@@ -1,0 +1,146 @@
+Submodule Imports/AvaloniaUI/Avalonia.DataGrid contains modified content
+diff --git a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid.Themes.Default/Avalonia.DataGrid.Themes.Default.csproj b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid.Themes.Default/Avalonia.DataGrid.Themes.Default.csproj
+index d6e449a..9cebbc6 100644
+--- a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid.Themes.Default/Avalonia.DataGrid.Themes.Default.csproj
++++ b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid.Themes.Default/Avalonia.DataGrid.Themes.Default.csproj
+@@ -5,7 +5,7 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="Avalonia" Version="0.6.2-*" />
++    <PackageReference Include="Avalonia" Version="0.7.0" />
+   </ItemGroup>
+   <ItemGroup>
+     <Compile Update="**\*.xaml.cs">
+diff --git a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/Avalonia.DataGrid.csproj b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/Avalonia.DataGrid.csproj
+index b0189a4..048a84e 100644
+--- a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/Avalonia.DataGrid.csproj
++++ b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/Avalonia.DataGrid.csproj
+@@ -5,7 +5,7 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="Avalonia" Version="0.6.2-*" />
++    <PackageReference Include="Avalonia" Version="0.7.0" />
+   </ItemGroup>
+ 
+ </Project>
+diff --git a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridColumnCollection.cs b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridColumnCollection.cs
+index 44ac001..ce963ea 100644
+--- a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridColumnCollection.cs
++++ b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridColumnCollection.cs
+@@ -297,7 +297,11 @@ namespace Avalonia.Controls
+         {
+             VisibleStarColumnCount = 0;
+             VisibleEdgedColumnsWidth = 0;
+-            for (int columnIndex = 0; columnIndex < ItemsInternal.Count; columnIndex++)
++			if (ItemsInternal.Count > 2)
++				VisibleStarColumnCount = 0;
++
++
++			for (int columnIndex = 0; columnIndex < ItemsInternal.Count; columnIndex++)
+             {
+                 if (ItemsInternal[columnIndex].IsVisible)
+                 {
+diff --git a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridSelectedItemsCollection.cs b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridSelectedItemsCollection.cs
+index 2698b0c..ae7b875 100644
+--- a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridSelectedItemsCollection.cs
++++ b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridSelectedItemsCollection.cs
+@@ -75,13 +75,13 @@ namespace Avalonia.Controls
+             Debug.Assert(itemIndex >= 0);
+ 
+             int slot = OwningGrid.SlotFromRowIndex(itemIndex);
+-            if (_selectedSlotsTable.RangeCount == 0)
++			/*if (_selectedSlotsTable.RangeCount == 0)
+             {
+                 OwningGrid.SelectedItem = dataItem;
+             }
+-            else
+-            {
+-                OwningGrid.SetRowSelection(slot, true /*isSelected*/, false /*setAnchorSlot*/);
++            else*/
++			{
++				OwningGrid.SetRowSelection(slot, true /*isSelected*/, false /*setAnchorSlot*/);
+             }
+             return _selectedSlotsTable.IndexOf(slot);
+         }
+Submodule Imports/AvaloniaUI/OxyPlot.Avalonia contains modified content
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/CanvasRenderContext.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/CanvasRenderContext.cs
+index 8539cd8..13f9788 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/CanvasRenderContext.cs
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/CanvasRenderContext.cs
+@@ -605,7 +605,7 @@ public void SetToolTip(string text)
+             var bitmapChain = GetImageSource(source);
+ 
+             // ReSharper disable CompareOfFloatsByEqualityOperator
+-            if (srcX == 0 && srcY == 0 && srcWidth == bitmapChain.PixelWidth && srcHeight == bitmapChain.PixelHeight)
++            if (srcX == 0 && srcY == 0 && srcWidth == bitmapChain.PixelSize.Width && srcHeight == bitmapChain.PixelSize.Height)
+             // ReSharper restore CompareOfFloatsByEqualityOperator
+             {
+                 // do not crop
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/OxyColorConverter.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/OxyColorConverter.cs
+index 7303fbd..eeab319 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/OxyColorConverter.cs
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/OxyColorConverter.cs
+@@ -9,7 +9,8 @@
+ 
+ namespace OxyPlot.Avalonia.Converters
+ {
+-    using global::Avalonia.Markup;
++	using global::Avalonia.Data.Converters;
++	using global::Avalonia.Markup;
+     using global::Avalonia.Media;
+     using System;
+     using System.Globalization;
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/ThicknessConverter.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/ThicknessConverter.cs
+index f6fba80..f62b4d9 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/ThicknessConverter.cs
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/ThicknessConverter.cs
+@@ -10,7 +10,8 @@
+ namespace OxyPlot.Avalonia.Converters
+ {
+     using global::Avalonia;
+-    using global::Avalonia.Markup;
++	using global::Avalonia.Data.Converters;
++	using global::Avalonia.Markup;
+     using System;
+     using System.Globalization;
+ 
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj
+index 8d8fafe..2ea0cd0 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj
+@@ -14,7 +14,7 @@
+   </PropertyGroup>
+   <ItemGroup>
+     <EmbeddedResource Include="**\*.xaml;Assets\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+-    <PackageReference Include="Avalonia" Version="0.6.1" />
++    <PackageReference Include="Avalonia" Version="0.7.0" />
+     <PackageReference Include="OxyPlot.Core" Version="2.0.0-unstable1013" />
+   </ItemGroup>
+ </Project>
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/PngExporter.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/PngExporter.cs
+index 6616eff..9b9304f 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/PngExporter.cs
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/PngExporter.cs
+@@ -118,7 +118,7 @@ public IBitmap ExportToBitmap(IPlotModel model)
+             canvas.Measure(new Size(canvas.Width, canvas.Height));
+             canvas.Arrange(new Rect(0, 0, canvas.Width, canvas.Height));
+ 
+-            var bmp = new RenderTargetBitmap(Width, Height);
++            var bmp = new RenderTargetBitmap(new PixelSize(Width, Height));
+             bmp.Render(canvas);
+             return bmp;
+         }
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Tracker/TrackerControl.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Tracker/TrackerControl.cs
+index 836149e..cf448d6 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Tracker/TrackerControl.cs
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Tracker/TrackerControl.cs
+@@ -16,7 +16,6 @@ namespace OxyPlot.Avalonia
+     using global::Avalonia.Controls.Primitives;
+     using global::Avalonia.Controls.Shapes;
+     using global::Avalonia.Layout;
+-    using global::Avalonia.Markup.Xaml.Data;
+     using global::Avalonia.Media;
+     using global::Avalonia.VisualTree;
+     using System.Collections.Generic;
