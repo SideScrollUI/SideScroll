@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\cancel.png" />
+    <None Remove="Assets\cancel_red.png" />
+    <None Remove="Assets\if_help_62217.png" />
+    <None Remove="Assets\info_24_759eeb.png" />
+    <None Remove="Assets\info_24_c8c2f9.png" />
+    <None Remove="Assets\left-arrow-blue.png" />
+    <None Remove="Assets\left-arrow-gray.png" />
+    <None Remove="Assets\left-arrow.png" />
+    <None Remove="Assets\left-chevron.png" />
+    <None Remove="Assets\Logo.ico" />
+    <None Remove="Assets\placeholder.png" />
+    <None Remove="Assets\right-arrow-blue.png" />
+    <None Remove="Assets\right-arrow-gray.png" />
+    <None Remove="Assets\right-chevron.png" />
+    <None Remove="Assets\save-file-option.png" />
+    <None Remove="Assets\search.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\cancel.png" />
+    <EmbeddedResource Include="Assets\cancel_red.png" />
+    <EmbeddedResource Include="Assets\info_24_759eeb.png" />
+    <EmbeddedResource Include="Assets\info_24_c8c2f9.png" />
+    <EmbeddedResource Include="Assets\left-arrow-blue.png" />
+    <EmbeddedResource Include="Assets\left-arrow-gray.png" />
+    <EmbeddedResource Include="Assets\left-arrow.png" />
+    <EmbeddedResource Include="Assets\Logo.ico" />
+    <EmbeddedResource Include="Assets\placeholder.png" />
+    <EmbeddedResource Include="Assets\right-arrow-blue.png" />
+    <EmbeddedResource Include="Assets\right-arrow-gray.png" />
+    <EmbeddedResource Include="Assets\save-file-option.png" />
+    <EmbeddedResource Include="Assets\search.png" />
+  </ItemGroup>
+
+</Project>
