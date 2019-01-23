@@ -1,0 +1,52 @@
+﻿<Styles 
+  xmlns="https://github.com/avaloniaui"
+  xmlns:dg="clr-namespace:Avalonia.Controls;assembly=Avalonia.DataGrid"
+  xmlns:prim="clr-namespace:Avalonia.Controls.Primitives;assembly=Avalonia.DataGrid"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+  <Style Selector="dg|DataGridColumnHeader">
+      <Setter Property="Foreground" Value="{DynamicResource GridColumnHeaderForegroundBrush}" />
+      <Setter Property="HorizontalContentAlignment" Value="Left" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="AreSeparatorsVisible" Value="true" />
+      <Setter Property="SeparatorBrush" Value="#FF0000" />
+      <Setter Property="Padding" Value="4" />
+      <Setter Property="Background" Value="{DynamicResource GridColumnHeaderBackgroundBrush}"/>
+  </Style>
+  
+  <Style Selector="dg|DataGridRow /template/ Rectangle#BackgroundRectangle">
+    <Setter Property="IsVisible" Value="False"/>
+    <Setter Property="Fill" Value="#FF92F397" />
+  </Style>
+  
+  <Style Selector="Button:pointerover /template/ ContentPresenter">
+    <Setter Property="BorderBrush" Value="#FF000000"/>
+  </Style>
+  
+  <Style Selector="ScrollBar:horizontal /template/ Thumb#thumb">
+    <Setter Property="MinHeight"
+            Value="16" />
+    <Setter Property="MinWidth"
+            Value="16" />
+  </Style>
+  <Style Selector="ScrollBar:horizontal">
+    <Setter Property="MinHeight"
+            Value="16" />
+    <Setter Property="MinWidth"
+            Value="16" />
+  </Style>
+  <Style Selector="ScrollBar:vertical">
+    <Setter Property="MinWidth"
+            Value="16" />
+    <Setter Property="MinWidth"
+            Value="16" />
+  </Style>
+  <Style Selector="ScrollBar:vertical /template/ Thumb#thumb">
+    <Setter Property="MinHeight"
+            Value="16" />
+    <Setter Property="MinWidth"
+            Value="16" />
+  </Style>
+  
+</Styles>

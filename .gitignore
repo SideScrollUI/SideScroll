@@ -1,0 +1,14 @@
+*.cache
+*.diff
+*.dll
+*.exe
+*.pdb
+*.psess
+*.resources
+*.suo
+*.tmp
+*.vspx
+.vs/
+bin/
+obj/
+packages/

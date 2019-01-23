@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <NuGetPackageRoot>../../packages</NuGetPackageRoot>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CDE37BBD-8277-4695-A1D8-5E37901D4D1A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Atlas.Start.Eto.Desktop</RootNamespace>
+    <AssemblyName>Atlas.Start.Eto.Desktop</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <DoNotCopyLocalIfInGac>true</DoNotCopyLocalIfInGac>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AtkSharp, Version=3.22.24.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/AtkSharp.3.22.24.29\lib\netstandard2.0\AtkSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="CairoSharp, Version=3.22.24.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/CairoSharp.3.22.24.29\lib\netstandard2.0\CairoSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Forms, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/Eto.Forms.2.4.1\lib\netstandard2.0\Eto.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Gtk, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/Eto.Platform.Gtk.2.4.1\lib\netstandard2.0\Eto.Gtk.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Gtk3, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/Eto.Platform.Gtk3.2.4.1\lib\net45\Eto.Gtk3.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.XamMac2, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/Eto.Platform.XamMac2.2.4.1\lib\net45\Eto.XamMac2.dll</HintPath>
+    </Reference>
+    <Reference Include="Eto.Wpf, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/Eto.Platform.Wpf.2.4.1\lib\net45\Eto.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="GdkSharp, Version=3.22.24.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/GdkSharp.3.22.24.29\lib\netstandard2.0\GdkSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GioSharp, Version=3.22.24.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/GioSharp.3.22.24.29\lib\netstandard2.0\GioSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GLibSharp, Version=3.22.24.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/GLibSharp.3.22.24.29\lib\netstandard2.0\GLibSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GtkSharp, Version=3.22.24.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/GtkSharp.3.22.24.29\lib\netstandard2.0\GtkSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMac, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/Eto.Platform.Mac.2.4.1\lib\net45\MonoMac.dll</HintPath>
+    </Reference>
+    <Reference Include="PangoSharp, Version=3.22.24.29, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/PangoSharp.3.22.24.29\lib\netstandard2.0\PangoSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Primitives, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(NuGetPackageRoot)/System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainWindow.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Atlas.Core\Atlas.Core.csproj">
+      <Project>{9bfc7193-df0f-4d3f-8847-3043b2484e8e}</Project>
+      <Name>Atlas.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Atlas.GUI.Eto\Atlas.GUI.Eto.csproj">
+      <Project>{0ca0a666-479e-47bc-85b2-3a62f6bd6190}</Project>
+      <Name>Atlas.GUI.Eto</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Atlas.Network\Atlas.Network.csproj">
+      <Project>{40eb70b2-f23a-4f9f-83f0-dd6c833713d5}</Project>
+      <Name>Atlas.Network</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Atlas.Serialize\Atlas.Serialize.csproj">
+      <Project>{0bbd1c4c-e414-457b-9121-1f2280e8ffaf}</Project>
+      <Name>Atlas.Serialize</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Atlas.Tabs.Test\Atlas.Tabs.Test.csproj">
+      <Project>{1347efe2-c9e3-4a6d-918b-c8b15d301e7e}</Project>
+      <Name>Atlas.Tabs.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Atlas.Tabs.Tools\Atlas.Tabs.Tools.csproj">
+      <Project>{98030cf3-fd36-4632-a93a-0095321275ca}</Project>
+      <Name>Atlas.Tabs.Tools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Atlas.Tabs\Atlas.Tabs.csproj">
+      <Project>{043632ca-dcec-423c-854f-5448749bb402}</Project>
+      <Name>Atlas.Tabs</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Make sure the reference assemblies are available -->
+    <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.6.1" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" />
+  </ItemGroup>
+  <Import Project="..\EtoApp2\EtoApp2.projitems" Label="Shared" Condition="Exists('..\EtoApp2\EtoApp2.projitems')" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(NuGetPackageRoot)/Eto.Forms.2.4.1/build/Eto.Forms.targets" Condition="Exists('$(NuGetPackageRoot)/Eto.Forms.2.4.1/build/Eto.Forms.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(NuGetPackageRoot)/Eto.Forms.2.4.1/build/Eto.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(NuGetPackageRoot)/Eto.Forms.2.4.1/build/Eto.Forms.targets'))" />
+    <Error Condition="!Exists('$(NuGetPackageRoot)/Eto.Platform.Mac.2.4.1\build\Eto.Platform.Mac.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(NuGetPackageRoot)/Eto.Platform.Mac.2.4.1\build\Eto.Platform.Mac.targets'))" />
+    <Error Condition="!Exists('$(NuGetPackageRoot)/Eto.Platform.XamMac2.2.4.1\build\Eto.Platform.XamMac2.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(NuGetPackageRoot)/Eto.Platform.XamMac2.2.4.1\build\Eto.Platform.XamMac2.targets'))" />
+  </Target>
+  <Import Project="$(NuGetPackageRoot)/Eto.Platform.Mac.2.4.1\build\Eto.Platform.Mac.targets" Condition="Exists('$(NuGetPackageRoot)/Eto.Platform.Mac.2.4.1\build\Eto.Platform.Mac.targets')" />
+  <Import Project="$(NuGetPackageRoot)/Eto.Platform.XamMac2.2.4.1\build\Eto.Platform.XamMac2.targets" Condition="Exists('$(NuGetPackageRoot)/Eto.Platform.XamMac2.2.4.1\build\Eto.Platform.XamMac2.targets')" />
+</Project>

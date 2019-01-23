@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Atlas.Tabs.Test</AssemblyName>
+    <RootNamespace>Atlas.Tabs.Test</RootNamespace>
+    <Configurations>Debug;Release;DebugX86</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugX86|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Atlas.Core\Atlas.Core.csproj" />
+    <ProjectReference Include="..\Atlas.Network\Atlas.Network.csproj" />
+    <ProjectReference Include="..\Atlas.Tabs.Tools\Atlas.Tabs.Tools.csproj" />
+    <ProjectReference Include="..\Atlas.Tabs\Atlas.Tabs.csproj" />
+  </ItemGroup>
+
+</Project>

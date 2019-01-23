@@ -1,0 +1,48 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+               
+        {
+            "name": "Atlas.Start.Avalonia",
+            "console": "integratedTerminal",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build Atlas.Avalonia",
+            "program": "${workspaceFolder}/Programs/Atlas.Start.Avalonia/bin/Debug/netcoreapp2.0/Atlas.Start.Avalonia.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Programs/Atlas.Start.Avalonia",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        /* Only works for .Net Core?*/
+        /*{
+            "name": "Atlas.Start.Eto.Desktop",
+            "console": "integratedTerminal",
+            "type": "mono",
+            "request": "launch",
+            "preLaunchTask": "build Atlas.Eto",
+            "program": "${workspaceFolder}/Programs/Atlas.Start.Eto.Desktop/bin/Debug/netcoreapp2.0/Atlas.Start.Eto.Desktop.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Programs/Atlas.Start.Eto.Desktop",
+            //"stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart"
+        },*/
+        {
+            "name": "Atlas.Start.Eto.Gtk",
+            "console": "integratedTerminal",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build Atlas.Start.Eto.Gtk",
+            "program": "${workspaceFolder}/Programs/Atlas.Start.Eto.Gtk/bin/Debug/netcoreapp2.0/Atlas.Start.Eto.Gtk.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Programs/Atlas.Start.Eto.Gtk",
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
+        }
+    ]
+}

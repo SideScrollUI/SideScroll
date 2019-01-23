@@ -1,0 +1,165 @@
+﻿using Atlas.Core;
+using Atlas.Extensions;
+using Atlas.Tabs;
+using Avalonia;
+using Avalonia.Collections;
+using Avalonia.Controls;
+using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Layout;
+using Avalonia.Media;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Reflection;
+
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using OxyPlot.Avalonia;
+using Avalonia.Markup.Xaml.Templates;
+using Avalonia.Threading;
+using Atlas.GUI.Avalonia.Controls;
+
+namespace Atlas.GUI.Avalonia
+{
+	public class TabChartGroup : ITab
+	{
+		//private string name;
+		public ChartSettings ChartSettings { get; set; }
+		//private List<ListSeries> ListSeries { get; set; }
+		//private Dictionary<IList, ListSeries> ListToListSeries { get; set; } = new Dictionary<IList, ListSeries>();
+		//private Dictionary<IList, int> ListToTabIndex { get; set; } = new Dictionary<IList, int>(); // not used
+		private Dictionary<ListGroup, TabControlChart> ListGroupToTabChart { get; set; } = new Dictionary<ListGroup, TabControlChart>();
+
+		//public SeriesCollection SeriesCollection { get; set; }
+		//public string[] Labels { get; set; }
+		//public Func<double, string> YFormatter { get; set; }
+
+		// try to change might be lower or higher than the rendering interval
+		//private const int UpdateInterval = 20;
+
+		//private bool disposed;
+		//private readonly Timer timer;
+		//private readonly Stopwatch watch = new Stopwatch();
+		//private int numberOfSeries;
+
+		private TabControlDataGrid tabDataGrid;
+
+
+		//public event EventHandler<EventArgs> OnSelectionChanged;
+		//private bool autoSelectNew = true;
+
+		public TabChartGroup(ChartSettings chartSettings)
+		{
+			this.ChartSettings = chartSettings;
+		}
+
+
+		public TabInstance Create() { return new Instance(this); }
+
+		public class Instance : TabInstance
+		{
+			private TabChartGroup tab;
+			private TabControlDataGrid tabDataGrid;
+
+			public Instance(TabChartGroup tab)
+			{
+				this.tab = tab;
+			}
+
+			//private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
+			//private CustomControl control;
+			//private TabChart tabChart;
+
+			public override void Load()
+			{
+				if (tabViewSettings.ChartDataSettings.Count == 0)
+					tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
+
+
+				//this.Background = new SolidColorBrush(Theme.BackgroundColor);
+				//this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
+				//this.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
+				//this.Width = 1000;
+				//this.Height = 1000;
+				//this.Children.Add(border);
+				//this.Orientation = Orientation.Vertical;
+
+				// autogenerate columns
+				tabDataGrid = new TabControlDataGrid(this, tab.ChartSettings.ListSeries, true, tabViewSettings.ChartDataSettings[0]);
+				//Grid.SetRow(tabDataGrid, 1);
+
+				//tabDataGrid.AddButtonColumn("<>", nameof(TaskInstance.Cancel));
+
+				//tabDataGrid.AutoLoad = tabModel.AutoLoad;
+				tabDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;
+				//tabDataGrid.Width = 1000;
+				//tabDataGrid.Height = 1000;
+				//tabDataGrid.Initialize();
+				//bool addSplitter = false;
+				//tabParentControls.AddControl(tabDataGrid, true, false);
+
+				LoadSelectedCharts();
+				/*plotView.Template = new ControlTemplate() // todo: fix
+				{
+					Content = new object(),
+					TargetType = typeof(object),
+				};*/
+
+				tabModel.AddObject(tabDataGrid);
+			}
+			private void LoadSelectedCharts()
+			{
+				foreach (ListSeries listSeries in tabDataGrid.SelectedItems)
+				{
+					AddSeries(listSeries);
+				}
+
+				// would need to be able to disable to use
+				//foreach (ListSeries listSeries in ChartSettings.ListSeries)
+				//	AddSeries(listSeries);
+			}
+
+			private void AddSeries(ListSeries listSeries)
+			{
+				//TabChart tabChart;
+				//if (ListGroupToTabChart.TryGetValue(list)
+			}
+
+			private void UnloadCharts()
+			{
+
+			}
+
+			private void TabData_OnSelectionChanged(object sender, EventArgs e)
+			{
+				UnloadCharts();
+				LoadSelectedCharts();
+			}
+		}
+	}
+}
+
+
+/*
+Still in progress
+--
+ -
+ -
+ -
+ -
+ -
+
+--
+ -
+ -
+ -
+ -
+
+--
+*/

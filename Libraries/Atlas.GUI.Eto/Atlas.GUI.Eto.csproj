@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Atlas.GUI.Eto</RootNamespace>
+    <PackageVersion>1.0</PackageVersion>
+    <Title>Atlas.GUI.Eto</Title>
+    <Copyright>Copyright © 2018</Copyright>
+    <Description></Description>
+    <Configurations>Debug;Release;DebugX86</Configurations>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Eto.Forms" Version="2.4.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Atlas.Core\Atlas.Core.csproj" />
+    <ProjectReference Include="..\Atlas.Network\Atlas.Network.csproj" />
+    <ProjectReference Include="..\Atlas.Serialize\Atlas.Serialize.csproj" />
+    <ProjectReference Include="..\Atlas.Tabs\Atlas.Tabs.csproj" />
+  </ItemGroup>
+  
+</Project>

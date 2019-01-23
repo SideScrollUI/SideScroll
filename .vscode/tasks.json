@@ -1,0 +1,41 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        // Includes Avalonia, Web Servers, and Core Libraries
+        {
+            "label": "build Atlas.Avalonia",
+            "command": "dotnet build Atlas.Avalonia.sln",
+            "type": "shell",
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        // (only compiles GTK Version)
+        // (is there a mono version?) this doesn't actually build the mono binaries, since they target net461
+        {
+            "label": "build Atlas.Start.Eto.Gtk",
+            "type": "shell",
+            "group": "build",
+            "command": "dotnet build Atlas.Eto.sln",
+            "problemMatcher": "$msCompile"
+        },
+        //  (Windows Only)
+        /*{
+            "label": "build Atlas.Start.Wpf",
+            "type": "process",
+            "command": "MSBuild.exe",
+            "args": [
+                "${workspaceRoot}/Programs/Atlas.Start.Wpf/Atlas.Start.Wpf.csproj"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        }*/
+    ]
+}

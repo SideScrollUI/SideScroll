@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <Configurations>Debug;Release;DebugX86</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.1|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='DebugX86|netcoreapp2.1|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="**\*.cs" Exclude="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="**\*.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\**" />
+    <EmbeddedResource Remove="Pages\**" />
+    <None Remove="Pages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.7.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.7.0" />
+    <PackageReference Include="OxyPlot.Core" Version="2.0.0-unstable1013" />
+    <PackageReference Include="VitalElement.CefGlue.Core" Version="0.9.0-build20-alpha" />
+    <PackageReference Include="VitalElement.CefGlue.Core.Avalonia" Version="0.9.0-build20-alpha" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Imports\AvaloniaUI\Avalonia.DataGrid\src\Avalonia.DataGrid.Themes.Default\Avalonia.DataGrid.Themes.Default.csproj" />
+    <ProjectReference Include="..\..\Imports\AvaloniaUI\Avalonia.DataGrid\src\Avalonia.DataGrid\Avalonia.DataGrid.csproj" />
+    <ProjectReference Include="..\..\Imports\AvaloniaUI\AvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj" />
+    <ProjectReference Include="..\..\Imports\AvaloniaUI\OxyPlot.Avalonia\Source\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
+    <ProjectReference Include="..\..\Libraries\Atlas.GUI.Avalonia\Atlas.GUI.Avalonia.csproj" />
+    <ProjectReference Include="..\..\Libraries\Atlas.Resources\Atlas.Resources.csproj" />
+    <ProjectReference Include="..\..\Libraries\Atlas.Tabs\Atlas.Tabs.csproj" />
+    <ProjectReference Include="..\..\Libraries\Atlas.Tabs.Test\Atlas.Tabs.Test.csproj" />
+  </ItemGroup>
+
+</Project>

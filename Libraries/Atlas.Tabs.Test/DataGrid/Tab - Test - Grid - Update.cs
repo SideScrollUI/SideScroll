@@ -1,0 +1,110 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading;
+using System.Runtime.CompilerServices;
+using Atlas.Core;
+
+namespace Atlas.Tabs.Test.DataGrid
+{
+	public class TabTestGridUpdate : ITab
+	{
+		public TabInstance Create() { return new Instance(); }
+
+		public class Instance : TabInstance
+		{
+			private ItemCollection<TestItem> items;
+			protected SynchronizationContext context;
+
+			public Instance()
+			{
+				this.context = SynchronizationContext.Current;
+				if (this.context == null)
+					this.context = new SynchronizationContext();
+			}
+
+			public override void Load()
+			{
+				items = new ItemCollection<TestItem>();
+				AddEntries();
+				tabModel.Items = items;
+
+				tabModel.Actions = new ItemCollection<TaskCreator>()
+				{
+					//new TaskAction("Add Entries", AddEntries),
+					new TaskDelegate("Start bigNumber++ Thread", UpdateCounter, true),
+				};
+			}
+
+			private void AddEntries()
+			{
+				for (int i = 0; i < 20; i++)
+				{
+					TestItem testItem = new TestItem(context);
+					testItem.smallNumber = i;
+					testItem.bigNumber += i;
+					items.Add(testItem);
+				}
+			}
+
+			private void UpdateCounter(Call call)
+			{
+				while (true)
+				{
+					//System.Threading.Thread.Sleep(10);
+					for (int i = 0; i < 10000; i++)
+					{
+						System.Threading.Thread.Sleep(10);
+						foreach (TestItem testItem in items)
+						{
+							testItem.bigNumber++;
+							testItem.Update();
+						}
+					}
+					//System.Threading.Thread.Sleep(1000);
+				}
+			}
+		}
+
+		public class TestItem : INotifyPropertyChanged
+		{
+			public int smallNumber { get; set; } = 0;
+			public long bigNumber { get; set; } = 1234567890123456789;
+
+			protected SynchronizationContext context;
+
+			public TestItem(SynchronizationContext context)
+			{
+				this.context = context;
+			}
+
+			public override string ToString()
+			{
+				return smallNumber.ToString();
+			}
+
+			public event PropertyChangedEventHandler PropertyChanged;
+
+			public void Update()
+			{
+				//context.Post(new SendOrPostCallback(this.OnUpdateProgress), eventArgs);
+				//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("bigNumber"));
+				NotifyPropertyChanged(nameof(bigNumber));
+			}
+
+			public void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+			{
+				context.Post(new SendOrPostCallback(this.NotifyPropertyChangedContext), propertyName);
+				//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			}
+
+			private void NotifyPropertyChangedContext(object state)
+			{
+				string propertyName = state as string;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+}
+/*
+*/
