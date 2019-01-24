@@ -109,6 +109,7 @@ namespace Atlas.Serialize
 		public ItemCollection<T> LoadAll<T>(Call call = null, string directory = null, bool lazy = false)
 		{
 			call = call ?? new Call();
+			directory = directory ?? DefaultDirectory;
 
 			/*ItemCollection<string> objectIds = GetObjectIds(typeof(T));
 
