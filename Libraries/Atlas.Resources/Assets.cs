@@ -9,6 +9,7 @@ namespace Atlas.Resources
 		public static readonly string Logo = "Logo.ico";
 
 		public static readonly string Pin = "placeholder.png";
+		public static readonly string Add = "add.png";
 		public static readonly string Delete = "cancel.png"; // red too bright
 
 		public static readonly string Back = "left-arrow-blue.png";
@@ -26,6 +27,7 @@ namespace Atlas.Resources
 			public static Stream Logo => Get(Assets.Logo);
 
 			public static Stream Pin => Get(Assets.Pin);
+			public static Stream Add => Get(Assets.Add);
 			public static Stream Delete => Get(Assets.Delete);
 
 			public static Stream Back => Get(Assets.Back);

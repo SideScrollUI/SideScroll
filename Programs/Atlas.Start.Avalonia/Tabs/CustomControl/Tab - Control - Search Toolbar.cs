@@ -7,6 +7,7 @@ namespace Atlas.Start.Avalonia.Tabs
 	public class TabControlSearchToolbar : TabControlToolbar
 	{
 		public Button buttonSearch;
+		public Button buttonLoadAdd;
 		public Button buttonLoadNext;
 
 		public TextBlock textBlockStatus;
@@ -26,12 +27,17 @@ namespace Atlas.Start.Avalonia.Tabs
 				(obj) => CommandNextCanExecute(obj),
 				(obj) => CommandNextExecute(obj));
 
+			RelayCommand commandBindingAdd = new RelayCommand(
+				(obj) => CommandAddCanExecute(obj),
+				(obj) => CommandAddExecute(obj));
+
 			//project.navigator.CanSeekBackwardOb
 			//CommandBinder.
 			//CommandBindings.Add(commandBindingBack);
 
 			buttonSearch = AddButton("Search", commandBindingSearch, Assets.Streams.Search);
 			buttonLoadNext = AddButton("Next", commandBindingNext, Assets.Streams.Forward);
+			buttonLoadAdd = AddButton("Add", commandBindingAdd, Assets.Streams.Add);
 			textBlockStatus = AddLabel("Status");
 		}
 
@@ -52,6 +58,16 @@ namespace Atlas.Start.Avalonia.Tabs
 		}
 
 		private void CommandNextExecute(object obj)
+		{
+
+		}
+
+		private bool CommandAddCanExecute(object obj)
+		{
+			return true;
+		}
+
+		private void CommandAddExecute(object obj)
 		{
 
 		}

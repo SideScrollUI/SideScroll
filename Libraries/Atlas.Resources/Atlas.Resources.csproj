@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\add.png" />
     <None Remove="Assets\cancel.png" />
     <None Remove="Assets\cancel_red.png" />
     <None Remove="Assets\if_help_62217.png" />
@@ -24,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Assets\add.png" />
     <EmbeddedResource Include="Assets\cancel.png" />
     <EmbeddedResource Include="Assets\cancel_red.png" />
     <EmbeddedResource Include="Assets\info_24_759eeb.png" />
