@@ -89,6 +89,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			Type propertyType = property.propertyInfo.PropertyType;
 			Type underlyingType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
 
+			bool propertyReadOnly = (property.propertyInfo.GetCustomAttribute(typeof(ReadOnlyAttribute)) != null);
+
 			BindListAttribute listAttribute = underlyingType.GetCustomAttribute(typeof(BindListAttribute)) as BindListAttribute;
 
 			Control control = null;
@@ -107,12 +109,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 			else
 			{
-				control = AddTextBox(property, rowIndex, underlyingType);
+				control = AddTextBox(property, rowIndex, underlyingType, propertyReadOnly);
 			}
 			return control;
 		}
 
-		private TextBox AddTextBox(ListProperty property, int rowIndex, Type type)
+		private TextBox AddTextBox(ListProperty property, int rowIndex, Type type, bool propertyReadOnly)
 		{
 			TextBox textBox = new TextBox()
 			{
@@ -120,7 +122,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				IsReadOnly = !property.Editable,
+				IsReadOnly = !property.Editable || propertyReadOnly,
 				MinWidth = 50,
 				Padding = new Thickness(6, 3),
 				Focusable = true, // already set?
@@ -128,6 +130,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = 1,
 			};
+			if (textBox.IsReadOnly)
+				textBox.Background = new SolidColorBrush(Theme.TextBackgroundDisabledColor);
 
 			PasswordCharAttribute passwordCharAttribute = property.propertyInfo.GetCustomAttribute(typeof(PasswordCharAttribute)) as PasswordCharAttribute;
 			if (passwordCharAttribute != null)

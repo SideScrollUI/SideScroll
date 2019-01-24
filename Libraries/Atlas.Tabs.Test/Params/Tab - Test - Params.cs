@@ -57,6 +57,8 @@ namespace Atlas.Tabs.Test
 		{
 			public bool Boolean { get; set; } = true;
 			public string String { get; set; } = "Test";
+			[ReadOnly]
+			public string ReadOnly { get; set; } = "ReadOnly";
 			public int Integer { get; set; } = 123;
 			public double Double { get; set; } = 3.14;
 			public DateTime DateTime { get; set; } = DateTime.Now;

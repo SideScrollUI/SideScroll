@@ -27,6 +27,8 @@ namespace Atlas.GUI.Avalonia
 		//public static Color ButtonBackgroundHoverColor = Color.Parse("#4e8ef7"); // 659aff, DefaultTheme.xaml is overriding this
 		public static Color ButtonBackgroundHoverColor = Color.Parse("#FF7827d4"); // 659aff, DefaultTheme.xaml is overriding this
 
+		public static Color TextBackgroundDisabledColor = Color.Parse("#c5c6c6");
+
 		// 
 		public static Color ActiveSelectionHighlightColor = Color.Parse("#92F397");
 		public static Color InactiveSelectionHighlightColor = Color.Parse("#92F397");
