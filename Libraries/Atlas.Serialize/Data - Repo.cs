@@ -184,7 +184,7 @@ namespace Atlas.Serialize
 
 		public void Delete(Type type, string name)
 		{
-			string directoryPath = GetTypePath(type, name);
+			string directoryPath = GetDirectoryPath(type, DefaultDirectory, name);
 			if (Directory.Exists(directoryPath))
 				Directory.Delete(directoryPath, true);
 		}
