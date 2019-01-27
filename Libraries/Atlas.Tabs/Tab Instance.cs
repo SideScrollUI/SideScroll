@@ -288,6 +288,8 @@ namespace Atlas.Tabs
 					return false;
 				if (tabModel.Objects.Count > 0)
 					return false; // Only data is skippable?
+				if (tabModel.Actions != null && tabModel.Actions.Count > 0)
+					return false; // Only data is skippable?
 				return tabModel.Skippable;
 			}
 		}

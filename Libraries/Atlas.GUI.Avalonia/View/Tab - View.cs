@@ -331,6 +331,10 @@ namespace Atlas.GUI.Avalonia.View
 			if (TabViewSettings.SplitterDistance != null)
 				tabParentControls.Width = (double)containerGrid.ColumnDefinitions[0].ActualWidth;
 
+			double width = containerGrid.ColumnDefinitions[0].ActualWidth;
+			TabViewSettings.SplitterDistance = width;
+			tabParentControls.Width = width;
+
 			InvalidateMeasure();
 			InvalidateArrange();
 			tabParentControls.InvalidateArrange();
@@ -354,7 +358,11 @@ namespace Atlas.GUI.Avalonia.View
 			InvalidateMeasure();
 			InvalidateArrange();
 			//TabViewSettings.SplitterDistance = (int)Math.Ceiling(e.Vector.Y); // backwards
-			TabViewSettings.SplitterDistance = (int)containerGrid.ColumnDefinitions[0].Width.Value;
+			double width = (int)containerGrid.ColumnDefinitions[0].ActualWidth;
+			double width2 = (int)containerGrid.ColumnDefinitions[0].Width.Value;
+			TabViewSettings.SplitterDistance = width;
+			tabParentControls.Width = width;
+			containerGrid.ColumnDefinitions[0].Width = new GridLength(width);
 			//UpdateSplitterDistance();
 			SaveSplitterDistance();
 			UpdateSplitterFiller();
