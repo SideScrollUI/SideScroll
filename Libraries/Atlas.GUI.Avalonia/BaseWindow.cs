@@ -15,6 +15,7 @@ namespace Atlas.GUI.Avalonia
 	public class BaseWindow : Window
 	{
 		private const int MinWindowSize = 500;
+		public static readonly int DefaultIncrementWidth = 1000; // should we also use a max percent?
 
 		public Project project;
 
@@ -216,10 +217,10 @@ namespace Atlas.GUI.Avalonia
 			//if (scrollViewer.Width == double.NaN)
 			//	scrollViewer.Viewport.Width
 			if (double.IsNaN(contentGrid.Width))
-				contentGrid.Width = contentGrid.DesiredSize.Width + 500;
+				contentGrid.Width = contentGrid.DesiredSize.Width + DefaultIncrementWidth;
 			else
-				contentGrid.Width += 500;
-			scrollViewer.Offset = new Vector(scrollViewer.Offset.X + 500, scrollViewer.Offset.Y);
+				contentGrid.Width += DefaultIncrementWidth;
+			scrollViewer.Offset = new Vector(scrollViewer.Offset.X + DefaultIncrementWidth, scrollViewer.Offset.Y);
 			scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
 			scrollViewer.InvalidateArrange();
 			scrollViewer.InvalidateMeasure();
