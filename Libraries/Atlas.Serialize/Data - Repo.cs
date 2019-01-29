@@ -38,9 +38,6 @@ namespace Atlas.Serialize
 
 		public SerializerFile GetSerializerFile(Type type, string name)
 		{
-			/*string dataPath = GetHashedDataPath(type, name);
-			SerializerFile serializer = new SerializerFile(dataPath, name);
-			return serializer;*/
 			return GetSerializerFile(type, DefaultDirectory, name);
 		}
 
@@ -75,7 +72,6 @@ namespace Atlas.Serialize
 			Save(obj.GetType().AssemblyQualifiedName, obj, call);
 		}
 
-
 		public T Load<T>(string name, Call call, bool createIfNeeded = false, bool lazy = false)
 		{
 			return Load<T>(DefaultDirectory, name, call, createIfNeeded, lazy);
@@ -106,7 +102,7 @@ namespace Atlas.Serialize
 			return Load<T>(typeof(T).AssemblyQualifiedName, call, createIfNeeded, lazy);
 		}
 
-		public ItemCollection<T> LoadAll<T>(Call call = null, string directory = null, bool lazy = false)
+		public Dictionary<string, T> LoadAll<T>(Call call = null, string directory = null, bool lazy = false)
 		{
 			call = call ?? new Call();
 			directory = directory ?? DefaultDirectory;
@@ -120,7 +116,7 @@ namespace Atlas.Serialize
 				if (item != null)
 					list.Add(item);
 			}*/
-			ItemCollection<T> list = new ItemCollection<T>();
+			var entries = new Dictionary<string, T>();
 
 			string typePath = GetTypePath(typeof(T), directory);
 			if (Directory.Exists(typePath))
@@ -138,11 +134,11 @@ namespace Atlas.Serialize
 					{
 						T obj = serializerFile.Load<T>(call, lazy);
 						if (obj != null)
-							list.Add(obj);
+							entries.Add(serializerFile.LoadHeader(call).name, obj);
 					}
 				}
 			}
-			return list;
+			return entries;
 		}
 
 

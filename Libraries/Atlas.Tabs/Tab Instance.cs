@@ -418,17 +418,11 @@ namespace Atlas.Tabs
 			return data;
 		}
 
-		public ItemCollection<T> LoadAllData<T>()
-		{
-			ItemCollection<T> datas = project.DataShared.LoadAll<T>(taskInstance.call);
-			return datas;
-		}
-
-		public ItemCollection<T> LoadAllData<T>(string directory)
+		/*public ItemCollection<T> LoadAllData<T>(string directory = null)
 		{
 			ItemCollection<T> datas = project.DataShared.LoadAll<T>(taskInstance.call, directory);
 			return datas;
-		}
+		}*/
 
 		public TabViewSettings LoadBookmark()
 		{
