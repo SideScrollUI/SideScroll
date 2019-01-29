@@ -18,7 +18,7 @@ namespace Atlas.Core
 
 	// Winforms really need IBindingList, but Wpf DataGrid tries to use IBindingList to sort if available (bad)
 	// Would be nice to make this thread safe to make storing logs easier?
-	public class ItemCollection<T> : ObservableCollection<T>, IList, ICollection, IEnumerable //, IRaiseItemChangedEvents //
+	public class ItemCollection<T> : ObservableCollection<T>, IList, ICollection, IEnumerable, IComparer //, IRaiseItemChangedEvents //
 	{
 		public ItemCollection()
 		{
@@ -29,6 +29,13 @@ namespace Atlas.Core
 			base(iEnumerable)
 		{
 
+		}
+
+		CustomComparer customComparer = new CustomComparer();
+		public int Compare(object x, object y)
+		{
+			int result = customComparer.Compare(x, y);
+			return result;
 		}
 	}
 
