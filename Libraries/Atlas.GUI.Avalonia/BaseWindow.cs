@@ -145,9 +145,18 @@ namespace Atlas.GUI.Avalonia
 
 		private void SetMaxBounds()
 		{
-			this.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
-			this.MaxHeight = PlatformImpl.MaxClientSize.Height + 10;
+			//this.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
+			//this.MaxHeight = PlatformImpl.MaxClientSize.Height + 10;
 
+			double maxWidth = 0;
+			double maxHeight = 0;
+			foreach (var screen in Screens.All)
+			{
+				maxWidth += screen.Bounds.Width;
+				maxHeight = Math.Max(maxHeight, screen.Bounds.Height);
+			}
+			this.MaxWidth = maxWidth + 10;
+			this.MaxHeight = maxHeight + 10;
 			//contentGrid.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
 			//contentGrid.MaxHeight = PlatformImpl.MaxClientSize.Height + 10;
 			//scrollViewer.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
@@ -216,10 +225,15 @@ namespace Atlas.GUI.Avalonia
 		{
 			//if (scrollViewer.Width == double.NaN)
 			//	scrollViewer.Viewport.Width
-			if (double.IsNaN(contentGrid.Width))
+			/*if (double.IsNaN(contentGrid.Width))
 				contentGrid.Width = contentGrid.DesiredSize.Width + DefaultIncrementWidth;
 			else
-				contentGrid.Width += DefaultIncrementWidth;
+				contentGrid.Width += DefaultIncrementWidth;*/
+
+			if (double.IsNaN(contentGrid.Width))
+				contentGrid.MinWidth = contentGrid.DesiredSize.Width + DefaultIncrementWidth;
+			else
+				contentGrid.MinWidth += DefaultIncrementWidth;
 			scrollViewer.Offset = new Vector(scrollViewer.Offset.X + DefaultIncrementWidth, scrollViewer.Offset.Y);
 			scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
 			scrollViewer.InvalidateArrange();
