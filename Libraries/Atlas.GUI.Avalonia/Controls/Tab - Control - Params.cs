@@ -33,7 +33,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//this.VerticalAlignment = VerticalAlignment.Stretch;
 			this.HorizontalAlignment = HorizontalAlignment.Stretch;
 			this.ColumnDefinitions = new ColumnDefinitions("Auto,*");
-			this.Margin = new Thickness(15);
+			this.Margin = new Thickness(15, 6);
 			this.MinWidth = 100;
 			this.MaxWidth = 1000;
 

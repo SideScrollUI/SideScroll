@@ -11,6 +11,8 @@ namespace Atlas.Tabs
 	{
 		public static object Create(JsonValue jsonValue)
 		{
+			if (jsonValue == null)
+				return null;
 			switch (jsonValue.JsonType)
 			{
 				case JsonType.String: return (string)jsonValue;
