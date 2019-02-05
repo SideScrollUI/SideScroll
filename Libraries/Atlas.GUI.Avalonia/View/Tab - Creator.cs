@@ -60,12 +60,11 @@ namespace Atlas.GUI.Avalonia.View
 			{
 				value = new TabText(value.ToString()); // create an ITab
 			}
-			/*else if (value is Uri)
+			else if (value is Uri)
 			{
-				// Doesn't work with nightly build branch we need for DataGrid
 				TabWebBrowser tabWebBrowser = new TabWebBrowser((Uri)value);
 				value = tabWebBrowser;
-			}*/
+			}
 
 			if (value is ITab)
 			{

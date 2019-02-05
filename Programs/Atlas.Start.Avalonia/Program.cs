@@ -1,6 +1,7 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Logging.Serilog;
+using CefGlue.Avalonia;
 using OxyPlot.Avalonia;
 
 namespace Atlas.Start.Avalonia
@@ -10,7 +11,8 @@ namespace Atlas.Start.Avalonia
 		static void Main(string[] args)
 		{
 			OxyPlotModule.EnsureLoaded();
-			AppBuilder builder = AppBuilder.Configure<App>().UsePlatformDetect();
+			//AppBuilder builder = AppBuilder.Configure<App>().UsePlatformDetect();
+			AppBuilder builder = AppBuilder.Configure<App>().UsePlatformDetect().UseSkia().ConfigureCefGlue(args).LogToDebug();
 			//AvaloniaLocator.Current.GetService<IGlobalStyles>().Styles.AddRange(new OxyPlot.Avalonia.Themes.Default());
 
 			builder.BeforeStarting(_ => OxyPlotModule.Initialize());
@@ -19,9 +21,11 @@ namespace Atlas.Start.Avalonia
 			//builder.Start<MainWindow>(mainWindow);
 		}
 
-		public static AppBuilder BuildAvaloniaApp()
+		// Not currently used
+		public static AppBuilder BuildAvaloniaApp(string[] args)
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
+				.ConfigureCefGlue(args)
 				.BeforeStarting(_ => OxyPlotModule.Initialize())
 				.LogToDebug();
 	}

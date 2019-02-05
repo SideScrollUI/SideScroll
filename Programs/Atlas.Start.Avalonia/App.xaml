@@ -5,6 +5,7 @@
         <StyleInclude Source="resm:Avalonia.Themes.Default.Accents.BaseLight.xaml?assembly=Avalonia.Themes.Default"/>
         <StyleInclude Source="resm:Avalonia.DataGrid.Themes.Default.DefaultTheme.xaml?assembly=Avalonia.DataGrid.Themes.Default"/>
         <StyleInclude Source="resm:AvaloniaEdit.AvaloniaEdit.xaml?assembly=AvaloniaEdit" />
+        <StyleInclude Source="resm:CefGlue.Avalonia.AvaloniaCefBrowser.xaml?assembly=CefGlue.Avalonia"/>
         <StyleInclude Source="resm:Atlas.GUI.Avalonia.DefaultTheme.xaml?assembly=Atlas.GUI.Avalonia"/>
         <StyleInclude Source="resm:Atlas.GUI.Avalonia.StyleResources.xaml?assembly=Atlas.GUI.Avalonia"/>
 
