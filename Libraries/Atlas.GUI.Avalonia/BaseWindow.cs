@@ -79,6 +79,8 @@ namespace Atlas.GUI.Avalonia
 
 			Background = new SolidColorBrush(Theme.BackgroundColor);
 
+			Resources["FontSizeSmall"] = 14; // stop DatePicker using a small font size
+
 			using (Stream stream = Assets.Streams.Logo)
 			{
 				Icon = new WindowIcon(stream);
@@ -145,9 +147,6 @@ namespace Atlas.GUI.Avalonia
 
 		private void SetMaxBounds()
 		{
-			//this.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
-			//this.MaxHeight = PlatformImpl.MaxClientSize.Height + 10;
-
 			double maxWidth = 0;
 			double maxHeight = 0;
 			foreach (var screen in Screens.All)
@@ -157,8 +156,6 @@ namespace Atlas.GUI.Avalonia
 			}
 			this.MaxWidth = maxWidth + 10;
 			this.MaxHeight = maxHeight + 10;
-			//contentGrid.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
-			//contentGrid.MaxHeight = PlatformImpl.MaxClientSize.Height + 10;
 			//scrollViewer.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
 			//scrollViewer.MaxHeight = PlatformImpl.MaxClientSize.Height + 10;
 		}

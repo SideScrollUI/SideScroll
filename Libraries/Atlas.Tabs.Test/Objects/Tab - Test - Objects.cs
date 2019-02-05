@@ -22,6 +22,7 @@ namespace Atlas.Tabs.Test.Objects
 					new ListItem("Tags", new Tag[] { new Tag("abc", 1.1) }),
 					new ListItem("Subclass", new TabTestSubClassProperty()),
 					new ListItem("Enum", new EnumTest()),
+					new ListItem("TimeSpan", new TimeSpan(1, 2, 3)),
 				};
 			}
 
