@@ -60,11 +60,11 @@ namespace Atlas.GUI.Avalonia.View
 			{
 				value = new TabText(value.ToString()); // create an ITab
 			}
-			else if (value is Uri)
+			/*else if (value is Uri)
 			{
 				TabWebBrowser tabWebBrowser = new TabWebBrowser((Uri)value);
 				value = tabWebBrowser;
-			}
+			}*/
 
 			if (value is ITab)
 			{

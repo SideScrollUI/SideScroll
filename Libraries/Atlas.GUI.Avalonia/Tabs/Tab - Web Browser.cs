@@ -1,4 +1,4 @@
-﻿using Avalonia.Controls;
+﻿/*using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
 using CefGlue.Avalonia;
@@ -68,6 +68,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 		}
 	}
 }
+*/
 /*
  https://github.com/VitalElement/CefGlue.Core
 
