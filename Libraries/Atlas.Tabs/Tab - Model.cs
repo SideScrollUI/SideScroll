@@ -359,6 +359,7 @@ namespace Atlas.Tabs
 		}
 
 		// used for saving/loading TabViewSettings
+		public string CustomSettingsPath { get; set; }
 		public string ObjectTypePath
 		{
 			get

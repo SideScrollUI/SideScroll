@@ -70,6 +70,7 @@ namespace Atlas.Tabs
 
 		// Relative paths for where all the TabSettings get stored, primarily used for loading future defaults
 		// paths get hashed later to avoid having to encode and super long names breaking path limits
+		private string CustomPath { get { return tabModel.CustomSettingsPath != null ? "Custom/" + GetType().FullName + "/" + tabModel.CustomSettingsPath : null; } }
 		private string TabPath { get { return "Tab/" + GetType().FullName + "/" + tabModel.ObjectTypePath; } }
 		//private string TabPath { get { return "Tab/" + GetType().FullName + "/" + tabModel.ObjectTypePath + "/" + Label; } }
 		// deprecate?
@@ -456,6 +457,13 @@ namespace Atlas.Tabs
 		{
 			tabViewSettings = null;
 
+			if (CustomPath != null)
+			{
+				tabViewSettings = project.DataApp.Load<TabViewSettings>(CustomPath, taskInstance.call);
+				if (tabViewSettings != null)
+					return tabViewSettings;
+			}
+
 			Type type = GetType();
 			if (type != typeof(TabInstance))
 			{
@@ -481,6 +489,9 @@ namespace Atlas.Tabs
 
 		public void SaveTabSettings()
 		{
+			if (CustomPath != null)
+				project.DataApp.Save(CustomPath, tabViewSettings, taskInstance.call);
+
 			Type type = GetType();
 			if (type != typeof(TabInstance))
 			{
