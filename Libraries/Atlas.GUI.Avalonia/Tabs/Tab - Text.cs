@@ -1,9 +1,11 @@
 ﻿using Atlas.Tabs;
+using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using System;
 using System.Collections.Generic;
 using Atlas.GUI.Avalonia.Controls;
+using System.Json;
 
 namespace Atlas.GUI.Avalonia.Tabs
 {
@@ -60,6 +62,19 @@ namespace Atlas.GUI.Avalonia.Tabs
 				//tabAvaloniaEdit.textEditor.IsReadOnly = true; // todo: allow editing?
 				tabAvaloniaEdit.textEditor.Text = tab.text;
 				tabAvaloniaEdit.Background = new SolidColorBrush(Colors.White);
+
+
+				try
+				{
+					JsonValue jsonValue = JsonValue.Parse(tab.text);
+					if (jsonValue != null)
+					{
+						tabAvaloniaEdit.textEditor.FontFamily = new FontFamily("Courier New");
+					}
+				}
+				catch
+				{
+				}
 
 				tabModel.AddObject(tabAvaloniaEdit, true);
 

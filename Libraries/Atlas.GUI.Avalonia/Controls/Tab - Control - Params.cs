@@ -35,7 +35,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.ColumnDefinitions = new ColumnDefinitions("Auto,*");
 			this.Margin = new Thickness(15, 6);
 			this.MinWidth = 100;
-			this.MaxWidth = 1000;
+			this.MaxWidth = 2000;
 
 			//DataStore = (IEnumerable<object>)obj;
 
@@ -49,6 +49,33 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 
 			//this.Focus();
+		}
+
+		public List<Control> AddObjectRow(object obj)
+		{
+			int rowIndex = RowDefinitions.Count;
+			int columnIndex = 0;
+
+			/*RowDefinition spacerRow = new RowDefinition();
+			spacerRow.Height = new GridLength(5);
+			RowDefinitions.Add(spacerRow);*/
+
+			RowDefinition gridRow = new RowDefinition()
+			{
+				Height = new GridLength(1, GridUnitType.Auto),
+			};
+			this.RowDefinitions.Add(gridRow);
+
+			List<Control> controls = new List<Control>();
+			foreach (PropertyInfo propertyInfo in obj.GetType().GetProperties())
+			{
+				var property = new ListProperty(obj, propertyInfo);
+				Control control = AddProperty(property, rowIndex, columnIndex);
+				controls.Add(control);
+				columnIndex++;
+			}
+			rowIndex++;
+			return controls;
 		}
 
 		public Control AddPropertyRow(PropertyInfo propertyInfo)
@@ -85,7 +112,13 @@ namespace Atlas.GUI.Avalonia.Controls
 				[Grid.ColumnProperty] = 0,
 			};
 			this.Children.Add(textLabel);
+			Control control = AddProperty(property, rowIndex, 1);
+			rowIndex++;
+			return control;
+		}
 
+		private Control AddProperty(ListProperty property, int rowIndex, int columnIndex)
+		{
 			Type propertyType = property.propertyInfo.PropertyType;
 			Type underlyingType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
 
@@ -97,24 +130,25 @@ namespace Atlas.GUI.Avalonia.Controls
 			//AvaloniaObject avaloniaObject;
 			if (underlyingType == typeof(bool))
 			{
-				control = AddCheckBox(property, rowIndex);
+				control = AddCheckBox(property, rowIndex, columnIndex);
 			}
 			else if (underlyingType.IsEnum || listAttribute != null)
 			{
-				control = AddEnum(property, rowIndex, underlyingType, listAttribute);
+				control = AddEnum(property, rowIndex, columnIndex, underlyingType, listAttribute);
 			}
 			else if (typeof(DateTime).IsAssignableFrom(underlyingType))
 			{
-				AddDateTimePicker(property, rowIndex); // has 2 controls
+				AddDateTimePicker(property, rowIndex, columnIndex); // has 2 controls
 			}
 			else
 			{
-				control = AddTextBox(property, rowIndex, underlyingType, propertyReadOnly);
+				control = AddTextBox(property, rowIndex, columnIndex, underlyingType, propertyReadOnly);
 			}
+
 			return control;
 		}
 
-		private TextBox AddTextBox(ListProperty property, int rowIndex, Type type, bool propertyReadOnly)
+		private TextBox AddTextBox(ListProperty property, int rowIndex, int columnIndex, Type type, bool propertyReadOnly)
 		{
 			TextBox textBox = new TextBox()
 			{
@@ -128,7 +162,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				Focusable = true, // already set?
 				MaxWidth = ControlMaxWidth,
 				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = 1,
+				[Grid.ColumnProperty] = columnIndex,
 			};
 			if (textBox.IsReadOnly)
 				textBox.Background = new SolidColorBrush(Theme.TextBackgroundDisabledColor);
@@ -145,7 +179,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				Converter = new EditValueConverter(),
 				//StringFormat = "Hello {0}",
-				Source = obj,
+				Source = property.obj,
 			};
 			if (type == typeof(string) || type.IsPrimitive)
 				binding.Mode = BindingMode.TwoWay;
@@ -156,7 +190,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			return textBox;
 		}
 
-		private CheckBox AddCheckBox(ListProperty property, int rowIndex)
+		private CheckBox AddCheckBox(ListProperty property, int rowIndex, int columnIndex)
 		{
 			CheckBox checkBox = new CheckBox()
 			{
@@ -166,21 +200,21 @@ namespace Atlas.GUI.Avalonia.Controls
 				BorderThickness = new Thickness(1),
 				MaxWidth = 200,
 				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = 1,
+				[Grid.ColumnProperty] = columnIndex,
 			};
 			var binding = new Binding(property.propertyInfo.Name)
 			{
 				Converter = new EditValueConverter(),
 				//StringFormat = "Hello {0}",
 				Mode = BindingMode.TwoWay,
-				Source = obj,
+				Source = property.obj,
 			};
 			checkBox.Bind(CheckBox.IsCheckedProperty, binding);
 			this.Children.Add(checkBox);
 			return checkBox;
 		}
 
-		private DropDown AddEnum(ListProperty property, int rowIndex, Type underlyingType, BindListAttribute listAttribute)
+		private DropDown AddEnum(ListProperty property, int rowIndex, int columnIndex, Type underlyingType, BindListAttribute propertyListAttribute)
 		{
 			// todo: eventually handle custom lists
 			//ComboBox comboBox = new ComboBox(); // AvaloniaUI doesn't implement yet :(
@@ -192,13 +226,13 @@ namespace Atlas.GUI.Avalonia.Controls
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				BorderThickness = new Thickness(1),
 				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = 1,
+				[Grid.ColumnProperty] = columnIndex,
 			};
 
-			if (listAttribute != null)
+			if (propertyListAttribute != null)
 			{
-				PropertyInfo propertyInfo = obj.GetType().GetProperty(listAttribute.Name);
-				dropDown.Items = propertyInfo.GetValue(obj) as IEnumerable;
+				PropertyInfo propertyInfo = property.obj.GetType().GetProperty(propertyListAttribute.Name);
+				dropDown.Items = propertyInfo.GetValue(property.obj) as IEnumerable;
 			}
 			else
 			{
@@ -211,7 +245,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				Converter = new EditValueConverter(),
 				//StringFormat = "Hello {0}",
 				Mode = BindingMode.TwoWay,
-				Source = obj,
+				Source = property.obj,
 			};
 			dropDown.Bind(DropDown.SelectedItemProperty, binding);
 			this.Children.Add(dropDown);
@@ -219,7 +253,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		}
 
 		// todo: need a real DateTimePicker
-		private void AddDateTimePicker(ListProperty property, int rowIndex)
+		private void AddDateTimePicker(ListProperty property, int rowIndex, int columnIndex)
 		{
 			DatePicker datePicker = new DatePicker()
 			{
@@ -235,14 +269,14 @@ namespace Atlas.GUI.Avalonia.Controls
 
 				//MaxWidth = 200,
 				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = 1,
+				[Grid.ColumnProperty] = columnIndex,
 			};
 			var binding = new Binding(property.propertyInfo.Name)
 			{
 				//Converter = new FieldValueConverter(),
 				//StringFormat = "Hello {0}",
 				Mode = BindingMode.TwoWay,
-				Source = obj,
+				Source = property.obj,
 			};
 			datePicker.Bind(DatePicker.SelectedDateProperty, binding);
 			this.Children.Add(datePicker);
@@ -268,14 +302,14 @@ namespace Atlas.GUI.Avalonia.Controls
 				MaxWidth = ControlMaxWidth,
 				Focusable = true, // already set?
 				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = 1,
+				[Grid.ColumnProperty] = columnIndex,
 			};
 			binding = new Binding(property.propertyInfo.Name)
 			{
 				Converter = new TimeValueConverter(),
 				//StringFormat = "Hello {0}",
 				Mode = BindingMode.TwoWay,
-				Source = obj,
+				Source = property.obj,
 			};
 			textBox.Bind(TextBlock.TextProperty, binding);
 			this.Children.Add(textBox);

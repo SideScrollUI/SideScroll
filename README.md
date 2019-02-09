@@ -12,7 +12,7 @@ Atlas is a tool for exploring multiple paths of a tree at once
 
 
 * [Setup](Docs/Setup.md)
-* [Getting Started](Docs/UserGuide.md)
+* [User Guide](Docs/UserGuide.md)
 * [Dev](Docs/Dev/Dev.md)
 * [Credits](Docs/Credits.md)
 
