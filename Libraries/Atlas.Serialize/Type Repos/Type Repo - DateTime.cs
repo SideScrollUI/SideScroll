@@ -32,6 +32,7 @@ namespace Atlas.Serialize
 		{
 			DateTime dateTime = (DateTime)obj;
 			writer.Write(dateTime.Ticks);
+			writer.Write((byte)dateTime.Kind);
 		}
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
@@ -52,9 +53,17 @@ namespace Atlas.Serialize
 			try
 			{
 				if (CanAssign(type))
-					obj = new DateTime(reader.ReadInt64());
+				{
+					long ticks = reader.ReadInt64();
+					int kindValue = reader.ReadByte();
+					//Enum.ToObject(typeof(DateTimeKind), kindValue);
+					DateTime dateTime = new DateTime(ticks, (DateTimeKind)kindValue);
+					obj = dateTime;
+				}
 				else
+				{
 					throw new Exception("Unhandled primitive type");
+				}
 			}
 			catch (Exception)
 			{

@@ -75,7 +75,7 @@ namespace Atlas.Serialize
 		{
 			using (CallTimer callTimer = call.Timer("Loading object: " + name))
 			{
-				//try
+				try
 				{
 					Serializer serializer = new Serializer();
 					serializer.taskInstance = taskInstance;
@@ -100,11 +100,11 @@ namespace Atlas.Serialize
 						serializer.Dispose();
 					return obj;
 				}
-				/*catch (Exception e)
+				catch (Exception e)
 				{
-					log.AddError("Exception loading file", new Tag("Exception", e.ToString()));
+					call.log.AddError("Exception loading file", new Tag("Exception", e.ToString()));
 					return null; // returns null if reference type, otherwise default value (i.e. 0)
-				}*/
+				}
 			}
 		}
 

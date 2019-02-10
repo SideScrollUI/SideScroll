@@ -30,7 +30,7 @@ namespace Atlas.GUI.Avalonia
 			if (value == null)
 				return originalDateTime;
 
-			if (targetType != typeof(DateTime))
+			if (targetType != typeof(DateTime) && targetType != typeof(DateTime?))
 				throw new Exception("invalid conversion");
 
 			if (value is string)
