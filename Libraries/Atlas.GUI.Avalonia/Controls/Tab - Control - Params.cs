@@ -271,9 +271,10 @@ namespace Atlas.GUI.Avalonia.Controls
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
 			};
+			var dateTimeConverter = new DateTimeValueConverter();
 			var binding = new Binding(property.propertyInfo.Name)
 			{
-				//Converter = new FieldValueConverter(),
+				Converter = dateTimeConverter,
 				//StringFormat = "Hello {0}",
 				Mode = BindingMode.TwoWay,
 				Source = property.obj,
@@ -306,7 +307,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			binding = new Binding(property.propertyInfo.Name)
 			{
-				Converter = new TimeValueConverter(),
+				Converter = dateTimeConverter,
 				//StringFormat = "Hello {0}",
 				Mode = BindingMode.TwoWay,
 				Source = property.obj,

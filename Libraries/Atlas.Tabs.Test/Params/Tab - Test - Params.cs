@@ -20,7 +20,7 @@ namespace Atlas.Tabs.Test
 
 				tabModel.Actions = new ItemCollection<TaskCreator>()
 				{
-					new TaskDelegate("Run", Run),
+					new TaskDelegate("Add", Add),
 					new TaskDelegate("10s Task", LongTask, true),
 				};
 
@@ -30,12 +30,13 @@ namespace Atlas.Tabs.Test
 				tabModel.Notes = "Adding a class of type [Params] to a tabModel creates a TabControlParam\nParameter values can be saved between Tasks";
 			}
 
-			private void Run(Call call)
+			private void Add(Call call)
 			{
 				this.SaveData(dataKey, paramTestItem);
+				var clone = Serialize.SerializerMemory.Clone<ParamTestItem>(call, paramTestItem);
 				ParamTestResult result = new ParamTestResult()
 				{
-					parameters = paramTestItem,
+					parameters = clone,
 				};
 				items.Add(result);
 			}
