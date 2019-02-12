@@ -10,6 +10,7 @@ namespace Atlas.Tabs
 	public class ListPair : INotifyPropertyChanged
 	{
 		public object Name { get; set; }
+		[StyleValue]
 		public object Value { get; set; }
 		[HiddenColumn]
 		[InnerValue]

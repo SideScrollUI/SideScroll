@@ -9,6 +9,7 @@ using Avalonia.Media;
 using Avalonia.Layout;
 using Avalonia;
 using Avalonia.Data;
+using Atlas.Extensions;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -67,7 +68,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.RowDefinitions.Add(gridRow);
 
 			List<Control> controls = new List<Control>();
-			foreach (PropertyInfo propertyInfo in obj.GetType().GetProperties())
+			foreach (PropertyInfo propertyInfo in obj.GetType().GetVisibleProperties())
 			{
 				var property = new ListProperty(obj, propertyInfo);
 				Control control = AddProperty(property, rowIndex, columnIndex);
