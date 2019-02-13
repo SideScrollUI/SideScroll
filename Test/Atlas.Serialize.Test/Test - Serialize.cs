@@ -143,7 +143,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize DateTime")]
 		public void SerializeDateTime()
 		{
-			DateTime input = DateTime.Now;
+			DateTime input = DateTime.UtcNow;
 
 			interFace.Save(call, input);
 			DateTime output = interFace.Load<DateTime>(call);

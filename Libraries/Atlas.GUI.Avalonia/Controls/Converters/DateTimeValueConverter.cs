@@ -53,6 +53,9 @@ namespace Atlas.GUI.Avalonia
 				return;
 			}
 
+			// use the same Kind as the original
+			dateTime = DateTime.SpecifyKind(dateTime, ((DateTime)originalDateTime).Kind);
+
 			var timeSpan = ((DateTime)originalDateTime).TimeOfDay;
 			dateTime = dateTime.Date + timeSpan;
 			originalDateTime = dateTime;
