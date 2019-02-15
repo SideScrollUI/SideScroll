@@ -16,6 +16,7 @@ namespace Atlas.GUI.Avalonia
 	{
 		private const int MinWindowSize = 500;
 		public static readonly int DefaultIncrementWidth = 1000; // should we also use a max percent?
+		public static BaseWindow baseWindow;
 
 		public Project project;
 
@@ -31,6 +32,7 @@ namespace Atlas.GUI.Avalonia
 
 		public BaseWindow() : base()
 		{
+			baseWindow = this;
 #if DEBUG
 			this.AttachDevTools();
 #endif
@@ -109,7 +111,7 @@ namespace Atlas.GUI.Avalonia
 				//HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				ColumnDefinitions = new ColumnDefinitions("Auto"),
-				RowDefinitions = new RowDefinitions("*"), // scrollViewer
+				RowDefinitions = new RowDefinitions("*"),
 				//Background = new SolidColorBrush(Colors.Blue),
 				MaxWidth = 10000,
 				MaxHeight = 5000,
@@ -240,6 +242,7 @@ namespace Atlas.GUI.Avalonia
 		private void ButtonCollapse_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			//scrollViewer.Offset = new Vector(Math.Max(0.0, scrollViewer.Offset.X - 500), scrollViewer.Offset.Y);
+			contentGrid.MinWidth = 0;
 		}
 
 		// How to set the main Content
@@ -318,6 +321,12 @@ namespace Atlas.GUI.Avalonia
 		private void BaseWindow_PositionChanged(object sender, PointEventArgs e)
 		{
 			//SaveWindowSettings();
+		}
+
+		// don't allow the scroll viewer to jump back to the left while we're loading content and the content grid width is fluctuating
+		public void SetMinScrollOffset()
+		{
+			contentGrid.MinWidth = scrollViewer.Offset.X + scrollViewer.Bounds.Size.Width;
 		}
 	}
 }

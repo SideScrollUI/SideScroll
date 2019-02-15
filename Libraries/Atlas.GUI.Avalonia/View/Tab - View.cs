@@ -653,6 +653,7 @@ namespace Atlas.GUI.Avalonia.View
 				//if (rendered == false)
 				//	return false;
 
+				// don't show if the new control won't have enough room
 				IControl control = this.Parent;
 				double offset = tabChildControls.Bounds.X;
 				while (control != null)
@@ -758,6 +759,8 @@ namespace Atlas.GUI.Avalonia.View
 			updateChildControls = false;
 
 			childControlsFinishedLoading = true;
+
+			BaseWindow.baseWindow.SetMinScrollOffset();
 
 			// Create new child controls
 			//Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
