@@ -388,7 +388,8 @@ namespace Atlas.Tabs
 			if (type.IsPrimitive ||
 				type.Equals(typeof(string)) ||
 				type.Equals(typeof(Decimal)) ||
-				type.Equals(typeof(DateTime))) //  || type.IsEnum 
+				type.Equals(typeof(DateTime)) ||
+				type.Equals(typeof(TimeSpan))) //  || type.IsEnum 
 			{
 				return false;
 			}

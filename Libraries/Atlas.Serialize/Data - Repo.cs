@@ -171,6 +171,13 @@ namespace Atlas.Serialize
 			return list;
 		}
 
+		public void DeleteAll(Type type, string directory = null)
+		{
+			string directoryPath = GetTypePath(type, directory);
+			if (Directory.Exists(directoryPath))
+				Directory.Delete(directoryPath, true);
+		}
+
 		public void Delete(Type type, string directory, string name)
 		{
 			string directoryPath = GetDirectoryPath(type, directory, name);
@@ -185,7 +192,7 @@ namespace Atlas.Serialize
 				Directory.Delete(directoryPath, true);
 		}
 
-		public void DeleteAllData()
+		public void DeleteRepo()
 		{
 			string path = Paths.Combine(RepoPath, RepoName);
 			if (Directory.Exists(path))

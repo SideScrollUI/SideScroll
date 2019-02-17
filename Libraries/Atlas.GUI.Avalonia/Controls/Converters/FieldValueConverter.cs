@@ -52,7 +52,10 @@ namespace Atlas.GUI.Avalonia
 			{
 				DateTime dateTime = (DateTime)value;
 				if (dateTime != null)
-					return dateTime.ToString("yyyy-MM-dd HH:mm:ss.ffffff");
+				{
+					string text = dateTime.ToString("yyyy-MM-dd HH:mm:ss.FFFFFF");
+					return text;
+				}
 			}
 
 			if (targetType == typeof(string))

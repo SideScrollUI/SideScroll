@@ -35,11 +35,8 @@ namespace Atlas.Core
 			}
 			catch (Exception e)
 			{
-				call.log.AddError(e.Message);
+				call.log.AddError(e.Message, new Tag("Exception", e));
 			}
 		}
 	}
 }
-
-/*
-*/

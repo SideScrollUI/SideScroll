@@ -140,7 +140,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			InitializeControls();
 
 			INotifyCollectionChanged iNotifyCollectionChanged = iList as INotifyCollectionChanged;
-			if (iNotifyCollectionChanged != null)
+			if (AutoLoad && iNotifyCollectionChanged != null)
 			{
 				// DataGrid must exist before adding this
 				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
@@ -278,8 +278,19 @@ namespace Atlas.GUI.Avalonia.Controls
 			set
 			{
 				iList = value;
-				collectionView = new CollectionViewBase(iList);
-				dataGrid.Items = collectionView;
+				/*if (collectionView != null && iList is ICollection)
+				{
+					var collection = (ICollection)iList;
+					collectionView.DeferRefresh();
+					collection.Clear();
+
+					collectionView.Refresh();
+				}
+				else*/
+				{
+					collectionView = new CollectionViewBase(iList);
+					dataGrid.Items = collectionView;
+				}
 				//dataGrid.SelectedItem = null;
 				//dataGrid.InvalidateMeasure();
 				//dataGrid.InvalidateArrange();
@@ -997,7 +1008,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//KeyDown -= UserControl_KeyDown;
 
 			INotifyCollectionChanged iNotifyCollectionChanged = iList as INotifyCollectionChanged;
-			if (iNotifyCollectionChanged != null)
+			if (AutoLoad && iNotifyCollectionChanged != null)
 				iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
 
 			iList = null;

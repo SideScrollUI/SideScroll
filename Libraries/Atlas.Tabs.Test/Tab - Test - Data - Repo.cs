@@ -37,8 +37,8 @@ namespace Atlas.Tabs.Test
 
 			private void Delete(Call call)
 			{
-				project.DataShared.DeleteAllData();
-				project.DataApp.DeleteAllData();
+				project.DataShared.DeleteRepo();
+				project.DataApp.DeleteRepo();
 				Reload();
 			}
 
