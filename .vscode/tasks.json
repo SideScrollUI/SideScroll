@@ -14,15 +14,6 @@
             },
             "problemMatcher": "$msCompile"
         },
-        // (only compiles GTK Version)
-        // (is there a mono version?) this doesn't actually build the mono binaries, since they target net461
-        {
-            "label": "build Atlas.Start.Eto.Gtk",
-            "type": "shell",
-            "group": "build",
-            "command": "dotnet build Atlas.Eto.sln",
-            "problemMatcher": "$msCompile"
-        },
         //  (Windows Only)
         /*{
             "label": "build Atlas.Start.Wpf",
