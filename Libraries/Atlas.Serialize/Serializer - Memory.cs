@@ -33,6 +33,7 @@ namespace Atlas.Serialize
 			}
 		}
 
+		//public static T Clone<T>(Call call, T obj)
 		public static T Clone<T>(Call call, object obj)
 		{
 			if (typeof(T) != obj.GetType())

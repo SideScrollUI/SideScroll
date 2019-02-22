@@ -178,6 +178,12 @@ namespace Atlas.Serialize
 				Directory.Delete(directoryPath, true);
 		}
 
+		// remove all other deletes and add null defaults?
+		public void Delete<T>(string directory, string name)
+		{
+			Delete(typeof(T), directory, name);
+		}
+
 		public void Delete(Type type, string directory, string name)
 		{
 			string directoryPath = GetDirectoryPath(type, directory, name);

@@ -66,6 +66,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			this.tabInstance = tabInstance;
 			this.tabModel = tabInstance.tabModel;
+			this.AutoLoad = tabModel.AutoLoad;
 			this.iList = iList;
 			this.autoGenerateColumns = autoGenerateColumns;
 			this.tabDataSettings = tabDataSettings ?? new TabDataSettings();
