@@ -635,7 +635,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				return rowObjects;
 
 			Dictionary<string, object> keys = new Dictionary<string, object>(); // todo: change to unordered?
-			foreach (object listItem in iList)
+			foreach (object listItem in collectionView) // collectionView takes filters into account
 			{
 				if (listItem == null)
 					continue;
