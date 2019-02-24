@@ -16,6 +16,7 @@ namespace Atlas.Tabs.Test.Chart
 				tabModel.Notes = "";
 				tabModel.Items = new ItemCollection<ListItem>()
 				{
+					new ListItem("List", new TabTestChartList()),
 					//new ListItem("Split", new TabTestChartSplit()),
 					new ListItem("Overlay", new TabTestChartOverlay()),
 				};

@@ -27,6 +27,17 @@ namespace Atlas.Tabs
 
 		}
 
+		public void AddList(string label, IList iList)
+		{
+			ListSeries listSeries = new ListSeries(label, iList);
+
+			ListGroup listGroup = DefaultListGroup;
+			// Will add to Default Group if no Unit specified, and add the Default Group if needed
+			ListGroups.Add(listGroup.Name, listGroup);
+			listGroup.ListSeries.Add(listSeries);
+			this.ListSeries.Add(listSeries);
+		}
+
 		public ChartSettings(IList iList)
 		{
 			Type type = iList.GetType();
@@ -35,8 +46,15 @@ namespace Atlas.Tabs
 				elementType = type.GetElementType();
 			else //if (type.GenericTypeArguments.Length > 0)
 				elementType = type.GenericTypeArguments[0];
+
+			if (elementType.IsPrimitive)
+			{
+				AddList("Values", iList);
+				return;
+			}
+
 			PropertyInfo[] properties = elementType.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
-			ItemCollection<ListSeries> listProperties = new ItemCollection<ListSeries>();
+			//ItemCollection<ListSeries> listProperties = new ItemCollection<ListSeries>();
 			foreach (PropertyInfo propertyInfo in properties)
 			{
 				if (propertyInfo.DeclaringType.IsNotPublic)
@@ -45,7 +63,7 @@ namespace Atlas.Tabs
 				{
 					ListSeries listSeries = new ListSeries(propertyInfo);
 					listSeries.iList = iList;
-					listProperties.Add(listSeries);
+					//listProperties.Add(listSeries);
 
 					ListGroup listGroup = DefaultListGroup;
 					UnitAttribute attribute = propertyInfo.GetCustomAttribute(typeof(UnitAttribute)) as UnitAttribute;
