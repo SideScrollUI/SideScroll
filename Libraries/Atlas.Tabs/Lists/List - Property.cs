@@ -63,7 +63,7 @@ namespace Atlas.Tabs
 			
 			Name = propertyInfo.Name;
 			Name = Name.AddSpacesBetweenWords();
-			NameAttribute attribute = propertyInfo.GetCustomAttribute(typeof(NameAttribute)) as NameAttribute;
+			NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;
 		}

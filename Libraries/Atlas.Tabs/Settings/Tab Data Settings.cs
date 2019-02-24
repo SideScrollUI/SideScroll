@@ -93,7 +93,7 @@ namespace Atlas.Tabs
 			foreach (PropertyInfo propertyInfo in visibleProperties)
 			{
 				string label;
-				NameAttribute attribute = propertyInfo.GetCustomAttribute(typeof(NameAttribute)) as NameAttribute;
+				NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 				if (attribute != null)
 				{
 					label = attribute.Name;

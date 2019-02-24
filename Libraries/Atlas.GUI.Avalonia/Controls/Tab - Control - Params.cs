@@ -125,7 +125,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			bool propertyReadOnly = (property.propertyInfo.GetCustomAttribute(typeof(ReadOnlyAttribute)) != null);
 
-			BindListAttribute listAttribute = underlyingType.GetCustomAttribute(typeof(BindListAttribute)) as BindListAttribute;
+			BindListAttribute listAttribute = underlyingType.GetCustomAttribute<BindListAttribute>();
 
 			Control control = null;
 			//AvaloniaObject avaloniaObject;
@@ -168,11 +168,11 @@ namespace Atlas.GUI.Avalonia.Controls
 			if (textBox.IsReadOnly)
 				textBox.Background = new SolidColorBrush(Theme.TextBackgroundDisabledColor);
 
-			PasswordCharAttribute passwordCharAttribute = property.propertyInfo.GetCustomAttribute(typeof(PasswordCharAttribute)) as PasswordCharAttribute;
+			PasswordCharAttribute passwordCharAttribute = property.propertyInfo.GetCustomAttribute<PasswordCharAttribute>();
 			if (passwordCharAttribute != null)
 				textBox.PasswordChar = passwordCharAttribute.Character;
 
-			ExampleAttribute attribute = property.propertyInfo.GetCustomAttribute(typeof(ExampleAttribute)) as ExampleAttribute;
+			ExampleAttribute attribute = property.propertyInfo.GetCustomAttribute<ExampleAttribute>();
 			if (attribute != null)
 				textBox.Watermark = attribute.Text;
 

@@ -66,7 +66,7 @@ namespace Atlas.Tabs
 					//listProperties.Add(listSeries);
 
 					ListGroup listGroup = DefaultListGroup;
-					UnitAttribute attribute = propertyInfo.GetCustomAttribute(typeof(UnitAttribute)) as UnitAttribute;
+					UnitAttribute attribute = propertyInfo.GetCustomAttribute<UnitAttribute>();
 					if (attribute != null)
 					{
 						if (!ListGroups.TryGetValue(attribute.Name, out listGroup))
