@@ -142,4 +142,9 @@ namespace Atlas.Core
 			this.Name = name;
 		}
 	}
+
+	[AttributeUsage(AttributeTargets.All)]
+	public class XAxisAttribute : Attribute
+	{
+	}
 }

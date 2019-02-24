@@ -27,6 +27,8 @@ namespace Atlas.Tabs.Test.Chart
 			{
 				//public string Group { get; set; } = "Group";
 				public string Name { get; set; }
+				[XAxis]
+				public DateTime TimeStamp { get; set; }
 				[Unit("B")]
 				public int SeriesAlpha { get; set; }
 				[Unit("A")]
@@ -74,6 +76,7 @@ namespace Atlas.Tabs.Test.Chart
 				}
 			}
 
+			private DateTime baseDateTime = DateTime.Now;
 			private void AddSample(int i)
 			{
 				//series.Add(random.Next(1050, 1095));
@@ -81,6 +84,7 @@ namespace Atlas.Tabs.Test.Chart
 				ChartSample sample = new ChartSample()
 				{
 					Name = "Name " + i.ToString(),
+					TimeStamp = baseDateTime.AddMinutes(i),
 					SeriesAlpha = random.Next(50, 100),
 					SeriesBeta = random.Next(50, 100),
 					SeriesGamma = random.Next(50, 100),

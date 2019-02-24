@@ -75,6 +75,13 @@ namespace Atlas.Tabs
 							ListGroups[attribute.Name] = listGroup;
 						}
 					}
+					else
+					{
+						if (!ListGroups.ContainsKey(listGroup.Name))
+						{
+							ListGroups[listGroup.Name] = listGroup;
+						}
+					}
 					// Will add to Default Group if no Unit specified, and add the Default Group if needed
 					listGroup.ListSeries.Add(listSeries);
 					this.ListSeries.Add(listSeries);

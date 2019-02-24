@@ -49,6 +49,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		private TabControlDataGrid tabControlDataGrid;
 		private PlotModel plotModel;
 		private PlotView plotView;
+		private PropertyInfo xAxisPropertyInfo;
 
 
 		//public event EventHandler<EventArgs> OnSelectionChanged;
@@ -146,6 +147,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
 				MaxWidth = 1000,
 				MaxHeight = 1000,
+				MinHeight = 200,
 				//[Grid.RowProperty] = 1,
 				[Grid.ColumnProperty] = 1,
 				
@@ -199,10 +201,18 @@ namespace Atlas.GUI.Avalonia.Controls
 				//Title = name,
 				LegendPlacement = LegendPlacement.Outside,
 			};
-			plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = AxisPosition.Left });
 
 			foreach (ListSeries listSeries in tabControlDataGrid.SelectedItems)
 				AddSeries(listSeries);
+
+			if (xAxisPropertyInfo != null && xAxisPropertyInfo.PropertyType == typeof(DateTime))
+			{
+				plotModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = AxisPosition.Bottom });
+			}
+			
+			{
+				plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = AxisPosition.Left });
+			}
 
 			// would need to be able to disable to use
 			//foreach (ListSeries listSeries in ChartSettings.ListSeries)
@@ -248,14 +258,35 @@ namespace Atlas.GUI.Avalonia.Controls
 			ListToTabIndex[listSeries.iList] = ListToTabIndex.Count;
 		}
 
-		private static void AddPoints(ListSeries listSeries, IList iList, OxyPlot.Series.LineSeries lineSeries)
+		private void AddPoints(ListSeries listSeries, IList iList, OxyPlot.Series.LineSeries lineSeries)
 		{
+			if (iList.Count == 0)
+				return;
+
 			if (listSeries.propertyInfo != null)
 			{
+				foreach (PropertyInfo propertyInfo in iList[0].GetType().GetProperties())
+				{
+					if (propertyInfo.GetCustomAttribute<XAxisAttribute>() != null)
+						xAxisPropertyInfo = propertyInfo;
+				}
 				foreach (object obj in iList)
 				{
 					object value = listSeries.propertyInfo.GetValue(obj);
-					lineSeries.Points.Add(new DataPoint(lineSeries.Points.Count, (dynamic)value));
+					double x = lineSeries.Points.Count;
+					if (xAxisPropertyInfo != null)
+					{
+						object xObj = xAxisPropertyInfo.GetValue(obj);
+						if (xObj.GetType() == typeof(DateTime))
+						{
+							x = OxyPlot.Axes.DateTimeAxis.ToDouble((DateTime)xObj);
+						}
+						else
+						{
+							x = (dynamic)xObj;
+						}
+					}
+					lineSeries.Points.Add(new DataPoint(x, (dynamic)value));
 				}
 			}
 			else

@@ -23,6 +23,7 @@ namespace Atlas.Tabs
 	{
 		public string Name { get; set; }
 		public IList iList; // List to start with, any elements added will also trigger an event to add new points
+		//public PropertyInfo xPropertyInfo; // optional
 		public PropertyInfo propertyInfo; // optional
 		//public object obj;
 		
