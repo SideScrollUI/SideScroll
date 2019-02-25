@@ -5,7 +5,6 @@ using Atlas.Tabs.Test.Actions;
 using Atlas.Tabs.Test.Chart;
 using Atlas.Tabs.Test.DataGrid;
 using Atlas.Tabs.Test.Objects;
-using Atlas.Tabs.Tools;
 
 namespace Atlas.Tabs.Test
 {
@@ -44,7 +43,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Bookmarks", new TabTestBookmarks()),
 					new ListItem("Skip", new TabTestSkip()), // move into new Lists?
 
-					new ListItem("Web Browser", new Uri("https://wikipedia.org")),
+					new ListItem("Web Browser", new TabTestBrowser()),
 					new ListItem("Text Editor", new TabTestTextEditor()),
 					new ListItem("Chart", new TabTestChart()),
 					new ListItem("Serializer", new TabSerializer()),
@@ -54,6 +53,3 @@ namespace Atlas.Tabs.Test
 		}
 	}
 }
-/*
-
-*/
