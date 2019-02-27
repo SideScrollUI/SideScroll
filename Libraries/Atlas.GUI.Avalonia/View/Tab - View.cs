@@ -20,7 +20,7 @@ namespace Atlas.GUI.Avalonia.View
 	{
 		// Maybe this control should own it's own settings?
 		//private TabViewSettings _tabViewSettings = new TabViewSettings();
-		private TabViewSettings TabViewSettings
+		internal TabViewSettings TabViewSettings
 		{
 			get
 			{
@@ -844,7 +844,7 @@ namespace Atlas.GUI.Avalonia.View
 			return orderedChildControls;
 		}
 
-		private void CreateChildControls(IList newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector tabControl = null)
+		internal void CreateChildControls(IList newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector tabControl = null)
 		{
 			//var collection = newList as DataGridSelectedItemsCollection;
 			//if (collection != null && collection.)
@@ -888,7 +888,7 @@ namespace Atlas.GUI.Avalonia.View
 			}
 		}
 
-		private Control CreateChildControl(object obj, string label = null, ITabSelector tabControl = null)
+		internal Control CreateChildControl(object obj, string label = null, ITabSelector tabControl = null)
 		{
 			try
 			{

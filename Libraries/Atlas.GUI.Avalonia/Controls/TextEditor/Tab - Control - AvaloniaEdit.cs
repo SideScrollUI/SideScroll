@@ -74,18 +74,21 @@ namespace Atlas.GUI.Avalonia.Controls
 				MaxHeight = 2000,
 				Background = new SolidColorBrush(Colors.White),
 				WordWrap = true,
-				HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // WordWrap requires Disabled
+				//HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // WordWrap requires Disabled
+				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, // WordWrap requires Disabled, but it doesn't work
 				VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
 				//Text = "test",
 				Margin = new Thickness(6),
 				//Padding = new Thickness(6),	
 				FontSize = 14,
 				//[Grid.RowProperty] = 1,
+				//SyntaxHighlighting = 
+				SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"), // handles JSON too
 			};
 			textEditor.HorizontalAlignment = HorizontalAlignment.Left;
 			this.Children.Add(textEditor);
 
-			//textEditor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.
+			//textEditor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
 			/*ShowLineNumbers = true;
 			SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
 			TextArea.TextEntering += textEditor_TextArea_TextEntering;

@@ -102,7 +102,7 @@ namespace Atlas.Serialize
 			return Load<T>(typeof(T).AssemblyQualifiedName, call, createIfNeeded, lazy);
 		}
 
-		public Dictionary<string, T> LoadAll<T>(Call call = null, string directory = null, bool lazy = false)
+		public SortedDictionary<string, T> LoadAll<T>(Call call = null, string directory = null, bool lazy = false)
 		{
 			call = call ?? new Call();
 			directory = directory ?? DefaultDirectory;
@@ -116,7 +116,7 @@ namespace Atlas.Serialize
 				if (item != null)
 					list.Add(item);
 			}*/
-			var entries = new Dictionary<string, T>();
+			var entries = new SortedDictionary<string, T>();
 
 			string typePath = GetTypePath(typeof(T), directory);
 			if (Directory.Exists(typePath))
@@ -140,7 +140,6 @@ namespace Atlas.Serialize
 			}
 			return entries;
 		}
-
 
 		public ItemCollection<Header> LoadHeaders(Type type, Call call = null)
 		{
