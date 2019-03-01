@@ -98,7 +98,11 @@ namespace Atlas.Core
 
 		protected override void InsertItem(int index, T item)
 		{
-			context.Post(new SendOrPostCallback(this.InsertItemCallback), new ItemLocation(index, item) );
+			var location = new ItemLocation(index, item);
+			if (context == SynchronizationContext.Current)
+				InsertItemCallback(location);
+			else
+				context.Post(new SendOrPostCallback(this.InsertItemCallback), location); // inserting 2 items inserts in wrong order
 		}
 
 		// Thread safe callback, only works if the context is the same
