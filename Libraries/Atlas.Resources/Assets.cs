@@ -22,6 +22,8 @@ namespace Atlas.Resources
 
 		public static readonly string Save = "save-file-option.png";
 
+		public static readonly string Browser = "internet.png";
+
 		public class Streams
 		{
 			public static Stream Logo => Get(Assets.Logo);
@@ -38,6 +40,8 @@ namespace Atlas.Resources
 			public static Stream Info => Get(Assets.Info1);
 
 			public static Stream Save => Get(Assets.Save);
+
+			public static Stream Browser => Get(Assets.Browser);
 
 			public static Stream Get(string resourceName)
 			{

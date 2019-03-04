@@ -38,6 +38,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			buttonSearch = AddButton("Search", commandBindingSearch, Assets.Streams.Search);
 			buttonLoadNext = AddButton("Next", commandBindingNext, Assets.Streams.Forward);
 			buttonLoadAdd = AddButton("Add", commandBindingAdd, Assets.Streams.Add);
+			AddButton("Browser", commandBindingNext, Assets.Streams.Browser);
 			textBlockStatus = AddLabel("Status");
 		}
 

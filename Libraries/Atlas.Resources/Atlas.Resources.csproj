@@ -11,6 +11,7 @@
     <None Remove="Assets\if_help_62217.png" />
     <None Remove="Assets\info_24_759eeb.png" />
     <None Remove="Assets\info_24_c8c2f9.png" />
+    <None Remove="Assets\internet.png" />
     <None Remove="Assets\left-arrow-blue.png" />
     <None Remove="Assets\left-arrow-gray.png" />
     <None Remove="Assets\left-arrow.png" />
@@ -30,6 +31,7 @@
     <EmbeddedResource Include="Assets\cancel_red.png" />
     <EmbeddedResource Include="Assets\info_24_759eeb.png" />
     <EmbeddedResource Include="Assets\info_24_c8c2f9.png" />
+    <EmbeddedResource Include="Assets\internet.png" />
     <EmbeddedResource Include="Assets\left-arrow-blue.png" />
     <EmbeddedResource Include="Assets\left-arrow-gray.png" />
     <EmbeddedResource Include="Assets\left-arrow.png" />
