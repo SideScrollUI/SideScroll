@@ -20,10 +20,12 @@ namespace Atlas.Tabs
 		[HiddenColumn]
 		public virtual bool Editable { get { return true; } }
 
-		[HiddenColumn]
+		//[HiddenColumn]
+		[StyleValue]
 		[InnerValue]
 		public abstract object Value { get; set; }
 
+		[HiddenColumn]
 		[Name("Value")]
 		[StyleValue]
 		[Editing]

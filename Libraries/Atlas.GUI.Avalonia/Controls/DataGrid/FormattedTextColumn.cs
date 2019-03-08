@@ -30,6 +30,20 @@ namespace Atlas.GUI.Avalonia
 			this.propertyInfo = propertyInfo;
 			IsReadOnly = isReadOnly;
 			Binding = GetFormattedTextBinding();
+
+			CanUserSort = IsSortable(propertyInfo.PropertyType);
+		}
+
+		private bool IsSortable(Type type)
+		{
+			type = type.GetNonNullableType();
+			if (propertyInfo.PropertyType.IsPrimitive ||
+				type == typeof(string) ||
+				type == typeof(DateTime) ||
+				type == typeof(TimeSpan))
+				return true;
+
+			return false;
 		}
 
 		protected override IControl GenerateElement(DataGridCell cell, object dataItem)

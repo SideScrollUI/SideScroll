@@ -64,7 +64,7 @@ namespace Atlas.GUI.Avalonia
 		public void SetTime(string timeText)
 		{
 			TimeSpan timeSpan;
-			if (TimeSpan.TryParseExact(timeText, "g", CultureInfo.InvariantCulture, out timeSpan))
+			if (TimeSpan.TryParseExact(timeText, @"hh\:mm\:ss", CultureInfo.InvariantCulture, out timeSpan))
 			{
 				var date = ((DateTime)originalDateTime).Date;
 				originalDateTime = date.AddSeconds(timeSpan.TotalSeconds);

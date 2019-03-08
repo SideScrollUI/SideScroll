@@ -41,13 +41,16 @@ namespace Atlas.GUI.Avalonia.View
 				}*/
 			}
 			string labelOverride = null;
-			if (parentTabInstance is ITabCreator)
+			if (!(value is Exception))
 			{
-				value = ((ITabCreator)parentTabInstance).CreateControl(value, out labelOverride);
-			}
-			else if (tabControl is ITabCreator)
-			{
-				value = ((ITabCreator)tabControl).CreateControl(value, out labelOverride);
+				if (parentTabInstance is ITabCreator)
+				{
+					value = ((ITabCreator)parentTabInstance).CreateControl(value, out labelOverride);
+				}
+				else if (tabControl is ITabCreator)
+				{
+					value = ((ITabCreator)tabControl).CreateControl(value, out labelOverride);
+				}
 			}
 			if (value == null)
 				return null;
