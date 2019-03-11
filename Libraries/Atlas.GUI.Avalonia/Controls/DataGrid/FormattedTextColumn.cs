@@ -175,7 +175,8 @@ namespace Atlas.GUI.Avalonia
 				formattedBinding = new Binding
 				{
 					Path = binding.Path,
-					Mode = binding.Mode
+					//Mode = binding.Mode,
+					Mode = BindingMode.OneWay, // copying a value to the clipboard triggers an infinite loop without this?
 				};
 				if (IsReadOnly)
 					formattedBinding.Converter = formatConverter;
