@@ -17,6 +17,7 @@
     <None Remove="Assets\left-arrow.png" />
     <None Remove="Assets\left-chevron.png" />
     <None Remove="Assets\Logo.ico" />
+    <None Remove="Assets\password.png" />
     <None Remove="Assets\placeholder.png" />
     <None Remove="Assets\right-arrow-blue.png" />
     <None Remove="Assets\right-arrow-gray.png" />
@@ -37,6 +38,7 @@
     <EmbeddedResource Include="Assets\left-arrow-gray.png" />
     <EmbeddedResource Include="Assets\left-arrow.png" />
     <EmbeddedResource Include="Assets\Logo.ico" />
+    <EmbeddedResource Include="Assets\password.png" />
     <EmbeddedResource Include="Assets\placeholder.png" />
     <EmbeddedResource Include="Assets\right-arrow-blue.png" />
     <EmbeddedResource Include="Assets\right-arrow-gray.png" />

@@ -24,6 +24,9 @@ namespace Atlas.Resources
 
 		public static readonly string Browser = "internet.png";
 
+		public static readonly string Unlock = "unlock.png";
+		public static readonly string Password = "password.png";
+
 		public class Streams
 		{
 			public static Stream Logo => Get(Assets.Logo);
@@ -42,6 +45,9 @@ namespace Atlas.Resources
 			public static Stream Save => Get(Assets.Save);
 
 			public static Stream Browser => Get(Assets.Browser);
+
+			public static Stream Unlock => Get(Assets.Unlock);
+			public static Stream Password => Get(Assets.Password);
 
 			public static Stream Get(string resourceName)
 			{

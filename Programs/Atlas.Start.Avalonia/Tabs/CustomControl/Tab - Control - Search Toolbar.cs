@@ -31,6 +31,11 @@ namespace Atlas.Start.Avalonia.Tabs
 				(obj) => CommandAddCanExecute(obj),
 				(obj) => CommandAddExecute(obj));
 
+			RelayCommand commandBindingDefault = new RelayCommand(
+				(obj) => CommandDefaultCanExecute(obj),
+				(obj) => CommandDefaultExecute(obj));
+
+
 			//project.navigator.CanSeekBackwardOb
 			//CommandBinder.
 			//CommandBindings.Add(commandBindingBack);
@@ -39,6 +44,9 @@ namespace Atlas.Start.Avalonia.Tabs
 			buttonLoadNext = AddButton("Next", commandBindingNext, Assets.Streams.Forward);
 			buttonLoadAdd = AddButton("Add", commandBindingAdd, Assets.Streams.Add);
 			AddButton("Browser", commandBindingNext, Assets.Streams.Browser);
+			AddButton("Unlock", commandBindingDefault, Assets.Streams.Unlock);
+			AddButton("Password", commandBindingDefault, Assets.Streams.Password);
+			AddButton("Save", commandBindingDefault, Assets.Streams.Save);
 			textBlockStatus = AddLabel("Status");
 		}
 
@@ -69,6 +77,16 @@ namespace Atlas.Start.Avalonia.Tabs
 		}
 
 		private void CommandAddExecute(object obj)
+		{
+
+		}
+
+		private bool CommandDefaultCanExecute(object obj)
+		{
+			return true;
+		}
+
+		private void CommandDefaultExecute(object obj)
 		{
 
 		}
