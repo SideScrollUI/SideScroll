@@ -1,9 +1,11 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
+using Avalonia.Input.Platform;
 using Avalonia.Media;
 using System;
 using System.Collections.Generic;
@@ -52,6 +54,11 @@ namespace Atlas.GUI.Avalonia
 			cell.MaxHeight = 100; // don't let them have more than a few lines each
 
 			TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
+			textBlock.DoubleTapped += delegate
+			{
+				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard)))
+				.SetTextAsync(textBlock.Text);
+			};
 			return textBlock;
 		}
 

@@ -47,7 +47,6 @@ namespace Atlas.GUI.Avalonia.Tabs
 
 			Button button = new Button()
 			{
-				//ToolTip = name, // doesn't work
 				Content = image,
 				Command = command,
 				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
@@ -57,6 +56,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 				//BorderThickness = new Thickness(2),
 				//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
 				//BorderBrush = new SolidColorBrush(Colors.Black),
+				[ToolTip.TipProperty] = name,
 			};
 			button.BorderBrush = button.Background;
 			button.PointerEnter += Button_PointerEnter;
@@ -65,6 +65,17 @@ namespace Atlas.GUI.Avalonia.Tabs
 			this.Children.Add(button);
 
 			return button;
+		}
+
+		public void AddSeparator()
+		{
+			Panel panel = new Panel()
+			{
+				Background = new SolidColorBrush(Theme.ToolbarButtonSeparatorColor),
+				Width = 2,
+				Margin = new Thickness(4),
+			};
+			this.Children.Add(panel);
 		}
 
 		// DefaultTheme.xaml is overriding this currently
@@ -118,7 +129,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 		}
 	}
 
-	// replace with version that uses IObservable
+	// todo: replace with version that uses IObservable
 	public class RelayCommand : ICommand
 	{
 		readonly Func<object, bool> canExecute;
