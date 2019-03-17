@@ -14,7 +14,7 @@ using System.Reflection;
 
 namespace Atlas.GUI.Avalonia
 {
-	public class FormattedTextColumn : DataGridTextColumn
+	public class DataGridPropertyTextColumn : DataGridTextColumn
 	{
 		public SolidColorBrush BrushHasChildren { get; set; } = new SolidColorBrush(Theme.HasChildrenColor);
 		public SolidColorBrush BrushEditable { get; set; } = new SolidColorBrush(Theme.EditableColor);
@@ -27,7 +27,7 @@ namespace Atlas.GUI.Avalonia
 		private FieldValueConverter formatConverter = new FieldValueConverter();
 		private PropertyInfo propertyInfo;
 		
-		public FormattedTextColumn(PropertyInfo propertyInfo, bool isReadOnly)
+		public DataGridPropertyTextColumn(PropertyInfo propertyInfo, bool isReadOnly)
 		{
 			this.propertyInfo = propertyInfo;
 			IsReadOnly = isReadOnly;

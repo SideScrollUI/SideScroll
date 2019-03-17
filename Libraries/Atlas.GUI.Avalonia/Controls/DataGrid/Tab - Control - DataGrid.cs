@@ -33,7 +33,6 @@ namespace Atlas.GUI.Avalonia.Controls
 		public DataGrid dataGrid;
 		public TextBox textBoxSearch;
 
-
 		//private HashSet<int> pinnedItems = new HashSet<int>();
 		private ICollectionView collectionView;
 		private Dictionary<string, DataGridColumn> columnObjects = new Dictionary<string, DataGridColumn>();
@@ -220,9 +219,9 @@ namespace Atlas.GUI.Avalonia.Controls
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch, // doesn't work
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, // todo: can't get working
-																		  //HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // Use scrollviewer instead for now 
-																		  //BorderThickness = new Thickness(0), // DataGrid bug, setting this breaks the background OnFocus, but fixes the extra border
-																		  //Padding = new Thickness(0),
+				//HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // Use scrollviewer instead for now 
+				//BorderThickness = new Thickness(0), // DataGrid bug, setting this breaks the background OnFocus, but fixes the extra border
+				//Padding = new Thickness(0),
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				IsReadOnly = !tabModel.Editing,
@@ -258,8 +257,8 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			dataGrid.SelectionChanged += DataGrid_SelectionChanged;
 			dataGrid.PointerPressed += DataGrid_PointerPressed; // doesn't trigger (only implemented for column headers)
-																//dataGrid.PointerReleased += DataGrid_PointerReleased; // does trigger, but after selection changes
-																//dataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // only triggers some of the time
+			//dataGrid.PointerReleased += DataGrid_PointerReleased; // does trigger, but after selection changes
+			//dataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // only triggers some of the time
 			dataGrid.Tapped += DataGrid_Tapped;
 			dataGrid.Initialized += DataGrid_Initialized;
 			dataGrid.ColumnReordered += DataGrid_ColumnReordered;
@@ -553,7 +552,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				else
 				{
 					//if (isReadOnly)
-						column = new FormattedTextColumn(propertyInfo, isReadOnly);
+						column = new DataGridPropertyTextColumn(propertyInfo, isReadOnly);
 					//else
 					//	column = new DataGridTextColumn();
 				}
