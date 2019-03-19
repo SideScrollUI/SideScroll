@@ -51,15 +51,12 @@ namespace Atlas.Serialize
 		// Use ToString()? for name?
 		public void Save(string name, object obj, Call call = null)
 		{
-			call = call ?? new Call();
-			//using (Call call = call.Child(this,
-			Type type = obj.GetType();
-			SerializerFile serializer = GetSerializerFile(type, name); // use hash since filesystems can't handle long names
-			serializer.Save(call, obj, name);
+			Save(null, name, obj, call);
 		}
 
 		public void Save(string directory, string name, object obj, Call call = null)
 		{
+			directory = directory ?? DefaultDirectory;
 			call = call ?? new Call();
 			//using (Call call = call.Child(this,
 			Type type = obj.GetType();
@@ -185,6 +182,7 @@ namespace Atlas.Serialize
 
 		public void Delete(Type type, string directory, string name)
 		{
+			directory = directory ?? DefaultDirectory;
 			string directoryPath = GetDirectoryPath(type, directory, name);
 			if (Directory.Exists(directoryPath))
 				Directory.Delete(directoryPath, true);
@@ -192,9 +190,7 @@ namespace Atlas.Serialize
 
 		public void Delete(Type type, string name)
 		{
-			string directoryPath = GetDirectoryPath(type, DefaultDirectory, name);
-			if (Directory.Exists(directoryPath))
-				Directory.Delete(directoryPath, true);
+			Delete(type, null, name);
 		}
 
 		public void DeleteRepo()

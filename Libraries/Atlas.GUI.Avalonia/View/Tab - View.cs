@@ -626,6 +626,9 @@ namespace Atlas.GUI.Avalonia.View
 				if (tabChildControls == null) // TabTasks hiding can sometimes trigger this, todo: figure out why
 					return false;
 
+                if (Bounds.Height < 50)
+                    return false;
+
 				if (tabInstance.Depth > 30)
 					return false;
 				//if (arrangeOverrideFinalSize.Width < 30)

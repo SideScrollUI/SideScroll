@@ -2,6 +2,7 @@
 using Atlas.Extensions;
 using Atlas.Tabs;
 using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
@@ -56,10 +57,32 @@ namespace Atlas.GUI.Avalonia
 			TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
 			textBlock.DoubleTapped += delegate
 			{
-				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard)))
-				.SetTextAsync(textBlock.Text);
+				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
 			};
+			AddTextBoxContextMenu(textBlock);
 			return textBlock;
+		}
+
+		private void AddTextBoxContextMenu(TextBlock textBlock)
+		{
+			ContextMenu contextMenu = new ContextMenu();
+
+			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+
+			var list = new AvaloniaList<object>();
+
+			MenuItem menuItemCopy = new MenuItem() { Header = "_Copy" };
+			menuItemCopy.Click += delegate
+			{
+				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
+			};
+			list.Add(menuItemCopy);
+
+			//list.Add(new Separator());
+
+			contextMenu.Items = list;
+
+			textBlock.ContextMenu = contextMenu;
 		}
 
 		private IBrush GetCellBrush(DataGridCell dataGridCell, object dataItem)
