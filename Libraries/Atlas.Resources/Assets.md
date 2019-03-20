@@ -12,8 +12,8 @@ When adding a new file:
 	- `!*.png` doesn't work
 
 Colors:
-Dark Blue: 006df0
-Light Blue: 759eeb
+Dark Blue: 006df0 (currently used)
+Light Blue: 759eeb (not used)
 
 <div>Icons made by <a href="https://www.flaticon.com/authors/lucy-g" title="Lucy G">Lucy G</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
@@ -23,7 +23,8 @@ Light Blue: 759eeb
 	https://www.flaticon.com/free-icon/right-arrow_118745
 	https://www.flaticon.com/free-icon/add_118742
 	https://www.flaticon.com/free-icon/unlock_118737
-	https://www.flaticon.com/free-icon/password_1330268#term=login&page=2&position=31
+	https://www.flaticon.com/free-icon/password_1330268
+	https://www.flaticon.com/free-icon/padnote_118751
 
 <div>Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 

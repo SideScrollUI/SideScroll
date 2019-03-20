@@ -45,7 +45,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		private bool autoSelectNew = true;
 		private bool autoGenerateColumns = true;
 
-		private int disableSaving = 0; // enables saving if 0
+		private int disableSaving = 0; // enables saving if > 0
 
 		private DispatcherTimer dispatcherTimer;  // delays auto selection to throttle updates
 		private object autoSelectItem = null;
@@ -103,6 +103,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				tabInstance.SetEndLoad();
 				disableSaving--;
 				finishedLoading = true;
+				if (selectionModified)
+					tabInstance.SaveTabSettings(); // selection has probably changed
 			}
 			return size;
 		}
@@ -321,6 +323,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 		}
 
+		private bool selectionModified = false;
+
 		private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			if (e.Action == NotifyCollectionChangedAction.Add)
@@ -339,6 +343,7 @@ namespace Atlas.GUI.Avalonia.Controls
 						disableSaving++;
 						// change to dispatch here?
 						autoSelectItem = null;
+						selectionModified = true;
 						//SelectedItem = e.NewItems[0];
 						SelectedItem = iList[iList.Count - 1];
 						disableSaving--;

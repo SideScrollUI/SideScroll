@@ -620,38 +620,39 @@ namespace Atlas.GUI.Avalonia.View
 		{
 			get
 			{
+				if (IsArrangeValid == false)
+					return false;
+
 				// Only add children if they'll be visible
 				if (IsVisible == false)
 					return false;
 				if (tabChildControls == null) // TabTasks hiding can sometimes trigger this, todo: figure out why
 					return false;
 
-                if (Bounds.Height < 50)
-                    return false;
+				if (Bounds.Height < 50)
+					return false;
 
 				if (tabInstance.Depth > 30)
 					return false;
-				//if (arrangeOverrideFinalSize.Width < 30)
-				//	return false;
-				//if (Bounds.Width < 30 || double.IsNaN(Bounds.Width))
-				//	return false;
 				if (double.IsNaN(tabParentControls.arrangeOverrideFinalSize.Width))
 					return false;
+				if (tabChildControls.Width < 30)
+					return false;
+
 				//if (tabParentControls.arrangeOverrideFinalSize.Width < 30)
 				//	return false;
 				//if (tabParentControls.Width < 30) // this breaks if we collapse splitter
 				//	return false;
 				//if (double.IsNaN(tabParentControls.Width))
 				//	return false;
-				if (tabChildControls.Width < 30)
-					return false;
+				//if (arrangeOverrideFinalSize.Width < 30)
+				//	return false;
+				//if (Bounds.Width < 30 || double.IsNaN(Bounds.Width))
+				//	return false;
 				//if (tabChildControls.arrangeOverrideFinalSize.Width < 30) // doesn't work if this is in a AutoSize container
 				//	return false;
 				//if (double.IsNaN(tabChildControls.arrangeOverrideFinalSize.Width))
 				//	return false;
-
-				if (IsArrangeValid == false)
-					return false;
 
 				//if (rendered == false)
 				//	return false;

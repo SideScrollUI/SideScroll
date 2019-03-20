@@ -44,9 +44,6 @@ namespace Atlas.Start.Avalonia.Tabs
 			buttonLoadNext = AddButton("Next", commandBindingNext, Assets.Streams.Forward);
 			AddSeparator();
 			buttonLoadAdd = AddButton("Add", commandBindingAdd, Assets.Streams.Add);
-			AddButton("Browser", commandBindingNext, Assets.Streams.Browser);
-			AddButton("Unlock", commandBindingDefault, Assets.Streams.Unlock);
-			AddButton("Password", commandBindingDefault, Assets.Streams.Password);
 			AddButton("Save", commandBindingDefault, Assets.Streams.Save);
 			textBlockStatus = AddLabel("Status");
 		}

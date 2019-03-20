@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -27,6 +28,8 @@ namespace Atlas.Resources
 		public static readonly string Unlock = "unlock.png";
 		public static readonly string Password = "password.png";
 
+		public static readonly string PadNote = "padnote.png";
+
 		public class Streams
 		{
 			public static Stream Logo => Get(Assets.Logo);
@@ -49,11 +52,31 @@ namespace Atlas.Resources
 			public static Stream Unlock => Get(Assets.Unlock);
 			public static Stream Password => Get(Assets.Password);
 
+			public static Stream PadNote => Get(Assets.PadNote);
+
 			public static Stream Get(string resourceName)
 			{
 				var assembly = Assembly.GetExecutingAssembly();
 				return assembly.GetManifestResourceStream("Atlas.Resources.Assets." + resourceName);
 			}
+
+			// this might slow loading?
+			public static List<Stream> All { get; set; } = new List<Stream>()
+				{
+				Logo,
+				Pin,
+				Add,
+				Delete,
+				Back,
+				Forward,
+				Search,
+				Info,
+				Save,
+				Browser,
+				Unlock,
+				Password,
+				PadNote,
+				};
 		}
 	}
 

@@ -33,6 +33,7 @@ namespace Atlas.Start.Avalonia.Tabs
 					new ListItem("Test", new TabTest()),
 					//new ListItem("SeriLog", new TabSeriLog()),
 					new ListItem("Custom Control", new TabCustomControl()),
+					new ListItem("Icons", new TabIcons()),
 					//new ListItem("Inputs", new TabParams()),
 				};
 				tabModel.Items = items;
