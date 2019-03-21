@@ -19,7 +19,14 @@ namespace Atlas.Tabs
 		public PropertyInfo propertyInfo;
 		
 		[HiddenColumn]
-		public override bool Editable { get { return propertyInfo.CanWrite; } }
+		public override bool Editable // rename to IsReadOnly?
+		{
+			get
+			{
+				bool propertyReadOnly = (propertyInfo.GetCustomAttribute(typeof(ReadOnlyAttribute)) != null);
+				return propertyInfo.CanWrite && !propertyReadOnly;
+			}
+		}
 
 		[Editing]
 		[InnerValue]

@@ -127,8 +127,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			Type propertyType = property.propertyInfo.PropertyType;
 			Type underlyingType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
 
-			bool propertyReadOnly = (property.propertyInfo.GetCustomAttribute(typeof(ReadOnlyAttribute)) != null);
-
 			BindListAttribute listAttribute = underlyingType.GetCustomAttribute<BindListAttribute>();
 
 			Control control = null;
@@ -147,13 +145,13 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 			else
 			{
-				control = AddTextBox(property, rowIndex, columnIndex, underlyingType, propertyReadOnly);
+				control = AddTextBox(property, rowIndex, columnIndex, underlyingType);
 			}
 
 			return control;
 		}
 
-		private TextBox AddTextBox(ListProperty property, int rowIndex, int columnIndex, Type type, bool propertyReadOnly)
+		private TextBox AddTextBox(ListProperty property, int rowIndex, int columnIndex, Type type)
 		{
 			TextBox textBox = new TextBox()
 			{
@@ -161,7 +159,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				IsReadOnly = !property.Editable || propertyReadOnly,
+				IsReadOnly = !property.Editable,
 				MinWidth = 50,
 				Padding = new Thickness(6, 3),
 				Focusable = true, // already set?
@@ -304,9 +302,10 @@ namespace Atlas.GUI.Avalonia.Controls
 		// todo: need a real DateTimePicker
 		private void AddDateTimePicker(ListProperty property, int rowIndex, int columnIndex)
 		{
+			var backgroundColor = property.Editable ? Colors.White : Colors.LightGray;
 			DatePicker datePicker = new DatePicker()
 			{
-				Background = new SolidColorBrush(Colors.White),
+				Background = new SolidColorBrush(backgroundColor),
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				BorderThickness = new Thickness(1),
@@ -315,6 +314,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				Watermark = "yyyy/M/d",
 				MinWidth = 100,
 				MaxWidth = ControlMaxWidth,
+				IsEnabled = property.Editable,
 
 				//MaxWidth = 200,
 				[Grid.RowProperty] = rowIndex,
@@ -341,7 +341,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			TextBox textBox = new TextBox()
 			{
-				Background = new SolidColorBrush(Colors.White),
+				Background = new SolidColorBrush(backgroundColor),
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				HorizontalAlignment = HorizontalAlignment.Stretch,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Atlas.Core;
 using Atlas.Tabs;
 
@@ -58,7 +59,7 @@ namespace Atlas.Tabs.Test
 		{
 			public bool Boolean { get; set; } = true;
 			public string String { get; set; } = "Test";
-			[ReadOnly]
+			[ReadOnly(true)]
 			public string ReadOnly { get; set; } = "ReadOnly";
 			public int Integer { get; set; } = 123;
 			public double Double { get; set; } = 3.14;

@@ -56,10 +56,10 @@ namespace Atlas.Core
 	{
 	}
 
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	/*[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class ReadOnlyAttribute : Attribute
 	{
-	}
+	}*/
 
 	// ->Serialize: When Cloning an object, anything marked with [Static] won't be deep copied
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
