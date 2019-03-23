@@ -49,4 +49,11 @@
             Value="16" />
   </Style>
   
+  <Style Selector="ToolTip">
+    <Setter Property="BorderThickness"
+            Value="1" />
+    <Setter Property="BorderBrush"
+            Value="#FF000000" />
+  </Style>
+  
 </Styles>
