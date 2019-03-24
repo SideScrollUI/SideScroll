@@ -20,6 +20,7 @@ namespace Atlas.Tabs.Test.Actions
 				tabModel.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Parameters", new TabParamsDataGrid()),
+					new ListItem("Async", new TabTestAsync()),
 				};
 
 				tabModel.Actions = new ItemCollection<TaskCreator>()

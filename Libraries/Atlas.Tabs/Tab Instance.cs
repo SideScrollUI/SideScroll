@@ -5,7 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using static Atlas.Core.TaskDelegate;
 using static Atlas.Core.TaskDelegateParams;
 
@@ -14,6 +16,11 @@ namespace Atlas.Tabs
 	public interface ITab
 	{
 		TabInstance Create();
+	}
+
+	public interface ITabAsync
+	{
+		Task LoadAsync();
 	}
 
 	//	An Instance of a TabModel, created by TabView
@@ -228,15 +235,21 @@ namespace Atlas.Tabs
 			StartTask(taskDelegate);
 		}
 
+		private MethodInfo GetDerivedLoadMethod()
+		{
+			Type type = GetType(); // gets derived type
+			if (type.GetMethods().Where(m => m.Name == nameof(Load)).ToList().Count > 1)
+				return null;
+			MethodInfo methodInfo = type.GetMethod(nameof(Load));//, new Type[] { typeof(Call) });
+			return methodInfo;
+		}
+
 		// Check if derived type implements Load()
 		public bool CanLoad
 		{
 			get
 			{
-				Type type = GetType(); // gets derived type
-				if (type.GetMethods().Where(m => m.Name == nameof(Load)).ToList().Count > 1)
-					return true;
-				MethodInfo methodInfo = type.GetMethod(nameof(Load));//, new Type[] { typeof(Call) });
+				MethodInfo methodInfo = GetDerivedLoadMethod();
 				return (methodInfo.DeclaringType != typeof(TabInstance));
 			}
 		}
@@ -249,7 +262,16 @@ namespace Atlas.Tabs
 		private bool isLoaded = false;
 		public void Reintialize()
 		{
-			if (CanLoad && isLoaded == false)
+			if (isLoaded)
+				return;
+
+			//MethodInfo methodInfo = GetDerivedLoadMethod();
+			if (this is ITabAsync tabAsync)
+			{
+				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
+				Task.Run(() => tabAsync.LoadAsync()).Wait(); // Call this way to avoid .Result deadlock
+			}
+			else if (CanLoad)
 			{
 				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
 				Load(); // Creates a tabModel if none exists and adds other Controls
