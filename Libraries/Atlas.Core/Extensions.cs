@@ -425,6 +425,11 @@ namespace Atlas.Extensions // rename to Core?
 					return GetInnerValue(value);
 				}
 			}
+			if (value is DictionaryEntry dictionaryEntry)
+			{
+				if (dictionaryEntry.Key is string)
+					return dictionaryEntry.Value;
+			}
 			return value;
 		}
 

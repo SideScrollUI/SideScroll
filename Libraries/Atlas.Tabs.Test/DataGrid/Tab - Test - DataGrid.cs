@@ -17,6 +17,7 @@ namespace Atlas.Tabs.Test.DataGrid
 				{
 					new ListItem("Collection Size", new TabTestGridCollectionSize()),
 					new ListItem("Enumerable", new TabTestGridHashSet()),
+					new ListItem("Dictionary", new TabTestGridDictionary()),
 					new ListItem("Array", new TabTestArray()),
 					new ListItem("Nullable Array", new TabTestNullableArray()),
 					new ListItem("Memory", new TabTestMemory()),

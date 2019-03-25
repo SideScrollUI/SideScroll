@@ -19,7 +19,7 @@ namespace Atlas.GUI.Avalonia.Controls
 {
 	public class TabControlParams : Grid
 	{
-		private const int ControlMaxWidth = 300;
+		private const int ControlMaxWidth = 400;
 		private TabInstance tabInstance;
 		private object obj;
 		private bool autoGenerateRows;
