@@ -250,7 +250,10 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			//dataGrid.AutoGenerateColumns = true;
 			if (autoGenerateColumns)
+			{
+				AddMethodsAsColumns();
 				AddPropertiesAsColumns();
+			}
 
 			collectionView = new CollectionViewBase(iList);
 			dataGrid.Items = collectionView;
@@ -470,6 +473,16 @@ namespace Atlas.GUI.Avalonia.Controls
 				tabInstance.SaveTabSettings();
 		}
 
+		private void AddMethodsAsColumns()
+		{
+			List<TabDataSettings.MethodColumn> methodColumns = TabDataSettings.GetButtonMethods(elementType);
+
+			foreach (TabDataSettings.MethodColumn methodColumn in methodColumns)
+			{
+				AddButtonColumn(methodColumn);
+			}
+		}
+
 		private void AddPropertiesAsColumns()
 		{
 			columnObjects = new Dictionary<string, DataGridColumn>();
@@ -595,7 +608,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			columnProperties.Add(propertyInfo);
 		}
 
-		public void AddButtonColumn(string label, string methodName)
+		public void AddButtonColumn(TabDataSettings.MethodColumn methodColumn)
 		{
 			/*DataGridTemplateColumn column = new DataGridTemplateColumn();
 			//column.CellTemplate.
@@ -605,6 +618,12 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			column.Header = label;
 			dataGrid.Columns.Add(column);*/
+
+			// databound
+			//DataGridCheckBoxColumn checkBoxColumn = new DataGridCheckBoxColumn()
+			DataGridButtonColumn column = new DataGridButtonColumn(methodColumn.methodInfo, methodColumn.label);
+			//column.Header = methodColumn.methodInfo.Name;
+			dataGrid.Columns.Add(column);
 		}
 
 		public void LoadSettings()

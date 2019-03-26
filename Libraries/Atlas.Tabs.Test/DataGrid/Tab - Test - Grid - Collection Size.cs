@@ -45,6 +45,12 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class TestItem
 		{
+			[ButtonColumn("-")]
+			public void Click()
+			{
+
+			}
+
 			public int smallNumber { get; set; } = 0;
 			public long bigNumber { get; set; } = 1234567890123456789;
 			public string longText0 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";

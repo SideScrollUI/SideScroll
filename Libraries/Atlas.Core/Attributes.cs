@@ -79,6 +79,18 @@ namespace Atlas.Core
 	{
 	}
 
+	// ->Tabs: Don't show this field/property as a column
+	[AttributeUsage(AttributeTargets.Method)]
+	public class ButtonColumnAttribute : Attribute
+	{
+		public readonly string Name;
+
+		public ButtonColumnAttribute(string name = null)
+		{
+			this.Name = name;
+		}
+	}
+
 	// ->Tabs: Don't show this field/property as a row
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class HiddenRowAttribute : Attribute

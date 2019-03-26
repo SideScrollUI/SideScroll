@@ -27,6 +27,21 @@ namespace Atlas.Tabs
 
 		public string Filter { get; set; }
 
+		public static List<MethodColumn> GetButtonMethods(Type type)
+		{
+			List<MethodColumn> callableMethods = new List<MethodColumn>();
+			MethodInfo[] methodInfos = type.GetMethods().OrderBy(x => x.MetadataToken).ToArray();
+			foreach (MethodInfo methodInfo in methodInfos)
+			{
+				var attribute = methodInfo.GetCustomAttribute<ButtonColumnAttribute>();
+				if (attribute == null)
+					continue;
+
+				callableMethods.Add(new MethodColumn(methodInfo, attribute.Name ?? methodInfo.Name));
+			}
+			return callableMethods;
+		}
+
 		public static List<PropertyInfo> GetVisibleProperties(Type type)
 		{
 			List<PropertyInfo> visibleProperties = new List<PropertyInfo>();
@@ -34,12 +49,24 @@ namespace Atlas.Tabs
 			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
-				if (propertyInfo.GetCustomAttribute(typeof(HiddenColumnAttribute)) != null)
+				if (propertyInfo.GetCustomAttribute<HiddenColumnAttribute>() != null)
 					continue;
 
 				visibleProperties.Add(propertyInfo);
 			}
 			return visibleProperties;
+		}
+
+		public class MethodColumn
+		{
+			public MethodInfo methodInfo;
+			public string label;
+
+			public MethodColumn(MethodInfo methodInfo, string label)
+			{
+				this.methodInfo = methodInfo;
+				this.label = label;
+			}
 		}
 
 		public class PropertyColumn
