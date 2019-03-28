@@ -23,8 +23,9 @@ namespace Atlas.Tabs.Test.DataGrid
 					new ListItem("Memory", new TabTestMemory()),
 					new ListItem("Object Properties", new TabTestObjectProperties()),
 					new ListItem("Wide Columns", new TabTestWideColumns()),
-					new ListItem("Column Types", new TabTestColumnTypes()),
-					new ListItem("Column Ordering", new TabTestColumnOrdering()),
+					new ListItem("Column Types", new TabTestGridColumnTypes()),
+					new ListItem("Column Ordering", new TabTestGridColumnOrdering()),
+					new ListItem("Column Count", new TabTestGridColumnCount()),
 					new ListItem("Filter", new TabTestFilter()),
 				};
 			}

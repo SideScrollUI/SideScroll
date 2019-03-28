@@ -167,6 +167,11 @@ namespace Atlas.Serialize
 			return list;
 		}
 
+		public void DeleteAll<T>(string directory = null)
+		{
+			DeleteAll(typeof(T), directory);
+		}
+
 		public void DeleteAll(Type type, string directory = null)
 		{
 			string directoryPath = GetTypePath(type, directory);

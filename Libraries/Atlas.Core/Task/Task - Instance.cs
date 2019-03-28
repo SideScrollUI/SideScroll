@@ -25,6 +25,7 @@ namespace Atlas.Core
 		public Task Task { get; set; }
 		public TaskStatus TaskStatus { get { return Task == null ? TaskStatus.Created : Task.Status; } }
 		public CancellationTokenSource tokenSource = new CancellationTokenSource();
+		public CancellationToken CancelToken => tokenSource.Token;
 
 		public string Status { get; set; } = "Running";
 

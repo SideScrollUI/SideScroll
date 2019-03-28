@@ -164,6 +164,10 @@ namespace Atlas.Tabs
 			{
 				tabModel.Clear();
 			}
+			foreach (TaskInstance taskInstance in tabModel.Tasks)
+			{
+				taskInstance.Cancel();
+			}
 		}
 
 		private void InitializeContext()

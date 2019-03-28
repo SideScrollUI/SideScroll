@@ -22,8 +22,8 @@ namespace Atlas.Tabs.Test.DataGrid
 					new TaskAction("Add 100 Entries", new Action(() => AddEntries(100))),
 					new TaskAction("Add 1,000 Entries", new Action(() => AddEntries(1000))),
 					new TaskAction("Add 10,000 Entries", new Action(() => AddEntries(10000))),
-					new TaskAction("Add 100,000 Entries", new Action(() => AddEntries(100000))),
-					new TaskAction("Add 1,000,000 Entries", new Action(() => AddEntries(1000000))),
+					new TaskAction("Add 100,000 Entries (WPF Only)", new Action(() => AddEntries(100000))),
+					new TaskAction("Add 1,000,000 Entries (WPF Only)", new Action(() => AddEntries(1000000))),
 				};
 				//actions.Add(new TaskAction("Add Entries", AddEntries));
 			}

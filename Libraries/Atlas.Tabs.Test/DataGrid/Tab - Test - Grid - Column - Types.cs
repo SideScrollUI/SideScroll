@@ -3,7 +3,7 @@ using Atlas.Core;
 
 namespace Atlas.Tabs.Test.DataGrid
 {
-	public class TabTestColumnTypes : ITab
+	public class TabTestGridColumnTypes : ITab
 	{
 		public TabInstance Create() { return new Instance(); }
 

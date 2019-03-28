@@ -245,7 +245,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				BorderThickness = new Thickness(1),
-				MaxWidth = 200,
+				MaxWidth = ControlMaxWidth,
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
 			};
@@ -272,6 +272,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				BorderThickness = new Thickness(1),
+				MaxWidth = ControlMaxWidth,
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
 			};
