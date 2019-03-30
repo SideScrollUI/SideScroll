@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Input.Platform;
+using Avalonia.Layout;
 using Avalonia.Media;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace Atlas.GUI.Avalonia
 			this.propertyInfo = propertyInfo;
 			IsReadOnly = isReadOnly;
 			Binding = GetFormattedTextBinding();
+			//Binding = GetTextBinding();
 
 			CanUserSort = IsSortable(propertyInfo.PropertyType);
 		}
@@ -55,6 +57,7 @@ namespace Atlas.GUI.Avalonia
 			cell.MaxHeight = 100; // don't let them have more than a few lines each
 
 			TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
+			//TextBlock textBlock = GetTextBlock(cell, dataItem);
 			textBlock.DoubleTapped += delegate
 			{
 				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
@@ -62,6 +65,39 @@ namespace Atlas.GUI.Avalonia
 			AddTextBoxContextMenu(textBlock);
 			return textBlock;
 		}
+
+		// so we don't load slow templates?
+		/*public class SubTextBlock : TextBlock
+		{
+		}
+
+		protected TextBlock GetTextBlock(DataGridCell cell, object dataItem)
+		{
+			SubTextBlock textBlockElement = new SubTextBlock
+			{
+				Margin = new Thickness(4),
+				VerticalAlignment = VerticalAlignment.Center,
+				//FontFamily
+				//FontSize
+				//FontStyle
+				//FontWeight
+				//Foreground
+			};
+
+			if (Binding != null)
+			{
+				textBlockElement.Bind(TextBlock.TextProperty, Binding);
+				
+				/*var directBindingsField = textBlockElement.GetType().GetField("_directBindings", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+				if (directBindingsField.GetValue(textBlockElement) == null)
+				{
+					directBindingsField.SetValue(textBlockElement, new List<AvaloniaObject.DirectBindingSubscription>();
+				}
+
+				return new AvaloniaObject.DirectBindingSubscription(textBlockElement, TextBlock.TextProperty, Binding);*//*
+			}
+			return textBlockElement;
+		}*/
 
 		private void AddTextBoxContextMenu(TextBlock textBlock)
 		{
@@ -176,18 +212,19 @@ namespace Atlas.GUI.Avalonia
 		{
 			Binding binding = (Binding)Binding;
 			if (binding == null)
-				return new Binding();
+				return new Binding(propertyInfo.Name);
 
 			//if (unformattedBinding == null)
 			{
 				unformattedBinding = new Binding
 				{
 					Path = binding.Path,
+					Mode = BindingMode.OneWay, // copying a value to the clipboard triggers an infinite loop without this?
 				};
 				//if (!IsReadOnly)
 				//	unformattedBinding.Mode = BindingMode.TwoWay;
 				//else
-				unformattedBinding.Mode = binding.Mode;
+				//unformattedBinding.Mode = binding.Mode;
 				//unformattedBinding.BindsDirectlyToSource = true;
 			}
 

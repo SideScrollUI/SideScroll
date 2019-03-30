@@ -174,7 +174,54 @@ namespace Atlas.Serialize.Test
 			Assert.AreEqual(output.stringTest, input.stringTest);
 		}
 
-		[Test, Description("Clone Nullable int")]
+		public struct StructTest
+		{
+			public int value;
+		}
+
+		[Test, Description("Clone Struct")]
+		public void CloneStruct()
+		{
+			StructTest input = new StructTest()
+			{
+				value = 5
+			};
+
+			Serializer serializer = new Serializer();
+			StructTest output = serializer.Clone<StructTest>(log, input);
+
+			Assert.AreEqual(input, output);
+
+			output.value = 2;
+
+			Assert.AreNotEqual(input, output);
+		}
+
+		// DateTime has no set operators and relies on constructor
+		[Test, Description("Clone DateTime Local")]
+		public void CloneDateTimeLocal()
+		{
+			DateTime input = DateTime.Now;
+
+			Serializer serializer = new Serializer();
+			DateTime output = serializer.Clone<DateTime>(log, input);
+
+			Assert.AreEqual(input, output);
+		}
+
+		// DateTime has no set operators and relies on constructor
+		[Test, Description("Clone DateTime UTC")]
+		public void CloneDateTimeUtc()
+		{
+			DateTime input = DateTime.UtcNow;
+
+			Serializer serializer = new Serializer();
+			DateTime output = serializer.Clone<DateTime>(log, input);
+
+			Assert.AreEqual(input, output);
+		}
+
+		[Test, Description("Clone DateTime")]
 		public void CloneNullableInt()
 		{
 			int? input = 1;

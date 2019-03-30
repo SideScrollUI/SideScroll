@@ -7,7 +7,9 @@ namespace Atlas.GUI.Avalonia
 {
 	public class FieldValueConverter : IValueConverter
 	{
-		public string Append { get; set; }
+		// add a map to store original mappings?
+		//public Dictionary<object, object> { get; set; }
+		public bool ConvertBackEnabled { get; set; } = true;
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
@@ -24,12 +26,14 @@ namespace Atlas.GUI.Avalonia
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (value == null)
+			// once a string, keep it as a string for copying to the DataGrid ClipBoard
+			return value;
+			/*if (value == null)
 				return null;
 
 			object result = ChangeType(value, targetType);
 
-			return result;
+			return result;*/
 		}
 
 		public static object ChangeType(object value, Type targetType)

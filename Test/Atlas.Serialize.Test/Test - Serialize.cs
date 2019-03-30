@@ -139,9 +139,40 @@ namespace Atlas.Serialize.Test
 			Assert.AreEqual(type, output);
 		}
 
+		public struct StructTest
+		{
+			public int value;
+		}
+
+		[Test, Description("Serialize Struct")]
+		public void SerializeStruct()
+		{
+			StructTest input = new StructTest()
+			{
+				value = 5
+			};
+
+			interFace.Save(call, input);
+			StructTest output = interFace.Load<StructTest>(call);
+
+			Assert.AreEqual(input, output);
+		}
+
 		// DateTime has no set operators and relies on constructor
-		[Test, Description("Serialize DateTime")]
-		public void SerializeDateTime()
+		[Test, Description("Serialize DateTime Local")]
+		public void SerializeDateTimeLocal()
+		{
+			DateTime input = DateTime.Now;
+
+			interFace.Save(call, input);
+			DateTime output = interFace.Load<DateTime>(call);
+
+			Assert.AreEqual(input, output);
+		}
+
+		// DateTime has no set operators and relies on constructor
+		[Test, Description("Serialize DateTime UTC")]
+		public void SerializeDateTimeUtc()
 		{
 			DateTime input = DateTime.UtcNow;
 

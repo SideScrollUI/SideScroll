@@ -18,6 +18,10 @@
     - "ABC" | 123
 * Recursive searches will eventually be supported
 
+### Hints
+* To copy the cell data to the clipboard, you can double click on the cell, or right click and select `Copy`
+* You can clear the local disk cache & settings by going to `Test` -> `Data Repos` and clicking `Delete`
+
 ### Bookmarks
 
 You can save a bookmark for any location in the GUI. Multiple bookmarks can be selected at once and the merged results will be shown.

@@ -26,6 +26,8 @@ namespace Atlas.Tabs.Test
 				};
 
 				paramTestItem = this.LoadData<ParamTestItem>(dataKey);
+				if (paramTestItem.DateTime.Ticks == 0)
+					paramTestItem.DateTime = DateTime.Now; // in case the serializer loses it
 				tabModel.AddObject(paramTestItem);
 
 				tabModel.Notes = "Adding a class of type [Params] to a tabModel creates a TabControlParam\nParameter values can be saved between Tasks";

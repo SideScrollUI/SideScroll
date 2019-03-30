@@ -14,4 +14,8 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Atlas.GUI.Avalonia\Atlas.GUI.Avalonia.csproj" />
+  </ItemGroup>
+
 </Project>

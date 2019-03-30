@@ -541,6 +541,11 @@ namespace Atlas.Serialize
 				{
 					clone = Array.CreateInstance(type.GetElementType(), (obj as Array).Length);
 				}
+				else if (type.IsValueType)
+				{
+					// struct
+					return obj; // move this earlier to primitive check?
+				}
 				else
 				{
 					clone = Activator.CreateInstance(type, true);
