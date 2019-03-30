@@ -11,7 +11,7 @@ namespace Atlas.Serialize.Test
 	[Category("Serialize")]
 	public class SerializeTypes : TestSerializeBase
 	{
-		private SerializerFile interFace;
+		private SerializerFile serializer;
 		private Log log;
 		
 		[OneTimeSetUp]
@@ -25,7 +25,7 @@ namespace Atlas.Serialize.Test
 			Directory.CreateDirectory(basePath);
 
 			string filePath = Paths.Combine(basePath, "Data.atlas");
-			interFace = new SerializerFile(filePath);
+			serializer = new SerializerFile(filePath);
 		}
 
 		[Test, Description("Serialize Primitives")]
@@ -36,8 +36,8 @@ namespace Atlas.Serialize.Test
 			input.doubleTest = 2.5;
 			input.stringTest = "abc";
 
-			interFace.Save(call, input);
-			Primitives output = interFace.Load<Primitives>(call);
+			serializer.Save(call, input);
+			Primitives output = serializer.Load<Primitives>(call);
 
 			Assert.AreEqual(output.uintTest, input.uintTest);
 			Assert.AreEqual(output.doubleTest, input.doubleTest);
@@ -49,8 +49,8 @@ namespace Atlas.Serialize.Test
 		{
 			int? input = 1;
 
-			interFace.Save(call, input);
-			int? output = interFace.Load<int?>(call);
+			serializer.Save(call, input);
+			int? output = serializer.Load<int?>(call);
 
 			Assert.AreEqual(output, input);
 		}
@@ -60,8 +60,8 @@ namespace Atlas.Serialize.Test
 		{
 			int? input = 5;
 
-			interFace.Save(call, input);
-			int? output = interFace.Load<int?>(call);
+			serializer.Save(call, input);
+			int? output = serializer.Load<int?>(call);
 
 			Assert.AreEqual(output, input);
 		}
@@ -73,8 +73,8 @@ namespace Atlas.Serialize.Test
 			input.uintTest = 5;
 			input.doubleTest = 2.5;
 
-			interFace.Save(call, input);
-			NullableFieldPrimitives output = interFace.Load<NullableFieldPrimitives>(call);
+			serializer.Save(call, input);
+			NullableFieldPrimitives output = serializer.Load<NullableFieldPrimitives>(call);
 
 			Assert.AreEqual(output.uintTest, input.uintTest);
 			Assert.AreEqual(output.doubleTest, input.doubleTest);
@@ -87,8 +87,8 @@ namespace Atlas.Serialize.Test
 			input.uintTest = 5;
 			input.doubleTest = 2.5;
 
-			interFace.Save(call, input);
-			NullablePropertyPrimitives output = interFace.Load<NullablePropertyPrimitives>(call);
+			serializer.Save(call, input);
+			NullablePropertyPrimitives output = serializer.Load<NullablePropertyPrimitives>(call);
 
 			Assert.AreEqual(output.uintTest, input.uintTest);
 			Assert.AreEqual(output.doubleTest, input.doubleTest);
@@ -99,8 +99,8 @@ namespace Atlas.Serialize.Test
 		{
 			int input = 5;
 
-			interFace.Save(call, input);
-			int output = interFace.Load<int>(call);
+			serializer.Save(call, input);
+			int output = serializer.Load<int>(call);
 
 			Assert.AreEqual(input, output);
 		}
@@ -111,8 +111,8 @@ namespace Atlas.Serialize.Test
 			EnumTest input = new EnumTest();
 			input.testEnum = MyEnum.b;
 
-			interFace.Save(call, input);
-			EnumTest output = interFace.Load<EnumTest>(call);
+			serializer.Save(call, input);
+			EnumTest output = serializer.Load<EnumTest>(call);
 
 			Assert.AreEqual(output.testEnum, input.testEnum);
 		}
@@ -122,8 +122,8 @@ namespace Atlas.Serialize.Test
 		{
 			MyEnum? input = MyEnum.b;
 
-			interFace.Save(call, input);
-			MyEnum? output = interFace.Load<MyEnum?>(call);
+			serializer.Save(call, input);
+			MyEnum? output = serializer.Load<MyEnum?>(call);
 
 			Assert.AreEqual(output, input);
 		}
@@ -133,8 +133,8 @@ namespace Atlas.Serialize.Test
 		{
 			Type type = typeof(string);
 
-			interFace.Save(call, type);
-			Type output = interFace.Load<Type>(call);
+			serializer.Save(call, type);
+			Type output = serializer.Load<Type>(call);
 
 			Assert.AreEqual(type, output);
 		}
@@ -152,8 +152,8 @@ namespace Atlas.Serialize.Test
 				value = 5
 			};
 
-			interFace.Save(call, input);
-			StructTest output = interFace.Load<StructTest>(call);
+			serializer.Save(call, input);
+			StructTest output = serializer.Load<StructTest>(call);
 
 			Assert.AreEqual(input, output);
 		}
@@ -164,8 +164,8 @@ namespace Atlas.Serialize.Test
 		{
 			DateTime input = DateTime.Now;
 
-			interFace.Save(call, input);
-			DateTime output = interFace.Load<DateTime>(call);
+			serializer.Save(call, input);
+			DateTime output = serializer.Load<DateTime>(call);
 
 			Assert.AreEqual(input, output);
 		}
@@ -176,8 +176,8 @@ namespace Atlas.Serialize.Test
 		{
 			DateTime input = DateTime.UtcNow;
 
-			interFace.Save(call, input);
-			DateTime output = interFace.Load<DateTime>(call);
+			serializer.Save(call, input);
+			DateTime output = serializer.Load<DateTime>(call);
 
 			Assert.AreEqual(input, output);
 		}
@@ -188,8 +188,8 @@ namespace Atlas.Serialize.Test
 			byte[] input = new byte[1000];
 			for (int i = 0; i < input.Length; i++)
 				input[i] = 1;
-			interFace.Save(call, input);
-			byte[] output = interFace.Load<byte[]>(call);
+			serializer.Save(call, input);
+			byte[] output = serializer.Load<byte[]>(call);
 		}
 
 		[Test, Description("Serialize Nullable List")]
@@ -200,8 +200,8 @@ namespace Atlas.Serialize.Test
 			input.Add(1);
 			input.Add(null);
 			input.Add(2);
-			interFace.Save(call, input);
-			List<int?> output = interFace.Load<List<int?>>(call);
+			serializer.Save(call, input);
+			List<int?> output = serializer.Load<List<int?>>(call);
 		}
 
 		private class MultipleArrays
@@ -214,8 +214,8 @@ namespace Atlas.Serialize.Test
 		public void ArrayMultipleTest()
 		{
 			MultipleArrays arrays = new MultipleArrays();
-			interFace.Save(call, arrays);
-			MultipleArrays output = interFace.Load<MultipleArrays>(call);
+			serializer.Save(call, arrays);
+			MultipleArrays output = serializer.Load<MultipleArrays>(call);
 		}
 
 
@@ -243,8 +243,8 @@ namespace Atlas.Serialize.Test
 		{
 			Objects input = new Objects();
 
-			interFace.Save(call, input);
-			Objects output = interFace.Load<Objects>(call);
+			serializer.Save(call, input);
+			Objects output = serializer.Load<Objects>(call);
 		}
 
 		[Test, Description("Serialize Properties")]
@@ -255,8 +255,8 @@ namespace Atlas.Serialize.Test
 			input.doubleTest = 2.5;
 			input.stringTest = "abc";
 
-			interFace.Save(call, input);
-			Properties output = interFace.Load<Properties>(call);
+			serializer.Save(call, input);
+			Properties output = serializer.Load<Properties>(call);
 
 			Assert.AreEqual(output.uintTest, input.uintTest);
 			Assert.AreEqual(output.doubleTest, input.doubleTest);
@@ -269,8 +269,8 @@ namespace Atlas.Serialize.Test
 			FieldInterfaceList input = new FieldInterfaceList();
 			input.list = new List<uint> { 1, 2, 3 };
 
-			interFace.Save(call, input);
-			FieldInterfaceList output = interFace.Load<FieldInterfaceList>(call);
+			serializer.Save(call, input);
+			FieldInterfaceList output = serializer.Load<FieldInterfaceList>(call);
 
 			Assert.AreEqual(output.list, input.list);
 		}
@@ -281,8 +281,8 @@ namespace Atlas.Serialize.Test
 			DerivedClassReference input = new DerivedClassReference();
 			input.baseClass = new DerivedClass();
 
-			interFace.Save(call, input);
-			DerivedClassReference output = interFace.Load<DerivedClassReference>(call);
+			serializer.Save(call, input);
+			DerivedClassReference output = serializer.Load<DerivedClassReference>(call);
 
 			Assert.AreEqual(output.baseClass.a, input.baseClass.a);
 		}
@@ -293,8 +293,8 @@ namespace Atlas.Serialize.Test
 			Dictionary<Type, string> input = new Dictionary<Type, string>();
 			input[typeof(int)] = "integer";
 
-			interFace.Save(call, input);
-			Dictionary<Type, string> output = interFace.Load<Dictionary<Type, string>>(call);
+			serializer.Save(call, input);
+			Dictionary<Type, string> output = serializer.Load<Dictionary<Type, string>>(call);
 
 			Assert.IsTrue(output.ContainsKey(typeof(int)));
 			Assert.IsTrue(output.ContainsValue("integer"));
@@ -306,8 +306,8 @@ namespace Atlas.Serialize.Test
 			Circular input = new Circular();
 			input.self = input;
 
-			interFace.Save(call, input);
-			Circular output = interFace.Load<Circular>(call);
+			serializer.Save(call, input);
+			Circular output = serializer.Load<Circular>(call);
 
 			Assert.AreEqual(output.self, output);
 		}
@@ -320,8 +320,8 @@ namespace Atlas.Serialize.Test
 			parent.child = child;
 			child.parent = parent;
 
-			interFace.Save(call, parent);
-			Parent loaded = interFace.Load<Parent>(call);
+			serializer.Save(call, parent);
+			Parent loaded = serializer.Load<Parent>(call);
 
 			Assert.AreEqual(loaded.child.parent, loaded);
 		}
@@ -335,8 +335,8 @@ namespace Atlas.Serialize.Test
 				"123"
 			};
 
-			interFace.Save(call, input);
-			List<string> output = interFace.Load<List<string>>(call);
+			serializer.Save(call, input);
+			List<string> output = serializer.Load<List<string>>(call);
 
 			Assert.AreEqual(input[0], output[0]);
 			Assert.AreEqual(input[1], output[1]);
@@ -349,8 +349,8 @@ namespace Atlas.Serialize.Test
 			input["a"] = "1";
 			input["b"] = "2";
 
-			interFace.Save(call, input);
-			Dictionary<string, string> output = interFace.Load<Dictionary<string, string>>(call);
+			serializer.Save(call, input);
+			Dictionary<string, string> output = serializer.Load<Dictionary<string, string>>(call);
 
 			Assert.AreEqual(input["a"], output["a"]);
 			Assert.AreEqual(input["b"], output["b"]);
@@ -361,8 +361,8 @@ namespace Atlas.Serialize.Test
 		{
 			DictionaryTest input = new DictionaryTest();
 
-			interFace.Save(call, input);
-			DictionaryTest output = interFace.Load<DictionaryTest>(call);
+			serializer.Save(call, input);
+			DictionaryTest output = serializer.Load<DictionaryTest>(call);
 
 			//Assert.AreEqual(input, output);
 		}
@@ -373,8 +373,8 @@ namespace Atlas.Serialize.Test
 			int[] input = { 1, 2 };
 			input[0] = 5;
 
-			interFace.Save(call, input);
-			int[] output = interFace.Load<int[]>(call);
+			serializer.Save(call, input);
+			int[] output = serializer.Load<int[]>(call);
 
 			Assert.AreEqual(2, output.Length);
 			Assert.AreEqual(5, output[0]);
@@ -387,8 +387,8 @@ namespace Atlas.Serialize.Test
 			HashSet<string> input = new HashSet<string>();
 			input.Add("test");
 
-			interFace.Save(call, input);
-			HashSet<string> output = interFace.Load<HashSet<string>>(call);
+			serializer.Save(call, input);
+			HashSet<string> output = serializer.Load<HashSet<string>>(call);
 
 			Assert.AreEqual(input.Count, output.Count);
 			Assert.True(output.Contains("test"));
@@ -418,8 +418,8 @@ namespace Atlas.Serialize.Test
 			};
 			input.Add(inputItem);
 
-			interFace.Save(call, input);
-			HashSet<SelectedItem> output = interFace.Load<HashSet<SelectedItem>>(call);
+			serializer.Save(call, input);
+			HashSet<SelectedItem> output = serializer.Load<HashSet<SelectedItem>>(call);
 
 			Assert.AreEqual(input.Count, output.Count);
 			//Assert.True(output.Contains("test"));
@@ -434,8 +434,8 @@ namespace Atlas.Serialize.Test
 				serialized = 10,
 			};
 
-			interFace.Save(call, input);
-			NonSerializedTest output = interFace.Load<NonSerializedTest>(call);
+			serializer.Save(call, input);
+			NonSerializedTest output = serializer.Load<NonSerializedTest>(call);
 
 			Assert.AreEqual(output.nonSerialized, 1);
 			Assert.AreEqual(output.serialized, 10);
@@ -546,8 +546,8 @@ namespace Atlas.Serialize.Test
 		{
 			SubClassContainer input = new SubClassContainer();
 
-			interFace.Save(call, input);
-			SubClassContainer output = interFace.Load<SubClassContainer>(call);
+			serializer.Save(call, input);
+			SubClassContainer output = serializer.Load<SubClassContainer>(call);
 
 			Assert.AreEqual(output.subSclass.a, input.subSclass.a);
 		}
@@ -558,8 +558,8 @@ namespace Atlas.Serialize.Test
 			List<Base> input = new List<Base>();
 
 			input.Add(new SubClass() { a = 5 });
-			interFace.Save(call, input);
-			List<Base> output = interFace.Load<List<Base>>(call);
+			serializer.Save(call, input);
+			List<Base> output = serializer.Load<List<Base>>(call);
 
 			Assert.AreEqual(output[0].a, 5);
 			//Assert.AreEqual(input, output); // only works on primitives
@@ -574,8 +574,8 @@ namespace Atlas.Serialize.Test
 			SubClass s = new SubClass();
 			s.b = 3;
 			input[s] = b;
-			interFace.Save(call, input);
-			Dictionary<Base, Base> output = interFace.Load<Dictionary<Base, Base>>(call);
+			serializer.Save(call, input);
+			Dictionary<Base, Base> output = serializer.Load<Dictionary<Base, Base>>(call);
 
 			Assert.AreEqual(s.b, 3);
 		}

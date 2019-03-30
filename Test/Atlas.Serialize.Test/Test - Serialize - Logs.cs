@@ -10,7 +10,7 @@ namespace Atlas.Serialize.Test
 	[Category("Serialize")]
 	public class SerializeLogs : TestSerializeBase
 	{
-		private SerializerFile interFace;
+		private SerializerFile serializer;
 		private Log log;
 		
 		[OneTimeSetUp]
@@ -24,7 +24,7 @@ namespace Atlas.Serialize.Test
 			Directory.CreateDirectory(basePath);
 
 			string filePath = Paths.Combine(basePath, "Data.atlas");
-			interFace = new SerializerFile(filePath);
+			serializer = new SerializerFile(filePath);
 		}
 
 		class TestLog
@@ -53,16 +53,16 @@ namespace Atlas.Serialize.Test
 		{
 			TestLogBig testLog = new TestLogBig();
 			testLog.Child("test");
-			interFace.Save(call, testLog);
-			TestLogBig output = interFace.Load<TestLogBig>(call);
+			serializer.Save(call, testLog);
+			TestLogBig output = serializer.Load<TestLogBig>(call);
 		}
 
 		[Test, Description("Serialize Test Log")]
 		public void SerializeTestLog()
 		{
 			TestLog testLog = new TestLog();
-			interFace.Save(call, testLog);
-			TestLog output = interFace.Load<TestLog>(call);
+			serializer.Save(call, testLog);
+			TestLog output = serializer.Load<TestLog>(call);
 		}
 
 		[Test, Description("Serialize Log Timer 2")]
@@ -71,32 +71,32 @@ namespace Atlas.Serialize.Test
 			Log testLog = new Log();
 			using (testLog.Timer("timing"))
 				testLog.Add("child");
-			interFace.Save(call, testLog);
-			Log output = interFace.Load<Log>(call);
+			serializer.Save(call, testLog);
+			Log output = serializer.Load<Log>(call);
 		}
 
 		[Test, Description("Serialize Log Entry")]
 		public void SerializeLogEntry()
 		{
 			LogEntry input = new LogEntry();
-			interFace.Save(call, input);
-			LogEntry output = interFace.Load<LogEntry>(call);
+			serializer.Save(call, input);
+			LogEntry output = serializer.Load<LogEntry>(call);
 		}
 
 		[Test, Description("Serialize Log")]
 		public void SerializeLog()
 		{
 			Log testLog = new Log();
-			interFace.Save(call, testLog);
-			Log output = interFace.Load<Log>(call);
+			serializer.Save(call, testLog);
+			Log output = serializer.Load<Log>(call);
 		}
 
 		[Test, Description("Serialize Log Unknown")]
 		public void SerializeLogUnknown()
 		{
 			LogUnknown testLog = new LogUnknown();
-			interFace.Save(call, testLog);
-			LogUnknown output = interFace.Load<LogUnknown>(call);
+			serializer.Save(call, testLog);
+			LogUnknown output = serializer.Load<LogUnknown>(call);
 		}
 
 		[Test, Description("Serialize Log Child")]
@@ -105,8 +105,8 @@ namespace Atlas.Serialize.Test
 			Log testLog = new Log();
 			testLog.Call("test");
 
-			interFace.Save(call, testLog);
-			Log output = interFace.Load<Log>(call);
+			serializer.Save(call, testLog);
+			Log output = serializer.Load<Log>(call);
 		}
 
 		[Test, Description("Serialize Log Timer")]
@@ -114,8 +114,8 @@ namespace Atlas.Serialize.Test
 		{
 			LogTimer testLog = new LogTimer();
 
-			interFace.Save(call, testLog);
-			LogTimer output = interFace.Load<LogTimer>(call);
+			serializer.Save(call, testLog);
+			LogTimer output = serializer.Load<LogTimer>(call);
 		}
 
 		private class MultipleArrays
@@ -130,8 +130,8 @@ namespace Atlas.Serialize.Test
 			LogEntryTest2 testLog = new LogEntryTest2();
 			testLog.tags = new Tag[] { new Tag("abc", 123) };
 
-			interFace.Save(call, testLog);
-			LogEntryTest2 output = interFace.Load<LogEntryTest2>(call);
+			serializer.Save(call, testLog);
+			LogEntryTest2 output = serializer.Load<LogEntryTest2>(call);
 		}
 
 		[Test, Description("Serialize Log Timer Child Unknown")]
@@ -140,8 +140,8 @@ namespace Atlas.Serialize.Test
 			LogTest2 testLog = new LogTest2();
 			testLog.Add(new Tag("abc", 123));
 
-			interFace.Save(call, testLog);
-			LogTest2 output = interFace.Load<LogTest2>(call);
+			serializer.Save(call, testLog);
+			LogTest2 output = serializer.Load<LogTest2>(call);
 		}
 
 		[Test, Description("Serialize Log Timer Child")]
@@ -150,8 +150,8 @@ namespace Atlas.Serialize.Test
 			Log testLog = new Log();
 			using (testLog.Timer("test")) { }
 
-			interFace.Save(call, testLog);
-			Log output = interFace.Load<Log>(call);
+			serializer.Save(call, testLog);
+			Log output = serializer.Load<Log>(call);
 		}
 
 		public class SelectedItem
