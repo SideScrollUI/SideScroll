@@ -31,7 +31,7 @@ namespace Atlas.Tabs.Test.Chart
 				tabModel.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Add Entry", AddEntry),
-					new TaskDelegate("Start: 1 Entry / second", StartTask),
+					new TaskDelegate("Start: 1 Entry / second", StartTask, true),
 				};
 
 				for (int i = 0; i < 10; i++)
