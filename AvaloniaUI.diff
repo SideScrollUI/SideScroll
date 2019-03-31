@@ -1,6 +1,6 @@
 Submodule Imports/AvaloniaUI/Avalonia.DataGrid contains modified content
 diff --git a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid.Themes.Default/Avalonia.DataGrid.Themes.Default.csproj b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid.Themes.Default/Avalonia.DataGrid.Themes.Default.csproj
-index d6e449a..9cebbc6 100644
+index d6e449a..7e98b40 100644
 --- a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid.Themes.Default/Avalonia.DataGrid.Themes.Default.csproj
 +++ b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid.Themes.Default/Avalonia.DataGrid.Themes.Default.csproj
 @@ -5,7 +5,7 @@
@@ -8,12 +8,12 @@ index d6e449a..9cebbc6 100644
  
    <ItemGroup>
 -    <PackageReference Include="Avalonia" Version="0.6.2-*" />
-+    <PackageReference Include="Avalonia" Version="0.7.0" />
++    <PackageReference Include="Avalonia" Version="0.7.1-cibuild0001754-beta" />
    </ItemGroup>
    <ItemGroup>
      <Compile Update="**\*.xaml.cs">
 diff --git a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/Avalonia.DataGrid.csproj b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/Avalonia.DataGrid.csproj
-index b0189a4..048a84e 100644
+index b0189a4..02c2325 100644
 --- a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/Avalonia.DataGrid.csproj
 +++ b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/Avalonia.DataGrid.csproj
 @@ -5,7 +5,7 @@
@@ -21,7 +21,7 @@ index b0189a4..048a84e 100644
  
    <ItemGroup>
 -    <PackageReference Include="Avalonia" Version="0.6.2-*" />
-+    <PackageReference Include="Avalonia" Version="0.7.0" />
++    <PackageReference Include="Avalonia" Version="0.7.1-cibuild0001754-beta" />
    </ItemGroup>
  
  </Project>
@@ -64,6 +64,19 @@ index 2698b0c..ae7b875 100644
              }
              return _selectedSlotsTable.IndexOf(slot);
          }
+Submodule Imports/AvaloniaUI/AvaloniaEdit contains modified content
+diff --git a/Imports/AvaloniaUI/AvaloniaEdit/Directory.Build.props b/Imports/AvaloniaUI/AvaloniaEdit/Directory.Build.props
+index 0afa821..880103c 100644
+--- a/Imports/AvaloniaUI/AvaloniaEdit/Directory.Build.props
++++ b/Imports/AvaloniaUI/AvaloniaEdit/Directory.Build.props
+@@ -2,6 +2,6 @@
+   <PropertyGroup>
+     <LangVersion>7.1</LangVersion>
+     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+-    <AvaloniaVersion>0.7.1-cibuild0001689-beta</AvaloniaVersion>
++    <AvaloniaVersion>0.7.1-cibuild0001754-beta</AvaloniaVersion>
+   </PropertyGroup>
+ </Project>
 Submodule Imports/AvaloniaUI/OxyPlot.Avalonia contains modified content
 diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/CanvasRenderContext.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/CanvasRenderContext.cs
 index 8539cd8..13f9788 100644
