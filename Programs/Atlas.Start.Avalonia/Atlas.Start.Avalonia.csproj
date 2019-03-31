@@ -33,8 +33,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.7.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.7.0" />
+    <PackageReference Include="Avalonia" Version="0.7.1-cibuild0001754-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.7.1-cibuild0001754-beta" />
     <PackageReference Include="OxyPlot.Core" Version="2.0.0-unstable1013" />
   </ItemGroup>
 

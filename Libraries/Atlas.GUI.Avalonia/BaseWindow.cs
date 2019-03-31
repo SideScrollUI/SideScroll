@@ -278,7 +278,7 @@ namespace Atlas.GUI.Avalonia
 				double top = Math.Max(0, value.Top);
 
 				// These are causing the window to be shifted down
-				this.Position = new Point(left, top);
+				this.Position = new PixelPoint((int)left, (int)top);
 				this.Width = Math.Max(MinWindowSize, value.Width);
 				this.Height = Math.Max(MinWindowSize, value.Height);
 				this.WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
@@ -318,7 +318,7 @@ namespace Atlas.GUI.Avalonia
 		}
 
 		// this fires too often, could attach a dispatch timer, or add an override method
-		private void BaseWindow_PositionChanged(object sender, PointEventArgs e)
+		private void BaseWindow_PositionChanged(object sender, PixelPointEventArgs e)
 		{
 			//SaveWindowSettings();
 		}
