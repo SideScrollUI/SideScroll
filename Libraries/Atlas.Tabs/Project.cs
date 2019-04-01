@@ -9,10 +9,11 @@ namespace Atlas.Tabs
 	public class Project
 	{
 		public string Name => projectSettings.Name; // for viewing purposes
+		public string Version { get; set; } = "0";
 		public virtual ProjectSettings projectSettings { get; set; }
 
 		public DataRepo DataShared { get { return new DataRepo(DataRepoPath, "Shared"); } }
-		public DataRepo DataApp { get { return new DataRepo(DataRepoPath, "Programs/" + Name); } }
+		public DataRepo DataApp { get { return new DataRepo(DataRepoPath, "Programs/" + Name + "/" + Version); } }
 
 		public HttpCacheManager httpCacheManager = new HttpCacheManager();
 
