@@ -37,7 +37,7 @@ namespace Atlas.Tabs
 		public TabModel tabModel = new TabModel();
 		public string Label { get { return tabModel.Name; } set { tabModel.Name = value; } }
 
-		public DataRepo DataShared => project.DataShared;
+		public DataRepo DataApp => project.DataApp;
 
 		public TabViewSettings tabViewSettings = new TabViewSettings();
 		public TabBookmark tabBookmark;
@@ -387,7 +387,7 @@ namespace Atlas.Tabs
 		{
 			Bookmark bookmark = RootInstance.CreateBookmark(); // create from base Tab
 			bookmark.Name = CurrentBookmarkName;
-			project.DataShared.Save(bookmark.Name, bookmark, taskInstance.call);
+			project.DataApp.Save(bookmark.Name, bookmark, taskInstance.call);
 
 			//bookmark.Name = Label;
 			//project.navigator.Add(bookmark);
@@ -404,7 +404,7 @@ namespace Atlas.Tabs
 			if (project.projectSettings.AutoLoad == false)
 				return;
 
-			Bookmark bookmark = project.DataShared.Load<Bookmark>(CurrentBookmarkName, taskInstance.call);
+			Bookmark bookmark = project.DataApp.Load<Bookmark>(CurrentBookmarkName, taskInstance.call);
 			if (bookmark != null)
 				this.tabBookmark = bookmark.tabBookmark;
 		}
@@ -425,29 +425,29 @@ namespace Atlas.Tabs
 		// replace with DataShared? Split call up?
 		public void SaveData(string name, object obj)
 		{
-			project.DataShared.Save(name, obj, taskInstance.call);
+			project.DataApp.Save(name, obj, taskInstance.call);
 		}
 
 		public void SaveData(string directory, string name, object obj)
 		{
-			project.DataShared.Save(directory, name, obj, taskInstance.call);
+			project.DataApp.Save(directory, name, obj, taskInstance.call);
 		}
 
 		public T LoadData<T>(string name, bool createIfNeeded = true)
 		{
-			T data = project.DataShared.Load<T>(name, taskInstance.call, createIfNeeded);
+			T data = project.DataApp.Load<T>(name, taskInstance.call, createIfNeeded);
 			return data;
 		}
 
 		public T LoadData<T>(string directory, string name, bool createIfNeeded = true)
 		{
-			T data = project.DataShared.Load<T>(directory, name, taskInstance.call, createIfNeeded);
+			T data = project.DataApp.Load<T>(directory, name, taskInstance.call, createIfNeeded);
 			return data;
 		}
 
 		/*public ItemCollection<T> LoadAllData<T>(string directory = null)
 		{
-			ItemCollection<T> datas = project.DataShared.LoadAll<T>(taskInstance.call, directory);
+			ItemCollection<T> datas = project.DataApp.LoadAll<T>(taskInstance.call, directory);
 			return datas;
 		}*/
 

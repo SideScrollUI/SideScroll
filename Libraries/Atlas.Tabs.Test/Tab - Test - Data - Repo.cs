@@ -16,14 +16,14 @@ namespace Atlas.Tabs.Test
 
 			public override void Load()
 			{
-				//new ListItem("Data Repos", new TabDirectory(project.DataShared.RepoPath)),
+				//new ListItem("Data Repos", new TabDirectory(project.DataApp.RepoPath)),
 				// Replace this
 				sampleItems = new ItemCollection<SampleItem>();
 				AddItems(5);
 
 				tabModel.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Data Repos", new TabDirectory(project.DataShared.RepoPath)),
+					new ListItem("Data Repos", new TabDirectory(project.DataApp.RepoPath)),
 				};
 
 				tabModel.Actions = new ItemCollection<TaskCreator>()

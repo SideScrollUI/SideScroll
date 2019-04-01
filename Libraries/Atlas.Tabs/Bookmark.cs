@@ -193,7 +193,7 @@ namespace Atlas.Tabs
 				Names.Add(bookmarkName);
 			}*/
 
-			var bookmarks = project.DataShared.LoadAll<Bookmark>().Values;
+			var bookmarks = project.DataApp.LoadAll<Bookmark>().Values;
 			foreach (Bookmark bookmark in bookmarks)
 			{
 				if (bookmark.Name == TabInstance.CurrentBookmarkName)
