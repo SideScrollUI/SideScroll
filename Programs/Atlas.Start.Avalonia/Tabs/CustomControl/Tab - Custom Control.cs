@@ -13,7 +13,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			private MyParams myParams;
 			private TabControlSearchToolbar searchToolbar;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				myParams = new MyParams();
 				TabControlMyParams tabMyParams = new TabControlMyParams(this, myParams);

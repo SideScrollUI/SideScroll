@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private ItemCollection<TestFilterItem> items;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				string characters = "abcdefghijklmn";
 				items = new ItemCollection<TestFilterItem>();

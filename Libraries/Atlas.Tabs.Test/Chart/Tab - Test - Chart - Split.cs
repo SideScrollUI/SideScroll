@@ -39,7 +39,7 @@ namespace Atlas.Tabs.Test.Chart
 				public int InstanceAmount { get { return testItem.Amount; } }
 			}
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				//items.Add(new ListItem("Log", series));
 				//tabModel.Items = items;

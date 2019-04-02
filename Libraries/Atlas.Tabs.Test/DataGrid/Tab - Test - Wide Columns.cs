@@ -11,7 +11,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private ItemCollection<TestWideItem> items;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				items = new ItemCollection<TestWideItem>();
 				AddEntries();

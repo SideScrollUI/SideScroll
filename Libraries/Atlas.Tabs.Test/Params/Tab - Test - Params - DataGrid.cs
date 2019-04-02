@@ -18,7 +18,7 @@ namespace Atlas.Tabs.Test.Actions
 				Text = "Test Entry",
 			};
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				// uses DataGrid internally, doesn't work well yet
 				tabModel.AddData(logEntry);

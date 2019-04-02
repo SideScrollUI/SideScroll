@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Atlas.GUI.Avalonia.Controls;
 using System.Json;
+using Atlas.Core;
 
 namespace Atlas.GUI.Avalonia.Tabs
 {
@@ -29,7 +30,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 				this.tab = tab;
 			}
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				//textEditor.TextBlock.FontSize = 30;
 

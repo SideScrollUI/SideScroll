@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private Dictionary<string, TestItem> items;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				items = new Dictionary<string, TestItem>();
 				AddEntries(null);

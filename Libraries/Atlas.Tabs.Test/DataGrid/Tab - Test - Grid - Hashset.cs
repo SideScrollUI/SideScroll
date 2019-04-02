@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private HashSet<TabTestGridCollectionSize.TestItem> items;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				items = new HashSet<TabTestGridCollectionSize.TestItem>();
 				AddEntries(null);

@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private PropertyTest propertyTest = new PropertyTest();
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				tabModel.Items = ListProperty.Create(propertyTest);
 				tabModel.Editing = true;

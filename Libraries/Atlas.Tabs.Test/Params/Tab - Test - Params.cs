@@ -15,7 +15,7 @@ namespace Atlas.Tabs.Test
 			private ItemCollection<ParamTestResult> items = new ItemCollection<ParamTestResult>();
 			private ParamTestItem paramTestItem;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				tabModel.Items = items;
 

@@ -12,11 +12,11 @@ namespace Atlas.Tabs.Test
 		{
 			//private ItemCollection<SampleItem> sampleItems;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				//tabModel.Items = project.navigator.History;
 
-				Navigator navigator = Serialize.SerializerMemory.Clone<Navigator>(taskInstance.call, project.Navigator);
+				Navigator navigator = Serialize.SerializerMemory.Clone<Navigator>(call, project.Navigator);
 				navigator.History.RemoveAt(navigator.History.Count - 1); // remove the current in progress bookmark
 				navigator.CurrentIndex = navigator.History.Count;
 				//navigator.B

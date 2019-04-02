@@ -11,7 +11,7 @@ namespace Atlas.Tabs.Tools
 
 		public class Instance : TabInstance
 		{
-			public override void Load()
+			public override void Load(Call call)
 			{
 				ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 				items.Add(new ListItem("Data", new TabDirectory(project.projectSettings.ProjectPath)));

@@ -23,7 +23,7 @@ namespace Atlas.Tabs.Test.DataGrid
 					this.context = new SynchronizationContext();
 			}
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				items = new ItemCollection<TestItem>();
 				AddEntries();

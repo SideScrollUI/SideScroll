@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private byte[] bytes;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				//bytes = new byte[500000000]; // 500 MB, creates 200k strings using ListToString
 				bytes = new byte[128];

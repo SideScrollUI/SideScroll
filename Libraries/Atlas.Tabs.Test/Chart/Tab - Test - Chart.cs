@@ -11,7 +11,7 @@ namespace Atlas.Tabs.Test.Chart
 
 		public class Instance : TabInstance
 		{
-			public override void Load()
+			public override void Load(Call call)
 			{
 				tabModel.Notes = "";
 				tabModel.Items = new ItemCollection<ListItem>()

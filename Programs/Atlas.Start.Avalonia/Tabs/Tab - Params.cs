@@ -15,7 +15,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			//private TabControlParams tabParams;
 			private ParamTestItem paramTestItem;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				tabModel.Items = items;
 

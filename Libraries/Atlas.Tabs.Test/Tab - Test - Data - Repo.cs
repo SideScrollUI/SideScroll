@@ -14,7 +14,7 @@ namespace Atlas.Tabs.Test
 		{
 			private ItemCollection<SampleItem> sampleItems;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				//new ListItem("Data Repos", new TabDirectory(project.DataApp.RepoPath)),
 				// Replace this

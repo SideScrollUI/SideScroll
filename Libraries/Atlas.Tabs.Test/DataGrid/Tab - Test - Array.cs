@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 			}
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				MyClass[] classes = new MyClass[] { new MyClass(), new MyClass() };
 

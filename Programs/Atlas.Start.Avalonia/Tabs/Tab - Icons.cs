@@ -20,7 +20,7 @@ namespace Atlas.Start.Avalonia.Tabs
 		{
 			private Grid grid;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				grid = new Grid()
 				{

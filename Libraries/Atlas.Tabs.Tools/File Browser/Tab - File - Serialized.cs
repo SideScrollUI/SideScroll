@@ -30,13 +30,13 @@ namespace Atlas.Tabs.Tools
 				this.tab = tab;
 			}
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 
 				var serializerFile = new SerializerFile(tab.path);
 
-				serializer = serializerFile.LoadSchema(taskInstance.call);
+				serializer = serializerFile.LoadSchema(call);
 
 				items.Add(new ListItem("Schema", serializer));
 				items.Add(listData);

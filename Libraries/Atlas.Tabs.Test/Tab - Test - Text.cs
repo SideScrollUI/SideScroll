@@ -11,7 +11,7 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			public override void Load()
+			public override void Load(Call call)
 			{
 				string shortText = GetString(1000);
 				string longText = GetString(10000);

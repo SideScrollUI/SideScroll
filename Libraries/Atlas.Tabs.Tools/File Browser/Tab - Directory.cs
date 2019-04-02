@@ -25,7 +25,7 @@ namespace Atlas.Tabs.Tools
 				this.tab = tab;
 			}
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				if (!Directory.Exists(tab.path))
 					return;

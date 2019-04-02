@@ -40,7 +40,7 @@ namespace Atlas.Tabs.Tools
 				this.tab = tab;
 			}
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 				listItemTasks = new ListItem("Tasks", tab.tasks);

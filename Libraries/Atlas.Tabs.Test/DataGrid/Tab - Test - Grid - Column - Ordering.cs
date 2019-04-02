@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private ItemCollection<TestChild> items;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				items = new ItemCollection<TestChild>();
 				for (int i = 0; i < 2; i++)

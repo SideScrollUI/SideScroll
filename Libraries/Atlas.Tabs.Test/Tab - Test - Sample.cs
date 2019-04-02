@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Test
 		{
 			private ItemCollection<SampleItem> sampleItems;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				// Replace this
 				sampleItems = new ItemCollection<SampleItem>();

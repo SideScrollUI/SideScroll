@@ -14,7 +14,7 @@ namespace Atlas.Tabs.Test
 		{
 			private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				tabModel.Items = items;
 

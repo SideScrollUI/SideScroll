@@ -16,7 +16,7 @@ namespace Atlas.Start.Avalonia.Tabs
 		{
 			private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				//tabModel.Items = items;
 				/*SerilogLogger serilogLogger = new SerilogLogger()

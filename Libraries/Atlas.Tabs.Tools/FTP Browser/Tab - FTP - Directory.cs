@@ -28,7 +28,7 @@ namespace Atlas.Tabs.Tools
 				this.tab = tab;
 			}
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				FTP ftp = new FTP(new Call(this.taskInstance.log), tab.ftpInfo);
 				List<FtpItem> fileDatas = ftp.GetDirectoryListDetailed(tab.path);

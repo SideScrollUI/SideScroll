@@ -28,7 +28,7 @@ namespace Atlas.Tabs.Test
 				tabModel.Bookmarks = new BookmarkCollection(project);
 			}
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				tabModel.Items = new ItemCollection<ListItem>()
 				{

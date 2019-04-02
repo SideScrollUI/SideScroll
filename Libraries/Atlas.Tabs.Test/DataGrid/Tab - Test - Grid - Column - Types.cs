@@ -9,7 +9,7 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			public override void Load()
+			public override void Load(Call call)
 			{
 				ItemCollection<TestItem> items = new ItemCollection<TestItem>();
 				for (int i = 0; i < 10; i++)

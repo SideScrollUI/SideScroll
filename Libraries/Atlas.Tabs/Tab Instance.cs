@@ -258,7 +258,7 @@ namespace Atlas.Tabs
 			}
 		}
 
-		public virtual void Load()
+		public virtual void Load(Call call)
 		{
 		}
 
@@ -278,7 +278,10 @@ namespace Atlas.Tabs
 			else if (CanLoad)
 			{
 				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
-				Load(); // Creates a tabModel if none exists and adds other Controls
+				using (CallTimer loadCall = taskInstance.call.Timer("Loading"))
+				{
+					Load(loadCall); // Creates a tabModel if none exists and adds other Controls
+				}
 				isLoaded = true;
 			}
 

@@ -15,7 +15,7 @@ namespace Atlas.Tabs.Test
 			private Call sampleCall;
 			private int counter = 0;
 
-			public override void Load()
+			public override void Load(Call call)
 			{
 				taskInstance = new TaskInstance();
 				taskInstance.log.Add("Double Tag Test", new Tag("Double", 0.5));
