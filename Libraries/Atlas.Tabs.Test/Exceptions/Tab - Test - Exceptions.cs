@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Atlas.Core;
 
-namespace Atlas.Tabs.Test.Chart
+namespace Atlas.Tabs.Test.DataGrid
 {
-	public class TabTestChart : ITab
+	public class TabTestExceptions : ITab
 	{
 		public TabInstance Create() { return new Instance(); }
 
@@ -13,13 +13,12 @@ namespace Atlas.Tabs.Test.Chart
 		{
 			public override void Load(Call call)
 			{
-				tabModel.Notes = "";
 				tabModel.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("List", new TabTestChartList()),
-					//new ListItem("Split", new TabTestChartSplit()),
-					new ListItem("Overlay", new TabTestChartOverlay()),
+					new ListItem("Load Exception", new TabTestLoadException()),
 				};
+
+				call.log.AddError("Load error");
 			}
 		}
 	}

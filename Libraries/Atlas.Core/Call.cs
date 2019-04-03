@@ -55,9 +55,9 @@ namespace Atlas.Core
 		}
 
 		// allows having progress broken down into multiple tasks
-		public TaskInstance AddSubTask()
+		public TaskInstance AddSubTask(string name = "")
 		{
-			taskInstance = taskInstance.AddSubTask(this);
+			taskInstance = taskInstance.AddSubTask(this, name);
 			return taskInstance;
 		}
 

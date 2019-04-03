@@ -76,5 +76,3 @@ namespace Atlas.Tabs.Test
 		}
 	}
 }
-/*
-*/

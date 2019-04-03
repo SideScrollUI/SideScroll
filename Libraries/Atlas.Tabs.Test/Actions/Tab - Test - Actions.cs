@@ -78,5 +78,3 @@ Actions add Buttons to the tab. When clicked, it will:
 		}
 	}
 }
-/*
-*/

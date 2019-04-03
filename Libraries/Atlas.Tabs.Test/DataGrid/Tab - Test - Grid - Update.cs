@@ -106,5 +106,3 @@ namespace Atlas.Tabs.Test.DataGrid
 		}
 	}
 }
-/*
-*/

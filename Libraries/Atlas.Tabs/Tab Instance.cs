@@ -278,9 +278,11 @@ namespace Atlas.Tabs
 			else if (CanLoad)
 			{
 				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
-				using (CallTimer loadCall = taskInstance.call.Timer("Loading"))
+				var subTask = taskInstance.call.AddSubTask("Loading");
+				//using (CallTimer loadCall = )
 				{
-					Load(loadCall); // Creates a tabModel if none exists and adds other Controls
+					Load(subTask.call); // Creates a tabModel if none exists and adds other Controls
+					//if (subTask.TaskStatus ==TaskStatus.
 				}
 				isLoaded = true;
 			}

@@ -55,6 +55,7 @@ namespace Atlas.Core
 
 		public TaskInstance()
 		{
+			call.taskInstance = this;
 			stopwatch.Start();
 		}
 
@@ -112,11 +113,11 @@ namespace Atlas.Core
 		}
 
 		// allows having progress broken down into multiple tasks
-		public TaskInstance AddSubTask(Call call)
+		public TaskInstance AddSubTask(Call call, string name = "")
 		{
 			TaskInstance subTask = new TaskInstance();
 			subTask.Creator = Creator;
-			subTask.call = call.Child();
+			subTask.call = call.Child(name);
 			subTask.tokenSource = tokenSource;
 			subTask.ParentTask = this;
 			

@@ -168,6 +168,3 @@ namespace Atlas.Tabs.Test.Objects
 		}
 	}*/
 }
-/*
-
-*/

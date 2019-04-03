@@ -42,5 +42,3 @@ namespace Atlas.Tabs.Test.Actions
 		}
 	}
 }
-/*
-*/

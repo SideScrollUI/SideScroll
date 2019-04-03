@@ -59,11 +59,10 @@ namespace Atlas.GUI.Avalonia.Tabs
 				// wordwrap doesn't work
 				TabControlAvaloniaEdit tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
 				//tabAvaloniaEdit.textEditor.VerticalAlignment = VerticalAlignment.Top;
-				tabAvaloniaEdit.textEditor.VerticalAlignment = VerticalAlignment.Stretch;
+				//tabAvaloniaEdit.textEditor.VerticalAlignment = VerticalAlignment.Stretch;
 				//tabAvaloniaEdit.textEditor.IsReadOnly = true; // todo: allow editing?
 				tabAvaloniaEdit.textEditor.Text = tab.text;
 				tabAvaloniaEdit.Background = new SolidColorBrush(Colors.White);
-
 
 				try
 				{

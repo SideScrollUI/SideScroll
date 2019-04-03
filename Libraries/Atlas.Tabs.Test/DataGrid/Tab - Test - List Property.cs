@@ -57,5 +57,3 @@ namespace Atlas.Tabs.Test.DataGrid
 		public List<int> list { get; set; } = new List<int>() { 1, 2, 3 };
 	}
 }
-/*
-*/

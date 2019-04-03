@@ -37,7 +37,14 @@ namespace Atlas.GUI.Avalonia.Controls
 		public Size measureOverrideSize;
 		protected override Size MeasureOverride(Size constraint)
 		{
-			measureOverrideSize = base.MeasureOverride(constraint);
+			try
+			{
+				measureOverrideSize = base.MeasureOverride(constraint);
+			}
+			catch
+			{
+				// catch 10k line length limit exception
+			}
 			Size desiredSize = DesiredSize;
 			return measureOverrideSize;
 		}
@@ -56,19 +63,17 @@ namespace Atlas.GUI.Avalonia.Controls
 			//Background = new SolidColorBrush(Colors.White);
 			MaxWidth = 3000;
 
-			ColumnDefinitions = new ColumnDefinitions("Auto");
+			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("*");
 
-			HorizontalAlignment = HorizontalAlignment.Left;
-			//this.HorizontalAlignment = HorizontalAlignment.Stretch;
+			this.HorizontalAlignment = HorizontalAlignment.Stretch;
 			this.VerticalAlignment = VerticalAlignment.Stretch;
 
 			var temp = TemplatedControl.FontFamilyProperty;
 			textEditor = new AvaloniaEdit.TextEditor()
 			{
 				IsReadOnly = true,
-				HorizontalAlignment = HorizontalAlignment.Left,
-				//HorizontalAlignment = HorizontalAlignment.Stretch,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				MaxWidth = 3000,
 				MaxHeight = 2000,
@@ -85,7 +90,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				//SyntaxHighlighting = 
 				SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"), // handles JSON too
 			};
-			textEditor.HorizontalAlignment = HorizontalAlignment.Left;
 			this.Children.Add(textEditor);
 
 			//textEditor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
