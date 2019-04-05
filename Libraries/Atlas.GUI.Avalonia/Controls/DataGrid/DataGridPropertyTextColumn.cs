@@ -39,6 +39,11 @@ namespace Atlas.GUI.Avalonia
 			CanUserSort = IsSortable(propertyInfo.PropertyType);
 		}
 
+		public override string ToString()
+		{
+			return propertyInfo.Name;
+		}
+
 		private bool IsSortable(Type type)
 		{
 			type = type.GetNonNullableType();

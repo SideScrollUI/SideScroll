@@ -48,6 +48,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Text Editor", new TabTestTextEditor()),
 					new ListItem("Chart", new TabTestChart()),
 					new ListItem("Serializer", new TabSerializer()),
+					new ListItem("Process", new TabTestProcess()),
 					new ListItem("Data Repos", new TabTestDataRepo()),
 				};
 			}

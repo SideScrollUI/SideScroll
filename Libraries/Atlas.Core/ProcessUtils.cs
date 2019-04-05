@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Atlas.Core
@@ -9,6 +10,8 @@ namespace Atlas.Core
 	{
 		public static void OpenBrowser(string url)
 		{
+			if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+				throw new Exception("Invalid url: " + url);
 			try
 			{
 				Process.Start(url);
@@ -33,6 +36,27 @@ namespace Atlas.Core
 				{
 					throw;
 				}
+			}
+		}
+
+		public static void OpenFolder(string path)
+		{
+			try
+			{
+				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+				{
+					path = path.Replace('/', '\\');
+					string argument;
+					if (File.Exists(path))
+						argument = "/select,\"" + path + "\"";
+					else
+						argument = '"' + Path.GetDirectoryName(path) + '"';
+
+					Process.Start("explorer.exe", argument);
+				}
+			}
+			catch
+			{
 			}
 		}
 	}
