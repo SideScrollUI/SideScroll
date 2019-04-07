@@ -25,6 +25,7 @@
     <None Remove="Assets\right-chevron.png" />
     <None Remove="Assets\save-file-option.png" />
     <None Remove="Assets\search.png" />
+    <None Remove="Assets\stats.png" />
     <None Remove="Assets\unlock.png" />
   </ItemGroup>
 
@@ -46,6 +47,7 @@
     <EmbeddedResource Include="Assets\right-arrow-gray.png" />
     <EmbeddedResource Include="Assets\save-file-option.png" />
     <EmbeddedResource Include="Assets\search.png" />
+    <EmbeddedResource Include="Assets\stats.png" />
     <EmbeddedResource Include="Assets\unlock.png" />
   </ItemGroup>
 
