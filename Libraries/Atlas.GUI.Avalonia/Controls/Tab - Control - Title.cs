@@ -82,7 +82,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				Button button = new Button();
 				//button.St
-				Image image = Atlas.GUI.Avalonia.Resources.Images.Info;
+				Image image = Atlas.GUI.Avalonia.AvaloniaAssets.Images.Info;
 				image.Height = 20;
 				Grid.SetColumn(image, 1);
 				//image.

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Atlas.Core;
+using Atlas.Serialize;
 using Atlas.Tabs;
 
 namespace Atlas.Tabs.Test
@@ -36,7 +37,7 @@ namespace Atlas.Tabs.Test
 			private void Add(Call call)
 			{
 				this.SaveData(dataKey, paramTestItem);
-				var clone = Serialize.SerializerMemory.Clone<ParamTestItem>(call, paramTestItem);
+				var clone = paramTestItem.Clone<ParamTestItem>(call);
 				ParamTestResult result = new ParamTestResult()
 				{
 					parameters = clone,

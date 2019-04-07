@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Atlas.Core;
+using Atlas.Serialize;
 
 namespace Atlas.Tabs.Test
 {
@@ -16,7 +17,7 @@ namespace Atlas.Tabs.Test
 			{
 				//tabModel.Items = project.navigator.History;
 
-				Navigator navigator = Serialize.SerializerMemory.Clone<Navigator>(call, project.Navigator);
+				Navigator navigator = project.Navigator.Clone<Navigator>(call);
 				navigator.History.RemoveAt(navigator.History.Count - 1); // remove the current in progress bookmark
 				navigator.CurrentIndex = navigator.History.Count;
 				//navigator.B

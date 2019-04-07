@@ -25,30 +25,18 @@
   </Style>
   
   <Style Selector="ScrollBar:horizontal /template/ Thumb#thumb">
-    <Setter Property="MinHeight"
-            Value="16" />
-    <Setter Property="MinWidth"
-            Value="16" />
+        <Setter Property="Padding"
+            Value="2" />
+    </Style>
+    <Style Selector="ScrollBar">
+        <Setter Property="Padding"
+            Value="2" />
+    </Style>
+    <Style Selector="ScrollBar:horizontal">
+    <Setter Property="Padding"
+            Value="2" />
   </Style>
-  <Style Selector="ScrollBar:horizontal">
-    <Setter Property="MinHeight"
-            Value="16" />
-    <Setter Property="MinWidth"
-            Value="16" />
-  </Style>
-  <Style Selector="ScrollBar:vertical">
-    <Setter Property="MinWidth"
-            Value="16" />
-    <Setter Property="MinWidth"
-            Value="16" />
-  </Style>
-  <Style Selector="ScrollBar:vertical /template/ Thumb#thumb">
-    <Setter Property="MinHeight"
-            Value="16" />
-    <Setter Property="MinWidth"
-            Value="16" />
-  </Style>
-  
+
   <Style Selector="ToolTip">
     <Setter Property="BorderThickness"
             Value="1" />

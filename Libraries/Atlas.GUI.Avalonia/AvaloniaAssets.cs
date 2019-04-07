@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Atlas.GUI.Avalonia
 {
-	public class Resources
+	public class AvaloniaAssets
 	{
 		public static Bitmap GetBitmap(string name)
 		{

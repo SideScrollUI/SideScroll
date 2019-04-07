@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Atlas.Serialize;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -69,7 +70,7 @@ namespace Atlas.Tabs
 			{
 				CurrentIndex--;
 				Bookmark oldBookmark = History[CurrentIndex];
-				Bookmark newBookmark = Serialize.SerializerMemory.Clone<Bookmark>(new Core.Call(), oldBookmark); // sanitize
+				Bookmark newBookmark = oldBookmark.Clone<Bookmark>(); // sanitize
 				Append(newBookmark, false); // Fork instead?
 				return newBookmark;
 			}

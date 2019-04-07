@@ -10,8 +10,9 @@ namespace Atlas.Core
 	{
 		public static void OpenBrowser(string url)
 		{
-			if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
-				throw new Exception("Invalid url: " + url);
+			// not working
+			//if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+			//	throw new Exception("Invalid url: " + url);
 			try
 			{
 				Process.Start(url);

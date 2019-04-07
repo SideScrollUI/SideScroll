@@ -343,7 +343,7 @@ namespace Atlas.Tabs
 			Bookmark bookmark = new Bookmark();
 			//bookmark.tabBookmark.Name = Label;
 			GetBookmark(bookmark.tabBookmark);
-			bookmark = Serialize.SerializerMemory.Clone<Bookmark>(taskInstance.call, bookmark); // sanitize
+			bookmark = bookmark.Clone<Bookmark>(taskInstance.call); // sanitize
 			return bookmark;
 		}
 

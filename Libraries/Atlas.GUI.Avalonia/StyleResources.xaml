@@ -12,7 +12,8 @@
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#FF888888</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderDarkBrush">#FF333333</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeControlLightBrush">#FFFFFFFF</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeControlMidBrush">#FFAAAAAA</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeControlMidBrush">#FFCCCCCC</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeControlHighBrush">#FF808080</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeControlDarkBrush">#FF888888</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeForegroundBrush">#FF000000</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeForegroundLightBrush">#FF808080</SolidColorBrush>
@@ -31,5 +32,7 @@
         <sys:Double x:Key="FontSizeSmall">10</sys:Double>
         <sys:Double x:Key="FontSizeNormal">12</sys:Double>
         <sys:Double x:Key="FontSizeLarge">16</sys:Double>
+
+        <sys:Double x:Key="ScrollBarThickness">16</sys:Double>
     </Style.Resources>
 </Style>

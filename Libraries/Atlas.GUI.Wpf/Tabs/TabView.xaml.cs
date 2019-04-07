@@ -633,7 +633,7 @@ namespace Atlas.GUI.Wpf
 		private void toolStripMenuItemDebug_Click(object sender, EventArgs e)
 		{
 			TabModel debugListCollection = new TabModel("Debug");
-			TabView tabView = Serialize.SerializerMemory.Clone<TabView>(tabInstance.taskInstance.call, this);
+			TabView tabView = this.Clone<TabView>(tabInstance.taskInstance.call);
 			debugListCollection.AddData(tabView);
 			Control debugControl = CreateChildControl("Debug", debugListCollection);
 		}
