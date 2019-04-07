@@ -30,6 +30,7 @@ namespace Atlas.Resources
 
 		public static readonly string PadNote = "padnote.png";
 
+		public static readonly string Refresh = "refresh.png";
 		public static readonly string Stats = "stats.png";
 
 		public class Streams
@@ -56,6 +57,7 @@ namespace Atlas.Resources
 
 			public static Stream PadNote => Get(Assets.PadNote);
 
+			public static Stream Refresh => Get(Assets.Refresh);
 			public static Stream Stats => Get(Assets.Stats);
 
 			public static Stream Get(string resourceName)
@@ -80,6 +82,7 @@ namespace Atlas.Resources
 				Unlock,
 				Password,
 				PadNote,
+				Refresh,
 				Stats,
 				};
 		}

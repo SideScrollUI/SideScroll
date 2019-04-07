@@ -31,3 +31,5 @@ Light Blue: 759eeb (not used)
 	https://www.flaticon.com/free-icon/save-file-option_25398
 
 	https://www.flaticon.com/free-icon/internet_149229
+
+Refresh - https://www.flaticon.com/free-icon/refresh_875100 - Becris

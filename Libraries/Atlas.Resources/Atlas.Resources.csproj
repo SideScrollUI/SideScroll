@@ -20,6 +20,7 @@
     <None Remove="Assets\padnote.png" />
     <None Remove="Assets\password.png" />
     <None Remove="Assets\placeholder.png" />
+    <None Remove="Assets\refresh.png" />
     <None Remove="Assets\right-arrow-blue.png" />
     <None Remove="Assets\right-arrow-gray.png" />
     <None Remove="Assets\right-chevron.png" />
@@ -43,6 +44,7 @@
     <EmbeddedResource Include="Assets\padnote.png" />
     <EmbeddedResource Include="Assets\password.png" />
     <EmbeddedResource Include="Assets\placeholder.png" />
+    <EmbeddedResource Include="Assets\refresh.png" />
     <EmbeddedResource Include="Assets\right-arrow-blue.png" />
     <EmbeddedResource Include="Assets\right-arrow-gray.png" />
     <EmbeddedResource Include="Assets\save-file-option.png" />
