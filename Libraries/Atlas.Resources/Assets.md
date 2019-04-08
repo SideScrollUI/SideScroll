@@ -33,3 +33,6 @@ Light Blue: 759eeb (not used)
 	https://www.flaticon.com/free-icon/internet_149229
 
 Refresh - https://www.flaticon.com/free-icon/refresh_875100 - Becris
+
+List1 - https://www.flaticon.com/free-icon/list_151917 - Chanut
+List2 - https://www.flaticon.com/free-icon/list_159841- Gregor Cresnar

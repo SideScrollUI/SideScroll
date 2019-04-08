@@ -33,6 +33,9 @@ namespace Atlas.Resources
 		public static readonly string Refresh = "refresh.png";
 		public static readonly string Stats = "stats.png";
 
+		public static readonly string List1 = "list1.png";
+		public static readonly string List2 = "list2.png";
+
 		public class Streams
 		{
 			public static Stream Logo => Get(Assets.Logo);
@@ -60,6 +63,9 @@ namespace Atlas.Resources
 			public static Stream Refresh => Get(Assets.Refresh);
 			public static Stream Stats => Get(Assets.Stats);
 
+			public static Stream List1 => Get(Assets.List1);
+			public static Stream List2 => Get(Assets.List2);
+
 			public static Stream Get(string resourceName)
 			{
 				var assembly = Assembly.GetExecutingAssembly();
@@ -84,6 +90,8 @@ namespace Atlas.Resources
 				PadNote,
 				Refresh,
 				Stats,
+				List1,
+				List2,
 				};
 		}
 	}
