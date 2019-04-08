@@ -7,6 +7,7 @@
         <StyleInclude Source="resm:AvaloniaEdit.AvaloniaEdit.xaml?assembly=AvaloniaEdit" />
         <StyleInclude Source="resm:Atlas.GUI.Avalonia.DefaultTheme.xaml?assembly=Atlas.GUI.Avalonia"/>
         <StyleInclude Source="resm:Atlas.GUI.Avalonia.StyleResources.xaml?assembly=Atlas.GUI.Avalonia"/>
+        <StyleInclude Source="resm:Atlas.GUI.Avalonia.ScrollBar.xaml?assembly=Atlas.GUI.Avalonia"/>
 
         
     </Application.Styles>

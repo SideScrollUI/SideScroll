@@ -23,25 +23,34 @@
   <Style Selector="Button:pointerover /template/ ContentPresenter">
     <Setter Property="BorderBrush" Value="#FF000000"/>
   </Style>
-  
-  <Style Selector="ScrollBar:horizontal /template/ Thumb#thumb">
-        <Setter Property="Padding"
-            Value="2" />
-    </Style>
-    <Style Selector="ScrollBar">
-        <Setter Property="Padding"
-            Value="2" />
-    </Style>
-    <Style Selector="ScrollBar:horizontal">
-    <Setter Property="Padding"
-            Value="2" />
-  </Style>
 
-  <Style Selector="ToolTip">
+    <Style Selector="ScrollBar /template/ Thumb#thumb /template/ Border">
+        <Setter Property="Margin" Value="2"/>
+    </Style>
+
+    <Style Selector="ScrollBar:horizontal /template/ Thumb#thumb /template/ Border">
+        <Setter Property="Margin" Value="2"/>
+    </Style>
+
+    <Style Selector="ToolTip">
     <Setter Property="BorderThickness"
             Value="1" />
     <Setter Property="BorderBrush"
             Value="#FF000000" />
-  </Style>
-  
+    </Style>
+    
+    <Style Selector="ScrollBar /template/ Thumb#thumb /template/ Border">
+        <Setter Property="Background" Value="#9e9e9e"/>
+    </Style>
+    <Style Selector="ScrollBar /template/ Thumb#thumb /template/ Border:pointerover">
+        <Setter Property="Background" Value="#4e8ef7"/>
+    </Style>
+    
+    <Style Selector="ScrollBar:horizontal /template/ Thumb#thumb /template/ Border">
+        <Setter Property="Background" Value="#9e9e9e"/>
+    </Style>
+    <Style Selector="ScrollBar:horizontal /template/ Thumb#thumb /template/ Border:pointerover">
+        <Setter Property="Background" Value="#4e8ef7"/>
+    </Style>
+
 </Styles>
