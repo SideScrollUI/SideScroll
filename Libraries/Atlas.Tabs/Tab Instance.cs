@@ -20,7 +20,7 @@ namespace Atlas.Tabs
 
 	public interface ITabAsync
 	{
-		Task LoadAsync();
+		Task LoadAsync(Call call);
 	}
 
 	//	An Instance of a TabModel, created by TabView
@@ -273,7 +273,7 @@ namespace Atlas.Tabs
 			if (this is ITabAsync tabAsync)
 			{
 				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
-				Task.Run(() => tabAsync.LoadAsync()).Wait(); // Call this way to avoid .Result deadlock
+				Task.Run(() => tabAsync.LoadAsync(taskInstance.call)).Wait(); // Call this way to avoid .Result deadlock
 			}
 			else if (CanLoad)
 			{

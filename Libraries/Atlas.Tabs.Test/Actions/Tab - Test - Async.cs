@@ -14,12 +14,11 @@ namespace Atlas.Tabs.Test.Actions
 		{
 			//private ItemCollection<ListItem> items;
 
-			public async Task LoadAsync()
+			public async Task LoadAsync(Call call)
 			{
 				await Task.Delay(2000);
 				tabModel.AddObject("Finished");
 			}
-
 		}
 	}
 }

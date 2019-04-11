@@ -386,6 +386,7 @@ namespace Atlas.Tabs
 				value = (value as ListMember).Value;
 			Type type = value.GetType();
 			if (type.IsPrimitive ||
+				type.IsEnum ||
 				type.Equals(typeof(string)) ||
 				type.Equals(typeof(Decimal)) ||
 				type.Equals(typeof(DateTime)) ||
