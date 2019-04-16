@@ -167,8 +167,9 @@ namespace Atlas.Tabs
 			foreach (TaskInstance taskInstance in tabModel.Tasks)
 			{
 				taskInstance.Cancel();
-			}
-		}
+            }
+            taskInstance.Cancel();
+        }
 
 		private void InitializeContext()
 		{
@@ -200,6 +201,12 @@ namespace Atlas.Tabs
 		{
 			Action action = (Action)state;
 			action.Invoke();
+		}
+
+		// make generic? not useful yet, causes flickering
+		public void ScheduleTask(int milliSeconds, Action action)
+		{
+			Task.Delay(milliSeconds).ContinueWith(t => action());
 		}
 
 		public void Invoke(SendOrPostCallback callback, object param = null)

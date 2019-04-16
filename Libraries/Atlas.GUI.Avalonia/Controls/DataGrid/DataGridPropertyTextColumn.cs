@@ -47,7 +47,7 @@ namespace Atlas.GUI.Avalonia
 		private bool IsSortable(Type type)
 		{
 			type = type.GetNonNullableType();
-			if (propertyInfo.PropertyType.IsPrimitive ||
+			if (type.IsPrimitive ||
 				type == typeof(string) ||
 				type == typeof(DateTime) ||
 				type == typeof(TimeSpan))
