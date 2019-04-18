@@ -60,8 +60,8 @@ namespace Atlas.GUI.Avalonia
 			//HotKeyManager.SetHotKey(button, gesture1);
 
 			// gray color 3289C7
-			Button buttonBack = AddButton("Back", commandBindingBack, Assets.Streams.Back);
-			Button buttonForward = AddButton("Forward", commandBindingForward, Assets.Streams.Forward);
+			Button buttonBack = AddButton("Back", Assets.Streams.Back, commandBindingBack);
+			Button buttonForward = AddButton("Forward", Assets.Streams.Forward, commandBindingForward);
 
 			/*
 			ToolbarButton2 buttonBack = new ToolbarButton2()

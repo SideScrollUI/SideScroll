@@ -2,9 +2,11 @@
 using Atlas.Resources;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Styling;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,8 +33,11 @@ namespace Atlas.GUI.Avalonia.Tabs
 			Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
 		}
 
-		public Button AddButton(string name, ICommand command, Stream resource)
+		public Button AddButton(string tooltip, Stream resource, ICommand command = null)
 		{
+			//command = command ?? new RelayCommand(
+			//	(obj) => CommandDefaultCanExecute(obj),
+			//	(obj) => CommandDefaultExecute(obj));
 			var assembly = Assembly.GetExecutingAssembly();
 			Bitmap bitmap;
 			using (resource)
@@ -56,26 +61,15 @@ namespace Atlas.GUI.Avalonia.Tabs
 				//BorderThickness = new Thickness(2),
 				//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
 				//BorderBrush = new SolidColorBrush(Colors.Black),
-				[ToolTip.TipProperty] = name,
+				[ToolTip.TipProperty] = tooltip,
 			};
 			button.BorderBrush = button.Background;
 			button.PointerEnter += Button_PointerEnter;
 			button.PointerLeave += Button_PointerLeave;
 
+			//var button = new ToolbarButton(tooltip, command, resource);
 			this.Children.Add(button);
-
 			return button;
-		}
-
-		public void AddSeparator()
-		{
-			Panel panel = new Panel()
-			{
-				Background = new SolidColorBrush(Theme.ToolbarButtonSeparatorColor),
-				Width = 2,
-				Margin = new Thickness(4),
-			};
-			this.Children.Add(panel);
 		}
 
 		// DefaultTheme.xaml is overriding this currently
@@ -91,6 +85,27 @@ namespace Atlas.GUI.Avalonia.Tabs
 			Button button = (Button)sender;
 			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
 			button.BorderBrush = button.Background;
+		}
+
+		/*private bool CommandDefaultCanExecute(object obj)
+		{
+			return true;
+		}
+
+		private void CommandDefaultExecute(object obj)
+		{
+
+		}*/
+
+		public void AddSeparator()
+		{
+			Panel panel = new Panel()
+			{
+				Background = new SolidColorBrush(Theme.ToolbarButtonSeparatorColor),
+				Width = 2,
+				Margin = new Thickness(4),
+			};
+			this.Children.Add(panel);
 		}
 
 		public TextBlock AddLabel(string text)
@@ -126,6 +141,57 @@ namespace Atlas.GUI.Avalonia.Tabs
 			this.Children.Add(textBox);
 
 			return textBox;
+		}
+	}
+
+	// not working yet :(
+	public class ToolbarButton : Button, IStyleable, ILayoutable
+	{
+		Type IStyleable.StyleKey => typeof(Button);
+
+		public ToolbarButton(string tooltip, ICommand command, Stream resource)
+		{
+			//var assembly = Assembly.GetExecutingAssembly();
+			Bitmap bitmap;
+			using (resource)
+			{
+				bitmap = new Bitmap(resource);
+			}
+
+			var image = new Image()
+			{
+				Source = bitmap,
+			};
+
+			Button button = new Button()
+			{
+				Content = image,
+				Command = command,
+				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
+				BorderBrush = Background,
+				BorderThickness = new Thickness(0),
+				Margin = new Thickness(2),
+				//BorderThickness = new Thickness(2),
+				//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
+				//BorderBrush = new SolidColorBrush(Colors.Black),
+				[ToolTip.TipProperty] = tooltip,
+			};
+			button.BorderBrush = button.Background;
+		}
+
+		// DefaultTheme.xaml is overriding this currently
+		protected override void OnPointerEnter(PointerEventArgs e)
+		{
+			base.OnPointerEnter(e);
+			this.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			this.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundHoverColor);
+		}
+
+		protected override void OnPointerLeave(PointerEventArgs e)
+		{
+			base.OnPointerLeave(e);
+			this.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
+			this.BorderBrush = this.Background;
 		}
 	}
 

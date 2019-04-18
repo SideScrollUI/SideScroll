@@ -19,74 +19,16 @@ namespace Atlas.Start.Avalonia.Tabs
 
 		private void InitializeControls()
 		{
-			RelayCommand commandBindingSearch = new RelayCommand(
-				(obj) => CommandSearchCanExecute(obj),
-				(obj) => CommandSearchExecute(obj));
-
-			RelayCommand commandBindingNext = new RelayCommand(
-				(obj) => CommandNextCanExecute(obj),
-				(obj) => CommandNextExecute(obj));
-
-			RelayCommand commandBindingAdd = new RelayCommand(
-				(obj) => CommandAddCanExecute(obj),
-				(obj) => CommandAddExecute(obj));
-
-			RelayCommand commandBindingDefault = new RelayCommand(
-				(obj) => CommandDefaultCanExecute(obj),
-				(obj) => CommandDefaultExecute(obj));
-
-
 			//project.navigator.CanSeekBackwardOb
 			//CommandBinder.
 			//CommandBindings.Add(commandBindingBack);
 
-			buttonSearch = AddButton("Search", commandBindingSearch, Assets.Streams.Search);
-			buttonLoadNext = AddButton("Next", commandBindingNext, Assets.Streams.Forward);
+			buttonSearch = AddButton("Search", Assets.Streams.Search);
+			buttonLoadNext = AddButton("Next", Assets.Streams.Forward);
 			AddSeparator();
-			buttonLoadAdd = AddButton("Add", commandBindingAdd, Assets.Streams.Add);
-			AddButton("Save", commandBindingDefault, Assets.Streams.Save);
+			buttonLoadAdd = AddButton("Add", Assets.Streams.Add);
+			AddButton("Save", Assets.Streams.Save);
 			textBlockStatus = AddLabel("Status");
-		}
-
-		// Not currently being used. See TabScanControl
-		private bool CommandSearchCanExecute(object obj)
-		{
-			return true;
-		}
-
-		private void CommandSearchExecute(object obj)
-		{
-
-		}
-
-		private bool CommandNextCanExecute(object obj)
-		{
-			return true;
-		}
-
-		private void CommandNextExecute(object obj)
-		{
-
-		}
-
-		private bool CommandAddCanExecute(object obj)
-		{
-			return true;
-		}
-
-		private void CommandAddExecute(object obj)
-		{
-
-		}
-
-		private bool CommandDefaultCanExecute(object obj)
-		{
-			return true;
-		}
-
-		private void CommandDefaultExecute(object obj)
-		{
-
 		}
 	}
 }
