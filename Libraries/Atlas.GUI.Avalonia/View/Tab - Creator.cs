@@ -59,7 +59,7 @@ namespace Atlas.GUI.Avalonia.View
 			Type type = value.GetType();
 
 
-			if (value is string || value is Decimal || type.IsPrimitive)
+			if (value is string || value is decimal || type.IsPrimitive)
 			{
 				value = new TabText(value.ToString()); // create an ITab
 			}

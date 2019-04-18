@@ -51,12 +51,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OxyPlot.Avalonia", "Imports
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Resources", "Libraries\Atlas.Resources\Atlas.Resources.csproj", "{77D36F2E-2D9A-4FF3-B92D-2BEFFF03CC8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atlas.GUI.Avalonia.Test", "Test\Atlas.GUI.Avalonia.Test\Atlas.GUI.Avalonia.Test.csproj", "{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.GUI.Avalonia.Test", "Test\Atlas.GUI.Avalonia.Test\Atlas.GUI.Avalonia.Test.csproj", "{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atlas.Core.Test", "Test\Atlas.Core.Test\Atlas.Core.Test.csproj", "{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		DebugX86|Any CPU = DebugX86|Any CPU
@@ -177,6 +176,12 @@ Global
 		{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}.DebugX86|Any CPU.Build.0 = Debug|Any CPU
 		{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}.DebugX86|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}.DebugX86|Any CPU.Build.0 = Debug|Any CPU
+		{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -203,8 +208,12 @@ Global
 		{931E23F0-EEE8-4338-85C7-AFE9D790F178} = {D88AED94-C434-458D-820C-F738A7867B2D}
 		{77D36F2E-2D9A-4FF3-B92D-2BEFFF03CC8C} = {05F04605-3FC3-4A78-8C52-CFAF0AE94A5F}
 		{6DDD8F96-72EC-49EB-B745-0393EF9B20A9} = {B14E9554-8531-4CE0-80BB-FD4C4A87F488}
+		{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91} = {B14E9554-8531-4CE0-80BB-FD4C4A87F488}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B8EE36E-D3EA-401F-A48B-6B0D45E04DCC}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

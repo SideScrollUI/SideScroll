@@ -19,7 +19,7 @@ namespace Atlas.GUI.Avalonia.Controls
 {
 	public class TabControlParams : Grid
 	{
-		private const int ControlMaxWidth = 400;
+		private const int ControlMaxWidth = 500;
 		private TabInstance tabInstance;
 		private object obj;
 		private bool autoGenerateRows;
@@ -164,6 +164,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				Padding = new Thickness(6, 3),
 				Focusable = true, // already set?
 				MaxWidth = ControlMaxWidth,
+				//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
 			};

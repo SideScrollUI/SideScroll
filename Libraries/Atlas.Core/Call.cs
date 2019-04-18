@@ -72,6 +72,7 @@ namespace Atlas.Core
 	{
 		private Stopwatch stopwatch = new Stopwatch();
 		private System.Timers.Timer timer = new System.Timers.Timer();
+		public long ElapsedMilliseconds => stopwatch.ElapsedMilliseconds;
 
 		public CallTimer()
 		{

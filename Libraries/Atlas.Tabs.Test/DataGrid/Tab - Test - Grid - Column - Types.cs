@@ -32,6 +32,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			public int Integer { get; set; } = 0;
 			public long Long { get; set; } = 1234567890123456789;
+			public decimal Decimal { get; set; } = 123456789.0123456789M;
 			public bool Bool { get; set; }
 			public byte[] ByteArray { get; set; } = new byte[256];
 			public DateTime DateTime { get; set; }

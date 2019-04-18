@@ -238,6 +238,17 @@ namespace Atlas.Extensions // rename to Core?
 			if (type.Equals(typeof(string)))
 				return (string)obj;
 
+			// handle decimal here: a decimal is considered a primitive
+			if (type.IsNumeric())
+			{
+				MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) });
+				string format = type.IsDecimal() ? "N3" : "N0";
+				object result = toStringMethod.Invoke(obj, new object[] { format });
+				if (result == null)
+					return null;
+				return (string)result;
+			}
+
 			if (type.IsPrimitive == false)
 			{
 				// use any ToString() that overrides the base
@@ -255,15 +266,6 @@ namespace Atlas.Extensions // rename to Core?
 			//if (toString != null && !toString.StartsWith("("))
 			//	return toString;
 
-			if (type.IsNumeric())
-			{
-				MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) });
-				string format = type.IsDecimal() ? "N3" : "N0";
-				object result = toStringMethod.Invoke(obj, new object[] { format });
-				if (result == null)
-					return null;
-				return (string)result;
-			}
 			if (typeof(ICollection).IsAssignableFrom(type))
 			{
 				return "[" + ((ICollection)obj).Count.ToString("N0") + "]";

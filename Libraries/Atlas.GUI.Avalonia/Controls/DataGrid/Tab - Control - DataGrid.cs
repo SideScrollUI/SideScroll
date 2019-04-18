@@ -24,6 +24,8 @@ namespace Atlas.GUI.Avalonia.Controls
 {
 	public class TabControlDataGrid : Grid, IDisposable, ITabSelector
 	{
+		private static int MaxColumnWidth = 500;
+
 		private TabModel tabModel;
 		private TabInstance tabInstance;
 		public TabDataSettings tabDataSettings;
@@ -582,7 +584,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			column.IsReadOnly = isReadOnly;
 			//column.Bind(avaloniaProperty, iList);
 			//column.Width = new DataGridLength(200);// new DataGridLength(1, DataGridLengthUnitType.Star);
-			column.MaxWidth = 400;
+			column.MaxWidth = MaxColumnWidth;
 			//column.HeaderCell.AreSeparatorsVisible = true;
 			//column.HeaderCell.SeparatorBrush = new SolidColorBrush(Colors.Black); // Header Cell styles aren't implemented yet :(
 
