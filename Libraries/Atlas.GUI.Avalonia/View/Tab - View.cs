@@ -201,7 +201,7 @@ namespace Atlas.GUI.Avalonia.View
 			if (this.Children.Count == 0)
 				this.Children.Add(containerGrid);
 
-			AddContextMenu();
+			this.ContextMenu = new TabViewContextMenu(this, tabInstance);
 		}
 
 		private void AddParentControls()
@@ -254,76 +254,6 @@ namespace Atlas.GUI.Avalonia.View
 			tabInstance.OnLoadBookmark += TabInstance_OnLoadBookmark;
 			//tabInstance.OnClearSelection += TabInstance_OnClearSelection; // data controls should attach these instead?
 			tabInstance.OnSelectItem += TabInstance_OnSelectItem;
-		}
-
-		private void AddContextMenu()
-		{
-			ContextMenu contextMenu = new ContextMenu();
-
-			var list = new AvaloniaList<object>();
-			MenuItem menuItemRefresh = new MenuItem() { Header = "_Refresh" };
-			menuItemRefresh.Click += MenuItemRefresh_Click;
-			list.Add(menuItemRefresh);
-
-			MenuItem menuItemReload = new MenuItem() { Header = "_Reload" };
-			menuItemReload.Click += MenuItemReload_Click;
-			list.Add(menuItemReload);
-
-			MenuItem menuItemReset = new MenuItem() { Header = "Re_set" };
-			menuItemReset.Click += MenuItemReset_Click;
-			list.Add(menuItemReset);
-
-			MenuItem menuItemDebug = new MenuItem() { Header = "_Debug" };
-			menuItemDebug.Click += MenuItemDebug_Click;
-			list.Add(menuItemDebug);
-
-			list.Add(new Separator());
-
-			MenuItem menuItemAutoLoad = new MenuItem() { Header = "_AutoLoad" };
-			menuItemAutoLoad.Click += MenuItemAutoLoad_Click;
-			list.Add(menuItemAutoLoad);
-
-			contextMenu.Items = list;
-
-			this.ContextMenu = contextMenu;
-		}
-
-		private void MenuItemAutoLoad_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			tabInstance.project.projectSettings.AutoLoad = !tabInstance.project.projectSettings.AutoLoad;
-			tabInstance.project.SaveSettings();
-		}
-
-		private void MenuItemRefresh_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			tabInstance.Refresh();
-		}
-
-		private void MenuItemReload_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			//Initialize(); reloads data without reloading GUI
-			LoadSettings(); // reloads tab settings, recreates all controls
-		}
-
-		private void MenuItemReset_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			//tabInstance.Reset()
-			TabViewSettings = new TabViewSettings()
-			{
-				Name = tabModel.Name,
-			};
-			tabInstance.SaveTabSettings();
-			tabInstance.Reintialize();
-			Load();
-			// Could have parent instance reload children
-		}
-
-		private void MenuItemDebug_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			TabModel debugListCollection = new TabModel("Debug");
-			TabView tabView = this.Clone<TabView>(tabInstance.taskInstance.call);
-			debugListCollection.AddData(tabView);
-			Control debugControl = CreateChildControl(debugListCollection, "Debug");
 		}
 
 		private void GridSplitter_DragDelta(object sender, global::Avalonia.Input.VectorEventArgs e)

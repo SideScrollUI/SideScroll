@@ -7,7 +7,7 @@ namespace Atlas.Serialize
 		public static T Clone<T>(this object obj, Call call = null)
 		{
 			call = call ?? new Call();
-			return (T)SerializerMemory.Clone<T>(call, obj);
+			return SerializerMemory.Clone<T>(call, obj);
 		}
 	}
 }

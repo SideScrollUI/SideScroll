@@ -65,18 +65,6 @@ index 2698b0c..ae7b875 100644
              return _selectedSlotsTable.IndexOf(slot);
          }
 Submodule Imports/AvaloniaUI/AvaloniaEdit contains modified content
-diff --git a/Imports/AvaloniaUI/AvaloniaEdit/Directory.Build.props b/Imports/AvaloniaUI/AvaloniaEdit/Directory.Build.props
-index 0afa821..880103c 100644
---- a/Imports/AvaloniaUI/AvaloniaEdit/Directory.Build.props
-+++ b/Imports/AvaloniaUI/AvaloniaEdit/Directory.Build.props
-@@ -2,6 +2,6 @@
-   <PropertyGroup>
-     <LangVersion>7.1</LangVersion>
-     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
--    <AvaloniaVersion>0.7.1-cibuild0001689-beta</AvaloniaVersion>
-+    <AvaloniaVersion>0.7.1-cibuild0001754-beta</AvaloniaVersion>
-   </PropertyGroup>
- </Project>
 diff --git a/Imports/AvaloniaUI/AvaloniaEdit/src/AvaloniaEdit/AvaloniaEdit.csproj b/Imports/AvaloniaUI/AvaloniaEdit/src/AvaloniaEdit/AvaloniaEdit.csproj
 index 886d644..c451046 100644
 --- a/Imports/AvaloniaUI/AvaloniaEdit/src/AvaloniaEdit/AvaloniaEdit.csproj
@@ -91,6 +79,1232 @@ index 886d644..c451046 100644
      <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
    </ItemGroup>
 Submodule Imports/AvaloniaUI/OxyPlot.Avalonia contains modified content
+Submodule Imports/AvaloniaUI/OxyPlot.Avalonia b04d399..7872a23:
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/AvaloniaExamples.csproj b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/AvaloniaExamples.csproj
+index 3b0e6cf..ccd91dc 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/AvaloniaExamples.csproj
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/AvaloniaExamples.csproj
+@@ -13,6 +13,6 @@
+     <PackageReference Include="JetBrains.Annotations" Version="11.0.0" />
+     <ProjectReference Include="..\..\..\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
+     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
+-    <PackageReference Include="Avalonia.Desktop" Version="0.6.1" />
++    <PackageReference Include="Avalonia.Desktop" Version="0.7.0" />
+   </ItemGroup>
+ </Project>
+\ No newline at end of file
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/Examples/DataTemplateDemo/PlotViewDataTemplateWindow.xaml.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/Examples/DataTemplateDemo/PlotViewDataTemplateWindow.xaml.cs
+index 20cf1de..303cb25 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/Examples/DataTemplateDemo/PlotViewDataTemplateWindow.xaml.cs
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/Examples/DataTemplateDemo/PlotViewDataTemplateWindow.xaml.cs
+@@ -20,7 +20,7 @@ namespace AvaloniaExamples.Examples.DataTemplateDemo
+     using AvaloniaExamples;
+     using Avalonia.Controls.Templates;
+     using Avalonia.Controls;
+-    using Avalonia.Markup.Xaml.Data;
++    using Avalonia.Data;
+ 
+     /// <summary>
+     /// Interaction logic for PlotViewDataTemplateWindow.xaml
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/Examples/OverlayDemo/MainWindow.xaml.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/Examples/OverlayDemo/MainWindow.xaml.cs
+index cd46224..1e6b100 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/Examples/OverlayDemo/MainWindow.xaml.cs
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/AvaloniaExamples/Examples/OverlayDemo/MainWindow.xaml.cs
+@@ -55,7 +55,7 @@ public MainWindow()
+             {
+                 Fill = new LinearGradientBrush
+                 {
+-                    GradientStops = new System.Collections.Generic.List<GradientStop>
++                    GradientStops = new GradientStops
+                     {
+                         new GradientStop(Colors.Black, 0),
+                         new GradientStop(Colors.Red, 1)
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/App.xaml.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/App.xaml.cs
+index 4865adc..98d7f45 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/App.xaml.cs
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/App.xaml.cs
+@@ -21,6 +21,7 @@ public override void Initialize()
+ 
+         static void Main(string[] args)
+         {
++            OxyPlotModule.EnsureLoaded();
+             InitializeLogging();
+             AppBuilder.Configure<App>()
+                 .UsePlatformDetect()
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/MemoryTest.csproj b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/MemoryTest.csproj
+index b26a18f..6c26348 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/MemoryTest.csproj
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/MemoryTest.csproj
+@@ -1,5 +1,9 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+ <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <Import Project="..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props" Condition="Exists('..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props')" />
++  <Import Project="..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props" Condition="Exists('..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props')" />
++  <Import Project="..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props" Condition="Exists('..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props')" />
++  <Import Project="..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props" Condition="Exists('..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props')" />
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+@@ -10,8 +14,12 @@
+     <AppDesignerFolder>Properties</AppDesignerFolder>
+     <RootNamespace>MemoryTest</RootNamespace>
+     <AssemblyName>MemoryTest</AssemblyName>
+-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
++    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+     <FileAlignment>512</FileAlignment>
++    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
++    <TargetFrameworkProfile />
++    <NuGetPackageImportStamp>
++    </NuGetPackageImportStamp>
+   </PropertyGroup>
+   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+     <DebugSymbols>true</DebugSymbols>
+@@ -31,116 +39,197 @@
+     <WarningLevel>4</WarningLevel>
+   </PropertyGroup>
+   <ItemGroup>
+-    <Reference Include="Avalonia.Animation, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Animation.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Animation, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Animation.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Base, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Base.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Base, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Base.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Cairo, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.Desktop.0.4.0\lib\net45\Avalonia.Cairo.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Controls, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Controls.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Controls, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Controls.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.DesignerSupport, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.DesignerSupport.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.DesignerSupport, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.DesignerSupport.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Desktop, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Desktop.0.7.0\lib\netstandard2.0\Avalonia.Desktop.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Diagnostics, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Diagnostics.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.DesktopRuntime, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.DesktopRuntime.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Direct2D1, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.Desktop.0.4.0\lib\net45\Avalonia.Direct2D1.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Diagnostics, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Diagnostics.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Gtk, Version=1.0.6062.14569, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.Desktop.0.4.0\lib\net45\Avalonia.Gtk.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Direct2D1, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Direct2D1.0.7.0\lib\netstandard2.0\Avalonia.Direct2D1.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.HtmlRenderer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.HtmlRenderer.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Gtk3, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Gtk3.0.7.0\lib\netstandard2.0\Avalonia.Gtk3.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Input, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Input.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Input, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Input.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Interactivity, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Interactivity.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Interactivity, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Interactivity.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Layout, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Layout.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Layout, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Layout.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Logging.Serilog, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Logging.Serilog.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Logging.Serilog, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Logging.Serilog.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Markup, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Markup.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Markup, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Markup.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Markup.Xaml, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Markup.Xaml.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Markup.Xaml, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Markup.Xaml.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Native, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Native.0.7.0\lib\netstandard2.0\Avalonia.Native.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.OpenGL, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.OpenGL.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Remote.Protocol, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Remote.Protocol.0.7.0\lib\netstandard2.0\Avalonia.Remote.Protocol.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Skia, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Skia.0.7.0\lib\netstandard2.0\Avalonia.Skia.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Styling, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Styling.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Themes.Default, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Themes.Default.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Visuals, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Visuals.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.ReactiveUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.ReactiveUI.dll</HintPath>
++    <Reference Include="Avalonia.Win32, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Win32.0.7.0\lib\netstandard2.0\Avalonia.Win32.dll</HintPath>
++    </Reference>
++    <Reference Include="JetBrains.Annotations, Version=10.3.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\JetBrains.Annotations.10.3.0\lib\net\JetBrains.Annotations.dll</HintPath>
++    </Reference>
++    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Avalonia.SceneGraph, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.SceneGraph.dll</HintPath>
++    <Reference Include="OxyPlot, Version=2.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\OxyPlot.Core.2.0.0-unstable1035\lib\net45\OxyPlot.dll</HintPath>
++    </Reference>
++    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Serilog.2.5.0\lib\net46\Serilog.dll</HintPath>
++    </Reference>
++    <Reference Include="Serilog.Sinks.Debug, Version=1.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Serilog.Sinks.Debug.1.0.0\lib\netstandard1.0\Serilog.Sinks.Debug.dll</HintPath>
++    </Reference>
++    <Reference Include="Serilog.Sinks.Trace, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Serilog.Sinks.Trace.2.1.0\lib\net45\Serilog.Sinks.Trace.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpDX, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpDX.4.0.1\lib\net45\SharpDX.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpDX.Direct2D1, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpDX.Direct2D1.4.0.1\lib\net45\SharpDX.Direct2D1.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpDX.Direct3D11, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpDX.Direct3D11.4.0.1\lib\net45\SharpDX.Direct3D11.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpDX.DXGI, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpDX.DXGI.4.0.1\lib\net45\SharpDX.DXGI.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpGen.Runtime, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpGen.Runtime.1.1.0\lib\netstandard2.0\SharpGen.Runtime.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpGen.Runtime.COM, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpGen.Runtime.COM.1.1.0\lib\netstandard1.1\SharpGen.Runtime.COM.dll</HintPath>
++    </Reference>
++    <Reference Include="SkiaSharp, Version=1.68.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SkiaSharp.1.68.0\lib\net45\SkiaSharp.dll</HintPath>
++    </Reference>
++    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Avalonia.Styling, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Styling.dll</HintPath>
++    <Reference Include="Sprache, Version=2.0.0.50, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Sprache.2.0.0.50\lib\portable-net4+netcore45+win8+wp8+sl5+MonoAndroid+Xamarin.iOS10+MonoTouch\Sprache.dll</HintPath>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Avalonia.Themes.Default, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Themes.Default.dll</HintPath>
++    <Reference Include="System" />
++    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+       <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Win32, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.Desktop.0.4.0\lib\net45\Avalonia.Win32.dll</HintPath>
++    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
++    </Reference>
++    <Reference Include="System.ComponentModel.Composition" />
++    <Reference Include="System.ComponentModel.DataAnnotations" />
++    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Serilog.1.5.14\lib\net45\Serilog.dll</HintPath>
++    <Reference Include="System.Core" />
++    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Drawing" />
++    <Reference Include="System.Drawing.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Drawing.Common.4.5.0\lib\net461\System.Drawing.Common.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Serilog.1.5.14\lib\net45\Serilog.FullNetFx.dll</HintPath>
++    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="SharpDX, Version=3.0.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\SharpDX.3.0.2\lib\net45\SharpDX.dll</HintPath>
++    <Reference Include="System.IO.Compression.FileSystem" />
++    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="SharpDX.Direct2D1, Version=3.0.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\SharpDX.Direct2D1.3.0.2\lib\net45\SharpDX.Direct2D1.dll</HintPath>
++    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="SharpDX.DXGI, Version=3.0.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\SharpDX.DXGI.3.0.2\lib\net45\SharpDX.DXGI.dll</HintPath>
++    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
++    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Net.Http, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Net.Http.4.3.0\lib\net46\System.Net.Http.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Sprache, Version=2.0.0.50, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Sprache.2.0.0.50\lib\portable-net4+netcore45+win8+wp8+sl5+MonoAndroid+Xamarin.iOS10+MonoTouch\Sprache.dll</HintPath>
++    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="System" />
+-    <Reference Include="System.Core" />
++    <Reference Include="System.Numerics" />
++    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Reactive, Version=4.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Reactive.4.0.0\lib\net46\System.Reactive.dll</HintPath>
++    </Reference>
+     <Reference Include="System.Reactive.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+       <HintPath>..\..\..\packages\System.Reactive.Core.3.0.0\lib\net46\System.Reactive.Core.dll</HintPath>
+       <Private>True</Private>
+@@ -161,11 +250,49 @@
+       <HintPath>..\..\..\packages\System.Reactive.Windows.Threading.3.0.0\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+       <Private>True</Private>
+     </Reference>
++    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Windows" />
++    <Reference Include="System.Windows.Forms" />
+     <Reference Include="System.Xml.Linq" />
+     <Reference Include="System.Data.DataSetExtensions" />
+     <Reference Include="Microsoft.CSharp" />
+     <Reference Include="System.Data" />
+     <Reference Include="System.Xml" />
++    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
+     <Reference Include="WindowsBase" />
+   </ItemGroup>
+   <ItemGroup>
+@@ -186,6 +313,7 @@
+     <Compile Include="Properties\AssemblyInfo.cs" />
+   </ItemGroup>
+   <ItemGroup>
++    <None Include="app.config" />
+     <None Include="packages.config" />
+   </ItemGroup>
+   <ItemGroup>
+@@ -193,10 +321,6 @@
+       <Project>{698CCD8E-ADCC-4565-8517-5EDD36F07155}</Project>
+       <Name>OxyPlot.Avalonia</Name>
+     </ProjectReference>
+-    <ProjectReference Include="..\..\..\OxyPlot\OxyPlot.csproj">
+-      <Project>{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}</Project>
+-      <Name>OxyPlot</Name>
+-    </ProjectReference>
+   </ItemGroup>
+   <ItemGroup>
+     <EmbeddedResource Include="Window1.xaml">
+@@ -209,6 +333,19 @@
+     </EmbeddedResource>
+   </ItemGroup>
+   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
++  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
++    <PropertyGroup>
++      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
++    </PropertyGroup>
++    <Error Condition="!Exists('..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props'))" />
++    <Error Condition="!Exists('..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props'))" />
++    <Error Condition="!Exists('..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props'))" />
++    <Error Condition="!Exists('..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props'))" />
++    <Error Condition="!Exists('..\..\..\packages\SkiaSharp.1.68.0\build\net45\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SkiaSharp.1.68.0\build\net45\SkiaSharp.targets'))" />
++    <Error Condition="!Exists('..\..\..\packages\Avalonia.Skia.Linux.Natives.1.68.0.2\build\net45\Avalonia.Skia.Linux.Natives.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.Skia.Linux.Natives.1.68.0.2\build\net45\Avalonia.Skia.Linux.Natives.targets'))" />
++  </Target>
++  <Import Project="..\..\..\packages\SkiaSharp.1.68.0\build\net45\SkiaSharp.targets" Condition="Exists('..\..\..\packages\SkiaSharp.1.68.0\build\net45\SkiaSharp.targets')" />
++  <Import Project="..\..\..\packages\Avalonia.Skia.Linux.Natives.1.68.0.2\build\net45\Avalonia.Skia.Linux.Natives.targets" Condition="Exists('..\..\..\packages\Avalonia.Skia.Linux.Natives.1.68.0.2\build\net45\Avalonia.Skia.Linux.Natives.targets')" />
+   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+        Other similar extension points exist, see Microsoft.Common.targets.
+   <Target Name="BeforeBuild">
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/app.config b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/app.config
+new file mode 100644
+index 0000000..65b0a0d
+--- /dev/null
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/app.config
+@@ -0,0 +1,20 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<configuration>
++<startup><supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.6.1" /></startup>
++  <runtime>
++    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
++      <dependentAssembly>
++        <assemblyIdentity name="System.ComponentModel.Annotations" publicKeyToken="b03f5f7f11d50a3a" culture="neutral" />
++        <bindingRedirect oldVersion="0.0.0.0-4.2.1.0" newVersion="4.2.1.0" />
++      </dependentAssembly>
++      <dependentAssembly>
++        <assemblyIdentity name="SkiaSharp" publicKeyToken="0738eb9f132ed756" culture="neutral" />
++        <bindingRedirect oldVersion="0.0.0.0-1.68.0.0" newVersion="1.68.0.0" />
++      </dependentAssembly>
++      <dependentAssembly>
++        <assemblyIdentity name="System.Xml.ReaderWriter" publicKeyToken="b03f5f7f11d50a3a" culture="neutral" />
++        <bindingRedirect oldVersion="0.0.0.0-4.1.1.0" newVersion="4.1.1.0" />
++      </dependentAssembly>
++    </assemblyBinding>
++  </runtime>
++</configuration>
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/packages.config b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/packages.config
+index 6c6fd40..b875c7b 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/packages.config
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/MemoryTest/packages.config
+@@ -1,17 +1,85 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+ <packages>
+-  <package id="Avalonia" version="0.4.0" targetFramework="net46" />
+-  <package id="Avalonia.Desktop" version="0.4.0" targetFramework="net46" />
+-  <package id="Serilog" version="1.5.14" targetFramework="net46" />
+-  <package id="SharpDX" version="3.0.2" targetFramework="net46" />
+-  <package id="SharpDX.Direct2D1" version="3.0.2" targetFramework="net46" />
+-  <package id="SharpDX.DXGI" version="3.0.2" targetFramework="net46" />
++  <package id="Avalonia" version="0.7.0" targetFramework="net461" />
++  <package id="Avalonia.Desktop" version="0.7.0" targetFramework="net461" />
++  <package id="Avalonia.Direct2D1" version="0.7.0" targetFramework="net461" />
++  <package id="Avalonia.Gtk3" version="0.7.0" targetFramework="net461" />
++  <package id="Avalonia.Native" version="0.7.0" targetFramework="net461" />
++  <package id="Avalonia.Remote.Protocol" version="0.7.0" targetFramework="net461" />
++  <package id="Avalonia.Skia" version="0.7.0" targetFramework="net461" />
++  <package id="Avalonia.Skia.Linux.Natives" version="1.68.0.2" targetFramework="net461" />
++  <package id="Avalonia.Win32" version="0.7.0" targetFramework="net461" />
++  <package id="JetBrains.Annotations" version="10.3.0" targetFramework="net461" />
++  <package id="Microsoft.NETCore.Platforms" version="1.1.0" targetFramework="net461" />
++  <package id="Microsoft.Win32.Primitives" version="4.3.0" targetFramework="net461" />
++  <package id="NETStandard.Library" version="1.6.1" targetFramework="net461" />
++  <package id="OxyPlot.Core" version="2.0.0-unstable1035" targetFramework="net461" />
++  <package id="Serilog" version="2.5.0" targetFramework="net461" />
++  <package id="Serilog.Sinks.Debug" version="1.0.0" targetFramework="net461" />
++  <package id="Serilog.Sinks.Trace" version="2.1.0" targetFramework="net461" />
++  <package id="SharpDX" version="4.0.1" targetFramework="net461" />
++  <package id="SharpDX.Direct2D1" version="4.0.1" targetFramework="net461" />
++  <package id="SharpDX.Direct3D11" version="4.0.1" targetFramework="net461" />
++  <package id="SharpDX.DXGI" version="4.0.1" targetFramework="net461" />
++  <package id="SharpGen.Runtime" version="1.1.0" targetFramework="net461" />
++  <package id="SharpGen.Runtime.COM" version="1.1.0" targetFramework="net461" />
++  <package id="SkiaSharp" version="1.68.0" targetFramework="net461" />
+   <package id="Splat" version="1.6.2" targetFramework="net46" />
+   <package id="Sprache" version="2.0.0.50" targetFramework="net46" />
+-  <package id="System.Reactive" version="3.0.0" targetFramework="net46" />
++  <package id="System.AppContext" version="4.3.0" targetFramework="net461" />
++  <package id="System.Buffers" version="4.4.0" targetFramework="net461" />
++  <package id="System.Collections" version="4.3.0" targetFramework="net461" />
++  <package id="System.Collections.Concurrent" version="4.3.0" targetFramework="net461" />
++  <package id="System.ComponentModel.Annotations" version="4.5.0" targetFramework="net461" />
++  <package id="System.Console" version="4.3.0" targetFramework="net461" />
++  <package id="System.Diagnostics.Debug" version="4.3.0" targetFramework="net461" />
++  <package id="System.Diagnostics.DiagnosticSource" version="4.3.0" targetFramework="net461" />
++  <package id="System.Diagnostics.Tools" version="4.3.0" targetFramework="net461" />
++  <package id="System.Diagnostics.Tracing" version="4.3.0" targetFramework="net461" />
++  <package id="System.Drawing.Common" version="4.5.0" targetFramework="net461" />
++  <package id="System.Globalization" version="4.3.0" targetFramework="net461" />
++  <package id="System.Globalization.Calendars" version="4.3.0" targetFramework="net461" />
++  <package id="System.IO" version="4.3.0" targetFramework="net461" />
++  <package id="System.IO.Compression" version="4.3.0" targetFramework="net461" />
++  <package id="System.IO.Compression.ZipFile" version="4.3.0" targetFramework="net461" />
++  <package id="System.IO.FileSystem" version="4.3.0" targetFramework="net461" />
++  <package id="System.IO.FileSystem.Primitives" version="4.3.0" targetFramework="net461" />
++  <package id="System.Linq" version="4.3.0" targetFramework="net461" />
++  <package id="System.Linq.Expressions" version="4.3.0" targetFramework="net461" />
++  <package id="System.Memory" version="4.5.1" targetFramework="net461" />
++  <package id="System.Net.Http" version="4.3.0" targetFramework="net461" />
++  <package id="System.Net.Primitives" version="4.3.0" targetFramework="net461" />
++  <package id="System.Net.Sockets" version="4.3.0" targetFramework="net461" />
++  <package id="System.Numerics.Vectors" version="4.4.0" targetFramework="net461" />
++  <package id="System.ObjectModel" version="4.3.0" targetFramework="net461" />
++  <package id="System.Reactive" version="4.0.0" targetFramework="net461" />
+   <package id="System.Reactive.Core" version="3.0.0" targetFramework="net46" />
+   <package id="System.Reactive.Interfaces" version="3.0.0" targetFramework="net46" />
+   <package id="System.Reactive.Linq" version="3.0.0" targetFramework="net46" />
+   <package id="System.Reactive.PlatformServices" version="3.0.0" targetFramework="net46" />
+   <package id="System.Reactive.Windows.Threading" version="3.0.0" targetFramework="net46" />
++  <package id="System.Reflection" version="4.3.0" targetFramework="net461" />
++  <package id="System.Reflection.Extensions" version="4.3.0" targetFramework="net461" />
++  <package id="System.Reflection.Primitives" version="4.3.0" targetFramework="net461" />
++  <package id="System.Resources.ResourceManager" version="4.3.0" targetFramework="net461" />
++  <package id="System.Runtime" version="4.3.0" targetFramework="net461" />
++  <package id="System.Runtime.CompilerServices.Unsafe" version="4.5.0" targetFramework="net461" />
++  <package id="System.Runtime.Extensions" version="4.3.0" targetFramework="net461" />
++  <package id="System.Runtime.Handles" version="4.3.0" targetFramework="net461" />
++  <package id="System.Runtime.InteropServices" version="4.3.0" targetFramework="net461" />
++  <package id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" targetFramework="net461" />
++  <package id="System.Runtime.Numerics" version="4.3.0" targetFramework="net461" />
++  <package id="System.Security.Cryptography.Algorithms" version="4.3.0" targetFramework="net461" />
++  <package id="System.Security.Cryptography.Encoding" version="4.3.0" targetFramework="net461" />
++  <package id="System.Security.Cryptography.Primitives" version="4.3.0" targetFramework="net461" />
++  <package id="System.Security.Cryptography.X509Certificates" version="4.3.0" targetFramework="net461" />
++  <package id="System.Text.Encoding" version="4.3.0" targetFramework="net461" />
++  <package id="System.Text.Encoding.Extensions" version="4.3.0" targetFramework="net461" />
++  <package id="System.Text.RegularExpressions" version="4.3.0" targetFramework="net461" />
++  <package id="System.Threading" version="4.3.0" targetFramework="net461" />
++  <package id="System.Threading.Tasks" version="4.3.0" targetFramework="net461" />
++  <package id="System.Threading.Timer" version="4.3.0" targetFramework="net461" />
++  <package id="System.ValueTuple" version="4.5.0" targetFramework="net461" />
++  <package id="System.Xml.ReaderWriter" version="4.3.0" targetFramework="net461" />
++  <package id="System.Xml.XDocument" version="4.3.0" targetFramework="net461" />
+ </packages>
+\ No newline at end of file
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/App.xaml.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/App.xaml.cs
+index 40b9072..cd9ddc8 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/App.xaml.cs
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/App.xaml.cs
+@@ -19,12 +19,13 @@ public App()
+ 
+         public override void Initialize()
+         {
+-            base.Initialize();
+             AvaloniaXamlLoader.Load(this);
++            base.Initialize();
+         }
+ 
+         public static void Main(string[] args)
+         {
++            OxyPlotModule.EnsureLoaded();
+             AppBuilder.Configure<App>()
+                 .UsePlatformDetect()
+                 .BeforeStarting(_ => OxyPlotModule.Initialize())
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/Properties/Resources.Designer.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/Properties/Resources.Designer.cs
+index 7aeb033..b83b222 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/Properties/Resources.Designer.cs
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/Properties/Resources.Designer.cs
+@@ -1,7 +1,7 @@
+ ﻿//------------------------------------------------------------------------------
+ // <auto-generated>
+ //     This code was generated by a tool.
+-//     Runtime Version:4.0.30319.17929
++//     Runtime Version:4.0.30319.42000
+ //
+ //     Changes to this file may cause incorrect behavior and will be lost if
+ //     the code is regenerated.
+@@ -19,7 +19,7 @@ namespace SimpleDemo.Properties {
+     // class via a tool like ResGen or Visual Studio.
+     // To add or remove a member, edit your .ResX file then rerun ResGen
+     // with the /str option, or rebuild your VS project.
+-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
++    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+     internal class Resources {
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/Properties/Settings.Designer.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/Properties/Settings.Designer.cs
+index 80c0e4b..fae3efb 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/Properties/Settings.Designer.cs
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/Properties/Settings.Designer.cs
+@@ -1,7 +1,7 @@
+ ﻿//------------------------------------------------------------------------------
+ // <auto-generated>
+ //     This code was generated by a tool.
+-//     Runtime Version:4.0.30319.17929
++//     Runtime Version:4.0.30319.42000
+ //
+ //     Changes to this file may cause incorrect behavior and will be lost if
+ //     the code is regenerated.
+@@ -12,7 +12,7 @@ namespace SimpleDemo.Properties {
+     
+     
+     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
+-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
++    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
+     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+         
+         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/SimpleDemo.csproj b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/SimpleDemo.csproj
+index 8cfb961..dad1067 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/SimpleDemo.csproj
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/SimpleDemo.csproj
+@@ -1,5 +1,9 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <Import Project="..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props" Condition="Exists('..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props')" />
++  <Import Project="..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props" Condition="Exists('..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props')" />
++  <Import Project="..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props" Condition="Exists('..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props')" />
++  <Import Project="..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props" Condition="Exists('..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props')" />
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+@@ -8,13 +12,13 @@
+     <AppDesignerFolder>Properties</AppDesignerFolder>
+     <RootNamespace>SimpleDemo</RootNamespace>
+     <AssemblyName>SimpleDemo</AssemblyName>
+-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
++    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+     <FileAlignment>512</FileAlignment>
+     <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+     <WarningLevel>4</WarningLevel>
+-  </PropertyGroup>
+-  <PropertyGroup>
+-    <ApplicationIcon>..\..\..\..\Icons\OxyPlot.ico</ApplicationIcon>
++    <TargetFrameworkProfile />
++    <NuGetPackageImportStamp>
++    </NuGetPackageImportStamp>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+     <DebugSymbols>true</DebugSymbols>
+@@ -39,116 +43,217 @@
+     <StartupObject>SimpleDemo.App</StartupObject>
+   </PropertyGroup>
+   <ItemGroup>
+-    <Reference Include="Avalonia.Animation, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Animation.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Animation, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Animation.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Base, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Base.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Base, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Base.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Cairo, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.Desktop.0.4.0\lib\net45\Avalonia.Cairo.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Controls, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Controls.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Controls, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Controls.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.DesignerSupport, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.DesignerSupport.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.DesignerSupport, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.DesignerSupport.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Desktop, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Desktop.0.7.0\lib\netstandard2.0\Avalonia.Desktop.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Diagnostics, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Diagnostics.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.DesktopRuntime, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.DesktopRuntime.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Direct2D1, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.Desktop.0.4.0\lib\net45\Avalonia.Direct2D1.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Diagnostics, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Diagnostics.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Gtk, Version=1.0.6062.14569, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.Desktop.0.4.0\lib\net45\Avalonia.Gtk.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Direct2D1, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Direct2D1.0.7.0\lib\netstandard2.0\Avalonia.Direct2D1.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.HtmlRenderer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.HtmlRenderer.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Gtk3, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Gtk3.0.7.0\lib\netstandard2.0\Avalonia.Gtk3.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Input, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Input.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Input, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Input.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Interactivity, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Interactivity.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Avalonia.Interactivity, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Interactivity.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Layout, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Layout.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.Layout, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Layout.dll</HintPath>
++    <Reference Include="Avalonia.Logging.Serilog, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Logging.Serilog.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Markup, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Markup.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Markup.Xaml, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Markup.Xaml.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Native, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Native.0.7.0\lib\netstandard2.0\Avalonia.Native.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.OpenGL, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.OpenGL.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Remote.Protocol, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Remote.Protocol.0.7.0\lib\netstandard2.0\Avalonia.Remote.Protocol.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Skia, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Skia.0.7.0\lib\netstandard2.0\Avalonia.Skia.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Styling, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Styling.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Themes.Default, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Themes.Default.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Visuals, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.0.7.0\lib\net461\Avalonia.Visuals.dll</HintPath>
++    </Reference>
++    <Reference Include="Avalonia.Win32, Version=0.7.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Avalonia.Win32.0.7.0\lib\netstandard2.0\Avalonia.Win32.dll</HintPath>
++    </Reference>
++    <Reference Include="JetBrains.Annotations, Version=10.3.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\JetBrains.Annotations.10.3.0\lib\net\JetBrains.Annotations.dll</HintPath>
++    </Reference>
++    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Avalonia.Logging.Serilog, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Logging.Serilog.dll</HintPath>
++    <Reference Include="OxyPlot, Version=2.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\OxyPlot.Core.2.0.0-unstable1035\lib\net45\OxyPlot.dll</HintPath>
++    </Reference>
++    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Serilog.2.5.0\lib\net46\Serilog.dll</HintPath>
++    </Reference>
++    <Reference Include="Serilog.Sinks.Debug, Version=1.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Serilog.Sinks.Debug.1.0.0\lib\netstandard1.0\Serilog.Sinks.Debug.dll</HintPath>
++    </Reference>
++    <Reference Include="Serilog.Sinks.Trace, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Serilog.Sinks.Trace.2.1.0\lib\net45\Serilog.Sinks.Trace.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpDX, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpDX.4.0.1\lib\net45\SharpDX.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpDX.Direct2D1, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpDX.Direct2D1.4.0.1\lib\net45\SharpDX.Direct2D1.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpDX.Direct3D11, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpDX.Direct3D11.4.0.1\lib\net45\SharpDX.Direct3D11.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpDX.DXGI, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpDX.DXGI.4.0.1\lib\net45\SharpDX.DXGI.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpGen.Runtime, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpGen.Runtime.1.1.0\lib\netstandard2.0\SharpGen.Runtime.dll</HintPath>
++    </Reference>
++    <Reference Include="SharpGen.Runtime.COM, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SharpGen.Runtime.COM.1.1.0\lib\netstandard1.1\SharpGen.Runtime.COM.dll</HintPath>
++    </Reference>
++    <Reference Include="SkiaSharp, Version=1.60.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\SkiaSharp.1.60.0\lib\net45\SkiaSharp.dll</HintPath>
++    </Reference>
++    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Avalonia.Markup, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Markup.dll</HintPath>
++    <Reference Include="Sprache, Version=2.0.0.50, Culture=neutral, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\Sprache.2.0.0.50\lib\portable-net4+netcore45+win8+wp8+sl5+MonoAndroid+Xamarin.iOS10+MonoTouch\Sprache.dll</HintPath>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Avalonia.Markup.Xaml, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Markup.Xaml.dll</HintPath>
++    <Reference Include="System" />
++    <Reference Include="System.AppContext, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.AppContext.4.3.0\lib\net463\System.AppContext.dll</HintPath>
+       <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+     </Reference>
+-    <Reference Include="Avalonia.ReactiveUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.ReactiveUI.dll</HintPath>
++    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
++    </Reference>
++    <Reference Include="System.ComponentModel.Composition" />
++    <Reference Include="System.ComponentModel.DataAnnotations" />
++    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Avalonia.SceneGraph, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.SceneGraph.dll</HintPath>
++    <Reference Include="System.Data" />
++    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Diagnostics.Tracing, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Diagnostics.Tracing.4.3.0\lib\net462\System.Diagnostics.Tracing.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Avalonia.Styling, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Styling.dll</HintPath>
++    <Reference Include="System.Drawing" />
++    <Reference Include="System.Drawing.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Drawing.Common.4.5.0\lib\net461\System.Drawing.Common.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Avalonia.Themes.Default, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.0.4.0\lib\portable-windows8+net45\Avalonia.Themes.Default.dll</HintPath>
++    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Avalonia.Win32, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Avalonia.Desktop.0.4.0\lib\net45\Avalonia.Win32.dll</HintPath>
++    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Serilog, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Serilog.1.5.14\lib\net45\Serilog.dll</HintPath>
++    <Reference Include="System.IO.Compression.FileSystem" />
++    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Serilog.FullNetFx, Version=1.5.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Serilog.1.5.14\lib\net45\Serilog.FullNetFx.dll</HintPath>
++    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="SharpDX, Version=3.0.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\SharpDX.3.0.2\lib\net45\SharpDX.dll</HintPath>
++    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="SharpDX.Direct2D1, Version=3.0.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\SharpDX.Direct2D1.3.0.2\lib\net45\SharpDX.Direct2D1.dll</HintPath>
++    <Reference Include="System.Linq, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Linq.4.3.0\lib\net463\System.Linq.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="SharpDX.DXGI, Version=3.0.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\SharpDX.DXGI.3.0.2\lib\net45\SharpDX.DXGI.dll</HintPath>
++    <Reference Include="System.Linq.Expressions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Linq.Expressions.4.3.0\lib\net463\System.Linq.Expressions.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
++    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Net.Http, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Net.Http.4.3.0\lib\net46\System.Net.Http.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="Sprache, Version=2.0.0.50, Culture=neutral, processorArchitecture=MSIL">
+-      <HintPath>..\..\..\packages\Sprache.2.0.0.50\lib\portable-net4+netcore45+win8+wp8+sl5+MonoAndroid+Xamarin.iOS10+MonoTouch\Sprache.dll</HintPath>
++    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
++      <Private>True</Private>
+       <Private>True</Private>
+     </Reference>
+-    <Reference Include="System" />
+-    <Reference Include="System.Data" />
++    <Reference Include="System.Numerics" />
++    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Reactive, Version=4.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Reactive.4.0.0\lib\net46\System.Reactive.dll</HintPath>
++    </Reference>
+     <Reference Include="System.Reactive.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+       <HintPath>..\..\..\packages\System.Reactive.Core.3.0.0\lib\net45\System.Reactive.Core.dll</HintPath>
+       <Private>True</Private>
+@@ -169,9 +274,73 @@
+       <HintPath>..\..\..\packages\System.Reactive.Windows.Threading.3.0.0\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+       <Private>True</Private>
+     </Reference>
++    <Reference Include="System.Reflection, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Reflection.4.3.0\lib\net462\System.Reflection.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.5.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Runtime.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Runtime.Extensions.4.3.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Runtime.InteropServices, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Runtime.InteropServices.4.3.0\lib\net463\System.Runtime.InteropServices.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Text.RegularExpressions.4.3.0\lib\net463\System.Text.RegularExpressions.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
++    </Reference>
++    <Reference Include="System.Windows" />
++    <Reference Include="System.Windows.Forms" />
+     <Reference Include="System.Xml" />
+     <Reference Include="System.Core" />
+     <Reference Include="System.Xml.Linq" />
++    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
++      <HintPath>..\..\..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
++      <Private>True</Private>
++      <Private>True</Private>
++    </Reference>
++    <Reference Include="WindowsBase" />
+   </ItemGroup>
+   <ItemGroup>
+     <EmbeddedResource Include="MainWindow.xaml">
+@@ -217,15 +386,24 @@
+   </ItemGroup>
+   <ItemGroup>
+     <ProjectReference Include="..\..\..\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj">
+-      <Project>{698ccd8e-adcc-4565-8517-5edd36f07155}</Project>
++      <Project>{33f816d5-7faa-46ec-947e-9b51cb366d9d}</Project>
+       <Name>OxyPlot.Avalonia</Name>
+     </ProjectReference>
+-    <ProjectReference Include="..\..\..\OxyPlot\OxyPlot.csproj">
+-      <Project>{7A0B35C0-DD17-4964-8E9A-44D6CECDC692}</Project>
+-      <Name>OxyPlot</Name>
+-    </ProjectReference>
+   </ItemGroup>
+   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
++  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
++    <PropertyGroup>
++      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
++    </PropertyGroup>
++    <Error Condition="!Exists('..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.0.7.0\build\Avalonia.props'))" />
++    <Error Condition="!Exists('..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets'))" />
++    <Error Condition="!Exists('..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets'))" />
++    <Error Condition="!Exists('..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SharpGen.Runtime.1.1.0\build\SharpGen.Runtime.props'))" />
++    <Error Condition="!Exists('..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SharpGen.Runtime.COM.1.1.0\build\netstandard1.1\SharpGen.Runtime.COM.props'))" />
++    <Error Condition="!Exists('..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Avalonia.Native.0.7.0\build\netstandard2.0\Avalonia.Native.props'))" />
++  </Target>
++  <Import Project="..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets" Condition="Exists('..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" />
++  <Import Project="..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets" Condition="Exists('..\..\..\packages\Avalonia.Skia.Linux.Natives.1.60.0.1\build\net45\Avalonia.Skia.Linux.Natives.targets')" />
+   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+        Other similar extension points exist, see Microsoft.Common.targets.
+   <Target Name="BeforeBuild">
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/app.config b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/app.config
+index c5e1dae..7bcd1d7 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/app.config
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/app.config
+@@ -1,3 +1,12 @@
+-<?xml version="1.0"?>
++﻿<?xml version="1.0" encoding="utf-8"?>
+ <configuration>
+-<startup><supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5"/></startup></configuration>
++<startup><supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.6.1" /></startup>
++  <runtime>
++    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
++      <dependentAssembly>
++        <assemblyIdentity name="System.ComponentModel.Annotations" publicKeyToken="b03f5f7f11d50a3a" culture="neutral" />
++        <bindingRedirect oldVersion="0.0.0.0-4.2.1.0" newVersion="4.2.1.0" />
++      </dependentAssembly>
++    </assemblyBinding>
++  </runtime>
++</configuration>
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/packages.config b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/packages.config
+index 07f3142..e24188f 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/packages.config
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/Examples/Avalonia/SimpleDemo/packages.config
+@@ -1,17 +1,85 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+ <packages>
+-  <package id="Avalonia" version="0.4.0" targetFramework="net45" />
+-  <package id="Avalonia.Desktop" version="0.4.0" targetFramework="net45" />
+-  <package id="Serilog" version="1.5.14" targetFramework="net45" />
+-  <package id="SharpDX" version="3.0.2" targetFramework="net45" />
+-  <package id="SharpDX.Direct2D1" version="3.0.2" targetFramework="net45" />
+-  <package id="SharpDX.DXGI" version="3.0.2" targetFramework="net45" />
++  <package id="Avalonia" version="0.7.0" targetFramework="net472" />
++  <package id="Avalonia.Desktop" version="0.7.0" targetFramework="net472" />
++  <package id="Avalonia.Direct2D1" version="0.7.0" targetFramework="net472" />
++  <package id="Avalonia.Gtk3" version="0.7.0" targetFramework="net472" />
++  <package id="Avalonia.Native" version="0.7.0" targetFramework="net472" />
++  <package id="Avalonia.Remote.Protocol" version="0.7.0" targetFramework="net472" />
++  <package id="Avalonia.Skia" version="0.7.0" targetFramework="net472" />
++  <package id="Avalonia.Skia.Linux.Natives" version="1.60.0.1" targetFramework="net472" />
++  <package id="Avalonia.Win32" version="0.7.0" targetFramework="net472" />
++  <package id="JetBrains.Annotations" version="10.3.0" targetFramework="net472" />
++  <package id="Microsoft.NETCore.Platforms" version="1.1.0" targetFramework="net472" />
++  <package id="Microsoft.Win32.Primitives" version="4.3.0" targetFramework="net472" />
++  <package id="NETStandard.Library" version="1.6.1" targetFramework="net472" />
++  <package id="OxyPlot.Core" version="2.0.0-unstable1035" targetFramework="net461" />
++  <package id="Serilog" version="2.5.0" targetFramework="net472" />
++  <package id="Serilog.Sinks.Debug" version="1.0.0" targetFramework="net472" />
++  <package id="Serilog.Sinks.Trace" version="2.1.0" targetFramework="net472" />
++  <package id="SharpDX" version="4.0.1" targetFramework="net472" />
++  <package id="SharpDX.Direct2D1" version="4.0.1" targetFramework="net472" />
++  <package id="SharpDX.Direct3D11" version="4.0.1" targetFramework="net472" />
++  <package id="SharpDX.DXGI" version="4.0.1" targetFramework="net472" />
++  <package id="SharpGen.Runtime" version="1.1.0" targetFramework="net472" />
++  <package id="SharpGen.Runtime.COM" version="1.1.0" targetFramework="net472" />
++  <package id="SkiaSharp" version="1.60.0" targetFramework="net472" />
+   <package id="Splat" version="1.6.2" targetFramework="net45" />
+   <package id="Sprache" version="2.0.0.50" targetFramework="net45" />
+-  <package id="System.Reactive" version="3.0.0" targetFramework="net45" />
+-  <package id="System.Reactive.Core" version="3.0.0" targetFramework="net45" />
++  <package id="System.AppContext" version="4.3.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.Buffers" version="4.4.0" targetFramework="net472" />
++  <package id="System.Collections" version="4.3.0" targetFramework="net472" />
++  <package id="System.Collections.Concurrent" version="4.3.0" targetFramework="net472" />
++  <package id="System.ComponentModel.Annotations" version="4.5.0" targetFramework="net472" />
++  <package id="System.Console" version="4.3.0" targetFramework="net472" />
++  <package id="System.Diagnostics.Debug" version="4.3.0" targetFramework="net472" />
++  <package id="System.Diagnostics.DiagnosticSource" version="4.3.0" targetFramework="net472" />
++  <package id="System.Diagnostics.Tools" version="4.3.0" targetFramework="net472" />
++  <package id="System.Diagnostics.Tracing" version="4.3.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.Drawing.Common" version="4.5.0" targetFramework="net472" />
++  <package id="System.Globalization" version="4.3.0" targetFramework="net472" />
++  <package id="System.Globalization.Calendars" version="4.3.0" targetFramework="net472" />
++  <package id="System.IO" version="4.3.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.IO.Compression" version="4.3.0" targetFramework="net472" />
++  <package id="System.IO.Compression.ZipFile" version="4.3.0" targetFramework="net472" />
++  <package id="System.IO.FileSystem" version="4.3.0" targetFramework="net472" />
++  <package id="System.IO.FileSystem.Primitives" version="4.3.0" targetFramework="net472" />
++  <package id="System.Linq" version="4.3.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.Linq.Expressions" version="4.3.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.Memory" version="4.5.1" targetFramework="net472" />
++  <package id="System.Net.Http" version="4.3.0" targetFramework="net472" />
++  <package id="System.Net.Primitives" version="4.3.0" targetFramework="net472" />
++  <package id="System.Net.Sockets" version="4.3.0" targetFramework="net472" />
++  <package id="System.Numerics.Vectors" version="4.4.0" targetFramework="net472" />
++  <package id="System.ObjectModel" version="4.3.0" targetFramework="net472" />
++  <package id="System.Reactive" version="4.0.0" targetFramework="net472" />
++  <package id="System.Reactive.Core" version="3.0.0" targetFramework="net45" requireReinstallation="true" />
+   <package id="System.Reactive.Interfaces" version="3.0.0" targetFramework="net45" />
+-  <package id="System.Reactive.Linq" version="3.0.0" targetFramework="net45" />
+-  <package id="System.Reactive.PlatformServices" version="3.0.0" targetFramework="net45" />
++  <package id="System.Reactive.Linq" version="3.0.0" targetFramework="net45" requireReinstallation="true" />
++  <package id="System.Reactive.PlatformServices" version="3.0.0" targetFramework="net45" requireReinstallation="true" />
+   <package id="System.Reactive.Windows.Threading" version="3.0.0" targetFramework="net45" />
++  <package id="System.Reflection" version="4.3.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.Reflection.Extensions" version="4.3.0" targetFramework="net472" />
++  <package id="System.Reflection.Primitives" version="4.3.0" targetFramework="net472" />
++  <package id="System.Resources.ResourceManager" version="4.3.0" targetFramework="net472" />
++  <package id="System.Runtime" version="4.3.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.Runtime.CompilerServices.Unsafe" version="4.5.0" targetFramework="net472" />
++  <package id="System.Runtime.Extensions" version="4.3.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.Runtime.Handles" version="4.3.0" targetFramework="net472" />
++  <package id="System.Runtime.InteropServices" version="4.3.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.Runtime.InteropServices.RuntimeInformation" version="4.3.0" targetFramework="net472" />
++  <package id="System.Runtime.Numerics" version="4.3.0" targetFramework="net472" />
++  <package id="System.Security.Cryptography.Algorithms" version="4.3.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.Security.Cryptography.Encoding" version="4.3.0" targetFramework="net472" />
++  <package id="System.Security.Cryptography.Primitives" version="4.3.0" targetFramework="net472" />
++  <package id="System.Security.Cryptography.X509Certificates" version="4.3.0" targetFramework="net472" />
++  <package id="System.Text.Encoding" version="4.3.0" targetFramework="net472" />
++  <package id="System.Text.Encoding.Extensions" version="4.3.0" targetFramework="net472" />
++  <package id="System.Text.RegularExpressions" version="4.3.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.Threading" version="4.3.0" targetFramework="net472" />
++  <package id="System.Threading.Tasks" version="4.3.0" targetFramework="net472" />
++  <package id="System.Threading.Timer" version="4.3.0" targetFramework="net472" />
++  <package id="System.ValueTuple" version="4.5.0" targetFramework="net472" requireReinstallation="true" />
++  <package id="System.Xml.ReaderWriter" version="4.3.0" targetFramework="net472" />
++  <package id="System.Xml.XDocument" version="4.3.0" targetFramework="net472" />
+ </packages>
+\ No newline at end of file
+diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia.sln b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia.sln
+index 20377c0..2d72c56 100644
+--- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia.sln
++++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia.sln
+@@ -1,9 +1,9 @@
+ ﻿
+ Microsoft Visual Studio Solution File, Format Version 12.00
+-# Visual Studio 14
+-VisualStudioVersion = 14.0.25420.1
++# Visual Studio 15
++VisualStudioVersion = 15.0.28307.489
+ MinimumVisualStudioVersion = 10.0.40219.1
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxyPlot.Avalonia", "OxyPlot.Avalonia\OxyPlot.Avalonia.csproj", "{33F816D5-7FAA-46EC-947E-9B51CB366D9D}"
++Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OxyPlot.Avalonia", "OxyPlot.Avalonia\OxyPlot.Avalonia.csproj", "{33F816D5-7FAA-46EC-947E-9B51CB366D9D}"
+ EndProject
+ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Change log", "Change log", "{4334530D-EBDE-4F04-838A-DA5A8A598124}"
+ 	ProjectSection(SolutionItems) = preProject
+@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDemo", "Examples\Aval
+ EndProject
+ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryTest", "Examples\Avalonia\MemoryTest\MemoryTest.csproj", "{4EA1B734-AFD1-435D-AF18-B7957DE92939}"
+ EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaExamples", "Examples\Avalonia\AvaloniaExamples\AvaloniaExamples.csproj", "{B86739B8-5DE9-406F-9418-0751BF7C166F}"
++Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvaloniaExamples", "Examples\Avalonia\AvaloniaExamples\AvaloniaExamples.csproj", "{B86739B8-5DE9-406F-9418-0751BF7C166F}"
+ EndProject
+ Global
+ 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+@@ -69,18 +69,18 @@ Global
+ 		{4EA1B734-AFD1-435D-AF18-B7957DE92939}.Release|x64.Build.0 = Release|Any CPU
+ 		{4EA1B734-AFD1-435D-AF18-B7957DE92939}.Release|x86.ActiveCfg = Release|Any CPU
+ 		{4EA1B734-AFD1-435D-AF18-B7957DE92939}.Release|x86.Build.0 = Release|Any CPU
+-		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Debug|Any CPU.ActiveCfg = Debug|x86
+-		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Debug|Any CPU.Build.0 = Debug|x86
++		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ 		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Debug|x64.ActiveCfg = Debug|Any CPU
+ 		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Debug|x64.Build.0 = Debug|Any CPU
+-		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Debug|x86.ActiveCfg = Debug|x86
+-		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Debug|x86.Build.0 = Debug|x86
++		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Debug|x86.ActiveCfg = Debug|Any CPU
++		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Debug|x86.Build.0 = Debug|Any CPU
+ 		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+ 		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Release|Any CPU.Build.0 = Release|Any CPU
+ 		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Release|x64.ActiveCfg = Release|Any CPU
+ 		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Release|x64.Build.0 = Release|Any CPU
+-		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Release|x86.ActiveCfg = Release|x86
+-		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Release|x86.Build.0 = Release|x86
++		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Release|x86.ActiveCfg = Release|Any CPU
++		{B86739B8-5DE9-406F-9418-0751BF7C166F}.Release|x86.Build.0 = Release|Any CPU
+ 	EndGlobalSection
+ 	GlobalSection(SolutionProperties) = preSolution
+ 		HideSolutionNode = FALSE
+@@ -90,4 +90,7 @@ Global
+ 		{4EA1B734-AFD1-435D-AF18-B7957DE92939} = {D9495547-A68B-4BFE-A969-8EFC899201F7}
+ 		{B86739B8-5DE9-406F-9418-0751BF7C166F} = {D9495547-A68B-4BFE-A969-8EFC899201F7}
+ 	EndGlobalSection
++	GlobalSection(ExtensibilityGlobals) = postSolution
++		SolutionGuid = {468E0F0B-9D70-4C0F-93F7-60DA5581D466}
++	EndGlobalSection
+ EndGlobal
 diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/CanvasRenderContext.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/CanvasRenderContext.cs
 index 8539cd8..13f9788 100644
 --- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/CanvasRenderContext.cs
@@ -105,35 +1319,31 @@ index 8539cd8..13f9788 100644
              {
                  // do not crop
 diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/OxyColorConverter.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/OxyColorConverter.cs
-index 7303fbd..eeab319 100644
+index 7303fbd..3aa2ae9 100644
 --- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/OxyColorConverter.cs
 +++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/OxyColorConverter.cs
-@@ -9,7 +9,8 @@
+@@ -9,6 +9,7 @@
  
  namespace OxyPlot.Avalonia.Converters
  {
--    using global::Avalonia.Markup;
-+	using global::Avalonia.Data.Converters;
-+	using global::Avalonia.Markup;
++    using global::Avalonia.Data.Converters;
+     using global::Avalonia.Markup;
      using global::Avalonia.Media;
      using System;
-     using System.Globalization;
 diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/ThicknessConverter.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/ThicknessConverter.cs
-index f6fba80..f62b4d9 100644
+index f6fba80..52f8b77 100644
 --- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/ThicknessConverter.cs
 +++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/Converters/ThicknessConverter.cs
-@@ -10,7 +10,8 @@
+@@ -10,6 +10,7 @@
  namespace OxyPlot.Avalonia.Converters
  {
      using global::Avalonia;
--    using global::Avalonia.Markup;
-+	using global::Avalonia.Data.Converters;
-+	using global::Avalonia.Markup;
++    using global::Avalonia.Data.Converters;
+     using global::Avalonia.Markup;
      using System;
      using System.Globalization;
- 
 diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj
-index 8d8fafe..7c18443 100644
+index 8d8fafe..6b21168 100644
 --- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj
 +++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj
 @@ -14,7 +14,7 @@
@@ -141,8 +1351,9 @@ index 8d8fafe..7c18443 100644
    <ItemGroup>
      <EmbeddedResource Include="**\*.xaml;Assets\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
 -    <PackageReference Include="Avalonia" Version="0.6.1" />
+-    <PackageReference Include="OxyPlot.Core" Version="2.0.0-unstable1013" />
 +    <PackageReference Include="Avalonia" Version="0.8.0" />
-     <PackageReference Include="OxyPlot.Core" Version="2.0.0-unstable1013" />
++    <PackageReference Include="OxyPlot.Core" Version="2.0.0-unstable1035" />
    </ItemGroup>
  </Project>
 diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/PngExporter.cs b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/PngExporter.cs

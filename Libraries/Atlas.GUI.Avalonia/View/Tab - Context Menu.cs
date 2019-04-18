@@ -8,6 +8,7 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using System;
 using System.Collections;
@@ -16,13 +17,24 @@ using System.Reflection;
 
 namespace Atlas.GUI.Avalonia.View
 {
-	public class TabViewContextMenu : ContextMenu //, IDisposable
+	public class TabViewContextMenu : ContextMenu, IStyleable, ILayoutable //, IDisposable
 	{
 		private TabView tabView;
 		private TabInstance tabInstance;
 
+		private CheckBox checkboxAutoLoad;
 
-		private void AddContextMenu()
+		Type IStyleable.StyleKey => typeof(ContextMenu);
+
+		public TabViewContextMenu(TabView tabView, TabInstance tabInstance)
+		{
+			this.tabView = tabView;
+			this.tabInstance = tabInstance;
+
+			Initialize();
+		}
+
+		private void Initialize()
 		{
 			//ContextMenu contextMenu = new ContextMenu();
 
@@ -45,7 +57,15 @@ namespace Atlas.GUI.Avalonia.View
 
 			list.Add(new Separator());
 
-			MenuItem menuItemAutoLoad = new MenuItem() { Header = "_AutoLoad" };
+			checkboxAutoLoad = new CheckBox()
+			{
+				IsChecked = tabInstance.project.projectSettings.AutoLoad,
+			};
+			MenuItem menuItemAutoLoad = new MenuItem()
+			{
+				Header = "_AutoLoad",
+				Icon = checkboxAutoLoad,
+			};
 			menuItemAutoLoad.Click += MenuItemAutoLoad_Click;
 			list.Add(menuItemAutoLoad);
 
@@ -55,6 +75,7 @@ namespace Atlas.GUI.Avalonia.View
 		private void MenuItemAutoLoad_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			tabInstance.project.projectSettings.AutoLoad = !tabInstance.project.projectSettings.AutoLoad;
+			checkboxAutoLoad.IsChecked = tabInstance.project.projectSettings.AutoLoad;
 			tabInstance.project.SaveSettings();
 		}
 

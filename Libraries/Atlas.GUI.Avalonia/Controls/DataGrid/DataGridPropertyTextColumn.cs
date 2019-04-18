@@ -112,7 +112,7 @@ namespace Atlas.GUI.Avalonia
 
 			var list = new AvaloniaList<object>();
 
-			MenuItem menuItemCopy = new MenuItem() { Header = "_Copy" };
+			MenuItem menuItemCopy = new MenuItem() { Header = "_Copy - Cell Contents" };
 			menuItemCopy.Click += delegate
 			{
 				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
