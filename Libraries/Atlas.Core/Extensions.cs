@@ -242,7 +242,7 @@ namespace Atlas.Extensions // rename to Core?
 			if (type.IsNumeric())
 			{
 				MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) });
-				string format = type.IsDecimal() ? "N3" : "N0";
+				string format = type.IsDecimal() ? "G" : "N0";
 				object result = toStringMethod.Invoke(obj, new object[] { format });
 				if (result == null)
 					return null;
