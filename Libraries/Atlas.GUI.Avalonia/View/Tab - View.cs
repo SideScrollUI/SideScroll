@@ -682,6 +682,10 @@ namespace Atlas.GUI.Avalonia.View
 		private Panel fillerPanel;
 		private void UpdateChildControls()
 		{
+			// These need to be set regardless of if the children show
+			if (tabDatas.Count > 0)
+				tabInstance.SelectedItems = tabDatas[0].SelectedItems;
+
 			if (ShowChildren == false)
 			{
 				updateChildControls = true;
@@ -773,8 +777,6 @@ namespace Atlas.GUI.Avalonia.View
 			{
 				CreateChildControls(tabData.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
-			if (tabDatas.Count > 0)
-				tabInstance.SelectedItems = tabDatas[0].SelectedItems;
 			return orderedChildControls;
 		}
 

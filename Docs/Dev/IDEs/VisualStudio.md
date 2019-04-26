@@ -33,6 +33,10 @@ Visual Studio 2017
 	- Tools -> Options -> Debugging -> General
 	-   Check `Enable Just My Code`
 
+### Visual Studio 2019 Preview
+  - No `Custom Document Well` extension support yet
+    - No vertical tabs :(
+
 #### Suggested Visual Studio Addons
 ---
 ##### Productivity Power Tools
