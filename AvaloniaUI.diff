@@ -25,23 +25,6 @@ index b0189a4..b6c6f60 100644
    </ItemGroup>
  
  </Project>
-diff --git a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridColumnCollection.cs b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridColumnCollection.cs
-index 44ac001..ce963ea 100644
---- a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridColumnCollection.cs
-+++ b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridColumnCollection.cs
-@@ -297,7 +297,11 @@ namespace Avalonia.Controls
-         {
-             VisibleStarColumnCount = 0;
-             VisibleEdgedColumnsWidth = 0;
--            for (int columnIndex = 0; columnIndex < ItemsInternal.Count; columnIndex++)
-+			if (ItemsInternal.Count > 2)
-+				VisibleStarColumnCount = 0;
-+
-+
-+			for (int columnIndex = 0; columnIndex < ItemsInternal.Count; columnIndex++)
-             {
-                 if (ItemsInternal[columnIndex].IsVisible)
-                 {
 diff --git a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridSelectedItemsCollection.cs b/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridSelectedItemsCollection.cs
 index 2698b0c..ae7b875 100644
 --- a/Imports/AvaloniaUI/Avalonia.DataGrid/src/Avalonia.DataGrid/DataGridSelectedItemsCollection.cs
