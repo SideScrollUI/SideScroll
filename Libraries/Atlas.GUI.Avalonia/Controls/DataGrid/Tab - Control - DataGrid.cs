@@ -24,7 +24,7 @@ namespace Atlas.GUI.Avalonia.Controls
 {
 	public class TabControlDataGrid : Grid, IDisposable, ITabSelector
 	{
-		private static int MaxColumnWidth = 500;
+		private static int MaxColumnWidth = 600;
 
 		private TabModel tabModel;
 		private TabInstance tabInstance;

@@ -9,6 +9,7 @@ namespace Atlas.Start.Avalonia.Tabs
 		public Button buttonSearch;
 		public Button buttonLoadAdd;
 		public Button buttonLoadNext;
+		public Button buttonCopyClipBoard;
 
 		public TextBlock textBlockStatus;
 
@@ -27,7 +28,10 @@ namespace Atlas.Start.Avalonia.Tabs
 			buttonLoadNext = AddButton("Next", Assets.Streams.Forward);
 			AddSeparator();
 			buttonLoadAdd = AddButton("Add", Assets.Streams.Add);
+			AddSeparator();
 			AddButton("Save", Assets.Streams.Save);
+			AddSeparator();
+			buttonCopyClipBoard = AddButton("Copy to Clipboard", Assets.Streams.PadNote);
 			textBlockStatus = AddLabel("Status");
 		}
 	}

@@ -23,7 +23,8 @@ namespace Atlas.Start.Avalonia.Tabs
 				tabModel.AddObject(searchToolbar);
 
 				searchToolbar.buttonSearch.Click += ButtonSearch_Click;  // move logic into SearchToolbar Command
-				searchToolbar.buttonLoadNext.Click += ButtonLoadNext_Click;  // move logic into SearchToolbar Command
+				searchToolbar.buttonLoadNext.Click += ButtonLoadNext_Click;
+				searchToolbar.buttonCopyClipBoard.Click += ButtonCopyClipBoard_Click; ;
 			}
 
 			private void ButtonSearch_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
@@ -49,6 +50,10 @@ namespace Atlas.Start.Avalonia.Tabs
 			}
 
 			private void LoadNext(Call call)
+			{
+			}
+
+			private void ButtonCopyClipBoard_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 			{
 			}
 		}
