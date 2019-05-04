@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using System;
@@ -84,6 +85,18 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void TabView_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
+			this.Background = new SolidColorBrush(Theme.BackgroundColor);
+		}
+
+		protected override void OnPointerEnter(PointerEventArgs e)
+		{
+			base.OnPointerEnter(e);
+			this.Background = new SolidColorBrush(Theme.BackgroundFocusedColor);
+		}
+
+		protected override void OnPointerLeave(PointerEventArgs e)
+		{
+			base.OnPointerLeave(e);
 			this.Background = new SolidColorBrush(Theme.BackgroundColor);
 		}
 
