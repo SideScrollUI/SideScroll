@@ -279,9 +279,9 @@ namespace Atlas.Extensions // rename to Core?
 					return "[" + count.ToString("N0") + "]";
 				}
 			}
-			if (typeof(Stream).IsAssignableFrom(type))
+			if (obj is Stream stream)
 			{
-				return "[" + ((Stream)obj).Length.ToString("N0") + "]";
+				return "[" + stream.Length.ToString("N0") + "]";
 			}
 			if (type == typeof(DictionaryEntry))
 				return ((DictionaryEntry)obj).Key.ToString();

@@ -262,13 +262,16 @@ namespace Atlas.GUI.Avalonia
 		{
 			get
 			{
+				Rect bounds = this.Bounds;
+				if (this.TransformedBounds != null)
+					bounds = this.TransformedBounds.Value.Bounds;
 				WindowSettings windowSettings = new WindowSettings()
 				{
 					Maximized = (this.WindowState == WindowState.Maximized),
-					Width = this.Width,
-					Height = this.Height,
-					Left = this.Position.X,
-					Top = this.Position.Y,
+					Width = bounds.Width,
+					Height = bounds.Height,
+					Left = bounds.Position.X,
+					Top = bounds.Position.Y,
 				};
 				return windowSettings;
 			}
