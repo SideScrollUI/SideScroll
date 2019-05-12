@@ -190,52 +190,10 @@ namespace Atlas.GUI.Avalonia.Controls
 			else
 				binding.Mode = BindingMode.OneWay;
 			textBox.Bind(TextBlock.TextProperty, binding);
-			AddTextBoxContextMenu(textBox);
+			AvaloniaUtils.AddTextBoxContextMenu(textBox);
 
 			this.Children.Add(textBox);
 			return textBox;
-		}
-
-		private void SendTextBoxKey(TextBox textBox, List<KeyGesture> keyGestures)
-		{
-			foreach (var key in keyGestures)
-			{
-				var args = new KeyEventArgs()
-				{
-					Key = key.Key,
-					Modifiers = key.Modifiers,
-					RoutedEvent = TextBox.KeyDownEvent,
-				};
-
-				textBox.RaiseEvent(args);
-				break;
-			}
-		}
-
-		private void AddTextBoxContextMenu(TextBox textBox)
-		{
-			ContextMenu contextMenu = new ContextMenu();
-
-			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
-
-			var list = new AvaloniaList<object>();
-			MenuItem menuItemCut = new MenuItem() { Header = "Cut" };
-			menuItemCut.Click += delegate { SendTextBoxKey(textBox, keymap.Cut); };
-			list.Add(menuItemCut);
-
-			MenuItem menuItemCopy = new MenuItem() { Header = "_Copy" };
-			menuItemCopy.Click += delegate { SendTextBoxKey(textBox, keymap.Copy); };
-			list.Add(menuItemCopy);
-
-			MenuItem menuItemPaste = new MenuItem() { Header = "Paste" };
-			menuItemPaste.Click += delegate { SendTextBoxKey(textBox, keymap.Paste); };
-			list.Add(menuItemPaste);
-
-			//list.Add(new Separator());
-
-			contextMenu.Items = list;
-
-			textBox.ContextMenu = contextMenu;
 		}
 
 		private CheckBox AddCheckBox(ListProperty property, int rowIndex, int columnIndex)
@@ -262,12 +220,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			return checkBox;
 		}
 
-		private DropDown AddEnum(ListProperty property, int rowIndex, int columnIndex, Type underlyingType, BindListAttribute propertyListAttribute)
+		private ComboBox AddEnum(ListProperty property, int rowIndex, int columnIndex, Type underlyingType, BindListAttribute propertyListAttribute)
 		{
 			// todo: eventually handle custom lists
 			//ComboBox comboBox = new ComboBox(); // AvaloniaUI doesn't implement yet :(
 
-			DropDown dropDown = new DropDown()
+			ComboBox comboBox = new ComboBox()
 			{
 				Background = new SolidColorBrush(Colors.White),
 				BorderBrush = new SolidColorBrush(Colors.Black),
@@ -281,12 +239,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			if (propertyListAttribute != null)
 			{
 				PropertyInfo propertyInfo = property.obj.GetType().GetProperty(propertyListAttribute.Name);
-				dropDown.Items = propertyInfo.GetValue(property.obj) as IEnumerable;
+				comboBox.Items = propertyInfo.GetValue(property.obj) as IEnumerable;
 			}
 			else
 			{
 				var values = underlyingType.GetEnumValues();
-				dropDown.Items = values;
+				comboBox.Items = values;
 			}
 
 			var binding = new Binding(property.propertyInfo.Name)
@@ -296,9 +254,9 @@ namespace Atlas.GUI.Avalonia.Controls
 				Mode = BindingMode.TwoWay,
 				Source = property.obj,
 			};
-			dropDown.Bind(DropDown.SelectedItemProperty, binding);
-			this.Children.Add(dropDown);
-			return dropDown;
+			comboBox.Bind(ComboBox.SelectedItemProperty, binding);
+			this.Children.Add(comboBox);
+			return comboBox;
 		}
 
 		// todo: need a real DateTimePicker
