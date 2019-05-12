@@ -9,6 +9,7 @@ using System.IO;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Atlas.GUI.Avalonia.Controls;
 
 namespace Atlas.GUI.Avalonia
 {
@@ -100,22 +101,8 @@ namespace Atlas.GUI.Avalonia
 			};
 
 			BaseWindowToolbar toolbar = new BaseWindowToolbar(this);
-
 			Grid.SetRow(toolbar, 0);
 			containerGrid.Children.Add(toolbar);
-
-			// contains scroll viewer
-			contentGrid = new Grid()
-			{
-				HorizontalAlignment = HorizontalAlignment.Left,
-				//HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
-				ColumnDefinitions = new ColumnDefinitions("Auto"),
-				RowDefinitions = new RowDefinitions("*"),
-				//Background = new SolidColorBrush(Colors.Blue),
-				MaxWidth = 10000,
-				MaxHeight = 5000,
-			};
 
 			scrollViewer = new ScrollViewer()
 			{
@@ -132,9 +119,22 @@ namespace Atlas.GUI.Avalonia
 
 			//containerGrid.Children.Add(scrollViewer);
 
-			SetMaxBounds();
+			// contains scroll viewer
+			contentGrid = new Grid()
+			{
+				HorizontalAlignment = HorizontalAlignment.Left,
+				//HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch,
+				ColumnDefinitions = new ColumnDefinitions("Auto"),
+				RowDefinitions = new RowDefinitions("*"),
+				//Background = new SolidColorBrush(Colors.Blue),
+				MaxWidth = 10000,
+				MaxHeight = 5000,
+			};
 
 			scrollViewer.Content = contentGrid;
+
+			SetMaxBounds();
 
 			containerGrid.Children.Add(scrollViewer);
 
@@ -251,11 +251,28 @@ namespace Atlas.GUI.Avalonia
 			tabView = new TabView(tabInstance);
 			tabView.Load();
 
+			//var tabBookmarks = new TabBookmarks(tabView);
+			//contentGrid.Children.Add(tabView);
+
 			//Grid.SetRow(tabView, 1);
 			//containerGrid.Children.Add(tabView);
 
 			//scrollViewer.Content = tabView;
 			contentGrid.Children.Add(tabView);
+		}
+
+		// How to set the main Content
+		protected void AddTab(ITab iTab)
+		{
+			var tabBookmarks = new TabBookmarks(project, iTab).Create();
+			tabBookmarks.Load(new Call());
+			contentGrid.Children.Add(tabView);
+
+			//Grid.SetRow(tabView, 1);
+			//containerGrid.Children.Add(tabView);
+
+			//scrollViewer.Content = tabView;
+			//contentGrid.Children.Add(tabView);
 		}
 
 		protected WindowSettings WindowSettings

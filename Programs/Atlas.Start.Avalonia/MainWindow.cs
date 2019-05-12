@@ -17,6 +17,7 @@ namespace Atlas.Start.Avalonia
 			LoadProject(project);
 
 			AddTabView(new TabAvalonia.Instance(project));
+			//AddTab(new TabAvalonia());
 		}
 	}
 }

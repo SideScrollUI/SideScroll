@@ -18,7 +18,7 @@ namespace Atlas.Tabs
 		public HttpCacheManager httpCacheManager = new HttpCacheManager();
 
 		public TypeObjectStore TypeObjectStore { get; set; } = new TypeObjectStore();
-		public Navigator Navigator { get; set; } = new Navigator();
+		public BookmarkNavigator Navigator { get; set; } = new BookmarkNavigator();
 		public TaskInstanceCollection Tasks { get; set; } = new TaskInstanceCollection();
 
 

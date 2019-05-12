@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Atlas.Tabs
 {
-	public class Navigator
+	public class BookmarkNavigator
 	{
 		public int CurrentIndex { get; set; } = -1;
 
@@ -27,7 +27,7 @@ namespace Atlas.Tabs
 
 		//public event EventHandler<EventArgs> OnSelectionChanged;
 
-		public Navigator()
+		public BookmarkNavigator()
 		{
 			Bookmark bookmark = new Bookmark();
 			bookmark.Name = "Start";

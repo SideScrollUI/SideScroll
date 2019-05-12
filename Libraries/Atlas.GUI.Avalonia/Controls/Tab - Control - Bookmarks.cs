@@ -58,41 +58,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			AddListData();
 		}*/
 
-		/*
-		WPF Implementation
-		<Grid HorizontalAlignment="Stretch" Name="grid">
-			<Grid.RowDefinitions>
-				<RowDefinition Name="gridRowBookmarks" Height="Auto" MaxHeight="500"/>
-				<RowDefinition Name="gridRowToolbar" Height="Auto"/>
-				<RowDefinition Name="gridRowNew" Height="Auto"/>
-				<RowDefinition Name="gridRowSpacer" Height="20"/>
-			</Grid.RowDefinitions>
-
-
-			<!--Label Name="labelName" Grid.Row="0" Background="DarkOrange" FontSize="14"/-->
-			<ToolBarTray Grid.Row="1" DockPanel.Dock="Top" ToolBarTray.IsLocked="True" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" >
-				<ToolBar Name="toolbar" Loaded="ToolBar_Loaded" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" BorderBrush="Black">
-					<Button Click="Button_NewClick" Content="Add" ToolBar.OverflowMode="Never" Foreground="White" />
-					<Button Click="Button_DeleteClick" Content="Delete" ToolBar.OverflowMode="Never" Foreground="White"/>
-				</ToolBar>
-			</ToolBarTray>
-
-			<StackPanel Grid.Row="2" Name="panelNew" Orientation="Vertical" Visibility="Collapsed">
-				<Label Content="Name:" Foreground="White"/>
-				<TextBox Name="textBoxName" HorizontalAlignment="Stretch" MinWidth="100" FontSize="14"/>
-				<ToolBarTray DockPanel.Dock="Top" ToolBarTray.IsLocked="True" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" >
-					<ToolBar Name="toolbarSave" Loaded="ToolBar_Loaded" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" BorderBrush="Black">
-						<Button Click="Button_NewSave" Content="Save" ToolBar.OverflowMode="Never" Foreground="White" />
-						<Button Click="Button_NewCancel" Content="Cancel" ToolBar.OverflowMode="Never" Foreground="White"/>
-					</ToolBar>
-				</ToolBarTray>
-			</StackPanel>
-
-
-		</Grid>
-		*/
-
-		// don't want to reload this because 
+		// don't want to reload this because
 		private void InitializeControls()
 		{
 			this.Background = new SolidColorBrush(Theme.BackgroundColor);
@@ -294,7 +260,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			bookmark.Name = textBoxName.Text;
 			project.DataApp.Save(bookmark.Name, bookmark);
 
-			tabModel.Bookmarks.Names.Add(new ViewBookmarkName(bookmark.Name));
+			tabModel.Bookmarks.Names.Add(new ViewBookmarkName(bookmark));
 			gridAddBookmark.IsVisible = false;
 		}
 
@@ -338,3 +304,38 @@ namespace Atlas.GUI.Avalonia.Controls
 		}
 	}
 }
+
+
+/*
+WPF Implementation
+<Grid HorizontalAlignment="Stretch" Name="grid">
+	<Grid.RowDefinitions>
+		<RowDefinition Name="gridRowBookmarks" Height="Auto" MaxHeight="500"/>
+		<RowDefinition Name="gridRowToolbar" Height="Auto"/>
+		<RowDefinition Name="gridRowNew" Height="Auto"/>
+		<RowDefinition Name="gridRowSpacer" Height="20"/>
+	</Grid.RowDefinitions>
+
+
+	<!--Label Name="labelName" Grid.Row="0" Background="DarkOrange" FontSize="14"/-->
+	<ToolBarTray Grid.Row="1" DockPanel.Dock="Top" ToolBarTray.IsLocked="True" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" >
+		<ToolBar Name="toolbar" Loaded="ToolBar_Loaded" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" BorderBrush="Black">
+			<Button Click="Button_NewClick" Content="Add" ToolBar.OverflowMode="Never" Foreground="White" />
+			<Button Click="Button_DeleteClick" Content="Delete" ToolBar.OverflowMode="Never" Foreground="White"/>
+		</ToolBar>
+	</ToolBarTray>
+
+	<StackPanel Grid.Row="2" Name="panelNew" Orientation="Vertical" Visibility="Collapsed">
+		<Label Content="Name:" Foreground="White"/>
+		<TextBox Name="textBoxName" HorizontalAlignment="Stretch" MinWidth="100" FontSize="14"/>
+		<ToolBarTray DockPanel.Dock="Top" ToolBarTray.IsLocked="True" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" >
+			<ToolBar Name="toolbarSave" Loaded="ToolBar_Loaded" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" BorderBrush="Black">
+				<Button Click="Button_NewSave" Content="Save" ToolBar.OverflowMode="Never" Foreground="White" />
+				<Button Click="Button_NewCancel" Content="Cancel" ToolBar.OverflowMode="Never" Foreground="White"/>
+			</ToolBar>
+		</ToolBarTray>
+	</StackPanel>
+
+
+</Grid>
+*/

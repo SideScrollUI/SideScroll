@@ -483,7 +483,7 @@ namespace Atlas.GUI.Avalonia.View
 
 		protected void AddBookmarks()
 		{
-			if (tabModel.Bookmarks == null)
+			//if (tabModel.Bookmarks == null)
 				return;
 
 			this.tabBookmarks = new TabControlBookmarks(tabInstance);

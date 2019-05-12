@@ -17,7 +17,7 @@ namespace Atlas.Tabs.Test
 			{
 				//tabModel.Items = project.navigator.History;
 
-				Navigator navigator = project.Navigator.Clone<Navigator>(call);
+				BookmarkNavigator navigator = project.Navigator.Clone<BookmarkNavigator>(call);
 				navigator.History.RemoveAt(navigator.History.Count - 1); // remove the current in progress bookmark
 				navigator.CurrentIndex = navigator.History.Count;
 				//navigator.B
