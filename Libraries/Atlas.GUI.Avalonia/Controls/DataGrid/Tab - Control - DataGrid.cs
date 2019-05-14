@@ -494,6 +494,13 @@ namespace Atlas.GUI.Avalonia.Controls
 			columnProperties = new List<PropertyInfo>();
 
 			List<TabDataSettings.PropertyColumn> propertyColumns = tabDataSettings.GetPropertiesAsColumns(elementType);
+			if (propertyColumns.Count == 0)
+				return;
+
+			if (iList is INamedItemCollection itemCollection && itemCollection.ColumnName != null)
+			{
+				propertyColumns[0].label = itemCollection.ColumnName;
+			}
 
 			foreach (TabDataSettings.PropertyColumn propertyColumn in propertyColumns)
 			{
@@ -729,16 +736,16 @@ namespace Atlas.GUI.Avalonia.Controls
 				if (value == null)
 					continue;
 
-				ListItem listItem = obj as ListItem;
-				if (listItem != null)
+				//ListItem listItem = obj as ListItem;
+				//if (listItem != null)
+				if (obj is ListItem listItem)
 				{
 					if (listItem.autoLoad == false)
 						continue;
 				}
 
-				if (value is TabView)
+				if (value is TabView tabView)
 				{
-					TabView tabView = (TabView)value;
 					if (tabView.tabModel.AutoLoad == false)
 						continue;
 				}

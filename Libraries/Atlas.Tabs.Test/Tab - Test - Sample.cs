@@ -19,7 +19,7 @@ namespace Atlas.Tabs.Test
 				sampleItems = new ItemCollection<SampleItem>();
 				AddItems(5);
 
-				tabModel.Items = new ItemCollection<ListItem>()
+				tabModel.Items = new ItemCollection<ListItem>("Items")
 				{
 					new ListItem("Sample Items", sampleItems),
 					new ListItem("Small Collection", new TabTestGridCollectionSize()),

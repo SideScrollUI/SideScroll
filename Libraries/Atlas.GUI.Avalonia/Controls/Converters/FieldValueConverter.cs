@@ -45,20 +45,18 @@ namespace Atlas.GUI.Avalonia
 
 				targetType = Nullable.GetUnderlyingType(targetType);
 			}
-			if (value is string)
+			if (value is string text)
 			{
-				string text = (string)value;
 				if (text.Length == 0)
 					return null;
 			}
 
-			if (value is DateTime)
+			if (value is DateTime dateTime)
 			{
-				DateTime dateTime = (DateTime)value;
 				if (dateTime != null)
 				{
-					string text = dateTime.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss.FFFFFF");
-					return text;
+					string dateText = dateTime.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss.FFFFFF");
+					return dateText;
 				}
 			}
 

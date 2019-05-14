@@ -335,8 +335,8 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			foreach (object obj in Children)
 			{
-				if (obj is IDisposable)
-					(obj as IDisposable).Dispose(); // does Children.Clear() already handle this?
+				if (obj is IDisposable disposable)
+					disposable.Dispose(); // does Children.Clear() already handle this?
 			}
 			RowDefinitions.Clear();
 			Children.Clear();
