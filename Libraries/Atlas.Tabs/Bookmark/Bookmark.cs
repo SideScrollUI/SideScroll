@@ -1,7 +1,11 @@
 ﻿using Atlas.Core;
+using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
 
 namespace Atlas.Tabs
 {
@@ -27,6 +31,22 @@ namespace Atlas.Tabs
 			node.MergeNodes(nodes);*/
 			foreach (Bookmark bookmark in bookmarks)
 				tabBookmark.MergeNode(bookmark.tabBookmark);
+		}
+
+		public string GetEncodedString()
+		{
+			var serializer = new SerializerMemory();
+			serializer.Save(new Call(), this);
+			string data = serializer.GetEncodedString();
+			return data;
+		}
+
+		public static Bookmark Create(string encoded)
+		{
+			var serializer = new SerializerMemory();
+			serializer.LoadEncodedString(encoded);
+			Bookmark bookmark = serializer.Load<Bookmark>();
+			return bookmark;
 		}
 	}
 

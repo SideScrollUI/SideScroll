@@ -36,6 +36,10 @@ namespace Atlas.Resources
 		public static readonly string List1 = "list1.png";
 		public static readonly string List2 = "list2.png";
 
+		public static readonly string Link = "link.png";
+		public static readonly string Bookmark = "bookmark.png";
+		public static readonly string Import = "import.png";
+
 		public class Streams
 		{
 			public static Stream Logo => Get(Assets.Logo);
@@ -66,6 +70,10 @@ namespace Atlas.Resources
 			public static Stream List1 => Get(Assets.List1);
 			public static Stream List2 => Get(Assets.List2);
 
+			public static Stream Link => Get(Assets.Link);
+			public static Stream Bookmark => Get(Assets.Bookmark);
+			public static Stream Import => Get(Assets.Import);
+
 			public static Stream Get(string resourceName)
 			{
 				var assembly = Assembly.GetExecutingAssembly();
@@ -92,6 +100,8 @@ namespace Atlas.Resources
 				Stats,
 				List1,
 				List2,
+				Link,
+				Bookmark,
 				};
 		}
 	}

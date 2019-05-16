@@ -171,7 +171,7 @@ namespace Atlas.Serialize
 				//UpdateTypeSchemaDerived();
 				header.Save(writer);
 				long schemaPosition = writer.BaseStream.Position;
-				writer.Write((long)0);
+				writer.Write((long)0); // will write correct value at end
 				SaveSchemas(writer);
 				SavePrimitives(callSaving, writer);
 				SaveObjects(callSaving.log, writer);
@@ -338,11 +338,17 @@ namespace Atlas.Serialize
 
 			using (LogTimer logSerialize = log.Timer("Serializing Object Data"))
 			{
-				Parallel.ForEach(writers, new ParallelOptions() { MaxDegreeOfParallelism = 3 }, typeRepoWriter =>
+				// todo: add parallel param
+				/*Parallel.ForEach(writers, new ParallelOptions() { MaxDegreeOfParallelism = 3 }, typeRepoWriter =>
 				{
 					using (BinaryWriter binaryWriter = new BinaryWriter(typeRepoWriter.memoryStream, System.Text.Encoding.Default, true))
 						typeRepoWriter.typeRepo.SaveObjects(logSerialize, binaryWriter);
-				});
+				});*/
+				foreach (var typeRepoWriter in writers)
+				{
+					using (BinaryWriter binaryWriter = new BinaryWriter(typeRepoWriter.memoryStream, System.Text.Encoding.Default, true))
+						typeRepoWriter.typeRepo.SaveObjects(logSerialize, binaryWriter);
+				}
 			}
 
 			using (LogTimer logSave = log.Timer("Saving Object Data"))

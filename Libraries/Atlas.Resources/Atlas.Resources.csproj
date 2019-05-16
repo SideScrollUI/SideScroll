@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <None Remove="Assets\add.png" />
+    <None Remove="Assets\bookmark.png" />
     <None Remove="Assets\cancel.png" />
     <None Remove="Assets\cancel_red.png" />
     <None Remove="Assets\if_help_62217.png" />
+    <None Remove="Assets\import.png" />
     <None Remove="Assets\info_24_759eeb.png" />
     <None Remove="Assets\info_24_c8c2f9.png" />
     <None Remove="Assets\internet.png" />
@@ -16,6 +18,7 @@
     <None Remove="Assets\left-arrow-gray.png" />
     <None Remove="Assets\left-arrow.png" />
     <None Remove="Assets\left-chevron.png" />
+    <None Remove="Assets\link.png" />
     <None Remove="Assets\list1.png" />
     <None Remove="Assets\list2.png" />
     <None Remove="Assets\Logo.ico" />
@@ -34,14 +37,17 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\add.png" />
+    <EmbeddedResource Include="Assets\bookmark.png" />
     <EmbeddedResource Include="Assets\cancel.png" />
     <EmbeddedResource Include="Assets\cancel_red.png" />
+    <EmbeddedResource Include="Assets\import.png" />
     <EmbeddedResource Include="Assets\info_24_759eeb.png" />
     <EmbeddedResource Include="Assets\info_24_c8c2f9.png" />
     <EmbeddedResource Include="Assets\internet.png" />
     <EmbeddedResource Include="Assets\left-arrow-blue.png" />
     <EmbeddedResource Include="Assets\left-arrow-gray.png" />
     <EmbeddedResource Include="Assets\left-arrow.png" />
+    <EmbeddedResource Include="Assets\link.png" />
     <EmbeddedResource Include="Assets\list1.png" />
     <EmbeddedResource Include="Assets\list2.png" />
     <EmbeddedResource Include="Assets\Logo.ico" />

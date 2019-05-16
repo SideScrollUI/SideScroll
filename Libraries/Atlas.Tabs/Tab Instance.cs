@@ -167,9 +167,9 @@ namespace Atlas.Tabs
 			foreach (TaskInstance taskInstance in tabModel.Tasks)
 			{
 				taskInstance.Cancel();
-            }
-            taskInstance.Cancel();
-        }
+			}
+			taskInstance.Cancel();
+		}
 
 		private void InitializeContext()
 		{
@@ -382,6 +382,15 @@ namespace Atlas.Tabs
 			}
 		}
 
+		public TabViewSettings LoadBookmark(Bookmark bookmark)
+		{
+			tabBookmark = null;
+			if (bookmark != null)
+				this.SelectBookmark(bookmark.tabBookmark);
+
+			return tabViewSettings; // remove?
+		}
+
 		public void SelectBookmark(TabBookmark tabBookmark)
 		{
 			this.tabViewSettings = tabBookmark.tabViewSettings;
@@ -462,12 +471,6 @@ namespace Atlas.Tabs
 			ItemCollection<T> datas = project.DataApp.LoadAll<T>(taskInstance.call, directory);
 			return datas;
 		}*/
-
-		public TabViewSettings LoadBookmark()
-		{
-			tabBookmark = null;
-			return tabViewSettings;
-		}
 
 		/*private void LoadBookmark2()
 		{

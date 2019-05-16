@@ -1,6 +1,8 @@
 ﻿using Atlas.Core;
 using System;
 using System.IO;
+using System.IO.Compression;
+using System.Text;
 
 namespace Atlas.Serialize
 {
@@ -24,6 +26,7 @@ namespace Atlas.Serialize
 
 		public T Load<T>(Call call = null)
 		{
+			call = call ?? new Call();
 			stream.Seek(0, SeekOrigin.Begin);
 			using (BinaryReader reader = new BinaryReader(stream))
 			{
@@ -43,6 +46,35 @@ namespace Atlas.Serialize
 			memorySerializer.Save(call, obj);
 			T copy = memorySerializer.Load<T>(call);
 			return copy;
+		}
+
+		public string GetEncodedString()
+		{
+			stream.Seek(0, SeekOrigin.Begin);
+			using (var outStream = new MemoryStream())
+			{
+				using (var tinyStream = new GZipStream(outStream, CompressionMode.Compress))
+					stream.CopyTo(tinyStream);
+
+				byte[] compressed = outStream.ToArray();
+				string base64 = Convert.ToBase64String(compressed);
+				return base64;
+			}
+		}
+
+		public static void ConvertEncodedToStream(string base64, Stream outStream)
+		{
+			byte[] bytes = Convert.FromBase64String(base64);
+			using (var inStream = new MemoryStream(bytes))
+			{
+				using (var tinyStream = new GZipStream(inStream, CompressionMode.Decompress))
+					tinyStream.CopyTo(outStream);
+			}
+		}
+
+		public void LoadEncodedString(string base64)
+		{
+			ConvertEncodedToStream(base64, stream);
 		}
 	}
 }

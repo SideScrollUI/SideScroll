@@ -10,6 +10,8 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Atlas.GUI.Avalonia.Controls;
+using Avalonia.Input.Platform;
+using Avalonia.Interactivity;
 
 namespace Atlas.GUI.Avalonia
 {
@@ -101,6 +103,8 @@ namespace Atlas.GUI.Avalonia
 			};
 
 			BaseWindowToolbar toolbar = new BaseWindowToolbar(this);
+			toolbar.buttonLink.Click += ButtonLink_Click;
+			toolbar.buttonImport.Click += ButtonImport_Click;
 			Grid.SetRow(toolbar, 0);
 			containerGrid.Children.Add(toolbar);
 
@@ -145,6 +149,39 @@ namespace Atlas.GUI.Avalonia
 			Content = containerGrid;
 
 			this.PositionChanged += BaseWindow_PositionChanged;
+		}
+
+		private void ButtonLink_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		{
+			string uri = GetLinkUri();
+			((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(uri);
+		}
+
+		private void ButtonImport_Click(object sender, RoutedEventArgs e)
+		{
+			string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
+			string data = GetLinkData(clipboardText);
+			if (data == null)
+				return;
+			Bookmark bookmark = Bookmark.Create(data);
+			baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
+		}
+
+		protected virtual string GetLinkUri()
+		{
+			Bookmark bookmark = tabView.tabInstance.CreateBookmark();
+			string encoded = bookmark.GetEncodedString();
+			string uri = "atlas:" + encoded;
+			return uri;
+		}
+
+		protected virtual string GetLinkData(string uri)
+		{
+			if (!uri.StartsWith("atlas:"))
+				return null;
+
+			string data = uri.Substring(6);
+			return data;
 		}
 
 		private void SetMaxBounds()

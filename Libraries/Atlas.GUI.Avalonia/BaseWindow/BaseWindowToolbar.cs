@@ -9,6 +9,8 @@ namespace Atlas.GUI.Avalonia
 	public class BaseWindowToolbar : TabControlToolbar
 	{
 		public Button buttonLoadNext;
+		public Button buttonLink;
+		public Button buttonImport;
 		//public Project project;
 		private BaseWindow baseWindow;
 
@@ -62,6 +64,9 @@ namespace Atlas.GUI.Avalonia
 			// gray color 3289C7
 			Button buttonBack = AddButton("Back", Assets.Streams.Back, commandBindingBack);
 			Button buttonForward = AddButton("Forward", Assets.Streams.Forward, commandBindingForward);
+			AddSeparator();
+			buttonLink = AddButton("Link - Copy to Clipboard", Assets.Streams.Link);
+			buttonImport = AddButton("Import from Clipboard", Assets.Streams.Import);
 
 			/*
 			ToolbarButton2 buttonBack = new ToolbarButton2()
