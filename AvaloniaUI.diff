@@ -61,17 +61,3 @@ index 886d644..c451046 100644
      <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
      <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
    </ItemGroup>
-Submodule Imports/AvaloniaUI/OxyPlot.Avalonia contains modified content
-diff --git a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj
-index cdb2ac6..6b21168 100644
---- a/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj
-+++ b/Imports/AvaloniaUI/OxyPlot.Avalonia/Source/OxyPlot.Avalonia/OxyPlot.Avalonia.csproj
-@@ -14,7 +14,7 @@
-   </PropertyGroup>
-   <ItemGroup>
-     <EmbeddedResource Include="**\*.xaml;Assets\*" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
--    <PackageReference Include="Avalonia" Version="0.7.0" />
-+    <PackageReference Include="Avalonia" Version="0.8.0" />
-     <PackageReference Include="OxyPlot.Core" Version="2.0.0-unstable1035" />
-   </ItemGroup>
- </Project>
