@@ -236,20 +236,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			// Add a style for selected & focused here?
 			var styles = dataGrid.Styles;
-
-			/*ScrollViewer scrollViewer = new ScrollViewer()
-			{
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
-				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-				VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
-				MaxWidth = 4000,
-				MaxHeight = 4000,
-				Content = dataGrid,
-				[Grid.RowProperty] = 1,
-			};*/
-			//Content = scrollViewer;
-
+			
 			//dataGrid.AutoGenerateColumns = true;
 			if (autoGenerateColumns)
 			{

@@ -180,8 +180,6 @@ namespace Atlas.GUI.Avalonia.View
 			{
 				containerGrid.Children.Clear();
 			}
-			if (TabViewSettings.SplitterDistance != null)
-				containerGrid.ColumnDefinitions[0].Width = new GridLength((double)TabViewSettings.SplitterDistance);
 
 			AddParentControls();
 
@@ -261,10 +259,12 @@ namespace Atlas.GUI.Avalonia.View
 			if (TabViewSettings.SplitterDistance != null)
 				tabParentControls.Width = (double)containerGrid.ColumnDefinitions[0].ActualWidth;
 
+			// force the width to update (Grid Auto Size caching problem?
 			double width = containerGrid.ColumnDefinitions[0].ActualWidth;
 			TabViewSettings.SplitterDistance = width;
 			tabParentControls.Width = width;
 
+			// remove these lines? do they do anything?
 			InvalidateMeasure();
 			InvalidateArrange();
 			tabParentControls.InvalidateArrange();
@@ -346,9 +346,15 @@ namespace Atlas.GUI.Avalonia.View
 				return;
 
 			if (TabViewSettings.SplitterDistance == null)
+			{
 				containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
+			}
 			else
+			{
 				containerGrid.ColumnDefinitions[0].Width = new GridLength((int)TabViewSettings.SplitterDistance);
+				if (tabParentControls != null)
+					tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
+			}
 		}
 
 		public bool IsLoaded { get; set; } = false;

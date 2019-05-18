@@ -48,6 +48,7 @@ namespace Atlas.GUI.Avalonia
 		{
 			type = type.GetNonNullableType();
 			if (type.IsPrimitive ||
+				type.IsEnum ||
 				type == typeof(string) ||
 				type == typeof(DateTime) ||
 				type == typeof(TimeSpan))

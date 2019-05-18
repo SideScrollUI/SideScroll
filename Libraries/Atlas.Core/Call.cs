@@ -62,9 +62,9 @@ namespace Atlas.Core
 		}
 
 		// allows having progress broken down into multiple tasks
-		public Call AddSubCall()
+		public Call AddSubCall(string name = "")
 		{
-			return AddSubTask().call;
+			return AddSubTask(name).call;
 		}
 	}
 
