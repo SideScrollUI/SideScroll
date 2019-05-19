@@ -62,8 +62,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				BorderThickness = new Thickness(5, 2, 2, 2),
 				BorderBrush = new SolidColorBrush(Theme.TitleBackgroundColor),
+				Child = title,
 			};
-			borderPaddingTitle.Child = title;
 			containerGrid.Children.Add(borderPaddingTitle);
 
 			// Notes

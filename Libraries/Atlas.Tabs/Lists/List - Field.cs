@@ -38,6 +38,7 @@ namespace Atlas.Tabs
 			base(obj, fieldInfo)
 		{
 			this.fieldInfo = fieldInfo;
+			autoLoad = !fieldInfo.IsStatic;
 
 			Name = fieldInfo.Name;
 			Name = Name.AddSpacesBetweenWords();

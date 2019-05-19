@@ -730,6 +730,11 @@ namespace Atlas.GUI.Avalonia.Controls
 					if (listItem.autoLoad == false)
 						continue;
 				}
+				if (obj is ListMember listMember)
+				{
+					if (listMember.autoLoad == false)
+						continue;
+				}
 
 				if (value is TabView tabView)
 				{

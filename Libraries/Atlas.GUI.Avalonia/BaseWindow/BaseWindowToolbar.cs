@@ -64,9 +64,10 @@ namespace Atlas.GUI.Avalonia
 			// gray color 3289C7
 			Button buttonBack = AddButton("Back", Assets.Streams.Back, commandBindingBack);
 			Button buttonForward = AddButton("Forward", Assets.Streams.Forward, commandBindingForward);
-			AddSeparator();
+
+			/*AddSeparator();
 			buttonLink = AddButton("Link - Copy to Clipboard", Assets.Streams.Link);
-			buttonImport = AddButton("Import from Clipboard", Assets.Streams.Import);
+			buttonImport = AddButton("Import from Clipboard", Assets.Streams.Import);*/
 
 			/*
 			ToolbarButton2 buttonBack = new ToolbarButton2()

@@ -19,6 +19,7 @@ namespace Atlas.Tabs
 
 		[HiddenColumn]
 		public virtual bool Editable { get { return true; } }
+		public bool autoLoad = true;
 
 		//[HiddenColumn]
 		[StyleValue]
@@ -86,6 +87,3 @@ namespace Atlas.Tabs
 		}
 	}
 }
-
-/*
-*/

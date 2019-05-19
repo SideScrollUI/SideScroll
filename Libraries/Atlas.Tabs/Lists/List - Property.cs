@@ -67,7 +67,9 @@ namespace Atlas.Tabs
 			base(obj, propertyInfo)
 		{
 			this.propertyInfo = propertyInfo;
-			
+			var accessors = propertyInfo.GetAccessors(true);
+			autoLoad = !accessors[0].IsStatic;
+
 			Name = propertyInfo.Name;
 			Name = Name.AddSpacesBetweenWords();
 			NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();

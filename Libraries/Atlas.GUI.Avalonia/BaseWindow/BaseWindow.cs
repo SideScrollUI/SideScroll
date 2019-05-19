@@ -103,8 +103,8 @@ namespace Atlas.GUI.Avalonia
 			};
 
 			BaseWindowToolbar toolbar = new BaseWindowToolbar(this);
-			toolbar.buttonLink.Click += ButtonLink_Click;
-			toolbar.buttonImport.Click += ButtonImport_Click;
+			//toolbar.buttonLink.Click += ButtonLink_Click;
+			//toolbar.buttonImport.Click += ButtonImport_Click;
 			Grid.SetRow(toolbar, 0);
 			containerGrid.Children.Add(toolbar);
 
