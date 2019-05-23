@@ -15,6 +15,7 @@ namespace Atlas.Start.Avalonia
 		{
 			Project project = new Project(projectPath, typeof(MainWindow).Namespace);
 			LoadProject(project);
+			AddClipBoardButtons();
 
 			AddTabView(new TabAvalonia.Instance(project));
 			//AddTab(new TabAvalonia());

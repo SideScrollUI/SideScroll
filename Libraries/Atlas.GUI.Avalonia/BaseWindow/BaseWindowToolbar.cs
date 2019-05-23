@@ -23,12 +23,7 @@ namespace Atlas.GUI.Avalonia
 		// don't want to reload this because 
 		private void InitializeControls()
 		{
-			/*ToolBar toolBar = new ToolBar()
-			{
-
-			};
-			Grid.SetRow(toolBar, 0);
-
+			/*
 			CommandBinding commandBinding = new CommandBinding(
 				ApplicationCommands.Open,
 				OpenCmdExecuted,
@@ -65,9 +60,7 @@ namespace Atlas.GUI.Avalonia
 			Button buttonBack = AddButton("Back", Assets.Streams.Back, commandBindingBack);
 			Button buttonForward = AddButton("Forward", Assets.Streams.Forward, commandBindingForward);
 
-			/*AddSeparator();
-			buttonLink = AddButton("Link - Copy to Clipboard", Assets.Streams.Link);
-			buttonImport = AddButton("Import from Clipboard", Assets.Streams.Import);*/
+			
 
 			/*
 			ToolbarButton2 buttonBack = new ToolbarButton2()
@@ -90,6 +83,13 @@ namespace Atlas.GUI.Avalonia
 				//Command = commandBack,
 			};*/
 			//buttonForward.Click += ButtonForward_Click;
+		}
+
+		public void AddClipBoardButtons()
+		{
+			AddSeparator();
+			buttonLink = AddButton("Link - Copy to Clipboard", Assets.Streams.Link);
+			buttonImport = AddButton("Import from Clipboard", Assets.Streams.Import);
 		}
 
 		private bool CommandBackCanExecute(object obj)

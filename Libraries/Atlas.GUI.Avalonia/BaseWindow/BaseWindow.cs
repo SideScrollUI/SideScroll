@@ -28,9 +28,10 @@ namespace Atlas.GUI.Avalonia
 		const string IsLoadingDataKey = "Loading";
 
 		// Controls
-		private Grid containerGrid;
-		private ScrollViewer scrollViewer;
-		private Grid contentGrid;
+		protected Grid containerGrid;
+		protected BaseWindowToolbar toolbar;
+		protected ScrollViewer scrollViewer;
+		protected Grid contentGrid;
 		public TabView tabView;
 
 		public BaseWindow() : base()
@@ -102,9 +103,7 @@ namespace Atlas.GUI.Avalonia
 				//Background = new SolidColorBrush(Theme.BackgroundColor),
 			};
 
-			BaseWindowToolbar toolbar = new BaseWindowToolbar(this);
-			//toolbar.buttonLink.Click += ButtonLink_Click;
-			//toolbar.buttonImport.Click += ButtonImport_Click;
+			toolbar = new BaseWindowToolbar(this);
 			Grid.SetRow(toolbar, 0);
 			containerGrid.Children.Add(toolbar);
 
@@ -149,6 +148,13 @@ namespace Atlas.GUI.Avalonia
 			Content = containerGrid;
 
 			this.PositionChanged += BaseWindow_PositionChanged;
+		}
+
+		public void AddClipBoardButtons()
+		{
+			toolbar.AddClipBoardButtons();
+			toolbar.buttonLink.Click += ButtonLink_Click;
+			toolbar.buttonImport.Click += ButtonImport_Click;
 		}
 
 		private void ButtonLink_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
