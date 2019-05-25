@@ -62,14 +62,32 @@ namespace Atlas.GUI.Avalonia
 			cell.Background = GetCellBrush(cell, dataItem);
 			cell.MaxHeight = 100; // don't let them have more than a few lines each
 
-			TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
-			//TextBlock textBlock = GetTextBlock(cell, dataItem);
-			textBlock.DoubleTapped += delegate
+			/*if (GetBindingType(dataItem) == typeof(bool))
 			{
-				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
-			};
-			AddTextBoxContextMenu(textBlock);
-			return textBlock;
+				CheckBox checkbox = new CheckBox()
+				{
+					Margin = new Thickness(10, 0, 0, 0),
+				};
+				GetTextBinding();
+				unformattedBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+				checkbox.SetBinding(CheckBox.IsCheckedProperty, unformattedBinding);
+				if (IsReadOnly)
+					checkbox.IsHitTestVisible = false; // disable changing
+													   //formattedBinding = unformattedBinding;
+													   //Binding = unformattedBinding;
+				return checkbox;
+			}
+			else*/
+			{
+				TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
+				//TextBlock textBlock = GetTextBlock(cell, dataItem);
+				textBlock.DoubleTapped += delegate
+				{
+					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
+				};
+				AddTextBoxContextMenu(textBlock);
+				return textBlock;
+			}
 		}
 
 		// so we don't load slow templates?

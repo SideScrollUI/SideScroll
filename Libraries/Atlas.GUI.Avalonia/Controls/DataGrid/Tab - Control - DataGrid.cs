@@ -504,6 +504,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		public void AddColumn(string label, PropertyInfo propertyInfo)
 		{
 			bool propertyEditable = (propertyInfo.GetCustomAttribute(typeof(EditingAttribute)) != null);
+			ColumnMaxWidthAttribute attributeColumnMaxWidth = propertyInfo.GetCustomAttribute<ColumnMaxWidthAttribute>();
 			bool isReadOnly = (tabModel.Editing == false || propertyEditable == false || !propertyInfo.CanWrite);
 
 			//DataGridBoundColumn column;
@@ -578,7 +579,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			column.IsReadOnly = isReadOnly;
 			//column.Bind(avaloniaProperty, iList);
 			//column.Width = new DataGridLength(200);// new DataGridLength(1, DataGridLengthUnitType.Star);
-			column.MaxWidth = MaxColumnWidth;
+			column.MaxWidth = attributeColumnMaxWidth != null ? attributeColumnMaxWidth.MaxWidth : MaxColumnWidth;
 			//column.HeaderCell.AreSeparatorsVisible = true;
 			//column.HeaderCell.SeparatorBrush = new SolidColorBrush(Colors.Black); // Header Cell styles aren't implemented yet :(
 

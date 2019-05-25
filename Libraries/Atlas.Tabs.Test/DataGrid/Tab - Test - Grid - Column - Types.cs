@@ -21,6 +21,8 @@ namespace Atlas.Tabs.Test.DataGrid
 						DateTime = new DateTime(DateTime.Now.Ticks + i),
 						Bool = (i % 2 == 1),
 					};
+					if (testItem.Bool)
+						testItem.Object = true;
 					testItem.LongString = testItem.LongString + i.ToString(); // make as a unique string
 					items.Add(testItem);
 				}
@@ -36,6 +38,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			public bool Bool { get; set; }
 			public byte[] ByteArray { get; set; } = new byte[256];
 			public DateTime DateTime { get; set; }
+			public object Object { get; set; }
 			public string SmallString { get; set; } = "Text";
 			public string LongString { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 		}

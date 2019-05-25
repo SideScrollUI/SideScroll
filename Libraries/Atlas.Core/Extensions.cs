@@ -281,7 +281,14 @@ namespace Atlas.Extensions // rename to Core?
 			}
 			if (obj is Stream stream)
 			{
-				return "[" + stream.Length.ToString("N0") + "]";
+				try
+				{
+					// can throw exception if stream has been closed
+					return "[" + stream.Length.ToString("N0") + "]";
+				}
+				catch (Exception)
+				{
+				}
 			}
 			if (type == typeof(DictionaryEntry))
 				return ((DictionaryEntry)obj).Key.ToString();

@@ -1,11 +1,5 @@
+# Getting Started
 
-
-
-### Versions supported
-Visual Studio 2017
-
-## Getting Started
----
 1. Download Atlas
     - `git clone https://github.com/garyhertel/atlas.git`
 2. Install a C# IDE
@@ -16,8 +10,8 @@ Visual Studio 2017
 5. Configure Paths
     - Select `Settings` to change any of the default locations
     
----
-### Visual Studio 2017
+
+## Visual Studio 2017
 
 * Customizing (you can search for these options in the Options Menu)
   - Insert tabs instead of spaces (spaces only make sense if you don't use IDEs)
@@ -33,13 +27,14 @@ Visual Studio 2017
 	- Tools -> Options -> Debugging -> General
 	-   Check `Enable Just My Code`
 
-### Visual Studio 2019 Preview
+## Visual Studio 2019 Preview
   - No `Custom Document Well` extension support yet
     - No vertical tabs :(
+    - Not recommended yet
 
-#### Suggested Visual Studio Addons
+# Suggested Visual Studio Addons
 ---
-##### Productivity Power Tools
+## Productivity Power Tools
 * Shows your open files as tabs on the left side instead of tabs across the top
 * Visual Studio 2015
 			https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProductivityPowerTools2015
@@ -52,8 +47,8 @@ Visual Studio 2017
        - Set `Place tabs on the` = `Left`
 			 - Set `Maximum tab size` = `300`
 
-##### NUnit 3 Test Adapter
-* GUI for unit tests
+## NUnit 3 Test Adapter
+* GUI for running unit tests in Visual Studio
 * Install
   - Tools -> Extensions and Updates -> Online
     - Search for `NUnit 3 Test Adapter` and then install
@@ -64,7 +59,7 @@ Visual Studio 2017
 * Using
   - Right click on any test and select `Run` or `Debug`
 
-##### dotMem
+## dotMem
 * For tracking down memory leaks
 * Commercial with 5 day eval trial
   - Better than Visual Studio at tracking down memory leaks

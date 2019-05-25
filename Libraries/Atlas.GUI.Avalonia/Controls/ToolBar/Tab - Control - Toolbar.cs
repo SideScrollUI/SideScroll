@@ -1,5 +1,4 @@
 ﻿using Atlas.GUI.Avalonia;
-using Atlas.Resources;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -15,22 +14,26 @@ using System.Windows.Input;
 
 namespace Atlas.GUI.Avalonia.Tabs
 {
-	public class TabControlToolbar : StackPanel
+	public class TabControlToolbar : Grid
 	{
 		public TabControlToolbar()
 		{
 			InitializeControls();
 		}
 
-		// don't want to reload this because 
 		private void InitializeControls()
 		{
-			Orientation = Orientation.Horizontal;
-			//ColumnDefinitions = new ColumnDefinitions("Auto,Auto,Auto,Auto");
-			//RowDefinitions = new RowDefinitions("Auto"); // Header, Body
-			//HorizontalAlignment = HorizontalAlignment.Stretch;
+			RowDefinitions = new RowDefinitions("Auto");
+			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
 			Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
+		}
+
+		public void AddControl(Control control)
+		{
+			Grid.SetColumn(control, ColumnDefinitions.Count);
+			ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+			Children.Add(control);
 		}
 
 		public Button AddButton(string tooltip, Stream resource, ICommand command = null)
@@ -48,6 +51,8 @@ namespace Atlas.GUI.Avalonia.Tabs
 			var image = new Image()
 			{
 				Source = bitmap,
+				Width = 24,
+				Height = 24,
 			};
 
 			Button button = new Button()
@@ -68,7 +73,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 			button.PointerLeave += Button_PointerLeave;
 
 			//var button = new ToolbarButton(tooltip, command, resource);
-			this.Children.Add(button);
+			AddControl(button);
 			return button;
 		}
 
@@ -105,7 +110,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 				Width = 2,
 				Margin = new Thickness(4),
 			};
-			this.Children.Add(panel);
+			AddControl(panel);
 		}
 
 		public TextBlock AddLabel(string text)
@@ -119,7 +124,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 				VerticalAlignment = VerticalAlignment.Center,
 			};
 
-			this.Children.Add(textBlock);
+			AddControl(textBlock);
 
 			return textBlock;
 		}
@@ -138,7 +143,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 				VerticalAlignment = VerticalAlignment.Center,
 			};
 
-			this.Children.Add(textBox);
+			AddControl(textBox);
 
 			return textBox;
 		}
@@ -151,7 +156,6 @@ namespace Atlas.GUI.Avalonia.Tabs
 
 		public ToolbarButton(string tooltip, ICommand command, Stream resource)
 		{
-			//var assembly = Assembly.GetExecutingAssembly();
 			Bitmap bitmap;
 			using (resource)
 			{

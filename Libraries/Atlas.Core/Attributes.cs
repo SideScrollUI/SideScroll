@@ -116,6 +116,18 @@ namespace Atlas.Core
 
 	// ->Tabs: Flag as the ToString() property/field?
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class ColumnMaxWidthAttribute : Attribute
+	{
+		public readonly int MaxWidth;
+
+		public ColumnMaxWidthAttribute(int maxWidth)
+		{
+			this.MaxWidth = maxWidth;
+		}
+	}
+
+	// ->Tabs: Flag as the ToString() property/field?
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class AttributeToString : Attribute
 	{
 	}

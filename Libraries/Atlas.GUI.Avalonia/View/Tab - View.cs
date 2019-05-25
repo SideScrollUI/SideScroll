@@ -189,6 +189,7 @@ namespace Atlas.GUI.Avalonia.View
 				if (tabInstance.Skippable)
 				{
 					containerGrid.ColumnDefinitions[0].Width = new GridLength(0);
+					tabParentControls.Width = 0;
 				}
 			}
 
