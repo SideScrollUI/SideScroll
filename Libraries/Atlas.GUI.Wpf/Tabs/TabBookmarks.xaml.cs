@@ -135,7 +135,7 @@ namespace Atlas.GUI.Wpf
 			bookmark.Name = textBoxName.Text;
 			project.DataApp.Save(bookmark.Name, bookmark);
 
-			tabModel.Bookmarks.Names.Add(new ViewBookmarkName(bookmark.Name));
+			tabModel.Bookmarks.Names.Add(new ViewBookmarkName(bookmark));
 			panelNew.Visibility = Visibility.Collapsed;
 		}
 

@@ -1,9 +1,6 @@
 [submodule "Imports/AvaloniaUI/AvaloniaEdit"]
 	path = Imports/AvaloniaUI/AvaloniaEdit
 	url = https://github.com/AvaloniaUI/AvaloniaEdit
-[submodule "Imports/AvaloniaUI/Avalonia.DataGrid"]
-	path = Imports/AvaloniaUI/Avalonia.DataGrid
-	url = https://github.com/AvaloniaUI/DataGrid.git
 [submodule "Imports/AvaloniaUI/OxyPlot.Avalonia"]
 	path = Imports/AvaloniaUI/OxyPlot.Avalonia
 	url = https://github.com/AvaloniaUI/oxyplot-avalonia.git

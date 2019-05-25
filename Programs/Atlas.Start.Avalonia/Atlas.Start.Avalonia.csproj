@@ -34,13 +34,12 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.8.0" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.8.0" />
     <PackageReference Include="Avalonia.Desktop" Version="0.8.0" />
     <PackageReference Include="OxyPlot.Core" Version="2.0.0-unstable1035" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Imports\AvaloniaUI\Avalonia.DataGrid\src\Avalonia.DataGrid.Themes.Default\Avalonia.DataGrid.Themes.Default.csproj" />
-    <ProjectReference Include="..\..\Imports\AvaloniaUI\Avalonia.DataGrid\src\Avalonia.DataGrid\Avalonia.DataGrid.csproj" />
     <ProjectReference Include="..\..\Imports\AvaloniaUI\AvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj" />
     <ProjectReference Include="..\..\Imports\AvaloniaUI\OxyPlot.Avalonia\Source\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.GUI.Avalonia\Atlas.GUI.Avalonia.csproj" />

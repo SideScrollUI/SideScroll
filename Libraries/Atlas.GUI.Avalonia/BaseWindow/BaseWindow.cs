@@ -276,10 +276,10 @@ namespace Atlas.GUI.Avalonia
 				contentGrid.MinWidth = contentGrid.DesiredSize.Width + DefaultIncrementWidth;
 			else
 				contentGrid.MinWidth += DefaultIncrementWidth;
-			scrollViewer.Offset = new Vector(scrollViewer.Offset.X + DefaultIncrementWidth, scrollViewer.Offset.Y);
 			scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
 			scrollViewer.InvalidateArrange();
 			scrollViewer.InvalidateMeasure();
+			scrollViewer.Offset = new Vector(scrollViewer.Offset.X + DefaultIncrementWidth, scrollViewer.Offset.Y);
 		}
 
 		private void ButtonCollapse_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)

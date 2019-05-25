@@ -36,7 +36,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		public TextBox textBoxSearch;
 
 		//private HashSet<int> pinnedItems = new HashSet<int>();
-		private ICollectionView collectionView;
+		private DataGridCollectionView collectionView;
 		private Dictionary<string, DataGridColumn> columnObjects = new Dictionary<string, DataGridColumn>();
 		private Dictionary<DataGridColumn, string> columnNames = new Dictionary<DataGridColumn, string>();
 		private List<PropertyInfo> columnProperties = new List<PropertyInfo>(); // makes filtering faster, could change other Dictionaries strings to PropertyInfo
@@ -245,7 +245,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 
             // Switch to DataGridCollectionView with 0.8.0
-            collectionView = new CollectionViewBase(iList);
+            collectionView = new DataGridCollectionView(iList);
 			dataGrid.Items = collectionView;
 			dataGrid.SelectedItem = null;
 			dataGrid.InvalidateMeasure();
@@ -283,7 +283,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				}
 				else*/
 				{
-					collectionView = new CollectionViewBase(iList);
+					collectionView = new DataGridCollectionView(iList);
 					dataGrid.Items = collectionView;
 				}
 				//dataGrid.SelectedItem = null;
@@ -795,10 +795,11 @@ namespace Atlas.GUI.Avalonia.Controls
 				// datagrid has a bug and doesn't reselect cleared records correctly
 				// Could try only removing removed items, and adding new items, need to check SelectedItems order is correct after
 				dataGrid.SelectedItems.Clear();
+				dataGrid.SelectedItem = null; // need both of these
 				//foreach (object obj in dataGrid.SelectedItems)
 				// remove all items so the we have to worry about this order changing?
 				//while (dataGrid.SelectedItems.Count > 0)
-					//dataGrid.SelectedItems.RemoveAt(0);
+				//dataGrid.SelectedItems.RemoveAt(0);
 				foreach (object obj in value)
 					dataGrid.SelectedItems.Add(obj);
 				dataGrid.InvalidateVisual();
@@ -857,6 +858,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				if (dataGrid.SelectedItems.Count != 1 || dataGrid.SelectedItems[0] != value)
 				{
 					dataGrid.SelectedItems.Clear();
+					dataGrid.SelectedItem = null; // need both of these
 					if (value != null)
 						//dataGrid.SelectedItems.Add(value);
 						dataGrid.SelectedItem = value;

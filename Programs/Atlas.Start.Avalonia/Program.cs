@@ -11,7 +11,7 @@ namespace Atlas.Start.Avalonia
 		{
 			OxyPlotModule.EnsureLoaded();
 			//AppBuilder builder = AppBuilder.Configure<App>().UsePlatformDetect();
-			AppBuilder builder = AppBuilder.Configure<App>().UsePlatformDetect().LogToDebug();
+			AppBuilder builder = AppBuilder.Configure<App>().UsePlatformDetect().UseDataGrid().LogToDebug();
 			//AvaloniaLocator.Current.GetService<IGlobalStyles>().Styles.AddRange(new OxyPlot.Avalonia.Themes.Default());
 
 			builder.BeforeStarting(_ => OxyPlotModule.Initialize());
@@ -24,6 +24,7 @@ namespace Atlas.Start.Avalonia
 		public static AppBuilder BuildAvaloniaApp(string[] args)
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
+				.UseDataGrid()
 				.BeforeStarting(_ => OxyPlotModule.Initialize())
 				.LogToDebug();
 	}
