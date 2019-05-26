@@ -9,12 +9,17 @@
       <Setter Property="Foreground" Value="{DynamicResource GridColumnHeaderForegroundBrush}" />
       <Setter Property="HorizontalContentAlignment" Value="Left" />
       <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="AreSeparatorsVisible" Value="false" />
       <Setter Property="AreSeparatorsVisible" Value="true" />
-      <Setter Property="SeparatorBrush" Value="#FF0000" />
       <Setter Property="Padding" Value="4" />
       <Setter Property="Background" Value="{DynamicResource GridColumnHeaderBackgroundBrush}"/>
   </Style>
-  
+
+  <Style Selector="dg|DataGridColumnHeader /template/ Rectangle#VerticalSeparator">
+    <Setter Property="Stroke" Value="Black"/>
+    <Setter Property="StrokeThickness" Value="1"/>
+  </Style>
+
   <Style Selector="dg|DataGridRow /template/ Rectangle#BackgroundRectangle">
     <Setter Property="IsVisible" Value="False"/>
     <Setter Property="Fill" Value="#FF92F397" />

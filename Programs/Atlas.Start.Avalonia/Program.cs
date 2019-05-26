@@ -10,9 +10,7 @@ namespace Atlas.Start.Avalonia
 		static void Main(string[] args)
 		{
 			OxyPlotModule.EnsureLoaded();
-			//AppBuilder builder = AppBuilder.Configure<App>().UsePlatformDetect();
 			AppBuilder builder = AppBuilder.Configure<App>().UsePlatformDetect().UseDataGrid().LogToDebug();
-			//AvaloniaLocator.Current.GetService<IGlobalStyles>().Styles.AddRange(new OxyPlot.Avalonia.Themes.Default());
 
 			builder.BeforeStarting(_ => OxyPlotModule.Initialize());
 

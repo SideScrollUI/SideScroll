@@ -154,6 +154,11 @@ namespace Atlas.GUI.Avalonia.Controls
 				//
 				//Background = new SolidColorBrush(Colors.White),
 			};
+
+			// Show Hover text on mouse over instead of requiring holding the mouse down (why isn't this the default?)
+			plotView.ActualController.UnbindMouseDown(OxyMouseButton.Left);
+			plotView.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack);
+
 			LoadPlotModel();
 			/*plotView.Template = new ControlTemplate() // todo: fix
 			{
