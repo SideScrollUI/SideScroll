@@ -21,8 +21,8 @@ namespace Atlas.Tabs.Test.DataGrid
 						DateTime = new DateTime(DateTime.Now.Ticks + i),
 						Bool = (i % 2 == 1),
 					};
-					if (testItem.Bool)
-						testItem.Object = true;
+					if (i % 2 == 0)
+						testItem.Object = (i % 4 == 0);
 					testItem.LongString = testItem.LongString + i.ToString(); // make as a unique string
 					items.Add(testItem);
 				}

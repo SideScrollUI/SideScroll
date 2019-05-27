@@ -25,7 +25,7 @@ namespace Atlas.Network
 			return bytes;
 		}
 
-		public override string GetString(string uri)
+		public override string GetString(string uri, string accept = null)
 		{
 			byte[] bytes = GetBytes(uri);
 			if (bytes != null)

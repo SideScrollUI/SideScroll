@@ -17,9 +17,9 @@ namespace Atlas.Network
 			this.call = call;
 		}
 
-		public virtual string GetString(string uri)
+		public virtual string GetString(string uri, string accept = null)
 		{
-			byte[] bytes = GetBytes(uri);
+			byte[] bytes = GetResponse(uri, accept);
 			if (bytes != null)
 				return Encoding.ASCII.GetString(bytes);
 			return null;
@@ -27,18 +27,18 @@ namespace Atlas.Network
 
 		public virtual byte[] GetBytes(string uri)
 		{
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-			request.Method = "GET";
-
-			return GetResponse(request);
+			return GetResponse(uri);
 		}
 
-		private byte[] GetResponse(HttpWebRequest request)
+		private byte[] GetResponse(string uri, string accept = null)
 		{
-			using (CallTimer getCall = call.Timer("Downloading HTTP File", new Tag("URI", request.RequestUri)))
+			using (CallTimer getCall = call.Timer("Downloading HTTP File", new Tag("URI", uri)))
 			{
 				for (int attempt = 1; attempt <= MaxAttempts; attempt++)
 				{
+					HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri); // requests can't be reused between attempts
+					request.Method = "GET";
+					request.Accept = accept;
 					try
 					{
 						WebResponse response = request.GetResponse();
@@ -66,7 +66,7 @@ namespace Atlas.Network
 					}
 					System.Threading.Thread.Sleep(3000 * (int)Math.Pow(2, attempt));
 				}
-				throw new Exception("HTTP request failed " + MaxAttempts.ToString() + " times: " + request.RequestUri);
+				throw new Exception("HTTP request failed " + MaxAttempts.ToString() + " times: " + uri);
 			}
 		}
 	}
