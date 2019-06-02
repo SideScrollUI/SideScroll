@@ -69,16 +69,14 @@ namespace Atlas.GUI.Avalonia.View
 				value = tabWebBrowser;
 			}*/
 
-			if (value is ITab)
+			if (value is ITab iTab)
 			{
 				// Custom controls implement ITab
-				ITab iTab = (ITab)value;
 				TabInstance childTabInstance = parentTabInstance.CreateChildTab(iTab);
 				childTabInstance.Reintialize(); // todo: fix, called in TabView
 				childTabInstance.tabModel.Name = label;
-				if (childTabInstance.tabModel.Object is TabContainer)
+				if (childTabInstance.tabModel.Object is TabContainer tabContainer)
 				{
-					TabContainer tabContainer = (TabContainer)childTabInstance.tabModel.Object;
 					tabContainer.Label = label;
 					//tabContainer.Load();
 					return tabContainer;
@@ -88,27 +86,24 @@ namespace Atlas.GUI.Avalonia.View
 				tabView.Load();
 				return tabView;
 			}
-			else if (value is TabContainer)
+			else if (value is TabContainer tabContainer)
 			{
-				TabContainer tabContainer = (TabContainer)value;
 				tabContainer.tabInstance.ParentTabInstance = parentTabInstance;
 				tabContainer.tabInstance.tabBookmark = tabBookmark;
 				tabContainer.Label = label;
 				tabContainer.Load();
 				return tabContainer;
 			}
-			else if (value is TabView)
+			else if (value is TabView tabView)
 			{
-				TabView tabView = (TabView)value;
 				tabView.tabInstance.ParentTabInstance = parentTabInstance;
 				tabView.tabInstance.tabBookmark = tabBookmark;
 				tabView.Label = label;
 				tabView.Load();
 				return tabView;
 			}
-			else if (value is Control)
+			else if (value is Control control)
 			{
-				Control control = (Control)value;
 				return control;
 			}
 			/*else if (value is FilePath)
@@ -148,9 +143,9 @@ namespace Atlas.GUI.Avalonia.View
 
 				TabInstance childTabInstance = parentTabInstance.CreateChild(childTabModel);
 				childTabInstance.Label = label;
-				TabView tabView = new TabView(childTabInstance);
-				tabView.Load();
-				return tabView;
+				TabView tabModelView = new TabView(childTabInstance);
+				tabModelView.Load();
+				return tabModelView;
 			}
 		}
 	}

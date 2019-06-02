@@ -478,7 +478,7 @@ namespace Atlas.GUI.Avalonia.View
 			TextBlock textBlock = new TextBlock()
 			{
 				Text = text,
-				TextWrapping = global::Avalonia.Media.TextWrapping.Wrap,
+				TextWrapping = TextWrapping.Wrap,
 				MaxWidth = 1000,
 				Foreground = new SolidColorBrush(Colors.White),
 				FontSize = 16,
