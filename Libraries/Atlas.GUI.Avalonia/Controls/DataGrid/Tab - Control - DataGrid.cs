@@ -244,8 +244,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				AddPropertiesAsColumns();
 			}
 
-            // Switch to DataGridCollectionView with 0.8.0
-            collectionView = new DataGridCollectionView(iList);
+			// Switch to DataGridCollectionView with 0.8.0
+			collectionView = new DataGridCollectionView(iList);
 			dataGrid.Items = collectionView;
 			dataGrid.SelectedItem = null;
 			dataGrid.InvalidateMeasure();
@@ -339,11 +339,11 @@ namespace Atlas.GUI.Avalonia.Controls
 						selectionModified = true;
 						//SelectedItem = e.NewItems[0];
 						SelectedItem = iList[iList.Count - 1];
-                        disableSaving--;
+						disableSaving--;
 						stopwatch.Reset();
 						stopwatch.Start();
-                        //collectionView.Refresh();
-                    }
+						//collectionView.Refresh();
+					}
 					else
 					{
 						autoSelectItem = iList[iList.Count - 1];

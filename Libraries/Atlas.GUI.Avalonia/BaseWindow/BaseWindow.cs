@@ -322,16 +322,17 @@ namespace Atlas.GUI.Avalonia
 		{
 			get
 			{
+				bool maximized = (this.WindowState == WindowState.Maximized);
 				Rect bounds = this.Bounds;
-				if (this.TransformedBounds != null)
+				if (maximized && this.TransformedBounds != null)
 					bounds = this.TransformedBounds.Value.Bounds;
 				WindowSettings windowSettings = new WindowSettings()
 				{
-					Maximized = (this.WindowState == WindowState.Maximized),
+					Maximized = maximized,
 					Width = bounds.Width,
 					Height = bounds.Height,
-					Left = bounds.Position.X,
-					Top = bounds.Position.Y,
+					Left = maximized ? bounds.Position.X : Position.X,
+					Top = maximized ? bounds.Position.Y : Position.Y,
 				};
 				return windowSettings;
 			}
@@ -360,7 +361,7 @@ namespace Atlas.GUI.Avalonia
 		// Still saving due to a HandleResized calls after IsActive (loadComplete does nothing)
 		private void SaveWindowSettings()
 		{
-			if (loadComplete && IsActive && IsArrangeValid && IsMeasureValid)
+			if (loadComplete && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
 				project.DataApp.Save(this.WindowSettings);
 
 			// need a better trigger for when the screen size changes

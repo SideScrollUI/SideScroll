@@ -17,7 +17,10 @@ namespace Atlas.Tabs
 	public class ListProperty : ListMember, IListEditable
 	{
 		public PropertyInfo propertyInfo;
-		
+		private bool cached;
+		private bool valueCached;
+		private object valueObject = null;
+
 		[HiddenColumn]
 		public override bool Editable // rename to IsReadOnly?
 		{
@@ -36,6 +39,15 @@ namespace Atlas.Tabs
 			{
 				try
 				{
+					if (cached)
+					{
+						if (!valueCached)
+						{
+							valueCached = true;
+							valueObject = propertyInfo.GetValue(obj);
+						}
+						return valueObject;
+					}
 					return propertyInfo.GetValue(obj);
 				}
 				catch (Exception)
@@ -63,10 +75,11 @@ namespace Atlas.Tabs
 			}
 		}
 
-		public ListProperty(object obj, PropertyInfo propertyInfo) : 
+		public ListProperty(object obj, PropertyInfo propertyInfo, bool cached = true) : 
 			base(obj, propertyInfo)
 		{
 			this.propertyInfo = propertyInfo;
+			this.cached = cached;
 			var accessors = propertyInfo.GetAccessors(true);
 			autoLoad = !accessors[0].IsStatic;
 
