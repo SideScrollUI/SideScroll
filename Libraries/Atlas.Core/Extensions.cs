@@ -442,6 +442,11 @@ namespace Atlas.Extensions // rename to Core?
 			return value;
 		}
 
+		public static DateTime Trim(this DateTime date, long ticks)
+		{
+			return new DateTime(date.Ticks - (date.Ticks % ticks), date.Kind);
+		}
+
 		/*public static bool IsAction(object obj)
 		{
 			if (obj == null)
