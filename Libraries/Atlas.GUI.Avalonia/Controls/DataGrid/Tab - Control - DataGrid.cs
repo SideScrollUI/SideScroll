@@ -349,20 +349,10 @@ namespace Atlas.GUI.Avalonia.Controls
 						autoSelectItem = iList[iList.Count - 1];
 					}
 				}
+				// causing Invalid thread issues when removing items, remove completely?
+				dataGrid.InvalidateArrange(); // not resizing when adding new item, not needed?
+				dataGrid.InvalidateMeasure(); // not resizing when adding new item, not needed?
 			}
-			dataGrid.InvalidateArrange(); // not resizing when adding new item, not needed?
-			dataGrid.InvalidateMeasure(); // not resizing when adding new item, not needed?
-		}
-
-		private void TabDataGrid_GotFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			//this.Background = new SolidColorBrush(Theme.BackgroundFocusedColor);
-			//dataGrid.
-		}
-
-		private void TabDataGrid_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			//this.Background = new SolidColorBrush(Theme.BackgroundColor);
 		}
 
 		private void DataGrid_Tapped(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
