@@ -150,6 +150,12 @@ namespace Atlas.GUI.Avalonia
 			this.PositionChanged += BaseWindow_PositionChanged;
 		}
 
+		public void Reload()
+		{
+			//LoadProject(project);
+			tabView.Load();
+		}
+
 		public void AddClipBoardButtons()
 		{
 			toolbar.AddClipBoardButtons();

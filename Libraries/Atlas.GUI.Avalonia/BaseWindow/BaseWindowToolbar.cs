@@ -11,6 +11,7 @@ namespace Atlas.GUI.Avalonia
 		public Button buttonLoadNext;
 		public Button buttonLink;
 		public Button buttonImport;
+		public Button buttonRefresh;
 		//public Project project;
 		private BaseWindow baseWindow;
 
@@ -60,7 +61,10 @@ namespace Atlas.GUI.Avalonia
 			Button buttonBack = AddButton("Back", Assets.Streams.Back, commandBindingBack);
 			Button buttonForward = AddButton("Forward", Assets.Streams.Forward, commandBindingForward);
 
-			
+			AddSeparator();
+			buttonRefresh = AddButton("Refresh", Assets.Streams.Refresh);
+			buttonRefresh.Click += ButtonRefresh_Click;
+
 
 			/*
 			ToolbarButton2 buttonBack = new ToolbarButton2()
@@ -83,6 +87,11 @@ namespace Atlas.GUI.Avalonia
 				//Command = commandBack,
 			};*/
 			//buttonForward.Click += ButtonForward_Click;
+		}
+
+		private void ButtonRefresh_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		{
+			baseWindow.Reload();
 		}
 
 		public void AddClipBoardButtons()

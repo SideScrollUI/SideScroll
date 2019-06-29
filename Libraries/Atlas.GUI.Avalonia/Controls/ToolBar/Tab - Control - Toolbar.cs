@@ -113,7 +113,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 			AddControl(panel);
 		}
 
-		public TextBlock AddLabel(string text)
+		public TextBlock AddLabel(string text = "")
 		{
 			TextBlock textBlock = new TextBlock()
 			{
