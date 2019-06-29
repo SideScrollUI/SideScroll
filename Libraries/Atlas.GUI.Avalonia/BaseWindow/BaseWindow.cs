@@ -271,27 +271,27 @@ namespace Atlas.GUI.Avalonia
 
 		private void ButtonExpand_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			//if (scrollViewer.Width == double.NaN)
-			//	scrollViewer.Viewport.Width
-			/*if (double.IsNaN(contentGrid.Width))
-				contentGrid.Width = contentGrid.DesiredSize.Width + DefaultIncrementWidth;
-			else
-				contentGrid.Width += DefaultIncrementWidth;*/
+			double minXOffset = scrollViewer.Offset.X + DefaultIncrementWidth;
+			double widthRequired = minXOffset + scrollViewer.Viewport.Width;
+			contentGrid.MinWidth = widthRequired;
+			contentGrid.Width = widthRequired;
 
-			if (double.IsNaN(contentGrid.Width))
-				contentGrid.MinWidth = contentGrid.DesiredSize.Width + DefaultIncrementWidth;
-			else
-				contentGrid.MinWidth += DefaultIncrementWidth;
+			//var extentSize = scrollViewer.Extent;
+			//double extentMinWidth = Math.Max(extentSize.Width, widthRequired);
+			//scrollViewer.Extent = new Size(extentMinWidth, extentSize.Height);
+
+			scrollViewer.Measure(Size.Infinity);
+			scrollViewer.Arrange(this.Bounds);
+
 			scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-			scrollViewer.InvalidateArrange();
-			scrollViewer.InvalidateMeasure();
-			scrollViewer.Offset = new Vector(scrollViewer.Offset.X + DefaultIncrementWidth, scrollViewer.Offset.Y);
+			scrollViewer.Offset = new Vector(minXOffset, scrollViewer.Offset.Y);
 		}
 
 		private void ButtonCollapse_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			//scrollViewer.Offset = new Vector(Math.Max(0.0, scrollViewer.Offset.X - 500), scrollViewer.Offset.Y);
+			scrollViewer.Offset = new Vector(Math.Max(0.0, scrollViewer.Offset.X - DefaultIncrementWidth), scrollViewer.Offset.Y);
 			contentGrid.MinWidth = 0;
+			contentGrid.Width = 0;
 		}
 
 		// How to set the main Content
