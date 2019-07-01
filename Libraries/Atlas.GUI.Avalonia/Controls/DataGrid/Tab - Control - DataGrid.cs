@@ -22,7 +22,7 @@ using System.Reflection;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
-	public class TabControlDataGrid : Grid, IDisposable, ITabSelector
+	public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ILayoutable
 	{
 		private static int MaxColumnWidth = 600;
 
@@ -125,6 +125,30 @@ namespace Atlas.GUI.Avalonia.Controls
 				Parent.InvalidateMeasure();
 		}
 
+		// real DesiredSize doesn't work because of HorizontalAlign = Stretch?
+		public new Size DesiredSize
+		{
+			get
+			{
+				double columnWidths = GetTotalColumnWidths();
+				Size desiredSize = new Size(columnWidths, 0);
+				foreach (var control in Children)
+				{
+					Size childDesiredSize = control.DesiredSize;
+					desiredSize = new Size(Math.Max(desiredSize.Width, childDesiredSize.Width), Math.Max(desiredSize.Height, childDesiredSize.Height));
+				}
+				return desiredSize;
+			}
+		}
+
+		public double GetTotalColumnWidths()
+		{
+			double total = 0;
+			foreach (var dataColumn in dataGrid.Columns)
+				total += dataColumn.ActualWidth;
+			return total;
+		}
+
 		private void Initialize()
 		{
 			disableSaving++;
@@ -206,7 +230,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			dataGrid = new DataGrid()
 			{
-				SelectionMode = DataGridSelectionMode.Extended, // No MultiSelect support :( (no way to select individual cells) Makes copying and pasting annoying
+				SelectionMode = DataGridSelectionMode.Extended, // No MultiSelect support :( (use right click for copy/paste)
 
 				CanUserResizeColumns = true,
 				CanUserReorderColumns = true,
@@ -244,7 +268,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				AddPropertiesAsColumns();
 			}
 
-			// Switch to DataGridCollectionView with 0.8.0
 			collectionView = new DataGridCollectionView(iList);
 			dataGrid.Items = collectionView;
 			dataGrid.SelectedItem = null;
@@ -865,7 +888,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			tabDataSettings.SelectionType = SelectionType.User; // todo: place earlier with more accurate type
 
 			OnSelectionChanged?.Invoke(this, null);
-			
+
 			tabInstance.UpdateNavigator();
 		}
 
@@ -979,6 +1002,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void SortSavedColumn()
 		{
+			//collectionView.SortDescriptions
 			/*ListCollectionView listCollectionView = collectionView as ListCollectionView;
 			if (listCollectionView != null && tabDataSettings.SortColumnName != null)
 			{

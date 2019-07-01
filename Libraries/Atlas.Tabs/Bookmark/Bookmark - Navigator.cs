@@ -54,9 +54,9 @@ namespace Atlas.Tabs
 
 		public void Update(Bookmark bookmark)
 		{
-			Bookmark prevBookmark = History[CurrentIndex];
+			Bookmark currentBookmark = History[CurrentIndex];
 			//bookmark = Serialize.SerializerMemory.Clone<Bookmark>(new Core.Log(), bookmark); // sanitize
-			prevBookmark.tabBookmark = bookmark.tabBookmark;
+			currentBookmark.tabBookmark = bookmark.tabBookmark;
 			//bookmark.tabBookmark = 
 			//bookmark = bookmark.Clone();
 			/*bookmark.Name = prevBookmark.Name;

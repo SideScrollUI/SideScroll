@@ -308,7 +308,9 @@ namespace Atlas.GUI.Avalonia.View
 			double desiredWidth = tabParentControls.DesiredSize.Width;
 			TabViewSettings.SplitterDistance = desiredWidth;
 			tabParentControls.Width = desiredWidth;
-			containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
+			//containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
+			containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
+			//containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
 
 			containerGrid.InvalidateArrange();
 			containerGrid.InvalidateMeasure();
