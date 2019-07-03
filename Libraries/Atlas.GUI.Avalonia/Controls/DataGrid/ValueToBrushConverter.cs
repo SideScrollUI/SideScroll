@@ -23,7 +23,7 @@ namespace Atlas.GUI.Avalonia
 			{
 				if (dataGridCell.DisplayIndex == 1 && (obj is ListItem || obj is ListMember))
 				{
-					bool hasChildren = TabModel.ObjectHasChildren(obj);
+					bool hasChildren = TabModel.ObjectHasChildren(obj, true);
 					if (hasChildren)
 						return HasChildrenBrush;
 						//return Brushes.Moccasin;

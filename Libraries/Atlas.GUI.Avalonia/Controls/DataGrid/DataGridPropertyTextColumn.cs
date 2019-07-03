@@ -37,6 +37,8 @@ namespace Atlas.GUI.Avalonia
 			//Binding = GetTextBinding();
 
 			CanUserSort = IsSortable(propertyInfo.PropertyType);
+
+			//CellStyleClasses = new Classes()
 		}
 
 		public override string ToString()
@@ -57,24 +59,35 @@ namespace Atlas.GUI.Avalonia
 			return false;
 		}
 
+		// never gets triggered, can't override since it's internal?
+		// Owning Grid also internal so can't add our own handler
+		// _owningGrid.LoadingRow += OwningGrid_LoadingRow;
+		/*protected override void RefreshCellContent(IControl element, string propertyName)
+		{
+			base.RefreshCellContent(element, propertyName);
+		}*/
+
 		protected override IControl GenerateElement(DataGridCell cell, object dataItem)
 		{
 			cell.Background = GetCellBrush(cell, dataItem);
 			cell.MaxHeight = 100; // don't let them have more than a few lines each
 
+			// this needs to get set when the cell content value changes, see LoadingRow()
 			/*if (GetBindingType(dataItem) == typeof(bool))
 			{
 				CheckBox checkbox = new CheckBox()
 				{
-					Margin = new Thickness(10, 0, 0, 0),
+					Margin = new Thickness(10, 0, 0, 0), // aligns with header title better than centering
 				};
 				GetTextBinding();
-				unformattedBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-				checkbox.SetBinding(CheckBox.IsCheckedProperty, unformattedBinding);
+				//unformattedBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+				if (Binding != null)
+					checkbox.Bind(CheckBox.IsCheckedProperty, Binding);
+				//checkbox.SetBinding(CheckBox.IsCheckedProperty, unformattedBinding);
 				if (IsReadOnly)
 					checkbox.IsHitTestVisible = false; // disable changing
-													   //formattedBinding = unformattedBinding;
-													   //Binding = unformattedBinding;
+				//formattedBinding = unformattedBinding;
+				//Binding = unformattedBinding;
 				return checkbox;
 			}
 			else*/
@@ -153,7 +166,7 @@ namespace Atlas.GUI.Avalonia
 				if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				//if (this.DisplayIndex == 1 && (dataItem is ListItem || dataItem is ListMember))
 				{
-					bool hasChildren = TabModel.ObjectHasChildren(dataItem);
+					bool hasChildren = TabModel.ObjectHasChildren(dataItem, true);
 					if (hasChildren)
 						return BrushHasChildren;
 					//return Brushes.Moccasin;

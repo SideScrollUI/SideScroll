@@ -373,7 +373,7 @@ namespace Atlas.Tabs
 		}
 
 		// Might want to move this elsewhere or refactor
-		public static bool ObjectHasChildren(object obj)
+		public static bool ObjectHasChildren(object obj, bool ignoreEmpty = false)
 		{
 			if (obj == null)
 				return false;
@@ -394,6 +394,8 @@ namespace Atlas.Tabs
 			{
 				return false;
 			}
+			if (ignoreEmpty && value is IList list && list.Count == 0)
+				return false;
 			return true;
 		}
 	}
