@@ -1,5 +1,6 @@
 ﻿using System;
 using Atlas.Core;
+using Atlas.GUI.Avalonia.View;
 using Atlas.Start.Avalonia.Tabs;
 using Atlas.Tabs;
 
@@ -28,14 +29,22 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				this.tab = tab;
 				this.project = tab.project;
+				tabModel.Name = "Bookmarks";
 				tabModel.Bookmarks = new BookmarkCollection(project);
+				//var currentBookMark = this.CreateBookmark();
+				var currentBookMark = new Bookmark()
+				{
+					Name = "Current",
+					//tabBookmark = tab,
+				};
+				tabModel.Bookmarks.Names.Insert(0, new ViewBookmark(currentBookMark));
 			}
 
 			public override void Load(Call call)
 			{
 				toolbar = new TabControlBookmarksToolbar();
 				toolbar.buttonLoadAdd.Click += ButtonLoadAdd_Click;
-				toolbar.buttonCopyClipBoard.Click += ButtonCopyClipBoard_Click; ;
+				toolbar.buttonCopyClipBoard.Click += ButtonCopyClipBoard_Click;
 				tabModel.AddObject(toolbar);
 
 				bookmarkSettings = new TabControlBookmarkSettings(this);
@@ -46,7 +55,11 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			private void ButtonLoadAdd_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 			{
-				bookmarkSettings.IsVisible = true;
+				var bookmark = this.CreateBookmark();
+				bookmark.Name = bookmark.Address;
+				//tabModel.Bookmarks.Names.Add(new ViewBookmark(bookmark));
+				//bookmarkSettings.IsVisible = true;
+				bookmarkSettings.ShowBookmark(bookmark);
 			}
 
 			private void ButtonCopyClipBoard_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
@@ -55,13 +68,14 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			public object CreateControl(object value, out string label)
 			{
-				var bookmark = (ViewBookmarkName)value;
+				var bookmark = (ViewBookmark)value;
 				label = bookmark.Name;
 
 				TabInstance tabInstance = tab.iTab.Create();
+				tabInstance.project = tab.project;
 				tabInstance.tabBookmark = bookmark.Bookmark.tabBookmark;
 				//tabInstance.LoadBookmark()
-				return tabInstance;
+				return new TabView(tabInstance);
 			}
 		}
 	}

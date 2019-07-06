@@ -315,7 +315,10 @@ namespace Atlas.GUI.Avalonia
 		{
 			var tabBookmarks = new TabBookmarks(project, iTab).Create();
 			tabBookmarks.Load(new Call());
-			contentGrid.Children.Add(tabView);
+
+			AddTabView(tabBookmarks);
+
+			//contentGrid.Children.Add(tabBookmarks);
 
 			//Grid.SetRow(tabView, 1);
 			//containerGrid.Children.Add(tabView);

@@ -804,6 +804,18 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 			set
 			{
+				var dataGridSelectedItems = dataGrid.SelectedItems;
+				if (value.Count == dataGridSelectedItems.Count)
+				{
+					bool match = true;
+					for (int i = 0; i < value.Count; i++)
+					{
+						if (value[i] != dataGridSelectedItems[i])
+							match = false;
+					}
+					if (match)
+						return;
+				}
 				disableSaving++;
 				// datagrid has a bug and doesn't reselect cleared records correctly
 				// Could try only removing removed items, and adding new items, need to check SelectedItems order is correct after

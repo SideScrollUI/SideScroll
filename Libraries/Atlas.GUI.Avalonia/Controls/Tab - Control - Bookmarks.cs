@@ -241,7 +241,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void ButtonDelete_Click(object sender, RoutedEventArgs e)
 		{
-			foreach (ViewBookmarkName bookmarkName in tabControlDataGrid.SelectedItems)
+			foreach (ViewBookmark bookmarkName in tabControlDataGrid.SelectedItems)
 				project.DataApp.Delete(typeof(Bookmark), bookmarkName.Name);
 			tabModel.Bookmarks.Reload();
 		}
@@ -260,7 +260,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			bookmark.Name = textBoxName.Text;
 			project.DataApp.Save(bookmark.Name, bookmark);
 
-			tabModel.Bookmarks.Names.Add(new ViewBookmarkName(bookmark));
+			tabModel.Bookmarks.Names.Add(new ViewBookmark(bookmark));
 			gridAddBookmark.IsVisible = false;
 		}
 
@@ -272,9 +272,9 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void OnSelectedBookmarkChanged(object sender, EventArgs e)
 		{
 			List<Bookmark> bookmarks = new List<Bookmark>();
-			foreach (ViewBookmarkName name in tabControlDataGrid.SelectedItems)
+			foreach (ViewBookmark viewBookmark in tabControlDataGrid.SelectedItems)
 			{
-				Bookmark bookmark = project.DataApp.Load<Bookmark>(name.Name, new Call(tabInstance.taskInstance.log));
+				Bookmark bookmark = project.DataApp.Load<Bookmark>(viewBookmark.Name, new Call(tabInstance.taskInstance.log));
 				if (bookmark != null)
 					bookmarks.Add(bookmark);
 			}

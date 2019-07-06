@@ -58,7 +58,7 @@ namespace Atlas.GUI.Wpf
 		private void OnSelectedBookmarkChanged(object sender, EventArgs e)
 		{
 			List<Bookmark> bookmarks = new List<Bookmark>();
-			foreach (ViewBookmarkName name in tabData.SelectedItems)
+			foreach (ViewBookmark name in tabData.SelectedItems)
 			{
 				Bookmark bookmark = project.DataApp.Load<Bookmark>(name.Name, new Call(tabInstance.taskInstance.log));
 				if (bookmark != null)
@@ -124,7 +124,7 @@ namespace Atlas.GUI.Wpf
 
 		private void Button_DeleteClick(object sender, RoutedEventArgs e)
 		{
-			foreach (ViewBookmarkName bookmarkName in tabData.SelectedItems)
+			foreach (ViewBookmark bookmarkName in tabData.SelectedItems)
 				project.DataApp.Delete(typeof(Bookmark), bookmarkName.Name);
 			tabModel.Bookmarks.Reload();
 		}
@@ -135,7 +135,7 @@ namespace Atlas.GUI.Wpf
 			bookmark.Name = textBoxName.Text;
 			project.DataApp.Save(bookmark.Name, bookmark);
 
-			tabModel.Bookmarks.Names.Add(new ViewBookmarkName(bookmark));
+			tabModel.Bookmarks.Names.Add(new ViewBookmark(bookmark));
 			panelNew.Visibility = Visibility.Collapsed;
 		}
 

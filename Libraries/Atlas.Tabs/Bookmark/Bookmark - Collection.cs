@@ -9,7 +9,7 @@ namespace Atlas.Tabs
 	{
 		public string path;
 		private Project project;
-		public ItemCollection<ViewBookmarkName> Names { get; set; } = new ItemCollection<ViewBookmarkName>();
+		public ItemCollection<ViewBookmark> Names { get; set; } = new ItemCollection<ViewBookmark>();
 
 		public BookmarkCollection(Project project)
 		{
@@ -35,7 +35,7 @@ namespace Atlas.Tabs
 			{
 				if (bookmark.Name == TabInstance.CurrentBookmarkName)
 					continue;
-				ViewBookmarkName bookmarkName = new ViewBookmarkName(bookmark);
+				ViewBookmark bookmarkName = new ViewBookmark(bookmark);
 				Names.Add(bookmarkName);
 			}
 		}

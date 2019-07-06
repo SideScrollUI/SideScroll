@@ -6,6 +6,7 @@ using Avalonia.Media;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -284,8 +285,10 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 		}
 
+		private List<Control> prevOrderedControls;
 		private void AddControls(Dictionary<object, Control> oldControls, List<Control> orderedControls)
 		{
+			//RowDefinitions.Clear();
 			gridItems.Clear();
 			int newIndex = 1;
 			foreach (Control control in orderedControls)
@@ -305,14 +308,18 @@ namespace Atlas.GUI.Avalonia.Controls
 				}
 				newIndex += 2; // leave spot for splitters
 			}
+			prevOrderedControls = orderedControls;
 		}
 
 		// Only used for child controls right now
 		public void SetControls(Dictionary<object, Control> newControls, List<Control> orderedControls)
 		{
-			// don't clear old controls so we invalidate container as little as possible when we resize the remaining
+			//if (prevOrderedControls != null && orderedControls.SequenceEqual(prevOrderedControls))
+			//	return;
 
 			Dictionary<object, Control> oldControls = gridControls;
+
+			// don't clear old controls so we invalidate container as little as possible when we resize the remaining
 
 			this.gridControls = newControls;
 

@@ -18,7 +18,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		public TabModel tabModel;
 
 		private Grid containerGrid;
-		private TabControlDataGrid tabControlDataGrid;
+		//private TabControlDataGrid tabControlDataGrid;
 
 		private Grid gridAddBookmark;
 		private TextBox textBoxName;
@@ -49,8 +49,11 @@ namespace Atlas.GUI.Avalonia.Controls
 		// don't want to reload this because
 		private void InitializeControls()
 		{
-			this.IsVisible = false;
-			this.Background = new SolidColorBrush(Theme.BackgroundColor);
+			if (containerGrid != null)
+				return;
+
+			//this.IsVisible = false;
+			//this.Background = new SolidColorBrush(Theme.BackgroundColor);
 			this.HorizontalAlignment = HorizontalAlignment.Stretch;
 			this.VerticalAlignment = VerticalAlignment.Stretch;
 			//this.Width = 1000;
@@ -66,7 +69,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//Background = new SolidColorBrush(Theme.BackgroundColor),
 			};
 
-			containerGrid.Children.Add(tabControlDataGrid);
+			//containerGrid.Children.Add(tabControlDataGrid);
 
 			AddNewPanel();
 
@@ -75,12 +78,19 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.Focusable = true;
 		}
 
+		public void ShowBookmark(Bookmark bookmark)
+		{
+			this.IsVisible = true;
+			InitializeControls();
+			textBoxName.Focus();
+		}
+
 		private void AddNewPanel()
 		{
 			gridAddBookmark = new Grid()
 			{
 				ColumnDefinitions = new ColumnDefinitions("Auto,Auto"),
-				RowDefinitions = new RowDefinitions("Auto,Auto,Auto"), // Header, Body
+				RowDefinitions = new RowDefinitions("Auto,Auto,Auto"), // Name Label, Name Value, Buttons
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				//Background = new SolidColorBrush(Theme.BackgroundColor),
@@ -161,7 +171,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			bookmark.Name = textBoxName.Text;
 			project.DataApp.Save(bookmark.Name, bookmark);
 
-			tabModel.Bookmarks.Names.Add(new ViewBookmarkName(bookmark));
+			tabModel.Bookmarks.Names.Add(new ViewBookmark(bookmark));
 			gridAddBookmark.IsVisible = false;
 		}
 
