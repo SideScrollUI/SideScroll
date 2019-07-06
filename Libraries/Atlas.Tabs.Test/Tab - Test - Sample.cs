@@ -22,7 +22,7 @@ namespace Atlas.Tabs.Test
 				tabModel.Items = new ItemCollection<ListItem>("Items")
 				{
 					new ListItem("Sample Items", sampleItems),
-					new ListItem("Small Collection", new TabTestGridCollectionSize()),
+					new ListItem("Collections", new TabTestGridCollectionSize()),
 					new ListItem("Child Tab", new TabSample()), // recursive
 				};
 

@@ -39,7 +39,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Params", new TabTestParams()),
 					new ListItem("Log", new TabTestLog()),
 					new ListItem("Actions", new TabActions()),
-					new ListItem("JSON", new TabTestJson()),
+					new ListItem("Json", new TabTestJson()),
 					new ListItem("Bookmarks", new TabTestBookmarks()),
 					new ListItem("Skip", new TabTestSkip()), // move into new Lists?
 					new ListItem("Exceptions", new TabTestExceptions()), // move into new Lists?
