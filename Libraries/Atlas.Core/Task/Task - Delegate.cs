@@ -9,11 +9,12 @@ namespace Atlas.Core
 
 		private CallAction callAction;
 
-		public TaskDelegate(string label, CallAction callAction, bool useTask = false, string description = null)
+		public TaskDelegate(string label, CallAction callAction, bool useTask = false, bool showTask = false, string description = null)
 		{
 			this.Label = label;
 			this.callAction = callAction;
 			this.UseTask = useTask;
+			this.ShowTask = showTask;
 			this.Description = description;
 		}
 

@@ -224,26 +224,27 @@ namespace Atlas.Tabs
 		private void ActionParamsCallback(object state)
 		{
 			TaskDelegateParams taskDelegate = (TaskDelegateParams)state;
-			StartTask(taskDelegate);
+			StartTask(taskDelegate, false);
 		}
 
-		public void StartTask(TaskCreator taskCreator)
+		public void StartTask(TaskCreator taskCreator, bool showTask)
 		{
 			Call call = new Call(taskCreator.Label);
 			TaskInstance taskInstance = taskCreator.Start(call);
+			taskInstance.ShowTask = showTask;
 			tabModel.Tasks.Add(taskInstance);
 		}
 
-		public void StartTask(CallAction callAction, bool useTask)
+		public void StartTask(CallAction callAction, bool useTask, bool showTask)
 		{
 			TaskDelegate taskDelegate = new TaskDelegate(callAction.Method.Name, callAction, useTask);
-			StartTask(taskDelegate);
+			StartTask(taskDelegate, showTask);
 		}
 
-		public void StartTask(CallActionParams callAction, bool useTask, params object[] objects)
+		public void StartTask(CallActionParams callAction, bool useTask, bool showTask, params object[] objects)
 		{
 			TaskDelegateParams taskDelegate = new TaskDelegateParams(callAction.Method.Name, callAction, useTask, null, objects);
-			StartTask(taskDelegate);
+			StartTask(taskDelegate, showTask);
 		}
 
 		private MethodInfo GetDerivedLoadMethod()

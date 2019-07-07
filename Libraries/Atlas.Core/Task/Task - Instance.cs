@@ -22,6 +22,9 @@ namespace Atlas.Core
 		[InnerValue]
 		public Log log { get { return call.log; } }
 
+		[HiddenColumn]
+		public bool ShowTask { get; set; }
+
 		public Task Task { get; set; }
 		public TaskStatus TaskStatus { get { return Task == null ? TaskStatus.Created : Task.Status; } }
 		public CancellationTokenSource tokenSource = new CancellationTokenSource();
@@ -31,6 +34,7 @@ namespace Atlas.Core
 
 		public long ProgressMax { get; set; }
 
+		public bool Errored { get; set; }
 		public bool Finished { get; set; }
 
 		public TaskInstance ParentTask { get; set; }
@@ -144,11 +148,19 @@ namespace Atlas.Core
 			Percent = 100; // calls NotifyPropertyChanged
 
 			if (call.log.Type >= LogEntry.LogType.Error)
+			{
 				Status = call.log.Type.ToString();
+				Errored = true;
+				ShowTask = true;
+			}
 			else if (Task == null || TaskStatus == TaskStatus.RanToCompletion)
+			{
 				Status = "Complete";
+			}
 			else
+			{
 				Status = TaskStatus.ToString();
+			}
 			NotifyPropertyChanged(nameof(Status));
 
 			NotifyPropertyChanged(nameof(TaskStatus));

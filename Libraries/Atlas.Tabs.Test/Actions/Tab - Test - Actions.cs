@@ -26,7 +26,7 @@ namespace Atlas.Tabs.Test.Actions
 				tabModel.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Add Log Entry", AddEntry),
-					new TaskDelegate("Test Exception", TestException, true, "Throws an exception"),
+					new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
 					new TaskDelegate("Task Instance Progress", SubTaskInstances, true),
 					new TaskAction("Action", new Action(() => PassParams(1, "abc"))),
 				};

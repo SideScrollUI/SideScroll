@@ -174,7 +174,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			Button button = (Button)sender;
 			TaskCreator taskCreator = taskCreators[button];
-			tabInstance.StartTask(taskCreator);
+			tabInstance.StartTask(taskCreator, taskCreator.ShowTask);
 			//this.UnselectAll();
 		}
 

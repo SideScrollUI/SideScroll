@@ -30,7 +30,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			private void ButtonSearch_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 			{
 				searchToolbar.textBlockStatus.Text = "Searching";
-				StartTask(Search, true);
+				StartTask(Search, true, true);
 			}
 
 			private void Search(Call call)
@@ -46,7 +46,7 @@ namespace Atlas.Start.Avalonia.Tabs
 
 			private void ButtonLoadNext_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 			{
-				StartTask(LoadNext, true);
+				StartTask(LoadNext, true, false);
 			}
 
 			private void LoadNext(Call call)

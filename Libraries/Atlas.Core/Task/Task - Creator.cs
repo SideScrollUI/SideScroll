@@ -17,6 +17,8 @@ namespace Atlas.Core
 		public string Description { get; set; } // Button hint text
 		public string Info { get { return Description != null ? ">" : null; } } // Button hint text
 		[HiddenColumn]
+		public bool ShowTask { get; set; }
+		[HiddenColumn]
 		public bool UseTask { get; set; } = false; // Blocks, Action uses GUI thread if false
 		public int TimesRun { get; set; } = 0;
 

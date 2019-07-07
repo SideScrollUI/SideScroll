@@ -49,11 +49,25 @@ namespace Atlas.GUI.Avalonia.Controls
 			//Size size = tabDataGrid.dataGrid.DesiredSize;
 		}*/
 
+		private bool ShowTasks
+		{
+			get
+			{
+				foreach(var task in tabInstance.tabModel.Tasks)
+				{
+					if (task.ShowTask || task.TaskStatus == System.Threading.Tasks.TaskStatus.Faulted)
+						return true;
+				}
+				return false;
+			}
+		}
+
 		private void InitializeControls()
 		{
 			this.ColumnDefinitions = new ColumnDefinitions("*");
 			this.RowDefinitions = new RowDefinitions("Auto"); // doesn't work
-			this.IsVisible = (tabInstance.tabModel.Tasks.Count > 0);
+			//this.IsVisible = (tabInstance.tabModel.Tasks.Count > 0);
+			this.IsVisible = ShowTasks;
 			//this.Background = new SolidColorBrush(Colors.Blue);
 			this.HorizontalAlignment = HorizontalAlignment.Stretch;
 			this.VerticalAlignment = VerticalAlignment.Stretch;
@@ -91,7 +105,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			tabControlDataGrid.InvalidateMeasure();
 			//tabDataGrid.Height
 			//InvalidateMeasure();
-			IsVisible = true;
+			//IsVisible = true;
+			IsVisible = ShowTasks;
 
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
@@ -116,6 +131,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				if (selectedItems.Count == 1 && selectedItems[0] == taskInstance)
 					tabControlDataGrid.SelectedItem = null;
 			}
+			IsVisible = ShowTasks;
 		}
 
 		private void TabData_OnSelectionChanged(object sender, EventArgs e)
