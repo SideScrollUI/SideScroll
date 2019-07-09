@@ -47,7 +47,7 @@ namespace Atlas.GUI.Wpf
 
 		protected void AddListData()
 		{
-			tabData = new TabData(tabInstance, tabModel.Bookmarks.Names, new TabDataSettings());
+			tabData = new TabData(tabInstance, tabModel.Bookmarks.Items, new TabDataSettings());
 			tabData.autoSelectFirst = false;
 			tabData.OnSelectionChanged += OnSelectedBookmarkChanged;
 			tabData.Initialize();
@@ -135,7 +135,7 @@ namespace Atlas.GUI.Wpf
 			bookmark.Name = textBoxName.Text;
 			project.DataApp.Save(bookmark.Name, bookmark);
 
-			tabModel.Bookmarks.Names.Add(new ViewBookmark(bookmark));
+			tabModel.Bookmarks.Items.Add(new TabBookmarkItem(bookmark));
 			panelNew.Visibility = Visibility.Collapsed;
 		}
 
