@@ -12,6 +12,7 @@ using Avalonia.Media;
 using Atlas.GUI.Avalonia.Controls;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
+using Avalonia.Input;
 
 namespace Atlas.GUI.Avalonia
 {
@@ -19,6 +20,7 @@ namespace Atlas.GUI.Avalonia
 	{
 		private const int MinWindowSize = 500;
 		public static readonly int DefaultIncrementWidth = 1000; // should we also use a max percent?
+		public static readonly int KeyboardIncrementWidth = 500; // should we also use a max percent?
 		public static BaseWindow baseWindow;
 
 		public Project project;
@@ -271,7 +273,24 @@ namespace Atlas.GUI.Avalonia
 
 		private void ButtonExpand_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			double minXOffset = scrollViewer.Offset.X + DefaultIncrementWidth;
+			ScrollRight(DefaultIncrementWidth);
+		}
+
+		private void ButtonCollapse_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		{
+			ScrollLeft(DefaultIncrementWidth);
+		}
+
+		private void ScrollLeft(int amount)
+		{
+			scrollViewer.Offset = new Vector(Math.Max(0.0, scrollViewer.Offset.X - amount), scrollViewer.Offset.Y);
+			contentGrid.MinWidth = 0;
+			//contentGrid.Width = 0;
+		}
+
+		private void ScrollRight(int amount)
+		{
+			double minXOffset = scrollViewer.Offset.X + amount;
 			double widthRequired = minXOffset + scrollViewer.Viewport.Width;
 			contentGrid.MinWidth = widthRequired;
 			contentGrid.Width = widthRequired;
@@ -285,13 +304,6 @@ namespace Atlas.GUI.Avalonia
 
 			scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
 			scrollViewer.Offset = new Vector(minXOffset, scrollViewer.Offset.Y);
-		}
-
-		private void ButtonCollapse_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			scrollViewer.Offset = new Vector(Math.Max(0.0, scrollViewer.Offset.X - DefaultIncrementWidth), scrollViewer.Offset.Y);
-			contentGrid.MinWidth = 0;
-			contentGrid.Width = 0;
 		}
 
 		// How to set the main Content
@@ -343,10 +355,29 @@ namespace Atlas.GUI.Avalonia
 					Left = maximized ? bounds.Position.X : Position.X,
 					Top = maximized ? bounds.Position.Y : Position.Y,
 				};
+
+				Console.WriteLine("---");
+				Console.WriteLine("Get");
+				Console.WriteLine("Position:" + bounds.Position);
+				Console.WriteLine("Width:" + bounds.Width);
+				Console.WriteLine("Height:" + bounds.Height);
+				Console.WriteLine("WindowState:" + maximized);
+
 				return windowSettings;
 			}
 			set
 			{
+				Console.WriteLine("---");
+				Console.WriteLine("Set");
+				Console.WriteLine("Position:" + Position);
+				Console.WriteLine("Width:" + Width);
+				Console.WriteLine("Height:" + Height);
+				Console.WriteLine("WindowState:" + WindowState);
+
+				Console.WriteLine("---");
+				Console.WriteLine("Value: " + value.ToString());
+				Console.WriteLine("---");
+
 				double left = Math.Max(-10, value.Left); // values can be negative
 				double top = Math.Max(0, value.Top);
 
@@ -357,6 +388,11 @@ namespace Atlas.GUI.Avalonia
 				this.WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
 				//InvalidateArrange(); // these don't restore well and need another pass
 				//InvalidateMeasure();
+
+				Console.WriteLine("Position:" + Position);
+				Console.WriteLine("Width:" + Width);
+				Console.WriteLine("Height:" + Height);
+				Console.WriteLine("WindowState:" + WindowState);
 			}
 		}
 
@@ -400,6 +436,35 @@ namespace Atlas.GUI.Avalonia
 		public void SetMinScrollOffset()
 		{
 			contentGrid.MinWidth = scrollViewer.Offset.X + scrollViewer.Bounds.Size.Width;
+		}
+
+		protected override void OnKeyDown(KeyEventArgs e)
+		{
+			base.OnKeyDown(e);
+
+			//if (e.Key == Key.F5)
+			//	SelectSavedItems();
+
+			if (e.Key == Key.Left)
+			{
+				ScrollLeft(KeyboardIncrementWidth);
+				e.Handled = true;
+				return;
+			}
+
+			if (e.Key == Key.Right)
+			{
+				ScrollRight(KeyboardIncrementWidth);
+				e.Handled = true;
+				return;
+			}
+
+			if (e.Modifiers == InputModifiers.Control)
+			{
+			}
+			else if (e.Key == Key.Escape)
+			{
+			}
 		}
 	}
 }

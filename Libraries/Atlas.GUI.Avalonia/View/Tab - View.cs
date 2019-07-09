@@ -477,7 +477,7 @@ namespace Atlas.GUI.Avalonia.View
 
 		protected void AddControlString(string text)
 		{
-			TextBlock textBlock = new TextBlock()
+			/*TextBlock textBlock = new TextBlock()
 			{
 				Text = text,
 				TextWrapping = TextWrapping.Wrap,
@@ -485,9 +485,29 @@ namespace Atlas.GUI.Avalonia.View
 				Foreground = new SolidColorBrush(Colors.White),
 				FontSize = 16,
 				Margin = new Thickness(4),
+			};*/
+			TextBox textBox = new TextBox()
+			{
+				Text = text,
+				Foreground = new SolidColorBrush(Colors.White),
+				Background = new SolidColorBrush(Theme.BackgroundColor),
+				//BorderBrush = new SolidColorBrush(Colors.Black),
+				BorderThickness = new Thickness(0),
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				IsReadOnly = true,
+				FontSize = 16,
+				Padding = new Thickness(6, 3),
+				//Margin = new Thickness(4),
+				//Focusable = true, // already set?
+				MinWidth = 50,
+				MaxWidth = 1000,
+				TextWrapping = TextWrapping.Wrap,
+				//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
+				//[Grid.RowProperty] = rowIndex,
+				//[Grid.ColumnProperty] = columnIndex,
 			};
 			//control.OnSelectionChanged += ParentListSelectionChanged;
-			tabParentControls.AddControl(textBlock, false, SeparatorType.Spacer);
+			tabParentControls.AddControl(textBox, false, SeparatorType.Spacer);
 		}
 
 		protected void AddBookmarks()

@@ -356,13 +356,13 @@ namespace Atlas.GUI.Avalonia.Controls
 					// don't update the selection too often or we'll slow things down
 					if (!stopwatch.IsRunning || stopwatch.ElapsedMilliseconds > 1000)
 					{
-						disableSaving++;
+						//disableSaving++;
 						// change to dispatch here?
 						autoSelectItem = null;
 						selectionModified = true;
 						//SelectedItem = e.NewItems[0];
 						SelectedItem = iList[iList.Count - 1];
-						disableSaving--;
+						//disableSaving--;
 						stopwatch.Reset();
 						stopwatch.Start();
 						//collectionView.Refresh();

@@ -37,7 +37,7 @@ namespace Atlas.GUI.Avalonia.Controls
 					Name = "Current",
 					//tabBookmark = tab,
 				};
-				tabModel.Bookmarks.Names.Insert(0, new ViewBookmark(currentBookMark));
+				tabModel.Bookmarks.Items.Insert(0, new TabBookmarkItem(currentBookMark));
 			}
 
 			public override void Load(Call call)
@@ -50,7 +50,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				bookmarkSettings = new TabControlBookmarkSettings(this);
 				tabModel.AddObject(bookmarkSettings);
 
-				tabModel.AddData(tabModel.Bookmarks.Names);
+				tabModel.AddData(tabModel.Bookmarks.Items);
 			}
 
 			private void ButtonLoadAdd_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
@@ -68,12 +68,12 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			public object CreateControl(object value, out string label)
 			{
-				var bookmark = (ViewBookmark)value;
+				var bookmark = (TabBookmarkItem)value;
 				label = bookmark.Name;
 
 				TabInstance tabInstance = tab.iTab.Create();
 				tabInstance.project = tab.project;
-				tabInstance.tabBookmark = bookmark.Bookmark.tabBookmark;
+				tabInstance.tabBookmark = bookmark.Bookmark.tabBookmark; // bookmark specified here will get auto loaded
 				//tabInstance.LoadBookmark()
 				return new TabView(tabInstance);
 			}

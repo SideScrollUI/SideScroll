@@ -9,7 +9,7 @@ namespace Atlas.Tabs
 	{
 		public string path;
 		private Project project;
-		public ItemCollection<ViewBookmark> Names { get; set; } = new ItemCollection<ViewBookmark>();
+		public ItemCollection<TabBookmarkItem> Items { get; set; } = new ItemCollection<TabBookmarkItem>();
 
 		public BookmarkCollection(Project project)
 		{
@@ -19,7 +19,7 @@ namespace Atlas.Tabs
 
 		public void Reload()
 		{
-			Names.Clear();
+			Items.Clear();
 			// Add ID indices?
 			/*ItemCollection<string> ids = project.DataShared.GetObjectIds(typeof(Bookmark));
 			foreach (string id in ids)
@@ -35,8 +35,8 @@ namespace Atlas.Tabs
 			{
 				if (bookmark.Name == TabInstance.CurrentBookmarkName)
 					continue;
-				ViewBookmark bookmarkName = new ViewBookmark(bookmark);
-				Names.Add(bookmarkName);
+				TabBookmarkItem bookmarkItem = new TabBookmarkItem(bookmark);
+				Items.Add(bookmarkItem);
 			}
 		}
 	}

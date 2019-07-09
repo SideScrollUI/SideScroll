@@ -14,6 +14,11 @@ using Avalonia.Collections;
 using Avalonia.Input.Platform;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media.Imaging;
+using System.IO;
+using System.Windows.Input;
+using Atlas.Resources;
+using System.ComponentModel;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -192,9 +197,52 @@ namespace Atlas.GUI.Avalonia.Controls
 			textBox.Bind(TextBlock.TextProperty, binding);
 			AvaloniaUtils.AddTextBoxContextMenu(textBox);
 
+			//textBox.PropertyChanged += TextBox_PropertyChanged;
+			//textBox.TextInput += TextBox_TextInput;
+			//textBox.DataContextChanged += TextBox_DataContextChanged;
+			//textBox.KeyUp += TextBox_KeyUp;
+
 			this.Children.Add(textBox);
 			return textBox;
 		}
+
+		// works
+		private void TextBox_KeyUp(object sender, KeyEventArgs e)
+		{
+		}
+
+		// doesn't work
+		private void TextBox_DataContextChanged(object sender, EventArgs e)
+		{
+		}
+
+		// doesn't work
+		private void TextBox_TextInput(object sender, TextInputEventArgs e)
+		{
+		}
+
+		// looks like this bug is fixed in Live version? remove
+		// catching IsPointerOver, filter out?
+		/*private void TextBox_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+		{
+			if (e.Property.Name == "IsPointerOver"
+				|| e.Property.Name == "Parent"
+				|| e.Property.Name == "IsFocused"
+				|| e.Property.Name == "CaretIndex"
+				|| e.Property.Name == "SelectionStart"
+				|| e.Property.Name == "Foreground"
+				|| e.Property.Name == "VisualParent")
+				return;
+			{
+
+			}
+
+			TextBox textBox = (TextBox)sender;
+			if (e.Property.Name == "Text")
+			{
+				textBox.Measure(textBox.Bounds.Size);
+			}
+		}*/
 
 		private CheckBox AddCheckBox(ListProperty property, int rowIndex, int columnIndex)
 		{
@@ -323,6 +371,92 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			textBox.Bind(TextBlock.TextProperty, binding);
 			this.Children.Add(textBox);
+
+			Button buttonImport = AddButton(rowIndex, "Import Clipboard", Assets.Streams.Import);
+			buttonImport.Click += (sender, e) =>
+			{
+				string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
+				DateTime? dateTime = ConvertTextToDateTime(clipboardText);
+				if (dateTime != null)
+				{
+					property.propertyInfo.SetValue(property.obj, dateTime);
+					datePicker.SelectedDate = dateTime;
+					textBox.Text = (string)dateTimeConverter.Convert(dateTime, typeof(string), null, null);
+					e.Handled = true;
+				}
+			};
+			this.Children.Add(buttonImport);
+		}
+
+		private DateTime? ConvertTextToDateTime(string text)
+		{
+			DateTime dateTime;
+			if (DateTime.TryParse(text, out dateTime))
+			{
+				DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+				return dateTime;
+			}
+			return null;
+		}
+
+		public Button AddButton(int rowIndex, string tooltip, Stream resource, ICommand command = null)
+		{
+			//command = command ?? new RelayCommand(
+			//	(obj) => CommandDefaultCanExecute(obj),
+			//	(obj) => CommandDefaultExecute(obj));
+			var assembly = Assembly.GetExecutingAssembly();
+			Bitmap bitmap;
+			using (resource)
+			{
+				bitmap = new Bitmap(resource);
+			}
+
+			var image = new Image()
+			{
+				Source = bitmap,
+				Width = 16,
+				Height = 16,
+			};
+
+			Button button = new Button()
+			{
+				Content = image,
+				Command = command,
+				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
+				BorderBrush = Background,
+				BorderThickness = new Thickness(0),
+				//Margin = new Thickness(2),
+				HorizontalAlignment = HorizontalAlignment.Right,
+				//BorderThickness = new Thickness(2),
+				//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
+				//BorderBrush = new SolidColorBrush(Colors.Black),
+
+				[ToolTip.TipProperty] = tooltip,
+				[Grid.RowProperty] = rowIndex,
+				[Grid.ColumnProperty] = 1,
+			};
+			button.BorderBrush = button.Background;
+			button.PointerEnter += Button_PointerEnter;
+			button.PointerLeave += Button_PointerLeave;
+
+			//var button = new ToolbarButton(tooltip, command, resource);
+			//AddControl(button);
+			return button;
+		}
+
+		// DefaultTheme.xaml is overriding this currently
+		private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			Button button = (Button)sender;
+			button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundHoverColor);
+		}
+
+		private void Button_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			Button button = (Button)sender;
+			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
+			button.BorderBrush = button.Background;
 		}
 	}
 }

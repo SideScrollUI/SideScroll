@@ -171,7 +171,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			bookmark.Name = textBoxName.Text;
 			project.DataApp.Save(bookmark.Name, bookmark);
 
-			tabModel.Bookmarks.Names.Add(new ViewBookmark(bookmark));
+			tabModel.Bookmarks.Items.Add(new TabBookmarkItem(bookmark));
 			gridAddBookmark.IsVisible = false;
 		}
 
