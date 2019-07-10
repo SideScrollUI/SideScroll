@@ -198,21 +198,6 @@ namespace Atlas.GUI.Avalonia
 			return data;
 		}
 
-		private void SetMaxBounds()
-		{
-			double maxWidth = 0;
-			double maxHeight = 0;
-			foreach (var screen in Screens.All)
-			{
-				maxWidth += screen.Bounds.Width;
-				maxHeight = Math.Max(maxHeight, screen.Bounds.Height);
-			}
-			this.MaxWidth = maxWidth + 10;
-			this.MaxHeight = maxHeight + 10;
-			//scrollViewer.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
-			//scrollViewer.MaxHeight = PlatformImpl.MaxClientSize.Height + 10;
-		}
-
 		private Grid CreateScrollButtons()
 		{
 			Grid grid = new Grid()
@@ -323,7 +308,7 @@ namespace Atlas.GUI.Avalonia
 		}
 
 		// How to set the main Content
-		protected void AddTab(ITab iTab)
+		protected void AddTabBookmarks(ITab iTab)
 		{
 			var tabBookmarks = new TabBookmarks(project, iTab).Create();
 			tabBookmarks.Load(new Call());
@@ -337,6 +322,21 @@ namespace Atlas.GUI.Avalonia
 
 			//scrollViewer.Content = tabView;
 			//contentGrid.Children.Add(tabView);
+		}
+
+		private void SetMaxBounds()
+		{
+			double maxWidth = 0;
+			double maxHeight = 0;
+			foreach (var screen in Screens.All)
+			{
+				maxWidth += screen.Bounds.Width;
+				maxHeight = Math.Max(maxHeight, screen.Bounds.Height);
+			}
+			this.MaxWidth = maxWidth + 10;
+			this.MaxHeight = maxHeight + 10;
+			//scrollViewer.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
+			//scrollViewer.MaxHeight = PlatformImpl.MaxClientSize.Height + 10;
 		}
 
 		protected WindowSettings WindowSettings
@@ -356,28 +356,10 @@ namespace Atlas.GUI.Avalonia
 					Top = maximized ? bounds.Position.Y : Position.Y,
 				};
 
-				Console.WriteLine("---");
-				Console.WriteLine("Get");
-				Console.WriteLine("Position:" + bounds.Position);
-				Console.WriteLine("Width:" + bounds.Width);
-				Console.WriteLine("Height:" + bounds.Height);
-				Console.WriteLine("WindowState:" + maximized);
-
 				return windowSettings;
 			}
 			set
 			{
-				Console.WriteLine("---");
-				Console.WriteLine("Set");
-				Console.WriteLine("Position:" + Position);
-				Console.WriteLine("Width:" + Width);
-				Console.WriteLine("Height:" + Height);
-				Console.WriteLine("WindowState:" + WindowState);
-
-				Console.WriteLine("---");
-				Console.WriteLine("Value: " + value.ToString());
-				Console.WriteLine("---");
-
 				double left = Math.Max(-10, value.Left); // values can be negative
 				double top = Math.Max(0, value.Top);
 
@@ -385,14 +367,11 @@ namespace Atlas.GUI.Avalonia
 				this.Position = new PixelPoint((int)left, (int)top);
 				this.Width = Math.Max(MinWindowSize, value.Width);
 				this.Height = Math.Max(MinWindowSize, value.Height);
+				//this.Height = Math.Max(MinWindowSize, value.Height + 50); // reproduces problem
+				//Measure(Bounds.Size);
 				this.WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
 				//InvalidateArrange(); // these don't restore well and need another pass
 				//InvalidateMeasure();
-
-				Console.WriteLine("Position:" + Position);
-				Console.WriteLine("Width:" + Width);
-				Console.WriteLine("Height:" + Height);
-				Console.WriteLine("WindowState:" + WindowState);
 			}
 		}
 
