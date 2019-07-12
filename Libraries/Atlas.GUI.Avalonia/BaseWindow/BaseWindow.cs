@@ -13,6 +13,7 @@ using Atlas.GUI.Avalonia.Controls;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.Input;
+using Avalonia.Threading;
 
 namespace Atlas.GUI.Avalonia
 {
@@ -280,12 +281,7 @@ namespace Atlas.GUI.Avalonia
 			contentGrid.MinWidth = widthRequired;
 			contentGrid.Width = widthRequired;
 
-			//var extentSize = scrollViewer.Extent;
-			//double extentMinWidth = Math.Max(extentSize.Width, widthRequired);
-			//scrollViewer.Extent = new Size(extentMinWidth, extentSize.Height);
-
-			scrollViewer.Measure(Size.Infinity);
-			scrollViewer.Arrange(this.Bounds);
+			Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);
 
 			scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
 			scrollViewer.Offset = new Vector(minXOffset, scrollViewer.Offset.Y);
