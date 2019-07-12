@@ -561,10 +561,33 @@ namespace Atlas.Tabs
 		// for detecting parent/child loops
 		public bool IsOwnerObject(object obj)
 		{
+			if (obj == null)
+				return false;
+
 			if (this.tabModel.Object == obj)
 				return true;
-			else if (ParentTabInstance != null)
+
+			Type type = obj.GetType();
+			if (iTab != null && type == iTab.GetType())
+			{
+				foreach (PropertyInfo propertyInfo in type.GetProperties())
+				{
+					if (propertyInfo.GetCustomAttribute<KeyAttribute>() != null)
+					{
+						var objKey = propertyInfo.GetValue(obj);
+						var tabKey = propertyInfo.GetValue(iTab);
+						// todo: support multiple [Key]s?
+						if (objKey == tabKey)
+							return true;
+						if (objKey.GetType() == typeof(string) && Equals(objKey, tabKey))
+							return true;
+					}
+				}
+			}
+
+			if (ParentTabInstance != null)
 				return ParentTabInstance.IsOwnerObject(obj);
+
 			return false;
 		}
 

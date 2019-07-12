@@ -14,6 +14,12 @@ namespace Atlas.Core
 		}
 	}
 
+	// ->Tabs: Use the specified name instead of the field/property name
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class KeyAttribute : Attribute
+	{
+	}
+
 	[AttributeUsage(AttributeTargets.All)]
 	public class PasswordCharAttribute : Attribute
 	{
