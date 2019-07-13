@@ -4,7 +4,6 @@
 *.exe
 *.pdb
 *.psess
-*.resources
 *.suo
 *.tmp
 *.vspx
