@@ -40,7 +40,9 @@ namespace Atlas.Serialize
 		public static T Clone<T>(Call call, object obj)
 		{
 			if (typeof(T) != obj.GetType())
-				throw new Exception("Cloned types do not match");
+			{
+				throw new Exception("Cloned types do not match [" + typeof(T).ToString() + "], [" + obj.GetType().ToString() +"]");
+			}
 			//	return default(T);
 			SerializerMemory memorySerializer = new SerializerMemory();
 			memorySerializer.Save(call, obj);

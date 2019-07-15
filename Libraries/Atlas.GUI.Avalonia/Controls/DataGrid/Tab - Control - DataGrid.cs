@@ -48,6 +48,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		private bool autoGenerateColumns = true;
 
 		private int disableSaving = 0; // enables saving if > 0
+		private int isAutoSelecting = 0; // enables saving if > 0
 
 		private DispatcherTimer dispatcherTimer;  // delays auto selection to throttle updates
 		private object autoSelectItem = null;
@@ -357,12 +358,14 @@ namespace Atlas.GUI.Avalonia.Controls
 					if (!stopwatch.IsRunning || stopwatch.ElapsedMilliseconds > 1000)
 					{
 						//disableSaving++;
+						isAutoSelecting++;
 						// change to dispatch here?
 						autoSelectItem = null;
 						selectionModified = true;
 						//SelectedItem = e.NewItems[0];
 						SelectedItem = iList[iList.Count - 1];
 						//disableSaving--;
+						isAutoSelecting--;
 						stopwatch.Reset();
 						stopwatch.Start();
 						//collectionView.Refresh();
@@ -406,7 +409,8 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			if (disableSaving == 0)
 			{
-				autoSelectNew = (dataGrid.SelectedItems.Count == 0);
+				if (isAutoSelecting == 0)
+					autoSelectNew = (dataGrid.SelectedItems.Count == 0);
 				tabInstance.SaveTabSettings(); // selection has probably changed
 			}
 			if (bookmark != null)
