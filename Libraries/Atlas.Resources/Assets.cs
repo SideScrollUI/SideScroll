@@ -29,6 +29,7 @@ namespace Atlas.Resources
 		public static readonly string Password = "password.png";
 
 		public static readonly string PadNote = "padnote.png";
+		public static readonly string Paste = "paste_16.png";
 
 		public static readonly string Refresh = "refresh.png";
 		public static readonly string Stats = "stats.png";
@@ -63,6 +64,7 @@ namespace Atlas.Resources
 			public static Stream Password => Get(Assets.Password);
 
 			public static Stream PadNote => Get(Assets.PadNote);
+			public static Stream Paste => Get(Assets.Paste);
 
 			public static Stream Refresh => Get(Assets.Refresh);
 			public static Stream Stats => Get(Assets.Stats);
@@ -82,7 +84,7 @@ namespace Atlas.Resources
 
 			// this might slow loading?
 			public static List<Stream> All { get; set; } = new List<Stream>()
-				{
+			{
 				Logo,
 				Pin,
 				Add,
@@ -96,13 +98,14 @@ namespace Atlas.Resources
 				Unlock,
 				Password,
 				PadNote,
+				Paste,
 				Refresh,
 				Stats,
 				List1,
 				List2,
 				Link,
 				Bookmark,
-				};
+			};
 		}
 	}
 

@@ -19,6 +19,7 @@ using System.IO;
 using System.Windows.Input;
 using Atlas.Resources;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -372,7 +373,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			textBox.Bind(TextBlock.TextProperty, binding);
 			this.Children.Add(textBox);
 
-			Button buttonImport = AddButton(rowIndex, "Import Clipboard", Assets.Streams.Import);
+			Button buttonImport = AddButton(rowIndex, "Import Clipboard", Assets.Streams.Paste);
 			buttonImport.Click += (sender, e) =>
 			{
 				string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
@@ -396,6 +397,19 @@ namespace Atlas.GUI.Avalonia.Controls
 				DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
 				return dateTime;
 			}
+			// 18/Jul/2019:11:47:45 +0000
+			if (DateTime.TryParseExact(text, "dd/MMM/yyyy:HH:mm:ss zzz", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out dateTime))
+			{
+				DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+				return dateTime;
+			}
+			// 18/Jul/2019:11:47:45
+			if (DateTime.TryParseExact(text, "dd/MMM/yyyy:HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out dateTime))
+			{
+				DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+				return dateTime;
+			}
+
 			return null;
 		}
 

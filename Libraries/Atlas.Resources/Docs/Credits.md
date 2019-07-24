@@ -23,3 +23,4 @@ Refresh - https://www.flaticon.com/free-icon/refresh_875100 - Becris
 List1 - https://www.flaticon.com/free-icon/list_151917 - Chanut
 List2 - https://www.flaticon.com/free-icon/list_159841- Gregor Cresnar
 Import - https://www.flaticon.com/free-icon/import_223438 - Kirill Kazachek
+Paste - https://www.flaticon.com/free-icon/paste_930233 - Vitaly Gorbachev

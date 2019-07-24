@@ -64,16 +64,19 @@ namespace Atlas.GUI.Avalonia.Tabs
 				tabAvaloniaEdit.textEditor.Text = tab.text;
 				tabAvaloniaEdit.Background = new SolidColorBrush(Colors.White);
 
-				try
+				if (tab.text.StartsWith("{"))
 				{
-					JsonValue jsonValue = JsonValue.Parse(tab.text);
-					if (jsonValue != null)
+					try
 					{
-						tabAvaloniaEdit.textEditor.FontFamily = new FontFamily("Courier New");
+						JsonValue jsonValue = JsonValue.Parse(tab.text);
+						if (jsonValue != null)
+						{
+							tabAvaloniaEdit.textEditor.FontFamily = new FontFamily("Courier New");
+						}
 					}
-				}
-				catch
-				{
+					catch
+					{
+					}
 				}
 
 				tabModel.AddObject(tabAvaloniaEdit, true);
