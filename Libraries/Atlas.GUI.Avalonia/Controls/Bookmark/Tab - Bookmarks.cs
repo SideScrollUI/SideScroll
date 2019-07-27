@@ -31,6 +31,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				this.project = tab.project;
 				tabModel.Name = "Bookmarks";
 				tabModel.Bookmarks = new BookmarkCollection(project);
+				//tabModel.Bookmarks.OnDelete
 				//var currentBookMark = this.CreateBookmark();
 				var currentBookMark = new Bookmark()
 				{
@@ -43,7 +44,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			public override void Load(Call call)
 			{
 				toolbar = new TabControlBookmarksToolbar();
-				toolbar.buttonLoadAdd.Click += ButtonLoadAdd_Click;
+				toolbar.buttonAdd.Click += ButtonAdd_Click;
 				toolbar.buttonCopyClipBoard.Click += ButtonCopyClipBoard_Click;
 				tabModel.AddObject(toolbar);
 
@@ -53,7 +54,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				tabModel.AddData(tabModel.Bookmarks.Items);
 			}
 
-			private void ButtonLoadAdd_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+			private void ButtonAdd_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 			{
 				var bookmark = this.CreateBookmark();
 				bookmark.Name = bookmark.Address;

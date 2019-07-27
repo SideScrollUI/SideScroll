@@ -83,6 +83,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.IsVisible = true;
 			InitializeControls();
 			textBoxName.Focus();
+			if (textBoxName.Text != null)
+				textBoxName.SelectionEnd = textBoxName.Text.Length;
 		}
 
 		private void AddNewPanel()
@@ -138,11 +140,15 @@ namespace Atlas.GUI.Avalonia.Controls
 			Grid.SetRow(buttonSave, 2);
 			Grid.SetColumn(buttonSave, 0);
 			buttonSave.Click += ButtonSave_Click;
+			buttonSave.PointerEnter += Button_PointerEnter;
+			buttonSave.PointerLeave += Button_PointerLeave;
 
 			Button buttonCancel = TabControlButton.Create("Cancel");
 			Grid.SetRow(buttonCancel, 2);
 			Grid.SetColumn(buttonCancel, 1);
 			buttonCancel.Click += ButtonCancel_Click;
+			buttonCancel.PointerEnter += Button_PointerEnter;
+			buttonCancel.PointerLeave += Button_PointerLeave;
 
 
 			/*Grid gridSaveCancelButtons = new Grid()
@@ -163,6 +169,20 @@ namespace Atlas.GUI.Avalonia.Controls
 			gridAddBookmark.Children.Add(buttonCancel);
 
 			containerGrid.Children.Add(gridAddBookmark);
+		}
+
+		private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			Button button = (Button)sender;
+			//button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			button.Background = new SolidColorBrush(Theme.ButtonBackgroundHoverColor);
+		}
+
+		private void Button_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			Button button = (Button)sender;
+			button.Background = new SolidColorBrush(Theme.ButtonBackgroundColor);
+			//button.BorderBrush = button.Background;
 		}
 
 		private void ButtonSave_Click(object sender, RoutedEventArgs e)
