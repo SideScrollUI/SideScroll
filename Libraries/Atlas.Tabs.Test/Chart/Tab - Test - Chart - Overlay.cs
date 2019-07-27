@@ -62,8 +62,9 @@ namespace Atlas.Tabs.Test.Chart
 
 			private void AddEntry(Call call)
 			{
-				this.Invoke(new SendOrPostCallback(this.AddSampleCallback), call);
-				//context.Send(, log);
+				int param1 = 1;
+				string param2 = "abc";
+				Invoke(call, AddSampleCallback, param1, param2);
 			}
 
 			private void StartTask(Call call)
@@ -71,8 +72,8 @@ namespace Atlas.Tabs.Test.Chart
 				CancellationToken token = call.taskInstance.tokenSource.Token;
 				for (int i = 0; !token.IsCancellationRequested; i++)
 				{
-					this.Invoke(new SendOrPostCallback(this.AddSampleCallback), call);
-					System.Threading.Thread.Sleep(1000);
+					Invoke(call, AddSampleCallback);
+					Thread.Sleep(1000);
 				}
 			}
 
@@ -114,9 +115,9 @@ namespace Atlas.Tabs.Test.Chart
 			}
 
 			// GUI context
-			private void AddSampleCallback(object state)
+			private void AddSampleCallback(Call call, object state)
 			{
-				Call call = (Call)state;
+				// data = state;
 				Initialize();
 
 				//call.log.Add("test");

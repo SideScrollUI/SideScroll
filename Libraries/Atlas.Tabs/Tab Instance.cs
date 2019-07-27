@@ -214,10 +214,15 @@ namespace Atlas.Tabs
 			guiContext.Send(callback, param);
 		}
 
+		public void Invoke(Call call, Action action)
+		{
+			guiContext.Send(ActionCallback, action);
+		}
+
 		// switch to SendOrPostCallback?
 		public void Invoke(CallActionParams callAction, params object[] objects)
 		{
-			TaskDelegateParams taskDelegate = new TaskDelegateParams(callAction.Method.Name, callAction, false, null, objects);
+			TaskDelegateParams taskDelegate = new TaskDelegateParams(null, callAction.Method.Name, callAction, false, null, objects);
 			guiContext.Send(ActionParamsCallback, taskDelegate);
 		}
 
@@ -225,6 +230,25 @@ namespace Atlas.Tabs
 		{
 			TaskDelegateParams taskDelegate = (TaskDelegateParams)state;
 			StartTask(taskDelegate, false);
+		}
+
+		// switch to SendOrPostCallback?
+		public void Invoke(Call call, CallActionParams callAction, params object[] objects)
+		{
+			TaskDelegateParams taskDelegate = new TaskDelegateParams(call, callAction.Method.Name, callAction, false, null, objects);
+			guiContext.Send(CallActionParamsCallback, taskDelegate);
+		}
+
+		private void CallActionParamsCallback(object state)
+		{
+			TaskDelegateParams taskDelegate = (TaskDelegateParams)state;
+			CallTask(taskDelegate, false);
+		}
+
+		// subtask?
+		public void CallTask(TaskDelegateParams taskCreator, bool showTask)
+		{
+			TaskInstance taskInstance = taskCreator.Start(taskCreator.call);
 		}
 
 		public void StartTask(TaskCreator taskCreator, bool showTask)
@@ -243,7 +267,7 @@ namespace Atlas.Tabs
 
 		public void StartTask(CallActionParams callAction, bool useTask, bool showTask, params object[] objects)
 		{
-			TaskDelegateParams taskDelegate = new TaskDelegateParams(callAction.Method.Name, callAction, useTask, null, objects);
+			TaskDelegateParams taskDelegate = new TaskDelegateParams(null, callAction.Method.Name, callAction, useTask, null, objects);
 			StartTask(taskDelegate, showTask);
 		}
 
