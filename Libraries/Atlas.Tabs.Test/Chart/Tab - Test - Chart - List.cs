@@ -47,8 +47,7 @@ namespace Atlas.Tabs.Test.Chart
 
 			private void AddEntry(Call call)
 			{
-				this.Invoke(call, AddSampleCallback);
-				//context.Send(, log);
+				Invoke(call, AddSampleCallback);
 			}
 
 			private void StartTask(Call call)
@@ -57,7 +56,7 @@ namespace Atlas.Tabs.Test.Chart
 				for (int i = 0; !token.IsCancellationRequested; i++)
 				{
 					Invoke(AddSampleCallback, call);
-					System.Threading.Thread.Sleep(1000);
+					Thread.Sleep(1000);
 				}
 			}
 

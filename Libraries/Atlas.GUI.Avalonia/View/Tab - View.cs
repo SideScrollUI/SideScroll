@@ -532,7 +532,9 @@ namespace Atlas.GUI.Avalonia.View
 		{
 			//allowAutoScrolling = false;
 
-			if (tabInstance.project.projectSettings.AutoLoad)
+			if (tabInstance.tabBookmark != null && tabInstance.tabBookmark.tabViewSettings != null)
+				tabInstance.tabViewSettings = tabInstance.tabBookmark.tabViewSettings;
+			else if (tabInstance.project.projectSettings.AutoLoad)
 				LoadDefaultTabSettings();
 		}
 

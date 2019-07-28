@@ -7,6 +7,8 @@ namespace Atlas.Tabs
 {
 	public class BookmarkCollection
 	{
+		public event EventHandler<EventArgs> OnDelete;
+
 		public string path;
 		private Project project;
 		public ItemCollection<TabBookmarkItem> Items { get; set; } = new ItemCollection<TabBookmarkItem>();
@@ -15,7 +17,12 @@ namespace Atlas.Tabs
 		{
 			this.project = project;
 			Reload();
+			//Items.CollectionChanged += Items_CollectionChanged;
 		}
+
+		/*private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+		}*/
 
 		public void Reload()
 		{
@@ -35,9 +42,27 @@ namespace Atlas.Tabs
 			{
 				if (bookmark.Name == TabInstance.CurrentBookmarkName)
 					continue;
-				TabBookmarkItem bookmarkItem = new TabBookmarkItem(bookmark);
-				Items.Add(bookmarkItem);
+				Add(bookmark);
 			}
+		}
+
+		public void Add(Bookmark bookmark)
+		{
+			var tabItem = new TabBookmarkItem(bookmark);
+			tabItem.OnDelete += Item_OnDelete;
+			Items.Add(tabItem);
+		}
+
+		private void Item_OnDelete(object sender, EventArgs e)
+		{
+			TabBookmarkItem bookmark = (TabBookmarkItem)sender;
+			var currentBookMark = new Bookmark()
+			{
+				Name = "Current",
+			};
+			project.DataApp.Delete<Bookmark>(null, bookmark.Bookmark.Name);
+			Items.Remove(bookmark);
+			//Reload();
 		}
 	}
 }

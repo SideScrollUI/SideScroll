@@ -97,7 +97,7 @@ namespace Atlas.GUI.Avalonia.View
 			else if (value is TabView tabView)
 			{
 				tabView.tabInstance.ParentTabInstance = parentTabInstance;
-				tabView.tabInstance.tabBookmark = tabBookmark;
+				tabView.tabInstance.tabBookmark = tabBookmark ?? tabView.tabInstance.tabBookmark;
 				tabView.Label = label;
 				tabView.Load();
 				return tabView;

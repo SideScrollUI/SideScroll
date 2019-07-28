@@ -13,7 +13,7 @@ namespace Atlas.Tabs
 	{
 		[Name("Bookmark")]
 		public string Name { get; set; }
-		public string Changed { get; set; }
+		public string Changed { get; set; } // used for naming, find better default name
 		public string Address => tabBookmark.Address;
 		public TabBookmark tabBookmark { get; set; } = new TabBookmark();
 

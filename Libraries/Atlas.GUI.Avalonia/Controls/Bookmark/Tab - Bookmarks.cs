@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Atlas.Core;
 using Atlas.GUI.Avalonia.View;
+using Atlas.Serialize;
 using Atlas.Start.Avalonia.Tabs;
 using Atlas.Tabs;
 
@@ -24,6 +26,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			private TabControlBookmarkSettings bookmarkSettings;
 			private TabControlBookmarksToolbar toolbar;
 			private TabBookmarks tab;
+			private Bookmark currentBookMark;
 
 			public Instance(TabBookmarks tab)
 			{
@@ -33,10 +36,9 @@ namespace Atlas.GUI.Avalonia.Controls
 				tabModel.Bookmarks = new BookmarkCollection(project);
 				//tabModel.Bookmarks.OnDelete
 				//var currentBookMark = this.CreateBookmark();
-				var currentBookMark = new Bookmark()
+				currentBookMark = new Bookmark()
 				{
 					Name = "Current",
-					//tabBookmark = tab,
 				};
 				tabModel.Bookmarks.Items.Insert(0, new TabBookmarkItem(currentBookMark));
 			}
@@ -52,12 +54,30 @@ namespace Atlas.GUI.Avalonia.Controls
 				tabModel.AddObject(bookmarkSettings);
 
 				tabModel.AddData(tabModel.Bookmarks.Items);
+
+				/*foreach (var item in tabModel.Bookmarks.Items)
+				{
+					item.OnDelete += Item_OnDelete;
+				}*/
 			}
+
+			// move into BookmarkCollection?
+			/*private void Item_OnDelete(object sender, EventArgs e)
+			{
+				TabBookmarkItem bookmark = (TabBookmarkItem)sender;
+				project.DataApp.Delete<Bookmark>(null, bookmark.Bookmark.Name);
+				tabModel.Bookmarks.Reload();
+				tabModel.Bookmarks.Items.Insert(0, new TabBookmarkItem(currentBookMark));
+				//tabModel.Bookmarks.Items.Remove(new TabBookmarkItem(bookmark));
+				//this.Reload();
+			}*/
 
 			private void ButtonAdd_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 			{
 				var bookmark = this.CreateBookmark();
-				bookmark.Name = bookmark.Address;
+				var childBookmark = bookmark.tabBookmark.tabChildBookmarks.Values.First();
+				bookmark.Name = childBookmark.Address;
+				bookmark.tabBookmark = childBookmark;
 				//tabModel.Bookmarks.Names.Add(new ViewBookmark(bookmark));
 				//bookmarkSettings.IsVisible = true;
 				bookmarkSettings.ShowBookmark(bookmark);
@@ -69,12 +89,12 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			public object CreateControl(object value, out string label)
 			{
-				var bookmark = (TabBookmarkItem)value;
-				label = bookmark.Name;
+				var bookmarkItem = (TabBookmarkItem)value;
+				label = bookmarkItem.Name;
 
 				TabInstance tabInstance = tab.iTab.Create();
 				tabInstance.project = tab.project;
-				tabInstance.tabBookmark = bookmark.Bookmark.tabBookmark; // bookmark specified here will get auto loaded
+				tabInstance.tabBookmark = bookmarkItem.Bookmark.tabBookmark.Clone<TabBookmark>(taskInstance.call); // bookmark specified here will get auto loaded
 				//tabInstance.LoadBookmark()
 				return new TabView(tabInstance);
 			}

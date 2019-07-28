@@ -16,6 +16,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		public Project project;
 		public TabInstance tabInstance;
 		public TabModel tabModel;
+		public Bookmark bookmark;
 
 		private Grid containerGrid;
 		//private TabControlDataGrid tabControlDataGrid;
@@ -80,11 +81,15 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public void ShowBookmark(Bookmark bookmark)
 		{
+			this.bookmark = bookmark;
 			this.IsVisible = true;
 			InitializeControls();
 			textBoxName.Focus();
+			textBoxName.Text = project.Navigator.Current.Changed;
 			if (textBoxName.Text != null)
 				textBoxName.SelectionEnd = textBoxName.Text.Length;
+			this.InvalidateArrange();
+			this.InvalidateMeasure();
 		}
 
 		private void AddNewPanel()
@@ -113,7 +118,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			textBoxName = new TextBox()
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				Text = project.Navigator.Current.Changed,
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				FontSize = 14,
@@ -187,12 +191,13 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void ButtonSave_Click(object sender, RoutedEventArgs e)
 		{
-			Bookmark bookmark = tabInstance.RootInstance.CreateBookmark();
+			//Bookmark bookmark = tabInstance.RootInstance.CreateBookmark();
 			bookmark.Name = textBoxName.Text;
 			project.DataApp.Save(bookmark.Name, bookmark);
 
-			tabModel.Bookmarks.Items.Add(new TabBookmarkItem(bookmark));
-			gridAddBookmark.IsVisible = false;
+			//tabModel.Bookmarks.Items.Add(new TabBookmarkItem(bookmark));
+			tabModel.Bookmarks.Add(bookmark);
+			this.IsVisible = false;
 		}
 
 		private void ButtonCancel_Click(object sender, RoutedEventArgs e)
