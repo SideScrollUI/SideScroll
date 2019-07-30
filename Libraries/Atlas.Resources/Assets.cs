@@ -30,12 +30,14 @@ namespace Atlas.Resources
 
 		public static readonly string PadNote = "padnote.png";
 		public static readonly string Paste = "paste_16.png";
+		public static readonly string Eraser = "eraser.png";
 
 		public static readonly string Refresh = "refresh.png";
 		public static readonly string Stats = "stats.png";
 
 		public static readonly string List1 = "list1.png";
 		public static readonly string List2 = "list2.png";
+		public static readonly string DeleteList = "delete_list.png";
 
 		public static readonly string Link = "link.png";
 		public static readonly string Bookmark = "bookmark.png";
@@ -65,12 +67,14 @@ namespace Atlas.Resources
 
 			public static Stream PadNote => Get(Assets.PadNote);
 			public static Stream Paste => Get(Assets.Paste);
+			public static Stream Eraser => Get(Assets.Eraser);
 
 			public static Stream Refresh => Get(Assets.Refresh);
 			public static Stream Stats => Get(Assets.Stats);
 
 			public static Stream List1 => Get(Assets.List1);
 			public static Stream List2 => Get(Assets.List2);
+			public static Stream DeleteList => Get(Assets.DeleteList);
 
 			public static Stream Link => Get(Assets.Link);
 			public static Stream Bookmark => Get(Assets.Bookmark);
@@ -99,10 +103,12 @@ namespace Atlas.Resources
 				Password,
 				PadNote,
 				Paste,
+				Eraser,
 				Refresh,
 				Stats,
 				List1,
 				List2,
+				DeleteList,
 				Link,
 				Bookmark,
 			};

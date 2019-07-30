@@ -1,9 +1,14 @@
 
-Find new value:
+Find new icon:
 	https://www.flaticon.com/packs/free-basic-ui-elements
+	Click color picker next to "Add to Collection"
+	Paste in color
+	Click Download
+	Select PNG, 24 pixels
 Colors:
 	Dark Blue: `006df0` (currently used)
 	Light Blue: `759eeb` (not used anymore)
+	(bad) Toolbar Buttons: 8888FF
 
 
 When adding a new file:
