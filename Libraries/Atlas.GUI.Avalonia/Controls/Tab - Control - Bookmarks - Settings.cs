@@ -79,7 +79,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.Focusable = true;
 		}
 
-		public void ShowBookmark(Bookmark bookmark)
+		public void ShowBookmarkSettings(Bookmark bookmark)
 		{
 			this.bookmark = bookmark;
 			this.IsVisible = true;

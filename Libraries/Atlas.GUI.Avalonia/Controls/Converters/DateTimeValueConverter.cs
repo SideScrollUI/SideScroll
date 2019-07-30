@@ -33,13 +33,13 @@ namespace Atlas.GUI.Avalonia
 			if (targetType != typeof(DateTime) && targetType != typeof(DateTime?))
 				throw new Exception("invalid conversion");
 
-			if (value is string)
+			if (value is string text)
 			{
-				SetTime((string)value);
+				SetTime(text.Trim());
 			}
-			else if (value.GetType() == typeof(DateTime))
+			else if (value is DateTime dateTime)
 			{
-				SetDate((DateTime)value);
+				SetDate(dateTime);
 			}
 
 			return originalDateTime;

@@ -75,12 +75,9 @@ namespace Atlas.GUI.Avalonia.Controls
 			private void ButtonAdd_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 			{
 				var bookmark = this.CreateBookmark();
-				var childBookmark = bookmark.tabBookmark.tabChildBookmarks.Values.First();
-				bookmark.Name = childBookmark.Address;
-				bookmark.tabBookmark = childBookmark;
 				//tabModel.Bookmarks.Names.Add(new ViewBookmark(bookmark));
 				//bookmarkSettings.IsVisible = true;
-				bookmarkSettings.ShowBookmark(bookmark);
+				bookmarkSettings.ShowBookmarkSettings(bookmark);
 			}
 
 			private void ButtonCopyClipBoard_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
@@ -97,6 +94,19 @@ namespace Atlas.GUI.Avalonia.Controls
 				tabInstance.tabBookmark = bookmarkItem.Bookmark.tabBookmark.Clone<TabBookmark>(taskInstance.call); // bookmark specified here will get auto loaded
 				//tabInstance.LoadBookmark()
 				return new TabView(tabInstance);
+			}
+
+			public override Bookmark CreateBookmark()
+			{
+				if (childTabInstances.Values.Count > 0)
+					return childTabInstances.Values.First().CreateBookmark();
+
+				return base.CreateBookmark();
+				/*Bookmark bookmark = new Bookmark();
+				//bookmark.tabBookmark.Name = Label;
+				GetBookmark(bookmark.tabBookmark);
+				bookmark = bookmark.Clone<Bookmark>(taskInstance.call); // sanitize
+				return bookmark;*/
 			}
 		}
 	}

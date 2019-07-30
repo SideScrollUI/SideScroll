@@ -107,7 +107,7 @@ namespace Atlas.Tabs
 			tabInstance.ParentTabInstance = this;
 			//tabInstance.taskInstance.call.log =
 			//tabInstance.taskInstance = taskInstance.AddSubTask(taskInstance.call); // too slow?
-			tabInstance.tabBookmark = tabBookmark;
+			//tabInstance.tabBookmark = tabBookmark;
 			FillInheritables(tabInstance);
 			return tabInstance;
 		}
@@ -118,7 +118,7 @@ namespace Atlas.Tabs
 			//tabInstance.project = project;
 			//tabInstance.iTab = iTab;
 			tabInstance.ParentTabInstance = this;
-			tabInstance.tabBookmark = tabBookmark;
+			//tabInstance.tabBookmark = tabBookmark;
 			FillInheritables(tabInstance);
 			return tabInstance;
 		}
@@ -370,7 +370,7 @@ namespace Atlas.Tabs
 				guiContext.Send(_ => OnClearSelection(this, new EventArgs()), null);
 		}
 
-		public Bookmark CreateBookmark()
+		public virtual Bookmark CreateBookmark()
 		{
 			Bookmark bookmark = new Bookmark();
 			//bookmark.tabBookmark.Name = Label;
