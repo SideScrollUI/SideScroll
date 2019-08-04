@@ -404,7 +404,7 @@ namespace Atlas.GUI.Avalonia
 		// this fires too often, could attach a dispatch timer, or add an override method
 		private void BaseWindow_PositionChanged(object sender, PixelPointEventArgs e)
 		{
-			//SaveWindowSettings();
+			SaveWindowSettings();
 		}
 
 		// don't allow the scroll viewer to jump back to the left while we're loading content and the content grid width is fluctuating
