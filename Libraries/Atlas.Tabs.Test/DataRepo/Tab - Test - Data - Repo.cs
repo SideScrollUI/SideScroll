@@ -17,7 +17,7 @@ namespace Atlas.Tabs.Test
 				tabModel.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Sample Data Repo", new TabTestDataRepoCollection()),
-					new ListItem("Data Repos", new TabDirectory(project.DataApp.RepoPath)),
+					new ListItem("Local Directories", new TabDirectory(project.DataApp.RepoPath)),
 				};
 
 				tabModel.Actions = new ItemCollection<TaskCreator>()
