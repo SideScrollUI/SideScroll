@@ -624,28 +624,37 @@ namespace Atlas.Tabs
 		{
 			TabInstance childTabInstance = new TabInstance(project, tabModel);
 			childTabInstance.ParentTabInstance = this;
-			childTabInstance.tabBookmark = tabBookmark;
+			//childTabInstance.tabBookmark = tabBookmark;
+
+			if (this.tabBookmark != null)
+			{
+				TabBookmark tabChildBookmark = null;
+				if (this.tabBookmark.tabChildBookmarks.TryGetValue(tabModel.Name, out tabChildBookmark))
+				{
+					childTabInstance.tabBookmark = tabChildBookmark;
+				}
+			}
 			return childTabInstance;
 		}
 
 		private object GetBookmarkObject(string name)
 		{
 			// FindMatches uses bookmarks
-			TabBookmark tabBookmark = null;
+			TabBookmark tabChildBookmark = null;
 			if (this.tabBookmark != null)
 			{
-				if (this.tabBookmark.tabChildBookmarks.TryGetValue(name, out tabBookmark))
+				if (this.tabBookmark.tabChildBookmarks.TryGetValue(name, out tabChildBookmark))
 				{
-					if (tabBookmark.tabModel != null)
-						return tabBookmark.tabModel;
+					if (tabChildBookmark.tabModel != null)
+						return tabChildBookmark.tabModel;
 				}
 				/*foreach (Bookmark.Node node in tabInstance.tabBookmark.nodes)
 				{
-					tabBookmark = node;
+					tabChildBookmark = node;
 					break;
 				}*/
 			}
-			return tabBookmark;
+			return tabChildBookmark;
 		}
 
 		public void UpdateNavigator()

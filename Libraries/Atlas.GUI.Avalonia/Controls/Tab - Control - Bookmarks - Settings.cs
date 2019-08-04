@@ -192,7 +192,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void ButtonSave_Click(object sender, RoutedEventArgs e)
 		{
 			//Bookmark bookmark = tabInstance.RootInstance.CreateBookmark();
-			bookmark.Name = textBoxName.Text;
+			bookmark.tabBookmark.Name = bookmark.Name = textBoxName.Text;
 			project.DataApp.Save(bookmark.Name, bookmark);
 
 			//tabModel.Bookmarks.Items.Add(new TabBookmarkItem(bookmark));

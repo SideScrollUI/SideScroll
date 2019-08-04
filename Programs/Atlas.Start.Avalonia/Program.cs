@@ -10,9 +10,7 @@ namespace Atlas.Start.Avalonia
 		static void Main(string[] args)
 		{
 			OxyPlotModule.EnsureLoaded();
-			AppBuilder builder = AppBuilder.Configure<App>().UsePlatformDetect().UseDataGrid().LogToDebug();
-
-			builder.BeforeStarting(_ => OxyPlotModule.Initialize());
+			AppBuilder builder = BuildAvaloniaApp(args);
 
 			builder.Start<MainWindow>();
 			//builder.Start<MainWindow>(mainWindow);

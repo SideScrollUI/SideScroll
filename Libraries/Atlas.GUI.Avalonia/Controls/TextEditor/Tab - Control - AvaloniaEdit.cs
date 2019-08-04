@@ -83,8 +83,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, // WordWrap requires Disabled, but it doesn't work
 				VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
 				//Text = "test",
-				Margin = new Thickness(6),
-				//Padding = new Thickness(6),	
+				//Margin = new Thickness(6),
+				Padding = new Thickness(6), // doesn't work well with scroll bars
 				FontSize = 14,
 				//[Grid.RowProperty] = 1,
 				//SyntaxHighlighting = 

@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Atlas.Tabs
 {
+	// rename to TabInstanceSettings?
 	public class TabBookmark
 	{
 		//public Bookmark bookmark;
