@@ -9,6 +9,7 @@
     <None Remove="Assets\bookmark.png" />
     <None Remove="Assets\cancel.png" />
     <None Remove="Assets\cancel_red.png" />
+    <None Remove="Assets\clear_search.png" />
     <None Remove="Assets\delete_list.png" />
     <None Remove="Assets\eraser.png" />
     <None Remove="Assets\if_help_62217.png" />
@@ -44,6 +45,7 @@
     <EmbeddedResource Include="Assets\bookmark.png" />
     <EmbeddedResource Include="Assets\cancel.png" />
     <EmbeddedResource Include="Assets\cancel_red.png" />
+    <EmbeddedResource Include="Assets\clear_search.png" />
     <EmbeddedResource Include="Assets\delete_list.png" />
     <EmbeddedResource Include="Assets\eraser.png" />
     <EmbeddedResource Include="Assets\import.png" />

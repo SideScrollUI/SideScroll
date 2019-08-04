@@ -48,7 +48,7 @@ namespace Atlas.Tabs.Test
 			private void Add(Call call)
 			{
 				var sampleItem = new SampleItem(sampleItems.Count, "Item " + sampleItems.Count.ToString());
-				RemoveResult(sampleItem.Name); // Remove previous result so refocus works
+				RemoveItem(sampleItem.Name); // Remove previous result so refocus works
 				SaveData(sampleItem.ToString(), sampleItem);
 				sampleItems.Add(sampleItem);
 			}
@@ -64,7 +64,7 @@ namespace Atlas.Tabs.Test
 				foreach (SampleItem item in selectedItems)
 				{
 					//this.DataApp.Delete<SampleItem>(saveDirectory, item.Name);
-					RemoveResult(item.Name);
+					RemoveItem(item.Name);
 				}
 			}
 
@@ -74,14 +74,14 @@ namespace Atlas.Tabs.Test
 				sampleItems.Clear();
 			}
 
-			public void RemoveResult(string key)
+			public void RemoveItem(string key)
 			{
 				DataApp.Delete<SampleItem>(saveDirectory, key);
 				SampleItem existing = null;
-				foreach (var searchResult in sampleItems)
+				foreach (var item in sampleItems)
 				{
-					if (searchResult.Name == key)
-						existing = searchResult;
+					if (item.Name == key)
+						existing = item;
 				}
 				if (existing != null)
 					sampleItems.Remove(existing);
@@ -109,5 +109,4 @@ namespace Atlas.Tabs.Test
 			}
 		}
 	}
-
 }

@@ -17,6 +17,7 @@ namespace Atlas.Resources
 		public static readonly string Forward = "right-arrow-blue.png";
 
 		public static readonly string Search = "search.png";
+		public static readonly string ClearSearch = "clear_search.png";
 
 		public static readonly string Info1 = "info_24_759eeb.png"; // 759eeb
 		//public static readonly string Info2 = "info_24_c8c2f9.png"; // C8C2F9
@@ -54,6 +55,7 @@ namespace Atlas.Resources
 			public static Stream Back => Get(Assets.Back);
 			public static Stream Forward => Get(Assets.Forward);
 
+			public static Stream ClearSearch => Get(Assets.ClearSearch);
 			public static Stream Search => Get(Assets.Search);
 
 			public static Stream Info => Get(Assets.Info1);
@@ -96,6 +98,7 @@ namespace Atlas.Resources
 				Back,
 				Forward,
 				Search,
+				ClearSearch,
 				Info,
 				Save,
 				Browser,
