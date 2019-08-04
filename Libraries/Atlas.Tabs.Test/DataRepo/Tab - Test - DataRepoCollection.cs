@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Atlas.Core;
+using Atlas.Serialize;
 
 //namespace Atlas.Tabs.Test.DataRepo // good idea?
 namespace Atlas.Tabs.Test
@@ -14,10 +15,11 @@ namespace Atlas.Tabs.Test
 		{
 			private ItemCollection<SampleItem> sampleItems;
 			private string saveDirectory = null;
+			private DataRepoInstance<SampleItem> dataRepoItems;
 
 			public override void Load(Call call)
 			{
-				LoadSavedItems();
+				LoadSavedItems(call);
 				tabModel.Items = sampleItems;
 
 				tabModel.Actions = new ItemCollection<TaskCreator>()
@@ -30,10 +32,11 @@ namespace Atlas.Tabs.Test
 				//tabModel.Notes = "Data Repos store C# objects as serialized data.";
 			}
 
-			private void LoadSavedItems()
+			private void LoadSavedItems(Call call)
 			{
+				dataRepoItems = DataApp.Open<SampleItem>(call, saveDirectory);
 				sampleItems = new ItemCollection<SampleItem>();
-				var dataRefs = DataApp.LoadAll<SampleItem>(taskInstance.call, saveDirectory);
+				var dataRefs = dataRepoItems.LoadAll(call);
 				foreach (var dataRef in dataRefs)
 				{
 					sampleItems.Add(dataRef.Value);
@@ -49,34 +52,33 @@ namespace Atlas.Tabs.Test
 			{
 				var sampleItem = new SampleItem(sampleItems.Count, "Item " + sampleItems.Count.ToString());
 				RemoveItem(sampleItem.Name); // Remove previous result so refocus works
-				SaveData(sampleItem.ToString(), sampleItem);
+				dataRepoItems.Save(sampleItem.ToString(), sampleItem);
 				sampleItems.Add(sampleItem);
 			}
 
 			private void Delete(Call call)
 			{
+				// can't modify SelectedItems while iterating so create a copy, find better way
 				var selectedItems = new List<SampleItem>();
 				foreach (SampleItem item in SelectedItems)
 				{
 					selectedItems.Add(item);
 				}
-				// can't modify SelectedItems while iterating
 				foreach (SampleItem item in selectedItems)
 				{
-					//this.DataApp.Delete<SampleItem>(saveDirectory, item.Name);
 					RemoveItem(item.Name);
 				}
 			}
 
 			private void DeleteAll(Call call)
 			{
-				this.DataApp.DeleteAll<SampleItem>();
+				dataRepoItems.DeleteAll();
 				sampleItems.Clear();
 			}
 
 			public void RemoveItem(string key)
 			{
-				DataApp.Delete<SampleItem>(saveDirectory, key);
+				dataRepoItems.Delete(key);
 				SampleItem existing = null;
 				foreach (var item in sampleItems)
 				{

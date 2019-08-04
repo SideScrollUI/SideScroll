@@ -30,6 +30,11 @@ namespace Atlas.Serialize
 			return RepoName;
 		}
 
+		public DataRepoInstance<T> Open<T>(Call call, string saveDirectory)
+		{
+			return new DataRepoInstance<T>(this, call, saveDirectory);
+		}
+
 		public FileInfo GetFileInfo(Type type, string name)
 		{
 			string dataPath = GetHashedDataPath(type, name);
@@ -155,7 +160,6 @@ namespace Atlas.Serialize
 						continue;
 
 					SerializerFile serializerFile = new SerializerFile(dataPath, fileName);
-
 					if (serializerFile.Exists)
 					{
 						Header header = serializerFile.LoadHeader(call);
@@ -273,6 +277,39 @@ namespace Atlas.Serialize
 			}
 			return list;
 		}*/
+	}
+	public class DataRepoInstance<T>
+	{
+		public DataRepo dataRepo;
+		private Call call;
+		private string saveDirectory;
+
+		public DataRepoInstance(DataRepo dataRepo, Call call, string saveDirectory)
+		{
+			this.dataRepo = dataRepo;
+			this.call = call;
+			this.saveDirectory = saveDirectory;
+		}
+
+		public SortedDictionary<string, T> LoadAll(Call call = null, bool lazy = false)
+		{
+			return dataRepo.LoadAll<T>(call, saveDirectory, lazy);
+		}
+
+		public void Delete(string key)
+		{
+			dataRepo.Delete<T>(saveDirectory, key);
+		}
+
+		public void DeleteAll()
+		{
+			dataRepo.DeleteAll<T>();
+		}
+
+		public void Save(string name, T sampleItem)
+		{
+			dataRepo.Save(saveDirectory, name, sampleItem, call);
+		}
 	}
 }
 /*
