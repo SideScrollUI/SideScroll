@@ -468,6 +468,20 @@ namespace Atlas.Tabs
 			return tabViewSettings;
 		}
 
+		protected SortedDictionary<string, T> GetBookmarkData<T>()
+		{
+			var items = new SortedDictionary<string, T>();
+			if (tabBookmark != null)
+			{
+				foreach (var row in tabBookmark.tabViewSettings.SelectedRows)
+				{
+					if (row.dataKey != null && row.dataValue != null && row.dataValue.GetType() == typeof(T))
+						items[row.dataKey] = (T)row.dataValue;
+				}
+			}
+			return items;
+		}
+
 		// replace with DataShared? Split call up?
 		public void SaveData(string name, object obj)
 		{

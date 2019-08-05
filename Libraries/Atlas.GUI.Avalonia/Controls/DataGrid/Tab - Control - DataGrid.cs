@@ -275,9 +275,11 @@ namespace Atlas.GUI.Avalonia.Controls
 			dataGrid.InvalidateMeasure();
 
 			dataGrid.SelectionChanged += DataGrid_SelectionChanged;
+
 			dataGrid.PointerPressed += DataGrid_PointerPressed; // doesn't trigger (only implemented for column headers)
-			//dataGrid.PointerReleased += DataGrid_PointerReleased; // does trigger, but after selection changes
-			//dataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // only triggers some of the time
+			dataGrid.PointerReleased += DataGrid_PointerReleased; // does trigger, but after selection changes
+			dataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // only triggers some of the time
+
 			dataGrid.Tapped += DataGrid_Tapped;
 			dataGrid.Initialized += DataGrid_Initialized;
 			dataGrid.ColumnReordered += DataGrid_ColumnReordered;
@@ -435,19 +437,40 @@ namespace Atlas.GUI.Avalonia.Controls
 			return GetControlRow(control.Parent, depth - 1);
 		}
 
+		private bool unselectOnRelease = false;
 		private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
 		{
+			DataGridRow row = e.Row;
+
+			//if (dataGridCell.Column is DataGridCheckBoxColumn)
+			//	return;
+			unselectOnRelease = false;
+			if (row != null && dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
+			{
+				if (dataGrid.SelectedItems.Contains(row.DataContext))
+				{
+					unselectOnRelease = true;
+					//dataGrid.SelectedItems.Clear();
+					//e.PointerPressedEventArgs.Handled = true;
+				}
+			}
 		}
 
 		// happens too late to deselect
 		private void DataGrid_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e)
 		{
+			if (unselectOnRelease)
+			{
+				unselectOnRelease = false;
+				dataGrid.SelectedItems.Clear();
+				e.Handled = true;
+			}
 		}
 
 		// unselect cell if already selected, this never gets triggered
 		private void DataGrid_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e)
 		{
-			/*DataGridRow row = GetControlRow(e.Source, 3);
+			DataGridRow row = GetControlRow(e.Source, 3);
 
 			//if (dataGridCell.Column is DataGridCheckBoxColumn)
 			//	return;
@@ -459,7 +482,7 @@ namespace Atlas.GUI.Avalonia.Controls
 					dataGrid.SelectedItems.Clear();
 					e.Handled = true;
 				}
-			}*/
+			}
 		}
 
 		private void TextBoxSearch_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e)
@@ -967,6 +990,22 @@ namespace Atlas.GUI.Avalonia.Controls
 					{
 						selectedItem.label = null;
 					}
+					var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
+					if (keyProperties.Count > 0)
+					{
+						selectedItem.dataKey = keyProperties[0].GetValue(obj).ToString();
+
+						var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
+						if (valueProperties.Count > 0)
+						{
+							selectedItem.dataValue = valueProperties[0].GetValue(obj);
+						}
+						else
+						{
+							selectedItem.dataValue = obj;
+						}
+					}
+
 					selectedRows.Add(selectedItem);
 				}
 				return selectedRows;

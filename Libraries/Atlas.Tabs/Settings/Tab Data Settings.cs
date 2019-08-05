@@ -141,6 +141,8 @@ namespace Atlas.Tabs
 		public int rowIndex;
 		[NonSerialized]
 		public object obj; // used for bookmark searches, dangerous to keep these references around otherwise
+		public string dataKey;
+		public object dataValue;
 		//public bool pinned;
 		public List<string> selectedColumns = new List<string>();
 

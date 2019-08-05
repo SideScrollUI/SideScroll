@@ -343,6 +343,19 @@ namespace Atlas.Extensions // rename to Core?
 			return visibleProperties;
 		}
 
+		public static List<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type)
+		{
+			List<PropertyInfo> visibleProperties = new List<PropertyInfo>();
+			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
+			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
+			foreach (PropertyInfo propertyInfo in propertyInfos)
+			{
+				if (propertyInfo.GetCustomAttribute(typeof(T)) != null)
+					visibleProperties.Add(propertyInfo);
+			}
+			return visibleProperties;
+		}
+
 		private static string ObjectToUniqueStringAll(this object obj)
 		{
 			if (obj == null)

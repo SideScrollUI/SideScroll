@@ -41,6 +41,11 @@ namespace Atlas.Tabs.Test
 				{
 					sampleItems.Add(dataRef.Value);
 				}
+				var bookmarkRefs = GetBookmarkData<SampleItem>();
+				foreach (var dataRef in bookmarkRefs)
+				{
+					sampleItems.Add(dataRef.Value);
+				}
 			}
 
 			private void Clear(Call call)
@@ -92,6 +97,7 @@ namespace Atlas.Tabs.Test
 
 		public class SampleItem
 		{
+			[DataKey]
 			public int ID { get; set; }
 			public string Name { get; set; }
 
