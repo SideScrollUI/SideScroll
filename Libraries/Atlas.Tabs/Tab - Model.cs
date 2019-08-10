@@ -141,7 +141,7 @@ namespace Atlas.Tabs
 						ItemList.Add(iNewList);
 					}
 					// skip over single items that will take up lots of room (always show ListItems though)
-					Skippable = (ItemList[0].Count == 1 && TabDataSettings.GetVisibleProperties(elementType).Count > 1);
+					Skippable = (ItemList[0].Count == 1 && !(ItemList[0][0] is ITab) && TabDataSettings.GetVisibleProperties(elementType).Count > 1);
 					return;
 				}
 			}

@@ -983,30 +983,30 @@ namespace Atlas.GUI.Avalonia.Controls
 					if (obj == null)
 						continue;
 					Type type = obj.GetType();
-					SelectedRow selectedItem = new SelectedRow();
-					selectedItem.label = obj.ObjectToUniqueString();
-					selectedItem.rowIndex = iList.IndexOf(obj);
-					if (selectedItem.label == type.FullName)
+					SelectedRow selectedRow = new SelectedRow();
+					selectedRow.label = obj.ObjectToUniqueString();
+					selectedRow.rowIndex = iList.IndexOf(obj);
+					if (selectedRow.label == type.FullName)
 					{
-						selectedItem.label = null;
+						selectedRow.label = null;
 					}
 					var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
 					if (keyProperties.Count > 0)
 					{
-						selectedItem.dataKey = keyProperties[0].GetValue(obj).ToString();
+						selectedRow.dataKey = keyProperties[0].GetValue(obj).ToString();
 
 						var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
 						if (valueProperties.Count > 0)
 						{
-							selectedItem.dataValue = valueProperties[0].GetValue(obj);
+							selectedRow.dataValue = valueProperties[0].GetValue(obj);
 						}
 						else
 						{
-							selectedItem.dataValue = obj;
+							selectedRow.dataValue = obj;
 						}
 					}
 
-					selectedRows.Add(selectedItem);
+					selectedRows.Add(selectedRow);
 				}
 				return selectedRows;
 			}
