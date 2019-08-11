@@ -330,10 +330,10 @@ namespace Atlas.GUI.Avalonia
 			foreach (var screen in Screens.All)
 			{
 				maxWidth += screen.Bounds.Width;
-				maxHeight = Math.Max(maxHeight, screen.Bounds.Height);
+				maxHeight = Math.Max(maxHeight, screen.WorkingArea.Height - 20);
 			}
-			this.MaxWidth = maxWidth + 10;
-			this.MaxHeight = maxHeight + 10;
+			this.MaxWidth = maxWidth;
+			this.MaxHeight = maxHeight;
 			//scrollViewer.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
 			//scrollViewer.MaxHeight = PlatformImpl.MaxClientSize.Height + 10;
 		}
@@ -366,7 +366,7 @@ namespace Atlas.GUI.Avalonia
 				this.Position = new PixelPoint((int)left, (int)top);
 				this.Width = Math.Max(MinWindowSize, value.Width);
 				this.Height = Math.Max(MinWindowSize, value.Height);
-				//this.Height = Math.Max(MinWindowSize, value.Height + 50); // reproduces problem
+				//this.Height = Math.Max(MinWindowSize, value.Height + 500); // reproduces black bar problem, not subtracting bottom toolbar for Height
 				//Measure(Bounds.Size);
 				this.WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
 				//InvalidateArrange(); // these don't restore well and need another pass

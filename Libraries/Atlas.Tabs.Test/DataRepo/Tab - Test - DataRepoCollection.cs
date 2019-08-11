@@ -25,6 +25,7 @@ namespace Atlas.Tabs.Test
 				tabModel.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Add", Add, false), // Foreground task so we can modify collection
+					new TaskDelegate("Add 10", Add10, false), // Foreground task so we can modify collection
 					new TaskDelegate("Delete", Delete),
 					new TaskDelegate("Delete All", DeleteAll), // Foreground task so we can modify collection
 				};
@@ -60,6 +61,12 @@ namespace Atlas.Tabs.Test
 				RemoveItem(sampleItem.Name); // Remove previous result so refocus works
 				dataRepoItems.Save(sampleItem.ToString(), sampleItem);
 				sampleItems.Add(sampleItem);
+			}
+
+			private void Add10(Call call)
+			{
+				for (int i = 0; i < 10; i++)
+					Add(call);
 			}
 
 			private void Delete(Call call)

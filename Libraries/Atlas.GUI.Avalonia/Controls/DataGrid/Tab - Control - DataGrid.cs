@@ -854,8 +854,12 @@ namespace Atlas.GUI.Avalonia.Controls
 				//dataGrid.SelectedItems.RemoveAt(0);
 				foreach (object obj in value)
 					dataGrid.SelectedItems.Add(obj);
-				dataGrid.InvalidateVisual();
+				//dataGrid.Render(); //Can't get data grid to flush this correctly, see DataGrid.FlushSelectionChanged()
+				dataGrid.InvalidateVisual(); // required for autoselection to work
+				//Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);
 				//dataGrid.Flush(); //Can't get data grid to flush this correctly,
+				//if (value.Count > 0)
+				//	dataGrid.ScrollIntoView(value[0], null);
 				disableSaving--;
 			}
 			/*get
