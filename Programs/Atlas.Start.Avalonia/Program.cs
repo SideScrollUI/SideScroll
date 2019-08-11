@@ -1,6 +1,7 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Logging.Serilog;
+using Avalonia.Rendering;
 using OxyPlot.Avalonia;
 
 namespace Atlas.Start.Avalonia
@@ -12,11 +13,22 @@ namespace Atlas.Start.Avalonia
 			OxyPlotModule.EnsureLoaded();
 			AppBuilder builder = BuildAvaloniaApp(args);
 
+			// Fix borrowed from https://github.com/zkSNACKs/WalletWasabi/commit/02338667e0c2fd577bbcdb7c575a29c9b0cc4d01
+			// TODO remove this overriding of RenderTimer when Avalonia 0.9 is released.
+			// fixes "Thread Leak" issue in 0.8.1 Avalonia.
+			var old = builder.WindowingSubsystemInitializer;
+
+			builder.UseWindowingSubsystem(() =>
+			{
+				old();
+
+				AvaloniaLocator.CurrentMutable.Bind<IRenderTimer>().ToConstant(new DefaultRenderTimer(60));
+			});
+
 			builder.Start<MainWindow>();
 			//builder.Start<MainWindow>(mainWindow);
 		}
 
-		// Not currently used
 		public static AppBuilder BuildAvaloniaApp(string[] args)
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
