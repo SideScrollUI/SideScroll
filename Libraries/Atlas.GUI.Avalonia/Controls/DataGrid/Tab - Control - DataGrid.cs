@@ -9,6 +9,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Input.Platform;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -286,6 +287,27 @@ namespace Atlas.GUI.Avalonia.Controls
 			dataGrid.PointerEnter += DataGrid_PointerEnter;
 			//this.GotFocus += TabDataGrid_GotFocus;
 			//this.LostFocus += TabDataGrid_LostFocus;
+
+
+			//var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+
+			var list = new AvaloniaList<object>();
+
+			MenuItem menuItemCopy = new MenuItem() { Header = "_Copy - DataGrid" };
+			menuItemCopy.Click += delegate
+			{
+				string text = DataGridUtils.DataGridToStringTable(dataGrid);
+				if (text != null)
+					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+			};
+			list.Add(menuItemCopy);
+
+			//list.Add(new Separator());
+
+			ContextMenu contextMenu = new ContextMenu();
+			contextMenu.Items = list;
+
+			dataGrid.ContextMenu = contextMenu;
 
 			Children.Add(dataGrid);
 		}
