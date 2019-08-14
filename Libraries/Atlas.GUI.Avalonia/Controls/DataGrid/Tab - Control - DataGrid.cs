@@ -262,7 +262,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			// Add a style for selected & focused here?
 			var styles = dataGrid.Styles;
-			
+
 			//dataGrid.AutoGenerateColumns = true;
 			if (autoGenerateColumns)
 			{
@@ -277,9 +277,9 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			dataGrid.SelectionChanged += DataGrid_SelectionChanged;
 
-			dataGrid.PointerPressed += DataGrid_PointerPressed; // doesn't trigger (only implemented for column headers)
-			dataGrid.PointerReleased += DataGrid_PointerReleased; // does trigger, but after selection changes
-			dataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // only triggers some of the time
+			//dataGrid.PointerPressed += DataGrid_PointerPressed; // doesn't trigger (only implemented for column headers)
+			//dataGrid.PointerReleased += DataGrid_PointerReleased; // does trigger, but after selection changes
+			//dataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // only triggers some of the time
 
 			dataGrid.Tapped += DataGrid_Tapped;
 			dataGrid.Initialized += DataGrid_Initialized;
@@ -288,12 +288,17 @@ namespace Atlas.GUI.Avalonia.Controls
 			//this.GotFocus += TabDataGrid_GotFocus;
 			//this.LostFocus += TabDataGrid_LostFocus;
 
-
 			//var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+			//AddContextMenu();
 
+			Children.Add(dataGrid);
+		}
+
+		private void AddContextMenu()
+		{
 			var list = new AvaloniaList<object>();
 
-			MenuItem menuItemCopy = new MenuItem() { Header = "_Copy - DataGrid" };
+			MenuItem menuItemCopy = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopy.Click += delegate
 			{
 				string text = DataGridUtils.DataGridToStringTable(dataGrid);
@@ -308,8 +313,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			contextMenu.Items = list;
 
 			dataGrid.ContextMenu = contextMenu;
-
-			Children.Add(dataGrid);
 		}
 
 		public IList Items
@@ -631,7 +634,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				else
 				{
 					//if (isReadOnly)
-						column = new DataGridPropertyTextColumn(propertyInfo, isReadOnly);
+						column = new DataGridPropertyTextColumn(dataGrid, propertyInfo, isReadOnly);
 					//else
 					//	column = new DataGridTextColumn();
 				}

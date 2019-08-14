@@ -21,16 +21,19 @@ namespace Atlas.GUI.Avalonia
 		public SolidColorBrush BrushHasChildren { get; set; } = new SolidColorBrush(Theme.HasChildrenColor);
 		public SolidColorBrush BrushEditable { get; set; } = new SolidColorBrush(Theme.EditableColor);
 		public SolidColorBrush BrushValue { get; set; } = new SolidColorBrush(Colors.LightGray);
+		public SolidColorBrush BrushBackground { get; set; } = new SolidColorBrush(Colors.White);
 
 		//public bool Editable { get; set; } = false;
 
 		private Binding formattedBinding;
 		private Binding unformattedBinding;
 		private FieldValueConverter formatConverter = new FieldValueConverter();
+		private DataGrid dataGrid;
 		private PropertyInfo propertyInfo;
 		
-		public DataGridPropertyTextColumn(PropertyInfo propertyInfo, bool isReadOnly)
+		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly)
 		{
+			this.dataGrid = dataGrid;
 			this.propertyInfo = propertyInfo;
 			IsReadOnly = isReadOnly;
 			Binding = GetFormattedTextBinding();
@@ -95,11 +98,8 @@ namespace Atlas.GUI.Avalonia
 			{
 				TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
 				//TextBlock textBlock = GetTextBlock(cell, dataItem);
-				textBlock.DoubleTapped += delegate
-				{
-					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
-				};
-				AddTextBoxContextMenu(textBlock);
+				// textBlock.DoubleTapped += delegate // bad idea: clicking too fast triggers
+				AddTextBoxContextMenu(cell, textBlock);
 				return textBlock;
 			}
 		}
@@ -137,7 +137,7 @@ namespace Atlas.GUI.Avalonia
 			return textBlockElement;
 		}*/
 
-		private void AddTextBoxContextMenu(TextBlock textBlock)
+		private void AddTextBoxContextMenu(DataGridCell cell, TextBlock textBlock)
 		{
 			ContextMenu contextMenu = new ContextMenu();
 
@@ -152,13 +152,25 @@ namespace Atlas.GUI.Avalonia
 			};
 			list.Add(menuItemCopy);
 
+			MenuItem menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
+			menuItemCopyDataGrid.Click += delegate
+			{
+				string text = DataGridUtils.DataGridToStringTable(dataGrid);
+				if (text != null)
+					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+			};
+			list.Add(menuItemCopyDataGrid);
+
 			//list.Add(new Separator());
 
 			contextMenu.Items = list;
 
-			textBlock.ContextMenu = contextMenu;
+			cell.IsHitTestVisible = true;
+			cell.Focusable = true;
+			cell.ContextMenu = contextMenu;
 		}
 
+		// todo: set default background brush to white so context menu's work, hover breaks if it's set though
 		private IBrush GetCellBrush(DataGridCell dataGridCell, object dataItem)
 		{
 			object obj = dataGridCell.DataContext;

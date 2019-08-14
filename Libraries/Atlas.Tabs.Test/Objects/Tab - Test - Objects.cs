@@ -20,7 +20,8 @@ namespace Atlas.Tabs.Test.Objects
 				{
 					new ListItem("UriTest", new UriTest("test")),
 					new ListItem("Tags", new Tag[] { new Tag("abc", 1.1) }),
-					new ListItem("Subclass", new TabTestSubClassProperty()),
+					new ListItem("Subclass Property", new TabTestSubClassProperty()),
+					new ListItem("Subclass", new ValueSub()),
 					new ListItem("Enum", new EnumTest()),
 					new ListItem("TimeSpan", new TimeSpan(1, 2, 3)),
 				};
@@ -39,6 +40,16 @@ namespace Atlas.Tabs.Test.Objects
 				Eight = 8,
 			}
 		}
+	}
+
+	public class ValueBase
+	{
+		public int value = 1;
+	}
+
+	public class ValueSub : ValueBase
+	{
+		public new int value = 2;
 	}
 
 	public class UriTest : ISerializable
