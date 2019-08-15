@@ -284,6 +284,7 @@ namespace Atlas.GUI.Avalonia
 			contentGrid.MinWidth = widthRequired;
 			contentGrid.Width = widthRequired;
 
+			// Force the ScrollViewer to update it's ViewPort so we can set an offset past the old bounds
 			Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);
 
 			scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;

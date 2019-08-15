@@ -1,8 +1,6 @@
 using Atlas.GUI.Avalonia.Controls;
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
-using Avalonia.Input.Platform;
 using Avalonia.Media;
 using System.Reflection;
 
@@ -19,6 +17,7 @@ namespace Atlas.GUI.Avalonia
 			this.buttonText = buttonText;
 		}
 
+		// This doesn't get called when reusing cells
 		protected override IControl GenerateElement(DataGridCell cell, object dataItem)
 		{
 			//cell.Background = GetCellBrush(cell, dataItem);
@@ -27,12 +26,14 @@ namespace Atlas.GUI.Avalonia
 			Button button = TabControlButton.Create(buttonText);
 			button.PointerEnter += Button_PointerEnter;
 			button.PointerLeave += Button_PointerLeave;
-			button.Click += delegate
-			{
-				dataItem.GetType().GetMethod(methodInfo.Name);
-				methodInfo.Invoke(dataItem, new object[] {});
-			};
+			button.Click += Button_Click;
 			return button;
+		}
+
+		private void Button_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		{
+			Button button = (Button)sender;
+			methodInfo.Invoke(button.DataContext, new object[] { });
 		}
 
 		private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
