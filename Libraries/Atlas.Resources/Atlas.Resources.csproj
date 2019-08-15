@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <None Remove="Assets\add.png" />
+    <None Remove="Assets\blank-document.png" />
     <None Remove="Assets\bookmark.png" />
     <None Remove="Assets\cancel.png" />
     <None Remove="Assets\cancel_red.png" />
@@ -42,6 +43,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\add.png" />
+    <EmbeddedResource Include="Assets\blank-document.png" />
     <EmbeddedResource Include="Assets\bookmark.png" />
     <EmbeddedResource Include="Assets\cancel.png" />
     <EmbeddedResource Include="Assets\cancel_red.png" />

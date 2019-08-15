@@ -27,3 +27,4 @@ Import - https://www.flaticon.com/free-icon/import_223438 - Kirill Kazachek
 Paste - https://www.flaticon.com/free-icon/paste_930233 - Vitaly Gorbachev
 Delete List - https://www.flaticon.com/free-icon/delete-list_1201 - Freepik
 Eraser - https://www.flaticon.com/free-icon/eraser_1203953 - Freepik
+Blank Document - https://www.flaticon.com/free-icon/blank-document_14922 - Freepik

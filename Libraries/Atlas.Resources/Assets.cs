@@ -22,6 +22,7 @@ namespace Atlas.Resources
 		public static readonly string Info1 = "info_24_759eeb.png"; // 759eeb
 		//public static readonly string Info2 = "info_24_c8c2f9.png"; // C8C2F9
 
+		public static readonly string BlankDocument = "blank-document.png";
 		public static readonly string Save = "save-file-option.png";
 
 		public static readonly string Browser = "internet.png";
@@ -60,6 +61,7 @@ namespace Atlas.Resources
 
 			public static Stream Info => Get(Assets.Info1);
 
+			public static Stream BlankDocument => Get(Assets.BlankDocument);
 			public static Stream Save => Get(Assets.Save);
 
 			public static Stream Browser => Get(Assets.Browser);
@@ -100,6 +102,7 @@ namespace Atlas.Resources
 				Search,
 				ClearSearch,
 				Info,
+				BlankDocument,
 				Save,
 				Browser,
 				Unlock,

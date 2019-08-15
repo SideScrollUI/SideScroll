@@ -251,14 +251,27 @@ namespace Atlas.Tabs
 
 			ItemCollection<ListMember> itemCollection = new ItemCollection<ListMember>();
 
+			// replace any overriden/new field & properties
+			var fieldToIndex = new Dictionary<string, int>();
 			foreach (FieldInfo fieldInfo in fieldInfos)
 			{
 				if (fieldInfo.GetCustomAttribute(typeof(HiddenRowAttribute)) != null)
 					continue;
 				ListField listField = new ListField(Object, fieldInfo);
-				itemCollection.Add(listField);
+				int index;
+				if (fieldToIndex.TryGetValue(fieldInfo.Name, out index))
+				{
+					itemCollection.RemoveAt(index);
+					itemCollection.Insert(index, listField);
+				}
+				else
+				{
+					fieldToIndex[fieldInfo.Name] = itemCollection.Count;
+					itemCollection.Add(listField);
+				}
 			}
 
+			var propertyToIndex = new Dictionary<string, int>();
 			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
 				if (!propertyInfo.DeclaringType.IsNotPublic)
@@ -266,7 +279,18 @@ namespace Atlas.Tabs
 					if (propertyInfo.GetCustomAttribute(typeof(HiddenRowAttribute)) != null)
 						continue;
 					ListProperty listProperty = new ListProperty(Object, propertyInfo);
-					itemCollection.Add(listProperty);
+
+					int index;
+					if (fieldToIndex.TryGetValue(propertyInfo.Name, out index))
+					{
+						itemCollection.RemoveAt(index);
+						itemCollection.Insert(index, listProperty);
+					}
+					else
+					{
+						fieldToIndex[propertyInfo.Name] = itemCollection.Count;
+						itemCollection.Add(listProperty);
+					}
 				}
 			}
 			//itemCollection = new ItemCollection<ListMember>(itemCollection.OrderBy(x => x.memberInfo.MetadataToken).ToList());
