@@ -152,6 +152,8 @@ namespace Atlas.GUI.Avalonia
 			};
 			list.Add(menuItemCopy);
 
+			list.Add(new Separator());
+
 			MenuItem menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopyDataGrid.Click += delegate
 			{
@@ -160,8 +162,6 @@ namespace Atlas.GUI.Avalonia
 					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
 			};
 			list.Add(menuItemCopyDataGrid);
-
-			//list.Add(new Separator());
 
 			contextMenu.Items = list;
 

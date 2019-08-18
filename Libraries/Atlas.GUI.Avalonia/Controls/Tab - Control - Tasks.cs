@@ -80,6 +80,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			tabControlDataGrid.AddColumn("Task", nameof(TaskInstance.Label));
 			tabControlDataGrid.AddColumn("   %   ", nameof(TaskInstance.Percent));
 			tabControlDataGrid.AddColumn("Status", nameof(TaskInstance.Status));
+			//tabControlDataGrid.AddColumn("Message", nameof(TaskInstance.Message));
 			//tabDataGrid.AddButtonColumn("<>", nameof(TaskInstance.Cancel)); // todo: No Button Column support
 
 			//tabDataGrid.AutoLoad = tabModel.AutoLoad;
@@ -125,7 +126,8 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void TaskCompleted(TaskInstance taskInstance)
 		{
-			if (autoSelectNew)
+			// unselect running if no error
+			if (autoSelectNew && !taskInstance.Errored)
 			{
 				IList selectedItems = tabControlDataGrid.SelectedItems;
 				if (selectedItems.Count == 1 && selectedItems[0] == taskInstance)
@@ -139,13 +141,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			UpdateSelection();
 		}
 
-		public IList SelectedItems
-		{
-			get
-			{
-				return tabControlDataGrid.SelectedItems;
-			}
-		}
+		public IList SelectedItems => tabControlDataGrid.SelectedItems;
 
 		private void UpdateSelection()
 		{

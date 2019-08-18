@@ -251,7 +251,7 @@ namespace Atlas.GUI.Avalonia.View
 			tabInstance.OnRefresh += TabInstance_OnRefresh;
 			tabInstance.OnReload += TabInstance_OnReload;
 			tabInstance.OnLoadBookmark += TabInstance_OnLoadBookmark;
-			//tabInstance.OnClearSelection += TabInstance_OnClearSelection; // data controls should attach these instead?
+			tabInstance.OnClearSelection += TabInstance_OnClearSelection; // data controls should attach these instead?
 			tabInstance.OnSelectItem += TabInstance_OnSelectItem;
 		}
 
@@ -893,7 +893,7 @@ namespace Atlas.GUI.Avalonia.View
 			tabInstance.OnRefresh -= TabInstance_OnRefresh;
 			tabInstance.OnReload -= TabInstance_OnReload;
 			tabInstance.OnLoadBookmark -= TabInstance_OnLoadBookmark;
-			//tabInstance.OnClearSelection -= TabInstance_OnClearSelection;
+			tabInstance.OnClearSelection -= TabInstance_OnClearSelection;
 			tabInstance.OnSelectItem -= TabInstance_OnSelectItem;
 
 			ClearDispatchLoader();
@@ -947,6 +947,14 @@ namespace Atlas.GUI.Avalonia.View
 		{
 			tabInstance.Reintialize();
 			Load();
+		}
+
+		private void TabInstance_OnClearSelection(object sender, EventArgs e)
+		{
+			foreach (var tabData in tabDatas)
+			{
+				tabData.SelectedItem = null; // dataGrid.UnselectAll() doesn't work
+			}
 		}
 
 		private void TabInstance_OnLoadBookmark(object sender, EventArgs e)
@@ -1055,14 +1063,6 @@ private void UpdateNearbySplitters(int depth, TabView triggeredControl)
 					tabView.splitContainer.SplitterDistance = splitContainer.SplitterDistance;
 			}
 		}
-	}
-}
-
-private void TabInstance_OnClearSelection(object sender, EventArgs e)
-{
-	foreach (TabDataGrid tabData in tabDatas)
-	{
-		tabData.SelectedItem = null; // dataGrid.UnselectAll() doesn't work
 	}
 }
 
