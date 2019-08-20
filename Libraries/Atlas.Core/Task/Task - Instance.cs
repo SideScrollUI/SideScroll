@@ -31,6 +31,7 @@ namespace Atlas.Core
 		public CancellationToken CancelToken => tokenSource.Token;
 
 		public string Status { get; set; } = "Running";
+		public string Message { get; set; }
 
 		public long ProgressMax { get; set; }
 
@@ -156,10 +157,12 @@ namespace Atlas.Core
 			else if (Task == null || TaskStatus == TaskStatus.RanToCompletion)
 			{
 				Status = "Complete";
+				Message = Message ?? "Success";
 			}
 			else
 			{
 				Status = TaskStatus.ToString();
+				Message = log.Summary;
 			}
 			NotifyPropertyChanged(nameof(Status));
 

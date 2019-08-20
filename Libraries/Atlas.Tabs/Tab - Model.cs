@@ -356,7 +356,7 @@ namespace Atlas.Tabs
 						selectedRow.rowIndex = -1;
 						selectedRow.obj = obj;
 						tabDataSettings.SelectedRows.Add(selectedRow);
-						tabBookmark.selected.Add(obj);
+						tabBookmark.selectedObjects.Add(obj);
 					}
 					else if (depth >= 0)
 					{
@@ -364,7 +364,7 @@ namespace Atlas.Tabs
 						if (tabModel != null)
 						{
 							TabBookmark childNode = tabModel.FindMatches(filter, depth);
-							if (childNode.selected.Count > 0)
+							if (childNode.selectedObjects.Count > 0)
 							{
 								childNode.tabModel = tabModel;
 								SelectedRow selectedRow = new SelectedRow();
@@ -372,7 +372,7 @@ namespace Atlas.Tabs
 								selectedRow.obj = obj;
 								tabDataSettings.SelectedRows.Add(selectedRow);
 								tabBookmark.tabChildBookmarks.Add(childNode.Name, childNode);
-								tabBookmark.selected.Add(obj);
+								tabBookmark.selectedObjects.Add(obj);
 							}
 						}
 					}

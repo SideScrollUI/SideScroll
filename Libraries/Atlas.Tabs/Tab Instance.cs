@@ -416,7 +416,7 @@ namespace Atlas.Tabs
 			return tabViewSettings; // remove?
 		}
 
-		public void SelectBookmark(TabBookmark tabBookmark)
+		public virtual void SelectBookmark(TabBookmark tabBookmark)
 		{
 			this.tabViewSettings = tabBookmark.tabViewSettings;
 			this.tabBookmark = tabBookmark;

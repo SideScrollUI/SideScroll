@@ -5,6 +5,9 @@ using Atlas.GUI.Avalonia.View;
 using Atlas.Serialize;
 using Atlas.Start.Avalonia.Tabs;
 using Atlas.Tabs;
+using Avalonia;
+using Avalonia.Input.Platform;
+using Avalonia.Interactivity;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -12,11 +15,13 @@ namespace Atlas.GUI.Avalonia.Controls
 	{
 		public Project project;
 		public ITab iTab;
+		public Linker linker;
 
-		public TabBookmarks(Project project, ITab iTab)
+		public TabBookmarks(Project project, ITab iTab, Linker linker)
 		{
 			this.project = project;
 			this.iTab = iTab;
+			this.linker = linker;
 		}
 
 		public TabInstance Create() { return new Instance(this); }
@@ -47,7 +52,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				toolbar = new TabControlBookmarksToolbar();
 				toolbar.buttonAdd.Click += ButtonAdd_Click;
-				toolbar.buttonCopyClipBoard.Click += ButtonCopyClipBoard_Click;
+				toolbar.buttonLink.Click += ButtonLink_Click;
+				toolbar.buttonImport.Click += ButtonImport_Click;
 				tabModel.AddObject(toolbar);
 
 				bookmarkSettings = new TabControlBookmarkSettings(this);
@@ -80,8 +86,23 @@ namespace Atlas.GUI.Avalonia.Controls
 				bookmarkSettings.ShowBookmarkSettings(bookmark);
 			}
 
-			private void ButtonCopyClipBoard_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+			private void ButtonLink_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 			{
+				var bookmark = this.CreateBookmark();
+				string uri = tab.linker.GetLinkUri(bookmark);
+				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(uri);
+			}
+
+			private void ButtonImport_Click(object sender, RoutedEventArgs e)
+			{
+				string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
+				string data = tab.linker.GetLinkData(clipboardText);
+				if (data == null)
+					return;
+				Bookmark bookmark = Bookmark.Create(data);
+				SelectBookmark(bookmark.tabBookmark);
+				//tabView.tabInstance.tabBookmark = bookmark.tabBookmark;
+				//Reload();
 			}
 
 			public object CreateControl(object value, out string label)
@@ -107,6 +128,22 @@ namespace Atlas.GUI.Avalonia.Controls
 				GetBookmark(bookmark.tabBookmark);
 				bookmark = bookmark.Clone<Bookmark>(taskInstance.call); // sanitize
 				return bookmark;*/
+			}
+
+			public override void SelectBookmark(TabBookmark tabBookmark)
+			{
+				if (childTabInstances.Values.Count > 0)
+				{
+					currentBookMark.tabBookmark = tabBookmark;
+					/*SelectItem(currentBookMark);
+					var childTab = childTabInstances.Values.First();
+					childTab.tabBookmark = tabBookmark;
+					childTab.Reload();
+					//childTab.SelectBookmark(tabBookmark);*/
+					Reload();
+				}
+				else
+					base.SelectBookmark(tabBookmark);
 			}
 		}
 	}

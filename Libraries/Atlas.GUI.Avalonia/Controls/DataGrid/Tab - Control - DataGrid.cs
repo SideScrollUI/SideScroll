@@ -524,7 +524,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void TextBoxSearch_KeyUp(object sender, global::Avalonia.Input.KeyEventArgs e)
 		{
 			FilterText = textBoxSearch.Text;
-			SelectFirstValue();
+			AutoSelect();
 			if (disableSaving == 0)
 				tabInstance.SaveTabSettings();
 		}
@@ -708,7 +708,7 @@ namespace Atlas.GUI.Avalonia.Controls
 					textBoxSearch.IsVisible = false;
 				}
 				if (!SelectSavedItems()) // sorting must happen before this
-					SelectFirstValue();
+					AutoSelect();
 				//UpdateSelection(); // datagrid not fully loaded yet
 			}
 			OnSelectionChanged?.Invoke(this, null);
@@ -777,7 +777,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			return false;
 		}
 
-		private object GetFirstValue()
+		private object GetAutoSelectValue()
 		{
 			object firstValidObject = null;
 			foreach (object obj in collectionView)
@@ -835,12 +835,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			return firstValidObject;
 		}
 
-		private void SelectFirstValue()
+		private void AutoSelect()
 		{
 			if (autoSelectFirst == false)
 				return;
 
-			object firstValidObject = GetFirstValue();
+			object firstValidObject = GetAutoSelectValue();
 			if (firstValidObject != null && dataGrid.SelectedItems.Count == 0)
 				SelectedItem = firstValidObject;
 			//SaveSelectedItems();
@@ -1076,7 +1076,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			if (tabInstance.filterBookmarkNode != null)
 			{
-				return tabInstance.filterBookmarkNode.selected.Contains(obj);
+				return tabInstance.filterBookmarkNode.selectedObjects.Contains(obj);
 			}
 			else
 			{
@@ -1203,7 +1203,7 @@ private void dataGrid_Loaded(object sender, RoutedEventArgs e)
 	{
 		LoadSavedSettings();
 		if (tabDataConfiguration.selected.Count == 0 || (autoSelectNew && dataGrid.SelectedCells.Count == 0))
-			SelectFirstValue();
+			AutoSelect();
 	}
 
 	/*foreach (var column in dataGrid.Columns)
@@ -1446,7 +1446,7 @@ private void textBoxSearch_PreviewKeyDown(object sender, KeyEventArgs e)
 	if (e.Key == Key.Enter || e.Key == Key.Tab)
 	{
 		FilterText = textBoxSearch.Text;
-		SelectFirstValue();
+		AutoSelect();
 		if (enableSaving)
 			tabInstance.SaveConfiguration();
 		//e.Handled = true;

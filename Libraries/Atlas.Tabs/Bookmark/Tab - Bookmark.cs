@@ -47,7 +47,7 @@ namespace Atlas.Tabs
 
 		// Temporary, Only FindMatches() uses, refactor these out?
 		[NonSerialized]
-		public HashSet<object> selected = new HashSet<object>(); // does this work with multiple TabDatas?
+		public HashSet<object> selectedObjects = new HashSet<object>(); // does this work with multiple TabDatas?
 		[NonSerialized]
 		public TabModel tabModel;
 

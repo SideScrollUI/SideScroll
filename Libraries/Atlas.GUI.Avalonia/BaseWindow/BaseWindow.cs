@@ -23,6 +23,7 @@ namespace Atlas.GUI.Avalonia
 		public static readonly int DefaultIncrementWidth = 1000; // should we also use a max percent?
 		public static readonly int KeyboardIncrementWidth = 500; // should we also use a max percent?
 		public static BaseWindow baseWindow;
+		protected Linker linker = new Linker();
 
 		public Project project;
 
@@ -168,21 +169,21 @@ namespace Atlas.GUI.Avalonia
 
 		private void ButtonLink_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			string uri = GetLinkUri();
+			Bookmark bookmark = tabView.tabInstance.CreateBookmark();
+			string uri = linker.GetLinkUri(bookmark);
 			((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(uri);
 		}
 
 		private void ButtonImport_Click(object sender, RoutedEventArgs e)
 		{
 			string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
-			string data = GetLinkData(clipboardText);
+			string data = linker.GetLinkData(clipboardText);
 			if (data == null)
 				return;
 			Bookmark bookmark = Bookmark.Create(data);
-			//baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
-
-			tabView.tabInstance.tabBookmark = bookmark.tabBookmark;
-			Reload();
+			baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark); 
+			//tabView.tabInstance.tabBookmark = bookmark.tabBookmark;
+			//Reload();
 		}
 
 		protected virtual string GetLinkUri()
@@ -310,7 +311,7 @@ namespace Atlas.GUI.Avalonia
 		// How to set the main Content
 		protected void AddTabBookmarks(ITab iTab)
 		{
-			var tabBookmarks = new TabBookmarks(project, iTab).Create();
+			var tabBookmarks = new TabBookmarks(project, iTab, linker).Create();
 			tabBookmarks.Load(new Call());
 
 			AddTabView(tabBookmarks);

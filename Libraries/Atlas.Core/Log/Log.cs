@@ -77,6 +77,9 @@ namespace Atlas.Core
 				return Text + " " + tagText;
 			}
 		}
+
+		[HiddenColumn]
+		public virtual string Summary => Text;
 		public int Entries { get; set; }
 
 		private float? _Duration;
@@ -146,6 +149,10 @@ namespace Atlas.Core
 		private SynchronizationContext context; // inherited from creator (which can be a Parent Log)
 		private int contextRandomId;
 		private static object locker = new object(); // todo: replace this with individual ones? (deadlock territory if circular) or a non-blocking version
+		private string SummaryText;
+
+		[HiddenColumn]
+		public override string Summary => SummaryText;
 
 		public event EventHandler<EventLogMessage> OnMessage;
 
@@ -280,7 +287,10 @@ namespace Atlas.Core
 				count++;
 				count += logEntry.Entries;
 				if (logEntry.Type > Type)
+				{
 					Type = logEntry.Type;
+					SummaryText = logEntry.Summary;
+				}
 			}
 			Entries = count;
 			CreateEventPropertyChanged(nameof(Entries));
