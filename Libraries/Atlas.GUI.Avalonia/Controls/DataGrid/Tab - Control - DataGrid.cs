@@ -1019,15 +1019,29 @@ namespace Atlas.GUI.Avalonia.Controls
 					{
 						selectedRow.label = null;
 					}
+					// Fill in the DataKey/DataValue pair if found
 					var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
+					var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
 					if (keyProperties.Count > 0)
 					{
 						selectedRow.dataKey = keyProperties[0].GetValue(obj).ToString();
+					}
+					else if (keyFields.Count > 0)
+					{
+						selectedRow.dataKey = keyFields[0].GetValue(obj).ToString();
+					}
 
+					if (selectedRow.dataKey != null)
+					{
 						var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
+						var valueFields = type.GetFieldsWithAttribute<DataValueAttribute>();
 						if (valueProperties.Count > 0)
 						{
 							selectedRow.dataValue = valueProperties[0].GetValue(obj);
+						}
+						else if (valueFields.Count > 0)
+						{
+							selectedRow.dataValue = valueFields[0].GetValue(obj);
 						}
 						else
 						{

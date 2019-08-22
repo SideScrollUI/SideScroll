@@ -345,15 +345,28 @@ namespace Atlas.Extensions // rename to Core?
 
 		public static List<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type)
 		{
-			List<PropertyInfo> visibleProperties = new List<PropertyInfo>();
+			List<PropertyInfo> matchingProperties = new List<PropertyInfo>();
 			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
 			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
 				if (propertyInfo.GetCustomAttribute(typeof(T)) != null)
-					visibleProperties.Add(propertyInfo);
+					matchingProperties.Add(propertyInfo);
 			}
-			return visibleProperties;
+			return matchingProperties;
+		}
+
+		public static List<FieldInfo> GetFieldsWithAttribute<T>(this Type type)
+		{
+			List<FieldInfo> matchingFields = new List<FieldInfo>();
+			// Fields are returned in a random order, so sort them by the MetadataToken to get the original order
+			FieldInfo[] fieldInfos = type.GetFields().OrderBy(x => x.MetadataToken).ToArray();
+			foreach (FieldInfo fieldInfo in fieldInfos)
+			{
+				if (fieldInfo.GetCustomAttribute(typeof(T)) != null)
+					matchingFields.Add(fieldInfo);
+			}
+			return matchingFields;
 		}
 
 		private static string ObjectToUniqueStringAll(this object obj)

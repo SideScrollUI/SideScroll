@@ -44,10 +44,18 @@ namespace Atlas.Serialize
 				throw new Exception("Cloned types do not match [" + typeof(T).ToString() + "], [" + obj.GetType().ToString() +"]");
 			}
 			//	return default(T);
-			SerializerMemory memorySerializer = new SerializerMemory();
-			memorySerializer.Save(call, obj);
-			T copy = memorySerializer.Load<T>(call);
-			return copy;
+			try
+			{
+				SerializerMemory memorySerializer = new SerializerMemory();
+				memorySerializer.Save(call, obj);
+				T copy = memorySerializer.Load<T>(call);
+				return copy;
+			}
+			catch (Exception e)
+			{
+				call.log.AddError(e.Message);
+			}
+			return default(T);
 		}
 
 		public string GetEncodedString()

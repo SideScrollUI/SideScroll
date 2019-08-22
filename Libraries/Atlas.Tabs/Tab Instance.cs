@@ -432,6 +432,8 @@ namespace Atlas.Tabs
 		private void SaveDefaultBookmark()
 		{
 			Bookmark bookmark = RootInstance.CreateBookmark(); // create from base Tab
+			if (bookmark == null)
+				return;
 			bookmark.Name = CurrentBookmarkName;
 			project.DataApp.Save(bookmark.Name, bookmark, taskInstance.call);
 
