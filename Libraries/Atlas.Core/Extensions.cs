@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -341,6 +342,13 @@ namespace Atlas.Extensions // rename to Core?
 				visibleProperties.Add(propertyInfo);
 			}
 			return visibleProperties;
+		}
+
+		public static PropertyInfo GetPropertyWithAttribute<T>(this Type type)
+		{
+			List<PropertyInfo> matchingProperties = GetPropertiesWithAttribute<T>(type);
+			Debug.Assert(matchingProperties.Count == 1);
+			return matchingProperties[0];
 		}
 
 		public static List<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type)
