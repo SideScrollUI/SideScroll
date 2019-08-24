@@ -40,4 +40,7 @@ namespace Atlas.Tabs
 
 /*
 Not used anywhere. Remove?
+Uses:
+	Passing dynamic types?
+	Setting return type?
 */

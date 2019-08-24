@@ -7,9 +7,10 @@ using Atlas.Extensions;
 namespace Atlas.Tabs
 {
 	// implement INotifyPropertyChanged to prevent memory leaks
-	public class ListItem : INotifyPropertyChanged
+	public class ListItem : IListItem, INotifyPropertyChanged
 	{
-		public object key;
+		[HiddenColumn]
+		public object Key { get; set; }
 		[HiddenColumn]
 		[InnerValue]
 		public object Value { get; set; }
@@ -20,15 +21,15 @@ namespace Atlas.Tabs
 
 		public ListItem(object key, object value)
 		{
-			this.key = key;
+			this.Key = key;
 			this.Value = value;
 		}
 
 		public override string ToString()
 		{
-			if (key != null)
+			if (Key != null)
 			{
-				string description = key.ToString();
+				string description = Key.ToString();
 				if (description != null)
 					return description;
 			}
@@ -41,12 +42,21 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				return key.ObjectToString();
+				return Key.ObjectToString();
 			}
 			set
 			{
-				this.key = value;
+				this.Key = value;
 			}
 		}
+	}
+
+	public interface IListItem
+	{
+		[Name("Name")]
+		object Key { get; }
+
+		[HiddenColumn, InnerValue, StyleValue]
+		object Value { get; set; }
 	}
 }

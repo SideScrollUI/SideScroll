@@ -8,7 +8,12 @@ using System.Reflection;
 
 namespace Atlas.Tabs
 {
-	public abstract class ListMember : INotifyPropertyChanged
+	public interface IListAutoSelect
+	{
+		int Order { get; }
+	}
+
+	public abstract class ListMember : IListItem, INotifyPropertyChanged, IListAutoSelect
 	{
 		public const int MaxStringLength = 1000;
 
@@ -16,6 +21,12 @@ namespace Atlas.Tabs
 		public MemberInfo memberInfo;
 		public object obj;
 		public string Name { get; set; }
+
+		[HiddenColumn]
+		public object Key => Name;
+
+		[HiddenColumn, HiddenRow]
+		public int Order { get; set; } = 0;
 
 		[HiddenColumn]
 		public virtual bool Editable { get { return true; } }

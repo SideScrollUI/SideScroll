@@ -10,6 +10,34 @@ namespace Atlas.GUI.Avalonia
 {
 	public class DataGridUtils
 	{
+		public static string DataGridColumnToStringTable(DataGrid dataGrid, DataGridBoundColumn column)
+		{
+			if (dataGrid == null || column == null)
+				return null;
+
+			var sb = new StringBuilder();
+			foreach (var item in dataGrid.Items)
+			{
+				Binding binding = (Binding)column.Binding;
+				string propertyName = binding.Path;
+				Type type = item.GetType();
+				PropertyInfo propertyInfo = type.GetProperty(propertyName);
+				if (propertyInfo != null)
+				{
+					object obj = propertyInfo.GetValue(item);
+					string value = obj.ObjectToString();
+					sb.AppendLine(value);
+				}
+				else
+				{
+					sb.AppendLine('(' + propertyName + ')');
+				}
+				//object content = dataColumn.GetCellValue(item, dataColumn.ClipboardContentBinding);
+			}
+			string text = sb.ToString();
+			return text;
+		}
+
 		public static string DataGridToStringTable(DataGrid dataGrid)
 		{
 			if (dataGrid == null)
