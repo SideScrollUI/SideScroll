@@ -148,11 +148,17 @@ namespace Atlas.GUI.Avalonia.Controls
 				MaxWidth = 1000,
 				MaxHeight = 1000,
 				MinHeight = 200,
+				
 				//[Grid.RowProperty] = 1,
 				[Grid.ColumnProperty] = 1,
-				
+
 				//
 				//Background = new SolidColorBrush(Colors.White),
+
+				Background = new SolidColorBrush(Theme.BackgroundColor),
+
+				//Foreground = Brushes.LightGray,
+				BorderBrush = Brushes.LightGray,
 			};
 
 			// Show Hover text on mouse over instead of requiring holding the mouse down (why isn't this the default?)
@@ -197,6 +203,20 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.LostFocus += Tab_LostFocus;
 		}
 
+		public string GetDateTimeFormat(double duration)
+		{
+			if (duration < 60)
+				return "HH:mm:ss";
+			if (duration < 60 * 60)
+				return "HH:mm";
+			if (duration < 24 * 60 * 60)
+				return "HH:mm";
+			if (duration < 30 * 24 * 60 * 60)
+				return "MM/dd";
+
+			return "yyyy-MM-dd";
+		}
+
 		private void LoadPlotModel()
 		{
 			UnloadModel();
@@ -205,18 +225,87 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				//Title = name,
 				LegendPlacement = LegendPlacement.Outside,
+				TitleColor = OxyColors.LightGray,
+				PlotAreaBorderColor = OxyColors.LightGray,
+				TextColor = OxyColors.Black,
+				LegendTextColor = OxyColors.LightGray,
+				SelectionColor = OxyColors.Blue,
 			};
 
+			//double duration = 0;
 			foreach (ListSeries listSeries in tabControlDataGrid.SelectedItems)
+			{
+				//duration = listSeries.iList[0]
 				AddSeries(listSeries);
+			}
 
 			if (xAxisPropertyInfo != null && xAxisPropertyInfo.PropertyType == typeof(DateTime))
 			{
-				plotModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = AxisPosition.Bottom });
+				var dateTimeAxis = new OxyPlot.Axes.DateTimeAxis
+				{
+					Position = AxisPosition.Bottom,
+					//StringFormat = GetDateTimeFormat(duration),
+					//MinorIntervalType = DateTimeIntervalType.Days,
+					//IntervalType = DateTimeIntervalType.Days,
+					IntervalType = DateTimeIntervalType.Hours,
+					MajorGridlineStyle = LineStyle.Solid,
+					MajorGridlineColor = OxyColors.Gray,
+					//MinorGridlineStyle = LineStyle.None,
+					IntervalLength = 100,
+					IsAxisVisible = true,
+					AxislineColor = OxyColors.Black,
+					AxislineStyle = LineStyle.Solid,
+					AxislineThickness = 2,
+					TickStyle = TickStyle.Outside,
+					TicklineColor = OxyColors.Black,
+					MajorTickSize = 5,
+					MinorTicklineColor = OxyColors.Black,
+					MinorTickSize = 5,
+					AxisTickToLabelDistance = 2,
+					TitleColor = OxyColors.LightGray,
+					TextColor = OxyColors.LightGray,
+				};
+				plotModel.Axes.Add(dateTimeAxis);
+				//plotModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = AxisPosition.Bottom });
 			}
-			
+			else
 			{
-				plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = AxisPosition.Left });
+				var linearAxis = new OxyPlot.Axes.LinearAxis
+				{
+					Position = AxisPosition.Bottom,
+					MajorGridlineStyle = LineStyle.Solid,
+					MajorGridlineColor = OxyColors.Gray,
+					TitleColor = OxyColors.LightGray,
+					TextColor = OxyColors.LightGray,
+				};
+				plotModel.Axes.Add(linearAxis);
+			}
+
+			var valueAxis = new OxyPlot.Axes.LinearAxis
+			{
+				Position = AxisPosition.Left,
+				//Minimum = minimum - margin,
+				//Maximum = maximum + margin,
+				IntervalLength = 20,
+				MajorGridlineStyle = LineStyle.Solid,
+				MajorGridlineColor = OxyColors.Gray,
+				MinorGridlineStyle = LineStyle.None,
+				MinorTickSize = 0,
+				//MinorStep = 10,
+				MinimumMinorStep = 10,
+				IsAxisVisible = true,
+				AxislineColor = OxyColors.Black,
+				AxislineStyle = LineStyle.Solid,
+				AxislineThickness = 2,
+				TickStyle = TickStyle.Outside,
+				TicklineColor = OxyColors.Black,
+				MajorTickSize = 2,
+				TitleColor = OxyColors.LightGray,
+				TextColor = OxyColors.LightGray,
+			};
+			plotModel.Axes.Add(valueAxis);
+			{
+				//plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = AxisPosition.Left });
 			}
 
 			// would need to be able to disable to use
@@ -245,6 +334,11 @@ namespace Atlas.GUI.Avalonia.Controls
 				Title = listSeries.Name,
 				LineStyle = LineStyle.Solid,
 				StrokeThickness = 2,
+				Color = OxyColors.YellowGreen,
+				TextColor = OxyColors.Black,
+				CanTrackerInterpolatePoints = false,
+				MarkerSize = 3,
+				MarkerType = MarkerType.Circle,
 			};
 			AddPoints(listSeries, listSeries.iList, lineSeries);
 
