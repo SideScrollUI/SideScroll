@@ -181,7 +181,7 @@ namespace Atlas.GUI.Avalonia
 			if (data == null)
 				return;
 			Bookmark bookmark = Bookmark.Create(data);
-			baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark); 
+			baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
 			//tabView.tabInstance.tabBookmark = bookmark.tabBookmark;
 			//Reload();
 		}

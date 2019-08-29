@@ -8,8 +8,9 @@ namespace Atlas.Tabs
 {
 	public class Project
 	{
-		public string Name => projectSettings.Name; // for viewing purposes
-		public string Version { get; set; } = "0";
+		public string Name => projectSettings.Name;	// for viewing purposes
+		public string LinkType => projectSettings.LinkType; // for bookmarking
+		public string Version => projectSettings.Version;
 		public virtual ProjectSettings projectSettings { get; set; }
 
 		public DataRepo DataShared { get { return new DataRepo(DataRepoPath, "Shared"); } }
@@ -20,6 +21,11 @@ namespace Atlas.Tabs
 		public TypeObjectStore TypeObjectStore { get; set; } = new TypeObjectStore();
 		public BookmarkNavigator Navigator { get; set; } = new BookmarkNavigator();
 		public TaskInstanceCollection Tasks { get; set; } = new TaskInstanceCollection();
+
+		private string DataRepoPath
+		{
+			get { return Paths.Combine(projectSettings.ProjectPath, "Data"); }
+		}
 
 
 		public Project()
@@ -52,11 +58,6 @@ namespace Atlas.Tabs
 		public override string ToString()
 		{
 			return Name;
-		}
-
-		private string DataRepoPath
-		{
-			get { return Paths.Combine(projectSettings.ProjectPath, "Data"); }
 		}
 	}
 

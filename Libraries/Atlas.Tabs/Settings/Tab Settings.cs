@@ -68,6 +68,31 @@ namespace Atlas.Tabs
 				return selectedRows;
 			}
 		}
+
+		// Store Skipped bool instead?
+		public SelectionType SelectionType
+		{
+			get
+			{
+				if (TabDataSettings == null)
+					return SelectionType.None;
+
+				foreach (TabDataSettings dataSettings in TabDataSettings)
+				{
+					if (dataSettings.SelectionType != SelectionType.None)
+						return dataSettings.SelectionType;
+				}
+
+				return SelectionType.None;
+			}
+		}
+
+		/*public override string ToString()
+		{
+			var strings = new List<string>();
+			TabDataSettings.ForEach(p => strings.Add(p.ObjectToString()));
+			return string.Join(",", strings);
+		}*/
 	}
 }
 /*
