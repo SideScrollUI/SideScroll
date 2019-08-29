@@ -944,8 +944,20 @@ namespace Atlas.GUI.Avalonia.Controls
 						//dataGrid.SelectedItems.Add(value);
 						dataGrid.SelectedItem = value;
 				}
-				//if (value != null)
-				//	dataGrid.ScrollIntoView(value);
+				if (value != null && dataGrid.IsEffectivelyVisible)
+				{
+					try
+					{
+						//if (collectionView.Contains(value))
+							dataGrid.ScrollIntoView(value, dataGrid.CurrentColumn);
+					}
+					catch (Exception e)
+					{
+						// {System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+						//Parameter name: index
+						//   at Avalonia.Collections.DataGridCollectionView.GetItemAt(Int32 index) in D:\a\1\s\src\Avalonia.Controls.DataGrid\Collections\DataGridCollectionView.cs:line 1957
+					}
+				}
 			}
 		}
 
