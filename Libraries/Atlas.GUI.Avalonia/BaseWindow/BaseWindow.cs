@@ -439,6 +439,13 @@ namespace Atlas.GUI.Avalonia
 				return;
 			}
 
+			if (e.Key == Key.F5)
+			{
+				Reload();
+				e.Handled = true;
+				return;
+			}
+
 			if (e.Modifiers == InputModifiers.Control)
 			{
 			}

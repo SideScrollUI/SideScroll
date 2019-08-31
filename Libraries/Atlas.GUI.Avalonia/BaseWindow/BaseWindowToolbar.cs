@@ -2,6 +2,7 @@
 using Atlas.Resources;
 using Atlas.Tabs;
 using Avalonia.Controls;
+using Avalonia.Input;
 using System;
 
 namespace Atlas.GUI.Avalonia
@@ -62,8 +63,12 @@ namespace Atlas.GUI.Avalonia
 			Button buttonForward = AddButton("Forward", Assets.Streams.Forward, commandBindingForward);
 
 			AddSeparator();
-			buttonRefresh = AddButton("Refresh", Assets.Streams.Refresh);
+			buttonRefresh = AddButton("Refresh (F5)", Assets.Streams.Refresh);
 			buttonRefresh.Click += ButtonRefresh_Click;
+
+			// Handle in BaseWindow
+			//var refreshGesture = new KeyGesture { Key = Key.F5 };
+			//HotKeyManager.SetHotKey(buttonRefresh, refreshGesture);
 
 
 			/*
