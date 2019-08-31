@@ -944,7 +944,7 @@ namespace Atlas.GUI.Avalonia.Controls
 						//dataGrid.SelectedItems.Add(value);
 						dataGrid.SelectedItem = value;
 				}
-				if (value != null && dataGrid.IsEffectivelyVisible)
+				if (value != null && dataGrid.IsEffectivelyVisible && dataGrid.IsInitialized)
 				{
 					try
 					{
