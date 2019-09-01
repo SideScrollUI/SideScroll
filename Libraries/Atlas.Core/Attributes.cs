@@ -91,6 +91,12 @@ namespace Atlas.Core
 	{
 	}
 
+	// ->Serialize: Can't use [NonSerialized] since that's only for fields :(
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+	public class SecureAttribute : Attribute
+	{
+	}
+
 	// ->Tabs: Don't show this field/property as a column
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class HiddenColumnAttribute : Attribute

@@ -48,6 +48,17 @@ namespace Atlas.Tabs
 			Bookmark bookmark = serializer.Load<Bookmark>();
 			return bookmark;
 		}
+
+		public Bookmark GetSecure()
+		{
+			return this; // todo: implement?
+			// clone first?
+
+			/*foreach (var item in tabBookmark.tabChildBookmarks.Values)
+			{
+				item.
+			}*/
+		}
 	}
 
 	// Display Class

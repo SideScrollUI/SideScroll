@@ -238,7 +238,17 @@ namespace Atlas.GUI.Avalonia.Controls
 				//duration = listSeries.iList[0]
 				AddSeries(listSeries);
 			}
+			AddAxis();
 
+			// would need to be able to disable to use
+			//foreach (ListSeries listSeries in ChartSettings.ListSeries)
+			//	AddSeries(listSeries);
+
+			plotView.Model = plotModel;
+		}
+
+		private void AddAxis()
+		{
 			if (xAxisPropertyInfo != null && xAxisPropertyInfo.PropertyType == typeof(DateTime))
 			{
 				var dateTimeAxis = new OxyPlot.Axes.DateTimeAxis
@@ -307,12 +317,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				//plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = AxisPosition.Left });
 			}
-
-			// would need to be able to disable to use
-			//foreach (ListSeries listSeries in ChartSettings.ListSeries)
-			//	AddSeries(listSeries);
-
-			plotView.Model = plotModel;
 		}
 
 		private void UnloadModel()

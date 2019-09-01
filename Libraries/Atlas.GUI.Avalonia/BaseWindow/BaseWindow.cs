@@ -181,22 +181,31 @@ namespace Atlas.GUI.Avalonia
 			if (data == null)
 				return;
 			Bookmark bookmark = Bookmark.Create(data);
-			baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
-			//tabView.tabInstance.tabBookmark = bookmark.tabBookmark;
-			//Reload();
+			bool reloadBase = true;
+			if (reloadBase)
+			{
+				tabView.tabInstance.tabBookmark = bookmark.tabBookmark;
+				Reload();
+			}
+			else
+			{
+				// only if TabBookmarks used, don't need to reload the tab
+				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
+			}
 		}
 
 		protected virtual string GetLinkUri()
 		{
 			Bookmark bookmark = tabView.tabInstance.CreateBookmark();
+			Bookmark secureBookmark = bookmark.GetSecure();
 			string encoded = bookmark.GetEncodedString();
-			string uri = "atlas:" + encoded;
+			string uri = "atlas://" + encoded;
 			return uri;
 		}
 
 		protected virtual string GetLinkData(string uri)
 		{
-			if (!uri.StartsWith("atlas:"))
+			if (!uri.StartsWith("atlas://"))
 				return null;
 
 			string data = uri.Substring(6);

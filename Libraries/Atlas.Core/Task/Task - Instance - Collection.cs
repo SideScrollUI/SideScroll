@@ -9,7 +9,7 @@ namespace Atlas.Core
 		public new void Add(TaskInstance taskInstance)
 		{
 			base.Add(taskInstance);
-			if (Count > 100) // fixme
+			if (Count > 10) // fixme
 				this.RemoveAt(0);
 		}
 	}
