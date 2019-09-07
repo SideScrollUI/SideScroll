@@ -8,8 +8,8 @@ namespace Atlas.Network
 {
 	public class HTTP
 	{
-		private const int MaxAttempts = 5;
-
+		private const int MaxAttempts = 4;
+		private const int SleepMilliseconds = 500; // < ^ MaxAttempts
 		public Call call;
 
 		public HTTP(Call call)
@@ -34,7 +34,7 @@ namespace Atlas.Network
 		{
 			using (CallTimer getCall = call.Timer("Downloading HTTP File", new Tag("URI", uri)))
 			{
-				for (int attempt = 1; attempt <= MaxAttempts; attempt++)
+				for (int attempt = 1; ; attempt++)
 				{
 					HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri); // requests can't be reused between attempts
 					request.Method = "GET";
@@ -64,7 +64,10 @@ namespace Atlas.Network
 							call.log.AddError(response);
 						}
 					}
-					System.Threading.Thread.Sleep(3000 * (int)Math.Pow(2, attempt));
+					if (attempt >= MaxAttempts)
+						break;
+					//System.Threading.Thread.Sleep(SleedMilliseconds * (int)Math.Pow(2, attempt));
+					System.Threading.Thread.Sleep(SleepMilliseconds * attempt);
 				}
 				throw new Exception("HTTP request failed " + MaxAttempts.ToString() + " times: " + uri);
 			}

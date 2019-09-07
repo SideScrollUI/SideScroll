@@ -626,7 +626,7 @@ namespace Atlas.GUI.Avalonia.View
 					ScrollViewer scrollViewer = control as ScrollViewer;
 					if (scrollViewer != null)
 					{
-						if (offset - scrollViewer.Offset.X + 50 > scrollViewer.Bounds.Width)
+						if (offset - scrollViewer.Offset.X > scrollViewer.Bounds.Width)
 							return false;
 						break;
 					}

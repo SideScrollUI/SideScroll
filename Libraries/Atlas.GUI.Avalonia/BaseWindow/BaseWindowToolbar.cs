@@ -9,10 +9,11 @@ namespace Atlas.GUI.Avalonia
 {
 	public class BaseWindowToolbar : TabControlToolbar
 	{
-		public Button buttonLoadNext;
-		public Button buttonLink;
-		public Button buttonImport;
-		public Button buttonRefresh;
+		public ToolbarButton buttonBack;
+		public ToolbarButton buttonForward;
+		public ToolbarButton buttonLink;
+		public ToolbarButton buttonImport;
+		public ToolbarButton buttonRefresh;
 		//public Project project;
 		private BaseWindow baseWindow;
 
@@ -59,11 +60,12 @@ namespace Atlas.GUI.Avalonia
 			//HotKeyManager.SetHotKey(button, gesture1);
 
 			// gray color 3289C7
-			Button buttonBack = AddButton("Back", Assets.Streams.Back, commandBindingBack);
-			Button buttonForward = AddButton("Forward", Assets.Streams.Forward, commandBindingForward);
+			buttonBack = AddButton("Back", Assets.Streams.Back, commandBindingBack);
+			buttonForward = AddButton("Forward", Assets.Streams.Forward, commandBindingForward);
 
 			AddSeparator();
 			buttonRefresh = AddButton("Refresh (F5)", Assets.Streams.Refresh);
+			//buttonRefresh.Add();
 			buttonRefresh.Click += ButtonRefresh_Click;
 
 			// Handle in BaseWindow

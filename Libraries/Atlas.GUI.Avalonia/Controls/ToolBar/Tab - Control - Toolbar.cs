@@ -1,4 +1,5 @@
-﻿using Atlas.GUI.Avalonia;
+﻿using Atlas.Core;
+using Atlas.GUI.Avalonia;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -36,7 +37,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 			Children.Add(control);
 		}
 
-		public Button AddButton(string tooltip, Stream resource, ICommand command = null)
+		/*public Button AddButton(string tooltip, Stream resource, ICommand command = null)
 		{
 			//command = command ?? new RelayCommand(
 			//	(obj) => CommandDefaultCanExecute(obj),
@@ -75,10 +76,17 @@ namespace Atlas.GUI.Avalonia.Tabs
 			//var button = new ToolbarButton(tooltip, command, resource);
 			AddControl(button);
 			return button;
+		}*/
+
+		public ToolbarButton AddButton(string tooltip, Stream resource, ICommand command = null)
+		{
+			var button = new ToolbarButton(tooltip, command, resource);
+			AddControl(button);
+			return button;
 		}
 
 		// DefaultTheme.xaml is overriding this currently
-		private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		/*private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
 			Button button = (Button)sender;
 			button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
@@ -90,7 +98,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 			Button button = (Button)sender;
 			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
 			button.BorderBrush = button.Background;
-		}
+		}*/
 
 		/*private bool CommandDefaultCanExecute(object obj)
 		{
@@ -149,12 +157,14 @@ namespace Atlas.GUI.Avalonia.Tabs
 		}
 	}
 
-	// not working yet :(
+	// working now
 	public class ToolbarButton : Button, IStyleable, ILayoutable
 	{
 		Type IStyleable.StyleKey => typeof(Button);
 
-		public ToolbarButton(string tooltip, ICommand command, Stream resource)
+		public TaskDelegate.CallAction callAction;
+
+		public ToolbarButton(string tooltip, ICommand command, Stream resource) : base()
 		{
 			Bitmap bitmap;
 			using (resource)
@@ -165,22 +175,45 @@ namespace Atlas.GUI.Avalonia.Tabs
 			var image = new Image()
 			{
 				Source = bitmap,
+				MaxWidth = 24,
+				MaxHeight = 24,
 			};
 
-			Button button = new Button()
+			Content = image;
+			Command = command;
+			Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
+			BorderBrush = Background;
+			BorderThickness = new Thickness(0);
+			Margin = new Thickness(2);
+			//BorderThickness = new Thickness(2),
+			//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
+			//BorderBrush = new SolidColorBrush(Colors.Black),
+			ToolTip.SetTip(this, tooltip);
+
+			BorderBrush = Background;
+			this.Click += ToolbarButton_Click;
+		}
+
+		private void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		{
+			InvokeAction(new Call());
+		}
+
+		public void Add(TaskDelegate.CallAction callAction)
+		{
+			this.callAction = callAction;
+		}
+
+		private void InvokeAction(Call call)
+		{
+			try
 			{
-				Content = image,
-				Command = command,
-				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
-				BorderBrush = Background,
-				BorderThickness = new Thickness(0),
-				Margin = new Thickness(2),
-				//BorderThickness = new Thickness(2),
-				//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
-				//BorderBrush = new SolidColorBrush(Colors.Black),
-				[ToolTip.TipProperty] = tooltip,
-			};
-			button.BorderBrush = button.Background;
+				callAction?.Invoke(call);
+			}
+			catch (Exception e)
+			{
+				call.log.AddError(e.Message, new Tag("Exception", e));
+			}
 		}
 
 		// DefaultTheme.xaml is overriding this currently

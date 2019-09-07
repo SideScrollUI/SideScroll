@@ -163,18 +163,18 @@ namespace Atlas.GUI.Avalonia
 		public void AddClipBoardButtons()
 		{
 			toolbar.AddClipBoardButtons();
-			toolbar.buttonLink.Click += ButtonLink_Click;
-			toolbar.buttonImport.Click += ButtonImport_Click;
+			toolbar.buttonLink.Add(Link);
+			toolbar.buttonImport.Add(ImportBookmark);
 		}
 
-		private void ButtonLink_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		private void Link(Call call)
 		{
 			Bookmark bookmark = tabView.tabInstance.CreateBookmark();
 			string uri = linker.GetLinkUri(bookmark);
 			((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(uri);
 		}
 
-		private void ButtonImport_Click(object sender, RoutedEventArgs e)
+		private void ImportBookmark(Call call)
 		{
 			string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
 			string data = linker.GetLinkData(clipboardText);
