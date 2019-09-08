@@ -5,6 +5,7 @@
     <ApplicationIcon />
     <StartupObject />
     <Configurations>Debug;Release;DebugX86</Configurations>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>

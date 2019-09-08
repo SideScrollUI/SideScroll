@@ -9,6 +9,7 @@ namespace Atlas.Start.Avalonia.Tabs
 		public ToolbarButton buttonSearch;
 		public ToolbarButton buttonLoadAdd;
 		public ToolbarButton buttonLoadNext;
+		public ToolbarButton buttonSleep;
 		public ToolbarButton buttonCopyClipBoard;
 
 		public TextBlock textBlockStatus;
@@ -24,14 +25,15 @@ namespace Atlas.Start.Avalonia.Tabs
 			//CommandBinder.
 			//CommandBindings.Add(commandBindingBack);
 
-			buttonSearch = AddButton("Search", Assets.Streams.Search);
-			buttonLoadNext = AddButton("Next", Assets.Streams.Forward);
+			buttonSearch = AddButton("Search", Icons.Streams.Search);
+			buttonLoadNext = AddButton("Next", Icons.Streams.Forward);
+			buttonSleep = AddButton("Sleep", Icons.Streams.Refresh);
 			AddSeparator();
-			buttonLoadAdd = AddButton("Add", Assets.Streams.Add);
+			buttonLoadAdd = AddButton("Add", Icons.Streams.Add);
 			AddSeparator();
-			AddButton("Save", Assets.Streams.Save);
+			AddButton("Save", Icons.Streams.Save);
 			AddSeparator();
-			buttonCopyClipBoard = AddButton("Copy to Clipboard", Assets.Streams.PadNote);
+			buttonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
 			textBlockStatus = AddLabel("Status");
 		}
 	}

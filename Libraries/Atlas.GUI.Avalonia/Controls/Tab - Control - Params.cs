@@ -373,7 +373,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			textBox.Bind(TextBlock.TextProperty, binding);
 			this.Children.Add(textBox);
 
-			Button buttonImport = AddButton(rowIndex, "Import Clipboard", Assets.Streams.Paste);
+			Button buttonImport = AddButton(rowIndex, "Import Clipboard", Icons.Streams.Paste);
 			buttonImport.Click += (sender, e) =>
 			{
 				string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;

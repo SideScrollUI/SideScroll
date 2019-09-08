@@ -98,9 +98,9 @@ namespace Atlas.GUI.Avalonia.Controls
 			TabControlToolbar tabToolbar = new TabControlToolbar();
 			Grid.SetRow(tabToolbar, 1);
 			//tabToolbar.AddButton("Add", null,
-			Button buttonPin = tabToolbar.AddButton("Pin", Assets.Streams.Pin);
+			Button buttonPin = tabToolbar.AddButton("Pin", Icons.Streams.Pin);
 			buttonPin.Click += ButtonAdd_Click;
-			Button buttonDelete = tabToolbar.AddButton("Delete", Assets.Streams.Delete);
+			Button buttonDelete = tabToolbar.AddButton("Delete", Icons.Streams.Delete);
 			buttonDelete.Click += ButtonDelete_Click;
 
 			//Button buttonAdd = TabButton.Create("Add");

@@ -91,7 +91,7 @@ namespace Atlas.GUI.Avalonia
 
 			Resources["FontSizeSmall"] = 14; // stop DatePicker using a small font size
 
-			using (Stream stream = Assets.Streams.Logo)
+			using (Stream stream = Icons.Streams.Logo)
 			{
 				Icon = new WindowIcon(stream);
 			}

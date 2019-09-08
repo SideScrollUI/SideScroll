@@ -32,8 +32,10 @@ namespace Atlas.GUI.Avalonia
 
 		public class Bitmaps
 		{
-			public static Bitmap Help { get { return new Bitmap(Assets.Streams.Forward); } }
-			public static Bitmap Info { get { return new Bitmap(Assets.Streams.Info); } }
+			public static Bitmap Help { get { return new Bitmap(Icons.Streams.Forward); } }
+			public static Bitmap Info { get { return new Bitmap(Icons.Streams.Info); } }
+			public static Bitmap Hourglass { get { return new Bitmap(Assets.Streams.Hourglass); } }
+			public static Bitmap Shutter { get { return new Bitmap(Assets.Streams.Shutter); } }
 		}
 
 		public class Images

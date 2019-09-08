@@ -61,11 +61,11 @@ namespace Atlas.GUI.Avalonia
 			//HotKeyManager.SetHotKey(button, gesture1);
 
 			// gray color 3289C7
-			buttonBack = AddButton("Back", Assets.Streams.Back, commandBindingBack);
-			buttonForward = AddButton("Forward", Assets.Streams.Forward, commandBindingForward);
+			buttonBack = AddButton("Back", Icons.Streams.Back, commandBindingBack);
+			buttonForward = AddButton("Forward", Icons.Streams.Forward, commandBindingForward);
 
 			AddSeparator();
-			buttonRefresh = AddButton("Refresh (F5)", Assets.Streams.Refresh);
+			buttonRefresh = AddButton("Refresh (F5)", Icons.Streams.Refresh);
 			//buttonRefresh.Add();
 			buttonRefresh.Add(ButtonRefresh_Click);
 
@@ -105,8 +105,8 @@ namespace Atlas.GUI.Avalonia
 		public void AddClipBoardButtons()
 		{
 			AddSeparator();
-			buttonLink = AddButton("Link - Copy to Clipboard", Assets.Streams.Link);
-			buttonImport = AddButton("Import from Clipboard", Assets.Streams.Import);
+			buttonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
+			buttonImport = AddButton("Import from Clipboard", Icons.Streams.Import);
 		}
 
 		private bool CommandBackCanExecute(object obj)

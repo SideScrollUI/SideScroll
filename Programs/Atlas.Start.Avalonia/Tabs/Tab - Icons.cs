@@ -28,7 +28,7 @@ namespace Atlas.Start.Avalonia.Tabs
 				};
 				tabModel.AddObject(grid);
 
-				foreach (Stream stream in Assets.Streams.All)
+				foreach (Stream stream in Icons.Streams.All)
 					AddIcon(stream);
 			}
 
