@@ -9,6 +9,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Input.Platform;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -73,7 +74,7 @@ namespace Atlas.GUI.Avalonia
 
 		protected override IControl GenerateElement(DataGridCell cell, object dataItem)
 		{
-			cell.Background = GetCellBrush(cell, dataItem);
+			//cell.Background = GetCellBrush(cell, dataItem);
 			cell.MaxHeight = 100; // don't let them have more than a few lines each
 
 			// this needs to get set when the cell content value changes, see LoadingRow()
@@ -100,6 +101,29 @@ namespace Atlas.GUI.Avalonia
 				//TextBlock textBlock = GetTextBlock(cell, dataItem);
 				// textBlock.DoubleTapped += delegate // bad idea: clicking too fast triggers
 				AddTextBoxContextMenu(cell, textBlock);
+
+
+				/*Style style = new Style(x => x.OfType<DataGridCell>())
+				{
+					Setters = new[]
+					{
+						new Setter(DataGridCell.BackgroundProperty, BrushEditable),
+					},
+				};
+				cell.Styles.Add(style);*/
+
+
+				if (this.DisplayIndex == 1)
+				{
+					// Update the cell color based on the object
+					var binding = new Binding()
+					{
+						Converter = new ValueToBrushConverter(),
+						Mode = BindingMode.OneWay,
+					};
+					cell.Bind(DataGridCell.BackgroundProperty, binding);
+				}
+
 				return textBlock;
 			}
 		}
