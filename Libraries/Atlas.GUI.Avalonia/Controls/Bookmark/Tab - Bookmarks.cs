@@ -51,9 +51,9 @@ namespace Atlas.GUI.Avalonia.Controls
 			public override void Load(Call call)
 			{
 				toolbar = new TabControlBookmarksToolbar();
-				toolbar.buttonAdd.Click += ButtonAdd_Click;
-				toolbar.buttonLink.Click += ButtonLink_Click;
-				toolbar.buttonImport.Click += ButtonImport_Click;
+				toolbar.buttonAdd.Add(ButtonAdd_Click);
+				toolbar.buttonLink.Add(ButtonLink_Click);
+				toolbar.buttonImport.Add(ButtonImport_Click);
 				tabModel.AddObject(toolbar);
 
 				bookmarkSettings = new TabControlBookmarkSettings(this);
@@ -78,7 +78,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//this.Reload();
 			}*/
 
-			private void ButtonAdd_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+			private void ButtonAdd_Click(Call call)
 			{
 				var bookmark = this.CreateBookmark();
 				//tabModel.Bookmarks.Names.Add(new ViewBookmark(bookmark));
@@ -86,14 +86,14 @@ namespace Atlas.GUI.Avalonia.Controls
 				bookmarkSettings.ShowBookmarkSettings(bookmark);
 			}
 
-			private void ButtonLink_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+			private void ButtonLink_Click(Call call)
 			{
 				var bookmark = this.CreateBookmark();
 				string uri = tab.linker.GetLinkUri(bookmark);
 				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(uri);
 			}
 
-			private void ButtonImport_Click(object sender, RoutedEventArgs e)
+			private void ButtonImport_Click(Call call)
 			{
 				string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
 				string data = tab.linker.GetLinkData(clipboardText);

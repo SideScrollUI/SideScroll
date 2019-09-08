@@ -376,7 +376,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				// Group up any new items after the 1st one
 				//if (SelectedRows.Count == 0 || (dataGrid.SelectedCells.Count == 1 && dataGrid.CurrentCell.Item == dataGrid.Items[dataGrid.Items.Count - 1]))
 				// autoSelectNew not exposed
-				if (autoSelectFirst && autoSelectNew && (textBoxSearch.Text == null || textBoxSearch.Text.Length == 0))
+				if (autoSelectFirst && (autoSelectNew || tabModel.AutoSelect == TabModel.AutoSelectType.AnyNewOrSaved) && (textBoxSearch.Text == null || textBoxSearch.Text.Length == 0))
 				{
 					//CancellationTokenSource tokenSource = new CancellationTokenSource();
 					//this.Dispatcher.Invoke(() => SelectedItem = e.NewItems[0], System.Windows.Threading.DispatcherPriority.SystemIdle, tokenSource.Token, TimeSpan.FromSeconds(1));
@@ -405,6 +405,13 @@ namespace Atlas.GUI.Avalonia.Controls
 				// causing Invalid thread issues when removing items, remove completely?
 				dataGrid.InvalidateArrange(); // not resizing when adding new item, not needed?
 				dataGrid.InvalidateMeasure(); // not resizing when adding new item, not needed?
+			}
+			else if (e.Action == NotifyCollectionChangedAction.Reset) // Clear() will trigger this
+			{
+				// doesn't work
+				//dataGrid.InvalidateArrange();
+				//collectionView.Refresh();
+				//collectionView.
 			}
 		}
 

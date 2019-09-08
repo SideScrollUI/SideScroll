@@ -29,11 +29,18 @@ namespace Atlas.Tabs
 
 	public class TabModel
 	{
+		public enum AutoSelectType
+		{
+			None,
+			FirstSavedOrNew,
+			AnyNewOrSaved,
+		}
 		public string Id { get; set; } // todo: Unique key for bookmarks?
 		public string Name { get; set; } = "<TabModel>";
 		public string Notes { get; set; }
 		public object Object { get; set; } // optional
 		public bool AutoLoad { get; set; } = true;
+		public AutoSelectType AutoSelect { get; set; } = AutoSelectType.FirstSavedOrNew;
 
 		public BookmarkCollection Bookmarks { get; set; }
 		public IList Actions { get; set; }

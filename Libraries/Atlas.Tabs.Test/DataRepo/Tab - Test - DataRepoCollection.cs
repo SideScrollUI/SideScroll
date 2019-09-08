@@ -26,6 +26,7 @@ namespace Atlas.Tabs.Test
 				{
 					new TaskDelegate("Add", Add, false), // Foreground task so we can modify collection
 					new TaskDelegate("Add 10", Add10, false), // Foreground task so we can modify collection
+					new TaskDelegate("Replace", Replace, false), // Foreground task so we can modify collection
 					new TaskDelegate("Delete", Delete),
 					new TaskDelegate("Delete All", DeleteAll), // Foreground task so we can modify collection
 				};
@@ -67,6 +68,14 @@ namespace Atlas.Tabs.Test
 			{
 				for (int i = 0; i < 10; i++)
 					Add(call);
+			}
+
+			private void Replace(Call call)
+			{
+				var sampleItem = new SampleItem(sampleItems.Count, "Item 0");
+				RemoveItem(sampleItem.Name); // Remove previous result so refocus works
+				dataRepoItems.Save(sampleItem.ToString(), sampleItem);
+				sampleItems.Add(sampleItem);
 			}
 
 			private void Delete(Call call)

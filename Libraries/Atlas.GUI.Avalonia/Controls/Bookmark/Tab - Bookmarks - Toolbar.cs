@@ -6,11 +6,11 @@ namespace Atlas.Start.Avalonia.Tabs
 {
 	public class TabControlBookmarksToolbar : TabControlToolbar
 	{
-		//public Button buttonSearch;
-		public Button buttonAdd;
-		public Button buttonLink;
-		public Button buttonImport;
-		//public Button buttonCopyClipBoard;
+		//public ToolbarButton buttonSearch;
+		public ToolbarButton buttonAdd;
+		public ToolbarButton buttonLink;
+		public ToolbarButton buttonImport;
+		//public ToolbarButton buttonCopyClipBoard;
 
 		//public TextBlock textBlockStatus;
 

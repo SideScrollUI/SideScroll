@@ -1,4 +1,5 @@
-﻿using Atlas.GUI.Avalonia.Tabs;
+﻿using Atlas.Core;
+using Atlas.GUI.Avalonia.Tabs;
 using Atlas.Resources;
 using Atlas.Tabs;
 using Avalonia.Controls;
@@ -66,7 +67,7 @@ namespace Atlas.GUI.Avalonia
 			AddSeparator();
 			buttonRefresh = AddButton("Refresh (F5)", Assets.Streams.Refresh);
 			//buttonRefresh.Add();
-			buttonRefresh.Click += ButtonRefresh_Click;
+			buttonRefresh.Add(ButtonRefresh_Click);
 
 			// Handle in BaseWindow
 			//var refreshGesture = new KeyGesture { Key = Key.F5 };
@@ -96,7 +97,7 @@ namespace Atlas.GUI.Avalonia
 			//buttonForward.Click += ButtonForward_Click;
 		}
 
-		private void ButtonRefresh_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		private void ButtonRefresh_Click(Call call)
 		{
 			baseWindow.Reload();
 		}
