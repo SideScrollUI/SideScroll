@@ -10,7 +10,13 @@ namespace Atlas.GUI.Avalonia.Controls
 {
 	public class TabControlLoadingAnimation : Control
 	{
+		private Bitmap source = AvaloniaAssets.Bitmaps.Shutter;
 		private RenderTargetBitmap _bitmap;
+
+		public TabControlLoadingAnimation()
+		{
+			Width = Height = source.Size.Width;
+		}
 
 		protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
 		{
@@ -47,8 +53,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public override void Render(DrawingContext context)
 		{
-			var asset = AvaloniaAssets.Bitmaps.Shutter;
-			int width = (int)asset.Size.Width;
+			int width = (int)source.Size.Width;
 			int halfWidth = width / 2;
 			using (var ctxi = _bitmap.CreateDrawingContext(null))
 			using (var ctx = new DrawingContext(ctxi, false))
@@ -57,7 +62,7 @@ namespace Atlas.GUI.Avalonia.Controls
 										 * Matrix.CreateTranslation(halfWidth, halfWidth)))
 			{
 				ctxi.Clear(default);
-				ctx.DrawImage(asset, 1, new Rect(asset.Size), new Rect(asset.Size));
+				ctx.DrawImage(source, 1, new Rect(source.Size), new Rect(source.Size));
 				//ctx.FillRectangle(Brush.Parse("#006df0"), new Rect(50, 50, 100, 100));
 			}
 

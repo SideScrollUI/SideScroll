@@ -40,19 +40,9 @@
   - Has a lot better layout controls than WinForms
   - Ideally would eventually get deprecated for a cross platform solution
   
-* Atlas.GUI.Avalonia (.NET Core)
+* Atlas.GUI.Avalonia (.NET Standard)
   - Cross Platform GUI Controls
   - Works well on Windows, Linux?, Mac?
   - Still early beta
 
-* Atlas.GUI.Eto (.NET Standard)
-  - Cross Platform GUI Controls
-  - Wrapper around local GUI implementations
-  - Eto doesn't look like it's far enough along to support all of the Atlas features
-  - Grid support is rather poor right now
-  - Seems to suffer from lowest common denominator syndrome of the wrapped components
-  - The ideal solution probably reimplements all controls instead of wrapping existing ones
-  - Not sure whether to delete this, continue working on it, or try something else
-  - Requires Mono on linux?
-     - Need to test
      

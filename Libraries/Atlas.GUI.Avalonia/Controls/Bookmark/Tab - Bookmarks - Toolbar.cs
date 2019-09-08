@@ -22,14 +22,14 @@ namespace Atlas.Start.Avalonia.Tabs
 		private void InitializeControls()
 		{
 			buttonAdd = AddButton("Add", Icons.Streams.Add);
-			//buttonCopyClipBoard = AddButton("Copy to Clipboard", Assets.Streams.PadNote);
+			//buttonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
 			buttonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
 			buttonImport = AddButton("Import from Clipboard", Icons.Streams.Import);
 
-			//buttonSearch = AddButton("Search", Assets.Streams.Search);
+			//buttonSearch = AddButton("Search", Icons.Streams.Search);
 			//AddSeparator();
 			//AddSeparator();
-			//AddButton("Save", Assets.Streams.Save);
+			//AddButton("Save", Icons.Streams.Save);
 			//AddSeparator();
 			//textBlockStatus = AddLabel("Status");
 		}
