@@ -121,6 +121,12 @@ namespace Atlas.Core
 	{
 	}
 
+	// ->Tabs: Allow Tab to be collapsed
+	[AttributeUsage(AttributeTargets.Class)]
+	public class SkippableAttribute : Attribute
+	{
+	}
+
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class BindListAttribute : Attribute
 	{

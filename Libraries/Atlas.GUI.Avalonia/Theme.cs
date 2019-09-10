@@ -35,6 +35,7 @@ namespace Atlas.GUI.Avalonia
 
 		public static Color EditableColor = Color.Parse("#c8c2f9");
 		public static Color HasChildrenColor = Color.Parse("#f4c68d");
+		//public static Color HasChildrenColor = Colors.Tan;
 
 		// Notes
 		//public static Color NoteForegroundColor = Color.Parse("#000000");
@@ -55,3 +56,7 @@ namespace Atlas.GUI.Avalonia
 
 	}
 }
+
+/*
+https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.colors?view=netframework-4.8
+*/

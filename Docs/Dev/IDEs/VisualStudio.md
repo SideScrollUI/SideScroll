@@ -28,9 +28,9 @@
 	-   Check `Enable Just My Code`
 
 ## Visual Studio 2019 Preview
-  - No `Custom Document Well` extension support yet
-    - No vertical tabs :(
-    - Not recommended yet
+* Installing `Custom Document Well` for vertical tabs
+  - [https://tabsstudio.com/documentation/installing-custom-document-well-for-visual-studio-2019.html
+  - [Official Support on the roadmap](https://developercommunity.visualstudio.com/idea/467369/vertical-group-tab.html)
 
 # Suggested Visual Studio Addons
 ---

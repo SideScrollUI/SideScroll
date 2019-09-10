@@ -212,9 +212,9 @@ namespace Atlas.GUI.Avalonia.View
 			};
 			//if (TabViewSettings.SplitterDistance != null)
 			//	tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
-			UpdateSplitterDistance();
-			Grid.SetColumn(tabParentControls, 0);
+			//Grid.SetColumn(tabParentControls, 0);
 			containerGrid.Children.Add(tabParentControls);
+			UpdateSplitterDistance();
 
 			TabControlTitle tabTitle = new TabControlTitle(tabInstance, tabModel.Name);
 			tabParentControls.AddControl(tabTitle, false, SeparatorType.None);
@@ -453,6 +453,8 @@ namespace Atlas.GUI.Avalonia.View
 			foreach (IList iList in tabModel.ItemList)
 			{
 				TabControlDataGrid tabData = new TabControlDataGrid(tabInstance, iList, true, TabViewSettings.GetData(index));
+				//tabData.HorizontalAlignment = HorizontalAlignment.Stretch;
+				//tabData.VerticalAlignment = VerticalAlignment.Stretch;
 				tabData.OnSelectionChanged += ParentListSelectionChanged;
 				bool addSplitter = (tabDatas.Count > 0);
 				tabParentControls.AddControl(tabData, true, SeparatorType.Splitter);

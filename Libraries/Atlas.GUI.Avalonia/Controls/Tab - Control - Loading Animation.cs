@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -10,17 +11,20 @@ namespace Atlas.GUI.Avalonia.Controls
 {
 	public class TabControlLoadingAnimation : Control
 	{
-		private Bitmap source = AvaloniaAssets.Bitmaps.Shutter;
+		private const int maxWidth = 100;
+
+		private Bitmap source = AvaloniaAssets.Bitmaps.Logo;
+		//private Bitmap source = AvaloniaAssets.Bitmaps.Shutter;
 		private RenderTargetBitmap _bitmap;
 
 		public TabControlLoadingAnimation()
 		{
-			Width = Height = source.Size.Width;
+			Width = Height = Math.Min(source.Size.Width, maxWidth);
 		}
 
 		protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
 		{
-			_bitmap = new RenderTargetBitmap(new PixelSize(200, 200), new Vector(96, 96));
+			_bitmap = new RenderTargetBitmap(new PixelSize(maxWidth, maxWidth), new Vector(96, 96));
 			base.OnAttachedToLogicalTree(e);
 		}
 
@@ -53,13 +57,18 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public override void Render(DrawingContext context)
 		{
-			int width = (int)source.Size.Width;
-			int halfWidth = width / 2;
+			int sourceWidth = (int)source.Size.Width;
+			int sourceHeight = (int)source.Size.Height;
+			double minDimension = Math.Min(sourceWidth, sourceHeight);
+			double maxDimension = Math.Max(sourceWidth, sourceHeight);
+			double sourceRadius = maxDimension / 2;
+
 			using (var ctxi = _bitmap.CreateDrawingContext(null))
 			using (var ctx = new DrawingContext(ctxi, false))
-			using (ctx.PushPostTransform(Matrix.CreateTranslation(-halfWidth, -halfWidth)
-										 * Matrix.CreateRotation(_st.Elapsed.TotalSeconds)
-										 * Matrix.CreateTranslation(halfWidth, halfWidth)))
+			using (ctx.PushPostTransform(Matrix.CreateTranslation(-sourceRadius, -sourceRadius)
+										* Matrix.CreateRotation(_st.Elapsed.TotalSeconds)
+										* Matrix.CreateTranslation(sourceRadius, sourceRadius)
+										* Matrix.CreateScale(Width / sourceWidth, Height / sourceHeight)))
 			{
 				ctxi.Clear(default);
 				ctx.DrawImage(source, 1, new Rect(source.Size), new Rect(source.Size));
@@ -67,8 +76,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 
 			context.DrawImage(_bitmap, 1,
-				new Rect(0, 0, width, width),
-				new Rect(0, 0, width, width));
+				new Rect(0, 0, sourceWidth, sourceHeight),
+				new Rect(0, 0, maxWidth, maxWidth));
 			Dispatcher.UIThread.Post(InvalidateVisual, DispatcherPriority.Background);
 			base.Render(context);
 		}
