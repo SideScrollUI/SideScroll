@@ -377,16 +377,35 @@ namespace Atlas.GUI.Avalonia.Controls
 			buttonImport.Click += (sender, e) =>
 			{
 				string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
-				DateTime? dateTime = ConvertTextToDateTime(clipboardText);
-				if (dateTime != null)
+				TimeSpan? timeSpan = ConvertTextToTimeSpan(clipboardText);
+				if (timeSpan != null)
 				{
-					property.propertyInfo.SetValue(property.obj, dateTime);
-					datePicker.SelectedDate = dateTime;
-					textBox.Text = (string)dateTimeConverter.Convert(dateTime, typeof(string), null, null);
+					DateTime? newDateTime = dateTimeConverter.Convert(timeSpan, typeof(string), null, null) as DateTime?;
+					property.propertyInfo.SetValue(property.obj, newDateTime);
+					textBox.Text = timeSpan.ToString();
 					e.Handled = true;
+				}
+				else
+				{
+					DateTime? dateTime = ConvertTextToDateTime(clipboardText);
+					if (dateTime != null)
+					{
+						property.propertyInfo.SetValue(property.obj, dateTime);
+						datePicker.SelectedDate = dateTime;
+						textBox.Text = (string)dateTimeConverter.Convert(dateTime, typeof(string), null, null);
+						e.Handled = true;
+					}
 				}
 			};
 			this.Children.Add(buttonImport);
+		}
+		private TimeSpan? ConvertTextToTimeSpan(string text)
+		{
+			TimeSpan timeSpan;
+			if (TimeSpan.TryParseExact(text, @"h\:m\:s", CultureInfo.InvariantCulture, out timeSpan))
+				return timeSpan;
+
+			return null;
 		}
 
 		private DateTime? ConvertTextToDateTime(string text)

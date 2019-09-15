@@ -6,29 +6,36 @@ namespace Atlas.GUI.Avalonia
 {
 	public class DateTimeValueConverter : IValueConverter
 	{
-		public DateTime? originalDateTime;
+		public DateTime? previousDateTime;
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			originalDateTime = value as DateTime?;
+			if (value is TimeSpan timeSpan)
+			{
+				var date = ((DateTime)previousDateTime).Date;
+				previousDateTime = date.AddSeconds(timeSpan.TotalSeconds);
+				return previousDateTime;
+			}
 
+			previousDateTime = value as DateTime?;
+			
 			if (targetType == typeof(string))
 			{
-				if (originalDateTime == null)
+				if (previousDateTime == null)
 					return "";
 
-				return ((DateTime)originalDateTime).ToString("HH:mm:ss");
+				return ((DateTime)previousDateTime).ToString("HH:mm:ss");
 			}
 			else
 			{
-				return originalDateTime;
+				return previousDateTime;
 			}
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value == null)
-				return originalDateTime;
+				return previousDateTime;
 
 			if (targetType != typeof(DateTime) && targetType != typeof(DateTime?))
 				throw new Exception("invalid conversion");
@@ -42,23 +49,23 @@ namespace Atlas.GUI.Avalonia
 				SetDate(dateTime);
 			}
 
-			return originalDateTime;
+			return previousDateTime;
 		}
 
 		private void SetDate(DateTime dateTime)
 		{
-			if (originalDateTime == null)
+			if (previousDateTime == null)
 			{
-				originalDateTime = dateTime;
+				previousDateTime = dateTime;
 				return;
 			}
 
 			// use the same Kind as the original
-			dateTime = DateTime.SpecifyKind(dateTime, ((DateTime)originalDateTime).Kind);
+			dateTime = DateTime.SpecifyKind(dateTime, ((DateTime)previousDateTime).Kind);
 
-			var timeSpan = ((DateTime)originalDateTime).TimeOfDay;
+			var timeSpan = ((DateTime)previousDateTime).TimeOfDay;
 			dateTime = dateTime.Date + timeSpan;
-			originalDateTime = dateTime;
+			previousDateTime = dateTime;
 		}
 
 		public void SetTime(string timeText)
@@ -67,15 +74,17 @@ namespace Atlas.GUI.Avalonia
 			TimeSpan timeSpan;
 			if (TimeSpan.TryParseExact(timeText, @"h\:m\:s", CultureInfo.InvariantCulture, out timeSpan))
 			{
-				var date = ((DateTime)originalDateTime).Date;
-				originalDateTime = date.AddSeconds(timeSpan.TotalSeconds);
-				//return timeSpan;
+				if (previousDateTime != null)
+				{
+					var date = ((DateTime)previousDateTime).Date;
+					previousDateTime = date.AddSeconds(timeSpan.TotalSeconds);
+				}
+				else
+				{
+					var date = DateTime.UtcNow.Date;
+					previousDateTime = date.AddSeconds(timeSpan.TotalSeconds);
+				}
 			}
-
-			//DateTimeOffset result;
-			//if (DateTimeOffset.TryParseExact(text, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out result))
-			//DateTime result;
-			//if (DateTime.TryParseExact(text, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.NoCurrentDateDefault, out result))
 		}
 	}
 }

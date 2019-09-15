@@ -61,7 +61,7 @@ namespace Atlas.Core
 			Alert
 		}
 		public event PropertyChangedEventHandler PropertyChanged;
-		public DateTime Created;// { get; set; }
+		public DateTime Created // { get; set; }
 		public LogType originalType = LogType.Info;
 		public LogType Type { get; set; } = LogType.Info;
 		public string Text;// { get; set; }
@@ -157,8 +157,9 @@ namespace Atlas.Core
 		public event EventHandler<EventLogMessage> OnMessage;
 
 		public Log()
-		{
-			InitializeContext();
+        {
+            this.Created = DateTime.Now;
+            InitializeContext();
 		}
 
 		public Log(string text = null, SynchronizationContext context = null, Tag[] tags = null)
@@ -166,8 +167,9 @@ namespace Atlas.Core
 			this.context = context;
 			this.Text = text;
 			this.tags = tags;
+            this.Created = DateTime.Now;
 
-			InitializeContext();
+            InitializeContext();
 		}
 
 		private void InitializeContext()

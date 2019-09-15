@@ -10,7 +10,6 @@ using Avalonia.Styling;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Windows.Input;
 
 namespace Atlas.GUI.Avalonia.Tabs
@@ -37,78 +36,12 @@ namespace Atlas.GUI.Avalonia.Tabs
 			Children.Add(control);
 		}
 
-		/*public Button AddButton(string tooltip, Stream resource, ICommand command = null)
-		{
-			//command = command ?? new RelayCommand(
-			//	(obj) => CommandDefaultCanExecute(obj),
-			//	(obj) => CommandDefaultExecute(obj));
-			var assembly = Assembly.GetExecutingAssembly();
-			Bitmap bitmap;
-			using (resource)
-			{
-				bitmap = new Bitmap(resource);
-			}
-
-			var image = new Image()
-			{
-				Source = bitmap,
-				Width = 24,
-				Height = 24,
-			};
-
-			Button button = new Button()
-			{
-				Content = image,
-				Command = command,
-				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
-				BorderBrush = Background,
-				BorderThickness = new Thickness(0),
-				Margin = new Thickness(2),
-				//BorderThickness = new Thickness(2),
-				//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
-				//BorderBrush = new SolidColorBrush(Colors.Black),
-				[ToolTip.TipProperty] = tooltip,
-			};
-			button.BorderBrush = button.Background;
-			button.PointerEnter += Button_PointerEnter;
-			button.PointerLeave += Button_PointerLeave;
-
-			//var button = new ToolbarButton(tooltip, command, resource);
-			AddControl(button);
-			return button;
-		}*/
-
 		public ToolbarButton AddButton(string tooltip, Stream resource, ICommand command = null)
 		{
 			var button = new ToolbarButton(tooltip, command, resource);
 			AddControl(button);
 			return button;
 		}
-
-		// DefaultTheme.xaml is overriding this currently
-		/*private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			Button button = (Button)sender;
-			button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundHoverColor);
-		}
-
-		private void Button_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			Button button = (Button)sender;
-			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
-			button.BorderBrush = button.Background;
-		}*/
-
-		/*private bool CommandDefaultCanExecute(object obj)
-		{
-			return true;
-		}
-
-		private void CommandDefaultExecute(object obj)
-		{
-
-		}*/
 
 		public void AddSeparator()
 		{

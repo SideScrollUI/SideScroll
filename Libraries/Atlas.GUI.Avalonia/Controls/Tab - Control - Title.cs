@@ -56,6 +56,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				//HorizontalAlignment = HorizontalAlignment.Left,
 				//[Grid.RowProperty] = 0,
+				//[ToolTip.TipProperty] = Label,
 			};
 
 			Border borderPaddingTitle = new Border()
@@ -82,7 +83,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				Button button = new Button();
 				//button.St
-				Image image = Atlas.GUI.Avalonia.AvaloniaAssets.Images.Info;
+				Image image = AvaloniaAssets.Images.Info;
 				image.Height = 20;
 				Grid.SetColumn(image, 1);
 				//image.
