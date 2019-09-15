@@ -61,7 +61,7 @@ namespace Atlas.Core
 			Alert
 		}
 		public event PropertyChangedEventHandler PropertyChanged;
-		public DateTime Created // { get; set; }
+		public DateTime Created; // { get; set; }
 		public LogType originalType = LogType.Info;
 		public LogType Type { get; set; } = LogType.Info;
 		public string Text;// { get; set; }
