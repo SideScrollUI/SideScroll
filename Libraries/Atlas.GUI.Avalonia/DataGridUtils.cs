@@ -74,6 +74,7 @@ namespace Atlas.GUI.Avalonia
 						{
 							object obj = propertyInfo.GetValue(item);
 							string value = obj.ObjectToString();
+							value = value?.Replace('\n', ' '); // remove newlines
 							stringCells.Add(value);
 						}
 						else

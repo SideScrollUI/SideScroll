@@ -30,20 +30,20 @@ namespace Atlas.GUI.Avalonia.Controls
 		private object obj;
 		private bool autoGenerateRows;
 
-		public TabControlParams(TabInstance tabInstance, object obj, bool autoGenerateRows = true)
+		public TabControlParams(TabInstance tabInstance, object obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
 		{
 			this.tabInstance = tabInstance;
 			this.obj = obj;
 			this.autoGenerateRows = autoGenerateRows;
 
-			InitializeControls();
+			InitializeControls(columnDefinitions);
 		}
 
-		private void InitializeControls()
+		private void InitializeControls(string columnDefinitions)
 		{
 			//this.VerticalAlignment = VerticalAlignment.Stretch;
 			this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.ColumnDefinitions = new ColumnDefinitions("Auto,*");
+			this.ColumnDefinitions = new ColumnDefinitions(columnDefinitions);
 			this.Margin = new Thickness(15, 6);
 			this.MinWidth = 100;
 			this.MaxWidth = 2000;
@@ -254,6 +254,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				BorderThickness = new Thickness(1),
 				MaxWidth = ControlMaxWidth,
+				Margin = new Thickness(2, 2),
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
 			};
