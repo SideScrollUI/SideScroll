@@ -7,8 +7,11 @@ namespace Atlas.GUI.Avalonia
 {
 	public class DataGridBoundTextColumn : DataGridTextColumn
 	{
-		public DataGridBoundTextColumn()
+		private DataGrid dataGrid;
+
+		public DataGridBoundTextColumn(DataGrid dataGrid)
 		{
+			this.dataGrid = dataGrid;
 			//AddHeaderContextMenu();
 		}
 
@@ -69,6 +72,17 @@ namespace Atlas.GUI.Avalonia
 				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
 			};
 			list.Add(menuItemCopy);
+
+			list.Add(new Separator());
+
+			MenuItem menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
+			menuItemCopyDataGrid.Click += delegate
+			{
+				string text = DataGridUtils.DataGridToStringTable(dataGrid);
+				if (text != null)
+					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+			};
+			list.Add(menuItemCopyDataGrid);
 
 			//list.Add(new Separator());
 

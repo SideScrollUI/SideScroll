@@ -688,7 +688,7 @@ namespace Atlas.GUI.Wpf
 		{
 			if (tabInstance.filterBookmarkNode != null)
 			{
-				return tabInstance.filterBookmarkNode.selected.Contains(obj);
+				return tabInstance.filterBookmarkNode.selectedObjects.Contains(obj);
 			}
 			else
 			{
