@@ -10,6 +10,10 @@
 5. Configure Paths
     - Select `Settings` to change any of the default locations
     
+## Visual Studio 2019
+* Installing `Custom Document Well` for vertical tabs
+  - [https://tabsstudio.com/documentation/installing-custom-document-well-for-visual-studio-2019.html
+  - [Official Support on the roadmap](https://developercommunity.visualstudio.com/idea/467369/vertical-group-tab.html)
 
 ## Visual Studio 2017
 
@@ -26,11 +30,6 @@
   - Stopping on all(?) Exceptions
 	- Tools -> Options -> Debugging -> General
 	-   Check `Enable Just My Code`
-
-## Visual Studio 2019 Preview
-* Installing `Custom Document Well` for vertical tabs
-  - [https://tabsstudio.com/documentation/installing-custom-document-well-for-visual-studio-2019.html
-  - [Official Support on the roadmap](https://developercommunity.visualstudio.com/idea/467369/vertical-group-tab.html)
 
 # Suggested Visual Studio Addons
 ---

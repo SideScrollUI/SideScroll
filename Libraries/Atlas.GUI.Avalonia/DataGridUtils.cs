@@ -1,4 +1,5 @@
-﻿using Atlas.Extensions;
+﻿using Atlas.Core;
+using Atlas.Extensions;
 using Avalonia.Controls;
 using Avalonia.Data;
 using System;
@@ -49,7 +50,8 @@ namespace Atlas.GUI.Avalonia
 
 			foreach (DataGridColumn dataColumn in dataGrid.Columns)
 			{
-				visibleColumns[dataColumn.DisplayIndex] = dataColumn;
+				if (dataColumn.IsVisible)
+					visibleColumns[dataColumn.DisplayIndex] = dataColumn;
 			}
 
 			foreach (DataGridColumn dataColumn in visibleColumns.Values)
@@ -67,19 +69,20 @@ namespace Atlas.GUI.Avalonia
 					if (dataColumn is DataGridBoundColumn boundColumn)
 					{
 						Binding binding = (Binding)boundColumn.Binding;
-						string propertyName = binding.Path;
-						Type type = item.GetType();
-						PropertyInfo propertyInfo = type.GetProperty(propertyName);
-						if (propertyInfo != null)
+						string propertyPath = binding.Path;
+						object obj = ReflectorUtil.FollowPropertyPath(item, propertyPath);
+
+						//Type type = item.GetType();
+						//PropertyInfo propertyInfo = type.GetProperty(propertyPath);
+						if (obj != null)
 						{
-							object obj = propertyInfo.GetValue(item);
 							string value = obj.ObjectToString();
 							value = value?.Replace('\n', ' '); // remove newlines
 							stringCells.Add(value);
 						}
 						else
 						{
-							stringCells.Add('(' + propertyName + ')');
+							stringCells.Add('(' + propertyPath + ')');
 						}
 					}
 					//object content = dataColumn.GetCellValue(item, dataColumn.ClipboardContentBinding);
