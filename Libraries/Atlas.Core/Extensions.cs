@@ -252,6 +252,8 @@ namespace Atlas.Extensions // rename to Core?
 
 			if (type.IsPrimitive == false)
 			{
+				if (obj is DateTime dateTime)
+					return dateTime.ToString("yyyy-MM-dd HH:mm:ss.FFFFFF");
 				// use any ToString() that overrides the base
 				MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes);
 				if (toStringMethod.DeclaringType != typeof(Object) && toStringMethod.DeclaringType != typeof(ValueType))
@@ -389,6 +391,8 @@ namespace Atlas.Extensions // rename to Core?
 
 			if (type.IsPrimitive == false)
 			{
+				if (obj is DateTime dateTime)
+					return dateTime.ToString("yyyy-MM-dd HH:mm:ss.FFFFFF");
 				// use any ToString() that overrides the base
 				MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes);
 				if (toStringMethod.DeclaringType != typeof(Object) && toStringMethod.DeclaringType != typeof(ValueType))
