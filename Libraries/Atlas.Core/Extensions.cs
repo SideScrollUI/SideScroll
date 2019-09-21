@@ -322,63 +322,6 @@ namespace Atlas.Extensions // rename to Core?
 			return "( " + label + " )";*/
 		}
 
-
-		public static string ObjectToUniqueString(this object obj, int maxLength = 100)
-		{
-			string text = ObjectToUniqueStringAll(obj);
-			if (text != null && text.Length > maxLength)
-				return text.Substring(0, maxLength);
-			return text;
-		}
-
-		public static List<PropertyInfo> GetVisibleProperties(this Type type)
-		{
-			List<PropertyInfo> visibleProperties = new List<PropertyInfo>();
-			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
-			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
-			foreach (PropertyInfo propertyInfo in propertyInfos)
-			{
-				if (propertyInfo.GetCustomAttribute(typeof(HiddenColumnAttribute)) != null)
-					continue;
-
-				visibleProperties.Add(propertyInfo);
-			}
-			return visibleProperties;
-		}
-
-		public static PropertyInfo GetPropertyWithAttribute<T>(this Type type)
-		{
-			List<PropertyInfo> matchingProperties = GetPropertiesWithAttribute<T>(type);
-			Debug.Assert(matchingProperties.Count == 1);
-			return matchingProperties[0];
-		}
-
-		public static List<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type)
-		{
-			List<PropertyInfo> matchingProperties = new List<PropertyInfo>();
-			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
-			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
-			foreach (PropertyInfo propertyInfo in propertyInfos)
-			{
-				if (propertyInfo.GetCustomAttribute(typeof(T)) != null)
-					matchingProperties.Add(propertyInfo);
-			}
-			return matchingProperties;
-		}
-
-		public static List<FieldInfo> GetFieldsWithAttribute<T>(this Type type)
-		{
-			List<FieldInfo> matchingFields = new List<FieldInfo>();
-			// Fields are returned in a random order, so sort them by the MetadataToken to get the original order
-			FieldInfo[] fieldInfos = type.GetFields().OrderBy(x => x.MetadataToken).ToArray();
-			foreach (FieldInfo fieldInfo in fieldInfos)
-			{
-				if (fieldInfo.GetCustomAttribute(typeof(T)) != null)
-					matchingFields.Add(fieldInfo);
-			}
-			return matchingFields;
-		}
-
 		private static string ObjectToUniqueStringAll(this object obj)
 		{
 			if (obj == null)
@@ -449,6 +392,63 @@ namespace Atlas.Extensions // rename to Core?
 			}
 
 			return null;
+		}
+
+
+		public static string ObjectToUniqueString(this object obj, int maxLength = 100)
+		{
+			string text = ObjectToUniqueStringAll(obj);
+			if (text != null && text.Length > maxLength)
+				return text.Substring(0, maxLength);
+			return text;
+		}
+
+		public static List<PropertyInfo> GetVisibleProperties(this Type type)
+		{
+			List<PropertyInfo> visibleProperties = new List<PropertyInfo>();
+			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
+			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
+			foreach (PropertyInfo propertyInfo in propertyInfos)
+			{
+				if (propertyInfo.GetCustomAttribute(typeof(HiddenColumnAttribute)) != null)
+					continue;
+
+				visibleProperties.Add(propertyInfo);
+			}
+			return visibleProperties;
+		}
+
+		public static PropertyInfo GetPropertyWithAttribute<T>(this Type type)
+		{
+			List<PropertyInfo> matchingProperties = GetPropertiesWithAttribute<T>(type);
+			Debug.Assert(matchingProperties.Count == 1);
+			return matchingProperties[0];
+		}
+
+		public static List<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type)
+		{
+			List<PropertyInfo> matchingProperties = new List<PropertyInfo>();
+			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
+			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
+			foreach (PropertyInfo propertyInfo in propertyInfos)
+			{
+				if (propertyInfo.GetCustomAttribute(typeof(T)) != null)
+					matchingProperties.Add(propertyInfo);
+			}
+			return matchingProperties;
+		}
+
+		public static List<FieldInfo> GetFieldsWithAttribute<T>(this Type type)
+		{
+			List<FieldInfo> matchingFields = new List<FieldInfo>();
+			// Fields are returned in a random order, so sort them by the MetadataToken to get the original order
+			FieldInfo[] fieldInfos = type.GetFields().OrderBy(x => x.MetadataToken).ToArray();
+			foreach (FieldInfo fieldInfo in fieldInfos)
+			{
+				if (fieldInfo.GetCustomAttribute(typeof(T)) != null)
+					matchingFields.Add(fieldInfo);
+			}
+			return matchingFields;
 		}
 
 		public static object GetInnerValue(this object value)

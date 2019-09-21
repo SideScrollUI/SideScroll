@@ -59,7 +59,6 @@ namespace Atlas.GUI.Avalonia
 				columns.Add((string)dataColumn.Header);
 			}
 
-			// some really ugly code for retrieving cell values
 			//var collection = (ICollectionView)dataGrid.Items;
 			foreach (var item in dataGrid.Items)
 			{
@@ -72,18 +71,9 @@ namespace Atlas.GUI.Avalonia
 						string propertyPath = binding.Path;
 						object obj = ReflectorUtil.FollowPropertyPath(item, propertyPath);
 
-						//Type type = item.GetType();
-						//PropertyInfo propertyInfo = type.GetProperty(propertyPath);
-						if (obj != null)
-						{
-							string value = obj.ObjectToString();
-							value = value?.Replace('\n', ' '); // remove newlines
-							stringCells.Add(value);
-						}
-						else
-						{
-							stringCells.Add('(' + propertyPath + ')');
-						}
+						string value = obj.ObjectToString();
+						value = value?.Replace('\n', ' '); // remove newlines
+						stringCells.Add(value);
 					}
 					//object content = dataColumn.GetCellValue(item, dataColumn.ClipboardContentBinding);
 				}

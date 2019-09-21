@@ -7,7 +7,7 @@ using Atlas.Extensions;
 namespace Atlas.Tabs
 {
 	// implement INotifyPropertyChanged to prevent memory leaks
-	public class ListPair : INotifyPropertyChanged
+	public class ListPair : INotifyPropertyChanged, IMaxDesiredWidth
 	{
 		public object Name { get; set; }
 		[StyleValue]
@@ -17,10 +17,13 @@ namespace Atlas.Tabs
 		public object Object { get; set; }
 		public bool autoLoad = true;
 
+		[HiddenColumn]
+		public int? MaxDesiredWidth { get; set; }
+
 #pragma warning disable 414
 		public event PropertyChangedEventHandler PropertyChanged = null;
 
-		public ListPair(object key, object value, object obj = null)
+		public ListPair(object key, object value, object obj = null, int? maxDesiredWidth = null)
 		{
 			this.Name = key;
 			this.Value = value;
@@ -28,6 +31,7 @@ namespace Atlas.Tabs
 				this.Object = obj;
 			else
 				this.Object = value;
+			this.MaxDesiredWidth = maxDesiredWidth;
 		}
 
 		public override string ToString()
@@ -41,7 +45,7 @@ namespace Atlas.Tabs
 
 			return "";
 		}
-		
+
 		// DataGrid columns bind to this
 		/*public string Name
 		{

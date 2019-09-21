@@ -9,12 +9,16 @@ using Atlas.Extensions;
 
 namespace Atlas.Tabs
 {
-	public interface IListEditable
+	public interface IPropertyEditable
 	{
 		bool Editable { get; }
 	}
+	public interface IMaxDesiredWidth
+	{
+		int? MaxDesiredWidth { get; }
+	}
 
-	public class ListProperty : ListMember, IListEditable
+	public class ListProperty : ListMember, IPropertyEditable, IMaxDesiredWidth
 	{
 		public PropertyInfo propertyInfo;
 		private bool cached;
@@ -26,8 +30,20 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				bool propertyReadOnly = (propertyInfo.GetCustomAttribute(typeof(ReadOnlyAttribute)) != null);
+				bool propertyReadOnly = (propertyInfo.GetCustomAttribute<ReadOnlyAttribute>() != null);
 				return propertyInfo.CanWrite && !propertyReadOnly;
+			}
+		}
+
+		[HiddenColumn]
+		public int? MaxDesiredWidth
+		{
+			get
+			{
+				var maxWidthAttribute = propertyInfo.GetCustomAttribute<ColumnMaxWidthAttribute>();
+				if (maxWidthAttribute != null)
+					return maxWidthAttribute.MaxWidth;
+				return null;
 			}
 		}
 

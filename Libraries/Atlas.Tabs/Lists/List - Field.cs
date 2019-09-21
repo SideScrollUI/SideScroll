@@ -6,7 +6,7 @@ using Atlas.Extensions;
 
 namespace Atlas.Tabs
 {
-	public class ListField : ListMember, IListEditable
+	public class ListField : ListMember, IPropertyEditable
 	{
 		public FieldInfo fieldInfo;
 		

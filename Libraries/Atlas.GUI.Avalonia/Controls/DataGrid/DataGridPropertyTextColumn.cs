@@ -31,6 +31,7 @@ namespace Atlas.GUI.Avalonia
 		private FieldValueConverter formatConverter = new FieldValueConverter();
 		private DataGrid dataGrid;
 		private PropertyInfo propertyInfo;
+		private int MaxDesiredWidth = 500;
 		
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly)
 		{
@@ -97,9 +98,8 @@ namespace Atlas.GUI.Avalonia
 			}
 			else*/
 			{
-				TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
-				//TextBlock textBlock = GetTextBlock(cell, dataItem);
-				// textBlock.DoubleTapped += delegate // bad idea: clicking too fast triggers
+				//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
+				TextBlock textBlock = GetTextBlock(cell, dataItem);
 				AddTextBoxContextMenu(cell, textBlock);
 
 
@@ -129,16 +129,41 @@ namespace Atlas.GUI.Avalonia
 		}
 
 		// so we don't load slow templates?
-		/*public class SubTextBlock : TextBlock
+		public class SubTextBlock : TextBlock
 		{
+			public double MaxDesiredWidth = 500;
+
+			private DataGridPropertyTextColumn column;
+			private PropertyInfo propertyInfo;
+
+			public SubTextBlock(DataGridPropertyTextColumn column, PropertyInfo propertyInfo)
+			{
+				this.column = column;
+				this.propertyInfo = propertyInfo;
+			}
+
+			// can't override DesiredSize
+			protected override Size MeasureCore(Size availableSize)
+			{
+				double maxDesiredWidth = MaxDesiredWidth;
+				if (DataContext is IMaxDesiredWidth iMaxWidth && column.DisplayIndex == 1 && iMaxWidth.MaxDesiredWidth != null)
+				{
+					maxDesiredWidth = iMaxWidth.MaxDesiredWidth.Value;
+				}
+
+				Size measured = base.MeasureCore(availableSize);
+				Size maxSize = new Size(Math.Min(maxDesiredWidth, measured.Width), measured.Height);
+				return maxSize;
+			}
 		}
 
 		protected TextBlock GetTextBlock(DataGridCell cell, object dataItem)
 		{
-			SubTextBlock textBlockElement = new SubTextBlock
+			SubTextBlock textBlockElement = new SubTextBlock(this, propertyInfo)
 			{
 				Margin = new Thickness(4),
 				VerticalAlignment = VerticalAlignment.Center,
+				MaxDesiredWidth = this.MaxDesiredWidth,
 				//FontFamily
 				//FontSize
 				//FontStyle
@@ -156,10 +181,10 @@ namespace Atlas.GUI.Avalonia
 					directBindingsField.SetValue(textBlockElement, new List<AvaloniaObject.DirectBindingSubscription>();
 				}
 
-				return new AvaloniaObject.DirectBindingSubscription(textBlockElement, TextBlock.TextProperty, Binding);*//*
+				return new AvaloniaObject.DirectBindingSubscription(textBlockElement, TextBlock.TextProperty, Binding);*/
 			}
 			return textBlockElement;
-		}*/
+		}
 
 		private void AddTextBoxContextMenu(DataGridCell cell, TextBlock textBlock)
 		{
