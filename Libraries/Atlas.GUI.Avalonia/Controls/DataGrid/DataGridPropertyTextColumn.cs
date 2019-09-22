@@ -118,7 +118,7 @@ namespace Atlas.GUI.Avalonia
 					// Update the cell color based on the object
 					var binding = new Binding()
 					{
-						Converter = new ValueToBrushConverter(),
+						Converter = new ValueToBrushConverter(propertyInfo),
 						Mode = BindingMode.OneWay,
 					};
 					cell.Bind(DataGridCell.BackgroundProperty, binding);

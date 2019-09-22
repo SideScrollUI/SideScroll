@@ -11,8 +11,7 @@ namespace Atlas.Tabs
 	{
 		[HiddenColumn]
 		public object Key { get; set; }
-		[HiddenColumn]
-		[InnerValue]
+		[HiddenColumn, InnerValue]
 		public object Value { get; set; }
 		public bool autoLoad = true;
 

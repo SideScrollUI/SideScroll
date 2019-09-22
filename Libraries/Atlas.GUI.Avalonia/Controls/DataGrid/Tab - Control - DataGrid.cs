@@ -1026,50 +1026,58 @@ namespace Atlas.GUI.Avalonia.Controls
 					}
 					tabDataConfiguration.selectedRows.Add(selectedItem);
 				}*/
-				foreach (object obj in dataGrid.SelectedItems)
+				try
 				{
-					if (obj == null)
-						continue;
-					Type type = obj.GetType();
-					SelectedRow selectedRow = new SelectedRow();
-					selectedRow.label = obj.ObjectToUniqueString();
-					selectedRow.rowIndex = iList.IndexOf(obj);
-					if (selectedRow.label == type.FullName)
+					foreach (object obj in dataGrid.SelectedItems)
 					{
-						selectedRow.label = null;
-					}
-					// Fill in the DataKey/DataValue pair if found
-					var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
-					var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
-					if (keyProperties.Count > 0)
-					{
-						selectedRow.dataKey = keyProperties[0].GetValue(obj).ToString();
-					}
-					else if (keyFields.Count > 0)
-					{
-						selectedRow.dataKey = keyFields[0].GetValue(obj).ToString();
-					}
+						if (obj == null)
+							continue;
+						Type type = obj.GetType();
+						SelectedRow selectedRow = new SelectedRow();
+						selectedRow.label = obj.ObjectToUniqueString();
+						selectedRow.rowIndex = iList.IndexOf(obj);
+						if (selectedRow.label == type.FullName)
+						{
+							selectedRow.label = null;
+						}
+						// Fill in the DataKey/DataValue pair if found
+						var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
+						var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
+						if (keyProperties.Count > 0)
+						{
+							selectedRow.dataKey = keyProperties[0].GetValue(obj).ToString();
+						}
+						else if (keyFields.Count > 0)
+						{
+							selectedRow.dataKey = keyFields[0].GetValue(obj).ToString();
+						}
 
-					if (selectedRow.dataKey != null)
-					{
-						var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
-						var valueFields = type.GetFieldsWithAttribute<DataValueAttribute>();
-						if (valueProperties.Count > 0)
+						if (selectedRow.dataKey != null)
 						{
-							selectedRow.dataValue = valueProperties[0].GetValue(obj);
+							var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
+							var valueFields = type.GetFieldsWithAttribute<DataValueAttribute>();
+							if (valueProperties.Count > 0)
+							{
+								selectedRow.dataValue = valueProperties[0].GetValue(obj);
+							}
+							else if (valueFields.Count > 0)
+							{
+								selectedRow.dataValue = valueFields[0].GetValue(obj);
+							}
+							else
+							{
+								selectedRow.dataValue = obj;
+							}
 						}
-						else if (valueFields.Count > 0)
-						{
-							selectedRow.dataValue = valueFields[0].GetValue(obj);
-						}
-						else
-						{
-							selectedRow.dataValue = obj;
-						}
-					}
 
-					selectedRows.Add(selectedRow);
+						selectedRows.Add(selectedRow);
+					}
 				}
+				catch (Exception e)
+				{
+					Debug.WriteLine(e.Message);
+				}
+
 				return selectedRows;
 			}
 		}

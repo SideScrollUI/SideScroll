@@ -771,26 +771,7 @@ namespace Atlas.GUI.Avalonia.View
 			Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
 			newChildControls = new Dictionary<object, Control>();
 			List<Control> orderedChildControls = new List<Control>();
-			if (tabModel.Notes != null && tabModel.Notes.Length > 0 && tabInstance.tabViewSettings.NotesVisible)
-			{
-				// Could add control to class instead of this
-				Control controlNotes;
-				if (oldChildControls.TryGetValue(tabModel.Notes, out controlNotes))
-				{
-					newChildControls[tabModel.Notes] = controlNotes;
-					orderedChildControls.Add(controlNotes);
-				}
-				else
-				{
-					TabModel notesTabModel = new TabModel("Notes");
-					notesTabModel.AddData(tabModel.Notes);
-					notesTabModel.Notes = tabModel.Notes;
-					TabInstance childTabInstance = tabInstance.CreateChildTab(notesTabModel);
-					TabNotes tabNotes = new TabNotes(childTabInstance);
-					newChildControls[tabModel.Notes] = tabNotes;
-					orderedChildControls.Add(tabNotes);
-				}
-			}
+			AddNotes(newChildControls, oldChildControls, orderedChildControls);
 
 			foreach (ITabSelector tabControl in CustomTabControls)
 			{
@@ -813,6 +794,30 @@ namespace Atlas.GUI.Avalonia.View
 			return orderedChildControls;
 		}
 
+		private void AddNotes(Dictionary<object, Control> newChildControls, Dictionary<object, Control> oldChildControls, List<Control> orderedChildControls)
+		{
+			if (tabModel.Notes != null && tabModel.Notes.Length > 0 && tabInstance.tabViewSettings.NotesVisible)
+			{
+				// Could add control to class instead of this
+				Control controlNotes;
+				if (oldChildControls.TryGetValue(tabModel.Notes, out controlNotes))
+				{
+					newChildControls[tabModel.Notes] = controlNotes;
+					orderedChildControls.Add(controlNotes);
+				}
+				else
+				{
+					TabModel notesTabModel = new TabModel("Notes");
+					notesTabModel.AddData(tabModel.Notes);
+					notesTabModel.Notes = tabModel.Notes;
+					TabInstance childTabInstance = tabInstance.CreateChildTab(notesTabModel);
+					TabNotes tabNotes = new TabNotes(childTabInstance);
+					newChildControls[tabModel.Notes] = tabNotes;
+					orderedChildControls.Add(tabNotes);
+				}
+			}
+		}
+
 		internal void CreateChildControls(IList newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector tabControl = null)
 		{
 			//var collection = newList as DataGridSelectedItemsCollection;
@@ -832,7 +837,7 @@ namespace Atlas.GUI.Avalonia.View
 			//var collection = newList as DataGridSelectedItemsCollection;
 			//if (collection != null && collection.)
 			//	newList.
-			object value = obj.GetInnerValue();
+			object value = obj.GetInnerValue(); // performance issues? cache this?
 			if (value == null)
 				return;
 

@@ -4,15 +4,31 @@ using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using System;
+using System.Reflection;
 
 namespace Atlas.GUI.Avalonia
 {
 	public class ValueToBrushConverter : IValueConverter
 	{
-		public const string ColorHasChildren = "#f4c68d";
+		private PropertyInfo propertyInfo;
 
-		public SolidColorBrush HasChildrenBrush { get; set; } = (SolidColorBrush)(new BrushConverter().ConvertFrom(ColorHasChildren));
-		public SolidColorBrush EditableBrush { get; set; } = new SolidColorBrush(Theme.EditableColor);
+		public ValueToBrushConverter(PropertyInfo propertyInfo)
+		{
+			this.propertyInfo = propertyInfo;
+		}
+
+		public sealed class BrushColors
+		{
+			public const string ColorHasChildren = "#f4c68d";
+
+			public ISolidColorBrush HasChildren { get; set; } = (SolidColorBrush)(new BrushConverter().ConvertFrom(ColorHasChildren));
+			public ISolidColorBrush NoChildren { get; set; } = Brushes.LightGray;
+			public ISolidColorBrush Editable { get; set; } = new SolidColorBrush(Theme.EditableColor);
+		}
+		internal static BrushColors StyleBrushes { get; set; } = new BrushColors();
+
+		//public SolidColorBrush HasChildrenBrush { get; set; } = (SolidColorBrush)(new BrushConverter().ConvertFrom(ColorHasChildren));
+		//public SolidColorBrush EditableBrush { get; set; } = new SolidColorBrush(Theme.EditableColor);
 
 		public bool Editable { get; set; } = false;
 
@@ -21,16 +37,16 @@ namespace Atlas.GUI.Avalonia
 			//DataGridCell dataGridCell = (DataGridCell)value;
 			try
 			{
-				if ((value is ListItem || value is ListMember)) // dataGridCell.DisplayIndex == 1 && 
+				if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					bool hasChildren = TabModel.ObjectHasChildren(value, true);
 					if (hasChildren)
-						return HasChildrenBrush;
+						return StyleBrushes.HasChildren;
 					//return Brushes.Moccasin;
 					else if (Editable && (value is ListMember) && ((ListMember)value).Editable)
-						return EditableBrush;
+						return StyleBrushes.Editable;
 					else
-						return Brushes.LightGray;
+						return StyleBrushes.NoChildren;
 				}
 			}
 			catch (InvalidCastException)
@@ -58,7 +74,7 @@ namespace Atlas.GUI.Avalonia
 						return BrushHasChildren;
 					//return Brushes.Moccasin;
 					else if (!IsReadOnly && (dataItem is ListMember) && ((ListMember)dataItem).Editable)
-						return BrushEditable;
+						return Editable;
 					else
 						return BrushValue;
 				}
