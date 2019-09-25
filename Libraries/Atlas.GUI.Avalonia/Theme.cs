@@ -54,6 +54,7 @@ namespace Atlas.GUI.Avalonia
 		public static Color ToolbarButtonBackgroundHoverColor = Color.Parse("#4e8ef7"); // 659aff, DefaultTheme.xaml is overriding this
 		public static Color ToolbarButtonSeparatorColor = Color.Parse("#004db0");
 
+		public static Color ControlBackgroundHover = Color.Parse("#ddffdd");
 	}
 }
 

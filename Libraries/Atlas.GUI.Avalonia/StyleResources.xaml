@@ -34,5 +34,8 @@
         <sys:Double x:Key="FontSizeLarge">16</sys:Double>
 
         <sys:Double x:Key="ScrollBarThickness">16</sys:Double>
+
+
+        <SolidColorBrush x:Key="ThemeBackgroundHover">#ddffdd</SolidColorBrush>
     </Style.Resources>
 </Style>

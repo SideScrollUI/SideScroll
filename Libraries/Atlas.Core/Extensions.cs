@@ -271,7 +271,7 @@ namespace Atlas.Extensions // rename to Core?
 
 			if (typeof(IDictionary).IsAssignableFrom(type))
 			{
-				return "{" + ((ICollection)obj).Count.ToString("N0") + "}";
+				return "{ " + ((ICollection)obj).Count.ToString("N0") + " }";
 			}
 			else if (typeof(ICollection).IsAssignableFrom(type))
 			{

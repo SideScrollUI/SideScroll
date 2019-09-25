@@ -6,12 +6,24 @@ using Atlas.Extensions;
 
 namespace Atlas.Tabs
 {
-	public class ListField : ListMember, IPropertyEditable
+	public class ListField : ListMember, IPropertyEditable, IMaxDesiredWidth
 	{
 		public FieldInfo fieldInfo;
 		
 		[HiddenColumn]
 		public override bool Editable { get { return true; } }
+
+		[HiddenColumn]
+		public int? MaxDesiredWidth
+		{
+			get
+			{
+				var maxWidthAttribute = fieldInfo.GetCustomAttribute<ColumnMaxWidthAttribute>();
+				if (maxWidthAttribute != null)
+					return maxWidthAttribute.MaxWidth;
+				return null;
+			}
+		}
 
 		[Editing]
 		[InnerValue]

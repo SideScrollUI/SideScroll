@@ -20,6 +20,7 @@ using System.Windows.Input;
 using Atlas.Resources;
 using System.ComponentModel;
 using System.Globalization;
+using Avalonia.Styling;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -202,9 +203,28 @@ namespace Atlas.GUI.Avalonia.Controls
 			//textBox.TextInput += TextBox_TextInput;
 			//textBox.DataContextChanged += TextBox_DataContextChanged;
 			//textBox.KeyUp += TextBox_KeyUp;
+			textBox.PointerEnter += TextBox_PointerEnter;
+			textBox.PointerLeave += TextBox_PointerLeave;
+			//textBox.ApplyTemplate();
 
 			this.Children.Add(textBox);
 			return textBox;
+		}
+		// DefaultTheme.xaml is setting this for templates
+		private void TextBox_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			TextBox textBox = (TextBox)sender;
+			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			if (textBox.IsEnabled && !textBox.IsReadOnly)
+				textBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
+		}
+
+		private void TextBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			TextBox textBox = (TextBox)sender;
+			if (textBox.IsEnabled && !textBox.IsReadOnly)
+				textBox.Background = new SolidColorBrush(Colors.White);
+			//textBox.BorderBrush = textBox.Background;
 		}
 
 		// works
@@ -306,7 +326,26 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			comboBox.Bind(ComboBox.SelectedItemProperty, binding);
 			this.Children.Add(comboBox);
+			comboBox.PointerEnter += ComboBox_PointerEnter;
+			comboBox.PointerLeave += ComboBox_PointerLeave;
 			return comboBox;
+		}
+
+		// DefaultTheme.xaml is setting this for templates
+		private void ComboBox_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			ComboBox comboBox = (ComboBox)sender;
+			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			if (comboBox.IsEnabled)
+				comboBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
+		}
+
+		private void ComboBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			ComboBox comboBox = (ComboBox)sender;
+			if (comboBox.IsEnabled)
+				comboBox.Background = new SolidColorBrush(Colors.White);
+			//textBox.BorderBrush = textBox.Background;
 		}
 
 		// todo: need a real DateTimePicker
@@ -372,6 +411,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				Source = property.obj,
 			};
 			textBox.Bind(TextBlock.TextProperty, binding);
+			textBox.PointerEnter += TextBox_PointerEnter;
+			textBox.PointerLeave += TextBox_PointerLeave;
 			this.Children.Add(textBox);
 
 			Button buttonImport = AddButton(rowIndex, "Import Clipboard", Icons.Streams.Paste);
@@ -487,6 +528,38 @@ namespace Atlas.GUI.Avalonia.Controls
 			Button button = (Button)sender;
 			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
 			button.BorderBrush = button.Background;
+		}
+	}
+	public class TabComboBox : ComboBox, IStyleable, ILayoutable
+	{
+		Type IStyleable.StyleKey => typeof(ComboBox);
+
+		public TabComboBox()
+		{
+			Background = new SolidColorBrush(Colors.White);
+			BorderBrush = new SolidColorBrush(Colors.Black);
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			BorderThickness = new Thickness(1);
+
+			PointerEnter += ComboBox_PointerEnter;
+			PointerLeave += ComboBox_PointerLeave;
+		}
+
+		// DefaultTheme.xaml is setting this for templates
+		private void ComboBox_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			ComboBox comboBox = (ComboBox)sender;
+			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			if (comboBox.IsEnabled)
+				comboBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
+		}
+
+		private void ComboBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			ComboBox comboBox = (ComboBox)sender;
+			if (comboBox.IsEnabled)
+				comboBox.Background = new SolidColorBrush(Colors.White);
+			//textBox.BorderBrush = textBox.Background;
 		}
 	}
 }

@@ -51,11 +51,11 @@
         <Setter Property="Background" Value="#4e8ef7"/>
     </Style>
     
-    <Style Selector="ScrollBar:horizontal /template/ Thumb#thumb /template/ Border">
-        <Setter Property="Background" Value="#9e9e9e"/>
+    <Style Selector="TextBox">
+        <Setter Property="Background" Value="#ffffff"/>
     </Style>
-    <Style Selector="ScrollBar:horizontal /template/ Thumb#thumb /template/ Border:pointerover">
-        <Setter Property="Background" Value="#4e8ef7"/>
+    <Style Selector="TextBox:pointerover">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHover}"/>
     </Style>
 
 </Styles>
