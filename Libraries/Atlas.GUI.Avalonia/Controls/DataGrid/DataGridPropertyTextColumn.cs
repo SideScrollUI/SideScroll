@@ -31,13 +31,14 @@ namespace Atlas.GUI.Avalonia
 		private FieldValueConverter formatConverter = new FieldValueConverter();
 		private DataGrid dataGrid;
 		private PropertyInfo propertyInfo;
-		private int MaxDesiredWidth = 500;
+		public int MaxDesiredWidth = 500;
 		
-		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly)
+		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{
 			this.dataGrid = dataGrid;
 			this.propertyInfo = propertyInfo;
 			IsReadOnly = isReadOnly;
+			MaxDesiredWidth = maxDesiredWidth;
 			Binding = GetFormattedTextBinding();
 			//Binding = GetTextBinding();
 

@@ -616,7 +616,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			//textBoxCell.Binding = Binding.Property<string>(propertyInfo.Name); // TextBoxCell requires a string cast, but property value might not be castable to a string (like a class)
 
 			//AvaloniaProperty avaloniaProperty = AvaloniaProperty.DirectProperty<propertyInfo.DeclaringType, propertyInfo.PropertyType> ()
-			
+
+			int maxDesiredWidth = attributeColumnMaxWidth != null ? attributeColumnMaxWidth.MaxWidth : MaxColumnWidth;
 			DataGridBoundColumn column;
 			/*if (tabModel.Editing == false)
 			{
@@ -641,7 +642,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				else
 				{
 					//if (isReadOnly)
-						column = new DataGridPropertyTextColumn(dataGrid, propertyInfo, isReadOnly);
+						column = new DataGridPropertyTextColumn(dataGrid, propertyInfo, isReadOnly, maxDesiredWidth);
 					//else
 					//	column = new DataGridTextColumn();
 				}
