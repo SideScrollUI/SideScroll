@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Atlas.Core;
@@ -68,9 +69,24 @@ namespace Atlas.Tabs
 		{
 			FieldInfo[] fieldInfos = obj.GetType().GetFields().OrderBy(x => x.MetadataToken).ToArray();
 			ItemCollection<ListField> listFields = new ItemCollection<ListField>();
+			// replace any overriden/new field & properties
+			var fieldToIndex = new Dictionary<string, int>();
 			foreach (FieldInfo fieldInfo in fieldInfos)
 			{
-				listFields.Add(new ListField(obj, fieldInfo));
+				if (fieldInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
+					continue;
+				ListField listField = new ListField(obj, fieldInfo);
+				int index;
+				if (fieldToIndex.TryGetValue(fieldInfo.Name, out index))
+				{
+					listFields.RemoveAt(index);
+					listFields.Insert(index, listField);
+				}
+				else
+				{
+					fieldToIndex[fieldInfo.Name] = listFields.Count;
+					listFields.Add(listField);
+				}
 			}
 			return listFields;
 		}

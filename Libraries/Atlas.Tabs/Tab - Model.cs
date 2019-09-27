@@ -259,53 +259,16 @@ namespace Atlas.Tabs
 		// Adds the fields and properties as one list, and methods as another list (disabled right now)
 		private void AddObject(Type type)
 		{
-			FieldInfo[] fieldInfos = type.GetFields().OrderBy(x => x.MetadataToken).ToArray();
-			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
+			//PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 
 			ItemCollection<ListMember> itemCollection = new ItemCollection<ListMember>();
 
-			// replace any overriden/new field & properties
-			var fieldToIndex = new Dictionary<string, int>();
-			foreach (FieldInfo fieldInfo in fieldInfos)
-			{
-				if (fieldInfo.GetCustomAttribute(typeof(HiddenRowAttribute)) != null)
-					continue;
-				ListField listField = new ListField(Object, fieldInfo);
-				int index;
-				if (fieldToIndex.TryGetValue(fieldInfo.Name, out index))
-				{
-					itemCollection.RemoveAt(index);
-					itemCollection.Insert(index, listField);
-				}
-				else
-				{
-					fieldToIndex[fieldInfo.Name] = itemCollection.Count;
-					itemCollection.Add(listField);
-				}
-			}
+			var listFields = ListField.Create(Object);
+			itemCollection.AddRange(listFields);
 
-			var propertyToIndex = new Dictionary<string, int>();
-			foreach (PropertyInfo propertyInfo in propertyInfos)
-			{
-				if (!propertyInfo.DeclaringType.IsNotPublic)
-				{
-					if (propertyInfo.GetCustomAttribute(typeof(HiddenRowAttribute)) != null)
-						continue;
-					ListProperty listProperty = new ListProperty(Object, propertyInfo);
+			var listProperties = ListProperty.Create(Object);
+			itemCollection.AddRange(listProperties);
 
-					int index;
-					if (fieldToIndex.TryGetValue(propertyInfo.Name, out index))
-					{
-						itemCollection.RemoveAt(index);
-						itemCollection.Insert(index, listProperty);
-					}
-					else
-					{
-						fieldToIndex[propertyInfo.Name] = itemCollection.Count;
-						itemCollection.Add(listProperty);
-					}
-				}
-			}
 			//itemCollection = new ItemCollection<ListMember>(itemCollection.OrderBy(x => x.memberInfo.MetadataToken).ToList());
 			ItemList.Add(itemCollection);
 

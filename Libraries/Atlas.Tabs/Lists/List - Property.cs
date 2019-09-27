@@ -113,14 +113,32 @@ namespace Atlas.Tabs
 
 		public static ItemCollection<ListProperty> Create(object obj)
 		{
-			PropertyInfo[] properties = obj.GetType().GetProperties().OrderBy(x => x.MetadataToken).ToArray();
+			PropertyInfo[] propertyInfos = obj.GetType().GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 			ItemCollection<ListProperty> listProperties = new ItemCollection<ListProperty>();
-			foreach (PropertyInfo propertyInfo in properties)
+			var propertyToIndex = new Dictionary<string, int>();
+			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
-				if (propertyInfo.GetCustomAttribute(typeof(HiddenRowAttribute)) != null)
-					continue;
 				if (!propertyInfo.DeclaringType.IsNotPublic)
-					listProperties.Add(new ListProperty(obj, propertyInfo));
+				{
+					if (propertyInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
+						continue;
+					if (propertyInfo.DeclaringType.IsNotPublic)
+						continue;
+
+					ListProperty listProperty = new ListProperty(obj, propertyInfo);
+
+					int index;
+					if (propertyToIndex.TryGetValue(propertyInfo.Name, out index))
+					{
+						listProperties.RemoveAt(index);
+						listProperties.Insert(index, listProperty);
+					}
+					else
+					{
+						propertyToIndex[propertyInfo.Name] = listProperties.Count;
+						listProperties.Add(listProperty);
+					}
+				}
 			}
 			return listProperties;
 		}
