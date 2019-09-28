@@ -228,6 +228,7 @@ namespace Atlas.Extensions // rename to Core?
 			FieldInfo[] fieldInfos = type.GetFields();
 		}
 
+		// Needs new name
 		public static string ObjectToString(this object obj, int maxLength = 100)
 		{
 			// don't override cell style formatting for numbers
@@ -273,9 +274,18 @@ namespace Atlas.Extensions // rename to Core?
 			{
 				return "{ " + ((ICollection)obj).Count.ToString("N0") + " }";
 			}
-			else if (typeof(ICollection).IsAssignableFrom(type))
+			else if (obj is ICollection collection)
 			{
-				return "[" + ((ICollection)obj).Count.ToString("N0") + "]";
+				Type elementType = type.GetElementTypeForAll();
+				if (elementType.GetCustomAttribute<ToStringAttribute>() != null)
+				{
+					var strings = new List<string>();
+					foreach (var item in collection)
+						strings.Add(item.ToString());
+					string joined = string.Join(", ", strings);
+					return "[" + joined + "]";
+				}
+				return "[" + collection.Count.ToString("N0") + "]";
 			}
 			if (typeof(IEnumerable).IsAssignableFrom(type))
 			{

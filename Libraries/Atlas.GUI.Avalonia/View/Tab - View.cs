@@ -646,6 +646,7 @@ namespace Atlas.GUI.Avalonia.View
 			}
 		}
 
+		// The GridSplitter doesn't work well if there's not a control on each side of the splitter, so add a filler panel
 		/*private double GetControlOffset(IControl control)
 		{
 			if (cont

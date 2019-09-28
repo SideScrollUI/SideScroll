@@ -52,6 +52,7 @@ namespace Atlas.Core
 			int result = customComparer.Compare(x, y);
 			return result;
 		}
+
 		public void AddRange(IEnumerable<T> collection)
 		{
 			foreach (T item in collection)

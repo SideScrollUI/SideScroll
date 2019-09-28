@@ -157,8 +157,9 @@ namespace Atlas.Core
 	}
 
 	// ->Tabs: Flag as the ToString() property/field?
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-	public class AttributeToString : Attribute
+	// ->Tabs: ToString() on items in array
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+	public class ToStringAttribute : Attribute
 	{
 	}
 

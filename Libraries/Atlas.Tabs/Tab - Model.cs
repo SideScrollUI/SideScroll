@@ -234,7 +234,20 @@ namespace Atlas.Tabs
 				ItemList.Add(ListToString.Create(iEnumerable));
 				return;
 			}
+			Type elementType = GetElementType(type);
 
+			Type genericType = typeof(ItemCollection<>).MakeGenericType(elementType);
+			IList iList = (IList)Activator.CreateInstance(genericType);
+			foreach (var item in iEnumerable)
+			{
+				iList.Add(item);
+			}
+			ItemList.Add(iList);
+		}
+
+		// merge with GetElementTypeForAll?
+		private Type GetElementType(Type type)
+		{
 			Type elementType;
 			if (type.IsAssignableToGenericType(typeof(IEnumerable<>)))
 			{
@@ -247,13 +260,7 @@ namespace Atlas.Tabs
 				elementType = type.GenericTypeArguments[0];
 			}
 
-			Type genericType = typeof(ItemCollection<>).MakeGenericType(elementType);
-			IList iList = (IList)Activator.CreateInstance(genericType);
-			foreach (var item in iEnumerable)
-			{
-				iList.Add(item);
-			}
-			ItemList.Add(iList);
+			return elementType;
 		}
 
 		// Adds the fields and properties as one list, and methods as another list (disabled right now)
