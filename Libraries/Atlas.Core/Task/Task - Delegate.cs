@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Atlas.Core
 {
@@ -32,7 +33,20 @@ namespace Atlas.Core
 		{
 			try
 			{
-				callAction.Invoke(call);
+				// BeginInvoke() doesn't work for .NET Core
+				callAction.Invoke(call); // any await will make this return and finish the task
+			}
+			catch (Exception e)
+			{
+				call.log.AddError(e.Message, new Tag("Exception", e));
+			}
+		}
+
+		private void InvokeAction2(Call call)
+		{
+			try
+			{
+				Task.Run(() => callAction.Invoke(call)).Wait(); // Call this way to avoid .Result deadlock
 			}
 			catch (Exception e)
 			{

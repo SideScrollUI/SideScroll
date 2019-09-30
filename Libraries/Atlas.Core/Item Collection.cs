@@ -136,6 +136,17 @@ namespace Atlas.Core
 				base.InsertItem(itemLocation.index, itemLocation.item);
 			}
 		}
+
+		public void AddRange(IEnumerable<T> collection)
+		{
+			int index = Items.Count;
+			foreach (T item in collection)
+				InsertItem(index++, item); // item gets added in the background with Add() and doesn't increment index
+
+			//foreach (T item in collection)
+			//	Items.Add(item);
+			//OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)); // need gui thread
+		}
 	}
 
 

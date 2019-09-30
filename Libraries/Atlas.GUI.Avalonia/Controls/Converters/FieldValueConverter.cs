@@ -1,4 +1,5 @@
-﻿using Atlas.Extensions;
+﻿using Atlas.Core;
+using Atlas.Extensions;
 using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
