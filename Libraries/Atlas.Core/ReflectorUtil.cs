@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -20,11 +21,12 @@ namespace Atlas.Core
 			{
 				if (currentType != null)
 				{
-					PropertyInfo property = null;
 					int brackStart = propertyName.IndexOf("[");
 					int brackEnd = propertyName.IndexOf("]");
+					string subPropertyName = brackStart > 0 ? propertyName.Substring(0, brackStart) : propertyName;
 
-					property = currentType.GetProperty(brackStart > 0 ? propertyName.Substring(0, brackStart) : propertyName);
+					var properties = currentType.GetProperties().Where(x => x.Name == subPropertyName);
+					PropertyInfo property = properties.FirstOrDefault(x => x.DeclaringType == currentType) ?? properties.First();
 					obj = property.GetValue(obj, null);
 
 					if (brackStart > 0)
