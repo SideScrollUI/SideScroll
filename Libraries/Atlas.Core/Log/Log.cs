@@ -30,6 +30,12 @@ namespace Atlas.Core
 				this.Value = value.ToString();
 		}*/
 
+		public Tag(object value)
+		{
+			this.Name = value.ToString();
+			this.Value = value;
+		}
+
 		public Tag(string name, object value, bool verbose = true)
 		{
 			this.Name = name;
@@ -37,6 +43,19 @@ namespace Atlas.Core
 				this.Value = value;
 			else
 				this.Value = value.ToString();
+		}
+
+		public static Tag Add(object value, bool verbose = true)
+		{
+			Tag tag = new Tag()
+			{
+				Name = value.ToString(),
+			};
+			if (verbose)
+				tag.Value = value;
+			else
+				tag.Value = value.ToString();
+			return tag;
 		}
 
 		public override string ToString()
