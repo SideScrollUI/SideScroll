@@ -14,7 +14,7 @@ namespace Atlas.Tabs
 		public virtual ProjectSettings projectSettings { get; set; }
 
 		public DataRepo DataShared { get { return new DataRepo(DataRepoPath, "Shared"); } }
-		public DataRepo DataApp { get { return new DataRepo(DataRepoPath, "Programs/" + Name + "/" + Version); } }
+		public DataRepo DataApp { get { return new DataRepo(DataRepoPath, "Programs/" + Name + "/" + projectSettings.DataVersion); } }
 
 		public HttpCacheManager httpCacheManager = new HttpCacheManager();
 

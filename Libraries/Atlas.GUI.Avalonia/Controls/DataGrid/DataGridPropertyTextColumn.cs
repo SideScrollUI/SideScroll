@@ -66,6 +66,15 @@ namespace Atlas.GUI.Avalonia
 			return false;
 		}
 
+		private TextAlignment GetTextAlignment(Type type)
+		{
+			type = type.GetNonNullableType();
+			if (type.IsNumeric() || type == typeof(TimeSpan))
+				return TextAlignment.Right;
+
+			return TextAlignment.Left;
+		}
+
 		// never gets triggered, can't override since it's internal?
 		// Owning Grid also internal so can't add our own handler
 		// _owningGrid.LoadingRow += OwningGrid_LoadingRow;
@@ -103,6 +112,7 @@ namespace Atlas.GUI.Avalonia
 				TextBlock textBlock = GetTextBlock(cell, dataItem);
 				AddTextBoxContextMenu(cell, textBlock);
 
+				textBlock.TextAlignment = GetTextAlignment(propertyInfo.PropertyType);
 
 				/*Style style = new Style(x => x.OfType<DataGridCell>())
 				{

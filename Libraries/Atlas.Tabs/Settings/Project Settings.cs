@@ -25,6 +25,7 @@ namespace Atlas.Tabs
 		public string Name { get; set; }
 		public string LinkType { get; set; }        // for bookmarking
 		public string Version { get; set; } = "0";
+		public string DataVersion { get; set; } = "0";
 
 		public string ProjectPath { get; set; }
 
