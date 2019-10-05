@@ -11,6 +11,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
@@ -69,8 +70,13 @@ namespace Atlas.GUI.Avalonia
 		private TextAlignment GetTextAlignment(Type type)
 		{
 			type = type.GetNonNullableType();
-			if (type.IsNumeric() || type == typeof(TimeSpan))
+
+			if (type.IsNumeric() ||
+				type == typeof(TimeSpan) ||
+				typeof(ICollection).IsAssignableFrom(type))
+			{
 				return TextAlignment.Right;
+			}
 
 			return TextAlignment.Left;
 		}

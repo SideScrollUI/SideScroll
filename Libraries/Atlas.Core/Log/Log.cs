@@ -176,9 +176,9 @@ namespace Atlas.Core
 		public event EventHandler<EventLogMessage> OnMessage;
 
 		public Log()
-        {
-            this.Created = DateTime.Now;
-            InitializeContext();
+		{
+			this.Created = DateTime.Now;
+			InitializeContext();
 		}
 
 		public Log(string text = null, SynchronizationContext context = null, Tag[] tags = null)
@@ -186,9 +186,9 @@ namespace Atlas.Core
 			this.context = context;
 			this.Text = text;
 			this.tags = tags;
-            this.Created = DateTime.Now;
+			this.Created = DateTime.Now;
 
-            InitializeContext();
+			InitializeContext();
 		}
 
 		private void InitializeContext()
