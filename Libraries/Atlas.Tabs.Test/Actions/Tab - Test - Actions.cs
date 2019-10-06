@@ -20,7 +20,7 @@ namespace Atlas.Tabs.Test.Actions
 				tabModel.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Parameters", new TabParamsDataGrid()),
-					new ListItem("Async", new TabTestAsync()),
+					new ListItem("Async Sleep", new TabTestAsync()),
 				};
 
 				tabModel.Actions = new ItemCollection<TaskCreator>()
@@ -29,7 +29,7 @@ namespace Atlas.Tabs.Test.Actions
 					new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
 					new TaskDelegate("Task Instance Progress", SubTaskInstances, true),
 					new TaskAction("Action", new Action(() => PassParams(1, "abc"))),
-					new TaskDelegate("Sleep (Async)", SleepAsync, true, true),
+					new TaskDelegateAsync("Sleep (Async)", SleepAsync, true, true),
 				};
 
 				tabModel.Notes = @"
@@ -78,7 +78,7 @@ Actions add Buttons to the tab. When clicked, it will:
 			}
 
 			//private async Task<Call> SleepAsync(Call call)
-			private async void SleepAsync(Call call)
+			private async Task SleepAsync(Call call)
 			{
 				call.log.Add("Sleeping");
 				await Task.Delay(5000);

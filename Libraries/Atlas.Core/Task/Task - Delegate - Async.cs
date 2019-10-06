@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 
 namespace Atlas.Core
 {
-	public class TaskDelegate : TaskCreator
+	public class TaskDelegateAsync : TaskCreator
 	{
-		public delegate void CallAction(Call call);
+		public delegate Task CallActionAsync(Call call);
 
-		private CallAction callAction;
+		private CallActionAsync callAction;
 
-		public TaskDelegate(string label, CallAction callAction, bool useTask = false, bool showTask = false, string description = null)
+		public TaskDelegateAsync(string label, CallActionAsync callAction, bool useTask = false, bool showTask = false, string description = null)
 		{
 			this.Label = label;
 			this.callAction = callAction;
@@ -34,7 +34,9 @@ namespace Atlas.Core
 			try
 			{
 				// BeginInvoke() doesn't work for .NET Core
-				callAction.Invoke(call); // any await in the Invoked call will make this return and finish the task
+				//callAction.Invoke(call);
+				//InvokeActionAsync(call);
+				Task.Run(() => InvokeActionAsync(call)).Wait(); // Call this way to avoid .Result deadlock
 			}
 			catch (Exception e)
 			{
@@ -42,11 +44,14 @@ namespace Atlas.Core
 			}
 		}
 
-		private void InvokeAction2(Call call)
+		private async Task InvokeActionAsync(Call call)
 		{
 			try
 			{
-				Task.Run(() => callAction.Invoke(call)).Wait(); // Call this way to avoid .Result deadlock
+				// BeginInvoke() doesn't work for .NET Core
+				//return await callAction.BeginInvoke(call);
+				await callAction.Invoke(call);
+				//await taskInstance;
 			}
 			catch (Exception e)
 			{
