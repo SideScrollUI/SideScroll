@@ -26,7 +26,7 @@ namespace Atlas.GUI.Avalonia.Controls
 {
 	public class TabControlParams : Grid
 	{
-		private const int ControlMaxWidth = 500;
+		public const int ControlMaxWidth = 500;
 		private TabInstance tabInstance;
 		private object obj;
 		private bool autoGenerateRows;
@@ -160,6 +160,48 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private TextBox AddTextBox(ListProperty property, int rowIndex, int columnIndex, Type type)
 		{
+			var textBox = new TabTextBox()
+			{
+				[Grid.RowProperty] = rowIndex,
+				[Grid.ColumnProperty] = columnIndex,
+				IsReadOnly = !property.Editable,
+			};
+			if (textBox.IsReadOnly)
+				textBox.Background = new SolidColorBrush(Theme.TextBackgroundDisabledColor);
+
+			PasswordCharAttribute passwordCharAttribute = property.propertyInfo.GetCustomAttribute<PasswordCharAttribute>();
+			if (passwordCharAttribute != null)
+				textBox.PasswordChar = passwordCharAttribute.Character;
+
+			ExampleAttribute attribute = property.propertyInfo.GetCustomAttribute<ExampleAttribute>();
+			if (attribute != null)
+				textBox.Watermark = attribute.Text;
+
+			var binding = new Binding(property.propertyInfo.Name)
+			{
+				Converter = new EditValueConverter(),
+				//StringFormat = "Hello {0}",
+				Source = property.obj,
+			};
+			if (type == typeof(string) || type.IsPrimitive)
+				binding.Mode = BindingMode.TwoWay;
+			else
+				binding.Mode = BindingMode.OneWay;
+			textBox.Bind(TextBlock.TextProperty, binding);
+			AvaloniaUtils.AddTextBoxContextMenu(textBox);
+
+			//textBox.PropertyChanged += TextBox_PropertyChanged;
+			//textBox.TextInput += TextBox_TextInput;
+			//textBox.DataContextChanged += TextBox_DataContextChanged;
+			//textBox.KeyUp += TextBox_KeyUp;
+			//textBox.ApplyTemplate();
+
+			this.Children.Add(textBox);
+			return textBox;
+		}
+
+		/*private TextBox AddTextBox(ListProperty property, int rowIndex, int columnIndex, Type type)
+		{
 			TextBox textBox = new TextBox()
 			{
 				Background = new SolidColorBrush(Colors.White),
@@ -209,7 +251,8 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			this.Children.Add(textBox);
 			return textBox;
-		}
+		}*/
+
 		// DefaultTheme.xaml is setting this for templates
 		private void TextBox_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
@@ -544,6 +587,53 @@ namespace Atlas.GUI.Avalonia.Controls
 			button.BorderBrush = button.Background;
 		}
 	}
+
+	public class TabTextBox : TextBox, IStyleable, ILayoutable
+	{
+		Type IStyleable.StyleKey => typeof(TextBox);
+
+		public TabTextBox()
+		{
+			Background = new SolidColorBrush(Colors.White);
+			BorderBrush = new SolidColorBrush(Colors.Black);
+			BorderThickness = new Thickness(1);
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			MinWidth = 50;
+			Padding = new Thickness(6, 3);
+			Focusable = true; // already set?
+			MaxWidth = TabControlParams.ControlMaxWidth;
+			//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
+			//[Grid.RowProperty] = rowIndex;
+			//[Grid.ColumnProperty] = columnIndex;
+			//IsReadOnly = !property.Editable;
+
+			this.PointerEnter += TextBox_PointerEnter;
+			this.PointerLeave += TextBox_PointerLeave;
+		}
+
+		private IBrush OriginalColor;
+
+		// DefaultTheme.xaml is setting this for templates
+		private void TextBox_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			TextBox textBox = (TextBox)sender;
+			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			if (textBox.IsEnabled && !textBox.IsReadOnly)
+			{
+				OriginalColor = textBox.Background;
+				textBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
+			}
+		}
+
+		private void TextBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			TextBox textBox = (TextBox)sender;
+			if (textBox.IsEnabled && !textBox.IsReadOnly)
+				textBox.Background = OriginalColor ?? textBox.Background;
+			//textBox.BorderBrush = textBox.Background;
+		}
+	}
+
 	public class TabComboBox : ComboBox, IStyleable, ILayoutable
 	{
 		Type IStyleable.StyleKey => typeof(ComboBox);

@@ -51,6 +51,14 @@ namespace Atlas.GUI.Avalonia.Controls
 		private PlotView plotView;
 		private PropertyInfo xAxisPropertyInfo;
 
+		public static OxyColor[] Colors { get; set; } = new OxyColor[] {
+				OxyColors.YellowGreen,
+				OxyColors.Fuchsia,
+				OxyColors.Cyan,
+				//OxyColors.Aquamarine, // too close to Cyan (but more matte)
+				OxyColors.Gold,
+			};
+
 
 		//public event EventHandler<EventArgs> OnSelectionChanged;
 		//private bool autoSelectNew = true;
@@ -344,6 +352,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				MarkerSize = 3,
 				MarkerType = MarkerType.Circle,
 			};
+			if (Colors.Length > plotModel.Series.Count)
+				lineSeries.Color = Colors[plotModel.Series.Count];
 			AddPoints(listSeries, listSeries.iList, lineSeries);
 
 			plotModel.Series.Add(lineSeries);

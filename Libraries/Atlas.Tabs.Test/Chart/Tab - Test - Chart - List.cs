@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Test.Chart
 		public class Instance : TabInstance
 		{
 			//private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
-			private ItemCollection<int> series = new ItemCollection<int>();
+			private List<ItemCollection<int>> series = new List<ItemCollection<int>>();
 			//private ItemCollection<double> samples = new ItemCollection<ChartSample>();
 			private Random random = new Random();
 			private bool ChartInitialized = false;
@@ -34,13 +34,18 @@ namespace Atlas.Tabs.Test.Chart
 					new TaskDelegate("Start: 1 Entry / second", StartTask, true),
 				};
 
+				ChartSettings chartSettings = new ChartSettings();
+				for (int i = 0; i < 2; i++)
+				{
+					var list = new ItemCollection<int>();
+					chartSettings.AddList("Series " + i, list);
+					series.Add(list);
+				}
+
 				for (int i = 0; i < 10; i++)
 				{
 					AddSample(i);
 				}
-
-				ChartSettings chartSettings = new ChartSettings();
-				chartSettings.AddList("Values", series);
 				tabModel.AddObject(chartSettings);
 				//tabModel.ChartSettings.ListSeries.
 			}
@@ -64,8 +69,11 @@ namespace Atlas.Tabs.Test.Chart
 			{
 				//series.Add(random.Next(1050, 1095));
 
-				int amount = random.Next();
-				series.Add(amount);
+				foreach (var list in series)
+				{
+					int amount = random.Next();
+					list.Add(amount);
+				}
 			}
 
 			private void Initialize()

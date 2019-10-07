@@ -32,6 +32,7 @@ namespace Atlas.Tabs
 			ListSeries listSeries = new ListSeries(label, iList);
 
 			ListGroup listGroup = DefaultListGroup;
+			listGroup.Name = label ?? listGroup.Name;
 			// Will add to Default Group if no Unit specified, and add the Default Group if needed
 			ListGroups.Add(listGroup.Name, listGroup);
 			listGroup.ListSeries.Add(listSeries);
