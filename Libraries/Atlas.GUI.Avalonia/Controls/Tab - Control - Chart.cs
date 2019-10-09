@@ -59,6 +59,12 @@ namespace Atlas.GUI.Avalonia.Controls
 				OxyColors.Gold,
 			};
 
+		public static OxyColor? GetColor(int index)
+		{
+			if (index < Colors.Length)
+				return Colors[index];
+			return null;
+		}
 
 		//public event EventHandler<EventArgs> OnSelectionChanged;
 		//private bool autoSelectNew = true;
@@ -352,8 +358,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				MarkerSize = 3,
 				MarkerType = MarkerType.Circle,
 			};
-			if (Colors.Length > plotModel.Series.Count)
-				lineSeries.Color = Colors[plotModel.Series.Count];
+			lineSeries.Color = GetColor(plotModel.Series.Count) ?? lineSeries.Color;
 			AddPoints(listSeries, listSeries.iList, lineSeries);
 
 			plotModel.Series.Add(lineSeries);
