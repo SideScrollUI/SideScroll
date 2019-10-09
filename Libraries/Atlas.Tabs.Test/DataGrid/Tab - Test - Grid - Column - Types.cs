@@ -19,6 +19,7 @@ namespace Atlas.Tabs.Test.DataGrid
 						Integer = i,
 						Long = (long)i * (long)int.MaxValue,
 						DateTime = new DateTime(DateTime.Now.Ticks + i),
+						TimeSpan = TimeSpan.FromHours(i),
 						Bool = (i % 2 == 1),
 					};
 					if (i % 2 == 0)
@@ -38,6 +39,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			public bool Bool { get; set; }
 			public byte[] ByteArray { get; set; } = new byte[256];
 			public DateTime DateTime { get; set; }
+			public TimeSpan TimeSpan { get; set; }
 			public object Object { get; set; }
 			public string SmallString { get; set; } = "Text";
 			public string LongString { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";

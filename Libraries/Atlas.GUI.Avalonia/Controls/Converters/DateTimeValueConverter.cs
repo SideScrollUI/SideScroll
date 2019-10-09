@@ -24,7 +24,7 @@ namespace Atlas.GUI.Avalonia
 				if (previousDateTime == null)
 					return "";
 
-				return ((DateTime)previousDateTime).ToString("HH:mm:ss");
+				return ((DateTime)previousDateTime).ToString("H:mm:ss");
 			}
 			else
 			{

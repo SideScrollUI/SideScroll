@@ -214,15 +214,15 @@ namespace Atlas.GUI.Avalonia.Controls
 		public string GetDateTimeFormat(double duration)
 		{
 			if (duration < 60)
-				return "HH:mm:ss";
+				return "H:mm:ss";
 			if (duration < 60 * 60)
-				return "HH:mm";
+				return "H:mm";
 			if (duration < 24 * 60 * 60)
-				return "HH:mm";
+				return "H:mm";
 			if (duration < 30 * 24 * 60 * 60)
-				return "MM/dd";
+				return "M/d";
 
-			return "yyyy-MM-dd";
+			return "yyyy-M-d";
 		}
 
 		private void LoadPlotModel()

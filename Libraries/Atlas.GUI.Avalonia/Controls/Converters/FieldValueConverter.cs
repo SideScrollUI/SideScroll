@@ -56,7 +56,7 @@ namespace Atlas.GUI.Avalonia
 			{
 				if (dateTime != null)
 				{
-					string dateText = dateTime.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss.FFFFFF");
+					string dateText = dateTime.ToUniversalTime().ToString("yyyy-M-d H:mm:ss.FFFFFF");
 					return dateText;
 				}
 			}

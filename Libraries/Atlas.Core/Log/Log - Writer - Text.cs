@@ -35,7 +35,7 @@ namespace Atlas.Core
 			foreach (LogEntry logEntry in e.Entries)
 				Indendation += '\t';
 			LogEntry newLog = e.Entries[0];
-			string line = log.Created.ToString("yyyy-MM-dd HH:mm:ss") + Indendation + newLog.Message;
+			string line = log.Created.ToString("yyyy-M-d H:mm:ss") + Indendation + newLog.Message;
 			txtStreamWriter.WriteLine(line);
 			txtStreamWriter.Flush();
 		}
