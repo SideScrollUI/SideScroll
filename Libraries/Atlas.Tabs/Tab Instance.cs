@@ -307,13 +307,16 @@ namespace Atlas.Tabs
 				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
 				Task.Run(() => tabAsync.LoadAsync(taskInstance.call)).Wait(); // Call this way to avoid .Result deadlock
 			}
-			else if (CanLoad)
+			if (CanLoad)
 			{
 				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
 				var subTask = taskInstance.call.AddSubTask("Loading");
 				//using (CallTimer loadCall = )
 				{
-					Load(subTask.call); // Creates a tabModel if none exists and adds other Controls
+					if (this is ITabAsync)
+						Invoke(() => Load(subTask.call));
+					else
+						Load(subTask.call); // Creates a tabModel if none exists and adds other Controls
 					//if (subTask.TaskStatus ==TaskStatus.
 				}
 				isLoaded = true;

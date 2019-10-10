@@ -83,6 +83,13 @@ namespace Atlas.Core
 			timer.Start();
 		}
 
+		public void Stop()
+		{
+			timer.Stop();
+			stopwatch.Stop();
+			UpdateDuration();
+		}
+
 		private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
 		{
 			UpdateDuration();
@@ -95,9 +102,7 @@ namespace Atlas.Core
 
 		public void Dispose()
 		{
-			timer.Stop();
-			stopwatch.Stop();
-			UpdateDuration();
+			Stop();
 		}
 	}
 }

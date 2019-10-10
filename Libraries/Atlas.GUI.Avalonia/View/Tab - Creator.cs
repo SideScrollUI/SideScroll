@@ -74,7 +74,7 @@ namespace Atlas.GUI.Avalonia.View
 				// Custom controls implement ITab
 				TabInstance childTabInstance = parentTabInstance.CreateChildTab(iTab);
 				childTabInstance.tabBookmark = tabBookmark;
-				childTabInstance.Reintialize(); // todo: fix, called in TabView
+				//childTabInstance.Reintialize(); // todo: fix, called in TabView
 				childTabInstance.tabModel.Name = label;
 				if (childTabInstance.tabModel.Object is TabContainer tabContainer)
 				{

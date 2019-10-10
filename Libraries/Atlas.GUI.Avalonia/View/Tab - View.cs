@@ -55,7 +55,7 @@ namespace Atlas.GUI.Avalonia.View
 
 		private TabView()
 		{
-			this.tabInstance = new TabInstance();
+			tabInstance = new TabInstance();
 			Initialize();
 		}
 
@@ -76,6 +76,22 @@ namespace Atlas.GUI.Avalonia.View
 			ColumnDefinitions = new ColumnDefinitions("Auto");
 			RowDefinitions = new RowDefinitions("*");
 
+			if (!(tabInstance is ITabAsync))
+			{
+				LoadSettings();
+				//this.InitializeControls();
+				//AddListeners();
+
+				// Have return TabModel?
+				tabInstance.Reintialize();
+			}
+
+			//tabInstance.StartTask(LoadAll, true, false);
+		}
+
+
+		public void LoadAll(Call call)
+		{
 			LoadSettings();
 			//this.InitializeControls();
 			//AddListeners();
@@ -83,7 +99,7 @@ namespace Atlas.GUI.Avalonia.View
 			// Have return TabModel?
 			tabInstance.Reintialize();
 
-			//ReloadControls();
+			tabInstance.Invoke(ReloadControls);
 		}
 
 		protected override void ArrangeCore(Rect finalRect)
@@ -522,11 +538,22 @@ namespace Atlas.GUI.Avalonia.View
 			tabParentControls.AddControl(tabBookmarks, false, SeparatorType.Splitter);
 		}
 
+		private bool loadCalled = false;
 		public void Load()
 		{
-			LoadSettings();
+			if (loadCalled)
+				return;
+			loadCalled = true;
+			if (tabInstance is ITabAsync)
+			{
+				tabInstance.StartTask(LoadAll, true, false);
+			}
+			else
+			{
+				LoadSettings();
 
-			ReloadControls();
+				ReloadControls();
+			}
 			//this.Dispatcher.BeginInvoke((Action)(() => { allowAutoScrolling = true; }));
 		}
 

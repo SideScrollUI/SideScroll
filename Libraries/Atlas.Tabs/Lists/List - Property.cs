@@ -113,6 +113,7 @@ namespace Atlas.Tabs
 
 		public static ItemCollection<ListProperty> Create(object obj)
 		{
+			// this doesn't work for virtual methods (or any method modifier?)
 			PropertyInfo[] propertyInfos = obj.GetType().GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 			ItemCollection<ListProperty> listProperties = new ItemCollection<ListProperty>();
 			var propertyToIndex = new Dictionary<string, int>();
