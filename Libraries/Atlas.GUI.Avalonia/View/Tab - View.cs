@@ -83,21 +83,20 @@ namespace Atlas.GUI.Avalonia.View
 				//AddListeners();
 
 				// Have return TabModel?
-				tabInstance.Reintialize();
+				tabInstance.Reintialize(false);
 			}
 
 			//tabInstance.StartTask(LoadAll, true, false);
 		}
 
-
-		public void LoadAll(Call call)
+		public void LoadBackground(Call call)
 		{
 			LoadSettings();
 			//this.InitializeControls();
 			//AddListeners();
 
 			// Have return TabModel?
-			tabInstance.Reintialize();
+			tabInstance.Reintialize(false);
 
 			tabInstance.Invoke(ReloadControls);
 		}
@@ -538,15 +537,14 @@ namespace Atlas.GUI.Avalonia.View
 			tabParentControls.AddControl(tabBookmarks, false, SeparatorType.Splitter);
 		}
 
-		private bool loadCalled = false;
 		public void Load()
 		{
-			if (loadCalled)
+			if (tabInstance.loadCalled)
 				return;
-			loadCalled = true;
+			tabInstance.loadCalled = true;
 			if (tabInstance is ITabAsync)
 			{
-				tabInstance.StartTask(LoadAll, true, false);
+				tabInstance.StartTask(LoadBackground, true, false);
 			}
 			else
 			{
@@ -980,7 +978,7 @@ namespace Atlas.GUI.Avalonia.View
 
 		private void TabInstance_OnReload(object sender, EventArgs e)
 		{
-			tabInstance.Reintialize();
+			tabInstance.Reintialize(true);
 			Load();
 		}
 

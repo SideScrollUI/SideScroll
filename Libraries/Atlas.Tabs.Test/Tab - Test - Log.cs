@@ -48,7 +48,7 @@ namespace Atlas.Tabs.Test
 
 			private void Reset(Call call)
 			{
-				base.Reintialize();
+				base.Reintialize(true);
 			}
 
 			private void SubTaskInstances(Call call)

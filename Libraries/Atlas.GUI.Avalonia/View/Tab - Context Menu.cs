@@ -98,7 +98,7 @@ namespace Atlas.GUI.Avalonia.View
 				Name = tabInstance.tabModel.Name,
 			};
 			tabInstance.SaveTabSettings();
-			tabInstance.Reintialize();
+			tabInstance.Reintialize(true);
 			tabView.Load();
 			// Could have parent instance reload children
 		}

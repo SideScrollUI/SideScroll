@@ -145,7 +145,6 @@ namespace Atlas.GUI.Avalonia
 			}
 		}
 
-		// so we don't load slow templates?
 		public class SubTextBlock : TextBlock
 		{
 			public double MaxDesiredWidth = 500;

@@ -86,6 +86,10 @@ namespace Atlas.Tabs
 
 		private string LoadedPath { get { return "Loaded/" + tabModel.ObjectTypePath; } }
 
+		// Reload to initial state
+		private bool isLoaded = false;
+		public bool loadCalled = false; // Used by the view
+
 		public TabInstance()
 		{
 			InitializeContext();
@@ -294,12 +298,12 @@ namespace Atlas.Tabs
 		{
 		}
 
-		// Reload to initial state
-		private bool isLoaded = false;
-		public void Reintialize()
+		public void Reintialize(bool force)
 		{
-			if (isLoaded)
+			if (!force && isLoaded)
 				return;
+
+			loadCalled = false; // allow TabView to reload
 
 			//MethodInfo methodInfo = GetDerivedLoadMethod();
 			if (this is ITabAsync tabAsync)

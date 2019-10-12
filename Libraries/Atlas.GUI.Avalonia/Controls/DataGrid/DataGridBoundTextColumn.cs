@@ -2,12 +2,15 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input.Platform;
+using Avalonia.Layout;
+using System;
 
 namespace Atlas.GUI.Avalonia
 {
 	public class DataGridBoundTextColumn : DataGridTextColumn
 	{
 		private DataGrid dataGrid;
+		public int MaxDesiredWidth = 500;
 
 		public DataGridBoundTextColumn(DataGrid dataGrid)
 		{
@@ -20,9 +23,46 @@ namespace Atlas.GUI.Avalonia
 			//cell.Background = GetCellBrush(cell, dataItem);
 			cell.MaxHeight = 100; // don't let them have more than a few lines each
 
-			TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
+			TextBlock textBlock = GetTextBlock(cell, dataItem);
+			//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
 			AddTextBoxContextMenu(textBlock);
 			return textBlock;
+		}
+
+		public class SubTextBlock : TextBlock
+		{
+			public double MaxDesiredWidth = 500;
+
+			// can't override DesiredSize
+			protected override Size MeasureCore(Size availableSize)
+			{
+				double maxDesiredWidth = MaxDesiredWidth;
+
+				Size measured = base.MeasureCore(availableSize);
+				Size maxSize = new Size(Math.Min(maxDesiredWidth, measured.Width), measured.Height);
+				return maxSize;
+			}
+		}
+
+		protected TextBlock GetTextBlock(DataGridCell cell, object dataItem)
+		{
+			SubTextBlock textBlockElement = new SubTextBlock()
+			{
+				Margin = new Thickness(4),
+				VerticalAlignment = VerticalAlignment.Center,
+				MaxDesiredWidth = this.MaxDesiredWidth,
+				//FontFamily
+				//FontSize
+				//FontStyle
+				//FontWeight
+				//Foreground
+			};
+
+			if (Binding != null)
+			{
+				textBlockElement.Bind(TextBlock.TextProperty, Binding);
+			}
+			return textBlockElement;
 		}
 
 		// Adds a context menu to the text block
