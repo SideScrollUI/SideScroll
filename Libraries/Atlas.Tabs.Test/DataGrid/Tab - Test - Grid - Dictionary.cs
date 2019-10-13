@@ -19,9 +19,10 @@ namespace Atlas.Tabs.Test.DataGrid
 				AddEntries(null);
 				tabModel.AddData(items);
 
-				ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>();
-				actions.Add(new TaskDelegate("Add Entries", AddEntries));
-				tabModel.Actions = actions;
+				tabModel.Actions = new ItemCollection<TaskCreator>()
+				{
+					new TaskDelegate("Add Entries", AddEntries),
+				};
 			}
 
 			private void AddEntries(Call call)

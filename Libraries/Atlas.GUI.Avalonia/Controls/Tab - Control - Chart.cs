@@ -52,11 +52,21 @@ namespace Atlas.GUI.Avalonia.Controls
 		private PropertyInfo xAxisPropertyInfo;
 
 		public static OxyColor[] Colors { get; set; } = new OxyColor[] {
-				OxyColors.YellowGreen,
+				OxyColors.LawnGreen,
 				OxyColors.Fuchsia,
 				OxyColors.Cyan,
 				//OxyColors.Aquamarine, // too close to Cyan (but more matte)
 				OxyColors.Gold,
+				OxyColors.DodgerBlue,
+				OxyColors.Red,
+				OxyColors.BlueViolet,
+				//OxyColors.SlateBlue,
+				OxyColors.Orange,
+				//OxyColors.Pink,
+				//OxyColors.Coral,
+				//OxyColors.YellowGreen,
+				OxyColors.Salmon,
+				OxyColors.MediumSpringGreen,
 			};
 
 		public static OxyColor? GetColor(int index)
