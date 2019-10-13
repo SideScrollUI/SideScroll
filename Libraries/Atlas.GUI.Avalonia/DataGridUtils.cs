@@ -2,7 +2,9 @@
 using Atlas.Extensions;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Media;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -145,6 +147,34 @@ namespace Atlas.GUI.Avalonia
 			}
 			stringBuilder.Append(line);
 			return stringBuilder.ToString();
+		}
+
+		public static bool IsTypeSortable(Type type)
+		{
+			type = type.GetNonNullableType();
+			if (type.IsPrimitive ||
+				type.IsEnum ||
+				type == typeof(decimal) ||
+				type == typeof(string) ||
+				type == typeof(DateTime) ||
+				type == typeof(TimeSpan))
+				return true;
+
+			return false;
+		}
+
+		public static TextAlignment GetTextAlignment(Type type)
+		{
+			type = type.GetNonNullableType();
+
+			if (type.IsNumeric() ||
+				type == typeof(TimeSpan) ||
+				typeof(ICollection).IsAssignableFrom(type))
+			{
+				return TextAlignment.Right;
+			}
+
+			return TextAlignment.Left;
 		}
 	}
 }

@@ -4,17 +4,20 @@ using Avalonia.Controls;
 using Avalonia.Input.Platform;
 using Avalonia.Layout;
 using System;
+using System.Data;
 
 namespace Atlas.GUI.Avalonia
 {
 	public class DataGridBoundTextColumn : DataGridTextColumn
 	{
 		private DataGrid dataGrid;
+		private DataColumn dataColumn;
 		public int MaxDesiredWidth = 500;
 
-		public DataGridBoundTextColumn(DataGrid dataGrid)
+		public DataGridBoundTextColumn(DataGrid dataGrid, DataColumn dataColumn)
 		{
 			this.dataGrid = dataGrid;
+			this.dataColumn = dataColumn;
 			//AddHeaderContextMenu();
 		}
 
@@ -23,8 +26,9 @@ namespace Atlas.GUI.Avalonia
 			//cell.Background = GetCellBrush(cell, dataItem);
 			cell.MaxHeight = 100; // don't let them have more than a few lines each
 
-			TextBlock textBlock = GetTextBlock(cell, dataItem);
+			TextBlock textBlock = CreateTextBlock(cell, dataItem);
 			//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
+			textBlock.TextAlignment = DataGridUtils.GetTextAlignment(dataColumn.DataType);
 			AddTextBoxContextMenu(textBlock);
 			return textBlock;
 		}
@@ -44,7 +48,7 @@ namespace Atlas.GUI.Avalonia
 			}
 		}
 
-		protected TextBlock GetTextBlock(DataGridCell cell, object dataItem)
+		protected TextBlock CreateTextBlock(DataGridCell cell, object dataItem)
 		{
 			SubTextBlock textBlockElement = new SubTextBlock()
 			{

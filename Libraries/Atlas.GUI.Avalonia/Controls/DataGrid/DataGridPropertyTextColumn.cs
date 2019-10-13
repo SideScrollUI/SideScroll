@@ -43,7 +43,7 @@ namespace Atlas.GUI.Avalonia
 			Binding = GetFormattedTextBinding();
 			//Binding = GetTextBinding();
 
-			CanUserSort = IsSortable(propertyInfo.PropertyType);
+			CanUserSort = DataGridUtils.IsTypeSortable(propertyInfo.PropertyType);
 
 			//CellStyleClasses = new Classes()
 		}
@@ -51,34 +51,6 @@ namespace Atlas.GUI.Avalonia
 		public override string ToString()
 		{
 			return propertyInfo.Name;
-		}
-
-		private bool IsSortable(Type type)
-		{
-			type = type.GetNonNullableType();
-			if (type.IsPrimitive ||
-				type.IsEnum ||
-				type == typeof(decimal) ||
-				type == typeof(string) ||
-				type == typeof(DateTime) ||
-				type == typeof(TimeSpan))
-				return true;
-
-			return false;
-		}
-
-		private TextAlignment GetTextAlignment(Type type)
-		{
-			type = type.GetNonNullableType();
-
-			if (type.IsNumeric() ||
-				type == typeof(TimeSpan) ||
-				typeof(ICollection).IsAssignableFrom(type))
-			{
-				return TextAlignment.Right;
-			}
-
-			return TextAlignment.Left;
 		}
 
 		// never gets triggered, can't override since it's internal?
@@ -115,10 +87,7 @@ namespace Atlas.GUI.Avalonia
 			else*/
 			{
 				//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
-				TextBlock textBlock = GetTextBlock(cell, dataItem);
-				AddTextBoxContextMenu(cell, textBlock);
-
-				textBlock.TextAlignment = GetTextAlignment(propertyInfo.PropertyType);
+				TextBlock textBlock = CreateTextBlock(cell, dataItem);
 
 				/*Style style = new Style(x => x.OfType<DataGridCell>())
 				{
@@ -173,7 +142,7 @@ namespace Atlas.GUI.Avalonia
 			}
 		}
 
-		protected TextBlock GetTextBlock(DataGridCell cell, object dataItem)
+		protected TextBlock CreateTextBlock(DataGridCell cell, object dataItem)
 		{
 			SubTextBlock textBlockElement = new SubTextBlock(this, propertyInfo)
 			{
@@ -186,6 +155,8 @@ namespace Atlas.GUI.Avalonia
 				//FontWeight
 				//Foreground
 			};
+			textBlockElement.TextAlignment = DataGridUtils.GetTextAlignment(propertyInfo.PropertyType);
+			AddTextBoxContextMenu(cell, textBlockElement);
 
 			if (Binding != null)
 			{
