@@ -142,6 +142,8 @@ namespace Atlas.Extensions // rename to Core?
 						newText.Append(' ');
 					else if (char.IsNumber(c) && !char.IsNumber(prevChar))
 						newText.Append(' ');
+					else if (char.IsUpper(prevChar) && char.IsUpper(c) && i + 1 < text.Length && char.IsLower(text[i + 1]))
+						newText.Append(' ');
 				}
 				newText.Append(c);
 				prevChar = c;
