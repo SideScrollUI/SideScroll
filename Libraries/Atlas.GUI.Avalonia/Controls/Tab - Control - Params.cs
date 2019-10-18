@@ -254,7 +254,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		}*/
 
 		// DefaultTheme.xaml is setting this for templates
-		private void TextBox_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void TextBox_PointerEnter(object sender, PointerEventArgs e)
 		{
 			TextBox textBox = (TextBox)sender;
 			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
@@ -262,7 +262,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				textBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
 		}
 
-		private void TextBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void TextBox_PointerLeave(object sender, PointerEventArgs e)
 		{
 			TextBox textBox = (TextBox)sender;
 			if (textBox.IsEnabled && !textBox.IsReadOnly)
@@ -310,25 +310,11 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private CheckBox AddCheckBox(ListProperty property, int rowIndex, int columnIndex)
 		{
-			CheckBox checkBox = new CheckBox()
+			TabCheckBox checkBox = new TabCheckBox(property)
 			{
-				Background = new SolidColorBrush(Colors.White),
-				BorderBrush = new SolidColorBrush(Colors.Black),
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				BorderThickness = new Thickness(1),
-				MaxWidth = ControlMaxWidth,
-				Margin = new Thickness(2, 2),
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
 			};
-			var binding = new Binding(property.propertyInfo.Name)
-			{
-				Converter = new EditValueConverter(),
-				//StringFormat = "Hello {0}",
-				Mode = BindingMode.TwoWay,
-				Source = property.obj,
-			};
-			checkBox.Bind(CheckBox.IsCheckedProperty, binding);
 			this.Children.Add(checkBox);
 			return checkBox;
 		}
@@ -375,7 +361,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		}
 
 		// DefaultTheme.xaml is setting this for templates
-		private void ComboBox_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void ComboBox_PointerEnter(object sender, PointerEventArgs e)
 		{
 			ComboBox comboBox = (ComboBox)sender;
 			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
@@ -383,7 +369,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				comboBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
 		}
 
-		private void ComboBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void ComboBox_PointerLeave(object sender, PointerEventArgs e)
 		{
 			ComboBox comboBox = (ComboBox)sender;
 			if (comboBox.IsEnabled)
@@ -573,19 +559,84 @@ namespace Atlas.GUI.Avalonia.Controls
 		}
 
 		// DefaultTheme.xaml is overriding this currently
-		private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void Button_PointerEnter(object sender, PointerEventArgs e)
 		{
 			Button button = (Button)sender;
 			button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
 			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundHoverColor);
 		}
 
-		private void Button_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void Button_PointerLeave(object sender, PointerEventArgs e)
 		{
 			Button button = (Button)sender;
 			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
 			button.BorderBrush = button.Background;
 		}
+	}
+
+	public class TabCheckBox : CheckBox, IStyleable, ILayoutable
+	{
+		Type IStyleable.StyleKey => typeof(CheckBox);
+
+		public TabCheckBox()
+		{
+			Initialize();
+		}
+
+		public TabCheckBox(ListProperty property)//, int rowIndex, int columnIndex)
+		{
+			Initialize();
+			//Grid.SetRow(this, rowIndex);
+			//Grid.SetColumn(this, columnIndex);
+			Bind(property);
+		}
+
+		private void Bind(ListProperty property)
+		{
+			var binding = new Binding(property.propertyInfo.Name)
+			{
+				//Converter = new EditValueConverter(),
+				//StringFormat = "Hello {0}",
+				Mode = BindingMode.TwoWay,
+				Source = property.obj,
+			};
+			((CheckBox)this).Bind(IsCheckedProperty, binding);
+		}
+
+		private void Initialize()
+		{
+			Background = new SolidColorBrush(Colors.White);
+			BorderBrush = new SolidColorBrush(Colors.Black);
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			BorderThickness = new Thickness(1);
+			//MinWidth = 50;
+			MaxWidth = TabControlParams.ControlMaxWidth;
+			Margin = new Thickness(2, 2);
+			//Focusable = true; // already set?
+			//Padding = new Thickness(6, 3);
+		}
+
+		/*private IBrush OriginalColor;
+
+		// DefaultTheme.xaml is setting this for templates
+		private void TextBox_PointerEnter(object sender, PointerEventArgs e)
+		{
+			TextBox textBox = (TextBox)sender;
+			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			if (textBox.IsEnabled && !textBox.IsReadOnly)
+			{
+				OriginalColor = textBox.Background;
+				textBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
+			}
+		}
+
+		private void TextBox_PointerLeave(object sender, PointerEventArgs e)
+		{
+			TextBox textBox = (TextBox)sender;
+			if (textBox.IsEnabled && !textBox.IsReadOnly)
+				textBox.Background = OriginalColor ?? textBox.Background;
+			//textBox.BorderBrush = textBox.Background;
+		}*/
 	}
 
 	public class TabTextBox : TextBox, IStyleable, ILayoutable
@@ -614,7 +665,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		private IBrush OriginalColor;
 
 		// DefaultTheme.xaml is setting this for templates
-		private void TextBox_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void TextBox_PointerEnter(object sender, PointerEventArgs e)
 		{
 			TextBox textBox = (TextBox)sender;
 			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
@@ -625,7 +676,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 		}
 
-		private void TextBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void TextBox_PointerLeave(object sender, PointerEventArgs e)
 		{
 			TextBox textBox = (TextBox)sender;
 			if (textBox.IsEnabled && !textBox.IsReadOnly)
@@ -637,6 +688,8 @@ namespace Atlas.GUI.Avalonia.Controls
 	public class TabComboBox : ComboBox, IStyleable, ILayoutable
 	{
 		Type IStyleable.StyleKey => typeof(ComboBox);
+
+		private IBrush OriginalColor;
 
 		public TabComboBox()
 		{
@@ -650,19 +703,22 @@ namespace Atlas.GUI.Avalonia.Controls
 		}
 
 		// DefaultTheme.xaml is setting this for templates
-		private void ComboBox_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void ComboBox_PointerEnter(object sender, PointerEventArgs e)
 		{
 			ComboBox comboBox = (ComboBox)sender;
 			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
 			if (comboBox.IsEnabled)
+			{
+				OriginalColor = comboBox.Background;
 				comboBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
+			}
 		}
 
-		private void ComboBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void ComboBox_PointerLeave(object sender, PointerEventArgs e)
 		{
 			ComboBox comboBox = (ComboBox)sender;
 			if (comboBox.IsEnabled)
-				comboBox.Background = new SolidColorBrush(Colors.White);
+				comboBox.Background = OriginalColor ?? new SolidColorBrush(Colors.White);
 			//textBox.BorderBrush = textBox.Background;
 		}
 	}

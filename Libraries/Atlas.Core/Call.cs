@@ -87,6 +87,7 @@ namespace Atlas.Core
 		{
 			timer.Stop();
 			stopwatch.Stop();
+			timer.Elapsed -= Timer_Elapsed;
 			UpdateDuration();
 		}
 
