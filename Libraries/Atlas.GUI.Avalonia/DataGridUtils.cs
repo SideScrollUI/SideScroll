@@ -41,24 +41,91 @@ namespace Atlas.GUI.Avalonia
 			return text;
 		}
 
+		public class ColumnInfo
+		{
+			public string Name { get; set; }
+			public TextAlignment RightAlign { get; set; }
+
+			public ColumnInfo(string name)
+			{
+				this.Name = name;
+			}
+		}
+
 		public static string DataGridToStringTable(DataGrid dataGrid)
 		{
 			if (dataGrid == null)
 				return null;
 
-			List<string> columns = new List<string>();
-			List<List<string>> contentRows = new List<List<string>>();
+			List<ColumnInfo> columns;
+			List<List<string>> contentRows;
+			GetDataGridContents(dataGrid, out columns, out contentRows);
+
+			string text = TableToString(columns, contentRows);
+			return text;
+		}
+
+		public static string DataGridToCsv(DataGrid dataGrid)
+		{
+			if (dataGrid == null)
+				return null;
+
+			List<ColumnInfo> columns;
+			List<List<string>> contentRows;
+			GetDataGridContents(dataGrid, out columns, out contentRows);
+
+			StringBuilder stringBuilder = new StringBuilder();
+			bool addComma = false;
+			foreach (ColumnInfo columnInfo in columns)
+			{
+				if (addComma)
+					stringBuilder.Append(',');
+				addComma = true;
+				stringBuilder.Append(columnInfo.Name);
+			}
+			stringBuilder.Append('\n');
+
+			foreach (var row in contentRows)
+			{
+				addComma = false;
+				foreach (string value in row)
+				{
+					if (addComma)
+						stringBuilder.Append(',');
+					addComma = true;
+
+					string text = value ?? "";
+					text = text.Replace("\"", "\"\""); // escape double quote
+					stringBuilder.Append('"');
+					stringBuilder.Append(text);
+					stringBuilder.Append('"');
+				}
+				stringBuilder.Append('\n');
+			}
+
+			return stringBuilder.ToString();
+		}
+
+		private static void GetDataGridContents(DataGrid dataGrid, out List<ColumnInfo> columns, out List<List<string>> contentRows)
+		{
+			columns = new List<ColumnInfo>();
+			contentRows = new List<List<string>>();
 			Dictionary<int, DataGridColumn> visibleColumns = new Dictionary<int, DataGridColumn>();
 
 			foreach (DataGridColumn dataColumn in dataGrid.Columns)
 			{
-				if (dataColumn.IsVisible)
+				if (dataColumn.IsVisible && dataColumn is DataGridBoundColumn boundColumn && boundColumn.Binding != null)
 					visibleColumns[dataColumn.DisplayIndex] = dataColumn;
 			}
 
 			foreach (DataGridColumn dataColumn in visibleColumns.Values)
 			{
-				columns.Add((string)dataColumn.Header);
+				var columnInfo = new ColumnInfo((string)dataColumn.Header);
+				if (dataColumn is DataGridPropertyTextColumn propertyColumn)
+					columnInfo.RightAlign = GetTextAlignment(propertyColumn.propertyInfo.PropertyType);
+				else if (dataColumn is DataGridBoundTextColumn boundColumn)
+					columnInfo.RightAlign = GetTextAlignment(boundColumn.dataColumn.DataType);
+				columns.Add(columnInfo);
 			}
 
 			//var collection = (ICollectionView)dataGrid.Items;
@@ -82,17 +149,14 @@ namespace Atlas.GUI.Avalonia
 
 				contentRows.Add(stringCells);
 			}
-
-			string text = TableToString(columns, contentRows);
-			return text;
 		}
 
-		public static string TableToString(List<string> columns, List<List<string>> contentRows)
+		public static string TableToString(List<ColumnInfo> columns, List<List<string>> contentRows)
 		{
 			List<int> columnWidths = new List<int>();
 			for (int column = 0; column < columns.Count; column++)
 			{
-				string header = columns[column];
+				string header = columns[column].Name;
 				int maxWidth = header.Length;
 				foreach (List<string> row in contentRows)
 				{
@@ -115,12 +179,12 @@ namespace Atlas.GUI.Avalonia
 			// Column Headers
 			stringBuilder.Append("|");
 			int columnIndex = 0;
-			foreach (string value in columns)
+			foreach (var columnInfo in columns)
 			{
 				int columnWidth = columnWidths[columnIndex++];
-				int leftPadding = (columnWidth - value.Length) / 2;
-				int rightPadding = columnWidth - value.Length - leftPadding;
-				stringBuilder.Append(" " + new string(' ', leftPadding) + value + new string(' ', rightPadding) + " |");
+				int leftPadding = (columnWidth - columnInfo.Name.Length) / 2;
+				int rightPadding = columnWidth - columnInfo.Name.Length - leftPadding;
+				stringBuilder.Append(" " + new string(' ', leftPadding) + columnInfo.Name + new string(' ', rightPadding) + " |");
 			}
 			stringBuilder.Append('\n');
 
@@ -141,7 +205,10 @@ namespace Atlas.GUI.Avalonia
 				foreach (string value in row)
 				{
 					string text = value ?? "";
-					stringBuilder.Append(" " + text.PadRight(columnWidths[columnIndex++], ' ') + " |");
+					if (columns[columnIndex].RightAlign == TextAlignment.Right)
+						stringBuilder.Append(" " + text.PadLeft(columnWidths[columnIndex++], ' ') + " |");
+					else
+						stringBuilder.Append(" " + text.PadRight(columnWidths[columnIndex++], ' ') + " |");
 				}
 				stringBuilder.Append('\n');
 			}

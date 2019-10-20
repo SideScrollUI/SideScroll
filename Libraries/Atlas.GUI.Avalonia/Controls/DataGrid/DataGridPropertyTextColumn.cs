@@ -31,7 +31,7 @@ namespace Atlas.GUI.Avalonia
 		private Binding unformattedBinding;
 		private FieldValueConverter formatConverter = new FieldValueConverter();
 		private DataGrid dataGrid;
-		private PropertyInfo propertyInfo;
+		public PropertyInfo propertyInfo;
 		public int MaxDesiredWidth = 500;
 		
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
@@ -207,6 +207,15 @@ namespace Atlas.GUI.Avalonia
 					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
 			};
 			list.Add(menuItemCopyDataGrid);
+
+			MenuItem menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - C_SV" };
+			menuItemCopyDataGridCsv.Click += delegate
+			{
+				string text = DataGridUtils.DataGridToCsv(dataGrid);
+				if (text != null)
+					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+			};
+			list.Add(menuItemCopyDataGridCsv);
 
 			contextMenu.Items = list;
 

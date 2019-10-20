@@ -11,7 +11,7 @@ namespace Atlas.GUI.Avalonia
 	public class DataGridBoundTextColumn : DataGridTextColumn
 	{
 		private DataGrid dataGrid;
-		private DataColumn dataColumn;
+		public DataColumn dataColumn;
 		public int MaxDesiredWidth = 500;
 
 		public DataGridBoundTextColumn(DataGrid dataGrid, DataColumn dataColumn)
@@ -127,6 +127,15 @@ namespace Atlas.GUI.Avalonia
 					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
 			};
 			list.Add(menuItemCopyDataGrid);
+
+			MenuItem menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - C_SV" };
+			menuItemCopyDataGridCsv.Click += delegate
+			{
+				string text = DataGridUtils.DataGridToCsv(dataGrid);
+				if (text != null)
+					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+			};
+			list.Add(menuItemCopyDataGridCsv);
 
 			//list.Add(new Separator());
 
