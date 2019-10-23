@@ -15,7 +15,6 @@ namespace Atlas.Tabs.Test
 
 			public override void Load(Call call)
 			{
-				// Replace this
 				sampleItems = new ItemCollection<SampleItem>();
 				AddItems(5);
 

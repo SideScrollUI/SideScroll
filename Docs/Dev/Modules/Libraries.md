@@ -1,6 +1,5 @@
 # Libraries
 
----
 
 ## Core Libraries
 
@@ -33,16 +32,16 @@
   - File Browser
 
 ## GUI Libraries
-
+  
+* Atlas.GUI.Avalonia (.NET Standard)
+  - Cross Platform GUI Controls
+  - Works on Windows, Linux, and Mac
+  - Still early beta
+  
 * Atlas.GUI.WPF (.NET Framework)
   - Windows only GUI Controls
   - Furthest along of the GUI interfaces
   - Has a lot better layout controls than WinForms
   - Ideally would eventually get deprecated for a cross platform solution
-  
-* Atlas.GUI.Avalonia (.NET Standard)
-  - Cross Platform GUI Controls
-  - Works well on Windows, Linux?, Mac?
-  - Still early beta
 
      

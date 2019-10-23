@@ -4,8 +4,8 @@
 ---
 * IDEs
   * [Visual Studio](IDEs/VisualStudio.md) (recommended)
-  * [Visual Studio Code](IDEs/VisualStudioCode.md)
   * JetBrains Rider
+  * [Visual Studio Code](IDEs/VisualStudioCode.md)
 * Modules
   * [Libraries](Modules/Libraries.md)
   * [Programs](Modules/Programs.md)

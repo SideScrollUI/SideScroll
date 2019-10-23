@@ -16,7 +16,7 @@
 - Open `Atlas.sln`
 - Operating system
   - Windows
-    - Visual Studio 2017 - (recommended) (community edition or +)
+    - Visual Studio 2019 - (recommended) (community edition or higher)
   - Linux
       - Visual Studio Code
       - JetBrains Rider?

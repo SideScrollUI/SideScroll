@@ -77,12 +77,10 @@ Actions add Buttons to the tab. When clicked, it will:
 				});
 			}
 
-			//private async Task<Call> SleepAsync(Call call)
 			private async Task SleepAsync(Call call)
 			{
 				call.log.Add("Sleeping for 3 seconds");
 				await Task.Delay(3000);
-				//System.Threading.Thread.Sleep(3000);
 				call.log.Add("Waking Up");
 			}
 		}

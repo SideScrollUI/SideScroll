@@ -1,6 +1,6 @@
 
 # Logs
----
+
 ```csharp
 Log log = new Log();
 log.Add("New Log entry", new Tag("Name", "value"), new Tag("Count", 123));

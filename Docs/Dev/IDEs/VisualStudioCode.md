@@ -3,8 +3,8 @@
 
 ## Installing
 
-  https://code.visualstudio.com/download
-	sudo apt install ./code_1.15.1-1502903936_amd64.deb
+* https://code.visualstudio.com/download
+  - sudo apt install ./code_1.15.1-1502903936_amd64.deb
 
 	Install dotnet core
 		https://www.microsoft.com/net/core
@@ -22,13 +22,13 @@
 
 # Update Settings
 
-  Settings
-    Enable Soft Wrap
-      View->Toggle Word Wrap
+* Settings
+  - Enable Soft Wrap
+    - View->Toggle Word Wrap
 
-Click Debug icon on left
+* Click Debug icon on left
 
-- Windows
+* Windows
   - Get rid of annoying beep in PowerShell (that vscode uses)
     https://superuser.com/questions/1113429/disable-powershell-beep-on-backspace
     make sure to restart after
