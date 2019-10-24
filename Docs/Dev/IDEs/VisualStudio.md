@@ -12,7 +12,7 @@
     
 ## Visual Studio 2019
 * Installing `Custom Document Well` for vertical tabs
-  - [https://tabsstudio.com/documentation/installing-custom-document-well-for-visual-studio-2019.html
+  - https://tabsstudio.com/documentation/installing-custom-document-well-for-visual-studio-2019.html
   - [Official Support on the roadmap](https://developercommunity.visualstudio.com/idea/467369/vertical-group-tab.html)
 
 ## Visual Studio 2017

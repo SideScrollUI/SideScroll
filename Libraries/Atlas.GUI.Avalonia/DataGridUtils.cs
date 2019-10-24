@@ -40,6 +40,36 @@ namespace Atlas.GUI.Avalonia
 			string text = sb.ToString();
 			return text;
 		}
+		
+		public static string DataGridRowToString(DataGrid dataGrid, object obj)
+		{
+			if (dataGrid == null || obj == null)
+				return null;
+
+			Type type = obj.GetType();
+			var sb = new StringBuilder();
+			foreach (DataGridBoundColumn column in dataGrid.Columns)
+			{
+				Binding binding = (Binding)column.Binding;
+				if (binding == null) // Buttons don't have a binding
+					continue;
+				string propertyName = binding.Path;
+				sb.Append(propertyName + ": ");
+				PropertyInfo propertyInfo = type.GetProperty(propertyName);
+				if (propertyInfo != null)
+				{
+					object value = propertyInfo.GetValue(obj);
+					string valueText = value.ObjectToString();
+					sb.AppendLine(valueText);
+				}
+				else
+				{
+					sb.AppendLine('(' + propertyName + ')');
+				}
+			}
+			string text = sb.ToString();
+			return text;
+		}
 
 		public class ColumnInfo
 		{

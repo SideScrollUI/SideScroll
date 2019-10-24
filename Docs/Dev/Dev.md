@@ -9,6 +9,7 @@
 * Modules
   * [Libraries](Modules/Libraries.md)
   * [Programs](Modules/Programs.md)
+* [AddingTabs](AddingTabs.md)
 * [Logs](Logs.md)
 * [Serializer](Serializer.md)
 
