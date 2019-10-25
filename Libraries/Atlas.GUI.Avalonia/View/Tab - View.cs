@@ -808,7 +808,7 @@ namespace Atlas.GUI.Avalonia.View
 				// show action help?
 				//CreateChildControls(this.tabActions.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
-			if (tabTasks != null)
+			if (tabTasks != null && tabTasks.IsVisible)
 			{
 				CreateChildControls(this.tabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}

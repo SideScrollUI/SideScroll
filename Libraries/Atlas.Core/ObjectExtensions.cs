@@ -12,7 +12,7 @@ namespace Atlas.Core
 	{
 
 		// Needs new name
-		public static string ObjectToString(this object obj, int maxLength = 100)
+		public static string ObjectToString(this object obj, int maxLength = 255)
 		{
 			// don't override cell style formatting for numbers
 			if (obj == null)

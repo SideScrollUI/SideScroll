@@ -4,7 +4,7 @@
 * Every tab is composed of an outer class that implements the `ITab` interface. The `ITab` interface allows you to:
   - Set parameters that can be reused each time a `TabInstance` is created
   - Defines a `Create()` method that creates a `TabInstance` that you can pass those parameters to
-  - You can also declare properties for a Tab which will show as columns if another tabs Items contains a list of Tabs
+  - You can also declare properties for a Tab, which when passed in a IList will be displayed as columns for the DataGrid
 * A new `TabInstance` will be created each time that Tab becomes visible, meaning the `TabInstance.Load()` is not called until the Tab is shown.
 
 ```csharp

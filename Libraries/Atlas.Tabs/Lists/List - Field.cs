@@ -26,8 +26,7 @@ namespace Atlas.Tabs
 			}
 		}
 
-		[Editing]
-		[InnerValue]
+		[Editing, InnerValue]
 		public override object Value
 		{
 			get
