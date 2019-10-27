@@ -183,11 +183,12 @@ namespace Atlas.GUI.Avalonia.Controls
 
 				//Foreground = Brushes.LightGray,
 				BorderBrush = Brushes.LightGray,
+				DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
 			};
 
 			// Show Hover text on mouse over instead of requiring holding the mouse down (why isn't this the default?)
-			plotView.ActualController.UnbindMouseDown(OxyMouseButton.Left);
-			plotView.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack);
+			plotView.ActualController.UnbindMouseDown(OxyMouseButton.Left); // remove default
+			plotView.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack); // show when hovering
 
 			LoadPlotModel();
 			/*plotView.Template = new ControlTemplate() // todo: fix

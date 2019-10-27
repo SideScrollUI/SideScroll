@@ -125,6 +125,12 @@ namespace Atlas.Core
 	[AttributeUsage(AttributeTargets.Class)]
 	public class SkippableAttribute : Attribute
 	{
+		public readonly bool Value;
+
+		public SkippableAttribute(bool value = true)
+		{
+			this.Value = value;
+		}
 	}
 
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]

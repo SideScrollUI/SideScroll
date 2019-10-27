@@ -108,7 +108,7 @@ namespace Atlas.GUI.Wpf
 		{
 			allowAutoScrolling = false;
 
-			tabInstance.Reintialize();
+			tabInstance.Reintialize(true);
 
 			LoadTabSettings();
 

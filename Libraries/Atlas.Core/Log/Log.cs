@@ -69,6 +69,7 @@ namespace Atlas.Core
 		public List<LogEntry> Entries = new List<LogEntry>();
 	}
 
+	[Skippable(false)]
 	public class LogEntry : INotifyPropertyChanged
 	{
 		public enum LogType
@@ -159,6 +160,7 @@ namespace Atlas.Core
 		}
 	}
 
+	[Skippable(false)]
 	public class Log : LogEntry
 	{
 		private const int MaxLogItems = 10000;

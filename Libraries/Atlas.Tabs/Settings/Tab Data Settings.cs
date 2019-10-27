@@ -85,7 +85,7 @@ namespace Atlas.Tabs
 		{
 			List<PropertyInfo> visibleProperties = GetVisibleProperties(elementType);
 
-			if (ColumnNameOrder.Count > 0)
+			if (ColumnNameOrder?.Count > 0)
 			{
 				Dictionary<string, PropertyInfo> propertyNames = new Dictionary<string, PropertyInfo>();
 				foreach (PropertyInfo propertyInfo in visibleProperties)

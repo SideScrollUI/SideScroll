@@ -36,7 +36,7 @@
     <PackageReference Include="Avalonia" Version="0.8.0" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.8.0" />
     <PackageReference Include="Avalonia.Desktop" Version="0.8.0" />
-    <PackageReference Include="OxyPlot.Core" Version="2.0.0-unstable1035" />
+    <PackageReference Include="OxyPlot.Core" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

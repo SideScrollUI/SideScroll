@@ -153,7 +153,16 @@ namespace Atlas.Tabs
 					{
 						var firstItem = ItemList[0][0];
 						var skippableAttribute = firstItem.GetType().GetCustomAttribute<SkippableAttribute>();
-						Skippable = (skippableAttribute != null) || (!(firstItem is ITab) && TabDataSettings.GetVisibleProperties(elementType).Count > 1);
+						if (skippableAttribute != null)
+						{
+							Skippable = skippableAttribute.Value;
+						}
+						else if (!(firstItem is ITab) && TabDataSettings.GetVisibleProperties(elementType).Count > 1)
+						{
+							Skippable = true;
+						}
+
+						//Skippable = (skippableAttribute != null) || (!(firstItem is ITab) && TabDataSettings.GetVisibleProperties(elementType).Count > 1);
 					}
 					return;
 				}
