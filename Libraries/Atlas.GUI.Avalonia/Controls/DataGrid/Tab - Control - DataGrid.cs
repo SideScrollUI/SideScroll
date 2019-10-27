@@ -277,10 +277,13 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			dataGrid.SelectionChanged += DataGrid_SelectionChanged;
 
+			// for 1 click unselecting we ideally want an event before the selection changes
+			// or we can remember previous selection? (selectionchanged gets triggered before Tapped, clicking same doesn't trigger that, selectionChanged can be triggered by code selections, not going to work for now)
 			//dataGrid.PointerPressed += DataGrid_PointerPressed; // doesn't trigger (only implemented for column headers)
 			//dataGrid.PointerReleased += DataGrid_PointerReleased; // does trigger, but after selection changes
-			//dataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // only triggers some of the time
+			dataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // only triggers some of the time, Cell only triggers 
 
+			//PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => x.DataGridRow_PointerPressed(e), handledEventsToo: true);
 			dataGrid.Tapped += DataGrid_Tapped;
 			dataGrid.Initialized += DataGrid_Initialized;
 			dataGrid.ColumnReordered += DataGrid_ColumnReordered;
@@ -293,6 +296,27 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			Children.Add(dataGrid);
 		}
+
+		/*private void DataGridRow_PointerPressed(PointerPressedEventArgs e)
+		{
+			if (e.MouseButton != MouseButton.Left)
+			{
+				return;
+			}
+
+			if (OwningGrid != null)
+			{
+				OwningGrid.IsDoubleClickRecordsClickOnCall(this);
+				if (OwningGrid.UpdatedStateOnMouseLeftButtonDown)
+				{
+					OwningGrid.UpdatedStateOnMouseLeftButtonDown = false;
+				}
+				else
+				{
+					e.Handled = OwningGrid.UpdateStateOnMouseLeftButtonDown(e, -1, Slot, false);
+				}
+			}
+		}*/
 
 		private void AddContextMenu()
 		{
@@ -476,25 +500,32 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			//if (dataGridCell.Column is DataGridCheckBoxColumn)
 			//	return;
-			unselectOnRelease = false;
+			//unselectOnRelease = false;
 			if (row != null && dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
 			{
 				if (dataGrid.SelectedItems.Contains(row.DataContext))
 				{
-					unselectOnRelease = true;
-					//dataGrid.SelectedItems.Clear();
-					//e.PointerPressedEventArgs.Handled = true;
+					//unselectOnRelease = true;
+
+					// need both of these
+					dataGrid.SelectedItems.Clear();
+					dataGrid.SelectedItem = null;
+
+					// parent function doesn't check Handled, but does check MouseButton = MouseButton.Left
+					e.PointerPressedEventArgs.Handled = true;
+					e.PointerPressedEventArgs.MouseButton = MouseButton.None; 
 				}
 			}
 		}
 
 		// happens too late to deselect
-		private void DataGrid_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e)
+		/*private void DataGrid_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e)
 		{
 			if (unselectOnRelease)
 			{
 				unselectOnRelease = false;
 				dataGrid.SelectedItems.Clear();
+				dataGrid.SelectedItem = null; // need both of these
 				e.Handled = true;
 			}
 		}
@@ -512,10 +543,11 @@ namespace Atlas.GUI.Avalonia.Controls
 				if (dataGrid.SelectedItems.Contains(row.DataContext))
 				{
 					dataGrid.SelectedItems.Clear();
+					dataGrid.SelectedItem = null; // need both of these
 					e.Handled = true;
 				}
 			}
-		}
+		}*/
 
 		private void TextBoxSearch_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e)
 		{
@@ -1163,7 +1195,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			stopwatch.Stop();
 
 			dataGrid.SelectionChanged -= DataGrid_SelectionChanged;
-			dataGrid.PointerPressed -= DataGrid_PointerPressed;
+			//dataGrid.PointerPressed -= DataGrid_PointerPressed;
+			dataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
 			dataGrid.Tapped -= DataGrid_Tapped;
 			dataGrid.Initialized -= DataGrid_Initialized;
 			dataGrid.ColumnReordered -= DataGrid_ColumnReordered;
