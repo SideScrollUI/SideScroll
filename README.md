@@ -10,7 +10,7 @@ Atlas is a tool for exploring multiple paths of a tree at once
 
 ![Atlas GUI](/Images/Screenshots/DataGridAndCustomControl.png)
 
-
+* [Demo Project - Video Game Database](https://github.com/garyhertel/VideoGamesDB)
 * [Setup](Docs/Setup.md)
 * [User Guide](Docs/UserGuide.md)
 * [Development](Docs/Dev/Development.md)
