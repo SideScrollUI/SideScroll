@@ -26,13 +26,13 @@
 
 You can save a bookmark for any location in the GUI. Multiple bookmarks can be selected at once and the merged results will be shown.
 
-![Bookmarks](/../Screenshots/bookmarks.png)
+![Bookmarks](/../Images/Screenshots/bookmarks.png)
 
 ### Widescreen monitor recommended
 
 Atlas automatically displays all entries in a recursive Parent->Child->Sub-Child...and will keep going until it hits the edge of your screen or an object that can't be expanded. Because of this, entries can easily get to be 10-20 levels deep. Atlas does include some autoscrolling capability, but it really shines with a widescreen monitor. It's much easier to use when everything is visible at once.
 
-![Widescreen](/../Screenshots/widescreen.png)
+![Widescreen](/../Images/Screenshots/widescreen.png)
 
 ### Web Browser (Windows/WPF Only)
 

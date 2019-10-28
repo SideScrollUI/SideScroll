@@ -14,6 +14,7 @@ namespace Atlas.Start.Avalonia.Tabs
 
 		public class Instance : TabInstance
 		{
+			private ItemCollection<MyParams> items;
 			private MyParams myParams;
 			private TabControlSearchToolbar searchToolbar;
 			private TabControlLoadingAnimation animation;
@@ -37,6 +38,18 @@ namespace Atlas.Start.Avalonia.Tabs
 				searchToolbar.buttonLoadNext.Click += ButtonLoadNext_Click;
 				searchToolbar.buttonCopyClipBoard.Click += ButtonCopyClipBoard_Click;
 				searchToolbar.buttonSleep.Click += ButtonSleep_Click;
+
+				items = new ItemCollection<MyParams>();
+				for (int i = 0; i < 10; i++)
+				{
+					var item = new MyParams()
+					{
+						Name = "Item " + i.ToString(),
+						Amount = i,
+					};
+					items.Add(item);
+				}
+				tabModel.Items = items;
 			}
 
 			private void ButtonSearch_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
