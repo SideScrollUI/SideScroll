@@ -553,6 +553,7 @@ namespace Atlas.Tabs
 				tabViewSettings = project.DataApp.Load<TabViewSettings>(CustomPath, taskInstance.call);
 				if (tabViewSettings != null)
 					return tabViewSettings;
+				return new TabViewSettings();
 			}
 
 			Type type = GetType();

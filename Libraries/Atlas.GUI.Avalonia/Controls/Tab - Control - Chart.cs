@@ -71,9 +71,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public static OxyColor? GetColor(int index)
 		{
-			if (index < Colors.Length)
-				return Colors[index];
-			return null;
+			return Colors[index % Colors.Length];
 		}
 
 		//public event EventHandler<EventArgs> OnSelectionChanged;

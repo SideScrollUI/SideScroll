@@ -252,7 +252,9 @@ namespace Atlas.GUI.Avalonia.Controls
 				//HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // Use scrollviewer instead for now 
 				//BorderThickness = new Thickness(0), // DataGrid bug, setting this breaks the background OnFocus, but fixes the extra border
 				//Padding = new Thickness(0),
-				BorderBrush = new SolidColorBrush(Colors.Black),
+				//BorderBrush = new SolidColorBrush(Colors.Black),
+				BorderBrush = new SolidColorBrush(Color.Parse("#555555")),
+				
 				BorderThickness = new Thickness(1),
 				IsReadOnly = !tabModel.Editing,
 				GridLinesVisibility = DataGridGridLinesVisibility.All,
@@ -501,7 +503,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//if (dataGridCell.Column is DataGridCheckBoxColumn)
 			//	return;
 			//unselectOnRelease = false;
-			if (row != null && dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
+			if (e.PointerPressedEventArgs.MouseButton == MouseButton.Left && row != null && dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
 			{
 				if (dataGrid.SelectedItems.Contains(row.DataContext))
 				{
