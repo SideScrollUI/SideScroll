@@ -252,8 +252,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // Use scrollviewer instead for now 
 				//BorderThickness = new Thickness(0), // DataGrid bug, setting this breaks the background OnFocus, but fixes the extra border
 				//Padding = new Thickness(0),
-				//BorderBrush = new SolidColorBrush(Colors.Black),
-				BorderBrush = new SolidColorBrush(Color.Parse("#555555")),
+				BorderBrush = new SolidColorBrush(Colors.Black),
 				
 				BorderThickness = new Thickness(1),
 				IsReadOnly = !tabModel.Editing,
