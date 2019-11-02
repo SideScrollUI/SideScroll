@@ -29,7 +29,7 @@ namespace Atlas.GUI.Avalonia
 
 		private Binding formattedBinding;
 		private Binding unformattedBinding;
-		private FieldValueConverter formatConverter = new FieldValueConverter();
+		private FormatValueConverter formatConverter = new FormatValueConverter();
 		private DataGrid dataGrid;
 		public PropertyInfo propertyInfo;
 		public int MaxDesiredWidth = 500;

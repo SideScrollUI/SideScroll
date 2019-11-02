@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace Atlas.GUI.Avalonia
 {
-	public class FieldValueConverter : IValueConverter
+	public class FormatValueConverter : IValueConverter
 	{
 		// add a map to store original mappings?
 		//public Dictionary<object, object> { get; set; }
@@ -56,7 +56,7 @@ namespace Atlas.GUI.Avalonia
 			{
 				if (dateTime != null)
 				{
-					string dateText = dateTime.ToUniversalTime().ToString("yyyy-M-d H:mm:ss.FFFFFF");
+					string dateText = dateTime.ToUniversalTime().ToString("yyyy-M-d H:mm:ss.FFF");
 					return dateText;
 				}
 			}

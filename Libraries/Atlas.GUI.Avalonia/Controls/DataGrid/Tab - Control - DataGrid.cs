@@ -274,7 +274,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			collectionView = new DataGridCollectionView(iList);
 			dataGrid.Items = collectionView;
 			dataGrid.SelectedItem = null;
-			dataGrid.InvalidateMeasure();
 
 			dataGrid.SelectionChanged += DataGrid_SelectionChanged;
 
@@ -291,11 +290,18 @@ namespace Atlas.GUI.Avalonia.Controls
 			dataGrid.PointerEnter += DataGrid_PointerEnter;
 			//this.GotFocus += TabDataGrid_GotFocus;
 			//this.LostFocus += TabDataGrid_LostFocus;
+			this.LayoutUpdated += TabControlDataGrid_LayoutUpdated;
 
 			//var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 			//AddContextMenu();
 
 			Children.Add(dataGrid);
+		}
+
+		// The DataGrid needs this to update sometimes
+		private void TabControlDataGrid_LayoutUpdated(object sender, EventArgs e)
+		{
+			dataGrid.InvalidateMeasure();
 		}
 
 		/*private void DataGridRow_PointerPressed(PointerPressedEventArgs e)
@@ -390,6 +396,22 @@ namespace Atlas.GUI.Avalonia.Controls
 				disableSaving--;
 				autoSelectItem = null;
 			}
+
+			if (scrollIntoViewObject != null && dataGrid.IsEffectivelyVisible && dataGrid.IsInitialized)
+			{
+				try
+				{
+					//if (collectionView.Contains(value))
+					dataGrid.ScrollIntoView(scrollIntoViewObject, dataGrid.CurrentColumn);
+				}
+				catch (Exception)
+				{
+					// {System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+					//Parameter name: index
+					//   at Avalonia.Collections.DataGridCollectionView.GetItemAt(Int32 index) in D:\a\1\s\src\Avalonia.Controls.DataGrid\Collections\DataGridCollectionView.cs:line 1957
+				}
+				scrollIntoViewObject = null;
+			}
 		}
 
 		private bool selectionModified = false;
@@ -401,7 +423,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				// Group up any new items after the 1st one
 				//if (SelectedRows.Count == 0 || (dataGrid.SelectedCells.Count == 1 && dataGrid.CurrentCell.Item == dataGrid.Items[dataGrid.Items.Count - 1]))
 				// autoSelectNew not exposed
-				if (autoSelectFirst && (autoSelectNew || tabModel.AutoSelect == TabModel.AutoSelectType.AnyNewOrSaved) && (textBoxSearch.Text == null || textBoxSearch.Text.Length == 0))
+				if (autoSelectFirst && (autoSelectNew || tabModel.AutoSelect == TabModel.AutoSelectType.AnyNewOrSaved) && (textBoxSearch.Text == null || textBoxSearch.Text.Length == 0) && finishedLoading)
 				{
 					//CancellationTokenSource tokenSource = new CancellationTokenSource();
 					//this.Dispatcher.Invoke(() => SelectedItem = e.NewItems[0], System.Windows.Threading.DispatcherPriority.SystemIdle, tokenSource.Token, TimeSpan.FromSeconds(1));
@@ -889,6 +911,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				UpdateSelection();
 		}
 
+		private object scrollIntoViewObject;
 		public IList SelectedItems
 		{
 			get
@@ -926,6 +949,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				//dataGrid.Flush(); //Can't get data grid to flush this correctly,
 				//if (value.Count > 0)
 				//	dataGrid.ScrollIntoView(value[0], null);
+				if (value.Count > 0)
+					scrollIntoViewObject = value[0];
 				disableSaving--;
 			}
 			/*get
