@@ -304,16 +304,17 @@ namespace Atlas.Tabs
 				return;
 
 			loadCalled = false; // allow TabView to reload
+			
+			if (this is ITabAsync || CanLoad)
+				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
 
 			//MethodInfo methodInfo = GetDerivedLoadMethod();
 			if (this is ITabAsync tabAsync)
 			{
-				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
 				Task.Run(() => tabAsync.LoadAsync(taskInstance.call)).Wait(); // Call this way to avoid .Result deadlock
 			}
 			if (CanLoad)
 			{
-				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
 				var subTask = taskInstance.call.AddSubTask("Loading");
 				//using (CallTimer loadCall = )
 				{
@@ -334,7 +335,12 @@ namespace Atlas.Tabs
 		{
 			isLoaded = false;
 			if (OnReload != null)
-				guiContext.Send(_ => OnReload(this, new EventArgs()), null);
+			{
+				if (this is ITabAsync tabAsync)
+					OnReload.Invoke(this, new EventArgs());
+				else
+					guiContext.Send(_ => OnReload(this, new EventArgs()), null);
+			}
 			// todo: this needs to actually wait for reload
 		}
 

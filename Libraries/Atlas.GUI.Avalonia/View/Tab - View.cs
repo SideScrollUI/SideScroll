@@ -31,7 +31,6 @@ namespace Atlas.GUI.Avalonia.View
 			{
 				tabInstance.tabViewSettings = value;
 				//_tabViewSettings = value;
-				UpdateSplitterDistance();
 			}
 		}
 		public TabInstance tabInstance;
@@ -542,7 +541,7 @@ namespace Atlas.GUI.Avalonia.View
 			if (tabInstance.loadCalled)
 				return;
 			tabInstance.loadCalled = true;
-			if (tabInstance is ITabAsync)
+			if (tabInstance is ITabAsync)// && tabInstance.isLoaded)
 			{
 				tabInstance.StartTask(LoadBackground, true, false);
 			}

@@ -64,11 +64,7 @@ namespace Atlas.Core
 				Type elementType = type.GetElementTypeForAll();
 				if (elementType.GetCustomAttribute<ToStringAttribute>() != null)
 				{
-					var strings = new List<string>();
-					foreach (var item in collection)
-						strings.Add(item.ToString());
-					string joined = string.Join(", ", strings);
-					return "[" + joined + "]";
+					return CollectionToString(collection);
 				}
 				return "[" + collection.Count.ToString("N0") + "]";
 			}
@@ -119,6 +115,15 @@ namespace Atlas.Core
 				}
 			}
 			return "( " + label + " )";*/
+		}
+
+		public static string CollectionToString(ICollection collection)
+		{
+			var strings = new List<string>();
+			foreach (var item in collection)
+				strings.Add(item.ToString());
+			string joined = string.Join(", ", strings);
+			return "[" + joined + "]";
 		}
 
 		private static string ObjectToUniqueStringAll(this object obj)

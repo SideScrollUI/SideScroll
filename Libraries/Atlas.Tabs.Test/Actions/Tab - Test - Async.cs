@@ -16,8 +16,21 @@ namespace Atlas.Tabs.Test.Actions
 
 			public async Task LoadAsync(Call call)
 			{
-				await Task.Delay(2000);
+				await Task.Delay(500);
 				tabModel.AddObject("Finished");
+			}
+
+			public override void Load(Call call)
+			{
+				tabModel.Actions = new ItemCollection<TaskCreator>()
+				{
+					new TaskDelegate("Reload", ReloadInstance),
+				};
+			}
+
+			private void ReloadInstance(Call call)
+			{
+				base.Reload();
 			}
 		}
 	}
