@@ -17,7 +17,7 @@ namespace Atlas.Start.Wpf
 
 		private void ButtonCreate_Click(object sender, RoutedEventArgs e)
 		{
-			ProjectSettings.DefaultProjectPath = textBoxProjectPath.Text;
+			//ProjectSettings.DefaultProjectPath = textBoxProjectPath.Text;
 			//this.mainWindow.Reload();
 		}
 	}

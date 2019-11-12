@@ -17,12 +17,12 @@ namespace Atlas.Start.Wpf
 			this.Activated += MainWindow_Activated;
 		}
 
-		public MainWindow(string projectPath) : base(new Project(projectPath, typeof(MainWindow).Namespace))
+		/*public MainWindow(string projectPath) : base(new Project(projectPath, typeof(MainWindow).Namespace))
 		{
 			// Todo: This is really ugly, fix logging (needs a GUI context to work)
 			//this.Initialized += MainWindow_Initialized; // doesn't work
 			this.Activated += MainWindow_Activated;
-		}
+		}*/
 
 		private void MainWindow_Activated(object sender, EventArgs e)
 		{
