@@ -59,7 +59,7 @@ namespace Atlas.GUI.Avalonia.View
 
 			checkboxAutoLoad = new CheckBox()
 			{
-				IsChecked = tabInstance.project.projectSettings.AutoLoad,
+				IsChecked = tabInstance.project.userSettings.AutoLoad,
 			};
 			MenuItem menuItemAutoLoad = new MenuItem()
 			{
@@ -74,8 +74,8 @@ namespace Atlas.GUI.Avalonia.View
 
 		private void MenuItemAutoLoad_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			tabInstance.project.projectSettings.AutoLoad = !tabInstance.project.projectSettings.AutoLoad;
-			checkboxAutoLoad.IsChecked = tabInstance.project.projectSettings.AutoLoad;
+			tabInstance.project.userSettings.AutoLoad = !tabInstance.project.userSettings.AutoLoad;
+			checkboxAutoLoad.IsChecked = tabInstance.project.userSettings.AutoLoad;
 			tabInstance.project.SaveSettings();
 		}
 

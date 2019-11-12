@@ -464,7 +464,7 @@ namespace Atlas.Tabs
 
 		public void LoadDefaultBookmark()
 		{
-			if (project.projectSettings.AutoLoad == false)
+			if (project.userSettings.AutoLoad == false)
 				return;
 
 			Bookmark bookmark = project.DataApp.Load<Bookmark>(CurrentBookmarkName, taskInstance.call);

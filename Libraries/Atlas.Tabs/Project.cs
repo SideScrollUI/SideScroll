@@ -12,9 +12,10 @@ namespace Atlas.Tabs
 		public string LinkType => projectSettings.LinkType; // for bookmarking
 		public string Version => projectSettings.Version;
 		public virtual ProjectSettings projectSettings { get; set; }
+		public virtual UserSettings userSettings { get; set; }
 
-		public DataRepo DataShared { get { return new DataRepo(DataRepoPath, "Shared"); } }
-		public DataRepo DataApp { get { return new DataRepo(DataRepoPath, "Programs/" + Name + "/" + projectSettings.DataVersion); } }
+		public DataRepo DataShared => new DataRepo(DataRepoPath, "Shared");
+		public DataRepo DataApp => new DataRepo(DataRepoPath, "Programs/" + Name + "/" + projectSettings.DataVersion);
 
 		public HttpCacheManager httpCacheManager = new HttpCacheManager();
 
@@ -22,36 +23,24 @@ namespace Atlas.Tabs
 		public BookmarkNavigator Navigator { get; set; } = new BookmarkNavigator();
 		public TaskInstanceCollection Tasks { get; set; } = new TaskInstanceCollection();
 
-		private string DataRepoPath
-		{
-			get { return Paths.Combine(projectSettings.ProjectPath, "Data"); }
-		}
+		private string DataRepoPath => Paths.Combine(userSettings.ProjectPath, "Data");
 
 
 		public Project()
 		{
 		}
 
-		public Project(ProjectSettings settings)
+		public Project(ProjectSettings projectSettings, UserSettings userSettings)
 		{
-			this.projectSettings = settings;
-		}
-
-		public Project(string projectPath, string name)
-		{
-			Call call = new Call();
-			string settingsPath = ProjectSettings.GetSettingsPath(projectPath);
-			var serializer = new SerializerFile(settingsPath, name);
-			projectSettings = serializer.LoadOrCreate<ProjectSettings>(call);
-			projectSettings.ProjectPath = projectPath;
-			projectSettings.Name = name;
+			this.projectSettings = projectSettings;
+			this.userSettings = userSettings;
 		}
 
 		public void SaveSettings()
 		{
 			//tabInstance.project.DataApp.Save(projectSettings, new Call());
 
-			var serializer = new SerializerFile(projectSettings.SettingsPath, "");
+			var serializer = new SerializerFile(userSettings.SettingsPath, "");
 			serializer.Save(new Call(), projectSettings);
 		}
 

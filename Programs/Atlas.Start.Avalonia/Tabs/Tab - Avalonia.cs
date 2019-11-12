@@ -19,7 +19,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			public Instance(Project project)
 			{
 				this.project = project;
-				if (project.projectSettings.AutoLoad) // did we load successfully last time?
+				if (project.userSettings.AutoLoad) // did we load successfully last time?
 					LoadDefaultBookmark();
 
 				tabModel.Name = "Avalonia";

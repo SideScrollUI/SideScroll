@@ -620,6 +620,9 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				AddColumn(propertyColumn.label, propertyColumn.propertyInfo);
 			}
+			// 1 column should take up entire grid
+			//if (dataGrid.Columns.Count == 1)
+			//	dataGrid.Columns[0].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
 		}
 
 		public void AddColumn(string label, string propertyName)
@@ -755,7 +758,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public void LoadSettings()
 		{
-			if (tabInstance.project.projectSettings.AutoLoad)
+			if (tabInstance.project.userSettings.AutoLoad)
 			{
 				SortSavedColumn();
 				if (tabDataSettings.Filter != null && tabDataSettings.Filter.Length > 0)
@@ -1227,6 +1230,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			dataGrid.Initialized -= DataGrid_Initialized;
 			dataGrid.ColumnReordered -= DataGrid_ColumnReordered;
 			dataGrid.PointerEnter -= DataGrid_PointerEnter;
+
+			LayoutUpdated -= TabControlDataGrid_LayoutUpdated;
 
 			dataGrid.Items = null;
 

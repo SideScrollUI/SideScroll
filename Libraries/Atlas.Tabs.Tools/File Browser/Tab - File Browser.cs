@@ -14,7 +14,7 @@ namespace Atlas.Tabs.Tools
 			public override void Load(Call call)
 			{
 				ItemCollection<ListItem> items = new ItemCollection<ListItem>();
-				items.Add(new ListItem("Data", new TabDirectory(project.projectSettings.ProjectPath)));
+				items.Add(new ListItem("Data", new TabDirectory(project.userSettings.ProjectPath)));
 				tabModel.Items = items;
 			}
 		}

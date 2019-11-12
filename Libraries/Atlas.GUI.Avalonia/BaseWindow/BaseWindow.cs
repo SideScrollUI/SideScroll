@@ -38,9 +38,10 @@ namespace Atlas.GUI.Avalonia
 		protected Grid contentGrid;
 		public TabView tabView;
 
-		public BaseWindow() : base()
+		public BaseWindow(Project project) : base()
 		{
 			baseWindow = this;
+			LoadProject(project);
 #if DEBUG
 			this.AttachDevTools();
 #endif
@@ -71,7 +72,7 @@ namespace Atlas.GUI.Avalonia
 			this.project = project;
 			bool isLoading = project.DataApp.Load<bool>(IsLoadingDataKey, new Call());
 			if (isLoading) // did the previous load succeed?
-				project.projectSettings.AutoLoad = false;
+				project.userSettings.AutoLoad = false;
 
 			project.DataApp.Save(IsLoadingDataKey, true);
 

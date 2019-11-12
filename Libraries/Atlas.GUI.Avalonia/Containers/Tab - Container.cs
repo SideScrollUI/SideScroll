@@ -172,7 +172,7 @@ namespace Atlas.GUI.Avalonia
 		{
 			//allowAutoScrolling = false;
 
-			if (tabInstance.project.projectSettings.AutoLoad)
+			if (tabInstance.project.userSettings.AutoLoad)
 				LoadDefaultTabSettings();
 		}
 
