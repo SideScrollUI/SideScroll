@@ -6,11 +6,26 @@ namespace Atlas.Start.Avalonia
 {
 	public class MainWindow : BaseWindow
 	{
-		public static Project defaultProject; // todo: find a way to pass this in
-
-		public MainWindow() : base(defaultProject)
+		public MainWindow() : base(LoadProject())
 		{
-			AddTabView(new TabAvalonia.Instance(defaultProject));
+			AddTabView(new TabAvalonia.Instance(project));
+		}
+
+		public static Project LoadProject()
+		{
+			var projectSettings = new ProjectSettings()
+			{
+				Name = "Atlas",
+				Version = "1",
+				DataVersion = "1",
+				LinkType = "atlas",
+			};
+			var userSettings = new UserSettings()
+			{
+				ProjectPath = UserSettings.DefaultProjectPath,
+			};
+			Project project = new Project(projectSettings, userSettings);
+			return project;
 		}
 	}
 }

@@ -26,29 +26,11 @@ namespace Atlas.Start.Avalonia
 				AvaloniaLocator.CurrentMutable.Bind<IRenderTimer>().ToConstant(new DefaultRenderTimer(60));
 			});
 
-			MainWindow.defaultProject = LoadProject(UserSettings.DefaultProjectPath);
 			builder.Start<MainWindow>();
 			// todo: fix and switch to this
 			//var project = LoadProject(UserSettings.DefaultProjectPath);
 			//var mainWindow = new MainWindow(project);
 			//builder.Start<MainWindow>(mainWindow);
-		}
-
-		public static Project LoadProject(string projectPath)
-		{
-			var projectSettings = new ProjectSettings()
-			{
-				Name = "Atlas",
-				Version = "1",
-				DataVersion = "1",
-				LinkType = "atlas",
-			};
-			var userSettings = new UserSettings()
-			{
-				ProjectPath = projectPath,
-			};
-			Project project = new Project(projectSettings, userSettings);
-			return project;
 		}
 
 		public static AppBuilder BuildAvaloniaApp(string[] args)

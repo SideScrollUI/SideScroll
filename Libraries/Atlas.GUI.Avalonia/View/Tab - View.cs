@@ -222,7 +222,7 @@ namespace Atlas.GUI.Avalonia.View
 			tabParentControls = new TabControlSplitContainer()
 			{
 				ColumnDefinitions = new ColumnDefinitions("*"),
-				MaxDesiredWidth = 1200,
+				MaxDesiredWidth = 1300,
 			};
 			//if (TabViewSettings.SplitterDistance != null)
 			//	tabParentControls.Width = (double)TabViewSettings.SplitterDistance;

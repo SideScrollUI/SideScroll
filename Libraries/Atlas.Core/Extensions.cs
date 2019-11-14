@@ -127,14 +127,25 @@ namespace Atlas.Extensions // rename to Core?
 			if (string.IsNullOrWhiteSpace(text))
 				return "";
 			StringBuilder newText = new StringBuilder(text.Length * 2);
-			newText.Append(char.ToUpper(text[0]));
-			char prevChar = newText[0];
-			for (int i = 1; i < text.Length; i++)
+			bool upperCase = true;
+			char prevChar = ' ';
+			for (int i = 0; i < text.Length; i++)
 			{
 				char c = text[i];
+				if (upperCase)
+				{
+					upperCase = false;
+					c = char.ToUpper(c);
+				}
 				if (c == '_')
 				{
 					c = ' ';
+				}
+				else if (c == '|')
+				{
+					newText.Append(" |");
+					c = ' ';
+					upperCase = true;
 				}
 				else if (prevChar != ' ')
 				{

@@ -158,7 +158,8 @@ namespace Atlas.GUI.Avalonia
 		public void Reload()
 		{
 			//LoadProject(project);
-			tabView.Load();
+			//tabView.Load();
+			tabView.tabInstance.Reload();
 		}
 
 		public void AddClipBoardButtons()
@@ -193,24 +194,6 @@ namespace Atlas.GUI.Avalonia
 				// only if TabBookmarks used, don't need to reload the tab
 				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
 			}
-		}
-
-		protected virtual string GetLinkUri()
-		{
-			Bookmark bookmark = tabView.tabInstance.CreateBookmark();
-			Bookmark secureBookmark = bookmark.GetSecure();
-			string encoded = bookmark.GetEncodedString();
-			string uri = "atlas://" + encoded;
-			return uri;
-		}
-
-		protected virtual string GetLinkData(string uri)
-		{
-			if (!uri.StartsWith("atlas://"))
-				return null;
-
-			string data = uri.Substring(6);
-			return data;
 		}
 
 		private Grid CreateScrollButtons()
