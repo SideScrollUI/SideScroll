@@ -62,7 +62,7 @@ namespace Atlas.Core
 			else if (obj is ICollection collection)
 			{
 				Type elementType = type.GetElementTypeForAll();
-				if (elementType.GetCustomAttribute<ToStringAttribute>() != null)
+				if (elementType != null && elementType.GetCustomAttribute<ToStringAttribute>() != null)
 				{
 					return CollectionToString(collection);
 				}

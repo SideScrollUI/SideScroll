@@ -93,6 +93,7 @@ namespace Atlas.Serialize
 			if (createIfNeeded)
 			{
 				T newObject = Activator.CreateInstance<T>();
+				Debug.Assert(newObject != null);
 				return newObject;
 			}
 			return default(T);

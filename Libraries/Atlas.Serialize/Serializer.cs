@@ -467,7 +467,7 @@ namespace Atlas.Serialize
 				else
 					writer.Write((byte)2);
 				TypeRepo typeRepo = idxTypeToRepo[type];
-				if (baseType.IsPrimitive)
+				if (baseType != null && baseType.IsPrimitive)
 				{
 					//if (type != baseType)
 					//	writer.Write((short)typeRepo.typeIndex); // could compress by storing Base Class subtype 

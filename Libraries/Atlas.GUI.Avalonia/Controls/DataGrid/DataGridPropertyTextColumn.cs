@@ -98,7 +98,6 @@ namespace Atlas.GUI.Avalonia
 				};
 				cell.Styles.Add(style);*/
 
-
 				if (this.DisplayIndex == 1)
 				{
 					// Update the cell color based on the object

@@ -234,6 +234,11 @@ namespace Atlas.Core
 			return logEntry;
 		}
 
+		public LogEntry AddException(Exception e)
+		{
+			return AddError(e.Message, new Tag(e));
+		}
+
 		public LogTimer Timer(string text, params Tag[] tags)
 		{
 			LogTimer logTimer = new LogTimer(text, context);

@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using System;
+using System.Collections;
 using System.Reflection;
 
 namespace Atlas.GUI.Avalonia
@@ -37,7 +38,7 @@ namespace Atlas.GUI.Avalonia
 			//DataGridCell dataGridCell = (DataGridCell)value;
 			try
 			{
-				if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
+				if (value is DictionaryEntry || propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					bool hasChildren = TabModel.ObjectHasChildren(value, true);
 					if (hasChildren)
