@@ -61,6 +61,12 @@ namespace Atlas.Core
 	{
 	}
 
+	// 
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class WordWrapAttribute : Attribute
+	{
+	}
+
 	// Put Serialize here so others don't have to reference a serializer directly?
 	// Serialize: Shows the field/property instead of the parent class as the nested tab
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]

@@ -154,6 +154,8 @@ namespace Atlas.GUI.Avalonia
 				//FontWeight
 				//Foreground
 			};
+			if (propertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
+				textBlockElement.TextWrapping = TextWrapping.Wrap;
 			textBlockElement.TextAlignment = DataGridUtils.GetTextAlignment(propertyInfo.PropertyType);
 			AddTextBoxContextMenu(cell, textBlockElement);
 
