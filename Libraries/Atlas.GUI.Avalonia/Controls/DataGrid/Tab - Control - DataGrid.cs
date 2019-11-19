@@ -791,7 +791,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				if (listItem == null)
 					continue;
-				string id = listItem.ObjectToUniqueString();
+				string id = GetDataKey(listItem) ?? listItem.ObjectToUniqueString();
 				if (id != null)
 					keys[id] = listItem;
 			}
@@ -801,6 +801,11 @@ namespace Atlas.GUI.Avalonia.Controls
 				if (selectedRow.obj != null)
 				{
 					listItem = selectedRow.obj;
+				}
+				else if (selectedRow.dataKey != null)
+				{
+					if (!keys.TryGetValue(selectedRow.dataKey, out listItem))
+						continue;
 				}
 				else if (selectedRow.label != null)
 				{
@@ -1041,6 +1046,41 @@ namespace Atlas.GUI.Avalonia.Controls
 			tabInstance.UpdateNavigator();
 		}
 
+		private string GetDataKey(object obj)
+		{
+			Type type = obj.GetType();
+			var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
+			var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
+			if (keyProperties.Count > 0)
+			{
+				return keyProperties[0].GetValue(obj).ToString();
+			}
+			else if (keyFields.Count > 0)
+			{
+				return keyFields[0].GetValue(obj).ToString();
+			}
+			return null;
+		}
+
+		private object GetDataValue(object obj)
+		{
+			Type type = obj.GetType();
+			var keyProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
+			var keyFields = type.GetFieldsWithAttribute<DataValueAttribute>();
+			if (keyProperties.Count > 0)
+			{
+				return keyProperties[0].GetValue(obj);
+			}
+			else if (keyFields.Count > 0)
+			{
+				return keyFields[0].GetValue(obj);
+			}
+			else
+			{
+				return obj;
+			}
+		}
+
 		public HashSet<SelectedRow> SelectedRows
 		{
 			get
@@ -1103,34 +1143,9 @@ namespace Atlas.GUI.Avalonia.Controls
 							selectedRow.label = null;
 						}
 						// Fill in the DataKey/DataValue pair if found
-						var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
-						var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
-						if (keyProperties.Count > 0)
-						{
-							selectedRow.dataKey = keyProperties[0].GetValue(obj).ToString();
-						}
-						else if (keyFields.Count > 0)
-						{
-							selectedRow.dataKey = keyFields[0].GetValue(obj).ToString();
-						}
-
+						selectedRow.dataKey = GetDataKey(obj);
 						if (selectedRow.dataKey != null)
-						{
-							var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
-							var valueFields = type.GetFieldsWithAttribute<DataValueAttribute>();
-							if (valueProperties.Count > 0)
-							{
-								selectedRow.dataValue = valueProperties[0].GetValue(obj);
-							}
-							else if (valueFields.Count > 0)
-							{
-								selectedRow.dataValue = valueFields[0].GetValue(obj);
-							}
-							else
-							{
-								selectedRow.dataValue = obj;
-							}
-						}
+							selectedRow.dataValue = GetDataValue(obj);
 
 						selectedRows.Add(selectedRow);
 					}
