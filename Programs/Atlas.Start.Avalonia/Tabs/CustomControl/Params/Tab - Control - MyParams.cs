@@ -33,8 +33,8 @@ namespace Atlas.Start.Avalonia.Tabs
 			{
 				[Grid.RowProperty] = 0,
 			};
-			controlParams.AddPropertyRow(myParams.GetType().GetProperty(nameof(myParams.Name)));
-			controlParams.AddPropertyRow(myParams.GetType().GetProperty(nameof(myParams.Amount)));
+			controlParams.AddPropertyRow(nameof(myParams.Name));
+			controlParams.AddPropertyRow(nameof(myParams.Amount));
 			this.Children.Add(controlParams);
 		}
 	}

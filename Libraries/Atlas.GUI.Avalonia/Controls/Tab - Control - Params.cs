@@ -90,6 +90,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			return controls;
 		}
 
+		public Control AddPropertyRow(string propertyName)
+		{
+			PropertyInfo propertyInfo = obj.GetType().GetProperty(propertyName);
+			return AddPropertyRow(new ListProperty(obj, propertyInfo));
+		}
+
 		public Control AddPropertyRow(PropertyInfo propertyInfo)
 		{
 			return AddPropertyRow(new ListProperty(obj, propertyInfo));
