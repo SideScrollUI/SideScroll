@@ -126,8 +126,7 @@ namespace Atlas.GUI.Avalonia
 				this.propertyInfo = propertyInfo;
 			}
 
-			// can't override DesiredSize
-			protected override Size MeasureCore(Size availableSize)
+			protected Size GetMaxSize(Size size)
 			{
 				double maxDesiredWidth = MaxDesiredWidth;
 				if (DataContext is IMaxDesiredWidth iMaxWidth && column.DisplayIndex == 1 && iMaxWidth.MaxDesiredWidth != null)
@@ -135,9 +134,17 @@ namespace Atlas.GUI.Avalonia
 					maxDesiredWidth = iMaxWidth.MaxDesiredWidth.Value;
 				}
 
-				Size measured = base.MeasureCore(availableSize);
-				Size maxSize = new Size(Math.Min(maxDesiredWidth, measured.Width), measured.Height);
+				Size maxSize = new Size(Math.Min(maxDesiredWidth, size.Width), size.Height);
 				return maxSize;
+			}
+
+			// can't override DesiredSize
+			protected override Size MeasureCore(Size availableSize)
+			{
+				availableSize = GetMaxSize(availableSize);
+				Size measured = base.MeasureCore(availableSize);
+				measured = GetMaxSize(measured);
+				return measured;
 			}
 		}
 

@@ -52,17 +52,15 @@ namespace Atlas.GUI.Avalonia
 					return null;
 			}
 
-			if (value is DateTime dateTime)
-			{
-				if (dateTime != null)
-				{
-					string dateText = dateTime.ToUniversalTime().ToString("yyyy-M-d H:mm:ss.FFF");
-					return dateText;
-				}
-			}
-
 			if (targetType == typeof(string))
+			{
+				if (value is DateTime dateTime)
+					return dateTime.ToUniversalTime().ToString("yyyy-M-d H:mm:ss.FFF");
+				if (value is TimeSpan timeSpan)
+					return timeSpan.ToString(@"s\.fff");
+
 				return value.ObjectToString();
+			}
 			try
 			{
 				return System.Convert.ChangeType(value, targetType);

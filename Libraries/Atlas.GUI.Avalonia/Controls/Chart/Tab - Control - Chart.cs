@@ -1,20 +1,13 @@
 ﻿using Atlas.Core;
 using Atlas.Tabs;
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Reflection;
 
 using OxyPlot;
@@ -69,7 +62,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				OxyColors.MediumSpringGreen,
 			};
 
-		public static OxyColor? GetColor(int index)
+		public static OxyColor GetColor(int index)
 		{
 			return Colors[index % Colors.Length];
 		}
@@ -138,7 +131,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		// don't want to reload this because 
 		private void InitializeControls()
 		{
-			this.Background = new SolidColorBrush(Theme.BackgroundColor);
+			//this.Background = new SolidColorBrush(Theme.BackgroundColor);
 			this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
 			this.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
 			//this.Width = 1000;
@@ -177,7 +170,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//
 				//Background = new SolidColorBrush(Colors.White),
 
-				Background = new SolidColorBrush(Theme.BackgroundColor),
+				Background = Brushes.Transparent,
 
 				//Foreground = Brushes.LightGray,
 				BorderBrush = Brushes.LightGray,
@@ -206,7 +199,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			Grid containerGrid = new Grid()
 			{
-				ColumnDefinitions = new ColumnDefinitions("Auto,*"),
+				ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto"),
 				RowDefinitions = new RowDefinitions("*"), // Header, Body
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
@@ -215,15 +208,18 @@ namespace Atlas.GUI.Avalonia.Controls
 			//containerGrid.Children.Add(borderTitle);
 
 			containerGrid.Children.Add(tabControlDataGrid);
-
 			containerGrid.Children.Add(plotView);
+
+			var legend = new TabControlChartLegend(plotView)
+			{
+				[Grid.ColumnProperty] = 2,
+			};
+			containerGrid.Children.Add(legend);
 
 			//this.watch.Start();
 			this.Content = containerGrid;
 
 			this.Focusable = true;
-			this.GotFocus += Tab_GotFocus;
-			this.LostFocus += Tab_LostFocus;
 		}
 
 		public string GetDateTimeFormat(double duration)
@@ -361,13 +357,12 @@ namespace Atlas.GUI.Avalonia.Controls
 				Title = listSeries.Name,
 				LineStyle = LineStyle.Solid,
 				StrokeThickness = 2,
-				Color = OxyColors.YellowGreen,
+				Color = GetColor(plotModel.Series.Count),
 				TextColor = OxyColors.Black,
 				CanTrackerInterpolatePoints = false,
 				MarkerSize = 3,
 				MarkerType = MarkerType.Circle,
 			};
-			lineSeries.Color = GetColor(plotModel.Series.Count) ?? lineSeries.Color;
 			AddPoints(listSeries, listSeries.iList, lineSeries);
 
 			plotModel.Series.Add(lineSeries);
@@ -457,16 +452,6 @@ namespace Atlas.GUI.Avalonia.Controls
 		public void Dispose()
 		{
 			UnloadModel();
-		}
-
-		private void Tab_LostFocus(object sender, RoutedEventArgs e)
-		{
-			this.Background = new SolidColorBrush(Theme.BackgroundColor);
-		}
-
-		private void Tab_GotFocus(object sender, RoutedEventArgs e)
-		{
-			this.Background = new SolidColorBrush(Theme.BackgroundFocusedColor);
 		}
 	}
 }

@@ -10,11 +10,11 @@ namespace Atlas.Core
 
 		private CallActionAsync callAction;
 
-		public TaskDelegateAsync(string label, CallActionAsync callAction, bool useTask = false, bool showTask = false, string description = null)
+		public TaskDelegateAsync(string label, CallActionAsync callAction, bool showTask = false, string description = null)
 		{
 			this.Label = label;
 			this.callAction = callAction;
-			this.UseTask = useTask;
+			this.UseTask = true;
 			this.ShowTask = showTask;
 			this.Description = description;
 		}

@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using static Atlas.Core.TaskDelegate;
+using static Atlas.Core.TaskDelegateAsync;
 using static Atlas.Core.TaskDelegateParams;
 
 namespace Atlas.Tabs
@@ -77,14 +78,14 @@ namespace Atlas.Tabs
 
 		// Relative paths for where all the TabSettings get stored, primarily used for loading future defaults
 		// paths get hashed later to avoid having to encode and super long names breaking path limits
-		private string CustomPath { get { return tabModel.CustomSettingsPath != null ? "Custom/" + GetType().FullName + "/" + tabModel.CustomSettingsPath : null; } }
-		private string TabPath { get { return "Tab/" + GetType().FullName + "/" + tabModel.ObjectTypePath; } }
-		//private string TabPath { get { return "Tab/" + GetType().FullName + "/" + tabModel.ObjectTypePath + "/" + Label; } }
+		private string CustomPath => (tabModel.CustomSettingsPath != null) ? "Custom/" + GetType().FullName + "/" + tabModel.CustomSettingsPath : null;
+		private string TabPath => "Tab/" + GetType().FullName + "/" + tabModel.ObjectTypePath;
+		//private string TabPath => "Tab/" + GetType().FullName + "/" + tabModel.ObjectTypePath + "/" + Label;
 		// deprecate?
-		private string TypeLabelPath { get { return "TypePath/" + tabModel.ObjectTypePath + "/" + Label; } }
-		private string TypePath { get { return "Type/" + tabModel.ObjectTypePath; } }
+		private string TypeLabelPath => "TypePath/" + tabModel.ObjectTypePath + "/" + Label;
+		private string TypePath => "Type/" + tabModel.ObjectTypePath;
 
-		private string LoadedPath { get { return "Loaded/" + tabModel.ObjectTypePath; } }
+		private string LoadedPath => "Loaded/" + tabModel.ObjectTypePath;
 
 		// Reload to initial state
 		private bool isLoaded = false;
@@ -266,6 +267,12 @@ namespace Atlas.Tabs
 		public void StartTask(CallAction callAction, bool useTask, bool showTask)
 		{
 			TaskDelegate taskDelegate = new TaskDelegate(callAction.Method.Name, callAction, useTask);
+			StartTask(taskDelegate, showTask);
+		}
+
+		public void StartAsync(CallActionAsync callAction, bool showTask)
+		{
+			var taskDelegate = new TaskDelegateAsync(callAction.Method.Name, callAction, true);
 			StartTask(taskDelegate, showTask);
 		}
 

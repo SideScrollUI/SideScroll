@@ -20,8 +20,8 @@ namespace Atlas.Core
 
 			Type type = obj.GetType();
 
-			if (type.Equals(typeof(string)))
-				return (string)obj;
+			if (obj is string text)
+				return text;
 
 			// handle decimal here: a decimal is considered a primitive
 			if (type.IsNumeric())
@@ -42,7 +42,7 @@ namespace Atlas.Core
 					return timeSpan.ToString("g");
 				// use any ToString() that overrides the base
 				MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes);
-				if (toStringMethod.DeclaringType != typeof(Object) && toStringMethod.DeclaringType != typeof(ValueType))
+				if (toStringMethod.DeclaringType != typeof(object) && toStringMethod.DeclaringType != typeof(ValueType))
 				{
 					string toString = obj.ToString();
 					if (toString != null && toString.Length > maxLength)
@@ -55,9 +55,9 @@ namespace Atlas.Core
 			//if (toString != null && !toString.StartsWith("("))
 			//	return toString;
 
-			if (typeof(IDictionary).IsAssignableFrom(type))
+			if (obj is IDictionary dictionary)
 			{
-				return "{ " + ((ICollection)obj).Count.ToString("N0") + " }";
+				return "{ " + dictionary.Count.ToString("N0") + " }";
 			}
 			else if (obj is ICollection collection)
 			{
@@ -88,8 +88,8 @@ namespace Atlas.Core
 				{
 				}
 			}
-			if (type == typeof(DictionaryEntry))
-				return ((DictionaryEntry)obj).Key.ToString();
+			if (obj is DictionaryEntry dictionaryEntry)
+				return dictionaryEntry.Key.ToString();
 
 			string valueString = obj.ToString();
 			if (valueString == type.ToString())
@@ -133,8 +133,8 @@ namespace Atlas.Core
 
 			Type type = obj.GetType();
 
-			if (type.Equals(typeof(string)))
-				return (string)obj;
+			if (obj is string text)
+				return text;
 
 			if (type.IsPrimitive == false)
 			{
@@ -142,7 +142,7 @@ namespace Atlas.Core
 					return dateTime.ToString("yyyy-MM-dd H:mm:ss.FFFFFF");
 				// use any ToString() that overrides the base
 				MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes);
-				if (toStringMethod.DeclaringType != typeof(Object) && toStringMethod.DeclaringType != typeof(ValueType))
+				if (toStringMethod.DeclaringType != typeof(object) && toStringMethod.DeclaringType != typeof(ValueType))
 				{
 					return obj.ToString();
 				}
@@ -161,8 +161,8 @@ namespace Atlas.Core
 					return null;
 				return (string)result;
 			}
-			if (type == typeof(DictionaryEntry))
-				return ((DictionaryEntry)obj).Key.ToString();
+			if (obj is DictionaryEntry dictionaryEntry)
+				return dictionaryEntry.Key.ToString();
 
 			string valueString = obj.ToString();
 			if (valueString != type.ToString())

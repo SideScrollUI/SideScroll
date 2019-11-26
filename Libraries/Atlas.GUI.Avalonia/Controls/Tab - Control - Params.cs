@@ -321,8 +321,25 @@ namespace Atlas.GUI.Avalonia.Controls
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
 			};
+			checkBox.PointerEnter += CheckBox_PointerEnter;
+			checkBox.PointerLeave += CheckBox_PointerLeave;
 			this.Children.Add(checkBox);
 			return checkBox;
+		}
+
+		private void CheckBox_PointerEnter(object sender, PointerEventArgs e)
+		{
+			CheckBox checkBox = (CheckBox)sender;
+			//checkBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			if (checkBox.IsEnabled)
+				checkBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
+		}
+
+		private void CheckBox_PointerLeave(object sender, PointerEventArgs e)
+		{
+			CheckBox checkBox = (CheckBox)sender;
+			if (checkBox.IsEnabled)
+				checkBox.Background = new SolidColorBrush(Colors.White);
 		}
 
 		private ComboBox AddEnum(ListProperty property, int rowIndex, int columnIndex, Type underlyingType, BindListAttribute propertyListAttribute)
@@ -360,9 +377,9 @@ namespace Atlas.GUI.Avalonia.Controls
 				Source = property.obj,
 			};
 			comboBox.Bind(ComboBox.SelectedItemProperty, binding);
-			this.Children.Add(comboBox);
 			comboBox.PointerEnter += ComboBox_PointerEnter;
 			comboBox.PointerLeave += ComboBox_PointerLeave;
+			this.Children.Add(comboBox);
 			return comboBox;
 		}
 

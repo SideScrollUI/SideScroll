@@ -29,7 +29,7 @@ namespace Atlas.Tabs.Test.Actions
 					new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
 					new TaskDelegate("Task Instance Progress", SubTaskInstances, true),
 					new TaskAction("Action", new Action(() => PassParams(1, "abc"))),
-					new TaskDelegateAsync("Sleep (Async)", SleepAsync, true, true),
+					new TaskDelegateAsync("Sleep (Async)", SleepAsync, true),
 				};
 
 				tabModel.Notes = @"

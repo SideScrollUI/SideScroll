@@ -72,6 +72,7 @@ namespace Atlas.Core
 	[Skippable(false)]
 	public class LogEntry : INotifyPropertyChanged
 	{
+		public LogEntry rootLog;
 		public enum LogType
 		{
 			Debug,
@@ -81,7 +82,8 @@ namespace Atlas.Core
 			Alert
 		}
 		public event PropertyChangedEventHandler PropertyChanged;
-		public DateTime Created; // { get; set; }
+		public DateTime Created;// { get; set; }
+		public TimeSpan Time => Created.Subtract(rootLog.Created);
 		public LogType originalType = LogType.Info;
 		public LogType Type { get; set; } = LogType.Info;
 		public string Text;// { get; set; }
@@ -137,10 +139,12 @@ namespace Atlas.Core
 
 		public LogEntry()
 		{
+			rootLog = this;
 		}
 
 		public LogEntry(LogType logType, string text, Tag[] tags)
 		{
+			rootLog = this;
 			this.originalType = logType;
 			this.Type = logType;
 			this.Text = text;
@@ -270,6 +274,7 @@ namespace Atlas.Core
 
 		public void AddLogEntry(LogEntry logEntry)
 		{
+			logEntry.rootLog = rootLog;
 			context.Post(new SendOrPostCallback(this.AddEntryCallback), logEntry);
 		}
 

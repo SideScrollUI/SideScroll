@@ -124,12 +124,12 @@ namespace Atlas.GUI.Avalonia.View
 		}
 
 		private bool childControlsFinishedLoading = false;
-		private bool rendered = false;
+		/*private bool rendered = false;
 		public override void Render(DrawingContext context)
 		{
 			base.Render(context);
 			rendered = true;
-		}
+		}*/
 
 		private Size measuredOverrideAvailableSize;
 		protected override Size MeasureOverride(Size availableSize)
@@ -272,7 +272,7 @@ namespace Atlas.GUI.Avalonia.View
 		private void GridSplitter_DragDelta(object sender, global::Avalonia.Input.VectorEventArgs e)
 		{
 			if (TabViewSettings.SplitterDistance != null)
-				tabParentControls.Width = (double)containerGrid.ColumnDefinitions[0].ActualWidth;
+				tabParentControls.Width = containerGrid.ColumnDefinitions[0].ActualWidth;
 
 			// force the width to update (Grid Auto Size caching problem?
 			double width = containerGrid.ColumnDefinitions[0].ActualWidth;

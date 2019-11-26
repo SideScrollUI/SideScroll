@@ -8,6 +8,7 @@ using System.Data;
 
 namespace Atlas.GUI.Avalonia
 {
+	// Rename to DataGridBoundTextDataColumn?
 	public class DataGridBoundTextColumn : DataGridTextColumn
 	{
 		private DataGrid dataGrid;
@@ -41,10 +42,10 @@ namespace Atlas.GUI.Avalonia
 			protected override Size MeasureCore(Size availableSize)
 			{
 				double maxDesiredWidth = MaxDesiredWidth;
-
+				availableSize = new Size(Math.Min(maxDesiredWidth, availableSize.Width), availableSize.Height);
 				Size measured = base.MeasureCore(availableSize);
-				Size maxSize = new Size(Math.Min(maxDesiredWidth, measured.Width), measured.Height);
-				return maxSize;
+				measured = new Size(Math.Min(maxDesiredWidth, measured.Width), measured.Height);
+				return measured;
 			}
 		}
 
