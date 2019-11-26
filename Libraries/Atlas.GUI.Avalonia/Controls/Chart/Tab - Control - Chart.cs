@@ -210,11 +210,11 @@ namespace Atlas.GUI.Avalonia.Controls
 			containerGrid.Children.Add(tabControlDataGrid);
 			containerGrid.Children.Add(plotView);
 
-			var legend = new TabControlChartLegend(plotView)
+			/*var legend = new TabControlChartLegend(plotView)
 			{
 				[Grid.ColumnProperty] = 2,
 			};
-			containerGrid.Children.Add(legend);
+			containerGrid.Children.Add(legend);*/
 
 			//this.watch.Start();
 			this.Content = containerGrid;

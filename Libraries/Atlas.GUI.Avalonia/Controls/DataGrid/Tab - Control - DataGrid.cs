@@ -885,11 +885,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				if (TabModel.ObjectHasChildren(value) && type.IsEnum == false)
 				{
 					// make sure there's something present
-					if (typeof(ICollection).IsAssignableFrom(type))
-					{
-						if (((ICollection)value).Count == 0)
-							continue;
-					}
+					if (value is ICollection collection && collection.Count == 0)
+						continue;
 					/*else if (typeof(IEnumerable).IsAssignableFrom(type))
 					  {
 						  if (!((IEnumerable)value).GetEnumerator().MoveNext())
@@ -1046,41 +1043,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			tabInstance.UpdateNavigator();
 		}
 
-		private string GetDataKey(object obj)
-		{
-			Type type = obj.GetType();
-			var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
-			var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
-			if (keyProperties.Count > 0)
-			{
-				return keyProperties[0].GetValue(obj).ToString();
-			}
-			else if (keyFields.Count > 0)
-			{
-				return keyFields[0].GetValue(obj).ToString();
-			}
-			return null;
-		}
-
-		private object GetDataValue(object obj)
-		{
-			Type type = obj.GetType();
-			var keyProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
-			var keyFields = type.GetFieldsWithAttribute<DataValueAttribute>();
-			if (keyProperties.Count > 0)
-			{
-				return keyProperties[0].GetValue(obj);
-			}
-			else if (keyFields.Count > 0)
-			{
-				return keyFields[0].GetValue(obj);
-			}
-			else
-			{
-				return obj;
-			}
-		}
-
 		public HashSet<SelectedRow> SelectedRows
 		{
 			get
@@ -1134,19 +1096,7 @@ namespace Atlas.GUI.Avalonia.Controls
 					{
 						if (obj == null)
 							continue;
-						Type type = obj.GetType();
-						SelectedRow selectedRow = new SelectedRow();
-						selectedRow.label = obj.ObjectToUniqueString();
-						selectedRow.rowIndex = iList.IndexOf(obj);
-						if (selectedRow.label == type.FullName)
-						{
-							selectedRow.label = null;
-						}
-						// Fill in the DataKey/DataValue pair if found
-						selectedRow.dataKey = GetDataKey(obj);
-						if (selectedRow.dataKey != null)
-							selectedRow.dataValue = GetDataValue(obj);
-
+						SelectedRow selectedRow = GetSelectedRow(obj);
 						selectedRows.Add(selectedRow);
 					}
 				}
@@ -1157,6 +1107,55 @@ namespace Atlas.GUI.Avalonia.Controls
 
 				return selectedRows;
 			}
+		}
+
+		private SelectedRow GetSelectedRow(object obj)
+		{
+			Type type = obj.GetType();
+			SelectedRow selectedRow = new SelectedRow();
+			selectedRow.label = obj.ObjectToUniqueString();
+			selectedRow.rowIndex = iList.IndexOf(obj);
+			if (selectedRow.label == type.FullName)
+			{
+				selectedRow.label = null;
+			}
+			// Fill in the DataKey/DataValue pair if found
+			selectedRow.dataKey = GetDataKey(obj);
+			if (selectedRow.dataKey != null)
+				selectedRow.dataValue = GetDataValue(obj);
+			return selectedRow;
+		}
+
+		private string GetDataKey(object obj)
+		{
+			Type type = obj.GetType();
+			var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
+			var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
+			if (keyProperties.Count > 0)
+			{
+				return keyProperties[0].GetValue(obj).ToString();
+			}
+			else if (keyFields.Count > 0)
+			{
+				return keyFields[0].GetValue(obj).ToString();
+			}
+			return null;
+		}
+
+		private object GetDataValue(object obj)
+		{
+			Type type = obj.GetType();
+			var keyProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
+			var keyFields = type.GetFieldsWithAttribute<DataValueAttribute>();
+			if (keyProperties.Count > 0)
+			{
+				return keyProperties[0].GetValue(obj);
+			}
+			else if (keyFields.Count > 0)
+			{
+				return keyFields[0].GetValue(obj);
+			}
+			return null;
 		}
 
 		private string FilterText
