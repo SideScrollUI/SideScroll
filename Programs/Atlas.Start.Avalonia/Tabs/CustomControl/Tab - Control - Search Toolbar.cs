@@ -12,7 +12,7 @@ namespace Atlas.Start.Avalonia.Tabs
 		public ToolbarButton buttonSleep;
 		public ToolbarButton buttonCopyClipBoard;
 
-		public TextBlock textBlockStatus;
+		public TextBox textBoxStatus;
 
 		public TabControlSearchToolbar()
 		{
@@ -34,7 +34,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			AddButton("Save", Icons.Streams.Save);
 			AddSeparator();
 			buttonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
-			textBlockStatus = AddLabel("Status");
+			textBoxStatus = AddLabelText("Status");
 		}
 	}
 }

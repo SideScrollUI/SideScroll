@@ -10,18 +10,24 @@ using System.Collections.Generic;
 
 using OxyPlot;
 using OxyPlot.Avalonia;
+using Atlas.Serialize;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
 	public class TabControlChartLegend : Grid
 	{
 		private PlotView plotView;
+		public List<TabChartLegendItem> legendItems = new List<TabChartLegendItem>();
+		public Dictionary<string, TabChartLegendItem> idxLegendItems = new Dictionary<string, TabChartLegendItem>();
+
+		public bool Horizontal { get; set; }
 
 		public event EventHandler<EventArgs> OnSelectionChanged;
 
-		public TabControlChartLegend(PlotView plotView)
+		public TabControlChartLegend(PlotView plotView, bool horizontal)
 		{
 			this.plotView = plotView;
+			this.Horizontal = horizontal;
 			InitializeControls();
 		}
 
@@ -30,24 +36,18 @@ namespace Atlas.GUI.Avalonia.Controls
 			//this.HorizontalAlignment = HorizontalAlignment.Right;
 			//this.VerticalAlignment = VerticalAlignment.Stretch;
 			this.ColumnDefinitions = new ColumnDefinitions("Auto");
-			this.RowDefinitions = new RowDefinitions();
+			this.RowDefinitions = new RowDefinitions("Auto");
 			//this.Margin = new Thickness(6);
 
 			RefreshModel();
 		}
-		public List<TabChartLegendItem> legendItems = new List<TabChartLegendItem>();
-		public Dictionary<string, TabChartLegendItem> idxLegendItems = new Dictionary<string, TabChartLegendItem>();
 
 		private TabChartLegendItem AddSeries(OxyPlot.Series.Series series)
 		{
-			RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 			Color color = Colors.Green;
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 				color = lineSeries.Color.ToColor();
-			TabChartLegendItem legendItem = new TabChartLegendItem(series)
-			{
-				[Grid.RowProperty] = Children.Count,
-			};
+			TabChartLegendItem legendItem = new TabChartLegendItem(series);
 			//legendItem.PointerEnter += CheckBox_PointerEnter;
 			//legendItem.PointerLeave += CheckBox_PointerLeave;
 			legendItem.OnSelectionChanged += CheckBox_SelectionChanged;
@@ -55,10 +55,25 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				LegendItemClicked(legendItem);
 			};
-			this.Children.Add(legendItem);
+			//this.Children.Add(legendItem);
 			legendItems.Add(legendItem);
 			idxLegendItems.Add(series.Title, legendItem);
+			AddControl(legendItem);
 			return legendItem;
+		}
+
+		private void AddControl(TabChartLegendItem legendItem)
+		{
+			if (Horizontal)
+			{
+				ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+				Grid.SetColumn(legendItem, Children.Count);
+			}
+			else
+			{
+				RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+				Grid.SetRow(legendItem, Children.Count);
+			}
 		}
 
 		private void UpdateSeriesPositions()
@@ -73,7 +88,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				if (item.checkBox.IsChecked == true)
 					selectedCount++;
 			}
-			if (selectedCount > 1)
+			if (legendItem.checkBox.IsChecked == false || selectedCount > 1)
 			{
 				SetSelectionAll(false);
 				legendItem.checkBox.IsChecked = true;
@@ -82,7 +97,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				SetSelectionAll(true);
 			}
-			UpdateSelected();
+			UpdateVisibleSeries();
 			//if (legendItem.checkBox.IsChecked == true)
 			//SetSelectionAll(legendItem.checkBox.IsChecked == true);
 		}
@@ -97,20 +112,40 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public void RefreshModel()
 		{
-			if (plotView.Model != null)
+			if (plotView.Model == null)
+				return;
+
+			Children.Clear();
+			int column = 0, row = 0;
+			foreach (var series in plotView.Model.Series)
 			{
-				int row = 0;
-				foreach (var series in plotView.Model.Series)
-				{
-					TabChartLegendItem legendItem;
-					if (!idxLegendItems.TryGetValue(series.Title, out legendItem))
-						legendItem = AddSeries(series);
+				TabChartLegendItem legendItem;
+				if (!idxLegendItems.TryGetValue(series.Title, out legendItem))
+					legendItem = AddSeries(series);
+				if (Horizontal)
+					Grid.SetColumn(legendItem, column++);
+				else
 					Grid.SetRow(legendItem, row++);
-				}
+				Children.Add(legendItem);
 			}
+
+			/*var prevLegends = idxLegendItems.Clone<Dictionary<string, TabChartLegendItem>>();
+			idxLegendItems = new Dictionary<string, TabChartLegendItem>();
+			int row = 0;
+			foreach (var series in plotView.Model.Series)
+			{
+				TabChartLegendItem legendItem;
+				if (!prevLegends.TryGetValue(series.Title, out legendItem))
+				{
+					legendItem = AddSeries(series);
+					prevLegends.Remove(series.Title);
+				}
+				idxLegendItems.Add(series.Title, legendItem);
+				Grid.SetRow(legendItem, row++);
+			}*/
 		}
 
-		private void UpdateSelected()
+		private void UpdateVisibleSeries()
 		{
 			/*foreach (CheckBox checkBox in checkBoxes)
 			{
@@ -134,20 +169,9 @@ namespace Atlas.GUI.Avalonia.Controls
 				if (series is OxyPlot.Series.LineSeries lineSeries)
 				{
 					TabChartLegendItem legendItem;
-					if (idxLegendItems.TryGetValue(series.Title, out legendItem))
+					if (idxLegendItems.TryGetValue(lineSeries.Title, out legendItem))
 					{
-						legendItem.series = series;
-						if (legendItem.checkBox.IsChecked == true)
-						{
-							lineSeries.LineStyle = LineStyle.Solid;
-							lineSeries.MarkerType = MarkerType.Circle;
-						}
-						else
-						{
-							lineSeries.LineStyle = LineStyle.None;
-							lineSeries.MarkerType = MarkerType.None;
-							lineSeries.Unselect();
-						}
+						legendItem.UpdateSeries(lineSeries);
 					}
 				}
 			}
@@ -168,7 +192,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void CheckBox_SelectionChanged(object sender, EventArgs e)
 		{
-			UpdateSelected();
+			UpdateVisibleSeries();
 			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 

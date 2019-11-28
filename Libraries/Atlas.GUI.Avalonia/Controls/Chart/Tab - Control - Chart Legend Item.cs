@@ -7,6 +7,8 @@ using System;
 using System.Collections;
 
 using OxyPlot.Avalonia;
+using OxyPlot.Series;
+using OxyPlot;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -18,6 +20,8 @@ namespace Atlas.GUI.Avalonia.Controls
 		//public string Label { get; set; }
 		public CheckBox checkBox;
 		public TextBlock textBlock;
+
+		public IEnumerable ItemsSource { get; internal set; }
 
 		public TabChartLegendItem(OxyPlot.Series.Series series)
 		{
@@ -117,6 +121,28 @@ namespace Atlas.GUI.Avalonia.Controls
 			lineSeries.StrokeThickness = 2;
 			lineSeries.MarkerSize = 3;
 			OnSelectionChanged?.Invoke(this, null);*/
+		}
+
+		public void UpdateSeries(OxyPlot.Series.LineSeries lineSeries)
+		{
+			this.series = lineSeries;
+			if (checkBox.IsChecked == true)
+			{
+				lineSeries.ItemsSource = lineSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
+				//ItemsSource = null;
+				lineSeries.LineStyle = LineStyle.Solid;
+				lineSeries.MarkerType = MarkerType.Circle;
+			}
+			else
+			{
+				ItemsSource = lineSeries.ItemsSource ?? ItemsSource;
+				lineSeries.ItemsSource = null;
+				lineSeries.LineStyle = LineStyle.None;
+				lineSeries.MarkerType = MarkerType.None;
+				lineSeries.Selectable = false;
+				//lineSeries.SelectionMode = OxyPlot.SelectionMode.
+				lineSeries.Unselect();
+			}
 		}
 	}
 }

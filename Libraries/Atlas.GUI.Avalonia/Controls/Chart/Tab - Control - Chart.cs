@@ -163,6 +163,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				MaxWidth = 1000,
 				MaxHeight = 1000,
 				MinHeight = 200,
+				MinWidth = 400,
 				
 				//[Grid.RowProperty] = 1,
 				[Grid.ColumnProperty] = 1,
@@ -210,7 +211,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			containerGrid.Children.Add(tabControlDataGrid);
 			containerGrid.Children.Add(plotView);
 
-			/*var legend = new TabControlChartLegend(plotView)
+			/*var legend = new TabControlChartLegend(plotView, false)
 			{
 				[Grid.ColumnProperty] = 2,
 			};

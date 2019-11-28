@@ -81,7 +81,6 @@ namespace Atlas.GUI.Avalonia
 				if (tabViewSettings.ChartDataSettings.Count == 0)
 					tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
 
-
 				//this.Background = new SolidColorBrush(Theme.BackgroundColor);
 				//this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
 				//this.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;

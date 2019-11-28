@@ -70,6 +70,27 @@ namespace Atlas.GUI.Avalonia.Tabs
 			return textBlock;
 		}
 
+		public TextBox AddLabelText(string text)
+		{
+			TextBox textBox = new TextBox()
+			{
+				Text = text,
+				TextWrapping = global::Avalonia.Media.TextWrapping.NoWrap,
+				VerticalAlignment = VerticalAlignment.Center,
+				IsReadOnly = true,
+				Margin = new Thickness(6),
+				BorderThickness = new Thickness(0),
+				BorderBrush = Brushes.Transparent,
+				Background = Brushes.Transparent,
+				Foreground = Brushes.White,
+				//CaretBrush = new SolidColorBrush(Theme.GridSelectedBackgroundColor), // todo: enable with next version?
+			};
+			
+
+			AddControl(textBox);
+			return textBox;
+		}
+
 		public TextBox AddText(string text, int minWidth)
 		{
 			TextBox textBox = new TextBox()
