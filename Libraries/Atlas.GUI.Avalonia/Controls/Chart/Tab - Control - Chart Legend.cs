@@ -143,6 +143,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				idxLegendItems.Add(series.Title, legendItem);
 				Grid.SetRow(legendItem, row++);
 			}*/
+
+			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
 		private void UpdateVisibleSeries()
@@ -175,6 +177,7 @@ namespace Atlas.GUI.Avalonia.Controls
 					}
 				}
 			}
+			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 			OnSelectionChanged?.Invoke(this, null);
 		}
 
@@ -193,7 +196,6 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void CheckBox_SelectionChanged(object sender, EventArgs e)
 		{
 			UpdateVisibleSeries();
-			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
 		private void CheckBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)

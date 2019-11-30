@@ -20,7 +20,7 @@ namespace Atlas.Tabs.Test.Actions
 				tabModel.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Parameters", new TabParamsDataGrid()),
-					new ListItem("Async Sleep", new TabTestAsync()),
+					new ListItem("Async Sleep", new TabTestLoadAsync()),
 				};
 
 				tabModel.Actions = new ItemCollection<TaskCreator>()
@@ -29,7 +29,7 @@ namespace Atlas.Tabs.Test.Actions
 					new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
 					new TaskDelegate("Task Instance Progress", SubTaskInstances, true),
 					new TaskAction("Action", new Action(() => PassParams(1, "abc"))),
-					new TaskDelegateAsync("Sleep (Async)", SleepAsync, true),
+					new TaskDelegateAsync("Long load (Async)", SleepAsync, true),
 				};
 
 				tabModel.Notes = @"

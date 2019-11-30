@@ -243,14 +243,14 @@ namespace Atlas.GUI.Avalonia
 			return grid;
 		}
 
-		private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void Button_PointerEnter(object sender, PointerEventArgs e)
 		{
 			Button button = (Button)sender;
 			button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
 			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundHoverColor);
 		}
 
-		private void Button_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void Button_PointerLeave(object sender, PointerEventArgs e)
 		{
 			Button button = (Button)sender;
 			button.Background = new SolidColorBrush(Theme.NotesButtonBackgroundColor);

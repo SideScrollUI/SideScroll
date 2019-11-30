@@ -9,6 +9,8 @@ namespace Atlas.Start.Avalonia
 		public MainWindow() : base(LoadProject())
 		{
 			AddTabView(new TabAvalonia.Instance(project));
+
+			AddClipBoardButtons();
 		}
 
 		public static Project LoadProject()

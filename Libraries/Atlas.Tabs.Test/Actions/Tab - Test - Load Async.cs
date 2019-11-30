@@ -6,17 +6,18 @@ using Atlas.Tabs;
 
 namespace Atlas.Tabs.Test.Actions
 {
-	public class TabTestAsync : ITab
+	public class TabTestLoadAsync : ITab
 	{
 		public TabInstance Create() { return new Instance(); }
 
 		public class Instance : TabInstance, ITabAsync
 		{
-			//private ItemCollection<ListItem> items;
+			private const int delayMs = 500;
 
 			public async Task LoadAsync(Call call)
 			{
-				await Task.Delay(500);
+				call.log.Add("Sleeping", new Tag("Milliseconds", delayMs));
+				await Task.Delay(delayMs);
 				tabModel.AddObject("Finished");
 			}
 
