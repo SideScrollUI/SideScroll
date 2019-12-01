@@ -9,6 +9,9 @@ using System.Collections;
 using OxyPlot.Avalonia;
 using OxyPlot.Series;
 using OxyPlot;
+using Avalonia.Media.Imaging;
+using Avalonia.Controls.Shapes;
+using System.Collections.Generic;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -18,8 +21,24 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public OxyPlot.Series.Series series;
 		//public string Label { get; set; }
-		public CheckBox checkBox;
 		public TextBlock textBlock;
+		private Polygon polygon;
+		private Color color = Colors.Green;
+
+		private bool _IsChecked = true;
+		public bool IsChecked
+		{
+			get
+			{
+				return _IsChecked;
+			}
+			set
+			{
+				_IsChecked = value;
+				polygon.Fill = new SolidColorBrush(IsChecked ? color : Colors.Transparent);
+				OnSelectionChanged?.Invoke(this, null);
+			}
+		}
 
 		public IEnumerable ItemsSource { get; internal set; }
 
@@ -37,35 +56,85 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.RowDefinitions = new RowDefinitions();
 			//this.Margin = new Thickness(6);
 
-			AddCheckBox();
+			AddRoundedCheckBox();
 			AddTextBox();
 		}
 
-		private void AddCheckBox()
+		private void AddRoundedCheckBox()
 		{
 			RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-			Color color = Colors.Green;
+			
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 				color = lineSeries.Color.ToColor();
-			checkBox = new CheckBox()
+
+			int width = 13;
+			int height = 13;
+			polygon = new Polygon()
 			{
-				Content = "",
-				Foreground = Brushes.LightGray,
-				Background = new SolidColorBrush(color),
-				BorderThickness = new Thickness(1),
-				BorderBrush = new SolidColorBrush(Colors.Black),
-				Margin = new Thickness(2, 2),
-				IsChecked = true,
-				//VerticalAlignment = VerticalAlignment.Center,
-				//HorizontalAlignment = HorizontalAlignment.Stretch,
+				Width = 16,
+				Height = 16,
+				Fill = new SolidColorBrush(color),
+				Stroke = Brushes.Black,
+				StrokeThickness = 1.5,
 			};
-			checkBox.PointerEnter += CheckBox_PointerEnter;
-			checkBox.PointerLeave += CheckBox_PointerLeave;
-			checkBox.Click += CheckBox_Click;
-			//checkBox.Tapped += CheckBox_Tapped; // doesn't work
-			this.Children.Add(checkBox);
+			UpdatePoints(width, height);
+			polygon.PointerPressed += Polygon_PointerPressed;
+			polygon.PointerEnter += Polygon_PointerEnter;
+			polygon.PointerLeave += Polygon_PointerLeave;
+			this.Children.Add(polygon);
 		}
 
+		private void UpdatePoints(int width, int height)
+		{
+			int cornerSize = 3;
+			polygon.Points = new List<Point>()
+			{
+				new Point(0, height),
+				new Point(width - cornerSize, height),
+				new Point(width, height - cornerSize),
+				new Point(width, 0),
+				new Point(cornerSize, 0),
+				new Point(0, cornerSize),
+			};
+		}
+
+		private void Polygon_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e)
+		{
+			IsChecked = !IsChecked;
+		}
+
+		double? markerSize;
+		private void Polygon_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			UpdatePoints(15, 15);
+			if (series is OxyPlot.Series.LineSeries lineSeries)
+			{
+				markerSize = markerSize ?? lineSeries.MarkerSize;
+				lineSeries.StrokeThickness = 4;
+				lineSeries.MarkerSize = markerSize.Value + 2;
+				OnSelectionChanged?.Invoke(this, null);
+			}
+			textBlock.Foreground = new SolidColorBrush(Theme.ActiveSelectionHighlightColor);
+			//polygon.Stroke = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor);
+			//polygon.Stroke = Brushes.White;
+			//polygon.StrokeThickness = 2;
+		}
+
+		private void Polygon_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			UpdatePoints(13, 13);
+			if (series is OxyPlot.Series.LineSeries lineSeries)
+			{
+				markerSize = markerSize ?? lineSeries.MarkerSize;
+				lineSeries.StrokeThickness = 2;
+				lineSeries.MarkerSize = markerSize.Value;
+				//lineSeries.MarkerSize = 3; // store original?
+				OnSelectionChanged?.Invoke(this, null);
+			}
+			textBlock.Foreground = Brushes.LightGray;
+			//polygon.StrokeThickness = 4;
+			//polygon.Stroke = Brushes.Black;
+		}
 
 		private void AddTextBox()
 		{
@@ -85,10 +154,9 @@ namespace Atlas.GUI.Avalonia.Controls
 				//HorizontalAlignment = HorizontalAlignment.Stretch,
 				[Grid.ColumnProperty] = 1,
 			};
-			//textBlock.PointerEnter += CheckBox_PointerEnter;
-			//textBlock.PointerLeave += CheckBox_PointerLeave;
+			textBlock.PointerEnter += Polygon_PointerEnter;
+			textBlock.PointerLeave += Polygon_PointerLeave;
 			textBlock.Tapped += TextBox_Tapped;
-			//checkBox.Tapped += CheckBox_Tapped; // doesn't work
 			/*Border border = new Border()
 			{
 				BorderThickness = new Thickness(5),
@@ -103,30 +171,10 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 		}
 
-		private void CheckBox_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			OnSelectionChanged?.Invoke(this, null);
-		}
-
-		private void CheckBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			//OnSelectionChanged?.Invoke(this, null);
-		}
-
-		private void CheckBox_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			/*CheckBox checkBox = (CheckBox)sender;
-			HighlightSeries(1, 2);
-			var lineSeries = (OxyPlot.Series.LineSeries)checkBox.DataContext;
-			lineSeries.StrokeThickness = 2;
-			lineSeries.MarkerSize = 3;
-			OnSelectionChanged?.Invoke(this, null);*/
-		}
-
 		public void UpdateSeries(OxyPlot.Series.LineSeries lineSeries)
 		{
 			this.series = lineSeries;
-			if (checkBox.IsChecked == true)
+			if (IsChecked == true)
 			{
 				lineSeries.ItemsSource = lineSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
 				//ItemsSource = null;

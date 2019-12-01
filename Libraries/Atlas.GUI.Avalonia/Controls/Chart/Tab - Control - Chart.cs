@@ -211,11 +211,11 @@ namespace Atlas.GUI.Avalonia.Controls
 			containerGrid.Children.Add(tabControlDataGrid);
 			containerGrid.Children.Add(plotView);
 
-			/*var legend = new TabControlChartLegend(plotView, false)
+			var legend = new TabControlChartLegend(plotView, false)
 			{
 				[Grid.ColumnProperty] = 2,
 			};
-			containerGrid.Children.Add(legend);*/
+			containerGrid.Children.Add(legend);
 
 			//this.watch.Start();
 			this.Content = containerGrid;
@@ -244,6 +244,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			plotModel = new OxyPlot.PlotModel()
 			{
 				//Title = name,
+				IsLegendVisible = false,
 				LegendPlacement = LegendPlacement.Outside,
 				TitleColor = OxyColors.LightGray,
 				PlotAreaBorderColor = OxyColors.LightGray,

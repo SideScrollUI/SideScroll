@@ -10,7 +10,6 @@ using System.Collections.Generic;
 
 using OxyPlot;
 using OxyPlot.Avalonia;
-using Atlas.Serialize;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -37,7 +36,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//this.VerticalAlignment = VerticalAlignment.Stretch;
 			this.ColumnDefinitions = new ColumnDefinitions("Auto");
 			this.RowDefinitions = new RowDefinitions("Auto");
-			//this.Margin = new Thickness(6);
+			this.Margin = new Thickness(6);
 
 			RefreshModel();
 		}
@@ -85,13 +84,13 @@ namespace Atlas.GUI.Avalonia.Controls
 			int selectedCount = 0;
 			foreach (TabChartLegendItem item in legendItems)
 			{
-				if (item.checkBox.IsChecked == true)
+				if (item.IsChecked == true)
 					selectedCount++;
 			}
-			if (legendItem.checkBox.IsChecked == false || selectedCount > 1)
+			if (legendItem.IsChecked == false || selectedCount > 1)
 			{
 				SetSelectionAll(false);
-				legendItem.checkBox.IsChecked = true;
+				legendItem.IsChecked = true;
 			}
 			else
 			{
@@ -106,7 +105,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			foreach (TabChartLegendItem legendItem in legendItems)
 			{
-				legendItem.checkBox.IsChecked = selected;
+				legendItem.IsChecked = selected;
 			}
 		}
 
@@ -181,24 +180,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			OnSelectionChanged?.Invoke(this, null);
 		}
 
-		private void HighlightSeries(double thickness, double markerSize)
-		{
-			foreach (OxyPlot.Series.Series series in plotView.Model.Series)
-			{
-				if (series is OxyPlot.Series.LineSeries lineSeries)
-				{
-					lineSeries.MarkerSize = markerSize;
-					lineSeries.StrokeThickness = thickness;
-				}
-			}
-		}
-
 		private void CheckBox_SelectionChanged(object sender, EventArgs e)
 		{
 			UpdateVisibleSeries();
 		}
 
-		private void CheckBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		/*private void CheckBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
 			HighlightSeries(2, 3);
 			OnSelectionChanged?.Invoke(this, null);
@@ -215,5 +202,17 @@ namespace Atlas.GUI.Avalonia.Controls
 			OnSelectionChanged?.Invoke(this, null);
 			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
+
+		private void HighlightSeries(double thickness, double markerSize)
+		{
+			foreach (OxyPlot.Series.Series series in plotView.Model.Series)
+			{
+				if (series is OxyPlot.Series.LineSeries lineSeries)
+				{
+					lineSeries.MarkerSize = markerSize;
+					lineSeries.StrokeThickness = thickness;
+				}
+			}
+		}*/
 	}
 }
