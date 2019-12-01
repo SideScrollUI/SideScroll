@@ -289,9 +289,16 @@ namespace Atlas.GUI.Avalonia
 		}
 
 		// How to set the main Content
-		protected void AddTabView(TabInstance tabInstance)
+		protected void AddTabView(ITab tab)
 		{
+			TabInstance tabInstance = tab.Create();
+			tabInstance.project = project;
+			if (project.userSettings.AutoLoad) // did we load successfully last time?
+				tabInstance.LoadDefaultBookmark();
+
 			tabView = new TabView(tabInstance);
+			tabView.tabModel.Name = project.Name;
+			tabView.tabModel.Bookmarks = new BookmarkCollection(project);
 			tabView.Load();
 
 			//var tabBookmarks = new TabBookmarks(tabView);
@@ -307,9 +314,7 @@ namespace Atlas.GUI.Avalonia
 		// How to set the main Content
 		protected void AddTabBookmarks(ITab iTab)
 		{
-			var tabBookmarks = new TabBookmarks(project, iTab, linker).Create();
-			tabBookmarks.Load(new Call());
-
+			var tabBookmarks = new TabBookmarks(project, iTab, linker);
 			AddTabView(tabBookmarks);
 
 			//contentGrid.Children.Add(tabBookmarks);
