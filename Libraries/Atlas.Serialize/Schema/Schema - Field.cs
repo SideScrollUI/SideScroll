@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -82,6 +83,16 @@ namespace Atlas.Serialize
 		{
 			fieldName = reader.ReadString();
 			typeIndex = reader.ReadInt16();
+		}
+
+		public void Validate(List<TypeSchema> typeSchemas)
+		{
+			if (typeIndex >= 0)
+			{
+				TypeSchema typeSchema = typeSchemas[typeIndex];
+				if (fieldInfo != null && typeSchema.type != fieldInfo.FieldType.GetNonNullableType())
+					Loadable = false;
+			}
 		}
 	}
 }

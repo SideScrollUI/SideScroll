@@ -232,6 +232,10 @@ namespace Atlas.Serialize
 
 		public void Validate(List<TypeSchema> typeSchemas)
 		{
+			foreach (FieldSchema fieldSchema in FieldSchemas)
+			{
+				fieldSchema.Validate(typeSchemas);
+			}
 			foreach (PropertySchema propertySchema in PropertySchemas)
 			{
 				propertySchema.Validate(typeSchemas);

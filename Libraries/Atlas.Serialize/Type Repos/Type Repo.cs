@@ -472,7 +472,14 @@ namespace Atlas.Serialize
 		{
 			object obj = objectsLoaded[objectIndex];
 			reader.BaseStream.Position = objectOffsets[objectIndex];
-			LoadObjectData(obj);
+			try
+			{
+				LoadObjectData(obj);
+			}
+			catch (Exception e)
+			{
+
+			}
 		}
 
 		/*public virtual object LoadObject(int objectIndex)

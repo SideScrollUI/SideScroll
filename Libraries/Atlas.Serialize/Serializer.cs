@@ -56,6 +56,11 @@ namespace Atlas.Serialize
 		{
 			public TypeRepo typeRepo;
 			public int index;
+
+			public override string ToString()
+			{
+				return typeRepo.ToString() + " - " + index;
+			}
 		}
 
 		public Queue<LoadItem> loadQueue = new Queue<LoadItem>();
@@ -287,7 +292,7 @@ namespace Atlas.Serialize
 
 				foreach (TypeRepo typeRepo in typeRepos)
 				{
-					if (typeRepo == null || typeRepo.type == null) // if we want to save after opening?
+					if (typeRepo == null) // if we want to save after opening?
 						continue;
 
 					if (!typeRepo.typeSchema.CanReference)

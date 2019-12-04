@@ -178,7 +178,7 @@ namespace Atlas.GUI.Avalonia
 
 		private void ImportBookmark(Call call)
 		{
-			string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
+			string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().GetAwaiter().GetResult();
 			string data = linker.GetLinkData(clipboardText);
 			if (data == null)
 				return;

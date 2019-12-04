@@ -37,6 +37,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.ColumnDefinitions = new ColumnDefinitions("Auto");
 			this.RowDefinitions = new RowDefinitions("Auto");
 			this.Margin = new Thickness(6);
+			this.MaxHeight = plotView.MaxHeight;
 
 			RefreshModel();
 		}

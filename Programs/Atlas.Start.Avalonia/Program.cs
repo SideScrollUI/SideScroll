@@ -27,7 +27,7 @@ namespace Atlas.Start.Avalonia
 			});
 
 			builder.Start<MainWindow>();
-			// todo: fix and switch to this
+			// todo: switch to this in next version?
 			//var project = LoadProject(UserSettings.DefaultProjectPath);
 			//var mainWindow = new MainWindow(project);
 			//builder.Start<MainWindow>(mainWindow);
@@ -38,6 +38,11 @@ namespace Atlas.Start.Avalonia
 				.UsePlatformDetect()
 				.UseDataGrid()
 				.BeforeStarting(_ => OxyPlotModule.Initialize())
+				.With(new Win32PlatformOptions
+				{
+					UseDeferredRendering = false,
+					AllowEglInitialization = true,
+				})
 				.LogToDebug();
 	}
 }
