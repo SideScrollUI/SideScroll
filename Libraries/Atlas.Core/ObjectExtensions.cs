@@ -117,7 +117,16 @@ namespace Atlas.Core
 			return "( " + label + " )";*/
 		}
 
-		public static string CollectionToString(ICollection collection)
+		public static string EnumerableToString(this IEnumerable enumerable)
+		{
+			var strings = new List<string>();
+			foreach (var item in enumerable)
+				strings.Add(item.ToString());
+			string joined = string.Join(", ", strings);
+			return "[" + joined + "]";
+		}
+
+		public static string CollectionToString(this ICollection collection)
 		{
 			var strings = new List<string>();
 			foreach (var item in collection)
