@@ -67,6 +67,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		// can't override DesiredSize
 		protected override Size MeasureCore(Size availableSize)
 		{
+			availableSize = new Size(Math.Min(MaxDesiredWidth, availableSize.Width), availableSize.Height);
 			Size measured = base.MeasureCore(availableSize);
 			Size maxSize = new Size(Math.Min(MaxDesiredWidth, measured.Width), measured.Height);
 			return maxSize;

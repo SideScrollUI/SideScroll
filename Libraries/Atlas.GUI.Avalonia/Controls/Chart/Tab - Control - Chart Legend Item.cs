@@ -149,7 +149,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//Background = new SolidColorBrush(Theme.BackgroundColor),
 				//BorderThickness = new Thickness(1),
 				//BorderBrush = new SolidColorBrush(Colors.Black),
-				Margin = new Thickness(2, 2),
+				Margin = new Thickness(2, 2, 6, 2),
 				//VerticalAlignment = VerticalAlignment.Center,
 				//HorizontalAlignment = HorizontalAlignment.Stretch,
 				[Grid.ColumnProperty] = 1,

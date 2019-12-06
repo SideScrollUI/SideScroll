@@ -344,12 +344,12 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			//if (plotModel != null)
 			//	plotModel.Series.Clear();
-			foreach (ListSeries listSeries in ChartSettings.ListSeries)
+			/*foreach (ListSeries listSeries in ChartSettings.ListSeries)
 			{
 				INotifyCollectionChanged iNotifyCollectionChanged = listSeries.iList as INotifyCollectionChanged;
 				//if (iNotifyCollectionChanged != null)
 				//	iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
-			}
+			}*/
 		}
 
 		private void AddSeries(ListSeries listSeries)

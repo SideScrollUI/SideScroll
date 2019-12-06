@@ -116,16 +116,17 @@ namespace Atlas.GUI.Avalonia.Controls
 		// Before MaxWidth applies
 		protected override Size MeasureCore(Size availableSize)
 		{
-			return base.MeasureCore(availableSize);
+			Size measuredSize = base.MeasureCore(availableSize);
+			return measuredSize;
 		}
 
-		protected override void OnMeasureInvalidated()
+		/*protected override void OnMeasureInvalidated()
 		{
 			dataGrid.InvalidateMeasure();
 			base.OnMeasureInvalidated();
 			if (Parent != null)
 				Parent.InvalidateMeasure();
-		}
+		}*/
 
 		// real DesiredSize doesn't work because of HorizontalAlign = Stretch?
 		public new Size DesiredSize
