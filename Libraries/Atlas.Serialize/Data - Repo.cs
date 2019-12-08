@@ -181,7 +181,15 @@ namespace Atlas.Serialize
 		{
 			string directoryPath = GetTypePath(type, directory);
 			if (Directory.Exists(directoryPath))
-				Directory.Delete(directoryPath, true);
+			{
+				try
+				{
+					Directory.Delete(directoryPath, true);
+				}
+				catch (Exception)
+				{
+				}
+			}
 		}
 
 		// remove all other deletes and add null defaults?
@@ -195,7 +203,15 @@ namespace Atlas.Serialize
 			directory = directory ?? DefaultDirectory;
 			string directoryPath = GetDirectoryPath(type, directory, name);
 			if (Directory.Exists(directoryPath))
-				Directory.Delete(directoryPath, true);
+			{
+				try
+				{
+					Directory.Delete(directoryPath, true);
+				}
+				catch (Exception)
+				{
+				}
+			}
 		}
 
 		public void Delete(Type type, string name)
@@ -207,7 +223,15 @@ namespace Atlas.Serialize
 		{
 			string path = Paths.Combine(RepoPath, RepoName);
 			if (Directory.Exists(path))
-				Directory.Delete(path, true);
+			{
+				try
+				{
+					Directory.Delete(path, true);
+				}
+				catch (Exception)
+				{
+				}
+			}
 		}
 
 		// Move to Atlas.Core Extensions?

@@ -6,6 +6,7 @@ using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -398,21 +399,21 @@ namespace Atlas.GUI.Avalonia.View
 			foreach (TabObject tabObject in tabModel.Objects)
 			{
 				object obj = tabObject.obj;
-				if (obj is ChartSettings)
+				if (obj is ChartSettings chartSettings)
 				{
-					AddChart(obj as ChartSettings);
+					AddChart(chartSettings);
 				}
-				else if (obj is ITabSelector)
+				else if (obj is ITabSelector tabSelector)
 				{
-					AddITabControl(obj as ITabSelector, tabObject.fill);
+					AddITabControl(tabSelector, tabObject.fill);
 				}
-				else if (obj is Control)
+				else if (obj is Control control)
 				{
-					AddControl(obj as Control, tabObject.fill);
+					AddControl(control, tabObject.fill);
 				}
-				else if (obj is string)
+				else if (obj is string text)
 				{
-					AddControlString(obj as string);
+					AddControlString(text);
 				}
 				else
 				{
@@ -453,7 +454,7 @@ namespace Atlas.GUI.Avalonia.View
 		{
 			foreach (var listGroupPair in chartSettings.ListGroups)
 			{
-				TabControlChart tabChart = new TabControlChart(tabInstance, chartSettings, listGroupPair.Value);
+				TabControlChart tabChart = new TabControlChart(tabInstance, listGroupPair.Value);
 
 				tabParentControls.AddControl(tabChart, false, SeparatorType.Spacer);
 				//tabChart.OnSelectionChanged += ListData_OnSelectionChanged;

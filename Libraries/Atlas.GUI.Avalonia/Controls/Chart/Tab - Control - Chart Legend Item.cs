@@ -66,6 +66,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 				color = lineSeries.Color.ToColor();
+			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
+				color = scatterSeries.MarkerFill.ToColor();
 
 			int width = 13;
 			int height = 13;
@@ -139,9 +141,6 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void AddTextBox()
 		{
 			RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-			Color color = Colors.Green;
-			if (series is OxyPlot.Series.LineSeries lineSeries)
-				color = lineSeries.Color.ToColor();
 			textBlock = new TextBlock()
 			{
 				Text = series.Title,
@@ -190,6 +189,26 @@ namespace Atlas.GUI.Avalonia.Controls
 				lineSeries.Selectable = false;
 				//lineSeries.SelectionMode = OxyPlot.SelectionMode.
 				lineSeries.Unselect();
+			}
+		}
+
+		public void UpdateSeries(OxyPlot.Series.ScatterSeries scatterSeries)
+		{
+			this.series = scatterSeries;
+			if (IsChecked == true)
+			{
+				scatterSeries.ItemsSource = scatterSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
+				//ItemsSource = null;
+				scatterSeries.MarkerType = MarkerType.Circle;
+			}
+			else
+			{
+				ItemsSource = scatterSeries.ItemsSource ?? ItemsSource;
+				scatterSeries.ItemsSource = null;
+				scatterSeries.MarkerType = MarkerType.None;
+				scatterSeries.Selectable = false;
+				//lineSeries.SelectionMode = OxyPlot.SelectionMode.
+				scatterSeries.Unselect();
 			}
 		}
 	}

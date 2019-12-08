@@ -12,8 +12,9 @@ namespace Atlas.Tabs
 	public class ListGroup
 	{
 		public string Name { get; set; }
+		public bool Horizontal { get; set; }
 		public ItemCollection<ListSeries> ListSeries { get; set; } = new ItemCollection<ListSeries>();
-		public ListGroup(string name)
+		public ListGroup(string name = null)
 		{
 			Name = name;
 		}

@@ -35,7 +35,7 @@ namespace Atlas.Tabs.Test.Chart
 				};
 
 				ChartSettings chartSettings = new ChartSettings();
-				for (int i = 0; i < 10; i++)
+				for (int i = 0; i < 3; i++)
 				{
 					var list = new ItemCollection<int>();
 					chartSettings.AddList("Series " + i, list);

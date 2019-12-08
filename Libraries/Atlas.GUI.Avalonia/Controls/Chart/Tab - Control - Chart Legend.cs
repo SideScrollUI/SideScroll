@@ -32,7 +32,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			//this.HorizontalAlignment = HorizontalAlignment.Right;
+			this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left;
 			//this.VerticalAlignment = VerticalAlignment.Stretch;
 			this.ColumnDefinitions = new ColumnDefinitions("Auto");
 			this.RowDefinitions = new RowDefinitions("Auto");
@@ -47,6 +47,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			Color color = Colors.Green;
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 				color = lineSeries.Color.ToColor();
+			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
+				color = scatterSeries.MarkerFill.ToColor();
 			TabChartLegendItem legendItem = new TabChartLegendItem(series);
 			//legendItem.PointerEnter += CheckBox_PointerEnter;
 			//legendItem.PointerLeave += CheckBox_PointerLeave;
@@ -57,7 +59,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			//this.Children.Add(legendItem);
 			legendItems.Add(legendItem);
-			idxLegendItems.Add(series.Title, legendItem);
+			if (series.Title != null)
+				idxLegendItems.Add(series.Title, legendItem);
 			AddControl(legendItem);
 			return legendItem;
 		}
@@ -119,6 +122,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			int column = 0, row = 0;
 			foreach (var series in plotView.Model.Series)
 			{
+				if (series.Title == null)
+					continue;
 				TabChartLegendItem legendItem;
 				if (!idxLegendItems.TryGetValue(series.Title, out legendItem))
 					legendItem = AddSeries(series);
@@ -170,10 +175,22 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				if (series is OxyPlot.Series.LineSeries lineSeries)
 				{
+					if (lineSeries.Title == null)
+						continue;
 					TabChartLegendItem legendItem;
 					if (idxLegendItems.TryGetValue(lineSeries.Title, out legendItem))
 					{
 						legendItem.UpdateSeries(lineSeries);
+					}
+				}
+				if (series is OxyPlot.Series.ScatterSeries scatterSeries)
+				{
+					if (scatterSeries.Title == null)
+						continue;
+					TabChartLegendItem legendItem;
+					if (idxLegendItems.TryGetValue(scatterSeries.Title, out legendItem))
+					{
+						legendItem.UpdateSeries(scatterSeries);
 					}
 				}
 			}

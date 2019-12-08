@@ -21,7 +21,7 @@ namespace Atlas.GUI.Avalonia.Controls
 	{
 		//private string name;
 		private TabInstance tabInstance;
-		public ChartSettings ChartSettings { get; set; }
+		//public ChartSettings ChartSettings { get; set; }
 		public ListGroup ListGroup { get; set; }
 
 		//private List<ListSeries> ListSeries { get; set; }
@@ -39,11 +39,14 @@ namespace Atlas.GUI.Avalonia.Controls
 		//private readonly Timer timer;
 		//private int numberOfSeries;
 
-		private TabControlDataGrid tabControlDataGrid;
-		private PlotModel plotModel;
-		private PlotView plotView;
+		//private TabControlDataGrid tabControlDataGrid;
+		public PlotModel plotModel;
+		public PlotView plotView;
 		private PropertyInfo xAxisPropertyInfo;
+		private TabControlChartLegend legend;
+		private OxyPlot.Axes.LinearAxis valueAxis;
 
+		private static OxyColor GridLineColor = OxyColor.Parse("#333333");
 		public static OxyColor[] Colors { get; set; } = new OxyColor[] {
 				OxyColors.LawnGreen,
 				OxyColors.Fuchsia,
@@ -70,10 +73,9 @@ namespace Atlas.GUI.Avalonia.Controls
 		//public event EventHandler<EventArgs> OnSelectionChanged;
 		//private bool autoSelectNew = true;
 
-		public TabControlChart(TabInstance tabInstance, ChartSettings chartSettings, ListGroup listGroup)
+		public TabControlChart(TabInstance tabInstance, ListGroup listGroup)
 		{
 			this.tabInstance = tabInstance;
-			this.ChartSettings = chartSettings;
 			this.ListGroup = listGroup;
 
 			InitializeControls();
@@ -82,7 +84,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public override string ToString()
 		{
-			return ChartSettings.ToString(); // todo: fix for multiple
+			return ListGroup.ToString(); // todo: fix for multiple
 		}
 
 		protected override Size MeasureOverride(Size availableSize)
@@ -138,18 +140,22 @@ namespace Atlas.GUI.Avalonia.Controls
 			//this.Height = 1000;
 			//this.Children.Add(border);
 			//this.Orientation = Orientation.Vertical;
+			MinHeight = 200;
+			MaxWidth = 1000;
+			MaxHeight = 1000;
+			MinWidth = 400;
 
 			// autogenerate columns
 			if (tabInstance.tabViewSettings.ChartDataSettings.Count == 0)
 				tabInstance.tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
 			//tabDataGrid = new TabDataGrid(tabInstance, ChartSettings.ListSeries, true, tabInstance.tabViewSettings.ChartDataSettings);
-			tabControlDataGrid = new TabControlDataGrid(tabInstance, ListGroup.ListSeries, true, tabInstance.tabViewSettings.ChartDataSettings[0]);
+			//tabControlDataGrid = new TabControlDataGrid(tabInstance, ListGroup.ListSeries, true, tabInstance.tabViewSettings.ChartDataSettings[0]);
 			//Grid.SetRow(tabDataGrid, 1);
 
 			//tabDataGrid.AddButtonColumn("<>", nameof(TaskInstance.Cancel));
 
 			//tabDataGrid.AutoLoad = tabModel.AutoLoad;
-			tabControlDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;
+			//tabControlDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;
 			//tabDataGrid.Width = 1000;
 			//tabDataGrid.Height = 1000;
 			//tabDataGrid.Initialize();
@@ -160,19 +166,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
-				MaxWidth = 1000,
-				MaxHeight = 1000,
-				MinHeight = 200,
-				MinWidth = 400,
-				
-				//[Grid.RowProperty] = 1,
-				[Grid.ColumnProperty] = 1,
-
-				//
-				//Background = new SolidColorBrush(Colors.White),
 
 				Background = Brushes.Transparent,
-
 				//Foreground = Brushes.LightGray,
 				BorderBrush = Brushes.LightGray,
 				DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
@@ -200,21 +195,22 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			Grid containerGrid = new Grid()
 			{
-				ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto"),
-				RowDefinitions = new RowDefinitions("*"), // Header, Body
+				ColumnDefinitions = new ColumnDefinitions("*,Auto"),
+				RowDefinitions = new RowDefinitions("*,Auto"), // Header, Body
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
 				//Background = new SolidColorBrush(Theme.BackgroundColor),
 			};
 			//containerGrid.Children.Add(borderTitle);
 
-			containerGrid.Children.Add(tabControlDataGrid);
+			//containerGrid.Children.Add(tabControlDataGrid);
 			containerGrid.Children.Add(plotView);
 
-			var legend = new TabControlChartLegend(plotView, false)
-			{
-				[Grid.ColumnProperty] = 2,
-			};
+			legend = new TabControlChartLegend(plotView, ListGroup.Horizontal);
+			if (ListGroup.Horizontal)
+				Grid.SetRow(legend, 1);
+			else
+				Grid.SetColumn(legend, 1);
 			containerGrid.Children.Add(legend);
 
 			//this.watch.Start();
@@ -240,21 +236,10 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void LoadPlotModel()
 		{
 			UnloadModel();
-
-			plotModel = new OxyPlot.PlotModel()
-			{
-				//Title = name,
-				IsLegendVisible = false,
-				LegendPlacement = LegendPlacement.Outside,
-				TitleColor = OxyColors.LightGray,
-				PlotAreaBorderColor = OxyColors.LightGray,
-				TextColor = OxyColors.Black,
-				LegendTextColor = OxyColors.LightGray,
-				SelectionColor = OxyColors.Blue,
-			};
+			RecreatePlotModel();
 
 			//double duration = 0;
-			foreach (ListSeries listSeries in tabControlDataGrid.SelectedItems)
+			foreach (ListSeries listSeries in ListGroup.ListSeries)
 			{
 				//duration = listSeries.iList[0]
 				AddSeries(listSeries);
@@ -268,73 +253,203 @@ namespace Atlas.GUI.Avalonia.Controls
 			plotView.Model = plotModel;
 		}
 
+		public void RecreatePlotModel()
+		{
+			plotModel = new PlotModel()
+			{
+				Title = ListGroup?.Name,
+				TitleFontWeight = 400,
+				TitleFontSize = 16,
+				//TitleFont = "Arial",
+				IsLegendVisible = false,
+				LegendPlacement = LegendPlacement.Outside,
+				//LegendTitleColor = OxyColors.Yellow, // doesn't work
+
+				TitleColor = OxyColors.LightGray,
+				//PlotAreaBorderColor = OxyColors.LightGray,
+				PlotAreaBorderColor = OxyColor.Parse("#888888"),
+				TextColor = OxyColors.Black,
+				LegendTextColor = OxyColors.LightGray,
+				SelectionColor = OxyColors.Blue,
+			};
+			plotView.Model = plotModel;
+		}
+
+		public void Refresh()
+		{
+			UpdateValueAxis();
+			plotView.InvalidatePlot(true);
+			plotView.Model.InvalidatePlot(true);
+			legend.RefreshModel();
+		}
+
+		public void Unload()
+		{
+			this.IsVisible = false;
+			UnloadModel();
+		}
+
+		public OxyPlot.Axes.DateTimeAxis AddDateTimeAxis(DateTime? startTime = null, DateTime? endTime = null)
+		{
+			var dateTimeAxis = new OxyPlot.Axes.DateTimeAxis
+			{
+				Position = AxisPosition.Bottom,
+				//MinorIntervalType = DateTimeIntervalType.Days,
+				//IntervalType = DateTimeIntervalType.Days,
+				IntervalType = DateTimeIntervalType.Hours,
+				MajorGridlineStyle = LineStyle.Solid,
+				MajorGridlineColor = GridLineColor,
+				//MinorGridlineStyle = LineStyle.None,
+				IntervalLength = 50,
+				IsAxisVisible = true,
+				AxislineColor = OxyColors.Black,
+				//AxislineColor = GridLineColor,
+				AxislineStyle = LineStyle.Solid,
+				AxislineThickness = 2,
+				TickStyle = TickStyle.Outside,
+				TicklineColor = GridLineColor,
+				//MajorTickSize = 5,
+				MinorGridlineColor = OxyColors.Gray,
+				//MinorTicklineColor = GridLineColor,
+				//MinorTickSize = 5,
+				AxisTickToLabelDistance = 2,
+				TitleColor = OxyColors.LightGray,
+				TextColor = OxyColors.LightGray,
+			};
+			if (startTime != null && endTime != null)
+			{
+				double duration = endTime.Value.Subtract(startTime.Value).TotalSeconds;
+				dateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(startTime.Value);
+				dateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value);
+				dateTimeAxis.StringFormat = GetDateTimeFormat(duration);
+			}
+			plotModel.Axes.Add(dateTimeAxis);
+			return dateTimeAxis;
+		}
+
+		private void AddLinearAccess()
+		{
+			var linearAxis = new OxyPlot.Axes.LinearAxis
+			{
+				Position = AxisPosition.Bottom,
+				MajorGridlineStyle = LineStyle.Solid,
+				MajorGridlineColor = GridLineColor,
+				TitleColor = OxyColors.LightGray,
+				TextColor = OxyColors.LightGray,
+				TicklineColor = GridLineColor,
+				MinorGridlineColor = OxyColors.Gray,
+			};
+			plotModel.Axes.Add(linearAxis);
+		}
+
+		public OxyPlot.Axes.LinearAxis AddValueAxis(AxisPosition axisPosition = AxisPosition.Left, string key = null)
+		{
+			valueAxis = new OxyPlot.Axes.LinearAxis
+			{
+				Position = axisPosition,
+				IntervalLength = 20,
+				MajorGridlineStyle = LineStyle.Solid,
+				MajorGridlineColor = GridLineColor,
+				MinorGridlineStyle = LineStyle.None,
+				MinorTickSize = 0,
+				MinorStep = 20,
+				MinimumMinorStep = 10,
+				IsAxisVisible = true,
+				AxislineColor = GridLineColor,
+				AxislineStyle = LineStyle.Solid,
+				AxislineThickness = 2,
+				TickStyle = TickStyle.Outside,
+				TicklineColor = GridLineColor,
+				//MajorTickSize = 2,
+				MinorGridlineColor = OxyColors.Gray,
+				TitleColor = OxyColors.LightGray,
+				TextColor = OxyColors.LightGray,
+				LabelFormatter = ValueFormatter,
+			};
+			if (key != null)
+				valueAxis.Key = key;
+			plotModel.Axes.Add(valueAxis);
+			return valueAxis;
+		}
+
+		private void UpdateValueAxis()
+		{
+			double minimum = int.MaxValue;
+			double maximum = 0;
+
+			foreach (OxyPlot.Series.Series series in plotModel.Series)
+			{
+				if (series is OxyPlot.Series.LineSeries lineSeries)
+				{
+					if (lineSeries.LineStyle == LineStyle.None)
+						continue;
+
+					//if (axisKey == "right" && lineSeries.YAxisKey != "right")
+					//	continue;
+
+					PropertyInfo propertyInfo = null;
+					foreach (var item in lineSeries.ItemsSource)
+					{
+						if (propertyInfo == null)
+							propertyInfo = item.GetType().GetProperty(lineSeries.DataFieldY);
+						
+						var value = propertyInfo.GetValue(item);
+						double d = Convert.ToDouble(value);
+						if (double.IsNaN(d))
+							continue;
+
+						minimum = Math.Min(minimum, d);
+						maximum = Math.Max(maximum, d);
+					}
+				}
+			}
+			var margin = (maximum - minimum) * 0.10;
+
+			valueAxis.Minimum = minimum - margin;
+			valueAxis.Maximum = maximum + margin;
+		}
+
+		private static string ValueFormatter(double d)
+		{
+			double ad = Math.Abs(d);
+			if (ad >= 1E12)
+			{
+				return string.Format("{0}T", d / 1E12);
+			}
+			else if (ad >= 1E9)
+			{
+				return string.Format("{0}G", d / 1E9);
+			}
+			else if (ad >= 1E6)
+			{
+				return string.Format("{0}M", d / 1E6);
+			}
+			else if (ad >= 1E3)
+			{
+				return string.Format("{0}K", d / 1E3);
+			}
+			else if (ad < 1E3)
+			{
+				return string.Format("{0}", d);
+			}
+			else
+			{
+				return string.Format("{0}", d);
+			}
+		}
+
 		private void AddAxis()
 		{
 			if (xAxisPropertyInfo != null && xAxisPropertyInfo.PropertyType == typeof(DateTime))
 			{
-				var dateTimeAxis = new OxyPlot.Axes.DateTimeAxis
-				{
-					Position = AxisPosition.Bottom,
-					//StringFormat = GetDateTimeFormat(duration),
-					//MinorIntervalType = DateTimeIntervalType.Days,
-					//IntervalType = DateTimeIntervalType.Days,
-					IntervalType = DateTimeIntervalType.Hours,
-					MajorGridlineStyle = LineStyle.Solid,
-					MajorGridlineColor = OxyColors.Gray,
-					//MinorGridlineStyle = LineStyle.None,
-					IntervalLength = 100,
-					IsAxisVisible = true,
-					AxislineColor = OxyColors.Black,
-					AxislineStyle = LineStyle.Solid,
-					AxislineThickness = 2,
-					TickStyle = TickStyle.Outside,
-					TicklineColor = OxyColors.Black,
-					MajorTickSize = 5,
-					MinorTicklineColor = OxyColors.Black,
-					MinorTickSize = 5,
-					AxisTickToLabelDistance = 2,
-					TitleColor = OxyColors.LightGray,
-					TextColor = OxyColors.LightGray,
-				};
-				plotModel.Axes.Add(dateTimeAxis);
+				AddDateTimeAxis();
 				//plotModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = AxisPosition.Bottom });
 			}
 			else
 			{
-				var linearAxis = new OxyPlot.Axes.LinearAxis
-				{
-					Position = AxisPosition.Bottom,
-					MajorGridlineStyle = LineStyle.Solid,
-					MajorGridlineColor = OxyColors.Gray,
-					TitleColor = OxyColors.LightGray,
-					TextColor = OxyColors.LightGray,
-				};
-				plotModel.Axes.Add(linearAxis);
+				AddLinearAccess();
 			}
-
-			var valueAxis = new OxyPlot.Axes.LinearAxis
-			{
-				Position = AxisPosition.Left,
-				//Minimum = minimum - margin,
-				//Maximum = maximum + margin,
-				IntervalLength = 20,
-				MajorGridlineStyle = LineStyle.Solid,
-				MajorGridlineColor = OxyColors.Gray,
-				MinorGridlineStyle = LineStyle.None,
-				MinorTickSize = 0,
-				//MinorStep = 10,
-				MinimumMinorStep = 10,
-				IsAxisVisible = true,
-				AxislineColor = OxyColors.Black,
-				AxislineStyle = LineStyle.Solid,
-				AxislineThickness = 2,
-				TickStyle = TickStyle.Outside,
-				TicklineColor = OxyColors.Black,
-				MajorTickSize = 2,
-				TitleColor = OxyColors.LightGray,
-				TextColor = OxyColors.LightGray,
-			};
-			plotModel.Axes.Add(valueAxis);
+			AddValueAxis();
 			{
 				//plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = AxisPosition.Left });
 			}
