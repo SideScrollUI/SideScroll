@@ -179,6 +179,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//ItemsSource = null;
 				lineSeries.LineStyle = LineStyle.Solid;
 				lineSeries.MarkerType = MarkerType.Circle;
+				lineSeries.Selectable = true;
 			}
 			else
 			{
@@ -200,6 +201,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				scatterSeries.ItemsSource = scatterSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
 				//ItemsSource = null;
 				scatterSeries.MarkerType = MarkerType.Circle;
+				scatterSeries.Selectable = true;
 			}
 			else
 			{

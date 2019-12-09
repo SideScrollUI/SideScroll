@@ -14,6 +14,7 @@ using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.Avalonia;
+using Avalonia.Input;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -199,7 +200,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				RowDefinitions = new RowDefinitions("*,Auto"), // Header, Body
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
-				//Background = new SolidColorBrush(Theme.BackgroundColor),
+				Background = new SolidColorBrush(Theme.BackgroundColor), // grid lines look bad when hovering
 			};
 			//containerGrid.Children.Add(borderTitle);
 
@@ -212,11 +213,17 @@ namespace Atlas.GUI.Avalonia.Controls
 			else
 				Grid.SetColumn(legend, 1);
 			containerGrid.Children.Add(legend);
+			legend.OnSelectionChanged += Legend_OnSelectionChanged;
 
 			//this.watch.Start();
 			this.Content = containerGrid;
 
 			this.Focusable = true;
+		}
+
+		private void Legend_OnSelectionChanged(object sender, EventArgs e)
+		{
+			UpdateValueAxis();
 		}
 
 		public string GetDateTimeFormat(double duration)
@@ -249,6 +256,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			// would need to be able to disable to use
 			//foreach (ListSeries listSeries in ChartSettings.ListSeries)
 			//	AddSeries(listSeries);
+
+			UpdateValueAxis();
 
 			plotView.Model = plotModel;
 		}
@@ -381,18 +390,54 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				if (series is OxyPlot.Series.LineSeries lineSeries)
 				{
-					if (lineSeries.LineStyle == LineStyle.None)
+					if (lineSeries.ItemsSource != null)
+					{
+
+						//if (axisKey == "right" && lineSeries.YAxisKey != "right")
+						//	continue;
+
+						PropertyInfo propertyInfo = null;
+						foreach (var item in lineSeries.ItemsSource)
+						{
+							if (propertyInfo == null)
+								propertyInfo = item.GetType().GetProperty(lineSeries.DataFieldY);
+
+							var value = propertyInfo.GetValue(item);
+							double d = Convert.ToDouble(value);
+							if (double.IsNaN(d))
+								continue;
+
+							minimum = Math.Min(minimum, d);
+							maximum = Math.Max(maximum, d);
+						}
+					}
+					else if (lineSeries.Points.Count > 0)
+					{
+						foreach (var point in lineSeries.Points)
+						{
+							double d = point.Y;
+							if (double.IsNaN(d))
+								continue;
+
+							minimum = Math.Min(minimum, d);
+							maximum = Math.Max(maximum, d);
+						}
+					}
+				}
+				if (series is OxyPlot.Series.ScatterSeries scatterSeries)
+				{
+					if (scatterSeries.ItemsSource == null)
 						continue;
 
 					//if (axisKey == "right" && lineSeries.YAxisKey != "right")
 					//	continue;
 
 					PropertyInfo propertyInfo = null;
-					foreach (var item in lineSeries.ItemsSource)
+					foreach (var item in scatterSeries.ItemsSource)
 					{
 						if (propertyInfo == null)
-							propertyInfo = item.GetType().GetProperty(lineSeries.DataFieldY);
-						
+							propertyInfo = item.GetType().GetProperty(scatterSeries.DataFieldY);
+
 						var value = propertyInfo.GetValue(item);
 						double d = Convert.ToDouble(value);
 						if (double.IsNaN(d))
@@ -404,6 +449,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				}
 			}
 			var margin = (maximum - minimum) * 0.10;
+			if (minimum == maximum)
+				margin = Math.Abs(minimum);
 
 			valueAxis.Minimum = minimum - margin;
 			valueAxis.Maximum = maximum + margin;
@@ -479,6 +526,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				CanTrackerInterpolatePoints = false,
 				MarkerSize = 3,
 				MarkerType = MarkerType.Circle,
+				//ItemsSource = listSeries.iList,
+				//DataFieldY = 
 			};
 			AddPoints(listSeries, listSeries.iList, lineSeries);
 

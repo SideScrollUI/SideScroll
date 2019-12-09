@@ -194,8 +194,8 @@ namespace Atlas.GUI.Avalonia.Controls
 					}
 				}
 			}
-			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 			OnSelectionChanged?.Invoke(this, null);
+			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
 		private void CheckBox_SelectionChanged(object sender, EventArgs e)
