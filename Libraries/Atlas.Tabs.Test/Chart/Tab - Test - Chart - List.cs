@@ -69,10 +69,12 @@ namespace Atlas.Tabs.Test.Chart
 			{
 				//series.Add(random.Next(1050, 1095));
 
+				int multiplier = 1;
 				foreach (var list in series)
 				{
-					int amount = random.Next();
+					int amount = (random.Next() % 1000) * multiplier;
 					list.Add(amount);
+					multiplier++;
 				}
 			}
 

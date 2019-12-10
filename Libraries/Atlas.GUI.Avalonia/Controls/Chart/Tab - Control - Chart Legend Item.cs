@@ -18,6 +18,7 @@ namespace Atlas.GUI.Avalonia.Controls
 	public class TabChartLegendItem : Grid
 	{
 		public event EventHandler<EventArgs> OnSelectionChanged;
+		public event EventHandler<EventArgs> OnHighlightChanged;
 
 		public OxyPlot.Series.Series series;
 		//public string Label { get; set; }
@@ -36,7 +37,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				_IsChecked = value;
 				polygon.Fill = new SolidColorBrush(IsChecked ? color : Colors.Transparent);
-				OnSelectionChanged?.Invoke(this, null);
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				markerSize = markerSize ?? lineSeries.MarkerSize;
 				lineSeries.StrokeThickness = 4;
 				lineSeries.MarkerSize = markerSize.Value + 2;
-				OnSelectionChanged?.Invoke(this, null);
+				OnHighlightChanged?.Invoke(this, null);
 			}
 			textBlock.Foreground = new SolidColorBrush(Theme.ActiveSelectionHighlightColor);
 			//polygon.Stroke = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor);
@@ -131,7 +131,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				lineSeries.StrokeThickness = 2;
 				lineSeries.MarkerSize = markerSize.Value;
 				//lineSeries.MarkerSize = 3; // store original?
-				OnSelectionChanged?.Invoke(this, null);
+				OnHighlightChanged?.Invoke(this, null);
 			}
 			textBlock.Foreground = Brushes.LightGray;
 			//polygon.StrokeThickness = 4;

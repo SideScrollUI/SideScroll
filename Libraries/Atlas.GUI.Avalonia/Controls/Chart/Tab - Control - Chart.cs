@@ -390,6 +390,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				if (series is OxyPlot.Series.LineSeries lineSeries)
 				{
+					if (lineSeries.LineStyle == LineStyle.None)
+						continue;
 					if (lineSeries.ItemsSource != null)
 					{
 

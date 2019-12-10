@@ -53,6 +53,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//legendItem.PointerEnter += CheckBox_PointerEnter;
 			//legendItem.PointerLeave += CheckBox_PointerLeave;
 			legendItem.OnSelectionChanged += CheckBox_SelectionChanged;
+			legendItem.OnHighlightChanged += LegendItem_OnHighlightChanged;
 			legendItem.textBlock.PointerPressed += (s, e) =>
 			{
 				LegendItemClicked(legendItem);
@@ -101,6 +102,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				SetSelectionAll(true);
 			}
 			UpdateVisibleSeries();
+			OnSelectionChanged?.Invoke(this, null);
 			//if (legendItem.checkBox.IsChecked == true)
 			//SetSelectionAll(legendItem.checkBox.IsChecked == true);
 		}
@@ -201,6 +203,11 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void CheckBox_SelectionChanged(object sender, EventArgs e)
 		{
 			UpdateVisibleSeries();
+		}
+
+		private void LegendItem_OnHighlightChanged(object sender, EventArgs e)
+		{
+			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
 		/*private void CheckBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
