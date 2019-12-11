@@ -13,6 +13,7 @@ using OxyPlot.Avalonia;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
+	// todo: switch to WrapPanel? Children.Clear() doesn't work? throws exception when re-adding
 	public class TabControlChartLegend : Grid
 	{
 		private PlotView plotView;
@@ -38,6 +39,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.RowDefinitions = new RowDefinitions("Auto");
 			this.Margin = new Thickness(6);
 			this.MaxHeight = plotView.MaxHeight;
+			this.MaxWidth = plotView.MaxWidth;
 
 			RefreshModel();
 		}
@@ -210,24 +212,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
-		/*private void CheckBox_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			HighlightSeries(2, 3);
-			OnSelectionChanged?.Invoke(this, null);
-			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
-		}
-
-		private void CheckBox_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			TabChartLegendItem legendItem = (TabChartLegendItem)sender;
-			HighlightSeries(1, 2);
-			var lineSeries = (OxyPlot.Series.LineSeries)legendItem.series;
-			lineSeries.StrokeThickness = 2;
-			lineSeries.MarkerSize = 3;
-			OnSelectionChanged?.Invoke(this, null);
-			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
-		}
-
+		/*
 		private void HighlightSeries(double thickness, double markerSize)
 		{
 			foreach (OxyPlot.Series.Series series in plotView.Model.Series)
@@ -238,6 +223,7 @@ namespace Atlas.GUI.Avalonia.Controls
 					lineSeries.StrokeThickness = thickness;
 				}
 			}
-		}*/
+		}
+		*/
 	}
 }

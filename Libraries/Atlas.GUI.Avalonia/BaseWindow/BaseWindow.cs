@@ -440,15 +440,14 @@ namespace Atlas.GUI.Avalonia
 				return;
 			}
 
-			if (e.Key == Key.F5)
-			{
-				Reload();
-				e.Handled = true;
-				return;
-			}
-
 			if (e.Modifiers == InputModifiers.Control)
 			{
+				if (e.Key == Key.R)
+				{
+					Reload();
+					e.Handled = true;
+					return;
+				}
 			}
 			else if (e.Key == Key.Escape)
 			{

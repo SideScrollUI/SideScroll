@@ -103,6 +103,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void Polygon_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e)
 		{
 			IsChecked = !IsChecked;
+			OnSelectionChanged?.Invoke(this, null);
 		}
 
 		double? markerSize;

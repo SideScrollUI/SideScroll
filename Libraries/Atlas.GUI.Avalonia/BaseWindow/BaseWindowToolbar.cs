@@ -65,7 +65,7 @@ namespace Atlas.GUI.Avalonia
 			buttonForward = AddButton("Forward", Icons.Streams.Forward, commandBindingForward);
 
 			AddSeparator();
-			buttonRefresh = AddButton("Refresh (F5)", Icons.Streams.Refresh);
+			buttonRefresh = AddButton("Refresh (Ctrl+R)", Icons.Streams.Refresh);
 			//buttonRefresh.Add();
 			buttonRefresh.Add(ButtonRefresh_Click);
 
