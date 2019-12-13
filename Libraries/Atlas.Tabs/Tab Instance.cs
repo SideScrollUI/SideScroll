@@ -318,7 +318,8 @@ namespace Atlas.Tabs
 			//MethodInfo methodInfo = GetDerivedLoadMethod();
 			if (this is ITabAsync tabAsync)
 			{
-				Task.Run(() => tabAsync.LoadAsync(taskInstance.call)).Wait(); // Call this way to avoid .Result deadlock
+				Task.Run(() => tabAsync.LoadAsync(taskInstance.call)).GetAwaiter().GetResult();
+
 			}
 			if (CanLoad)
 			{

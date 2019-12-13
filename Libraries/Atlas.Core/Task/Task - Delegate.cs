@@ -46,7 +46,7 @@ namespace Atlas.Core
 		{
 			try
 			{
-				Task.Run(() => callAction.Invoke(call)).Wait(); // Call this way to avoid .Result deadlock
+				Task.Run(() => callAction.Invoke(call)).GetAwaiter().GetResult();
 			}
 			catch (Exception e)
 			{

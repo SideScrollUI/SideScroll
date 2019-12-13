@@ -58,6 +58,9 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			AddRoundedCheckBox();
 			AddTextBox();
+
+			PointerEnter += TabChartLegendItem_PointerEnter;
+			PointerLeave += TabChartLegendItem_PointerLeave;
 		}
 
 		private void AddRoundedCheckBox()
@@ -81,8 +84,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			UpdatePoints(width, height);
 			polygon.PointerPressed += Polygon_PointerPressed;
-			polygon.PointerEnter += Polygon_PointerEnter;
-			polygon.PointerLeave += Polygon_PointerLeave;
 			this.Children.Add(polygon);
 		}
 
@@ -107,7 +108,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		}
 
 		double? markerSize;
-		private void Polygon_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void TabChartLegendItem_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
 			UpdatePoints(15, 15);
 			if (series is OxyPlot.Series.LineSeries lineSeries)
@@ -123,7 +124,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//polygon.StrokeThickness = 2;
 		}
 
-		private void Polygon_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void TabChartLegendItem_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
 			UpdatePoints(13, 13);
 			if (series is OxyPlot.Series.LineSeries lineSeries)
@@ -154,8 +155,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				//HorizontalAlignment = HorizontalAlignment.Stretch,
 				[Grid.ColumnProperty] = 1,
 			};
-			textBlock.PointerEnter += Polygon_PointerEnter;
-			textBlock.PointerLeave += Polygon_PointerLeave;
 			textBlock.Tapped += TextBox_Tapped;
 			/*Border border = new Border()
 			{

@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Test.Actions
 
 		public class Instance : TabInstance, ITabAsync
 		{
-			private const int delayMs = 500;
+			private const int delayMs = 5000;
 
 			public async Task LoadAsync(Call call)
 			{

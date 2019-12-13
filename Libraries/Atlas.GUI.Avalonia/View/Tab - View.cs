@@ -544,6 +544,7 @@ namespace Atlas.GUI.Avalonia.View
 			tabInstance.loadCalled = true;
 			if (tabInstance is ITabAsync)// && tabInstance.isLoaded)
 			{
+				ShowLoading();
 				tabInstance.StartTask(LoadBackground, true, false);
 			}
 			else
@@ -553,6 +554,21 @@ namespace Atlas.GUI.Avalonia.View
 				ReloadControls();
 			}
 			//this.Dispatcher.BeginInvoke((Action)(() => { allowAutoScrolling = true; }));
+		}
+
+		public void ShowLoading()
+		{
+			// This will get cleared when the view reloads
+			var progressBar = new ProgressBar()
+			{
+				IsIndeterminate = true,
+				MinWidth = 100,
+				MinHeight = 100,
+				Foreground = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
+				Background = new SolidColorBrush(Theme.BackgroundColor),
+			};
+
+			this.Children.Add(progressBar);
 		}
 
 		public void LoadSettings()

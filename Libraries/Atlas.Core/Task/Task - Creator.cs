@@ -35,7 +35,7 @@ namespace Atlas.Core
 		public void Run(Call call)
 		{
 			TaskInstance taskInstance = Start(call);
-			taskInstance.Task.Wait();
+			taskInstance.Task.GetAwaiter().GetResult();
 		}
 
 		// Creates, Starts, and returns a new Task

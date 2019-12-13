@@ -36,7 +36,7 @@ namespace Atlas.Core
 				// BeginInvoke() doesn't work for .NET Core
 				//callAction.Invoke(call);
 				//InvokeActionAsync(call);
-				Task.Run(() => InvokeActionAsync(call)).Wait(); // Call this way to avoid .Result deadlock
+				Task.Run(() => InvokeActionAsync(call)).GetAwaiter().GetResult();
 			}
 			catch (Exception e)
 			{

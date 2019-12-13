@@ -234,6 +234,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				return "H:mm";
 			if (duration < 24 * 60 * 60)
 				return "H:mm";
+			if (duration < 3 * 24 * 60 * 60)
+				return "M/d H:mm";
 			if (duration < 30 * 24 * 60 * 60)
 				return "M/d";
 
@@ -309,7 +311,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				MajorGridlineStyle = LineStyle.Solid,
 				MajorGridlineColor = GridLineColor,
 				//MinorGridlineStyle = LineStyle.None,
-				IntervalLength = 50,
+				IntervalLength = 75,
 				IsAxisVisible = true,
 				AxislineColor = OxyColors.Black,
 				//AxislineColor = GridLineColor,
