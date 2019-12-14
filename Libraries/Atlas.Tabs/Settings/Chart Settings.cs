@@ -62,8 +62,7 @@ namespace Atlas.Tabs
 					continue;
 				if (propertyInfo.PropertyType.IsNumeric())
 				{
-					ListSeries listSeries = new ListSeries(propertyInfo);
-					listSeries.iList = iList;
+					ListSeries listSeries = new ListSeries(iList, propertyInfo);
 					//listProperties.Add(listSeries);
 
 					ListGroup listGroup = DefaultListGroup;

@@ -144,7 +144,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			MinHeight = 200;
 			MaxWidth = 1000;
 			MaxHeight = 1000;
-			MinWidth = 400;
+			MinWidth = 150;
 
 			// autogenerate columns
 			if (tabInstance.tabViewSettings.ChartDataSettings.Count == 0)
@@ -171,6 +171,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				Background = Brushes.Transparent,
 				//Foreground = Brushes.LightGray,
 				BorderBrush = Brushes.LightGray,
+				IsMouseWheelEnabled = false,
 				DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
 			};
 
@@ -385,8 +386,8 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void UpdateValueAxis()
 		{
-			double minimum = int.MaxValue;
-			double maximum = 0;
+			double minimum = double.MaxValue;
+			double maximum = double.MinValue;
 
 			foreach (OxyPlot.Series.Series series in plotModel.Series)
 			{
@@ -452,6 +453,14 @@ namespace Atlas.GUI.Avalonia.Controls
 					}
 				}
 			}
+
+			if (minimum == double.MaxValue)
+			{
+				// didn't find any values
+				minimum = 0;
+				maximum = 1;
+			}
+
 			var margin = (maximum - minimum) * 0.10;
 			if (minimum == maximum)
 				margin = Math.Abs(minimum);
@@ -530,10 +539,20 @@ namespace Atlas.GUI.Avalonia.Controls
 				CanTrackerInterpolatePoints = false,
 				MarkerSize = 3,
 				MarkerType = MarkerType.Circle,
+				DataFieldX = listSeries.xPropertyName,
+				DataFieldY = listSeries.yPropertyName,
 				//ItemsSource = listSeries.iList,
 				//DataFieldY = 
 			};
-			AddPoints(listSeries, listSeries.iList, lineSeries);
+			if (listSeries.xPropertyName != null)
+			{
+				lineSeries.ItemsSource = listSeries.iList;
+				xAxisPropertyInfo = listSeries.xPropertyInfo;
+			}
+			else
+			{
+				AddPoints(listSeries, listSeries.iList, lineSeries);
+			}
 
 			plotModel.Series.Add(lineSeries);
 
@@ -555,8 +574,9 @@ namespace Atlas.GUI.Avalonia.Controls
 			if (iList.Count == 0)
 				return;
 
-			if (listSeries.propertyInfo != null)
+			if (listSeries.xPropertyInfo != null)
 			{
+				// faster than using ItemSource?
 				foreach (PropertyInfo propertyInfo in iList[0].GetType().GetProperties())
 				{
 					if (propertyInfo.GetCustomAttribute<XAxisAttribute>() != null)
@@ -564,14 +584,14 @@ namespace Atlas.GUI.Avalonia.Controls
 				}
 				foreach (object obj in iList)
 				{
-					object value = listSeries.propertyInfo.GetValue(obj);
+					object value = listSeries.xPropertyInfo.GetValue(obj);
 					double x = lineSeries.Points.Count;
 					if (xAxisPropertyInfo != null)
 					{
 						object xObj = xAxisPropertyInfo.GetValue(obj);
-						if (xObj.GetType() == typeof(DateTime))
+						if (xObj is DateTime dateTime)
 						{
-							x = OxyPlot.Axes.DateTimeAxis.ToDouble((DateTime)xObj);
+							x = OxyPlot.Axes.DateTimeAxis.ToDouble(dateTime);
 						}
 						else
 						{

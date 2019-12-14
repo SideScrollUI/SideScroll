@@ -25,24 +25,42 @@ namespace Atlas.Tabs
 		public string Name { get; set; }
 		public IList iList; // List to start with, any elements added will also trigger an event to add new points
 		//public PropertyInfo xPropertyInfo; // optional
-		public PropertyInfo propertyInfo; // optional
+
+		public PropertyInfo xPropertyInfo; // optional
+		public PropertyInfo yPropertyInfo; // optional
+
+		public string xPropertyName;
+		public string yPropertyName;
 		//public object obj;
-		
+
 		public ListSeries(string name, IList iList)
 		{
 			Name = name;
 			this.iList = iList;
 		}
 
-		public ListSeries(PropertyInfo propertyInfo)
+		public ListSeries(IList iList, PropertyInfo propertyInfo)
 		{
-			this.propertyInfo = propertyInfo;
+			this.iList = iList;
+			this.xPropertyInfo = propertyInfo;
 
 			Name = propertyInfo.Name;
 			Name = Name.AddSpacesBetweenWords();
-			NameAttribute attribute = propertyInfo.GetCustomAttribute(typeof(NameAttribute)) as NameAttribute;
+			NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;
+		}
+
+		public ListSeries(string name, IList iList, string xPropertyName, string yPropertyName)
+		{
+			Name = name;
+			this.iList = iList;
+			this.xPropertyName = xPropertyName;
+			this.yPropertyName = yPropertyName;
+
+			Type elementType = iList.GetType().GetElementTypeForAll();
+			xPropertyInfo = elementType.GetProperty(xPropertyName);
+			yPropertyInfo = elementType.GetProperty(yPropertyName);
 		}
 
 		public override string ToString()

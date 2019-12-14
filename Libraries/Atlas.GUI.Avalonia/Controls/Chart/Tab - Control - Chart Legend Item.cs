@@ -1,17 +1,18 @@
-﻿using Atlas.Core;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Atlas.Core;
 using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Input;
 using Avalonia.Media;
-using System;
-using System.Collections;
+using Avalonia.Media.Imaging;
 
 using OxyPlot.Avalonia;
 using OxyPlot.Series;
 using OxyPlot;
-using Avalonia.Media.Imaging;
-using Avalonia.Controls.Shapes;
-using System.Collections.Generic;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -56,21 +57,31 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.RowDefinitions = new RowDefinitions();
 			//this.Margin = new Thickness(6);
 
-			AddRoundedCheckBox();
+			AddCheckBox();
 			AddTextBox();
 
 			PointerEnter += TabChartLegendItem_PointerEnter;
 			PointerLeave += TabChartLegendItem_PointerLeave;
 		}
 
-		private void AddRoundedCheckBox()
+		private void AddCheckBox()
 		{
 			RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-			
+
+			int count = 0;
 			if (series is OxyPlot.Series.LineSeries lineSeries)
+			{
 				color = lineSeries.Color.ToColor();
+				if (lineSeries.Points.Count > 0)
+					count = lineSeries.Points.Count;
+				else
+					count = lineSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0;
+			}
 			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
+			{
 				color = scatterSeries.MarkerFill.ToColor();
+				count = Math.Max(scatterSeries.Points.Count, scatterSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0);
+			}
 
 			int width = 13;
 			int height = 13;
@@ -78,10 +89,11 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				Width = 16,
 				Height = 16,
-				Fill = new SolidColorBrush(color),
 				Stroke = Brushes.Black,
 				StrokeThickness = 1.5,
 			};
+			if (count > 0)
+				polygon.Fill = new SolidColorBrush(color);
 			UpdatePoints(width, height);
 			polygon.PointerPressed += Polygon_PointerPressed;
 			this.Children.Add(polygon);
@@ -103,8 +115,11 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void Polygon_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e)
 		{
-			IsChecked = !IsChecked;
-			OnSelectionChanged?.Invoke(this, null);
+			if (e.MouseButton == MouseButton.Left)
+			{
+				IsChecked = !IsChecked;
+				OnSelectionChanged?.Invoke(this, null);
+			}
 		}
 
 		double? markerSize;

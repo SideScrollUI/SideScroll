@@ -197,21 +197,27 @@ namespace Atlas.Tabs
 			}
 		}
 
-		public void Invoke(Action action)
-		{
-			guiContext.Send(ActionCallback, action);
-		}
-
 		private void ActionCallback(object state)
 		{
 			Action action = (Action)state;
 			action.Invoke();
 		}
 
+		private void ActionParamsCallback(object state)
+		{
+			TaskDelegateParams taskDelegate = (TaskDelegateParams)state;
+			StartTask(taskDelegate, false);
+		}
+
 		// make generic? not useful yet, causes flickering
 		public void ScheduleTask(int milliSeconds, Action action)
 		{
 			Task.Delay(milliSeconds).ContinueWith(t => action());
+		}
+
+		public void Invoke(Action action)
+		{
+			guiContext.Send(ActionCallback, action);
 		}
 
 		public void Invoke(SendOrPostCallback callback, object param = null)
@@ -229,12 +235,6 @@ namespace Atlas.Tabs
 		{
 			TaskDelegateParams taskDelegate = new TaskDelegateParams(null, callAction.Method.Name, callAction, false, null, objects);
 			guiContext.Send(ActionParamsCallback, taskDelegate);
-		}
-
-		private void ActionParamsCallback(object state)
-		{
-			TaskDelegateParams taskDelegate = (TaskDelegateParams)state;
-			StartTask(taskDelegate, false);
 		}
 
 		// switch to SendOrPostCallback?
