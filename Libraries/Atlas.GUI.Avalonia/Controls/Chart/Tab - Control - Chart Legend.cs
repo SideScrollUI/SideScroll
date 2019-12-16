@@ -51,7 +51,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				color = lineSeries.Color.ToColor();
 			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
 				color = scatterSeries.MarkerFill.ToColor();
-			TabChartLegendItem legendItem = new TabChartLegendItem(series);
+			TabChartLegendItem legendItem = new TabChartLegendItem(this, series);
 			//legendItem.PointerEnter += CheckBox_PointerEnter;
 			//legendItem.PointerLeave += CheckBox_PointerLeave;
 			legendItem.OnSelectionChanged += CheckBox_SelectionChanged;
@@ -214,18 +214,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
-		/*
-		private void HighlightSeries(double thickness, double markerSize)
+		public void HighlightAll(bool showFaded)
 		{
-			foreach (OxyPlot.Series.Series series in plotView.Model.Series)
+			foreach (TabChartLegendItem item in legendItems)
 			{
-				if (series is OxyPlot.Series.LineSeries lineSeries)
-				{
-					lineSeries.MarkerSize = markerSize;
-					lineSeries.StrokeThickness = thickness;
-				}
+				item.UpdateHighlight(showFaded);
 			}
 		}
-		*/
 	}
 }

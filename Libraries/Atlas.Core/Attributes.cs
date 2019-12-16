@@ -199,7 +199,7 @@ namespace Atlas.Core
 		}
 	}
 
-	[AttributeUsage(AttributeTargets.All)]
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class UnitAttribute : Attribute
 	{
 		public readonly string Name;
@@ -210,8 +210,13 @@ namespace Atlas.Core
 		}
 	}
 
-	[AttributeUsage(AttributeTargets.All)]
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class XAxisAttribute : Attribute
+	{
+	}
+
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class YAxisAttribute : Attribute
 	{
 	}
 }

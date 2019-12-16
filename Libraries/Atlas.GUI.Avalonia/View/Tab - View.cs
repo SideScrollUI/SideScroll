@@ -544,7 +544,8 @@ namespace Atlas.GUI.Avalonia.View
 			tabInstance.loadCalled = true;
 			if (tabInstance is ITabAsync)// && tabInstance.isLoaded)
 			{
-				ShowLoading();
+				tabInstance.Invoke(ShowLoading);
+				//ShowLoading();
 				tabInstance.StartTask(LoadBackground, true, false);
 			}
 			else

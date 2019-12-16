@@ -259,8 +259,9 @@ namespace Atlas.Extensions // rename to Core?
 		public static PropertyInfo GetPropertyWithAttribute<T>(this Type type)
 		{
 			List<PropertyInfo> matchingProperties = GetPropertiesWithAttribute<T>(type);
-			Debug.Assert(matchingProperties.Count == 1);
-			return matchingProperties[0];
+			if (matchingProperties.Count > 0)
+				return matchingProperties[0];
+			return null;
 		}
 
 		public static List<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type)

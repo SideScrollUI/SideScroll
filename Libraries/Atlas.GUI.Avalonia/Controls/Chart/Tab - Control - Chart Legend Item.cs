@@ -8,7 +8,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 
 using OxyPlot.Avalonia;
 using OxyPlot.Series;
@@ -21,11 +20,14 @@ namespace Atlas.GUI.Avalonia.Controls
 		public event EventHandler<EventArgs> OnSelectionChanged;
 		public event EventHandler<EventArgs> OnHighlightChanged;
 
+		public TabControlChartLegend legend;
 		public OxyPlot.Series.Series series;
 		//public string Label { get; set; }
 		public TextBlock textBlock;
 		private Polygon polygon;
 		private Color color = Colors.Green;
+		private OxyColor oxyColor;
+		private MarkerType markerType;
 
 		private bool _IsChecked = true;
 		public bool IsChecked
@@ -43,8 +45,9 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public IEnumerable ItemsSource { get; internal set; }
 
-		public TabChartLegendItem(OxyPlot.Series.Series series)
+		public TabChartLegendItem(TabControlChartLegend legend, OxyPlot.Series.Series series)
 		{
+			this.legend = legend;
 			this.series = series;
 			InitializeControls();
 		}
@@ -71,17 +74,20 @@ namespace Atlas.GUI.Avalonia.Controls
 			int count = 0;
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 			{
-				color = lineSeries.Color.ToColor();
+				oxyColor = lineSeries.Color;
+				markerType = lineSeries.MarkerType;
 				if (lineSeries.Points.Count > 0)
 					count = lineSeries.Points.Count;
-				else
+				else if (lineSeries.ItemsSource != null)
 					count = lineSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0;
 			}
 			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
 			{
-				color = scatterSeries.MarkerFill.ToColor();
+				oxyColor = scatterSeries.MarkerFill;
+				markerType = scatterSeries.MarkerType;
 				count = Math.Max(scatterSeries.Points.Count, scatterSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0);
 			}
+			color = oxyColor.ToColor();
 
 			int width = 13;
 			int height = 13;
@@ -94,12 +100,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			if (count > 0)
 				polygon.Fill = new SolidColorBrush(color);
-			UpdatePoints(width, height);
+			UpdatePolygonPoints(width, height);
 			polygon.PointerPressed += Polygon_PointerPressed;
 			this.Children.Add(polygon);
 		}
 
-		private void UpdatePoints(int width, int height)
+		private void UpdatePolygonPoints(int width, int height)
 		{
 			int cornerSize = 3;
 			polygon.Points = new List<Point>()
@@ -122,15 +128,14 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 		}
 
-		double? markerSize;
+		private bool highlight;
 		private void TabChartLegendItem_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
-			UpdatePoints(15, 15);
+			UpdatePolygonPoints(15, 15);
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 			{
-				markerSize = markerSize ?? lineSeries.MarkerSize;
-				lineSeries.StrokeThickness = 4;
-				lineSeries.MarkerSize = markerSize.Value + 2;
+				highlight = true;
+				legend.HighlightAll(true);
 				OnHighlightChanged?.Invoke(this, null);
 			}
 			textBlock.Foreground = new SolidColorBrush(Theme.ActiveSelectionHighlightColor);
@@ -141,13 +146,11 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void TabChartLegendItem_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
-			UpdatePoints(13, 13);
+			UpdatePolygonPoints(13, 13);
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 			{
-				markerSize = markerSize ?? lineSeries.MarkerSize;
-				lineSeries.StrokeThickness = 2;
-				lineSeries.MarkerSize = markerSize.Value;
-				//lineSeries.MarkerSize = 3; // store original?
+				highlight = false;
+				legend.HighlightAll(false);
 				OnHighlightChanged?.Invoke(this, null);
 			}
 			textBlock.Foreground = Brushes.LightGray;
@@ -193,7 +196,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				lineSeries.ItemsSource = lineSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
 				//ItemsSource = null;
 				lineSeries.LineStyle = LineStyle.Solid;
-				lineSeries.MarkerType = MarkerType.Circle;
+				lineSeries.MarkerType = markerType;
 				lineSeries.Selectable = true;
 			}
 			else
@@ -215,7 +218,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				scatterSeries.ItemsSource = scatterSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
 				//ItemsSource = null;
-				scatterSeries.MarkerType = MarkerType.Circle;
+				scatterSeries.MarkerType = markerType;
 				scatterSeries.Selectable = true;
 			}
 			else
@@ -226,6 +229,21 @@ namespace Atlas.GUI.Avalonia.Controls
 				scatterSeries.Selectable = false;
 				//lineSeries.SelectionMode = OxyPlot.SelectionMode.
 				scatterSeries.Unselect();
+			}
+		}
+
+		public void UpdateHighlight(bool showFaded)
+		{
+			OxyColor newColor;
+			if (highlight || !showFaded)
+				newColor = oxyColor;
+			else
+				newColor = OxyColor.FromAColor(64, oxyColor);
+			
+			if (series is OxyPlot.Series.LineSeries lineSeries)
+			{
+				lineSeries.MarkerFill = newColor;
+				lineSeries.Color = newColor;
 			}
 		}
 	}

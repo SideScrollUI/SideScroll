@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using Atlas.Core;
 using Atlas.Extensions;
 
-namespace Atlas.Tabs
+namespace Atlas.Core
 {
 	public class ListGroup
 	{
 		public string Name { get; set; }
 		public bool Horizontal { get; set; }
+		public DateTime? StartTime { get; set; }
+		public DateTime? EndTime { get; set; }
 		public ItemCollection<ListSeries> ListSeries { get; set; } = new ItemCollection<ListSeries>();
-		public ListGroup(string name = null)
+		public ListGroup(string name = null, DateTime? startTime = null, DateTime? endTime = null)
 		{
 			Name = name;
+			StartTime = startTime;
+			EndTime = endTime;
 		}
 	}
 
@@ -37,12 +39,16 @@ namespace Atlas.Tabs
 		{
 			Name = name;
 			this.iList = iList;
+
+			Type elementType = iList.GetType().GetElementTypeForAll();
+			xPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
+			yPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();
 		}
 
 		public ListSeries(IList iList, PropertyInfo propertyInfo)
 		{
 			this.iList = iList;
-			this.xPropertyInfo = propertyInfo;
+			this.yPropertyInfo = propertyInfo;
 
 			Name = propertyInfo.Name;
 			Name = Name.AddSpacesBetweenWords();

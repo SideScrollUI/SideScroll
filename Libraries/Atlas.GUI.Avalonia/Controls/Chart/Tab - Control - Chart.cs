@@ -263,6 +263,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			UpdateValueAxis();
 
 			plotView.Model = plotModel;
+			this.IsVisible = true;
 		}
 
 		public void RecreatePlotModel()
@@ -384,7 +385,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			return valueAxis;
 		}
 
-		private void UpdateValueAxis()
+		private void UpdateValueAxis() // OxyPlot.Axes.LinearAxis valueAxis, string axisKey = null
 		{
 			double minimum = double.MaxValue;
 			double maximum = double.MinValue;
@@ -502,7 +503,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			if (xAxisPropertyInfo != null && xAxisPropertyInfo.PropertyType == typeof(DateTime))
 			{
-				AddDateTimeAxis();
+				AddDateTimeAxis(ListGroup.StartTime, ListGroup.EndTime);
 				//plotModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = AxisPosition.Bottom });
 			}
 			else
@@ -537,19 +538,23 @@ namespace Atlas.GUI.Avalonia.Controls
 				Color = GetColor(plotModel.Series.Count),
 				TextColor = OxyColors.Black,
 				CanTrackerInterpolatePoints = false,
+				MinimumSegmentLength = 2,
 				MarkerSize = 3,
-				MarkerType = MarkerType.Circle,
-				DataFieldX = listSeries.xPropertyName,
-				DataFieldY = listSeries.yPropertyName,
+				//MarkerType = MarkerType.Circle,
+				MarkerType = listSeries.iList.Count < 100 ? MarkerType.Circle : MarkerType.None,
+				//DataFieldX = listSeries.xPropertyName,
+				//DataFieldY = listSeries.yPropertyName,
 				//ItemsSource = listSeries.iList,
 				//DataFieldY = 
+				TrackerFormatString = "{0}\nTime: {2:yyyy-M-d H:mm:ss.FFF}\nValue: {4}",
 			};
-			if (listSeries.xPropertyName != null)
+			// can't add gaps with these so convert to DataPoint ourselves?
+			/*if (listSeries.xPropertyName != null)
 			{
 				lineSeries.ItemsSource = listSeries.iList;
 				xAxisPropertyInfo = listSeries.xPropertyInfo;
 			}
-			else
+			else*/
 			{
 				AddPoints(listSeries, listSeries.iList, lineSeries);
 			}
@@ -574,7 +579,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			if (iList.Count == 0)
 				return;
 
-			if (listSeries.xPropertyInfo != null)
+			if (listSeries.yPropertyInfo != null)
 			{
 				// faster than using ItemSource?
 				foreach (PropertyInfo propertyInfo in iList[0].GetType().GetProperties())
@@ -584,7 +589,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				}
 				foreach (object obj in iList)
 				{
-					object value = listSeries.xPropertyInfo.GetValue(obj);
+					object value = listSeries.yPropertyInfo.GetValue(obj);
 					double x = lineSeries.Points.Count;
 					if (xAxisPropertyInfo != null)
 					{
