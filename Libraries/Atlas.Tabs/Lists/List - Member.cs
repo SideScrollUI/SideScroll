@@ -33,7 +33,7 @@ namespace Atlas.Tabs
 		public bool autoLoad = true;
 
 		//[HiddenColumn]
-		[StyleValue, InnerValue]
+		[StyleValue, InnerValue, WordWrap]
 		public abstract object Value { get; set; }
 
 		[HiddenColumn, Name("Value"), StyleValue, Editing]

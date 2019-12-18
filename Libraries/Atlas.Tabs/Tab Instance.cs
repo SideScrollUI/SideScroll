@@ -88,7 +88,7 @@ namespace Atlas.Tabs
 		private string LoadedPath => "Loaded/" + tabModel.ObjectTypePath;
 
 		// Reload to initial state
-		private bool isLoaded = false;
+		public bool isLoaded = false;
 		public bool loadCalled = false; // Used by the view
 
 		public TabInstance()
@@ -319,7 +319,6 @@ namespace Atlas.Tabs
 			if (this is ITabAsync tabAsync)
 			{
 				Task.Run(() => tabAsync.LoadAsync(taskInstance.call)).GetAwaiter().GetResult();
-
 			}
 			if (CanLoad)
 			{

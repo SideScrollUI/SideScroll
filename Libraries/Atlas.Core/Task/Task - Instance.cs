@@ -154,6 +154,12 @@ namespace Atlas.Core
 				Errored = true;
 				ShowTask = true;
 			}
+			else if (call.log.Type == LogEntry.LogType.Warn)
+			{
+				if (!Errored)
+					Status = call.log.Type.ToString();
+				ShowTask = true;
+			}
 			else if (Task == null || TaskStatus == TaskStatus.RanToCompletion)
 			{
 				Status = "Complete";

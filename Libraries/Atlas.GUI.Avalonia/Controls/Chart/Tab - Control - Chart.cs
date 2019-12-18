@@ -1,26 +1,24 @@
-﻿using Atlas.Core;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Reflection;
+using Atlas.Core;
+using Atlas.Extensions;
 using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Reflection;
-
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.Avalonia;
-using Avalonia.Input;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
 	public class TabControlChart : UserControl //, IDisposable
 	{
-		//private string name;
 		private TabInstance tabInstance;
 		//public ChartSettings ChartSettings { get; set; }
 		public ListGroup ListGroup { get; set; }
@@ -33,19 +31,12 @@ namespace Atlas.GUI.Avalonia.Controls
 		public string[] Labels { get; set; }
 		public Func<double, string> YFormatter { get; set; }
 
-		// try to change might be lower or higher than the rendering interval
-		private const int UpdateInterval = 20;
-
-		//private bool disposed;
-		//private readonly Timer timer;
-		//private int numberOfSeries;
-
-		//private TabControlDataGrid tabControlDataGrid;
 		public PlotModel plotModel;
 		public PlotView plotView;
 		private PropertyInfo xAxisPropertyInfo;
 		private TabControlChartLegend legend;
 		private OxyPlot.Axes.LinearAxis valueAxis;
+		public OxyPlot.Axes.DateTimeAxis dateTimeAxis;
 
 		private static OxyColor GridLineColor = OxyColor.Parse("#333333");
 		public static OxyColor[] Colors { get; set; } = new OxyColor[] {
@@ -72,7 +63,6 @@ namespace Atlas.GUI.Avalonia.Controls
 		}
 
 		//public event EventHandler<EventArgs> OnSelectionChanged;
-		//private bool autoSelectNew = true;
 
 		public TabControlChart(TabInstance tabInstance, ListGroup listGroup)
 		{
@@ -80,7 +70,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.ListGroup = listGroup;
 
 			InitializeControls();
-			//DataContext = new TestNode().Children;
 		}
 
 		public override string ToString()
@@ -103,43 +92,10 @@ namespace Atlas.GUI.Avalonia.Controls
 			base.OnMeasureInvalidated();
 		}
 
-		///public class LabelControl
-		//{
-			/*TextBlock labelTitle = new TextBlock()
-			{
-				Text = ToString(),
-				Background = new SolidColorBrush(Theme.TitleBackgroundColor),
-				Foreground = new SolidColorBrush(Theme.TitleForegroundColor),
-				FontSize = 14,
-				//Margin = new Thickness(2), // Shows as black, Need Padding so Border not needed
-				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
-				//VerticalAlignment = VerticalAlignment.Auto, // doesn't exist
-				//Height = 24,
-			};
-			//this.Children.Add(labelTitle);
-
-			Border borderTitle = new Border()
-			{
-				//BorderThickness = new Thickness(10),
-				BorderThickness = new Thickness(5, 2, 2, 2),
-				//Background = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor),
-				//Background = new SolidColorBrush(Colors.Crimson),
-				BorderBrush = new SolidColorBrush(Theme.TitleBackgroundColor),
-				[Grid.RowProperty] = 0,
-				[Grid.ColumnSpanProperty] = 2,
-			};
-			borderTitle.Child = labelTitle;*/
-		//}
-
-		// don't want to reload this because 
 		private void InitializeControls()
 		{
-			//this.Background = new SolidColorBrush(Theme.BackgroundColor);
 			this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
 			this.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
-			//this.Width = 1000;
-			//this.Height = 1000;
-			//this.Children.Add(border);
 			//this.Orientation = Orientation.Vertical;
 			MinHeight = 200;
 			MaxWidth = 1000;
@@ -149,19 +105,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			// autogenerate columns
 			if (tabInstance.tabViewSettings.ChartDataSettings.Count == 0)
 				tabInstance.tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
-			//tabDataGrid = new TabDataGrid(tabInstance, ChartSettings.ListSeries, true, tabInstance.tabViewSettings.ChartDataSettings);
-			//tabControlDataGrid = new TabControlDataGrid(tabInstance, ListGroup.ListSeries, true, tabInstance.tabViewSettings.ChartDataSettings[0]);
-			//Grid.SetRow(tabDataGrid, 1);
-
-			//tabDataGrid.AddButtonColumn("<>", nameof(TaskInstance.Cancel));
-
-			//tabDataGrid.AutoLoad = tabModel.AutoLoad;
-			//tabControlDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;
-			//tabDataGrid.Width = 1000;
-			//tabDataGrid.Height = 1000;
-			//tabDataGrid.Initialize();
-			//bool addSplitter = false;
-			//tabParentControls.AddControl(tabDataGrid, true, false);
 			
 			plotView = new PlotView()
 			{
@@ -169,7 +112,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
 
 				Background = Brushes.Transparent,
-				//Foreground = Brushes.LightGray,
 				BorderBrush = Brushes.LightGray,
 				IsMouseWheelEnabled = false,
 				DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
@@ -203,9 +145,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
 				Background = new SolidColorBrush(Theme.BackgroundColor), // grid lines look bad when hovering
 			};
-			//containerGrid.Children.Add(borderTitle);
 
-			//containerGrid.Children.Add(tabControlDataGrid);
 			containerGrid.Children.Add(plotView);
 
 			legend = new TabControlChartLegend(plotView, ListGroup.Horizontal);
@@ -216,7 +156,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			containerGrid.Children.Add(legend);
 			legend.OnSelectionChanged += Legend_OnSelectionChanged;
 
-			//this.watch.Start();
 			this.Content = containerGrid;
 
 			this.Focusable = true;
@@ -304,7 +243,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public OxyPlot.Axes.DateTimeAxis AddDateTimeAxis(DateTime? startTime = null, DateTime? endTime = null)
 		{
-			var dateTimeAxis = new OxyPlot.Axes.DateTimeAxis
+			dateTimeAxis = new OxyPlot.Axes.DateTimeAxis
 			{
 				Position = AxisPosition.Bottom,
 				//MinorIntervalType = DateTimeIntervalType.Days,
@@ -504,16 +443,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			if (xAxisPropertyInfo != null && xAxisPropertyInfo.PropertyType == typeof(DateTime))
 			{
 				AddDateTimeAxis(ListGroup.StartTime, ListGroup.EndTime);
-				//plotModel.Axes.Add(new OxyPlot.Axes.DateTimeAxis { Position = AxisPosition.Bottom });
 			}
 			else
 			{
 				AddLinearAccess();
 			}
 			AddValueAxis();
-			{
-				//plotModel.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = AxisPosition.Left });
-			}
 		}
 
 		private void UnloadModel()
@@ -541,7 +476,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				MinimumSegmentLength = 2,
 				MarkerSize = 3,
 				//MarkerType = MarkerType.Circle,
-				MarkerType = listSeries.iList.Count < 100 ? MarkerType.Circle : MarkerType.None,
+				MarkerType = listSeries.iList.Count < 20 ? MarkerType.Circle : MarkerType.None,
 				//DataFieldX = listSeries.xPropertyName,
 				//DataFieldY = listSeries.yPropertyName,
 				//ItemsSource = listSeries.iList,
@@ -557,6 +492,20 @@ namespace Atlas.GUI.Avalonia.Controls
 			else*/
 			{
 				AddPoints(listSeries, listSeries.iList, lineSeries);
+			}
+			// use circle markers if there's a single point all alone, otherwise it won't display
+			bool prevNan1 = false;
+			bool prevNan2 = false;
+			foreach (DataPoint dataPoint in lineSeries.Points)
+			{
+				bool nan = double.IsNaN(dataPoint.Y);
+				if (prevNan2 && !prevNan1 && nan)
+				{
+					lineSeries.MarkerType = MarkerType.Circle;
+					break;
+				}
+				prevNan2 = prevNan1;
+				prevNan1 = nan;
 			}
 
 			plotModel.Series.Add(lineSeries);
@@ -576,16 +525,19 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void AddPoints(ListSeries listSeries, IList iList, OxyPlot.Series.LineSeries lineSeries)
 		{
-			if (iList.Count == 0)
-				return;
-
 			if (listSeries.yPropertyInfo != null)
 			{
 				// faster than using ItemSource?
-				foreach (PropertyInfo propertyInfo in iList[0].GetType().GetProperties())
+				if (listSeries.xPropertyInfo != null)
+					xAxisPropertyInfo = listSeries.xPropertyInfo;
+				if (xAxisPropertyInfo == null)
 				{
-					if (propertyInfo.GetCustomAttribute<XAxisAttribute>() != null)
-						xAxisPropertyInfo = propertyInfo;
+					Type elementType = iList.GetType().GetElementTypeForAll();
+					foreach (PropertyInfo propertyInfo in elementType.GetProperties())
+					{
+						if (propertyInfo.GetCustomAttribute<XAxisAttribute>() != null)
+							xAxisPropertyInfo = propertyInfo;
+					}
 				}
 				foreach (object obj in iList)
 				{
@@ -623,7 +575,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void SeriesChanged(ListSeries listSeries, IList iList, OxyPlot.Series.LineSeries lineSeries)
 		{
-			lock (this.plotModel.SyncRoot)
+			lock (plotModel.SyncRoot)
 			{
 				//this.Update();
 				AddPoints(listSeries, iList, lineSeries);
@@ -631,6 +583,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			Dispatcher.UIThread.InvokeAsync(() => this.plotModel.InvalidatePlot(true), DispatcherPriority.Background);
 		}
+
 		/*private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			lock (this.plotModel.SyncRoot)

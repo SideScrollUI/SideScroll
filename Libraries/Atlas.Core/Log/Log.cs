@@ -275,7 +275,7 @@ namespace Atlas.Core
 		public void AddLogEntry(LogEntry logEntry)
 		{
 			logEntry.rootLog = rootLog;
-			context.Post(new SendOrPostCallback(this.AddEntryCallback), logEntry);
+			context.Post(new SendOrPostCallback(AddEntryCallback), logEntry);
 		}
 
 		// Thread safe callback, only works if the context is the same

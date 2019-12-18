@@ -565,8 +565,10 @@ namespace Atlas.GUI.Avalonia.View
 				IsIndeterminate = true,
 				MinWidth = 100,
 				MinHeight = 100,
+				MaxWidth = 200,
 				Foreground = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
 				Background = new SolidColorBrush(Theme.BackgroundColor),
+				HorizontalAlignment = HorizontalAlignment.Left,
 			};
 
 			this.Children.Add(progressBar);
@@ -995,7 +997,8 @@ namespace Atlas.GUI.Avalonia.View
 
 		private void TabInstance_OnReload(object sender, EventArgs e)
 		{
-			tabInstance.Reintialize(true);
+			tabInstance.isLoaded = false;
+			//tabInstance.Reintialize(true);
 			Load();
 		}
 
