@@ -181,7 +181,7 @@ namespace Atlas.Serialize
 				//	continue;
 
 				TypeRepo typeRepo;
-				if (propertySchema.typeIndex >= 0)
+				if (propertySchema.typeIndex >= 0 || propertySchema.propertyInfo == null)
 				{
 					typeRepo = serializer.typeRepos[propertySchema.typeIndex];
 					if (typeRepo.type != propertySchema.nonNullableType)

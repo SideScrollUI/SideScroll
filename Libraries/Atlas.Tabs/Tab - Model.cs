@@ -107,10 +107,8 @@ namespace Atlas.Tabs
 			if (type.Assembly.ManifestModule.ScopeName == "Lazy")
 				type = type.BaseType; // Use original type for lazy loaded serializer wrapper classes, so properties appear in the same MetadataToken order
 
-			if (obj is IList)
+			if (obj is IList iList)
 			{
-				IList iList = (IList)obj;
-
 				Type elementType = type.GetElementTypeForAll();
 				if (elementType != null)
 				{

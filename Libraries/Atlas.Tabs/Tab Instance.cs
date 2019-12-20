@@ -341,6 +341,7 @@ namespace Atlas.Tabs
 		public void Reload()
 		{
 			isLoaded = false;
+			loadCalled = false;
 			if (OnReload != null)
 			{
 				if (this is ITabAsync tabAsync)

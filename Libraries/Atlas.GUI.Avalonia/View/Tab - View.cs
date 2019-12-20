@@ -507,8 +507,7 @@ namespace Atlas.GUI.Avalonia.View
 			{
 				Text = text,
 				Foreground = new SolidColorBrush(Colors.White),
-				Background = new SolidColorBrush(Theme.BackgroundColor),
-				//BorderBrush = new SolidColorBrush(Colors.Black),
+				Background = Brushes.Transparent,
 				BorderThickness = new Thickness(0),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				IsReadOnly = true,
@@ -537,6 +536,11 @@ namespace Atlas.GUI.Avalonia.View
 			tabParentControls.AddControl(tabBookmarks, false, SeparatorType.Splitter);
 		}
 
+		public void Invalidate()
+		{
+			tabInstance.loadCalled = false;
+		}
+
 		public void Load()
 		{
 			if (tabInstance.loadCalled)
@@ -551,6 +555,8 @@ namespace Atlas.GUI.Avalonia.View
 			else
 			{
 				LoadSettings();
+
+				tabInstance.Reintialize(false);
 
 				ReloadControls();
 			}
@@ -997,7 +1003,6 @@ namespace Atlas.GUI.Avalonia.View
 
 		private void TabInstance_OnReload(object sender, EventArgs e)
 		{
-			tabInstance.isLoaded = false;
 			//tabInstance.Reintialize(true);
 			Load();
 		}

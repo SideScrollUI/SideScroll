@@ -20,7 +20,7 @@ namespace Atlas.Tabs.Test.Actions
 				tabModel.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Parameters", new TabParamsDataGrid()),
-					new ListItem("Async Sleep", new TabTestLoadAsync()),
+					new ListItem("Async Load", new TabTestLoadAsync()),
 				};
 
 				tabModel.Actions = new ItemCollection<TaskCreator>()
@@ -30,6 +30,7 @@ namespace Atlas.Tabs.Test.Actions
 					new TaskDelegate("Task Instance Progress", SubTaskInstances, true),
 					new TaskAction("Action", new Action(() => PassParams(1, "abc"))),
 					new TaskDelegateAsync("Long load (Async)", SleepAsync, true),
+					new TaskDelegate("StartAsync error", StartAsyncError),
 				};
 
 				tabModel.Notes = @"
@@ -40,6 +41,16 @@ Actions add Buttons to the tab. When clicked, it will:
 
 * Tasks
 ";
+			}
+
+			private void StartAsyncError(Call call)
+			{
+				StartAsync(StartAsyncLogError, false);
+			}
+
+			private async Task StartAsyncLogError(Call call)
+			{
+				call.log.AddError("This should show the task");
 			}
 
 			private void PassParams(int v1, string v2)

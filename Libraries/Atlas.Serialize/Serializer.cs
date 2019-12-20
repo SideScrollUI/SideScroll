@@ -262,14 +262,21 @@ namespace Atlas.Serialize
 		private void LoadSchemas(Log log, BinaryReader reader)
 		{
 			int count = reader.ReadInt32();
-			for (int i = 0; i < count; i++)
+			try
 			{
-				TypeSchema typeSchema = new TypeSchema(log, reader);
-				typeSchema.typeIndex = i;
-				typeSchemas.Add(typeSchema);
+				for (int i = 0; i < count; i++)
+				{
+					TypeSchema typeSchema = new TypeSchema(log, reader);
+					typeSchema.typeIndex = i;
+					typeSchemas.Add(typeSchema);
 
-				//TypeRepo typeRepo = TypeRepo.Create(this, typeSchema);
-				//AddTypeRepo(typeRepo);
+					//TypeRepo typeRepo = TypeRepo.Create(this, typeSchema);
+					//AddTypeRepo(typeRepo);
+				}
+			}
+			catch (Exception e)
+			{
+				log.AddException(e);
 			}
 
 			foreach (TypeSchema typeSchema in typeSchemas)

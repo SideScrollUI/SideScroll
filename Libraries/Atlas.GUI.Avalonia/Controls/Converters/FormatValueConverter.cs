@@ -56,6 +56,8 @@ namespace Atlas.GUI.Avalonia
 			{
 				if (value is DateTime dateTime)
 					return dateTime.ToUniversalTime().ToString("yyyy-M-d H:mm:ss.FFF");
+				if (value is DateTimeOffset dateTimeOffset)
+					return dateTimeOffset.ToUniversalTime().ToString("yyyy-M-d H:mm:ss.FFF");
 				if (value is TimeSpan timeSpan)
 					return timeSpan.ToString("g");
 				//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above

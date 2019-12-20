@@ -137,7 +137,7 @@ namespace Atlas.Core
 		public void SetFinished()
 		{
 			stopwatch.Stop(); // Both Send and Post adds some delay
-			Creator?.context.Post(new SendOrPostCallback(this.OnFinished), null);
+			Creator?.context.Post(new SendOrPostCallback(OnFinished), null);
 		}
 
 		private void OnFinished(object state)

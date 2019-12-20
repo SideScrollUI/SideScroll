@@ -36,8 +36,14 @@ namespace Atlas.Serialize
 		{
 			this.ownerTypeSchema = typeSchema;
 			Load(reader);
-			if (typeSchema.type != null)
-				propertyInfo = typeSchema.type.GetProperty(propertyName);
+			try
+			{
+				if (typeSchema.type != null)
+					propertyInfo = typeSchema.type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+			}
+			catch (Exception e)
+			{
+			}
 			Serialized = IsSerialized;
 
 			if (propertyInfo != null)
@@ -95,8 +101,13 @@ namespace Atlas.Serialize
 			if (typeIndex >= 0)
 			{
 				TypeSchema typeSchema = typeSchemas[typeIndex];
-				if (propertyInfo != null && typeSchema.type != propertyInfo.PropertyType.GetNonNullableType())
-					Loadable = false;
+				if (propertyInfo != null)
+				{
+					// check if the type has changed
+					Type currentType = propertyInfo.PropertyType.GetNonNullableType();
+					if (typeSchema.type != currentType)
+						Loadable = false;
+				}
 			}
 		}
 	}
