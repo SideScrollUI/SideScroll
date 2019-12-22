@@ -78,7 +78,6 @@ namespace Atlas.GUI.Avalonia.View
 
 			if (!(tabInstance is ITabAsync))
 			{
-				LoadSettings();
 				//this.InitializeControls();
 				//AddListeners();
 
@@ -91,7 +90,6 @@ namespace Atlas.GUI.Avalonia.View
 
 		public void LoadBackground(Call call)
 		{
-			LoadSettings();
 			//this.InitializeControls();
 			//AddListeners();
 
@@ -554,8 +552,6 @@ namespace Atlas.GUI.Avalonia.View
 			}
 			else
 			{
-				LoadSettings();
-
 				tabInstance.Reintialize(false);
 
 				ReloadControls();
@@ -565,6 +561,8 @@ namespace Atlas.GUI.Avalonia.View
 
 		public void ShowLoading()
 		{
+			ClearControls();
+
 			// This will get cleared when the view reloads
 			var progressBar = new ProgressBar()
 			{
@@ -577,7 +575,7 @@ namespace Atlas.GUI.Avalonia.View
 				HorizontalAlignment = HorizontalAlignment.Left,
 			};
 
-			this.Children.Add(progressBar);
+			Children.Add(progressBar);
 		}
 
 		public void LoadSettings()

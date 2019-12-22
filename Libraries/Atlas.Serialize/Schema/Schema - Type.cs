@@ -35,6 +35,7 @@ namespace Atlas.Serialize
 		public Type type; // might be null
 		public Type nonNullableType; // might be null
 		public bool isPrimitive;
+		public bool hasConstructor = true;
 
 		public bool isStatic;
 		public bool hasSubType;
@@ -230,6 +231,7 @@ namespace Atlas.Serialize
 			}
 		}
 
+		// todo: this isn't getting called for types not serialized
 		public void Validate(List<TypeSchema> typeSchemas)
 		{
 			foreach (FieldSchema fieldSchema in FieldSchemas)
@@ -240,6 +242,10 @@ namespace Atlas.Serialize
 			{
 				propertySchema.Validate(typeSchemas);
 			}
+			//ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
+			ConstructorInfo constructorInfo = type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
+			var constructors = type.GetConstructors();
+			hasConstructor = (constructorInfo != null || constructors.Length == 0);
 		}
 	}
 }

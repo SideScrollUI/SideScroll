@@ -128,11 +128,13 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				if (series.Title == null)
 					continue;
-				if (idxLegendItems.Count > 25) // todo: improve this
-					break;
 				TabChartLegendItem legendItem;
 				if (!idxLegendItems.TryGetValue(series.Title, out legendItem))
+				{
+					if (idxLegendItems.Count > 25) // todo: improve this
+						continue;
 					legendItem = AddSeries(series);
+				}
 				if (Horizontal)
 					Grid.SetColumn(legendItem, column++);
 				else

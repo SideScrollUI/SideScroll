@@ -7,8 +7,19 @@ using System.Reflection;
 
 namespace Atlas.Serialize
 {
+	// not used yet
 	public class TypeRepoCollection : TypeRepo
 	{
+		/*public class Creator : IRepoCreator
+		{
+			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			{
+				if (CanAssign(typeSchema.type))
+					return new TypeRepoCollection(serializer, typeSchema);
+				return null;
+			}
+		}*/
+
 		private TypeRepo listTypeRepo;
 		private MethodInfo addMethod;
 		private Type elementType;
@@ -27,7 +38,7 @@ namespace Atlas.Serialize
 		public override void InitializeLoading(Log log)
 		{
 			if (elementType != null)
-				listTypeRepo = serializer.GetOrCreateRepo(elementType);
+				listTypeRepo = serializer.GetOrCreateRepo(log, elementType);
 		}
 
 		public override void AddChildObjects(object obj)

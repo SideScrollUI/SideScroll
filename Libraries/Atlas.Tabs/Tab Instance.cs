@@ -333,6 +333,7 @@ namespace Atlas.Tabs
 				}
 				isLoaded = true;
 			}
+			LoadSettings(); // Load() initializes the tabModel.Object which gets used for the settings path
 
 			// Have return tabModel?
 		}
@@ -567,7 +568,6 @@ namespace Atlas.Tabs
 				tabViewSettings = project.DataApp.Load<TabViewSettings>(CustomPath, taskInstance.call);
 				if (tabViewSettings != null)
 					return tabViewSettings;
-				return new TabViewSettings();
 			}
 
 			Type type = GetType();

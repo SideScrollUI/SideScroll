@@ -4,22 +4,23 @@ using System.IO;
 
 namespace Atlas.Serialize
 {
-	public class TypeRepoEnum : TypeRepo, IDisposable
+	public class TypeRepoDateTimeOffset : TypeRepo, IDisposable
 	{
 		public class Creator : IRepoCreator
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
 				if (CanAssign(typeSchema.type))
-					return new TypeRepoEnum(serializer, typeSchema);
+					return new TypeRepoDateTimeOffset(serializer, typeSchema);
 				return null;
 			}
 		}
 
-		public TypeRepoEnum(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoDateTimeOffset(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{
 		}
+
 
 		public override void InitializeLoading(Log log)
 		{
@@ -30,7 +31,7 @@ namespace Atlas.Serialize
 
 		public static bool CanAssign(Type type)
 		{
-			return type.IsEnum;
+			return type == typeof(DateTimeOffset);
 		}
 
 		public override void AddChildObjects(object obj)
@@ -39,16 +40,19 @@ namespace Atlas.Serialize
 
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
-			writer.Write((int)obj);
+			DateTime dateTime = ((DateTimeOffset)obj).DateTime;
+			writer.Write(dateTime.Ticks);
+			writer.Write((byte)dateTime.Kind);
 		}
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
-			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(typeSchema.type, value);
-			byteOffset += sizeof(int);
-			objects[objectIndex] = obj;
-			return obj;
+			long value = BitConverter.ToInt64(bytes, byteOffset);
+			DateTime dateTime = new DateTime(value);
+			byteOffset += sizeof(long);
+			DateTimeOffset offset = new DateTimeOffset(dateTime);
+			objects[objectIndex] = offset;
+			return offset;
 		}
 
 		protected override object CreateObject(int objectIndex)
@@ -59,10 +63,18 @@ namespace Atlas.Serialize
 			object obj = null;
 			try
 			{
-				if (type.IsEnum)
-					obj = Enum.ToObject(typeSchema.type, reader.ReadInt32());
+				if (CanAssign(type))
+				{
+					long ticks = reader.ReadInt64();
+					int kindValue = reader.ReadByte();
+					//Enum.ToObject(typeof(DateTimeKind), kindValue);
+					DateTime dateTime = new DateTime(ticks, (DateTimeKind)kindValue);
+					obj = new DateTimeOffset(dateTime);
+				}
 				else
+				{
 					throw new Exception("Unhandled primitive type");
+				}
 			}
 			catch (Exception)
 			{
@@ -86,19 +98,18 @@ namespace Atlas.Serialize
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
 		{
-			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(typeSchema.type, value);
-			byteOffset += sizeof(int);
-			return obj;
+			long value = BitConverter.ToInt64(bytes, byteOffset);
+			DateTime dateTime = new DateTime(value);
+			byteOffset += sizeof(long);
+			DateTimeOffset offset = new DateTimeOffset(dateTime);
+			//objects[objectIndex] = offset;
+			return offset;
 		}
 
+		// not called, it's a struct and a value
 		public override void Clone(object source, object dest)
 		{
-			// assigning won't do anything since it's not a ref
-			throw new Exception("Not cloneable");
+			//dest = new DateTime(((DateTime)source).Ticks, ((DateTime)source).Kind);
 		}
 	}
 }
-/*
-
-*/

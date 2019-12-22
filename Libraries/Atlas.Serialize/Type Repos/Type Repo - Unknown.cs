@@ -6,6 +6,26 @@ namespace Atlas.Serialize
 {
 	public class TypeRepoUnknown : TypeRepo
 	{
+		public class Creator : IRepoCreator
+		{
+			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			{
+				if (typeSchema.type == null)
+					return new TypeRepoUnknown(serializer, typeSchema);
+				return null;
+			}
+		}
+		
+		public class NoConstructorCreator : IRepoCreator
+		{
+			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			{
+				if (!typeSchema.hasConstructor)
+					return new TypeRepoUnknown(serializer, typeSchema);
+				return null;
+			}
+		}
+
 		public TypeRepoUnknown(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{

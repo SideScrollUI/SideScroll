@@ -238,7 +238,8 @@ namespace Atlas.Extensions // rename to Core?
 				propertyInfo.SetValue(obj, newValue);
 			}
 
-			FieldInfo[] fieldInfos = type.GetFields();
+			// todo:
+			//FieldInfo[] fieldInfos = type.GetFields();
 		}
 
 		public static List<PropertyInfo> GetVisibleProperties(this Type type)
@@ -322,6 +323,12 @@ namespace Atlas.Extensions // rename to Core?
 		public static DateTime Trim(this DateTime date, long ticks)
 		{
 			return new DateTime(date.Ticks - (date.Ticks % ticks), date.Kind);
+		}
+
+		public static DateTimeOffset Trim(this DateTimeOffset dateTimeOffset, long ticks)
+		{
+			DateTime dateTime = dateTimeOffset.DateTime;
+			return new DateTimeOffset(dateTime.Trim(ticks));
 		}
 
 		/*public static bool IsAction(object obj)

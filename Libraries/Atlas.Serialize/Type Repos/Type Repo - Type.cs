@@ -6,6 +6,16 @@ namespace Atlas.Serialize
 {
 	public class TypeRepoType : TypeRepo, IDisposable
 	{
+		public class Creator : IRepoCreator
+		{
+			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			{
+				if (typeof(Type).IsAssignableFrom(typeSchema.type))
+					return new TypeRepoType(serializer, typeSchema);
+				return null;
+			}
+		}
+
 		public TypeRepoType(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{

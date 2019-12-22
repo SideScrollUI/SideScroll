@@ -4,19 +4,19 @@ using System.IO;
 
 namespace Atlas.Serialize
 {
-	public class TypeRepoEnum : TypeRepo, IDisposable
+	public class TypeRepoTimeSpan : TypeRepo, IDisposable
 	{
 		public class Creator : IRepoCreator
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
 				if (CanAssign(typeSchema.type))
-					return new TypeRepoEnum(serializer, typeSchema);
+					return new TypeRepoTimeSpan(serializer, typeSchema);
 				return null;
 			}
 		}
 
-		public TypeRepoEnum(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{
 		}
@@ -30,7 +30,7 @@ namespace Atlas.Serialize
 
 		public static bool CanAssign(Type type)
 		{
-			return type.IsEnum;
+			return type == typeof(TimeSpan);
 		}
 
 		public override void AddChildObjects(object obj)
@@ -39,16 +39,17 @@ namespace Atlas.Serialize
 
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
-			writer.Write((int)obj);
+			TimeSpan timeSpan = (TimeSpan)obj;
+			writer.Write(timeSpan.Ticks);
 		}
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
-			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(typeSchema.type, value);
-			byteOffset += sizeof(int);
-			objects[objectIndex] = obj;
-			return obj;
+			long ticks = BitConverter.ToInt64(bytes, byteOffset);
+			TimeSpan timeSpan = new TimeSpan(ticks);
+			byteOffset += sizeof(long);
+			objects[objectIndex] = timeSpan;
+			return timeSpan;
 		}
 
 		protected override object CreateObject(int objectIndex)
@@ -59,10 +60,15 @@ namespace Atlas.Serialize
 			object obj = null;
 			try
 			{
-				if (type.IsEnum)
-					obj = Enum.ToObject(typeSchema.type, reader.ReadInt32());
+				if (CanAssign(type))
+				{
+					long ticks = reader.ReadInt64();
+					obj = new TimeSpan(ticks);
+				}
 				else
+				{
 					throw new Exception("Unhandled primitive type");
+				}
 			}
 			catch (Exception)
 			{
@@ -92,13 +98,10 @@ namespace Atlas.Serialize
 			return obj;
 		}
 
+		// not called, it's a struct and a value
 		public override void Clone(object source, object dest)
 		{
-			// assigning won't do anything since it's not a ref
-			throw new Exception("Not cloneable");
+			//dest = new DateTime(((DateTime)source).Ticks, ((DateTime)source).Kind);
 		}
 	}
 }
-/*
-
-*/

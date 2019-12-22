@@ -7,6 +7,16 @@ namespace Atlas.Serialize
 {
 	public class TypeRepoArray : TypeRepo
 	{
+		public class Creator : IRepoCreator
+		{
+			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			{
+				if (CanAssign(typeSchema.type))
+					return new TypeRepoArray(serializer, typeSchema);
+				return null;
+			}
+		}
+
 		private TypeRepo listTypeRepo;
 		private int[] sizes;
 		private Type elementType;
@@ -24,7 +34,7 @@ namespace Atlas.Serialize
 
 		public override void InitializeLoading(Log log)
 		{
-			listTypeRepo = serializer.GetOrCreateRepo(elementType);
+			listTypeRepo = serializer.GetOrCreateRepo(log, elementType);
 		}
 
 		public override void SaveCustomHeader(BinaryWriter writer)

@@ -7,6 +7,16 @@ namespace Atlas.Serialize
 {
 	public class TypeRepoPrimitive : TypeRepo, IDisposable
 	{
+		public class Creator : IRepoCreator
+		{
+			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			{
+				if (CanAssign(typeSchema.type))
+					return new TypeRepoPrimitive(serializer, typeSchema);
+				return null;
+			}
+		}
+
 		public TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{

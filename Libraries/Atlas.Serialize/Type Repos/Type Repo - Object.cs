@@ -9,6 +9,14 @@ namespace Atlas.Serialize
 {
 	public class TypeRepoObject : TypeRepo
 	{
+		public class Creator : IRepoCreator
+		{
+			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			{
+				return new TypeRepoObject(serializer, typeSchema);
+			}
+		}
+
 		public List<FieldRepo> fieldRepos = new List<FieldRepo>();
 		public List<PropertyRepo> propertyRepos = new List<PropertyRepo>();
 
@@ -55,6 +63,11 @@ namespace Atlas.Serialize
 			{
 				this.propertySchema = propertySchema;
 				this.typeRepo = typeRepo;
+			}
+
+			public override string ToString()
+			{
+				return propertySchema.ToString() + " (" + typeRepo.ToString() + ")";
 			}
 
 			// Load serialized data into object
@@ -161,7 +174,7 @@ namespace Atlas.Serialize
 				else
 				{
 					Type fieldType = fieldSchema.fieldInfo.FieldType.GetNonNullableType();
-					typeRepo = serializer.GetOrCreateRepo(fieldType);
+					typeRepo = serializer.GetOrCreateRepo(log, fieldType);
 				}
 				fieldSchema.typeSchema = typeRepo.typeSchema;
 				//TypeRepo typeRepo = serializer.typeRepos[fieldSchema.typeIndex];
@@ -196,7 +209,7 @@ namespace Atlas.Serialize
 				{
 					// Base Type might not have been serialized
 					Type propertyType = propertySchema.propertyInfo.PropertyType.GetNonNullableType();
-					typeRepo = serializer.GetOrCreateRepo(propertyType);
+					typeRepo = serializer.GetOrCreateRepo(log, propertyType);
 				}
 				propertySchema.propertyTypeSchema = typeRepo.typeSchema;
 				if (typeRepo != null)

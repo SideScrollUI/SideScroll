@@ -168,7 +168,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public string GetDateTimeFormat(double duration)
 		{
-			if (duration < 60)
+			if (duration <= 60)
 				return "H:mm:ss";
 			if (duration < 60 * 60)
 				return "H:mm";
@@ -481,7 +481,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//DataFieldY = listSeries.yPropertyName,
 				//ItemsSource = listSeries.iList,
 				//DataFieldY = 
-				TrackerFormatString = "{0}\nTime: {2:yyyy-M-d H:mm:ss.FFF}\nValue: {4}",
+				TrackerFormatString = "{0}\nTime: {2:yyyy-M-d H:mm:ss.FFF}\nValue: {4:#,0.###}",
 			};
 			// can't add gaps with these so convert to DataPoint ourselves?
 			/*if (listSeries.xPropertyName != null)

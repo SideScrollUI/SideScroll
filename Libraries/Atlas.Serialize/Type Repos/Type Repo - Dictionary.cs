@@ -9,6 +9,16 @@ namespace Atlas.Serialize
 {
 	public class TypeRepoDictionary : TypeRepo
 	{
+		public class Creator : IRepoCreator
+		{
+			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			{
+				if (CanAssign(typeSchema.type))
+					return new TypeRepoDictionary(serializer, typeSchema);
+				return null;
+			}
+		}
+
 		private Type typeKey;
 		private Type typeValue;
 		private TypeRepo list1TypeRepo;
@@ -37,9 +47,9 @@ namespace Atlas.Serialize
 		{
 			// these base types might not be serialized
 			if (typeKey != null)
-				list1TypeRepo = serializer.GetOrCreateRepo(typeKey);
+				list1TypeRepo = serializer.GetOrCreateRepo(log, typeKey);
 			if (typeValue != null)
-				list2TypeRepo = serializer.GetOrCreateRepo(typeValue);
+				list2TypeRepo = serializer.GetOrCreateRepo(log, typeValue);
 		}
 
 		public override void AddChildObjects(object obj)

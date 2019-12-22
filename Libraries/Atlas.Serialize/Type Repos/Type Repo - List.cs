@@ -8,6 +8,16 @@ namespace Atlas.Serialize
 {
 	public class TypeRepoList : TypeRepo
 	{
+		public class Creator : IRepoCreator
+		{
+			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			{
+				if (CanAssign(typeSchema.type))
+					return new TypeRepoList(serializer, typeSchema);
+				return null;
+			}
+		}
+
 		private TypeRepo listTypeRepo;
 		private PropertyInfo propertyInfoCapacity;
 		private Type elementType;
@@ -28,7 +38,7 @@ namespace Atlas.Serialize
 		public override void InitializeLoading(Log log)
 		{
 			if (elementType != null)
-				listTypeRepo = serializer.GetOrCreateRepo(elementType);
+				listTypeRepo = serializer.GetOrCreateRepo(log, elementType);
 			
 			propertyInfoCapacity = type.GetProperty("Capacity");
 		}

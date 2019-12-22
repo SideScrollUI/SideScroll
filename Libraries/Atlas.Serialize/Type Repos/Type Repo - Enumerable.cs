@@ -10,6 +10,16 @@ namespace Atlas.Serialize
 {
 	public class TypeRepoEnumerable : TypeRepo
 	{
+		public class Creator : IRepoCreator
+		{
+			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			{
+				if (CanAssign(typeSchema.type))
+					return new TypeRepoEnumerable(serializer, typeSchema);
+				return null;
+			}
+		}
+
 		private Type elementType;
 		private TypeRepo listTypeRepo;
 		private MethodInfo addMethod;
@@ -33,7 +43,7 @@ namespace Atlas.Serialize
 		public override void InitializeLoading(Log log)
 		{
 			if (elementType != null)
-				listTypeRepo = serializer.GetOrCreateRepo(elementType);
+				listTypeRepo = serializer.GetOrCreateRepo(log, elementType);
 		}
 
 		public override void AddChildObjects(object obj)

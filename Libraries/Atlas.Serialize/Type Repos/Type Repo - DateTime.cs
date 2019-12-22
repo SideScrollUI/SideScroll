@@ -6,6 +6,16 @@ namespace Atlas.Serialize
 {
 	public class TypeRepoDateTime : TypeRepo, IDisposable
 	{
+		public class Creator : IRepoCreator
+		{
+			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			{
+				if (CanAssign(typeSchema.type))
+					return new TypeRepoDateTime(serializer, typeSchema);
+				return null;
+			}
+		}
+
 		public TypeRepoDateTime(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{

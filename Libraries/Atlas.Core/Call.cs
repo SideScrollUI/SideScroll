@@ -10,6 +10,7 @@ namespace Atlas.Core
 		public Log log;
 
 		public Call ParentCall { get; set; }
+		[NonSerialized]
 		public TaskInstance taskInstance; // Shows the Task Status and let's you stop them
 		
 		protected Call()
@@ -98,7 +99,8 @@ namespace Atlas.Core
 
 		private void UpdateDuration()
 		{
-			log.Duration = stopwatch.ElapsedMilliseconds / 1000.0f;
+			if (log != null)
+				log.Duration = stopwatch.ElapsedMilliseconds / 1000.0f;
 		}
 
 		public void Dispose()

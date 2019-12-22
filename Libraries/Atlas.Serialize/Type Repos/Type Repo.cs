@@ -12,6 +12,25 @@ namespace Atlas.Serialize
 	// Represents all the object references for each unique type
 	public abstract class TypeRepo : IDisposable
 	{
+		public static List<IRepoCreator> RepoCreators { get; set; } = new List<IRepoCreator>()
+		{
+			new TypeRepoUnknown.Creator(),
+			new TypeRepoPrimitive.Creator(),
+			new TypeRepoEnum.Creator(),
+			new TypeRepoString.Creator(),
+			new TypeRepoDateTime.Creator(),
+			new TypeRepoDateTimeOffset.Creator(),
+			new TypeRepoTimeSpan.Creator(),
+			new TypeRepoType.Creator(),
+			new TypeRepoArrayBytes.Creator(),
+			new TypeRepoArray.Creator(),
+			new TypeRepoList.Creator(),
+			new TypeRepoDictionary.Creator(),
+			new TypeRepoEnumerable.Creator(),
+			//new TypeRepoUnknown.NoConstructorCreator(),
+			//new TypeRepoObject.Creator(),
+		};
+
 		public Serializer serializer;
 		public TypeSchema typeSchema;
 		public Type type; // might be null after loading
@@ -60,62 +79,45 @@ namespace Atlas.Serialize
 			return typeSchema.Name;
 		}
 
-		public static TypeRepo Create(Serializer serializer, TypeSchema typeSchema)
+		public static TypeRepo Create(Log log, Serializer serializer, TypeSchema typeSchema)
 		{
 			if (serializer.whitelistOnly && typeSchema.type != null && !typeSchema.Whitelisted)
 				throw new Exception("Type " + typeSchema.Name + " is not whitelisted");
-			Type type = typeSchema.type;
-			TypeRepo typeRepo = null;
+			//Type type = typeSchema.type;
+			TypeRepo typeRepo;
 
-			// can't declare
-			if (type == null)
+			foreach (var creator in RepoCreators)
+			{
+				typeRepo = creator.TryCreateRepo(serializer, typeSchema);
+				if (typeRepo != null)
+				{
+					typeRepo.reader = serializer.reader;
+					return typeRepo;
+				}
+			}
+			if (!typeSchema.hasConstructor)
 			{
 				typeRepo = new TypeRepoUnknown(serializer, typeSchema);
+				log.AddWarning("Type has no constructor", new Tag(typeSchema));
 			}
+			else
+			{
+				typeRepo = new TypeRepoObject(serializer, typeSchema);
+			}
+			typeRepo.reader = serializer.reader;
+			return typeRepo;
+
+			// todo: add TypoRepoRef class?
+			// can't declare
+			/*if (type == null)
+			{
+				log.AddWarning("Missing type", new Tag(typeSchema));
+				typeRepo = new TypeRepoUnknown(serializer, typeSchema);
+			}*/
 			/*else if (type.IsInterface || type.IsAbstract)
 			{
 
 			}*/
-			else if (TypeRepoPrimitive.CanAssign(type))
-			{
-				typeRepo = new TypeRepoPrimitive(serializer, typeSchema);
-			}
-			else if (TypeRepoEnum.CanAssign(type))
-			{
-				typeRepo = new TypeRepoEnum(serializer, typeSchema);
-			}
-			else if (type == typeof(string))
-			{
-				typeRepo = new TypeRepoString(serializer, typeSchema);
-			}
-			else if (TypeRepoDateTime.CanAssign(type))
-			{
-				typeRepo = new TypeRepoDateTime(serializer, typeSchema);
-			}
-			else if (typeof(Type).IsAssignableFrom(type))
-			{
-				typeRepo = new TypeRepoType(serializer, typeSchema);
-			}
-			else if (TypeRepoArrayBytes.CanAssign(type))
-			{
-				typeRepo = new TypeRepoArrayBytes(serializer, typeSchema);
-			}
-			else if (TypeRepoArray.CanAssign(type))
-			{
-				typeRepo = new TypeRepoArray(serializer, typeSchema);
-			}
-			else if (TypeRepoList.CanAssign(type))
-			{
-				typeRepo = new TypeRepoList(serializer, typeSchema);
-			}
-			else if (TypeRepoDictionary.CanAssign(type))
-			{
-				typeRepo = new TypeRepoDictionary(serializer, typeSchema);
-			}
-			else if (TypeRepoEnumerable.CanAssign(type))
-			{
-				typeRepo = new TypeRepoEnumerable(serializer, typeSchema);
-			}
 			/*else if (type is ISerializable)
 			{
 				typeRepo =  new TypeSerializable(typeSchema);
@@ -137,12 +139,6 @@ namespace Atlas.Serialize
 			{
 				typeRepo =  new TypeCollection(typeSchema);
 			}*/
-			else
-			{
-				typeRepo = new TypeRepoObject(serializer, typeSchema);
-			}
-			typeRepo.reader = serializer.reader;
-			return typeRepo;
 		}
 
 		/*public virtual void CreateObjects()

@@ -125,7 +125,7 @@ namespace Atlas.Serialize
 		}
 
 		// todo: only add types that are used
-		private void AddObjectMemberTypes()
+		private void AddObjectMemberTypes(Log log)
 		{
 			int count = typeSchemas.Count;
 			for (int i = 0; i < count; i++)
@@ -134,13 +134,13 @@ namespace Atlas.Serialize
 				foreach (FieldSchema fieldSchema in typeSchema.FieldSchemas)
 				{
 					Type type = fieldSchema.nonNullableType;
-					fieldSchema.typeSchema = GetOrCreateRepo(type).typeSchema;
+					fieldSchema.typeSchema = GetOrCreateRepo(log, type).typeSchema;
 					fieldSchema.typeIndex = fieldSchema.typeSchema.typeIndex;
 				}
 				foreach (PropertySchema propertySchema in typeSchema.PropertySchemas)
 				{
 					Type type = propertySchema.nonNullableType;
-					propertySchema.propertyTypeSchema = GetOrCreateRepo(type).typeSchema;
+					propertySchema.propertyTypeSchema = GetOrCreateRepo(log, type).typeSchema;
 					propertySchema.typeIndex = propertySchema.propertyTypeSchema.typeIndex;
 				}
 			}
@@ -172,7 +172,7 @@ namespace Atlas.Serialize
 		{
 			using (CallTimer callSaving = call.Timer("Saving to disk"))
 			{
-				AddObjectMemberTypes();
+				AddObjectMemberTypes(callSaving.log);
 				//UpdateTypeSchemaDerived();
 				header.Save(writer);
 				long schemaPosition = writer.BaseStream.Position;
@@ -283,7 +283,7 @@ namespace Atlas.Serialize
 			{
 				typeSchema.Validate(typeSchemas);
 
-				TypeRepo typeRepo = TypeRepo.Create(this, typeSchema);
+				TypeRepo typeRepo = TypeRepo.Create(log, this, typeSchema);
 				AddTypeRepo(typeRepo);
 			}
 		}
@@ -412,7 +412,7 @@ namespace Atlas.Serialize
 		}
 
 		// Adds TypeSchema and TypeRepo if required
-		public TypeRepo GetOrCreateRepo(Type type)
+		public TypeRepo GetOrCreateRepo(Log log, Type type)
 		{
 			TypeRepo typeRepo;
 			if (idxTypeToRepo.TryGetValue(type, out typeRepo))
@@ -425,7 +425,7 @@ namespace Atlas.Serialize
 			typeSchema.typeIndex = typeSchemas.Count;
 			typeSchemas.Add(typeSchema);
 
-			typeRepo = TypeRepo.Create(this, typeSchema);
+			typeRepo = TypeRepo.Create(log ?? new Log(), this, typeSchema);
 			AddTypeRepo(typeRepo);
 			return typeRepo;
 		}
@@ -442,7 +442,7 @@ namespace Atlas.Serialize
 		{
 			if (obj != null)
 			{
-				TypeRepo typeRepo = GetOrCreateRepo(obj.GetType());
+				TypeRepo typeRepo = GetOrCreateRepo(null, obj.GetType());
 				int objectIndex = typeRepo.GetOrAddObjectRef(obj);
 			}
 		}
@@ -509,7 +509,7 @@ namespace Atlas.Serialize
 		{
 			using (CallTimer callTimer = call.Timer("Parsing object", new Tag("Object", obj.ToString())))
 			{
-				TypeRepo typeRepo = GetOrCreateRepo(obj.GetType());
+				TypeRepo typeRepo = GetOrCreateRepo(callTimer.log, obj.GetType());
 				int objectIndex = typeRepo.GetOrAddObjectRef(obj);
 				//parserQueue.Enqueue(obj);
 				if (objectIndex < 0)
@@ -541,7 +541,8 @@ namespace Atlas.Serialize
 			object clone;
 			if (clones.TryGetValue(obj, out clone))
 				return clone;
-			TypeRepo typeRepo = GetOrCreateRepo(type);
+			Log log = new Log();
+			TypeRepo typeRepo = GetOrCreateRepo(log, type);
 			if (typeRepo is TypeRepoPrimitive || typeRepo is TypeRepoString || typeRepo is TypeRepoEnum || typeRepo is TypeRepoType)// || typeRepo.typeSchema.isStatic)
 			{
 				clones[obj] = obj; // optional
