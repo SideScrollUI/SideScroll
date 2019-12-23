@@ -9,19 +9,18 @@ namespace Atlas.Serialize.Test
 	[NUnit.Framework.Category("SerializeItemCollection")]
 	public class TestItemCollection : TestSerializeBase
 	{
-		private SerializerFile serializerFile;
+		private SerializerMemory serializer;
 
 		[OneTimeSetUp]
 		public void BaseSetup()
 		{
 			Initialize("SerializeItemCollection");
+		}
 
-			string basePath = Paths.Combine(TestPath, "Serialize");
-
-			Directory.CreateDirectory(basePath);
-
-			string filePath = Paths.Combine(basePath, "Data.atlas");
-			serializerFile = new SerializerFile(filePath);
+		[SetUp]
+		public void Setup()
+		{
+			serializer = new SerializerMemory();
 		}
 
 		[Test, NUnit.Framework.Description("Serialize ItemCollection")]
@@ -29,8 +28,8 @@ namespace Atlas.Serialize.Test
 		{
 			TestBindingList input = new TestBindingList();
 
-			serializerFile.Save(call, input);
-			TestBindingList output = serializerFile.Load<TestBindingList>(call);
+			serializer.Save(call, input);
+			TestBindingList output = serializer.Load<TestBindingList>(call);
 
 			//Assert.AreEqual(output.uintTest, input.uintTest);
 		}

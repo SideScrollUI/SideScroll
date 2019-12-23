@@ -40,9 +40,8 @@ namespace Atlas.Serialize
 
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
-			DateTime dateTime = ((DateTimeOffset)obj).DateTime;
+			DateTime dateTime = ((DateTimeOffset)obj).UtcDateTime;
 			writer.Write(dateTime.Ticks);
-			writer.Write((byte)dateTime.Kind);
 		}
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
@@ -66,9 +65,7 @@ namespace Atlas.Serialize
 				if (CanAssign(type))
 				{
 					long ticks = reader.ReadInt64();
-					int kindValue = reader.ReadByte();
-					//Enum.ToObject(typeof(DateTimeKind), kindValue);
-					DateTime dateTime = new DateTime(ticks, (DateTimeKind)kindValue);
+					DateTime dateTime = new DateTime(ticks, DateTimeKind.Utc);
 					obj = new DateTimeOffset(dateTime);
 				}
 				else
@@ -99,7 +96,7 @@ namespace Atlas.Serialize
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
 		{
 			long value = BitConverter.ToInt64(bytes, byteOffset);
-			DateTime dateTime = new DateTime(value);
+			DateTime dateTime = new DateTime(value, DateTimeKind.Utc);
 			byteOffset += sizeof(long);
 			DateTimeOffset offset = new DateTimeOffset(dateTime);
 			//objects[objectIndex] = offset;

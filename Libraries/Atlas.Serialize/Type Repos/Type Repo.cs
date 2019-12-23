@@ -12,6 +12,7 @@ namespace Atlas.Serialize
 	// Represents all the object references for each unique type
 	public abstract class TypeRepo : IDisposable
 	{
+		// Should we switch this to List<Type> instead?
 		public static List<IRepoCreator> RepoCreators { get; set; } = new List<IRepoCreator>()
 		{
 			new TypeRepoUnknown.Creator(),

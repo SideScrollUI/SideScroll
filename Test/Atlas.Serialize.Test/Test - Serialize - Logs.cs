@@ -10,7 +10,7 @@ namespace Atlas.Serialize.Test
 	[Category("Serialize")]
 	public class SerializeLogs : TestSerializeBase
 	{
-		private SerializerFile serializer;
+		private SerializerMemory serializer;
 		private Log log;
 		
 		[OneTimeSetUp]
@@ -18,13 +18,12 @@ namespace Atlas.Serialize.Test
 		{
 			Initialize("Serialize");
 			log = call.log;
+		}
 
-			string basePath = Paths.Combine(TestPath, "Serialize");
-
-			Directory.CreateDirectory(basePath);
-
-			string filePath = Paths.Combine(basePath, "Data.atlas");
-			serializer = new SerializerFile(filePath);
+		[SetUp]
+		public void Setup()
+		{
+			serializer = new SerializerMemory();
 		}
 
 		class TestLog

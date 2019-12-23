@@ -98,7 +98,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
 			//this.Orientation = Orientation.Vertical;
 			MinHeight = 200;
-			MaxWidth = 1000;
+			MaxWidth = 1500;
 			MaxHeight = 1000;
 			MinWidth = 150;
 

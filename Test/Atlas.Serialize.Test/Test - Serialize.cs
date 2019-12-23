@@ -11,7 +11,7 @@ namespace Atlas.Serialize.Test
 	[Category("Serialize")]
 	public class SerializeTypes : TestSerializeBase
 	{
-		private SerializerFile serializer;
+		private SerializerMemory serializer;
 		private Log log;
 		
 		[OneTimeSetUp]
@@ -19,13 +19,12 @@ namespace Atlas.Serialize.Test
 		{
 			Initialize("Serialize");
 			log = call.log;
+		}
 
-			string basePath = Paths.Combine(TestPath, "Serialize");
-
-			Directory.CreateDirectory(basePath);
-
-			string filePath = Paths.Combine(basePath, "Data.atlas");
-			serializer = new SerializerFile(filePath);
+		[SetUp]
+		public void Setup()
+		{
+			serializer = new SerializerMemory();
 		}
 
 		[Test, Description("Serialize Primitives")]
@@ -178,6 +177,32 @@ namespace Atlas.Serialize.Test
 
 			serializer.Save(call, input);
 			DateTime output = serializer.Load<DateTime>(call);
+
+			Assert.AreEqual(input, output);
+		}
+
+		// DateTimeOffset has no set operators and relies on constructor
+		[Test, Description("Serialize DateTimeOffset Local")]
+		public void SerializeDateTimeOffsetLocal()
+		{
+			DateTime dateTime = DateTime.Now;
+			DateTimeOffset input = new DateTimeOffset(dateTime);
+
+			serializer.Save(call, input);
+			DateTimeOffset output = serializer.Load<DateTimeOffset>(call);
+
+			Assert.AreEqual(input, output);
+		}
+
+		// DateTimeOffset has no set operators and relies on constructor
+		[Test, Description("Serialize DateTimeOffset UTC")]
+		public void SerializeDateTimeOffsetUtc()
+		{
+			DateTime dateTime = DateTime.UtcNow;
+			DateTimeOffset input = new DateTimeOffset(dateTime);
+
+			serializer.Save(call, input);
+			DateTimeOffset output = serializer.Load<DateTimeOffset>(call);
 
 			Assert.AreEqual(input, output);
 		}

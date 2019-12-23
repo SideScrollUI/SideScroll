@@ -327,7 +327,7 @@ namespace Atlas.Extensions // rename to Core?
 
 		public static DateTimeOffset Trim(this DateTimeOffset dateTimeOffset, long ticks)
 		{
-			DateTime dateTime = dateTimeOffset.DateTime;
+			DateTime dateTime = dateTimeOffset.UtcDateTime;
 			return new DateTimeOffset(dateTime.Trim(ticks));
 		}
 
