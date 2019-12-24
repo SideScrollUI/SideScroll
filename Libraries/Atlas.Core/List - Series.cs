@@ -35,6 +35,8 @@ namespace Atlas.Core
 		public string yPropertyName;
 		//public object obj;
 
+		public bool IsStacked { get; set; }
+
 		public ListSeries(string name, IList iList)
 		{
 			Name = name;

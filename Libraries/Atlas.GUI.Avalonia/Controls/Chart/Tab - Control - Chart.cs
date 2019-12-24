@@ -35,7 +35,8 @@ namespace Atlas.GUI.Avalonia.Controls
 		public PlotView plotView;
 		private PropertyInfo xAxisPropertyInfo;
 		private TabControlChartLegend legend;
-		private OxyPlot.Axes.LinearAxis valueAxis;
+		private OxyPlot.Axes.LinearAxis valueAxis; // left/right?
+		private OxyPlot.Axes.CategoryAxis categoryAxis;
 		public OxyPlot.Axes.DateTimeAxis dateTimeAxis;
 
 		private static OxyColor GridLineColor = OxyColor.Parse("#333333");
@@ -176,7 +177,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				return "H:mm";
 			if (duration < 3 * 24 * 60 * 60)
 				return "M/d H:mm";
-			if (duration < 30 * 24 * 60 * 60)
+			if (duration < 6 * 30 * 24 * 60 * 60)
 				return "M/d";
 
 			return "yyyy-M-d";
@@ -241,6 +242,22 @@ namespace Atlas.GUI.Avalonia.Controls
 			UnloadModel();
 		}
 
+		private void AddAxis()
+		{
+			if (xAxisPropertyInfo != null && xAxisPropertyInfo.PropertyType == typeof(DateTime))
+			{
+				AddDateTimeAxis(ListGroup.StartTime, ListGroup.EndTime);
+			}
+			else
+			{
+				AddLinearAxis();
+			}
+			if (ListGroup.ListSeries.Count > 0 && ListGroup.ListSeries[0].IsStacked)
+				AddCategoryAxis();
+			else
+				AddLinearAxis();
+		}
+
 		public OxyPlot.Axes.DateTimeAxis AddDateTimeAxis(DateTime? startTime = null, DateTime? endTime = null)
 		{
 			dateTimeAxis = new OxyPlot.Axes.DateTimeAxis
@@ -279,7 +296,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			return dateTimeAxis;
 		}
 
-		private void AddLinearAccess()
+		private void AddLinearAxis()
 		{
 			var linearAxis = new OxyPlot.Axes.LinearAxis
 			{
@@ -324,8 +341,47 @@ namespace Atlas.GUI.Avalonia.Controls
 			return valueAxis;
 		}
 
+		public OxyPlot.Axes.CategoryAxis AddCategoryAxis(AxisPosition axisPosition = AxisPosition.Left, string key = null)
+		{
+			categoryAxis = new OxyPlot.Axes.CategoryAxis
+			{
+				Position = axisPosition,
+				IntervalLength = 20,
+				MajorGridlineStyle = LineStyle.Solid,
+				MajorGridlineColor = GridLineColor,
+				MinorGridlineStyle = LineStyle.None,
+				MinorTickSize = 0,
+				MinorStep = 20,
+				MinimumMinorStep = 10,
+				IsAxisVisible = true,
+				AxislineColor = GridLineColor,
+				AxislineStyle = LineStyle.Solid,
+				AxislineThickness = 2,
+				TickStyle = TickStyle.Outside,
+				TicklineColor = GridLineColor,
+				//MajorTickSize = 2,
+				MinorGridlineColor = OxyColors.Gray,
+				TitleColor = OxyColors.LightGray,
+				TextColor = OxyColors.LightGray,
+				LabelFormatter = ValueFormatter,
+			};
+			if (key != null)
+				categoryAxis.Key = key;
+
+			foreach (ListSeries listSeries in ListGroup.ListSeries)
+			{
+				categoryAxis.Labels.Add(listSeries.Name);
+			}
+
+			plotModel.Axes.Add(categoryAxis);
+			return categoryAxis;
+		}
+
 		private void UpdateValueAxis() // OxyPlot.Axes.LinearAxis valueAxis, string axisKey = null
 		{
+			if (valueAxis == null)
+				return;
+
 			double minimum = double.MaxValue;
 			double maximum = double.MinValue;
 
@@ -438,19 +494,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 		}
 
-		private void AddAxis()
-		{
-			if (xAxisPropertyInfo != null && xAxisPropertyInfo.PropertyType == typeof(DateTime))
-			{
-				AddDateTimeAxis(ListGroup.StartTime, ListGroup.EndTime);
-			}
-			else
-			{
-				AddLinearAccess();
-			}
-			AddValueAxis();
-		}
-
 		private void UnloadModel()
 		{
 			//if (plotModel != null)
@@ -462,8 +505,38 @@ namespace Atlas.GUI.Avalonia.Controls
 				//	iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
 			}*/
 		}
+		public void AddSeries(ListSeries listSeries)
+		{
+			if (listSeries.IsStacked)
+				AddBarSeries(listSeries);
+			else
+				AddListSeries(listSeries);
+		}
 
-		private void AddSeries(ListSeries listSeries)
+		private void AddBarSeries(ListSeries listSeries)
+		{
+			var barSeries = new OxyPlot.Series.BarSeries
+			{
+				Title = listSeries.Name,
+				StrokeThickness = 2,
+				FillColor = GetColor(plotModel.Series.Count),
+				TextColor = OxyColors.Black,
+				IsStacked = listSeries.IsStacked,
+				TrackerFormatString = "{0}\nTime: {2:yyyy-M-d H:mm:ss.FFF}\nValue: {4:#,0.###}",
+			};
+			var dataPoints = GetDataPoints(listSeries, listSeries.iList);
+			foreach (DataPoint dataPoint in dataPoints)
+			{
+				barSeries.Items.Add(new BarItem(dataPoint.X, (int)dataPoint.Y));
+			}
+
+			plotModel.Series.Add(barSeries);
+
+			/*ListToTabSeries[listSeries.iList] = listSeries;
+			ListToTabIndex[listSeries.iList] = ListToTabIndex.Count;*/
+		}
+
+		public OxyPlot.Series.LineSeries AddListSeries(ListSeries listSeries)
 		{
 			var lineSeries = new OxyPlot.Series.LineSeries
 			{
@@ -477,36 +550,15 @@ namespace Atlas.GUI.Avalonia.Controls
 				MarkerSize = 3,
 				//MarkerType = MarkerType.Circle,
 				MarkerType = listSeries.iList.Count < 20 ? MarkerType.Circle : MarkerType.None,
-				//DataFieldX = listSeries.xPropertyName,
-				//DataFieldY = listSeries.yPropertyName,
-				//ItemsSource = listSeries.iList,
-				//DataFieldY = 
 				TrackerFormatString = "{0}\nTime: {2:yyyy-M-d H:mm:ss.FFF}\nValue: {4:#,0.###}",
 			};
-			// can't add gaps with these so convert to DataPoint ourselves?
-			/*if (listSeries.xPropertyName != null)
-			{
-				lineSeries.ItemsSource = listSeries.iList;
-				xAxisPropertyInfo = listSeries.xPropertyInfo;
-			}
-			else*/
-			{
-				AddPoints(listSeries, listSeries.iList, lineSeries);
-			}
-			// use circle markers if there's a single point all alone, otherwise it won't display
-			bool prevNan1 = false;
-			bool prevNan2 = false;
-			foreach (DataPoint dataPoint in lineSeries.Points)
-			{
-				bool nan = double.IsNaN(dataPoint.Y);
-				if (prevNan2 && !prevNan1 && nan)
-				{
-					lineSeries.MarkerType = MarkerType.Circle;
-					break;
-				}
-				prevNan2 = prevNan1;
-				prevNan1 = nan;
-			}
+			// can't add gaps with ItemSource so convert to DataPoint ourselves
+			var dataPoints = GetDataPoints(listSeries, listSeries.iList);
+			lineSeries.Points.AddRange(dataPoints);
+
+			// use circle markers if there's a single point all alone, otherwise it won't show
+			if (HasSinglePoint(lineSeries))
+				lineSeries.MarkerType = MarkerType.Circle;
 
 			plotModel.Series.Add(lineSeries);
 
@@ -521,10 +573,28 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			ListToTabSeries[listSeries.iList] = listSeries;
 			ListToTabIndex[listSeries.iList] = ListToTabIndex.Count;
+			return lineSeries;
 		}
 
-		private void AddPoints(ListSeries listSeries, IList iList, OxyPlot.Series.LineSeries lineSeries)
+		private bool HasSinglePoint(OxyPlot.Series.LineSeries lineSeries)
 		{
+			bool prevNan1 = false;
+			bool prevNan2 = false;
+			foreach (DataPoint dataPoint in lineSeries.Points)
+			{
+				bool nan = double.IsNaN(dataPoint.Y);
+				if (prevNan2 && !prevNan1 && nan)
+					return true;
+				
+				prevNan2 = prevNan1;
+				prevNan1 = nan;
+			}
+			return false;
+		}
+
+		private List<DataPoint> GetDataPoints(ListSeries listSeries, IList iList)
+		{
+			var dataPoints = new List<DataPoint>();
 			if (listSeries.yPropertyInfo != null)
 			{
 				// faster than using ItemSource?
@@ -542,7 +612,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				foreach (object obj in iList)
 				{
 					object value = listSeries.yPropertyInfo.GetValue(obj);
-					double x = lineSeries.Points.Count;
+					double x = dataPoints.Count;
 					if (xAxisPropertyInfo != null)
 					{
 						object xObj = xAxisPropertyInfo.GetValue(obj);
@@ -555,16 +625,17 @@ namespace Atlas.GUI.Avalonia.Controls
 							x = (dynamic)xObj;
 						}
 					}
-					lineSeries.Points.Add(new DataPoint(x, (dynamic)value));
+					dataPoints.Add(new DataPoint(x, (dynamic)value));
 				}
 			}
 			else
 			{
 				foreach (object obj in iList)
 				{
-					lineSeries.Points.Add(new DataPoint(lineSeries.Points.Count, (dynamic)obj));
+					dataPoints.Add(new DataPoint(dataPoints.Count, (dynamic)obj));
 				}
 			}
+			return dataPoints;
 		}
 
 		private void TabData_OnSelectionChanged(object sender, EventArgs e)
@@ -578,7 +649,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			lock (plotModel.SyncRoot)
 			{
 				//this.Update();
-				AddPoints(listSeries, iList, lineSeries);
+				var dataPoints = GetDataPoints(listSeries, iList);
+				lineSeries.Points.AddRange(dataPoints);
 			}
 
 			Dispatcher.UIThread.InvokeAsync(() => this.plotModel.InvalidatePlot(true), DispatcherPriority.Background);
