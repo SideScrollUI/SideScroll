@@ -27,12 +27,16 @@ namespace Atlas.Tabs
 
 		}
 
+		// todo: this needs to be reworked when a use is found
 		public void AddList(string label, IList iList)
 		{
 			ListSeries listSeries = new ListSeries(label, iList);
 
+			//ListGroup listGroup;
+			//if (ListGroups.TryGetValue(label, out listGroup)
+
 			ListGroup listGroup = DefaultListGroup;
-			listGroup.Name = label ?? listGroup.Name;
+			listGroup.Name = label ?? listGroup.Name; 
 			// Will add to Default Group if no Unit specified, and add the Default Group if needed
 			ListGroups.Add(listGroup.Name, listGroup);
 			listGroup.ListSeries.Add(listSeries);

@@ -14,7 +14,6 @@ namespace Atlas.Tabs.Test.Chart
 		{
 			//private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 			private List<ItemCollection<int>> series = new List<ItemCollection<int>>();
-			//private ItemCollection<double> samples = new ItemCollection<ChartSample>();
 			private Random random = new Random();
 			private bool ChartInitialized = false;
 
@@ -67,8 +66,6 @@ namespace Atlas.Tabs.Test.Chart
 
 			private void AddSample(int i)
 			{
-				//series.Add(random.Next(1050, 1095));
-
 				int multiplier = 1;
 				foreach (var list in series)
 				{

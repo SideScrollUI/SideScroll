@@ -255,7 +255,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			if (ListGroup.ListSeries.Count > 0 && ListGroup.ListSeries[0].IsStacked)
 				AddCategoryAxis();
 			else
-				AddLinearAxis();
+				AddValueAxis();
 		}
 
 		public OxyPlot.Axes.DateTimeAxis AddDateTimeAxis(DateTime? startTime = null, DateTime? endTime = null)

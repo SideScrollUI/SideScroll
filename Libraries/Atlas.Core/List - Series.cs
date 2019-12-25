@@ -20,6 +20,11 @@ namespace Atlas.Core
 			StartTime = startTime;
 			EndTime = endTime;
 		}
+
+		public override string ToString()
+		{
+			return Name;
+		}
 	}
 
 	public class ListSeries
