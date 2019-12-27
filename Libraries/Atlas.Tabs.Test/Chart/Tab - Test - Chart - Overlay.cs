@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Atlas.Core;
+using Atlas.Extensions;
 
 namespace Atlas.Tabs.Test.Chart
 {
@@ -17,6 +18,7 @@ namespace Atlas.Tabs.Test.Chart
 			private ItemCollection<ChartSample> samples = new ItemCollection<ChartSample>();
 			private Random random = new Random();
 			private bool ChartInitialized = false;
+			private DateTime baseDateTime = DateTime.Now.Trim(TimeSpan.FromMinutes(1));
 
 			public class TestItem
 			{
@@ -77,7 +79,6 @@ namespace Atlas.Tabs.Test.Chart
 				}
 			}
 
-			private DateTime baseDateTime = DateTime.Now;
 			private void AddSample(int i)
 			{
 				//series.Add(random.Next(1050, 1095));

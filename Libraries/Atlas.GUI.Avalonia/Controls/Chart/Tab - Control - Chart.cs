@@ -35,7 +35,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		public PlotView plotView;
 		private PropertyInfo xAxisPropertyInfo;
 		private TabControlChartLegend legend;
-		private OxyPlot.Axes.LinearAxis valueAxis; // left/right?
+		public OxyPlot.Axes.LinearAxis valueAxis; // left/right?
 		private OxyPlot.Axes.CategoryAxis categoryAxis;
 		public OxyPlot.Axes.DateTimeAxis dateTimeAxis;
 
@@ -98,7 +98,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
 			this.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
 			//this.Orientation = Orientation.Vertical;
-			MinHeight = 200;
+			MinHeight = 150;
 			MaxWidth = 1500;
 			MaxHeight = 1000;
 			MinWidth = 150;
@@ -291,6 +291,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				dateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(startTime.Value);
 				dateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value);
 				dateTimeAxis.StringFormat = GetDateTimeFormat(duration);
+				double widthPerLabel = 6 * dateTimeAxis.StringFormat.Length + 25;
+				dateTimeAxis.IntervalLength = Math.Max(50, widthPerLabel);
 			}
 			plotModel.Axes.Add(dateTimeAxis);
 			return dateTimeAxis;
@@ -316,13 +318,14 @@ namespace Atlas.GUI.Avalonia.Controls
 			valueAxis = new OxyPlot.Axes.LinearAxis
 			{
 				Position = axisPosition,
-				IntervalLength = 20,
 				MajorGridlineStyle = LineStyle.Solid,
 				MajorGridlineColor = GridLineColor,
 				MinorGridlineStyle = LineStyle.None,
+				IntervalLength = 25,
+				//MinorStep = 20,
+				//MajorStep = 10,
+				//MinimumMinorStep = 20,
 				MinorTickSize = 0,
-				MinorStep = 20,
-				MinimumMinorStep = 10,
 				IsAxisVisible = true,
 				AxislineColor = GridLineColor,
 				AxislineStyle = LineStyle.Solid,
