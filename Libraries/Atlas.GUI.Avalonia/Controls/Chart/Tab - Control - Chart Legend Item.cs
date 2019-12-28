@@ -45,6 +45,8 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public IEnumerable ItemsSource { get; internal set; }
 
+		public List<DataPoint> Points { get; internal set; }
+
 		public TabChartLegendItem(TabControlChartLegend legend, OxyPlot.Series.Series series)
 		{
 			this.legend = legend;
@@ -193,7 +195,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.series = lineSeries;
 			if (IsChecked == true)
 			{
-				lineSeries.ItemsSource = lineSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
+				if (Points != null)
+				{
+					lineSeries.Points.Clear();
+					lineSeries.Points.AddRange(Points);
+				}
+				//lineSeries.ItemsSource = lineSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
 				//ItemsSource = null;
 				lineSeries.LineStyle = LineStyle.Solid;
 				lineSeries.MarkerType = markerType;
@@ -201,8 +208,15 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 			else
 			{
-				ItemsSource = lineSeries.ItemsSource ?? ItemsSource;
-				lineSeries.ItemsSource = null;
+				if (lineSeries.Points.Count > 0)
+				{
+					Points = new List<DataPoint>();
+					Points.AddRange(lineSeries.Points);
+				}
+				lineSeries.Points.Clear();
+				//lineSeries.Points = new List<DataPoint>();
+				//ItemsSource = lineSeries.ItemsSource ?? ItemsSource;
+				//lineSeries.ItemsSource = null;
 				lineSeries.LineStyle = LineStyle.None;
 				lineSeries.MarkerType = MarkerType.None;
 				lineSeries.Selectable = false;

@@ -473,19 +473,19 @@ namespace Atlas.GUI.Avalonia.Controls
 			double ad = Math.Abs(d);
 			if (ad >= 1E12)
 			{
-				return string.Format("{0}T", d / 1E12);
+				return string.Format("{0} T", d / 1E12);
 			}
 			else if (ad >= 1E9)
 			{
-				return string.Format("{0}G", d / 1E9);
+				return string.Format("{0} G", d / 1E9);
 			}
 			else if (ad >= 1E6)
 			{
-				return string.Format("{0}M", d / 1E6);
+				return string.Format("{0} M", d / 1E6);
 			}
 			else if (ad >= 1E3)
 			{
-				return string.Format("{0}K", d / 1E3);
+				return string.Format("{0} K", d / 1E3);
 			}
 			else if (ad < 1E3)
 			{
