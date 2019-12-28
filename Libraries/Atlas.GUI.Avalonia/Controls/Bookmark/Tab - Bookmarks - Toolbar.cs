@@ -24,7 +24,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			buttonAdd = AddButton("Add", Icons.Streams.Add);
 			//buttonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
 			buttonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
-			buttonImport = AddButton("Import from Clipboard", Icons.Streams.Import);
+			buttonImport = AddButton("Import Link from Clipboard", Icons.Streams.Import);
 
 			//buttonSearch = AddButton("Search", Icons.Streams.Search);
 			//AddSeparator();

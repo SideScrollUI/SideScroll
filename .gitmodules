@@ -3,4 +3,4 @@
 	url = https://github.com/AvaloniaUI/AvaloniaEdit
 [submodule "Imports/AvaloniaUI/OxyPlot.Avalonia"]
 	path = Imports/AvaloniaUI/OxyPlot.Avalonia
-	url = https://github.com/AvaloniaUI/oxyplot-avalonia.git
+	url = https://github.com/garyhertel/oxyplot-avalonia.git

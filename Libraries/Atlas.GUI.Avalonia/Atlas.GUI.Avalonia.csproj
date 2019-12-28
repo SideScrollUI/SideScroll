@@ -43,9 +43,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.8.0" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.8.0" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.8.0" />
+    <PackageReference Include="Avalonia" Version="0.9.1" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.9.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Imports\AvaloniaUI\AvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj" />

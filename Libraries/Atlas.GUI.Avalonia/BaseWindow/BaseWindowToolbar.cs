@@ -106,7 +106,7 @@ namespace Atlas.GUI.Avalonia
 		{
 			AddSeparator();
 			buttonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
-			buttonImport = AddButton("Import from Clipboard", Icons.Streams.Import);
+			buttonImport = AddButton("Import Link from Clipboard", Icons.Streams.Import);
 		}
 
 		private bool CommandBackCanExecute(object obj)

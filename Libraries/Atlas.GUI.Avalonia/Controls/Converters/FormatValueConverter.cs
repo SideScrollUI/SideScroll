@@ -11,9 +11,11 @@ namespace Atlas.GUI.Avalonia
 		// add a map to store original mappings?
 		//public Dictionary<object, object> { get; set; }
 		public bool ConvertBackEnabled { get; set; } = true;
+		private object originalValue;
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
+			originalValue = value;
 			if (value == null)
 				return null;
 
@@ -25,10 +27,12 @@ namespace Atlas.GUI.Avalonia
 			return result;
 		}
 
+		// The DataGrid triggers this even if the binding is one way
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
+			return originalValue;
 			// once a string, keep it as a string for copying to the DataGrid ClipBoard
-			return value;
+			//return value;
 			/*if (value == null)
 				return null;
 

@@ -36,13 +36,13 @@ namespace Atlas.Start.Avalonia
 		public static AppBuilder BuildAvaloniaApp(string[] args)
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
-				.UseDataGrid()
-				.BeforeStarting(_ => OxyPlotModule.Initialize())
 				.With(new Win32PlatformOptions
 				{
 					UseDeferredRendering = false,
 					AllowEglInitialization = true,
 				})
+				//.UseDataGrid()
+				//.BeforeStarting(_ => OxyPlotModule.Initialize())
 				.LogToDebug();
 	}
 }

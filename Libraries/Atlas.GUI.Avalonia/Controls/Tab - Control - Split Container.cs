@@ -33,7 +33,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		public class Item
 		{
 			public object Object { get; set; }
-			public AvaloniaObject Control { get; set; }
+			public Control Control { get; set; }
 			public bool fill { get; set; }
 		}
 
@@ -67,7 +67,8 @@ namespace Atlas.GUI.Avalonia.Controls
 		// can't override DesiredSize
 		protected override Size MeasureCore(Size availableSize)
 		{
-			availableSize = new Size(Math.Min(MaxDesiredWidth, availableSize.Width), availableSize.Height);
+			if (MaxDesiredWidth != double.MaxValue)
+				availableSize = new Size(Math.Min(MaxDesiredWidth, availableSize.Width), availableSize.Height);
 			Size measured = base.MeasureCore(availableSize);
 			Size maxSize = new Size(Math.Min(MaxDesiredWidth, measured.Width), measured.Height);
 			return maxSize;

@@ -43,7 +43,7 @@ namespace Atlas.GUI.Avalonia
 				var args = new KeyEventArgs()
 				{
 					Key = key.Key,
-					Modifiers = key.Modifiers,
+					KeyModifiers = key.KeyModifiers,
 					RoutedEvent = TextBox.KeyDownEvent,
 				};
 

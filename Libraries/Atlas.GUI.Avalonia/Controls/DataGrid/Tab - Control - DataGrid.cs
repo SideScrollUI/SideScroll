@@ -128,8 +128,9 @@ namespace Atlas.GUI.Avalonia.Controls
 				Parent.InvalidateMeasure();
 		}*/
 
+		// this breaks when content is too wide for Tab
 		// real DesiredSize doesn't work because of HorizontalAlign = Stretch?
-		public new Size DesiredSize
+		/*public new Size DesiredSize
 		{
 			get
 			{
@@ -142,7 +143,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				}
 				return desiredSize;
 			}
-		}
+		}*/
 
 		public double GetTotalColumnWidths()
 		{
@@ -521,25 +522,28 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
 		{
 			DataGridRow row = e.Row;
-
-			//if (dataGridCell.Column is DataGridCheckBoxColumn)
-			//	return;
-			//unselectOnRelease = false;
 			if (e.PointerPressedEventArgs.MouseButton == MouseButton.Left && row != null && dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
 			{
 				if (dataGrid.SelectedItems.Contains(row.DataContext))
 				{
-					//unselectOnRelease = true;
-
 					// need both of these
-					dataGrid.SelectedItems.Clear();
+					/*dataGrid.SelectedItems.Clear();
 					dataGrid.SelectedItem = null;
 
 					// parent function doesn't check Handled, but does check MouseButton = MouseButton.Left
+					// MouseButton is ReadOnly now so this hack doesn't work anymore
 					e.PointerPressedEventArgs.Handled = true;
-					e.PointerPressedEventArgs.MouseButton = MouseButton.None; 
+					e.PointerPressedEventArgs.MouseButton = MouseButton.None; */
+
+					Dispatcher.UIThread.Post(ClearSelection, DispatcherPriority.Background);
 				}
 			}
+		}
+
+		private void ClearSelection()
+		{
+			dataGrid.SelectedItems.Clear();
+			dataGrid.SelectedItem = null;
 		}
 
 		// happens too late to deselect
@@ -636,7 +640,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			bool propertyEditable = (propertyInfo.GetCustomAttribute(typeof(EditingAttribute)) != null);
 			ColumnMaxWidthAttribute attributeColumnMaxWidth = propertyInfo.GetCustomAttribute<ColumnMaxWidthAttribute>();
-			bool isReadOnly = (tabModel.Editing == false || propertyEditable == false || !propertyInfo.CanWrite);
+			bool isReadOnly = true;// (tabModel.Editing == false || propertyEditable == false || !propertyInfo.CanWrite);
 
 			//DataGridBoundColumn column;
 			/*if (tabModel.Editing == false)

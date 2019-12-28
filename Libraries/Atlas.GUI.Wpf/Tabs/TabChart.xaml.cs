@@ -81,11 +81,11 @@ namespace Atlas.GUI.Wpf
 
 		private void AddItems(LineSeries lineSeries, ListSeries listSeries, IList iList)
 		{
-			if (listSeries.propertyInfo != null)
+			if (listSeries.yPropertyInfo != null)
 			{
 				foreach (object obj in iList)
 				{
-					object value = listSeries.propertyInfo.GetValue(obj);
+					object value = listSeries.yPropertyInfo.GetValue(obj);
 					lineSeries.Values.Add((double)(dynamic)value);
 				}
 			}

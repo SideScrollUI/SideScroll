@@ -3,13 +3,13 @@ using Avalonia.Controls;
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
+using Atlas.GUI.Avalonia.Controls;
 using Atlas.GUI.Avalonia.View;
 using System;
 using System.IO;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Atlas.GUI.Avalonia.Controls;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.Input;
@@ -46,6 +46,7 @@ namespace Atlas.GUI.Avalonia
 			this.AttachDevTools();
 #endif
 			this.Initialized += BaseWindow_Initialized;
+			this.Closed += BaseWindow_Closed;
 		}
 
 		protected override Size MeasureOverride(Size availableSize)
@@ -153,6 +154,13 @@ namespace Atlas.GUI.Avalonia
 			Content = containerGrid;
 
 			this.PositionChanged += BaseWindow_PositionChanged;
+
+			this.GetObservable(ClientSizeProperty).Subscribe(Resize);
+		}
+
+		private void Resize(Size size)
+		{
+			SaveWindowSettings();
 		}
 
 		public void Reload()
@@ -387,7 +395,7 @@ namespace Atlas.GUI.Avalonia
 		// Still saving due to a HandleResized calls after IsActive (loadComplete does nothing)
 		private void SaveWindowSettings()
 		{
-			if (loadComplete && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
+			if (loadComplete)// && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
 				project.DataApp.Save(this.WindowSettings);
 
 			// need a better trigger for when the screen size changes
@@ -395,10 +403,17 @@ namespace Atlas.GUI.Avalonia
 		}
 
 		// Avalonia missing Window move event or override so moving window doesn't update save
-		protected override void HandleResized(Size clientSize)
+		/*protected override void HandleResized(Size clientSize)
 		{
 			base.HandleResized(clientSize);
 			SaveWindowSettings();
+		}*/
+
+		private void BaseWindow_Closed(object sender, EventArgs e)
+		{
+			// todo: split saving position out
+			//project.DataApp.Save(this.WindowSettings);
+			//SaveWindowSettings();
 		}
 
 		protected override void HandleWindowStateChanged(WindowState state)
