@@ -5,15 +5,6 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-
-    <Style>
-        <Style.Resources>
-            <SolidColorBrush x:Key="ThemeControlMidHighBrush">#9e9e9e</SolidColorBrush>
-            <sys:Double x:Key="ScrollBarThickness">18</sys:Double>
-            <sys:Double x:Key="ScrollBarThumbThickness">10</sys:Double>
-        </Style.Resources>
-    </Style>
-
     <Style Selector="dg|DataGridColumnHeader">
       <Setter Property="Foreground" Value="{DynamicResource GridColumnHeaderForegroundBrush}" />
       <Setter Property="HorizontalContentAlignment" Value="Left" />

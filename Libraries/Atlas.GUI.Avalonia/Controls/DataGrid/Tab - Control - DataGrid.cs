@@ -518,7 +518,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			return GetControlRow(control.Parent, depth - 1);
 		}
 
-		private bool unselectOnRelease = false;
+		//private bool unselectOnRelease = false;
 		private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
 		{
 			DataGridRow row = e.Row;
@@ -1027,7 +1027,7 @@ namespace Atlas.GUI.Avalonia.Controls
 						//if (collectionView.Contains(value))
 							dataGrid.ScrollIntoView(value, dataGrid.CurrentColumn);
 					}
-					catch (Exception e)
+					catch (Exception)
 					{
 						// {System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
 						//Parameter name: index
@@ -1274,7 +1274,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//if (e.Key == Key.F5)
 			//	SelectSavedItems();
 
-			if (e.Modifiers == InputModifiers.Control)
+			if (e.KeyModifiers == KeyModifiers.Control)
 			{
 				if (e.Key == Key.F)
 				{

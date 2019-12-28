@@ -276,7 +276,7 @@ namespace Atlas.Serialize
 			}
 			catch (Exception e)
 			{
-				log.AddException(e);
+				log.Add(e);
 			}
 
 			foreach (TypeSchema typeSchema in typeSchemas)

@@ -12,7 +12,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		private TabInstance tabInstance;
 		private BookmarkParams myParams;
 
-		public event EventHandler<EventArgs> OnSelectionChanged;
+		//public event EventHandler<EventArgs> OnSelectionChanged;
 
 		public TabControlBookmarkParams(TabInstance tabInstance, BookmarkParams myParams)
 		{

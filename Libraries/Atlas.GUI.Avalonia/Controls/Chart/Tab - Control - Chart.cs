@@ -149,7 +149,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			containerGrid.Children.Add(plotView);
 
-			legend = new TabControlChartLegend(plotView, ListGroup.Horizontal);
+			legend = new TabControlChartLegend(this, ListGroup.Horizontal);
 			if (ListGroup.Horizontal)
 				Grid.SetRow(legend, 1);
 			else

@@ -2,6 +2,7 @@
 using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using System;
@@ -14,20 +15,22 @@ using OxyPlot.Avalonia;
 namespace Atlas.GUI.Avalonia.Controls
 {
 	// todo: switch to WrapPanel? Children.Clear() doesn't work? throws exception when re-adding
-	public class TabControlChartLegend : Grid
+	public class TabControlChartLegend : WrapPanel
 	{
+		private TabControlChart tabControlChart;
 		private PlotView plotView;
 		public List<TabChartLegendItem> legendItems = new List<TabChartLegendItem>();
 		public Dictionary<string, TabChartLegendItem> idxLegendItems = new Dictionary<string, TabChartLegendItem>();
 
-		public bool Horizontal { get; set; }
+		public bool IsHorizontal { get; set; }
 
 		public event EventHandler<EventArgs> OnSelectionChanged;
 
-		public TabControlChartLegend(PlotView plotView, bool horizontal)
+		public TabControlChartLegend(TabControlChart tabControlChart, bool horizontal)
 		{
-			this.plotView = plotView;
-			this.Horizontal = horizontal;
+			this.tabControlChart = tabControlChart;
+			this.plotView = tabControlChart.plotView;
+			this.IsHorizontal = horizontal;
 			InitializeControls();
 		}
 
@@ -35,11 +38,8 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left;
 			//this.VerticalAlignment = VerticalAlignment.Stretch;
-			this.ColumnDefinitions = new ColumnDefinitions("Auto");
-			this.RowDefinitions = new RowDefinitions("Auto");
 			this.Margin = new Thickness(6);
-			this.MaxHeight = plotView.MaxHeight;
-			this.MaxWidth = plotView.MaxWidth;
+			this.Orientation = IsHorizontal ? Orientation.Horizontal : Orientation.Vertical;
 
 			RefreshModel();
 		}
@@ -70,14 +70,12 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void AddControl(TabChartLegendItem legendItem)
 		{
-			if (Horizontal)
+			if (IsHorizontal)
 			{
-				ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
 				Grid.SetColumn(legendItem, Children.Count);
 			}
 			else
 			{
-				RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 				Grid.SetRow(legendItem, Children.Count);
 			}
 		}
@@ -135,7 +133,7 @@ namespace Atlas.GUI.Avalonia.Controls
 						continue;
 					legendItem = AddSeries(series);
 				}
-				if (Horizontal)
+				if (IsHorizontal)
 					Grid.SetColumn(legendItem, column++);
 				else
 					Grid.SetRow(legendItem, row++);

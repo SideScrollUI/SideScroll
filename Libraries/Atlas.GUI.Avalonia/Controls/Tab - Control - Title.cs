@@ -13,7 +13,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		public string Label { get; set; }
 		private TextBlock title;
 		private TabInstance tabInstance;
-		private CheckBox checkBox;
+		//private CheckBox checkBox;
 
 		public TabControlTitle(TabInstance tabInstance, string name = null)
 		{
@@ -102,12 +102,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.Content = borderContent;
 		}
 
-		private void CheckBox_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		/*private void CheckBox_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			tabInstance.tabViewSettings.NotesVisible = (bool)checkBox.IsChecked;
 			tabInstance.SaveTabSettings();
 			tabInstance.Reload();
-		}
+		}*/
 
 		public string Text
 		{

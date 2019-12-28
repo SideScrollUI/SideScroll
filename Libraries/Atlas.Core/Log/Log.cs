@@ -238,7 +238,7 @@ namespace Atlas.Core
 			return logEntry;
 		}
 
-		public LogEntry AddException(Exception e)
+		public LogEntry Add(Exception e)
 		{
 			return AddError(e.Message, new Tag(e));
 		}

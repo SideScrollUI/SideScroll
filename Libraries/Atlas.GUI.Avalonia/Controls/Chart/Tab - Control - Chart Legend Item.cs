@@ -121,8 +121,10 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 		}
 
-		private void Polygon_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e)
+		private void Polygon_PointerPressed(object sender, PointerPressedEventArgs e)
 		{
+			// protected
+			//if (e.Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed)
 			if (e.MouseButton == MouseButton.Left)
 			{
 				IsChecked = !IsChecked;
@@ -131,7 +133,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		}
 
 		private bool highlight;
-		private void TabChartLegendItem_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void TabChartLegendItem_PointerEnter(object sender, PointerEventArgs e)
 		{
 			UpdatePolygonPoints(15, 15);
 			if (series is OxyPlot.Series.LineSeries lineSeries)
@@ -146,7 +148,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//polygon.StrokeThickness = 2;
 		}
 
-		private void TabChartLegendItem_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void TabChartLegendItem_PointerLeave(object sender, PointerEventArgs e)
 		{
 			UpdatePolygonPoints(13, 13);
 			if (series is OxyPlot.Series.LineSeries lineSeries)

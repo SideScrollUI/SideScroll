@@ -455,7 +455,7 @@ namespace Atlas.GUI.Avalonia
 				return;
 			}
 
-			if (e.Modifiers == InputModifiers.Control)
+			if (e.KeyModifiers == KeyModifiers.Control)
 			{
 				if (e.Key == Key.R)
 				{

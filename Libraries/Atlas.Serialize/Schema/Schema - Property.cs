@@ -41,7 +41,7 @@ namespace Atlas.Serialize
 				if (typeSchema.type != null)
 					propertyInfo = typeSchema.type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 			}
 			Serialized = IsSerialized;

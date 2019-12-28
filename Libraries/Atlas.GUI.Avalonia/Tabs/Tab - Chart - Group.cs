@@ -48,7 +48,7 @@ namespace Atlas.GUI.Avalonia
 		//private readonly Stopwatch watch = new Stopwatch();
 		//private int numberOfSeries;
 
-		private TabControlDataGrid tabDataGrid;
+		//private TabControlDataGrid tabDataGrid;
 
 
 		//public event EventHandler<EventArgs> OnSelectionChanged;
