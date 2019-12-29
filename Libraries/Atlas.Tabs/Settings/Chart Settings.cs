@@ -43,6 +43,16 @@ namespace Atlas.Tabs
 			this.ListSeries.Add(listSeries);
 		}
 
+		public void AddSeries(ListSeries listSeries)
+		{
+			ListGroup listGroup = DefaultListGroup;
+			listGroup.Name = listSeries.Name ?? listGroup.Name;
+			// Will add to Default Group if no Unit specified, and add the Default Group if needed
+			ListGroups.Add(listGroup.Name, listGroup);
+			listGroup.ListSeries.Add(listSeries);
+			this.ListSeries.Add(listSeries);
+		}
+
 		public ChartSettings(IList iList)
 		{
 			Type type = iList.GetType();

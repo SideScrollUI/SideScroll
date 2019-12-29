@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
+using System.Linq;
 using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
@@ -37,6 +38,8 @@ namespace Atlas.GUI.Avalonia.Controls
 		private TabControlChartLegend legend;
 		public OxyPlot.Axes.LinearAxis valueAxis; // left/right?
 		private OxyPlot.Axes.CategoryAxis categoryAxis;
+
+		public OxyPlot.Axes.LinearAxis linearAxis;
 		public OxyPlot.Axes.DateTimeAxis dateTimeAxis;
 
 		private static OxyColor GridLineColor = OxyColor.Parse("#333333");
@@ -187,6 +190,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			UnloadModel();
 			RecreatePlotModel();
+			AddAxis();
 
 			//double duration = 0;
 			foreach (ListSeries listSeries in ListGroup.ListSeries)
@@ -194,13 +198,13 @@ namespace Atlas.GUI.Avalonia.Controls
 				//duration = listSeries.iList[0]
 				AddSeries(listSeries);
 			}
-			AddAxis();
 
 			// would need to be able to disable to use
 			//foreach (ListSeries listSeries in ChartSettings.ListSeries)
 			//	AddSeries(listSeries);
 
 			UpdateValueAxis();
+			UpdateLinearAxis();
 
 			plotView.Model = plotModel;
 			this.IsVisible = true;
@@ -231,6 +235,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		public void Refresh()
 		{
 			UpdateValueAxis();
+			UpdateLinearAxis();
 			plotView.InvalidatePlot(true);
 			plotView.Model.InvalidatePlot(true);
 			legend.RefreshModel();
@@ -300,7 +305,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void AddLinearAxis()
 		{
-			var linearAxis = new OxyPlot.Axes.LinearAxis
+			linearAxis = new OxyPlot.Axes.LinearAxis
 			{
 				Position = AxisPosition.Bottom,
 				MajorGridlineStyle = LineStyle.Solid,
@@ -378,6 +383,44 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			plotModel.Axes.Add(categoryAxis);
 			return categoryAxis;
+		}
+
+		private void UpdateLinearAxis()
+		{
+			if (linearAxis == null)
+				return;
+
+			double minimum = double.MaxValue;
+			double maximum = double.MinValue;
+
+			foreach (OxyPlot.Series.Series series in plotModel.Series)
+			{
+				if (series is OxyPlot.Series.LineSeries lineSeries)
+				{
+					if (lineSeries.LineStyle == LineStyle.None)
+						continue;
+
+					foreach (var dataPoint in lineSeries.Points)
+					{
+						double x = dataPoint.X;
+						if (double.IsNaN(x))
+							continue;
+
+						minimum = Math.Min(minimum, x);
+						maximum = Math.Max(maximum, x);
+					}
+				}
+			}
+
+			if (minimum == double.MaxValue)
+			{
+				// didn't find any values
+				minimum = 0;
+				maximum = 1;
+			}
+
+			linearAxis.Minimum = minimum;
+			linearAxis.Maximum = maximum;
 		}
 
 		private void UpdateValueAxis() // OxyPlot.Axes.LinearAxis valueAxis, string axisKey = null
@@ -523,6 +566,9 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public OxyPlot.Series.LineSeries AddListSeries(ListSeries listSeries)
 		{
+			string xTrackerFormat = "Time: {2:yyyy-M-d H:mm:ss.FFF}";
+			if (linearAxis != null)
+				xTrackerFormat = listSeries.xPropertyName + ": {2:#,0.###}";
 			var lineSeries = new OxyPlot.Series.LineSeries
 			{
 				Title = listSeries.Name,
@@ -535,7 +581,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				MarkerSize = 3,
 				//MarkerType = MarkerType.Circle,
 				MarkerType = listSeries.iList.Count < 20 ? MarkerType.Circle : MarkerType.None,
-				TrackerFormatString = "{0}\nTime: {2:yyyy-M-d H:mm:ss.FFF}\nValue: {4:#,0.###}",
+				TrackerFormatString = "{0}\n" + xTrackerFormat + "\nValue: {4:#,0.###}",
 			};
 			// can't add gaps with ItemSource so convert to DataPoint ourselves
 			var dataPoints = GetDataPoints(listSeries, listSeries.iList);
@@ -605,19 +651,46 @@ namespace Atlas.GUI.Avalonia.Controls
 						{
 							x = OxyPlot.Axes.DateTimeAxis.ToDouble(dateTime);
 						}
+						else if (xObj == null)
+						{
+							continue;
+						}
 						else
 						{
-							x = (dynamic)xObj;
+							x = Convert.ToDouble(xObj);
 						}
 					}
-					dataPoints.Add(new DataPoint(x, (dynamic)value));
+					double d = double.NaN;
+					if (value != null)
+						d = Convert.ToDouble(value);
+					dataPoints.Add(new DataPoint(x, d));
+				}
+				dataPoints = dataPoints.OrderBy(d => d.X).ToList();
+
+				if (dataPoints.Count > 0 && listSeries.xBinSize > 0)
+				{
+					double firstBin = dataPoints[0].X;
+					double lastBin = dataPoints[dataPoints.Count-1].X;
+					int numBins = (int)Math.Ceiling((lastBin - firstBin) / listSeries.xBinSize) + 1;
+					double[] bins = new double[numBins];
+					foreach (DataPoint dataPoint in dataPoints)
+					{
+						int bin = (int)((dataPoint.X - firstBin) / listSeries.xBinSize);
+						bins[bin] += dataPoint.Y;
+					}
+					dataPoints = new List<DataPoint>();
+					for (int i = 0; i < numBins; i++)
+					{
+						dataPoints.Add(new DataPoint(firstBin + i * listSeries.xBinSize, bins[i]));
+					}
 				}
 			}
 			else
 			{
 				foreach (object obj in iList)
 				{
-					dataPoints.Add(new DataPoint(dataPoints.Count, (dynamic)obj));
+					double value = Convert.ToDouble(obj);
+					dataPoints.Add(new DataPoint(dataPoints.Count, value));
 				}
 			}
 			return dataPoints;
