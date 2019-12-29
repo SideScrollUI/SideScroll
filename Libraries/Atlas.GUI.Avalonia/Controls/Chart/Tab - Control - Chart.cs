@@ -98,10 +98,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
 			this.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
 			//this.Orientation = Orientation.Vertical;
-			MinHeight = 150;
 			MaxWidth = 1500;
 			MaxHeight = 1000;
-			MinWidth = 150;
 
 			// autogenerate columns
 			if (tabInstance.tabViewSettings.ChartDataSettings.Count == 0)
@@ -116,6 +114,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				BorderBrush = Brushes.LightGray,
 				IsMouseWheelEnabled = false,
 				DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
+				MinHeight = 150,
+				MinWidth = 150,
 			};
 
 			// Show Hover text on mouse over instead of requiring holding the mouse down (why isn't this the default?)
@@ -244,7 +244,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void AddAxis()
 		{
-			if (xAxisPropertyInfo != null && xAxisPropertyInfo.PropertyType == typeof(DateTime))
+			if (ListGroup.StartTime != null && ListGroup.EndTime != null)
 			{
 				AddDateTimeAxis(ListGroup.StartTime, ListGroup.EndTime);
 			}
@@ -387,6 +387,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			double minimum = double.MaxValue;
 			double maximum = double.MinValue;
+			bool hasFraction = false;
 
 			foreach (OxyPlot.Series.Series series in plotModel.Series)
 			{
@@ -394,38 +395,17 @@ namespace Atlas.GUI.Avalonia.Controls
 				{
 					if (lineSeries.LineStyle == LineStyle.None)
 						continue;
-					if (lineSeries.ItemsSource != null)
+
+					foreach (var dataPoint in lineSeries.Points)
 					{
+						double y = dataPoint.Y;
+						if (double.IsNaN(y))
+							continue;
 
-						//if (axisKey == "right" && lineSeries.YAxisKey != "right")
-						//	continue;
+						hasFraction |= (y % 1 != 0.0);
 
-						PropertyInfo propertyInfo = null;
-						foreach (var item in lineSeries.ItemsSource)
-						{
-							if (propertyInfo == null)
-								propertyInfo = item.GetType().GetProperty(lineSeries.DataFieldY);
-
-							var value = propertyInfo.GetValue(item);
-							double d = Convert.ToDouble(value);
-							if (double.IsNaN(d))
-								continue;
-
-							minimum = Math.Min(minimum, d);
-							maximum = Math.Max(maximum, d);
-						}
-					}
-					else if (lineSeries.Points.Count > 0)
-					{
-						foreach (var point in lineSeries.Points)
-						{
-							double d = point.Y;
-							if (double.IsNaN(d))
-								continue;
-
-							minimum = Math.Min(minimum, d);
-							maximum = Math.Max(maximum, d);
-						}
+						minimum = Math.Min(minimum, y);
+						maximum = Math.Max(maximum, y);
 					}
 				}
 				if (series is OxyPlot.Series.ScatterSeries scatterSeries)
@@ -459,6 +439,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				minimum = 0;
 				maximum = 1;
 			}
+
+			valueAxis.MinimumMajorStep = hasFraction ? 0 : 1;
 
 			var margin = (maximum - minimum) * 0.10;
 			if (minimum == maximum)

@@ -28,6 +28,12 @@
   <Style Selector="Button:pointerover /template/ ContentPresenter">
     <Setter Property="BorderBrush" Value="#FF000000"/>
   </Style>
+    
+    <Style Selector="ScrollBar /template/ RepeatButton.repeat">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
 
     <Style Selector="ToolTip">
     <Setter Property="BorderThickness"

@@ -473,9 +473,8 @@ namespace Atlas.Serialize
 			{
 				LoadObjectData(obj);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-
 			}
 		}
 

@@ -7,7 +7,7 @@ namespace Atlas.Tabs
 {
 	public class BookmarkCollection
 	{
-		public event EventHandler<EventArgs> OnDelete;
+		//public event EventHandler<EventArgs> OnDelete;
 
 		public string path;
 		private Project project;
