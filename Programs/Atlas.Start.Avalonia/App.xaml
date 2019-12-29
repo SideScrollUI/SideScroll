@@ -9,6 +9,5 @@
         <StyleInclude Source="resm:Atlas.GUI.Avalonia.DefaultTheme.xaml?assembly=Atlas.GUI.Avalonia"/>
         <StyleInclude Source="resm:Atlas.GUI.Avalonia.StyleResources.xaml?assembly=Atlas.GUI.Avalonia"/>
         <StyleInclude Source="resm:OxyPlot.Avalonia.Themes.Default.xaml?assembly=OxyPlot.Avalonia"/>
-
     </Application.Styles>
 </Application>
