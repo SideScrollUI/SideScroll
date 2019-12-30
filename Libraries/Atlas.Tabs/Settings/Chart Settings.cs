@@ -15,45 +15,23 @@ namespace Atlas.Tabs
 		public Dictionary<string, ListGroup> ListGroups { get; set; } = new Dictionary<string, ListGroup>();
 		//public ItemCollection<ListGroup> ListGroups { get; set; } = new ItemCollection<ListGroup>();
 		public ItemCollection<ListSeries> ListSeries { get; set; } = new ItemCollection<ListSeries>();
-		
+
+		public ChartSettings()
+		{
+
+		}
+		public ChartSettings(IList iList)
+		{
+			LoadList(iList);
+		}
+
 		public override string ToString()
 		{
 			return String.Join(" ", ListSeries);
 			//return ListSeries[0].ToString(); // todo: fix for multiple
 		}
 
-		public ChartSettings()
-		{
-
-		}
-
-		// todo: this needs to be reworked when a use is found
-		public void AddList(string label, IList iList)
-		{
-			ListSeries listSeries = new ListSeries(label, iList);
-
-			//ListGroup listGroup;
-			//if (ListGroups.TryGetValue(label, out listGroup)
-
-			ListGroup listGroup = DefaultListGroup;
-			listGroup.Name = label ?? listGroup.Name; 
-			// Will add to Default Group if no Unit specified, and add the Default Group if needed
-			ListGroups.Add(listGroup.Name, listGroup);
-			listGroup.ListSeries.Add(listSeries);
-			this.ListSeries.Add(listSeries);
-		}
-
-		public void AddSeries(ListSeries listSeries)
-		{
-			ListGroup listGroup = DefaultListGroup;
-			listGroup.Name = listSeries.Name ?? listGroup.Name;
-			// Will add to Default Group if no Unit specified, and add the Default Group if needed
-			ListGroups.Add(listGroup.Name, listGroup);
-			listGroup.ListSeries.Add(listSeries);
-			this.ListSeries.Add(listSeries);
-		}
-
-		public ChartSettings(IList iList)
+		public void LoadList(IList iList)
 		{
 			Type type = iList.GetType();
 			Type elementType = null;
@@ -103,6 +81,38 @@ namespace Atlas.Tabs
 					this.ListSeries.Add(listSeries);
 				}
 			}
+		}
+
+		// todo: this needs to be reworked when a use is found
+		public void AddList(string label, IList iList)
+		{
+			ListSeries listSeries = new ListSeries(label, iList);
+
+			//ListGroup listGroup;
+			//if (ListGroups.TryGetValue(label, out listGroup)
+
+			ListGroup listGroup = DefaultListGroup;
+			listGroup.Name = label ?? listGroup.Name;
+			// Will add to Default Group if no Unit specified, and add the Default Group if needed
+			ListGroups.Add(listGroup.Name, listGroup);
+			listGroup.ListSeries.Add(listSeries);
+			this.ListSeries.Add(listSeries);
+		}
+
+		public void AddGroup(ListGroup listGroup)
+		{
+			ListGroups.Add(listGroup.Name, listGroup);
+			ListSeries.AddRange(listGroup.ListSeries);
+		}
+
+		public void AddSeries(ListSeries listSeries)
+		{
+			ListGroup listGroup = DefaultListGroup;
+			listGroup.Name = listSeries.Name ?? listGroup.Name;
+			// Will add to Default Group if no Unit specified, and add the Default Group if needed
+			ListGroups.Add(listGroup.Name, listGroup);
+			listGroup.ListSeries.Add(listSeries);
+			this.ListSeries.Add(listSeries);
 		}
 
 		// todo: add Append?

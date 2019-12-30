@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using Atlas.Extensions;
@@ -14,6 +15,9 @@ namespace Atlas.Core
 		public DateTime? StartTime { get; set; }
 		public DateTime? EndTime { get; set; }
 		public ItemCollection<ListSeries> ListSeries { get; set; } = new ItemCollection<ListSeries>();
+
+		public double xBinSize;
+
 		public ListGroup(string name = null, DateTime? startTime = null, DateTime? endTime = null)
 		{
 			Name = name;
@@ -24,6 +28,35 @@ namespace Atlas.Core
 		public override string ToString()
 		{
 			return Name;
+		}
+
+		public void AddDimensions(IList iList, string categoryPropertyName, string xPropertyName, string yPropertyName)
+		{
+			Type listType = iList.GetType();
+			Type elementType = iList.GetType().GetElementTypeForAll();
+			PropertyInfo categoryPropertyInfo = elementType.GetProperty(categoryPropertyName);
+
+			var dimensions = new Dictionary<string, IList>();
+			foreach (var obj in iList)
+			{
+				var categoryObject = categoryPropertyInfo.GetValue(obj);
+
+				string category = categoryObject.ToString();
+
+				IList categoryList;
+				if (!dimensions.TryGetValue(category, out categoryList))
+				{
+					categoryList = (IList)Activator.CreateInstance(listType);
+					dimensions.Add(category, categoryList);
+
+					ListSeries listSeries = new ListSeries(category, categoryList, xPropertyName, yPropertyName)
+					{
+						xBinSize = xBinSize,
+					};
+					ListSeries.Add(listSeries);
+				}
+				categoryList.Add(obj);
+			}
 		}
 	}
 
