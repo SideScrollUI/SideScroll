@@ -117,7 +117,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				BorderBrush = Brushes.LightGray,
 				IsMouseWheelEnabled = false,
 				DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
-				MinHeight = 150,
+				MinHeight = 125,
 				MinWidth = 150,
 			};
 
@@ -185,12 +185,16 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			return "yyyy-M-d";
 		}
+		public void LoadListGroup(ListGroup listGroup)
+		{
+			ListGroup = listGroup;
+			LoadPlotModel();
+		}
 
-		private void LoadPlotModel()
+		public void LoadPlotModel()
 		{
 			UnloadModel();
 			RecreatePlotModel();
-			AddAxis();
 
 			//double duration = 0;
 			foreach (ListSeries listSeries in ListGroup.ListSeries)
@@ -203,6 +207,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//foreach (ListSeries listSeries in ChartSettings.ListSeries)
 			//	AddSeries(listSeries);
 
+			AddAxis();
 			UpdateValueAxis();
 			UpdateLinearAxis();
 
@@ -247,9 +252,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			UnloadModel();
 		}
 
+		private bool UseDateTimeAxis => (xAxisPropertyInfo?.PropertyType == typeof(DateTime)) ||
+				(ListGroup.StartTime != null && ListGroup.EndTime != null);
+
 		private void AddAxis()
 		{
-			if (ListGroup.StartTime != null && ListGroup.EndTime != null)
+			if (UseDateTimeAxis)
 			{
 				AddDateTimeAxis(ListGroup.StartTime, ListGroup.EndTime);
 			}
@@ -524,6 +532,8 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void UnloadModel()
 		{
+			linearAxis = null;
+			dateTimeAxis = null;
 			//if (plotModel != null)
 			//	plotModel.Series.Clear();
 			/*foreach (ListSeries listSeries in ChartSettings.ListSeries)
@@ -533,6 +543,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//	iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
 			}*/
 		}
+
 		public void AddSeries(ListSeries listSeries)
 		{
 			if (listSeries.IsStacked)
@@ -566,9 +577,9 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public OxyPlot.Series.LineSeries AddListSeries(ListSeries listSeries)
 		{
-			string xTrackerFormat = "Time: {2:yyyy-M-d H:mm:ss.FFF}";
-			if (linearAxis != null)
-				xTrackerFormat = listSeries.xPropertyName + ": {2:#,0.###}";
+			string xTrackerFormat = listSeries.xPropertyName ?? "Index" + ": {2:#,0.###}";
+			if (UseDateTimeAxis || listSeries.xPropertyInfo?.PropertyType == typeof(DateTime))
+				xTrackerFormat = "Time: {2:yyyy-M-d H:mm:ss.FFF}";
 			var lineSeries = new OxyPlot.Series.LineSeries
 			{
 				Title = listSeries.Name,
@@ -623,23 +634,31 @@ namespace Atlas.GUI.Avalonia.Controls
 			return false;
 		}
 
-		private List<DataPoint> GetDataPoints(ListSeries listSeries, IList iList)
+		private void UpdateXAxisProperty(ListSeries listSeries)
 		{
-			var dataPoints = new List<DataPoint>();
 			if (listSeries.yPropertyInfo != null)
 			{
-				// faster than using ItemSource?
 				if (listSeries.xPropertyInfo != null)
 					xAxisPropertyInfo = listSeries.xPropertyInfo;
 				if (xAxisPropertyInfo == null)
 				{
-					Type elementType = iList.GetType().GetElementTypeForAll();
+					Type elementType = listSeries.iList.GetType().GetElementTypeForAll();
 					foreach (PropertyInfo propertyInfo in elementType.GetProperties())
 					{
 						if (propertyInfo.GetCustomAttribute<XAxisAttribute>() != null)
 							xAxisPropertyInfo = propertyInfo;
 					}
 				}
+			}
+		}
+
+		private List<DataPoint> GetDataPoints(ListSeries listSeries, IList iList)
+		{
+			UpdateXAxisProperty(listSeries);
+			var dataPoints = new List<DataPoint>();
+			if (listSeries.yPropertyInfo != null)
+			{
+				// faster than using ItemSource?
 				foreach (object obj in iList)
 				{
 					object value = listSeries.yPropertyInfo.GetValue(obj);

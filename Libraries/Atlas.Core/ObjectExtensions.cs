@@ -26,6 +26,8 @@ namespace Atlas.Core
 			// handle decimal here: a decimal is considered a primitive
 			if (type.IsNumeric())
 			{
+				if (obj is double d)
+					return d.ToString("#,0.###");
 				MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) });
 				string format = type.IsDecimal() ? "G" : "N0";
 				object result = toStringMethod.Invoke(obj, new object[] { format });

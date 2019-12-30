@@ -68,6 +68,8 @@ namespace Atlas.Tabs
 				return;
 			}
 
+			PropertyInfo xAxisPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
+
 			PropertyInfo[] properties = elementType.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 			//ItemCollection<ListSeries> listProperties = new ItemCollection<ListSeries>();
 			foreach (PropertyInfo propertyInfo in properties)
@@ -76,7 +78,7 @@ namespace Atlas.Tabs
 					continue;
 				if (propertyInfo.PropertyType.IsNumeric())
 				{
-					ListSeries listSeries = new ListSeries(iList, propertyInfo);
+					ListSeries listSeries = new ListSeries(iList, xAxisPropertyInfo, propertyInfo);
 					//listProperties.Add(listSeries);
 
 					ListGroup listGroup = DefaultListGroup;

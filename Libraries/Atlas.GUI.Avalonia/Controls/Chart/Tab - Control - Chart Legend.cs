@@ -8,7 +8,7 @@ using Avalonia.Threading;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using OxyPlot;
 using OxyPlot.Avalonia;
 
@@ -52,8 +52,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
 				color = scatterSeries.MarkerFill.ToColor();
 			TabChartLegendItem legendItem = new TabChartLegendItem(this, series);
-			//legendItem.PointerEnter += CheckBox_PointerEnter;
-			//legendItem.PointerLeave += CheckBox_PointerLeave;
 			legendItem.OnSelectionChanged += CheckBox_SelectionChanged;
 			legendItem.OnHighlightChanged += LegendItem_OnHighlightChanged;
 			legendItem.textBlock.PointerPressed += (s, e) =>
@@ -64,20 +62,27 @@ namespace Atlas.GUI.Avalonia.Controls
 			legendItems.Add(legendItem);
 			if (series.Title != null)
 				idxLegendItems.Add(series.Title, legendItem);
-			AddControl(legendItem);
 			return legendItem;
 		}
 
-		private void AddControl(TabChartLegendItem legendItem)
+		// Show items in order of count, retaining original order for unused values
+		private void UpdatePositions()
 		{
-			if (IsHorizontal)
+			this.Children.Clear();
+
+			var nonzero = new List<TabChartLegendItem>();
+			var unused = new List<TabChartLegendItem>();
+			foreach (TabChartLegendItem legendItem in idxLegendItems.Values)
 			{
-				Grid.SetColumn(legendItem, Children.Count);
+				if (legendItem.count > 0)
+					nonzero.Add(legendItem);
+				else
+					unused.Add(legendItem);
 			}
-			else
-			{
-				Grid.SetRow(legendItem, Children.Count);
-			}
+
+			var ordered = nonzero.OrderByDescending(a => a.count).ToList();
+			Children.AddRange(ordered);
+			Children.AddRange(unused);
 		}
 
 		private void UpdateSeriesPositions()
@@ -133,12 +138,9 @@ namespace Atlas.GUI.Avalonia.Controls
 						continue;
 					legendItem = AddSeries(series);
 				}
-				if (IsHorizontal)
-					Grid.SetColumn(legendItem, column++);
-				else
-					Grid.SetRow(legendItem, row++);
 				Children.Add(legendItem);
 			}
+			UpdatePositions();
 
 			/*var prevLegends = idxLegendItems.Clone<Dictionary<string, TabChartLegendItem>>();
 			idxLegendItems = new Dictionary<string, TabChartLegendItem>();

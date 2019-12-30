@@ -53,14 +53,14 @@ namespace Atlas.Core
 			yPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();
 		}
 
-		public ListSeries(IList iList, PropertyInfo propertyInfo)
+		public ListSeries(IList iList, PropertyInfo xPropertyInfo, PropertyInfo yPropertyInfo)
 		{
 			this.iList = iList;
-			this.yPropertyInfo = propertyInfo;
+			this.xPropertyInfo = xPropertyInfo;
+			this.yPropertyInfo = yPropertyInfo;
 
-			Name = propertyInfo.Name;
-			Name = Name.AddSpacesBetweenWords();
-			NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
+			Name = yPropertyInfo.Name.AddSpacesBetweenWords();
+			NameAttribute attribute = yPropertyInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;
 		}

@@ -7,6 +7,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Media;
 
 using OxyPlot.Avalonia;
@@ -39,7 +40,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			set
 			{
 				_IsChecked = value;
-				polygon.Fill = new SolidColorBrush(IsChecked ? color : Colors.Transparent);
+				if (count > 0)
+					polygon.Fill = new SolidColorBrush(IsChecked ? color : Colors.Transparent);
 			}
 		}
 
@@ -69,11 +71,13 @@ namespace Atlas.GUI.Avalonia.Controls
 			PointerLeave += TabChartLegendItem_PointerLeave;
 		}
 
+		public int count;
+
 		private void AddCheckBox()
 		{
 			RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
-			int count = 0;
+			count = 0;
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 			{
 				oxyColor = lineSeries.Color;
