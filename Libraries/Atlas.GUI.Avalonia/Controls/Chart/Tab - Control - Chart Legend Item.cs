@@ -30,6 +30,9 @@ namespace Atlas.GUI.Avalonia.Controls
 		private OxyColor oxyColor;
 		private MarkerType markerType;
 
+		public int Count { get; set; }
+		public double Sum { get; set; }
+
 		private bool _IsChecked = true;
 		public bool IsChecked
 		{
@@ -40,7 +43,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			set
 			{
 				_IsChecked = value;
-				if (count > 0)
+				if (Count > 0)
 					polygon.Fill = new SolidColorBrush(IsChecked ? color : Colors.Transparent);
 			}
 		}
@@ -64,6 +67,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.RowDefinitions = new RowDefinitions();
 			//this.Margin = new Thickness(6);
 
+			UpdateSums();
 			AddCheckBox();
 			AddTextBox();
 
@@ -71,27 +75,46 @@ namespace Atlas.GUI.Avalonia.Controls
 			PointerLeave += TabChartLegendItem_PointerLeave;
 		}
 
-		public int count;
+		private void UpdateSums()
+		{
+			Sum = 0; // todo: finish
+			Count = 0;
+			if (series is OxyPlot.Series.LineSeries lineSeries)
+			{
+				if (lineSeries.Points.Count > 0)
+				{
+					Count = lineSeries.Points.Count;
+					foreach (DataPoint dataPoint in lineSeries.Points)
+					{
+						Sum += dataPoint.Y;
+					}
+				}
+				else if (lineSeries.ItemsSource != null)
+				{
+					Count = lineSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0;
+					Sum = Count;
+				}
+			}
+			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
+			{
+				Count = Math.Max(scatterSeries.Points.Count, scatterSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0);
+				Sum = Count;
+			}
+		}
 
 		private void AddCheckBox()
 		{
 			RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 
-			count = 0;
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 			{
 				oxyColor = lineSeries.Color;
 				markerType = lineSeries.MarkerType;
-				if (lineSeries.Points.Count > 0)
-					count = lineSeries.Points.Count;
-				else if (lineSeries.ItemsSource != null)
-					count = lineSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0;
 			}
 			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
 			{
 				oxyColor = scatterSeries.MarkerFill;
 				markerType = scatterSeries.MarkerType;
-				count = Math.Max(scatterSeries.Points.Count, scatterSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0);
 			}
 			color = oxyColor.ToColor();
 
@@ -104,7 +127,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				Stroke = Brushes.Black,
 				StrokeThickness = 1.5,
 			};
-			if (count > 0)
+			if (Count > 0)
 				polygon.Fill = new SolidColorBrush(color);
 			UpdatePolygonPoints(width, height);
 			polygon.PointerPressed += Polygon_PointerPressed;

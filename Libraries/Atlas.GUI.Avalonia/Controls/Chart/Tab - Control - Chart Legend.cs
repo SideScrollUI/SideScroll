@@ -74,13 +74,13 @@ namespace Atlas.GUI.Avalonia.Controls
 			var unused = new List<TabChartLegendItem>();
 			foreach (TabChartLegendItem legendItem in idxLegendItems.Values)
 			{
-				if (legendItem.count > 0)
+				if (legendItem.Count > 0)
 					nonzero.Add(legendItem);
 				else
 					unused.Add(legendItem);
 			}
 
-			var ordered = nonzero.OrderByDescending(a => a.count).ToList();
+			var ordered = nonzero.OrderByDescending(a => a.Sum).ToList();
 			Children.AddRange(ordered);
 			Children.AddRange(unused);
 		}
