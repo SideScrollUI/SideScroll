@@ -81,21 +81,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			return ListGroup.ToString(); // todo: fix for multiple
 		}
 
-		protected override Size MeasureOverride(Size availableSize)
-		{
-			return base.MeasureOverride(availableSize);
-		}
-
-		private void Initialize()
-		{
-			InitializeControls();
-		}
-
-		protected override void OnMeasureInvalidated()
-		{
-			base.OnMeasureInvalidated();
-		}
-
 		private void InitializeControls()
 		{
 			this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
@@ -170,21 +155,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			UpdateValueAxis();
 		}
 
-		public string GetDateTimeFormat(double duration)
-		{
-			if (duration <= 60)
-				return "H:mm:ss";
-			if (duration < 60 * 60)
-				return "H:mm";
-			if (duration < 24 * 60 * 60)
-				return "H:mm";
-			if (duration < 3 * 24 * 60 * 60)
-				return "M/d H:mm";
-			if (duration < 6 * 30 * 24 * 60 * 60)
-				return "M/d";
-
-			return "yyyy-M-d";
-		}
 		public void LoadListGroup(ListGroup listGroup)
 		{
 			ListGroup = listGroup;
@@ -241,9 +211,9 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			UpdateValueAxis();
 			UpdateLinearAxis();
+			legend.RefreshModel();
 			plotView.InvalidatePlot(true);
 			plotView.Model.InvalidatePlot(true);
-			legend.RefreshModel();
 		}
 
 		public void Unload()
@@ -529,9 +499,25 @@ namespace Atlas.GUI.Avalonia.Controls
 				return string.Format("{0}", d);
 			}
 		}
+		public string GetDateTimeFormat(double duration)
+		{
+			if (duration <= 2 * 60)
+				return "H:mm:ss";
+			if (duration < 60 * 60)
+				return "H:mm";
+			if (duration < 24 * 60 * 60)
+				return "H:mm";
+			if (duration < 3 * 24 * 60 * 60)
+				return "M/d H:mm";
+			if (duration < 6 * 30 * 24 * 60 * 60)
+				return "M/d";
+
+			return "yyyy-M-d";
+		}
 
 		private void UnloadModel()
 		{
+			plotView.Model = null;
 			linearAxis = null;
 			dateTimeAxis = null;
 			//if (plotModel != null)
