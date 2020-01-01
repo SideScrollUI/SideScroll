@@ -77,7 +77,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void UpdateSums()
 		{
-			Sum = 0; // todo: finish
+			Sum = 0;
 			Count = 0;
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 			{
@@ -91,12 +91,14 @@ namespace Atlas.GUI.Avalonia.Controls
 				}
 				else if (lineSeries.ItemsSource != null)
 				{
+					// todo: finish
 					Count = lineSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0;
 					Sum = Count;
 				}
 			}
 			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
 			{
+				// todo: finish
 				Count = Math.Max(scatterSeries.Points.Count, scatterSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0);
 				Sum = Count;
 			}

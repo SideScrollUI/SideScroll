@@ -57,6 +57,18 @@ namespace Atlas.Core
 				}
 				categoryList.Add(obj);
 			}
+			SortBySum();
+		}
+
+		public void SortBySum()
+		{
+			var sums = new Dictionary<ListSeries, double>();
+			foreach (var listSeries in ListSeries)
+				sums.Add(listSeries, listSeries.GetSum());
+
+			var sortedDict = from entry in sums orderby entry.Value descending select entry.Key;
+
+			ListSeries = new ItemCollection<ListSeries>(sortedDict);
 		}
 	}
 
@@ -113,6 +125,29 @@ namespace Atlas.Core
 		public override string ToString()
 		{
 			return Name;
+		}
+
+		public double GetSum()
+		{
+			double sum = 0;
+			if (yPropertyInfo != null)
+			{
+				foreach (object obj in iList)
+				{
+					object value = yPropertyInfo.GetValue(obj);
+					if (value != null)
+						sum += Convert.ToDouble(value);
+				}
+			}
+			else
+			{
+				foreach (object obj in iList)
+				{
+					double value = Convert.ToDouble(obj);
+					sum += value;
+				}
+			}
+			return sum;
 		}
 	}
 }
