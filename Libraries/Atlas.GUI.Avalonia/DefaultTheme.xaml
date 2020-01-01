@@ -51,6 +51,7 @@
     
     <Style Selector="TextBox">
         <Setter Property="Background" Value="#ffffff"/>
+        <Setter Property="SelectionBrush" Value="#4e8ef7"/>
     </Style>
     <Style Selector="TextBox:pointerover">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHover}"/>
