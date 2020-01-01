@@ -126,7 +126,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				return;
 
 			Children.Clear();
-			int column = 0, row = 0;
 			foreach (var series in plotView.Model.Series)
 			{
 				if (series.Title == null)

@@ -9,16 +9,12 @@ namespace Atlas.Start.Avalonia
 {
 	class Program
 	{
-		static void Main(string[] args)
+		static int Main(string[] args)
 		{
 			OxyPlotModule.EnsureLoaded();
 			AppBuilder builder = BuildAvaloniaApp(args);
 
-			builder.Start<MainWindow>();
-			// todo: switch to this in next version?
-			//var project = LoadProject(UserSettings.DefaultProjectPath);
-			//var mainWindow = new MainWindow(project);
-			//builder.Start<MainWindow>(mainWindow);
+			return builder.StartWithClassicDesktopLifetime(args);
 		}
 
 		public static AppBuilder BuildAvaloniaApp(string[] args)

@@ -1,7 +1,6 @@
 ﻿using Avalonia;
-using Avalonia.Logging.Serilog;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Serilog;
 
 namespace Atlas.Start.Avalonia
 {
@@ -10,6 +9,16 @@ namespace Atlas.Start.Avalonia
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
-        }
+		}
+
+		public override void OnFrameworkInitializationCompleted()
+		{
+			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+				desktopLifetime.MainWindow = new MainWindow();
+			//else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewLifetime)
+			//	singleViewLifetime.MainView = new MainView();
+
+			base.OnFrameworkInitializationCompleted();
+		}
 	}
 }

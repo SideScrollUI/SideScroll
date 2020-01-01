@@ -12,7 +12,7 @@ namespace Atlas.Start.Avalonia.Tabs
 		private TabInstance tabInstance;
 		private MyParams myParams;
 
-		public event EventHandler<EventArgs> OnSelectionChanged;
+		//public event EventHandler<EventArgs> OnSelectionChanged;
 
 		public TabControlMyParams(TabInstance tabInstance, MyParams myParams)
 		{
