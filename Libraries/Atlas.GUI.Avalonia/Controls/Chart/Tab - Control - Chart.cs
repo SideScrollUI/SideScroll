@@ -139,9 +139,14 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			legend = new TabControlChartLegend(this, ListGroup.Horizontal);
 			if (ListGroup.Horizontal)
+			{
 				Grid.SetRow(legend, 1);
+				legend.MaxHeight = 150;
+			}
 			else
+			{
 				Grid.SetColumn(legend, 1);
+			}
 			containerGrid.Children.Add(legend);
 			legend.OnSelectionChanged += Legend_OnSelectionChanged;
 
@@ -159,6 +164,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			ListGroup = listGroup;
 			LoadPlotModel();
+			Refresh();
 		}
 
 		public void LoadPlotModel()
