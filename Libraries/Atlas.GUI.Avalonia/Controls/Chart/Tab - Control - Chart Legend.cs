@@ -156,7 +156,14 @@ namespace Atlas.GUI.Avalonia.Controls
 				Grid.SetRow(legendItem, row++);
 			}*/
 
-			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
+			Dispatcher.UIThread.InvokeAsync(() => plotView.Model?.InvalidatePlot(true), DispatcherPriority.Background);
+		}
+
+		public void Unload()
+		{
+			Children.Clear();
+			idxLegendItems.Clear();
+			legendItems.Clear();
 		}
 
 		private void UpdateVisibleSeries()
