@@ -29,8 +29,6 @@ namespace Atlas.GUI.Avalonia.Controls
 		private Dictionary<IList, int> ListToTabIndex { get; set; } = new Dictionary<IList, int>(); // not used
 
 		//public SeriesCollection SeriesCollection { get; set; }
-		public string[] Labels { get; set; }
-		public Func<double, string> YFormatter { get; set; }
 
 		public PlotModel plotModel;
 		public PlotView plotView;
@@ -193,6 +191,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public void RecreatePlotModel()
 		{
+			UnloadModel();
 			plotModel = new PlotModel()
 			{
 				Title = ListGroup?.Name,
@@ -271,6 +270,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//MinorTicklineColor = GridLineColor,
 				//MinorTickSize = 5,
 				AxisTickToLabelDistance = 2,
+				MinimumMajorStep = TimeSpan.FromSeconds(1).TotalDays,
 				TitleColor = OxyColors.LightGray,
 				TextColor = OxyColors.LightGray,
 			};
@@ -469,7 +469,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			valueAxis.MinimumMajorStep = hasFraction ? 0 : 1;
 
-			var margin = (maximum - minimum) * 0.10;
+			var margin = (maximum - minimum) * 0.05;
 			if (minimum == maximum)
 				margin = Math.Abs(minimum);
 
@@ -526,6 +526,9 @@ namespace Atlas.GUI.Avalonia.Controls
 			plotView.Model = null;
 			linearAxis = null;
 			dateTimeAxis = null;
+			legend?.Unload();
+			ListToTabSeries.Clear();
+			ListToTabIndex.Clear();
 			//if (plotModel != null)
 			//	plotModel.Series.Clear();
 			/*foreach (ListSeries listSeries in ChartSettings.ListSeries)
