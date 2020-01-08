@@ -14,13 +14,16 @@ namespace Atlas.Tabs
 			return uri;
 		}
 
-		public virtual string GetLinkData(string uri)
+		public virtual Bookmark GetBookmark(string uri)
 		{
 			if (!uri.StartsWith(atlasPrefix))
 				return null;
 
 			string data = uri.Substring(atlasPrefix.Length);
-			return data;
+			if (data == null)
+				return null;
+			Bookmark bookmark = Bookmark.Create(data);
+			return bookmark;
 		}
 	}
 }

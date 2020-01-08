@@ -38,6 +38,8 @@ namespace Atlas.GUI.Avalonia
 		protected Grid contentGrid;
 		public TabView tabView;
 
+		public static string LoadBookmarkUri { get; set; }
+
 		public BaseWindow(Project project) : base()
 		{
 			baseWindow = this;
@@ -187,10 +189,7 @@ namespace Atlas.GUI.Avalonia
 		private void ImportBookmark(Call call)
 		{
 			string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().GetAwaiter().GetResult();
-			string data = linker.GetLinkData(clipboardText);
-			if (data == null)
-				return;
-			Bookmark bookmark = Bookmark.Create(data);
+			Bookmark bookmark = linker.GetBookmark(clipboardText);
 			bool reloadBase = true;
 			if (reloadBase)
 			{
@@ -301,7 +300,9 @@ namespace Atlas.GUI.Avalonia
 		{
 			TabInstance tabInstance = tab.Create();
 			tabInstance.project = project;
-			if (project.userSettings.AutoLoad) // did we load successfully last time?
+			if (LoadBookmarkUri != null)
+				tabInstance.tabBookmark = linker.GetBookmark(LoadBookmarkUri)?.tabBookmark;
+			else if (project.userSettings.AutoLoad) // did we load successfully last time?
 				tabInstance.LoadDefaultBookmark();
 
 			tabView = new TabView(tabInstance);

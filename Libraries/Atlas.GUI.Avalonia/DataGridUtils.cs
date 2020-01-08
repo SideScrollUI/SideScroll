@@ -264,9 +264,12 @@ namespace Atlas.GUI.Avalonia
 		{
 			type = type.GetNonNullableType();
 
+			if (type == typeof(string))
+				return TextAlignment.Left;
+
 			if (type.IsNumeric() ||
 				type == typeof(TimeSpan) ||
-				typeof(ICollection).IsAssignableFrom(type))
+				typeof(IEnumerable).IsAssignableFrom(type))
 			{
 				return TextAlignment.Right;
 			}

@@ -1150,6 +1150,8 @@ namespace Atlas.GUI.Avalonia.Controls
 		private object GetDataValue(object obj)
 		{
 			Type type = obj.GetType();
+			if (type.GetCustomAttribute<DataKeyAttribute>() != null)
+				return obj;
 			var keyProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
 			var keyFields = type.GetFieldsWithAttribute<DataValueAttribute>();
 			if (keyProperties.Count > 0)

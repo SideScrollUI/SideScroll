@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OxyPlot;
 using OxyPlot.Avalonia;
+using Avalonia.Input;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -56,7 +57,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			legendItem.OnHighlightChanged += LegendItem_OnHighlightChanged;
 			legendItem.textBlock.PointerPressed += (s, e) =>
 			{
-				LegendItemClicked(legendItem);
+				if (e.MouseButton == MouseButton.Left)
+					LegendItemClicked(legendItem);
 			};
 			//this.Children.Add(legendItem);
 			legendItems.Add(legendItem);

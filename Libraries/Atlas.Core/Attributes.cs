@@ -27,7 +27,7 @@ namespace Atlas.Core
 	}
 
 	// ->Tabs: Use the specified name instead of the field/property name
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
 	public class DataValueAttribute : Attribute
 	{
 	}

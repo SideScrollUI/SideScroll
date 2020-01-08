@@ -666,10 +666,10 @@ namespace Atlas.Tabs
 			childTabInstance.ParentTabInstance = this;
 			//childTabInstance.tabBookmark = tabBookmark;
 
-			if (this.tabBookmark != null)
+			if (tabBookmark != null)
 			{
 				TabBookmark tabChildBookmark = null;
-				if (this.tabBookmark.tabChildBookmarks.TryGetValue(tabModel.Name, out tabChildBookmark))
+				if (tabBookmark.tabChildBookmarks.TryGetValue(tabModel.Name, out tabChildBookmark))
 				{
 					childTabInstance.tabBookmark = tabChildBookmark;
 				}
@@ -681,9 +681,9 @@ namespace Atlas.Tabs
 		{
 			// FindMatches uses bookmarks
 			TabBookmark tabChildBookmark = null;
-			if (this.tabBookmark != null)
+			if (tabBookmark != null)
 			{
-				if (this.tabBookmark.tabChildBookmarks.TryGetValue(name, out tabChildBookmark))
+				if (tabBookmark.tabChildBookmarks.TryGetValue(name, out tabChildBookmark))
 				{
 					if (tabChildBookmark.tabModel != null)
 						return tabChildBookmark.tabModel;
