@@ -127,6 +127,14 @@ namespace Atlas.Core
 			return Name;
 		}
 
+		private double GetObjectValue(object obj)
+		{
+			double value = Convert.ToDouble(obj);
+			if (double.IsNaN(value))
+				return 0;
+			return value;
+		}
+
 		public double GetSum()
 		{
 			double sum = 0;
@@ -136,14 +144,14 @@ namespace Atlas.Core
 				{
 					object value = yPropertyInfo.GetValue(obj);
 					if (value != null)
-						sum += Convert.ToDouble(value);
+						sum += GetObjectValue(value);
 				}
 			}
 			else
 			{
 				foreach (object obj in iList)
 				{
-					double value = Convert.ToDouble(obj);
+					double value = GetObjectValue(obj);
 					sum += value;
 				}
 			}
