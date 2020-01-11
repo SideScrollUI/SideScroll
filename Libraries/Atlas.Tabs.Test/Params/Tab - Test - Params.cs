@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using Atlas.Core;
 using Atlas.Serialize;
-using Atlas.Tabs;
 
 namespace Atlas.Tabs.Test
 {
