@@ -3,7 +3,7 @@
 1. Download Atlas
     - `git clone https://github.com/garyhertel/atlas.git`
 2. Install a C# IDE
-   - Visual Studio 2017 recommended (community edition is fine)
+   - Visual Studio 2019 recommended (community edition is fine)
 3. Open `Atlas.sln` in IDE
 4. Start Atlas in Debugger
     - It's recommended to always run it in debug mode
@@ -31,20 +31,21 @@
 	- Tools -> Options -> Debugging -> General
 	-   Check `Enable Just My Code`
 
-# Suggested Visual Studio Addons
----
+## Extensions
+
+* Avalonia for Visual Studio
+  - Previewer and templates for Avalonia applications and libraries
+
 ## Productivity Power Tools
 * Shows your open files as tabs on the left side instead of tabs across the top
-* Visual Studio 2015
-			https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProductivityPowerTools2015
 * Visual Studio 2017
 			https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ProductivityPowerPack2017
 * Configuring
   - Tools Menu
     - Productivity Power Tools
-       - Custom Document Well
-       - Set `Place tabs on the` = `Left`
-			 - Set `Maximum tab size` = `300`
+      - Custom Document Well
+        - Set `Place tabs on the` = `Left`
+        - Set `Maximum tab size` = `300`
 
 ## NUnit 3 Test Adapter
 * GUI for running unit tests in Visual Studio
@@ -57,6 +58,8 @@
   - Test->Windows->Test Explorer
 * Using
   - Right click on any test and select `Run` or `Debug`
+
+# Suggested Visual Studio Addons
 
 ## dotMem
 * For tracking down memory leaks

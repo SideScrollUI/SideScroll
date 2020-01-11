@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Atlas.Core;
-using Atlas.Tabs;
 
 namespace Atlas.Tabs.Test.Actions
 {
@@ -90,9 +89,10 @@ Actions add Buttons to the tab. When clicked, it will:
 
 			private async Task SleepAsync(Call call)
 			{
-				call.log.Add("Sleeping for 3 seconds");
-				await Task.Delay(3000);
-				call.log.Add("Waking Up");
+				using (CallTimer callTimer = call.Timer("long op"))
+				{
+					await Task.Delay(1000);
+				}
 			}
 		}
 	}

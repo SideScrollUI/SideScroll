@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Atlas.Core;
-using Atlas.Tabs;
 
 namespace Atlas.Tabs.Test.Actions
 {
