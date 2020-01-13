@@ -136,6 +136,8 @@ namespace Atlas.Core
 			}
 		}
 		public Tag[] tags;
+		public SynchronizationContext context; // inherited from creator (which can be a Parent Log)
+		private int contextRandomId;
 
 		public LogEntry()
 		{
@@ -157,10 +159,30 @@ namespace Atlas.Core
 			return Message;
 		}
 
+		private void InitializeContext()
+		{
+			if (context == null)
+			{
+				context = SynchronizationContext.Current;
+				if (context == null)
+				{
+					contextRandomId = new Random().Next();
+					context = new SynchronizationContext();
+				}
+			}
+		}
+
 		protected void CreateEventPropertyChanged([CallerMemberName] String propertyName = "")
 		{
-			//context.Post(new SendOrPostCallback(this.NotifyPropertyChangedContext), propertyName);
+			context?.Post(new SendOrPostCallback(this.NotifyPropertyChangedContext), propertyName);
+			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		private void NotifyPropertyChangedContext(object state)
+		{
+			string propertyName = state as string;
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			//PropertyChanged?.BeginInvoke(this, new PropertyChangedEventArgs(propertyName), EndAsyncEvent, null);
 		}
 	}
 
@@ -171,8 +193,6 @@ namespace Atlas.Core
 
 		[InnerValue]
 		public ItemCollection<LogEntry> items = new ItemCollection<LogEntry>(); // change to LRU for performance? No Binding?
-		private SynchronizationContext context; // inherited from creator (which can be a Parent Log)
-		private int contextRandomId;
 		private static object locker = new object(); // todo: replace this with individual ones? (deadlock territory if circular) or a non-blocking version
 		private string SummaryText;
 
@@ -184,7 +204,7 @@ namespace Atlas.Core
 		public Log()
 		{
 			this.Created = DateTime.Now;
-			InitializeContext();
+			//InitializeContext();
 		}
 
 		public Log(string text = null, SynchronizationContext context = null, Tag[] tags = null)
@@ -194,21 +214,7 @@ namespace Atlas.Core
 			this.tags = tags;
 			this.Created = DateTime.Now;
 
-			InitializeContext();
-		}
-
-		private void InitializeContext()
-		{
-			if (this.context == null)
-			{
-				this.context = SynchronizationContext.Current;
-				if (this.context == null)
-				{
-					contextRandomId = new Random().Next();
-					//throw new Exception("Don't do this");
-					this.context = new SynchronizationContext();
-				}
-			}
+			//InitializeContext();
 		}
 
 		// use caller instead?
@@ -246,7 +252,7 @@ namespace Atlas.Core
 		public LogTimer Timer(string text, params Tag[] tags)
 		{
 			LogTimer logTimer = new LogTimer(text, context);
-			logTimer.contextRandomId = contextRandomId;
+			//logTimer.contextRandomId = contextRandomId;
 			logTimer.tags = tags;
 			AddLogEntry(logTimer);
 			return logTimer;
@@ -265,7 +271,7 @@ namespace Atlas.Core
 		private Log AddChildEntry(LogType logType, string name, params Tag[] tags)
 		{
 			Log log = new Log(name, context, tags);
-			log.contextRandomId = contextRandomId;
+			//log.contextRandomId = contextRandomId;
 			log.originalType = logType;
 			log.Type = logType;
 			AddLogEntry(log);
@@ -275,7 +281,11 @@ namespace Atlas.Core
 		public void AddLogEntry(LogEntry logEntry)
 		{
 			logEntry.rootLog = rootLog;
-			context.Post(new SendOrPostCallback(AddEntryCallback), logEntry);
+			logEntry.context = context;
+			if (context != null)
+				context.Post(new SendOrPostCallback(AddEntryCallback), logEntry);
+			else
+				AddEntryCallback(logEntry);
 		}
 
 		// Thread safe callback, only works if the context is the same

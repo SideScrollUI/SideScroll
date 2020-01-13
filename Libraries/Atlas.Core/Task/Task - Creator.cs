@@ -46,6 +46,7 @@ namespace Atlas.Core
 			this.context = SynchronizationContext.Current;
 			if (this.context == null)
 				this.context = new SynchronizationContext();
+			call.log.context = context;
 
 			TaskInstance taskInstance = new TaskInstance()
 			{
