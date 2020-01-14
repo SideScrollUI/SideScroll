@@ -306,7 +306,7 @@ namespace Atlas.GUI.Avalonia
 				tabInstance.LoadDefaultBookmark();
 
 			tabView = new TabView(tabInstance);
-			tabView.tabModel.Name = project.Name;
+			tabView.tabModel.Name = "Start";
 			tabView.tabModel.Bookmarks = new BookmarkCollection(project);
 			tabView.Load();
 
