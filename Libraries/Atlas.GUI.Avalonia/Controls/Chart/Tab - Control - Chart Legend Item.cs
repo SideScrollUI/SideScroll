@@ -59,6 +59,11 @@ namespace Atlas.GUI.Avalonia.Controls
 			InitializeControls();
 		}
 
+		public override string ToString()
+		{
+			return series.Title;
+		}
+
 		private void InitializeControls()
 		{
 			//this.HorizontalAlignment = HorizontalAlignment.Right;
@@ -67,7 +72,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.RowDefinitions = new RowDefinitions();
 			//this.Margin = new Thickness(6);
 
-			UpdateSums();
+			UpdateSum();
 			AddCheckBox();
 			AddTextBox();
 
@@ -75,7 +80,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			PointerLeave += TabChartLegendItem_PointerLeave;
 		}
 
-		private void UpdateSums()
+		private void UpdateSum()
 		{
 			Sum = 0;
 			Count = 0;
@@ -86,7 +91,8 @@ namespace Atlas.GUI.Avalonia.Controls
 					Count = lineSeries.Points.Count;
 					foreach (DataPoint dataPoint in lineSeries.Points)
 					{
-						Sum += dataPoint.Y;
+						if (!double.IsNaN(dataPoint.Y))
+							Sum += dataPoint.Y;
 					}
 				}
 				else if (lineSeries.ItemsSource != null)
