@@ -58,7 +58,7 @@ namespace Atlas.Serialize
 			call = call ?? new Call();
 			object obj = Load(call, lazy, taskInstance);
 			if (obj == null)
-				return default(T);
+				return default;
 
 			/*Type type = typeof(T);
 			//if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
@@ -139,7 +139,7 @@ namespace Atlas.Serialize
 		public T LoadOrCreate<T>(Call call = null, bool lazy = false, TaskInstance taskInstance = null)
 		{
 			call = call ?? new Call();
-			T result = default(T);
+			T result = default;
 			if (Exists)
 			{
 				result = Load<T>(call, lazy, taskInstance);

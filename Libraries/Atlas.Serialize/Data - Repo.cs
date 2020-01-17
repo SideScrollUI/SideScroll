@@ -96,7 +96,7 @@ namespace Atlas.Serialize
 				Debug.Assert(newObject != null);
 				return newObject;
 			}
-			return default(T);
+			return default;
 		}
 
 		public T Load<T>(bool createIfNeeded = false, bool lazy = false, Call call = null)

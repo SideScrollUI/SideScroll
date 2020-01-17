@@ -64,7 +64,7 @@ namespace Atlas.Tabs
 			object obj;
 			if (Items.TryGetValue(typeof(T), out obj))
 				return (T)obj;
-			return default(T);
+			return default;
 		}
 
 		public object Get(Type type)

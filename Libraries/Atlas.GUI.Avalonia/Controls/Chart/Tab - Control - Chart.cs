@@ -496,13 +496,9 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				return string.Format("{0} K", d / 1E3);
 			}
-			else if (ad < 1E3)
-			{
-				return string.Format("{0}", d);
-			}
 			else
 			{
-				return string.Format("{0}", d);
+				return d.ObjectToString();
 			}
 		}
 		public string GetDateTimeFormat(double duration)

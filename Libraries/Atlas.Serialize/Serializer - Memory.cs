@@ -43,7 +43,7 @@ namespace Atlas.Serialize
 			{
 				throw new Exception("Cloned types do not match [" + typeof(T).ToString() + "], [" + obj.GetType().ToString() +"]");
 			}
-			//	return default(T);
+			//	return default;
 			try
 			{
 				SerializerMemory memorySerializer = new SerializerMemory();
@@ -55,7 +55,7 @@ namespace Atlas.Serialize
 			{
 				call.log.AddError(e.Message);
 			}
-			return default(T);
+			return default;
 		}
 
 		public string GetEncodedString()
