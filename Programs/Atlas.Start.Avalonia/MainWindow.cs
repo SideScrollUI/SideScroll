@@ -8,8 +8,6 @@ namespace Atlas.Start.Avalonia
 	{
 		public MainWindow() : base(LoadProject())
 		{
-			AddClipBoardButtons();
-
 			AddTab(new TabAvalonia());
 		}
 

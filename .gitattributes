@@ -1,2 +1,5 @@
 # force LF instead of CR + LF
 * text=auto eol=lf
+*.png -text
+*.ico -text
+*.fla -text
