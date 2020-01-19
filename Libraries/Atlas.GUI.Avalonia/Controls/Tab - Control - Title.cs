@@ -55,8 +55,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				Foreground = new SolidColorBrush(Theme.TitleForegroundColor),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				//HorizontalAlignment = HorizontalAlignment.Left,
-				//[Grid.RowProperty] = 0,
-				//[ToolTip.TipProperty] = Label,
+				//[ToolTip.TipProperty] = Label, // re-enable when foreground fixed
+				//[ToolTip.ForegroundProperty] = Brushes.Black, // this overrides the TextBlock Foreground property
 			};
 
 			Border borderPaddingTitle = new Border()

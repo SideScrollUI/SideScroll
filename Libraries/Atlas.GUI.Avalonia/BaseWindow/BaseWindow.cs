@@ -112,8 +112,9 @@ namespace Atlas.GUI.Avalonia
 			};
 
 			toolbar = new BaseWindowToolbar(this);
-			Grid.SetRow(toolbar, 0);
 			containerGrid.Children.Add(toolbar);
+			toolbar.buttonLink.Add(Link);
+			toolbar.buttonImport.Add(ImportBookmark);
 
 			scrollViewer = new ScrollViewer()
 			{
@@ -170,13 +171,6 @@ namespace Atlas.GUI.Avalonia
 			//LoadProject(project);
 			//tabView.Load();
 			tabView.tabInstance.Reload();
-		}
-
-		public void AddClipBoardButtons()
-		{
-			toolbar.AddClipBoardButtons();
-			toolbar.buttonLink.Add(Link);
-			toolbar.buttonImport.Add(ImportBookmark);
 		}
 
 		private void Link(Call call)

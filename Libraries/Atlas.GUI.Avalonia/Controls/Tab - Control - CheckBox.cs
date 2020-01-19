@@ -1,6 +1,7 @@
-﻿using Avalonia;
+﻿using Atlas.Tabs;
+using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -9,28 +10,47 @@ using System;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
-	public class TabControlTextBox : TextBox, IStyleable, ILayoutable
+	public class TabControlCheckBox : CheckBox, IStyleable, ILayoutable
 	{
-		Type IStyleable.StyleKey => typeof(TextBox);
+		Type IStyleable.StyleKey => typeof(CheckBox);
 
-		public TabControlTextBox()
+		public TabControlCheckBox()
+		{
+			Initialize();
+		}
+
+		public TabControlCheckBox(ListProperty property)
+		{
+			Initialize();
+			Bind(property);
+		}
+
+		private void Bind(ListProperty property)
+		{
+			var binding = new Binding(property.propertyInfo.Name)
+			{
+				//Converter = new EditValueConverter(),
+				//StringFormat = "Hello {0}",
+				Mode = BindingMode.TwoWay,
+				Source = property.obj,
+			};
+			((CheckBox)this).Bind(IsCheckedProperty, binding);
+		}
+
+		private void Initialize()
 		{
 			Background = new SolidColorBrush(Colors.White);
 			BorderBrush = new SolidColorBrush(Colors.Black);
-			BorderThickness = new Thickness(1);
 			HorizontalAlignment = HorizontalAlignment.Stretch;
-			MinWidth = 50;
-			Padding = new Thickness(6, 3);
-			Focusable = true; // already set?
+			BorderThickness = new Thickness(1);
+			//MinWidth = 50;
 			MaxWidth = TabControlParams.ControlMaxWidth;
-			//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
-			//IsReadOnly = !property.Editable;
-
-			this.PointerEnter += TextBox_PointerEnter;
-			this.PointerLeave += TextBox_PointerLeave;
+			Margin = new Thickness(2, 2);
+			//Focusable = true; // already set?
+			//Padding = new Thickness(6, 3);
 		}
 
-		private IBrush OriginalColor;
+		/*private IBrush OriginalColor;
 
 		// DefaultTheme.xaml is setting this for templates
 		private void TextBox_PointerEnter(object sender, PointerEventArgs e)
@@ -50,9 +70,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			if (textBox.IsEnabled && !textBox.IsReadOnly)
 				textBox.Background = OriginalColor ?? textBox.Background;
 			//textBox.BorderBrush = textBox.Background;
-		}
+		}*/
 	}
 }
-/*
-Todo: replace with Tab Avalonia Edit
-*/

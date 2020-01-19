@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using System.Globalization;
+using System.Windows.Input;
 using Atlas.Core;
+using Atlas.Extensions;
+using Atlas.Resources;
 using Atlas.Tabs;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Layout;
 using Avalonia;
 using Avalonia.Data;
-using Atlas.Extensions;
 using Avalonia.Collections;
 using Avalonia.Input.Platform;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
-using System.IO;
-using System.Windows.Input;
-using Atlas.Resources;
-using System.ComponentModel;
-using System.Globalization;
 using Avalonia.Styling;
 
 namespace Atlas.GUI.Avalonia.Controls
@@ -166,7 +165,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private TextBox AddTextBox(ListProperty property, int rowIndex, int columnIndex, Type type)
 		{
-			var textBox = new TabTextBox()
+			var textBox = new TabControlTextBox()
 			{
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
@@ -316,7 +315,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private CheckBox AddCheckBox(ListProperty property, int rowIndex, int columnIndex)
 		{
-			TabCheckBox checkBox = new TabCheckBox(property)
+			TabControlCheckBox checkBox = new TabControlCheckBox(property)
 			{
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
@@ -594,155 +593,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			Button button = (Button)sender;
 			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
 			button.BorderBrush = button.Background;
-		}
-	}
-
-	public class TabCheckBox : CheckBox, IStyleable, ILayoutable
-	{
-		Type IStyleable.StyleKey => typeof(CheckBox);
-
-		public TabCheckBox()
-		{
-			Initialize();
-		}
-
-		public TabCheckBox(ListProperty property)//, int rowIndex, int columnIndex)
-		{
-			Initialize();
-			//Grid.SetRow(this, rowIndex);
-			//Grid.SetColumn(this, columnIndex);
-			Bind(property);
-		}
-
-		private void Bind(ListProperty property)
-		{
-			var binding = new Binding(property.propertyInfo.Name)
-			{
-				//Converter = new EditValueConverter(),
-				//StringFormat = "Hello {0}",
-				Mode = BindingMode.TwoWay,
-				Source = property.obj,
-			};
-			((CheckBox)this).Bind(IsCheckedProperty, binding);
-		}
-
-		private void Initialize()
-		{
-			Background = new SolidColorBrush(Colors.White);
-			BorderBrush = new SolidColorBrush(Colors.Black);
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			BorderThickness = new Thickness(1);
-			//MinWidth = 50;
-			MaxWidth = TabControlParams.ControlMaxWidth;
-			Margin = new Thickness(2, 2);
-			//Focusable = true; // already set?
-			//Padding = new Thickness(6, 3);
-		}
-
-		/*private IBrush OriginalColor;
-
-		// DefaultTheme.xaml is setting this for templates
-		private void TextBox_PointerEnter(object sender, PointerEventArgs e)
-		{
-			TextBox textBox = (TextBox)sender;
-			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			if (textBox.IsEnabled && !textBox.IsReadOnly)
-			{
-				OriginalColor = textBox.Background;
-				textBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
-			}
-		}
-
-		private void TextBox_PointerLeave(object sender, PointerEventArgs e)
-		{
-			TextBox textBox = (TextBox)sender;
-			if (textBox.IsEnabled && !textBox.IsReadOnly)
-				textBox.Background = OriginalColor ?? textBox.Background;
-			//textBox.BorderBrush = textBox.Background;
-		}*/
-	}
-
-	public class TabTextBox : TextBox, IStyleable, ILayoutable
-	{
-		Type IStyleable.StyleKey => typeof(TextBox);
-
-		public TabTextBox()
-		{
-			Background = new SolidColorBrush(Colors.White);
-			BorderBrush = new SolidColorBrush(Colors.Black);
-			BorderThickness = new Thickness(1);
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			MinWidth = 50;
-			Padding = new Thickness(6, 3);
-			Focusable = true; // already set?
-			MaxWidth = TabControlParams.ControlMaxWidth;
-			//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
-			//[Grid.RowProperty] = rowIndex;
-			//[Grid.ColumnProperty] = columnIndex;
-			//IsReadOnly = !property.Editable;
-
-			this.PointerEnter += TextBox_PointerEnter;
-			this.PointerLeave += TextBox_PointerLeave;
-		}
-
-		private IBrush OriginalColor;
-
-		// DefaultTheme.xaml is setting this for templates
-		private void TextBox_PointerEnter(object sender, PointerEventArgs e)
-		{
-			TextBox textBox = (TextBox)sender;
-			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			if (textBox.IsEnabled && !textBox.IsReadOnly)
-			{
-				OriginalColor = textBox.Background;
-				textBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
-			}
-		}
-
-		private void TextBox_PointerLeave(object sender, PointerEventArgs e)
-		{
-			TextBox textBox = (TextBox)sender;
-			if (textBox.IsEnabled && !textBox.IsReadOnly)
-				textBox.Background = OriginalColor ?? textBox.Background;
-			//textBox.BorderBrush = textBox.Background;
-		}
-	}
-
-	public class TabComboBox : ComboBox, IStyleable, ILayoutable
-	{
-		Type IStyleable.StyleKey => typeof(ComboBox);
-
-		private IBrush OriginalColor;
-
-		public TabComboBox()
-		{
-			Background = new SolidColorBrush(Colors.White);
-			BorderBrush = new SolidColorBrush(Colors.Black);
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			BorderThickness = new Thickness(1);
-
-			PointerEnter += ComboBox_PointerEnter;
-			PointerLeave += ComboBox_PointerLeave;
-		}
-
-		// DefaultTheme.xaml is setting this for templates
-		private void ComboBox_PointerEnter(object sender, PointerEventArgs e)
-		{
-			ComboBox comboBox = (ComboBox)sender;
-			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			if (comboBox.IsEnabled)
-			{
-				OriginalColor = comboBox.Background;
-				comboBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
-			}
-		}
-
-		private void ComboBox_PointerLeave(object sender, PointerEventArgs e)
-		{
-			ComboBox comboBox = (ComboBox)sender;
-			if (comboBox.IsEnabled)
-				comboBox.Background = OriginalColor ?? new SolidColorBrush(Colors.White);
-			//textBox.BorderBrush = textBox.Background;
 		}
 	}
 }

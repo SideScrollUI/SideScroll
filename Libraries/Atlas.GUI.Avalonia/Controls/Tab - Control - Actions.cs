@@ -1,16 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Diagnostics;
 using Atlas.Core;
 using Atlas.Tabs;
-using Avalonia.Controls;
-using System.Collections;
-using Avalonia.Media;
-using Avalonia.Layout;
 using Avalonia;
-using Avalonia.Styling;
+using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Layout;
+using Avalonia.Media;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -79,7 +76,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				gridRow.Height = new GridLength(1, GridUnitType.Auto);
 				containerGrid.RowDefinitions.Add(gridRow);
 
-				Button button = TabControlButton.Create(taskCreator.Label);
+				Button button = new TabControlButton(taskCreator.Label);
 				//button.Styles.Add(new Style
 				/*
 				
@@ -97,8 +94,6 @@ namespace Atlas.GUI.Avalonia.Controls
 					}
 				});*/
 				button.Margin = new Thickness(4, 2);
-				button.PointerEnter += Button_PointerEnter;
-				button.PointerLeave += Button_PointerLeave;
 				button.Click += Button_Click;
 				taskCreators[button] = taskCreator;
 				//stackPanel.Children.Add(button);
@@ -154,20 +149,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				Text = "Child",
 			};
 			rightGrid.Children.Add(child);*/
-		}
-
-		private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			Button button = (Button)sender;
-			//button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			button.Background = new SolidColorBrush(Theme.ButtonBackgroundHoverColor);
-		}
-
-		private void Button_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			Button button = (Button)sender;
-			button.Background = new SolidColorBrush(Theme.ButtonBackgroundColor);
-			//button.BorderBrush = button.Background;
 		}
 
 		private void Button_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)

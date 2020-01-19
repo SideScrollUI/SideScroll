@@ -15,6 +15,7 @@ namespace Atlas.GUI.Avalonia
 		public ToolbarButton buttonLink;
 		public ToolbarButton buttonImport;
 		public ToolbarButton buttonRefresh;
+		public ToolbarButton buttonSnapshot;
 		//public Project project;
 		private BaseWindow baseWindow;
 
@@ -69,6 +70,10 @@ namespace Atlas.GUI.Avalonia
 			//buttonRefresh.Add();
 			buttonRefresh.Add(ButtonRefresh_Click);
 
+			AddSeparator();
+			buttonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
+			buttonImport = AddButton("Import Link from Clipboard", Icons.Streams.Import);
+
 			// Handle in BaseWindow
 			//var refreshGesture = new KeyGesture { Key = Key.F5 };
 			//HotKeyManager.SetHotKey(buttonRefresh, refreshGesture);
@@ -100,13 +105,6 @@ namespace Atlas.GUI.Avalonia
 		private void ButtonRefresh_Click(Call call)
 		{
 			baseWindow.Reload();
-		}
-
-		public void AddClipBoardButtons()
-		{
-			AddSeparator();
-			buttonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
-			buttonImport = AddButton("Import Link from Clipboard", Icons.Streams.Import);
 		}
 
 		private bool CommandBackCanExecute(object obj)
