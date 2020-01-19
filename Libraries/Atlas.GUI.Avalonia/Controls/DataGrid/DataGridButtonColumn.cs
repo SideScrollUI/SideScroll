@@ -23,7 +23,7 @@ namespace Atlas.GUI.Avalonia
 			//cell.Background = GetCellBrush(cell, dataItem);
 			//cell.MaxHeight = 100; // don't let them have more than a few lines each
 
-			Button button = TabControlButton.Create(buttonText);
+			Button button = new TabControlButton(buttonText);
 			button.PointerEnter += Button_PointerEnter;
 			button.PointerLeave += Button_PointerLeave;
 			button.Click += Button_Click;

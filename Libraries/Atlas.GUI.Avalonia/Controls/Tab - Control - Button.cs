@@ -1,54 +1,46 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Styling;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
-	public class TabControlButton : Button
+	public class TabControlButton : Button, IStyleable
 	{
-		public string Label { get; set; }
+		Type IStyleable.StyleKey => typeof(Button);
 
-		// doesn't work
-		private TabControlButton()
+		public TabControlButton(string label)
 		{
-			this.Label = "test";
+			this.Content = label;
 
 			InitializeControl();
 		}
 
-		// doesn't work
 		public void InitializeControl()
 		{
-			Content = Label;
 			Background = new SolidColorBrush(Theme.ButtonBackgroundColor);
 			Foreground = new SolidColorBrush(Theme.ButtonForegroundColor);
 			BorderBrush = new SolidColorBrush(Colors.Black);
-			BorderThickness = new Thickness(2);
-			// todo: set highlight colors
+			BorderThickness = new Thickness(1);
 
-			//TextColor = Theme.ButtonForegroundColor;
-			//BackgroundColor = Theme.ButtonBackgroundColor;
+			PointerEnter += Button_PointerEnter;
+			PointerLeave += Button_PointerLeave;
 		}
 
-		// works
-		public static Button Create(string label)
+		private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
-			Button button = new Button()
-			{
-				Content = label,
-				Background = new SolidColorBrush(Theme.ButtonBackgroundColor),
-				Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
-				BorderBrush = new SolidColorBrush(Colors.Black),
-				BorderThickness = new Thickness(1),
-				// todo: set highlight colors
+			Button button = (Button)sender;
+			//button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			button.Background = new SolidColorBrush(Theme.ButtonBackgroundHoverColor);
+		}
 
-				//TextColor = Theme.ButtonForegroundColor;
-				//BackgroundColor = Theme.ButtonBackgroundColor;
-			};
-			return button;
+		private void Button_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			Button button = (Button)sender;
+			button.Background = new SolidColorBrush(Theme.ButtonBackgroundColor);
+			//button.BorderBrush = button.Background;
 		}
 	}
 }
