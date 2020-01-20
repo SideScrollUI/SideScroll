@@ -75,6 +75,7 @@ namespace Atlas.Core
 	public class ListSeries
 	{
 		public string Name { get; set; }
+		public Dictionary<string, string> Tags { get; set; } = new Dictionary<string, string>();
 		public IList iList; // List to start with, any elements added will also trigger an event to add new points
 		//public PropertyInfo xPropertyInfo; // optional
 

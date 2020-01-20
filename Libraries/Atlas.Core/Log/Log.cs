@@ -137,7 +137,6 @@ namespace Atlas.Core
 		}
 		public Tag[] tags;
 		public SynchronizationContext context; // inherited from creator (which can be a Parent Log)
-		private int contextRandomId;
 
 		public LogEntry()
 		{
@@ -166,7 +165,6 @@ namespace Atlas.Core
 				context = SynchronizationContext.Current;
 				if (context == null)
 				{
-					contextRandomId = new Random().Next();
 					context = new SynchronizationContext();
 				}
 			}
@@ -204,7 +202,6 @@ namespace Atlas.Core
 		public Log()
 		{
 			this.Created = DateTime.Now;
-			//InitializeContext();
 		}
 
 		public Log(string text = null, SynchronizationContext context = null, Tag[] tags = null)
@@ -213,8 +210,6 @@ namespace Atlas.Core
 			this.Text = text;
 			this.tags = tags;
 			this.Created = DateTime.Now;
-
-			//InitializeContext();
 		}
 
 		// use caller instead?
@@ -252,7 +247,6 @@ namespace Atlas.Core
 		public LogTimer Timer(string text, params Tag[] tags)
 		{
 			LogTimer logTimer = new LogTimer(text, context);
-			//logTimer.contextRandomId = contextRandomId;
 			logTimer.tags = tags;
 			AddLogEntry(logTimer);
 			return logTimer;
@@ -271,7 +265,6 @@ namespace Atlas.Core
 		private Log AddChildEntry(LogType logType, string name, params Tag[] tags)
 		{
 			Log log = new Log(name, context, tags);
-			//log.contextRandomId = contextRandomId;
 			log.originalType = logType;
 			log.Type = logType;
 			AddLogEntry(log);

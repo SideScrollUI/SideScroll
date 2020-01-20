@@ -23,6 +23,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public TabControlChartLegend legend;
 		public OxyPlot.Series.Series series;
+		public OxyListSeries oxyListSeries;
 		//public string Label { get; set; }
 		public TextBlock textBlock;
 		private Polygon polygon;
@@ -42,6 +43,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 			set
 			{
+				oxyListSeries.IsVisible = value;
 				_IsChecked = value;
 				if (Count > 0)
 					polygon.Fill = new SolidColorBrush(IsChecked ? color : Colors.Transparent);
@@ -52,10 +54,11 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public List<DataPoint> Points { get; internal set; }
 
-		public TabChartLegendItem(TabControlChartLegend legend, OxyPlot.Series.Series series)
+		public TabChartLegendItem(TabControlChartLegend legend, OxyListSeries oxyListSeries)
 		{
 			this.legend = legend;
-			this.series = series;
+			this.oxyListSeries = oxyListSeries;
+			series = oxyListSeries.OxySeries;
 			InitializeControls();
 		}
 
