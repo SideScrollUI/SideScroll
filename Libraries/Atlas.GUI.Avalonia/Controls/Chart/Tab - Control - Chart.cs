@@ -18,6 +18,30 @@ using OxyPlot.Avalonia;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
+	public class OxyListSeries
+	{
+		public ListSeries ListSeries;
+		public OxyPlot.Series.Series OxySeries;
+		public bool IsVisible;
+
+		public OxyListSeries(ListSeries listSeries, OxyPlot.Series.Series oxySeries)
+		{
+			ListSeries = listSeries;
+			OxySeries = oxySeries;
+			IsVisible = true;
+		}
+	}
+
+	public class SeriesSelectedEventArgs : EventArgs
+	{
+		public List<ListSeries> Series;
+
+		public SeriesSelectedEventArgs(List<ListSeries> series)
+		{
+			Series = series;
+		}
+	}
+
 	public class TabControlChart : UserControl //, IDisposable
 	{
 		private TabInstance tabInstance;
@@ -25,8 +49,22 @@ namespace Atlas.GUI.Avalonia.Controls
 		public ListGroup ListGroup { get; set; }
 
 		//private List<ListSeries> ListSeries { get; set; }
+		public List<OxyListSeries> oxyListSeriesList = new List<OxyListSeries>();
 		private Dictionary<IList, ListSeries> ListToTabSeries { get; set; } = new Dictionary<IList, ListSeries>();
 		private Dictionary<IList, int> ListToTabIndex { get; set; } = new Dictionary<IList, int>(); // not used
+		public List<ListSeries> SelectedSeries
+		{
+			get
+			{
+				var selected = new List<ListSeries>();
+				foreach (var oxyListSeries in oxyListSeriesList)
+				{
+					if (oxyListSeries.IsVisible)
+						selected.Add(oxyListSeries.ListSeries);
+				}
+				return selected;
+			}
+		}
 
 		//public SeriesCollection SeriesCollection { get; set; }
 
@@ -64,7 +102,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			return Colors[index % Colors.Length];
 		}
 
-		//public event EventHandler<EventArgs> OnSelectionChanged;
+		public event EventHandler<SeriesSelectedEventArgs> OnSelectionChanged;
 
 		public TabControlChart(TabInstance tabInstance, ListGroup listGroup)
 		{
@@ -83,11 +121,9 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
 			this.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
-			//this.Orientation = Orientation.Vertical;
 			MaxWidth = 1500;
 			MaxHeight = 1000;
 
-			// autogenerate columns
 			if (tabInstance.tabViewSettings.ChartDataSettings.Count == 0)
 				tabInstance.tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
 			
@@ -115,22 +151,13 @@ namespace Atlas.GUI.Avalonia.Controls
 				TargetType = typeof(object),
 			};*/
 
-			// Doesn't work for Children that Stretch?
-			/*StackPanel stackPanel = new StackPanel();
-			stackPanel.Orientation = Orientation.Vertical;
-			stackPanel.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch;
-			stackPanel.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
-			stackPanel.Children.Add(borderTitle);
-			stackPanel.Children.Add(plotView);*/
-
-
 			Grid containerGrid = new Grid()
 			{
 				ColumnDefinitions = new ColumnDefinitions("*,Auto"),
-				RowDefinitions = new RowDefinitions("*,Auto"), // Header, Body
+				RowDefinitions = new RowDefinitions("*,Auto"),
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
-				Background = new SolidColorBrush(Theme.BackgroundColor), // grid lines look bad when hovering
+				Background = new SolidColorBrush(Theme.BackgroundColor), // grid lines look bad when hovering without this
 			};
 
 			containerGrid.Children.Add(plotView);
@@ -144,6 +171,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			else
 			{
 				Grid.SetColumn(legend, 1);
+				legend.MaxWidth = 300;
 			}
 			containerGrid.Children.Add(legend);
 			legend.OnSelectionChanged += Legend_OnSelectionChanged;
@@ -156,6 +184,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void Legend_OnSelectionChanged(object sender, EventArgs e)
 		{
 			UpdateValueAxis();
+			OnSelectionChanged?.Invoke(sender, new SeriesSelectedEventArgs(SelectedSeries));
 		}
 
 		public void LoadListGroup(ListGroup listGroup)
@@ -523,6 +552,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			linearAxis = null;
 			dateTimeAxis = null;
 			legend?.Unload();
+			oxyListSeriesList.Clear();
 			ListToTabSeries.Clear();
 			ListToTabIndex.Clear();
 			//if (plotModel != null)
@@ -595,6 +625,8 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			plotModel.Series.Add(lineSeries);
 
+			var oxyListSeries = new OxyListSeries(listSeries, lineSeries);
+
 			INotifyCollectionChanged iNotifyCollectionChanged = listSeries.iList as INotifyCollectionChanged;
 			if (iNotifyCollectionChanged != null)
 				//iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
@@ -604,6 +636,7 @@ namespace Atlas.GUI.Avalonia.Controls
 					SeriesChanged(listSeries, e.NewItems, lineSeries);
 				});
 
+			oxyListSeriesList.Add(oxyListSeries);
 			ListToTabSeries[listSeries.iList] = listSeries;
 			ListToTabIndex[listSeries.iList] = ListToTabIndex.Count;
 			return lineSeries;

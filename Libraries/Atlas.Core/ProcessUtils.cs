@@ -60,5 +60,25 @@ namespace Atlas.Core
 			{
 			}
 		}
+
+		public static void StartDotnetProcess(string arguments)
+		{
+			if (Environment.OSVersion.Platform == PlatformID.Unix)
+			{
+				Process process = Process.Start("dotnet", arguments);
+			}
+			else
+			{
+				ProcessStartInfo processStartInfo = new ProcessStartInfo()
+				{
+					FileName = "dotnet.exe",
+					Arguments = arguments,
+					WorkingDirectory = Directory.GetCurrentDirectory(),
+					CreateNoWindow = true,
+					//UseShellExecute = true, // doesn't work on mac yet, last checked for dotnet 3.1
+				};
+				Process process = Process.Start(processStartInfo);
+			}
+		}
 	}
 }

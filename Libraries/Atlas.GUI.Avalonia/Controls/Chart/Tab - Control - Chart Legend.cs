@@ -15,7 +15,6 @@ using Avalonia.Input;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
-	// todo: switch to WrapPanel? Children.Clear() doesn't work? throws exception when re-adding
 	public class TabControlChartLegend : WrapPanel
 	{
 		private TabControlChart tabControlChart;
@@ -45,14 +44,15 @@ namespace Atlas.GUI.Avalonia.Controls
 			RefreshModel();
 		}
 
-		private TabChartLegendItem AddSeries(OxyPlot.Series.Series series)
+		private TabChartLegendItem AddSeries(OxyListSeries oxyListSeries)
 		{
+			OxyPlot.Series.Series series = oxyListSeries.OxySeries;
 			Color color = Colors.Green;
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 				color = lineSeries.Color.ToColor();
 			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
 				color = scatterSeries.MarkerFill.ToColor();
-			TabChartLegendItem legendItem = new TabChartLegendItem(this, series);
+			TabChartLegendItem legendItem = new TabChartLegendItem(this, oxyListSeries);
 			legendItem.OnSelectionChanged += CheckBox_SelectionChanged;
 			legendItem.OnHighlightChanged += LegendItem_OnHighlightChanged;
 			legendItem.textBlock.PointerPressed += (s, e) =>
@@ -103,6 +103,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				SetSelectionAll(false);
 				legendItem.IsChecked = true;
+				//OnSelectionChanged?.Invoke(this, legendItem.oxyListSeries);
 			}
 			else
 			{
@@ -128,16 +129,17 @@ namespace Atlas.GUI.Avalonia.Controls
 				return;
 
 			Children.Clear();
-			foreach (var series in plotView.Model.Series)
+			foreach (var oxyListSeries in tabControlChart.oxyListSeriesList)
 			{
-				if (series.Title == null)
+				string title = oxyListSeries.OxySeries.Title;
+				if (title == null)
 					continue;
 				TabChartLegendItem legendItem;
-				if (!idxLegendItems.TryGetValue(series.Title, out legendItem))
+				if (!idxLegendItems.TryGetValue(title, out legendItem))
 				{
 					if (idxLegendItems.Count > 25) // todo: improve this
 						continue;
-					legendItem = AddSeries(series);
+					legendItem = AddSeries(oxyListSeries);
 				}
 				Children.Add(legendItem);
 			}
@@ -170,23 +172,6 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void UpdateVisibleSeries()
 		{
-			/*foreach (CheckBox checkBox in checkBoxes)
-			{
-				if (checkBox.DataContext is OxyPlot.Series.LineSeries lineSeries)
-				{
-					if (checkBox.IsChecked == true)
-					{
-						lineSeries.LineStyle = LineStyle.Solid;
-						lineSeries.MarkerType = MarkerType.Circle;
-					}
-					else
-					{
-						lineSeries.LineStyle = LineStyle.None;
-						lineSeries.MarkerType = MarkerType.None;
-						lineSeries.Unselect();
-					}
-				}
-			}*/
 			foreach (OxyPlot.Series.Series series in plotView.Model.Series)
 			{
 				if (series is OxyPlot.Series.LineSeries lineSeries)

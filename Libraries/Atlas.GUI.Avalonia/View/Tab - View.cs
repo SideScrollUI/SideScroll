@@ -84,6 +84,8 @@ namespace Atlas.GUI.Avalonia.View
 				// Have return TabModel?
 				tabInstance.Reintialize(false);
 			}
+			if (tabInstance is ITabSelector tabSelector)
+				tabSelector.OnSelectionChanged += ParentListSelectionChanged;
 
 			//tabInstance.StartTask(LoadAll, true, false);
 		}
@@ -812,8 +814,6 @@ namespace Atlas.GUI.Avalonia.View
 				newChildControls[tempPanelId] = fillerPanel;
 			}
 			tabChildControls.SetControls(newChildControls, orderedChildControls);
-			//InvalidateMeasure();
-			//InvalidateArrange();
 			UpdateSelectedTabInstances();
 		}
 
@@ -823,6 +823,11 @@ namespace Atlas.GUI.Avalonia.View
 			newChildControls = new Dictionary<object, Control>();
 			List<Control> orderedChildControls = new List<Control>();
 			AddNotes(newChildControls, oldChildControls, orderedChildControls);
+
+			if (tabInstance is ITabSelector tabSelector && tabSelector.SelectedItems != null)
+			{
+				CreateChildControls(tabSelector.SelectedItems, oldChildControls, newChildControls, orderedChildControls, tabSelector);
+			}
 
 			foreach (ITabSelector tabControl in CustomTabControls)
 			{
