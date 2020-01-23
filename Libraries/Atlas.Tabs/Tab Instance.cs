@@ -270,7 +270,7 @@ namespace Atlas.Tabs
 			StartTask(taskDelegate, showTask);
 		}
 
-		public void StartAsync(CallActionAsync callAction, bool showTask)
+		public void StartAsync(CallActionAsync callAction, bool showTask = false)
 		{
 			var taskDelegate = new TaskDelegateAsync(callAction.Method.Name, callAction, true);
 			StartTask(taskDelegate, showTask);
