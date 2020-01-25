@@ -798,14 +798,6 @@ namespace Atlas.GUI.Avalonia.View
 			// Add a filler panel so the grid splitter can drag to the right
 			if (orderedChildControls.Count == 0)
 			{
-				/*UserControl panel = new UserControl()
-				{
-					HorizontalAlignment = HorizontalAlignment.Stretch,
-					VerticalAlignment = VerticalAlignment.Stretch,
-					Background = new SolidColorBrush(Colors.Azure),
-					//Width = 500,
-					//[Grid.ColumnProperty] = 0,
-				};*/
 				fillerPanel = new Panel()
 				{
 					Width = GetFillerPanelWidth(), // should update this after moving grid splitter
