@@ -1,5 +1,5 @@
-# force LF instead of CR + LF
-* text=auto eol=lf
+# Convert to native line feeds on checkout to avoid git warnings
+* text=auto
 *.png -text
 *.ico -text
 *.fla -text

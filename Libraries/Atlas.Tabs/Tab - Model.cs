@@ -70,6 +70,7 @@ namespace Atlas.Tabs
 		}
 		public bool Editing { get; set; } = false;
 		public bool Skippable { get; set; } = false;
+		public int MaxDesiredWidth { get; set; } = 1500;
 
 
 		public TabModel()

@@ -56,9 +56,8 @@ namespace Atlas.GUI.Avalonia.View
 				return null;
 			if (labelOverride != null)
 				label = labelOverride;
+
 			Type type = value.GetType();
-
-
 			if (value is string || value is decimal || type.IsPrimitive)
 			{
 				value = new TabText(value.ToString()); // create an ITab
