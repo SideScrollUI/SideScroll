@@ -103,7 +103,9 @@ namespace Atlas.Extensions // rename to Core?
 
 		public static string TrimEnd(this string input, string postfix)
 		{
-			return input.Substring(0, input.Length - postfix.Length);
+			if (input.EndsWith(postfix))
+				return input.Substring(0, input.Length - postfix.Length);
+			return input;
 		}
 
 		public static string Range(this string input, int start, int end)

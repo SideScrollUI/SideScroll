@@ -62,6 +62,8 @@ namespace Atlas.GUI.Avalonia.Controls
 					if (oxyListSeries.IsVisible)
 						selected.Add(oxyListSeries.ListSeries);
 				}
+				if (selected.Count == oxyListSeriesList.Count)
+					selected.Clear(); // If all are selected, none are selected?
 				return selected;
 			}
 		}

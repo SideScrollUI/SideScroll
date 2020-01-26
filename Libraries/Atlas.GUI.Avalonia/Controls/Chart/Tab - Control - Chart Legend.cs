@@ -110,7 +110,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				SetSelectionAll(true);
 			}
 			UpdateVisibleSeries();
-			OnSelectionChanged?.Invoke(this, null);
 			//if (legendItem.checkBox.IsChecked == true)
 			//SetSelectionAll(legendItem.checkBox.IsChecked == true);
 		}

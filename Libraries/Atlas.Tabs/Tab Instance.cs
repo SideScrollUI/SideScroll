@@ -315,23 +315,30 @@ namespace Atlas.Tabs
 			if (this is ITabAsync || CanLoad)
 				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
 
-			//MethodInfo methodInfo = GetDerivedLoadMethod();
-			if (this is ITabAsync tabAsync)
+			try
 			{
-				Task.Run(() => tabAsync.LoadAsync(taskInstance.call)).GetAwaiter().GetResult();
-			}
-			if (CanLoad)
-			{
-				var subTask = taskInstance.call.AddSubTask("Loading");
-				//using (CallTimer loadCall = )
+				//MethodInfo methodInfo = GetDerivedLoadMethod();
+				if (this is ITabAsync tabAsync)
 				{
-					if (this is ITabAsync)
-						Invoke(() => Load(subTask.call));
-					else
-						Load(subTask.call); // Creates a tabModel if none exists and adds other Controls
-					//if (subTask.TaskStatus ==TaskStatus.
+					Task.Run(() => tabAsync.LoadAsync(taskInstance.call)).GetAwaiter().GetResult();
 				}
-				isLoaded = true;
+				if (CanLoad)
+				{
+					var subTask = taskInstance.call.AddSubTask("Loading");
+					//using (CallTimer loadCall = )
+					{
+						if (this is ITabAsync)
+							Invoke(() => Load(subTask.call));
+						else
+							Load(subTask.call); // Creates a tabModel if none exists and adds other Controls
+												//if (subTask.TaskStatus ==TaskStatus.
+					}
+					isLoaded = true;
+				}
+			}
+			catch (Exception e)
+			{
+				tabModel.AddData(e);
 			}
 			LoadSettings(); // Load() initializes the tabModel.Object which gets used for the settings path
 
