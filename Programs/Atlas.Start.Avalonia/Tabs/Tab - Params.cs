@@ -25,7 +25,7 @@ namespace Atlas.Start.Avalonia.Tabs
 					new TaskDelegate("10s Task", LongTask, true),
 				};
 
-				paramTestItem = this.LoadData<ParamTestItem>("Params");
+				paramTestItem = LoadData<ParamTestItem>("Params");
 				//paramTestItem = new ParamTestItem();
 				//TabControlParams tabParams = new TabControlParams(this, paramTestItem);
 				tabModel.AddObject(paramTestItem);
@@ -33,7 +33,7 @@ namespace Atlas.Start.Avalonia.Tabs
 
 			private void Run(Call call)
 			{
-				this.SaveData("Params", paramTestItem);
+				SaveData("Params", paramTestItem);
 				ParamTestResult result = new ParamTestResult()
 				{
 					parameters = paramTestItem,

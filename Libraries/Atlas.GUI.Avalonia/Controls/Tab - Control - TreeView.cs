@@ -43,15 +43,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			Initialize();
 		}
 
-		public override string ToString()
-		{
-			return tabInstance.ToString();
-		}
-
-		protected override Size MeasureOverride(Size availableSize)
-		{
-			return base.MeasureOverride(availableSize);
-		}
+		public override string ToString() => tabInstance.ToString();
 
 		private void Initialize()
 		{
@@ -100,19 +92,21 @@ namespace Atlas.GUI.Avalonia.Controls
 		private TreeView treeView;
 		private void InitializeControls()
 		{
-			Grid grid = new Grid();
-			grid.HorizontalAlignment = HorizontalAlignment.Stretch;
-			grid.VerticalAlignment = VerticalAlignment.Stretch;
-			grid.RowDefinitions = new RowDefinitions("*");
-			grid.ColumnDefinitions = new ColumnDefinitions("*");
+			Grid grid = new Grid()
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch,
+				RowDefinitions = new RowDefinitions("*"),
+				ColumnDefinitions = new ColumnDefinitions("*"),
+			};
 
-			//this.Background = new SolidColorBrush(Colors.Blue);
-			//this.Background = new SolidColorBrush(Colors.Orange);
-			this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.VerticalAlignment = VerticalAlignment.Stretch;
-			//this.Orientation = Orientation.Vertical;
-			//this.Width = 1000;
-			//this.Height = 700; // works
+			//Background = new SolidColorBrush(Colors.Blue);
+			//Background = new SolidColorBrush(Colors.Orange);
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
+			//Orientation = Orientation.Vertical;
+			//Width = 1000;
+			//Height = 700; // works
 
 			treeView = new TreeView()
 			{

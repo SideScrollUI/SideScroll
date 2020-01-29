@@ -65,10 +65,7 @@ namespace Atlas.GUI.Avalonia.View
 			Initialize();
 		}
 
-		public override string ToString()
-		{
-			return tabModel.Name;
-		}
+		public override string ToString() => tabModel.Name;
 
 		public void Initialize()
 		{

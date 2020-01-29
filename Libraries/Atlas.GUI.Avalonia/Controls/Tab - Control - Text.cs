@@ -26,8 +26,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
 			//IsReadOnly = !property.Editable;
 
-			this.PointerEnter += TextBox_PointerEnter;
-			this.PointerLeave += TextBox_PointerLeave;
+			PointerEnter += TextBox_PointerEnter;
+			PointerLeave += TextBox_PointerLeave;
 		}
 
 		private IBrush OriginalColor;

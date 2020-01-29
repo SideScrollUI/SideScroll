@@ -24,10 +24,10 @@ namespace Atlas.Start.Avalonia.Tabs
 
 		private void InitializeControls()
 		{
-			//this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.VerticalAlignment = VerticalAlignment.Top;
-			this.ColumnDefinitions = new ColumnDefinitions("Auto");
-			this.RowDefinitions = new RowDefinitions("Auto");
+			//HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Top;
+			ColumnDefinitions = new ColumnDefinitions("Auto");
+			RowDefinitions = new RowDefinitions("Auto");
 
 			var controlParams = new TabControlParams(tabInstance, myParams, false)
 			{
@@ -35,7 +35,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			};
 			controlParams.AddPropertyRow(nameof(myParams.Name));
 			controlParams.AddPropertyRow(nameof(myParams.Amount));
-			this.Children.Add(controlParams);
+			Children.Add(controlParams);
 		}
 	}
 }

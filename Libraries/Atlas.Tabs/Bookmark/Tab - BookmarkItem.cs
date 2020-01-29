@@ -1,7 +1,6 @@
 ﻿using Atlas.Core;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Atlas.Tabs
 {
@@ -24,7 +23,7 @@ namespace Atlas.Tabs
 
 		public TabBookmarkItem(Bookmark bookmark)
 		{
-			this.Bookmark = bookmark;
+			Bookmark = bookmark;
 		}
 	}
 }

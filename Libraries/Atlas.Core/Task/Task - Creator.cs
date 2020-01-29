@@ -27,10 +27,7 @@ namespace Atlas.Core
 
 		protected abstract Action CreateAction(Call call);
 
-		public override string ToString()
-		{
-			return Label;
-		}
+		public override string ToString() => Label;
 
 		public void Run(Call call)
 		{

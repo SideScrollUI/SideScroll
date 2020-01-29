@@ -9,7 +9,7 @@ namespace Atlas.GUI.Avalonia.Controls
 	{
 		public ToolbarButton2()
 		{
-			this.InitializeComponent();
+			InitializeComponent();
 		}
 
 		private void InitializeComponent()

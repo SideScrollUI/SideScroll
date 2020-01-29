@@ -10,6 +10,8 @@ namespace Atlas.Core
 
 		private CallActionAsync callAction;
 
+		public override string ToString() => Label;
+
 		public TaskDelegateAsync(string label, CallActionAsync callAction, bool showTask = false, string description = null)
 		{
 			this.Label = label;
@@ -17,11 +19,6 @@ namespace Atlas.Core
 			this.UseTask = true;
 			this.ShowTask = showTask;
 			this.Description = description;
-		}
-
-		public override string ToString()
-		{
-			return Label;
 		}
 
 		protected override Action CreateAction(Call call)

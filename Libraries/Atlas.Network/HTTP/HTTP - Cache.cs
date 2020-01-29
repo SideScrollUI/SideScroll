@@ -19,10 +19,7 @@ namespace Atlas.Network
 			public int Size { get; set; }
 			public DateTime Downloaded { get; set; }
 
-			public override string ToString()
-			{
-				return Uri;
-			}
+			public override string ToString() => Uri;
 		}
 
 		public class LoadableEntry : Entry
@@ -59,11 +56,11 @@ namespace Atlas.Network
 		private string dataPath;
 		private Stream indexStream;
 		private Stream dataStream;
-		private Object entryLock = new Object();
+		private object entryLock = new object();
 
 		public HttpCache(string basePath, bool writeable)
 		{
-			this.BasePath = basePath;
+			BasePath = basePath;
 			Directory.CreateDirectory(basePath);
 
 			indexPath = Paths.Combine(basePath, "http.index");
@@ -85,10 +82,7 @@ namespace Atlas.Network
 			dataStream.Dispose();
 		}
 
-		public override string ToString()
-		{
-			return BasePath;
-		}
+		public override string ToString() => BasePath;
 
 		private void LoadHeader(BinaryReader indexReader)
 		{

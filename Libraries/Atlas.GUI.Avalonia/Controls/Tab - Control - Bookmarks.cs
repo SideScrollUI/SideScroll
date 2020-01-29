@@ -44,10 +44,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			InitializeControls();
 		}
 
-		public override string ToString()
-		{
-			return tabModel.Name;
-		}
+		public override string ToString() => tabModel.Name;
 
 		/*public void Reload()
 		{
@@ -61,13 +58,13 @@ namespace Atlas.GUI.Avalonia.Controls
 		// don't want to reload this because
 		private void InitializeControls()
 		{
-			this.Background = new SolidColorBrush(Theme.BackgroundColor);
-			this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.VerticalAlignment = VerticalAlignment.Stretch;
-			//this.Width = 1000;
-			//this.Height = 1000;
-			//this.Children.Add(border);
-			//this.Orientation = Orientation.Vertical;
+			Background = new SolidColorBrush(Theme.BackgroundColor);
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
+			//Width = 1000;
+			//Height = 1000;
+			//Children.Add(border);
+			//Orientation = Orientation.Vertical;
 
 			// autogenerate columns
 			//tabInstance.tabViewSettings.ChartDataSettings = tabInstance.tabViewSettings.ChartDataSettings ?? new TabDataSettings();
@@ -150,11 +147,11 @@ namespace Atlas.GUI.Avalonia.Controls
 			AddNewPanel();
 
 			//this.watch.Start();
-			this.Content = containerGrid;
+			Content = containerGrid;
 
-			this.Focusable = true;
-			this.GotFocus += Tab_GotFocus;
-			this.LostFocus += Tab_LostFocus;
+			Focusable = true;
+			GotFocus += Tab_GotFocus;
+			LostFocus += Tab_LostFocus;
 		}
 
 		private void AddNewPanel()
@@ -295,12 +292,12 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void Tab_LostFocus(object sender, RoutedEventArgs e)
 		{
-			this.Background = new SolidColorBrush(Theme.BackgroundColor);
+			Background = new SolidColorBrush(Theme.BackgroundColor);
 		}
 
 		private void Tab_GotFocus(object sender, RoutedEventArgs e)
 		{
-			this.Background = new SolidColorBrush(Theme.BackgroundFocusedColor);
+			Background = new SolidColorBrush(Theme.BackgroundFocusedColor);
 		}
 	}
 }

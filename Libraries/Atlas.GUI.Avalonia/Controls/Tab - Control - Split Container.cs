@@ -83,24 +83,24 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void TabView_GotFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			this.Background = new SolidColorBrush(Theme.BackgroundFocusedColor);
+			Background = new SolidColorBrush(Theme.BackgroundFocusedColor);
 		}
 
 		private void TabView_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			this.Background = new SolidColorBrush(Theme.BackgroundColor);
+			Background = new SolidColorBrush(Theme.BackgroundColor);
 		}
 
 		protected override void OnPointerEnter(PointerEventArgs e)
 		{
 			base.OnPointerEnter(e);
-			this.Background = new SolidColorBrush(Theme.BackgroundFocusedColor);
+			Background = new SolidColorBrush(Theme.BackgroundFocusedColor);
 		}
 
 		protected override void OnPointerLeave(PointerEventArgs e)
 		{
 			base.OnPointerLeave(e);
-			this.Background = new SolidColorBrush(Theme.BackgroundColor);
+			Background = new SolidColorBrush(Theme.BackgroundColor);
 		}
 
 		public void AddSplitter()
@@ -303,7 +303,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				gridItems.Add(item);
 
 				bool fill = !(control is TabNotes); // don't show for notes, needs to be configurable
-				if (!this.Children.Contains(control))
+				if (!Children.Contains(control))
 				{
 					// Add a new control
 					InsertControl(control, fill, newIndex);
@@ -325,14 +325,14 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			this.gridControls = newControls;
 
-			this.BeginInit();
+			BeginInit();
 
 			RemoveControls(oldControls);
 			AddControls(oldControls, orderedControls);
 
 			ReattachSplitters();
 
-			this.EndInit();
+			EndInit();
 
 			// Add all child controls to the view
 			InvalidateMeasure();

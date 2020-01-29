@@ -47,8 +47,8 @@ namespace Atlas.GUI.Avalonia
 #if DEBUG
 			this.AttachDevTools();
 #endif
-			this.Initialized += BaseWindow_Initialized;
-			this.Closed += BaseWindow_Closed;
+			Initialized += BaseWindow_Initialized;
+			Closed += BaseWindow_Closed;
 		}
 
 		protected override Size MeasureOverride(Size availableSize)
@@ -338,8 +338,8 @@ namespace Atlas.GUI.Avalonia
 				maxWidth += screen.Bounds.Width;
 				maxHeight = Math.Max(maxHeight, screen.WorkingArea.Height - 20);
 			}
-			this.MaxWidth = maxWidth;
-			this.MaxHeight = maxHeight;
+			MaxWidth = maxWidth;
+			MaxHeight = maxHeight;
 			//scrollViewer.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
 			//scrollViewer.MaxHeight = PlatformImpl.MaxClientSize.Height + 10;
 		}
@@ -369,12 +369,12 @@ namespace Atlas.GUI.Avalonia
 				double top = Math.Max(0, value.Top);
 
 				// These are causing the window to be shifted down
-				this.Position = new PixelPoint((int)left, (int)top);
-				this.Width = Math.Max(MinWindowSize, value.Width);
-				this.Height = Math.Max(MinWindowSize, value.Height);
-				//this.Height = Math.Max(MinWindowSize, value.Height + 500); // reproduces black bar problem, not subtracting bottom toolbar for Height
+				Position = new PixelPoint((int)left, (int)top);
+				Width = Math.Max(MinWindowSize, value.Width);
+				Height = Math.Max(MinWindowSize, value.Height);
+				//Height = Math.Max(MinWindowSize, value.Height + 500); // reproduces black bar problem, not subtracting bottom toolbar for Height
 				//Measure(Bounds.Size);
-				this.WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
+				WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
 				//InvalidateArrange(); // these don't restore well and need another pass
 				//InvalidateMeasure();
 			}
@@ -391,7 +391,7 @@ namespace Atlas.GUI.Avalonia
 		private void SaveWindowSettings()
 		{
 			if (loadComplete)// && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
-				project.DataApp.Save(this.WindowSettings);
+				project.DataApp.Save(WindowSettings);
 
 			// need a better trigger for when the screen size changes
 			SetMaxBounds();
@@ -407,7 +407,7 @@ namespace Atlas.GUI.Avalonia
 		private void BaseWindow_Closed(object sender, EventArgs e)
 		{
 			// todo: split saving position out
-			//project.DataApp.Save(this.WindowSettings);
+			//project.DataApp.Save(WindowSettings);
 			//SaveWindowSettings();
 		}
 

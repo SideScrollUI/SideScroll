@@ -145,7 +145,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 			ToolTip.SetTip(this, tooltip);
 
 			BorderBrush = Background;
-			this.Click += ToolbarButton_Click;
+			Click += ToolbarButton_Click;
 		}
 
 		private void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
@@ -174,15 +174,15 @@ namespace Atlas.GUI.Avalonia.Tabs
 		protected override void OnPointerEnter(PointerEventArgs e)
 		{
 			base.OnPointerEnter(e);
-			this.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			this.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundHoverColor);
+			BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundHoverColor);
 		}
 
 		protected override void OnPointerLeave(PointerEventArgs e)
 		{
 			base.OnPointerLeave(e);
-			this.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
-			this.BorderBrush = this.Background;
+			Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
+			BorderBrush = Background;
 		}
 	}
 

@@ -10,7 +10,7 @@ namespace Atlas.Core
 
 		public NameAttribute(string name)
 		{
-			this.Name = name;
+			Name = name;
 		}
 	}
 
@@ -39,7 +39,7 @@ namespace Atlas.Core
 
 		public PasswordCharAttribute(char c)
 		{
-			this.Character = c;
+			Character = c;
 		}
 	}
 
@@ -51,7 +51,7 @@ namespace Atlas.Core
 
 		public ExampleAttribute(string text)
 		{
-			this.Text = text;
+			Text = text;
 		}
 	}
 
@@ -117,7 +117,7 @@ namespace Atlas.Core
 
 		public ButtonColumnAttribute(string name = null)
 		{
-			this.Name = name;
+			Name = name;
 		}
 	}
 
@@ -135,7 +135,7 @@ namespace Atlas.Core
 
 		public SkippableAttribute(bool value = true)
 		{
-			this.Value = value;
+			Value = value;
 		}
 	}
 
@@ -146,7 +146,7 @@ namespace Atlas.Core
 
 		public BindListAttribute(string name)
 		{
-			this.Name = name;
+			Name = name;
 		}
 	}
 
@@ -164,7 +164,7 @@ namespace Atlas.Core
 
 		public ColumnMaxWidthAttribute(int maxWidth)
 		{
-			this.MaxWidth = maxWidth;
+			MaxWidth = maxWidth;
 		}
 	}
 
@@ -206,7 +206,7 @@ namespace Atlas.Core
 
 		public UnitAttribute(string name)
 		{
-			this.Name = name;
+			Name = name;
 		}
 	}
 

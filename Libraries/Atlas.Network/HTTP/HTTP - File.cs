@@ -8,10 +8,7 @@ namespace Atlas.Network
 		public Uri Uri { get; set; }
 		public int? Size { get; set; }
 
-		public override string ToString()
-		{
-			return Uri.Query;
-		}
+		public override string ToString() => Uri.Query;
 
 		public void Download(Call call, HttpCache httpCache)
 		{

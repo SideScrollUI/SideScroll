@@ -33,10 +33,7 @@ namespace Atlas.Serialize
 				this.typeRepo = typeRepo;
 			}
 
-			public override string ToString()
-			{
-				return "Field Repo: " + fieldSchema.fieldName;
-			}
+			public override string ToString() => "Field Repo: " + fieldSchema.fieldName;
 
 			public void Load(object obj)
 			{

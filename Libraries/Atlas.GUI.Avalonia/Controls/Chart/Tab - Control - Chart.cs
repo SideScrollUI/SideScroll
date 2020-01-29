@@ -178,9 +178,9 @@ namespace Atlas.GUI.Avalonia.Controls
 			containerGrid.Children.Add(legend);
 			legend.OnSelectionChanged += Legend_OnSelectionChanged;
 
-			this.Content = containerGrid;
+			Content = containerGrid;
 
-			this.Focusable = true;
+			Focusable = true;
 		}
 
 		private void Legend_OnSelectionChanged(object sender, EventArgs e)

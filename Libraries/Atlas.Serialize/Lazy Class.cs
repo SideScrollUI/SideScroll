@@ -29,10 +29,7 @@ namespace Atlas.Serialize
 		public FieldInfo fieldInfoLoaded;
 		public FieldInfo fieldInfoTypeRef;
 
-		public override string ToString()
-		{
-			return propertyBuilder.Name;
-		}
+		public override string ToString() => propertyBuilder.Name;
 
 		public void SetTypeRef(object obj, TypeRef typeRef)
 		{

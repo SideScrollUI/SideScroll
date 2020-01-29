@@ -9,7 +9,7 @@ namespace Atlas.GUI.Avalonia.Themes
     {
         public DefaultTheme()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void InitializeComponent()

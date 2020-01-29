@@ -84,10 +84,7 @@ namespace Atlas.Serialize
 			Load(log, reader);
 		}
 
-		public override string ToString()
-		{
-			return Name;
-		}
+		public override string ToString() => Name;
 
 		// not completely safe since anyone can name their Assemblies whatever, but someone would have to include those libraries
 		// BinaryFormatter uses[Serializable], should we allow that?

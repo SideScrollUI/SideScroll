@@ -25,13 +25,13 @@ namespace Atlas.Tabs
 
 		public ListPair(object key, object value, object obj = null, int? maxDesiredWidth = null)
 		{
-			this.Key = key;
-			this.Value = value;
+			Key = key;
+			Value = value;
 			if (obj != null)
-				this.Object = obj;
+				Object = obj;
 			else
-				this.Object = value;
-			this.MaxDesiredWidth = maxDesiredWidth;
+				Object = value;
+			MaxDesiredWidth = maxDesiredWidth;
 		}
 
 		public override string ToString()

@@ -11,6 +11,8 @@ namespace Atlas.Core
 		
 		private SynchronizationContext context;
 
+		public override string ToString() => "Console";
+
 		public LogWriterConsole(Log log)
 		{
 			this.log = log;
@@ -30,11 +32,6 @@ namespace Atlas.Core
 			//string line = log.Created.ToString("yyyy-MM-dd HH:mm:ss") + Indendation + log.ToString();
 
 			Console.WriteLine(Indendation + newLog.Message);
-		}
-
-		public override string ToString()
-		{
-			return "Console";
 		}
 	}
 }

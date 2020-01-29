@@ -13,6 +13,8 @@ namespace Atlas.Core
 		private StreamWriter txtStreamWriter;
 		private SynchronizationContext context;
 
+		public override string ToString() => saveFilePath;
+
 		public LogWriterText(Log log, string saveFilePath)
 		{
 			this.log = log;
@@ -43,11 +45,6 @@ namespace Atlas.Core
 		public virtual void Dispose()
 		{
 			txtStreamWriter.Close();
-		}
-
-		public override string ToString()
-		{
-			return saveFilePath;
 		}
 	}
 }
