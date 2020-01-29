@@ -13,7 +13,16 @@ namespace Atlas.Tabs
 		int Order { get; }
 	}
 
-	public abstract class ListMember : IListItem, INotifyPropertyChanged, IListAutoSelect
+	public interface IListPair
+	{
+		[Name("Name")]
+		object Key { get; }
+
+		[InnerValue, StyleValue]
+		object Value { get; set; }
+	}
+
+	public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged, IListAutoSelect
 	{
 		public const int MaxStringLength = 1000;
 

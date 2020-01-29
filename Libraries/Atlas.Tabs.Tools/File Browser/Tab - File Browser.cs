@@ -7,7 +7,7 @@ namespace Atlas.Tabs.Tools
 {
 	public class TabFileBrowser : ITab
 	{
-		public TabInstance Create() { return new Instance(); }
+		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance
 		{

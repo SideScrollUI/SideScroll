@@ -24,7 +24,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.linker = linker;
 		}
 
-		public TabInstance Create() { return new Instance(this); }
+		public TabInstance Create() => new Instance(this);
 
 		public class Instance : TabInstance, ITabCreator
 		{

@@ -119,9 +119,9 @@ namespace Atlas.GUI.Avalonia.View
 					return null;
 
 				TabModel childTabModel;
-				if (value is TabModel)
+				if (value is TabModel tabModel)
 				{
-					childTabModel = (TabModel)value;
+					childTabModel = tabModel;
 					childTabModel.Name = label;
 				}
 				else

@@ -7,7 +7,7 @@ using Atlas.Extensions;
 namespace Atlas.Tabs
 {
 	// implement INotifyPropertyChanged to prevent memory leaks
-	public class ListPair : IListItem, INotifyPropertyChanged, IMaxDesiredWidth
+	public class ListPair : IListPair, IListItem, INotifyPropertyChanged, IMaxDesiredWidth
 	{
 		public object Key { get; set; }
 		[StyleValue]

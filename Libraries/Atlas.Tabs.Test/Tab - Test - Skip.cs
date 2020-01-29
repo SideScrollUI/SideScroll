@@ -6,7 +6,7 @@ namespace Atlas.Tabs.Test
 {
 	public class TabTestSkip: ITab
 	{
-		public TabInstance Create() { return new Instance(); }
+		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance
 		{

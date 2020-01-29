@@ -7,7 +7,7 @@ namespace Atlas.Start.Avalonia.Tabs
 {
 	public class TabAvalonia : ITab
 	{
-		public TabInstance Create() { return new Instance(); }
+		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance
 		{

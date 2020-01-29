@@ -16,7 +16,7 @@ namespace Atlas.Tabs.Tools
 			this.tasks = tasks;
 		}
 
-		public TabInstance Create() { return new Instance(this); }
+		public TabInstance Create() => new Instance(this);
 
 		public class Instance : TabInstance
 		{

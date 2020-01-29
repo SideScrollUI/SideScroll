@@ -14,7 +14,7 @@ namespace Atlas.Tabs.Tools
 			this.path = path;
 		}
 
-		public TabInstance Create() { return new Instance(this); }
+		public TabInstance Create() => new Instance(this);
 
 		public class Instance : TabInstance
 		{

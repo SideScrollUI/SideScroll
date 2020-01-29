@@ -17,7 +17,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 			this.uri = uri;
 		}
 
-		public TabInstance Create() { return new Instance(this); }
+		public TabInstance Create() => new Instance(this);
 
 		public class Instance : TabInstance
 		{

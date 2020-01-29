@@ -7,7 +7,7 @@ namespace Atlas.Tabs.Test.DataGrid
 {
 	public class TabTestGridHashSet : ITab
 	{
-		public TabInstance Create() { return new Instance(); }
+		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance
 		{
