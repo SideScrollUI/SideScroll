@@ -54,17 +54,14 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public List<DataPoint> Points { get; internal set; }
 
+		public override string ToString() => series.Title;
+
 		public TabChartLegendItem(TabControlChartLegend legend, OxyListSeries oxyListSeries)
 		{
 			this.legend = legend;
 			this.oxyListSeries = oxyListSeries;
 			series = oxyListSeries.OxySeries;
 			InitializeControls();
-		}
-
-		public override string ToString()
-		{
-			return series.Title;
 		}
 
 		private void InitializeControls()
@@ -142,7 +139,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				polygon.Fill = new SolidColorBrush(color);
 			UpdatePolygonPoints(width, height);
 			polygon.PointerPressed += Polygon_PointerPressed;
-			this.Children.Add(polygon);
+			Children.Add(polygon);
 		}
 
 		private void UpdatePolygonPoints(int width, int height)
@@ -222,8 +219,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				BorderBrush = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
 				Child = textBlock,
 			};
-			this.Children.Add(border);*/
-			this.Children.Add(textBlock);
+			Children.Add(border);*/
+			Children.Add(textBlock);
 		}
 
 		private void TextBox_Tapped(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)

@@ -20,15 +20,12 @@ namespace Atlas.Serialize
 
 		public DataRepo(string repoPath, string repoName)
 		{
-			this.RepoPath = repoPath;
-			this.RepoName = repoName;
+			RepoPath = repoPath;
+			RepoName = repoName;
 			Debug.Assert(repoName != null);
 		}
 
-		public override string ToString()
-		{
-			return RepoName;
-		}
+		public override string ToString() => RepoName;
 
 		public DataRepoInstance<T> Open<T>(Call call, string saveDirectory)
 		{

@@ -78,7 +78,7 @@ namespace Atlas.GUI.Avalonia
 
 			public ColumnInfo(string name)
 			{
-				this.Name = name;
+				Name = name;
 			}
 		}
 

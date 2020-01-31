@@ -51,12 +51,12 @@ namespace Atlas.GUI.Avalonia.Tabs
 		{
 			AvaloniaXamlLoader.Load(this);
 
-			//this.Background = new SolidColorBrush(Theme.BackgroundColor);
-			this.Background = new SolidColorBrush(Colors.Purple);
-			//this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			//this.VerticalAlignment = VerticalAlignment.Stretch;
-			this.Width = 1000;
-			this.Height = 1000;
+			//Background = new SolidColorBrush(Theme.BackgroundColor);
+			Background = new SolidColorBrush(Colors.Purple);
+			//HorizontalAlignment = HorizontalAlignment.Stretch;
+			//VerticalAlignment = VerticalAlignment.Stretch;
+			Width = 1000;
+			Height = 1000;
 		}
 	}
 }

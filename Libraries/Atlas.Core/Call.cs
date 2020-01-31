@@ -12,7 +12,9 @@ namespace Atlas.Core
 		public Call ParentCall { get; set; }
 		[NonSerialized]
 		public TaskInstance taskInstance; // Shows the Task Status and let's you stop them
-		
+
+		public override string ToString() => Name;
+
 		protected Call()
 		{
 		}
@@ -26,11 +28,6 @@ namespace Atlas.Core
 		public Call(Log log)
 		{
 			this.log = log;
-		}
-
-		public override string ToString()
-		{
-			return Name;
 		}
 
 		public Call Child([CallerMemberName] string name = "", params Tag[] tags)

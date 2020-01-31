@@ -18,16 +18,13 @@ namespace Atlas.Core
 
 		public double xBinSize;
 
+		public override string ToString() => Name;
+
 		public ListGroup(string name = null, DateTime? startTime = null, DateTime? endTime = null)
 		{
 			Name = name;
 			StartTime = startTime;
 			EndTime = endTime;
-		}
-
-		public override string ToString()
-		{
-			return Name;
 		}
 
 		public void AddDimensions(IList iList, string categoryPropertyName, string xPropertyName, string yPropertyName)
@@ -89,6 +86,8 @@ namespace Atlas.Core
 
 		public bool IsStacked { get; set; }
 
+		public override string ToString() => Name;
+
 		public ListSeries(string name, IList iList)
 		{
 			Name = name;
@@ -121,11 +120,6 @@ namespace Atlas.Core
 			Type elementType = iList.GetType().GetElementTypeForAll();
 			xPropertyInfo = elementType.GetProperty(xPropertyName);
 			yPropertyInfo = elementType.GetProperty(yPropertyName);
-		}
-
-		public override string ToString()
-		{
-			return Name;
 		}
 
 		private double GetObjectValue(object obj)

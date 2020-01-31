@@ -20,8 +20,8 @@ namespace Atlas.Tabs
 
 		public ListItem(object key, object value)
 		{
-			this.Key = key;
-			this.Value = value;
+			Key = key;
+			Value = value;
 		}
 
 		public override string ToString()

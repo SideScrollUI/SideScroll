@@ -33,10 +33,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//InitializeControls();
 		}
 
-		public override string ToString()
-		{
-			return tabModel.Name;
-		}
+		public override string ToString() => tabModel.Name;
 
 		/*public void Reload()
 		{

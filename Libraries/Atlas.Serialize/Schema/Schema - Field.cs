@@ -49,10 +49,7 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public override string ToString()
-		{
-			return fieldName;
-		}
+		public override string ToString() => fieldName;
 		
 		private bool IsSerialized
 		{

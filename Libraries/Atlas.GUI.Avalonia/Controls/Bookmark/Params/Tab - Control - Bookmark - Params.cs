@@ -3,7 +3,6 @@ using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Layout;
 using Avalonia.Controls;
-using Atlas.GUI.Avalonia.Controls;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -24,10 +23,10 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			//this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.VerticalAlignment = VerticalAlignment.Top;
-			this.ColumnDefinitions = new ColumnDefinitions("Auto");
-			this.RowDefinitions = new RowDefinitions("Auto");
+			//HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Top;
+			ColumnDefinitions = new ColumnDefinitions("Auto");
+			RowDefinitions = new RowDefinitions("Auto");
 
 			var controlParams = new TabControlParams(tabInstance, myParams, false)
 			{
@@ -35,7 +34,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			controlParams.AddPropertyRow(nameof(myParams.Name));
 			controlParams.AddPropertyRow(nameof(myParams.Amount));
-			this.Children.Add(controlParams);
+			Children.Add(controlParams);
 		}
 	}
 }

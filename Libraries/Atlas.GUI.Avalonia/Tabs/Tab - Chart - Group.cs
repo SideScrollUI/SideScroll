@@ -56,11 +56,11 @@ namespace Atlas.GUI.Avalonia
 
 		public TabChartGroup(ChartSettings chartSettings)
 		{
-			this.ChartSettings = chartSettings;
+			ChartSettings = chartSettings;
 		}
 
 
-		public TabInstance Create() { return new Instance(this); }
+		public TabInstance Create() => new Instance(this);
 
 		public class Instance : TabInstance
 		{
@@ -81,13 +81,13 @@ namespace Atlas.GUI.Avalonia
 				if (tabViewSettings.ChartDataSettings.Count == 0)
 					tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
 
-				//this.Background = new SolidColorBrush(Theme.BackgroundColor);
-				//this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
-				//this.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
-				//this.Width = 1000;
-				//this.Height = 1000;
-				//this.Children.Add(border);
-				//this.Orientation = Orientation.Vertical;
+				//Background = new SolidColorBrush(Theme.BackgroundColor);
+				//HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
+				//VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
+				//Width = 1000;
+				//Height = 1000;
+				//Children.Add(border);
+				//Orientation = Orientation.Vertical;
 
 				// autogenerate columns
 				tabDataGrid = new TabControlDataGrid(this, tab.ChartSettings.ListSeries, true, tabViewSettings.ChartDataSettings[0]);

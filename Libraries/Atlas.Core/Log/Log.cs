@@ -16,6 +16,8 @@ namespace Atlas.Core
 		[InnerValue]
 		public object Value { get; set; }
 
+		public override string ToString() => "[ " + Name + " = " + Value.ObjectToString() + " ]";
+
 		public Tag()
 		{
 		}
@@ -32,17 +34,17 @@ namespace Atlas.Core
 
 		public Tag(object value)
 		{
-			this.Name = value.ToString();
-			this.Value = value;
+			Name = value.ToString();
+			Value = value;
 		}
 
 		public Tag(string name, object value, bool verbose = true)
 		{
-			this.Name = name;
+			Name = name;
 			if (verbose)
-				this.Value = value;
+				Value = value;
 			else
-				this.Value = value.ToString();
+				Value = value.ToString();
 		}
 
 		public static Tag Add(object value, bool verbose = true)
@@ -56,11 +58,6 @@ namespace Atlas.Core
 			else
 				tag.Value = value.ToString();
 			return tag;
-		}
-
-		public override string ToString()
-		{
-			return "[ " + Name + " = " + Value.ObjectToString() + " ]";
 		}
 	}
 
@@ -138,6 +135,8 @@ namespace Atlas.Core
 		public Tag[] tags;
 		public SynchronizationContext context; // inherited from creator (which can be a Parent Log)
 
+		public override string ToString() => Message;
+
 		public LogEntry()
 		{
 			rootLog = this;
@@ -151,11 +150,6 @@ namespace Atlas.Core
 			this.Text = text;
 			this.tags = tags;
 			this.Created = DateTime.Now;
-		}
-
-		public override string ToString()
-		{
-			return Message;
 		}
 
 		private void InitializeContext()

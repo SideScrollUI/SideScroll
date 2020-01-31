@@ -58,15 +58,12 @@ namespace Atlas.Core
 
 		private Stopwatch stopwatch = new Stopwatch();
 
+		public override string ToString() => Label;
+
 		public TaskInstance()
 		{
 			call.taskInstance = this;
 			stopwatch.Start();
-		}
-
-		public override string ToString()
-		{
-			return Label;
 		}
 
 		private int _Percent;

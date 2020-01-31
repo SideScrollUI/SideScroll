@@ -54,10 +54,7 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public override string ToString()
-		{
-			return propertyName;
-		}
+		public override string ToString() => propertyName;
 
 		private bool IsSerialized
 		{

@@ -71,10 +71,7 @@ namespace Atlas.Network
 			}
 		}
 
-		public override string ToString()
-		{
-			return FileName ?? "";
-		}
+		public override string ToString() => FileName ?? "";
 
 		public void Download(Call call, bool overwrite, long maxBytes = long.MaxValue)
 		{

@@ -15,10 +15,7 @@ namespace Atlas.Serialize
 		public string version = latestVersion;
 		public string name = "<Default>";
 
-		public override string ToString()
-		{
-			return version.ToString();
-		}
+		public override string ToString() => version.ToString();
 
 		public void Save(BinaryWriter writer)
 		{
@@ -57,10 +54,7 @@ namespace Atlas.Serialize
 			public TypeRepo typeRepo;
 			public int index;
 
-			public override string ToString()
-			{
-				return typeRepo.ToString() + " - " + index;
-			}
+			public override string ToString() => typeRepo.ToString() + " - " + index;
 		}
 
 		public Queue<LoadItem> loadQueue = new Queue<LoadItem>();

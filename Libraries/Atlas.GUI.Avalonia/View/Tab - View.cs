@@ -65,10 +65,7 @@ namespace Atlas.GUI.Avalonia.View
 			Initialize();
 		}
 
-		public override string ToString()
-		{
-			return tabModel.Name;
-		}
+		public override string ToString() => tabModel.Name;
 
 		public void Initialize()
 		{
@@ -78,7 +75,7 @@ namespace Atlas.GUI.Avalonia.View
 
 			if (!(tabInstance is ITabAsync))
 			{
-				//this.InitializeControls();
+				//InitializeControls();
 				//AddListeners();
 
 				// Have return TabModel?
@@ -92,7 +89,7 @@ namespace Atlas.GUI.Avalonia.View
 
 		public void LoadBackground(Call call)
 		{
-			//this.InitializeControls();
+			//InitializeControls();
 			//AddListeners();
 
 			// Have return TabModel?
@@ -169,10 +166,10 @@ namespace Atlas.GUI.Avalonia.View
 		// Gets called multiple times when re-initializing
 		private void InitializeControls()
 		{
-			this.Background = new SolidColorBrush(Theme.BackgroundColor); // doesn't do anything
-			this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.VerticalAlignment = VerticalAlignment.Stretch;
-			//this.Focusable = true;
+			Background = new SolidColorBrush(Theme.BackgroundColor); // doesn't do anything
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
+			//Focusable = true;
 
 			AddListeners();
 
@@ -212,10 +209,10 @@ namespace Atlas.GUI.Avalonia.View
 			AddChildControls();
 
 			// don't re-add containerGrid (sizing doesn't work otherwise?)
-			if (this.Children.Count == 0)
-				this.Children.Add(containerGrid);
+			if (Children.Count == 0)
+				Children.Add(containerGrid);
 
-			this.ContextMenu = new TabViewContextMenu(this, tabInstance);
+			ContextMenu = new TabViewContextMenu(this, tabInstance);
 		}
 
 		private void AddParentControls()
@@ -431,7 +428,7 @@ namespace Atlas.GUI.Avalonia.View
 			if (tabModel.Actions == null)
 				return;
 
-			this.tabActions = new TabControlActions(tabInstance, this.tabModel, tabModel.Actions as ItemCollection<TaskCreator>);
+			tabActions = new TabControlActions(tabInstance, tabModel, tabModel.Actions as ItemCollection<TaskCreator>);
 
 			tabParentControls.AddControl(tabActions, false, SeparatorType.Spacer);
 		}
@@ -444,7 +441,7 @@ namespace Atlas.GUI.Avalonia.View
 			//if (tabModel.Tasks == null)
 			//	tabModel.Tasks = new TaskInstanceCollection();
 
-			this.tabTasks = new TabControlTasks(this.tabInstance);
+			tabTasks = new TabControlTasks(tabInstance);
 			tabTasks.OnSelectionChanged += ParentListSelectionChanged;
 
 			tabParentControls.AddControl(tabTasks, false, SeparatorType.Spacer);
@@ -532,7 +529,7 @@ namespace Atlas.GUI.Avalonia.View
 			//if (tabModel.Bookmarks == null)
 				return;
 
-			this.tabBookmarks = new TabControlBookmarks(tabInstance);
+			tabBookmarks = new TabControlBookmarks(tabInstance);
 
 			tabParentControls.AddControl(tabBookmarks, false, SeparatorType.Splitter);
 			*/
@@ -560,7 +557,7 @@ namespace Atlas.GUI.Avalonia.View
 
 				ReloadControls();
 			}
-			//this.Dispatcher.BeginInvoke((Action)(() => { allowAutoScrolling = true; }));
+			//Dispatcher.BeginInvoke((Action)(() => { allowAutoScrolling = true; }));
 		}
 
 		public void ShowLoading()
@@ -673,7 +670,7 @@ namespace Atlas.GUI.Avalonia.View
 				//	return false;
 
 				// don't show if the new control won't have enough room
-				IControl control = this.Parent;
+				IControl control = Parent;
 				double offset = tabChildControls.Bounds.X;
 				while (control != null)
 				{
@@ -690,7 +687,7 @@ namespace Atlas.GUI.Avalonia.View
 						control = control.Parent;
 					}
 				}
-				//GetControlOffset(this.Parent);
+				//GetControlOffset(Parent);
 				//var window = (BaseWindow)VisualRoot;
 				//window.scrollViewer.View
 
@@ -738,7 +735,7 @@ namespace Atlas.GUI.Avalonia.View
 
 		private double GetFillerPanelWidth()
 		{
-			IControl control = this.Parent;
+			IControl control = Parent;
 			double offset = tabChildControls.Bounds.X;
 			while (control != null)
 			{
@@ -828,11 +825,11 @@ namespace Atlas.GUI.Avalonia.View
 			if (tabActions != null)
 			{
 				// show action help?
-				//CreateChildControls(this.tabActions.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
+				//CreateChildControls(tabActions.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
 			if (tabTasks != null && (tabTasks.IsVisible || tabModel.Tasks?.Count > 0))
 			{
-				CreateChildControls(this.tabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
+				CreateChildControls(tabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
 
 			foreach (TabControlDataGrid tabData in tabDatas)
@@ -874,7 +871,7 @@ namespace Atlas.GUI.Avalonia.View
 
 			foreach (object obj in newList)
 			{
-				if (newChildControls.Count >= this.tabInstance.project.userSettings.SubTabLimit)
+				if (newChildControls.Count >= tabInstance.project.userSettings.SubTabLimit)
 					break;
 				GetOrCreateChildControl(oldChildControls, newChildControls, orderedChildControls, obj, null, tabControl);
 			}
@@ -1025,7 +1022,7 @@ namespace Atlas.GUI.Avalonia.View
 
 		private void LoadBookmark()
 		{
-			this.tabInstance.project.userSettings.AutoLoad = true;
+			tabInstance.project.userSettings.AutoLoad = true;
 
 			TabBookmark tabBookmark = tabInstance.tabBookmark;
 			TabViewSettings = tabBookmark.tabViewSettings;

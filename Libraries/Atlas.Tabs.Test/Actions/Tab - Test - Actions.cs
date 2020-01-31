@@ -7,7 +7,7 @@ namespace Atlas.Tabs.Test.Actions
 {
 	public class TabActions : ITab
 	{
-		public TabInstance Create() { return new Instance(); }
+		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance
 		{

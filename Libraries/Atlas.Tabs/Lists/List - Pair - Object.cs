@@ -7,7 +7,7 @@ using Atlas.Extensions;
 namespace Atlas.Tabs
 {
 	// implement INotifyPropertyChanged to prevent memory leaks
-	public class ListPair : IListItem, INotifyPropertyChanged, IMaxDesiredWidth
+	public class ListPair : IListPair, IListItem, INotifyPropertyChanged, IMaxDesiredWidth
 	{
 		public object Key { get; set; }
 		[StyleValue]
@@ -25,13 +25,13 @@ namespace Atlas.Tabs
 
 		public ListPair(object key, object value, object obj = null, int? maxDesiredWidth = null)
 		{
-			this.Key = key;
-			this.Value = value;
+			Key = key;
+			Value = value;
 			if (obj != null)
-				this.Object = obj;
+				Object = obj;
 			else
-				this.Object = value;
-			this.MaxDesiredWidth = maxDesiredWidth;
+				Object = value;
+			MaxDesiredWidth = maxDesiredWidth;
 		}
 
 		public override string ToString()

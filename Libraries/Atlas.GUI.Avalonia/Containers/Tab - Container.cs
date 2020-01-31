@@ -49,6 +49,8 @@ namespace Atlas.GUI.Avalonia
 		//private bool allowAutoScrolling = false; // stop new controls from triggering the ScrollView automatically
 		protected virtual bool focusTab { get; set; } = true; // use TabViewSettings or TabInstance instead?
 
+		public override string ToString() => tabModel.Name;
+
 
 		private TabContainer()
 		{
@@ -60,11 +62,6 @@ namespace Atlas.GUI.Avalonia
 		{
 			this.tabInstance = tabInstance;
 			Initialize();
-		}
-
-		public override string ToString()
-		{
-			return tabModel.Name;
 		}
 
 		public void Initialize()
@@ -94,15 +91,15 @@ namespace Atlas.GUI.Avalonia
 		// Gets called multiple times when re-initializing
 		private void InitializeControls()
 		{
-			this.Background = new SolidColorBrush(Theme.BackgroundColor); // doesn't do anything
-			//this.Background = new SolidColorBrush(Colors.Blue); // doesn't do anything
-			this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.VerticalAlignment = VerticalAlignment.Stretch;
+			Background = new SolidColorBrush(Theme.BackgroundColor); // doesn't do anything
+			//Background = new SolidColorBrush(Colors.Blue); // doesn't do anything
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
 			if (focusTab)
 			{
-				this.Focusable = true;
-				this.GotFocus += TabContainer_GotFocus;
-				this.LostFocus += TabContainer_LostFocus;
+				Focusable = true;
+				GotFocus += TabContainer_GotFocus;
+				LostFocus += TabContainer_LostFocus;
 			}
 			AddListeners();
 			
@@ -122,7 +119,7 @@ namespace Atlas.GUI.Avalonia
 
 			//AddContextMenu();
 
-			this.Children.Add(splitControls);
+			Children.Add(splitControls);
 		}
 
 		private Control content;
@@ -143,12 +140,12 @@ namespace Atlas.GUI.Avalonia
 
 		private void TabContainer_GotFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			this.Background = new SolidColorBrush(Theme.BackgroundFocusedColor);
+			Background = new SolidColorBrush(Theme.BackgroundFocusedColor);
 		}
 
 		private void TabContainer_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			this.Background = new SolidColorBrush(Theme.BackgroundColor);
+			Background = new SolidColorBrush(Theme.BackgroundColor);
 		}
 
 		public void ReloadControls()

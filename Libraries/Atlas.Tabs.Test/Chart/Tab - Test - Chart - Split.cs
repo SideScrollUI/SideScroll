@@ -8,7 +8,7 @@ namespace Atlas.Tabs.Test.Chart
 {
 	public class TabTestChartSplit : ITab
 	{
-		public TabInstance Create() { return new Instance(); }
+		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance
 		{
@@ -62,7 +62,7 @@ namespace Atlas.Tabs.Test.Chart
 
 			private void AddEntry(Call call)
 			{
-				this.Invoke(new SendOrPostCallback(this.AddSampleCallback), call);
+				Invoke(new SendOrPostCallback(this.AddSampleCallback), call);
 				//context.Send(, log);
 			}
 
@@ -71,8 +71,8 @@ namespace Atlas.Tabs.Test.Chart
 				CancellationToken token = call.taskInstance.tokenSource.Token;
 				for (int i = 0; !token.IsCancellationRequested; i++)
 				{
-					this.Invoke(new SendOrPostCallback(this.AddSampleCallback), call);
-					System.Threading.Thread.Sleep(1000);
+					Invoke(new SendOrPostCallback(this.AddSampleCallback), call);
+					Thread.Sleep(1000);
 				}
 			}
 

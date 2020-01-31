@@ -23,7 +23,7 @@ namespace Atlas.Tabs.Test
   }
 }
 ";
-		public TabInstance Create() { return new Instance(); }
+		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance
 		{

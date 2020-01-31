@@ -11,6 +11,8 @@ namespace Atlas.Core
 		private CallActionParams callAction;
 		private object[] objects;
 
+		public override string ToString() => Label;
+
 		public TaskDelegateParams(Call call, string label, CallActionParams callAction, bool useTask, string description, object[] objects)
 		{
 			this.call = call;
@@ -19,11 +21,6 @@ namespace Atlas.Core
 			this.UseTask = useTask;
 			this.Description = description;
 			this.objects = objects;
-		}
-
-		public override string ToString()
-		{
-			return Label;
 		}
 
 		protected override Action CreateAction(Call call)
@@ -44,6 +41,3 @@ namespace Atlas.Core
 		}
 	}
 }
-
-/*
-*/

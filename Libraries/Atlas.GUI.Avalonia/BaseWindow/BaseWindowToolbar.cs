@@ -155,20 +155,20 @@ namespace Atlas.GUI.Avalonia
 		{
 			Background = new SolidColorBrush(Colors.Blue);
 
-			//this.PointerEnter += ToolbarButton_PointerEnter;
-			//this.PointerLeave += ToolbarButton_PointerLeave;
+			//PointerEnter += ToolbarButton_PointerEnter;
+			//PointerLeave += ToolbarButton_PointerLeave;
 		}
 
 		private void ToolbarButton_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
-			this.Background = new SolidColorBrush(Colors.Blue);
-			//this.InvalidateVisual();
+			Background = new SolidColorBrush(Colors.Blue);
+			//InvalidateVisual();
 		}
 
 		private void ToolbarButton_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
-			this.Background = new SolidColorBrush(Colors.Green);
-			//this.InvalidateVisual();
+			Background = new SolidColorBrush(Colors.Green);
+			//InvalidateVisual();
 		}
 	}*/
 }

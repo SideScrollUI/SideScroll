@@ -41,12 +41,12 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void InitializeControls(string columnDefinitions)
 		{
-			//this.VerticalAlignment = VerticalAlignment.Stretch;
-			this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.ColumnDefinitions = new ColumnDefinitions(columnDefinitions);
-			this.Margin = new Thickness(15, 6);
-			this.MinWidth = 100;
-			this.MaxWidth = 2000;
+			//VerticalAlignment = VerticalAlignment.Stretch;
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			ColumnDefinitions = new ColumnDefinitions(columnDefinitions);
+			Margin = new Thickness(15, 6);
+			MinWidth = 100;
+			MaxWidth = 2000;
 
 			//DataStore = (IEnumerable<object>)obj;
 
@@ -378,7 +378,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			comboBox.Bind(ComboBox.SelectedItemProperty, binding);
 			comboBox.PointerEnter += ComboBox_PointerEnter;
 			comboBox.PointerLeave += ComboBox_PointerLeave;
-			this.Children.Add(comboBox);
+			Children.Add(comboBox);
 			return comboBox;
 		}
 
@@ -429,14 +429,14 @@ namespace Atlas.GUI.Avalonia.Controls
 				Source = property.obj,
 			};
 			datePicker.Bind(DatePicker.SelectedDateProperty, binding);
-			this.Children.Add(datePicker);
+			Children.Add(datePicker);
 
 			// Add extra row for time
 			RowDefinition timeRow = new RowDefinition()
 			{
 				Height = new GridLength(1, GridUnitType.Auto),
 			};
-			this.RowDefinitions.Add(timeRow);
+			RowDefinitions.Add(timeRow);
 			rowIndex++;
 
 			TextBox textBox = new TextBox()
@@ -464,7 +464,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			textBox.Bind(TextBlock.TextProperty, binding);
 			textBox.PointerEnter += TextBox_PointerEnter;
 			textBox.PointerLeave += TextBox_PointerLeave;
-			this.Children.Add(textBox);
+			Children.Add(textBox);
 
 			Button buttonImport = AddButton(rowIndex, "Import Clipboard", Icons.Streams.Paste);
 			buttonImport.Click += (sender, e) =>
@@ -490,7 +490,7 @@ namespace Atlas.GUI.Avalonia.Controls
 					}
 				}
 			};
-			this.Children.Add(buttonImport);
+			Children.Add(buttonImport);
 		}
 		private TimeSpan? ConvertTextToTimeSpan(string text)
 		{

@@ -62,7 +62,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private TabControlDataGrid()
 		{
-			this.Initialize();
+			Initialize();
 		}
 
 		public TabControlDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns, TabDataSettings tabDataSettings = null)
@@ -79,10 +79,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			Initialize();
 		}
 
-		public override string ToString()
-		{
-			return tabModel.Name;
-		}
+		public override string ToString() => tabModel.Name;
 
 		// Before MaxWidth applies
 		private bool finishedLoading = false;

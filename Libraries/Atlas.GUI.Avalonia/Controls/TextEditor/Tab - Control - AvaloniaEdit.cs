@@ -66,8 +66,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("*");
 
-			this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.VerticalAlignment = VerticalAlignment.Stretch;
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
 
 			var temp = TemplatedControl.FontFamilyProperty;
 			textEditor = new AvaloniaEdit.TextEditor()
@@ -90,7 +90,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//SyntaxHighlighting = 
 				SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"), // handles JSON too
 			};
-			this.Children.Add(textEditor);
+			Children.Add(textEditor);
 
 			//textEditor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
 			/*ShowLineNumbers = true;

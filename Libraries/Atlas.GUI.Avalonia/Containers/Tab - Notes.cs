@@ -19,12 +19,12 @@ namespace Atlas.GUI.Avalonia
 			Background = new SolidColorBrush(Theme.NotesBackgroundColor);
 			MaxWidth = double.MaxValue;
 
-			//this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left;
-			//this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			//this.VerticalAlignment = VerticalAlignment.Stretch;
-			//this.Width = 1000;
-			//this.Height = 500;
-			//this.MaxWidth = 2000;
+			//HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left;
+			//HorizontalAlignment = HorizontalAlignment.Stretch;
+			//VerticalAlignment = VerticalAlignment.Stretch;
+			//Width = 1000;
+			//Height = 500;
+			//MaxWidth = 2000;
 
 			//textEditor.TextBlock.FontSize = 30;
 			//Background = Brushes.Transparent;

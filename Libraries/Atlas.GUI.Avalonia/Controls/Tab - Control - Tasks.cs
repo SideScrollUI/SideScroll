@@ -28,10 +28,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			Initialize();
 		}
 
-		public override string ToString()
-		{
-			return tabInstance.tabModel.Name;
-		}
+		public override string ToString() => tabInstance.tabModel.Name;
 
 		private void Initialize()
 		{
@@ -64,14 +61,14 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			this.ColumnDefinitions = new ColumnDefinitions("*");
-			this.RowDefinitions = new RowDefinitions("Auto"); // doesn't work
-			//this.IsVisible = (tabInstance.tabModel.Tasks.Count > 0);
-			this.IsVisible = ShowTasks;
-			//this.Background = new SolidColorBrush(Colors.Blue);
-			this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.VerticalAlignment = VerticalAlignment.Stretch;
-			//this.Orientation = Orientation.Vertical;
+			ColumnDefinitions = new ColumnDefinitions("*");
+			RowDefinitions = new RowDefinitions("Auto"); // doesn't work
+			//IsVisible = (tabInstance.tabModel.Tasks.Count > 0);
+			IsVisible = ShowTasks;
+			//Background = new SolidColorBrush(Colors.Blue);
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
+			//Orientation = Orientation.Vertical;
 
 			tabControlDataGrid = new TabControlDataGrid(tabInstance, tabInstance.tabModel.Tasks, false); // don't autogenerate
 			tabControlDataGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -88,7 +85,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//tabDataGrid.Initialize();
 			//bool addSplitter = false;
 			//tabParentControls.AddControl(tabDataGrid, true, false);
-			this.Children.Add(tabControlDataGrid);
+			Children.Add(tabControlDataGrid);
 			//this.Content = tabDataGrid;
 
 			INotifyCollectionChanged iNotifyCollectionChanged = tabInstance.tabModel.Tasks as INotifyCollectionChanged;
@@ -100,7 +97,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			tabControlDataGrid.MinHeight = tabControlDataGrid.DesiredSize.Height;
-			this.MinHeight = tabControlDataGrid.MinHeight;
+			MinHeight = tabControlDataGrid.MinHeight;
 			//tabDataGrid.dataGrid._measured = false; doesn't work
 			//tabDataGrid.Measure(new Size(2000, 2000));
 			tabControlDataGrid.InvalidateMeasure();
@@ -173,7 +170,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			this.tabModel = tabModel;
 
 			InitializeComponent();
-			this.Visibility = Visibility.Collapsed;
+			Visibility = Visibility.Collapsed;
 		}
 
 		public void Initialize()

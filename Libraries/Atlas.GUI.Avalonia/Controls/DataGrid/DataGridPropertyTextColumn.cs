@@ -48,10 +48,7 @@ namespace Atlas.GUI.Avalonia
 			//CellStyleClasses = new Classes()
 		}
 
-		public override string ToString()
-		{
-			return propertyInfo.Name;
-		}
+		public override string ToString() => propertyInfo.Name;
 
 		// never gets triggered, can't override since it's internal?
 		// Owning Grid also internal so can't add our own handler

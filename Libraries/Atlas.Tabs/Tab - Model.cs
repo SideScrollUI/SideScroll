@@ -64,7 +64,7 @@ namespace Atlas.Tabs
 			{
 				ItemList.Clear();
 				//ItemList.Add(value);
-				//this.Object = value;
+				//bject = value;
 				AddData(value);
 			}
 		}
@@ -79,7 +79,7 @@ namespace Atlas.Tabs
 
 		public TabModel(string name)
 		{
-			this.Name = name;
+			Name = name;
 		}
 
 		public static TabModel Create(string name, object obj)
@@ -100,7 +100,7 @@ namespace Atlas.Tabs
 
 		public void AddData(object obj)
 		{
-			this.Object = obj;
+			Object = obj;
 			if (obj == null)
 				return;
 
@@ -326,7 +326,7 @@ namespace Atlas.Tabs
 		public TabBookmark FindMatches(Filter filter, int depth)
 		{
 			TabBookmark tabBookmark = new TabBookmark();
-			tabBookmark.Name = this.Name;
+			tabBookmark.Name = Name;
 			tabBookmark.tabViewSettings = new TabViewSettings();
 
 			depth--;

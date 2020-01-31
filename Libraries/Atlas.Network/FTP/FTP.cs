@@ -17,10 +17,7 @@ namespace Atlas.Network
 		public bool directory;
 		public string fullPath;
 
-		public override string ToString()
-		{
-			return fullPath ?? "(null)";
-		}
+		public override string ToString() => fullPath ?? "(null)";
 	}
 
 	public class FtpFileInfo

@@ -15,10 +15,7 @@ namespace Atlas.Serialize
 			this.name = name;
 		}
 
-		public override string ToString()
-		{
-			return filePath;
-		}
+		public override string ToString() => filePath;
 
 		// check for writeability and no open locks
 		public void TestWrite()
@@ -26,10 +23,7 @@ namespace Atlas.Serialize
 			File.WriteAllText(filePath, "");
 		}
 
-		public bool Exists
-		{
-			get { return File.Exists(filePath) && new FileInfo(filePath).Length > 0; }
-		}
+		public bool Exists => return File.Exists(filePath) && new FileInfo(filePath).Length > 0;
 
 		public void Save(Call call, object obj, string name = null)
 		{
