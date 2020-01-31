@@ -36,10 +36,10 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left;
-			//this.VerticalAlignment = VerticalAlignment.Stretch;
-			this.Margin = new Thickness(6);
-			this.Orientation = IsHorizontal ? Orientation.Horizontal : Orientation.Vertical;
+			HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left;
+			//VerticalAlignment = VerticalAlignment.Stretch;
+			Margin = new Thickness(6);
+			Orientation = IsHorizontal ? Orientation.Horizontal : Orientation.Vertical;
 
 			RefreshModel();
 		}
@@ -70,7 +70,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		// Show items in order of count, retaining original order for unused values
 		private void UpdatePositions()
 		{
-			this.Children.Clear();
+			Children.Clear();
 
 			var nonzero = new List<TabChartLegendItem>();
 			var unused = new List<TabChartLegendItem>();

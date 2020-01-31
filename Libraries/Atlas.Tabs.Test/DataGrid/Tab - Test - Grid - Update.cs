@@ -18,9 +18,9 @@ namespace Atlas.Tabs.Test.DataGrid
 
 			public Instance()
 			{
-				this.context = SynchronizationContext.Current;
-				if (this.context == null)
-					this.context = new SynchronizationContext();
+				context = SynchronizationContext.Current;
+				if (context == null)
+					context = new SynchronizationContext();
 			}
 
 			public override void Load(Call call)
@@ -92,9 +92,9 @@ namespace Atlas.Tabs.Test.DataGrid
 				NotifyPropertyChanged(nameof(bigNumber));
 			}
 
-			public void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+			public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 			{
-				context.Post(new SendOrPostCallback(this.NotifyPropertyChangedContext), propertyName);
+				context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
 				//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 			}
 

@@ -442,7 +442,7 @@ namespace Atlas.Tabs
 		{
 			tabBookmark = null;
 			if (bookmark != null)
-				this.SelectBookmark(bookmark.tabBookmark);
+				SelectBookmark(bookmark.tabBookmark);
 
 			return tabViewSettings; // remove?
 		}
@@ -635,7 +635,7 @@ namespace Atlas.Tabs
 			if (obj == null)
 				return false;
 
-			if (this.tabModel.Object == obj)
+			if (tabModel.Object == obj)
 				return true;
 
 			Type type = obj.GetType();

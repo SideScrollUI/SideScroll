@@ -69,7 +69,7 @@ namespace Atlas.GUI.Avalonia.View
 			menuItemAutoLoad.Click += MenuItemAutoLoad_Click;
 			list.Add(menuItemAutoLoad);
 
-			this.Items = list;
+			Items = list;
 		}
 
 		private void MenuItemAutoLoad_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)

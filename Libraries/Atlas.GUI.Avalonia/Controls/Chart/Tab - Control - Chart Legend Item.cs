@@ -66,10 +66,10 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			//this.HorizontalAlignment = HorizontalAlignment.Right;
-			//this.VerticalAlignment = VerticalAlignment.Stretch;
-			this.ColumnDefinitions = new ColumnDefinitions("Auto, Auto");
-			this.RowDefinitions = new RowDefinitions();
+			//HorizontalAlignment = HorizontalAlignment.Right;
+			//VerticalAlignment = VerticalAlignment.Stretch;
+			ColumnDefinitions = new ColumnDefinitions("Auto, Auto");
+			RowDefinitions = new RowDefinitions();
 			//this.Margin = new Thickness(6);
 
 			UpdateSum();

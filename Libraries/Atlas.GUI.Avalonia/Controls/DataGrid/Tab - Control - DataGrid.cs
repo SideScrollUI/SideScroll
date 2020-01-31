@@ -289,7 +289,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			dataGrid.PointerEnter += DataGrid_PointerEnter;
 			//this.GotFocus += TabDataGrid_GotFocus;
 			//this.LostFocus += TabDataGrid_LostFocus;
-			this.LayoutUpdated += TabControlDataGrid_LayoutUpdated;
+			LayoutUpdated += TabControlDataGrid_LayoutUpdated;
 
 			//var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 			//AddContextMenu();

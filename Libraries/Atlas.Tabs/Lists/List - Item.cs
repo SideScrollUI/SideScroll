@@ -45,7 +45,7 @@ namespace Atlas.Tabs
 			}
 			set
 			{
-				this.Key = value;
+				Key = value;
 			}
 		}
 	}
