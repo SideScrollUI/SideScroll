@@ -49,6 +49,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Chart", new TabTestChart()),
 					new ListItem("Serializer", new TabSerializer()),
 					new ListItem("Process", new TabTestProcess()),
+					new ListItem("Loading", new TabTestLoading()),
 					new ListItem("Data Repos", new TabTestDataRepo()),
 				};
 			}
