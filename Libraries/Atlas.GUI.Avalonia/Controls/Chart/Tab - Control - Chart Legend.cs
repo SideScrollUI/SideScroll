@@ -57,7 +57,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			legendItem.OnHighlightChanged += LegendItem_OnHighlightChanged;
 			legendItem.textBlock.PointerPressed += (s, e) =>
 			{
-				if (e.MouseButton == MouseButton.Left)
+				if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
 					LegendItemClicked(legendItem);
 			};
 			//this.Children.Add(legendItem);

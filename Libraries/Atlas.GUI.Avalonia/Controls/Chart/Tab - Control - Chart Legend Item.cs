@@ -158,9 +158,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void Polygon_PointerPressed(object sender, PointerPressedEventArgs e)
 		{
-			// protected
-			//if (e.Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed)
-			if (e.MouseButton == MouseButton.Left)
+			if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
 			{
 				IsChecked = !IsChecked;
 				OnSelectionChanged?.Invoke(this, null);

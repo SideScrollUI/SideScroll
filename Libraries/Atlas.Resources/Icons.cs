@@ -45,6 +45,8 @@ namespace Atlas.Resources
 		public static readonly string Bookmark = "bookmark.png";
 		public static readonly string Import = "import.png";
 
+		public static readonly string Screenshot = "screenshot.png";
+
 		public class Streams
 		{
 			public static Stream Logo => Get(Icons.Logo);
@@ -83,6 +85,7 @@ namespace Atlas.Resources
 			public static Stream Link => Get(Icons.Link);
 			public static Stream Bookmark => Get(Icons.Bookmark);
 			public static Stream Import => Get(Icons.Import);
+			public static Stream Screenshot => Get(Icons.Screenshot);
 
 			public static Stream Get(string resourceName)
 			{
@@ -117,6 +120,8 @@ namespace Atlas.Resources
 				DeleteList,
 				Link,
 				Bookmark,
+				Import,
+				Screenshot,
 			};
 		}
 	}

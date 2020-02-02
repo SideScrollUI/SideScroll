@@ -38,9 +38,16 @@
     <None Remove="Icons\right-arrow-gray.png" />
     <None Remove="Icons\right-chevron.png" />
     <None Remove="Icons\save-file-option.png" />
+    <None Remove="Icons\screenshot.png" />
+    <None Remove="Icons\screenshot2.png" />
     <None Remove="Icons\search.png" />
+    <None Remove="Icons\shutter.png" />
     <None Remove="Icons\stats.png" />
     <None Remove="Icons\unlock.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Icons\screenshot.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,6 +82,7 @@
     <EmbeddedResource Include="Icons\right-arrow-gray.png" />
     <EmbeddedResource Include="Icons\save-file-option.png" />
     <EmbeddedResource Include="Icons\search.png" />
+    <EmbeddedResource Include="Icons\shutter.png" />
     <EmbeddedResource Include="Icons\stats.png" />
     <EmbeddedResource Include="Icons\unlock.png" />
   </ItemGroup>
