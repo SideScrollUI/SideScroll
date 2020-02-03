@@ -35,7 +35,7 @@ namespace Atlas.Tabs.Test.Actions
 
 			private void ReloadInstance(Call call)
 			{
-				base.Reload();
+				Reload();
 			}
 		}
 	}

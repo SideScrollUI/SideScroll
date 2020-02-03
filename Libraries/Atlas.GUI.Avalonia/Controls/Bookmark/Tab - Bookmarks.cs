@@ -75,12 +75,12 @@ namespace Atlas.GUI.Avalonia.Controls
 				tabModel.Bookmarks.Reload();
 				tabModel.Bookmarks.Items.Insert(0, new TabBookmarkItem(currentBookMark));
 				//tabModel.Bookmarks.Items.Remove(new TabBookmarkItem(bookmark));
-				//this.Reload();
+				//Reload();
 			}*/
 
 			private void ButtonAdd_Click(Call call)
 			{
-				var bookmark = this.CreateBookmark();
+				var bookmark = CreateBookmark();
 				//tabModel.Bookmarks.Names.Add(new ViewBookmark(bookmark));
 				//bookmarkSettings.IsVisible = true;
 				bookmarkSettings.ShowBookmarkSettings(bookmark);
@@ -88,7 +88,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			private void ButtonLink_Click(Call call)
 			{
-				var bookmark = this.CreateBookmark();
+				var bookmark = CreateBookmark();
 				string uri = tab.linker.GetLinkUri(bookmark);
 				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(uri);
 			}

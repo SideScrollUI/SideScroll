@@ -66,10 +66,10 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			//this.HorizontalAlignment = HorizontalAlignment.Right;
-			//this.VerticalAlignment = VerticalAlignment.Stretch;
-			this.ColumnDefinitions = new ColumnDefinitions("Auto, Auto");
-			this.RowDefinitions = new RowDefinitions();
+			//HorizontalAlignment = HorizontalAlignment.Right;
+			//VerticalAlignment = VerticalAlignment.Stretch;
+			ColumnDefinitions = new ColumnDefinitions("Auto, Auto");
+			RowDefinitions = new RowDefinitions();
 			//this.Margin = new Thickness(6);
 
 			UpdateSum();
@@ -158,9 +158,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void Polygon_PointerPressed(object sender, PointerPressedEventArgs e)
 		{
-			// protected
-			//if (e.Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed)
-			if (e.MouseButton == MouseButton.Left)
+			if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
 			{
 				IsChecked = !IsChecked;
 				OnSelectionChanged?.Invoke(this, null);

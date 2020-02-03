@@ -66,8 +66,8 @@ DataGrids
 
 		public SampleItem(int id, string name)
 		{
-			this.ID = id;
-			this.Name = name;
+			ID = id;
+			Name = name;
 		}
 
 		public override string ToString()

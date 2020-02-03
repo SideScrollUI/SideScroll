@@ -59,7 +59,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				}
 			}
 
-			//this.Focus();
+			//Focus();
 		}
 
 		public List<Control> AddObjectRow(object obj)
@@ -128,7 +128,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = 0,
 			};
-			this.Children.Add(textLabel);
+			Children.Add(textLabel);
 			Control control = AddProperty(property, rowIndex, 1);
 			rowIndex++;
 			return control;
@@ -201,7 +201,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//textBox.KeyUp += TextBox_KeyUp;
 			//textBox.ApplyTemplate();
 
-			this.Children.Add(textBox);
+			Children.Add(textBox);
 			return textBox;
 		}
 
@@ -254,7 +254,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			textBox.PointerLeave += TextBox_PointerLeave;
 			//textBox.ApplyTemplate();
 
-			this.Children.Add(textBox);
+			Children.Add(textBox);
 			return textBox;
 		}*/
 
@@ -322,7 +322,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			checkBox.PointerEnter += CheckBox_PointerEnter;
 			checkBox.PointerLeave += CheckBox_PointerLeave;
-			this.Children.Add(checkBox);
+			Children.Add(checkBox);
 			return checkBox;
 		}
 

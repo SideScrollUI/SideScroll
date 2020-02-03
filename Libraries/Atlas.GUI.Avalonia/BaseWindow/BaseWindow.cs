@@ -14,6 +14,7 @@ using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.Input;
 using Avalonia.Threading;
+using Avalonia.Media.Imaging;
 
 namespace Atlas.GUI.Avalonia
 {
@@ -115,6 +116,7 @@ namespace Atlas.GUI.Avalonia
 			containerGrid.Children.Add(toolbar);
 			toolbar.buttonLink.Add(Link);
 			toolbar.buttonImport.Add(ImportBookmark);
+			toolbar.buttonSnapshot.Add(Snapshot);
 
 			scrollViewer = new ScrollViewer()
 			{
@@ -195,6 +197,16 @@ namespace Atlas.GUI.Avalonia
 				// only if TabBookmarks used, don't need to reload the tab
 				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
 			}
+		}
+
+		private void Snapshot(Call call)
+		{
+			var bitmap = new RenderTargetBitmap(new PixelSize((int)Width, (int)Height));
+			bitmap.Render(this);
+			bitmap.Save("C:\\temp\\test.bmp");
+			return;
+			/*using (var ctx = bitmap.CreateDrawingContext(null))
+				Render(ctx);*/
 		}
 
 		private Grid CreateScrollButtons()

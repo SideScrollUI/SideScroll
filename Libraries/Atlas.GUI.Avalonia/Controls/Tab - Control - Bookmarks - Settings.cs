@@ -85,8 +85,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			textBoxName.Text = project.Navigator.Current.Changed;
 			if (textBoxName.Text != null)
 				textBoxName.SelectionEnd = textBoxName.Text.Length;
-			this.InvalidateArrange();
-			this.InvalidateMeasure();
+			InvalidateArrange();
+			InvalidateMeasure();
 		}
 
 		private void AddNewPanel()
@@ -194,12 +194,12 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			//tabModel.Bookmarks.Items.Add(new TabBookmarkItem(bookmark));
 			tabModel.Bookmarks.Add(bookmark);
-			this.IsVisible = false;
+			IsVisible = false;
 		}
 
 		private void ButtonCancel_Click(object sender, RoutedEventArgs e)
 		{
-			this.IsVisible = false;
+			IsVisible = false;
 		}
 	}
 }

@@ -1,33 +1,33 @@
 # Credits
 
-* Flaticon (user account no longer exists)
- - See https://icon-icons.com/pack/Basic-Ui-Elements/1904 for alternative link
-<div>Icons made by <a href="https://www.flaticon.com/authors/lucy-g" title="Lucy G">Lucy G</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+* Flaticon 
+   - http://www.flaticon.com is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/)
 
-	https://www.flaticon.com/packs/free-basic-ui-elements
+| Icon | Name |
+| - | - |
+| [Blank Document](https://www.flaticon.com/free-icon/blank-document_14922) | Freepik |
+| [Delete List](https://www.flaticon.com/free-icon/delete-list_1201) | Freepik |
+| [Eraser](https://www.flaticon.com/free-icon/eraser_1203953) | Freepik |
+| [Import](https://www.flaticon.com/free-icon/import_223438) | Kirill Kazachek |
+| [List1](https://www.flaticon.com/free-icon/list_151917) | Chanut |
+| [List2](https://www.flaticon.com/free-icon/list_159841) | Gregor Cresnar |
+| [Paste](https://www.flaticon.com/free-icon/paste_930233) | Vitaly Gorbachev |
+| [Screenshot](https://www.flaticon.com/free-icon/screenshot_748046) | Freepik |
+| [Shutter](https://www.flaticon.com/premium-icon/shutter_2441508) | Freepik |
+| [Refresh](https://www.flaticon.com/free-icon/refresh_875100) | Becris |
+| [List1](https://www.flaticon.com/free-icon/left-arrow_118744) | [Lucy G](https://www.flaticon.com/authors/lucy-g) |
+| [List1](https://www.flaticon.com/free-icon/right-arrow_118745) | Lucy G |
+| [List1](https://www.flaticon.com/free-icon/add_118742) | Lucy G |
+| [List1](https://www.flaticon.com/free-icon/unlock_118737) | Lucy G |
+| [List1](https://www.flaticon.com/free-icon/password_1330268) | Lucy G |
+| [List1](https://www.flaticon.com/free-icon/padnote_118751) | Lucy G |
+| [List1](https://www.flaticon.com/free-icon/link_118780) | Lucy G |
+| [List1](https://www.flaticon.com/free-icon/bookmark_118732) | Lucy G |
+| [List1](https://www.flaticon.com/free-icon/search_118718) | Lucy G |
+| [List1](https://www.flaticon.com/free-icon/save-file-option_25398) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) |
+| [List1](https://www.flaticon.com/free-icon/internet_149229) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) |
 
-	https://www.flaticon.com/free-icon/left-arrow_118744
-	https://www.flaticon.com/free-icon/right-arrow_118745
-	https://www.flaticon.com/free-icon/add_118742
-	https://www.flaticon.com/free-icon/unlock_118737
-	https://www.flaticon.com/free-icon/password_1330268
-	https://www.flaticon.com/free-icon/padnote_118751
-	https://www.flaticon.com/free-icon/link_118780
-	https://www.flaticon.com/free-icon/bookmark_118732
-	https://www.flaticon.com/free-icon/search_118718
-
-<div>Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
-	https://www.flaticon.com/free-icon/save-file-option_25398
-
-	https://www.flaticon.com/free-icon/internet_149229
-
-Refresh - https://www.flaticon.com/free-icon/refresh_875100 - Becris
-
-List1 - https://www.flaticon.com/free-icon/list_151917 - Chanut
-List2 - https://www.flaticon.com/free-icon/list_159841- Gregor Cresnar
-Import - https://www.flaticon.com/free-icon/import_223438 - Kirill Kazachek
-Paste - https://www.flaticon.com/free-icon/paste_930233 - Vitaly Gorbachev
-Delete List - https://www.flaticon.com/free-icon/delete-list_1201 - Freepik
-Eraser - https://www.flaticon.com/free-icon/eraser_1203953 - Freepik
-Blank Document - https://www.flaticon.com/free-icon/blank-document_14922 - Freepik
+* Lucy G
+  - (user account no longer exists)
+  - https://www.flaticon.com/packs/free-basic-ui-elements
+  - See https://icon-icons.com/pack/Basic-Ui-Elements/1904 for alternative link

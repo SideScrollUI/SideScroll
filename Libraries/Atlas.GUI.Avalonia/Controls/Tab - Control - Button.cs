@@ -13,7 +13,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public TabControlButton(string label)
 		{
-			this.Content = label;
+			Content = label;
 
 			InitializeControl();
 		}

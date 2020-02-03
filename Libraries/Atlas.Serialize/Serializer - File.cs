@@ -23,7 +23,7 @@ namespace Atlas.Serialize
 			File.WriteAllText(filePath, "");
 		}
 
-		public bool Exists => return File.Exists(filePath) && new FileInfo(filePath).Length > 0;
+		public bool Exists => File.Exists(filePath) && new FileInfo(filePath).Length > 0;
 
 		public void Save(Call call, object obj, string name = null)
 		{

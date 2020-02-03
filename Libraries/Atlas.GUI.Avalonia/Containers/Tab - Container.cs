@@ -69,7 +69,7 @@ namespace Atlas.GUI.Avalonia
 			tabModel = tabInstance.tabModel;
 
 			Load();
-			//this.InitializeControls();
+			//InitializeControls();
 			//AddListeners();
 
 			// Have return ListCollection?
@@ -162,7 +162,7 @@ namespace Atlas.GUI.Avalonia
 			LoadSettings();
 
 			ReloadControls();
-			//this.Dispatcher.BeginInvoke((Action)(() => { allowAutoScrolling = true; }));
+			//Dispatcher.BeginInvoke((Action)(() => { allowAutoScrolling = true; }));
 		}
 
 		public void LoadSettings()
@@ -181,8 +181,8 @@ namespace Atlas.GUI.Avalonia
 		private void ClearControls()
 		{			
 			//LogicalChildren.Clear();
-			//this.Content = null;
-			this.Children.Clear();
+			//Content = null;
+			Children.Clear();
 		}
 
 		private void TabInstance_OnLoadBookmark(object sender, EventArgs e)

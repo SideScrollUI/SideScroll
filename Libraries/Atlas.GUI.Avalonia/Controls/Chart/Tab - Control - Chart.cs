@@ -121,8 +121,8 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			this.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
-			this.VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
+			HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
+			VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
 			MaxWidth = 1500;
 			MaxHeight = 1000;
 

@@ -45,8 +45,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			//ColumnDefinitions.Add(columnDefinition);
 			Focusable = true;
 
-			this.GotFocus += TabView_GotFocus;
-			this.LostFocus += TabView_LostFocus;
+			GotFocus += TabView_GotFocus;
+			LostFocus += TabView_LostFocus;
 		}
 
 		// real DesiredSize doesn't work because of HorizontalAlign = Stretch?
