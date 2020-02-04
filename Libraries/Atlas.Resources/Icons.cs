@@ -7,7 +7,7 @@ namespace Atlas.Resources
 {
 	public class Icons
 	{
-		public static readonly string Logo = "Logo.ico";
+		public static readonly string Logo = "Logo2.ico";
 
 		public static readonly string Pin = "placeholder.png";
 		public static readonly string Add = "add.png";

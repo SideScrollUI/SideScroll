@@ -5,6 +5,10 @@
 - `cd Atlas`
 - Restore SubModules for AvaloniaUI (the nuget packages aren't recent enough)
   - `git submodule update --init --recursive`
+- (If Required) Updating sub-module git repos
+  - `git submodule sync --recursive`
+  - `git submodule update --init --recursive --remote`
+
 ## Console
 - Build
   - `dotnet build Atlas.Avalonia.sln`
