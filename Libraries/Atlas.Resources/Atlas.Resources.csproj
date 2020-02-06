@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -27,7 +27,7 @@
     <None Remove="Icons\link.png" />
     <None Remove="Icons\list1.png" />
     <None Remove="Icons\list2.png" />
-    <None Remove="Icons\Logo.ico" />
+    <None Remove="Icons\Logo2.ico" />
     <None Remove="Icons\padnote.png" />
     <None Remove="Icons\password.png" />
     <None Remove="Icons\paste.png" />
@@ -71,7 +71,7 @@
     <EmbeddedResource Include="Icons\link.png" />
     <EmbeddedResource Include="Icons\list1.png" />
     <EmbeddedResource Include="Icons\list2.png" />
-    <EmbeddedResource Include="Icons\Logo.ico" />
+    <EmbeddedResource Include="Icons\Logo2.ico" />
     <EmbeddedResource Include="Icons\padnote.png" />
     <EmbeddedResource Include="Icons\password.png" />
     <EmbeddedResource Include="Icons\paste.png" />
