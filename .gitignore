@@ -7,6 +7,7 @@
 *.suo
 *.tmp
 *.vspx
+*.DS_Store
 .vs/
 bin/
 obj/

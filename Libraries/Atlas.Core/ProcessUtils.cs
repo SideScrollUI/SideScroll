@@ -65,7 +65,15 @@ namespace Atlas.Core
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Unix)
 			{
-				Process process = Process.Start("dotnet", arguments);
+				ProcessStartInfo processStartInfo = new ProcessStartInfo()
+				{
+					FileName = "dotnet",
+					Arguments = arguments,
+				};
+				// Required for Mac .apps
+				processStartInfo.Environment.Add("PATH", Environment.GetEnvironmentVariable("PATH"));
+				
+				Process process = Process.Start(processStartInfo);
 			}
 			else
 			{
