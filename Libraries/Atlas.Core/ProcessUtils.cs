@@ -67,11 +67,12 @@ namespace Atlas.Core
 			{
 				ProcessStartInfo processStartInfo = new ProcessStartInfo()
 				{
-					FileName = "dotnet",
+					//FileName = "dotnet",
+					FileName = "/usr/local/share/dotnet/dotnet",
 					Arguments = arguments,
 				};
-				// Required for Mac .apps
-				processStartInfo.Environment.Add("PATH", Environment.GetEnvironmentVariable("PATH"));
+				// Required for Mac .apps (doesn't work)
+				// processStartInfo.Environment.Add("PATH", Environment.GetEnvironmentVariable("PATH"));
 				
 				Process process = Process.Start(processStartInfo);
 			}
