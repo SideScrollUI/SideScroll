@@ -69,6 +69,7 @@ namespace Atlas.Core
 	[Skippable(false)]
 	public class LogEntry : INotifyPropertyChanged
 	{
+		[HiddenRow]
 		public LogEntry rootLog;
 		public enum LogType
 		{
@@ -133,6 +134,7 @@ namespace Atlas.Core
 			}
 		}
 		public Tag[] tags;
+		[HiddenRow]
 		public SynchronizationContext context; // inherited from creator (which can be a Parent Log)
 
 		public override string ToString() => Message;
@@ -195,7 +197,7 @@ namespace Atlas.Core
 
 		public Log()
 		{
-			this.Created = DateTime.Now;
+			Created = DateTime.Now;
 		}
 
 		public Log(string text = null, SynchronizationContext context = null, Tag[] tags = null)

@@ -261,7 +261,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				[Grid.RowProperty] = 1,
 			};
 			// Add a style for selected & focused here?
-			var styles = dataGrid.Styles;
+			//var styles = dataGrid.Styles;
 
 			//dataGrid.AutoGenerateColumns = true;
 			if (autoGenerateColumns)

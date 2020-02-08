@@ -158,7 +158,7 @@ namespace Atlas.GUI.Avalonia
 
 			Content = containerGrid;
 
-			this.PositionChanged += BaseWindow_PositionChanged;
+			PositionChanged += BaseWindow_PositionChanged;
 
 			this.GetObservable(ClientSizeProperty).Subscribe(Resize);
 		}
