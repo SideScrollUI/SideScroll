@@ -1,7 +1,6 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.GUI.Avalonia.Controls;
-using Atlas.Serialize;
 using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Collections;
@@ -95,7 +94,36 @@ namespace Atlas.GUI.Avalonia.View
 			// Have return TabModel?
 			tabInstance.Reintialize(false);
 
+			Preload();
+
 			tabInstance.Invoke(ReloadControls);
+		}
+
+		// Preload properties in a background thread so the GUI isn't blocked
+		// Todo: Make an async version of this for Task<T> Member(Call call)
+		private void Preload()
+		{
+			int index = 0;
+			foreach (IList iList in tabModel.ItemList)
+			{
+				Type listType = iList.GetType();
+				Type elementType = listType.GetElementTypeForAll();
+
+				var tabDataSettings = TabViewSettings.GetData(index);
+				List<TabDataSettings.PropertyColumn> propertyColumns = tabDataSettings.GetPropertiesAsColumns(elementType);
+				int itemCount = 0;
+				foreach (object obj in iList)
+				{
+					foreach (var propertyColumn in propertyColumns)
+					{
+						propertyColumn.propertyInfo.GetValue(obj);
+					}
+					itemCount++;
+					if (itemCount > 50)
+						break;
+				}
+				index++;
+			}
 		}
 
 		protected override void ArrangeCore(Rect finalRect)
@@ -540,12 +568,12 @@ namespace Atlas.GUI.Avalonia.View
 			tabInstance.loadCalled = false;
 		}
 
-		public void Load()
+		public void Load(bool background = true)
 		{
 			if (tabInstance.loadCalled)
 				return;
 			tabInstance.loadCalled = true;
-			if (tabInstance is ITabAsync)// && tabInstance.isLoaded)
+			if (background || tabInstance is ITabAsync)// && tabInstance.isLoaded)
 			{
 				tabInstance.Invoke(ShowLoading);
 				//ShowLoading();
@@ -882,9 +910,11 @@ namespace Atlas.GUI.Avalonia.View
 			//var collection = newList as DataGridSelectedItemsCollection;
 			//if (collection != null && collection.)
 			//	newList.
-			object value = obj.GetInnerValue(); // performance issues? cache this?
-			if (value == null)
-				return;
+
+			// duplicate work
+			//object value = obj.GetInnerValue(); // performance issues? cache this?
+			//if (value == null)
+			//	return;
 
 			if (oldChildControls.ContainsKey(obj))
 			{

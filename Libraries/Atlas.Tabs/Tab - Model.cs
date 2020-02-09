@@ -284,6 +284,8 @@ namespace Atlas.Tabs
 			var listProperties = ListProperty.Create(Object);
 			itemCollection.AddRange(listProperties);
 
+			AddMethodProperties(type, itemCollection);
+
 			//itemCollection = new ItemCollection<ListMember>(itemCollection.OrderBy(x => x.memberInfo.MetadataToken).ToList());
 			ItemList.Add(itemCollection);
 
@@ -295,6 +297,27 @@ namespace Atlas.Tabs
 			Objects.Clear();
 			ItemList.Clear();
 			Actions = null;
+		}
+
+		// Require attribute for this?
+		private void AddMethodProperties(Type type, ItemCollection<ListMember> itemCollection)
+		{
+			MethodInfo[] methodInfos = type.GetMethods().OrderBy(x => x.MetadataToken).ToArray();
+
+			// Add any methods that return a Task object
+			foreach (MethodInfo methodInfo in methodInfos)
+			{
+				if (methodInfo.IsPublic && methodInfo.ReturnType != null)
+				{
+					ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+					if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType == typeof(Call))
+					{
+						//itemCollection.Add(new ListMethod2((ListMethod2.LoadObjectAsync)Delegate.CreateDelegate(typeof(ListMethod2.LoadObjectAsync), methodInfo)));
+
+						itemCollection.Add(new ListMethod(Object, methodInfo));
+					}
+				}
+			}
 		}
 
 		private void AddMethods(Type type)
@@ -415,7 +438,3 @@ namespace Atlas.Tabs
 		}
 	}
 }
-
-/*
-
-*/

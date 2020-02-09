@@ -148,8 +148,6 @@ namespace Atlas.GUI.Avalonia
 
 			scrollViewer.Content = contentGrid;
 
-			SetMaxBounds();
-
 			containerGrid.Children.Add(scrollViewer);
 
 			Grid scrollButtons = CreateScrollButtons();
@@ -377,13 +375,14 @@ namespace Atlas.GUI.Avalonia
 			}
 			set
 			{
-				double left = Math.Max(-10, value.Left); // values can be negative
-				double top = Math.Max(0, value.Top);
-
 				// These are causing the window to be shifted down
-				Position = new PixelPoint((int)left, (int)top);
 				Width = Math.Max(MinWindowSize, value.Width);
 				Height = Math.Max(MinWindowSize, value.Height);
+
+				double minLeft = -10; // Left position for windows starts at -10
+				double left = Math.Min(Math.Max(minLeft, value.Left), MaxWidth - Width + minLeft); // values can be negative
+				double top = Math.Min(Math.Max(0, value.Top), MaxHeight - Height);
+				Position = new PixelPoint((int)left, (int)top);
 				//Height = Math.Max(MinWindowSize, value.Height + 500); // reproduces black bar problem, not subtracting bottom toolbar for Height
 				//Measure(Bounds.Size);
 				WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
@@ -394,6 +393,8 @@ namespace Atlas.GUI.Avalonia
 
 		protected void LoadWindowSettings()
 		{
+			SetMaxBounds();
+
 			WindowSettings windowSettings = project.DataApp.Load<WindowSettings>(true);
 
 			this.WindowSettings = windowSettings;

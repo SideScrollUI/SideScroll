@@ -16,6 +16,8 @@ namespace Atlas.Tabs.Test
 				{
 					new ListItem("Slow Load", new TabTestSlowLoad()),
 					new ListItem("Slow Model", new TabTestSlowModel()),
+					new ListItem("Slow Async Item", new TabTestSlowAsyncItem()),
+					new ListItem("Slow Async Model", new TabTestSlowAsyncModel()),
 				};
 			}
 		}

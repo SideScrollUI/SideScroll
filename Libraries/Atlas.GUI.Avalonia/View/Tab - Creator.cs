@@ -5,7 +5,6 @@ using Atlas.Tabs;
 using Avalonia.Controls;
 using System;
 using System.Collections;
-using System.Reflection;
 
 namespace Atlas.GUI.Avalonia.View
 {
@@ -67,6 +66,17 @@ namespace Atlas.GUI.Avalonia.View
 				TabWebBrowser tabWebBrowser = new TabWebBrowser((Uri)value);
 				value = tabWebBrowser;
 			}*/
+
+			if (value is ILoadAsync loadAsync)
+			{
+				TabInstance childTabInstance = new TabInstanceLoadAsync(loadAsync);
+				childTabInstance.project = parentTabInstance.project;
+				childTabInstance.tabBookmark = tabBookmark;
+				childTabInstance.tabModel.Name = label;
+				TabView tabView = new TabView(childTabInstance);
+				tabView.Load();
+				return tabView;
+			}
 
 			if (value is ITab iTab)
 			{
@@ -144,7 +154,7 @@ namespace Atlas.GUI.Avalonia.View
 				TabInstance childTabInstance = parentTabInstance.CreateChild(childTabModel);
 				childTabInstance.Label = label;
 				TabView tabModelView = new TabView(childTabInstance);
-				tabModelView.Load();
+				tabModelView.Load(true);
 				return tabModelView;
 			}
 		}

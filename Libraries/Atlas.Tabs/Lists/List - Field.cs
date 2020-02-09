@@ -67,7 +67,7 @@ namespace Atlas.Tabs
 		public static ItemCollection<ListField> Create(object obj)
 		{
 			FieldInfo[] fieldInfos = obj.GetType().GetFields().OrderBy(x => x.MetadataToken).ToArray();
-			ItemCollection<ListField> listFields = new ItemCollection<ListField>();
+			var listFields = new ItemCollection<ListField>();
 			// replace any overriden/new field & properties
 			var fieldToIndex = new Dictionary<string, int>();
 			foreach (FieldInfo fieldInfo in fieldInfos)
@@ -91,6 +91,3 @@ namespace Atlas.Tabs
 		}
 	}
 }
-
-/*
-*/

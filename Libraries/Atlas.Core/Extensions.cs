@@ -297,10 +297,12 @@ namespace Atlas.Extensions // rename to Core?
 		{
 			if (value == null)
 				return null;
+			if (value is ILoadAsync)
+				return value;
 			Type type = value.GetType();
 			foreach (PropertyInfo propertyInfo in type.GetProperties())
 			{
-				if (propertyInfo.GetCustomAttribute(typeof(InnerValueAttribute)) != null)
+				if (propertyInfo.GetCustomAttribute<InnerValueAttribute>() != null)
 				{
 					value = propertyInfo.GetValue(value);
 					return GetInnerValue(value);
@@ -308,7 +310,7 @@ namespace Atlas.Extensions // rename to Core?
 			}
 			foreach (FieldInfo fieldInfo in type.GetFields())
 			{
-				if (fieldInfo.GetCustomAttribute(typeof(InnerValueAttribute)) != null)
+				if (fieldInfo.GetCustomAttribute<InnerValueAttribute>() != null)
 				{
 					value = fieldInfo.GetValue(value);
 					return GetInnerValue(value);

@@ -24,12 +24,28 @@ namespace Atlas.Tabs
 		Task LoadAsync(Call call);
 	}
 
+	public class TabInstanceLoadAsync : TabInstance, ITabAsync
+	{
+		private ILoadAsync loadAsync;
+
+		public TabInstanceLoadAsync(ILoadAsync loadAsync)
+		{
+			this.loadAsync = loadAsync;
+		}
+
+		public async Task LoadAsync(Call call)
+		{
+			object result = await loadAsync.LoadAsync(call);
+			tabModel.AddData(result);
+		}
+	}
+
 	//	An Instance of a TabModel, created by TabView
 	public class TabInstance : IDisposable
 	{
 		public const string CurrentBookmarkName = "Current";
 
-		public delegate void MethodInvoker();
+		//public delegate void MethodInvoker();
 
 		public Project project;
 		public ITab iTab;
@@ -104,6 +120,11 @@ namespace Atlas.Tabs
 			SetStartLoad();
 		}
 
+		public override string ToString()
+		{
+			return Label;
+		}
+
 		public TabInstance CreateChildTab(ITab iTab)
 		{
 			TabInstance tabInstance = iTab.Create();
@@ -157,11 +178,6 @@ namespace Atlas.Tabs
 			}
 		}
 
-		public override string ToString()
-		{
-			return Label;
-		}
-
 		public virtual void Dispose()
 		{
 			childTabInstances.Clear();
@@ -179,11 +195,11 @@ namespace Atlas.Tabs
 		private void InitializeContext()
 		{
 			//Debug.Assert(context == null || SynchronizationContext.Current == context);
-			if (this.guiContext == null)
+			if (guiContext == null)
 			{
-				this.guiContext = SynchronizationContext.Current;
-				if (this.guiContext == null)
-					this.guiContext = new SynchronizationContext();
+				guiContext = SynchronizationContext.Current;
+				if (guiContext == null)
+					guiContext = new SynchronizationContext();
 			}
 		}
 
@@ -305,6 +321,7 @@ namespace Atlas.Tabs
 		{
 		}
 
+		// todo: Add sync version?
 		public void Reintialize(bool force)
 		{
 			if (!force && isLoaded)
