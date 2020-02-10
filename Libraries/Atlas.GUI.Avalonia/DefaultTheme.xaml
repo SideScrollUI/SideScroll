@@ -21,7 +21,6 @@
   </Style>
 
   <Style Selector="dg|DataGridRow /template/ Rectangle#BackgroundRectangle">
-    <Setter Property="IsVisible" Value="False"/>
     <Setter Property="Fill" Value="#FF92F397" />
   </Style>
   
@@ -55,6 +54,13 @@
     </Style>
     <Style Selector="TextBox:pointerover">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHover}"/>
+    </Style>
+
+    <Style Selector="ListBoxItem /template/ ContentPresenter">
+        <Setter Property="Background" Value="#FF086F9E"/>
+    </Style>
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#4e8ef7"/>
     </Style>
 
 </Styles>

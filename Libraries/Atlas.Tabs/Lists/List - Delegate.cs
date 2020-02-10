@@ -9,7 +9,7 @@ using Atlas.Extensions;
 
 namespace Atlas.Tabs
 {
-	public class ListMethodObject : ListMember, IPropertyEditable, ILoadAsync
+	public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 	{
 		public delegate Task<object> LoadObjectAsync(Call call);
 
@@ -50,7 +50,7 @@ namespace Atlas.Tabs
 			}
 		}
 
-		public ListMethodObject(LoadObjectAsync loadAction, bool cached = true) :
+		public ListDelegate(LoadObjectAsync loadAction, bool cached = true) :
 			base(loadAction.Target, loadAction.Method)
 		{
 			this.loadAction = loadAction;

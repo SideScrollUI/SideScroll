@@ -15,7 +15,7 @@ namespace Atlas.Tabs.Test
 			{
 				tabModel.Items = new ItemCollection<IListItem>()
 				{
-					new ListMethodObject(SlowAsyncItem),
+					new ListDelegate(SlowAsyncItem),
 				};
 			}
 

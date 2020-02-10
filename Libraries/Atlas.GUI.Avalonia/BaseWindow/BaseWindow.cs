@@ -116,7 +116,7 @@ namespace Atlas.GUI.Avalonia
 			containerGrid.Children.Add(toolbar);
 			toolbar.buttonLink.Add(Link);
 			toolbar.buttonImport.Add(ImportBookmark);
-			toolbar.buttonSnapshot.Add(Snapshot);
+			toolbar.buttonSnapshot?.Add(Snapshot);
 
 			scrollViewer = new ScrollViewer()
 			{

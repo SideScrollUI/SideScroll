@@ -23,7 +23,7 @@ namespace Atlas.Core.Test
 			decimal d = 123456.1234M;
 			string text = d.ObjectToString();
 
-			Assert.AreEqual("123,456.123", text);
+			Assert.AreEqual("123,456.1234", text);
 		}
 
 		[Test, Description("AddSpacesBetweenWords")]
@@ -32,6 +32,17 @@ namespace Atlas.Core.Test
 			string text = "CPUUtilization".AddSpacesBetweenWords();
 
 			Assert.AreEqual("CPU Utilization", text);
+		}
+
+		[Test]
+		public void TestBookmarkUri()
+		{
+			BookmarkUri uri = BookmarkUri.Parse("atlas://type/v3/id");
+
+			Assert.AreEqual("atlas", uri.Prefix);
+			Assert.AreEqual("type", uri.Type);
+			Assert.AreEqual(new Version(3, 0, 0, 0), uri.Version);
+			Assert.AreEqual("id", uri.Id);
 		}
 	}
 }
