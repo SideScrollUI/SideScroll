@@ -1,9 +1,7 @@
 
 # User Guide
----
 
 ## GUI
----
 
 ### Selecting Items
 * Use Ctrl or Shift to select multiple items

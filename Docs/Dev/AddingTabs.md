@@ -1,4 +1,3 @@
-
 # Adding new Tabs
 
 * Every tab is composed of an outer class that implements the `ITab` interface. The `ITab` interface allows you to:

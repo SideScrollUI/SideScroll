@@ -568,7 +568,7 @@ namespace Atlas.GUI.Avalonia.View
 			tabInstance.loadCalled = false;
 		}
 
-		public void Load(bool background = true)
+		public void Load(bool background = false)
 		{
 			if (tabInstance.loadCalled)
 				return;

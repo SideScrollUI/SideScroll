@@ -1,7 +1,4 @@
-
-
 # Development
----
 * IDEs
   * [Visual Studio](IDEs/VisualStudio.md) (recommended)
   * JetBrains Rider

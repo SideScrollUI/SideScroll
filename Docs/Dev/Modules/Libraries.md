@@ -43,5 +43,3 @@
   - Furthest along of the GUI interfaces
   - Has a lot better layout controls than WinForms
   - Ideally would eventually get deprecated for a cross platform solution
-
-     
