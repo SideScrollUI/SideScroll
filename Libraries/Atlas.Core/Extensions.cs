@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -377,6 +376,11 @@ namespace Atlas.Extensions // rename to Core?
 			}
 
 			return result;
+		}
+
+		public static string Formatted(this Version version)
+		{
+			return version.ToString().TrimEnd(".0").TrimEnd(".0").TrimEnd(".0");
 		}
 
 		/*public static bool IsAction(object obj)

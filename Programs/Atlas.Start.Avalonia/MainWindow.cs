@@ -1,6 +1,7 @@
 ﻿using Atlas.Tabs;
 using Atlas.GUI.Avalonia;
 using Atlas.Start.Avalonia.Tabs;
+using System;
 
 namespace Atlas.Start.Avalonia
 {
@@ -16,7 +17,7 @@ namespace Atlas.Start.Avalonia
 			var projectSettings = new ProjectSettings()
 			{
 				Name = "Atlas",
-				Version = "1",
+				Version = new Version(1, 0),
 				DataVersion = "1",
 				LinkType = "atlas",
 			};

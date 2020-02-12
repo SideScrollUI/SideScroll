@@ -56,15 +56,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 
 		public TextBlock AddLabel(string text = "")
 		{
-			TextBlock textBlock = new TextBlock()
-			{
-				Foreground = new SolidColorBrush(Colors.White),
-				Text = text,
-				Margin = new Thickness(6),
-				TextWrapping = global::Avalonia.Media.TextWrapping.NoWrap,
-				VerticalAlignment = VerticalAlignment.Center,
-			};
-
+			var textBlock = new ToolbarTextBlock(text);
 			AddControl(textBlock);
 
 			return textBlock;
@@ -75,7 +67,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 			TextBox textBox = new TextBox()
 			{
 				Text = text,
-				TextWrapping = global::Avalonia.Media.TextWrapping.NoWrap,
+				TextWrapping = TextWrapping.NoWrap,
 				VerticalAlignment = VerticalAlignment.Center,
 				IsReadOnly = true,
 				Margin = new Thickness(6),
@@ -101,7 +93,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 				Margin = new Thickness(6),
 				BorderThickness = new Thickness(1),
 				BorderBrush = new SolidColorBrush(Colors.Black),
-				TextWrapping = global::Avalonia.Media.TextWrapping.NoWrap,
+				TextWrapping = TextWrapping.NoWrap,
 				VerticalAlignment = VerticalAlignment.Center,
 			};
 
@@ -111,7 +103,20 @@ namespace Atlas.GUI.Avalonia.Tabs
 		}
 	}
 
-	// working now
+	public class ToolbarTextBlock : TextBlock, IStyleable
+	{
+		Type IStyleable.StyleKey => typeof(TextBlock);
+
+		public ToolbarTextBlock(string text = "")
+		{
+			Foreground = new SolidColorBrush(Colors.White);
+			Text = text;
+			Margin = new Thickness(6);
+			TextWrapping = TextWrapping.NoWrap;
+			VerticalAlignment = VerticalAlignment.Center;
+		}
+	}
+
 	public class ToolbarButton : Button, IStyleable, ILayoutable
 	{
 		Type IStyleable.StyleKey => typeof(Button);

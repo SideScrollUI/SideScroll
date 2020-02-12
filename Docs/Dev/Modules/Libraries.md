@@ -29,7 +29,8 @@
   - File Browser
   
 * Atlas.Tabs.Test (.NET Standard)
-  - File Browser
+  - `*Test` tabs that show up in debug mode
+  - Used for testing UI features
 
 ## GUI Libraries
   

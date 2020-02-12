@@ -10,7 +10,7 @@ namespace Atlas.Tabs
 	{
 		public string Name => projectSettings.Name;	// for viewing purposes
 		public string LinkType => projectSettings.LinkType; // for bookmarking
-		public string Version => projectSettings.Version;
+		public Version Version => projectSettings.Version;
 		public virtual ProjectSettings projectSettings { get; set; }
 		public virtual UserSettings userSettings { get; set; }
 
