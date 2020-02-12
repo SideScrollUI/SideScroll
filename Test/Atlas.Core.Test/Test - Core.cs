@@ -37,11 +37,11 @@ namespace Atlas.Core.Test
 		[Test]
 		public void TestBookmarkUri()
 		{
-			BookmarkUri uri = BookmarkUri.Parse("atlas://type/v3/id");
+			BookmarkUri uri = BookmarkUri.Parse("atlas://type/v3.1/id");
 
 			Assert.AreEqual("atlas", uri.Prefix);
 			Assert.AreEqual("type", uri.Type);
-			Assert.AreEqual(new Version(3, 0, 0, 0), uri.Version);
+			Assert.AreEqual(new Version(3, 1, 0, 0), uri.Version);
 			Assert.AreEqual("id", uri.Id);
 		}
 	}
