@@ -28,6 +28,7 @@
     <None Remove="Icons\list1.png" />
     <None Remove="Icons\list2.png" />
     <None Remove="Icons\Logo2.ico" />
+    <None Remove="Icons\Logo3.ico" />
     <None Remove="Icons\padnote.png" />
     <None Remove="Icons\password.png" />
     <None Remove="Icons\paste.png" />
@@ -47,6 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Icons\Logo3.ico" />
     <EmbeddedResource Include="Icons\screenshot.png" />
   </ItemGroup>
 
