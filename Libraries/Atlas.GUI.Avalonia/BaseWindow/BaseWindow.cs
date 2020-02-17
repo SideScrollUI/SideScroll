@@ -1,20 +1,19 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using System;
+using System.IO;
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
 using Atlas.GUI.Avalonia.Controls;
 using Atlas.GUI.Avalonia.View;
-using System;
-using System.IO;
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Layout;
-using Avalonia.Media;
+using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
-using Avalonia.Input;
+using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Threading;
-using Avalonia.Media.Imaging;
 
 namespace Atlas.GUI.Avalonia
 {
@@ -34,6 +33,7 @@ namespace Atlas.GUI.Avalonia
 
 		// Controls
 		protected Grid containerGrid;
+		protected Grid bottomGrid;
 		protected BaseWindowToolbar toolbar;
 		protected ScrollViewer scrollViewer;
 		protected Grid contentGrid;
@@ -101,22 +101,42 @@ namespace Atlas.GUI.Avalonia
 				Icon = new WindowIcon(stream);
 			}
 
-			// Toolbar      | Toolbar
+			// Toolbar
 			// ScrollViewer | Buttons
 			containerGrid = new Grid()
 			{
-				ColumnDefinitions = new ColumnDefinitions("*,Auto"),
+				ColumnDefinitions = new ColumnDefinitions("*"),
 				RowDefinitions = new RowDefinitions("Auto,*"),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
-				//Background = new SolidColorBrush(Theme.BackgroundColor),
 			};
 
 			toolbar = new BaseWindowToolbar(this);
-			containerGrid.Children.Add(toolbar);
 			toolbar.buttonLink.Add(Link);
 			toolbar.buttonImport.Add(ImportBookmark);
 			toolbar.buttonSnapshot?.Add(Snapshot);
+			containerGrid.Children.Add(toolbar);
+
+			bottomGrid = new Grid()
+			{
+				ColumnDefinitions = new ColumnDefinitions("*,Auto"),
+				RowDefinitions = new RowDefinitions("*"),
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch,
+				[Grid.RowProperty] = 1,
+			};
+			containerGrid.Children.Add(bottomGrid);
+
+			// Placed inside scroll viewer
+			contentGrid = new Grid()
+			{
+				HorizontalAlignment = HorizontalAlignment.Left,
+				VerticalAlignment = VerticalAlignment.Stretch,
+				ColumnDefinitions = new ColumnDefinitions("Auto"),
+				RowDefinitions = new RowDefinitions("*"),
+				MaxWidth = 10000,
+				MaxHeight = 5000,
+			};
 
 			scrollViewer = new ScrollViewer()
 			{
@@ -124,35 +144,16 @@ namespace Atlas.GUI.Avalonia
 				VerticalAlignment = VerticalAlignment.Stretch,
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
 				VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
-				//Background = new SolidColorBrush(Colors.Red),
 				MaxWidth = 5000,
 				MaxHeight = 4000,
-				[Grid.RowProperty] = 1,
-			};
-			//scrollViewer.horizontalScrollBar
-
-			//containerGrid.Children.Add(scrollViewer);
-
-			// contains scroll viewer
-			contentGrid = new Grid()
-			{
-				HorizontalAlignment = HorizontalAlignment.Left,
-				//HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
-				ColumnDefinitions = new ColumnDefinitions("Auto"),
-				RowDefinitions = new RowDefinitions("*"),
-				//Background = new SolidColorBrush(Colors.Blue),
-				MaxWidth = 10000,
-				MaxHeight = 5000,
+				Content = contentGrid,
 			};
 
-			scrollViewer.Content = contentGrid;
-
-			containerGrid.Children.Add(scrollViewer);
+			bottomGrid.Children.Add(scrollViewer);
 
 			Grid scrollButtons = CreateScrollButtons();
 
-			containerGrid.Children.Add(scrollButtons);
+			bottomGrid.Children.Add(scrollButtons);
 
 			Content = containerGrid;
 
@@ -199,12 +200,12 @@ namespace Atlas.GUI.Avalonia
 
 		private void Snapshot(Call call)
 		{
-			var bitmap = new RenderTargetBitmap(new PixelSize((int)Width, (int)Height));
-			bitmap.Render(this);
-			bitmap.Save("C:\\temp\\test.bmp");
-			return;
-			/*using (var ctx = bitmap.CreateDrawingContext(null))
-				Render(ctx);*/
+			var screenCapture = new ScreenCapture(scrollViewer)
+			{
+				[Grid.RowProperty] = 1,
+			};
+
+			containerGrid.Children.Add(screenCapture);
 		}
 
 		private Grid CreateScrollButtons()
@@ -216,8 +217,6 @@ namespace Atlas.GUI.Avalonia
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				[Grid.ColumnProperty] = 1,
-				[Grid.RowSpanProperty] = 2,
-				//[Grid.RowProperty] = 1, // need to add a dummy rectangle otherwise?
 			};
 
 			Button buttonExpand = new Button()
@@ -478,9 +477,3 @@ namespace Atlas.GUI.Avalonia
 		}
 	}
 }
-
-/*
-https://github.com/AvaloniaUI/Avalonia/wiki/Hide-console-window-for-self-contained-.NET-Core-application
-
-
-*/
