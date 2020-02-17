@@ -1114,17 +1114,16 @@ namespace Atlas.GUI.Avalonia.Controls
 		private SelectedRow GetSelectedRow(object obj)
 		{
 			Type type = obj.GetType();
-			SelectedRow selectedRow = new SelectedRow();
-			selectedRow.label = obj.ObjectToUniqueString();
-			selectedRow.rowIndex = iList.IndexOf(obj);
-			if (selectedRow.label == type.FullName)
+			SelectedRow selectedRow = new SelectedRow()
 			{
+				label = obj.ObjectToUniqueString(),
+				rowIndex = iList.IndexOf(obj),
+				dataKey = GetDataKey(obj), // overrides label
+				dataValue = GetDataValue(obj),
+			};
+			if (selectedRow.label == type.FullName)
 				selectedRow.label = null;
-			}
-			// Fill in the DataKey/DataValue pair if found
-			selectedRow.dataKey = GetDataKey(obj);
-			if (selectedRow.dataKey != null)
-				selectedRow.dataValue = GetDataValue(obj);
+			
 			return selectedRow;
 		}
 

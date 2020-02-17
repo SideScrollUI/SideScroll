@@ -76,6 +76,33 @@ namespace Atlas.Tabs
 			return Name;// string.Join(",", Nodes.Keys);
 		}
 
+		public SortedDictionary<string, T> GetData<T>()
+		{
+			var items = new SortedDictionary<string, T>();
+			if (tabViewSettings != null)
+			{
+				foreach (var row in tabViewSettings.SelectedRows)
+				{
+					string dataKey = row.dataKey ?? row.label;
+					if (dataKey != null && row.dataValue != null && row.dataValue.GetType() == typeof(T))
+						items[dataKey] = (T)row.dataValue;
+				}
+			}
+			return items;
+		}
+
+		public TabBookmark GetChild(string name)
+		{
+			if (tabChildBookmarks == null)
+				return null;
+
+			TabBookmark childBookmark;
+			if (tabChildBookmarks.TryGetValue(name, out childBookmark))
+				return childBookmark;
+
+			return null;
+		}
+
 		public void MergeNode(TabBookmark node)
 		{
 			foreach (var nodeEntry in node.tabChildBookmarks)

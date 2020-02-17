@@ -334,5 +334,3 @@ namespace Atlas.Serialize
 		}
 	}
 }
-/*
-*/
