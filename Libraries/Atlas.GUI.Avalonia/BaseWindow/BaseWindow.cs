@@ -48,7 +48,6 @@ namespace Atlas.GUI.Avalonia
 #if DEBUG
 			this.AttachDevTools();
 #endif
-			Initialized += BaseWindow_Initialized;
 			Closed += BaseWindow_Closed;
 		}
 
@@ -65,10 +64,6 @@ namespace Atlas.GUI.Avalonia
 				loaded = true;
 			}
 			return size;
-		}
-
-		private void BaseWindow_Initialized(object sender, EventArgs e)
-		{
 		}
 
 		public void LoadProject(Project project)
@@ -222,8 +217,8 @@ namespace Atlas.GUI.Avalonia
 			Button buttonExpand = new Button()
 			{
 				Content = ">",
-				Foreground = new SolidColorBrush(Theme.NotesButtonForegroundColor),
-				Background = new SolidColorBrush(Theme.NotesButtonBackgroundColor),
+				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
+				Foreground = new SolidColorBrush(Theme.ToolbarTextForegroundColor),
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				[ToolTip.ShowDelayProperty] = 5,
@@ -238,8 +233,8 @@ namespace Atlas.GUI.Avalonia
 			Button buttonCollapse = new Button()
 			{
 				Content = "<",
-				Foreground = new SolidColorBrush(Theme.NotesButtonForegroundColor),
-				Background = new SolidColorBrush(Theme.NotesButtonBackgroundColor),
+				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
+				Foreground = new SolidColorBrush(Theme.ToolbarTextForegroundColor),
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				[ToolTip.TipProperty] = "Scroll Left\n(<- button)",
@@ -256,23 +251,21 @@ namespace Atlas.GUI.Avalonia
 		private void Button_PointerEnter(object sender, PointerEventArgs e)
 		{
 			Button button = (Button)sender;
-			button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundHoverColor);
+			button.Background = new SolidColorBrush(Color.Parse("#4e8ef7"));
 		}
 
 		private void Button_PointerLeave(object sender, PointerEventArgs e)
 		{
 			Button button = (Button)sender;
-			button.Background = new SolidColorBrush(Theme.NotesButtonBackgroundColor);
-			button.BorderBrush = button.Background;
+			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
 		}
 
-		private void ButtonExpand_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		private void ButtonExpand_Click(object sender, RoutedEventArgs e)
 		{
 			ScrollRight(DefaultIncrementWidth);
 		}
 
-		private void ButtonCollapse_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		private void ButtonCollapse_Click(object sender, RoutedEventArgs e)
 		{
 			ScrollLeft(DefaultIncrementWidth);
 		}
@@ -281,7 +274,6 @@ namespace Atlas.GUI.Avalonia
 		{
 			scrollViewer.Offset = new Vector(Math.Max(0.0, scrollViewer.Offset.X - amount), scrollViewer.Offset.Y);
 			contentGrid.MinWidth = 0;
-			//contentGrid.Width = 0;
 		}
 
 		private void ScrollRight(int amount)
@@ -385,8 +377,6 @@ namespace Atlas.GUI.Avalonia
 				//Height = Math.Max(MinWindowSize, value.Height + 500); // reproduces black bar problem, not subtracting bottom toolbar for Height
 				//Measure(Bounds.Size);
 				WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
-				//InvalidateArrange(); // these don't restore well and need another pass
-				//InvalidateMeasure();
 			}
 		}
 
@@ -408,13 +398,6 @@ namespace Atlas.GUI.Avalonia
 			// need a better trigger for when the screen size changes
 			SetMaxBounds();
 		}
-
-		// Avalonia missing Window move event or override so moving window doesn't update save
-		/*protected override void HandleResized(Size clientSize)
-		{
-			base.HandleResized(clientSize);
-			SaveWindowSettings();
-		}*/
 
 		private void BaseWindow_Closed(object sender, EventArgs e)
 		{
@@ -444,9 +427,6 @@ namespace Atlas.GUI.Avalonia
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			base.OnKeyDown(e);
-
-			//if (e.Key == Key.F5)
-			//	SelectSavedItems();
 
 			if (e.Key == Key.Left)
 			{

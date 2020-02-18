@@ -6,28 +6,28 @@
   xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <Style Selector="dg|DataGridColumnHeader">
-      <Setter Property="Foreground" Value="{DynamicResource GridColumnHeaderForegroundBrush}" />
-      <Setter Property="HorizontalContentAlignment" Value="Left" />
-      <Setter Property="VerticalContentAlignment" Value="Center" />
-      <Setter Property="AreSeparatorsVisible" Value="false" />
-      <Setter Property="AreSeparatorsVisible" Value="true" />
-      <Setter Property="Padding" Value="4" />
-      <Setter Property="Background" Value="{DynamicResource GridColumnHeaderBackgroundBrush}"/>
-  </Style>
+        <Setter Property="Foreground" Value="{DynamicResource GridColumnHeaderForegroundBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="AreSeparatorsVisible" Value="false" />
+        <Setter Property="AreSeparatorsVisible" Value="true" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="{DynamicResource GridColumnHeaderBackgroundBrush}"/>
+    </Style>
 
-  <Style Selector="dg|DataGridColumnHeader /template/ Rectangle#VerticalSeparator">
-    <Setter Property="Stroke" Value="Black"/>
-    <Setter Property="StrokeThickness" Value="1"/>
-  </Style>
+    <Style Selector="dg|DataGridColumnHeader /template/ Rectangle#VerticalSeparator">
+        <Setter Property="Stroke" Value="Black"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+    </Style>
 
-  <Style Selector="dg|DataGridRow /template/ Rectangle#BackgroundRectangle">
-    <Setter Property="Fill" Value="#FF92F397" />
-  </Style>
-  
-  <Style Selector="Button:pointerover /template/ ContentPresenter">
-    <Setter Property="BorderBrush" Value="#FF000000"/>
-  </Style>
-    
+    <Style Selector="dg|DataGridRow /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="#FF92F397" />
+    </Style>
+
+    <Style Selector="Button:pointerover /template/ ContentPresenter">
+        <Setter Property="BorderBrush" Value="#FF000000"/>
+    </Style>
+
     <Style Selector="ScrollBar /template/ RepeatButton.repeat">
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Padding" Value="4"/>
@@ -35,10 +35,8 @@
     </Style>
 
     <Style Selector="ToolTip">
-    <Setter Property="BorderThickness"
-            Value="1" />
-    <Setter Property="BorderBrush"
-            Value="#FF000000" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="#FF000000" />
     </Style>
 
     <Style Selector="ScrollBar /template/ Thumb#thumb /template/ Border">
