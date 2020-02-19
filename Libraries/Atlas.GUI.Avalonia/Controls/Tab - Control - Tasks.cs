@@ -19,7 +19,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private TabControlTasks()
 		{
-			this.Initialize();
+			Initialize();
 		}
 
 		public TabControlTasks(TabInstance tabInstance)
@@ -65,10 +65,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			RowDefinitions = new RowDefinitions("Auto"); // doesn't work
 			//IsVisible = (tabInstance.tabModel.Tasks.Count > 0);
 			IsVisible = ShowTasks;
-			//Background = new SolidColorBrush(Colors.Blue);
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
-			//Orientation = Orientation.Vertical;
 
 			tabControlDataGrid = new TabControlDataGrid(tabInstance, tabInstance.tabModel.Tasks, false); // don't autogenerate
 			tabControlDataGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -83,10 +81,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//tabDataGrid.AutoLoad = tabModel.AutoLoad;
 			tabControlDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;
 			//tabDataGrid.Initialize();
-			//bool addSplitter = false;
-			//tabParentControls.AddControl(tabDataGrid, true, false);
 			Children.Add(tabControlDataGrid);
-			//this.Content = tabDataGrid;
 
 			INotifyCollectionChanged iNotifyCollectionChanged = tabInstance.tabModel.Tasks as INotifyCollectionChanged;
 			if (iNotifyCollectionChanged != null)
@@ -152,95 +147,3 @@ namespace Atlas.GUI.Avalonia.Controls
 		}
 	}
 }
-
-/* From Atlas.GUI.Wpf
-	public partial class TabTasks : UserControl, IDisposable
-	{
-		public TabTasks()
-		{
-			InitializeComponent();
-		}
-		private TabModel tabModel;
-
-		public event EventHandler<EventArgs> OnSelectionChanged;
-		private bool autoSelectNew = true;
-
-		public TabTasks(TabModel tabModel)
-		{
-			this.tabModel = tabModel;
-
-			InitializeComponent();
-			Visibility = Visibility.Collapsed;
-		}
-
-		public void Initialize()
-		{
-			dataGrid.AutoGenerateColumns = false;
-			AddColumn("Task", nameof(TaskInstance.Label));
-			AddColumn("   %   ", nameof(TaskInstance.Percent));
-			AddColumn("Status", nameof(TaskInstance.Status));
-
-			//DataStore = tabModel.Tasks;
-			dataGrid.ItemsSource = tabModel.Tasks;
-
-			dataGrid.SelectionChanged += DataGrid_SelectionChanged;
-			dataGrid.PreviewMouseLeftButtonDown += DataGrid_PreviewMouseLeftButtonDown;
-			dataGrid.MouseUp += DataGrid_MouseUp;
-
-			tabModel.Tasks.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
-		}
-
-		private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			DataGridRow dataGridRow = ItemsControl.ContainerFromElement(dataGrid, e.OriginalSource as DependencyObject) as DataGridRow;
-			if (dataGridRow == null)
-				return;
-			if (dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
-			{
-				if (dataGridRow.IsSelected)
-				{
-					dataGridRow.IsSelected = false;
-					e.Handled = true;
-				}
-			}
-		}
-
-		private void DataGrid_MouseUp(object sender, MouseButtonEventArgs e)
-		{
-			autoSelectNew = (dataGrid.SelectedCells.Count == 0);
-		}
-
-		private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			UpdateSelection();
-		}
-
-		private void UpdateSelection()
-		{
-			OnSelectionChanged?.Invoke(this, null);
-		}
-
-		private void AddColumn(string label, string propertyName)
-		{
-			DataGridTextColumn column = new DataGridTextColumn();
-			column.Binding = new Binding(propertyName);
-			//column.Sortable = true;
-			
-			column.Header = label;
-			dataGrid.Columns.Add(column);
-		}
-
-		public IList SelectedItems
-		{
-			get
-			{
-				SortedDictionary<int, object> orderedRows = new SortedDictionary<int, object>();
-				foreach (object obj in dataGrid.SelectedItems)
-				{
-					orderedRows[dataGrid.Items.IndexOf(obj)] = obj;
-				}
-				return orderedRows.Values.ToList();
-			}
-		}
-	}
-*/

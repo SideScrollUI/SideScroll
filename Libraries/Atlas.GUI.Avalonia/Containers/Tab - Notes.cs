@@ -1,13 +1,14 @@
-﻿using Atlas.Tabs;
+﻿using System;
+using Atlas.GUI.Avalonia.Controls;
+using Atlas.GUI.Avalonia.View;
+using Atlas.Tabs;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
-using System;
-using Avalonia;
-using Atlas.GUI.Avalonia.Controls;
 
 namespace Atlas.GUI.Avalonia
 {
-	public class TabNotes : TabContainer
+	/*public class TabNotes : TabView
 	{
 		public TabNotes(TabInstance tabInstance) : base(tabInstance)
 		{
@@ -31,7 +32,7 @@ namespace Atlas.GUI.Avalonia
 			/*ShowLineNumbers = true;
 			SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
 			TextArea.TextEntering += textEditor_TextArea_TextEntering;
-			TextArea.IndentationStrategy = new Indentation.CSharp.CSharpIndentationStrategy();*/
+			TextArea.IndentationStrategy = new Indentation.CSharp.CSharpIndentationStrategy();*//*
 
 			TabControlAvaloniaEdit tabAvaloniaEdit = new TabControlAvaloniaEdit(tabInstance);
 			tabAvaloniaEdit.textEditor.Background = new SolidColorBrush(Theme.NotesBackgroundColor);
@@ -84,7 +85,7 @@ namespace Atlas.GUI.Avalonia
 			button.Background = new SolidColorBrush(Theme.NotesButtonBackgroundColor);
 			button.BorderBrush = button.Background;
 		}
-	}
+	}*/
 }
 /*
 Markdown ?

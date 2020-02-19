@@ -14,7 +14,7 @@ namespace Atlas.Tabs.Test
 			{
 				// Replace this
 				var sampleItems = new ItemCollection<SampleItem>();
-				sampleItems.Add(new SampleItem(sampleItems.Count, "Item " + sampleItems.Count.ToString()));
+				sampleItems.Add(new SampleItem(sampleItems.Count, "Item " + sampleItems.Count));
 
 				tabModel.AddData("This should be skipped");
 

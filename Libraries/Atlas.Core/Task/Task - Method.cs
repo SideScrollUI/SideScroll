@@ -31,6 +31,3 @@ namespace Atlas.Core
 		}
 	}
 }
-
-/*
-*/

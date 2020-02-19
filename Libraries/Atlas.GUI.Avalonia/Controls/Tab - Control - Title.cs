@@ -51,7 +51,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				Text = Label,
 				FontSize = 14,
 				//Margin = new Thickness(2), // Shows as black, Need Padding so Border not needed
-				Background = new SolidColorBrush(Theme.TitleBackgroundColor),
+				//Background = new SolidColorBrush(Theme.TitleBackgroundColor),
 				Foreground = new SolidColorBrush(Theme.TitleForegroundColor),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				//HorizontalAlignment = HorizontalAlignment.Left,
@@ -81,16 +81,13 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			if (tabInstance.tabModel.Notes != null && tabInstance.tabModel.Notes.Length > 0)
 			{
-				Button button = new Button();
-				//button.St
+				//Button button = new Button();
 				Image image = AvaloniaAssets.Images.Info;
 				image.Height = 20;
 				Grid.SetColumn(image, 1);
-				//image.
 				containerGrid.Children.Add(image); // always enable so they can add notes? (future thing)
 				//containerGrid.Children.Add(checkBox); // always enable so they can add notes? (future thing)
 			}
-
 
 			Border borderContent = new Border()
 			{
@@ -99,7 +96,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			borderContent.Child = containerGrid;
 
-			this.Content = borderContent;
+			Content = borderContent;
 		}
 
 		/*private void CheckBox_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)

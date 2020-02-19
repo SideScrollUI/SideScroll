@@ -54,7 +54,7 @@ DataGrids
 			private void AddItems(int count)
 			{
 				for (int i = 0; i < count; i++)
-					sampleItems.Add(new SampleItem(sampleItems.Count, "Item " + sampleItems.Count.ToString()));
+					sampleItems.Add(new SampleItem(sampleItems.Count, "Item " + sampleItems.Count));
 			}
 		}
 	}

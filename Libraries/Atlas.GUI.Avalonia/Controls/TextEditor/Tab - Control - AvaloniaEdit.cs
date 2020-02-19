@@ -82,12 +82,9 @@ namespace Atlas.GUI.Avalonia.Controls
 				//HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // WordWrap requires Disabled
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, // WordWrap requires Disabled, but it doesn't work
 				VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-				//Text = "test",
 				//Margin = new Thickness(6),
 				Padding = new Thickness(6), // doesn't work well with scroll bars
 				FontSize = 14,
-				//[Grid.RowProperty] = 1,
-				//SyntaxHighlighting = 
 				SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"), // handles JSON too
 			};
 			Children.Add(textEditor);
@@ -166,14 +163,5 @@ namespace Atlas.GUI.Avalonia.Controls
 			if (e.PropertyName == "ValueText" && textEditor.Text != listProperty.ValueText.ToString())
 				textEditor.Text = listProperty.ValueText.ToString();
 		}
-
-		// I give up, let's do it the easy way
-		private void textEditor_TextChanged(object sender, EventArgs e)
-		{
-			if (listProperty != null)
-				listProperty.ValueText = textEditor.Text;
-		}
 	}
 }
-/*
-*/

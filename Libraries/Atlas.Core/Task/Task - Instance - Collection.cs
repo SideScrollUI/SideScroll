@@ -9,7 +9,7 @@ namespace Atlas.Core
 		{
 			base.Add(taskInstance);
 			if (Count > 10) // fixme
-				this.RemoveAt(0);
+				RemoveAt(0);
 		}
 	}
 }

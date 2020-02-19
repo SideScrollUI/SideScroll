@@ -67,7 +67,7 @@ namespace Atlas.Start.Avalonia.Tabs
 		public class ParamTestResult
 		{
 			public ParamTestItem parameters;
-			public string String { get { return parameters.String; } }
+			public string String => parameters.String;
 		}
 	}
 }

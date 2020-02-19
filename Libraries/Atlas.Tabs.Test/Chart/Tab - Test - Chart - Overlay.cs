@@ -40,7 +40,7 @@ namespace Atlas.Tabs.Test.Chart
 				[Unit("B")]
 				public int SeriesEpsilon { get; set; }  // High Value, small delta
 				public TestItem testItem { get; set; } = new TestItem();
-				public int InstanceAmount { get { return testItem.Amount; } }
+				public int InstanceAmount => testItem.Amount;
 			}
 
 			public override void Load(Call call)

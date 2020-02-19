@@ -74,7 +74,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			UpdateSum();
 			AddCheckBox();
-			AddTextBox();
+			AddTextBlock();
 
 			PointerEnter += TabChartLegendItem_PointerEnter;
 			PointerLeave += TabChartLegendItem_PointerLeave;
@@ -195,7 +195,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			//polygon.Stroke = Brushes.Black;
 		}
 
-		private void AddTextBox()
+		private void AddTextBlock()
 		{
 			RowDefinitions.Add(new RowDefinition(GridLength.Auto));
 			textBlock = new TextBlock()

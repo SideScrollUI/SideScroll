@@ -12,7 +12,7 @@ namespace Atlas.Tabs
 		public FieldInfo fieldInfo;
 		
 		[HiddenColumn]
-		public override bool Editable { get { return true; } }
+		public override bool Editable => true;
 
 		[HiddenColumn]
 		public int? MaxDesiredWidth

@@ -25,11 +25,11 @@ namespace Atlas.Core
 		// only one of these works at a time for strings due to ambiguous calls
 		/*public Tag(object value, bool verbose = true, [CallerMemberName] string callerMemberName = "")
 		{
-			this.Name = callerMemberName;
+			Name = callerMemberName;
 			if (verbose)
-				this.Value = value;
+				Value = value;
 			else
-				this.Value = value.ToString();
+				Value = value.ToString();
 		}*/
 
 		public Tag(object value)
@@ -89,7 +89,7 @@ namespace Atlas.Core
 		{
 			get
 			{
-				if (tags == null)
+				if (Tags == null)
 					return Text;
 				string tagText = TagText;
 				if (tagText == "")
@@ -123,17 +123,18 @@ namespace Atlas.Core
 			get
 			{
 				string line = "";
-				if (tags == null)
+				if (Tags == null)
 					return line;
 
-				foreach (Tag tag in tags)
+				foreach (Tag tag in Tags)
 				{
 					line += tag.ToString() + " ";
 				}
 				return line;
 			}
 		}
-		public Tag[] tags;
+		[HiddenColumn]
+		public Tag[] Tags { get; set; }
 		[HiddenRow]
 		public SynchronizationContext context; // inherited from creator (which can be a Parent Log)
 
@@ -147,11 +148,11 @@ namespace Atlas.Core
 		public LogEntry(LogType logType, string text, Tag[] tags)
 		{
 			rootLog = this;
-			this.originalType = logType;
-			this.Type = logType;
-			this.Text = text;
-			this.tags = tags;
-			this.Created = DateTime.Now;
+			originalType = logType;
+			Type = logType;
+			Text = text;
+			Tags = tags;
+			Created = DateTime.Now;
 		}
 
 		private void InitializeContext()
@@ -204,7 +205,7 @@ namespace Atlas.Core
 		{
 			this.context = context;
 			this.Text = text;
-			this.tags = tags;
+			this.Tags = tags;
 			this.Created = DateTime.Now;
 		}
 
@@ -243,7 +244,7 @@ namespace Atlas.Core
 		public LogTimer Timer(string text, params Tag[] tags)
 		{
 			LogTimer logTimer = new LogTimer(text, context);
-			logTimer.tags = tags;
+			logTimer.Tags = tags;
 			AddLogEntry(logTimer);
 			return logTimer;
 		}
@@ -260,9 +261,11 @@ namespace Atlas.Core
 
 		private Log AddChildEntry(LogType logType, string name, params Tag[] tags)
 		{
-			Log log = new Log(name, context, tags);
-			log.originalType = logType;
-			log.Type = logType;
+			Log log = new Log(name, context, tags)
+			{
+				originalType = logType,
+				Type = logType,
+			};
 			AddLogEntry(log);
 			return log;
 		}

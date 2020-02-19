@@ -25,18 +25,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			Bind(property);
 		}
 
-		private void Bind(ListProperty property)
-		{
-			var binding = new Binding(property.propertyInfo.Name)
-			{
-				//Converter = new EditValueConverter(),
-				//StringFormat = "Hello {0}",
-				Mode = BindingMode.TwoWay,
-				Source = property.obj,
-			};
-			((CheckBox)this).Bind(IsCheckedProperty, binding);
-		}
-
 		private void Initialize()
 		{
 			Background = new SolidColorBrush(Colors.White);
@@ -48,28 +36,33 @@ namespace Atlas.GUI.Avalonia.Controls
 			Margin = new Thickness(2, 2);
 			//Focusable = true; // already set?
 			//Padding = new Thickness(6, 3);
+
+			PointerEnter += CheckBox_PointerEnter;
+			PointerLeave += CheckBox_PointerLeave;
 		}
 
-		/*private IBrush OriginalColor;
-
-		// DefaultTheme.xaml is setting this for templates
-		private void TextBox_PointerEnter(object sender, PointerEventArgs e)
+		private void CheckBox_PointerEnter(object sender, PointerEventArgs e)
 		{
-			TextBox textBox = (TextBox)sender;
-			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			if (textBox.IsEnabled && !textBox.IsReadOnly)
+			if (IsEnabled)
+				Background = new SolidColorBrush(Theme.ControlBackgroundHover);
+		}
+
+		private void CheckBox_PointerLeave(object sender, PointerEventArgs e)
+		{
+			if (IsEnabled)
+				Background = new SolidColorBrush(Colors.White);
+		}
+
+		private void Bind(ListProperty property)
+		{
+			var binding = new Binding(property.propertyInfo.Name)
 			{
-				OriginalColor = textBox.Background;
-				textBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
-			}
+				//Converter = new EditValueConverter(),
+				//StringFormat = "Hello {0}",
+				Mode = BindingMode.TwoWay,
+				Source = property.obj,
+			};
+			((CheckBox)this).Bind(IsCheckedProperty, binding);
 		}
-
-		private void TextBox_PointerLeave(object sender, PointerEventArgs e)
-		{
-			TextBox textBox = (TextBox)sender;
-			if (textBox.IsEnabled && !textBox.IsReadOnly)
-				textBox.Background = OriginalColor ?? textBox.Background;
-			//textBox.BorderBrush = textBox.Background;
-		}*/
 	}
 }

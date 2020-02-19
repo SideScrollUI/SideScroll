@@ -25,24 +25,19 @@ namespace Atlas.GUI.Avalonia.Controls
 			PointerLeave += ComboBox_PointerLeave;
 		}
 
-		// DefaultTheme.xaml is setting this for templates
 		private void ComboBox_PointerEnter(object sender, PointerEventArgs e)
 		{
-			ComboBox comboBox = (ComboBox)sender;
-			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			if (comboBox.IsEnabled)
+			if (IsEnabled)
 			{
-				OriginalColor = comboBox.Background;
-				comboBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
+				OriginalColor = Background;
+				Background = new SolidColorBrush(Theme.ControlBackgroundHover);
 			}
 		}
 
 		private void ComboBox_PointerLeave(object sender, PointerEventArgs e)
 		{
-			ComboBox comboBox = (ComboBox)sender;
-			if (comboBox.IsEnabled)
-				comboBox.Background = OriginalColor ?? new SolidColorBrush(Colors.White);
-			//textBox.BorderBrush = textBox.Background;
+			if (IsEnabled)
+				Background = OriginalColor ?? new SolidColorBrush(Colors.White);
 		}
 	}
 }

@@ -11,8 +11,6 @@ namespace Atlas.Tabs.Test.Actions
 
 		public class Instance : TabInstance
 		{
-			//private ItemCollection<ListItem> items;
-
 			public override void Load(Call call)
 			{
 				tabModel.Notes = "";

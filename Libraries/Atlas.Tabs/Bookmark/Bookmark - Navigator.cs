@@ -21,9 +21,9 @@ namespace Atlas.Tabs
 			}
 		}
 
-		//public IObservable<bool> CanSeekBackwardObservable { get { return (CurrentIndex > 0); } }
-		public bool CanSeekBackward { get { return (CurrentIndex > 0); } }
-		public bool CanSeekForward { get { return (CurrentIndex + 1 < History.Count); } }
+		//public IObservable<bool> CanSeekBackwardObservable => (CurrentIndex > 0);
+		public bool CanSeekBackward => (CurrentIndex > 0);
+		public bool CanSeekForward => (CurrentIndex + 1 < History.Count);
 
 		//public event EventHandler<EventArgs> OnSelectionChanged;
 

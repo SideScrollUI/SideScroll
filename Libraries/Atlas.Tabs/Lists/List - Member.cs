@@ -38,7 +38,7 @@ namespace Atlas.Tabs
 		public int Order { get; set; } = 0;
 
 		[HiddenColumn]
-		public virtual bool Editable { get { return true; } }
+		public virtual bool Editable => true;
 		public bool autoLoad = true;
 
 		//[HiddenColumn]

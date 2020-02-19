@@ -87,10 +87,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			Children.AddRange(unused);
 		}
 
-		private void UpdateSeriesPositions()
-		{
-		}
-
 		private void LegendItemClicked(TabChartLegendItem legendItem)
 		{
 			int selectedCount = 0;

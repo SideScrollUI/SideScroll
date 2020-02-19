@@ -110,13 +110,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			return size;
 		}
 
-		// Before MaxWidth applies
-		protected override Size MeasureCore(Size availableSize)
-		{
-			Size measuredSize = base.MeasureCore(availableSize);
-			return measuredSize;
-		}
-
 		/*protected override void OnMeasureInvalidated()
 		{
 			dataGrid.InvalidateMeasure();
@@ -140,7 +133,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				}
 				return desiredSize;
 			}
-		}*/
+		}
 
 		public double GetTotalColumnWidths()
 		{
@@ -148,7 +141,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			foreach (var dataColumn in dataGrid.Columns)
 				total += dataColumn.ActualWidth;
 			return total;
-		}
+		}*/
 
 		private void Initialize()
 		{
@@ -189,11 +182,9 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			//this.Background = new SolidColorBrush(Theme.BackgroundColor);
-			this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.VerticalAlignment = VerticalAlignment.Stretch;
-			this.Focusable = true;
-			//this.BorderThickness = new Thickness(0);
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
+			Focusable = true;
 
 			MaxWidth = 4000;
 			MaxHeight = 4000;
@@ -205,25 +196,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			textBoxSearch.KeyDown += TextBoxSearch_KeyDown;
 			textBoxSearch.KeyUp += TextBoxSearch_KeyUp;
 
-			/*Grid containerGrid = new Grid()
-			{
-				ColumnDefinitions = new ColumnDefinitions("*"),
-				RowDefinitions = new RowDefinitions("Auto,*"), // textBoxSearch, dataGrid
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
-				//Background = new SolidColorBrush(Theme.BackgroundColor),
-				//MaxWidth = 4000,
-			};
-
-			containerGrid.Children.Add(textBoxSearch);
-			containerGrid.Children.Add(dataGrid);*/
-			//containerGrid.Children.Add(scrollViewer);
-
 			LoadSettings();
 
-			//Grid.SetRow(dataGrid, 0);
-			//Children.Add(containerGrid);
-			//Content = containerGrid;
 			Children.Add(textBoxSearch);
 		}
 
@@ -276,19 +250,11 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			dataGrid.SelectionChanged += DataGrid_SelectionChanged;
 
-			// for 1 click unselecting we ideally want an event before the selection changes
-			// or we can remember previous selection? (selectionchanged gets triggered before Tapped, clicking same doesn't trigger that, selectionChanged can be triggered by code selections, not going to work for now)
-			//dataGrid.PointerPressed += DataGrid_PointerPressed; // doesn't trigger (only implemented for column headers)
-			//dataGrid.PointerReleased += DataGrid_PointerReleased; // does trigger, but after selection changes
-			dataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // only triggers some of the time, Cell only triggers 
+			dataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // Add one click deselection
 
 			//PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => x.DataGridRow_PointerPressed(e), handledEventsToo: true);
-			dataGrid.Tapped += DataGrid_Tapped;
-			dataGrid.Initialized += DataGrid_Initialized;
 			dataGrid.ColumnReordered += DataGrid_ColumnReordered;
 			dataGrid.PointerEnter += DataGrid_PointerEnter;
-			//this.GotFocus += TabDataGrid_GotFocus;
-			//this.LostFocus += TabDataGrid_LostFocus;
 			LayoutUpdated += TabControlDataGrid_LayoutUpdated;
 
 			//var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
@@ -303,6 +269,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			dataGrid.InvalidateMeasure();
 		}
 
+		// Double click handling?
 		/*private void DataGridRow_PointerPressed(PointerPressedEventArgs e)
 		{
 			if (e.MouseButton != MouseButton.Left)
@@ -368,8 +335,6 @@ namespace Atlas.GUI.Avalonia.Controls
 					dataGrid.Items = collectionView;
 				}
 				//dataGrid.SelectedItem = null;
-				//dataGrid.InvalidateMeasure();
-				//dataGrid.InvalidateArrange();
 			}
 		}
 
@@ -430,14 +395,12 @@ namespace Atlas.GUI.Avalonia.Controls
 					// don't update the selection too often or we'll slow things down
 					if (!stopwatch.IsRunning || stopwatch.ElapsedMilliseconds > 1000)
 					{
-						//disableSaving++;
 						isAutoSelecting++;
 						// change to dispatch here?
 						autoSelectItem = null;
 						selectionModified = true;
 						//SelectedItem = e.NewItems[0];
 						SelectedItem = iList[iList.Count - 1];
-						//disableSaving--;
 						isAutoSelecting--;
 						stopwatch.Reset();
 						stopwatch.Start();
@@ -455,14 +418,9 @@ namespace Atlas.GUI.Avalonia.Controls
 			else if (e.Action == NotifyCollectionChangedAction.Reset) // Clear() will trigger this
 			{
 				// doesn't work
-				//dataGrid.InvalidateArrange();
 				//collectionView.Refresh();
 				//collectionView.
 			}
-		}
-
-		private void DataGrid_Tapped(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
 		}
 
 		private void DataGrid_ColumnReordered(object sender, DataGridColumnEventArgs e)
@@ -497,11 +455,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				bookmark.Changed = String.Join(",", tabDataSettings.SelectedRows);
 		}
 
-		private void DataGrid_Initialized(object sender, EventArgs e)
-		{
-			//enableSaving = true;
-		}
-
 		private DataGridRow GetControlRow(object obj, int depth)
 		{
 			Control control = obj as Control;
@@ -515,23 +468,14 @@ namespace Atlas.GUI.Avalonia.Controls
 			return GetControlRow(control.Parent, depth - 1);
 		}
 
-		//private bool unselectOnRelease = false;
 		private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
 		{
 			DataGridRow row = e.Row;
-			if (e.PointerPressedEventArgs.MouseButton == MouseButton.Left && row != null && dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
+			var pointer = e.PointerPressedEventArgs.GetCurrentPoint(this);
+			if (pointer.Properties.IsLeftButtonPressed && row != null && dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
 			{
 				if (dataGrid.SelectedItems.Contains(row.DataContext))
 				{
-					// need both of these
-					/*dataGrid.SelectedItems.Clear();
-					dataGrid.SelectedItem = null;
-
-					// parent function doesn't check Handled, but does check MouseButton = MouseButton.Left
-					// MouseButton is ReadOnly now so this hack doesn't work anymore
-					e.PointerPressedEventArgs.Handled = true;
-					e.PointerPressedEventArgs.MouseButton = MouseButton.None; */
-
 					Dispatcher.UIThread.Post(ClearSelection, DispatcherPriority.Background);
 				}
 			}
@@ -543,38 +487,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			dataGrid.SelectedItem = null;
 		}
 
-		// happens too late to deselect
-		/*private void DataGrid_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e)
-		{
-			if (unselectOnRelease)
-			{
-				unselectOnRelease = false;
-				dataGrid.SelectedItems.Clear();
-				dataGrid.SelectedItem = null; // need both of these
-				e.Handled = true;
-			}
-		}
-
-		// unselect cell if already selected, this never gets triggered
-		private void DataGrid_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e)
-		{
-			DataGridRow row = GetControlRow(e.Source, 3);
-
-			//if (dataGridCell.Column is DataGridCheckBoxColumn)
-			//	return;
-
-			if (row != null && dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
-			{
-				if (dataGrid.SelectedItems.Contains(row.DataContext))
-				{
-					dataGrid.SelectedItems.Clear();
-					dataGrid.SelectedItem = null; // need both of these
-					e.Handled = true;
-				}
-			}
-		}*/
-
-		private void TextBoxSearch_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e)
+		private void TextBoxSearch_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Escape)
 			{
@@ -585,7 +498,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 		}
 
-		private void TextBoxSearch_KeyUp(object sender, global::Avalonia.Input.KeyEventArgs e)
+		private void TextBoxSearch_KeyUp(object sender, KeyEventArgs e)
 		{
 			FilterText = textBoxSearch.Text;
 			AutoSelect();
@@ -1241,10 +1154,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			stopwatch.Stop();
 
 			dataGrid.SelectionChanged -= DataGrid_SelectionChanged;
-			//dataGrid.PointerPressed -= DataGrid_PointerPressed;
 			dataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
-			dataGrid.Tapped -= DataGrid_Tapped;
-			dataGrid.Initialized -= DataGrid_Initialized;
 			dataGrid.ColumnReordered -= DataGrid_ColumnReordered;
 			dataGrid.PointerEnter -= DataGrid_PointerEnter;
 
@@ -1303,8 +1213,6 @@ namespace Atlas.GUI.Avalonia.Controls
 
 /* From Atlas.GUI.Wpf
 
-private const double MaxDefaultWidth = 1500;
-// Params
 
 // 
 
@@ -1631,26 +1539,6 @@ private void dataGrid_DoubleClick(object sender, EventArgs e)
   call.parent.dataGrid.EndUpdate();
 }*//*
 }*//*
-
-// don't append an extra newline when copying cells, really annoying when copying a single cell value
-private void dataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
-{
-	if (e.Key == Key.Enter)
-	{
-		dataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
-		e.Handled = true;
-		return;
-	}
-	if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-	{
-		if (e.Key == Key.C)
-		{
-			CopyCellData();
-			e.Handled = true;
-			return;
-		}
-	}
-}
 
 private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
 {

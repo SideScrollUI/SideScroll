@@ -85,24 +85,10 @@ namespace Atlas.GUI.Avalonia.View
 				childTabInstance.tabBookmark = tabBookmark;
 				//childTabInstance.Reintialize(); // todo: fix, called in TabView
 				childTabInstance.tabModel.Name = label;
-				if (childTabInstance.tabModel.Object is TabContainer tabContainer)
-				{
-					tabContainer.Label = label;
-					//tabContainer.Load();
-					return tabContainer;
-				}
 				TabView tabView = new TabView(childTabInstance);
 				//tabView.Label = label;
 				tabView.Load();
 				return tabView;
-			}
-			else if (value is TabContainer tabContainer)
-			{
-				tabContainer.tabInstance.ParentTabInstance = parentTabInstance;
-				tabContainer.tabInstance.tabBookmark = tabBookmark;
-				tabContainer.Label = label;
-				tabContainer.Load();
-				return tabContainer;
 			}
 			else if (value is TabView tabView)
 			{

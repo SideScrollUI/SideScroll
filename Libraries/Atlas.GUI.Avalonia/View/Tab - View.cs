@@ -126,11 +126,6 @@ namespace Atlas.GUI.Avalonia.View
 			}
 		}
 
-		protected override void ArrangeCore(Rect finalRect)
-		{
-			base.ArrangeCore(finalRect);
-		}
-
 		private Size arrangeOverrideFinalSize;
 		protected override Size ArrangeOverride(Size finalSize)
 		{
@@ -150,46 +145,6 @@ namespace Atlas.GUI.Avalonia.View
 		}
 
 		private bool childControlsFinishedLoading = false;
-		/*private bool rendered = false;
-		public override void Render(DrawingContext context)
-		{
-			base.Render(context);
-			rendered = true;
-		}*/
-
-		private Size measuredOverrideAvailableSize;
-		protected override Size MeasureOverride(Size availableSize)
-		{
-			//Size testSize = LayoutHelper.ApplyLayoutConstraints(this, availableSize);
-			/*{
-				double width = (control.Width > 0) ? control.Width : constraints.Width;
-				double height = (control.Height > 0) ? control.Height : constraints.Height;
-				width = Math.Min(width, control.MaxWidth);
-				width = Math.Max(width, control.MinWidth);
-				height = Math.Min(height, control.MaxHeight);
-				height = Math.Max(height, control.MinHeight);
-				return new Size(width, height);
-			}*/
-			//base.Measure(availableSize);
-			//dataGrid.Measure(availableSize);
-			//Size desiredSize = dataGrid.DesiredSize;
-			measuredOverrideAvailableSize = base.MeasureOverride(availableSize);
-			/*if (!finishedLoading)
-			{
-				UpdateSelectedChildControls();
-				//tabInstance.SetEndLoad();
-				//disableSaving--;
-				finishedLoading = true;
-			}*/
-			return measuredOverrideAvailableSize;
-		}
-
-		private Size measuredCore;
-		protected override Size MeasureCore(Size availableSize)
-		{
-			measuredCore = base.MeasureCore(availableSize);
-			return measuredCore;
-		}
 
 		// Gets called multiple times when re-initializing
 		private void InitializeControls()
@@ -869,7 +824,7 @@ namespace Atlas.GUI.Avalonia.View
 
 		private void AddNotes(Dictionary<object, Control> newChildControls, Dictionary<object, Control> oldChildControls, List<Control> orderedChildControls)
 		{
-			if (tabModel.Notes != null && tabModel.Notes.Length > 0 && tabInstance.tabViewSettings.NotesVisible)
+			/*if (tabModel.Notes != null && tabModel.Notes.Length > 0 && tabInstance.tabViewSettings.NotesVisible)
 			{
 				// Could add control to class instead of this
 				Control controlNotes;
@@ -888,7 +843,7 @@ namespace Atlas.GUI.Avalonia.View
 					newChildControls[tabModel.Notes] = tabNotes;
 					orderedChildControls.Add(tabNotes);
 				}
-			}
+			}*/
 		}
 
 		internal void CreateChildControls(IList newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector tabControl = null)

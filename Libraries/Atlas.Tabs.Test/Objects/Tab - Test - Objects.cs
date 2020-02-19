@@ -79,7 +79,6 @@ namespace Atlas.Tabs.Test.Objects
 
 		public UriTest(string uriString)
 		{
-
 		}
 
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -87,92 +86,4 @@ namespace Atlas.Tabs.Test.Objects
 			throw new NotImplementedException();
 		}
 	}
-
-
-	/*public class LogEntry2 : INotifyPropertyChanged
-	{
-		public enum LogType
-		{
-			Debug,
-			Info,
-			Warn,
-			Error,
-			Alert
-		}
-		public event PropertyChangedEventHandler PropertyChanged;
-		public DateTime Created;// { get; set; }
-		public LogType originalType = LogType.Info;
-		public LogType Type { get; set; } = LogType.Info;
-		public string Text;// { get; set; }
-		public string Message
-		{
-			get
-			{
-				if (tags == null)
-					return Text;
-				string tagText = TagText;
-				if (tagText == "")
-					return Text;
-				return Text + " " + tagText;
-			}
-		}
-		public int Entries { get; set; }
-
-		private float? _Duration;
-		public float? Duration
-		{
-			get
-			{
-				return _Duration;
-			}
-			set
-			{
-				_Duration = value;
-				CreateEventPropertyChanged();
-			}
-		}
-
-		//[AttributeName("Tags")]
-		//[HiddenColumn]
-		private string TagText
-		{
-			get
-			{
-				string line = "";
-				if (tags == null)
-					return line;
-
-				foreach (Tag tag in tags)
-				{
-					line += tag.ToString() + " ";
-				}
-				return line;
-			}
-		}
-		public Tag[] tags;
-
-		public LogEntry2()
-		{
-		}
-
-		public LogEntry2(LogType logType, string text, Tag[] tags)
-		{
-			this.originalType = logType;
-			this.Type = logType;
-			this.Text = text;
-			this.tags = tags;
-			this.Created = DateTime.Now;
-		}
-
-		public override string ToString()
-		{
-			return Message;
-		}
-
-		protected void CreateEventPropertyChanged([CallerMemberName] String propertyName = "")
-		{
-			//context.Post(new SendOrPostCallback(this.NotifyPropertyChangedContext), propertyName);
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
-	}*/
 }

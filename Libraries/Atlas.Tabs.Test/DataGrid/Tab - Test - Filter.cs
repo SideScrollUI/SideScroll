@@ -20,7 +20,7 @@ namespace Atlas.Tabs.Test.DataGrid
 				{
 					TestFilterItem item = new TestFilterItem()
 					{
-						Text = "Item " + i.ToString(),
+						Text = "Item " + i,
 						Number = i
 					};
 

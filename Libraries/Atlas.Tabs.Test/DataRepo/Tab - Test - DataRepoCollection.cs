@@ -58,7 +58,7 @@ namespace Atlas.Tabs.Test
 
 			private void Add(Call call)
 			{
-				var sampleItem = new SampleItem(sampleItems.Count, "Item " + sampleItems.Count.ToString());
+				var sampleItem = new SampleItem(sampleItems.Count, "Item " + sampleItems.Count);
 				RemoveItem(sampleItem.Name); // Remove previous result so refocus works
 				dataRepoItems.Save(sampleItem.ToString(), sampleItem);
 				sampleItems.Add(sampleItem);

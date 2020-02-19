@@ -13,9 +13,10 @@ namespace Atlas.Tabs.Tools
 		{
 			public override void Load(Call call)
 			{
-				ItemCollection<ListItem> items = new ItemCollection<ListItem>();
-				items.Add(new ListItem("File Browser", new TabFileBrowser()));
-				tabModel.Items = items;
+				tabModel.Items = new ItemCollection<ListItem>()
+				{
+					new ListItem("File Browser", new TabFileBrowser()),
+				};
 			}
 		}
 	}

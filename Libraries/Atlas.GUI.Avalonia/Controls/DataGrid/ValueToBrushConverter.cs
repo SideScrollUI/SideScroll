@@ -35,7 +35,6 @@ namespace Atlas.GUI.Avalonia
 
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
-			//DataGridCell dataGridCell = (DataGridCell)value;
 			try
 			{
 				if (value is DictionaryEntry || propertyInfo.IsDefined(typeof(StyleValueAttribute)))
@@ -54,7 +53,6 @@ namespace Atlas.GUI.Avalonia
 			{
 			}
 
-			//if (dataGridCell.OwningColumn.IsReadOnly)
 			return null;
 			//	return Brushes.White; // checkbox column requires a valid value
 			//else

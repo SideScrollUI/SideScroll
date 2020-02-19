@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -24,7 +23,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			Focusable = true; // already set?
 			MaxWidth = TabControlParams.ControlMaxWidth;
 			//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
-			//IsReadOnly = !property.Editable;
 
 			PointerEnter += TextBox_PointerEnter;
 			PointerLeave += TextBox_PointerLeave;
@@ -52,7 +50,23 @@ namespace Atlas.GUI.Avalonia.Controls
 			//textBox.BorderBrush = textBox.Background;
 		}
 	}
+
+	/*private TextBox AddTextBox(ListProperty property, int rowIndex, int columnIndex, Type type)
+	{
+		if (textBox.IsReadOnly)
+			textBox.Background = new SolidColorBrush(Theme.TextBackgroundDisabledColor);
+
+		var binding = new Binding(property.propertyInfo.Name)
+		{
+			Converter = new EditValueConverter(),
+			//StringFormat = "Hello {0}",
+			Source = property.obj,
+		};
+		if (type == typeof(string) || type.IsPrimitive)
+			binding.Mode = BindingMode.TwoWay;
+		else
+			binding.Mode = BindingMode.OneWay;
+		textBox.Bind(TextBlock.TextProperty, binding);
+		AvaloniaUtils.AddTextBoxContextMenu(textBox);
+	}*/
 }
-/*
-Todo: replace with Tab Avalonia Edit
-*/

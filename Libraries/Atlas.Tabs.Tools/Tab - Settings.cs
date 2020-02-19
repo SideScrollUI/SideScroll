@@ -16,10 +16,11 @@ namespace Atlas.Tabs.Tools
 				tabModel.Items = ListProperty.Create(this.project.projectSettings);
 				tabModel.Editing = true;
 
-				ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>();
-				actions.Add(new TaskDelegate("Reset", Reset));
-				actions.Add(new TaskDelegate("Save", Save));
-				tabModel.Actions = actions;
+				tabModel.Actions = new ItemCollection<TaskCreator>()
+				{
+					new TaskDelegate("Reset", Reset),
+					new TaskDelegate("Save", Save),
+				};
 			}
 
 			private void Reset(Call call)

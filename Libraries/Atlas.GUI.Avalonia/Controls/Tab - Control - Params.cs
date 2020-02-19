@@ -48,8 +48,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			MinWidth = 100;
 			MaxWidth = 2000;
 
-			//DataStore = (IEnumerable<object>)obj;
-
 			if (autoGenerateRows)
 			{
 				ItemCollection<ListProperty> properties = ListProperty.Create(obj);
@@ -58,8 +56,6 @@ namespace Atlas.GUI.Avalonia.Controls
 					AddPropertyRow(property);
 				}
 			}
-
-			//Focus();
 		}
 
 		public List<Control> AddObjectRow(object obj)
@@ -75,7 +71,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				Height = new GridLength(1, GridUnitType.Auto),
 			};
-			this.RowDefinitions.Add(gridRow);
+			RowDefinitions.Add(gridRow);
 
 			List<Control> controls = new List<Control>();
 			foreach (PropertyInfo propertyInfo in obj.GetType().GetVisibleProperties())
@@ -85,7 +81,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				controls.Add(control);
 				columnIndex++;
 			}
-			rowIndex++;
 			return controls;
 		}
 
@@ -113,7 +108,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				Height = new GridLength(1, GridUnitType.Auto),
 			};
-			this.RowDefinitions.Add(gridRow);
+			RowDefinitions.Add(gridRow);
 
 			TextBlock textLabel = new TextBlock()
 			{
@@ -130,7 +125,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			};
 			Children.Add(textLabel);
 			Control control = AddProperty(property, rowIndex, 1);
-			rowIndex++;
 			return control;
 		}
 
@@ -142,7 +136,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			BindListAttribute listAttribute = underlyingType.GetCustomAttribute<BindListAttribute>();
 
 			Control control = null;
-			//AvaloniaObject avaloniaObject;
 			if (underlyingType == typeof(bool))
 			{
 				control = AddCheckBox(property, rowIndex, columnIndex);
@@ -195,124 +188,9 @@ namespace Atlas.GUI.Avalonia.Controls
 			textBox.Bind(TextBlock.TextProperty, binding);
 			AvaloniaUtils.AddTextBoxContextMenu(textBox);
 
-			//textBox.PropertyChanged += TextBox_PropertyChanged;
-			//textBox.TextInput += TextBox_TextInput;
-			//textBox.DataContextChanged += TextBox_DataContextChanged;
-			//textBox.KeyUp += TextBox_KeyUp;
-			//textBox.ApplyTemplate();
-
 			Children.Add(textBox);
 			return textBox;
 		}
-
-		/*private TextBox AddTextBox(ListProperty property, int rowIndex, int columnIndex, Type type)
-		{
-			TextBox textBox = new TextBox()
-			{
-				Background = new SolidColorBrush(Colors.White),
-				BorderBrush = new SolidColorBrush(Colors.Black),
-				BorderThickness = new Thickness(1),
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				IsReadOnly = !property.Editable,
-				MinWidth = 50,
-				Padding = new Thickness(6, 3),
-				Focusable = true, // already set?
-				MaxWidth = ControlMaxWidth,
-				//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
-				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = columnIndex,
-			};
-			if (textBox.IsReadOnly)
-				textBox.Background = new SolidColorBrush(Theme.TextBackgroundDisabledColor);
-
-			PasswordCharAttribute passwordCharAttribute = property.propertyInfo.GetCustomAttribute<PasswordCharAttribute>();
-			if (passwordCharAttribute != null)
-				textBox.PasswordChar = passwordCharAttribute.Character;
-
-			ExampleAttribute attribute = property.propertyInfo.GetCustomAttribute<ExampleAttribute>();
-			if (attribute != null)
-				textBox.Watermark = attribute.Text;
-
-			var binding = new Binding(property.propertyInfo.Name)
-			{
-				Converter = new EditValueConverter(),
-				//StringFormat = "Hello {0}",
-				Source = property.obj,
-			};
-			if (type == typeof(string) || type.IsPrimitive)
-				binding.Mode = BindingMode.TwoWay;
-			else
-				binding.Mode = BindingMode.OneWay;
-			textBox.Bind(TextBlock.TextProperty, binding);
-			AvaloniaUtils.AddTextBoxContextMenu(textBox);
-
-			//textBox.PropertyChanged += TextBox_PropertyChanged;
-			//textBox.TextInput += TextBox_TextInput;
-			//textBox.DataContextChanged += TextBox_DataContextChanged;
-			//textBox.KeyUp += TextBox_KeyUp;
-			textBox.PointerEnter += TextBox_PointerEnter;
-			textBox.PointerLeave += TextBox_PointerLeave;
-			//textBox.ApplyTemplate();
-
-			Children.Add(textBox);
-			return textBox;
-		}*/
-
-		// DefaultTheme.xaml is setting this for templates
-		private void TextBox_PointerEnter(object sender, PointerEventArgs e)
-		{
-			TextBox textBox = (TextBox)sender;
-			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			if (textBox.IsEnabled && !textBox.IsReadOnly)
-				textBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
-		}
-
-		private void TextBox_PointerLeave(object sender, PointerEventArgs e)
-		{
-			TextBox textBox = (TextBox)sender;
-			if (textBox.IsEnabled && !textBox.IsReadOnly)
-				textBox.Background = new SolidColorBrush(Colors.White);
-			//textBox.BorderBrush = textBox.Background;
-		}
-
-		// works
-		private void TextBox_KeyUp(object sender, KeyEventArgs e)
-		{
-		}
-
-		// doesn't work
-		private void TextBox_DataContextChanged(object sender, EventArgs e)
-		{
-		}
-
-		// doesn't work
-		private void TextBox_TextInput(object sender, TextInputEventArgs e)
-		{
-		}
-
-		// looks like this bug is fixed in Live version? remove
-		// catching IsPointerOver, filter out?
-		/*private void TextBox_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
-		{
-			if (e.Property.Name == "IsPointerOver"
-				|| e.Property.Name == "Parent"
-				|| e.Property.Name == "IsFocused"
-				|| e.Property.Name == "CaretIndex"
-				|| e.Property.Name == "SelectionStart"
-				|| e.Property.Name == "Foreground"
-				|| e.Property.Name == "VisualParent")
-				return;
-			{
-
-			}
-
-			TextBox textBox = (TextBox)sender;
-			if (e.Property.Name == "Text")
-			{
-				textBox.Measure(textBox.Bounds.Size);
-			}
-		}*/
-
 		private CheckBox AddCheckBox(ListProperty property, int rowIndex, int columnIndex)
 		{
 			TabControlCheckBox checkBox = new TabControlCheckBox(property)
@@ -320,38 +198,15 @@ namespace Atlas.GUI.Avalonia.Controls
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
 			};
-			checkBox.PointerEnter += CheckBox_PointerEnter;
-			checkBox.PointerLeave += CheckBox_PointerLeave;
 			Children.Add(checkBox);
 			return checkBox;
 		}
 
-		private void CheckBox_PointerEnter(object sender, PointerEventArgs e)
-		{
-			CheckBox checkBox = (CheckBox)sender;
-			//checkBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			if (checkBox.IsEnabled)
-				checkBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
-		}
-
-		private void CheckBox_PointerLeave(object sender, PointerEventArgs e)
-		{
-			CheckBox checkBox = (CheckBox)sender;
-			if (checkBox.IsEnabled)
-				checkBox.Background = new SolidColorBrush(Colors.White);
-		}
-
 		private ComboBox AddEnum(ListProperty property, int rowIndex, int columnIndex, Type underlyingType, BindListAttribute propertyListAttribute)
 		{
-			// todo: eventually handle custom lists
-			//ComboBox comboBox = new ComboBox(); // AvaloniaUI doesn't implement yet :(
-
-			ComboBox comboBox = new ComboBox()
+			// todo: handle custom lists
+			ComboBox comboBox = new TabControlComboBox()
 			{
-				Background = new SolidColorBrush(Colors.White),
-				BorderBrush = new SolidColorBrush(Colors.Black),
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				BorderThickness = new Thickness(1),
 				MaxWidth = ControlMaxWidth,
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
@@ -376,27 +231,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				Source = property.obj,
 			};
 			comboBox.Bind(ComboBox.SelectedItemProperty, binding);
-			comboBox.PointerEnter += ComboBox_PointerEnter;
-			comboBox.PointerLeave += ComboBox_PointerLeave;
 			Children.Add(comboBox);
 			return comboBox;
-		}
-
-		// DefaultTheme.xaml is setting this for templates
-		private void ComboBox_PointerEnter(object sender, PointerEventArgs e)
-		{
-			ComboBox comboBox = (ComboBox)sender;
-			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			if (comboBox.IsEnabled)
-				comboBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
-		}
-
-		private void ComboBox_PointerLeave(object sender, PointerEventArgs e)
-		{
-			ComboBox comboBox = (ComboBox)sender;
-			if (comboBox.IsEnabled)
-				comboBox.Background = new SolidColorBrush(Colors.White);
-			//textBox.BorderBrush = textBox.Background;
 		}
 
 		// todo: need a real DateTimePicker
@@ -439,12 +275,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			RowDefinitions.Add(timeRow);
 			rowIndex++;
 
-			TextBox textBox = new TextBox()
+			TextBox textBox = new TabControlTextBox()
 			{
-				Background = new SolidColorBrush(backgroundColor),
-				BorderBrush = new SolidColorBrush(Colors.Black),
-				BorderThickness = new Thickness(1),
-				HorizontalAlignment = HorizontalAlignment.Stretch,
 				IsReadOnly = !property.Editable,
 				Watermark = "15:30:45",
 				MinWidth = 80,
@@ -462,8 +294,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				Source = property.obj,
 			};
 			textBox.Bind(TextBlock.TextProperty, binding);
-			textBox.PointerEnter += TextBox_PointerEnter;
-			textBox.PointerLeave += TextBox_PointerLeave;
 			Children.Add(textBox);
 
 			Button buttonImport = AddButton(rowIndex, "Import Clipboard", Icons.Streams.Paste);
@@ -540,7 +370,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			//command = command ?? new RelayCommand(
 			//	(obj) => CommandDefaultCanExecute(obj),
 			//	(obj) => CommandDefaultExecute(obj));
-			var assembly = Assembly.GetExecutingAssembly();
 			Bitmap bitmap;
 			using (resource)
 			{

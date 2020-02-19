@@ -61,7 +61,7 @@ namespace Atlas.Tabs.Test
 					sampleCall.log.Add("New Sample Log Entry", new Tag("counter", counter));
 					logChild.Add("New Child Log Entry", new Tag("i", i));
 					counter++;
-					System.Threading.Thread.Sleep(1000);
+					Thread.Sleep(1000);
 				}
 			}
 

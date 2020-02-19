@@ -24,7 +24,7 @@ namespace Atlas.Tabs.Test.DataGrid
 					};
 					if (i % 2 == 0)
 						testItem.Object = (i % 4 == 0);
-					testItem.LongString = testItem.LongString + i.ToString(); // make as a unique string
+					testItem.LongString = testItem.LongString + i; // make as a unique string
 					items.Add(testItem);
 				}
 				tabModel.Items = items;

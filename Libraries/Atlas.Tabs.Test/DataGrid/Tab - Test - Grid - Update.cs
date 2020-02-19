@@ -51,17 +51,15 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 				while (true)
 				{
-					//System.Threading.Thread.Sleep(10);
 					for (int i = 0; i < 10000; i++)
 					{
-						System.Threading.Thread.Sleep(10);
+						Thread.Sleep(10);
 						foreach (TestItem testItem in items)
 						{
 							testItem.bigNumber++;
 							testItem.Update();
 						}
 					}
-					//System.Threading.Thread.Sleep(1000);
 				}
 			}
 		}

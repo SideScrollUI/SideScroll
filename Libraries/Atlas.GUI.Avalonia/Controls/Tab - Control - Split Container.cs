@@ -34,7 +34,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			public object Object { get; set; }
 			public Control Control { get; set; }
-			public bool fill { get; set; }
+			public bool Fill { get; set; }
 		}
 
 		public TabControlSplitContainer()
@@ -103,17 +103,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			Background = new SolidColorBrush(Theme.BackgroundColor);
 		}
 
-		public void AddSplitter()
-		{
-
-		}
-
 		public void AddControl(Control control, bool fill, SeparatorType separatorType)
 		{
 			Item item = new Item()
 			{
 				Control = control,
-				fill = fill,
+				Fill = fill,
 			};
 			gridItems.Add(item);
 			AddSeparatorRowDefinition(RowDefinitions.Count);
@@ -176,7 +171,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				index++;
 				// separator
 				RowDefinition rowDefinition = RowDefinitions[index];
-				if (gridItem.fill)
+				if (gridItem.Fill)
 					//rowDefinition.Height = new GridLength(1000);
 					RowDefinitions[index].Height = new GridLength(1, GridUnitType.Star);
 				else
@@ -194,30 +189,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			RowDefinition rowDefinition = new RowDefinition();
 			rowDefinition.Height = GridLength.Auto;
 			RowDefinitions.Insert(index, rowDefinition);
-		}
-
-		private void AddRowSplitter(int index)
-		{
-			/*if (Children.Count <= 1)
-				return;
-
-			RowDefinition rowDefinition = new RowDefinition();
-			rowDefinition.Height = new GridLength(6);
-			RowDefinitions.Insert(index, rowDefinition);*/
-
-			GridSplitter gridSplitter = new GridSplitter()
-			{
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				Background = Brushes.Black,
-				//ShowsPreview = true,
-				//HorizontalAlignment.Stretch,
-				//VerticalAlignment = VerticalAlignment.Center,
-				Height = 6,
-			};
-			gridSplitters.Add(gridSplitter);
-			//gridSplitter.DragCompleted += verticalGridSplitter_DragCompleted;
-			SetRow(gridSplitter, index);
-			Children.Insert(index, gridSplitter);
 		}
 
 		private void AddGridSplitter(int index)
@@ -298,11 +269,11 @@ namespace Atlas.GUI.Avalonia.Controls
 				Item item = new Item()
 				{
 					Control = control,
-					fill = true,
+					Fill = true,
 				};
 				gridItems.Add(item);
 
-				bool fill = !(control is TabNotes); // don't show for notes, needs to be configurable
+				bool fill = true;// !(control is TabNotes); // don't show for notes, needs to be configurable
 				if (!Children.Contains(control))
 				{
 					// Add a new control

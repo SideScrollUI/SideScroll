@@ -20,9 +20,9 @@ namespace Atlas.Tabs.Test
 				tabModel.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Sample Text", "This is some sample text\n\n1\n2\n3"),
-					new ListItem("Short Text - [" + shortText.Length.ToString() + "]", shortText),
-					new ListItem("Medium Text - [" + longText.Length.ToString() + "]", longText),
-					new ListItem("Long Text - [" + reallyLongText.Length.ToString() + "]", reallyLongText),
+					new ListItem("Short Text - [" + shortText.Length + "]", shortText),
+					new ListItem("Medium Text - [" + longText.Length + "]", longText),
+					new ListItem("Long Text - [" + reallyLongText.Length + "]", reallyLongText),
 				};
 			}
 

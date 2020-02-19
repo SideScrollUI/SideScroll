@@ -8,6 +8,7 @@
 *.tmp
 *.vspx
 *.DS_Store
+.idea/
 .vs/
 bin/
 obj/
