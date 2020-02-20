@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using Atlas.Core;
 using Atlas.GUI.Avalonia;
 using Atlas.Resources;

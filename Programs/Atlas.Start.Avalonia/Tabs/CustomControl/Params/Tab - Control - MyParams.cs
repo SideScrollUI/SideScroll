@@ -1,9 +1,9 @@
 ﻿using System;
+using Atlas.GUI.Avalonia.Controls;
 using Atlas.Tabs;
 using Avalonia;
-using Avalonia.Layout;
 using Avalonia.Controls;
-using Atlas.GUI.Avalonia.Controls;
+using Avalonia.Layout;
 
 namespace Atlas.Start.Avalonia.Tabs
 {

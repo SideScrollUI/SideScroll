@@ -1,7 +1,7 @@
-﻿using Atlas.Tabs;
+﻿using System;
+using Atlas.Tabs;
 using Atlas.GUI.Avalonia;
 using Atlas.Start.Avalonia.Tabs;
-using System;
 
 namespace Atlas.Start.Avalonia
 {
@@ -17,16 +17,15 @@ namespace Atlas.Start.Avalonia
 			var projectSettings = new ProjectSettings()
 			{
 				Name = "Atlas",
-				Version = new Version(1, 0),
-				DataVersion = "1",
 				LinkType = "atlas",
+				Version = new Version(1, 0),
+				DataVersion = new Version(1, 0),
 			};
 			var userSettings = new UserSettings()
 			{
 				ProjectPath = UserSettings.DefaultProjectPath,
 			};
-			Project project = new Project(projectSettings, userSettings);
-			return project;
+			return new Project(projectSettings, userSettings);
 		}
 	}
 }

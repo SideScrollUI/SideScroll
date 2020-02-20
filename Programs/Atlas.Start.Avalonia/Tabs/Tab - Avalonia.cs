@@ -26,6 +26,3 @@ namespace Atlas.Start.Avalonia.Tabs
 		}
 	}
 }
-/*
-
-*/

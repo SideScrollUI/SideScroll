@@ -1,8 +1,5 @@
-﻿using System;
-using Atlas.Tabs;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Logging.Serilog;
-using Avalonia.Rendering;
 using OxyPlot.Avalonia;
 
 namespace Atlas.Start.Avalonia
