@@ -271,7 +271,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			List<Bookmark> bookmarks = new List<Bookmark>();
 			foreach (TabBookmarkItem viewBookmark in tabControlDataGrid.SelectedItems)
 			{
-				Bookmark bookmark = project.DataApp.Load<Bookmark>(viewBookmark.Name, new Call(tabInstance.taskInstance.log));
+				Bookmark bookmark = project.DataApp.Load<Bookmark>(viewBookmark.Name, new Call(tabInstance.taskInstance.Log));
 				if (bookmark != null)
 					bookmarks.Add(bookmark);
 			}

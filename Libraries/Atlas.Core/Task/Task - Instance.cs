@@ -14,19 +14,19 @@ namespace Atlas.Core
 		//public event EventHandler<EventArgs> OnComplete;
 		public Action OnComplete;
 
-		public string Label { get { return Creator?.Label; } } // used for Task Label
+		public string Label => Creator?.Label; // used for Task Label
 		public TaskCreator Creator { get; set; }
 		[HiddenColumn]
 		public Call call { get; set; } = new Call();
 
-		[InnerValue]
-		public Log log { get { return call.log; } }
+		[InnerValue, HiddenColumn]
+		public Log Log => call.log;
 
 		[HiddenColumn]
 		public bool ShowTask { get; set; }
 
 		public Task Task { get; set; }
-		public TaskStatus TaskStatus { get { return Task == null ? TaskStatus.Created : Task.Status; } }
+		public TaskStatus TaskStatus => (Task?.Status ?? TaskStatus.Created);
 		public CancellationTokenSource tokenSource = new CancellationTokenSource();
 		public CancellationToken CancelToken => tokenSource.Token;
 
@@ -165,7 +165,7 @@ namespace Atlas.Core
 			else
 			{
 				Status = TaskStatus.ToString();
-				Message = log.Summary;
+				Message = Log.Summary;
 			}
 			NotifyPropertyChanged(nameof(Status));
 

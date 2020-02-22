@@ -17,13 +17,13 @@ namespace Atlas.Tabs.Test
 			public override void Load(Call call)
 			{
 				taskInstance = new TaskInstance();
-				taskInstance.log.Add("Double Tag Test", new Tag("Double", 0.5));
+				taskInstance.Log.Add("Double Tag Test", new Tag("Double", 0.5));
 				sampleCall = new Call(Label);
 				counter = 0;
 
 				tabModel.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Task Instance Log", taskInstance.log),
+					new ListItem("Task Instance Log", taskInstance.Log),
 					new ListItem("Sample Call", sampleCall),
 					new ListItem("Sample Call Log", sampleCall.log),
 					new ListItem("Log Entry", new LogEntry(LogEntry.LogType.Info, "test", null)),

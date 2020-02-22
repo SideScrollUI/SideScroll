@@ -69,7 +69,7 @@ namespace Atlas.Network
 					//System.Threading.Thread.Sleep(SleedMilliseconds * (int)Math.Pow(2, attempt));
 					System.Threading.Thread.Sleep(SleepMilliseconds * attempt);
 				}
-				throw new Exception("HTTP request failed " + MaxAttempts.ToString() + " times: " + uri);
+				throw new Exception("HTTP request failed " + MaxAttempts + " times: " + uri);
 			}
 		}
 	}
