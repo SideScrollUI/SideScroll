@@ -1,4 +1,4 @@
-# Getting Started
+# Visual Studio
 
 1. Download Atlas
     - `git clone https://github.com/garyhertel/atlas.git`

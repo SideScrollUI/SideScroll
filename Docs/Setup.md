@@ -3,7 +3,7 @@
 ## Clone Atlas
 - `git clone https://github.com/garyhertel/Atlas.git`
 - `cd Atlas`
-- Restore SubModules for AvaloniaUI (the nuget packages aren't recent enough)
+- Restore SubModules
   - `git submodule update --init --recursive`
 - (If Required) Updating sub-module git repos
   - `git submodule sync --recursive`
@@ -14,6 +14,7 @@
   - `dotnet build Atlas.Avalonia.sln`
 - Run
   - `dotnet run --project Programs/Atlas.Start.Avalonia/Atlas.Start.Avalonia.csproj`
+
 ## IDE
 - Open `Atlas.sln`
 - Operating system
@@ -37,5 +38,4 @@
   - `Programs / Atlas.Start.Wpf`
     - .NET Framework
       - Windows Only
-  - It's recommended to run Atlas in debug mode to catch exceptions
     

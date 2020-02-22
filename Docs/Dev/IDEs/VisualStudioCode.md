@@ -1,4 +1,4 @@
-## VSCode
+# Visual Studio Code
 
 
 ## Installing

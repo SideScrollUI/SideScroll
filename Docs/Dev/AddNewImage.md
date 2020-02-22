@@ -1,3 +1,4 @@
+# Adding new Image Resources
 
 * Find new icon:
   - https://www.flaticon.com/packs/free-basic-ui-elements
@@ -19,4 +20,4 @@
   - Build Action
 	  - Embedded
 - Add with git
-- Add an entry in the `Credits.md`
+- Add an entry in the [Credits](../Credits.md)

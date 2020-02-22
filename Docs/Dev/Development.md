@@ -1,7 +1,9 @@
 # Development
 * IDEs
-  * [Visual Studio](IDEs/VisualStudio.md) (recommended)
-  * JetBrains Rider
+  * [Visual Studio](IDEs/VisualStudio.md)
+    - Recommended for Windows
+  * [JetBrains Rider](https://www.jetbrains.com/rider/)
+    - Recommended for Macs
   * [Visual Studio Code](IDEs/VisualStudioCode.md)
 * Modules
   * [Libraries](Modules/Libraries.md)
