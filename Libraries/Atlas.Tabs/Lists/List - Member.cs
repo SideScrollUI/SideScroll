@@ -65,7 +65,7 @@ namespace Atlas.Tabs
 					}
 					else if (!value.GetType().IsPrimitive)
 					{
-						return value.ObjectToString();
+						return value.Formatted();
 					}
 					return value;
 				}

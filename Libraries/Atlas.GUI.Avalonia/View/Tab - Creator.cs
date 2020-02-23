@@ -19,7 +19,7 @@ namespace Atlas.GUI.Avalonia.View
 			if (label == null)
 			{
 				// use object? or inner value?
-				label = obj.ObjectToString();
+				label = obj.Formatted();
 				if (label == null || label.Length == 0)
 					label = "(" + obj.GetType().Name + ")";
 			}

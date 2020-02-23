@@ -55,7 +55,7 @@ namespace Atlas.GUI.Avalonia
 			}
 
 			if (value.GetType().IsPrimitive == false && targetType == typeof(string))
-				return value.ObjectToString();
+				return value.Formatted();
 			try
 			{
 				return System.Convert.ChangeType(value, targetType);

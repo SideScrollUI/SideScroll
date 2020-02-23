@@ -10,9 +10,7 @@ namespace Atlas.Core
 {
 	public static class ObjectExtensions
 	{
-
-		// Needs new name
-		public static string ObjectToString(this object obj, int maxLength = 255)
+		public static string Formatted(this object obj, int maxLength = 255)
 		{
 			// don't override cell style formatting for numbers
 			if (obj == null)
@@ -137,7 +135,15 @@ namespace Atlas.Core
 			return "[" + joined + "]";
 		}
 
-		private static string ObjectToUniqueStringAll(this object obj)
+		public static string ToUniqueString(this object obj, int maxLength = 100)
+		{
+			string text = ToUniqueStringAll(obj);
+			if (text != null && text.Length > maxLength)
+				return text.Substring(0, maxLength);
+			return text;
+		}
+
+		private static string ToUniqueStringAll(this object obj)
 		{
 			if (obj == null)
 				return null;
@@ -188,7 +194,7 @@ namespace Atlas.Core
 				object propertyValue = propertyInfo.GetValue(obj);
 				if (propertyValue != null)
 				{
-					string toString = ObjectToUniqueStringAll(propertyValue);
+					string toString = ToUniqueStringAll(propertyValue);
 					if (toString != null)
 						return toString;
 				}
@@ -200,22 +206,13 @@ namespace Atlas.Core
 				object fieldValue = fieldInfo.GetValue(obj);
 				if (fieldValue != null)
 				{
-					string toString = ObjectToUniqueStringAll(fieldValue);
+					string toString = ToUniqueStringAll(fieldValue);
 					if (toString != null)
 						return toString;
 				}
 			}
 
 			return null;
-		}
-
-
-		public static string ObjectToUniqueString(this object obj, int maxLength = 100)
-		{
-			string text = ObjectToUniqueStringAll(obj);
-			if (text != null && text.Length > maxLength)
-				return text.Substring(0, maxLength);
-			return text;
 		}
 	}
 }

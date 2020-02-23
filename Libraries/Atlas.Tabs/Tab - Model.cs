@@ -374,7 +374,7 @@ namespace Atlas.Tabs
 					}
 					else if (depth >= 0)
 					{
-						TabModel tabModel = Create(obj.ObjectToString(), obj);
+						TabModel tabModel = Create(obj.Formatted(), obj);
 						if (tabModel != null)
 						{
 							TabBookmark childNode = tabModel.FindMatches(filter, depth);

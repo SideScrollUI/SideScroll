@@ -41,7 +41,7 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				return Key.ObjectToString();
+				return Key.Formatted();
 			}
 			set
 			{

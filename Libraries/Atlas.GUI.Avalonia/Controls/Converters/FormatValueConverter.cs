@@ -66,7 +66,7 @@ namespace Atlas.GUI.Avalonia
 					return timeSpan.ToString("g");
 				//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above
 
-				return value.ObjectToString();
+				return value.Formatted();
 			}
 			try
 			{

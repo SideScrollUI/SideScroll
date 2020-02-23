@@ -66,7 +66,7 @@ namespace Atlas.Tabs
 
 		public override string ToString()
 		{
-			return Items.ObjectToString();
+			return Items.Formatted();
 		}
 	}
 
@@ -102,7 +102,7 @@ namespace Atlas.Tabs
 
 		public override string ToString()
 		{
-			return Items.ObjectToString();
+			return Items.Formatted();
 		}
 	}
 

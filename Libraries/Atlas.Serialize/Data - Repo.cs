@@ -300,6 +300,7 @@ namespace Atlas.Serialize
 			return list;
 		}*/
 	}
+
 	public class DataRepoInstance<T>
 	{
 		public DataRepo dataRepo;

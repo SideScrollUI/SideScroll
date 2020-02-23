@@ -706,7 +706,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				if (listItem == null)
 					continue;
-				string id = GetDataKey(listItem) ?? listItem.ObjectToUniqueString();
+				string id = GetDataKey(listItem) ?? listItem.ToUniqueString();
 				if (id != null)
 					keys[id] = listItem;
 			}
@@ -1029,7 +1029,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			Type type = obj.GetType();
 			SelectedRow selectedRow = new SelectedRow()
 			{
-				label = obj.ObjectToUniqueString(),
+				label = obj.ToUniqueString(),
 				rowIndex = iList.IndexOf(obj),
 				dataKey = GetDataKey(obj), // overrides label
 				dataValue = GetDataValue(obj),

@@ -21,7 +21,7 @@ namespace Atlas.Core.Test
 		public void DecimalToString()
 		{
 			decimal d = 123456.1234M;
-			string text = d.ObjectToString();
+			string text = d.Formatted();
 
 			Assert.AreEqual("123,456.1234", text);
 		}

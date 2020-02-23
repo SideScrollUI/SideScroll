@@ -28,7 +28,7 @@ namespace Atlas.GUI.Avalonia
 				if (propertyInfo != null)
 				{
 					object obj = propertyInfo.GetValue(item);
-					string value = obj.ObjectToString();
+					string value = obj.Formatted();
 					sb.AppendLine(value);
 				}
 				else
@@ -59,7 +59,7 @@ namespace Atlas.GUI.Avalonia
 				if (propertyInfo != null)
 				{
 					object value = propertyInfo.GetValue(obj);
-					string valueText = value.ObjectToString();
+					string valueText = value.Formatted();
 					sb.AppendLine(valueText);
 				}
 				else
@@ -170,7 +170,7 @@ namespace Atlas.GUI.Avalonia
 						string propertyPath = binding.Path;
 						object obj = ReflectorUtil.FollowPropertyPath(item, propertyPath);
 
-						string value = obj.ObjectToString();
+						string value = obj.Formatted();
 						value = value?.Replace('\n', ' '); // remove newlines
 						stringCells.Add(value);
 					}

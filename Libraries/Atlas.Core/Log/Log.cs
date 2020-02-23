@@ -16,7 +16,7 @@ namespace Atlas.Core
 		[InnerValue]
 		public object Value { get; set; }
 
-		public override string ToString() => "[ " + Name + " = " + Value.ObjectToString() + " ]";
+		public override string ToString() => "[ " + Name + " = " + Value.Formatted() + " ]";
 
 		public Tag()
 		{
@@ -80,11 +80,13 @@ namespace Atlas.Core
 			Alert
 		}
 		public event PropertyChangedEventHandler PropertyChanged;
-		public DateTime Created;// { get; set; }
+		[HiddenColumn]
+		public DateTime Created { get; set; }
 		public TimeSpan Time => Created.Subtract(rootLog.Created);
 		public LogType originalType = LogType.Info;
 		public LogType Type { get; set; } = LogType.Info;
-		public string Text;// { get; set; }
+		[HiddenColumn, HiddenRow]
+		public string Text { get; set; }
 		public string Message
 		{
 			get
@@ -98,7 +100,7 @@ namespace Atlas.Core
 			}
 		}
 
-		[HiddenColumn]
+		[HiddenColumn, HiddenRow]
 		public virtual string Summary => Text;
 		public int Entries { get; set; }
 

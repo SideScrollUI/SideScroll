@@ -290,6 +290,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//MinorGridlineStyle = LineStyle.None,
 				IntervalLength = 75,
 				IsAxisVisible = true,
+				IsPanEnabled = false,
 				AxislineColor = OxyColors.Black,
 				//AxislineColor = GridLineColor,
 				AxislineStyle = LineStyle.Solid,
@@ -347,6 +348,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				//MinimumMinorStep = 20,
 				MinorTickSize = 0,
 				IsAxisVisible = true,
+				IsPanEnabled = false,
 				AxislineColor = GridLineColor,
 				AxislineStyle = LineStyle.Solid,
 				AxislineThickness = 2,
@@ -377,6 +379,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				MinorStep = 20,
 				MinimumMinorStep = 10,
 				IsAxisVisible = true,
+				IsPanEnabled = false,
 				AxislineColor = GridLineColor,
 				AxislineStyle = LineStyle.Solid,
 				AxislineThickness = 2,
@@ -529,7 +532,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 			else
 			{
-				return d.ObjectToString();
+				return d.Formatted();
 			}
 		}
 		public string GetDateTimeFormat(double duration)
