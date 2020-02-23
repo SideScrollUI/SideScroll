@@ -21,7 +21,7 @@ namespace Atlas.GUI.Avalonia
 	{
 		private const int MinWindowSize = 500;
 		public static readonly int DefaultIncrementWidth = 1000; // should we also use a max percent?
-		public static readonly int KeyboardIncrementWidth = 500; // should we also use a max percent?
+		public static readonly int KeyboardIncrementWidth = 500;
 		public static BaseWindow baseWindow;
 		protected Linker linker = new Linker();
 
@@ -315,7 +315,7 @@ namespace Atlas.GUI.Avalonia
 			contentGrid.Children.Add(tabView);
 		}
 
-		// How to set the main Content
+		// How to set the main Content?
 		protected void AddTabBookmarks(ITab iTab)
 		{
 			var tabBookmarks = new TabBookmarks(project, iTab, linker);

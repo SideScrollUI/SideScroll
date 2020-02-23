@@ -32,7 +32,7 @@ namespace Atlas.Network
 
 		private byte[] GetResponse(string uri, string accept = null)
 		{
-			using (CallTimer getCall = call.Timer("Downloading HTTP File", new Tag("URI", uri)))
+			using (CallTimer getCall = call.Timer("Get Uri", new Tag("URI", uri)))
 			{
 				for (int attempt = 1; ; attempt++)
 				{

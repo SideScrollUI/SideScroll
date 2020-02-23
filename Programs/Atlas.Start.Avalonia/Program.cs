@@ -19,7 +19,7 @@ namespace Atlas.Start.Avalonia
 				.UsePlatformDetect()
 				.With(new Win32PlatformOptions
 				{
-					UseDeferredRendering = false,
+					//UseDeferredRendering = false, // Causes DataGrid blank columns when scrolling right?
 					AllowEglInitialization = true,
 				})
 				.LogToDebug();
