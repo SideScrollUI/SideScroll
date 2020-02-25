@@ -90,7 +90,7 @@ namespace Atlas.Tabs
 		/*public override string ToString()
 		{
 			var strings = new List<string>();
-			TabDataSettings.ForEach(p => strings.Add(p.ObjectToString()));
+			TabDataSettings.ForEach(p => strings.Add(p.Formatted()));
 			return string.Join(",", strings);
 		}*/
 	}

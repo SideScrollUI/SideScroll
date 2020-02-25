@@ -69,9 +69,9 @@ namespace Atlas.GUI.Avalonia
 		public void LoadProject(Project project)
 		{
 			this.project = project;
-			bool isLoading = project.DataApp.Load<bool>(IsLoadingDataKey, new Call());
-			if (isLoading) // did the previous load succeed?
-				project.userSettings.AutoLoad = false;
+			//bool isLoading = project.DataApp.Load<bool>(IsLoadingDataKey, new Call());
+			//if (isLoading) // did the previous load succeed?
+			//	project.userSettings.AutoLoad = false;
 
 			project.DataApp.Save(IsLoadingDataKey, true);
 

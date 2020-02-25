@@ -1589,7 +1589,7 @@ private void dataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArg
 	}
 }
 
-// use ObjectToString() formatting instead of default
+// use Formatted() formatting instead of default
 private void dataGrid_CopyingRowClipboardContent(object sender, DataGridRowClipboardEventArgs e)
 {
 	var rowContents = e.ClipboardRowContent.ToList(); // create a copy before clearing
@@ -1601,7 +1601,7 @@ private void dataGrid_CopyingRowClipboardContent(object sender, DataGridRowClipb
 		{
 			Type type = content.GetType();
 			if (!type.IsNumeric())
-				content = content.ObjectToString();
+				content = content.Formatted();
 		}
 
 		e.ClipboardRowContent.Add(new DataGridClipboardCellContent(cellContent.Item, cellContent.Column, content));

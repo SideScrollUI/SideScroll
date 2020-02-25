@@ -20,7 +20,7 @@ namespace Atlas.GUI.Avalonia
 				return null;
 
 			//if (targetType == typeof(string))
-			//	return value.ObjectToString();
+			//	return value.Formatted();
 
 			object result = ChangeType(value, targetType);
 			//dynamic result = System.Convert.ChangeType(value, targetType);
