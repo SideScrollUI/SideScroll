@@ -28,22 +28,26 @@
         <Setter Property="BorderBrush" Value="#FF000000"/>
     </Style>
 
-    <Style Selector="ScrollBar /template/ RepeatButton.repeat">
-        <Setter Property="Margin" Value="0"/>
-        <Setter Property="Padding" Value="4"/>
-        <Setter Property="BorderThickness" Value="0"/>
-    </Style>
-
     <Style Selector="ToolTip">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="#FF000000" />
     </Style>
 
-    <Style Selector="ScrollBar /template/ Thumb#thumb /template/ Border">
-        <Setter Property="Background" Value="#9e9e9e"/>
+    <Style Selector="ScrollBar /template/ Border">
+        <Setter Property="Background" Value="#FF38409a"/>
+    </Style>
+
+    <Style Selector="ScrollBar /template/ Thumb#thumb">
+        <Setter Property="Background" Value="#45599b"/>
     </Style>
     <Style Selector="ScrollBar /template/ Thumb#thumb /template/ Border:pointerover">
         <Setter Property="Background" Value="#4e8ef7"/>
+    </Style>
+
+    <Style Selector="ScrollBar /template/ RepeatButton.repeat">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="BorderThickness" Value="0"/>
     </Style>
     
     <Style Selector="TextBox">
