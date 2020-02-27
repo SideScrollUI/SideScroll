@@ -35,6 +35,8 @@
 
     <Style Selector="ScrollBar /template/ Border">
         <Setter Property="Background" Value="#FF38409a"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="#FF000000"/>
     </Style>
 
     <Style Selector="ScrollBar /template/ Thumb#thumb">
