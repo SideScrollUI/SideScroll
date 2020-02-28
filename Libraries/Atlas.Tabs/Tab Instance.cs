@@ -396,7 +396,7 @@ namespace Atlas.Tabs
 				if (tabViewSettings.SelectionType == SelectionType.User && tabViewSettings.SelectedRows.Count == 0) // Need to split apart user selected rows?
 					return false;
 				// Only data is skippable?
-				if (tabModel.Objects.Count > 0 || tabModel.ItemList.Count == 0 || tabModel.ItemList[0].Count == 0)
+				if (tabModel.Objects.Count > 0 || tabModel.ItemList.Count == 0 || tabModel.ItemList[0].Count != 1)
 					return false;
 				var skippableAttribute = tabModel.ItemList[0][0].GetType().GetCustomAttribute<SkippableAttribute>();
 				if (skippableAttribute == null && tabModel.Actions != null && tabModel.Actions.Count > 0)

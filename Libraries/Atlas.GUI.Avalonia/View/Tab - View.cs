@@ -343,7 +343,7 @@ namespace Atlas.GUI.Avalonia.View
 			if (containerGrid == null)
 				return;
 
-			if (TabViewSettings.SplitterDistance == null)
+			if (TabViewSettings.SplitterDistance == null || TabViewSettings.SplitterDistance <= 0.0)
 			{
 				containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 			}
