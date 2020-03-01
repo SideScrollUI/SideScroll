@@ -51,6 +51,7 @@ namespace Atlas.GUI.Avalonia.View
 			menuItemReset.Click += MenuItemReset_Click;
 			list.Add(menuItemReset);
 
+#if DEBUG
 			MenuItem menuItemDebug = new MenuItem() { Header = "_Debug" };
 			menuItemDebug.Click += MenuItemDebug_Click;
 			list.Add(menuItemDebug);
@@ -68,6 +69,7 @@ namespace Atlas.GUI.Avalonia.View
 			};
 			menuItemAutoLoad.Click += MenuItemAutoLoad_Click;
 			list.Add(menuItemAutoLoad);
+#endif
 
 			Items = list;
 		}

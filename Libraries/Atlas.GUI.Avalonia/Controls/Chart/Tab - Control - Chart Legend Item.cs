@@ -67,7 +67,6 @@ namespace Atlas.GUI.Avalonia.Controls
 		private void InitializeControls()
 		{
 			//HorizontalAlignment = HorizontalAlignment.Right;
-			//VerticalAlignment = VerticalAlignment.Stretch;
 			ColumnDefinitions = new ColumnDefinitions("Auto, Auto");
 			RowDefinitions = new RowDefinitions();
 			//this.Margin = new Thickness(6);
@@ -203,8 +202,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				Text = series.Title,
 				Foreground = Brushes.LightGray,
 				//Background = new SolidColorBrush(Theme.BackgroundColor),
-				//BorderThickness = new Thickness(1),
-				//BorderBrush = new SolidColorBrush(Colors.Black),
 				Margin = new Thickness(2, 2, 6, 2),
 				//VerticalAlignment = VerticalAlignment.Center,
 				//HorizontalAlignment = HorizontalAlignment.Stretch,

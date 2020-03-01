@@ -201,10 +201,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			UnloadModel();
 			RecreatePlotModel();
 
-			//double duration = 0;
 			foreach (ListSeries listSeries in ListGroup.ListSeries)
 			{
-				//duration = listSeries.iList[0]
 				AddSeries(listSeries);
 			}
 
@@ -217,7 +215,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			UpdateLinearAxis();
 
 			plotView.Model = plotModel;
-			this.IsVisible = true;
+			IsVisible = true;
 		}
 
 		public void RecreatePlotModel()
@@ -254,7 +252,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		public void Unload()
 		{
-			this.IsVisible = false;
+			IsVisible = false;
 			UnloadModel();
 		}
 

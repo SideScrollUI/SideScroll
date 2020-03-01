@@ -24,6 +24,7 @@
         
         <SolidColorBrush x:Key="ThemeForegroundBrush">#FF000000</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeForegroundLightBrush">#FF808080</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeForegroundLowBrush">#FF5860CA</SolidColorBrush>
 
         <SolidColorBrush x:Key="ErrorBrush">Red</SolidColorBrush>
         <SolidColorBrush x:Key="ErrorBrushLight">#10ff0000</SolidColorBrush>
