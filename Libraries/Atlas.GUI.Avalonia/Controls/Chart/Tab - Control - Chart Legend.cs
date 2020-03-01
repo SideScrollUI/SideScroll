@@ -132,8 +132,8 @@ namespace Atlas.GUI.Avalonia.Controls
 				TabChartLegendItem legendItem;
 				if (!idxLegendItems.TryGetValue(title, out legendItem))
 				{
-					if (idxLegendItems.Count > 25) // todo: improve this
-						continue;
+					//if (idxLegendItems.Count > 25) // todo: improve this
+					//	continue;
 					legendItem = AddSeries(oxyListSeries);
 				}
 				Children.Add(legendItem);
