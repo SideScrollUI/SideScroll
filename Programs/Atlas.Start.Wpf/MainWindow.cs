@@ -13,29 +13,16 @@ namespace Atlas.Start.Wpf
 		public MainWindow(Project project) : base(project)
 		{
 			// Todo: This is really ugly, fix logging
-			//this.Initialized += MainWindow_Initialized; // doesn't work
-			this.Activated += MainWindow_Activated;
+			//Initialized += MainWindow_Initialized; // doesn't work
+			Activated += MainWindow_Activated;
 		}
-
-		/*public MainWindow(string projectPath) : base(new Project(projectPath, typeof(MainWindow).Namespace))
-		{
-			// Todo: This is really ugly, fix logging (needs a GUI context to work)
-			//this.Initialized += MainWindow_Initialized; // doesn't work
-			this.Activated += MainWindow_Activated;
-		}*/
 
 		private void MainWindow_Activated(object sender, EventArgs e)
 		{
-			this.Activated -= MainWindow_Activated;
+			Activated -= MainWindow_Activated;
 
 			Load();
 		}
-
-		/*private void LoadProject(string projectPath)
-		{
-			Project project = new Project(projectPath, GetType().Namespace);
-			LoadProject(project);
-		}*/
 
 		private void Load()
 		{
@@ -68,5 +55,3 @@ namespace Atlas.Start.Wpf
 	}
 }
 
-/*
-*/

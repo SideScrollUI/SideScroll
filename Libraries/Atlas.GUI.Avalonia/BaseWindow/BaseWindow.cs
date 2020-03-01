@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
@@ -350,6 +351,8 @@ namespace Atlas.GUI.Avalonia
 			get
 			{
 				bool maximized = (this.WindowState == WindowState.Maximized);
+				if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) // Avalonia bug? WindowState doesn't update correctly for MacOS
+					maximized = false;
 				Rect bounds = this.Bounds;
 				if (maximized && this.TransformedBounds != null)
 					bounds = this.TransformedBounds.Value.Bounds;
