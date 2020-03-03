@@ -32,7 +32,7 @@
         <SolidColorBrush x:Key="HighlightBrush">#FF086F9E</SolidColorBrush>
 
         <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#FFFFFFFF</SolidColorBrush>
-        <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#4e8ef7</SolidColorBrush>
+        <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#4e7ee7</SolidColorBrush>
 
         <Thickness x:Key="ThemeBorderThickness">1</Thickness>
         <sys:Double x:Key="ThemeDisabledOpacity">0.5</sys:Double>
