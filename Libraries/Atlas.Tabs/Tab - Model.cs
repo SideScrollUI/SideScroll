@@ -299,47 +299,54 @@ namespace Atlas.Tabs
 			Actions = null;
 		}
 
-		// Require attribute for this?
-		private void AddMethodProperties(Type type, ItemCollection<ListMember> itemCollection)
+		private List<MethodInfo> GetVisibleProperties(Type type)
 		{
 			MethodInfo[] methodInfos = type.GetMethods().OrderBy(x => x.MetadataToken).ToArray();
+			var visibleMethods = new List<MethodInfo>();
 
-			// Add any methods that return a Task object
 			foreach (MethodInfo methodInfo in methodInfos)
 			{
-				if (methodInfo.IsPublic && methodInfo.ReturnType != null)
-				{
-					ParameterInfo[] parameterInfos = methodInfo.GetParameters();
-					if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType == typeof(Call))
-					{
-						//itemCollection.Add(new ListMethod2((ListMethod2.LoadObjectAsync)Delegate.CreateDelegate(typeof(ListMethod2.LoadObjectAsync), methodInfo)));
+				if (methodInfo.IsPublic && methodInfo.ReturnType != null && methodInfo.GetType().GetCustomAttribute<VisibleAttribute>() != null)
+					visibleMethods.Add(methodInfo);
+			}
+			return visibleMethods;
+		}
 
-						itemCollection.Add(new ListMethod(Object, methodInfo));
-					}
+		private void AddMethodProperties(Type type, ItemCollection<ListMember> itemCollection)
+		{
+			List<MethodInfo> visibleMethods = GetVisibleProperties(type);
+
+			// Add any methods that return a Task object
+			foreach (MethodInfo methodInfo in visibleMethods)
+			{
+				ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+				if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType == typeof(Call))
+				{
+					//itemCollection.Add(new ListMethod2((ListMethod2.LoadObjectAsync)Delegate.CreateDelegate(typeof(ListMethod2.LoadObjectAsync), methodInfo)));
+
+					itemCollection.Add(new ListMethod(Object, methodInfo));
 				}
 			}
 		}
 
 		private void AddMethods(Type type)
 		{
-			MethodInfo[] methodInfos = type.GetMethods().OrderBy(x => x.MetadataToken).ToArray();
+			List<MethodInfo> visibleMethods = GetVisibleProperties(type);
 
 			// Add any methods that return a Task object
 			ItemCollection<TaskCreator> methods = new ItemCollection<TaskCreator>();
-			foreach (MethodInfo methodInfo in methodInfos)
+			foreach (MethodInfo methodInfo in visibleMethods)
 			{
 				// todo: check parameter types, assuming Log param now
 				/*if (methodInfo.IsPublic && methodInfo.ReturnType.IsAssignableFrom(typeof(Task)))
 				{
 					//methods.Add(new TaskMethod(methodInfo, Object));
 				}*/
-				if (methodInfo.IsPublic && methodInfo.ReturnType == null)
+
+				ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+				if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType == typeof(Call))
 				{
-					ParameterInfo[] parameterInfos = methodInfo.GetParameters();
-					if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType == typeof(Call))
-					{
-						methods.Add(new TaskDelegate(methodInfo.Name, (TaskDelegate.CallAction)Delegate.CreateDelegate(typeof(TaskDelegate.CallAction), methodInfo)));
-					}
+					methods.Add(new TaskDelegate(methodInfo.Name, (TaskDelegate.CallAction)Delegate.CreateDelegate(typeof(TaskDelegate.CallAction), methodInfo)));
 				}
 			}
 			if (methods.Count > 0)

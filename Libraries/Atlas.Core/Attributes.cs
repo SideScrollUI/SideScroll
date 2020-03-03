@@ -32,6 +32,12 @@ namespace Atlas.Core
 	{
 	}
 
+	// ->Tabs: Use the specified name instead of the field/property name
+	[AttributeUsage(AttributeTargets.Method)]
+	public class VisibleAttribute : Attribute
+	{
+	}
+
 	[AttributeUsage(AttributeTargets.All)]
 	public class PasswordCharAttribute : Attribute
 	{

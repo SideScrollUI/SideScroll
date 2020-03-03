@@ -16,7 +16,7 @@ namespace Atlas.Start.Avalonia.Tabs
 		{
 			private ItemCollection<MyParams> items;
 			private MyParams myParams;
-			private TabControlSearchToolbar searchToolbar;
+			private TabControlSearchToolbar toolbar;
 			private TabControlLoadingAnimation animation;
 
 			public override void Load(Call call)
@@ -25,8 +25,8 @@ namespace Atlas.Start.Avalonia.Tabs
 				TabControlMyParams tabMyParams = new TabControlMyParams(this, myParams);
 				tabModel.AddObject(tabMyParams);
 
-				searchToolbar = new TabControlSearchToolbar();
-				tabModel.AddObject(searchToolbar);
+				toolbar = new TabControlSearchToolbar();
+				tabModel.AddObject(toolbar);
 
 				animation = new TabControlLoadingAnimation()
 				{
@@ -34,10 +34,10 @@ namespace Atlas.Start.Avalonia.Tabs
 				};
 				tabModel.AddObject(animation);
 
-				searchToolbar.buttonSearch.Click += ButtonSearch_Click;  // move logic into SearchToolbar Command
-				searchToolbar.buttonLoadNext.Click += ButtonLoadNext_Click;
-				searchToolbar.buttonCopyClipBoard.Click += ButtonCopyClipBoard_Click;
-				searchToolbar.buttonSleep.Click += ButtonSleep_Click;
+				toolbar.buttonSearch.Click += ButtonSearch_Click;  // move logic into SearchToolbar Command
+				toolbar.buttonLoadNext.Click += ButtonLoadNext_Click;
+				toolbar.buttonCopyClipBoard.Click += ButtonCopyClipBoard_Click;
+				toolbar.buttonSleep.Click += ButtonSleep_Click;
 
 				items = new ItemCollection<MyParams>();
 				for (int i = 0; i < 10; i++)
@@ -54,7 +54,7 @@ namespace Atlas.Start.Avalonia.Tabs
 
 			private void ButtonSearch_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 			{
-				searchToolbar.textBoxStatus.Text = "Searching";
+				toolbar.textBoxStatus.Text = "Searching";
 				StartTask(Search, true, true);
 			}
 
@@ -66,7 +66,7 @@ namespace Atlas.Start.Avalonia.Tabs
 
 			private void ShowSearchResults(Call call, params object[] objects)
 			{
-				searchToolbar.textBoxStatus.Text = "Finished";
+				toolbar.textBoxStatus.Text = "Finished";
 			}
 
 			private void ButtonLoadNext_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
