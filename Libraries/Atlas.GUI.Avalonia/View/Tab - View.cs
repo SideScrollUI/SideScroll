@@ -196,6 +196,18 @@ namespace Atlas.GUI.Avalonia.View
 				Children.Add(containerGrid);
 
 			ContextMenu = new TabViewContextMenu(this, tabInstance);
+
+			Dispatcher.UIThread.Post(AutoSizeParentControls, DispatcherPriority.Background);
+		}
+
+		private void AutoSizeParentControls()
+		{
+			if (tabParentControls == null)
+				return;
+
+			int desiredWidth = (int)tabParentControls.DesiredSize.Width;
+			containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
+			tabParentControls.Width = desiredWidth;
 		}
 
 		private void AddParentControls()

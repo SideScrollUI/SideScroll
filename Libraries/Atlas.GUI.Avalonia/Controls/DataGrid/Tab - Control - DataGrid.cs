@@ -254,8 +254,9 @@ namespace Atlas.GUI.Avalonia.Controls
 
 			//PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => x.DataGridRow_PointerPressed(e), handledEventsToo: true);
 			dataGrid.ColumnReordered += DataGrid_ColumnReordered;
-			dataGrid.PointerEnter += DataGrid_PointerEnter;
 			LayoutUpdated += TabControlDataGrid_LayoutUpdated;
+
+			Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 
 			//var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 			//AddContextMenu();
@@ -338,15 +339,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			}
 		}
 
-		// Add column stretch property instead?
-		private void DataGrid_PointerEnter(object sender, PointerEventArgs e)
+		private void AutoSizeColumns()
 		{
-			dataGrid.PointerEnter -= DataGrid_PointerEnter; // todo? still need to Dispose
 			foreach (DataGridColumn column in dataGrid.Columns)
 			{
-				// don't let columns autosize later
-				if (column.ActualWidth >= column.MaxWidth)
-					column.Width = new DataGridLength(column.ActualWidth);
+				if (column.ActualWidth >= 150)
+					column.Width = new DataGridLength(column.ActualWidth, DataGridLengthUnitType.Star);
 				column.MaxWidth = 2000;
 			}
 		}
@@ -365,7 +363,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			{
 				try
 				{
-					//if (collectionView.Contains(value))
+					//if (collectionVie w.Contains(value))
 					dataGrid.ScrollIntoView(scrollIntoViewObject, dataGrid.CurrentColumn);
 				}
 				catch (Exception)
@@ -1156,7 +1154,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			dataGrid.SelectionChanged -= DataGrid_SelectionChanged;
 			dataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
 			dataGrid.ColumnReordered -= DataGrid_ColumnReordered;
-			dataGrid.PointerEnter -= DataGrid_PointerEnter;
 
 			LayoutUpdated -= TabControlDataGrid_LayoutUpdated;
 
