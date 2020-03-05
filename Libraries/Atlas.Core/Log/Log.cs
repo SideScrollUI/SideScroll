@@ -87,6 +87,7 @@ namespace Atlas.Core
 		public LogType Type { get; set; } = LogType.Info;
 		[HiddenColumn, HiddenRow]
 		public string Text { get; set; }
+		[WordWrap]
 		public string Message
 		{
 			get

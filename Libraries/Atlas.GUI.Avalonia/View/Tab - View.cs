@@ -206,6 +206,11 @@ namespace Atlas.GUI.Avalonia.View
 				return;
 
 			int desiredWidth = (int)tabParentControls.DesiredSize.Width;
+			if (tabModel.CustomSettingsPath != null && TabViewSettings.SplitterDistance != null)
+			{
+				desiredWidth = (int)TabViewSettings.SplitterDistance.Value;
+			}
+
 			containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
 			tabParentControls.Width = desiredWidth;
 		}
@@ -639,7 +644,7 @@ namespace Atlas.GUI.Avalonia.View
 				if (Bounds.Height < 50)
 					return false;
 
-				if (tabInstance.Depth > 30)
+				if (tabInstance.Depth > 50)
 					return false;
 				if (double.IsNaN(tabParentControls.arrangeOverrideFinalSize.Width))
 					return false;
