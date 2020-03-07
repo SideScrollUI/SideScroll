@@ -334,6 +334,7 @@ namespace Atlas.GUI.Avalonia.Controls
 				{
 					collectionView = new DataGridCollectionView(iList);
 					dataGrid.Items = collectionView;
+					Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 				}
 				//dataGrid.SelectedItem = null;
 			}
@@ -347,6 +348,11 @@ namespace Atlas.GUI.Avalonia.Controls
 					column.Width = new DataGridLength(column.ActualWidth, DataGridLengthUnitType.Star);
 				column.MaxWidth = 2000;
 			}
+			// If 1 or 2 columns, make the last column stretch
+			if (dataGrid.Columns.Count == 1)
+				dataGrid.Columns[0].Width = new DataGridLength(dataGrid.Columns[0].ActualWidth, DataGridLengthUnitType.Star);
+			if (dataGrid.Columns.Count == 2)
+				dataGrid.Columns[1].Width = new DataGridLength(dataGrid.Columns[1].ActualWidth, DataGridLengthUnitType.Star);
 		}
 
 		private void DispatcherTimer_Tick(object sender, EventArgs e)

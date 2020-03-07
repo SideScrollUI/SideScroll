@@ -1,17 +1,13 @@
-﻿using Atlas.Core;
-using Atlas.Tabs;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using OxyPlot;
 using OxyPlot.Avalonia;
-using Avalonia.Input;
 
 namespace Atlas.GUI.Avalonia.Controls
 {
@@ -36,7 +32,7 @@ namespace Atlas.GUI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Left;
+			HorizontalAlignment = HorizontalAlignment.Left;
 			//VerticalAlignment = VerticalAlignment.Stretch;
 			Margin = new Thickness(6);
 			Orientation = IsHorizontal ? Orientation.Horizontal : Orientation.Vertical;

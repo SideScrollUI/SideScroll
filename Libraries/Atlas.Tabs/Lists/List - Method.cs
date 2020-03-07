@@ -78,7 +78,7 @@ namespace Atlas.Tabs
 
 		public async Task<object> LoadAsync(Call call)
 		{
-			var task = (Task<object>)methodInfo.Invoke(obj, new object[] { new Call() });
+			var task = (Task<object>)methodInfo.Invoke(obj, new object[] { call });
 			return await task;
 		}
 

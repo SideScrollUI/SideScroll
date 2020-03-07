@@ -63,31 +63,28 @@ namespace Atlas.Core
 
 		public static void StartDotnetProcess(string arguments)
 		{
-			if (Environment.OSVersion.Platform == PlatformID.Unix)
+			ProcessStartInfo processStartInfo = new ProcessStartInfo()
 			{
-				ProcessStartInfo processStartInfo = new ProcessStartInfo()
-				{
-					//FileName = "dotnet",
-					FileName = "/usr/local/share/dotnet/dotnet",
-					Arguments = arguments,
-				};
+				Arguments = arguments,
+				WorkingDirectory = Directory.GetCurrentDirectory(),
+			};
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+			{
+				processStartInfo.FileName = "/usr/local/share/dotnet/dotnet";
 				// Required for Mac .apps (doesn't work)
 				// processStartInfo.Environment.Add("PATH", Environment.GetEnvironmentVariable("PATH"));
-				
-				Process process = Process.Start(processStartInfo);
+			}
+			else if (Environment.OSVersion.Platform == PlatformID.Unix)
+			{
+				processStartInfo.FileName = "dotnet";
 			}
 			else
 			{
-				ProcessStartInfo processStartInfo = new ProcessStartInfo()
-				{
-					FileName = "dotnet.exe",
-					Arguments = arguments,
-					WorkingDirectory = Directory.GetCurrentDirectory(),
-					CreateNoWindow = true,
-					//UseShellExecute = true, // doesn't work on mac yet, last checked for dotnet 3.1
-				};
-				Process process = Process.Start(processStartInfo);
+				processStartInfo.FileName = "dotnet.exe";
+				processStartInfo.CreateNoWindow = true;
+				//processStartInfo.UseShellExecute = true, // doesn't work on mac yet, last checked for dotnet 3.1
 			}
+			Process process = Process.Start(processStartInfo);
 		}
 	}
 }

@@ -7,7 +7,6 @@ using System.Linq;
 using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -168,7 +167,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			if (ListGroup.Horizontal)
 			{
 				Grid.SetRow(legend, 1);
-				legend.MaxHeight = 150;
+				legend.MaxHeight = 100;
 			}
 			else
 			{
@@ -614,7 +613,6 @@ namespace Atlas.GUI.Avalonia.Controls
 				CanTrackerInterpolatePoints = false,
 				MinimumSegmentLength = 2,
 				MarkerSize = 3,
-				//MarkerType = MarkerType.Circle,
 				MarkerType = listSeries.iList.Count < 20 ? MarkerType.Circle : MarkerType.None,
 				TrackerFormatString = "{0}\n" + xTrackerFormat + "\nValue: {4:#,0.###}",
 			};

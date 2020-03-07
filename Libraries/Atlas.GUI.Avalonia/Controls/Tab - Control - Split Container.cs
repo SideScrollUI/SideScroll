@@ -25,6 +25,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		public Dictionary<object, Control> gridControls = new Dictionary<object, Control>();
 		//public Dictionary<int, GridSplitter> gridSplitters = new Dictionary<int, GridSplitter>(); // reattach each time controls change
 		public List<GridSplitter> gridSplitters = new List<GridSplitter>(); // reattach each time controls change
+		public double MinDesiredWidth = 100;
 		public double MaxDesiredWidth = double.MaxValue;
 
 		public List<Item> gridItems = new List<Item>();
@@ -54,7 +55,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			get
 			{
-				Size desiredSize = new Size();
+				Size desiredSize = new Size(MinDesiredWidth, 0);
 				foreach (var control in Children)
 				{
 					Size childDesiredSize = control.DesiredSize;
@@ -70,7 +71,9 @@ namespace Atlas.GUI.Avalonia.Controls
 			if (MaxDesiredWidth != double.MaxValue)
 				availableSize = new Size(Math.Min(MaxDesiredWidth, availableSize.Width), availableSize.Height);
 			Size measured = base.MeasureCore(availableSize);
-			Size maxSize = new Size(Math.Min(MaxDesiredWidth, measured.Width), measured.Height);
+			double desiredWidth = Math.Min(MaxDesiredWidth, measured.Width);
+			desiredWidth = Math.Max(desiredWidth, MinDesiredWidth);
+			Size maxSize = new Size(desiredWidth, measured.Height);
 			return maxSize;
 		}
 
