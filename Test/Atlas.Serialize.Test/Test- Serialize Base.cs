@@ -15,6 +15,6 @@ namespace Atlas.Serialize.Test
 			//project.settings = settings;
 		}
 
-		public string TestPath = @"D:\Atlas\Test\Serializer";
+		public string TestPath = Environment.CurrentDirectory;
 	}
 }

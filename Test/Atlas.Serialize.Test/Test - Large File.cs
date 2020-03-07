@@ -18,7 +18,7 @@ namespace Atlas.Serialize.Test
 			Initialize("LargeFile");
 
 			basePath = Paths.Combine(TestPath, "LargeFile");
-			basePath = @"S:\Atlas\Test\LargeFile";
+			//basePath = @"S:\Atlas\Test\LargeFile";
 
 			Directory.CreateDirectory(basePath);
 		}

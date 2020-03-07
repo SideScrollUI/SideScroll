@@ -41,18 +41,21 @@ namespace Atlas.Serialize
 
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
-			if (obj is uint)
-				writer.Write((uint)obj);
-			else if (obj is int)
-				writer.Write((int)obj);
-			else if (obj is double)
-				writer.Write((double)obj);
-			else if (obj is float)
-				writer.Write((double)(float)obj); // there's no ReadFloat() routine
-			else if (obj is bool)
-				writer.Write((bool)obj); // 1 byte
-			else if (obj is char)
-				writer.Write((char)obj); // there's no ReadFloat() routine
+			if (obj is uint u)
+				writer.Write(u);
+			else if (obj is int i)
+				writer.Write(i);
+			else if (obj is long l)
+				writer.Write(l);
+			else if (obj is double d)
+				writer.Write(d);
+			else if (obj is float f)
+				writer.Write((double)f); // there's no ReadFloat() routine
+			else if (obj is bool b)
+				writer.Write(b); // 1 byte
+			else if (obj is char c)
+				writer.Write(c); // there's no ReadFloat() routine
+
 			else
 				Debug.Assert(true);
 		}
@@ -78,6 +81,8 @@ namespace Atlas.Serialize
 				obj = reader.ReadUInt32();
 			else if (type == typeof(int))
 				obj = reader.ReadInt32();
+			else if (type == typeof(long))
+				obj = reader.ReadInt64();
 			else if (type == typeof(double))
 				obj = reader.ReadDouble();
 			else if (type == typeof(float))
@@ -127,6 +132,3 @@ namespace Atlas.Serialize
 		}
 	}
 }
-/*
-
-*/

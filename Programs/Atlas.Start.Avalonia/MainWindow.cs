@@ -1,7 +1,7 @@
 ﻿using System;
-using Atlas.Tabs;
 using Atlas.GUI.Avalonia;
 using Atlas.Start.Avalonia.Tabs;
+using Atlas.Tabs;
 
 namespace Atlas.Start.Avalonia
 {

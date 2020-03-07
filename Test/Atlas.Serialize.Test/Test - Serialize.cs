@@ -1,10 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using NUnit.Framework;
-using System.Collections;
 using Atlas.Core;
+using NUnit.Framework;
 
 namespace Atlas.Serialize.Test
 {
@@ -205,6 +204,27 @@ namespace Atlas.Serialize.Test
 			DateTimeOffset output = serializer.Load<DateTimeOffset>(call);
 
 			Assert.AreEqual(input, output);
+		}
+
+		public class NullableDateTime
+		{
+			public long Long { get; set; }
+			public DateTime? TimeStamp { get; set; }
+		}
+
+		// DateTime has no set operators and relies on constructor
+		[Test, Description("Serialize Long and DateTime")]
+		public void SerializeLongAndDateTime()
+		{
+			var input = new NullableDateTime()
+			{
+				TimeStamp = DateTime.UtcNow,
+			};
+
+			serializer.Save(call, input);
+			NullableDateTime output = serializer.Load<NullableDateTime>(call);
+
+			Assert.AreEqual(input.TimeStamp, output.TimeStamp);
 		}
 
 		[Test, Description("Serialize Byte Array")]
@@ -624,6 +644,3 @@ namespace Atlas.Serialize.Test
 		}
 	}
 }
-/*
-	
-*/

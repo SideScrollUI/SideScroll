@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using NUnit.Framework;
 using System.Reflection;
 using System.Reflection.Emit;
+using NUnit.Framework;
 
 namespace Atlas.Serialize.Test
 {

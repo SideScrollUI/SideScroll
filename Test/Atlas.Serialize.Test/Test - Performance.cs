@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
 using NUnit.Framework;
-using Atlas.Core;
 
 namespace Atlas.Core.Test
 {
@@ -34,6 +31,3 @@ namespace Atlas.Core.Test
 		}
 	}
 }
-/*
-	
-*/
