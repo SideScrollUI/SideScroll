@@ -15,7 +15,12 @@ namespace Atlas.GUI.Avalonia
 		public ToolbarButton buttonLink;
 		public ToolbarButton buttonImport;
 		public ToolbarButton buttonRefresh;
+
 		public ToolbarButton buttonSnapshot;
+		public ToolbarButton buttonSnapshotClipboard;
+		public ToolbarButton buttonSnapshotEmbed;
+		public ToolbarButton buttonSnapshotCancel;
+
 		//public Project project;
 		private BaseWindow baseWindow;
 
@@ -77,6 +82,8 @@ namespace Atlas.GUI.Avalonia
 #if DEBUG
 			AddSeparator();
 			buttonSnapshot = AddButton("Snapshot", Icons.Streams.Screenshot);
+			buttonSnapshotCancel = AddButton("Cancel Snapshot", Icons.Streams.Delete);
+			SetSnapshotVisible(false);
 #endif
 
 			// Handle in BaseWindow
@@ -150,6 +157,11 @@ namespace Atlas.GUI.Avalonia
 			Bookmark bookmark = baseWindow.project.Navigator.SeekForward();
 			if (bookmark != null)
 				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
+		}
+
+		public void SetSnapshotVisible(bool visible)
+		{
+			buttonSnapshotCancel.IsVisible = visible;
 		}
 	}
 

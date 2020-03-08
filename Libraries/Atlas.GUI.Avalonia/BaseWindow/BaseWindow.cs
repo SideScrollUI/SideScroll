@@ -36,6 +36,7 @@ namespace Atlas.GUI.Avalonia
 		protected BaseWindowToolbar toolbar;
 		protected ScrollViewer scrollViewer;
 		protected Grid contentGrid;
+		private ScreenCapture screenCapture;
 		public TabView tabView;
 
 		public static string LoadBookmarkUri { get; set; }
@@ -89,6 +90,7 @@ namespace Atlas.GUI.Avalonia
 			toolbar.buttonLink.Add(Link);
 			toolbar.buttonImport.Add(ImportBookmark);
 			toolbar.buttonSnapshot?.Add(Snapshot);
+			toolbar.buttonSnapshotCancel?.Add(CloseSnapshot);
 			containerGrid.Children.Add(toolbar);
 
 			bottomGrid = new Grid()
@@ -174,12 +176,22 @@ namespace Atlas.GUI.Avalonia
 
 		private void Snapshot(Call call)
 		{
-			var screenCapture = new ScreenCapture(scrollViewer)
+			screenCapture = new ScreenCapture(scrollViewer)
 			{
 				[Grid.RowProperty] = 1,
 			};
+			toolbar.SetSnapshotVisible(true);
 
+			containerGrid.Children.Remove(bottomGrid);
 			containerGrid.Children.Add(screenCapture);
+		}
+
+		private void CloseSnapshot(Call call)
+		{
+			toolbar.SetSnapshotVisible(false);
+
+			containerGrid.Children.Remove(screenCapture);
+			containerGrid.Children.Add(bottomGrid);
 		}
 
 		private Grid CreateScrollButtons()
