@@ -61,12 +61,14 @@ namespace Atlas.GUI.Avalonia.Controls
 					Size childDesiredSize = control.DesiredSize;
 					desiredSize = new Size(Math.Max(desiredSize.Width, childDesiredSize.Width), Math.Max(desiredSize.Height, childDesiredSize.Height));
 				}
+				double desiredWidth = Math.Min(MaxDesiredWidth, desiredSize.Width);
+				desiredSize = new Size(desiredWidth, desiredSize.Height);
 				return desiredSize;
 			}
 		}
 
 		// can't override DesiredSize
-		protected override Size MeasureCore(Size availableSize)
+		/*protected override Size MeasureCore(Size availableSize)
 		{
 			if (MaxDesiredWidth != double.MaxValue)
 				availableSize = new Size(Math.Min(MaxDesiredWidth, availableSize.Width), availableSize.Height);
@@ -75,7 +77,7 @@ namespace Atlas.GUI.Avalonia.Controls
 			desiredWidth = Math.Max(desiredWidth, MinDesiredWidth);
 			Size maxSize = new Size(desiredWidth, measured.Height);
 			return maxSize;
-		}
+		}*/
 
 		public Size arrangeOverrideFinalSize;
 		protected override Size ArrangeOverride(Size finalSize)
