@@ -485,7 +485,7 @@ namespace Atlas.GUI.Wpf
 				else
 				{
 					// Create a new control
-					string name = obj.ObjectToString();
+					string name = obj.Formatted();
 					if (name == null || name.Length == 0)
 						name = "(" + obj.GetType().Name + ")";
 					Control userControl = CreateChildControl(name, obj);

@@ -367,7 +367,7 @@ namespace Atlas.GUI.Wpf
 					List<DataGridCellInfo> cellsInfos = rowCells.Value;
 					Type type = obj.GetType();
 					SelectedRow selectedItem = new SelectedRow();
-					selectedItem.label = obj.ObjectToUniqueString();
+					selectedItem.label = obj.ToUniqueString();
 					selectedItem.rowIndex = dataGrid.Items.IndexOf(obj);
 					if (selectedItem.label == type.FullName)
 					{
@@ -538,7 +538,7 @@ namespace Atlas.GUI.Wpf
 			{
 				if (listItem == null)
 					continue;
-				string id = listItem.ObjectToUniqueString();
+				string id = listItem.ToUniqueString();
 				if (id != null)
 					keys[id] = listItem;
 			}
@@ -909,7 +909,7 @@ namespace Atlas.GUI.Wpf
 			}
 		}
 
-		// use ObjectToString() formatting instead of default
+		// use Formatted() formatting instead of default
 		private void dataGrid_CopyingRowClipboardContent(object sender, DataGridRowClipboardEventArgs e)
 		{
 			var rowContents = e.ClipboardRowContent.ToList(); // create a copy before clearing
@@ -921,7 +921,7 @@ namespace Atlas.GUI.Wpf
 				{
 					Type type = content.GetType();
 					if (!type.IsNumeric())
-						content = content.ObjectToString();
+						content = content.Formatted();
 				}
 
 				e.ClipboardRowContent.Add(new DataGridClipboardCellContent(cellContent.Item, cellContent.Column, content));

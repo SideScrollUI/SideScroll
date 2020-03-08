@@ -60,7 +60,7 @@ namespace Atlas.GUI.Wpf
 			List<Bookmark> bookmarks = new List<Bookmark>();
 			foreach (ViewBookmark name in tabData.SelectedItems)
 			{
-				Bookmark bookmark = project.DataApp.Load<Bookmark>(name.Name, new Call(tabInstance.taskInstance.log));
+				Bookmark bookmark = project.DataApp.Load<Bookmark>(name.Name, tabInstance.taskInstance.call);
 				if (bookmark != null)
 					bookmarks.Add(bookmark);
 			}
