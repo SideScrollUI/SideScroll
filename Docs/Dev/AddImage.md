@@ -11,7 +11,6 @@
   - Light Blue: `759eeb` (not used anymore)
   - (bad) Toolbar Buttons: `8888FF`
 
-
 ## Adding a new file:
 - Use 24 x 24 png files
 - Add in the Assets folder

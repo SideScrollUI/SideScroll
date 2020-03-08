@@ -1,6 +1,6 @@
 # Credits
 
-* Flaticon 
+## Flaticon 
    - http://www.flaticon.com is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/)
 
 | Icon | Name |
@@ -15,17 +15,17 @@
 | [Screenshot](https://www.flaticon.com/free-icon/screenshot_748046) | Freepik |
 | [Shutter](https://www.flaticon.com/premium-icon/shutter_2441508) | Freepik |
 | [Refresh](https://www.flaticon.com/free-icon/refresh_875100) | Becris |
-| [List1](https://www.flaticon.com/free-icon/left-arrow_118744) | [Lucy G](https://www.flaticon.com/authors/lucy-g) |
-| [List1](https://www.flaticon.com/free-icon/right-arrow_118745) | Lucy G |
-| [List1](https://www.flaticon.com/free-icon/add_118742) | Lucy G |
-| [List1](https://www.flaticon.com/free-icon/unlock_118737) | Lucy G |
-| [List1](https://www.flaticon.com/free-icon/password_1330268) | Lucy G |
-| [List1](https://www.flaticon.com/free-icon/padnote_118751) | Lucy G |
-| [List1](https://www.flaticon.com/free-icon/link_118780) | Lucy G |
-| [List1](https://www.flaticon.com/free-icon/bookmark_118732) | Lucy G |
-| [List1](https://www.flaticon.com/free-icon/search_118718) | Lucy G |
-| [List1](https://www.flaticon.com/free-icon/save-file-option_25398) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) |
-| [List1](https://www.flaticon.com/free-icon/internet_149229) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) |
+| [Left Arrow](https://www.flaticon.com/free-icon/left-arrow_118744) | [Lucy G](https://www.flaticon.com/authors/lucy-g) |
+| [Right Arrow](https://www.flaticon.com/free-icon/right-arrow_118745) | Lucy G |
+| [Add](https://www.flaticon.com/free-icon/add_118742) | Lucy G |
+| [Unlock](https://www.flaticon.com/free-icon/unlock_118737) | Lucy G |
+| [Password](https://www.flaticon.com/free-icon/password_1330268) | Lucy G |
+| [Padnote](https://www.flaticon.com/free-icon/padnote_118751) | Lucy G |
+| [Link](https://www.flaticon.com/free-icon/link_118780) | Lucy G |
+| [Bookmark](https://www.flaticon.com/free-icon/bookmark_118732) | Lucy G |
+| [Search](https://www.flaticon.com/free-icon/search_118718) | Lucy G |
+| [Save File](https://www.flaticon.com/free-icon/save-file-option_25398) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) |
+| [Internet](https://www.flaticon.com/free-icon/internet_149229) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) |
 
 * Lucy G
   - (user account no longer exists)

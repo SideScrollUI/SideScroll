@@ -29,8 +29,6 @@ namespace Atlas.GUI.Avalonia
 		public Project project;
 
 		private bool loadComplete = false;
-		private bool loaded = false;
-		const string IsLoadingDataKey = "Loading";
 
 		// Controls
 		protected Grid containerGrid;
@@ -52,29 +50,9 @@ namespace Atlas.GUI.Avalonia
 			Closed += BaseWindow_Closed;
 		}
 
-		protected override Size MeasureOverride(Size availableSize)
-		{
-			Size size = base.MeasureOverride(availableSize); // can freeze
-			if (loaded == false)
-			{
-				bool isLoading1 = project.DataApp.Load<bool>(IsLoadingDataKey, new Call());
-				//project.DataApp.Save(name, tabView.);
-				project.DataApp.Save(IsLoadingDataKey, false);
-				bool isLoading2 = project.DataApp.Load<bool>(IsLoadingDataKey, new Call());
-				//project.projectSettings.AutoLoad = true;
-				loaded = true;
-			}
-			return size;
-		}
-
 		public void LoadProject(Project project)
 		{
 			this.project = project;
-			//bool isLoading = project.DataApp.Load<bool>(IsLoadingDataKey, new Call());
-			//if (isLoading) // did the previous load succeed?
-			//	project.userSettings.AutoLoad = false;
-
-			project.DataApp.Save(IsLoadingDataKey, true);
 
 			LoadWindowSettings();
 
@@ -350,12 +328,12 @@ namespace Atlas.GUI.Avalonia
 		{
 			get
 			{
-				bool maximized = (this.WindowState == WindowState.Maximized);
+				bool maximized = (WindowState == WindowState.Maximized);
 				if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) // Avalonia bug? WindowState doesn't update correctly for MacOS
 					maximized = false;
-				Rect bounds = this.Bounds;
-				if (maximized && this.TransformedBounds != null)
-					bounds = this.TransformedBounds.Value.Bounds;
+				Rect bounds = Bounds;
+				if (maximized && TransformedBounds != null)
+					bounds = TransformedBounds.Value.Bounds;
 				WindowSettings windowSettings = new WindowSettings()
 				{
 					Maximized = maximized,

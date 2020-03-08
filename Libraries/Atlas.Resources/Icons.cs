@@ -49,7 +49,7 @@ namespace Atlas.Resources
 
 		public class Streams
 		{
-			public static Stream Logo => Get(Icons.Logo);
+			public static Stream Logo => Get(Icons.Logo, "Logo");
 
 			public static Stream Pin => Get(Icons.Pin);
 			public static Stream Add => Get(Icons.Add);
@@ -87,10 +87,10 @@ namespace Atlas.Resources
 			public static Stream Import => Get(Icons.Import);
 			public static Stream Screenshot => Get(Icons.Screenshot);
 
-			public static Stream Get(string resourceName)
+			public static Stream Get(string resourceName, string resourceType = "png")
 			{
 				var assembly = Assembly.GetExecutingAssembly();
-				return assembly.GetManifestResourceStream("Atlas.Resources.Icons." + resourceName);
+				return assembly.GetManifestResourceStream("Atlas.Resources.Icons." + resourceType + "." + resourceName);
 			}
 
 			// this might slow loading?
