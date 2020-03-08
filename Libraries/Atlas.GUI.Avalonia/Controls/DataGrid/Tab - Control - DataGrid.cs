@@ -344,12 +344,15 @@ namespace Atlas.GUI.Avalonia.Controls
 		{
 			foreach (DataGridColumn column in dataGrid.Columns)
 			{
-				if (column.ActualWidth >= 150)
-					column.Width = new DataGridLength(column.ActualWidth, DataGridLengthUnitType.Star);
 				column.MaxWidth = 2000;
 				column.MinWidth = Math.Min(100, column.ActualWidth);
+				if (column.ActualWidth >= 150)
+				{
+					// Changes ActualWidth
+					column.Width = new DataGridLength(column.ActualWidth, DataGridLengthUnitType.Star);
+				}
 			}
-			dataGrid.MinColumnWidth = 40;
+			//dataGrid.MinColumnWidth = 40; // doesn't do anything
 			// If 1 or 2 columns, make the last column stretch
 			if (dataGrid.Columns.Count == 1)
 				dataGrid.Columns[0].Width = new DataGridLength(dataGrid.Columns[0].ActualWidth, DataGridLengthUnitType.Star);
