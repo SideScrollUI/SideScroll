@@ -54,14 +54,21 @@ namespace Atlas.GUI.Avalonia.Tabs
 			AddControl(panel);
 		}
 
-		public TextBlock AddLabel(string text = "")
+		public ToolbarTextBlock AddLabel(string text = "")
 		{
 			var textBlock = new ToolbarTextBlock(text);
 			AddControl(textBlock);
-
 			return textBlock;
 		}
 
+		public ToolbarRadioButton AddRadioButton(string text)
+		{
+			var radioButton = new ToolbarRadioButton(text);
+			AddControl(radioButton);
+			return radioButton;
+		}
+
+		// Read Only
 		public TextBox AddLabelText(string text)
 		{
 			TextBox textBox = new TextBox()
@@ -83,6 +90,7 @@ namespace Atlas.GUI.Avalonia.Tabs
 			return textBox;
 		}
 
+		// Editable
 		public TextBox AddText(string text, int minWidth)
 		{
 			TextBox textBox = new TextBox()
@@ -113,6 +121,19 @@ namespace Atlas.GUI.Avalonia.Tabs
 			Text = text;
 			Margin = new Thickness(6);
 			TextWrapping = TextWrapping.NoWrap;
+			VerticalAlignment = VerticalAlignment.Center;
+		}
+	}
+
+	public class ToolbarRadioButton : RadioButton, IStyleable
+	{
+		Type IStyleable.StyleKey => typeof(RadioButton);
+
+		public ToolbarRadioButton(string text = "")
+		{
+			Foreground = new SolidColorBrush(Colors.White);
+			Content = text;
+			Margin = new Thickness(6);
 			VerticalAlignment = VerticalAlignment.Center;
 		}
 	}
