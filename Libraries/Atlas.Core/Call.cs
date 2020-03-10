@@ -46,7 +46,7 @@ namespace Atlas.Core
 			CallTimer call = new CallTimer();
 			call.Name = name;
 			call.ParentCall = this;
-			call.taskInstance = taskInstance;
+			call.taskInstance = taskInstance?.AddSubTask(call);
 			call.log = log.Call(name, tags);
 
 			return call;
@@ -55,7 +55,7 @@ namespace Atlas.Core
 		// allows having progress broken down into multiple tasks
 		public TaskInstance AddSubTask(string name = "")
 		{
-			taskInstance = taskInstance.AddSubTask(this, name);
+			taskInstance = taskInstance.AddSubTask(Child(name));
 			return taskInstance;
 		}
 

@@ -72,6 +72,9 @@ namespace Atlas.Core
 			get { return _Percent; }
 			set
 			{
+				if (_Percent == value)
+					return;
+				
 				_Percent = value;
 				NotifyPropertyChanged(nameof(Percent));
 				if (ParentTask != null)
@@ -85,6 +88,9 @@ namespace Atlas.Core
 			get { return _Progress; }
 			set
 			{
+				if (_Progress == value)
+					return;
+
 				_Progress = value;
 				NotifyPropertyChanged(nameof(Progress));
 				UpdatePercent();
@@ -115,11 +121,11 @@ namespace Atlas.Core
 		}
 
 		// allows having progress broken down into multiple tasks
-		public TaskInstance AddSubTask(Call call, string name = "")
+		public TaskInstance AddSubTask(Call call)
 		{
 			TaskInstance subTask = new TaskInstance();
 			subTask.Creator = Creator;
-			subTask.call = call.Child(name);
+			subTask.call = call;
 			subTask.tokenSource = tokenSource;
 			subTask.ParentTask = this;
 			
