@@ -63,11 +63,11 @@ namespace Atlas.Serialize
 				if (propertyInfo == null)
 					return false;
 
-				Attribute attribute = propertyInfo.GetCustomAttribute(typeof(NonSerializedAttribute));
+				Attribute attribute = propertyInfo.GetCustomAttribute<NonSerializedAttribute>();
 				if (attribute != null)
 					return false;
 
-				attribute = propertyInfo.GetCustomAttribute(typeof(UnserializedAttribute));
+				attribute = propertyInfo.GetCustomAttribute<UnserializedAttribute>();
 				if (attribute != null)
 					return false;
 
@@ -109,7 +109,3 @@ namespace Atlas.Serialize
 		}
 	}
 }
-
-/*
-
-*/

@@ -33,14 +33,14 @@ namespace Atlas.Core
 		public string Status { get; set; } = "Running";
 		public string Message { get; set; }
 
-		public long ProgressMax { get; set; }
+		public long ProgressMax { get; set; } = 100;
 
 		public bool Errored { get; set; }
 		public bool Finished { get; set; }
 
 		public TaskInstance ParentTask { get; set; }
 		public List<TaskInstance> SubTasks { get; set; } = new List<TaskInstance>();
-		private int? _NumSubTasks;
+		/*private int? _NumSubTasks;
 		public int NumSubTasks
 		{
 			get
@@ -54,7 +54,7 @@ namespace Atlas.Core
 			{
 				_NumSubTasks = value;
 			}
-		}
+		}*/
 
 		private Stopwatch stopwatch = new Stopwatch();
 
@@ -77,11 +77,10 @@ namespace Atlas.Core
 				
 				_Percent = value;
 				NotifyPropertyChanged(nameof(Percent));
-				if (ParentTask != null)
-					ParentTask.UpdatePercent();
 			}
 		}
 
+		private long prevPercent;
 		private long _Progress;
 		public long Progress
 		{
@@ -94,12 +93,27 @@ namespace Atlas.Core
 				_Progress = value;
 				NotifyPropertyChanged(nameof(Progress));
 				UpdatePercent();
+				if (ParentTask != null)
+				{
+					ParentTask.AddProgress(Percent - prevPercent);
+					prevPercent = Percent;
+				}
+			}
+		}
+
+		private void AddProgress(long amount)
+		{
+			if (amount <= 0)
+				return;
+			lock (SubTasks)
+			{
+				Progress += amount;
 			}
 		}
 
 		private void UpdatePercent()
 		{
-			if (NumSubTasks > 0)
+			/*if (NumSubTasks > 0)
 			{
 				int totalPercent = 0;
 				lock (SubTasks)
@@ -109,9 +123,11 @@ namespace Atlas.Core
 				}
 				Percent = totalPercent / NumSubTasks;
 			}
-			else if (ProgressMax > 0)
+			else*/
+			if (ProgressMax > 0)
 			{
 				Percent = (int)(100 * _Progress / ProgressMax);
+				NotifyPropertyChanged(nameof(Percent));
 			}
 		}
 
@@ -139,6 +155,8 @@ namespace Atlas.Core
 
 		public void SetFinished()
 		{
+			if (Finished)
+				return;
 			stopwatch.Stop(); // Both Send and Post adds some delay
 			Creator?.context.Post(new SendOrPostCallback(OnFinished), null);
 		}
@@ -149,7 +167,7 @@ namespace Atlas.Core
 			eventCompleted.taskCheckFileSize = this;
 			OnComplete?.Invoke(this, eventCompleted);*/
 			Finished = true;
-			Percent = 100; // calls NotifyPropertyChanged
+			Progress = ProgressMax;
 
 			if (call.log.Type >= LogEntry.LogType.Error)
 			{
@@ -174,7 +192,6 @@ namespace Atlas.Core
 				Message = Log.Summary;
 			}
 			NotifyPropertyChanged(nameof(Status));
-
 			NotifyPropertyChanged(nameof(TaskStatus));
 			NotifyPropertyChanged(nameof(Finished));
 			call.log.Add("Finished", new Tag("Time", stopwatch.ElapsedMilliseconds / 1000.0));

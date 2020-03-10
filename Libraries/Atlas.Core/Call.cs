@@ -102,9 +102,8 @@ namespace Atlas.Core
 
 		public void Dispose()
 		{
+			taskInstance?.SetFinished();
 			Stop();
 		}
 	}
 }
-/*
-*/
