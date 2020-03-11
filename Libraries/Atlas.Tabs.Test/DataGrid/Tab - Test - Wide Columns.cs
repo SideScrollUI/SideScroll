@@ -41,7 +41,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			public int smallNumber { get; set; } = 0;
 			public long bigNumber { get; set; } = 1234567890123456789;
 			public string longText0 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
-			[ColumnMaxWidth(200), WordWrap]
+			[MaxWidth(200), WordWrap]
 			public string longText1 { get; set; } = "abcdefghijklmnopqrz";
 			public string longText2 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 			public string longText3 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";

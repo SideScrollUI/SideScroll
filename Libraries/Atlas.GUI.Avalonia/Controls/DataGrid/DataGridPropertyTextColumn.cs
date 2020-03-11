@@ -32,7 +32,8 @@ namespace Atlas.GUI.Avalonia
 		private FormatValueConverter formatConverter = new FormatValueConverter();
 		private DataGrid dataGrid;
 		public PropertyInfo propertyInfo;
-		public int MaxDesiredWidth = 500;
+
+		public int MaxDesiredWidth { get; set; } = 500;
 		
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{
@@ -95,7 +96,7 @@ namespace Atlas.GUI.Avalonia
 				};
 				cell.Styles.Add(style);*/
 
-				if (this.DisplayIndex == 1)
+				if (DisplayIndex == 1)
 				{
 					// Update the cell color based on the object
 					var binding = new Binding()
@@ -112,7 +113,7 @@ namespace Atlas.GUI.Avalonia
 
 		public class SubTextBlock : TextBlock
 		{
-			public double MaxDesiredWidth = 500;
+			public double MaxDesiredWidth { get; set; } = 500;
 
 			private DataGridPropertyTextColumn column;
 			private PropertyInfo propertyInfo;

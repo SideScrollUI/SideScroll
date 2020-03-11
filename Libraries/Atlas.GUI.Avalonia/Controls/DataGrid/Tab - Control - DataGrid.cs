@@ -558,7 +558,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		public void AddColumn(string label, PropertyInfo propertyInfo)
 		{
 			bool propertyEditable = (propertyInfo.GetCustomAttribute(typeof(EditingAttribute)) != null);
-			ColumnMaxWidthAttribute attributeColumnMaxWidth = propertyInfo.GetCustomAttribute<ColumnMaxWidthAttribute>();
+			MaxWidthAttribute attributeColumnMaxWidth = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
 			bool isReadOnly = true;// (tabModel.Editing == false || propertyEditable == false || !propertyInfo.CanWrite);
 
 			//DataGridBoundColumn column;

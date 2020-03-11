@@ -19,7 +19,7 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				var maxWidthAttribute = fieldInfo.GetCustomAttribute<ColumnMaxWidthAttribute>();
+				var maxWidthAttribute = fieldInfo.GetCustomAttribute<MaxWidthAttribute>();
 				if (maxWidthAttribute != null)
 					return maxWidthAttribute.MaxWidth;
 				return null;

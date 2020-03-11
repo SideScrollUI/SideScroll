@@ -33,7 +33,7 @@ namespace Atlas.Core
 		public string Status { get; set; } = "Running";
 		public string Message { get; set; }
 
-		public long ProgressMax { get; set; } = 100;
+		public long ProgressMax { get; set; } = 0;
 
 		public bool Errored { get; set; }
 		public bool Finished { get; set; }
