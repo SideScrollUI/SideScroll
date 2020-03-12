@@ -2,10 +2,10 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using Atlas.Core;
-using Atlas.Resources;
-using Atlas.Tabs;
 using Atlas.GUI.Avalonia.Controls;
 using Atlas.GUI.Avalonia.View;
+using Atlas.Resources;
+using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;

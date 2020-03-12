@@ -36,7 +36,7 @@ namespace Atlas.Core
 		private static Version ParseVersion(string version)
 		{
 			List<string> parts = version.Split('.').ToList();
-			while (parts.Count < 4)
+			while (parts.Count < 2)
 				parts.Add("0");
 			return new Version(string.Join(".", parts));
 		}
