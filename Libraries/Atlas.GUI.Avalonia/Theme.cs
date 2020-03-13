@@ -4,8 +4,8 @@ namespace Atlas.GUI.Avalonia
 {
 	public class Theme
 	{
-		public static Color BackgroundColor = Color.Parse("#252626");
-		public static Color BackgroundFocusedColor = Color.Parse("#2e2e2e");
+		public static Color BackgroundColor = Color.Parse("#1b1b1b");
+		public static Color BackgroundFocusedColor = Color.Parse("#242424");
 
 		//public static Color BackgroundColor = Color.Parse("#353636");
 		//public static Color BackgroundFocusedColor = Color.Parse("#252626");

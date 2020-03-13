@@ -164,6 +164,18 @@ namespace Atlas.Core
 
 	// ->Tabs: Flag as the ToString() property/field? MaxDesiredWidthAttribute?
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
+	public class MinWidthAttribute : Attribute
+	{
+		public readonly int MinWidth;
+
+		public MinWidthAttribute(int minWidth)
+		{
+			MinWidth = minWidth;
+		}
+	}
+
+	// ->Tabs: Flag as the ToString() property/field? MaxDesiredWidthAttribute?
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
 	public class MaxWidthAttribute : Attribute
 	{
 		public readonly int MaxWidth;

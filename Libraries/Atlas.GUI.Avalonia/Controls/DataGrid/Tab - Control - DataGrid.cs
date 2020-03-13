@@ -345,11 +345,12 @@ namespace Atlas.GUI.Avalonia.Controls
 			foreach (DataGridColumn column in dataGrid.Columns)
 			{
 				column.MaxWidth = 2000;
-				column.MinWidth = Math.Min(100, column.ActualWidth);
+				column.MinWidth = Math.Min(Math.Max(column.MinWidth, 100), column.ActualWidth);
 				if (column.ActualWidth >= 150)
 				{
 					// Changes ActualWidth
-					column.Width = new DataGridLength(column.ActualWidth, DataGridLengthUnitType.Star);
+					double desiredWidth = Math.Max(column.MinWidth, column.ActualWidth);
+					column.Width = new DataGridLength(desiredWidth, DataGridLengthUnitType.Star);
 				}
 			}
 			//dataGrid.MinColumnWidth = 40; // doesn't do anything
@@ -558,6 +559,7 @@ namespace Atlas.GUI.Avalonia.Controls
 		public void AddColumn(string label, PropertyInfo propertyInfo)
 		{
 			bool propertyEditable = (propertyInfo.GetCustomAttribute(typeof(EditingAttribute)) != null);
+			MinWidthAttribute attributeColumnMinWidth = propertyInfo.GetCustomAttribute<MinWidthAttribute>();
 			MaxWidthAttribute attributeColumnMaxWidth = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
 			bool isReadOnly = true;// (tabModel.Editing == false || propertyEditable == false || !propertyInfo.CanWrite);
 
@@ -634,6 +636,8 @@ namespace Atlas.GUI.Avalonia.Controls
 			column.IsReadOnly = isReadOnly;
 			//column.Bind(avaloniaProperty, iList);
 			//column.Width = new DataGridLength(200);// new DataGridLength(1, DataGridLengthUnitType.Star);
+			if (attributeColumnMinWidth != null)
+				column.MinWidth = attributeColumnMinWidth.MinWidth;
 			column.MaxWidth = attributeColumnMaxWidth != null ? attributeColumnMaxWidth.MaxWidth : MaxColumnWidth;
 			//column.HeaderCell.AreSeparatorsVisible = true;
 			//column.HeaderCell.SeparatorBrush = new SolidColorBrush(Colors.Black); // Header Cell styles aren't implemented yet :(
