@@ -118,6 +118,3 @@ namespace Atlas.Serialize.Test
 		}
 	}
 }
-/*
-	
-*/

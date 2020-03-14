@@ -93,7 +93,3 @@ namespace Atlas.Serialize
 		}
 	}
 }
-
-/*
-
-*/

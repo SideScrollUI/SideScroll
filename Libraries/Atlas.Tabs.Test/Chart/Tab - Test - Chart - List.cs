@@ -109,8 +109,3 @@ namespace Atlas.Tabs.Test.Chart
 		}
 	}
 }
-/*
-Can we bind sub-properties?
-	Can we use instances if we can't?
-
-*/

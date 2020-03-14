@@ -532,6 +532,3 @@ namespace Atlas.Serialize.Test
 		}
 	}
 }
-/*
-	
-*/

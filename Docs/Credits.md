@@ -8,12 +8,13 @@
 | [Blank Document](https://www.flaticon.com/free-icon/blank-document_14922) | Freepik |
 | [Delete List](https://www.flaticon.com/free-icon/delete-list_1201) | Freepik |
 | [Eraser](https://www.flaticon.com/free-icon/eraser_1203953) | Freepik |
+| [Report](https://www.flaticon.com/free-icon/file_1508964) | Freepik |
+| [Screenshot](https://www.flaticon.com/free-icon/screenshot_748046) | Freepik |
+| [Shutter](https://www.flaticon.com/premium-icon/shutter_2441508) | Freepik |
 | [Import](https://www.flaticon.com/free-icon/import_223438) | Kirill Kazachek |
 | [List1](https://www.flaticon.com/free-icon/list_151917) | Chanut |
 | [List2](https://www.flaticon.com/free-icon/list_159841) | Gregor Cresnar |
 | [Paste](https://www.flaticon.com/free-icon/paste_930233) | Vitaly Gorbachev |
-| [Screenshot](https://www.flaticon.com/free-icon/screenshot_748046) | Freepik |
-| [Shutter](https://www.flaticon.com/premium-icon/shutter_2441508) | Freepik |
 | [Refresh](https://www.flaticon.com/free-icon/refresh_875100) | Becris |
 | [Left Arrow](https://www.flaticon.com/free-icon/left-arrow_118744) | [Lucy G](https://www.flaticon.com/authors/lucy-g) |
 | [Right Arrow](https://www.flaticon.com/free-icon/right-arrow_118745) | Lucy G |

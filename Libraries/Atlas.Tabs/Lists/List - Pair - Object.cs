@@ -60,6 +60,3 @@ namespace Atlas.Tabs
 		}*/
 	}
 }
-
-/*
-*/
