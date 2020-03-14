@@ -45,7 +45,7 @@ namespace Atlas.Serialize
 			this.type = type;
 			Name = type.ToString(); // better than FullName (don't remember why)
 			
-			AssemblyQualifiedName = type.AssemblyQualifiedName;
+			AssemblyQualifiedName = type.AssemblyQualifiedName; // todo: strip out unused version?
 			isCollection = (typeof(ICollection).IsAssignableFrom(type));
 			hasSubType = !type.IsSealed; // set for all non derived classes?
 			CanReference = !(type.IsPrimitive || type.IsEnum || type == typeof(string));
@@ -171,7 +171,7 @@ namespace Atlas.Serialize
 
 			try
 			{
-				type = Type.GetType(AssemblyQualifiedName, false);
+				type = Type.GetType(AssemblyQualifiedName, AssemblyResolver, null);
 			}
 			catch (Exception e)
 			{
@@ -190,6 +190,13 @@ namespace Atlas.Serialize
 
 			LoadFields(reader);
 			LoadProperties(reader);
+		}
+
+		// ignore Assembly version to allow loading shared 
+		private static Assembly AssemblyResolver(AssemblyName assemblyName)
+		{
+			assemblyName.Version = null;
+			return Assembly.Load(assemblyName);
 		}
 
 		public void SaveFields(BinaryWriter writer)

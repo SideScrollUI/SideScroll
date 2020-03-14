@@ -345,11 +345,13 @@ namespace Atlas.GUI.Avalonia.Controls
 			foreach (DataGridColumn column in dataGrid.Columns)
 			{
 				column.MaxWidth = 2000;
-				column.MinWidth = Math.Min(Math.Max(column.MinWidth, 100), column.ActualWidth);
-				if (column.ActualWidth >= 150)
+				//column.MinWidth = Math.Min(Math.Max(column.MinWidth, 100), column.ActualWidth);
+				double desiredWidth = Math.Max(column.MinWidth, column.ActualWidth);
+				if (column is DataGridPropertyTextColumn textColumn)
+					desiredWidth = Math.Max(desiredWidth, textColumn.MinDesiredWidth);
+				if (desiredWidth >= 150)
 				{
 					// Changes ActualWidth
-					double desiredWidth = Math.Max(column.MinWidth, column.ActualWidth);
 					column.Width = new DataGridLength(desiredWidth, DataGridLengthUnitType.Star);
 				}
 			}
@@ -626,7 +628,10 @@ namespace Atlas.GUI.Avalonia.Controls
 				else
 				{
 					//if (isReadOnly)
-						column = new DataGridPropertyTextColumn(dataGrid, propertyInfo, isReadOnly, maxDesiredWidth);
+					var textColumn = new DataGridPropertyTextColumn(dataGrid, propertyInfo, isReadOnly, maxDesiredWidth);
+					if (attributeColumnMinWidth != null)
+						textColumn.MinDesiredWidth = attributeColumnMinWidth.MinWidth;
+					column = textColumn;
 					//else
 					//	column = new DataGridTextColumn();
 				}
@@ -636,8 +641,6 @@ namespace Atlas.GUI.Avalonia.Controls
 			column.IsReadOnly = isReadOnly;
 			//column.Bind(avaloniaProperty, iList);
 			//column.Width = new DataGridLength(200);// new DataGridLength(1, DataGridLengthUnitType.Star);
-			if (attributeColumnMinWidth != null)
-				column.MinWidth = attributeColumnMinWidth.MinWidth;
 			column.MaxWidth = attributeColumnMaxWidth != null ? attributeColumnMaxWidth.MaxWidth : MaxColumnWidth;
 			//column.HeaderCell.AreSeparatorsVisible = true;
 			//column.HeaderCell.SeparatorBrush = new SolidColorBrush(Colors.Black); // Header Cell styles aren't implemented yet :(
@@ -1190,9 +1193,6 @@ namespace Atlas.GUI.Avalonia.Controls
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			base.OnKeyDown(e);
-
-			//if (e.Key == Key.F5)
-			//	SelectSavedItems();
 
 			if (e.KeyModifiers == KeyModifiers.Control)
 			{

@@ -33,8 +33,9 @@ namespace Atlas.GUI.Avalonia
 		private DataGrid dataGrid;
 		public PropertyInfo propertyInfo;
 
+		public int MinDesiredWidth { get; set; } = 40;
 		public int MaxDesiredWidth { get; set; } = 500;
-		
+
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{
 			this.dataGrid = dataGrid;
