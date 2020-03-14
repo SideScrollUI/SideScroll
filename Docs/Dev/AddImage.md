@@ -20,3 +20,6 @@
 	  - Embedded
 - Add with git
 - Add an entry in the [Credits](../Credits.md)
+
+## Converting svg to png
+- [Vectr](https://vectr.com/)

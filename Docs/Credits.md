@@ -19,6 +19,7 @@
 | [Left Arrow](https://www.flaticon.com/free-icon/left-arrow_118744) | [Lucy G](https://www.flaticon.com/authors/lucy-g) |
 | [Right Arrow](https://www.flaticon.com/free-icon/right-arrow_118745) | Lucy G |
 | [Add](https://www.flaticon.com/free-icon/add_118742) | Lucy G |
+| [Cancel](https://icon-icons.com/icon/cancel/121292) | Lucy G |
 | [Unlock](https://www.flaticon.com/free-icon/unlock_118737) | Lucy G |
 | [Password](https://www.flaticon.com/free-icon/password_1330268) | Lucy G |
 | [Padnote](https://www.flaticon.com/free-icon/padnote_118751) | Lucy G |
