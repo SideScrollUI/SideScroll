@@ -42,7 +42,7 @@ Actions add Buttons to the tab. When clicked, it will:
 
 			private void StartAsyncError(Call call)
 			{
-				StartAsync(StartAsyncLogError, false);
+				StartAsync(StartAsyncLogError, call);
 			}
 
 			private async Task StartAsyncLogError(Call call)

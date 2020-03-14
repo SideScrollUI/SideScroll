@@ -57,13 +57,7 @@ namespace Atlas.Core
 			}
 		}
 
-		public static string DownloadPath
-		{
-			get
-			{
-				return Paths.Combine(HomePath, "Downloads");
-			}
-		}
+		public static string DownloadPath => Combine(HomePath, "Downloads");
 
 		public static string HomePath
 		{

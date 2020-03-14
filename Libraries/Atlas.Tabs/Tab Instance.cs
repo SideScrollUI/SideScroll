@@ -271,9 +271,9 @@ namespace Atlas.Tabs
 			TaskInstance taskInstance = taskCreator.Start(taskCreator.call);
 		}
 
-		public void StartTask(TaskCreator taskCreator, bool showTask)
+		public void StartTask(TaskCreator taskCreator, bool showTask, Call call = null)
 		{
-			Call call = new Call(taskCreator.Label);
+			call = call ?? new Call(taskCreator.Label);
 			TaskInstance taskInstance = taskCreator.Start(call);
 			taskInstance.ShowTask = showTask;
 			tabModel.Tasks.Add(taskInstance);
@@ -285,10 +285,10 @@ namespace Atlas.Tabs
 			StartTask(taskDelegate, showTask);
 		}
 
-		public void StartAsync(CallActionAsync callAction, bool showTask = false)
+		public void StartAsync(CallActionAsync callAction, Call call = null, bool showTask = false)
 		{
 			var taskDelegate = new TaskDelegateAsync(callAction.Method.Name, callAction, true);
-			StartTask(taskDelegate, showTask);
+			StartTask(taskDelegate, showTask, call);
 		}
 
 		public void StartTask(CallActionParams callAction, bool useTask, bool showTask, params object[] objects)
