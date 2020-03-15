@@ -2,11 +2,7 @@
 using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.Resources;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-
+using Atlas.UI.Avalonia.Tabs;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -15,11 +11,10 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Reflection;
-using System.IO;
-using Atlas.UI.Avalonia.Tabs;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Atlas.UI.Avalonia.Controls
 {

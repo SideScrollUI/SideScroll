@@ -1,7 +1,7 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
-using Atlas.UI.Avalonia.Controls;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Controls;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;

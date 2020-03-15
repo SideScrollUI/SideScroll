@@ -1,12 +1,12 @@
-﻿using Atlas.Tabs;
+﻿using Atlas.Core;
+using Atlas.Tabs;
+using Atlas.UI.Avalonia.Controls;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using System;
 using System.Collections.Generic;
-using Atlas.UI.Avalonia.Controls;
 using System.Json;
-using Atlas.Core;
 
 namespace Atlas.UI.Avalonia.Tabs
 {

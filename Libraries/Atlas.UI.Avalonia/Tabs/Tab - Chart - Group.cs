@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Controls;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -23,7 +24,6 @@ using OxyPlot.Series;
 using OxyPlot.Avalonia;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Threading;
-using Atlas.UI.Avalonia.Controls;
 
 namespace Atlas.UI.Avalonia
 {

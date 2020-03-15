@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Atlas.Core;
-using Atlas.UI.Avalonia.View;
 using Atlas.Serialize;
 using Atlas.Start.Avalonia.Tabs;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
