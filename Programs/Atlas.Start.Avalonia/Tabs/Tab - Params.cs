@@ -1,6 +1,6 @@
 ﻿using System;
 using Atlas.Core;
-using Atlas.GUI.Avalonia.Controls;
+using Atlas.UI.Avalonia.Controls;
 using Atlas.Tabs;
 
 namespace Atlas.Start.Avalonia.Tabs

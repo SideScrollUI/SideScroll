@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Tabs.Tools", "Librari
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{05F04605-3FC3-4A78-8C52-CFAF0AE94A5F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GUI", "GUI", "{E7D9713F-A249-443C-B300-52A335BD8891}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{E7D9713F-A249-443C-B300-52A335BD8891}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.GUI.Avalonia", "Libraries\Atlas.GUI.Avalonia\Atlas.GUI.Avalonia.csproj", "{8FE32C9A-1196-4BE0-B66B-C8ADAD9C621D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.UI.Avalonia", "Libraries\Atlas.UI.Avalonia\Atlas.UI.Avalonia.csproj", "{8FE32C9A-1196-4BE0-B66B-C8ADAD9C621D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Programs", "Programs", "{E4AFA68B-CE75-4BFE-9329-85FECDB49D3D}"
 EndProject
@@ -42,6 +42,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OxyPlot.Avalonia", "Imports\AvaloniaUI\OxyPlot.Avalonia\Source\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj", "{931E23F0-EEE8-4338-85C7-AFE9D790F178}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Resources", "Libraries\Atlas.Resources\Atlas.Resources.csproj", "{77D36F2E-2D9A-4FF3-B92D-2BEFFF03CC8C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{332EF461-464E-4A75-A15D-647E3FED6C18}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

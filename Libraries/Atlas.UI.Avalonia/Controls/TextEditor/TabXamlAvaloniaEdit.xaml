@@ -1,0 +1,14 @@
+﻿<UserControl
+    xmlns:controls="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:local="clr-namespace:Atlas.UI.Avalonia.Tabs;assembly=Atlas.UI.Avalonia"
+    xmlns:AvalonEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+    Height="480" Width="640">
+    
+    <Grid Background="#777777" >
+            <AvalonEdit:TextEditor Name="Editor"
+                               Margin="30"
+                               TextBlock.FontSize="30" />
+    </Grid>
+</UserControl>

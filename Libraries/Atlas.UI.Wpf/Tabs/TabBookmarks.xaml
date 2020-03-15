@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="Atlas.UI.Wpf.TabBookmarks"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Atlas.UI.Wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             Background="{DynamicResource {x:Static local:Keys.BackgroundBrush}}" HorizontalAlignment="Stretch" Width="Auto">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="New" Executed="New_Executed"/>
+        <CommandBinding Command="Delete" CanExecute="CommandBinding_CanExecute" Executed="Delete_Executed" />
+        <!--CommandBinding Command="NewSave" Executed="Save_Executed"/>
+        <CommandBinding Command="NewCancel" Executed="Cancel_Executed"/-->
+    </UserControl.CommandBindings>
+    
+    <Grid HorizontalAlignment="Stretch" Name="grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Name="gridRowBookmarks" Height="Auto" MaxHeight="500"/>
+            <RowDefinition Name="gridRowToolbar" Height="Auto"/>
+            <RowDefinition Name="gridRowNew" Height="Auto"/>
+            <RowDefinition Name="gridRowSpacer" Height="20"/>
+        </Grid.RowDefinitions>
+
+
+        <!--Label Name="labelName" Grid.Row="0" Background="DarkOrange" FontSize="14"/-->
+        <ToolBarTray Grid.Row="1" DockPanel.Dock="Top" ToolBarTray.IsLocked="True" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" >
+            <ToolBar Name="toolbar" Loaded="ToolBar_Loaded" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" BorderBrush="Black">
+                <Button Click="Button_NewClick" Content="Add" ToolBar.OverflowMode="Never" Foreground="White" />
+                <Button Click="Button_DeleteClick" Content="Delete" ToolBar.OverflowMode="Never" Foreground="White"/>
+            </ToolBar>
+        </ToolBarTray>
+
+        <StackPanel Grid.Row="2" Name="panelNew" Orientation="Vertical" Visibility="Collapsed">
+            <Label Content="Name:" Foreground="White"/>
+            <TextBox Name="textBoxName" HorizontalAlignment="Stretch" MinWidth="100" FontSize="14"/>
+            <ToolBarTray DockPanel.Dock="Top" ToolBarTray.IsLocked="True" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" >
+                <ToolBar Name="toolbarSave" Loaded="ToolBar_Loaded" Background="{DynamicResource {x:Static local:Keys.ButtonBackgroundBrush}}" BorderBrush="Black">
+                    <Button Click="Button_NewSave" Content="Save" ToolBar.OverflowMode="Never" Foreground="White" />
+                    <Button Click="Button_NewCancel" Content="Cancel" ToolBar.OverflowMode="Never" Foreground="White"/>
+                </ToolBar>
+            </ToolBarTray>
+        </StackPanel>
+
+
+    </Grid>
+</UserControl>

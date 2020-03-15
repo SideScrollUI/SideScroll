@@ -109,9 +109,9 @@
       <Project>{9bfc7193-df0f-4d3f-8847-3043b2484e8e}</Project>
       <Name>Atlas.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\Atlas.GUI.Wpf\Atlas.GUI.Wpf.csproj">
+    <ProjectReference Include="..\..\Libraries\Atlas.UI.Wpf\Atlas.UI.Wpf.csproj">
       <Project>{deb30158-9698-41be-8aaf-9b7a3b6defd6}</Project>
-      <Name>Atlas.GUI.Wpf</Name>
+      <Name>Atlas.UI.Wpf</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Atlas.Network\Atlas.Network.csproj">
       <Project>{40eb70b2-f23a-4f9f-83f0-dd6c833713d5}</Project>

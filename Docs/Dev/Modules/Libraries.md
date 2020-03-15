@@ -5,7 +5,7 @@
 
 * Atlas.Core (.NET Standard)
 
-  - GUI Tab Interface
+  - UI Tab Interface
   -	Logging
   - Utilities - (Extensions, Attributes, etc)
 
@@ -21,9 +21,9 @@
 ## Tab Libraries
 
 * Atlas.Tabs (.NET Standard)
-  - Defines the GUI menus
+  - Defines the UI menus
   - Contains all the Tab interface logic for everything
-  - Shared across GUIs
+  - Shared across UIs
   
 * Atlas.Tabs.Tools (.NET Standard)
   - File Browser
@@ -32,15 +32,15 @@
   - `*Test` tabs that show up in debug mode
   - Used for testing UI features
 
-## GUI Libraries
+## User Interface Libraries
   
-* Atlas.GUI.Avalonia (.NET Standard)
-  - Cross Platform GUI Controls
+* Atlas.UI.Avalonia (.NET Standard)
+  - Cross Platform UI Controls
   - Works on Windows, Linux, and Mac
   - Still early beta
   
-* Atlas.GUI.WPF (.NET Framework)
-  - Windows only GUI Controls
-  - Furthest along of the GUI interfaces
+* Atlas.UI.WPF (.NET Framework)
+  - Windows only UI Controls
+  - Furthest along of the UI interfaces
   - Has a lot better layout controls than WinForms
   - Ideally would eventually get deprecated for a cross platform solution

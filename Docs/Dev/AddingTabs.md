@@ -148,7 +148,7 @@ namespace Atlas.Tabs.Test
 
 ## Async calls
   - Tabs can load as Async by implementing the `ITabAsync` interface for a `TabInstance`
-  - This allows the GUI to continue responding to user actions while it's loading
+  - This allows the UI to continue responding to user actions while it's loading
   - You can also make calls async by using `TaskDelegateAsync`
     - These are useful when you need to make lots of parallel async calls
 ```csharp

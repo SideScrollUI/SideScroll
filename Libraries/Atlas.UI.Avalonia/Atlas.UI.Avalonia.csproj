@@ -1,0 +1,103 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+    <Configurations>Debug;Release;DebugX86</Configurations>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugX86|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="**\*.xaml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Assets\**" />
+    <EmbeddedResource Remove="Assets\**" />
+    <None Remove="Assets\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Controls\ToolbarButton.dat" />
+    <None Remove="Controls\ToolbarButton2.xaml" />
+    <None Remove="DefaultTheme.xaml" />
+    <None Remove="if_help_62217.png" />
+    <None Remove="left-chevron.png" />
+    <None Remove="Logo.ico" />
+    <None Remove="right-chevron.png" />
+    <None Remove="StyleResources.xaml" />
+    <None Remove="View\TabAvalonEdit.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\ToolBar\ToolbarButton.dat">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Imports\AvaloniaUI\AvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj" />
+    <ProjectReference Include="..\..\Imports\AvaloniaUI\OxyPlot.Avalonia\Source\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
+    <ProjectReference Include="..\Atlas.Core\Atlas.Core.csproj" />
+    <ProjectReference Include="..\Atlas.Resources\Atlas.Resources.csproj" />
+    <ProjectReference Include="..\Atlas.Serialize\Atlas.Serialize.csproj" />
+    <ProjectReference Include="..\Atlas.Tabs\Atlas.Tabs.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="DefaultTheme.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Tabs\TabAvalonEdit.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>TabAvalonEdit.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Controls\ToolBar\ToolbarButton2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Controls\ToolBar\ToolbarButton2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+  <!--
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Public\AvaloniaUI\DataGrid\src\Avalonia.DataGrid\Avalonia.DataGrid.csproj" />
+  <ItemGroup>
+    <Reference Include="Avalonia.DataGrid">
+      <HintPath>..\..\..\..\Public\AvaloniaUI\DataGrid\src\Avalonia.DataGrid\bin\Debug\netstandard2.0\Avalonia.DataGrid.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+  -->
+  <!--
+  <ItemGroup>
+    <EmbeddedResource Update="DefaultTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Sandbox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="StyleResources.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Tabs\TabChart2.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  -->
+</Project>

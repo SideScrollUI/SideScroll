@@ -1,5 +1,5 @@
 ﻿using Atlas.Core;
-using Atlas.GUI.Wpf;
+using Atlas.UI.Wpf;
 using Atlas.Tabs;
 using System;
 using System.Diagnostics;

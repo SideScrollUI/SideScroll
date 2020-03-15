@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29409.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Core", "Libraries\Atlas.Core\Atlas.Core.csproj", "{9BFC7193-DF0F-4D3F-8847-3043B2484E8E}"
 EndProject
@@ -19,11 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Tabs.Tools", "Librari
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{05F04605-3FC3-4A78-8C52-CFAF0AE94A5F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GUI", "GUI", "{E7D9713F-A249-443C-B300-52A335BD8891}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{E7D9713F-A249-443C-B300-52A335BD8891}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atlas.GUI.Wpf", "Libraries\Atlas.GUI.Wpf\Atlas.GUI.Wpf.csproj", "{DEB30158-9698-41BE-8AAF-9B7A3B6DEFD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.UI.Avalonia", "Libraries\Atlas.UI.Avalonia\Atlas.UI.Avalonia.csproj", "{8FE32C9A-1196-4BE0-B66B-C8ADAD9C621D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.GUI.Avalonia", "Libraries\Atlas.GUI.Avalonia\Atlas.GUI.Avalonia.csproj", "{8FE32C9A-1196-4BE0-B66B-C8ADAD9C621D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atlas.UI.Wpf", "Libraries\Atlas.UI.Wpf\Atlas.UI.Wpf.csproj", "{DEB30158-9698-41BE-8AAF-9B7A3B6DEFD6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Programs", "Programs", "{E4AFA68B-CE75-4BFE-9329-85FECDB49D3D}"
 EndProject
@@ -47,9 +47,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OxyPlot.Avalonia", "Imports
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Resources", "Libraries\Atlas.Resources\Atlas.Resources.csproj", "{77D36F2E-2D9A-4FF3-B92D-2BEFFF03CC8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.GUI.Avalonia.Test", "Test\Atlas.GUI.Avalonia.Test\Atlas.GUI.Avalonia.Test.csproj", "{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.UI.Avalonia.Test", "Test\Atlas.UI.Avalonia.Test\Atlas.UI.Avalonia.Test.csproj", "{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Core.Test", "Test\Atlas.Core.Test\Atlas.Core.Test.csproj", "{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{332EF461-464E-4A75-A15D-647E3FED6C18}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

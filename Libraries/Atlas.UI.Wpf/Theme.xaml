@@ -1,0 +1,37 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Atlas.UI.Wpf">
+
+    <Color x:Key="{x:Static local:Keys.BackgroundColor}">#353636</Color>
+    <Color x:Key="{x:Static local:Keys.BackgroundFocusedColor}">#252626</Color>
+    
+    <Color x:Key="{x:Static local:Keys.SplitterColor}">#111111</Color>
+    <Color x:Key="{x:Static local:Keys.TitleBackgroundColor}">#4f52bb</Color>
+    <Color x:Key="{x:Static local:Keys.TitleForegroundColor}">White</Color>
+    <Color x:Key="{x:Static local:Keys.GridColumnHeaderBackgroundColor}">#4e8ef7</Color>
+    <Color x:Key="{x:Static local:Keys.GridSelectedBackgroundColor}">#92F397</Color>
+    <Color x:Key="{x:Static local:Keys.ButtonForegroundColor}">AliceBlue</Color>
+    <Color x:Key="{x:Static local:Keys.ButtonBackgroundColor}">SlateBlue</Color>
+    <Color x:Key="{x:Static local:Keys.ButtonMouseOverBackgroundColor}">#7827d4</Color>
+    <!--Color x:Key="{x:Static local:Keys.ActiveSelectionHighlightColor}">DarkOrange</-->
+    <Color x:Key="{x:Static local:Keys.ActiveSelectionHighlightColor}">#92F397</Color>
+    <Color x:Key="{x:Static local:Keys.InactiveSelectionHighlightColor}">#92F397</Color>
+    <Color x:Key="{x:Static local:Keys.EditableColor}">#c8c2f9</Color>
+    <Color x:Key="{x:Static local:Keys.HasChildrenColor}">#f4c68d</Color>
+
+
+    <SolidColorBrush x:Key="{x:Static local:Keys.BackgroundBrush}" Color="{DynamicResource {x:Static local:Keys.BackgroundColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.BackgroundFocusedBrush}" Color="{DynamicResource {x:Static local:Keys.BackgroundFocusedColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.SplitterBrush}" Color="{DynamicResource {x:Static local:Keys.SplitterColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.TitleBackgroundBrush}" Color="{DynamicResource {x:Static local:Keys.TitleBackgroundColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.TitleForegroundBrush}" Color="{DynamicResource {x:Static local:Keys.TitleForegroundColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.GridColumnHeaderBackgroundBrush}" Color="{DynamicResource {x:Static local:Keys.GridColumnHeaderBackgroundColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.ButtonForegroundBrush}"  Color="{DynamicResource {x:Static local:Keys.ButtonForegroundColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.ButtonBackgroundBrush}"  Color="{DynamicResource {x:Static local:Keys.ButtonBackgroundColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.ButtonMouseOverBackgroundBrush}" Color="{DynamicResource {x:Static local:Keys.ButtonMouseOverBackgroundColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.ActiveSelectionHighlightBrush}" Color="{DynamicResource {x:Static local:Keys.ActiveSelectionHighlightColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.InactiveSelectionHighlightBrush}" Color="{DynamicResource {x:Static local:Keys.InactiveSelectionHighlightColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.EditableBrush}" Color="{DynamicResource {x:Static local:Keys.EditableColor}}"/>
+    <SolidColorBrush x:Key="{x:Static local:Keys.HasChildrenBrush}" Color="{DynamicResource {x:Static local:Keys.HasChildrenColor}}"/>
+    
+</ResourceDictionary>

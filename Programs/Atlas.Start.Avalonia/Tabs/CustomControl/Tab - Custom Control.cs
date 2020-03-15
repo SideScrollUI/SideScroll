@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Atlas.Core;
-using Atlas.GUI.Avalonia.Controls;
+using Atlas.UI.Avalonia.Controls;
 using Atlas.Tabs;
 using Avalonia.Animation;
 using Avalonia.Threading;
