@@ -65,7 +65,7 @@ namespace Atlas.Tabs
 			this.CacheEnabled = cached;
 
 			Name = methodInfo.Name;
-			Name = Name.AddSpacesBetweenWords();
+			Name = Name.WordSpaced();
 			NameAttribute attribute = methodInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;

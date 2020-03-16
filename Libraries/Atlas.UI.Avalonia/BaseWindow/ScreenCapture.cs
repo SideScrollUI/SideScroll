@@ -60,7 +60,7 @@ namespace Atlas.UI.Avalonia
 			using (var ctx = correctedBitmap.CreateDrawingContext(null))
 			{
 				var destRect = new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
-				ctx.DrawImage(sourceBitmap.PlatformImpl, 0.85, bounds, destRect);
+				ctx.DrawImage(sourceBitmap.PlatformImpl, 0.75, bounds, destRect);
 			}
 
 			var image = new Image()

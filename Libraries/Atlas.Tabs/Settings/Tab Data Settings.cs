@@ -127,7 +127,7 @@ namespace Atlas.Tabs
 				}
 				else
 				{
-					label = propertyInfo.Name.AddSpacesBetweenWords();
+					label = propertyInfo.Name.WordSpaced();
 				}
 				propertyColumns.Add(new PropertyColumn(propertyInfo, label));
 			}

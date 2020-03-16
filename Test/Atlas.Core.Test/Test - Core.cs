@@ -26,10 +26,10 @@ namespace Atlas.Core.Test
 			Assert.AreEqual("123,456.1234", text);
 		}
 
-		[Test, Description("AddSpacesBetweenWords")]
-		public void AddSpacesBetweenWords()
+		[Test, Description("WordSpaced")]
+		public void WordSpaced()
 		{
-			string text = "CPUUtilization".AddSpacesBetweenWords();
+			string text = "CPUUtilization".WordSpaced();
 
 			Assert.AreEqual("CPU Utilization", text);
 		}

@@ -122,7 +122,7 @@ namespace Atlas.Extensions // rename to Core?
 			return input.Substring(start, input.Length - start);
 		}
 
-		public static string AddSpacesBetweenWords(this string text)
+		public static string WordSpaced(this string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
 				return "";

@@ -53,7 +53,7 @@ namespace Atlas.Tabs
 			autoLoad = !fieldInfo.IsStatic;
 
 			Name = fieldInfo.Name;
-			Name = Name.AddSpacesBetweenWords();
+			Name = Name.WordSpaced();
 			NameAttribute attribute = fieldInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;

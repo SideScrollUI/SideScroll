@@ -99,7 +99,7 @@ namespace Atlas.Tabs
 			autoLoad = !accessors[0].IsStatic;
 
 			Name = propertyInfo.Name;
-			Name = Name.AddSpacesBetweenWords();
+			Name = Name.WordSpaced();
 			NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;

@@ -104,7 +104,7 @@ namespace Atlas.Core
 			this.xPropertyInfo = xPropertyInfo;
 			this.yPropertyInfo = yPropertyInfo;
 
-			Name = yPropertyInfo.Name.AddSpacesBetweenWords();
+			Name = yPropertyInfo.Name.WordSpaced();
 			NameAttribute attribute = yPropertyInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;
