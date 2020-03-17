@@ -136,7 +136,7 @@ namespace Atlas.UI.Avalonia.Controls
 				Background = Brushes.Transparent,
 				BorderBrush = Brushes.LightGray,
 				IsMouseWheelEnabled = false,
-				DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
+				//DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
 				MinHeight = 125,
 				MinWidth = 150,
 			};

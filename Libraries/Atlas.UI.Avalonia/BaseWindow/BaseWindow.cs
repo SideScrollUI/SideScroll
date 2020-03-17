@@ -213,7 +213,7 @@ namespace Atlas.UI.Avalonia
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				[ToolTip.ShowDelayProperty] = 5,
-				[ToolTip.TipProperty] = "Scroll Right\n(-> button)",
+				[ToolTip.TipProperty] = "Scroll Right ( -> )",
 				[Grid.RowProperty] = 0,
 			};
 			grid.Children.Add(buttonExpand);
@@ -228,7 +228,7 @@ namespace Atlas.UI.Avalonia
 				Foreground = new SolidColorBrush(Theme.ToolbarTextForegroundColor),
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
-				[ToolTip.TipProperty] = "Scroll Left\n(<- button)",
+				[ToolTip.TipProperty] = "Scroll Left ( <- )",
 				[Grid.RowProperty] = 1,
 			};
 			grid.Children.Add(buttonCollapse);

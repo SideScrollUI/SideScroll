@@ -3,23 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Globalization;
 using System.Windows.Input;
 using Atlas.Core;
 using Atlas.Extensions;
-using Atlas.Resources;
 using Atlas.Tabs;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Layout;
 using Avalonia;
 using Avalonia.Data;
-using Avalonia.Collections;
-using Avalonia.Input.Platform;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
-using Avalonia.Styling;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -236,192 +230,15 @@ namespace Atlas.UI.Avalonia.Controls
 		}
 
 		// todo: need a real DateTimePicker
-		private void AddDateTimePicker(ListProperty property, int rowIndex, int columnIndex)
+		private TabDateTimePicker AddDateTimePicker(ListProperty property, int rowIndex, int columnIndex)
 		{
-			var backgroundColor = property.Editable ? Colors.White : Colors.LightGray;
-			DatePicker datePicker = new DatePicker()
+			TabDateTimePicker control = new TabDateTimePicker(property)
 			{
-				Background = new SolidColorBrush(backgroundColor),
-				BorderBrush = new SolidColorBrush(Colors.Black),
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				BorderThickness = new Thickness(1),
-				SelectedDateFormat = DatePickerFormat.Custom,
-				CustomDateFormatString = "yyyy/M/d",
-				Watermark = "yyyy/M/d",
-				MinWidth = 100,
-				MaxWidth = ControlMaxWidth,
-				IsEnabled = property.Editable,
-
-				//MaxWidth = 200,
 				[Grid.RowProperty] = rowIndex,
 				[Grid.ColumnProperty] = columnIndex,
 			};
-			var dateTimeConverter = new DateTimeValueConverter();
-			var binding = new Binding(property.propertyInfo.Name)
-			{
-				Converter = dateTimeConverter,
-				//StringFormat = "Hello {0}",
-				Mode = BindingMode.TwoWay,
-				Source = property.obj,
-			};
-			datePicker.Bind(DatePicker.SelectedDateProperty, binding);
-			Children.Add(datePicker);
-
-			// Add extra row for time
-			RowDefinition timeRow = new RowDefinition()
-			{
-				Height = new GridLength(1, GridUnitType.Auto),
-			};
-			RowDefinitions.Add(timeRow);
-			rowIndex++;
-
-			TextBox textBox = new TabControlTextBox()
-			{
-				IsReadOnly = !property.Editable,
-				Watermark = "15:30:45",
-				MinWidth = 80,
-				//MaxWidth = 150,
-				MaxWidth = ControlMaxWidth,
-				Focusable = true, // already set?
-				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = columnIndex,
-			};
-			binding = new Binding(property.propertyInfo.Name)
-			{
-				Converter = dateTimeConverter,
-				//StringFormat = "Hello {0}",
-				Mode = BindingMode.TwoWay,
-				Source = property.obj,
-			};
-			textBox.Bind(TextBlock.TextProperty, binding);
-			Children.Add(textBox);
-
-			Button buttonImport = AddButton(rowIndex, "Import Clipboard", Icons.Streams.Paste);
-			buttonImport.Click += (sender, e) =>
-			{
-				string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
-				TimeSpan? timeSpan = ConvertTextToTimeSpan(clipboardText);
-				if (timeSpan != null)
-				{
-					DateTime? newDateTime = dateTimeConverter.Convert(timeSpan, typeof(string), null, null) as DateTime?;
-					property.propertyInfo.SetValue(property.obj, newDateTime);
-					textBox.Text = timeSpan.ToString();
-					e.Handled = true;
-				}
-				else
-				{
-					DateTime? dateTime = ConvertTextToDateTime(clipboardText);
-					if (dateTime != null)
-					{
-						property.propertyInfo.SetValue(property.obj, dateTime);
-						datePicker.SelectedDate = dateTime;
-						textBox.Text = (string)dateTimeConverter.Convert(dateTime, typeof(string), null, null);
-						e.Handled = true;
-					}
-				}
-			};
-			Children.Add(buttonImport);
-		}
-		private TimeSpan? ConvertTextToTimeSpan(string text)
-		{
-			TimeSpan timeSpan;
-			if (TimeSpan.TryParseExact(text, @"h\:m\:s", CultureInfo.InvariantCulture, out timeSpan))
-				return timeSpan;
-
-			return null;
-		}
-
-		private DateTime? ConvertTextToDateTime(string text)
-		{
-			DateTime dateTime;
-
-			// convert epoch 1569998557298
-			var epochTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			uint epochValue;
-			if (text.Length == 10 && uint.TryParse(text, out epochValue))
-			{
-				dateTime = epochTime.AddSeconds(epochValue);
-				return dateTime;
-			}
-			long epochValueMilliseconds;
-			if (text.Length == 13 && long.TryParse(text, out epochValueMilliseconds))
-			{
-				dateTime = epochTime.AddMilliseconds(epochValueMilliseconds);
-				return dateTime;
-			}
-
-			if (DateTime.TryParse(text, out dateTime)
-				//|| DateTime.TryParseExact(text, "dd/MMM/yyyy:HH:mm:ss zzz", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out dateTime) // July 25 05:08:00
-				|| DateTime.TryParseExact(text, "dd/MMM/yyyy:HH:mm:ss zzz", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out dateTime) // 18/Jul/2019:11:47:45 +0000
-				|| DateTime.TryParseExact(text, "dd/MMM/yyyy:HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out dateTime)) // 18/Jul/2019:11:47:45
-			{
-				if (dateTime.Kind == DateTimeKind.Unspecified)
-					dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
-				else if (dateTime.Kind == DateTimeKind.Local)
-					dateTime = dateTime.ToUniversalTime();
-				return dateTime;
-			}
-
-			return null;
-		}
-
-		public Button AddButton(int rowIndex, string tooltip, Stream resource, ICommand command = null)
-		{
-			//command = command ?? new RelayCommand(
-			//	(obj) => CommandDefaultCanExecute(obj),
-			//	(obj) => CommandDefaultExecute(obj));
-			Bitmap bitmap;
-			using (resource)
-			{
-				bitmap = new Bitmap(resource);
-			}
-
-			var image = new Image()
-			{
-				Source = bitmap,
-				Width = 16,
-				Height = 16,
-			};
-
-			Button button = new Button()
-			{
-				Content = image,
-				Command = command,
-				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
-				BorderBrush = Background,
-				BorderThickness = new Thickness(0),
-				//Margin = new Thickness(2),
-				HorizontalAlignment = HorizontalAlignment.Right,
-				//BorderThickness = new Thickness(2),
-				//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
-				//BorderBrush = new SolidColorBrush(Colors.Black),
-
-				[ToolTip.TipProperty] = tooltip,
-				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = 1,
-			};
-			button.BorderBrush = button.Background;
-			button.PointerEnter += Button_PointerEnter;
-			button.PointerLeave += Button_PointerLeave;
-
-			//var button = new ToolbarButton(tooltip, command, resource);
-			//AddControl(button);
-			return button;
-		}
-
-		// DefaultTheme.xaml is overriding this currently
-		private void Button_PointerEnter(object sender, PointerEventArgs e)
-		{
-			Button button = (Button)sender;
-			button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundHoverColor);
-		}
-
-		private void Button_PointerLeave(object sender, PointerEventArgs e)
-		{
-			Button button = (Button)sender;
-			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
-			button.BorderBrush = button.Background;
+			Children.Add(control);
+			return control;
 		}
 	}
 }
