@@ -83,8 +83,7 @@ namespace Atlas.UI.Avalonia.Controls
 			//tabDataGrid.Initialize();
 			Children.Add(tabControlDataGrid);
 
-			INotifyCollectionChanged iNotifyCollectionChanged = tabInstance.tabModel.Tasks as INotifyCollectionChanged;
-			if (iNotifyCollectionChanged != null)
+			if (tabInstance.tabModel.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
 				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
 		}
 
@@ -103,9 +102,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
-				if (autoSelectNew)
+				if (autoSelectNew && e.NewStartingIndex >= 0)
 				{
-					TaskInstance taskInstance = (TaskInstance)tabInstance.tabModel.Tasks[e.NewStartingIndex];
+					TaskInstance taskInstance = tabInstance.tabModel.Tasks[e.NewStartingIndex];
 					tabControlDataGrid.SelectedItem = taskInstance;
 					taskInstance.OnComplete = () => TaskCompleted(taskInstance);
 					int lineHeight = 26;

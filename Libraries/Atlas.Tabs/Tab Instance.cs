@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using Atlas.Extensions;
 using Atlas.Serialize;
 using System;
 using System.Collections;
@@ -20,7 +21,7 @@ namespace Atlas.Tabs
 
 	public interface ITabAsync
 	{
-		Task LoadAsync(Call call);
+		Task LoadAsync(Call call, TabModel model);
 	}
 
 	public class TabInstanceLoadAsync : TabInstance, ITabAsync
@@ -32,7 +33,7 @@ namespace Atlas.Tabs
 			this.loadAsync = loadAsync;
 		}
 
-		public async Task LoadAsync(Call call)
+		public async Task LoadAsync(Call call, TabModel tabModel)
 		{
 			object result = await loadAsync.LoadAsync(call);
 			tabModel.AddData(result);
@@ -68,18 +69,31 @@ namespace Atlas.Tabs
 				return count;
 			}
 		}
+
+		public int Width
+		{
+			get
+			{
+				int count = 1;
+				if (ParentTabInstance != null)
+					count += ParentTabInstance.Depth;
+				return count;
+			}
+		}
 		public TabInstance ParentTabInstance { get; set; }
 		public Dictionary<object, TabInstance> childTabInstances = new Dictionary<object, TabInstance>();
 
-		private SynchronizationContext guiContext; // inherited from creator (which can be a Parent Log)
+		private SynchronizationContext uiContext; // inherited from creator (which can be a Parent Log)
 		public TabBookmark filterBookmarkNode;
 
 		public event EventHandler<EventArgs> OnRefresh;
 		public event EventHandler<EventArgs> OnReload;
+		public event EventHandler<EventArgs> OnModelChanged;
 		public event EventHandler<EventArgs> OnLoadBookmark;
 		public event EventHandler<EventArgs> OnClearSelection;
 		public event EventHandler<EventSelectItem> OnSelectItem;
 		public event EventHandler<EventArgs> OnModified;
+		public event EventHandler<EventArgs> OnResize;
 
 		public class EventSelectItem : EventArgs
 		{
@@ -194,11 +208,11 @@ namespace Atlas.Tabs
 		private void InitializeContext()
 		{
 			//Debug.Assert(context == null || SynchronizationContext.Current == context);
-			if (guiContext == null)
+			if (uiContext == null)
 			{
-				guiContext = SynchronizationContext.Current;
-				if (guiContext == null)
-					guiContext = new SynchronizationContext();
+				uiContext = SynchronizationContext.Current;
+				if (uiContext == null)
+					uiContext = new SynchronizationContext();
 			}
 		}
 
@@ -232,31 +246,31 @@ namespace Atlas.Tabs
 
 		public void Invoke(Action action)
 		{
-			guiContext.Send(ActionCallback, action);
+			uiContext.Post(ActionCallback, action);
 		}
 
 		public void Invoke(SendOrPostCallback callback, object param = null)
 		{
-			guiContext.Send(callback, param);
+			uiContext.Post(callback, param);
 		}
 
 		public void Invoke(Call call, Action action)
 		{
-			guiContext.Send(ActionCallback, action);
+			uiContext.Post(ActionCallback, action);
 		}
 
 		// switch to SendOrPostCallback?
 		public void Invoke(CallActionParams callAction, params object[] objects)
 		{
 			TaskDelegateParams taskDelegate = new TaskDelegateParams(null, callAction.Method.Name, callAction, false, null, objects);
-			guiContext.Send(ActionParamsCallback, taskDelegate);
+			uiContext.Post(ActionParamsCallback, taskDelegate);
 		}
 
 		// switch to SendOrPostCallback?
 		public void Invoke(Call call, CallActionParams callAction, params object[] objects)
 		{
 			TaskDelegateParams taskDelegate = new TaskDelegateParams(call, callAction.Method.Name, callAction, false, null, objects);
-			guiContext.Send(CallActionParamsCallback, taskDelegate);
+			uiContext.Post(CallActionParamsCallback, taskDelegate);
 		}
 
 		private void CallActionParamsCallback(object state)
@@ -327,38 +341,94 @@ namespace Atlas.Tabs
 				return;
 
 			loadCalled = false; // allow TabView to reload
-			
-			if (this is ITabAsync || CanLoad)
-				tabModel.Clear(); // don't clear for Tab Instances, only auto generated
 
+			if (this is ITabAsync tabAsync)
+			{
+				StartAsync(ReintializeAsync);
+				return;
+			}
+
+			var newModel = tabModel;
+			if (CanLoad)
+			{
+				newModel = new TabModel();
+				newModel.Name = tabModel.Name;
+				isLoaded = true;
+			}
 			try
 			{
-				//MethodInfo methodInfo = GetDerivedLoadMethod();
-				if (this is ITabAsync tabAsync)
-				{
-					Task.Run(() => tabAsync.LoadAsync(taskInstance.call)).GetAwaiter().GetResult();
-				}
-				if (CanLoad)
-				{
-					var subTask = taskInstance.call.AddSubTask("Loading");
-					//using (CallTimer loadCall = )
-					{
-						if (this is ITabAsync)
-							Invoke(() => Load(subTask.call));
-						else
-							Load(subTask.call); // Creates a tabModel if none exists and adds other Controls
-												//if (subTask.TaskStatus ==TaskStatus.
-					}
-					isLoaded = true;
-				}
+				Preload(newModel);
+			}
+			catch (Exception)
+			{
+				newModel.AddData(e);
+			}
+			
+			var loadUiTask = taskInstance.call.AddSubTask("Loading");
+			Invoke(() => LoadUi(loadUiTask.call, newModel)); // Some controls need to be created on the UI context
+		}
+
+		// todo: Add sync version?
+		public async Task ReintializeAsync(Call call)
+		{
+			TabModel tabModel = new TabModel();
+			tabModel.Name = this.tabModel.Name; // todo: fix
+
+			var tabAsync = (ITabAsync)this;
+			try
+			{
+				await tabAsync.LoadAsync(call, tabModel);
+				Preload(tabModel);
 			}
 			catch (Exception e)
 			{
 				tabModel.AddData(e);
+				//tabModel.Tasks.Add(call.taskInstance);
 			}
-			LoadSettings(); // Load() initializes the tabModel.Object which gets used for the settings path
+
+			//Invoke(() => LoadUi(call, tabModel));
+			var subTask = call.AddSubTask("Loading");
+			Invoke(() => LoadUi(subTask.call, tabModel)); // Some controls need to be created on the UI context
 
 			// Have return tabModel?
+		}
+
+		// Preload properties in a background thread so the GUI isn't blocked
+		// Todo: Make an async version of this for Task<T> Member(Call call)
+		private void Preload(TabModel tabModel)
+		{
+			int index = 0;
+			foreach (IList iList in tabModel.ItemList)
+			{
+				Type listType = iList.GetType();
+				Type elementType = listType.GetElementTypeForAll();
+
+				var tabDataSettings = tabViewSettings.GetData(index);
+				List<TabDataSettings.PropertyColumn> propertyColumns = tabDataSettings.GetPropertiesAsColumns(elementType);
+				int itemCount = 0;
+				foreach (object obj in iList)
+				{
+					foreach (var propertyColumn in propertyColumns)
+					{
+						propertyColumn.propertyInfo.GetValue(obj);
+					}
+					itemCount++;
+					if (itemCount > 50)
+						break;
+				}
+				index++;
+			}
+		}
+
+		public void LoadUi(Call call, TabModel tabModel)
+		{
+			this.tabModel = tabModel; // Load() needs this set
+			if (CanLoad)
+				Load(call);
+			LoadSettings(); // Load() initializes the tabModel.Object which gets used for the settings path
+			OnModelChanged?.Invoke(this, new EventArgs());
+
+			isLoaded = true;
 		}
 
 		// calls Load and then Refresh
@@ -371,7 +441,7 @@ namespace Atlas.Tabs
 				if (this is ITabAsync tabAsync)
 					OnReload.Invoke(this, new EventArgs());
 				else
-					guiContext.Send(_ => OnReload(this, new EventArgs()), null);
+					uiContext.Send(_ => OnReload(this, new EventArgs()), null);
 			}
 			// todo: this needs to actually wait for reload
 		}
@@ -383,8 +453,17 @@ namespace Atlas.Tabs
 			if (OnRefresh != null)
 			{
 				var onRefresh = OnRefresh; // create temporary copy since this gets delayed
-				guiContext.Send(_ => onRefresh(this, new EventArgs()), null);
+				uiContext.Send(_ => onRefresh(this, new EventArgs()), null);
 				// todo: this needs to actually wait for refresh?
+			}
+		}
+
+		public void Resize()
+		{
+			if (OnResize != null)
+			{
+				var onResize = OnResize; // create temporary copy since this gets delayed
+				uiContext.Send(_ => onResize(this, new EventArgs()), null);
 			}
 		}
 
@@ -393,6 +472,8 @@ namespace Atlas.Tabs
 		{
 			get
 			{
+				if (tabViewSettings == null)
+					return false;
 				if (tabViewSettings.SelectionType == SelectionType.User && tabViewSettings.SelectedRows.Count == 0) // Need to split apart user selected rows?
 					return false;
 				// Only data is skippable?
@@ -408,13 +489,13 @@ namespace Atlas.Tabs
 		public void SelectItem(object obj)
 		{
 			if (OnSelectItem != null)
-				guiContext.Send(_ => OnSelectItem(this, new EventSelectItem(obj)), null);
+				uiContext.Send(_ => OnSelectItem(this, new EventSelectItem(obj)), null);
 		}
 
 		public void ClearSelection()
 		{
 			if (OnClearSelection != null)
-				guiContext.Send(_ => OnClearSelection(this, new EventArgs()), null);
+				uiContext.Send(_ => OnClearSelection(this, new EventArgs()), null);
 		}
 
 		public virtual Bookmark CreateBookmark()
@@ -468,7 +549,7 @@ namespace Atlas.Tabs
 			this.tabViewSettings = tabBookmark.tabViewSettings;
 			this.tabBookmark = tabBookmark;
 			if (OnLoadBookmark != null)
-				guiContext.Send(_ => OnLoadBookmark(this, new EventArgs()), null);
+				uiContext.Send(_ => OnLoadBookmark(this, new EventArgs()), null);
 			//this.bookmarkNode = null; // have to wait until TabData's Load, which might be after this
 			/*foreach (TabInstance tabInstance in children)
 			{

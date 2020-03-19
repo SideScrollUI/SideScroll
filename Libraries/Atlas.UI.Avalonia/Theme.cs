@@ -10,11 +10,11 @@ namespace Atlas.UI.Avalonia
 		public static Color SplitterColor = Color.Parse("#111111");
 
 		public static Color TitleBackgroundColor = Color.Parse("#4f52bb");
-		public static Color TitleForegroundColor = Color.Parse("#ffffff");
+		public static Color TitleForegroundColor = Color.Parse("#f0f0f8");
 
 
 		public static Color GridColumnHeaderBackgroundColor = Color.Parse("#4e8ef7");
-		public static Color GridColumnHeaderForegroundColor = Color.Parse("#FFFFFF");
+		public static Color GridColumnHeaderForegroundColor = Color.Parse("#f0f0f8");
 
 		public static Color GridSelectedBackgroundColor = Color.Parse("#92F397");
 

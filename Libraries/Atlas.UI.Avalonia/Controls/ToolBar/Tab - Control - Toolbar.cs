@@ -117,7 +117,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public ToolbarTextBlock(string text = "")
 		{
-			Foreground = new SolidColorBrush(Colors.White);
+			Foreground = new SolidColorBrush(Theme.TitleForegroundColor);
 			Text = text;
 			Margin = new Thickness(6);
 			TextWrapping = TextWrapping.NoWrap;
@@ -131,7 +131,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public ToolbarRadioButton(string text = "")
 		{
-			Foreground = new SolidColorBrush(Colors.White);
+			Foreground = new SolidColorBrush(Theme.TitleForegroundColor);
 			Content = text;
 			Margin = new Thickness(6);
 			VerticalAlignment = VerticalAlignment.Center;

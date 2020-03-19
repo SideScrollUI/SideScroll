@@ -26,6 +26,7 @@ namespace Atlas.Tabs.Test.Chart
 			{
 				//items.Add(new ListItem("Log", series));
 				//tabModel.Items = items;
+				tabModel.MinDesiredWidth = 600;
 
 				tabModel.Actions = new ItemCollection<TaskCreator>()
 				{

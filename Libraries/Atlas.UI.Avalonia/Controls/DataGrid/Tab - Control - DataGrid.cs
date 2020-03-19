@@ -25,6 +25,7 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ILayoutable
 	{
+		private const int ColumnPercentBased = 150;
 		private static int MaxColumnWidth = 600;
 
 		private TabModel tabModel;
@@ -161,8 +162,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			InitializeControls();
 
-			INotifyCollectionChanged iNotifyCollectionChanged = iList as INotifyCollectionChanged;
-			if (AutoLoad && iNotifyCollectionChanged != null)
+			if (iList is INotifyCollectionChanged iNotifyCollectionChanged) // AutoLoad
 			{
 				// DataGrid must exist before adding this
 				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
@@ -345,11 +345,14 @@ namespace Atlas.UI.Avalonia.Controls
 			foreach (DataGridColumn column in dataGrid.Columns)
 			{
 				column.MaxWidth = 2000;
-				//column.MinWidth = Math.Min(Math.Max(column.MinWidth, 100), column.ActualWidth);
-				double desiredWidth = Math.Max(column.MinWidth, column.ActualWidth);
+				if (column.MinWidth == 0)
+					column.MinWidth = Math.Min(100, column.Width.DesiredValue);
+				else
+					column.MinWidth = Math.Max(column.MinWidth, Math.Min(100, column.Width.DesiredValue));
+				double desiredWidth = Math.Max(column.MinWidth, column.Width.DesiredValue);
 				if (column is DataGridPropertyTextColumn textColumn)
 					desiredWidth = Math.Max(desiredWidth, textColumn.MinDesiredWidth);
-				if (desiredWidth >= 150)
+				if (desiredWidth >= ColumnPercentBased)
 				{
 					// Changes ActualWidth
 					column.Width = new DataGridLength(desiredWidth, DataGridLengthUnitType.Star);
@@ -1182,8 +1185,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			//KeyDown -= UserControl_KeyDown;
 
-			INotifyCollectionChanged iNotifyCollectionChanged = iList as INotifyCollectionChanged;
-			if (AutoLoad && iNotifyCollectionChanged != null)
+			if (iList is INotifyCollectionChanged iNotifyCollectionChanged) // as AutoLoad
 				iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
 
 			iList = null;

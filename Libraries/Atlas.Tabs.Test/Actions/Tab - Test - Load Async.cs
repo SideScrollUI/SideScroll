@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Test.Actions
 		{
 			private const int delayMs = 2000;
 
-			public async Task LoadAsync(Call call)
+			public async Task LoadAsync(Call call, TabModel tabModel)
 			{
 				call.log.Add("Sleeping", new Tag("Milliseconds", delayMs));
 				await Task.Delay(delayMs);

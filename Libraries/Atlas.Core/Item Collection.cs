@@ -53,6 +53,12 @@ namespace Atlas.Core
 			return result;
 		}
 
+		public void Add(T item)
+		{
+			base.Add(item);
+			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
+		}
+
 		public void AddRange(IEnumerable<T> collection)
 		{
 			foreach (T item in collection)
@@ -145,7 +151,7 @@ namespace Atlas.Core
 
 			//foreach (T item in collection)
 			//	Items.Add(item);
-			//OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)); // need gui thread
+			//OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)); // need ui thread
 		}
 	}
 

@@ -628,8 +628,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			var oxyListSeries = new OxyListSeries(listSeries, lineSeries);
 
-			INotifyCollectionChanged iNotifyCollectionChanged = listSeries.iList as INotifyCollectionChanged;
-			if (iNotifyCollectionChanged != null)
+			if (listSeries.iList is INotifyCollectionChanged iNotifyCollectionChanged)
 				//iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
 				iNotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object sender, NotifyCollectionChangedEventArgs e)
 				{

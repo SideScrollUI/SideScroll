@@ -13,6 +13,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia.View
 {
@@ -72,6 +73,7 @@ namespace Atlas.UI.Avalonia.View
 			ColumnDefinitions = new ColumnDefinitions("Auto");
 			RowDefinitions = new RowDefinitions("*");
 
+			tabInstance.OnModelChanged += TabInstance_OnModelChanged;
 			if (!(tabInstance is ITabAsync))
 			{
 				//InitializeControls();
@@ -88,42 +90,19 @@ namespace Atlas.UI.Avalonia.View
 
 		public void LoadBackground(Call call)
 		{
-			//InitializeControls();
-			//AddListeners();
-
 			// Have return TabModel?
 			tabInstance.Reintialize(false);
-
-			Preload();
 
 			tabInstance.Invoke(ReloadControls);
 		}
 
-		// Preload properties in a background thread so the GUI isn't blocked
-		// Todo: Make an async version of this for Task<T> Member(Call call)
-		private void Preload()
+		public async Task LoadBackgroundAsync(Call call)
 		{
-			int index = 0;
-			foreach (IList iList in tabModel.ItemList)
-			{
-				Type listType = iList.GetType();
-				Type elementType = listType.GetElementTypeForAll();
+			tabInstance.Invoke(ShowLoading);
 
-				var tabDataSettings = TabViewSettings.GetData(index);
-				List<TabDataSettings.PropertyColumn> propertyColumns = tabDataSettings.GetPropertiesAsColumns(elementType);
-				int itemCount = 0;
-				foreach (object obj in iList)
-				{
-					foreach (var propertyColumn in propertyColumns)
-					{
-						propertyColumn.propertyInfo.GetValue(obj);
-					}
-					itemCount++;
-					if (itemCount > 50)
-						break;
-				}
-				index++;
-			}
+			await tabInstance.ReintializeAsync(call);
+
+			tabInstance.Invoke(ReloadControls);
 		}
 
 		private Size arrangeOverrideFinalSize;
@@ -266,6 +245,26 @@ namespace Atlas.UI.Avalonia.View
 			tabInstance.OnLoadBookmark += TabInstance_OnLoadBookmark;
 			tabInstance.OnClearSelection += TabInstance_OnClearSelection; // data controls should attach these instead?
 			tabInstance.OnSelectItem += TabInstance_OnSelectItem;
+			tabInstance.OnResize += TabInstance_OnResize;
+		}
+
+		private void RemoveListeners()
+		{
+			tabInstance.OnRefresh -= TabInstance_OnRefresh;
+			tabInstance.OnReload -= TabInstance_OnReload;
+			tabInstance.OnLoadBookmark -= TabInstance_OnLoadBookmark;
+			tabInstance.OnClearSelection -= TabInstance_OnClearSelection;
+			tabInstance.OnSelectItem -= TabInstance_OnSelectItem;
+		}
+
+		private void TabInstance_OnModelChanged(object sender, EventArgs e)
+		{
+			ReloadControls();
+		}
+
+		private void TabInstance_OnResize(object sender, EventArgs e)
+		{
+			containerGrid.ColumnDefinitions[0].Width = GridLength.Auto;
 		}
 
 		private void GridSplitter_DragDelta(object sender, global::Avalonia.Input.VectorEventArgs e)
@@ -361,7 +360,7 @@ namespace Atlas.UI.Avalonia.View
 			if (containerGrid == null)
 				return;
 
-			if (TabViewSettings.SplitterDistance == null || TabViewSettings.SplitterDistance <= 0.0)
+			if (tabInstance.tabViewSettings.SplitterDistance == null || tabInstance.tabViewSettings.SplitterDistance <= 0.0)
 			{
 				containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 			}
@@ -541,22 +540,20 @@ namespace Atlas.UI.Avalonia.View
 			tabInstance.loadCalled = false;
 		}
 
-		public void Load(bool background = false)
+		public void Load()
 		{
 			if (tabInstance.loadCalled)
 				return;
 			tabInstance.loadCalled = true;
-			if (background || tabInstance is ITabAsync)// && tabInstance.isLoaded)
+
+			if (tabInstance is ITabAsync)
 			{
-				tabInstance.Invoke(ShowLoading);
-				//ShowLoading();
-				tabInstance.StartTask(LoadBackground, true, false);
+				tabInstance.StartAsync(LoadBackgroundAsync);
 			}
 			else
 			{
-				tabInstance.Reintialize(false);
-
-				ReloadControls();
+				tabInstance.Invoke(ShowLoading);
+				tabInstance.StartTask(LoadBackground, true, false);
 			}
 			//Dispatcher.BeginInvoke((Action)(() => { allowAutoScrolling = true; }));
 		}
@@ -945,11 +942,7 @@ namespace Atlas.UI.Avalonia.View
 		private void ClearControls()
 		{
 			IsLoaded = false;
-			tabInstance.OnRefresh -= TabInstance_OnRefresh;
-			tabInstance.OnReload -= TabInstance_OnReload;
-			tabInstance.OnLoadBookmark -= TabInstance_OnLoadBookmark;
-			tabInstance.OnClearSelection -= TabInstance_OnClearSelection;
-			tabInstance.OnSelectItem -= TabInstance_OnSelectItem;
+			RemoveListeners();
 
 			ClearDispatchLoader();
 
