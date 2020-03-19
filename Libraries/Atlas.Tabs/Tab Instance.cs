@@ -359,7 +359,7 @@ namespace Atlas.Tabs
 			{
 				Preload(newModel);
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 				newModel.AddData(e);
 			}
