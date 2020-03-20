@@ -19,13 +19,13 @@ namespace Atlas.Start.Avalonia.Tabs
 		{
 			private Grid grid;
 
-			public override void Load(Call call)
+			public override void LoadUI(Call call)
 			{
 				grid = new Grid()
 				{
 					Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
 				};
-				tabModel.AddObject(grid);
+				Model.AddObject(grid);
 
 				foreach (Stream stream in Icons.Streams.All)
 					AddIcon(stream);

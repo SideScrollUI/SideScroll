@@ -22,13 +22,13 @@ namespace Atlas.Tabs.Test.Chart
 				public int Amount { get; set; }
 			}
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				//items.Add(new ListItem("Log", series));
-				//tabModel.Items = items;
-				tabModel.MinDesiredWidth = 600;
+				//model.Items = items;
+				model.MinDesiredWidth = 600;
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions =  new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Add Entry", AddEntry),
 					new TaskDelegate("Start: 1 Entry / second", StartTask, true),
@@ -44,9 +44,9 @@ namespace Atlas.Tabs.Test.Chart
 
 				for (int i = 0; i < 10; i++)
 				{
-					AddSample(i);
+					AddSample();
 				}
-				tabModel.AddObject(chartSettings);
+				model.AddObject(chartSettings);
 				//tabModel.ChartSettings.ListSeries.
 			}
 
@@ -65,7 +65,7 @@ namespace Atlas.Tabs.Test.Chart
 				}
 			}
 
-			private void AddSample(int i)
+			private void AddSample()
 			{
 				int multiplier = 1;
 				foreach (var list in series)
@@ -92,20 +92,12 @@ namespace Atlas.Tabs.Test.Chart
 				//tabChart.chart.Update();
 			}
 
-			// GUI context
+			// UI context
 			private void AddSampleCallback(Call call, object state)
 			{
-				//state;
 				Initialize();
 
-				call.log.Add("test");
-				//call.log.Add("New Log entry", new Tag("name", "value"));
-
-				Random random = new Random();
-				AddSample(series.Count);
-				//tabChart.chart.Series[0].Points.DataBindY(tabModel.Chart); // required to refresh, any alternatives?
-				//tabChart.chart.DataBind();
-				//tabChart.chart.In
+				AddSample();
 			}
 		}
 	}

@@ -356,9 +356,11 @@ namespace Atlas.Tabs
 
 		public TabBookmark FindMatches(Filter filter, int depth)
 		{
-			TabBookmark tabBookmark = new TabBookmark();
-			tabBookmark.Name = Name;
-			tabBookmark.tabViewSettings = new TabViewSettings();
+			TabBookmark tabBookmark = new TabBookmark()
+			{
+				Name = Name,
+				tabViewSettings = new TabViewSettings(),
+			};
 
 			depth--;
 			foreach (IList iList in ItemList)
@@ -374,9 +376,11 @@ namespace Atlas.Tabs
 				{
 					if (filter.Matches(obj, visibleProperties))
 					{
-						SelectedRow selectedRow = new SelectedRow();
-						selectedRow.rowIndex = -1;
-						selectedRow.obj = obj;
+						SelectedRow selectedRow = new SelectedRow()
+						{
+							rowIndex = -1,
+							obj = obj,
+						};
 						tabDataSettings.SelectedRows.Add(selectedRow);
 						tabBookmark.selectedObjects.Add(obj);
 					}
@@ -389,9 +393,11 @@ namespace Atlas.Tabs
 							if (childNode.selectedObjects.Count > 0)
 							{
 								childNode.tabModel = tabModel;
-								SelectedRow selectedRow = new SelectedRow();
-								selectedRow.rowIndex = -1;
-								selectedRow.obj = obj;
+								SelectedRow selectedRow = new SelectedRow()
+								{
+									rowIndex = -1,
+									obj = obj,
+								};
 								tabDataSettings.SelectedRows.Add(selectedRow);
 								tabBookmark.tabChildBookmarks.Add(childNode.Name, childNode);
 								tabBookmark.selectedObjects.Add(obj);

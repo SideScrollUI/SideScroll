@@ -10,10 +10,9 @@ namespace Atlas.Tabs.Test.Chart
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Notes = "";
-				tabModel.Items = new ItemCollection<ListItem>()
+				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("List", new TabTestChartList()),
 					//new ListItem("Split", new TabTestChartSplit()),

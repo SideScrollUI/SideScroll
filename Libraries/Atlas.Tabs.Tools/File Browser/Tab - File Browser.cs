@@ -11,11 +11,11 @@ namespace Atlas.Tabs.Tools
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 				items.Add(new ListItem("Data", new TabDirectory(project.userSettings.ProjectPath)));
-				tabModel.Items = items;
+				model.Items = items;
 			}
 		}
 	}

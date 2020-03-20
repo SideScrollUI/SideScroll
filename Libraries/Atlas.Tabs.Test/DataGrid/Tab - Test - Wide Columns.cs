@@ -11,11 +11,11 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private ItemCollection<TestWideItem> items;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				items = new ItemCollection<TestWideItem>();
 				AddEntries();
-				tabModel.Items = items;
+				model.Items = items;
 
 				/*ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>();
 				//actions.Add(new TaskAction("Add Entries", AddEntries));

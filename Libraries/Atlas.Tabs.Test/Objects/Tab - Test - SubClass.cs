@@ -10,7 +10,7 @@ namespace Atlas.Tabs.Test.Objects
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				ItemCollection<ParentClass> items = new ItemCollection<ParentClass>();
 
@@ -18,7 +18,7 @@ namespace Atlas.Tabs.Test.Objects
 					items.Add(new ParentClass());
 
 				//items.Add(new ListItem("Long Text", reallyLongText));
-				tabModel.Items = items;
+				model.Items = items;
 			}
 		}
 

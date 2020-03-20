@@ -72,7 +72,7 @@ namespace Atlas.UI.Avalonia.View
 				TabInstance childTabInstance = new TabInstanceLoadAsync(loadAsync);
 				childTabInstance.project = parentTabInstance.project;
 				childTabInstance.tabBookmark = tabBookmark;
-				childTabInstance.tabModel.Name = label;
+				childTabInstance.Model.Name = label;
 				TabView tabView = new TabView(childTabInstance);
 				tabView.Load();
 				return tabView;
@@ -84,7 +84,7 @@ namespace Atlas.UI.Avalonia.View
 				TabInstance childTabInstance = parentTabInstance.CreateChildTab(iTab);
 				childTabInstance.tabBookmark = tabBookmark;
 				//childTabInstance.Reintialize(); // todo: fix, called in TabView
-				childTabInstance.tabModel.Name = label;
+				childTabInstance.Model.Name = label;
 				TabView tabView = new TabView(childTabInstance);
 				//tabView.Label = label;
 				tabView.Load();
@@ -111,7 +111,7 @@ namespace Atlas.UI.Avalonia.View
 			}*/
 			else
 			{
-				if (value is Enum && parentTabInstance.tabModel.Object.GetType().IsEnum)
+				if (value is Enum && parentTabInstance.Model.Object.GetType().IsEnum)
 					return null;
 
 				TabModel childTabModel;
@@ -135,7 +135,7 @@ namespace Atlas.UI.Avalonia.View
 					if (childTabModel == null)
 						return null;
 				}
-				childTabModel.Editing = parentTabInstance.tabModel.Editing;
+				childTabModel.Editing = parentTabInstance.Model.Editing;
 
 				TabInstance childTabInstance = parentTabInstance.CreateChild(childTabModel);
 				childTabInstance.Label = label;

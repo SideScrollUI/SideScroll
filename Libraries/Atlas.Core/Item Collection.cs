@@ -53,11 +53,11 @@ namespace Atlas.Core
 			return result;
 		}
 
-		public void Add(T item)
+		/*public new void Add(T item)
 		{
 			base.Add(item);
 			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
-		}
+		}*/
 
 		public void AddRange(IEnumerable<T> collection)
 		{

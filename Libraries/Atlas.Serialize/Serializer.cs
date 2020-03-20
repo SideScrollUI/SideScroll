@@ -260,8 +260,10 @@ namespace Atlas.Serialize
 			{
 				for (int i = 0; i < count; i++)
 				{
-					TypeSchema typeSchema = new TypeSchema(log, reader);
-					typeSchema.typeIndex = i;
+					TypeSchema typeSchema = new TypeSchema(log, reader)
+					{
+						typeIndex = i,
+					};
 					typeSchemas.Add(typeSchema);
 
 					//TypeRepo typeRepo = TypeRepo.Create(this, typeSchema);
@@ -337,8 +339,10 @@ namespace Atlas.Serialize
 				if (typeRepo.type == null)
 					continue;
 
-				TypeRepoWriter typeRepoWriter = new TypeRepoWriter();
-				typeRepoWriter.typeRepo = typeRepo;
+				TypeRepoWriter typeRepoWriter = new TypeRepoWriter()
+				{
+					typeRepo = typeRepo,
+				};
 				writers.Add(typeRepoWriter);
 			}
 
@@ -408,15 +412,16 @@ namespace Atlas.Serialize
 		// Adds TypeSchema and TypeRepo if required
 		public TypeRepo GetOrCreateRepo(Log log, Type type)
 		{
-			TypeRepo typeRepo;
-			if (idxTypeToRepo.TryGetValue(type, out typeRepo))
+			if (idxTypeToRepo.TryGetValue(type, out TypeRepo typeRepo))
 				return typeRepo;
 
 			//if (type.IsInterface || type.IsAbstract)
 			//	return null;
 
-			TypeSchema typeSchema = new TypeSchema(type);
-			typeSchema.typeIndex = typeSchemas.Count;
+			TypeSchema typeSchema = new TypeSchema(type)
+			{
+				typeIndex = typeSchemas.Count,
+			};
 			typeSchemas.Add(typeSchema);
 
 			typeRepo = TypeRepo.Create(log ?? new Log(), this, typeSchema);
@@ -437,7 +442,7 @@ namespace Atlas.Serialize
 			if (obj != null)
 			{
 				TypeRepo typeRepo = GetOrCreateRepo(null, obj.GetType());
-				int objectIndex = typeRepo.GetOrAddObjectRef(obj);
+				typeRepo.GetOrAddObjectRef(obj);
 			}
 		}
 
@@ -532,8 +537,7 @@ namespace Atlas.Serialize
 			Type type = obj.GetType();
 			if (type.IsPrimitive)
 				return obj;
-			object clone;
-			if (clones.TryGetValue(obj, out clone))
+			if (clones.TryGetValue(obj, out object clone))
 				return clone;
 			Log log = new Log();
 			TypeRepo typeRepo = GetOrCreateRepo(log, type);

@@ -30,9 +30,6 @@ namespace Atlas.Core
 		{
 			try
 			{
-				// BeginInvoke() doesn't work for .NET Core
-				//callAction.Invoke(call);
-				//InvokeActionAsync(call);
 				Task.Run(() => InvokeActionAsync(call)).GetAwaiter().GetResult();
 			}
 			catch (Exception e)
@@ -45,8 +42,6 @@ namespace Atlas.Core
 		{
 			try
 			{
-				// BeginInvoke() doesn't work for .NET Core
-				//return await callAction.BeginInvoke(call);
 				await callAction.Invoke(call);
 				//await taskInstance;
 			}

@@ -16,7 +16,7 @@ namespace Atlas.Start.Avalonia.Tabs
 		{
 			private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				//tabModel.Items = items;
 				/*SerilogLogger serilogLogger = new SerilogLogger()
@@ -31,7 +31,7 @@ namespace Atlas.Start.Avalonia.Tabs
 					new TaskDelegate("Add Log Entry", AddEntry),
 					new TaskDelegate("Task Instance Progress", SubTaskInstances),
 				};
-				tabModel.Actions = actions;
+				model.Actions = actions;
 			}
 
 			private Serilog.Core.Logger CreateLogger()

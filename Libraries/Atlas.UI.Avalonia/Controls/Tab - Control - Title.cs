@@ -79,7 +79,7 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			checkBox.Click += CheckBox_Click;*/
 
-			if (tabInstance.tabModel.Notes != null && tabInstance.tabModel.Notes.Length > 0)
+			if (tabInstance.Model.Notes != null && tabInstance.Model.Notes.Length > 0)
 			{
 				//Button button = new Button();
 				Image image = AvaloniaAssets.Images.Info;

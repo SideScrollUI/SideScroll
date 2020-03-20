@@ -15,11 +15,11 @@ namespace Atlas.Tabs.Test
 			private ItemCollection<ParamTestResult> items = new ItemCollection<ParamTestResult>();
 			private ParamTestItem paramTestItem;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Items = items;
+				model.Items = items;
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Add", Add),
 					new TaskDelegate("10s Task", LongTask, true),
@@ -28,9 +28,9 @@ namespace Atlas.Tabs.Test
 				paramTestItem = this.LoadData<ParamTestItem>(dataKey);
 				if (paramTestItem.DateTime.Ticks == 0)
 					paramTestItem.DateTime = DateTime.Now; // in case the serializer loses it
-				tabModel.AddObject(paramTestItem);
+				model.AddObject(paramTestItem);
 
-				tabModel.Notes = "Adding a class of type [Params] to a tabModel creates a TabControlParam\nParameter values can be saved between Tasks";
+				model.Notes = "Adding a class of type [Params] to a tabModel creates a TabControlParam\nParameter values can be saved between Tasks";
 			}
 
 			private void Add(Call call)

@@ -14,14 +14,14 @@ namespace Atlas.Tabs.Test
 			private Call sampleCall;
 			private int counter = 0;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				taskInstance = new TaskInstance();
 				taskInstance.Log.Add("Double Tag Test", new Tag("Double", 0.5));
 				sampleCall = new Call(Label);
 				counter = 0;
 
-				tabModel.Items = new ItemCollection<ListItem>()
+				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Task Instance Log", taskInstance.Log),
 					new ListItem("Sample Call", sampleCall),
@@ -29,7 +29,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Log Entry", new LogEntry(LogEntry.LogType.Info, "test", null)),
 				};
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskAction("Add 1 Entry", new Action(() => AddEntries(1))),
 					new TaskAction("Add 10 Entries", new Action(() => AddEntries(10))),

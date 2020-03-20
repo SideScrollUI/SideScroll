@@ -10,9 +10,10 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				System.Threading.Thread.Sleep(5000);
+				model.AddObject("Finished");
 			}
 		}
 	}

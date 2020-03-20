@@ -23,14 +23,14 @@ namespace Atlas.Tabs.Test
 				this.project = project;
 				LoadDefaultBookmark();
 
-				tabModel.Name = "Start";
+				Model.Name = "Start";
 
-				tabModel.Bookmarks = new BookmarkCollection(project);
+				Model.Bookmarks = new BookmarkCollection(project);
 			}
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Items = new ItemCollection<ListItem>()
+				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Sample", new TabSample()),
 

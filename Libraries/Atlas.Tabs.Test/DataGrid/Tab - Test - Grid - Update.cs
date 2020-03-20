@@ -23,13 +23,13 @@ namespace Atlas.Tabs.Test.DataGrid
 					context = new SynchronizationContext();
 			}
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				items = new ItemCollection<TestItem>();
 				AddEntries();
-				tabModel.Items = items;
+				model.Items = items;
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions =  new ItemCollection<TaskCreator>()
 				{
 					//new TaskAction("Add Entries", AddEntries),
 					new TaskDelegate("Start bigNumber++ Thread", UpdateCounter, true),

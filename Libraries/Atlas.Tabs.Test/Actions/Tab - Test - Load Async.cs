@@ -13,21 +13,21 @@ namespace Atlas.Tabs.Test.Actions
 		{
 			private const int delayMs = 2000;
 
-			public async Task LoadAsync(Call call, TabModel tabModel)
+			public async Task LoadAsync(Call call, TabModel model)
 			{
 				call.log.Add("Sleeping", new Tag("Milliseconds", delayMs));
 				await Task.Delay(delayMs);
-				tabModel.AddObject("Finished");
+				model.AddObject("Finished");
 
-				tabModel.Items = new List<int>()
+				model.Items = new List<int>()
 				{
 					1, 2, 3
 				};
 			}
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Reload", ReloadInstance),
 				};

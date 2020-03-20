@@ -34,7 +34,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			this.tabInstance = tabInstance;
 			this.project = tabInstance.project;
-			this.tabModel = tabInstance.tabModel;
+			this.tabModel = tabInstance.Model;
 
 			InitializeControls();
 		}

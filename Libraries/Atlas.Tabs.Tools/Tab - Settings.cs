@@ -11,12 +11,12 @@ namespace Atlas.Tabs.Tools
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Items = ListProperty.Create(this.project.projectSettings);
-				tabModel.Editing = true;
+				model.Items = ListProperty.Create(this.project.projectSettings);
+				Model.Editing = true;
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Reset", Reset),
 					new TaskDelegate("Save", Save),

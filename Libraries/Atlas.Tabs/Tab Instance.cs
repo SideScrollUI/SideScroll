@@ -33,10 +33,10 @@ namespace Atlas.Tabs
 			this.loadAsync = loadAsync;
 		}
 
-		public async Task LoadAsync(Call call, TabModel tabModel)
+		public async Task LoadAsync(Call call, TabModel model)
 		{
 			object result = await loadAsync.LoadAsync(call);
-			tabModel.AddData(result);
+			model.AddData(result);
 		}
 	}
 
@@ -49,10 +49,10 @@ namespace Atlas.Tabs
 
 		public Project project;
 		public ITab iTab;
-		//public Log Log { get {taskInstance.log; } }
+		//public Log Log => taskInstance.log;
 		public TaskInstance taskInstance = new TaskInstance();
-		public TabModel tabModel = new TabModel();
-		public string Label { get { return tabModel.Name; } set { tabModel.Name = value; } }
+		public TabModel Model { get; set; } = new TabModel();
+		public string Label { get { return Model.Name; } set { Model.Name = value; } }
 
 		public DataRepo DataApp => project.DataApp;
 
@@ -107,28 +107,29 @@ namespace Atlas.Tabs
 
 		// Relative paths for where all the TabSettings get stored, primarily used for loading future defaults
 		// paths get hashed later to avoid having to encode and super long names breaking path limits
-		private string CustomPath => (tabModel.CustomSettingsPath != null) ? "Custom/" + GetType().FullName + "/" + tabModel.CustomSettingsPath : null;
-		private string TabPath => "Tab/" + GetType().FullName + "/" + tabModel.ObjectTypePath;
+		private string CustomPath => (Model.CustomSettingsPath != null) ? "Custom/" + GetType().FullName + "/" + Model.CustomSettingsPath : null;
+		private string TabPath => "Tab/" + GetType().FullName + "/" + Model.ObjectTypePath;
 		//private string TabPath => "Tab/" + GetType().FullName + "/" + tabModel.ObjectTypePath + "/" + Label;
 		// deprecate?
-		private string TypeLabelPath => "TypePath/" + tabModel.ObjectTypePath + "/" + Label;
-		private string TypePath => "Type/" + tabModel.ObjectTypePath;
+		private string TypeLabelPath => "TypePath/" + Model.ObjectTypePath + "/" + Label;
+		private string TypePath => "Type/" + Model.ObjectTypePath;
 
-		private string LoadedPath => "Loaded/" + tabModel.ObjectTypePath;
+		private string LoadedPath => "Loaded/" + Model.ObjectTypePath;
 
 		// Reload to initial state
 		public bool isLoaded = false;
 		public bool loadCalled = false; // Used by the view
+		private bool modelCreated = false;
 
 		public TabInstance()
 		{
 			InitializeContext();
 		}
 
-		public TabInstance(Project project, TabModel tabModel)
+		public TabInstance(Project project, TabModel model)
 		{
 			this.project = project;
-			this.tabModel = tabModel;
+			this.Model = model;
 			InitializeContext();
 			SetStartLoad();
 		}
@@ -151,12 +152,12 @@ namespace Atlas.Tabs
 			return tabInstance;
 		}
 
-		public TabInstance CreateChildTab(TabModel tabModel)
+		public TabInstance CreateChildTab(TabModel model)
 		{
-			TabInstance tabInstance = new TabInstance(project, tabModel);
-			//tabInstance.project = project;
-			//tabInstance.iTab = iTab;
-			tabInstance.ParentTabInstance = this;
+			TabInstance tabInstance = new TabInstance(project, model)
+			{
+				ParentTabInstance = this,
+			};
 			//tabInstance.tabBookmark = tabBookmark;
 			FillInheritables(tabInstance);
 			return tabInstance;
@@ -194,11 +195,9 @@ namespace Atlas.Tabs
 		public virtual void Dispose()
 		{
 			childTabInstances.Clear();
-			if (CanLoad)
-			{
-				tabModel.Clear();
-			}
-			foreach (TaskInstance taskInstance in tabModel.Tasks)
+			if (modelCreated)
+				Model.Clear();
+			foreach (TaskInstance taskInstance in Model.Tasks)
 			{
 				taskInstance.Cancel();
 			}
@@ -282,7 +281,7 @@ namespace Atlas.Tabs
 		// subtask?
 		public void CallTask(TaskDelegateParams taskCreator, bool showTask)
 		{
-			TaskInstance taskInstance = taskCreator.Start(taskCreator.call);
+			taskCreator.Start(taskCreator.call);
 		}
 
 		public void StartTask(TaskCreator taskCreator, bool showTask, Call call = null)
@@ -290,7 +289,7 @@ namespace Atlas.Tabs
 			call = call ?? new Call(taskCreator.Label);
 			TaskInstance taskInstance = taskCreator.Start(call);
 			taskInstance.ShowTask = showTask;
-			tabModel.Tasks.Add(taskInstance);
+			Model.Tasks.Add(taskInstance);
 		}
 
 		public void StartTask(CallAction callAction, bool useTask, bool showTask)
@@ -311,13 +310,32 @@ namespace Atlas.Tabs
 			StartTask(taskDelegate, showTask);
 		}
 
-		private MethodInfo GetDerivedLoadMethod()
+		private MethodInfo GetDerivedLoadMethod(string name)
 		{
 			Type type = GetType(); // gets derived type
-			if (type.GetMethods().Where(m => m.Name == nameof(Load)).ToList().Count > 1)
+			if (type.GetMethods().Where(m => m.Name == name).ToList().Count > 1)
 				return null;
 			MethodInfo methodInfo = type.GetMethod(nameof(Load));//, new Type[] { typeof(Call) });
 			return methodInfo;
+		}
+
+		private MethodInfo GetDerivedLoadMethod(string name, int paramCount)
+		{
+			try
+			{
+				Type type = GetType(); // gets derived type
+				var methods = type.GetMethods().Where(m => m.Name == name).ToList();
+				foreach (var method in methods)
+				{
+					var parameters = method.GetParameters();
+					if (paramCount == parameters.Length)
+						return method;
+				}
+			}
+			catch (Exception e)
+			{
+			}
+			return null;
 		}
 
 		// Check if derived type implements Load()
@@ -325,12 +343,36 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				MethodInfo methodInfo = GetDerivedLoadMethod();
+				//MethodInfo methodInfo = GetDerivedLoadMethod(nameof(Load));
+				MethodInfo methodInfo = GetDerivedLoadMethod(nameof(Load), 2);
+				return (methodInfo?.DeclaringType != typeof(TabInstance));
+			}
+		}
+
+		public bool CanLoadUI
+		{
+			get
+			{
+				MethodInfo methodInfo = GetDerivedLoadMethod(nameof(LoadUI), 1);
+				return (methodInfo?.DeclaringType != typeof(TabInstance));
+			}
+		}
+
+		// Check if derived type implements Load()
+		public bool CanLoadModel
+		{
+			get
+			{
+				MethodInfo methodInfo = GetDerivedLoadMethod(nameof(Load), 2);
 				return (methodInfo.DeclaringType != typeof(TabInstance));
 			}
 		}
 
-		public virtual void Load(Call call)
+		public virtual void Load(Call call, TabModel model)
+		{
+		}
+
+		public virtual void LoadUI(Call call)
 		{
 		}
 
@@ -340,20 +382,22 @@ namespace Atlas.Tabs
 			if (!force && isLoaded)
 				return;
 
+			isLoaded = true;
 			loadCalled = false; // allow TabView to reload
 
-			if (this is ITabAsync tabAsync)
+			//StartAsync(ReintializeAsync);
+
+			if (this is ITabAsync || CanLoadModel)
 			{
 				StartAsync(ReintializeAsync);
 				return;
 			}
 
-			var newModel = tabModel;
-			if (CanLoad)
+			var newModel = Model;
+			if (CanLoad) // || CanLoadModel)
 			{
-				newModel = new TabModel();
-				newModel.Name = tabModel.Name;
-				isLoaded = true;
+				newModel = new TabModel(Model.Name);
+				modelCreated = true;
 			}
 			try
 			{
@@ -365,40 +409,54 @@ namespace Atlas.Tabs
 			}
 			
 			var loadUiTask = taskInstance.call.AddSubTask("Loading");
-			Invoke(() => LoadUi(loadUiTask.call, newModel)); // Some controls need to be created on the UI context
+			Invoke(() => LoadUi(loadUiTask.call, newModel)); // Some controls need to be created on the UI context*/
 		}
 
 		// todo: Add sync version?
 		public async Task ReintializeAsync(Call call)
 		{
-			TabModel tabModel = new TabModel();
-			tabModel.Name = this.tabModel.Name; // todo: fix
+			TabModel model = new TabModel(Model.Name);
 
-			var tabAsync = (ITabAsync)this;
-			try
+			if (this is ITabAsync tabAsync)
 			{
-				await tabAsync.LoadAsync(call, tabModel);
-				Preload(tabModel);
+				try
+				{
+					await tabAsync.LoadAsync(call, model);
+					Preload(model);
+				}
+				catch (Exception e)
+				{
+					model.AddData(e);
+					//tabModel.Tasks.Add(call.taskInstance);
+				}
+				//StartAsync(ReintializeAsync);
 			}
-			catch (Exception e)
+			if (CanLoadModel)
 			{
-				tabModel.AddData(e);
-				//tabModel.Tasks.Add(call.taskInstance);
+				try
+				{
+					Load(call, model);
+				}
+				catch (Exception e)
+				{
+					call.log.Add(e);
+					model.AddData(e);
+				}
 			}
 
-			//Invoke(() => LoadUi(call, tabModel));
+			//Invoke(() => LoadUi(call, model));
 			var subTask = call.AddSubTask("Loading");
-			Invoke(() => LoadUi(subTask.call, tabModel)); // Some controls need to be created on the UI context
+			Invoke(() => LoadUi(subTask.call, model)); // Some controls need to be created on the UI context
 
 			// Have return tabModel?
 		}
 
 		// Preload properties in a background thread so the GUI isn't blocked
 		// Todo: Make an async version of this for Task<T> Member(Call call)
-		private void Preload(TabModel tabModel)
+		private void Preload(TabModel model)
 		{
 			int index = 0;
-			foreach (IList iList in tabModel.ItemList)
+			foreach (IList iList in model.ItemList)
 			{
 				Type listType = iList.GetType();
 				Type elementType = listType.GetElementTypeForAll();
@@ -420,12 +478,22 @@ namespace Atlas.Tabs
 			}
 		}
 
-		public void LoadUi(Call call, TabModel tabModel)
+		public void LoadUi(Call call, TabModel model)
 		{
-			this.tabModel = tabModel; // Load() needs this set
-			if (CanLoad)
-				Load(call);
-			LoadSettings(); // Load() initializes the tabModel.Object which gets used for the settings path
+			Model = model; // Load() needs this set
+			if (CanLoadUI)
+			{
+				try
+				{
+					LoadUI(call);
+				}
+				catch (Exception e)
+				{
+					call.log.Add(e);
+					Model.AddData(e);
+				}
+			}
+			LoadSettings(); // Load() initializes the tabModel.Object & CustomSettingsPath which gets used for the settings path
 			OnModelChanged?.Invoke(this, new EventArgs());
 
 			isLoaded = true;
@@ -477,12 +545,12 @@ namespace Atlas.Tabs
 				if (tabViewSettings.SelectionType == SelectionType.User && tabViewSettings.SelectedRows.Count == 0) // Need to split apart user selected rows?
 					return false;
 				// Only data is skippable?
-				if (tabModel.Objects.Count > 0 || tabModel.ItemList.Count == 0 || tabModel.ItemList[0].Count != 1)
+				if (Model.Objects.Count > 0 || Model.ItemList.Count == 0 || Model.ItemList[0].Count != 1)
 					return false;
-				var skippableAttribute = tabModel.ItemList[0][0].GetType().GetCustomAttribute<SkippableAttribute>();
-				if (skippableAttribute == null && tabModel.Actions != null && tabModel.Actions.Count > 0)
+				var skippableAttribute = Model.ItemList[0][0].GetType().GetCustomAttribute<SkippableAttribute>();
+				if (skippableAttribute == null && Model.Actions != null && Model.Actions.Count > 0)
 					return false; 
-				return tabModel.Skippable;
+				return Model.Skippable;
 			}
 		}
 
@@ -723,7 +791,7 @@ namespace Atlas.Tabs
 			if (obj == null)
 				return false;
 
-			if (tabModel.Object == obj)
+			if (Model.Object == obj)
 				return true;
 
 			Type type = obj.GetType();
@@ -755,16 +823,17 @@ namespace Atlas.Tabs
 			OnModified?.Invoke(this, null);
 		}
 
-		public TabInstance CreateChild(TabModel tabModel)
+		public TabInstance CreateChild(TabModel model)
 		{
-			TabInstance childTabInstance = new TabInstance(project, tabModel);
-			childTabInstance.ParentTabInstance = this;
+			TabInstance childTabInstance = new TabInstance(project, model)
+			{
+				ParentTabInstance = this,
+			};
 			//childTabInstance.tabBookmark = tabBookmark;
 
 			if (tabBookmark != null)
 			{
-				TabBookmark tabChildBookmark = null;
-				if (tabBookmark.tabChildBookmarks.TryGetValue(tabModel.Name, out tabChildBookmark))
+				if (tabBookmark.tabChildBookmarks.TryGetValue(model.Name, out TabBookmark tabChildBookmark))
 				{
 					childTabInstance.tabBookmark = tabChildBookmark;
 				}

@@ -76,7 +76,7 @@ namespace Atlas.UI.Avalonia
 			//private CustomControl control;
 			//private TabChart tabChart;
 
-			public override void Load(Call call)
+			public override void LoadUI(Call call)
 			{
 				if (tabViewSettings.ChartDataSettings.Count == 0)
 					tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
@@ -110,7 +110,7 @@ namespace Atlas.UI.Avalonia
 					TargetType = typeof(object),
 				};*/
 
-				tabModel.AddObject(tabDataGrid);
+				Model.AddObject(tabDataGrid);
 			}
 			private void LoadSelectedCharts()
 			{

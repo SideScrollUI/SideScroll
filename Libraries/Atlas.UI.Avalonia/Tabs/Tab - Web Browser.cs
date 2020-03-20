@@ -32,7 +32,7 @@ namespace Atlas.UI.Avalonia.Tabs
 			//private CustomControl control;
 			//private TabChart tabChart;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				//labelName.Content = label;
 				//textBoxUri.Text = uri.AbsoluteUri;

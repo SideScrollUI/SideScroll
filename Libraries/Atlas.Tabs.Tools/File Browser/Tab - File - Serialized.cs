@@ -30,7 +30,7 @@ namespace Atlas.Tabs.Tools
 				this.tab = tab;
 			}
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 
@@ -40,12 +40,12 @@ namespace Atlas.Tabs.Tools
 
 				items.Add(new ListItem("Schema", serializer));
 				items.Add(listData);
-				tabModel.Items = items;
+				model.Items = items;
 
 				ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>();
 				if (Object == null)
 					actions.Add(new TaskDelegate("Load Data", LoadData));
-				tabModel.Actions = actions;
+				model.Actions = actions;
 			}
 
 			private void LoadData(Call call)

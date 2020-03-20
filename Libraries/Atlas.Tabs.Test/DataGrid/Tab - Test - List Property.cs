@@ -13,12 +13,12 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private PropertyTest propertyTest = new PropertyTest();
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Items = ListProperty.Create(propertyTest);
-				tabModel.Editing = true;
+				model.Items = ListProperty.Create(propertyTest);
+				model.Editing = true;
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions =  new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Toggle", Toggle),
 				};

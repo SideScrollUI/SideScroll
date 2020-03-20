@@ -13,11 +13,11 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 			}
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				MyClass[] classes = new MyClass[] { new MyClass(), new MyClass() };
 
-				tabModel.Items = new ItemCollection<ListItem>()
+				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("2 Items", classes),
 					new ListItem("String Array", new string[] { "abc", "123" }),

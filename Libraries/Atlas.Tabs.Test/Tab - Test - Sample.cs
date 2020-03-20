@@ -13,25 +13,25 @@ namespace Atlas.Tabs.Test
 		{
 			private ItemCollection<SampleItem> sampleItems;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				sampleItems = new ItemCollection<SampleItem>();
 				AddItems(5);
 
-				tabModel.Items = new ItemCollection<ListItem>("Items")
+				model.Items = new ItemCollection<ListItem>("Items")
 				{
 					new ListItem("Sample Items", sampleItems),
 					new ListItem("Collections", new TabTestGridCollectionSize()),
 					new ListItem("Child Tab", new TabSample()), // recursive
 				};
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Sleep 10s", Sleep, true),
 					new TaskAction("Add 5 Items", new Action(() => AddItems(5)), false), // Foreground task so we can modify collection
 				};
 
-				tabModel.Notes =
+				Model.Notes =
 @"
 This is a sample tab that shows some of the different tab features
 

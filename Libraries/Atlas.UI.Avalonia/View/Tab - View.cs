@@ -35,8 +35,8 @@ namespace Atlas.UI.Avalonia.View
 			}
 		}
 		public TabInstance tabInstance;
-		public TabModel tabModel => tabInstance.tabModel;
-		public string Label { get { return tabModel.Name; } set { tabModel.Name = value; } }
+		public TabModel Model => tabInstance.Model;
+		public string Label { get { return Model.Name; } set { Model.Name = value; } }
 
 		// Created Controls
 		public TabControlActions tabActions;
@@ -65,7 +65,7 @@ namespace Atlas.UI.Avalonia.View
 			Initialize();
 		}
 
-		public override string ToString() => tabModel.Name;
+		public override string ToString() => Model.Name;
 
 		public void Initialize()
 		{
@@ -74,14 +74,14 @@ namespace Atlas.UI.Avalonia.View
 			RowDefinitions = new RowDefinitions("*");
 
 			tabInstance.OnModelChanged += TabInstance_OnModelChanged;
-			if (!(tabInstance is ITabAsync))
+			/*if (!(tabInstance is ITabAsync))
 			{
 				//InitializeControls();
 				//AddListeners();
 
 				// Have return TabModel?
 				tabInstance.Reintialize(false);
-			}
+			}*/
 			if (tabInstance is ITabSelector tabSelector)
 				tabSelector.OnSelectionChanged += ParentListSelectionChanged;
 
@@ -185,7 +185,7 @@ namespace Atlas.UI.Avalonia.View
 				return;
 
 			int desiredWidth = (int)tabParentControls.DesiredSize.Width;
-			if (tabModel.CustomSettingsPath != null && TabViewSettings.SplitterDistance != null)
+			if (Model.CustomSettingsPath != null && TabViewSettings.SplitterDistance != null)
 			{
 				desiredWidth = (int)TabViewSettings.SplitterDistance.Value;
 			}
@@ -199,8 +199,8 @@ namespace Atlas.UI.Avalonia.View
 			tabParentControls = new TabControlSplitContainer()
 			{
 				ColumnDefinitions = new ColumnDefinitions("*"),
-				MinDesiredWidth = tabModel.MinDesiredWidth,
-				MaxDesiredWidth = tabModel.MaxDesiredWidth,
+				MinDesiredWidth = Model.MinDesiredWidth,
+				MaxDesiredWidth = Model.MaxDesiredWidth,
 			};
 			//if (TabViewSettings.SplitterDistance != null)
 			//	tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
@@ -208,7 +208,7 @@ namespace Atlas.UI.Avalonia.View
 			containerGrid.Children.Add(tabParentControls);
 			UpdateSplitterDistance();
 
-			TabControlTitle tabTitle = new TabControlTitle(tabInstance, tabModel.Name);
+			TabControlTitle tabTitle = new TabControlTitle(tabInstance, Model.Name);
 			tabParentControls.AddControl(tabTitle, false, SeparatorType.None);
 		}
 
@@ -302,7 +302,6 @@ namespace Atlas.UI.Avalonia.View
 			InvalidateArrange();
 			//TabViewSettings.SplitterDistance = (int)Math.Ceiling(e.Vector.Y); // backwards
 			double width = (int)containerGrid.ColumnDefinitions[0].ActualWidth;
-			double width2 = (int)containerGrid.ColumnDefinitions[0].Width.Value;
 			TabViewSettings.SplitterDistance = width;
 			tabParentControls.Width = width;
 			containerGrid.ColumnDefinitions[0].Width = new GridLength(width);
@@ -393,7 +392,7 @@ namespace Atlas.UI.Avalonia.View
 
 		protected void AddObjects()
 		{
-			foreach (TabObject tabObject in tabModel.Objects)
+			foreach (TabObject tabObject in Model.Objects)
 			{
 				object obj = tabObject.obj;
 				if (obj is ChartSettings chartSettings)
@@ -425,17 +424,17 @@ namespace Atlas.UI.Avalonia.View
 
 		protected void AddActions()
 		{
-			if (tabModel.Actions == null)
+			if (Model.Actions == null)
 				return;
 
-			tabActions = new TabControlActions(tabInstance, tabModel, tabModel.Actions as ItemCollection<TaskCreator>);
+			tabActions = new TabControlActions(tabInstance, Model, Model.Actions as ItemCollection<TaskCreator>);
 
 			tabParentControls.AddControl(tabActions, false, SeparatorType.Spacer);
 		}
 
 		protected void AddTasks()
 		{
-			if (tabModel.Actions == null)
+			if (Model.Actions == null)
 				return;
 
 			//if (tabModel.Tasks == null)
@@ -462,7 +461,7 @@ namespace Atlas.UI.Avalonia.View
 		{
 			tabDatas.Clear();
 			int index = 0;
-			foreach (IList iList in tabModel.ItemList)
+			foreach (IList iList in Model.ItemList)
 			{
 				TabControlDataGrid tabData = new TabControlDataGrid(tabInstance, iList, true, TabViewSettings.GetData(index));
 				//tabData.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -546,7 +545,7 @@ namespace Atlas.UI.Avalonia.View
 				return;
 			tabInstance.loadCalled = true;
 
-			if (tabInstance is ITabAsync)
+			if (tabInstance is ITabAsync || tabInstance.CanLoadModel)
 			{
 				tabInstance.StartAsync(LoadBackgroundAsync);
 			}
@@ -672,8 +671,7 @@ namespace Atlas.UI.Avalonia.View
 				double offset = tabChildControls.Bounds.X;
 				while (control != null)
 				{
-					ScrollViewer scrollViewer = control as ScrollViewer;
-					if (scrollViewer != null)
+					if (control is ScrollViewer scrollViewer)
 					{
 						if (offset - scrollViewer.Offset.X > scrollViewer.Bounds.Width)
 							return false;
@@ -737,8 +735,7 @@ namespace Atlas.UI.Avalonia.View
 			double offset = tabChildControls.Bounds.X;
 			while (control != null)
 			{
-				ScrollViewer scrollViewer = control as ScrollViewer;
-				if (scrollViewer != null)
+				if (control is ScrollViewer scrollViewer)
 				{
 					double width = scrollViewer.Bounds.Width - (offset - scrollViewer.Offset.X);
 					return Math.Max(0, width - 10);
@@ -785,8 +782,7 @@ namespace Atlas.UI.Avalonia.View
 			//Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
 			//tabChildControls.gridControls = new Dictionary<object, Control>();
 
-			Dictionary<object, Control> newChildControls;
-			List<Control> orderedChildControls = CreateAllChildControls(out newChildControls);
+			List<Control> orderedChildControls = CreateAllChildControls(out Dictionary<object, Control> newChildControls);
 
 			fillerPanel = null;
 
@@ -809,7 +805,7 @@ namespace Atlas.UI.Avalonia.View
 			Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
 			newChildControls = new Dictionary<object, Control>();
 			List<Control> orderedChildControls = new List<Control>();
-			AddNotes(newChildControls, oldChildControls, orderedChildControls);
+			//AddNotes(newChildControls, oldChildControls, orderedChildControls);
 
 			if (tabInstance is ITabSelector tabSelector && tabSelector.SelectedItems != null)
 			{
@@ -825,7 +821,7 @@ namespace Atlas.UI.Avalonia.View
 				// show action help?
 				//CreateChildControls(tabActions.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
-			if (tabTasks != null && (tabTasks.IsVisible || tabModel.Tasks?.Count > 0))
+			if (tabTasks != null && (tabTasks.IsVisible || Model.Tasks?.Count > 0))
 			{
 				CreateChildControls(tabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
@@ -835,30 +831,6 @@ namespace Atlas.UI.Avalonia.View
 				CreateChildControls(tabData.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
 			return orderedChildControls;
-		}
-
-		private void AddNotes(Dictionary<object, Control> newChildControls, Dictionary<object, Control> oldChildControls, List<Control> orderedChildControls)
-		{
-			/*if (tabModel.Notes != null && tabModel.Notes.Length > 0 && tabInstance.tabViewSettings.NotesVisible)
-			{
-				// Could add control to class instead of this
-				Control controlNotes;
-				if (oldChildControls.TryGetValue(tabModel.Notes, out controlNotes))
-				{
-					newChildControls[tabModel.Notes] = controlNotes;
-					orderedChildControls.Add(controlNotes);
-				}
-				else
-				{
-					TabModel notesTabModel = new TabModel("Notes");
-					notesTabModel.AddData(tabModel.Notes);
-					notesTabModel.Notes = tabModel.Notes;
-					TabInstance childTabInstance = tabInstance.CreateChildTab(notesTabModel);
-					TabNotes tabNotes = new TabNotes(childTabInstance);
-					newChildControls[tabModel.Notes] = tabNotes;
-					orderedChildControls.Add(tabNotes);
-				}
-			}*/
 		}
 
 		internal void CreateChildControls(IList newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector tabControl = null)
@@ -926,8 +898,7 @@ namespace Atlas.UI.Avalonia.View
 			tabInstance.childTabInstances.Clear();
 			foreach (Control control in tabChildControls.gridControls.Values)
 			{
-				TabView tabView = control as TabView;
-				if (tabView != null)
+				if (control is TabView tabView)
 				{
 					tabInstance.childTabInstances.Add(control, tabView.tabInstance);
 				}
@@ -1032,8 +1003,7 @@ namespace Atlas.UI.Avalonia.View
 				//if (tabInstance.tabBookmark != null)
 				foreach (TabInstance childTabInstance in tabInstance.childTabInstances.Values)
 				{
-					TabBookmark childBookmarkNode = null;
-					if (tabBookmark.tabChildBookmarks.TryGetValue(childTabInstance.Label, out childBookmarkNode))
+					if (tabBookmark.tabChildBookmarks.TryGetValue(childTabInstance.Label, out TabBookmark childBookmarkNode))
 					{
 						childTabInstance.SelectBookmark(childBookmarkNode);
 					}

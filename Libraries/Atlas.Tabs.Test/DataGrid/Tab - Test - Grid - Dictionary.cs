@@ -13,13 +13,13 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private Dictionary<string, TestItem> items;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				items = new Dictionary<string, TestItem>();
 				AddEntries(null);
-				tabModel.AddData(items);
+				model.AddData(items);
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions =  new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Add Entries", AddEntries),
 				};

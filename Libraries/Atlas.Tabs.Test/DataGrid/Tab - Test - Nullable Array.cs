@@ -10,7 +10,7 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				TestItem?[] testItems = new TestItem?[10];
 
@@ -22,8 +22,8 @@ namespace Atlas.Tabs.Test.DataGrid
 						bigNumber = i * 1000,
 					};
 				}
-				//tabModel.Items = testItems;
-				tabModel.AddData(testItems);
+				//model.Items = testItems;
+				model.AddData(testItems);
 			}
 		}
 

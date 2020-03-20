@@ -12,21 +12,21 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Items = new ItemCollection<ListItem>()
+				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Sample Data Repo", new TabTestDataRepoCollection()),
 					new ListItem("Local Directories", new TabDirectory(project.DataApp.RepoPath)),
 				};
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions =  new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Delete Repos", DeleteRepos),
 				};
-				tabModel.AutoSelect = TabModel.AutoSelectType.AnyNewOrSaved;
+				model.AutoSelect = TabModel.AutoSelectType.AnyNewOrSaved;
 
-				tabModel.Notes = "Data Repos store C# objects as serialized data.";
+				model.Notes = "Data Repos store C# objects as serialized data.";
 			}
 
 			private void DeleteRepos(Call call)

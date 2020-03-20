@@ -40,7 +40,7 @@ namespace Atlas.Tabs.Tools
 				this.tab = tab;
 			}
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 				listItemTasks = new ListItem("Tasks", tab.tasks);
@@ -49,7 +49,7 @@ namespace Atlas.Tabs.Tools
 				//list.Add(listItemActive);
 				//list.Add(listItemFinished);
 
-				tabModel.Items = items;
+				model.Items = items;
 
 				ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>();
 				listItemStart = new TaskDelegate("Start", Start);
@@ -57,7 +57,7 @@ namespace Atlas.Tabs.Tools
 				actions.Add(listItemStart);
 				actions.Add(listItemStop);
 
-				tabModel.Actions = actions;
+				model.Actions = actions;
 			}
 
 			public void Start(Call call)

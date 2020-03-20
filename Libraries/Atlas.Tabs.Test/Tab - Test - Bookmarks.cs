@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Test
 		{
 			//private ItemCollection<SampleItem> sampleItems;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				//tabModel.Items = project.navigator.History;
 
@@ -21,13 +21,13 @@ namespace Atlas.Tabs.Test
 				navigator.History.RemoveAt(navigator.History.Count - 1); // remove the current in progress bookmark
 				navigator.CurrentIndex = navigator.History.Count;
 
-				tabModel.Items = new ItemCollection<ListItem>()
+				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Navigator (snapshot)", navigator),
 					//new ListItem("Recursive Tab", new TabSample()),
 				};
 
-				tabModel.Notes = "The Navigator class creates a bookmark for every tab change you make, and allows you to move backwards and forwards. The Back/Forward buttons currently use this. Eventually a list/drop down could be used to select the bookmark";
+				model.Notes = "The Navigator class creates a bookmark for every tab change you make, and allows you to move backwards and forwards. The Back/Forward buttons currently use this. Eventually a list/drop down could be used to select the bookmark";
 
 				// Replace this
 				/*sampleItems = new ItemCollection<SampleItem>();

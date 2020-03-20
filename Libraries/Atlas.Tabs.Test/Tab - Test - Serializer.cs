@@ -14,11 +14,11 @@ namespace Atlas.Tabs.Test
 		{
 			private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Items = items;
+				model.Items = items;
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Serialize 1 object", Serialize, true),
 					new TaskDelegate("Deserialize 1 object", Deserialize, true),
@@ -26,7 +26,7 @@ namespace Atlas.Tabs.Test
 					new TaskDelegate("Deserialize 1 million objects", DeserializeOneMillionObjects, true),
 				};
 
-				tabModel.Notes = "";
+				Model.Notes = "";
 			}
 
 			// GUI thread

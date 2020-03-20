@@ -11,16 +11,16 @@ namespace Atlas.Tabs.Test.Actions
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Notes = "";
-				tabModel.Items = new ItemCollection<ListItem>()
+				model.Notes = "";
+				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Parameters", new TabParamsDataGrid()),
 					new ListItem("Async Load", new TabTestLoadAsync()),
 				};
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions =  new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Add Log Entry", AddEntry),
 					new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
@@ -30,7 +30,7 @@ namespace Atlas.Tabs.Test.Actions
 					new TaskDelegate("StartAsync error", StartAsyncError),
 				};
 
-				tabModel.Notes = @"
+				model.Notes = @"
 Actions add Buttons to the tab. When clicked, it will:
 * Start a task that calls this action
 * Add a Tasks grid to the tab

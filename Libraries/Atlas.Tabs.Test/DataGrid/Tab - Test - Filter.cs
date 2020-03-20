@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private ItemCollection<TestFilterItem> items;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				string characters = "abcdefghijklmn";
 				items = new ItemCollection<TestFilterItem>();
@@ -34,9 +34,9 @@ namespace Atlas.Tabs.Test.DataGrid
 					items.Add(item);
 				}
 
-				tabModel.Items = items;
+				model.Items = items;
 
-				tabModel.Notes = @"
+				model.Notes = @"
 * Press Ctrl-F on any Data Grid to add a filter (You can click anywhere on a tab to focus it)
 * You can use | or & to restrict searches
 * Examples:

@@ -11,9 +11,9 @@ namespace Atlas.Tabs.Test.Objects
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Items = new ItemCollection<ListItem>()
+				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("UriTest", new UriTest("test")),
 					new ListItem("Tags", new Tag[] { new Tag("abc", 1.1) }),

@@ -28,7 +28,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Initialize();
 		}
 
-		public override string ToString() => tabInstance.tabModel.Name;
+		public override string ToString() => tabInstance.Model.Name;
 
 		private void Initialize()
 		{
@@ -50,7 +50,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			get
 			{
-				foreach(var task in tabInstance.tabModel.Tasks)
+				foreach(var task in tabInstance.Model.Tasks)
 				{
 					if (task.ShowTask || task.TaskStatus == System.Threading.Tasks.TaskStatus.Faulted)
 						return true;
@@ -68,7 +68,7 @@ namespace Atlas.UI.Avalonia.Controls
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			tabControlDataGrid = new TabControlDataGrid(tabInstance, tabInstance.tabModel.Tasks, false); // don't autogenerate
+			tabControlDataGrid = new TabControlDataGrid(tabInstance, tabInstance.Model.Tasks, false); // don't autogenerate
 			tabControlDataGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
 			tabControlDataGrid.VerticalAlignment = VerticalAlignment.Stretch;
 
@@ -83,7 +83,7 @@ namespace Atlas.UI.Avalonia.Controls
 			//tabDataGrid.Initialize();
 			Children.Add(tabControlDataGrid);
 
-			if (tabInstance.tabModel.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
+			if (tabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
 				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
 		}
 
@@ -104,11 +104,11 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (autoSelectNew && e.NewStartingIndex >= 0)
 				{
-					TaskInstance taskInstance = tabInstance.tabModel.Tasks[e.NewStartingIndex];
+					TaskInstance taskInstance = tabInstance.Model.Tasks[e.NewStartingIndex];
 					tabControlDataGrid.SelectedItem = taskInstance;
 					taskInstance.OnComplete = () => TaskCompleted(taskInstance);
 					int lineHeight = 26;
-					tabControlDataGrid.MinHeight = Math.Min(tabInstance.tabModel.Tasks.Count * lineHeight + lineHeight, 6 * lineHeight);
+					tabControlDataGrid.MinHeight = Math.Min(tabInstance.Model.Tasks.Count * lineHeight + lineHeight, 6 * lineHeight);
 				}
 
 				//this.Visibility = Visibility.Visible;

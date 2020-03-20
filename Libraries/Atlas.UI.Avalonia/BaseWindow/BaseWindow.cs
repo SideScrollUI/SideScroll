@@ -285,6 +285,7 @@ namespace Atlas.UI.Avalonia
 		protected void AddTab(ITab tab)
 		{
 			TabInstance tabInstance = tab.Create();
+			tabInstance.Model.Name = "Start";
 			tabInstance.project = project;
 			if (LoadBookmarkUri != null)
 				tabInstance.tabBookmark = linker.GetBookmark(LoadBookmarkUri)?.tabBookmark;
@@ -292,8 +293,7 @@ namespace Atlas.UI.Avalonia
 				tabInstance.LoadDefaultBookmark();
 
 			tabView = new TabView(tabInstance);
-			tabView.tabModel.Name = "Start";
-			tabView.tabModel.Bookmarks = new BookmarkCollection(project);
+			tabView.Model.Bookmarks = new BookmarkCollection(project);
 			tabView.Load();
 
 			//var tabBookmarks = new TabBookmarks(tabView);

@@ -13,15 +13,15 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private HashSet<TabTestGridCollectionSize.TestItem> items;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				items = new HashSet<TabTestGridCollectionSize.TestItem>();
 				AddEntries(null);
-				tabModel.AddData(items);
+				model.AddData(items);
 
 				ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>();
 				actions.Add(new TaskDelegate("Add Entries", AddEntries));
-				tabModel.Actions = actions;
+				model.Actions =  actions;
 			}
 
 			private void AddEntries(Call call)

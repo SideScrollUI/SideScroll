@@ -9,7 +9,7 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				ItemCollection<TestItem> items = new ItemCollection<TestItem>();
 				for (int i = 0; i < 10; i++)
@@ -27,7 +27,7 @@ namespace Atlas.Tabs.Test.DataGrid
 					testItem.LongString = testItem.LongString + i; // make as a unique string
 					items.Add(testItem);
 				}
-				tabModel.Items = items;
+				model.Items = items;
 			}
 		}
 

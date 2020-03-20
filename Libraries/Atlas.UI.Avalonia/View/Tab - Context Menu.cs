@@ -97,7 +97,7 @@ namespace Atlas.UI.Avalonia.View
 			//tabInstance.Reset()
 			tabView.TabViewSettings = new TabViewSettings()
 			{
-				Name = tabInstance.tabModel.Name,
+				Name = tabInstance.Model.Name,
 			};
 			tabInstance.SaveTabSettings();
 			tabInstance.Reintialize(true);

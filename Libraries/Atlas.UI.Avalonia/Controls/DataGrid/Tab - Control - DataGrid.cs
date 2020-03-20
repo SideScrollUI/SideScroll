@@ -26,6 +26,7 @@ namespace Atlas.UI.Avalonia.Controls
 	public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ILayoutable
 	{
 		private const int ColumnPercentBased = 150;
+		private const int MaxMinColumnWidth = 125;
 		private static int MaxColumnWidth = 600;
 
 		private TabModel tabModel;
@@ -69,7 +70,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public TabControlDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns, TabDataSettings tabDataSettings = null)
 		{
 			this.tabInstance = tabInstance;
-			this.tabModel = tabInstance.tabModel;
+			this.tabModel = tabInstance.Model;
 			this.AutoLoad = tabModel.AutoLoad;
 			this.iList = iList;
 			this.autoGenerateColumns = autoGenerateColumns;
@@ -346,7 +347,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				column.MaxWidth = 2000;
 				if (column.MinWidth == 0)
-					column.MinWidth = Math.Min(100, column.Width.DesiredValue);
+					column.MinWidth = Math.Min(MaxMinColumnWidth, column.Width.DesiredValue);
 				else
 					column.MinWidth = Math.Max(column.MinWidth, Math.Min(100, column.Width.DesiredValue));
 				double desiredWidth = Math.Max(column.MinWidth, column.Width.DesiredValue);
@@ -809,7 +810,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 				if (value is TabView tabView)
 				{
-					if (tabView.tabModel.AutoLoad == false)
+					if (tabView.Model.AutoLoad == false)
 						continue;
 				}
 				if (firstValidObject == null)

@@ -15,11 +15,11 @@ namespace Atlas.Start.Avalonia.Tabs
 			//private TabControlParams tabParams;
 			private ParamTestItem paramTestItem;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Items = items;
+				model.Items = items;
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Run", Run),
 					new TaskDelegate("10s Task", LongTask, true),
@@ -28,7 +28,7 @@ namespace Atlas.Start.Avalonia.Tabs
 				paramTestItem = LoadData<ParamTestItem>("Params");
 				//paramTestItem = new ParamTestItem();
 				//TabControlParams tabParams = new TabControlParams(this, paramTestItem);
-				tabModel.AddObject(paramTestItem);
+				model.AddObject(paramTestItem);
 			}
 
 			private void Run(Call call)

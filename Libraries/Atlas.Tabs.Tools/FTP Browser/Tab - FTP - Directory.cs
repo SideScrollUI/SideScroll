@@ -28,9 +28,9 @@ namespace Atlas.Tabs.Tools
 				this.tab = tab;
 			}
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				FTP ftp = new FTP(new Call(this.taskInstance.Log), tab.ftpInfo);
+				FTP ftp = new FTP(call, tab.ftpInfo);
 				List<FtpItem> fileDatas = ftp.GetDirectoryListDetailed(tab.path);
 				ItemCollection<ListDirectory> directories = new ItemCollection<ListDirectory>();
 				ItemCollection<ListFile> files = new ItemCollection<ListFile>();
@@ -48,10 +48,10 @@ namespace Atlas.Tabs.Tools
 					}
 				}
 				if (directories.Count > 0)
-					tabModel.ItemList.Add(directories);
+					Model.ItemList.Add(directories);
 
 				if (files.Count > 0)
-					tabModel.ItemList.Add(files);
+					Model.ItemList.Add(files);
 			}
 		}
 

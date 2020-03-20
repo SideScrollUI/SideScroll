@@ -17,12 +17,12 @@ namespace Atlas.Tabs.Test
 			private string saveDirectory = null;
 			private DataRepoInstance<SampleItem> dataRepoItems;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				LoadSavedItems(call);
-				tabModel.Items = sampleItems;
+				model.Items = sampleItems;
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions =  new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Add", Add, false), // Foreground task so we can modify collection
 					new TaskDelegate("Add 10", Add10, false), // Foreground task so we can modify collection

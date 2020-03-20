@@ -37,29 +37,29 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				this.tab = tab;
 				this.project = tab.project;
-				tabModel.Name = "Bookmarks";
-				tabModel.Bookmarks = new BookmarkCollection(project);
+				Model.Name = "Bookmarks";
+				Model.Bookmarks = new BookmarkCollection(project);
 				//tabModel.Bookmarks.OnDelete
 				//var currentBookMark = this.CreateBookmark();
 				currentBookMark = new Bookmark()
 				{
 					Name = "Current",
 				};
-				tabModel.Bookmarks.Items.Insert(0, new TabBookmarkItem(currentBookMark));
+				Model.Bookmarks.Items.Insert(0, new TabBookmarkItem(currentBookMark));
 			}
 
-			public override void Load(Call call)
+			public override void LoadUI(Call call)
 			{
 				toolbar = new TabControlBookmarksToolbar();
 				toolbar.buttonAdd.Add(ButtonAdd_Click);
 				toolbar.buttonLink.Add(ButtonLink_Click);
 				toolbar.buttonImport.Add(ButtonImport_Click);
-				tabModel.AddObject(toolbar);
+				Model.AddObject(toolbar);
 
 				bookmarkSettings = new TabControlBookmarkSettings(this);
-				tabModel.AddObject(bookmarkSettings);
+				Model.AddObject(bookmarkSettings);
 
-				tabModel.AddData(tabModel.Bookmarks.Items);
+				Model.AddData(Model.Bookmarks.Items);
 
 				/*foreach (var item in tabModel.Bookmarks.Items)
 				{

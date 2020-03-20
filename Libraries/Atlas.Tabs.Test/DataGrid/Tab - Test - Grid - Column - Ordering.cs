@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private ItemCollection<TestChild> items;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				items = new ItemCollection<TestChild>();
 				for (int i = 0; i < 2; i++)
@@ -24,7 +24,7 @@ namespace Atlas.Tabs.Test.DataGrid
 					items.Add(item);
 				}
 
-				tabModel.Items = items;
+				model.Items = items;
 			}
 		}
 

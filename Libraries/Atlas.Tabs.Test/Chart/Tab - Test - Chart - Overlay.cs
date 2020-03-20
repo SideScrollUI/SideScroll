@@ -43,12 +43,12 @@ namespace Atlas.Tabs.Test.Chart
 				public int InstanceAmount => testItem.Amount;
 			}
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				//items.Add(new ListItem("Log", series));
 				//tabModel.Items = items;
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions =  new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Add Entry", AddEntry),
 					new TaskDelegate("Start: 1 Entry / second", StartTask, true),
@@ -59,7 +59,7 @@ namespace Atlas.Tabs.Test.Chart
 					AddSample(i);
 				}
 				ChartSettings chartSettings = new ChartSettings(samples);
-				tabModel.AddObject(chartSettings, true);
+				model.AddObject(chartSettings, true);
 			}
 
 			private void AddEntry(Call call)

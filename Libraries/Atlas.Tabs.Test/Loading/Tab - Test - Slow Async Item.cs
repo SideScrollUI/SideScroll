@@ -11,9 +11,9 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Items = new ItemCollection<IListItem>()
+				model.Items = new ItemCollection<IListItem>()
 				{
 					new ListDelegate(SlowAsyncItem),
 				};

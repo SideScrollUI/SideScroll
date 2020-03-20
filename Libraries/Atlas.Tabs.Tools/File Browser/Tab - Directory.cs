@@ -25,7 +25,7 @@ namespace Atlas.Tabs.Tools
 				this.tab = tab;
 			}
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				if (!Directory.Exists(tab.path))
 					return;
@@ -34,7 +34,7 @@ namespace Atlas.Tabs.Tools
 				{
 					new TaskDelegate("Delete", Delete, true),
 				};
-				tabModel.Actions = actions;
+				model.Actions = actions;
 
 
 				ItemCollection<ListDirectory> directories = new ItemCollection<ListDirectory>();
@@ -43,7 +43,7 @@ namespace Atlas.Tabs.Tools
 					ListDirectory listDirectory = new ListDirectory(directoryPath);
 					directories.Add(listDirectory);
 				}
-				tabModel.ItemList.Add(directories);
+				Model.ItemList.Add(directories);
 
 				ItemCollection<ListFile> files = new ItemCollection<ListFile>();
 				foreach (string filePath in Directory.EnumerateFiles(tab.path))
@@ -52,7 +52,7 @@ namespace Atlas.Tabs.Tools
 					files.Add(listFile);
 				}
 				if (files.Count > 0)
-					tabModel.ItemList.Add(files);
+					Model.ItemList.Add(files);
 			}
 
 			private void Delete(Call call)

@@ -10,7 +10,7 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				throw new Exception("Load exception");
 			}

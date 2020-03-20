@@ -17,19 +17,19 @@ namespace Atlas.Tabs.Test.Actions
 				Text = "Test Entry",
 			};
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				// uses DataGrid internally, doesn't work well yet
-				tabModel.AddData(logEntry);
-				tabModel.Editing = true;
-				//tabModel.AddInput(logEntry);
+				model.AddData(logEntry);
+				model.Editing = true;
+				//model.AddInput(logEntry);
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Add Log Entry", AddEntry),
 				};
 
-				tabModel.Notes = "You can specify parameters for an action.\n\nSpecify the values for a new Log Entry and click the Add button to add it";
+				model.Notes = "You can specify parameters for an action.\n\nSpecify the values for a new Log Entry and click the Add button to add it";
 			}
 
 			private void AddEntry(Call call)

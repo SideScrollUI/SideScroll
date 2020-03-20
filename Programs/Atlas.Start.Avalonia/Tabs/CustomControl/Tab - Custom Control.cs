@@ -19,20 +19,20 @@ namespace Atlas.Start.Avalonia.Tabs
 			private TabControlSearchToolbar toolbar;
 			private TabControlLoadingAnimation animation;
 
-			public override void Load(Call call)
+			public override void LoadUI(Call call)
 			{
 				myParams = new MyParams();
 				TabControlMyParams tabMyParams = new TabControlMyParams(this, myParams);
-				tabModel.AddObject(tabMyParams);
+				Model.AddObject(tabMyParams);
 
 				toolbar = new TabControlSearchToolbar();
-				tabModel.AddObject(toolbar);
+				Model.AddObject(toolbar);
 
 				animation = new TabControlLoadingAnimation()
 				{
 					IsVisible = false,
 				};
-				tabModel.AddObject(animation);
+				Model.AddObject(animation);
 
 				toolbar.buttonSearch.Click += ButtonSearch_Click;  // move logic into SearchToolbar Command
 				toolbar.buttonLoadNext.Click += ButtonLoadNext_Click;
@@ -49,7 +49,7 @@ namespace Atlas.Start.Avalonia.Tabs
 					};
 					items.Add(item);
 				}
-				tabModel.Items = items;
+				Model.Items = items;
 			}
 
 			private void ButtonSearch_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)

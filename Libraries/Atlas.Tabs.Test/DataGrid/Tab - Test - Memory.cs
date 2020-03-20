@@ -12,12 +12,12 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			private byte[] bytes;
 
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
 				//bytes = new byte[500000000]; // 500 MB, creates 200k strings using ListToString
 				bytes = new byte[128];
 				Array.Clear(bytes, 0, bytes.Length); // toggle the memory so it gets used
-				tabModel.Items = new ItemCollection<ListItem>()
+				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Bytes", bytes),
 				};
