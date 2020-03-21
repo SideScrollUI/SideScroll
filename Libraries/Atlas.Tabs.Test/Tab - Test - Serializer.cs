@@ -25,8 +25,6 @@ namespace Atlas.Tabs.Test
 					new TaskDelegate("Serialize 1 million objects", SerializeOneMillionObjects, true),
 					new TaskDelegate("Deserialize 1 million objects", DeserializeOneMillionObjects, true),
 				};
-
-				Model.Notes = "";
 			}
 
 			// GUI thread

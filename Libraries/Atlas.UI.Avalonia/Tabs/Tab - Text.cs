@@ -30,7 +30,7 @@ namespace Atlas.UI.Avalonia.Tabs
 				this.tab = tab;
 			}
 
-			public override void LoadUI(Call call)
+			public override void LoadUI(Call call, TabModel model)
 			{
 				//textEditor.TextBlock.FontSize = 30;
 
@@ -79,7 +79,7 @@ namespace Atlas.UI.Avalonia.Tabs
 					}
 				}
 
-				Model.AddObject(tabAvaloniaEdit, true);
+				model.AddObject(tabAvaloniaEdit, true);
 
 				/*ShowLineNumbers = true;
 				SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");

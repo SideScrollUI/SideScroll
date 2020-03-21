@@ -13,7 +13,7 @@ namespace Atlas.Core
 		{
 			base.Add(item);
 			if (Count > 100)
-				this.RemoveAt(0);
+				RemoveAt(0);
 		}
 	}
 
@@ -100,14 +100,14 @@ namespace Atlas.Core
 
 		private void InitializeContext()
 		{
-			if (this.context == null)
+			if (context == null)
 			{
-				this.context = SynchronizationContext.Current;
-				if (this.context == null)
+				context = SynchronizationContext.Current;
+				if (context == null)
 				{
 					//contextRandomId = new Random().Next();
 					//throw new Exception("Don't do this");
-					this.context = new SynchronizationContext();
+					context = new SynchronizationContext();
 				}
 			}
 		}

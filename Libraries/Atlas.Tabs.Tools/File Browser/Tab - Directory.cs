@@ -43,7 +43,7 @@ namespace Atlas.Tabs.Tools
 					ListDirectory listDirectory = new ListDirectory(directoryPath);
 					directories.Add(listDirectory);
 				}
-				Model.ItemList.Add(directories);
+				model.ItemList.Add(directories);
 
 				ItemCollection<ListFile> files = new ItemCollection<ListFile>();
 				foreach (string filePath in Directory.EnumerateFiles(tab.path))
@@ -52,7 +52,7 @@ namespace Atlas.Tabs.Tools
 					files.Add(listFile);
 				}
 				if (files.Count > 0)
-					Model.ItemList.Add(files);
+					model.ItemList.Add(files);
 			}
 
 			private void Delete(Call call)

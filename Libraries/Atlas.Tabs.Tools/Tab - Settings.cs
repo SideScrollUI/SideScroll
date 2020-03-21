@@ -14,7 +14,7 @@ namespace Atlas.Tabs.Tools
 			public override void Load(Call call, TabModel model)
 			{
 				model.Items = ListProperty.Create(this.project.projectSettings);
-				Model.Editing = true;
+				model.Editing = true;
 
 				model.Actions = new ItemCollection<TaskCreator>()
 				{

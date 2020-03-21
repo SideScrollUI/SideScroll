@@ -119,7 +119,7 @@ namespace Atlas.Tabs
 		// Reload to initial state
 		public bool isLoaded = false;
 		public bool loadCalled = false; // Used by the view
-		private bool modelCreated = false;
+		private bool staticModel = false;
 
 		public TabInstance()
 		{
@@ -130,6 +130,7 @@ namespace Atlas.Tabs
 		{
 			this.project = project;
 			this.Model = model;
+			staticModel = true;
 			InitializeContext();
 			SetStartLoad();
 		}
@@ -147,17 +148,6 @@ namespace Atlas.Tabs
 			tabInstance.ParentTabInstance = this;
 			//tabInstance.taskInstance.call.log =
 			//tabInstance.taskInstance = taskInstance.AddSubTask(taskInstance.call); // too slow?
-			//tabInstance.tabBookmark = tabBookmark;
-			FillInheritables(tabInstance);
-			return tabInstance;
-		}
-
-		public TabInstance CreateChildTab(TabModel model)
-		{
-			TabInstance tabInstance = new TabInstance(project, model)
-			{
-				ParentTabInstance = this,
-			};
 			//tabInstance.tabBookmark = tabBookmark;
 			FillInheritables(tabInstance);
 			return tabInstance;
@@ -195,7 +185,7 @@ namespace Atlas.Tabs
 		public virtual void Dispose()
 		{
 			childTabInstances.Clear();
-			if (modelCreated)
+			if (!staticModel)
 				Model.Clear();
 			foreach (TaskInstance taskInstance in Model.Tasks)
 			{
@@ -310,15 +300,6 @@ namespace Atlas.Tabs
 			StartTask(taskDelegate, showTask);
 		}
 
-		private MethodInfo GetDerivedLoadMethod(string name)
-		{
-			Type type = GetType(); // gets derived type
-			if (type.GetMethods().Where(m => m.Name == name).ToList().Count > 1)
-				return null;
-			MethodInfo methodInfo = type.GetMethod(nameof(Load));//, new Type[] { typeof(Call) });
-			return methodInfo;
-		}
-
 		private MethodInfo GetDerivedLoadMethod(string name, int paramCount)
 		{
 			try
@@ -343,7 +324,6 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				//MethodInfo methodInfo = GetDerivedLoadMethod(nameof(Load));
 				MethodInfo methodInfo = GetDerivedLoadMethod(nameof(Load), 2);
 				return (methodInfo?.DeclaringType != typeof(TabInstance));
 			}
@@ -353,18 +333,8 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				MethodInfo methodInfo = GetDerivedLoadMethod(nameof(LoadUI), 1);
+				MethodInfo methodInfo = GetDerivedLoadMethod(nameof(LoadUI), 2);
 				return (methodInfo?.DeclaringType != typeof(TabInstance));
-			}
-		}
-
-		// Check if derived type implements Load()
-		public bool CanLoadModel
-		{
-			get
-			{
-				MethodInfo methodInfo = GetDerivedLoadMethod(nameof(Load), 2);
-				return (methodInfo.DeclaringType != typeof(TabInstance));
 			}
 		}
 
@@ -372,11 +342,10 @@ namespace Atlas.Tabs
 		{
 		}
 
-		public virtual void LoadUI(Call call)
+		public virtual void LoadUI(Call call, TabModel model)
 		{
 		}
 
-		// todo: Add sync version?
 		public void Reintialize(bool force)
 		{
 			if (!force && isLoaded)
@@ -385,44 +354,28 @@ namespace Atlas.Tabs
 			isLoaded = true;
 			loadCalled = false; // allow TabView to reload
 
-			//StartAsync(ReintializeAsync);
-
-			if (this is ITabAsync || CanLoadModel)
-			{
-				StartAsync(ReintializeAsync);
-				return;
-			}
-
-			var newModel = Model;
-			if (CanLoad) // || CanLoadModel)
-			{
-				newModel = new TabModel(Model.Name);
-				modelCreated = true;
-			}
-			try
-			{
-				Preload(newModel);
-			}
-			catch (Exception e)
-			{
-				newModel.AddData(e);
-			}
-			
-			var loadUiTask = taskInstance.call.AddSubTask("Loading");
-			Invoke(() => LoadUi(loadUiTask.call, newModel)); // Some controls need to be created on the UI context*/
+			StartAsync(ReintializeAsync);
 		}
 
-		// todo: Add sync version?
 		public async Task ReintializeAsync(Call call)
 		{
-			TabModel model = new TabModel(Model.Name);
+			TabModel model = Model;
+			if (!staticModel)
+				model = await LoadModel(call);
 
+			//Invoke(() => LoadUi(call, model));
+			var subTask = call.AddSubTask("Loading");
+			Invoke(() => LoadUi(subTask.call, model)); // Some controls need to be created on the UI context
+		}
+
+		private async Task<TabModel> LoadModel(Call call)
+		{
+			var model = new TabModel(Model.Name);
 			if (this is ITabAsync tabAsync)
 			{
 				try
 				{
 					await tabAsync.LoadAsync(call, model);
-					Preload(model);
 				}
 				catch (Exception e)
 				{
@@ -431,7 +384,7 @@ namespace Atlas.Tabs
 				}
 				//StartAsync(ReintializeAsync);
 			}
-			if (CanLoadModel)
+			if (CanLoad)
 			{
 				try
 				{
@@ -443,12 +396,14 @@ namespace Atlas.Tabs
 					model.AddData(e);
 				}
 			}
-
-			//Invoke(() => LoadUi(call, model));
-			var subTask = call.AddSubTask("Loading");
-			Invoke(() => LoadUi(subTask.call, model)); // Some controls need to be created on the UI context
-
-			// Have return tabModel?
+			try
+			{
+				Preload(model);
+			}
+			catch (Exception)
+			{
+			}
+			return model;
 		}
 
 		// Preload properties in a background thread so the GUI isn't blocked
@@ -480,19 +435,19 @@ namespace Atlas.Tabs
 
 		public void LoadUi(Call call, TabModel model)
 		{
-			Model = model; // Load() needs this set
 			if (CanLoadUI)
 			{
 				try
 				{
-					LoadUI(call);
+					LoadUI(call, model);
 				}
 				catch (Exception e)
 				{
 					call.log.Add(e);
-					Model.AddData(e);
+					model.AddData(e);
 				}
 			}
+			Model = model;
 			LoadSettings(); // Load() initializes the tabModel.Object & CustomSettingsPath which gets used for the settings path
 			OnModelChanged?.Invoke(this, new EventArgs());
 

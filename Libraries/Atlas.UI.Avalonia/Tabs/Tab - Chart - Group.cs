@@ -76,7 +76,7 @@ namespace Atlas.UI.Avalonia
 			//private CustomControl control;
 			//private TabChart tabChart;
 
-			public override void LoadUI(Call call)
+			public override void LoadUI(Call call, TabModel model)
 			{
 				if (tabViewSettings.ChartDataSettings.Count == 0)
 					tabViewSettings.ChartDataSettings.Add(new TabDataSettings());

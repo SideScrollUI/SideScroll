@@ -88,14 +88,6 @@ namespace Atlas.UI.Avalonia.View
 			//tabInstance.StartTask(LoadAll, true, false);
 		}
 
-		public void LoadBackground(Call call)
-		{
-			// Have return TabModel?
-			tabInstance.Reintialize(false);
-
-			tabInstance.Invoke(ReloadControls);
-		}
-
 		public async Task LoadBackgroundAsync(Call call)
 		{
 			tabInstance.Invoke(ShowLoading);
@@ -545,15 +537,8 @@ namespace Atlas.UI.Avalonia.View
 				return;
 			tabInstance.loadCalled = true;
 
-			if (tabInstance is ITabAsync || tabInstance.CanLoadModel)
-			{
-				tabInstance.StartAsync(LoadBackgroundAsync);
-			}
-			else
-			{
-				tabInstance.Invoke(ShowLoading);
-				tabInstance.StartTask(LoadBackground, true, false);
-			}
+			tabInstance.StartAsync(LoadBackgroundAsync);
+
 			//Dispatcher.BeginInvoke((Action)(() => { allowAutoScrolling = true; }));
 		}
 

@@ -14,20 +14,6 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			public Instance()
-			{
-			}
-
-			public Instance(Project project)
-			{
-				this.project = project;
-				LoadDefaultBookmark();
-
-				Model.Name = "Start";
-
-				Model.Bookmarks = new BookmarkCollection(project);
-			}
-
 			public override void Load(Call call, TabModel model)
 			{
 				model.Items = new ItemCollection<ListItem>()

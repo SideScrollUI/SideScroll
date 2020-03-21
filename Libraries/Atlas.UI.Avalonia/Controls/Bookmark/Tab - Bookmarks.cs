@@ -48,7 +48,7 @@ namespace Atlas.UI.Avalonia.Controls
 				Model.Bookmarks.Items.Insert(0, new TabBookmarkItem(currentBookMark));
 			}
 
-			public override void LoadUI(Call call)
+			public override void LoadUI(Call call, TabModel model)
 			{
 				toolbar = new TabControlBookmarksToolbar();
 				toolbar.buttonAdd.Add(ButtonAdd_Click);

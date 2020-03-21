@@ -48,10 +48,10 @@ namespace Atlas.Tabs.Tools
 					}
 				}
 				if (directories.Count > 0)
-					Model.ItemList.Add(directories);
+					model.ItemList.Add(directories);
 
 				if (files.Count > 0)
-					Model.ItemList.Add(files);
+					model.ItemList.Add(files);
 			}
 		}
 

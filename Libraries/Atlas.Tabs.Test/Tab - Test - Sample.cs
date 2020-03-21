@@ -31,7 +31,7 @@ namespace Atlas.Tabs.Test
 					new TaskAction("Add 5 Items", new Action(() => AddItems(5)), false), // Foreground task so we can modify collection
 				};
 
-				Model.Notes =
+				model.Notes =
 @"
 This is a sample tab that shows some of the different tab features
 
