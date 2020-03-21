@@ -216,10 +216,10 @@ namespace Atlas.UI.Avalonia.Controls
 				HorizontalGridLinesBrush = new SolidColorBrush(Colors.Black),
 				VerticalGridLinesBrush = new SolidColorBrush(Colors.Black),
 
-				Background = new SolidColorBrush(Colors.White),
-				RowBackground = new SolidColorBrush(Colors.White),
-				//BorderBrush = new SolidColorBrush(Colors.Black),
-				AlternatingRowBackground = new SolidColorBrush(Colors.White),
+				Foreground = new SolidColorBrush(Theme.GridForegroundColor),
+				Background = new SolidColorBrush(Theme.GridBackgroundColor),
+				RowBackground = new SolidColorBrush(Theme.GridBackgroundColor),
+				AlternatingRowBackground = new SolidColorBrush(Theme.GridBackgroundColor),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch, // doesn't work
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, // todo: can't get working

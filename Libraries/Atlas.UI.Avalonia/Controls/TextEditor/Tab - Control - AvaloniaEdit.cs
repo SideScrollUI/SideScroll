@@ -60,7 +60,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			var theme = new global::Avalonia.Themes.Default.DefaultTheme();
 			theme.FindResource("Button");
-			//Background = new SolidColorBrush(Colors.White);
+			Background = new SolidColorBrush(Theme.GridBackgroundColor);
 			MaxWidth = 3000;
 
 			ColumnDefinitions = new ColumnDefinitions("*");
@@ -77,17 +77,27 @@ namespace Atlas.UI.Avalonia.Controls
 				VerticalAlignment = VerticalAlignment.Stretch,
 				MaxWidth = 3000,
 				MaxHeight = 2000,
-				Background = new SolidColorBrush(Colors.White),
+				Foreground = new SolidColorBrush(Theme.GridForegroundColor),
+				Background = new SolidColorBrush(Theme.GridBackgroundColor),
 				WordWrap = true,
 				//HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // WordWrap requires Disabled
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, // WordWrap requires Disabled, but it doesn't work
 				VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
 				//Margin = new Thickness(6),
-				Padding = new Thickness(6), // doesn't work well with scroll bars
+				//Padding = new Thickness(6), // doesn't work well with scroll bars
 				FontSize = 14,
 				SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"), // handles JSON too
 			};
-			Children.Add(textEditor);
+
+			Border border = new Border()
+			{
+				BorderThickness = new Thickness(6, 6, 0, 6),
+				BorderBrush = new SolidColorBrush(Theme.GridBackgroundColor),
+				Child = textEditor,
+			};
+
+
+			Children.Add(border);
 
 			//textEditor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
 			/*ShowLineNumbers = true;

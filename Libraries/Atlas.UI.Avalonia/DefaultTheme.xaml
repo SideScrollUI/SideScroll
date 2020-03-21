@@ -6,13 +6,13 @@
   xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <Style Selector="dg|DataGridColumnHeader">
-        <Setter Property="Foreground" Value="{DynamicResource GridColumnHeaderForegroundBrush}" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="AreSeparatorsVisible" Value="false" />
-        <Setter Property="AreSeparatorsVisible" Value="true" />
-        <Setter Property="Padding" Value="4" />
-        <Setter Property="Background" Value="{DynamicResource GridColumnHeaderBackgroundBrush}"/>
+      <Setter Property="Background" Value="{DynamicResource GridColumnHeaderBackgroundBrush}"/>
+      <Setter Property="Foreground" Value="{DynamicResource GridColumnHeaderForegroundBrush}" />
+      <Setter Property="HorizontalContentAlignment" Value="Left" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+      <Setter Property="AreSeparatorsVisible" Value="false" />
+      <Setter Property="AreSeparatorsVisible" Value="true" />
+      <Setter Property="Padding" Value="4" />
     </Style>
 
     <Style Selector="dg|DataGridColumnHeader /template/ Rectangle#VerticalSeparator">
@@ -35,8 +35,8 @@
 
     <Style Selector="ScrollBar /template/ Border">
         <Setter Property="Background" Value="#FF38409a"/>
+      <Setter Property="BorderBrush" Value="#FF000000"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="#FF000000"/>
     </Style>
 
     <Style Selector="ScrollBar /template/ Thumb#thumb">

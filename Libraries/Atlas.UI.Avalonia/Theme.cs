@@ -13,10 +13,13 @@ namespace Atlas.UI.Avalonia
 		public static Color TitleForegroundColor = Color.Parse("#f0f0f8");
 
 
-		public static Color GridColumnHeaderBackgroundColor = Color.Parse("#4e8ef7");
 		public static Color GridColumnHeaderForegroundColor = Color.Parse("#f0f0f8");
+		public static Color GridColumnHeaderBackgroundColor = Color.Parse("#324699");
 
-		public static Color GridSelectedBackgroundColor = Color.Parse("#92F397");
+		public static Color GridForegroundColor = Colors.Black;
+		public static Color GridBackgroundColor = Color.Parse("#FFFFFF");
+
+		public static Color GridSelectedBackgroundColor = Color.Parse("#005555");
 
 		public static Color ButtonBackgroundColor = Colors.SlateBlue;
 		public static Color ButtonForegroundColor = Colors.AliceBlue;
@@ -27,11 +30,13 @@ namespace Atlas.UI.Avalonia
 		public static Color TextBackgroundDisabledColor = Color.Parse("#c5c6c6");
 
 		// 
-		public static Color ActiveSelectionHighlightColor = Color.Parse("#92F397");
-		public static Color InactiveSelectionHighlightColor = Color.Parse("#92F397");
+		public static Color ActiveSelectionHighlightColor = GridSelectedBackgroundColor;
+		public static Color InactiveSelectionHighlightColor = GridSelectedBackgroundColor;
 
 		public static Color EditableColor = Color.Parse("#c8c2f9");
+
 		public static Color HasChildrenColor = Color.Parse("#f4c68d");
+		public static Color HasNoChildrenColor = Colors.LightGray;
 		//public static Color HasChildrenColor = Colors.Tan;
 
 		// Notes
