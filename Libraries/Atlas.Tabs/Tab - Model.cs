@@ -300,7 +300,7 @@ namespace Atlas.Tabs
 			Actions = null;
 		}
 
-		private List<MethodInfo> GetVisibleProperties(Type type)
+		private List<MethodInfo> GetVisibleMethods(Type type)
 		{
 			MethodInfo[] methodInfos = type.GetMethods().OrderBy(x => x.MetadataToken).ToArray();
 			var visibleMethods = new List<MethodInfo>();
@@ -315,7 +315,7 @@ namespace Atlas.Tabs
 
 		private void AddMethodProperties(Type type, ItemCollection<ListMember> itemCollection)
 		{
-			List<MethodInfo> visibleMethods = GetVisibleProperties(type);
+			List<MethodInfo> visibleMethods = GetVisibleMethods(type);
 
 			// Add any methods that return a Task object
 			foreach (MethodInfo methodInfo in visibleMethods)
@@ -332,7 +332,7 @@ namespace Atlas.Tabs
 
 		private void AddMethods(Type type)
 		{
-			List<MethodInfo> visibleMethods = GetVisibleProperties(type);
+			List<MethodInfo> visibleMethods = GetVisibleMethods(type);
 
 			// Add any methods that return a Task object
 			ItemCollection<TaskCreator> methods = new ItemCollection<TaskCreator>();

@@ -2,6 +2,7 @@
 using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
+using Atlas.UI.Avalonia.Tabs;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -391,6 +392,10 @@ namespace Atlas.UI.Avalonia.View
 				{
 					AddChart(chartSettings);
 				}
+				else if (obj is TabToolbar toolbar)
+				{
+					AddToolbar(toolbar);
+				}
 				else if (obj is ITabSelector tabSelector)
 				{
 					AddITabControl(tabSelector, tabObject.fill);
@@ -412,6 +417,24 @@ namespace Atlas.UI.Avalonia.View
 					}
 				}
 			}
+		}
+
+		private void AddToolbar(TabToolbar toolbar)
+		{
+			var properties = toolbar.GetType().GetVisibleProperties();
+			var toolbarControl = new TabControlToolbar();
+			foreach (PropertyInfo propertyInfo in properties)
+			{
+				if (propertyInfo.GetCustomAttribute<SeparatorAttribute>() != null)
+					toolbarControl.AddSeparator();
+				var propertyValue = propertyInfo.GetValue(toolbar);
+				if (propertyValue is ToolButton toolButton)
+				{
+					var buttonControl = toolbarControl.AddButton(toolButton.Label, toolButton.Icon);
+					buttonControl.Add(toolButton.Action);
+				}
+			}
+			AddControl(toolbarControl, false);
 		}
 
 		protected void AddActions()

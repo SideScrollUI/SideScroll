@@ -144,13 +144,10 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public TaskDelegate.CallAction callAction;
 
-		public ToolbarButton(string tooltip, ICommand command, Stream resource) : base()
+		public ToolbarButton(string tooltip, ICommand command, Stream stream) : base()
 		{
-			Bitmap bitmap;
-			using (resource)
-			{
-				bitmap = new Bitmap(resource);
-			}
+			stream.Position = 0;
+			Bitmap bitmap = new Bitmap(stream);
 
 			var image = new Image()
 			{

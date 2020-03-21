@@ -82,9 +82,15 @@ namespace Atlas.Core
 		}
 	}
 
-	public class ThreadedItemCollection<T> : ObservableCollection<T>, IList, ICollection, IEnumerable //, IRaiseItemChangedEvents //
+	public interface IContext
 	{
-		private SynchronizationContext context; // inherited from creator (which can be a Parent Log)
+		SynchronizationContext Context { get; set; }
+		void InitializeContext(bool reset = false);
+	}
+
+	public class ThreadedItemCollection<T> : ObservableCollection<T>, IList, ICollection, IEnumerable, IContext //, IRaiseItemChangedEvents //
+	{
+		public SynchronizationContext Context { get; set; } // inherited from creator (which can be a Parent Log)
 
 		public ThreadedItemCollection()
 		{
@@ -98,16 +104,16 @@ namespace Atlas.Core
 			InitializeContext();
 		}
 
-		private void InitializeContext()
+		public void InitializeContext(bool reset = false)
 		{
-			if (context == null)
+			if (Context == null || reset)
 			{
-				context = SynchronizationContext.Current;
-				if (context == null)
+				Context = SynchronizationContext.Current;
+				if (Context == null)
 				{
 					//contextRandomId = new Random().Next();
 					//throw new Exception("Don't do this");
-					context = new SynchronizationContext();
+					Context = new SynchronizationContext();
 				}
 			}
 		}
@@ -127,17 +133,17 @@ namespace Atlas.Core
 		protected override void InsertItem(int index, T item)
 		{
 			var location = new ItemLocation(index, item);
-			if (context == SynchronizationContext.Current)
+			if (Context == SynchronizationContext.Current)
 				InsertItemCallback(location);
 			else
-				context.Post(new SendOrPostCallback(this.InsertItemCallback), location); // inserting 2 items inserts in wrong order
+				Context.Post(new SendOrPostCallback(this.InsertItemCallback), location); // inserting 2 items inserts in wrong order
 		}
 
 		// Thread safe callback, only works if the context is the same
 		private void InsertItemCallback(object state)
 		{
 			ItemLocation itemLocation = (ItemLocation)state;
-			lock (context)
+			lock (Context)
 			{
 				base.InsertItem(itemLocation.index, itemLocation.item);
 			}

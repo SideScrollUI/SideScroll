@@ -365,7 +365,7 @@ namespace Atlas.Tabs
 
 			//Invoke(() => LoadUi(call, model));
 			var subTask = call.AddSubTask("Loading");
-			Invoke(() => LoadUi(subTask.call, model)); // Some controls need to be created on the UI context
+			Invoke(() => LoadModelUI(subTask.call, model)); // Some controls need to be created on the UI context
 		}
 
 		private async Task<TabModel> LoadModel(Call call)
@@ -433,8 +433,15 @@ namespace Atlas.Tabs
 			}
 		}
 
-		public void LoadUi(Call call, TabModel model)
+		public void LoadModelUI(Call call, TabModel model)
 		{
+			// Set the context to the UI for items that support it
+			foreach (IList iList in model.ItemList)
+			{
+				if (iList is IContext context)
+					context.InitializeContext(true);
+			}
+
 			if (CanLoadUI)
 			{
 				try

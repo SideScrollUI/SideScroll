@@ -237,4 +237,10 @@ namespace Atlas.Core
 	public class YAxisAttribute : Attribute
 	{
 	}
+
+	// ->Toolbar: Show a separator before this item
+	[AttributeUsage(AttributeTargets.Property)]
+	public class SeparatorAttribute : Attribute
+	{
+	}
 }
