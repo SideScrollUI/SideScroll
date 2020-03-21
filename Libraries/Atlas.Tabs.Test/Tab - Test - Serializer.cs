@@ -27,7 +27,7 @@ namespace Atlas.Tabs.Test
 				};
 			}
 
-			// GUI thread
+			// UI thread
 			private void AddListItem(ListItem listItem)
 			{
 				items.Add(listItem);

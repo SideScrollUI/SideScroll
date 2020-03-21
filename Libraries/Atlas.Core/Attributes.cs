@@ -156,7 +156,7 @@ namespace Atlas.Core
 		}
 	}
 
-	// ->Tabs: Allows property to be edited in GUI
+	// ->Tabs: Allows property to be edited in UI
 	[AttributeUsage(AttributeTargets.Property)]
 	public class EditingAttribute : Attribute
 	{

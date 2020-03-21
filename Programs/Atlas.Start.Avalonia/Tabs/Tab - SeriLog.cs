@@ -70,5 +70,5 @@ namespace Atlas.Start.Avalonia.Tabs
 	}
 }
 /*
-Todo: test out logging from other threads, while showing in GUI
+Todo: test out logging from other threads, while showing in UI
 */

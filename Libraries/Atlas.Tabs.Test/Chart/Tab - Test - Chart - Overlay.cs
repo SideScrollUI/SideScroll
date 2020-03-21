@@ -115,7 +115,7 @@ namespace Atlas.Tabs.Test.Chart
 				//tabChart.chart.Update();
 			}
 
-			// GUI context
+			// UI context
 			private void AddSampleCallback(Call call, object state)
 			{
 				// data = state;

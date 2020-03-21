@@ -406,7 +406,7 @@ namespace Atlas.Tabs
 			return model;
 		}
 
-		// Preload properties in a background thread so the GUI isn't blocked
+		// Preload properties in a background thread so the UI isn't blocked
 		// Todo: Make an async version of this for Task<T> Member(Call call)
 		private void Preload(TabModel model)
 		{

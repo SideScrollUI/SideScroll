@@ -88,7 +88,7 @@ namespace Atlas.UI.Avalonia.View
 
 		private void MenuItemReload_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			//Initialize(); reloads data without reloading GUI
+			//Initialize(); reloads data without reloading UI
 			tabInstance.LoadSettings(); // reloads tab settings, recreates all controls
 		}
 
