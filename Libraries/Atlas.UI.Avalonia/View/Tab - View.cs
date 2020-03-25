@@ -54,6 +54,8 @@ namespace Atlas.UI.Avalonia.View
 
 		//private bool allowAutoScrolling = false; // stop new controls from triggering the ScrollView automatically
 
+		public override string ToString() => Model.Name;
+
 		private TabView()
 		{
 			tabInstance = new TabInstance();
@@ -66,8 +68,6 @@ namespace Atlas.UI.Avalonia.View
 			Initialize();
 		}
 
-		public override string ToString() => Model.Name;
-
 		public void Initialize()
 		{
 			// Can only be initialized once
@@ -75,18 +75,8 @@ namespace Atlas.UI.Avalonia.View
 			RowDefinitions = new RowDefinitions("*");
 
 			tabInstance.OnModelChanged += TabInstance_OnModelChanged;
-			/*if (!(tabInstance is ITabAsync))
-			{
-				//InitializeControls();
-				//AddListeners();
-
-				// Have return TabModel?
-				tabInstance.Reintialize(false);
-			}*/
 			if (tabInstance is ITabSelector tabSelector)
 				tabSelector.OnSelectionChanged += ParentListSelectionChanged;
-
-			//tabInstance.StartTask(LoadAll, true, false);
 		}
 
 		public async Task LoadBackgroundAsync(Call call)

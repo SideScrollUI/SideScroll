@@ -363,6 +363,15 @@ namespace Atlas.Tabs
 			if (!staticModel)
 				model = await LoadModel(call);
 
+			try
+			{
+				Preload(model);
+			}
+			catch (Exception e)
+			{
+				call.log.Add(e);
+			}
+
 			//Invoke(() => LoadUi(call, model));
 			var subTask = call.AddSubTask("Loading");
 			Invoke(() => LoadModelUI(subTask.call, model)); // Some controls need to be created on the UI context
@@ -395,13 +404,6 @@ namespace Atlas.Tabs
 					call.log.Add(e);
 					model.AddData(e);
 				}
-			}
-			try
-			{
-				Preload(model);
-			}
-			catch (Exception)
-			{
 			}
 			return model;
 		}
