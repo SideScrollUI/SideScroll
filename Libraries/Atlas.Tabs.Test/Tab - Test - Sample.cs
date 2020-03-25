@@ -22,7 +22,7 @@ namespace Atlas.Tabs.Test
 				{
 					new ListItem("Sample Items", sampleItems),
 					new ListItem("Collections", new TabTestGridCollectionSize()),
-					new ListItem("Child Tab", new TabSample()), // recursive
+					new ListItem("Recursive Copy", new TabSample()),
 				};
 
 				model.Actions = new ItemCollection<TaskCreator>()

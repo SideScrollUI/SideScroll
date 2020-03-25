@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Atlas.Core;
-using Atlas.Serialize;
 
 namespace Atlas.Tabs.Test
 {
@@ -12,40 +10,34 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
+			private ThreadedItemCollection<ListItem> items;
 
 			public override void Load(Call call, TabModel model)
 			{
+				items = new ThreadedItemCollection<ListItem>();
 				model.Items = items;
 
 				model.Actions = new ItemCollection<TaskCreator>()
 				{
-					new TaskDelegate("Serialize 1 object", Serialize, true),
-					new TaskDelegate("Deserialize 1 object", Deserialize, true),
-					new TaskDelegate("Serialize 1 million objects", SerializeOneMillionObjects, true),
-					new TaskDelegate("Deserialize 1 million objects", DeserializeOneMillionObjects, true),
+					new TaskDelegate("Serialize 1 object", Serialize, true, true),
+					new TaskDelegate("Deserialize 1 object", Deserialize, true, true),
+					new TaskDelegate("Serialize 1 million objects", SerializeOneMillionObjects, true, true),
+					new TaskDelegate("Deserialize 1 million objects", DeserializeOneMillionObjects, true, true),
 				};
 			}
 
-			// UI thread
-			private void AddListItem(ListItem listItem)
-			{
-				items.Add(listItem);
-			}
-
-			// Task threads
 			private void Serialize(Call call)
 			{
 				SampleItem sampleItem = new SampleItem(1, "Sample Item");
 				
 				project.DataApp.Save(sampleItem, call);
-				call.taskInstance.OnComplete = () => AddListItem(new ListItem("Sample Item", sampleItem));
+				items.Add(new ListItem("Sample Item", sampleItem));
 			}
 
 			private void Deserialize(Call call)
 			{
 				SampleItem sampleItem = project.DataApp.Load<SampleItem>(false, false, call);
-				call.taskInstance.OnComplete = () => AddListItem(new ListItem("Deserialized Sample Item", sampleItem));
+				items.Add(new ListItem("Deserialized Sample Item", sampleItem));
 			}
 
 			private void SerializeOneMillionObjects(Call call)
@@ -56,13 +48,13 @@ namespace Atlas.Tabs.Test
 					sampleItems.Add(new SampleItem(i, "Item " + i.ToString()));
 				}
 				project.DataApp.Save(sampleItems, call);
-				call.taskInstance.OnComplete = () => AddListItem(new ListItem("SerializeOneMillionObjects", sampleItems));
+				items.Add(new ListItem("SerializeOneMillionObjects", sampleItems));
 			}
 
 			private void DeserializeOneMillionObjects(Call call)
 			{
 				List<SampleItem> sampleItems = project.DataApp.Load<List<SampleItem>>(false, false, call);
-				call.taskInstance.OnComplete = () => AddListItem(new ListItem("DeserializeOneMillionObjects", sampleItems));
+				items.Add(new ListItem("DeserializeOneMillionObjects", sampleItems));
 			}
 		}
 
@@ -71,9 +63,8 @@ namespace Atlas.Tabs.Test
 			public int ID { get; set; }
 			public string Name { get; set; }
 
-			private SampleItem()
+			public SampleItem()
 			{
-
 			}
 
 			public SampleItem(int id, string name)
