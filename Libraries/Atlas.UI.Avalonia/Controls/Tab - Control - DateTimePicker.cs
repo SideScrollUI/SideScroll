@@ -1,4 +1,5 @@
-﻿using Atlas.Resources;
+﻿using Atlas.Core;
+using Atlas.Resources;
 using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
@@ -9,7 +10,6 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using System;
-using System.Globalization;
 using System.IO;
 
 namespace Atlas.UI.Avalonia.Controls
@@ -78,7 +78,7 @@ namespace Atlas.UI.Avalonia.Controls
 			buttonImport.Click += (sender, e) =>
 			{
 				string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
-				TimeSpan? timeSpan = ConvertTextToTimeSpan(clipboardText);
+				TimeSpan? timeSpan = DateTimeUtils.ConvertTextToTimeSpan(clipboardText);
 				if (timeSpan != null)
 				{
 					DateTime? newDateTime = dateTimeConverter.Convert(timeSpan, typeof(string), null, null) as DateTime?;
@@ -88,7 +88,7 @@ namespace Atlas.UI.Avalonia.Controls
 				}
 				else
 				{
-					DateTime? dateTime = ConvertTextToDateTime(clipboardText);
+					DateTime? dateTime = DateTimeUtils.ConvertTextToDateTime(clipboardText);
 					if (dateTime != null)
 					{
 						property.propertyInfo.SetValue(property.obj, dateTime);
@@ -99,49 +99,6 @@ namespace Atlas.UI.Avalonia.Controls
 				}
 			};
 			Children.Add(buttonImport);
-		}
-
-		private TimeSpan? ConvertTextToTimeSpan(string text)
-		{
-			TimeSpan timeSpan;
-			if (TimeSpan.TryParseExact(text, @"h\:m\:s", CultureInfo.InvariantCulture, out timeSpan))
-				return timeSpan;
-
-			return null;
-		}
-
-		private DateTime? ConvertTextToDateTime(string text)
-		{
-			DateTime dateTime;
-
-			// convert epoch 1569998557298
-			var epochTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			uint epochValue;
-			if (text.Length == 10 && uint.TryParse(text, out epochValue))
-			{
-				dateTime = epochTime.AddSeconds(epochValue);
-				return dateTime;
-			}
-			long epochValueMilliseconds;
-			if (text.Length == 13 && long.TryParse(text, out epochValueMilliseconds))
-			{
-				dateTime = epochTime.AddMilliseconds(epochValueMilliseconds);
-				return dateTime;
-			}
-
-			if (DateTime.TryParse(text, out dateTime)
-				//|| DateTime.TryParseExact(text, "dd/MMM/yyyy:HH:mm:ss zzz", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out dateTime) // July 25 05:08:00
-				|| DateTime.TryParseExact(text, "dd/MMM/yyyy:HH:mm:ss zzz", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out dateTime) // 18/Jul/2019:11:47:45 +0000
-				|| DateTime.TryParseExact(text, "dd/MMM/yyyy:HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out dateTime)) // 18/Jul/2019:11:47:45
-			{
-				if (dateTime.Kind == DateTimeKind.Unspecified)
-					dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
-				else if (dateTime.Kind == DateTimeKind.Local)
-					dateTime = dateTime.ToUniversalTime();
-				return dateTime;
-			}
-
-			return null;
 		}
 
 		public Button AddButton(string tooltip, Stream resource)

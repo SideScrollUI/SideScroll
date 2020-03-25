@@ -30,6 +30,7 @@ namespace Atlas.UI.Avalonia.Controls
 			this.property = property;
 			InitializeComponent();
 
+			IsEnabled = property.Editable;
 			MaxWidth = TabControlParams.ControlMaxWidth;
 			Type type = property.UnderlyingType;
 

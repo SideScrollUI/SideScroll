@@ -433,6 +433,10 @@ namespace Atlas.UI.Avalonia.View
 					var buttonControl = toolbarControl.AddButton(toolButton.Label, toolButton.Icon);
 					buttonControl.Add(toolButton.Action);
 				}
+				else if (propertyValue is string text)
+				{
+					toolbarControl.AddLabel(text);
+				}
 			}
 			AddControl(toolbarControl, false);
 		}

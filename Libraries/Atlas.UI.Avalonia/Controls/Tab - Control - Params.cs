@@ -70,7 +70,7 @@ namespace Atlas.UI.Avalonia.Controls
 				if (control == null)
 					continue;
 
-				AddControl(control, rowIndex, columnIndex);
+				AddControl(control, columnIndex, rowIndex);
 				controls.Add(control);
 				columnIndex++;
 			}

@@ -90,6 +90,7 @@ namespace Atlas.Tabs
 			}
 		}
 
+		[HiddenColumn, HiddenRow]
 		public Type UnderlyingType => propertyInfo.PropertyType.GetNonNullableType();
 
 		public ListProperty(object obj, PropertyInfo propertyInfo, bool cached = true) : 
