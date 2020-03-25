@@ -1,10 +1,14 @@
-﻿using Avalonia;
+﻿using Atlas.Core;
+using Atlas.Tabs;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using System;
+using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -13,6 +17,42 @@ namespace Atlas.UI.Avalonia.Controls
 		Type IStyleable.StyleKey => typeof(TextBox);
 
 		public TabControlTextBox()
+		{
+			InitializeComponent();
+		}
+
+		public TabControlTextBox(ListProperty property)
+		{
+			InitializeComponent();
+
+			IsReadOnly = !property.Editable;
+			if (IsReadOnly)
+				Background = new SolidColorBrush(Theme.TextBackgroundDisabledColor);
+
+			PasswordCharAttribute passwordCharAttribute = property.propertyInfo.GetCustomAttribute<PasswordCharAttribute>();
+			if (passwordCharAttribute != null)
+				PasswordChar = passwordCharAttribute.Character;
+
+			ExampleAttribute attribute = property.propertyInfo.GetCustomAttribute<ExampleAttribute>();
+			if (attribute != null)
+				Watermark = attribute.Text;
+
+			var binding = new Binding(property.propertyInfo.Name)
+			{
+				Converter = new EditValueConverter(),
+				//StringFormat = "Hello {0}",
+				Source = property.obj,
+			};
+			Type type = property.UnderlyingType;
+			if (type == typeof(string) || type.IsPrimitive)
+				binding.Mode = BindingMode.TwoWay;
+			else
+				binding.Mode = BindingMode.OneWay;
+			this.Bind(TextBlock.TextProperty, binding);
+			AvaloniaUtils.AddTextBoxContextMenu(this);
+		}
+
+		private void InitializeComponent()
 		{
 			Background = new SolidColorBrush(Colors.White);
 			BorderBrush = new SolidColorBrush(Colors.Black);
@@ -50,23 +90,4 @@ namespace Atlas.UI.Avalonia.Controls
 			//textBox.BorderBrush = textBox.Background;
 		}
 	}
-
-	/*private TextBox AddTextBox(ListProperty property, int rowIndex, int columnIndex, Type type)
-	{
-		if (textBox.IsReadOnly)
-			textBox.Background = new SolidColorBrush(Theme.TextBackgroundDisabledColor);
-
-		var binding = new Binding(property.propertyInfo.Name)
-		{
-			Converter = new EditValueConverter(),
-			//StringFormat = "Hello {0}",
-			Source = property.obj,
-		};
-		if (type == typeof(string) || type.IsPrimitive)
-			binding.Mode = BindingMode.TwoWay;
-		else
-			binding.Mode = BindingMode.OneWay;
-		textBox.Bind(TextBlock.TextProperty, binding);
-		AvaloniaUtils.AddTextBoxContextMenu(textBox);
-	}*/
 }

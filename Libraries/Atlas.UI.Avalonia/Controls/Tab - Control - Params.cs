@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
-using System.Windows.Input;
 using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Layout;
-using Avalonia;
-using Avalonia.Data;
-using Avalonia.Input;
-using Avalonia.Media.Imaging;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -35,7 +31,6 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeControls(string columnDefinitions)
 		{
-			//VerticalAlignment = VerticalAlignment.Stretch;
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			ColumnDefinitions = new ColumnDefinitions(columnDefinitions);
 			Margin = new Thickness(15, 6);
@@ -67,15 +62,26 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			RowDefinitions.Add(gridRow);
 
-			List<Control> controls = new List<Control>();
+			var controls = new List<Control>();
 			foreach (PropertyInfo propertyInfo in obj.GetType().GetVisibleProperties())
 			{
 				var property = new ListProperty(obj, propertyInfo);
-				Control control = AddProperty(property, rowIndex, columnIndex);
+				Control control = CreatePropertyControl(property);
+				if (control == null)
+					continue;
+
+				AddControl(control, rowIndex, columnIndex);
 				controls.Add(control);
 				columnIndex++;
 			}
 			return controls;
+		}
+
+		private void AddControl(Control control, int columnIndex, int rowIndex)
+		{
+			Grid.SetColumn(control, columnIndex);
+			Grid.SetRow(control, rowIndex);
+			Children.Add(control);
 		}
 
 		public Control AddPropertyRow(string propertyName)
@@ -91,6 +97,10 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public Control AddPropertyRow(ListProperty property)
 		{
+			Control control = CreatePropertyControl(property);
+			if (control == null)
+				return null;
+
 			int rowIndex = RowDefinitions.Count;
 			{
 				RowDefinition spacerRow = new RowDefinition();
@@ -108,8 +118,6 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				Text = property.Name,
 				Margin = new Thickness(0, 3, 10, 3),
-				//Margin = new Thickness(10, 0, 0, 0), // needs Padding so Border not required
-				//Background = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor),
 				Foreground = new SolidColorBrush(Colors.White),
 				VerticalAlignment = VerticalAlignment.Center,
 				//HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -118,126 +126,37 @@ namespace Atlas.UI.Avalonia.Controls
 				[Grid.ColumnProperty] = 0,
 			};
 			Children.Add(textLabel);
-			Control control = AddProperty(property, rowIndex, 1);
+
+			AddControl(control, 1, rowIndex);
+
 			return control;
 		}
 
-		private Control AddProperty(ListProperty property, int rowIndex, int columnIndex)
+		private Control CreatePropertyControl(ListProperty property)
 		{
-			Type propertyType = property.propertyInfo.PropertyType;
-			Type underlyingType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
+			Type type = property.UnderlyingType;
 
-			BindListAttribute listAttribute = underlyingType.GetCustomAttribute<BindListAttribute>();
+			BindListAttribute listAttribute = type.GetCustomAttribute<BindListAttribute>();
+			listAttribute = listAttribute ?? property.propertyInfo.GetCustomAttribute<BindListAttribute>();
 
 			Control control = null;
-			if (underlyingType == typeof(bool))
+			if (type == typeof(bool))
 			{
-				control = AddCheckBox(property, rowIndex, columnIndex);
+				control = new TabControlCheckBox(property);
 			}
-			else if (underlyingType.IsEnum || listAttribute != null)
+			else if (type.IsEnum || listAttribute != null)
 			{
-				control = AddEnum(property, rowIndex, columnIndex, underlyingType, listAttribute);
+				control = new TabControlComboBox(property, listAttribute);
 			}
-			else if (typeof(DateTime).IsAssignableFrom(underlyingType))
+			else if (typeof(DateTime).IsAssignableFrom(type))
 			{
-				AddDateTimePicker(property, rowIndex, columnIndex); // has 2 controls
+				control = new TabDateTimePicker(property);
 			}
-			else
+			else if (!typeof(IList).IsAssignableFrom(type))
 			{
-				control = AddTextBox(property, rowIndex, columnIndex, underlyingType);
-			}
-
-			return control;
-		}
-
-		private TextBox AddTextBox(ListProperty property, int rowIndex, int columnIndex, Type type)
-		{
-			var textBox = new TabControlTextBox()
-			{
-				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = columnIndex,
-				IsReadOnly = !property.Editable,
-			};
-			if (textBox.IsReadOnly)
-				textBox.Background = new SolidColorBrush(Theme.TextBackgroundDisabledColor);
-
-			PasswordCharAttribute passwordCharAttribute = property.propertyInfo.GetCustomAttribute<PasswordCharAttribute>();
-			if (passwordCharAttribute != null)
-				textBox.PasswordChar = passwordCharAttribute.Character;
-
-			ExampleAttribute attribute = property.propertyInfo.GetCustomAttribute<ExampleAttribute>();
-			if (attribute != null)
-				textBox.Watermark = attribute.Text;
-
-			var binding = new Binding(property.propertyInfo.Name)
-			{
-				Converter = new EditValueConverter(),
-				//StringFormat = "Hello {0}",
-				Source = property.obj,
-			};
-			if (type == typeof(string) || type.IsPrimitive)
-				binding.Mode = BindingMode.TwoWay;
-			else
-				binding.Mode = BindingMode.OneWay;
-			textBox.Bind(TextBlock.TextProperty, binding);
-			AvaloniaUtils.AddTextBoxContextMenu(textBox);
-
-			Children.Add(textBox);
-			return textBox;
-		}
-		private CheckBox AddCheckBox(ListProperty property, int rowIndex, int columnIndex)
-		{
-			TabControlCheckBox checkBox = new TabControlCheckBox(property)
-			{
-				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = columnIndex,
-			};
-			Children.Add(checkBox);
-			return checkBox;
-		}
-
-		private ComboBox AddEnum(ListProperty property, int rowIndex, int columnIndex, Type underlyingType, BindListAttribute propertyListAttribute)
-		{
-			// todo: handle custom lists
-			ComboBox comboBox = new TabControlComboBox()
-			{
-				MaxWidth = ControlMaxWidth,
-				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = columnIndex,
-			};
-
-			if (propertyListAttribute != null)
-			{
-				PropertyInfo propertyInfo = property.obj.GetType().GetProperty(propertyListAttribute.Name);
-				comboBox.Items = propertyInfo.GetValue(property.obj) as IEnumerable;
-			}
-			else
-			{
-				var values = underlyingType.GetEnumValues();
-				comboBox.Items = values;
+				control = new TabControlTextBox(property);
 			}
 
-			var binding = new Binding(property.propertyInfo.Name)
-			{
-				Converter = new EditValueConverter(),
-				//StringFormat = "Hello {0}",
-				Mode = BindingMode.TwoWay,
-				Source = property.obj,
-			};
-			comboBox.Bind(ComboBox.SelectedItemProperty, binding);
-			Children.Add(comboBox);
-			return comboBox;
-		}
-
-		// todo: need a real DateTimePicker
-		private TabDateTimePicker AddDateTimePicker(ListProperty property, int rowIndex, int columnIndex)
-		{
-			TabDateTimePicker control = new TabDateTimePicker(property)
-			{
-				[Grid.RowProperty] = rowIndex,
-				[Grid.ColumnProperty] = columnIndex,
-			};
-			Children.Add(control);
 			return control;
 		}
 	}

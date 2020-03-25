@@ -206,6 +206,18 @@ namespace Atlas.Serialize.Test
 			Assert.AreEqual(input, output);
 		}
 
+		// DateTime has no set operators and relies on constructor
+		[Test, Description("Serialize TimeZoneInfo")]
+		public void SerializeTimeZoneInfo()
+		{
+			TimeZoneInfo input = TimeZoneInfo.Local;
+
+			serializer.Save(call, input);
+			TimeZoneInfo output = serializer.Load<TimeZoneInfo>(call);
+
+			Assert.AreEqual(input, output);
+		}
+
 		public class NullableDateTime
 		{
 			public long Long { get; set; }

@@ -22,6 +22,7 @@ namespace Atlas.Serialize
 			new TypeRepoDateTime.Creator(),
 			new TypeRepoDateTimeOffset.Creator(),
 			new TypeRepoTimeSpan.Creator(),
+			new TypeRepoTimeZoneInfo.Creator(),
 			new TypeRepoType.Creator(),
 			new TypeRepoArrayBytes.Creator(),
 			new TypeRepoArray.Creator(),

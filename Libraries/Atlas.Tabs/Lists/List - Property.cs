@@ -90,6 +90,8 @@ namespace Atlas.Tabs
 			}
 		}
 
+		public Type UnderlyingType => propertyInfo.PropertyType.GetNonNullableType();
+
 		public ListProperty(object obj, PropertyInfo propertyInfo, bool cached = true) : 
 			base(obj, propertyInfo)
 		{
@@ -105,10 +107,7 @@ namespace Atlas.Tabs
 				Name = attribute.Name;
 		}
 
-		public override string ToString()
-		{
-			return Name;
-		}
+		public override string ToString() => Name;
 
 		public static ItemCollection<ListProperty> Create(object obj)
 		{
