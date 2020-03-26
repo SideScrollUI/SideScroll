@@ -33,6 +33,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Web Browser", new TabTestBrowser()),
 					new ListItem("Text Editor", new TabTestTextEditor()),
 					new ListItem("Chart", new TabTestChart()),
+					new ListItem("Toolbar", new TabTestToolbar()),
 					new ListItem("Serializer", new TabSerializer()),
 					new ListItem("Process", new TabTestProcess()),
 					new ListItem("Loading", new TabTestLoading()),
