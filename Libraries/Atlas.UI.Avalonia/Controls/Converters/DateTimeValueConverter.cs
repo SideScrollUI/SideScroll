@@ -1,4 +1,5 @@
-﻿using Avalonia.Data.Converters;
+﻿using Atlas.Core;
+using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
 
@@ -71,18 +72,18 @@ namespace Atlas.UI.Avalonia
 		public void SetTime(string timeText)
 		{
 			// use a single 'h' so a leading zero isn't required
-			TimeSpan timeSpan;
-			if (TimeSpan.TryParseExact(timeText, @"h\:m\:s", CultureInfo.InvariantCulture, out timeSpan))
+			TimeSpan? timeSpan = DateTimeUtils.ConvertTextToTimeSpan(timeText);
+			if (timeSpan != null)
 			{
 				if (previousDateTime != null)
 				{
 					var date = ((DateTime)previousDateTime).Date;
-					previousDateTime = date.AddSeconds(timeSpan.TotalSeconds);
+					previousDateTime = date.AddSeconds(timeSpan.Value.TotalSeconds);
 				}
 				else
 				{
 					var date = DateTime.UtcNow.Date;
-					previousDateTime = date.AddSeconds(timeSpan.TotalSeconds);
+					previousDateTime = date.AddSeconds(timeSpan.Value.TotalSeconds);
 				}
 			}
 		}
