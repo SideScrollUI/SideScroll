@@ -700,7 +700,7 @@ namespace Atlas.UI.Wpf
 
 		private void TabInstance_OnModelChanged(object sender, EventArgs e)
 		{
-			tabModel = tabInstance.Model
+			tabModel = tabInstance.Model;
 			ReloadControls();
 		}
 
