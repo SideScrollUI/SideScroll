@@ -108,7 +108,7 @@ namespace Atlas.UI.Avalonia.View
 		private void MenuItemDebug_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			TabModel debugListCollection = new TabModel("Debug");
-			TabView clone = Serialize.SerializerMemory.Clone<TabView>(tabInstance.taskInstance.call, this);
+			TabView clone = Serialize.SerializerMemory.Clone<TabView>(tabInstance.taskInstance.Call, this);
 			debugListCollection.AddData(clone);
 			Control debugControl = clone.CreateChildControl(debugListCollection, "Debug");
 		}

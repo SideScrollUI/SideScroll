@@ -260,6 +260,24 @@ namespace Atlas.UI.Avalonia
 			return false;
 		}
 
+		public static bool IsTypeAutoSize(Type type)
+		{
+			type = type.GetNonNullableType();
+
+			if (type == typeof(string))
+				return false;
+
+			if (type.IsPrimitive ||
+				type.IsEnum ||
+				type == typeof(decimal) ||
+				type == typeof(DateTime) ||
+				type == typeof(TimeSpan) ||
+				typeof(IList).IsAssignableFrom(type))
+				return true;
+
+			return false;
+		}
+
 		public static TextAlignment GetTextAlignment(Type type)
 		{
 			type = type.GetNonNullableType();

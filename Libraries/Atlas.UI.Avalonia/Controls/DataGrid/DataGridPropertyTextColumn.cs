@@ -35,6 +35,7 @@ namespace Atlas.UI.Avalonia
 
 		public int MinDesiredWidth { get; set; } = 40;
 		public int MaxDesiredWidth { get; set; } = 500;
+		public bool AutoSize { get; set; }
 
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{
@@ -44,6 +45,8 @@ namespace Atlas.UI.Avalonia
 			MaxDesiredWidth = maxDesiredWidth;
 			Binding = GetFormattedTextBinding();
 			//Binding = GetTextBinding();
+			if (DataGridUtils.IsTypeAutoSize(propertyInfo.PropertyType))
+				AutoSize = true;
 
 			CanUserSort = DataGridUtils.IsTypeSortable(propertyInfo.PropertyType);
 

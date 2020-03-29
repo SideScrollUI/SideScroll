@@ -12,6 +12,12 @@ namespace Atlas.Serialize
 			return SerializerMemory.Clone<T>(call, obj);
 		}
 
+		public static object Clone(this object obj, Call call = null)
+		{
+			call = call ?? new Call();
+			return SerializerMemory.Clone(call, obj);
+		}
+
 		public static void CloneParentClass(this object dest, object source)
 		{
 			Type inputType = source.GetType();

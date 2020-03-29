@@ -40,14 +40,12 @@ namespace Atlas.Core
 		{
 			//call = call.Child(Label);
 			TimesRun++;
-			this.context = SynchronizationContext.Current;
-			if (this.context == null)
-				this.context = new SynchronizationContext();
+			context = SynchronizationContext.Current ?? new SynchronizationContext();
 			call.log.context = context;
 
 			TaskInstance taskInstance = new TaskInstance()
 			{
-				call = call,
+				Call = call,
 				Creator = this,
 			};
 			call.taskInstance = taskInstance;
@@ -71,7 +69,7 @@ namespace Atlas.Core
 
 		public void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
 		{
-			context.Post(new SendOrPostCallback(this.NotifyPropertyChangedContext), propertyName);
+			context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
 			//PropertyChanged?.BeginInvoke(this, new PropertyChangedEventArgs(propertyName), EndAsyncEvent, null);
 			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}

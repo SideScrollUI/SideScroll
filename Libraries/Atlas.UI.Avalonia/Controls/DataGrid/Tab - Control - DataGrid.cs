@@ -352,7 +352,16 @@ namespace Atlas.UI.Avalonia.Controls
 					column.MinWidth = Math.Max(column.MinWidth, Math.Min(100, column.Width.DesiredValue));
 				double desiredWidth = Math.Max(column.MinWidth, column.Width.DesiredValue);
 				if (column is DataGridPropertyTextColumn textColumn)
+				{
 					desiredWidth = Math.Max(desiredWidth, textColumn.MinDesiredWidth);
+					if (textColumn.AutoSize)
+					{
+						//column.Width = new DataGridLength(desiredWidth, DataGridLengthUnitType.Auto);
+						column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto, desiredWidth, double.NaN);
+						continue;
+					}
+					//column.Width = new DataGridLength(desiredWidth, DataGridLengthUnitType.Star);
+				}
 				if (desiredWidth >= ColumnPercentBased)
 				{
 					// Changes ActualWidth
@@ -567,6 +576,7 @@ namespace Atlas.UI.Avalonia.Controls
 			bool propertyEditable = (propertyInfo.GetCustomAttribute(typeof(EditingAttribute)) != null);
 			MinWidthAttribute attributeColumnMinWidth = propertyInfo.GetCustomAttribute<MinWidthAttribute>();
 			MaxWidthAttribute attributeColumnMaxWidth = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
+			AutoSizeAttribute attributeAutoSize = propertyInfo.GetCustomAttribute<AutoSizeAttribute>();
 			bool isReadOnly = true;// (tabModel.Editing == false || propertyEditable == false || !propertyInfo.CanWrite);
 
 			//DataGridBoundColumn column;
@@ -635,6 +645,8 @@ namespace Atlas.UI.Avalonia.Controls
 					var textColumn = new DataGridPropertyTextColumn(dataGrid, propertyInfo, isReadOnly, maxDesiredWidth);
 					if (attributeColumnMinWidth != null)
 						textColumn.MinDesiredWidth = attributeColumnMinWidth.MinWidth;
+					if (attributeAutoSize != null)
+						textColumn.AutoSize = true;
 					column = textColumn;
 					//else
 					//	column = new DataGridTextColumn();

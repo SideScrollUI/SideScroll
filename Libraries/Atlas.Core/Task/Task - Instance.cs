@@ -17,10 +17,10 @@ namespace Atlas.Core
 		public string Label => Creator?.Label; // used for Task Label
 		public TaskCreator Creator { get; set; }
 		[HiddenColumn]
-		public Call call { get; set; } = new Call();
+		public Call Call { get; set; } = new Call();
 
 		[InnerValue, HiddenColumn]
-		public Log Log => call.log;
+		public Log Log => Call.log;
 
 		[HiddenColumn]
 		public bool ShowTask { get; set; }
@@ -62,7 +62,7 @@ namespace Atlas.Core
 
 		public TaskInstance()
 		{
-			call.taskInstance = this;
+			Call.taskInstance = this;
 			stopwatch.Start();
 		}
 
@@ -141,7 +141,7 @@ namespace Atlas.Core
 		{
 			TaskInstance subTask = new TaskInstance();
 			subTask.Creator = Creator;
-			subTask.call = call;
+			subTask.Call = call;
 			subTask.tokenSource = tokenSource;
 			subTask.ParentTask = this;
 			
@@ -169,16 +169,16 @@ namespace Atlas.Core
 			Finished = true;
 			Progress = ProgressMax;
 
-			if (call.log.Type >= LogEntry.LogType.Error)
+			if (Call.log.Type >= LogEntry.LogType.Error)
 			{
-				Status = call.log.Type.ToString();
+				Status = Call.log.Type.ToString();
 				Errored = true;
 				ShowTask = true;
 			}
-			else if (call.log.Type == LogEntry.LogType.Warn)
+			else if (Call.log.Type == LogEntry.LogType.Warn)
 			{
 				if (!Errored)
-					Status = call.log.Type.ToString();
+					Status = Call.log.Type.ToString();
 				ShowTask = true;
 			}
 			else if (Task == null || TaskStatus == TaskStatus.RanToCompletion)
@@ -194,7 +194,7 @@ namespace Atlas.Core
 			NotifyPropertyChanged(nameof(Status));
 			NotifyPropertyChanged(nameof(TaskStatus));
 			NotifyPropertyChanged(nameof(Finished));
-			call.log.Add("Finished", new Tag("Time", stopwatch.ElapsedMilliseconds / 1000.0));
+			Call.log.Add("Finished", new Tag("Time", stopwatch.ElapsedMilliseconds / 1000.0));
 			Creator?.OnComplete?.Invoke();
 			OnComplete?.Invoke();
 		}

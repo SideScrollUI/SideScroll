@@ -32,6 +32,7 @@ namespace Atlas.Core
 
 		public Call Child([CallerMemberName] string name = "", params Tag[] tags)
 		{
+			log = log ?? new Log();
 			Call call = new Call();
 			call.Name = name;
 			call.ParentCall = this;
@@ -43,6 +44,7 @@ namespace Atlas.Core
 
 		public CallTimer Timer([CallerMemberName] string name = "", params Tag[] tags)
 		{
+			log = log ?? new Log();
 			CallTimer call = new CallTimer();
 			call.Name = name;
 			call.ParentCall = this;
@@ -62,7 +64,7 @@ namespace Atlas.Core
 		// allows having progress broken down into multiple tasks
 		public Call AddSubCall(string name = "")
 		{
-			return AddSubTask(name).call;
+			return AddSubTask(name).Call;
 		}
 	}
 

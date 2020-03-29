@@ -110,12 +110,6 @@ namespace Atlas.Core
 	}
 
 	// ->Tabs: Don't show this field/property as a column
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-	public class HiddenColumnAttribute : Attribute
-	{
-	}
-
-	// ->Tabs: Don't show this field/property as a column
 	[AttributeUsage(AttributeTargets.Method)]
 	public class ButtonColumnAttribute : Attribute
 	{
@@ -125,6 +119,18 @@ namespace Atlas.Core
 		{
 			Name = name;
 		}
+	}
+
+	// ->Tabs: Column Width should AutoSize instead of */Percent based
+	[AttributeUsage(AttributeTargets.Property)]
+	public class AutoSizeAttribute : Attribute
+	{
+	}
+
+	// ->Tabs: Don't show this field/property as a column
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class HiddenColumnAttribute : Attribute
+	{
 	}
 
 	// ->Tabs: Don't show this field/property as a row

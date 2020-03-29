@@ -36,6 +36,18 @@ namespace Atlas.Serialize
 			}
 		}
 
+		public object Load(Call call = null)
+		{
+			call = call ?? new Call();
+			stream.Seek(0, SeekOrigin.Begin);
+			using (BinaryReader reader = new BinaryReader(stream))
+			{
+				Serializer serializer = new Serializer();
+				serializer.Load(call, reader);
+				return serializer.BaseObject();
+			}
+		}
+
 		//public static T Clone<T>(Call call, T obj)
 		public static T Clone<T>(Call call, object obj)
 		{
@@ -56,6 +68,22 @@ namespace Atlas.Serialize
 				call.log.AddError(e.Message);
 			}
 			return default;
+		}
+
+		public static object Clone(Call call, object obj)
+		{
+			try
+			{
+				SerializerMemory memorySerializer = new SerializerMemory();
+				memorySerializer.Save(call, obj);
+				object copy = memorySerializer.Load(call);
+				return copy;
+			}
+			catch (Exception e)
+			{
+				call.log.AddError(e.Message);
+			}
+			return null;
 		}
 
 		public string GetEncodedString()

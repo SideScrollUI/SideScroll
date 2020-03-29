@@ -111,7 +111,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 				TabInstance tabInstance = tab.iTab.Create();
 				tabInstance.project = tab.project;
-				tabInstance.tabBookmark = bookmarkItem.Bookmark.tabBookmark.Clone<TabBookmark>(taskInstance.call); // bookmark specified here will get auto loaded
+				tabInstance.tabBookmark = bookmarkItem.Bookmark.tabBookmark.Clone<TabBookmark>(taskInstance.Call); // bookmark specified here will get auto loaded
 				//tabInstance.LoadBookmark()
 				return new TabView(tabInstance);
 			}
