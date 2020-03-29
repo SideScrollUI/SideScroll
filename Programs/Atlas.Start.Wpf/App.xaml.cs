@@ -1,4 +1,5 @@
 ﻿using Atlas.Tabs;
+using System;
 using System.Windows;
 
 namespace Atlas.Start.Wpf
@@ -27,9 +28,9 @@ namespace Atlas.Start.Wpf
 			var projectSettings = new ProjectSettings()
 			{
 				Name = "Atlas",
-				Version = "1",
-				DataVersion = "1",
 				LinkType = "atlas",
+				Version = new Version(1, 0),
+				DataVersion = new Version(1, 0),
 			};
 			var userSettings = new UserSettings()
 			{

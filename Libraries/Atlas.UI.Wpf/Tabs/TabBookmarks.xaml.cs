@@ -47,6 +47,7 @@ namespace Atlas.UI.Wpf
 
 		protected void AddListData()
 		{
+			tabModel.Bookmarks = tabModel.Bookmarks ?? new BookmarkCollection(tabInstance.project);
 			tabData = new TabData(tabInstance, tabModel.Bookmarks.Items, new TabDataSettings());
 			tabData.autoSelectFirst = false;
 			tabData.OnSelectionChanged += OnSelectedBookmarkChanged;

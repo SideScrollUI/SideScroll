@@ -279,6 +279,24 @@ namespace Atlas.UI.Wpf
 			Application.Current.Shutdown();
 		}
 
+		protected void AddTab(ITab tab)
+		{
+			TabInstance tabInstance = tab.Create();
+			tabInstance.Model.Name = "Start";
+			tabInstance.project = project;
+			//if (LoadBookmarkUri != null)
+			//	tabInstance.tabBookmark = linker.GetBookmark(LoadBookmarkUri)?.tabBookmark;
+			//else
+			if (project.userSettings.AutoLoad) // did we load successfully last time?
+				tabInstance.LoadDefaultBookmark();
+
+			tabView = new TabView(tabInstance);
+			tabView.tabModel.Bookmarks = new BookmarkCollection(project);
+			tabView.Load();
+
+			scrollViewer.Content = tabView;
+		}
+
 		// Use IE 11 mode instead of IE 8 mode
 		// Most users won't run this program as Administrator (good) so this will abort early
 		public static void SetRegistryUseIE11Mode()

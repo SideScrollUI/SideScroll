@@ -26,32 +26,8 @@ namespace Atlas.Start.Wpf
 
 		private void Load()
 		{
-			Debug.Assert(SynchronizationContext.Current != null); // log needs this to work properly
-			tabView = new TabView(new TabTest.Instance(project));
-			tabView.Load();
-
-			scrollViewer.Content = tabView;
-
-			//LoadWindowSettings();
+			AddTab(new TabTest());
 		}
-
-		/* Avalonia's
-		public static MainWindow LoadProject(string projectPath)
-		{
-			Project project = new Project(projectPath, typeof(MainWindow).Namespace);
-			//this.settings = project.settings;
-
-			MainWindow mainWindow = new MainWindow();
-			mainWindow.tabView = new TabView(new TabAvalonia.Instance(project));
-			//mainWindow.tabView = new TabView(new TabTest.Instance(project));
-			mainWindow.tabView.LoadConfig();
-			mainWindow.LoadProject(project);
-
-			//Project project
-
-			//scrollViewer.Content = tabView;
-			return mainWindow;
-		}*/
 	}
 }
 

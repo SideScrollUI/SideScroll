@@ -76,6 +76,7 @@ namespace Atlas.UI.Wpf
 			tabInstance.OnLoadBookmark += TabInstance_OnLoadBookmark;
 			tabInstance.OnClearSelection += TabInstance_OnClearSelection;
 			tabInstance.OnSelectItem += TabInstance_OnSelectItem;
+			tabInstance.OnModelChanged += TabInstance_OnModelChanged;
 
 			//this.GotFocus += TabView_GotFocus;
 			//this.LostFocus += TabView_LostFocus;
@@ -697,6 +698,12 @@ namespace Atlas.UI.Wpf
 			tabDatas[0].SelectedItem = e.obj;
 		}
 
+		private void TabInstance_OnModelChanged(object sender, EventArgs e)
+		{
+			tabModel = tabInstance.Model
+			ReloadControls();
+		}
+
 		private void SaveSplitterDistance()
 		{
 			if (gridColumnLists.Width.IsAbsolute)
@@ -753,6 +760,7 @@ namespace Atlas.UI.Wpf
 			tabInstance.OnLoadBookmark -= TabInstance_OnLoadBookmark;
 			tabInstance.OnClearSelection -= TabInstance_OnClearSelection;
 			tabInstance.OnSelectItem -= TabInstance_OnSelectItem;
+			tabInstance.OnModelChanged -= TabInstance_OnModelChanged;
 
 			gridParentControls.MouseDown -= gridParentControls_MouseDown;
 			horizontalSplitter.DragCompleted -= horizontalSplitter_DragCompleted;
