@@ -27,7 +27,7 @@ namespace Atlas.UI.Wpf
 		{
 			this.tabInstance = tabInstance;
 			this.project = tabInstance.project;
-			this.tabModel = tabInstance.tabModel;
+			this.tabModel = tabInstance.Model;
 			AddListData();
 		}
 
@@ -60,7 +60,7 @@ namespace Atlas.UI.Wpf
 			List<Bookmark> bookmarks = new List<Bookmark>();
 			foreach (ViewBookmark name in tabData.SelectedItems)
 			{
-				Bookmark bookmark = project.DataApp.Load<Bookmark>(name.Name, tabInstance.taskInstance.call);
+				Bookmark bookmark = project.DataApp.Load<Bookmark>(name.Name, tabInstance.taskInstance.Call);
 				if (bookmark != null)
 					bookmarks.Add(bookmark);
 			}

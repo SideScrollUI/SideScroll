@@ -22,7 +22,7 @@ namespace Atlas.UI.Wpf
 			InitializeComponent();
 			labelName.Content = "Notes";
 			textEditor.IsReadOnly = true;
-			textEditor.Text = tabInstance.tabModel.Notes;
+			textEditor.Text = tabInstance.Model.Notes;
 
 			SearchPanel.Install(this.textEditor);
 		}

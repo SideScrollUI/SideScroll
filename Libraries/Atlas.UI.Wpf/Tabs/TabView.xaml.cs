@@ -65,7 +65,7 @@ namespace Atlas.UI.Wpf
 
 		private void Initialize()
 		{
-			tabModel = tabInstance.tabModel;
+			tabModel = tabInstance.Model;
 			InitializeComponent();
 			AddListeners();
 		}
@@ -423,7 +423,7 @@ namespace Atlas.UI.Wpf
 			Dictionary<object, Control> oldChildControls = childControls;
 			newChildControls = new Dictionary<object, Control>();
 			List<Control> orderedChildControls = new List<Control>();
-			if (tabModel.Notes != null && tabModel.Notes.Length > 0 && tabInstance.tabViewSettings.NotesVisible)
+			/*if (tabModel.Notes != null && tabModel.Notes.Length > 0 && tabInstance.tabViewSettings.NotesVisible)
 			{
 				// Could add control to class instead of this
 				Control controlNotes;
@@ -446,7 +446,7 @@ namespace Atlas.UI.Wpf
 				}
 				//GetOrCreateChildControl(oldChildControls, newChildControls, orderedChildControls, tabModel.Notes, "Notes");
 				//CreateChildControls(new List<string>() { tabModel.Notes }, oldChildControls, newChildControls, orderedChildControls);
-			}
+			}*/
 			if (tabActions != null)
 			{
 				// show action help?
@@ -633,7 +633,7 @@ namespace Atlas.UI.Wpf
 		private void toolStripMenuItemDebug_Click(object sender, EventArgs e)
 		{
 			TabModel debugListCollection = new TabModel("Debug");
-			TabView tabView = this.Clone<TabView>(tabInstance.taskInstance.call);
+			TabView tabView = this.Clone<TabView>(tabInstance.taskInstance.Call);
 			debugListCollection.AddData(tabView);
 			Control debugControl = CreateChildControl("Debug", debugListCollection);
 		}

@@ -313,7 +313,7 @@ namespace Atlas.Tabs
 						return method;
 				}
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 			}
 			return null;

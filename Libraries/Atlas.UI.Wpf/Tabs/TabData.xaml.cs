@@ -52,7 +52,7 @@ namespace Atlas.UI.Wpf
 		public TabData(TabInstance tabInstance, IList iList, TabDataSettings tabDataSettings = null)
 		{
 			this.tabInstance = tabInstance;
-			this.tabModel = tabInstance.tabModel;
+			this.tabModel = tabInstance.Model;
 			this.tabDataSettings = tabDataSettings ?? new TabDataSettings();
 			this.iList = iList;
 			Debug.Assert(tabDataSettings != null);
