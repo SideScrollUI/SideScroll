@@ -168,16 +168,7 @@ namespace Atlas.Serialize
 			NumObjects = reader.ReadInt32();
 			FileDataOffset = reader.ReadInt64();
 			DataSize = reader.ReadInt64();
-
-			try
-			{
-				type = Type.GetType(AssemblyQualifiedName, AssemblyResolver, null);
-			}
-			catch (Exception e)
-			{
-				// why doesn't the false flag work above?
-				log.AddWarning("Missing Type", new Tag("TypeSchema", this), new Tag("Message", e.Message));
-			}
+			LoadType(log);
 			if (type == null)
 			{
 				log.AddWarning("Missing Type", new Tag("TypeSchema", this));
@@ -190,6 +181,48 @@ namespace Atlas.Serialize
 
 			LoadFields(reader);
 			LoadProperties(reader);
+		}
+
+		// Type lookup can take a long time, especially when there's missing types
+		private static Dictionary<string, Type> typeCache = new Dictionary<string, Type>();
+
+		private void LoadType(Log log)
+		{
+			lock (typeCache)
+			{
+				if (typeCache.TryGetValue(AssemblyQualifiedName, out Type type))
+				{
+					this.type = type;
+					return;
+				}
+			}
+
+			// Get Type with version
+			try
+			{
+				type = Type.GetType(AssemblyQualifiedName); // .Net Framework (WPF) requires this?
+			}
+			catch (Exception e)
+			{
+				log.AddWarning("Missing Versioned Type", new Tag("TypeSchema", this), new Tag("Message", e.Message));
+			}
+
+			// Get Type without version
+			try
+			{
+				if (type == null)
+					type = Type.GetType(AssemblyQualifiedName, AssemblyResolver, null);
+			}
+			catch (Exception e)
+			{
+				// why doesn't the false flag work above?
+				log.AddWarning("Missing Unversioned Type", new Tag("TypeSchema", this), new Tag("Message", e.Message));
+			}
+
+			lock (typeCache)
+			{
+				typeCache.Add(AssemblyQualifiedName, type);
+			}
 		}
 
 		// ignore Assembly version to allow loading shared 
