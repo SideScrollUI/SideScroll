@@ -141,13 +141,14 @@ namespace Atlas.Serialize
 			return entries;
 		}
 
-		public ItemCollection<Header> LoadHeaders(Type type, Call call = null)
+		public ItemCollection<Header> LoadHeaders(Type type, string directory = null, Call call = null)
 		{
 			call = call ?? new Call();
+			directory = directory ?? DefaultDirectory;
 
 			ItemCollection<Header> list = new ItemCollection<Header>();
 
-			string typePath = GetTypePath(type);
+			string typePath = GetTypePath(type, directory);
 			if (Directory.Exists(typePath))
 			{
 				foreach (string filePath in Directory.EnumerateDirectories(typePath))
