@@ -19,9 +19,9 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class OxyListSeries
 	{
-		public ListSeries ListSeries;
-		public OxyPlot.Series.Series OxySeries;
-		public bool IsVisible;
+		public ListSeries ListSeries { get; set; }
+		public OxyPlot.Series.Series OxySeries { get; set; }
+		public bool IsVisible { get; set; }
 
 		public OxyListSeries(ListSeries listSeries, OxyPlot.Series.Series oxySeries)
 		{
@@ -33,7 +33,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 	public class SeriesSelectedEventArgs : EventArgs
 	{
-		public List<ListSeries> Series;
+		public List<ListSeries> Series { get; set; }
 
 		public SeriesSelectedEventArgs(List<ListSeries> series)
 		{
@@ -496,6 +496,12 @@ namespace Atlas.UI.Avalonia.Controls
 				// didn't find any values
 				minimum = 0;
 				maximum = 1;
+			}
+
+			foreach (OxyPlot.Annotations.Annotation annotation in plotModel.Annotations)
+			{
+				if (annotation is OxyPlot.Annotations.LineAnnotation lineAnnotation)
+					maximum = Math.Max(lineAnnotation.Y * 1.1, maximum);
 			}
 
 			valueAxis.MinimumMajorStep = hasFraction ? 0 : 1;

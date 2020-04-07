@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <Configurations>Debug;Release;DebugX86</Configurations>
     <ApplicationIcon />
