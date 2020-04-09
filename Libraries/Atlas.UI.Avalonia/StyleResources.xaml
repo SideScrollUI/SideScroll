@@ -13,7 +13,8 @@
         <SolidColorBrush x:Key="ThemeBackgroundHover">#ddffdd</SolidColorBrush>
         
         <SolidColorBrush x:Key="ThemeBorderLightBrush">#FFAAAAAA</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBorderMidBrush">#FF888888</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBorderMidBrush">#FF106090</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBorderHighBrush">#006df0</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderDarkBrush">#FF333333</SolidColorBrush>
         
         <SolidColorBrush x:Key="ThemeControlLightBrush">#FFFFFFFF</SolidColorBrush>
@@ -28,8 +29,8 @@
 
         <SolidColorBrush x:Key="ErrorBrush">Red</SolidColorBrush>
         <SolidColorBrush x:Key="ErrorBrushLight">#10ff0000</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="HighlightBrush">#FF086F9E</SolidColorBrush>
+
+        <SolidColorBrush x:Key="HighlightBrush">#005dd0</SolidColorBrush>
 
         <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#FFFFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#4e7ee7</SolidColorBrush>

@@ -1,17 +1,16 @@
 ﻿using Atlas.Tabs;
-using System;
-using System.Collections.Generic;
-using System.IO;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Media;
 using AvaloniaEdit.CodeCompletion;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using Avalonia.Layout;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Input;
-using Avalonia.Media;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -69,7 +68,6 @@ namespace Atlas.UI.Avalonia.Controls
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			var temp = TemplatedControl.FontFamilyProperty;
 			textEditor = new AvaloniaEdit.TextEditor()
 			{
 				IsReadOnly = true,
@@ -83,21 +81,12 @@ namespace Atlas.UI.Avalonia.Controls
 				//HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // WordWrap requires Disabled
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, // WordWrap requires Disabled, but it doesn't work
 				VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-				//Margin = new Thickness(6),
-				//Padding = new Thickness(6), // doesn't work well with scroll bars
+				Padding = new Thickness(6),
 				FontSize = 14,
 				SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"), // handles JSON too
 			};
 
-			Border border = new Border()
-			{
-				BorderThickness = new Thickness(6, 6, 0, 6),
-				BorderBrush = new SolidColorBrush(Theme.GridBackgroundColor),
-				Child = textEditor,
-			};
-
-
-			Children.Add(border);
+			Children.Add(textEditor);
 
 			//textEditor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
 			/*ShowLineNumbers = true;

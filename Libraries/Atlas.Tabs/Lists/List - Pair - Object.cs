@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using Atlas.Core;
+using System;
 using System.ComponentModel;
-using Atlas.Core;
-using Atlas.Extensions;
 
 namespace Atlas.Tabs
 {
@@ -12,8 +10,7 @@ namespace Atlas.Tabs
 		public object Key { get; set; }
 		[StyleValue]
 		public object Value { get; set; }
-		[HiddenColumn]
-		[InnerValue]
+		[HiddenColumn, InnerValue]
 		public object Object { get; set; }
 		public bool autoLoad = true;
 

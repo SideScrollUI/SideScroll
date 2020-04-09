@@ -35,7 +35,7 @@ namespace Atlas.UI.Avalonia
 
 		public static Color EditableColor = Color.Parse("#c8c2f9");
 
-		public static Color HasChildrenColor = Color.Parse("#f4c68d");
+		public static Color HasChildrenColor = Color.Parse("#ebc17f");
 		public static Color HasNoChildrenColor = Colors.LightGray;
 		//public static Color HasChildrenColor = Colors.Tan;
 
