@@ -234,7 +234,7 @@ namespace Atlas.UI.Avalonia
 				columnIndex = 0;
 				foreach (string value in row)
 				{
-					string text = value ?? "";
+					string text = value?.Replace("\n", "").Replace("\r", "") ?? "";
 					if (columns[columnIndex].RightAlign == TextAlignment.Right)
 						stringBuilder.Append(" " + text.PadLeft(columnWidths[columnIndex++], ' ') + " |");
 					else

@@ -118,7 +118,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				Text = property.Name,
 				Margin = new Thickness(0, 3, 10, 3),
-				Foreground = new SolidColorBrush(Colors.White),
+				Foreground = new SolidColorBrush(Theme.ForegroundColor),
 				VerticalAlignment = VerticalAlignment.Center,
 				//HorizontalAlignment = HorizontalAlignment.Stretch,
 				MaxWidth = 500,

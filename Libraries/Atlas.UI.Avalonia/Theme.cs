@@ -6,6 +6,7 @@ namespace Atlas.UI.Avalonia
 	{
 		public static Color BackgroundColor = Color.Parse("#1e1e1e");
 		public static Color BackgroundFocusedColor = Color.Parse("#262626");
+		public static Color ForegroundColor = Color.Parse("#f8f8f8");
 
 		public static Color SplitterColor = Color.Parse("#111111");
 
