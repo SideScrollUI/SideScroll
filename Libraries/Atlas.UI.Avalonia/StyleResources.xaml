@@ -14,7 +14,7 @@
         
         <SolidColorBrush x:Key="ThemeBorderLightBrush">#FFAAAAAA</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#FF106090</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBorderHighBrush">#006df0</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBorderHighRadioBrush">#006df0</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderDarkBrush">#FF333333</SolidColorBrush>
         
         <SolidColorBrush x:Key="ThemeControlLightBrush">#FFFFFFFF</SolidColorBrush>

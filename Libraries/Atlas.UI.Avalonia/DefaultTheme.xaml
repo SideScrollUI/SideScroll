@@ -60,11 +60,22 @@
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHover}"/>
     </Style>
 
+    <Style Selector="ComboBox">
+        <Setter Property="Background" Value="#cecece"/>
+    </Style>
+    <Style Selector="ComboBox /template/ Border#border:pointerover">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHover}"/>
+    </Style>
+
     <Style Selector="ListBoxItem /template/ ContentPresenter">
         <Setter Property="Background" Value="#FF086F9E"/>
     </Style>
     <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="#4e8ef7"/>
+    </Style>
+    
+    <Style Selector="RadioButton:pointerover /template/ Ellipse#border">
+        <Setter Property="Stroke" Value="{DynamicResource ThemeBorderHighRadioBrush}"/>
     </Style>
 
 </Styles>
