@@ -1,11 +1,9 @@
-﻿using Atlas.UI.Avalonia.Utilities;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.VisualTree;
 using System;
 using System.Collections.Generic;
