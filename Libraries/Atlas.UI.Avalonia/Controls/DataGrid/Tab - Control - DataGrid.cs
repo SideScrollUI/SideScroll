@@ -356,6 +356,7 @@ namespace Atlas.UI.Avalonia.Controls
 					desiredWidth = Math.Max(desiredWidth, textColumn.MinDesiredWidth);
 					if (textColumn.AutoSize)
 					{
+						column.MinWidth = Math.Max(column.MinWidth, Math.Min(150, desiredWidth));
 						//column.Width = new DataGridLength(desiredWidth, DataGridLengthUnitType.Auto);
 						column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto, desiredWidth, double.NaN);
 						continue;
