@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Atlas.Core;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Atlas.Core;
 
 namespace Atlas.Tabs.Test.Actions
 {
@@ -13,7 +14,6 @@ namespace Atlas.Tabs.Test.Actions
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				model.Notes = "";
 				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Parameters", new TabParamsDataGrid()),
@@ -24,7 +24,8 @@ namespace Atlas.Tabs.Test.Actions
 				{
 					new TaskDelegate("Add Log Entry", AddEntry),
 					new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
-					new TaskDelegate("Task Instance Progress", SubTaskInstances, true),
+					new TaskDelegate("Parallel Task Progress", ParallelTaskProgress, true),
+					new TaskDelegateAsync("Task Progress", SubTaskProgressAsync, true),
 					new TaskAction("Action", new Action(() => PassParams(1, "abc"))),
 					new TaskDelegateAsync("Long load (Async)", SleepAsync, true),
 					new TaskDelegate("StartAsync error", StartAsyncError),
@@ -67,7 +68,7 @@ Actions add Buttons to the tab. When clicked, it will:
 				throw new NotImplementedException();
 			}
 
-			private void SubTaskInstances(Call call)
+			private void ParallelTaskProgress(Call call)
 			{
 				List<int> downloads = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 				Parallel.ForEach(downloads, new ParallelOptions() { MaxDegreeOfParallelism = 10 }, i =>
@@ -83,6 +84,46 @@ Actions add Buttons to the tab. When clicked, it will:
 						}
 					}
 				});
+			}
+
+			private async Task SubTaskProgressAsync(Call call)
+			{
+				var ids = new List<int>();
+				for (int i = 0; i < 30; i++)
+					ids.Add(i);
+
+				call.taskInstance.TaskCount = ids.Count;
+
+				IEnumerable<Task<int>> queries =
+					from id in ids select DoTask(call, id);
+
+				List<Task<int>> tasks = queries.ToList();
+
+				using (CallTimer callTimer = call.Timer("long op"))
+				{
+					await Task.Delay(1000);
+				}
+
+				var results = new List<int>();
+				while (tasks.Count > 0)
+				{
+					Task<int> firstFinishedTask = await Task.WhenAny(tasks);
+					tasks.Remove(firstFinishedTask);
+					results.Add(firstFinishedTask.Result);
+				}
+			}
+
+			public async static Task<int> DoTask(Call call, int id)
+			{
+				using (CallTimer callTimer = call.Timer("Task", new Tag(id)))
+				{
+					for (int i = 0; i < id; i++)
+					{
+						callTimer.log.Add("Sleeping");
+						await Task.Delay(1000);
+					}
+				}
+				return id;
 			}
 
 			private async Task SleepAsync(Call call)

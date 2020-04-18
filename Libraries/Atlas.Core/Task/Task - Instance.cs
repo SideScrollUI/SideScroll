@@ -40,8 +40,8 @@ namespace Atlas.Core
 
 		public TaskInstance ParentTask { get; set; }
 		public List<TaskInstance> SubTasks { get; set; } = new List<TaskInstance>();
-		/*private int? _NumSubTasks;
-		public int NumSubTasks
+		private int? _NumSubTasks;
+		public int TaskCount
 		{
 			get
 			{
@@ -53,8 +53,9 @@ namespace Atlas.Core
 			set
 			{
 				_NumSubTasks = value;
+				ProgressMax = 100 * value;
 			}
-		}*/
+		}
 
 		private Stopwatch stopwatch = new Stopwatch();
 
@@ -69,7 +70,7 @@ namespace Atlas.Core
 		private int _Percent;
 		public int Percent
 		{
-			get { return _Percent; }
+			get => _Percent;
 			set
 			{
 				if (_Percent == value)
@@ -84,13 +85,13 @@ namespace Atlas.Core
 		private long _Progress;
 		public long Progress
 		{
-			get { return _Progress; }
+			get => _Progress;
 			set
 			{
 				if (_Progress == value)
 					return;
 
-				_Progress = value;
+				_Progress = Math.Min(value, ProgressMax);
 				NotifyPropertyChanged(nameof(Progress));
 				UpdatePercent();
 				if (ParentTask != null)
@@ -144,7 +145,9 @@ namespace Atlas.Core
 			subTask.Call = call;
 			subTask.tokenSource = tokenSource;
 			subTask.ParentTask = this;
-			
+			if (ProgressMax > 0)
+				subTask.ProgressMax = 100;
+
 			lock (SubTasks)
 			{
 				SubTasks.Add(subTask);
