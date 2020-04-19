@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Atlas.Core;
+using Atlas.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using Atlas.Core;
-using Atlas.Extensions;
 
 namespace Atlas.Tabs
 {
@@ -140,6 +140,14 @@ namespace Atlas.Tabs
 					}
 				}
 			}
+			// Don't sort until after results have been filtered sinc properties can be slow
+			listProperties = Sort(listProperties);
+			return listProperties;
+		}
+
+		public static ItemCollection<ListProperty> Sort(ItemCollection<ListProperty> listProperties)
+		{
+			listProperties = new ItemCollection<ListProperty>(listProperties.OrderByDescending(i => TabModel.ObjectHasChildren(i, true)).ToList());
 			return listProperties;
 		}
 	}

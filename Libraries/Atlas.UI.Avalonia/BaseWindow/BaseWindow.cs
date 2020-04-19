@@ -340,9 +340,7 @@ namespace Atlas.UI.Avalonia
 		{
 			get
 			{
-				bool maximized = (WindowState == WindowState.Maximized);
-				if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) // Avalonia bug? WindowState doesn't update correctly for MacOS
-					maximized = false;
+				bool maximized = IsMaximized();
 				Rect bounds = Bounds;
 				if (maximized && TransformedBounds != null)
 					bounds = TransformedBounds.Value.Bounds;
@@ -365,12 +363,23 @@ namespace Atlas.UI.Avalonia
 
 				double minLeft = -10; // Left position for windows starts at -10
 				double left = Math.Min(Math.Max(minLeft, value.Left), MaxWidth - Width + minLeft); // values can be negative
-				double top = Math.Min(Math.Max(0, value.Top), MaxHeight - Height);
+				double maxHeight = MaxHeight;
+				if (!IsMaximized())
+					maxHeight -= 12; // On windows, the menu header takes up an extra 12 pixels when maximized
+				double top = Math.Min(Math.Max(0, value.Top), maxHeight - Height);
 				Position = new PixelPoint((int)left, (int)top);
 				//Height = Math.Max(MinWindowSize, value.Height + 500); // reproduces black bar problem, not subtracting bottom toolbar for Height
 				//Measure(Bounds.Size);
 				WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
 			}
+		}
+
+		private bool IsMaximized()
+		{
+			bool maximized = (WindowState == WindowState.Maximized);
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) // Avalonia bug? WindowState doesn't update correctly for MacOS
+				maximized = false;
+			return maximized;
 		}
 
 		protected void LoadWindowSettings()

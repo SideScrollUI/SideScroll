@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Atlas.Core;
+using Atlas.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Atlas.Core;
-using Atlas.Extensions;
 
 namespace Atlas.Tabs
 {
@@ -275,9 +275,7 @@ namespace Atlas.Tabs
 		// Adds the fields and properties as one list, and methods as another list (disabled right now)
 		private void AddObject(Type type)
 		{
-			//PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
-
-			ItemCollection<ListMember> itemCollection = new ItemCollection<ListMember>();
+			var itemCollection = new ItemCollection<ListMember>();
 
 			var listFields = ListField.Create(Object);
 			itemCollection.AddRange(listFields);
