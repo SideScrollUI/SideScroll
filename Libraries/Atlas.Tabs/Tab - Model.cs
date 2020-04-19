@@ -29,6 +29,8 @@ namespace Atlas.Tabs
 
 	public class TabModel
 	{
+		public static List<Type> IgnoreHighlightTypes { get; set; } = new List<Type>();
+		
 		public enum AutoSelectType
 		{
 			None,
@@ -206,7 +208,7 @@ namespace Atlas.Tabs
 
 		private void AddDictionary(Type type)
 		{
-			List<DictionaryEntry> sortedList = new List<DictionaryEntry>(); // can't sort ItemCollection
+			var sortedList = new List<DictionaryEntry>(); // can't sort ItemCollection
 			try
 			{
 				foreach (DictionaryEntry item in (IDictionary)Object)
@@ -444,8 +446,19 @@ namespace Atlas.Tabs
 			{
 				return false;
 			}
-			if (ignoreEmpty && value is IList list && list.Count == 0)
-				return false;
+
+			if (ignoreEmpty)
+			{
+				if (value is IList list && list.Count == 0)
+					return false;
+
+				foreach (Type ignoreType in IgnoreHighlightTypes)
+				{
+					if (ignoreType.IsAssignableFrom(type))
+						return false;
+				}
+			}
+
 			return true;
 		}
 	}
