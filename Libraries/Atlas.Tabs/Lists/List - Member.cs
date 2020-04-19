@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 
 namespace Atlas.Tabs
@@ -92,14 +93,20 @@ namespace Atlas.Tabs
 				(obj as INotifyPropertyChanged).PropertyChanged += ListProperty_PropertyChanged;
 		}
 
+		public override string ToString()
+		{
+			return Name;
+		}
+
 		private void ListProperty_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			PropertyChanged?.Invoke(this, e);
 		}
 
-		public override string ToString()
+		public static ItemCollection<ListMember> Sort(ItemCollection<ListMember> items)
 		{
-			return Name;
+			items = new ItemCollection<ListMember>(items.OrderByDescending(i => TabModel.ObjectHasChildren(i, true)).ToList());
+			return items;
 		}
 	}
 }

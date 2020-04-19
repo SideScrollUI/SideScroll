@@ -140,11 +140,10 @@ namespace Atlas.Tabs
 					}
 				}
 			}
-			// Don't sort until after results have been filtered sinc properties can be slow
-			listProperties = Sort(listProperties);
 			return listProperties;
 		}
 
+		// This can be slow due to lazy property loading
 		public static ItemCollection<ListProperty> Sort(ItemCollection<ListProperty> listProperties)
 		{
 			listProperties = new ItemCollection<ListProperty>(listProperties.OrderByDescending(i => TabModel.ObjectHasChildren(i, true)).ToList());

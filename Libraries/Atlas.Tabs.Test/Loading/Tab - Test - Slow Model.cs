@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Atlas.Core;
+using System;
 using System.Collections.Generic;
-using Atlas.Core;
 
 namespace Atlas.Tabs.Test
 {
@@ -23,12 +23,17 @@ namespace Atlas.Tabs.Test
 		{
 			public int Integer { get; set; }
 
+			private string _Text;
 			public string Text
 			{
 				get
 				{
-					System.Threading.Thread.Sleep(5000);
-					return "Text";
+					if (_Text == null)
+					{
+						System.Threading.Thread.Sleep(5000);
+						_Text = "Text";
+					}
+					return _Text;
 				}
 			}
 		}

@@ -431,6 +431,12 @@ namespace Atlas.Tabs
 					if (itemCount > 50)
 						break;
 				}
+
+				if (iList is ItemCollection<ListProperty> propertyList)
+					model.ItemList[index] = ListProperty.Sort(propertyList);
+
+				if (iList is ItemCollection<ListMember> memberList)
+					model.ItemList[index] = ListMember.Sort(memberList);
 				index++;
 			}
 		}
