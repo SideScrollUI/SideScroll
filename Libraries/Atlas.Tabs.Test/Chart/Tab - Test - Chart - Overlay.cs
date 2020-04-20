@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Atlas.Core;
+using Atlas.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using Atlas.Core;
-using Atlas.Extensions;
 
 namespace Atlas.Tabs.Test.Chart
 {
@@ -71,7 +71,7 @@ namespace Atlas.Tabs.Test.Chart
 
 			private void StartTask(Call call)
 			{
-				CancellationToken token = call.taskInstance.tokenSource.Token;
+				CancellationToken token = call.TaskInstance.tokenSource.Token;
 				for (int i = 0; !token.IsCancellationRequested; i++)
 				{
 					Invoke(call, AddSampleCallback);

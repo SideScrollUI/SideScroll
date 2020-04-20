@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Atlas.Core;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Atlas.Core;
 
 namespace Atlas.Tabs.Test.Actions
 {
@@ -35,7 +35,7 @@ namespace Atlas.Tabs.Test.Actions
 			private void AddEntry(Call call)
 			{
 				//LogEntry logEntry = (LogEntry)call.Params;
-				call.log.AddLogEntry(logEntry);
+				call.Log.AddLogEntry(logEntry);
 			}
 
 		}

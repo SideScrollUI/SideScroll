@@ -7,11 +7,11 @@ namespace Atlas.Core
 	public class Call
 	{
 		public string Name { get; set; } = "";
-		public Log log;
+		public Log Log { get; set; }
 
 		public Call ParentCall { get; set; }
-		[NonSerialized]
-		public TaskInstance taskInstance; // Shows the Task Status and let's you stop them
+		[Unserialized]
+		public TaskInstance TaskInstance { get; set; } // Shows the Task Status and let's you stop them
 
 		public override string ToString() => Name;
 
@@ -22,34 +22,34 @@ namespace Atlas.Core
 		public Call(string name = null)
 		{
 			Name = name;
-			log = new Log();
+			Log = new Log();
 		}
 
 		public Call(Log log)
 		{
-			this.log = log;
+			Log = log;
 		}
 
 		public Call Child([CallerMemberName] string name = "", params Tag[] tags)
 		{
-			log = log ?? new Log();
+			Log = Log ?? new Log();
 			Call call = new Call();
 			call.Name = name;
 			call.ParentCall = this;
-			call.taskInstance = taskInstance;
-			call.log = log.Call(name, tags);
+			call.TaskInstance = TaskInstance;
+			call.Log = Log.Call(name, tags);
 
 			return call;
 		}
 
 		public CallTimer Timer([CallerMemberName] string name = "", params Tag[] tags)
 		{
-			log = log ?? new Log();
+			Log = Log ?? new Log();
 			CallTimer call = new CallTimer();
 			call.Name = name;
 			call.ParentCall = this;
-			call.taskInstance = taskInstance?.AddSubTask(call);
-			call.log = log.Call(name, tags);
+			call.TaskInstance = TaskInstance?.AddSubTask(call);
+			call.Log = Log.Call(name, tags);
 
 			return call;
 		}
@@ -57,8 +57,8 @@ namespace Atlas.Core
 		// allows having progress broken down into multiple tasks
 		public TaskInstance AddSubTask(string name = "")
 		{
-			taskInstance = taskInstance.AddSubTask(Child(name));
-			return taskInstance;
+			TaskInstance = TaskInstance.AddSubTask(Child(name));
+			return TaskInstance;
 		}
 
 		// allows having progress broken down into multiple tasks
@@ -98,13 +98,13 @@ namespace Atlas.Core
 
 		private void UpdateDuration()
 		{
-			if (log != null)
-				log.Duration = stopwatch.ElapsedMilliseconds / 1000.0f;
+			if (Log != null)
+				Log.Duration = stopwatch.ElapsedMilliseconds / 1000.0f;
 		}
 
 		public void Dispose()
 		{
-			taskInstance?.SetFinished();
+			TaskInstance?.SetFinished();
 			Stop();
 		}
 	}

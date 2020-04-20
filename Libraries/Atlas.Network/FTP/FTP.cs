@@ -75,7 +75,7 @@ namespace Atlas.Network
 
 		public FTP(Call call, Info info)
 		{
-			this.log = call.log;
+			this.log = call.Log;
 			this.info = info;
 		}
 

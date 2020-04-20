@@ -1,7 +1,7 @@
-﻿using System;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
+using System;
 
 namespace Atlas.Start.Avalonia.Tabs
 {
@@ -43,12 +43,12 @@ namespace Atlas.Start.Avalonia.Tabs
 
 			private void LongTask(Call call)
 			{
-				call.taskInstance.ProgressMax = 10;
+				call.TaskInstance.ProgressMax = 10;
 				for (int i = 0; i < 10; i++)
 				{
 					System.Threading.Thread.Sleep(1000);
-					call.log.Add("Slept 1 second");
-					call.taskInstance.Progress++;
+					call.Log.Add("Slept 1 second");
+					call.TaskInstance.Progress++;
 				}
 			}
 		}

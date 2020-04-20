@@ -48,7 +48,7 @@ Actions add Buttons to the tab. When clicked, it will:
 
 			private async Task StartAsyncLogError(Call call)
 			{
-				call.log.AddError("This should show the task");
+				call.Log.AddError("This should show the task");
 			}
 
 			private void PassParams(int v1, string v2)
@@ -60,7 +60,7 @@ Actions add Buttons to the tab. When clicked, it will:
 			private int counter = 1;
 			private void AddEntry(Call call)
 			{
-				call.log.Add("New Log entry", new Tag("counter", counter++));
+				call.Log.Add("New Log entry", new Tag("counter", counter++));
 			}
 
 			private void TestException(Call call)
@@ -76,11 +76,11 @@ Actions add Buttons to the tab. When clicked, it will:
 					using (CallTimer sleepCall = call.Timer(i.ToString()))
 					{
 						sleepCall.AddSubTask();
-						sleepCall.taskInstance.ProgressMax = i;
+						sleepCall.TaskInstance.ProgressMax = i;
 						for (int j = 0; j < i; j++)
 						{
 							System.Threading.Thread.Sleep(1000);
-							sleepCall.taskInstance.Progress = j + 1;
+							sleepCall.TaskInstance.Progress = j + 1;
 						}
 					}
 				});
@@ -92,7 +92,7 @@ Actions add Buttons to the tab. When clicked, it will:
 				for (int i = 0; i < 30; i++)
 					ids.Add(i);
 
-				call.taskInstance.TaskCount = ids.Count;
+				call.TaskInstance.TaskCount = ids.Count;
 
 				IEnumerable<Task<int>> queries =
 					from id in ids select DoTask(call, id);
@@ -119,7 +119,7 @@ Actions add Buttons to the tab. When clicked, it will:
 				{
 					for (int i = 0; i < id; i++)
 					{
-						callTimer.log.Add("Sleeping");
+						callTimer.Log.Add("Sleeping");
 						await Task.Delay(1000);
 					}
 				}

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Atlas.Core;
+using System;
 using System.Collections.Generic;
-using Atlas.Core;
 
 namespace Atlas.Tabs.Test.DataGrid
 {
@@ -17,7 +17,7 @@ namespace Atlas.Tabs.Test.DataGrid
 					new ListItem("Load Exception", new TabTestLoadException()),
 				};
 
-				call.log.AddError("Load error");
+				call.Log.AddError("Load error");
 			}
 		}
 	}

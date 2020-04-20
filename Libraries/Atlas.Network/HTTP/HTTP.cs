@@ -50,18 +50,18 @@ namespace Atlas.Network
 						
 						dataStream.Close();
 						response.Close();
-						getCall.log.Add("Downloaded HTTP File", new Tag("URI", request.RequestUri), new Tag("Size", memoryStream.Length));
+						getCall.Log.Add("Downloaded HTTP File", new Tag("URI", request.RequestUri), new Tag("Size", memoryStream.Length));
 
 						return data;
 					}
 					catch (WebException exception)
 					{
-						getCall.log.AddError("URI request " + request.RequestUri + " failed: " + exception.Message);
+						getCall.Log.AddError("URI request " + request.RequestUri + " failed: " + exception.Message);
 
 						if (exception.Response != null)
 						{
 							string response = new StreamReader(exception.Response.GetResponseStream()).ReadToEnd();
-							call.log.AddError(response);
+							call.Log.AddError(response);
 						}
 					}
 					if (attempt >= MaxAttempts)

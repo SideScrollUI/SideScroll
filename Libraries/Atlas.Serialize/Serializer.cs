@@ -115,7 +115,7 @@ namespace Atlas.Serialize
 				};
 				loaded.Add(typeInfo);
 			}
-			call.log.Add("Objects Loaded", new Tag("Type Repos", loaded));
+			call.Log.Add("Objects Loaded", new Tag("Type Repos", loaded));
 		}
 
 		// todo: only add types that are used
@@ -166,14 +166,14 @@ namespace Atlas.Serialize
 		{
 			using (CallTimer callSaving = call.Timer("Saving to disk"))
 			{
-				AddObjectMemberTypes(callSaving.log);
+				AddObjectMemberTypes(callSaving.Log);
 				//UpdateTypeSchemaDerived();
 				header.Save(writer);
 				long schemaPosition = writer.BaseStream.Position;
 				writer.Write((long)0); // will write correct value at end
 				SaveSchemas(writer);
 				SavePrimitives(callSaving, writer);
-				SaveObjects(callSaving.log, writer);
+				SaveObjects(callSaving.Log, writer);
 
 				// write out schema again for file offsets and size
 				writer.Seek((int)schemaPosition, SeekOrigin.Begin);
@@ -186,7 +186,7 @@ namespace Atlas.Serialize
 		{
 			this.reader = reader;
 			this.lazy = lazy;
-			using (LogTimer logTimer = call.log.Timer("Loading object"))
+			using (LogTimer logTimer = call.Log.Timer("Loading object"))
 			{
 				header.Load(reader);
 				if (header.version != Header.latestVersion)
@@ -508,7 +508,7 @@ namespace Atlas.Serialize
 		{
 			using (CallTimer callTimer = call.Timer("Parsing object", new Tag("Object", obj.ToString())))
 			{
-				TypeRepo typeRepo = GetOrCreateRepo(callTimer.log, obj.GetType());
+				TypeRepo typeRepo = GetOrCreateRepo(callTimer.Log, obj.GetType());
 				int objectIndex = typeRepo.GetOrAddObjectRef(obj);
 				//parserQueue.Enqueue(obj);
 				if (objectIndex < 0)

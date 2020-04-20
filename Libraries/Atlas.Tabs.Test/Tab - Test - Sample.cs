@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Tabs.Test.DataGrid;
+using System;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test
 {
@@ -42,12 +42,12 @@ DataGrids
 
 			private void Sleep(Call call)
 			{
-				call.taskInstance.ProgressMax = 10;
+				call.TaskInstance.ProgressMax = 10;
 				for (int i = 0; i < 10; i++)
 				{
 					System.Threading.Thread.Sleep(1000);
-					call.log.Add("Slept 1 second");
-					call.taskInstance.Progress++;
+					call.Log.Add("Slept 1 second");
+					call.TaskInstance.Progress++;
 				}
 			}
 

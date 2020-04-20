@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Atlas.Core;
+using System;
 using System.Collections.Generic;
 using System.Threading;
-using Atlas.Core;
 
 namespace Atlas.Tabs.Test
 {
@@ -25,7 +25,7 @@ namespace Atlas.Tabs.Test
 				{
 					new ListItem("Task Instance Log", taskInstance.Log),
 					new ListItem("Sample Call", sampleCall),
-					new ListItem("Sample Call Log", sampleCall.log),
+					new ListItem("Sample Call Log", sampleCall.Log),
 					new ListItem("Log Entry", new LogEntry(LogEntry.LogType.Info, "test", null)),
 				};
 
@@ -52,13 +52,13 @@ namespace Atlas.Tabs.Test
 
 			private void SubTaskInstances(Call call)
 			{
-				Log logChild = call.log.Call("child");
-				CancellationToken token = call.taskInstance.tokenSource.Token;
+				Log logChild = call.Log.Call("child");
+				CancellationToken token = call.TaskInstance.tokenSource.Token;
 				for (int i = 0; !token.IsCancellationRequested; i++)
 				{
 					//log.Add("New Log Entry", new Tag("i", counter));
-					call.log.Add("New Call Log Entry", new Tag("i", counter));
-					sampleCall.log.Add("New Sample Log Entry", new Tag("counter", counter));
+					call.Log.Add("New Call Log Entry", new Tag("i", counter));
+					sampleCall.Log.Add("New Sample Log Entry", new Tag("counter", counter));
 					logChild.Add("New Child Log Entry", new Tag("i", i));
 					counter++;
 					Thread.Sleep(1000);
@@ -72,7 +72,7 @@ namespace Atlas.Tabs.Test
 					//log.Add("test " + counter.ToString());
 					counter++;
 					//call.log.Add("New Log entry", new Tag("name", "value"));
-					sampleCall.log.Add("New Log entry", new Tag("name", "value"));
+					sampleCall.Log.Add("New Log entry", new Tag("name", "value"));
 				}
 			}
 

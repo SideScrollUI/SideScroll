@@ -65,7 +65,7 @@ namespace Atlas.Serialize
 			}
 			catch (Exception e)
 			{
-				call.log.AddError(e.Message);
+				call.Log.AddError(e.Message);
 			}
 			return default;
 		}
@@ -81,7 +81,7 @@ namespace Atlas.Serialize
 			}
 			catch (Exception e)
 			{
-				call.log.AddError(e.Message);
+				call.Log.AddError(e.Message);
 			}
 			return null;
 		}

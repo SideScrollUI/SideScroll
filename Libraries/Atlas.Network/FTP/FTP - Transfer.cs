@@ -80,12 +80,12 @@ namespace Atlas.Network
 				UpdateRemoteFileSize(call);
 				if (FilesMatch)
 				{
-					call.log.Add("Files match, skipping downloading");
+					call.Log.Add("Files match, skipping downloading");
 					return;
 				}
 			}
 			FTP ftp = new FTP(call, ftpInfo);
-			ftp.Download(RemoteFile.fullPath, LocalFilePath, call.taskInstance, maxBytes);
+			ftp.Download(RemoteFile.fullPath, LocalFilePath, call.TaskInstance, maxBytes);
 			FileInfo fileInfo = new FileInfo(LocalFilePath);
 			if (fileInfo.Extension == ".gz")
 				Compression.Decompress(call, fileInfo);

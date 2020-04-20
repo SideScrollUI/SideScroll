@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Tabs;
 using Avalonia.Logging.Serilog;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Atlas.Start.Avalonia.Tabs
 {
@@ -46,7 +46,7 @@ namespace Atlas.Start.Avalonia.Tabs
 
 			private void AddEntry(Call call)
 			{
-				call.log.Add("New Log entry", new Tag("name", "value"));
+				call.Log.Add("New Log entry", new Tag("name", "value"));
 			}
 
 			private void SubTaskInstances(Call call)
@@ -57,11 +57,11 @@ namespace Atlas.Start.Avalonia.Tabs
 					using (CallTimer sleepCall = call.Timer(i.ToString()))
 					{
 						sleepCall.AddSubTask();
-						sleepCall.taskInstance.ProgressMax = i;
+						sleepCall.TaskInstance.ProgressMax = i;
 						for (int j = 0; j < i; j++)
 						{
 							System.Threading.Thread.Sleep(1000);
-							sleepCall.taskInstance.Progress = j + 1;
+							sleepCall.TaskInstance.Progress = j + 1;
 						}
 					}
 				});

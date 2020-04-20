@@ -20,7 +20,7 @@ namespace Atlas.Core
 							using (GZipStream compressionStream = new GZipStream(compressedFileStream, CompressionMode.Compress))
 							{
 								originalFileStream.CopyTo(compressionStream);
-								compressCall.log.Add("Finished Compressing",
+								compressCall.Log.Add("Finished Compressing",
 									new Tag("File", fileToCompress.Name),
 									new Tag("Original Size", fileToCompress.Length),
 									new Tag("Compressed Size", compressedFileStream.Length)
@@ -55,7 +55,7 @@ namespace Atlas.Core
 							using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
 							{
 								decompressionStream.CopyTo(decompressedFileStream);
-								decompressCall.log.Add("Finished Decompressing",
+								decompressCall.Log.Add("Finished Decompressing",
 									new Tag("File", fileToDecompress.Name),
 									new Tag("Original Size", fileToDecompress.Length),
 									new Tag("Compressed Size", decompressedFileStream.Length)

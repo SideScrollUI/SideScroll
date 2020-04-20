@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Atlas.Core;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Atlas.Core;
 
 namespace Atlas.Tabs.Test.Actions
 {
@@ -15,7 +15,7 @@ namespace Atlas.Tabs.Test.Actions
 
 			public async Task LoadAsync(Call call, TabModel model)
 			{
-				call.log.Add("Sleeping", new Tag("Milliseconds", delayMs));
+				call.Log.Add("Sleeping", new Tag("Milliseconds", delayMs));
 				await Task.Delay(delayMs);
 				model.AddObject("Finished");
 

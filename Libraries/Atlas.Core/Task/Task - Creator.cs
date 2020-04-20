@@ -41,14 +41,14 @@ namespace Atlas.Core
 			//call = call.Child(Label);
 			TimesRun++;
 			context = SynchronizationContext.Current ?? new SynchronizationContext();
-			call.log.context = context;
+			call.Log.context = context;
 
 			TaskInstance taskInstance = new TaskInstance()
 			{
 				Call = call,
 				Creator = this,
 			};
-			call.taskInstance = taskInstance;
+			call.TaskInstance = taskInstance;
 
 			Action action = CreateAction(call);
 			if (UseTask == true)

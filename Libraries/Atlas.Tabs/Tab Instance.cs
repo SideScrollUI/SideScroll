@@ -369,7 +369,7 @@ namespace Atlas.Tabs
 			}
 			catch (Exception e)
 			{
-				call.log.Add(e);
+				call.Log.Add(e);
 			}
 
 			//Invoke(() => LoadUi(call, model));
@@ -401,7 +401,7 @@ namespace Atlas.Tabs
 				}
 				catch (Exception e)
 				{
-					call.log.Add(e);
+					call.Log.Add(e);
 					model.AddData(e);
 				}
 			}
@@ -458,7 +458,7 @@ namespace Atlas.Tabs
 				}
 				catch (Exception e)
 				{
-					call.log.Add(e);
+					call.Log.Add(e);
 					model.AddData(e);
 				}
 			}

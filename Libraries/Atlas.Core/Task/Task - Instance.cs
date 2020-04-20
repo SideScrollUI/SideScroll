@@ -20,7 +20,7 @@ namespace Atlas.Core
 		public Call Call { get; set; } = new Call();
 
 		[InnerValue, HiddenColumn]
-		public Log Log => Call.log;
+		public Log Log => Call.Log;
 
 		[HiddenColumn]
 		public bool ShowTask { get; set; }
@@ -63,7 +63,7 @@ namespace Atlas.Core
 
 		public TaskInstance()
 		{
-			Call.taskInstance = this;
+			Call.TaskInstance = this;
 			stopwatch.Start();
 		}
 
@@ -172,16 +172,16 @@ namespace Atlas.Core
 			Finished = true;
 			Progress = ProgressMax;
 
-			if (Call.log.Type >= LogEntry.LogType.Error)
+			if (Call.Log.Type >= LogEntry.LogType.Error)
 			{
-				Status = Call.log.Type.ToString();
+				Status = Call.Log.Type.ToString();
 				Errored = true;
 				ShowTask = true;
 			}
-			else if (Call.log.Type == LogEntry.LogType.Warn)
+			else if (Call.Log.Type == LogEntry.LogType.Warn)
 			{
 				if (!Errored)
-					Status = Call.log.Type.ToString();
+					Status = Call.Log.Type.ToString();
 				ShowTask = true;
 			}
 			else if (Task == null || TaskStatus == TaskStatus.RanToCompletion)
@@ -197,7 +197,7 @@ namespace Atlas.Core
 			NotifyPropertyChanged(nameof(Status));
 			NotifyPropertyChanged(nameof(TaskStatus));
 			NotifyPropertyChanged(nameof(Finished));
-			Call.log.Add("Finished", new Tag("Time", stopwatch.ElapsedMilliseconds / 1000.0));
+			Call.Log.Add("Finished", new Tag("Time", stopwatch.ElapsedMilliseconds / 1000.0));
 			Creator?.OnComplete?.Invoke();
 			OnComplete?.Invoke();
 		}
