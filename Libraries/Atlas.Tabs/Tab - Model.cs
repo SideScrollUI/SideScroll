@@ -449,8 +449,14 @@ namespace Atlas.Tabs
 
 			if (ignoreEmpty)
 			{
-				if (value is IList list && list.Count == 0)
-					return false;
+				if (value is ICollection collection)
+				{
+					if (collection.Count == 0)
+						return false;
+					Type elementType = collection.GetType().GetElementTypeForAll();
+					if (elementType.IsPrimitive)
+						return false;
+				}
 
 				foreach (Type ignoreType in IgnoreHighlightTypes)
 				{

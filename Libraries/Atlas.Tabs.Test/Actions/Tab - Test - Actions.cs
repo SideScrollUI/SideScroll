@@ -113,7 +113,7 @@ Actions add Buttons to the tab. When clicked, it will:
 				}
 			}
 
-			public async static Task<int> DoTask(Call call, int id)
+			public static async Task<int> DoTask(Call call, int id)
 			{
 				using (CallTimer callTimer = call.Timer("Task", new Tag(id)))
 				{
