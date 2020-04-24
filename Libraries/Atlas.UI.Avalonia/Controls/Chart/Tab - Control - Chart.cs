@@ -14,6 +14,7 @@ using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.Avalonia;
+using OxyPlot.Annotations;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -43,6 +44,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 	public class TabControlChart : UserControl //, IDisposable
 	{
+		private static OxyColor nowColor = OxyColors.Green;
+
 		private TabInstance tabInstance;
 		//public ChartSettings ChartSettings { get; set; }
 		public ListGroup ListGroup { get; set; }
@@ -263,6 +266,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (UseDateTimeAxis)
 			{
 				AddDateTimeAxis(ListGroup.StartTime, ListGroup.EndTime);
+				AddNowTime();
 			}
 			else
 			{
@@ -768,6 +772,22 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 
 			Dispatcher.UIThread.InvokeAsync(() => this.plotModel.InvalidatePlot(true), DispatcherPriority.Background);
+		}
+
+		private void AddNowTime()
+		{
+			var now = DateTime.UtcNow;
+			if (ListGroup.EndTime < now.AddMinutes(1))
+				return;
+			var annotation = new OxyPlot.Annotations.LineAnnotation
+			{
+				Type = LineAnnotationType.Vertical,
+				X = OxyPlot.Axes.DateTimeAxis.ToDouble(now.ToUniversalTime()),
+				Color = nowColor,
+				// LineStyle = LineStyle.Dot, // doesn't work for vertical?
+			};
+
+			plotModel.Annotations.Add(annotation);
 		}
 
 		/*private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

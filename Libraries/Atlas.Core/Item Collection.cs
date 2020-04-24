@@ -27,6 +27,11 @@ namespace Atlas.Core
 	// Would be nice to make this thread safe to make storing logs easier?
 	public class ItemCollection<T> : ObservableCollection<T>, IList, INamedItemCollection, ICollection, IEnumerable, IComparer //, IRaiseItemChangedEvents //
 	{
+		public string ColumnName { get; set; }
+		public string Label { get; set; }
+
+		private CustomComparer customComparer = new CustomComparer();
+
 		public ItemCollection()
 		{
 		}
@@ -36,6 +41,8 @@ namespace Atlas.Core
 			ColumnName = columnName;
 		}
 
+		public override string ToString() => Label ?? base.ToString();
+
 		// Don't implement List<T>, it isn't sortable
 		public ItemCollection(IEnumerable<T> iEnumerable) :
 			base(iEnumerable)
@@ -43,9 +50,12 @@ namespace Atlas.Core
 
 		}
 
-		CustomComparer customComparer = new CustomComparer();
-
-		public string ColumnName { get; set; }
+		public void AddRange(IEnumerable<T> collection)
+		{
+			foreach (T item in collection)
+				Items.Add(item);
+			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+		}
 
 		public int Compare(object x, object y)
 		{
@@ -58,13 +68,6 @@ namespace Atlas.Core
 			base.Add(item);
 			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
 		}*/
-
-		public void AddRange(IEnumerable<T> collection)
-		{
-			foreach (T item in collection)
-				Items.Add(item);
-			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-		}
 	}
 
 	// Winforms really need IBindingList, but Wpf DataGrid tries to use IBindingList to sort if available (bad)
