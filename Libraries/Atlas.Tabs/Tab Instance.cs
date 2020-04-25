@@ -47,14 +47,14 @@ namespace Atlas.Tabs
 
 		//public delegate void MethodInvoker();
 
-		public Project project;
+		public Project Project { get; set; }
 		public ITab iTab;
 		//public Log Log => taskInstance.log;
-		public TaskInstance taskInstance = new TaskInstance();
+		public TaskInstance TaskInstance { get; set; } = new TaskInstance();
 		public TabModel Model { get; set; } = new TabModel();
 		public string Label { get { return Model.Name; } set { Model.Name = value; } }
 
-		public DataRepo DataApp => project.DataApp;
+		public DataRepo DataApp => Project.DataApp;
 
 		public TabViewSettings tabViewSettings = new TabViewSettings();
 		public TabBookmark tabBookmark;
@@ -128,7 +128,7 @@ namespace Atlas.Tabs
 
 		public TabInstance(Project project, TabModel model)
 		{
-			this.project = project;
+			this.Project = project;
 			this.Model = model;
 			staticModel = true;
 			InitializeContext();
@@ -143,7 +143,7 @@ namespace Atlas.Tabs
 		public TabInstance CreateChildTab(ITab iTab)
 		{
 			TabInstance tabInstance = iTab.Create();
-			tabInstance.project = project;
+			tabInstance.Project = Project;
 			tabInstance.iTab = iTab;
 			tabInstance.ParentTabInstance = this;
 			//tabInstance.taskInstance.call.log =
@@ -165,7 +165,7 @@ namespace Atlas.Tabs
 				if (fieldInfo.GetCustomAttribute(typeof(InheritAttribute)) == null)
 					continue;
 
-				object obj = project.TypeObjectStore.Get(fieldInfo.FieldType);
+				object obj = Project.TypeObjectStore.Get(fieldInfo.FieldType);
 				fieldInfo.SetValue(tabInstance, obj);
 			}
 
@@ -176,7 +176,7 @@ namespace Atlas.Tabs
 					if (propertyInfo.GetCustomAttribute(typeof(InheritAttribute)) == null)
 						continue;
 
-					object obj = project.TypeObjectStore.Get(propertyInfo.PropertyType);
+					object obj = Project.TypeObjectStore.Get(propertyInfo.PropertyType);
 					propertyInfo.SetValue(tabInstance, obj);
 				}
 			}
@@ -191,7 +191,7 @@ namespace Atlas.Tabs
 			{
 				taskInstance.Cancel();
 			}
-			taskInstance.Cancel();
+			TaskInstance.Cancel();
 		}
 
 		private void InitializeContext()
@@ -541,14 +541,14 @@ namespace Atlas.Tabs
 			Bookmark bookmark = new Bookmark();
 			//bookmark.tabBookmark.Name = Label;
 			GetBookmark(bookmark.tabBookmark);
-			bookmark = bookmark.Clone<Bookmark>(taskInstance.Call); // sanitize
+			bookmark = bookmark.Clone<Bookmark>(TaskInstance.Call); // sanitize
 			return bookmark;
 		}
 
 		public Bookmark CreateNavigatorBookmark()
 		{
 			Bookmark bookmark = RootInstance.CreateBookmark();
-			project.Navigator.Append(bookmark, true);
+			Project.Navigator.Append(bookmark, true);
 			return bookmark;
 		}
 
@@ -601,7 +601,7 @@ namespace Atlas.Tabs
 			if (bookmark == null)
 				return;
 			bookmark.Name = CurrentBookmarkName;
-			project.DataApp.Save(bookmark.Name, bookmark, taskInstance.Call);
+			Project.DataApp.Save(bookmark.Name, bookmark, TaskInstance.Call);
 
 			//bookmark.Name = Label;
 			//project.navigator.Add(bookmark);
@@ -615,12 +615,12 @@ namespace Atlas.Tabs
 
 		public void LoadDefaultBookmark()
 		{
-			if (project.userSettings.AutoLoad == false)
+			if (Project.userSettings.AutoLoad == false)
 				return;
 
-			Bookmark bookmark = project.DataApp.Load<Bookmark>(CurrentBookmarkName, taskInstance.Call);
+			Bookmark bookmark = Project.DataApp.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);
 			if (bookmark != null)
-				this.tabBookmark = bookmark.tabBookmark;
+				tabBookmark = bookmark.tabBookmark;
 		}
 
 		public TabViewSettings LoadSettings()
@@ -644,23 +644,23 @@ namespace Atlas.Tabs
 		// replace with DataShared? Split call up?
 		public void SaveData(string name, object obj)
 		{
-			project.DataApp.Save(name, obj, taskInstance.Call);
+			Project.DataApp.Save(name, obj, TaskInstance.Call);
 		}
 
 		public void SaveData(string directory, string name, object obj)
 		{
-			project.DataApp.Save(directory, name, obj, taskInstance.Call);
+			Project.DataApp.Save(directory, name, obj, TaskInstance.Call);
 		}
 
 		public T LoadData<T>(string name, bool createIfNeeded = true)
 		{
-			T data = project.DataApp.Load<T>(name, taskInstance.Call, createIfNeeded);
+			T data = Project.DataApp.Load<T>(name, TaskInstance.Call, createIfNeeded);
 			return data;
 		}
 
 		public T LoadData<T>(string directory, string name, bool createIfNeeded = true)
 		{
-			T data = project.DataApp.Load<T>(directory, name, taskInstance.Call, createIfNeeded);
+			T data = Project.DataApp.Load<T>(directory, name, TaskInstance.Call, createIfNeeded);
 			return data;
 		}
 
@@ -698,7 +698,7 @@ namespace Atlas.Tabs
 
 			if (CustomPath != null)
 			{
-				tabViewSettings = project.DataApp.Load<TabViewSettings>(CustomPath, taskInstance.Call);
+				tabViewSettings = Project.DataApp.Load<TabViewSettings>(CustomPath, TaskInstance.Call);
 				if (tabViewSettings != null)
 					return tabViewSettings;
 			}
@@ -707,17 +707,17 @@ namespace Atlas.Tabs
 			if (type != typeof(TabInstance))
 			{
 				// Unique TabInstance
-				tabViewSettings = project.DataApp.Load<TabViewSettings>(TabPath, taskInstance.Call);
+				tabViewSettings = Project.DataApp.Load<TabViewSettings>(TabPath, TaskInstance.Call);
 				if (tabViewSettings != null)
 					return tabViewSettings;
 			}
 			else
 			{
-				tabViewSettings = project.DataApp.Load<TabViewSettings>(TypeLabelPath, taskInstance.Call);
+				tabViewSettings = Project.DataApp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call);
 				if (tabViewSettings != null)
 					return tabViewSettings;
 
-				tabViewSettings = project.DataApp.Load<TabViewSettings>(TypePath, taskInstance.Call);
+				tabViewSettings = Project.DataApp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
 				if (tabViewSettings != null)
 					return tabViewSettings;
 			}
@@ -729,30 +729,30 @@ namespace Atlas.Tabs
 		public void SaveTabSettings()
 		{
 			if (CustomPath != null)
-				project.DataApp.Save(CustomPath, tabViewSettings, taskInstance.Call);
+				Project.DataApp.Save(CustomPath, tabViewSettings, TaskInstance.Call);
 
 			Type type = GetType();
 			if (type != typeof(TabInstance))
 			{
 				// Unique TabInstance
-				project.DataApp.Save(TabPath, tabViewSettings, taskInstance.Call);
+				Project.DataApp.Save(TabPath, tabViewSettings, TaskInstance.Call);
 			}
 			else
 			{
-				project.DataApp.Save(TypeLabelPath, tabViewSettings, taskInstance.Call);
-				project.DataApp.Save(TypePath, tabViewSettings, taskInstance.Call);
+				Project.DataApp.Save(TypeLabelPath, tabViewSettings, TaskInstance.Call);
+				Project.DataApp.Save(TypePath, tabViewSettings, TaskInstance.Call);
 			}
 			SaveDefaultBookmark();
 		}
 
 		protected void SetStartLoad()
 		{
-			project.DataApp.Save(LoadedPath, true, taskInstance.Call);
+			Project.DataApp.Save(LoadedPath, true, TaskInstance.Call);
 		}
 
 		public void SetEndLoad()
 		{
-			project.DataApp.Delete(typeof(bool), LoadedPath);
+			Project.DataApp.Delete(typeof(bool), LoadedPath);
 		}
 
 		// for detecting parent/child loops
@@ -795,7 +795,7 @@ namespace Atlas.Tabs
 
 		public TabInstance CreateChild(TabModel model)
 		{
-			TabInstance childTabInstance = new TabInstance(project, model)
+			TabInstance childTabInstance = new TabInstance(Project, model)
 			{
 				ParentTabInstance = this,
 			};
@@ -834,7 +834,7 @@ namespace Atlas.Tabs
 		public void UpdateNavigator()
 		{
 			Bookmark bookmark = RootInstance.CreateBookmark(); // create from root Tab
-			project.Navigator.Update(bookmark);
+			Project.Navigator.Update(bookmark);
 		}
 	}
 }

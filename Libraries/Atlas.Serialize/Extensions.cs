@@ -23,7 +23,7 @@ namespace Atlas.Serialize
 			Type inputType = source.GetType();
 			Type outputType = dest.GetType();
 			if (!outputType.Equals(inputType) && !outputType.IsSubclassOf(inputType))
-				throw new ArgumentException(String.Format("{0} is not a sublcass of {1}", outputType, inputType));
+				throw new ArgumentException(string.Format("{0} is not a sublcass of {1}", outputType, inputType));
 
 			PropertyInfo[] properties = inputType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
 			FieldInfo[] fields = inputType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);

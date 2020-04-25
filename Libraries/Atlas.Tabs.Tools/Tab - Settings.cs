@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Serialize;
+using System;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Tools
 {
@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Tools
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				model.Items = ListProperty.Create(this.project.projectSettings);
+				model.Items = ListProperty.Create(this.Project.projectSettings);
 				model.Editing = true;
 
 				model.Actions = new ItemCollection<TaskCreator>()
@@ -27,15 +27,15 @@ namespace Atlas.Tabs.Tools
 			{
 				// How do we replace a shared pointer that exists everywhere? references?
 				//call.Application.Restart();
-				var serializer = new SerializerFile(project.userSettings.SettingsPath);
+				var serializer = new SerializerFile(Project.userSettings.SettingsPath);
 				serializer.Save(call, new ProjectSettings());
 				Environment.Exit(0);
 			}
 
 			private void Save(Call call)
 			{
-				var serializer = new SerializerFile(project.userSettings.SettingsPath);
-				serializer.Save(call, project.projectSettings);
+				var serializer = new SerializerFile(Project.userSettings.SettingsPath);
+				serializer.Save(call, Project.projectSettings);
 			}
 		}
 	}

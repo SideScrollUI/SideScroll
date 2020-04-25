@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Tabs.Test.Actions;
 using Atlas.Tabs.Test.Chart;
 using Atlas.Tabs.Test.DataGrid;

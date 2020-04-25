@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Atlas.Core;
-using Atlas.Tabs;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
-using Avalonia.Layout;
 using Avalonia.Media;
-
-using OxyPlot.Avalonia;
-using OxyPlot.Series;
 using OxyPlot;
+using OxyPlot.Avalonia;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Atlas.UI.Avalonia.Controls
 {

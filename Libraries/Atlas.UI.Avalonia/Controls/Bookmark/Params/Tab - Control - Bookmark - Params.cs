@@ -1,6 +1,4 @@
-﻿using System;
-using Atlas.Tabs;
-using Avalonia;
+﻿using Atlas.Tabs;
 using Avalonia.Layout;
 using Avalonia.Controls;
 

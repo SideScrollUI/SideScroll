@@ -60,7 +60,7 @@ namespace Atlas.UI.Avalonia.View
 
 			checkboxAutoLoad = new CheckBox()
 			{
-				IsChecked = tabInstance.project.userSettings.AutoLoad,
+				IsChecked = tabInstance.Project.userSettings.AutoLoad,
 			};
 			MenuItem menuItemAutoLoad = new MenuItem()
 			{
@@ -76,9 +76,9 @@ namespace Atlas.UI.Avalonia.View
 
 		private void MenuItemAutoLoad_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			tabInstance.project.userSettings.AutoLoad = !tabInstance.project.userSettings.AutoLoad;
-			checkboxAutoLoad.IsChecked = tabInstance.project.userSettings.AutoLoad;
-			tabInstance.project.SaveSettings();
+			tabInstance.Project.userSettings.AutoLoad = !tabInstance.Project.userSettings.AutoLoad;
+			checkboxAutoLoad.IsChecked = tabInstance.Project.userSettings.AutoLoad;
+			tabInstance.Project.SaveSettings();
 		}
 
 		private void MenuItemRefresh_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
@@ -108,7 +108,7 @@ namespace Atlas.UI.Avalonia.View
 		private void MenuItemDebug_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			TabModel debugListCollection = new TabModel("Debug");
-			TabView clone = Serialize.SerializerMemory.Clone<TabView>(tabInstance.taskInstance.Call, this);
+			TabView clone = Serialize.SerializerMemory.Clone<TabView>(tabInstance.TaskInstance.Call, this);
 			debugListCollection.AddData(clone);
 			Control debugControl = clone.CreateChildControl(debugListCollection, "Debug");
 		}

@@ -584,7 +584,7 @@ namespace Atlas.UI.Avalonia.View
 
 			if (tabInstance.tabBookmark != null && tabInstance.tabBookmark.tabViewSettings != null)
 				tabInstance.tabViewSettings = tabInstance.tabBookmark.tabViewSettings;
-			else if (tabInstance.project.userSettings.AutoLoad)
+			else if (tabInstance.Project.userSettings.AutoLoad)
 				LoadDefaultTabSettings();
 		}
 
@@ -843,7 +843,7 @@ namespace Atlas.UI.Avalonia.View
 
 			foreach (object obj in newList)
 			{
-				if (newChildControls.Count >= tabInstance.project.userSettings.SubTabLimit)
+				if (newChildControls.Count >= tabInstance.Project.userSettings.SubTabLimit)
 					break;
 				GetOrCreateChildControl(oldChildControls, newChildControls, orderedChildControls, obj, null, tabControl);
 			}
@@ -991,7 +991,7 @@ namespace Atlas.UI.Avalonia.View
 
 		private void LoadBookmark()
 		{
-			tabInstance.project.userSettings.AutoLoad = true;
+			tabInstance.Project.userSettings.AutoLoad = true;
 
 			TabBookmark tabBookmark = tabInstance.tabBookmark;
 			TabViewSettings = tabBookmark.tabViewSettings;

@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Atlas.Core;
 using System.Collections.Generic;
-using Atlas.Core;
 
 namespace Atlas.Tabs.Test
 {
@@ -30,13 +29,13 @@ namespace Atlas.Tabs.Test
 			{
 				SampleItem sampleItem = new SampleItem(1, "Sample Item");
 				
-				project.DataApp.Save(sampleItem, call);
+				Project.DataApp.Save(sampleItem, call);
 				items.Add(new ListItem("Sample Item", sampleItem));
 			}
 
 			private void Deserialize(Call call)
 			{
-				SampleItem sampleItem = project.DataApp.Load<SampleItem>(false, false, call);
+				SampleItem sampleItem = Project.DataApp.Load<SampleItem>(false, false, call);
 				items.Add(new ListItem("Deserialized Sample Item", sampleItem));
 			}
 
@@ -47,13 +46,13 @@ namespace Atlas.Tabs.Test
 				{
 					sampleItems.Add(new SampleItem(i, "Item " + i.ToString()));
 				}
-				project.DataApp.Save(sampleItems, call);
+				Project.DataApp.Save(sampleItems, call);
 				items.Add(new ListItem("SerializeOneMillionObjects", sampleItems));
 			}
 
 			private void DeserializeOneMillionObjects(Call call)
 			{
-				List<SampleItem> sampleItems = project.DataApp.Load<List<SampleItem>>(false, false, call);
+				List<SampleItem> sampleItems = Project.DataApp.Load<List<SampleItem>>(false, false, call);
 				items.Add(new ListItem("DeserializeOneMillionObjects", sampleItems));
 			}
 		}

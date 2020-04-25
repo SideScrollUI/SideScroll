@@ -163,9 +163,9 @@ namespace Atlas.Core
 			}
 		}
 
-		protected void CreateEventPropertyChanged([CallerMemberName] String propertyName = "")
+		protected void CreateEventPropertyChanged([CallerMemberName] string propertyName = "")
 		{
-			context?.Post(new SendOrPostCallback(this.NotifyPropertyChangedContext), propertyName);
+			context?.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
 			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 

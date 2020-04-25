@@ -21,7 +21,7 @@ namespace Atlas.Extensions
 		{
 			char[] chars = input.ToCharArray();
 			Array.Reverse(chars);
-			return new String(chars);
+			return new string(chars);
 		}
 
 		public static string Trim(this string input, string prefix)

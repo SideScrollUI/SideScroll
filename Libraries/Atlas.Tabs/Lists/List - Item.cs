@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.ComponentModel;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Extensions;
+using System.ComponentModel;
 
 namespace Atlas.Tabs
 {

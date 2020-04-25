@@ -202,7 +202,7 @@ namespace Atlas.Core
 			OnComplete?.Invoke();
 		}
 
-		protected void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+		protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 		{
 			Creator?.context.Post(new SendOrPostCallback(this.NotifyPropertyChangedContext), propertyName);
 		}

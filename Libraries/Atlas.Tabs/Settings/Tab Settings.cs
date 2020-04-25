@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.ComponentModel;
-using System.Reflection;
-using Atlas.Core;
-using System.Linq;
-using Atlas.Extensions;
+﻿using System.Collections.Generic;
 
 namespace Atlas.Tabs
 {

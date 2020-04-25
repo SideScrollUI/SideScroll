@@ -1,6 +1,5 @@
 ﻿using Atlas.Resources;
 using Atlas.UI.Avalonia.Tabs;
-using Avalonia.Controls;
 
 namespace Atlas.Start.Avalonia.Tabs
 {

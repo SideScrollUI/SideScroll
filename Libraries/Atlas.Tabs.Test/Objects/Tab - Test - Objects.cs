@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Atlas.Core;
+using System;
 using System.Runtime.Serialization;
-using Atlas.Core;
 
 namespace Atlas.Tabs.Test.Objects
 {

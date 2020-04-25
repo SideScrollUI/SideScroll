@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Layout;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls
 {

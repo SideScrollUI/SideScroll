@@ -70,7 +70,7 @@ namespace Atlas.UI.Avalonia.View
 			if (value is ILoadAsync loadAsync)
 			{
 				TabInstance childTabInstance = new TabInstanceLoadAsync(loadAsync);
-				childTabInstance.project = parentTabInstance.project;
+				childTabInstance.Project = parentTabInstance.Project;
 				childTabInstance.tabBookmark = tabBookmark;
 				childTabInstance.Model.Name = label;
 				TabView tabView = new TabView(childTabInstance);

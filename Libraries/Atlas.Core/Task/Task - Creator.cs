@@ -67,7 +67,7 @@ namespace Atlas.Core
 			return taskInstance;
 		}
 
-		public void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+		public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 		{
 			context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
 			//PropertyChanged?.BeginInvoke(this, new PropertyChangedEventArgs(propertyName), EndAsyncEvent, null);

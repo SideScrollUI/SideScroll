@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Atlas.Core;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Atlas.Core;
 
 namespace Atlas.Tabs.Test.DataGrid
 {

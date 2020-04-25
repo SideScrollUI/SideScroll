@@ -1,11 +1,11 @@
-﻿using System;
-using System.Diagnostics;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
+using System;
+using System.Diagnostics;
 
 namespace Atlas.UI.Avalonia.Controls
 {

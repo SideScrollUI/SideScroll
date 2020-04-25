@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Tabs.Tools;
 
 //namespace Atlas.Tabs.Test.DataRepo // good idea?
@@ -17,7 +15,7 @@ namespace Atlas.Tabs.Test
 				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Sample Data Repo", new TabTestDataRepoCollection()),
-					new ListItem("Local Directories", new TabDirectory(project.DataApp.RepoPath)),
+					new ListItem("Local Directories", new TabDirectory(Project.DataApp.RepoPath)),
 				};
 
 				model.Actions =  new ItemCollection<TaskCreator>()
@@ -31,8 +29,8 @@ namespace Atlas.Tabs.Test
 
 			private void DeleteRepos(Call call)
 			{
-				project.DataShared.DeleteRepo();
-				project.DataApp.DeleteRepo();
+				Project.DataShared.DeleteRepo();
+				Project.DataApp.DeleteRepo();
 				Reload();
 			}
 		}

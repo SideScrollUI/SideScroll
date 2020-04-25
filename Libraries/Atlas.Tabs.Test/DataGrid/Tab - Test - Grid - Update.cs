@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Atlas.Core;
 using System.ComponentModel;
 using System.Threading;
 using System.Runtime.CompilerServices;
-using Atlas.Core;
 
 namespace Atlas.Tabs.Test.DataGrid
 {

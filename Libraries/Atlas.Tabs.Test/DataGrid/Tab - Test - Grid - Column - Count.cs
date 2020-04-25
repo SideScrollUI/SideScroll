@@ -1,5 +1,5 @@
-﻿using System;
-using Atlas.Core;
+﻿using Atlas.Core;
+using System;
 
 namespace Atlas.Tabs.Test.DataGrid
 {

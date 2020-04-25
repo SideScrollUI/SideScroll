@@ -1,13 +1,11 @@
-﻿using System;
-using System.Linq;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Serialize;
 using Atlas.Start.Avalonia.Tabs;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Input.Platform;
-using Avalonia.Interactivity;
+using System.Linq;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -36,9 +34,9 @@ namespace Atlas.UI.Avalonia.Controls
 			public Instance(TabBookmarks tab)
 			{
 				this.tab = tab;
-				this.project = tab.project;
+				this.Project = tab.project;
 				Model.Name = "Bookmarks";
-				Model.Bookmarks = new BookmarkCollection(project);
+				Model.Bookmarks = new BookmarkCollection(Project);
 				//tabModel.Bookmarks.OnDelete
 				//var currentBookMark = this.CreateBookmark();
 				currentBookMark = new Bookmark()
@@ -110,8 +108,8 @@ namespace Atlas.UI.Avalonia.Controls
 				label = bookmarkItem.Name;
 
 				TabInstance tabInstance = tab.iTab.Create();
-				tabInstance.project = tab.project;
-				tabInstance.tabBookmark = bookmarkItem.Bookmark.tabBookmark.Clone<TabBookmark>(taskInstance.Call); // bookmark specified here will get auto loaded
+				tabInstance.Project = tab.project;
+				tabInstance.tabBookmark = bookmarkItem.Bookmark.tabBookmark.Clone<TabBookmark>(TaskInstance.Call); // bookmark specified here will get auto loaded
 				//tabInstance.LoadBookmark()
 				return new TabView(tabInstance);
 			}

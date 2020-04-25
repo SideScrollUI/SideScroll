@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Serialize;
+using System.Collections.Generic;
 
 //namespace Atlas.Tabs.Test.DataRepo // good idea?
 namespace Atlas.Tabs.Test

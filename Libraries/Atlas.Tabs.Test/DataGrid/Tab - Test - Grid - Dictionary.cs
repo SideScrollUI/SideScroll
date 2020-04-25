@@ -1,7 +1,5 @@
-﻿using System;
+﻿using Atlas.Core;
 using System.Collections.Generic;
-using System.Threading;
-using Atlas.Core;
 
 namespace Atlas.Tabs.Test.DataGrid
 {

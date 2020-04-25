@@ -1,19 +1,13 @@
 ﻿using Atlas.Core;
-using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.Resources;
 using Atlas.UI.Avalonia.Tabs;
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using System.Reflection;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Atlas.UI.Avalonia.Controls
@@ -33,7 +27,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public TabControlBookmarks(TabInstance tabInstance)
 		{
 			this.tabInstance = tabInstance;
-			this.project = tabInstance.project;
+			this.project = tabInstance.Project;
 			this.tabModel = tabInstance.Model;
 
 			InitializeControls();
@@ -266,7 +260,7 @@ namespace Atlas.UI.Avalonia.Controls
 			var bookmarks = new List<Bookmark>();
 			foreach (TabBookmarkItem viewBookmark in tabControlDataGrid.SelectedItems)
 			{
-				Bookmark bookmark = project.DataApp.Load<Bookmark>(viewBookmark.Name, new Call(tabInstance.taskInstance.Log));
+				Bookmark bookmark = project.DataApp.Load<Bookmark>(viewBookmark.Name, new Call(tabInstance.TaskInstance.Log));
 				if (bookmark != null)
 					bookmarks.Add(bookmark);
 			}

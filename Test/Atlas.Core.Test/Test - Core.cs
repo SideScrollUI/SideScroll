@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using Atlas.Core;
-using Atlas.Extensions;
+﻿using Atlas.Extensions;
 using NUnit.Framework;
+using System;
 
 namespace Atlas.Core.Test
 {

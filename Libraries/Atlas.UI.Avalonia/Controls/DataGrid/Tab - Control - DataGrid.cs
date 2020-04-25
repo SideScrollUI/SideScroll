@@ -27,6 +27,7 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		private const int ColumnPercentBased = 150;
 		private const int MaxMinColumnWidth = 150;
+		private const int MaxAutoSizeMinColumnWidth = 250;
 		private static int MaxColumnWidth = 600;
 
 		private TabModel tabModel;
@@ -347,7 +348,7 @@ namespace Atlas.UI.Avalonia.Controls
 					desiredWidth = Math.Max(desiredWidth, textColumn.MinDesiredWidth);
 					if (textColumn.AutoSize)
 					{
-						column.MinWidth = Math.Max(column.MinWidth, Math.Min(150, desiredWidth));
+						column.MinWidth = Math.Max(column.MinWidth, Math.Min(MaxAutoSizeMinColumnWidth, desiredWidth));
 						//column.Width = new DataGridLength(desiredWidth, DataGridLengthUnitType.Auto);
 						column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto, desiredWidth, double.NaN);
 						continue;
@@ -481,7 +482,7 @@ namespace Atlas.UI.Avalonia.Controls
 				tabInstance.SaveTabSettings(); // selection has probably changed
 			}
 			if (bookmark != null)
-				bookmark.Changed = String.Join(",", tabDataSettings.SelectedRows);
+				bookmark.Changed = string.Join(",", tabDataSettings.SelectedRows);
 		}
 
 		private DataGridRow GetControlRow(object obj, int depth)
@@ -711,7 +712,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void LoadSettings()
 		{
-			if (tabInstance.project.userSettings.AutoLoad)
+			if (tabInstance.Project.userSettings.AutoLoad)
 			{
 				SortSavedColumn();
 				if (tabDataSettings.Filter != null && tabDataSettings.Filter.Length > 0)
@@ -793,7 +794,7 @@ namespace Atlas.UI.Avalonia.Controls
 				return false;
 
 			// Select new log items automatically
-			if (tabInstance.taskInstance.TaskStatus == System.Threading.Tasks.TaskStatus.Running)
+			if (tabInstance.TaskInstance.TaskStatus == System.Threading.Tasks.TaskStatus.Running)
 			{
 				SelectedItem = iList[iList.Count - 1];
 				return true;

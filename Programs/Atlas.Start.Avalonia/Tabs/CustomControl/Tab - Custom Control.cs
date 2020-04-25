@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
 using Avalonia.Animation;
 using Avalonia.Threading;
+using System;
+using System.Threading.Tasks;
 
 namespace Atlas.Start.Avalonia.Tabs
 {

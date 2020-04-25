@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using Atlas.Core;
+﻿using Atlas.Core;
 using System.Collections;
-using Atlas.Tabs;
+using System.Threading;
 
 namespace Atlas.Tabs.Tools
 {

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Atlas.Core;
+using Atlas.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using Atlas.Core;
-using Atlas.Extensions;
 
 namespace Atlas.Tabs
 {

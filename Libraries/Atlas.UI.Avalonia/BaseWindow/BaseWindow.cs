@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
@@ -15,6 +12,9 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using System;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Atlas.UI.Avalonia
 {
@@ -286,7 +286,7 @@ namespace Atlas.UI.Avalonia
 		{
 			TabInstance tabInstance = tab.Create();
 			tabInstance.Model.Name = "Start";
-			tabInstance.project = project;
+			tabInstance.Project = project;
 			if (LoadBookmarkUri != null)
 				tabInstance.tabBookmark = linker.GetBookmark(LoadBookmarkUri)?.tabBookmark;
 			else if (project.userSettings.AutoLoad) // did we load successfully last time?

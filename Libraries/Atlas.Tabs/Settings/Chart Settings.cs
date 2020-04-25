@@ -27,7 +27,7 @@ namespace Atlas.Tabs
 
 		public override string ToString()
 		{
-			return String.Join(" ", ListSeries);
+			return string.Join(" ", ListSeries);
 			//return ListSeries[0].ToString(); // todo: fix for multiple
 		}
 

@@ -1,8 +1,4 @@
-﻿using Atlas.Core;
-using Atlas.Tabs;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -27,7 +23,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public TabControlBookmarkSettings(TabInstance tabInstance)
 		{
 			this.tabInstance = tabInstance;
-			this.project = tabInstance.project;
+			this.project = tabInstance.Project;
 			this.tabModel = tabInstance.Model;
 
 			//InitializeControls();

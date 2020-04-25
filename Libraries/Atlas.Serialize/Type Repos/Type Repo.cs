@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using Atlas.Core;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using Atlas.Core;
 
 namespace Atlas.Serialize
 {

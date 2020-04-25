@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Reflection;
-using System.Linq;
-using Atlas.Core;
+﻿using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
 using Avalonia.Controls;
@@ -15,6 +9,12 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.Avalonia;
 using OxyPlot.Annotations;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Reflection;
+using System.Linq;
 
 namespace Atlas.UI.Avalonia.Controls
 {
