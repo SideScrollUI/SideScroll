@@ -44,7 +44,7 @@ namespace Atlas.Tabs
 
 		public static List<PropertyInfo> GetVisibleProperties(Type type)
 		{
-			List<PropertyInfo> visibleProperties = new List<PropertyInfo>();
+			var visibleProperties = new List<PropertyInfo>();
 			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
 			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 			foreach (PropertyInfo propertyInfo in propertyInfos)
@@ -92,7 +92,7 @@ namespace Atlas.Tabs
 					propertyNames[propertyInfo.Name] = propertyInfo;
 
 				// Add all previously seen property infos
-				List<PropertyInfo> orderedPropertyInfos = new List<PropertyInfo>();
+				var orderedPropertyInfos = new List<PropertyInfo>();
 				foreach (string columnName in ColumnNameOrder)
 				{
 					PropertyInfo propertyInfo;
@@ -113,7 +113,7 @@ namespace Atlas.Tabs
 		{
 			List<PropertyInfo> visibleProperties = GetPropertyColumns(elementType);
 
-			List<PropertyColumn> propertyColumns = new List<PropertyColumn>();
+			var propertyColumns = new List<PropertyColumn>();
 
 			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
 			//Debug.Assert(visibleProperties.Count > 0); // built in types don't always have properties

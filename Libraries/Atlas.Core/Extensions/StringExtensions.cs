@@ -105,7 +105,7 @@ namespace Atlas.Extensions
 		{
 			if (string.IsNullOrEmpty(value))
 				throw new ArgumentException("the string to find may not be empty", "value");
-			List<int> indexes = new List<int>();
+			var indexes = new List<int>();
 			for (int index = 0; ; index += value.Length)
 			{
 				index = str.IndexOf(value, index);

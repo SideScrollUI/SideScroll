@@ -105,7 +105,7 @@ namespace Atlas.Serialize
 
 		public void LogLoadedTypes(Call call)
 		{
-			List<ObjectsLoaded> loaded = new List<ObjectsLoaded>();
+			var loaded = new List<ObjectsLoaded>();
 			foreach (TypeRepo typeRepo in typeRepos)
 			{
 				ObjectsLoaded typeInfo = new ObjectsLoaded()
@@ -289,9 +289,9 @@ namespace Atlas.Serialize
 		{
 			get
 			{
-				List<TypeRepo> primitives = new List<TypeRepo>();
-				List<TypeRepo> collections = new List<TypeRepo>();
-				List<TypeRepo> others = new List<TypeRepo>();
+				var primitives = new List<TypeRepo>();
+				var collections = new List<TypeRepo>();
+				var others = new List<TypeRepo>();
 
 				foreach (TypeRepo typeRepo in typeRepos)
 				{
@@ -306,7 +306,7 @@ namespace Atlas.Serialize
 						others.Add(typeRepo);
 				}
 
-				List<TypeRepo> orderedTypes = new List<TypeRepo>();
+				var orderedTypes = new List<TypeRepo>();
 				orderedTypes.AddRange(primitives);
 				orderedTypes.AddRange(others);
 				orderedTypes.AddRange(collections);
@@ -333,7 +333,7 @@ namespace Atlas.Serialize
 				typeRepo.SkipHeader(writer);
 			}
 
-			List<TypeRepoWriter> writers = new List<TypeRepoWriter>();
+			var writers = new List<TypeRepoWriter>();
 			foreach (TypeRepo typeRepo in OrderedTypes)
 			{
 				if (typeRepo.type == null)
@@ -602,7 +602,7 @@ namespace Atlas.Serialize
 
 		public void LogClonedTypes(Log log)
 		{
-			List<ObjectsLoaded> loaded = new List<ObjectsLoaded>();
+			var loaded = new List<ObjectsLoaded>();
 			foreach (TypeRepo typeRepo in typeRepos)
 			{
 				ObjectsLoaded typeInfo = new ObjectsLoaded()

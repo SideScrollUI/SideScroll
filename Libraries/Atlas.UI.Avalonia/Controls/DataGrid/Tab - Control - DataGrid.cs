@@ -732,7 +732,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public List<object> GetMatchingRowObjects()
 		{
-			List<object> rowObjects = new List<object>();
+			var rowObjects = new List<object>();
 			if (tabDataSettings.SelectedRows.Count == 0)
 				return rowObjects;
 

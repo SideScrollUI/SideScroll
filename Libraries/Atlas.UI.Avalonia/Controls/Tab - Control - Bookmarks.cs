@@ -263,7 +263,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void OnSelectedBookmarkChanged(object sender, EventArgs e)
 		{
-			List<Bookmark> bookmarks = new List<Bookmark>();
+			var bookmarks = new List<Bookmark>();
 			foreach (TabBookmarkItem viewBookmark in tabControlDataGrid.SelectedItems)
 			{
 				Bookmark bookmark = project.DataApp.Load<Bookmark>(viewBookmark.Name, new Call(tabInstance.taskInstance.Log));

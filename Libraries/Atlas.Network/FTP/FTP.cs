@@ -276,7 +276,7 @@ namespace Atlas.Network
 		// List Directory Contents File/Folder Name Only
 		public List<string> GetDirectoryListSimple(string directory)
 		{
-			List<string> files = new List<string>();
+			var files = new List<string>();
 
 			FtpWebRequest ftpRequest = info.CreateRequest(directory);
 			ftpRequest.Method = WebRequestMethods.Ftp.ListDirectory;
@@ -299,7 +299,7 @@ namespace Atlas.Network
 		{
 			if (directory == null || directory.Length == 0)
 				directory = "/";
-			List<FtpItem> files = new List<FtpItem>();
+			var files = new List<FtpItem>();
 
 			FtpWebRequest ftpRequest = info.CreateRequest(directory);
 			ftpRequest.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
@@ -341,7 +341,7 @@ namespace Atlas.Network
 		{
 			if (directory == null || directory.Length == 0)
 				directory = "/";
-			List<FtpItem> files = new List<FtpItem>();
+			var files = new List<FtpItem>();
 
 			FtpWebRequest ftpRequest = info.CreateRequest(directory);
 			ftpRequest.Method = "MLSD";

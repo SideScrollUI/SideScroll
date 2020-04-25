@@ -51,7 +51,7 @@ namespace Atlas.Start.Avalonia.Tabs
 
 			private void SubTaskInstances(Call call)
 			{
-				List<int> downloads = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+				var downloads = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 				Parallel.ForEach(downloads, new ParallelOptions() { MaxDegreeOfParallelism = 10 }, i =>
 				{
 					using (CallTimer sleepCall = call.Timer(i.ToString()))

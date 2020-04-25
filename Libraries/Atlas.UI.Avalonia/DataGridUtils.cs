@@ -161,7 +161,7 @@ namespace Atlas.UI.Avalonia
 			//var collection = (ICollectionView)dataGrid.Items;
 			foreach (var item in dataGrid.Items)
 			{
-				List<string> stringCells = new List<string>();
+				var stringCells = new List<string>();
 				foreach (DataGridColumn dataColumn in visibleColumns.Values)
 				{
 					if (dataColumn is DataGridBoundColumn boundColumn)
@@ -183,7 +183,7 @@ namespace Atlas.UI.Avalonia
 
 		public static string TableToString(List<ColumnInfo> columns, List<List<string>> contentRows)
 		{
-			List<int> columnWidths = new List<int>();
+			var columnWidths = new List<int>();
 			for (int column = 0; column < columns.Count; column++)
 			{
 				string header = columns[column].Name;

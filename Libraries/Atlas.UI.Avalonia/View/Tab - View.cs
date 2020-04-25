@@ -806,7 +806,7 @@ namespace Atlas.UI.Avalonia.View
 		{
 			Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
 			newChildControls = new Dictionary<object, Control>();
-			List<Control> orderedChildControls = new List<Control>();
+			var orderedChildControls = new List<Control>();
 			//AddNotes(newChildControls, oldChildControls, orderedChildControls);
 
 			if (tabInstance is ITabSelector tabSelector && tabSelector.SelectedItems != null)

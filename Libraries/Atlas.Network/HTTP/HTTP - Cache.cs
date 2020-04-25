@@ -120,7 +120,7 @@ namespace Atlas.Network
 		{
 			get
 			{
-				List<Entry> entries = new List<Entry>();
+				var entries = new List<Entry>();
 				foreach (Entry entry in cache.Values)
 					entries.Add(entry);
 				return entries;
@@ -131,7 +131,7 @@ namespace Atlas.Network
 		{
 			get
 			{
-				List<LoadableEntry> entries = new List<LoadableEntry>();
+				var entries = new List<LoadableEntry>();
 				foreach (Entry entry in cache.Values)
 				{
 					LoadableEntry loadableEntry = new LoadableEntry()

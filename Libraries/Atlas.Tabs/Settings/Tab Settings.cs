@@ -58,7 +58,7 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				List<SelectedRow> selectedRows = new List<SelectedRow>();
+				var selectedRows = new List<SelectedRow>();
 				if (TabDataSettings == null)
 					return selectedRows;
 

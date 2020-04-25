@@ -42,7 +42,7 @@ namespace Atlas.Tabs.Test
 
 			private void SerializeOneMillionObjects(Call call)
 			{
-				List<SampleItem> sampleItems = new List<SampleItem>();
+				var sampleItems = new List<SampleItem>();
 				for (int i = 0; i < 1000000; i++)
 				{
 					sampleItems.Add(new SampleItem(i, "Item " + i.ToString()));

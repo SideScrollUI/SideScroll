@@ -121,7 +121,7 @@ namespace Atlas.Network
 
 		/*public static List<TransferFtp> GetRemoteFiles(Call call, string remotePath)
 		{
-			List<TransferFtp> transfers = new List<TransferFtp>();
+			var transfers = new List<TransferFtp>();
 			FTP ftp = new FTP(log, ftpHost);
 			var files = ftp.DirectoryListDetailed(remotePath);
 			foreach (FTP.FileInfo remoteFile in files)

@@ -24,7 +24,7 @@ namespace Atlas.Extensions // rename to Core?
 
 		public static XmlNode[] Elements(this XmlDocument xmlDoc, string name)
 		{
-			List<XmlNode> list = new List<XmlNode>();
+			var list = new List<XmlNode>();
 			foreach (XmlNode xmlNode in xmlDoc.ChildNodes)
 			{
 				if (xmlNode.Name == name)
@@ -35,7 +35,7 @@ namespace Atlas.Extensions // rename to Core?
 
 		public static XmlNode[] Elements(this XmlNode xmlNode, string name)
 		{
-			List<XmlNode> list = new List<XmlNode>();
+			var list = new List<XmlNode>();
 			foreach (XmlNode childNode in xmlNode.ChildNodes)
 			{
 				if (childNode.Name == name)
@@ -126,7 +126,7 @@ namespace Atlas.Extensions // rename to Core?
 
 		public static List<PropertyInfo> GetVisibleProperties(this Type type)
 		{
-			List<PropertyInfo> visibleProperties = new List<PropertyInfo>();
+			var visibleProperties = new List<PropertyInfo>();
 			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
 			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 			foreach (PropertyInfo propertyInfo in propertyInfos)
@@ -149,7 +149,7 @@ namespace Atlas.Extensions // rename to Core?
 
 		public static List<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type)
 		{
-			List<PropertyInfo> matchingProperties = new List<PropertyInfo>();
+			var matchingProperties = new List<PropertyInfo>();
 			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
 			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 			foreach (PropertyInfo propertyInfo in propertyInfos)
@@ -162,7 +162,7 @@ namespace Atlas.Extensions // rename to Core?
 
 		public static List<FieldInfo> GetFieldsWithAttribute<T>(this Type type)
 		{
-			List<FieldInfo> matchingFields = new List<FieldInfo>();
+			var matchingFields = new List<FieldInfo>();
 			// Fields are returned in a random order, so sort them by the MetadataToken to get the original order
 			FieldInfo[] fieldInfos = type.GetFields().OrderBy(x => x.MetadataToken).ToArray();
 			foreach (FieldInfo fieldInfo in fieldInfos)
