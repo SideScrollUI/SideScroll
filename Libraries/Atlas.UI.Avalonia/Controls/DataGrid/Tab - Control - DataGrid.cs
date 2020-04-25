@@ -343,14 +343,22 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AutoSizeColumns()
 		{
+			// The star column widths will change as other column widths are changed
+			var originalWidths = new Dictionary<DataGridColumn, DataGridLength>();
 			foreach (DataGridColumn column in dataGrid.Columns)
 			{
+				originalWidths[column] = column.Width;
+				column.Width = new DataGridLength(column.ActualWidth, DataGridLengthUnitType.Auto); // remove Star sizing so columns don't interfere with each other
+			}
+			foreach (DataGridColumn column in dataGrid.Columns)
+			{
+				DataGridLength originalWidth = originalWidths[column];
 				column.MaxWidth = 2000;
 				if (column.MinWidth == 0)
-					column.MinWidth = Math.Min(MaxMinColumnWidth, column.Width.DesiredValue);
+					column.MinWidth = Math.Min(MaxMinColumnWidth, originalWidth.DesiredValue);
 				else
-					column.MinWidth = Math.Max(column.MinWidth, Math.Min(100, column.Width.DesiredValue));
-				double desiredWidth = Math.Max(column.MinWidth, column.Width.DesiredValue);
+					column.MinWidth = Math.Max(column.MinWidth, Math.Min(100, originalWidth.DesiredValue));
+				double desiredWidth = Math.Max(column.MinWidth, originalWidth.DesiredValue);
 				if (column is DataGridPropertyTextColumn textColumn)
 				{
 					desiredWidth = Math.Max(desiredWidth, textColumn.MinDesiredWidth);
@@ -736,7 +744,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (tabDataSettings.SelectedRows.Count == 0)
 				return rowObjects;
 
-			Dictionary<string, object> keys = new Dictionary<string, object>(); // todo: change to unordered?
+			var keys = new Dictionary<string, object>(); // todo: change to unordered?
 			foreach (object listItem in collectionView) // collectionView takes filters into account
 			{
 				if (listItem == null)
@@ -998,7 +1006,7 @@ namespace Atlas.UI.Avalonia.Controls
 			get
 			{
 				// todo: cell selection not supported yet
-				HashSet<SelectedRow> selectedRows = new HashSet<SelectedRow>();
+				var selectedRows = new HashSet<SelectedRow>();
 				/*Dictionary<object, List<DataGridCellInfo>> orderedRows = new Dictionary<object, List<DataGridCellInfo>>();
 				foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
 				{
@@ -1319,7 +1327,7 @@ if (rowIndex >= 0 && rowIndex < dataGrid.RowCount)
 public List<DataGridCellInfo> GetMatchingCellInfos()
 {
 	List<DataGridCellInfo> cellInfos = new List<DataGridCellInfo>();
-	Dictionary<string, object> keys = new Dictionary<string, object>(); // todo: change to unordered?
+	var keys = new Dictionary<string, object>(); // todo: change to unordered?
 	foreach (object listItem in iList)
 	{
 		if (listItem == null)

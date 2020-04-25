@@ -241,7 +241,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void RemoveControls(Dictionary<object, Control> controls)
 		{
-			HashSet<Control> hashedControls = new HashSet<Control>(); // one line linq?
+			var hashedControls = new HashSet<Control>(); // one line linq?
 			foreach (var pair in gridControls)
 			{
 				hashedControls.Add(pair.Value);

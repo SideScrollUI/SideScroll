@@ -140,7 +140,7 @@ namespace Atlas.UI.Avalonia
 		{
 			columns = new List<ColumnInfo>();
 			contentRows = new List<List<string>>();
-			Dictionary<int, DataGridColumn> visibleColumns = new Dictionary<int, DataGridColumn>();
+			var visibleColumns = new Dictionary<int, DataGridColumn>();
 
 			foreach (DataGridColumn dataColumn in dataGrid.Columns)
 			{

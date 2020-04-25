@@ -108,28 +108,28 @@ namespace Atlas.Tabs
 			foreach (var nodeEntry in node.tabChildBookmarks)
 			{
 				TabBookmark existingNode;
-				if (this.tabChildBookmarks.TryGetValue(nodeEntry.Key, out existingNode))
+				if (tabChildBookmarks.TryGetValue(nodeEntry.Key, out existingNode))
 				{
 					existingNode.MergeNode(nodeEntry.Value);
 				}
 				else
 				{
-					this.tabChildBookmarks.Add(nodeEntry.Key, nodeEntry.Value);
+					tabChildBookmarks.Add(nodeEntry.Key, nodeEntry.Value);
 				}
 			}
-			if (this.tabViewSettings == null)
+			if (tabViewSettings == null)
 			{
-				this.tabViewSettings = node.tabViewSettings;
+				tabViewSettings = node.tabViewSettings;
 				return;
 			}
 			Name = " + " + node.Name;
-			for (int i = 0; i < this.tabViewSettings.TabDataSettings.Count; i++)
+			for (int i = 0; i < tabViewSettings.TabDataSettings.Count; i++)
 			{
-				var currentSelection = this.tabViewSettings.TabDataSettings[i].SelectedRows;
+				var currentSelection = tabViewSettings.TabDataSettings[i].SelectedRows;
 				var otherSelection = node.tabViewSettings.TabDataSettings[i].SelectedRows;
 
-				HashSet<string> labelsUsed = new HashSet<string>();
-				HashSet<int> indicesUsed = new HashSet<int>();
+				var labelsUsed = new HashSet<string>();
+				var indicesUsed = new HashSet<int>();
 				foreach (SelectedRow row in currentSelection)
 				{
 					if (row.label != null)
