@@ -41,6 +41,7 @@ namespace Atlas.Core
 		public Tag(string name, object value, bool verbose = true)
 		{
 			Name = name;
+
 			if (verbose)
 				Value = value;
 			else
@@ -49,15 +50,7 @@ namespace Atlas.Core
 
 		public static Tag Add(object value, bool verbose = true)
 		{
-			Tag tag = new Tag()
-			{
-				Name = value.ToString(),
-			};
-			if (verbose)
-				tag.Value = value;
-			else
-				tag.Value = value.ToString();
-			return tag;
+			return new Tag(value.ToString(), value, verbose);
 		}
 	}
 
@@ -190,7 +183,7 @@ namespace Atlas.Core
 		private const int MaxLogItems = 10000;
 
 		[InnerValue]
-		public ItemCollection<LogEntry> items = new ItemCollection<LogEntry>(); // change to LRU for performance? No Binding?
+		public ItemCollection<LogEntry> Items { get; set; } = new ItemCollection<LogEntry>(); // change to LRU for performance? No Binding?
 		private static object locker = new object(); // todo: replace this with individual ones? (deadlock territory if circular) or a non-blocking version
 		private string SummaryText;
 
@@ -255,7 +248,7 @@ namespace Atlas.Core
 		public string EntriesText()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			foreach (LogEntry logEntry in items)
+			foreach (LogEntry logEntry in Items)
 			{
 				stringBuilder.AppendLine(logEntry.ToString());
 			}
@@ -294,10 +287,10 @@ namespace Atlas.Core
 
 		private void AddEntry(LogEntry logEntry)
 		{
-			items.Add(logEntry);
-			if (items.Count > MaxLogItems)
+			Items.Add(logEntry);
+			if (Items.Count > MaxLogItems)
 			{
-				items.RemoveAt(0);
+				Items.RemoveAt(0);
 				UpdateEntries();
 			}
 			else
@@ -320,7 +313,7 @@ namespace Atlas.Core
 		{
 			int count = 0;
 			Type = originalType;
-			foreach (LogEntry logEntry in items)
+			foreach (LogEntry logEntry in Items)
 			{
 				count++;
 				count += logEntry.Entries;

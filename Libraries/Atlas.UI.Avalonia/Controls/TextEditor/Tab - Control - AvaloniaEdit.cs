@@ -8,6 +8,7 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using Avalonia.Layout;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -57,8 +58,6 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			var theme = new global::Avalonia.Themes.Default.DefaultTheme();
-			theme.FindResource("Button");
 			Background = new SolidColorBrush(Theme.GridBackgroundColor);
 			MaxWidth = 3000;
 
@@ -125,7 +124,25 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			set
 			{
+				if (value is string s && s.StartsWith("{") && !s.Contains("\n"))
+				{
+					value = GetFormattedJson(s);
+				}
 				textEditor.Text = value;
+			}
+		}
+
+		public static string GetFormattedJson(string text)
+		{
+			try
+			{
+				dynamic parsedJson = JsonConvert.DeserializeObject(text);
+				string formatted = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+				return formatted;
+			}
+			catch (Exception)
+			{
+				return text;
 			}
 		}
 

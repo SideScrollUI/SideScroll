@@ -54,6 +54,15 @@ namespace Atlas.Core
 			return call;
 		}
 
+		public CallTimer Timer(int taskCount, [CallerMemberName] string name = "", params Tag[] tags)
+		{
+			if (TaskInstance.TaskCount == 0)
+				TaskInstance.TaskCount = 1;
+			CallTimer timer = Timer(name, tags);
+			timer.TaskInstance.TaskCount = taskCount;
+			return timer;
+		}
+
 		// allows having progress broken down into multiple tasks
 		public TaskInstance AddSubTask(string name = "")
 		{

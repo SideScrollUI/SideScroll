@@ -62,6 +62,33 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private Stopwatch stopwatch = new Stopwatch();
 
+		public IList Items
+		{
+			get
+			{
+				return iList;
+			}
+			set
+			{
+				iList = value;
+				/*if (collectionView != null && iList is ICollection)
+				{
+					var collection = (ICollection)iList;
+					collectionView.DeferRefresh();
+					collection.Clear();
+
+					collectionView.Refresh();
+				}
+				else*/
+				{
+					collectionView = new DataGridCollectionView(iList);
+					dataGrid.Items = collectionView;
+					Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
+				}
+				//dataGrid.SelectedItem = null;
+			}
+		}
+
 		private TabControlDataGrid()
 		{
 			Initialize();
@@ -82,35 +109,6 @@ namespace Atlas.UI.Avalonia.Controls
 		}
 
 		public override string ToString() => tabModel.Name;
-
-		// Before MaxWidth applies
-		private bool finishedLoading = false;
-		protected override Size MeasureOverride(Size availableSize)
-		{
-			//Size testSize = LayoutHelper.ApplyLayoutConstraints(this, availableSize);
-			/*{
-				double width = (control.Width > 0) ? control.Width : constraints.Width;
-				double height = (control.Height > 0) ? control.Height : constraints.Height;
-				width = Math.Min(width, control.MaxWidth);
-				width = Math.Max(width, control.MinWidth);
-				height = Math.Min(height, control.MaxHeight);
-				height = Math.Max(height, control.MinHeight);
-				return new Size(width, height);
-			}*/
-			//base.Measure(availableSize);
-			//dataGrid.Measure(availableSize);
-			//Size desiredSize = dataGrid.DesiredSize;
-			Size size = base.MeasureOverride(availableSize);
-			if (!finishedLoading)
-			{
-				tabInstance.SetEndLoad();
-				disableSaving--;
-				finishedLoading = true;
-				if (selectionModified)
-					tabInstance.SaveTabSettings(); // selection has probably changed
-			}
-			return size;
-		}
 
 		/*protected override void OnMeasureInvalidated()
 		{
@@ -162,21 +160,15 @@ namespace Atlas.UI.Avalonia.Controls
 			elementType = listType.GetElementTypeForAll();
 
 			InitializeControls();
+			AddListUpdatedDispatcher();
 
-			if (iList is INotifyCollectionChanged iNotifyCollectionChanged) // AutoLoad
+			Dispatcher.UIThread.Post(() =>
 			{
-				// DataGrid must exist before adding this
-				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
-
-				// Invoking was happening at bad times in the data binding
-				if (dispatcherTimer == null)
-				{
-					dispatcherTimer = new DispatcherTimer();
-					dispatcherTimer.Tick += DispatcherTimer_Tick;
-					dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
-					dispatcherTimer.Start();
-				}
-			}
+				tabInstance.SetEndLoad();
+				disableSaving--;
+				if (selectionModified)
+					tabInstance.SaveTabSettings(); // selection has probably changed
+			}, DispatcherPriority.Background);
 
 			//Debug.Assert(dataGrid.Columns.Count > 0); // make sure something is databindable, not all lists have a property, add a ListToString wrapper around ToString()?
 		}
@@ -265,6 +257,24 @@ namespace Atlas.UI.Avalonia.Controls
 			Children.Add(dataGrid);
 		}
 
+		private void AddListUpdatedDispatcher()
+		{
+			if (iList is INotifyCollectionChanged iNotifyCollectionChanged) // AutoLoad
+			{
+				// DataGrid must exist before adding this
+				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
+
+				// Invoking was happening at bad times in the data binding
+				if (dispatcherTimer == null)
+				{
+					dispatcherTimer = new DispatcherTimer();
+					dispatcherTimer.Tick += DispatcherTimer_Tick;
+					dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+					dispatcherTimer.Start();
+				}
+			}
+		}
+
 		// The DataGrid needs this to update sometimes
 		private void TabControlDataGrid_LayoutUpdated(object sender, EventArgs e)
 		{
@@ -314,33 +324,6 @@ namespace Atlas.UI.Avalonia.Controls
 			dataGrid.ContextMenu = contextMenu;
 		}
 
-		public IList Items
-		{
-			get
-			{
-				return iList;
-			}
-			set
-			{
-				iList = value;
-				/*if (collectionView != null && iList is ICollection)
-				{
-					var collection = (ICollection)iList;
-					collectionView.DeferRefresh();
-					collection.Clear();
-
-					collectionView.Refresh();
-				}
-				else*/
-				{
-					collectionView = new DataGridCollectionView(iList);
-					dataGrid.Items = collectionView;
-					Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
-				}
-				//dataGrid.SelectedItem = null;
-			}
-		}
-
 		private void AutoSizeColumns()
 		{
 			// The star column widths will change as other column widths are changed
@@ -385,33 +368,6 @@ namespace Atlas.UI.Avalonia.Controls
 				dataGrid.Columns[1].Width = new DataGridLength(dataGrid.Columns[1].ActualWidth, DataGridLengthUnitType.Star);
 		}
 
-		private void DispatcherTimer_Tick(object sender, EventArgs e)
-		{
-			if (autoSelectItem != null)
-			{
-				disableSaving++;
-				SelectedItem = autoSelectItem;
-				disableSaving--;
-				autoSelectItem = null;
-			}
-
-			if (scrollIntoViewObject != null && dataGrid.IsEffectivelyVisible && dataGrid.IsInitialized)
-			{
-				try
-				{
-					//if (collectionVie w.Contains(value))
-					dataGrid.ScrollIntoView(scrollIntoViewObject, dataGrid.CurrentColumn);
-				}
-				catch (Exception)
-				{
-					// {System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
-					//Parameter name: index
-					//   at Avalonia.Collections.DataGridCollectionView.GetItemAt(Int32 index) in D:\a\1\s\src\Avalonia.Controls.DataGrid\Collections\DataGridCollectionView.cs:line 1957
-				}
-				scrollIntoViewObject = null;
-			}
-		}
-
 		private bool selectionModified = false;
 
 		private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -426,16 +382,16 @@ namespace Atlas.UI.Avalonia.Controls
 					//CancellationTokenSource tokenSource = new CancellationTokenSource();
 					//this.Dispatcher.Invoke(() => SelectedItem = e.NewItems[0], System.Windows.Threading.DispatcherPriority.SystemIdle, tokenSource.Token, TimeSpan.FromSeconds(1));
 
+					selectItemEnabled = true;
 					// don't update the selection too often or we'll slow things down
 					if (!stopwatch.IsRunning || stopwatch.ElapsedMilliseconds > 1000)
 					{
-						isAutoSelecting++;
 						// change to dispatch here?
 						autoSelectItem = null;
 						selectionModified = true;
 						//SelectedItem = e.NewItems[0];
-						SelectedItem = iList[iList.Count - 1];
-						isAutoSelecting--;
+						object item = iList[iList.Count - 1];
+						Dispatcher.UIThread.Post(() => SetSelectedItem(item), DispatcherPriority.Background);
 						stopwatch.Reset();
 						stopwatch.Start();
 						//collectionView.Refresh();
@@ -454,6 +410,45 @@ namespace Atlas.UI.Avalonia.Controls
 				// doesn't work
 				//collectionView.Refresh();
 				//collectionView.
+			}
+		}
+
+		private void DispatcherTimer_Tick(object sender, EventArgs e)
+		{
+			if (autoSelectItem != null)
+			{
+				object selectItem = autoSelectItem;
+				Dispatcher.UIThread.Post(() => SetSelectedItem(selectItem), DispatcherPriority.Background);
+				autoSelectItem = null;
+			}
+		}
+
+		private bool selectItemEnabled;
+
+		private void SetSelectedItem(object selectedItem)
+		{
+			if (!selectItemEnabled)
+				return;
+			disableSaving++;
+			isAutoSelecting++;
+			SelectedItem = selectedItem;
+			isAutoSelecting--;
+			disableSaving--;
+
+			if (scrollIntoViewObject != null && dataGrid.IsEffectivelyVisible && dataGrid.IsInitialized)
+			{
+				try
+				{
+					//if (collectionVie w.Contains(value))
+					dataGrid.ScrollIntoView(scrollIntoViewObject, dataGrid.CurrentColumn);
+				}
+				catch (Exception)
+				{
+					// {System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+					//Parameter name: index
+					//   at Avalonia.Collections.DataGridCollectionView.GetItemAt(Int32 index) in D:\a\1\s\src\Avalonia.Controls.DataGrid\Collections\DataGridCollectionView.cs:line 1957
+				}
+				scrollIntoViewObject = null;
 			}
 		}
 
@@ -794,6 +789,16 @@ namespace Atlas.UI.Avalonia.Controls
 			if (tabDataSettings.SelectionType == SelectionType.None)
 				return false;
 
+			if (iList.Count == 0)
+				return false;
+
+			// Select new log items automatically
+			if (tabInstance.taskInstance.TaskStatus == System.Threading.Tasks.TaskStatus.Running)
+			{
+				SelectedItem = iList[iList.Count - 1];
+				return true;
+			}
+
 			if (tabDataSettings.SelectedRows.Count == 0)
 				return true; // clear too?
 
@@ -964,6 +969,8 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			set
 			{
+				autoSelectItem = null;
+				selectItemEnabled = false;
 				// don't reselect if already selected				
 				if (dataGrid.SelectedItems.Count != 1 || dataGrid.SelectedItems[0] != value)
 				{

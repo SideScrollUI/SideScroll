@@ -61,7 +61,7 @@ namespace Atlas.UI.Avalonia.Tabs
 				//tabAvaloniaEdit.textEditor.VerticalAlignment = VerticalAlignment.Top;
 				//tabAvaloniaEdit.textEditor.VerticalAlignment = VerticalAlignment.Stretch;
 				//tabAvaloniaEdit.textEditor.IsReadOnly = true; // todo: allow editing?
-				tabAvaloniaEdit.textEditor.Text = tab.text;
+				tabAvaloniaEdit.Text = tab.text;
 				tabAvaloniaEdit.Background = new SolidColorBrush(Colors.White);
 
 				if (tab.text.StartsWith("{"))

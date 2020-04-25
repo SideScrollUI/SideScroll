@@ -92,24 +92,20 @@ Actions add Buttons to the tab. When clicked, it will:
 				for (int i = 0; i < 30; i++)
 					ids.Add(i);
 
-				call.TaskInstance.TaskCount = ids.Count;
-
-				IEnumerable<Task<int>> queries =
-					from id in ids select DoTask(call, id);
-
-				List<Task<int>> tasks = queries.ToList();
-
-				using (CallTimer callTimer = call.Timer("long op"))
+				using (CallTimer callTimer = call.Timer(ids.Count))
 				{
-					await Task.Delay(1000);
-				}
+					IEnumerable<Task<int>> queries =
+						from id in ids select DoTask(callTimer, id);
 
-				var results = new List<int>();
-				while (tasks.Count > 0)
-				{
-					Task<int> firstFinishedTask = await Task.WhenAny(tasks);
-					tasks.Remove(firstFinishedTask);
-					results.Add(firstFinishedTask.Result);
+					List<Task<int>> tasks = queries.ToList();
+
+					var results = new List<int>();
+					while (tasks.Count > 0)
+					{
+						Task<int> firstFinishedTask = await Task.WhenAny(tasks);
+						tasks.Remove(firstFinishedTask);
+						results.Add(firstFinishedTask.Result);
+					}
 				}
 			}
 
