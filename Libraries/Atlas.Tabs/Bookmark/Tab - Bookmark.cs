@@ -76,12 +76,12 @@ namespace Atlas.Tabs
 			return Name;// string.Join(",", Nodes.Keys);
 		}
 
-		public SortedDictionary<string, T> GetData<T>()
+		public SortedDictionary<string, T> GetSelectedData<T>()
 		{
 			var items = new SortedDictionary<string, T>();
 			if (tabViewSettings != null)
 			{
-				foreach (var row in tabViewSettings.SelectedRows)
+				foreach (SelectedRow row in tabViewSettings.SelectedRows)
 				{
 					string dataKey = row.dataKey ?? row.label;
 					if (dataKey != null && row.dataValue != null && row.dataValue.GetType() == typeof(T))
@@ -89,6 +89,26 @@ namespace Atlas.Tabs
 				}
 			}
 			return items;
+		}
+
+		public void SetData(object obj)
+		{
+			SetData("default", obj);
+		}
+
+		public void SetData(string name, object obj)
+		{
+			tabViewSettings = tabViewSettings ?? new TabViewSettings();
+			tabViewSettings.BookmarkData = tabViewSettings.BookmarkData ?? new Dictionary<string, object>();
+			tabViewSettings.BookmarkData[name] = obj;
+		}
+
+		public T GetData<T>(string name = "default")
+		{
+			if (tabViewSettings != null && tabViewSettings.BookmarkData != null && tabViewSettings.BookmarkData.TryGetValue(name, out object obj) && obj is T t)
+				return t;
+
+			return default;
 		}
 
 		public TabBookmark GetChild(string name)

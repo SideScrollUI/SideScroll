@@ -32,6 +32,7 @@ namespace Atlas.Tabs
 		public double? SplitterDistance { get; set; }
 
 		public List<TabDataSettings> TabDataSettings { get; set; } = new List<TabDataSettings>();
+		public Dictionary<string, object> BookmarkData { get; set; }
 
 		// change to string id?
 		public TabDataSettings GetData(int index)

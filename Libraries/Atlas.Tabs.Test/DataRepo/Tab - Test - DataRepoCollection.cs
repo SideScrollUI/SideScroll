@@ -41,7 +41,7 @@ namespace Atlas.Tabs.Test
 				{
 					sampleItems.Add(dataRef.Value);
 				}
-				var bookmarkRefs = GetBookmarkData<SampleItem>();
+				var bookmarkRefs = GetBookmarkSelectedData<SampleItem>();
 				foreach (var dataRef in bookmarkRefs)
 				{
 					if (!dataRefs.ContainsKey(dataRef.Key))

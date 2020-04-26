@@ -552,7 +552,7 @@ namespace Atlas.Tabs
 			return bookmark;
 		}
 
-		public void GetBookmark(TabBookmark tabBookmark)
+		public virtual void GetBookmark(TabBookmark tabBookmark)
 		{
 			tabBookmark.Name = Label;
 			tabBookmark.tabViewSettings = tabViewSettings;
@@ -636,9 +636,16 @@ namespace Atlas.Tabs
 			return tabViewSettings;
 		}
 
-		protected SortedDictionary<string, T> GetBookmarkData<T>()
+		protected SortedDictionary<string, T> GetBookmarkSelectedData<T>()
 		{
-			return tabBookmark?.GetData<T>() ?? new SortedDictionary<string, T>();
+			return tabBookmark?.GetSelectedData<T>() ?? new SortedDictionary<string, T>();
+		}
+
+		protected T GetBookmarkData<T>()
+		{
+			if (tabBookmark != null)
+				return tabBookmark.GetData<T>();
+			return default;
 		}
 
 		// replace with DataShared? Split call up?
