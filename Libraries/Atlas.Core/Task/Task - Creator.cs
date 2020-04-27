@@ -43,7 +43,7 @@ namespace Atlas.Core
 			context = SynchronizationContext.Current ?? new SynchronizationContext();
 			call.Log.context = context;
 
-			TaskInstance taskInstance = new TaskInstance()
+			var taskInstance = new TaskInstance()
 			{
 				Call = call,
 				Creator = this,

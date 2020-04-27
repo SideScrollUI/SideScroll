@@ -14,7 +14,12 @@ namespace Atlas.Core
 		//public event EventHandler<EventArgs> OnComplete;
 		public Action OnComplete;
 
-		public string Label => Creator?.Label; // used for Task Label
+		private string _Label;
+		public string Label
+		{ 
+			get => _Label ?? Creator?.Label;
+			set => _Label = value;
+		}
 		public TaskCreator Creator { get; set; }
 		[HiddenColumn]
 		public Call Call { get; set; } = new Call();
@@ -140,11 +145,14 @@ namespace Atlas.Core
 		// allows having progress broken down into multiple tasks
 		public TaskInstance AddSubTask(Call call)
 		{
-			TaskInstance subTask = new TaskInstance();
-			subTask.Creator = Creator;
-			subTask.Call = call;
-			subTask.tokenSource = tokenSource;
-			subTask.ParentTask = this;
+			var subTask = new TaskInstance()
+			{
+				Label = call.Name,
+				Creator = Creator,
+				Call = call,
+				tokenSource = tokenSource,
+				ParentTask = this,
+			};
 			if (ProgressMax > 0)
 				subTask.ProgressMax = 100;
 

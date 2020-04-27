@@ -33,21 +33,24 @@ namespace Atlas.Core
 		public Call Child([CallerMemberName] string name = "", params Tag[] tags)
 		{
 			Log = Log ?? new Log();
-			Call call = new Call();
-			call.Name = name;
-			call.ParentCall = this;
-			call.TaskInstance = TaskInstance;
-			call.Log = Log.Call(name, tags);
-
+			Call call = new Call()
+			{
+				Name = name,
+				ParentCall = this,
+				TaskInstance = TaskInstance,
+				Log = Log.Call(name, tags),
+			};
 			return call;
 		}
 
 		public CallTimer Timer([CallerMemberName] string name = "", params Tag[] tags)
 		{
 			Log = Log ?? new Log();
-			CallTimer call = new CallTimer();
-			call.Name = name;
-			call.ParentCall = this;
+			var call = new CallTimer()
+			{
+				Name = name,
+				ParentCall = this,
+			};
 			call.TaskInstance = TaskInstance?.AddSubTask(call);
 			call.Log = Log.Call(name, tags);
 
