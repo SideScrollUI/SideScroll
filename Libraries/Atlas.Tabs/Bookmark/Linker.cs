@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Atlas.Core;
+using System;
 using System.Collections.Generic;
 
 namespace Atlas.Tabs
@@ -14,7 +15,7 @@ namespace Atlas.Tabs
 			return uri;
 		}
 
-		public virtual Bookmark GetBookmark(string uri)
+		public virtual Bookmark GetBookmark(Call call, string uri)
 		{
 			if (!uri.StartsWith(atlasPrefix))
 				return null;

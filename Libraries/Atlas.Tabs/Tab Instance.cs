@@ -40,6 +40,11 @@ namespace Atlas.Tabs
 		}
 	}
 
+	public abstract class TabInstanceAsync : TabInstance, ITabAsync
+	{
+		public abstract Task LoadAsync(Call call, TabModel model);
+	}
+
 	//	An Instance of a TabModel, created by TabView
 	public class TabInstance : IDisposable
 	{

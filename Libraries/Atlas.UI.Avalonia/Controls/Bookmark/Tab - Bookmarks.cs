@@ -94,7 +94,7 @@ namespace Atlas.UI.Avalonia.Controls
 			private void ButtonImport_Click(Call call)
 			{
 				string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
-				Bookmark bookmark = tab.linker.GetBookmark(clipboardText);
+				Bookmark bookmark = tab.linker.GetBookmark(call, clipboardText);
 				if (bookmark == null)
 					return;
 				SelectBookmark(bookmark.tabBookmark);

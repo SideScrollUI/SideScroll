@@ -160,7 +160,9 @@ namespace Atlas.UI.Avalonia
 		private void ImportBookmark(Call call)
 		{
 			string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().GetAwaiter().GetResult();
-			Bookmark bookmark = linker.GetBookmark(clipboardText);
+			Bookmark bookmark = linker.GetBookmark(call, clipboardText);
+			if (bookmark == null)
+				return;
 			bool reloadBase = true;
 			if (reloadBase)
 			{
@@ -288,7 +290,7 @@ namespace Atlas.UI.Avalonia
 			tabInstance.Model.Name = "Start";
 			tabInstance.Project = project;
 			if (LoadBookmarkUri != null)
-				tabInstance.tabBookmark = linker.GetBookmark(LoadBookmarkUri)?.tabBookmark;
+				tabInstance.tabBookmark = linker.GetBookmark(new Call(), LoadBookmarkUri)?.tabBookmark;
 			else if (project.userSettings.AutoLoad) // did we load successfully last time?
 				tabInstance.LoadDefaultBookmark();
 

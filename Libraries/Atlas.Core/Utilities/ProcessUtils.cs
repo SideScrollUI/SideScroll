@@ -61,9 +61,9 @@ namespace Atlas.Core
 			}
 		}
 
-		public static void StartDotnetProcess(string arguments)
+		public static Process StartDotnetProcess(string arguments)
 		{
-			ProcessStartInfo processStartInfo = new ProcessStartInfo()
+			var processStartInfo = new ProcessStartInfo()
 			{
 				Arguments = arguments,
 				WorkingDirectory = Directory.GetCurrentDirectory(),
@@ -85,6 +85,7 @@ namespace Atlas.Core
 				//processStartInfo.UseShellExecute = true, // doesn't work on mac yet, last checked for dotnet 3.1
 			}
 			Process process = Process.Start(processStartInfo);
+			return process;
 		}
 	}
 }
