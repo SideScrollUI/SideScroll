@@ -454,7 +454,7 @@ namespace Atlas.Tabs
 					if (collection.Count == 0)
 						return false;
 					Type elementType = collection.GetType().GetElementTypeForAll();
-					if (elementType.IsPrimitive)
+					if (elementType != null && elementType.IsPrimitive)
 						return false;
 				}
 
