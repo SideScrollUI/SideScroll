@@ -352,7 +352,7 @@ namespace Atlas.UI.Wpf
 			get
 			{
 				HashSet<SelectedRow> selectedRows = new HashSet<SelectedRow>();
-				Dictionary<object, List<DataGridCellInfo>> orderedRowCells = new Dictionary<object, List<DataGridCellInfo>>();
+				var orderedRowCells = new Dictionary<object, List<DataGridCellInfo>>();
 				foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
 				{
 					if (cellInfo.Column == null)
@@ -532,8 +532,8 @@ namespace Atlas.UI.Wpf
 
 		public List<DataGridCellInfo> GetMatchingCellInfos()
 		{
-			List<DataGridCellInfo> cellInfos = new List<DataGridCellInfo>();
-			Dictionary<string, object> keys = new Dictionary<string, object>(); // todo: change to unordered?
+			var cellInfos = new List<DataGridCellInfo>();
+			var keys = new Dictionary<string, object>(); // todo: change to unordered?
 			foreach (object listItem in iList)
 			{
 				if (listItem == null)

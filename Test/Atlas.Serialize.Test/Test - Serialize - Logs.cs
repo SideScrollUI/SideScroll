@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Atlas.Core;
+﻿using Atlas.Core;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace Atlas.Serialize.Test
 {
@@ -9,13 +9,11 @@ namespace Atlas.Serialize.Test
 	public class SerializeLogs : TestSerializeBase
 	{
 		private SerializerMemory serializer;
-		private Log log;
 		
 		[OneTimeSetUp]
 		public void BaseSetup()
 		{
 			Initialize("Serialize");
-			log = call.log;
 		}
 
 		[SetUp]
@@ -48,7 +46,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Test Log Big")]
 		public void SerializeTestLogBig()
 		{
-			TestLogBig testLog = new TestLogBig();
+			var testLog = new TestLogBig();
 			testLog.Child("test");
 			serializer.Save(call, testLog);
 			TestLogBig output = serializer.Load<TestLogBig>(call);
@@ -134,7 +132,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Log Timer Child Unknown")]
 		public void SerializeLogTimerChildUnknown()
 		{
-			LogTest2 testLog = new LogTest2();
+			var testLog = new LogTest2();
 			testLog.Add(new Tag("abc", 123));
 
 			serializer.Save(call, testLog);

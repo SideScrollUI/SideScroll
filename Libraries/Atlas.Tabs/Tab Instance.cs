@@ -646,10 +646,10 @@ namespace Atlas.Tabs
 			return tabBookmark?.GetSelectedData<T>() ?? new SortedDictionary<string, T>();
 		}
 
-		protected T GetBookmarkData<T>()
+		protected T GetBookmarkData<T>(string name = "default")
 		{
 			if (tabBookmark != null)
-				return tabBookmark.GetData<T>();
+				return tabBookmark.GetData<T>(name);
 			return default;
 		}
 

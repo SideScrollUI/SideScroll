@@ -87,7 +87,7 @@ namespace Atlas.Tabs
 
 			if (ColumnNameOrder?.Count > 0)
 			{
-				Dictionary<string, PropertyInfo> propertyNames = new Dictionary<string, PropertyInfo>();
+				var propertyNames = new Dictionary<string, PropertyInfo>();
 				foreach (PropertyInfo propertyInfo in visibleProperties)
 					propertyNames[propertyInfo.Name] = propertyInfo;
 

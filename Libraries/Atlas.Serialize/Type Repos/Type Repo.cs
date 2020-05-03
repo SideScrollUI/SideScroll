@@ -287,8 +287,7 @@ namespace Atlas.Serialize
 		{
 			if (type.IsPrimitive)
 				return -1;
-			int index;
-			if (!idxObjectToIndex.TryGetValue(obj, out index))
+			if (!idxObjectToIndex.TryGetValue(obj, out int index))
 			{
 				index = idxObjectToIndex.Count;
 				idxObjectToIndex[obj] = index;
@@ -407,7 +406,7 @@ namespace Atlas.Serialize
 						return null;
 					TypeRepo typeRepo = serializer.typeRepos[typeIndex];
 					if (typeRepo.typeSchema.isPrimitive) // object ref can point to primitives
-						return LoadObject();
+						return typeRepo.LoadObject();
 
 					int objectIndex = reader.ReadInt32();
 					return typeRepo.LoadObject(objectIndex);

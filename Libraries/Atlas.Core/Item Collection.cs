@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Atlas.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -41,7 +42,7 @@ namespace Atlas.Core
 			ColumnName = columnName;
 		}
 
-		public override string ToString() => Label ?? base.ToString();
+		public override string ToString() => Label ?? "[" + Count.ToString("N0") + "]";
 
 		// Don't implement List<T>, it isn't sortable
 		public ItemCollection(IEnumerable<T> iEnumerable) :
@@ -91,17 +92,17 @@ namespace Atlas.Core
 		void InitializeContext(bool reset = false);
 	}
 
-	public class ThreadedItemCollection<T> : ObservableCollection<T>, IList, ICollection, IEnumerable, IContext //, IRaiseItemChangedEvents //
+	public class ItemCollectionUI<T> : ObservableCollection<T>, IList, ICollection, IEnumerable, IContext //, IRaiseItemChangedEvents //
 	{
 		public SynchronizationContext Context { get; set; } // inherited from creator (which can be a Parent Log)
 
-		public ThreadedItemCollection()
+		public ItemCollectionUI()
 		{
 			InitializeContext();
 		}
 
 		// Don't implement List<T>, it isn't sortable
-		public ThreadedItemCollection(IEnumerable<T> iEnumerable) :
+		public ItemCollectionUI(IEnumerable<T> iEnumerable) :
 			base(iEnumerable)
 		{
 			InitializeContext();
@@ -139,7 +140,7 @@ namespace Atlas.Core
 			if (Context == SynchronizationContext.Current)
 				InsertItemCallback(location);
 			else
-				Context.Post(new SendOrPostCallback(this.InsertItemCallback), location); // inserting 2 items inserts in wrong order
+				Context.Post(new SendOrPostCallback(InsertItemCallback), location); // inserting 2 items inserts in wrong order
 		}
 
 		// Thread safe callback, only works if the context is the same

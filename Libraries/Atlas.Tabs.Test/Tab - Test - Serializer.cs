@@ -9,11 +9,11 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			private ThreadedItemCollection<ListItem> items;
+			private ItemCollectionUI<ListItem> items;
 
 			public override void Load(Call call, TabModel model)
 			{
-				items = new ThreadedItemCollection<ListItem>();
+				items = new ItemCollectionUI<ListItem>();
 				model.Items = items;
 
 				model.Actions = new ItemCollection<TaskCreator>()

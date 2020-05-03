@@ -25,7 +25,7 @@ namespace Atlas.Serialize.Test
 		[Test, NUnit.Framework.Description("Serialize ItemCollection")]
 		public void SerializeItemCollection()
 		{
-			TestBindingList input = new TestBindingList();
+			var input = new TestBindingList();
 
 			serializer.Save(call, input);
 			TestBindingList output = serializer.Load<TestBindingList>(call);

@@ -66,7 +66,7 @@ namespace Atlas.Serialize
 		{
 			IDictionary dictionary = (IDictionary)obj;
 			
-			writer.Write((int)dictionary.Count);
+			writer.Write(dictionary.Count);
 			foreach (DictionaryEntry item in dictionary)
 			{
 				serializer.WriteObjectRef(typeKey, item.Key, writer);

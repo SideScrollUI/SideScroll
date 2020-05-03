@@ -1,7 +1,7 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using NUnit.Framework;
 
 namespace Atlas.Core.Test
 {
@@ -16,7 +16,7 @@ namespace Atlas.Core.Test
 		[Test, Description("DictionaryTest")]
 		public void DictionaryTest()
 		{
-			Dictionary<int, int> items = new Dictionary<int, int>();
+			var items = new Dictionary<int, int>();
 
 			for (int i = 0; i < 100000; i++)
 			{

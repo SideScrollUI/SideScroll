@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Atlas.Core;
+﻿using Atlas.Core;
 using NUnit.Framework;
+using System.IO;
 
 namespace Atlas.Serialize.Test
 {
@@ -10,13 +8,11 @@ namespace Atlas.Serialize.Test
 	public class SerializeChanges : TestSerializeBase
 	{
 		private SerializerFile serializerFile;
-		private Log log;
 		
 		[OneTimeSetUp]
 		public void BaseSetup()
 		{
 			Initialize("Serialize");
-			log = call.log;
 
 			string basePath = Paths.Combine(TestPath, "Serialize");
 

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Atlas.Core;
+﻿using Atlas.Core;
 using NUnit.Framework;
+using System.IO;
 
 namespace Atlas.Serialize.Test
 {
@@ -10,13 +8,11 @@ namespace Atlas.Serialize.Test
 	public class SerializeLazy : TestSerializeBase
 	{
 		private SerializerFile serializerFile;
-		private Log log;
 		
 		[OneTimeSetUp]
 		public void BaseSetup()
 		{
 			Initialize("SerializeLazy");
-			log = call.log;
 
 			string basePath = Paths.Combine(TestPath, "SerializeLazy");
 
@@ -53,7 +49,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Lazy Write Then Read")]
 		public void SerializeLazyWriteThenRead()
 		{
-			WriteRead input = new WriteRead();
+			var input = new WriteRead();
 
 			serializerFile.Save(call, input);
 			WriteRead output = serializerFile.Load<WriteRead>(call, true);
@@ -66,7 +62,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Lazy Constructor")]
 		public void SerializeLazyConstructor()
 		{
-			Container input = new Container();
+			var input = new Container();
 
 			serializerFile.Save(call, input);
 			Container output = serializerFile.Load<Container>(call, true);

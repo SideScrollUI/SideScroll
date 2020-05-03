@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Atlas.Core;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Atlas.Core;
-using NUnit.Framework;
 
 namespace Atlas.Network.Test
 {

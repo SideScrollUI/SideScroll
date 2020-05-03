@@ -1,9 +1,8 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Atlas.Core;
-using NUnit.Framework;
 
 namespace Atlas.Serialize.Test
 {
@@ -11,13 +10,11 @@ namespace Atlas.Serialize.Test
 	public class SerializeTypes : TestSerializeBase
 	{
 		private SerializerMemory serializer;
-		private Log log;
 		
 		[OneTimeSetUp]
 		public void BaseSetup()
 		{
 			Initialize("Serialize");
-			log = call.log;
 		}
 
 		[SetUp]
@@ -29,13 +26,15 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Primitives")]
 		public void SerializePrimitives()
 		{
-			Primitives input = new Primitives();
-			input.uintTest = 5;
-			input.doubleTest = 2.5;
-			input.stringTest = "abc";
+			var input = new Primitives()
+			{
+				uintTest = 5,
+				doubleTest = 2.5,
+				stringTest = "abc",
+			};
 
 			serializer.Save(call, input);
-			Primitives output = serializer.Load<Primitives>(call);
+			var output = serializer.Load<Primitives>(call);
 
 			Assert.AreEqual(output.uintTest, input.uintTest);
 			Assert.AreEqual(output.doubleTest, input.doubleTest);
@@ -67,12 +66,14 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Nullable Field Primitives")]
 		public void SerializeNullableFieldPrimitives()
 		{
-			NullableFieldPrimitives input = new NullableFieldPrimitives();
-			input.uintTest = 5;
-			input.doubleTest = 2.5;
+			var input = new NullableFieldPrimitives()
+			{
+				uintTest = 5,
+				doubleTest = 2.5,
+			};
 
 			serializer.Save(call, input);
-			NullableFieldPrimitives output = serializer.Load<NullableFieldPrimitives>(call);
+			var output = serializer.Load<NullableFieldPrimitives>(call);
 
 			Assert.AreEqual(output.uintTest, input.uintTest);
 			Assert.AreEqual(output.doubleTest, input.doubleTest);
@@ -81,12 +82,14 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Nullable Properties Primitive")]
 		public void SerializeNullablePropertyPrimitives()
 		{
-			NullablePropertyPrimitives input = new NullablePropertyPrimitives();
-			input.uintTest = 5;
-			input.doubleTest = 2.5;
+			var input = new NullablePropertyPrimitives()
+			{
+				uintTest = 5,
+				doubleTest = 2.5,
+			};
 
 			serializer.Save(call, input);
-			NullablePropertyPrimitives output = serializer.Load<NullablePropertyPrimitives>(call);
+			var output = serializer.Load<NullablePropertyPrimitives>(call);
 
 			Assert.AreEqual(output.uintTest, input.uintTest);
 			Assert.AreEqual(output.doubleTest, input.doubleTest);
@@ -106,7 +109,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Enum")]
 		public void SerializeEnum()
 		{
-			EnumTest input = new EnumTest();
+			var input = new EnumTest();
 			input.testEnum = MyEnum.b;
 
 			serializer.Save(call, input);
@@ -145,7 +148,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Struct")]
 		public void SerializeStruct()
 		{
-			StructTest input = new StructTest()
+			var input = new StructTest()
 			{
 				value = 5
 			};
@@ -234,7 +237,7 @@ namespace Atlas.Serialize.Test
 			};
 
 			serializer.Save(call, input);
-			NullableDateTime output = serializer.Load<NullableDateTime>(call);
+			var output = serializer.Load<NullableDateTime>(call);
 
 			Assert.AreEqual(input.TimeStamp, output.TimeStamp);
 		}
@@ -252,13 +255,14 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Nullable List")]
 		public void SerializeNullableList()
 		{
-			List<int?> input = new List<int?>();
+			var input = new List<int?>();
 			input.Add(null);
 			input.Add(1);
 			input.Add(null);
 			input.Add(2);
+
 			serializer.Save(call, input);
-			List<int?> output = serializer.Load<List<int?>>(call);
+			var output = serializer.Load<List<int?>>(call);
 		}
 
 		private class MultipleArrays
@@ -270,9 +274,9 @@ namespace Atlas.Serialize.Test
 		[Test, Description("ArrayMultipleTest")]
 		public void ArrayMultipleTest()
 		{
-			MultipleArrays arrays = new MultipleArrays();
+			var arrays = new MultipleArrays();
 			serializer.Save(call, arrays);
-			MultipleArrays output = serializer.Load<MultipleArrays>(call);
+			var output = serializer.Load<MultipleArrays>(call);
 		}
 
 
@@ -282,7 +286,7 @@ namespace Atlas.Serialize.Test
 			int[] array1 = { };
 			int[] array2 = { };
 
-			Dictionary<object, int> idxObjectToIndex = new Dictionary<object, int>(); // for saving, not filled in for loading
+			var idxObjectToIndex = new Dictionary<object, int>(); // for saving, not filled in for loading
 			idxObjectToIndex[array1] = idxObjectToIndex.Count;
 
 			if (idxObjectToIndex.ContainsKey(array2))
@@ -298,22 +302,24 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Objects")]
 		public void SerializeObjects()
 		{
-			Objects input = new Objects();
+			var input = new Objects();
 
 			serializer.Save(call, input);
-			Objects output = serializer.Load<Objects>(call);
+			var output = serializer.Load<Objects>(call);
 		}
 
 		[Test, Description("Serialize Properties")]
 		public void SerializeProperties()
 		{
-			Properties input = new Properties();
-			input.uintTest = 5;
-			input.doubleTest = 2.5;
-			input.stringTest = "abc";
+			var input = new Properties()
+			{
+				uintTest = 5,
+				doubleTest = 2.5,
+				stringTest = "abc",
+			};
 
 			serializer.Save(call, input);
-			Properties output = serializer.Load<Properties>(call);
+			var output = serializer.Load<Properties>(call);
 
 			Assert.AreEqual(output.uintTest, input.uintTest);
 			Assert.AreEqual(output.doubleTest, input.doubleTest);
@@ -323,11 +329,11 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Properties")]
 		public void SerializeFieldInterfaceList()
 		{
-			FieldInterfaceList input = new FieldInterfaceList();
+			var input = new FieldInterfaceList();
 			input.list = new List<uint> { 1, 2, 3 };
 
 			serializer.Save(call, input);
-			FieldInterfaceList output = serializer.Load<FieldInterfaceList>(call);
+			var output = serializer.Load<FieldInterfaceList>(call);
 
 			Assert.AreEqual(output.list, input.list);
 		}
@@ -335,7 +341,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Field Subclass")]
 		public void SerializeFieldSubclass()
 		{
-			DerivedClassReference input = new DerivedClassReference();
+			var input = new DerivedClassReference();
 			input.baseClass = new DerivedClass();
 
 			serializer.Save(call, input);
@@ -347,11 +353,11 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Type Dictionary")]
 		public void SerializeTypeDictionary()
 		{
-			Dictionary<Type, string> input = new Dictionary<Type, string>();
+			var input = new Dictionary<Type, string>();
 			input[typeof(int)] = "integer";
 
 			serializer.Save(call, input);
-			Dictionary<Type, string> output = serializer.Load<Dictionary<Type, string>>(call);
+			var output = serializer.Load<Dictionary<Type, string>>(call);
 
 			Assert.IsTrue(output.ContainsKey(typeof(int)));
 			Assert.IsTrue(output.ContainsValue("integer"));
@@ -360,7 +366,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Circular Dependency")]
 		public void SerializeCircular()
 		{
-			Circular input = new Circular();
+			var input = new Circular();
 			input.self = input;
 
 			serializer.Save(call, input);
@@ -372,8 +378,8 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Parent Child")]
 		public void SerializeParentChild()
 		{
-			Parent parent = new Parent();
-			Child child = new Child();
+			var parent = new Parent();
+			var child = new Child();
 			parent.child = child;
 			child.parent = parent;
 
@@ -386,14 +392,14 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize String List")]
 		public void SerializeStringList()
 		{
-			List<string> input = new List<string>()
+			var input = new List<string>()
 			{
 				"abc",
 				"123"
 			};
 
 			serializer.Save(call, input);
-			List<string> output = serializer.Load<List<string>>(call);
+			var output = serializer.Load<List<string>>(call);
 
 			Assert.AreEqual(input[0], output[0]);
 			Assert.AreEqual(input[1], output[1]);
@@ -402,12 +408,12 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize String Dictionary")]
 		public void SerializeStringDictionary()
 		{
-			Dictionary<string, string> input = new Dictionary<string, string>();
+			var input = new Dictionary<string, string>();
 			input["a"] = "1";
 			input["b"] = "2";
 
 			serializer.Save(call, input);
-			Dictionary<string, string> output = serializer.Load<Dictionary<string, string>>(call);
+			var output = serializer.Load<Dictionary<string, string>>(call);
 
 			Assert.AreEqual(input["a"], output["a"]);
 			Assert.AreEqual(input["b"], output["b"]);
@@ -416,7 +422,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Dictionary Circular References")]
 		public void SerializeDictionaryCircularReferences()
 		{
-			DictionaryTest input = new DictionaryTest();
+			var input = new DictionaryTest();
 
 			serializer.Save(call, input);
 			DictionaryTest output = serializer.Load<DictionaryTest>(call);
@@ -441,11 +447,11 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize HashSet")]
 		public void SerializeHashSet()
 		{
-			HashSet<string> input = new HashSet<string>();
+			var input = new HashSet<string>();
 			input.Add("test");
 
 			serializer.Save(call, input);
-			HashSet<string> output = serializer.Load<HashSet<string>>(call);
+			var output = serializer.Load<HashSet<string>>(call);
 
 			Assert.AreEqual(input.Count, output.Count);
 			Assert.True(output.Contains("test"));
@@ -467,8 +473,8 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize HashSet")]
 		public void SerializeHashSetObject()
 		{
-			HashSet<SelectedItem> input = new HashSet<SelectedItem>();
-			SelectedItem inputItem = new SelectedItem()
+			var input = new HashSet<SelectedItem>();
+			var inputItem = new SelectedItem()
 			{
 				label = "abc",
 				pinned = true,
@@ -476,7 +482,7 @@ namespace Atlas.Serialize.Test
 			input.Add(inputItem);
 
 			serializer.Save(call, input);
-			HashSet<SelectedItem> output = serializer.Load<HashSet<SelectedItem>>(call);
+			var output = serializer.Load<HashSet<SelectedItem>>(call);
 
 			Assert.AreEqual(input.Count, output.Count);
 			//Assert.True(output.Contains("test"));
@@ -485,14 +491,14 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Attribute NonSerialized")]
 		public void SerializeAttributeNonSerialized()
 		{
-			NonSerializedTest input = new NonSerializedTest()
+			var input = new NonSerializedTest()
 			{
 				nonSerialized = 5,
 				serialized = 10,
 			};
 
 			serializer.Save(call, input);
-			NonSerializedTest output = serializer.Load<NonSerializedTest>(call);
+			var output = serializer.Load<NonSerializedTest>(call);
 
 			Assert.AreEqual(output.nonSerialized, 1);
 			Assert.AreEqual(output.serialized, 10);
@@ -601,10 +607,10 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize List Containing Subclass of Type")]
 		public void SerializeSubClassContainer()
 		{
-			SubClassContainer input = new SubClassContainer();
+			var input = new SubClassContainer();
 
 			serializer.Save(call, input);
-			SubClassContainer output = serializer.Load<SubClassContainer>(call);
+			var output = serializer.Load<SubClassContainer>(call);
 
 			Assert.AreEqual(output.subSclass.a, input.subSclass.a);
 		}
@@ -612,7 +618,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize List Containing Subclass of Type")]
 		public void SerializeListContainingSubclassOfType()
 		{
-			List<Base> input = new List<Base>();
+			var input = new List<Base>();
 
 			input.Add(new SubClass() { a = 5 });
 			serializer.Save(call, input);
@@ -625,14 +631,14 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Dictionary Containing Subclass of Type")]
 		public void SerializeDictionaryContainingSubclassOfType()
 		{
-			Dictionary<Base, Base> input = new Dictionary<Base, Base>();
+			var input = new Dictionary<Base, Base>();
 
 			Base b = new Base();
 			SubClass s = new SubClass();
 			s.b = 3;
 			input[s] = b;
 			serializer.Save(call, input);
-			Dictionary<Base, Base> output = serializer.Load<Dictionary<Base, Base>>(call);
+			var output = serializer.Load<Dictionary<Base, Base>>(call);
 
 			Assert.AreEqual(s.b, 3);
 		}
@@ -653,6 +659,18 @@ namespace Atlas.Serialize.Test
 			{
 				a = 3
 			};
+		}
+
+		[Test, Description("Serialize Dictionary Containing Subclass of Type")]
+		public void SerializeDictionaryOfObjects()
+		{
+			var input = new Dictionary<string, object>();
+			input.Add("default", true);
+
+			serializer.Save(call, input);
+			var output = serializer.Load<Dictionary<string, object>>(call);
+
+			Assert.AreEqual(true, output["default"]);
 		}
 	}
 }

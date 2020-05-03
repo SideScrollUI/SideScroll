@@ -417,7 +417,7 @@ namespace Atlas.Serialize
 			//if (type.IsInterface || type.IsAbstract)
 			//	return null;
 
-			TypeSchema typeSchema = new TypeSchema(type)
+			var typeSchema = new TypeSchema(type)
 			{
 				typeIndex = typeSchemas.Count,
 			};

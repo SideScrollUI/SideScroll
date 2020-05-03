@@ -16,9 +16,9 @@ namespace Atlas.Serialize
 
 		public void Save(Call call, object obj)
 		{
-			using (BinaryWriter writer = new BinaryWriter(stream, System.Text.Encoding.Default, true))
+			using (var writer = new BinaryWriter(stream, Encoding.Default, true))
 			{
-				Serializer serializer = new Serializer();
+				var serializer = new Serializer();
 				serializer.AddObject(call, obj);
 				serializer.Save(call, writer);
 			}
@@ -28,9 +28,9 @@ namespace Atlas.Serialize
 		{
 			call = call ?? new Call();
 			stream.Seek(0, SeekOrigin.Begin);
-			using (BinaryReader reader = new BinaryReader(stream))
+			using (var reader = new BinaryReader(stream))
 			{
-				Serializer serializer = new Serializer();
+				var serializer = new Serializer();
 				serializer.Load(call, reader);
 				return (T)serializer.BaseObject();
 			}
@@ -40,9 +40,9 @@ namespace Atlas.Serialize
 		{
 			call = call ?? new Call();
 			stream.Seek(0, SeekOrigin.Begin);
-			using (BinaryReader reader = new BinaryReader(stream))
+			using (var reader = new BinaryReader(stream))
 			{
-				Serializer serializer = new Serializer();
+				var serializer = new Serializer();
 				serializer.Load(call, reader);
 				return serializer.BaseObject();
 			}
@@ -58,7 +58,7 @@ namespace Atlas.Serialize
 			//	return default;
 			try
 			{
-				SerializerMemory memorySerializer = new SerializerMemory();
+				var memorySerializer = new SerializerMemory();
 				memorySerializer.Save(call, obj);
 				T copy = memorySerializer.Load<T>(call);
 				return copy;
@@ -74,7 +74,7 @@ namespace Atlas.Serialize
 		{
 			try
 			{
-				SerializerMemory memorySerializer = new SerializerMemory();
+				var memorySerializer = new SerializerMemory();
 				memorySerializer.Save(call, obj);
 				object copy = memorySerializer.Load(call);
 				return copy;
