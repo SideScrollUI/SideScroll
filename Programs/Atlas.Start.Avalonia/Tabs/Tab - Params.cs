@@ -1,7 +1,7 @@
 ﻿using Atlas.Core;
 using Atlas.Tabs;
-using Atlas.UI.Avalonia.Controls;
 using System;
+using System.Collections.Generic;
 
 namespace Atlas.Start.Avalonia.Tabs
 {
@@ -19,7 +19,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			{
 				model.Items = items;
 
-				model.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Run", Run),
 					new TaskDelegate("10s Task", LongTask, true),

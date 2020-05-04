@@ -16,7 +16,7 @@ namespace Atlas.Tabs.Tools
 				model.Items = ListProperty.Create(this.Project.projectSettings);
 				model.Editing = true;
 
-				model.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Reset", Reset),
 					new TaskDelegate("Save", Save),

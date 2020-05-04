@@ -16,7 +16,7 @@ namespace Atlas.Tabs.Test
 				items = new ItemCollectionUI<ListItem>();
 				model.Items = items;
 
-				model.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Serialize 1 object", Serialize, true, true),
 					new TaskDelegate("Deserialize 1 object", Deserialize, true, true),

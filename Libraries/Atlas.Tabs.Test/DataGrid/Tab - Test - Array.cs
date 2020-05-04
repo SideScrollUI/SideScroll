@@ -22,7 +22,7 @@ namespace Atlas.Tabs.Test.DataGrid
 					new ListItem("String Array", new string[] { "abc", "123" }),
 				};
 
-				/*tabModel.Actions = new ItemCollection<TaskCreator>() {
+				/*tabModel.Actions = new List<TaskCreator>() {
 				//new TaskAction("Add Entries", AddEntries),
 				};*/
 			}

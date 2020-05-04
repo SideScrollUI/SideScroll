@@ -29,7 +29,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Log Entry", new LogEntry(LogEntry.LogType.Info, "test", null)),
 				};
 
-				model.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskAction("Add 1 Entry", new Action(() => AddEntries(1))),
 					new TaskAction("Add 10 Entries", new Action(() => AddEntries(10))),
@@ -47,7 +47,7 @@ namespace Atlas.Tabs.Test
 
 			private void Reset(Call call)
 			{
-				base.Reintialize(true);
+				Reintialize(true);
 			}
 
 			private void SubTaskInstances(Call call)

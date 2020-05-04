@@ -1,5 +1,6 @@
 ﻿using Atlas.Core;
 using Atlas.Serialize;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test
 {
@@ -19,7 +20,7 @@ namespace Atlas.Tabs.Test
 				navigator.History.RemoveAt(navigator.History.Count - 1); // remove the current in progress bookmark
 				navigator.CurrentIndex = navigator.History.Count;
 
-				model.Items = new ItemCollection<ListItem>()
+				model.Items = new List<ListItem>()
 				{
 					new ListItem("Navigator (snapshot)", navigator),
 					//new ListItem("Recursive Tab", new TabSample()),

@@ -27,7 +27,7 @@ namespace Atlas.Tabs.Test.Actions
 
 			public override void Load(Call call, TabModel model)
 			{
-				model.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Reload", ReloadInstance),
 				};

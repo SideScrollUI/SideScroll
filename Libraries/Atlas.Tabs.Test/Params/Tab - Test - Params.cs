@@ -20,7 +20,7 @@ namespace Atlas.Tabs.Test
 			{
 				model.Items = items;
 
-				model.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Add", Add),
 					new TaskDelegate("10s Task", LongTask, true),

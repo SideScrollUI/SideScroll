@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test.Actions
 {
@@ -21,7 +22,7 @@ namespace Atlas.Tabs.Test.Actions
 				model.Editing = true;
 				//model.AddInput(logEntry);
 
-				model.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Add Log Entry", AddEntry),
 				};

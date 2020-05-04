@@ -25,7 +25,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Recursive Copy", new TabSample()),
 				};
 
-				model.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Sleep 10s", Sleep, true),
 					new TaskAction("Add 5 Items", new Action(() => AddItems(5)), false), // Foreground task so we can modify collection
