@@ -267,6 +267,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				AddDateTimeAxis(ListGroup.StartTime, ListGroup.EndTime);
 				AddNowTime();
+				//AddTrackerLine();
 			}
 			else
 			{
@@ -610,7 +611,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public OxyPlot.Series.LineSeries AddListSeries(ListSeries listSeries)
 		{
-			string xTrackerFormat = listSeries.xPropertyName ?? "Index" + ": {2:#,0.###}";
+			string xTrackerFormat = listSeries.xPropertyName ?? "Index: {2:#,0.###}";
 			if (UseDateTimeAxis || listSeries.xPropertyInfo?.PropertyType == typeof(DateTime))
 				xTrackerFormat = "Time: {2:yyyy-M-d H:mm:ss.FFF}";
 			var lineSeries = new OxyPlot.Series.LineSeries
@@ -788,6 +789,23 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 
 			plotModel.Annotations.Add(annotation);
+		}
+
+		private OxyPlot.Annotations.LineAnnotation trackerAnnotation;
+		private void AddTrackerLine()
+		{
+			var now = DateTime.UtcNow;
+			if (ListGroup.EndTime < now.AddMinutes(1))
+				return;
+			trackerAnnotation = new OxyPlot.Annotations.LineAnnotation
+			{
+				Type = LineAnnotationType.Vertical,
+				//X = OxyPlot.Axes.DateTimeAxis.ToDouble(now.ToUniversalTime()),
+				Color = nowColor,
+				// LineStyle = LineStyle.Dot, // doesn't work for vertical?
+			};
+
+			plotModel.Annotations.Add(trackerAnnotation);
 		}
 
 		/*private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

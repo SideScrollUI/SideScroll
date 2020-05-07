@@ -153,16 +153,18 @@ namespace Atlas.UI.Avalonia
 		private void Link(Call call)
 		{
 			Bookmark bookmark = tabView.tabInstance.CreateBookmark();
-			string uri = linker.GetLinkUri(bookmark);
+			string uri = linker.GetLinkUri(call, bookmark);
 			((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(uri);
 		}
 
 		private void ImportBookmark(Call call)
 		{
 			string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().GetAwaiter().GetResult();
-			Bookmark bookmark = linker.GetBookmark(call, clipboardText);
+
+			Bookmark bookmark = linker.GetBookmark(call, clipboardText, true);
 			if (bookmark == null)
 				return;
+
 			bool reloadBase = true;
 			if (reloadBase)
 			{
@@ -290,7 +292,7 @@ namespace Atlas.UI.Avalonia
 			tabInstance.Model.Name = "Start";
 			tabInstance.Project = project;
 			if (LoadBookmarkUri != null)
-				tabInstance.tabBookmark = linker.GetBookmark(new Call(), LoadBookmarkUri)?.tabBookmark;
+				tabInstance.tabBookmark = linker.GetBookmark(new Call(), LoadBookmarkUri, false)?.tabBookmark;
 			else if (project.userSettings.AutoLoad) // did we load successfully last time?
 				tabInstance.LoadDefaultBookmark();
 
@@ -346,7 +348,7 @@ namespace Atlas.UI.Avalonia
 				Rect bounds = Bounds;
 				if (maximized && TransformedBounds != null)
 					bounds = TransformedBounds.Value.Bounds;
-				WindowSettings windowSettings = new WindowSettings()
+				var windowSettings = new WindowSettings()
 				{
 					Maximized = maximized,
 					Width = bounds.Width,

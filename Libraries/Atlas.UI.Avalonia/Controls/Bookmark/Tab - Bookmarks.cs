@@ -87,14 +87,14 @@ namespace Atlas.UI.Avalonia.Controls
 			private void ButtonLink_Click(Call call)
 			{
 				var bookmark = CreateBookmark();
-				string uri = tab.linker.GetLinkUri(bookmark);
+				string uri = tab.linker.GetLinkUri(call, bookmark);
 				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(uri);
 			}
 
 			private void ButtonImport_Click(Call call)
 			{
 				string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
-				Bookmark bookmark = tab.linker.GetBookmark(call, clipboardText);
+				Bookmark bookmark = tab.linker.GetBookmark(call, clipboardText, false);
 				if (bookmark == null)
 					return;
 				SelectBookmark(bookmark.tabBookmark);

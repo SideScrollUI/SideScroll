@@ -22,7 +22,7 @@ namespace Atlas.Core
 			if (!match.Success)
 				return null;
 
-			BookmarkUri uri = new BookmarkUri()
+			var uri = new BookmarkUri()
 			{
 				Url = url,
 				Prefix = match.Groups["prefix"].Value.ToLower(),
