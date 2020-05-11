@@ -51,7 +51,7 @@ namespace Atlas.UI.Avalonia
 
 		protected TextBlock CreateTextBlock(DataGridCell cell, object dataItem)
 		{
-			SubTextBlock textBlockElement = new SubTextBlock()
+			var textBlockElement = new SubTextBlock()
 			{
 				Margin = new Thickness(4),
 				VerticalAlignment = VerticalAlignment.Center,

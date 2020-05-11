@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -126,7 +127,7 @@ namespace Atlas.UI.Avalonia.Controls
 			HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
 			VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
 			MaxWidth = 1500;
-			MaxHeight = 1000;
+			MaxHeight = 600;
 
 			if (tabInstance.tabViewSettings.ChartDataSettings.Count == 0)
 				tabInstance.tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
@@ -155,7 +156,7 @@ namespace Atlas.UI.Avalonia.Controls
 				TargetType = typeof(object),
 			};*/
 
-			Grid containerGrid = new Grid()
+			var containerGrid = new Grid()
 			{
 				ColumnDefinitions = new ColumnDefinitions("*,Auto"),
 				RowDefinitions = new RowDefinitions("*,Auto"),

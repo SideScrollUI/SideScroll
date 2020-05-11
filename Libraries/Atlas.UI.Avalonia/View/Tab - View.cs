@@ -459,9 +459,9 @@ namespace Atlas.UI.Avalonia.View
 		{
 			foreach (var listGroupPair in chartSettings.ListGroups)
 			{
-				TabControlChart tabChart = new TabControlChart(tabInstance, listGroupPair.Value);
+				var tabChart = new TabControlChart(tabInstance, listGroupPair.Value);
 
-				tabParentControls.AddControl(tabChart, false, SeparatorType.Spacer);
+				tabParentControls.AddControl(tabChart, true, SeparatorType.Spacer);
 				//tabChart.OnSelectionChanged += ListData_OnSelectionChanged;
 			}
 		}
@@ -472,7 +472,7 @@ namespace Atlas.UI.Avalonia.View
 			int index = 0;
 			foreach (IList iList in Model.ItemList)
 			{
-				TabControlDataGrid tabData = new TabControlDataGrid(tabInstance, iList, true, TabViewSettings.GetData(index));
+				var tabData = new TabControlDataGrid(tabInstance, iList, true, TabViewSettings.GetData(index));
 				//tabData.HorizontalAlignment = HorizontalAlignment.Stretch;
 				//tabData.VerticalAlignment = VerticalAlignment.Stretch;
 				tabData.OnSelectionChanged += ParentListSelectionChanged;
@@ -508,7 +508,7 @@ namespace Atlas.UI.Avalonia.View
 				FontSize = 16,
 				Margin = new Thickness(4),
 			};*/
-			TextBox textBox = new TextBox()
+			var textBox = new TextBox()
 			{
 				Text = text,
 				Foreground = new SolidColorBrush(Colors.White),

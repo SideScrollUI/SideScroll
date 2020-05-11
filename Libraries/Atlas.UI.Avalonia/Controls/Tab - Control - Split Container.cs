@@ -122,7 +122,7 @@ namespace Atlas.UI.Avalonia.Controls
 			else if (separatorType == SeparatorType.Splitter)
 				AddRowSpacer(RowDefinitions.Count);*/
 
-			RowDefinition rowDefinition = new RowDefinition();
+			var rowDefinition = new RowDefinition();
 			if (fill)
 				rowDefinition.Height = new GridLength(1, GridUnitType.Star);
 			else
@@ -144,7 +144,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			AddSeparatorRowDefinition(index - 1);
 
-			RowDefinition rowDefinition = new RowDefinition();
+			var rowDefinition = new RowDefinition();
 			if (fill)
 				rowDefinition.Height = new GridLength(1, GridUnitType.Star);
 			else
@@ -191,8 +191,10 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddSeparatorRowDefinition(int index)
 		{
-			RowDefinition rowDefinition = new RowDefinition();
-			rowDefinition.Height = GridLength.Auto;
+			var rowDefinition = new RowDefinition()
+			{
+				Height = GridLength.Auto,
+			};
 			RowDefinitions.Insert(index, rowDefinition);
 		}
 
@@ -202,7 +204,7 @@ namespace Atlas.UI.Avalonia.Controls
 			rowDefinition.Height = new GridLength(6);
 			RowDefinitions.Insert(index, rowDefinition);*/
 
-			GridSplitter gridSplitter = new GridSplitter()
+			var gridSplitter = new GridSplitter()
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				Background = Brushes.Black,
@@ -227,7 +229,7 @@ namespace Atlas.UI.Avalonia.Controls
 			rowDefinition.Height = new GridLength(5);
 			RowDefinitions.Add(rowDefinition);*/
 
-			Border border = new Border
+			var border = new Border
 			{
 				//Width = 100,
 				Height = 6,

@@ -20,16 +20,14 @@ namespace Atlas.Tabs
 		{
 
 		}
-		public ChartSettings(IList iList)
+		public ChartSettings(IList iList, string name = null)
 		{
+			Name = name;
+			DefaultListGroup.Name = name ?? DefaultListGroup.Name;
 			LoadList(iList);
 		}
 
-		public override string ToString()
-		{
-			return string.Join(" ", ListSeries);
-			//return ListSeries[0].ToString(); // todo: fix for multiple
-		}
+		public override string ToString() => string.Join(" ", ListSeries);
 
 		public void LoadList(IList iList)
 		{
@@ -56,7 +54,7 @@ namespace Atlas.Tabs
 					continue;
 				if (propertyInfo.PropertyType.IsNumeric())
 				{
-					ListSeries listSeries = new ListSeries(iList, xAxisPropertyInfo, propertyInfo);
+					var listSeries = new ListSeries(iList, xAxisPropertyInfo, propertyInfo);
 					//listProperties.Add(listSeries);
 
 					ListGroup listGroup = DefaultListGroup;
@@ -86,7 +84,7 @@ namespace Atlas.Tabs
 		// todo: this needs to be reworked when a use is found
 		public void AddList(string label, IList iList)
 		{
-			ListSeries listSeries = new ListSeries(label, iList);
+			var listSeries = new ListSeries(label, iList);
 
 			//ListGroup listGroup;
 			//if (ListGroups.TryGetValue(label, out listGroup)

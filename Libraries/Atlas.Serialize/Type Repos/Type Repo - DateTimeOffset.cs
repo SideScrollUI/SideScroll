@@ -47,9 +47,9 @@ namespace Atlas.Serialize
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
 			long value = BitConverter.ToInt64(bytes, byteOffset);
-			DateTime dateTime = new DateTime(value);
+			var dateTime = new DateTime(value);
 			byteOffset += sizeof(long);
-			DateTimeOffset offset = new DateTimeOffset(dateTime);
+			var offset = new DateTimeOffset(dateTime);
 			objects[objectIndex] = offset;
 			return offset;
 		}
@@ -65,7 +65,7 @@ namespace Atlas.Serialize
 				if (CanAssign(type))
 				{
 					long ticks = reader.ReadInt64();
-					DateTime dateTime = new DateTime(ticks, DateTimeKind.Utc);
+					var dateTime = new DateTime(ticks, DateTimeKind.Utc);
 					obj = new DateTimeOffset(dateTime);
 				}
 				else
@@ -96,9 +96,9 @@ namespace Atlas.Serialize
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
 		{
 			long value = BitConverter.ToInt64(bytes, byteOffset);
-			DateTime dateTime = new DateTime(value, DateTimeKind.Utc);
+			var dateTime = new DateTime(value, DateTimeKind.Utc);
 			byteOffset += sizeof(long);
-			DateTimeOffset offset = new DateTimeOffset(dateTime);
+			var offset = new DateTimeOffset(dateTime);
 			//objects[objectIndex] = offset;
 			return offset;
 		}
