@@ -25,7 +25,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 				for (int i = 0; i < 100; i++)
 				{
-					TestWideItem testItem = new TestWideItem();
+					var testItem = new TestWideItem();
 					testItem.smallNumber = i;
 					testItem.bigNumber += i;
 					if (i % 3 == 0)

@@ -17,16 +17,17 @@ namespace Atlas.Tabs.Test.DataGrid
 				AddEntries(null);
 				model.AddData(items);
 
-				ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>();
-				actions.Add(new TaskDelegate("Add Entries", AddEntries));
-				model.Actions =  actions;
+				model.Actions = new ItemCollection<TaskCreator>()
+				{
+					new TaskDelegate("Add Entries", AddEntries),
+				};
 			}
 
 			private void AddEntries(Call call)
 			{
 				for (int i = 0; i < 20; i++)
 				{
-					TabTestGridCollectionSize.TestItem testItem = new TabTestGridCollectionSize.TestItem();
+					var testItem = new TabTestGridCollectionSize.TestItem();
 					testItem.smallNumber = i;
 					testItem.bigNumber += i;
 					items.Add(testItem);

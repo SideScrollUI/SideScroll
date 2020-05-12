@@ -156,7 +156,7 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			//panelNew.Visibility = Visibility.Visible;
 			//textBoxName.Clear();
-			TextBlock textBlock = new TextBlock()
+			var textBlock = new TextBlock()
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				Text = "Name:",
@@ -268,7 +268,7 @@ namespace Atlas.UI.Avalonia.Controls
 				return;
 
 			// Show merged set of selected bookmarks
-			Bookmark selectedBookmarks = new Bookmark();
+			var selectedBookmarks = new Bookmark();
 			selectedBookmarks.MergeBookmarks(bookmarks);
 			tabInstance.SelectBookmark(selectedBookmarks.tabBookmark);
 		}

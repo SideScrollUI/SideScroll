@@ -46,7 +46,7 @@ namespace Atlas.Serialize
 		public SerializerFile GetSerializerFile(Type type, string directory, string name)
 		{
 			string dataPath = GetHashedDataPath(type, directory, name);
-			SerializerFile serializer = new SerializerFile(dataPath, name);
+			var serializer = new SerializerFile(dataPath, name);
 			return serializer;
 		}
 
@@ -128,7 +128,7 @@ namespace Atlas.Serialize
 					if (File.Exists(dataPath) == false)
 						continue;
 
-					SerializerFile serializerFile = new SerializerFile(dataPath, fileName);
+					var serializerFile = new SerializerFile(dataPath, fileName);
 
 					if (serializerFile.Exists)
 					{
@@ -146,7 +146,7 @@ namespace Atlas.Serialize
 			call = call ?? new Call();
 			directory = directory ?? DefaultDirectory;
 
-			ItemCollection<Header> list = new ItemCollection<Header>();
+			var list = new ItemCollection<Header>();
 
 			string typePath = GetTypePath(type, directory);
 			if (Directory.Exists(typePath))
@@ -158,7 +158,7 @@ namespace Atlas.Serialize
 					if (File.Exists(dataPath) == false)
 						continue;
 
-					SerializerFile serializerFile = new SerializerFile(dataPath, fileName);
+					var serializerFile = new SerializerFile(dataPath, fileName);
 					if (serializerFile.Exists)
 					{
 						Header header = serializerFile.LoadHeader(call);

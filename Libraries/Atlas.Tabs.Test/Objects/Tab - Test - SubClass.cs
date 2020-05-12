@@ -10,7 +10,7 @@ namespace Atlas.Tabs.Test.Objects
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				ItemCollection<ParentClass> items = new ItemCollection<ParentClass>();
+				var items = new ItemCollection<ParentClass>();
 
 				for (int i = 0; i < 1; i++)
 					items.Add(new ParentClass());

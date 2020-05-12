@@ -44,7 +44,7 @@ namespace Atlas.Network
 						WebResponse response = request.GetResponse();
 						Stream dataStream = response.GetResponseStream();
 
-						MemoryStream memoryStream = new MemoryStream();
+						var memoryStream = new MemoryStream();
 						dataStream.CopyTo(memoryStream);
 						byte[] data = memoryStream.ToArray();
 						

@@ -56,7 +56,7 @@ namespace Atlas.Extensions
 		{
 			if (string.IsNullOrWhiteSpace(text))
 				return "";
-			StringBuilder newText = new StringBuilder(text.Length * 2);
+			var newText = new StringBuilder(text.Length * 2);
 			bool upperCase = true;
 			char prevChar = ' ';
 			for (int i = 0; i < text.Length; i++)

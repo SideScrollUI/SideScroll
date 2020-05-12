@@ -45,13 +45,7 @@ namespace Atlas.Network
 
 		private Dictionary<string, Entry> cache = new Dictionary<string, Entry>();
 		public string BasePath { get; set; }
-		public long Size
-		{
-			get
-			{
-				return dataStream.Length;
-			}
-		}
+		public long Size => dataStream.Length;
 		private string indexPath;
 		private string dataPath;
 		private Stream indexStream;
@@ -100,12 +94,12 @@ namespace Atlas.Network
 		private void LoadIndex()
 		{
 			indexStream.Seek(0, SeekOrigin.Begin);
-			using (BinaryReader indexReader = new BinaryReader(indexStream, Encoding.Default, true))
+			using (var indexReader = new BinaryReader(indexStream, Encoding.Default, true))
 			{
 				LoadHeader(indexReader);
 				while (indexReader.PeekChar() >= 0)
 				{
-					Entry entry = new Entry();
+					var entry = new Entry();
 					entry.Uri = indexReader.ReadString();
 					entry.Offset = indexReader.ReadInt64();
 					entry.Size = indexReader.ReadInt32();
@@ -134,7 +128,7 @@ namespace Atlas.Network
 				var entries = new List<LoadableEntry>();
 				foreach (Entry entry in cache.Values)
 				{
-					LoadableEntry loadableEntry = new LoadableEntry()
+					var loadableEntry = new LoadableEntry()
 					{
 						Uri = entry.Uri,
 						Size = entry.Size,
@@ -153,24 +147,25 @@ namespace Atlas.Network
 			lock (entryLock)
 			{
 				// todo: add support for updating entries
-				Entry entry;
-				if (cache.TryGetValue(uri, out entry))
+				if (cache.TryGetValue(uri, out Entry entry))
 					return;
 
-				entry = new Entry();
-				entry.Uri = uri;
-				entry.Size = bytes.Length;
-				entry.Downloaded = DateTime.Now;
+				entry = new Entry()
+				{
+					Uri = uri,
+					Size = bytes.Length,
+					Downloaded = DateTime.Now,
+				};
 
 				// todo: seek to last entry instead since the last entry might be incomplete
-				using (BinaryWriter dataWriter = new BinaryWriter(dataStream, Encoding.Default, true))
+				using (var dataWriter = new BinaryWriter(dataStream, Encoding.Default, true))
 				{
 					dataWriter.Seek(0, SeekOrigin.End);
 					entry.Offset = dataStream.Position;
 					dataWriter.Write(bytes);
 				}
 
-				using (BinaryWriter indexWriter = new BinaryWriter(indexStream, Encoding.Default, true))
+				using (var indexWriter = new BinaryWriter(indexStream, Encoding.Default, true))
 				{
 					indexWriter.Seek(0, SeekOrigin.End);
 					indexWriter.Write(entry.Uri);
@@ -191,12 +186,11 @@ namespace Atlas.Network
 		{
 			lock (entryLock)
 			{
-				Entry entry;
-				if (!cache.TryGetValue(uri, out entry))
+				if (!cache.TryGetValue(uri, out Entry entry))
 					return null;
 
 				dataStream.Position = entry.Offset;
-				using (BinaryReader dataReader = new BinaryReader(dataStream, Encoding.Default, true))
+				using (var dataReader = new BinaryReader(dataStream, Encoding.Default, true))
 				{
 					byte[] data = dataReader.ReadBytes(entry.Size);
 					return data;

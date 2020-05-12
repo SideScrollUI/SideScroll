@@ -22,7 +22,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			public override void LoadUI(Call call, TabModel model)
 			{
 				myParams = new MyParams();
-				TabControlMyParams tabMyParams = new TabControlMyParams(this, myParams);
+				var tabMyParams = new TabControlMyParams(this, myParams);
 				model.AddObject(tabMyParams);
 
 				toolbar = new TabControlSearchToolbar();

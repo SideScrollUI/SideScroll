@@ -20,23 +20,23 @@ namespace Atlas.Core
 			if (xType != yType)
 				return 0;
 
-			if (x is string)
+			if (x is string xString && y is string yString)
 			{
-				return string.Compare((string)x, (string)y);// , true); // performance hit?
+				return string.Compare(xString, yString);// , true); // performance hit?
 			}
 
-			if (x is ICollection)
+			if (x is ICollection xCollection && y is ICollection yCollection)
 			{
-				if (((ICollection)x).Count == ((ICollection)y).Count)
+				if (xCollection.Count == yCollection.Count)
 					return 0;
-				else if (((ICollection)x).Count < ((ICollection)y).Count)
+				else if (xCollection.Count < yCollection.Count)
 					return -1;
 				else
 					return 1;
 			}
 
-			if (x is IComparable)
-				return ((IComparable)x).CompareTo(y);
+			if (x is IComparable xComparable)
+				return xComparable.CompareTo(y);
 
 			if (xType.IsPrimitive || xType.IsEnum)
 			{

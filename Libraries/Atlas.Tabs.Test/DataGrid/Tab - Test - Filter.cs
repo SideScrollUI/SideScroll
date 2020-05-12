@@ -8,21 +8,19 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			private ItemCollection<TestFilterItem> items;
-
 			public override void Load(Call call, TabModel model)
 			{
 				string characters = "abcdefghijklmn";
-				items = new ItemCollection<TestFilterItem>();
+				var items = new ItemCollection<TestFilterItem>();
 				for (int i = 0; i < 2; i++)
 				{
-					TestFilterItem item = new TestFilterItem()
+					var item = new TestFilterItem()
 					{
 						Text = "Item " + i,
 						Number = i
 					};
 
-					TestFilterItem child = new TestFilterItem()
+					var child = new TestFilterItem()
 					{
 						Text = characters[i].ToString(),
 						Number = i

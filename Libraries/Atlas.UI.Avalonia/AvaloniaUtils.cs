@@ -17,15 +17,15 @@ namespace Atlas.UI.Avalonia
 			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 
 			var list = new AvaloniaList<object>();
-			MenuItem menuItemCut = new MenuItem() { Header = "Cut" };
+			var menuItemCut = new MenuItem() { Header = "Cut" };
 			menuItemCut.Click += delegate { SendTextBoxKey(textBox, keymap.Cut); };
 			list.Add(menuItemCut);
 
-			MenuItem menuItemCopy = new MenuItem() { Header = "_Copy" };
+			var menuItemCopy = new MenuItem() { Header = "_Copy" };
 			menuItemCopy.Click += delegate { SendTextBoxKey(textBox, keymap.Copy); };
 			list.Add(menuItemCopy);
 
-			MenuItem menuItemPaste = new MenuItem() { Header = "Paste" };
+			var menuItemPaste = new MenuItem() { Header = "Paste" };
 			menuItemPaste.Click += delegate { SendTextBoxKey(textBox, keymap.Paste); };
 			list.Add(menuItemPaste);
 

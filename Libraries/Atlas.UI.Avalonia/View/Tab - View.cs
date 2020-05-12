@@ -191,7 +191,7 @@ namespace Atlas.UI.Avalonia.View
 			containerGrid.Children.Add(tabParentControls);
 			UpdateSplitterDistance();
 
-			TabControlTitle tabTitle = new TabControlTitle(tabInstance, Model.Name);
+			var tabTitle = new TabControlTitle(tabInstance, Model.Name);
 			tabParentControls.AddControl(tabTitle, false, SeparatorType.None);
 		}
 

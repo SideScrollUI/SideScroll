@@ -25,7 +25,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			ColumnDefinitions = new ColumnDefinitions("*,*");
 			var backgroundColor = property.Editable ? Colors.White : Colors.LightGray;
-			DatePicker datePicker = new DatePicker()
+			var datePicker = new DatePicker()
 			{
 				Background = new SolidColorBrush(backgroundColor),
 				BorderBrush = new SolidColorBrush(Colors.Black),
@@ -52,7 +52,7 @@ namespace Atlas.UI.Avalonia.Controls
 			datePicker.Bind(DatePicker.SelectedDateProperty, binding);
 			Children.Add(datePicker);
 
-			TextBox textBox = new TabControlTextBox()
+			var textBox = new TabControlTextBox()
 			{
 				IsReadOnly = !property.Editable,
 				Watermark = "15:30:45",
@@ -119,7 +119,7 @@ namespace Atlas.UI.Avalonia.Controls
 				Height = 16,
 			};
 
-			Button button = new Button()
+			var button = new Button()
 			{
 				Content = image,
 				//Command = command,

@@ -29,14 +29,16 @@ namespace Atlas.Tabs
 
 		public BookmarkNavigator()
 		{
-			Bookmark bookmark = new Bookmark();
-			bookmark.Name = "Start";
+			var bookmark = new Bookmark()
+			{
+				Name = "Start",
+			};
 			Append(bookmark, true);
 		}
 
 		public override string ToString()
 		{
-			return CurrentIndex.ToString() + " / " + History.Count.ToString();
+			return CurrentIndex.ToString() + " / " + History.Count;
 		}
 
 		public void Append(Bookmark bookmark, bool makeCurrent)

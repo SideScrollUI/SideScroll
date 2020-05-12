@@ -120,11 +120,11 @@ namespace Atlas.Serialize
 
 			// GET
 
-			MethodBuilder getPropertyMethodBuilder = typeBuilder.DefineMethod("get_" + propertyName, 
-				MethodAttributes.Public | 
-				MethodAttributes.Virtual | 
-				MethodAttributes.SpecialName | 
-				MethodAttributes.HideBySig, 
+			MethodBuilder getPropertyMethodBuilder = typeBuilder.DefineMethod("get_" + propertyName,
+				MethodAttributes.Public |
+				MethodAttributes.Virtual |
+				MethodAttributes.SpecialName |
+				MethodAttributes.HideBySig,
 				propertyType, Type.EmptyTypes);
 			ILGenerator getIl = getPropertyMethodBuilder.GetILGenerator();
 
@@ -182,7 +182,7 @@ namespace Atlas.Serialize
 			setIl.Emit(OpCodes.Ldarg_0); // load this
 			setIl.Emit(OpCodes.Ldc_I4_1); // load 1 (true)
 			setIl.Emit(OpCodes.Stfld, fieldBuilderLoaded);
-			
+
 			// save value to inner property
 
 			// set value
@@ -195,11 +195,13 @@ namespace Atlas.Serialize
 			propertyBuilder.SetGetMethod(getPropertyMethodBuilder);
 			propertyBuilder.SetSetMethod(setPropertyMethodBuilder);
 
-			LazyProperty lazyProperty = new LazyProperty();
-			lazyProperty.propertyInfoOriginal = propertyInfo;
-			lazyProperty.propertyBuilder = propertyBuilder;
-			lazyProperty.fieldBuilderTypeRef = fieldBuilderTypeRef;
-			lazyProperty.fieldBuilderLoaded = fieldBuilderLoaded;
+			var lazyProperty = new LazyProperty()
+			{
+				propertyInfoOriginal = propertyInfo,
+				propertyBuilder = propertyBuilder,
+				fieldBuilderTypeRef = fieldBuilderTypeRef,
+				fieldBuilderLoaded = fieldBuilderLoaded,
+			};
 			lazyProperties[propertyInfo] = lazyProperty;
 
 			return lazyProperty;

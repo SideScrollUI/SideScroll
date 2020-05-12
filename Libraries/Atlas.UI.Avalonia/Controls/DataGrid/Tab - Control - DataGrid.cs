@@ -308,7 +308,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			var list = new AvaloniaList<object>();
 
-			MenuItem menuItemCopy = new MenuItem() { Header = "Copy - _DataGrid" };
+			var menuItemCopy = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopy.Click += delegate
 			{
 				string text = DataGridUtils.DataGridToStringTable(dataGrid);
@@ -319,7 +319,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			//list.Add(new Separator());
 
-			ContextMenu contextMenu = new ContextMenu();
+			var contextMenu = new ContextMenu();
 			contextMenu.Items = list;
 
 			dataGrid.ContextMenu = contextMenu;
@@ -455,7 +455,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void DataGrid_ColumnReordered(object sender, DataGridColumnEventArgs e)
 		{
-			SortedDictionary<int, string> orderedColumns = new SortedDictionary<int, string>();
+			var orderedColumns = new SortedDictionary<int, string>();
 			foreach (DataGridColumn column in dataGrid.Columns)
 				orderedColumns[column.DisplayIndex] = columnNames[column];
 
@@ -490,8 +490,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Control control = obj as Control;
 			if (control == null)
 				return null;
-			DataGridRow row = control as DataGridRow;
-			if (row != null)
+			if (control is DataGridRow row)
 				return row;
 			if (depth == 0)
 				return null;
@@ -705,7 +704,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			// databound
 			//DataGridCheckBoxColumn checkBoxColumn = new DataGridCheckBoxColumn()
-			DataGridButtonColumn column = new DataGridButtonColumn(methodColumn.methodInfo, methodColumn.label);
+			var column = new DataGridButtonColumn(methodColumn.methodInfo, methodColumn.label);
 			//column.Header = methodColumn.methodInfo.Name;
 			dataGrid.Columns.Add(column);
 		}
@@ -1078,7 +1077,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private SelectedRow GetSelectedRow(object obj)
 		{
 			Type type = obj.GetType();
-			SelectedRow selectedRow = new SelectedRow()
+			var selectedRow = new SelectedRow()
 			{
 				label = obj.ToUniqueString(),
 				rowIndex = iList.IndexOf(obj),

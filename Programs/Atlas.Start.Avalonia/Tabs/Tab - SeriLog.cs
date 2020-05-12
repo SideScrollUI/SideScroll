@@ -26,12 +26,11 @@ namespace Atlas.Start.Avalonia.Tabs
 				var logger = CreateLogger();
 				logger.Debug("test");
 
-				ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Add Log Entry", AddEntry),
 					new TaskDelegate("Task Instance Progress", SubTaskInstances),
 				};
-				model.Actions = actions;
 			}
 
 			private Serilog.Core.Logger CreateLogger()

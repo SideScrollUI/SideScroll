@@ -12,8 +12,7 @@ namespace Atlas.Network
         // should we be returning disposable references?
         public HttpCache OpenCache(string path)
         {
-            HttpCache httpCache = null;
-            if (httpCaches.TryGetValue(path, out httpCache))
+            if (httpCaches.TryGetValue(path, out HttpCache httpCache))
                 return httpCache;
             httpCache = new HttpCache(path, true);
             httpCaches[path] = httpCache;
@@ -22,8 +21,7 @@ namespace Atlas.Network
 
         public void DeleteHttpCache(string path)
         {
-            HttpCache httpCache = null;
-            if (httpCaches.TryGetValue(path, out httpCache))
+            if (httpCaches.TryGetValue(path, out HttpCache httpCache))
             {
                 httpCache.Dispose();
                 httpCaches.Remove(path);

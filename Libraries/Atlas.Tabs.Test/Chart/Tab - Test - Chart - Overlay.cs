@@ -83,7 +83,7 @@ namespace Atlas.Tabs.Test.Chart
 			{
 				//series.Add(random.Next(1050, 1095));
 
-				ChartSample sample = new ChartSample()
+				var sample = new ChartSample()
 				{
 					Name = "Name " + i.ToString(),
 					TimeStamp = baseDateTime.AddMinutes(i),

@@ -69,11 +69,13 @@ namespace Atlas.UI.Avalonia.View
 
 			if (value is ILoadAsync loadAsync)
 			{
-				TabInstance childTabInstance = new TabInstanceLoadAsync(loadAsync);
-				childTabInstance.Project = parentTabInstance.Project;
-				childTabInstance.tabBookmark = tabBookmark;
+				var childTabInstance = new TabInstanceLoadAsync(loadAsync)
+				{
+					Project = parentTabInstance.Project,
+					tabBookmark = tabBookmark,
+				};
 				childTabInstance.Model.Name = label;
-				TabView tabView = new TabView(childTabInstance);
+				var tabView = new TabView(childTabInstance);
 				tabView.Load();
 				return tabView;
 			}
@@ -85,7 +87,7 @@ namespace Atlas.UI.Avalonia.View
 				childTabInstance.tabBookmark = tabBookmark;
 				//childTabInstance.Reintialize(); // todo: fix, called in TabView
 				childTabInstance.Model.Name = label;
-				TabView tabView = new TabView(childTabInstance);
+				var tabView = new TabView(childTabInstance);
 				//tabView.Label = label;
 				tabView.Load();
 				return tabView;
@@ -139,7 +141,7 @@ namespace Atlas.UI.Avalonia.View
 
 				TabInstance childTabInstance = parentTabInstance.CreateChild(childTabModel);
 				childTabInstance.Label = label;
-				TabView tabModelView = new TabView(childTabInstance);
+				var tabModelView = new TabView(childTabInstance);
 				tabModelView.Load();
 				return tabModelView;
 			}

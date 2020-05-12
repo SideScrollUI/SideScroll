@@ -81,8 +81,7 @@ namespace Atlas.Tabs
 					}
 					propertyInfo.SetValue(obj, Convert.ChangeType(value, type));
 
-					INotifyPropertyChanged notifyPropertyChanged = obj as INotifyPropertyChanged;
-					if (notifyPropertyChanged != null)
+					if (obj is INotifyPropertyChanged notifyPropertyChanged)
 					{
 						//notifyPropertyChanged.PropertyChanged?.Invoke(obj, new PropertyChangedEventArgs(propertyName));
 					}
@@ -125,10 +124,9 @@ namespace Atlas.Tabs
 					if (propertyInfo.DeclaringType.IsNotPublic)
 						continue;
 
-					ListProperty listProperty = new ListProperty(obj, propertyInfo);
+					var listProperty = new ListProperty(obj, propertyInfo);
 
-					int index;
-					if (propertyToIndex.TryGetValue(propertyInfo.Name, out index))
+					if (propertyToIndex.TryGetValue(propertyInfo.Name, out int index))
 					{
 						listProperties.RemoveAt(index);
 						listProperties.Insert(index, listProperty);

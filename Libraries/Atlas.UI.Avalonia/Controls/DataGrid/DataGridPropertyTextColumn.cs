@@ -152,7 +152,7 @@ namespace Atlas.UI.Avalonia
 
 		protected TextBlock CreateTextBlock(DataGridCell cell, object dataItem)
 		{
-			SubTextBlock textBlockElement = new SubTextBlock(this, propertyInfo)
+			var textBlockElement = new SubTextBlock(this, propertyInfo)
 			{
 				Margin = new Thickness(4),
 				VerticalAlignment = VerticalAlignment.Center,
@@ -185,13 +185,13 @@ namespace Atlas.UI.Avalonia
 
 		private void AddTextBoxContextMenu(DataGridCell cell, TextBlock textBlock)
 		{
-			ContextMenu contextMenu = new ContextMenu();
+			var contextMenu = new ContextMenu();
 
 			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 
 			var list = new AvaloniaList<object>();
 
-			MenuItem menuItemCopy = new MenuItem() { Header = "Copy - _Cell Contents" };
+			var menuItemCopy = new MenuItem() { Header = "Copy - _Cell Contents" };
 			menuItemCopy.Click += delegate
 			{
 				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
@@ -200,7 +200,7 @@ namespace Atlas.UI.Avalonia
 
 			list.Add(new Separator());
 
-			MenuItem menuItemCopyColumn = new MenuItem() { Header = "Copy - Co_lumn" };
+			var menuItemCopyColumn = new MenuItem() { Header = "Copy - Co_lumn" };
 			menuItemCopyColumn.Click += delegate
 			{
 				string text = DataGridUtils.DataGridColumnToStringTable(dataGrid, this);
@@ -209,7 +209,7 @@ namespace Atlas.UI.Avalonia
 			};
 			list.Add(menuItemCopyColumn);
 
-			MenuItem menuItemCopyRow = new MenuItem() { Header = "Copy - _Row" };
+			var menuItemCopyRow = new MenuItem() { Header = "Copy - _Row" };
 			menuItemCopyRow.Click += delegate
 			{
 				string text = DataGridUtils.DataGridRowToString(dataGrid, cell.DataContext);
@@ -218,7 +218,7 @@ namespace Atlas.UI.Avalonia
 			};
 			list.Add(menuItemCopyRow);
 
-			MenuItem menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
+			var menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopyDataGrid.Click += delegate
 			{
 				string text = DataGridUtils.DataGridToStringTable(dataGrid);
@@ -227,7 +227,7 @@ namespace Atlas.UI.Avalonia
 			};
 			list.Add(menuItemCopyDataGrid);
 
-			MenuItem menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - C_SV" };
+			var menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - C_SV" };
 			menuItemCopyDataGridCsv.Click += delegate
 			{
 				string text = DataGridUtils.DataGridToCsv(dataGrid);

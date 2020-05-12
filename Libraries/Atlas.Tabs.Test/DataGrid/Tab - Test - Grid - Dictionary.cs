@@ -27,7 +27,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 				for (int i = 0; i < 20; i++)
 				{
-					TestItem testItem = new TestItem();
+					var testItem = new TestItem();
 					testItem.Name = i.ToString();
 					testItem.Value += i * 100;
 					items.Add(testItem.Name, testItem);

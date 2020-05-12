@@ -95,8 +95,7 @@ namespace Atlas.Tabs
 				var orderedPropertyInfos = new List<PropertyInfo>();
 				foreach (string columnName in ColumnNameOrder)
 				{
-					PropertyInfo propertyInfo;
-					if (propertyNames.TryGetValue(columnName, out propertyInfo))
+					if (propertyNames.TryGetValue(columnName, out PropertyInfo propertyInfo))
 					{
 						orderedPropertyInfos.Add(propertyInfo);
 						propertyNames.Remove(columnName);

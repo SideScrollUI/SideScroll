@@ -30,25 +30,25 @@ namespace Atlas.Tabs.Tools
 				if (!Directory.Exists(tab.path))
 					return;
 
-				ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>()
+				var actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Delete", Delete, true),
 				};
 				model.Actions = actions;
 
 
-				ItemCollection<ListDirectory> directories = new ItemCollection<ListDirectory>();
+				var directories = new ItemCollection<ListDirectory>();
 				foreach (string directoryPath in Directory.EnumerateDirectories(tab.path))
 				{
-					ListDirectory listDirectory = new ListDirectory(directoryPath);
+					var listDirectory = new ListDirectory(directoryPath);
 					directories.Add(listDirectory);
 				}
 				model.ItemList.Add(directories);
 
-				ItemCollection<ListFile> files = new ItemCollection<ListFile>();
+				var files = new ItemCollection<ListFile>();
 				foreach (string filePath in Directory.EnumerateFiles(tab.path))
 				{
-					ListFile listFile = new ListFile(filePath);
+					var listFile = new ListFile(filePath);
 					files.Add(listFile);
 				}
 				if (files.Count > 0)

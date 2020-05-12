@@ -26,7 +26,7 @@ namespace Atlas.Tabs.Test
 
 			private string GetString(int length)
 			{
-				StringBuilder stringBuilder = new StringBuilder();
+				var stringBuilder = new StringBuilder();
 				while (stringBuilder.Length < length)
 					stringBuilder.Append("StringBuilder ");
 				return stringBuilder.ToString();

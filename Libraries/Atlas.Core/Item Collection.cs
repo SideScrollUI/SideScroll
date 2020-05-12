@@ -112,13 +112,7 @@ namespace Atlas.Core
 		{
 			if (Context == null || reset)
 			{
-				Context = SynchronizationContext.Current;
-				if (Context == null)
-				{
-					//contextRandomId = new Random().Next();
-					//throw new Exception("Don't do this");
-					Context = new SynchronizationContext();
-				}
+				Context = SynchronizationContext.Current ?? new SynchronizationContext();
 			}
 		}
 

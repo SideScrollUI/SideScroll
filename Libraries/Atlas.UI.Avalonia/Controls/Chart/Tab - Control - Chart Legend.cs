@@ -48,7 +48,7 @@ namespace Atlas.UI.Avalonia.Controls
 				color = lineSeries.Color.ToColor();
 			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
 				color = scatterSeries.MarkerFill.ToColor();
-			TabChartLegendItem legendItem = new TabChartLegendItem(this, oxyListSeries);
+			var legendItem = new TabChartLegendItem(this, oxyListSeries);
 			legendItem.OnSelectionChanged += CheckBox_SelectionChanged;
 			legendItem.OnHighlightChanged += LegendItem_OnHighlightChanged;
 			legendItem.textBlock.PointerPressed += (s, e) =>
@@ -125,8 +125,7 @@ namespace Atlas.UI.Avalonia.Controls
 				string title = oxyListSeries.OxySeries.Title;
 				if (title == null)
 					continue;
-				TabChartLegendItem legendItem;
-				if (!idxLegendItems.TryGetValue(title, out legendItem))
+				if (!idxLegendItems.TryGetValue(title, out TabChartLegendItem legendItem))
 				{
 					//if (idxLegendItems.Count > 25) // todo: improve this
 					//	continue;
@@ -169,8 +168,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					if (lineSeries.Title == null)
 						continue;
-					TabChartLegendItem legendItem;
-					if (idxLegendItems.TryGetValue(lineSeries.Title, out legendItem))
+					if (idxLegendItems.TryGetValue(lineSeries.Title, out TabChartLegendItem legendItem))
 					{
 						legendItem.UpdateSeries(lineSeries);
 					}
@@ -179,8 +177,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					if (scatterSeries.Title == null)
 						continue;
-					TabChartLegendItem legendItem;
-					if (idxLegendItems.TryGetValue(scatterSeries.Title, out legendItem))
+					if (idxLegendItems.TryGetValue(scatterSeries.Title, out TabChartLegendItem legendItem))
 					{
 						legendItem.UpdateSeries(scatterSeries);
 					}

@@ -34,11 +34,11 @@ namespace Atlas.Serialize
 
 			using (CallTimer callTimer = call.Timer("Saving object: " + name, new Tag("Path", filePath)))
 			{
-				using (Stream stream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
+				using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
 				{
-					using (BinaryWriter writer = new BinaryWriter(stream))
+					using (var writer = new BinaryWriter(stream))
 					{
-						Serializer serializer = new Serializer();
+						var serializer = new Serializer();
 						serializer.header.name = name;
 						serializer.AddObject(callTimer, obj);
 						serializer.Save(callTimer, writer);
@@ -71,14 +71,14 @@ namespace Atlas.Serialize
 			{
 				try
 				{
-					Serializer serializer = new Serializer();
+					var serializer = new Serializer();
 					serializer.taskInstance = taskInstance;
 
 					MemoryStream memoryStream;
 					using (CallTimer callReadAllBytes = callTimer.Timer("Loading file: " + name))
 						memoryStream = new MemoryStream(File.ReadAllBytes(filePath));
 
-					BinaryReader reader = new BinaryReader(memoryStream);
+					var reader = new BinaryReader(memoryStream);
 
 					serializer.Load(callTimer, reader, lazy);
 					object obj;
@@ -108,10 +108,10 @@ namespace Atlas.Serialize
 
 			using (CallTimer callReadAllBytes = call.Timer("Loading header: " + name))
 			{
-				MemoryStream memoryStream = new MemoryStream(File.ReadAllBytes(filePath));
+				var memoryStream = new MemoryStream(File.ReadAllBytes(filePath));
 
-				BinaryReader reader = new BinaryReader(memoryStream);
-				Header header = new Header();
+				var reader = new BinaryReader(memoryStream);
+				var header = new Header();
 				header.Load(reader);
 				return header;
 			}
@@ -119,11 +119,11 @@ namespace Atlas.Serialize
 
 		public Serializer LoadSchema(Call call)
 		{
-			using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+			using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
 			{
-				using (BinaryReader reader = new BinaryReader(stream))
+				using (var reader = new BinaryReader(stream))
 				{
-					Serializer serializer = new Serializer();
+					var serializer = new Serializer();
 					serializer.Load(call, reader, false);
 					return serializer;
 				}

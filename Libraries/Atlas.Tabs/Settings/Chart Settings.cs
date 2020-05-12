@@ -86,8 +86,7 @@ namespace Atlas.Tabs
 		{
 			var listSeries = new ListSeries(label, iList);
 
-			//ListGroup listGroup;
-			//if (ListGroups.TryGetValue(label, out listGroup)
+			//if (ListGroups.TryGetValue(label, out ListGroup listGroup)
 
 			ListGroup listGroup = DefaultListGroup;
 			listGroup.Name = label ?? listGroup.Name;

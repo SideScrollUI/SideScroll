@@ -39,8 +39,7 @@ namespace Atlas.Core
 
 				string category = categoryObject.ToString();
 
-				IList categoryList;
-				if (!dimensions.TryGetValue(category, out categoryList))
+				if (!dimensions.TryGetValue(category, out IList categoryList))
 				{
 					categoryList = (IList)Activator.CreateInstance(listType);
 					dimensions.Add(category, categoryList);

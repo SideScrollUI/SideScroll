@@ -318,7 +318,7 @@ namespace Atlas.Serialize
 			if (flags == 0)
 				return null;
 
-			TypeRef typeRef = new TypeRef();
+			var typeRef = new TypeRef();
 
 			if (typeSchema.hasSubType)
 			{

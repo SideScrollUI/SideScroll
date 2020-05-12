@@ -213,21 +213,21 @@ namespace Atlas.Core
 
 		public LogEntry Add(string text, params Tag[] tags)
 		{
-			LogEntry logEntry = new LogEntry(LogType.Info, text, tags);
+			var logEntry = new LogEntry(LogType.Info, text, tags);
 			AddLogEntry(logEntry);
 			return logEntry;
 		}
 
 		public LogEntry AddWarning(string text, params Tag[] tags)
 		{
-			LogEntry logEntry = new LogEntry(LogType.Warn, text, tags);
+			var logEntry = new LogEntry(LogType.Warn, text, tags);
 			AddLogEntry(logEntry);
 			return logEntry;
 		}
 
 		public LogEntry AddError(string text, params Tag[] tags)
 		{
-			LogEntry logEntry = new LogEntry(LogType.Error, text, tags);
+			var logEntry = new LogEntry(LogType.Error, text, tags);
 			AddLogEntry(logEntry);
 			return logEntry;
 		}
@@ -239,7 +239,7 @@ namespace Atlas.Core
 
 		public LogTimer Timer(string text, params Tag[] tags)
 		{
-			LogTimer logTimer = new LogTimer(text, context);
+			var logTimer = new LogTimer(text, context);
 			logTimer.Tags = tags;
 			AddLogEntry(logTimer);
 			return logTimer;
@@ -247,7 +247,7 @@ namespace Atlas.Core
 
 		public string EntriesText()
 		{
-			StringBuilder stringBuilder = new StringBuilder();
+			var stringBuilder = new StringBuilder();
 			foreach (LogEntry logEntry in Items)
 			{
 				stringBuilder.AppendLine(logEntry.ToString());
@@ -304,8 +304,7 @@ namespace Atlas.Core
 			CreateEventLogMessage(logEntry);
 
 			// Update if there can be child entries
-			Log log = logEntry as Log;
-			if (log != null)
+			if (logEntry is Log log)
 				log.OnMessage += ChildLog_OnMessage;
 		}
 

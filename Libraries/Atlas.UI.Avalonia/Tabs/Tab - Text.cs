@@ -57,7 +57,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 
 				// wordwrap doesn't work
-				TabControlAvaloniaEdit tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
+				var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
 				//tabAvaloniaEdit.textEditor.VerticalAlignment = VerticalAlignment.Top;
 				//tabAvaloniaEdit.textEditor.VerticalAlignment = VerticalAlignment.Stretch;
 				//tabAvaloniaEdit.textEditor.IsReadOnly = true; // todo: allow editing?

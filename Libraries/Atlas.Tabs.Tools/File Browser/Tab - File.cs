@@ -36,7 +36,7 @@ namespace Atlas.Tabs.Tools
 
 			public override void Load(Call call, TabModel model)
 			{
-				ItemCollection<ListItem> items = new ItemCollection<ListItem>();
+				var items = new ItemCollection<ListItem>();
 
 				string extension = Path.GetExtension(tab.path);
 

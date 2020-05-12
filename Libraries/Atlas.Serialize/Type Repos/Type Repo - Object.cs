@@ -211,7 +211,7 @@ namespace Atlas.Serialize
 				propertySchema.propertyTypeSchema = typeRepo.typeSchema;
 				if (typeRepo != null)
 				{
-					PropertyRepo propertyRepo = new PropertyRepo(propertySchema, typeRepo);
+					var propertyRepo = new PropertyRepo(propertySchema, typeRepo);
 					propertyRepos.Add(propertyRepo);
 
 					if (propertySchema.Loadable && !propertySchema.type.IsPrimitive)

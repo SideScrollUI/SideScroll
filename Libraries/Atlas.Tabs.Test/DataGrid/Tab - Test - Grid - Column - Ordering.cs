@@ -8,14 +8,12 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			private ItemCollection<TestChild> items;
-
 			public override void Load(Call call, TabModel model)
 			{
-				items = new ItemCollection<TestChild>();
+				var items = new ItemCollection<TestChild>();
 				for (int i = 0; i < 2; i++)
 				{
-					TestChild item = new TestChild()
+					var item = new TestChild()
 					{
 					};
 

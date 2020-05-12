@@ -67,11 +67,11 @@ namespace Atlas.UI.Avalonia.Controls
 			int rowIndex = 0;
 			foreach (TaskCreator taskCreator in tabModel.Actions)
 			{
-				RowDefinition gridRow = new RowDefinition();
-				gridRow.Height = new GridLength(1, GridUnitType.Auto);
-				containerGrid.RowDefinitions.Add(gridRow);
+				var rowDefinition = new RowDefinition();
+				rowDefinition.Height = new GridLength(1, GridUnitType.Auto);
+				containerGrid.RowDefinitions.Add(rowDefinition);
 
-				Button button = new TabControlButton(taskCreator.Label);
+				var button = new TabControlButton(taskCreator.Label);
 				//button.Styles.Add(new Style
 				/*
 				

@@ -39,7 +39,7 @@ namespace Atlas.Tabs.Tools
 
 			public override void Load(Call call, TabModel model)
 			{
-				ItemCollection<ListItem> items = new ItemCollection<ListItem>();
+				var items = new ItemCollection<ListItem>();
 				listItemTasks = new ListItem("Tasks", tab.tasks);
 
 				items.Add(listItemTasks);
@@ -48,7 +48,7 @@ namespace Atlas.Tabs.Tools
 
 				model.Items = items;
 
-				ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>();
+				var actions = new ItemCollection<TaskCreator>();
 				listItemStart = new TaskDelegate("Start", Start);
 				listItemStop = new TaskDelegate("Stop", Stop);
 				actions.Add(listItemStart);

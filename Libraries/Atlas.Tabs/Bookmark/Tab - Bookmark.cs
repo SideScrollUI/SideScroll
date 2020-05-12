@@ -116,8 +116,7 @@ namespace Atlas.Tabs
 			if (tabChildBookmarks == null)
 				return null;
 
-			TabBookmark childBookmark;
-			if (tabChildBookmarks.TryGetValue(name, out childBookmark))
+			if (tabChildBookmarks.TryGetValue(name, out TabBookmark childBookmark))
 				return childBookmark;
 
 			return null;
@@ -127,8 +126,7 @@ namespace Atlas.Tabs
 		{
 			foreach (var nodeEntry in node.tabChildBookmarks)
 			{
-				TabBookmark existingNode;
-				if (tabChildBookmarks.TryGetValue(nodeEntry.Key, out existingNode))
+				if (tabChildBookmarks.TryGetValue(nodeEntry.Key, out TabBookmark existingNode))
 				{
 					existingNode.MergeNode(nodeEntry.Value);
 				}

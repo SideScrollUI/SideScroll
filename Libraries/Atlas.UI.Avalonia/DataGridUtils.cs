@@ -104,7 +104,7 @@ namespace Atlas.UI.Avalonia
 			List<List<string>> contentRows;
 			GetDataGridContents(dataGrid, out columns, out contentRows);
 
-			StringBuilder stringBuilder = new StringBuilder();
+			var stringBuilder = new StringBuilder();
 			bool addComma = false;
 			foreach (ColumnInfo columnInfo in columns)
 			{
@@ -204,7 +204,7 @@ namespace Atlas.UI.Avalonia
 			}
 			line += '\n';
 
-			StringBuilder stringBuilder = new StringBuilder(line);
+			var stringBuilder = new StringBuilder(line);
 
 			// Column Headers
 			stringBuilder.Append("|");

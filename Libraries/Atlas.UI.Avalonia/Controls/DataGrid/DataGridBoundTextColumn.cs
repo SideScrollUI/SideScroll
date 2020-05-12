@@ -105,13 +105,13 @@ namespace Atlas.UI.Avalonia
 		// Adds a context menu to the text block
 		private void AddTextBoxContextMenu(TextBlock textBlock)
 		{
-			ContextMenu contextMenu = new ContextMenu();
+			var contextMenu = new ContextMenu();
 
 			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 
 			var list = new AvaloniaList<object>();
 
-			MenuItem menuItemCopy = new MenuItem() { Header = "_Copy - Cell Contents" };
+			var menuItemCopy = new MenuItem() { Header = "_Copy - Cell Contents" };
 			menuItemCopy.Click += delegate
 			{
 				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
@@ -120,7 +120,7 @@ namespace Atlas.UI.Avalonia
 
 			list.Add(new Separator());
 
-			MenuItem menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
+			var menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopyDataGrid.Click += delegate
 			{
 				string text = DataGridUtils.DataGridToStringTable(dataGrid);
@@ -129,7 +129,7 @@ namespace Atlas.UI.Avalonia
 			};
 			list.Add(menuItemCopyDataGrid);
 
-			MenuItem menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - C_SV" };
+			var menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - C_SV" };
 			menuItemCopyDataGridCsv.Click += delegate
 			{
 				string text = DataGridUtils.DataGridToCsv(dataGrid);

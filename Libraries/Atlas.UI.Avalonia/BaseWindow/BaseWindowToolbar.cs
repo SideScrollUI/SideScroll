@@ -50,11 +50,11 @@ namespace Atlas.UI.Avalonia
 
 			//RoutedCommand commandBack = new RoutedCommand("Back", GetType());
 
-			RelayCommand commandBindingBack = new RelayCommand(
+			var commandBindingBack = new RelayCommand(
 				(obj) => CommandBackCanExecute(obj),
 				(obj) => CommandBackExecute(obj));
 
-			RelayCommand commandBindingForward = new RelayCommand(
+			var commandBindingForward = new RelayCommand(
 				(obj) => CommandForwardCanExecute(obj),
 				(obj) => CommandForwardExecute(obj));
 

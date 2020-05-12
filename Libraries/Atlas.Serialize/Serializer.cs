@@ -107,7 +107,7 @@ namespace Atlas.Serialize
 			var loaded = new List<ObjectsLoaded>();
 			foreach (TypeRepo typeRepo in typeRepos)
 			{
-				ObjectsLoaded typeInfo = new ObjectsLoaded()
+				var typeInfo = new ObjectsLoaded()
 				{
 					Name = typeRepo.ToString(),
 					Loaded = typeRepo.objectsLoadedCount
@@ -259,7 +259,7 @@ namespace Atlas.Serialize
 			{
 				for (int i = 0; i < count; i++)
 				{
-					TypeSchema typeSchema = new TypeSchema(log, reader)
+					var typeSchema = new TypeSchema(log, reader)
 					{
 						typeIndex = i,
 					};
@@ -604,7 +604,7 @@ namespace Atlas.Serialize
 			var loaded = new List<ObjectsLoaded>();
 			foreach (TypeRepo typeRepo in typeRepos)
 			{
-				ObjectsLoaded typeInfo = new ObjectsLoaded()
+				var typeInfo = new ObjectsLoaded()
 				{
 					Name = typeRepo.ToString(),
 					Loaded = typeRepo.cloned
@@ -616,7 +616,7 @@ namespace Atlas.Serialize
 
 		internal void QueueLoading(TypeRepo typeRepo, int objectIndex)
 		{
-			LoadItem loadItem = new LoadItem()
+			var loadItem = new LoadItem()
 			{
 				typeRepo = typeRepo,
 				index = objectIndex

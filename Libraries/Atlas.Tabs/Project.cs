@@ -61,16 +61,14 @@ namespace Atlas.Tabs
 
 		public T Get<T>()
 		{
-			object obj;
-			if (Items.TryGetValue(typeof(T), out obj))
+			if (Items.TryGetValue(typeof(T), out object obj))
 				return (T)obj;
 			return default;
 		}
 
 		public object Get(Type type)
 		{
-			object obj;
-			if (Items.TryGetValue(type, out obj))
+			if (Items.TryGetValue(type, out object obj))
 				return obj;
 			return null;
 		}

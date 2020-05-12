@@ -11,10 +11,10 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				ItemCollection<TestItem> items = new ItemCollection<TestItem>();
+				var items = new ItemCollection<TestItem>();
 				for (int i = 0; i < 10; i++)
 				{
-					TestItem testItem = new TestItem()
+					var testItem = new TestItem()
 					{
 						Integer = i,
 						Long = (long)i * (long)int.MaxValue,

@@ -102,10 +102,9 @@ namespace Atlas.Tabs
 					if (methodInfo.DeclaringType.IsNotPublic)
 						continue;
 
-					ListMethod listMethod = new ListMethod(obj, methodInfo);
+					var listMethod = new ListMethod(obj, methodInfo);
 
-					int index;
-					if (propertyToIndex.TryGetValue(methodInfo.Name, out index))
+					if (propertyToIndex.TryGetValue(methodInfo.Name, out int index))
 					{
 						listMethods.RemoveAt(index);
 						listMethods.Insert(index, listMethod);

@@ -55,11 +55,11 @@ namespace Atlas.UI.Avalonia.Controls
 			spacerRow.Height = new GridLength(5);
 			RowDefinitions.Add(spacerRow);*/
 
-			RowDefinition gridRow = new RowDefinition()
+			var rowDefinition = new RowDefinition()
 			{
 				Height = new GridLength(1, GridUnitType.Auto),
 			};
-			RowDefinitions.Add(gridRow);
+			RowDefinitions.Add(rowDefinition);
 
 			var controls = new List<Control>();
 			foreach (PropertyInfo propertyInfo in obj.GetType().GetVisibleProperties())
@@ -102,18 +102,18 @@ namespace Atlas.UI.Avalonia.Controls
 
 			int rowIndex = RowDefinitions.Count;
 			{
-				RowDefinition spacerRow = new RowDefinition();
+				var spacerRow = new RowDefinition();
 				spacerRow.Height = new GridLength(5);
 				RowDefinitions.Add(spacerRow);
 				rowIndex++;
 			}
-			RowDefinition gridRow = new RowDefinition()
+			var rowDefinition = new RowDefinition()
 			{
 				Height = new GridLength(1, GridUnitType.Auto),
 			};
-			RowDefinitions.Add(gridRow);
+			RowDefinitions.Add(rowDefinition);
 
-			TextBlock textLabel = new TextBlock()
+			var textLabel = new TextBlock()
 			{
 				Text = property.Name,
 				Margin = new Thickness(0, 3, 10, 3),

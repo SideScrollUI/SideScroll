@@ -48,8 +48,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 			//this.IsVisible = false;
 			//this.Background = new SolidColorBrush(Theme.BackgroundColor);
-			this.HorizontalAlignment = HorizontalAlignment.Stretch;
-			this.VerticalAlignment = VerticalAlignment.Stretch;
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
 			//this.Width = 1000;
 			//this.Height = 1000;
 
@@ -67,9 +67,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 			AddNewPanel();
 
-			this.Content = containerGrid;
+			Content = containerGrid;
 
-			this.Focusable = true;
+			Focusable = true;
 		}
 
 		public void ShowBookmarkSettings(Bookmark bookmark)
@@ -98,7 +98,7 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			//panelNew.Visibility = Visibility.Visible;
 			//textBoxName.Clear();
-			TextBlock textBlock = new TextBlock()
+			var textBlock = new TextBlock()
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				Text = "Name:",

@@ -34,7 +34,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			private void Run(Call call)
 			{
 				SaveData("Params", paramTestItem);
-				ParamTestResult result = new ParamTestResult()
+				var result = new ParamTestResult()
 				{
 					parameters = paramTestItem,
 				};

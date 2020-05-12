@@ -32,18 +32,18 @@ namespace Atlas.Tabs.Tools
 			{
 				FTP ftp = new FTP(call, tab.ftpInfo);
 				List<FtpItem> fileDatas = ftp.GetDirectoryListDetailed(tab.path);
-				ItemCollection<ListDirectory> directories = new ItemCollection<ListDirectory>();
-				ItemCollection<ListFile> files = new ItemCollection<ListFile>();
+				var directories = new ItemCollection<ListDirectory>();
+				var files = new ItemCollection<ListFile>();
 				foreach (FtpItem fileData in fileDatas)
 				{
 					if (fileData.directory)
 					{
-						ListDirectory listDirectory = new ListDirectory(tab.ftpInfo, fileData);
+						var listDirectory = new ListDirectory(tab.ftpInfo, fileData);
 						directories.Add(listDirectory);
 					}
 					else
 					{
-						ListFile listFile = new ListFile(tab.ftpInfo, fileData);
+						var listFile = new ListFile(tab.ftpInfo, fileData);
 						files.Add(listFile);
 					}
 				}

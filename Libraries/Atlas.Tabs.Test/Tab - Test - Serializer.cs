@@ -27,7 +27,7 @@ namespace Atlas.Tabs.Test
 
 			private void Serialize(Call call)
 			{
-				SampleItem sampleItem = new SampleItem(1, "Sample Item");
+				var sampleItem = new SampleItem(1, "Sample Item");
 				
 				Project.DataApp.Save(sampleItem, call);
 				items.Add(new ListItem("Sample Item", sampleItem));

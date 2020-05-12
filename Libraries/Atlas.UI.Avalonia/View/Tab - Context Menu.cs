@@ -43,16 +43,16 @@ namespace Atlas.UI.Avalonia.View
 			menuItemRefresh.Click += MenuItemRefresh_Click;
 			list.Add(menuItemRefresh);
 
-			MenuItem menuItemReload = new MenuItem() { Header = "_Reload" };
+			var menuItemReload = new MenuItem() { Header = "_Reload" };
 			menuItemReload.Click += MenuItemReload_Click;
 			list.Add(menuItemReload);
 
-			MenuItem menuItemReset = new MenuItem() { Header = "Re_set" };
+			var menuItemReset = new MenuItem() { Header = "Re_set" };
 			menuItemReset.Click += MenuItemReset_Click;
 			list.Add(menuItemReset);
 
 #if DEBUG
-			MenuItem menuItemDebug = new MenuItem() { Header = "_Debug" };
+			var menuItemDebug = new MenuItem() { Header = "_Debug" };
 			menuItemDebug.Click += MenuItemDebug_Click;
 			list.Add(menuItemDebug);
 
@@ -62,7 +62,7 @@ namespace Atlas.UI.Avalonia.View
 			{
 				IsChecked = tabInstance.Project.userSettings.AutoLoad,
 			};
-			MenuItem menuItemAutoLoad = new MenuItem()
+			var menuItemAutoLoad = new MenuItem()
 			{
 				Header = "_AutoLoad",
 				Icon = checkboxAutoLoad,
@@ -108,7 +108,7 @@ namespace Atlas.UI.Avalonia.View
 		private void MenuItemDebug_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			TabModel debugListCollection = new TabModel("Debug");
-			TabView clone = Serialize.SerializerMemory.Clone<TabView>(tabInstance.TaskInstance.Call, this);
+			TabView clone = SerializerMemory.Clone<TabView>(tabInstance.TaskInstance.Call, this);
 			debugListCollection.AddData(clone);
 			Control debugControl = clone.CreateChildControl(debugListCollection, "Debug");
 		}

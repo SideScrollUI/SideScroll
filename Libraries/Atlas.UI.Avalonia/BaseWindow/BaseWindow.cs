@@ -200,7 +200,7 @@ namespace Atlas.UI.Avalonia
 
 		private Grid CreateScrollButtons()
 		{
-			Grid grid = new Grid()
+			var grid = new Grid()
 			{
 				ColumnDefinitions = new ColumnDefinitions("Auto"),
 				RowDefinitions = new RowDefinitions("*,*"), // Expand, Collapse
@@ -209,7 +209,7 @@ namespace Atlas.UI.Avalonia
 				[Grid.ColumnProperty] = 1,
 			};
 
-			Button buttonExpand = new Button()
+			var buttonExpand = new Button()
 			{
 				Content = ">",
 				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
@@ -225,7 +225,7 @@ namespace Atlas.UI.Avalonia
 			buttonExpand.PointerEnter += Button_PointerEnter;
 			buttonExpand.PointerLeave += Button_PointerLeave;
 
-			Button buttonCollapse = new Button()
+			var buttonCollapse = new Button()
 			{
 				Content = "<",
 				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),

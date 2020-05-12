@@ -33,7 +33,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			public void AddIcon(Stream stream)
 			{
 				stream.Seek(0, SeekOrigin.Begin);
-				Bitmap bitmap = new Bitmap(stream);
+				var bitmap = new Bitmap(stream);
 
 				var image = new Image()
 				{

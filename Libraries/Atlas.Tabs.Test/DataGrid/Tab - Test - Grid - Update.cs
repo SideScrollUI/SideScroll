@@ -38,7 +38,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 				for (int i = 0; i < 20; i++)
 				{
-					TestItem testItem = new TestItem(context);
+					var testItem = new TestItem(context);
 					testItem.smallNumber = i;
 					testItem.bigNumber += i;
 					items.Add(testItem);
