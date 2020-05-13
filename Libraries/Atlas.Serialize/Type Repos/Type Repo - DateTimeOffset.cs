@@ -75,7 +75,7 @@ namespace Atlas.Serialize
 			}
 			catch (Exception)
 			{
-				//log.Add(e.Message, new Tag("Exception", e));
+				//log.Add(e);
 			}
 			reader.BaseStream.Position = position;
 

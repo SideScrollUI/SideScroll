@@ -305,6 +305,19 @@ namespace Atlas.Tabs
 			StartTask(taskDelegate, showTask);
 		}
 
+		protected ItemCollection<ListProperty> GetListProperties()
+		{
+			var items = ListProperty.Create(this);
+			var properties = new ItemCollection<ListProperty>();
+			foreach (ListProperty listProperty in items)
+			{
+				if (listProperty.propertyInfo.DeclaringType == GetType())
+					properties.Add(listProperty);
+			}
+
+			return properties;
+		}
+
 		private MethodInfo GetDerivedLoadMethod(string name, int paramCount)
 		{
 			try

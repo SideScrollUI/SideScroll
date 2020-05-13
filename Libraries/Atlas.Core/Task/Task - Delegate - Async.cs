@@ -33,7 +33,7 @@ namespace Atlas.Core
 			}
 			catch (Exception e)
 			{
-				call.Log.AddError(e.Message, new Tag("Exception", e));
+				call.Log.Add(e);
 			}
 		}
 
@@ -46,7 +46,7 @@ namespace Atlas.Core
 			}
 			catch (Exception e)
 			{
-				call.Log.AddError(e.Message, new Tag("Exception", e));
+				call.Log.Add(e);
 			}
 		}
 	}

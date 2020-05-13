@@ -823,7 +823,8 @@ namespace Atlas.UI.Avalonia.View
 				// show action help?
 				//CreateChildControls(tabActions.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
-			if (tabTasks != null && (tabTasks.IsVisible || Model.Tasks?.Count > 0))
+			//if (tabTasks != null && (tabTasks.IsVisible || Model.Tasks?.Count > 0))
+			if (tabTasks != null && tabTasks.IsVisible)
 			{
 				CreateChildControls(tabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
@@ -890,7 +891,7 @@ namespace Atlas.UI.Avalonia.View
 			catch (Exception e)
 			{
 				// Add instructions for enabling debugger to catch these
-				//call.log.AddError(e.Message);
+				//call.log.Add(e);
 				return TabCreator.CreateChildControl(tabInstance, e, "Caught Exception", tabControl);
 			}
 		}

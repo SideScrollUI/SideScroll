@@ -128,7 +128,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void TabData_OnSelectionChanged(object sender, EventArgs e)
 		{
-			UpdateSelection();
+			if (IsVisible)
+				UpdateSelection();
 		}
 
 		public IList SelectedItems => tabControlDataGrid.SelectedItems;

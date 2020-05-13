@@ -268,9 +268,11 @@ namespace Atlas.UI.Avalonia.Controls
 				// Invoking was happening at bad times in the data binding
 				if (dispatcherTimer == null)
 				{
-					dispatcherTimer = new DispatcherTimer();
+					dispatcherTimer = new DispatcherTimer()
+					{
+						Interval = new TimeSpan(0, 0, 1), // Tick event doesn't fire if set to < 1 second
+					};
 					dispatcherTimer.Tick += DispatcherTimer_Tick;
-					dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
 					dispatcherTimer.Start();
 				}
 			}
@@ -384,6 +386,7 @@ namespace Atlas.UI.Avalonia.Controls
 					//this.Dispatcher.Invoke(() => SelectedItem = e.NewItems[0], System.Windows.Threading.DispatcherPriority.SystemIdle, tokenSource.Token, TimeSpan.FromSeconds(1));
 
 					selectItemEnabled = true;
+					object item = iList[iList.Count - 1];
 					// don't update the selection too often or we'll slow things down
 					if (!stopwatch.IsRunning || stopwatch.ElapsedMilliseconds > 1000)
 					{
@@ -391,7 +394,6 @@ namespace Atlas.UI.Avalonia.Controls
 						autoSelectItem = null;
 						selectionModified = true;
 						//SelectedItem = e.NewItems[0];
-						object item = iList[iList.Count - 1];
 						Dispatcher.UIThread.Post(() => SetSelectedItem(item), DispatcherPriority.Background);
 						stopwatch.Reset();
 						stopwatch.Start();
@@ -399,7 +401,7 @@ namespace Atlas.UI.Avalonia.Controls
 					}
 					else
 					{
-						autoSelectItem = iList[iList.Count - 1];
+						autoSelectItem = item;
 					}
 				}
 				// causing Invalid thread issues when removing items, remove completely?
@@ -416,9 +418,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void DispatcherTimer_Tick(object sender, EventArgs e)
 		{
-			if (autoSelectItem != null)
+			object selectItem = autoSelectItem;
+			if (selectItem != null)
 			{
-				object selectItem = autoSelectItem;
 				Dispatcher.UIThread.Post(() => SetSelectedItem(selectItem), DispatcherPriority.Background);
 				autoSelectItem = null;
 			}
@@ -440,7 +442,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				try
 				{
-					//if (collectionVie w.Contains(value))
+					//if (collectionView.Contains(value))
 					dataGrid.ScrollIntoView(scrollIntoViewObject, dataGrid.CurrentColumn);
 				}
 				catch (Exception)
@@ -969,8 +971,9 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			set
 			{
-				autoSelectItem = null;
-				selectItemEnabled = false;
+				//autoSelectItem = null;
+				if (value == null)
+					selectItemEnabled = false;
 				// don't reselect if already selected				
 				if (dataGrid.SelectedItems.Count != 1 || dataGrid.SelectedItems[0] != value)
 				{
