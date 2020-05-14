@@ -131,7 +131,8 @@ namespace Atlas.UI.Avalonia.Controls
 					//	continue;
 					legendItem = AddSeries(oxyListSeries);
 				}
-				Children.Add(legendItem);
+				if (!Children.Contains(legendItem))
+					Children.Add(legendItem);
 			}
 			UpdatePositions();
 
