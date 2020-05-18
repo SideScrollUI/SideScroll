@@ -40,6 +40,30 @@ namespace Atlas.Tabs
 		}
 	}
 
+	public class TabCreatorAsync : TabInstance, ITabAsync
+	{
+		private ITabCreatorAsync creatorAsync;
+		private TabInstance innerChildInstance;
+
+		public TabCreatorAsync(ITabCreatorAsync creatorAsync)
+		{
+			this.creatorAsync = creatorAsync;
+		}
+
+		public async Task LoadAsync(Call call, TabModel model)
+		{
+			ITab iTab = await creatorAsync.CreateAsync(call);
+			innerChildInstance = CreateChildTab(iTab);
+			if (innerChildInstance is ITabAsync tabAsync)
+				await tabAsync.LoadAsync(call, model);
+		}
+
+		public override void LoadUI(Call call, TabModel model)
+		{
+			innerChildInstance.LoadUI(call, model);
+		}
+	}
+
 	public abstract class TabInstanceAsync : TabInstance, ITabAsync
 	{
 		public abstract Task LoadAsync(Call call, TabModel model);
@@ -133,8 +157,8 @@ namespace Atlas.Tabs
 
 		public TabInstance(Project project, TabModel model)
 		{
-			this.Project = project;
-			this.Model = model;
+			Project = project;
+			Model = model;
 			staticModel = true;
 			InitializeContext();
 			SetStartLoad();
@@ -256,20 +280,20 @@ namespace Atlas.Tabs
 		// switch to SendOrPostCallback?
 		public void Invoke(CallActionParams callAction, params object[] objects)
 		{
-			TaskDelegateParams taskDelegate = new TaskDelegateParams(null, callAction.Method.Name, callAction, false, null, objects);
+			var taskDelegate = new TaskDelegateParams(null, callAction.Method.Name, callAction, false, null, objects);
 			uiContext.Post(ActionParamsCallback, taskDelegate);
 		}
 
 		// switch to SendOrPostCallback?
 		public void Invoke(Call call, CallActionParams callAction, params object[] objects)
 		{
-			TaskDelegateParams taskDelegate = new TaskDelegateParams(call, callAction.Method.Name, callAction, false, null, objects);
+			var taskDelegate = new TaskDelegateParams(call, callAction.Method.Name, callAction, false, null, objects);
 			uiContext.Post(CallActionParamsCallback, taskDelegate);
 		}
 
 		private void CallActionParamsCallback(object state)
 		{
-			TaskDelegateParams taskDelegate = (TaskDelegateParams)state;
+			var taskDelegate = (TaskDelegateParams)state;
 			CallTask(taskDelegate, false);
 		}
 
@@ -289,7 +313,7 @@ namespace Atlas.Tabs
 
 		public void StartTask(CallAction callAction, bool useTask, bool showTask)
 		{
-			TaskDelegate taskDelegate = new TaskDelegate(callAction.Method.Name, callAction, useTask);
+			var taskDelegate = new TaskDelegate(callAction.Method.Name, callAction, useTask);
 			StartTask(taskDelegate, showTask);
 		}
 
@@ -301,7 +325,7 @@ namespace Atlas.Tabs
 
 		public void StartTask(CallActionParams callAction, bool useTask, bool showTask, params object[] objects)
 		{
-			TaskDelegateParams taskDelegate = new TaskDelegateParams(null, callAction.Method.Name, callAction, useTask, null, objects);
+			var taskDelegate = new TaskDelegateParams(null, callAction.Method.Name, callAction, useTask, null, objects);
 			StartTask(taskDelegate, showTask);
 		}
 
@@ -556,7 +580,7 @@ namespace Atlas.Tabs
 
 		public virtual Bookmark CreateBookmark()
 		{
-			Bookmark bookmark = new Bookmark();
+			var bookmark = new Bookmark();
 			//bookmark.tabBookmark.Name = Label;
 			GetBookmark(bookmark.tabBookmark);
 			bookmark = bookmark.Clone<Bookmark>(TaskInstance.Call); // sanitize
@@ -576,7 +600,7 @@ namespace Atlas.Tabs
 			tabBookmark.tabViewSettings = tabViewSettings;
 			foreach (TabInstance tabInstance in childTabInstances.Values)
 			{
-				TabBookmark childBookmark = new TabBookmark();
+				var childBookmark = new TabBookmark();
 				//childBookmark.Name = tabInstance.Label;
 				tabInstance.GetBookmark(childBookmark);
 				// Change this to a Key

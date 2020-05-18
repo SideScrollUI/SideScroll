@@ -13,6 +13,7 @@ namespace Atlas.Core
 		public bool Horizontal { get; set; }
 		public DateTime? StartTime { get; set; }
 		public DateTime? EndTime { get; set; }
+		public bool ShowOrder { get; set; }
 		public ItemCollection<ListSeries> ListSeries { get; set; } = new ItemCollection<ListSeries>();
 
 		public double xBinSize;
@@ -44,7 +45,7 @@ namespace Atlas.Core
 					categoryList = (IList)Activator.CreateInstance(listType);
 					dimensions.Add(category, categoryList);
 
-					ListSeries listSeries = new ListSeries(category, categoryList, xPropertyName, yPropertyName)
+					var listSeries = new ListSeries(category, categoryList, xPropertyName, yPropertyName)
 					{
 						xBinSize = xBinSize,
 					};

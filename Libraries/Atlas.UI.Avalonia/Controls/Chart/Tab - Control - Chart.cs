@@ -76,7 +76,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public PlotModel plotModel;
 		public PlotView plotView;
 		private PropertyInfo xAxisPropertyInfo;
-		private TabControlChartLegend legend;
+		public TabControlChartLegend legend;
 		public OxyPlot.Axes.LinearAxis valueAxis; // left/right?
 		private OxyPlot.Axes.CategoryAxis categoryAxis;
 
@@ -305,7 +305,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//MinorTicklineColor = GridLineColor,
 				//MinorTickSize = 5,
 				AxisTickToLabelDistance = 2,
-				MinimumMajorStep = TimeSpan.FromSeconds(1).TotalDays,
+				//MinimumMajorStep = TimeSpan.FromSeconds(1).TotalDays,
 				TitleColor = OxyColors.LightGray,
 				TextColor = OxyColors.LightGray,
 			};
@@ -314,7 +314,10 @@ namespace Atlas.UI.Avalonia.Controls
 				double duration = endTime.Value.Subtract(startTime.Value).TotalSeconds;
 				dateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(startTime.Value);
 				dateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value);
-				dateTimeAxis.StringFormat = GetDateTimeFormat(duration);
+
+				var dateFormat = GetDateTimeFormat(duration);
+				dateTimeAxis.StringFormat = dateFormat.TextFormat;
+				dateTimeAxis.MinimumMajorStep = dateFormat.StepSize.TotalDays;
 				double widthPerLabel = 6 * dateTimeAxis.StringFormat.Length + 25;
 				dateTimeAxis.IntervalLength = Math.Max(50, widthPerLabel);
 			}
@@ -544,20 +547,40 @@ namespace Atlas.UI.Avalonia.Controls
 				return d.Formatted();
 			}
 		}
-		public string GetDateTimeFormat(double duration)
-		{
-			if (duration <= 2 * 60)
-				return "H:mm:ss";
-			if (duration < 60 * 60)
-				return "H:mm";
-			if (duration < 24 * 60 * 60)
-				return "H:mm";
-			if (duration < 3 * 24 * 60 * 60)
-				return "M/d H:mm";
-			if (duration < 6 * 30 * 24 * 60 * 60)
-				return "M/d";
 
-			return "yyyy-M-d";
+		public class DateTimeFormat
+		{
+			public double Maximum { get; set; }
+			public TimeSpan StepSize { get; set; }
+			public string TextFormat { get; set; }
+
+			public DateTimeFormat(double maximum, TimeSpan stepSize, string textFormat)
+			{
+				Maximum = maximum;
+				StepSize = stepSize;
+				TextFormat = textFormat;
+			}
+		}
+
+		public List<DateTimeFormat> dateFormats = new List<DateTimeFormat>
+		{
+			new DateTimeFormat(2 * 60, TimeSpan.FromSeconds(1), "H:mm:ss"),
+			//new DateTimeFormat(60 * 60, 1, "H:mm"),
+			new DateTimeFormat(24 * 60 * 60, TimeSpan.FromMinutes(1), "H:mm"),
+			new DateTimeFormat(3 * 24 * 60 * 60, TimeSpan.FromMinutes(1), "M/d H:mm"),
+			new DateTimeFormat(6 * 30 * 24 * 60 * 60, TimeSpan.FromDays(1), "M/d"),
+			new DateTimeFormat(1000.0 * 12 * 30 * 24 * 60 * 60, TimeSpan.FromDays(1), "yyyy-M-d"),
+		};
+
+		public DateTimeFormat GetDateTimeFormat(double duration)
+		{
+			foreach (var format in dateFormats)
+			{
+				if (duration < format.Maximum)
+					return format;
+			}
+
+			return null;
 		}
 
 		private void UnloadModel()
@@ -740,8 +763,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private static List<DataPoint> BinDataPoints(ListSeries listSeries, List<DataPoint> dataPoints)
 		{
-			double firstBin = dataPoints[0].X;
-			double lastBin = dataPoints[dataPoints.Count - 1].X;
+			double firstBin = dataPoints.First().X;
+			double lastBin = dataPoints.Last().X;
 			int numBins = (int)Math.Ceiling((lastBin - firstBin) / listSeries.xBinSize) + 1;
 			double[] bins = new double[numBins];
 			foreach (DataPoint dataPoint in dataPoints)

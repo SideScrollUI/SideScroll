@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using Atlas.Core;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -15,6 +16,8 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		private TabControlChart tabControlChart;
 		private PlotView plotView;
+		public ListGroup listGroup;
+		private TextBlock textBlockSum;
 		public List<TabChartLegendItem> legendItems = new List<TabChartLegendItem>();
 		public Dictionary<string, TabChartLegendItem> idxLegendItems = new Dictionary<string, TabChartLegendItem>();
 
@@ -26,6 +29,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			this.tabControlChart = tabControlChart;
 			this.plotView = tabControlChart.plotView;
+			this.listGroup = tabControlChart.ListGroup;
 			this.IsHorizontal = horizontal;
 			InitializeControls();
 		}
@@ -36,6 +40,17 @@ namespace Atlas.UI.Avalonia.Controls
 			//VerticalAlignment = VerticalAlignment.Stretch;
 			Margin = new Thickness(6);
 			Orientation = IsHorizontal ? Orientation.Horizontal : Orientation.Vertical;
+
+			if (listGroup.ShowOrder && !IsHorizontal)
+			{
+				textBlockSum = new TextBlock()
+				{
+					Text = "Sum",
+					Foreground = Brushes.LightGray,
+					Margin = new Thickness(2, 2, 2, 2),
+					HorizontalAlignment = HorizontalAlignment.Right,
+				};
+			}
 
 			RefreshModel();
 		}
@@ -67,6 +82,8 @@ namespace Atlas.UI.Avalonia.Controls
 		private void UpdatePositions()
 		{
 			Children.Clear();
+			if (textBlockSum != null)
+				Children.Add(textBlockSum);
 
 			var nonzero = new List<TabChartLegendItem>();
 			var unused = new List<TabChartLegendItem>();
@@ -79,8 +96,13 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 
 			var ordered = nonzero.OrderByDescending(a => a.Sum).ToList();
+			ordered.AddRange(unused);
+			if (listGroup.ShowOrder)
+			{
+				for (int i = 0; i < ordered.Count; i++)
+					ordered[i].Index = i + 1;
+			}
 			Children.AddRange(ordered);
-			Children.AddRange(unused);
 		}
 
 		private void LegendItemClicked(TabChartLegendItem legendItem)
@@ -136,6 +158,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			UpdatePositions();
 
+			// Possibly faster? But more likely to cause problems
 			/*var prevLegends = idxLegendItems.Clone<Dictionary<string, TabChartLegendItem>>();
 			idxLegendItems = new Dictionary<string, TabChartLegendItem>();
 			int row = 0;

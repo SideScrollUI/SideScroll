@@ -5,6 +5,7 @@ using Atlas.Tabs;
 using Avalonia.Controls;
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia.View
 {
@@ -78,6 +79,13 @@ namespace Atlas.UI.Avalonia.View
 				var tabView = new TabView(childTabInstance);
 				tabView.Load();
 				return tabView;
+			}
+			
+			if (value is ITabCreatorAsync creatorAsync)
+			{
+				//value = new TabCreatorAsync(creatorAsync);
+				// todo: move
+				value = Task.Run(() => creatorAsync.CreateAsync(new Call())).GetAwaiter().GetResult();
 			}
 
 			if (value is ITab iTab)

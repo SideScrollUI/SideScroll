@@ -69,7 +69,7 @@ namespace Atlas.Core
 					int period = (int)(offset / periodDuration);
 					Debug.Assert(period < timeRangeValues.Count);
 
-					timeRangeValues[period].Value += binDuration.TotalMinutes;
+					timeRangeValues[period].Value += binDuration.TotalMinutes * dataPoint.Value;
 				}
 			}
 			return timeRangeValues;

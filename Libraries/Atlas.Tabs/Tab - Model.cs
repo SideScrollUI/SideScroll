@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Atlas.Tabs
 {
@@ -19,6 +20,11 @@ namespace Atlas.Tabs
 	public interface ITabCreator
 	{
 		object CreateControl(object value, out string label);
+	}
+
+	public interface ITabCreatorAsync
+	{
+		Task<ITab> CreateAsync(Call call);
 	}
 
 	public class TabObject
