@@ -64,6 +64,8 @@ namespace Atlas.Tabs
 			if (obj == null)
 				throw new Exception("Object is null");
 			Objects.Add(new TabObject() { obj = obj, fill = fill });
+			if (obj is ChartSettings)
+				MinDesiredWidth = 800;
 		}
 
 		public IList Items
@@ -341,7 +343,7 @@ namespace Atlas.Tabs
 			List<MethodInfo> visibleMethods = GetVisibleMethods(type);
 
 			// Add any methods that return a Task object
-			ItemCollection<TaskCreator> methods = new ItemCollection<TaskCreator>();
+			var methods = new ItemCollection<TaskCreator>();
 			foreach (MethodInfo methodInfo in visibleMethods)
 			{
 				// todo: check parameter types, assuming Log param now
@@ -375,7 +377,7 @@ namespace Atlas.Tabs
 				Type elementType = listType.GetGenericArguments()[0]; // dictionaries?
 				List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleProperties(elementType);
 
-				TabDataSettings tabDataSettings = new TabDataSettings();
+				var tabDataSettings = new TabDataSettings();
 				tabBookmark.tabViewSettings.TabDataSettings.Add(tabDataSettings);
 
 				foreach (object obj in iList)
@@ -399,7 +401,7 @@ namespace Atlas.Tabs
 							if (childNode.selectedObjects.Count > 0)
 							{
 								childNode.tabModel = tabModel;
-								SelectedRow selectedRow = new SelectedRow()
+								var selectedRow = new SelectedRow()
 								{
 									rowIndex = -1,
 									obj = obj,

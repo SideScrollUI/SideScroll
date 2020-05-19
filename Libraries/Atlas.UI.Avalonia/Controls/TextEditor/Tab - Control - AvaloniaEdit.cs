@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Avalonia.Styling;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -34,21 +35,6 @@ namespace Atlas.UI.Avalonia.Controls
 			InitializeControls();
 		}
 
-		public Size measureOverrideSize;
-		protected override Size MeasureOverride(Size constraint)
-		{
-			try
-			{
-				measureOverrideSize = base.MeasureOverride(constraint);
-			}
-			catch
-			{
-				// catch 10k line length limit exception
-			}
-			Size desiredSize = DesiredSize;
-			return measureOverrideSize;
-		}
-
 		public Size arrangeOverrideFinalSize;
 		protected override Size ArrangeOverride(Size finalSize)
 		{
@@ -56,18 +42,39 @@ namespace Atlas.UI.Avalonia.Controls
 			return base.ArrangeOverride(finalSize);
 		}
 
+		public class TabControlTextEditor : AvaloniaEdit.TextEditor, IStyleable
+		{
+			Type IStyleable.StyleKey => typeof(AvaloniaEdit.TextEditor);
+
+			protected override Size MeasureOverride(Size constraint)
+			{
+				Size  measureOverrideSize = constraint;
+				try
+				{
+					measureOverrideSize = base.MeasureOverride(constraint);
+					measureOverrideSize = new Size(measureOverrideSize.Width, Math.Min(constraint.Height, measureOverrideSize.Height + 12)); // compensate for padding bug
+				}
+				catch
+				{
+					// catch 10k line length limit exception
+				}
+				//Size desiredSize = DesiredSize;
+				return measureOverrideSize;
+			}
+		}
+
 		private void InitializeControls()
 		{
-			Background = new SolidColorBrush(Theme.GridBackgroundColor);
+			Background = new SolidColorBrush(Theme.BackgroundColor);
 			MaxWidth = 3000;
 
 			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("*");
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Top;
 
-			textEditor = new AvaloniaEdit.TextEditor()
+			textEditor = new TabControlTextEditor()
 			{
 				IsReadOnly = true,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -85,7 +92,15 @@ namespace Atlas.UI.Avalonia.Controls
 				SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"), // handles JSON too
 			};
 
-			Children.Add(textEditor);
+			var border = new Border()
+			{
+				Child = textEditor,
+				Background = new SolidColorBrush(Theme.GridBackgroundColor),
+				VerticalAlignment = VerticalAlignment.Top,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+			};
+
+			Children.Add(border);
 
 			//textEditor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
 			/*ShowLineNumbers = true;
@@ -99,7 +114,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public void Load(string path)
 		{
 			this.path = path;
-			FileInfo fileInfo = new FileInfo(path);
+			var fileInfo = new FileInfo(path);
 			if (fileInfo.Length > MaxAutoLoadSize)
 			{
 				// todo: add load button to load rest of content

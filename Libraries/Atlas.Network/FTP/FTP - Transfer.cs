@@ -40,9 +40,11 @@ namespace Atlas.Network
 		{
 			get
 			{
-				FtpItem fileInfo = new FtpItem();
-				fileInfo.fullPath = LocalFilePath;
-				fileInfo.Filename = FileName;
+				var fileInfo = new FtpItem()
+				{
+					fullPath = LocalFilePath,
+					Filename = FileName,
+				};
 				if (File.Exists(LocalFilePath))
 				{
 					fileInfo.Size = new FileInfo(LocalFilePath).Length;

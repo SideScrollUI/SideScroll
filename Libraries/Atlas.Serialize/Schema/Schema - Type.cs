@@ -60,8 +60,7 @@ namespace Atlas.Serialize
 				// FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance); // For Atlas only?
 				foreach (FieldInfo fieldInfo in type.GetFields())
 				{
-					FieldSchema fieldSchema = new FieldSchema(fieldInfo);
-
+					var fieldSchema = new FieldSchema(fieldInfo);
 					if (!fieldSchema.Serialized)
 						continue;
 
@@ -70,7 +69,7 @@ namespace Atlas.Serialize
 				
 				foreach (PropertyInfo propertyInfo in type.GetProperties())
 				{
-					PropertySchema propertySchema = new PropertySchema(propertyInfo);
+					var propertySchema = new PropertySchema(propertyInfo);
 					if (!propertySchema.Serialized)
 						continue;
 

@@ -17,7 +17,7 @@ namespace Atlas.Tabs.Test.DataGrid
 					var testItem = new TestItem()
 					{
 						Integer = i,
-						Long = (long)i * (long)int.MaxValue,
+						Long = (long)i * int.MaxValue,
 						DateTime = new DateTime(DateTime.Now.Ticks + i),
 						TimeSpan = TimeSpan.FromHours(i),
 						Bool = (i % 2 == 1),

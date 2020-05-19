@@ -24,7 +24,7 @@ namespace Atlas.Tabs
 
 		public static ItemCollection<ListToString> Create(IEnumerable enumerable, int limit = 200000)
 		{
-			ItemCollection<ListToString> list = new ItemCollection<ListToString>();
+			var list = new ItemCollection<ListToString>();
 			foreach (object obj in enumerable)
 			{
 				list.Add(new ListToString(obj));

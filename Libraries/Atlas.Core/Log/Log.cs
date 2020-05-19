@@ -153,14 +153,7 @@ namespace Atlas.Core
 
 		private void InitializeContext()
 		{
-			if (context == null)
-			{
-				context = SynchronizationContext.Current;
-				if (context == null)
-				{
-					context = new SynchronizationContext();
-				}
-			}
+			context = context ?? SynchronizationContext.Current ?? new SynchronizationContext();
 		}
 
 		protected void CreateEventPropertyChanged([CallerMemberName] string propertyName = "")

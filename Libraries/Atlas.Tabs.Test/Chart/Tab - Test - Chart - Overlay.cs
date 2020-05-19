@@ -58,7 +58,7 @@ namespace Atlas.Tabs.Test.Chart
 				{
 					AddSample(i);
 				}
-				ChartSettings chartSettings = new ChartSettings(samples);
+				var chartSettings = new ChartSettings(samples);
 				model.AddObject(chartSettings, true);
 			}
 
@@ -124,7 +124,7 @@ namespace Atlas.Tabs.Test.Chart
 				//call.log.Add("test");
 				//call.log.Add("New Log entry", new Tag("name", "value"));
 
-				Random random = new Random();
+				//var random = new Random();
 				AddSample(samples.Count);
 				//tabChart.chart.Series[0].Points.DataBindY(tabModel.Chart); // required to refresh, any alternatives?
 				//tabChart.chart.DataBind();

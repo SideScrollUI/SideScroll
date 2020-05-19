@@ -182,7 +182,7 @@ namespace Atlas.UI.Avalonia.Controls
 			gridAddBookmark.Children.Add(textBoxName);
 
 
-			Grid gridSaveCancelBookmark = new Grid()
+			var gridSaveCancelBookmark = new Grid()
 			{
 				ColumnDefinitions = new ColumnDefinitions("Auto,Auto"),
 				RowDefinitions = new RowDefinitions("Auto,Auto"), // Header, Body
@@ -192,12 +192,12 @@ namespace Atlas.UI.Avalonia.Controls
 				[Grid.RowProperty] = 2,
 			};
 
-			Button buttonSave = new TabControlButton("Save");
+			var buttonSave = new TabControlButton("Save");
 			Grid.SetRow(buttonSave, 2);
 			Grid.SetColumn(buttonSave, 0);
 			buttonSave.Click += ButtonSave_Click;
 
-			Button buttonCancel = new TabControlButton("Cancel");
+			var buttonCancel = new TabControlButton("Cancel");
 			Grid.SetRow(buttonCancel, 2);
 			Grid.SetColumn(buttonCancel, 1);
 			buttonCancel.Click += ButtonCancel_Click;

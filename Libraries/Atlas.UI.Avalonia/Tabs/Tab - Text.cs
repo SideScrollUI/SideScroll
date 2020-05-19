@@ -35,7 +35,7 @@ namespace Atlas.UI.Avalonia.Tabs
 				//textEditor.TextBlock.FontSize = 30;
 
 				// No scrollbars
-				/*TextBox textBox = new TextBox()
+				/*var textBox = new TextBox()
 				{
 					VerticalAlignment = VerticalAlignment.Stretch,
 					HorizontalAlignment = HorizontalAlignment.Left,
@@ -62,7 +62,6 @@ namespace Atlas.UI.Avalonia.Tabs
 				//tabAvaloniaEdit.textEditor.VerticalAlignment = VerticalAlignment.Stretch;
 				//tabAvaloniaEdit.textEditor.IsReadOnly = true; // todo: allow editing?
 				tabAvaloniaEdit.Text = tab.text;
-				tabAvaloniaEdit.Background = new SolidColorBrush(Colors.White);
 
 				if (tab.text.StartsWith("{"))
 				{
@@ -87,7 +86,6 @@ namespace Atlas.UI.Avalonia.Tabs
 				TextArea.IndentationStrategy = new Indentation.CSharp.CSharpIndentationStrategy();*/
 
 				//SearchPanel.Install(this.textEditor);
-
 			}
 		}
 	}

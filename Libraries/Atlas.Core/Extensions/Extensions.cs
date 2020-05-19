@@ -214,6 +214,16 @@ namespace Atlas.Extensions // rename to Core?
 			return Trim(dateTime, timeSpan.Ticks);
 		}
 
+		public static TimeSpan Trim(this TimeSpan timeSpan, long ticks = TimeSpan.TicksPerSecond)
+		{
+			return new TimeSpan(timeSpan.Ticks - (timeSpan.Ticks % ticks));
+		}
+
+		public static TimeSpan Trim(this TimeSpan timeSpan, TimeSpan roundingInterval)
+		{
+			return Trim(timeSpan, roundingInterval.Ticks);
+		}
+
 		public static DateTimeOffset Trim(this DateTimeOffset dateTimeOffset, long ticks)
 		{
 			DateTime dateTime = dateTimeOffset.UtcDateTime;

@@ -84,7 +84,7 @@ namespace Atlas.UI.Avalonia.View
 			if (value is ITabCreatorAsync creatorAsync)
 			{
 				//value = new TabCreatorAsync(creatorAsync);
-				// todo: move
+				// todo: move elsewhere, we shouldn't be blocking during creation
 				value = Task.Run(() => creatorAsync.CreateAsync(new Call())).GetAwaiter().GetResult();
 			}
 

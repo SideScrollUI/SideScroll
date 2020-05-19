@@ -228,9 +228,7 @@ namespace Atlas.Tabs
 			//Debug.Assert(context == null || SynchronizationContext.Current == context);
 			if (uiContext == null)
 			{
-				uiContext = SynchronizationContext.Current;
-				if (uiContext == null)
-					uiContext = new SynchronizationContext();
+				uiContext = SynchronizationContext.Current ?? new SynchronizationContext();
 			}
 		}
 
@@ -844,7 +842,7 @@ namespace Atlas.Tabs
 
 		public TabInstance CreateChild(TabModel model)
 		{
-			TabInstance childTabInstance = new TabInstance(Project, model)
+			var childTabInstance = new TabInstance(Project, model)
 			{
 				ParentTabInstance = this,
 			};

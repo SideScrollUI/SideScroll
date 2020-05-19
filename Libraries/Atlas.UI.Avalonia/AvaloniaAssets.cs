@@ -13,21 +13,19 @@ namespace Atlas.UI.Avalonia
 			var assembly = Assembly.GetExecutingAssembly();
 			var resourceName = name;
 
-			Bitmap bitmap;
 			using (Stream stream = assembly.GetManifestResourceStream(resourceName))
 			{
-				bitmap = new Bitmap(stream);
+				return new Bitmap(stream);
 			}
-			return bitmap;
 		}
 
 		public static Image GetImage(Bitmap bitmap)
 		{
-			Image imageBack = new Image()
+			var image = new Image()
 			{
 				Source = bitmap,
 			};
-			return imageBack;
+			return image;
 		}
 
 		public class Bitmaps

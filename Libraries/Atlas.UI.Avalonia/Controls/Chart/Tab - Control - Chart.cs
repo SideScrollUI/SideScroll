@@ -45,6 +45,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 	public class TabControlChart : UserControl //, IDisposable
 	{
+		private const double MarginPercent = 0.1;
 		private static OxyColor nowColor = OxyColors.Green;
 
 		private TabInstance tabInstance;
@@ -314,15 +315,19 @@ namespace Atlas.UI.Avalonia.Controls
 				double duration = endTime.Value.Subtract(startTime.Value).TotalSeconds;
 				dateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(startTime.Value);
 				dateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value);
-
-				var dateFormat = GetDateTimeFormat(duration);
-				dateTimeAxis.StringFormat = dateFormat.TextFormat;
-				dateTimeAxis.MinimumMajorStep = dateFormat.StepSize.TotalDays;
-				double widthPerLabel = 6 * dateTimeAxis.StringFormat.Length + 25;
-				dateTimeAxis.IntervalLength = Math.Max(50, widthPerLabel);
+				UpdateDateTimeInterval(duration);
 			}
 			plotModel.Axes.Add(dateTimeAxis);
 			return dateTimeAxis;
+		}
+
+		private void UpdateDateTimeInterval(double duration)
+		{
+			var dateFormat = GetDateTimeFormat(duration);
+			dateTimeAxis.StringFormat = dateFormat.TextFormat;
+			dateTimeAxis.MinimumMajorStep = dateFormat.StepSize.TotalDays;
+			double widthPerLabel = 6 * dateTimeAxis.StringFormat.Length + 25;
+			dateTimeAxis.IntervalLength = Math.Max(50, widthPerLabel);
 		}
 
 		private void AddLinearAxis()
@@ -515,12 +520,23 @@ namespace Atlas.UI.Avalonia.Controls
 
 			valueAxis.MinimumMajorStep = hasFraction ? 0 : 1;
 
-			var margin = (maximum - minimum) * 0.05;
+			if (ListGroup.MinValue is double minValue)
+				minimum = minValue;
+
+			var margin = (maximum - minimum) * MarginPercent;
 			if (minimum == maximum)
 				margin = Math.Abs(minimum);
 
 			valueAxis.Minimum = minimum - margin;
 			valueAxis.Maximum = maximum + margin;
+		}
+
+		private void UpdateDateTimeAxis()
+		{
+			if (dateTimeAxis == null)
+				return;
+
+			//UpdateDateTimeInterval(double duration);
 		}
 
 		private static string ValueFormatter(double d)
@@ -796,7 +812,7 @@ namespace Atlas.UI.Avalonia.Controls
 				lineSeries.Points.AddRange(dataPoints);
 			}
 
-			Dispatcher.UIThread.InvokeAsync(() => this.plotModel.InvalidatePlot(true), DispatcherPriority.Background);
+			Dispatcher.UIThread.InvokeAsync(() => plotModel.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
 		private void AddNowTime()

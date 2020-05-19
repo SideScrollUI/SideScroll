@@ -14,7 +14,7 @@ namespace Atlas.Tabs.Test.DataGrid
 
 			public override void Load(Call call, TabModel model)
 			{
-				MyClass[] classes = new MyClass[] { new MyClass(), new MyClass() };
+				var classes = new MyClass[] { new MyClass(), new MyClass() };
 
 				model.Items = new ItemCollection<ListItem>()
 				{

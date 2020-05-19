@@ -14,6 +14,7 @@ namespace Atlas.Core
 		public DateTime? StartTime { get; set; }
 		public DateTime? EndTime { get; set; }
 		public bool ShowOrder { get; set; }
+		public double? MinValue { get; set; }
 		public ItemCollection<ListSeries> ListSeries { get; set; } = new ItemCollection<ListSeries>();
 
 		public double xBinSize;

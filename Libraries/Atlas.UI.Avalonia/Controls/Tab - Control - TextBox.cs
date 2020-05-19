@@ -73,21 +73,19 @@ namespace Atlas.UI.Avalonia.Controls
 		// DefaultTheme.xaml is setting this for templates
 		private void TextBox_PointerEnter(object sender, PointerEventArgs e)
 		{
-			TextBox textBox = (TextBox)sender;
-			//textBox.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			if (textBox.IsEnabled && !textBox.IsReadOnly)
+			//BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+			if (IsEnabled && !IsReadOnly)
 			{
-				OriginalColor = textBox.Background;
-				textBox.Background = new SolidColorBrush(Theme.ControlBackgroundHover);
+				OriginalColor = Background;
+				Background = new SolidColorBrush(Theme.ControlBackgroundHover);
 			}
 		}
 
 		private void TextBox_PointerLeave(object sender, PointerEventArgs e)
 		{
-			TextBox textBox = (TextBox)sender;
-			if (textBox.IsEnabled && !textBox.IsReadOnly)
-				textBox.Background = OriginalColor ?? textBox.Background;
-			//textBox.BorderBrush = textBox.Background;
+			if (IsEnabled && !IsReadOnly)
+				Background = OriginalColor ?? Background;
+			//BorderBrush = Background;
 		}
 	}
 }

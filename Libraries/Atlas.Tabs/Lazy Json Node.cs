@@ -41,8 +41,7 @@ namespace Atlas.Tabs
 	{
 		private JsonArray jsonArray;
 		private List<object> _Items;
-		[InnerValue]
-		[StyleValue]
+		[InnerValue, StyleValue]
 		public List<object> Items
 		{
 			get
@@ -74,8 +73,7 @@ namespace Atlas.Tabs
 	{
 		private JsonObject jsonObject;
 		private List<LazyJsonProperty> _Items;
-		[InnerValue]
-		[StyleValue]
+		[InnerValue, StyleValue]
 		public List<LazyJsonProperty> Items
 		{
 			get
@@ -85,9 +83,11 @@ namespace Atlas.Tabs
 					_Items = new List<LazyJsonProperty>();
 					foreach (var pair in jsonObject)
 					{
-						LazyJsonProperty property = new LazyJsonProperty();
-						property.Key = pair.Key;
-						property.Value = Create(pair.Value);
+						var property = new LazyJsonProperty()
+						{
+							Key = pair.Key,
+							Value = Create(pair.Value),
+						};
 						_Items.Add(property);
 					}
 				}
@@ -109,8 +109,7 @@ namespace Atlas.Tabs
 	public class LazyJsonProperty : LazyJsonNode
 	{
 		public string Key { get; set; }
-		[InnerValue]
-		[StyleValue]
+		[InnerValue, StyleValue]
 		public object Value { get; set; }
 
 		/*public bool HasChildren

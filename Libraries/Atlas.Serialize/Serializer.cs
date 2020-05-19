@@ -338,7 +338,7 @@ namespace Atlas.Serialize
 				if (typeRepo.type == null)
 					continue;
 
-				TypeRepoWriter typeRepoWriter = new TypeRepoWriter()
+				var typeRepoWriter = new TypeRepoWriter()
 				{
 					typeRepo = typeRepo,
 				};
@@ -355,7 +355,7 @@ namespace Atlas.Serialize
 				});*/
 				foreach (var typeRepoWriter in writers)
 				{
-					using (BinaryWriter binaryWriter = new BinaryWriter(typeRepoWriter.memoryStream, System.Text.Encoding.Default, true))
+					using (var binaryWriter = new BinaryWriter(typeRepoWriter.memoryStream, System.Text.Encoding.Default, true))
 						typeRepoWriter.typeRepo.SaveObjects(logSerialize, binaryWriter);
 				}
 			}

@@ -16,9 +16,7 @@ namespace Atlas.Tabs.Test.DataGrid
 
 			public Instance()
 			{
-				context = SynchronizationContext.Current;
-				if (context == null)
-					context = new SynchronizationContext();
+				context = SynchronizationContext.Current ?? new SynchronizationContext();
 			}
 
 			public override void Load(Call call, TabModel model)

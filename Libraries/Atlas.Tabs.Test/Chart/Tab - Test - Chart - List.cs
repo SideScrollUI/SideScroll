@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Test.Chart
 		public class Instance : TabInstance
 		{
 			//private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
-			private List<ItemCollection<int>> series = new List<ItemCollection<int>>();
+			private List<ItemCollection<int>> series;
 			private Random random = new Random();
 			private bool ChartInitialized = false;
 
@@ -24,9 +24,9 @@ namespace Atlas.Tabs.Test.Chart
 
 			public override void Load(Call call, TabModel model)
 			{
+				series = new List<ItemCollection<int>>();
 				//items.Add(new ListItem("Log", series));
 				//model.Items = items;
-				model.MinDesiredWidth = 600;
 
 				model.Actions =  new ItemCollection<TaskCreator>()
 				{

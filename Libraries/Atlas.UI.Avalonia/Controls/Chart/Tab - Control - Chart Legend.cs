@@ -64,8 +64,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
 				color = scatterSeries.MarkerFill.ToColor();
 			var legendItem = new TabChartLegendItem(this, oxyListSeries);
-			legendItem.OnSelectionChanged += CheckBox_SelectionChanged;
-			legendItem.OnHighlightChanged += LegendItem_OnHighlightChanged;
+			legendItem.OnSelectionChanged += LegendItem_SelectionChanged;
 			legendItem.textBlock.PointerPressed += (s, e) =>
 			{
 				if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
@@ -211,14 +210,9 @@ namespace Atlas.UI.Avalonia.Controls
 			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
-		private void CheckBox_SelectionChanged(object sender, EventArgs e)
+		private void LegendItem_SelectionChanged(object sender, EventArgs e)
 		{
 			UpdateVisibleSeries();
-		}
-
-		private void LegendItem_OnHighlightChanged(object sender, EventArgs e)
-		{
-			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
 		public void HighlightAll(bool showFaded)

@@ -68,7 +68,7 @@ namespace Atlas.Tabs
 				string text = filter.Trim();
 				if (text.Length == 0)
 					continue;
-				FilterExpression filterExpression = new FilterExpression();
+				var filterExpression = new FilterExpression();
 				if (text.First() == '"' && text.Last() == '"')
 				{
 					filterExpression.matchWord = true;
@@ -83,7 +83,6 @@ namespace Atlas.Tabs
 		public bool Matches(object obj, List<PropertyInfo> columnProperties)
 		{
 			string allValuesUppercase = "";
-			Type type = obj.GetType();
 			foreach (PropertyInfo propertyInfo in columnProperties)
 			{
 				object value = propertyInfo.GetValue(obj);

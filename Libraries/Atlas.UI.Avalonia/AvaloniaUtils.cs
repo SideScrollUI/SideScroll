@@ -12,7 +12,7 @@ namespace Atlas.UI.Avalonia
 	{
 		public static void AddTextBoxContextMenu(TextBox textBox)
 		{
-			ContextMenu contextMenu = new ContextMenu();
+			var contextMenu = new ContextMenu();
 
 			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 

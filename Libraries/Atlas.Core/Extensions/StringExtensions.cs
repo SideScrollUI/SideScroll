@@ -52,6 +52,8 @@ namespace Atlas.Extensions
 			return input.Substring(start, input.Length - start);
 		}
 
+		private static HashSet<char> wordSpacedSymbols = new HashSet<char>() { '|', '/', '-' };
+
 		public static string WordSpaced(this string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -71,9 +73,10 @@ namespace Atlas.Extensions
 				{
 					c = ' ';
 				}
-				else if (c == '|')
+				else if (wordSpacedSymbols.Contains(c))
 				{
-					newText.Append(" |");
+					newText.Append(' ');
+					newText.Append(c);
 					c = ' ';
 					upperCase = true;
 				}

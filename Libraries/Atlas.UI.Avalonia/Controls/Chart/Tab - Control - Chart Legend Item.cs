@@ -15,7 +15,6 @@ namespace Atlas.UI.Avalonia.Controls
 	public class TabChartLegendItem : Grid
 	{
 		public event EventHandler<EventArgs> OnSelectionChanged;
-		public event EventHandler<EventArgs> OnHighlightChanged;
 
 		public TabControlChartLegend legend;
 		public OxyListSeries oxyListSeries;
@@ -77,8 +76,8 @@ namespace Atlas.UI.Avalonia.Controls
 			//HorizontalAlignment = HorizontalAlignment.Right;
 			ColumnDefinitions = new ColumnDefinitions("Auto, *, Auto");
 			RowDefinitions = new RowDefinitions("Auto");
-			//this.Margin = new Thickness(6);
-			this.
+			//Margin = new Thickness(6);
+			Background = new SolidColorBrush(Theme.BackgroundColor);
 
 			UpdateSum();
 			AddCheckBox();
@@ -224,7 +223,7 @@ namespace Atlas.UI.Avalonia.Controls
 				SetFilled(true);
 				UpdateSeries(lineSeries);
 				legend.HighlightAll(true);
-				OnHighlightChanged?.Invoke(this, null);
+				OnSelectionChanged?.Invoke(this, null);
 			}
 			textBlock.Foreground = new SolidColorBrush(Theme.ActiveSelectionHighlightColor);
 			//polygon.Stroke = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor);
@@ -241,7 +240,7 @@ namespace Atlas.UI.Avalonia.Controls
 				UpdateSeries(lineSeries);
 				SetFilled(IsChecked);
 				legend.HighlightAll(false);
-				OnHighlightChanged?.Invoke(this, null);
+				OnSelectionChanged?.Invoke(this, null);
 			}
 			textBlock.Foreground = Brushes.LightGray;
 			//polygon.StrokeThickness = 4;

@@ -110,7 +110,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void AddControl(Control control, bool fill, SeparatorType separatorType)
 		{
-			Item item = new Item()
+			var item = new Item()
 			{
 				Control = control,
 				Fill = fill,
@@ -273,7 +273,7 @@ namespace Atlas.UI.Avalonia.Controls
 			int newIndex = 1;
 			foreach (Control control in orderedControls)
 			{
-				Item item = new Item()
+				var item = new Item()
 				{
 					Control = control,
 					Fill = true,
