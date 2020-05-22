@@ -39,7 +39,7 @@ namespace Atlas.Core
 				if (obj is DateTime dateTime)
 					return dateTime.ToString("yyyy-M-d H:mm:ss.FFFFFF");
 				if (obj is TimeSpan timeSpan)
-					return timeSpan.ToString("g");
+					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
 				// use any ToString() that overrides the base
 				MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes);
 				if (toStringMethod.DeclaringType != typeof(object) && toStringMethod.DeclaringType != typeof(ValueType))
