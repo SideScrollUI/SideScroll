@@ -128,7 +128,7 @@ namespace Atlas.UI.Avalonia.Controls
 			HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
 			VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
 			MaxWidth = 1500;
-			MaxHeight = 600;
+			MaxHeight = 620; // 25 Items
 
 			if (tabInstance.tabViewSettings.ChartDataSettings.Count == 0)
 				tabInstance.tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
