@@ -15,6 +15,7 @@ namespace Atlas.UI.Avalonia.Controls
 	public class TabChartLegendItem : Grid
 	{
 		public event EventHandler<EventArgs> OnSelectionChanged;
+		public event EventHandler<EventArgs> OnVisibleChanged;
 
 		public TabControlChartLegend legend;
 		public OxyListSeries oxyListSeries;
@@ -223,7 +224,7 @@ namespace Atlas.UI.Avalonia.Controls
 				SetFilled(true);
 				UpdateSeries(lineSeries);
 				legend.HighlightAll(true);
-				OnSelectionChanged?.Invoke(this, null);
+				OnVisibleChanged?.Invoke(this, null);
 			}
 			textBlock.Foreground = new SolidColorBrush(Theme.ActiveSelectionHighlightColor);
 			//polygon.Stroke = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor);
@@ -240,7 +241,7 @@ namespace Atlas.UI.Avalonia.Controls
 				UpdateSeries(lineSeries);
 				SetFilled(IsChecked);
 				legend.HighlightAll(false);
-				OnSelectionChanged?.Invoke(this, null);
+				OnVisibleChanged?.Invoke(this, null);
 			}
 			textBlock.Foreground = Brushes.LightGray;
 			//polygon.StrokeThickness = 4;

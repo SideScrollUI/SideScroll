@@ -45,7 +45,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				textBlockSum = new TextBlock()
 				{
-					Text = "Sum",
+					Text = "Total",
 					Foreground = Brushes.LightGray,
 					Margin = new Thickness(2, 2, 2, 2),
 					HorizontalAlignment = HorizontalAlignment.Right,
@@ -65,6 +65,7 @@ namespace Atlas.UI.Avalonia.Controls
 				color = scatterSeries.MarkerFill.ToColor();
 			var legendItem = new TabChartLegendItem(this, oxyListSeries);
 			legendItem.OnSelectionChanged += LegendItem_SelectionChanged;
+			legendItem.OnVisibleChanged += LegendItem_VisibleChanged;
 			legendItem.textBlock.PointerPressed += (s, e) =>
 			{
 				if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
@@ -123,6 +124,7 @@ namespace Atlas.UI.Avalonia.Controls
 				SetSelectionAll(true);
 			}
 			UpdateVisibleSeries();
+			OnSelectionChanged?.Invoke(this, null);
 			//if (legendItem.checkBox.IsChecked == true)
 			//SetSelectionAll(legendItem.checkBox.IsChecked == true);
 		}
@@ -206,11 +208,16 @@ namespace Atlas.UI.Avalonia.Controls
 					}
 				}
 			}
-			OnSelectionChanged?.Invoke(this, null);
 			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
 		private void LegendItem_SelectionChanged(object sender, EventArgs e)
+		{
+			UpdateVisibleSeries();
+			OnSelectionChanged?.Invoke(this, null);
+		}
+
+		private void LegendItem_VisibleChanged(object sender, EventArgs e)
 		{
 			UpdateVisibleSeries();
 		}
