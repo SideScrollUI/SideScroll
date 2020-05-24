@@ -28,7 +28,7 @@ namespace Atlas.Tabs.Test.Chart
 				//items.Add(new ListItem("Log", series));
 				//model.Items = items;
 
-				model.Actions =  new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Add Entry", AddEntry),
 					new TaskDelegate("Start: 1 Entry / second", StartTask, true),

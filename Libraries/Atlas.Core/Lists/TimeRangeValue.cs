@@ -9,11 +9,13 @@ namespace Atlas.Core
 {
 	public class TimeRangeValue
 	{
+		[XAxis]
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 		public TimeSpan Duration => EndTime.Subtract(StartTime);
 
 		public string Name { get; set; }
+		[YAxis]
 		public double Value { get; set; }
 
 		public override string ToString() => Name;

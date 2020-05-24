@@ -15,6 +15,7 @@ namespace Atlas.Tabs.Test.Chart
 					new ListItem("List", new TabTestChartList()),
 					//new ListItem("Split", new TabTestChartSplit()),
 					new ListItem("Overlay", new TabTestChartOverlay()),
+					new ListItem("Time Range", new TabTestChartTimeRangeValue()),
 				};
 			}
 		}
