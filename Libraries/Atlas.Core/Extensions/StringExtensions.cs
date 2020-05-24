@@ -54,19 +54,22 @@ namespace Atlas.Extensions
 
 		private static HashSet<char> wordSpacedSymbols = new HashSet<char>() { '|', '/', '-' };
 
+		// Adds spaces between words
+		// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'
 		public static string WordSpaced(this string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
 				return "";
 			var newText = new StringBuilder(text.Length * 2);
-			bool upperCase = true;
+			bool upperCaseNext = true;
 			char prevChar = ' ';
 			for (int i = 0; i < text.Length; i++)
 			{
 				char c = text[i];
-				if (upperCase)
+				char nextChar = (i + 1) < text.Length ? text[i + 1] : ' ';
+				if (upperCaseNext)
 				{
-					upperCase = false;
+					upperCaseNext = false;
 					c = char.ToUpper(c);
 				}
 				if (c == '_')
@@ -78,16 +81,27 @@ namespace Atlas.Extensions
 					newText.Append(' ');
 					newText.Append(c);
 					c = ' ';
-					upperCase = true;
+					upperCaseNext = true;
 				}
 				else if (prevChar != ' ')
 				{
-					if (char.IsUpper(c) && !char.IsUpper(prevChar))
+					if (char.IsUpper(c) && char.IsDigit(prevChar) && nextChar == c) // Don't split 5XX apart
+					{
+					}
+					else if (char.IsUpper(c) && !char.IsUpper(prevChar)) // Add space between CamelCase
+					{
+						//if (nextChar
 						newText.Append(' ');
-					else if (char.IsNumber(c) && !char.IsNumber(prevChar))
+					}
+					else if (char.IsNumber(c) && !char.IsNumber(prevChar)) // Add space before 1st Number, Number10
+					{
 						newText.Append(' ');
-					else if (char.IsUpper(prevChar) && char.IsUpper(c) && i + 1 < text.Length && char.IsLower(text[i + 1]))
-						newText.Append(' ');
+					}
+					else if (char.IsUpper(prevChar) && char.IsUpper(c) && char.IsLower(nextChar))
+					{
+						if (nextChar != 's')
+							newText.Append(' '); // Add a space before first capital after caps string, assume CamelCase, CAPSName
+					}
 				}
 				newText.Append(c);
 				prevChar = c;

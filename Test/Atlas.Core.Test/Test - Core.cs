@@ -30,6 +30,30 @@ namespace Atlas.Core.Test
 			Assert.AreEqual("CPU Utilization", text);
 		}
 
+		[Test, Description("WordSpaced 5XX")]
+		public void WordSpaced5xx()
+		{
+			string text = "Http5XXErrors".WordSpaced();
+
+			Assert.AreEqual("Http 5XX Errors", text); // 5xx would be better though?
+		}
+
+		[Test, Description("WordSpaced 5XXs")]
+		public void WordSpaced5xxs()
+		{
+			string text = "Http5XXsErrors".WordSpaced();
+
+			Assert.AreEqual("Http 5XXs Errors", text);
+		}
+
+		[Test, Description("WordSpaced 2APIs")]
+		public void WordSpaced2Apis()
+		{
+			string text = "2APIs".WordSpaced();
+
+			Assert.AreEqual("2 APIs", text);
+		}
+
 		[Test]
 		public void TestBookmarkUri()
 		{
@@ -37,7 +61,7 @@ namespace Atlas.Core.Test
 
 			Assert.AreEqual("atlas", uri.Prefix);
 			Assert.AreEqual("type", uri.Type);
-			Assert.AreEqual(new Version(3, 1, 0, 0), uri.Version);
+			Assert.AreEqual(new Version(3, 1), uri.Version);
 			Assert.AreEqual("id", uri.Id);
 		}
 	}

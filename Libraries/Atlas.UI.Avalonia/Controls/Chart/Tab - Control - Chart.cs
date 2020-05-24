@@ -687,6 +687,11 @@ namespace Atlas.UI.Avalonia.Controls
 					SeriesChanged(listSeries, e.NewItems, lineSeries);
 				});
 
+			lineSeries.MouseDown += (s, e) =>
+			{
+				OnSelectionChanged?.Invoke(s, new SeriesSelectedEventArgs(new List<ListSeries>() { listSeries }));
+			};
+
 			oxyListSeriesList.Add(oxyListSeries);
 			ListToTabSeries[listSeries.iList] = listSeries;
 			ListToTabIndex[listSeries.iList] = ListToTabIndex.Count;
