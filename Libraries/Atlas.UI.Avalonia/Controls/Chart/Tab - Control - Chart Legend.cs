@@ -195,7 +195,7 @@ namespace Atlas.UI.Avalonia.Controls
 						continue;
 					if (idxLegendItems.TryGetValue(lineSeries.Title, out TabChartLegendItem legendItem))
 					{
-						legendItem.UpdateSeries(lineSeries);
+						legendItem.UpdateVisible(lineSeries);
 					}
 				}
 				if (series is OxyPlot.Series.ScatterSeries scatterSeries)
@@ -204,7 +204,7 @@ namespace Atlas.UI.Avalonia.Controls
 						continue;
 					if (idxLegendItems.TryGetValue(scatterSeries.Title, out TabChartLegendItem legendItem))
 					{
-						legendItem.UpdateSeries(scatterSeries);
+						legendItem.UpdateVisible(scatterSeries);
 					}
 				}
 			}

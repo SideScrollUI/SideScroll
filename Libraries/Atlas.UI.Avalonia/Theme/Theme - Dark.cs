@@ -9,8 +9,9 @@ namespace Atlas.UI.Avalonia
 		public static Color BackgroundFocusedColor = Color.Parse("#161616");
 		public static Color ForegroundColor = Color.Parse("#f8f8f8");
 
-		public static Color TitleBackgroundColor = Color.Parse("#4f52bb");
-		public static Color TitleForegroundColor = Color.Parse("#f0f0f8");
+		//public static Color GridForegroundColor = Color.Parse("#f0f0f8");
+		//public static Color GridForegroundColor = Color.Parse("#d8d8f0");
+		//public static Color GridBackgroundColor = Color.Parse("#1f2242");
 
 		public static Color GridForegroundColor = Color.Parse("#f3f3f3");
 		public static Color GridBackgroundColor = Color.Parse("#181818");
@@ -21,8 +22,6 @@ namespace Atlas.UI.Avalonia
 		//public static Color ButtonMouseOverBackgroundColor = Color.Parse("#7827d4");
 		//public static Color ButtonBackgroundHoverColor = Color.Parse("#4e8ef7"); // 659aff, DefaultTheme.xaml is overriding this
 		public static Color ButtonBackgroundHoverColor = Color.Parse("#7827d4"); // 659aff, DefaultTheme.xaml is overriding this
-
-		public static Color TextBackgroundDisabledColor = Color.Parse("#c5c6c6");
 
 		public static Color ActiveSelectionHighlightColor = GridBackgroundSelectedColor;
 		public static Color InactiveSelectionHighlightColor = GridBackgroundSelectedColor;

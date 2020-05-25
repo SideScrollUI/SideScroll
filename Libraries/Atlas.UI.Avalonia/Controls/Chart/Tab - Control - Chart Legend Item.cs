@@ -222,7 +222,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				highlight = true;
 				SetFilled(true);
-				UpdateSeries(lineSeries);
+				UpdateVisible(lineSeries);
 				legend.HighlightAll(true);
 				OnVisibleChanged?.Invoke(this, null);
 			}
@@ -238,7 +238,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 			{
 				highlight = false;
-				UpdateSeries(lineSeries);
+				UpdateVisible(lineSeries);
 				SetFilled(IsChecked);
 				legend.HighlightAll(false);
 				OnVisibleChanged?.Invoke(this, null);
@@ -252,7 +252,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 		}
 
-		public void UpdateSeries(OxyPlot.Series.LineSeries lineSeries)
+		public void UpdateVisible(OxyPlot.Series.LineSeries lineSeries)
 		{
 			this.series = lineSeries;
 			if (IsChecked == true || highlight)
@@ -287,7 +287,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		public void UpdateSeries(OxyPlot.Series.ScatterSeries scatterSeries)
+		public void UpdateVisible(OxyPlot.Series.ScatterSeries scatterSeries)
 		{
 			this.series = scatterSeries;
 			if (IsChecked == true || highlight)

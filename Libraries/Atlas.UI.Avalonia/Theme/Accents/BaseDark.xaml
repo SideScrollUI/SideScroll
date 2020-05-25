@@ -8,8 +8,8 @@
         <SolidColorBrush x:Key="ThemeAccentBrush2">#99119EDA</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeAccentBrush3">#66119EDA</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeAccentBrush4">#33119EDA</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="ThemeBackgroundBrush">#FFFFFFFF</SolidColorBrush>
+
+        <SolidColorBrush x:Key="ThemeBackgroundBrush">#101010</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBackgroundHover">#ddffdd</SolidColorBrush>
         
         <SolidColorBrush x:Key="ThemeBorderLightBrush">#FF282828</SolidColorBrush>
