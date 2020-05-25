@@ -35,6 +35,7 @@
     <None Remove="Logo.ico" />
     <None Remove="right-chevron.png" />
     <None Remove="StyleResources.xaml" />
+    <None Remove="Theme\Accents\BaseLight.xaml" />
     <None Remove="View\TabAvalonEdit.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -57,7 +58,7 @@
     <ProjectReference Include="..\Atlas.Tabs\Atlas.Tabs.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="DefaultTheme.xaml.cs">
+    <Compile Update="Theme\DefaultTheme.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
     <Compile Update="Tabs\TabAvalonEdit.xaml.cs">
@@ -67,6 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Controls\ToolBar\ToolbarButton2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Theme\Accents\BaseLight.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

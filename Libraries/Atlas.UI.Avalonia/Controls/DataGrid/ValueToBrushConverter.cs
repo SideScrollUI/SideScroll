@@ -41,7 +41,7 @@ namespace Atlas.UI.Avalonia
 					if (hasChildren)
 						return StyleBrushes.HasChildren;
 					//return Brushes.Moccasin;
-					else if (Editable && (value is ListMember) && ((ListMember)value).Editable)
+					else if (Editable && value is ListMember listMember && listMember.Editable)
 						return StyleBrushes.Editable;
 					else
 						return StyleBrushes.NoChildren;

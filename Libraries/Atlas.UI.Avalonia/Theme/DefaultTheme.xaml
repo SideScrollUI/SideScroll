@@ -21,7 +21,7 @@
     </Style>
 
     <Style Selector="dg|DataGridRow /template/ Rectangle#BackgroundRectangle">
-        <Setter Property="Fill" Value="#FF92F397" />
+    <Setter Property="Fill" Value="{DynamicResource ThemeControlHighBrush}" />
     </Style>
 
     <Style Selector="Button:pointerover /template/ ContentPresenter">

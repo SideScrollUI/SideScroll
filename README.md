@@ -7,7 +7,7 @@ Atlas is a tool for exploring multiple paths of a tree at once
 * Custom serializer that can save & load any object without any extra code
 * Follow tabs 20 or more levels deep. Your view will scroll as needed
 
-![Atlas GUI](/Images/Screenshots/DataGridAndCustomControl.png)
+![Atlas UI](/Images/Screenshots/DataGridAndCustomControl.png)
 
 * [Demo Project - Video Game Database](https://github.com/garyhertel/VideoGamesDB)
 * [Setup](Docs/Setup.md)

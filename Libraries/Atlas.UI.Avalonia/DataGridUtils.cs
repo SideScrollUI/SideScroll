@@ -87,9 +87,9 @@ namespace Atlas.UI.Avalonia
 			if (dataGrid == null)
 				return null;
 
-			List<ColumnInfo> columns;
-			List<List<string>> contentRows;
-			GetDataGridContents(dataGrid, out columns, out contentRows);
+			GetDataGridContents(dataGrid, 
+				out List<ColumnInfo> columns, 
+				out List<List<string>> contentRows);
 
 			string text = TableToString(columns, contentRows);
 			return text;
@@ -100,9 +100,9 @@ namespace Atlas.UI.Avalonia
 			if (dataGrid == null)
 				return null;
 
-			List<ColumnInfo> columns;
-			List<List<string>> contentRows;
-			GetDataGridContents(dataGrid, out columns, out contentRows);
+			GetDataGridContents(dataGrid, 
+				out List<ColumnInfo> columns, 
+				out List<List<string>> contentRows);
 
 			var stringBuilder = new StringBuilder();
 			bool addComma = false;

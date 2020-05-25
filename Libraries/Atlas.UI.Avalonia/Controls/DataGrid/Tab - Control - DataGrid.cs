@@ -205,12 +205,6 @@ namespace Atlas.UI.Avalonia.Controls
 				CanUserReorderColumns = true,
 				CanUserSortColumns = true,
 
-				//Foreground = new SolidColorBrush(Colors.White),
-				HorizontalGridLinesBrush = new SolidColorBrush(Colors.Black),
-				VerticalGridLinesBrush = new SolidColorBrush(Colors.Black),
-
-				Foreground = new SolidColorBrush(Theme.GridForegroundColor),
-				Background = new SolidColorBrush(Theme.GridBackgroundColor),
 				RowBackground = new SolidColorBrush(Theme.GridBackgroundColor),
 				AlternatingRowBackground = new SolidColorBrush(Theme.GridBackgroundColor),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
