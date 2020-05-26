@@ -163,7 +163,7 @@ namespace Atlas.UI.Avalonia.Controls
 				RowDefinitions = new RowDefinitions("*,Auto"),
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
-				Background = Theme.Brushes.Background, // grid lines look bad when hovering without this
+				Background = Theme.Background, // grid lines look bad when hovering without this
 			};
 
 			containerGrid.Children.Add(plotView);

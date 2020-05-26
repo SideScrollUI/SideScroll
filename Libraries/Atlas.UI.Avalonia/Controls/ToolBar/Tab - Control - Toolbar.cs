@@ -26,7 +26,7 @@ namespace Atlas.UI.Avalonia.Tabs
 			RowDefinitions = new RowDefinitions("Auto");
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
-			Background = Theme.Brushes.ToolbarButtonBackground;
+			Background = Theme.ToolbarButtonBackground;
 		}
 
 		public void AddControl(Control control)
@@ -47,7 +47,7 @@ namespace Atlas.UI.Avalonia.Tabs
 		{
 			Panel panel = new Panel()
 			{
-				Background = Theme.Brushes.ToolbarButtonSeparator,
+				Background = Theme.ToolbarButtonSeparator,
 				Width = 2,
 				Margin = new Thickness(4),
 			};
@@ -117,7 +117,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public ToolbarTextBlock(string text = "")
 		{
-			Foreground = Theme.Brushes.TitleForeground;
+			Foreground = Theme.TitleForeground;
 			Text = text;
 			Margin = new Thickness(6);
 			TextWrapping = TextWrapping.NoWrap;
@@ -131,7 +131,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public ToolbarRadioButton(string text = "")
 		{
-			Foreground = Theme.Brushes.TitleForeground;
+			Foreground = Theme.TitleForeground;
 			Content = text;
 			Margin = new Thickness(6);
 			VerticalAlignment = VerticalAlignment.Center;
@@ -158,7 +158,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 			Content = image;
 			Command = command;
-			Background = Theme.Brushes.ToolbarButtonBackground;
+			Background = Theme.ToolbarButtonBackground;
 			BorderBrush = Background;
 			BorderThickness = new Thickness(0);
 			Margin = new Thickness(2);
@@ -198,13 +198,13 @@ namespace Atlas.UI.Avalonia.Tabs
 		{
 			base.OnPointerEnter(e);
 			BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			Background = Theme.Brushes.ToolbarButtonBackgroundHover;
+			Background = Theme.ToolbarButtonBackgroundHover;
 		}
 
 		protected override void OnPointerLeave(PointerEventArgs e)
 		{
 			base.OnPointerLeave(e);
-			Background = Theme.Brushes.ToolbarButtonBackground;
+			Background = Theme.ToolbarButtonBackground;
 			BorderBrush = Background;
 		}
 	}

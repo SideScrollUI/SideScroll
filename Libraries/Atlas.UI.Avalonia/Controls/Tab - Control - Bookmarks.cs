@@ -47,7 +47,7 @@ namespace Atlas.UI.Avalonia.Controls
 		// don't want to reload this because
 		private void InitializeControls()
 		{
-			Background = Theme.Brushes.Background;
+			Background = Theme.Background;
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 			//Width = 1000;
@@ -281,12 +281,12 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void Tab_LostFocus(object sender, RoutedEventArgs e)
 		{
-			Background = Theme.Brushes.Background;
+			Background = Theme.Background;
 		}
 
 		private void Tab_GotFocus(object sender, RoutedEventArgs e)
 		{
-			Background = Theme.Brushes.BackgroundFocused;
+			Background = Theme.BackgroundFocused;
 		}
 	}
 }

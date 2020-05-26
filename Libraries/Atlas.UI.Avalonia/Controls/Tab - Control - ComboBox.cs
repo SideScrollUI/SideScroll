@@ -82,7 +82,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (IsEnabled)
 			{
 				OriginalColor = Background;
-				Background = Theme.Brushes.ControlBackgroundHover;
+				Background = Theme.ControlBackgroundHover;
 			}
 		}
 

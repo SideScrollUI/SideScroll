@@ -205,8 +205,8 @@ namespace Atlas.UI.Avalonia.Controls
 				CanUserReorderColumns = true,
 				CanUserSortColumns = true,
 
-				RowBackground = Theme.Brushes.GridBackground,
-				AlternatingRowBackground = Theme.Brushes.GridBackground,
+				RowBackground = Theme.GridBackground,
+				AlternatingRowBackground = Theme.GridBackground,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch, // doesn't work
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, // todo: can't get working

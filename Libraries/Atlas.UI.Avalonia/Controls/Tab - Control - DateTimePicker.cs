@@ -123,7 +123,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				Content = image,
 				//Command = command,
-				Background = Theme.Brushes.ToolbarButtonBackground,
+				Background = Theme.ToolbarButtonBackground,
 				BorderBrush = Background,
 				BorderThickness = new Thickness(0),
 				//Margin = new Thickness(2),
@@ -149,13 +149,13 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			Button button = (Button)sender;
 			button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			button.Background = Theme.Brushes.ToolbarButtonBackgroundHover;
+			button.Background = Theme.ToolbarButtonBackgroundHover;
 		}
 
 		private void Button_PointerLeave(object sender, PointerEventArgs e)
 		{
 			Button button = (Button)sender;
-			button.Background = Theme.Brushes.ToolbarButtonBackground;
+			button.Background = Theme.ToolbarButtonBackground;
 			button.BorderBrush = button.Background;
 		}
 	}

@@ -65,7 +65,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			Background = Theme.Brushes.Background;
+			Background = Theme.Background;
 			MaxWidth = 3000;
 
 			ColumnDefinitions = new ColumnDefinitions("*");
@@ -81,8 +81,8 @@ namespace Atlas.UI.Avalonia.Controls
 				VerticalAlignment = VerticalAlignment.Stretch,
 				MaxWidth = 3000,
 				MaxHeight = 2000,
-				Foreground = Theme.Brushes.GridForeground,
-				Background = Theme.Brushes.GridBackground,
+				Foreground = Theme.GridForeground,
+				Background = Theme.GridBackground,
 				WordWrap = true,
 				//HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // WordWrap requires Disabled
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, // WordWrap requires Disabled, but it doesn't work
@@ -95,7 +95,7 @@ namespace Atlas.UI.Avalonia.Controls
 			var border = new Border()
 			{
 				Child = textEditor,
-				Background = Theme.Brushes.GridBackground,
+				Background = Theme.GridBackground,
 				VerticalAlignment = VerticalAlignment.Top,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 			};

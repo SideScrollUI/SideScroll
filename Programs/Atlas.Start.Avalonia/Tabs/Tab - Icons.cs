@@ -22,7 +22,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			{
 				grid = new Grid()
 				{
-					Background = UI.Avalonia.Theme.Brushes.ToolbarButtonBackground,
+					Background = UI.Avalonia.Theme.ToolbarButtonBackground,
 				};
 				model.AddObject(grid);
 

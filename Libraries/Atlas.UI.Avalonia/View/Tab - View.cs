@@ -111,7 +111,7 @@ namespace Atlas.UI.Avalonia.View
 		// Gets called multiple times when re-initializing
 		private void InitializeControls()
 		{
-			Background = Theme.Brushes.Background; // doesn't do anything
+			Background = Theme.Background; // doesn't do anything
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 			//Focusable = true;
@@ -570,8 +570,8 @@ namespace Atlas.UI.Avalonia.View
 				MinWidth = 100,
 				MinHeight = 100,
 				MaxWidth = 200,
-				Foreground = Theme.Brushes.ToolbarButtonBackground,
-				Background = Theme.Brushes.Background,
+				Foreground = Theme.ToolbarButtonBackground,
+				Background = Theme.Background,
 				HorizontalAlignment = HorizontalAlignment.Left,
 			};
 

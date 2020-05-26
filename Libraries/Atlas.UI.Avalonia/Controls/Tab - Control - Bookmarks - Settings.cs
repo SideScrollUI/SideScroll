@@ -172,13 +172,13 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			Button button = (Button)sender;
 			//button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			button.Background = Theme.Brushes.ButtonBackgroundHover;
+			button.Background = Theme.ButtonBackgroundHover;
 		}
 
 		private void Button_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
 			Button button = (Button)sender;
-			button.Background = Theme.Brushes.ButtonBackground;
+			button.Background = Theme.ButtonBackground;
 			//button.BorderBrush = button.Background;
 		}
 

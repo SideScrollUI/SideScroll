@@ -1,9 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Media;
 
-namespace Atlas.UI.Avalonia.Theme
+namespace Atlas.UI.Avalonia
 {
-	public class Brushes
+	public class Theme
 	{
 		public static SolidColorBrush Background => Get("ThemeBackgroundBrush");
 		public static SolidColorBrush BackgroundFocused => Get("ThemeBackgroundFocusedBrush");

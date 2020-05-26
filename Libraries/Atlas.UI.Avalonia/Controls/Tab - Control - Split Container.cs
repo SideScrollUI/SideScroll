@@ -88,24 +88,24 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void TabView_GotFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			Background = Theme.Brushes.BackgroundFocused;
+			Background = Theme.BackgroundFocused;
 		}
 
 		private void TabView_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			Background = Theme.Brushes.Background;
+			Background = Theme.Background;
 		}
 
 		protected override void OnPointerEnter(PointerEventArgs e)
 		{
 			base.OnPointerEnter(e);
-			Background = Theme.Brushes.BackgroundFocused;
+			Background = Theme.BackgroundFocused;
 		}
 
 		protected override void OnPointerLeave(PointerEventArgs e)
 		{
 			base.OnPointerLeave(e);
-			Background = Theme.Brushes.Background;
+			Background = Theme.Background;
 		}
 
 		public void AddControl(Control control, bool fill, SeparatorType separatorType)

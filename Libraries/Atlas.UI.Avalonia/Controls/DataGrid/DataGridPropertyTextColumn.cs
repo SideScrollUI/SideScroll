@@ -21,8 +21,8 @@ namespace Atlas.UI.Avalonia
 	public class DataGridPropertyTextColumn : DataGridTextColumn
 	{
 
-		public SolidColorBrush BrushHasChildren => Theme.Brushes.HasLinks;
-		public SolidColorBrush BrushEditable { get; set; } = Theme.Brushes.Editable;
+		public SolidColorBrush BrushHasChildren => Theme.HasLinks;
+		public SolidColorBrush BrushEditable { get; set; } = Theme.Editable;
 		public SolidColorBrush BrushValue { get; set; } = new SolidColorBrush(Colors.LightGray);
 		public SolidColorBrush BrushBackground { get; set; } = new SolidColorBrush(Colors.White);
 

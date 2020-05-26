@@ -78,7 +78,7 @@ namespace Atlas.UI.Avalonia.Controls
 			ColumnDefinitions = new ColumnDefinitions("Auto, *, Auto");
 			RowDefinitions = new RowDefinitions("Auto");
 			//Margin = new Thickness(6);
-			Background = Theme.Brushes.Background;
+			Background = Theme.Background;
 
 			UpdateSum();
 			AddCheckBox();
@@ -226,7 +226,7 @@ namespace Atlas.UI.Avalonia.Controls
 				legend.HighlightAll(true);
 				OnVisibleChanged?.Invoke(this, null);
 			}
-			textBlock.Foreground = Theme.Brushes.GridBackgroundSelected;
+			textBlock.Foreground = Theme.GridBackgroundSelected;
 			//polygon.Stroke = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor);
 			//polygon.Stroke = Brushes.White;
 			//polygon.StrokeThickness = 2;

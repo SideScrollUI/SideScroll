@@ -33,7 +33,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void InitializeControl()
 		{
-			Background = Theme.Brushes.TitleBackground;
+			Background = Theme.TitleBackground;
 
 			var containerGrid = new Grid()
 			{
@@ -52,7 +52,7 @@ namespace Atlas.UI.Avalonia.Controls
 				FontSize = 14,
 				//Margin = new Thickness(2), // Shows as black, Need Padding so Border not needed
 				//Background = new SolidColorBrush(Theme.TitleBackgroundColor),
-				Foreground = Theme.Brushes.TitleForeground,
+				Foreground = Theme.TitleForeground,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				//HorizontalAlignment = HorizontalAlignment.Left,
 				//[ToolTip.TipProperty] = Label, // re-enable when foreground fixed
@@ -62,7 +62,7 @@ namespace Atlas.UI.Avalonia.Controls
 			var borderPaddingTitle = new Border()
 			{
 				BorderThickness = new Thickness(5, 2, 2, 2),
-				BorderBrush = Theme.Brushes.TitleBackground,
+				BorderBrush = Theme.TitleBackground,
 				Child = title,
 			};
 			containerGrid.Children.Add(borderPaddingTitle);

@@ -44,7 +44,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private void CheckBox_PointerEnter(object sender, PointerEventArgs e)
 		{
 			if (IsEnabled)
-				Background = Theme.Brushes.ControlBackgroundHover;
+				Background = Theme.ControlBackgroundHover;
 		}
 
 		private void CheckBox_PointerLeave(object sender, PointerEventArgs e)
