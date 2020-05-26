@@ -634,7 +634,7 @@ namespace Atlas.UI.Wpf
 		private void toolStripMenuItemDebug_Click(object sender, EventArgs e)
 		{
 			TabModel debugListCollection = new TabModel("Debug");
-			TabView tabView = this.Clone<TabView>(tabInstance.taskInstance.Call);
+			TabView tabView = this.Clone<TabView>(tabInstance.TaskInstance.Call);
 			debugListCollection.AddData(tabView);
 			Control debugControl = CreateChildControl("Debug", debugListCollection);
 		}

@@ -26,8 +26,8 @@ namespace Atlas.Console
 			// setup
 			Project project = LoadProject(UserSettings.DefaultProjectPath);
 			call = new Call(GetType().Name);
-			logWriterConsole = new LogWriterConsole(call.log);
-			logWriterText = new LogWriterText(call.log, project.DataApp.GetTypePath(typeof(Console)) + "/Logs/Main");
+			logWriterConsole = new LogWriterConsole(call.Log);
+			logWriterText = new LogWriterText(call.Log, project.DataApp.GetTypePath(typeof(Console)) + "/Logs/Main");
 			cancellationToken = tokenSource.Token;
 
 			//for (int i = 0; i < 100; i++)
@@ -65,7 +65,7 @@ namespace Atlas.Console
 
 		void TestLogWriter()
 		{
-			call.log.Add("test");
+			call.Log.Add("test");
 		}
 	}
 }

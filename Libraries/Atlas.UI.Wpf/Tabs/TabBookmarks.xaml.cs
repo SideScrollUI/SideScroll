@@ -26,7 +26,7 @@ namespace Atlas.UI.Wpf
 		public void Initialize(TabInstance tabInstance)
 		{
 			this.tabInstance = tabInstance;
-			this.project = tabInstance.project;
+			this.project = tabInstance.Project;
 			this.tabModel = tabInstance.Model;
 			AddListData();
 		}
@@ -47,7 +47,7 @@ namespace Atlas.UI.Wpf
 
 		protected void AddListData()
 		{
-			tabModel.Bookmarks = tabModel.Bookmarks ?? new BookmarkCollection(tabInstance.project);
+			tabModel.Bookmarks = tabModel.Bookmarks ?? new BookmarkCollection(tabInstance.Project);
 			tabData = new TabData(tabInstance, tabModel.Bookmarks.Items, new TabDataSettings());
 			tabData.autoSelectFirst = false;
 			tabData.OnSelectionChanged += OnSelectedBookmarkChanged;
@@ -61,7 +61,7 @@ namespace Atlas.UI.Wpf
 			List<Bookmark> bookmarks = new List<Bookmark>();
 			foreach (ViewBookmark name in tabData.SelectedItems)
 			{
-				Bookmark bookmark = project.DataApp.Load<Bookmark>(name.Name, tabInstance.taskInstance.Call);
+				Bookmark bookmark = project.DataApp.Load<Bookmark>(name.Name, tabInstance.TaskInstance.Call);
 				if (bookmark != null)
 					bookmarks.Add(bookmark);
 			}

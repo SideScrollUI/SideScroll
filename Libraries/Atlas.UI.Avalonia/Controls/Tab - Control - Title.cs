@@ -33,9 +33,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void InitializeControl()
 		{
-			Background = new SolidColorBrush(Theme.TitleBackgroundColor);
+			Background = Theme.Brushes.TitleBackground;
 
-			Grid containerGrid = new Grid()
+			var containerGrid = new Grid()
 			{
 				ColumnDefinitions = new ColumnDefinitions("*,Auto"),
 				RowDefinitions = new RowDefinitions("Auto"), // Header, Body
@@ -52,17 +52,17 @@ namespace Atlas.UI.Avalonia.Controls
 				FontSize = 14,
 				//Margin = new Thickness(2), // Shows as black, Need Padding so Border not needed
 				//Background = new SolidColorBrush(Theme.TitleBackgroundColor),
-				Foreground = new SolidColorBrush(Theme.TitleForegroundColor),
+				Foreground = Theme.Brushes.TitleForeground,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				//HorizontalAlignment = HorizontalAlignment.Left,
 				//[ToolTip.TipProperty] = Label, // re-enable when foreground fixed
 				//[ToolTip.ForegroundProperty] = Brushes.Black, // this overrides the TextBlock Foreground property
 			};
 
-			Border borderPaddingTitle = new Border()
+			var borderPaddingTitle = new Border()
 			{
 				BorderThickness = new Thickness(5, 2, 2, 2),
-				BorderBrush = new SolidColorBrush(Theme.TitleBackgroundColor),
+				BorderBrush = Theme.Brushes.TitleBackground,
 				Child = title,
 			};
 			containerGrid.Children.Add(borderPaddingTitle);
@@ -89,7 +89,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//containerGrid.Children.Add(checkBox); // always enable so they can add notes? (future thing)
 			}
 
-			Border borderContent = new Border()
+			var borderContent = new Border()
 			{
 				BorderThickness = new Thickness(1),
 				BorderBrush = new SolidColorBrush(Colors.Black),

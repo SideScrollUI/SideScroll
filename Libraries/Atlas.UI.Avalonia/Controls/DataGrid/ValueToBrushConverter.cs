@@ -20,9 +20,9 @@ namespace Atlas.UI.Avalonia
 
 		public sealed class BrushColors
 		{
-			public ISolidColorBrush HasChildren { get; set; } = new SolidColorBrush(Theme.HasChildrenColor);
-			public ISolidColorBrush NoChildren { get; set; } = new SolidColorBrush(Theme.HasNoChildrenColor); // Brushes.LightGray;
-			public ISolidColorBrush Editable { get; set; } = new SolidColorBrush(Theme.EditableColor);
+			public ISolidColorBrush HasChildren => Theme.Brushes.HasLinks;
+			public ISolidColorBrush NoChildren => Theme.Brushes.NoLinks;
+			public ISolidColorBrush Editable { get; set; } = Theme.Brushes.Editable;
 		}
 		internal static BrushColors StyleBrushes { get; set; } = new BrushColors();
 

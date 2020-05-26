@@ -78,7 +78,7 @@ namespace Atlas.UI.Avalonia.Controls
 			ColumnDefinitions = new ColumnDefinitions("Auto, *, Auto");
 			RowDefinitions = new RowDefinitions("Auto");
 			//Margin = new Thickness(6);
-			Background = new SolidColorBrush(Theme.BackgroundColor);
+			Background = Theme.Brushes.Background;
 
 			UpdateSum();
 			AddCheckBox();
@@ -147,7 +147,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				Width = 16,
 				Height = 16,
-				Stroke = Brushes.Black,
+				Stroke = global::Avalonia.Media.Brushes.Black,
 				StrokeThickness = 1.5,
 			};
 			if (Count > 0)
@@ -178,7 +178,7 @@ namespace Atlas.UI.Avalonia.Controls
 			textBlock = new TextBlock()
 			{
 				Text = series.Title,
-				Foreground = Brushes.LightGray,
+				Foreground = global::Avalonia.Media.Brushes.LightGray,
 				//Background = new SolidColorBrush(Theme.BackgroundColor),
 				Margin = new Thickness(2, 2, 6, 2),
 				//VerticalAlignment = VerticalAlignment.Center,
@@ -196,7 +196,7 @@ namespace Atlas.UI.Avalonia.Controls
 			textBlockSum = new TextBlock()
 			{
 				Text = Sum.Formatted(),
-				Foreground = Brushes.LightGray,
+				Foreground = global::Avalonia.Media.Brushes.LightGray,
 				Margin = new Thickness(10, 2, 6, 2),
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Right,
 				[Grid.ColumnProperty] = 2,
@@ -226,7 +226,7 @@ namespace Atlas.UI.Avalonia.Controls
 				legend.HighlightAll(true);
 				OnVisibleChanged?.Invoke(this, null);
 			}
-			textBlock.Foreground = new SolidColorBrush(Theme.ActiveSelectionHighlightColor);
+			textBlock.Foreground = Theme.Brushes.GridBackgroundSelected;
 			//polygon.Stroke = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor);
 			//polygon.Stroke = Brushes.White;
 			//polygon.StrokeThickness = 2;
@@ -243,7 +243,7 @@ namespace Atlas.UI.Avalonia.Controls
 				legend.HighlightAll(false);
 				OnVisibleChanged?.Invoke(this, null);
 			}
-			textBlock.Foreground = Brushes.LightGray;
+			textBlock.Foreground = global::Avalonia.Media.Brushes.LightGray;
 			//polygon.StrokeThickness = 4;
 			//polygon.Stroke = Brushes.Black;
 		}

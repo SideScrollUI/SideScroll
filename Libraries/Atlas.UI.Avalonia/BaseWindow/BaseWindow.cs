@@ -67,7 +67,7 @@ namespace Atlas.UI.Avalonia
 		{
 			Title = project.projectSettings.Name ?? "<Name>";
 
-			Background = new SolidColorBrush(Theme.BackgroundColor);
+			Background = Theme.Brushes.Background;
 
 			Resources["FontSizeSmall"] = 14; // stop DatePicker using a small font size
 
@@ -212,8 +212,8 @@ namespace Atlas.UI.Avalonia
 			var buttonExpand = new Button()
 			{
 				Content = ">",
-				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
-				Foreground = new SolidColorBrush(Theme.ToolbarTextForegroundColor),
+				Background = Theme.Brushes.ToolbarButtonBackground,
+				Foreground = Theme.Brushes.ToolbarTextForeground,
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				[ToolTip.ShowDelayProperty] = 5,
@@ -228,8 +228,8 @@ namespace Atlas.UI.Avalonia
 			var buttonCollapse = new Button()
 			{
 				Content = "<",
-				Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor),
-				Foreground = new SolidColorBrush(Theme.ToolbarTextForegroundColor),
+				Background = Theme.Brushes.ToolbarButtonBackground,
+				Foreground = Theme.Brushes.ToolbarTextForeground,
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				[ToolTip.TipProperty] = "Scroll Left ( <- )",
@@ -252,7 +252,7 @@ namespace Atlas.UI.Avalonia
 		private void Button_PointerLeave(object sender, PointerEventArgs e)
 		{
 			Button button = (Button)sender;
-			button.Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
+			button.Background = Theme.Brushes.ToolbarButtonBackground;
 		}
 
 		private void ButtonExpand_Click(object sender, RoutedEventArgs e)

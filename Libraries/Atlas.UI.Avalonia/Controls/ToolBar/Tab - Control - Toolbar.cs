@@ -26,7 +26,7 @@ namespace Atlas.UI.Avalonia.Tabs
 			RowDefinitions = new RowDefinitions("Auto");
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
-			Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
+			Background = Theme.Brushes.ToolbarButtonBackground;
 		}
 
 		public void AddControl(Control control)
@@ -47,7 +47,7 @@ namespace Atlas.UI.Avalonia.Tabs
 		{
 			Panel panel = new Panel()
 			{
-				Background = new SolidColorBrush(Theme.ToolbarButtonSeparatorColor),
+				Background = Theme.Brushes.ToolbarButtonSeparator,
 				Width = 2,
 				Margin = new Thickness(4),
 			};
@@ -117,7 +117,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public ToolbarTextBlock(string text = "")
 		{
-			Foreground = new SolidColorBrush(Theme.TitleForegroundColor);
+			Foreground = Theme.Brushes.TitleForeground;
 			Text = text;
 			Margin = new Thickness(6);
 			TextWrapping = TextWrapping.NoWrap;
@@ -131,7 +131,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public ToolbarRadioButton(string text = "")
 		{
-			Foreground = new SolidColorBrush(Theme.TitleForegroundColor);
+			Foreground = Theme.Brushes.TitleForeground;
 			Content = text;
 			Margin = new Thickness(6);
 			VerticalAlignment = VerticalAlignment.Center;
@@ -158,7 +158,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 			Content = image;
 			Command = command;
-			Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
+			Background = Theme.Brushes.ToolbarButtonBackground;
 			BorderBrush = Background;
 			BorderThickness = new Thickness(0);
 			Margin = new Thickness(2);
@@ -198,13 +198,13 @@ namespace Atlas.UI.Avalonia.Tabs
 		{
 			base.OnPointerEnter(e);
 			BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundHoverColor);
+			Background = Theme.Brushes.ToolbarButtonBackgroundHover;
 		}
 
 		protected override void OnPointerLeave(PointerEventArgs e)
 		{
 			base.OnPointerLeave(e);
-			Background = new SolidColorBrush(Theme.ToolbarButtonBackgroundColor);
+			Background = Theme.Brushes.ToolbarButtonBackground;
 			BorderBrush = Background;
 		}
 	}

@@ -2,52 +2,64 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
        xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <Style.Resources>
+  <Style.Resources>
 
-        <SolidColorBrush x:Key="ThemeAccentBrush">#CC119EDA</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeAccentBrush2">#99119EDA</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeAccentBrush3">#66119EDA</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeAccentBrush4">#33119EDA</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeAccentBrush">#CC119EDA</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeAccentBrush2">#99119EDA</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeAccentBrush3">#66119EDA</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeAccentBrush4">#33119EDA</SolidColorBrush>
 
-        <SolidColorBrush x:Key="ThemeBackgroundBrush">#101010</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBackgroundHover">#ddffdd</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeBackgroundBrush">#101010</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeBackgroundHover">#ddffdd</SolidColorBrush>
+
+    <SolidColorBrush x:Key="ThemeForegroundBrush">#f8f8f8</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeForegroundLowBrush">#FF6579bb</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeForegroundLightBrush">#FF808080</SolidColorBrush>
         
-        <SolidColorBrush x:Key="ThemeBorderLightBrush">#FF282828</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBorderMidBrush">#FF106090</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBorderHighRadioBrush">#006df0</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBorderDarkBrush">#FF333333</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeBorderLightBrush">#FF282828</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeBorderMidBrush">#FF106090</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeBorderHighRadioBrush">#006df0</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeBorderDarkBrush">#FF333333</SolidColorBrush>
         
-        <SolidColorBrush x:Key="ThemeControlLightBrush">#FFFFFFFF</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeControlMidBrush">#333333</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeControlHighBrush">#333333</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeControlDarkBrush">#FF888888</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="ThemeForegroundBrush">#FF000000</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeForegroundLowBrush">#FF6579bb</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeForegroundLightBrush">#FF808080</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeControlLightBrush">#FFFFFFFF</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeControlMidBrush">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeControlHighBrush">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeControlDarkBrush">#FF888888</SolidColorBrush>
 
-        <SolidColorBrush x:Key="ErrorBrush">Red</SolidColorBrush>
-        <SolidColorBrush x:Key="ErrorBrushLight">#10ff0000</SolidColorBrush>
+    <SolidColorBrush x:Key="ErrorBrush">Red</SolidColorBrush>
+    <SolidColorBrush x:Key="ErrorBrushLight">#10ff0000</SolidColorBrush>
 
-        <SolidColorBrush x:Key="HighlightBrush">#333333</SolidColorBrush>
-        <SolidColorBrush x:Key="HighlightBackgroundBrush">#333333</SolidColorBrush>
-        <SolidColorBrush x:Key="HighlightForegroundBrush">#1dd05d</SolidColorBrush>
+    <SolidColorBrush x:Key="HighlightBrush">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="HighlightBackgroundBrush">#333333</SolidColorBrush>
+    <SolidColorBrush x:Key="HighlightForegroundBrush">#1dd05d</SolidColorBrush>
 
-        <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#f0f0f8</SolidColorBrush>
-        <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#3a3ac9</SolidColorBrush>
+    <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#f0f0f8</SolidColorBrush>
+    <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#3a3ac9</SolidColorBrush>
+
+    <SolidColorBrush x:Key="ThemeHasLinksBrush">#224444</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeNoLinksBrush">#222222</SolidColorBrush>
+
+    <SolidColorBrush x:Key="ThemeBackgroundFocusedColor">#161616</SolidColorBrush>
+
+    <SolidColorBrush x:Key="ThemeGridForegroundBrush">#f3f3f3</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#181818</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeGridBackgroundSelectedBrush">#333333</SolidColorBrush>
+
+    <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">#303281</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeButtonForegroundBrush">AliceBlue</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#7827d4</SolidColorBrush>
       
-        <Thickness x:Key="ThemeBorderThickness">1</Thickness>
-        <sys:Double x:Key="ThemeDisabledOpacity">0.5</sys:Double>
+    <Thickness x:Key="ThemeBorderThickness">1</Thickness>
+    <sys:Double x:Key="ThemeDisabledOpacity">0.5</sys:Double>
 
-        <sys:Double x:Key="FontSizeSmall">11</sys:Double>
-        <sys:Double x:Key="FontSizeNormal">13</sys:Double>
-        <sys:Double x:Key="FontSizeLarge">17</sys:Double>
+    <sys:Double x:Key="FontSizeSmall">11</sys:Double>
+    <sys:Double x:Key="FontSizeNormal">13</sys:Double>
+    <sys:Double x:Key="FontSizeLarge">17</sys:Double>
 
-        <sys:Double x:Key="ScrollBarThickness">20</sys:Double>
-        <sys:Double x:Key="ScrollBarThumbThickness">12</sys:Double>
+    <sys:Double x:Key="ScrollBarThickness">20</sys:Double>
+    <sys:Double x:Key="ScrollBarThumbThickness">12</sys:Double>
 
-        <sys:Double x:Key="LargeChange">20</sys:Double>
- 
+    <sys:Double x:Key="LargeChange">20</sys:Double>
 
-    </Style.Resources>
+  </Style.Resources>
 </Style>

@@ -27,7 +27,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			IsReadOnly = !property.Editable;
 			if (IsReadOnly)
-				Background = new SolidColorBrush(Theme.TextBackgroundDisabledColor);
+				Background = Theme.Brushes.TextBackgroundDisabled;
 
 			PasswordCharAttribute passwordCharAttribute = property.propertyInfo.GetCustomAttribute<PasswordCharAttribute>();
 			if (passwordCharAttribute != null)
@@ -77,7 +77,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (IsEnabled && !IsReadOnly)
 			{
 				OriginalColor = Background;
-				Background = new SolidColorBrush(Theme.ControlBackgroundHover);
+				Background = Theme.Brushes.ControlBackgroundHover;
 			}
 		}
 

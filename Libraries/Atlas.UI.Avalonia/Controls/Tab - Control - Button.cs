@@ -11,9 +11,9 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		Type IStyleable.StyleKey => typeof(Button);
 
-		public Brush BackgroundBrush = new SolidColorBrush(Theme.ButtonBackgroundColor);
-		public Brush ForegroundBrush = new SolidColorBrush(Theme.ButtonForegroundColor);
-		public Brush HoverBrush = new SolidColorBrush(Theme.ButtonBackgroundHoverColor);
+		public Brush BackgroundBrush = Theme.Brushes.ButtonBackground;
+		public Brush ForegroundBrush = Theme.Brushes.ButtonForeground;
+		public Brush HoverBrush = Theme.Brushes.ButtonBackgroundHover;
 
 		public TabControlButton(string label = null)
 		{

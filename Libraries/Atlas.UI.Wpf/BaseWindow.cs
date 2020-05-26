@@ -283,7 +283,7 @@ namespace Atlas.UI.Wpf
 		{
 			TabInstance tabInstance = tab.Create();
 			tabInstance.Model.Name = "Start";
-			tabInstance.project = project;
+			tabInstance.Project = project;
 			//if (LoadBookmarkUri != null)
 			//	tabInstance.tabBookmark = linker.GetBookmark(LoadBookmarkUri)?.tabBookmark;
 			//else
