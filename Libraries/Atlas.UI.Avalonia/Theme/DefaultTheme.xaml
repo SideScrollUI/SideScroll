@@ -31,7 +31,6 @@
     <Style Selector="ToolTip">
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="#FF000000" />
-        <Setter Property="Background" Value="#FFFFFF" />
     </Style>
 
     <Style Selector="ScrollBar /template/ Border">

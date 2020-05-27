@@ -9,7 +9,7 @@
     <SolidColorBrush x:Key="ThemeAccentBrush3">#66119EDA</SolidColorBrush>
     <SolidColorBrush x:Key="ThemeAccentBrush4">#33119EDA</SolidColorBrush>
         
-    <SolidColorBrush x:Key="ThemeBackgroundBrush">#1e1e1e</SolidColorBrush>
+    <SolidColorBrush x:Key="ThemeBackgroundBrush">#ffffff</SolidColorBrush>
     <SolidColorBrush x:Key="ThemeBackgroundHover">#ddffdd</SolidColorBrush>
     <SolidColorBrush x:Key="ThemeBackgroundTextBrush">#f8f8f8</SolidColorBrush>
         
@@ -38,6 +38,8 @@
     <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#4e7ee7</SolidColorBrush>
       
      <!-- Custom Colors -->
+    <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#1e1e1e</SolidColorBrush>
+      
     <SolidColorBrush x:Key="ThemeHasLinksBrush">#ebc17f</SolidColorBrush>
     <SolidColorBrush x:Key="ThemeNoLinksBrush">LightGray</SolidColorBrush>
 

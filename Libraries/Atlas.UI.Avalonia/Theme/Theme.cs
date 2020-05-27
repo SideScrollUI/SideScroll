@@ -5,7 +5,7 @@ namespace Atlas.UI.Avalonia
 {
 	public class Theme
 	{
-		public static SolidColorBrush Background => Get("ThemeBackgroundBrush");
+		public static SolidColorBrush Background => Get("ThemeTabBackgroundBrush");
 		public static SolidColorBrush BackgroundFocused => Get("ThemeBackgroundFocusedBrush");
 		public static SolidColorBrush Foreground => Get("ThemeForegroundBrush");
 		public static SolidColorBrush BackgroundText => Get("ThemeBackgroundTextBrush");
