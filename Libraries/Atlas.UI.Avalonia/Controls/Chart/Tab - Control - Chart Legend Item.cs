@@ -147,7 +147,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				Width = 16,
 				Height = 16,
-				Stroke = global::Avalonia.Media.Brushes.Black,
+				Stroke = Brushes.Black,
 				StrokeThickness = 1.5,
 			};
 			if (Count > 0)
@@ -178,7 +178,7 @@ namespace Atlas.UI.Avalonia.Controls
 			textBlock = new TextBlock()
 			{
 				Text = series.Title,
-				Foreground = global::Avalonia.Media.Brushes.LightGray,
+				Foreground = Brushes.LightGray,
 				//Background = new SolidColorBrush(Theme.BackgroundColor),
 				Margin = new Thickness(2, 2, 6, 2),
 				//VerticalAlignment = VerticalAlignment.Center,
@@ -196,7 +196,7 @@ namespace Atlas.UI.Avalonia.Controls
 			textBlockSum = new TextBlock()
 			{
 				Text = Sum.Formatted(),
-				Foreground = global::Avalonia.Media.Brushes.LightGray,
+				Foreground = Brushes.LightGray,
 				Margin = new Thickness(10, 2, 6, 2),
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Right,
 				[Grid.ColumnProperty] = 2,
@@ -224,7 +224,7 @@ namespace Atlas.UI.Avalonia.Controls
 				SetFilled(true);
 				UpdateVisible(lineSeries);
 				legend.HighlightAll(true);
-				OnVisibleChanged?.Invoke(this, null);
+				OnSelectionChanged?.Invoke(this, null);
 			}
 			textBlock.Foreground = Theme.GridBackgroundSelected;
 			//polygon.Stroke = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor);
@@ -241,9 +241,9 @@ namespace Atlas.UI.Avalonia.Controls
 				UpdateVisible(lineSeries);
 				SetFilled(IsChecked);
 				legend.HighlightAll(false);
-				OnVisibleChanged?.Invoke(this, null);
+				OnSelectionChanged?.Invoke(this, null);
 			}
-			textBlock.Foreground = global::Avalonia.Media.Brushes.LightGray;
+			textBlock.Foreground = Brushes.LightGray;
 			//polygon.StrokeThickness = 4;
 			//polygon.Stroke = Brushes.Black;
 		}
