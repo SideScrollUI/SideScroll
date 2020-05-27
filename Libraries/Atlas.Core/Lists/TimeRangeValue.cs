@@ -37,7 +37,7 @@ namespace Atlas.Core
 			double duration = Math.Ceiling(EndTime.Subtract(StartTime).TotalSeconds);
 			int numPeriods = Math.Max(5, Math.Min(200, (int)duration));
 			double periodDuration = Math.Ceiling(duration / numPeriods);
-			DateTime startTime = StartTime.Trim(TimeSpan.FromSeconds(1));
+			DateTime startTime = StartTime.Trim();
 
 			if (duration <= 1)
 				return null;

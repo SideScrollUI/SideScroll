@@ -5,6 +5,8 @@ namespace Atlas.Core
 {
 	public class DateTimeUtils
 	{
+		public static DateTime EpochTime => new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+
 		public static TimeSpan? ConvertTextToTimeSpan(string text)
 		{
 			TimeSpan timeSpan;
@@ -22,15 +24,13 @@ namespace Atlas.Core
 			DateTime dateTime;
 
 			// convert epoch 1569998557298
-			var epochTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			uint epochValue;
-			if (text.Length == 10 && uint.TryParse(text, out epochValue))
+			var epochTime = EpochTime;
+			if (text.Length == 10 && uint.TryParse(text, out uint epochValue))
 			{
 				dateTime = epochTime.AddSeconds(epochValue);
 				return dateTime;
 			}
-			long epochValueMilliseconds;
-			if (text.Length == 13 && long.TryParse(text, out epochValueMilliseconds))
+			if (text.Length == 13 && long.TryParse(text, out long epochValueMilliseconds))
 			{
 				dateTime = epochTime.AddMilliseconds(epochValueMilliseconds);
 				return dateTime;
