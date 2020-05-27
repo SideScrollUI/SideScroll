@@ -37,6 +37,7 @@
     <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#FFFFFF</SolidColorBrush>
     <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#4e7ee7</SolidColorBrush>
       
+     <!-- Custom Colors -->
     <SolidColorBrush x:Key="ThemeHasLinksBrush">#ebc17f</SolidColorBrush>
     <SolidColorBrush x:Key="ThemeNoLinksBrush">LightGray</SolidColorBrush>
 
