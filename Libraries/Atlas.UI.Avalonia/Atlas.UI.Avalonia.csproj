@@ -36,6 +36,7 @@
     <None Remove="right-chevron.png" />
     <None Remove="StyleResources.xaml" />
     <None Remove="Theme\Accents\BaseLight.xaml" />
+    <None Remove="Theme\Accents\BaseDark.xaml" />
     <None Remove="View\TabAvalonEdit.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +72,9 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Theme\Accents\BaseLight.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Theme\Accents\BaseDark.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

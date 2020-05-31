@@ -18,7 +18,7 @@ namespace Atlas.Core
 		[YAxis]
 		public double Value { get; set; }
 
-		public override string ToString() => Name;
+		public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime);
 
 		public TimeRangeValue()
 		{
@@ -75,6 +75,60 @@ namespace Atlas.Core
 				}
 			}
 			return timeRangeValues;
+		}
+
+		private static int GetMinGap(List<TimeRangeValue> input, int periodDuration)
+		{
+			if (input.Count < 10)
+				return periodDuration;
+
+			int minDistance = 2 * periodDuration;
+			DateTime? prevTime = null;
+			foreach (TimeRangeValue point in input)
+			{
+				DateTime startTime = point.StartTime;
+				if (prevTime != null)
+				{
+					int duration = Math.Abs((int)startTime.Subtract(prevTime.Value).TotalSeconds);
+					minDistance = Math.Min(minDistance, duration);
+				}
+
+				prevTime = startTime;
+			}
+			return Math.Max(periodDuration, minDistance);
+		}
+
+		// Adds a single NaN point between all gaps greater than minGap so the chart will add gaps in lines
+		public static List<TimeRangeValue> AddGaps(List<TimeRangeValue> input, int periodDuration)
+		{
+			var sorted = input.OrderBy(p => p.StartTime).ToList();
+			int minGap = GetMinGap(sorted, periodDuration);
+
+			DateTime? prevTime = null;
+			var output = new List<TimeRangeValue>();
+			foreach (TimeRangeValue point in sorted)
+			{
+				DateTime startTime = point.StartTime;
+				double value = point.Value;
+				if (prevTime != null)
+				{
+					DateTime expectedTime = prevTime.Value.AddSeconds(minGap);
+					if (expectedTime < startTime)
+					{
+						var insertedPoint = new TimeRangeValue()
+						{
+							StartTime = expectedTime.ToUniversalTime(),
+							Value = double.NaN,
+						};
+						output.Add(insertedPoint);
+					}
+				}
+
+				output.Add(point);
+				prevTime = startTime;
+			}
+
+			return output;
 		}
 	}
 }

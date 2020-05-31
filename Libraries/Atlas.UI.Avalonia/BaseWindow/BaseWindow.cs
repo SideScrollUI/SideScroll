@@ -246,7 +246,7 @@ namespace Atlas.UI.Avalonia
 		private void Button_PointerEnter(object sender, PointerEventArgs e)
 		{
 			Button button = (Button)sender;
-			button.Background = new SolidColorBrush(Color.Parse("#4e8ef7"));
+			button.Background = Theme.ToolbarButtonBackgroundHover;
 		}
 
 		private void Button_PointerLeave(object sender, PointerEventArgs e)

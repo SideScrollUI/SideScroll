@@ -54,7 +54,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeComponent()
 		{
-			Background = new SolidColorBrush(Colors.White);
+			Background = Theme.GridBackground;
 			BorderBrush = new SolidColorBrush(Colors.Black);
 			BorderThickness = new Thickness(1);
 			HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -84,7 +84,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private void TextBox_PointerLeave(object sender, PointerEventArgs e)
 		{
 			if (IsEnabled && !IsReadOnly)
-				Background = OriginalColor ?? Background;
+				Background = OriginalColor;
 			//BorderBrush = Background;
 		}
 	}

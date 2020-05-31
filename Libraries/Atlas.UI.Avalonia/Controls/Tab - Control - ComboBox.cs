@@ -68,7 +68,7 @@ namespace Atlas.UI.Avalonia.Controls
 			MaxWidth = TabControlParams.ControlMaxWidth;*/
 			//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
 
-			Background = new SolidColorBrush(Colors.White);
+			Background = Theme.GridBackground;
 			BorderBrush = new SolidColorBrush(Colors.Black);
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			BorderThickness = new Thickness(1);
@@ -89,7 +89,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private void ComboBox_PointerLeave(object sender, PointerEventArgs e)
 		{
 			if (IsEnabled)
-				Background = OriginalColor ?? new SolidColorBrush(Colors.White);
+				Background = OriginalColor;
 		}
 	}
 }

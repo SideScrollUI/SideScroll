@@ -3,6 +3,7 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input.Platform;
 using Avalonia.Layout;
+using Avalonia.Styling;
 using System;
 using System.Data;
 
@@ -34,8 +35,10 @@ namespace Atlas.UI.Avalonia
 			return textBlock;
 		}
 
-		public class SubTextBlock : TextBlock
+		public class TextBlockElement : TextBlock, IStyleable, ILayoutable
 		{
+			Type IStyleable.StyleKey => typeof(TextBlock);
+
 			public double MaxDesiredWidth = 500;
 
 			// can't override DesiredSize
@@ -51,7 +54,7 @@ namespace Atlas.UI.Avalonia
 
 		protected TextBlock CreateTextBlock(DataGridCell cell, object dataItem)
 		{
-			var textBlockElement = new SubTextBlock()
+			var textBlockElement = new TextBlockElement()
 			{
 				Margin = new Thickness(4),
 				VerticalAlignment = VerticalAlignment.Center,

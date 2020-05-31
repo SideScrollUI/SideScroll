@@ -116,14 +116,16 @@ namespace Atlas.UI.Avalonia
 			}
 		}
 
-		public class SubTextBlock : TextBlock
+		public class TextBlockElement : TextBlock, IStyleable, ILayoutable
 		{
+			Type IStyleable.StyleKey => typeof(TextBlock);
+
 			public double MaxDesiredWidth { get; set; } = 500;
 
 			private DataGridPropertyTextColumn column;
 			private PropertyInfo propertyInfo;
 
-			public SubTextBlock(DataGridPropertyTextColumn column, PropertyInfo propertyInfo)
+			public TextBlockElement(DataGridPropertyTextColumn column, PropertyInfo propertyInfo)
 			{
 				this.column = column;
 				this.propertyInfo = propertyInfo;
@@ -153,7 +155,7 @@ namespace Atlas.UI.Avalonia
 
 		protected TextBlock CreateTextBlock(DataGridCell cell, object dataItem)
 		{
-			var textBlockElement = new SubTextBlock(this, propertyInfo)
+			var textBlockElement = new TextBlockElement(this, propertyInfo)
 			{
 				Margin = new Thickness(4),
 				VerticalAlignment = VerticalAlignment.Center,
