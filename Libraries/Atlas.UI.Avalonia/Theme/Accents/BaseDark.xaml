@@ -4,15 +4,15 @@
 
     <Style.Resources>
 
-        <SolidColorBrush x:Key="ThemeBackgroundBrush">#101010</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBackgroundBrush">#1e1e1e</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBackgroundHover">#4e8ef7</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBackgroundTextBrush">#f0f0f0</SolidColorBrush>
 
-        <SolidColorBrush x:Key="ThemeForegroundBrush">#f3f3f3</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeForegroundBrush">#e3e3e3</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeForegroundLowBrush">#FF6579bb</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeForegroundLightBrush">#FF808080</SolidColorBrush>
         
-        <SolidColorBrush x:Key="ThemeBorderLightBrush">#202020</SolidColorBrush> <!-- DataGrid Lines -->
+        <SolidColorBrush x:Key="ThemeBorderLightBrush">#303030</SolidColorBrush> <!-- DataGrid Lines -->
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#106090</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighRadioBrush">#006df0</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderDarkBrush">#222222</SolidColorBrush>
@@ -39,14 +39,16 @@
         <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#403778</SolidColorBrush>
 
         <!-- Custom Colors -->
-        <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#101010</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#0f0f0f</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeHasLinksBrush">#224444</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeNoLinksBrush">#222222</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeBackgroundFocusedColor">#161616</SolidColorBrush>
 
-        <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#181818</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeScrollBarThumbBrush">#494880</SolidColorBrush>
+
+        <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#202020</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridBackgroundSelectedBrush">#005555</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridForegroundBrush">#f3f3f3</SolidColorBrush>
 

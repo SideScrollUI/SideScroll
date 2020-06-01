@@ -102,8 +102,10 @@ namespace Atlas.UI.Avalonia.Controls
 
 			int rowIndex = RowDefinitions.Count;
 			{
-				var spacerRow = new RowDefinition();
-				spacerRow.Height = new GridLength(5);
+				var spacerRow = new RowDefinition()
+				{
+					Height = new GridLength(5),
+				};
 				RowDefinitions.Add(spacerRow);
 				rowIndex++;
 			}

@@ -46,6 +46,8 @@
 
         <SolidColorBrush x:Key="ThemeBackgroundFocusedColor">LightGray</SolidColorBrush>
 
+        <SolidColorBrush x:Key="ThemeScrollBarThumbBrush">#45599b</SolidColorBrush>
+
         <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridBackgroundSelectedBrush">#005555</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridForegroundBrush">Black</SolidColorBrush>
