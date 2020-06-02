@@ -98,7 +98,7 @@ namespace Atlas.Core
 	}
 
 	// ->Serialize: Can't use [NonSerialized] since that's only for fields :(
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
 	public class UnserializedAttribute : Attribute
 	{
 	}

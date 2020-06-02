@@ -452,13 +452,13 @@ namespace Atlas.Tabs
 		// Todo: Make an async version of this for Task<T> Member(Call call)
 		private void Preload(TabModel model)
 		{
-			int index = 0;
-			foreach (IList iList in model.ItemList)
+			for (int i = 0; i < model.ItemList.Count; i++)
 			{
+				IList iList = model.ItemList[i];
 				Type listType = iList.GetType();
 				Type elementType = listType.GetElementTypeForAll();
 
-				var tabDataSettings = tabViewSettings.GetData(index);
+				var tabDataSettings = tabViewSettings.GetData(i);
 				List<TabDataSettings.PropertyColumn> propertyColumns = tabDataSettings.GetPropertiesAsColumns(elementType);
 				int itemCount = 0;
 				foreach (object obj in iList)
@@ -473,11 +473,11 @@ namespace Atlas.Tabs
 				}
 
 				if (iList is ItemCollection<ListProperty> propertyList)
-					model.ItemList[index] = ListProperty.Sort(propertyList);
+					model.ItemList[i] = ListProperty.Sort(propertyList);
 
 				if (iList is ItemCollection<ListMember> memberList)
-					model.ItemList[index] = ListMember.Sort(memberList);
-				index++;
+					model.ItemList[i] = ListMember.Sort(memberList);
+				i++;
 			}
 		}
 

@@ -27,8 +27,8 @@ namespace Atlas.Serialize
 		{
 			propertyName = propertyInfo.Name;
 			this.propertyInfo = propertyInfo;
-			Serialized = IsSerialized;
 			type = propertyInfo.PropertyType;
+			Serialized = IsSerialized;
 			nonNullableType = type.GetNonNullableType();
 		}
 
@@ -63,7 +63,11 @@ namespace Atlas.Serialize
 				if (propertyInfo == null)
 					return false;
 
-				Attribute attribute = propertyInfo.GetCustomAttribute<NonSerializedAttribute>();
+				Attribute attribute = type?.GetCustomAttribute<UnserializedAttribute>();
+				if (attribute != null)
+					return false;
+
+				attribute = propertyInfo.GetCustomAttribute<NonSerializedAttribute>();
 				if (attribute != null)
 					return false;
 

@@ -27,8 +27,8 @@ namespace Atlas.Serialize
 		{
 			fieldName = fieldInfo.Name;
 			this.fieldInfo = fieldInfo;
-			Serialized = IsSerialized;
 			type = fieldInfo.FieldType;
+			Serialized = IsSerialized;
 			nonNullableType = type.GetNonNullableType();
 		}
 
@@ -58,11 +58,15 @@ namespace Atlas.Serialize
 				if (fieldInfo == null || fieldInfo.IsLiteral == true || fieldInfo.IsStatic == true)
 					return false;
 
-				Attribute attribute = fieldInfo.GetCustomAttribute(typeof(NonSerializedAttribute));
+				Attribute attribute = type?.GetCustomAttribute<UnserializedAttribute>();
 				if (attribute != null)
 					return false;
 
-				attribute = fieldInfo.GetCustomAttribute(typeof(UnserializedAttribute));
+				attribute = fieldInfo.GetCustomAttribute<NonSerializedAttribute>();
+				if (attribute != null)
+					return false;
+
+				attribute = fieldInfo.GetCustomAttribute<UnserializedAttribute>();
 				if (attribute != null)
 					return false;
 
