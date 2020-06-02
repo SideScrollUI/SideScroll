@@ -24,6 +24,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public bool IsHorizontal { get; set; }
 
 		public event EventHandler<EventArgs> OnSelectionChanged;
+		public event EventHandler<EventArgs> OnVisibleChanged;
 
 		public TabControlChartLegend(TabControlChart tabControlChart, bool horizontal)
 		{
@@ -150,8 +151,6 @@ namespace Atlas.UI.Avalonia.Controls
 					continue;
 				if (!idxLegendItems.TryGetValue(title, out TabChartLegendItem legendItem))
 				{
-					//if (idxLegendItems.Count > 25) // todo: improve this
-					//	continue;
 					legendItem = AddSeries(oxyListSeries);
 				}
 				if (!Children.Contains(legendItem))
@@ -220,6 +219,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private void LegendItem_VisibleChanged(object sender, EventArgs e)
 		{
 			UpdateVisibleSeries();
+			OnVisibleChanged?.Invoke(this, null);
 		}
 
 		public void HighlightAll(bool showFaded)

@@ -6,7 +6,7 @@
 
         <SolidColorBrush x:Key="ThemeBackgroundBrush">#1e1e1e</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBackgroundHover">#4e8ef7</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBackgroundTextBrush">#f0f0f0</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBackgroundTextBrush">#e3e3e3</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeForegroundBrush">#e3e3e3</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeForegroundLowBrush">#FF6579bb</SolidColorBrush>

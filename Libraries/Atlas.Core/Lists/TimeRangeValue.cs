@@ -18,7 +18,7 @@ namespace Atlas.Core
 		[YAxis]
 		public double Value { get; set; }
 
-		public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime);
+		public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Value;
 
 		public TimeRangeValue()
 		{
@@ -31,12 +31,20 @@ namespace Atlas.Core
 			Value = value;
 		}
 
-		public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> dataPoints)//, TimeSpan periodTimeSpan = null)
+		public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> dataPoints)
 		{
-			//if (periodTimeSpan == null)
 			double duration = Math.Ceiling(EndTime.Subtract(StartTime).TotalSeconds);
 			int numPeriods = Math.Max(5, Math.Min(200, (int)duration));
 			double periodDuration = Math.Ceiling(duration / numPeriods);
+
+			return SumPeriods(dataPoints, periodDuration);
+		}
+
+		public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> dataPoints, double periodDuration)
+		{
+			double duration = Math.Ceiling(EndTime.Subtract(StartTime).TotalSeconds);
+			int numPeriods = (int)Math.Ceiling((duration + 1) / periodDuration);
+
 			DateTime startTime = StartTime.Trim();
 
 			if (duration <= 1)
@@ -49,13 +57,15 @@ namespace Atlas.Core
 				var bin = new TimeRangeValue()
 				{
 					StartTime = startTime.AddSeconds(i * periodDuration),
-					EndTime = startTime.AddSeconds(i * periodDuration),
+					EndTime = startTime.AddSeconds((i + 1) * periodDuration),
 				};
 				timeRangeValues.Add(bin);
 			}
 
 			foreach (var dataPoint in dataPoints)
 			{
+				if (double.IsNaN(dataPoint.Value))
+					continue;
 				DateTime binTime = dataPoint.StartTime;
 				if (binTime < startTime)
 					binTime = startTime;
@@ -63,15 +73,16 @@ namespace Atlas.Core
 				for (; binTime < dataPoint.EndTime && binTime < EndTime; binTime = binTime.AddSeconds(periodDuration))
 				{
 					double offset = binTime.Subtract(startTime).TotalSeconds;
-					DateTime binEndTime = binTime.AddSeconds(periodDuration);
-					DateTime binStarted = binTime.Max(startTime);
-					DateTime binEnded = binEndTime.Min(EndTime).Min(dataPoint.EndTime);
-
-					TimeSpan binDuration = binEnded.Subtract(binStarted);
 					int period = (int)(offset / periodDuration);
 					Debug.Assert(period < timeRangeValues.Count);
+					var bin = timeRangeValues[period];
 
-					timeRangeValues[period].Value += binDuration.TotalMinutes * dataPoint.Value;
+					DateTime binStartTime = dataPoint.StartTime.Max(bin.StartTime);
+					DateTime binEndTime = dataPoint.EndTime.Min(bin.EndTime);
+
+					TimeSpan binDuration = binEndTime.Subtract(binStartTime);
+
+					bin.Value += binDuration.TotalMinutes * dataPoint.Value;
 				}
 			}
 			return timeRangeValues;
@@ -129,6 +140,53 @@ namespace Atlas.Core
 			}
 
 			return output;
+		}
+
+		public static List<TimeRangeValue> FillGaps(List<TimeRangeValue> input, DateTime startTime, DateTime endTime, int periodDuration)
+		{
+			var output = new List<TimeRangeValue>();
+			if (input.Count == 0)
+			{
+				FillGaps(startTime, endTime, periodDuration, output);
+				return output;
+			}
+			var sorted = input.OrderBy(p => p.StartTime).ToList();
+
+			DateTime prevTime = startTime;
+			foreach (TimeRangeValue point in sorted)
+			{
+				prevTime = FillGaps(prevTime, point.StartTime, periodDuration, output);
+				output.Add(point);
+				prevTime = point.StartTime;
+			}
+			prevTime = FillGaps(prevTime, endTime, periodDuration, output);
+			return output;
+		}
+
+		// Add NaN points for each period duration between the start/end times
+		private static DateTime FillGaps(DateTime startTime, DateTime endTime, int periodDuration, List<TimeRangeValue> output)
+		{
+			int maxGap = periodDuration * 2;
+
+			while (true)
+			{
+				TimeSpan timeSpan = endTime.Subtract(startTime);
+				if (timeSpan.TotalSeconds <= maxGap)
+					break;
+
+				DateTime expectedTime = startTime.AddSeconds(periodDuration);
+				var insertedPoint = new TimeRangeValue()
+				{
+					StartTime = expectedTime.ToUniversalTime(),
+					EndTime = expectedTime.ToUniversalTime().AddSeconds(periodDuration),
+					Value = double.NaN,
+				};
+
+				output.Add(insertedPoint);
+				startTime = expectedTime;
+			}
+
+			return startTime;
 		}
 	}
 }

@@ -181,6 +181,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			containerGrid.Children.Add(legend);
 			legend.OnSelectionChanged += Legend_OnSelectionChanged;
+			legend.OnVisibleChanged += Legend_OnVisibleChanged;
 
 			Content = containerGrid;
 
@@ -191,6 +192,11 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			UpdateValueAxis();
 			OnSelectionChanged?.Invoke(sender, new SeriesSelectedEventArgs(SelectedSeries));
+		}
+
+		private void Legend_OnVisibleChanged(object sender, EventArgs e)
+		{
+			UpdateValueAxis();
 		}
 
 		public void LoadListGroup(ListGroup listGroup)

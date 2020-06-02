@@ -224,7 +224,7 @@ namespace Atlas.UI.Avalonia.Controls
 				SetFilled(true);
 				UpdateVisible(lineSeries);
 				legend.HighlightAll(true);
-				OnSelectionChanged?.Invoke(this, null);
+				OnVisibleChanged?.Invoke(this, null);
 			}
 			textBlock.Foreground = Theme.GridBackgroundSelected;
 			//polygon.Stroke = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor);
@@ -241,7 +241,7 @@ namespace Atlas.UI.Avalonia.Controls
 				UpdateVisible(lineSeries);
 				SetFilled(IsChecked);
 				legend.HighlightAll(false);
-				OnSelectionChanged?.Invoke(this, null);
+				OnVisibleChanged?.Invoke(this, null);
 			}
 			textBlock.Foreground = Brushes.LightGray;
 			//polygon.StrokeThickness = 4;

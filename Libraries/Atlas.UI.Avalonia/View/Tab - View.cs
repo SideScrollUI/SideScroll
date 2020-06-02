@@ -511,7 +511,7 @@ namespace Atlas.UI.Avalonia.View
 			var textBox = new TextBox()
 			{
 				Text = text,
-				Foreground = new SolidColorBrush(Colors.White),
+				Foreground = Theme.BackgroundText,
 				Background = Brushes.Transparent,
 				BorderThickness = new Thickness(0),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
