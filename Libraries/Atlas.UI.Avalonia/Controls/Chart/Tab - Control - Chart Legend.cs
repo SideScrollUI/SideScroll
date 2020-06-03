@@ -70,7 +70,7 @@ namespace Atlas.UI.Avalonia.Controls
 			legendItem.textBlock.PointerPressed += (s, e) =>
 			{
 				if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-					LegendItemClicked(legendItem);
+					SelectLegendItem(legendItem);
 			};
 			//this.Children.Add(legendItem);
 			legendItems.Add(legendItem);
@@ -106,7 +106,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Children.AddRange(ordered);
 		}
 
-		private void LegendItemClicked(TabChartLegendItem legendItem)
+		private void SelectLegendItem(TabChartLegendItem legendItem)
 		{
 			int selectedCount = 0;
 			foreach (TabChartLegendItem item in legendItems)
@@ -116,13 +116,13 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			if (legendItem.IsChecked == false || selectedCount > 1)
 			{
-				SetSelectionAll(false);
+				SetAllVisible(false);
 				legendItem.IsChecked = true;
 				//OnSelectionChanged?.Invoke(this, legendItem.oxyListSeries);
 			}
 			else
 			{
-				SetSelectionAll(true);
+				SetAllVisible(true);
 			}
 			UpdateVisibleSeries();
 			OnSelectionChanged?.Invoke(this, null);
@@ -130,11 +130,26 @@ namespace Atlas.UI.Avalonia.Controls
 			//SetSelectionAll(legendItem.checkBox.IsChecked == true);
 		}
 
-		private void SetSelectionAll(bool selected)
+		public void SelectSeries(OxyPlot.Series.Series oxySeries)
+		{
+			if (oxySeries.Title == null)
+				return;
+			if (idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
+			{
+				SelectLegendItem(legendItem);
+			}
+		}
+
+		public void SetAllVisible(bool selected, bool update = false)
 		{
 			foreach (TabChartLegendItem legendItem in legendItems)
 			{
 				legendItem.IsChecked = selected;
+			}
+			if (update)
+			{
+				UpdateVisibleSeries();
+				OnSelectionChanged?.Invoke(this, null);
 			}
 		}
 

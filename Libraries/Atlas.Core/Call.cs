@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 
 namespace Atlas.Core
 {
-	[Unserialized]
 	public class Call
 	{
 		public string Name { get; set; } = "";

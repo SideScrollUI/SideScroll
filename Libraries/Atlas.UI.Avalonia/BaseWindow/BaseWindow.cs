@@ -67,7 +67,7 @@ namespace Atlas.UI.Avalonia
 		{
 			Title = project.projectSettings.Name ?? "<Name>";
 
-			Background = Theme.Background;
+			Background = Theme.TabBackground;
 
 			Resources["FontSizeSmall"] = 14; // stop DatePicker using a small font size
 

@@ -78,7 +78,7 @@ namespace Atlas.UI.Avalonia.Controls
 			ColumnDefinitions = new ColumnDefinitions("Auto, *, Auto");
 			RowDefinitions = new RowDefinitions("Auto");
 			//Margin = new Thickness(6);
-			Background = Theme.Background;
+			Background = Theme.TabBackground;
 
 			UpdateSum();
 			AddCheckBox();

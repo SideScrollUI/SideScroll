@@ -33,10 +33,10 @@
 
         <SolidColorBrush x:Key="HighlightBrush">#005dd0</SolidColorBrush>
         <SolidColorBrush x:Key="HighlightBackgroundBrush">#005555</SolidColorBrush>
-        <SolidColorBrush x:Key="HighlightForegroundBrush">#1dd05d</SolidColorBrush>
+        <SolidColorBrush x:Key="HighlightForegroundBrush">#000000</SolidColorBrush>
 
-        <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#4e7ee7</SolidColorBrush>
+        <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#FFFFFF</SolidColorBrush>
       
          <!-- Custom Colors -->
         <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#1e1e1e</SolidColorBrush>
@@ -49,7 +49,7 @@
         <SolidColorBrush x:Key="ThemeScrollBarThumbBrush">#45599b</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#FFFFFF</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeGridBackgroundSelectedBrush">#005555</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeGridBackgroundSelectedBrush">#21d064</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridForegroundBrush">Black</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">SlateBlue</SolidColorBrush>

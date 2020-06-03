@@ -93,7 +93,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void TabView_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			Background = Theme.Background;
+			Background = Theme.TabBackground;
 		}
 
 		protected override void OnPointerEnter(PointerEventArgs e)
@@ -105,7 +105,7 @@ namespace Atlas.UI.Avalonia.Controls
 		protected override void OnPointerLeave(PointerEventArgs e)
 		{
 			base.OnPointerLeave(e);
-			Background = Theme.Background;
+			Background = Theme.TabBackground;
 		}
 
 		public void AddControl(Control control, bool fill, SeparatorType separatorType)

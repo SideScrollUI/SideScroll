@@ -54,7 +54,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeComponent()
 		{
-			Background = Theme.GridBackground;
+			Background = Theme.Background;
 			BorderBrush = new SolidColorBrush(Colors.Black);
 			BorderThickness = new Thickness(1);
 			HorizontalAlignment = HorizontalAlignment.Stretch;

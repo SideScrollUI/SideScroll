@@ -65,7 +65,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			Background = Theme.Background;
+			Background = Theme.TabBackground;
 			MaxWidth = 3000;
 
 			ColumnDefinitions = new ColumnDefinitions("*");

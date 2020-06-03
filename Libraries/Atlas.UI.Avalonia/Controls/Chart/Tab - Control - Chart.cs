@@ -149,6 +149,7 @@ namespace Atlas.UI.Avalonia.Controls
 			// Show Hover text on mouse over instead of requiring holding the mouse down (why isn't this the default?)
 			plotView.ActualController.UnbindMouseDown(OxyMouseButton.Left); // remove default
 			plotView.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack); // show when hovering
+			plotView.PointerPressed += PlotView_PointerPressed;
 
 			LoadPlotModel();
 			/*plotView.Template = new ControlTemplate() // todo: fix
@@ -163,7 +164,7 @@ namespace Atlas.UI.Avalonia.Controls
 				RowDefinitions = new RowDefinitions("*,Auto"),
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
-				Background = Theme.Background, // grid lines look bad when hovering without this
+				Background = Theme.TabBackground, // grid lines look bad when hovering without this
 			};
 
 			containerGrid.Children.Add(plotView);
@@ -186,6 +187,11 @@ namespace Atlas.UI.Avalonia.Controls
 			Content = containerGrid;
 
 			Focusable = true;
+		}
+
+		private void PlotView_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e)
+		{
+			legend.SetAllVisible(true, true);
 		}
 
 		private void Legend_OnSelectionChanged(object sender, EventArgs e)
@@ -686,16 +692,20 @@ namespace Atlas.UI.Avalonia.Controls
 			var oxyListSeries = new OxyListSeries(listSeries, lineSeries);
 
 			if (listSeries.iList is INotifyCollectionChanged iNotifyCollectionChanged)
+			{
 				//iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
 				iNotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object sender, NotifyCollectionChangedEventArgs e)
 				{
 					// can we remove this later when disposing?
 					SeriesChanged(listSeries, e.NewItems, lineSeries);
 				});
+			}
 
 			lineSeries.MouseDown += (s, e) =>
 			{
 				OnSelectionChanged?.Invoke(s, new SeriesSelectedEventArgs(new List<ListSeries>() { listSeries }));
+				legend.SelectSeries(lineSeries);
+				e.Handled = true;
 			};
 
 			oxyListSeriesList.Add(oxyListSeries);
