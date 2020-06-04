@@ -212,7 +212,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				base.Delta(e);
 
-				var series = PlotView.ActualModel.GetSeriesFromPoint(e.Position, 10);
+				var series = PlotView.ActualModel.GetSeriesFromPoint(e.Position, 20);
 				if (chart.hoverSeries == series)
 					return;
 
