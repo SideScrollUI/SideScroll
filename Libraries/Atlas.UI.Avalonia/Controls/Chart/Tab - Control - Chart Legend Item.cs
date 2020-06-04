@@ -215,37 +215,52 @@ namespace Atlas.UI.Avalonia.Controls
 		}
 
 		private bool highlight;
+		public bool Highlight
+		{
+			get => highlight;
+			set
+			{
+				if (value == highlight)
+					return;
+
+				highlight = value;
+				if (highlight)
+				{
+					UpdatePolygonPoints(15, 15);
+					if (series is OxyPlot.Series.LineSeries lineSeries)
+					{
+						highlight = true;
+						SetFilled(true);
+						UpdateVisible(lineSeries);
+						legend.UpdateHighlight(true);
+						OnVisibleChanged?.Invoke(this, null);
+					}
+					textBlock.Foreground = Theme.GridBackgroundSelected;
+				}
+				else
+				{
+					UpdatePolygonPoints(13, 13);
+					if (series is OxyPlot.Series.LineSeries lineSeries)
+					{
+						highlight = false;
+						UpdateVisible(lineSeries);
+						SetFilled(IsChecked);
+						legend.UpdateHighlight(false);
+						OnVisibleChanged?.Invoke(this, null);
+					}
+					textBlock.Foreground = Brushes.LightGray;
+				}
+			}
+		}
+
 		private void TabChartLegendItem_PointerEnter(object sender, PointerEventArgs e)
 		{
-			UpdatePolygonPoints(15, 15);
-			if (series is OxyPlot.Series.LineSeries lineSeries)
-			{
-				highlight = true;
-				SetFilled(true);
-				UpdateVisible(lineSeries);
-				legend.HighlightAll(true);
-				OnVisibleChanged?.Invoke(this, null);
-			}
-			textBlock.Foreground = Theme.GridBackgroundSelected;
-			//polygon.Stroke = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor);
-			//polygon.Stroke = Brushes.White;
-			//polygon.StrokeThickness = 2;
+			Highlight = true;
 		}
 
 		private void TabChartLegendItem_PointerLeave(object sender, PointerEventArgs e)
 		{
-			UpdatePolygonPoints(13, 13);
-			if (series is OxyPlot.Series.LineSeries lineSeries)
-			{
-				highlight = false;
-				UpdateVisible(lineSeries);
-				SetFilled(IsChecked);
-				legend.HighlightAll(false);
-				OnVisibleChanged?.Invoke(this, null);
-			}
-			textBlock.Foreground = Brushes.LightGray;
-			//polygon.StrokeThickness = 4;
-			//polygon.Stroke = Brushes.Black;
+			Highlight = false;
 		}
 
 		private void TextBox_Tapped(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)

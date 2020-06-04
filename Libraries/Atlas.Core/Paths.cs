@@ -51,9 +51,10 @@ namespace Atlas.Core
 		{
 			get
 			{
-				string dataPath = Environment.GetEnvironmentVariable(
-					RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "LocalAppData" : "HOME");
-				return dataPath;
+				if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+					return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library");
+				else
+					return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 			}
 		}
 

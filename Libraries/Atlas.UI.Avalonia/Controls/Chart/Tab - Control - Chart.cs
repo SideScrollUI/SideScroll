@@ -71,6 +71,7 @@ namespace Atlas.UI.Avalonia.Controls
 				return selected;
 			}
 		}
+		private OxyPlot.Series.Series hoverSeries;
 
 		//public SeriesCollection SeriesCollection { get; set; }
 
@@ -150,6 +151,11 @@ namespace Atlas.UI.Avalonia.Controls
 			plotView.ActualController.UnbindMouseDown(OxyMouseButton.Left); // remove default
 			plotView.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack); // show when hovering
 			plotView.PointerPressed += PlotView_PointerPressed;
+			PointerLeave += PlotView_PointerLeave; // doesn't work on PlotView
+
+			plotView.ActualController.BindMouseEnter(new DelegatePlotCommand<OxyMouseEventArgs>(
+				(view, controller, args) =>
+				controller.AddHoverManipulator(view, new MouseHoverManipulator(this), args)));
 
 			LoadPlotModel();
 			/*plotView.Template = new ControlTemplate() // todo: fix
@@ -187,6 +193,50 @@ namespace Atlas.UI.Avalonia.Controls
 			Content = containerGrid;
 
 			Focusable = true;
+		}
+
+		public class MouseHoverManipulator : TrackerManipulator
+		{
+			private TabControlChart chart;
+
+			public MouseHoverManipulator(TabControlChart chart)
+				: base(chart.plotView)
+			{
+				this.chart = chart;
+				LockToInitialSeries = false;
+				Snap = true;
+				PointsOnly = false;
+			}
+
+			public override void Delta(OxyMouseEventArgs e)
+			{
+				base.Delta(e);
+
+				var series = PlotView.ActualModel.GetSeriesFromPoint(e.Position, 10);
+				if (chart.hoverSeries == series)
+					return;
+
+				if (series != null)
+				{
+					chart.legend.HighlightSeries(series);
+				}
+				else
+				{
+					chart.legend.UnhighlightAll();
+				}
+				chart.hoverSeries = series;
+
+				// todo: replace tracker here
+			}
+		}
+
+		private void PlotView_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			if (hoverSeries != null)
+			{
+				hoverSeries = null;
+				legend.UnhighlightAll();
+			}
 		}
 
 		private void PlotView_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e)

@@ -94,7 +94,7 @@ namespace Atlas.Core
 
 	public class ItemCollectionUI<T> : ObservableCollection<T>, IList, ICollection, IEnumerable, IContext //, IRaiseItemChangedEvents //
 	{
-		public SynchronizationContext Context { get; set; } // inherited from creator (which can be a Parent Log)
+		public SynchronizationContext Context { get; set; }
 
 		public ItemCollectionUI()
 		{

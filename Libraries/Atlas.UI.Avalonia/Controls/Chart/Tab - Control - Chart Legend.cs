@@ -140,6 +140,17 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
+		public void HighlightSeries(OxyPlot.Series.Series oxySeries)
+		{
+			if (oxySeries.Title == null)
+				return;
+			if (idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
+			{
+				foreach (TabChartLegendItem item in legendItems)
+					item.Highlight = (legendItem == item);
+			}
+		}
+
 		public void SetAllVisible(bool selected, bool update = false)
 		{
 			foreach (TabChartLegendItem legendItem in legendItems)
@@ -199,7 +210,7 @@ namespace Atlas.UI.Avalonia.Controls
 			legendItems.Clear();
 		}
 
-		private void UpdateVisibleSeries()
+		public void UpdateVisibleSeries()
 		{
 			foreach (OxyPlot.Series.Series series in plotView.Model.Series)
 			{
@@ -237,7 +248,16 @@ namespace Atlas.UI.Avalonia.Controls
 			OnVisibleChanged?.Invoke(this, null);
 		}
 
-		public void HighlightAll(bool showFaded)
+		public void UnhighlightAll()
+		{
+			foreach (TabChartLegendItem item in legendItems)
+			{
+				item.Highlight = false;
+			}
+			UpdateVisibleSeries();
+		}
+
+		public void UpdateHighlight(bool showFaded)
 		{
 			foreach (TabChartLegendItem item in legendItems)
 			{
