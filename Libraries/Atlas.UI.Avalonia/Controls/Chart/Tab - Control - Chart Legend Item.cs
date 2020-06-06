@@ -236,6 +236,8 @@ namespace Atlas.UI.Avalonia.Controls
 						OnVisibleChanged?.Invoke(this, null);
 					}
 					textBlock.Foreground = Theme.GridBackgroundSelected;
+					if (textBlockSum != null)
+						textBlockSum.Foreground = Theme.GridBackgroundSelected;
 				}
 				else
 				{
@@ -249,6 +251,8 @@ namespace Atlas.UI.Avalonia.Controls
 						OnVisibleChanged?.Invoke(this, null);
 					}
 					textBlock.Foreground = Brushes.LightGray;
+					if (textBlockSum != null)
+						textBlockSum.Foreground = Brushes.LightGray;
 				}
 			}
 		}

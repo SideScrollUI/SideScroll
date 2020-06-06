@@ -44,9 +44,11 @@
         <SolidColorBrush x:Key="ThemeHasLinksBrush">#ebc17f</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeNoLinksBrush">LightGray</SolidColorBrush>
 
-        <SolidColorBrush x:Key="ThemeBackgroundFocusedColor">LightGray</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#272727</SolidColorBrush>
 
+        <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush">#38409a</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeScrollBarThumbBrush">#45599b</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeScrollBarThumbHoverBrush">#477ed7</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridBackgroundSelectedBrush">#21d064</SolidColorBrush>

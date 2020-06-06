@@ -38,7 +38,7 @@
     </Style>
 
     <Style Selector="ScrollBar /template/ Border">
-        <Setter Property="Background" Value="#FF38409a"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeScrollBarBackgroundBrush}"/>
         <Setter Property="BorderBrush" Value="#FF000000"/>
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
@@ -47,7 +47,7 @@
         <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>
     </Style>
     <Style Selector="ScrollBar /template/ Thumb#thumb /template/ Border:pointerover">
-        <Setter Property="Background" Value="{DynamicResource ToolbarButtonBackgroundHoverBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbHoverBrush}"/>
     </Style>
 
     <Style Selector="ScrollBar /template/ RepeatButton.repeat">
