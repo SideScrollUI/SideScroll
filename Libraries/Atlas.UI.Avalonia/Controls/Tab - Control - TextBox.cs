@@ -63,29 +63,6 @@ namespace Atlas.UI.Avalonia.Controls
 			Focusable = true; // already set?
 			MaxWidth = TabControlParams.ControlMaxWidth;
 			//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
-
-			PointerEnter += TextBox_PointerEnter;
-			PointerLeave += TextBox_PointerLeave;
-		}
-
-		private IBrush OriginalColor;
-
-		// DefaultTheme.xaml is setting this for templates
-		private void TextBox_PointerEnter(object sender, PointerEventArgs e)
-		{
-			//BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			if (IsEnabled && !IsReadOnly)
-			{
-				OriginalColor = Background;
-				Background = Theme.ControlBackgroundHover;
-			}
-		}
-
-		private void TextBox_PointerLeave(object sender, PointerEventArgs e)
-		{
-			if (IsEnabled && !IsReadOnly)
-				Background = OriginalColor;
-			//BorderBrush = Background;
 		}
 	}
 }

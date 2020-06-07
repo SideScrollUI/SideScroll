@@ -17,7 +17,6 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		Type IStyleable.StyleKey => typeof(ComboBox);
 
-		private IBrush OriginalColor;
 		private ListProperty property;
 
 		public TabControlComboBox()
@@ -72,24 +71,6 @@ namespace Atlas.UI.Avalonia.Controls
 			BorderBrush = new SolidColorBrush(Colors.Black);
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			BorderThickness = new Thickness(1);
-
-			PointerEnter += ComboBox_PointerEnter;
-			PointerLeave += ComboBox_PointerLeave;
-		}
-
-		private void ComboBox_PointerEnter(object sender, PointerEventArgs e)
-		{
-			if (IsEnabled)
-			{
-				OriginalColor = Background;
-				Background = Theme.ControlBackgroundHover;
-			}
-		}
-
-		private void ComboBox_PointerLeave(object sender, PointerEventArgs e)
-		{
-			if (IsEnabled)
-				Background = OriginalColor;
 		}
 	}
 }
