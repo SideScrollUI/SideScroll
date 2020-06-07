@@ -70,6 +70,7 @@ namespace Atlas.Tabs
 
 		public IList Items
 		{
+			get => ItemList.First();
 			set
 			{
 				ItemList.Clear();

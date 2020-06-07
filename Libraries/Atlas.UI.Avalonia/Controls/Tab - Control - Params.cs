@@ -120,7 +120,6 @@ namespace Atlas.UI.Avalonia.Controls
 				Text = property.Name,
 				Margin = new Thickness(0, 3, 10, 3),
 				Foreground = Theme.BackgroundText,
-				Background = Theme.TabBackground,
 				VerticalAlignment = VerticalAlignment.Center,
 				//HorizontalAlignment = HorizontalAlignment.Stretch,
 				MaxWidth = 500,

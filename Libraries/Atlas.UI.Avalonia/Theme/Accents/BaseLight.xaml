@@ -32,8 +32,8 @@
         <SolidColorBrush x:Key="ErrorBrushLight">#10ff0000</SolidColorBrush>
 
         <SolidColorBrush x:Key="HighlightBrush">#005dd0</SolidColorBrush>
-        <SolidColorBrush x:Key="HighlightBackgroundBrush">#005555</SolidColorBrush>
-        <SolidColorBrush x:Key="HighlightForegroundBrush">#000000</SolidColorBrush>
+        <SolidColorBrush x:Key="HighlightBackgroundBrush">#4e8ef7</SolidColorBrush>
+        <SolidColorBrush x:Key="HighlightForegroundBrush">AliceBlue</SolidColorBrush>
 
         <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#4e7ee7</SolidColorBrush>
         <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#FFFFFF</SolidColorBrush>
@@ -53,6 +53,7 @@
         <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridBackgroundSelectedBrush">#21d064</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridForegroundBrush">Black</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeGridForegroundSelectedBrush">Black</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">SlateBlue</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonForegroundBrush">AliceBlue</SolidColorBrush>

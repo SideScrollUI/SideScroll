@@ -57,6 +57,7 @@
         <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#131a33</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridBackgroundSelectedBrush">#50c474</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridForegroundBrush">#f3f3f3</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeGridForegroundSelectedBrush">#21d064</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">#561a76</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonForegroundBrush">AliceBlue</SolidColorBrush>
