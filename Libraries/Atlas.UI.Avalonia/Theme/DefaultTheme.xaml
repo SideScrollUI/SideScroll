@@ -30,6 +30,7 @@
 
     <Style Selector="Button:pointerover /template/ ContentPresenter">
         <Setter Property="BorderBrush" Value="#FF000000"/>
+        <!--Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundHoverBrush}"/-->
     </Style>
 
     <Style Selector="ToolTip">
@@ -66,13 +67,16 @@
     <Style Selector="TextBox:pointerover">
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}"/>
     </Style>
-    <Style Selector="TextBox /template/ Border#border:pointerover">
+    <Style Selector="TextBox[IsReadOnly=false] /template/ Border#border:pointerover">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>
+    </Style>
+
+    <Style Selector="CheckBox:pointerover /template/ Border#border">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>
     </Style>
 
     <Style Selector="ComboBox">
-        <Setter Property="Background" Value="#cecece"/>
-        <!--Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/-->
+        <Setter Property="Background" Value="{DynamicResource ThemeComboBoxBackgroundBrush}"/>
     </Style>
     <Style Selector="ComboBox /template/ Border#border:pointerover">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>
@@ -87,6 +91,10 @@
     
     <Style Selector="RadioButton:pointerover /template/ Ellipse#border">
         <Setter Property="Stroke" Value="{DynamicResource ThemeBorderHighRadioBrush}"/>
+    </Style>
+
+    <Style Selector="RadioButton /template/ Ellipse#checkMark">
+        <Setter Property="Fill" Value="{DynamicResource ThemeBorderHighRadioBrush}"/>
     </Style>
 
 </Styles>

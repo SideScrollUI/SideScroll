@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Media;
+using System;
 
 namespace Atlas.UI.Avalonia
 {
@@ -45,7 +46,7 @@ namespace Atlas.UI.Avalonia
 		{
 			if (Application.Current.Styles.TryGetResource(brushName, out object obj))
 				return (SolidColorBrush)obj;
-			return null;
+			throw new Exception("Brush not found: " + brushName);
 		}
 	}
 }

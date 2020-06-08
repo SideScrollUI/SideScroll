@@ -36,21 +36,6 @@ namespace Atlas.UI.Avalonia.Controls
 			Margin = new Thickness(2, 2);
 			//Focusable = true; // already set?
 			//Padding = new Thickness(6, 3);
-
-			PointerEnter += CheckBox_PointerEnter;
-			PointerLeave += CheckBox_PointerLeave;
-		}
-
-		private void CheckBox_PointerEnter(object sender, PointerEventArgs e)
-		{
-			if (IsEnabled)
-				Background = Theme.ControlBackgroundHover;
-		}
-
-		private void CheckBox_PointerLeave(object sender, PointerEventArgs e)
-		{
-			if (IsEnabled)
-				Background = new SolidColorBrush(Colors.White);
 		}
 
 		private void Bind(ListProperty property)

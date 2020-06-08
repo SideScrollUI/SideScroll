@@ -240,6 +240,16 @@ namespace Atlas.Extensions // rename to Core?
 			return new DateTime(Math.Min(first.Ticks, second.Ticks), DateTimeKind.Utc);
 		}
 
+		public static TimeSpan Max(this TimeSpan first, TimeSpan second)
+		{
+			return new TimeSpan(Math.Max(first.Ticks, second.Ticks));
+		}
+
+		public static TimeSpan Min(this TimeSpan first, TimeSpan second)
+		{
+			return new TimeSpan(Math.Min(first.Ticks, second.Ticks));
+		}
+
 		public static string Formatted(this TimeSpan timeSpan)
 		{
 			string result = "";

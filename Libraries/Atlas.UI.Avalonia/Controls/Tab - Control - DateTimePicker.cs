@@ -9,13 +9,16 @@ using Avalonia.Input.Platform;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Styling;
 using System;
 using System.IO;
 
 namespace Atlas.UI.Avalonia.Controls
 {
-	public class TabDateTimePicker : Grid
+	public class TabDateTimePicker : Grid, IStyleable
 	{
+		Type IStyleable.StyleKey => typeof(TabDateTimePicker);
+
 		public TabDateTimePicker(ListProperty property)
 		{
 			InitializeComponent(property);
@@ -123,7 +126,8 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				Content = image,
 				//Command = command,
-				Background = Theme.ToolbarButtonBackground,
+				//Background = Brushes.Transparent,
+				Background = Theme.TabBackground,
 				BorderBrush = Background,
 				BorderThickness = new Thickness(0),
 				//Margin = new Thickness(2),
@@ -155,7 +159,8 @@ namespace Atlas.UI.Avalonia.Controls
 		private void Button_PointerLeave(object sender, PointerEventArgs e)
 		{
 			Button button = (Button)sender;
-			button.Background = Theme.ToolbarButtonBackground;
+			button.Background = Theme.TabBackground;
+			//button.Background = Brushes.Transparent;
 			button.BorderBrush = button.Background;
 		}
 	}

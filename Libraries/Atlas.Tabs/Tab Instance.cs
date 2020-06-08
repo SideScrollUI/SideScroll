@@ -112,7 +112,7 @@ namespace Atlas.Tabs
 		public TabInstance ParentTabInstance { get; set; }
 		public Dictionary<object, TabInstance> childTabInstances = new Dictionary<object, TabInstance>();
 
-		private SynchronizationContext uiContext; // inherited from creator (which can be a Parent Log)
+		public SynchronizationContext uiContext;
 		public TabBookmark filterBookmarkNode;
 
 		public event EventHandler<EventArgs> OnRefresh;

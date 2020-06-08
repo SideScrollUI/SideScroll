@@ -4,8 +4,8 @@
 
     <Style.Resources>
 
-        <SolidColorBrush x:Key="ThemeBackgroundBrush">#464646</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBackgroundHoverBrush">#464646</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBackgroundBrush">#404040</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBackgroundHoverBrush">#404040</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBackgroundTextBrush">#e3e3e3</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeForegroundBrush">#e3e3e3</SolidColorBrush>
@@ -16,7 +16,7 @@
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#106090</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighBrush">#4188c2</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighRadioBrush">#006df0</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBorderDarkBrush">#222222</SolidColorBrush>    
+        <SolidColorBrush x:Key="ThemeBorderDarkBrush">#222222</SolidColorBrush>    <!-- DataGrid only -->
 
         <SolidColorBrush x:Key="ThemeControlLightBrush">#101010</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeControlMidBrush">#222222</SolidColorBrush>
@@ -38,10 +38,10 @@
         <!--SolidColorBrush x:Key="HighlightBackgroundBrush">#005555</-->
         <!--SolidColorBrush x:Key="HighlightForegroundBrush">#000000</-->
 
-        <SolidColorBrush x:Key="HighlightBrush">#303030</SolidColorBrush>
+        <SolidColorBrush x:Key="HighlightBrush">#006df0</SolidColorBrush>
         <SolidColorBrush x:Key="HighlightForegroundBrush">#21d064</SolidColorBrush>
 
-        <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#5732c3</SolidColorBrush>
+        <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#4141c2</SolidColorBrush>
         <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#e3e3e9</SolidColorBrush>
 
         <!-- Custom Colors -->
@@ -66,18 +66,20 @@
         <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#7827d4</SolidColorBrush>
     
         <SolidColorBrush x:Key="ToolbarButtonBackgroundBrush">#1a1940</SolidColorBrush>
-        <SolidColorBrush x:Key="ToolbarButtonBackgroundHoverBrush">#477ed7</SolidColorBrush>
+        <SolidColorBrush x:Key="ToolbarButtonBackgroundHoverBrush">#2040a0</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarButtonSeparatorBrush">#004db0</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarTextForegroundBrush">#8888FF</SolidColorBrush>
 
         <SolidColorBrush x:Key="ControlBackgroundHoverBrush">#4e8ef7</SolidColorBrush>
 
-        <SolidColorBrush x:Key="TitleBackgroundBrush">#4141c2</SolidColorBrush>
+        <SolidColorBrush x:Key="TitleBackgroundBrush">#5732c3</SolidColorBrush>
         <SolidColorBrush x:Key="TitleForegroundBrush">#e3e3e9</SolidColorBrush>
 
         <SolidColorBrush x:Key="TextBackgroundDisabledBrush">#2e2e2e</SolidColorBrush>
 
         <SolidColorBrush x:Key="EditableBrush">#686289</SolidColorBrush>
+        
+        <SolidColorBrush x:Key="ThemeComboBoxBackgroundBrush">#404040</SolidColorBrush>
       
         <Thickness x:Key="ThemeBorderThickness">1</Thickness>
         <sys:Double x:Key="ThemeDisabledOpacity">0.5</sys:Double>

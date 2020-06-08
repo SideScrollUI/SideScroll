@@ -49,7 +49,7 @@ namespace Atlas.UI.Avalonia.Controls
 			title = new TextBlock()
 			{
 				Text = Label,
-				FontSize = 14,
+				FontSize = 15,
 				//Margin = new Thickness(2), // Shows as black, Need Padding so Border not needed
 				//Background = new SolidColorBrush(Theme.TitleBackgroundColor),
 				Foreground = Theme.TitleForeground,

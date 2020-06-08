@@ -67,7 +67,6 @@ namespace Atlas.UI.Avalonia.Controls
 			MaxWidth = TabControlParams.ControlMaxWidth;*/
 			//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
 
-			Background = Theme.Background;
 			BorderBrush = new SolidColorBrush(Colors.Black);
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			BorderThickness = new Thickness(1);

@@ -45,7 +45,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public void AddSeparator()
 		{
-			Panel panel = new Panel()
+			var panel = new Panel()
 			{
 				Background = Theme.ToolbarButtonSeparator,
 				Width = 2,
@@ -71,7 +71,7 @@ namespace Atlas.UI.Avalonia.Tabs
 		// Read Only
 		public TextBox AddLabelText(string text)
 		{
-			TextBox textBox = new TextBox()
+			var textBox = new TextBox()
 			{
 				Text = text,
 				TextWrapping = TextWrapping.NoWrap,
@@ -84,7 +84,6 @@ namespace Atlas.UI.Avalonia.Tabs
 				Foreground = Brushes.White,
 				//CaretBrush = new SolidColorBrush(Theme.GridSelectedBackgroundColor), // todo: enable with next version?
 			};
-			
 
 			AddControl(textBox);
 			return textBox;
@@ -93,7 +92,7 @@ namespace Atlas.UI.Avalonia.Tabs
 		// Editable
 		public TextBox AddText(string text, int minWidth)
 		{
-			TextBox textBox = new TextBox()
+			var textBox = new TextBox()
 			{
 				//Foreground = new SolidColorBrush(Colors.Black),
 				Text = text,
@@ -147,7 +146,7 @@ namespace Atlas.UI.Avalonia.Tabs
 		public ToolbarButton(string tooltip, ICommand command, Stream stream) : base()
 		{
 			stream.Position = 0;
-			Bitmap bitmap = new Bitmap(stream);
+			var bitmap = new Bitmap(stream);
 
 			var image = new Image()
 			{

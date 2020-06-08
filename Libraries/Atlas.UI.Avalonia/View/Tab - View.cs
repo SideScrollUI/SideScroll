@@ -523,9 +523,6 @@ namespace Atlas.UI.Avalonia.View
 				MinWidth = 50,
 				MaxWidth = 1000,
 				TextWrapping = TextWrapping.Wrap,
-				//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
-				//[Grid.RowProperty] = rowIndex,
-				//[Grid.ColumnProperty] = columnIndex,
 			};
 			//control.OnSelectionChanged += ParentListSelectionChanged;
 			tabParentControls.AddControl(textBox, false, SeparatorType.Spacer);

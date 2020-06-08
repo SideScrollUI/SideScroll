@@ -45,7 +45,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 	public class TabControlChart : UserControl //, IDisposable
 	{
-		private const double MarginPercent = 0.1;
+		private const double MarginPercent = 0.1; // This needs a min height so this can be lowered
 		private static OxyColor nowColor = OxyColors.Green;
 
 		private TabInstance tabInstance;
