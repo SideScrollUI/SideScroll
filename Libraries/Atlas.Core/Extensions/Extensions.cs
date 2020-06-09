@@ -279,6 +279,28 @@ namespace Atlas.Extensions // rename to Core?
 			return result;
 		}
 
+		public static string FormattedDecimal(this TimeSpan timeSpan)
+		{
+			if (timeSpan.TotalDays > 7)
+				return (timeSpan.TotalDays / 7).Formatted() + " Weeks";
+			else if (timeSpan.TotalDays == 7)
+				return (timeSpan.TotalDays / 7).Formatted() + " Week";
+			else if (timeSpan.TotalDays > 1)
+				return timeSpan.TotalDays.Formatted() + " Days";
+			else if (timeSpan.TotalDays == 1)
+				return timeSpan.TotalDays.Formatted() + " Day";
+			else if (timeSpan.TotalHours > 1)
+				return timeSpan.TotalHours.Formatted() + " Hours";
+			else if (timeSpan.TotalHours == 1)
+				return timeSpan.TotalHours.Formatted() + " Hour";
+			else if (timeSpan.TotalMinutes > 1)
+				return timeSpan.TotalMinutes.Formatted() + " Minutes";
+			else if (timeSpan.TotalMinutes == 1)
+				return timeSpan.TotalMinutes.Formatted() + " Minute";
+			else
+				return timeSpan.TotalSeconds + " Seconds";
+		}
+
 		public static string Formatted(this Version version)
 		{
 			return version.ToString().TrimEnd(".0").TrimEnd(".0").TrimEnd(".0");
