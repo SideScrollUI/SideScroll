@@ -76,7 +76,7 @@
     </Style>
 
     <Style Selector="ComboBox">
-        <Setter Property="Background" Value="{DynamicResource ThemeComboBoxBackgroundBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
     </Style>
     <Style Selector="ComboBox /template/ Border#border:pointerover">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>

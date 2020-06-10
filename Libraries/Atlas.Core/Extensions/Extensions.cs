@@ -250,35 +250,6 @@ namespace Atlas.Extensions // rename to Core?
 			return new TimeSpan(Math.Min(first.Ticks, second.Ticks));
 		}
 
-		public static string Formatted(this TimeSpan timeSpan)
-		{
-			string result = "";
-			if (timeSpan.Hours > 0)
-			{
-				result += timeSpan.Hours.ToString() + " hour";
-				if (timeSpan.Hours > 1)
-					result += 's';
-			}
-			if (timeSpan.Minutes > 0)
-			{
-				if (result.Length > 0)
-					result += ", ";
-				result += timeSpan.Minutes.ToString() + " minute";
-				if (timeSpan.Minutes > 1)
-					result += 's';
-			}
-			if (timeSpan.Seconds > 0)
-			{
-				if (result.Length > 0)
-					result += ", ";
-				result += timeSpan.Seconds.ToString() + " second";
-				if (timeSpan.Seconds > 1)
-					result += 's';
-			}
-
-			return result;
-		}
-
 		public static string FormattedDecimal(this TimeSpan timeSpan)
 		{
 			if (timeSpan.TotalDays > 7)

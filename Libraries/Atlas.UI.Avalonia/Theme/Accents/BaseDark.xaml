@@ -16,7 +16,7 @@
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#106090</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighBrush">#4188c2</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighRadioBrush">#006df0</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBorderDarkBrush">#222222</SolidColorBrush>    <!-- DataGrid only -->
+        <SolidColorBrush x:Key="ThemeBorderDarkBrush">#000000</SolidColorBrush>    <!-- DataGrid only -->
 
         <SolidColorBrush x:Key="ThemeControlLightBrush">#101010</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeControlMidBrush">#222222</SolidColorBrush>
@@ -78,8 +78,6 @@
         <SolidColorBrush x:Key="TextBackgroundDisabledBrush">#2e2e2e</SolidColorBrush>
 
         <SolidColorBrush x:Key="EditableBrush">#686289</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="ThemeComboBoxBackgroundBrush">#404040</SolidColorBrush>
       
         <Thickness x:Key="ThemeBorderThickness">1</Thickness>
         <sys:Double x:Key="ThemeDisabledOpacity">0.5</sys:Double>

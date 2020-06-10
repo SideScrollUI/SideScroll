@@ -184,8 +184,10 @@ namespace Atlas.UI.Avalonia.Controls
 			MaxHeight = 4000;
 			AddDataGrid();
 
-			textBoxSearch = new TextBox();
-			textBoxSearch.IsVisible = false;
+			textBoxSearch = new TextBox()
+			{
+				IsVisible = false,
+			};
 			//textBoxSearch.TextInput += TextBoxSearch_TextInput; // doesn't work
 			textBoxSearch.KeyDown += TextBoxSearch_KeyDown;
 			textBoxSearch.KeyUp += TextBoxSearch_KeyUp;
@@ -213,7 +215,6 @@ namespace Atlas.UI.Avalonia.Controls
 				//HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // Use scrollviewer instead for now 
 				//BorderThickness = new Thickness(0), // DataGrid bug, setting this breaks the background OnFocus, but fixes the extra border
 				//Padding = new Thickness(0),
-				BorderBrush = new SolidColorBrush(Colors.Black),
 				
 				BorderThickness = new Thickness(1),
 				IsReadOnly = !tabModel.Editing,

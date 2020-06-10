@@ -16,6 +16,29 @@ using Avalonia.Styling;
 
 namespace Atlas.UI.Avalonia.Controls
 {
+	public class TabControlTextEditor : AvaloniaEdit.TextEditor, IStyleable
+	{
+		Type IStyleable.StyleKey => typeof(AvaloniaEdit.TextEditor);
+
+		public int BottomPadding { get; set; } = 12; // Compensate for AvaloniaEdit margin/padding bug
+
+		protected override Size MeasureOverride(Size constraint)
+		{
+			Size measureOverrideSize = constraint;
+			try
+			{
+				measureOverrideSize = base.MeasureOverride(constraint);
+				measureOverrideSize = new Size(measureOverrideSize.Width, Math.Min(constraint.Height, measureOverrideSize.Height + BottomPadding));
+			}
+			catch
+			{
+				// catch 10k line length limit exception
+			}
+			//Size desiredSize = DesiredSize;
+			return measureOverrideSize;
+		}
+	}
+
 	public class TabControlAvaloniaEdit : Grid
 	{
 		public const int MaxAutoLoadSize = 1000000;
@@ -33,34 +56,6 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			this.tabInstance = tabInstance;
 			InitializeControls();
-		}
-
-		public Size arrangeOverrideFinalSize;
-		protected override Size ArrangeOverride(Size finalSize)
-		{
-			arrangeOverrideFinalSize = finalSize;
-			return base.ArrangeOverride(finalSize);
-		}
-
-		public class TabControlTextEditor : AvaloniaEdit.TextEditor, IStyleable
-		{
-			Type IStyleable.StyleKey => typeof(AvaloniaEdit.TextEditor);
-
-			protected override Size MeasureOverride(Size constraint)
-			{
-				Size  measureOverrideSize = constraint;
-				try
-				{
-					measureOverrideSize = base.MeasureOverride(constraint);
-					measureOverrideSize = new Size(measureOverrideSize.Width, Math.Min(constraint.Height, measureOverrideSize.Height + 12)); // compensate for padding bug
-				}
-				catch
-				{
-					// catch 10k line length limit exception
-				}
-				//Size desiredSize = DesiredSize;
-				return measureOverrideSize;
-			}
 		}
 
 		private void InitializeControls()
@@ -92,6 +87,7 @@ namespace Atlas.UI.Avalonia.Controls
 				SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"), // handles JSON too
 			};
 
+			// Anchor the Text Editor at the top
 			var border = new Border()
 			{
 				Child = textEditor,

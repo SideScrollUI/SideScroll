@@ -76,8 +76,6 @@
 
         <SolidColorBrush x:Key="EditableBrush">#c8c2f9</SolidColorBrush>
 
-        <SolidColorBrush x:Key="ThemeComboBoxBackgroundBrush">LightGray</SolidColorBrush>
-
         <Thickness x:Key="ThemeBorderThickness">1</Thickness>
         <sys:Double x:Key="ThemeDisabledOpacity">0.5</sys:Double>
 

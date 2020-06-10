@@ -27,10 +27,10 @@ namespace Atlas.UI.Avalonia.Controls
 		private void InitializeComponent(ListProperty property)
 		{
 			ColumnDefinitions = new ColumnDefinitions("*,*");
-			var backgroundColor = property.Editable ? Colors.White : Colors.LightGray;
+			var backgroundColor = property.Editable ? Theme.Background : Brushes.LightGray;
 			var datePicker = new DatePicker()
 			{
-				Background = new SolidColorBrush(backgroundColor),
+				Background = backgroundColor,
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				BorderThickness = new Thickness(1),
