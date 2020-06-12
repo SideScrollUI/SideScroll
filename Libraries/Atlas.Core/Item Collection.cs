@@ -94,18 +94,16 @@ namespace Atlas.Core
 
 	public class ItemCollectionUI<T> : ObservableCollection<T>, IList, ICollection, IEnumerable, IContext //, IRaiseItemChangedEvents //
 	{
-		public SynchronizationContext Context { get; set; }
+		public SynchronizationContext Context { get; set; } // TabInstance will initialize this, don't want to initialize this early due to default SynchronizationContext not posting messages in order
 
 		public ItemCollectionUI()
 		{
-			InitializeContext();
 		}
 
 		// Don't implement List<T>, it isn't sortable
 		public ItemCollectionUI(IEnumerable<T> iEnumerable) :
 			base(iEnumerable)
 		{
-			InitializeContext();
 		}
 
 		public void InitializeContext(bool reset = false)
@@ -131,10 +129,12 @@ namespace Atlas.Core
 		protected override void InsertItem(int index, T item)
 		{
 			var location = new ItemLocation(index, item);
-			if (Context == SynchronizationContext.Current)
+			if (Context == null)
+				base.InsertItem(index, item);
+			else if (Context == SynchronizationContext.Current)
 				InsertItemCallback(location);
 			else
-				Context.Post(new SendOrPostCallback(InsertItemCallback), location); // inserting 2 items inserts in wrong order
+				Context.Post(new SendOrPostCallback(InsertItemCallback), location); // default context inserts multiple items in wrong order, AvaloniaUI doesn't
 		}
 
 		// Thread safe callback, only works if the context is the same

@@ -12,12 +12,12 @@
         <SolidColorBrush x:Key="ThemeForegroundLightBrush">#808080</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeForegroundLowBrush">#5860CA</SolidColorBrush>
 
-        <SolidColorBrush x:Key="ThemeBorderLightBrush">#000000</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBorderLightBrush">#000000</SolidColorBrush> <!-- DataGrid Lines -->
         <SolidColorBrush x:Key="ThemeBorderLowBrush">#000000</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#106090</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighBrush">#000000</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighRadioBrush">#006df0</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBorderDarkBrush">#000000</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBorderDarkBrush">#000000</SolidColorBrush>    <!-- DataGrid only -->
         
         <SolidColorBrush x:Key="ThemeControlLightBrush">#FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeControlMidBrush">#2a2954</SolidColorBrush>

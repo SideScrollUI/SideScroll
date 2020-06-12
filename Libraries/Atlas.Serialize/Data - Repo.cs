@@ -29,7 +29,7 @@ namespace Atlas.Serialize
 
 		public DataRepoInstance<T> Open<T>(Call call, string saveDirectory)
 		{
-			return new DataRepoInstance<T>(this, call, saveDirectory);
+			return new DataRepoInstance<T>(this, saveDirectory);
 		}
 
 		public FileInfo GetFileInfo(Type type, string name)
@@ -102,21 +102,21 @@ namespace Atlas.Serialize
 			return Load<T>(typeof(T).AssemblyQualifiedName, call, createIfNeeded, lazy);
 		}
 
-		public SortedDictionary<string, T> LoadAll<T>(Call call = null, string directory = null, bool lazy = false)
+		public DataItemCollection<T> LoadAll<T>(Call call = null, string directory = null, bool lazy = false)
 		{
 			call = call ?? new Call();
 			directory = directory ?? DefaultDirectory;
 
 			/*ItemCollection<string> objectIds = GetObjectIds(typeof(T));
 
-			ItemCollection<T> list = new ItemCollection<T>();
+			var list = new ItemCollection<T>();
 			foreach (string id in objectIds)
 			{
 				T item = Load<T>(id, log, createIfNeeded, lazy, taskInstance);
 				if (item != null)
 					list.Add(item);
 			}*/
-			var entries = new SortedDictionary<string, T>();
+			var entries = new DataItemCollection<T>();
 
 			string typePath = GetTypePath(typeof(T), directory);
 			if (Directory.Exists(typePath))
@@ -129,15 +129,24 @@ namespace Atlas.Serialize
 						continue;
 
 					var serializerFile = new SerializerFile(dataPath, fileName);
-
 					if (serializerFile.Exists)
 					{
 						T obj = serializerFile.Load<T>(call, lazy);
 						if (obj != null)
-							entries.Add(serializerFile.LoadHeader(call).name, obj);
+							entries.Add(new DataItem<T>(serializerFile.LoadHeader(call).name, obj));
 					}
 				}
 			}
+			return entries;
+		}
+
+		public SortedDictionary<string, T> LoadAllSorted<T>(Call call = null, string directory = null, bool lazy = false)
+		{
+			List<DataItem<T>> items = LoadAll<T>(call, directory, lazy);
+
+			var entries = new SortedDictionary<string, T>();
+			foreach (var item in items)
+				entries.Add(item.Key, item.Value);
 			return entries;
 		}
 
@@ -284,7 +293,7 @@ namespace Atlas.Serialize
 		// clean this up?
 		/*private ItemCollection<string> GetObjectIds(Type type, string name = null)
 		{
-			ItemCollection<string> list = new ItemCollection<string>();
+			var list = new ItemCollection<string>();
 
 			string typePath = GetTypePath(type, name);
 			if (Directory.Exists(typePath))
@@ -305,19 +314,22 @@ namespace Atlas.Serialize
 	public class DataRepoInstance<T>
 	{
 		public DataRepo dataRepo;
-		private Call call;
 		private string saveDirectory;
 
-		public DataRepoInstance(DataRepo dataRepo, Call call, string saveDirectory)
+		public DataRepoInstance(DataRepo dataRepo, string saveDirectory)
 		{
 			this.dataRepo = dataRepo;
-			this.call = call;
 			this.saveDirectory = saveDirectory;
 		}
 
-		public SortedDictionary<string, T> LoadAll(Call call = null, bool lazy = false)
+		public DataItemCollection<T> LoadAll(Call call = null, bool lazy = false)
 		{
 			return dataRepo.LoadAll<T>(call, saveDirectory, lazy);
+		}
+
+		public SortedDictionary<string, T> LoadAllSorted(Call call = null, bool lazy = false)
+		{
+			return dataRepo.LoadAllSorted<T>(call, saveDirectory, lazy);
 		}
 
 		public void Delete(string key)
@@ -330,9 +342,41 @@ namespace Atlas.Serialize
 			dataRepo.DeleteAll<T>();
 		}
 
-		public void Save(string name, T sampleItem)
+		public void Save(Call call, string key, T item)
 		{
-			dataRepo.Save(saveDirectory, name, sampleItem, call);
+			dataRepo.Save(saveDirectory, key, item, call);
+		}
+	}
+
+	public class DataItemCollection<T> : List<DataItem<T>>
+	{
+		public SortedDictionary<string, T> Map()
+		{
+			var entries = new SortedDictionary<string, T>();
+			foreach (DataItem<T> item in base.ToArray())
+				entries.Add(item.Key, item.Value);
+			return entries;
+		}
+
+		public void Add(string key, T value)
+		{
+			Add(new DataItem<T>(key, value));
+		}
+	}
+
+	public class DataItem<T>
+	{
+		public string Key { get; set; }
+		public T Value { get; set; }
+
+		public DataItem()
+		{
+		}
+
+		public DataItem(string key, T value)
+		{
+			Key = key;
+			Value = value;
 		}
 	}
 }

@@ -36,7 +36,7 @@ namespace Atlas.Tabs.Test
 			{
 				dataRepoItems = DataApp.Open<SampleItem>(call, saveDirectory);
 				sampleItems = new ItemCollection<SampleItem>();
-				var dataRefs = dataRepoItems.LoadAll(call);
+				var dataRefs = dataRepoItems.LoadAllSorted(call);
 				foreach (var dataRef in dataRefs)
 				{
 					sampleItems.Add(dataRef.Value);
@@ -58,7 +58,7 @@ namespace Atlas.Tabs.Test
 			{
 				var sampleItem = new SampleItem(sampleItems.Count, "Item " + sampleItems.Count);
 				RemoveItem(sampleItem.Name); // Remove previous result so refocus works
-				dataRepoItems.Save(sampleItem.ToString(), sampleItem);
+				dataRepoItems.Save(call, sampleItem.ToString(), sampleItem);
 				sampleItems.Add(sampleItem);
 			}
 
@@ -72,7 +72,7 @@ namespace Atlas.Tabs.Test
 			{
 				var sampleItem = new SampleItem(sampleItems.Count, "Item 0");
 				RemoveItem(sampleItem.Name); // Remove previous result so refocus works
-				dataRepoItems.Save(sampleItem.ToString(), sampleItem);
+				dataRepoItems.Save(call, sampleItem.ToString(), sampleItem);
 				sampleItems.Add(sampleItem);
 			}
 
