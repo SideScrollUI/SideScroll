@@ -142,12 +142,7 @@ namespace Atlas.Serialize
 
 		public SortedDictionary<string, T> LoadAllSorted<T>(Call call = null, string directory = null, bool lazy = false)
 		{
-			List<DataItem<T>> items = LoadAll<T>(call, directory, lazy);
-
-			var entries = new SortedDictionary<string, T>();
-			foreach (var item in items)
-				entries.Add(item.Key, item.Value);
-			return entries;
+			return LoadAll<T>(call, directory, lazy).Map();
 		}
 
 		public ItemCollection<Header> LoadHeaders(Type type, string directory = null, Call call = null)
