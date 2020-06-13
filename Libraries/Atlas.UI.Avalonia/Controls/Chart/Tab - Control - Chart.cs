@@ -1,7 +1,6 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -729,6 +728,8 @@ namespace Atlas.UI.Avalonia.Controls
 				MarkerType = listSeries.iList.Count < 20 ? MarkerType.Circle : MarkerType.None,
 				TrackerFormatString = "{0}\n" + xTrackerFormat + "\nValue: {4:#,0.###}",
 			};
+			if (listSeries.Description != null)
+				lineSeries.TrackerFormatString += "\n\n" + listSeries.Description;
 			// can't add gaps with ItemSource so convert to DataPoint ourselves
 			var dataPoints = GetDataPoints(listSeries, listSeries.iList);
 			lineSeries.Points.AddRange(dataPoints);

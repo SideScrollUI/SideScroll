@@ -23,7 +23,7 @@
     <Style Selector="dg|DataGridRow /template/ Rectangle#BackgroundRectangle">
         <Setter Property="Fill" Value="{DynamicResource ThemeGridHighBrush}" />
     </Style>
-    
+
     <Style Selector="dg|DataGridRow:selected">
         <Setter Property="Foreground" Value="{DynamicResource ThemeGridForegroundSelectedBrush}" />
     </Style>

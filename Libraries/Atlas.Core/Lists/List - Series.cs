@@ -21,6 +21,7 @@ namespace Atlas.Core
 		public string yPropertyName;
 		//public object obj;
 		public double xBinSize;
+		public string Description { get; set; }
 
 		public bool IsStacked { get; set; }
 

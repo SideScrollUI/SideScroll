@@ -86,6 +86,15 @@ namespace Atlas.Serialize
 					object valueObject = typeRepo.LoadObjectRef();
 					// can throw System.ArgumentException, set to null if not Loadable?
 					// Should we add exception handling or detect this earlier when we load the schema?
+
+					// Don't set the property if it's already set to the default, some objects track property assignments
+					if (typeRepo.typeSchema.IsPrimitive)
+					{
+						// todo: construct temp object and store default instead for speed?
+						dynamic currentValue = propertySchema.propertyInfo.GetValue(obj);
+						if ((dynamic)valueObject == currentValue)
+							return;
+					}
 					propertySchema.propertyInfo.SetValue(obj, valueObject);
 				}
 			}

@@ -66,7 +66,8 @@ namespace Atlas.Core
 				{
 					return CollectionToString(collection);
 				}
-				return "[" + collection.Count.ToString("N0") + "]";
+				return collection.Count.ToString("N0");
+				//return "[" + collection.Count.ToString("N0") + "]";
 			}
 			if (typeof(IEnumerable).IsAssignableFrom(type))
 			{
@@ -123,7 +124,8 @@ namespace Atlas.Core
 			foreach (var item in enumerable)
 				strings.Add(item.ToString());
 			string joined = string.Join(", ", strings);
-			return "[" + joined + "]";
+			return joined;
+			//return "[" + joined + "]";
 		}
 
 		public static string CollectionToString(this ICollection collection)
@@ -132,7 +134,8 @@ namespace Atlas.Core
 			foreach (var item in collection)
 				strings.Add(item.ToString());
 			string joined = string.Join(", ", strings);
-			return "[" + joined + "]";
+			return joined;
+			//return "[" + joined + "]";
 		}
 
 		public static string ToUniqueString(this object obj, int maxLength = 100)
