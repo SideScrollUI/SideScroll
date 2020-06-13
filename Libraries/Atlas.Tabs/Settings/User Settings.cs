@@ -6,16 +6,13 @@ namespace Atlas.Tabs
 	{
 		public static string DefaultProjectPath => Paths.Combine(Paths.AppDataPath, "Atlas");
 
-		public static string GetSettingsPath(string projectPath) => Paths.Combine(projectPath, @"Settings.atlas");
-
 		public string ProjectPath { get; set; }
 
-		public string SettingsPath => GetSettingsPath(ProjectPath);
+		public string SettingsPath => Paths.Combine(ProjectPath, @"Settings.atlas");
 
-		//public const bool Reset = false;
 		public bool AutoLoad = true;
 
-		public int SubTabLimit { get; set; } = 10;
+		public int VerticalTabLimit { get; set; } = 10;
 
 		//public int MaxLogItems { get; set; } = 100000;
 	}

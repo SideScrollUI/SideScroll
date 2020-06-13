@@ -7,24 +7,11 @@ namespace Atlas.Core
 {
 	public class Paths
 	{
-		public static string Combine(string path1, string path2)
+		public static string Combine(string path, params string[] paths)
 		{
-			return Path.Combine(path1, path2.TrimStart('/')).Replace('\\', '/');
-		}
-
-		public static string Combine(string path1, string path2, string path3)
-		{
-			return Path.Combine(path1, path2.TrimStart('/'), path3.TrimStart('/')).Replace('\\', '/');
-		}
-
-		public static string Combine(string path1, string path2, string path3, string path4)
-		{
-			return Path.Combine(path1, path2.TrimStart('/'), path3.TrimStart('/'), path4.TrimStart('/')).Replace('\\', '/');
-		}
-
-		public static string Combine(string path1, string path2, string path3, string path4, string path5)
-		{
-			return Path.Combine(path1, path2.TrimStart('/'), path3.TrimStart('/'), path4.TrimStart('/'), path5.TrimStart('/')).Replace('\\', '/');
+			foreach (string part in paths)
+				path = Path.Combine(path, part.TrimStart('/'));
+			return path.Replace('\\', '/');
 		}
 
 		public static string Escape(string path)

@@ -840,7 +840,7 @@ namespace Atlas.UI.Avalonia.View
 
 			foreach (object obj in newList)
 			{
-				if (newChildControls.Count >= tabInstance.Project.userSettings.SubTabLimit)
+				if (newChildControls.Count >= tabInstance.Project.userSettings.VerticalTabLimit)
 					break;
 				GetOrCreateChildControl(oldChildControls, newChildControls, orderedChildControls, obj, null, tabControl);
 			}
