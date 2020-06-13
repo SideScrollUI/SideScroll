@@ -37,6 +37,7 @@ namespace Atlas.Core
 
 		public void Dispose()
 		{
+			timer.Elapsed -= Timer_Elapsed;
 			timer.Stop();
 			stopwatch.Stop();
 			UpdateDuration();

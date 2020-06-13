@@ -238,6 +238,7 @@ namespace Atlas.UI.Avalonia.View
 			tabInstance.OnLoadBookmark -= TabInstance_OnLoadBookmark;
 			tabInstance.OnClearSelection -= TabInstance_OnClearSelection;
 			tabInstance.OnSelectItem -= TabInstance_OnSelectItem;
+			tabInstance.OnResize -= TabInstance_OnResize;
 		}
 
 		private void TabInstance_OnModelChanged(object sender, EventArgs e)
@@ -468,7 +469,6 @@ namespace Atlas.UI.Avalonia.View
 
 		protected void AddData()
 		{
-			tabDatas.Clear();
 			int index = 0;
 			foreach (IList iList in Model.ItemList)
 			{
@@ -615,9 +615,8 @@ namespace Atlas.UI.Avalonia.View
 
 		private void ClearDispatchLoader()
 		{
-			if (dispatcherTimer == null)
+			if (dispatcherTimer != null)
 			{
-				dispatcherTimer = new DispatcherTimer();
 				dispatcherTimer.Stop();
 				dispatcherTimer.Tick -= DispatcherTimer_Tick;
 				dispatcherTimer = null;
@@ -923,7 +922,6 @@ namespace Atlas.UI.Avalonia.View
 
 			//RequestBringIntoView -= UserControl_RequestBringIntoView;
 
-			//tabDatas.Clear();
 			foreach (TabControlDataGrid tabData in tabDatas)
 			{
 				tabData.OnSelectionChanged -= ParentListSelectionChanged;
@@ -951,10 +949,22 @@ namespace Atlas.UI.Avalonia.View
 				tabChildControls.Clear();
 				tabChildControls = null;
 			}
+			if (parentChildGridSplitter != null)
+			{
+				parentChildGridSplitter.DragDelta -= GridSplitter_DragDelta;
+				parentChildGridSplitter.DragStarted -= GridSplitter_DragStarted;
+				parentChildGridSplitter.DragCompleted -= GridSplitter_DragCompleted;
+				parentChildGridSplitter.DoubleTapped -= GridSplitter_DoubleTapped;
+				parentChildGridSplitter = null;
+			}
+			foreach (ITabSelector tabSelector in CustomTabControls)
+			{
+				tabSelector.OnSelectionChanged -= ParentListSelectionChanged;
+			}
+			CustomTabControls.Clear();
 
 			//LogicalChildren.Clear();
 			Children.Clear();
-			CustomTabControls.Clear();
 		}
 
 		private void TabInstance_OnRefresh(object sender, EventArgs e)
@@ -1027,6 +1037,10 @@ namespace Atlas.UI.Avalonia.View
 				// TODO: set large fields to null.
 
 				ClearControls();
+
+				tabInstance.OnModelChanged += TabInstance_OnModelChanged;
+				if (tabInstance is ITabSelector tabSelector)
+					tabSelector.OnSelectionChanged += ParentListSelectionChanged;
 
 				tabInstance.Dispose();
 

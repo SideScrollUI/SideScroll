@@ -141,8 +141,11 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void Dispose()
 		{
-			tabControlDataGrid.Dispose();
 			tabControlDataGrid.OnSelectionChanged -= TabData_OnSelectionChanged;
+			tabControlDataGrid.Dispose();
+
+			if (tabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
+				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
 		}
 	}
 }
