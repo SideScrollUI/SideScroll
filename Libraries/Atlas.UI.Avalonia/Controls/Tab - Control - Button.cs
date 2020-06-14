@@ -9,7 +9,7 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabControlButton : Button, IStyleable
 	{
-		Type IStyleable.StyleKey => typeof(Button);
+		Type IStyleable.StyleKey => typeof(TabControlButton);
 
 		public Brush BackgroundBrush = Theme.ButtonBackground;
 		public Brush ForegroundBrush = Theme.ButtonForeground;

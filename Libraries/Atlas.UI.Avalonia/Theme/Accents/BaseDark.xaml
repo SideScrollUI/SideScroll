@@ -7,17 +7,17 @@
         <!-- Background -->
         <SolidColorBrush x:Key="ThemeBackgroundBrush">#404040</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBackgroundHoverBrush">#404040</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBackgroundTextBrush">#d9d9d9</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBackgroundTextBrush">#d5d5d5</SolidColorBrush>
 
         <!-- Foreground -->
-        <SolidColorBrush x:Key="ThemeForegroundBrush">#d9d9d9</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeForegroundBrush">#d5d5d5</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeForegroundLowBrush">#6579bb</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeForegroundLightBrush">#808080</SolidColorBrush>
 
         <!-- Border -->
         <SolidColorBrush x:Key="ThemeBorderLightBrush">#181838</SolidColorBrush> <!-- DataGrid Lines -->
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#106090</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBorderHighBrush">#4188c2</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBorderHighBrush">#3168a2</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighRadioBrush">#006df0</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderDarkBrush">#000000</SolidColorBrush>    <!-- DataGrid only -->
 
@@ -77,7 +77,8 @@
         <!-- Buttons -->
         <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">#2d2d2d</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonForegroundBrush">#d9d9d9</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#525252</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#424242</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush">#828282</SolidColorBrush>
 
         <!-- Toolbar -->
         <SolidColorBrush x:Key="ToolbarButtonBackgroundBrush">#1a1940</SolidColorBrush>

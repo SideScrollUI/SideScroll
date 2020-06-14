@@ -37,6 +37,7 @@
     <None Remove="StyleResources.xaml" />
     <None Remove="Theme\Accents\BaseLight.xaml" />
     <None Remove="Theme\Accents\BaseDark.xaml" />
+    <None Remove="Theme\TabButton.xaml" />
     <None Remove="View\TabAvalonEdit.xaml" />
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +76,9 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Theme\Accents\BaseDark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Theme\TabButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

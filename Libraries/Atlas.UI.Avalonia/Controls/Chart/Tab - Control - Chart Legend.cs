@@ -144,11 +144,15 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (oxySeries.Title == null)
 				return;
+			// Clear all first before setting to avoid event race conditions
+			foreach (TabChartLegendItem item in legendItems)
+				item.Highlight = false;
 			if (idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
 			{
 				foreach (TabChartLegendItem item in legendItems)
 					item.Highlight = (legendItem == item);
 			}
+			UpdateVisibleSeries();
 		}
 
 		public void SetAllVisible(bool selected, bool update = false)
