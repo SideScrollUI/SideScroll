@@ -412,23 +412,7 @@ namespace Atlas.UI.Avalonia.View
 
 		private void AddToolbar(TabToolbar toolbar)
 		{
-			var properties = toolbar.GetType().GetVisibleProperties();
-			var toolbarControl = new TabControlToolbar();
-			foreach (PropertyInfo propertyInfo in properties)
-			{
-				if (propertyInfo.GetCustomAttribute<SeparatorAttribute>() != null)
-					toolbarControl.AddSeparator();
-				var propertyValue = propertyInfo.GetValue(toolbar);
-				if (propertyValue is ToolButton toolButton)
-				{
-					var buttonControl = toolbarControl.AddButton(toolButton.Label, toolButton.Icon);
-					buttonControl.Add(toolButton.Action);
-				}
-				else if (propertyValue is string text)
-				{
-					toolbarControl.AddLabel(text);
-				}
-			}
+			var toolbarControl = new TabControlToolbar(toolbar);
 			AddControl(toolbarControl, false);
 		}
 

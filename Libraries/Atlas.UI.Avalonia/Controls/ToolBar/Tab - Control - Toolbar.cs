@@ -1,4 +1,6 @@
 ﻿using Atlas.Core;
+using Atlas.Extensions;
+using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -9,15 +11,18 @@ using Avalonia.Styling;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Windows.Input;
 
 namespace Atlas.UI.Avalonia.Tabs
 {
 	public class TabControlToolbar : Grid
 	{
-		public TabControlToolbar()
+		public TabControlToolbar(TabToolbar toolbar = null)
 		{
 			InitializeControls();
+			if (toolbar != null)
+				LoadToolbar(toolbar);
 		}
 
 		private void InitializeControls()
@@ -26,6 +31,31 @@ namespace Atlas.UI.Avalonia.Tabs
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
 			Background = Theme.ToolbarButtonBackground;
+		}
+
+		public void LoadToolbar(TabToolbar toolbar)
+		{
+			var properties = toolbar.GetType().GetVisibleProperties();
+			foreach (PropertyInfo propertyInfo in properties)
+			{
+				if (propertyInfo.GetCustomAttribute<SeparatorAttribute>() != null)
+					AddSeparator();
+				var propertyValue = propertyInfo.GetValue(toolbar);
+				if (propertyValue is ToolButton toolButton)
+				{
+					AddButton(toolButton);
+				}
+				else if (propertyValue is string text)
+				{
+					AddLabel(text);
+				}
+			}
+			if (toolbar.Buttons.Count > 0)
+			{
+				AddSeparator();
+				foreach (var toolButton in toolbar.Buttons)
+					AddButton(toolButton);
+			}
 		}
 
 		public void AddControl(Control control)
@@ -37,7 +67,16 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public ToolbarButton AddButton(string tooltip, Stream resource, ICommand command = null)
 		{
-			var button = new ToolbarButton(tooltip, command, resource);
+			var button = new ToolbarButton(tooltip, resource, command);
+			AddControl(button);
+			return button;
+		}
+
+		public ToolbarButton AddButton(ToolButton toolButton)
+		{
+			var button = new ToolbarButton(toolButton.Label, toolButton.Icon);
+			button.Add(toolButton.Action);
+			button.AddAsync(toolButton.ActionAsync);
 			AddControl(button);
 			return button;
 		}
@@ -141,8 +180,9 @@ namespace Atlas.UI.Avalonia.Tabs
 		Type IStyleable.StyleKey => typeof(Button);
 
 		public TaskDelegate.CallAction callAction;
+		public TaskDelegateAsync.CallActionAsync callActionAsync;
 
-		public ToolbarButton(string tooltip, ICommand command, Stream stream) : base()
+		public ToolbarButton(string tooltip, Stream stream, ICommand command = null) : base()
 		{
 			stream.Position = 0;
 			var bitmap = new Bitmap(stream);
@@ -169,9 +209,9 @@ namespace Atlas.UI.Avalonia.Tabs
 			Click += ToolbarButton_Click;
 		}
 
-		private void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		private async void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			InvokeAction(new Call());
+			InvokeActionAsync(new Call());
 		}
 
 		public void Add(TaskDelegate.CallAction callAction)
@@ -179,10 +219,16 @@ namespace Atlas.UI.Avalonia.Tabs
 			this.callAction = callAction;
 		}
 
-		private void InvokeAction(Call call)
+		public void AddAsync(TaskDelegateAsync.CallActionAsync callActionAsync)
+		{
+			this.callActionAsync = callActionAsync;
+		}
+
+		private async void InvokeActionAsync(Call call)
 		{
 			try
 			{
+				callActionAsync?.Invoke(call);
 				callAction?.Invoke(call);
 			}
 			catch (Exception e)
