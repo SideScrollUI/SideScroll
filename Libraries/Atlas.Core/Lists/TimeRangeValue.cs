@@ -14,6 +14,8 @@ namespace Atlas.Core
 		public string Name { get; set; }
 		[YAxis]
 		public double Value { get; set; }
+		/*[Description]
+		public string Description { get; set; }*/
 
 		public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Value;
 

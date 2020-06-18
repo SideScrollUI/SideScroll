@@ -58,7 +58,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			var textBlock = new TextBlock()
 			{
-				Text = descriptionAttribute.Text,
+				Text = descriptionAttribute.Description,
 				FontSize = 14,
 				Margin = new Thickness(0, 3, 10, 3),
 				Foreground = Theme.BackgroundText,

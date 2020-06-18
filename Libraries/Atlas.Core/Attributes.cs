@@ -61,6 +61,18 @@ namespace Atlas.Core
 		}
 	}
 
+	// [Description("Text to describe object")]
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
+	public class DescriptionAttribute : Attribute
+	{
+		public readonly string Description;
+
+		public DescriptionAttribute(string description)
+		{
+			Description = description;
+		}
+	}
+
 	// 
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class StyleValueAttribute : Attribute
