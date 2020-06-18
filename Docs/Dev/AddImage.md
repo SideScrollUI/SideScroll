@@ -1,11 +1,12 @@
 # Adding new Image Resources
 
 * Find new icon:
-  - https://www.flaticon.com/packs/free-basic-ui-elements
-  - Click color picker next to "Add to Collection"
-  - Paste in color `006df0`
-  - Click Download
-  - Select PNG, 24 pixels
+  - FlatIcon
+    - https://www.flaticon.com/
+    - Click color picker next to "Add to Collection"
+    - Paste in color `006df0`
+    - Click Download
+    - Select PNG, 24 pixels
 * Colors:
   - Dark Blue: `006df0` (currently used)
   - Light Blue: `759eeb` (not used anymore)

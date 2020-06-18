@@ -29,6 +29,7 @@ namespace Atlas.Resources
 
 		public static readonly string Unlock = "unlock.png";
 		public static readonly string Password = "password.png";
+		public static readonly string Enter = "enter.png";
 
 		public static readonly string PadNote = "padnote.png";
 		public static readonly string Paste = "paste_16.png";
@@ -70,6 +71,7 @@ namespace Atlas.Resources
 
 			public static Stream Unlock => Get(Icons.Unlock);
 			public static Stream Password => Get(Icons.Password);
+			public static Stream Enter => Get(Icons.Enter);
 
 			public static Stream PadNote => Get(Icons.PadNote);
 			public static Stream Paste => Get(Icons.Paste);
@@ -93,7 +95,6 @@ namespace Atlas.Resources
 				return assembly.GetManifestResourceStream("Atlas.Resources.Icons." + resourceType + "." + resourceName);
 			}
 
-			// this might slow loading?
 			public static List<Stream> All { get; set; } = new List<Stream>()
 			{
 				Logo,
@@ -110,6 +111,7 @@ namespace Atlas.Resources
 				Browser,
 				Unlock,
 				Password,
+				Enter,
 				PadNote,
 				Paste,
 				Eraser,

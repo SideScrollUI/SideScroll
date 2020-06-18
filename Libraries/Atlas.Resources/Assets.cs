@@ -21,7 +21,6 @@ namespace Atlas.Resources
 				return assembly.GetManifestResourceStream("Atlas.Resources.Assets." + resourceName);
 			}
 
-			// this might slow loading?
 			public static List<Stream> All { get; set; } = new List<Stream>()
 			{
 				Hourglass,

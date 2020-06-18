@@ -3,7 +3,6 @@ using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -36,6 +35,13 @@ namespace Atlas.UI.Avalonia.Controls
 			ExampleAttribute attribute = property.propertyInfo.GetCustomAttribute<ExampleAttribute>();
 			if (attribute != null)
 				Watermark = attribute.Text;
+
+			// todo: re-enable when wordwrap works again
+			/*if (property.propertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
+			{
+				TextWrapping = TextWrapping.Wrap;
+				MinHeight = 80;
+			}*/
 
 			var binding = new Binding(property.propertyInfo.Name)
 			{

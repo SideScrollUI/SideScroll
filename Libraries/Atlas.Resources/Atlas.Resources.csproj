@@ -17,6 +17,7 @@
     <None Remove="Icons\png\cancel_red.png" />
     <None Remove="Icons\png\clear_search.png" />
     <None Remove="Icons\png\delete_list.png" />
+    <None Remove="Icons\png\enter.png" />
     <None Remove="Icons\png\eraser.png" />
     <None Remove="Icons\png\if_help_62217.png" />
     <None Remove="Icons\png\import.png" />
@@ -61,6 +62,7 @@
     <EmbeddedResource Include="Icons\png\cancel_red.png" />
     <EmbeddedResource Include="Icons\png\clear_search.png" />
     <EmbeddedResource Include="Icons\png\delete_list.png" />
+    <EmbeddedResource Include="Icons\png\enter.png" />
     <EmbeddedResource Include="Icons\png\eraser.png" />
     <EmbeddedResource Include="Icons\png\import.png" />
     <EmbeddedResource Include="Icons\png\info_24_759eeb.png" />

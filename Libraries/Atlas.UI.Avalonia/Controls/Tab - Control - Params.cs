@@ -38,6 +38,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 			if (autoGenerateRows)
 			{
+				AddDescription();
+
 				ItemCollection<ListProperty> properties = ListProperty.Create(obj);
 				foreach (ListProperty property in properties)
 				{
@@ -46,20 +48,37 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
+		private void AddDescription()
+		{
+			var descriptionAttribute = obj.GetType().GetCustomAttribute<DescriptionAttribute>();
+			if (descriptionAttribute == null)
+				return;
+
+			AddRowDefinition();
+
+			var textBlock = new TextBlock()
+			{
+				Text = descriptionAttribute.Text,
+				FontSize = 14,
+				Margin = new Thickness(0, 3, 10, 3),
+				Foreground = Theme.BackgroundText,
+				VerticalAlignment = VerticalAlignment.Top,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				TextWrapping = TextWrapping.Wrap,
+				MaxWidth = 500,
+				[Grid.ColumnSpanProperty] = 2,
+			};
+			Children.Add(textBlock);
+		}
+
 		public List<Control> AddObjectRow(object obj)
 		{
-			int rowIndex = RowDefinitions.Count;
+			int rowIndex = AddRowDefinition();
 			int columnIndex = 0;
 
 			/*RowDefinition spacerRow = new RowDefinition();
 			spacerRow.Height = new GridLength(5);
 			RowDefinitions.Add(spacerRow);*/
-
-			var rowDefinition = new RowDefinition()
-			{
-				Height = new GridLength(1, GridUnitType.Auto),
-			};
-			RowDefinitions.Add(rowDefinition);
 
 			var controls = new List<Control>();
 			foreach (PropertyInfo propertyInfo in obj.GetType().GetVisibleProperties())
@@ -74,6 +93,17 @@ namespace Atlas.UI.Avalonia.Controls
 				columnIndex++;
 			}
 			return controls;
+		}
+
+		private int AddRowDefinition()
+		{
+			int rowIndex = RowDefinitions.Count;
+			var rowDefinition = new RowDefinition()
+			{
+				Height = new GridLength(1, GridUnitType.Auto),
+			};
+			RowDefinitions.Add(rowDefinition);
+			return rowIndex;
 		}
 
 		private void AddControl(Control control, int columnIndex, int rowIndex)

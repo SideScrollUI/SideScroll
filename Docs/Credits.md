@@ -28,6 +28,7 @@
 | [Search](https://www.flaticon.com/free-icon/search_118718) | Lucy G |
 | [Save File](https://www.flaticon.com/free-icon/save-file-option_25398) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) |
 | [Internet](https://www.flaticon.com/free-icon/internet_149229) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) |
+| [Enter](https://www.flaticon.com/free-icon/enter_1828391) | Pixel Perfect |
 
 * Lucy G
   - (user account no longer exists)
