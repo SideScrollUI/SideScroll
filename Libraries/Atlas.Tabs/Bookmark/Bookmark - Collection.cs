@@ -60,7 +60,7 @@ namespace Atlas.Tabs
 			{
 				Name = "Current",
 			};
-			project.DataApp.Delete<Bookmark>(null, bookmark.Bookmark.Name);
+			project.DataApp.Delete<Bookmark>(bookmark.Bookmark.Name);
 			Items.Remove(bookmark);
 			//Reload();
 		}

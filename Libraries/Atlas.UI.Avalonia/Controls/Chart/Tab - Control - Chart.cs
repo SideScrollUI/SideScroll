@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Linq;
+using Avalonia;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -47,9 +48,10 @@ namespace Atlas.UI.Avalonia.Controls
 		private const double MarginPercent = 0.1; // This needs a min height so this can be lowered
 		private static OxyColor nowColor = OxyColors.Green;
 
-		private TabInstance tabInstance;
+		private TabInstance TabInstance;
 		//public ChartSettings ChartSettings { get; set; }
 		public ListGroup ListGroup { get; set; }
+		public bool FillHeight { get; set; }
 
 		//private List<ListSeries> ListSeries { get; set; }
 		public List<OxyListSeries> oxyListSeriesList = new List<OxyListSeries>();
@@ -110,10 +112,11 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public event EventHandler<SeriesSelectedEventArgs> OnSelectionChanged;
 
-		public TabControlChart(TabInstance tabInstance, ListGroup listGroup)
+		public TabControlChart(TabInstance tabInstance, ListGroup listGroup, bool fillHeight = false)
 		{
-			this.tabInstance = tabInstance;
+			this.TabInstance = tabInstance;
 			this.ListGroup = listGroup;
+			this.FillHeight = fillHeight;
 
 			InitializeControls();
 		}
@@ -130,8 +133,8 @@ namespace Atlas.UI.Avalonia.Controls
 			MaxWidth = 1500;
 			MaxHeight = 620; // 25 Items
 
-			if (tabInstance.tabViewSettings.ChartDataSettings.Count == 0)
-				tabInstance.tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
+			if (TabInstance.tabViewSettings.ChartDataSettings.Count == 0)
+				TabInstance.tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
 			
 			plotView = new PlotView()
 			{
@@ -192,6 +195,15 @@ namespace Atlas.UI.Avalonia.Controls
 			Content = containerGrid;
 
 			Focusable = true;
+		}
+
+		// Anchor the chart to the top and stretch to max height
+		protected override Size MeasureOverride(Size availableSize)
+		{
+			Size size = base.MeasureOverride(availableSize);
+			if (FillHeight)
+				size = new Size(size.Width, Math.Max(size.Height, Math.Min(MaxHeight, availableSize.Height)));
+			return size;
 		}
 
 		public class MouseHoverManipulator : TrackerManipulator
@@ -642,7 +654,6 @@ namespace Atlas.UI.Avalonia.Controls
 		public List<DateTimeFormat> dateFormats = new List<DateTimeFormat>
 		{
 			new DateTimeFormat(2 * 60, TimeSpan.FromSeconds(1), "H:mm:ss"),
-			//new DateTimeFormat(60 * 60, 1, "H:mm"),
 			new DateTimeFormat(24 * 60 * 60, TimeSpan.FromMinutes(1), "H:mm"),
 			new DateTimeFormat(3 * 24 * 60 * 60, TimeSpan.FromMinutes(1), "M/d H:mm"),
 			new DateTimeFormat(6 * 30 * 24 * 60 * 60, TimeSpan.FromDays(1), "M/d"),

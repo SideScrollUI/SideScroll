@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Atlas.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,37 +31,38 @@ namespace Atlas.Core
 			Value = value;
 		}
 
-		public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> dataPoints, double periodDuration)
+		public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> dataPoints, TimeSpan periodDuration)
 		{
 			return TimeRangePeriod.SumPeriods(dataPoints, StartTime, EndTime, periodDuration);
 		}
 
-		private static int GetMinGap(List<TimeRangeValue> input, int periodDuration)
+		private static TimeSpan GetMinGap(List<TimeRangeValue> input, TimeSpan periodDuration)
 		{
 			if (input.Count < 10)
 				return periodDuration;
 
-			int minDistance = 2 * periodDuration;
+			TimeSpan minDistance = TimeSpan.FromSeconds(2 * (int)periodDuration.TotalSeconds);
 			DateTime? prevTime = null;
 			foreach (TimeRangeValue point in input)
 			{
 				DateTime startTime = point.StartTime;
 				if (prevTime != null)
 				{
-					int duration = Math.Abs((int)startTime.Subtract(prevTime.Value).TotalSeconds);
-					minDistance = Math.Min(minDistance, duration);
+					TimeSpan duration = startTime.Subtract(prevTime.Value);
+					duration = TimeSpan.FromSeconds(Math.Abs((int)duration.TotalSeconds));
+					minDistance = minDistance.Min(duration);
 				}
 
 				prevTime = startTime;
 			}
-			return Math.Max(periodDuration, minDistance);
+			return periodDuration.Max(minDistance);
 		}
 
 		// Adds a single NaN point between all gaps greater than minGap so the chart will add gaps in lines
-		public static List<TimeRangeValue> AddGaps(List<TimeRangeValue> input, int periodDuration)
+		public static List<TimeRangeValue> AddGaps(List<TimeRangeValue> input, TimeSpan periodDuration)
 		{
 			var sorted = input.OrderBy(p => p.StartTime).ToList();
-			int minGap = GetMinGap(sorted, periodDuration);
+			TimeSpan minGap = GetMinGap(sorted, periodDuration);
 
 			DateTime? prevTime = null;
 			var output = new List<TimeRangeValue>();
@@ -70,7 +72,7 @@ namespace Atlas.Core
 				double value = point.Value;
 				if (prevTime != null)
 				{
-					DateTime expectedTime = prevTime.Value.AddSeconds(minGap);
+					DateTime expectedTime = prevTime.Value.Add(minGap);
 					if (expectedTime < startTime)
 					{
 						var insertedPoint = new TimeRangeValue()

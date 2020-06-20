@@ -444,9 +444,9 @@ namespace Atlas.UI.Avalonia.View
 		{
 			foreach (var listGroupPair in chartSettings.ListGroups)
 			{
-				var tabChart = new TabControlChart(tabInstance, listGroupPair.Value);
+				var tabChart = new TabControlChart(tabInstance, listGroupPair.Value, true);
 
-				tabParentControls.AddControl(tabChart, true, SeparatorType.Spacer);
+				tabParentControls.AddControl(tabChart, false, SeparatorType.Spacer);
 				//tabChart.OnSelectionChanged += ListData_OnSelectionChanged;
 			}
 		}

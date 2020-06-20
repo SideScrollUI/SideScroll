@@ -200,6 +200,11 @@ namespace Atlas.Serialize
 			Delete(typeof(T), directory, name);
 		}
 
+		public void Delete<T>(string name)
+		{
+			Delete(typeof(T), null, name);
+		}
+
 		public void Delete(Type type, string directory, string name)
 		{
 			directory = directory ?? DefaultDirectory;

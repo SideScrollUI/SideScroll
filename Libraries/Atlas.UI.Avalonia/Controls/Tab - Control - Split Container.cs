@@ -121,13 +121,7 @@ namespace Atlas.UI.Avalonia.Controls
 				AddRowSplitter(RowDefinitions.Count);
 			else if (separatorType == SeparatorType.Splitter)
 				AddRowSpacer(RowDefinitions.Count);*/
-
-			var rowDefinition = new RowDefinition();
-			if (fill)
-				rowDefinition.Height = new GridLength(1, GridUnitType.Star);
-			else
-				rowDefinition.Height = GridLength.Auto;
-			RowDefinitions.Add(rowDefinition);
+			AddRowDefinition(fill);
 
 			SetRow(control, RowDefinitions.Count - 1);
 			//SetRow(control, Children.Count);
@@ -137,6 +131,21 @@ namespace Atlas.UI.Avalonia.Controls
 			InvalidateMeasure();
 		}
 
+		private bool filled = false;
+		private void AddRowDefinition(bool fill, int? index = null)
+		{
+			var rowDefinition = new RowDefinition();
+			if (fill)
+				rowDefinition.Height = new GridLength(1, GridUnitType.Star);
+			else
+				rowDefinition.Height = GridLength.Auto;
+			if (index is int i)
+				RowDefinitions.Insert(i, rowDefinition);
+			else
+				RowDefinitions.Add(rowDefinition);
+			filled |= fill;
+		}
+
 		// always show splitters if their is a fill before or after?
 		// Do we allow changing an auto to a fill?
 		// always add a RowDefinition before and after
@@ -144,12 +153,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			AddSeparatorRowDefinition(index - 1);
 
-			var rowDefinition = new RowDefinition();
-			if (fill)
-				rowDefinition.Height = new GridLength(1, GridUnitType.Star);
-			else
-				rowDefinition.Height = GridLength.Auto;
-			RowDefinitions.Insert(index, rowDefinition);
+			AddRowDefinition(fill, index);
 
 			SetRow(control, index);
 			//Children.Insert(index, control);
