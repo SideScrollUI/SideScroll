@@ -7,25 +7,17 @@ namespace Atlas.Start.Avalonia
 {
 	public class MainWindow : BaseWindow
 	{
-		public MainWindow() : base(LoadProject())
+		public MainWindow() : base(new Project(Settings))
 		{
 			AddTab(new TabAvalonia());
 		}
 
-		public static Project LoadProject()
+		public static ProjectSettings Settings => new ProjectSettings()
 		{
-			var projectSettings = new ProjectSettings()
-			{
-				Name = "Atlas",
-				LinkType = "atlas",
-				Version = new Version(1, 0),
-				DataVersion = new Version(1, 0),
-			};
-			var userSettings = new UserSettings()
-			{
-				ProjectPath = UserSettings.DefaultProjectPath,
-			};
-			return new Project(projectSettings, userSettings);
-		}
+			Name = "Atlas",
+			LinkType = "atlas",
+			Version = new Version(1, 0),
+			DataVersion = new Version(1, 0),
+		};
 	}
 }

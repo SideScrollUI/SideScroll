@@ -30,6 +30,15 @@ namespace Atlas.Tabs
 		{
 		}
 
+		public Project(ProjectSettings projectSettings)
+		{
+			this.projectSettings = projectSettings;
+			userSettings = new UserSettings()
+			{
+				ProjectPath = Paths.Combine(Paths.AppDataPath, projectSettings.Name),
+			};
+		}
+
 		public Project(ProjectSettings projectSettings, UserSettings userSettings)
 		{
 			this.projectSettings = projectSettings;
