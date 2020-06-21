@@ -35,7 +35,7 @@ namespace Atlas.Tabs
 			this.projectSettings = projectSettings;
 			userSettings = new UserSettings()
 			{
-				ProjectPath = Paths.Combine(Paths.AppDataPath, projectSettings.Name),
+				ProjectPath = projectSettings.DefaultProjectPath,
 			};
 		}
 
