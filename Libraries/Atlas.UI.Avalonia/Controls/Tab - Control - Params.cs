@@ -38,7 +38,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			if (autoGenerateRows)
 			{
-				AddDescription();
+				AddSummary();
 
 				ItemCollection<ListProperty> properties = ListProperty.Create(obj);
 				foreach (ListProperty property in properties)
@@ -48,17 +48,17 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private void AddDescription()
+		private void AddSummary()
 		{
-			var descriptionAttribute = obj.GetType().GetCustomAttribute<DescriptionAttribute>();
-			if (descriptionAttribute == null)
+			var summaryAttribute = obj.GetType().GetCustomAttribute<SummaryAttribute>();
+			if (summaryAttribute == null)
 				return;
 
 			AddRowDefinition();
 
 			var textBlock = new TextBlock()
 			{
-				Text = descriptionAttribute.Description,
+				Text = summaryAttribute.Summary,
 				FontSize = 14,
 				Margin = new Thickness(0, 3, 10, 3),
 				Foreground = Theme.BackgroundText,

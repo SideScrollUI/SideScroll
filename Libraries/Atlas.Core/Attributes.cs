@@ -61,15 +61,15 @@ namespace Atlas.Core
 		}
 	}
 
-	// [Description("Text to describe object")]
+	// [Summary("Text to describe object")], [Description] conflicts with NUnit's, use [TabDescription]?
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
-	public class DescriptionAttribute : Attribute
+	public class SummaryAttribute : Attribute
 	{
-		public readonly string Description;
+		public readonly string Summary;
 
-		public DescriptionAttribute(string description)
+		public SummaryAttribute(string summary)
 		{
-			Description = description;
+			Summary = summary;
 		}
 	}
 
