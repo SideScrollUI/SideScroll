@@ -18,7 +18,7 @@
         <SolidColorBrush x:Key="ThemeBorderLightBrush">#000000</SolidColorBrush> <!-- DataGrid Lines -->
         <SolidColorBrush x:Key="ThemeBorderLowBrush">#000000</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#000000</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeBorderHighBrush">#000000</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBorderHighBrush">#000000</SolidColorBrush> <!-- RadioButton circle border -->
         <SolidColorBrush x:Key="ThemeBorderHighRadioBrush">#006df0</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderDarkBrush">#000000</SolidColorBrush>    <!-- DataGrid only -->
 
@@ -75,6 +75,9 @@
         <SolidColorBrush x:Key="ThemeButtonForegroundBrush">AliceBlue</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#7827d4</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush">#9837ff</SolidColorBrush>
+
+        <!-- RadioButton -->
+        <SolidColorBrush x:Key="ThemeRadioButtonBorderBrush">#004dd0</SolidColorBrush>
 
         <!-- Toolbar -->
         <SolidColorBrush x:Key="ToolbarButtonBackgroundBrush">#2a2954</SolidColorBrush>

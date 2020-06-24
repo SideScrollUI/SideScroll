@@ -85,7 +85,10 @@
     <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>
     </Style>
-    
+
+    <Style Selector="RadioButton">
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeRadioButtonBorderBrush}"/>
+    </Style>
     <Style Selector="RadioButton:pointerover /template/ Ellipse#border">
         <Setter Property="Stroke" Value="{DynamicResource ThemeBorderHighRadioBrush}"/>
     </Style>

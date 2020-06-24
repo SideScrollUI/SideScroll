@@ -80,6 +80,9 @@
         <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#424242</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush">#828282</SolidColorBrush>
 
+        <!-- RadioButton -->
+        <SolidColorBrush x:Key="ThemeRadioButtonBorderBrush">#004dd0</SolidColorBrush>
+
         <!-- Toolbar -->
         <SolidColorBrush x:Key="ToolbarButtonBackgroundBrush">#1a1940</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarButtonBackgroundHoverBrush">#2040a0</SolidColorBrush>
