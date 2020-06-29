@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -120,6 +121,25 @@ namespace Atlas.Tabs
 				return childBookmark;
 
 			return null;
+		}
+
+		public void Import(Project project)
+		{
+			if (tabViewSettings == null)
+				return;
+
+			DataRepo dataRepo = project.GetBookmarkRepo(Name);
+
+			foreach (SelectedRow row in tabViewSettings.SelectedRows)
+			{
+				string dataKey = row.dataKey ?? row.label;
+				if (dataKey == null || row.dataValue == null)
+					continue;
+
+				dataRepo.Save(dataKey, row.dataValue);
+			}
+			foreach (TabBookmark tabBookmark in tabChildBookmarks.Values)
+				tabBookmark.Import(project);
 		}
 
 		public void MergeNode(TabBookmark node)

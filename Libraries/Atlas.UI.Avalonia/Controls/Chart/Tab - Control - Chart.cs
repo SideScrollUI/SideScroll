@@ -45,6 +45,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 	public class TabControlChart : UserControl //, IDisposable
 	{
+		public static int SeriesLimit { get; set; } = 25;
 		private const double MarginPercent = 0.1; // This needs a min height so this can be lowered
 		private static OxyColor nowColor = OxyColors.Green;
 
@@ -135,7 +136,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			if (TabInstance.tabViewSettings.ChartDataSettings.Count == 0)
 				TabInstance.tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
-			
+
 			plotView = new PlotView()
 			{
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
@@ -197,7 +198,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Focusable = true;
 		}
 
-		// Anchor the chart to the top and stretch to max height
+		// Anchor the chart to the top and stretch to max height, available size gets set to max :(
 		protected override Size MeasureOverride(Size availableSize)
 		{
 			Size size = base.MeasureOverride(availableSize);
@@ -278,7 +279,7 @@ namespace Atlas.UI.Avalonia.Controls
 			UnloadModel();
 			RecreatePlotModel();
 
-			foreach (ListSeries listSeries in ListGroup.ListSeries)
+			foreach (ListSeries listSeries in ListGroup.Series)
 			{
 				AddSeries(listSeries);
 			}
@@ -348,7 +349,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				AddLinearAxis();
 			}
-			if (ListGroup.ListSeries.Count > 0 && ListGroup.ListSeries[0].IsStacked)
+			if (ListGroup.Series.Count > 0 && ListGroup.Series[0].IsStacked)
 				AddCategoryAxis();
 			else
 				AddValueAxis();
@@ -478,7 +479,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (key != null)
 				categoryAxis.Key = key;
 
-			foreach (ListSeries listSeries in ListGroup.ListSeries)
+			foreach (ListSeries listSeries in ListGroup.Series)
 			{
 				categoryAxis.Labels.Add(listSeries.Name);
 			}
@@ -690,6 +691,13 @@ namespace Atlas.UI.Avalonia.Controls
 			}*/
 		}
 
+		public void MergeGroup(ListGroup listGroup)
+		{
+			listGroup.SortBySum();
+			foreach (var series in listGroup.Series)
+				AddSeries(series);
+		}
+
 		public void AddSeries(ListSeries listSeries)
 		{
 			if (listSeries.IsStacked)
@@ -723,31 +731,17 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public OxyPlot.Series.LineSeries AddListSeries(ListSeries listSeries)
 		{
-			string xTrackerFormat = listSeries.xPropertyName ?? "Index: {2:#,0.###}";
-			if (UseDateTimeAxis || listSeries.xPropertyInfo?.PropertyType == typeof(DateTime))
-				xTrackerFormat = "Time: {2:yyyy-M-d H:mm:ss.FFF}";
-			var lineSeries = new OxyPlot.Series.LineSeries
-			{
-				Title = listSeries.Name,
-				LineStyle = LineStyle.Solid,
-				StrokeThickness = 2,
-				Color = GetColor(plotModel.Series.Count),
-				TextColor = OxyColors.Black,
-				CanTrackerInterpolatePoints = false,
-				MinimumSegmentLength = 2,
-				MarkerSize = 3,
-				MarkerType = listSeries.iList.Count < 20 ? MarkerType.Circle : MarkerType.None,
-				TrackerFormatString = "{0}\n" + xTrackerFormat + "\nValue: {4:#,0.###}",
-			};
-			if (listSeries.Description != null)
-				lineSeries.TrackerFormatString += "\n\n" + listSeries.Description;
-			// can't add gaps with ItemSource so convert to DataPoint ourselves
-			var dataPoints = GetDataPoints(listSeries, listSeries.iList);
-			lineSeries.Points.AddRange(dataPoints);
+			if (oxyListSeriesList.Count >= SeriesLimit)
+				return null;
 
-			// use circle markers if there's a single point all alone, otherwise it won't show
-			if (HasSinglePoint(lineSeries))
-				lineSeries.MarkerType = MarkerType.Circle;
+			var lineSeries = new TabChartLineSeries(this, listSeries, UseDateTimeAxis)
+			{
+				Color = GetColor(plotModel.Series.Count),
+			};
+
+			// can't add gaps with ItemSource so convert to DataPoint ourselves
+			var dataPoints = GetDataPoints(listSeries, listSeries.iList, lineSeries.datapointLookup);
+			lineSeries.Points.AddRange(dataPoints);
 
 			plotModel.Series.Add(lineSeries);
 
@@ -776,22 +770,6 @@ namespace Atlas.UI.Avalonia.Controls
 			return lineSeries;
 		}
 
-		private bool HasSinglePoint(OxyPlot.Series.LineSeries lineSeries)
-		{
-			bool prevNan1 = false;
-			bool prevNan2 = false;
-			foreach (DataPoint dataPoint in lineSeries.Points)
-			{
-				bool nan = double.IsNaN(dataPoint.Y);
-				if (prevNan2 && !prevNan1 && nan)
-					return true;
-				
-				prevNan2 = prevNan1;
-				prevNan1 = nan;
-			}
-			return false;
-		}
-
 		private void UpdateXAxisProperty(ListSeries listSeries)
 		{
 			if (listSeries.yPropertyInfo != null)
@@ -810,7 +788,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private List<DataPoint> GetDataPoints(ListSeries listSeries, IList iList)
+		private List<DataPoint> GetDataPoints(ListSeries listSeries, IList iList, Dictionary<DataPoint, object> datapointLookup = null)
 		{
 			UpdateXAxisProperty(listSeries);
 			var dataPoints = new List<DataPoint>();
@@ -840,7 +818,11 @@ namespace Atlas.UI.Avalonia.Controls
 					double d = double.NaN;
 					if (value != null)
 						d = Convert.ToDouble(value);
-					dataPoints.Add(new DataPoint(x, d));
+
+					var dataPoint = new DataPoint(x, d);
+					if (datapointLookup != null && !double.IsNaN(d) && !datapointLookup.ContainsKey(dataPoint))
+						datapointLookup.Add(dataPoint, obj); 
+					dataPoints.Add(dataPoint);
 				}
 				dataPoints = dataPoints.OrderBy(d => d.X).ToList();
 

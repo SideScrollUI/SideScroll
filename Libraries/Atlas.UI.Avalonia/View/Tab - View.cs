@@ -446,7 +446,7 @@ namespace Atlas.UI.Avalonia.View
 			{
 				var tabChart = new TabControlChart(tabInstance, listGroupPair.Value, true);
 
-				tabParentControls.AddControl(tabChart, false, SeparatorType.Spacer);
+				tabParentControls.AddControl(tabChart, true, SeparatorType.Spacer);
 				//tabChart.OnSelectionChanged += ListData_OnSelectionChanged;
 			}
 		}
@@ -565,7 +565,7 @@ namespace Atlas.UI.Avalonia.View
 
 			if (tabInstance.tabBookmark != null && tabInstance.tabBookmark.tabViewSettings != null)
 				tabInstance.tabViewSettings = tabInstance.tabBookmark.tabViewSettings;
-			else if (tabInstance.Project.userSettings.AutoLoad)
+			else if (tabInstance.Project.UserSettings.AutoLoad)
 				LoadDefaultTabSettings();
 		}
 
@@ -824,7 +824,7 @@ namespace Atlas.UI.Avalonia.View
 
 			foreach (object obj in newList)
 			{
-				if (newChildControls.Count >= tabInstance.Project.userSettings.VerticalTabLimit)
+				if (newChildControls.Count >= tabInstance.Project.UserSettings.VerticalTabLimit)
 					break;
 				GetOrCreateChildControl(oldChildControls, newChildControls, orderedChildControls, obj, null, tabControl);
 			}
@@ -983,7 +983,7 @@ namespace Atlas.UI.Avalonia.View
 
 		private void LoadBookmark()
 		{
-			tabInstance.Project.userSettings.AutoLoad = true;
+			tabInstance.Project.UserSettings.AutoLoad = true;
 
 			TabBookmark tabBookmark = tabInstance.tabBookmark;
 			TabViewSettings = tabBookmark.tabViewSettings;

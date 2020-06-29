@@ -15,8 +15,8 @@ namespace Atlas.Core
 		public string Name { get; set; }
 		[YAxis]
 		public double Value { get; set; }
-		/*[Description]
-		public string Description { get; set; }*/
+		[Description]
+		public string Description { get; set; }
 
 		public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Value;
 
@@ -24,16 +24,17 @@ namespace Atlas.Core
 		{
 		}
 
-		public TimeRangeValue(DateTime startTime, DateTime endTime, double value = 0)
+		public TimeRangeValue(DateTime startTime, DateTime endTime, double value = 0, string description = null)
 		{
 			StartTime = startTime;
 			EndTime = endTime;
 			Value = value;
+			Description = description;
 		}
 
-		public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> dataPoints, TimeSpan periodDuration)
+		public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration)
 		{
-			return TimeRangePeriod.SumPeriods(dataPoints, StartTime, EndTime, periodDuration);
+			return TimeRangePeriod.SumPeriods(timeRangeValues, StartTime, EndTime, periodDuration);
 		}
 
 		private static TimeSpan GetMinGap(List<TimeRangeValue> input, TimeSpan periodDuration)

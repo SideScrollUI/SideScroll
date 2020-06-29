@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using Atlas.Extensions;
 using Atlas.Network;
 using Atlas.Serialize;
 using System;
@@ -8,14 +9,14 @@ namespace Atlas.Tabs
 {
 	public class Project
 	{
-		public string Name => projectSettings.Name;	// for viewing purposes
-		public string LinkType => projectSettings.LinkType; // for bookmarking
-		public Version Version => projectSettings.Version;
-		public virtual ProjectSettings projectSettings { get; set; }
-		public virtual UserSettings userSettings { get; set; }
+		public string Name => ProjectSettings.Name;	// for viewing purposes
+		public string LinkType => ProjectSettings.LinkType; // for bookmarking
+		public Version Version => ProjectSettings.Version;
+		public virtual ProjectSettings ProjectSettings { get; set; }
+		public virtual UserSettings UserSettings { get; set; }
 
 		public DataRepo DataShared => new DataRepo(DataRepoPath, "Shared");
-		public DataRepo DataApp => new DataRepo(DataRepoPath, "Programs/" + Name + "/" + projectSettings.DataVersion);
+		public DataRepo DataApp => new DataRepo(DataRepoPath, "Programs/" + Name + "/" + ProjectSettings.DataVersion);
 
 		public HttpCacheManager httpCacheManager = new HttpCacheManager();
 
@@ -23,7 +24,7 @@ namespace Atlas.Tabs
 		public BookmarkNavigator Navigator { get; set; } = new BookmarkNavigator();
 		public TaskInstanceCollection Tasks { get; set; } = new TaskInstanceCollection();
 
-		private string DataRepoPath => Paths.Combine(userSettings.ProjectPath, "Data");
+		private string DataRepoPath => Paths.Combine(UserSettings.ProjectPath, UserSettings.BookmarkPath?.HashSha256(), "Data");
 
 
 		public Project()
@@ -32,8 +33,8 @@ namespace Atlas.Tabs
 
 		public Project(ProjectSettings projectSettings)
 		{
-			this.projectSettings = projectSettings;
-			userSettings = new UserSettings()
+			ProjectSettings = projectSettings;
+			UserSettings = new UserSettings()
 			{
 				ProjectPath = projectSettings.DefaultProjectPath,
 			};
@@ -41,21 +42,36 @@ namespace Atlas.Tabs
 
 		public Project(ProjectSettings projectSettings, UserSettings userSettings)
 		{
-			this.projectSettings = projectSettings;
-			this.userSettings = userSettings;
+			ProjectSettings = projectSettings;
+			UserSettings = userSettings;
+		}
+
+		public override string ToString()
+		{
+			return Name;
 		}
 
 		public void SaveSettings()
 		{
 			//tabInstance.project.DataApp.Save(projectSettings, new Call());
 
-			var serializer = new SerializerFile(userSettings.SettingsPath, "");
-			serializer.Save(new Call(), projectSettings);
+			var serializer = new SerializerFile(UserSettings.SettingsPath, "");
+			serializer.Save(new Call(), ProjectSettings);
 		}
 
-		public override string ToString()
+		public DataRepo GetBookmarkRepo(string name)
 		{
-			return Name;
+			return new DataRepo(DataRepoPath, "Bookmarks/" + Name + "/" + ProjectSettings.DataVersion);
+		}
+
+		public Project Open(Bookmark bookmark)
+		{
+			var userSettings = UserSettings.Clone<UserSettings>();
+			userSettings.BookmarkPath = bookmark.Address;
+			var project = new Project(ProjectSettings, userSettings);
+			//project.Import(bookmark);
+			bookmark.tabBookmark.Import(project);
+			return project;
 		}
 	}
 

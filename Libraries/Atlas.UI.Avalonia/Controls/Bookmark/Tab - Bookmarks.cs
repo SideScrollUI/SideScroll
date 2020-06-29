@@ -43,7 +43,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					Name = "Current",
 				};
-				Model.Bookmarks.Items.Insert(0, new TabBookmarkItem(currentBookMark));
+				Model.Bookmarks.Items.Insert(0, new TabBookmarkItem(currentBookMark, Project));
 			}
 
 			public override void LoadUI(Call call, TabModel model)

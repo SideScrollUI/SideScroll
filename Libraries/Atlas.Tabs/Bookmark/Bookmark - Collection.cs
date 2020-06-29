@@ -48,19 +48,23 @@ namespace Atlas.Tabs
 
 		public void Add(Bookmark bookmark)
 		{
-			var tabItem = new TabBookmarkItem(bookmark);
+			var tabItem = new TabBookmarkItem(bookmark, project);
 			tabItem.OnDelete += Item_OnDelete;
 			Items.Add(tabItem);
+		}
+
+		public void AddNew(Call call, Bookmark bookmark)
+		{
+			//RemoveResult(tabSearchResult.Key); // Remove previous result
+			project.DataApp.Save(bookmark.Address, bookmark, call);
+			//dataRepoAccountResults?.Save(call, tabSearchResult.Key, tabSearchResult.Result);
+			Add(bookmark);
 		}
 
 		private void Item_OnDelete(object sender, EventArgs e)
 		{
 			TabBookmarkItem bookmark = (TabBookmarkItem)sender;
-			var currentBookMark = new Bookmark()
-			{
-				Name = "Current",
-			};
-			project.DataApp.Delete<Bookmark>(bookmark.Bookmark.Name);
+			project.DataApp.Delete<Bookmark>(bookmark.Bookmark.Address);
 			Items.Remove(bookmark);
 			//Reload();
 		}

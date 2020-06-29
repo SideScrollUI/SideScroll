@@ -84,6 +84,7 @@ namespace Atlas.Tabs
 		public string Label { get { return Model.Name; } set { Model.Name = value; } }
 
 		public DataRepo DataApp => Project.DataApp;
+		public DataRepo DataRepo => tabBookmark != null ? Project.GetBookmarkRepo(tabBookmark.Name) : DataApp;
 
 		public TabViewSettings tabViewSettings = new TabViewSettings();
 		public TabBookmark tabBookmark;
@@ -172,6 +173,8 @@ namespace Atlas.Tabs
 		public TabInstance CreateChildTab(ITab iTab)
 		{
 			TabInstance tabInstance = iTab.Create();
+			if (tabInstance == null)
+				return null;
 			tabInstance.Project = Project;
 			tabInstance.iTab = iTab;
 			tabInstance.ParentTabInstance = this;
@@ -579,6 +582,7 @@ namespace Atlas.Tabs
 		public virtual Bookmark CreateBookmark()
 		{
 			var bookmark = new Bookmark();
+			bookmark.Type = iTab?.GetType();
 			//bookmark.tabBookmark.Name = Label;
 			GetBookmark(bookmark.tabBookmark);
 			bookmark = bookmark.Clone<Bookmark>(TaskInstance.Call); // sanitize
@@ -655,7 +659,7 @@ namespace Atlas.Tabs
 
 		public void LoadDefaultBookmark()
 		{
-			if (Project.userSettings.AutoLoad == false)
+			if (Project.UserSettings.AutoLoad == false)
 				return;
 
 			Bookmark bookmark = Project.DataApp.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);

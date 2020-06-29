@@ -133,14 +133,14 @@ namespace Atlas.UI.Avalonia.Controls
 				[Grid.RowProperty] = 2,
 			};
 
-			Button buttonSave = new TabControlButton("Save");
+			var buttonSave = new TabControlButton("Save");
 			Grid.SetRow(buttonSave, 2);
 			Grid.SetColumn(buttonSave, 0);
 			buttonSave.Click += ButtonSave_Click;
 			buttonSave.PointerEnter += Button_PointerEnter;
 			buttonSave.PointerLeave += Button_PointerLeave;
 
-			Button buttonCancel = new TabControlButton("Cancel");
+			var buttonCancel = new TabControlButton("Cancel");
 			Grid.SetRow(buttonCancel, 2);
 			Grid.SetColumn(buttonCancel, 1);
 			buttonCancel.Click += ButtonCancel_Click;

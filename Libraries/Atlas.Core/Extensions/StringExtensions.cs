@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -142,6 +143,21 @@ namespace Atlas.Extensions
 				if (index == -1)
 					break;
 				yield return index;
+			}
+		}
+
+		public static string HashSha256(this string rawData)
+		{ 
+			using (SHA256 sha256Hash = SHA256.Create())
+			{
+				byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+
+				var builder = new StringBuilder();
+				foreach (byte b in bytes)
+				{
+					builder.Append(b.ToString("x2"));
+				}
+				return builder.ToString();
 			}
 		}
 	}

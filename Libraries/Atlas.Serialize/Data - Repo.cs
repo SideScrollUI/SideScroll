@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -202,6 +203,8 @@ namespace Atlas.Serialize
 
 		public void Delete<T>(string name)
 		{
+			if (name == null)
+				throw new ArgumentNullException(name);
 			Delete(typeof(T), null, name);
 		}
 
@@ -241,31 +244,12 @@ namespace Atlas.Serialize
 			}
 		}
 
-		// Move to Atlas.Core Extensions?
-		public static string ComputeSha256Hash(string rawData)
-		{
-			// Create a SHA256   
-			using (SHA256 sha256Hash = SHA256.Create())
-			{
-				// ComputeHash - returns byte array  
-				byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-
-				// Convert byte array to a string   
-				var builder = new StringBuilder();
-				for (int i = 0; i < bytes.Length; i++)
-				{
-					builder.Append(bytes[i].ToString("x2"));
-				}
-				return builder.ToString();
-			}
-		}
-
 		// Don't use GetHashCode(), it returns a different value each time the process is run
 		public string GetTypePath(Type type, string name = null)
 		{
 			string path = Paths.Combine(RepoPath, RepoName, type.FullName);
 			if (name != null)
-				path += "/" + ComputeSha256Hash(name);
+				path += "/" + name.HashSha256();
 			return path;
 		}
 
@@ -286,7 +270,7 @@ namespace Atlas.Serialize
 		public string GetDirectoryPath(Type type, string directory, string name)
 		{
 			string directoryPath = GetTypePath(type, directory);
-			string dataPath = ComputeSha256Hash(name);
+			string dataPath = name.HashSha256();
 			return Paths.Combine(directoryPath, dataPath);
 		}
 
@@ -309,6 +293,12 @@ namespace Atlas.Serialize
 			}
 			return list;
 		}*/
+	}
+
+	interface IDataRepoInstance
+	{
+		object Serialize();
+		//object Serialize();
 	}
 
 	public class DataRepoInstance<T>

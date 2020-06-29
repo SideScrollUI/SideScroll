@@ -10,7 +10,9 @@ namespace Atlas.Tabs
 		[Name("Bookmark")]
 		public string Name { get; set; }
 		public string Changed { get; set; } // used for naming, find better default name
+		public Type Type { get; set; }
 		public string Address => tabBookmark.Address;
+		public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
 		public TabBookmark tabBookmark { get; set; } = new TabBookmark();
 
 		public override string ToString()

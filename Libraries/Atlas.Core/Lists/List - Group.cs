@@ -13,9 +13,9 @@ namespace Atlas.Core
 		public bool Horizontal { get; set; }
 		public DateTime? StartTime { get; set; }
 		public DateTime? EndTime { get; set; }
-		public bool ShowOrder { get; set; }
+		public bool ShowOrder { get; set; } = true;
 		public double? MinValue { get; set; }
-		public ItemCollection<ListSeries> ListSeries { get; set; } = new ItemCollection<ListSeries>();
+		public ItemCollection<ListSeries> Series { get; set; } = new ItemCollection<ListSeries>();
 
 		public double xBinSize;
 
@@ -50,7 +50,7 @@ namespace Atlas.Core
 					{
 						xBinSize = xBinSize,
 					};
-					ListSeries.Add(listSeries);
+					Series.Add(listSeries);
 				}
 				categoryList.Add(obj);
 			}
@@ -60,12 +60,12 @@ namespace Atlas.Core
 		public void SortBySum()
 		{
 			var sums = new Dictionary<ListSeries, double>();
-			foreach (var listSeries in ListSeries)
+			foreach (var listSeries in Series)
 				sums.Add(listSeries, listSeries.GetSum());
 
 			var sortedDict = from entry in sums orderby entry.Value descending select entry.Key;
 
-			ListSeries = new ItemCollection<ListSeries>(sortedDict);
+			Series = new ItemCollection<ListSeries>(sortedDict);
 		}
 	}
 }

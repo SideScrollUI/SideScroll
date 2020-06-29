@@ -702,7 +702,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void LoadSettings()
 		{
-			if (tabInstance.Project.userSettings.AutoLoad)
+			if (tabInstance.Project.UserSettings.AutoLoad)
 			{
 				SortSavedColumn();
 				if (tabDataSettings.Filter != null && tabDataSettings.Filter.Length > 0)

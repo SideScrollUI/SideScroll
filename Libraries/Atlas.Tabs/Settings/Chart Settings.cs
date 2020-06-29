@@ -75,7 +75,7 @@ namespace Atlas.Tabs
 						}
 					}
 					// Will add to Default Group if no Unit specified, and add the Default Group if needed
-					listGroup.ListSeries.Add(listSeries);
+					listGroup.Series.Add(listSeries);
 					ListSeries.Add(listSeries);
 				}
 			}
@@ -92,14 +92,14 @@ namespace Atlas.Tabs
 			listGroup.Name = label ?? listGroup.Name;
 			// Will add to Default Group if no Unit specified, and add the Default Group if needed
 			ListGroups.Add(listGroup.Name, listGroup);
-			listGroup.ListSeries.Add(listSeries);
+			listGroup.Series.Add(listSeries);
 			ListSeries.Add(listSeries);
 		}
 
 		public void AddGroup(ListGroup listGroup)
 		{
 			ListGroups.Add(listGroup.Name, listGroup);
-			ListSeries.AddRange(listGroup.ListSeries);
+			ListSeries.AddRange(listGroup.Series);
 		}
 
 		public void AddSeries(ListSeries listSeries)
@@ -108,7 +108,7 @@ namespace Atlas.Tabs
 			listGroup.Name = listSeries.Name ?? listGroup.Name;
 			// Will add to Default Group if no Unit specified, and add the Default Group if needed
 			ListGroups.Add(listGroup.Name, listGroup);
-			listGroup.ListSeries.Add(listSeries);
+			listGroup.Series.Add(listSeries);
 			ListSeries.Add(listSeries);
 		}
 

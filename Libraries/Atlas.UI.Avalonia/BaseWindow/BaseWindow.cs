@@ -65,7 +65,7 @@ namespace Atlas.UI.Avalonia
 		// Load here instead of in xaml for better control
 		private void InitializeComponent()
 		{
-			Title = project.projectSettings.Name ?? "<Name>";
+			Title = project.ProjectSettings.Name ?? "<Name>";
 
 			Background = Theme.TabBackground;
 
@@ -165,6 +165,12 @@ namespace Atlas.UI.Avalonia
 			if (bookmark == null)
 				return;
 
+			if (TabBookmarks2.Global != null)
+			{
+				//tabView.tabInstance.SelectItem(tabBookmarks2); // select cells first so the child tab autoselects the new accounts
+				TabBookmarks2.Global.AddBookmark(call, bookmark);
+				return;
+			}
 			bool reloadBase = true;
 			if (reloadBase)
 			{
@@ -290,10 +296,11 @@ namespace Atlas.UI.Avalonia
 		{
 			TabInstance tabInstance = tab.Create();
 			tabInstance.Model.Name = "Start";
+			tabInstance.iTab = tab;
 			tabInstance.Project = project;
 			if (LoadBookmarkUri != null)
 				tabInstance.tabBookmark = linker.GetBookmark(new Call(), LoadBookmarkUri, false)?.tabBookmark;
-			else if (project.userSettings.AutoLoad) // did we load successfully last time?
+			else if (project.UserSettings.AutoLoad) // did we load successfully last time?
 				tabInstance.LoadDefaultBookmark();
 
 			tabView = new TabView(tabInstance);
