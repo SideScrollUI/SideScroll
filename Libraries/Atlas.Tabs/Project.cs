@@ -59,11 +59,6 @@ namespace Atlas.Tabs
 			serializer.Save(new Call(), ProjectSettings);
 		}
 
-		public DataRepo GetBookmarkRepo(string name)
-		{
-			return new DataRepo(DataRepoPath, "Bookmarks/" + Name + "/" + ProjectSettings.DataVersion);
-		}
-
 		public Project Open(Bookmark bookmark)
 		{
 			var userSettings = UserSettings.Clone<UserSettings>();

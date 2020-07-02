@@ -84,7 +84,6 @@ namespace Atlas.Tabs
 		public string Label { get { return Model.Name; } set { Model.Name = value; } }
 
 		public DataRepo DataApp => Project.DataApp;
-		public DataRepo DataRepo => tabBookmark != null ? Project.GetBookmarkRepo(tabBookmark.Name) : DataApp;
 
 		public TabViewSettings tabViewSettings = new TabViewSettings();
 		public TabBookmark tabBookmark;
@@ -175,7 +174,7 @@ namespace Atlas.Tabs
 			TabInstance tabInstance = iTab.Create();
 			if (tabInstance == null)
 				return null;
-			tabInstance.Project = Project;
+			tabInstance.Project = tabInstance.Project ?? Project;
 			tabInstance.iTab = iTab;
 			tabInstance.ParentTabInstance = this;
 			//tabInstance.taskInstance.call.log =
@@ -579,6 +578,8 @@ namespace Atlas.Tabs
 				uiContext.Send(_ => OnClearSelection(this, new EventArgs()), null);
 		}
 
+		protected IDataRepoInstance DataRepoInstance { get; set; }
+
 		public virtual Bookmark CreateBookmark()
 		{
 			var bookmark = new Bookmark();
@@ -600,20 +601,31 @@ namespace Atlas.Tabs
 		{
 			tabBookmark.Name = Label;
 			tabBookmark.tabViewSettings = tabViewSettings;
+			tabBookmark.DataRepoDirectory = DataRepoInstance?.Directory;
+			/*if (DataRepoInstance != null)
+			{
+				foreach (var item in tabViewSettings.SelectedRows)
+				{
+					var dataRepoItem = new DataRepoItem()
+					{
+						Directory = DataRepoInstance.Directory,
+						Key = item.dataKey,
+						Value = item.dataValue,
+					};
+					tabBookmark.DataRepoItems.Add(dataRepoItem);
+				}
+			}*/
+
 			foreach (TabInstance tabInstance in childTabInstances.Values)
 			{
+				// Change this to a Key
+				if (tabBookmark.tabChildBookmarks.ContainsKey(tabInstance.Label))
+					continue;
+				
 				var childBookmark = new TabBookmark();
 				//childBookmark.Name = tabInstance.Label;
 				tabInstance.GetBookmark(childBookmark);
-				// Change this to a Key
-				if (tabBookmark.tabChildBookmarks.ContainsKey(tabInstance.Label))
-				{
-					// log
-				}
-				else
-				{
-					tabBookmark.tabChildBookmarks.Add(tabInstance.Label, childBookmark);
-				}
+				tabBookmark.tabChildBookmarks.Add(tabInstance.Label, childBookmark);
 			}
 		}
 

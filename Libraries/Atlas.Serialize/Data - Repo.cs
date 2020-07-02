@@ -295,46 +295,51 @@ namespace Atlas.Serialize
 		}*/
 	}
 
-	interface IDataRepoInstance
+	public interface IDataRepoInstance
 	{
-		object Serialize();
-		//object Serialize();
+		string Directory { get; }
+		//object GetObject(string key);
 	}
 
-	public class DataRepoInstance<T>
+	public class DataRepoInstance<T> : IDataRepoInstance
 	{
 		public DataRepo dataRepo;
-		private string saveDirectory;
+		public string Directory { get; set; }
 
 		public DataRepoInstance(DataRepo dataRepo, string saveDirectory)
 		{
 			this.dataRepo = dataRepo;
-			this.saveDirectory = saveDirectory;
+			this.Directory = saveDirectory;
+		}
+
+		public void Save(Call call, string key, T item)
+		{
+			dataRepo.Save(Directory, key, item, call);
+		}
+
+		public T Load(Call call, string key, bool lazy = false)
+		{
+			return dataRepo.Load<T>(Directory, key, call, false, lazy);
 		}
 
 		public DataItemCollection<T> LoadAll(Call call = null, bool lazy = false)
 		{
-			return dataRepo.LoadAll<T>(call, saveDirectory, lazy);
+			return dataRepo.LoadAll<T>(call, Directory, lazy);
 		}
 
 		public SortedDictionary<string, T> LoadAllSorted(Call call = null, bool lazy = false)
 		{
-			return dataRepo.LoadAllSorted<T>(call, saveDirectory, lazy);
+			return dataRepo.LoadAllSorted<T>(call, Directory, lazy);
 		}
 
 		public void Delete(string key)
 		{
-			dataRepo.Delete<T>(saveDirectory, key);
+			dataRepo.Delete<T>(Directory, key);
 		}
 
 		public void DeleteAll()
 		{
 			dataRepo.DeleteAll<T>();
-		}
-
-		public void Save(Call call, string key, T item)
-		{
-			dataRepo.Save(saveDirectory, key, item, call);
 		}
 	}
 

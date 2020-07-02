@@ -58,9 +58,9 @@
         <Setter Property="FontSize" Value="14"/>
     </Style>
     
-    <Style Selector="TextBox">
+    <!--Style Selector="TextBox">
         <Setter Property="SelectionBrush" Value="{DynamicResource ToolbarButtonBackgroundHoverBrush}"/>
-    </Style>
+    </Style-->
     <Style Selector="TextBox:pointerover">
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}"/>
     </Style>

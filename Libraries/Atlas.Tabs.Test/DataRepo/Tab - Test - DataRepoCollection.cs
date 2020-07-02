@@ -35,17 +35,12 @@ namespace Atlas.Tabs.Test
 			private void LoadSavedItems(Call call)
 			{
 				dataRepoItems = DataApp.Open<SampleItem>(call, saveDirectory);
+				DataRepoInstance = dataRepoItems;
 				sampleItems = new ItemCollection<SampleItem>();
 				var dataRefs = dataRepoItems.LoadAllSorted(call);
 				foreach (var dataRef in dataRefs)
 				{
 					sampleItems.Add(dataRef.Value);
-				}
-				var bookmarkRefs = GetBookmarkSelectedData<SampleItem>();
-				foreach (var dataRef in bookmarkRefs)
-				{
-					if (!dataRefs.ContainsKey(dataRef.Key))
-						sampleItems.Add(dataRef.Value);
 				}
 			}
 

@@ -6,6 +6,13 @@ using System.Linq;
 
 namespace Atlas.Tabs
 {
+	public class DataRepoItem
+	{
+		public string Directory { get; set; }
+		public string Key { get; set; }
+		public object Value { get; set; }
+	}
+
 	// rename to TabInstanceSettings?
 	public class TabBookmark
 	{
@@ -45,6 +52,8 @@ namespace Atlas.Tabs
 				}
 			}
 		}
+		//public List<DataRepoItem> DataRepoItems { get; set; } = new List<DataRepoItem>();
+		public string DataRepoDirectory { get; set; }
 
 		// Temporary, Only FindMatches() uses, refactor these out?
 		[NonSerialized]
@@ -128,15 +137,13 @@ namespace Atlas.Tabs
 			if (tabViewSettings == null)
 				return;
 
-			DataRepo dataRepo = project.GetBookmarkRepo(Name);
-
 			foreach (SelectedRow row in tabViewSettings.SelectedRows)
 			{
 				string dataKey = row.dataKey ?? row.label;
 				if (dataKey == null || row.dataValue == null)
 					continue;
 
-				dataRepo.Save(dataKey, row.dataValue);
+				project.DataApp.Save(DataRepoDirectory, dataKey, row.dataValue);
 			}
 			foreach (TabBookmark tabBookmark in tabChildBookmarks.Values)
 				tabBookmark.Import(project);

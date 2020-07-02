@@ -181,7 +181,7 @@ namespace Atlas.UI.Avalonia.Controls
 				Foreground = Brushes.LightGray,
 				//Background = new SolidColorBrush(Theme.BackgroundColor),
 				Margin = new Thickness(2, 2, 6, 2),
-				//VerticalAlignment = VerticalAlignment.Center,
+				//VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Center,
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 				[Grid.ColumnProperty] = 1,
 			};

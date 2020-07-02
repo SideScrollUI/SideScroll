@@ -41,7 +41,7 @@
         <SolidColorBrush x:Key="ErrorBrushLight">#10ff0000</SolidColorBrush>
 
         <!-- Highlight -->
-        <SolidColorBrush x:Key="HighlightBrush">#005dd0</SolidColorBrush>
+        <SolidColorBrush x:Key="HighlightBrush">#006df0</SolidColorBrush>
         <SolidColorBrush x:Key="HighlightBackgroundBrush">#4e8ef7</SolidColorBrush>
         <SolidColorBrush x:Key="HighlightForegroundBrush">AliceBlue</SolidColorBrush>
 

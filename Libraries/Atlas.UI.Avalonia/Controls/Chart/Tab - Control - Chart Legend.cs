@@ -98,7 +98,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			var ordered = nonzero.OrderByDescending(a => a.Sum).ToList();
 			ordered.AddRange(unused);
-			if (listGroup.ShowOrder)
+			if (listGroup.ShowOrder && !listGroup.Horizontal)
 			{
 				for (int i = 0; i < ordered.Count; i++)
 					ordered[i].Index = i + 1;
