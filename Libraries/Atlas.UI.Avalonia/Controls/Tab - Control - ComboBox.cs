@@ -3,7 +3,6 @@ using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -59,12 +58,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeComponent()
 		{
-			/*
-			BorderThickness = new Thickness(1);
-			MinWidth = 50;
-			Padding = new Thickness(6, 3);
-			Focusable = true; // already set?
-			MaxWidth = TabControlParams.ControlMaxWidth;*/
+			//MaxWidth = TabControlParams.ControlMaxWidth;
 			//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
 
 			BorderBrush = new SolidColorBrush(Colors.Black);

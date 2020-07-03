@@ -62,10 +62,10 @@ namespace Atlas.Core
 	}
 
 	// [Description] conflicts with NUnit's, use [TabDescription]?
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	/*[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class DescriptionAttribute : Attribute
 	{
-	}
+	}*/
 
 	// [Summary("Text to describe object")], [Description] conflicts with NUnit's, use [TabDescription]?
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]

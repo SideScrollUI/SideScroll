@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Atlas.Core
 {
-	public class TimeRangePeriod
+	public class TimeRangePeriod : ITags
 	{
 		public DateTime StartTime { get; set; }
 		public DateTime? MinStartTime { get; set; }
@@ -20,8 +20,30 @@ namespace Atlas.Core
 		public double Sum { get; set; }
 		public TimeSpan SummedDurations { get; set; }
 		public int Count { get; set; }
-		public HashSet<string> Descriptions { get; set; } = new HashSet<string>();
-		public string Description => string.Join(", ", Descriptions.ToList());
+		public List<Tag> AllTags { get; set; } = new List<Tag>();
+		public List<Tag> Tags
+		{
+			get
+			{
+				var lookup = new Dictionary<string, Tag>();
+				foreach (Tag tag in AllTags)
+				{
+					if (lookup.TryGetValue(tag.Name, out Tag tagBin))
+					{
+						if (tagBin.Value is string text && tag.Value is string tagText)
+						{
+							if (!text.Contains(tagText))
+								tagBin.Value += ", " + tagText;
+						}
+					}
+					else
+					{
+						lookup.Add(tag.Name, tag);
+					}
+				}
+				return lookup.Values.ToList();
+			}
+		}
 
 		public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Count;
 
@@ -76,9 +98,7 @@ namespace Atlas.Core
 
 					bin.Sum += binDuration.TotalMinutes * timeRangeValue.Value;
 					bin.SummedDurations += binDuration;
-
-					if (timeRangeValue.Description != null)
-						bin.Descriptions.Add(timeRangeValue.Description);
+					bin.AllTags.AddRange(timeRangeValue.Tags);
 				}
 			}
 
@@ -103,7 +123,7 @@ namespace Atlas.Core
 					continue;
 				double binMinutes = period.Duration.TotalMinutes;
 				double averageSum = period.Sum * binMinutes / period.SummedDurations.Min(period.Duration).TotalMinutes;
-				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, averageSum, period.Description));
+				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, averageSum, period.Tags.ToArray()));
 			}
 			return timeRangeValues;
 		}
@@ -116,7 +136,7 @@ namespace Atlas.Core
 			{
 				if (period.SummedDurations.TotalMinutes == 0.0)
 					continue;
-				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.MinValue, period.Description));
+				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.MinValue, period.Tags.ToArray()));
 			}
 			return timeRangeValues;
 		}
@@ -129,7 +149,7 @@ namespace Atlas.Core
 			{
 				if (period.SummedDurations.TotalMinutes == 0.0)
 					continue;
-				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.MaxValue, period.Description));
+				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.MaxValue, period.Tags.ToArray()));
 			}
 			return timeRangeValues;
 		}

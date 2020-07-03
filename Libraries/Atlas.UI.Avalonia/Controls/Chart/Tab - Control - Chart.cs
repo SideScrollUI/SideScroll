@@ -708,7 +708,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddBarSeries(ListSeries listSeries)
 		{
-			var barSeries = new OxyPlot.Series.BarSeries
+			/*var barSeries = new OxyPlot.Series.BarSeries
 			{
 				Title = listSeries.Name,
 				StrokeThickness = 2,
@@ -723,7 +723,7 @@ namespace Atlas.UI.Avalonia.Controls
 				barSeries.Items.Add(new BarItem(dataPoint.X, (int)dataPoint.Y));
 			}
 
-			plotModel.Series.Add(barSeries);
+			plotModel.Series.Add(barSeries);*/
 
 			/*ListToTabSeries[listSeries.iList] = listSeries;
 			ListToTabIndex[listSeries.iList] = ListToTabIndex.Count;*/
@@ -738,24 +738,11 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				Color = GetColor(plotModel.Series.Count),
 			};
-
-			// can't add gaps with ItemSource so convert to DataPoint ourselves
-			var dataPoints = GetDataPoints(listSeries, listSeries.iList, lineSeries.datapointLookup);
-			lineSeries.Points.AddRange(dataPoints);
+			xAxisPropertyInfo = lineSeries.xAxisPropertyInfo;
 
 			plotModel.Series.Add(lineSeries);
 
 			var oxyListSeries = new OxyListSeries(listSeries, lineSeries);
-
-			if (listSeries.iList is INotifyCollectionChanged iNotifyCollectionChanged)
-			{
-				//iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
-				iNotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object sender, NotifyCollectionChangedEventArgs e)
-				{
-					// can we remove this later when disposing?
-					SeriesChanged(listSeries, e.NewItems, lineSeries);
-				});
-			}
 
 			lineSeries.MouseDown += (s, e) =>
 			{
@@ -770,114 +757,10 @@ namespace Atlas.UI.Avalonia.Controls
 			return lineSeries;
 		}
 
-		private void UpdateXAxisProperty(ListSeries listSeries)
-		{
-			if (listSeries.yPropertyInfo != null)
-			{
-				if (listSeries.xPropertyInfo != null)
-					xAxisPropertyInfo = listSeries.xPropertyInfo;
-				if (xAxisPropertyInfo == null)
-				{
-					Type elementType = listSeries.iList.GetType().GetElementTypeForAll();
-					foreach (PropertyInfo propertyInfo in elementType.GetProperties())
-					{
-						if (propertyInfo.GetCustomAttribute<XAxisAttribute>() != null)
-							xAxisPropertyInfo = propertyInfo;
-					}
-				}
-			}
-		}
-
-		private List<DataPoint> GetDataPoints(ListSeries listSeries, IList iList, Dictionary<DataPoint, object> datapointLookup = null)
-		{
-			UpdateXAxisProperty(listSeries);
-			var dataPoints = new List<DataPoint>();
-			if (listSeries.yPropertyInfo != null)
-			{
-				// faster than using ItemSource?
-				foreach (object obj in iList)
-				{
-					object value = listSeries.yPropertyInfo.GetValue(obj);
-					double x = dataPoints.Count;
-					if (xAxisPropertyInfo != null)
-					{
-						object xObj = xAxisPropertyInfo.GetValue(obj);
-						if (xObj is DateTime dateTime)
-						{
-							x = OxyPlot.Axes.DateTimeAxis.ToDouble(dateTime);
-						}
-						else if (xObj == null)
-						{
-							continue;
-						}
-						else
-						{
-							x = Convert.ToDouble(xObj);
-						}
-					}
-					double d = double.NaN;
-					if (value != null)
-						d = Convert.ToDouble(value);
-
-					var dataPoint = new DataPoint(x, d);
-					if (datapointLookup != null && !double.IsNaN(d) && !datapointLookup.ContainsKey(dataPoint))
-						datapointLookup.Add(dataPoint, obj); 
-					dataPoints.Add(dataPoint);
-				}
-				dataPoints = dataPoints.OrderBy(d => d.X).ToList();
-
-				if (dataPoints.Count > 0 && listSeries.xBinSize > 0)
-				{
-					dataPoints = BinDataPoints(listSeries, dataPoints);
-				}
-			}
-			else
-			{
-				foreach (object obj in iList)
-				{
-					double value = Convert.ToDouble(obj);
-					dataPoints.Add(new DataPoint(dataPoints.Count, value));
-				}
-			}
-			return dataPoints;
-		}
-
-		private static List<DataPoint> BinDataPoints(ListSeries listSeries, List<DataPoint> dataPoints)
-		{
-			double firstBin = dataPoints.First().X;
-			double lastBin = dataPoints.Last().X;
-			int numBins = (int)Math.Ceiling((lastBin - firstBin) / listSeries.xBinSize) + 1;
-			double[] bins = new double[numBins];
-			foreach (DataPoint dataPoint in dataPoints)
-			{
-				int bin = (int)((dataPoint.X - firstBin) / listSeries.xBinSize);
-				bins[bin] += dataPoint.Y;
-			}
-			var binDataPoints = new List<DataPoint>();
-			for (int i = 0; i < numBins; i++)
-			{
-				binDataPoints.Add(new DataPoint(firstBin + i * listSeries.xBinSize, bins[i]));
-			}
-
-			return binDataPoints;
-		}
-
 		private void TabData_OnSelectionChanged(object sender, EventArgs e)
 		{
 			UnloadModel();
 			LoadPlotModel();
-		}
-
-		private void SeriesChanged(ListSeries listSeries, IList iList, OxyPlot.Series.LineSeries lineSeries)
-		{
-			lock (plotModel.SyncRoot)
-			{
-				//this.Update();
-				var dataPoints = GetDataPoints(listSeries, iList);
-				lineSeries.Points.AddRange(dataPoints);
-			}
-
-			Dispatcher.UIThread.InvokeAsync(() => plotModel.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
 		private void AddNowTime()

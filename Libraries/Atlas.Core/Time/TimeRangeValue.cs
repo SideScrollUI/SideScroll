@@ -5,7 +5,12 @@ using System.Linq;
 
 namespace Atlas.Core
 {
-	public class TimeRangeValue
+	public interface ITags
+	{
+		List<Tag> Tags { get; }
+	}
+
+	public class TimeRangeValue : ITags
 	{
 		[XAxis]
 		public DateTime StartTime { get; set; }
@@ -15,8 +20,9 @@ namespace Atlas.Core
 		public string Name { get; set; }
 		[YAxis]
 		public double Value { get; set; }
-		[Description]
-		public string Description { get; set; }
+		//[Tags]
+		public List<Tag> Tags { get; set; } = new List<Tag>();
+		public string Description => string.Join(", ", Tags);
 
 		public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Value;
 
@@ -24,12 +30,12 @@ namespace Atlas.Core
 		{
 		}
 
-		public TimeRangeValue(DateTime startTime, DateTime endTime, double value = 0, string description = null)
+		public TimeRangeValue(DateTime startTime, DateTime endTime, double value, params Tag[] tags)
 		{
 			StartTime = startTime;
 			EndTime = endTime;
 			Value = value;
-			Description = description;
+			Tags = tags.ToList();
 		}
 
 		public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration)
