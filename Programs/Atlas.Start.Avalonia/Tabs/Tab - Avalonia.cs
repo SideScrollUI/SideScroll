@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using Atlas.Tabs;
 using Atlas.Tabs.Test;
+using Atlas.UI.Avalonia.Controls;
 
 namespace Atlas.Start.Avalonia.Tabs
 {
@@ -17,6 +18,7 @@ namespace Atlas.Start.Avalonia.Tabs
 					new ListItem("Test", new TabTest()),
 					new ListItem("Custom Control", new TabCustomControl()),
 					new ListItem("Icons", new TabIcons()),
+					new ListItem("Bookmarks", new TabBookmarks2(Project)),
 					//new ListItem("Demo", new TabDemo()),
 					//new ListItem("SeriLog", new TabSeriLog()),
 					//new ListItem("Inputs", new TabParams()),

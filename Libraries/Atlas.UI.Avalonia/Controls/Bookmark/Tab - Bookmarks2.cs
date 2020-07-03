@@ -1,8 +1,6 @@
 ﻿using Atlas.Core;
-using Atlas.Serialize;
 using Atlas.Start.Avalonia.Tabs;
 using Atlas.Tabs;
-using System.Linq;
 
 namespace Atlas.UI.Avalonia.Controls
 {

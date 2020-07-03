@@ -28,7 +28,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private void InitializeComponent(ListSeries listSeries)
 		{
 			Title = listSeries.Name;
-			if (Title.Length == 0)
+			if (Title?.Length == 0)
 				Title = "<NA>";
 			LineStyle = LineStyle.Solid;
 			StrokeThickness = 2;
