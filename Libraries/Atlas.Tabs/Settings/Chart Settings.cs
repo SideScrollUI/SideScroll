@@ -18,8 +18,13 @@ namespace Atlas.Tabs
 
 		public ChartSettings()
 		{
-
 		}
+
+		public ChartSettings(ListGroup listGroup)
+		{
+			AddGroup(listGroup);
+		}
+
 		public ChartSettings(IList iList, string name = null)
 		{
 			Name = name;
