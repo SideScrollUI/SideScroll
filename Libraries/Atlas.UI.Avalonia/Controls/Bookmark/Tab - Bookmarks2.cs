@@ -44,11 +44,20 @@ namespace Atlas.UI.Avalonia.Controls
 				model.AddObject(toolbar);
 
 				model.AddData(tab.bookmarks.Items);
+				if (tab.bookmarks.NewBookmark != null)
+					SelectItem(tab.bookmarks.NewBookmark);
 
 				/*foreach (var item in tabModel.Bookmarks.Items)
 				{
 					item.OnDelete += Item_OnDelete;
 				}*/
+			}
+
+			// Overriding here would break navigation
+			public override void GetBookmark(TabBookmark tabBookmark)
+			{
+				tabBookmark.IsRoot = true;
+				base.GetBookmark(tabBookmark);
 			}
 
 			// move into BookmarkCollection?

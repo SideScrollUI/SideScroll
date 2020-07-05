@@ -11,7 +11,8 @@ namespace Atlas.Tabs
 
 		public string path;
 		private Project project;
-		public ItemCollection<TabBookmarkItem> Items { get; set; } = new ItemCollection<TabBookmarkItem>();
+		public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new ItemCollectionUI<TabBookmarkItem>();
+		public TabBookmarkItem NewBookmark { get; set; }
 
 		public BookmarkCollection(Project project)
 		{
@@ -46,19 +47,19 @@ namespace Atlas.Tabs
 			}
 		}
 
-		public void Add(Bookmark bookmark)
+		public TabBookmarkItem Add(Bookmark bookmark)
 		{
 			var tabItem = new TabBookmarkItem(bookmark, project);
 			tabItem.OnDelete += Item_OnDelete;
 			Items.Add(tabItem);
+			return tabItem;
 		}
 
 		public void AddNew(Call call, Bookmark bookmark)
 		{
-			//RemoveResult(tabSearchResult.Key); // Remove previous result
+			Remove(bookmark.Address); // Remove previous bookmark
 			project.DataApp.Save(bookmark.Address, bookmark, call);
-			//dataRepoAccountResults?.Save(call, tabSearchResult.Key, tabSearchResult.Result);
-			Add(bookmark);
+			NewBookmark = Add(bookmark);
 		}
 
 		private void Item_OnDelete(object sender, EventArgs e)
@@ -67,6 +68,19 @@ namespace Atlas.Tabs
 			project.DataApp.Delete<Bookmark>(bookmark.Bookmark.Address);
 			Items.Remove(bookmark);
 			//Reload();
+		}
+
+		public void Remove(string key)
+		{
+			project.DataApp.Delete<Bookmark>(key);
+			TabBookmarkItem existing = null;
+			foreach (var item in Items)
+			{
+				if (item.Name == key)
+					existing = item;
+			}
+			if (existing != null)
+				Items.Remove(existing);
 		}
 	}
 }

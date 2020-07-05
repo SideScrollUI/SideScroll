@@ -15,6 +15,11 @@ namespace Atlas.Tabs
 		public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
 		public TabBookmark tabBookmark { get; set; } = new TabBookmark();
 
+		public Bookmark()
+		{
+			tabBookmark.bookmark = this;
+		}
+
 		public override string ToString()
 		{
 			//return Name;

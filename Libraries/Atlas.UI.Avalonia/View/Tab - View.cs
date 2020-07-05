@@ -978,7 +978,20 @@ namespace Atlas.UI.Avalonia.View
 		private void TabInstance_OnSelectItem(object sender, TabInstance.EventSelectItem e)
 		{
 			if (tabDatas.Count > 0)
-				tabDatas[0].SelectedItem = e.obj;
+			{
+				if (e.obj is ITab itab)
+				{
+					foreach (var obj in tabDatas[0].Items)
+					{
+						if (obj == itab || obj.GetInnerValue() == itab)
+							tabDatas[0].SelectedItem = obj;
+					}
+				}
+				else
+				{
+					tabDatas[0].SelectedItem = e.obj;
+				}
+			}
 		}
 
 		private void LoadBookmark()

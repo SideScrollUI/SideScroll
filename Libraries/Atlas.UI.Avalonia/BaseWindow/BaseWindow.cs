@@ -153,6 +153,7 @@ namespace Atlas.UI.Avalonia
 		private void Link(Call call)
 		{
 			Bookmark bookmark = tabView.tabInstance.CreateBookmark();
+			bookmark.tabBookmark = bookmark.tabBookmark.GetLeaf();
 			string uri = linker.GetLinkUri(call, bookmark);
 			((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(uri);
 		}
@@ -167,7 +168,7 @@ namespace Atlas.UI.Avalonia
 
 			if (TabBookmarks2.Global != null)
 			{
-				//tabView.tabInstance.SelectItem(TabBookmarks2.Global); // select cells first so the child tab autoselects the new accounts
+				tabView.tabInstance.SelectItem(TabBookmarks2.Global); // select cells first so the child tab autoselects the new accounts
 				TabBookmarks2.Global.AddBookmark(call, bookmark);
 				return;
 			}

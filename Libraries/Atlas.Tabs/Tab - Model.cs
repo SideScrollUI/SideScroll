@@ -365,7 +365,7 @@ namespace Atlas.Tabs
 
 		public TabBookmark FindMatches(Filter filter, int depth)
 		{
-			TabBookmark tabBookmark = new TabBookmark()
+			var tabBookmark = new TabBookmark()
 			{
 				Name = Name,
 				tabViewSettings = new TabViewSettings(),

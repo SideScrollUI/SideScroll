@@ -1,6 +1,4 @@
-﻿using Atlas.Core;
-using Atlas.Serialize;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,8 +14,9 @@ namespace Atlas.Tabs
 	// rename to TabInstanceSettings?
 	public class TabBookmark
 	{
-		//public Bookmark bookmark;
+		public Bookmark bookmark;
 		public string Name { get; set; }
+		public bool IsRoot { get; set; }
 		public TabViewSettings tabViewSettings = new TabViewSettings(); // list selections, doesn't know about children
 		public Dictionary<string, TabBookmark> tabChildBookmarks { get; set; } = new Dictionary<string, TabBookmark>(); // doesn't know which tabData to use, maps id to child info
 		public string Address
@@ -121,6 +120,16 @@ namespace Atlas.Tabs
 			return default;
 		}
 
+		public TabBookmark AddChild(string label)
+		{
+			var childBookmark = new TabBookmark()
+			{
+				bookmark = bookmark,
+			};
+			tabChildBookmarks.Add(label, childBookmark);
+			return childBookmark;
+		}
+
 		public TabBookmark GetChild(string name)
 		{
 			if (tabChildBookmarks == null)
@@ -147,6 +156,20 @@ namespace Atlas.Tabs
 			}
 			foreach (TabBookmark tabBookmark in tabChildBookmarks.Values)
 				tabBookmark.Import(project);
+		}
+
+		public TabBookmark GetLeaf()
+		{
+			foreach (TabBookmark tabBookmark in tabChildBookmarks.Values)
+			{
+				var leaf = tabBookmark.GetLeaf();
+				if (leaf != null)
+					return leaf;
+			}
+			if (IsRoot)
+				return this;
+
+			return null;
 		}
 
 		public void MergeNode(TabBookmark node)

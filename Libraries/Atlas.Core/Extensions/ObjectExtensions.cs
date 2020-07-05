@@ -138,15 +138,7 @@ namespace Atlas.Core
 			//return "[" + joined + "]";
 		}
 
-		public static string ToUniqueString(this object obj, int maxLength = 100)
-		{
-			string text = ToUniqueStringAll(obj);
-			if (text != null && text.Length > maxLength)
-				return text.Substring(0, maxLength);
-			return text;
-		}
-
-		private static string ToUniqueStringAll(this object obj)
+		public static string ToUniqueString(this object obj)
 		{
 			if (obj == null)
 				return null;
@@ -197,7 +189,7 @@ namespace Atlas.Core
 				object propertyValue = propertyInfo.GetValue(obj);
 				if (propertyValue != null)
 				{
-					string toString = ToUniqueStringAll(propertyValue);
+					string toString = ToUniqueString(propertyValue);
 					if (toString != null)
 						return toString;
 				}
@@ -209,7 +201,7 @@ namespace Atlas.Core
 				object fieldValue = fieldInfo.GetValue(obj);
 				if (fieldValue != null)
 				{
-					string toString = ToUniqueStringAll(fieldValue);
+					string toString = ToUniqueString(fieldValue);
 					if (toString != null)
 						return toString;
 				}

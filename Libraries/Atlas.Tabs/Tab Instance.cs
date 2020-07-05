@@ -569,7 +569,33 @@ namespace Atlas.Tabs
 		public void SelectItem(object obj)
 		{
 			if (OnSelectItem != null)
+			{
 				uiContext.Send(_ => OnSelectItem(this, new EventSelectItem(obj)), null);
+			}
+			else
+			{
+				// get TabBookmark.selectedObjects working again and replace?
+				tabBookmark = new TabBookmark()
+				{
+					tabViewSettings = new TabViewSettings()
+					{
+						TabDataSettings = new List<TabDataSettings>()
+						{
+							new TabDataSettings()
+							{
+								SelectionType = SelectionType.User,
+								SelectedRows = new HashSet<SelectedRow>()
+								{
+									new SelectedRow()
+									{
+										label = obj.ToString(),
+									},
+								},
+							},
+						},
+					},
+				};
+			}
 		}
 
 		public void ClearSelection()
@@ -621,11 +647,9 @@ namespace Atlas.Tabs
 				// Change this to a Key
 				if (tabBookmark.tabChildBookmarks.ContainsKey(tabInstance.Label))
 					continue;
-				
-				var childBookmark = new TabBookmark();
-				//childBookmark.Name = tabInstance.Label;
+
+				var childBookmark = tabBookmark.AddChild(tabInstance.Label);
 				tabInstance.GetBookmark(childBookmark);
-				tabBookmark.tabChildBookmarks.Add(tabInstance.Label, childBookmark);
 			}
 		}
 

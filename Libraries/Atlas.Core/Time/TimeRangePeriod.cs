@@ -98,6 +98,7 @@ namespace Atlas.Core
 
 					bin.Sum += binDuration.TotalMinutes * timeRangeValue.Value;
 					bin.SummedDurations += binDuration;
+					bin.Count++;
 					bin.AllTags.AddRange(timeRangeValue.Tags);
 				}
 			}
@@ -121,9 +122,10 @@ namespace Atlas.Core
 			{
 				if (period.SummedDurations.TotalMinutes == 0.0)
 					continue;
-				double binMinutes = period.Duration.TotalMinutes;
-				double averageSum = period.Sum * binMinutes / period.SummedDurations.Min(period.Duration).TotalMinutes;
-				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, averageSum, period.Tags.ToArray()));
+				double averageSum = period.Sum / period.SummedDurations.Min(period.Duration).TotalMinutes;
+				double chartSum = averageSum * periodDuration.TotalMinutes;
+				//double averageSum = period.Sum * (period.SummedDurations.TotalMinutes / period.Duration.TotalMinutes);
+				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, chartSum, period.Tags.ToArray()));
 			}
 			return timeRangeValues;
 		}
