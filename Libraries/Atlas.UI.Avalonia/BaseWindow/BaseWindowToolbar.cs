@@ -129,14 +129,14 @@ namespace Atlas.UI.Avalonia
 		{
 			Bookmark bookmark = baseWindow.project.Navigator.SeekBackward();
 			if (bookmark != null)
-				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
+				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		private void ButtonBack_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			Bookmark bookmark = baseWindow.project.Navigator.SeekBackward();
 			if (bookmark != null)
-				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
+				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		private bool CommandForwardCanExecute(object obj)
@@ -149,14 +149,14 @@ namespace Atlas.UI.Avalonia
 		{
 			Bookmark bookmark = baseWindow.project.Navigator.SeekForward();
 			if (bookmark != null)
-				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
+				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		private void ButtonForward_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			Bookmark bookmark = baseWindow.project.Navigator.SeekForward();
 			if (bookmark != null)
-				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
+				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		public void SetSnapshotVisible(bool visible)

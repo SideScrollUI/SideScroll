@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Test
 	{
 		public TabInstance Create() => new Instance();
 
-		public class TabParamToolbar : TabToolbar
+		public class Toolbar : TabToolbar
 		{
 			public ToolButton ButtonNew { get; set; } = new ToolButton("New", Icons.Streams.BlankDocument);
 			public ToolButton ButtonSave { get; set; } = new ToolButton("Save", Icons.Streams.Save);
@@ -37,7 +37,7 @@ namespace Atlas.Tabs.Test
 				paramTestItem = LoadData<ParamTestItem>(dataKey);
 				model.AddObject(paramTestItem);
 
-				var toolbar = new TabParamToolbar();
+				var toolbar = new Toolbar();
 				toolbar.ButtonNew.Action = New;
 				toolbar.ButtonSave.Action = Save;
 				model.AddObject(toolbar);

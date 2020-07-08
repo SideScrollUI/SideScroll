@@ -1,5 +1,6 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
+using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
 
@@ -40,12 +41,13 @@ namespace Atlas.Tabs
 			if (Bookmark.Type == null)
 				return null;
 
-			ITab tab = (ITab)Activator.CreateInstance(Bookmark.Type);
+			var bookmarkCopy = Bookmark.Clone<Bookmark>(); // This will get modified as users navigate
+			ITab tab = (ITab)Activator.CreateInstance(bookmarkCopy.Type);
 			TabInstance tabInstance = tab.Create();
-			tabInstance.Project = Project.Open(Bookmark); 
+			tabInstance.Project = Project.Open(bookmarkCopy); 
 			tabInstance.iTab = this;
 			//tabInstance.ParentTabInstance = this;
-			tabInstance.SelectBookmark(Bookmark.tabBookmark);
+			tabInstance.SelectBookmark(bookmarkCopy.TabBookmark);
 			return tabInstance;
 		}
 

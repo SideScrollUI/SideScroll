@@ -62,7 +62,7 @@ namespace Atlas.Tabs
 				return;
 			Bookmark currentBookmark = History[CurrentIndex];
 			//bookmark = Serialize.SerializerMemory.Clone<Bookmark>(new Core.Log(), bookmark); // sanitize
-			currentBookmark.tabBookmark = bookmark.tabBookmark;
+			currentBookmark.TabBookmark = bookmark.TabBookmark;
 			//bookmark.tabBookmark = 
 			//bookmark = bookmark.Clone();
 			/*bookmark.Name = prevBookmark.Name;

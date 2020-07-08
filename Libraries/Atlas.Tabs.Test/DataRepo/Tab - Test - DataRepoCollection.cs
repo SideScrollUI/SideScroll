@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using Atlas.Serialize;
 using System.Collections.Generic;
+using System.Linq;
 
 //namespace Atlas.Tabs.Test.DataRepo // good idea?
 namespace Atlas.Tabs.Test
@@ -94,12 +95,7 @@ namespace Atlas.Tabs.Test
 			public void RemoveItem(string key)
 			{
 				dataRepoItems.Delete(key);
-				SampleItem existing = null;
-				foreach (var item in sampleItems)
-				{
-					if (item.Name == key)
-						existing = item;
-				}
+				SampleItem existing = sampleItems.SingleOrDefault(i => i.Name == key);
 				if (existing != null)
 					sampleItems.Remove(existing);
 			}

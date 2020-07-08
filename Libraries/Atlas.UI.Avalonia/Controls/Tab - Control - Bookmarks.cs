@@ -270,7 +270,7 @@ namespace Atlas.UI.Avalonia.Controls
 			// Show merged set of selected bookmarks
 			var selectedBookmarks = new Bookmark();
 			selectedBookmarks.MergeBookmarks(bookmarks);
-			tabInstance.SelectBookmark(selectedBookmarks.tabBookmark);
+			tabInstance.SelectBookmark(selectedBookmarks.TabBookmark);
 		}
 
 		/*private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)

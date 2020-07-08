@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using Atlas.Resources;
 using Atlas.Start.Avalonia.Tabs;
 using Atlas.Tabs;
 
@@ -25,9 +26,14 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public TabInstance Create() => new Instance(this);
 
+		public class Toolbar : TabToolbar
+		{
+			public ToolButton ButtonReset { get; set; } = new ToolButton("Reset", Icons.Streams.Refresh);
+		}
+
 		public class Instance : TabInstance
 		{
-			private TabControlBookmarksToolbar toolbar;
+			private Toolbar toolbar;
 			private TabBookmarks2 tab;
 
 			public Instance(TabBookmarks2 tab)
@@ -40,7 +46,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 			public override void LoadUI(Call call, TabModel model)
 			{
-				toolbar = new TabControlBookmarksToolbar();
+				toolbar = new Toolbar();
+				toolbar.ButtonReset.Action = Reset;
 				model.AddObject(toolbar);
 
 				model.AddData(tab.bookmarks.Items);
@@ -58,6 +65,14 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				tabBookmark.IsRoot = true;
 				base.GetBookmark(tabBookmark);
+			}
+
+			private void Reset(Call call)
+			{
+				foreach (TabBookmarkItem item in SelectedItems)
+				{
+					SelectItem(item);
+				}
 			}
 
 			// move into BookmarkCollection?

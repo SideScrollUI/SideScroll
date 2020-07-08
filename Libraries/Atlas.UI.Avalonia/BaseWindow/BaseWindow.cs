@@ -153,7 +153,7 @@ namespace Atlas.UI.Avalonia
 		private void Link(Call call)
 		{
 			Bookmark bookmark = tabView.tabInstance.CreateBookmark();
-			bookmark.tabBookmark = bookmark.tabBookmark.GetLeaf();
+			bookmark.TabBookmark = bookmark.TabBookmark.GetLeaf();
 			string uri = linker.GetLinkUri(call, bookmark);
 			((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(uri);
 		}
@@ -175,13 +175,13 @@ namespace Atlas.UI.Avalonia
 			bool reloadBase = true;
 			if (reloadBase)
 			{
-				tabView.tabInstance.tabBookmark = bookmark.tabBookmark;
+				tabView.tabInstance.tabBookmark = bookmark.TabBookmark;
 				Reload();
 			}
 			else
 			{
 				// only if TabBookmarks used, don't need to reload the tab
-				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
+				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
 			}
 		}
 
@@ -300,7 +300,7 @@ namespace Atlas.UI.Avalonia
 			tabInstance.iTab = tab;
 			tabInstance.Project = project;
 			if (LoadBookmarkUri != null)
-				tabInstance.tabBookmark = linker.GetBookmark(new Call(), LoadBookmarkUri, false)?.tabBookmark;
+				tabInstance.tabBookmark = linker.GetBookmark(new Call(), LoadBookmarkUri, false)?.TabBookmark;
 			else if (project.UserSettings.AutoLoad) // did we load successfully last time?
 				tabInstance.LoadDefaultBookmark();
 

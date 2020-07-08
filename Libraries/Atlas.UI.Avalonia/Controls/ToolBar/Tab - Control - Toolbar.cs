@@ -190,8 +190,9 @@ namespace Atlas.UI.Avalonia.Tabs
 			var image = new Image()
 			{
 				Source = bitmap,
-				MaxWidth = 24,
-				MaxHeight = 24,
+				//MaxWidth = 24,
+				//MaxHeight = 24,
+				Stretch = Stretch.None,
 			};
 
 			Content = image;

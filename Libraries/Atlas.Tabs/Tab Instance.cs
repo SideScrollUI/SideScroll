@@ -574,27 +574,7 @@ namespace Atlas.Tabs
 			}
 			else
 			{
-				// get TabBookmark.selectedObjects working again and replace?
-				tabBookmark = new TabBookmark()
-				{
-					tabViewSettings = new TabViewSettings()
-					{
-						TabDataSettings = new List<TabDataSettings>()
-						{
-							new TabDataSettings()
-							{
-								SelectionType = SelectionType.User,
-								SelectedRows = new HashSet<SelectedRow>()
-								{
-									new SelectedRow()
-									{
-										label = obj.ToString(),
-									},
-								},
-							},
-						},
-					},
-				};
+				tabBookmark = TabBookmark.Create(obj);
 			}
 		}
 
@@ -611,7 +591,7 @@ namespace Atlas.Tabs
 			var bookmark = new Bookmark();
 			bookmark.Type = iTab?.GetType();
 			//bookmark.tabBookmark.Name = Label;
-			GetBookmark(bookmark.tabBookmark);
+			GetBookmark(bookmark.TabBookmark);
 			bookmark = bookmark.Clone<Bookmark>(TaskInstance.Call); // sanitize
 			return bookmark;
 		}
@@ -657,7 +637,7 @@ namespace Atlas.Tabs
 		{
 			tabBookmark = null;
 			if (bookmark != null)
-				SelectBookmark(bookmark.tabBookmark);
+				SelectBookmark(bookmark.TabBookmark);
 
 			return tabViewSettings; // remove?
 		}
@@ -700,7 +680,7 @@ namespace Atlas.Tabs
 
 			Bookmark bookmark = Project.DataApp.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);
 			if (bookmark != null)
-				tabBookmark = bookmark.tabBookmark;
+				tabBookmark = bookmark.TabBookmark;
 		}
 
 		public TabViewSettings LoadSettings()

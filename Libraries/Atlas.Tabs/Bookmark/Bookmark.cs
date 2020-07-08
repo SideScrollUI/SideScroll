@@ -11,13 +11,14 @@ namespace Atlas.Tabs
 		public string Name { get; set; }
 		public string Changed { get; set; } // used for naming, find better default name
 		public Type Type { get; set; }
-		public string Address => tabBookmark.Address;
+		public string Address => TabBookmark.Address;
 		public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-		public TabBookmark tabBookmark { get; set; } = new TabBookmark();
+		public TabBookmark TabBookmark { get; set; } = new TabBookmark();
 
 		public Bookmark()
 		{
-			tabBookmark.bookmark = this;
+			TabBookmark.bookmark = this;
+			TabBookmark.IsRoot = true;
 		}
 
 		public override string ToString()
@@ -33,7 +34,7 @@ namespace Atlas.Tabs
 				nodes.Add(bookmark.node);
 			node.MergeNodes(nodes);*/
 			foreach (Bookmark bookmark in bookmarks)
-				tabBookmark.MergeNode(bookmark.tabBookmark);
+				TabBookmark.MergeNode(bookmark.TabBookmark);
 		}
 
 		public string GetEncodedString()

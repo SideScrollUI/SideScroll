@@ -79,6 +79,41 @@ namespace Atlas.Tabs
 				}
 			}
 		}*/
+		public static TabBookmark Create(params object[] objs)
+		{
+			// get TabBookmark.selectedObjects working again and replace?
+
+			TabBookmark tabBookmark = null;
+			foreach (object obj in objs)
+			{
+				string label = obj.ToString();
+				var newBookmark = new TabBookmark()
+				{
+					tabViewSettings = new TabViewSettings()
+					{
+						TabDataSettings = new List<TabDataSettings>()
+						{
+							new TabDataSettings()
+							{
+								SelectionType = SelectionType.User,
+								SelectedRows = new HashSet<SelectedRow>()
+								{
+									new SelectedRow()
+									{
+										label = label,
+									},
+								},
+							},
+						},
+					},
+				};
+				if (tabBookmark != null)
+					tabBookmark.tabChildBookmarks.Add(label, newBookmark);
+				else
+					tabBookmark = newBookmark;
+			}
+			return tabBookmark;
+		}
 
 		public override string ToString()
 		{

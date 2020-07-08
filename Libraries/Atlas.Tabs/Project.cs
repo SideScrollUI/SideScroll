@@ -65,7 +65,7 @@ namespace Atlas.Tabs
 			userSettings.BookmarkPath = bookmark.Address;
 			var project = new Project(ProjectSettings, userSettings);
 			//project.Import(bookmark);
-			bookmark.tabBookmark.Import(project);
+			bookmark.TabBookmark.Import(project);
 			return project;
 		}
 	}

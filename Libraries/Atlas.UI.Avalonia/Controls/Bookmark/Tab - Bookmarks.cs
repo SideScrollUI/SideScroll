@@ -97,7 +97,7 @@ namespace Atlas.UI.Avalonia.Controls
 				Bookmark bookmark = tab.linker.GetBookmark(call, clipboardText, false);
 				if (bookmark == null)
 					return;
-				SelectBookmark(bookmark.tabBookmark);
+				SelectBookmark(bookmark.TabBookmark);
 				//tabView.tabInstance.tabBookmark = bookmark.tabBookmark;
 				//Reload();
 			}
@@ -109,7 +109,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 				TabInstance tabInstance = tab.iTab.Create();
 				tabInstance.Project = tab.project;
-				tabInstance.tabBookmark = bookmarkItem.Bookmark.tabBookmark.Clone<TabBookmark>(TaskInstance.Call); // bookmark specified here will get auto loaded
+				tabInstance.tabBookmark = bookmarkItem.Bookmark.TabBookmark.Clone<TabBookmark>(TaskInstance.Call); // bookmark specified here will get auto loaded
 				//tabInstance.LoadBookmark()
 				return new TabView(tabInstance);
 			}
@@ -131,7 +131,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (childTabInstances.Values.Count > 0)
 				{
-					currentBookMark.tabBookmark = tabBookmark;
+					currentBookMark.TabBookmark = tabBookmark;
 					/*SelectItem(currentBookMark);
 					var childTab = childTabInstances.Values.First();
 					childTab.tabBookmark = tabBookmark;

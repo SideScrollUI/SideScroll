@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,12 +8,14 @@ namespace Atlas.Tabs
 {
 	public class BookmarkCollection
 	{
+		public static string DataKey = "Saved";
 		//public event EventHandler<EventArgs> OnDelete;
 
 		public string path;
 		private Project project;
 		public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new ItemCollectionUI<TabBookmarkItem>();
 		public TabBookmarkItem NewBookmark { get; set; }
+		private DataRepoInstance<Bookmark> dataRepoBookmarks;
 
 		public BookmarkCollection(Project project)
 		{
@@ -38,8 +41,8 @@ namespace Atlas.Tabs
 				Names.Add(bookmarkName);
 			}*/
 
-			var bookmarks = project.DataApp.LoadAllSorted<Bookmark>().Values;
-			foreach (Bookmark bookmark in bookmarks)
+			dataRepoBookmarks = project.DataApp.Open<Bookmark>(null, DataKey);
+			foreach (Bookmark bookmark in dataRepoBookmarks.LoadAllSorted().Values)
 			{
 				if (bookmark.Name == TabInstance.CurrentBookmarkName)
 					continue;
@@ -58,27 +61,22 @@ namespace Atlas.Tabs
 		public void AddNew(Call call, Bookmark bookmark)
 		{
 			Remove(bookmark.Address); // Remove previous bookmark
-			project.DataApp.Save(bookmark.Address, bookmark, call);
+			dataRepoBookmarks.Save(call, bookmark.Address, bookmark);
 			NewBookmark = Add(bookmark);
 		}
 
 		private void Item_OnDelete(object sender, EventArgs e)
 		{
 			TabBookmarkItem bookmark = (TabBookmarkItem)sender;
-			project.DataApp.Delete<Bookmark>(bookmark.Bookmark.Address);
+			dataRepoBookmarks.Delete(bookmark.Bookmark.Address);
 			Items.Remove(bookmark);
 			//Reload();
 		}
 
 		public void Remove(string key)
 		{
-			project.DataApp.Delete<Bookmark>(key);
-			TabBookmarkItem existing = null;
-			foreach (var item in Items)
-			{
-				if (item.Name == key)
-					existing = item;
-			}
+			dataRepoBookmarks.Delete(key);
+			TabBookmarkItem existing = Items.SingleOrDefault(i => i.Name == key);
 			if (existing != null)
 				Items.Remove(existing);
 		}

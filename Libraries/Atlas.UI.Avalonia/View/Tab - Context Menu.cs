@@ -2,18 +2,13 @@
 using Atlas.Extensions;
 using Atlas.Serialize;
 using Atlas.Tabs;
-using Atlas.UI.Avalonia.Controls;
-using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Layout;
-using Avalonia.Media;
 using Avalonia.Styling;
-using Avalonia.Threading;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace Atlas.UI.Avalonia.View
 {

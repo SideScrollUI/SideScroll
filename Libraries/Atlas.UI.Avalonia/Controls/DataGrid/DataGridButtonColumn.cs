@@ -1,7 +1,6 @@
 using Atlas.UI.Avalonia.Controls;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Media;
 using System.Reflection;
 
 namespace Atlas.UI.Avalonia
@@ -23,9 +22,7 @@ namespace Atlas.UI.Avalonia
 			//cell.Background = GetCellBrush(cell, dataItem);
 			//cell.MaxHeight = 100; // don't let them have more than a few lines each
 
-			Button button = new TabControlButton(buttonText);
-			button.PointerEnter += Button_PointerEnter;
-			button.PointerLeave += Button_PointerLeave;
+			var button = new TabControlButton(buttonText);
 			button.Click += Button_Click;
 			return button;
 		}
@@ -34,20 +31,6 @@ namespace Atlas.UI.Avalonia
 		{
 			Button button = (Button)sender;
 			methodInfo.Invoke(button.DataContext, new object[] { });
-		}
-
-		private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			Button button = (Button)sender;
-			button.Background = Theme.ButtonBackgroundHover;
-			//button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-		}
-
-		private void Button_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			Button button = (Button)sender;
-			button.Background = Theme.ButtonBackground;
-			//button.BorderBrush = button.Background;
 		}
 	}
 }

@@ -71,9 +71,9 @@
         <SolidColorBrush x:Key="ThemeGridHighBrush">#92F397</SolidColorBrush>
 
         <!-- Buttons -->
-        <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">SlateBlue</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeButtonForegroundBrush">AliceBlue</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#7827d4</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">#2a2954</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeButtonForegroundBrush">#60bdff</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#2040a0</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush">#9837ff</SolidColorBrush>
 
         <!-- RadioButton -->
