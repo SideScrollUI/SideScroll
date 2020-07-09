@@ -137,6 +137,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private List<DataPoint> GetDataPoints(ListSeries listSeries, IList iList, Dictionary<DataPoint, object> datapointLookup = null)
 		{
 			UpdateXAxisProperty(listSeries);
+			double x = Points.Count;
 			var dataPoints = new List<DataPoint>();
 			if (listSeries.yPropertyInfo != null)
 			{
@@ -144,7 +145,6 @@ namespace Atlas.UI.Avalonia.Controls
 				foreach (object obj in iList)
 				{
 					object value = listSeries.yPropertyInfo.GetValue(obj);
-					double x = dataPoints.Count;
 					if (xAxisPropertyInfo != null)
 					{
 						object xObj = xAxisPropertyInfo.GetValue(obj);
@@ -165,7 +165,7 @@ namespace Atlas.UI.Avalonia.Controls
 					if (value != null)
 						d = Convert.ToDouble(value);
 
-					var dataPoint = new DataPoint(x, d);
+					var dataPoint = new DataPoint(x++, d);
 					if (datapointLookup != null && !double.IsNaN(d) && !datapointLookup.ContainsKey(dataPoint))
 						datapointLookup.Add(dataPoint, obj);
 					dataPoints.Add(dataPoint);
@@ -182,7 +182,7 @@ namespace Atlas.UI.Avalonia.Controls
 				foreach (object obj in iList)
 				{
 					double value = Convert.ToDouble(obj);
-					dataPoints.Add(new DataPoint(dataPoints.Count, value));
+					dataPoints.Add(new DataPoint(x++, value));
 				}
 			}
 			return dataPoints;
@@ -235,7 +235,7 @@ namespace Atlas.UI.Avalonia.Controls
 				Points.AddRange(dataPoints);
 			}
 
-			Dispatcher.UIThread.InvokeAsync(() => chart.plotModel.InvalidatePlot(true), DispatcherPriority.Background);
+			Dispatcher.UIThread.InvokeAsync(() => chart.Refresh(), DispatcherPriority.Background);
 		}
 	}
 }

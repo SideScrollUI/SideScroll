@@ -52,7 +52,7 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			this.Bind(SelectedItemProperty, binding);
 
-			if (property.obj == null && Items.GetEnumerator().MoveNext())
+			if ((property.obj == null || SelectedItem == null) && Items.GetEnumerator().MoveNext())
 				SelectedIndex = 0;
 		}
 

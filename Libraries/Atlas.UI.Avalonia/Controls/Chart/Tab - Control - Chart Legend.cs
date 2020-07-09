@@ -42,7 +42,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Margin = new Thickness(6);
 			Orientation = IsHorizontal ? Orientation.Horizontal : Orientation.Vertical;
 
-			if (listGroup.ShowOrder && !IsHorizontal)
+			if (listGroup.ShowLegend && listGroup.ShowOrder && !IsHorizontal)
 			{
 				textBlockSum = new TextBlock()
 				{
@@ -98,7 +98,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			var ordered = nonzero.OrderByDescending(a => a.Sum).ToList();
 			ordered.AddRange(unused);
-			if (listGroup.ShowOrder && !listGroup.Horizontal)
+			if (listGroup.ShowLegend && listGroup.ShowOrder && !listGroup.Horizontal)
 			{
 				for (int i = 0; i < ordered.Count; i++)
 					ordered[i].Index = i + 1;

@@ -99,16 +99,6 @@ namespace Atlas.Tabs
 			}
 		}
 
-		public int Width
-		{
-			get
-			{
-				int count = 1;
-				if (ParentTabInstance != null)
-					count += ParentTabInstance.Depth;
-				return count;
-			}
-		}
 		public TabInstance ParentTabInstance { get; set; }
 		public Dictionary<object, TabInstance> childTabInstances = new Dictionary<object, TabInstance>();
 
@@ -121,6 +111,7 @@ namespace Atlas.Tabs
 		public event EventHandler<EventArgs> OnLoadBookmark;
 		public event EventHandler<EventArgs> OnClearSelection;
 		public event EventHandler<EventSelectItem> OnSelectItem;
+		public event EventHandler<EventSelectItem> OnSelectionChanged;
 		public event EventHandler<EventArgs> OnModified;
 		public event EventHandler<EventArgs> OnResize;
 
@@ -228,10 +219,7 @@ namespace Atlas.Tabs
 		private void InitializeContext()
 		{
 			//Debug.Assert(context == null || SynchronizationContext.Current == context);
-			if (uiContext == null)
-			{
-				uiContext = SynchronizationContext.Current ?? new SynchronizationContext();
-			}
+			uiContext = uiContext ?? SynchronizationContext.Current ?? new SynchronizationContext();
 		}
 
 		public TabInstance RootInstance
@@ -902,6 +890,15 @@ namespace Atlas.Tabs
 		{
 			Bookmark bookmark = RootInstance.CreateBookmark(); // create from root Tab
 			Project.Navigator.Update(bookmark);
+		}
+
+		public void SelectionChanged(object sender, EventArgs e)
+		{
+			if (SelectedItems?.Count > 0)
+			{
+				var eSelectItem = new EventSelectItem(SelectedItems[0]);
+				OnSelectionChanged?.Invoke(sender, eSelectItem);
+			}
 		}
 	}
 }

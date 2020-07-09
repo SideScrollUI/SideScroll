@@ -43,7 +43,7 @@ namespace Atlas.UI.Avalonia.Controls
 		}
 	}
 
-	public class TabControlChart : UserControl //, IDisposable
+	public class TabControlChart : Grid //, IDisposable
 	{
 		public static int SeriesLimit { get; set; } = 25;
 		private const double MarginPercent = 0.1; // This needs a min height so this can be lowered
@@ -130,7 +130,12 @@ namespace Atlas.UI.Avalonia.Controls
 		private void InitializeControls()
 		{
 			HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
-			VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
+			if (FillHeight)
+				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Top;
+			else
+				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
+			ColumnDefinitions = new ColumnDefinitions("*");
+			RowDefinitions = new RowDefinitions("*");
 			MaxWidth = 1500;
 			MaxHeight = 620; // 25 Items
 
@@ -193,7 +198,7 @@ namespace Atlas.UI.Avalonia.Controls
 			legend.OnSelectionChanged += Legend_OnSelectionChanged;
 			legend.OnVisibleChanged += Legend_OnVisibleChanged;
 
-			Content = containerGrid;
+			Children.Add(containerGrid);
 
 			Focusable = true;
 		}

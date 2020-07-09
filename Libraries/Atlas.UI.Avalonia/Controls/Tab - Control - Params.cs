@@ -17,15 +17,16 @@ namespace Atlas.UI.Avalonia.Controls
 		public const int ControlMaxWidth = 500;
 		private TabInstance tabInstance;
 		private object obj;
-		private bool autoGenerateRows;
 
 		public TabControlParams(TabInstance tabInstance, object obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
 		{
 			this.tabInstance = tabInstance;
 			this.obj = obj;
-			this.autoGenerateRows = autoGenerateRows;
 
 			InitializeControls(columnDefinitions);
+
+			if (autoGenerateRows)
+				LoadObject(obj);
 		}
 
 		private void InitializeControls(string columnDefinitions)
@@ -35,16 +36,24 @@ namespace Atlas.UI.Avalonia.Controls
 			Margin = new Thickness(15, 6);
 			MinWidth = 100;
 			MaxWidth = 2000;
+		}
 
-			if (autoGenerateRows)
+		private void ClearControls()
+		{
+			Children.Clear();
+			RowDefinitions.Clear();
+		}
+
+		public void LoadObject(object obj)
+		{
+			ClearControls();
+
+			AddSummary();
+
+			ItemCollection<ListProperty> properties = ListProperty.Create(obj);
+			foreach (ListProperty property in properties)
 			{
-				AddSummary();
-
-				ItemCollection<ListProperty> properties = ListProperty.Create(obj);
-				foreach (ListProperty property in properties)
-				{
-					AddPropertyRow(property);
-				}
+				AddPropertyRow(property);
 			}
 		}
 

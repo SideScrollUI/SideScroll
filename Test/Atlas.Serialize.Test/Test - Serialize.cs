@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Atlas.Core.Time;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -219,6 +220,20 @@ namespace Atlas.Serialize.Test
 			TimeZoneInfo output = serializer.Load<TimeZoneInfo>(call);
 
 			Assert.AreEqual(input, output);
+		}
+
+		// DateTime has no set operators and relies on constructor
+		[Test, Description("Serialize TimeZoneView")]
+		public void SerializeTimeZoneView()
+		{
+			TimeZoneView input = TimeZoneView.Local;
+
+			serializer.Save(call, input);
+			TimeZoneView output = serializer.Load<TimeZoneView>(call);
+
+			Assert.AreEqual(input.Abbreviation, output.Abbreviation);
+			Assert.AreEqual(input.Name, output.Name);
+			Assert.AreEqual(input.TimeZoneInfo, output.TimeZoneInfo);
 		}
 
 		public class NullableDateTime

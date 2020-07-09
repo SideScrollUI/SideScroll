@@ -15,6 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using static Atlas.Tabs.TabInstance;
 
 namespace Atlas.UI.Avalonia.View
 {
@@ -891,6 +892,8 @@ namespace Atlas.UI.Avalonia.View
 		private void ParentListSelectionChanged(object sender, EventArgs e)
 		{
 			UpdateChildControls();
+
+			tabInstance.SelectionChanged(sender, e);
 		}
 
 		private void ClearControls()
