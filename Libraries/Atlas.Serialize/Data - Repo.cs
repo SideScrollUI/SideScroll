@@ -317,9 +317,9 @@ namespace Atlas.Serialize
 			dataRepo.Save(Directory, key, item, call);
 		}
 
-		public T Load(Call call, string key, bool lazy = false)
+		public T Load(Call call, string key, bool createIfNeeded = false, bool lazy = false)
 		{
-			return dataRepo.Load<T>(Directory, key, call, false, lazy);
+			return dataRepo.Load<T>(Directory, key, call, createIfNeeded, lazy);
 		}
 
 		public DataItemCollection<T> LoadAll(Call call = null, bool lazy = false)
