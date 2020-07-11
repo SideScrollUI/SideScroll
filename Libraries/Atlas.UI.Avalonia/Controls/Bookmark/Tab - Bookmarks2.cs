@@ -46,9 +46,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 			public override void LoadUI(Call call, TabModel model)
 			{
-				toolbar = new Toolbar();
+				/*toolbar = new Toolbar();
 				toolbar.ButtonReset.Action = Reset;
-				model.AddObject(toolbar);
+				model.AddObject(toolbar);*/
 
 				model.AddData(tab.bookmarks.Items);
 				if (tab.bookmarks.NewBookmark != null)
@@ -63,8 +63,9 @@ namespace Atlas.UI.Avalonia.Controls
 			// Overriding here would break navigation
 			public override void GetBookmark(TabBookmark tabBookmark)
 			{
-				tabBookmark.IsRoot = true;
 				base.GetBookmark(tabBookmark);
+				foreach (var child in tabBookmark.tabChildBookmarks.Values)
+					child.IsRoot = true;
 			}
 
 			private void Reset(Call call)
