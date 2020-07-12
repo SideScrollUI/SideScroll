@@ -17,28 +17,19 @@ namespace Atlas.Start.Wpf
 				return;
 			}*/
 
-			Project project = LoadProject(UserSettings.DefaultProjectPath);
+			Project project = new Project(Settings);
 			MainWindow window = new MainWindow(project);
 			//window.LoadSettings(Settings.DefaultProjectPath);
 			window.Show();
 		}
 
-		public static Project LoadProject(string projectPath)
+		public static ProjectSettings Settings => new ProjectSettings()
 		{
-			var projectSettings = new ProjectSettings()
-			{
-				Name = "Atlas",
-				LinkType = "atlas",
-				Version = new Version(1, 0),
-				DataVersion = new Version(1, 0),
-			};
-			var userSettings = new UserSettings()
-			{
-				ProjectPath = projectPath,
-			};
-			Project project = new Project(projectSettings, userSettings);
-			return project;
-		}
+			Name = "Atlas",
+			LinkType = "atlas",
+			Version = new Version(1, 0),
+			DataVersion = new Version(1, 0),
+		};
 
 		public void ShowNewProject()
 		{

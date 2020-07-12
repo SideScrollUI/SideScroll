@@ -31,7 +31,7 @@ namespace Atlas.UI.Wpf
 		{
 			LoadWindowSettings();
 
-			Title = project.projectSettings.Name ?? "<Name>";
+			Title = project.ProjectSettings.Name ?? "<Name>";
 
 			Uri iconUri = new Uri("pack://application:,,,/Atlas.UI.Wpf;component/Assets/Logo.ico");
 			Icon = BitmapFrame.Create(iconUri);
@@ -203,14 +203,14 @@ namespace Atlas.UI.Wpf
 		{
 			Bookmark bookmark = project.Navigator.SeekBackward();
 			if (bookmark != null)
-				tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
+				tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		private void CommandForwardExecute(object sender, ExecutedRoutedEventArgs e)
 		{
 			Bookmark bookmark = project.Navigator.SeekForward();
 			if (bookmark != null)
-				tabView.tabInstance.SelectBookmark(bookmark.tabBookmark);
+				tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		private bool isLoading = false;
@@ -287,7 +287,7 @@ namespace Atlas.UI.Wpf
 			//if (LoadBookmarkUri != null)
 			//	tabInstance.tabBookmark = linker.GetBookmark(LoadBookmarkUri)?.tabBookmark;
 			//else
-			if (project.userSettings.AutoLoad) // did we load successfully last time?
+			if (project.UserSettings.AutoLoad) // did we load successfully last time?
 				tabInstance.LoadDefaultBookmark();
 
 			tabView = new TabView(tabInstance);

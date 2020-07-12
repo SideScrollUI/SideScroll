@@ -74,7 +74,7 @@
         <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">#2a2954</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonForegroundBrush">#60bdff</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#2040a0</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush">#9837ff</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush">#3060d0</SolidColorBrush>
 
         <!-- RadioButton -->
         <SolidColorBrush x:Key="ThemeRadioButtonBorderBrush">#004dd0</SolidColorBrush>

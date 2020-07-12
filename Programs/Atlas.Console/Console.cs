@@ -24,7 +24,7 @@ namespace Atlas.Console
 		public Console()
 		{
 			// setup
-			Project project = LoadProject(UserSettings.DefaultProjectPath);
+			Project project = new Project(Settings);
 			call = new Call(GetType().Name);
 			logWriterConsole = new LogWriterConsole(call.Log);
 			logWriterText = new LogWriterText(call.Log, project.DataApp.GetTypePath(typeof(Console)) + "/Logs/Main");
@@ -35,33 +35,13 @@ namespace Atlas.Console
 			//TestLogWriter();
 		}
 
-		public static Project LoadProject(string projectPath)
+		public static ProjectSettings Settings => new ProjectSettings()
 		{
-			var projectSettings = new ProjectSettings()
-			{
-				Name = "Atlas",
-				LinkType = "atlas",
-				Version = new Version(1, 0),
-				DataVersion = new Version(1, 0),
-			};
-			var userSettings = new UserSettings()
-			{
-				ProjectPath = projectPath,
-			};
-			return new Project(projectSettings, userSettings);
-		}
-
-		public string GetProjectPath()
-		{
-			string projectPath = UserSettings.DefaultProjectPath;
-			/*if (projectPath == null || projectPath.Length == 0)
-			{
-				System.Console.Write("Enter Project Path: ");
-				projectPath = System.Console.ReadLine();
-				ProjectSettings.DefaultProjectPath = projectPath;
-			}*/
-			return projectPath;
-		}
+			Name = "Atlas",
+			LinkType = "atlas",
+			Version = new Version(1, 0),
+			DataVersion = new Version(1, 0),
+		};
 
 		void TestLogWriter()
 		{

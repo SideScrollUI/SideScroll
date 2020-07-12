@@ -71,7 +71,7 @@ namespace Atlas.UI.Wpf
 			// Show merged set of selected bookmarks
 			Bookmark selectedBookmarks = new Bookmark();
 			selectedBookmarks.MergeBookmarks(bookmarks);
-			tabInstance.SelectBookmark(selectedBookmarks.tabBookmark);
+			tabInstance.SelectBookmark(selectedBookmarks.TabBookmark);
 		}
 
 		private void ToolBar_Loaded(object sender, RoutedEventArgs e)
@@ -136,7 +136,7 @@ namespace Atlas.UI.Wpf
 			bookmark.Name = textBoxName.Text;
 			project.DataApp.Save(bookmark.Name, bookmark);
 
-			tabModel.Bookmarks.Items.Add(new TabBookmarkItem(bookmark));
+			tabModel.Bookmarks.Items.Add(new TabBookmarkItem(bookmark, project));
 			panelNew.Visibility = Visibility.Collapsed;
 		}
 
