@@ -78,6 +78,9 @@
     <Style Selector="ComboBox /template/ Border#border:pointerover">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>
     </Style>
+    <!--Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource ThemeBackgroundTextBrush}"/>
+    </Style-->
 
     <Style Selector="ListBoxItem /template/ ContentPresenter">
         <Setter Property="Background" Value="#FF086F9E"/>

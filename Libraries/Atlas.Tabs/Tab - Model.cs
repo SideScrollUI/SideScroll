@@ -50,7 +50,6 @@ namespace Atlas.Tabs
 		public bool AutoLoad { get; set; } = true;
 		public AutoSelectType AutoSelect { get; set; } = AutoSelectType.FirstSavedOrNew;
 
-		public BookmarkCollection Bookmarks { get; set; }
 		public IList Actions { get; set; }
 		public TaskInstanceCollection Tasks { get; set; } = new TaskInstanceCollection();
 
@@ -368,7 +367,7 @@ namespace Atlas.Tabs
 			var tabBookmark = new TabBookmark()
 			{
 				Name = Name,
-				tabViewSettings = new TabViewSettings(),
+				ViewSettings = new TabViewSettings(),
 			};
 
 			depth--;
@@ -379,7 +378,7 @@ namespace Atlas.Tabs
 				List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleProperties(elementType);
 
 				var tabDataSettings = new TabDataSettings();
-				tabBookmark.tabViewSettings.TabDataSettings.Add(tabDataSettings);
+				tabBookmark.ViewSettings.TabDataSettings.Add(tabDataSettings);
 
 				foreach (object obj in iList)
 				{
@@ -408,7 +407,7 @@ namespace Atlas.Tabs
 									obj = obj,
 								};
 								tabDataSettings.SelectedRows.Add(selectedRow);
-								tabBookmark.tabChildBookmarks.Add(childNode.Name, childNode);
+								tabBookmark.ChildBookmarks.Add(childNode.Name, childNode);
 								tabBookmark.selectedObjects.Add(obj);
 							}
 						}

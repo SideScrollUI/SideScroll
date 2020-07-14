@@ -1,20 +1,17 @@
 ﻿using Atlas.Core;
 using Atlas.Resources;
-using Atlas.Start.Avalonia.Tabs;
 using Atlas.Tabs;
 
 namespace Atlas.UI.Avalonia.Controls
 {
-	public class TabBookmarks2 : ITab
+	public class TabBookmarks : ITab
 	{
-		public static TabBookmarks2 Global;
+		public static TabBookmarks Global;
 
-		private Project project;
 		private BookmarkCollection bookmarks;
 
-		public TabBookmarks2(Project project)
+		public TabBookmarks(Project project)
 		{
-			this.project = project;
 			bookmarks = new BookmarkCollection(project);
 			Global = Global ?? this;
 		}
@@ -33,15 +30,12 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public class Instance : TabInstance
 		{
-			private Toolbar toolbar;
-			private TabBookmarks2 tab;
+			//private Toolbar toolbar;
+			private TabBookmarks tab;
 
-			public Instance(TabBookmarks2 tab)
+			public Instance(TabBookmarks tab)
 			{
 				this.tab = tab;
-				//this.Project = tab.project;
-				//Model.Name = "Bookmarks";
-				//Model.Bookmarks = new BookmarkCollection(Project);
 			}
 
 			public override void LoadUI(Call call, TabModel model)
@@ -53,18 +47,12 @@ namespace Atlas.UI.Avalonia.Controls
 				model.AddData(tab.bookmarks.Items);
 				if (tab.bookmarks.NewBookmark != null)
 					SelectItem(tab.bookmarks.NewBookmark);
-
-				/*foreach (var item in tabModel.Bookmarks.Items)
-				{
-					item.OnDelete += Item_OnDelete;
-				}*/
 			}
 
-			// Overriding here would break navigation
 			public override void GetBookmark(TabBookmark tabBookmark)
 			{
 				base.GetBookmark(tabBookmark);
-				foreach (var child in tabBookmark.tabChildBookmarks.Values)
+				foreach (var child in tabBookmark.ChildBookmarks.Values)
 					child.IsRoot = true;
 			}
 
@@ -75,17 +63,6 @@ namespace Atlas.UI.Avalonia.Controls
 					SelectItem(item);
 				}
 			}
-
-			// move into BookmarkCollection?
-			/*private void Item_OnDelete(object sender, EventArgs e)
-			{
-				TabBookmarkItem bookmark = (TabBookmarkItem)sender;
-				project.DataApp.Delete<Bookmark>(null, bookmark.Bookmark.Name);
-				tabModel.Bookmarks.Reload();
-				tabModel.Bookmarks.Items.Insert(0, new TabBookmarkItem(currentBookMark));
-				//tabModel.Bookmarks.Items.Remove(new TabBookmarkItem(bookmark));
-				//Reload();
-			}*/
 		}
 	}
 }

@@ -17,7 +17,7 @@ namespace Atlas.Tabs
 
 		public Bookmark()
 		{
-			TabBookmark.bookmark = this;
+			TabBookmark.Bookmark = this;
 			TabBookmark.IsRoot = true;
 		}
 

@@ -100,7 +100,7 @@ namespace Atlas.Tabs
 		}
 
 		public TabInstance ParentTabInstance { get; set; }
-		public Dictionary<object, TabInstance> childTabInstances = new Dictionary<object, TabInstance>();
+		public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = new Dictionary<object, TabInstance>();
 
 		public SynchronizationContext uiContext;
 		public TabBookmark filterBookmarkNode;
@@ -206,7 +206,7 @@ namespace Atlas.Tabs
 
 		public virtual void Dispose()
 		{
-			childTabInstances.Clear();
+			ChildTabInstances.Clear();
 			if (!staticModel)
 				Model.Clear();
 			foreach (TaskInstance taskInstance in Model.Tasks)
@@ -594,7 +594,7 @@ namespace Atlas.Tabs
 		public virtual void GetBookmark(TabBookmark tabBookmark)
 		{
 			tabBookmark.Name = Label;
-			tabBookmark.tabViewSettings = tabViewSettings;
+			tabBookmark.ViewSettings = tabViewSettings;
 			tabBookmark.DataRepoDirectory = DataRepoInstance?.Directory;
 			/*if (DataRepoInstance != null)
 			{
@@ -610,10 +610,10 @@ namespace Atlas.Tabs
 				}
 			}*/
 
-			foreach (TabInstance tabInstance in childTabInstances.Values)
+			foreach (TabInstance tabInstance in ChildTabInstances.Values)
 			{
 				// Change this to a Key
-				if (tabBookmark.tabChildBookmarks.ContainsKey(tabInstance.Label))
+				if (tabBookmark.ChildBookmarks.ContainsKey(tabInstance.Label))
 					continue;
 
 				var childBookmark = tabBookmark.AddChild(tabInstance.Label);
@@ -632,7 +632,7 @@ namespace Atlas.Tabs
 
 		public virtual void SelectBookmark(TabBookmark tabBookmark)
 		{
-			this.tabViewSettings = tabBookmark.tabViewSettings;
+			this.tabViewSettings = tabBookmark.ViewSettings;
 			this.tabBookmark = tabBookmark;
 			if (OnLoadBookmark != null)
 				uiContext.Send(_ => OnLoadBookmark(this, new EventArgs()), null);
@@ -673,9 +673,9 @@ namespace Atlas.Tabs
 
 		public TabViewSettings LoadSettings()
 		{
-			if (tabBookmark != null && tabBookmark.tabViewSettings != null)
+			if (tabBookmark != null && tabBookmark.ViewSettings != null)
 			{
-				tabViewSettings = tabBookmark.tabViewSettings;
+				tabViewSettings = tabBookmark.ViewSettings;
 			}
 			else
 			{
@@ -858,7 +858,7 @@ namespace Atlas.Tabs
 
 			if (tabBookmark != null)
 			{
-				if (tabBookmark.tabChildBookmarks.TryGetValue(model.Name, out TabBookmark tabChildBookmark))
+				if (tabBookmark.ChildBookmarks.TryGetValue(model.Name, out TabBookmark tabChildBookmark))
 				{
 					childTabInstance.tabBookmark = tabChildBookmark;
 				}
@@ -872,7 +872,7 @@ namespace Atlas.Tabs
 			TabBookmark tabChildBookmark = null;
 			if (tabBookmark != null)
 			{
-				if (tabBookmark.tabChildBookmarks.TryGetValue(name, out tabChildBookmark))
+				if (tabBookmark.ChildBookmarks.TryGetValue(name, out tabChildBookmark))
 				{
 					if (tabChildBookmark.tabModel != null)
 						return tabChildBookmark.tabModel;

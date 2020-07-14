@@ -26,9 +26,9 @@ namespace Atlas.UI.Avalonia.View
 			}
 
 			TabBookmark tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
-			if (parentTabInstance.tabBookmark != null && parentTabInstance.tabBookmark.tabChildBookmarks != null)
+			if (parentTabInstance.tabBookmark != null && parentTabInstance.tabBookmark.ChildBookmarks != null)
 			{
-				if (parentTabInstance.tabBookmark.tabChildBookmarks.TryGetValue(label, out tabBookmark))
+				if (parentTabInstance.tabBookmark.ChildBookmarks.TryGetValue(label, out tabBookmark))
 				{
 					// FindMatches only
 					if (tabBookmark.tabModel != null)

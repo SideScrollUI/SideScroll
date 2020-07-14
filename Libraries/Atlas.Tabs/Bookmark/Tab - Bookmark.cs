@@ -14,39 +14,39 @@ namespace Atlas.Tabs
 	// rename to TabInstanceSettings?
 	public class TabBookmark
 	{
-		public Bookmark bookmark;
+		public Bookmark Bookmark { get; set; }
 		public string Name { get; set; }
 		public bool IsRoot { get; set; }
-		public TabViewSettings tabViewSettings = new TabViewSettings(); // list selections, doesn't know about children
-		public Dictionary<string, TabBookmark> tabChildBookmarks { get; set; } = new Dictionary<string, TabBookmark>(); // doesn't know which tabData to use, maps id to child info
+		public TabViewSettings ViewSettings = new TabViewSettings(); // list selections, doesn't know about children
+		public Dictionary<string, TabBookmark> ChildBookmarks { get; set; } = new Dictionary<string, TabBookmark>(); // doesn't know which tabData to use, maps id to child info
 		public string Address
 		{
 			get
 			{
-				if (tabChildBookmarks.Count > 0)
+				if (ChildBookmarks.Count > 0)
 				{
 					string comma = "";
 					string address = "";
-					if (tabChildBookmarks.Count > 1)
+					if (ChildBookmarks.Count > 1)
 						address += "[";
 					//address += Name + "::";
-					foreach (var bookmark in tabChildBookmarks)
+					foreach (var bookmark in ChildBookmarks)
 					{
 						address += comma;
 						address += bookmark.Key + " / " + bookmark.Value.Address;
 						comma = ", ";
 					}
-					if (tabChildBookmarks.Count > 1)
+					if (ChildBookmarks.Count > 1)
 						address += "]";
 					return address;
 				}
 				else
 				{
 					//string address = "";
-					if (tabViewSettings == null)
+					if (ViewSettings == null)
 						return "";
 					//string address = "<" + tabConfiguration.Address + ">";
-					string address = tabViewSettings.Address;
+					string address = ViewSettings.Address;
 					return address;
 				}
 			}
@@ -89,7 +89,7 @@ namespace Atlas.Tabs
 				string label = obj.ToString();
 				var newBookmark = new TabBookmark()
 				{
-					tabViewSettings = new TabViewSettings()
+					ViewSettings = new TabViewSettings()
 					{
 						TabDataSettings = new List<TabDataSettings>()
 						{
@@ -108,7 +108,7 @@ namespace Atlas.Tabs
 					},
 				};
 				if (tabBookmark != null)
-					tabBookmark.tabChildBookmarks.Add(label, newBookmark);
+					tabBookmark.ChildBookmarks.Add(label, newBookmark);
 				else
 					tabBookmark = newBookmark;
 			}
@@ -123,9 +123,9 @@ namespace Atlas.Tabs
 		public SortedDictionary<string, T> GetSelectedData<T>()
 		{
 			var items = new SortedDictionary<string, T>();
-			if (tabViewSettings != null)
+			if (ViewSettings != null)
 			{
-				foreach (SelectedRow row in tabViewSettings.SelectedRows)
+				foreach (SelectedRow row in ViewSettings.SelectedRows)
 				{
 					string dataKey = row.dataKey ?? row.label;
 					if (dataKey != null && row.dataValue != null && row.dataValue.GetType() == typeof(T))
@@ -142,14 +142,14 @@ namespace Atlas.Tabs
 
 		public void SetData(string name, object obj)
 		{
-			tabViewSettings = tabViewSettings ?? new TabViewSettings();
-			tabViewSettings.BookmarkData = tabViewSettings.BookmarkData ?? new Dictionary<string, object>();
-			tabViewSettings.BookmarkData[name] = obj;
+			ViewSettings = ViewSettings ?? new TabViewSettings();
+			ViewSettings.BookmarkData = ViewSettings.BookmarkData ?? new Dictionary<string, object>();
+			ViewSettings.BookmarkData[name] = obj;
 		}
 
 		public T GetData<T>(string name = "default")
 		{
-			if (tabViewSettings != null && tabViewSettings.BookmarkData != null && tabViewSettings.BookmarkData.TryGetValue(name, out object obj) && obj is T t)
+			if (ViewSettings != null && ViewSettings.BookmarkData != null && ViewSettings.BookmarkData.TryGetValue(name, out object obj) && obj is T t)
 				return t;
 
 			return default;
@@ -159,18 +159,18 @@ namespace Atlas.Tabs
 		{
 			var childBookmark = new TabBookmark()
 			{
-				bookmark = bookmark,
+				Bookmark = Bookmark,
 			};
-			tabChildBookmarks.Add(label, childBookmark);
+			ChildBookmarks.Add(label, childBookmark);
 			return childBookmark;
 		}
 
 		public TabBookmark GetChild(string name)
 		{
-			if (tabChildBookmarks == null)
+			if (ChildBookmarks == null)
 				return null;
 
-			if (tabChildBookmarks.TryGetValue(name, out TabBookmark childBookmark))
+			if (ChildBookmarks.TryGetValue(name, out TabBookmark childBookmark))
 				return childBookmark;
 
 			return null;
@@ -178,10 +178,10 @@ namespace Atlas.Tabs
 
 		public void Import(Project project)
 		{
-			if (tabViewSettings == null)
+			if (ViewSettings == null)
 				return;
 
-			foreach (SelectedRow row in tabViewSettings.SelectedRows)
+			foreach (SelectedRow row in ViewSettings.SelectedRows)
 			{
 				string dataKey = row.dataKey ?? row.label;
 				if (dataKey == null || row.dataValue == null)
@@ -189,13 +189,13 @@ namespace Atlas.Tabs
 
 				project.DataApp.Save(DataRepoDirectory, dataKey, row.dataValue);
 			}
-			foreach (TabBookmark tabBookmark in tabChildBookmarks.Values)
+			foreach (TabBookmark tabBookmark in ChildBookmarks.Values)
 				tabBookmark.Import(project);
 		}
 
 		public TabBookmark GetLeaf()
 		{
-			foreach (TabBookmark tabBookmark in tabChildBookmarks.Values)
+			foreach (TabBookmark tabBookmark in ChildBookmarks.Values)
 			{
 				var leaf = tabBookmark.GetLeaf();
 				if (leaf != null)
@@ -209,27 +209,27 @@ namespace Atlas.Tabs
 
 		public void MergeNode(TabBookmark node)
 		{
-			foreach (var nodeEntry in node.tabChildBookmarks)
+			foreach (var nodeEntry in node.ChildBookmarks)
 			{
-				if (tabChildBookmarks.TryGetValue(nodeEntry.Key, out TabBookmark existingNode))
+				if (ChildBookmarks.TryGetValue(nodeEntry.Key, out TabBookmark existingNode))
 				{
 					existingNode.MergeNode(nodeEntry.Value);
 				}
 				else
 				{
-					tabChildBookmarks.Add(nodeEntry.Key, nodeEntry.Value);
+					ChildBookmarks.Add(nodeEntry.Key, nodeEntry.Value);
 				}
 			}
-			if (tabViewSettings == null)
+			if (ViewSettings == null)
 			{
-				tabViewSettings = node.tabViewSettings;
+				ViewSettings = node.ViewSettings;
 				return;
 			}
 			Name = " + " + node.Name;
-			for (int i = 0; i < tabViewSettings.TabDataSettings.Count; i++)
+			for (int i = 0; i < ViewSettings.TabDataSettings.Count; i++)
 			{
-				var currentSelection = tabViewSettings.TabDataSettings[i].SelectedRows;
-				var otherSelection = node.tabViewSettings.TabDataSettings[i].SelectedRows;
+				var currentSelection = ViewSettings.TabDataSettings[i].SelectedRows;
+				var otherSelection = node.ViewSettings.TabDataSettings[i].SelectedRows;
 
 				var labelsUsed = new HashSet<string>();
 				var indicesUsed = new HashSet<int>();

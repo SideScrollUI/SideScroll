@@ -13,7 +13,6 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using System;
-using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Atlas.UI.Avalonia
@@ -24,6 +23,7 @@ namespace Atlas.UI.Avalonia
 		public static readonly int DefaultIncrementWidth = 1000; // should we also use a max percent?
 		public static readonly int KeyboardIncrementWidth = 500;
 		public static BaseWindow baseWindow;
+
 		protected Linker linker = new Linker();
 
 		public Project project;
@@ -71,10 +71,7 @@ namespace Atlas.UI.Avalonia
 
 			Resources["FontSizeSmall"] = 14; // stop DatePicker using a small font size
 
-			using (Stream stream = Icons.Streams.Logo)
-			{
-				Icon = new WindowIcon(stream);
-			}
+			Icon = new WindowIcon(Icons.Streams.Logo);
 
 			// Toolbar
 			// ScrollViewer | Buttons
@@ -166,10 +163,10 @@ namespace Atlas.UI.Avalonia
 			if (bookmark == null)
 				return;
 
-			if (TabBookmarks2.Global != null)
+			if (TabBookmarks.Global != null)
 			{
-				tabView.tabInstance.SelectItem(TabBookmarks2.Global); // select cells first so the child tab autoselects the new accounts
-				TabBookmarks2.Global.AddBookmark(call, bookmark);
+				tabView.tabInstance.SelectItem(TabBookmarks.Global); // select cells first so the child tab autoselects the new accounts
+				TabBookmarks.Global.AddBookmark(call, bookmark);
 				return;
 			}
 			bool reloadBase = true;
@@ -305,32 +302,13 @@ namespace Atlas.UI.Avalonia
 				tabInstance.LoadDefaultBookmark();
 
 			tabView = new TabView(tabInstance);
-			tabView.Model.Bookmarks = new BookmarkCollection(project);
 			tabView.Load();
-
-			//var tabBookmarks = new TabBookmarks(tabView);
-			//contentGrid.Children.Add(tabView);
 
 			//Grid.SetRow(tabView, 1);
 			//containerGrid.Children.Add(tabView);
 
 			//scrollViewer.Content = tabView;
 			contentGrid.Children.Add(tabView);
-		}
-
-		// How to set the main Content?
-		protected void AddTabBookmarks(ITab iTab)
-		{
-			var tabBookmarks = new TabBookmarks(project, iTab, linker);
-			AddTab(tabBookmarks);
-
-			//contentGrid.Children.Add(tabBookmarks);
-
-			//Grid.SetRow(tabView, 1);
-			//containerGrid.Children.Add(tabView);
-
-			//scrollViewer.Content = tabView;
-			//contentGrid.Children.Add(tabView);
 		}
 
 		private void SetMaxBounds()

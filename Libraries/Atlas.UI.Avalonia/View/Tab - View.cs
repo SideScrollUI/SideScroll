@@ -45,7 +45,6 @@ namespace Atlas.UI.Avalonia.View
 		public TabControlTasks tabTasks;
 		public List<TabControlDataGrid> tabDatas = new List<TabControlDataGrid>();
 		public List<ITabSelector> CustomTabControls { get; set; } = new List<ITabSelector>(); // should everything use this?
-		public TabControlBookmarks tabBookmarks;
 
 		// Layout Controls
 		private Grid containerGrid;
@@ -564,8 +563,8 @@ namespace Atlas.UI.Avalonia.View
 		{
 			//allowAutoScrolling = false;
 
-			if (tabInstance.tabBookmark != null && tabInstance.tabBookmark.tabViewSettings != null)
-				tabInstance.tabViewSettings = tabInstance.tabBookmark.tabViewSettings;
+			if (tabInstance.tabBookmark != null && tabInstance.tabBookmark.ViewSettings != null)
+				tabInstance.tabViewSettings = tabInstance.tabBookmark.ViewSettings;
 			else if (tabInstance.Project.UserSettings.AutoLoad)
 				LoadDefaultTabSettings();
 		}
@@ -879,12 +878,12 @@ namespace Atlas.UI.Avalonia.View
 
 		private void UpdateSelectedTabInstances()
 		{
-			tabInstance.childTabInstances.Clear();
+			tabInstance.ChildTabInstances.Clear();
 			foreach (Control control in tabChildControls.gridControls.Values)
 			{
 				if (control is TabView tabView)
 				{
-					tabInstance.childTabInstances.Add(control, tabView.tabInstance);
+					tabInstance.ChildTabInstances.Add(control, tabView.tabInstance);
 				}
 			}
 		}
@@ -1002,7 +1001,7 @@ namespace Atlas.UI.Avalonia.View
 			tabInstance.Project.UserSettings.AutoLoad = true;
 
 			TabBookmark tabBookmark = tabInstance.tabBookmark;
-			TabViewSettings = tabBookmark.tabViewSettings;
+			TabViewSettings = tabBookmark.ViewSettings;
 
 			int index = 0;
 			foreach (TabControlDataGrid tabData in tabDatas)
@@ -1011,9 +1010,9 @@ namespace Atlas.UI.Avalonia.View
 				tabData.LoadSettings();
 
 				//if (tabInstance.tabBookmark != null)
-				foreach (TabInstance childTabInstance in tabInstance.childTabInstances.Values)
+				foreach (TabInstance childTabInstance in tabInstance.ChildTabInstances.Values)
 				{
-					if (tabBookmark.tabChildBookmarks.TryGetValue(childTabInstance.Label, out TabBookmark childBookmarkNode))
+					if (tabBookmark.ChildBookmarks.TryGetValue(childTabInstance.Label, out TabBookmark childBookmarkNode))
 					{
 						childTabInstance.SelectBookmark(childBookmarkNode);
 					}
