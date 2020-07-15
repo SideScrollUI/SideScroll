@@ -9,6 +9,7 @@ namespace Atlas.Serialize
 	public class SerializerMemory
 	{
 		private MemoryStream stream = new MemoryStream();
+		public bool SaveSecure { get; set; } = true;
 
 		public SerializerMemory()
 		{
@@ -18,7 +19,10 @@ namespace Atlas.Serialize
 		{
 			using (var writer = new BinaryWriter(stream, Encoding.Default, true))
 			{
-				var serializer = new Serializer();
+				var serializer = new Serializer()
+				{
+					saveSecure = SaveSecure,
+				};
 				serializer.AddObject(call, obj);
 				serializer.Save(call, writer);
 			}

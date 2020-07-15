@@ -98,6 +98,10 @@ namespace Atlas.Serialize
 				typeRepo = new TypeRepoUnknown(serializer, typeSchema);
 				log.AddWarning("Type has no constructor", new Tag(typeSchema));
 			}
+			else if (typeSchema.secure && !serializer.saveSecure)
+			{
+				typeRepo = new TypeRepoUnknown(serializer, typeSchema);
+			}
 			else
 			{
 				typeRepo = new TypeRepoObject(serializer, typeSchema);
@@ -223,7 +227,7 @@ namespace Atlas.Serialize
 		{
 			using (LogTimer logTimer = log.Timer("Serializing (" + typeSchema.Name + ")"))
 			{
-				long start = writer.BaseStream.Position;
+				//long start = writer.BaseStream.Position;
 				//SaveObjectData(writer);
 
 				objectSizes = new int[objects.Count];
@@ -238,13 +242,13 @@ namespace Atlas.Serialize
 					objectSizes[index++] = (int)(objectEnd - objectStart);
 				}
 
-				long end = writer.BaseStream.Position;
+				//long end = writer.BaseStream.Position;
 
 				//typeSchema.fileDataOffset = start;
 				//typeSchema.dataSize = end - start;
 
 				logTimer.Add("Saved Object",
-					new Tag("Type", this.type),
+					new Tag("Type", type),
 					new Tag("Count", objects.Count),
 					new Tag("Offset", typeSchema.FileDataOffset),
 					new Tag("Bytes", typeSchema.DataSize));

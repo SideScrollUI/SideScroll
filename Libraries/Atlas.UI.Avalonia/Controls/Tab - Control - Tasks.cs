@@ -62,7 +62,6 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("Auto"); // doesn't work
-			//IsVisible = (tabInstance.tabModel.Tasks.Count > 0);
 			IsVisible = ShowTasks;
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
@@ -116,6 +115,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void TaskCompleted(TaskInstance taskInstance)
 		{
+			bool wasVisible = IsVisible;
+			IsVisible = ShowTasks;
+
 			// unselect running if no error
 			if (autoSelectNew && !taskInstance.Errored)
 			{
@@ -123,7 +125,10 @@ namespace Atlas.UI.Avalonia.Controls
 				if (selectedItems.Count == 1 && selectedItems[0] == taskInstance)
 					tabControlDataGrid.SelectedItem = null;
 			}
-			IsVisible = ShowTasks;
+			else if (IsVisible != wasVisible)
+			{
+				UpdateSelection();
+			}
 		}
 
 		private void TabData_OnSelectionChanged(object sender, EventArgs e)
@@ -145,7 +150,7 @@ namespace Atlas.UI.Avalonia.Controls
 			tabControlDataGrid.Dispose();
 
 			if (tabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
-				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
+				iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
 		}
 	}
 }

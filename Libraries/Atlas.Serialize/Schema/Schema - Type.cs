@@ -36,6 +36,7 @@ namespace Atlas.Serialize
 		public Type nonNullableType; // might be null
 		public bool isPrimitive;
 		public bool hasConstructor = true;
+		public bool secure = false; // Secure types do not get saved if the SaveSecure flag is set
 
 		public bool isStatic;
 		public bool hasSubType;
@@ -52,8 +53,8 @@ namespace Atlas.Serialize
 			nonNullableType = type.GetNonNullableType();
 			isPrimitive = nonNullableType.IsPrimitive;
 
-			Attribute attribute = type.GetCustomAttribute(typeof(StaticAttribute));
-			isStatic = (attribute != null);
+			isStatic = (type.GetCustomAttribute<StaticAttribute>() != null);
+			secure = (type.GetCustomAttribute<SecureAttribute>() != null);
 
 			if (!isCollection)
 			{

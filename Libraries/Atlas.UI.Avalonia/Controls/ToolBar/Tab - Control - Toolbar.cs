@@ -18,8 +18,11 @@ namespace Atlas.UI.Avalonia.Tabs
 {
 	public class TabControlToolbar : Grid
 	{
-		public TabControlToolbar(TabToolbar toolbar = null)
+		public TabInstance tabInstance;
+
+		public TabControlToolbar(TabInstance tabInstance = null, TabToolbar toolbar = null)
 		{
+			this.tabInstance = tabInstance;
 			InitializeControls();
 			if (toolbar != null)
 				LoadToolbar(toolbar);
@@ -67,14 +70,14 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public ToolbarButton AddButton(string tooltip, Stream resource, ICommand command = null)
 		{
-			var button = new ToolbarButton(tooltip, resource, command);
+			var button = new ToolbarButton(this, tooltip, resource, command);
 			AddControl(button);
 			return button;
 		}
 
 		public ToolbarButton AddButton(ToolButton toolButton)
 		{
-			var button = new ToolbarButton(toolButton.Label, toolButton.Icon);
+			var button = new ToolbarButton(this, toolButton.Label, toolButton.Icon);
 			button.Add(toolButton.Action);
 			button.AddAsync(toolButton.ActionAsync);
 			AddControl(button);
@@ -179,11 +182,13 @@ namespace Atlas.UI.Avalonia.Tabs
 	{
 		Type IStyleable.StyleKey => typeof(Button);
 
+		public TabControlToolbar toolbar;
 		public TaskDelegate.CallAction callAction;
 		public TaskDelegateAsync.CallActionAsync callActionAsync;
 
-		public ToolbarButton(string tooltip, Stream stream, ICommand command = null) : base()
+		public ToolbarButton(TabControlToolbar toolbar, string tooltip, Stream stream, ICommand command = null) : base()
 		{
+			this.toolbar = toolbar;
 			stream.Position = 0;
 			var bitmap = new Bitmap(stream);
 
@@ -210,9 +215,15 @@ namespace Atlas.UI.Avalonia.Tabs
 			Click += ToolbarButton_Click;
 		}
 
-		private async void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		private void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			InvokeActionAsync(new Call());
+			if (toolbar.tabInstance == null)
+				return;
+
+			if (callActionAsync != null)
+				toolbar.tabInstance.StartAsync(callActionAsync);
+			if (callAction != null)
+				toolbar.tabInstance.StartTask(callAction, false, false);
 		}
 
 		public void Add(TaskDelegate.CallAction callAction)
@@ -223,19 +234,6 @@ namespace Atlas.UI.Avalonia.Tabs
 		public void AddAsync(TaskDelegateAsync.CallActionAsync callActionAsync)
 		{
 			this.callActionAsync = callActionAsync;
-		}
-
-		private async void InvokeActionAsync(Call call)
-		{
-			try
-			{
-				callActionAsync?.Invoke(call);
-				callAction?.Invoke(call);
-			}
-			catch (Exception e)
-			{
-				call.Log.Add(e);
-			}
 		}
 
 		// DefaultTheme.xaml is overriding this currently

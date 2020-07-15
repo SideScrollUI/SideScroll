@@ -193,7 +193,7 @@ namespace Atlas.Serialize
 
 		public void InitializeProperties(Log log)
 		{
-			List<PropertyRepo> lazyPropertyRepos = new List<PropertyRepo>();
+			var lazyPropertyRepos = new List<PropertyRepo>();
 			foreach (PropertySchema propertySchema in typeSchema.PropertySchemas)
 			{
 				//if (propertySchema.Loadable == false)

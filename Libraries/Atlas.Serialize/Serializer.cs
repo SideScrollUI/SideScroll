@@ -42,6 +42,7 @@ namespace Atlas.Serialize
 		public BinaryReader reader;
 		public bool lazy;
 		public bool whitelistOnly = true;
+		public bool saveSecure = true;
 
 		// Convert to Parser class?
 		// Use a queue so we don't exceed the stack size due to cross references (i.e. a list with values that refer back to the list)
@@ -472,11 +473,16 @@ namespace Atlas.Serialize
 			else
 			{
 				Type type = obj.GetType();
+				TypeRepo typeRepo = idxTypeToRepo[type];
+				if (typeRepo is TypeRepoUnknown)
+				{
+					writer.Write((byte)0);
+					return;
+				}
 				if (type == baseType)
 					writer.Write((byte)1);
 				else
 					writer.Write((byte)2);
-				TypeRepo typeRepo = idxTypeToRepo[type];
 				if (baseType != null && baseType.IsPrimitive)
 				{
 					//if (type != baseType)

@@ -412,7 +412,7 @@ namespace Atlas.UI.Avalonia.View
 
 		private void AddToolbar(TabToolbar toolbar)
 		{
-			var toolbarControl = new TabControlToolbar(toolbar);
+			var toolbarControl = new TabControlToolbar(tabInstance, toolbar);
 			AddControl(toolbarControl, false);
 		}
 
@@ -428,7 +428,7 @@ namespace Atlas.UI.Avalonia.View
 
 		protected void AddTasks()
 		{
-			if (Model.Actions == null)
+			if (Model.Actions == null && Model.Objects == null)
 				return;
 
 			//if (tabModel.Tasks == null)

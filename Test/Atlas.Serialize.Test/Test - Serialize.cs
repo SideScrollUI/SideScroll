@@ -1,4 +1,5 @@
-﻿using Atlas.Core.Time;
+﻿using Atlas.Core;
+using Atlas.Core.Time;
 using NUnit.Framework;
 using System;
 using System.Collections;
@@ -518,7 +519,45 @@ namespace Atlas.Serialize.Test
 			Assert.AreEqual(output.nonSerialized, 1);
 			Assert.AreEqual(output.serialized, 10);
 		}
-		
+
+		[Test, Description("Serialize [Secure]")]
+		public void SerializeSecure()
+		{
+			var input = new SecureContainer()
+			{
+				secureField = new SecureClass()
+				{
+					confidential = "secrets",
+				},
+				SecureProperty = new SecureClass()
+				{
+					confidential = "more secrets",
+				},
+				nonSecure = "test",
+			};
+
+			serializer.SaveSecure = false;
+			serializer.Save(call, input);
+			var output = serializer.Load<SecureContainer>(call);
+
+			Assert.IsNull(output.secureField);
+			Assert.IsNull(output.SecureProperty);
+			Assert.AreEqual(output.nonSecure, "test");
+		}
+
+		public class SecureContainer
+		{
+			public SecureClass secureField;
+			public SecureClass SecureProperty { get; set; }
+			public string nonSecure;
+		}
+
+		[Secure]
+		public class SecureClass
+		{
+			public string confidential { get; set; }
+		}
+
 		public class NullablePropertyPrimitives
 		{
 			public uint? uintTest { get; set; } = 1;

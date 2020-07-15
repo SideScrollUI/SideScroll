@@ -20,7 +20,8 @@ namespace Atlas.Serialize
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
-				if (!typeSchema.hasConstructor)
+				if (!typeSchema.hasConstructor ||
+					(typeSchema.secure && !serializer.saveSecure))
 					return new TypeRepoUnknown(serializer, typeSchema);
 				return null;
 			}
