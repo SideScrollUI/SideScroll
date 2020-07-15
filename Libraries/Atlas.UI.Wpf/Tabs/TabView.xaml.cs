@@ -265,13 +265,13 @@ namespace Atlas.UI.Wpf
 
 		protected void AddBookmarks()
 		{
-			if (tabModel.Bookmarks == null)
+			/*if (tabModel.Bookmarks == null)
 				return;
 
 			this.tabBookmarks = new TabBookmarks();
 			tabBookmarks.Initialize(tabInstance);
 
-			AddParentControl(tabBookmarks, false, true);
+			AddParentControl(tabBookmarks, false, true);*/
 		}
 
 		private void ClearControls()
@@ -512,9 +512,9 @@ namespace Atlas.UI.Wpf
 			// can we move this into the instance?
 			// FindMatches uses this with bookmarks
 			TabBookmark bookmarkNode = null;
-			if (tabInstance.tabBookmark != null && tabInstance.tabBookmark.tabChildBookmarks != null)
+			if (tabInstance.tabBookmark != null && tabInstance.tabBookmark.ChildBookmarks != null)
 			{
-				if (tabInstance.tabBookmark.tabChildBookmarks.TryGetValue(name, out bookmarkNode))
+				if (tabInstance.tabBookmark.ChildBookmarks.TryGetValue(name, out bookmarkNode))
 				{
 					if (bookmarkNode.tabModel != null)
 						value = bookmarkNode.tabModel;
@@ -603,13 +603,13 @@ namespace Atlas.UI.Wpf
 
 		private void UpdateSelectedTabInstances()
 		{
-			tabInstance.childTabInstances.Clear();
+			tabInstance.ChildTabInstances.Clear();
 			foreach (Control control in childControls.Values)
 			{
 				TabView tabView = control as TabView;
 				if (tabView != null)
 				{
-					tabInstance.childTabInstances[control] = tabView.tabInstance;
+					tabInstance.ChildTabInstances[control] = tabView.tabInstance;
 				}
 			}
 		}
@@ -664,7 +664,7 @@ namespace Atlas.UI.Wpf
 		private void LoadBookmark()
 		{
 			TabBookmark bookmarkNode = tabInstance.tabBookmark;
-			tabSettings = bookmarkNode.tabViewSettings;
+			tabSettings = bookmarkNode.ViewSettings;
 
 			//LoadTabSettings();
 			int index = 0;
@@ -674,10 +674,10 @@ namespace Atlas.UI.Wpf
 				tabData.LoadSettings();
 
 				//if (tabInstance.bookmarkNode != null)
-				foreach (TabInstance tabInstance in tabInstance.childTabInstances.Values)
+				foreach (TabInstance tabInstance in tabInstance.ChildTabInstances.Values)
 				{
 					TabBookmark childBookmarkNode = null;
-					if (bookmarkNode.tabChildBookmarks.TryGetValue(tabInstance.Label, out childBookmarkNode))
+					if (bookmarkNode.ChildBookmarks.TryGetValue(tabInstance.Label, out childBookmarkNode))
 					{
 						tabInstance.SelectBookmark(childBookmarkNode);
 					}

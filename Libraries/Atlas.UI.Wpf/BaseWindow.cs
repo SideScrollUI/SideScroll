@@ -291,7 +291,6 @@ namespace Atlas.UI.Wpf
 				tabInstance.LoadDefaultBookmark();
 
 			tabView = new TabView(tabInstance);
-			tabView.tabModel.Bookmarks = new BookmarkCollection(project);
 			tabView.Load();
 
 			scrollViewer.Content = tabView;

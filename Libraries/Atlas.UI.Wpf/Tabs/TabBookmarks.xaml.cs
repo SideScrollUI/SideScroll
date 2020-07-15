@@ -47,13 +47,12 @@ namespace Atlas.UI.Wpf
 
 		protected void AddListData()
 		{
-			tabModel.Bookmarks = tabModel.Bookmarks ?? new BookmarkCollection(tabInstance.Project);
-			tabData = new TabData(tabInstance, tabModel.Bookmarks.Items, new TabDataSettings());
+			/*tabData = new TabData(tabInstance, tabModel.Bookmarks.Items, new TabDataSettings());
 			tabData.autoSelectFirst = false;
 			tabData.OnSelectionChanged += OnSelectedBookmarkChanged;
 			tabData.Initialize();
 			Grid.SetRow(tabData, 0);
-			grid.Children.Add(tabData);
+			grid.Children.Add(tabData);*/
 		}
 
 		private void OnSelectedBookmarkChanged(object sender, EventArgs e)
@@ -127,7 +126,7 @@ namespace Atlas.UI.Wpf
 		{
 			foreach (ViewBookmark bookmarkName in tabData.SelectedItems)
 				project.DataApp.Delete(typeof(Bookmark), bookmarkName.Name);
-			tabModel.Bookmarks.Reload();
+			//tabModel.Bookmarks.Reload();
 		}
 
 		private void Button_NewSave(object sender, RoutedEventArgs e)
@@ -136,7 +135,7 @@ namespace Atlas.UI.Wpf
 			bookmark.Name = textBoxName.Text;
 			project.DataApp.Save(bookmark.Name, bookmark);
 
-			tabModel.Bookmarks.Items.Add(new TabBookmarkItem(bookmark, project));
+			//tabModel.Bookmarks.Items.Add(new TabBookmarkItem(bookmark, project));
 			panelNew.Visibility = Visibility.Collapsed;
 		}
 
