@@ -30,6 +30,12 @@ namespace Atlas.Core
 		{
 		}
 
+		public TimeRangeValue(DateTime startTime)
+		{
+			StartTime = startTime;
+			EndTime = startTime;
+		}
+
 		public TimeRangeValue(DateTime startTime, DateTime endTime, double value, params Tag[] tags)
 		{
 			StartTime = startTime;

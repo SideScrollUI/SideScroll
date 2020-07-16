@@ -79,7 +79,7 @@ namespace Atlas.Core
 				if (binTime < startTime)
 					binTime = startTime;
 
-				for (; binTime < timeRangeValue.EndTime && binTime < endTime; binTime = binTime.AddSeconds(periodSeconds))
+				for (; binTime <= timeRangeValue.EndTime && binTime <= endTime; binTime = binTime.AddSeconds(periodSeconds))
 				{
 					double offset = binTime.Subtract(startTime).TotalSeconds;
 					int period = (int)(offset / periodSeconds);
@@ -152,6 +152,19 @@ namespace Atlas.Core
 				if (period.SummedDurations.TotalMinutes == 0.0)
 					continue;
 				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.MaxValue, period.Tags.ToArray()));
+			}
+			return timeRangeValues;
+		}
+
+		public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
+		{
+			var periods = Periods(dataPoints, startTime, endTime, periodDuration);
+			var timeRangeValues = new List<TimeRangeValue>();
+			foreach (var period in periods)
+			{
+				//if (period.Count == 0)
+				//	continue;
+				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.Count, period.Tags.ToArray()));
 			}
 			return timeRangeValues;
 		}
