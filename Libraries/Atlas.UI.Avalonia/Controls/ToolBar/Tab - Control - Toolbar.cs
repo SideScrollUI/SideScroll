@@ -20,7 +20,7 @@ namespace Atlas.UI.Avalonia.Tabs
 	{
 		public TabInstance tabInstance;
 
-		public TabControlToolbar(TabInstance tabInstance = null, TabToolbar toolbar = null)
+		public TabControlToolbar(TabInstance tabInstance, TabToolbar toolbar = null)
 		{
 			this.tabInstance = tabInstance;
 			InitializeControls();
@@ -218,7 +218,10 @@ namespace Atlas.UI.Avalonia.Tabs
 		private void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			if (toolbar.tabInstance == null)
+			{
+				InvokeAction(new Call());
 				return;
+			}
 
 			if (callActionAsync != null)
 				toolbar.tabInstance.StartAsync(callActionAsync);
@@ -234,6 +237,19 @@ namespace Atlas.UI.Avalonia.Tabs
 		public void AddAsync(TaskDelegateAsync.CallActionAsync callActionAsync)
 		{
 			this.callActionAsync = callActionAsync;
+		}
+
+		private void InvokeAction(Call call)
+		{
+			try
+			{
+				callActionAsync?.Invoke(call);
+				callAction?.Invoke(call);
+			}
+			catch (Exception e)
+			{
+				call.Log.Add(e);
+			}
 		}
 
 		// DefaultTheme.xaml is overriding this currently

@@ -1,4 +1,5 @@
 ﻿using Atlas.Resources;
+using Atlas.Tabs;
 using Atlas.UI.Avalonia.Tabs;
 using Avalonia.Controls;
 
@@ -14,7 +15,7 @@ namespace Atlas.Start.Avalonia.Tabs
 
 		public TextBox textBoxStatus;
 
-		public TabControlSearchToolbar()
+		public TabControlSearchToolbar(TabInstance tabInstance) : base(tabInstance)
 		{
 			InitializeControls();
 		}

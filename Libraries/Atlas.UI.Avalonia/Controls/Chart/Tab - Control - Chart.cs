@@ -705,9 +705,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void AddSeries(ListSeries listSeries)
 		{
-			if (listSeries.IsStacked)
-				AddBarSeries(listSeries);
-			else
+			//if (listSeries.IsStacked)
+			//	AddBarSeries(listSeries);
+			//else
 				AddListSeries(listSeries);
 		}
 

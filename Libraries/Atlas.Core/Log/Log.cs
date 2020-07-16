@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Atlas.Core
 {
@@ -227,7 +228,10 @@ namespace Atlas.Core
 
 		public LogEntry Add(Exception e)
 		{
-			return AddError(e.Message, new Tag(e));
+			if (e is TaskCanceledException)
+				return Add(e.Message, new Tag(e));
+			else
+				return AddError(e.Message, new Tag(e));
 		}
 
 		public LogTimer Timer(string text, params Tag[] tags)

@@ -67,6 +67,8 @@ namespace Atlas.UI.Avalonia.Controls
 				//[Grid.RowProperty] = 0,
 				[Grid.ColumnProperty] = 1,
 			};
+			if (!property.Editable)
+				textBox.Background = Theme.TextBackgroundDisabled;
 			binding = new Binding(property.propertyInfo.Name)
 			{
 				Converter = dateTimeConverter,

@@ -27,14 +27,15 @@ namespace Atlas.Core
 
 		public override string ToString() => Name;
 
+		public ListSeries(IList iList)
+		{
+			LoadList(iList);
+		}
+
 		public ListSeries(string name, IList iList)
 		{
 			Name = name;
-			this.iList = iList;
-
-			Type elementType = iList.GetType().GetElementTypeForAll();
-			xPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
-			yPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();
+			LoadList(iList);
 		}
 
 		public ListSeries(IList iList, PropertyInfo xPropertyInfo, PropertyInfo yPropertyInfo)
@@ -49,7 +50,7 @@ namespace Atlas.Core
 				Name = attribute.Name;
 		}
 
-		public ListSeries(string name, IList iList, string xPropertyName, string yPropertyName)
+		public ListSeries(string name, IList iList, string xPropertyName, string yPropertyName = null)
 		{
 			Name = name;
 			this.iList = iList;
@@ -58,7 +59,17 @@ namespace Atlas.Core
 
 			Type elementType = iList.GetType().GetElementTypeForAll();
 			xPropertyInfo = elementType.GetProperty(xPropertyName);
-			yPropertyInfo = elementType.GetProperty(yPropertyName);
+			if (yPropertyName != null)
+				yPropertyInfo = elementType.GetProperty(yPropertyName);
+		}
+
+		private void LoadList(IList iList)
+		{
+			this.iList = iList;
+
+			Type elementType = iList.GetType().GetElementTypeForAll();
+			xPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
+			yPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();
 		}
 
 		private double GetObjectValue(object obj)
@@ -90,6 +101,28 @@ namespace Atlas.Core
 				}
 			}
 			return sum;
+		}
+
+		public List<TimeRangeValue> TimeRangeValues
+		{
+			get
+			{
+				var timeRangeValues = new List<TimeRangeValue>();
+				foreach (object obj in iList)
+				{
+					DateTime timeStamp = (DateTime)xPropertyInfo.GetValue(obj);
+					double value = 1;
+					if (yPropertyInfo != null)
+					{
+						object yObj = yPropertyInfo.GetValue(obj);
+						value = Convert.ToDouble(yObj);
+					}
+					var timeRangeValue = new TimeRangeValue(timeStamp, timeStamp, value);
+					timeRangeValues.Add(timeRangeValue);
+				}
+				var ordered = timeRangeValues.OrderBy(t => t.StartTime).ToList();
+				return ordered;
+			}
 		}
 	}
 }

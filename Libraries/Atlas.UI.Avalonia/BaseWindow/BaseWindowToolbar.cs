@@ -24,7 +24,7 @@ namespace Atlas.UI.Avalonia
 		//public Project project;
 		private BaseWindow baseWindow;
 
-		public BaseWindowToolbar(BaseWindow baseWindow)
+		public BaseWindowToolbar(BaseWindow baseWindow) : base(null)
 		{
 			this.baseWindow = baseWindow;
 			InitializeControls();
