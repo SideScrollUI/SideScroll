@@ -19,7 +19,7 @@ log.Add("New Log entry",
 # Timer
 * You can time any operation by using a log or call Timer with the `using` operator
 ```csharp
-	using (LogTimer logTimer = call.log.Timer("Doing work"))
+	using (LogTimer logTimer = call.Log.Timer("Doing work"))
 	{
 		...
 	}

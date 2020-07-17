@@ -78,7 +78,7 @@ namespace Atlas.Tabs
 
 		public Project Project { get; set; }
 		public ITab iTab;
-		//public Log Log => taskInstance.log;
+		//public Log Log => TaskInstance.Log;
 		public TaskInstance TaskInstance { get; set; } = new TaskInstance();
 		public TabModel Model { get; set; } = new TabModel();
 		public string Label { get { return Model.Name; } set { Model.Name = value; } }
@@ -155,10 +155,7 @@ namespace Atlas.Tabs
 			SetStartLoad();
 		}
 
-		public override string ToString()
-		{
-			return Label;
-		}
+		public override string ToString() => Label;
 
 		public TabInstance CreateChildTab(ITab iTab)
 		{

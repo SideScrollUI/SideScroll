@@ -32,7 +32,7 @@
   - `Programs / Atlas.Start.Avalonia`
     - .NET Core
       - Cross platform (Windows, Linux, Mac)
-    - AvaloniaUI still in alpha
+    - AvaloniaUI still in beta
       - Still pretty slow
       - Not many controls available
   - `Programs / Atlas.Start.Wpf`

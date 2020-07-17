@@ -5,6 +5,7 @@
   * [JetBrains Rider](https://www.jetbrains.com/rider/)
     - Recommended for Macs
   * [Visual Studio Code](IDEs/VisualStudioCode.md)
+    - Recommended for editing docs, although this can be used for coding too
 * Modules
   * [Libraries](Modules/Libraries.md)
   * [Programs](Modules/Programs.md)

@@ -25,7 +25,7 @@ namespace Atlas.Start.Avalonia.Tabs
 				var tabMyParams = new TabControlMyParams(this, myParams);
 				model.AddObject(tabMyParams);
 
-				toolbar = new TabControlSearchToolbar();
+				toolbar = new TabControlSearchToolbar(this);
 				model.AddObject(toolbar);
 
 				animation = new TabControlLoadingAnimation()

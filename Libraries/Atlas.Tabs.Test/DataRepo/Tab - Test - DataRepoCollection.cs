@@ -23,11 +23,11 @@ namespace Atlas.Tabs.Test
 
 				model.Actions =  new ItemCollection<TaskCreator>()
 				{
-					new TaskDelegate("Add", Add, false), // Foreground task so we can modify collection
-					new TaskDelegate("Add 10", Add10, false), // Foreground task so we can modify collection
-					new TaskDelegate("Replace", Replace, false), // Foreground task so we can modify collection
+					new TaskDelegate("Add", Add), // Foreground task so we can modify collection
+					new TaskDelegate("Add 10", Add10),
+					new TaskDelegate("Replace", Replace),
 					new TaskDelegate("Delete", Delete),
-					new TaskDelegate("Delete All", DeleteAll), // Foreground task so we can modify collection
+					new TaskDelegate("Delete All", DeleteAll),
 				};
 
 				//tabModel.Notes = "Data Repos store C# objects as serialized data.";

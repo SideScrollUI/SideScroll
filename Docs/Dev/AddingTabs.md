@@ -5,33 +5,39 @@
   - Defines a `Create()` method that creates a `TabInstance` that you can pass those parameters to
   - You can also declare properties for a Tab, which when passed in a IList will be displayed as columns for the DataGrid
 * A new `TabInstance` will be created each time that Tab becomes visible, meaning the `TabInstance.Load()` is not called until the Tab is shown.
-
+* There are 3 different Load methods that can be used for a `TabInstance`. You can use any combination of these. They are called in the order below:
+  - `public async Task LoadAsync(Call call, TabModel model)`
+    - Use when you need to call async methods
+  - `public override void Load(Call call, TabModel model)`
+    - The default Load method if you don't need to call an async method
+  - `public override void LoadUI(Call call, TabModel model)`
+    - Use when you need to create an Avalonia control, since those can only be created on the UI thread.
 ```csharp
 namespace Atlas.Tabs.Test
 {
 	public class TabSample : ITab
 	{
-		public TabInstance Create() { return new Instance(); }
+		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance
 		{
-			public override void Load(Call call)
+			public override void Load(Call call, TabModel model)
 			{
-				tabModel.Items = new ItemCollection<ListItem>()
+				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Test Item", sampleItems),
-					new ListItem("Collections", new TabTestGridCollectionSize()),
+					new ListItem("Tab 1", new Tab1()),
+					new ListItem("Tab 2", new Tab2()),
 				};
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
-					new TaskDelegate("Log this", LogThis, true),
+					new TaskDelegate("Log this", LogThis),
 				};
 			}
 
 			private void LogThis(Call call)
 			{
-				call.log.Add("I've been logged");
+				call.Log.Add("I've been logged");
 			}
 		}
 	}
@@ -39,8 +45,8 @@ namespace Atlas.Tabs.Test
 ```
 
 ## Items
-* Most `TabInstance` will contain `Items`. These can be any `IList` and will be displayed in a datagrid
-  - Any object properties will automatically be show as columns. If no properties are found, `ToString()` will be called on each object
+* Most `TabInstance` will contain `Items`. These can be any `IList` and will be displayed in a DataGrid
+  - Any object properties will automatically be show as columns. If no properties are found, the object's `ToString()` will be used for the item
   - The most common `Items` are a collection of `ListItem`, which lets you set a label and object to display
   - When a row is selected, a child tab will be shown to the right based on the following criteria
     - If the object is an `ITab`, a `TabInstance` will be created
@@ -50,12 +56,11 @@ namespace Atlas.Tabs.Test
 ## Actions
 * You can declare actions for Tabs, which will show up as buttons
 * Actions that set `useTask` to `true` will run in the background and won't block the UI from updating. However, you can't modify the UI or modify the `tabModel` while running in the background. If you want to update the UI after finishing a task you can `Invoke` a different function that does so.
-  - `Invoke(UpdateStatus, "param 1", "param 2");`
+  - `Dispatcher.UIThread.Post(() => SetStatusUI(call, "Finished"));`
 ```csharp
-public void UpdateStatus(Call call, params object[] objects)
+public void UpdateStatus(Call call, string text)
 {
-	string param1 = (ItemCollection<TabCloudWatchAlarm>)objects[0];
-	textBox.Text = param1;
+	textBox.Text = text;
 }
 ```
 * Types
@@ -63,62 +68,75 @@ public void UpdateStatus(Call call, params object[] objects)
     - `new TaskDelegate("Add Item", AddItem, false)`
     - `private void AddItem(Call call)`
     - Generally the preferred way if you don't need to pass parameters
-    - Allows setting the Task progress through the call
-    - Allows logging via the call.log
   - TaskDelegateAsync
     - `new TaskDelegateAsync("Add Item", AddItemAsync, false)`
     - `private async Task AddItemAsync(Call call)`
-    - Same as `TaskDelegate`, but called using `async`
+    - Same as `TaskDelegate`, but called using `async`. Use whenever you need to call async functions.
   - TaskAction
     - `new TaskAction("Add Item", new Action(() => AddItems(5)))`
     - `private void AddItems(int count)`
     - Useful when you need to pass custom parameters
-
+* ItemCollectionUI
+  - This is a User Interface version of the ItemCollection, which allows you to add items to a collection that appears in the user interface from a background thread. Adding an item to a List or ItemCollection from a background thread normally isn't safe and can cause an exception.
 ```csharp
 namespace Atlas.Tabs.Test
 {
 	public class TabSample : ITab
 	{
-		public TabInstance Create() { return new Instance(); }
+		private int count;
+
+		public TabSample(int count)
+		{
+			this.count = count;
+		}
+
+		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance
 		{
-			private ItemCollection<SampleItem> sampleItems;
+			private TabSample tab;
 
-			public override void Load(Call call)
+			private ItemCollectionUI<SampleItem> sampleItems;
+
+			public Instance(TabSample tab)
 			{
-				sampleItems = new ItemCollection<SampleItem>();
-				AddItems(5);
+				this.tab = tab;
+			}
 
-				tabModel.Items = new ItemCollection<ListItem>("Items")
+			public override void Load(Call call, TabModel model)
+			{
+				sampleItems = new ItemCollectionUI<SampleItem>();
+				AddItems(tab.count);
+
+				model.Items = new ItemCollection<ListItem>("Items")
 				{
 					new ListItem("Sample Items", sampleItems),
 					new ListItem("Collections", new TabTestGridCollectionSize()),
-					new ListItem("Child Tab", new TabSample()), // recursive
+					new ListItem("Recursive Tab", new TabSample()), // recursive
 				};
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
-					new TaskDelegate("Sleep 10s", Sleep, true),
-					new TaskAction("Add 5 Items", new Action(() => AddItems(5)), false), // Foreground task so we can modify collection
+					new TaskDelegateAsync("Sleep 10s", SleepAsync),
+					new TaskDelegate("Add Items", AddItems),
 				};
 			}
 
-			private void Sleep(Call call)
+			private async Task SleepAsync(Call call)
 			{
-				call.taskInstance.ProgressMax = 10;
+				call.TaskInstance.ProgressMax = 10;
 				for (int i = 0; i < 10; i++)
 				{
-					System.Threading.Thread.Sleep(1000);
-					call.log.Add("Slept 1 second");
-					call.taskInstance.Progress++;
+					await Task.Delay(1000);
+					call.Log.Add("Slept 1 second");
+					call.TaskInstance.Progress++;
 				}
 			}
 
 			private void AddItems(int count)
 			{
 				for (int i = 0; i < count; i++)
-					sampleItems.Add(new SampleItem(sampleItems.Count, "Item " + sampleItems.Count.ToString()));
+					sampleItems.Add(new SampleItem(sampleItems.Count, "Item " + sampleItems.Count));
 			}
 		}
 	}
@@ -130,14 +148,11 @@ namespace Atlas.Tabs.Test
 
 		public SampleItem(int id, string name)
 		{
-			this.ID = id;
-			this.Name = name;
+			ID = id;
+			Name = name;
 		}
 
-		public override string ToString()
-		{
-			return Name;
-		}
+		public override string ToString() => Name;
 	}
 }
 ```
@@ -148,7 +163,7 @@ namespace Atlas.Tabs.Test
 
 ## Async calls
   - Tabs can load as Async by implementing the `ITabAsync` interface for a `TabInstance`
-  - This allows the UI to continue responding to user actions while it's loading
+  - This allows calling async methods
   - You can also make calls async by using `TaskDelegateAsync`
     - These are useful when you need to make lots of parallel async calls
 ```csharp
@@ -162,12 +177,12 @@ namespace Atlas.Tabs.Test.Actions
 		{
 			//private ItemCollection<ListItem> items;
 
-			public async Task LoadAsync(Call call)
+			public async Task LoadAsync(Call call, TabModel model)
 			{
 				await Task.Delay(2000);
-				tabModel.AddObject("Finished");
+				model.AddObject("Finished");
 
-				tabModel.Actions = new ItemCollection<TaskCreator>()
+				model.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Add Log Entry", AddEntry),
 					new TaskDelegateAsync("Sleep (Async)", SleepAsync, true, true),
@@ -177,18 +192,20 @@ namespace Atlas.Tabs.Test.Actions
 			private int counter = 1;
 			private void AddEntry(Call call)
 			{
-				call.log.Add("New Log entry", new Tag("counter", counter++));
+				call.Log.Add("New Log entry", new Tag("counter", counter++));
 			}
 
 			private async Task SleepAsync(Call call)
 			{
-				call.log.Add("Sleeping for 3 seconds");
+				call.Log.Add("Sleeping for 3 seconds");
 				await Task.Delay(3000);
-				call.log.Add("Waking Up");
+				call.Log.Add("Waking Up");
 			}
 		}
 	}
 }
 ```
+
+## Toolbars
 
 ## Custom Controls

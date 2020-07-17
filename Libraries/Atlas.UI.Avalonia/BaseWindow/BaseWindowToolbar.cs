@@ -164,28 +164,4 @@ namespace Atlas.UI.Avalonia
 			buttonSnapshotCancel.IsVisible = visible;
 		}
 	}
-
-	// can't get derived class to work
-	/*public class ToolbarButton : Button
-	{
-		public ToolbarButton()
-		{
-			Background = new SolidColorBrush(Colors.Blue);
-
-			//PointerEnter += ToolbarButton_PointerEnter;
-			//PointerLeave += ToolbarButton_PointerLeave;
-		}
-
-		private void ToolbarButton_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			Background = new SolidColorBrush(Colors.Blue);
-			//InvalidateVisual();
-		}
-
-		private void ToolbarButton_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
-		{
-			Background = new SolidColorBrush(Colors.Green);
-			//InvalidateVisual();
-		}
-	}*/
 }
