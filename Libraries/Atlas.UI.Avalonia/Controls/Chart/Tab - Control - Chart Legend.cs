@@ -51,6 +51,8 @@ namespace Atlas.UI.Avalonia.Controls
 					Margin = new Thickness(2, 2, 2, 2),
 					HorizontalAlignment = HorizontalAlignment.Right,
 				};
+				if (listGroup.UnitName != null)
+					textBlockSum.Text += " - " + listGroup.UnitName;
 			}
 
 			RefreshModel();

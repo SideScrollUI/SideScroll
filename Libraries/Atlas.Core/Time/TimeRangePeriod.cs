@@ -159,6 +159,8 @@ namespace Atlas.Core
 		public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
 		{
 			var periods = Periods(dataPoints, startTime, endTime, periodDuration);
+			if (periods == null)
+				return null;
 			var timeRangeValues = new List<TimeRangeValue>();
 			foreach (var period in periods)
 			{
