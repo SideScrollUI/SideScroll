@@ -18,18 +18,19 @@ namespace Atlas.Core
 		}
 	}
 
-	// subclass ItemCollection? NamedItemCollection?
-	public interface INamedItemCollection
+	public interface IItemCollection
 	{
 		string ColumnName { get; set; }
+		bool Skippable { get; set; }
 	}
 
 	// Winforms really need IBindingList, but Wpf DataGrid tries to use IBindingList to sort if available (bad)
 	// Would be nice to make this thread safe to make storing logs easier?
-	public class ItemCollection<T> : ObservableCollection<T>, IList, INamedItemCollection, ICollection, IEnumerable, IComparer //, IRaiseItemChangedEvents //
+	public class ItemCollection<T> : ObservableCollection<T>, IList, IItemCollection, ICollection, IEnumerable, IComparer //, IRaiseItemChangedEvents //
 	{
 		public string ColumnName { get; set; }
 		public string Label { get; set; }
+		public bool Skippable { get; set; } = true;
 
 		private CustomComparer customComparer = new CustomComparer();
 

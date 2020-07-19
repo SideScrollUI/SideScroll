@@ -24,6 +24,9 @@ namespace Atlas.UI.Avalonia
 		//public Project project;
 		private BaseWindow baseWindow;
 
+		public RelayCommand commandBindingBack;
+		public RelayCommand commandBindingForward;
+
 		public BaseWindowToolbar(BaseWindow baseWindow) : base(null)
 		{
 			this.baseWindow = baseWindow;
@@ -50,13 +53,13 @@ namespace Atlas.UI.Avalonia
 
 			//RoutedCommand commandBack = new RoutedCommand("Back", GetType());
 
-			var commandBindingBack = new RelayCommand(
+			commandBindingBack = new RelayCommand(
 				(obj) => CommandBackCanExecute(obj),
-				(obj) => CommandBackExecute(obj));
+				(obj) => baseWindow.SeekBackward());
 
-			var commandBindingForward = new RelayCommand(
+			commandBindingForward = new RelayCommand(
 				(obj) => CommandForwardCanExecute(obj),
-				(obj) => CommandForwardExecute(obj));
+				(obj) => baseWindow.SeekForward());
 
 			//project.navigator.CanSeekBackwardOb
 			//CommandBinder.
@@ -67,8 +70,8 @@ namespace Atlas.UI.Avalonia
 			//HotKeyManager.SetHotKey(button, gesture1);
 
 			// gray color 3289C7
-			buttonBack = AddButton("Back", Icons.Streams.Back, commandBindingBack);
-			buttonForward = AddButton("Forward", Icons.Streams.Forward, commandBindingForward);
+			buttonBack = AddButton("Back (Alt+Left)", Icons.Streams.Back, commandBindingBack);
+			buttonForward = AddButton("Forward (Alt+Right)", Icons.Streams.Forward, commandBindingForward);
 
 			AddSeparator();
 			buttonRefresh = AddButton("Refresh (Ctrl+R)", Icons.Streams.Refresh);
@@ -125,38 +128,10 @@ namespace Atlas.UI.Avalonia
 			//return project.Navigator.CanSeekBackward;
 		}
 
-		private void CommandBackExecute(object obj)
-		{
-			Bookmark bookmark = baseWindow.project.Navigator.SeekBackward();
-			if (bookmark != null)
-				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
-		}
-
-		private void ButtonBack_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			Bookmark bookmark = baseWindow.project.Navigator.SeekBackward();
-			if (bookmark != null)
-				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
-		}
-
 		private bool CommandForwardCanExecute(object obj)
 		{
 			return true;
 			//return project.Navigator.CanSeekForward;
-		}
-
-		private void CommandForwardExecute(object obj)
-		{
-			Bookmark bookmark = baseWindow.project.Navigator.SeekForward();
-			if (bookmark != null)
-				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
-		}
-
-		private void ButtonForward_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			Bookmark bookmark = baseWindow.project.Navigator.SeekForward();
-			if (bookmark != null)
-				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		public void SetSnapshotVisible(bool visible)

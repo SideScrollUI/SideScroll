@@ -16,7 +16,7 @@ namespace Atlas.Tabs
 		public virtual UserSettings UserSettings { get; set; }
 
 		public DataRepo DataShared => new DataRepo(DataRepoPath, "Shared");
-		public DataRepo DataApp => new DataRepo(DataRepoPath, "Programs/" + Name + "/" + ProjectSettings.DataVersion);
+		public DataRepo DataApp => new DataRepo(DataRepoPath, "Versions/" + ProjectSettings.DataVersion);
 
 		public HttpCacheManager httpCacheManager = new HttpCacheManager();
 
@@ -24,7 +24,7 @@ namespace Atlas.Tabs
 		public BookmarkNavigator Navigator { get; set; } = new BookmarkNavigator();
 		public TaskInstanceCollection Tasks { get; set; } = new TaskInstanceCollection();
 
-		private string DataRepoPath => Paths.Combine(UserSettings.ProjectPath, UserSettings.BookmarkPath?.HashSha256(), "Data");
+		private string DataRepoPath => Paths.Combine(UserSettings.ProjectPath, UserSettings.BookmarkPath?.HashSha256() ?? "Current", "Data");
 
 
 		public Project()

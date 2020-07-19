@@ -367,6 +367,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
+			if (iList == null) // reloading detaches list temporarily?
+				return;
+
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
 				// Group up any new items after the 1st one
@@ -545,7 +548,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (propertyColumns.Count == 0)
 				return;
 
-			if (iList is INamedItemCollection itemCollection && itemCollection.ColumnName != null)
+			if (iList is IItemCollection itemCollection && itemCollection.ColumnName != null)
 			{
 				propertyColumns[0].label = itemCollection.ColumnName;
 			}

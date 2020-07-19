@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Atlas.Serialize
 {
@@ -303,6 +301,8 @@ namespace Atlas.Serialize
 
 	public class DataRepoInstance<T> : IDataRepoInstance
 	{
+		private const string DefaultName = ".Default"; // todo: support multiple directory levels?
+
 		public DataRepo dataRepo;
 		public string Directory { get; set; }
 
@@ -312,14 +312,19 @@ namespace Atlas.Serialize
 			this.Directory = saveDirectory;
 		}
 
+		public void Save(Call call, T item)
+		{
+			dataRepo.Save(Directory, DefaultName, item, call);
+		}
+
 		public void Save(Call call, string key, T item)
 		{
 			dataRepo.Save(Directory, key, item, call);
 		}
 
-		public T Load(Call call, string key, bool createIfNeeded = false, bool lazy = false)
+		public T Load(Call call, string key = null, bool createIfNeeded = false, bool lazy = false)
 		{
-			return dataRepo.Load<T>(Directory, key, call, createIfNeeded, lazy);
+			return dataRepo.Load<T>(Directory, key ?? DefaultName, call, createIfNeeded, lazy);
 		}
 
 		public DataItemCollection<T> LoadAll(Call call = null, bool lazy = false)
@@ -332,9 +337,9 @@ namespace Atlas.Serialize
 			return dataRepo.LoadAllSorted<T>(call, Directory, lazy);
 		}
 
-		public void Delete(string key)
+		public void Delete(string key = null)
 		{
-			dataRepo.Delete<T>(Directory, key);
+			dataRepo.Delete<T>(Directory, key ?? DefaultName);
 		}
 
 		public void DeleteAll()

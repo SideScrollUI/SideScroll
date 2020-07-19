@@ -416,20 +416,40 @@ namespace Atlas.UI.Avalonia
 			contentGrid.MinWidth = scrollViewer.Offset.X + scrollViewer.Bounds.Size.Width;
 		}
 
+		public void SeekBackward()
+		{
+			Bookmark bookmark = project.Navigator.SeekBackward();
+			if (bookmark != null)
+				tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
+		}
+
+		public void SeekForward()
+		{
+			Bookmark bookmark = project.Navigator.SeekForward();
+			if (bookmark != null)
+				tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
+		}
+
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
 			base.OnKeyDown(e);
 
 			if (e.Key == Key.Left)
 			{
-				ScrollLeft(KeyboardIncrementWidth);
+				if (e.KeyModifiers.HasFlag(KeyModifiers.Alt))
+					SeekBackward();
+				else
+					ScrollLeft(KeyboardIncrementWidth);
 				e.Handled = true;
 				return;
 			}
 
 			if (e.Key == Key.Right)
 			{
-				ScrollRight(KeyboardIncrementWidth);
+				if (e.KeyModifiers.HasFlag(KeyModifiers.Alt))
+					SeekForward();
+				else
+					ScrollRight(KeyboardIncrementWidth);
 				e.Handled = true;
 				return;
 			}

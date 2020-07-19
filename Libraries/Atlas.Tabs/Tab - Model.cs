@@ -157,23 +157,7 @@ namespace Atlas.Tabs
 							iNewList.Add(child);
 						ItemList.Add(iNewList);
 					}
-					// skip over single items that will take up lots of room (always show ListItems though)
-					Skippable = false;
-					if (ItemList[0].Count == 1)
-					{
-						var firstItem = ItemList[0][0];
-						var skippableAttribute = firstItem.GetType().GetCustomAttribute<SkippableAttribute>();
-						if (skippableAttribute != null)
-						{
-							Skippable = skippableAttribute.Value;
-						}
-						else if (!(firstItem is ITab) && TabDataSettings.GetVisibleProperties(elementType).Count > 1)
-						{
-							Skippable = true;
-						}
-
-						//Skippable = (skippableAttribute != null) || (!(firstItem is ITab) && TabDataSettings.GetVisibleProperties(elementType).Count > 1);
-					}
+					UpdateSkippable(elementType);
 					return;
 				}
 			}
@@ -202,6 +186,32 @@ namespace Atlas.Tabs
 					return;
 				// show as Name/Value columns for fields and properties
 				AddObject(type);
+			}
+		}
+
+		private void UpdateSkippable(Type elementType)
+		{
+			// skip over single items that will take up lots of room (always show ListItems though)
+			Skippable = false;
+			/*if (ItemList is ItemCollection<> itemCollection)
+			{
+			}*/
+			if (ItemList[0].Count == 1)
+			{
+				if (ItemList[0] is IItemCollection itemCollection && itemCollection.Skippable == false)
+					return;
+				var firstItem = ItemList[0][0];
+				var skippableAttribute = firstItem.GetType().GetCustomAttribute<SkippableAttribute>();
+				if (skippableAttribute != null)
+				{
+					Skippable = skippableAttribute.Value;
+				}
+				else if (!(firstItem is ITab) && TabDataSettings.GetVisibleProperties(elementType).Count > 1)
+				{
+					Skippable = true;
+				}
+
+				//Skippable = (skippableAttribute != null) || (!(firstItem is ITab) && TabDataSettings.GetVisibleProperties(elementType).Count > 1);
 			}
 		}
 
