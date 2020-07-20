@@ -340,6 +340,7 @@ namespace Atlas.UI.Avalonia.Controls
 				if (column is DataGridPropertyTextColumn textColumn)
 				{
 					desiredWidth = Math.Max(desiredWidth, textColumn.MinDesiredWidth);
+					desiredWidth = Math.Min(desiredWidth, textColumn.MaxDesiredWidth);
 					if (textColumn.AutoSize)
 					{
 						column.MinWidth = Math.Max(column.MinWidth, Math.Min(MaxAutoSizeMinColumnWidth, desiredWidth));
@@ -571,8 +572,8 @@ namespace Atlas.UI.Avalonia.Controls
 		public void AddColumn(string label, PropertyInfo propertyInfo)
 		{
 			bool propertyEditable = (propertyInfo.GetCustomAttribute(typeof(EditingAttribute)) != null);
-			MinWidthAttribute attributeColumnMinWidth = propertyInfo.GetCustomAttribute<MinWidthAttribute>();
-			MaxWidthAttribute attributeColumnMaxWidth = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
+			MinWidthAttribute attributeMinWidth = propertyInfo.GetCustomAttribute<MinWidthAttribute>();
+			MaxWidthAttribute attributeMaxWidth = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
 			AutoSizeAttribute attributeAutoSize = propertyInfo.GetCustomAttribute<AutoSizeAttribute>();
 			bool isReadOnly = true;// (tabModel.Editing == false || propertyEditable == false || !propertyInfo.CanWrite);
 
@@ -614,7 +615,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			//AvaloniaProperty avaloniaProperty = AvaloniaProperty.DirectProperty<propertyInfo.DeclaringType, propertyInfo.PropertyType> ()
 
-			int maxDesiredWidth = attributeColumnMaxWidth != null ? attributeColumnMaxWidth.MaxWidth : MaxColumnWidth;
+			int maxDesiredWidth = attributeMaxWidth != null ? attributeMaxWidth.MaxWidth : MaxColumnWidth;
 			DataGridBoundColumn column;
 			/*if (tabModel.Editing == false)
 			{
@@ -629,7 +630,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (propertyInfo.PropertyType == typeof(bool))
 				{
-					DataGridCheckBoxColumn checkBoxColumn = new DataGridCheckBoxColumn();
+					var checkBoxColumn = new DataGridPropertyCheckBoxColumn(propertyInfo, isReadOnly);
 					//checkBoxColumn.PropertyChanged
 					//if (!isReadOnly)
 					//	checkBoxColumn.OnModified += Item_OnModified;
@@ -640,8 +641,8 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					//if (isReadOnly)
 					var textColumn = new DataGridPropertyTextColumn(dataGrid, propertyInfo, isReadOnly, maxDesiredWidth);
-					if (attributeColumnMinWidth != null)
-						textColumn.MinDesiredWidth = attributeColumnMinWidth.MinWidth;
+					if (attributeMinWidth != null)
+						textColumn.MinDesiredWidth = attributeMinWidth.MinWidth;
 					if (attributeAutoSize != null)
 						textColumn.AutoSize = true;
 					column = textColumn;
@@ -649,14 +650,14 @@ namespace Atlas.UI.Avalonia.Controls
 					//	column = new DataGridTextColumn();
 				}
 			}
-			//DataGridTextColumn column = new DataGridTextColumn();
+			//var column = new DataGridTextColumn();
 			column.Header = label;
 			column.IsReadOnly = isReadOnly;
 			//column.Bind(avaloniaProperty, iList);
 			//column.Width = new DataGridLength(200);// new DataGridLength(1, DataGridLengthUnitType.Star);
-			column.MaxWidth = attributeColumnMaxWidth != null ? attributeColumnMaxWidth.MaxWidth : MaxColumnWidth;
-			if (attributeColumnMinWidth != null)
-				column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto, attributeColumnMinWidth.MinWidth, double.NaN);
+			column.MaxWidth = attributeMaxWidth != null ? attributeMaxWidth.MaxWidth : MaxColumnWidth;
+			if (attributeMinWidth != null)
+				column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto, attributeMinWidth.MinWidth, double.NaN);
 			//column.HeaderCell.AreSeparatorsVisible = true;
 			//column.HeaderCell.SeparatorBrush = new SolidColorBrush(Colors.Black); // Header Cell styles aren't implemented yet :(
 

@@ -193,6 +193,7 @@ namespace Atlas.Tabs
 				tabBookmark.Import(project);
 		}
 
+		// Returns the deepest TabBookmark that is rootable
 		public TabBookmark GetLeaf()
 		{
 			foreach (TabBookmark tabBookmark in ChildBookmarks.Values)

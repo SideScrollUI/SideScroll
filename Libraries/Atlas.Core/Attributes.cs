@@ -14,25 +14,25 @@ namespace Atlas.Core
 		}
 	}
 
-	// ->Tabs: Use the specified name instead of the field/property name
+	// ->Tabs: Currently used for detecting for detecting parent/child loops, merge this with [DataKey]?
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class KeyAttribute : Attribute
 	{
 	}
 
-	// ->Tabs: Use the specified name instead of the field/property name
+	// ->Tabs: DataGrids use this as a unique key when matching rows
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class DataKeyAttribute : Attribute
 	{
 	}
 
-	// ->Tabs: Use the specified name instead of the field/property name
+	// ->Tabs: DataGrids use this as a unique key when matching rows
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
 	public class DataValueAttribute : Attribute
 	{
 	}
 
-	// ->Tabs: Use the specified name instead of the field/property name
+	// ->Tabs: If set, this method will appear as an Action (rename to [Action]?)
 	[AttributeUsage(AttributeTargets.Method)]
 	public class VisibleAttribute : Attribute
 	{

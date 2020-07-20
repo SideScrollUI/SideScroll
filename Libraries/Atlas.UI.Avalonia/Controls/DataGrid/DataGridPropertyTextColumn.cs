@@ -68,10 +68,11 @@ namespace Atlas.UI.Avalonia
 			//cell.Background = GetCellBrush(cell, dataItem);
 			cell.MaxHeight = 100; // don't let them have more than a few lines each
 
+			// Support mixed control types?
 			// this needs to get set when the cell content value changes, see LoadingRow()
 			/*if (GetBindingType(dataItem) == typeof(bool))
 			{
-				CheckBox checkbox = new CheckBox()
+				var checkbox = new CheckBox()
 				{
 					Margin = new Thickness(10, 0, 0, 0), // aligns with header title better than centering
 				};
@@ -79,7 +80,6 @@ namespace Atlas.UI.Avalonia
 				//unformattedBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 				if (Binding != null)
 					checkbox.Bind(CheckBox.IsCheckedProperty, Binding);
-				//checkbox.SetBinding(CheckBox.IsCheckedProperty, unformattedBinding);
 				if (IsReadOnly)
 					checkbox.IsHitTestVisible = false; // disable changing
 				//formattedBinding = unformattedBinding;
@@ -358,9 +358,7 @@ namespace Atlas.UI.Avalonia
 
 		Binding GetFormattedTextBinding()
 		{
-			Binding binding = (Binding)Binding;
-			if (binding == null)
-				binding = new Binding(propertyInfo.Name);
+			Binding binding = Binding as Binding ?? new Binding(propertyInfo.Name);
 
 			if (formattedBinding == null)
 			{

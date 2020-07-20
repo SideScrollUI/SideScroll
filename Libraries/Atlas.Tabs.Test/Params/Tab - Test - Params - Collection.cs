@@ -1,10 +1,6 @@
 ﻿using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Serialize;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading.Tasks;
 
 namespace Atlas.Tabs.Test
 {
@@ -43,6 +39,19 @@ namespace Atlas.Tabs.Test
 				model.AddObject(toolbar);
 			}
 
+			private void LoadSavedItems(Call call, TabModel model)
+			{
+				dataRepoParams = DataApp.Open<ParamTestItem>(call, "CollectionTest");
+				DataRepoInstance = dataRepoParams;
+				items = new ItemCollection<ParamTestItem>();
+				var dataRefs = dataRepoParams.LoadAllSorted(call);
+				foreach (var dataRef in dataRefs)
+				{
+					items.Add(dataRef.Value);
+				}
+				model.Items = items;
+			}
+
 			private void New(Call call)
 			{
 			}
@@ -57,19 +66,6 @@ namespace Atlas.Tabs.Test
 					parameters = clone,
 				};*/
 				items.Add(clone);
-			}
-
-			private void LoadSavedItems(Call call, TabModel model)
-			{
-				dataRepoParams = DataApp.Open<ParamTestItem>(call, "CollectionTest");
-				DataRepoInstance = dataRepoParams;
-				items = new ItemCollection<ParamTestItem>();
-				var dataRefs = dataRepoParams.LoadAllSorted(call);
-				foreach (var dataRef in dataRefs)
-				{
-					items.Add(dataRef.Value);
-				}
-				model.Items = items;
 			}
 		}
 	}
