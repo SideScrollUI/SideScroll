@@ -20,11 +20,25 @@ namespace Atlas.Core.Time
 			TimeZoneInfo = timeZoneInfo;
 		}
 
+		public TimeZoneView(string abbreviation, string name, TimeSpan timeSpan)
+		{
+			Abbreviation = abbreviation;
+			Name = name;
+			try
+			{
+				TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(name);
+			}
+			catch (Exception)
+			{
+				TimeZoneInfo = TimeZoneInfo.CreateCustomTimeZone(name, timeSpan, name, name);
+			}
+		}
+
 		public override string ToString()
 		{
 			if (Abbreviation == Name)
 				return Abbreviation;
-			return Abbreviation + " - " + Name;
+			return Abbreviation + " - " + Name + ": " + TimeZoneInfo.BaseUtcOffset.Formatted();
 		}
 
 		public DateTime ConvertTimeToUtc(DateTime dateTime)
@@ -44,9 +58,11 @@ namespace Atlas.Core.Time
 		{
 			Utc,
 			Local,
-			new TimeZoneView("PDT", "Pacific Standard Time", TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time")),
-			new TimeZoneView("EST", "Eastern Standard Time", TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")),
-			new TimeZoneView("SGT", "Singapore Time", TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time")),
+			new TimeZoneView("PDT", "Pacific Daylight Time", TimeSpan.FromHours(-7)),
+			new TimeZoneView("PST", "Pacific Standard Time", TimeSpan.FromHours(-8)),
+			new TimeZoneView("EDT", "Eastern Daylight Time", TimeSpan.FromHours(-4)),
+			new TimeZoneView("EST", "Eastern Standard Time", TimeSpan.FromHours(-5)),
+			new TimeZoneView("SGT", "Singapore Standard Time", TimeSpan.FromHours(8)),
 		};
 	}
 
