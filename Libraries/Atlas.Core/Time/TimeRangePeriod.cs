@@ -156,6 +156,16 @@ namespace Atlas.Core
 			return timeRangeValues;
 		}
 
+		public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, int minPeriods, int maxPeriods)
+		{
+			double durationSeconds = Math.Ceiling(endTime.Subtract(startTime).TotalSeconds);
+			int numPeriods = Math.Max(minPeriods, Math.Min(maxPeriods, (int)durationSeconds));
+			double periodDuration = Math.Ceiling(durationSeconds / numPeriods);
+			startTime = startTime.Trim();
+
+			return PeriodCounts(dataPoints, startTime, endTime, TimeSpan.FromSeconds(periodDuration));
+		}
+
 		public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
 		{
 			var periods = Periods(dataPoints, startTime, endTime, periodDuration);

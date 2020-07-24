@@ -54,7 +54,7 @@
 
         <!-- Links -->
         <SolidColorBrush x:Key="ThemeHasLinksBrush">#ebc17f</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeNoLinksBrush">LightGray</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeNoLinksBrush">#d8d8d8</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#272727</SolidColorBrush>
 

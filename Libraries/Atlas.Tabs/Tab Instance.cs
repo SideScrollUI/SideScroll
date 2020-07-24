@@ -577,7 +577,7 @@ namespace Atlas.Tabs
 			bookmark.Type = iTab?.GetType();
 			//bookmark.tabBookmark.Name = Label;
 			GetBookmark(bookmark.TabBookmark);
-			bookmark = bookmark.Clone<Bookmark>(TaskInstance.Call); // sanitize
+			bookmark = bookmark.Clone<Bookmark>(TaskInstance.Call); // Sanitize and test bookmark
 			return bookmark;
 		}
 

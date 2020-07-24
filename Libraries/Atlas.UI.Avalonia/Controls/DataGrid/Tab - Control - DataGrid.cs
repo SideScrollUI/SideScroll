@@ -497,11 +497,13 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
 		{
-			DataGridRow row = e.Row;
+			// Single click deselect
 			var pointer = e.PointerPressedEventArgs.GetCurrentPoint(this);
-			if (pointer.Properties.IsLeftButtonPressed && row != null && dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
+			if (pointer.Properties.IsLeftButtonPressed && e.Row != null && dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
 			{
-				if (dataGrid.SelectedItems.Contains(row.DataContext))
+				if (e.Cell.Content is CheckBox)
+					return;
+				if (dataGrid.SelectedItems.Contains(e.Row.DataContext))
 				{
 					Dispatcher.UIThread.Post(ClearSelection, DispatcherPriority.Background);
 				}
@@ -840,7 +842,7 @@ namespace Atlas.UI.Avalonia.Controls
 					firstValidObject = obj;
 
 				Type type = value.GetType();
-				if (TabModel.ObjectHasChildren(value) && type.IsEnum == false)
+				if (TabModel.ObjectHasLinks(value) && type.IsEnum == false)
 				{
 					// make sure there's something present
 					if (value is ICollection collection && collection.Count == 0)
@@ -1093,11 +1095,11 @@ namespace Atlas.UI.Avalonia.Controls
 			var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
 			if (keyProperties.Count > 0)
 			{
-				return keyProperties[0].GetValue(obj).ToString();
+				return keyProperties[0].GetValue(obj)?.ToString();
 			}
 			else if (keyFields.Count > 0)
 			{
-				return keyFields[0].GetValue(obj).ToString();
+				return keyFields[0].GetValue(obj)?.ToString();
 			}
 			return null;
 		}

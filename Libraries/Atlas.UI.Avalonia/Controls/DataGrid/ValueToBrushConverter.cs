@@ -20,14 +20,11 @@ namespace Atlas.UI.Avalonia
 
 		public sealed class BrushColors
 		{
-			public ISolidColorBrush HasChildren => Theme.HasLinks;
-			public ISolidColorBrush NoChildren => Theme.NoLinks;
+			public ISolidColorBrush HasLinks => Theme.HasLinks;
+			public ISolidColorBrush NoLinks => Theme.NoLinks;
 			public ISolidColorBrush Editable { get; set; } = Theme.Editable;
 		}
 		internal static BrushColors StyleBrushes { get; set; } = new BrushColors();
-
-		//public SolidColorBrush HasChildrenBrush { get; set; } = (SolidColorBrush)(new BrushConverter().ConvertFrom(ColorHasChildren));
-		//public SolidColorBrush EditableBrush { get; set; } = new SolidColorBrush(Theme.EditableColor);
 
 		public bool Editable { get; set; } = false;
 
@@ -37,14 +34,13 @@ namespace Atlas.UI.Avalonia
 			{
 				if (value is DictionaryEntry || propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
-					bool hasChildren = TabModel.ObjectHasChildren(value, true);
-					if (hasChildren)
-						return StyleBrushes.HasChildren;
-					//return Brushes.Moccasin;
+					bool hasLinks = TabModel.ObjectHasLinks(value, true);
+					if (hasLinks)
+						return StyleBrushes.HasLinks;
 					else if (Editable && value is ListMember listMember && listMember.Editable)
 						return StyleBrushes.Editable;
 					else
-						return StyleBrushes.NoChildren;
+						return StyleBrushes.NoLinks;
 				}
 			}
 			catch (InvalidCastException)
@@ -93,7 +89,6 @@ namespace Atlas.UI.Avalonia
 	}
 }
 /*
-Not used
-FormattedTextColumn used instead for now
+Used by DataGridPropertyTextColumn
 Need to hook this into Cell.OnPaint for hover?
 */

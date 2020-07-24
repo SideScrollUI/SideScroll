@@ -95,7 +95,7 @@ namespace Atlas.Tabs
 
 		public static TabModel Create(string name, object obj)
 		{
-			if (ObjectHasChildren(obj) == false)
+			if (ObjectHasLinks(obj) == false)
 				return null;
 			TabModel tabModel = new TabModel(name);
 			tabModel.AddData(obj);
@@ -182,7 +182,7 @@ namespace Atlas.Tabs
 			}
 			else
 			{
-				if (!ObjectHasChildren(obj))
+				if (!ObjectHasLinks(obj))
 					return;
 				// show as Name/Value columns for fields and properties
 				AddObject(type);
@@ -443,7 +443,7 @@ namespace Atlas.Tabs
 		}
 
 		// Might want to move this elsewhere or refactor
-		public static bool ObjectHasChildren(object obj, bool ignoreEmpty = false)
+		public static bool ObjectHasLinks(object obj, bool ignoreEmpty = false)
 		{
 			if (obj == null)
 				return false;

@@ -103,7 +103,7 @@ namespace Atlas.Tabs
 
 		public static ItemCollection<ListMember> Sort(ItemCollection<ListMember> items)
 		{
-			var sorted = new ItemCollection<ListMember>(items.OrderByDescending(i => TabModel.ObjectHasChildren(i, true)).ToList());
+			var sorted = new ItemCollection<ListMember>(items.OrderByDescending(i => TabModel.ObjectHasLinks(i, true)).ToList());
 			return sorted;
 		}
 	}

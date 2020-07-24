@@ -144,7 +144,7 @@ namespace Atlas.Tabs
 		// This can be slow due to lazy property loading
 		public static ItemCollection<ListProperty> Sort(ItemCollection<ListProperty> listProperties)
 		{
-			var sorted = new ItemCollection<ListProperty>(listProperties.OrderByDescending(i => TabModel.ObjectHasChildren(i, true)).ToList());
+			var sorted = new ItemCollection<ListProperty>(listProperties.OrderByDescending(i => TabModel.ObjectHasLinks(i, true)).ToList());
 			return sorted;
 		}
 	}
