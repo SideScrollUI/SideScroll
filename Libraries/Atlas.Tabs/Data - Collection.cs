@@ -2,82 +2,97 @@
 using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace Atlas.Tabs
 {
-	public interface ILoadData
+	public interface IDataTab
 	{
 		void Load(Call call, object obj);
+		event EventHandler<EventArgs> OnDelete;
 	}
 
-	// An Item collection that shows adds a Tab interface to every item
-	public class DataCollection<TDataType, TTabType> where TTabType : ILoadData, new()
+	// An Item collection that shows a Tab interface for every item
+	public class DataCollection<TDataType, TTabType> where TTabType : IDataTab, new()
 	{
 		//public static string DataKey = "Saved";
 		//public event EventHandler<EventArgs> OnDelete;
 
 		public string path;
-		//private Project project;
 		public ItemCollectionUI<TTabType> Items { get; set; } = new ItemCollectionUI<TTabType>();
-		public TTabType NewBookmark { get; set; }
-		private DataRepoInstance<TDataType> dataRepoInstance;
+		public TTabType NewTabItem { get; set; }
+		private DataRepoView<TDataType> dataRepoInstance;
+		private Dictionary<TTabType, IDataItem> dataItemLookup;
 
-		public DataCollection(DataRepoInstance<TDataType> dataRepoInstance)
+		public DataCollection(DataRepoView<TDataType> dataRepoView)
 		{
-			this.dataRepoInstance = dataRepoInstance;
-			//this.project = project;
+			this.dataRepoInstance = dataRepoView;
+			dataRepoInstance.Items.CollectionChanged += Items_CollectionChanged;
 			Reload();
 			//Items.CollectionChanged += Items_CollectionChanged;
 		}
 
-		/*private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-		}*/
+			if (e.Action == NotifyCollectionChangedAction.Add)
+			{
+				foreach (IDataItem item in e.NewItems)
+				{
+					Add(item);
+				}
+			}
+		}
 
 		public void Reload()
 		{
 			Items.Clear();
-			// Add ID indices?
-			/*ItemCollection<string> ids = project.DataShared.GetObjectIds(typeof(Bookmark));
-			foreach (string id in ids)
-			{
-				if (id == TabInstance.CurrentBookmarkName)
-					continue;
-				BookmarkName bookmarkName = new BookmarkName(id);
-				Names.Add(bookmarkName);
-			}*/
+			dataItemLookup = new Dictionary<TTabType, IDataItem>();
 
 			//dataRepoBookmarks = project.DataApp.Open<TDataType>(null, DataKey);
-			foreach (TDataType bookmark in dataRepoInstance.LoadAllSorted().Values)
+			foreach (DataItem<TDataType> dataItem in dataRepoInstance.Items)
 			{
 				// for autoselecting?
 				//if (bookmark.Name == TabInstance.CurrentBookmarkName)
 				//	continue;
-				Add(bookmark);
+				Add(dataItem);
 			}
 		}
 
-		public TTabType Add(TDataType dataObject)
+		public TTabType Add(IDataItem dataItem)
 		{
 			var tabItem = new TTabType();
-			//tabItem.OnDelete += Item_OnDelete;
+			tabItem.Load(new Call(), dataItem.Object);
+			tabItem.OnDelete += Item_OnDelete;
+			Items.Add(tabItem);
+			dataItemLookup.Add(tabItem, dataItem);
+			return tabItem;
+		}
+
+		/*public TTabType Add(TDataType dataObject)
+		{
+			var tabItem = new TTabType();
+			tabItem.Load(new Call(), dataObject);
+			tabItem.OnDelete += Item_OnDelete;
 			Items.Add(tabItem);
 			return tabItem;
 		}
 
 		public void AddNew(Call call, TDataType dataObject)
 		{
-			Remove(dataObject.ToString()); // Remove previous bookmark
+			Remove(dataObject.ToString()); // Remove previous version
 			dataRepoInstance.Save(call, dataObject.ToString(), dataObject);
-			NewBookmark = Add(dataObject);
-		}
+			NewTabItem = Add(dataObject);
+		}*/
 
 		private void Item_OnDelete(object sender, EventArgs e)
 		{
-			TTabType bookmark = (TTabType)sender;
-			dataRepoInstance.Delete(bookmark.ToString());
-			Items.Remove(bookmark);
+			TTabType tab = (TTabType)sender;
+			if (!dataItemLookup.TryGetValue(tab, out IDataItem dataItem))
+				return;
+
+			dataRepoInstance.Delete(dataItem.Key);
+			Items.Remove(tab);
 			//Reload();
 		}
 

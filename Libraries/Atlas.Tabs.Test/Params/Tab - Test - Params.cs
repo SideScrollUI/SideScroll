@@ -14,6 +14,7 @@ namespace Atlas.Tabs.Test
 				{
 					new ListItem("Tasks", new TabTestParamsTasks()),
 					new ListItem("Collection", new TabTestParamsCollection()),
+					new ListItem("Data Tabs", new TabTestParamsDataTabs()),
 				};
 			}
 		}

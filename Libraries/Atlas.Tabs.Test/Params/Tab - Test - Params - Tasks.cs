@@ -61,7 +61,7 @@ namespace Atlas.Tabs.Test
 		public class ParamTestResult
 		{
 			public ParamTestItem parameters;
-			public string String => parameters.String;
+			public string String => parameters.Name;
 		}
 	}
 }

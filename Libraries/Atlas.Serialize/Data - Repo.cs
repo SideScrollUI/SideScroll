@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Atlas.Serialize
 {
@@ -29,6 +30,11 @@ namespace Atlas.Serialize
 		public DataRepoInstance<T> Open<T>(Call call, string saveDirectory)
 		{
 			return new DataRepoInstance<T>(this, saveDirectory);
+		}
+
+		public DataRepoView<T> OpenView<T>(Call call, string saveDirectory)
+		{
+			return new DataRepoView<T>(this, saveDirectory);
 		}
 
 		public FileInfo GetFileInfo(Type type, string name)
@@ -312,17 +318,17 @@ namespace Atlas.Serialize
 			this.Directory = saveDirectory;
 		}
 
-		public void Save(Call call, T item)
+		public virtual void Save(Call call, T item)
 		{
 			dataRepo.Save(Directory, DefaultName, item, call);
 		}
 
-		public void Save(Call call, string key, T item)
+		public virtual void Save(Call call, string key, T item)
 		{
 			dataRepo.Save(Directory, key, item, call);
 		}
 
-		public T Load(Call call, string key = null, bool createIfNeeded = false, bool lazy = false)
+		public virtual T Load(Call call, string key = null, bool createIfNeeded = false, bool lazy = false)
 		{
 			return dataRepo.Load<T>(Directory, key ?? DefaultName, call, createIfNeeded, lazy);
 		}
@@ -337,7 +343,7 @@ namespace Atlas.Serialize
 			return dataRepo.LoadAllSorted<T>(call, Directory, lazy);
 		}
 
-		public void Delete(string key = null)
+		public virtual void Delete(string key = null)
 		{
 			dataRepo.Delete<T>(Directory, key ?? DefaultName);
 		}
@@ -348,12 +354,50 @@ namespace Atlas.Serialize
 		}
 	}
 
-	public class DataItemCollection<T> : List<DataItem<T>>
+	public class DataRepoView<T> : DataRepoInstance<T>
+	{
+		//public DataRepo<T> dataRepo;
+
+		public DataItemCollection<T> Items { get; set; }
+		//public SortedDictionary<string, T> Lookup { get; set; }
+
+		public DataRepoView(DataRepo dataRepo, string saveDirectory) : base(dataRepo, saveDirectory)
+		{
+			Initialize();
+		}
+
+		public DataRepoView(DataRepoInstance<T> dataRepo) : base(dataRepo.dataRepo, dataRepo.Directory)
+		{
+			Initialize();
+		}
+
+		private void Initialize()
+		{
+			Items = LoadAll();
+			//Lookup = Items.Map()
+		}
+
+		public override void Save(Call call, string key, T item)
+		{
+			base.Save(call, key, item);
+			Items.Add(key, item);
+		}
+
+		public override void Delete(string key = null)
+		{
+			base.Delete(key);
+			var item = Items.Where(d => d.Key == key).FirstOrDefault();
+			if (item != null)
+				Items.Remove(item);
+		}
+	}
+
+	public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	{
 		public SortedDictionary<string, T> Map()
 		{
 			var entries = new SortedDictionary<string, T>();
-			foreach (DataItem<T> item in base.ToArray())
+			foreach (DataItem<T> item in ToList())
 				entries.Add(item.Key, item.Value);
 			return entries;
 		}
@@ -364,10 +408,17 @@ namespace Atlas.Serialize
 		}
 	}
 
-	public class DataItem<T>
+	public interface IDataItem
+	{
+		string Key { get; }
+		object Object { get; }
+	}
+
+	public class DataItem<T> : IDataItem
 	{
 		public string Key { get; set; }
 		public T Value { get; set; }
+		public object Object => Value;
 
 		public DataItem()
 		{
@@ -378,5 +429,7 @@ namespace Atlas.Serialize
 			Key = key;
 			Value = value;
 		}
+
+		public override string ToString() => Key;
 	}
 }

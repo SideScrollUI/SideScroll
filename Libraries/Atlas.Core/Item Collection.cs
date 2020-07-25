@@ -65,6 +65,14 @@ namespace Atlas.Core
 			return result;
 		}
 
+		public List<T> ToList()
+		{
+			var list = new List<T>();
+			foreach (T item in this)
+				list.Add(item);
+			return list;
+		}
+
 		/*public new void Add(T item)
 		{
 			base.Add(item);

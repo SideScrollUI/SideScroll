@@ -10,11 +10,11 @@ namespace Atlas.Tabs.Test
 	public class ParamTestItem
 	{
 		public bool Boolean { get; set; } = true;
-		public string String { get; set; } = "Test";
+		public string Name { get; set; } = "Test";
 		[ReadOnly(true)]
 		public string ReadOnly { get; set; } = "ReadOnly";
 		[DataKey]
-		public int Integer { get; set; } = 123;
+		public int Amount { get; set; } = 123;
 		public double Double { get; set; } = 3.14;
 		public DateTime DateTime { get; set; } = DateTime.Now;
 		public AttributeTargets EnumAttributeTargets { get; set; } = AttributeTargets.Event;
@@ -32,7 +32,7 @@ namespace Atlas.Tabs.Test
 			ListItem = ListItems[1];
 		}
 
-		public override string ToString() => Integer.ToString();
+		public override string ToString() => Name;
 
 		/*[ButtonColumn("-")]
 		public void Delete()
@@ -56,6 +56,58 @@ namespace Atlas.Tabs.Test
 		{
 			Name = name;
 			Value = value;
+		}
+	}
+
+	public class TabParamItem : ITab, IDataTab
+	{
+		public ParamTestItem testItem;
+
+		//[ButtonColumn("-")]
+		public event EventHandler<EventArgs> OnDelete;
+
+		[ButtonColumn("-")]
+		public void Delete()
+		{
+			OnDelete?.Invoke(this, null);
+		}
+
+		[DataKey]
+		public string Name => testItem.Name;
+
+		public int? Amount => testItem.Amount;
+
+		public TabParamItem()
+		{
+		}
+
+		public TabParamItem(ParamTestItem testItem)
+		{
+			this.testItem = testItem;
+		}
+
+		public void Load(Call call, object obj)
+		{
+			this.testItem = (ParamTestItem)obj;
+		}
+
+		public override string ToString() => Name;
+
+		public TabInstance Create() => new Instance(this);
+
+		public class Instance : TabInstance
+		{
+			private TabParamItem tab;
+
+			public Instance(TabParamItem tab)
+			{
+				this.tab = tab;
+			}
+
+			public override void Load(Call call, TabModel model)
+			{
+				model.AddData(tab.testItem);
+			}
 		}
 	}
 }
