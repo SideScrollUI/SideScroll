@@ -158,28 +158,37 @@ namespace Atlas.UI.Avalonia
 		private void ImportBookmark(Call call)
 		{
 			string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().GetAwaiter().GetResult();
+			ImportBookmark(call, clipboardText);
+		}
 
-			Bookmark bookmark = linker.GetBookmark(call, clipboardText, true);
+		private Bookmark ImportBookmark(Call call, string linkUri)
+		{
+			Bookmark bookmark = linker.GetBookmark(call, linkUri, true);
 			if (bookmark == null)
-				return;
+				return null;
 
 			if (TabBookmarks.Global != null)
 			{
+				// Add Bookmark to bookmark manager
 				tabView.tabInstance.SelectItem(TabBookmarks.Global); // select cells first so the child tab autoselects the new accounts
 				TabBookmarks.Global.AddBookmark(call, bookmark);
-				return;
 			}
-			bool reloadBase = true;
-			if (reloadBase)
+			else if (tabView != null)
 			{
-				tabView.tabInstance.tabBookmark = bookmark.TabBookmark;
-				Reload();
+				// Load bookmark on top of everything (how navigation works)
+				bool reloadBase = true;
+				if (reloadBase)
+				{
+					tabView.tabInstance.tabBookmark = bookmark.TabBookmark;
+					Reload();
+				}
+				else
+				{
+					// only if TabBookmarks used, don't need to reload the tab
+					tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
+				}
 			}
-			else
-			{
-				// only if TabBookmarks used, don't need to reload the tab
-				baseWindow.tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
-			}
+			return bookmark;
 		}
 
 		private void Snapshot(Call call)
@@ -297,15 +306,17 @@ namespace Atlas.UI.Avalonia
 			tabInstance.iTab = tab;
 			tabInstance.Project = project;
 			if (LoadBookmarkUri != null)
-				tabInstance.tabBookmark = linker.GetBookmark(new Call(), LoadBookmarkUri, false)?.TabBookmark;
+			{
+				// Wait until Bookmarks tab has been created
+				Dispatcher.UIThread.Post(() => ImportBookmark(new Call(), LoadBookmarkUri), DispatcherPriority.SystemIdle);
+			}
 			else if (project.UserSettings.AutoLoad) // did we load successfully last time?
+			{
 				tabInstance.LoadDefaultBookmark();
+			}
 
 			tabView = new TabView(tabInstance);
 			tabView.Load();
-
-			//Grid.SetRow(tabView, 1);
-			//containerGrid.Children.Add(tabView);
 
 			//scrollViewer.Content = tabView;
 			contentGrid.Children.Add(tabView);
