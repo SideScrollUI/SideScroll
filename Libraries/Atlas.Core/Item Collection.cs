@@ -100,8 +100,11 @@ namespace Atlas.Core
 		void InitializeContext(bool reset = false);
 	}
 
-	public class ItemCollectionUI<T> : ObservableCollection<T>, IList, ICollection, IEnumerable, IContext //, IRaiseItemChangedEvents //
+	public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollection, ICollection, IEnumerable, IContext //, IRaiseItemChangedEvents //
 	{
+		public string ColumnName { get; set; }
+		public string Label { get; set; }
+		public bool Skippable { get; set; } = true;
 		public SynchronizationContext Context { get; set; } // TabInstance will initialize this, don't want to initialize this early due to default SynchronizationContext not posting messages in order
 
 		public ItemCollectionUI()
