@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace Atlas.Serialize
 {
@@ -379,6 +380,7 @@ namespace Atlas.Serialize
 
 		public override void Save(Call call, string key, T item)
 		{
+			Delete(key);
 			base.Save(call, key, item);
 			Items.Add(key, item);
 		}
@@ -390,15 +392,43 @@ namespace Atlas.Serialize
 			if (item != null)
 				Items.Remove(item);
 		}
+
+		public void SortBy(string memberName)
+		{
+			var ordered = Items.OrderBy(memberName).Values;
+			Items = new DataItemCollection<T>(ordered);
+		}
 	}
 
 	public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	{
+		public DataItemCollection()
+		{
+		}
+
+		// Don't implement List<T>, it isn't sortable
+		public DataItemCollection(IEnumerable<DataItem<T>> iEnumerable) : base(iEnumerable)
+		{
+		}
+
 		public SortedDictionary<string, T> Map()
 		{
 			var entries = new SortedDictionary<string, T>();
 			foreach (DataItem<T> item in ToList())
 				entries.Add(item.Key, item.Value);
+			return entries;
+		}
+
+		public SortedDictionary<object, DataItem<T>> OrderBy(string memberName)
+		{
+			PropertyInfo propertyInfo = typeof(T).GetProperty(memberName);
+
+			var entries = new SortedDictionary<object, DataItem<T>>();
+			foreach (DataItem<T> item in ToList())
+			{
+				object obj = propertyInfo.GetValue(item.Value);
+				entries.Add(obj, item);
+			}
 			return entries;
 		}
 

@@ -86,7 +86,7 @@ namespace Atlas.Tabs.Test
 			this.testItem = testItem;
 		}
 
-		public void Load(Call call, object obj)
+		public void Load(Call call, object obj, object[] tabParams)
 		{
 			this.testItem = (ParamTestItem)obj;
 		}

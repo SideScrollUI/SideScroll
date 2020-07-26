@@ -34,6 +34,8 @@ namespace Atlas.Core
 
 		private CustomComparer customComparer = new CustomComparer();
 
+		public override string ToString() => Label ?? "[" + Count.ToString("N0") + "]";
+
 		public ItemCollection()
 		{
 		}
@@ -43,13 +45,10 @@ namespace Atlas.Core
 			ColumnName = columnName;
 		}
 
-		public override string ToString() => Label ?? "[" + Count.ToString("N0") + "]";
-
 		// Don't implement List<T>, it isn't sortable
 		public ItemCollection(IEnumerable<T> iEnumerable) :
 			base(iEnumerable)
 		{
-
 		}
 
 		public void AddRange(IEnumerable<T> collection)
