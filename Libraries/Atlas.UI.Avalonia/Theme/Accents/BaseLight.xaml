@@ -47,7 +47,7 @@
 
         <!-- Grid Column Header -->
         <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#2a2954</SolidColorBrush>
-        <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#c0c0e8</SolidColorBrush>
+        <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#d0d0f0</SolidColorBrush>
       
          <!-- Custom Colors -->
         <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#1e1e1e</SolidColorBrush>
@@ -89,7 +89,7 @@
 
         <!-- Title -->
         <SolidColorBrush x:Key="TitleBackgroundBrush">#4f52bb</SolidColorBrush>
-        <SolidColorBrush x:Key="TitleForegroundBrush">#f0f0f8</SolidColorBrush>
+        <SolidColorBrush x:Key="TitleForegroundBrush">#d8d8f8</SolidColorBrush>
     
         <SolidColorBrush x:Key="TextBackgroundDisabledBrush">#c5c6c6</SolidColorBrush>
 

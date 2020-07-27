@@ -9,7 +9,6 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Input;
@@ -122,7 +121,7 @@ namespace Atlas.UI.Avalonia.Tabs
 				BorderThickness = new Thickness(0),
 				BorderBrush = Brushes.Transparent,
 				Background = Brushes.Transparent,
-				Foreground = Brushes.White,
+				Foreground = Theme.TitleForeground,
 				//CaretBrush = new SolidColorBrush(Theme.GridSelectedBackgroundColor), // todo: enable with next version?
 			};
 
