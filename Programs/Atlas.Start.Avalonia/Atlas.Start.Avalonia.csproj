@@ -29,12 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Pages\**" />
-    <EmbeddedResource Remove="Pages\**" />
-    <None Remove="Pages\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />

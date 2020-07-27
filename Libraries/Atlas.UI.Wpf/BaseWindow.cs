@@ -219,7 +219,7 @@ namespace Atlas.UI.Wpf
 		{
 			get
 			{
-				WindowSettings windowSettings = new WindowSettings()
+				var windowSettings = new WindowSettings()
 				{
 					Maximized = (this.WindowState == WindowState.Maximized),
 					Width = this.Width,
