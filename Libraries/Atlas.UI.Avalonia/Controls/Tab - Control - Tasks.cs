@@ -110,7 +110,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					TaskInstance taskInstance = tabInstance.Model.Tasks[e.NewStartingIndex];
 					tabControlDataGrid.SelectedItem = taskInstance;
-					taskInstance.OnComplete = () => TaskCompleted(taskInstance);
+					taskInstance.OnComplete = () => Dispatcher.UIThread.Post(() => TaskCompleted(taskInstance));
 					int lineHeight = 26;
 					tabControlDataGrid.MinHeight = Math.Min(tabInstance.Model.Tasks.Count * lineHeight + lineHeight, 6 * lineHeight);
 				}
