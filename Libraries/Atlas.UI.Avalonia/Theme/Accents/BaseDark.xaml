@@ -50,14 +50,17 @@
         <SolidColorBrush x:Key="HighlightForegroundBrush">#21d064</SolidColorBrush>
 
         <!-- Grid Column Header -->
-        <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#4141c2</SolidColorBrush>
-        <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#e3e3e9</SolidColorBrush>
+        <!--SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#4141c2</SolidColorBrush-->
+        <!--SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#e3e3e9</SolidColorBrush-->
+
+        <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#1a1940</SolidColorBrush>
+        <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#c0c0c0</SolidColorBrush>
 
         <!-- Custom Colors -->
         <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#0f0f0f</SolidColorBrush>
 
         <!-- Links -->
-        <SolidColorBrush x:Key="ThemeHasLinksBrush">#232a53</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeHasLinksBrush">#394360</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeNoLinksBrush">#0c1523</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#161616</SolidColorBrush>
@@ -68,17 +71,17 @@
         <SolidColorBrush x:Key="ThemeScrollBarThumbHoverBrush">#477ed7</SolidColorBrush>
 
         <!-- Grid -->
-        <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#131a33</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#2d3145</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridBackgroundSelectedBrush">#50c474</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeGridForegroundBrush">#d3d3d3</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeGridForegroundSelectedBrush">#21d064</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeGridHighBrush">#2040a0</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeGridForegroundBrush">#b3b3b3</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeGridForegroundSelectedBrush">#f0f0f0</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeGridHighBrush">#3060c0</SolidColorBrush>
 
         <!-- Buttons -->
-        <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">#2d2d2d</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeButtonForegroundBrush">#d9d9d9</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#424242</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush">#828282</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">#1a1940</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeButtonForegroundBrush">#60bdff</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#2040a0</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush">#3060d0</SolidColorBrush>
 
         <!-- RadioButton -->
         <SolidColorBrush x:Key="ThemeRadioButtonBorderBrush">#004dd0</SolidColorBrush>

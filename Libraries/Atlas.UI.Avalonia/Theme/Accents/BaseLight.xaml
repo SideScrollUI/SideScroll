@@ -46,8 +46,8 @@
         <SolidColorBrush x:Key="HighlightForegroundBrush">AliceBlue</SolidColorBrush>
 
         <!-- Grid Column Header -->
-        <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#4e7ee7</SolidColorBrush>
-        <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#ffffff</SolidColorBrush>
+        <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#2a2954</SolidColorBrush>
+        <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#c0c0e8</SolidColorBrush>
       
          <!-- Custom Colors -->
         <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#1e1e1e</SolidColorBrush>
