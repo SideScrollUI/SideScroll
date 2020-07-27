@@ -349,7 +349,7 @@ namespace Atlas.Serialize
 			dataRepo.Delete<T>(Directory, key ?? DefaultName);
 		}
 
-		public void DeleteAll()
+		public virtual void DeleteAll()
 		{
 			dataRepo.DeleteAll<T>();
 		}
@@ -391,6 +391,12 @@ namespace Atlas.Serialize
 			var item = Items.Where(d => d.Key == key).FirstOrDefault();
 			if (item != null)
 				Items.Remove(item);
+		}
+
+		public override void DeleteAll()
+		{
+			base.DeleteAll();
+			Items.Clear();
 		}
 
 		public void SortBy(string memberName)

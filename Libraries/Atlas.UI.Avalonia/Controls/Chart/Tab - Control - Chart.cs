@@ -115,9 +115,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public TabControlChart(TabInstance tabInstance, ListGroup listGroup, bool fillHeight = false)
 		{
-			this.TabInstance = tabInstance;
-			this.ListGroup = listGroup;
-			this.FillHeight = fillHeight;
+			TabInstance = tabInstance;
+			ListGroup = listGroup;
+			FillHeight = fillHeight;
 
 			InitializeControls();
 		}
@@ -393,7 +393,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				double duration = endTime.Value.Subtract(startTime.Value).TotalSeconds;
 				dateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(startTime.Value);
-				dateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value);
+				dateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value.AddSeconds(duration / 25.0)); // labels get clipped without this
 				UpdateDateTimeInterval(duration);
 			}
 			plotModel.Axes.Add(dateTimeAxis);

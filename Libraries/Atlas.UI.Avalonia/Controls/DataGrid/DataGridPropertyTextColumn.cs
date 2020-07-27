@@ -156,7 +156,7 @@ namespace Atlas.UI.Avalonia
 		{
 			var textBlockElement = new TextBlockElement(this, propertyInfo)
 			{
-				Margin = new Thickness(4),
+				Margin = new Thickness(5),
 				VerticalAlignment = VerticalAlignment.Center,
 				MaxDesiredWidth = this.MaxDesiredWidth,
 				//FontFamily

@@ -842,7 +842,7 @@ namespace Atlas.UI.Avalonia.Controls
 					firstValidObject = obj;
 
 				Type type = value.GetType();
-				if (TabModel.ObjectHasLinks(value) && type.IsEnum == false)
+				if (TabModel.ObjectHasLinks(value, true) && type.IsEnum == false)
 				{
 					// make sure there's something present
 					if (value is ICollection collection && collection.Count == 0)

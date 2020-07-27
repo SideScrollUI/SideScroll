@@ -23,6 +23,7 @@ namespace Atlas.Tabs
 		public ItemCollectionUI<TTabType> Items { get; set; } = new ItemCollectionUI<TTabType>();
 		public TTabType NewTabItem { get; set; }
 		private DataRepoView<TDataType> dataRepoView;
+		private DataRepoView<TDataType> dataRepoSecondary; // saves and deletes goto a 2nd copy
 		private object[] tabParams;
 		private Dictionary<TTabType, IDataItem> dataItemLookup;
 
@@ -50,6 +51,10 @@ namespace Atlas.Tabs
 				{
 					Remove(item.Key);
 				}
+			}
+			else if (e.Action == NotifyCollectionChangedAction.Reset)
+			{
+				Items.Clear();
 			}
 		}
 
@@ -101,6 +106,7 @@ namespace Atlas.Tabs
 				return;
 
 			dataRepoView.Delete(dataItem.Key);
+			dataRepoSecondary?.Delete(dataItem.Key);
 			Items.Remove(tab);
 			//Reload();
 		}
@@ -111,6 +117,11 @@ namespace Atlas.Tabs
 			TTabType existing = Items.SingleOrDefault(i => i.ToString() == key);
 			if (existing != null)
 				Items.Remove(existing);
+		}
+
+		public void AddDataRepo(DataRepoView<TDataType> dataRepoView)
+		{
+			dataRepoSecondary = dataRepoView;
 		}
 	}
 }

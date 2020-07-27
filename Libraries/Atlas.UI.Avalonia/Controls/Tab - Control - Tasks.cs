@@ -2,6 +2,7 @@
 using Atlas.Tabs;
 using Avalonia.Controls;
 using Avalonia.Layout;
+using Avalonia.Threading;
 using System;
 using System.Collections;
 using System.Collections.Specialized;
@@ -87,6 +88,11 @@ namespace Atlas.UI.Avalonia.Controls
 
 		// not resizing correctly when we add a new item
 		private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			Dispatcher.UIThread.Post(() => CollectionChangedUI(e));
+		}
+
+		private void CollectionChangedUI(NotifyCollectionChangedEventArgs e)
 		{
 			tabControlDataGrid.MinHeight = tabControlDataGrid.DesiredSize.Height;
 			MinHeight = tabControlDataGrid.MinHeight;
