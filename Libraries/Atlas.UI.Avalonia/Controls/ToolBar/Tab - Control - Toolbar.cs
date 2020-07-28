@@ -79,6 +79,7 @@ namespace Atlas.UI.Avalonia.Tabs
 			var button = new ToolbarButton(this, toolButton.Label, toolButton.Icon);
 			button.Add(toolButton.Action);
 			button.AddAsync(toolButton.ActionAsync);
+			button.showTask = toolButton.ShowTask;
 			AddControl(button);
 			return button;
 		}
@@ -184,6 +185,7 @@ namespace Atlas.UI.Avalonia.Tabs
 		public TabControlToolbar toolbar;
 		public TaskDelegate.CallAction callAction;
 		public TaskDelegateAsync.CallActionAsync callActionAsync;
+		public bool showTask;
 
 		public ToolbarButton(TabControlToolbar toolbar, string tooltip, Stream stream, ICommand command = null) : base()
 		{
@@ -223,9 +225,9 @@ namespace Atlas.UI.Avalonia.Tabs
 			}
 
 			if (callActionAsync != null)
-				toolbar.tabInstance.StartAsync(callActionAsync);
+				toolbar.tabInstance.StartAsync(callActionAsync, null, showTask);
 			if (callAction != null)
-				toolbar.tabInstance.StartTask(callAction, false, false);
+				toolbar.tabInstance.StartTask(callAction, false, showTask);
 		}
 
 		public void Add(TaskDelegate.CallAction callAction)

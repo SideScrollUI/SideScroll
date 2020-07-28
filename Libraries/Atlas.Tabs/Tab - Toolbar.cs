@@ -9,6 +9,7 @@ namespace Atlas.Tabs
 	{
 		public string Label { get; set; }
 		public Stream Icon { get; set; }
+		public bool ShowTask { get; set; }
 
 		public TaskDelegate.CallAction Action { get; set; }
 		public TaskDelegateAsync.CallActionAsync ActionAsync { get; set; }

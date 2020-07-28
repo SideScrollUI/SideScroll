@@ -15,7 +15,7 @@
         <SolidColorBrush x:Key="ThemeForegroundLowBrush">#5860CA</SolidColorBrush>
 
         <!-- Border -->
-        <SolidColorBrush x:Key="ThemeBorderLightBrush">#000000</SolidColorBrush> <!-- DataGrid Lines -->
+        <SolidColorBrush x:Key="ThemeBorderLightBrush">#1e1e1e</SolidColorBrush> <!-- DataGrid Lines -->
         <SolidColorBrush x:Key="ThemeBorderLowBrush">#000000</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#000000</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighBrush">#000000</SolidColorBrush> <!-- RadioButton circle border -->
@@ -89,7 +89,7 @@
 
         <!-- Title -->
         <SolidColorBrush x:Key="TitleBackgroundBrush">#4f52bb</SolidColorBrush>
-        <SolidColorBrush x:Key="TitleForegroundBrush">#d8d8f8</SolidColorBrush>
+        <SolidColorBrush x:Key="TitleForegroundBrush">#e0e0f8</SolidColorBrush>
     
         <SolidColorBrush x:Key="TextBackgroundDisabledBrush">#c5c6c6</SolidColorBrush>
 

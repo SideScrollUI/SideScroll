@@ -15,7 +15,7 @@
         <SolidColorBrush x:Key="ThemeForegroundLightBrush">#808080</SolidColorBrush>
 
         <!-- Border -->
-        <SolidColorBrush x:Key="ThemeBorderLightBrush">#181838</SolidColorBrush> <!-- DataGrid Lines -->
+        <SolidColorBrush x:Key="ThemeBorderLightBrush">#181818</SolidColorBrush> <!-- DataGrid Lines -->
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#106090</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighBrush">#3168a2</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighRadioBrush">#006df0</SolidColorBrush>
@@ -60,8 +60,8 @@
         <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#0f0f0f</SolidColorBrush>
 
         <!-- Links -->
-        <SolidColorBrush x:Key="ThemeHasLinksBrush">#394360</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeNoLinksBrush">#0c1523</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeHasLinksBrush">#303060</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeNoLinksBrush">#0f1a2a</SolidColorBrush>
 
         <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#161616</SolidColorBrush>
 
@@ -71,7 +71,8 @@
         <SolidColorBrush x:Key="ThemeScrollBarThumbHoverBrush">#477ed7</SolidColorBrush>
 
         <!-- Grid -->
-        <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#2d3145</SolidColorBrush>
+        <!--SolidColorBrush x:Key="ThemeGridBackgroundBrush">#2d3145</SolidColorBrush-->
+        <SolidColorBrush x:Key="ThemeGridBackgroundBrush">#313131</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridBackgroundSelectedBrush">#50c474</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridForegroundBrush">#b3b3b3</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridForegroundSelectedBrush">#f0f0f0</SolidColorBrush>
@@ -96,7 +97,7 @@
 
         <!-- Title -->
         <SolidColorBrush x:Key="TitleBackgroundBrush">#5732c3</SolidColorBrush>
-        <SolidColorBrush x:Key="TitleForegroundBrush">#e3e3e9</SolidColorBrush>
+        <SolidColorBrush x:Key="TitleForegroundBrush">#d8d8e9</SolidColorBrush>
 
         <SolidColorBrush x:Key="TextBackgroundDisabledBrush">#2e2e2e</SolidColorBrush>
 
