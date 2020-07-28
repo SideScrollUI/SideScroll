@@ -365,7 +365,6 @@ namespace Atlas.UI.Avalonia.View
 			AddTasks();
 			AddData();
 
-			AddBookmarks(); // todo
 			IsLoaded = true;
 
 			UpdateChildControls();
@@ -507,18 +506,6 @@ namespace Atlas.UI.Avalonia.View
 			};
 			//control.OnSelectionChanged += ParentListSelectionChanged;
 			tabParentControls.AddControl(textBox, false, SeparatorType.Spacer);
-		}
-
-		protected void AddBookmarks()
-		{
-			/*
-			//if (tabModel.Bookmarks == null)
-				return;
-
-			tabBookmarks = new TabControlBookmarks(tabInstance);
-
-			tabParentControls.AddControl(tabBookmarks, false, SeparatorType.Splitter);
-			*/
 		}
 
 		public void Invalidate()

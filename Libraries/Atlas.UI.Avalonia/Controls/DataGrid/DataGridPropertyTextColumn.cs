@@ -20,7 +20,7 @@ namespace Atlas.UI.Avalonia
 {
 	public class DataGridPropertyTextColumn : DataGridTextColumn
 	{
-		public SolidColorBrush BrushHasChildren => Theme.HasLinks;
+		public SolidColorBrush BrushHasLinks => Theme.HasLinks;
 		public SolidColorBrush BrushEditable { get; set; } = Theme.Editable;
 		public SolidColorBrush BrushValue { get; set; } = new SolidColorBrush(Colors.LightGray);
 		public SolidColorBrush BrushBackground { get; set; } = new SolidColorBrush(Colors.White);
@@ -256,7 +256,7 @@ namespace Atlas.UI.Avalonia
 				{
 					bool hasLinks = TabModel.ObjectHasLinks(dataItem, true);
 					if (hasLinks)
-						return BrushHasChildren;
+						return BrushHasLinks;
 					//return Brushes.Moccasin;
 					else if (!IsReadOnly && (dataItem is ListMember) && ((ListMember)dataItem).Editable)
 						return BrushEditable;

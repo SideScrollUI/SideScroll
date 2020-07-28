@@ -62,7 +62,7 @@ namespace Atlas.UI.Avalonia
 				if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				//if (this.DisplayIndex == 1 && (dataItem is ListItem || dataItem is ListMember))
 				{
-					bool hasChildren = TabModel.ObjectHasChildren(dataItem, true);
+					bool hasChildren = TabModel.ObjectHasLinks(dataItem, true);
 					if (hasChildren)
 						return BrushHasChildren;
 					//return Brushes.Moccasin;

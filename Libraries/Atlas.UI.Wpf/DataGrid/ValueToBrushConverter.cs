@@ -25,7 +25,7 @@ namespace Atlas.UI.Wpf
 			{
 				if (dataGridCell.Column.DisplayIndex == 1 && (obj is ListItem || obj is ListMember))
 				{
-					bool hasChildren = TabModel.ObjectHasChildren(obj, true);
+					bool hasChildren = TabModel.ObjectHasLinks(obj, true);
 					if (hasChildren)
 						return HasChildrenBrush;
 						//return Brushes.Moccasin;
