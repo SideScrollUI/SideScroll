@@ -158,12 +158,12 @@ namespace Atlas.UI.Avalonia
 		private void ImportBookmark(Call call)
 		{
 			string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().GetAwaiter().GetResult();
-			ImportBookmark(call, clipboardText);
+			ImportBookmark(call, clipboardText, true);
 		}
 
-		private Bookmark ImportBookmark(Call call, string linkUri)
+		private Bookmark ImportBookmark(Call call, string linkUri, bool checkVersion)
 		{
-			Bookmark bookmark = linker.GetBookmark(call, linkUri, true);
+			Bookmark bookmark = linker.GetBookmark(call, linkUri, checkVersion);
 			if (bookmark == null)
 				return null;
 
@@ -308,7 +308,7 @@ namespace Atlas.UI.Avalonia
 			if (LoadBookmarkUri != null)
 			{
 				// Wait until Bookmarks tab has been created
-				Dispatcher.UIThread.Post(() => ImportBookmark(new Call(), LoadBookmarkUri), DispatcherPriority.SystemIdle);
+				Dispatcher.UIThread.Post(() => ImportBookmark(new Call(), LoadBookmarkUri, false), DispatcherPriority.SystemIdle);
 			}
 			else if (project.UserSettings.AutoLoad) // did we load successfully last time?
 			{
