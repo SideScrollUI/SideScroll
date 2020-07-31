@@ -742,7 +742,7 @@ namespace Atlas.UI.Avalonia.View
 
 			childControlsFinishedLoading = true;
 
-			BaseWindow.baseWindow.SetMinScrollOffset();
+			TabViewer.baseViewer.SetMinScrollOffset();
 
 			// Create new child controls
 			//Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
@@ -855,7 +855,7 @@ namespace Atlas.UI.Avalonia.View
 			catch (Exception e)
 			{
 				// Add instructions for enabling debugger to catch these
-				//call.log.Add(e);
+				//call.Log.Add(e);
 				return TabCreator.CreateChildControl(tabInstance, e, "Caught Exception", tabControl);
 			}
 		}

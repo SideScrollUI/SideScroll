@@ -165,7 +165,7 @@ namespace Atlas.Tabs
 			tabInstance.Project = tabInstance.Project ?? Project;
 			tabInstance.iTab = iTab;
 			tabInstance.ParentTabInstance = this;
-			//tabInstance.taskInstance.call.log =
+			//tabInstance.taskInstance.call.Log =
 			//tabInstance.taskInstance = taskInstance.AddSubTask(taskInstance.call); // too slow?
 			//tabInstance.tabBookmark = tabBookmark;
 			FillInheritables(tabInstance);

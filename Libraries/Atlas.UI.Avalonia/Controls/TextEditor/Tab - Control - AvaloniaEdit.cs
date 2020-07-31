@@ -8,11 +8,12 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using Avalonia.Layout;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Avalonia.Styling;
+using Atlas.Core;
+using Newtonsoft.Json;
 
 namespace Atlas.UI.Avalonia.Controls
 {

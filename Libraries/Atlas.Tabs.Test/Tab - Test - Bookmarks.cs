@@ -44,7 +44,7 @@ namespace Atlas.Tabs.Test
 				for (int i = 0; i < 10; i++)
 				{
 					System.Threading.Thread.Sleep(1000);
-					call.log.Add("Slept 1 second");
+					call.Log.Add("Slept 1 second");
 					call.taskInstance.Progress++;
 				}
 			}

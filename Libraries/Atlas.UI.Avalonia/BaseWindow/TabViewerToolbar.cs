@@ -8,7 +8,7 @@ using System;
 
 namespace Atlas.UI.Avalonia
 {
-	public class BaseWindowToolbar : TabControlToolbar
+	public class TabViewerToolbar : TabControlToolbar
 	{
 		public ToolbarButton buttonBack;
 		public ToolbarButton buttonForward;
@@ -22,14 +22,14 @@ namespace Atlas.UI.Avalonia
 		public ToolbarButton buttonSnapshotCancel;
 
 		//public Project project;
-		private BaseWindow baseWindow;
+		private TabViewer tabViewer;
 
 		public RelayCommand commandBindingBack;
 		public RelayCommand commandBindingForward;
 
-		public BaseWindowToolbar(BaseWindow baseWindow) : base(null)
+		public TabViewerToolbar(TabViewer tabViewer) : base(null)
 		{
-			this.baseWindow = baseWindow;
+			this.tabViewer = tabViewer;
 			InitializeControls();
 		}
 
@@ -55,11 +55,11 @@ namespace Atlas.UI.Avalonia
 
 			commandBindingBack = new RelayCommand(
 				(obj) => CommandBackCanExecute(obj),
-				(obj) => baseWindow.SeekBackward());
+				(obj) => tabViewer.SeekBackward());
 
 			commandBindingForward = new RelayCommand(
 				(obj) => CommandForwardCanExecute(obj),
-				(obj) => baseWindow.SeekForward());
+				(obj) => tabViewer.SeekForward());
 
 			//project.navigator.CanSeekBackwardOb
 			//CommandBinder.
@@ -119,7 +119,7 @@ namespace Atlas.UI.Avalonia
 
 		private void ButtonRefresh_Click(Call call)
 		{
-			baseWindow.Reload();
+			tabViewer.Reload();
 		}
 
 		private bool CommandBackCanExecute(object obj)

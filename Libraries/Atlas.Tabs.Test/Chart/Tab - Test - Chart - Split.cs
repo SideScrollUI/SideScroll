@@ -118,7 +118,7 @@ namespace Atlas.Tabs.Test.Chart
 				Initialize();
 
 				call.Log.Add("test");
-				//call.log.Add("New Log entry", new Tag("name", "value"));
+				//call.Log.Add("New Log entry", new Tag("name", "value"));
 
 				//var random = new Random();
 				AddSample(samples.Count);

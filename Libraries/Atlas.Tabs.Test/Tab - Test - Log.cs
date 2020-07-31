@@ -71,7 +71,7 @@ namespace Atlas.Tabs.Test
 				{
 					//log.Add("test " + counter.ToString());
 					counter++;
-					//call.log.Add("New Log entry", new Tag("name", "value"));
+					//call.Log.Add("New Log entry", new Tag("name", "value"));
 					sampleCall.Log.Add("New Log entry", new Tag("name", "value"));
 				}
 			}
