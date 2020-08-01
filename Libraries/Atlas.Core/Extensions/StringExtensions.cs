@@ -22,6 +22,10 @@ namespace Atlas.Extensions
 
 		public static string Trim(this string input, string prefix)
 		{
+			if (input == null || prefix == null)
+				return null;
+			if (prefix.Length >= input.Length)
+				return input;
 			return input.Substring(prefix.Length);
 		}
 
@@ -142,7 +146,10 @@ namespace Atlas.Extensions
 		}
 
 		public static string HashSha256(this string rawData)
-		{ 
+		{
+			if (rawData == null)
+				return null;
+
 			using (SHA256 sha256Hash = SHA256.Create())
 			{
 				byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));

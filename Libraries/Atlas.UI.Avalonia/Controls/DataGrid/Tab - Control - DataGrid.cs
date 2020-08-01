@@ -1082,6 +1082,9 @@ namespace Atlas.UI.Avalonia.Controls
 				dataKey = GetDataKey(obj), // overrides label
 				dataValue = GetDataValue(obj),
 			};
+			// Use the DataValue's DataKey if no DataKey found
+			if (selectedRow.dataKey == null && selectedRow.dataValue != null)
+				selectedRow.dataKey = GetDataKey(selectedRow.dataValue);
 			if (selectedRow.label == type.FullName)
 				selectedRow.label = null;
 			

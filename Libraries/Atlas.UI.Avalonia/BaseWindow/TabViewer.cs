@@ -19,11 +19,13 @@ namespace Atlas.UI.Avalonia
 	{
 		public static readonly int DefaultIncrementWidth = 1000; // should we also use a max percent?
 		public static readonly int KeyboardIncrementWidth = 500;
-		public static TabViewer baseViewer;
 
-		protected Linker linker = new Linker();
+		public static TabViewer baseViewer;
+		public static string LoadBookmarkUri { get; set; }
 
 		public Project project;
+
+		public Linker linker = new Linker();
 
 		// Controls
 		protected Grid bottomGrid;
@@ -32,8 +34,6 @@ namespace Atlas.UI.Avalonia
 		protected Grid contentGrid;
 		private ScreenCapture screenCapture;
 		public TabView tabView;
-
-		public static string LoadBookmarkUri { get; set; }
 
 		public TabViewer(Project project) : base()
 		{
@@ -52,8 +52,6 @@ namespace Atlas.UI.Avalonia
 		private void InitializeComponent()
 		{
 			Background = Theme.TabBackground;
-
-			Resources["FontSizeSmall"] = 14; // stop DatePicker using a small font size
 
 			// Toolbar
 			// ScrollViewer | Buttons

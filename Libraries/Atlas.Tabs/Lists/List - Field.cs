@@ -59,10 +59,7 @@ namespace Atlas.Tabs
 				Name = attribute.Name;
 		}
 
-		public override string ToString()
-		{
-			return Name;
-		}
+		public override string ToString() => Name;
 
 		public static ItemCollection<ListField> Create(object obj)
 		{

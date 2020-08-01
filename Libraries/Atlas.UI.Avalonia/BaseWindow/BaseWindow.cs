@@ -14,15 +14,11 @@ namespace Atlas.UI.Avalonia
 		private const int DefaultWindowWidth = 1280;
 		private const int DefaultWindowHeight = 800;
 
-		protected Linker linker = new Linker();
-
 		public Project project;
 
 		private bool loadComplete = false;
 
 		public TabViewer tabViewer;
-
-		public static string LoadBookmarkUri { get; set; }
 
 		public BaseWindow(Project project) : base()
 		{
@@ -58,12 +54,16 @@ namespace Atlas.UI.Avalonia
 
 			Icon = new WindowIcon(Icons.Streams.Logo);
 
-			tabViewer = new TabViewer(project);
-			Content = tabViewer;
+			Content = tabViewer = new TabViewer(project);
 
 			PositionChanged += BaseWindow_PositionChanged;
 
 			this.GetObservable(ClientSizeProperty).Subscribe(Resize);
+		}
+
+		public void AddTab(ITab tab)
+		{
+			tabViewer.AddTab(tab);
 		}
 
 		private void Resize(Size size)

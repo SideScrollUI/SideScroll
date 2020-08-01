@@ -1,6 +1,5 @@
 ﻿using Atlas.Core;
 using Atlas.Resources;
-using Atlas.Tabs;
 using Atlas.UI.Avalonia.Tabs;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -21,7 +20,6 @@ namespace Atlas.UI.Avalonia
 		public ToolbarButton buttonSnapshotEmbed;
 		public ToolbarButton buttonSnapshotCancel;
 
-		//public Project project;
 		private TabViewer tabViewer;
 
 		public RelayCommand commandBindingBack;
@@ -37,21 +35,16 @@ namespace Atlas.UI.Avalonia
 		private void InitializeControls()
 		{
 			/*
-			CommandBinding commandBinding = new CommandBinding(
+			var commandBinding = new CommandBinding(
 				ApplicationCommands.Open,
 				OpenCmdExecuted,
 				OpenCmdCanExecute);
 
 			CommandBindings.Add(commandBinding);
 
-			Button button = new Button();
-			button.Content = "Back";
-			//button.Command = commandBinding;
+			//button.Command = commandBinding;*/
 
-			toolBar.Items.Add(button);
-			stackPanel.Children.Add(toolBar);*/
-
-			//RoutedCommand commandBack = new RoutedCommand("Back", GetType());
+			//var commandBack = new RoutedCommand("Back", GetType());
 
 			commandBindingBack = new RelayCommand(
 				(obj) => CommandBackCanExecute(obj),
@@ -95,7 +88,7 @@ namespace Atlas.UI.Avalonia
 
 
 			/*
-			ToolbarButton2 buttonBack = new ToolbarButton2()
+			var buttonBack = new ToolbarButton2()
 			{
 				Content = "<-",
 				//ToolTip = "Back",
@@ -106,7 +99,7 @@ namespace Atlas.UI.Avalonia
 			//var commandBack = ReactiveCommand.Create(() => ButtonBack_Click(null, null));
 			//buttonBack.Bind(Class1.DoubleValueProperty, new Binding("[0]", BindingMode.TwoWay) { Source = source });
 			//buttonBack.Click += ButtonBack_Click;
-			/*Button buttonForward = new Button()
+			/*var buttonForward = new Button()
 			{
 				Content = "->",
 				//ToolTip = "Forward",
