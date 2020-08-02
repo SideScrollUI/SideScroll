@@ -19,6 +19,11 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		Type IStyleable.StyleKey => typeof(TabDateTimePicker);
 
+		private ListProperty property;
+		private DateTimeValueConverter dateTimeConverter;
+		private DatePicker datePicker;
+		private TabControlTextBox textBox;
+
 		public TabDateTimePicker(ListProperty property)
 		{
 			InitializeComponent(property);
@@ -26,9 +31,10 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeComponent(ListProperty property)
 		{
+			this.property = property;
 			ColumnDefinitions = new ColumnDefinitions("*,*");
 			var backgroundColor = property.Editable ? Theme.Background : Brushes.LightGray;
-			var datePicker = new DatePicker()
+			datePicker = new DatePicker()
 			{
 				Background = backgroundColor,
 				BorderBrush = new SolidColorBrush(Colors.Black),
@@ -44,7 +50,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//MaxWidth = 200,
 				[Grid.ColumnProperty] = 0,
 			};
-			var dateTimeConverter = new DateTimeValueConverter();
+			dateTimeConverter = new DateTimeValueConverter();
 			var binding = new Binding(property.propertyInfo.Name)
 			{
 				Converter = dateTimeConverter,
@@ -55,7 +61,7 @@ namespace Atlas.UI.Avalonia.Controls
 			datePicker.Bind(DatePicker.SelectedDateProperty, binding);
 			Children.Add(datePicker);
 
-			var textBox = new TabControlTextBox()
+			textBox = new TabControlTextBox()
 			{
 				IsReadOnly = !property.Editable,
 				Watermark = "15:30:45",
@@ -80,30 +86,32 @@ namespace Atlas.UI.Avalonia.Controls
 			Children.Add(textBox);
 
 			Button buttonImport = AddButton("Import Clipboard", Icons.Streams.Paste);
-			buttonImport.Click += (sender, e) =>
+			buttonImport.Click += ButtonImport_Click;
+			Children.Add(buttonImport);
+		}
+
+		private void ButtonImport_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		{
+			string clipboardText = ClipBoardUtils.GetTextAsync().Result;
+			TimeSpan? timeSpan = DateTimeUtils.ConvertTextToTimeSpan(clipboardText);
+			if (timeSpan != null)
 			{
-				string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().Result;
-				TimeSpan? timeSpan = DateTimeUtils.ConvertTextToTimeSpan(clipboardText);
-				if (timeSpan != null)
+				DateTime? newDateTime = dateTimeConverter.Convert(timeSpan, typeof(string), null, null) as DateTime?;
+				property.propertyInfo.SetValue(property.obj, newDateTime);
+				textBox.Text = timeSpan.ToString();
+				e.Handled = true;
+			}
+			else
+			{
+				DateTime? dateTime = DateTimeUtils.ConvertTextToDateTime(clipboardText);
+				if (dateTime != null)
 				{
-					DateTime? newDateTime = dateTimeConverter.Convert(timeSpan, typeof(string), null, null) as DateTime?;
-					property.propertyInfo.SetValue(property.obj, newDateTime);
-					textBox.Text = timeSpan.ToString();
+					property.propertyInfo.SetValue(property.obj, dateTime);
+					datePicker.SelectedDate = dateTime;
+					textBox.Text = (string)dateTimeConverter.Convert(dateTime, typeof(string), null, null);
 					e.Handled = true;
 				}
-				else
-				{
-					DateTime? dateTime = DateTimeUtils.ConvertTextToDateTime(clipboardText);
-					if (dateTime != null)
-					{
-						property.propertyInfo.SetValue(property.obj, dateTime);
-						datePicker.SelectedDate = dateTime;
-						textBox.Text = (string)dateTimeConverter.Convert(dateTime, typeof(string), null, null);
-						e.Handled = true;
-					}
-				}
-			};
-			Children.Add(buttonImport);
+			}
 		}
 
 		public Button AddButton(string tooltip, Stream resource)

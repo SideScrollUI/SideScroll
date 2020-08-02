@@ -12,6 +12,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using System;
+using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia
 {
@@ -61,8 +62,8 @@ namespace Atlas.UI.Avalonia
 			VerticalAlignment = VerticalAlignment.Stretch;
 
 			toolbar = new TabViewerToolbar(this);
-			toolbar.buttonLink.Add(Link);
-			toolbar.buttonImport.Add(ImportBookmark);
+			toolbar.buttonLink.AddAsync(LinkAsync);
+			toolbar.buttonImport.AddAsync(ImportBookmarkAsync);
 			toolbar.buttonSnapshot?.Add(Snapshot);
 			toolbar.buttonSnapshotCancel?.Add(CloseSnapshot);
 			Children.Add(toolbar);
@@ -113,17 +114,17 @@ namespace Atlas.UI.Avalonia
 			tabView.tabInstance.Reload();
 		}
 
-		private void Link(Call call)
+		private async Task LinkAsync(Call call)
 		{
 			Bookmark bookmark = tabView.tabInstance.CreateBookmark();
 			bookmark.TabBookmark = bookmark.TabBookmark.GetLeaf();
 			string uri = linker.GetLinkUri(call, bookmark);
-			((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(uri);
+			await ClipBoardUtils.SetTextAsync(uri);
 		}
 
-		private void ImportBookmark(Call call)
+		private async Task ImportBookmarkAsync(Call call)
 		{
-			string clipboardText = ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).GetTextAsync().GetAwaiter().GetResult();
+			string clipboardText = await ClipBoardUtils.GetTextAsync();
 			ImportBookmark(call, clipboardText, true);
 		}
 

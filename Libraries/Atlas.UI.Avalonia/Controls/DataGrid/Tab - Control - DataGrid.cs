@@ -307,7 +307,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				string text = DataGridUtils.DataGridToStringTable(dataGrid);
 				if (text != null)
-					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+					ClipBoardUtils.SetTextAsync(text);
 			};
 			list.Add(menuItemCopy);
 

@@ -153,7 +153,7 @@ namespace Atlas.UI.Avalonia
 
 			//PointerReleased -= ScreenCapture_PointerReleased;
 			var bitmap = GetSelectedBitmap();
-			//((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(bitmap);
+			//ClipBoardUtils.SetTextAsync(bitmap);
 			//ClipboardUtils.SetBitmapAsync(bitmap);
 
 			startPoint = null;

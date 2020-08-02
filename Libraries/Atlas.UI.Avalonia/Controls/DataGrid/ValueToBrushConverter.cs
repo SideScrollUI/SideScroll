@@ -32,11 +32,13 @@ namespace Atlas.UI.Avalonia
 		{
 			try
 			{
+				if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
+					return Theme.ButtonBackground;
 				if (value is DictionaryEntry || propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					bool hasLinks = TabModel.ObjectHasLinks(value, true);
 					if (hasLinks)
-						return StyleBrushes.HasLinks;
+						return null;// StyleBrushes.HasLinks;
 					else if (Editable && value is ListMember listMember && listMember.Editable)
 						return StyleBrushes.Editable;
 					else
@@ -81,6 +83,54 @@ namespace Atlas.UI.Avalonia
 			else
 				return BrushEditable;
 		}*/
+
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			throw new NotSupportedException();
+		}
+	}
+
+
+	public class ValueToForegroundBrushConverter : IValueConverter
+	{
+		private PropertyInfo propertyInfo;
+
+		public ValueToForegroundBrushConverter(PropertyInfo propertyInfo)
+		{
+			this.propertyInfo = propertyInfo;
+		}
+
+		public sealed class BrushColors
+		{
+			public ISolidColorBrush HasLinks => Theme.HasLinks;
+			public ISolidColorBrush NoLinks => Theme.NoLinks;
+			public ISolidColorBrush Editable { get; set; } = Theme.Editable;
+		}
+		internal static BrushColors StyleBrushes { get; set; } = new BrushColors();
+
+		public bool Editable { get; set; } = false;
+
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			try
+			{
+				if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
+					return Theme.TitleForeground;
+				if (value is DictionaryEntry || propertyInfo.IsDefined(typeof(StyleValueAttribute)))
+				{
+					bool hasLinks = TabModel.ObjectHasLinks(value, true);
+					if (hasLinks)
+						return Brushes.Black;// StyleBrushes.HasLinks;
+					else
+						return Theme.TitleForeground;
+				}
+			}
+			catch (InvalidCastException)
+			{
+			}
+
+			return Brushes.Black;
+		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{

@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -42,7 +43,28 @@ namespace Atlas.Tabs
 			return callableMethods;
 		}
 
+		public static List<PropertyInfo> GetVisibleElementProperties(IList list)
+		{
+			Type listType = list.GetType();
+			Type elementType = listType.GetGenericArguments()[0]; // dictionaries?
+			return GetVisibleProperties(elementType);
+		}
+
+		private static Dictionary<Type, List<PropertyInfo>> visiblePropertiesCache = new Dictionary<Type, List<PropertyInfo>>();
 		public static List<PropertyInfo> GetVisibleProperties(Type type)
+		{
+			lock (visiblePropertiesCache)
+			{
+				if (visiblePropertiesCache.TryGetValue(type, out List<PropertyInfo> list))
+					return list;
+
+				list = GetVisibleTypeProperties(type);
+				visiblePropertiesCache.Add(type, list);
+				return list;
+			}
+		}
+
+		private static List<PropertyInfo> GetVisibleTypeProperties(Type type)
 		{
 			var visibleProperties = new List<PropertyInfo>();
 			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
@@ -50,6 +72,9 @@ namespace Atlas.Tabs
 			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
 				if (propertyInfo.GetCustomAttribute<HiddenColumnAttribute>() != null)
+					continue;
+
+				if (propertyInfo.GetIndexParameters().Any())
 					continue;
 
 				visibleProperties.Add(propertyInfo);

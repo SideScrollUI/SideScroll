@@ -7,6 +7,7 @@ namespace Atlas.Tabs
 	// implement INotifyPropertyChanged to prevent memory leaks
 	public class ListPair : IListPair, IListItem, INotifyPropertyChanged, IMaxDesiredWidth
 	{
+		[StyleLabel]
 		public object Key { get; set; }
 		[StyleValue]
 		public object Value { get; set; }

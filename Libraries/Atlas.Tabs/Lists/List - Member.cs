@@ -14,7 +14,7 @@ namespace Atlas.Tabs
 
 	public interface IListPair
 	{
-		[Name("Name")]
+		[Name("Name"), StyleLabel]
 		object Key { get; }
 
 		[InnerValue, StyleValue]
@@ -28,6 +28,7 @@ namespace Atlas.Tabs
 		public event PropertyChangedEventHandler PropertyChanged;
 		public MemberInfo memberInfo;
 		public object obj;
+		[StyleLabel]
 		public string Name { get; set; }
 
 		[HiddenColumn]

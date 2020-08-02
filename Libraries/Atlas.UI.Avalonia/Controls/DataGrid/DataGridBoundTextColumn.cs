@@ -85,7 +85,7 @@ namespace Atlas.UI.Avalonia
 			MenuItem menuItemCopy = new MenuItem() { Header = "_Copy - Column" };
 			menuItemCopy.Click += delegate
 			{
-				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(ColumnText);
+				ClipBoardUtils.SetTextAsync(ColumnText);
 			};
 			list.Add(menuItemCopy);
 
@@ -117,7 +117,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopy = new MenuItem() { Header = "_Copy - Cell Contents" };
 			menuItemCopy.Click += delegate
 			{
-				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
+				ClipBoardUtils.SetTextAsync(textBlock.Text);
 			};
 			list.Add(menuItemCopy);
 
@@ -128,7 +128,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGridUtils.DataGridToStringTable(dataGrid);
 				if (text != null)
-					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+					ClipBoardUtils.SetTextAsync(text);
 			};
 			list.Add(menuItemCopyDataGrid);
 
@@ -137,7 +137,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGridUtils.DataGridToCsv(dataGrid);
 				if (text != null)
-					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+					ClipBoardUtils.SetTextAsync(text);
 			};
 			list.Add(menuItemCopyDataGridCsv);
 

@@ -79,6 +79,12 @@ namespace Atlas.Core
 		}
 	}
 
+	// Style a Column to use the same color as the header
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class StyleLabelAttribute : Attribute
+	{
+	}
+
 	// 
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class StyleValueAttribute : Attribute

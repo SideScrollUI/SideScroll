@@ -100,7 +100,7 @@ namespace Atlas.UI.Avalonia
 				};
 				cell.Styles.Add(style);*/
 
-				if (DisplayIndex == 1)
+				if (DisplayIndex == 1 || propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
 				{
 					// Update the cell color based on the object
 					var binding = new Binding()
@@ -109,6 +109,16 @@ namespace Atlas.UI.Avalonia
 						Mode = BindingMode.OneWay,
 					};
 					cell.Bind(DataGridCell.BackgroundProperty, binding);
+				}
+
+				if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
+				{
+					var foregroundBinding = new Binding()
+					{
+						Converter = new ValueToForegroundBrushConverter(propertyInfo),
+						Mode = BindingMode.OneWay,
+					};
+					cell.Bind(DataGridCell.ForegroundProperty, foregroundBinding);
 				}
 
 				return textBlock;
@@ -196,7 +206,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopy = new MenuItem() { Header = "Copy - _Cell Contents" };
 			menuItemCopy.Click += delegate
 			{
-				((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(textBlock.Text);
+				ClipBoardUtils.SetTextAsync(textBlock.Text);
 			};
 			list.Add(menuItemCopy);
 
@@ -207,7 +217,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGridUtils.DataGridColumnToStringTable(dataGrid, this);
 				if (text != null)
-					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+					ClipBoardUtils.SetTextAsync(text);
 			};
 			list.Add(menuItemCopyColumn);
 
@@ -216,7 +226,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGridUtils.DataGridRowToString(dataGrid, cell.DataContext);
 				if (text != null)
-					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+					ClipBoardUtils.SetTextAsync(text);
 			};
 			list.Add(menuItemCopyRow);
 
@@ -225,7 +235,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGridUtils.DataGridToStringTable(dataGrid);
 				if (text != null)
-					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+					ClipBoardUtils.SetTextAsync(text);
 			};
 			list.Add(menuItemCopyDataGrid);
 
@@ -234,7 +244,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGridUtils.DataGridToCsv(dataGrid);
 				if (text != null)
-					((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);
+					ClipBoardUtils.SetTextAsync(text);
 			};
 			list.Add(menuItemCopyDataGridCsv);
 

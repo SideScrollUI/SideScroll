@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Atlas.Core;
+using Atlas.Extensions;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -79,20 +82,17 @@ namespace Atlas.Tabs
 				filterExpressions.Add(filterExpression);
 			}
 		}
+		public bool Matches(IList iList)
+		{
+			Type listType = iList.GetType();
+			Type elementType = listType.GetGenericArguments()[0]; // dictionaries?
+			List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleProperties(elementType);
+			return Matches(iList, visibleProperties);
+		}
 
 		public bool Matches(object obj, List<PropertyInfo> columnProperties)
 		{
-			string allValuesUppercase = "";
-			foreach (PropertyInfo propertyInfo in columnProperties)
-			{
-				object value = propertyInfo.GetValue(obj);
-				if (value == null)
-					continue;
-				string valueText = value.ToString();
-				if (valueText == null)
-					continue;
-				allValuesUppercase += valueText.ToUpper();
-			}
+			string allValuesUppercase = GetItemSearchText(obj, columnProperties);
 			if (isAnd)
 			{
 				foreach (FilterExpression filterExpression in filterExpressions)
@@ -111,6 +111,42 @@ namespace Atlas.Tabs
 				}
 				return false;
 			}
+		}
+
+		private static string GetItemSearchText(object obj, List<PropertyInfo> columnProperties)
+		{
+			string allValuesUppercase = "";
+			foreach (PropertyInfo propertyInfo in columnProperties)
+			{
+				object value = propertyInfo.GetValue(obj);
+				if (value == null)
+					continue;
+
+				string valueText = value.ToString();
+				if (valueText == null)
+					continue;
+				allValuesUppercase += valueText;
+			}
+
+			object innerValue = obj.GetInnerValue();
+			if (innerValue != obj)
+			{
+				Type innerType = innerValue.GetType();
+				if (innerValue is IList list)
+				{
+					List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleElementProperties(list); // cache me
+					foreach (var item in list)
+						allValuesUppercase += GetItemSearchText(item, visibleProperties);
+				}
+				else
+				{
+					List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleProperties(innerType); // cache me
+					if (visibleProperties != null)
+						allValuesUppercase += GetItemSearchText(innerValue, visibleProperties);
+				}
+			}
+
+			return allValuesUppercase.ToUpper();
 		}
 	}
 }

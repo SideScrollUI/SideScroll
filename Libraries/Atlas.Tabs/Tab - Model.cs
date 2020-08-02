@@ -383,9 +383,7 @@ namespace Atlas.Tabs
 			depth--;
 			foreach (IList iList in ItemList)
 			{
-				Type listType = iList.GetType();
-				Type elementType = listType.GetGenericArguments()[0]; // dictionaries?
-				List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleProperties(elementType);
+				List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleElementProperties(iList);
 
 				var tabDataSettings = new TabDataSettings();
 				tabBookmark.ViewSettings.TabDataSettings.Add(tabDataSettings);
@@ -394,7 +392,7 @@ namespace Atlas.Tabs
 				{
 					if (filter.Matches(obj, visibleProperties))
 					{
-						SelectedRow selectedRow = new SelectedRow()
+						var selectedRow = new SelectedRow()
 						{
 							rowIndex = -1,
 							obj = obj,
