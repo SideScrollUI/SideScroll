@@ -91,7 +91,7 @@ namespace Atlas.UI.Avalonia
 				//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
 				TextBlock textBlock = CreateTextBlock(cell, dataItem);
 
-				/*Style style = new Style(x => x.OfType<DataGridCell>())
+				/*var style = new Style(x => x.OfType<DataGridCell>())
 				{
 					Setters = new[]
 					{

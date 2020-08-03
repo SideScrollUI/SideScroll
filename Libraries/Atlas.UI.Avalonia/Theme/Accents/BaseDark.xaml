@@ -58,12 +58,11 @@
 
         <!-- Custom Colors -->
         <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#0f0f0f</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#161616</SolidColorBrush>
 
         <!-- Links -->
         <SolidColorBrush x:Key="ThemeHasLinksBrush">#303060</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeNoLinksBrush">#0f1a2a</SolidColorBrush>
-
-        <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#161616</SolidColorBrush>
 
         <!-- ScrollBar -->
         <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush">#38409a</SolidColorBrush>

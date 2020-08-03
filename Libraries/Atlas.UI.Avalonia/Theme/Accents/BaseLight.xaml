@@ -46,18 +46,20 @@
         <SolidColorBrush x:Key="HighlightForegroundBrush">AliceBlue</SolidColorBrush>
 
         <!-- Grid Column Header -->
-        <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#262348</SolidColorBrush>
+        <SolidColorBrush x:Key="GridColumnHeaderBackgroundBrush">#27204a</SolidColorBrush>
         <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#d0d0f0</SolidColorBrush>
       
          <!-- Custom Colors -->
-        <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#1e1e1e</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#0f0f0f</SolidColorBrush>
+        <!--SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#272727</-->
+        <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#1d1d1d</SolidColorBrush>
 
         <!-- Links -->
         <SolidColorBrush x:Key="ThemeHasLinksBrush">#ffffff</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeNoLinksBrush">#d7d9f2</SolidColorBrush>
+        <!--SolidColorBrush x:Key="ThemeNoLinksBrush">#d7d9f2</SolidColorBrush-->
+        <SolidColorBrush x:Key="ThemeNoLinksBrush">#d9d8ed</SolidColorBrush>
+        <!--SolidColorBrush x:Key="ThemeNoLinksBrush">#cccfea</SolidColorBrush-->
         <!--SolidColorBrush x:Key="ThemeNoLinksBrush">#c8c9e5</SolidColorBrush-->
-
-        <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#272727</SolidColorBrush>
 
         <!-- ScrollBar -->
         <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush">#38409a</SolidColorBrush>
@@ -72,7 +74,7 @@
         <SolidColorBrush x:Key="ThemeGridHighBrush">#92F397</SolidColorBrush>
 
         <!-- Buttons -->
-        <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">#262348</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">#27204a</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonForegroundBrush">#60bdff</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush">#2040a0</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush">#3060d0</SolidColorBrush>
@@ -81,7 +83,7 @@
         <SolidColorBrush x:Key="ThemeRadioButtonBorderBrush">#004dd0</SolidColorBrush>
 
         <!-- Toolbar -->
-        <SolidColorBrush x:Key="ToolbarButtonBackgroundBrush">#262348</SolidColorBrush>
+        <SolidColorBrush x:Key="ToolbarButtonBackgroundBrush">#27204a</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarButtonBackgroundHoverBrush">#2040a0</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarButtonSeparatorBrush">#004db0</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarTextForegroundBrush">#8888FF</SolidColorBrush>
