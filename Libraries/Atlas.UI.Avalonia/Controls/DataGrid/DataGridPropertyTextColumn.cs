@@ -100,7 +100,7 @@ namespace Atlas.UI.Avalonia
 				};
 				cell.Styles.Add(style);*/
 
-				if (DisplayIndex == 1 || propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
+				if (DisplayIndex == 1)// || propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
 				{
 					// Update the cell color based on the object
 					var binding = new Binding()
@@ -111,7 +111,17 @@ namespace Atlas.UI.Avalonia
 					cell.Bind(DataGridCell.BackgroundProperty, binding);
 				}
 
-				if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
+				/*if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
+				{
+					var foregroundBinding = new Binding()
+					{
+						Converter = new ValueToForegroundBrushConverter(propertyInfo),
+						Mode = BindingMode.OneWay,
+					};
+					cell.Bind(DataGridCell.ForegroundProperty, foregroundBinding);
+				}*/
+
+				if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					var foregroundBinding = new Binding()
 					{

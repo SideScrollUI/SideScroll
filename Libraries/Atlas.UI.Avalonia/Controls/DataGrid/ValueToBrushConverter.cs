@@ -38,7 +38,7 @@ namespace Atlas.UI.Avalonia
 				{
 					bool hasLinks = TabModel.ObjectHasLinks(value, true);
 					if (hasLinks)
-						return null;// StyleBrushes.HasLinks;
+						return StyleBrushes.HasLinks; // null?
 					else if (Editable && value is ListMember listMember && listMember.Editable)
 						return StyleBrushes.Editable;
 					else
@@ -114,15 +114,16 @@ namespace Atlas.UI.Avalonia
 		{
 			try
 			{
-				if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
-					return Theme.TitleForeground;
-				if (value is DictionaryEntry || propertyInfo.IsDefined(typeof(StyleValueAttribute)))
+				//if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
+				//	return Theme.TitleForeground;
+				if (//value is DictionaryEntry || 
+					propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					bool hasLinks = TabModel.ObjectHasLinks(value, true);
-					if (hasLinks)
-						return Brushes.Black;// StyleBrushes.HasLinks;
+					if (!hasLinks)
+						return new SolidColorBrush(Color.Parse("#d0d0e8")); //Brushes.Black;// StyleBrushes.HasLinks;
 					else
-						return Theme.TitleForeground;
+						return new SolidColorBrush(Color.Parse("#d0d0e8")); //Theme.TitleForeground;
 				}
 			}
 			catch (InvalidCastException)

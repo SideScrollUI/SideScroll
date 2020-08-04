@@ -55,9 +55,9 @@
         <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#1d1d1d</SolidColorBrush>
 
         <!-- Links -->
-        <SolidColorBrush x:Key="ThemeHasLinksBrush">#ffffff</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeHasLinksBrush">#58588f</SolidColorBrush>
         <!--SolidColorBrush x:Key="ThemeNoLinksBrush">#d7d9f2</SolidColorBrush-->
-        <SolidColorBrush x:Key="ThemeNoLinksBrush">#d9d8ed</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeNoLinksBrush">#3c3a54</SolidColorBrush>
         <!--SolidColorBrush x:Key="ThemeNoLinksBrush">#cccfea</SolidColorBrush-->
         <!--SolidColorBrush x:Key="ThemeNoLinksBrush">#c8c9e5</SolidColorBrush-->
 
