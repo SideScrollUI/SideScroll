@@ -50,9 +50,9 @@
         <SolidColorBrush x:Key="GridColumnHeaderForegroundBrush">#d0d0f0</SolidColorBrush>
       
          <!-- Custom Colors -->
-        <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#0f0f0f</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeTabBackgroundBrush">#141414</SolidColorBrush>
         <!--SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#272727</-->
-        <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#1d1d1d</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush">#1e1e1e</SolidColorBrush>
 
         <!-- Links -->
         <SolidColorBrush x:Key="ThemeHasLinksBrush">#58588f</SolidColorBrush>
