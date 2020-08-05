@@ -43,11 +43,12 @@ Actions add Buttons to the tab. When clicked, it will:
 
 			private void StartAsyncError(Call call)
 			{
-				StartAsync(StartAsyncLogError, call);
+				StartAsync(StartAsyncLogErrorAsync, call);
 			}
 
-			private async Task StartAsyncLogError(Call call)
+			private async Task StartAsyncLogErrorAsync(Call call)
 			{
+				await Task.Delay(1);
 				call.Log.AddError("This should show the task");
 			}
 

@@ -100,7 +100,7 @@ namespace Atlas.UI.Avalonia
 				};
 				cell.Styles.Add(style);*/
 
-				if (DisplayIndex == 1)// || propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
+				if (DisplayIndex == 1 || propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					// Update the cell color based on the object
 					var binding = new Binding()
