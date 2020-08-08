@@ -563,6 +563,9 @@ namespace Atlas.UI.Avalonia.Controls
 			// 1 column should take up entire grid
 			//if (dataGrid.Columns.Count == 1)
 			//	dataGrid.Columns[0].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+
+			if (propertyColumns.Count == 1)
+				dataGrid.HeadersVisibility = DataGridHeadersVisibility.None;
 		}
 
 		public void AddColumn(string label, string propertyName)
@@ -1107,6 +1110,7 @@ namespace Atlas.UI.Avalonia.Controls
 			return null;
 		}
 
+		// Get's the [DataValue] member that will be imported with an Imported Bookmark
 		private object GetDataValue(object obj)
 		{
 			Type type = obj.GetType();

@@ -15,10 +15,10 @@ namespace Atlas.Core
 	}
 
 	// ->Tabs: Currently used for detecting for detecting parent/child loops, merge this with [DataKey]?
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	/*[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class KeyAttribute : Attribute
 	{
-	}
+	}*/
 
 	// ->Tabs: DataGrids use this as a unique key when matching rows
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
@@ -85,7 +85,7 @@ namespace Atlas.Core
 	{
 	}
 
-	// 
+	// Style value based on whether it contains links or not
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class StyleValueAttribute : Attribute
 	{

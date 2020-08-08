@@ -821,7 +821,7 @@ namespace Atlas.Tabs
 			{
 				foreach (PropertyInfo propertyInfo in type.GetProperties())
 				{
-					if (propertyInfo.GetCustomAttribute<KeyAttribute>() != null)
+					if (propertyInfo.GetCustomAttribute<DataKeyAttribute>() != null)
 					{
 						var objKey = propertyInfo.GetValue(obj);
 						var tabKey = propertyInfo.GetValue(iTab);

@@ -22,10 +22,11 @@ namespace Atlas.UI.Avalonia
 
 		protected override IControl GenerateElement(DataGridCell cell, object dataItem)
 		{
-			var checkbox = GenerateEditingElementDirect(cell, dataItem);
+			var checkbox = (CheckBox)GenerateEditingElementDirect(cell, dataItem);
 			if (Binding != null)
 				checkbox.Bind(CheckBox.IsCheckedProperty, Binding);
 
+			checkbox.Margin = new Thickness(10, 4);
 			/*var checkbox = new CheckBox()
 			{
 				Margin = new Thickness(10, 0, 0, 0), // aligns with header title better than centering

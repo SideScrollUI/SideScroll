@@ -128,7 +128,7 @@ namespace Atlas.UI.Avalonia
 						Converter = new ValueToForegroundBrushConverter(propertyInfo),
 						Mode = BindingMode.OneWay,
 					};
-					cell.Bind(DataGridCell.ForegroundProperty, foregroundBinding);
+					textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
 				}
 
 				return textBlock;
