@@ -1,19 +1,21 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
+using Atlas.UI.Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Media;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
+using static Atlas.UI.Avalonia.DataGridUtils;
 
-namespace Atlas.UI.Avalonia
+namespace Atlas.Extensions
 {
-	public class DataGridUtils
+	public static class DataGridExtensions
 	{
-		public static string DataGridColumnToStringTable(DataGrid dataGrid, DataGridBoundColumn column)
+		public static string ColumnToStringTable(this DataGrid dataGrid, DataGridBoundColumn column)
 		{
 			if (dataGrid == null || column == null)
 				return null;
@@ -40,8 +42,8 @@ namespace Atlas.UI.Avalonia
 			string text = sb.ToString();
 			return text;
 		}
-		
-		public static string DataGridRowToString(DataGrid dataGrid, object obj)
+
+		public static string RowToString(this DataGrid dataGrid, object obj)
 		{
 			if (dataGrid == null || obj == null)
 				return null;
@@ -71,37 +73,39 @@ namespace Atlas.UI.Avalonia
 			return text;
 		}
 
-		public class ColumnInfo
-		{
-			public string Name { get; set; }
-			public TextAlignment RightAlign { get; set; }
-
-			public ColumnInfo(string name)
-			{
-				Name = name;
-			}
-		}
-
-		public static string DataGridToStringTable(DataGrid dataGrid)
+		public static string SelectedToString(this DataGrid dataGrid)
 		{
 			if (dataGrid == null)
 				return null;
 
-			GetDataGridContents(dataGrid, 
-				out List<ColumnInfo> columns, 
+			GetDataGridContents(dataGrid, dataGrid.SelectedItems,
+				out List<ColumnInfo> columns,
 				out List<List<string>> contentRows);
 
 			string text = TableToString(columns, contentRows);
 			return text;
 		}
 
-		public static string DataGridToCsv(DataGrid dataGrid)
+		public static string ToStringTable(this DataGrid dataGrid)
 		{
 			if (dataGrid == null)
 				return null;
 
-			GetDataGridContents(dataGrid, 
-				out List<ColumnInfo> columns, 
+			GetDataGridContents(dataGrid, dataGrid.Items,
+				out List<ColumnInfo> columns,
+				out List<List<string>> contentRows);
+
+			string text = TableToString(columns, contentRows);
+			return text;
+		}
+
+		public static string ToCsv(this DataGrid dataGrid)
+		{
+			if (dataGrid == null)
+				return null;
+
+			GetDataGridContents(dataGrid, dataGrid.Items,
+				out List<ColumnInfo> columns,
 				out List<List<string>> contentRows);
 
 			var stringBuilder = new StringBuilder();
@@ -136,7 +140,7 @@ namespace Atlas.UI.Avalonia
 			return stringBuilder.ToString();
 		}
 
-		private static void GetDataGridContents(DataGrid dataGrid, out List<ColumnInfo> columns, out List<List<string>> contentRows)
+		private static void GetDataGridContents(DataGrid dataGrid, IEnumerable items, out List<ColumnInfo> columns, out List<List<string>> contentRows)
 		{
 			columns = new List<ColumnInfo>();
 			contentRows = new List<List<string>>();
@@ -159,7 +163,7 @@ namespace Atlas.UI.Avalonia
 			}
 
 			//var collection = (ICollectionView)dataGrid.Items;
-			foreach (var item in dataGrid.Items)
+			foreach (var item in items)
 			{
 				var stringCells = new List<string>();
 				foreach (DataGridColumn dataColumn in visibleColumns.Values)
@@ -181,118 +185,5 @@ namespace Atlas.UI.Avalonia
 			}
 		}
 
-		public static string TableToString(List<ColumnInfo> columns, List<List<string>> contentRows)
-		{
-			var columnWidths = new List<int>();
-			for (int column = 0; column < columns.Count; column++)
-			{
-				string header = columns[column].Name;
-				int maxWidth = header.Length;
-				foreach (List<string> row in contentRows)
-				{
-					string value = row[column];
-					if (value != null)
-						maxWidth = Math.Max(maxWidth, value.Length);
-				}
-				columnWidths.Add(maxWidth);
-			}
-
-			string line = "-";
-			foreach (int value in columnWidths)
-			{
-				line += new string('-', value + 3);
-			}
-			line += '\n';
-
-			var stringBuilder = new StringBuilder(line);
-
-			// Column Headers
-			stringBuilder.Append("|");
-			int columnIndex = 0;
-			foreach (var columnInfo in columns)
-			{
-				int columnWidth = columnWidths[columnIndex++];
-				int leftPadding = (columnWidth - columnInfo.Name.Length) / 2;
-				int rightPadding = columnWidth - columnInfo.Name.Length - leftPadding;
-				stringBuilder.Append(" " + new string(' ', leftPadding) + columnInfo.Name + new string(' ', rightPadding) + " |");
-			}
-			stringBuilder.Append('\n');
-
-			// Separator
-			stringBuilder.Append("|");
-			foreach (int columnWidth in columnWidths)
-			{
-				stringBuilder.Append(new string('-', columnWidth + 2));
-				stringBuilder.Append("|");
-			}
-			stringBuilder.Append('\n');
-
-			// Content Cells
-			foreach (var row in contentRows)
-			{
-				stringBuilder.Append("|");
-				columnIndex = 0;
-				foreach (string value in row)
-				{
-					string text = value?.Replace("\n", "").Replace("\r", "") ?? "";
-					if (columns[columnIndex].RightAlign == TextAlignment.Right)
-						stringBuilder.Append(" " + text.PadLeft(columnWidths[columnIndex++], ' ') + " |");
-					else
-						stringBuilder.Append(" " + text.PadRight(columnWidths[columnIndex++], ' ') + " |");
-				}
-				stringBuilder.Append('\n');
-			}
-			stringBuilder.Append(line);
-			return stringBuilder.ToString();
-		}
-
-		public static bool IsTypeSortable(Type type)
-		{
-			type = type.GetNonNullableType();
-			if (type.IsPrimitive ||
-				type.IsEnum ||
-				type == typeof(decimal) ||
-				type == typeof(string) ||
-				type == typeof(DateTime) ||
-				type == typeof(TimeSpan))
-				return true;
-
-			return false;
-		}
-
-		public static bool IsTypeAutoSize(Type type)
-		{
-			type = type.GetNonNullableType();
-
-			if (type == typeof(string))
-				return false;
-
-			if (type.IsPrimitive ||
-				type.IsEnum ||
-				type == typeof(decimal) ||
-				type == typeof(DateTime) ||
-				type == typeof(TimeSpan) ||
-				typeof(IList).IsAssignableFrom(type))
-				return true;
-
-			return false;
-		}
-
-		public static TextAlignment GetTextAlignment(Type type)
-		{
-			type = type.GetNonNullableType();
-
-			if (type == typeof(string))
-				return TextAlignment.Left;
-
-			if (type.IsNumeric() ||
-				type == typeof(TimeSpan) ||
-				typeof(IEnumerable).IsAssignableFrom(type))
-			{
-				return TextAlignment.Right;
-			}
-
-			return TextAlignment.Left;
-		}
 	}
 }

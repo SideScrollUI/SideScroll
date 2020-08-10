@@ -305,7 +305,7 @@ namespace Atlas.UI.Avalonia.Controls
 			var menuItemCopy = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopy.Click += delegate
 			{
-				string text = DataGridUtils.DataGridToStringTable(dataGrid);
+				string text = dataGrid.ToStringTable();
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
@@ -555,6 +555,9 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				propertyColumns[0].label = itemCollection.ColumnName;
 			}
+
+			//if (propertyColumns.Count == 1 && propertyColumns[0].label == "Name")
+			//	propertyColumns[0].label = " ";
 
 			foreach (TabDataSettings.PropertyColumn propertyColumn in propertyColumns)
 			{
@@ -1116,15 +1119,15 @@ namespace Atlas.UI.Avalonia.Controls
 			Type type = obj.GetType();
 			if (type.GetCustomAttribute<DataKeyAttribute>() != null)
 				return obj;
-			var keyProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
-			var keyFields = type.GetFieldsWithAttribute<DataValueAttribute>();
-			if (keyProperties.Count > 0)
+			var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
+			var valueFields = type.GetFieldsWithAttribute<DataValueAttribute>();
+			if (valueProperties.Count > 0)
 			{
-				return keyProperties[0].GetValue(obj);
+				return valueProperties[0].GetValue(obj);
 			}
-			else if (keyFields.Count > 0)
+			else if (valueFields.Count > 0)
 			{
-				return keyFields[0].GetValue(obj);
+				return valueFields[0].GetValue(obj);
 			}
 			return null;
 		}

@@ -1,3 +1,4 @@
+using Atlas.Extensions;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -126,7 +127,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopyDataGrid.Click += delegate
 			{
-				string text = DataGridUtils.DataGridToStringTable(dataGrid);
+				string text = dataGrid.ToStringTable();
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
@@ -135,7 +136,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - C_SV" };
 			menuItemCopyDataGridCsv.Click += delegate
 			{
-				string text = DataGridUtils.DataGridToCsv(dataGrid);
+				string text = dataGrid.ToCsv();
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};

@@ -109,6 +109,13 @@ namespace Atlas.UI.Avalonia
 						Mode = BindingMode.OneWay,
 					};
 					cell.Bind(DataGridCell.BackgroundProperty, binding);
+
+					var foregroundBinding = new Binding()
+					{
+						Converter = new ValueToForegroundBrushConverter(propertyInfo),
+						Mode = BindingMode.OneWay,
+					};
+					textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
 				}
 
 				/*if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
@@ -121,7 +128,7 @@ namespace Atlas.UI.Avalonia
 					cell.Bind(DataGridCell.ForegroundProperty, foregroundBinding);
 				}*/
 
-				if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
+				/*if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					var foregroundBinding = new Binding()
 					{
@@ -129,7 +136,7 @@ namespace Atlas.UI.Avalonia
 						Mode = BindingMode.OneWay,
 					};
 					textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
-				}
+				}*/
 
 				return textBlock;
 			}
@@ -225,7 +232,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopyColumn = new MenuItem() { Header = "Copy - Co_lumn" };
 			menuItemCopyColumn.Click += delegate
 			{
-				string text = DataGridUtils.DataGridColumnToStringTable(dataGrid, this);
+				string text = dataGrid.ColumnToStringTable(this);
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
@@ -234,25 +241,34 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopyRow = new MenuItem() { Header = "Copy - _Row" };
 			menuItemCopyRow.Click += delegate
 			{
-				string text = DataGridUtils.DataGridRowToString(dataGrid, cell.DataContext);
+				string text = dataGrid.RowToString(cell.DataContext);
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
 			list.Add(menuItemCopyRow);
 
+			var menuItemCopySelected = new MenuItem() { Header = "Copy - _Selected" };
+			menuItemCopySelected.Click += delegate
+			{
+				string text = dataGrid.SelectedToString();
+				if (text != null)
+					ClipBoardUtils.SetTextAsync(text);
+			};
+			list.Add(menuItemCopySelected);
+
 			var menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopyDataGrid.Click += delegate
 			{
-				string text = DataGridUtils.DataGridToStringTable(dataGrid);
+				string text = dataGrid.ToStringTable();
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
 			list.Add(menuItemCopyDataGrid);
 
-			var menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - C_SV" };
+			var menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - CS_V" };
 			menuItemCopyDataGridCsv.Click += delegate
 			{
-				string text = DataGridUtils.DataGridToCsv(dataGrid);
+				string text = dataGrid.ToCsv();
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};

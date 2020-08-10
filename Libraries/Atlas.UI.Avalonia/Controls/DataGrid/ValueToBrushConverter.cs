@@ -116,7 +116,7 @@ namespace Atlas.UI.Avalonia
 			{
 				//if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				//	return Theme.TitleForeground;
-				if (//value is DictionaryEntry || 
+				if (value is DictionaryEntry || 
 					propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					bool hasLinks = TabModel.ObjectHasLinks(value, true);
