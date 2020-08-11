@@ -139,7 +139,7 @@ namespace Atlas.Serialize
 					{
 						T obj = serializerFile.Load<T>(call, lazy);
 						if (obj != null)
-							entries.Add(new DataItem<T>(serializerFile.LoadHeader(call).name, obj));
+							entries.Add(serializerFile.LoadHeader(call).name, obj);
 					}
 				}
 			}
@@ -148,7 +148,7 @@ namespace Atlas.Serialize
 
 		public SortedDictionary<string, T> LoadAllSorted<T>(Call call = null, string directory = null, bool lazy = false)
 		{
-			return LoadAll<T>(call, directory, lazy).Map();
+			return LoadAll<T>(call, directory, lazy).Lookup;
 		}
 
 		public ItemCollection<Header> LoadHeaders(Type type, string directory = null, Call call = null)
@@ -360,7 +360,6 @@ namespace Atlas.Serialize
 		//public DataRepo<T> dataRepo;
 
 		public DataItemCollection<T> Items { get; set; }
-		//public SortedDictionary<string, T> Lookup { get; set; }
 
 		public DataRepoView(DataRepo dataRepo, string saveDirectory) : base(dataRepo, saveDirectory)
 		{
@@ -375,7 +374,6 @@ namespace Atlas.Serialize
 		private void Initialize()
 		{
 			Items = LoadAll();
-			//Lookup = Items.Map()
 		}
 
 		public override void Save(Call call, string key, T item)
@@ -408,6 +406,8 @@ namespace Atlas.Serialize
 
 	public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	{
+		public SortedDictionary<string, T> Lookup { get; set; } = new SortedDictionary<string, T>();
+
 		public DataItemCollection()
 		{
 		}
@@ -415,9 +415,10 @@ namespace Atlas.Serialize
 		// Don't implement List<T>, it isn't sortable
 		public DataItemCollection(IEnumerable<DataItem<T>> iEnumerable) : base(iEnumerable)
 		{
+			Lookup = Map();
 		}
 
-		public SortedDictionary<string, T> Map()
+		private SortedDictionary<string, T> Map()
 		{
 			var entries = new SortedDictionary<string, T>();
 			foreach (DataItem<T> item in ToList())
@@ -441,6 +442,13 @@ namespace Atlas.Serialize
 		public void Add(string key, T value)
 		{
 			Add(new DataItem<T>(key, value));
+			Lookup.Add(key, value);
+		}
+
+		public new void Remove(DataItem<T> item)
+		{
+			base.Remove(item);
+			Lookup.Remove(item.Key);
 		}
 	}
 

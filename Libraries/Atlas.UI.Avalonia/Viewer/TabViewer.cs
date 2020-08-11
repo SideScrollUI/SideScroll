@@ -18,8 +18,8 @@ namespace Atlas.UI.Avalonia
 {
 	public class TabViewer : Grid
 	{
-		public static readonly int DefaultIncrementWidth = 1000; // should we also use a max percent?
-		public static readonly int KeyboardIncrementWidth = 500;
+		public int DefaultIncrementWidth = 1000; // should we also use a max percent?
+		public int KeyboardIncrementWidth = 500;
 
 		public static TabViewer baseViewer;
 		public static string LoadBookmarkUri { get; set; }

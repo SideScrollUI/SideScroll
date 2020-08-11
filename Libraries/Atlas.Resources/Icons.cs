@@ -7,46 +7,46 @@ namespace Atlas.Resources
 {
 	public class Icons
 	{
-		public static readonly string Logo = "Logo3.ico";
+		public const string Logo = "Logo3.ico";
 
-		public static readonly string Pin = "placeholder.png";
-		public static readonly string Add = "add.png";
-		public static readonly string Delete = "cancel.png"; // red too bright
+		public const string Pin = "placeholder.png";
+		public const string Add = "add.png";
+		public const string Delete = "cancel.png"; // red too bright
 
-		public static readonly string Back = "left-arrow-blue.png";
-		public static readonly string Forward = "right-arrow-blue.png";
+		public const string Back = "left-arrow-blue.png";
+		public const string Forward = "right-arrow-blue.png";
 
-		public static readonly string Search = "search.png";
-		public static readonly string ClearSearch = "clear_search.png";
+		public const string Search = "search.png";
+		public const string ClearSearch = "clear_search.png";
 
-		public static readonly string Info1 = "info_24_759eeb.png"; // 759eeb
-		//public static readonly string Info2 = "info_24_c8c2f9.png"; // C8C2F9
+		public const string Info1 = "info_24_759eeb.png"; // 759eeb
+		//public const string Info2 = "info_24_c8c2f9.png"; // C8C2F9
 
-		public static readonly string BlankDocument = "blank-document.png";
-		public static readonly string Save = "save-file-option.png";
+		public const string BlankDocument = "blank-document.png";
+		public const string Save = "save-file-option.png";
 
-		public static readonly string Browser = "internet.png";
+		public const string Browser = "internet.png";
 
-		public static readonly string Unlock = "unlock.png";
-		public static readonly string Password = "password.png";
-		public static readonly string Enter = "enter.png";
+		public const string Unlock = "unlock.png";
+		public const string Password = "password.png";
+		public const string Enter = "enter.png";
 
-		public static readonly string PadNote = "padnote.png";
-		public static readonly string Paste = "paste_16.png";
-		public static readonly string Eraser = "eraser.png";
+		public const string PadNote = "padnote.png";
+		public const string Paste = "paste_16.png";
+		public const string Eraser = "eraser.png";
 
-		public static readonly string Refresh = "refresh.png";
-		public static readonly string Stats = "stats.png";
+		public const string Refresh = "refresh.png";
+		public const string Stats = "stats.png";
 
-		public static readonly string List1 = "list1.png";
-		public static readonly string List2 = "list2.png";
-		public static readonly string DeleteList = "delete_list.png";
+		public const string List1 = "list1.png";
+		public const string List2 = "list2.png";
+		public const string DeleteList = "delete_list.png";
 
-		public static readonly string Link = "link.png";
-		public static readonly string Bookmark = "bookmark.png";
-		public static readonly string Import = "import.png";
+		public const string Link = "link.png";
+		public const string Bookmark = "bookmark.png";
+		public const string Import = "import.png";
 
-		public static readonly string Screenshot = "screenshot.png";
+		public const string Screenshot = "screenshot.png";
 
 		public class Streams
 		{

@@ -11,7 +11,6 @@ namespace Atlas.Tabs
 		public static string DataKey = "Saved";
 		//public event EventHandler<EventArgs> OnDelete;
 
-		public string path;
 		private Project project;
 		public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new ItemCollectionUI<TabBookmarkItem>();
 		public TabBookmarkItem NewBookmark { get; set; }

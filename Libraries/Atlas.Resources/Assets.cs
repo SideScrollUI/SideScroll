@@ -7,8 +7,8 @@ namespace Atlas.Resources
 {
 	public class Assets
 	{
-		public static readonly string Hourglass = "hourglass64.png";
-		public static readonly string Shutter = "shutter64.png";
+		public const string Hourglass = "hourglass64.png";
+		public const string Shutter = "shutter64.png";
 
 		public class Streams
 		{

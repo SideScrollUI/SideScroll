@@ -16,7 +16,7 @@ namespace Atlas.Tabs
 	// An Item collection that shows a Tab interface for every item
 	public class DataCollection<TDataType, TTabType> where TTabType : IDataTab, new()
 	{
-		//public static string DataKey = "Saved";
+		//public const string DataKey = "Saved";
 		//public event EventHandler<EventArgs> OnDelete;
 
 		public string path;
