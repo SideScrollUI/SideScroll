@@ -8,7 +8,7 @@ namespace Atlas.Tabs
 {
 	public class BookmarkCollection
 	{
-		public static string DataKey = "Saved";
+		public static string DataKey = "Bookmarks";
 		//public event EventHandler<EventArgs> OnDelete;
 
 		private Project project;

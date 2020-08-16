@@ -25,15 +25,12 @@ namespace Atlas.Tabs
 		public Bookmark Bookmark { get; set; }
 		private Project Project { get; set; }
 
+		public override string ToString() => Name;
+
 		public TabBookmarkItem(Bookmark bookmark, Project project)
 		{
 			Bookmark = bookmark;
 			Project = project;
-		}
-
-		public override string ToString()
-		{
-			return Name;
 		}
 
 		public TabInstance Create()
@@ -42,7 +39,10 @@ namespace Atlas.Tabs
 				return null;
 
 			var bookmarkCopy = Bookmark.Clone<Bookmark>(); // This will get modified as users navigate
-			ITab tab = (ITab)Activator.CreateInstance(bookmarkCopy.Type);
+
+			ITab tab = bookmarkCopy.TabBookmark.Tab;
+			if (tab == null)
+				tab = (ITab)Activator.CreateInstance(bookmarkCopy.Type);
 			TabInstance tabInstance = tab.Create();
 			tabInstance.Project = Project.Open(bookmarkCopy); 
 			tabInstance.iTab = this;

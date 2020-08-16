@@ -606,6 +606,11 @@ namespace Atlas.Tabs
 					tabBookmark.DataRepoItems.Add(dataRepoItem);
 				}
 			}*/
+			if (iTab?.GetType().GetCustomAttribute<TabRootAttribute>() != null)
+			{
+				tabBookmark.IsRoot = true;
+				tabBookmark.Tab = iTab;
+			}
 
 			foreach (TabInstance tabInstance in ChildTabInstances.Values)
 			{

@@ -175,6 +175,12 @@ namespace Atlas.Core
 		}
 	}
 
+	// ->Tabs: Tab is rootable for bookmarks, also serializes tab
+	[AttributeUsage(AttributeTargets.Class)]
+	public class TabRootAttribute : Attribute
+	{
+	}
+
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class BindListAttribute : Attribute
 	{

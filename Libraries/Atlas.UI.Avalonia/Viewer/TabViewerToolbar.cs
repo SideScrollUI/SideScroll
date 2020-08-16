@@ -31,7 +31,6 @@ namespace Atlas.UI.Avalonia
 			InitializeControls();
 		}
 
-		// don't want to reload this because 
 		private void InitializeControls()
 		{
 			/*
@@ -69,7 +68,7 @@ namespace Atlas.UI.Avalonia
 			AddSeparator();
 			buttonRefresh = AddButton("Refresh (Ctrl+R)", Icons.Streams.Refresh);
 			//buttonRefresh.Add();
-			buttonRefresh.Add(ButtonRefresh_Click);
+			buttonRefresh.Add(Refresh);
 
 			AddSeparator();
 			buttonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
@@ -110,7 +109,7 @@ namespace Atlas.UI.Avalonia
 			//buttonForward.Click += ButtonForward_Click;
 		}
 
-		private void ButtonRefresh_Click(Call call)
+		private void Refresh(Call call)
 		{
 			tabViewer.Reload();
 		}

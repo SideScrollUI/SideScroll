@@ -17,6 +17,7 @@ namespace Atlas.Tabs
 		public Bookmark Bookmark { get; set; }
 		public string Name { get; set; }
 		public bool IsRoot { get; set; }
+		public ITab Tab { get; set; } // [TabRoot] will set this
 		public TabViewSettings ViewSettings = new TabViewSettings(); // list selections, doesn't know about children
 		public Dictionary<string, TabBookmark> ChildBookmarks { get; set; } = new Dictionary<string, TabBookmark>(); // doesn't know which tabData to use, maps id to child info
 		public string Address
