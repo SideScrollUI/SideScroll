@@ -21,17 +21,14 @@ namespace Atlas.UI.Avalonia.Controls
 		public List<TabChartLegendItem> legendItems = new List<TabChartLegendItem>();
 		public Dictionary<string, TabChartLegendItem> idxLegendItems = new Dictionary<string, TabChartLegendItem>();
 
-		public bool IsHorizontal { get; set; }
-
 		public event EventHandler<EventArgs> OnSelectionChanged;
 		public event EventHandler<EventArgs> OnVisibleChanged;
 
-		public TabControlChartLegend(TabControlChart tabControlChart, bool horizontal)
+		public TabControlChartLegend(TabControlChart tabControlChart)
 		{
 			this.tabControlChart = tabControlChart;
 			this.plotView = tabControlChart.plotView;
 			this.listGroup = tabControlChart.ListGroup;
-			this.IsHorizontal = horizontal;
 			InitializeControls();
 		}
 
@@ -40,14 +37,14 @@ namespace Atlas.UI.Avalonia.Controls
 			HorizontalAlignment = HorizontalAlignment.Left;
 			//VerticalAlignment = VerticalAlignment.Stretch;
 			Margin = new Thickness(6);
-			Orientation = IsHorizontal ? Orientation.Horizontal : Orientation.Vertical;
+			Orientation = listGroup.Horizontal ? Orientation.Horizontal : Orientation.Vertical;
 
-			if (listGroup.ShowLegend && listGroup.ShowOrder && !IsHorizontal)
+			if (listGroup.ShowLegend && listGroup.ShowOrder && !listGroup.Horizontal)
 			{
 				textBlockSum = new TextBlock()
 				{
 					Text = "Total",
-					Foreground = Brushes.LightGray,
+					Foreground = Theme.BackgroundText,
 					Margin = new Thickness(2, 2, 2, 2),
 					HorizontalAlignment = HorizontalAlignment.Right,
 				};

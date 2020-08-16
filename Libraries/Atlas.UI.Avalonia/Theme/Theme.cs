@@ -18,8 +18,8 @@ namespace Atlas.UI.Avalonia
 		public static SolidColorBrush GridBackgroundSelected => Get("ThemeGridBackgroundSelectedBrush");
 		
 		// Links
-		public static SolidColorBrush HasLinks => Get("ThemeHasLinksBrush");
-		public static SolidColorBrush NoLinks => Get("ThemeNoLinksBrush");
+		public static SolidColorBrush HasLinksBackground => Get("ThemeHasLinksBrush");
+		public static SolidColorBrush NoLinksBackground => Get("ThemeNoLinksBrush");
 
 		// Button
 		public static SolidColorBrush ButtonBackground => Get("ThemeButtonBackgroundBrush");

@@ -88,23 +88,24 @@ namespace Atlas.UI.Avalonia.Controls
 		public OxyPlot.Axes.DateTimeAxis dateTimeAxis;
 
 		private static OxyColor GridLineColor = OxyColor.Parse("#333333");
-		public static OxyColor[] Colors { get; set; } = new OxyColor[] {
-				OxyColors.LawnGreen,
-				OxyColors.Fuchsia,
-				OxyColors.Cyan,
-				//OxyColors.Aquamarine, // too close to Cyan (but more matte)
-				OxyColors.Gold,
-				OxyColors.DodgerBlue,
-				OxyColors.Red,
-				OxyColors.BlueViolet,
-				//OxyColors.SlateBlue,
-				OxyColors.Orange,
-				//OxyColors.Pink,
-				//OxyColors.Coral,
-				//OxyColors.YellowGreen,
-				OxyColors.Salmon,
-				OxyColors.MediumSpringGreen,
-			};
+		public static OxyColor[] Colors { get; set; } = new OxyColor[]
+		{
+			OxyColors.LawnGreen,
+			OxyColors.Fuchsia,
+			OxyColors.Cyan,
+			//OxyColors.Aquamarine, // too close to Cyan (but more matte)
+			OxyColors.Gold,
+			OxyColors.DodgerBlue,
+			OxyColors.Red,
+			OxyColors.BlueViolet,
+			//OxyColors.SlateBlue,
+			OxyColors.Orange,
+			//OxyColors.Pink,
+			//OxyColors.Coral,
+			//OxyColors.YellowGreen,
+			OxyColors.Salmon,
+			OxyColors.MediumSpringGreen,
+		};
 
 		public static OxyColor GetColor(int index)
 		{
@@ -137,7 +138,7 @@ namespace Atlas.UI.Avalonia.Controls
 			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("*");
 			MaxWidth = 1500;
-			MaxHeight = 620; // 25 Items
+			MaxHeight = 645; // 25 Items
 
 			if (TabInstance.tabViewSettings.ChartDataSettings.Count == 0)
 				TabInstance.tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
@@ -153,6 +154,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
 				MinHeight = 100,
 				MinWidth = 150,
+				[Grid.RowProperty] = 1,
 			};
 
 			// Show Hover text on mouse over instead of requiring holding the mouse down (why isn't this the default?)
@@ -175,22 +177,40 @@ namespace Atlas.UI.Avalonia.Controls
 			var containerGrid = new Grid()
 			{
 				ColumnDefinitions = new ColumnDefinitions("*,Auto"),
-				RowDefinitions = new RowDefinitions("*,Auto"),
+				RowDefinitions = new RowDefinitions("Auto,*,Auto"),
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
 				Background = Theme.TabBackground, // grid lines look bad when hovering without this
 			};
 
+			var title = new TextBlock()
+			{
+				Text = ListGroup?.Name,
+				FontSize = 16,
+				//Foreground = Brushes.LightGray,
+				//Foreground = Theme.ToolbarTextForeground,
+				Foreground = Theme.BackgroundText,
+				Margin = new Thickness(10, 5),
+				//FontWeight = FontWeight.Medium,
+				[Grid.ColumnSpanProperty] = 2,
+			};
+			if (!ListGroup.ShowOrder || ListGroup.Horizontal)
+				title.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Center;
+			else
+				title.Margin = new Thickness(40, 5, 5, 5);
+			containerGrid.Children.Add(title);
+
 			containerGrid.Children.Add(plotView);
 
-			legend = new TabControlChartLegend(this, ListGroup.Horizontal);
+			legend = new TabControlChartLegend(this);
 			if (ListGroup.Horizontal)
 			{
-				Grid.SetRow(legend, 1);
+				Grid.SetRow(legend, 2);
 				legend.MaxHeight = 100;
 			}
 			else
 			{
+				Grid.SetRow(legend, 1);
 				Grid.SetColumn(legend, 1);
 				legend.MaxWidth = 300;
 			}
@@ -306,9 +326,9 @@ namespace Atlas.UI.Avalonia.Controls
 			UnloadModel();
 			plotModel = new PlotModel()
 			{
-				Title = ListGroup?.Name,
-				TitleFontWeight = 400,
-				TitleFontSize = 16,
+				//Title = ListGroup?.Name,
+				//TitleFontWeight = 400,
+				//TitleFontSize = 16,
 				//TitleFont = "Arial",
 				IsLegendVisible = false,
 				LegendPlacement = LegendPlacement.Outside,

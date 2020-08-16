@@ -20,7 +20,7 @@ namespace Atlas.UI.Avalonia
 {
 	public class DataGridPropertyTextColumn : DataGridTextColumn
 	{
-		public SolidColorBrush BrushHasLinks => Theme.HasLinks;
+		public SolidColorBrush BrushHasLinks => Theme.HasLinksBackground;
 		public SolidColorBrush BrushEditable { get; set; } = Theme.Editable;
 		public SolidColorBrush BrushValue { get; set; } = new SolidColorBrush(Colors.LightGray);
 		public SolidColorBrush BrushBackground { get; set; } = new SolidColorBrush(Colors.White);

@@ -197,12 +197,23 @@ namespace Atlas.Tabs
 		// Returns the deepest TabBookmark that is rootable
 		public TabBookmark GetLeaf()
 		{
+			TabBookmark lastLeaf = null;
 			foreach (TabBookmark tabBookmark in ChildBookmarks.Values)
 			{
 				var leaf = tabBookmark.GetLeaf();
 				if (leaf != null)
-					return leaf;
+				{
+					if (lastLeaf != null)
+					{
+						// If there's > 1 leaf nodes, don't return any of them
+						lastLeaf = null;
+						break;
+					}
+				}
+				lastLeaf = leaf;
 			}
+			if (lastLeaf != null)
+				return lastLeaf;
 			if (IsRoot)
 				return this;
 
