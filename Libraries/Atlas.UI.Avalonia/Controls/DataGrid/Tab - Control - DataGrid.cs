@@ -747,7 +747,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (listItem == null)
 					continue;
-				string id = GetDataKey(listItem) ?? listItem.ToUniqueString();
+				string id = GetItemId(listItem);
 				if (id != null)
 					keys[id] = listItem;
 			}
@@ -1095,6 +1095,18 @@ namespace Atlas.UI.Avalonia.Controls
 				selectedRow.label = null;
 			
 			return selectedRow;
+		}
+
+		private string GetItemId(object obj)
+		{
+			string id = GetDataKey(obj);
+			if (id == null)
+			{
+				object dataValue = GetDataValue(obj);
+				if (dataValue != null)
+					id = GetDataKey(dataValue);
+			}
+			return id ?? obj.ToUniqueString();
 		}
 
 		private string GetDataKey(object obj)
