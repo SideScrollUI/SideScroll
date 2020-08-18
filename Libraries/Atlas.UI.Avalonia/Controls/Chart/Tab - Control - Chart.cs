@@ -205,13 +205,15 @@ namespace Atlas.UI.Avalonia.Controls
 			legend = new TabControlChartLegend(this);
 			if (ListGroup.Horizontal)
 			{
-				Grid.SetRow(legend, 2);
+				// Bottom
+				SetRow(legend, 2);
 				legend.MaxHeight = 100;
 			}
 			else
 			{
-				Grid.SetRow(legend, 1);
-				Grid.SetColumn(legend, 1);
+				// Right Side
+				SetRow(legend, 1);
+				SetColumn(legend, 1);
 				legend.MaxWidth = 300;
 			}
 			containerGrid.Children.Add(legend);

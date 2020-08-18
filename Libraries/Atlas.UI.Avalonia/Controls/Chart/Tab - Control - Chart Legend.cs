@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -12,11 +13,13 @@ using System.Linq;
 
 namespace Atlas.UI.Avalonia.Controls
 {
-	public class TabControlChartLegend : WrapPanel
+	public class TabControlChartLegend : Grid
 	{
 		private TabControlChart tabControlChart;
 		private PlotView plotView;
 		public ListGroup listGroup;
+		private ScrollViewer scrollViewer;
+		private WrapPanel wrapPanel;
 		private TextBlock textBlockSum;
 		public List<TabChartLegendItem> legendItems = new List<TabChartLegendItem>();
 		public Dictionary<string, TabChartLegendItem> idxLegendItems = new Dictionary<string, TabChartLegendItem>();
@@ -34,10 +37,27 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			HorizontalAlignment = HorizontalAlignment.Left;
-			//VerticalAlignment = VerticalAlignment.Stretch;
-			Margin = new Thickness(6);
-			Orientation = listGroup.Horizontal ? Orientation.Horizontal : Orientation.Vertical;
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
+
+			wrapPanel = new WrapPanel()
+			{
+				Orientation = listGroup.Horizontal ? Orientation.Horizontal : Orientation.Vertical,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch,
+				Margin = new Thickness(6),
+			};
+
+			scrollViewer = new ScrollViewer()
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch,
+				HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+				VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+				Content = wrapPanel,
+			};
+
+			Children.Add(scrollViewer);
 
 			if (listGroup.ShowLegend && listGroup.ShowOrder && !listGroup.Horizontal)
 			{
@@ -81,9 +101,9 @@ namespace Atlas.UI.Avalonia.Controls
 		// Show items in order of count, retaining original order for unused values
 		private void UpdatePositions()
 		{
-			Children.Clear();
+			wrapPanel.Children.Clear();
 			if (textBlockSum != null)
-				Children.Add(textBlockSum);
+				wrapPanel.Children.Add(textBlockSum);
 
 			var nonzero = new List<TabChartLegendItem>();
 			var unused = new List<TabChartLegendItem>();
@@ -102,7 +122,7 @@ namespace Atlas.UI.Avalonia.Controls
 				for (int i = 0; i < ordered.Count; i++)
 					ordered[i].Index = i + 1;
 			}
-			Children.AddRange(ordered);
+			wrapPanel.Children.AddRange(ordered);
 		}
 
 		private void SelectLegendItem(TabChartLegendItem legendItem)
@@ -172,7 +192,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (plotView.Model == null)
 				return;
 
-			Children.Clear();
+			wrapPanel.Children.Clear();
 			foreach (var oxyListSeries in tabControlChart.oxyListSeriesList)
 			{
 				string title = oxyListSeries.OxySeries.Title;
@@ -182,8 +202,8 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					legendItem = AddSeries(oxyListSeries);
 				}
-				if (!Children.Contains(legendItem))
-					Children.Add(legendItem);
+				if (!wrapPanel.Children.Contains(legendItem))
+					wrapPanel.Children.Add(legendItem);
 			}
 			UpdatePositions();
 
@@ -208,7 +228,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void Unload()
 		{
-			Children.Clear();
+			wrapPanel.Children.Clear();
 			idxLegendItems.Clear();
 			legendItems.Clear();
 		}
