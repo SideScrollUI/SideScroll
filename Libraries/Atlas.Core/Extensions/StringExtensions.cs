@@ -20,7 +20,7 @@ namespace Atlas.Extensions
 			return new string(chars);
 		}
 
-		public static string Trim(this string input, string prefix)
+		public static string TrimStart(this string input, string prefix)
 		{
 			if (input == null || prefix == null)
 				return null;

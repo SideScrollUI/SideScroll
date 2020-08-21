@@ -235,6 +235,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void UpdateVisibleSeries()
 		{
+			if (plotView.Model == null)
+				return;
 			foreach (OxyPlot.Series.Series series in plotView.Model.Series)
 			{
 				if (series is OxyPlot.Series.LineSeries lineSeries)

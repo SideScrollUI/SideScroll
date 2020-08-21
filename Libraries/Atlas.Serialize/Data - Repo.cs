@@ -450,6 +450,12 @@ namespace Atlas.Serialize
 			base.Remove(item);
 			Lookup.Remove(item.Key);
 		}
+
+		public new void Clear()
+		{
+			base.Clear();
+			Lookup.Clear();
+		}
 	}
 
 	public interface IDataItem
