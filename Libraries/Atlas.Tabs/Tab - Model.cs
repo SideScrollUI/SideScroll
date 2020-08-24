@@ -180,12 +180,10 @@ namespace Atlas.Tabs
 				var values = Enum.GetValues(type);
 				AddEnumerable(values);
 			}
-			else
+			else if (ObjectHasLinks(obj))
 			{
-				if (!ObjectHasLinks(obj))
-					return;
 				// show as Name/Value columns for fields and properties
-				AddObject(type);
+				AddObject(obj, type);
 			}
 		}
 
@@ -293,17 +291,18 @@ namespace Atlas.Tabs
 		}
 
 		// Adds the fields and properties as one list, and methods as another list (disabled right now)
-		private void AddObject(Type type)
+		private void AddObject(object obj, Type type)
 		{
 			var itemCollection = new ItemCollection<ListMember>();
 
-			var listFields = ListField.Create(Object);
+			var listFields = ListField.Create(obj);
 			itemCollection.AddRange(listFields);
 
-			var listProperties = ListProperty.Create(Object);
+			var listProperties = ListProperty.Create(obj);
 			itemCollection.AddRange(listProperties);
 
-			AddMethodProperties(type, itemCollection);
+			var listMethods = ListMethod.Create(obj);
+			itemCollection.AddRange(listMethods);
 
 			//itemCollection = new ItemCollection<ListMember>(itemCollection.OrderBy(x => x.memberInfo.MetadataToken).ToList());
 			ItemList.Add(itemCollection);
@@ -318,43 +317,13 @@ namespace Atlas.Tabs
 			Actions = null;
 		}
 
-		private List<MethodInfo> GetVisibleMethods(Type type)
-		{
-			MethodInfo[] methodInfos = type.GetMethods().OrderBy(x => x.MetadataToken).ToArray();
-			var visibleMethods = new List<MethodInfo>();
-
-			foreach (MethodInfo methodInfo in methodInfos)
-			{
-				if (methodInfo.IsPublic && methodInfo.ReturnType != null && methodInfo.GetType().GetCustomAttribute<VisibleAttribute>() != null)
-					visibleMethods.Add(methodInfo);
-			}
-			return visibleMethods;
-		}
-
-		private void AddMethodProperties(Type type, ItemCollection<ListMember> itemCollection)
-		{
-			List<MethodInfo> visibleMethods = GetVisibleMethods(type);
-
-			// Add any methods that return a Task object
-			foreach (MethodInfo methodInfo in visibleMethods)
-			{
-				ParameterInfo[] parameterInfos = methodInfo.GetParameters();
-				if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType == typeof(Call))
-				{
-					//itemCollection.Add(new ListMethod2((ListMethod2.LoadObjectAsync)Delegate.CreateDelegate(typeof(ListMethod2.LoadObjectAsync), methodInfo)));
-
-					itemCollection.Add(new ListMethod(Object, methodInfo));
-				}
-			}
-		}
-
 		private void AddMethods(Type type)
 		{
-			List<MethodInfo> visibleMethods = GetVisibleMethods(type);
+			var visibleMethods = ListMethod.Create(Object);
 
 			// Add any methods that return a Task object
 			var methods = new ItemCollection<TaskCreator>();
-			foreach (MethodInfo methodInfo in visibleMethods)
+			foreach (ListMethod listMethod in visibleMethods)
 			{
 				// todo: check parameter types, assuming Log param now
 				/*if (methodInfo.IsPublic && methodInfo.ReturnType.IsAssignableFrom(typeof(Task)))
@@ -362,11 +331,7 @@ namespace Atlas.Tabs
 					//methods.Add(new TaskMethod(methodInfo, Object));
 				}*/
 
-				ParameterInfo[] parameterInfos = methodInfo.GetParameters();
-				if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType == typeof(Call))
-				{
-					methods.Add(new TaskDelegate(methodInfo.Name, (TaskDelegate.CallAction)Delegate.CreateDelegate(typeof(TaskDelegate.CallAction), methodInfo)));
-				}
+				methods.Add(new TaskDelegate(listMethod.Name, (TaskDelegate.CallAction)Delegate.CreateDelegate(typeof(TaskDelegate.CallAction), listMethod.methodInfo)));
 			}
 			if (methods.Count > 0)
 				Actions = methods;

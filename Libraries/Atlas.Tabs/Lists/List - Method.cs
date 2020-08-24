@@ -57,6 +57,8 @@ namespace Atlas.Tabs
 			}
 		}
 
+		public override string ToString() => Name;
+
 		public ListMethod(object obj, MethodInfo methodInfo, bool cached = true) : 
 			base(obj, methodInfo)
 		{
@@ -68,9 +70,11 @@ namespace Atlas.Tabs
 			NameAttribute attribute = methodInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;
-		}
 
-		public override string ToString() => Name;
+			ItemAttribute itemAttribute = methodInfo.GetCustomAttribute<ItemAttribute>();
+			if (itemAttribute != null && itemAttribute.Name != null)
+				Name = itemAttribute.Name;
+		}
 
 		public async Task<object> LoadAsync(Call call)
 		{
@@ -81,7 +85,10 @@ namespace Atlas.Tabs
 		private object GetValue()
 		{
 			//return Task.Run(() => callAction.Invoke(call)).GetAwaiter().GetResult();
-			return Task.Run(() => methodInfo.Invoke(obj, new object[] { new Call() })).GetAwaiter().GetResult();
+			var result = Task.Run(() => methodInfo.Invoke(obj, new object[] { new Call() })).GetAwaiter().GetResult();
+			if (result is Task task)
+				return (object)((dynamic)result).Result;
+			return result;
 		}
 
 		public static ItemCollection<ListMethod> Create(object obj)
@@ -92,25 +99,31 @@ namespace Atlas.Tabs
 			var propertyToIndex = new Dictionary<string, int>();
 			foreach (MethodInfo methodInfo in methodInfos)
 			{
-				if (!methodInfo.DeclaringType.IsNotPublic)
+				if (methodInfo.DeclaringType.IsNotPublic)
+					continue;
+				if (methodInfo.ReturnType == null)
+					continue;
+				if (methodInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
+					continue;
+
+				ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+				if (parameterInfos.Length != 1 || parameterInfos[0].ParameterType != typeof(Call))
+					continue;
+				if (methodInfo.GetCustomAttribute<ItemAttribute>() == null)
+					continue;
+
+				var listMethod = new ListMethod(obj, methodInfo);
+
+				if (propertyToIndex.TryGetValue(methodInfo.Name, out int index))
 				{
-					if (methodInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
-						continue;
-					if (methodInfo.DeclaringType.IsNotPublic)
-						continue;
-
-					var listMethod = new ListMethod(obj, methodInfo);
-
-					if (propertyToIndex.TryGetValue(methodInfo.Name, out int index))
-					{
-						listMethods.RemoveAt(index);
-						listMethods.Insert(index, listMethod);
-					}
-					else
-					{
-						propertyToIndex[methodInfo.Name] = listMethods.Count;
-						listMethods.Add(listMethod);
-					}
+					// Replace base method with derived
+					listMethods.RemoveAt(index);
+					listMethods.Insert(index, listMethod);
+				}
+				else
+				{
+					propertyToIndex[methodInfo.Name] = listMethods.Count;
+					listMethods.Add(listMethod);
 				}
 			}
 			return listMethods;

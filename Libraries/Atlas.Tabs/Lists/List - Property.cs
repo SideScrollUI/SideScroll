@@ -92,6 +92,8 @@ namespace Atlas.Tabs
 		[HiddenColumn, HiddenRow]
 		public Type UnderlyingType => propertyInfo.PropertyType.GetNonNullableType();
 
+		public override string ToString() => Name;
+
 		public ListProperty(object obj, PropertyInfo propertyInfo, bool cached = true) : 
 			base(obj, propertyInfo)
 		{
@@ -106,8 +108,6 @@ namespace Atlas.Tabs
 			if (attribute != null)
 				Name = attribute.Name;
 		}
-
-		public override string ToString() => Name;
 
 		public static ItemCollection<ListProperty> Create(object obj)
 		{

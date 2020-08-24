@@ -2,7 +2,7 @@
 
 namespace Atlas.Core
 {
-	// ->Tabs: Use the specified name instead of the field/property name
+	// Use the specified name instead of the field/property name
 	[AttributeUsage(AttributeTargets.All)]
 	public class NameAttribute : Attribute
 	{
@@ -14,25 +14,25 @@ namespace Atlas.Core
 		}
 	}
 
-	// ->Tabs: Currently used for detecting for detecting parent/child loops, merge this with [DataKey]?
+	// Currently used for detecting for detecting parent/child loops, merge this with [DataKey]?
 	/*[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class KeyAttribute : Attribute
 	{
 	}*/
 
-	// ->Tabs: DataGrids use this as a unique key when matching rows
+	// DataGrids use this as a unique key when matching rows
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class DataKeyAttribute : Attribute
 	{
 	}
 
-	// ->Tabs: DataGrids use this as a unique key when matching rows
+	// DataGrids use this as a unique key when matching rows
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
 	public class DataValueAttribute : Attribute
 	{
 	}
 
-	// ->Tabs: If set, this method will appear as an Action (rename to [Action]?)
+	// If set, this method will appear as an Action (rename to [Action]?)
 	[AttributeUsage(AttributeTargets.Method)]
 	public class VisibleAttribute : Attribute
 	{
@@ -115,25 +115,7 @@ namespace Atlas.Core
 	{
 	}*/
 
-	// ->Serialize: When Cloning an object, anything marked with [Static] won't be deep copied
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
-	public class StaticAttribute : Attribute
-	{
-	}
-
-	// ->Serialize: Can't use [NonSerialized] since that's only for fields :(
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
-	public class UnserializedAttribute : Attribute
-	{
-	}
-
-	// ->Serialize: Can't use [NonSerialized] since that's only for fields :(
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
-	public class SecureAttribute : Attribute
-	{
-	}
-
-	// ->Tabs: Don't show this field/property as a column
+	// Don't show this field/property as a column
 	[AttributeUsage(AttributeTargets.Method)]
 	public class ButtonColumnAttribute : Attribute
 	{
@@ -145,25 +127,31 @@ namespace Atlas.Core
 		}
 	}
 
-	// ->Tabs: Column Width should AutoSize instead of */Percent based
+	// Column Width should AutoSize instead of */Percent based
 	[AttributeUsage(AttributeTargets.Property)]
 	public class AutoSizeAttribute : Attribute
 	{
 	}
 
-	// ->Tabs: Don't show this field/property as a column
+	// Don't show this field/property as a column
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class HiddenColumnAttribute : Attribute
 	{
 	}
 
-	// ->Tabs: Don't show this field/property as a row
+	// Don't show this field/property as a row
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class HiddenRowAttribute : Attribute
 	{
 	}
 
-	// ->Tabs: Allow Tab to be collapsed
+	// Don't show row if value is null
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class HideNullAttribute : Attribute
+	{
+	}
+
+	// Allow Tab to be collapsed
 	[AttributeUsage(AttributeTargets.Class)]
 	public class SkippableAttribute : Attribute
 	{
@@ -175,7 +163,19 @@ namespace Atlas.Core
 		}
 	}
 
-	// ->Tabs: Tab is rootable for bookmarks, also serializes tab
+	// Don't show unless #if DEBUG set
+	[AttributeUsage(AttributeTargets.Property)]
+	public class DebugOnlyAttribute : Attribute
+	{
+		public readonly bool Value;
+
+		public DebugOnlyAttribute(bool value = true)
+		{
+			Value = value;
+		}
+	}
+
+	// Tab is rootable for bookmarks, also serializes tab
 	[AttributeUsage(AttributeTargets.Class)]
 	public class TabRootAttribute : Attribute
 	{
@@ -192,13 +192,13 @@ namespace Atlas.Core
 		}
 	}
 
-	// ->Tabs: Allows property to be edited in UI
+	// Allows property to be edited in UI
 	[AttributeUsage(AttributeTargets.Property)]
 	public class EditingAttribute : Attribute
 	{
 	}
 
-	// ->Tabs: Flag as the ToString() property/field? MaxDesiredWidthAttribute?
+	// Flag as the ToString() property/field? MaxDesiredWidthAttribute?
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
 	public class MinWidthAttribute : Attribute
 	{
@@ -210,7 +210,7 @@ namespace Atlas.Core
 		}
 	}
 
-	// ->Tabs: Flag as the ToString() property/field? MaxDesiredWidthAttribute?
+	// Flag as the ToString() property/field? MaxDesiredWidthAttribute?
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
 	public class MaxWidthAttribute : Attribute
 	{
@@ -222,14 +222,14 @@ namespace Atlas.Core
 		}
 	}
 
-	// ->Tabs: Flag as the ToString() property/field?
-	// ->Tabs: ToString() on items in array
+	// Flag as the ToString() property/field?
+	// ToString() on items in array
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
 	public class ToStringAttribute : Attribute
 	{
 	}
 
-	// ->Tabs: 
+	// 
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class AttributeSelectable : Attribute
 	{
@@ -238,6 +238,18 @@ namespace Atlas.Core
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class InheritAttribute : Attribute
 	{
+	}
+
+	// Show method as an Item
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
+	public class ItemAttribute : Attribute
+	{
+		public readonly string Name;
+
+		public ItemAttribute(string name = null)
+		{
+			Name = name;
+		}
 	}
 
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
@@ -251,27 +263,6 @@ namespace Atlas.Core
 			this.key = key;
 			this.value = value;
 		}
-	}
-
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-	public class UnitAttribute : Attribute
-	{
-		public readonly string Name;
-
-		public UnitAttribute(string name)
-		{
-			Name = name;
-		}
-	}
-
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-	public class XAxisAttribute : Attribute
-	{
-	}
-
-	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-	public class YAxisAttribute : Attribute
-	{
 	}
 
 	// ->Toolbar: Show a separator before this item

@@ -327,6 +327,11 @@ namespace Atlas.Tabs
 			return properties;
 		}
 
+		protected List<ListItem> GetListItems()
+		{
+			return ListItem.Create(this, false);
+		}
+
 		private MethodInfo GetDerivedLoadMethod(string name, int paramCount)
 		{
 			try

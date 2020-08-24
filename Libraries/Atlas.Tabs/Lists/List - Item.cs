@@ -1,6 +1,9 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 
 namespace Atlas.Tabs
 {
@@ -45,6 +48,48 @@ namespace Atlas.Tabs
 			{
 				Key = value;
 			}
+		}
+
+		// Get list items for all public properties and any methods marked with [Item]
+		// todo: need lazy version
+		public static List<ListItem> Create(object obj, bool includeBaseTypes)
+		{
+			var listItems = new SortedDictionary<int, ListItem>();
+
+			var properties = ListProperty.Create(obj);
+			foreach (ListProperty listProperty in properties)
+			{
+				if (!includeBaseTypes && listProperty.propertyInfo.DeclaringType != obj.GetType())
+					continue;
+				string name = listProperty.Name;
+				// Only show [DebugOnly] in debug mode
+				if (listProperty.propertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+				{
+#if !DEBUG
+					continue;
+#endif
+					name = "*" + name;
+				}
+
+				int metadataToken = listProperty.propertyInfo.GetGetMethod(false).MetadataToken;
+				object value = listProperty.Value;
+
+				if (listProperty.propertyInfo.GetCustomAttribute<HideNullAttribute>() != null && value == null)
+					continue;
+
+				listItems.Add(metadataToken, new ListItem(name, value));
+			}
+
+			var methods = ListMethod.Create(obj);
+			foreach (ListMethod listMethod in methods)
+			{
+				if (!includeBaseTypes && listMethod.methodInfo.DeclaringType != obj.GetType())
+					continue;
+
+				listItems.Add(listMethod.methodInfo.MetadataToken, new ListItem(listMethod.Name, listMethod.Value));
+			}
+
+			return listItems.Values.ToList();
 		}
 	}
 
