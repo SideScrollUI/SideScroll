@@ -61,7 +61,7 @@ namespace Atlas.Tabs
 
 		public Project Open(Bookmark bookmark)
 		{
-			var userSettings = UserSettings.Clone<UserSettings>();
+			var userSettings = UserSettings.DeepClone<UserSettings>();
 			userSettings.BookmarkPath = bookmark.Address;
 			var project = new Project(ProjectSettings, userSettings);
 			//project.Import(bookmark);
