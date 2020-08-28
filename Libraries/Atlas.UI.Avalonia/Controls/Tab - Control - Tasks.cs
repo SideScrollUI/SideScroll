@@ -17,6 +17,22 @@ namespace Atlas.UI.Avalonia.Controls
 		public event EventHandler<EventArgs> OnSelectionChanged;
 		private bool autoSelectNew = true;
 
+		public IList SelectedItems => tabControlDataGrid.SelectedItems;
+
+		private bool ShowTasks
+		{
+			get
+			{
+				foreach (var task in tabInstance.Model.Tasks)
+				{
+					if (task.ShowTask || task.TaskStatus == System.Threading.Tasks.TaskStatus.Faulted)
+						return true;
+				}
+				return false;
+			}
+		}
+		public override string ToString() => tabInstance.Model.Name;
+
 		private TabControlTasks()
 		{
 			Initialize();
@@ -27,8 +43,6 @@ namespace Atlas.UI.Avalonia.Controls
 			this.tabInstance = tabInstance;
 			Initialize();
 		}
-
-		public override string ToString() => tabInstance.Model.Name;
 
 		private void Initialize()
 		{
@@ -46,19 +60,6 @@ namespace Atlas.UI.Avalonia.Controls
 			//Size size = tabDataGrid.dataGrid.DesiredSize;
 		}*/
 
-		private bool ShowTasks
-		{
-			get
-			{
-				foreach(var task in tabInstance.Model.Tasks)
-				{
-					if (task.ShowTask || task.TaskStatus == System.Threading.Tasks.TaskStatus.Faulted)
-						return true;
-				}
-				return false;
-			}
-		}
-
 		private void InitializeControls()
 		{
 			ColumnDefinitions = new ColumnDefinitions("*");
@@ -73,7 +74,7 @@ namespace Atlas.UI.Avalonia.Controls
 				VerticalAlignment = VerticalAlignment.Stretch,
 			};
 
-			tabControlDataGrid.AddButtonColumn(nameof(TaskInstance.Cancel));
+			//tabControlDataGrid.AddButtonColumn(nameof(TaskInstance.Cancel));
 			tabControlDataGrid.AddColumn("Task", nameof(TaskInstance.Label));
 			tabControlDataGrid.AddColumn("   %   ", nameof(TaskInstance.Percent));
 			tabControlDataGrid.AddColumn("Status", nameof(TaskInstance.Status));
@@ -153,8 +154,6 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			UpdateSelection();
 		}
-
-		public IList SelectedItems => tabControlDataGrid.SelectedItems;
 
 		private void UpdateSelection()
 		{
