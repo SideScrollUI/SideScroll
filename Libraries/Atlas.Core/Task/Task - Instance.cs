@@ -32,8 +32,8 @@ namespace Atlas.Core
 
 		public Task Task { get; set; }
 		public TaskStatus TaskStatus => (Task?.Status ?? TaskStatus.Created);
-		public CancellationTokenSource tokenSource = new CancellationTokenSource();
-		public CancellationToken CancelToken => tokenSource.Token;
+		public CancellationTokenSource TokenSource = new CancellationTokenSource();
+		public CancellationToken CancelToken => TokenSource.Token;
 
 		public string Status { get; set; } = "Running";
 		public string Message { get; set; }
@@ -137,9 +137,10 @@ namespace Atlas.Core
 			}
 		}
 
+		[ButtonColumn("-")]
 		public void Cancel()
 		{
-			tokenSource.Cancel();
+			TokenSource.Cancel();
 		}
 
 		// allows having progress broken down into multiple tasks
@@ -150,7 +151,7 @@ namespace Atlas.Core
 				Label = call.Name,
 				Creator = Creator,
 				Call = call,
-				tokenSource = tokenSource,
+				TokenSource = TokenSource,
 				ParentTask = this,
 			};
 			if (ProgressMax > 0)
@@ -180,7 +181,11 @@ namespace Atlas.Core
 			Finished = true;
 			Progress = ProgressMax;
 
-			if (Call.Log.Type >= LogEntry.LogType.Error)
+			if (Call.TaskInstance.CancelToken.IsCancellationRequested)
+			{
+				Status = "Cancelled";
+			}
+			else if (Call.Log.Type >= LogEntry.LogType.Error)
 			{
 				Status = Call.Log.Type.ToString();
 				Errored = true;
@@ -212,7 +217,7 @@ namespace Atlas.Core
 
 		protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 		{
-			Creator?.context.Post(new SendOrPostCallback(this.NotifyPropertyChangedContext), propertyName);
+			Creator?.context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
 		}
 
 		private void NotifyPropertyChangedContext(object state)

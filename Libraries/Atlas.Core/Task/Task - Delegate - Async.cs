@@ -7,17 +7,17 @@ namespace Atlas.Core
 	{
 		public delegate Task CallActionAsync(Call call);
 
-		private CallActionAsync callAction;
+		public CallActionAsync CallAction;
 
 		public override string ToString() => Label;
 
 		public TaskDelegateAsync(string label, CallActionAsync callAction, bool showTask = false, string description = null)
 		{
-			this.Label = label;
-			this.callAction = callAction;
-			this.UseTask = true;
-			this.ShowTask = showTask;
-			this.Description = description;
+			Label = label;
+			CallAction = callAction;
+			UseTask = true;
+			ShowTask = showTask;
+			Description = description;
 		}
 
 		protected override Action CreateAction(Call call)
@@ -41,7 +41,7 @@ namespace Atlas.Core
 		{
 			try
 			{
-				await callAction.Invoke(call);
+				await CallAction.Invoke(call);
 				//await taskInstance;
 			}
 			catch (Exception e)

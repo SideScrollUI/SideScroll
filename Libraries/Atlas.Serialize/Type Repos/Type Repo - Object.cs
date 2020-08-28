@@ -33,7 +33,7 @@ namespace Atlas.Serialize
 				this.typeRepo = typeRepo;
 			}
 
-			public override string ToString() => "Field Repo: " + fieldSchema.fieldName;
+			public override string ToString() => "Field Repo: " + fieldSchema.FieldName;
 
 			public void Load(object obj)
 			{
@@ -41,7 +41,7 @@ namespace Atlas.Serialize
 				{
 					object valueObject = typeRepo.LoadObjectRef();
 					// todo: 36% of current cpu usage, break into explicit operators? (is that even possible?)
-					fieldSchema.fieldInfo.SetValue(obj, valueObject); // else set to null?
+					fieldSchema.FieldInfo.SetValue(obj, valueObject); // else set to null?
 				}
 				else
 				{
@@ -91,11 +91,11 @@ namespace Atlas.Serialize
 					if (typeRepo.typeSchema.IsPrimitive)
 					{
 						// todo: construct temp object and store default instead for speed?
-						dynamic currentValue = propertySchema.propertyInfo.GetValue(obj);
+						dynamic currentValue = propertySchema.PropertyInfo.GetValue(obj);
 						if ((dynamic)valueObject == currentValue)
 							return;
 					}
-					propertySchema.propertyInfo.SetValue(obj, valueObject);
+					propertySchema.PropertyInfo.SetValue(obj, valueObject);
 				}
 			}
 		}
@@ -112,7 +112,7 @@ namespace Atlas.Serialize
 				if (!fieldSchema.Serialized)
 					continue;
 
-				Type fieldType = fieldSchema.fieldInfo.FieldType.GetNonNullableType();
+				Type fieldType = fieldSchema.FieldInfo.FieldType.GetNonNullableType();
 				//TypeRepo typeRepo = serializer.GetOrCreateRepo(fieldType);
 				//fieldSchema.fileDataOffset = writer.BaseStream.Position;
 				//if (fieldType != null && serializer.idxTypeToRepo.ContainsKey(fieldType))
@@ -126,7 +126,7 @@ namespace Atlas.Serialize
 				if (!propertySchema.Serialized)
 					continue;
 
-				Type propertyType = propertySchema.propertyInfo.PropertyType.GetNonNullableType();
+				Type propertyType = propertySchema.PropertyInfo.PropertyType.GetNonNullableType();
 				//if (propertyType != null && serializer.idxTypeToRepo.ContainsKey(propertyType))
 				//	propertySchema.typeIndex = serializer.idxTypeToRepo[propertyType].typeIndex;
 
@@ -151,7 +151,7 @@ namespace Atlas.Serialize
 					if (propertySchema.Loadable == false)
 						continue;
 
-					MethodInfo getMethod = propertySchema.propertyInfo.GetGetMethod(false);
+					MethodInfo getMethod = propertySchema.PropertyInfo.GetGetMethod(false);
 					if (getMethod.IsVirtual)
 						return true;
 				}
@@ -167,10 +167,10 @@ namespace Atlas.Serialize
 				//	continue;
 
 				TypeRepo typeRepo;
-				if (fieldSchema.typeIndex >= 0)
+				if (fieldSchema.TypeIndex >= 0)
 				{
-					typeRepo = serializer.typeRepos[fieldSchema.typeIndex];
-					if (typeRepo.type != fieldSchema.nonNullableType)
+					typeRepo = serializer.typeRepos[fieldSchema.TypeIndex];
+					if (typeRepo.type != fieldSchema.NonNullableType)
 					{
 						log.Add("Can't load field, type has changed", new Tag("Field", fieldSchema));
 						fieldSchema.Loadable = false;
@@ -179,10 +179,10 @@ namespace Atlas.Serialize
 				}
 				else
 				{
-					Type fieldType = fieldSchema.fieldInfo.FieldType.GetNonNullableType();
+					Type fieldType = fieldSchema.FieldInfo.FieldType.GetNonNullableType();
 					typeRepo = serializer.GetOrCreateRepo(log, fieldType);
 				}
-				fieldSchema.typeSchema = typeRepo.typeSchema;
+				fieldSchema.TypeSchema = typeRepo.typeSchema;
 				//TypeRepo typeRepo = serializer.typeRepos[fieldSchema.typeIndex];
 				//if (typeRepo == null)
 				//	continue;
@@ -200,10 +200,10 @@ namespace Atlas.Serialize
 				//	continue;
 
 				TypeRepo typeRepo;
-				if (propertySchema.typeIndex >= 0 || propertySchema.propertyInfo == null)
+				if (propertySchema.TypeIndex >= 0 || propertySchema.PropertyInfo == null)
 				{
-					typeRepo = serializer.typeRepos[propertySchema.typeIndex];
-					if (typeRepo.type != propertySchema.nonNullableType)
+					typeRepo = serializer.typeRepos[propertySchema.TypeIndex];
+					if (typeRepo.type != propertySchema.NonNullableType)
 					{
 						// should we add type conversion here?
 						log.Add("Can't load field, type has changed", new Tag("Property", propertySchema));
@@ -214,22 +214,22 @@ namespace Atlas.Serialize
 				else
 				{
 					// Base Type might not have been serialized
-					Type propertyType = propertySchema.propertyInfo.PropertyType.GetNonNullableType();
+					Type propertyType = propertySchema.PropertyInfo.PropertyType.GetNonNullableType();
 					typeRepo = serializer.GetOrCreateRepo(log, propertyType);
 				}
-				propertySchema.propertyTypeSchema = typeRepo.typeSchema;
+				propertySchema.PropertyTypeSchema = typeRepo.typeSchema;
 				if (typeRepo != null)
 				{
 					var propertyRepo = new PropertyRepo(propertySchema, typeRepo);
 					propertyRepos.Add(propertyRepo);
 
-					if (propertySchema.Loadable && !propertySchema.type.IsPrimitive)
+					if (propertySchema.Loadable && !propertySchema.Type.IsPrimitive)
 						lazyPropertyRepos.Add(propertyRepo);
 				}
 			}
 
 			// should we add an attribute for this instead?
-			if (serializer.lazy && HasVirtualProperty)
+			if (serializer.Lazy && HasVirtualProperty)
 			{
 				lazyClass = new LazyClass(type, lazyPropertyRepos);
 				loadableType = lazyClass.newType;
@@ -277,7 +277,7 @@ namespace Atlas.Serialize
 				if (!fieldSchema.Serialized)
 					continue;
 
-				object fieldValue = fieldSchema.fieldInfo.GetValue(obj);
+				object fieldValue = fieldSchema.FieldInfo.GetValue(obj);
 				serializer.AddObjectRef(fieldValue);
 			}
 		}
@@ -286,9 +286,9 @@ namespace Atlas.Serialize
 		{
 			foreach (FieldRepo fieldRepo in fieldRepos)
 			{
-				FieldInfo fieldInfo = fieldRepo.fieldSchema.fieldInfo;
+				FieldInfo fieldInfo = fieldRepo.fieldSchema.FieldInfo;
 				object fieldValue = fieldInfo.GetValue(obj);
-				serializer.WriteObjectRef(fieldRepo.fieldSchema.nonNullableType, fieldValue, writer);
+				serializer.WriteObjectRef(fieldRepo.fieldSchema.NonNullableType, fieldValue, writer);
 			}
 		}
 
@@ -306,7 +306,7 @@ namespace Atlas.Serialize
 			{
 				object valueObject = fieldRepo.typeRepo.LoadObjectRef(bytes, ref byteOffset);
 				// todo: 36% of current cpu usage, break into explicit operators? (is that even possible?)
-				fieldRepo.fieldSchema.fieldInfo.SetValue(obj, valueObject); // else set to null?
+				fieldRepo.fieldSchema.FieldInfo.SetValue(obj, valueObject); // else set to null?
 			}
 		}
 
@@ -317,7 +317,7 @@ namespace Atlas.Serialize
 				if (!propertySchema.Serialized)
 					continue;
 
-				object propertyValue = propertySchema.propertyInfo.GetValue(value);
+				object propertyValue = propertySchema.PropertyInfo.GetValue(value);
 				serializer.AddObjectRef(propertyValue);
 			}
 
@@ -343,9 +343,9 @@ namespace Atlas.Serialize
 		{
 			foreach (PropertyRepo propertyRepo in propertyRepos)
 			{
-				PropertyInfo propertyInfo = propertyRepo.propertySchema.propertyInfo;
+				PropertyInfo propertyInfo = propertyRepo.propertySchema.PropertyInfo;
 				object propertyValue = propertyInfo.GetValue(obj);
-				serializer.WriteObjectRef(propertyRepo.propertySchema.nonNullableType, propertyValue, writer);
+				serializer.WriteObjectRef(propertyRepo.propertySchema.NonNullableType, propertyValue, writer);
 			}
 		}
 
@@ -362,7 +362,7 @@ namespace Atlas.Serialize
 			foreach (PropertyRepo propertyRepo in propertyRepos)
 			{
 				object valueObject = propertyRepo.typeRepo.LoadObjectRef(bytes, ref byteOffset);
-				propertyRepo.propertySchema.propertyInfo.SetValue(obj, valueObject); // set to null if not Loadable?
+				propertyRepo.propertySchema.PropertyInfo.SetValue(obj, valueObject); // set to null if not Loadable?
 			}
 		}
 
@@ -379,10 +379,10 @@ namespace Atlas.Serialize
 				if (!fieldSchema.Serialized)
 					continue;
 
-				object propertyValue = fieldSchema.fieldInfo.GetValue(source);
+				object propertyValue = fieldSchema.FieldInfo.GetValue(source);
 				serializer.AddObjectRef(propertyValue);
 				object clone = serializer.Clone(propertyValue);
-				fieldSchema.fieldInfo.SetValue(dest, clone);
+				fieldSchema.FieldInfo.SetValue(dest, clone);
 			}
 		}
 
@@ -393,10 +393,10 @@ namespace Atlas.Serialize
 				if (!propertySchema.Serialized)
 					continue;
 
-				object propertyValue = propertySchema.propertyInfo.GetValue(source);
+				object propertyValue = propertySchema.PropertyInfo.GetValue(source);
 				serializer.AddObjectRef(propertyValue);
 				object clone = serializer.Clone(propertyValue);
-				propertySchema.propertyInfo.SetValue(dest, clone); // else set to null?
+				propertySchema.PropertyInfo.SetValue(dest, clone); // else set to null?
 			}
 		}
 	}

@@ -9,15 +9,15 @@ namespace Atlas.Serialize
 {
 	public class PropertySchema
 	{
-		public string propertyName;
-		public int typeIndex = -1;
+		public string PropertyName;
+		public int TypeIndex = -1;
 
-		public TypeSchema ownerTypeSchema;
-		public TypeSchema propertyTypeSchema;
-		public PropertyInfo propertyInfo; // can be null
+		public TypeSchema OwnerTypeSchema;
+		public TypeSchema PropertyTypeSchema;
+		public PropertyInfo PropertyInfo; // can be null
 
-		public Type type; // might be null
-		public Type nonNullableType; // might be null
+		public Type Type; // might be null
+		public Type NonNullableType; // might be null
 
 		public bool Serialized { get; set; } // cached copy of IsSerialized
 
@@ -25,60 +25,60 @@ namespace Atlas.Serialize
 
 		public PropertySchema(PropertyInfo propertyInfo)
 		{
-			propertyName = propertyInfo.Name;
-			this.propertyInfo = propertyInfo;
-			type = propertyInfo.PropertyType;
+			PropertyName = propertyInfo.Name;
+			PropertyInfo = propertyInfo;
+			Type = propertyInfo.PropertyType;
 			Serialized = IsSerialized;
-			nonNullableType = type.GetNonNullableType();
+			NonNullableType = Type.GetNonNullableType();
 		}
 
 		public PropertySchema(TypeSchema typeSchema, BinaryReader reader)
 		{
-			this.ownerTypeSchema = typeSchema;
+			OwnerTypeSchema = typeSchema;
 			Load(reader);
 			try
 			{
-				if (typeSchema.type != null)
-					propertyInfo = typeSchema.type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+				if (typeSchema.Type != null)
+					PropertyInfo = typeSchema.Type.GetProperty(PropertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
 			}
 			catch (Exception)
 			{
 			}
 			Serialized = IsSerialized;
 
-			if (propertyInfo != null)
+			if (PropertyInfo != null)
 			{
-				type = propertyInfo.PropertyType;
-				nonNullableType = type.GetNonNullableType();
+				Type = PropertyInfo.PropertyType;
+				NonNullableType = Type.GetNonNullableType();
 				Loadable = Serialized; // typeIndex >= 0 && // derived types won't have entries for base type
 			}
 		}
 
-		public override string ToString() => propertyName;
+		public override string ToString() => PropertyName;
 
 		private bool IsSerialized
 		{
 			get
 			{
-				if (propertyInfo == null)
+				if (PropertyInfo == null)
 					return false;
 
-				Attribute attribute = type?.GetCustomAttribute<UnserializedAttribute>();
+				Attribute attribute = Type?.GetCustomAttribute<UnserializedAttribute>();
 				if (attribute != null)
 					return false;
 
-				attribute = propertyInfo.GetCustomAttribute<NonSerializedAttribute>();
+				attribute = PropertyInfo.GetCustomAttribute<NonSerializedAttribute>();
 				if (attribute != null)
 					return false;
 
-				attribute = propertyInfo.GetCustomAttribute<UnserializedAttribute>();
+				attribute = PropertyInfo.GetCustomAttribute<UnserializedAttribute>();
 				if (attribute != null)
 					return false;
 
-				if (propertyInfo.CanRead == false || propertyInfo.CanWrite == false)
+				if (PropertyInfo.CanRead == false || PropertyInfo.CanWrite == false)
 					return false;
 
-				if (propertyInfo.GetIndexParameters().Length > 0)
+				if (PropertyInfo.GetIndexParameters().Length > 0)
 					return false;
 
 				return true;
@@ -87,26 +87,26 @@ namespace Atlas.Serialize
 
 		public void Save(BinaryWriter writer)
 		{
-			writer.Write(propertyName);
-			writer.Write((short)typeIndex);
+			writer.Write(PropertyName);
+			writer.Write((short)TypeIndex);
 		}
 
 		public void Load(BinaryReader reader)
 		{
-			propertyName = reader.ReadString();
-			typeIndex = reader.ReadInt16();
+			PropertyName = reader.ReadString();
+			TypeIndex = reader.ReadInt16();
 		}
 
 		public void Validate(List<TypeSchema> typeSchemas)
 		{
-			if (typeIndex >= 0)
+			if (TypeIndex >= 0)
 			{
-				TypeSchema typeSchema = typeSchemas[typeIndex];
-				if (propertyInfo != null)
+				TypeSchema typeSchema = typeSchemas[TypeIndex];
+				if (PropertyInfo != null)
 				{
 					// check if the type has changed
-					Type currentType = propertyInfo.PropertyType.GetNonNullableType();
-					if (typeSchema.type != currentType)
+					Type currentType = PropertyInfo.PropertyType.GetNonNullableType();
+					if (typeSchema.Type != currentType)
 						Loadable = false;
 				}
 			}

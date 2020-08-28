@@ -10,7 +10,7 @@ namespace Atlas.Serialize
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
-				if (typeof(Type).IsAssignableFrom(typeSchema.type))
+				if (typeof(Type).IsAssignableFrom(typeSchema.Type))
 					return new TypeRepoType(serializer, typeSchema);
 				return null;
 			}

@@ -9,15 +9,15 @@ namespace Atlas.Serialize
 {
 	public class FieldSchema
 	{
-		public string fieldName;
-		public int typeIndex = -1;
+		public string FieldName;
+		public int TypeIndex = -1;
 
-		public TypeSchema ownerTypeSchema;
-		public TypeSchema typeSchema;
-		public FieldInfo fieldInfo; // can be null
+		public TypeSchema OwnerTypeSchema;
+		public TypeSchema TypeSchema;
+		public FieldInfo FieldInfo; // can be null
 
-		public Type type; // might be null
-		public Type nonNullableType; // might be null
+		public Type Type; // might be null
+		public Type NonNullableType; // might be null
 
 		public bool Serialized { get; set; } // cached copy of IsSerialized
 
@@ -25,48 +25,48 @@ namespace Atlas.Serialize
 
 		public FieldSchema(FieldInfo fieldInfo)
 		{
-			fieldName = fieldInfo.Name;
-			this.fieldInfo = fieldInfo;
-			type = fieldInfo.FieldType;
+			FieldName = fieldInfo.Name;
+			FieldInfo = fieldInfo;
+			Type = fieldInfo.FieldType;
 			Serialized = IsSerialized;
-			nonNullableType = type.GetNonNullableType();
+			NonNullableType = Type.GetNonNullableType();
 		}
 
 		public FieldSchema(TypeSchema typeSchema, BinaryReader reader)
 		{
-			this.ownerTypeSchema = typeSchema;
+			OwnerTypeSchema = typeSchema;
 			Load(reader);
-			if (typeSchema.type != null)
-				fieldInfo = typeSchema.type.GetField(fieldName);
+			if (typeSchema.Type != null)
+				FieldInfo = typeSchema.Type.GetField(FieldName);
 			Serialized = IsSerialized;
 
-			if (fieldInfo != null)
+			if (FieldInfo != null)
 			{
-				type = fieldInfo.FieldType;
-				nonNullableType = type.GetNonNullableType();
+				Type = FieldInfo.FieldType;
+				NonNullableType = Type.GetNonNullableType();
 				Loadable = Serialized; // derived types won't have entries for base type
 				//Loadable = (typeIndex >= 0 && fieldInfo != null && Serialized);
 			}
 		}
 
-		public override string ToString() => fieldName;
+		public override string ToString() => FieldName;
 		
 		private bool IsSerialized
 		{
 			get
 			{
-				if (fieldInfo == null || fieldInfo.IsLiteral == true || fieldInfo.IsStatic == true)
+				if (FieldInfo == null || FieldInfo.IsLiteral == true || FieldInfo.IsStatic == true)
 					return false;
 
-				Attribute attribute = type?.GetCustomAttribute<UnserializedAttribute>();
+				Attribute attribute = Type?.GetCustomAttribute<UnserializedAttribute>();
 				if (attribute != null)
 					return false;
 
-				attribute = fieldInfo.GetCustomAttribute<NonSerializedAttribute>();
+				attribute = FieldInfo.GetCustomAttribute<NonSerializedAttribute>();
 				if (attribute != null)
 					return false;
 
-				attribute = fieldInfo.GetCustomAttribute<UnserializedAttribute>();
+				attribute = FieldInfo.GetCustomAttribute<UnserializedAttribute>();
 				if (attribute != null)
 					return false;
 
@@ -76,22 +76,22 @@ namespace Atlas.Serialize
 
 		public void Save(BinaryWriter writer)
 		{
-			writer.Write(fieldName);
-			writer.Write((short)typeIndex);
+			writer.Write(FieldName);
+			writer.Write((short)TypeIndex);
 		}
 
 		public void Load(BinaryReader reader)
 		{
-			fieldName = reader.ReadString();
-			typeIndex = reader.ReadInt16();
+			FieldName = reader.ReadString();
+			TypeIndex = reader.ReadInt16();
 		}
 
 		public void Validate(List<TypeSchema> typeSchemas)
 		{
-			if (typeIndex >= 0)
+			if (TypeIndex >= 0)
 			{
-				TypeSchema typeSchema = typeSchemas[typeIndex];
-				if (fieldInfo != null && typeSchema.type != fieldInfo.FieldType.GetNonNullableType())
+				TypeSchema typeSchema = typeSchemas[TypeIndex];
+				if (FieldInfo != null && typeSchema.Type != FieldInfo.FieldType.GetNonNullableType())
 					Loadable = false;
 			}
 		}

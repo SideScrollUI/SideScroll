@@ -21,7 +21,7 @@ namespace Atlas.Serialize
 			{
 				var serializer = new Serializer()
 				{
-					saveSecure = SaveSecure,
+					SaveSecure = SaveSecure,
 				};
 				serializer.AddObject(call, obj);
 				serializer.Save(call, writer);

@@ -67,10 +67,13 @@ namespace Atlas.UI.Avalonia.Controls
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			tabControlDataGrid = new TabControlDataGrid(tabInstance, tabInstance.Model.Tasks, false); // don't autogenerate
-			tabControlDataGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
-			tabControlDataGrid.VerticalAlignment = VerticalAlignment.Stretch;
+			tabControlDataGrid = new TabControlDataGrid(tabInstance, tabInstance.Model.Tasks, false) // don't autogenerate
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch,
+			};
 
+			tabControlDataGrid.AddButtonColumn(nameof(TaskInstance.Cancel));
 			tabControlDataGrid.AddColumn("Task", nameof(TaskInstance.Label));
 			tabControlDataGrid.AddColumn("   %   ", nameof(TaskInstance.Percent));
 			tabControlDataGrid.AddColumn("Status", nameof(TaskInstance.Status));

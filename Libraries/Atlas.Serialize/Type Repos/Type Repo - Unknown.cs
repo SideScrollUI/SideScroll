@@ -10,7 +10,7 @@ namespace Atlas.Serialize
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
-				if (typeSchema.type == null)
+				if (typeSchema.Type == null)
 					return new TypeRepoUnknown(serializer, typeSchema);
 				return null;
 			}
@@ -20,8 +20,8 @@ namespace Atlas.Serialize
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
-				if (!typeSchema.hasConstructor ||
-					(typeSchema.secure && !serializer.saveSecure))
+				if (!typeSchema.HasConstructor ||
+					(typeSchema.Secure && !serializer.SaveSecure))
 					return new TypeRepoUnknown(serializer, typeSchema);
 				return null;
 			}

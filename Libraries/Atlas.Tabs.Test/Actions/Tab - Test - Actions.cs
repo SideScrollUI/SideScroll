@@ -103,9 +103,9 @@ Actions add Buttons to the tab. When clicked, it will:
 					var results = new List<int>();
 					while (tasks.Count > 0)
 					{
-						Task<int> firstFinishedTask = await Task.WhenAny(tasks);
-						tasks.Remove(firstFinishedTask);
-						results.Add(firstFinishedTask.Result);
+						Task<int> taskResult = await Task.WhenAny(tasks);
+						tasks.Remove(taskResult);
+						results.Add(taskResult.Result);
 					}
 				}
 			}
@@ -114,10 +114,10 @@ Actions add Buttons to the tab. When clicked, it will:
 			{
 				using (CallTimer callTimer = call.Timer("Task", new Tag(id)))
 				{
-					for (int i = 0; i < id; i++)
+					for (int i = 0; i < id && !callTimer.TaskInstance.CancelToken.IsCancellationRequested; i++)
 					{
 						callTimer.Log.Add("Sleeping");
-						await Task.Delay(1000);
+						await Task.Delay(1000, callTimer.TaskInstance.CancelToken);
 					}
 				}
 				return id;

@@ -27,8 +27,8 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new TestBindingList();
 
-			serializer.Save(call, input);
-			TestBindingList output = serializer.Load<TestBindingList>(call);
+			serializer.Save(Call, input);
+			TestBindingList output = serializer.Load<TestBindingList>(Call);
 
 			//Assert.AreEqual(output.uintTest, input.uintTest);
 		}

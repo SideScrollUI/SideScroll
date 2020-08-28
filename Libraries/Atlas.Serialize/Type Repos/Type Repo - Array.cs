@@ -11,7 +11,7 @@ namespace Atlas.Serialize
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
-				if (CanAssign(typeSchema.type))
+				if (CanAssign(typeSchema.Type))
 					return new TypeRepoArray(serializer, typeSchema);
 				return null;
 			}
@@ -24,7 +24,7 @@ namespace Atlas.Serialize
 		public TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{
-			elementType = typeSchema.type.GetElementType();
+			elementType = typeSchema.Type.GetElementType();
 		}
 
 		public static bool CanAssign(Type type)
@@ -80,7 +80,7 @@ namespace Atlas.Serialize
 			//int count = reader.ReadInt32();
 			int count = sizes[objectIndex];
 
-			Array array = Array.CreateInstance(typeSchema.type.GetElementType(), count);
+			Array array = Array.CreateInstance(typeSchema.Type.GetElementType(), count);
 			objectsLoaded[objectIndex] = array;
 			serializer.QueueLoading(this, objectIndex);
 
@@ -106,7 +106,7 @@ namespace Atlas.Serialize
 			int count = BitConverter.ToInt32(bytes, byteOffset);
 			byteOffset += sizeof(int);
 
-			Array array = Array.CreateInstance(typeSchema.type.GetElementType(), count);
+			Array array = Array.CreateInstance(typeSchema.Type.GetElementType(), count);
 			objects[objectIndex] = array;
 
 			IList iList = (IList)array;

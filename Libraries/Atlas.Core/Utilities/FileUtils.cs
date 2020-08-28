@@ -5,11 +5,11 @@ namespace Atlas.Core
 {
 	public struct FilePath
 	{
-		public string path;
+		public string Path;
 
 		public FilePath(string path)
 		{
-			this.path = path;
+			Path = path;
 		}
 	}
 

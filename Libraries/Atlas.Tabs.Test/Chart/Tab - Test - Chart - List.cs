@@ -57,7 +57,7 @@ namespace Atlas.Tabs.Test.Chart
 
 			private void StartTask(Call call)
 			{
-				CancellationToken token = call.TaskInstance.tokenSource.Token;
+				CancellationToken token = call.TaskInstance.TokenSource.Token;
 				for (int i = 0; !token.IsCancellationRequested; i++)
 				{
 					Invoke(AddSampleCallback, call);

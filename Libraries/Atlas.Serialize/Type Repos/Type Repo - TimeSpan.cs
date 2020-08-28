@@ -10,7 +10,7 @@ namespace Atlas.Serialize
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
-				if (CanAssign(typeSchema.type))
+				if (CanAssign(typeSchema.Type))
 					return new TypeRepoTimeSpan(serializer, typeSchema);
 				return null;
 			}
@@ -86,14 +86,14 @@ namespace Atlas.Serialize
 
 		public override object LoadObject()
 		{
-			object obj = Enum.ToObject(typeSchema.type, reader.ReadInt32());
+			object obj = Enum.ToObject(typeSchema.Type, reader.ReadInt32());
 			return obj;
 		}
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
 		{
 			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(typeSchema.type, value);
+			object obj = Enum.ToObject(typeSchema.Type, value);
 			byteOffset += sizeof(int);
 			return obj;
 		}

@@ -29,8 +29,8 @@ namespace Atlas.Serialize.Test
 			input.child = new Child();
 			input.child.uintTest = 2;
 
-			serializerFile.Save(call, input);
-			Parent output = serializerFile.Load<Parent>(call, true);
+			serializerFile.Save(Call, input);
+			Parent output = serializerFile.Load<Parent>(Call, true);
 
 			Assert.AreEqual(output.child.uintTest, input.child.uintTest);
 		}
@@ -40,8 +40,8 @@ namespace Atlas.Serialize.Test
 		{
 			Parent input = new Parent();
 
-			serializerFile.Save(call, input);
-			Parent output = serializerFile.Load<Parent>(call, true);
+			serializerFile.Save(Call, input);
+			Parent output = serializerFile.Load<Parent>(Call, true);
 
 			Assert.AreEqual(output.child, input.child);
 		}
@@ -51,8 +51,8 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new WriteRead();
 
-			serializerFile.Save(call, input);
-			WriteRead output = serializerFile.Load<WriteRead>(call, true);
+			serializerFile.Save(Call, input);
+			WriteRead output = serializerFile.Load<WriteRead>(Call, true);
 			output.stringTest = "abc";
 			string temp = output.stringTest;
 
@@ -64,8 +64,8 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new Container();
 
-			serializerFile.Save(call, input);
-			Container output = serializerFile.Load<Container>(call, true);
+			serializerFile.Save(Call, input);
+			Container output = serializerFile.Load<Container>(Call, true);
 
 			Assert.NotNull(output.id);
 		}

@@ -134,7 +134,7 @@ namespace Atlas.Network
 
 				if (taskInstance != null)
 				{
-					if (taskInstance.tokenSource.IsCancellationRequested)
+					if (taskInstance.TokenSource.IsCancellationRequested)
 						break;
 					taskInstance.Percent = (int)(100.0 * percent);
 				}

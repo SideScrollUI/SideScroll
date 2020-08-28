@@ -10,7 +10,7 @@ namespace Atlas.Serialize
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
-				if (typeSchema.type == typeof(string))
+				if (typeSchema.Type == typeof(string))
 					return new TypeRepoString(serializer, typeSchema);
 				return null;
 			}

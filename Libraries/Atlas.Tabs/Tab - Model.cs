@@ -29,8 +29,8 @@ namespace Atlas.Tabs
 
 	public class TabObject
 	{
-		public object obj;
-		public bool fill;
+		public object Object;
+		public bool Fill;
 	}
 
 	public class TabModel
@@ -62,7 +62,7 @@ namespace Atlas.Tabs
 		{
 			if (obj == null)
 				throw new Exception("Object is null");
-			Objects.Add(new TabObject() { obj = obj, fill = fill });
+			Objects.Add(new TabObject() { Object = obj, Fill = fill });
 			if (obj is ChartSettings)
 				MinDesiredWidth = 800;
 		}
@@ -359,8 +359,8 @@ namespace Atlas.Tabs
 					{
 						var selectedRow = new SelectedRow()
 						{
-							rowIndex = -1,
-							obj = obj,
+							RowIndex = -1,
+							Object = obj,
 						};
 						tabDataSettings.SelectedRows.Add(selectedRow);
 						tabBookmark.selectedObjects.Add(obj);
@@ -376,8 +376,8 @@ namespace Atlas.Tabs
 								childNode.tabModel = tabModel;
 								var selectedRow = new SelectedRow()
 								{
-									rowIndex = -1,
-									obj = obj,
+									RowIndex = -1,
+									Object = obj,
 								};
 								tabDataSettings.SelectedRows.Add(selectedRow);
 								tabBookmark.ChildBookmarks.Add(childNode.Name, childNode);

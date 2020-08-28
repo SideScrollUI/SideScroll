@@ -17,7 +17,7 @@ namespace Atlas.Tabs
 					foreach (SelectedRow selectedRow in tabDataSettings.SelectedRows)
 					{
 						address += comma;
-						address += selectedRow.label;
+						address += selectedRow.Label;
 						comma = ", ";
 						count++;
 					}

@@ -12,21 +12,21 @@ namespace Atlas.Tabs
 {
 	public class FilterExpression
 	{
-		public string textUppercase;
-		public bool matchWord = false;
+		public string TextUppercase;
+		public bool MatchWord = false;
 
 		public bool Matches(string valueUppercase)
 		{
-			int index = valueUppercase.IndexOf(textUppercase);
+			int index = valueUppercase.IndexOf(TextUppercase);
 			if (index >= 0)
 			//if (valueText != null && valueText.CaseInsensitiveContains(filter))
 			{
-				if (matchWord)
+				if (MatchWord)
 				{
 					// require whitespace or start/end
 					if (index > 0 && !Char.IsWhiteSpace(valueUppercase[index - 1]))
 						return false;
-					int nextChar = index + textUppercase.Length;
+					int nextChar = index + TextUppercase.Length;
 					if (nextChar < valueUppercase.Length && !Char.IsWhiteSpace(valueUppercase[nextChar]))
 						return false;
 				}
@@ -38,16 +38,16 @@ namespace Atlas.Tabs
 
 	public class Filter
 	{
-		public string filterText;
-		public int depth = 0;
-		public List<FilterExpression> filterExpressions = new List<FilterExpression>();
-		public bool isAnd = false;
+		public string FilterText;
+		public int Depth = 0;
+		public List<FilterExpression> FilterExpressions = new List<FilterExpression>();
+		public bool IsAnd = false;
 
 		// "ABC" | 123
 		// +3 "ABC" | 123
 		public Filter(string filterText)
 		{
-			this.filterText = filterText;
+			this.FilterText = filterText;
 
 			string pattern = @"^(?<Depth>\+\d+ )?(?<Filters>.+)$";
 			Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
@@ -60,12 +60,12 @@ namespace Atlas.Tabs
 
 			string depthText = match.Groups["Depth"].Value;
 			if (depthText.Length > 0)
-				depth = int.Parse(depthText.Substring(1));
+				Depth = int.Parse(depthText.Substring(1));
 			string filters = match.Groups["Filters"].Value;
 
 			filters = filters.ToUpper();
 			string[] parts = filters.Split('|', '&'); // use a tree or something better later
-			isAnd = filters.Contains('&');
+			IsAnd = filters.Contains('&');
 			foreach (string filter in parts)
 			{
 				string text = filter.Trim();
@@ -74,12 +74,12 @@ namespace Atlas.Tabs
 				var filterExpression = new FilterExpression();
 				if (text.First() == '"' && text.Last() == '"')
 				{
-					filterExpression.matchWord = true;
+					filterExpression.MatchWord = true;
 					text = text.Substring(1);
 					text = text.Substring(0, text.Length - 1);
 				}
-				filterExpression.textUppercase = text.ToUpper();
-				filterExpressions.Add(filterExpression);
+				filterExpression.TextUppercase = text.ToUpper();
+				FilterExpressions.Add(filterExpression);
 			}
 		}
 		public bool Matches(IList iList)
@@ -93,9 +93,9 @@ namespace Atlas.Tabs
 		public bool Matches(object obj, List<PropertyInfo> columnProperties)
 		{
 			string allValuesUppercase = GetItemSearchText(obj, columnProperties);
-			if (isAnd)
+			if (IsAnd)
 			{
-				foreach (FilterExpression filterExpression in filterExpressions)
+				foreach (FilterExpression filterExpression in FilterExpressions)
 				{
 					if (!filterExpression.Matches(allValuesUppercase))
 						return false;
@@ -104,7 +104,7 @@ namespace Atlas.Tabs
 			}
 			else
 			{
-				foreach (FilterExpression filterExpression in filterExpressions)
+				foreach (FilterExpression filterExpression in FilterExpressions)
 				{
 					if (filterExpression.Matches(allValuesUppercase))
 						return true;

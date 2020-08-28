@@ -75,7 +75,7 @@ namespace Atlas.Serialize
 
 			foreach (TypeRepoObject.PropertyRepo propertyRepo in propertyRepos)
 			{
-				PropertyInfo propertyInfo = propertyRepo.propertySchema.propertyInfo;
+				PropertyInfo propertyInfo = propertyRepo.propertySchema.PropertyInfo;
 				if (propertyInfo.CanRead == false || propertyInfo.CanWrite == false)
 					continue;
 

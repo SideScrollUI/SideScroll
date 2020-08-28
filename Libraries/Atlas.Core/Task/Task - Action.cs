@@ -5,15 +5,15 @@ namespace Atlas.Core
 {
 	public class TaskAction : TaskCreator
 	{
-		private Action action;
+		public Action Action;
 
 		public override string ToString() => Label;
 
 		public TaskAction(string label, Action action, bool useTask = false)
 		{
-			this.Label = label;
-			this.action = action;
-			this.UseTask = useTask;
+			Label = label;
+			Action = action;
+			UseTask = useTask;
 		}
 
 		protected override Action CreateAction(Call call)
@@ -23,7 +23,7 @@ namespace Atlas.Core
 
 		private void InvokeAction()
 		{
-			action.Invoke();
+			Action.Invoke();
 		}
 	}
 }

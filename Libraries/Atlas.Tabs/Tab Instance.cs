@@ -285,7 +285,7 @@ namespace Atlas.Tabs
 		// subtask?
 		public void CallTask(TaskDelegateParams taskCreator, bool showTask)
 		{
-			taskCreator.Start(taskCreator.call);
+			taskCreator.Start(taskCreator.Call);
 		}
 
 		public void StartTask(TaskCreator taskCreator, bool showTask, Call call = null)
@@ -457,7 +457,7 @@ namespace Atlas.Tabs
 				{
 					foreach (var propertyColumn in propertyColumns)
 					{
-						propertyColumn.propertyInfo.GetValue(obj);
+						propertyColumn.PropertyInfo.GetValue(obj);
 					}
 					itemCount++;
 					if (itemCount > 50)

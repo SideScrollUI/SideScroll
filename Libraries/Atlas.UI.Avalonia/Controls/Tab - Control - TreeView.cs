@@ -208,11 +208,11 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				Type type = obj.GetType();
 				SelectedRow selectedItem = new SelectedRow();
-				selectedItem.label = obj.ToUniqueString();
+				selectedItem.Label = obj.ToUniqueString();
 				//selectedItem.index = dataGrid.Items.IndexOf(obj);
-				if (selectedItem.label == type.FullName)
+				if (selectedItem.Label == type.FullName)
 				{
-					selectedItem.label = null;
+					selectedItem.Label = null;
 				}
 				tabDataConfiguration.SelectedRows.Add(selectedItem);
 			}

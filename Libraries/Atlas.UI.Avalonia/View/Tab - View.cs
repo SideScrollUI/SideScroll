@@ -374,7 +374,7 @@ namespace Atlas.UI.Avalonia.View
 		{
 			foreach (TabObject tabObject in Model.Objects)
 			{
-				object obj = tabObject.obj;
+				object obj = tabObject.Object;
 				if (obj is ChartSettings chartSettings)
 				{
 					AddChart(chartSettings);
@@ -385,11 +385,11 @@ namespace Atlas.UI.Avalonia.View
 				}
 				else if (obj is ITabSelector tabSelector)
 				{
-					AddITabControl(tabSelector, tabObject.fill);
+					AddITabControl(tabSelector, tabObject.Fill);
 				}
 				else if (obj is Control control)
 				{
-					AddControl(control, tabObject.fill);
+					AddControl(control, tabObject.Fill);
 				}
 				else if (obj is string text)
 				{
@@ -400,7 +400,7 @@ namespace Atlas.UI.Avalonia.View
 					ParamsAttribute attribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
 					if (attribute != null)
 					{
-						AddControl(new TabControlParams(tabInstance, obj), tabObject.fill);
+						AddControl(new TabControlParams(tabInstance, obj), tabObject.Fill);
 					}
 				}
 			}

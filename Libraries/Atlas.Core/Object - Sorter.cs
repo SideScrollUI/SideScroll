@@ -54,12 +54,12 @@ namespace Atlas.Core
 
 	public class Sorter : CustomComparer
 	{
-		public ListSortDescriptionCollection sorts;
+		public ListSortDescriptionCollection Sorts;
 		public ListSortDirection SortDirection;
 		
 		public override int Compare(object x, object y)
 		{
-			PropertyDescriptor descriptor = sorts[0].PropertyDescriptor;
+			PropertyDescriptor descriptor = Sorts[0].PropertyDescriptor;
 			object xKey = descriptor.GetValue(x);
 			object yKey = descriptor.GetValue(y);
 

@@ -255,13 +255,13 @@ namespace Atlas.Core
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class DictionaryEntryAttribute : Attribute
 	{
-		public readonly string key;
-		public readonly string value;
+		public readonly string Key;
+		public readonly string Value;
 
 		public DictionaryEntryAttribute(string key, string value)
 		{
-			this.key = key;
-			this.value = value;
+			Key = key;
+			Value = value;
 		}
 	}
 

@@ -139,7 +139,7 @@ namespace Atlas.Serialize
 					{
 						T obj = serializerFile.Load<T>(call, lazy);
 						if (obj != null)
-							entries.Add(serializerFile.LoadHeader(call).name, obj);
+							entries.Add(serializerFile.LoadHeader(call).Name, obj);
 					}
 				}
 			}

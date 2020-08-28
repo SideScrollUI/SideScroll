@@ -19,7 +19,7 @@ namespace Atlas.Tabs
 		//public const string DataKey = "Saved";
 		//public event EventHandler<EventArgs> OnDelete;
 
-		public string path;
+		public string Path;
 		public ItemCollectionUI<TTabType> Items { get; set; } = new ItemCollectionUI<TTabType>();
 		public TTabType NewTabItem { get; set; }
 		private DataRepoView<TDataType> dataRepoView;

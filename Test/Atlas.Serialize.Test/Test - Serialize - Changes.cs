@@ -26,8 +26,8 @@ namespace Atlas.Serialize.Test
 		public void SerializePropertyTypeMissing()
 		{
 			Parent testLog = new Parent();
-			serializerFile.Save(call, testLog);
-			Parent output = serializerFile.Load<Parent>(call);
+			serializerFile.Save(Call, testLog);
+			Parent output = serializerFile.Load<Parent>(Call);
 		}
 
 		public class Parent

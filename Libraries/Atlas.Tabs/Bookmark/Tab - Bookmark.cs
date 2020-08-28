@@ -101,7 +101,7 @@ namespace Atlas.Tabs
 								{
 									new SelectedRow()
 									{
-										label = label,
+										Label = label,
 									},
 								},
 							},
@@ -128,9 +128,9 @@ namespace Atlas.Tabs
 			{
 				foreach (SelectedRow row in ViewSettings.SelectedRows)
 				{
-					string dataKey = row.dataKey ?? row.label;
-					if (dataKey != null && row.dataValue != null && row.dataValue.GetType() == typeof(T))
-						items[dataKey] = (T)row.dataValue;
+					string dataKey = row.DataKey ?? row.Label;
+					if (dataKey != null && row.DataValue != null && row.DataValue.GetType() == typeof(T))
+						items[dataKey] = (T)row.DataValue;
 				}
 			}
 			return items;
@@ -184,11 +184,11 @@ namespace Atlas.Tabs
 
 			foreach (SelectedRow row in ViewSettings.SelectedRows)
 			{
-				string dataKey = row.dataKey ?? row.label;
-				if (dataKey == null || row.dataValue == null)
+				string dataKey = row.DataKey ?? row.Label;
+				if (dataKey == null || row.DataValue == null)
 					continue;
 
-				project.DataApp.Save(DataRepoDirectory, dataKey, row.dataValue);
+				project.DataApp.Save(DataRepoDirectory, dataKey, row.DataValue);
 			}
 			foreach (TabBookmark tabBookmark in ChildBookmarks.Values)
 				tabBookmark.Import(project);
@@ -248,24 +248,24 @@ namespace Atlas.Tabs
 				var indicesUsed = new HashSet<int>();
 				foreach (SelectedRow row in currentSelection)
 				{
-					if (row.label != null)
-						labelsUsed.Add(row.label);
+					if (row.Label != null)
+						labelsUsed.Add(row.Label);
 					else
-						indicesUsed.Add(row.rowIndex);
+						indicesUsed.Add(row.RowIndex);
 				}
 
 				foreach (SelectedRow row in otherSelection)
 				{
-					if (row.label != null)
+					if (row.Label != null)
 					{
-						if (!labelsUsed.Contains(row.label))
+						if (!labelsUsed.Contains(row.Label))
 						{
 							currentSelection.Add(row);
 						}
 					}
 					else
 					{
-						if (!indicesUsed.Contains(row.rowIndex))
+						if (!indicesUsed.Contains(row.RowIndex))
 						{
 							currentSelection.Add(row);
 						}

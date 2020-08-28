@@ -553,7 +553,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			if (iList is IItemCollection itemCollection && itemCollection.ColumnName != null)
 			{
-				propertyColumns[0].label = itemCollection.ColumnName;
+				propertyColumns[0].Label = itemCollection.ColumnName;
 			}
 
 			//if (propertyColumns.Count == 1 && propertyColumns[0].label == "Name")
@@ -561,7 +561,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			foreach (TabDataSettings.PropertyColumn propertyColumn in propertyColumns)
 			{
-				AddColumn(propertyColumn.label, propertyColumn.propertyInfo);
+				AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo);
 			}
 			// 1 column should take up entire grid
 			//if (dataGrid.Columns.Count == 1)
@@ -693,6 +693,12 @@ namespace Atlas.UI.Avalonia.Controls
 			columnProperties.Add(propertyInfo);
 		}
 
+		public void AddButtonColumn(string methodName)
+		{
+			MethodInfo methodInfo = elementType.GetMethod(methodName);
+			AddButtonColumn(new TabDataSettings.MethodColumn(methodInfo));
+		}
+
 		public void AddButtonColumn(TabDataSettings.MethodColumn methodColumn)
 		{
 			/*DataGridTemplateColumn column = new DataGridTemplateColumn();
@@ -706,10 +712,10 @@ namespace Atlas.UI.Avalonia.Controls
 
 			// databound
 			//DataGridCheckBoxColumn checkBoxColumn = new DataGridCheckBoxColumn()
-			var column = new DataGridButtonColumn(methodColumn.methodInfo, methodColumn.label);
+			var column = new DataGridButtonColumn(methodColumn.MethodInfo, methodColumn.Label);
 			//column.Header = methodColumn.methodInfo.Name;
 			dataGrid.Columns.Add(column);
-			columnNames[column] = methodColumn.label;
+			columnNames[column] = methodColumn.Label;
 		}
 
 		public void LoadSettings()
@@ -754,25 +760,25 @@ namespace Atlas.UI.Avalonia.Controls
 			foreach (SelectedRow selectedRow in tabDataSettings.SelectedRows)
 			{
 				object listItem;
-				if (selectedRow.obj != null)
+				if (selectedRow.Object != null)
 				{
-					listItem = selectedRow.obj;
+					listItem = selectedRow.Object;
 				}
-				else if (selectedRow.dataKey != null)
+				else if (selectedRow.DataKey != null)
 				{
-					if (!keys.TryGetValue(selectedRow.dataKey, out listItem))
+					if (!keys.TryGetValue(selectedRow.DataKey, out listItem))
 						continue;
 				}
-				else if (selectedRow.label != null)
+				else if (selectedRow.Label != null)
 				{
-					if (!keys.TryGetValue(selectedRow.label, out listItem))
+					if (!keys.TryGetValue(selectedRow.Label, out listItem))
 						continue;
 				}
 				else
 				{
-					if (selectedRow.rowIndex < 0 || selectedRow.rowIndex >= iList.Count) // some items might be filtered or have changed
+					if (selectedRow.RowIndex < 0 || selectedRow.RowIndex >= iList.Count) // some items might be filtered or have changed
 						continue;
-					listItem = iList[selectedRow.rowIndex];
+					listItem = iList[selectedRow.RowIndex];
 				}
 				if (tabInstance.IsOwnerObject(listItem.GetInnerValue())) // stops self referencing loops
 					continue;
@@ -1083,16 +1089,16 @@ namespace Atlas.UI.Avalonia.Controls
 			Type type = obj.GetType();
 			var selectedRow = new SelectedRow()
 			{
-				label = obj.ToUniqueString(),
-				rowIndex = iList.IndexOf(obj),
-				dataKey = GetDataKey(obj), // overrides label
-				dataValue = GetDataValue(obj),
+				Label = obj.ToUniqueString(),
+				RowIndex = iList.IndexOf(obj),
+				DataKey = GetDataKey(obj), // overrides label
+				DataValue = GetDataValue(obj),
 			};
 			// Use the DataValue's DataKey if no DataKey found
-			if (selectedRow.dataKey == null && selectedRow.dataValue != null)
-				selectedRow.dataKey = GetDataKey(selectedRow.dataValue);
-			if (selectedRow.label == type.FullName)
-				selectedRow.label = null;
+			if (selectedRow.DataKey == null && selectedRow.DataValue != null)
+				selectedRow.DataKey = GetDataKey(selectedRow.DataValue);
+			if (selectedRow.Label == type.FullName)
+				selectedRow.Label = null;
 			
 			return selectedRow;
 		}
@@ -1151,13 +1157,13 @@ namespace Atlas.UI.Avalonia.Controls
 				tabDataSettings.Filter = value;
 				filter = new Filter(value);
 
-				if (filter.filterExpressions.Count > 0)
+				if (filter.FilterExpressions.Count > 0)
 				{
-					if (filter.depth > 0)
+					if (filter.Depth > 0)
 					{
 						// create a new collection because this one might have multiple lists
 						TabModel tabModel = TabModel.Create(this.tabModel.Name, iList);
-						TabBookmark bookmarkNode = tabModel.FindMatches(filter, filter.depth);
+						TabBookmark bookmarkNode = tabModel.FindMatches(filter, filter.Depth);
 						tabInstance.filterBookmarkNode = bookmarkNode;
 						collectionView.Filter = FilterPredicate;
 						tabInstance.SelectBookmark(bookmarkNode);

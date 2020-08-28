@@ -229,9 +229,25 @@ namespace Atlas.Core
 		public LogEntry Add(Exception e)
 		{
 			if (e is TaskCanceledException)
+			{
 				return Add(e.Message, new Tag(e));
+			}
+			else if (e is AggregateException ae)
+			{
+				LogEntry logEntry = null;
+				foreach (Exception ex in ae.InnerExceptions)
+				{
+					if (ex is TaskCanceledException)
+						logEntry = Add(ex.Message, new Tag(ex));
+					else
+						logEntry = AddError(ex.Message, new Tag(ex));
+				}
+				return logEntry;
+			}
 			else
+			{
 				return AddError(e.Message, new Tag(e));
+			}
 		}
 
 		public LogTimer Timer(string text, params Tag[] tags)

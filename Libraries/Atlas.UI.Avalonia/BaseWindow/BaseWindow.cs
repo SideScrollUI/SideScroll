@@ -14,7 +14,7 @@ namespace Atlas.UI.Avalonia
 		private const int DefaultWindowWidth = 1280;
 		private const int DefaultWindowHeight = 800;
 
-		public Project project;
+		public Project Project;
 
 		private bool loadComplete = false;
 
@@ -31,7 +31,7 @@ namespace Atlas.UI.Avalonia
 
 		public void LoadProject(Project project)
 		{
-			this.project = project;
+			Project = project;
 
 			LoadWindowSettings();
 
@@ -43,7 +43,7 @@ namespace Atlas.UI.Avalonia
 		// Load here instead of in xaml for better control
 		private void InitializeComponent()
 		{
-			Title = project.ProjectSettings.Name ?? "<Name>";
+			Title = Project.ProjectSettings.Name ?? "<Name>";
 
 			Background = Theme.TabBackground;
 
@@ -54,7 +54,7 @@ namespace Atlas.UI.Avalonia
 
 			Icon = new WindowIcon(Icons.Streams.Logo);
 
-			Content = tabViewer = new TabViewer(project);
+			Content = tabViewer = new TabViewer(Project);
 
 			PositionChanged += BaseWindow_PositionChanged;
 
@@ -140,7 +140,7 @@ namespace Atlas.UI.Avalonia
 		{
 			SetMaxBounds();
 
-			WindowSettings windowSettings = project.DataApp.Load<WindowSettings>(true);
+			WindowSettings windowSettings = Project.DataApp.Load<WindowSettings>(true);
 
 			this.WindowSettings = windowSettings;
 		}
@@ -149,7 +149,7 @@ namespace Atlas.UI.Avalonia
 		private void SaveWindowSettings()
 		{
 			if (loadComplete)// && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
-				project.DataApp.Save(WindowSettings);
+				Project.DataApp.Save(WindowSettings);
 
 			// need a better trigger for when the screen size changes
 			SetMaxBounds();

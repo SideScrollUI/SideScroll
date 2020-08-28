@@ -7,20 +7,20 @@ namespace Atlas.Core
 	{
 		public delegate void CallActionParams(Call call, params object[] objects);
 
-		public Call call;
-		private CallActionParams callAction;
-		private object[] objects;
+		public Call Call;
+		public CallActionParams CallAction;
+		public object[] Objects;
 
 		public override string ToString() => Label;
 
 		public TaskDelegateParams(Call call, string label, CallActionParams callAction, bool useTask, string description, object[] objects)
 		{
-			this.call = call;
-			this.Label = label;
-			this.callAction = callAction;
-			this.UseTask = useTask;
-			this.Description = description;
-			this.objects = objects;
+			Call = call;
+			Label = label;
+			CallAction = callAction;
+			UseTask = useTask;
+			Description = description;
+			Objects = objects;
 		}
 
 		protected override Action CreateAction(Call call)
@@ -32,7 +32,7 @@ namespace Atlas.Core
 		{
 			try
 			{
-				callAction.Invoke(call, objects);
+				CallAction.Invoke(call, Objects);
 			}
 			catch (Exception e)
 			{

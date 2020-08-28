@@ -53,7 +53,7 @@ namespace Atlas.Tabs.Test
 			private void SubTaskInstances(Call call)
 			{
 				Log logChild = call.Log.Call("child");
-				CancellationToken token = call.TaskInstance.tokenSource.Token;
+				CancellationToken token = call.TaskInstance.TokenSource.Token;
 				for (int i = 0; !token.IsCancellationRequested; i++)
 				{
 					//log.Add("New Log Entry", new Tag("i", counter));

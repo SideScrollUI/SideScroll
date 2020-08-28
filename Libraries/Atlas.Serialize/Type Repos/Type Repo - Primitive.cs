@@ -11,7 +11,7 @@ namespace Atlas.Serialize
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
-				if (CanAssign(typeSchema.type))
+				if (CanAssign(typeSchema.Type))
 					return new TypeRepoPrimitive(serializer, typeSchema);
 				return null;
 			}

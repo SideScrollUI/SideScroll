@@ -16,7 +16,7 @@ namespace Atlas.Serialize.Test
 		public void BaseSetup()
 		{
 			Initialize("Clone");
-			log = call.Log;
+			log = Call.Log;
 			
 			string basePath = Paths.Combine(TestPath, "Clone");
 		}

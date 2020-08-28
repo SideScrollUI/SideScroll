@@ -4,11 +4,11 @@ namespace Atlas.Core
 {
 	public class TestBase
 	{
-		public Call call;
+		public Call Call { get; set; }
 
 		public virtual void Initialize(string name)
 		{
-			call = new Call(name);
+			Call = new Call(name);
 		}
 	}
 }

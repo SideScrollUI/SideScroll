@@ -10,7 +10,7 @@ namespace Atlas.Serialize
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
-				if (CanAssign(typeSchema.type))
+				if (CanAssign(typeSchema.Type))
 					return new TypeRepoEnum(serializer, typeSchema);
 				return null;
 			}
@@ -45,7 +45,7 @@ namespace Atlas.Serialize
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
 			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(typeSchema.type, value);
+			object obj = Enum.ToObject(typeSchema.Type, value);
 			byteOffset += sizeof(int);
 			objects[objectIndex] = obj;
 			return obj;
@@ -60,7 +60,7 @@ namespace Atlas.Serialize
 			try
 			{
 				if (type.IsEnum)
-					obj = Enum.ToObject(typeSchema.type, reader.ReadInt32());
+					obj = Enum.ToObject(typeSchema.Type, reader.ReadInt32());
 				else
 					throw new Exception("Unhandled primitive type");
 			}
@@ -80,14 +80,14 @@ namespace Atlas.Serialize
 
 		public override object LoadObject()
 		{
-			object obj = Enum.ToObject(typeSchema.type, reader.ReadInt32());
+			object obj = Enum.ToObject(typeSchema.Type, reader.ReadInt32());
 			return obj;
 		}
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
 		{
 			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(typeSchema.type, value);
+			object obj = Enum.ToObject(typeSchema.Type, value);
 			byteOffset += sizeof(int);
 			return obj;
 		}

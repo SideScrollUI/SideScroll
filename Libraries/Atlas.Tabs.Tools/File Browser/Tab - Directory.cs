@@ -62,8 +62,8 @@ namespace Atlas.Tabs.Tools
 				{
 					foreach (SelectedRow selectedRow in tabDataSettings.SelectedRows)
 					{
-						if (Directory.Exists(selectedRow.label))
-							Directory.Delete(selectedRow.label, true);
+						if (Directory.Exists(selectedRow.Label))
+							Directory.Delete(selectedRow.Label, true);
 					}
 				}
 				Reload();

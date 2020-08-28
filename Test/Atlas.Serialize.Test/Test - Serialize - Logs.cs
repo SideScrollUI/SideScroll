@@ -48,16 +48,16 @@ namespace Atlas.Serialize.Test
 		{
 			var testLog = new TestLogBig();
 			testLog.Child("test");
-			serializer.Save(call, testLog);
-			TestLogBig output = serializer.Load<TestLogBig>(call);
+			serializer.Save(Call, testLog);
+			TestLogBig output = serializer.Load<TestLogBig>(Call);
 		}
 
 		[Test, Description("Serialize Test Log")]
 		public void SerializeTestLog()
 		{
 			TestLog testLog = new TestLog();
-			serializer.Save(call, testLog);
-			TestLog output = serializer.Load<TestLog>(call);
+			serializer.Save(Call, testLog);
+			TestLog output = serializer.Load<TestLog>(Call);
 		}
 
 		[Test, Description("Serialize Log Timer 2")]
@@ -66,32 +66,32 @@ namespace Atlas.Serialize.Test
 			Log testLog = new Log();
 			using (testLog.Timer("timing"))
 				testLog.Add("child");
-			serializer.Save(call, testLog);
-			Log output = serializer.Load<Log>(call);
+			serializer.Save(Call, testLog);
+			Log output = serializer.Load<Log>(Call);
 		}
 
 		[Test, Description("Serialize Log Entry")]
 		public void SerializeLogEntry()
 		{
 			LogEntry input = new LogEntry();
-			serializer.Save(call, input);
-			LogEntry output = serializer.Load<LogEntry>(call);
+			serializer.Save(Call, input);
+			LogEntry output = serializer.Load<LogEntry>(Call);
 		}
 
 		[Test, Description("Serialize Log")]
 		public void SerializeLog()
 		{
 			Log testLog = new Log();
-			serializer.Save(call, testLog);
-			Log output = serializer.Load<Log>(call);
+			serializer.Save(Call, testLog);
+			Log output = serializer.Load<Log>(Call);
 		}
 
 		[Test, Description("Serialize Log Unknown")]
 		public void SerializeLogUnknown()
 		{
 			LogUnknown testLog = new LogUnknown();
-			serializer.Save(call, testLog);
-			LogUnknown output = serializer.Load<LogUnknown>(call);
+			serializer.Save(Call, testLog);
+			LogUnknown output = serializer.Load<LogUnknown>(Call);
 		}
 
 		[Test, Description("Serialize Log Child")]
@@ -100,8 +100,8 @@ namespace Atlas.Serialize.Test
 			Log testLog = new Log();
 			testLog.Call("test");
 
-			serializer.Save(call, testLog);
-			Log output = serializer.Load<Log>(call);
+			serializer.Save(Call, testLog);
+			Log output = serializer.Load<Log>(Call);
 		}
 
 		[Test, Description("Serialize Log Timer")]
@@ -109,8 +109,8 @@ namespace Atlas.Serialize.Test
 		{
 			LogTimer testLog = new LogTimer();
 
-			serializer.Save(call, testLog);
-			LogTimer output = serializer.Load<LogTimer>(call);
+			serializer.Save(Call, testLog);
+			LogTimer output = serializer.Load<LogTimer>(Call);
 		}
 
 		private class MultipleArrays
@@ -125,8 +125,8 @@ namespace Atlas.Serialize.Test
 			LogEntryTest2 testLog = new LogEntryTest2();
 			testLog.tags = new Tag[] { new Tag("abc", 123) };
 
-			serializer.Save(call, testLog);
-			LogEntryTest2 output = serializer.Load<LogEntryTest2>(call);
+			serializer.Save(Call, testLog);
+			LogEntryTest2 output = serializer.Load<LogEntryTest2>(Call);
 		}
 
 		[Test, Description("Serialize Log Timer Child Unknown")]
@@ -135,8 +135,8 @@ namespace Atlas.Serialize.Test
 			var testLog = new LogTest2();
 			testLog.Add(new Tag("abc", 123));
 
-			serializer.Save(call, testLog);
-			LogTest2 output = serializer.Load<LogTest2>(call);
+			serializer.Save(Call, testLog);
+			LogTest2 output = serializer.Load<LogTest2>(Call);
 		}
 
 		[Test, Description("Serialize Log Timer Child")]
@@ -145,8 +145,8 @@ namespace Atlas.Serialize.Test
 			Log testLog = new Log();
 			using (testLog.Timer("test")) { }
 
-			serializer.Save(call, testLog);
-			Log output = serializer.Load<Log>(call);
+			serializer.Save(Call, testLog);
+			Log output = serializer.Load<Log>(Call);
 		}
 
 		public class SelectedItem

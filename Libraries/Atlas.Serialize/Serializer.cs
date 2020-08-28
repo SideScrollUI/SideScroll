@@ -9,23 +9,23 @@ namespace Atlas.Serialize
 {
 	public class Header
 	{
-		public const string latestVersion = "1";
+		public const string LatestVersion = "1";
 
-		public string version = latestVersion;
-		public string name = "<Default>";
+		public string Version = LatestVersion;
+		public string Name = "<Default>";
 
-		public override string ToString() => version.ToString();
+		public override string ToString() => Version.ToString();
 
 		public void Save(BinaryWriter writer)
 		{
-			writer.Write(version);
-			writer.Write(name);
+			writer.Write(Version);
+			writer.Write(Name);
 		}
 
 		public void Load(BinaryReader reader)
 		{
-			version = reader.ReadString();
-			name = reader.ReadString();
+			Version = reader.ReadString();
+			Name = reader.ReadString();
 			//Debug.Assert(version == latestVersion);
 		}
 	}
@@ -40,14 +40,14 @@ namespace Atlas.Serialize
 		public Dictionary<Type, TypeRepo> idxTypeToRepo = new Dictionary<Type, TypeRepo>();
 
 		public BinaryReader reader;
-		public bool lazy;
-		public bool whitelistOnly = true;
-		public bool saveSecure = true;
+		public bool Lazy;
+		public bool AllowListOnly = true;
+		public bool SaveSecure = true;
 
 		// Convert to Parser class?
 		// Use a queue so we don't exceed the stack size due to cross references (i.e. a list with values that refer back to the list)
-		public Queue<object> parserQueue = new Queue<object>();
-		public List<object> primitives = new List<object>(); // primitives are usually serialized inline, but that doesn't work if that's the primary type
+		public Queue<object> ParserQueue = new Queue<object>();
+		public List<object> Primitives = new List<object>(); // primitives are usually serialized inline, but that doesn't work if that's the primary type
 
 		public struct LoadItem
 		{
@@ -57,7 +57,7 @@ namespace Atlas.Serialize
 			public override string ToString() => typeRepo.ToString() + " - " + index;
 		}
 
-		public Queue<LoadItem> loadQueue = new Queue<LoadItem>();
+		public Queue<LoadItem> LoadQueue = new Queue<LoadItem>();
 
 		public Serializer()
 		{
@@ -73,7 +73,7 @@ namespace Atlas.Serialize
 
 			if (typeRepo.type.IsPrimitive)
 			{
-				return primitives[0];
+				return Primitives[0];
 				//return typeRepo.LoadObject();
 			}
 			return LoadObject(typeRepo, 0);
@@ -90,9 +90,9 @@ namespace Atlas.Serialize
 
 		public void ProcessLoadQueue()
 		{
-			while (loadQueue.Count > 0)
+			while (LoadQueue.Count > 0)
 			{
-				LoadItem loadItem = loadQueue.Dequeue();
+				LoadItem loadItem = LoadQueue.Dequeue();
 				loadItem.typeRepo.LoadObjectData(loadItem.index);
 			}
 		}
@@ -127,15 +127,15 @@ namespace Atlas.Serialize
 				TypeSchema typeSchema = typeSchemas[i];
 				foreach (FieldSchema fieldSchema in typeSchema.FieldSchemas)
 				{
-					Type type = fieldSchema.nonNullableType;
-					fieldSchema.typeSchema = GetOrCreateRepo(log, type).typeSchema;
-					fieldSchema.typeIndex = fieldSchema.typeSchema.typeIndex;
+					Type type = fieldSchema.NonNullableType;
+					fieldSchema.TypeSchema = GetOrCreateRepo(log, type).typeSchema;
+					fieldSchema.TypeIndex = fieldSchema.TypeSchema.TypeIndex;
 				}
 				foreach (PropertySchema propertySchema in typeSchema.PropertySchemas)
 				{
-					Type type = propertySchema.nonNullableType;
-					propertySchema.propertyTypeSchema = GetOrCreateRepo(log, type).typeSchema;
-					propertySchema.typeIndex = propertySchema.propertyTypeSchema.typeIndex;
+					Type type = propertySchema.NonNullableType;
+					propertySchema.PropertyTypeSchema = GetOrCreateRepo(log, type).typeSchema;
+					propertySchema.TypeIndex = propertySchema.PropertyTypeSchema.TypeIndex;
 				}
 			}
 		}
@@ -185,11 +185,11 @@ namespace Atlas.Serialize
 		public void Load(Call call, BinaryReader reader, bool lazy = false, bool loadData = true)
 		{
 			this.reader = reader;
-			this.lazy = lazy;
+			this.Lazy = lazy;
 			using (LogTimer logTimer = call.Log.Timer("Loading object"))
 			{
 				header.Load(reader);
-				if (header.version != Header.latestVersion)
+				if (header.Version != Header.LatestVersion)
 				{
 					logTimer.AddError("Header version doesn't match", new Tag("Header", header));
 					return;
@@ -210,8 +210,8 @@ namespace Atlas.Serialize
 		private void SavePrimitives(Call call, BinaryWriter writer)
 		{
 			writer.Seek(0, SeekOrigin.End);
-			writer.Write(primitives.Count);
-			foreach (object obj in primitives)
+			writer.Write(Primitives.Count);
+			foreach (object obj in Primitives)
 			{
 				//TypeRepo typeRepo = GetOrCreateRepo(obj.GetType());
 				WriteObjectRef(typeof(object), obj, writer);
@@ -226,19 +226,19 @@ namespace Atlas.Serialize
 				byte flags = reader.ReadByte();
 				if (flags == 0)
 				{
-					primitives.Add(null);
+					Primitives.Add(null);
 					continue;
 				}
 				int typeIndex = reader.ReadInt16();
 				TypeRepo typeRepo = typeRepos[typeIndex];
-				if (typeRepo.typeSchema.isPrimitive) // object ref can point to primitives
+				if (typeRepo.typeSchema.IsPrimitive) // object ref can point to primitives
 				{
-					primitives.Add(typeRepo.LoadObject());
+					Primitives.Add(typeRepo.LoadObject());
 				}
 				else
 				{
 					int objectIndex = reader.ReadInt32();
-					primitives.Add(typeRepo.LoadObject(objectIndex));
+					Primitives.Add(typeRepo.LoadObject(objectIndex));
 				}
 			}
 		}
@@ -262,7 +262,7 @@ namespace Atlas.Serialize
 				{
 					var typeSchema = new TypeSchema(log, reader)
 					{
-						typeIndex = i,
+						TypeIndex = i,
 					};
 					typeSchemas.Add(typeSchema);
 
@@ -300,7 +300,7 @@ namespace Atlas.Serialize
 
 					if (!typeRepo.typeSchema.CanReference)
 						primitives.Add(typeRepo);
-					else if (typeRepo.typeSchema.isCollection)
+					else if (typeRepo.typeSchema.IsCollection)
 						collections.Add(typeRepo);
 					else
 						others.Add(typeRepo);
@@ -420,7 +420,7 @@ namespace Atlas.Serialize
 
 			var typeSchema = new TypeSchema(type)
 			{
-				typeIndex = typeSchemas.Count,
+				TypeIndex = typeSchemas.Count,
 			};
 			typeSchemas.Add(typeSchema);
 
@@ -517,11 +517,11 @@ namespace Atlas.Serialize
 				int objectIndex = typeRepo.GetOrAddObjectRef(obj);
 				//parserQueue.Enqueue(obj);
 				if (objectIndex < 0)
-					primitives.Add(obj);
+					Primitives.Add(obj);
 
-				while (parserQueue.Count > 0)
+				while (ParserQueue.Count > 0)
 				{
-					obj = parserQueue.Dequeue();
+					obj = ParserQueue.Dequeue();
 					Type type = obj.GetType();
 					typeRepo = idxTypeToRepo[type]; // optimization? could save the object and TypeRepo reference in a Link struct 
 					typeRepo.AddChildObjects(obj);
@@ -551,7 +551,7 @@ namespace Atlas.Serialize
 				clones[obj] = obj; // optional
 				return obj;
 			}
-			if (typeRepo.typeSchema.isStatic)
+			if (typeRepo.typeSchema.IsStatic)
 			{
 				clones[obj] = obj; // optional
 				return obj;
@@ -586,7 +586,7 @@ namespace Atlas.Serialize
 		
 		public T Clone<T>(Log log, object obj)
 		{
-			whitelistOnly = false;
+			AllowListOnly = false;
 			T clone = (T)Clone(obj);
 			using (LogTimer logClone = log.Timer("Clone"))
 			{
@@ -628,7 +628,7 @@ namespace Atlas.Serialize
 				index = objectIndex
 			};
 
-			loadQueue.Enqueue(loadItem);
+			LoadQueue.Enqueue(loadItem);
 		}
 
 		public void Dispose()

@@ -30,7 +30,7 @@ namespace Atlas.Tabs
 
 		public static List<MethodColumn> GetButtonMethods(Type type)
 		{
-			List<MethodColumn> callableMethods = new List<MethodColumn>();
+			var callableMethods = new List<MethodColumn>();
 			MethodInfo[] methodInfos = type.GetMethods().OrderBy(x => x.MetadataToken).ToArray();
 			foreach (MethodInfo methodInfo in methodInfos)
 			{
@@ -84,25 +84,25 @@ namespace Atlas.Tabs
 
 		public class MethodColumn
 		{
-			public MethodInfo methodInfo;
-			public string label;
+			public MethodInfo MethodInfo;
+			public string Label { get; set; }
 
-			public MethodColumn(MethodInfo methodInfo, string label)
+			public MethodColumn(MethodInfo methodInfo, string label = null)
 			{
-				this.methodInfo = methodInfo;
-				this.label = label;
+				MethodInfo = methodInfo;
+				Label = label ?? methodInfo.GetCustomAttribute<ButtonColumnAttribute>()?.Name ?? methodInfo.Name;
 			}
 		}
 
 		public class PropertyColumn
 		{
-			public PropertyInfo propertyInfo;
-			public string label;
+			public PropertyInfo PropertyInfo;
+			public string Label { get; set; }
 
 			public PropertyColumn(PropertyInfo propertyInfo, string label)
 			{
-				this.propertyInfo = propertyInfo;
-				this.label = label;
+				PropertyInfo = propertyInfo;
+				Label = label;
 			}
 		}
 
@@ -161,19 +161,16 @@ namespace Atlas.Tabs
 
 	public class SelectedRow
 	{
-		public string label; // null if ToString() returns type
-		public int rowIndex;
+		public string Label; // null if ToString() returns type
+		public int RowIndex;
 		[NonSerialized]
-		public object obj; // used for bookmark searches, dangerous to keep these references around otherwise
-		public string dataKey;
-		public object dataValue;
-		//public bool pinned;
-		public List<string> selectedColumns = new List<string>();
+		public object Object; // used for bookmark searches, dangerous to keep these references around otherwise
+		public string DataKey;
+		public object DataValue;
+		//public bool Pinned;
+		public List<string> SelectedColumns = new List<string>();
 
-		public override string ToString()
-		{
-			return label;
-		}
+		public override string ToString() => Label;
 	}
 }
 /*

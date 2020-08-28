@@ -7,15 +7,15 @@ namespace Atlas.Core
 {
 	public class TaskMethod : TaskCreator
 	{
-		private MethodInfo methodInfo;
-		private object obj; // object to invoke method for
+		public MethodInfo MethodInfo { get; set; }
+		public object Object { get; set; } // object to invoke method for
 
-		public override string ToString() => methodInfo.Name;
+		public override string ToString() => MethodInfo.Name;
 
 		public TaskMethod(MethodInfo methodInfo, object obj)
 		{
-			this.methodInfo = methodInfo;
-			this.obj = obj;
+			MethodInfo = methodInfo;
+			Object = obj;
 
 			Label = methodInfo.Name;
 		}
@@ -27,7 +27,7 @@ namespace Atlas.Core
 
 		private void RunMethod(Call call)
 		{
-			methodInfo.Invoke(obj, new object[] { call });
+			MethodInfo.Invoke(Object, new object[] { call });
 		}
 	}
 }

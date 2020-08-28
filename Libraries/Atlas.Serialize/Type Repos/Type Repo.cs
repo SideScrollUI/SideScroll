@@ -65,7 +65,7 @@ namespace Atlas.Serialize
 		{
 			this.serializer = serializer;
 			this.typeSchema = typeSchema;
-			type = typeSchema.type;
+			type = typeSchema.Type;
 			loadableType = type;
 			//objects.Capacity = typeSchema.numObjects;
 			objectsLoaded = new object[typeSchema.NumObjects];
@@ -79,7 +79,7 @@ namespace Atlas.Serialize
 
 		public static TypeRepo Create(Log log, Serializer serializer, TypeSchema typeSchema)
 		{
-			if (serializer.whitelistOnly && typeSchema.type != null && !typeSchema.Whitelisted)
+			if (serializer.AllowListOnly && typeSchema.Type != null && !typeSchema.Whitelisted)
 				throw new Exception("Type " + typeSchema.Name + " is not whitelisted");
 			//Type type = typeSchema.type;
 			TypeRepo typeRepo;
@@ -93,12 +93,12 @@ namespace Atlas.Serialize
 					return typeRepo;
 				}
 			}
-			if (!typeSchema.hasConstructor)
+			if (!typeSchema.HasConstructor)
 			{
 				typeRepo = new TypeRepoUnknown(serializer, typeSchema);
 				log.AddWarning("Type has no constructor", new Tag(typeSchema));
 			}
-			else if (typeSchema.secure && !serializer.saveSecure)
+			else if (typeSchema.Secure && !serializer.SaveSecure)
 			{
 				typeRepo = new TypeRepoUnknown(serializer, typeSchema);
 			}
@@ -296,7 +296,7 @@ namespace Atlas.Serialize
 				index = idxObjectToIndex.Count;
 				idxObjectToIndex[obj] = index;
 				objects.Add(obj);
-				serializer.parserQueue.Enqueue(obj);
+				serializer.ParserQueue.Enqueue(obj);
 			}
 			return index;
 		}
@@ -324,7 +324,7 @@ namespace Atlas.Serialize
 
 			var typeRef = new TypeRef();
 
-			if (typeSchema.hasSubType)
+			if (typeSchema.HasSubType)
 			{
 				if (flags == 1)
 				{
@@ -362,7 +362,7 @@ namespace Atlas.Serialize
 				return;
 			}
 
-			if (typeSchema.hasSubType)
+			if (typeSchema.HasSubType)
 			{
 				if (flags == 1)
 				{
@@ -372,7 +372,7 @@ namespace Atlas.Serialize
 				{
 					int typeIndex = reader.ReadInt16(); // not saved for sealed classes
 					TypeRepo typeRepo = serializer.typeRepos[typeIndex];
-					if (typeRepo.typeSchema.type.IsPrimitive)
+					if (typeRepo.typeSchema.Type.IsPrimitive)
 						LoadObject();
 					else
 						reader.ReadInt32(); // objectIndex
@@ -390,12 +390,12 @@ namespace Atlas.Serialize
 			if (flags == 0)
 				return null;
 
-			if (typeSchema.isPrimitive)
+			if (typeSchema.IsPrimitive)
 			{
 				return LoadObject();
 			}
 
-			if (typeSchema.hasSubType)
+			if (typeSchema.HasSubType)
 			{
 				if (flags == 1)
 				{
@@ -409,7 +409,7 @@ namespace Atlas.Serialize
 					if (typeIndex >= serializer.typeRepos.Count)
 						return null;
 					TypeRepo typeRepo = serializer.typeRepos[typeIndex];
-					if (typeRepo.typeSchema.isPrimitive) // object ref can point to primitives
+					if (typeRepo.typeSchema.IsPrimitive) // object ref can point to primitives
 						return typeRepo.LoadObject();
 
 					int objectIndex = reader.ReadInt32();
@@ -437,7 +437,7 @@ namespace Atlas.Serialize
 
 			int objectIndex = BitConverter.ToInt32(bytes, byteOffset);
 			byteOffset += sizeof(int);
-			if (!typeSchema.hasSubType)
+			if (!typeSchema.HasSubType)
 			{
 				//return LoadObjectData(bytes, ref byteOffset, objectIndex);
 				return LoadObject(objectIndex);

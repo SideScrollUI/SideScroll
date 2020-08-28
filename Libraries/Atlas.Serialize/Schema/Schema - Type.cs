@@ -20,43 +20,43 @@ namespace Atlas.Serialize
 		public string Name { get; set; }
 		public string AssemblyQualifiedName { get; set; }
 		public bool CanReference { get; set; } // whether the object can reference other types
-		public bool isCollection;
+		public bool IsCollection;
 
 		public List<FieldSchema> FieldSchemas { get; set; } = new List<FieldSchema>();
 		public List<PropertySchema> PropertySchemas { get; set; } = new List<PropertySchema>();
 
 		// not really schema, could break out into a records class
-		public int typeIndex; // -1 if null
+		public int TypeIndex; // -1 if null
 		public int NumObjects { get; set; }
 		public long FileDataOffset { get; set; }
 		public long DataSize { get; set; }
 
 		// not written out
-		public Type type; // might be null
-		public Type nonNullableType; // might be null
+		public Type Type; // might be null
+		public Type NonNullableType; // might be null
 		public bool isPrimitive;
-		public bool hasConstructor = true;
-		public bool secure = false; // Secure types do not get saved if the SaveSecure flag is set
+		public bool HasConstructor = true;
+		public bool Secure = false; // Secure types do not get saved if the SaveSecure flag is set
 
-		public bool isStatic;
-		public bool hasSubType;
+		public bool IsStatic;
+		public bool HasSubType;
 
 		public TypeSchema(Type type)
 		{
-			this.type = type;
+			this.Type = type;
 			Name = type.ToString(); // better than FullName (don't remember why)
 			
 			AssemblyQualifiedName = type.AssemblyQualifiedName; // todo: strip out unused version?
-			isCollection = (typeof(ICollection).IsAssignableFrom(type));
-			hasSubType = !type.IsSealed; // set for all non derived classes?
+			IsCollection = (typeof(ICollection).IsAssignableFrom(type));
+			HasSubType = !type.IsSealed; // set for all non derived classes?
 			CanReference = !(type.IsPrimitive || type.IsEnum || type == typeof(string));
-			nonNullableType = type.GetNonNullableType();
-			isPrimitive = nonNullableType.IsPrimitive;
+			NonNullableType = type.GetNonNullableType();
+			isPrimitive = NonNullableType.IsPrimitive;
 
-			isStatic = (type.GetCustomAttribute<StaticAttribute>() != null);
-			secure = (type.GetCustomAttribute<SecureAttribute>() != null);
+			IsStatic = (type.GetCustomAttribute<StaticAttribute>() != null);
+			Secure = (type.GetCustomAttribute<SecureAttribute>() != null);
 
-			if (!isCollection)
+			if (!IsCollection)
 			{
 				// FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance); // For Atlas only?
 				foreach (FieldInfo fieldInfo in type.GetFields())
@@ -128,7 +128,7 @@ namespace Atlas.Serialize
 		{
 			get
 			{
-				return IsWhitelisted(type);
+				return IsWhitelisted(Type);
 			}
 		}
 
@@ -136,10 +136,10 @@ namespace Atlas.Serialize
 		{
 			get
 			{
-				if (nonNullableType == null)
+				if (NonNullableType == null)
 					return false;
 
-				return nonNullableType.IsPrimitive;
+				return NonNullableType.IsPrimitive;
 			}
 		}
 
@@ -148,8 +148,8 @@ namespace Atlas.Serialize
 			writer.Write(Name);
 			writer.Write(AssemblyQualifiedName);
 			writer.Write(CanReference);
-			writer.Write(isCollection);
-			writer.Write(hasSubType);
+			writer.Write(IsCollection);
+			writer.Write(HasSubType);
 			writer.Write(NumObjects);
 			writer.Write(FileDataOffset);
 			writer.Write(DataSize);
@@ -163,20 +163,20 @@ namespace Atlas.Serialize
 			Name = reader.ReadString();
 			AssemblyQualifiedName = reader.ReadString();
 			CanReference = reader.ReadBoolean();
-			isCollection = reader.ReadBoolean();
-			hasSubType = reader.ReadBoolean();
+			IsCollection = reader.ReadBoolean();
+			HasSubType = reader.ReadBoolean();
 			NumObjects = reader.ReadInt32();
 			FileDataOffset = reader.ReadInt64();
 			DataSize = reader.ReadInt64();
 			LoadType(log);
-			if (type == null)
+			if (Type == null)
 			{
 				log.AddWarning("Missing Type", new Tag("TypeSchema", this));
 			}
 			else
 			{
-				nonNullableType = type.GetNonNullableType();
-				isPrimitive = nonNullableType.IsPrimitive;
+				NonNullableType = Type.GetNonNullableType();
+				isPrimitive = NonNullableType.IsPrimitive;
 			}
 
 			LoadFields(reader);
@@ -192,7 +192,7 @@ namespace Atlas.Serialize
 			{
 				if (typeCache.TryGetValue(AssemblyQualifiedName, out Type type))
 				{
-					this.type = type;
+					this.Type = type;
 					return;
 				}
 			}
@@ -200,7 +200,7 @@ namespace Atlas.Serialize
 			// Get Type with version
 			try
 			{
-				type = Type.GetType(AssemblyQualifiedName); // .Net Framework (WPF) requires this?
+				Type = Type.GetType(AssemblyQualifiedName); // .Net Framework (WPF) requires this?
 			}
 			catch (Exception e)
 			{
@@ -210,8 +210,8 @@ namespace Atlas.Serialize
 			// Get Type without version
 			try
 			{
-				if (type == null)
-					type = Type.GetType(AssemblyQualifiedName, AssemblyResolver, null);
+				if (Type == null)
+					Type = Type.GetType(AssemblyQualifiedName, AssemblyResolver, null);
 			}
 			catch (Exception e)
 			{
@@ -221,7 +221,7 @@ namespace Atlas.Serialize
 
 			lock (typeCache)
 			{
-				typeCache.Add(AssemblyQualifiedName, type);
+				typeCache.Add(AssemblyQualifiedName, Type);
 			}
 		}
 
@@ -280,9 +280,9 @@ namespace Atlas.Serialize
 				propertySchema.Validate(typeSchemas);
 			}
 			//ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
-			ConstructorInfo constructorInfo = type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
-			var constructors = type.GetConstructors();
-			hasConstructor = (constructorInfo != null || constructors.Length == 0);
+			ConstructorInfo constructorInfo = Type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
+			var constructors = Type.GetConstructors();
+			HasConstructor = (constructorInfo != null || constructors.Length == 0);
 		}
 	}
 }
