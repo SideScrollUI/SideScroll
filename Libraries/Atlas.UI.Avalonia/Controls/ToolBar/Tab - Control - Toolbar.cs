@@ -17,11 +17,11 @@ namespace Atlas.UI.Avalonia.Tabs
 {
 	public class TabControlToolbar : Grid
 	{
-		public TabInstance tabInstance;
+		public TabInstance TabInstance;
 
 		public TabControlToolbar(TabInstance tabInstance, TabToolbar toolbar = null)
 		{
-			this.tabInstance = tabInstance;
+			TabInstance = tabInstance;
 			InitializeControls();
 			if (toolbar != null)
 				LoadToolbar(toolbar);
@@ -79,7 +79,7 @@ namespace Atlas.UI.Avalonia.Tabs
 			var button = new ToolbarButton(this, toolButton.Label, toolButton.Icon);
 			button.Add(toolButton.Action);
 			button.AddAsync(toolButton.ActionAsync);
-			button.showTask = toolButton.ShowTask;
+			button.ShowTask = toolButton.ShowTask;
 			AddControl(button);
 			return button;
 		}
@@ -182,14 +182,14 @@ namespace Atlas.UI.Avalonia.Tabs
 	{
 		Type IStyleable.StyleKey => typeof(Button);
 
-		public TabControlToolbar toolbar;
-		public TaskDelegate.CallAction callAction;
-		public TaskDelegateAsync.CallActionAsync callActionAsync;
-		public bool showTask;
+		public TabControlToolbar Toolbar;
+		public TaskDelegate.CallAction CallAction;
+		public TaskDelegateAsync.CallActionAsync CallActionAsync;
+		public bool ShowTask;
 
 		public ToolbarButton(TabControlToolbar toolbar, string tooltip, Stream stream, ICommand command = null) : base()
 		{
-			this.toolbar = toolbar;
+			Toolbar = toolbar;
 			stream.Position = 0;
 			var bitmap = new Bitmap(stream);
 
@@ -218,34 +218,34 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		private void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			if (toolbar.tabInstance == null)
+			if (Toolbar.TabInstance == null)
 			{
 				InvokeAction(new Call());
 				return;
 			}
 
-			if (callActionAsync != null)
-				toolbar.tabInstance.StartAsync(callActionAsync, null, showTask);
-			if (callAction != null)
-				toolbar.tabInstance.StartTask(callAction, false, showTask);
+			if (CallActionAsync != null)
+				Toolbar.TabInstance.StartAsync(CallActionAsync, null, ShowTask);
+			if (CallAction != null)
+				Toolbar.TabInstance.StartTask(CallAction, false, ShowTask);
 		}
 
 		public void Add(TaskDelegate.CallAction callAction)
 		{
-			this.callAction = callAction;
+			CallAction = callAction;
 		}
 
 		public void AddAsync(TaskDelegateAsync.CallActionAsync callActionAsync)
 		{
-			this.callActionAsync = callActionAsync;
+			CallActionAsync = callActionAsync;
 		}
 
 		private void InvokeAction(Call call)
 		{
 			try
 			{
-				callActionAsync?.Invoke(call);
-				callAction?.Invoke(call);
+				CallActionAsync?.Invoke(call);
+				CallAction?.Invoke(call);
 			}
 			catch (Exception e)
 			{

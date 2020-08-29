@@ -70,7 +70,7 @@ namespace Atlas.UI.Avalonia.Tabs
 						JsonValue jsonValue = JsonValue.Parse(tab.text);
 						if (jsonValue != null)
 						{
-							tabAvaloniaEdit.textEditor.FontFamily = new FontFamily("Courier New");
+							tabAvaloniaEdit.TextEditor.FontFamily = new FontFamily("Courier New");
 						}
 					}
 					catch

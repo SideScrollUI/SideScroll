@@ -50,19 +50,19 @@ namespace Atlas.Serialize
 			var dateTime = new DateTime(value);
 			byteOffset += sizeof(long);
 			var offset = new DateTimeOffset(dateTime);
-			objects[objectIndex] = offset;
+			Objects[objectIndex] = offset;
 			return offset;
 		}
 
 		protected override object CreateObject(int objectIndex)
 		{
 			long position = reader.BaseStream.Position;
-			reader.BaseStream.Position = objectOffsets[objectIndex];
+			reader.BaseStream.Position = ObjectOffsets[objectIndex];
 
 			object obj = null;
 			try
 			{
-				if (CanAssign(type))
+				if (CanAssign(Type))
 				{
 					long ticks = reader.ReadInt64();
 					var dateTime = new DateTime(ticks, DateTimeKind.Utc);
@@ -79,7 +79,7 @@ namespace Atlas.Serialize
 			}
 			reader.BaseStream.Position = position;
 
-			objectsLoaded[objectIndex] = obj; // must assign before loading any more refs
+			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;
 		}
 
@@ -89,7 +89,7 @@ namespace Atlas.Serialize
 
 		public override object LoadObject()
 		{
-			object obj = Enum.ToObject(typeSchema.Type, reader.ReadInt32());
+			object obj = Enum.ToObject(TypeSchema.Type, reader.ReadInt32());
 			return obj;
 		}
 

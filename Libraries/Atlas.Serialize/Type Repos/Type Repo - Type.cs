@@ -45,13 +45,13 @@ namespace Atlas.Serialize
 		protected override object CreateObject(int objectIndex)
 		{
 			long position = reader.BaseStream.Position;
-			reader.BaseStream.Position = objectOffsets[objectIndex];
+			reader.BaseStream.Position = ObjectOffsets[objectIndex];
 			
 			string assemblyQualifiedName = reader.ReadString();
 			object obj = Type.GetType(assemblyQualifiedName, false);
 			reader.BaseStream.Position = position;
 
-			objectsLoaded[objectIndex] = obj; // must assign before loading any more refs
+			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;
 		}
 

@@ -26,21 +26,21 @@ namespace Atlas.UI.Avalonia
 		public SolidColorBrush BrushBackground { get; set; } = new SolidColorBrush(Colors.White);
 
 		//public bool Editable { get; set; } = false;
-
-		private Binding formattedBinding;
-		private Binding unformattedBinding;
-		private FormatValueConverter formatConverter = new FormatValueConverter();
-		private DataGrid dataGrid;
-		public PropertyInfo propertyInfo;
+		public DataGrid DataGrid;
+		public PropertyInfo PropertyInfo;
 
 		public int MinDesiredWidth { get; set; } = 40;
 		public int MaxDesiredWidth { get; set; } = 500;
 		public bool AutoSize { get; set; }
 
+		private Binding formattedBinding;
+		private Binding unformattedBinding;
+		private FormatValueConverter formatConverter = new FormatValueConverter();
+
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{
-			this.dataGrid = dataGrid;
-			this.propertyInfo = propertyInfo;
+			DataGrid = dataGrid;
+			PropertyInfo = propertyInfo;
 			IsReadOnly = isReadOnly;
 			MaxDesiredWidth = maxDesiredWidth;
 			Binding = GetFormattedTextBinding();
@@ -53,7 +53,7 @@ namespace Atlas.UI.Avalonia
 			//CellStyleClasses = new Classes()
 		}
 
-		public override string ToString() => propertyInfo.Name;
+		public override string ToString() => PropertyInfo.Name;
 
 		// never gets triggered, can't override since it's internal?
 		// Owning Grid also internal so can't add our own handler
@@ -100,19 +100,19 @@ namespace Atlas.UI.Avalonia
 				};
 				cell.Styles.Add(style);*/
 
-				if (DisplayIndex == 1 || propertyInfo.IsDefined(typeof(StyleValueAttribute)))
+				if (DisplayIndex == 1 || PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					// Update the cell color based on the object
 					var binding = new Binding()
 					{
-						Converter = new ValueToBrushConverter(propertyInfo),
+						Converter = new ValueToBrushConverter(PropertyInfo),
 						Mode = BindingMode.OneWay,
 					};
 					cell.Bind(DataGridCell.BackgroundProperty, binding);
 
 					var foregroundBinding = new Binding()
 					{
-						Converter = new ValueToForegroundBrushConverter(propertyInfo),
+						Converter = new ValueToForegroundBrushConverter(PropertyInfo),
 						Mode = BindingMode.OneWay,
 					};
 					textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
@@ -181,7 +181,7 @@ namespace Atlas.UI.Avalonia
 
 		protected TextBlock CreateTextBlock(DataGridCell cell, object dataItem)
 		{
-			var textBlockElement = new TextBlockElement(this, propertyInfo)
+			var textBlockElement = new TextBlockElement(this, PropertyInfo)
 			{
 				Margin = new Thickness(5),
 				VerticalAlignment = VerticalAlignment.Center,
@@ -192,9 +192,9 @@ namespace Atlas.UI.Avalonia
 				//FontWeight
 				//Foreground
 			};
-			if (propertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
+			if (PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
 				textBlockElement.TextWrapping = TextWrapping.Wrap;
-			textBlockElement.TextAlignment = DataGridUtils.GetTextAlignment(propertyInfo.PropertyType);
+			textBlockElement.TextAlignment = DataGridUtils.GetTextAlignment(PropertyInfo.PropertyType);
 			AddTextBoxContextMenu(cell, textBlockElement);
 
 			if (Binding != null)
@@ -232,7 +232,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopyColumn = new MenuItem() { Header = "Copy - Co_lumn" };
 			menuItemCopyColumn.Click += delegate
 			{
-				string text = dataGrid.ColumnToStringTable(this);
+				string text = DataGrid.ColumnToStringTable(this);
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
@@ -241,7 +241,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopyRow = new MenuItem() { Header = "Copy - _Row" };
 			menuItemCopyRow.Click += delegate
 			{
-				string text = dataGrid.RowToString(cell.DataContext);
+				string text = DataGrid.RowToString(cell.DataContext);
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
@@ -250,7 +250,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopySelected = new MenuItem() { Header = "Copy - _Selected" };
 			menuItemCopySelected.Click += delegate
 			{
-				string text = dataGrid.SelectedToString();
+				string text = DataGrid.SelectedToString();
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
@@ -259,7 +259,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopyDataGrid.Click += delegate
 			{
-				string text = dataGrid.ToStringTable();
+				string text = DataGrid.ToStringTable();
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
@@ -268,7 +268,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - CS_V" };
 			menuItemCopyDataGridCsv.Click += delegate
 			{
-				string text = dataGrid.ToCsv();
+				string text = DataGrid.ToCsv();
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
@@ -287,7 +287,7 @@ namespace Atlas.UI.Avalonia
 			object obj = dataGridCell.DataContext;
 			try
 			{
-				if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
+				if (PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				//if (this.DisplayIndex == 1 && (dataItem is ListItem || dataItem is ListMember))
 				{
 					bool hasLinks = TabModel.ObjectHasLinks(dataItem, true);
@@ -356,12 +356,12 @@ namespace Atlas.UI.Avalonia
 
 		private Type GetBindingType(object dataItem)
 		{
-			if (propertyInfo.GetIndexParameters().Length > 0)
+			if (PropertyInfo.GetIndexParameters().Length > 0)
 				return null;
 
-			if (propertyInfo.DeclaringType.IsAssignableFrom(dataItem.GetType()))
+			if (PropertyInfo.DeclaringType.IsAssignableFrom(dataItem.GetType()))
 			{
-				object obj = propertyInfo.GetValue(dataItem);
+				object obj = PropertyInfo.GetValue(dataItem);
 				if (obj == null)
 					return null;
 				return obj.GetType();
@@ -373,7 +373,7 @@ namespace Atlas.UI.Avalonia
 		{
 			Binding binding = (Binding)Binding;
 			if (binding == null)
-				return new Binding(propertyInfo.Name);
+				return new Binding(PropertyInfo.Name);
 
 			//if (unformattedBinding == null)
 			{
@@ -394,7 +394,7 @@ namespace Atlas.UI.Avalonia
 
 		Binding GetFormattedTextBinding()
 		{
-			Binding binding = Binding as Binding ?? new Binding(propertyInfo.Name);
+			Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);
 
 			if (formattedBinding == null)
 			{

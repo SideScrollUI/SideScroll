@@ -17,10 +17,10 @@ namespace Atlas.UI.Avalonia.Controls
 		public event EventHandler<EventArgs> OnSelectionChanged;
 		public event EventHandler<EventArgs> OnVisibleChanged;
 
-		public TabControlChartLegend legend;
-		public OxyListSeries oxyListSeries;
-		public OxyPlot.Series.Series series;
-		public ListGroup listGroup;
+		public TabControlChartLegend Legend;
+		public OxyListSeries OxyListSeries;
+		public OxyPlot.Series.Series Series;
+		public ListGroup ListGroup;
 		//public string Label { get; set; }
 		public TextBlock textBlock;
 		public TextBlock textBlockSum;
@@ -36,7 +36,7 @@ namespace Atlas.UI.Avalonia.Controls
 			set
 			{
 				_Index = value;
-				textBlock.Text = value.ToString() + ". " + series.Title;
+				textBlock.Text = value.ToString() + ". " + Series.Title;
 			}
 		}
 		public int Count { get; set; }
@@ -51,7 +51,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			set
 			{
-				oxyListSeries.IsVisible = value;
+				OxyListSeries.IsVisible = value;
 				_IsChecked = value;
 				SetFilled(value);
 			}
@@ -61,14 +61,14 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public List<DataPoint> Points { get; internal set; }
 
-		public override string ToString() => series.Title;
+		public override string ToString() => Series.Title;
 
 		public TabChartLegendItem(TabControlChartLegend legend, OxyListSeries oxyListSeries)
 		{
-			this.legend = legend;
-			this.oxyListSeries = oxyListSeries;
-			series = oxyListSeries.OxySeries;
-			listGroup = legend.listGroup;
+			Legend = legend;
+			OxyListSeries = oxyListSeries;
+			Series = oxyListSeries.OxySeries;
+			ListGroup = legend.ListGroup;
 			InitializeControls();
 		}
 
@@ -83,7 +83,7 @@ namespace Atlas.UI.Avalonia.Controls
 			UpdateSum();
 			AddCheckBox();
 			AddTextBlock();
-			if (listGroup.ShowOrder && !listGroup.Horizontal)
+			if (ListGroup.ShowOrder && !ListGroup.Horizontal)
 				AddSumTextBlock();
 
 			PointerEnter += TabChartLegendItem_PointerEnter;
@@ -99,7 +99,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			Sum = 0;
 			Count = 0;
-			if (series is OxyPlot.Series.LineSeries lineSeries)
+			if (Series is OxyPlot.Series.LineSeries lineSeries)
 			{
 				if (lineSeries.Points.Count > 0)
 				{
@@ -119,7 +119,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			if (Sum > 100)
 				Sum = Math.Round(Sum);
-			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
+			if (Series is OxyPlot.Series.ScatterSeries scatterSeries)
 			{
 				// todo: finish
 				Count = Math.Max(scatterSeries.Points.Count, scatterSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0);
@@ -129,12 +129,12 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddCheckBox()
 		{
-			if (series is OxyPlot.Series.LineSeries lineSeries)
+			if (Series is OxyPlot.Series.LineSeries lineSeries)
 			{
 				oxyColor = lineSeries.Color;
 				markerType = lineSeries.MarkerType;
 			}
-			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
+			if (Series is OxyPlot.Series.ScatterSeries scatterSeries)
 			{
 				oxyColor = scatterSeries.MarkerFill;
 				markerType = scatterSeries.MarkerType;
@@ -177,7 +177,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			textBlock = new TextBlock()
 			{
-				Text = series.Title,
+				Text = Series.Title,
 				Foreground = Brushes.LightGray,
 				//Background = new SolidColorBrush(Theme.BackgroundColor),
 				Margin = new Thickness(2, 2, 6, 2),
@@ -227,12 +227,12 @@ namespace Atlas.UI.Avalonia.Controls
 				if (highlight)
 				{
 					UpdatePolygonPoints(15, 15);
-					if (series is OxyPlot.Series.LineSeries lineSeries)
+					if (Series is OxyPlot.Series.LineSeries lineSeries)
 					{
 						highlight = true;
 						SetFilled(true);
 						UpdateVisible(lineSeries);
-						legend.UpdateHighlight(true);
+						Legend.UpdateHighlight(true);
 						OnVisibleChanged?.Invoke(this, null);
 					}
 					textBlock.Foreground = Theme.GridBackgroundSelected;
@@ -242,12 +242,12 @@ namespace Atlas.UI.Avalonia.Controls
 				else
 				{
 					UpdatePolygonPoints(13, 13);
-					if (series is OxyPlot.Series.LineSeries lineSeries)
+					if (Series is OxyPlot.Series.LineSeries lineSeries)
 					{
 						highlight = false;
 						UpdateVisible(lineSeries);
 						SetFilled(IsChecked);
-						legend.UpdateHighlight(false);
+						Legend.UpdateHighlight(false);
 						OnVisibleChanged?.Invoke(this, null);
 					}
 					textBlock.Foreground = Brushes.LightGray;
@@ -273,7 +273,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void UpdateVisible(OxyPlot.Series.LineSeries lineSeries)
 		{
-			this.series = lineSeries;
+			Series = lineSeries;
 			if (IsChecked == true || highlight)
 			{
 				if (Points != null)
@@ -308,7 +308,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void UpdateVisible(OxyPlot.Series.ScatterSeries scatterSeries)
 		{
-			this.series = scatterSeries;
+			Series = scatterSeries;
 			if (IsChecked == true || highlight)
 			{
 				scatterSeries.ItemsSource = scatterSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
@@ -335,7 +335,7 @@ namespace Atlas.UI.Avalonia.Controls
 			else
 				newColor = OxyColor.FromAColor(32, oxyColor);
 			
-			if (series is OxyPlot.Series.LineSeries lineSeries)
+			if (Series is OxyPlot.Series.LineSeries lineSeries)
 			{
 				lineSeries.MarkerFill = newColor;
 				lineSeries.Color = newColor;

@@ -44,18 +44,18 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		public const int MaxAutoLoadSize = 1000000;
 
-		public TabInstance tabInstance;
+		public TabInstance TabInstance;
 
-		public string path;
-		public ListProperty listProperty;
-		public AvaloniaEdit.TextEditor textEditor;
+		public string Path;
+		public ListProperty ListProperty;
+		public AvaloniaEdit.TextEditor TextEditor;
 		public double MaxDesiredWidth = 1000;
 
 		public bool focusTab { get; set; } = false;
 
 		public TabControlAvaloniaEdit(TabInstance tabInstance)
 		{
-			this.tabInstance = tabInstance;
+			TabInstance = tabInstance;
 			InitializeControls();
 		}
 
@@ -70,7 +70,7 @@ namespace Atlas.UI.Avalonia.Controls
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
 
-			textEditor = new TabControlTextEditor()
+			TextEditor = new TabControlTextEditor()
 			{
 				IsReadOnly = true,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -91,7 +91,7 @@ namespace Atlas.UI.Avalonia.Controls
 			// Anchor the Text Editor at the top
 			var border = new Border()
 			{
-				Child = textEditor,
+				Child = TextEditor,
 				Background = Theme.GridBackground,
 				VerticalAlignment = VerticalAlignment.Top,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -110,7 +110,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void Load(string path)
 		{
-			this.path = path;
+			Path = path;
 			var fileInfo = new FileInfo(path);
 			if (fileInfo.Length > MaxAutoLoadSize)
 			{
@@ -119,12 +119,12 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					char[] buffer = new char[MaxAutoLoadSize];
 					streamReader.Read(buffer, 0, buffer.Length);
-					textEditor.Text = new string(buffer);
+					TextEditor.Text = new string(buffer);
 				}
 			}
 			else
 			{
-				textEditor.Load(path);
+				TextEditor.Load(path);
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			get
 			{
-				return textEditor.Text;
+				return TextEditor.Text;
 			}
 			set
 			{
@@ -140,7 +140,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					value = GetFormattedJson(s);
 				}
-				textEditor.Text = value;
+				TextEditor.Text = value;
 			}
 		}
 
@@ -162,14 +162,14 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void EnableEditing(ListMember listMember)
 		{
-			listProperty = listMember as ListProperty;
-			if (listProperty != null && !listProperty.Editable)
+			ListProperty = listMember as ListProperty;
+			if (ListProperty != null && !ListProperty.Editable)
 				return;
 
-			textEditor.IsReadOnly = false;
+			TextEditor.IsReadOnly = false;
 
-			if (listProperty != null)
-				listProperty.PropertyChanged += ListProperty_PropertyChanged;
+			if (ListProperty != null)
+				ListProperty.PropertyChanged += ListProperty_PropertyChanged;
 
 			/*Binding binding = new Binding
 			{
@@ -188,8 +188,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void ListProperty_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == "ValueText" && textEditor.Text != listProperty.ValueText.ToString())
-				textEditor.Text = listProperty.ValueText.ToString();
+			if (e.PropertyName == "ValueText" && TextEditor.Text != ListProperty.ValueText.ToString())
+				TextEditor.Text = ListProperty.ValueText.ToString();
 		}
 	}
 }

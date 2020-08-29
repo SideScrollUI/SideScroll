@@ -42,7 +42,7 @@ namespace Atlas.Serialize
 
 		public override void SaveCustomHeader(BinaryWriter writer)
 		{
-			foreach (IList list in objects)
+			foreach (IList list in Objects)
 			{
 				writer.Write((int)list.Count);
 			}
@@ -50,8 +50,8 @@ namespace Atlas.Serialize
 
 		public override void LoadCustomHeader()
 		{
-			sizes = new int[typeSchema.NumObjects];
-			for (int i = 0; i < typeSchema.NumObjects; i++)
+			sizes = new int[TypeSchema.NumObjects];
+			for (int i = 0; i < TypeSchema.NumObjects; i++)
 			{
 				int count = reader.ReadInt32();
 				sizes[i] = count;
@@ -76,9 +76,9 @@ namespace Atlas.Serialize
 			int count = sizes[objectIndex];
 
 			byte[] array = new byte[count];
-			objectsLoaded[objectIndex] = array;
+			ObjectsLoaded[objectIndex] = array;
 
-			serializer.QueueLoading(this, objectIndex);
+			Serializer.QueueLoading(this, objectIndex);
 			return array;
 		}
 
@@ -93,7 +93,7 @@ namespace Atlas.Serialize
 			int count = BitConverter.ToInt32(bytes, byteOffset);
 			byteOffset += sizeof(int);
 			byte[] array = new byte[count];
-			objectsLoaded[objectIndex] = array;
+			ObjectsLoaded[objectIndex] = array;
 
 			//Array.Copy(bytes, byteOffset, array, count);
 			Buffer.BlockCopy(bytes, byteOffset, array, 0, count);

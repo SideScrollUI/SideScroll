@@ -18,8 +18,8 @@ namespace Atlas.UI.Avalonia.Controls
 		public TabControlTitle(TabInstance tabInstance, string name = null)
 		{
 			this.tabInstance = tabInstance;
-			this.Label = name ?? tabInstance.Label;
-			this.Label = new StringReader(Label).ReadLine();
+			Label = name ?? tabInstance.Label;
+			Label = new StringReader(Label).ReadLine();
 
 			InitializeControl();
 		}

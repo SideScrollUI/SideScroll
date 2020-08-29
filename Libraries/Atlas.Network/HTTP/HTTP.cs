@@ -10,11 +10,12 @@ namespace Atlas.Network
 	{
 		private const int MaxAttempts = 4;
 		private const int SleepMilliseconds = 500; // < ^ MaxAttempts
-		public Call call;
+
+		public Call Call;
 
 		public HTTP(Call call)
 		{
-			this.call = call;
+			Call = call;
 		}
 
 		public virtual string GetString(string uri, string accept = null)
@@ -32,7 +33,7 @@ namespace Atlas.Network
 
 		private byte[] GetResponse(string uri, string accept = null)
 		{
-			using (CallTimer getCall = call.Timer("Get Uri", new Tag("URI", uri)))
+			using (CallTimer getCall = Call.Timer("Get Uri", new Tag("URI", uri)))
 			{
 				for (int attempt = 1; ; attempt++)
 				{
@@ -61,7 +62,7 @@ namespace Atlas.Network
 						if (exception.Response != null)
 						{
 							string response = new StreamReader(exception.Response.GetResponseStream()).ReadToEnd();
-							call.Log.AddError(response);
+							Call.Log.AddError(response);
 						}
 					}
 					if (attempt >= MaxAttempts)

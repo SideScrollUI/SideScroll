@@ -28,13 +28,13 @@ namespace Atlas.Serialize
 		public TypeRepoDictionary(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{
-			Type[] types = type.GetGenericArguments();
+			Type[] types = Type.GetGenericArguments();
 			if (types.Length > 0)
 			{
 				typeKey = types[0];
 				typeValue = types[1];
 			}
-			addMethod = type.GetMethods()
+			addMethod = Type.GetMethods()
 				.Where(m => m.Name == "Add" && m.GetParameters().Count() == 2).FirstOrDefault();
 		}
 
@@ -47,9 +47,9 @@ namespace Atlas.Serialize
 		{
 			// these base types might not be serialized
 			if (typeKey != null)
-				list1TypeRepo = serializer.GetOrCreateRepo(log, typeKey);
+				list1TypeRepo = Serializer.GetOrCreateRepo(log, typeKey);
 			if (typeValue != null)
-				list2TypeRepo = serializer.GetOrCreateRepo(log, typeValue);
+				list2TypeRepo = Serializer.GetOrCreateRepo(log, typeValue);
 		}
 
 		public override void AddChildObjects(object obj)
@@ -57,8 +57,8 @@ namespace Atlas.Serialize
 			IDictionary dictionary = (IDictionary)obj;
 			foreach (DictionaryEntry item in dictionary)
 			{
-				serializer.AddObjectRef(item.Key);
-				serializer.AddObjectRef(item.Value);
+				Serializer.AddObjectRef(item.Key);
+				Serializer.AddObjectRef(item.Value);
 			}
 		}
 
@@ -69,8 +69,8 @@ namespace Atlas.Serialize
 			writer.Write(dictionary.Count);
 			foreach (DictionaryEntry item in dictionary)
 			{
-				serializer.WriteObjectRef(typeKey, item.Key, writer);
-				serializer.WriteObjectRef(typeValue, item.Value, writer);
+				Serializer.WriteObjectRef(typeKey, item.Key, writer);
+				Serializer.WriteObjectRef(typeValue, item.Value, writer);
 			}
 		}
 
@@ -91,8 +91,8 @@ namespace Atlas.Serialize
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
-			object obj = Activator.CreateInstance(type, true);
-			objects[objectIndex] = obj; // must assign before loading any more refs
+			object obj = Activator.CreateInstance(Type, true);
+			Objects[objectIndex] = obj; // must assign before loading any more refs
 
 			IDictionary iCollection = (IDictionary)obj;
 			int count = BitConverter.ToInt32(bytes, byteOffset);
@@ -115,8 +115,8 @@ namespace Atlas.Serialize
 			IDictionary iDest = (IDictionary)dest;
 			foreach (DictionaryEntry item in iSource)
 			{
-				object key = serializer.Clone(item.Key);
-				object value = serializer.Clone(item.Value);
+				object key = Serializer.Clone(item.Key);
+				object value = Serializer.Clone(item.Value);
 				addMethod.Invoke(iDest, new object[] { key, value });
 			}
 		}

@@ -7,11 +7,11 @@ namespace Atlas.Tabs.Tools
 {
 	public class TabDirectory : ITab
 	{
-		public string path;
+		public string Path;
 
 		public TabDirectory(string path)
 		{
-			this.path = path;
+			Path = path;
 		}
 
 		public TabInstance Create() => new Instance(this);
@@ -27,7 +27,7 @@ namespace Atlas.Tabs.Tools
 
 			public override void Load(Call call, TabModel model)
 			{
-				if (!Directory.Exists(tab.path))
+				if (!Directory.Exists(tab.Path))
 					return;
 
 				var actions = new ItemCollection<TaskCreator>()
@@ -38,7 +38,7 @@ namespace Atlas.Tabs.Tools
 
 
 				var directories = new ItemCollection<ListDirectory>();
-				foreach (string directoryPath in Directory.EnumerateDirectories(tab.path))
+				foreach (string directoryPath in Directory.EnumerateDirectories(tab.Path))
 				{
 					var listDirectory = new ListDirectory(directoryPath);
 					directories.Add(listDirectory);
@@ -46,7 +46,7 @@ namespace Atlas.Tabs.Tools
 				model.ItemList.Add(directories);
 
 				var files = new ItemCollection<ListFile>();
-				foreach (string filePath in Directory.EnumerateFiles(tab.path))
+				foreach (string filePath in Directory.EnumerateFiles(tab.Path))
 				{
 					var listFile = new ListFile(filePath);
 					files.Add(listFile);
@@ -77,11 +77,11 @@ namespace Atlas.Tabs.Tools
 		[HiddenColumn]
 		[InnerValue]
 		public ITab iTab;
-		private string directoryPath;
+		public string DirectoryPath;
 
 		public ListDirectory(string directoryPath)
 		{
-			this.directoryPath = directoryPath;
+			DirectoryPath = directoryPath;
 			Directory = Path.GetFileName(directoryPath);
 			iTab = new TabDirectory(directoryPath);
 		}

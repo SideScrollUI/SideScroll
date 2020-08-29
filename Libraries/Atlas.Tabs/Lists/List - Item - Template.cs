@@ -6,12 +6,12 @@ namespace Atlas.Tabs
 	// implement INotifyPropertyChanged to prevent memory leaks
 	public class ListItem<T1, T2> : INotifyPropertyChanged
 	{
-		public T1 key { get; set; }
+		public T1 Key { get; set; }
 		public T2 Value { get; set; }
 
 		[HiddenColumn]
 		[InnerValue]
-		public object obj { get; set; }
+		public object Object { get; set; }
 
 		public bool autoLoad = true;
 #pragma warning disable 414
@@ -19,16 +19,16 @@ namespace Atlas.Tabs
 
 		public ListItem(T1 key, T2 value, object obj)
 		{
-			this.key = key;
-			this.Value = value;
-			this.obj = obj;
+			Key = key;
+			Value = value;
+			Object = obj;
 		}
 
 		public override string ToString()
 		{
-			if (key != null)
+			if (Key != null)
 			{
-				string description = key.ToString();
+				string description = Key.ToString();
 				if (description != null)
 					return description;
 			}

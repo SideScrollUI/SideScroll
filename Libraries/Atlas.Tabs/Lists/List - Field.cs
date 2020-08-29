@@ -9,7 +9,7 @@ namespace Atlas.Tabs
 {
 	public class ListField : ListMember, IPropertyEditable, IMaxDesiredWidth
 	{
-		public FieldInfo fieldInfo;
+		public FieldInfo FieldInfo;
 		
 		[HiddenColumn]
 		public override bool Editable => true;
@@ -19,7 +19,7 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				var maxWidthAttribute = fieldInfo.GetCustomAttribute<MaxWidthAttribute>();
+				var maxWidthAttribute = FieldInfo.GetCustomAttribute<MaxWidthAttribute>();
 				if (maxWidthAttribute != null)
 					return maxWidthAttribute.MaxWidth;
 				return null;
@@ -33,7 +33,7 @@ namespace Atlas.Tabs
 			{
 				try
 				{
-					return fieldInfo.GetValue(obj);
+					return FieldInfo.GetValue(Object);
 				}
 				catch (Exception)
 				{
@@ -42,15 +42,15 @@ namespace Atlas.Tabs
 			}
 			set
 			{
-				fieldInfo.SetValue(obj, Convert.ChangeType(value, fieldInfo.FieldType));
+				FieldInfo.SetValue(Object, Convert.ChangeType(value, FieldInfo.FieldType));
 			}
 		}
 
 		public ListField(object obj, FieldInfo fieldInfo) : 
 			base(obj, fieldInfo)
 		{
-			this.fieldInfo = fieldInfo;
-			autoLoad = !fieldInfo.IsStatic;
+			FieldInfo = fieldInfo;
+			AutoLoad = !fieldInfo.IsStatic;
 
 			Name = fieldInfo.Name;
 			Name = Name.WordSpaced();

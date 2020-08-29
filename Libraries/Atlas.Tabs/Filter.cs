@@ -47,7 +47,7 @@ namespace Atlas.Tabs
 		// +3 "ABC" | 123
 		public Filter(string filterText)
 		{
-			this.FilterText = filterText;
+			FilterText = filterText;
 
 			string pattern = @"^(?<Depth>\+\d+ )?(?<Filters>.+)$";
 			Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);

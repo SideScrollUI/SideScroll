@@ -44,25 +44,25 @@ namespace Atlas.Network
 	{
 		public class Info
 		{
-			public string hostIP;
-			public string username;
-			public string password;
-			public int bufferSize = 10000;
-			public bool fileSizeSupported = true;
+			public string HostIP { get; set; }
+			public string Username { get; set; }
+			public string Password { get; set; }
+			public int BufferSize { get; set; } = 10000;
+			public bool FileSizeSupported { get; set; } = true;
 
 			public Info(string hostIP, string username = null, string password = null)
 			{
-				this.hostIP = hostIP;
-				this.username = username;
-				this.password = password;
+				HostIP = hostIP;
+				Username = username;
+				Password = password;
 			}
 
 			public FtpWebRequest CreateRequest(string path)
 			{
 				path = path.Replace('\\', '/');
-				FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create("ftp://" + hostIP + path);
-				if (username != null)
-					ftpRequest.Credentials = new NetworkCredential(username, password);
+				FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create("ftp://" + HostIP + path);
+				if (Username != null)
+					ftpRequest.Credentials = new NetworkCredential(Username, Password);
 				ftpRequest.UseBinary = true;
 				ftpRequest.UsePassive = true;
 				ftpRequest.KeepAlive = true;
@@ -70,12 +70,12 @@ namespace Atlas.Network
 			}
 		}
 
-		public Log log;
+		public Log Log;
 		public Info info;
 
 		public FTP(Call call, Info info)
 		{
-			this.log = call.Log;
+			this.Log = call.Log;
 			this.info = info;
 		}
 
@@ -85,7 +85,7 @@ namespace Atlas.Network
 			if (!Directory.Exists(directoryPath))
 				Directory.CreateDirectory(directoryPath);
 
-			using (LogTimer logTimer = log.Timer("Downloading", new Tag("File", remoteFile)))
+			using (LogTimer logTimer = Log.Timer("Downloading", new Tag("File", remoteFile)))
 			{
 				for (int attempt = 0; attempt < 3; attempt++)
 				{
@@ -110,7 +110,7 @@ namespace Atlas.Network
 			Stream ftpStream = ftpResponse.GetResponseStream();
 
 			FileStream localFileStream = new FileStream(localFile, FileMode.Create);
-			byte[] byteBuffer = new byte[info.bufferSize];
+			byte[] byteBuffer = new byte[info.BufferSize];
 			
 			long bytesTransferred = 0;
 			while (bytesTransferred < maxBytes)
@@ -139,7 +139,7 @@ namespace Atlas.Network
 					taskInstance.Percent = (int)(100.0 * percent);
 				}
 
-				int bytesRead = ftpStream.Read(byteBuffer, 0, info.bufferSize);
+				int bytesRead = ftpStream.Read(byteBuffer, 0, info.BufferSize);
 				if (bytesRead <= 0)
 					break;
 				localFileStream.Write(byteBuffer, 0, bytesRead);
@@ -166,19 +166,19 @@ namespace Atlas.Network
 				ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
 				Stream ftpStream = ftpRequest.GetRequestStream();
 				FileStream localFileStream = new FileStream(localFile, FileMode.Create);
-				byte[] byteBuffer = new byte[info.bufferSize];
-				int bytesSent = localFileStream.Read(byteBuffer, 0, info.bufferSize);
+				byte[] byteBuffer = new byte[info.BufferSize];
+				int bytesSent = localFileStream.Read(byteBuffer, 0, info.BufferSize);
 				try
 				{
 					while (bytesSent != 0)
 					{
 						ftpStream.Write(byteBuffer, 0, bytesSent);
-						bytesSent = localFileStream.Read(byteBuffer, 0, info.bufferSize);
+						bytesSent = localFileStream.Read(byteBuffer, 0, info.BufferSize);
 					}
 				}
 				catch (Exception ex)
 				{
-					log.Add(ex.ToString());
+					Log.Add(ex.ToString());
 				}
 
 				localFileStream.Close();
@@ -186,7 +186,7 @@ namespace Atlas.Network
 			}
 			catch (Exception ex)
 			{
-				log.Add(ex.ToString());
+				Log.Add(ex.ToString());
 			}
 		}
 		
@@ -231,7 +231,7 @@ namespace Atlas.Network
 
 			//DateTime created = DateTime.Parse(fileInfo);
 
-			log.Add("Retrieved Remote File DateTimestamp",
+			Log.Add("Retrieved Remote File DateTimestamp",
 				new Tag("File Path", filePath),
 				new Tag("Created", ftpResponse.LastModified));
 
@@ -240,9 +240,9 @@ namespace Atlas.Network
 		
 		public long GetFileSize(string filePath)
 		{
-			using (LogTimer logTimer = log.Timer("Retrieving Remote File Size", new Tag("File Path", filePath)))
+			using (LogTimer logTimer = Log.Timer("Retrieving Remote File Size", new Tag("File Path", filePath)))
 			{
-				if (info.fileSizeSupported == false)
+				if (info.FileSizeSupported == false)
 				{
 					List<FtpItem> fileInfos = GetDirectoryListDetailed(Path.GetDirectoryName(filePath));
 					foreach (FtpItem fileInfo in fileInfos)

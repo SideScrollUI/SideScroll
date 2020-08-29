@@ -37,8 +37,8 @@ namespace Atlas.Tabs.Test.DataGrid
 				for (int i = 0; i < 20; i++)
 				{
 					var testItem = new TestItem(context);
-					testItem.smallNumber = i;
-					testItem.bigNumber += i;
+					testItem.SmallNumber = i;
+					testItem.BigNumber += i;
 					items.Add(testItem);
 				}
 			}
@@ -52,7 +52,7 @@ namespace Atlas.Tabs.Test.DataGrid
 						Thread.Sleep(10);
 						foreach (TestItem testItem in items)
 						{
-							testItem.bigNumber++;
+							testItem.BigNumber++;
 							testItem.Update();
 						}
 					}
@@ -62,8 +62,8 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class TestItem : INotifyPropertyChanged
 		{
-			public int smallNumber { get; set; } = 0;
-			public long bigNumber { get; set; } = 1234567890123456789;
+			public int SmallNumber { get; set; } = 0;
+			public long BigNumber { get; set; } = 1234567890123456789;
 
 			protected SynchronizationContext context;
 
@@ -74,7 +74,7 @@ namespace Atlas.Tabs.Test.DataGrid
 
 			public override string ToString()
 			{
-				return smallNumber.ToString();
+				return SmallNumber.ToString();
 			}
 
 			public event PropertyChangedEventHandler PropertyChanged;
@@ -83,7 +83,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 				//context.Post(new SendOrPostCallback(this.OnUpdateProgress), eventArgs);
 				//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("bigNumber"));
-				NotifyPropertyChanged(nameof(bigNumber));
+				NotifyPropertyChanged(nameof(BigNumber));
 			}
 
 			public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

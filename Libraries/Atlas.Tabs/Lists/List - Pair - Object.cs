@@ -49,11 +49,11 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				return key.Formatted();
+				return Key.Formatted();
 			}
 			set
 			{
-				this.key = value;
+				Key = value;
 			}
 		}*/
 	}

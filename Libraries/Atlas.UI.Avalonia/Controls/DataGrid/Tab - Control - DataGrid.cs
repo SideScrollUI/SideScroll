@@ -30,13 +30,17 @@ namespace Atlas.UI.Avalonia.Controls
 		private const int MaxAutoSizeMinColumnWidth = 250;
 		private static int MaxColumnWidth = 600;
 
-		private TabModel tabModel;
-		private TabInstance tabInstance;
-		public TabDataSettings tabDataSettings;
-		public IList iList;
+		public TabModel TabModel;
+		public TabInstance TabInstance;
+		public TabDataSettings TabDataSettings;
+		public IList List;
 		private Type elementType;
 
-		public DataGrid dataGrid;
+		public bool AutoSelectFirst = true;
+		public bool AutoSelectNew = true;
+		public bool AutoGenerateColumns = true;
+
+		public DataGrid DataGrid;
 		public TextBox textBoxSearch;
 
 		//private HashSet<int> pinnedItems = new HashSet<int>();
@@ -46,10 +50,6 @@ namespace Atlas.UI.Avalonia.Controls
 		private List<PropertyInfo> columnProperties = new List<PropertyInfo>(); // makes filtering faster, could change other Dictionaries strings to PropertyInfo
 
 		public event EventHandler<EventArgs> OnSelectionChanged;
-
-		public bool autoSelectFirst = true;
-		private bool autoSelectNew = true;
-		private bool autoGenerateColumns = true;
 
 		private int disableSaving = 0; // enables saving if > 0
 		private int isAutoSelecting = 0; // enables saving if > 0
@@ -67,11 +67,11 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			get
 			{
-				return iList;
+				return List;
 			}
 			set
 			{
-				iList = value;
+				List = value;
 				/*if (collectionView != null && iList is ICollection)
 				{
 					var collection = (ICollection)iList;
@@ -82,8 +82,8 @@ namespace Atlas.UI.Avalonia.Controls
 				}
 				else*/
 				{
-					collectionView = new DataGridCollectionView(iList);
-					dataGrid.Items = collectionView;
+					collectionView = new DataGridCollectionView(List);
+					DataGrid.Items = collectionView;
 					Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 				}
 				//dataGrid.SelectedItem = null;
@@ -97,19 +97,19 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public TabControlDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns, TabDataSettings tabDataSettings = null)
 		{
-			this.tabInstance = tabInstance;
-			this.tabModel = tabInstance.Model;
-			this.AutoLoad = tabModel.AutoLoad;
-			this.iList = iList;
-			this.autoGenerateColumns = autoGenerateColumns;
-			this.tabDataSettings = tabDataSettings ?? new TabDataSettings();
+			TabInstance = tabInstance;
+			TabModel = tabInstance.Model;
+			AutoLoad = TabModel.AutoLoad;
+			List = iList;
+			AutoGenerateColumns = autoGenerateColumns;
+			this.TabDataSettings = tabDataSettings ?? new TabDataSettings();
 			Debug.Assert(iList != null);
 			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("Auto,*");
 			Initialize();
 		}
 
-		public override string ToString() => tabModel.Name;
+		public override string ToString() => TabModel.Name;
 
 		/*protected override void OnMeasureInvalidated()
 		{
@@ -157,7 +157,7 @@ namespace Atlas.UI.Avalonia.Controls
 				brushConverter.EditableBrush = (SolidColorBrush)Resources[Keys.EditableBrush];
 			}*/
 
-			Type listType = iList.GetType();
+			Type listType = List.GetType();
 			elementType = listType.GetElementTypeForAll();
 
 			InitializeControls();
@@ -165,10 +165,10 @@ namespace Atlas.UI.Avalonia.Controls
 
 			Dispatcher.UIThread.Post(() =>
 			{
-				tabInstance.SetEndLoad();
+				TabInstance.SetEndLoad();
 				disableSaving--;
 				if (selectionModified)
-					tabInstance.SaveTabSettings(); // selection has probably changed
+					TabInstance.SaveTabSettings(); // selection has probably changed
 			}, DispatcherPriority.Background);
 
 			//Debug.Assert(dataGrid.Columns.Count > 0); // make sure something is databindable, not all lists have a property, add a ListToString wrapper around ToString()?
@@ -199,7 +199,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddDataGrid()
 		{
-			dataGrid = new DataGrid()
+			DataGrid = new DataGrid()
 			{
 				SelectionMode = DataGridSelectionMode.Extended, // No MultiSelect support :( (use right click for copy/paste)
 
@@ -217,7 +217,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//Padding = new Thickness(0),
 				
 				BorderThickness = new Thickness(1),
-				IsReadOnly = !tabModel.Editing,
+				IsReadOnly = !TabModel.Editing,
 				GridLinesVisibility = DataGridGridLinesVisibility.All,
 				MaxWidth = 4000,
 				MaxHeight = this.MaxHeight,
@@ -227,19 +227,19 @@ namespace Atlas.UI.Avalonia.Controls
 			//var styles = dataGrid.Styles;
 
 			//dataGrid.AutoGenerateColumns = true;
-			if (autoGenerateColumns)
+			if (AutoGenerateColumns)
 				AddColumns();
 
-			collectionView = new DataGridCollectionView(iList);
-			dataGrid.Items = collectionView;
-			dataGrid.SelectedItem = null;
+			collectionView = new DataGridCollectionView(List);
+			DataGrid.Items = collectionView;
+			DataGrid.SelectedItem = null;
 
-			dataGrid.SelectionChanged += DataGrid_SelectionChanged;
+			DataGrid.SelectionChanged += DataGrid_SelectionChanged;
 
-			dataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // Add one click deselection
+			DataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // Add one click deselection
 
 			//PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => x.DataGridRow_PointerPressed(e), handledEventsToo: true);
-			dataGrid.ColumnReordered += DataGrid_ColumnReordered;
+			DataGrid.ColumnReordered += DataGrid_ColumnReordered;
 			LayoutUpdated += TabControlDataGrid_LayoutUpdated;
 
 			Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
@@ -247,12 +247,12 @@ namespace Atlas.UI.Avalonia.Controls
 			//var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 			//AddContextMenu();
 
-			Children.Add(dataGrid);
+			Children.Add(DataGrid);
 		}
 
 		private void AddListUpdatedDispatcher()
 		{
-			if (iList is INotifyCollectionChanged iNotifyCollectionChanged) // AutoLoad
+			if (List is INotifyCollectionChanged iNotifyCollectionChanged) // AutoLoad
 			{
 				// DataGrid must exist before adding this
 				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
@@ -273,7 +273,7 @@ namespace Atlas.UI.Avalonia.Controls
 		// The DataGrid needs this to update sometimes
 		private void TabControlDataGrid_LayoutUpdated(object sender, EventArgs e)
 		{
-			dataGrid.InvalidateMeasure();
+			DataGrid.InvalidateMeasure();
 		}
 
 		// Double click handling?
@@ -305,7 +305,7 @@ namespace Atlas.UI.Avalonia.Controls
 			var menuItemCopy = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopy.Click += delegate
 			{
-				string text = dataGrid.ToStringTable();
+				string text = DataGrid.ToStringTable();
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
@@ -316,19 +316,19 @@ namespace Atlas.UI.Avalonia.Controls
 			var contextMenu = new ContextMenu();
 			contextMenu.Items = list;
 
-			dataGrid.ContextMenu = contextMenu;
+			DataGrid.ContextMenu = contextMenu;
 		}
 
 		private void AutoSizeColumns()
 		{
 			// The star column widths will change as other column widths are changed
 			var originalWidths = new Dictionary<DataGridColumn, DataGridLength>();
-			foreach (DataGridColumn column in dataGrid.Columns)
+			foreach (DataGridColumn column in DataGrid.Columns)
 			{
 				originalWidths[column] = column.Width;
 				column.Width = new DataGridLength(column.ActualWidth, DataGridLengthUnitType.Auto); // remove Star sizing so columns don't interfere with each other
 			}
-			foreach (DataGridColumn column in dataGrid.Columns)
+			foreach (DataGridColumn column in DataGrid.Columns)
 			{
 				DataGridLength originalWidth = originalWidths[column];
 				column.MaxWidth = 2000;
@@ -358,17 +358,17 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			//dataGrid.MinColumnWidth = 40; // doesn't do anything
 			// If 1 or 2 columns, make the last column stretch
-			if (dataGrid.Columns.Count == 1)
-				dataGrid.Columns[0].Width = new DataGridLength(dataGrid.Columns[0].ActualWidth, DataGridLengthUnitType.Star);
-			if (dataGrid.Columns.Count == 2)
-				dataGrid.Columns[1].Width = new DataGridLength(dataGrid.Columns[1].ActualWidth, DataGridLengthUnitType.Star);
+			if (DataGrid.Columns.Count == 1)
+				DataGrid.Columns[0].Width = new DataGridLength(DataGrid.Columns[0].ActualWidth, DataGridLengthUnitType.Star);
+			if (DataGrid.Columns.Count == 2)
+				DataGrid.Columns[1].Width = new DataGridLength(DataGrid.Columns[1].ActualWidth, DataGridLengthUnitType.Star);
 		}
 
 		private bool selectionModified = false;
 
 		private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			if (iList == null) // reloading detaches list temporarily?
+			if (List == null) // reloading detaches list temporarily?
 				return;
 
 			if (e.Action == NotifyCollectionChangedAction.Add)
@@ -376,13 +376,13 @@ namespace Atlas.UI.Avalonia.Controls
 				// Group up any new items after the 1st one
 				//if (SelectedRows.Count == 0 || (dataGrid.SelectedCells.Count == 1 && dataGrid.CurrentCell.Item == dataGrid.Items[dataGrid.Items.Count - 1]))
 				// autoSelectNew not exposed
-				if (autoSelectFirst && (autoSelectNew || tabModel.AutoSelect == TabModel.AutoSelectType.AnyNewOrSaved) && (textBoxSearch.Text == null || textBoxSearch.Text.Length == 0))// && finishedLoading)
+				if (AutoSelectFirst && (AutoSelectNew || TabModel.AutoSelect == TabModel.AutoSelectType.AnyNewOrSaved) && (textBoxSearch.Text == null || textBoxSearch.Text.Length == 0))// && finishedLoading)
 				{
 					//CancellationTokenSource tokenSource = new CancellationTokenSource();
 					//this.Dispatcher.Invoke(() => SelectedItem = e.NewItems[0], System.Windows.Threading.DispatcherPriority.SystemIdle, tokenSource.Token, TimeSpan.FromSeconds(1));
 
 					selectItemEnabled = true;
-					object item = iList[iList.Count - 1];
+					object item = List[List.Count - 1];
 					// don't update the selection too often or we'll slow things down
 					if (!stopwatch.IsRunning || stopwatch.ElapsedMilliseconds > 1000)
 					{
@@ -401,8 +401,8 @@ namespace Atlas.UI.Avalonia.Controls
 					}
 				}
 				// causing Invalid thread issues when removing items, remove completely?
-				dataGrid.InvalidateArrange(); // not resizing when adding new item, not needed?
-				dataGrid.InvalidateMeasure(); // not resizing when adding new item, not needed?
+				DataGrid.InvalidateArrange(); // not resizing when adding new item, not needed?
+				DataGrid.InvalidateMeasure(); // not resizing when adding new item, not needed?
 			}
 			else if (e.Action == NotifyCollectionChangedAction.Reset) // Clear() will trigger this
 			{
@@ -434,12 +434,12 @@ namespace Atlas.UI.Avalonia.Controls
 			isAutoSelecting--;
 			disableSaving--;
 
-			if (scrollIntoViewObject != null && dataGrid.IsEffectivelyVisible && dataGrid.IsInitialized)
+			if (scrollIntoViewObject != null && DataGrid.IsEffectivelyVisible && DataGrid.IsInitialized)
 			{
 				try
 				{
 					//if (collectionView.Contains(value))
-					dataGrid.ScrollIntoView(scrollIntoViewObject, dataGrid.CurrentColumn);
+					DataGrid.ScrollIntoView(scrollIntoViewObject, DataGrid.CurrentColumn);
 				}
 				catch (Exception)
 				{
@@ -454,13 +454,13 @@ namespace Atlas.UI.Avalonia.Controls
 		private void DataGrid_ColumnReordered(object sender, DataGridColumnEventArgs e)
 		{
 			var orderedColumns = new SortedDictionary<int, string>();
-			foreach (DataGridColumn column in dataGrid.Columns)
+			foreach (DataGridColumn column in DataGrid.Columns)
 				orderedColumns[column.DisplayIndex] = columnNames[column];
 
-			tabDataSettings.ColumnNameOrder.Clear();
-			tabDataSettings.ColumnNameOrder.AddRange(orderedColumns.Values);
+			TabDataSettings.ColumnNameOrder.Clear();
+			TabDataSettings.ColumnNameOrder.AddRange(orderedColumns.Values);
 
-			tabInstance.SaveTabSettings();
+			TabInstance.SaveTabSettings();
 		}
 
 		private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -468,7 +468,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Bookmark bookmark = null;
 			if (disableSaving == 0)
 			{
-				bookmark = tabInstance.CreateNavigatorBookmark();
+				bookmark = TabInstance.CreateNavigatorBookmark();
 			}
 
 			UpdateSelection();
@@ -476,11 +476,11 @@ namespace Atlas.UI.Avalonia.Controls
 			if (disableSaving == 0)
 			{
 				if (isAutoSelecting == 0)
-					autoSelectNew = (dataGrid.SelectedItems.Count == 0);
-				tabInstance.SaveTabSettings(); // selection has probably changed
+					AutoSelectNew = (DataGrid.SelectedItems.Count == 0);
+				TabInstance.SaveTabSettings(); // selection has probably changed
 			}
 			if (bookmark != null)
-				bookmark.Changed = string.Join(",", tabDataSettings.SelectedRows);
+				bookmark.Changed = string.Join(",", TabDataSettings.SelectedRows);
 		}
 
 		private DataGridRow GetControlRow(object obj, int depth)
@@ -499,11 +499,11 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			// Single click deselect
 			var pointer = e.PointerPressedEventArgs.GetCurrentPoint(this);
-			if (pointer.Properties.IsLeftButtonPressed && e.Row != null && dataGrid.SelectedItems != null && dataGrid.SelectedItems.Count == 1)
+			if (pointer.Properties.IsLeftButtonPressed && e.Row != null && DataGrid.SelectedItems != null && DataGrid.SelectedItems.Count == 1)
 			{
 				if (e.Cell.Content is CheckBox)
 					return;
-				if (dataGrid.SelectedItems.Contains(e.Row.DataContext))
+				if (DataGrid.SelectedItems.Contains(e.Row.DataContext))
 				{
 					Dispatcher.UIThread.Post(ClearSelection, DispatcherPriority.Background);
 				}
@@ -512,8 +512,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void ClearSelection()
 		{
-			dataGrid.SelectedItems.Clear();
-			dataGrid.SelectedItem = null;
+			DataGrid.SelectedItems.Clear();
+			DataGrid.SelectedItem = null;
 		}
 
 		private void TextBoxSearch_KeyDown(object sender, KeyEventArgs e)
@@ -523,7 +523,7 @@ namespace Atlas.UI.Avalonia.Controls
 				textBoxSearch.IsVisible = false;
 				textBoxSearch.Text = "";
 				FilterText = "";
-				tabInstance.SaveTabSettings();
+				TabInstance.SaveTabSettings();
 			}
 		}
 
@@ -532,7 +532,7 @@ namespace Atlas.UI.Avalonia.Controls
 			FilterText = textBoxSearch.Text;
 			AutoSelect();
 			if (disableSaving == 0)
-				tabInstance.SaveTabSettings();
+				TabInstance.SaveTabSettings();
 		}
 
 		private void AddColumns()
@@ -547,11 +547,11 @@ namespace Atlas.UI.Avalonia.Controls
 				AddButtonColumn(methodColumn);
 			}
 
-			List<TabDataSettings.PropertyColumn> propertyColumns = tabDataSettings.GetPropertiesAsColumns(elementType);
+			List<TabDataSettings.PropertyColumn> propertyColumns = TabDataSettings.GetPropertiesAsColumns(elementType);
 			if (propertyColumns.Count == 0)
 				return;
 
-			if (iList is IItemCollection itemCollection && itemCollection.ColumnName != null)
+			if (List is IItemCollection itemCollection && itemCollection.ColumnName != null)
 			{
 				propertyColumns[0].Label = itemCollection.ColumnName;
 			}
@@ -568,7 +568,7 @@ namespace Atlas.UI.Avalonia.Controls
 			//	dataGrid.Columns[0].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
 
 			if (propertyColumns.Count == 1)
-				dataGrid.HeadersVisibility = DataGridHeadersVisibility.None;
+				DataGrid.HeadersVisibility = DataGridHeadersVisibility.None;
 		}
 
 		public void AddColumn(string label, string propertyName)
@@ -648,7 +648,7 @@ namespace Atlas.UI.Avalonia.Controls
 				else
 				{
 					//if (isReadOnly)
-					var textColumn = new DataGridPropertyTextColumn(dataGrid, propertyInfo, isReadOnly, maxDesiredWidth);
+					var textColumn = new DataGridPropertyTextColumn(DataGrid, propertyInfo, isReadOnly, maxDesiredWidth);
 					if (attributeMinWidth != null)
 						textColumn.MinDesiredWidth = attributeMinWidth.MinWidth;
 					if (attributeAutoSize != null)
@@ -687,7 +687,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			column.Binding = binding;*/
 
-			dataGrid.Columns.Add(column);
+			DataGrid.Columns.Add(column);
 			columnObjects[propertyInfo.Name] = column;
 			columnNames[column] = propertyInfo.Name;
 			columnProperties.Add(propertyInfo);
@@ -714,18 +714,18 @@ namespace Atlas.UI.Avalonia.Controls
 			//DataGridCheckBoxColumn checkBoxColumn = new DataGridCheckBoxColumn()
 			var column = new DataGridButtonColumn(methodColumn.MethodInfo, methodColumn.Label);
 			//column.Header = methodColumn.methodInfo.Name;
-			dataGrid.Columns.Add(column);
+			DataGrid.Columns.Add(column);
 			columnNames[column] = methodColumn.Label;
 		}
 
 		public void LoadSettings()
 		{
-			if (tabInstance.Project.UserSettings.AutoLoad)
+			if (TabInstance.Project.UserSettings.AutoLoad)
 			{
 				SortSavedColumn();
-				if (tabDataSettings.Filter != null && tabDataSettings.Filter.Length > 0)
+				if (TabDataSettings.Filter != null && TabDataSettings.Filter.Length > 0)
 				{
-					textBoxSearch.Text = tabDataSettings.Filter;
+					textBoxSearch.Text = TabDataSettings.Filter;
 					FilterText = textBoxSearch.Text; // change to databinding?
 					textBoxSearch.IsVisible = true;
 				}
@@ -745,7 +745,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public List<object> GetMatchingRowObjects()
 		{
 			var rowObjects = new List<object>();
-			if (tabDataSettings.SelectedRows.Count == 0)
+			if (TabDataSettings.SelectedRows.Count == 0)
 				return rowObjects;
 
 			var keys = new Dictionary<string, object>(); // todo: change to unordered?
@@ -757,7 +757,7 @@ namespace Atlas.UI.Avalonia.Controls
 				if (id != null)
 					keys[id] = listItem;
 			}
-			foreach (SelectedRow selectedRow in tabDataSettings.SelectedRows)
+			foreach (SelectedRow selectedRow in TabDataSettings.SelectedRows)
 			{
 				object listItem;
 				if (selectedRow.Object != null)
@@ -776,11 +776,11 @@ namespace Atlas.UI.Avalonia.Controls
 				}
 				else
 				{
-					if (selectedRow.RowIndex < 0 || selectedRow.RowIndex >= iList.Count) // some items might be filtered or have changed
+					if (selectedRow.RowIndex < 0 || selectedRow.RowIndex >= List.Count) // some items might be filtered or have changed
 						continue;
-					listItem = iList[selectedRow.RowIndex];
+					listItem = List[selectedRow.RowIndex];
 				}
-				if (tabInstance.IsOwnerObject(listItem.GetInnerValue())) // stops self referencing loops
+				if (TabInstance.IsOwnerObject(listItem.GetInnerValue())) // stops self referencing loops
 					continue;
 
 				/*if (item.pinned)
@@ -795,20 +795,20 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public bool SelectSavedItems()
 		{
-			if (tabDataSettings.SelectionType == SelectionType.None)
+			if (TabDataSettings.SelectionType == SelectionType.None)
 				return false;
 
-			if (iList.Count == 0)
+			if (List.Count == 0)
 				return false;
 
 			// Select new log items automatically
-			if (tabInstance.TaskInstance.TaskStatus == System.Threading.Tasks.TaskStatus.Running)
+			if (TabInstance.TaskInstance.TaskStatus == System.Threading.Tasks.TaskStatus.Running)
 			{
-				SelectedItem = iList[iList.Count - 1];
+				SelectedItem = List[List.Count - 1];
 				return true;
 			}
 
-			if (tabDataSettings.SelectedRows.Count == 0)
+			if (TabDataSettings.SelectedRows.Count == 0)
 				return true; // clear too?
 
 			List<object> matchingItems = GetMatchingRowObjects();
@@ -841,7 +841,7 @@ namespace Atlas.UI.Avalonia.Controls
 				}
 				if (obj is ListMember listMember)
 				{
-					if (listMember.autoLoad == false)
+					if (listMember.AutoLoad == false)
 						continue;
 				}
 
@@ -865,7 +865,7 @@ namespace Atlas.UI.Avalonia.Controls
 							  continue;
 					  }*/
 
-					if (tabInstance.IsOwnerObject(obj.GetInnerValue())) // stops self referencing loops
+					if (TabInstance.IsOwnerObject(obj.GetInnerValue())) // stops self referencing loops
 						return null;
 
 					SelectedItem = obj;
@@ -877,11 +877,11 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AutoSelect()
 		{
-			if (autoSelectFirst == false)
+			if (AutoSelectFirst == false)
 				return;
 
 			object firstValidObject = GetAutoSelectValue();
-			if (firstValidObject != null && dataGrid.SelectedItems.Count == 0)
+			if (firstValidObject != null && DataGrid.SelectedItems.Count == 0)
 				SelectedItem = firstValidObject;
 			//SaveSelectedItems();
 			if (firstValidObject != null)
@@ -893,11 +893,11 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			get
 			{
-				return dataGrid.SelectedItems;
+				return DataGrid.SelectedItems;
 			}
 			set
 			{
-				var dataGridSelectedItems = dataGrid.SelectedItems;
+				var dataGridSelectedItems = DataGrid.SelectedItems;
 				if (value.Count == dataGridSelectedItems.Count)
 				{
 					bool match = true;
@@ -912,16 +912,16 @@ namespace Atlas.UI.Avalonia.Controls
 				disableSaving++;
 				// datagrid has a bug and doesn't reselect cleared records correctly
 				// Could try only removing removed items, and adding new items, need to check SelectedItems order is correct after
-				dataGrid.SelectedItems.Clear();
-				dataGrid.SelectedItem = null; // need both of these
+				DataGrid.SelectedItems.Clear();
+				DataGrid.SelectedItem = null; // need both of these
 				//foreach (object obj in dataGrid.SelectedItems)
 				// remove all items so the we have to worry about this order changing?
 				//while (dataGrid.SelectedItems.Count > 0)
 				//dataGrid.SelectedItems.RemoveAt(0);
 				foreach (object obj in value)
-					dataGrid.SelectedItems.Add(obj);
+					DataGrid.SelectedItems.Add(obj);
 				//dataGrid.Render(); //Can't get data grid to flush this correctly, see DataGrid.FlushSelectionChanged()
-				dataGrid.InvalidateVisual(); // required for autoselection to work
+				DataGrid.InvalidateVisual(); // required for autoselection to work
 				//Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);
 				//dataGrid.Flush(); //Can't get data grid to flush this correctly,
 				//if (value.Count > 0)
@@ -962,11 +962,11 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			get
 			{
-				return dataGrid.SelectedIndex;
+				return DataGrid.SelectedIndex;
 			}
 			set
 			{
-				dataGrid.SelectedIndex = value;
+				DataGrid.SelectedIndex = value;
 			}
 		}
 
@@ -974,7 +974,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			get
 			{
-				return dataGrid.SelectedItem;
+				return DataGrid.SelectedItem;
 			}
 			set
 			{
@@ -982,20 +982,20 @@ namespace Atlas.UI.Avalonia.Controls
 				if (value == null)
 					selectItemEnabled = false;
 				// don't reselect if already selected				
-				if (dataGrid.SelectedItems.Count != 1 || dataGrid.SelectedItems[0] != value)
+				if (DataGrid.SelectedItems.Count != 1 || DataGrid.SelectedItems[0] != value)
 				{
-					dataGrid.SelectedItems.Clear();
-					dataGrid.SelectedItem = null; // need both of these
+					DataGrid.SelectedItems.Clear();
+					DataGrid.SelectedItem = null; // need both of these
 					if (value != null)
 						//dataGrid.SelectedItems.Add(value);
-						dataGrid.SelectedItem = value;
+						DataGrid.SelectedItem = value;
 				}
-				if (value != null && dataGrid.IsEffectivelyVisible && dataGrid.IsInitialized)
+				if (value != null && DataGrid.IsEffectivelyVisible && DataGrid.IsInitialized)
 				{
 					try
 					{
 						//if (collectionView.Contains(value))
-							dataGrid.ScrollIntoView(value, dataGrid.CurrentColumn);
+							DataGrid.ScrollIntoView(value, DataGrid.CurrentColumn);
 					}
 					catch (Exception)
 					{
@@ -1010,12 +1010,12 @@ namespace Atlas.UI.Avalonia.Controls
 		private void UpdateSelection()
 		{
 			//SelectPinnedItems();
-			tabDataSettings.SelectedRows = SelectedRows;
-			tabDataSettings.SelectionType = SelectionType.User; // todo: place earlier with more accurate type
+			TabDataSettings.SelectedRows = SelectedRows;
+			TabDataSettings.SelectionType = SelectionType.User; // todo: place earlier with more accurate type
 
 			OnSelectionChanged?.Invoke(this, null);
 
-			tabInstance.UpdateNavigator();
+			TabInstance.UpdateNavigator();
 		}
 
 		public HashSet<SelectedRow> SelectedRows
@@ -1067,7 +1067,7 @@ namespace Atlas.UI.Avalonia.Controls
 				}*/
 				try
 				{
-					foreach (object obj in dataGrid.SelectedItems)
+					foreach (object obj in DataGrid.SelectedItems)
 					{
 						if (obj == null)
 							continue;
@@ -1090,7 +1090,7 @@ namespace Atlas.UI.Avalonia.Controls
 			var selectedRow = new SelectedRow()
 			{
 				Label = obj.ToUniqueString(),
-				RowIndex = iList.IndexOf(obj),
+				RowIndex = List.IndexOf(obj),
 				DataKey = GetDataKey(obj), // overrides label
 				DataValue = GetDataValue(obj),
 			};
@@ -1154,7 +1154,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			set
 			{
-				tabDataSettings.Filter = value;
+				TabDataSettings.Filter = value;
 				filter = new Filter(value);
 
 				if (filter.FilterExpressions.Count > 0)
@@ -1162,11 +1162,11 @@ namespace Atlas.UI.Avalonia.Controls
 					if (filter.Depth > 0)
 					{
 						// create a new collection because this one might have multiple lists
-						TabModel tabModel = TabModel.Create(this.tabModel.Name, iList);
+						TabModel tabModel = TabModel.Create(this.TabModel.Name, List);
 						TabBookmark bookmarkNode = tabModel.FindMatches(filter, filter.Depth);
-						tabInstance.filterBookmarkNode = bookmarkNode;
+						TabInstance.filterBookmarkNode = bookmarkNode;
 						collectionView.Filter = FilterPredicate;
-						tabInstance.SelectBookmark(bookmarkNode);
+						TabInstance.SelectBookmark(bookmarkNode);
 					}
 					else
 					{
@@ -1183,9 +1183,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private bool FilterPredicate(object obj)
 		{
-			if (tabInstance.filterBookmarkNode != null)
+			if (TabInstance.filterBookmarkNode != null)
 			{
-				return tabInstance.filterBookmarkNode.selectedObjects.Contains(obj);
+				return TabInstance.filterBookmarkNode.selectedObjects.Contains(obj);
 			}
 			else
 			{
@@ -1229,23 +1229,23 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			stopwatch.Stop();
 
-			dataGrid.SelectionChanged -= DataGrid_SelectionChanged;
-			dataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
-			dataGrid.ColumnReordered -= DataGrid_ColumnReordered;
+			DataGrid.SelectionChanged -= DataGrid_SelectionChanged;
+			DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
+			DataGrid.ColumnReordered -= DataGrid_ColumnReordered;
 
 			LayoutUpdated -= TabControlDataGrid_LayoutUpdated;
 
-			dataGrid.Items = null;
+			DataGrid.Items = null;
 
 			textBoxSearch.KeyDown -= TextBoxSearch_KeyDown;
 			textBoxSearch.KeyUp -= TextBoxSearch_KeyUp;
 
 			//KeyDown -= UserControl_KeyDown;
 
-			if (iList is INotifyCollectionChanged iNotifyCollectionChanged) // as AutoLoad
+			if (List is INotifyCollectionChanged iNotifyCollectionChanged) // as AutoLoad
 				iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
 
-			iList = null;
+			List = null;
 			collectionView = null;
 		}
 
@@ -1276,7 +1276,7 @@ namespace Atlas.UI.Avalonia.Controls
 				textBoxSearch.IsVisible = false;
 				textBoxSearch.Text = "";
 				FilterText = "";
-				tabInstance.SaveTabSettings();
+				TabInstance.SaveTabSettings();
 			}
 		}
 	}

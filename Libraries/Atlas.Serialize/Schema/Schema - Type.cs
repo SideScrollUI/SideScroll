@@ -43,7 +43,7 @@ namespace Atlas.Serialize
 
 		public TypeSchema(Type type)
 		{
-			this.Type = type;
+			Type = type;
 			Name = type.ToString(); // better than FullName (don't remember why)
 			
 			AssemblyQualifiedName = type.AssemblyQualifiedName; // todo: strip out unused version?
@@ -192,7 +192,7 @@ namespace Atlas.Serialize
 			{
 				if (typeCache.TryGetValue(AssemblyQualifiedName, out Type type))
 				{
-					this.Type = type;
+					Type = type;
 					return;
 				}
 			}

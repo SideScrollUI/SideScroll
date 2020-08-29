@@ -7,24 +7,24 @@ namespace Atlas.Core
 {
 	public class LogWriterText : IDisposable
 	{
-		public string saveFilePath;
-		private Log log;
+		private Log Log;
+		public string SaveFilePath;
 
 		private StreamWriter txtStreamWriter;
 		private SynchronizationContext context;
 
-		public override string ToString() => saveFilePath;
+		public override string ToString() => SaveFilePath;
 
 		public LogWriterText(Log log, string saveFilePath)
 		{
-			this.log = log;
-			this.saveFilePath = saveFilePath + ".log.txt";
+			Log = log;
+			SaveFilePath = saveFilePath + ".log.txt";
 
-			string parentDirectory = Path.GetDirectoryName(this.saveFilePath);
+			string parentDirectory = Path.GetDirectoryName(this.SaveFilePath);
 			if (!Directory.Exists(parentDirectory))
 				Directory.CreateDirectory(parentDirectory);
 			
-			txtStreamWriter = new StreamWriter(this.saveFilePath);
+			txtStreamWriter = new StreamWriter(this.SaveFilePath);
 			context = SynchronizationContext.Current;
 			context = context ?? new SynchronizationContext();
 			
@@ -37,7 +37,7 @@ namespace Atlas.Core
 			foreach (LogEntry logEntry in e.Entries)
 				Indendation += '\t';
 			LogEntry newLog = e.Entries[0];
-			string line = log.Created.ToString("yyyy-M-d H:mm:ss") + Indendation + newLog.Message;
+			string line = Log.Created.ToString("yyyy-M-d H:mm:ss") + Indendation + newLog.Message;
 			txtStreamWriter.WriteLine(line);
 			txtStreamWriter.Flush();
 		}

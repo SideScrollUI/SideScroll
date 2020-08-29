@@ -20,8 +20,8 @@ namespace Atlas.Tabs
 
 	public class ListProperty : ListMember, IPropertyEditable, IMaxDesiredWidth
 	{
-		public PropertyInfo propertyInfo;
-		private bool cached;
+		public PropertyInfo PropertyInfo;
+		public bool Cached;
 		private bool valueCached;
 		private object valueObject = null;
 
@@ -30,8 +30,8 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				bool propertyReadOnly = (propertyInfo.GetCustomAttribute<ReadOnlyAttribute>() != null);
-				return propertyInfo.CanWrite && !propertyReadOnly;
+				bool propertyReadOnly = (PropertyInfo.GetCustomAttribute<ReadOnlyAttribute>() != null);
+				return PropertyInfo.CanWrite && !propertyReadOnly;
 			}
 		}
 
@@ -40,7 +40,7 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				var maxWidthAttribute = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
+				var maxWidthAttribute = PropertyInfo.GetCustomAttribute<MaxWidthAttribute>();
 				if (maxWidthAttribute != null)
 					return maxWidthAttribute.MaxWidth;
 				return null;
@@ -54,16 +54,16 @@ namespace Atlas.Tabs
 			{
 				try
 				{
-					if (cached)
+					if (Cached)
 					{
 						if (!valueCached)
 						{
 							valueCached = true;
-							valueObject = propertyInfo.GetValue(obj);
+							valueObject = PropertyInfo.GetValue(Object);
 						}
 						return valueObject;
 					}
-					return propertyInfo.GetValue(obj);
+					return PropertyInfo.GetValue(Object);
 				}
 				catch (Exception)
 				{
@@ -72,16 +72,16 @@ namespace Atlas.Tabs
 			}
 			set
 			{
-				if (propertyInfo.CanWrite)
+				if (PropertyInfo.CanWrite)
 				{
-					Type type = propertyInfo.PropertyType;
+					Type type = PropertyInfo.PropertyType;
 					if (value != null)
 					{
 						type = type.GetNonNullableType();
 					}
-					propertyInfo.SetValue(obj, Convert.ChangeType(value, type));
+					PropertyInfo.SetValue(Object, Convert.ChangeType(value, type));
 
-					if (obj is INotifyPropertyChanged notifyPropertyChanged)
+					if (Object is INotifyPropertyChanged notifyPropertyChanged)
 					{
 						//notifyPropertyChanged.PropertyChanged?.Invoke(obj, new PropertyChangedEventArgs(propertyName));
 					}
@@ -90,17 +90,17 @@ namespace Atlas.Tabs
 		}
 
 		[HiddenColumn, HiddenRow]
-		public Type UnderlyingType => propertyInfo.PropertyType.GetNonNullableType();
+		public Type UnderlyingType => PropertyInfo.PropertyType.GetNonNullableType();
 
 		public override string ToString() => Name;
 
 		public ListProperty(object obj, PropertyInfo propertyInfo, bool cached = true) : 
 			base(obj, propertyInfo)
 		{
-			this.propertyInfo = propertyInfo;
-			this.cached = cached;
+			PropertyInfo = propertyInfo;
+			Cached = cached;
 			var accessors = propertyInfo.GetAccessors(true);
-			autoLoad = !accessors[0].IsStatic;
+			AutoLoad = !accessors[0].IsStatic;
 
 			Name = propertyInfo.Name;
 			Name = Name.WordSpaced();

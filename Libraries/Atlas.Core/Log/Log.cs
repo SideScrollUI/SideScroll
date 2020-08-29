@@ -133,7 +133,7 @@ namespace Atlas.Core
 		[HiddenColumn]
 		public Tag[] Tags { get; set; }
 		[HiddenRow]
-		public SynchronizationContext context; // inherited from creator (which can be a Parent Log)
+		public SynchronizationContext Context; // inherited from creator (which can be a Parent Log)
 
 		public override string ToString() => Message;
 
@@ -154,12 +154,12 @@ namespace Atlas.Core
 
 		private void InitializeContext()
 		{
-			context = context ?? SynchronizationContext.Current ?? new SynchronizationContext();
+			Context = Context ?? SynchronizationContext.Current ?? new SynchronizationContext();
 		}
 
 		protected void CreateEventPropertyChanged([CallerMemberName] string propertyName = "")
 		{
-			context?.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
+			Context?.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
 			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
@@ -193,10 +193,10 @@ namespace Atlas.Core
 
 		public Log(string text = null, SynchronizationContext context = null, Tag[] tags = null)
 		{
-			this.context = context;
-			this.Text = text;
-			this.Tags = tags;
-			this.Created = DateTime.Now;
+			Context = context;
+			Text = text;
+			Tags = tags;
+			Created = DateTime.Now;
 		}
 
 		// use caller instead?
@@ -252,7 +252,7 @@ namespace Atlas.Core
 
 		public LogTimer Timer(string text, params Tag[] tags)
 		{
-			var logTimer = new LogTimer(text, context);
+			var logTimer = new LogTimer(text, Context);
 			logTimer.Tags = tags;
 			AddLogEntry(logTimer);
 			return logTimer;
@@ -270,7 +270,7 @@ namespace Atlas.Core
 
 		private Log AddChildEntry(LogType logType, string name, params Tag[] tags)
 		{
-			Log log = new Log(name, context, tags)
+			Log log = new Log(name, Context, tags)
 			{
 				originalType = logType,
 				Type = logType,
@@ -282,9 +282,9 @@ namespace Atlas.Core
 		public void AddLogEntry(LogEntry logEntry)
 		{
 			logEntry.rootLog = rootLog;
-			logEntry.context = context;
-			if (context != null)
-				context.Post(new SendOrPostCallback(AddEntryCallback), logEntry);
+			logEntry.Context = Context;
+			if (Context != null)
+				Context.Post(new SendOrPostCallback(AddEntryCallback), logEntry);
 			else
 				AddEntryCallback(logEntry);
 		}

@@ -6,11 +6,11 @@ namespace Atlas.Tabs.Tools
 {
 	public class TabQueue : ITab
 	{
-		public IList tasks;
+		public IList Tasks;
 
 		public TabQueue(IList tasks)
 		{
-			this.tasks = tasks;
+			Tasks = tasks;
 		}
 
 		public TabInstance Create() => new Instance(this);
@@ -40,7 +40,7 @@ namespace Atlas.Tabs.Tools
 			public override void Load(Call call, TabModel model)
 			{
 				var items = new ItemCollection<ListItem>();
-				listItemTasks = new ListItem("Tasks", tab.tasks);
+				listItemTasks = new ListItem("Tasks", tab.Tasks);
 
 				items.Add(listItemTasks);
 				//list.Add(listItemActive);
@@ -61,12 +61,12 @@ namespace Atlas.Tabs.Tools
 			{
 				tokenSource = new CancellationTokenSource();
 
-				while (nextIndex < tab.tasks.Count)
+				while (nextIndex < tab.Tasks.Count)
 				{
 					if (tokenSource.IsCancellationRequested)
 						break;
 
-					TaskCreator taskCreator = (TaskCreator)tab.tasks[nextIndex];
+					TaskCreator taskCreator = (TaskCreator)tab.Tasks[nextIndex];
 					nextIndex++;
 
 					//waiting.RemoveAt(0);

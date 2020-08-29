@@ -34,12 +34,12 @@ namespace Atlas.Serialize
 
 		public override void InitializeLoading(Log log)
 		{
-			listTypeRepo = serializer.GetOrCreateRepo(log, elementType);
+			listTypeRepo = Serializer.GetOrCreateRepo(log, elementType);
 		}
 
 		public override void SaveCustomHeader(BinaryWriter writer)
 		{
-			foreach (IList list in objects)
+			foreach (IList list in Objects)
 			{
 				writer.Write((int)list.Count);
 			}
@@ -47,8 +47,8 @@ namespace Atlas.Serialize
 
 		public override void LoadCustomHeader()
 		{
-			sizes = new int[typeSchema.NumObjects];
-			for (int i = 0; i < typeSchema.NumObjects; i++)
+			sizes = new int[TypeSchema.NumObjects];
+			for (int i = 0; i < TypeSchema.NumObjects; i++)
 			{
 				int count = reader.ReadInt32();
 				sizes[i] = count;
@@ -60,7 +60,7 @@ namespace Atlas.Serialize
 			Array array = (Array)obj;
 			foreach (var item in array)
 			{
-				serializer.AddObjectRef(item);
+				Serializer.AddObjectRef(item);
 			}
 		}
 		public override void SaveObject(BinaryWriter writer, object obj)
@@ -70,7 +70,7 @@ namespace Atlas.Serialize
 			//writer.Write(array.Length);
 			foreach (var item in array)
 			{
-				serializer.WriteObjectRef(elementType, item, writer);
+				Serializer.WriteObjectRef(elementType, item, writer);
 			}
 		}
 
@@ -80,9 +80,9 @@ namespace Atlas.Serialize
 			//int count = reader.ReadInt32();
 			int count = sizes[objectIndex];
 
-			Array array = Array.CreateInstance(typeSchema.Type.GetElementType(), count);
-			objectsLoaded[objectIndex] = array;
-			serializer.QueueLoading(this, objectIndex);
+			Array array = Array.CreateInstance(TypeSchema.Type.GetElementType(), count);
+			ObjectsLoaded[objectIndex] = array;
+			Serializer.QueueLoading(this, objectIndex);
 
 			return array;
 		}
@@ -106,8 +106,8 @@ namespace Atlas.Serialize
 			int count = BitConverter.ToInt32(bytes, byteOffset);
 			byteOffset += sizeof(int);
 
-			Array array = Array.CreateInstance(typeSchema.Type.GetElementType(), count);
-			objects[objectIndex] = array;
+			Array array = Array.CreateInstance(TypeSchema.Type.GetElementType(), count);
+			Objects[objectIndex] = array;
 
 			IList iList = (IList)array;
 
@@ -126,7 +126,7 @@ namespace Atlas.Serialize
 			int i = 0;
 			foreach (var item in iSource)
 			{
-				object clone = serializer.Clone(item);
+				object clone = Serializer.Clone(item);
 				iDest[i++] = clone;
 			}
 		}

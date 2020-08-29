@@ -310,48 +310,48 @@ namespace Atlas.Serialize
 	{
 		private const string DefaultName = ".Default"; // todo: support multiple directory levels?
 
-		public DataRepo dataRepo;
+		public DataRepo DataRepo;
 		public string Directory { get; set; }
 
 		public DataRepoInstance(DataRepo dataRepo, string saveDirectory)
 		{
-			this.dataRepo = dataRepo;
-			this.Directory = saveDirectory;
+			DataRepo = dataRepo;
+			Directory = saveDirectory;
 		}
 
 		public virtual void Save(Call call, T item)
 		{
-			dataRepo.Save(Directory, DefaultName, item, call);
+			DataRepo.Save(Directory, DefaultName, item, call);
 		}
 
 		public virtual void Save(Call call, string key, T item)
 		{
-			dataRepo.Save(Directory, key, item, call);
+			DataRepo.Save(Directory, key, item, call);
 		}
 
 		public virtual T Load(Call call, string key = null, bool createIfNeeded = false, bool lazy = false)
 		{
-			return dataRepo.Load<T>(Directory, key ?? DefaultName, call, createIfNeeded, lazy);
+			return DataRepo.Load<T>(Directory, key ?? DefaultName, call, createIfNeeded, lazy);
 		}
 
 		public DataItemCollection<T> LoadAll(Call call = null, bool lazy = false)
 		{
-			return dataRepo.LoadAll<T>(call, Directory, lazy);
+			return DataRepo.LoadAll<T>(call, Directory, lazy);
 		}
 
 		public SortedDictionary<string, T> LoadAllSorted(Call call = null, bool lazy = false)
 		{
-			return dataRepo.LoadAllSorted<T>(call, Directory, lazy);
+			return DataRepo.LoadAllSorted<T>(call, Directory, lazy);
 		}
 
 		public virtual void Delete(string key = null)
 		{
-			dataRepo.Delete<T>(Directory, key ?? DefaultName);
+			DataRepo.Delete<T>(Directory, key ?? DefaultName);
 		}
 
 		public virtual void DeleteAll()
 		{
-			dataRepo.DeleteAll<T>();
+			DataRepo.DeleteAll<T>();
 		}
 	}
 
@@ -366,7 +366,7 @@ namespace Atlas.Serialize
 			Initialize();
 		}
 
-		public DataRepoView(DataRepoInstance<T> dataRepo) : base(dataRepo.dataRepo, dataRepo.Directory)
+		public DataRepoView(DataRepoInstance<T> dataRepo) : base(dataRepo.DataRepo, dataRepo.Directory)
 		{
 			Initialize();
 		}

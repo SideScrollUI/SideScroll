@@ -6,20 +6,17 @@ namespace Atlas.Tabs
 	public class ListToString
 	{
 		[InnerValue]
-		public object obj;
+		public object Object;
 		
 		public string Value { get; set; }
 
+		public override string ToString() => Value;
+
 		public ListToString(object obj)
 		{
-			this.obj = obj;
+			Object = obj;
 			if (obj != null)
 				Value = obj.ToString();
-		}
-
-		public override string ToString()
-		{
-			return Value;
 		}
 
 		public static ItemCollection<ListToString> Create(IEnumerable enumerable, int limit = 200000)

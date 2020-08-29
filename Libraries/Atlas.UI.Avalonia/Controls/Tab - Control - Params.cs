@@ -177,7 +177,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Type type = property.UnderlyingType;
 
 			BindListAttribute listAttribute = type.GetCustomAttribute<BindListAttribute>();
-			listAttribute = listAttribute ?? property.propertyInfo.GetCustomAttribute<BindListAttribute>();
+			listAttribute = listAttribute ?? property.PropertyInfo.GetCustomAttribute<BindListAttribute>();
 
 			Control control = null;
 			if (type == typeof(bool))

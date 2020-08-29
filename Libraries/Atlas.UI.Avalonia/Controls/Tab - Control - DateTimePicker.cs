@@ -19,21 +19,22 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		Type IStyleable.StyleKey => typeof(TabDateTimePicker);
 
-		private ListProperty property;
+		public readonly ListProperty Property;
+
 		private DateTimeValueConverter dateTimeConverter;
 		private DatePicker datePicker;
 		private TabControlTextBox textBox;
 
 		public TabDateTimePicker(ListProperty property)
 		{
-			InitializeComponent(property);
+			Property = property;
+			InitializeComponent();
 		}
 
-		private void InitializeComponent(ListProperty property)
+		private void InitializeComponent()
 		{
-			this.property = property;
 			ColumnDefinitions = new ColumnDefinitions("*,*");
-			var backgroundColor = property.Editable ? Theme.Background : Brushes.LightGray;
+			var backgroundColor = Property.Editable ? Theme.Background : Brushes.LightGray;
 			datePicker = new DatePicker()
 			{
 				Background = backgroundColor,
@@ -45,25 +46,25 @@ namespace Atlas.UI.Avalonia.Controls
 				Watermark = "yyyy/M/d",
 				MinWidth = 90,
 				MaxWidth = 300,
-				IsEnabled = property.Editable,
+				IsEnabled = Property.Editable,
 
 				//MaxWidth = 200,
 				[Grid.ColumnProperty] = 0,
 			};
 			dateTimeConverter = new DateTimeValueConverter();
-			var binding = new Binding(property.propertyInfo.Name)
+			var binding = new Binding(Property.PropertyInfo.Name)
 			{
 				Converter = dateTimeConverter,
 				//StringFormat = "Hello {0}",
 				Mode = BindingMode.TwoWay,
-				Source = property.obj,
+				Source = Property.Object,
 			};
 			datePicker.Bind(DatePicker.SelectedDateProperty, binding);
 			Children.Add(datePicker);
 
 			textBox = new TabControlTextBox()
 			{
-				IsReadOnly = !property.Editable,
+				IsReadOnly = !Property.Editable,
 				Watermark = "15:30:45",
 				Margin = new Thickness(6, 0, 0, 0),
 				MinWidth = 75,
@@ -73,14 +74,14 @@ namespace Atlas.UI.Avalonia.Controls
 				//[Grid.RowProperty] = 0,
 				[Grid.ColumnProperty] = 1,
 			};
-			if (!property.Editable)
+			if (!Property.Editable)
 				textBox.Background = Theme.TextBackgroundDisabled;
-			binding = new Binding(property.propertyInfo.Name)
+			binding = new Binding(Property.PropertyInfo.Name)
 			{
 				Converter = dateTimeConverter,
 				//StringFormat = "Hello {0}",
 				Mode = BindingMode.TwoWay,
-				Source = property.obj,
+				Source = Property.Object,
 			};
 			textBox.Bind(TextBlock.TextProperty, binding);
 			Children.Add(textBox);
@@ -97,7 +98,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (timeSpan != null)
 			{
 				DateTime? newDateTime = dateTimeConverter.Convert(timeSpan, typeof(string), null, null) as DateTime?;
-				property.propertyInfo.SetValue(property.obj, newDateTime);
+				Property.PropertyInfo.SetValue(Property.Object, newDateTime);
 				textBox.Text = timeSpan.ToString();
 				e.Handled = true;
 			}
@@ -106,7 +107,7 @@ namespace Atlas.UI.Avalonia.Controls
 				DateTime? dateTime = DateTimeUtils.ConvertTextToDateTime(clipboardText);
 				if (dateTime != null)
 				{
-					property.propertyInfo.SetValue(property.obj, dateTime);
+					Property.PropertyInfo.SetValue(Property.Object, dateTime);
 					datePicker.SelectedDate = dateTime;
 					textBox.Text = (string)dateTimeConverter.Convert(dateTime, typeof(string), null, null);
 					e.Handled = true;

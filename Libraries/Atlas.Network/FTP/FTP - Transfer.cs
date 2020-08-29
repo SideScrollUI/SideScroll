@@ -8,8 +8,8 @@ namespace Atlas.Network
 {
 	public class FtpTransfer
 	{
-		public FTP.Info ftpInfo;
-		private FtpFileInfo ftpFileInfo;
+		public FTP.Info FtpInfo;
+		public FtpFileInfo FtpFileInfo;
 
 		public FtpTransfer()
 		{
@@ -17,20 +17,14 @@ namespace Atlas.Network
 
 		public FtpTransfer(FtpFileInfo ftpFileInfo)
 		{
-			this.ftpFileInfo = ftpFileInfo;
-			ftpInfo = new FTP.Info(ftpFileInfo.FtpHost);
+			FtpFileInfo = ftpFileInfo;
+			FtpInfo = new FTP.Info(ftpFileInfo.FtpHost);
 			LocalFilePath = ftpFileInfo.LocalPath;
 			RemoteFile.fullPath = ftpFileInfo.RemotePath;
 			RemoteFile.Filename = FileName;
 		}
 
-		public string FileName
-		{
-			get
-			{
-				return Path.GetFileName(LocalFilePath);
-			}
-		}
+		public string FileName => Path.GetFileName(LocalFilePath);
 
 		public FtpItem RemoteFile { get; set; } = new FtpItem();
 		[HiddenColumn]
@@ -86,7 +80,7 @@ namespace Atlas.Network
 					return;
 				}
 			}
-			FTP ftp = new FTP(call, ftpInfo);
+			FTP ftp = new FTP(call, FtpInfo);
 			ftp.Download(RemoteFile.fullPath, LocalFilePath, call.TaskInstance, maxBytes);
 			FileInfo fileInfo = new FileInfo(LocalFilePath);
 			if (fileInfo.Extension == ".gz")
@@ -95,14 +89,14 @@ namespace Atlas.Network
 
 		public long UpdateRemoteFileSize(Call call, CancellationToken? cancellationToken = null)
 		{
-			FTP ftp = new FTP(call, ftpInfo);
+			FTP ftp = new FTP(call, FtpInfo);
 			RemoteFile.Size = ftp.GetFileSize(RemoteFile.fullPath);
 			return RemoteFile.Size;
 		}
 
 		public DateTime UpdateFileCreatedDateTime(Call call, CancellationToken? cancellationToken = null)
 		{
-			FTP ftp = new FTP(call, ftpInfo);
+			FTP ftp = new FTP(call, FtpInfo);
 			RemoteFile.Modified = ftp.GetFileModifiedDateTime(RemoteFile.fullPath);
 			return RemoteFile.Modified;
 		}

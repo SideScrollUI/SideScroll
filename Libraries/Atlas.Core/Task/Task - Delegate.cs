@@ -8,17 +8,17 @@ namespace Atlas.Core
 	{
 		public delegate void CallAction(Call call);
 
-		private CallAction callAction;
+		private CallAction Action;
 
 		public override string ToString() => Label;
 
 		public TaskDelegate(string label, CallAction callAction, bool useTask = false, bool showTask = false, string description = null)
 		{
-			this.Label = label;
-			this.callAction = callAction;
-			this.UseTask = useTask;
-			this.ShowTask = showTask;
-			this.Description = description;
+			Label = label;
+			Action = callAction;
+			UseTask = useTask;
+			ShowTask = showTask;
+			Description = description;
 		}
 
 		protected override Action CreateAction(Call call)
@@ -31,7 +31,7 @@ namespace Atlas.Core
 			try
 			{
 				// BeginInvoke() doesn't work for .NET Core
-				callAction.Invoke(call); // any await in the Invoked call will make this return and finish the task
+				Action.Invoke(call); // any await in the Invoked call will make this return and finish the task
 			}
 			catch (Exception e)
 			{
@@ -43,7 +43,7 @@ namespace Atlas.Core
 		{
 			try
 			{
-				Task.Run(() => callAction.Invoke(call)).GetAwaiter().GetResult();
+				Task.Run(() => Action.Invoke(call)).GetAwaiter().GetResult();
 			}
 			catch (Exception e)
 			{

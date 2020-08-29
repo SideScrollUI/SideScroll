@@ -55,7 +55,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public bool FillHeight { get; set; }
 
 		//private List<ListSeries> ListSeries { get; set; }
-		public List<OxyListSeries> oxyListSeriesList = new List<OxyListSeries>();
+		public List<OxyListSeries> OxyListSeriesList = new List<OxyListSeries>();
 		private Dictionary<IList, ListSeries> ListToTabSeries { get; set; } = new Dictionary<IList, ListSeries>();
 		private Dictionary<IList, int> ListToTabIndex { get; set; } = new Dictionary<IList, int>(); // not used
 		public List<ListSeries> SelectedSeries
@@ -63,12 +63,12 @@ namespace Atlas.UI.Avalonia.Controls
 			get
 			{
 				var selected = new List<ListSeries>();
-				foreach (var oxyListSeries in oxyListSeriesList)
+				foreach (var oxyListSeries in OxyListSeriesList)
 				{
 					if (oxyListSeries.IsVisible)
 						selected.Add(oxyListSeries.ListSeries);
 				}
-				if (selected.Count == oxyListSeriesList.Count)
+				if (selected.Count == OxyListSeriesList.Count)
 					selected.Clear(); // If all are selected, none are selected?
 				return selected;
 			}
@@ -77,15 +77,15 @@ namespace Atlas.UI.Avalonia.Controls
 
 		//public SeriesCollection SeriesCollection { get; set; }
 
-		public PlotModel plotModel;
-		public PlotView plotView;
+		public PlotModel PlotModel;
+		public PlotView PlotView;
 		private PropertyInfo xAxisPropertyInfo;
-		public TabControlChartLegend legend;
-		public OxyPlot.Axes.LinearAxis valueAxis; // left/right?
+		public TabControlChartLegend Legend;
+		public OxyPlot.Axes.LinearAxis ValueAxis; // left/right?
 		private OxyPlot.Axes.CategoryAxis categoryAxis;
 
-		public OxyPlot.Axes.LinearAxis linearAxis;
-		public OxyPlot.Axes.DateTimeAxis dateTimeAxis;
+		public OxyPlot.Axes.LinearAxis LinearAxis;
+		public OxyPlot.Axes.DateTimeAxis DateTimeAxis;
 
 		private static OxyColor GridLineColor = OxyColor.Parse("#333333");
 		public static OxyColor[] Colors { get; set; } = new OxyColor[]
@@ -143,7 +143,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (TabInstance.tabViewSettings.ChartDataSettings.Count == 0)
 				TabInstance.tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
 
-			plotView = new PlotView()
+			PlotView = new PlotView()
 			{
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
@@ -158,12 +158,12 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 
 			// Show Hover text on mouse over instead of requiring holding the mouse down (why isn't this the default?)
-			plotView.ActualController.UnbindMouseDown(OxyMouseButton.Left); // remove default
-			plotView.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack); // show when hovering
-			plotView.PointerPressed += PlotView_PointerPressed;
+			PlotView.ActualController.UnbindMouseDown(OxyMouseButton.Left); // remove default
+			PlotView.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack); // show when hovering
+			PlotView.PointerPressed += PlotView_PointerPressed;
 			PointerLeave += PlotView_PointerLeave; // doesn't work on PlotView
 
-			plotView.ActualController.BindMouseEnter(new DelegatePlotCommand<OxyMouseEventArgs>(
+			PlotView.ActualController.BindMouseEnter(new DelegatePlotCommand<OxyMouseEventArgs>(
 				(view, controller, args) =>
 				controller.AddHoverManipulator(view, new MouseHoverManipulator(this), args)));
 
@@ -200,25 +200,25 @@ namespace Atlas.UI.Avalonia.Controls
 				title.Margin = new Thickness(40, 5, 5, 5);
 			containerGrid.Children.Add(title);
 
-			containerGrid.Children.Add(plotView);
+			containerGrid.Children.Add(PlotView);
 
-			legend = new TabControlChartLegend(this);
+			Legend = new TabControlChartLegend(this);
 			if (ListGroup.Horizontal)
 			{
 				// Bottom
-				SetRow(legend, 2);
-				legend.MaxHeight = 100;
+				SetRow(Legend, 2);
+				Legend.MaxHeight = 100;
 			}
 			else
 			{
 				// Right Side
-				SetRow(legend, 1);
-				SetColumn(legend, 1);
-				legend.MaxWidth = 300;
+				SetRow(Legend, 1);
+				SetColumn(Legend, 1);
+				Legend.MaxWidth = 300;
 			}
-			containerGrid.Children.Add(legend);
-			legend.OnSelectionChanged += Legend_OnSelectionChanged;
-			legend.OnVisibleChanged += Legend_OnVisibleChanged;
+			containerGrid.Children.Add(Legend);
+			Legend.OnSelectionChanged += Legend_OnSelectionChanged;
+			Legend.OnVisibleChanged += Legend_OnVisibleChanged;
 
 			Children.Add(containerGrid);
 
@@ -236,12 +236,12 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public class MouseHoverManipulator : TrackerManipulator
 		{
-			private TabControlChart chart;
+			public TabControlChart Chart;
 
 			public MouseHoverManipulator(TabControlChart chart)
-				: base(chart.plotView)
+				: base(chart.PlotView)
 			{
-				this.chart = chart;
+				Chart = chart;
 				LockToInitialSeries = false;
 				Snap = true;
 				PointsOnly = false;
@@ -252,18 +252,18 @@ namespace Atlas.UI.Avalonia.Controls
 				base.Delta(e);
 
 				var series = PlotView.ActualModel.GetSeriesFromPoint(e.Position, 20);
-				if (chart.hoverSeries == series)
+				if (Chart.hoverSeries == series)
 					return;
 
 				if (series != null)
 				{
-					chart.legend.HighlightSeries(series);
+					Chart.Legend.HighlightSeries(series);
 				}
 				else
 				{
-					chart.legend.UnhighlightAll();
+					Chart.Legend.UnhighlightAll();
 				}
-				chart.hoverSeries = series;
+				Chart.hoverSeries = series;
 
 				// todo: replace tracker here
 			}
@@ -274,13 +274,13 @@ namespace Atlas.UI.Avalonia.Controls
 			if (hoverSeries != null)
 			{
 				hoverSeries = null;
-				legend.UnhighlightAll();
+				Legend.UnhighlightAll();
 			}
 		}
 
 		private void PlotView_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e)
 		{
-			legend.SetAllVisible(true, true);
+			Legend.SetAllVisible(true, true);
 		}
 
 		private void Legend_OnSelectionChanged(object sender, EventArgs e)
@@ -319,14 +319,14 @@ namespace Atlas.UI.Avalonia.Controls
 			UpdateValueAxis();
 			UpdateLinearAxis();
 
-			plotView.Model = plotModel;
+			PlotView.Model = PlotModel;
 			IsVisible = true;
 		}
 
 		public void RecreatePlotModel()
 		{
 			UnloadModel();
-			plotModel = new PlotModel()
+			PlotModel = new PlotModel()
 			{
 				//Title = ListGroup?.Name,
 				//TitleFontWeight = 400,
@@ -343,16 +343,16 @@ namespace Atlas.UI.Avalonia.Controls
 				LegendTextColor = OxyColors.LightGray,
 				SelectionColor = OxyColors.Blue,
 			};
-			plotView.Model = plotModel;
+			PlotView.Model = PlotModel;
 		}
 
 		public void Refresh()
 		{
 			UpdateValueAxis();
 			UpdateLinearAxis();
-			legend.RefreshModel();
-			plotView.InvalidatePlot(true);
-			plotView.Model.InvalidatePlot(true);
+			Legend.RefreshModel();
+			PlotView.InvalidatePlot(true);
+			PlotView.Model.InvalidatePlot(true);
 		}
 
 		public void Unload()
@@ -384,7 +384,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public OxyPlot.Axes.DateTimeAxis AddDateTimeAxis(DateTime? startTime = null, DateTime? endTime = null)
 		{
-			dateTimeAxis = new OxyPlot.Axes.DateTimeAxis
+			DateTimeAxis = new OxyPlot.Axes.DateTimeAxis
 			{
 				Position = AxisPosition.Bottom,
 				//MinorIntervalType = DateTimeIntervalType.Days,
@@ -414,26 +414,26 @@ namespace Atlas.UI.Avalonia.Controls
 			if (startTime != null && endTime != null)
 			{
 				double duration = endTime.Value.Subtract(startTime.Value).TotalSeconds;
-				dateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(startTime.Value);
-				dateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value.AddSeconds(duration / 25.0)); // labels get clipped without this
+				DateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(startTime.Value);
+				DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value.AddSeconds(duration / 25.0)); // labels get clipped without this
 				UpdateDateTimeInterval(duration);
 			}
-			plotModel.Axes.Add(dateTimeAxis);
-			return dateTimeAxis;
+			PlotModel.Axes.Add(DateTimeAxis);
+			return DateTimeAxis;
 		}
 
 		private void UpdateDateTimeInterval(double duration)
 		{
 			var dateFormat = GetDateTimeFormat(duration);
-			dateTimeAxis.StringFormat = dateFormat.TextFormat;
-			dateTimeAxis.MinimumMajorStep = dateFormat.StepSize.TotalDays;
-			double widthPerLabel = 6 * dateTimeAxis.StringFormat.Length + 25;
-			dateTimeAxis.IntervalLength = Math.Max(50, widthPerLabel);
+			DateTimeAxis.StringFormat = dateFormat.TextFormat;
+			DateTimeAxis.MinimumMajorStep = dateFormat.StepSize.TotalDays;
+			double widthPerLabel = 6 * DateTimeAxis.StringFormat.Length + 25;
+			DateTimeAxis.IntervalLength = Math.Max(50, widthPerLabel);
 		}
 
 		private void AddLinearAxis()
 		{
-			linearAxis = new OxyPlot.Axes.LinearAxis
+			LinearAxis = new OxyPlot.Axes.LinearAxis
 			{
 				Position = AxisPosition.Bottom,
 				MajorGridlineStyle = LineStyle.Solid,
@@ -443,12 +443,12 @@ namespace Atlas.UI.Avalonia.Controls
 				TicklineColor = GridLineColor,
 				MinorGridlineColor = OxyColors.Gray,
 			};
-			plotModel.Axes.Add(linearAxis);
+			PlotModel.Axes.Add(LinearAxis);
 		}
 
 		public OxyPlot.Axes.LinearAxis AddValueAxis(AxisPosition axisPosition = AxisPosition.Left, string key = null)
 		{
-			valueAxis = new OxyPlot.Axes.LinearAxis
+			ValueAxis = new OxyPlot.Axes.LinearAxis
 			{
 				Position = axisPosition,
 				MajorGridlineStyle = LineStyle.Solid,
@@ -473,9 +473,9 @@ namespace Atlas.UI.Avalonia.Controls
 				LabelFormatter = ValueFormatter,
 			};
 			if (key != null)
-				valueAxis.Key = key;
-			plotModel.Axes.Add(valueAxis);
-			return valueAxis;
+				ValueAxis.Key = key;
+			PlotModel.Axes.Add(ValueAxis);
+			return ValueAxis;
 		}
 
 		public OxyPlot.Axes.CategoryAxis AddCategoryAxis(AxisPosition axisPosition = AxisPosition.Left, string key = null)
@@ -511,19 +511,19 @@ namespace Atlas.UI.Avalonia.Controls
 				categoryAxis.Labels.Add(listSeries.Name);
 			}
 
-			plotModel.Axes.Add(categoryAxis);
+			PlotModel.Axes.Add(categoryAxis);
 			return categoryAxis;
 		}
 
 		private void UpdateLinearAxis()
 		{
-			if (linearAxis == null)
+			if (LinearAxis == null)
 				return;
 
 			double minimum = double.MaxValue;
 			double maximum = double.MinValue;
 
-			foreach (OxyPlot.Series.Series series in plotModel.Series)
+			foreach (OxyPlot.Series.Series series in PlotModel.Series)
 			{
 				if (series is OxyPlot.Series.LineSeries lineSeries)
 				{
@@ -549,20 +549,20 @@ namespace Atlas.UI.Avalonia.Controls
 				maximum = 1;
 			}
 
-			linearAxis.Minimum = minimum;
-			linearAxis.Maximum = maximum;
+			LinearAxis.Minimum = minimum;
+			LinearAxis.Maximum = maximum;
 		}
 
 		private void UpdateValueAxis() // OxyPlot.Axes.LinearAxis valueAxis, string axisKey = null
 		{
-			if (valueAxis == null)
+			if (ValueAxis == null)
 				return;
 
 			double minimum = double.MaxValue;
 			double maximum = double.MinValue;
 			bool hasFraction = false;
 
-			foreach (OxyPlot.Series.Series series in plotModel.Series)
+			foreach (OxyPlot.Series.Series series in PlotModel.Series)
 			{
 				if (series is OxyPlot.Series.LineSeries lineSeries)
 				{
@@ -613,13 +613,13 @@ namespace Atlas.UI.Avalonia.Controls
 				maximum = 1;
 			}
 
-			foreach (OxyPlot.Annotations.Annotation annotation in plotModel.Annotations)
+			foreach (OxyPlot.Annotations.Annotation annotation in PlotModel.Annotations)
 			{
 				if (annotation is OxyPlot.Annotations.LineAnnotation lineAnnotation)
 					maximum = Math.Max(lineAnnotation.Y * 1.1, maximum);
 			}
 
-			valueAxis.MinimumMajorStep = hasFraction ? 0 : 1;
+			ValueAxis.MinimumMajorStep = hasFraction ? 0 : 1;
 
 			if (ListGroup.MinValue is double minValue)
 				minimum = minValue;
@@ -628,13 +628,13 @@ namespace Atlas.UI.Avalonia.Controls
 			if (minimum == maximum)
 				margin = Math.Abs(minimum);
 
-			valueAxis.Minimum = minimum - margin;
-			valueAxis.Maximum = maximum + margin;
+			ValueAxis.Minimum = minimum - margin;
+			ValueAxis.Maximum = maximum + margin;
 		}
 
 		private void UpdateDateTimeAxis()
 		{
-			if (dateTimeAxis == null)
+			if (DateTimeAxis == null)
 				return;
 
 			//UpdateDateTimeInterval(double duration);
@@ -701,11 +701,11 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void UnloadModel()
 		{
-			plotView.Model = null;
-			linearAxis = null;
-			dateTimeAxis = null;
-			legend?.Unload();
-			oxyListSeriesList.Clear();
+			PlotView.Model = null;
+			LinearAxis = null;
+			DateTimeAxis = null;
+			Legend?.Unload();
+			OxyListSeriesList.Clear();
 			ListToTabSeries.Clear();
 			ListToTabIndex.Clear();
 			//if (plotModel != null)
@@ -758,27 +758,27 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public OxyPlot.Series.LineSeries AddListSeries(ListSeries listSeries)
 		{
-			if (oxyListSeriesList.Count >= SeriesLimit)
+			if (OxyListSeriesList.Count >= SeriesLimit)
 				return null;
 
 			var lineSeries = new TabChartLineSeries(this, listSeries, UseDateTimeAxis)
 			{
-				Color = GetColor(plotModel.Series.Count),
+				Color = GetColor(PlotModel.Series.Count),
 			};
 			xAxisPropertyInfo = lineSeries.xAxisPropertyInfo;
 
-			plotModel.Series.Add(lineSeries);
+			PlotModel.Series.Add(lineSeries);
 
 			var oxyListSeries = new OxyListSeries(listSeries, lineSeries);
 
 			lineSeries.MouseDown += (s, e) =>
 			{
 				OnSelectionChanged?.Invoke(s, new SeriesSelectedEventArgs(new List<ListSeries>() { listSeries }));
-				legend.SelectSeries(lineSeries);
+				Legend.SelectSeries(lineSeries);
 				e.Handled = true;
 			};
 
-			oxyListSeriesList.Add(oxyListSeries);
+			OxyListSeriesList.Add(oxyListSeries);
 			ListToTabSeries[listSeries.iList] = listSeries;
 			ListToTabIndex[listSeries.iList] = ListToTabIndex.Count;
 			return lineSeries;
@@ -803,7 +803,7 @@ namespace Atlas.UI.Avalonia.Controls
 				// LineStyle = LineStyle.Dot, // doesn't work for vertical?
 			};
 
-			plotModel.Annotations.Add(annotation);
+			PlotModel.Annotations.Add(annotation);
 		}
 
 		private OxyPlot.Annotations.LineAnnotation trackerAnnotation;
@@ -820,7 +820,7 @@ namespace Atlas.UI.Avalonia.Controls
 				// LineStyle = LineStyle.Dot, // doesn't work for vertical?
 			};
 
-			plotModel.Annotations.Add(trackerAnnotation);
+			PlotModel.Annotations.Add(trackerAnnotation);
 		}
 
 		/*private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

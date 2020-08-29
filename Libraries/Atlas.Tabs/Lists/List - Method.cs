@@ -10,7 +10,7 @@ namespace Atlas.Tabs
 {
 	public class ListMethod : ListMember, IPropertyEditable, IMaxDesiredWidth, ILoadAsync
 	{
-		public MethodInfo methodInfo;
+		public MethodInfo MethodInfo;
 		private bool CacheEnabled { get; set; }
 		private bool valueCached;
 		private object valueObject = null;
@@ -20,7 +20,7 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				var maxWidthAttribute = methodInfo.GetCustomAttribute<MaxWidthAttribute>();
+				var maxWidthAttribute = MethodInfo.GetCustomAttribute<MaxWidthAttribute>();
 				if (maxWidthAttribute != null)
 					return maxWidthAttribute.MaxWidth;
 				return null;
@@ -62,8 +62,8 @@ namespace Atlas.Tabs
 		public ListMethod(object obj, MethodInfo methodInfo, bool cached = true) : 
 			base(obj, methodInfo)
 		{
-			this.methodInfo = methodInfo;
-			this.CacheEnabled = cached;
+			MethodInfo = methodInfo;
+			CacheEnabled = cached;
 
 			Name = methodInfo.Name;
 			Name = Name.WordSpaced();
@@ -78,14 +78,14 @@ namespace Atlas.Tabs
 
 		public async Task<object> LoadAsync(Call call)
 		{
-			var task = (Task<object>)methodInfo.Invoke(obj, new object[] { call });
+			var task = (Task<object>)MethodInfo.Invoke(Object, new object[] { call });
 			return await task;
 		}
 
 		private object GetValue()
 		{
 			//return Task.Run(() => callAction.Invoke(call)).GetAwaiter().GetResult();
-			var result = Task.Run(() => methodInfo.Invoke(obj, new object[] { new Call() })).GetAwaiter().GetResult();
+			var result = Task.Run(() => MethodInfo.Invoke(Object, new object[] { new Call() })).GetAwaiter().GetResult();
 			if (result is Task task)
 				return (object)((dynamic)result).Result;
 			return result;

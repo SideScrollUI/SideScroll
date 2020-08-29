@@ -10,8 +10,8 @@ namespace Atlas.Tabs
 	{
 		public delegate Task<object> LoadObjectAsync(Call call);
 
-		private LoadObjectAsync loadAction;
-		private MethodInfo methodInfo;
+		public LoadObjectAsync LoadAction;
+		public MethodInfo MethodInfo;
 
 		private bool CacheEnabled { get; set; }
 		private bool valueCached;
@@ -47,34 +47,31 @@ namespace Atlas.Tabs
 			}
 		}
 
+		public override string ToString() => Name;
+
 		public ListDelegate(LoadObjectAsync loadAction, bool cached = true) :
 			base(loadAction.Target, loadAction.Method)
 		{
-			this.loadAction = loadAction;
-			this.CacheEnabled = cached;
-			this.methodInfo = loadAction.Method;
+			LoadAction = loadAction;
+			CacheEnabled = cached;
+			MethodInfo = loadAction.Method;
 
-			Name = methodInfo.Name;
+			Name = MethodInfo.Name;
 			Name = Name.WordSpaced();
-			NameAttribute attribute = methodInfo.GetCustomAttribute<NameAttribute>();
+			NameAttribute attribute = MethodInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;
 		}
 
-		public override string ToString()
-		{
-			return Name;
-		}
-
 		public async Task<object> LoadAsync(Call call)
 		{
-			return await loadAction.Invoke(call);
+			return await LoadAction.Invoke(call);
 		}
 
 		private object GetValue()
 		{
 			//return Task.Run(() => callAction.Invoke(call)).GetAwaiter().GetResult();
-			return Task.Run(() => loadAction.Invoke(new Call())).GetAwaiter().GetResult();
+			return Task.Run(() => LoadAction.Invoke(new Call())).GetAwaiter().GetResult();
 		}
 
 		/*public static ItemCollection<ListMethodObject> Create(object obj)

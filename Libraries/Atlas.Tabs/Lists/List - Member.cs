@@ -26,8 +26,8 @@ namespace Atlas.Tabs
 		public const int MaxStringLength = 1000;
 
 		public event PropertyChangedEventHandler PropertyChanged;
-		public MemberInfo memberInfo;
-		public object obj;
+		public MemberInfo MemberInfo;
+		public object Object;
 		[StyleLabel]
 		public string Name { get; set; }
 
@@ -39,7 +39,7 @@ namespace Atlas.Tabs
 
 		[HiddenColumn]
 		public virtual bool Editable => true;
-		public bool autoLoad = true;
+		public bool AutoLoad = true;
 
 		//[HiddenColumn]
 		[StyleValue, InnerValue, WordWrap]
@@ -85,8 +85,8 @@ namespace Atlas.Tabs
 
 		public ListMember(object obj, MemberInfo memberInfo)
 		{
-			this.obj = obj;
-			this.memberInfo = memberInfo;
+			Object = obj;
+			MemberInfo = memberInfo;
 			
 			if (obj is INotifyPropertyChanged)
 				(obj as INotifyPropertyChanged).PropertyChanged += ListProperty_PropertyChanged;

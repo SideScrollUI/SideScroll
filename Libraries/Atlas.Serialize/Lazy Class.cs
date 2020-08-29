@@ -75,13 +75,13 @@ namespace Atlas.Serialize
 
 			foreach (TypeRepoObject.PropertyRepo propertyRepo in propertyRepos)
 			{
-				PropertyInfo propertyInfo = propertyRepo.propertySchema.PropertyInfo;
+				PropertyInfo propertyInfo = propertyRepo.PropertySchema.PropertyInfo;
 				if (propertyInfo.CanRead == false || propertyInfo.CanWrite == false)
 					continue;
 
 				MethodInfo getMethod = propertyInfo.GetGetMethod(false);
 				if (getMethod.IsVirtual)
-					propertyRepo.lazyProperty = CreateLazyProperty(typeBuilder, propertyInfo);
+					propertyRepo.LazyProperty = CreateLazyProperty(typeBuilder, propertyInfo);
 			}
 
 			TypeInfo objectType = typeBuilder.CreateTypeInfo();

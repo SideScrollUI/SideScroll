@@ -127,13 +127,13 @@ namespace Atlas.Core
 
 		struct ItemLocation
 		{
-			public int index;
-			public T item;
+			public int Index;
+			public T Item;
 
 			public ItemLocation(int index, T item)
 			{
-				this.index = index;
-				this.item = item;
+				Index = index;
+				Item = item;
 			}
 		}
 
@@ -154,7 +154,7 @@ namespace Atlas.Core
 			ItemLocation itemLocation = (ItemLocation)state;
 			lock (Context)
 			{
-				base.InsertItem(itemLocation.index, itemLocation.item);
+				base.InsertItem(itemLocation.Index, itemLocation.Item);
 			}
 		}
 

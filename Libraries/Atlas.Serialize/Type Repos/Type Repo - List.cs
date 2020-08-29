@@ -25,7 +25,7 @@ namespace Atlas.Serialize
 		public TypeRepoList(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{
-			Type[] types = type.GetGenericArguments();
+			Type[] types = Type.GetGenericArguments();
 			if (types.Length > 0)
 				elementType = types[0];
 		}
@@ -38,9 +38,9 @@ namespace Atlas.Serialize
 		public override void InitializeLoading(Log log)
 		{
 			if (elementType != null)
-				listTypeRepo = serializer.GetOrCreateRepo(log, elementType);
+				listTypeRepo = Serializer.GetOrCreateRepo(log, elementType);
 			
-			propertyInfoCapacity = type.GetProperty("Capacity");
+			propertyInfoCapacity = Type.GetProperty("Capacity");
 		}
 
 		public override void AddChildObjects(object obj)
@@ -50,7 +50,7 @@ namespace Atlas.Serialize
 			{
 				//if (item.GetType() != elementType)
 				//	typeSchema.hasSubType = true;
-				serializer.AddObjectRef(item);
+				Serializer.AddObjectRef(item);
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace Atlas.Serialize
 			writer.Write(iList.Count);
 			foreach (var item in iList)
 			{
-				serializer.WriteObjectRef(elementType, item, writer);
+				Serializer.WriteObjectRef(elementType, item, writer);
 			}
 		}
 
@@ -81,8 +81,8 @@ namespace Atlas.Serialize
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
-			object obj = Activator.CreateInstance(type, true);
-			objects[objectIndex] = obj; // must assign before loading any more refs
+			object obj = Activator.CreateInstance(Type, true);
+			Objects[objectIndex] = obj; // must assign before loading any more refs
 
 			IList iList = (IList)obj;
 			int count = BitConverter.ToInt32(bytes, byteOffset);
@@ -102,7 +102,7 @@ namespace Atlas.Serialize
 			IList iDest = (IList)dest;
 			foreach (var item in iSource)
 			{
-				object clone = serializer.Clone(item);
+				object clone = Serializer.Clone(item);
 				iDest.Add(clone);
 			}
 		}

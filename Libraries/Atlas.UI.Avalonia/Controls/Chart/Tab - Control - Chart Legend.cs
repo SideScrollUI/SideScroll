@@ -15,9 +15,9 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabControlChartLegend : Grid
 	{
-		private TabControlChart tabControlChart;
+		public TabControlChart TabControlChart;
 		private PlotView plotView;
-		public ListGroup listGroup;
+		public ListGroup ListGroup;
 		private ScrollViewer scrollViewer;
 		private WrapPanel wrapPanel;
 		private TextBlock textBlockSum;
@@ -29,9 +29,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public TabControlChartLegend(TabControlChart tabControlChart)
 		{
-			this.tabControlChart = tabControlChart;
-			this.plotView = tabControlChart.plotView;
-			this.listGroup = tabControlChart.ListGroup;
+			TabControlChart = tabControlChart;
+			plotView = tabControlChart.PlotView;
+			ListGroup = tabControlChart.ListGroup;
 			InitializeControls();
 		}
 
@@ -42,7 +42,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			wrapPanel = new WrapPanel()
 			{
-				Orientation = listGroup.Horizontal ? Orientation.Horizontal : Orientation.Vertical,
+				Orientation = ListGroup.Horizontal ? Orientation.Horizontal : Orientation.Vertical,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				Margin = new Thickness(6),
@@ -59,7 +59,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			Children.Add(scrollViewer);
 
-			if (listGroup.ShowLegend && listGroup.ShowOrder && !listGroup.Horizontal)
+			if (ListGroup.ShowLegend && ListGroup.ShowOrder && !ListGroup.Horizontal)
 			{
 				textBlockSum = new TextBlock()
 				{
@@ -68,8 +68,8 @@ namespace Atlas.UI.Avalonia.Controls
 					Margin = new Thickness(2, 2, 2, 2),
 					HorizontalAlignment = HorizontalAlignment.Right,
 				};
-				if (listGroup.UnitName != null)
-					textBlockSum.Text += " - " + listGroup.UnitName;
+				if (ListGroup.UnitName != null)
+					textBlockSum.Text += " - " + ListGroup.UnitName;
 			}
 
 			RefreshModel();
@@ -117,7 +117,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			var ordered = nonzero.OrderByDescending(a => a.Sum).ToList();
 			ordered.AddRange(unused);
-			if (listGroup.ShowLegend && listGroup.ShowOrder && !listGroup.Horizontal)
+			if (ListGroup.ShowLegend && ListGroup.ShowOrder && !ListGroup.Horizontal)
 			{
 				for (int i = 0; i < ordered.Count; i++)
 					ordered[i].Index = i + 1;
@@ -193,7 +193,7 @@ namespace Atlas.UI.Avalonia.Controls
 				return;
 
 			wrapPanel.Children.Clear();
-			foreach (var oxyListSeries in tabControlChart.oxyListSeriesList)
+			foreach (var oxyListSeries in TabControlChart.OxyListSeriesList)
 			{
 				string title = oxyListSeries.OxySeries.Title;
 				if (title == null)

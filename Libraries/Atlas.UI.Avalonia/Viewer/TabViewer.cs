@@ -21,12 +21,12 @@ namespace Atlas.UI.Avalonia
 		public int DefaultIncrementWidth = 1000; // should we also use a max percent?
 		public int KeyboardIncrementWidth = 500;
 
-		public static TabViewer baseViewer;
+		public static TabViewer BaseViewer;
 		public static string LoadBookmarkUri { get; set; }
 
-		public Project project;
+		public Project Project { get; set; }
 
-		public Linker linker = new Linker();
+		public Linker Linker { get; set; } = new Linker();
 
 		// Controls
 		protected Grid bottomGrid;
@@ -38,13 +38,13 @@ namespace Atlas.UI.Avalonia
 
 		public TabViewer(Project project) : base()
 		{
-			baseViewer = this;
+			BaseViewer = this;
 			LoadProject(project);
 		}
 
 		public void LoadProject(Project project)
 		{
-			this.project = project;
+			Project = project;
 
 			InitializeComponent();
 		}
@@ -119,7 +119,7 @@ namespace Atlas.UI.Avalonia
 		{
 			Bookmark bookmark = tabView.tabInstance.CreateBookmark();
 			bookmark.TabBookmark = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
-			string uri = linker.GetLinkUri(call, bookmark);
+			string uri = Linker.GetLinkUri(call, bookmark);
 			await ClipBoardUtils.SetTextAsync(uri);
 		}
 
@@ -131,7 +131,7 @@ namespace Atlas.UI.Avalonia
 
 		private Bookmark ImportBookmark(Call call, string linkUri, bool checkVersion)
 		{
-			Bookmark bookmark = linker.GetBookmark(call, linkUri, checkVersion);
+			Bookmark bookmark = Linker.GetBookmark(call, linkUri, checkVersion);
 			if (bookmark == null)
 				return null;
 
@@ -272,13 +272,13 @@ namespace Atlas.UI.Avalonia
 			TabInstance tabInstance = tab.Create();
 			tabInstance.Model.Name = "Start";
 			tabInstance.iTab = tab;
-			tabInstance.Project = project;
+			tabInstance.Project = Project;
 			if (LoadBookmarkUri != null)
 			{
 				// Wait until Bookmarks tab has been created
 				Dispatcher.UIThread.Post(() => ImportBookmark(new Call(), LoadBookmarkUri, false), DispatcherPriority.SystemIdle);
 			}
-			else if (project.UserSettings.AutoLoad) // did we load successfully last time?
+			else if (Project.UserSettings.AutoLoad) // did we load successfully last time?
 			{
 				tabInstance.LoadDefaultBookmark();
 			}
@@ -298,14 +298,14 @@ namespace Atlas.UI.Avalonia
 
 		public void SeekBackward()
 		{
-			Bookmark bookmark = project.Navigator.SeekBackward();
+			Bookmark bookmark = Project.Navigator.SeekBackward();
 			if (bookmark != null)
 				tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		public void SeekForward()
 		{
-			Bookmark bookmark = project.Navigator.SeekForward();
+			Bookmark bookmark = Project.Navigator.SeekForward();
 			if (bookmark != null)
 				tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
 		}

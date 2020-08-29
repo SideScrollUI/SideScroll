@@ -13,14 +13,14 @@ namespace Atlas.UI.Avalonia
 	// Rename to DataGridBoundTextDataColumn?
 	public class DataGridBoundTextColumn : DataGridTextColumn
 	{
-		private DataGrid dataGrid;
-		public DataColumn dataColumn;
+		public DataGrid DataGrid;
+		public DataColumn DataColumn;
 		public int MaxDesiredWidth = 500;
 
 		public DataGridBoundTextColumn(DataGrid dataGrid, DataColumn dataColumn)
 		{
-			this.dataGrid = dataGrid;
-			this.dataColumn = dataColumn;
+			DataGrid = dataGrid;
+			DataColumn = dataColumn;
 			//AddHeaderContextMenu();
 		}
 
@@ -31,7 +31,7 @@ namespace Atlas.UI.Avalonia
 
 			TextBlock textBlock = CreateTextBlock(cell, dataItem);
 			//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
-			textBlock.TextAlignment = DataGridUtils.GetTextAlignment(dataColumn.DataType);
+			textBlock.TextAlignment = DataGridUtils.GetTextAlignment(DataColumn.DataType);
 			AddTextBoxContextMenu(textBlock);
 			return textBlock;
 		}
@@ -127,7 +127,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopyDataGrid.Click += delegate
 			{
-				string text = dataGrid.ToStringTable();
+				string text = DataGrid.ToStringTable();
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};
@@ -136,7 +136,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - C_SV" };
 			menuItemCopyDataGridCsv.Click += delegate
 			{
-				string text = dataGrid.ToCsv();
+				string text = DataGrid.ToCsv();
 				if (text != null)
 					ClipBoardUtils.SetTextAsync(text);
 			};

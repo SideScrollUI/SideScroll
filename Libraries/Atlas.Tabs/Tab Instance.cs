@@ -320,7 +320,7 @@ namespace Atlas.Tabs
 			var properties = new ItemCollection<ListProperty>();
 			foreach (ListProperty listProperty in items)
 			{
-				if (listProperty.propertyInfo.DeclaringType == GetType())
+				if (listProperty.PropertyInfo.DeclaringType == GetType())
 					properties.Add(listProperty);
 			}
 

@@ -27,11 +27,11 @@ namespace Atlas.Serialize
 		public TypeRepoEnumerable(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{
-			Type[] types = type.GetGenericArguments();
+			Type[] types = Type.GetGenericArguments();
 			if (types.Length > 0)
 				elementType = types[0];
 
-			addMethod = type.GetMethods()
+			addMethod = Type.GetMethods()
 				.Where(m => m.Name == "Add" && m.GetParameters().Count() == 1).FirstOrDefault();
 		}
 
@@ -43,7 +43,7 @@ namespace Atlas.Serialize
 		public override void InitializeLoading(Log log)
 		{
 			if (elementType != null)
-				listTypeRepo = serializer.GetOrCreateRepo(log, elementType);
+				listTypeRepo = Serializer.GetOrCreateRepo(log, elementType);
 		}
 
 		public override void AddChildObjects(object obj)
@@ -51,20 +51,20 @@ namespace Atlas.Serialize
 			IEnumerable iEnumerable = (IEnumerable)obj;
 			foreach (var item in iEnumerable)
 			{
-				serializer.AddObjectRef(item);
+				Serializer.AddObjectRef(item);
 			}
 		}
 
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
-			PropertyInfo countProp = type.GetProperty("Count"); // IEnumerable isn't required to implement this
+			PropertyInfo countProp = Type.GetProperty("Count"); // IEnumerable isn't required to implement this
 			IEnumerable iEnumerable = (IEnumerable)obj;
 			
 			int count = (int)countProp.GetValue(iEnumerable, null);
 			writer.Write(count);
 			foreach (object item in iEnumerable)
 			{
-				serializer.WriteObjectRef(elementType, item, writer);
+				Serializer.WriteObjectRef(elementType, item, writer);
 			}
 		}
 
@@ -82,8 +82,8 @@ namespace Atlas.Serialize
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
-			object obj = Activator.CreateInstance(type, true);
-			objects[objectIndex] = obj; // must assign before loading any more refs
+			object obj = Activator.CreateInstance(Type, true);
+			Objects[objectIndex] = obj; // must assign before loading any more refs
 
 			//(IEnumerable<listTypeRepo.type>)objects[i];
 			int count = BitConverter.ToInt32(bytes, byteOffset);
@@ -102,7 +102,7 @@ namespace Atlas.Serialize
 			IEnumerable iSource = (IEnumerable)source;
 			foreach (var item in iSource)
 			{
-				object clone = serializer.Clone(item);
+				object clone = Serializer.Clone(item);
 				addMethod.Invoke(dest, new object[] { clone });
 			}
 		}

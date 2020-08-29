@@ -9,6 +9,8 @@ namespace Atlas.UI.Avalonia
 {
 	public class TabViewerToolbar : TabControlToolbar
 	{
+		private TabViewer tabViewer;
+
 		public ToolbarButton buttonBack;
 		public ToolbarButton buttonForward;
 		public ToolbarButton buttonLink;
@@ -19,8 +21,6 @@ namespace Atlas.UI.Avalonia
 		public ToolbarButton buttonSnapshotClipboard;
 		public ToolbarButton buttonSnapshotEmbed;
 		public ToolbarButton buttonSnapshotCancel;
-
-		private TabViewer tabViewer;
 
 		public RelayCommand commandBindingBack;
 		public RelayCommand commandBindingForward;

@@ -16,11 +16,11 @@ namespace Atlas.Tabs.Tools
             ".fna",
 			".faa"
 		};
-		public string path;
+		public string Path;
 
 		public TabFile(string path)
 		{
-			this.path = path;
+			Path = path;
 		}
 
 		public TabInstance Create() => new Instance(this);
@@ -38,11 +38,11 @@ namespace Atlas.Tabs.Tools
 			{
 				var items = new ItemCollection<ListItem>();
 
-				string extension = Path.GetExtension(tab.path);
+				string extension = System.IO.Path.GetExtension(tab.Path);
 
 				if (extension == ".json")
 				{
-					items.Add(new ListItem("Contents", LazyJsonNode.LoadPath(tab.path)));
+					items.Add(new ListItem("Contents", LazyJsonNode.LoadPath(tab.Path)));
 					//items.Add(new ListItem("Contents", JsonValue.Parse(File.ReadAllText(path))));
 				}
 				else
@@ -53,7 +53,7 @@ namespace Atlas.Tabs.Tools
 						try
 						{
 							// doesn't work
-							using (StreamReader streamReader = File.OpenText(tab.path))
+							using (StreamReader streamReader = File.OpenText(tab.Path))
 							{
 								char[] buffer = new char[100];
 								streamReader.Read(buffer, 0, buffer.Length);
@@ -67,7 +67,7 @@ namespace Atlas.Tabs.Tools
 
 					if (isText)
 					{
-						items.Add(new ListItem("Contents", new FilePath(tab.path)));
+						items.Add(new ListItem("Contents", new FilePath(tab.Path)));
 					}
 					else
 					{

@@ -228,7 +228,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void SeriesChanged(ListSeries listSeries, IList iList)
 		{
-			lock (chart.plotModel.SyncRoot)
+			lock (chart.PlotModel.SyncRoot)
 			{
 				//this.Update();
 				var dataPoints = GetDataPoints(listSeries, iList);

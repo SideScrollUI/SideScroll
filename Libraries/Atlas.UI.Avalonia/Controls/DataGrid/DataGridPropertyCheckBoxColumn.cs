@@ -7,18 +7,19 @@ namespace Atlas.UI.Avalonia
 {
 	public class DataGridPropertyCheckBoxColumn : DataGridCheckBoxColumn
 	{
+		public PropertyInfo PropertyInfo;
+
 		private Binding formattedBinding;
-		public PropertyInfo propertyInfo;
 
 		public DataGridPropertyCheckBoxColumn(PropertyInfo propertyInfo, bool isReadOnly)
 		{
-			this.propertyInfo = propertyInfo;
+			PropertyInfo = propertyInfo;
 			IsReadOnly = isReadOnly;
 			Binding = GetBinding();
 			CanUserSort = true;
 		}
 
-		public override string ToString() => propertyInfo.Name;
+		public override string ToString() => PropertyInfo.Name;
 
 		protected override IControl GenerateElement(DataGridCell cell, object dataItem)
 		{
@@ -39,7 +40,7 @@ namespace Atlas.UI.Avalonia
 
 		private Binding GetBinding()
 		{
-			Binding binding = Binding as Binding ?? new Binding(propertyInfo.Name);
+			Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);
 
 			if (formattedBinding == null)
 			{

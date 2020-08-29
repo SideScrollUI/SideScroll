@@ -45,22 +45,22 @@ namespace Atlas.Serialize
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
 			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(typeSchema.Type, value);
+			object obj = Enum.ToObject(TypeSchema.Type, value);
 			byteOffset += sizeof(int);
-			objects[objectIndex] = obj;
+			Objects[objectIndex] = obj;
 			return obj;
 		}
 
 		protected override object CreateObject(int objectIndex)
 		{
 			long position = reader.BaseStream.Position;
-			reader.BaseStream.Position = objectOffsets[objectIndex];
+			reader.BaseStream.Position = ObjectOffsets[objectIndex];
 
 			object obj = null;
 			try
 			{
-				if (type.IsEnum)
-					obj = Enum.ToObject(typeSchema.Type, reader.ReadInt32());
+				if (Type.IsEnum)
+					obj = Enum.ToObject(TypeSchema.Type, reader.ReadInt32());
 				else
 					throw new Exception("Unhandled primitive type");
 			}
@@ -70,7 +70,7 @@ namespace Atlas.Serialize
 			}
 			reader.BaseStream.Position = position;
 
-			objectsLoaded[objectIndex] = obj; // must assign before loading any more refs
+			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;
 		}
 
@@ -80,14 +80,14 @@ namespace Atlas.Serialize
 
 		public override object LoadObject()
 		{
-			object obj = Enum.ToObject(typeSchema.Type, reader.ReadInt32());
+			object obj = Enum.ToObject(TypeSchema.Type, reader.ReadInt32());
 			return obj;
 		}
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
 		{
 			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(typeSchema.Type, value);
+			object obj = Enum.ToObject(TypeSchema.Type, value);
 			byteOffset += sizeof(int);
 			return obj;
 		}

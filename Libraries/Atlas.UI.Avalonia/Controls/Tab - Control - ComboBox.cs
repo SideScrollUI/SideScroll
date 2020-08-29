@@ -16,7 +16,7 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		Type IStyleable.StyleKey => typeof(ComboBox);
 
-		private ListProperty property;
+		public ListProperty Property;
 
 		public TabControlComboBox()
 		{
@@ -25,7 +25,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public TabControlComboBox(ListProperty property, BindListAttribute propertyListAttribute)
 		{
-			this.property = property;
+			Property = property;
 			InitializeComponent();
 
 			IsEnabled = property.Editable;
@@ -34,8 +34,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 			if (propertyListAttribute != null)
 			{
-				PropertyInfo propertyInfo = property.obj.GetType().GetProperty(propertyListAttribute.Name);
-				Items = propertyInfo.GetValue(property.obj) as IEnumerable;
+				PropertyInfo propertyInfo = property.Object.GetType().GetProperty(propertyListAttribute.Name);
+				Items = propertyInfo.GetValue(property.Object) as IEnumerable;
 			}
 			else
 			{
@@ -43,16 +43,16 @@ namespace Atlas.UI.Avalonia.Controls
 				Items = values;
 			}
 
-			var binding = new Binding(property.propertyInfo.Name)
+			var binding = new Binding(property.PropertyInfo.Name)
 			{
 				//Converter = new EditValueConverter(),
 				//StringFormat = "Hello {0}",
 				Mode = BindingMode.TwoWay,
-				Source = property.obj,
+				Source = property.Object,
 			};
 			this.Bind(SelectedItemProperty, binding);
 
-			if ((property.obj == null || SelectedItem == null) && Items.GetEnumerator().MoveNext())
+			if ((property.Object == null || SelectedItem == null) && Items.GetEnumerator().MoveNext())
 				SelectedIndex = 0;
 		}
 

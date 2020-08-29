@@ -61,7 +61,7 @@ namespace Atlas.Tabs.Test
 
 	public class TabParamItem : ITab, IDataTab
 	{
-		public ParamTestItem testItem;
+		public ParamTestItem TestItem;
 
 		//[ButtonColumn("-")]
 		public event EventHandler<EventArgs> OnDelete;
@@ -73,9 +73,9 @@ namespace Atlas.Tabs.Test
 		}
 
 		[DataKey]
-		public string Name => testItem.Name;
+		public string Name => TestItem.Name;
 
-		public int? Amount => testItem.Amount;
+		public int? Amount => TestItem.Amount;
 
 		public TabParamItem()
 		{
@@ -83,12 +83,12 @@ namespace Atlas.Tabs.Test
 
 		public TabParamItem(ParamTestItem testItem)
 		{
-			this.testItem = testItem;
+			TestItem = testItem;
 		}
 
 		public void Load(Call call, object obj, object[] tabParams)
 		{
-			this.testItem = (ParamTestItem)obj;
+			TestItem = (ParamTestItem)obj;
 		}
 
 		public override string ToString() => Name;
@@ -106,7 +106,7 @@ namespace Atlas.Tabs.Test
 
 			public override void Load(Call call, TabModel model)
 			{
-				model.AddData(tab.testItem);
+				model.AddData(tab.TestItem);
 			}
 		}
 	}

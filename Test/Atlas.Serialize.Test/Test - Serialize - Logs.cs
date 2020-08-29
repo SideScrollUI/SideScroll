@@ -123,7 +123,7 @@ namespace Atlas.Serialize.Test
 		public void SerializeLogEntryTags()
 		{
 			LogEntryTest2 testLog = new LogEntryTest2();
-			testLog.tags = new Tag[] { new Tag("abc", 123) };
+			testLog.Tags = new Tag[] { new Tag("abc", 123) };
 
 			serializer.Save(Call, testLog);
 			LogEntryTest2 output = serializer.Load<LogEntryTest2>(Call);
@@ -175,7 +175,7 @@ namespace Atlas.Serialize.Test
 
 		public class LogEntryTest2
 		{
-			public Tag[] tags;
+			public Tag[] Tags;
 
 			public LogEntryTest2()
 			{
@@ -183,7 +183,7 @@ namespace Atlas.Serialize.Test
 
 			public LogEntryTest2(Tag[] tags)
 			{
-				this.tags = tags;
+				Tags = tags;
 			}
 		}
 

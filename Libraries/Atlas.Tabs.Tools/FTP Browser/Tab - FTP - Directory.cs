@@ -8,13 +8,13 @@ namespace Atlas.Tabs.Tools
 {
 	public class TabFtpDirectory : ITab
 	{
-		public FTP.Info ftpInfo;
-		public string path;
+		public FTP.Info FtpInfo;
+		public string Path;
 
 		public TabFtpDirectory(FTP.Info ftpInfo, string path)
 		{
-			this.ftpInfo = ftpInfo;
-			this.path = path;
+			FtpInfo = ftpInfo;
+			Path = path;
 		}
 
 		public TabInstance Create() => new Instance(this);
@@ -30,20 +30,20 @@ namespace Atlas.Tabs.Tools
 
 			public override void Load(Call call, TabModel model)
 			{
-				FTP ftp = new FTP(call, tab.ftpInfo);
-				List<FtpItem> fileDatas = ftp.GetDirectoryListDetailed(tab.path);
+				FTP ftp = new FTP(call, tab.FtpInfo);
+				List<FtpItem> fileDatas = ftp.GetDirectoryListDetailed(tab.Path);
 				var directories = new ItemCollection<ListDirectory>();
 				var files = new ItemCollection<ListFile>();
 				foreach (FtpItem fileData in fileDatas)
 				{
 					if (fileData.directory)
 					{
-						var listDirectory = new ListDirectory(tab.ftpInfo, fileData);
+						var listDirectory = new ListDirectory(tab.FtpInfo, fileData);
 						directories.Add(listDirectory);
 					}
 					else
 					{
-						var listFile = new ListFile(tab.ftpInfo, fileData);
+						var listFile = new ListFile(tab.FtpInfo, fileData);
 						files.Add(listFile);
 					}
 				}
@@ -70,7 +70,7 @@ namespace Atlas.Tabs.Tools
 				this.ftpInfo = ftpInfo;
 				this.fileData = fileData;
 				this.directoryPath = fileData.fullPath;
-				Directory = Path.GetFileName(directoryPath);
+				Directory = System.IO.Path.GetFileName(directoryPath);
 				iTab = new TabFtpDirectory(ftpInfo, directoryPath);
 			}
 
@@ -82,7 +82,7 @@ namespace Atlas.Tabs.Tools
 
 		public class ListFile
 		{
-			public FTP.Info ftpInfo;
+			public FTP.Info FtpInfo;
 			public string Filename { get; set; }
 			public long Size { get; set; }
 			public DateTime Modified { get; set; }
@@ -94,7 +94,7 @@ namespace Atlas.Tabs.Tools
 
 			public ListFile(FTP.Info ftpInfo, FtpItem fileData)
 			{
-				this.ftpInfo = ftpInfo;
+				this.FtpInfo = ftpInfo;
 				this.fileData = fileData;
 				this.filePath = fileData.fullPath;
 

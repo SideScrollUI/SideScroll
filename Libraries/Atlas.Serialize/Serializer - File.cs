@@ -6,35 +6,35 @@ namespace Atlas.Serialize
 {
 	public class SerializerFile
 	{
-		public string filePath;
-		private string name;
+		public string FilePath;
+		public string Name;
 
 		public SerializerFile(string filePath, string name = "")
 		{
-			this.filePath = filePath;
-			this.name = name;
+			FilePath = filePath;
+			Name = name;
 		}
 
-		public override string ToString() => filePath;
+		public override string ToString() => FilePath;
 
 		// check for writeability and no open locks
 		public void TestWrite()
 		{
-			File.WriteAllText(filePath, "");
+			File.WriteAllText(FilePath, "");
 		}
 
-		public bool Exists => File.Exists(filePath) && new FileInfo(filePath).Length > 0;
+		public bool Exists => File.Exists(FilePath) && new FileInfo(FilePath).Length > 0;
 
 		public void Save(Call call, object obj, string name = null)
 		{
 			name = name ?? "<Default>";
-			string parentDirectory = Path.GetDirectoryName(this.filePath);
+			string parentDirectory = Path.GetDirectoryName(FilePath);
 			if (!Directory.Exists(parentDirectory))
 				Directory.CreateDirectory(parentDirectory);
 
-			using (CallTimer callTimer = call.Timer("Saving object: " + name, new Tag("Path", filePath)))
+			using (CallTimer callTimer = call.Timer("Saving object: " + name, new Tag("Path", FilePath)))
 			{
-				using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
+				using (var stream = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
 				{
 					using (var writer = new BinaryWriter(stream))
 					{
@@ -67,7 +67,7 @@ namespace Atlas.Serialize
 
 		public object Load(Call call, bool lazy = false, TaskInstance taskInstance = null)
 		{
-			using (CallTimer callTimer = call.Timer("Loading object: " + name))
+			using (CallTimer callTimer = call.Timer("Loading object: " + Name))
 			{
 				try
 				{
@@ -75,8 +75,8 @@ namespace Atlas.Serialize
 					serializer.taskInstance = taskInstance;
 
 					MemoryStream memoryStream;
-					using (CallTimer callReadAllBytes = callTimer.Timer("Loading file: " + name))
-						memoryStream = new MemoryStream(File.ReadAllBytes(filePath));
+					using (CallTimer callReadAllBytes = callTimer.Timer("Loading file: " + Name))
+						memoryStream = new MemoryStream(File.ReadAllBytes(FilePath));
 
 					var reader = new BinaryReader(memoryStream);
 
@@ -106,9 +106,9 @@ namespace Atlas.Serialize
 		{
 			call = call ?? new Call();
 
-			using (CallTimer callReadAllBytes = call.Timer("Loading header: " + name))
+			using (CallTimer callReadAllBytes = call.Timer("Loading header: " + Name))
 			{
-				var memoryStream = new MemoryStream(File.ReadAllBytes(filePath));
+				var memoryStream = new MemoryStream(File.ReadAllBytes(FilePath));
 
 				var reader = new BinaryReader(memoryStream);
 				var header = new Header();
@@ -119,7 +119,7 @@ namespace Atlas.Serialize
 
 		public Serializer LoadSchema(Call call)
 		{
-			using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+			using (var stream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
 			{
 				using (var reader = new BinaryReader(stream))
 				{

@@ -28,11 +28,11 @@ namespace Atlas.UI.Avalonia.Controls
 			if (IsReadOnly)
 				Background = Theme.TextBackgroundDisabled;
 
-			PasswordCharAttribute passwordCharAttribute = property.propertyInfo.GetCustomAttribute<PasswordCharAttribute>();
+			PasswordCharAttribute passwordCharAttribute = property.PropertyInfo.GetCustomAttribute<PasswordCharAttribute>();
 			if (passwordCharAttribute != null)
 				PasswordChar = passwordCharAttribute.Character;
 
-			ExampleAttribute attribute = property.propertyInfo.GetCustomAttribute<ExampleAttribute>();
+			ExampleAttribute attribute = property.PropertyInfo.GetCustomAttribute<ExampleAttribute>();
 			if (attribute != null)
 				Watermark = attribute.Text;
 
@@ -43,11 +43,11 @@ namespace Atlas.UI.Avalonia.Controls
 				MinHeight = 80;
 			}*/
 
-			var binding = new Binding(property.propertyInfo.Name)
+			var binding = new Binding(property.PropertyInfo.Name)
 			{
 				Converter = new EditValueConverter(),
 				//StringFormat = "Hello {0}",
-				Source = property.obj,
+				Source = property.Object,
 			};
 			Type type = property.UnderlyingType;
 			if (type == typeof(string) || type.IsPrimitive)

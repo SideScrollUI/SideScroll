@@ -11,11 +11,11 @@ namespace Atlas.UI.Avalonia
 {
 	public class ValueToBrushConverter : IValueConverter
 	{
-		private PropertyInfo propertyInfo;
+		public PropertyInfo PropertyInfo;
 
 		public ValueToBrushConverter(PropertyInfo propertyInfo)
 		{
-			this.propertyInfo = propertyInfo;
+			PropertyInfo = propertyInfo;
 		}
 
 		public sealed class BrushColors
@@ -32,9 +32,9 @@ namespace Atlas.UI.Avalonia
 		{
 			try
 			{
-				if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
+				if (PropertyInfo.IsDefined(typeof(StyleLabelAttribute)))
 					return Theme.ButtonBackground;
-				if (value is DictionaryEntry || propertyInfo.IsDefined(typeof(StyleValueAttribute)))
+				if (value is DictionaryEntry || PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					bool hasLinks = TabModel.ObjectHasLinks(value, true);
 					if (hasLinks)
@@ -93,11 +93,11 @@ namespace Atlas.UI.Avalonia
 
 	public class ValueToForegroundBrushConverter : IValueConverter
 	{
-		private PropertyInfo propertyInfo;
+		public PropertyInfo PropertyInfo;
 
 		public ValueToForegroundBrushConverter(PropertyInfo propertyInfo)
 		{
-			this.propertyInfo = propertyInfo;
+			PropertyInfo = propertyInfo;
 		}
 
 		public sealed class BrushColors
@@ -117,7 +117,7 @@ namespace Atlas.UI.Avalonia
 				//if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				//	return Theme.TitleForeground;
 				if (value is DictionaryEntry || 
-					propertyInfo.IsDefined(typeof(StyleValueAttribute)))
+					PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					bool hasLinks = TabModel.ObjectHasLinks(value, true);
 					if (!hasLinks)

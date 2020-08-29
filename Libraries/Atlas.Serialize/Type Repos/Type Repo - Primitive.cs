@@ -77,19 +77,19 @@ namespace Atlas.Serialize
 		public override object LoadObject()
 		{
 			object obj = null;
-			if (type == typeof(uint))
+			if (Type == typeof(uint))
 				obj = reader.ReadUInt32();
-			else if (type == typeof(int))
+			else if (Type == typeof(int))
 				obj = reader.ReadInt32();
-			else if (type == typeof(long))
+			else if (Type == typeof(long))
 				obj = reader.ReadInt64();
-			else if (type == typeof(double))
+			else if (Type == typeof(double))
 				obj = reader.ReadDouble();
-			else if (type == typeof(float))
+			else if (Type == typeof(float))
 				obj = (float)reader.ReadDouble();
-			else if (type == typeof(bool))
+			else if (Type == typeof(bool))
 				obj = reader.ReadBoolean();
-			else if (type == typeof(char))
+			else if (Type == typeof(char))
 				obj = reader.ReadChar();
 			else
 				throw new Exception("Unhandled primitive type");
@@ -100,22 +100,22 @@ namespace Atlas.Serialize
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
 		{
 			object obj = null;
-			if (type == typeof(uint))
+			if (Type == typeof(uint))
 			{
 				obj = BitConverter.ToUInt32(bytes, byteOffset);
 				byteOffset += sizeof(uint);
 			}
-			else if (type == typeof(int))
+			else if (Type == typeof(int))
 			{
 				obj = BitConverter.ToInt32(bytes, byteOffset);
 				byteOffset += sizeof(int);
 			}
-			else if (type == typeof(double))
+			else if (Type == typeof(double))
 			{
 				obj = BitConverter.ToDouble(bytes, byteOffset);
 				byteOffset += sizeof(double);
 			}
-			else if (type == typeof(bool))
+			else if (Type == typeof(bool))
 			{
 				obj = BitConverter.ToBoolean(bytes, byteOffset);
 				byteOffset += sizeof(bool);

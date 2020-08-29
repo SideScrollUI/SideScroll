@@ -22,9 +22,9 @@ namespace Atlas.UI.Avalonia.Controls
 	// Vertical only right now
 	public class TabControlSplitContainer : Grid
 	{
-		public Dictionary<object, Control> gridControls = new Dictionary<object, Control>();
-		//public Dictionary<int, GridSplitter> gridSplitters = new Dictionary<int, GridSplitter>(); // reattach each time controls change
-		public List<GridSplitter> gridSplitters = new List<GridSplitter>(); // reattach each time controls change
+		public Dictionary<object, Control> GridControls = new Dictionary<object, Control>();
+		//public Dictionary<int, GridSplitter> GridSplitters = new Dictionary<int, GridSplitter>(); // reattach each time controls change
+		public List<GridSplitter> GridSplitters = new List<GridSplitter>(); // reattach each time controls change
 		public double MinDesiredWidth = 100;
 		public double MaxDesiredWidth = double.MaxValue;
 
@@ -164,11 +164,11 @@ namespace Atlas.UI.Avalonia.Controls
 		// Reattach them whenever we change neighbors
 		private void ReattachSplitters()
 		{
-			foreach (var gridSplitter in gridSplitters)
+			foreach (var gridSplitter in GridSplitters)
 			{
 				Children.Remove(gridSplitter);
 			}
-			gridSplitters.Clear();
+			GridSplitters.Clear();
 
 			Debug.Assert(gridItems.Count * 2 == RowDefinitions.Count);
 			int index = 0;
@@ -217,7 +217,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//VerticalAlignment = VerticalAlignment.Center,
 				Height = 6,
 			};
-			gridSplitters.Add(gridSplitter);
+			GridSplitters.Add(gridSplitter);
 			//gridSplitter.DragCompleted += verticalGridSplitter_DragCompleted;
 			SetRow(gridSplitter, index);
 			//Children.Insert(index, gridSplitter);
@@ -248,7 +248,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private void RemoveControls(Dictionary<object, Control> controls)
 		{
 			var hashedControls = new HashSet<Control>(); // one line linq?
-			foreach (var pair in gridControls)
+			foreach (var pair in GridControls)
 			{
 				hashedControls.Add(pair.Value);
 			}
@@ -301,11 +301,11 @@ namespace Atlas.UI.Avalonia.Controls
 			//if (prevOrderedControls != null && orderedControls.SequenceEqual(prevOrderedControls))
 			//	return;
 
-			Dictionary<object, Control> oldControls = gridControls;
+			Dictionary<object, Control> oldControls = GridControls;
 
 			// don't clear old controls so we invalidate container as little as possible when we resize the remaining
 
-			this.gridControls = newControls;
+			GridControls = newControls;
 
 			BeginInit();
 

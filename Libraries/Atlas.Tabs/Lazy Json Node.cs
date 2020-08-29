@@ -63,10 +63,7 @@ namespace Atlas.Tabs
 			this.jsonArray = jsonArray;
 		}
 
-		public override string ToString()
-		{
-			return Items.Formatted();
-		}
+		public override string ToString() => Items.Formatted();
 	}
 
 	public class LazyJsonObject : LazyJsonNode
@@ -100,10 +97,7 @@ namespace Atlas.Tabs
 			this.jsonObject = jsonObject;
 		}
 
-		public override string ToString()
-		{
-			return Items.Formatted();
-		}
+		public override string ToString() => Items.Formatted();
 	}
 
 	public class LazyJsonProperty : LazyJsonNode

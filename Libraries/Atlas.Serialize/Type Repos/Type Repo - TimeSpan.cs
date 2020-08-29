@@ -48,19 +48,19 @@ namespace Atlas.Serialize
 			long ticks = BitConverter.ToInt64(bytes, byteOffset);
 			TimeSpan timeSpan = new TimeSpan(ticks);
 			byteOffset += sizeof(long);
-			objects[objectIndex] = timeSpan;
+			Objects[objectIndex] = timeSpan;
 			return timeSpan;
 		}
 
 		protected override object CreateObject(int objectIndex)
 		{
 			long position = reader.BaseStream.Position;
-			reader.BaseStream.Position = objectOffsets[objectIndex];
+			reader.BaseStream.Position = ObjectOffsets[objectIndex];
 
 			object obj = null;
 			try
 			{
-				if (CanAssign(type))
+				if (CanAssign(Type))
 				{
 					long ticks = reader.ReadInt64();
 					obj = new TimeSpan(ticks);
@@ -76,7 +76,7 @@ namespace Atlas.Serialize
 			}
 			reader.BaseStream.Position = position;
 
-			objectsLoaded[objectIndex] = obj; // must assign before loading any more refs
+			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;
 		}
 
@@ -86,14 +86,14 @@ namespace Atlas.Serialize
 
 		public override object LoadObject()
 		{
-			object obj = Enum.ToObject(typeSchema.Type, reader.ReadInt32());
+			object obj = Enum.ToObject(TypeSchema.Type, reader.ReadInt32());
 			return obj;
 		}
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
 		{
 			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(typeSchema.Type, value);
+			object obj = Enum.ToObject(TypeSchema.Type, value);
 			byteOffset += sizeof(int);
 			return obj;
 		}

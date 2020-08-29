@@ -59,11 +59,11 @@ namespace Atlas.Tabs
 			var properties = ListProperty.Create(obj);
 			foreach (ListProperty listProperty in properties)
 			{
-				if (!includeBaseTypes && listProperty.propertyInfo.DeclaringType != obj.GetType())
+				if (!includeBaseTypes && listProperty.PropertyInfo.DeclaringType != obj.GetType())
 					continue;
 				string name = listProperty.Name;
 				// Only show [DebugOnly] in debug mode
-				if (listProperty.propertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+				if (listProperty.PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
 				{
 #if !DEBUG
 					continue;
@@ -71,10 +71,10 @@ namespace Atlas.Tabs
 					name = "*" + name;
 				}
 
-				int metadataToken = listProperty.propertyInfo.GetGetMethod(false).MetadataToken;
+				int metadataToken = listProperty.PropertyInfo.GetGetMethod(false).MetadataToken;
 				object value = listProperty.Value;
 
-				if (listProperty.propertyInfo.GetCustomAttribute<HideNullAttribute>() != null && value == null)
+				if (listProperty.PropertyInfo.GetCustomAttribute<HideNullAttribute>() != null && value == null)
 					continue;
 
 				listItems.Add(metadataToken, new ListItem(name, value));
@@ -83,10 +83,10 @@ namespace Atlas.Tabs
 			var methods = ListMethod.Create(obj);
 			foreach (ListMethod listMethod in methods)
 			{
-				if (!includeBaseTypes && listMethod.methodInfo.DeclaringType != obj.GetType())
+				if (!includeBaseTypes && listMethod.MethodInfo.DeclaringType != obj.GetType())
 					continue;
 
-				listItems.Add(listMethod.methodInfo.MetadataToken, new ListItem(listMethod.Name, listMethod.Value));
+				listItems.Add(listMethod.MethodInfo.MetadataToken, new ListItem(listMethod.Name, listMethod.Value));
 			}
 
 			return listItems.Values.ToList();

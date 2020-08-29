@@ -742,7 +742,7 @@ namespace Atlas.UI.Avalonia.View
 
 			childControlsFinishedLoading = true;
 
-			TabViewer.baseViewer.SetMinScrollOffset();
+			TabViewer.BaseViewer.SetMinScrollOffset();
 
 			// Create new child controls
 			//Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
@@ -768,7 +768,7 @@ namespace Atlas.UI.Avalonia.View
 
 		private List<Control> CreateAllChildControls(out Dictionary<object, Control> newChildControls)
 		{
-			Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
+			Dictionary<object, Control> oldChildControls = tabChildControls.GridControls;
 			newChildControls = new Dictionary<object, Control>();
 			var orderedChildControls = new List<Control>();
 			//AddNotes(newChildControls, oldChildControls, orderedChildControls);
@@ -863,7 +863,7 @@ namespace Atlas.UI.Avalonia.View
 		private void UpdateSelectedTabInstances()
 		{
 			tabInstance.ChildTabInstances.Clear();
-			foreach (Control control in tabChildControls.gridControls.Values)
+			foreach (Control control in tabChildControls.GridControls.Values)
 			{
 				if (control is TabView tabView)
 				{
@@ -990,7 +990,7 @@ namespace Atlas.UI.Avalonia.View
 			int index = 0;
 			foreach (TabControlDataGrid tabData in tabDatas)
 			{
-				tabData.tabDataSettings = TabViewSettings.GetData(index++);
+				tabData.TabDataSettings = TabViewSettings.GetData(index++);
 				tabData.LoadSettings();
 
 				//if (tabInstance.tabBookmark != null)

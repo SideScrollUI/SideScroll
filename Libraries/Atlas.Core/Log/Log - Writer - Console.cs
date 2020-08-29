@@ -7,7 +7,7 @@ namespace Atlas.Core
 {
 	public class LogWriterConsole
 	{
-		private Log log;
+		public Log Log;
 		
 		private SynchronizationContext context;
 
@@ -15,7 +15,7 @@ namespace Atlas.Core
 
 		public LogWriterConsole(Log log)
 		{
-			this.log = log;
+			Log = log;
 			
 			context = SynchronizationContext.Current;
 			context = context ?? new SynchronizationContext();

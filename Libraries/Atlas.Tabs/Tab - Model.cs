@@ -331,7 +331,7 @@ namespace Atlas.Tabs
 					//methods.Add(new TaskMethod(methodInfo, Object));
 				}*/
 
-				methods.Add(new TaskDelegate(listMethod.Name, (TaskDelegate.CallAction)Delegate.CreateDelegate(typeof(TaskDelegate.CallAction), listMethod.methodInfo)));
+				methods.Add(new TaskDelegate(listMethod.Name, (TaskDelegate.CallAction)Delegate.CreateDelegate(typeof(TaskDelegate.CallAction), listMethod.MethodInfo)));
 			}
 			if (methods.Count > 0)
 				Actions = methods;
