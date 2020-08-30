@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Atlas.Core
 {
@@ -78,6 +81,78 @@ namespace Atlas.Core
 		public Call AddSubCall(string name = "")
 		{
 			return AddSubTask(name).Call;
+		}
+
+		// Call func for every item in the list using the specified parameters
+		public async Task<List<T2>> RunAsync<T1, T2>(string name, List<T1> items, Func<Call, T1, Task<T2>> func)
+		{
+			using (CallTimer callTimer = Timer(items.Count, name))
+			{
+				IEnumerable<Task<T2>> getTasksQuery =
+					from item in items select func(callTimer, item);
+
+				List<Task<T2>> getResultTasks = getTasksQuery.ToList();
+
+				var results = new List<T2>();
+				while (getResultTasks.Count > 0)
+				{
+					Task<T2> firstFinishedTask = await Task.WhenAny(getResultTasks);
+					getResultTasks.Remove(firstFinishedTask);
+
+					T2 taskResult = await firstFinishedTask;
+					if (taskResult != null)
+						results.Add(taskResult);
+				}
+				return results;
+			}
+		}
+
+		// Call func for every item in the list using the specified parameters
+		public async Task<List<T3>> RunAsync<T1, T2, T3>(string name, List<T1> items, T2 param1, Func<Call, T1, T2, Task<T3>> func)
+		{
+			using (CallTimer callTimer = Timer(items.Count, name))
+			{
+				IEnumerable<Task<T3>> getTasksQuery =
+					from item in items select func(callTimer, item, param1);
+
+				List<Task<T3>> getResultTasks = getTasksQuery.ToList();
+
+				var results = new List<T3>();
+				while (getResultTasks.Count > 0)
+				{
+					Task<T3> firstFinishedTask = await Task.WhenAny(getResultTasks);
+					getResultTasks.Remove(firstFinishedTask);
+
+					T3 taskResult = await firstFinishedTask;
+					if (taskResult != null)
+						results.Add(taskResult);
+				}
+				return results;
+			}
+		}
+
+		// Call func for every item in the list using the specified parameters
+		public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(string name, List<T1> items, T2 param1, T3 param2, Func<Call, T1, T2, T3, Task<T4>> func)
+		{
+			using (CallTimer callTimer = Timer(items.Count, name))
+			{
+				IEnumerable<Task<T4>> getTasksQuery =
+					from item in items select func(callTimer, item, param1, param2);
+
+				List<Task<T4>> getResultTasks = getTasksQuery.ToList();
+
+				var results = new List<T4>();
+				while (getResultTasks.Count > 0)
+				{
+					Task<T4> firstFinishedTask = await Task.WhenAny(getResultTasks);
+					getResultTasks.Remove(firstFinishedTask);
+
+					T4 taskResult = await firstFinishedTask;
+					if (taskResult != null)
+						results.Add(taskResult);
+				}
+				return results;
+			}
 		}
 	}
 
