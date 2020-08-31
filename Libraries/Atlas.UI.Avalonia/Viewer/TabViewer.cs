@@ -147,7 +147,7 @@ namespace Atlas.UI.Avalonia
 				bool reloadBase = true;
 				if (reloadBase)
 				{
-					tabView.tabInstance.tabBookmark = bookmark.TabBookmark;
+					tabView.tabInstance.TabBookmark = bookmark.TabBookmark;
 					Reload();
 				}
 				else

@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Styling;
 using System;
@@ -43,6 +44,19 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			Background = BackgroundBrush;
 			//BorderBrush = button.Background;
+		}
+
+		public void BindVisible(string propertyName)
+		{
+			var binding = new Binding(propertyName)
+			{
+				//Converter = new EditValueConverter(),
+				//StringFormat = "Hello {0}",
+				Path = propertyName,
+				Mode = BindingMode.TwoWay,
+				//Source = DataContext,
+			};
+			((Button)this).Bind(IsVisibleProperty, binding);
 		}
 	}
 }

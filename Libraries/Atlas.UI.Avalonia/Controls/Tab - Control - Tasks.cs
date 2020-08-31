@@ -74,7 +74,7 @@ namespace Atlas.UI.Avalonia.Controls
 				VerticalAlignment = VerticalAlignment.Stretch,
 			};
 
-			//tabControlDataGrid.AddButtonColumn(nameof(TaskInstance.Cancel));
+			tabControlDataGrid.AddButtonColumn(nameof(TaskInstance.Cancel));
 			tabControlDataGrid.AddColumn("Task", nameof(TaskInstance.Label));
 			tabControlDataGrid.AddColumn("   %   ", nameof(TaskInstance.Percent));
 			tabControlDataGrid.AddColumn("Status", nameof(TaskInstance.Status));

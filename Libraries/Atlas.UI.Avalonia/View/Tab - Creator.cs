@@ -26,9 +26,9 @@ namespace Atlas.UI.Avalonia.View
 			}
 
 			TabBookmark tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
-			if (parentTabInstance.tabBookmark != null && parentTabInstance.tabBookmark.ChildBookmarks != null)
+			if (parentTabInstance.TabBookmark != null && parentTabInstance.TabBookmark.ChildBookmarks != null)
 			{
-				if (parentTabInstance.tabBookmark.ChildBookmarks.TryGetValue(label, out tabBookmark))
+				if (parentTabInstance.TabBookmark.ChildBookmarks.TryGetValue(label, out tabBookmark))
 				{
 					// FindMatches only
 					if (tabBookmark.tabModel != null)
@@ -73,7 +73,7 @@ namespace Atlas.UI.Avalonia.View
 				var childTabInstance = new TabInstanceLoadAsync(loadAsync)
 				{
 					Project = parentTabInstance.Project,
-					tabBookmark = tabBookmark,
+					TabBookmark = tabBookmark,
 				};
 				childTabInstance.Model.Name = label;
 				var tabView = new TabView(childTabInstance);
@@ -94,7 +94,7 @@ namespace Atlas.UI.Avalonia.View
 				TabInstance childTabInstance = parentTabInstance.CreateChildTab(iTab);
 				if (childTabInstance == null)
 					return null;
-				childTabInstance.tabBookmark = childTabInstance.tabBookmark ?? tabBookmark;
+				childTabInstance.TabBookmark = childTabInstance.TabBookmark ?? tabBookmark;
 				//childTabInstance.Reintialize(); // todo: fix, called in TabView
 				childTabInstance.Model.Name = label;
 				var tabView = new TabView(childTabInstance);
@@ -105,7 +105,7 @@ namespace Atlas.UI.Avalonia.View
 			else if (value is TabView tabView)
 			{
 				tabView.tabInstance.ParentTabInstance = parentTabInstance;
-				tabView.tabInstance.tabBookmark = tabBookmark ?? tabView.tabInstance.tabBookmark;
+				tabView.tabInstance.TabBookmark = tabBookmark ?? tabView.tabInstance.TabBookmark;
 				tabView.Label = label;
 				tabView.Load();
 				return tabView;

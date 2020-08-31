@@ -24,12 +24,12 @@ namespace Atlas.UI.Avalonia.View
 		{
 			get
 			{
-				return tabInstance.tabViewSettings;
+				return tabInstance.TabViewSettings;
 				//return _tabViewSettings;
 			}
 			set
 			{
-				tabInstance.tabViewSettings = value;
+				tabInstance.TabViewSettings = value;
 				//_tabViewSettings = value;
 			}
 		}
@@ -340,7 +340,7 @@ namespace Atlas.UI.Avalonia.View
 			if (containerGrid == null)
 				return;
 
-			if (tabInstance.tabViewSettings.SplitterDistance == null || tabInstance.tabViewSettings.SplitterDistance <= 0.0)
+			if (tabInstance.TabViewSettings.SplitterDistance == null || tabInstance.TabViewSettings.SplitterDistance <= 0.0)
 			{
 				containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 			}
@@ -547,8 +547,8 @@ namespace Atlas.UI.Avalonia.View
 		{
 			//allowAutoScrolling = false;
 
-			if (tabInstance.tabBookmark != null && tabInstance.tabBookmark.ViewSettings != null)
-				tabInstance.tabViewSettings = tabInstance.tabBookmark.ViewSettings;
+			if (tabInstance.TabBookmark != null && tabInstance.TabBookmark.ViewSettings != null)
+				tabInstance.TabViewSettings = tabInstance.TabBookmark.ViewSettings;
 			else if (tabInstance.Project.UserSettings.AutoLoad)
 				LoadDefaultTabSettings();
 		}
@@ -984,7 +984,7 @@ namespace Atlas.UI.Avalonia.View
 		{
 			tabInstance.Project.UserSettings.AutoLoad = true;
 
-			TabBookmark tabBookmark = tabInstance.tabBookmark;
+			TabBookmark tabBookmark = tabInstance.TabBookmark;
 			TabViewSettings = tabBookmark.ViewSettings;
 
 			int index = 0;

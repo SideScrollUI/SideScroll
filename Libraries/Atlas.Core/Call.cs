@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Atlas.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -83,13 +84,76 @@ namespace Atlas.Core
 			return AddSubTask(name).Call;
 		}
 
+		public async Task<T2> RunTaskAsync<T1, T2>(Call call, T1 item, Func<Call, T1, Task<T2>> func)
+		{
+			using (CallTimer callTimer = call.Timer(item.ToString()))
+			{
+				try
+				{
+					return await func(callTimer, item);
+				}
+				catch (Exception e)
+				{
+					callTimer.Log.Add(e);
+					return default;
+				}
+			}
+		}
+
+		public async Task<T3> RunTaskAsync<T1, T2, T3>(Call call, T1 item, T2 param1, Func<Call, T1, T2, Task<T3>> func)
+		{
+			using (CallTimer callTimer = call.Timer(item.ToString()))
+			{
+				try
+				{
+					return await func(callTimer, item, param1);
+				}
+				catch (Exception e)
+				{
+					callTimer.Log.Add(e);
+					return default;
+				}
+			}
+		}
+
+		public async Task<T4> RunTaskAsync<T1, T2, T3, T4>(Call call, Func<Call, T1, T2, T3, Task<T4>> func, T1 item, T2 param1, T3 param2)
+		{
+			using (CallTimer callTimer = call.Timer(item.ToString()))
+			{
+				try
+				{
+					return await func(callTimer, item, param1, param2);
+				}
+				catch (Exception e)
+				{
+					callTimer.Log.Add(e);
+					return default;
+				}
+			}
+		}
+
+		public async Task<List<T2>> RunAsync<T1, T2>(Func<Call, T1, Task<T2>> func, List<T1> items)
+		{
+			return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items);
+		}
+
+		public async Task<List<T3>> RunAsync<T1, T2, T3>(Func<Call, T1, T2, Task<T3>> func, List<T1> items, T2 param1)
+		{
+			return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1);
+		}
+
+		public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(Func<Call, T1, T2, T3, Task<T4>> func, List<T1> items, T2 param1, T3 param2)
+		{
+			return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1, param2);
+		}
+
 		// Call func for every item in the list using the specified parameters
-		public async Task<List<T2>> RunAsync<T1, T2>(string name, List<T1> items, Func<Call, T1, Task<T2>> func)
+		public async Task<List<T2>> RunAsync<T1, T2>(string name, Func<Call, T1, Task<T2>> func, List<T1> items)
 		{
 			using (CallTimer callTimer = Timer(items.Count, name))
 			{
 				IEnumerable<Task<T2>> getTasksQuery =
-					from item in items select func(callTimer, item);
+					from item in items select RunTaskAsync(callTimer, item, func);
 
 				List<Task<T2>> getResultTasks = getTasksQuery.ToList();
 
@@ -107,13 +171,12 @@ namespace Atlas.Core
 			}
 		}
 
-		// Call func for every item in the list using the specified parameters
-		public async Task<List<T3>> RunAsync<T1, T2, T3>(string name, List<T1> items, T2 param1, Func<Call, T1, T2, Task<T3>> func)
+		public async Task<List<T3>> RunAsync<T1, T2, T3>(string name, Func<Call, T1, T2, Task<T3>> func, List<T1> items, T2 param1)
 		{
 			using (CallTimer callTimer = Timer(items.Count, name))
 			{
 				IEnumerable<Task<T3>> getTasksQuery =
-					from item in items select func(callTimer, item, param1);
+					from item in items select RunTaskAsync(callTimer, item, param1, func);
 
 				List<Task<T3>> getResultTasks = getTasksQuery.ToList();
 
@@ -131,13 +194,12 @@ namespace Atlas.Core
 			}
 		}
 
-		// Call func for every item in the list using the specified parameters
-		public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(string name, List<T1> items, T2 param1, T3 param2, Func<Call, T1, T2, T3, Task<T4>> func)
+		public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(string name, Func<Call, T1, T2, T3, Task<T4>> func, List<T1> items, T2 param1, T3 param2)
 		{
 			using (CallTimer callTimer = Timer(items.Count, name))
 			{
 				IEnumerable<Task<T4>> getTasksQuery =
-					from item in items select func(callTimer, item, param1, param2);
+					from item in items select RunTaskAsync(callTimer, func, item, param1, param2);
 
 				List<Task<T4>> getResultTasks = getTasksQuery.ToList();
 

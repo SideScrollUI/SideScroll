@@ -14,6 +14,7 @@ namespace Atlas.Tabs.Test.Actions
 		{
 			public override void Load(Call call, TabModel model)
 			{
+				model.MinDesiredWidth = 250;
 				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Parameters", new TabParamsDataGrid()),
@@ -93,7 +94,7 @@ Actions add Buttons to the tab. When clicked, it will:
 				for (int i = 0; i < 30; i++)
 					ids.Add(i);
 
-				List<int> results = await call.RunAsync("Run Tasks", ids, DoTask);
+				List<int> results = await call.RunAsync(DoTask, ids);
 			}
 
 			public static async Task<int> DoTask(Call call, int id)

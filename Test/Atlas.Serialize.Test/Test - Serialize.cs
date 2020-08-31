@@ -111,8 +111,10 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Enum")]
 		public void SerializeEnum()
 		{
-			var input = new EnumTest();
-			input.testEnum = MyEnum.b;
+			var input = new EnumTest
+			{
+				testEnum = MyEnum.b
+			};
 
 			serializer.Save(Call, input);
 			EnumTest output = serializer.Load<EnumTest>(Call);
@@ -271,11 +273,13 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Nullable List")]
 		public void SerializeNullableList()
 		{
-			var input = new List<int?>();
-			input.Add(null);
-			input.Add(1);
-			input.Add(null);
-			input.Add(2);
+			var input = new List<int?>
+			{
+				null,
+				1,
+				null,
+				2
+			};
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<List<int?>>(Call);
@@ -345,8 +349,10 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Properties")]
 		public void SerializeFieldInterfaceList()
 		{
-			var input = new FieldInterfaceList();
-			input.list = new List<uint> { 1, 2, 3 };
+			var input = new FieldInterfaceList
+			{
+				list = new List<uint> { 1, 2, 3 }
+			};
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<FieldInterfaceList>(Call);
@@ -357,8 +363,10 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Field Subclass")]
 		public void SerializeFieldSubclass()
 		{
-			var input = new DerivedClassReference();
-			input.baseClass = new DerivedClass();
+			var input = new DerivedClassReference()
+			{
+				baseClass = new DerivedClass(),
+			};
 
 			serializer.Save(Call, input);
 			DerivedClassReference output = serializer.Load<DerivedClassReference>(Call);
@@ -369,8 +377,10 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Type Dictionary")]
 		public void SerializeTypeDictionary()
 		{
-			var input = new Dictionary<Type, string>();
-			input[typeof(int)] = "integer";
+			var input = new Dictionary<Type, string>
+			{
+				[typeof(int)] = "integer"
+			};
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<Dictionary<Type, string>>(Call);
@@ -666,7 +676,7 @@ namespace Atlas.Serialize.Test
 			serializer.Save(Call, input);
 			var output = serializer.Load<SubClassContainer>(Call);
 
-			Assert.AreEqual(output.subSclass.a, input.subSclass.a);
+			Assert.AreEqual(output.subSclass.A, input.subSclass.A);
 		}
 
 		[Test, Description("Serialize List Containing Subclass of Type")]
@@ -674,11 +684,11 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new List<Base>();
 
-			input.Add(new SubClass() { a = 5 });
+			input.Add(new SubClass() { A = 5 });
 			serializer.Save(Call, input);
 			List<Base> output = serializer.Load<List<Base>>(Call);
 
-			Assert.AreEqual(output[0].a, 5);
+			Assert.AreEqual(output[0].A, 5);
 			//Assert.AreEqual(input, output); // only works on primitives
 		}
 
@@ -688,38 +698,42 @@ namespace Atlas.Serialize.Test
 			var input = new Dictionary<Base, Base>();
 
 			Base b = new Base();
-			SubClass s = new SubClass();
-			s.b = 3;
+			SubClass s = new SubClass
+			{
+				B = 3
+			};
 			input[s] = b;
 			serializer.Save(Call, input);
 			var output = serializer.Load<Dictionary<Base, Base>>(Call);
 
-			Assert.AreEqual(s.b, 3);
+			Assert.AreEqual(s.B, 3);
 		}
 
 		public class Base
 		{
-			public int a { get; set; } = 1;
+			public int A { get; set; } = 1;
 		}
 
 		public class SubClass : Base
 		{
-			public int b { get; set; } = 2;
+			public int B { get; set; } = 2;
 		}
 
 		public class SubClassContainer
 		{
 			public SubClass subSclass = new SubClass()
 			{
-				a = 3
+				A = 3
 			};
 		}
 
 		[Test, Description("Serialize Dictionary Containing Subclass of Type")]
 		public void SerializeDictionaryOfObjects()
 		{
-			var input = new Dictionary<string, object>();
-			input.Add("default", true);
+			var input = new Dictionary<string, object>
+			{
+				{ "default", true }
+			};
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<Dictionary<string, object>>(Call);

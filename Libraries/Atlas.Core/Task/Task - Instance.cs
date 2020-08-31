@@ -31,7 +31,7 @@ namespace Atlas.Core
 		public bool ShowTask { get; set; }
 
 		public Task Task { get; set; }
-		public TaskStatus TaskStatus => (Task?.Status ?? TaskStatus.Created);
+		public TaskStatus TaskStatus => Task?.Status ?? TaskStatus.Created;
 		public CancellationTokenSource TokenSource = new CancellationTokenSource();
 		public CancellationToken CancelToken => TokenSource.Token;
 
@@ -137,7 +137,9 @@ namespace Atlas.Core
 			}
 		}
 
-		[ButtonColumn("-")]
+		public bool CancelVisible => !Finished;
+
+		[ButtonColumn("-", nameof(CancelVisible))]
 		public void Cancel()
 		{
 			TokenSource.Cancel();
@@ -179,37 +181,41 @@ namespace Atlas.Core
 			eventCompleted.taskCheckFileSize = this;
 			OnComplete?.Invoke(this, eventCompleted);*/
 			Finished = true;
-			Progress = ProgressMax;
 
 			if (Call.TaskInstance.CancelToken.IsCancellationRequested)
 			{
 				Status = "Cancelled";
 			}
-			else if (Call.Log.Type >= LogEntry.LogType.Error)
-			{
-				Status = Call.Log.Type.ToString();
-				Errored = true;
-				ShowTask = true;
-			}
-			else if (Call.Log.Type == LogEntry.LogType.Warn)
-			{
-				if (!Errored)
-					Status = Call.Log.Type.ToString();
-				ShowTask = true;
-			}
-			else if (Task == null || TaskStatus == TaskStatus.RanToCompletion)
-			{
-				Status = "Complete";
-				Message = Message ?? "Success";
-			}
 			else
 			{
-				Status = TaskStatus.ToString();
-				Message = Log.Summary;
+				Progress = ProgressMax;
+				if (Call.Log.Type >= LogEntry.LogType.Error)
+				{
+					Status = Call.Log.Type.ToString();
+					Errored = true;
+					ShowTask = true;
+				}
+				else if (Call.Log.Type == LogEntry.LogType.Warn)
+				{
+					if (!Errored)
+						Status = Call.Log.Type.ToString();
+					ShowTask = true;
+				}
+				else if (Task == null || TaskStatus == TaskStatus.RanToCompletion)
+				{
+					Status = "Complete";
+					Message = Message ?? "Success";
+				}
+				else
+				{
+					Status = TaskStatus.ToString();
+					Message = Log.Summary;
+				}
 			}
 			NotifyPropertyChanged(nameof(Status));
 			NotifyPropertyChanged(nameof(TaskStatus));
 			NotifyPropertyChanged(nameof(Finished));
+			NotifyPropertyChanged(nameof(CancelVisible));
 			Call.Log.Add("Finished", new Tag("Time", stopwatch.ElapsedMilliseconds / 1000.0));
 			Creator?.OnComplete?.Invoke();
 			OnComplete?.Invoke();

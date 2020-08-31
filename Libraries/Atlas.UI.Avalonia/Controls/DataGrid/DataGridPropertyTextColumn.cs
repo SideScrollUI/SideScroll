@@ -15,6 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia
 {
@@ -223,7 +224,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopy = new MenuItem() { Header = "Copy - _Cell Contents" };
 			menuItemCopy.Click += delegate
 			{
-				ClipBoardUtils.SetTextAsync(textBlock.Text);
+				Task.Run(() => ClipBoardUtils.SetTextAsync(textBlock.Text));
 			};
 			list.Add(menuItemCopy);
 
@@ -234,7 +235,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGrid.ColumnToStringTable(this);
 				if (text != null)
-					ClipBoardUtils.SetTextAsync(text);
+					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
 			};
 			list.Add(menuItemCopyColumn);
 
@@ -243,7 +244,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGrid.RowToString(cell.DataContext);
 				if (text != null)
-					ClipBoardUtils.SetTextAsync(text);
+					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
 			};
 			list.Add(menuItemCopyRow);
 
@@ -252,7 +253,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGrid.SelectedToString();
 				if (text != null)
-					ClipBoardUtils.SetTextAsync(text);
+					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
 			};
 			list.Add(menuItemCopySelected);
 
@@ -261,7 +262,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGrid.ToStringTable();
 				if (text != null)
-					ClipBoardUtils.SetTextAsync(text);
+					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
 			};
 			list.Add(menuItemCopyDataGrid);
 
@@ -270,7 +271,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGrid.ToCsv();
 				if (text != null)
-					ClipBoardUtils.SetTextAsync(text);
+					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
 			};
 			list.Add(menuItemCopyDataGridCsv);
 
@@ -284,7 +285,6 @@ namespace Atlas.UI.Avalonia
 		// todo: set default background brush to white so context menu's work, hover breaks if it's set though
 		private IBrush GetCellBrush(DataGridCell dataGridCell, object dataItem)
 		{
-			object obj = dataGridCell.DataContext;
 			try
 			{
 				if (PropertyInfo.IsDefined(typeof(StyleValueAttribute)))

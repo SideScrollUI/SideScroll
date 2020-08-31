@@ -140,8 +140,8 @@ namespace Atlas.UI.Avalonia.Controls
 			MaxWidth = 1500;
 			MaxHeight = 645; // 25 Items
 
-			if (TabInstance.tabViewSettings.ChartDataSettings.Count == 0)
-				TabInstance.tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
+			if (TabInstance.TabViewSettings.ChartDataSettings.Count == 0)
+				TabInstance.TabViewSettings.ChartDataSettings.Add(new TabDataSettings());
 
 			PlotView = new PlotView()
 			{

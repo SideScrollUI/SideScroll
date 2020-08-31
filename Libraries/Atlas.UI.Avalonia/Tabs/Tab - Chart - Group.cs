@@ -78,8 +78,8 @@ namespace Atlas.UI.Avalonia
 
 			public override void LoadUI(Call call, TabModel model)
 			{
-				if (tabViewSettings.ChartDataSettings.Count == 0)
-					tabViewSettings.ChartDataSettings.Add(new TabDataSettings());
+				if (TabViewSettings.ChartDataSettings.Count == 0)
+					TabViewSettings.ChartDataSettings.Add(new TabDataSettings());
 
 				//Background = new SolidColorBrush(Theme.BackgroundColor);
 				//HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
@@ -90,7 +90,7 @@ namespace Atlas.UI.Avalonia
 				//Orientation = Orientation.Vertical;
 
 				// autogenerate columns
-				tabDataGrid = new TabControlDataGrid(this, tab.ChartSettings.ListSeries, true, tabViewSettings.ChartDataSettings[0]);
+				tabDataGrid = new TabControlDataGrid(this, tab.ChartSettings.ListSeries, true, TabViewSettings.ChartDataSettings[0]);
 				//Grid.SetRow(tabDataGrid, 1);
 
 				//tabDataGrid.AddButtonColumn("<>", nameof(TaskInstance.Cancel));

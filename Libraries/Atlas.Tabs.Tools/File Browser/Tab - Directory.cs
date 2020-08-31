@@ -58,7 +58,7 @@ namespace Atlas.Tabs.Tools
 			private void Delete(Call call)
 			{
 				// Should we delete both directories and files?
-				foreach (TabDataSettings tabDataSettings in tabViewSettings.TabDataSettings)
+				foreach (TabDataSettings tabDataSettings in TabViewSettings.TabDataSettings)
 				{
 					foreach (SelectedRow selectedRow in tabDataSettings.SelectedRows)
 					{

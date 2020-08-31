@@ -120,10 +120,17 @@ namespace Atlas.Core
 	public class ButtonColumnAttribute : Attribute
 	{
 		public readonly string Name;
+		public readonly string VisiblePropertyName;
 
 		public ButtonColumnAttribute(string name = null)
 		{
 			Name = name;
+		}
+
+		public ButtonColumnAttribute(string name, string visiblePropertyName)
+		{
+			Name = name;
+			VisiblePropertyName = visiblePropertyName;
 		}
 	}
 

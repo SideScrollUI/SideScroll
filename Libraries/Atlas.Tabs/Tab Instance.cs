@@ -42,17 +42,18 @@ namespace Atlas.Tabs
 
 	public class TabCreatorAsync : TabInstance, ITabAsync
 	{
-		private ITabCreatorAsync creatorAsync;
+		public ITabCreatorAsync CreatorAsync;
+
 		private TabInstance innerChildInstance;
 
 		public TabCreatorAsync(ITabCreatorAsync creatorAsync)
 		{
-			this.creatorAsync = creatorAsync;
+			CreatorAsync = creatorAsync;
 		}
 
 		public async Task LoadAsync(Call call, TabModel model)
 		{
-			ITab iTab = await creatorAsync.CreateAsync(call);
+			ITab iTab = await CreatorAsync.CreateAsync(call);
 			innerChildInstance = CreateChildTab(iTab);
 			if (innerChildInstance is ITabAsync tabAsync)
 				await tabAsync.LoadAsync(call, model);
@@ -85,8 +86,8 @@ namespace Atlas.Tabs
 
 		public DataRepo DataApp => Project.DataApp;
 
-		public TabViewSettings tabViewSettings = new TabViewSettings();
-		public TabBookmark tabBookmark;
+		public TabViewSettings TabViewSettings = new TabViewSettings();
+		public TabBookmark TabBookmark;
 
 		public int Depth
 		{
@@ -450,7 +451,7 @@ namespace Atlas.Tabs
 				Type listType = iList.GetType();
 				Type elementType = listType.GetElementTypeForAll();
 
-				var tabDataSettings = tabViewSettings.GetData(i);
+				var tabDataSettings = TabViewSettings.GetData(i);
 				List<TabDataSettings.PropertyColumn> propertyColumns = tabDataSettings.GetPropertiesAsColumns(elementType);
 				int itemCount = 0;
 				foreach (object obj in iList)
@@ -542,9 +543,9 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				if (tabViewSettings == null)
+				if (TabViewSettings == null)
 					return false;
-				if (tabViewSettings.SelectionType == SelectionType.User && tabViewSettings.SelectedRows.Count == 0) // Need to split apart user selected rows?
+				if (TabViewSettings.SelectionType == SelectionType.User && TabViewSettings.SelectedRows.Count == 0) // Need to split apart user selected rows?
 					return false;
 				// Only data is skippable?
 				if (Model.Objects.Count > 0 || Model.ItemList.Count == 0 || Model.ItemList[0].Count != 1)
@@ -564,7 +565,7 @@ namespace Atlas.Tabs
 			}
 			else
 			{
-				tabBookmark = TabBookmark.Create(obj);
+				TabBookmark = TabBookmark.Create(obj);
 			}
 		}
 
@@ -578,8 +579,10 @@ namespace Atlas.Tabs
 
 		public virtual Bookmark CreateBookmark()
 		{
-			var bookmark = new Bookmark();
-			bookmark.Type = iTab?.GetType();
+			var bookmark = new Bookmark
+			{
+				Type = iTab?.GetType(),
+			};
 			//bookmark.tabBookmark.Name = Label;
 			GetBookmark(bookmark.TabBookmark);
 			bookmark = bookmark.DeepClone<Bookmark>(TaskInstance.Call); // Sanitize and test bookmark
@@ -596,7 +599,7 @@ namespace Atlas.Tabs
 		public virtual void GetBookmark(TabBookmark tabBookmark)
 		{
 			tabBookmark.Name = Label;
-			tabBookmark.ViewSettings = tabViewSettings;
+			tabBookmark.ViewSettings = TabViewSettings;
 			tabBookmark.DataRepoDirectory = DataRepoInstance?.Directory;
 			/*if (DataRepoInstance != null)
 			{
@@ -630,17 +633,17 @@ namespace Atlas.Tabs
 
 		public TabViewSettings LoadBookmark(Bookmark bookmark)
 		{
-			tabBookmark = null;
+			TabBookmark = null;
 			if (bookmark != null)
 				SelectBookmark(bookmark.TabBookmark);
 
-			return tabViewSettings; // remove?
+			return TabViewSettings; // remove?
 		}
 
 		public virtual void SelectBookmark(TabBookmark tabBookmark)
 		{
-			this.tabViewSettings = tabBookmark.ViewSettings;
-			this.tabBookmark = tabBookmark;
+			TabViewSettings = tabBookmark.ViewSettings;
+			TabBookmark = tabBookmark;
 			if (OnLoadBookmark != null)
 				uiContext.Send(_ => OnLoadBookmark(this, new EventArgs()), null);
 			//this.bookmarkNode = null; // have to wait until TabData's Load, which might be after this
@@ -675,31 +678,31 @@ namespace Atlas.Tabs
 
 			Bookmark bookmark = Project.DataApp.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);
 			if (bookmark != null)
-				tabBookmark = bookmark.TabBookmark;
+				TabBookmark = bookmark.TabBookmark;
 		}
 
 		public TabViewSettings LoadSettings()
 		{
-			if (tabBookmark != null && tabBookmark.ViewSettings != null)
+			if (TabBookmark != null && TabBookmark.ViewSettings != null)
 			{
-				tabViewSettings = tabBookmark.ViewSettings;
+				TabViewSettings = TabBookmark.ViewSettings;
 			}
 			else
 			{
 				LoadDefaultTabSettings();
 			}
-			return tabViewSettings;
+			return TabViewSettings;
 		}
 
 		protected SortedDictionary<string, T> GetBookmarkSelectedData<T>()
 		{
-			return tabBookmark?.GetSelectedData<T>() ?? new SortedDictionary<string, T>();
+			return TabBookmark?.GetSelectedData<T>() ?? new SortedDictionary<string, T>();
 		}
 
 		protected T GetBookmarkData<T>(string name = "default")
 		{
-			if (tabBookmark != null)
-				return tabBookmark.GetData<T>(name);
+			if (TabBookmark != null)
+				return TabBookmark.GetData<T>(name);
 			return default;
 		}
 
@@ -756,53 +759,53 @@ namespace Atlas.Tabs
 
 		public TabViewSettings LoadDefaultTabSettings()
 		{
-			tabViewSettings = null;
+			TabViewSettings = null;
 
 			if (CustomPath != null)
 			{
-				tabViewSettings = Project.DataApp.Load<TabViewSettings>(CustomPath, TaskInstance.Call);
-				if (tabViewSettings != null)
-					return tabViewSettings;
+				TabViewSettings = Project.DataApp.Load<TabViewSettings>(CustomPath, TaskInstance.Call);
+				if (TabViewSettings != null)
+					return TabViewSettings;
 			}
 
 			Type type = GetType();
 			if (type != typeof(TabInstance))
 			{
 				// Unique TabInstance
-				tabViewSettings = Project.DataApp.Load<TabViewSettings>(TabPath, TaskInstance.Call);
-				if (tabViewSettings != null)
-					return tabViewSettings;
+				TabViewSettings = Project.DataApp.Load<TabViewSettings>(TabPath, TaskInstance.Call);
+				if (TabViewSettings != null)
+					return TabViewSettings;
 			}
 			else
 			{
-				tabViewSettings = Project.DataApp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call);
-				if (tabViewSettings != null)
-					return tabViewSettings;
+				TabViewSettings = Project.DataApp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call);
+				if (TabViewSettings != null)
+					return TabViewSettings;
 
-				tabViewSettings = Project.DataApp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
-				if (tabViewSettings != null)
-					return tabViewSettings;
+				TabViewSettings = Project.DataApp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
+				if (TabViewSettings != null)
+					return TabViewSettings;
 			}
 
-			tabViewSettings = new TabViewSettings();
-			return tabViewSettings;
+			TabViewSettings = new TabViewSettings();
+			return TabViewSettings;
 		}
 
 		public void SaveTabSettings()
 		{
 			if (CustomPath != null)
-				Project.DataApp.Save(CustomPath, tabViewSettings, TaskInstance.Call);
+				Project.DataApp.Save(CustomPath, TabViewSettings, TaskInstance.Call);
 
 			Type type = GetType();
 			if (type != typeof(TabInstance))
 			{
 				// Unique TabInstance
-				Project.DataApp.Save(TabPath, tabViewSettings, TaskInstance.Call);
+				Project.DataApp.Save(TabPath, TabViewSettings, TaskInstance.Call);
 			}
 			else
 			{
-				Project.DataApp.Save(TypeLabelPath, tabViewSettings, TaskInstance.Call);
-				Project.DataApp.Save(TypePath, tabViewSettings, TaskInstance.Call);
+				Project.DataApp.Save(TypeLabelPath, TabViewSettings, TaskInstance.Call);
+				Project.DataApp.Save(TypePath, TabViewSettings, TaskInstance.Call);
 			}
 			SaveDefaultBookmark();
 		}
@@ -863,11 +866,11 @@ namespace Atlas.Tabs
 			};
 			//childTabInstance.tabBookmark = tabBookmark;
 
-			if (tabBookmark != null)
+			if (TabBookmark != null)
 			{
-				if (tabBookmark.ChildBookmarks.TryGetValue(model.Name, out TabBookmark tabChildBookmark))
+				if (TabBookmark.ChildBookmarks.TryGetValue(model.Name, out TabBookmark tabChildBookmark))
 				{
-					childTabInstance.tabBookmark = tabChildBookmark;
+					childTabInstance.TabBookmark = tabChildBookmark;
 				}
 			}
 			return childTabInstance;
@@ -877,9 +880,9 @@ namespace Atlas.Tabs
 		{
 			// FindMatches uses bookmarks
 			TabBookmark tabChildBookmark = null;
-			if (tabBookmark != null)
+			if (TabBookmark != null)
 			{
-				if (tabBookmark.ChildBookmarks.TryGetValue(name, out tabChildBookmark))
+				if (TabBookmark.ChildBookmarks.TryGetValue(name, out tabChildBookmark))
 				{
 					if (tabChildBookmark.tabModel != null)
 						return tabChildBookmark.tabModel;

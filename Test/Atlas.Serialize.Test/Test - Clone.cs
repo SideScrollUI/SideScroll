@@ -144,15 +144,15 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new Properties()
 			{
-				uintTest = 5,
-				doubleTest = 2.5,
-				stringTest = "abc"
+				UintTest = 5,
+				DoubleTest = 2.5,
+				StringTest = "abc"
 			};
 			var output = serializer.Clone<Properties>(log, input);
 
-			Assert.AreEqual(output.uintTest, input.uintTest);
-			Assert.AreEqual(output.doubleTest, input.doubleTest);
-			Assert.AreEqual(output.stringTest, input.stringTest);
+			Assert.AreEqual(output.UintTest, input.UintTest);
+			Assert.AreEqual(output.DoubleTest, input.DoubleTest);
+			Assert.AreEqual(output.StringTest, input.StringTest);
 		}
 
 		[Test, Description("Clone Primitives")]
@@ -160,15 +160,15 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new Primitives()
 			{
-				uintTest = 5,
-				doubleTest = 2.5,
-				stringTest = "abc"
+				UintTest = 5,
+				DoubleTest = 2.5,
+				StringTest = "abc"
 			};
 			var output = serializer.Clone<Primitives>(log, input);
 
-			Assert.AreEqual(output.uintTest, input.uintTest);
-			Assert.AreEqual(output.doubleTest, input.doubleTest);
-			Assert.AreEqual(output.stringTest, input.stringTest);
+			Assert.AreEqual(output.UintTest, input.UintTest);
+			Assert.AreEqual(output.DoubleTest, input.DoubleTest);
+			Assert.AreEqual(output.StringTest, input.StringTest);
 		}
 
 		public struct StructTest
@@ -254,13 +254,13 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new NullablePrimitives()
 			{
-				uintTest = 5,
-				doubleTest = 2.5
+				UintTest = 5,
+				DoubleTest = 2.5
 			};
 			var output = serializer.Clone<NullablePrimitives>(log, input);
 
-			Assert.AreEqual(output.uintTest, input.uintTest);
-			Assert.AreEqual(output.doubleTest, input.doubleTest);
+			Assert.AreEqual(output.UintTest, input.UintTest);
+			Assert.AreEqual(output.DoubleTest, input.DoubleTest);
 		}
 
 		[Test, Description("Clone int")]
@@ -278,12 +278,12 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new EnumTest()
 			{
-				testEnum = EnumTest.MyEnum.b,
+				TestEnum = EnumTest.MyEnum.b,
 			};
 			
 			var output = serializer.Clone<EnumTest>(log, input);
 
-			Assert.AreEqual(output.testEnum, input.testEnum);
+			Assert.AreEqual(output.TestEnum, input.TestEnum);
 		}
 
 		[Test, Description("Clone Type")]
@@ -312,11 +312,11 @@ namespace Atlas.Serialize.Test
 		public void CloneCircular()
 		{
 			var input = new Circular();
-			input.self = input;
+			input.Self = input;
 			
 			Circular output = serializer.Clone<Circular>(log, input);
 
-			Assert.AreEqual(output.self, output);
+			Assert.AreEqual(output.Self, output);
 		}
 
 		[Test, Description("Clone Parent Child")]
@@ -324,12 +324,12 @@ namespace Atlas.Serialize.Test
 		{
 			Parent parent = new Parent();
 			Child child = new Child();
-			parent.child = child;
-			child.parent = parent;
+			parent.Child = child;
+			child.Parent = parent;
 			
 			Parent loaded = serializer.Clone<Parent>(log, parent);
 
-			Assert.AreEqual(loaded.child.parent, loaded);
+			Assert.AreEqual(loaded.Child.Parent, loaded);
 		}
 
 		[Test, Description("Clone Dictionary")]
@@ -372,14 +372,14 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new NonSerializedTest()
 			{
-				nonSerialized = 5,
-				serialized = 10,
+				NonSerialized = 5,
+				Serialized = 10,
 			};
 			
 			var output = serializer.Clone<NonSerializedTest>(log, input);
 
-			Assert.AreEqual(output.nonSerialized, 1);
-			Assert.AreEqual(output.serialized, 10);
+			Assert.AreEqual(output.NonSerialized, 1);
+			Assert.AreEqual(output.Serialized, 10);
 		}
 
 		public class NullablePrimitiveProperties
@@ -390,37 +390,37 @@ namespace Atlas.Serialize.Test
 
 		public class NullablePrimitives
 		{
-			public uint? uintTest = 1;
-			public double? doubleTest = 2.3;
+			public uint? UintTest = 1;
+			public double? DoubleTest = 2.3;
 		}
 
 		public class Primitives
 		{
-			public uint uintTest = 1;
-			public double doubleTest = 2.3;
-			public string stringTest = "mystring";
+			public uint UintTest = 1;
+			public double DoubleTest = 2.3;
+			public string StringTest = "mystring";
 		}
 
 		public class Properties
 		{
-			public uint uintTest { get; set; } = 1;
-			public double doubleTest { get; set; } = 2.3;
-			public string stringTest { get; set; } = "mystring";
+			public uint UintTest { get; set; } = 1;
+			public double DoubleTest { get; set; } = 2.3;
+			public string StringTest { get; set; } = "mystring";
 		}
 
 		public class Circular
 		{
-			public Circular self;
+			public Circular Self;
 		}
 
 		public class Parent
 		{
-			public Child child;
+			public Child Child;
 		}
 
 		public class Child
 		{
-			public Parent parent;
+			public Parent Parent;
 		}
 
 		public class DictionaryTest
@@ -431,8 +431,8 @@ namespace Atlas.Serialize.Test
 			{
 				Parent parent = new Parent();
 				Child child = new Child();
-				parent.child = child;
-				child.parent = parent;
+				parent.Child = child;
+				child.Parent = parent;
 				items[parent] = child;
 			}
 		}
@@ -445,15 +445,15 @@ namespace Atlas.Serialize.Test
 				b
 			}
 
-			public MyEnum testEnum = MyEnum.a;
+			public MyEnum TestEnum = MyEnum.a;
 		}
 
 
 		public class NonSerializedTest
 		{
 			[NonSerialized]
-			public int nonSerialized = 1;
-			public int serialized = 2;
+			public int NonSerialized = 1;
+			public int Serialized = 2;
 		}
 
 		
