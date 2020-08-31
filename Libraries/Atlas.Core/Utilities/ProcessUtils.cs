@@ -55,6 +55,10 @@ namespace Atlas.Core
 
 					Process.Start("explorer.exe", argument);
 				}
+				else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+				{
+					Process.Start("open", path);
+				}
 			}
 			catch
 			{

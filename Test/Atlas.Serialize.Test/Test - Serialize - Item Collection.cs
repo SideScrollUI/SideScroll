@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Atlas.Serialize.Test
 {
-	[NUnit.Framework.Category("SerializeItemCollection")]
+	[Category("SerializeItemCollection")]
 	public class TestItemCollection : TestSerializeBase
 	{
 		private SerializerMemory serializer;
@@ -22,7 +22,7 @@ namespace Atlas.Serialize.Test
 			serializer = new SerializerMemory();
 		}
 
-		[Test, NUnit.Framework.Description("Serialize ItemCollection")]
+		[Test, Description("Serialize ItemCollection")]
 		public void SerializeItemCollection()
 		{
 			var input = new TestBindingList();
