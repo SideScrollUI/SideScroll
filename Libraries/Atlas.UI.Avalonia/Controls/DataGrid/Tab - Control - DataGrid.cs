@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Reflection;
-
+using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -28,7 +28,8 @@ namespace Atlas.UI.Avalonia.Controls
 		private const int ColumnPercentBased = 150;
 		private const int MaxMinColumnWidth = 150;
 		private const int MaxAutoSizeMinColumnWidth = 250;
-		private static int MaxColumnWidth = 600;
+
+		public int MaxColumnWidth = 600;
 
 		public TabModel TabModel;
 		public TabInstance TabInstance;
@@ -61,7 +62,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private Filter filter;
 
-		private Stopwatch stopwatch = new Stopwatch();
+		private Stopwatch _stopwatch = new Stopwatch();
 
 		public IList Items
 		{
@@ -298,7 +299,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}*/
 
-		private void AddContextMenu()
+		/*private void AddContextMenu()
 		{
 			var list = new AvaloniaList<object>();
 
@@ -307,17 +308,19 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				string text = DataGrid.ToStringTable();
 				if (text != null)
-					ClipBoardUtils.SetTextAsync(text);
+					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
 			};
 			list.Add(menuItemCopy);
 
 			//list.Add(new Separator());
 
-			var contextMenu = new ContextMenu();
-			contextMenu.Items = list;
+			var contextMenu = new ContextMenu
+			{
+				Items = list,
+			};
 
 			DataGrid.ContextMenu = contextMenu;
-		}
+		}*/
 
 		private void AutoSizeColumns()
 		{
@@ -384,15 +387,15 @@ namespace Atlas.UI.Avalonia.Controls
 					selectItemEnabled = true;
 					object item = List[List.Count - 1];
 					// don't update the selection too often or we'll slow things down
-					if (!stopwatch.IsRunning || stopwatch.ElapsedMilliseconds > 1000)
+					if (!_stopwatch.IsRunning || _stopwatch.ElapsedMilliseconds > 1000)
 					{
 						// change to dispatch here?
 						autoSelectItem = null;
 						selectionModified = true;
 						//SelectedItem = e.NewItems[0];
 						Dispatcher.UIThread.Post(() => SetSelectedItem(item), DispatcherPriority.Background);
-						stopwatch.Reset();
-						stopwatch.Start();
+						_stopwatch.Reset();
+						_stopwatch.Start();
 						//collectionView.Refresh();
 					}
 					else
@@ -485,14 +488,13 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private DataGridRow GetControlRow(object obj, int depth)
 		{
-			Control control = obj as Control;
-			if (control == null)
-				return null;
-			if (control is DataGridRow row)
-				return row;
 			if (depth == 0)
 				return null;
-			return GetControlRow(control.Parent, depth - 1);
+			if (obj is DataGridRow row)
+				return row;
+			if (obj is Control control)
+				return GetControlRow(control.Parent, depth - 1);
+			return null;
 		}
 
 		private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
@@ -579,7 +581,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void AddColumn(string label, PropertyInfo propertyInfo)
 		{
-			bool propertyEditable = (propertyInfo.GetCustomAttribute(typeof(EditingAttribute)) != null);
+			//bool propertyEditable = (propertyInfo.GetCustomAttribute(typeof(EditingAttribute)) != null);
 			MinWidthAttribute attributeMinWidth = propertyInfo.GetCustomAttribute<MinWidthAttribute>();
 			MaxWidthAttribute attributeMaxWidth = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
 			AutoSizeAttribute attributeAutoSize = propertyInfo.GetCustomAttribute<AutoSizeAttribute>();
@@ -1164,7 +1166,7 @@ namespace Atlas.UI.Avalonia.Controls
 						// create a new collection because this one might have multiple lists
 						TabModel tabModel = TabModel.Create(this.TabModel.Name, List);
 						TabBookmark bookmarkNode = tabModel.FindMatches(filter, filter.Depth);
-						TabInstance.filterBookmarkNode = bookmarkNode;
+						TabInstance.FilterBookmarkNode = bookmarkNode;
 						collectionView.Filter = FilterPredicate;
 						TabInstance.SelectBookmark(bookmarkNode);
 					}
@@ -1183,9 +1185,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private bool FilterPredicate(object obj)
 		{
-			if (TabInstance.filterBookmarkNode != null)
+			if (TabInstance.FilterBookmarkNode != null)
 			{
-				return TabInstance.filterBookmarkNode.selectedObjects.Contains(obj);
+				return TabInstance.FilterBookmarkNode.selectedObjects.Contains(obj);
 			}
 			else
 			{
@@ -1227,7 +1229,7 @@ namespace Atlas.UI.Avalonia.Controls
 				dispatcherTimer.Tick -= DispatcherTimer_Tick;
 				dispatcherTimer = null;
 			}
-			stopwatch.Stop();
+			_stopwatch.Stop();
 
 			DataGrid.SelectionChanged -= DataGrid_SelectionChanged;
 			DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;

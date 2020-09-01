@@ -35,8 +35,8 @@ namespace Atlas.UI.Avalonia
 		public bool AutoSize { get; set; }
 
 		private Binding formattedBinding;
-		private Binding unformattedBinding;
-		private FormatValueConverter formatConverter = new FormatValueConverter();
+		//private Binding unformattedBinding;
+		private readonly FormatValueConverter formatConverter = new FormatValueConverter();
 
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{
@@ -149,19 +149,19 @@ namespace Atlas.UI.Avalonia
 
 			public double MaxDesiredWidth { get; set; } = 500;
 
-			private DataGridPropertyTextColumn column;
-			private PropertyInfo propertyInfo;
+			public readonly DataGridPropertyTextColumn Column;
+			public readonly PropertyInfo PropertyInfo;
 
 			public TextBlockElement(DataGridPropertyTextColumn column, PropertyInfo propertyInfo)
 			{
-				this.column = column;
-				this.propertyInfo = propertyInfo;
+				Column = column;
+				PropertyInfo = propertyInfo;
 			}
 
 			protected Size GetMaxSize(Size size)
 			{
 				double maxDesiredWidth = MaxDesiredWidth;
-				if (DataContext is IMaxDesiredWidth iMaxWidth && column.DisplayIndex == 1 && iMaxWidth.MaxDesiredWidth != null)
+				if (DataContext is IMaxDesiredWidth iMaxWidth && Column.DisplayIndex == 1 && iMaxWidth.MaxDesiredWidth != null)
 				{
 					maxDesiredWidth = iMaxWidth.MaxDesiredWidth.Value;
 				}
@@ -282,8 +282,27 @@ namespace Atlas.UI.Avalonia
 			cell.ContextMenu = contextMenu;
 		}
 
+		Binding GetFormattedTextBinding()
+		{
+			Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);
+
+			if (formattedBinding == null)
+			{
+				formattedBinding = new Binding
+				{
+					Path = binding.Path,
+					//Mode = binding.Mode,
+					Mode = BindingMode.OneWay, // copying a value to the clipboard triggers an infinite loop without this?
+				};
+				if (IsReadOnly)
+					formattedBinding.Converter = formatConverter;
+			}
+
+			return formattedBinding;
+		}
+
 		// todo: set default background brush to white so context menu's work, hover breaks if it's set though
-		private IBrush GetCellBrush(DataGridCell dataGridCell, object dataItem)
+		/*private IBrush GetCellBrush(DataGridCell dataGridCell, object dataItem)
 		{
 			try
 			{
@@ -308,7 +327,7 @@ namespace Atlas.UI.Avalonia
 				return null; // checkbox column requires a valid value
 			else
 				return BrushEditable;
-		}
+		}*/
 
 		/*protected override FrameworkElement GenerateElement(DataGridCell cell, object dataItem)
 		{
@@ -354,7 +373,7 @@ namespace Atlas.UI.Avalonia
 			}
 		}*/
 
-		private Type GetBindingType(object dataItem)
+		/*private Type GetBindingType(object dataItem)
 		{
 			if (PropertyInfo.GetIndexParameters().Length > 0)
 				return null;
@@ -390,25 +409,6 @@ namespace Atlas.UI.Avalonia
 			}
 
 			return unformattedBinding;
-		}
-
-		Binding GetFormattedTextBinding()
-		{
-			Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);
-
-			if (formattedBinding == null)
-			{
-				formattedBinding = new Binding
-				{
-					Path = binding.Path,
-					//Mode = binding.Mode,
-					Mode = BindingMode.OneWay, // copying a value to the clipboard triggers an infinite loop without this?
-				};
-				if (IsReadOnly)
-					formattedBinding.Converter = formatConverter;
-			}
-
-			return formattedBinding;
-		}
+		}*/
 	}
 }

@@ -42,12 +42,10 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			var binding = new Binding(property.PropertyInfo.Name)
 			{
-				//Converter = new EditValueConverter(),
-				//StringFormat = "Hello {0}",
 				Mode = BindingMode.TwoWay,
 				Source = property.Object,
 			};
-			((CheckBox)this).Bind(IsCheckedProperty, binding);
+			this.Bind(IsCheckedProperty, binding);
 		}
 	}
 }

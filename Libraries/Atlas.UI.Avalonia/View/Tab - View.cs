@@ -965,7 +965,7 @@ namespace Atlas.UI.Avalonia.View
 		{
 			if (tabDatas.Count > 0)
 			{
-				if (e.obj is ITab itab)
+				if (e.Object is ITab itab)
 				{
 					foreach (var obj in tabDatas[0].Items)
 					{
@@ -975,7 +975,7 @@ namespace Atlas.UI.Avalonia.View
 				}
 				else
 				{
-					tabDatas[0].SelectedItem = e.obj;
+					tabDatas[0].SelectedItem = e.Object;
 				}
 			}
 		}

@@ -30,17 +30,17 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new Primitives()
 			{
-				uintTest = 5,
-				doubleTest = 2.5,
-				stringTest = "abc",
+				UintTest = 5,
+				DoubleTest = 2.5,
+				StringTest = "abc",
 			};
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<Primitives>(Call);
 
-			Assert.AreEqual(output.uintTest, input.uintTest);
-			Assert.AreEqual(output.doubleTest, input.doubleTest);
-			Assert.AreEqual(output.stringTest, input.stringTest);
+			Assert.AreEqual(output.UintTest, input.UintTest);
+			Assert.AreEqual(output.DoubleTest, input.DoubleTest);
+			Assert.AreEqual(output.StringTest, input.StringTest);
 		}
 
 		[Test, Description("Serialize Nullable int")]
@@ -70,15 +70,15 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new NullableFieldPrimitives()
 			{
-				uintTest = 5,
-				doubleTest = 2.5,
+				UintTest = 5,
+				DoubleTest = 2.5,
 			};
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<NullableFieldPrimitives>(Call);
 
-			Assert.AreEqual(output.uintTest, input.uintTest);
-			Assert.AreEqual(output.doubleTest, input.doubleTest);
+			Assert.AreEqual(output.UintTest, input.UintTest);
+			Assert.AreEqual(output.DoubleTest, input.DoubleTest);
 		}
 
 		[Test, Description("Serialize Nullable Properties Primitive")]
@@ -86,15 +86,15 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new NullablePropertyPrimitives()
 			{
-				uintTest = 5,
-				doubleTest = 2.5,
+				UintTest = 5,
+				DoubleTest = 2.5,
 			};
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<NullablePropertyPrimitives>(Call);
 
-			Assert.AreEqual(output.uintTest, input.uintTest);
-			Assert.AreEqual(output.doubleTest, input.doubleTest);
+			Assert.AreEqual(output.UintTest, input.UintTest);
+			Assert.AreEqual(output.DoubleTest, input.DoubleTest);
 		}
 
 		[Test, Description("Serialize int")]
@@ -268,6 +268,7 @@ namespace Atlas.Serialize.Test
 				input[i] = 1;
 			serializer.Save(Call, input);
 			byte[] output = serializer.Load<byte[]>(Call);
+			Assert.NotNull(output);
 		}
 
 		[Test, Description("Serialize Nullable List")]
@@ -283,6 +284,7 @@ namespace Atlas.Serialize.Test
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<List<int?>>(Call);
+			Assert.NotNull(output);
 		}
 
 		private class MultipleArrays
@@ -297,6 +299,7 @@ namespace Atlas.Serialize.Test
 			var arrays = new MultipleArrays();
 			serializer.Save(Call, arrays);
 			var output = serializer.Load<MultipleArrays>(Call);
+			Assert.NotNull(output);
 		}
 
 
@@ -326,6 +329,7 @@ namespace Atlas.Serialize.Test
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<Objects>(Call);
+			Assert.NotNull(output);
 		}
 
 		[Test, Description("Serialize Properties")]
@@ -333,17 +337,17 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new Properties()
 			{
-				uintTest = 5,
-				doubleTest = 2.5,
-				stringTest = "abc",
+				UintTest = 5,
+				DoubleTest = 2.5,
+				StringTest = "abc",
 			};
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<Properties>(Call);
 
-			Assert.AreEqual(output.uintTest, input.uintTest);
-			Assert.AreEqual(output.doubleTest, input.doubleTest);
-			Assert.AreEqual(output.stringTest, input.stringTest);
+			Assert.AreEqual(output.UintTest, input.UintTest);
+			Assert.AreEqual(output.DoubleTest, input.DoubleTest);
+			Assert.AreEqual(output.StringTest, input.StringTest);
 		}
 
 		[Test, Description("Serialize Properties")]
@@ -351,13 +355,13 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new FieldInterfaceList
 			{
-				list = new List<uint> { 1, 2, 3 }
+				List = new List<uint> { 1, 2, 3 }
 			};
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<FieldInterfaceList>(Call);
 
-			Assert.AreEqual(output.list, input.list);
+			Assert.AreEqual(output.List, input.List);
 		}
 
 		[Test, Description("Serialize Field Subclass")]
@@ -371,7 +375,7 @@ namespace Atlas.Serialize.Test
 			serializer.Save(Call, input);
 			DerivedClassReference output = serializer.Load<DerivedClassReference>(Call);
 
-			Assert.AreEqual(output.baseClass.a, input.baseClass.a);
+			Assert.AreEqual(output.baseClass.A, input.baseClass.A);
 		}
 
 		[Test, Description("Serialize Type Dictionary")]
@@ -434,9 +438,11 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize String Dictionary")]
 		public void SerializeStringDictionary()
 		{
-			var input = new Dictionary<string, string>();
-			input["a"] = "1";
-			input["b"] = "2";
+			var input = new Dictionary<string, string>
+			{
+				["a"] = "1",
+				["b"] = "2"
+			};
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<Dictionary<string, string>>(Call);
@@ -452,6 +458,7 @@ namespace Atlas.Serialize.Test
 
 			serializer.Save(Call, input);
 			DictionaryTest output = serializer.Load<DictionaryTest>(Call);
+			Assert.NotNull(output);
 
 			//Assert.AreEqual(input, output);
 		}
@@ -473,8 +480,10 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize HashSet")]
 		public void SerializeHashSet()
 		{
-			var input = new HashSet<string>();
-			input.Add("test");
+			var input = new HashSet<string>
+			{
+				"test",
+			};
 
 			serializer.Save(Call, input);
 			var output = serializer.Load<HashSet<string>>(Call);
@@ -535,79 +544,79 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new SecureContainer()
 			{
-				secureField = new SecureClass()
+				SecureField = new SecureClass()
 				{
-					confidential = "secrets",
+					Confidential = "secrets",
 				},
 				SecureProperty = new SecureClass()
 				{
-					confidential = "more secrets",
+					Confidential = "more secrets",
 				},
-				nonSecure = "test",
+				NonSecure = "test",
 			};
 
 			serializer.SaveSecure = false;
 			serializer.Save(Call, input);
 			var output = serializer.Load<SecureContainer>(Call);
 
-			Assert.IsNull(output.secureField);
+			Assert.IsNull(output.SecureField);
 			Assert.IsNull(output.SecureProperty);
-			Assert.AreEqual(output.nonSecure, "test");
+			Assert.AreEqual(output.NonSecure, "test");
 		}
 
 		public class SecureContainer
 		{
-			public SecureClass secureField;
+			public SecureClass SecureField;
 			public SecureClass SecureProperty { get; set; }
-			public string nonSecure;
+			public string NonSecure;
 		}
 
 		[Secure]
 		public class SecureClass
 		{
-			public string confidential { get; set; }
+			public string Confidential { get; set; }
 		}
 
 		public class NullablePropertyPrimitives
 		{
-			public uint? uintTest { get; set; } = 1;
-			public double? doubleTest { get; set; } = 2.3;
+			public uint? UintTest { get; set; } = 1;
+			public double? DoubleTest { get; set; } = 2.3;
 		}
 
 		public class NullableFieldPrimitives
 		{
-			public uint? uintTest = 1;
-			public double? doubleTest = 2.3;
+			public uint? UintTest = 1;
+			public double? DoubleTest = 2.3;
 		}
 
 		public class Primitives
 		{
-			public uint uintTest = 1;
-			public double doubleTest = 2.3;
-			public string stringTest = "mystring";
+			public uint UintTest = 1;
+			public double DoubleTest = 2.3;
+			public string StringTest = "mystring";
 		}
 
 		public class Properties
 		{
-			public uint uintTest { get; set; } = 1;
-			public double doubleTest { get; set; } = 2.3;
-			public string stringTest { get; set; } = "mystring";
-			public Type type { get; set; } = null;
+			public uint UintTest { get; set; } = 1;
+			public double DoubleTest { get; set; } = 2.3;
+			public string StringTest { get; set; } = "mystring";
+			public Type Type { get; set; } = null;
 		}
 
 		public class FieldInterfaceList
 		{
-			public IList list;
+			public IList List;
 		}
 
 		public class Objects
 		{
-			public object obj = 2;
+			public object Object = 2;
 		}
 
 		public class BaseClass
 		{
-			public int a = 1;
+			public int A = 1;
 		}
 
 		public class DerivedClass : BaseClass
@@ -682,9 +691,10 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize List Containing Subclass of Type")]
 		public void SerializeListContainingSubclassOfType()
 		{
-			var input = new List<Base>();
-
-			input.Add(new SubClass() { A = 5 });
+			var input = new List<Base>
+			{
+				new SubClass() { A = 5 }
+			};
 			serializer.Save(Call, input);
 			List<Base> output = serializer.Load<List<Base>>(Call);
 
@@ -705,6 +715,7 @@ namespace Atlas.Serialize.Test
 			input[s] = b;
 			serializer.Save(Call, input);
 			var output = serializer.Load<Dictionary<Base, Base>>(Call);
+			Assert.NotNull(output);
 
 			Assert.AreEqual(s.B, 3);
 		}

@@ -62,14 +62,14 @@ namespace Atlas.Core
 			}
 		}
 
-		private Stopwatch stopwatch = new Stopwatch();
+		private readonly Stopwatch _stopwatch = new Stopwatch();
 
 		public override string ToString() => Label;
 
 		public TaskInstance()
 		{
 			Call.TaskInstance = this;
-			stopwatch.Start();
+			_stopwatch.Start();
 		}
 
 		private int _percent;
@@ -171,7 +171,7 @@ namespace Atlas.Core
 		{
 			if (Finished)
 				return;
-			stopwatch.Stop(); // Both Send and Post adds some delay
+			_stopwatch.Stop(); // Both Send and Post adds some delay
 			Creator?.context.Post(new SendOrPostCallback(OnFinished), null);
 		}
 
@@ -216,7 +216,7 @@ namespace Atlas.Core
 			NotifyPropertyChanged(nameof(TaskStatus));
 			NotifyPropertyChanged(nameof(Finished));
 			NotifyPropertyChanged(nameof(CancelVisible));
-			Call.Log.Add("Finished", new Tag("Time", stopwatch.ElapsedMilliseconds / 1000.0));
+			Call.Log.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));
 			Creator?.OnComplete?.Invoke();
 			OnComplete?.Invoke();
 		}

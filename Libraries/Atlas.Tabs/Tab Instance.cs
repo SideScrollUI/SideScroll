@@ -26,16 +26,16 @@ namespace Atlas.Tabs
 
 	public class TabInstanceLoadAsync : TabInstance, ITabAsync
 	{
-		private ILoadAsync loadAsync;
+		public ILoadAsync LoadMethod;
 
 		public TabInstanceLoadAsync(ILoadAsync loadAsync)
 		{
-			this.loadAsync = loadAsync;
+			LoadMethod = loadAsync;
 		}
 
 		public async Task LoadAsync(Call call, TabModel model)
 		{
-			object result = await loadAsync.LoadAsync(call);
+			object result = await LoadMethod.LoadAsync(call);
 			model.AddData(result);
 		}
 	}
@@ -104,7 +104,7 @@ namespace Atlas.Tabs
 		public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = new Dictionary<object, TabInstance>();
 
 		public SynchronizationContext uiContext;
-		public TabBookmark filterBookmarkNode;
+		public TabBookmark FilterBookmarkNode;
 
 		public event EventHandler<EventArgs> OnRefresh;
 		public event EventHandler<EventArgs> OnReload;
@@ -118,11 +118,11 @@ namespace Atlas.Tabs
 
 		public class EventSelectItem : EventArgs
 		{
-			public object obj;
+			public object Object;
 
 			public EventSelectItem(object obj)
 			{
-				this.obj = obj;
+				Object = obj;
 			}
 		}
 
@@ -140,7 +140,12 @@ namespace Atlas.Tabs
 		// Reload to initial state
 		public bool isLoaded = false;
 		public bool loadCalled = false; // Used by the view
-		private bool staticModel = false;
+		public bool StaticModel = false;
+		public IList SelectedItems { get; set; }
+
+		protected IDataRepoInstance DataRepoInstance { get; set; }
+
+		public override string ToString() => Label;
 
 		public TabInstance()
 		{
@@ -151,12 +156,10 @@ namespace Atlas.Tabs
 		{
 			Project = project;
 			Model = model;
-			staticModel = true;
+			StaticModel = true;
 			InitializeContext();
 			SetStartLoad();
 		}
-
-		public override string ToString() => Label;
 
 		public TabInstance CreateChildTab(ITab iTab)
 		{
@@ -205,7 +208,7 @@ namespace Atlas.Tabs
 		public virtual void Dispose()
 		{
 			ChildTabInstances.Clear();
-			if (!staticModel)
+			if (!StaticModel)
 				Model.Clear();
 			foreach (TaskInstance taskInstance in Model.Tasks)
 			{
@@ -393,7 +396,7 @@ namespace Atlas.Tabs
 		public async Task ReintializeAsync(Call call)
 		{
 			TabModel model = Model;
-			if (!staticModel)
+			if (!StaticModel)
 				model = await LoadModelAsync(call);
 
 			try
@@ -538,7 +541,6 @@ namespace Atlas.Tabs
 			}
 		}
 
-		public IList SelectedItems { get; set; }
 		public bool Skippable
 		{
 			get
@@ -574,8 +576,6 @@ namespace Atlas.Tabs
 			if (OnClearSelection != null)
 				uiContext.Send(_ => OnClearSelection(this, new EventArgs()), null);
 		}
-
-		protected IDataRepoInstance DataRepoInstance { get; set; }
 
 		public virtual Bookmark CreateBookmark()
 		{

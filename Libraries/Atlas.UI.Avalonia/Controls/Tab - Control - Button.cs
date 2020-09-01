@@ -50,13 +50,10 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			var binding = new Binding(propertyName)
 			{
-				//Converter = new EditValueConverter(),
-				//StringFormat = "Hello {0}",
 				Path = propertyName,
-				Mode = BindingMode.TwoWay,
-				//Source = DataContext,
+				Mode = BindingMode.OneWay,
 			};
-			((Button)this).Bind(IsVisibleProperty, binding);
+			this.Bind(IsVisibleProperty, binding);
 		}
 	}
 }
