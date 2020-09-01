@@ -18,16 +18,16 @@ namespace Atlas.Tabs.Tools
 
 		public class Instance : TabInstance
 		{
-			private TabDirectory tab;
+			public TabDirectory Tab;
 
 			public Instance(TabDirectory tab)
 			{
-				this.tab = tab;
+				Tab = tab;
 			}
 
 			public override void Load(Call call, TabModel model)
 			{
-				if (!Directory.Exists(tab.Path))
+				if (!Directory.Exists(Tab.Path))
 					return;
 
 				var actions = new ItemCollection<TaskCreator>()
@@ -38,7 +38,7 @@ namespace Atlas.Tabs.Tools
 
 
 				var directories = new ItemCollection<ListDirectory>();
-				foreach (string directoryPath in Directory.EnumerateDirectories(tab.Path))
+				foreach (string directoryPath in Directory.EnumerateDirectories(Tab.Path))
 				{
 					var listDirectory = new ListDirectory(directoryPath);
 					directories.Add(listDirectory);
@@ -46,7 +46,7 @@ namespace Atlas.Tabs.Tools
 				model.ItemList.Add(directories);
 
 				var files = new ItemCollection<ListFile>();
-				foreach (string filePath in Directory.EnumerateFiles(tab.Path))
+				foreach (string filePath in Directory.EnumerateFiles(Tab.Path))
 				{
 					var listFile = new ListFile(filePath);
 					files.Add(listFile);

@@ -21,29 +21,29 @@ namespace Atlas.Tabs.Tools
 
 		public class Instance : TabInstance
 		{
-			private TabFtpDirectory tab;
+			public TabFtpDirectory Tab;
 
 			public Instance(TabFtpDirectory tab)
 			{
-				this.tab = tab;
+				Tab = tab;
 			}
 
 			public override void Load(Call call, TabModel model)
 			{
-				FTP ftp = new FTP(call, tab.FtpInfo);
-				List<FtpItem> fileDatas = ftp.GetDirectoryListDetailed(tab.Path);
+				FTP ftp = new FTP(call, Tab.FtpInfo);
+				List<FtpItem> fileDatas = ftp.GetDirectoryListDetailed(Tab.Path);
 				var directories = new ItemCollection<ListDirectory>();
 				var files = new ItemCollection<ListFile>();
 				foreach (FtpItem fileData in fileDatas)
 				{
 					if (fileData.directory)
 					{
-						var listDirectory = new ListDirectory(tab.FtpInfo, fileData);
+						var listDirectory = new ListDirectory(Tab.FtpInfo, fileData);
 						directories.Add(listDirectory);
 					}
 					else
 					{
-						var listFile = new ListFile(tab.FtpInfo, fileData);
+						var listFile = new ListFile(Tab.FtpInfo, fileData);
 						files.Add(listFile);
 					}
 				}

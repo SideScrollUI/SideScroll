@@ -99,16 +99,16 @@ namespace Atlas.Core
 		public virtual string Summary => Text;
 		public int Entries { get; set; }
 
-		private float? _Duration;
+		private float? _duration;
 		public float? Duration
 		{
 			get
 			{
-				return _Duration;
+				return _duration;
 			}
 			set
 			{
-				_Duration = value;
+				_duration = value;
 				CreateEventPropertyChanged();
 			}
 		}

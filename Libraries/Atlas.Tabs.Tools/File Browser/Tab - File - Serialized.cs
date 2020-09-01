@@ -19,7 +19,7 @@ namespace Atlas.Tabs.Tools
 
 		public class Instance : TabInstance
 		{
-			private TabFileSerialized tab;
+			public TabFileSerialized Tab;
 
 			public object Object;
 			public Serializer serializer;
@@ -27,14 +27,14 @@ namespace Atlas.Tabs.Tools
 
 			public Instance(TabFileSerialized tab)
 			{
-				this.tab = tab;
+				Tab = tab;
 			}
 
 			public override void Load(Call call, TabModel model)
 			{
 				var items = new ItemCollection<ListItem>();
 
-				var serializerFile = new SerializerFile(tab.path);
+				var serializerFile = new SerializerFile(Tab.path);
 
 				serializer = serializerFile.LoadSchema(call);
 
@@ -50,7 +50,7 @@ namespace Atlas.Tabs.Tools
 
 			private void LoadData(Call call)
 			{
-				var serializerFile = new SerializerFile(tab.path);
+				var serializerFile = new SerializerFile(Tab.path);
 
 				Object = serializerFile.Load(call);
 				listData.Value = Object;

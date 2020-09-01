@@ -40,21 +40,21 @@ namespace Atlas.Tabs
 	public class LazyJsonArray : LazyJsonNode
 	{
 		private JsonArray jsonArray;
-		private List<object> _Items;
+		private List<object> _items;
 		[InnerValue, StyleValue]
 		public List<object> Items
 		{
 			get
 			{
-				if (_Items == null)
+				if (_items == null)
 				{
-					_Items = new List<object>();
+					_items = new List<object>();
 					foreach (JsonValue jsonValue in jsonArray)
 					{
-						_Items.Add(Create(jsonValue));
+						_items.Add(Create(jsonValue));
 					}
 				}
-				return _Items;
+				return _items;
 			}
 		}
 
@@ -69,15 +69,15 @@ namespace Atlas.Tabs
 	public class LazyJsonObject : LazyJsonNode
 	{
 		private JsonObject jsonObject;
-		private List<LazyJsonProperty> _Items;
+		private List<LazyJsonProperty> _items;
 		[InnerValue, StyleValue]
 		public List<LazyJsonProperty> Items
 		{
 			get
 			{
-				if (_Items == null)
+				if (_items == null)
 				{
-					_Items = new List<LazyJsonProperty>();
+					_items = new List<LazyJsonProperty>();
 					foreach (var pair in jsonObject)
 					{
 						var property = new LazyJsonProperty()
@@ -85,10 +85,10 @@ namespace Atlas.Tabs
 							Key = pair.Key,
 							Value = Create(pair.Value),
 						};
-						_Items.Add(property);
+						_items.Add(property);
 					}
 				}
-				return _Items;
+				return _items;
 			}
 		}
 

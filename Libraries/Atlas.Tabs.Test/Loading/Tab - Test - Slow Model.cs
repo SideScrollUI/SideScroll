@@ -21,17 +21,17 @@ namespace Atlas.Tabs.Test
 		{
 			public int Integer { get; set; }
 
-			private string _Text;
+			private string _text;
 			public string Text
 			{
 				get
 				{
-					if (_Text == null)
+					if (_text == null)
 					{
 						System.Threading.Thread.Sleep(5000);
-						_Text = "Text";
+						_text = "Text";
 					}
-					return _Text;
+					return _text;
 				}
 			}
 		}

@@ -8,17 +8,17 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		public static TabBookmarks Global;
 
-		private BookmarkCollection bookmarks;
+		public BookmarkCollection Bookmarks;
 
 		public TabBookmarks(Project project)
 		{
-			bookmarks = new BookmarkCollection(project);
+			Bookmarks = new BookmarkCollection(project);
 			Global = Global ?? this;
 		}
 
 		public void AddBookmark(Call call, Bookmark bookmark)
 		{
-			bookmarks.AddNew(call, bookmark);
+			Bookmarks.AddNew(call, bookmark);
 		}
 
 		public TabInstance Create() => new Instance(this);
@@ -31,11 +31,11 @@ namespace Atlas.UI.Avalonia.Controls
 		public class Instance : TabInstance
 		{
 			//private Toolbar toolbar;
-			private TabBookmarks tab;
+			public TabBookmarks Tab;
 
 			public Instance(TabBookmarks tab)
 			{
-				this.tab = tab;
+				Tab = tab;
 			}
 
 			public override void LoadUI(Call call, TabModel model)
@@ -44,9 +44,9 @@ namespace Atlas.UI.Avalonia.Controls
 				toolbar.ButtonReset.Action = Reset;
 				model.AddObject(toolbar);*/
 
-				model.AddData(tab.bookmarks.Items);
-				if (tab.bookmarks.NewBookmark != null)
-					SelectItem(tab.bookmarks.NewBookmark);
+				model.AddData(Tab.Bookmarks.Items);
+				if (Tab.Bookmarks.NewBookmark != null)
+					SelectItem(Tab.Bookmarks.NewBookmark);
 			}
 
 			public override void GetBookmark(TabBookmark tabBookmark)

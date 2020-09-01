@@ -17,7 +17,7 @@ namespace Atlas.Tabs.Tools
 
 		public class Instance : TabInstance
 		{
-			private TabQueue tab;
+			public TabQueue Tab;
 
 			//public IList waiting;
 			int nextIndex = 0;
@@ -34,13 +34,13 @@ namespace Atlas.Tabs.Tools
 
 			public Instance(TabQueue tab)
 			{
-				this.tab = tab;
+				Tab = tab;
 			}
 
 			public override void Load(Call call, TabModel model)
 			{
 				var items = new ItemCollection<ListItem>();
-				listItemTasks = new ListItem("Tasks", tab.Tasks);
+				listItemTasks = new ListItem("Tasks", Tab.Tasks);
 
 				items.Add(listItemTasks);
 				//list.Add(listItemActive);
@@ -61,12 +61,12 @@ namespace Atlas.Tabs.Tools
 			{
 				tokenSource = new CancellationTokenSource();
 
-				while (nextIndex < tab.Tasks.Count)
+				while (nextIndex < Tab.Tasks.Count)
 				{
 					if (tokenSource.IsCancellationRequested)
 						break;
 
-					TaskCreator taskCreator = (TaskCreator)tab.Tasks[nextIndex];
+					TaskCreator taskCreator = (TaskCreator)Tab.Tasks[nextIndex];
 					nextIndex++;
 
 					//waiting.RemoveAt(0);

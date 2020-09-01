@@ -64,12 +64,12 @@ namespace Atlas.UI.Avalonia
 
 		public class Instance : TabInstance
 		{
-			private TabChartGroup tab;
+			public TabChartGroup Tab;
 			private TabControlDataGrid tabDataGrid;
 
 			public Instance(TabChartGroup tab)
 			{
-				this.tab = tab;
+				Tab = tab;
 			}
 
 			//private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
@@ -90,7 +90,7 @@ namespace Atlas.UI.Avalonia
 				//Orientation = Orientation.Vertical;
 
 				// autogenerate columns
-				tabDataGrid = new TabControlDataGrid(this, tab.ChartSettings.ListSeries, true, TabViewSettings.ChartDataSettings[0]);
+				tabDataGrid = new TabControlDataGrid(this, Tab.ChartSettings.ListSeries, true, TabViewSettings.ChartDataSettings[0]);
 				//Grid.SetRow(tabDataGrid, 1);
 
 				//tabDataGrid.AddButtonColumn("<>", nameof(TaskInstance.Cancel));

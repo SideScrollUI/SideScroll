@@ -14,11 +14,11 @@ namespace Atlas.Core
 		//public event EventHandler<EventArgs> OnComplete;
 		public Action OnComplete;
 
-		private string _Label;
+		private string _label;
 		public string Label
 		{ 
-			get => _Label ?? Creator?.Label;
-			set => _Label = value;
+			get => _label ?? Creator?.Label;
+			set => _label = value;
 		}
 		public TaskCreator Creator { get; set; }
 		[HiddenColumn]
@@ -72,31 +72,31 @@ namespace Atlas.Core
 			stopwatch.Start();
 		}
 
-		private int _Percent;
+		private int _percent;
 		public int Percent
 		{
-			get => _Percent;
+			get => _percent;
 			set
 			{
-				if (_Percent == value)
+				if (_percent == value)
 					return;
 				
-				_Percent = value;
+				_percent = value;
 				NotifyPropertyChanged(nameof(Percent));
 			}
 		}
 
 		private long prevPercent;
-		private long _Progress;
+		private long _progress;
 		public long Progress
 		{
-			get => _Progress;
+			get => _progress;
 			set
 			{
-				if (_Progress == value)
+				if (_progress == value)
 					return;
 
-				_Progress = Math.Min(value, ProgressMax);
+				_progress = Math.Min(value, ProgressMax);
 				NotifyPropertyChanged(nameof(Progress));
 				UpdatePercent();
 				if (ParentTask != null)
@@ -132,7 +132,7 @@ namespace Atlas.Core
 			else*/
 			if (ProgressMax > 0)
 			{
-				Percent = (int)(100 * _Progress / ProgressMax);
+				Percent = (int)(100 * _progress / ProgressMax);
 				NotifyPropertyChanged(nameof(Percent));
 			}
 		}

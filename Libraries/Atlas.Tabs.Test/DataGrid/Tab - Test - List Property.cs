@@ -32,17 +32,17 @@ namespace Atlas.Tabs.Test.DataGrid
 
 	public class PropertyTest : INotifyPropertyChanged
 	{
-		private bool _Boolean;
+		private bool _boolean;
 		[Editing]
 		public bool Boolean
 		{
 			get
 			{
-				return _Boolean;
+				return _boolean;
 			}
 			set
 			{
-				_Boolean = value;
+				_boolean = value;
 				NotifyPropertyChangedContext(nameof(Boolean));
 			}
 		}

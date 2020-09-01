@@ -12,22 +12,22 @@ namespace Atlas.UI.Avalonia.Tabs
 {
 	public class TabText : ITab
 	{
-		public string text;
+		public string Text;
 
 		public TabText(string text)
 		{
-			this.text = text;
+			Text = text;
 		}
 
 		public TabInstance Create() => new Instance(this);
 
 		public class Instance : TabInstance
 		{
-			private TabText tab;
+			public TabText Tab;
 
 			public Instance(TabText tab)
 			{
-				this.tab = tab;
+				Tab = tab;
 			}
 
 			public override void LoadUI(Call call, TabModel model)
@@ -61,13 +61,13 @@ namespace Atlas.UI.Avalonia.Tabs
 				//tabAvaloniaEdit.textEditor.VerticalAlignment = VerticalAlignment.Top;
 				//tabAvaloniaEdit.textEditor.VerticalAlignment = VerticalAlignment.Stretch;
 				//tabAvaloniaEdit.textEditor.IsReadOnly = true; // todo: allow editing?
-				tabAvaloniaEdit.Text = tab.text;
+				tabAvaloniaEdit.Text = Tab.Text;
 
-				if (tab.text.StartsWith("{"))
+				if (Tab.Text.StartsWith("{"))
 				{
 					try
 					{
-						JsonValue jsonValue = JsonValue.Parse(tab.text);
+						JsonValue jsonValue = JsonValue.Parse(Tab.Text);
 						if (jsonValue != null)
 						{
 							tabAvaloniaEdit.TextEditor.FontFamily = new FontFamily("Courier New");

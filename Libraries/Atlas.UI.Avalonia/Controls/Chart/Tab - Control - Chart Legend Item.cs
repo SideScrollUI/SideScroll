@@ -29,13 +29,13 @@ namespace Atlas.UI.Avalonia.Controls
 		private OxyColor oxyColor;
 		private MarkerType markerType;
 
-		public int _Index;
+		public int _index;
 		public int Index
 		{
-			get => _Index;
+			get => _index;
 			set
 			{
-				_Index = value;
+				_index = value;
 				textBlock.Text = value.ToString() + ". " + Series.Title;
 			}
 		}

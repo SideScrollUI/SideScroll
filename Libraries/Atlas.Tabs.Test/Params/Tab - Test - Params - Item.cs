@@ -97,16 +97,16 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			private TabParamItem tab;
+			public TabParamItem Tab;
 
 			public Instance(TabParamItem tab)
 			{
-				this.tab = tab;
+				Tab = tab;
 			}
 
 			public override void Load(Call call, TabModel model)
 			{
-				model.AddData(tab.TestItem);
+				model.AddData(Tab.TestItem);
 			}
 		}
 	}

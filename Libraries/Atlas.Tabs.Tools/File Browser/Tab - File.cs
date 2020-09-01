@@ -27,22 +27,22 @@ namespace Atlas.Tabs.Tools
 
 		public class Instance : TabInstance
 		{
-			private TabFile tab;
+			public TabFile Tab;
 
 			public Instance(TabFile tab)
 			{
-				this.tab = tab;
+				Tab = tab;
 			}
 
 			public override void Load(Call call, TabModel model)
 			{
 				var items = new ItemCollection<ListItem>();
 
-				string extension = System.IO.Path.GetExtension(tab.Path);
+				string extension = System.IO.Path.GetExtension(Tab.Path);
 
 				if (extension == ".json")
 				{
-					items.Add(new ListItem("Contents", LazyJsonNode.LoadPath(tab.Path)));
+					items.Add(new ListItem("Contents", LazyJsonNode.LoadPath(Tab.Path)));
 					//items.Add(new ListItem("Contents", JsonValue.Parse(File.ReadAllText(path))));
 				}
 				else
@@ -53,7 +53,7 @@ namespace Atlas.Tabs.Tools
 						try
 						{
 							// doesn't work
-							using (StreamReader streamReader = File.OpenText(tab.Path))
+							using (StreamReader streamReader = File.OpenText(Tab.Path))
 							{
 								char[] buffer = new char[100];
 								streamReader.Read(buffer, 0, buffer.Length);
@@ -67,7 +67,7 @@ namespace Atlas.Tabs.Tools
 
 					if (isText)
 					{
-						items.Add(new ListItem("Contents", new FilePath(tab.Path)));
+						items.Add(new ListItem("Contents", new FilePath(Tab.Path)));
 					}
 					else
 					{

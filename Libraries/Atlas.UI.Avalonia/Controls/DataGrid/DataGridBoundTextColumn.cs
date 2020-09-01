@@ -7,6 +7,7 @@ using Avalonia.Layout;
 using Avalonia.Styling;
 using System;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia
 {
@@ -118,7 +119,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopy = new MenuItem() { Header = "_Copy - Cell Contents" };
 			menuItemCopy.Click += delegate
 			{
-				ClipBoardUtils.SetTextAsync(textBlock.Text);
+				Task.Run(() => ClipBoardUtils.SetTextAsync(textBlock.Text));
 			};
 			list.Add(menuItemCopy);
 
@@ -129,7 +130,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGrid.ToStringTable();
 				if (text != null)
-					ClipBoardUtils.SetTextAsync(text);
+					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
 			};
 			list.Add(menuItemCopyDataGrid);
 
@@ -138,7 +139,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGrid.ToCsv();
 				if (text != null)
-					ClipBoardUtils.SetTextAsync(text);
+					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
 			};
 			list.Add(menuItemCopyDataGridCsv);
 
