@@ -1,7 +1,6 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -144,8 +143,9 @@ namespace Atlas.Tabs
 		// This can be slow due to lazy property loading
 		public static ItemCollection<ListProperty> Sort(ItemCollection<ListProperty> listProperties)
 		{
-			var sorted = new ItemCollection<ListProperty>(listProperties.OrderByDescending(i => TabModel.ObjectHasLinks(i, true)).ToList());
-			return sorted;
+			var autoSorted = new ItemCollection<ListProperty>(listProperties.OrderByDescending(i => i.PropertyInfo.GetCustomAttribute<AutoSelectAttribute>() != null).ToList());
+			var linkSorted = new ItemCollection<ListProperty>(autoSorted.OrderByDescending(i => TabModel.ObjectHasLinks(i, true)).ToList());
+			return linkSorted;
 		}
 	}
 }

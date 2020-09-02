@@ -418,6 +418,8 @@ namespace Atlas.Serialize
 			Lookup = Map();
 		}
 
+		public List<T> Values => this.Select(o => o.Value).ToList();
+
 		private SortedDictionary<string, T> Map()
 		{
 			var entries = new SortedDictionary<string, T>();

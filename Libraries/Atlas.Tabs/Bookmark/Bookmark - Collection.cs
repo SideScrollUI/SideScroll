@@ -14,7 +14,7 @@ namespace Atlas.Tabs
 		private Project project;
 		public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new ItemCollectionUI<TabBookmarkItem>();
 		public TabBookmarkItem NewBookmark { get; set; }
-		private DataRepoInstance<Bookmark> dataRepoBookmarks;
+		private DataRepoView<Bookmark> dataRepoBookmarks;
 
 		public BookmarkCollection(Project project)
 		{
@@ -40,8 +40,9 @@ namespace Atlas.Tabs
 				Names.Add(bookmarkName);
 			}*/
 
-			dataRepoBookmarks = project.DataApp.Open<Bookmark>(null, DataKey);
-			foreach (Bookmark bookmark in dataRepoBookmarks.LoadAllSorted().Values)
+			dataRepoBookmarks = project.DataApp.OpenView<Bookmark>(null, DataKey);
+			dataRepoBookmarks.SortBy(nameof(Bookmark.TimeStamp));
+			foreach (Bookmark bookmark in dataRepoBookmarks.Items.Values)
 			{
 				if (bookmark.Name == TabInstance.CurrentBookmarkName)
 					continue;

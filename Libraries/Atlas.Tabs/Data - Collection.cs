@@ -22,6 +22,7 @@ namespace Atlas.Tabs
 		public string Path;
 		public ItemCollectionUI<TTabType> Items { get; set; } = new ItemCollectionUI<TTabType>();
 		public TTabType NewTabItem { get; set; }
+
 		private DataRepoView<TDataType> dataRepoView;
 		private DataRepoView<TDataType> dataRepoSecondary; // saves and deletes goto a 2nd copy
 		private object[] tabParams;

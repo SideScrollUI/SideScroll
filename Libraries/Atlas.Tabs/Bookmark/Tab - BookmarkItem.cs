@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Atlas.Tabs
 {
 	// Display Class
-	public class TabBookmarkItem : ITab
+	public class TabBookmarkItem : ITab, InnerTab
 	{
 		//[ButtonColumn("-")]
 		public event EventHandler<EventArgs> OnDelete;
@@ -24,6 +24,9 @@ namespace Atlas.Tabs
 		[HiddenColumn]
 		public Bookmark Bookmark { get; set; }
 		private Project Project { get; set; }
+
+		[HiddenColumn]
+		public ITab Tab => Bookmark.TabBookmark.Tab;
 
 		public override string ToString() => Name;
 

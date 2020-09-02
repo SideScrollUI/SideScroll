@@ -24,6 +24,11 @@ namespace Atlas.Tabs
 		Task LoadAsync(Call call, TabModel model);
 	}
 
+	public interface InnerTab
+	{
+		ITab Tab { get; }
+	}
+
 	public class TabInstanceLoadAsync : TabInstance, ITabAsync
 	{
 		public ILoadAsync LoadMethod;
@@ -614,6 +619,8 @@ namespace Atlas.Tabs
 					tabBookmark.DataRepoItems.Add(dataRepoItem);
 				}
 			}*/
+			if (iTab is InnerTab innerTab)
+				iTab = innerTab.Tab;
 			if (iTab?.GetType().GetCustomAttribute<TabRootAttribute>() != null)
 			{
 				tabBookmark.IsRoot = true;

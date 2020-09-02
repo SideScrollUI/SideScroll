@@ -140,6 +140,12 @@ namespace Atlas.Core
 	{
 	}
 
+	// AutoSelect the item if non-null, rename? add priority?
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class AutoSelectAttribute : Attribute
+	{
+	}
+
 	// Don't show this field/property as a column
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class HiddenColumnAttribute : Attribute
