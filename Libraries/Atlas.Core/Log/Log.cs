@@ -207,21 +207,22 @@ namespace Atlas.Core
 
 		public LogEntry Add(string text, params Tag[] tags)
 		{
-			var logEntry = new LogEntry(LogType.Info, text, tags);
-			AddLogEntry(logEntry);
-			return logEntry;
+			return Add(LogType.Info, text, tags);
 		}
 
 		public LogEntry AddWarning(string text, params Tag[] tags)
 		{
-			var logEntry = new LogEntry(LogType.Warn, text, tags);
-			AddLogEntry(logEntry);
-			return logEntry;
+			return Add(LogType.Warn, text, tags);
 		}
 
 		public LogEntry AddError(string text, params Tag[] tags)
 		{
-			var logEntry = new LogEntry(LogType.Error, text, tags);
+			return Add(LogType.Error, text, tags);
+		}
+
+		public LogEntry Add(LogType logType, string text, params Tag[] tags)
+		{
+			var logEntry = new LogEntry(logType, text, tags);
 			AddLogEntry(logEntry);
 			return logEntry;
 		}

@@ -24,7 +24,7 @@ namespace Atlas.Tabs
 		Task LoadAsync(Call call, TabModel model);
 	}
 
-	public interface InnerTab
+	public interface IInnerTab
 	{
 		ITab Tab { get; }
 	}
@@ -619,7 +619,7 @@ namespace Atlas.Tabs
 					tabBookmark.DataRepoItems.Add(dataRepoItem);
 				}
 			}*/
-			if (iTab is InnerTab innerTab)
+			if (iTab is IInnerTab innerTab)
 				iTab = innerTab.Tab;
 			if (iTab?.GetType().GetCustomAttribute<TabRootAttribute>() != null)
 			{
