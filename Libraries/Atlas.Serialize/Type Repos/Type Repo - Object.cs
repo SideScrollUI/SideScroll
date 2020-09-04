@@ -74,7 +74,7 @@ namespace Atlas.Serialize
 				{
 					TypeRepo.LoadLazyObjectRef(); // skip reference
 					if (LazyProperty != null)
-						LazyProperty.fieldInfoLoaded.SetValue(obj, true);
+						LazyProperty.FieldInfoLoaded.SetValue(obj, true);
 				}
 				else if (LazyProperty != null)
 				{
@@ -232,7 +232,7 @@ namespace Atlas.Serialize
 			if (Serializer.Lazy && HasVirtualProperty)
 			{
 				LazyClass = new LazyClass(Type, lazyPropertyRepos);
-				LoadableType = LazyClass.newType;
+				LoadableType = LazyClass.NewType;
 			}
 
 			/*if (lazyClass != null)

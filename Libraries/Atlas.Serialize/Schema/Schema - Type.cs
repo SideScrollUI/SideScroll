@@ -88,7 +88,7 @@ namespace Atlas.Serialize
 
 		// not completely safe since anyone can name their Assemblies whatever, but someone would have to include those libraries
 		// BinaryFormatter uses[Serializable], should we allow that?
-		public static bool IsWhitelisted(Type type)
+		public static bool IsAllowed(Type type)
 		{
 			return true;
 			/*if (type == null)
@@ -124,11 +124,11 @@ namespace Atlas.Serialize
 
 		// loading a random type from a derived type such as an object can be dangerous, disallow by default
 		// otherwise it could be dangerous loading a random file from the internet
-		public bool Whitelisted
+		public bool Allowed
 		{
 			get
 			{
-				return IsWhitelisted(Type);
+				return IsAllowed(Type);
 			}
 		}
 

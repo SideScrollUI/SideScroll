@@ -9,60 +9,60 @@ namespace Atlas.Serialize
 {
 	public class TypeRef
 	{
-		public TypeRepo typeRepo;
-		public int index;
+		public TypeRepo TypeRepo;
+		public int Index;
 
 		public object Load()
 		{
-			return typeRepo.LoadFullObject(index);
+			return TypeRepo.LoadFullObject(Index);
 		}
 	}
 
 	public class LazyProperty
 	{
-		//public TypeRepo typeRepo;
-		public PropertyBuilder propertyBuilder;
-		public PropertyInfo propertyInfoOriginal;
-		public PropertyInfo propertyInfoOverride;
-		public FieldBuilder fieldBuilderLoaded;
-		public FieldBuilder fieldBuilderTypeRef;
-		public FieldInfo fieldInfoLoaded;
-		public FieldInfo fieldInfoTypeRef;
+		//public TypeRepo TypeRepo;
+		public PropertyBuilder PropertyBuilder;
+		public PropertyInfo PropertyInfoOriginal;
+		public PropertyInfo PropertyInfoOverride;
+		public FieldBuilder FieldBuilderLoaded;
+		public FieldBuilder FieldBuilderTypeRef;
+		public FieldInfo FieldInfoLoaded;
+		public FieldInfo FieldInfoTypeRef;
 
-		public override string ToString() => propertyBuilder.Name;
+		public override string ToString() => PropertyBuilder.Name;
 
 		public void SetTypeRef(object obj, TypeRef typeRef)
 		{
 			if (typeRef == null)
 			{
-				fieldInfoLoaded.SetValue(obj, true);
+				FieldInfoLoaded.SetValue(obj, true);
 			}
 			else
 			{
-				fieldInfoTypeRef.SetValue(obj, typeRef);
+				FieldInfoTypeRef.SetValue(obj, typeRef);
 			}
 		}
 	}
 
 	public class LazyClass
 	{
-		public Type originalType;
-		public Type newType;
+		public Type OriginalType;
+		public Type NewType;
 		public Dictionary<PropertyInfo, LazyProperty> lazyProperties = new Dictionary<PropertyInfo, LazyProperty>();
 
 		public LazyClass(Type type, List<TypeRepoObject.PropertyRepo> propertyRepos)
 		{
-			originalType = type;
+			OriginalType = type;
 
-			newType = CreateLazyType(propertyRepos);
+			NewType = CreateLazyType(propertyRepos);
 
 			foreach (LazyProperty lazyProperty in lazyProperties.Values)
 			{
-				lazyProperty.propertyInfoOverride = newType.GetProperty(lazyProperty.propertyInfoOriginal.Name);
-				lazyProperty.fieldInfoLoaded = newType.GetField(lazyProperty.fieldBuilderLoaded.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				lazyProperty.fieldInfoTypeRef = newType.GetField(lazyProperty.fieldBuilderTypeRef.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-				Debug.Assert(lazyProperty.fieldInfoLoaded != null);
-				Debug.Assert(lazyProperty.fieldBuilderTypeRef != null);
+				lazyProperty.PropertyInfoOverride = NewType.GetProperty(lazyProperty.PropertyInfoOriginal.Name);
+				lazyProperty.FieldInfoLoaded = NewType.GetField(lazyProperty.FieldBuilderLoaded.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				lazyProperty.FieldInfoTypeRef = NewType.GetField(lazyProperty.FieldBuilderTypeRef.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+				Debug.Assert(lazyProperty.FieldInfoLoaded != null);
+				Debug.Assert(lazyProperty.FieldBuilderTypeRef != null);
 			}
 		}
 
@@ -71,7 +71,7 @@ namespace Atlas.Serialize
 			TypeBuilder typeBuilder = GetTypeBuilder();
 			ConstructorBuilder constructor = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
 
-			PropertyInfo[] propertyInfos = originalType.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
+			PropertyInfo[] propertyInfos = OriginalType.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 
 			foreach (TypeRepoObject.PropertyRepo propertyRepo in propertyRepos)
 			{
@@ -90,7 +90,7 @@ namespace Atlas.Serialize
 
 		private TypeBuilder GetTypeBuilder()
 		{
-			string typeSignature = "Lazy." + originalType.FullName;
+			string typeSignature = "Lazy." + OriginalType.FullName;
 			AssemblyName assemblyName = new AssemblyName(typeSignature);
 			AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
 			ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("Lazy");
@@ -101,7 +101,7 @@ namespace Atlas.Serialize
 					TypeAttributes.AnsiClass |
 					TypeAttributes.BeforeFieldInit |
 					TypeAttributes.AutoLayout,
-					originalType);
+					OriginalType);
 			return typeBuilder;
 		}
 
@@ -197,10 +197,10 @@ namespace Atlas.Serialize
 
 			var lazyProperty = new LazyProperty()
 			{
-				propertyInfoOriginal = propertyInfo,
-				propertyBuilder = propertyBuilder,
-				fieldBuilderTypeRef = fieldBuilderTypeRef,
-				fieldBuilderLoaded = fieldBuilderLoaded,
+				PropertyInfoOriginal = propertyInfo,
+				PropertyBuilder = propertyBuilder,
+				FieldBuilderTypeRef = fieldBuilderTypeRef,
+				FieldBuilderLoaded = fieldBuilderLoaded,
 			};
 			lazyProperties[propertyInfo] = lazyProperty;
 

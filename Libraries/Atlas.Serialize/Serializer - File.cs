@@ -39,7 +39,7 @@ namespace Atlas.Serialize
 					using (var writer = new BinaryWriter(stream))
 					{
 						var serializer = new Serializer();
-						serializer.header.Name = name;
+						serializer.Header.Name = name;
 						serializer.AddObject(callTimer, obj);
 						serializer.Save(callTimer, writer);
 					}

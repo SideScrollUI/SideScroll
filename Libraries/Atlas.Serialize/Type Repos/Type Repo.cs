@@ -79,7 +79,7 @@ namespace Atlas.Serialize
 
 		public static TypeRepo Create(Log log, Serializer serializer, TypeSchema typeSchema)
 		{
-			if (serializer.AllowListOnly && typeSchema.Type != null && !typeSchema.Whitelisted)
+			if (serializer.AllowListOnly && typeSchema.Type != null && !typeSchema.Allowed)
 				throw new Exception("Type " + typeSchema.Name + " is not whitelisted");
 			//Type type = typeSchema.type;
 			TypeRepo typeRepo;
@@ -328,12 +328,12 @@ namespace Atlas.Serialize
 			{
 				if (flags == 1)
 				{
-					typeRef.typeRepo = this;
+					typeRef.TypeRepo = this;
 				}
 				else
 				{
 					int typeIndex = reader.ReadInt16(); // not saved for sealed classes
-					typeRef.typeRepo = Serializer.TypeRepos[typeIndex];
+					typeRef.TypeRepo = Serializer.TypeRepos[typeIndex];
 					/*if (typeRef.typeRepo.typeSchema.type.IsPrimitive)
 					{
 						LoadObject(); // throw it away
@@ -343,9 +343,9 @@ namespace Atlas.Serialize
 			}
 			else
 			{
-				typeRef.typeRepo = this;
+				typeRef.TypeRepo = this;
 			}
-			typeRef.index = reader.ReadInt32();
+			typeRef.Index = reader.ReadInt32();
 			return typeRef;
 		}
 

@@ -32,7 +32,7 @@ namespace Atlas.Serialize
 
 	public class Serializer : IDisposable
 	{
-		public Header header = new Header();
+		public Header Header = new Header();
 
 		public List<TypeSchema> TypeSchemas = new List<TypeSchema>();
 
@@ -168,7 +168,7 @@ namespace Atlas.Serialize
 			{
 				AddObjectMemberTypes(callSaving.Log);
 				//UpdateTypeSchemaDerived();
-				header.Save(writer);
+				Header.Save(writer);
 				long schemaPosition = writer.BaseStream.Position;
 				writer.Write((long)0); // will write correct value at end
 				SaveSchemas(writer);
@@ -188,10 +188,10 @@ namespace Atlas.Serialize
 			Lazy = lazy;
 			using (LogTimer logTimer = call.Log.Timer("Loading object"))
 			{
-				header.Load(reader);
-				if (header.Version != Header.LatestVersion)
+				Header.Load(reader);
+				if (Header.Version != Header.LatestVersion)
 				{
-					logTimer.AddError("Header version doesn't match", new Tag("Header", header));
+					logTimer.AddError("Header version doesn't match", new Tag("Header", Header));
 					return;
 				}
 				long fileLength = reader.ReadInt64();
