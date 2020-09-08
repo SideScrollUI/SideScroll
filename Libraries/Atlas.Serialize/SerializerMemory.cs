@@ -2,55 +2,23 @@
 using System;
 using System.IO;
 using System.IO.Compression;
-using System.Text;
 
 namespace Atlas.Serialize
 {
-	public class SerializerMemory
+	public abstract class SerializerMemory
 	{
-		private MemoryStream stream = new MemoryStream();
-		public bool SaveSecure { get; set; } = true;
+		protected MemoryStream stream = new MemoryStream(); // move to atlas class?
+		public bool SaveSecure { get; set; } = true; // Whether to save classes with the [Secure] attribute
 
 		public SerializerMemory()
 		{
 		}
 
-		public void Save(Call call, object obj)
-		{
-			using (var writer = new BinaryWriter(stream, Encoding.Default, true))
-			{
-				var serializer = new Serializer()
-				{
-					SaveSecure = SaveSecure,
-				};
-				serializer.AddObject(call, obj);
-				serializer.Save(call, writer);
-			}
-		}
+		public abstract void Save(Call call, object obj);
 
-		public T Load<T>(Call call = null)
-		{
-			call = call ?? new Call();
-			stream.Seek(0, SeekOrigin.Begin);
-			using (var reader = new BinaryReader(stream))
-			{
-				var serializer = new Serializer();
-				serializer.Load(call, reader);
-				return (T)serializer.BaseObject();
-			}
-		}
+		public abstract T Load<T>(Call call = null);
 
-		public object Load(Call call = null)
-		{
-			call = call ?? new Call();
-			stream.Seek(0, SeekOrigin.Begin);
-			using (var reader = new BinaryReader(stream))
-			{
-				var serializer = new Serializer();
-				serializer.Load(call, reader);
-				return serializer.BaseObject();
-			}
-		}
+		public abstract object Load(Call call = null);
 
 		//public static T Clone<T>(Call call, T obj)
 		public static T Clone<T>(Call call, object obj)
@@ -62,10 +30,8 @@ namespace Atlas.Serialize
 			//	return default;
 			try
 			{
-				var memorySerializer = new SerializerMemory();
-				memorySerializer.Save(call, obj);
-				T copy = memorySerializer.Load<T>(call);
-				return copy;
+				var memorySerializer = Create();
+				return memorySerializer.CloneInternal<T>(call, obj);
 			}
 			catch (Exception e)
 			{
@@ -78,10 +44,8 @@ namespace Atlas.Serialize
 		{
 			try
 			{
-				var memorySerializer = new SerializerMemory();
-				memorySerializer.Save(call, obj);
-				object copy = memorySerializer.Load(call);
-				return copy;
+				var memorySerializer = Create();
+				return memorySerializer.CloneInternal(call, obj);
 			}
 			catch (Exception e)
 			{
@@ -89,6 +53,10 @@ namespace Atlas.Serialize
 			}
 			return null;
 		}
+
+		public abstract T CloneInternal<T>(Call call, object obj);
+
+		public abstract object CloneInternal(Call call, object obj);
 
 		public string GetEncodedString()
 		{
@@ -117,6 +85,12 @@ namespace Atlas.Serialize
 		public void LoadEncodedString(string base64)
 		{
 			ConvertEncodedToStream(base64, stream);
+		}
+
+		public static SerializerMemory Create()
+		{
+			return new SerializerMemoryAtlas();
+			// todo: Add SerializerMemoryJson
 		}
 	}
 }

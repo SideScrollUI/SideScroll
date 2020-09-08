@@ -10,7 +10,7 @@ namespace Atlas.Core
 {
 	public static class ObjectExtensions
 	{
-		public static string Formatted(this object obj, int maxLength = 255)
+		public static string Formatted(this object obj, int maxLength = 500)
 		{
 			// don't override cell style formatting for numbers
 			if (obj == null)
@@ -19,7 +19,11 @@ namespace Atlas.Core
 			Type type = obj.GetType();
 
 			if (obj is string text)
+			{
+				if (text.Length > maxLength)
+					return text.Substring(0, maxLength);
 				return text;
+			}
 
 			// handle decimal here: a decimal is considered a primitive
 			if (type.IsNumeric())

@@ -9,10 +9,9 @@ using System.Threading.Tasks;
 
 namespace Atlas.Tabs
 {
-	public interface ITabSelector //: ITabCreator
+	public interface ITabSelector
 	{
 		IList SelectedItems { get; }
-		//object CreateControl(object value, out string label); // remove? moved to ITabCreator
 
 		event EventHandler<EventArgs> OnSelectionChanged;
 	}
@@ -29,8 +28,8 @@ namespace Atlas.Tabs
 
 	public class TabObject
 	{
-		public object Object;
-		public bool Fill;
+		public object Object { get; set; }
+		public bool Fill { get; set; }
 	}
 
 	public class TabModel
@@ -45,7 +44,7 @@ namespace Atlas.Tabs
 		}
 		public string Id { get; set; } // todo: Unique key for bookmarks?
 		public string Name { get; set; } = "<TabModel>";
-		public string Notes { get; set; }
+		public string Notes { get; set; } // not used anymore
 		public object Object { get; set; } // optional
 		public bool AutoLoad { get; set; } = true;
 		public AutoSelectType AutoSelect { get; set; } = AutoSelectType.FirstSavedOrNew;
@@ -58,23 +57,12 @@ namespace Atlas.Tabs
 		public List<TabObject> Objects { get; set; } = new List<TabObject>();
 		//public List<ITabControl> CustomTabControls { get; set; } = new List<ITabControl>(); // should everything be a custom control? tabControls?
 
-		public void AddObject(object obj, bool fill = false)
-		{
-			if (obj == null)
-				throw new Exception("Object is null");
-			Objects.Add(new TabObject() { Object = obj, Fill = fill });
-			if (obj is ChartSettings)
-				MinDesiredWidth = 800;
-		}
-
 		public IList Items
 		{
 			get => ItemList.First();
 			set
 			{
 				ItemList.Clear();
-				//ItemList.Add(value);
-				//bject = value;
 				AddData(value);
 			}
 		}
@@ -83,6 +71,21 @@ namespace Atlas.Tabs
 		public int MinDesiredWidth { get; set; } = 0;
 		public int MaxDesiredWidth { get; set; } = 1500;
 
+		// used for saving/loading TabViewSettings
+		public string CustomSettingsPath { get; set; }
+		public string ObjectTypePath
+		{
+			get
+			{
+				if (Object == null)
+					return "(null)";
+
+				Type objType = Object.GetType();
+				return objType.FullName; // need to hash this or escape it
+			}
+		}
+
+		public override string ToString() => Name;
 
 		public TabModel()
 		{
@@ -104,9 +107,13 @@ namespace Atlas.Tabs
 			return tabModel;
 		}
 
-		public override string ToString()
+		public void AddObject(object obj, bool fill = false)
 		{
-			return Name;
+			if (obj == null)
+				throw new Exception("Object is null");
+			Objects.Add(new TabObject() { Object = obj, Fill = fill });
+			if (obj is ChartSettings)
+				MinDesiredWidth = 800;
 		}
 
 		public void AddData(object obj)
@@ -212,15 +219,6 @@ namespace Atlas.Tabs
 				//Skippable = (skippableAttribute != null) || (!(firstItem is ITab) && TabDataSettings.GetVisibleProperties(elementType).Count > 1);
 			}
 		}
-
-		/*public bool Skippable
-		{
-			get
-			{
-				if (ItemList.Count == 1 && ItemList[0].Count == 1 && TabDataSettings.GetVisibleProperties(elementType).Count > 1) ;
-				return false;
-			}
-		}*/
 
 		private void AddDictionary(Type type)
 		{
@@ -391,20 +389,6 @@ namespace Atlas.Tabs
 			return tabBookmark;
 		}
 
-		// used for saving/loading TabViewSettings
-		public string CustomSettingsPath { get; set; }
-		public string ObjectTypePath
-		{
-			get
-			{
-				if (Object == null)
-					return "(null)";
-				
-				Type objType = Object.GetType();
-				return objType.FullName; // need to hash this or escape it
-			}
-		}
-
 		// Might want to move this elsewhere or refactor
 		public static bool ObjectHasLinks(object obj, bool ignoreEmpty = false)
 		{
@@ -423,7 +407,7 @@ namespace Atlas.Tabs
 				type.Equals(typeof(string)) ||
 				type.Equals(typeof(decimal)) ||
 				type.Equals(typeof(DateTime)) ||
-				type.Equals(typeof(TimeSpan))) //  || type.IsEnum 
+				type.Equals(typeof(TimeSpan)))
 			{
 				return false;
 			}

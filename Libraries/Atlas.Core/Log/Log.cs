@@ -1,9 +1,6 @@
-﻿using Atlas.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -22,16 +19,6 @@ namespace Atlas.Core
 		public Tag()
 		{
 		}
-
-		// only one of these works at a time for strings due to ambiguous calls
-		/*public Tag(object value, bool verbose = true, [CallerMemberName] string callerMemberName = "")
-		{
-			Name = callerMemberName;
-			if (verbose)
-				Value = value;
-			else
-				Value = value.ToString();
-		}*/
 
 		public Tag(object value)
 		{
@@ -64,7 +51,7 @@ namespace Atlas.Core
 	public class LogEntry : INotifyPropertyChanged
 	{
 		[HiddenRow]
-		public LogEntry rootLog;
+		public LogEntry RootLog;
 		public enum LogType
 		{
 			Debug,
@@ -76,8 +63,8 @@ namespace Atlas.Core
 		public event PropertyChangedEventHandler PropertyChanged;
 		[HiddenColumn]
 		public DateTime Created { get; set; }
-		public TimeSpan Time => Created.Subtract(rootLog.Created);
-		public LogType originalType = LogType.Info;
+		public TimeSpan Time => Created.Subtract(RootLog.Created);
+		public LogType OriginalType = LogType.Info;
 		public LogType Type { get; set; } = LogType.Info;
 		[HiddenColumn, HiddenRow]
 		public string Text { get; set; }
@@ -139,13 +126,13 @@ namespace Atlas.Core
 
 		public LogEntry()
 		{
-			rootLog = this;
+			RootLog = this;
 		}
 
 		public LogEntry(LogType logType, string text, Tag[] tags)
 		{
-			rootLog = this;
-			originalType = logType;
+			RootLog = this;
+			OriginalType = logType;
 			Type = logType;
 			Text = text;
 			Tags = tags;
@@ -178,7 +165,7 @@ namespace Atlas.Core
 
 		[InnerValue]
 		public ItemCollection<LogEntry> Items { get; set; } = new ItemCollection<LogEntry>(); // change to LRU for performance? No Binding?
-		private static object locker = new object(); // todo: replace this with individual ones? (deadlock territory if circular) or a non-blocking version
+		private static object _locker = new object(); // todo: replace this with individual ones? (deadlock territory if circular) or a non-blocking version
 		private string SummaryText;
 
 		[HiddenColumn]
@@ -253,8 +240,10 @@ namespace Atlas.Core
 
 		public LogTimer Timer(string text, params Tag[] tags)
 		{
-			var logTimer = new LogTimer(text, Context);
-			logTimer.Tags = tags;
+			var logTimer = new LogTimer(text, Context)
+			{
+				Tags = tags,
+			};
 			AddLogEntry(logTimer);
 			return logTimer;
 		}
@@ -273,7 +262,7 @@ namespace Atlas.Core
 		{
 			Log log = new Log(name, Context, tags)
 			{
-				originalType = logType,
+				OriginalType = logType,
 				Type = logType,
 			};
 			AddLogEntry(log);
@@ -282,7 +271,7 @@ namespace Atlas.Core
 
 		public void AddLogEntry(LogEntry logEntry)
 		{
-			logEntry.rootLog = rootLog;
+			logEntry.RootLog = RootLog;
 			logEntry.Context = Context;
 			if (Context != null)
 				Context.Post(new SendOrPostCallback(AddEntryCallback), logEntry);
@@ -293,7 +282,7 @@ namespace Atlas.Core
 		// Thread safe callback, only works if the context is the same
 		private void AddEntryCallback(object state)
 		{
-			lock (locker)
+			lock (_locker)
 			{
 				AddEntry((LogEntry)state);
 			}
@@ -325,7 +314,7 @@ namespace Atlas.Core
 		private void UpdateEntries()
 		{
 			int count = 0;
-			Type = originalType;
+			Type = OriginalType;
 			foreach (LogEntry logEntry in Items)
 			{
 				count++;

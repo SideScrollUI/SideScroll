@@ -19,7 +19,7 @@ namespace Atlas.Serialize.Test
 		[SetUp]
 		public void Setup()
 		{
-			serializer = new SerializerMemory();
+			serializer = new SerializerMemoryAtlas();
 		}
 
 		[Test, Description("Serialize ItemCollection")]

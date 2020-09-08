@@ -12,7 +12,6 @@ namespace Atlas.Serialize
 	public class DataRepo
 	{
 		private const string DefaultDirectory = ".Default";
-		private const string DataName = "Data.atlas";
 
 		public string RepoPath { get; set; }
 		public string RepoName { get; set; }
@@ -52,7 +51,7 @@ namespace Atlas.Serialize
 		public SerializerFile GetSerializerFile(Type type, string directory, string name)
 		{
 			string dataPath = GetHashedDataPath(type, directory, name);
-			var serializer = new SerializerFile(dataPath, name);
+			var serializer = SerializerFile.Create(dataPath, name);
 			return serializer;
 		}
 
@@ -129,12 +128,7 @@ namespace Atlas.Serialize
 			{
 				foreach (string filePath in Directory.EnumerateDirectories(typePath))
 				{
-					string fileName = Path.GetFileName(filePath);
-					string dataPath = Paths.Combine(filePath, DataName);
-					if (File.Exists(dataPath) == false)
-						continue;
-
-					var serializerFile = new SerializerFile(dataPath, fileName);
+					var serializerFile = SerializerFile.Create(filePath);
 					if (serializerFile.Exists)
 					{
 						T obj = serializerFile.Load<T>(call, lazy);
@@ -163,12 +157,7 @@ namespace Atlas.Serialize
 			{
 				foreach (string filePath in Directory.EnumerateDirectories(typePath))
 				{
-					string fileName = Path.GetFileName(filePath);
-					string dataPath = Paths.Combine(filePath, DataName);
-					if (File.Exists(dataPath) == false)
-						continue;
-
-					var serializerFile = new SerializerFile(dataPath, fileName);
+					var serializerFile = SerializerFile.Create(filePath);
 					if (serializerFile.Exists)
 					{
 						Header header = serializerFile.LoadHeader(call);
@@ -261,15 +250,13 @@ namespace Atlas.Serialize
 		public string GetHashedDataPath(Type type, string name)
 		{
 			string typePath = GetTypePath(type, name);
-			string dataPath = Paths.Combine(typePath, DataName);
-			return dataPath;
+			return typePath;
 		}
 
 		public string GetHashedDataPath(Type type, string directory, string name)
 		{
 			string typePath = GetDirectoryPath(type, directory, name);
-			string dataPath = Paths.Combine(typePath, DataName);
-			return dataPath;
+			return typePath;
 		}
 
 		public string GetDirectoryPath(Type type, string directory, string name)

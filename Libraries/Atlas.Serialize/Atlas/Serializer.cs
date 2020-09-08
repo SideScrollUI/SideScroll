@@ -51,10 +51,10 @@ namespace Atlas.Serialize
 
 		public struct LoadItem
 		{
-			public TypeRepo typeRepo;
-			public int index;
+			public TypeRepo TypeRepo;
+			public int Index;
 
-			public override string ToString() => typeRepo.ToString() + " - " + index;
+			public override string ToString() => TypeRepo.ToString() + " - " + Index;
 		}
 
 		public Queue<LoadItem> LoadQueue = new Queue<LoadItem>();
@@ -93,7 +93,7 @@ namespace Atlas.Serialize
 			while (LoadQueue.Count > 0)
 			{
 				LoadItem loadItem = LoadQueue.Dequeue();
-				loadItem.typeRepo.LoadObjectData(loadItem.index);
+				loadItem.TypeRepo.LoadObjectData(loadItem.Index);
 			}
 		}
 
@@ -529,9 +529,9 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public Dictionary<object, object> clones = new Dictionary<object, object>();
-		public Queue<Action> cloneQueue = new Queue<Action>();
-		public TaskInstance taskInstance;
+		public Dictionary<object, object> Clones = new Dictionary<object, object>();
+		public Queue<Action> CloneQueue = new Queue<Action>();
+		public TaskInstance TaskInstance;
 
 		//private object CreateInstance(Type, )
 
@@ -542,18 +542,18 @@ namespace Atlas.Serialize
 			Type type = obj.GetType();
 			if (type.IsPrimitive)
 				return obj;
-			if (clones.TryGetValue(obj, out object clone))
+			if (Clones.TryGetValue(obj, out object clone))
 				return clone;
 			Log log = new Log();
 			TypeRepo typeRepo = GetOrCreateRepo(log, type);
 			if (typeRepo is TypeRepoPrimitive || typeRepo is TypeRepoString || typeRepo is TypeRepoEnum || typeRepo is TypeRepoType)// || typeRepo.typeSchema.isStatic)
 			{
-				clones[obj] = obj; // optional
+				Clones[obj] = obj; // optional
 				return obj;
 			}
 			if (typeRepo.TypeSchema.IsStatic)
 			{
-				clones[obj] = obj; // optional
+				Clones[obj] = obj; // optional
 				return obj;
 			}
 
@@ -577,10 +577,10 @@ namespace Atlas.Serialize
 			{
 
 			}
-			clones[obj] = clone;
+			Clones[obj] = clone;
 			typeRepo.cloned++;
 			Action action = new Action(() => typeRepo.Clone(obj, clone));
-			cloneQueue.Enqueue(action);
+			CloneQueue.Enqueue(action);
 			return clone;
 		}
 		
@@ -590,16 +590,16 @@ namespace Atlas.Serialize
 			T clone = (T)Clone(obj);
 			using (LogTimer logClone = log.Timer("Clone"))
 			{
-				while (cloneQueue.Count > 0)
+				while (CloneQueue.Count > 0)
 				{
-					Action action = cloneQueue.Dequeue();
+					Action action = CloneQueue.Dequeue();
 					action.Invoke();
 					//obj = parserQueue.Dequeue();
 					//Type type = obj.GetType();
 					//typeRepo = idxTypeToInstances[type]; // optimization? could save the object and TypeRepo reference in a Link class 
 				}
 				
-				logClone.Add("Clone Finished", new Tag("Objects", clones.Count));
+				logClone.Add("Clone Finished", new Tag("Objects", Clones.Count));
 				LogClonedTypes(logClone);
 			}
 			return clone;
@@ -624,8 +624,8 @@ namespace Atlas.Serialize
 		{
 			var loadItem = new LoadItem()
 			{
-				typeRepo = typeRepo,
-				index = objectIndex
+				TypeRepo = typeRepo,
+				Index = objectIndex
 			};
 
 			LoadQueue.Enqueue(loadItem);

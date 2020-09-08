@@ -23,6 +23,8 @@ namespace Atlas.Serialize
 
 		public bool Loadable;
 
+		public override string ToString() => FieldName;
+
 		public FieldSchema(FieldInfo fieldInfo)
 		{
 			FieldName = fieldInfo.Name;
@@ -48,8 +50,6 @@ namespace Atlas.Serialize
 				//Loadable = (typeIndex >= 0 && fieldInfo != null && Serialized);
 			}
 		}
-
-		public override string ToString() => FieldName;
 		
 		private bool IsSerialized
 		{

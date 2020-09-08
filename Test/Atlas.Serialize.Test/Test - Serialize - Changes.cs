@@ -19,7 +19,7 @@ namespace Atlas.Serialize.Test
 			Directory.CreateDirectory(basePath);
 
 			string filePath = Paths.Combine(basePath, "Data.atlas");
-			serializerFile = new SerializerFile(filePath);
+			serializerFile = new SerializerFileAtlas(filePath);
 		}
 
 		[Test, Description("Serialize Property Type Missing")]

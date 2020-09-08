@@ -235,6 +235,18 @@ namespace Atlas.Core
 		}
 	}
 
+	// MaxDesiredHeightAttribute?
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
+	public class MaxHeightAttribute : Attribute
+	{
+		public readonly int MaxHeight;
+
+		public MaxHeightAttribute(int maxHeight)
+		{
+			MaxHeight = maxHeight;
+		}
+	}
+
 	// Flag as the ToString() property/field?
 	// ToString() on items in array
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]

@@ -34,7 +34,7 @@ namespace Atlas.Tabs.Tools
 			{
 				var items = new ItemCollection<ListItem>();
 
-				var serializerFile = new SerializerFile(Tab.path);
+				var serializerFile = new SerializerFileAtlas(Tab.path);
 
 				serializer = serializerFile.LoadSchema(call);
 
@@ -50,7 +50,7 @@ namespace Atlas.Tabs.Tools
 
 			private void LoadData(Call call)
 			{
-				var serializerFile = new SerializerFile(Tab.path);
+				var serializerFile = new SerializerFileAtlas(Tab.path);
 
 				Object = serializerFile.Load(call);
 				listData.Value = Object;

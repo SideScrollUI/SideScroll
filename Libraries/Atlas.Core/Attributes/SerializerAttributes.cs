@@ -15,7 +15,7 @@ namespace Atlas.Core
 	{
 	}
 
-	// Can't use [NonSerialized] since that's only for fields :(
+	// Don't serialize this when creating bookmarks, data is only saved locally
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
 	public class SecureAttribute : Attribute
 	{

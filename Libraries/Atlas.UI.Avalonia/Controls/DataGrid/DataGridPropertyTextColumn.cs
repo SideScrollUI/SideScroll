@@ -32,6 +32,7 @@ namespace Atlas.UI.Avalonia
 
 		public int MinDesiredWidth { get; set; } = 40;
 		public int MaxDesiredWidth { get; set; } = 500;
+		public int MaxDesiredHeight { get; set; } = 100;
 		public bool AutoSize { get; set; }
 
 		private Binding formattedBinding;
@@ -46,6 +47,9 @@ namespace Atlas.UI.Avalonia
 			MaxDesiredWidth = maxDesiredWidth;
 			Binding = GetFormattedTextBinding();
 			//Binding = GetTextBinding();
+			var maxHeightAttribute = propertyInfo.GetCustomAttribute<MaxHeightAttribute>();
+			if (maxHeightAttribute != null)
+				MaxDesiredHeight = maxHeightAttribute.MaxHeight;
 			if (DataGridUtils.IsTypeAutoSize(propertyInfo.PropertyType))
 				AutoSize = true;
 
@@ -67,7 +71,7 @@ namespace Atlas.UI.Avalonia
 		protected override IControl GenerateElement(DataGridCell cell, object dataItem)
 		{
 			//cell.Background = GetCellBrush(cell, dataItem);
-			cell.MaxHeight = 100; // don't let them have more than a few lines each
+			//cell.MaxHeight = MaxDesiredHeight; // don't let them have more than a few lines each
 
 			// Support mixed control types?
 			// this needs to get set when the cell content value changes, see LoadingRow()
@@ -91,6 +95,7 @@ namespace Atlas.UI.Avalonia
 			{
 				//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
 				TextBlock textBlock = CreateTextBlock(cell, dataItem);
+				textBlock.MaxHeight = MaxDesiredHeight;
 
 				/*var style = new Style(x => x.OfType<DataGridCell>())
 				{

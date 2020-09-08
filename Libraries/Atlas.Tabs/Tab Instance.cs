@@ -148,7 +148,7 @@ namespace Atlas.Tabs
 		public bool StaticModel = false;
 		public IList SelectedItems { get; set; }
 
-		protected IDataRepoInstance DataRepoInstance { get; set; }
+		protected IDataRepoInstance DataRepoInstance { get; set; } // Bookmarks use this for saving/loading DataRepo values
 
 		public override string ToString() => Label;
 

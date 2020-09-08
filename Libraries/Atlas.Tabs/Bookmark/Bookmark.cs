@@ -39,7 +39,7 @@ namespace Atlas.Tabs
 
 		public string GetEncodedString()
 		{
-			var serializer = new SerializerMemory();
+			var serializer = SerializerMemory.Create();
 			serializer.Save(new Call(), this);
 			string data = serializer.GetEncodedString();
 			return data;
@@ -47,7 +47,7 @@ namespace Atlas.Tabs
 
 		public static Bookmark Create(string encoded)
 		{
-			var serializer = new SerializerMemory();
+			var serializer = SerializerMemory.Create();
 			serializer.LoadEncodedString(encoded);
 			Bookmark bookmark = serializer.Load<Bookmark>();
 			return bookmark;

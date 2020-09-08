@@ -27,14 +27,14 @@ namespace Atlas.Tabs.Tools
 			{
 				// How do we replace a shared pointer that exists everywhere? references?
 				//call.Application.Restart();
-				var serializer = new SerializerFile(Project.UserSettings.SettingsPath);
+				var serializer = SerializerFile.Create(Project.UserSettings.SettingsPath);
 				serializer.Save(call, new ProjectSettings());
 				Environment.Exit(0);
 			}
 
 			private void Save(Call call)
 			{
-				var serializer = new SerializerFile(Project.UserSettings.SettingsPath);
+				var serializer = SerializerFile.Create(Project.UserSettings.SettingsPath);
 				serializer.Save(call, Project.ProjectSettings);
 			}
 		}
