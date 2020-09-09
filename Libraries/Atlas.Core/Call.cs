@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Atlas.Core
@@ -11,6 +12,8 @@ namespace Atlas.Core
 	[Unserialized]
 	public class Call
 	{
+		private const int MaxThreads = 10;
+
 		public string Name { get; set; } = "";
 		public Log Log { get; set; }
 
@@ -66,7 +69,9 @@ namespace Atlas.Core
 		{
 			if (TaskInstance.TaskCount == 0)
 				TaskInstance.TaskCount = 1;
-			CallTimer timer = Timer(name, tags);
+			var allTags = tags.ToList();
+			allTags.Add(new Tag("Count", taskCount));
+			CallTimer timer = Timer(name, allTags.ToArray());
 			timer.TaskInstance.TaskCount = taskCount;
 			return timer;
 		}
@@ -84,7 +89,7 @@ namespace Atlas.Core
 			return AddSubTask(name).Call;
 		}
 
-		public async Task<T2> RunTaskAsync<T1, T2>(Call call, T1 item, Func<Call, T1, Task<T2>> func)
+		private async Task<T2> RunFuncAsync<T1, T2>(Call call, Func<Call, T1, Task<T2>> func, T1 item)
 		{
 			using (CallTimer callTimer = call.Timer(item.ToString()))
 			{
@@ -100,7 +105,7 @@ namespace Atlas.Core
 			}
 		}
 
-		public async Task<T3> RunTaskAsync<T1, T2, T3>(Call call, T1 item, T2 param1, Func<Call, T1, T2, Task<T3>> func)
+		private async Task<T3> RunFuncAsync<T1, T2, T3>(Call call, Func<Call, T1, T2, Task<T3>> func, T1 item, T2 param1)
 		{
 			using (CallTimer callTimer = call.Timer(item.ToString()))
 			{
@@ -116,7 +121,7 @@ namespace Atlas.Core
 			}
 		}
 
-		public async Task<T4> RunTaskAsync<T1, T2, T3, T4>(Call call, Func<Call, T1, T2, T3, Task<T4>> func, T1 item, T2 param1, T3 param2)
+		private async Task<T4> RunFuncAsync<T1, T2, T3, T4>(Call call, Func<Call, T1, T2, T3, Task<T4>> func, T1 item, T2 param1, T3 param2)
 		{
 			using (CallTimer callTimer = call.Timer(item.ToString()))
 			{
@@ -132,86 +137,110 @@ namespace Atlas.Core
 			}
 		}
 
-		public async Task<List<T2>> RunAsync<T1, T2>(Func<Call, T1, Task<T2>> func, List<T1> items)
+		public async Task<List<T2>> RunAsync<T1, T2>(Func<Call, T1, Task<T2>> func, List<T1> items, int maxThreads = MaxThreads)
 		{
-			return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items);
+			return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, maxThreads);
 		}
 
-		public async Task<List<T3>> RunAsync<T1, T2, T3>(Func<Call, T1, T2, Task<T3>> func, List<T1> items, T2 param1)
+		public async Task<List<T3>> RunAsync<T1, T2, T3>(Func<Call, T1, T2, Task<T3>> func, List<T1> items, T2 param1, int maxThreads = MaxThreads)
 		{
-			return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1);
+			return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1, maxThreads);
 		}
 
-		public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(Func<Call, T1, T2, T3, Task<T4>> func, List<T1> items, T2 param1, T3 param2)
+		public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(Func<Call, T1, T2, T3, Task<T4>> func, List<T1> items, T2 param1, T3 param2, int maxThreads = MaxThreads)
 		{
-			return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1, param2);
+			return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1, param2, maxThreads);
 		}
 
 		// Call func for every item in the list using the specified parameters
-		public async Task<List<T2>> RunAsync<T1, T2>(string name, Func<Call, T1, Task<T2>> func, List<T1> items)
+		public async Task<List<T2>> RunAsync<T1, T2>(string name, Func<Call, T1, Task<T2>> func, List<T1> items, int maxThreads = MaxThreads)
 		{
+			var results = new List<T2>();
 			using (CallTimer callTimer = Timer(items.Count, name))
 			{
-				IEnumerable<Task<T2>> getTasksQuery =
-					from item in items select RunTaskAsync(callTimer, item, func);
-
-				List<Task<T2>> getResultTasks = getTasksQuery.ToList();
-
-				var results = new List<T2>();
-				while (getResultTasks.Count > 0)
+				using (var throttler = new SemaphoreSlim(maxThreads))
 				{
-					Task<T2> firstFinishedTask = await Task.WhenAny(getResultTasks);
-					getResultTasks.Remove(firstFinishedTask);
-
-					T2 taskResult = await firstFinishedTask;
-					if (taskResult != null)
-						results.Add(taskResult);
+					var tasks = new List<Task>();
+					foreach (var item in items)
+					{
+						await throttler.WaitAsync();
+						tasks.Add(Task.Run(async () =>
+						{
+							try
+							{
+								T2 result = await RunFuncAsync(callTimer, func, item);
+								if (result != null)
+									results.Add(result);
+							}
+							finally
+							{
+								throttler.Release();
+							}
+						}));
+					}
+					await Task.WhenAll(tasks);
 				}
 				return results;
 			}
 		}
 
-		public async Task<List<T3>> RunAsync<T1, T2, T3>(string name, Func<Call, T1, T2, Task<T3>> func, List<T1> items, T2 param1)
+		public async Task<List<T3>> RunAsync<T1, T2, T3>(string name, Func<Call, T1, T2, Task<T3>> func, List<T1> items, T2 param1, int maxThreads = MaxThreads)
 		{
+			var results = new List<T3>();
 			using (CallTimer callTimer = Timer(items.Count, name))
 			{
-				IEnumerable<Task<T3>> getTasksQuery =
-					from item in items select RunTaskAsync(callTimer, item, param1, func);
-
-				List<Task<T3>> getResultTasks = getTasksQuery.ToList();
-
-				var results = new List<T3>();
-				while (getResultTasks.Count > 0)
+				using (var throttler = new SemaphoreSlim(maxThreads))
 				{
-					Task<T3> firstFinishedTask = await Task.WhenAny(getResultTasks);
-					getResultTasks.Remove(firstFinishedTask);
-
-					T3 taskResult = await firstFinishedTask;
-					if (taskResult != null)
-						results.Add(taskResult);
+					var tasks = new List<Task>();
+					foreach (var item in items)
+					{
+						await throttler.WaitAsync();
+						tasks.Add(Task.Run(async () =>
+						{
+							try
+							{
+								T3 result = await RunFuncAsync(callTimer, func, item, param1);
+								if (result != null)
+									results.Add(result);
+							}
+							finally
+							{
+								throttler.Release();
+							}
+						}));
+					}
+					await Task.WhenAll(tasks);
 				}
 				return results;
 			}
 		}
 
-		public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(string name, Func<Call, T1, T2, T3, Task<T4>> func, List<T1> items, T2 param1, T3 param2)
+		public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(string name, Func<Call, T1, T2, T3, Task<T4>> func, List<T1> items, T2 param1, T3 param2, int maxThreads = MaxThreads)
 		{
+			var results = new List<T4>();
 			using (CallTimer callTimer = Timer(items.Count, name))
 			{
-				IEnumerable<Task<T4>> getTasksQuery =
-					from item in items select RunTaskAsync(callTimer, func, item, param1, param2);
-
-				List<Task<T4>> getResultTasks = getTasksQuery.ToList();
-
-				var results = new List<T4>();
-				while (getResultTasks.Count > 0)
+				using (var throttler = new SemaphoreSlim(maxThreads))
 				{
-					Task<T4> firstFinishedTask = await Task.WhenAny(getResultTasks);
-					getResultTasks.Remove(firstFinishedTask);
-
-					T4 taskResult = await firstFinishedTask;
-					if (taskResult != null)
-						results.Add(taskResult);
+					var tasks = new List<Task>();
+					foreach (var item in items)
+					{
+						await throttler.WaitAsync();
+						tasks.Add(Task.Run(async () =>
+						{
+							try
+							{
+								T4 result = await RunFuncAsync(callTimer, func, item, param1, param2);
+								if (result != null)
+									results.Add(result);
+							}
+							finally
+							{
+								throttler.Release();
+							}
+						}));
+					}
+					await Task.WhenAll(tasks);
 				}
 				return results;
 			}

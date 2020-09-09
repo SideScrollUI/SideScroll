@@ -23,10 +23,10 @@ namespace Atlas.Extensions
 		public static string TrimStart(this string input, string prefix)
 		{
 			if (input == null || prefix == null)
-				return null;
-			if (prefix.Length >= input.Length)
 				return input;
-			return input.Substring(prefix.Length);
+			if (input.StartsWith(prefix))
+				return input.Substring(prefix.Length);
+			return input;
 		}
 
 		public static string TrimEnd(this string input, string postfix)
