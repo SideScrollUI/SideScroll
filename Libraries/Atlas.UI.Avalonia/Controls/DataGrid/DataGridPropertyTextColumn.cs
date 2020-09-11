@@ -37,7 +37,7 @@ namespace Atlas.UI.Avalonia
 
 		private Binding formattedBinding;
 		//private Binding unformattedBinding;
-		private readonly FormatValueConverter formatConverter = new FormatValueConverter();
+		private FormatValueConverter formatConverter = new FormatValueConverter();
 
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{
@@ -49,7 +49,10 @@ namespace Atlas.UI.Avalonia
 			//Binding = GetTextBinding();
 			var maxHeightAttribute = propertyInfo.GetCustomAttribute<MaxHeightAttribute>();
 			if (maxHeightAttribute != null)
+			{
 				MaxDesiredHeight = maxHeightAttribute.MaxHeight;
+				formatConverter.MaxLength = MaxDesiredHeight * 5;
+			}
 			if (DataGridUtils.IsTypeAutoSize(propertyInfo.PropertyType))
 				AutoSize = true;
 

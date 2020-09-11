@@ -804,7 +804,7 @@ namespace Atlas.UI.Avalonia.Controls
 				return false;
 
 			// Select new log items automatically
-			if (TabInstance.TaskInstance.TaskStatus == System.Threading.Tasks.TaskStatus.Running)
+			if (TabInstance.TaskInstance.TaskStatus == TaskStatus.Running)
 			{
 				SelectedItem = List[List.Count - 1];
 				return true;

@@ -11,6 +11,7 @@ namespace Atlas.UI.Avalonia
 		// add a map to store original mappings?
 		//public Dictionary<object, object> { get; set; }
 		public bool ConvertBackEnabled { get; set; } = true;
+		public int MaxLength { get; set; } = 500;
 		private object originalValue;
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -22,7 +23,7 @@ namespace Atlas.UI.Avalonia
 			//if (targetType == typeof(string))
 			//	return value.Formatted();
 
-			object result = ChangeType(value, targetType);
+			object result = ChangeType(value, targetType, MaxLength);
 			//dynamic result = System.Convert.ChangeType(value, targetType);
 			return result;
 		}
@@ -41,7 +42,7 @@ namespace Atlas.UI.Avalonia
 			return result;*/
 		}
 
-		public static object ChangeType(object value, Type targetType)
+		public static object ChangeType(object value, Type targetType, int maxLength)
 		{
 			if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
 			{
@@ -66,7 +67,7 @@ namespace Atlas.UI.Avalonia
 					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
 				//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above
 
-				return value.Formatted();
+				return value.Formatted(maxLength);
 			}
 			try
 			{

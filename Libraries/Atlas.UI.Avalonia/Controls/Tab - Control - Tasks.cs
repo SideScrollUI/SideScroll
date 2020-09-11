@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using System;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -112,7 +113,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (autoSelectNew && e.NewStartingIndex >= 0 && tabInstance.Model.Tasks.Count > 0)
 				{
-					TaskInstance taskInstance = tabInstance.Model.Tasks[e.NewStartingIndex];
+					TaskInstance taskInstance = tabInstance.Model.Tasks.Last();
 					if (tabControlDataGrid.SelectedItem == taskInstance)
 						UpdateSelection();
 					else
