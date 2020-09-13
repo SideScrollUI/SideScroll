@@ -44,7 +44,7 @@ namespace Atlas.Core
 
 	public class EventLogMessage : EventArgs
 	{
-		public List<LogEntry> Entries = new List<LogEntry>();
+		public List<LogEntry> Entries = new List<LogEntry>(); // 1st is new log message, last is highest parent log message
 	}
 
 	[Skippable(false)]
@@ -84,7 +84,8 @@ namespace Atlas.Core
 
 		[HiddenColumn, HiddenRow]
 		public virtual string Summary => Text;
-		public int Entries { get; set; }
+		protected int _entries;
+		public int Entries => _entries;
 
 		private float? _duration;
 		public float? Duration
@@ -293,17 +294,15 @@ namespace Atlas.Core
 			Items.Add(logEntry);
 			if (Items.Count > MaxLogItems)
 			{
+				// subtract entries or leave them?
 				Items.RemoveAt(0);
-				UpdateEntries();
+				//UpdateStats();
 			}
 			else
 			{
-				Entries += logEntry.Entries + 1;
-				if (logEntry.Type > Type)
-					Type = logEntry.Type;
+				UpdateStats(logEntry);
 			}
 
-			CreateEventPropertyChanged(nameof(Entries));
 			CreateEventLogMessage(logEntry);
 
 			// Update if there can be child entries
@@ -311,27 +310,21 @@ namespace Atlas.Core
 				log.OnMessage += ChildLog_OnMessage;
 		}
 
-		private void UpdateEntries()
+		// Update stats when a new child log entry gets added at any level below
+		private void UpdateStats(LogEntry logEntry)
 		{
-			int count = 0;
-			Type = OriginalType;
-			foreach (LogEntry logEntry in Items)
+			Interlocked.Add(ref _entries, logEntry.Entries + 1);
+			if (logEntry.Type > Type)
 			{
-				count++;
-				count += logEntry.Entries;
-				if (logEntry.Type > Type)
-				{
-					Type = logEntry.Type;
-					SummaryText = logEntry.Summary;
-				}
+				Type = logEntry.Type;
+				CreateEventPropertyChanged(nameof(Type));
 			}
-			Entries = count;
 			CreateEventPropertyChanged(nameof(Entries));
 		}
 
 		private void CreateEventLogMessage(LogEntry logEntry)
 		{
-			EventLogMessage eventLogMessage = new EventLogMessage();
+			var eventLogMessage = new EventLogMessage();
 			eventLogMessage.Entries.Add(logEntry);
 			eventLogMessage.Entries.Add(this);
 			OnMessage?.Invoke(this, eventLogMessage);
@@ -339,7 +332,7 @@ namespace Atlas.Core
 
 		private void ChildLog_OnMessage(object sender, EventLogMessage eventLogMessage)
 		{
-			UpdateEntries();
+			UpdateStats(eventLogMessage.Entries[0]);
 			eventLogMessage.Entries.Add(this);
 			OnMessage?.Invoke(this, eventLogMessage);
 		}

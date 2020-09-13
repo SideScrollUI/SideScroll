@@ -164,6 +164,11 @@ namespace Atlas.Core
 					foreach (var item in items)
 					{
 						await throttler.WaitAsync();
+						if (TaskInstance?.CancelToken.IsCancellationRequested == true)
+						{
+							Log.Add("Cancelled");
+							break;
+						}
 						tasks.Add(Task.Run(async () =>
 						{
 							try
@@ -195,6 +200,11 @@ namespace Atlas.Core
 					foreach (var item in items)
 					{
 						await throttler.WaitAsync();
+						if (TaskInstance?.CancelToken.IsCancellationRequested == true)
+						{
+							Log.Add("Cancelled");
+							break;
+						}
 						tasks.Add(Task.Run(async () =>
 						{
 							try
@@ -226,6 +236,11 @@ namespace Atlas.Core
 					foreach (var item in items)
 					{
 						await throttler.WaitAsync();
+						if (TaskInstance?.CancelToken.IsCancellationRequested == true)
+						{
+							Log.Add("Cancelled");
+							break;
+						}
 						tasks.Add(Task.Run(async () =>
 						{
 							try

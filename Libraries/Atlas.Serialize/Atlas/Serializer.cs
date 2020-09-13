@@ -32,6 +32,8 @@ namespace Atlas.Serialize
 
 	public class Serializer : IDisposable
 	{
+		private const uint HeaderId = 0x6F6F6F6F; // 111 x 4
+
 		public Header Header = new Header();
 
 		public List<TypeSchema> TypeSchemas = new List<TypeSchema>();
@@ -315,8 +317,6 @@ namespace Atlas.Serialize
 			}
 		}
 
-		private const int checksum = 555;
-
 		class TypeRepoWriter
 		{
 			public TypeRepo typeRepo;
@@ -325,7 +325,8 @@ namespace Atlas.Serialize
 
 		private void SaveObjects(Log log, BinaryWriter writer)
 		{
-			writer.Write(checksum);
+			writer.Write(HeaderId);
+			// todo: Add Checksum?
 
 			long headerPosition = writer.BaseStream.Position;
 			foreach (TypeRepo typeRepo in OrderedTypes)
@@ -386,8 +387,8 @@ namespace Atlas.Serialize
 
 		private void LoadTypeRepos(Log log)
 		{
-			int id = Reader.ReadInt32();
-			Debug.Assert(id == checksum);
+			uint id = Reader.ReadUInt32();
+			Debug.Assert(id == HeaderId);
 			
 			using (LogTimer logTimer = log.Timer("Loading Type Repo headers"))
 			{

@@ -484,13 +484,6 @@ namespace Atlas.Tabs
 
 		public void LoadModelUI(Call call, TabModel model)
 		{
-			// Set the context to the UI for items that support it
-			foreach (IList iList in model.ItemList)
-			{
-				if (iList is IContext context)
-					context.InitializeContext(true);
-			}
-
 			if (CanLoadUI)
 			{
 				try
@@ -503,6 +496,14 @@ namespace Atlas.Tabs
 					model.AddData(e);
 				}
 			}
+
+			// Set the context to the UI for items that support it
+			foreach (IList iList in model.ItemList)
+			{
+				if (iList is IContext context)
+					context.InitializeContext(true);
+			}
+
 			Model = model;
 			LoadSettings(); // Load() initializes the tabModel.Object & CustomSettingsPath which gets used for the settings path
 			OnModelChanged?.Invoke(this, new EventArgs());
@@ -552,7 +553,8 @@ namespace Atlas.Tabs
 			{
 				if (TabViewSettings == null)
 					return false;
-				if (TabViewSettings.SelectionType == SelectionType.User && TabViewSettings.SelectedRows.Count == 0) // Need to split apart user selected rows?
+				//if (TabViewSettings.SelectionType == SelectionType.User && TabViewSettings.SelectedRows.Count == 0) // Need to split apart user selected rows?
+				if (TabViewSettings.SelectedRows.Count == 0)
 					return false;
 				// Only data is skippable?
 				if (Model.Objects.Count > 0 || Model.ItemList.Count == 0 || Model.ItemList[0].Count != 1)

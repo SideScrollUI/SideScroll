@@ -21,11 +21,7 @@ namespace Atlas.Tabs
 			TabBookmark.IsRoot = true;
 		}
 
-		public override string ToString()
-		{
-			//return Name;
-			return Address;
-		}
+		public override string ToString() => Address;
 
 		public void MergeBookmarks(List<Bookmark> bookmarks)
 		{
@@ -37,18 +33,15 @@ namespace Atlas.Tabs
 				TabBookmark.MergeNode(bookmark.TabBookmark);
 		}
 
-		public string GetEncodedString()
+		public string ToBase64String(Call call)
 		{
-			var serializer = SerializerMemory.Create();
-			serializer.Save(new Call(), this);
-			string data = serializer.GetEncodedString();
-			return data;
+			return SerializerMemory.ToBase64String(call, this);
 		}
 
 		public static Bookmark Create(string encoded)
 		{
 			var serializer = SerializerMemory.Create();
-			serializer.LoadEncodedString(encoded);
+			serializer.LoadBase64String(encoded);
 			Bookmark bookmark = serializer.Load<Bookmark>();
 			return bookmark;
 		}

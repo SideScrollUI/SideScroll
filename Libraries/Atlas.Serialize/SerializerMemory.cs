@@ -58,7 +58,7 @@ namespace Atlas.Serialize
 
 		public abstract object CloneInternal(Call call, object obj);
 
-		public string GetEncodedString()
+		public string ToBase64String()
 		{
 			stream.Seek(0, SeekOrigin.Begin);
 			using (var outStream = new MemoryStream())
@@ -82,9 +82,17 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public void LoadEncodedString(string base64)
+		public void LoadBase64String(string base64)
 		{
 			ConvertEncodedToStream(base64, stream);
+		}
+
+		public static string ToBase64String(Call call, object obj)
+		{
+			var serializer = Create();
+			serializer.Save(call, obj);
+			string data = serializer.ToBase64String();
+			return data;
 		}
 
 		public static SerializerMemory Create()

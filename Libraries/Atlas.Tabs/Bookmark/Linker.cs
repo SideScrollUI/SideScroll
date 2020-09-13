@@ -8,8 +8,8 @@ namespace Atlas.Tabs
 
 		public virtual string GetLinkUri(Call call, Bookmark bookmark)
 		{
-			string encoded = bookmark.GetEncodedString();
-			string uri = atlasPrefix + encoded;
+			string base64 = bookmark.ToBase64String(call);
+			string uri = atlasPrefix + base64;
 			return uri;
 		}
 

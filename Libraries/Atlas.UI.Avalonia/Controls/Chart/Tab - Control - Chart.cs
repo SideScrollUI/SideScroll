@@ -415,7 +415,8 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				double duration = endTime.Value.Subtract(startTime.Value).TotalSeconds;
 				DateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(startTime.Value);
-				DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value.AddSeconds(duration / 25.0)); // labels get clipped without this
+				DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value);
+				//DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value.AddSeconds(duration / 25.0)); // labels get clipped without this
 				UpdateDateTimeInterval(duration);
 			}
 			PlotModel.Axes.Add(DateTimeAxis);
