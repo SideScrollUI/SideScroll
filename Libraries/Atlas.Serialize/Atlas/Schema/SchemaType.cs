@@ -184,13 +184,13 @@ namespace Atlas.Serialize
 		}
 
 		// Type lookup can take a long time, especially when there's missing types
-		private static Dictionary<string, Type> typeCache = new Dictionary<string, Type>();
+		private static Dictionary<string, Type> _typeCache = new Dictionary<string, Type>();
 
 		private void LoadType(Log log)
 		{
-			lock (typeCache)
+			lock (_typeCache)
 			{
-				if (typeCache.TryGetValue(AssemblyQualifiedName, out Type type))
+				if (_typeCache.TryGetValue(AssemblyQualifiedName, out Type type))
 				{
 					Type = type;
 					return;
@@ -219,9 +219,10 @@ namespace Atlas.Serialize
 				log.AddWarning("Missing Unversioned Type", new Tag("TypeSchema", this), new Tag("Message", e.Message));
 			}
 
-			lock (typeCache)
+			lock (_typeCache)
 			{
-				typeCache.Add(AssemblyQualifiedName, Type);
+				if (!_typeCache.ContainsKey(AssemblyQualifiedName))
+					_typeCache.Add(AssemblyQualifiedName, Type);
 			}
 		}
 
