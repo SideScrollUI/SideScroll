@@ -22,7 +22,7 @@ namespace Atlas.Tabs
 			if (data == null)
 				return null;
 
-			Bookmark bookmark = Bookmark.Create(data);
+			Bookmark bookmark = Bookmark.Create(call, data);
 			return bookmark;
 		}
 	}

@@ -51,7 +51,7 @@ namespace Atlas.UI.Avalonia
 			if (maxHeightAttribute != null)
 			{
 				MaxDesiredHeight = maxHeightAttribute.MaxHeight;
-				formatConverter.MaxLength = MaxDesiredHeight * 5;
+				formatConverter.MaxLength = MaxDesiredHeight * 6;
 			}
 			if (DataGridUtils.IsTypeAutoSize(propertyInfo.PropertyType))
 				AutoSize = true;

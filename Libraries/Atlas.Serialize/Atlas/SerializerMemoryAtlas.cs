@@ -30,6 +30,7 @@ namespace Atlas.Serialize
 
 		public override T Load<T>(Call call = null)
 		{
+			call = call ?? new Call();
 			stream.Seek(0, SeekOrigin.Begin);
 			using (var reader = new BinaryReader(stream))
 			{
@@ -41,6 +42,7 @@ namespace Atlas.Serialize
 
 		public override object Load(Call call = null)
 		{
+			call = call ?? new Call();
 			stream.Seek(0, SeekOrigin.Begin);
 			using (var reader = new BinaryReader(stream))
 			{

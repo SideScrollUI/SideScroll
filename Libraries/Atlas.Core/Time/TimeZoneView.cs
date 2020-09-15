@@ -43,7 +43,15 @@ namespace Atlas.Core.Time
 
 		public DateTime ConvertTimeToUtc(DateTime dateTime)
 		{
-			return TimeZoneInfo.ConvertTimeToUtc(dateTime);
+			if (this == Utc)
+				return dateTime;
+
+			if (this == Local)
+				dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
+			else
+				dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+
+			return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo);
 		}
 
 		public int CompareTo(object obj)

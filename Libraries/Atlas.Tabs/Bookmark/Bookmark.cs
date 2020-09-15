@@ -38,11 +38,11 @@ namespace Atlas.Tabs
 			return SerializerMemory.ToBase64String(call, this);
 		}
 
-		public static Bookmark Create(string encoded)
+		public static Bookmark Create(Call call, string encoded)
 		{
 			var serializer = SerializerMemory.Create();
 			serializer.LoadBase64String(encoded);
-			Bookmark bookmark = serializer.Load<Bookmark>();
+			Bookmark bookmark = serializer.Load<Bookmark>(call);
 			return bookmark;
 		}
 

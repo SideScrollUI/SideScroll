@@ -11,7 +11,7 @@ namespace Atlas.UI.Avalonia
 		// add a map to store original mappings?
 		//public Dictionary<object, object> { get; set; }
 		public bool ConvertBackEnabled { get; set; } = true;
-		public int MaxLength { get; set; } = 500;
+		public int MaxLength { get; set; } = 600;
 		private object originalValue;
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

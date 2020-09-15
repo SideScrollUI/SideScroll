@@ -6,7 +6,6 @@ using Avalonia.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Text;
 using static Atlas.UI.Avalonia.DataGridUtils;
@@ -15,6 +14,8 @@ namespace Atlas.Extensions
 {
 	public static class DataGridExtensions
 	{
+		private const int MaxValueLength = 2000;
+
 		public static string ColumnToStringTable(this DataGrid dataGrid, DataGridBoundColumn column)
 		{
 			if (dataGrid == null || column == null)
@@ -30,7 +31,7 @@ namespace Atlas.Extensions
 				if (propertyInfo != null)
 				{
 					object obj = propertyInfo.GetValue(item);
-					string value = obj.Formatted();
+					string value = obj.Formatted(MaxValueLength);
 					sb.AppendLine(value);
 				}
 				else
@@ -61,7 +62,7 @@ namespace Atlas.Extensions
 				if (propertyInfo != null)
 				{
 					object value = propertyInfo.GetValue(obj);
-					string valueText = value.Formatted();
+					string valueText = value.Formatted(MaxValueLength);
 					sb.AppendLine(valueText);
 				}
 				else
@@ -140,7 +141,7 @@ namespace Atlas.Extensions
 			return stringBuilder.ToString();
 		}
 
-		private static void GetDataGridContents(DataGrid dataGrid, IEnumerable items, out List<ColumnInfo> columns, out List<List<string>> contentRows)
+		private static void GetDataGridContents(DataGrid dataGrid, IEnumerable items, out List<ColumnInfo> columns, out List<List<string>> contentRows, int maxValueLength = MaxValueLength)
 		{
 			columns = new List<ColumnInfo>();
 			contentRows = new List<List<string>>();
@@ -174,7 +175,7 @@ namespace Atlas.Extensions
 						string propertyPath = binding.Path;
 						object obj = ReflectorUtil.FollowPropertyPath(item, propertyPath);
 
-						string value = obj.Formatted();
+						string value = obj.Formatted(maxValueLength);
 						value = value?.Replace('\n', ' '); // remove newlines
 						stringCells.Add(value);
 					}

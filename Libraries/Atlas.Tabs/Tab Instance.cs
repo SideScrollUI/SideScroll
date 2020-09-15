@@ -667,6 +667,7 @@ namespace Atlas.Tabs
 			Bookmark bookmark = RootInstance.CreateBookmark(); // create from base Tab
 			if (bookmark == null)
 				return;
+
 			bookmark.Name = CurrentBookmarkName;
 			Project.DataApp.Save(bookmark.Name, bookmark, TaskInstance.Call);
 
