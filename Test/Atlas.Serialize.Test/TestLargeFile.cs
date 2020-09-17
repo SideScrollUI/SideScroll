@@ -7,7 +7,7 @@ using System.IO;
 namespace Atlas.Serialize.Test
 {
 	[Category("LargeFile")]
-	public class LargeFile : TestSerializeBase
+	public class TestLargeFile : TestSerializeBase
 	{
 		private string basePath;
 		private const int intCount = 10000;

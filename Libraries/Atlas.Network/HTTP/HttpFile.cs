@@ -12,7 +12,7 @@ namespace Atlas.Network
 
 		public void Download(Call call, HttpCache httpCache)
 		{
-			var cachedHttp = new CachedHTTP(call, httpCache);
+			var cachedHttp = new CachedHttp(call, httpCache);
 			byte[] bytes = cachedHttp.GetBytes(Uri.ToString());
 			Size = bytes.Length;
 		}

@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace Atlas.Core.Test
 {
 	[Category("Performance")]
-	public class TestPerformance : TestBase
+	public class TestSerializePerformance : TestBase
 	{
 		[OneTimeSetUp]
 		public void OneTimeSetUp()

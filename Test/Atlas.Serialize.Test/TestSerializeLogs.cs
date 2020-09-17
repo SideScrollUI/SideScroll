@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Atlas.Serialize.Test
 {
 	[Category("Serialize")]
-	public class SerializeLogs : TestSerializeBase
+	public class TestSerializeLogs : TestSerializeBase
 	{
 		private SerializerMemory serializer;
 		

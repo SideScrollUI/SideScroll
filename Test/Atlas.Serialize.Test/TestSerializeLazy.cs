@@ -5,7 +5,7 @@ using System.IO;
 namespace Atlas.Serialize.Test
 {
 	[Category("SerializeLazy")]
-	public class SerializeLazy : TestSerializeBase
+	public class TestSerializeLazy : TestSerializeBase
 	{
 		private SerializerFile serializerFile;
 		

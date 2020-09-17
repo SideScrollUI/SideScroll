@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Atlas.Serialize
 {
-	public static class AtlasExtensions
+	public static class SerializerExtensions
 	{
 		public static T DeepClone<T>(this object obj, Call call = null)
 		{

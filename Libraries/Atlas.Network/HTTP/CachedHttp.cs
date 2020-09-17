@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Atlas.Network
 {
-	public class CachedHTTP : HTTP
+	public class CachedHttp : HTTP
 	{
 		private HttpCache httpCache;
 
-		public CachedHTTP(Call call, HttpCache httpCache) : 
+		public CachedHttp(Call call, HttpCache httpCache) : 
 			base(call)
 		{
 			this.httpCache = httpCache;

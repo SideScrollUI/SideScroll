@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Atlas.Serialize.Test
 {
 	[Category("Clone")]
-	public class CloneTest : TestSerializeBase
+	public class TestClone : TestSerializeBase
 	{
 		private Log log;
 		private Serializer serializer;
