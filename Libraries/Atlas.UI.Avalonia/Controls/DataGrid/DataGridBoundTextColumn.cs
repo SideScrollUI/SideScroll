@@ -4,6 +4,7 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input.Platform;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Styling;
 using System;
 using System.Data;
@@ -17,6 +18,7 @@ namespace Atlas.UI.Avalonia
 		public DataGrid DataGrid;
 		public DataColumn DataColumn;
 		public int MaxDesiredWidth = 500;
+		public bool WordWrap;
 
 		public DataGridBoundTextColumn(DataGrid dataGrid, DataColumn dataColumn)
 		{
@@ -71,6 +73,10 @@ namespace Atlas.UI.Avalonia
 			if (Binding != null)
 			{
 				textBlockElement.Bind(TextBlock.TextProperty, Binding);
+			}
+			if (WordWrap)
+			{
+				textBlockElement.TextWrapping = TextWrapping.Wrap;
 			}
 			return textBlockElement;
 		}

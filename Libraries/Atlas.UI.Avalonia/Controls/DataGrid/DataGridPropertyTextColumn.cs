@@ -1,21 +1,13 @@
 ﻿using Atlas.Core;
-using Atlas.Extensions;
 using Atlas.Tabs;
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Data.Converters;
-using Avalonia.Input.Platform;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia
 {
@@ -34,6 +26,7 @@ namespace Atlas.UI.Avalonia
 		public int MaxDesiredWidth { get; set; } = 500;
 		public int MaxDesiredHeight { get; set; } = 100;
 		public bool AutoSize { get; set; }
+		public bool WordWrap { get; set; }
 
 		private Binding formattedBinding;
 		//private Binding unformattedBinding;
@@ -57,6 +50,8 @@ namespace Atlas.UI.Avalonia
 				AutoSize = true;
 
 			CanUserSort = DataGridUtils.IsTypeSortable(propertyInfo.PropertyType);
+
+			WordWrap = (PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null);
 
 			//CellStyleClasses = new Classes()
 		}
@@ -201,10 +196,13 @@ namespace Atlas.UI.Avalonia
 				//FontWeight
 				//Foreground
 			};
-			if (PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
+			if (WordWrap)
 				textBlockElement.TextWrapping = TextWrapping.Wrap;
 			textBlockElement.TextAlignment = DataGridUtils.GetTextAlignment(PropertyInfo.PropertyType);
-			AddTextBoxContextMenu(cell, textBlockElement);
+
+			cell.IsHitTestVisible = true;
+			cell.Focusable = true;
+			cell.ContextMenu = new DataGridCellContextMenu(DataGrid, this, cell, textBlockElement);
 
 			if (Binding != null)
 			{
@@ -221,75 +219,6 @@ namespace Atlas.UI.Avalonia
 			return textBlockElement;
 		}
 
-		private void AddTextBoxContextMenu(DataGridCell cell, TextBlock textBlock)
-		{
-			var contextMenu = new ContextMenu();
-
-			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
-
-			var list = new AvaloniaList<object>();
-
-			var menuItemCopy = new MenuItem() { Header = "Copy - _Cell Contents" };
-			menuItemCopy.Click += delegate
-			{
-				Task.Run(() => ClipBoardUtils.SetTextAsync(textBlock.Text));
-			};
-			list.Add(menuItemCopy);
-
-			list.Add(new Separator());
-
-			var menuItemCopyColumn = new MenuItem() { Header = "Copy - Co_lumn" };
-			menuItemCopyColumn.Click += delegate
-			{
-				string text = DataGrid.ColumnToStringTable(this);
-				if (text != null)
-					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
-			};
-			list.Add(menuItemCopyColumn);
-
-			var menuItemCopyRow = new MenuItem() { Header = "Copy - _Row" };
-			menuItemCopyRow.Click += delegate
-			{
-				string text = DataGrid.RowToString(cell.DataContext);
-				if (text != null)
-					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
-			};
-			list.Add(menuItemCopyRow);
-
-			var menuItemCopySelected = new MenuItem() { Header = "Copy - _Selected" };
-			menuItemCopySelected.Click += delegate
-			{
-				string text = DataGrid.SelectedToString();
-				if (text != null)
-					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
-			};
-			list.Add(menuItemCopySelected);
-
-			var menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
-			menuItemCopyDataGrid.Click += delegate
-			{
-				string text = DataGrid.ToStringTable();
-				if (text != null)
-					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
-			};
-			list.Add(menuItemCopyDataGrid);
-
-			var menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - CS_V" };
-			menuItemCopyDataGridCsv.Click += delegate
-			{
-				string text = DataGrid.ToCsv();
-				if (text != null)
-					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
-			};
-			list.Add(menuItemCopyDataGridCsv);
-
-			contextMenu.Items = list;
-
-			cell.IsHitTestVisible = true;
-			cell.Focusable = true;
-			cell.ContextMenu = contextMenu;
-		}
-
 		Binding GetFormattedTextBinding()
 		{
 			Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);
@@ -299,8 +228,7 @@ namespace Atlas.UI.Avalonia
 				formattedBinding = new Binding
 				{
 					Path = binding.Path,
-					//Mode = binding.Mode,
-					Mode = BindingMode.OneWay, // copying a value to the clipboard triggers an infinite loop without this?
+					Mode = BindingMode.OneTime,
 				};
 				if (IsReadOnly)
 					formattedBinding.Converter = formatConverter;

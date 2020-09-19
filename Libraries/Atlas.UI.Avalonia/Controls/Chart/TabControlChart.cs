@@ -680,7 +680,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		public List<DateTimeFormat> dateFormats = new List<DateTimeFormat>
+		public List<DateTimeFormat> DateFormats = new List<DateTimeFormat>
 		{
 			new DateTimeFormat(2 * 60, TimeSpan.FromSeconds(1), "H:mm:ss"),
 			new DateTimeFormat(24 * 60 * 60, TimeSpan.FromMinutes(1), "H:mm"),
@@ -691,7 +691,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public DateTimeFormat GetDateTimeFormat(double duration)
 		{
-			foreach (var format in dateFormats)
+			foreach (var format in DateFormats)
 			{
 				if (duration < format.Maximum)
 					return format;

@@ -20,8 +20,9 @@ namespace Atlas.Serialize
 
 		public abstract object Load(Call call = null);
 
+		// Save an object to a memory stream and then load it
 		//public static T Clone<T>(Call call, T obj)
-		public static T Clone<T>(Call call, object obj)
+		public static T DeepClone<T>(Call call, object obj)
 		{
 			if (typeof(T) != obj.GetType())
 			{
@@ -31,7 +32,7 @@ namespace Atlas.Serialize
 			try
 			{
 				var memorySerializer = Create();
-				return memorySerializer.CloneInternal<T>(call, obj);
+				return memorySerializer.DeepCloneInternal<T>(call, obj);
 			}
 			catch (Exception e)
 			{
@@ -40,12 +41,12 @@ namespace Atlas.Serialize
 			return default;
 		}
 
-		public static object Clone(Call call, object obj)
+		public static object DeepClone(Call call, object obj)
 		{
 			try
 			{
 				var memorySerializer = Create();
-				return memorySerializer.CloneInternal(call, obj);
+				return memorySerializer.DeepCloneInternal(call, obj);
 			}
 			catch (Exception e)
 			{
@@ -54,9 +55,9 @@ namespace Atlas.Serialize
 			return null;
 		}
 
-		public abstract T CloneInternal<T>(Call call, object obj);
+		public abstract T DeepCloneInternal<T>(Call call, object obj);
 
-		public abstract object CloneInternal(Call call, object obj);
+		public abstract object DeepCloneInternal(Call call, object obj);
 
 		public string ToBase64String()
 		{

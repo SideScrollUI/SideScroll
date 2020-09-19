@@ -9,13 +9,13 @@ namespace Atlas.Serialize
 		public static T DeepClone<T>(this object obj, Call call = null)
 		{
 			call = call ?? new Call();
-			return SerializerMemory.Clone<T>(call, obj);
+			return SerializerMemory.DeepClone<T>(call, obj);
 		}
 
 		public static object DeepClone(this object obj, Call call = null)
 		{
 			call = call ?? new Call();
-			return SerializerMemory.Clone(call, obj);
+			return SerializerMemory.DeepClone(call, obj);
 		}
 
 		public static void CloneParentClass(this object dest, object source)

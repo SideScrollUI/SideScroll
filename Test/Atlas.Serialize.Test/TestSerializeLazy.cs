@@ -25,7 +25,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Lazy Base")]
 		public void SerializeLazyBase()
 		{
-			Parent input = new Parent();
+			var input = new Parent();
 			input.child = new Child();
 			input.child.uintTest = 2;
 
@@ -38,7 +38,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Lazy Null Properties")]
 		public void SerializeLazyNullProperties()
 		{
-			Parent input = new Parent();
+			var input = new Parent();
 
 			serializerFile.Save(Call, input);
 			Parent output = serializerFile.Load<Parent>(Call, true);

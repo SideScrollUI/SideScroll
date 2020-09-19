@@ -53,14 +53,14 @@ namespace Atlas.Serialize
 		}
 
 		//public static T Clone<T>(Call call, T obj)
-		public override T CloneInternal<T>(Call call, object obj)
+		public override T DeepCloneInternal<T>(Call call, object obj)
 		{
 			Save(call, obj);
 			T copy = Load<T>(call);
 			return copy;
 		}
 
-		public override object CloneInternal(Call call, object obj)
+		public override object DeepCloneInternal(Call call, object obj)
 		{
 			Save(call, obj);
 			object copy = Load(call);

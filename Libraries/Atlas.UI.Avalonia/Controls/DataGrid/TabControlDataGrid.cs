@@ -28,7 +28,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private const int ColumnPercentBased = 150;
 		private const int MaxMinColumnWidth = 150;
 		private const int MaxAutoSizeMinColumnWidth = 250;
-
+		private const int EnableWordWrapMinStringLength = 64; // Don't enable wordwrap unless we have to (expensive and not always wanted)
 		public int MaxColumnWidth = 600;
 
 		public TabModel TabModel;
@@ -351,7 +351,6 @@ namespace Atlas.UI.Avalonia.Controls
 						column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto, desiredWidth, double.NaN);
 						continue;
 					}
-					//column.Width = new DataGridLength(desiredWidth, DataGridLengthUnitType.Star);
 				}
 				if (desiredWidth >= ColumnPercentBased)
 				{
@@ -658,6 +657,15 @@ namespace Atlas.UI.Avalonia.Controls
 					column = textColumn;
 					//else
 					//	column = new DataGridTextColumn();
+
+					if (propertyInfo.PropertyType == typeof(string) && !textColumn.WordWrap)
+					{
+						for (int i = 0; i < 30 && i < List.Count; i++)
+						{
+							if (propertyInfo.GetValue(List[i]) is string text && text.Length > EnableWordWrapMinStringLength)
+								textColumn.WordWrap = true;
+						}
+					}
 				}
 			}
 			//var column = new DataGridTextColumn();
