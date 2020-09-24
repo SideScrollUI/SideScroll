@@ -49,11 +49,11 @@ namespace Atlas.Serialize
 
 		protected override object CreateObject(int objectIndex)
 		{
-			long position = reader.BaseStream.Position;
-			reader.BaseStream.Position = ObjectOffsets[objectIndex];
+			long position = Reader.BaseStream.Position;
+			Reader.BaseStream.Position = ObjectOffsets[objectIndex];
 
-			object obj = reader.ReadString();
-			reader.BaseStream.Position = position;
+			object obj = Reader.ReadString();
+			Reader.BaseStream.Position = position;
 
 			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;

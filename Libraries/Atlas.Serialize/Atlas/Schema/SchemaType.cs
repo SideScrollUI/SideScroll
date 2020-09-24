@@ -90,6 +90,9 @@ namespace Atlas.Serialize
 		// BinaryFormatter uses[Serializable], should we allow that?
 		public static bool IsAllowed(Type type)
 		{
+			Attribute attribute = type.GetCustomAttribute<UnserializedAttribute>();
+			if (attribute != null)
+				return false;
 			return true;
 			/*if (type == null)
 				return false;

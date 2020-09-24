@@ -28,13 +28,13 @@ namespace Atlas.Serialize
 		public TypeRepoDictionary(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{
-			Type[] types = Type.GetGenericArguments();
+			Type[] types = LoadableType.GetGenericArguments();
 			if (types.Length > 0)
 			{
 				typeKey = types[0];
 				typeValue = types[1];
 			}
-			addMethod = Type.GetMethods()
+			addMethod = LoadableType.GetMethods()
 				.Where(m => m.Name == "Add" && m.GetParameters().Count() == 2).FirstOrDefault();
 		}
 
@@ -77,7 +77,7 @@ namespace Atlas.Serialize
 		public override void LoadObjectData(object obj)
 		{
 			IDictionary iCollection = (IDictionary)obj;
-			int count = reader.ReadInt32();
+			int count = Reader.ReadInt32();
 
 			for (int j = 0; j < count; j++)
 			{
@@ -91,7 +91,7 @@ namespace Atlas.Serialize
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
-			object obj = Activator.CreateInstance(Type, true);
+			object obj = Activator.CreateInstance(LoadableType, true);
 			Objects[objectIndex] = obj; // must assign before loading any more refs
 
 			IDictionary iCollection = (IDictionary)obj;

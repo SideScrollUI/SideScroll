@@ -50,7 +50,7 @@ namespace Atlas.Serialize
 			sizes = new int[TypeSchema.NumObjects];
 			for (int i = 0; i < TypeSchema.NumObjects; i++)
 			{
-				int count = reader.ReadInt32();
+				int count = Reader.ReadInt32();
 				sizes[i] = count;
 			}
 		}

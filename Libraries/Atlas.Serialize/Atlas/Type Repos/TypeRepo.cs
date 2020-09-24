@@ -32,7 +32,7 @@ namespace Atlas.Serialize
 		public Serializer Serializer;
 		public TypeSchema TypeSchema;
 		public Type Type; // might be null after loading
-		public Type LoadableType; // some types get overridden lazy load
+		public Type LoadableType; // some types get overridden lazy load, or get removed [Unserialized]
 		public int TypeIndex; // -1 if null
 		public List<object> Objects = new List<object>(); // ordered by index, not filled in when loading
 		public int[] ObjectSizes;
@@ -40,7 +40,7 @@ namespace Atlas.Serialize
 		public object[] ObjectsLoaded;
 		public int ObjectsLoadedCount = 0;
 
-		public BinaryReader reader;
+		public BinaryReader Reader;
 
 		// Saving Only
 		public Dictionary<object, int> idxObjectToIndex = new Dictionary<object, int>(); // for saving only, not filled in for loading
@@ -66,7 +66,8 @@ namespace Atlas.Serialize
 			Serializer = serializer;
 			TypeSchema = typeSchema;
 			Type = typeSchema.Type;
-			LoadableType = Type;
+			if (typeSchema.Allowed)
+				LoadableType = Type;
 			//objects.Capacity = typeSchema.numObjects;
 			ObjectsLoaded = new object[typeSchema.NumObjects];
 			//CreateObjects();
@@ -80,7 +81,12 @@ namespace Atlas.Serialize
 		public static TypeRepo Create(Log log, Serializer serializer, TypeSchema typeSchema)
 		{
 			if (serializer.AllowListOnly && typeSchema.Type != null && !typeSchema.Allowed)
-				throw new Exception("Type " + typeSchema.Name + " is not whitelisted");
+			{
+				log.Add("Type " + typeSchema.Name + " is not allowed");
+				var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema);
+				typeRepoUnknown.Reader = serializer.Reader;
+				return typeRepoUnknown;
+			}
 			//Type type = typeSchema.type;
 			TypeRepo typeRepo;
 
@@ -89,7 +95,7 @@ namespace Atlas.Serialize
 				typeRepo = creator.TryCreateRepo(serializer, typeSchema);
 				if (typeRepo != null)
 				{
-					typeRepo.reader = serializer.Reader;
+					typeRepo.Reader = serializer.Reader;
 					return typeRepo;
 				}
 			}
@@ -106,7 +112,7 @@ namespace Atlas.Serialize
 			{
 				typeRepo = new TypeRepoObject(serializer, typeSchema);
 			}
-			typeRepo.reader = serializer.Reader;
+			typeRepo.Reader = serializer.Reader;
 			return typeRepo;
 
 			// todo: add TypoRepoRef class?
@@ -210,7 +216,7 @@ namespace Atlas.Serialize
 				long offset = TypeSchema.FileDataOffset;
 				for (int i = 0; i < TypeSchema.NumObjects; i++)
 				{
-					int size = reader.ReadInt32();
+					int size = Reader.ReadInt32();
 					ObjectOffsets[i] = offset;
 					ObjectSizes[i] = size;
 					offset += size;
@@ -289,7 +295,7 @@ namespace Atlas.Serialize
 		// Creates one if required
 		public int GetOrAddObjectRef(object obj)
 		{
-			if (Type.IsPrimitive)
+			if (LoadableType.IsPrimitive)
 				return -1;
 			if (!idxObjectToIndex.TryGetValue(obj, out int index))
 			{
@@ -318,7 +324,7 @@ namespace Atlas.Serialize
 
 		public TypeRef LoadLazyObjectRef()
 		{
-			byte flags = reader.ReadByte();
+			byte flags = Reader.ReadByte();
 			if (flags == 0)
 				return null;
 
@@ -332,7 +338,7 @@ namespace Atlas.Serialize
 				}
 				else
 				{
-					int typeIndex = reader.ReadInt16(); // not saved for sealed classes
+					int typeIndex = Reader.ReadInt16(); // not saved for sealed classes
 					typeRef.TypeRepo = Serializer.TypeRepos[typeIndex];
 					/*if (typeRef.typeRepo.typeSchema.type.IsPrimitive)
 					{
@@ -345,14 +351,14 @@ namespace Atlas.Serialize
 			{
 				typeRef.TypeRepo = this;
 			}
-			typeRef.Index = reader.ReadInt32();
+			typeRef.Index = Reader.ReadInt32();
 			return typeRef;
 		}
 
 
 		public void SkipObjectRef()
 		{
-			byte flags = reader.ReadByte();
+			byte flags = Reader.ReadByte();
 			if (flags == 0)
 				return;
 
@@ -366,27 +372,27 @@ namespace Atlas.Serialize
 			{
 				if (flags == 1)
 				{
-					reader.ReadInt32(); // objectIndex
+					Reader.ReadInt32(); // objectIndex
 				}
 				else
 				{
-					int typeIndex = reader.ReadInt16(); // not saved for sealed classes
+					int typeIndex = Reader.ReadInt16(); // not saved for sealed classes
 					TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
 					if (typeRepo.TypeSchema.Type.IsPrimitive)
 						LoadObject();
 					else
-						reader.ReadInt32(); // objectIndex
+						Reader.ReadInt32(); // objectIndex
 				}
 			}
 			else
 			{
-				reader.ReadInt32(); // objectIndex
+				Reader.ReadInt32(); // objectIndex
 			}
 		}
 
 		public object LoadObjectRef()
 		{
-			byte flags = reader.ReadByte();
+			byte flags = Reader.ReadByte();
 			if (flags == 0)
 				return null;
 
@@ -399,26 +405,26 @@ namespace Atlas.Serialize
 			{
 				if (flags == 1)
 				{
-					int objectIndex = reader.ReadInt32();
+					int objectIndex = Reader.ReadInt32();
 					return LoadObject(objectIndex);
 				}
 				else
 				{
 					// has a derived type
-					int typeIndex = reader.ReadInt16();
+					int typeIndex = Reader.ReadInt16();
 					if (typeIndex >= Serializer.TypeRepos.Count)
 						return null;
 					TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
 					if (typeRepo.TypeSchema.IsPrimitive) // object ref can point to primitives
 						return typeRepo.LoadObject();
 
-					int objectIndex = reader.ReadInt32();
+					int objectIndex = Reader.ReadInt32();
 					return typeRepo.LoadObject(objectIndex);
 				}
 			}
 			else
 			{
-				int objectIndex = reader.ReadInt32();
+				int objectIndex = Reader.ReadInt32();
 				return LoadObject(objectIndex);
 			}
 		}
@@ -429,7 +435,7 @@ namespace Atlas.Serialize
 			if (isNull)
 				return null;
 
-			if (Type.IsPrimitive)
+			if (LoadableType.IsPrimitive)
 			{
 				return LoadObject();
 				//return LoadObjectData(bytes, ref byteOffset);
@@ -468,12 +474,12 @@ namespace Atlas.Serialize
 		public void LoadObjectData(int objectIndex)
 		{
 			object obj = ObjectsLoaded[objectIndex];
-			reader.BaseStream.Position = ObjectOffsets[objectIndex];
+			Reader.BaseStream.Position = ObjectOffsets[objectIndex];
 			try
 			{
 				LoadObjectData(obj);
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 			}
 		}
@@ -498,7 +504,7 @@ namespace Atlas.Serialize
 
 		public object LoadObject(int objectIndex)
 		{
-			if (Type == null) // type might have disappeared or been renamed
+			if (LoadableType == null) // type might have disappeared or been renamed
 				return null; // should we pass a "ref bool valid"?
 			if (objectIndex >= ObjectsLoaded.Length)
 				return null;

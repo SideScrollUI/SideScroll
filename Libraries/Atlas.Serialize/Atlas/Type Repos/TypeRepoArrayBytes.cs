@@ -53,7 +53,7 @@ namespace Atlas.Serialize
 			sizes = new int[TypeSchema.NumObjects];
 			for (int i = 0; i < TypeSchema.NumObjects; i++)
 			{
-				int count = reader.ReadInt32();
+				int count = Reader.ReadInt32();
 				sizes[i] = count;
 			}
 		}
@@ -85,7 +85,7 @@ namespace Atlas.Serialize
 		public override void LoadObjectData(object obj)
 		{
 			byte[] array = (byte[])obj;
-			reader.Read(array, 0, array.Length);
+			Reader.Read(array, 0, array.Length);
 		}
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)

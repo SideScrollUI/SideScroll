@@ -56,16 +56,16 @@ namespace Atlas.Serialize
 
 		protected override object CreateObject(int objectIndex)
 		{
-			long position = reader.BaseStream.Position;
-			reader.BaseStream.Position = ObjectOffsets[objectIndex];
+			long position = Reader.BaseStream.Position;
+			Reader.BaseStream.Position = ObjectOffsets[objectIndex];
 
 			object obj = null;
 			try
 			{
-				if (CanAssign(Type))
+				if (CanAssign(LoadableType))
 				{
-					long ticks = reader.ReadInt64();
-					int kindValue = reader.ReadByte();
+					long ticks = Reader.ReadInt64();
+					int kindValue = Reader.ReadByte();
 					//Enum.ToObject(typeof(DateTimeKind), kindValue);
 					DateTime dateTime = new DateTime(ticks, (DateTimeKind)kindValue);
 					obj = dateTime;
@@ -79,7 +79,7 @@ namespace Atlas.Serialize
 			{
 				//log.Add(e);
 			}
-			reader.BaseStream.Position = position;
+			Reader.BaseStream.Position = position;
 
 			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;
@@ -91,7 +91,7 @@ namespace Atlas.Serialize
 
 		public override object LoadObject()
 		{
-			object obj = Enum.ToObject(TypeSchema.Type, reader.ReadInt32());
+			object obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
 			return obj;
 		}
 

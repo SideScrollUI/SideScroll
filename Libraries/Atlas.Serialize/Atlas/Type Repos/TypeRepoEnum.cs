@@ -53,14 +53,14 @@ namespace Atlas.Serialize
 
 		protected override object CreateObject(int objectIndex)
 		{
-			long position = reader.BaseStream.Position;
-			reader.BaseStream.Position = ObjectOffsets[objectIndex];
+			long position = Reader.BaseStream.Position;
+			Reader.BaseStream.Position = ObjectOffsets[objectIndex];
 
 			object obj = null;
 			try
 			{
-				if (Type.IsEnum)
-					obj = Enum.ToObject(TypeSchema.Type, reader.ReadInt32());
+				if (LoadableType.IsEnum)
+					obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
 				else
 					throw new Exception("Unhandled primitive type");
 			}
@@ -68,7 +68,7 @@ namespace Atlas.Serialize
 			{
 				//log.Add(e);
 			}
-			reader.BaseStream.Position = position;
+			Reader.BaseStream.Position = position;
 
 			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;
@@ -80,7 +80,7 @@ namespace Atlas.Serialize
 
 		public override object LoadObject()
 		{
-			object obj = Enum.ToObject(TypeSchema.Type, reader.ReadInt32());
+			object obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
 			return obj;
 		}
 

@@ -70,7 +70,7 @@ namespace Atlas.Serialize
 			if (TypeRepos.Count == 0)// || typeRepos[0].objects.Count == 0)
 				return null;
 			TypeRepo typeRepo = TypeRepos[0];
-			if (typeRepo.Type == null)
+			if (typeRepo.LoadableType == null)
 				return null;
 
 			if (typeRepo.Type.IsPrimitive)
@@ -282,7 +282,8 @@ namespace Atlas.Serialize
 				typeSchema.Validate(TypeSchemas);
 
 				TypeRepo typeRepo = TypeRepo.Create(log, this, typeSchema);
-				AddTypeRepo(typeRepo);
+				if (typeRepo != null)
+					AddTypeRepo(typeRepo);
 			}
 		}
 
@@ -337,7 +338,7 @@ namespace Atlas.Serialize
 			var writers = new List<TypeRepoWriter>();
 			foreach (TypeRepo typeRepo in OrderedTypes)
 			{
-				if (typeRepo.Type == null)
+				if (typeRepo.LoadableType == null)
 					continue;
 
 				var typeRepoWriter = new TypeRepoWriter()
@@ -402,7 +403,7 @@ namespace Atlas.Serialize
 			{
 				foreach (TypeRepo typeRepo in OrderedTypes)
 				{
-					if (typeRepo.Type == null)
+					if (typeRepo.LoadableType == null)
 						continue;
 
 					typeRepo.InitializeLoading(log);

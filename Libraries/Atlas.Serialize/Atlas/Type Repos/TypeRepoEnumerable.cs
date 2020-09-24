@@ -27,11 +27,11 @@ namespace Atlas.Serialize
 		public TypeRepoEnumerable(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{
-			Type[] types = Type.GetGenericArguments();
+			Type[] types = LoadableType.GetGenericArguments();
 			if (types.Length > 0)
 				elementType = types[0];
 
-			addMethod = Type.GetMethods()
+			addMethod = LoadableType.GetMethods()
 				.Where(m => m.Name == "Add" && m.GetParameters().Count() == 1).FirstOrDefault();
 		}
 
@@ -57,7 +57,7 @@ namespace Atlas.Serialize
 
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
-			PropertyInfo countProp = Type.GetProperty("Count"); // IEnumerable isn't required to implement this
+			PropertyInfo countProp = LoadableType.GetProperty("Count"); // IEnumerable isn't required to implement this
 			IEnumerable iEnumerable = (IEnumerable)obj;
 			
 			int count = (int)countProp.GetValue(iEnumerable, null);
@@ -71,7 +71,7 @@ namespace Atlas.Serialize
 		public override void LoadObjectData(object obj)
 		{
 			//(IEnumerable<listTypeRepo.type>)objects[i];
-			int count = reader.ReadInt32();
+			int count = Reader.ReadInt32();
 
 			for (int j = 0; j < count; j++)
 			{
@@ -82,7 +82,7 @@ namespace Atlas.Serialize
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
-			object obj = Activator.CreateInstance(Type, true);
+			object obj = Activator.CreateInstance(LoadableType, true);
 			Objects[objectIndex] = obj; // must assign before loading any more refs
 
 			//(IEnumerable<listTypeRepo.type>)objects[i];

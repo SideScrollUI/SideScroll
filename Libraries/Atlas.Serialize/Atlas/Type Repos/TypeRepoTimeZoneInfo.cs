@@ -56,19 +56,19 @@ namespace Atlas.Serialize
 
 		protected override object CreateObject(int objectIndex)
 		{
-			long position = reader.BaseStream.Position;
-			reader.BaseStream.Position = ObjectOffsets[objectIndex];
+			long position = Reader.BaseStream.Position;
+			Reader.BaseStream.Position = ObjectOffsets[objectIndex];
 
 			object obj = null;
 			try
 			{
-				obj = TimeZoneInfo.FromSerializedString(reader.ReadString());
+				obj = TimeZoneInfo.FromSerializedString(Reader.ReadString());
 			}
 			catch (Exception)
 			{
 				//log.Add(e);
 			}
-			reader.BaseStream.Position = position;
+			Reader.BaseStream.Position = position;
 
 			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;
@@ -80,7 +80,7 @@ namespace Atlas.Serialize
 
 		public override object LoadObject()
 		{
-			object obj = TimeZoneInfo.FromSerializedString(reader.ReadString());
+			object obj = TimeZoneInfo.FromSerializedString(Reader.ReadString());
 			return obj;
 		}
 

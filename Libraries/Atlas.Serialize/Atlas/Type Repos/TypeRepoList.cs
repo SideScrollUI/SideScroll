@@ -40,7 +40,7 @@ namespace Atlas.Serialize
 			if (elementType != null)
 				listTypeRepo = Serializer.GetOrCreateRepo(log, elementType);
 			
-			propertyInfoCapacity = Type.GetProperty("Capacity");
+			propertyInfoCapacity = LoadableType.GetProperty("Capacity");
 		}
 
 		public override void AddChildObjects(object obj)
@@ -68,7 +68,7 @@ namespace Atlas.Serialize
 		public override void LoadObjectData(object obj)
 		{
 			IList iList = (IList)obj;
-			int count = reader.ReadInt32();
+			int count = Reader.ReadInt32();
 			if (propertyInfoCapacity != null)
 				propertyInfoCapacity.SetValue(iList, count);
 
@@ -81,7 +81,7 @@ namespace Atlas.Serialize
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
-			object obj = Activator.CreateInstance(Type, true);
+			object obj = Activator.CreateInstance(LoadableType, true);
 			Objects[objectIndex] = obj; // must assign before loading any more refs
 
 			IList iList = (IList)obj;

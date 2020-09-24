@@ -231,7 +231,7 @@ namespace Atlas.Serialize
 			// should we add an attribute for this instead?
 			if (Serializer.Lazy && HasVirtualProperty)
 			{
-				LazyClass = new LazyClass(Type, lazyPropertyRepos);
+				LazyClass = new LazyClass(LoadableType, lazyPropertyRepos);
 				LoadableType = LazyClass.NewType;
 			}
 
@@ -262,7 +262,7 @@ namespace Atlas.Serialize
 
 		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
 		{
-			object obj = Activator.CreateInstance(Type, true);
+			object obj = Activator.CreateInstance(LoadableType, true);
 			Objects[objectIndex] = obj; // must assign before loading any more refs
 
 			LoadFields(bytes, ref byteOffset, obj);

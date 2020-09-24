@@ -78,19 +78,19 @@ namespace Atlas.Serialize
 		{
 			object obj = null;
 			if (Type == typeof(uint))
-				obj = reader.ReadUInt32();
+				obj = Reader.ReadUInt32();
 			else if (Type == typeof(int))
-				obj = reader.ReadInt32();
+				obj = Reader.ReadInt32();
 			else if (Type == typeof(long))
-				obj = reader.ReadInt64();
+				obj = Reader.ReadInt64();
 			else if (Type == typeof(double))
-				obj = reader.ReadDouble();
+				obj = Reader.ReadDouble();
 			else if (Type == typeof(float))
-				obj = (float)reader.ReadDouble();
+				obj = (float)Reader.ReadDouble();
 			else if (Type == typeof(bool))
-				obj = reader.ReadBoolean();
+				obj = Reader.ReadBoolean();
 			else if (Type == typeof(char))
-				obj = reader.ReadChar();
+				obj = Reader.ReadChar();
 			else
 				throw new Exception("Unhandled primitive type");
 
