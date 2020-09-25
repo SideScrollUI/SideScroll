@@ -105,7 +105,7 @@ namespace Atlas.Serialize
 
 		public void SortBy(string memberName)
 		{
-			var ordered = Items.OrderBy(memberName).Values;
+			var ordered = Items.OrderBy(memberName);
 			Items = new DataItemCollection<T>(ordered);
 		}
 	}
@@ -134,17 +134,10 @@ namespace Atlas.Serialize
 			return entries;
 		}
 
-		public SortedDictionary<object, DataItem<T>> OrderBy(string memberName)
+		public IEnumerable<DataItem<T>> OrderBy(string memberName)
 		{
 			PropertyInfo propertyInfo = typeof(T).GetProperty(memberName);
-
-			var entries = new SortedDictionary<object, DataItem<T>>();
-			foreach (DataItem<T> item in ToList())
-			{
-				object obj = propertyInfo.GetValue(item.Value);
-				entries.Add(obj, item);
-			}
-			return entries;
+			return ToList().OrderBy(i => propertyInfo.GetValue(i.Value));
 		}
 
 		public void Add(string key, T value)

@@ -13,7 +13,10 @@ namespace Atlas.Serialize
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
-				return new TypeRepoObject(serializer, typeSchema);
+				// todo: support matching constructors with name params & types to fields/properties
+				if (typeSchema.HasConstructor)
+					return new TypeRepoObject(serializer, typeSchema);
+				return null;
 			}
 		}
 
