@@ -293,16 +293,19 @@ namespace Atlas.Tabs
 		{
 			var itemCollection = new ItemCollection<ListMember>();
 
-			var listFields = ListField.Create(obj);
-			itemCollection.AddRange(listFields);
+			// Add in correct order?
+			//obj.GetType().GetMembers
 
 			var listProperties = ListProperty.Create(obj);
 			itemCollection.AddRange(listProperties);
 
+			var listFields = ListField.Create(obj);
+			itemCollection.AddRange(listFields);
+
 			var listMethods = ListMethod.Create(obj);
 			itemCollection.AddRange(listMethods);
 
-			//itemCollection = new ItemCollection<ListMember>(itemCollection.OrderBy(x => x.memberInfo.MetadataToken).ToList());
+			//itemCollection = new ItemCollection<ListMember>(itemCollection.OrderBy(x => x.MemberInfo.MetadataToken).ToList());
 			ItemList.Add(itemCollection);
 
 			AddMethods(type);

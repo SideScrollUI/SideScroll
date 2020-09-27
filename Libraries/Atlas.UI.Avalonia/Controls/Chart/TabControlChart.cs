@@ -766,7 +766,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				Color = GetColor(PlotModel.Series.Count),
 			};
-			xAxisPropertyInfo = lineSeries.xAxisPropertyInfo;
+			xAxisPropertyInfo = lineSeries.XAxisPropertyInfo;
 
 			PlotModel.Series.Add(lineSeries);
 
@@ -780,8 +780,8 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 
 			OxyListSeriesList.Add(oxyListSeries);
-			ListToTabSeries[listSeries.iList] = listSeries;
-			ListToTabIndex[listSeries.iList] = ListToTabIndex.Count;
+			ListToTabSeries[listSeries.List] = listSeries;
+			ListToTabIndex[listSeries.List] = ListToTabIndex.Count;
 			return lineSeries;
 		}
 

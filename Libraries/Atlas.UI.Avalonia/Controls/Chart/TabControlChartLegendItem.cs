@@ -29,7 +29,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private OxyColor oxyColor;
 		private MarkerType markerType;
 
-		public int _index;
+		private int _index;
 		public int Index
 		{
 			get => _index;
@@ -42,17 +42,17 @@ namespace Atlas.UI.Avalonia.Controls
 		public int Count { get; set; }
 		public double Sum { get; set; }
 
-		private bool _IsChecked = true;
+		private bool _isChecked = true;
 		public bool IsChecked
 		{
 			get
 			{
-				return _IsChecked;
+				return _isChecked;
 			}
 			set
 			{
 				OxyListSeries.IsVisible = value;
-				_IsChecked = value;
+				_isChecked = value;
 				SetFilled(value);
 			}
 		}
@@ -214,22 +214,22 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private bool highlight;
+		private bool _highlight;
 		public bool Highlight
 		{
-			get => highlight;
+			get => _highlight;
 			set
 			{
-				if (value == highlight)
+				if (value == _highlight)
 					return;
 
-				highlight = value;
-				if (highlight)
+				_highlight = value;
+				if (_highlight)
 				{
 					UpdatePolygonPoints(15, 15);
 					if (Series is OxyPlot.Series.LineSeries lineSeries)
 					{
-						highlight = true;
+						_highlight = true;
 						SetFilled(true);
 						UpdateVisible(lineSeries);
 						Legend.UpdateHighlight(true);
@@ -244,7 +244,7 @@ namespace Atlas.UI.Avalonia.Controls
 					UpdatePolygonPoints(13, 13);
 					if (Series is OxyPlot.Series.LineSeries lineSeries)
 					{
-						highlight = false;
+						_highlight = false;
 						UpdateVisible(lineSeries);
 						SetFilled(IsChecked);
 						Legend.UpdateHighlight(false);
@@ -274,7 +274,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public void UpdateVisible(OxyPlot.Series.LineSeries lineSeries)
 		{
 			Series = lineSeries;
-			if (IsChecked == true || highlight)
+			if (IsChecked == true || _highlight)
 			{
 				if (Points != null)
 				{
@@ -309,7 +309,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public void UpdateVisible(OxyPlot.Series.ScatterSeries scatterSeries)
 		{
 			Series = scatterSeries;
-			if (IsChecked == true || highlight)
+			if (IsChecked == true || Highlight)
 			{
 				scatterSeries.ItemsSource = scatterSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
 				//ItemsSource = null;
@@ -330,7 +330,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public void UpdateHighlight(bool showFaded)
 		{
 			OxyColor newColor;
-			if (highlight || !showFaded)
+			if (Highlight || !showFaded)
 				newColor = oxyColor;
 			else
 				newColor = OxyColor.FromAColor(32, oxyColor);

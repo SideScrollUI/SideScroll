@@ -16,6 +16,7 @@ namespace Atlas.Core
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 		public TimeSpan Duration => EndTime.Subtract(StartTime);
+		public string TimeText => DateTimeUtils.FormatTimeRange(StartTime, EndTime, false);
 
 		public string Name { get; set; }
 		[YAxis]

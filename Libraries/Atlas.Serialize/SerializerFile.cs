@@ -40,7 +40,7 @@ namespace Atlas.Serialize
 
 			using (CallTimer callTimer = call.Timer("Saving object: " + name, new Tag("Path", BasePath)))
 			{
-				SaveInternal(call, obj, name);
+				SaveInternal(callTimer, obj, name);
 			}
 		}
 

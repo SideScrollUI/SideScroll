@@ -13,20 +13,21 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabChartLineSeries : OxyPlot.Series.LineSeries
 	{
-		public TabControlChart chart;
-		public ListSeries listSeries;
-		public PropertyInfo xAxisPropertyInfo;
+		public TabControlChart Chart;
+		public ListSeries ListSeries;
+		private bool UseDateTimeAxis;
+
+		public PropertyInfo XAxisPropertyInfo;
 
 		// DataPoint is sealed
-		public Dictionary<DataPoint, object> datapointLookup = new Dictionary<DataPoint, object>();
+		private Dictionary<DataPoint, object> _datapointLookup = new Dictionary<DataPoint, object>();
 
-		private bool useDateTimeAxis;
 
 		public TabChartLineSeries(TabControlChart chart, ListSeries listSeries, bool useDateTimeAxis)
 		{
-			this.chart = chart;
-			this.listSeries = listSeries;
-			this.useDateTimeAxis = useDateTimeAxis;
+			Chart = chart;
+			ListSeries = listSeries;
+			UseDateTimeAxis = useDateTimeAxis;
 
 			InitializeComponent(listSeries);
 		}
@@ -42,14 +43,14 @@ namespace Atlas.UI.Avalonia.Controls
 			CanTrackerInterpolatePoints = false;
 			MinimumSegmentLength = 2;
 			MarkerSize = 3;
-			MarkerType = listSeries.iList.Count < 20 ? MarkerType.Circle : MarkerType.None;
+			MarkerType = listSeries.List.Count < 20 ? MarkerType.Circle : MarkerType.None;
 			LoadTrackFormat();
 
 			// can't add gaps with ItemSource so convert to DataPoint ourselves
-			var dataPoints = GetDataPoints(listSeries, listSeries.iList, datapointLookup);
+			var dataPoints = GetDataPoints(listSeries, listSeries.List, _datapointLookup);
 			Points.AddRange(dataPoints);
 
-			if (listSeries.iList is INotifyCollectionChanged iNotifyCollectionChanged)
+			if (listSeries.List is INotifyCollectionChanged iNotifyCollectionChanged)
 			{
 				//iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
 				iNotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object sender, NotifyCollectionChangedEventArgs e)
@@ -86,8 +87,12 @@ namespace Atlas.UI.Avalonia.Controls
 			if (result == null)
 				return null;
 
-			if (datapointLookup.TryGetValue(result.DataPoint, out object obj))
+			if (_datapointLookup.TryGetValue(result.DataPoint, out object obj))
 			{
+				if (obj is TimeRangeValue timeRangeValue)
+				{
+					result.Text = ListSeries.Name + "\nTime: " + timeRangeValue.TimeText + "\nDuration: " + timeRangeValue.Duration.FormattedDecimal() + "\nValue: " + timeRangeValue.Value.Formatted();
+				}
 				if (obj is ITags tags && tags.Tags.Count > 0)
 				{
 					result.Text += "\n";
@@ -97,15 +102,9 @@ namespace Atlas.UI.Avalonia.Controls
 						result.Text += "\n" + tag.Name + ": " + tag.Value;
 					}
 				}
-				/*if (DescriptionProperty is PropertyInfo propertyInfo)
-				{
-					object value = propertyInfo.GetValue(obj);
-					if (value is string text && text.Length > 0)
-						result.Text += "\n\n" + text;
-				}*/
 			}
-			if (listSeries.Description != null)
-				result.Text += "\n\n" + listSeries.Description;
+			if (ListSeries.Description != null)
+				result.Text += "\n\n" + ListSeries.Description;
 			return result;
 		}
 
@@ -121,11 +120,21 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}*/
 
+		/*
+			{0} the title of the series
+			{1} the title of the x-axis
+			{2} the x-value
+			{3} the title of the y-axis
+			{4} the y-value
+		*/
+		// Show 
 		private void LoadTrackFormat()
 		{
-			string xTrackerFormat = listSeries.xPropertyName ?? "Index: {2:#,0.###}";
-			if (useDateTimeAxis || listSeries.xPropertyInfo?.PropertyType == typeof(DateTime))
+			string xTrackerFormat = ListSeries.XPropertyName ?? "Index: {2:#,0.###}";
+			if (UseDateTimeAxis || ListSeries.XPropertyInfo?.PropertyType == typeof(DateTime))
+			{
 				xTrackerFormat = "Time: {2:yyyy-M-d H:mm:ss.FFF}";
+			}
 			TrackerFormatString = "{0}\n" + xTrackerFormat + "\nValue: {4:#,0.###}";
 			/*if (listSeries.iList.Count > 0)
 			{
@@ -139,15 +148,15 @@ namespace Atlas.UI.Avalonia.Controls
 			UpdateXAxisProperty(listSeries);
 			double x = Points.Count;
 			var dataPoints = new List<DataPoint>();
-			if (listSeries.yPropertyInfo != null)
+			if (listSeries.YPropertyInfo != null)
 			{
 				// faster than using ItemSource?
 				foreach (object obj in iList)
 				{
-					object value = listSeries.yPropertyInfo.GetValue(obj);
-					if (xAxisPropertyInfo != null)
+					object value = listSeries.YPropertyInfo.GetValue(obj);
+					if (XAxisPropertyInfo != null)
 					{
-						object xObj = xAxisPropertyInfo.GetValue(obj);
+						object xObj = XAxisPropertyInfo.GetValue(obj);
 						if (xObj is DateTime dateTime)
 						{
 							x = OxyPlot.Axes.DateTimeAxis.ToDouble(dateTime);
@@ -172,7 +181,7 @@ namespace Atlas.UI.Avalonia.Controls
 				}
 				dataPoints = dataPoints.OrderBy(d => d.X).ToList();
 
-				if (dataPoints.Count > 0 && listSeries.xBinSize > 0)
+				if (dataPoints.Count > 0 && listSeries.XBinSize > 0)
 				{
 					dataPoints = BinDataPoints(listSeries, dataPoints);
 				}
@@ -190,17 +199,17 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void UpdateXAxisProperty(ListSeries listSeries)
 		{
-			if (listSeries.yPropertyInfo != null)
+			if (listSeries.YPropertyInfo != null)
 			{
-				if (listSeries.xPropertyInfo != null)
-					xAxisPropertyInfo = listSeries.xPropertyInfo;
-				if (xAxisPropertyInfo == null)
+				if (listSeries.XPropertyInfo != null)
+					XAxisPropertyInfo = listSeries.XPropertyInfo;
+				if (XAxisPropertyInfo == null)
 				{
-					Type elementType = listSeries.iList.GetType().GetElementTypeForAll();
+					Type elementType = listSeries.List.GetType().GetElementTypeForAll();
 					foreach (PropertyInfo propertyInfo in elementType.GetProperties())
 					{
 						if (propertyInfo.GetCustomAttribute<XAxisAttribute>() != null)
-							xAxisPropertyInfo = propertyInfo;
+							XAxisPropertyInfo = propertyInfo;
 					}
 				}
 			}
@@ -210,17 +219,17 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			double firstBin = dataPoints.First().X;
 			double lastBin = dataPoints.Last().X;
-			int numBins = (int)Math.Ceiling((lastBin - firstBin) / listSeries.xBinSize) + 1;
+			int numBins = (int)Math.Ceiling((lastBin - firstBin) / listSeries.XBinSize) + 1;
 			double[] bins = new double[numBins];
 			foreach (DataPoint dataPoint in dataPoints)
 			{
-				int bin = (int)((dataPoint.X - firstBin) / listSeries.xBinSize);
+				int bin = (int)((dataPoint.X - firstBin) / listSeries.XBinSize);
 				bins[bin] += dataPoint.Y;
 			}
 			var binDataPoints = new List<DataPoint>();
 			for (int i = 0; i < numBins; i++)
 			{
-				binDataPoints.Add(new DataPoint(firstBin + i * listSeries.xBinSize, bins[i]));
+				binDataPoints.Add(new DataPoint(firstBin + i * listSeries.XBinSize, bins[i]));
 			}
 
 			return binDataPoints;
@@ -228,14 +237,14 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void SeriesChanged(ListSeries listSeries, IList iList)
 		{
-			lock (chart.PlotModel.SyncRoot)
+			lock (Chart.PlotModel.SyncRoot)
 			{
 				//this.Update();
 				var dataPoints = GetDataPoints(listSeries, iList);
 				Points.AddRange(dataPoints);
 			}
 
-			Dispatcher.UIThread.InvokeAsync(() => chart.Refresh(), DispatcherPriority.Background);
+			Dispatcher.UIThread.InvokeAsync(() => Chart.Refresh(), DispatcherPriority.Background);
 		}
 	}
 }

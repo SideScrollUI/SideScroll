@@ -52,12 +52,15 @@ namespace Atlas.Core
 			return null;
 		}
 
-		public static string FormatTimeRange(DateTime startTime, DateTime endTime)
+		public static string FormatTimeRange(DateTime startTime, DateTime endTime, bool withDuration = true)
 		{
 			string startFormat = "yyyy-M-d H:mm:ss";
 			string endFormat = (startTime.Date == endTime.Date) ? "H:mm:ss" : startFormat;
 			TimeSpan duration = endTime.Subtract(startTime);
-			return startTime.ToString(startFormat) + " - " + endTime.ToString(endFormat) + " - " + duration.FormattedDecimal();
+			string text = startTime.ToString(startFormat) + " - " + endTime.ToString(endFormat);
+			if (withDuration)
+				text += " - " + duration.FormattedDecimal();
+			return text;
 		}
 	}
 }

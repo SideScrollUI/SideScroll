@@ -50,7 +50,7 @@ namespace Atlas.Core
 
 					var listSeries = new ListSeries(category, categoryList, xPropertyName, yPropertyName)
 					{
-						xBinSize = xBinSize,
+						XBinSize = xBinSize,
 					};
 					Series.Add(listSeries);
 				}

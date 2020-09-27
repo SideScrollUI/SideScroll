@@ -11,38 +11,36 @@ namespace Atlas.Core
 	{
 		public string Name { get; set; }
 		public Dictionary<string, string> Tags { get; set; } = new Dictionary<string, string>();
-		public IList iList; // List to start with, any elements added will also trigger an event to add new points
-		//public PropertyInfo xPropertyInfo; // optional
+		public IList List; // List to start with, any elements added will also trigger an event to add new points
 
-		public PropertyInfo xPropertyInfo; // optional
-		public PropertyInfo yPropertyInfo; // optional
+		public PropertyInfo XPropertyInfo; // optional
+		public PropertyInfo YPropertyInfo; // optional
 
-		public string xPropertyName;
-		public string yPropertyName;
-		//public object obj;
-		public double xBinSize;
+		public string XPropertyName;
+		public string YPropertyName;
+		public double XBinSize;
 		public string Description { get; set; }
 
 		public bool IsStacked { get; set; }
 
 		public override string ToString() => Name;
 
-		public ListSeries(IList iList)
+		public ListSeries(IList list)
 		{
-			LoadList(iList);
+			LoadList(list);
 		}
 
-		public ListSeries(string name, IList iList)
+		public ListSeries(string name, IList list)
 		{
 			Name = name;
-			LoadList(iList);
+			LoadList(list);
 		}
 
-		public ListSeries(IList iList, PropertyInfo xPropertyInfo, PropertyInfo yPropertyInfo)
+		public ListSeries(IList list, PropertyInfo xPropertyInfo, PropertyInfo yPropertyInfo)
 		{
-			this.iList = iList;
-			this.xPropertyInfo = xPropertyInfo;
-			this.yPropertyInfo = yPropertyInfo;
+			List = list;
+			XPropertyInfo = xPropertyInfo;
+			YPropertyInfo = yPropertyInfo;
 
 			Name = yPropertyInfo.Name.WordSpaced();
 			NameAttribute attribute = yPropertyInfo.GetCustomAttribute<NameAttribute>();
@@ -50,26 +48,26 @@ namespace Atlas.Core
 				Name = attribute.Name;
 		}
 
-		public ListSeries(string name, IList iList, string xPropertyName, string yPropertyName = null)
+		public ListSeries(string name, IList list, string xPropertyName, string yPropertyName = null)
 		{
 			Name = name;
-			this.iList = iList;
-			this.xPropertyName = xPropertyName;
-			this.yPropertyName = yPropertyName;
+			List = list;
+			XPropertyName = xPropertyName;
+			YPropertyName = yPropertyName;
 
-			Type elementType = iList.GetType().GetElementTypeForAll();
-			xPropertyInfo = elementType.GetProperty(xPropertyName);
+			Type elementType = list.GetType().GetElementTypeForAll();
+			XPropertyInfo = elementType.GetProperty(xPropertyName);
 			if (yPropertyName != null)
-				yPropertyInfo = elementType.GetProperty(yPropertyName);
+				YPropertyInfo = elementType.GetProperty(yPropertyName);
 		}
 
-		private void LoadList(IList iList)
+		private void LoadList(IList list)
 		{
-			this.iList = iList;
+			List = list;
 
-			Type elementType = iList.GetType().GetElementTypeForAll();
-			xPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
-			yPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();
+			Type elementType = list.GetType().GetElementTypeForAll();
+			XPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
+			YPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();
 		}
 
 		private double GetObjectValue(object obj)
@@ -83,18 +81,18 @@ namespace Atlas.Core
 		public double GetSum()
 		{
 			double sum = 0;
-			if (yPropertyInfo != null)
+			if (YPropertyInfo != null)
 			{
-				foreach (object obj in iList)
+				foreach (object obj in List)
 				{
-					object value = yPropertyInfo.GetValue(obj);
+					object value = YPropertyInfo.GetValue(obj);
 					if (value != null)
 						sum += GetObjectValue(value);
 				}
 			}
 			else
 			{
-				foreach (object obj in iList)
+				foreach (object obj in List)
 				{
 					double value = GetObjectValue(obj);
 					sum += value;
@@ -108,13 +106,13 @@ namespace Atlas.Core
 			get
 			{
 				var timeRangeValues = new List<TimeRangeValue>();
-				foreach (object obj in iList)
+				foreach (object obj in List)
 				{
-					DateTime timeStamp = (DateTime)xPropertyInfo.GetValue(obj);
+					DateTime timeStamp = (DateTime)XPropertyInfo.GetValue(obj);
 					double value = 1;
-					if (yPropertyInfo != null)
+					if (YPropertyInfo != null)
 					{
-						object yObj = yPropertyInfo.GetValue(obj);
+						object yObj = YPropertyInfo.GetValue(obj);
 						value = Convert.ToDouble(yObj);
 					}
 					var timeRangeValue = new TimeRangeValue(timeStamp, timeStamp, value);
