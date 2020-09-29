@@ -158,6 +158,26 @@ namespace Atlas.Core
 			}
 		}
 
+		protected override void RemoveItem(int index)
+		{
+			if (Context == null)
+				base.RemoveItem(index);
+			else if (Context == SynchronizationContext.Current)
+				RemoveItemCallback(index);
+			else
+				Context.Post(new SendOrPostCallback(RemoveItemCallback), index);
+		}
+
+		// Thread safe callback, only works if the context is the same
+		private void RemoveItemCallback(object state)
+		{
+			int index = (int)state;
+			lock (Context)
+			{
+				base.RemoveItem(index);
+			}
+		}
+
 		public void AddRange(IEnumerable<T> collection)
 		{
 			int index = Items.Count;
