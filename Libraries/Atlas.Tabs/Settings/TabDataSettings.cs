@@ -16,6 +16,7 @@ namespace Atlas.Tabs
 		Auto,
 	}
 
+	[PublicData]
 	public class TabDataSettings
 	{
 		public HashSet<SelectedRow> SelectedRows { get; set; } = new HashSet<SelectedRow>(); // needs to be nullable or we need another initialized value
@@ -159,6 +160,7 @@ namespace Atlas.Tabs
 		}
 	}
 
+	[PublicData]
 	public class SelectedRow
 	{
 		public string Label; // null if ToString() returns type

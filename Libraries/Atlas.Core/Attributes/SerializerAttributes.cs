@@ -15,9 +15,15 @@ namespace Atlas.Core
 	{
 	}
 
-	// Don't serialize this when creating bookmarks, data is only saved locally
+	// Serialized when exported for public usage
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
-	public class SecureAttribute : Attribute
+	public class PublicDataAttribute : Attribute
+	{
+	}
+
+	// Not serialized when exported for public usage, data is only saved locally, could require encryption
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+	public class PrivateDataAttribute : Attribute
 	{
 	}
 }

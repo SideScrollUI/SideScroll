@@ -21,7 +21,7 @@ namespace Atlas.Serialize
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
 				if (!typeSchema.HasConstructor ||
-					(typeSchema.Secure && !serializer.SaveSecure))
+					(typeSchema.IsPublic && !serializer.PublicOnly))
 					return new TypeRepoUnknown(serializer, typeSchema);
 				return null;
 			}

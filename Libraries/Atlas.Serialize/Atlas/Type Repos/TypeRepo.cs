@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace Atlas.Serialize
@@ -66,7 +67,7 @@ namespace Atlas.Serialize
 			Serializer = serializer;
 			TypeSchema = typeSchema;
 			Type = typeSchema.Type;
-			if (typeSchema.Allowed)
+			if (typeSchema.IsSerialized && (!serializer.PublicOnly || TypeSchema.IsPublic))
 				LoadableType = Type;
 			//objects.Capacity = typeSchema.numObjects;
 			ObjectsLoaded = new object[typeSchema.NumObjects];
@@ -80,14 +81,27 @@ namespace Atlas.Serialize
 
 		public static TypeRepo Create(Log log, Serializer serializer, TypeSchema typeSchema)
 		{
-			if (serializer.AllowListOnly && typeSchema.Type != null && !typeSchema.Allowed)
+			if (!typeSchema.IsSerialized)
 			{
-				log.Add("Type " + typeSchema.Name + " is not allowed");
+				string message = "Type " + typeSchema.Name + " is not serializable";
+				Debug.Print(message);
+				log.Add(message);
 				var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema);
 				typeRepoUnknown.Reader = serializer.Reader;
 				return typeRepoUnknown;
 			}
-			//Type type = typeSchema.type;
+			if (serializer.PublicOnly && !typeSchema.IsPublic)
+			{
+				if (!typeSchema.IsPrivate)
+				{
+					string message = "Type " + typeSchema.Name + " does not specify [PublicData] or [PrivateData], ignoring";
+					Debug.Print(message);
+					log.Add(message);
+				}
+				var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema);
+				typeRepoUnknown.Reader = serializer.Reader;
+				return typeRepoUnknown;
+			}
 			TypeRepo typeRepo;
 
 			foreach (var creator in RepoCreators)
@@ -104,49 +118,12 @@ namespace Atlas.Serialize
 				typeRepo = new TypeRepoUnknown(serializer, typeSchema);
 				log.AddWarning("Type has no constructor", new Tag(typeSchema));
 			}
-			else if (typeSchema.Secure && !serializer.SaveSecure)
-			{
-				typeRepo = new TypeRepoUnknown(serializer, typeSchema);
-			}
 			else
 			{
 				typeRepo = new TypeRepoObject(serializer, typeSchema);
 			}
 			typeRepo.Reader = serializer.Reader;
 			return typeRepo;
-
-			// todo: add TypoRepoRef class?
-			// can't declare
-			/*if (type == null)
-			{
-				log.AddWarning("Missing type", new Tag(typeSchema));
-				typeRepo = new TypeRepoUnknown(serializer, typeSchema);
-			}*/
-			/*else if (type.IsInterface || type.IsAbstract)
-			{
-
-			}*/
-			/*else if (type is ISerializable)
-			{
-				typeRepo =  new TypeSerializable(typeSchema);
-			}*/
-			/*
-			else if (typeof(ICollection<>).IsAssignableFrom(type))
-			{
-				typeRepo =  new TypeCollection(typeSchema);
-			}
-			else if (typeof(HashSet<>).IsAssignableFrom(type))
-			{
-				typeRepo =  new TypeCollection(typeSchema);
-			}
-			else if (typeof(ICollection).IsAssignableFrom(type))
-			{
-				typeRepo =  new TypeCollection(typeSchema);
-			}
-			else if (typeof(ISet<>).IsAssignableFrom(type))
-			{
-				typeRepo =  new TypeCollection(typeSchema);
-			}*/
 		}
 
 		/*public virtual void CreateObjects()
@@ -195,11 +172,21 @@ namespace Atlas.Serialize
 			{
 				writer.Write(offset);
 			}*/
-			foreach (int size in ObjectSizes)
+			// For UnknownTypeRepo
+			if (ObjectSizes == null)
+				return;
+
+			try
 			{
-				writer.Write(size);
+				foreach (int size in ObjectSizes)
+				{
+					writer.Write(size);
+				}
+				SaveCustomHeader(writer);
 			}
-			SaveCustomHeader(writer);
+			catch (Exception e)
+			{
+			}
 		}
 
 		public void LoadHeader(Log log)
@@ -295,8 +282,9 @@ namespace Atlas.Serialize
 		// Creates one if required
 		public int GetOrAddObjectRef(object obj)
 		{
-			if (LoadableType.IsPrimitive)
+			if (LoadableType == null || LoadableType.IsPrimitive)
 				return -1;
+
 			if (!idxObjectToIndex.TryGetValue(obj, out int index))
 			{
 				index = idxObjectToIndex.Count;

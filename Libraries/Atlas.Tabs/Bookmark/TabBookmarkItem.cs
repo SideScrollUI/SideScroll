@@ -41,7 +41,8 @@ namespace Atlas.Tabs
 			if (Bookmark.Type == null)
 				return null;
 
-			var bookmarkCopy = Bookmark.DeepClone<Bookmark>(); // This will get modified as users navigate
+			var call = new Call();
+			var bookmarkCopy = Bookmark.DeepClone<Bookmark>(call, true); // This will get modified as users navigate
 
 			ITab tab = bookmarkCopy.TabBookmark.Tab;
 			if (tab == null)

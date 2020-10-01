@@ -8,7 +8,7 @@ namespace Atlas.Serialize
 	public abstract class SerializerMemory
 	{
 		protected MemoryStream stream = new MemoryStream(); // move to atlas class?
-		public bool SaveSecure { get; set; } = true; // Whether to save classes with the [Secure] attribute
+		public bool PublicOnly { get; set; } = false; // Whether to save classes with the [PublicData] attribute
 
 		public SerializerMemory()
 		{
@@ -22,7 +22,7 @@ namespace Atlas.Serialize
 
 		// Save an object to a memory stream and then load it
 		//public static T Clone<T>(Call call, T obj)
-		public static T DeepClone<T>(Call call, object obj)
+		public static T DeepClone<T>(Call call, object obj, bool publicOnly = false)
 		{
 			if (typeof(T) != obj.GetType())
 			{
@@ -32,6 +32,7 @@ namespace Atlas.Serialize
 			try
 			{
 				var memorySerializer = Create();
+				memorySerializer.PublicOnly = publicOnly;
 				return memorySerializer.DeepCloneInternal<T>(call, obj);
 			}
 			catch (Exception e)
@@ -41,11 +42,12 @@ namespace Atlas.Serialize
 			return default;
 		}
 
-		public static object DeepClone(Call call, object obj)
+		public static object DeepClone(Call call, object obj, bool publicOnly = false)
 		{
 			try
 			{
 				var memorySerializer = Create();
+				memorySerializer.PublicOnly = publicOnly;
 				return memorySerializer.DeepCloneInternal(call, obj);
 			}
 			catch (Exception e)

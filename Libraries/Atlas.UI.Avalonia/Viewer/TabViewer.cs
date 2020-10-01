@@ -112,12 +112,12 @@ namespace Atlas.UI.Avalonia
 			//LoadProject(project);
 			//tabView.Load();
 			TabBookmarks.Global = null;
-			tabView.tabInstance.Reload();
+			tabView.Instance.Reload();
 		}
 
 		private async Task LinkAsync(Call call)
 		{
-			Bookmark bookmark = tabView.tabInstance.CreateBookmark();
+			Bookmark bookmark = tabView.Instance.CreateBookmark();
 			bookmark.TabBookmark = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
 			string uri = Linker.GetLinkUri(call, bookmark);
 			await ClipBoardUtils.SetTextAsync(uri);
@@ -138,7 +138,7 @@ namespace Atlas.UI.Avalonia
 			if (TabBookmarks.Global != null)
 			{
 				// Add Bookmark to bookmark manager
-				tabView.tabInstance.SelectItem(TabBookmarks.Global); // select bookmarks first so the child tab autoselects the new bookmark
+				tabView.Instance.SelectItem(TabBookmarks.Global); // select bookmarks first so the child tab autoselects the new bookmark
 				TabBookmarks.Global.AddBookmark(call, bookmark);
 			}
 			else if (tabView != null)
@@ -147,13 +147,13 @@ namespace Atlas.UI.Avalonia
 				bool reloadBase = true;
 				if (reloadBase)
 				{
-					tabView.tabInstance.TabBookmark = bookmark.TabBookmark;
+					tabView.Instance.TabBookmark = bookmark.TabBookmark;
 					Reload();
 				}
 				else
 				{
 					// only if TabBookmarks used, don't need to reload the tab
-					tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
+					tabView.Instance.SelectBookmark(bookmark.TabBookmark);
 				}
 			}
 			return bookmark;
@@ -300,14 +300,14 @@ namespace Atlas.UI.Avalonia
 		{
 			Bookmark bookmark = Project.Navigator.SeekBackward();
 			if (bookmark != null)
-				tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
+				tabView.Instance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		public void SeekForward()
 		{
 			Bookmark bookmark = Project.Navigator.SeekForward();
 			if (bookmark != null)
-				tabView.tabInstance.SelectBookmark(bookmark.TabBookmark);
+				tabView.Instance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e)

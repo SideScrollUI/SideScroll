@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Atlas.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,6 +13,7 @@ namespace Atlas.Tabs
 	}
 
 	// rename to TabInstanceSettings?
+	[PublicData]
 	public class TabBookmark
 	{
 		public Bookmark Bookmark { get; set; }

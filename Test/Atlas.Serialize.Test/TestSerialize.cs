@@ -113,13 +113,13 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new EnumTest
 			{
-				testEnum = MyEnum.b
+				TestEnum = MyEnum.b
 			};
 
 			serializer.Save(Call, input);
 			EnumTest output = serializer.Load<EnumTest>(Call);
 
-			Assert.AreEqual(output.testEnum, input.testEnum);
+			Assert.AreEqual(output.TestEnum, input.TestEnum);
 		}
 
 		[Test, Description("Serialize Nullable Enum")]
@@ -523,60 +523,6 @@ namespace Atlas.Serialize.Test
 			//Assert.True(output.Contains("test"));
 		}
 
-		[Test, Description("Serialize Attribute NonSerialized")]
-		public void SerializeAttributeNonSerialized()
-		{
-			var input = new NonSerializedTest()
-			{
-				nonSerialized = 5,
-				serialized = 10,
-			};
-
-			serializer.Save(Call, input);
-			var output = serializer.Load<NonSerializedTest>(Call);
-
-			Assert.AreEqual(output.nonSerialized, 1);
-			Assert.AreEqual(output.serialized, 10);
-		}
-
-		[Test, Description("Serialize [Secure]")]
-		public void SerializeSecure()
-		{
-			var input = new SecureContainer()
-			{
-				SecureField = new SecureClass()
-				{
-					Confidential = "secrets",
-				},
-				SecureProperty = new SecureClass()
-				{
-					Confidential = "more secrets",
-				},
-				NonSecure = "test",
-			};
-
-			serializer.SaveSecure = false;
-			serializer.Save(Call, input);
-			var output = serializer.Load<SecureContainer>(Call);
-
-			Assert.IsNull(output.SecureField);
-			Assert.IsNull(output.SecureProperty);
-			Assert.AreEqual(output.NonSecure, "test");
-		}
-
-		public class SecureContainer
-		{
-			public SecureClass SecureField;
-			public SecureClass SecureProperty { get; set; }
-			public string NonSecure;
-		}
-
-		[Secure]
-		public class SecureClass
-		{
-			public string Confidential { get; set; }
-		}
-
 		public class NullablePropertyPrimitives
 		{
 			public uint? UintTest { get; set; } = 1;
@@ -665,15 +611,7 @@ namespace Atlas.Serialize.Test
 
 		public class EnumTest
 		{
-			public MyEnum testEnum = MyEnum.a;
-		}
-
-
-		public class NonSerializedTest
-		{
-			[NonSerialized]
-			public int nonSerialized = 1;
-			public int serialized = 2;
+			public MyEnum TestEnum = MyEnum.a;
 		}
 
 		

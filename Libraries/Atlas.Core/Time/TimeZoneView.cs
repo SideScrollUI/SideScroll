@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Atlas.Core.Time
 {
+	[PublicData]
 	public class TimeZoneView : IComparable
 	{
 		public string Abbreviation { get; set; }

@@ -19,16 +19,18 @@ namespace Atlas.Serialize
 		public Type Type; // might be null
 		public Type NonNullableType; // might be null
 
-		public bool Serialized { get; set; } // cached copy of IsSerialized
+		public bool IsSerialized; // cached copy of IsSerialized
 
-		public bool Loadable;
+		public bool IsLoadable;
+
+		public override string ToString() => PropertyName;
 
 		public PropertySchema(PropertyInfo propertyInfo)
 		{
 			PropertyName = propertyInfo.Name;
 			PropertyInfo = propertyInfo;
 			Type = propertyInfo.PropertyType;
-			Serialized = IsSerialized;
+			IsSerialized = GetIsSerialized();
 			NonNullableType = Type.GetNonNullableType();
 		}
 
@@ -39,50 +41,47 @@ namespace Atlas.Serialize
 			try
 			{
 				if (typeSchema.Type != null)
+				{
 					PropertyInfo = typeSchema.Type.GetProperty(PropertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+				}
 			}
 			catch (Exception)
 			{
 			}
-			Serialized = IsSerialized;
+			IsSerialized = GetIsSerialized();
 
 			if (PropertyInfo != null)
 			{
 				Type = PropertyInfo.PropertyType;
 				NonNullableType = Type.GetNonNullableType();
-				Loadable = Serialized; // typeIndex >= 0 && // derived types won't have entries for base type
+				IsLoadable = IsSerialized; // typeIndex >= 0 && // derived types won't have entries for base type
 			}
 		}
 
-		public override string ToString() => PropertyName;
-
-		private bool IsSerialized
+		private bool GetIsSerialized()
 		{
-			get
-			{
-				if (PropertyInfo == null)
-					return false;
+			if (PropertyInfo == null)
+				return false;
 
-				Attribute attribute = Type?.GetCustomAttribute<UnserializedAttribute>();
-				if (attribute != null)
-					return false;
+			Attribute attribute = Type?.GetCustomAttribute<UnserializedAttribute>();
+			if (attribute != null)
+				return false;
 
-				attribute = PropertyInfo.GetCustomAttribute<NonSerializedAttribute>();
-				if (attribute != null)
-					return false;
+			attribute = PropertyInfo.GetCustomAttribute<NonSerializedAttribute>();
+			if (attribute != null)
+				return false;
 
-				attribute = PropertyInfo.GetCustomAttribute<UnserializedAttribute>();
-				if (attribute != null)
-					return false;
+			attribute = PropertyInfo.GetCustomAttribute<UnserializedAttribute>();
+			if (attribute != null)
+				return false;
 
-				if (PropertyInfo.CanRead == false || PropertyInfo.CanWrite == false)
-					return false;
+			if (PropertyInfo.CanRead == false || PropertyInfo.CanWrite == false)
+				return false;
 
-				if (PropertyInfo.GetIndexParameters().Length > 0)
-					return false;
+			if (PropertyInfo.GetIndexParameters().Length > 0)
+				return false;
 
-				return true;
-			}
+			return true;
 		}
 
 		public void Save(BinaryWriter writer)
@@ -107,7 +106,7 @@ namespace Atlas.Serialize
 					// check if the type has changed
 					Type currentType = PropertyInfo.PropertyType.GetNonNullableType();
 					if (typeSchema.Type != currentType)
-						Loadable = false;
+						IsLoadable = false;
 				}
 			}
 		}

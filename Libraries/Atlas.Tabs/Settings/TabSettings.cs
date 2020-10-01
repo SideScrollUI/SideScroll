@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Atlas.Core;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs
 {
+	[PublicData]
 	public class TabViewSettings
 	{
 		public string Name { get; set; }

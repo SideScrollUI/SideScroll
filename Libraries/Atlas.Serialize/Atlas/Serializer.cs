@@ -43,8 +43,7 @@ namespace Atlas.Serialize
 
 		public BinaryReader Reader;
 		public bool Lazy;
-		public bool AllowListOnly = true;
-		public bool SaveSecure = true;
+		public bool PublicOnly = false;
 
 		// Convert to Parser class?
 		// Use a queue so we don't exceed the stack size due to cross references (i.e. a list with values that refer back to the list)
@@ -588,7 +587,6 @@ namespace Atlas.Serialize
 		
 		public T Clone<T>(Log log, object obj)
 		{
-			AllowListOnly = false;
 			T clone = (T)Clone(obj);
 			using (LogTimer logClone = log.Timer("Clone"))
 			{

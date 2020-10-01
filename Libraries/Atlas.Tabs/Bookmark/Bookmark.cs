@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace Atlas.Tabs
 {
+	[PublicData]
 	public class Bookmark
 	{
 		[Name("Bookmark")]
@@ -38,9 +39,10 @@ namespace Atlas.Tabs
 			return SerializerMemory.ToBase64String(call, this);
 		}
 
-		public static Bookmark Create(Call call, string encoded)
+		public static Bookmark Create(Call call, string encoded, bool publicOnly)
 		{
 			var serializer = SerializerMemory.Create();
+			serializer.PublicOnly = publicOnly;
 			serializer.LoadBase64String(encoded);
 			Bookmark bookmark = serializer.Load<Bookmark>(call);
 			return bookmark;

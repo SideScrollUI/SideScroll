@@ -9,7 +9,6 @@ namespace Atlas.Serialize
 	public class SerializerMemoryJson : SerializerMemory
 	{
 		//private MemoryStream stream = new MemoryStream();
-		//public bool SaveSecure { get; set; } = true; // Whether to save classes with the [Secure] attribute
 		private string _json;
 
 		public SerializerMemoryJson()

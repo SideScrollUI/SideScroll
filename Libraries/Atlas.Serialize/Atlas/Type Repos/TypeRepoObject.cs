@@ -73,7 +73,7 @@ namespace Atlas.Serialize
 			// Load serialized data into object
 			public void Load(object obj)
 			{
-				if (!PropertySchema.Loadable)
+				if (!PropertySchema.IsLoadable)
 				{
 					TypeRepo.LoadLazyObjectRef(); // skip reference
 					if (LazyProperty != null)
@@ -126,7 +126,7 @@ namespace Atlas.Serialize
 
 			foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
 			{
-				if (!propertySchema.Serialized)
+				if (!propertySchema.IsSerialized)
 					continue;
 
 				Type propertyType = propertySchema.PropertyInfo.PropertyType.GetNonNullableType();
@@ -151,7 +151,7 @@ namespace Atlas.Serialize
 				// todo: add nonloadable type
 				foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
 				{
-					if (propertySchema.Loadable == false)
+					if (propertySchema.IsLoadable == false)
 						continue;
 
 					MethodInfo getMethod = propertySchema.PropertyInfo.GetGetMethod(false);
@@ -210,7 +210,7 @@ namespace Atlas.Serialize
 					{
 						// should we add type conversion here?
 						log.Add("Can't load field, type has changed", new Tag("Property", propertySchema));
-						propertySchema.Loadable = false;
+						propertySchema.IsLoadable = false;
 						//continue;
 					}
 				}
@@ -226,7 +226,7 @@ namespace Atlas.Serialize
 					var propertyRepo = new PropertyRepo(propertySchema, typeRepo);
 					PropertyRepos.Add(propertyRepo);
 
-					if (propertySchema.Loadable && !propertySchema.Type.IsPrimitive)
+					if (propertySchema.IsLoadable && !propertySchema.Type.IsPrimitive)
 						lazyPropertyRepos.Add(propertyRepo);
 				}
 			}
@@ -317,7 +317,7 @@ namespace Atlas.Serialize
 		{
 			foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
 			{
-				if (!propertySchema.Serialized)
+				if (!propertySchema.IsSerialized)
 					continue;
 
 				object propertyValue = propertySchema.PropertyInfo.GetValue(value);
@@ -393,7 +393,7 @@ namespace Atlas.Serialize
 		{
 			foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
 			{
-				if (!propertySchema.Serialized)
+				if (!propertySchema.IsSerialized)
 					continue;
 
 				object propertyValue = propertySchema.PropertyInfo.GetValue(source);

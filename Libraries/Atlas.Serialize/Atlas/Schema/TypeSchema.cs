@@ -10,6 +10,22 @@ namespace Atlas.Serialize
 {
 	public class TypeSchema
 	{
+		public static HashSet<Type> AllowedTypes = new HashSet<Type>()
+		{
+			typeof(string),
+			typeof(DateTime),
+			typeof(TimeSpan),
+			typeof(Type),
+			typeof(object),
+		};
+
+		public static HashSet<Type> AllowedGenericTypes = new HashSet<Type>()
+		{
+			typeof(List<>),
+			typeof(Dictionary<,>),
+			typeof(HashSet<>),
+		};
+
 		/*public enum TypeClass
 		{
 			primitive,
@@ -34,27 +50,22 @@ namespace Atlas.Serialize
 		// not written out
 		public Type Type; // might be null
 		public Type NonNullableType; // might be null
-		public bool isPrimitive;
-		public bool HasConstructor = true;
-		public bool Secure = false; // Secure types do not get saved if the SaveSecure flag is set
 
+		public bool IsPrimitive;
+		public bool IsPrivate;
+		public bool IsPublic; // [PublicData], will get exported if PublicOnly set
 		public bool IsStatic;
+		public bool IsSerialized;
+		public bool HasConstructor;
 		public bool HasSubType;
 
 		public TypeSchema(Type type)
 		{
 			Type = type;
 			Name = type.ToString(); // better than FullName (don't remember why)
-			
-			AssemblyQualifiedName = type.AssemblyQualifiedName; // todo: strip out unused version?
-			IsCollection = (typeof(ICollection).IsAssignableFrom(type));
-			HasSubType = !type.IsSealed; // set for all non derived classes?
-			CanReference = !(type.IsPrimitive || type.IsEnum || type == typeof(string));
-			NonNullableType = type.GetNonNullableType();
-			isPrimitive = NonNullableType.IsPrimitive;
 
-			IsStatic = (type.GetCustomAttribute<StaticAttribute>() != null);
-			Secure = (type.GetCustomAttribute<SecureAttribute>() != null);
+			AssemblyQualifiedName = type.AssemblyQualifiedName; // todo: strip out unused version?
+			InitializeType();
 
 			if (!IsCollection)
 			{
@@ -67,16 +78,35 @@ namespace Atlas.Serialize
 
 					FieldSchemas.Add(fieldSchema);
 				}
-				
+
 				foreach (PropertyInfo propertyInfo in type.GetProperties())
 				{
 					var propertySchema = new PropertySchema(propertyInfo);
-					if (!propertySchema.Serialized)
+					if (!propertySchema.IsSerialized)
 						continue;
 
 					PropertySchemas.Add(propertySchema);
 				}
 			}
+		}
+
+		private void InitializeType()
+		{
+			IsCollection = (typeof(ICollection).IsAssignableFrom(Type));
+			HasSubType = !Type.IsSealed; // set for all non derived classes?
+			CanReference = !(Type.IsPrimitive || Type.IsEnum || Type == typeof(string));
+			NonNullableType = Type.GetNonNullableType();
+			IsPrimitive = NonNullableType.IsPrimitive;
+
+			//ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
+			ConstructorInfo constructorInfo = Type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
+			var constructors = Type.GetConstructors();
+			HasConstructor = (constructorInfo != null || constructors.Length == 0);
+
+			IsSerialized = (Type.GetCustomAttribute<UnserializedAttribute>() == null);
+			IsStatic = (Type.GetCustomAttribute<StaticAttribute>() != null);
+			IsPrivate = (Type.GetCustomAttribute<PrivateDataAttribute>() != null);
+			IsPublic = GetIsPublic();
 		}
 
 		public TypeSchema(Log log, BinaryReader reader)
@@ -86,64 +116,34 @@ namespace Atlas.Serialize
 
 		public override string ToString() => Name;
 
-		// not completely safe since anyone can name their Assemblies whatever, but someone would have to include those libraries
 		// BinaryFormatter uses[Serializable], should we allow that?
-		public static bool IsAllowed(Type type)
+		private bool GetIsPublic()
 		{
-			Attribute attribute = type.GetCustomAttribute<UnserializedAttribute>();
-			if (attribute != null)
+			if (IsPrivate)
 				return false;
-			return true;
-			/*if (type == null)
+			if (Type.IsPrimitive || Type.IsEnum || Type.IsInterface)
+				return true;
+			// Might need to modify this later if we ever add dynamic loading
+			if (Type.GetCustomAttribute<PublicDataAttribute>() != null)
+				return true;
+			if (AllowedTypes.Contains(Type))
+				return true;
+			if (typeof(Type).IsAssignableFrom(Type))
+				return true;
+			//if (Type.IsSecurityCritical) // useful?
+			//	return true;
+			if (Type.IsGenericType)
+			{
+				Type genericType = Type.GetGenericTypeDefinition();
+				if (AllowedGenericTypes.Contains(genericType))
+					return true;
+			}
+
+			return false;
+			/*if (Type == null)
 				return false;
-			if (type.IsPrimitive)
-				return true;
-			if (type == typeof(string))
-				return true;
-			if (type == typeof(object))
-				return true;
-			if (type == typeof(DateTime))
-				return true;
-			if (typeof(Type).IsAssignableFrom(type))
-				return true;
-			if (type.IsArray)
-				return IsWhitelisted(type.GetElementType());
-			if (type.Assembly.FullName.StartsWith("Atlas."))
-				return true;
-			if (type.Namespace.StartsWith("System."))
-			{
-				//type.Assembly.GetName().GetPublicKeyToken(); // todo: add support for this
-				if (!type.Assembly.IsFullyTrusted)
-					return false;
-				foreach (Type argType in type.GenericTypeArguments)
-				{
-					if (!IsWhitelisted(argType))
-						return false;
-				}
-				return true;
-			}
-			return false;*/
-		}
-
-		// loading a random type from a derived type such as an object can be dangerous, disallow by default
-		// otherwise it could be dangerous loading a random file from the internet
-		public bool Allowed
-		{
-			get
-			{
-				return IsAllowed(Type);
-			}
-		}
-
-		public bool IsPrimitive
-		{
-			get
-			{
-				if (NonNullableType == null)
-					return false;
-
-				return NonNullableType.IsPrimitive;
-			}
+			if (Type.IsArray)
+				return IsAllowed(type.GetElementType());*/
 		}
 
 		public void Save(BinaryWriter writer)
@@ -178,8 +178,7 @@ namespace Atlas.Serialize
 			}
 			else
 			{
-				NonNullableType = Type.GetNonNullableType();
-				isPrimitive = NonNullableType.IsPrimitive;
+				InitializeType();
 			}
 
 			LoadFields(reader);
@@ -283,10 +282,6 @@ namespace Atlas.Serialize
 			{
 				propertySchema.Validate(typeSchemas);
 			}
-			//ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
-			ConstructorInfo constructorInfo = Type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
-			var constructors = Type.GetConstructors();
-			HasConstructor = (constructorInfo != null || constructors.Length == 0);
 		}
 	}
 }

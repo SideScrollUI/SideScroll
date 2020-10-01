@@ -6,16 +6,16 @@ namespace Atlas.Serialize
 {
 	public static class SerializerExtensions
 	{
-		public static T DeepClone<T>(this object obj, Call call = null)
+		public static T DeepClone<T>(this object obj, Call call = null, bool publicOnly = false)
 		{
 			call = call ?? new Call();
-			return SerializerMemory.DeepClone<T>(call, obj);
+			return SerializerMemory.DeepClone<T>(call, obj, publicOnly);
 		}
 
-		public static object DeepClone(this object obj, Call call = null)
+		public static object DeepClone(this object obj, Call call = null, bool publicOnly = false)
 		{
 			call = call ?? new Call();
-			return SerializerMemory.DeepClone(call, obj);
+			return SerializerMemory.DeepClone(call, obj, publicOnly);
 		}
 
 		public static void CloneParentClass(this object dest, object source)
