@@ -50,11 +50,11 @@ namespace Atlas.Tabs
 			}
 		}
 
+		// todo: move into IListItem after upgrading to .Net Standard 2.1
 		// Get list items for all public properties and any methods marked with [Item]
-		// todo: need lazy version
-		public static List<ListItem> Create(object obj, bool includeBaseTypes)
+		public static List<IListItem> Create(object obj, bool includeBaseTypes)
 		{
-			var listItems = new SortedDictionary<int, ListItem>();
+			var listItems = new SortedDictionary<int, IListItem>();
 
 			var properties = ListProperty.Create(obj);
 			foreach (ListProperty listProperty in properties)
@@ -72,12 +72,14 @@ namespace Atlas.Tabs
 				}
 
 				int metadataToken = listProperty.PropertyInfo.GetGetMethod(false).MetadataToken;
-				object value = listProperty.Value;
 
-				if (listProperty.PropertyInfo.GetCustomAttribute<HideNullAttribute>() != null && value == null)
-					continue;
+				if (listProperty.PropertyInfo.GetCustomAttribute<HideNullAttribute>() != null)
+				{
+					if (listProperty.Value == null)
+						continue;
+				}
 
-				listItems.Add(metadataToken, new ListItem(name, value));
+				listItems.Add(metadataToken, listProperty);
 			}
 
 			var methods = ListMethod.Create(obj);
@@ -86,7 +88,7 @@ namespace Atlas.Tabs
 				if (!includeBaseTypes && listMethod.MethodInfo.DeclaringType != obj.GetType())
 					continue;
 
-				listItems.Add(listMethod.MethodInfo.MetadataToken, new ListItem(listMethod.Name, listMethod.Value));
+				listItems.Add(listMethod.MethodInfo.MetadataToken, listMethod);
 			}
 
 			return listItems.Values.ToList();

@@ -76,6 +76,7 @@ namespace Atlas.Serialize.Test
 			Assert.AreEqual("test", output.PublicData);
 		}
 
+		// Test changing serialized field to public in internal model
 		[Test, Description("Serialize [PrivateData]")]
 		public void SerializePrivateDataPublicLoading()
 		{
@@ -102,6 +103,10 @@ namespace Atlas.Serialize.Test
 		public class PrivateClass
 		{
 			public string Confidential { get; set; }
+		}
+
+		public class DerivedPrivateClass : PrivateClass
+		{
 		}
 
 		[Test, Description("Serialize [PublicData]")]
@@ -140,6 +145,22 @@ namespace Atlas.Serialize.Test
 		public class PublicClass
 		{
 			public string PublicData { get; set; }
+			public object RestrictedData { get; set; } // Only allows [PublicData]
+		}
+
+		[Test]
+		public void SerializeDerivedNonPrivateClass()
+		{
+			var input = new DerivedPrivateClass()
+			{
+				Confidential = "secrets",
+			};
+
+			serializer.Save(Call, input);
+			serializer.PublicOnly = true;
+			var output = serializer.Load<PrivateClass>(Call);
+
+			Assert.IsNull(output);
 		}
 	}
 }

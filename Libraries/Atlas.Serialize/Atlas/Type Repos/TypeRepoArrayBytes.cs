@@ -5,13 +5,6 @@ using System.IO;
 
 namespace Atlas.Serialize
 {
-	public interface IRepoCreator
-	{
-		// needs to handle generics (lists, arrays, dictionaries)
-		TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema);
-	}
-
-
 	public class TypeRepoArrayBytes : TypeRepo
 	{
 		private int[] sizes;

@@ -6,6 +6,12 @@ using System.IO;
 
 namespace Atlas.Serialize
 {
+	public interface IRepoCreator
+	{
+		// needs to handle generics (lists, arrays, dictionaries)
+		TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema);
+	}
+
 	// Represents all the object references for each unique type
 	public abstract class TypeRepo : IDisposable
 	{
@@ -44,11 +50,11 @@ namespace Atlas.Serialize
 		public BinaryReader Reader;
 
 		// Saving Only
-		public Dictionary<object, int> idxObjectToIndex = new Dictionary<object, int>(); // for saving only, not filled in for loading
+		public Dictionary<object, int> IdxObjectToIndex = new Dictionary<object, int>(); // for saving only, not filled in for loading
 
 		// Loading Only
 
-		public int cloned = 0; // for stats
+		public int Cloned = 0; // for stats
 
 
 		//protected abstract void SaveObjectData(BinaryWriter writer);
@@ -193,11 +199,6 @@ namespace Atlas.Serialize
 		{
 			using (LogTimer logTimer = log.Timer("Loading Headers", new Tag("Type", TypeSchema.Name), new Tag("Count", TypeSchema.NumObjects)))
 			{
-				//int count = reader.ReadInt32();
-				/*for (int i = 0; i < count; i++)
-				{
-					objectOffsets.Add(reader.ReadInt64());
-				}*/
 				ObjectOffsets = new long[TypeSchema.NumObjects];
 				ObjectSizes = new int[TypeSchema.NumObjects];
 				long offset = TypeSchema.FileDataOffset;
@@ -285,10 +286,10 @@ namespace Atlas.Serialize
 			if (LoadableType == null || LoadableType.IsPrimitive)
 				return -1;
 
-			if (!idxObjectToIndex.TryGetValue(obj, out int index))
+			if (!IdxObjectToIndex.TryGetValue(obj, out int index))
 			{
-				index = idxObjectToIndex.Count;
-				idxObjectToIndex[obj] = index;
+				index = IdxObjectToIndex.Count;
+				IdxObjectToIndex[obj] = index;
 				Objects.Add(obj);
 				Serializer.ParserQueue.Enqueue(obj);
 			}

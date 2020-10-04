@@ -73,7 +73,7 @@ namespace Atlas.Serialize
 				foreach (FieldInfo fieldInfo in type.GetFields())
 				{
 					var fieldSchema = new FieldSchema(fieldInfo);
-					if (!fieldSchema.Serialized)
+					if (!fieldSchema.IsSerialized)
 						continue;
 
 					FieldSchemas.Add(fieldSchema);
@@ -150,8 +150,6 @@ namespace Atlas.Serialize
 		{
 			writer.Write(Name);
 			writer.Write(AssemblyQualifiedName);
-			writer.Write(CanReference);
-			writer.Write(IsCollection);
 			writer.Write(HasSubType);
 			writer.Write(NumObjects);
 			writer.Write(FileDataOffset);
@@ -165,8 +163,6 @@ namespace Atlas.Serialize
 		{
 			Name = reader.ReadString();
 			AssemblyQualifiedName = reader.ReadString();
-			CanReference = reader.ReadBoolean();
-			IsCollection = reader.ReadBoolean();
 			HasSubType = reader.ReadBoolean();
 			NumObjects = reader.ReadInt32();
 			FileDataOffset = reader.ReadInt64();

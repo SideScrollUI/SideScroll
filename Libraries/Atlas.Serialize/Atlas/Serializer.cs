@@ -68,6 +68,7 @@ namespace Atlas.Serialize
 		{
 			if (TypeRepos.Count == 0)// || typeRepos[0].objects.Count == 0)
 				return null;
+
 			TypeRepo typeRepo = TypeRepos[0];
 			if (typeRepo.LoadableType == null)
 				return null;
@@ -122,8 +123,7 @@ namespace Atlas.Serialize
 		// todo: only add types that are used
 		private void AddObjectMemberTypes(Log log)
 		{
-			int count = TypeSchemas.Count;
-			for (int i = 0; i < count; i++)
+			for (int i = 0; i < TypeSchemas.Count; i++)
 			{
 				TypeSchema typeSchema = TypeSchemas[i];
 				foreach (FieldSchema fieldSchema in typeSchema.FieldSchemas)
@@ -319,8 +319,8 @@ namespace Atlas.Serialize
 
 		class TypeRepoWriter
 		{
-			public TypeRepo typeRepo;
-			public MemoryStream memoryStream = new MemoryStream();
+			public TypeRepo TypeRepo;
+			public MemoryStream MemoryStream = new MemoryStream();
 		}
 
 		private void SaveObjects(Log log, BinaryWriter writer)
@@ -342,14 +342,14 @@ namespace Atlas.Serialize
 
 				var typeRepoWriter = new TypeRepoWriter()
 				{
-					typeRepo = typeRepo,
+					TypeRepo = typeRepo,
 				};
 				writers.Add(typeRepoWriter);
 			}
 
 			using (LogTimer logSerialize = log.Timer("Serializing Object Data"))
 			{
-				// todo: add parallel param
+				// todo: add parallel param, switch to async
 				/*Parallel.ForEach(writers, new ParallelOptions() { MaxDegreeOfParallelism = 3 }, typeRepoWriter =>
 				{
 					using (BinaryWriter binaryWriter = new BinaryWriter(typeRepoWriter.memoryStream, System.Text.Encoding.Default, true))
@@ -357,8 +357,8 @@ namespace Atlas.Serialize
 				});*/
 				foreach (var typeRepoWriter in writers)
 				{
-					using (var binaryWriter = new BinaryWriter(typeRepoWriter.memoryStream, System.Text.Encoding.Default, true))
-						typeRepoWriter.typeRepo.SaveObjects(logSerialize, binaryWriter);
+					using (var binaryWriter = new BinaryWriter(typeRepoWriter.MemoryStream, System.Text.Encoding.Default, true))
+						typeRepoWriter.TypeRepo.SaveObjects(logSerialize, binaryWriter);
 				}
 			}
 
@@ -366,10 +366,10 @@ namespace Atlas.Serialize
 			{
 				foreach (TypeRepoWriter typeRepoWriter in writers)
 				{
-					byte[] bytes = typeRepoWriter.memoryStream.ToArray();
+					byte[] bytes = typeRepoWriter.MemoryStream.ToArray();
 
-					typeRepoWriter.typeRepo.TypeSchema.FileDataOffset = writer.BaseStream.Position;
-					typeRepoWriter.typeRepo.TypeSchema.DataSize = bytes.Length;
+					typeRepoWriter.TypeRepo.TypeSchema.FileDataOffset = writer.BaseStream.Position;
+					typeRepoWriter.TypeRepo.TypeSchema.DataSize = bytes.Length;
 
 					writer.Write(bytes);
 				}
@@ -502,7 +502,7 @@ namespace Atlas.Serialize
 							return;
 						}
 					}
-					int objectIndex = typeRepo.idxObjectToIndex[obj];
+					int objectIndex = typeRepo.IdxObjectToIndex[obj];
 					writer.Write(objectIndex);
 				}
 			}
@@ -516,7 +516,7 @@ namespace Atlas.Serialize
 			{
 				TypeRepo typeRepo = GetOrCreateRepo(callTimer.Log, obj.GetType());
 				int objectIndex = typeRepo.GetOrAddObjectRef(obj);
-				//parserQueue.Enqueue(obj);
+				//ParserQueue.Enqueue(obj);
 				if (objectIndex < 0)
 					Primitives.Add(obj);
 
@@ -540,11 +540,14 @@ namespace Atlas.Serialize
 		{
 			if (obj == null)
 				return null;
+
 			Type type = obj.GetType();
 			if (type.IsPrimitive)
 				return obj;
+
 			if (Clones.TryGetValue(obj, out object clone))
 				return clone;
+
 			Log log = new Log();
 			TypeRepo typeRepo = GetOrCreateRepo(log, type);
 			if (typeRepo is TypeRepoPrimitive || typeRepo is TypeRepoString || typeRepo is TypeRepoEnum || typeRepo is TypeRepoType)// || typeRepo.typeSchema.isStatic)
@@ -579,7 +582,7 @@ namespace Atlas.Serialize
 
 			}
 			Clones[obj] = clone;
-			typeRepo.cloned++;
+			typeRepo.Cloned++;
 			Action action = new Action(() => typeRepo.Clone(obj, clone));
 			CloneQueue.Enqueue(action);
 			return clone;
@@ -613,7 +616,7 @@ namespace Atlas.Serialize
 				var typeInfo = new ObjectsLoaded()
 				{
 					Name = typeRepo.ToString(),
-					Loaded = typeRepo.cloned
+					Loaded = typeRepo.Cloned
 				};
 				loaded.Add(typeInfo);
 			}

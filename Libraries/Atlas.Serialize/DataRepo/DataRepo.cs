@@ -14,7 +14,7 @@ namespace Atlas.Serialize
 		public string RepoPath { get; set; }
 		public string RepoName { get; set; }
 
-		//public RepoSettings repoSettings;
+		//public RepoSettings Settings;
 
 		public DataRepo(string repoPath, string repoName)
 		{

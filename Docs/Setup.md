@@ -32,7 +32,6 @@
   - `Programs / Atlas.Start.Avalonia`
     - .NET Core
       - Cross platform (Windows, Linux, Mac)
-    - AvaloniaUI still in beta
   - `Programs / Atlas.Start.Wpf`
     - .NET Framework
       - Windows Only

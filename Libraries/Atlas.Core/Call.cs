@@ -67,6 +67,7 @@ namespace Atlas.Core
 
 		public CallTimer Timer(int taskCount, [CallerMemberName] string name = "", params Tag[] tags)
 		{
+			TaskInstance = TaskInstance ?? new TaskInstance();
 			if (TaskInstance.TaskCount == 0)
 				TaskInstance.TaskCount = 1;
 			var allTags = tags.ToList();

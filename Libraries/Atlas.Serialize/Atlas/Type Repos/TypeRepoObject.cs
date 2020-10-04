@@ -40,7 +40,7 @@ namespace Atlas.Serialize
 
 			public void Load(object obj)
 			{
-				if (FieldSchema.Loadable)
+				if (FieldSchema.IsLoadable)
 				{
 					object valueObject = TypeRepo.LoadObjectRef();
 					// todo: 36% of current cpu usage, break into explicit operators? (is that even possible?)
@@ -112,7 +112,7 @@ namespace Atlas.Serialize
 		{
 			foreach (FieldSchema fieldSchema in TypeSchema.FieldSchemas)
 			{
-				if (!fieldSchema.Serialized)
+				if (!fieldSchema.IsSerialized)
 					continue;
 
 				Type fieldType = fieldSchema.FieldInfo.FieldType.GetNonNullableType();
@@ -176,7 +176,7 @@ namespace Atlas.Serialize
 					if (typeRepo.Type != fieldSchema.NonNullableType)
 					{
 						log.Add("Can't load field, type has changed", new Tag("Field", fieldSchema));
-						fieldSchema.Loadable = false;
+						fieldSchema.IsLoadable = false;
 						//continue;
 					}
 				}
@@ -277,7 +277,7 @@ namespace Atlas.Serialize
 		{
 			foreach (FieldSchema fieldSchema in TypeSchema.FieldSchemas)
 			{
-				if (!fieldSchema.Serialized)
+				if (!fieldSchema.IsSerialized)
 					continue;
 
 				object fieldValue = fieldSchema.FieldInfo.GetValue(obj);
@@ -379,7 +379,7 @@ namespace Atlas.Serialize
 		{
 			foreach (FieldSchema fieldSchema in TypeSchema.FieldSchemas)
 			{
-				if (!fieldSchema.Serialized)
+				if (!fieldSchema.IsSerialized)
 					continue;
 
 				object propertyValue = fieldSchema.FieldInfo.GetValue(source);

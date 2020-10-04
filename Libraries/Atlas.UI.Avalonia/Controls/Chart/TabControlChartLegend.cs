@@ -273,13 +273,14 @@ namespace Atlas.UI.Avalonia.Controls
 			OnVisibleChanged?.Invoke(this, null);
 		}
 
-		public void UnhighlightAll()
+		public void UnhighlightAll(bool update = false)
 		{
 			foreach (TabChartLegendItem item in legendItems)
 			{
 				item.Highlight = false;
 			}
-			UpdateVisibleSeries();
+			if (update)
+				UpdateVisibleSeries();
 		}
 
 		public void UpdateHighlight(bool showFaded)

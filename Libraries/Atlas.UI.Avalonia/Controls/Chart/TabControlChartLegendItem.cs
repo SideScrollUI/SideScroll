@@ -259,6 +259,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void TabChartLegendItem_PointerEnter(object sender, PointerEventArgs e)
 		{
+			Legend.UnhighlightAll(false);
 			Highlight = true;
 		}
 

@@ -43,11 +43,22 @@ namespace Atlas.UI.Avalonia.Controls
 		}
 	}
 
+	public class MouseCursorMovedEventArgs : EventArgs
+	{
+		public double X { get; set; }
+
+		public MouseCursorMovedEventArgs(double x)
+		{
+			X = x;
+		}
+	}
+
 	public class TabControlChart : Grid //, IDisposable
 	{
 		public static int SeriesLimit { get; set; } = 25;
 		private const double MarginPercent = 0.1; // This needs a min height so this can be lowered
 		private static OxyColor nowColor = OxyColors.Green;
+		//private static OxyColor timeTrackerColor = Theme.TitleBackground;
 
 		private TabInstance TabInstance;
 		//public ChartSettings ChartSettings { get; set; }
@@ -73,7 +84,7 @@ namespace Atlas.UI.Avalonia.Controls
 				return selected;
 			}
 		}
-		private OxyPlot.Series.Series hoverSeries;
+		public OxyPlot.Series.Series HoverSeries;
 
 		//public SeriesCollection SeriesCollection { get; set; }
 
@@ -113,6 +124,7 @@ namespace Atlas.UI.Avalonia.Controls
 		}
 
 		public event EventHandler<SeriesSelectedEventArgs> OnSelectionChanged;
+		public static event EventHandler<MouseCursorMovedEventArgs> OnMouseCursorChanged;
 
 		public TabControlChart(TabInstance tabInstance, ListGroup listGroup, bool fillHeight = false)
 		{
@@ -225,6 +237,47 @@ namespace Atlas.UI.Avalonia.Controls
 			Focusable = true;
 		}
 
+		private void UpdateVisible()
+		{
+			if (PlotView == null)
+				return;
+
+			bool visible = IsControlVisible();
+			if (visible != PlotView.IsVisible)
+			{
+				PlotView.IsVisible = visible;
+				Legend.IsVisible = visible;
+				//PlotModel.InvalidatePlot(false);
+				PlotView.InvalidateArrange();
+				Legend.InvalidateArrange();
+			}
+		}
+
+		private bool IsControlVisible()
+		{
+			IControl control = this;
+			while (control != null)
+			{
+				Point? topLeft = this.TranslatePoint(Bounds.TopLeft, control);
+				Point? bottomRight = this.TranslatePoint(Bounds.BottomRight, control);
+				if (topLeft == null || bottomRight == null)
+					return false;
+
+				var newBounds = new Rect(topLeft.Value, bottomRight.Value);
+				newBounds = newBounds.WithX(newBounds.X + control.Bounds.X);
+				newBounds = newBounds.WithY(newBounds.Y + control.Bounds.Y);
+
+				if (newBounds.X > control.Bounds.Right ||
+					newBounds.Y > control.Bounds.Bottom ||
+					newBounds.Right < control.Bounds.X ||
+					newBounds.Bottom < control.Bounds.Y)
+					return false;
+
+				control = control.Parent;
+			}
+			return true;
+		}
+
 		// Anchor the chart to the top and stretch to max height, available size gets set to max :(
 		protected override Size MeasureOverride(Size availableSize)
 		{
@@ -232,6 +285,12 @@ namespace Atlas.UI.Avalonia.Controls
 			if (FillHeight)
 				size = new Size(size.Width, Math.Max(size.Height, Math.Min(MaxHeight, availableSize.Height)));
 			return size;
+		}
+
+		public override void Render(DrawingContext context)
+		{
+			Dispatcher.UIThread.Post(UpdateVisible, DispatcherPriority.Background);
+			base.Render(context);
 		}
 
 		public class MouseHoverManipulator : TrackerManipulator
@@ -252,7 +311,7 @@ namespace Atlas.UI.Avalonia.Controls
 				base.Delta(e);
 
 				var series = PlotView.ActualModel.GetSeriesFromPoint(e.Position, 20);
-				if (Chart.hoverSeries == series)
+				if (Chart.HoverSeries == series)
 					return;
 
 				if (series != null)
@@ -261,9 +320,9 @@ namespace Atlas.UI.Avalonia.Controls
 				}
 				else
 				{
-					Chart.Legend.UnhighlightAll();
+					Chart.Legend.UnhighlightAll(true);
 				}
-				Chart.hoverSeries = series;
+				Chart.HoverSeries = series;
 
 				// todo: replace tracker here
 			}
@@ -271,10 +330,10 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void PlotView_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
 		{
-			if (hoverSeries != null)
+			if (HoverSeries != null)
 			{
-				hoverSeries = null;
-				Legend.UnhighlightAll();
+				HoverSeries = null;
+				Legend.UnhighlightAll(true);
 			}
 		}
 
@@ -370,7 +429,8 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				AddDateTimeAxis(ListGroup.StartTime, ListGroup.EndTime);
 				AddNowTime();
-				//AddTrackerLine();
+				if (ListGroup.ShowTimeTracker)
+					AddTrackerLine();
 			}
 			else
 			{
@@ -807,21 +867,43 @@ namespace Atlas.UI.Avalonia.Controls
 			PlotModel.Annotations.Add(annotation);
 		}
 
-		private OxyPlot.Annotations.LineAnnotation trackerAnnotation;
+		private OxyPlot.Annotations.LineAnnotation _trackerAnnotation;
 		private void AddTrackerLine()
 		{
-			var now = DateTime.UtcNow;
-			if (ListGroup.EndTime < now.AddMinutes(1))
-				return;
-			trackerAnnotation = new OxyPlot.Annotations.LineAnnotation
+			_trackerAnnotation = new OxyPlot.Annotations.LineAnnotation
 			{
 				Type = LineAnnotationType.Vertical,
-				//X = OxyPlot.Axes.DateTimeAxis.ToDouble(now.ToUniversalTime()),
-				Color = nowColor,
+				//Color = Theme.TitleBackground.ToOxyColor(),
+				//Color = Color.Parse("#21a094").ToOxyColor(),
+				Color = Theme.GridBackgroundSelected.ToOxyColor(),
+				//Color = timeTrackerColor,
 				// LineStyle = LineStyle.Dot, // doesn't work for vertical?
 			};
 
-			PlotModel.Annotations.Add(trackerAnnotation);
+			PlotModel.Annotations.Add(_trackerAnnotation);
+			PlotModel.MouseMove += PlotModel_MouseMove;
+			PlotModel.MouseLeave += PlotModel_MouseLeave;
+
+			OnMouseCursorChanged += TabControlChart_OnMouseCursorChanged;
+		}
+
+		private void PlotModel_MouseMove(object sender, OxyMouseEventArgs e)
+		{
+			DataPoint dataPoint = OxyPlot.Axes.DateTimeAxis.InverseTransform(e.Position, DateTimeAxis, ValueAxis);
+			var moveEvent = new MouseCursorMovedEventArgs(dataPoint.X);
+			OnMouseCursorChanged?.Invoke(sender, moveEvent);
+		}
+
+		private void PlotModel_MouseLeave(object sender, OxyMouseEventArgs e)
+		{
+			var moveEvent = new MouseCursorMovedEventArgs(0);
+			OnMouseCursorChanged?.Invoke(sender, moveEvent);
+		}
+
+		private void TabControlChart_OnMouseCursorChanged(object sender, MouseCursorMovedEventArgs e)
+		{
+			_trackerAnnotation.X = e.X;
+			Dispatcher.UIThread.Post(() => PlotModel.InvalidatePlot(false), DispatcherPriority.Background);
 		}
 
 		/*private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

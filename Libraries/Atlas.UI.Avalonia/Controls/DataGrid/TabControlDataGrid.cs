@@ -6,12 +6,9 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Shapes;
 using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Input.Platform;
 using Avalonia.Layout;
-using Avalonia.Media;
 using Avalonia.Threading;
 using System;
 using System.Collections;
@@ -44,7 +41,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public DataGrid DataGrid;
 		public TextBox textBoxSearch;
 
-		//private HashSet<int> pinnedItems = new HashSet<int>();
+		//private HashSet<int> pinnedItems = new HashSet<int>(); // starred items?
 		private DataGridCollectionView collectionView;
 		private Dictionary<string, DataGridColumn> columnObjects = new Dictionary<string, DataGridColumn>();
 		private Dictionary<DataGridColumn, string> columnNames = new Dictionary<DataGridColumn, string>();
@@ -1203,6 +1200,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
+		// Not possible with current DataGrid yet?
 		private void SortSavedColumn()
 		{
 			//collectionView.SortDescriptions

@@ -336,7 +336,7 @@ namespace Atlas.Tabs
 			return properties;
 		}
 
-		protected List<ListItem> GetListItems()
+		protected List<IListItem> GetListItems()
 		{
 			return ListItem.Create(this, false);
 		}

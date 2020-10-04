@@ -19,8 +19,7 @@ namespace Atlas.Serialize
 		public Type Type; // might be null
 		public Type NonNullableType; // might be null
 
-		public bool IsSerialized; // cached copy of IsSerialized
-
+		public bool IsSerialized;
 		public bool IsLoadable;
 
 		public override string ToString() => PropertyName;
@@ -30,8 +29,8 @@ namespace Atlas.Serialize
 			PropertyName = propertyInfo.Name;
 			PropertyInfo = propertyInfo;
 			Type = propertyInfo.PropertyType;
-			IsSerialized = GetIsSerialized();
 			NonNullableType = Type.GetNonNullableType();
+			IsSerialized = GetIsSerialized();
 		}
 
 		public PropertySchema(TypeSchema typeSchema, BinaryReader reader)
@@ -98,16 +97,16 @@ namespace Atlas.Serialize
 
 		public void Validate(List<TypeSchema> typeSchemas)
 		{
-			if (TypeIndex >= 0)
+			if (TypeIndex < 0)
+				return;
+			
+			TypeSchema typeSchema = typeSchemas[TypeIndex];
+			if (PropertyInfo != null)
 			{
-				TypeSchema typeSchema = typeSchemas[TypeIndex];
-				if (PropertyInfo != null)
-				{
-					// check if the type has changed
-					Type currentType = PropertyInfo.PropertyType.GetNonNullableType();
-					if (typeSchema.Type != currentType)
-						IsLoadable = false;
-				}
+				// check if the type has changed
+				Type currentType = PropertyInfo.PropertyType.GetNonNullableType();
+				if (typeSchema.Type != currentType)
+					IsLoadable = false;
 			}
 		}
 	}
