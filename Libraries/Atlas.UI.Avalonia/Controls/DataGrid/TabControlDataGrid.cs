@@ -1192,7 +1192,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (TabInstance.FilterBookmarkNode != null)
 			{
-				return TabInstance.FilterBookmarkNode.selectedObjects.Contains(obj);
+				return TabInstance.FilterBookmarkNode.SelectedObjects.Contains(obj);
 			}
 			else
 			{

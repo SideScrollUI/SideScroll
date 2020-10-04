@@ -103,7 +103,7 @@ namespace Atlas.UI.Avalonia.View
 		private void MenuItemDebug_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			var debugModel = new TabModel("Debug");
-			TabView clone = this.DeepClone<TabView>();
+			TabView clone = tabView.DeepClone();
 			debugModel.AddData(clone);
 			//Control debugControl = clone.CreateChildControl(debugModel, "Debug");
 		}

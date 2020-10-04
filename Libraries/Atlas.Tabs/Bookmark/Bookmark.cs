@@ -10,7 +10,7 @@ namespace Atlas.Tabs
 	{
 		[Name("Bookmark")]
 		public string Name { get; set; }
-		public string Changed { get; set; } // used for naming, find better default name
+		public string Changed { get; set; } // what was just selected, used for naming, find better default name
 		public Type Type { get; set; }
 		public string Address => TabBookmark.Address;
 		public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
@@ -34,9 +34,9 @@ namespace Atlas.Tabs
 				TabBookmark.MergeNode(bookmark.TabBookmark);
 		}
 
-		public string ToBase64String(Call call)
+		public string ToBase64String(Call call, bool publicOnly)
 		{
-			return SerializerMemory.ToBase64String(call, this);
+			return SerializerMemory.ToBase64String(call, this, publicOnly);
 		}
 
 		public static Bookmark Create(Call call, string encoded, bool publicOnly)
@@ -46,17 +46,6 @@ namespace Atlas.Tabs
 			serializer.LoadBase64String(encoded);
 			Bookmark bookmark = serializer.Load<Bookmark>(call);
 			return bookmark;
-		}
-
-		public Bookmark GetSecure()
-		{
-			return this; // todo: implement?
-			// clone first?
-
-			/*foreach (var item in tabBookmark.tabChildBookmarks.Values)
-			{
-				item.
-			}*/
 		}
 	}
 

@@ -24,7 +24,7 @@ namespace Atlas.Serialize
 
 		public override void Save(Call call, object obj)
 		{
-			using (var writer = new BinaryWriter(stream, Encoding.Default, true))
+			using (var writer = new BinaryWriter(Stream, Encoding.Default, true))
 			{
 				var serializer = Create();
 				serializer.AddObject(call, obj);
@@ -35,8 +35,8 @@ namespace Atlas.Serialize
 		public override T Load<T>(Call call = null)
 		{
 			call = call ?? new Call();
-			stream.Seek(0, SeekOrigin.Begin);
-			using (var reader = new BinaryReader(stream))
+			Stream.Seek(0, SeekOrigin.Begin);
+			using (var reader = new BinaryReader(Stream))
 			{
 				var serializer = Create();
 				serializer.Load(call, reader);
@@ -47,8 +47,8 @@ namespace Atlas.Serialize
 		public override object Load(Call call = null)
 		{
 			call = call ?? new Call();
-			stream.Seek(0, SeekOrigin.Begin);
-			using (var reader = new BinaryReader(stream))
+			Stream.Seek(0, SeekOrigin.Begin);
+			using (var reader = new BinaryReader(Stream))
 			{
 				var serializer = Create();
 				serializer.Load(call, reader);
@@ -57,7 +57,7 @@ namespace Atlas.Serialize
 		}
 
 		//public static T Clone<T>(Call call, T obj)
-		public override T DeepCloneInternal<T>(Call call, object obj)
+		public override T DeepCloneInternal<T>(Call call, T obj)
 		{
 			Save(call, obj);
 			T copy = Load<T>(call);

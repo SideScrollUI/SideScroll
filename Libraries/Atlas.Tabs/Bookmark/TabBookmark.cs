@@ -59,9 +59,9 @@ namespace Atlas.Tabs
 
 		// Temporary, Only FindMatches() uses, refactor these out?
 		[NonSerialized]
-		public HashSet<object> selectedObjects = new HashSet<object>(); // does this work with multiple TabDatas?
+		public HashSet<object> SelectedObjects = new HashSet<object>(); // does this work with multiple TabDatas?
 		[NonSerialized]
-		public TabModel tabModel;
+		public TabModel TabModel;
 
 		// too complicated, for now
 		/*public void MergeNodes(List<Node> nodes)
@@ -82,9 +82,10 @@ namespace Atlas.Tabs
 				}
 			}
 		}*/
+
 		public static TabBookmark Create(params object[] objs)
 		{
-			// get TabBookmark.selectedObjects working again and replace?
+			// get TabBookmark.SelectedObjects working again and replace?
 
 			TabBookmark tabBookmark = null;
 			foreach (object obj in objs)

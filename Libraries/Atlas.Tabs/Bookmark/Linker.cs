@@ -11,7 +11,7 @@ namespace Atlas.Tabs
 
 		public virtual string GetLinkUri(Call call, Bookmark bookmark)
 		{
-			string base64 = bookmark.ToBase64String(call);
+			string base64 = bookmark.ToBase64String(call, PublicOnly);
 			if (base64.Length > MaxLength)
 				return "Serialization size " + base64.Length + " > " + MaxLength;
 			string uri = AtlasPrefix + base64;
@@ -23,14 +23,14 @@ namespace Atlas.Tabs
 			if (!uri.StartsWith(AtlasPrefix))
 				return null;
 
-			string data = uri.Substring(AtlasPrefix.Length);
-			if (data == null)
+			string base64 = uri.Substring(AtlasPrefix.Length);
+			if (base64 == null)
 				return null;
 
 			if (uri.Length > MaxLength)
 				return null;
 
-			Bookmark bookmark = Bookmark.Create(call, data, PublicOnly);
+			Bookmark bookmark = Bookmark.Create(call, base64, PublicOnly);
 			return bookmark;
 		}
 	}

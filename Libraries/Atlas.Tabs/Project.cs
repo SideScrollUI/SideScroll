@@ -9,7 +9,7 @@ namespace Atlas.Tabs
 {
 	public class Project
 	{
-		public string Name => ProjectSettings.Name;	// for viewing purposes
+		public string Name => ProjectSettings.Name; // for viewing purposes
 		public string LinkType => ProjectSettings.LinkType; // for bookmarking
 		public Version Version => ProjectSettings.Version;
 		public virtual ProjectSettings ProjectSettings { get; set; }
@@ -24,7 +24,16 @@ namespace Atlas.Tabs
 		public BookmarkNavigator Navigator { get; set; } = new BookmarkNavigator();
 		public TaskInstanceCollection Tasks { get; set; } = new TaskInstanceCollection();
 
-		private string DataRepoPath => Paths.Combine(UserSettings.ProjectPath, UserSettings.BookmarkPath?.HashSha256() ?? "Current", "Data");
+		private string DataRepoPath
+		{
+			get
+			{
+				if (UserSettings.BookmarkPath != null)
+					return Paths.Combine(UserSettings.ProjectPath, "Bookmarks", UserSettings.BookmarkPath.HashSha256(), "Data");
+				else
+					return Paths.Combine(UserSettings.ProjectPath, "Current", "Data");
+			}
+		}
 
 
 		public Project()
@@ -61,7 +70,7 @@ namespace Atlas.Tabs
 
 		public Project Open(Bookmark bookmark)
 		{
-			var userSettings = UserSettings.DeepClone<UserSettings>();
+			UserSettings userSettings = UserSettings.DeepClone();
 			userSettings.BookmarkPath = bookmark.Address;
 			var project = new Project(ProjectSettings, userSettings);
 			//project.Import(bookmark);

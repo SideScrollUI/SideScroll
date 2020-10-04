@@ -76,7 +76,7 @@ namespace Atlas.Tabs
 			{
 				CurrentIndex--;
 				Bookmark oldBookmark = History[CurrentIndex];
-				Bookmark newBookmark = oldBookmark.DeepClone<Bookmark>(); // sanitize
+				Bookmark newBookmark = oldBookmark.DeepClone(); // sanitize
 				Append(newBookmark, false); // Fork instead?
 				return newBookmark;
 			}

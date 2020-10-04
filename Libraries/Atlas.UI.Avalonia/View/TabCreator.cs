@@ -31,8 +31,8 @@ namespace Atlas.UI.Avalonia.View
 				if (parentTabInstance.TabBookmark.ChildBookmarks.TryGetValue(label, out tabBookmark))
 				{
 					// FindMatches only
-					if (tabBookmark.tabModel != null)
-						value = tabBookmark.tabModel;
+					if (tabBookmark.TabModel != null)
+						value = tabBookmark.TabModel;
 				}
 				/*foreach (Bookmark.Node node in tabInstance.tabBookmark.nodes)
 				{

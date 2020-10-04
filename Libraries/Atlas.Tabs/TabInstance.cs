@@ -592,7 +592,7 @@ namespace Atlas.Tabs
 			};
 			//bookmark.tabBookmark.Name = Label;
 			GetBookmark(bookmark.TabBookmark);
-			bookmark = bookmark.DeepClone<Bookmark>(TaskInstance.Call); // Sanitize and test bookmark
+			bookmark = bookmark.DeepClone(TaskInstance.Call); // Sanitize and test bookmark
 			return bookmark;
 		}
 
@@ -894,8 +894,8 @@ namespace Atlas.Tabs
 			{
 				if (TabBookmark.ChildBookmarks.TryGetValue(name, out tabChildBookmark))
 				{
-					if (tabChildBookmark.tabModel != null)
-						return tabChildBookmark.tabModel;
+					if (tabChildBookmark.TabModel != null)
+						return tabChildBookmark.TabModel;
 				}
 				/*foreach (Bookmark.Node node in tabInstance.tabBookmark.nodes)
 				{

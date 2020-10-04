@@ -58,7 +58,7 @@ namespace Atlas.Tabs.Test
 
 			private void Save(Call call)
 			{
-				var clone = paramTestItem.DeepClone<ParamTestItem>(call);
+				ParamTestItem clone = paramTestItem.DeepClone(call);
 				dataRepoParams.Save(call, clone.ToString(), clone);
 				//SaveData(dataKey, paramTestItem);
 				/*var result = new ParamTestResult()

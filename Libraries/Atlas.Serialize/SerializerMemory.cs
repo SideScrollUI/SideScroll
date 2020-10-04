@@ -7,7 +7,7 @@ namespace Atlas.Serialize
 {
 	public abstract class SerializerMemory
 	{
-		protected MemoryStream stream = new MemoryStream(); // move to atlas class?
+		protected MemoryStream Stream { get; set; } = new MemoryStream(); // move to atlas class?
 		public bool PublicOnly { get; set; } = false; // Whether to save classes with the [PublicData] attribute
 
 		public SerializerMemory()
@@ -22,7 +22,7 @@ namespace Atlas.Serialize
 
 		// Save an object to a memory stream and then load it
 		//public static T Clone<T>(Call call, T obj)
-		public static T DeepClone<T>(Call call, object obj, bool publicOnly = false)
+		public static T DeepClone<T>(Call call, T obj, bool publicOnly = false)
 		{
 			if (typeof(T) != obj.GetType())
 			{
@@ -33,7 +33,7 @@ namespace Atlas.Serialize
 			{
 				var memorySerializer = Create();
 				memorySerializer.PublicOnly = publicOnly;
-				return memorySerializer.DeepCloneInternal<T>(call, obj);
+				return memorySerializer.DeepCloneInternal(call, obj);
 			}
 			catch (Exception e)
 			{
@@ -57,17 +57,17 @@ namespace Atlas.Serialize
 			return null;
 		}
 
-		public abstract T DeepCloneInternal<T>(Call call, object obj);
+		public abstract T DeepCloneInternal<T>(Call call, T obj);
 
 		public abstract object DeepCloneInternal(Call call, object obj);
 
 		public string ToBase64String()
 		{
-			stream.Seek(0, SeekOrigin.Begin);
+			Stream.Seek(0, SeekOrigin.Begin);
 			using (var outStream = new MemoryStream())
 			{
 				using (var tinyStream = new GZipStream(outStream, CompressionMode.Compress))
-					stream.CopyTo(tinyStream);
+					Stream.CopyTo(tinyStream);
 
 				byte[] compressed = outStream.ToArray();
 				string base64 = Convert.ToBase64String(compressed);
@@ -87,12 +87,13 @@ namespace Atlas.Serialize
 
 		public void LoadBase64String(string base64)
 		{
-			ConvertEncodedToStream(base64, stream);
+			ConvertEncodedToStream(base64, Stream);
 		}
 
-		public static string ToBase64String(Call call, object obj)
+		public static string ToBase64String(Call call, object obj, bool publicOnly = false)
 		{
 			var serializer = Create();
+			serializer.PublicOnly = publicOnly;
 			serializer.Save(call, obj);
 			string data = serializer.ToBase64String();
 			return data;
