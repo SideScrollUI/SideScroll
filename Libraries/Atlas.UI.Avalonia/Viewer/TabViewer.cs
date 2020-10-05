@@ -62,10 +62,10 @@ namespace Atlas.UI.Avalonia
 			VerticalAlignment = VerticalAlignment.Stretch;
 
 			toolbar = new TabViewerToolbar(this);
-			toolbar.buttonLink.AddAsync(LinkAsync);
-			toolbar.buttonImport.AddAsync(ImportBookmarkAsync);
-			toolbar.buttonSnapshot?.Add(Snapshot);
-			toolbar.buttonSnapshotCancel?.Add(CloseSnapshot);
+			toolbar.ButtonLink.AddAsync(LinkAsync);
+			toolbar.ButtonImport.AddAsync(ImportBookmarkAsync);
+			toolbar.ButtonSnapshot?.Add(Snapshot);
+			toolbar.ButtonSnapshotCancel?.Add(CloseSnapshot);
 			Children.Add(toolbar);
 
 			bottomGrid = new Grid()

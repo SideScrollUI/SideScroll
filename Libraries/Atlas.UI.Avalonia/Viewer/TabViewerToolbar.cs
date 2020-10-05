@@ -9,25 +9,25 @@ namespace Atlas.UI.Avalonia
 {
 	public class TabViewerToolbar : TabControlToolbar
 	{
-		private TabViewer tabViewer;
+		public TabViewer TabViewer;
 
-		public ToolbarButton buttonBack;
-		public ToolbarButton buttonForward;
-		public ToolbarButton buttonLink;
-		public ToolbarButton buttonImport;
-		public ToolbarButton buttonRefresh;
+		public ToolbarButton ButtonBack;
+		public ToolbarButton ButtonForward;
+		public ToolbarButton ButtonLink;
+		public ToolbarButton ButtonImport;
+		public ToolbarButton ButtonRefresh;
 
-		public ToolbarButton buttonSnapshot;
-		public ToolbarButton buttonSnapshotClipboard;
-		public ToolbarButton buttonSnapshotEmbed;
-		public ToolbarButton buttonSnapshotCancel;
+		public ToolbarButton ButtonSnapshot;
+		public ToolbarButton ButtonSnapshotClipboard;
+		public ToolbarButton ButtonSnapshotEmbed;
+		public ToolbarButton ButtonSnapshotCancel;
 
-		public RelayCommand commandBindingBack;
-		public RelayCommand commandBindingForward;
+		public RelayCommand CommandBindingBack;
+		public RelayCommand CommandBindingForward;
 
 		public TabViewerToolbar(TabViewer tabViewer) : base(null)
 		{
-			this.tabViewer = tabViewer;
+			TabViewer = tabViewer;
 			InitializeControls();
 		}
 
@@ -45,13 +45,13 @@ namespace Atlas.UI.Avalonia
 
 			//var commandBack = new RoutedCommand("Back", GetType());
 
-			commandBindingBack = new RelayCommand(
+			CommandBindingBack = new RelayCommand(
 				(obj) => CommandBackCanExecute(obj),
-				(obj) => tabViewer.SeekBackward());
+				(obj) => TabViewer.SeekBackward());
 
-			commandBindingForward = new RelayCommand(
+			CommandBindingForward = new RelayCommand(
 				(obj) => CommandForwardCanExecute(obj),
-				(obj) => tabViewer.SeekForward());
+				(obj) => TabViewer.SeekForward());
 
 			//project.navigator.CanSeekBackwardOb
 			//CommandBinder.
@@ -62,22 +62,22 @@ namespace Atlas.UI.Avalonia
 			//HotKeyManager.SetHotKey(button, gesture1);
 
 			// gray color 3289C7
-			buttonBack = AddButton("Back (Alt+Left)", Icons.Streams.Back, commandBindingBack);
-			buttonForward = AddButton("Forward (Alt+Right)", Icons.Streams.Forward, commandBindingForward);
+			ButtonBack = AddButton("Back (Alt+Left)", Icons.Streams.Back, CommandBindingBack);
+			ButtonForward = AddButton("Forward (Alt+Right)", Icons.Streams.Forward, CommandBindingForward);
 
 			AddSeparator();
-			buttonRefresh = AddButton("Refresh (Ctrl+R)", Icons.Streams.Refresh);
+			ButtonRefresh = AddButton("Refresh (Ctrl+R)", Icons.Streams.Refresh);
 			//buttonRefresh.Add();
-			buttonRefresh.Add(Refresh);
+			ButtonRefresh.Add(Refresh);
 
 			AddSeparator();
-			buttonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
-			buttonImport = AddButton("Import Link from Clipboard", Icons.Streams.Import);
+			ButtonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
+			ButtonImport = AddButton("Import Link from Clipboard", Icons.Streams.Import);
 
 #if DEBUG
 			AddSeparator();
-			buttonSnapshot = AddButton("Snapshot", Icons.Streams.Screenshot);
-			buttonSnapshotCancel = AddButton("Cancel Snapshot", Icons.Streams.Delete);
+			ButtonSnapshot = AddButton("Snapshot", Icons.Streams.Screenshot);
+			ButtonSnapshotCancel = AddButton("Cancel Snapshot", Icons.Streams.Delete);
 			SetSnapshotVisible(false);
 #endif
 
@@ -111,7 +111,7 @@ namespace Atlas.UI.Avalonia
 
 		private void Refresh(Call call)
 		{
-			tabViewer.Reload();
+			TabViewer.Reload();
 		}
 
 		private bool CommandBackCanExecute(object obj)
@@ -128,7 +128,7 @@ namespace Atlas.UI.Avalonia
 
 		public void SetSnapshotVisible(bool visible)
 		{
-			buttonSnapshotCancel.IsVisible = visible;
+			ButtonSnapshotCancel.IsVisible = visible;
 		}
 	}
 }

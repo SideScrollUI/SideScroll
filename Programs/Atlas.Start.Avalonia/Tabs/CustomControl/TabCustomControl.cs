@@ -34,10 +34,10 @@ namespace Atlas.Start.Avalonia.Tabs
 				};
 				model.AddObject(animation);
 
-				toolbar.buttonSearch.Click += ButtonSearch_Click;  // move logic into SearchToolbar Command
-				toolbar.buttonLoadNext.Click += ButtonLoadNext_Click;
-				toolbar.buttonCopyClipBoard.Click += ButtonCopyClipBoard_Click;
-				toolbar.buttonSleep.Click += ButtonSleep_Click;
+				toolbar.ButtonSearch.Click += ButtonSearch_Click;  // move logic into SearchToolbar Command
+				toolbar.ButtonLoadNext.Click += ButtonLoadNext_Click;
+				toolbar.ButtonCopyClipBoard.Click += ButtonCopyClipBoard_Click;
+				toolbar.ButtonSleep.Click += ButtonSleep_Click;
 
 				items = new ItemCollection<MyParams>();
 				for (int i = 0; i < 10; i++)
@@ -54,7 +54,7 @@ namespace Atlas.Start.Avalonia.Tabs
 
 			private void ButtonSearch_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 			{
-				toolbar.textBoxStatus.Text = "Searching";
+				toolbar.TextBoxStatus.Text = "Searching";
 				StartTask(Search, true, true);
 			}
 
@@ -66,7 +66,7 @@ namespace Atlas.Start.Avalonia.Tabs
 
 			private void ShowSearchResults(Call call, params object[] objects)
 			{
-				toolbar.textBoxStatus.Text = "Finished";
+				toolbar.TextBoxStatus.Text = "Finished";
 			}
 
 			private void ButtonLoadNext_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)

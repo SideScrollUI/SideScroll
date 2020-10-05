@@ -7,13 +7,13 @@ namespace Atlas.Start.Avalonia.Tabs
 {
 	public class TabControlSearchToolbar : TabControlToolbar
 	{
-		public ToolbarButton buttonSearch;
-		public ToolbarButton buttonLoadAdd;
-		public ToolbarButton buttonLoadNext;
-		public ToolbarButton buttonSleep;
-		public ToolbarButton buttonCopyClipBoard;
+		public ToolbarButton ButtonSearch;
+		public ToolbarButton ButtonLoadAdd;
+		public ToolbarButton ButtonLoadNext;
+		public ToolbarButton ButtonSleep;
+		public ToolbarButton ButtonCopyClipBoard;
 
-		public TextBox textBoxStatus;
+		public TextBox TextBoxStatus;
 
 		public TabControlSearchToolbar(TabInstance tabInstance) : base(tabInstance)
 		{
@@ -26,16 +26,16 @@ namespace Atlas.Start.Avalonia.Tabs
 			//CommandBinder.
 			//CommandBindings.Add(commandBindingBack);
 
-			buttonSearch = AddButton("Search", Icons.Streams.Search);
-			buttonLoadNext = AddButton("Next", Icons.Streams.Forward);
-			buttonSleep = AddButton("Sleep", Icons.Streams.Refresh);
+			ButtonSearch = AddButton("Search", Icons.Streams.Search);
+			ButtonLoadNext = AddButton("Next", Icons.Streams.Forward);
+			ButtonSleep = AddButton("Sleep", Icons.Streams.Refresh);
 			AddSeparator();
-			buttonLoadAdd = AddButton("Add", Icons.Streams.Add);
+			ButtonLoadAdd = AddButton("Add", Icons.Streams.Add);
 			AddSeparator();
 			AddButton("Save", Icons.Streams.Save);
 			AddSeparator();
-			buttonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
-			textBoxStatus = AddLabelText("Status");
+			ButtonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
+			TextBoxStatus = AddLabelText("Status");
 		}
 	}
 }
