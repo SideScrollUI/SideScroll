@@ -26,13 +26,6 @@ namespace Atlas.Serialize
 			typeof(HashSet<>),
 		};
 
-		/*public enum TypeClass
-		{
-			primitive,
-			list,
-			dictionary,
-			hashset
-		}*/
 		public string Name { get; set; }
 		public string AssemblyQualifiedName { get; set; }
 		public bool CanReference { get; set; } // whether the object can reference other types
@@ -58,6 +51,9 @@ namespace Atlas.Serialize
 		public bool IsSerialized;
 		public bool HasConstructor;
 		public bool HasSubType;
+
+		// Type lookup can take a long time, especially when there's missing types
+		private static Dictionary<string, Type> _typeCache = new Dictionary<string, Type>();
 
 		public TypeSchema(Type type)
 		{
@@ -116,7 +112,7 @@ namespace Atlas.Serialize
 
 		public override string ToString() => Name;
 
-		// BinaryFormatter uses[Serializable], should we allow that?
+		// BinaryFormatter uses [Serializable], should we allow that?
 		private bool GetIsPublic()
 		{
 			if (IsPrivate)
@@ -180,9 +176,6 @@ namespace Atlas.Serialize
 			LoadFields(reader);
 			LoadProperties(reader);
 		}
-
-		// Type lookup can take a long time, especially when there's missing types
-		private static Dictionary<string, Type> _typeCache = new Dictionary<string, Type>();
 
 		private void LoadType(Log log)
 		{

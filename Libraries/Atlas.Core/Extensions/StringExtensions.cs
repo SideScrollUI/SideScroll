@@ -22,10 +22,11 @@ namespace Atlas.Extensions
 
 		public static string TrimStart(this string input, string prefix)
 		{
-			if (input == null || prefix == null)
+			if (input == null || prefix == null || prefix.Length == 0)
 				return input;
-			if (input.StartsWith(prefix))
-				return input.Substring(prefix.Length);
+
+			while (input.StartsWith(prefix))
+				input = input.Substring(prefix.Length);
 			return input;
 		}
 

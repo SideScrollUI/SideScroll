@@ -9,6 +9,9 @@ namespace Atlas.Core
 	{
 		public static string Combine(string path, params string[] paths)
 		{
+			if (path == null)
+				return null;
+
 			foreach (string part in paths)
 			{
 				string name = part ?? "(null)";

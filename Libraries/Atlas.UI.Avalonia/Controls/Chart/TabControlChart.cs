@@ -362,23 +362,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void LoadPlotModel()
 		{
-			UnloadModel();
 			RecreatePlotModel();
 
-			foreach (ListSeries listSeries in ListGroup.Series)
-			{
-				AddSeries(listSeries);
-			}
-
-			// would need to be able to disable to use
-			//foreach (ListSeries listSeries in ChartSettings.ListSeries)
-			//	AddSeries(listSeries);
-
-			AddAxis();
-			UpdateValueAxis();
-			UpdateLinearAxis();
-
-			PlotView.Model = PlotModel;
 			IsVisible = true;
 		}
 
@@ -402,6 +387,20 @@ namespace Atlas.UI.Avalonia.Controls
 				LegendTextColor = OxyColors.LightGray,
 				SelectionColor = OxyColors.Blue,
 			};
+
+			foreach (ListSeries listSeries in ListGroup.Series)
+			{
+				AddSeries(listSeries);
+			}
+
+			// would need to be able to disable to use
+			//foreach (ListSeries listSeries in ChartSettings.ListSeries)
+			//	AddSeries(listSeries);
+
+			AddAxis();
+			UpdateValueAxis();
+			UpdateLinearAxis();
+
 			PlotView.Model = PlotModel;
 		}
 
