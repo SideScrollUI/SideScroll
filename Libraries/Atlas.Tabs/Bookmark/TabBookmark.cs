@@ -91,26 +91,8 @@ namespace Atlas.Tabs
 			foreach (object obj in objs)
 			{
 				string label = obj.ToString();
-				var newBookmark = new TabBookmark()
-				{
-					ViewSettings = new TabViewSettings()
-					{
-						TabDataSettings = new List<TabDataSettings>()
-						{
-							new TabDataSettings()
-							{
-								SelectionType = SelectionType.User,
-								SelectedRows = new HashSet<SelectedRow>()
-								{
-									new SelectedRow()
-									{
-										Label = label,
-									},
-								},
-							},
-						},
-					},
-				};
+				var newBookmark = new TabBookmark();
+				newBookmark.Select(label);
 				if (tabBookmark != null)
 					tabBookmark.ChildBookmarks.Add(label, newBookmark);
 				else
@@ -157,6 +139,27 @@ namespace Atlas.Tabs
 				return t;
 
 			return default;
+		}
+
+		public void Select(string label)
+		{
+			ViewSettings = new TabViewSettings()
+			{
+				TabDataSettings = new List<TabDataSettings>()
+				{
+					new TabDataSettings()
+					{
+						SelectionType = SelectionType.User,
+						SelectedRows = new HashSet<SelectedRow>()
+						{
+							new SelectedRow()
+							{
+								Label = label,
+							},
+						},
+					},
+				},
+			};
 		}
 
 		public TabBookmark AddChild(string label)

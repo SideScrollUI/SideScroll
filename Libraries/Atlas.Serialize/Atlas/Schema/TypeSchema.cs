@@ -14,7 +14,9 @@ namespace Atlas.Serialize
 		{
 			typeof(string),
 			typeof(DateTime),
+			typeof(DateTimeOffset),
 			typeof(TimeSpan),
+			typeof(TimeZoneInfo),
 			typeof(Type),
 			typeof(object),
 		};

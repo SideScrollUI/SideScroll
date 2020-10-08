@@ -13,7 +13,7 @@ namespace Atlas.Tabs
 		{
 			string base64 = bookmark.ToBase64String(call, PublicOnly);
 			if (base64.Length > MaxLength)
-				return "Serialization size " + base64.Length + " > " + MaxLength;
+				return "Bookmark size " + base64.Length + " > " + MaxLength;
 			string uri = AtlasPrefix + base64;
 			return uri;
 		}

@@ -50,7 +50,6 @@ namespace Atlas.Tabs
 			TabInstance tabInstance = tab.Create();
 			tabInstance.Project = Project.Open(bookmarkCopy); 
 			tabInstance.iTab = this;
-			//tabInstance.ParentTabInstance = this;
 			tabInstance.SelectBookmark(bookmarkCopy.TabBookmark);
 			return tabInstance;
 		}

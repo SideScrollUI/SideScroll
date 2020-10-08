@@ -15,6 +15,7 @@ namespace Atlas.Tabs
 		public string Address => TabBookmark.Address;
 		public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
 		public TabBookmark TabBookmark { get; set; } = new TabBookmark();
+		public bool Imported { get; set; }
 
 		public Bookmark()
 		{
@@ -45,6 +46,7 @@ namespace Atlas.Tabs
 			serializer.PublicOnly = publicOnly;
 			serializer.LoadBase64String(encoded);
 			Bookmark bookmark = serializer.Load<Bookmark>(call);
+			bookmark.Imported = true;
 			return bookmark;
 		}
 	}
