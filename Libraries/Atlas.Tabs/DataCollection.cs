@@ -23,16 +23,16 @@ namespace Atlas.Tabs
 		public ItemCollectionUI<TTabType> Items { get; set; } = new ItemCollectionUI<TTabType>();
 		public TTabType NewTabItem { get; set; }
 
-		private DataRepoView<TDataType> dataRepoView;
-		private DataRepoView<TDataType> dataRepoSecondary; // saves and deletes goto a 2nd copy
-		private object[] tabParams;
+		public DataRepoView<TDataType> DataRepoView;
+		public DataRepoView<TDataType> DataRepoSecondary; // saves and deletes goto a 2nd copy
+		public object[] TabParams;
 		private Dictionary<TTabType, IDataItem> dataItemLookup;
 
 		public DataCollection(DataRepoView<TDataType> dataRepoView, params object[] tabParams)
 		{
-			this.dataRepoView = dataRepoView;
-			this.tabParams = tabParams;
-			this.dataRepoView.Items.CollectionChanged += Items_CollectionChanged;
+			DataRepoView = dataRepoView;
+			TabParams = tabParams;
+			DataRepoView.Items.CollectionChanged += Items_CollectionChanged;
 			Reload();
 			//Items.CollectionChanged += Items_CollectionChanged;
 		}
@@ -65,7 +65,7 @@ namespace Atlas.Tabs
 			dataItemLookup = new Dictionary<TTabType, IDataItem>();
 
 			//dataRepoBookmarks = project.DataApp.Open<TDataType>(null, DataKey);
-			foreach (DataItem<TDataType> dataItem in dataRepoView.Items)
+			foreach (DataItem<TDataType> dataItem in DataRepoView.Items)
 			{
 				// for autoselecting?
 				//if (bookmark.Name == TabInstance.CurrentBookmarkName)
@@ -77,7 +77,7 @@ namespace Atlas.Tabs
 		public TTabType Add(IDataItem dataItem)
 		{
 			var tabItem = new TTabType();
-			tabItem.Load(new Call(), dataItem.Object, tabParams);
+			tabItem.Load(new Call(), dataItem.Object, TabParams);
 			tabItem.OnDelete += Item_OnDelete;
 			Items.Add(tabItem);
 			dataItemLookup.Add(tabItem, dataItem);
@@ -106,23 +106,23 @@ namespace Atlas.Tabs
 			if (!dataItemLookup.TryGetValue(tab, out IDataItem dataItem))
 				return;
 
-			dataRepoView.Delete(dataItem.Key);
-			dataRepoSecondary?.Delete(dataItem.Key);
+			DataRepoView.Delete(dataItem.Key);
+			DataRepoSecondary?.Delete(dataItem.Key);
 			Items.Remove(tab);
 			//Reload();
 		}
 
 		public void Remove(string key)
 		{
-			dataRepoView.Delete(key);
-			TTabType existing = Items.SingleOrDefault(i => i.ToString() == key);
+			DataRepoView.Delete(key);
+			TTabType existing = Items.FirstOrDefault(i => i.ToString() == key);
 			if (existing != null)
 				Items.Remove(existing);
 		}
 
 		public void AddDataRepo(DataRepoView<TDataType> dataRepoView)
 		{
-			dataRepoSecondary = dataRepoView;
+			DataRepoSecondary = dataRepoView;
 		}
 	}
 }

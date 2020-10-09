@@ -143,6 +143,20 @@ namespace Atlas.Tabs
 
 		public void Select(string label)
 		{
+			Select(new List<string>() { label });
+		}
+
+		public void Select(IEnumerable<string> labels)
+		{
+			var selectedRows = new HashSet<SelectedRow>();
+			foreach (string label in labels)
+			{
+				var selectedRow = new SelectedRow()
+				{
+					Label = label,
+				};
+				selectedRows.Add(selectedRow);
+			}
 			ViewSettings = new TabViewSettings()
 			{
 				TabDataSettings = new List<TabDataSettings>()
@@ -150,13 +164,7 @@ namespace Atlas.Tabs
 					new TabDataSettings()
 					{
 						SelectionType = SelectionType.User,
-						SelectedRows = new HashSet<SelectedRow>()
-						{
-							new SelectedRow()
-							{
-								Label = label,
-							},
-						},
+						SelectedRows = selectedRows,
 					},
 				},
 			};

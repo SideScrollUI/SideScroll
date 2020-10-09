@@ -61,7 +61,7 @@ namespace Atlas.UI.Avalonia.View
 
 		public TabView(TabInstance tabInstance)
 		{
-			this.Instance = tabInstance;
+			Instance = tabInstance;
 			Initialize();
 		}
 

@@ -14,7 +14,7 @@ namespace Atlas.Tabs
 		public object Key { get; set; }
 		[HiddenColumn, InnerValue]
 		public object Value { get; set; }
-		public bool autoLoad = true;
+		public bool AutoLoad = true;
 
 #pragma warning disable 414
 		public event PropertyChangedEventHandler PropertyChanged = null;
@@ -61,15 +61,11 @@ namespace Atlas.Tabs
 			{
 				if (!includeBaseTypes && listProperty.PropertyInfo.DeclaringType != obj.GetType())
 					continue;
-				string name = listProperty.Name;
+#if !DEBUG
 				// Only show [DebugOnly] in debug mode
 				if (listProperty.PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
-				{
-#if !DEBUG
 					continue;
 #endif
-					name = "*" + name;
-				}
 
 				int metadataToken = listProperty.PropertyInfo.GetGetMethod(false).MetadataToken;
 

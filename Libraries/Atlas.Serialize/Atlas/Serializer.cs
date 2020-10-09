@@ -126,6 +126,9 @@ namespace Atlas.Serialize
 			for (int i = 0; i < TypeSchemas.Count; i++)
 			{
 				TypeSchema typeSchema = TypeSchemas[i];
+				if (PublicOnly && !typeSchema.IsPublic)
+					continue;
+
 				foreach (FieldSchema fieldSchema in typeSchema.FieldSchemas)
 				{
 					Type type = fieldSchema.NonNullableType;

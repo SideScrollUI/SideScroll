@@ -843,7 +843,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//if (listItem != null)
 				if (obj is ListItem listItem)
 				{
-					if (listItem.autoLoad == false)
+					if (listItem.AutoLoad == false)
 						continue;
 				}
 				if (obj is ListMember listMember)

@@ -21,8 +21,8 @@ namespace Atlas.Tabs
 	{
 		public PropertyInfo PropertyInfo;
 		public bool Cached;
-		private bool valueCached;
-		private object valueObject = null;
+		private bool _valueCached;
+		private object _valueObject = null;
 
 		[HiddenColumn]
 		public override bool Editable // rename to IsReadOnly?
@@ -55,12 +55,12 @@ namespace Atlas.Tabs
 				{
 					if (Cached)
 					{
-						if (!valueCached)
+						if (!_valueCached)
 						{
-							valueCached = true;
-							valueObject = PropertyInfo.GetValue(Object);
+							_valueCached = true;
+							_valueObject = PropertyInfo.GetValue(Object);
 						}
-						return valueObject;
+						return _valueObject;
 					}
 					return PropertyInfo.GetValue(Object);
 				}
@@ -102,6 +102,8 @@ namespace Atlas.Tabs
 			AutoLoad = !accessors[0].IsStatic;
 
 			Name = propertyInfo.Name;
+			if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+				Name = "*" + Name;
 			Name = Name.WordSpaced();
 			NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
