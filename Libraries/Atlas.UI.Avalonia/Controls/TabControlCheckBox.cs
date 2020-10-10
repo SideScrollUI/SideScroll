@@ -2,7 +2,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -34,7 +33,6 @@ namespace Atlas.UI.Avalonia.Controls
 			//MinWidth = 50;
 			MaxWidth = TabControlParams.ControlMaxWidth;
 			Margin = new Thickness(2, 2);
-			//Focusable = true; // already set?
 			//Padding = new Thickness(6, 3);
 		}
 

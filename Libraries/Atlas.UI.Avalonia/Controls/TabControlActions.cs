@@ -8,18 +8,19 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabControlActions : UserControl
 	{
-		private TabInstance tabInstance;
-		private TabModel tabModel;
-		
-		private ItemCollection<TaskCreator> taskItems;
-		public bool GridInitialized { get; private set; } = false;
-		private Dictionary<Button, TaskCreator> taskCreators = new Dictionary<Button, TaskCreator>();
+		public TabInstance TabInstance;
+		public TabModel TabModel;
+		public ItemCollection<TaskCreator> TaskItems;
+
+		public bool GridInitialized { get; private set; }
+
+		private Dictionary<Button, TaskCreator> _taskCreators = new Dictionary<Button, TaskCreator>();
 
 		public TabControlActions(TabInstance tabInstance, TabModel tabModel, ItemCollection<TaskCreator> taskItems)
 		{
-			this.tabInstance = tabInstance;
-			this.tabModel = tabModel;
-			this.taskItems = taskItems;
+			TabInstance = tabInstance;
+			TabModel = tabModel;
+			TaskItems = taskItems;
 
 			InitializeControls();
 		}
@@ -65,7 +66,7 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 
 			int rowIndex = 0;
-			foreach (TaskCreator taskCreator in tabModel.Actions)
+			foreach (TaskCreator taskCreator in TabModel.Actions)
 			{
 				var rowDefinition = new RowDefinition();
 				rowDefinition.Height = new GridLength(1, GridUnitType.Auto);
@@ -90,7 +91,7 @@ namespace Atlas.UI.Avalonia.Controls
 				});*/
 				button.Margin = new Thickness(4, 2);
 				button.Click += Button_Click;
-				taskCreators[button] = taskCreator;
+				_taskCreators[button] = taskCreator;
 				//stackPanel.Children.Add(button);
 				Grid.SetRow(button, rowIndex++);
 				containerGrid.Children.Add(button);
@@ -149,8 +150,8 @@ namespace Atlas.UI.Avalonia.Controls
 		private void Button_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			Button button = (Button)sender;
-			TaskCreator taskCreator = taskCreators[button];
-			tabInstance.StartTask(taskCreator, taskCreator.ShowTask);
+			TaskCreator taskCreator = _taskCreators[button];
+			TabInstance.StartTask(taskCreator, taskCreator.ShowTask);
 			//this.UnselectAll();
 		}
 

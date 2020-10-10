@@ -15,13 +15,13 @@ namespace Atlas.UI.Avalonia.Controls
 	public class TabControlParams : Grid
 	{
 		public const int ControlMaxWidth = 500;
-		private TabInstance tabInstance;
-		private object obj;
+		public TabInstance TabInstance; // remove?
+		public object Object;
 
 		public TabControlParams(TabInstance tabInstance, object obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
 		{
-			this.tabInstance = tabInstance;
-			this.obj = obj;
+			TabInstance = tabInstance;
+			Object = obj;
 
 			InitializeControls(columnDefinitions);
 
@@ -59,7 +59,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddSummary()
 		{
-			var summaryAttribute = obj.GetType().GetCustomAttribute<SummaryAttribute>();
+			var summaryAttribute = Object.GetType().GetCustomAttribute<SummaryAttribute>();
 			if (summaryAttribute == null)
 				return;
 
@@ -117,20 +117,20 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddControl(Control control, int columnIndex, int rowIndex)
 		{
-			Grid.SetColumn(control, columnIndex);
-			Grid.SetRow(control, rowIndex);
+			SetColumn(control, columnIndex);
+			SetRow(control, rowIndex);
 			Children.Add(control);
 		}
 
 		public Control AddPropertyRow(string propertyName)
 		{
-			PropertyInfo propertyInfo = obj.GetType().GetProperty(propertyName);
-			return AddPropertyRow(new ListProperty(obj, propertyInfo));
+			PropertyInfo propertyInfo = Object.GetType().GetProperty(propertyName);
+			return AddPropertyRow(new ListProperty(Object, propertyInfo));
 		}
 
 		public Control AddPropertyRow(PropertyInfo propertyInfo)
 		{
-			return AddPropertyRow(new ListProperty(obj, propertyInfo));
+			return AddPropertyRow(new ListProperty(Object, propertyInfo));
 		}
 
 		public Control AddPropertyRow(ListProperty property)

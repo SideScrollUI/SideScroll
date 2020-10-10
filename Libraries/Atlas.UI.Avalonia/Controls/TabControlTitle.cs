@@ -10,14 +10,15 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabControlTitle : UserControl
 	{
+		public TabInstance TabInstance;
 		public string Label { get; set; }
-		private TextBlock title;
-		private TabInstance tabInstance;
+
+		public TextBlock TextBlock;
 		//private CheckBox checkBox;
 
 		public TabControlTitle(TabInstance tabInstance, string name = null)
 		{
-			this.tabInstance = tabInstance;
+			TabInstance = tabInstance;
 			Label = name ?? tabInstance.Label;
 			Label = new StringReader(Label).ReadLine();
 
@@ -46,7 +47,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			// Add a wrapper class with a border?
 			// Need to make the desired size for this a constant x
-			title = new TextBlock()
+			TextBlock = new TextBlock()
 			{
 				Text = Label,
 				FontSize = 15,
@@ -63,7 +64,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				BorderThickness = new Thickness(5, 2, 2, 2),
 				BorderBrush = Theme.TitleBackground,
-				Child = title,
+				Child = TextBlock,
 			};
 			containerGrid.Children.Add(borderPaddingTitle);
 
@@ -79,7 +80,7 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			checkBox.Click += CheckBox_Click;*/
 
-			if (tabInstance.Model.Notes != null && tabInstance.Model.Notes.Length > 0)
+			if (TabInstance.Model.Notes != null && TabInstance.Model.Notes.Length > 0)
 			{
 				//Button button = new Button();
 				Image image = AvaloniaAssets.Images.Info;
@@ -115,7 +116,7 @@ namespace Atlas.UI.Avalonia.Controls
 			set
 			{
 				Label = value;
-				title.Text = value;
+				TextBlock.Text = value;
 			}
 		}
 	}

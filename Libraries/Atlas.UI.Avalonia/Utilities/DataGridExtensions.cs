@@ -38,10 +38,9 @@ namespace Atlas.Extensions
 				{
 					sb.AppendLine('(' + propertyName + ')');
 				}
-				//object content = dataColumn.GetCellValue(item, dataColumn.ClipboardContentBinding);
+				//object content = column.GetCellValue(item, column.ClipboardContentBinding);
 			}
-			string text = sb.ToString();
-			return text;
+			return sb.ToString();
 		}
 
 		public static string RowToString(this DataGrid dataGrid, object obj)
@@ -56,6 +55,7 @@ namespace Atlas.Extensions
 				Binding binding = (Binding)column.Binding;
 				if (binding == null) // Buttons don't have a binding
 					continue;
+
 				string propertyName = binding.Path;
 				sb.Append(propertyName + ": ");
 				PropertyInfo propertyInfo = type.GetProperty(propertyName);
@@ -70,8 +70,7 @@ namespace Atlas.Extensions
 					sb.AppendLine('(' + propertyName + ')');
 				}
 			}
-			string text = sb.ToString();
-			return text;
+			return sb.ToString();
 		}
 
 		public static string SelectedToString(this DataGrid dataGrid)
@@ -83,8 +82,7 @@ namespace Atlas.Extensions
 				out List<ColumnInfo> columns,
 				out List<List<string>> contentRows);
 
-			string text = TableToString(columns, contentRows);
-			return text;
+			return TableToString(columns, contentRows);
 		}
 
 		public static string ToStringTable(this DataGrid dataGrid)
@@ -96,8 +94,7 @@ namespace Atlas.Extensions
 				out List<ColumnInfo> columns,
 				out List<List<string>> contentRows);
 
-			string text = TableToString(columns, contentRows);
-			return text;
+			return TableToString(columns, contentRows);
 		}
 
 		public static string ToCsv(this DataGrid dataGrid)
@@ -185,6 +182,5 @@ namespace Atlas.Extensions
 				contentRows.Add(stringCells);
 			}
 		}
-
 	}
 }

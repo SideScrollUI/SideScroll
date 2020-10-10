@@ -15,11 +15,7 @@ namespace Atlas.UI.Avalonia
 			if (value == null)
 				return null;
 
-			//if (targetType == typeof(string))
-			//	return value.Formatted();
-
 			object result = ChangeType(value, targetType);
-			//dynamic result = System.Convert.ChangeType(value, targetType);
 			return result;
 		}
 
@@ -29,7 +25,6 @@ namespace Atlas.UI.Avalonia
 				return null;
 
 			object result = ChangeType(value, targetType);
-
 			return result;
 		}
 

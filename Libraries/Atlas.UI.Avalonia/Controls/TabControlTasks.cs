@@ -12,7 +12,8 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabControlTasks : Grid, IDisposable
 	{
-		private TabInstance tabInstance;
+		public TabInstance TabInstance;
+
 		private TabControlDataGrid tabControlDataGrid;
 
 		public event EventHandler<EventArgs> OnSelectionChanged;
@@ -24,7 +25,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			get
 			{
-				foreach (var task in tabInstance.Model.Tasks)
+				foreach (var task in TabInstance.Model.Tasks)
 				{
 					if (task.ShowTask || task.TaskStatus == System.Threading.Tasks.TaskStatus.Faulted)
 						return true;
@@ -32,7 +33,7 @@ namespace Atlas.UI.Avalonia.Controls
 				return false;
 			}
 		}
-		public override string ToString() => tabInstance.Model.Name;
+		public override string ToString() => TabInstance.Model.Name;
 
 		private TabControlTasks()
 		{
@@ -41,7 +42,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public TabControlTasks(TabInstance tabInstance)
 		{
-			this.tabInstance = tabInstance;
+			TabInstance = tabInstance;
 			Initialize();
 		}
 
@@ -69,7 +70,7 @@ namespace Atlas.UI.Avalonia.Controls
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			tabControlDataGrid = new TabControlDataGrid(tabInstance, tabInstance.Model.Tasks, false) // don't autogenerate
+			tabControlDataGrid = new TabControlDataGrid(TabInstance, TabInstance.Model.Tasks, false) // don't autogenerate
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
@@ -87,7 +88,7 @@ namespace Atlas.UI.Avalonia.Controls
 			//tabDataGrid.Initialize();
 			Children.Add(tabControlDataGrid);
 
-			if (tabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
+			if (TabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
 				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
 		}
 
@@ -111,9 +112,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
-				if (autoSelectNew && e.NewStartingIndex >= 0 && tabInstance.Model.Tasks.Count > 0)
+				if (autoSelectNew && e.NewStartingIndex >= 0 && TabInstance.Model.Tasks.Count > 0)
 				{
-					TaskInstance taskInstance = tabInstance.Model.Tasks.Last();
+					TaskInstance taskInstance = TabInstance.Model.Tasks.Last();
 					if (tabControlDataGrid.SelectedItem == taskInstance)
 						UpdateSelection();
 					else
@@ -128,7 +129,7 @@ namespace Atlas.UI.Avalonia.Controls
 						taskInstance.OnComplete = () => Dispatcher.UIThread.Post(() => TaskCompleted(taskInstance), DispatcherPriority.SystemIdle);
 					}
 					int lineHeight = 26;
-					tabControlDataGrid.MinHeight = Math.Min(tabInstance.Model.Tasks.Count * lineHeight + lineHeight, 6 * lineHeight);
+					tabControlDataGrid.MinHeight = Math.Min(TabInstance.Model.Tasks.Count * lineHeight + lineHeight, 6 * lineHeight);
 				}
 			}
 		}
@@ -167,7 +168,7 @@ namespace Atlas.UI.Avalonia.Controls
 			tabControlDataGrid.OnSelectionChanged -= TabData_OnSelectionChanged;
 			tabControlDataGrid.Dispose();
 
-			if (tabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
+			if (TabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
 				iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
 		}
 	}

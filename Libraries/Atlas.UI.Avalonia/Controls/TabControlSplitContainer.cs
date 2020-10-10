@@ -6,7 +6,6 @@ using Avalonia.Media;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -28,8 +27,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public double MinDesiredWidth = 100;
 		public double MaxDesiredWidth = double.MaxValue;
 
-		public List<Item> gridItems = new List<Item>();
-
+		private List<Item> _gridItems = new List<Item>();
 
 		public class Item
 		{
@@ -115,7 +113,7 @@ namespace Atlas.UI.Avalonia.Controls
 				Control = control,
 				Fill = fill,
 			};
-			gridItems.Add(item);
+			_gridItems.Add(item);
 			AddSeparatorRowDefinition(RowDefinitions.Count);
 			/*if (separatorType == SeparatorType.Splitter)
 				AddRowSplitter(RowDefinitions.Count);
@@ -170,10 +168,10 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			GridSplitters.Clear();
 
-			Debug.Assert(gridItems.Count * 2 == RowDefinitions.Count);
+			Debug.Assert(_gridItems.Count * 2 == RowDefinitions.Count);
 			int index = 0;
 			//int prevStretch = -1; // todo: we can figure out splitters vs spacers automatically via fill property
-			foreach (var gridItem in gridItems)
+			foreach (var gridItem in _gridItems)
 			{
 				if (index > 0)
 					AddGridSplitter(index);
@@ -269,11 +267,10 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private List<Control> prevOrderedControls;
 		private void AddControls(Dictionary<object, Control> oldControls, List<Control> orderedControls)
 		{
 			//RowDefinitions.Clear();
-			gridItems.Clear();
+			_gridItems.Clear();
 			int newIndex = 1;
 			foreach (Control control in orderedControls)
 			{
@@ -282,7 +279,7 @@ namespace Atlas.UI.Avalonia.Controls
 					Control = control,
 					Fill = true,
 				};
-				gridItems.Add(item);
+				_gridItems.Add(item);
 
 				bool fill = true;// !(control is TabNotes); // don't show for notes, needs to be configurable
 				if (!Children.Contains(control))
@@ -292,15 +289,11 @@ namespace Atlas.UI.Avalonia.Controls
 				}
 				newIndex += 2; // leave spot for splitters
 			}
-			prevOrderedControls = orderedControls;
 		}
 
 		// Only used for child controls right now
 		public void SetControls(Dictionary<object, Control> newControls, List<Control> orderedControls)
 		{
-			//if (prevOrderedControls != null && orderedControls.SequenceEqual(prevOrderedControls))
-			//	return;
-
 			Dictionary<object, Control> oldControls = GridControls;
 
 			// don't clear old controls so we invalidate container as little as possible when we resize the remaining

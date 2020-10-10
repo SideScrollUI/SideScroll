@@ -20,11 +20,7 @@ namespace Atlas.UI.Avalonia
 			if (value == null)
 				return null;
 
-			//if (targetType == typeof(string))
-			//	return value.Formatted();
-
 			object result = ChangeType(value, targetType, MaxLength);
-			//dynamic result = System.Convert.ChangeType(value, targetType);
 			return result;
 		}
 
@@ -32,14 +28,6 @@ namespace Atlas.UI.Avalonia
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			return originalValue;
-			// once a string, keep it as a string for copying to the DataGrid ClipBoard
-			//return value;
-			/*if (value == null)
-				return null;
-
-			object result = ChangeType(value, targetType);
-
-			return result;*/
 		}
 
 		public static object ChangeType(object value, Type targetType, int maxLength)

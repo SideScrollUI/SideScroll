@@ -7,7 +7,6 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using OxyPlot.Avalonia;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,13 +15,14 @@ namespace Atlas.UI.Avalonia.Controls
 	public class TabControlChartLegend : Grid
 	{
 		public TabControlChart TabControlChart;
-		private PlotView plotView;
+		public PlotView PlotView;
 		public ListGroup ListGroup;
-		private ScrollViewer scrollViewer;
-		private WrapPanel wrapPanel;
-		private TextBlock textBlockSum;
-		public List<TabChartLegendItem> legendItems = new List<TabChartLegendItem>();
-		public Dictionary<string, TabChartLegendItem> idxLegendItems = new Dictionary<string, TabChartLegendItem>();
+		public List<TabChartLegendItem> LegendItems = new List<TabChartLegendItem>();
+		private Dictionary<string, TabChartLegendItem> _idxLegendItems = new Dictionary<string, TabChartLegendItem>();
+
+		private ScrollViewer _scrollViewer;
+		private WrapPanel _wrapPanel;
+		private TextBlock _textBlockSum;
 
 		public event EventHandler<EventArgs> OnSelectionChanged;
 		public event EventHandler<EventArgs> OnVisibleChanged;
@@ -30,7 +30,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public TabControlChartLegend(TabControlChart tabControlChart)
 		{
 			TabControlChart = tabControlChart;
-			plotView = tabControlChart.PlotView;
+			PlotView = tabControlChart.PlotView;
 			ListGroup = tabControlChart.ListGroup;
 			InitializeControls();
 		}
@@ -40,7 +40,7 @@ namespace Atlas.UI.Avalonia.Controls
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			wrapPanel = new WrapPanel()
+			_wrapPanel = new WrapPanel()
 			{
 				Orientation = ListGroup.Horizontal ? Orientation.Horizontal : Orientation.Vertical,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -48,20 +48,20 @@ namespace Atlas.UI.Avalonia.Controls
 				Margin = new Thickness(6),
 			};
 
-			scrollViewer = new ScrollViewer()
+			_scrollViewer = new ScrollViewer()
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
 				VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-				Content = wrapPanel,
+				Content = _wrapPanel,
 			};
 
-			Children.Add(scrollViewer);
+			Children.Add(_scrollViewer);
 
 			if (ListGroup.ShowLegend && ListGroup.ShowOrder && !ListGroup.Horizontal)
 			{
-				textBlockSum = new TextBlock()
+				_textBlockSum = new TextBlock()
 				{
 					Text = "Total",
 					Foreground = Theme.BackgroundText,
@@ -69,7 +69,7 @@ namespace Atlas.UI.Avalonia.Controls
 					HorizontalAlignment = HorizontalAlignment.Right,
 				};
 				if (ListGroup.UnitName != null)
-					textBlockSum.Text += " - " + ListGroup.UnitName;
+					_textBlockSum.Text += " - " + ListGroup.UnitName;
 			}
 
 			RefreshModel();
@@ -92,22 +92,22 @@ namespace Atlas.UI.Avalonia.Controls
 					SelectLegendItem(legendItem);
 			};
 			//this.Children.Add(legendItem);
-			legendItems.Add(legendItem);
+			LegendItems.Add(legendItem);
 			if (series.Title != null)
-				idxLegendItems.Add(series.Title, legendItem);
+				_idxLegendItems.Add(series.Title, legendItem);
 			return legendItem;
 		}
 
 		// Show items in order of count, retaining original order for unused values
 		private void UpdatePositions()
 		{
-			wrapPanel.Children.Clear();
-			if (textBlockSum != null)
-				wrapPanel.Children.Add(textBlockSum);
+			_wrapPanel.Children.Clear();
+			if (_textBlockSum != null)
+				_wrapPanel.Children.Add(_textBlockSum);
 
 			var nonzero = new List<TabChartLegendItem>();
 			var unused = new List<TabChartLegendItem>();
-			foreach (TabChartLegendItem legendItem in idxLegendItems.Values)
+			foreach (TabChartLegendItem legendItem in _idxLegendItems.Values)
 			{
 				if (legendItem.Count > 0)
 					nonzero.Add(legendItem);
@@ -122,13 +122,13 @@ namespace Atlas.UI.Avalonia.Controls
 				for (int i = 0; i < ordered.Count; i++)
 					ordered[i].Index = i + 1;
 			}
-			wrapPanel.Children.AddRange(ordered);
+			_wrapPanel.Children.AddRange(ordered);
 		}
 
 		private void SelectLegendItem(TabChartLegendItem legendItem)
 		{
 			int selectedCount = 0;
-			foreach (TabChartLegendItem item in legendItems)
+			foreach (TabChartLegendItem item in LegendItems)
 			{
 				if (item.IsChecked == true)
 					selectedCount++;
@@ -153,7 +153,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (oxySeries.Title == null)
 				return;
-			if (idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
+			if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
 			{
 				SelectLegendItem(legendItem);
 			}
@@ -164,11 +164,11 @@ namespace Atlas.UI.Avalonia.Controls
 			if (oxySeries.Title == null)
 				return;
 			// Clear all first before setting to avoid event race conditions
-			foreach (TabChartLegendItem item in legendItems)
+			foreach (TabChartLegendItem item in LegendItems)
 				item.Highlight = false;
-			if (idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
+			if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
 			{
-				foreach (TabChartLegendItem item in legendItems)
+				foreach (TabChartLegendItem item in LegendItems)
 					item.Highlight = (legendItem == item);
 			}
 			UpdateVisibleSeries();
@@ -176,7 +176,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void SetAllVisible(bool selected, bool update = false)
 		{
-			foreach (TabChartLegendItem legendItem in legendItems)
+			foreach (TabChartLegendItem legendItem in LegendItems)
 			{
 				legendItem.IsChecked = selected;
 			}
@@ -189,21 +189,21 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void RefreshModel()
 		{
-			if (plotView.Model == null)
+			if (PlotView.Model == null)
 				return;
 
-			wrapPanel.Children.Clear();
+			_wrapPanel.Children.Clear();
 			foreach (var oxyListSeries in TabControlChart.OxyListSeriesList)
 			{
 				string title = oxyListSeries.OxySeries.Title;
 				if (title == null)
 					continue;
-				if (!idxLegendItems.TryGetValue(title, out TabChartLegendItem legendItem))
+				if (!_idxLegendItems.TryGetValue(title, out TabChartLegendItem legendItem))
 				{
 					legendItem = AddSeries(oxyListSeries);
 				}
-				if (!wrapPanel.Children.Contains(legendItem))
-					wrapPanel.Children.Add(legendItem);
+				if (!_wrapPanel.Children.Contains(legendItem))
+					_wrapPanel.Children.Add(legendItem);
 			}
 			UpdatePositions();
 
@@ -223,27 +223,27 @@ namespace Atlas.UI.Avalonia.Controls
 				Grid.SetRow(legendItem, row++);
 			}*/
 
-			Dispatcher.UIThread.InvokeAsync(() => plotView.Model?.InvalidatePlot(true), DispatcherPriority.Background);
+			Dispatcher.UIThread.InvokeAsync(() => PlotView.Model?.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
 		public void Unload()
 		{
-			wrapPanel.Children.Clear();
-			idxLegendItems.Clear();
-			legendItems.Clear();
+			_wrapPanel.Children.Clear();
+			_idxLegendItems.Clear();
+			LegendItems.Clear();
 		}
 
 		public void UpdateVisibleSeries()
 		{
-			if (plotView.Model == null)
+			if (PlotView.Model == null)
 				return;
-			foreach (OxyPlot.Series.Series series in plotView.Model.Series)
+			foreach (OxyPlot.Series.Series series in PlotView.Model.Series)
 			{
 				if (series is OxyPlot.Series.LineSeries lineSeries)
 				{
 					if (lineSeries.Title == null)
 						continue;
-					if (idxLegendItems.TryGetValue(lineSeries.Title, out TabChartLegendItem legendItem))
+					if (_idxLegendItems.TryGetValue(lineSeries.Title, out TabChartLegendItem legendItem))
 					{
 						legendItem.UpdateVisible(lineSeries);
 					}
@@ -252,13 +252,13 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					if (scatterSeries.Title == null)
 						continue;
-					if (idxLegendItems.TryGetValue(scatterSeries.Title, out TabChartLegendItem legendItem))
+					if (_idxLegendItems.TryGetValue(scatterSeries.Title, out TabChartLegendItem legendItem))
 					{
 						legendItem.UpdateVisible(scatterSeries);
 					}
 				}
 			}
-			Dispatcher.UIThread.InvokeAsync(() => plotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
+			Dispatcher.UIThread.InvokeAsync(() => PlotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
 		private void LegendItem_SelectionChanged(object sender, EventArgs e)
@@ -275,7 +275,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void UnhighlightAll(bool update = false)
 		{
-			foreach (TabChartLegendItem item in legendItems)
+			foreach (TabChartLegendItem item in LegendItems)
 			{
 				item.Highlight = false;
 			}
@@ -285,7 +285,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void UpdateHighlight(bool showFaded)
 		{
-			foreach (TabChartLegendItem item in legendItems)
+			foreach (TabChartLegendItem item in LegendItems)
 			{
 				item.UpdateHighlight(showFaded);
 			}

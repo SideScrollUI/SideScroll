@@ -69,6 +69,7 @@ namespace Atlas.UI.Avalonia.Controls
 			OxyListSeries = oxyListSeries;
 			Series = oxyListSeries.OxySeries;
 			ListGroup = legend.ListGroup;
+
 			InitializeControls();
 		}
 

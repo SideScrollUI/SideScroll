@@ -47,8 +47,6 @@ namespace Atlas.UI.Avalonia.Controls
 				MinWidth = 90,
 				MaxWidth = 300,
 				IsEnabled = Property.Editable,
-
-				//MaxWidth = 200,
 				[Grid.ColumnProperty] = 0,
 			};
 			dateTimeConverter = new DateTimeValueConverter();
@@ -68,7 +66,6 @@ namespace Atlas.UI.Avalonia.Controls
 				Watermark = "15:30:45",
 				Margin = new Thickness(6, 0, 0, 0),
 				MinWidth = 75,
-				//MaxWidth = 150,
 				MaxWidth = 300,
 				Focusable = true, // already set?
 				//[Grid.RowProperty] = 0,

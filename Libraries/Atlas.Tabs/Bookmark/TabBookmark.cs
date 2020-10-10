@@ -1,7 +1,6 @@
 ﻿using Atlas.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Atlas.Tabs
 {
@@ -16,10 +15,13 @@ namespace Atlas.Tabs
 	[PublicData]
 	public class TabBookmark
 	{
+		private const string DefaultDataName = "default";
+
 		public Bookmark Bookmark { get; set; }
 		public string Name { get; set; }
 		public bool IsRoot { get; set; }
 		public ITab Tab { get; set; } // [TabRoot] will set this
+
 		public TabViewSettings ViewSettings = new TabViewSettings(); // list selections, doesn't know about children
 		public Dictionary<string, TabBookmark> ChildBookmarks { get; set; } = new Dictionary<string, TabBookmark>(); // doesn't know which tabData to use, maps id to child info
 		public string Address
@@ -45,10 +47,8 @@ namespace Atlas.Tabs
 				}
 				else
 				{
-					//string address = "";
 					if (ViewSettings == null)
 						return "";
-					//string address = "<" + tabConfiguration.Address + ">";
 					string address = ViewSettings.Address;
 					return address;
 				}
@@ -106,6 +106,12 @@ namespace Atlas.Tabs
 			return Name;// string.Join(",", Nodes.Keys);
 		}
 
+		public void Add(TabBookmark tabBookmark)
+		{
+			ChildBookmarks.Add(tabBookmark.Name, tabBookmark);
+			Select(ChildBookmarks.Keys);
+		}
+
 		public SortedDictionary<string, T> GetSelectedData<T>()
 		{
 			var items = new SortedDictionary<string, T>();
@@ -123,7 +129,7 @@ namespace Atlas.Tabs
 
 		public void SetData(object obj)
 		{
-			SetData("default", obj);
+			SetData(DefaultDataName, obj);
 		}
 
 		public void SetData(string name, object obj)
@@ -133,7 +139,7 @@ namespace Atlas.Tabs
 			ViewSettings.BookmarkData[name] = obj;
 		}
 
-		public T GetData<T>(string name = "default")
+		public T GetData<T>(string name = DefaultDataName)
 		{
 			if (ViewSettings != null && ViewSettings.BookmarkData != null && ViewSettings.BookmarkData.TryGetValue(name, out object obj) && obj is T t)
 				return t;
