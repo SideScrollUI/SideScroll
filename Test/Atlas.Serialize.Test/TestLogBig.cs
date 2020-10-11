@@ -1,7 +1,6 @@
 ﻿using Atlas.Core;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Atlas.Serialize.Test
 {
@@ -17,7 +16,6 @@ namespace Atlas.Serialize.Test
 			Error,
 			Alert
 		}
-		//public event PropertyChangedEventHandler PropertyChanged;
 		// Change everything to tags? const for created/message/childLog? harder to use then
 		public DateTime Created;// { get; set; }
 		public LogType Type { get; set; }
@@ -57,10 +55,7 @@ namespace Atlas.Serialize.Test
 
 		[InnerValue]
 		public ItemCollection<TestLogBig> items; // change to LRU for performance? No Binding?
-		//private SynchronizationContext context = null;
 		//private int contextID = 0;
-
-		//public event EventHandler<EventLogMessage> OnMessage;
 
 		public TestLogBig()
 		{

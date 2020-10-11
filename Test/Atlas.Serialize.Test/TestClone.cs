@@ -54,14 +54,14 @@ namespace Atlas.Serialize.Test
 			var testLog = new TestLogBig();
 			testLog.Child("test");
 
-			var output = serializer.Clone<TestLogBig>(log, testLog);
+			var output = serializer.Clone(log, testLog);
 		}
 
 		[Test, Description("Clone Test Log")]
 		public void CloneTestLog()
 		{
 			var testLog = new TestLog();
-			var output = serializer.Clone<TestLog>(log, testLog);
+			var output = serializer.Clone(log, testLog);
 		}
 
 		[Test, Description("Clone Log Timer 2")]
@@ -70,14 +70,14 @@ namespace Atlas.Serialize.Test
 			Log testLog = new Log();
 			using (testLog.Timer("timing"))
 				testLog.Add("child");
-			Log output = serializer.Clone<Log>(log, testLog);
+			Log output = serializer.Clone(log, testLog);
 		}
 
 		[Test, Description("Clone Log")]
 		public void CloneLog()
 		{
 			Log testLog = new Log();
-			Log output = serializer.Clone<Log>(log, testLog);
+			Log output = serializer.Clone(log, testLog);
 		}
 
 		[Test, Description("Clone Log Child")]
@@ -86,7 +86,7 @@ namespace Atlas.Serialize.Test
 			Log testLog = new Log();
 			testLog.Call("test");
 
-			Log output = serializer.Clone<Log>(log, testLog);
+			Log output = serializer.Clone(log, testLog);
 		}
 
 		[Test, Description("Clone Log Timer")]
@@ -94,7 +94,7 @@ namespace Atlas.Serialize.Test
 		{
 			var testLog = new LogTimer();
 
-			var output = serializer.Clone<LogTimer>(log, testLog);
+			var output = serializer.Clone(log, testLog);
 		}
 
 		private class MultipleArrays
@@ -107,7 +107,7 @@ namespace Atlas.Serialize.Test
 		public void ArrayMultipleTest()
 		{
 			var arrays = new MultipleArrays();
-			var output = serializer.Clone<MultipleArrays>(log, arrays);
+			var output = serializer.Clone(log, arrays);
 		}
 
 
@@ -136,7 +136,7 @@ namespace Atlas.Serialize.Test
 			Log testLog = new Log();
 			using (testLog.Timer("test")) { }
 
-			Log output = serializer.Clone<Log>(log, testLog);
+			Log output = serializer.Clone(log, testLog);
 		}
 
 		[Test, Description("Clone Properties")]
@@ -148,7 +148,7 @@ namespace Atlas.Serialize.Test
 				DoubleTest = 2.5,
 				StringTest = "abc"
 			};
-			var output = serializer.Clone<Properties>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.UintTest, input.UintTest);
 			Assert.AreEqual(output.DoubleTest, input.DoubleTest);
@@ -164,7 +164,7 @@ namespace Atlas.Serialize.Test
 				DoubleTest = 2.5,
 				StringTest = "abc"
 			};
-			var output = serializer.Clone<Primitives>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.UintTest, input.UintTest);
 			Assert.AreEqual(output.DoubleTest, input.DoubleTest);
@@ -184,7 +184,7 @@ namespace Atlas.Serialize.Test
 				value = 5
 			};
 
-			var output = serializer.Clone<StructTest>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(input, output);
 
@@ -199,7 +199,7 @@ namespace Atlas.Serialize.Test
 		{
 			DateTime input = DateTime.Now;
 
-			DateTime output = serializer.Clone<DateTime>(log, input);
+			DateTime output = serializer.Clone(log, input);
 
 			Assert.AreEqual(input, output);
 		}
@@ -210,7 +210,7 @@ namespace Atlas.Serialize.Test
 		{
 			DateTime input = DateTime.UtcNow;
 
-			DateTime output = serializer.Clone<DateTime>(log, input);
+			DateTime output = serializer.Clone(log, input);
 
 			Assert.AreEqual(input, output);
 		}
@@ -220,7 +220,7 @@ namespace Atlas.Serialize.Test
 		{
 			int? input = 1;
 
-			int? output = serializer.Clone<int?>(log, input);
+			int? output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output, input);
 		}
@@ -233,7 +233,7 @@ namespace Atlas.Serialize.Test
 				uintTest = 5,
 				doubleTest = 2.5
 			};
-			var output = serializer.Clone<NullablePrimitiveProperties>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.uintTest, input.uintTest);
 			Assert.AreEqual(output.doubleTest, input.doubleTest);
@@ -244,7 +244,7 @@ namespace Atlas.Serialize.Test
 		{
 			int? input = 5;
 
-			int? output = serializer.Clone<int?>(log, input);
+			int? output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output, input);
 		}
@@ -257,7 +257,7 @@ namespace Atlas.Serialize.Test
 				UintTest = 5,
 				DoubleTest = 2.5
 			};
-			var output = serializer.Clone<NullablePrimitives>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.UintTest, input.UintTest);
 			Assert.AreEqual(output.DoubleTest, input.DoubleTest);
@@ -268,7 +268,7 @@ namespace Atlas.Serialize.Test
 		{
 			int input = 5;
 			
-			int output = serializer.Clone<int>(log, input);
+			int output = serializer.Clone(log, input);
 
 			Assert.AreEqual(input, output);
 		}
@@ -281,7 +281,7 @@ namespace Atlas.Serialize.Test
 				TestEnum = EnumTest.MyEnum.b,
 			};
 			
-			var output = serializer.Clone<EnumTest>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.TestEnum, input.TestEnum);
 		}
@@ -291,7 +291,7 @@ namespace Atlas.Serialize.Test
 		{
 			Type type = typeof(string);
 			
-			Type output = serializer.Clone<Type>(log, type);
+			Type output = serializer.Clone(log, type);
 
 			Assert.AreEqual(type, output);
 		}
@@ -302,7 +302,7 @@ namespace Atlas.Serialize.Test
 			var input = new Dictionary<Type, string>();
 			input[typeof(int)] = "integer";
 			
-			var output = serializer.Clone<Dictionary<Type, string>>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.IsTrue(output.ContainsKey(typeof(int)));
 			Assert.IsTrue(output.ContainsValue("integer"));
@@ -314,7 +314,7 @@ namespace Atlas.Serialize.Test
 			var input = new Circular();
 			input.Self = input;
 			
-			Circular output = serializer.Clone<Circular>(log, input);
+			Circular output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.Self, output);
 		}
@@ -327,7 +327,7 @@ namespace Atlas.Serialize.Test
 			parent.Child = child;
 			child.Parent = parent;
 			
-			Parent loaded = serializer.Clone<Parent>(log, parent);
+			Parent loaded = serializer.Clone(log, parent);
 
 			Assert.AreEqual(loaded.Child.Parent, loaded);
 		}
@@ -337,7 +337,7 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new DictionaryTest();
 			
-			var output = serializer.Clone<DictionaryTest>(log, input);
+			var output = serializer.Clone(log, input);
 
 			//Assert.AreEqual(input, output);
 		}
@@ -348,7 +348,7 @@ namespace Atlas.Serialize.Test
 			int[] input = { 1, 2 };
 			input[0] = 5;
 			
-			int[] output = serializer.Clone<int[]>(log, input);
+			int[] output = serializer.Clone(log, input);
 
 			Assert.AreEqual(2, output.Length);
 			Assert.AreEqual(5, output[0]);
@@ -361,7 +361,7 @@ namespace Atlas.Serialize.Test
 			var input = new HashSet<string>();
 			input.Add("test");
 			
-			var output = serializer.Clone<HashSet<string>>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(input.Count, output.Count);
 			Assert.True(output.Contains("test"));
@@ -376,7 +376,7 @@ namespace Atlas.Serialize.Test
 				Serialized = 10,
 			};
 			
-			var output = serializer.Clone<NonSerializedTest>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.NonSerialized, 1);
 			Assert.AreEqual(output.Serialized, 10);
@@ -462,7 +462,7 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new SubClassContainer();
 			
-			var output = serializer.Clone<SubClassContainer>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.subSclass.A, input.subSclass.A);
 		}
@@ -473,7 +473,7 @@ namespace Atlas.Serialize.Test
 			var input = new List<Base>();
 
 			input.Add(new SubClass() { A = 5 });
-			var output = serializer.Clone<List<Base>>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output[0].A, 5);
 			//Assert.AreEqual(input, output); // only works on primitives
@@ -489,7 +489,7 @@ namespace Atlas.Serialize.Test
 			s.B = 3;
 			input[s] = b;
 			
-			var output = serializer.Clone<Dictionary<Base, Base>>(log, input);
+			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(s.B, 3);
 		}

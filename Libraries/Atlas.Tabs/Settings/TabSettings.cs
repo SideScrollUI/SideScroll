@@ -6,7 +6,6 @@ namespace Atlas.Tabs
 	[PublicData]
 	public class TabViewSettings
 	{
-		public string Name { get; set; }
 		public string Address
 		{
 			get
@@ -34,7 +33,6 @@ namespace Atlas.Tabs
 		public double? SplitterDistance { get; set; }
 
 		public List<TabDataSettings> TabDataSettings { get; set; } = new List<TabDataSettings>();
-		public Dictionary<string, object> BookmarkData { get; set; }
 
 		// change to string id?
 		public TabDataSettings GetData(int index)
@@ -49,7 +47,6 @@ namespace Atlas.Tabs
 
 		public List<TabDataSettings> ChartDataSettings { get; set; } = new List<TabDataSettings>(); // for the Chart's internal Data List
 
-		// Is this useful? Remove?
 		public List<SelectedRow> SelectedRows
 		{
 			get

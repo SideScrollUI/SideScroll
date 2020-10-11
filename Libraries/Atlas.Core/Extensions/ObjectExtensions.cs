@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 
 namespace Atlas.Core
 {
@@ -12,29 +11,22 @@ namespace Atlas.Core
 	{
 		public static string Formatted(this object obj, int maxLength = 500)
 		{
-			// don't override cell style formatting for numbers
 			if (obj == null)
 				return null;
 
 			Type type = obj.GetType();
 
-			if (obj is string text)
-			{
-				if (text.Length > maxLength)
-					return text.Substring(0, maxLength);
-				return text;
-			}
-
-			// handle decimal here: a decimal is considered a primitive
 			if (type.IsNumeric())
 			{
 				if (obj is double d)
 					return d.ToString("#,0.###");
+
 				MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) });
 				string format = type.IsDecimal() ? "G" : "N0";
 				object result = toStringMethod.Invoke(obj, new object[] { format });
 				if (result == null)
 					return null;
+
 				return (string)result;
 			}
 
@@ -42,8 +34,10 @@ namespace Atlas.Core
 			{
 				if (obj is DateTime dateTime)
 					return dateTime.ToString("yyyy-M-d H:mm:ss.FFFFFF");
+
 				if (obj is TimeSpan timeSpan)
 					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
+
 				// use any ToString() that overrides the base
 				MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes);
 				if (toStringMethod.DeclaringType != typeof(object) && toStringMethod.DeclaringType != typeof(ValueType))
@@ -55,11 +49,13 @@ namespace Atlas.Core
 				}
 			}
 
-			//string toString = obj.ToString();
-			//if (toString != null && !toString.StartsWith("("))
-			//	return toString;
-
-			if (obj is IDictionary dictionary)
+			if (obj is string text)
+			{
+				if (text.Length > maxLength)
+					return text.Substring(0, maxLength);
+				return text;
+			}
+			else if (obj is IDictionary dictionary)
 			{
 				return "{ " + dictionary.Count.ToString("N0") + " }";
 			}
@@ -103,23 +99,8 @@ namespace Atlas.Core
 			}
 			if (valueString.Length > maxLength)
 				return valueString.Substring(0, maxLength);
-			//description = description.Replace('+', '.');
 
 			return valueString;
-
-			/*
-			string label = type.Name;
-			if (!type.IsGenericType)
-			{
-				if (type.IsGenericType)
-				{
-					label = label.Split('`')[0]; // Dictionary`1
-					label += '<';
-					label += type.GenericTypeArguments[0].Name;
-					label += '>';
-				}
-			}
-			return "( " + label + " )";*/
 		}
 
 		public static string EnumerableToString(this IEnumerable enumerable)
@@ -156,6 +137,7 @@ namespace Atlas.Core
 			{
 				if (obj is DateTime dateTime)
 					return dateTime.ToString("yyyy-MM-dd H:mm:ss.FFFFFF");
+
 				// use any ToString() that overrides the base
 				MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes);
 				if (toStringMethod.DeclaringType != typeof(object) && toStringMethod.DeclaringType != typeof(ValueType))
@@ -163,10 +145,6 @@ namespace Atlas.Core
 					return obj.ToString();
 				}
 			}
-
-			//string toString = obj.ToString();
-			//if (toString != null && !toString.StartsWith("("))
-			//	return toString;
 
 			if (type.IsNumeric())
 			{

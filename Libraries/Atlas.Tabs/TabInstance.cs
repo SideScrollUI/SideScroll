@@ -83,7 +83,7 @@ namespace Atlas.Tabs
 		//public delegate void MethodInvoker();
 
 		public Project Project { get; set; }
-		public ITab iTab;
+		public ITab iTab; // Collision with derived Tab
 		//public Log Log => TaskInstance.Log;
 		public TaskInstance TaskInstance { get; set; } = new TaskInstance();
 		public TabModel Model { get; set; } = new TabModel();

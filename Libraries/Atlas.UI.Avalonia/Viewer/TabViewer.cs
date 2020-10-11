@@ -6,7 +6,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -29,12 +28,12 @@ namespace Atlas.UI.Avalonia
 		public Linker Linker { get; set; } = new Linker();
 
 		// Controls
-		protected Grid bottomGrid;
 		public TabViewerToolbar toolbar;
+		protected Grid bottomGrid;
 		protected ScrollViewer scrollViewer;
 		protected Grid contentGrid;
+		public TabView TabView;
 		private ScreenCapture screenCapture;
-		public TabView tabView;
 
 		public TabViewer(Project project) : base()
 		{
@@ -109,15 +108,13 @@ namespace Atlas.UI.Avalonia
 
 		public void Reload()
 		{
-			//LoadProject(project);
-			//tabView.Load();
 			TabBookmarks.Global = null;
-			tabView.Instance.Reload();
+			TabView.Instance.Reload();
 		}
 
 		private async Task LinkAsync(Call call)
 		{
-			Bookmark bookmark = tabView.Instance.CreateBookmark();
+			Bookmark bookmark = TabView.Instance.CreateBookmark();
 			bookmark.TabBookmark = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
 			string uri = Linker.GetLinkUri(call, bookmark);
 			await ClipBoardUtils.SetTextAsync(uri);
@@ -138,22 +135,22 @@ namespace Atlas.UI.Avalonia
 			if (TabBookmarks.Global != null)
 			{
 				// Add Bookmark to bookmark manager
-				tabView.Instance.SelectItem(TabBookmarks.Global); // select bookmarks first so the child tab autoselects the new bookmark
+				TabView.Instance.SelectItem(TabBookmarks.Global); // select bookmarks first so the child tab autoselects the new bookmark
 				TabBookmarks.Global.AddBookmark(call, bookmark);
 			}
-			else if (tabView != null)
+			else if (TabView != null)
 			{
 				// Load bookmark on top of everything (how navigation works)
 				bool reloadBase = true;
 				if (reloadBase)
 				{
-					tabView.Instance.TabBookmark = bookmark.TabBookmark;
+					TabView.Instance.TabBookmark = bookmark.TabBookmark;
 					Reload();
 				}
 				else
 				{
 					// only if TabBookmarks used, don't need to reload the tab
-					tabView.Instance.SelectBookmark(bookmark.TabBookmark);
+					TabView.Instance.SelectBookmark(bookmark.TabBookmark);
 				}
 			}
 			return bookmark;
@@ -283,11 +280,11 @@ namespace Atlas.UI.Avalonia
 				tabInstance.LoadDefaultBookmark();
 			}
 
-			tabView = new TabView(tabInstance);
-			tabView.Load();
+			TabView = new TabView(tabInstance);
+			TabView.Load();
 
 			//scrollViewer.Content = tabView;
-			contentGrid.Children.Add(tabView);
+			contentGrid.Children.Add(TabView);
 		}
 
 		// don't allow the scroll viewer to jump back to the left while we're loading content and the content grid width is fluctuating
@@ -300,14 +297,14 @@ namespace Atlas.UI.Avalonia
 		{
 			Bookmark bookmark = Project.Navigator.SeekBackward();
 			if (bookmark != null)
-				tabView.Instance.SelectBookmark(bookmark.TabBookmark);
+				TabView.Instance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		public void SeekForward()
 		{
 			Bookmark bookmark = Project.Navigator.SeekForward();
 			if (bookmark != null)
-				tabView.Instance.SelectBookmark(bookmark.TabBookmark);
+				TabView.Instance.SelectBookmark(bookmark.TabBookmark);
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e)
@@ -342,9 +339,6 @@ namespace Atlas.UI.Avalonia
 					e.Handled = true;
 					return;
 				}
-			}
-			else if (e.Key == Key.Escape)
-			{
 			}
 		}
 	}

@@ -42,7 +42,6 @@ namespace Atlas.Core
 			try
 			{
 				await CallAction.Invoke(call);
-				//await taskInstance;
 			}
 			catch (Exception e)
 			{

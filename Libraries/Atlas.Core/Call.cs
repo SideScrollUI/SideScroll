@@ -265,24 +265,25 @@ namespace Atlas.Core
 
 	public class CallTimer : Call, IDisposable
 	{
-		private Stopwatch stopwatch = new Stopwatch();
-		private System.Timers.Timer timer = new System.Timers.Timer();
-		public long ElapsedMilliseconds => stopwatch.ElapsedMilliseconds;
+		private Stopwatch _stopwatch = new Stopwatch();
+		private System.Timers.Timer _timer = new System.Timers.Timer();
+
+		public long ElapsedMilliseconds => _stopwatch.ElapsedMilliseconds;
 
 		public CallTimer()
 		{
-			stopwatch.Start();
+			_stopwatch.Start();
 
-			timer.Interval = 1000.0;
-			timer.Elapsed += Timer_Elapsed;
-			timer.Start();
+			_timer.Interval = 1000.0;
+			_timer.Elapsed += Timer_Elapsed;
+			_timer.Start();
 		}
 
 		public void Stop()
 		{
-			timer.Stop();
-			stopwatch.Stop();
-			timer.Elapsed -= Timer_Elapsed;
+			_timer.Stop();
+			_stopwatch.Stop();
+			_timer.Elapsed -= Timer_Elapsed;
 			UpdateDuration();
 		}
 
@@ -294,7 +295,7 @@ namespace Atlas.Core
 		private void UpdateDuration()
 		{
 			if (Log != null)
-				Log.Duration = stopwatch.ElapsedMilliseconds / 1000.0f;
+				Log.Duration = _stopwatch.ElapsedMilliseconds / 1000.0f;
 		}
 
 		public void Dispose()

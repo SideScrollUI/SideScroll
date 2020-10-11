@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Atlas.Core
+﻿namespace Atlas.Core
 {
 	public class TestBase
 	{

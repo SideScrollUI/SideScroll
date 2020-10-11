@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Atlas.Core
+﻿namespace Atlas.Core
 {
 	public class TaskInstanceCollection : ItemCollection<TaskInstance>
 	{

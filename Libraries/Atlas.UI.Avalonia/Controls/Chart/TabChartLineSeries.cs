@@ -22,7 +22,6 @@ namespace Atlas.UI.Avalonia.Controls
 		// DataPoint is sealed
 		private Dictionary<DataPoint, object> _datapointLookup = new Dictionary<DataPoint, object>();
 
-
 		public TabChartLineSeries(TabControlChart chart, ListSeries listSeries, bool useDateTimeAxis)
 		{
 			Chart = chart;
@@ -81,6 +80,7 @@ namespace Atlas.UI.Avalonia.Controls
 			return false;
 		}
 
+		// Override the default tracker text
 		public override TrackerHitResult GetNearestPoint(ScreenPoint point, bool interpolate)
 		{
 			TrackerHitResult result = base.GetNearestPoint(point, interpolate);
@@ -108,18 +108,6 @@ namespace Atlas.UI.Avalonia.Controls
 			return result;
 		}
 
-		/*private PropertyInfo DescriptionProperty
-		{
-			get
-			{
-				Type type = listSeries.iList[0].GetType();
-				var props = type.GetProperties().Where(prop => Attribute.IsDefined(prop, typeof(DescriptionAttribute)));
-				if (props.ToList().Count == 0)
-					return null;
-				return props.First() as PropertyInfo;
-			}
-		}*/
-
 		/*
 			{0} the title of the series
 			{1} the title of the x-axis
@@ -127,7 +115,6 @@ namespace Atlas.UI.Avalonia.Controls
 			{3} the title of the y-axis
 			{4} the y-value
 		*/
-		// Show 
 		private void LoadTrackFormat()
 		{
 			string xTrackerFormat = ListSeries.XPropertyName ?? "Index: {2:#,0.###}";
@@ -136,11 +123,6 @@ namespace Atlas.UI.Avalonia.Controls
 				xTrackerFormat = "Time: {2:yyyy-M-d H:mm:ss.FFF}";
 			}
 			TrackerFormatString = "{0}\n" + xTrackerFormat + "\nValue: {4:#,0.###}";
-			/*if (listSeries.iList.Count > 0)
-			{
-				if (DescriptionProperty != null)
-					TrackerFormatString += "\n\nDescription {" + DescriptionProperty.Name + "}";
-			}*/
 		}
 
 		private List<DataPoint> GetDataPoints(ListSeries listSeries, IList iList, Dictionary<DataPoint, object> datapointLookup = null)

@@ -22,17 +22,17 @@ namespace Atlas.Serialize.Test
 			serializerFile = new SerializerFileAtlas(filePath);
 		}
 
-		[Test, Description("Serialize Property Type Missing")]
+		/*[Test, Description("Serialize Property Type Missing")]
 		public void SerializePropertyTypeMissing()
 		{
-			Parent testLog = new Parent();
+			var testLog = new Parent();
 			serializerFile.Save(Call, testLog);
 			Parent output = serializerFile.Load<Parent>(Call);
-		}
+		}*/
 
 		public class Parent
 		{
-			public Child child;
+			public Child Child;
 		}
 
 		public class Child

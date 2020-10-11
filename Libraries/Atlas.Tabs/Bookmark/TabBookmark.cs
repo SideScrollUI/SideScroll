@@ -24,6 +24,8 @@ namespace Atlas.Tabs
 
 		public TabViewSettings ViewSettings = new TabViewSettings(); // list selections, doesn't know about children
 		public Dictionary<string, TabBookmark> ChildBookmarks { get; set; } = new Dictionary<string, TabBookmark>(); // doesn't know which tabData to use, maps id to child info
+		public Dictionary<string, object> BookmarkData { get; set; }
+
 		public string Address
 		{
 			get
@@ -135,13 +137,13 @@ namespace Atlas.Tabs
 		public void SetData(string name, object obj)
 		{
 			ViewSettings = ViewSettings ?? new TabViewSettings();
-			ViewSettings.BookmarkData = ViewSettings.BookmarkData ?? new Dictionary<string, object>();
-			ViewSettings.BookmarkData[name] = obj;
+			BookmarkData = BookmarkData ?? new Dictionary<string, object>();
+			BookmarkData[name] = obj;
 		}
 
 		public T GetData<T>(string name = DefaultDataName)
 		{
-			if (ViewSettings != null && ViewSettings.BookmarkData != null && ViewSettings.BookmarkData.TryGetValue(name, out object obj) && obj is T t)
+			if (BookmarkData != null && BookmarkData.TryGetValue(name, out object obj) && obj is T t)
 				return t;
 
 			return default;

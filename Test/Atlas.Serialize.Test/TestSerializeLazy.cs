@@ -26,13 +26,13 @@ namespace Atlas.Serialize.Test
 		public void SerializeLazyBase()
 		{
 			var input = new Parent();
-			input.child = new Child();
-			input.child.uintTest = 2;
+			input.Child = new Child();
+			input.Child.UintTest = 2;
 
 			serializerFile.Save(Call, input);
 			Parent output = serializerFile.Load<Parent>(Call, true);
 
-			Assert.AreEqual(output.child.uintTest, input.child.uintTest);
+			Assert.AreEqual(output.Child.UintTest, input.Child.UintTest);
 		}
 
 		[Test, Description("Serialize Lazy Null Properties")]
@@ -43,7 +43,7 @@ namespace Atlas.Serialize.Test
 			serializerFile.Save(Call, input);
 			Parent output = serializerFile.Load<Parent>(Call, true);
 
-			Assert.AreEqual(output.child, input.child);
+			Assert.AreEqual(output.Child, input.Child);
 		}
 
 		[Test, Description("Serialize Lazy Write Then Read")]
@@ -53,10 +53,10 @@ namespace Atlas.Serialize.Test
 
 			serializerFile.Save(Call, input);
 			WriteRead output = serializerFile.Load<WriteRead>(Call, true);
-			output.stringTest = "abc";
-			string temp = output.stringTest;
+			output.StringTest = "abc";
+			string temp = output.StringTest;
 
-			Assert.AreEqual(output.stringTest, "abc");
+			Assert.AreEqual(output.StringTest, "abc");
 		}
 
 		[Test, Description("Serialize Lazy Constructor")]
@@ -67,35 +67,35 @@ namespace Atlas.Serialize.Test
 			serializerFile.Save(Call, input);
 			Container output = serializerFile.Load<Container>(Call, true);
 
-			Assert.NotNull(output.id);
+			Assert.NotNull(output.Id);
 		}
 
 		public class Container
 		{
-			public virtual string id { get; set; } = "5";
-			public string result { get; set; }
+			public virtual string Id { get; set; } = "5";
+			public string Result { get; set; }
 
 			public Container()
 			{
-				result = id;
+				Result = Id;
 			}
 		}
 
 		public class Parent
 		{
-			public virtual Child child { get; set; } //= new Child();
+			public virtual Child Child { get; set; } //= new Child();
 		}
 
 		public class Child
 		{
-			public uint uintTest { get; set; } = 1;
-			public double doubleTest { get; set; } = 2.3;
-			public string stringTest { get; set; } = "mystring";
+			public uint UintTest { get; set; } = 1;
+			public double DoubleTest { get; set; } = 2.3;
+			public string StringTest { get; set; } = "mystring";
 		}
 
 		public class WriteRead
 		{
-			public virtual string stringTest { get; set; } = "mystring";
+			public virtual string StringTest { get; set; } = "mystring";
 		}
 	}
 }

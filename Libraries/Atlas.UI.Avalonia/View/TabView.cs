@@ -18,6 +18,8 @@ namespace Atlas.UI.Avalonia.View
 {
 	public class TabView : Grid, IDisposable
 	{
+		private const string TempPanelId = "TempPanelID";
+
 		// Maybe this control should own it's own settings?
 		//private TabViewSettings _tabViewSettings = new TabViewSettings();
 		internal TabViewSettings TabViewSettings
@@ -38,18 +40,26 @@ namespace Atlas.UI.Avalonia.View
 		public string Label { get { return Model.Name; } set { Model.Name = value; } }
 
 		// Created Controls
-		public TabControlActions tabActions;
-		public TabControlTasks tabTasks;
-		public List<TabControlDataGrid> tabDatas = new List<TabControlDataGrid>();
+		public TabControlActions TabActions;
+		public TabControlTasks TabTasks;
+		public List<TabControlDataGrid> TabDatas = new List<TabControlDataGrid>();
 		public List<ITabSelector> CustomTabControls { get; set; } = new List<ITabSelector>(); // should everything use this?
 
 		// Layout Controls
-		private Grid containerGrid;
-		private TabControlSplitContainer tabParentControls;
-		private GridSplitter parentChildGridSplitter;
-		private TabControlSplitContainer tabChildControls;
+		private Grid _containerGrid;
+		private TabControlSplitContainer _tabParentControls;
+		private GridSplitter _parentChildGridSplitter;
+		private TabControlSplitContainer _tabChildControls;
+		private Panel _fillerPanel; // GridSplitter doesn't work without control on right side
 
-		//private bool allowAutoScrolling = false; // stop new controls from triggering the ScrollView automatically
+		private Size _arrangeOverrideFinalSize;
+		private bool _childControlsFinishedLoading = false;
+		private bool _isDragging = false;
+
+		// Throttles updating selectedChildControls
+		// todo: extract
+		private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
+		private bool _updateChildControls = false;
 
 		public override string ToString() => Model.Name;
 
@@ -85,25 +95,22 @@ namespace Atlas.UI.Avalonia.View
 			Instance.Invoke(ReloadControls);
 		}
 
-		private Size arrangeOverrideFinalSize;
 		protected override Size ArrangeOverride(Size finalSize)
 		{
 			try
 			{
-				arrangeOverrideFinalSize = base.ArrangeOverride(finalSize);
+				_arrangeOverrideFinalSize = base.ArrangeOverride(finalSize);
 			}
 			catch (Exception)
 			{
 			}
-			if (!childControlsFinishedLoading)
+			if (!_childControlsFinishedLoading)
 			{
 				AddDispatchLoader();
 				//tabInstance.SetEndLoad();
 			}
-			return arrangeOverrideFinalSize;
+			return _arrangeOverrideFinalSize;
 		}
-
-		private bool childControlsFinishedLoading = false;
 
 		// Gets called multiple times when re-initializing
 		private void InitializeControls()
@@ -116,12 +123,12 @@ namespace Atlas.UI.Avalonia.View
 			AddListeners();
 
 			// don't recreate to allow reloading (sizing doesn't work otherwise)
-			if (containerGrid == null)
+			if (_containerGrid == null)
 			{
 				// Use Grid instead of StackPanel
 				// StackPanel doesn't translate layouts, and we want splitters if we want multiple children?
 				// not filling the height vertically? splitter inside isn't
-				containerGrid = new Grid()
+				_containerGrid = new Grid()
 				{
 					ColumnDefinitions = new ColumnDefinitions("Auto,Auto,Auto"), // Controls, Splitter, Child Tabs
 					RowDefinitions = new RowDefinitions("*"), // Single Row
@@ -132,7 +139,7 @@ namespace Atlas.UI.Avalonia.View
 			}
 			else
 			{
-				containerGrid.Children.Clear();
+				_containerGrid.Children.Clear();
 			}
 
 			AddParentControls();
@@ -142,8 +149,8 @@ namespace Atlas.UI.Avalonia.View
 			{
 				if (Instance.Skippable)
 				{
-					containerGrid.ColumnDefinitions[0].Width = new GridLength(0);
-					tabParentControls.Width = 0;
+					_containerGrid.ColumnDefinitions[0].Width = new GridLength(0);
+					_tabParentControls.Width = 0;
 				}
 			}
 
@@ -152,7 +159,7 @@ namespace Atlas.UI.Avalonia.View
 
 			// don't re-add containerGrid (sizing doesn't work otherwise?)
 			if (Children.Count == 0)
-				Children.Add(containerGrid);
+				Children.Add(_containerGrid);
 
 			ContextMenu = new TabViewContextMenu(this, Instance);
 
@@ -161,22 +168,22 @@ namespace Atlas.UI.Avalonia.View
 
 		private void AutoSizeParentControls()
 		{
-			if (tabParentControls == null)
+			if (_tabParentControls == null)
 				return;
 
-			int desiredWidth = (int)tabParentControls.DesiredSize.Width;
+			int desiredWidth = (int)_tabParentControls.DesiredSize.Width;
 			if (Model.CustomSettingsPath != null && TabViewSettings.SplitterDistance != null)
 			{
 				desiredWidth = (int)TabViewSettings.SplitterDistance.Value;
 			}
 
-			containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
-			tabParentControls.Width = desiredWidth;
+			_containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
+			_tabParentControls.Width = desiredWidth;
 		}
 
 		private void AddParentControls()
 		{
-			tabParentControls = new TabControlSplitContainer()
+			_tabParentControls = new TabControlSplitContainer()
 			{
 				ColumnDefinitions = new ColumnDefinitions("*"),
 				MinDesiredWidth = Model.MinDesiredWidth,
@@ -185,37 +192,37 @@ namespace Atlas.UI.Avalonia.View
 			//if (TabViewSettings.SplitterDistance != null)
 			//	tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
 			//Grid.SetColumn(tabParentControls, 0);
-			containerGrid.Children.Add(tabParentControls);
+			_containerGrid.Children.Add(_tabParentControls);
 			UpdateSplitterDistance();
 
 			var tabTitle = new TabControlTitle(Instance, Model.Name);
-			tabParentControls.AddControl(tabTitle, false, SeparatorType.None);
+			_tabParentControls.AddControl(tabTitle, false, SeparatorType.None);
 		}
 
 		private void AddGridColumnSplitter()
 		{
-			parentChildGridSplitter = new GridSplitter
+			_parentChildGridSplitter = new GridSplitter
 			{
 				Background = Brushes.Black,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				[Grid.ColumnProperty] = 1,
 			};
-			containerGrid.Children.Add(parentChildGridSplitter);
-			parentChildGridSplitter.DragDelta += GridSplitter_DragDelta;
-			parentChildGridSplitter.DragStarted += GridSplitter_DragStarted;
-			parentChildGridSplitter.DragCompleted += GridSplitter_DragCompleted; // bug, this is firing when double clicking splitter
-			parentChildGridSplitter.DoubleTapped += GridSplitter_DoubleTapped;
+			_containerGrid.Children.Add(_parentChildGridSplitter);
+			_parentChildGridSplitter.DragDelta += GridSplitter_DragDelta;
+			_parentChildGridSplitter.DragStarted += GridSplitter_DragStarted;
+			_parentChildGridSplitter.DragCompleted += GridSplitter_DragCompleted; // bug, this is firing when double clicking splitter
+			_parentChildGridSplitter.DoubleTapped += GridSplitter_DoubleTapped;
 		}
 
 		private void AddChildControls()
 		{
-			tabChildControls = new TabControlSplitContainer()
+			_tabChildControls = new TabControlSplitContainer()
 			{
 				ColumnDefinitions = new ColumnDefinitions("Auto"),
 				//MinWidth = 100,
 			};
-			Grid.SetColumn(tabChildControls, 2);
-			containerGrid.Children.Add(tabChildControls);
+			Grid.SetColumn(_tabChildControls, 2);
+			_containerGrid.Children.Add(_tabChildControls);
 		}
 
 		private void AddListeners()
@@ -245,67 +252,66 @@ namespace Atlas.UI.Avalonia.View
 
 		private void TabInstance_OnResize(object sender, EventArgs e)
 		{
-			containerGrid.ColumnDefinitions[0].Width = GridLength.Auto;
+			_containerGrid.ColumnDefinitions[0].Width = GridLength.Auto;
 		}
 
 		private void GridSplitter_DragDelta(object sender, global::Avalonia.Input.VectorEventArgs e)
 		{
 			if (TabViewSettings.SplitterDistance != null)
-				tabParentControls.Width = containerGrid.ColumnDefinitions[0].ActualWidth;
+				_tabParentControls.Width = _containerGrid.ColumnDefinitions[0].ActualWidth;
 
 			// force the width to update (Grid Auto Size caching problem?
-			double width = containerGrid.ColumnDefinitions[0].ActualWidth;
+			double width = _containerGrid.ColumnDefinitions[0].ActualWidth;
 			TabViewSettings.SplitterDistance = width;
-			tabParentControls.Width = width;
+			_tabParentControls.Width = width;
 
 			// remove these lines? do they do anything?
 			InvalidateMeasure();
 			InvalidateArrange();
-			tabParentControls.InvalidateArrange();
-			tabParentControls.InvalidateMeasure();
+			_tabParentControls.InvalidateArrange();
+			_tabParentControls.InvalidateMeasure();
 
 			//if (TabViewSettings.SplitterDistance != null)
 			//	containerGrid.ColumnDefinitions[0].Width = new GridLength((double)containerGrid.ColumnDefinitions[1].);
 		}
 
-		private bool isDragging = false;
 		private void GridSplitter_DragStarted(object sender, global::Avalonia.Input.VectorEventArgs e)
 		{
-			isDragging = true;
+			_isDragging = true;
 		}
 
 		private void GridSplitter_DragCompleted(object sender, global::Avalonia.Input.VectorEventArgs e)
 		{
-			if (isDragging == false)
+			if (_isDragging == false)
 				return;
-			isDragging = false;
+			_isDragging = false;
 			InvalidateMeasure();
 			InvalidateArrange();
 			//TabViewSettings.SplitterDistance = (int)Math.Ceiling(e.Vector.Y); // backwards
-			double width = (int)containerGrid.ColumnDefinitions[0].ActualWidth;
+			double width = (int)_containerGrid.ColumnDefinitions[0].ActualWidth;
 			TabViewSettings.SplitterDistance = width;
-			tabParentControls.Width = width;
-			containerGrid.ColumnDefinitions[0].Width = new GridLength(width);
+			_tabParentControls.Width = width;
+			_containerGrid.ColumnDefinitions[0].Width = new GridLength(width);
 			//UpdateSplitterDistance();
 			SaveSplitterDistance();
 			UpdateSplitterFiller();
-			tabParentControls.InvalidateMeasure();
+			_tabParentControls.InvalidateMeasure();
 		}
 
 		// doesn't resize bigger well
 		// The Drag start, delta, and complete get called for this too. Which makes this really hard to do well
 		private void GridSplitter_DoubleTapped(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			isDragging = false;
-			double desiredWidth = tabParentControls.DesiredSize.Width;
+			_isDragging = false;
+			double desiredWidth = _tabParentControls.DesiredSize.Width;
 			TabViewSettings.SplitterDistance = desiredWidth;
-			tabParentControls.Width = desiredWidth;
+			_tabParentControls.Width = desiredWidth;
 			//containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
-			containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
+			_containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 			//containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
 
-			containerGrid.InvalidateArrange();
-			containerGrid.InvalidateMeasure();
+			_containerGrid.InvalidateArrange();
+			_containerGrid.InvalidateMeasure();
 
 			//tabParentControls.grid.Width = new GridLength(1, GridUnitType.Auto);
 			//tabParentControls.grid.Width = tabParentControls.grid.DesiredSize.Width;
@@ -337,18 +343,18 @@ namespace Atlas.UI.Avalonia.View
 
 		public void UpdateSplitterDistance()
 		{
-			if (containerGrid == null)
+			if (_containerGrid == null)
 				return;
 
 			if (Instance.TabViewSettings.SplitterDistance == null || Instance.TabViewSettings.SplitterDistance <= 0.0)
 			{
-				containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
+				_containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 			}
 			else
 			{
-				containerGrid.ColumnDefinitions[0].Width = new GridLength((int)TabViewSettings.SplitterDistance);
-				if (tabParentControls != null)
-					tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
+				_containerGrid.ColumnDefinitions[0].Width = new GridLength((int)TabViewSettings.SplitterDistance);
+				if (_tabParentControls != null)
+					_tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
 			}
 		}
 
@@ -417,9 +423,9 @@ namespace Atlas.UI.Avalonia.View
 			if (Model.Actions == null)
 				return;
 
-			tabActions = new TabControlActions(Instance, Model, Model.Actions as ItemCollection<TaskCreator>);
+			TabActions = new TabControlActions(Instance, Model, Model.Actions as ItemCollection<TaskCreator>);
 
-			tabParentControls.AddControl(tabActions, false, SeparatorType.Spacer);
+			_tabParentControls.AddControl(TabActions, false, SeparatorType.Spacer);
 		}
 
 		protected void AddTasks()
@@ -430,10 +436,10 @@ namespace Atlas.UI.Avalonia.View
 			//if (tabModel.Tasks == null)
 			//	tabModel.Tasks = new TaskInstanceCollection();
 
-			tabTasks = new TabControlTasks(Instance);
-			tabTasks.OnSelectionChanged += ParentListSelectionChanged;
+			TabTasks = new TabControlTasks(Instance);
+			TabTasks.OnSelectionChanged += ParentListSelectionChanged;
 
-			tabParentControls.AddControl(tabTasks, false, SeparatorType.Spacer);
+			_tabParentControls.AddControl(TabTasks, false, SeparatorType.Spacer);
 		}
 
 		protected void AddChart(ChartSettings chartSettings)
@@ -442,7 +448,7 @@ namespace Atlas.UI.Avalonia.View
 			{
 				var tabChart = new TabControlChart(Instance, listGroupPair.Value, true);
 
-				tabParentControls.AddControl(tabChart, true, SeparatorType.Spacer);
+				_tabParentControls.AddControl(tabChart, true, SeparatorType.Spacer);
 				//tabChart.OnSelectionChanged += ListData_OnSelectionChanged;
 			}
 		}
@@ -456,9 +462,9 @@ namespace Atlas.UI.Avalonia.View
 				//tabData.HorizontalAlignment = HorizontalAlignment.Stretch;
 				//tabData.VerticalAlignment = VerticalAlignment.Stretch;
 				tabData.OnSelectionChanged += ParentListSelectionChanged;
-				bool addSplitter = (tabDatas.Count > 0);
-				tabParentControls.AddControl(tabData, true, SeparatorType.Splitter);
-				tabDatas.Add(tabData);
+				bool addSplitter = (TabDatas.Count > 0);
+				_tabParentControls.AddControl(tabData, true, SeparatorType.Splitter);
+				TabDatas.Add(tabData);
 				index++;
 			}
 		}
@@ -467,13 +473,13 @@ namespace Atlas.UI.Avalonia.View
 		protected void AddControl(Control control, bool fill)
 		{
 			//tabData.OnSelectionChanged += ParentListSelectionChanged;
-			tabParentControls.AddControl(control, fill, SeparatorType.Spacer);
+			_tabParentControls.AddControl(control, fill, SeparatorType.Spacer);
 		}
 
 		protected void AddITabControl(ITabSelector control, bool fill)
 		{
 			control.OnSelectionChanged += ParentListSelectionChanged;
-			tabParentControls.AddControl((Control)control, fill, SeparatorType.Spacer);
+			_tabParentControls.AddControl((Control)control, fill, SeparatorType.Spacer);
 			CustomTabControls.Add(control);
 		}
 
@@ -505,7 +511,7 @@ namespace Atlas.UI.Avalonia.View
 				TextWrapping = TextWrapping.Wrap,
 			};
 			//control.OnSelectionChanged += ParentListSelectionChanged;
-			tabParentControls.AddControl(textBox, false, SeparatorType.Spacer);
+			_tabParentControls.AddControl(textBox, false, SeparatorType.Spacer);
 		}
 
 		public void Invalidate()
@@ -520,8 +526,6 @@ namespace Atlas.UI.Avalonia.View
 			Instance.loadCalled = true;
 
 			Instance.StartAsync(LoadBackgroundAsync);
-
-			//Dispatcher.BeginInvoke((Action)(() => { allowAutoScrolling = true; }));
 		}
 
 		public void ShowLoading()
@@ -545,8 +549,6 @@ namespace Atlas.UI.Avalonia.View
 
 		public void LoadSettings()
 		{
-			//allowAutoScrolling = false;
-
 			if (Instance.TabBookmark != null && Instance.TabBookmark.ViewSettings != null)
 				Instance.TabViewSettings = Instance.TabBookmark.ViewSettings;
 			else if (Instance.Project.UserSettings.AutoLoad)
@@ -558,13 +560,9 @@ namespace Atlas.UI.Avalonia.View
 			TabViewSettings = Instance.LoadDefaultTabSettings();
 		}
 
-		// Throttles updating selectedChildControls
-		// todo: extract
-		private DispatcherTimer dispatcherTimer;  // delays auto selection to throttle updates
-		private bool updateChildControls = false;
 		private void DispatcherTimer_Tick(object sender, EventArgs e)
 		{
-			if (updateChildControls)
+			if (_updateChildControls)
 			{
 				UpdateChildControls();
 			}
@@ -572,22 +570,22 @@ namespace Atlas.UI.Avalonia.View
 
 		private void AddDispatchLoader()
 		{
-			if (dispatcherTimer == null)
+			if (_dispatcherTimer == null)
 			{
-				dispatcherTimer = new DispatcherTimer();
-				dispatcherTimer.Tick += DispatcherTimer_Tick;
-				dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10); // Every 10 milliseconds
-				dispatcherTimer.Start();
+				_dispatcherTimer = new DispatcherTimer();
+				_dispatcherTimer.Tick += DispatcherTimer_Tick;
+				_dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10); // Every 10 milliseconds
+				_dispatcherTimer.Start();
 			}
 		}
 
 		private void ClearDispatchLoader()
 		{
-			if (dispatcherTimer != null)
+			if (_dispatcherTimer != null)
 			{
-				dispatcherTimer.Stop();
-				dispatcherTimer.Tick -= DispatcherTimer_Tick;
-				dispatcherTimer = null;
+				_dispatcherTimer.Stop();
+				_dispatcherTimer.Tick -= DispatcherTimer_Tick;
+				_dispatcherTimer = null;
 			}
 		}
 
@@ -601,7 +599,7 @@ namespace Atlas.UI.Avalonia.View
 				// Only add children if they'll be visible
 				if (IsVisible == false)
 					return false;
-				if (tabChildControls == null) // TabTasks hiding can sometimes trigger this, todo: figure out why
+				if (_tabChildControls == null) // TabTasks hiding can sometimes trigger this, todo: figure out why
 					return false;
 
 				if (Bounds.Height < 50)
@@ -609,9 +607,9 @@ namespace Atlas.UI.Avalonia.View
 
 				if (Instance.Depth > 50)
 					return false;
-				if (double.IsNaN(tabParentControls.arrangeOverrideFinalSize.Width))
+				if (double.IsNaN(_tabParentControls.arrangeOverrideFinalSize.Width))
 					return false;
-				if (tabChildControls.Width < 30)
+				if (_tabChildControls.Width < 30)
 					return false;
 
 				//if (tabParentControls.arrangeOverrideFinalSize.Width < 30)
@@ -634,7 +632,7 @@ namespace Atlas.UI.Avalonia.View
 
 				// don't show if the new control won't have enough room
 				IControl control = Parent;
-				double offset = tabChildControls.Bounds.X;
+				double offset = _tabChildControls.Bounds.X;
 				while (control != null)
 				{
 					if (control is ScrollViewer scrollViewer)
@@ -698,7 +696,7 @@ namespace Atlas.UI.Avalonia.View
 		private double GetFillerPanelWidth()
 		{
 			IControl control = Parent;
-			double offset = tabChildControls.Bounds.X;
+			double offset = _tabChildControls.Bounds.X;
 			while (control != null)
 			{
 				if (control is ScrollViewer scrollViewer)
@@ -718,29 +716,27 @@ namespace Atlas.UI.Avalonia.View
 
 		public void UpdateSplitterFiller()
 		{
-			if (fillerPanel != null)
-				fillerPanel.Width = GetFillerPanelWidth();
+			if (_fillerPanel != null)
+				_fillerPanel.Width = GetFillerPanelWidth();
 		}
 
-		private const string tempPanelId = "TempPanelID";
-		private Panel fillerPanel;
 		private void UpdateChildControls()
 		{
 			// These need to be set regardless of if the children show
-			if (tabDatas.Count > 0)
-				Instance.SelectedItems = tabDatas[0].SelectedItems;
+			if (TabDatas.Count > 0)
+				Instance.SelectedItems = TabDatas[0].SelectedItems;
 
 			if (ShowChildren == false)
 			{
-				updateChildControls = true;
+				_updateChildControls = true;
 				AddDispatchLoader();
 				// Invoking was happening at bad times in the data binding
 				return;
 			}
 			ClearDispatchLoader();
-			updateChildControls = false;
+			_updateChildControls = false;
 
-			childControlsFinishedLoading = true;
+			_childControlsFinishedLoading = true;
 
 			TabViewer.BaseViewer.SetMinScrollOffset();
 
@@ -750,25 +746,25 @@ namespace Atlas.UI.Avalonia.View
 
 			List<Control> orderedChildControls = CreateAllChildControls(out Dictionary<object, Control> newChildControls);
 
-			fillerPanel = null;
+			_fillerPanel = null;
 
 			// Add a filler panel so the grid splitter can drag to the right
 			if (orderedChildControls.Count == 0)
 			{
-				fillerPanel = new Panel()
+				_fillerPanel = new Panel()
 				{
 					Width = GetFillerPanelWidth(), // should update this after moving grid splitter
 				};
-				orderedChildControls.Add(fillerPanel);
-				newChildControls[tempPanelId] = fillerPanel;
+				orderedChildControls.Add(_fillerPanel);
+				newChildControls[TempPanelId] = _fillerPanel;
 			}
-			tabChildControls.SetControls(newChildControls, orderedChildControls);
+			_tabChildControls.SetControls(newChildControls, orderedChildControls);
 			UpdateSelectedTabInstances();
 		}
 
 		private List<Control> CreateAllChildControls(out Dictionary<object, Control> newChildControls)
 		{
-			Dictionary<object, Control> oldChildControls = tabChildControls.GridControls;
+			Dictionary<object, Control> oldChildControls = _tabChildControls.GridControls;
 			newChildControls = new Dictionary<object, Control>();
 			var orderedChildControls = new List<Control>();
 			//AddNotes(newChildControls, oldChildControls, orderedChildControls);
@@ -782,18 +778,18 @@ namespace Atlas.UI.Avalonia.View
 			{
 				CreateChildControls(tabControl.SelectedItems, oldChildControls, newChildControls, orderedChildControls, tabControl);
 			}
-			if (tabActions != null)
+			if (TabActions != null)
 			{
 				// show action help?
 				//CreateChildControls(tabActions.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
 			//if (tabTasks != null && (tabTasks.IsVisible || Model.Tasks?.Count > 0))
-			if (tabTasks != null && tabTasks.IsVisible)
+			if (TabTasks != null && TabTasks.IsVisible)
 			{
-				CreateChildControls(tabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
+				CreateChildControls(TabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
 
-			foreach (TabControlDataGrid tabData in tabDatas)
+			foreach (TabControlDataGrid tabData in TabDatas)
 			{
 				CreateChildControls(tabData.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
@@ -863,7 +859,7 @@ namespace Atlas.UI.Avalonia.View
 		private void UpdateSelectedTabInstances()
 		{
 			Instance.ChildTabInstances.Clear();
-			foreach (Control control in tabChildControls.GridControls.Values)
+			foreach (Control control in _tabChildControls.GridControls.Values)
 			{
 				if (control is TabView tabView)
 				{
@@ -892,40 +888,40 @@ namespace Atlas.UI.Avalonia.View
 
 			//RequestBringIntoView -= UserControl_RequestBringIntoView;
 
-			foreach (TabControlDataGrid tabData in tabDatas)
+			foreach (TabControlDataGrid tabData in TabDatas)
 			{
 				tabData.OnSelectionChanged -= ParentListSelectionChanged;
 				tabData.Dispose();
 			}
-			tabDatas.Clear();
-			if (tabActions != null)
+			TabDatas.Clear();
+			if (TabActions != null)
 			{
 				//tabActions.Dispose();
-				tabActions = null;
+				TabActions = null;
 			}
-			if (tabTasks != null)
+			if (TabTasks != null)
 			{
-				tabTasks.OnSelectionChanged -= ParentListSelectionChanged;
-				tabTasks.Dispose();
-				tabTasks = null;
+				TabTasks.OnSelectionChanged -= ParentListSelectionChanged;
+				TabTasks.Dispose();
+				TabTasks = null;
 			}
-			if (tabParentControls != null)
+			if (_tabParentControls != null)
 			{
-				tabParentControls.Clear();
-				tabParentControls = null;
+				_tabParentControls.Clear();
+				_tabParentControls = null;
 			}
-			if (tabChildControls != null)
+			if (_tabChildControls != null)
 			{
-				tabChildControls.Clear();
-				tabChildControls = null;
+				_tabChildControls.Clear();
+				_tabChildControls = null;
 			}
-			if (parentChildGridSplitter != null)
+			if (_parentChildGridSplitter != null)
 			{
-				parentChildGridSplitter.DragDelta -= GridSplitter_DragDelta;
-				parentChildGridSplitter.DragStarted -= GridSplitter_DragStarted;
-				parentChildGridSplitter.DragCompleted -= GridSplitter_DragCompleted;
-				parentChildGridSplitter.DoubleTapped -= GridSplitter_DoubleTapped;
-				parentChildGridSplitter = null;
+				_parentChildGridSplitter.DragDelta -= GridSplitter_DragDelta;
+				_parentChildGridSplitter.DragStarted -= GridSplitter_DragStarted;
+				_parentChildGridSplitter.DragCompleted -= GridSplitter_DragCompleted;
+				_parentChildGridSplitter.DoubleTapped -= GridSplitter_DoubleTapped;
+				_parentChildGridSplitter = null;
 			}
 			foreach (ITabSelector tabSelector in CustomTabControls)
 			{
@@ -950,7 +946,7 @@ namespace Atlas.UI.Avalonia.View
 
 		private void TabInstance_OnClearSelection(object sender, EventArgs e)
 		{
-			foreach (var tabData in tabDatas)
+			foreach (var tabData in TabDatas)
 			{
 				tabData.SelectedItem = null; // dataGrid.UnselectAll() doesn't work
 			}
@@ -963,19 +959,19 @@ namespace Atlas.UI.Avalonia.View
 
 		private void TabInstance_OnSelectItem(object sender, TabInstance.EventSelectItem e)
 		{
-			if (tabDatas.Count > 0)
+			if (TabDatas.Count > 0)
 			{
 				if (e.Object is ITab itab)
 				{
-					foreach (var obj in tabDatas[0].Items)
+					foreach (var obj in TabDatas[0].Items)
 					{
 						if (obj == itab || obj.GetInnerValue() == itab)
-							tabDatas[0].SelectedItem = obj;
+							TabDatas[0].SelectedItem = obj;
 					}
 				}
 				else
 				{
-					tabDatas[0].SelectedItem = e.Object;
+					TabDatas[0].SelectedItem = e.Object;
 				}
 			}
 		}
@@ -988,7 +984,7 @@ namespace Atlas.UI.Avalonia.View
 			TabViewSettings = tabBookmark.ViewSettings;
 
 			int index = 0;
-			foreach (TabControlDataGrid tabData in tabDatas)
+			foreach (TabControlDataGrid tabData in TabDatas)
 			{
 				tabData.TabDataSettings = TabViewSettings.GetData(index++);
 				tabData.LoadSettings();
@@ -1114,12 +1110,6 @@ private void gridParentControls_MouseDown(object sender, MouseButtonEventArgs e)
 		tabDatas[0].dataGrid.Focus();
 		e.Handled = true;
 	}
-}
-
-private void UserControl_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
-{
-	if (!allowAutoScrolling)
-		e.Handled = true;
 }
 
 */

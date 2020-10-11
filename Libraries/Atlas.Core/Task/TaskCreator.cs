@@ -23,7 +23,7 @@ namespace Atlas.Core
 		public int TimesRun { get; set; } = 0;
 
 		[HiddenColumn]
-		public SynchronizationContext context;
+		public SynchronizationContext Context;
 
 		protected abstract Action CreateAction(Call call);
 
@@ -40,8 +40,8 @@ namespace Atlas.Core
 		{
 			//call = call.Child(Label);
 			TimesRun++;
-			context = SynchronizationContext.Current ?? new SynchronizationContext();
-			call.Log.Context = context;
+			Context = SynchronizationContext.Current ?? new SynchronizationContext();
+			call.Log.Context = Context;
 
 			var taskInstance = new TaskInstance()
 			{
@@ -69,7 +69,7 @@ namespace Atlas.Core
 
 		public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 		{
-			context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
+			Context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
 			//PropertyChanged?.BeginInvoke(this, new PropertyChangedEventArgs(propertyName), EndAsyncEvent, null);
 			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}

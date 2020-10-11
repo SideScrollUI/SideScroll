@@ -124,18 +124,3 @@ namespace Atlas.Core
 		}
 	}
 }
-
-/*
-TabSeries
-	Pros
-		Has iList
-			
-ListChart(x) -> ListChartItem(x) -> ListSeries -> ItemSeries -> ItemList
-	Cons
-		Bad name
-
-Binding an iList
-Who should update
-
-
-*/

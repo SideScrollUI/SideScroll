@@ -111,6 +111,7 @@ namespace Atlas.Core
 		{
 			if (amount <= 0)
 				return;
+
 			lock (SubTasks)
 			{
 				Progress += amount;
@@ -171,8 +172,9 @@ namespace Atlas.Core
 		{
 			if (Finished)
 				return;
+
 			_stopwatch.Stop(); // Both Send and Post adds some delay
-			Creator?.context.Post(new SendOrPostCallback(OnFinished), null);
+			Creator?.Context.Post(new SendOrPostCallback(OnFinished), null);
 		}
 
 		private void OnFinished(object state)
@@ -223,7 +225,7 @@ namespace Atlas.Core
 
 		protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 		{
-			Creator?.context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
+			Creator?.Context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
 		}
 
 		private void NotifyPropertyChangedContext(object state)

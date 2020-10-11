@@ -1,21 +1,19 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
 using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
-using OxyPlot.Avalonia;
 using OxyPlot.Annotations;
+using OxyPlot.Avalonia;
+using OxyPlot.Axes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Reflection;
 using System.Linq;
-using Avalonia;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -137,7 +135,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public override string ToString()
 		{
-			return ListGroup.ToString(); // todo: fix for multiple
+			return ListGroup.ToString();
 		}
 
 		private void InitializeControls()

@@ -591,7 +591,7 @@ namespace Atlas.Serialize
 			return clone;
 		}
 		
-		public T Clone<T>(Log log, object obj)
+		public T Clone<T>(Log log, T obj)
 		{
 			T clone = (T)Clone(obj);
 			using (LogTimer logClone = log.Timer("Clone"))

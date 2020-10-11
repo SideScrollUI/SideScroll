@@ -16,9 +16,9 @@ namespace Atlas.UI.Avalonia
 
 		public Project Project;
 
-		private bool loadComplete = false;
+		public TabViewer TabViewer;
 
-		public TabViewer tabViewer;
+		private bool _loadComplete = false;
 
 		public BaseWindow(Project project) : base()
 		{
@@ -37,7 +37,7 @@ namespace Atlas.UI.Avalonia
 
 			InitializeComponent();
 
-			loadComplete = true;
+			_loadComplete = true;
 		}
 
 		// Load here instead of in xaml for better control
@@ -54,7 +54,7 @@ namespace Atlas.UI.Avalonia
 
 			Icon = new WindowIcon(Icons.Streams.Logo);
 
-			Content = tabViewer = new TabViewer(Project);
+			Content = TabViewer = new TabViewer(Project);
 
 			PositionChanged += BaseWindow_PositionChanged;
 
@@ -63,7 +63,7 @@ namespace Atlas.UI.Avalonia
 
 		public void AddTab(ITab tab)
 		{
-			tabViewer.AddTab(tab);
+			TabViewer.AddTab(tab);
 		}
 
 		private void Resize(Size size)
@@ -140,15 +140,13 @@ namespace Atlas.UI.Avalonia
 		{
 			SetMaxBounds();
 
-			WindowSettings windowSettings = Project.DataApp.Load<WindowSettings>(true);
-
-			this.WindowSettings = windowSettings;
+			WindowSettings = Project.DataApp.Load<WindowSettings>(true);
 		}
 
 		// Still saving due to a HandleResized calls after IsActive (loadComplete does nothing)
 		private void SaveWindowSettings()
 		{
-			if (loadComplete)// && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
+			if (_loadComplete)// && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
 				Project.DataApp.Save(WindowSettings);
 
 			// need a better trigger for when the screen size changes
