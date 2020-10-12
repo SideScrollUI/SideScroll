@@ -1292,7 +1292,8 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		public override void Render(DrawingContext context)
+		// This sometimes runs into rare issues where this doesn't display when it should
+		/*public override void Render(DrawingContext context)
 		{
 			Dispatcher.UIThread.Post(UpdateVisible, DispatcherPriority.Background);
 			base.Render(context);
@@ -1310,7 +1311,7 @@ namespace Atlas.UI.Avalonia.Controls
 				DataGrid.IsVisible = visible;
 				DataGrid.InvalidateArrange();
 			}
-		}
+		}*/
 	}
 }
 
