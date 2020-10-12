@@ -87,6 +87,8 @@ namespace Atlas.Tabs
 			}
 		}*/
 
+		public override string ToString() => Name;
+
 		public static TabBookmark Create(params object[] objs)
 		{
 			// get TabBookmark.SelectedObjects working again and replace?
@@ -105,9 +107,17 @@ namespace Atlas.Tabs
 			return tabBookmark;
 		}
 
-		public override string ToString()
+		// Shallow Clone
+		public TabBookmark Clone()
 		{
-			return Name;// string.Join(",", Nodes.Keys);
+			return new TabBookmark()
+			{
+				Bookmark = Bookmark,
+				Name = Name,
+				SelectedRow = SelectedRow,
+				DataRepoDirectory = DataRepoDirectory,
+				BookmarkData = BookmarkData,
+			};
 		}
 
 		public void Add(TabBookmark tabBookmark)
