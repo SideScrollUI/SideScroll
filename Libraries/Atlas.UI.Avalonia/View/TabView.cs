@@ -11,6 +11,7 @@ using Avalonia.Threading;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -783,7 +784,6 @@ namespace Atlas.UI.Avalonia.View
 				// show action help?
 				//CreateChildControls(tabActions.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
-			//if (tabTasks != null && (tabTasks.IsVisible || Model.Tasks?.Count > 0))
 			if (TabTasks != null && TabTasks.IsVisible)
 			{
 				CreateChildControls(TabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
@@ -791,12 +791,12 @@ namespace Atlas.UI.Avalonia.View
 
 			foreach (TabControlDataGrid tabData in TabDatas)
 			{
-				CreateChildControls(tabData.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
+				CreateChildControls(tabData.SelectedRows, oldChildControls, newChildControls, orderedChildControls);
 			}
 			return orderedChildControls;
 		}
 
-		internal void CreateChildControls(IList newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector tabControl = null)
+		internal void CreateChildControls(IEnumerable newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector tabControl = null)
 		{
 			//var collection = newList as DataGridSelectedItemsCollection;
 			//if (collection != null && collection.)
@@ -820,6 +820,9 @@ namespace Atlas.UI.Avalonia.View
 			//object value = obj.GetInnerValue(); // performance issues? cache this?
 			//if (value == null)
 			//	return;
+			SelectedRow selectedRow = obj as SelectedRow;
+			if (selectedRow != null)
+				obj = selectedRow.Object;
 
 			if (oldChildControls.ContainsKey(obj))
 			{
@@ -833,7 +836,7 @@ namespace Atlas.UI.Avalonia.View
 			else
 			{
 				// Create a new control
-				Control control = CreateChildControl(obj, label, tabControl);
+				Control control = CreateChildControl(selectedRow, obj, label, tabControl);
 				if (control != null)
 				{
 					newChildControls[obj] = control;
@@ -842,11 +845,14 @@ namespace Atlas.UI.Avalonia.View
 			}
 		}
 
-		internal Control CreateChildControl(object obj, string label = null, ITabSelector tabControl = null)
+		internal Control CreateChildControl(SelectedRow selectedRow, object obj, string label = null, ITabSelector tabControl = null)
 		{
 			try
 			{
-				return TabCreator.CreateChildControl(Instance, obj, label, tabControl);
+				Control control = TabCreator.CreateChildControl(Instance, obj, label, tabControl);
+				if (control is TabView tabView && selectedRow != null)
+					tabView.Instance.SelectedRow = selectedRow;
+				return control;
 			}
 			catch (Exception e)
 			{
@@ -873,6 +879,8 @@ namespace Atlas.UI.Avalonia.View
 			UpdateChildControls();
 
 			Instance.SelectionChanged(sender, e);
+
+			Instance.UpdateNavigator();
 		}
 
 		private void ClearControls()

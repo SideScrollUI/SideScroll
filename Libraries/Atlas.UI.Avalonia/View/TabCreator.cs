@@ -34,11 +34,6 @@ namespace Atlas.UI.Avalonia.View
 					if (tabBookmark.TabModel != null)
 						value = tabBookmark.TabModel;
 				}
-				/*foreach (Bookmark.Node node in tabInstance.tabBookmark.nodes)
-				{
-					tabBookmark = node;
-					break;
-				}*/
 			}
 			string labelOverride = null;
 			if (value is Exception)
@@ -94,6 +89,7 @@ namespace Atlas.UI.Avalonia.View
 				TabInstance childTabInstance = parentTabInstance.CreateChildTab(iTab);
 				if (childTabInstance == null)
 					return null;
+
 				childTabInstance.TabBookmark = childTabInstance.TabBookmark ?? tabBookmark;
 				//childTabInstance.Reintialize(); // todo: fix, called in TabView
 				childTabInstance.Model.Name = label;

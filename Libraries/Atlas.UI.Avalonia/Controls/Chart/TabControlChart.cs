@@ -240,7 +240,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (PlotView == null)
 				return;
 
-			bool visible = IsControlVisible();
+			bool visible = AvaloniaUtils.IsControlVisible(this);
 			if (visible != PlotView.IsVisible)
 			{
 				PlotView.IsVisible = visible;
@@ -249,31 +249,6 @@ namespace Atlas.UI.Avalonia.Controls
 				PlotView.InvalidateArrange();
 				Legend.InvalidateArrange();
 			}
-		}
-
-		private bool IsControlVisible()
-		{
-			IControl control = this;
-			while (control != null)
-			{
-				Point? topLeft = this.TranslatePoint(Bounds.TopLeft, control);
-				Point? bottomRight = this.TranslatePoint(Bounds.BottomRight, control);
-				if (topLeft == null || bottomRight == null)
-					return false;
-
-				var newBounds = new Rect(topLeft.Value, bottomRight.Value);
-				newBounds = newBounds.WithX(newBounds.X + control.Bounds.X);
-				newBounds = newBounds.WithY(newBounds.Y + control.Bounds.Y);
-
-				if (newBounds.X > control.Bounds.Right ||
-					newBounds.Y > control.Bounds.Bottom ||
-					newBounds.Right < control.Bounds.X ||
-					newBounds.Bottom < control.Bounds.Y)
-					return false;
-
-				control = control.Parent;
-			}
-			return true;
 		}
 
 		// Anchor the chart to the top and stretch to max height, available size gets set to max :(

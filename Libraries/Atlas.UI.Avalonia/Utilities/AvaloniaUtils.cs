@@ -51,5 +51,31 @@ namespace Atlas.UI.Avalonia
 				break;
 			}
 		}
+
+		// Add padding to avoid poppin effect?
+		public static bool IsControlVisible(IControl control)
+		{
+			IControl parentControl = control?.Parent;
+			while (parentControl != null)
+			{
+				Point? topLeft = control.TranslatePoint(control.Bounds.TopLeft, parentControl);
+				Point? bottomRight = control.TranslatePoint(control.Bounds.BottomRight, parentControl);
+				if (topLeft == null || bottomRight == null)
+					return false;
+
+				var newBounds = new Rect(topLeft.Value, bottomRight.Value);
+				newBounds = newBounds.WithX(newBounds.X + parentControl.Bounds.X);
+				newBounds = newBounds.WithY(newBounds.Y + parentControl.Bounds.Y);
+
+				if (newBounds.X > parentControl.Bounds.Right ||
+					newBounds.Y > parentControl.Bounds.Bottom ||
+					newBounds.Right < parentControl.Bounds.X ||
+					newBounds.Bottom < parentControl.Bounds.Y)
+					return false;
+
+				parentControl = parentControl.Parent;
+			}
+			return true;
+		}
 	}
 }

@@ -93,6 +93,7 @@ namespace Atlas.Tabs
 
 		public TabViewSettings TabViewSettings = new TabViewSettings();
 		public TabBookmark TabBookmark;
+		public SelectedRow SelectedRow { get; set; } // The parent selection that points to this tab
 
 		public int Depth
 		{
@@ -606,8 +607,9 @@ namespace Atlas.Tabs
 		public virtual void GetBookmark(TabBookmark tabBookmark)
 		{
 			tabBookmark.Name = Label;
-			tabBookmark.ViewSettings = TabViewSettings;
+			tabBookmark.ViewSettings = TabViewSettings.DeepClone();
 			tabBookmark.DataRepoDirectory = DataRepoInstance?.Directory;
+			tabBookmark.SelectedRow = SelectedRow;
 			/*if (DataRepoInstance != null)
 			{
 				foreach (var item in tabViewSettings.SelectedRows)

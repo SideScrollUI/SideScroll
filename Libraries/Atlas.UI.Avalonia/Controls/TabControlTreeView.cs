@@ -207,7 +207,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (obj != null)
 			{
 				Type type = obj.GetType();
-				SelectedRow selectedItem = new SelectedRow();
+				var selectedItem = new SelectedRow();
 				selectedItem.Label = obj.ToUniqueString();
 				//selectedItem.index = dataGrid.Items.IndexOf(obj);
 				if (selectedItem.Label == type.FullName)

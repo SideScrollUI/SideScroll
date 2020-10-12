@@ -12,8 +12,8 @@ namespace Atlas.Tabs
 {
 	public class FilterExpression
 	{
-		public string TextUppercase;
-		public bool MatchWord = false;
+		public string TextUppercase { get; set; }
+		public bool MatchWord { get; set; } = false;
 
 		public bool Matches(string valueUppercase)
 		{
@@ -38,10 +38,10 @@ namespace Atlas.Tabs
 
 	public class Filter
 	{
-		public string FilterText;
-		public int Depth = 0;
-		public List<FilterExpression> FilterExpressions = new List<FilterExpression>();
-		public bool IsAnd = false;
+		public string FilterText { get; set; }
+		public int Depth { get; set; } = 0;
+		public List<FilterExpression> FilterExpressions { get; set; } = new List<FilterExpression>();
+		public bool IsAnd { get; set; } = false;
 
 		// "ABC" | 123
 		// +3 "ABC" | 123

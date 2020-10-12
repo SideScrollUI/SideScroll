@@ -9,6 +9,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Threading;
 using System;
 using System.Collections;
@@ -783,9 +784,10 @@ namespace Atlas.UI.Avalonia.Controls
 				}
 				else
 				{
-					if (selectedRow.RowIndex < 0 || selectedRow.RowIndex >= List.Count) // some items might be filtered or have changed
+					int rowIndex = selectedRow.RowIndex;
+					if (rowIndex < 0 || rowIndex >= List.Count) // some items might be filtered or have changed
 						continue;
-					listItem = List[selectedRow.RowIndex];
+					listItem = List[rowIndex];
 				}
 				if (TabInstance.IsOwnerObject(listItem.GetInnerValue())) // stops self referencing loops
 					continue;
@@ -926,7 +928,10 @@ namespace Atlas.UI.Avalonia.Controls
 				//while (dataGrid.SelectedItems.Count > 0)
 				//dataGrid.SelectedItems.RemoveAt(0);
 				foreach (object obj in value)
-					DataGrid.SelectedItems.Add(obj);
+				{
+					if (List.Contains(obj))
+						DataGrid.SelectedItems.Add(obj);
+				}
 				//dataGrid.Render(); //Can't get data grid to flush this correctly, see DataGrid.FlushSelectionChanged()
 				DataGrid.InvalidateVisual(); // required for autoselection to work
 				//Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);
@@ -1021,8 +1026,6 @@ namespace Atlas.UI.Avalonia.Controls
 			TabDataSettings.SelectionType = SelectionType.User; // todo: place earlier with more accurate type
 
 			OnSelectionChanged?.Invoke(this, null);
-
-			TabInstance.UpdateNavigator();
 		}
 
 		public HashSet<SelectedRow> SelectedRows
@@ -1100,6 +1103,7 @@ namespace Atlas.UI.Avalonia.Controls
 				RowIndex = List.IndexOf(obj),
 				DataKey = GetDataKey(obj), // overrides label
 				DataValue = GetDataValue(obj),
+				Object = obj,
 			};
 			// Use the DataValue's DataKey if no DataKey found
 			if (selectedRow.DataKey == null && selectedRow.DataValue != null)
@@ -1285,6 +1289,26 @@ namespace Atlas.UI.Avalonia.Controls
 				textBoxSearch.Text = "";
 				FilterText = "";
 				TabInstance.SaveTabSettings();
+			}
+		}
+
+		public override void Render(DrawingContext context)
+		{
+			Dispatcher.UIThread.Post(UpdateVisible, DispatcherPriority.Background);
+			base.Render(context);
+		}
+
+		// Hide control when offscreen
+		private void UpdateVisible()
+		{
+			if (DataGrid == null)
+				return;
+
+			bool visible = AvaloniaUtils.IsControlVisible(this);
+			if (visible != DataGrid.IsVisible)
+			{
+				DataGrid.IsVisible = visible;
+				DataGrid.InvalidateArrange();
 			}
 		}
 	}

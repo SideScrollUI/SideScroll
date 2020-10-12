@@ -17,14 +17,27 @@ namespace Atlas.Serialize
 
 		public override void SaveInternal(Call call, object obj, string name = null)
 		{
-			using (var stream = new FileStream(DataPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
+			for (int attempt = 0; attempt < 10; attempt++)
 			{
-				using (var writer = new BinaryWriter(stream))
+				if (attempt > 0)
+					System.Threading.Thread.Sleep(attempt * 10);
+				try
 				{
-					var serializer = new Serializer();
-					serializer.Header.Name = name;
-					serializer.AddObject(call, obj);
-					serializer.Save(call, writer);
+					using (var stream = new FileStream(DataPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
+					{
+						using (var writer = new BinaryWriter(stream))
+						{
+							var serializer = new Serializer();
+							serializer.Header.Name = name;
+							serializer.AddObject(call, obj);
+							serializer.Save(call, writer);
+							break;
+						}
+					}
+				}
+				catch (Exception e)
+				{
+					call.Log.Add(e.Message);
 				}
 			}
 		}

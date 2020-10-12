@@ -20,7 +20,9 @@ namespace Atlas.Tabs
 		public Bookmark Bookmark { get; set; }
 		public string Name { get; set; }
 		public bool IsRoot { get; set; }
-		public ITab Tab { get; set; } // [TabRoot] will set this
+		public ITab Tab { get; set; } // [TabRoot] will set this to use the serialized tab as the root tab
+
+		public SelectedRow SelectedRow { get; set; } // The parent selection that created this bookmark
 
 		public TabViewSettings ViewSettings = new TabViewSettings(); // list selections, doesn't know about children
 		public Dictionary<string, TabBookmark> ChildBookmarks { get; set; } = new Dictionary<string, TabBookmark>(); // doesn't know which tabData to use, maps id to child info
@@ -111,7 +113,19 @@ namespace Atlas.Tabs
 		public void Add(TabBookmark tabBookmark)
 		{
 			ChildBookmarks.Add(tabBookmark.Name, tabBookmark);
-			Select(ChildBookmarks.Keys);
+
+			var selectedRow = tabBookmark.SelectedRow ?? new SelectedRow()
+			{
+				Label = tabBookmark.Name,
+			};
+			ViewSettings = ViewSettings ?? new TabViewSettings();
+			ViewSettings.TabDataSettings = ViewSettings.TabDataSettings ?? new List<TabDataSettings>();
+			if (ViewSettings.TabDataSettings.Count == 0)
+				ViewSettings.TabDataSettings.Add(new TabDataSettings());
+			ViewSettings.TabDataSettings[0].SelectionType = SelectionType.User;
+			ViewSettings.TabDataSettings[0].SelectedRows = ViewSettings.TabDataSettings[0].SelectedRows ?? new HashSet<SelectedRow>();
+			ViewSettings.TabDataSettings[0].SelectedRows.Add(selectedRow);
+			//Select(ChildBookmarks.Keys);
 		}
 
 		public SortedDictionary<string, T> GetSelectedData<T>()
