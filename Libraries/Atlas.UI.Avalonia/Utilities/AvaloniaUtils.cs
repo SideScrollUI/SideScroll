@@ -55,22 +55,25 @@ namespace Atlas.UI.Avalonia
 		// Add padding to avoid poppin effect?
 		public static bool IsControlVisible(IControl control)
 		{
+			Point controlTopLeftPoint = new Point(0, 0);
+			Point controlBottomRight = new Point(control.Bounds.Width, control.Bounds.Height);
 			IControl parentControl = control?.Parent;
 			while (parentControl != null)
 			{
-				Point? topLeft = control.TranslatePoint(control.Bounds.TopLeft, parentControl);
-				Point? bottomRight = control.TranslatePoint(control.Bounds.BottomRight, parentControl);
-				if (topLeft == null || bottomRight == null)
+				// Get control bounds in Parent control coordinates
+				Point? translatedTopLeft = control.TranslatePoint(controlTopLeftPoint, parentControl);
+				Point? translatedBottomRight = control.TranslatePoint(controlBottomRight, parentControl);
+				if (translatedTopLeft == null || translatedBottomRight == null)
 					return false;
 
-				var newBounds = new Rect(topLeft.Value, bottomRight.Value);
-				newBounds = newBounds.WithX(newBounds.X + parentControl.Bounds.X);
-				newBounds = newBounds.WithY(newBounds.Y + parentControl.Bounds.Y);
+				var parentBounds = new Rect(translatedTopLeft.Value, translatedBottomRight.Value);
+				parentBounds = parentBounds.WithX(parentBounds.X + parentControl.Bounds.X);
+				parentBounds = parentBounds.WithY(parentBounds.Y + parentControl.Bounds.Y);
 
-				if (newBounds.X > parentControl.Bounds.Right ||
-					newBounds.Y > parentControl.Bounds.Bottom ||
-					newBounds.Right < parentControl.Bounds.X ||
-					newBounds.Bottom < parentControl.Bounds.Y)
+				if (parentBounds.X > parentControl.Bounds.Right ||
+					parentBounds.Y > parentControl.Bounds.Bottom ||
+					parentBounds.Right < parentControl.Bounds.X ||
+					parentBounds.Bottom < parentControl.Bounds.Y)
 					return false;
 
 				parentControl = parentControl.Parent;
