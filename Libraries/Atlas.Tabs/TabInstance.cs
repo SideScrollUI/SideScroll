@@ -80,8 +80,6 @@ namespace Atlas.Tabs
 	{
 		public const string CurrentBookmarkName = "Current";
 
-		//public delegate void MethodInvoker();
-
 		public Project Project { get; set; }
 		public ITab iTab; // Collision with derived Tab
 		//public Log Log => TaskInstance.Log;
@@ -92,7 +90,7 @@ namespace Atlas.Tabs
 		public DataRepo DataApp => Project.DataApp;
 
 		public TabViewSettings TabViewSettings = new TabViewSettings();
-		public TabBookmark TabBookmark;
+		public TabBookmark TabBookmark { get; set; }
 		public SelectedRow SelectedRow { get; set; } // The parent selection that points to this tab
 
 		public int Depth
@@ -414,7 +412,6 @@ namespace Atlas.Tabs
 				call.Log.Add(e);
 			}
 
-			//Invoke(() => LoadUi(call, model));
 			var subTask = call.AddSubTask("Loading");
 			Invoke(() => LoadModelUI(subTask.Call, model)); // Some controls need to be created on the UI context
 		}
@@ -591,7 +588,6 @@ namespace Atlas.Tabs
 			{
 				Type = iTab?.GetType(),
 			};
-			//bookmark.tabBookmark.Name = Label;
 			GetBookmark(bookmark.TabBookmark);
 			bookmark = bookmark.DeepClone(TaskInstance.Call); // Sanitize and test bookmark
 			return bookmark;
@@ -673,13 +669,10 @@ namespace Atlas.Tabs
 			bookmark.Name = CurrentBookmarkName;
 			Project.DataApp.Save(bookmark.Name, bookmark, TaskInstance.Call);
 
-			//bookmark.Name = Label;
 			//project.navigator.Add(bookmark);
 
-			/*Serializer serializer = new Serializer();
-			Bookmark clonedBookmark = serializer.Clone<Bookmark>(log, bookmark);
-
-
+			/*
+			Bookmark clonedBookmark = bookmark.DeepClone();
 			project.navigator.Add(clonedBookmark);*/
 		}
 
@@ -711,7 +704,7 @@ namespace Atlas.Tabs
 			return TabBookmark?.GetSelectedData<T>() ?? new SortedDictionary<string, T>();
 		}
 
-		protected T GetBookmarkData<T>(string name = "default")
+		protected T GetBookmarkData<T>(string name = TabBookmark.DefaultDataName)
 		{
 			if (TabBookmark != null)
 				return TabBookmark.GetData<T>(name);
@@ -740,12 +733,6 @@ namespace Atlas.Tabs
 			T data = Project.DataApp.Load<T>(directory, name, TaskInstance.Call, createIfNeeded);
 			return data;
 		}
-
-		/*public ItemCollection<T> LoadAllData<T>(string directory = null)
-		{
-			ItemCollection<T> datas = project.DataApp.LoadAll<T>(taskInstance.call, directory);
-			return datas;
-		}*/
 
 		/*private void LoadBookmark2()
 		{
@@ -876,7 +863,6 @@ namespace Atlas.Tabs
 			{
 				ParentTabInstance = this,
 			};
-			//childTabInstance.tabBookmark = tabBookmark;
 
 			if (TabBookmark != null)
 			{
@@ -890,21 +876,20 @@ namespace Atlas.Tabs
 
 		private object GetBookmarkObject(string name)
 		{
+			if (TabBookmark == null)
+				return null;
+			
 			// FindMatches uses bookmarks
-			TabBookmark tabChildBookmark = null;
-			if (TabBookmark != null)
+			if (TabBookmark.ChildBookmarks.TryGetValue(name, out TabBookmark tabChildBookmark))
 			{
-				if (TabBookmark.ChildBookmarks.TryGetValue(name, out tabChildBookmark))
-				{
-					if (tabChildBookmark.TabModel != null)
-						return tabChildBookmark.TabModel;
-				}
-				/*foreach (Bookmark.Node node in tabInstance.tabBookmark.nodes)
-				{
-					tabChildBookmark = node;
-					break;
-				}*/
+				if (tabChildBookmark.TabModel != null)
+					return tabChildBookmark.TabModel;
 			}
+			/*foreach (Bookmark.Node node in tabInstance.tabBookmark.nodes)
+			{
+				tabChildBookmark = node;
+				break;
+			}*/
 			return tabChildBookmark;
 		}
 

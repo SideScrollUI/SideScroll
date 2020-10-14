@@ -375,6 +375,8 @@ namespace Atlas.UI.Avalonia.View
 			IsLoaded = true;
 
 			UpdateChildControls();
+
+			Instance.TabBookmark = null; // clear so user can navigate and save prefs
 		}
 
 		protected void AddObjects()
@@ -1025,9 +1027,9 @@ namespace Atlas.UI.Avalonia.View
 
 				ClearControls();
 
-				Instance.OnModelChanged += TabInstance_OnModelChanged;
+				Instance.OnModelChanged -= TabInstance_OnModelChanged;
 				if (Instance is ITabSelector tabSelector)
-					tabSelector.OnSelectionChanged += ParentListSelectionChanged;
+					tabSelector.OnSelectionChanged -= ParentListSelectionChanged;
 
 				Instance.Dispose();
 

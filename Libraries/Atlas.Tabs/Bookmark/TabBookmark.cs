@@ -15,7 +15,7 @@ namespace Atlas.Tabs
 	[PublicData]
 	public class TabBookmark
 	{
-		private const string DefaultDataName = "default";
+		public const string DefaultDataName = "default";
 
 		public Bookmark Bookmark { get; set; }
 		public string Name { get; set; }
