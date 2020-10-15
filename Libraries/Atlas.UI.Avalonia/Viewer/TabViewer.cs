@@ -25,10 +25,8 @@ namespace Atlas.UI.Avalonia
 
 		public Project Project { get; set; }
 
-		public Linker Linker { get; set; } = new Linker();
-
 		// Controls
-		public TabViewerToolbar toolbar;
+		public TabViewerToolbar Toolbar;
 		protected Grid bottomGrid;
 		protected ScrollViewer scrollViewer;
 		protected Grid contentGrid;
@@ -60,12 +58,12 @@ namespace Atlas.UI.Avalonia
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			toolbar = new TabViewerToolbar(this);
-			toolbar.ButtonLink.AddAsync(LinkAsync);
-			toolbar.ButtonImport.AddAsync(ImportBookmarkAsync);
-			toolbar.ButtonSnapshot?.Add(Snapshot);
-			toolbar.ButtonSnapshotCancel?.Add(CloseSnapshot);
-			Children.Add(toolbar);
+			Toolbar = new TabViewerToolbar(this);
+			Toolbar.ButtonLink.AddAsync(LinkAsync);
+			Toolbar.ButtonImport.AddAsync(ImportBookmarkAsync);
+			Toolbar.ButtonSnapshot?.Add(Snapshot);
+			Toolbar.ButtonSnapshotCancel?.Add(CloseSnapshot);
+			Children.Add(Toolbar);
 
 			bottomGrid = new Grid()
 			{
@@ -116,7 +114,7 @@ namespace Atlas.UI.Avalonia
 		{
 			Bookmark bookmark = TabView.Instance.CreateBookmark();
 			bookmark.TabBookmark = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
-			string uri = Linker.GetLinkUri(call, bookmark);
+			string uri = Project.Linker.GetLinkUri(call, bookmark);
 			await ClipBoardUtils.SetTextAsync(uri);
 		}
 
@@ -128,7 +126,7 @@ namespace Atlas.UI.Avalonia
 
 		private Bookmark ImportBookmark(Call call, string linkUri, bool checkVersion)
 		{
-			Bookmark bookmark = Linker.GetBookmark(call, linkUri, checkVersion);
+			Bookmark bookmark = Project.Linker.GetBookmark(call, linkUri, checkVersion);
 			if (bookmark == null)
 				return null;
 
@@ -162,7 +160,7 @@ namespace Atlas.UI.Avalonia
 			{
 				[Grid.RowProperty] = 1,
 			};
-			toolbar.SetSnapshotVisible(true);
+			Toolbar.SetSnapshotVisible(true);
 
 			Children.Remove(bottomGrid);
 			Children.Add(screenCapture);
@@ -170,7 +168,7 @@ namespace Atlas.UI.Avalonia
 
 		private void CloseSnapshot(Call call)
 		{
-			toolbar.SetSnapshotVisible(false);
+			Toolbar.SetSnapshotVisible(false);
 
 			Children.Remove(screenCapture);
 			Children.Add(bottomGrid);

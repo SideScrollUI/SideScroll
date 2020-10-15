@@ -95,16 +95,20 @@ namespace Atlas.Serialize
 			CanReference = !(Type.IsPrimitive || Type.IsEnum || Type == typeof(string));
 			NonNullableType = Type.GetNonNullableType();
 			IsPrimitive = NonNullableType.IsPrimitive;
-
-			//ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
-			ConstructorInfo constructorInfo = Type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
-			var constructors = Type.GetConstructors();
-			HasConstructor = (constructorInfo != null || constructors.Length == 0);
+			HasConstructor = HasEmptyConstructor(Type);
 
 			IsSerialized = (Type.GetCustomAttribute<UnserializedAttribute>() == null);
 			IsStatic = (Type.GetCustomAttribute<StaticAttribute>() != null);
 			IsPrivate = (Type.GetCustomAttribute<PrivateDataAttribute>() != null);
 			IsPublic = GetIsPublic();
+		}
+
+		public static bool HasEmptyConstructor(Type type)
+		{
+			//ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
+			ConstructorInfo constructorInfo = type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
+			var constructors = type.GetConstructors();
+			return (constructorInfo != null || constructors.Length == 0);
 		}
 
 		public TypeSchema(Log log, BinaryReader reader)

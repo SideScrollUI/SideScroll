@@ -15,6 +15,8 @@ namespace Atlas.Tabs
 		public virtual ProjectSettings ProjectSettings { get; set; }
 		public virtual UserSettings UserSettings { get; set; }
 
+		public Linker Linker { get; set; } = new Linker();
+
 		public DataRepo DataShared => new DataRepo(DataRepoPath, "Shared");
 		public DataRepo DataApp => new DataRepo(DataRepoPath, "Versions/" + ProjectSettings.DataVersion);
 

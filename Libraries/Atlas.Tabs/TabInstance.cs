@@ -255,6 +255,11 @@ namespace Atlas.Tabs
 			Task.Delay(milliSeconds).ContinueWith(t => action());
 		}
 
+		public void ScheduleTask(TimeSpan timeSpan, Action action)
+		{
+			Task.Delay(timeSpan).ContinueWith(t => action());
+		}
+
 		public void Invoke(Action action)
 		{
 			uiContext.Post(ActionCallback, action);
@@ -580,6 +585,17 @@ namespace Atlas.Tabs
 		{
 			if (OnClearSelection != null)
 				uiContext.Send(_ => OnClearSelection(this, new EventArgs()), null);
+		}
+
+		public bool IsLinkable
+		{
+			get
+			{
+				Type type = iTab?.GetType();
+				if (type == null)
+					return false;
+				return TypeSchema.HasEmptyConstructor(type);
+			}
 		}
 
 		public virtual Bookmark CreateBookmark()

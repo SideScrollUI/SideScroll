@@ -49,6 +49,7 @@ namespace Atlas.UI.Avalonia.View
 		// Layout Controls
 		private Grid _containerGrid;
 		private TabControlSplitContainer _tabParentControls;
+		private TabControlTitle _tabTitle;
 		private GridSplitter _parentChildGridSplitter;
 		private TabControlSplitContainer _tabChildControls;
 		private Panel _fillerPanel; // GridSplitter doesn't work without control on right side
@@ -196,8 +197,8 @@ namespace Atlas.UI.Avalonia.View
 			_containerGrid.Children.Add(_tabParentControls);
 			UpdateSplitterDistance();
 
-			var tabTitle = new TabControlTitle(Instance, Model.Name);
-			_tabParentControls.AddControl(tabTitle, false, SeparatorType.None);
+			_tabTitle = new TabControlTitle(Instance, Model.Name);
+			_tabParentControls.AddControl(_tabTitle, false, SeparatorType.None);
 		}
 
 		private void AddGridColumnSplitter()
@@ -213,6 +214,33 @@ namespace Atlas.UI.Avalonia.View
 			_parentChildGridSplitter.DragStarted += GridSplitter_DragStarted;
 			_parentChildGridSplitter.DragCompleted += GridSplitter_DragCompleted; // bug, this is firing when double clicking splitter
 			_parentChildGridSplitter.DoubleTapped += GridSplitter_DoubleTapped;
+
+			//AddLinkButton();
+		}
+
+		private void AddLinkButton()
+		{
+			// todo: add more checks for validity
+			if (!Instance.IsLinkable)
+				return;
+
+			var linkButton = new TabControlButton
+			{
+				VerticalAlignment = VerticalAlignment.Top,
+				Height = 26,
+				Content = "~",
+				Padding = new Thickness(1),
+				[Grid.ColumnProperty] = 1,
+			};
+			linkButton.Click += LinkButton_Click;
+			_containerGrid.Children.Add(linkButton);
+		}
+
+		private async void LinkButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		{
+			Bookmark bookmark = Instance.CreateBookmark();
+			string uri = Instance.Project.Linker.GetLinkUri(new Call(), bookmark);
+			await ClipBoardUtils.SetTextAsync(uri);
 		}
 
 		private void AddChildControls()
@@ -576,8 +604,8 @@ namespace Atlas.UI.Avalonia.View
 			if (_dispatcherTimer == null)
 			{
 				_dispatcherTimer = new DispatcherTimer();
-				_dispatcherTimer.Tick += DispatcherTimer_Tick;
 				_dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10); // Every 10 milliseconds
+				_dispatcherTimer.Tick += DispatcherTimer_Tick;
 				_dispatcherTimer.Start();
 			}
 		}

@@ -112,6 +112,7 @@ namespace Atlas.UI.Avalonia
 
 				Model.AddObject(tabDataGrid);
 			}
+
 			private void LoadSelectedCharts()
 			{
 				foreach (ListSeries listSeries in tabDataGrid.SelectedItems)
