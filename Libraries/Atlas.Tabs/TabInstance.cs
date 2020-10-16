@@ -40,7 +40,9 @@ namespace Atlas.Tabs
 
 		public async Task LoadAsync(Call call, TabModel model)
 		{
-			object result = await LoadMethod.LoadAsync(call);
+			Task task = LoadMethod.LoadAsync(call);
+			await task.ConfigureAwait(false);
+			object result = ((dynamic)task).Result;
 			model.AddData(result);
 		}
 	}

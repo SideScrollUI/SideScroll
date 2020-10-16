@@ -403,8 +403,6 @@ namespace Atlas.UI.Avalonia.View
 			IsLoaded = true;
 
 			UpdateChildControls();
-
-			Instance.TabBookmark = null; // clear so user can navigate and save prefs
 		}
 
 		protected void AddObjects()
@@ -791,6 +789,8 @@ namespace Atlas.UI.Avalonia.View
 			}
 			_tabChildControls.SetControls(newChildControls, orderedChildControls);
 			UpdateSelectedTabInstances();
+
+			Instance.TabBookmark = null; // clear so user can navigate and save prefs
 		}
 
 		private List<Control> CreateAllChildControls(out Dictionary<object, Control> newChildControls)

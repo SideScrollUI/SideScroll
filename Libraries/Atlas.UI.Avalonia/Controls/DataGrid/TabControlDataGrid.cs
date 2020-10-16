@@ -101,7 +101,7 @@ namespace Atlas.UI.Avalonia.Controls
 			AutoLoad = TabModel.AutoLoad;
 			List = iList;
 			AutoGenerateColumns = autoGenerateColumns;
-			this.TabDataSettings = tabDataSettings ?? new TabDataSettings();
+			TabDataSettings = tabDataSettings ?? new TabDataSettings();
 			Debug.Assert(iList != null);
 			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("Auto,*");
