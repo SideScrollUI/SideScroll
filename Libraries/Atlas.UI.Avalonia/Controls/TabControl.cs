@@ -7,11 +7,11 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabControl : Grid
 	{
-		protected TabInstance tabInstance;
+		public TabInstance TabInstance;
 
 		public TabControl(TabInstance tabInstance)
 		{
-			this.tabInstance = tabInstance;
+			TabInstance = tabInstance;
 
 			InitializeControls();
 		}
@@ -30,7 +30,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			get
 			{
-				SortedDictionary<int, object> orderedItems = new SortedDictionary<int, object>();
+				var orderedItems = new SortedDictionary<int, object>();
 				foreach (DataGridViewCell cell in dataGridView.SelectedCells)
 				{
 					orderedItems.Add(cell.RowIndex, cell.OwningRow.DataBoundItem);

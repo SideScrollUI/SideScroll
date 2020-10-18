@@ -27,6 +27,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private const int MaxMinColumnWidth = 150;
 		private const int MaxAutoSizeMinColumnWidth = 250;
 		private const int EnableWordWrapMinStringLength = 64; // Don't enable wordwrap unless we have to (expensive and not always wanted)
+
 		public int MaxColumnWidth = 600;
 
 		public TabModel TabModel;
@@ -43,7 +44,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public TextBox textBoxSearch;
 
 		//private HashSet<int> pinnedItems = new HashSet<int>(); // starred items?
-		private DataGridCollectionView collectionView;
+		public DataGridCollectionView CollectionView;
 		private Dictionary<string, DataGridColumn> columnObjects = new Dictionary<string, DataGridColumn>();
 		private Dictionary<DataGridColumn, string> columnNames = new Dictionary<DataGridColumn, string>();
 		private List<PropertyInfo> columnProperties = new List<PropertyInfo>(); // makes filtering faster, could change other Dictionaries strings to PropertyInfo
@@ -81,8 +82,8 @@ namespace Atlas.UI.Avalonia.Controls
 				}
 				else*/
 				{
-					collectionView = new DataGridCollectionView(List);
-					DataGrid.Items = collectionView;
+					CollectionView = new DataGridCollectionView(List);
+					DataGrid.Items = CollectionView;
 					Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 				}
 				//dataGrid.SelectedItem = null;
@@ -230,8 +231,8 @@ namespace Atlas.UI.Avalonia.Controls
 			if (AutoGenerateColumns)
 				AddColumns();
 
-			collectionView = new DataGridCollectionView(List);
-			DataGrid.Items = collectionView;
+			CollectionView = new DataGridCollectionView(List);
+			DataGrid.Items = CollectionView;
 			DataGrid.SelectedItem = null;
 
 			DataGrid.SelectionChanged += DataGrid_SelectionChanged;
@@ -758,7 +759,7 @@ namespace Atlas.UI.Avalonia.Controls
 				return rowObjects;
 
 			var keys = new Dictionary<string, object>(); // todo: change to unordered?
-			foreach (object listItem in collectionView) // collectionView takes filters into account
+			foreach (object listItem in CollectionView) // collectionView takes filters into account
 			{
 				if (listItem == null)
 					continue;
@@ -837,7 +838,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private object GetAutoSelectValue()
 		{
 			object firstValidObject = null;
-			foreach (object obj in collectionView)
+			foreach (object obj in CollectionView)
 			{
 				object value = obj;
 				if (value == null)
@@ -1181,18 +1182,18 @@ namespace Atlas.UI.Avalonia.Controls
 						TabModel tabModel = TabModel.Create(this.TabModel.Name, List);
 						TabBookmark bookmarkNode = tabModel.FindMatches(filter, filter.Depth);
 						TabInstance.FilterBookmarkNode = bookmarkNode;
-						collectionView.Filter = FilterPredicate;
+						CollectionView.Filter = FilterPredicate;
 						TabInstance.SelectBookmark(bookmarkNode);
 					}
 					else
 					{
-						collectionView.Filter = FilterPredicate;
-						collectionView.Refresh();
+						CollectionView.Filter = FilterPredicate;
+						CollectionView.Refresh();
 					}
 				}
 				else
 				{
-					collectionView.Filter = null;
+					CollectionView.Filter = null;
 				}
 			}
 		}
@@ -1263,7 +1264,7 @@ namespace Atlas.UI.Avalonia.Controls
 				iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
 
 			List = null;
-			collectionView = null;
+			CollectionView = null;
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e)

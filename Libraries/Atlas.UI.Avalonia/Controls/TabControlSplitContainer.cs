@@ -147,10 +147,12 @@ namespace Atlas.UI.Avalonia.Controls
 				rowDefinition.Height = new GridLength(1, GridUnitType.Star);
 			else
 				rowDefinition.Height = GridLength.Auto;
+
 			if (index is int i)
 				RowDefinitions.Insert(i, rowDefinition);
 			else
 				RowDefinitions.Add(rowDefinition);
+
 			filled |= fill;
 		}
 

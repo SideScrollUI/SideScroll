@@ -43,7 +43,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Initialize();
 		}
 
-		public override string ToString() => tabInstance.ToString();
+		public override string ToString() => TabInstance.ToString();
 
 		private void Initialize()
 		{

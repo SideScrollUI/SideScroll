@@ -1,5 +1,6 @@
 ﻿using Atlas.Core;
 using System;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test.DataGrid
 {
@@ -11,10 +12,10 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				var items = new ItemCollection<TestItem>();
+				var items = new ItemCollection<ManyTypesItem>();
 				for (int i = 0; i < 10; i++)
 				{
-					var testItem = new TestItem()
+					var testItem = new ManyTypesItem()
 					{
 						Integer = i,
 						Long = (long)i * int.MaxValue,
@@ -24,6 +25,8 @@ namespace Atlas.Tabs.Test.DataGrid
 					};
 					if (i % 2 == 0)
 						testItem.Object = (i % 4 == 0);
+					for (int j = 0; j < i; j++)
+						testItem.IntegerList.Add(j);
 					testItem.LongString = testItem.LongString + i; // make as a unique string
 					items.Add(testItem);
 				}
@@ -31,13 +34,14 @@ namespace Atlas.Tabs.Test.DataGrid
 			}
 		}
 
-		public class TestItem
+		public class ManyTypesItem
 		{
 			public int Integer { get; set; } = 0;
 			public long Long { get; set; } = 1234567890123456789;
 			public decimal Decimal { get; set; } = 123456789.0123456789M;
 			public bool Bool { get; set; }
 			public byte[] ByteArray { get; set; } = new byte[256];
+			public List<int> IntegerList { get; set; } = new List<int>();
 			public DateTime DateTime { get; set; }
 			public TimeSpan TimeSpan { get; set; }
 			public object Object { get; set; }

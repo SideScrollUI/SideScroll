@@ -154,26 +154,6 @@ namespace Atlas.UI.Avalonia.Controls
 			TabInstance.StartTask(taskCreator, taskCreator.ShowTask);
 			//this.UnselectAll();
 		}
-
-		/*public IList SelectedItemsOrdered
-		{
-			get
-			{
-				SortedDictionary<int, object> orderedItems = new SortedDictionary<int, object>();
-				foreach (DataGridViewCell cell in dataGridView.SelectedCells)
-				{
-					orderedItems.Add(cell.RowIndex, cell.OwningRow.DataBoundItem);
-				}
-				return orderedItems.Values.ToList();
-			}
-		}
-
-		private void dataGridView_SelectionChanged(object sender, EventArgs e)
-		{
-			OnSelectionChanged?.Invoke(this, null);
-		}
-		
-		*/
 	}
 }
 

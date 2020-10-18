@@ -14,12 +14,8 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		public TabInstance TabInstance;
 
-		private TabControlDataGrid tabControlDataGrid;
-
 		public event EventHandler<EventArgs> OnSelectionChanged;
-		private bool autoSelectNew = true;
-
-		public IList SelectedItems => tabControlDataGrid.SelectedItems;
+		public bool AutoSelectNew = true;
 
 		private bool ShowTasks
 		{
@@ -33,6 +29,12 @@ namespace Atlas.UI.Avalonia.Controls
 				return false;
 			}
 		}
+
+		public IList SelectedItems => _tabControlDataGrid.SelectedItems;
+
+
+		private TabControlDataGrid _tabControlDataGrid;
+
 		public override string ToString() => TabInstance.Model.Name;
 
 		private TabControlTasks()
@@ -65,23 +67,23 @@ namespace Atlas.UI.Avalonia.Controls
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			tabControlDataGrid = new TabControlDataGrid(TabInstance, TabInstance.Model.Tasks, false) // don't autogenerate
+			_tabControlDataGrid = new TabControlDataGrid(TabInstance, TabInstance.Model.Tasks, false) // don't autogenerate
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 			};
 
-			tabControlDataGrid.AddButtonColumn(nameof(TaskInstance.Cancel));
-			tabControlDataGrid.AddColumn("Task", nameof(TaskInstance.Label));
-			tabControlDataGrid.AddColumn("   %   ", nameof(TaskInstance.Percent));
-			tabControlDataGrid.AddColumn("Status", nameof(TaskInstance.Status));
+			_tabControlDataGrid.AddButtonColumn(nameof(TaskInstance.Cancel));
+			_tabControlDataGrid.AddColumn("Task", nameof(TaskInstance.Label));
+			_tabControlDataGrid.AddColumn("   %   ", nameof(TaskInstance.Percent));
+			_tabControlDataGrid.AddColumn("Status", nameof(TaskInstance.Status));
 			//tabControlDataGrid.AddColumn("Message", nameof(TaskInstance.Message));
 			//tabDataGrid.AddButtonColumn("<>", nameof(TaskInstance.Cancel)); // todo: No Button Column support
 
 			//tabDataGrid.AutoLoad = tabModel.AutoLoad;
-			tabControlDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;
+			_tabControlDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;
 			//tabDataGrid.Initialize();
-			Children.Add(tabControlDataGrid);
+			Children.Add(_tabControlDataGrid);
 
 			if (TabInstance.Model.Tasks.Count > 0)
 				SelectLastItem();
@@ -104,23 +106,23 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void SelectLastItem()
 		{
-			tabControlDataGrid.MinHeight = tabControlDataGrid.DesiredSize.Height;
-			MinHeight = tabControlDataGrid.MinHeight;
+			_tabControlDataGrid.MinHeight = _tabControlDataGrid.DesiredSize.Height;
+			MinHeight = _tabControlDataGrid.MinHeight;
 			//tabDataGrid.dataGrid._measured = false; doesn't work
 			//tabDataGrid.Measure(new Size(2000, 2000));
-			tabControlDataGrid.InvalidateMeasure();
+			_tabControlDataGrid.InvalidateMeasure();
 			//tabDataGrid.Height
 			//InvalidateMeasure();
 			//IsVisible = true;
 			IsVisible = ShowTasks;
 
-			if (autoSelectNew  && TabInstance.Model.Tasks.Count > 0)
+			if (AutoSelectNew && TabInstance.Model.Tasks.Count > 0)
 			{
 				TaskInstance taskInstance = TabInstance.Model.Tasks.Last();
-				if (tabControlDataGrid.SelectedItem == taskInstance)
+				if (_tabControlDataGrid.SelectedItem == taskInstance)
 					UpdateSelection();
 				else
-					tabControlDataGrid.SelectedItem = taskInstance;
+					_tabControlDataGrid.SelectedItem = taskInstance;
 				// use lock internally?
 				if (taskInstance.Finished)
 				{
@@ -131,7 +133,7 @@ namespace Atlas.UI.Avalonia.Controls
 					taskInstance.OnComplete = () => Dispatcher.UIThread.Post(() => TaskCompleted(taskInstance), DispatcherPriority.SystemIdle);
 				}
 				int lineHeight = 26;
-				tabControlDataGrid.MinHeight = Math.Min(TabInstance.Model.Tasks.Count * lineHeight + lineHeight, 6 * lineHeight);
+				_tabControlDataGrid.MinHeight = Math.Min(TabInstance.Model.Tasks.Count * lineHeight + lineHeight, 6 * lineHeight);
 			}
 		}
 
@@ -141,11 +143,11 @@ namespace Atlas.UI.Avalonia.Controls
 			IsVisible = ShowTasks;
 
 			// Unselect running if no error
-			if (autoSelectNew && !taskInstance.Errored)
+			if (AutoSelectNew && !taskInstance.Errored)
 			{
-				IList selectedItems = tabControlDataGrid.SelectedItems;
+				IList selectedItems = _tabControlDataGrid.SelectedItems;
 				if (selectedItems.Count == 1 && selectedItems[0] == taskInstance)
-					tabControlDataGrid.SelectedItem = null;
+					_tabControlDataGrid.SelectedItem = null;
 			}
 			else if (IsVisible != wasVisible)
 			{
@@ -166,8 +168,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void Dispose()
 		{
-			tabControlDataGrid.OnSelectionChanged -= TabData_OnSelectionChanged;
-			tabControlDataGrid.Dispose();
+			_tabControlDataGrid.OnSelectionChanged -= TabData_OnSelectionChanged;
+			_tabControlDataGrid.Dispose();
 
 			if (TabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
 				iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;

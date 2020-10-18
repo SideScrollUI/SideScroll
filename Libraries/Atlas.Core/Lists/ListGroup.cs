@@ -20,7 +20,7 @@ namespace Atlas.Core
 		public double? MinValue { get; set; }
 		public ItemCollection<ListSeries> Series { get; set; } = new ItemCollection<ListSeries>();
 
-		public double xBinSize;
+		public double XBinSize { get; set; }
 
 		public override string ToString() => Name;
 
@@ -51,7 +51,7 @@ namespace Atlas.Core
 
 					var listSeries = new ListSeries(category, categoryList, xPropertyName, yPropertyName)
 					{
-						XBinSize = xBinSize,
+						XBinSize = XBinSize,
 					};
 					Series.Add(listSeries);
 				}
