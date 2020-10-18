@@ -22,7 +22,7 @@ namespace Atlas.UI.Wpf
 		{
 			if (GetBindingType(dataItem) == typeof(bool))
 			{
-				CheckBox checkbox = new CheckBox()
+				var checkbox = new CheckBox()
 				{
 					Margin = new Thickness(10, 0, 0, 0)
 				};
@@ -47,7 +47,7 @@ namespace Atlas.UI.Wpf
 		{
 			if (GetBindingType(dataItem) == typeof(bool))
 			{
-				CheckBox checkbox = new CheckBox()
+				var checkbox = new CheckBox()
 				{
 					HorizontalAlignment = HorizontalAlignment.Center
 				};

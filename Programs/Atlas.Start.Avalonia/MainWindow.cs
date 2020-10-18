@@ -17,7 +17,7 @@ namespace Atlas.Start.Avalonia
 			Name = "Atlas",
 			LinkType = "atlas",
 			Version = new Version(1, 0),
-			DataVersion = new Version(1, 0),
+			DataVersion = new Version(1, 1),
 		};
 	}
 }
