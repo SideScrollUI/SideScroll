@@ -42,6 +42,7 @@ namespace Atlas.Tabs
 			FirstSavedOrNew,
 			AnyNewOrSaved,
 		}
+
 		public string Id { get; set; } // todo: Unique key for bookmarks?
 		public string Name { get; set; } = "<TabModel>";
 		public string Notes { get; set; } // not used anymore
@@ -111,6 +112,7 @@ namespace Atlas.Tabs
 		{
 			if (obj == null)
 				throw new Exception("Object is null");
+
 			Objects.Add(new TabObject() { Object = obj, Fill = fill });
 			if (obj is ChartSettings)
 				MinDesiredWidth = 800;

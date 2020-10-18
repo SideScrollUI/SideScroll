@@ -105,6 +105,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Debug.Assert(iList != null);
 			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("Auto,*");
+
 			Initialize();
 		}
 
@@ -765,6 +766,7 @@ namespace Atlas.UI.Avalonia.Controls
 				if (id != null)
 					keys[id] = listItem;
 			}
+
 			foreach (SelectedRow selectedRow in TabDataSettings.SelectedRows)
 			{
 				object listItem;
@@ -806,6 +808,9 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (TabDataSettings.SelectionType == SelectionType.None)
 				return false;
+
+			if (TabModel.AutoSelect == TabModel.AutoSelectType.None)
+				return true;
 
 			if (List.Count == 0)
 				return false;

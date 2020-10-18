@@ -61,7 +61,7 @@ namespace Atlas.UI.Avalonia
 			this.GetObservable(ClientSizeProperty).Subscribe(Resize);
 		}
 
-		public void AddTab(ITab tab)
+		public virtual void AddTab(ITab tab)
 		{
 			TabViewer.AddTab(tab);
 		}

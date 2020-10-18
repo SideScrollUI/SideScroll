@@ -37,17 +37,12 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private TabControlTasks()
 		{
-			Initialize();
+			InitializeControls();
 		}
 
 		public TabControlTasks(TabInstance tabInstance)
 		{
 			TabInstance = tabInstance;
-			Initialize();
-		}
-
-		private void Initialize()
-		{
 			InitializeControls();
 		}
 
@@ -88,6 +83,9 @@ namespace Atlas.UI.Avalonia.Controls
 			//tabDataGrid.Initialize();
 			Children.Add(tabControlDataGrid);
 
+			if (TabInstance.Model.Tasks.Count > 0)
+				SelectLastItem();
+
 			if (TabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
 				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
 		}
@@ -100,6 +98,12 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void CollectionChangedUI(NotifyCollectionChangedEventArgs e)
 		{
+			if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex >= 0)
+				SelectLastItem();
+		}
+
+		private void SelectLastItem()
+		{
 			tabControlDataGrid.MinHeight = tabControlDataGrid.DesiredSize.Height;
 			MinHeight = tabControlDataGrid.MinHeight;
 			//tabDataGrid.dataGrid._measured = false; doesn't work
@@ -110,27 +114,24 @@ namespace Atlas.UI.Avalonia.Controls
 			//IsVisible = true;
 			IsVisible = ShowTasks;
 
-			if (e.Action == NotifyCollectionChangedAction.Add)
+			if (autoSelectNew  && TabInstance.Model.Tasks.Count > 0)
 			{
-				if (autoSelectNew && e.NewStartingIndex >= 0 && TabInstance.Model.Tasks.Count > 0)
+				TaskInstance taskInstance = TabInstance.Model.Tasks.Last();
+				if (tabControlDataGrid.SelectedItem == taskInstance)
+					UpdateSelection();
+				else
+					tabControlDataGrid.SelectedItem = taskInstance;
+				// use lock internally?
+				if (taskInstance.Finished)
 				{
-					TaskInstance taskInstance = TabInstance.Model.Tasks.Last();
-					if (tabControlDataGrid.SelectedItem == taskInstance)
-						UpdateSelection();
-					else
-						tabControlDataGrid.SelectedItem = taskInstance;
-					// use lock internally?
-					if (taskInstance.Finished)
-					{
-						TaskCompleted(taskInstance);
-					}
-					else
-					{
-						taskInstance.OnComplete = () => Dispatcher.UIThread.Post(() => TaskCompleted(taskInstance), DispatcherPriority.SystemIdle);
-					}
-					int lineHeight = 26;
-					tabControlDataGrid.MinHeight = Math.Min(TabInstance.Model.Tasks.Count * lineHeight + lineHeight, 6 * lineHeight);
+					TaskCompleted(taskInstance);
 				}
+				else
+				{
+					taskInstance.OnComplete = () => Dispatcher.UIThread.Post(() => TaskCompleted(taskInstance), DispatcherPriority.SystemIdle);
+				}
+				int lineHeight = 26;
+				tabControlDataGrid.MinHeight = Math.Min(TabInstance.Model.Tasks.Count * lineHeight + lineHeight, 6 * lineHeight);
 			}
 		}
 

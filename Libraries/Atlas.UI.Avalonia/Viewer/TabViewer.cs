@@ -22,6 +22,7 @@ namespace Atlas.UI.Avalonia
 
 		public static TabViewer BaseViewer;
 		public static string LoadBookmarkUri { get; set; }
+		public static Bookmark LoadBookmark { get; set; }
 
 		public Project Project { get; set; }
 
@@ -127,6 +128,14 @@ namespace Atlas.UI.Avalonia
 		private Bookmark ImportBookmark(Call call, string linkUri, bool checkVersion)
 		{
 			Bookmark bookmark = Project.Linker.GetBookmark(call, linkUri, checkVersion);
+			if (bookmark == null)
+				return null;
+
+			return ImportBookmark(call, bookmark);
+		}
+
+		private Bookmark ImportBookmark(Call call, Bookmark bookmark)
+		{
 			if (bookmark == null)
 				return null;
 
@@ -272,6 +281,10 @@ namespace Atlas.UI.Avalonia
 			{
 				// Wait until Bookmarks tab has been created
 				Dispatcher.UIThread.Post(() => ImportBookmark(new Call(), LoadBookmarkUri, false), DispatcherPriority.SystemIdle);
+			}
+			else if (LoadBookmark != null)
+			{
+				tabInstance.TabBookmark = LoadBookmark.TabBookmark;
 			}
 			else if (Project.UserSettings.AutoLoad) // did we load successfully last time?
 			{

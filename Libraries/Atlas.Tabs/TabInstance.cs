@@ -308,24 +308,25 @@ namespace Atlas.Tabs
 			call = call ?? new Call(taskCreator.Label);
 			TaskInstance taskInstance = taskCreator.Start(call);
 			taskInstance.ShowTask = showTask;
-			Model.Tasks.Add(taskInstance);
+			if (showTask)
+				Model.Tasks.Add(taskInstance);
 		}
 
 		public void StartTask(CallAction callAction, bool useTask, bool showTask)
 		{
-			var taskDelegate = new TaskDelegate(callAction.Method.Name, callAction, useTask);
+			var taskDelegate = new TaskDelegate(callAction.Method.Name.TrimEnd("Async"), callAction, useTask);
 			StartTask(taskDelegate, showTask);
 		}
 
 		public void StartAsync(CallActionAsync callAction, Call call = null, bool showTask = false)
 		{
-			var taskDelegate = new TaskDelegateAsync(callAction.Method.Name, callAction, true);
+			var taskDelegate = new TaskDelegateAsync(callAction.Method.Name.TrimEnd("Async"), callAction, true);
 			StartTask(taskDelegate, showTask, call);
 		}
 
 		public void StartTask(CallActionParams callAction, bool useTask, bool showTask, params object[] objects)
 		{
-			var taskDelegate = new TaskDelegateParams(null, callAction.Method.Name, callAction, useTask, null, objects);
+			var taskDelegate = new TaskDelegateParams(null, callAction.Method.Name.TrimEnd("Async"), callAction, useTask, null, objects);
 			StartTask(taskDelegate, showTask);
 		}
 
@@ -426,6 +427,7 @@ namespace Atlas.Tabs
 		private async Task<TabModel> LoadModelAsync(Call call)
 		{
 			var model = new TabModel(Model.Name);
+			model.Tasks = Model.Tasks;
 			if (this is ITabAsync tabAsync)
 			{
 				try

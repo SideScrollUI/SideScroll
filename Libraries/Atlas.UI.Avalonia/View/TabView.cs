@@ -932,27 +932,32 @@ namespace Atlas.UI.Avalonia.View
 				tabData.Dispose();
 			}
 			TabDatas.Clear();
+
 			if (TabActions != null)
 			{
 				//tabActions.Dispose();
 				TabActions = null;
 			}
+
 			if (TabTasks != null)
 			{
 				TabTasks.OnSelectionChanged -= ParentListSelectionChanged;
 				TabTasks.Dispose();
 				TabTasks = null;
 			}
+
 			if (_tabParentControls != null)
 			{
 				_tabParentControls.Clear();
 				_tabParentControls = null;
 			}
+
 			if (_tabChildControls != null)
 			{
 				_tabChildControls.Clear();
 				_tabChildControls = null;
 			}
+
 			if (_parentChildGridSplitter != null)
 			{
 				_parentChildGridSplitter.DragDelta -= GridSplitter_DragDelta;
@@ -961,6 +966,7 @@ namespace Atlas.UI.Avalonia.View
 				_parentChildGridSplitter.DoubleTapped -= GridSplitter_DoubleTapped;
 				_parentChildGridSplitter = null;
 			}
+
 			foreach (ITabSelector tabSelector in CustomTabControls)
 			{
 				tabSelector.OnSelectionChanged -= ParentListSelectionChanged;

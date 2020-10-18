@@ -115,10 +115,20 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			_gridItems.Add(item);
 			AddSeparatorRowDefinition(RowDefinitions.Count);
-			/*if (separatorType == SeparatorType.Splitter)
-				AddRowSplitter(RowDefinitions.Count);
-			else if (separatorType == SeparatorType.Splitter)
-				AddRowSpacer(RowDefinitions.Count);*/
+			/*if (separatorType == SeparatorType.Splitter && fill)
+			{
+				// Add a Grid Splitter if there's been a single star row definition before this one
+				for (int rowIndex = RowDefinitions.Count - 2; rowIndex >= 0; rowIndex--)
+				{
+					if (RowDefinitions[rowIndex].Height.IsStar)
+					{
+						AddHorizontalGridSplitter(RowDefinitions.Count - 1);
+						break;
+					}
+				}
+			}*/
+			//else if (separatorType == SeparatorType.Splitter)
+			//	AddRowSpacer(RowDefinitions.Count);
 			AddRowDefinition(fill);
 
 			SetRow(control, RowDefinitions.Count - 1);
@@ -147,13 +157,13 @@ namespace Atlas.UI.Avalonia.Controls
 		// always show splitters if their is a fill before or after?
 		// Do we allow changing an auto to a fill?
 		// always add a RowDefinition before and after
-		public void InsertControl(Control control, bool fill, int index)
+		public void InsertControl(Control control, bool fill, int rowIndex)
 		{
-			AddSeparatorRowDefinition(index - 1);
+			AddSeparatorRowDefinition(rowIndex - 1);
 
-			AddRowDefinition(fill, index);
+			AddRowDefinition(fill, rowIndex);
 
-			SetRow(control, index);
+			SetRow(control, rowIndex);
 			//Children.Insert(index, control);
 			Children.Add(control);
 		}
@@ -174,7 +184,7 @@ namespace Atlas.UI.Avalonia.Controls
 			foreach (var gridItem in _gridItems)
 			{
 				if (index > 0)
-					AddGridSplitter(index);
+					AddHorizontalGridSplitter(index);
 				index++;
 				// separator
 				RowDefinition rowDefinition = RowDefinitions[index];
@@ -191,16 +201,16 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private void AddSeparatorRowDefinition(int index)
+		private void AddSeparatorRowDefinition(int rowIndex)
 		{
 			var rowDefinition = new RowDefinition()
 			{
 				Height = GridLength.Auto,
 			};
-			RowDefinitions.Insert(index, rowDefinition);
+			RowDefinitions.Insert(rowIndex, rowDefinition);
 		}
 
-		private void AddGridSplitter(int index)
+		private void AddHorizontalGridSplitter(int rowIndex)
 		{
 			/*RowDefinition rowDefinition = new RowDefinition();
 			rowDefinition.Height = new GridLength(6);
@@ -217,12 +227,34 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			GridSplitters.Add(gridSplitter);
 			//gridSplitter.DragCompleted += verticalGridSplitter_DragCompleted;
-			SetRow(gridSplitter, index);
+			SetRow(gridSplitter, rowIndex);
 			//Children.Insert(index, gridSplitter);
 			Children.Add(gridSplitter);
 		}
 
-		private void AddRowSpacer(int index)
+		private void AddVerticalGridSplitter(int columnIndex)
+		{
+			/*RowDefinition rowDefinition = new RowDefinition();
+			rowDefinition.Height = new GridLength(6);
+			RowDefinitions.Insert(index, rowDefinition);*/
+
+			var gridSplitter = new GridSplitter()
+			{
+				VerticalAlignment = VerticalAlignment.Stretch,
+				Background = Brushes.Black,
+				//ShowsPreview = true,
+				//HorizontalAlignment.Stretch,
+				//VerticalAlignment = VerticalAlignment.Center,
+				Height = 6,
+			};
+			//GridSplitters.Add(gridSplitter);
+			//gridSplitter.DragCompleted += verticalGridSplitter_DragCompleted;
+			SetColumn(gridSplitter, columnIndex);
+			//Children.Insert(index, gridSplitter);
+			Children.Add(gridSplitter);
+		}
+
+		private void AddRowSpacer(int rowIndex)
 		{
 			//if (Children.Count <= 1)
 			//	return;
@@ -235,7 +267,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				//Width = 100,
 				Height = 6,
-				[Grid.RowProperty] = index
+				[Grid.RowProperty] = rowIndex
 			};
 			// Add a dummy panel so the children count equals the rowdefinition count, otherwise we need to track which rowdefinitions belong to which control
 			//Bounds border = new Bounds();

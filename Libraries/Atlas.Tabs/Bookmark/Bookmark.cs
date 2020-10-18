@@ -49,6 +49,14 @@ namespace Atlas.Tabs
 			bookmark.Imported = true;
 			return bookmark;
 		}
+
+		public static Bookmark Create(string uri)
+		{
+			Bookmark bookmark = new Bookmark();
+			bookmark.TabBookmark.Select(uri);
+			bookmark.Imported = true;
+			return bookmark;
+		}
 	}
 
 	// Display Class

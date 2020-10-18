@@ -7,7 +7,7 @@ namespace Atlas.Core
 	{
 		public delegate void CallAction(Call call);
 
-		private CallAction Action;
+		public CallAction Action;
 
 		public override string ToString() => Label;
 
