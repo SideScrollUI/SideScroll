@@ -175,8 +175,3 @@ namespace Atlas.Tabs
 		public override string ToString() => Label;
 	}
 }
-/*
-Type of control
-Name of control
-	Usually a reference
-*/

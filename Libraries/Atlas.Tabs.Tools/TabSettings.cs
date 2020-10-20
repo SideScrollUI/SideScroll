@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Tools
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				model.Items = ListProperty.Create(this.Project.ProjectSettings);
+				model.Items = ListProperty.Create(Project.ProjectSettings);
 				model.Editing = true;
 
 				model.Actions = new List<TaskCreator>()

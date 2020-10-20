@@ -1,8 +1,6 @@
 ﻿using Atlas.Core;
-using Atlas.Tabs;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 namespace Atlas.Tabs.Tools
@@ -76,7 +74,7 @@ namespace Atlas.Tabs.Tools
 				}
 				model.Items = items;
 
-				/*ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>();
+				/*var actions = new ItemCollection<TaskCreator>();
 				actions.Add(new TaskDelegate("Save", Save));
 				model.Actions = actions;*/
 			}

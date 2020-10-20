@@ -13,7 +13,7 @@ namespace Atlas.Tabs
 		[InnerValue]
 		public object Object { get; set; }
 
-		public bool autoLoad = true;
+		public bool AutoLoad = true;
 #pragma warning disable 414
 		public event PropertyChangedEventHandler PropertyChanged = null;
 

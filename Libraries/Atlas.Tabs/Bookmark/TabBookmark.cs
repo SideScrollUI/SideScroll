@@ -53,8 +53,8 @@ namespace Atlas.Tabs
 				{
 					if (ViewSettings == null)
 						return "";
-					string address = ViewSettings.Address;
-					return address;
+
+					return ViewSettings.Address;
 				}
 			}
 		}
@@ -260,6 +260,7 @@ namespace Atlas.Tabs
 			}
 			if (lastLeaf != null)
 				return lastLeaf;
+
 			if (IsRoot)
 				return this;
 

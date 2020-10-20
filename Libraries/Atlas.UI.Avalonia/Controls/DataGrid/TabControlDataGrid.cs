@@ -112,14 +112,6 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public override string ToString() => TabModel.Name;
 
-		/*protected override void OnMeasureInvalidated()
-		{
-			dataGrid.InvalidateMeasure();
-			base.OnMeasureInvalidated();
-			if (Parent != null)
-				Parent.InvalidateMeasure();
-		}*/
-
 		// this breaks when content is too wide for Tab
 		// real DesiredSize doesn't work because of HorizontalAlign = Stretch?
 		/*public new Size DesiredSize
@@ -410,7 +402,6 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				// doesn't work
 				//collectionView.Refresh();
-				//collectionView.
 			}
 		}
 
@@ -489,10 +480,13 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (depth == 0)
 				return null;
+
 			if (obj is DataGridRow row)
 				return row;
+
 			if (obj is Control control)
 				return GetControlRow(control.Parent, depth - 1);
+
 			return null;
 		}
 
@@ -711,19 +705,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void AddButtonColumn(TabDataSettings.MethodColumn methodColumn)
 		{
-			/*DataGridTemplateColumn column = new DataGridTemplateColumn();
-			//column.CellTemplate.
-
-			//column.Binding = new Binding(methodName);
-			//column.Sortable = true;
-
-			column.Header = label;
-			dataGrid.Columns.Add(column);*/
-
-			// databound
-			//DataGridCheckBoxColumn checkBoxColumn = new DataGridCheckBoxColumn()
 			var column = new DataGridButtonColumn(methodColumn.MethodInfo, methodColumn.Label);
-			//column.Header = methodColumn.methodInfo.Name;
 			DataGrid.Columns.Add(column);
 			columnNames[column] = methodColumn.Label;
 		}
@@ -1323,78 +1305,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 /* From Atlas.UI.Wpf
 
-
-// 
-
-
-private void Item_OnModified(object sender, EventArgs e)
-{
-	tabInstance.ItemModified();
-}
-
-private void dataGrid_Loaded(object sender, RoutedEventArgs e)
-{
-	enableSaving = false;
-	if (tabInstance.tabConfiguration.SplitterDistance == null)
-	{
-		if (dataGrid.ActualWidth > MaxDefaultWidth)
-			dataGrid.Width = MaxDefaultWidth;
-	}
-	if (AutoLoad)
-	{
-		LoadSavedSettings();
-		if (tabDataConfiguration.selected.Count == 0 || (autoSelectNew && dataGrid.SelectedCells.Count == 0))
-			AutoSelect();
-	}
-
-	/*foreach (var column in dataGrid.Columns)
-{
-  var starSize = column.ActualWidth / dataGrid.ActualWidth;
-  column.Width = new DataGridLength(starSize, DataGridLengthUnitType.Star);
-}*//*
-
-	dataGrid.Loaded -= dataGrid_Loaded;
-	//dataGrid.SelectionChanged += DataGrid_SelectionChanged; // doesn't catch cell selection, only row selections
-	//dataGrid.CurrentCellChanged += DataGrid_CurrentCellChanged; // happens before selection changes
-	dataGrid.SelectedCellsChanged += DataGrid_SelectedCellsChanged;
-	dataGrid.PreviewMouseLeftButtonDown += DataGrid_PreviewMouseLeftButtonDown;
-	enableSaving = true;
-}
-
 /*
-public int SelectedIndex
-{
-set
-{
-  dataGrid.SelectedCells.Clear();
-  if (dataGrid.Items.Count == 0) // todo: find out why the databinding falls behind, rows don't get created when there's no columns?
-	  return;
-  dataGrid.CurrentCell = new DataGridCellInfo(value, dataGrid.Columns[0]);
-  var row = dataGrid.Rows[value];
-  //row.Selected = true;
-  row.Cells[0].Selected = true;
-  dataGrid.FirstDisplayedScrollingRowIndex = value;
-  SaveSelectedItems();
-}
-}*//*
-
-
-/*private void EnsureVisibleRow(int rowIndex)
-{
-if (rowIndex >= 0 && rowIndex < dataGrid.RowCount)
-{
-  int countVisible = dataGrid.DisplayedRowCount(false);
-  int firstVisible = dataGrid.FirstDisplayedScrollingRowIndex;
-  if (rowIndex < firstVisible)
-  {
-	  dataGrid.FirstDisplayedScrollingRowIndex = rowIndex;
-  }
-  else if (rowIndex >= firstVisible + countVisible)
-  {
-	  dataGrid.FirstDisplayedScrollingRowIndex = rowIndex - countVisible / 2 + 1;
-  }
-}
-}*//*
 
 public List<DataGridCellInfo> GetMatchingCellInfos()
 {
@@ -1560,41 +1471,6 @@ foreach (int rowIndex in pinnedItems)
 }
 }*//*
 
-private void CopyCellData()
-{
-	ApplicationCommands.Copy.Execute(null, dataGrid);
-
-	var oldData = Clipboard.GetDataObject();
-	var newData = new DataObject();
-
-	foreach (string format in oldData.GetFormats())
-	{
-		if (format.Equals("UnicodeText") || format.Equals("Text"))
-		{
-			newData.SetData(format, Regex.Replace(((String)oldData.GetData(format)), "\r\n$", ""));
-		}
-		else
-		{
-			newData.SetData(format, oldData.GetData(format));
-		}
-	}
-
-	Clipboard.SetDataObject(newData);
-}
-
-private void textBoxSearch_PreviewKeyDown(object sender, KeyEventArgs e)
-{
-	if (e.Key == Key.Enter || e.Key == Key.Tab)
-	{
-		FilterText = textBoxSearch.Text;
-		AutoSelect();
-		if (enableSaving)
-			tabInstance.SaveConfiguration();
-		//e.Handled = true;
-		return;
-	}
-}
-
 /*private ICommand searchCommand;
 public ICommand SearchCommand
 {
@@ -1632,34 +1508,7 @@ if (e.Button == MouseButtons.Right)
   }
 }
 }
-
-private void dataGrid_DoubleClick(object sender, EventArgs e)
-{
-// get rid of all the other neighbors
-/*if (call.parent != null)
-{
-  call.parent.dataGrid.BeginUpdate();
-  List<int> selected = call.parent.dataGrid.SelectedIndices.Cast<int>().ToList();
-  foreach (int index in selected)
-  {
-	  object listItem = call.parent.dataGrid.Items[index];
-	  if (listItem != this.listItem)
-		  call.parent.dataGrid.SetSelected(index, false); // probably triggering event each time
-  }
-  call.parent.dataGrid.EndUpdate();
-}*//*
-}*//*
-
-private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-{
-	UpdateSelection();
-
-	if (enableSaving)
-	{
-		autoSelectNew = (dataGrid.SelectedCells.Count == 0);
-		tabInstance.SaveConfiguration(); // selection has probably changed
-	}
-}
+//*
 
 private void dataGrid_Sorting(object sender, DataGridSortingEventArgs e)
 {
@@ -1698,26 +1547,6 @@ private void dataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArg
 			e.Cancel = true;
 	}
 }
-
-// use Formatted() formatting instead of default
-private void dataGrid_CopyingRowClipboardContent(object sender, DataGridRowClipboardEventArgs e)
-{
-	var rowContents = e.ClipboardRowContent.ToList(); // create a copy before clearing
-	e.ClipboardRowContent.Clear();
-	foreach (var cellContent in rowContents)
-	{
-		object content = cellContent.Content;
-		if (content != null)
-		{
-			Type type = content.GetType();
-			if (!type.IsNumeric())
-				content = content.Formatted();
-		}
-
-		e.ClipboardRowContent.Add(new DataGridClipboardCellContent(cellContent.Item, cellContent.Column, content));
-	}
-}
-
 
 /*public class DynamicTemplateSelector : DataTemplateSelector
 {

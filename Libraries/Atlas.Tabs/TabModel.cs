@@ -101,10 +101,12 @@ namespace Atlas.Tabs
 		{
 			if (ObjectHasLinks(obj) == false)
 				return null;
+
 			TabModel tabModel = new TabModel(name);
 			tabModel.AddData(obj);
 			if (tabModel.ItemList.Count == 0)
 				return null;
+
 			return tabModel;
 		}
 

@@ -2,7 +2,6 @@
 using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Atlas.Tabs.Test
@@ -41,7 +40,7 @@ namespace Atlas.Tabs.Test
 				ParamTestItem clone = paramTestItem.DeepClone(call);
 				var result = new ParamTestResult()
 				{
-					parameters = clone,
+					Parameters = clone,
 				};
 				items.Add(result);
 			}
@@ -60,8 +59,8 @@ namespace Atlas.Tabs.Test
 
 		public class ParamTestResult
 		{
-			public ParamTestItem parameters;
-			public string String => parameters.Name;
+			public ParamTestItem Parameters;
+			public string String => Parameters.Name;
 		}
 	}
 }

@@ -89,14 +89,15 @@ namespace Atlas.Tabs.Tools
 			[HiddenColumn]
 			[InnerValue]
 			public ITab iTab;
-			private string filePath;
-			private FtpItem fileData;
+
+			public string FilePath;
+			public FtpItem FileData;
 
 			public ListFile(FTP.Info ftpInfo, FtpItem fileData)
 			{
-				this.FtpInfo = ftpInfo;
-				this.fileData = fileData;
-				this.filePath = fileData.fullPath;
+				FtpInfo = ftpInfo;
+				FileData = fileData;
+				FilePath = fileData.fullPath;
 
 				Filename = fileData.Filename;
 				Size = fileData.Size;

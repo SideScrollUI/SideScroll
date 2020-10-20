@@ -100,17 +100,18 @@ namespace Atlas.Tabs.Tools
 		[HiddenColumn]
 		[InnerValue]
 		public ITab iTab;
-		private string filePath;
-		private FileInfo fileInfo;
+
+		public string FilePath;
+		public FileInfo FileInfo;
 
 		public ListFile(string filePath)
 		{
-			this.filePath = filePath;
-			this.fileInfo = new FileInfo(filePath);
+			FilePath = filePath;
+			FileInfo = new FileInfo(filePath);
 
 			Filename = Path.GetFileName(filePath);
-			Size = fileInfo.Length;
-			Modified = fileInfo.LastWriteTime;
+			Size = FileInfo.Length;
+			Modified = FileInfo.LastWriteTime;
 			if (Filename.EndsWith(".atlas"))
 				iTab = new TabFileSerialized(filePath);
 			else

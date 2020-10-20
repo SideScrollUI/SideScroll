@@ -27,7 +27,7 @@ namespace Atlas.Tabs
 
 		public void MergeBookmarks(List<Bookmark> bookmarks)
 		{
-			/*List<Node> nodes = new List<Node>();
+			/*var nodes = new List<Node>();
 			foreach (Bookmark bookmark in bookmarks)
 				nodes.Add(bookmark.node);
 			node.MergeNodes(nodes);*/
