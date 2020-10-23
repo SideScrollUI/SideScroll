@@ -7,6 +7,15 @@ using System.Reflection;
 
 namespace Atlas.Core
 {
+	public enum SeriesType
+	{
+		Average,
+		Sum,
+		Count,
+		Minimum,
+		Maximum,
+	}
+
 	public class ListSeries
 	{
 		public string Name { get; set; }
@@ -22,6 +31,9 @@ namespace Atlas.Core
 		public string Description { get; set; }
 
 		public bool IsStacked { get; set; }
+		public TimeSpan? PeriodDuration { get; set; }
+		public SeriesType SeriesType { get; set; } = SeriesType.Sum;
+		public double Total { get; set; }
 
 		public override string ToString() => Name;
 
@@ -76,6 +88,20 @@ namespace Atlas.Core
 			if (double.IsNaN(value))
 				return 0;
 			return value;
+		}
+
+		public double GetTotal(DateTime? startTime, DateTime? endTime)
+		{
+			if (startTime == null || endTime == null || PeriodDuration == null || XPropertyInfo == null || XPropertyInfo.PropertyType != typeof(DateTime))
+				return Total = GetSum();
+
+			switch (SeriesType)
+			{
+				case SeriesType.Sum: return Total = TimeRangePeriod.TotalSum(TimeRangeValues, startTime.Value, endTime.Value, PeriodDuration.Value);
+				case SeriesType.Minimum: return Total = TimeRangePeriod.TotalMinimum(TimeRangeValues);
+				case SeriesType.Maximum: return Total = TimeRangePeriod.TotalMaximum(TimeRangeValues);
+				default: return Total = TimeRangePeriod.TotalAverage(TimeRangeValues, startTime.Value, endTime.Value, PeriodDuration.Value);
+			}
 		}
 
 		public double GetSum()

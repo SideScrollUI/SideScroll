@@ -57,14 +57,14 @@ namespace Atlas.Core
 				}
 				categoryList.Add(obj);
 			}
-			SortBySum();
+			SortByTotal();
 		}
 
-		public void SortBySum()
+		public void SortByTotal()
 		{
 			var sums = new Dictionary<ListSeries, double>();
 			foreach (var listSeries in Series)
-				sums.Add(listSeries, listSeries.GetSum());
+				sums.Add(listSeries, listSeries.GetTotal(StartTime, EndTime));
 
 			var sortedDict = from entry in sums orderby entry.Value descending select entry.Key;
 

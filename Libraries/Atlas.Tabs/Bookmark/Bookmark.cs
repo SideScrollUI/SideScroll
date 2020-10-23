@@ -50,10 +50,10 @@ namespace Atlas.Tabs
 			return bookmark;
 		}
 
-		public static Bookmark Create(string uri)
+		public static Bookmark Create(params string[] labels)
 		{
-			Bookmark bookmark = new Bookmark();
-			bookmark.TabBookmark.Select(uri);
+			var bookmark = new Bookmark();
+			bookmark.TabBookmark = TabBookmark.Create(labels);
 			bookmark.Imported = true;
 			return bookmark;
 		}

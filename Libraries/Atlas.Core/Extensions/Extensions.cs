@@ -252,22 +252,23 @@ namespace Atlas.Extensions // rename to Core?
 
 		public static string FormattedDecimal(this TimeSpan timeSpan)
 		{
+			string format = "#,0.#";
 			if (timeSpan.TotalDays > 7)
-				return (timeSpan.TotalDays / 7).Formatted() + " Weeks";
+				return (timeSpan.TotalDays / 7).ToString(format) + " Weeks";
 			else if (timeSpan.TotalDays == 7)
-				return (timeSpan.TotalDays / 7).Formatted() + " Week";
+				return (timeSpan.TotalDays / 7).ToString(format) + " Week";
 			else if (timeSpan.TotalDays > 1)
-				return timeSpan.TotalDays.Formatted() + " Days";
+				return timeSpan.TotalDays.ToString(format) + " Days";
 			else if (timeSpan.TotalDays == 1)
-				return timeSpan.TotalDays.Formatted() + " Day";
+				return timeSpan.TotalDays.ToString(format) + " Day";
 			else if (timeSpan.TotalHours > 1)
-				return timeSpan.TotalHours.Formatted() + " Hours";
+				return timeSpan.TotalHours.ToString(format) + " Hours";
 			else if (timeSpan.TotalHours == 1)
-				return timeSpan.TotalHours.Formatted() + " Hour";
+				return timeSpan.TotalHours.ToString(format) + " Hour";
 			else if (timeSpan.TotalMinutes > 1)
-				return timeSpan.TotalMinutes.Formatted() + " Minutes";
+				return timeSpan.TotalMinutes.ToString(format) + " Minutes";
 			else if (timeSpan.TotalMinutes == 1)
-				return timeSpan.TotalMinutes.Formatted() + " Minute";
+				return timeSpan.TotalMinutes.ToString(format) + " Minute";
 			else
 				return timeSpan.TotalSeconds + " Seconds";
 		}

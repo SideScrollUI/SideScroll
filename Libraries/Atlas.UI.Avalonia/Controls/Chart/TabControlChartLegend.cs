@@ -115,7 +115,7 @@ namespace Atlas.UI.Avalonia.Controls
 					unused.Add(legendItem);
 			}
 
-			var ordered = nonzero.OrderByDescending(a => a.Sum).ToList();
+			var ordered = nonzero.OrderByDescending(a => a.Total).ToList();
 			ordered.AddRange(unused);
 			if (ListGroup.ShowLegend && ListGroup.ShowOrder && !ListGroup.Horizontal)
 			{

@@ -65,6 +65,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		//private List<ListSeries> ListSeries { get; set; }
 		public List<OxyListSeries> OxyListSeriesList = new List<OxyListSeries>();
+		private Dictionary<string, OxyListSeries> IdxNameToSeries { get; set; } = new Dictionary<string, OxyListSeries>();
 		private Dictionary<IList, ListSeries> ListToTabSeries { get; set; } = new Dictionary<IList, ListSeries>();
 		private Dictionary<IList, int> ListToTabIndex { get; set; } = new Dictionary<IList, int>(); // not used
 		public List<ListSeries> SelectedSeries
@@ -738,9 +739,7 @@ namespace Atlas.UI.Avalonia.Controls
 			LinearAxis = null;
 			DateTimeAxis = null;
 			Legend?.Unload();
-			OxyListSeriesList.Clear();
-			ListToTabSeries.Clear();
-			ListToTabIndex.Clear();
+			ClearSeries();
 			//if (plotModel != null)
 			//	plotModel.Series.Clear();
 			/*foreach (ListSeries listSeries in ChartSettings.ListSeries)
@@ -751,19 +750,39 @@ namespace Atlas.UI.Avalonia.Controls
 			}*/
 		}
 
-		public void MergeGroup(ListGroup listGroup)
+		private void ClearSeries()
 		{
-			listGroup.SortBySum();
-			foreach (var series in listGroup.Series)
-				AddSeries(series);
+			PlotModel?.Series.Clear();
+
+			OxyListSeriesList.Clear();
+			ListToTabSeries.Clear();
+			ListToTabIndex.Clear();
+			IdxNameToSeries.Clear();
 		}
 
-		public void AddSeries(ListSeries listSeries)
+		public void MergeGroup(ListGroup listGroup)
+		{
+			var prevListSeries = IdxNameToSeries;
+			ClearSeries();
+			ListGroup.Series = listGroup.Series;
+			ListGroup.StartTime = listGroup.StartTime ?? ListGroup.StartTime;
+			ListGroup.EndTime = listGroup.EndTime ?? ListGroup.EndTime;
+			ListGroup.SortByTotal();
+			foreach (var series in listGroup.Series)
+			{
+				OxyColor? oxyColor = null;
+				if (series.Name != null && prevListSeries.TryGetValue(series.Name, out OxyListSeries prevSeries))
+					oxyColor = ((TabChartLineSeries)prevSeries.OxySeries).Color;
+				AddSeries(series, oxyColor);
+			}
+		}
+
+		public void AddSeries(ListSeries listSeries, OxyColor? oxyColor = null)
 		{
 			//if (listSeries.IsStacked)
 			//	AddBarSeries(listSeries);
 			//else
-				AddListSeries(listSeries);
+				AddListSeries(listSeries, oxyColor);
 		}
 
 		private void AddBarSeries(ListSeries listSeries)
@@ -789,14 +808,14 @@ namespace Atlas.UI.Avalonia.Controls
 			ListToTabIndex[listSeries.iList] = ListToTabIndex.Count;*/
 		}
 
-		public OxyPlot.Series.LineSeries AddListSeries(ListSeries listSeries)
+		public OxyPlot.Series.LineSeries AddListSeries(ListSeries listSeries, OxyColor? oxyColor = null)
 		{
 			if (OxyListSeriesList.Count >= SeriesLimit)
 				return null;
 
 			var lineSeries = new TabChartLineSeries(this, listSeries, UseDateTimeAxis)
 			{
-				Color = GetColor(PlotModel.Series.Count),
+				Color = oxyColor ?? GetColor(PlotModel.Series.Count),
 			};
 			xAxisPropertyInfo = lineSeries.XAxisPropertyInfo;
 
@@ -814,6 +833,8 @@ namespace Atlas.UI.Avalonia.Controls
 			OxyListSeriesList.Add(oxyListSeries);
 			ListToTabSeries[listSeries.List] = listSeries;
 			ListToTabIndex[listSeries.List] = ListToTabIndex.Count;
+			if (listSeries.Name != null)
+				IdxNameToSeries[listSeries.Name] = oxyListSeries;
 			return lineSeries;
 		}
 

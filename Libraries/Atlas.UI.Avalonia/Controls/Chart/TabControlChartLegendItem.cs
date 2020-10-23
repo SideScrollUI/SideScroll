@@ -40,7 +40,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 		public int Count { get; set; }
-		public double Sum { get; set; }
+		public double Total { get; set; }
 
 		private bool _isChecked = true;
 		public bool IsChecked
@@ -81,7 +81,7 @@ namespace Atlas.UI.Avalonia.Controls
 			//Margin = new Thickness(6);
 			Background = Theme.TabBackground;
 
-			UpdateSum();
+			UpdateTotal();
 			AddCheckBox();
 			AddTextBlock();
 			if (ListGroup.ShowOrder && !ListGroup.Horizontal)
@@ -96,9 +96,15 @@ namespace Atlas.UI.Avalonia.Controls
 			polygon.Fill = new SolidColorBrush(filled && Count > 0 ? color : Colors.Transparent);
 		}
 
-		private void UpdateSum()
+		private void UpdateTotal()
 		{
-			Sum = 0;
+			if (OxyListSeries.ListSeries != null)
+			{
+				Total = OxyListSeries.ListSeries.Total;
+				Count = OxyListSeries.ListSeries.List.Count;
+				return;
+			}
+			Total = 0;
 			Count = 0;
 			if (Series is OxyPlot.Series.LineSeries lineSeries)
 			{
@@ -108,23 +114,23 @@ namespace Atlas.UI.Avalonia.Controls
 					foreach (DataPoint dataPoint in lineSeries.Points)
 					{
 						if (!double.IsNaN(dataPoint.Y))
-							Sum += dataPoint.Y;
+							Total += dataPoint.Y;
 					}
 				}
 				else if (lineSeries.ItemsSource != null)
 				{
 					// todo: finish
 					Count = lineSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0;
-					Sum = Count;
+					Total = Count;
 				}
 			}
-			if (Sum > 100)
-				Sum = Math.Round(Sum);
+			if (Total > 100)
+				Total = Math.Round(Total);
 			if (Series is OxyPlot.Series.ScatterSeries scatterSeries)
 			{
 				// todo: finish
 				Count = Math.Max(scatterSeries.Points.Count, scatterSeries.ItemsSource.GetEnumerator().MoveNext() ? 1 : 0);
-				Sum = Count;
+				Total = Count;
 			}
 		}
 
@@ -196,7 +202,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			textBlockSum = new TextBlock()
 			{
-				Text = Sum.Formatted(),
+				Text = Total.Formatted(),
 				Foreground = Brushes.LightGray,
 				Margin = new Thickness(10, 2, 6, 2),
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Right,

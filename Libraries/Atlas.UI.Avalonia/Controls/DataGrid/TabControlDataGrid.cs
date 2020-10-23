@@ -51,17 +51,17 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public event EventHandler<EventArgs> OnSelectionChanged;
 
-		private int disableSaving = 0; // enables saving if > 0
-		private int isAutoSelecting = 0; // enables saving if > 0
+		private int _disableSaving = 0; // enables saving if > 0
+		private int _isAutoSelecting = 0; // enables saving if > 0
+		private bool _ignoreSelectionChanged = false;
 
-		private DispatcherTimer dispatcherTimer;  // delays auto selection to throttle updates
-		private object autoSelectItem = null;
+		private Stopwatch _notifyItemChangedStopwatch = new Stopwatch();
+		private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
+		private object _autoSelectItem = null;
 
 		public bool AutoLoad { get; internal set; }
 
 		private Filter filter;
-
-		private Stopwatch _stopwatch = new Stopwatch();
 
 		public IList Items
 		{
@@ -139,7 +139,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void Initialize()
 		{
-			disableSaving++;
+			_disableSaving++;
 			/*ValueToBrushConverter brushConverter = (ValueToBrushConverter)dataGrid.Resources["colorConverter"];
 			brushConverter.HasChildrenBrush = (SolidColorBrush)Resources[Keys.HasChildrenBrush];
 
@@ -159,7 +159,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Dispatcher.UIThread.Post(() =>
 			{
 				TabInstance.SetEndLoad();
-				disableSaving--;
+				_disableSaving--;
 				if (selectionModified)
 					TabInstance.SaveTabSettings(); // selection has probably changed
 			}, DispatcherPriority.Background);
@@ -251,14 +251,14 @@ namespace Atlas.UI.Avalonia.Controls
 				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
 
 				// Invoking was happening at bad times in the data binding
-				if (dispatcherTimer == null)
+				if (_dispatcherTimer == null)
 				{
-					dispatcherTimer = new DispatcherTimer()
+					_dispatcherTimer = new DispatcherTimer()
 					{
 						Interval = new TimeSpan(0, 0, 1), // Tick event doesn't fire if set to < 1 second
 					};
-					dispatcherTimer.Tick += DispatcherTimer_Tick;
-					dispatcherTimer.Start();
+					_dispatcherTimer.Tick += DispatcherTimer_Tick;
+					_dispatcherTimer.Start();
 				}
 			}
 		}
@@ -378,20 +378,20 @@ namespace Atlas.UI.Avalonia.Controls
 					selectItemEnabled = true;
 					object item = List[List.Count - 1];
 					// don't update the selection too often or we'll slow things down
-					if (!_stopwatch.IsRunning || _stopwatch.ElapsedMilliseconds > 1000)
+					if (!_notifyItemChangedStopwatch.IsRunning || _notifyItemChangedStopwatch.ElapsedMilliseconds > 1000)
 					{
 						// change to dispatch here?
-						autoSelectItem = null;
+						_autoSelectItem = null;
 						selectionModified = true;
 						//SelectedItem = e.NewItems[0];
 						Dispatcher.UIThread.Post(() => SetSelectedItem(item), DispatcherPriority.Background);
-						_stopwatch.Reset();
-						_stopwatch.Start();
+						_notifyItemChangedStopwatch.Reset();
+						_notifyItemChangedStopwatch.Start();
 						//collectionView.Refresh();
 					}
 					else
 					{
-						autoSelectItem = item;
+						_autoSelectItem = item;
 					}
 				}
 				// causing Invalid thread issues when removing items, remove completely?
@@ -407,11 +407,11 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void DispatcherTimer_Tick(object sender, EventArgs e)
 		{
-			object selectItem = autoSelectItem;
+			object selectItem = _autoSelectItem;
 			if (selectItem != null)
 			{
 				Dispatcher.UIThread.Post(() => SetSelectedItem(selectItem), DispatcherPriority.Background);
-				autoSelectItem = null;
+				_autoSelectItem = null;
 			}
 		}
 
@@ -421,11 +421,11 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (!selectItemEnabled)
 				return;
-			disableSaving++;
-			isAutoSelecting++;
+			_disableSaving++;
+			_isAutoSelecting++;
 			SelectedItem = selectedItem;
-			isAutoSelecting--;
-			disableSaving--;
+			_isAutoSelecting--;
+			_disableSaving--;
 
 			if (scrollIntoViewObject != null && DataGrid.IsEffectivelyVisible && DataGrid.IsInitialized)
 			{
@@ -458,17 +458,20 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
+			if (_ignoreSelectionChanged)
+				return;
+
 			Bookmark bookmark = null;
-			if (disableSaving == 0)
+			if (_disableSaving == 0)
 			{
 				bookmark = TabInstance.CreateNavigatorBookmark();
 			}
 
 			UpdateSelection();
 
-			if (disableSaving == 0)
+			if (_disableSaving == 0)
 			{
-				if (isAutoSelecting == 0)
+				if (_isAutoSelecting == 0)
 					AutoSelectNew = (DataGrid.SelectedItems.Count == 0);
 				TabInstance.SaveTabSettings(); // selection has probably changed
 			}
@@ -526,7 +529,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			FilterText = textBoxSearch.Text;
 			AutoSelect();
-			if (disableSaving == 0)
+			if (_disableSaving == 0)
 				TabInstance.SaveTabSettings();
 		}
 
@@ -906,11 +909,14 @@ namespace Atlas.UI.Avalonia.Controls
 					if (match)
 						return;
 				}
-				disableSaving++;
+				_disableSaving++;
 				// datagrid has a bug and doesn't reselect cleared records correctly
 				// Could try only removing removed items, and adding new items, need to check SelectedItems order is correct after
+				if (value.Count > 0)
+					_ignoreSelectionChanged = true;
 				DataGrid.SelectedItems.Clear();
 				DataGrid.SelectedItem = null; // need both of these
+				_ignoreSelectionChanged = false;
 				//foreach (object obj in dataGrid.SelectedItems)
 				// remove all items so the we have to worry about this order changing?
 				//while (dataGrid.SelectedItems.Count > 0)
@@ -928,7 +934,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//	dataGrid.ScrollIntoView(value[0], null);
 				if (value.Count > 0)
 					scrollIntoViewObject = value[0];
-				disableSaving--;
+				_disableSaving--;
 			}
 			/*get
 			{
@@ -1221,13 +1227,13 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void Dispose()
 		{
-			if (dispatcherTimer != null)
+			if (_dispatcherTimer != null)
 			{
-				dispatcherTimer.Stop();
-				dispatcherTimer.Tick -= DispatcherTimer_Tick;
-				dispatcherTimer = null;
+				_dispatcherTimer.Stop();
+				_dispatcherTimer.Tick -= DispatcherTimer_Tick;
+				_dispatcherTimer = null;
 			}
-			_stopwatch.Stop();
+			_notifyItemChangedStopwatch.Stop();
 
 			DataGrid.SelectionChanged -= DataGrid_SelectionChanged;
 			DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;

@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Atlas.Tabs
 {
@@ -93,6 +94,8 @@ namespace Atlas.Tabs
 		{
 			// get TabBookmark.SelectedObjects working again and replace?
 
+			string prevLabel = null;
+			TabBookmark rootBookmark = null;
 			TabBookmark tabBookmark = null;
 			foreach (object obj in objs)
 			{
@@ -100,11 +103,12 @@ namespace Atlas.Tabs
 				var newBookmark = new TabBookmark();
 				newBookmark.Select(label);
 				if (tabBookmark != null)
-					tabBookmark.ChildBookmarks.Add(label, newBookmark);
-				else
-					tabBookmark = newBookmark;
+					tabBookmark.ChildBookmarks.Add(prevLabel, newBookmark);
+				tabBookmark = newBookmark;
+				rootBookmark = rootBookmark ?? tabBookmark;
+				prevLabel = label;
 			}
-			return tabBookmark;
+			return rootBookmark;
 		}
 
 		// Shallow Clone
@@ -173,12 +177,7 @@ namespace Atlas.Tabs
 			return default;
 		}
 
-		public void Select(string label)
-		{
-			Select(new List<string>() { label });
-		}
-
-		public void Select(IEnumerable<string> labels)
+		public void Select(params string[] labels)
 		{
 			var selectedRows = new HashSet<SelectedRow>();
 			foreach (string label in labels)
