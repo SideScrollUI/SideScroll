@@ -64,7 +64,7 @@ namespace Atlas.Serialize
 		{
 		}
 
-		public object BaseObject()
+		public object BaseObject(Call call)
 		{
 			if (TypeRepos.Count == 0)// || typeRepos[0].objects.Count == 0)
 				return null;
@@ -78,7 +78,11 @@ namespace Atlas.Serialize
 				return Primitives[0];
 				//return typeRepo.LoadObject();
 			}
-			return LoadObject(typeRepo, 0);
+
+			using (CallTimer callSaving = call.Timer("Load BaseObject"))
+			{
+				return LoadObject(typeRepo, 0);
+			}
 		}
 
 		public object LoadObject(TypeRepo typeRepo, int index)

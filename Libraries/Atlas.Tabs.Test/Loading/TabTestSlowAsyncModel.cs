@@ -1,7 +1,7 @@
 ﻿using Atlas.Core;
 using System.Threading.Tasks;
 
-namespace Atlas.Tabs.Test
+namespace Atlas.Tabs.Test.Loading
 {
 	public class TabTestSlowAsyncModel: ITab
 	{

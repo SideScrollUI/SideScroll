@@ -31,7 +31,7 @@ namespace Atlas.Core
 		public string Label { get; set; }
 		public bool Skippable { get; set; } = true;
 
-		private CustomComparer customComparer = new CustomComparer();
+		public IComparer Comparer = new CustomComparer();
 
 		public override string ToString() => Label ?? "[" + Count.ToString("N0") + "]";
 
@@ -59,7 +59,7 @@ namespace Atlas.Core
 
 		public int Compare(object x, object y)
 		{
-			int result = customComparer.Compare(x, y);
+			int result = Comparer.Compare(x, y);
 			return result;
 		}
 

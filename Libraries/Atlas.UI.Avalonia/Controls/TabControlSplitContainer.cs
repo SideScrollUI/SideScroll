@@ -214,7 +214,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddHorizontalGridSplitter(int rowIndex)
 		{
-			/*RowDefinition rowDefinition = new RowDefinition();
+			/*var rowDefinition = new RowDefinition();
 			rowDefinition.Height = new GridLength(6);
 			RowDefinitions.Insert(index, rowDefinition);*/
 
@@ -236,7 +236,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddVerticalGridSplitter(int columnIndex)
 		{
-			/*RowDefinition rowDefinition = new RowDefinition();
+			/*var rowDefinition = new RowDefinition();
 			rowDefinition.Height = new GridLength(6);
 			RowDefinitions.Insert(index, rowDefinition);*/
 
@@ -261,7 +261,7 @@ namespace Atlas.UI.Avalonia.Controls
 			//if (Children.Count <= 1)
 			//	return;
 
-			/*RowDefinition rowDefinition = new RowDefinition();
+			/*var rowDefinition = new RowDefinition();
 			rowDefinition.Height = new GridLength(5);
 			RowDefinitions.Add(rowDefinition);*/
 

@@ -57,7 +57,7 @@ namespace Atlas.Serialize
 			object obj;
 			using (CallTimer callLoadBaseObject = call.Timer("Loading base object"))
 			{
-				obj = serializer.BaseObject();
+				obj = serializer.BaseObject(callLoadBaseObject);
 			}
 			serializer.LogLoadedTypes(call);
 			//logTimer.Add("Type Repos", new Tag("Repos", serializer.typeRepos)); // fields don't appear in columns

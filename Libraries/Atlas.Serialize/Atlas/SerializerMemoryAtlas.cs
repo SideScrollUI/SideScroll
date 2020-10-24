@@ -24,23 +24,29 @@ namespace Atlas.Serialize
 
 		public override void Save(Call call, object obj)
 		{
-			using (var writer = new BinaryWriter(Stream, Encoding.Default, true))
+			using (CallTimer callTimer = call.Timer("Save"))
 			{
-				var serializer = Create();
-				serializer.AddObject(call, obj);
-				serializer.Save(call, writer);
+				using (var writer = new BinaryWriter(Stream, Encoding.Default, true))
+				{
+					var serializer = Create();
+					serializer.AddObject(callTimer, obj);
+					serializer.Save(callTimer, writer);
+				}
 			}
 		}
 
 		public override T Load<T>(Call call = null)
 		{
 			call = call ?? new Call();
-			Stream.Seek(0, SeekOrigin.Begin);
-			using (var reader = new BinaryReader(Stream))
+			using (CallTimer callTimer = call.Timer("Load"))
 			{
-				var serializer = Create();
-				serializer.Load(call, reader);
-				return (T)serializer.BaseObject();
+				Stream.Seek(0, SeekOrigin.Begin);
+				using (var reader = new BinaryReader(Stream))
+				{
+					var serializer = Create();
+					serializer.Load(callTimer, reader);
+					return (T)serializer.BaseObject(callTimer);
+				}
 			}
 		}
 
@@ -52,7 +58,7 @@ namespace Atlas.Serialize
 			{
 				var serializer = Create();
 				serializer.Load(call, reader);
-				return serializer.BaseObject();
+				return serializer.BaseObject(call);
 			}
 		}
 

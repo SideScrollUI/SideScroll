@@ -3,8 +3,7 @@ using Atlas.Serialize;
 using System.Collections.Generic;
 using System.Linq;
 
-//namespace Atlas.Tabs.Test.DataRepo // good idea?
-namespace Atlas.Tabs.Test
+namespace Atlas.Tabs.Test.DataRepo
 {
 	public class TabTestDataRepoCollection : ITab
 	{

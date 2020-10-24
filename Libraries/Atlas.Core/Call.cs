@@ -302,6 +302,8 @@ namespace Atlas.Core
 		{
 			Stop();
 			TaskInstance?.SetFinished();
+			if (TaskInstance == null)
+				Log.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));
 		}
 	}
 }

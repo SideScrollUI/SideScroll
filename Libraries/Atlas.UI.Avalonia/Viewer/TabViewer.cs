@@ -28,11 +28,12 @@ namespace Atlas.UI.Avalonia
 
 		// Controls
 		public TabViewerToolbar Toolbar;
-		protected Grid bottomGrid;
-		protected ScrollViewer scrollViewer;
-		protected Grid contentGrid;
+		protected Grid BottomGrid;
+		protected ScrollViewer ScrollViewer;
+		protected Grid ContentGrid;
 		public TabView TabView;
-		private ScreenCapture screenCapture;
+
+		protected ScreenCapture ScreenCapture;
 
 		public TabViewer(Project project) : base()
 		{
@@ -66,7 +67,7 @@ namespace Atlas.UI.Avalonia
 			Toolbar.ButtonSnapshotCancel?.Add(CloseSnapshot);
 			Children.Add(Toolbar);
 
-			bottomGrid = new Grid()
+			BottomGrid = new Grid()
 			{
 				ColumnDefinitions = new ColumnDefinitions("*,Auto"),
 				RowDefinitions = new RowDefinitions("*"),
@@ -74,10 +75,10 @@ namespace Atlas.UI.Avalonia
 				VerticalAlignment = VerticalAlignment.Stretch,
 				[Grid.RowProperty] = 1,
 			};
-			Children.Add(bottomGrid);
+			Children.Add(BottomGrid);
 
 			// Placed inside scroll viewer
-			contentGrid = new Grid()
+			ContentGrid = new Grid()
 			{
 				HorizontalAlignment = HorizontalAlignment.Left,
 				VerticalAlignment = VerticalAlignment.Stretch,
@@ -87,7 +88,7 @@ namespace Atlas.UI.Avalonia
 				MaxHeight = 5000,
 			};
 
-			scrollViewer = new ScrollViewer()
+			ScrollViewer = new ScrollViewer()
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
@@ -95,14 +96,14 @@ namespace Atlas.UI.Avalonia
 				VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
 				MaxWidth = 5000,
 				MaxHeight = 4000,
-				Content = contentGrid,
+				Content = ContentGrid,
 			};
 
-			bottomGrid.Children.Add(scrollViewer);
+			BottomGrid.Children.Add(ScrollViewer);
 
 			Grid scrollButtons = CreateScrollButtons();
 
-			bottomGrid.Children.Add(scrollButtons);
+			BottomGrid.Children.Add(scrollButtons);
 		}
 
 		public void Reload()
@@ -165,22 +166,22 @@ namespace Atlas.UI.Avalonia
 
 		private void Snapshot(Call call)
 		{
-			screenCapture = new ScreenCapture(scrollViewer)
+			ScreenCapture = new ScreenCapture(ScrollViewer)
 			{
 				[Grid.RowProperty] = 1,
 			};
 			Toolbar.SetSnapshotVisible(true);
 
-			Children.Remove(bottomGrid);
-			Children.Add(screenCapture);
+			Children.Remove(BottomGrid);
+			Children.Add(ScreenCapture);
 		}
 
 		private void CloseSnapshot(Call call)
 		{
 			Toolbar.SetSnapshotVisible(false);
 
-			Children.Remove(screenCapture);
-			Children.Add(bottomGrid);
+			Children.Remove(ScreenCapture);
+			Children.Add(BottomGrid);
 		}
 
 		private Grid CreateScrollButtons()
@@ -252,22 +253,22 @@ namespace Atlas.UI.Avalonia
 
 		private void ScrollLeft(int amount)
 		{
-			scrollViewer.Offset = new Vector(Math.Max(0.0, scrollViewer.Offset.X - amount), scrollViewer.Offset.Y);
-			contentGrid.MinWidth = 0;
+			ScrollViewer.Offset = new Vector(Math.Max(0.0, ScrollViewer.Offset.X - amount), ScrollViewer.Offset.Y);
+			ContentGrid.MinWidth = 0;
 		}
 
 		private void ScrollRight(int amount)
 		{
-			double minXOffset = scrollViewer.Offset.X + amount;
-			double widthRequired = minXOffset + scrollViewer.Viewport.Width;
-			contentGrid.MinWidth = widthRequired;
-			contentGrid.Width = widthRequired;
+			double minXOffset = ScrollViewer.Offset.X + amount;
+			double widthRequired = minXOffset + ScrollViewer.Viewport.Width;
+			ContentGrid.MinWidth = widthRequired;
+			ContentGrid.Width = widthRequired;
 
 			// Force the ScrollViewer to update it's ViewPort so we can set an offset past the old bounds
 			Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);
 
-			scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-			scrollViewer.Offset = new Vector(minXOffset, scrollViewer.Offset.Y);
+			ScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+			ScrollViewer.Offset = new Vector(minXOffset, ScrollViewer.Offset.Y);
 		}
 
 		// How to set the main Content
@@ -295,13 +296,13 @@ namespace Atlas.UI.Avalonia
 			TabView.Load();
 
 			//scrollViewer.Content = tabView;
-			contentGrid.Children.Add(TabView);
+			ContentGrid.Children.Add(TabView);
 		}
 
 		// don't allow the scroll viewer to jump back to the left while we're loading content and the content grid width is fluctuating
 		public void SetMinScrollOffset()
 		{
-			contentGrid.MinWidth = scrollViewer.Offset.X + scrollViewer.Bounds.Size.Width;
+			ContentGrid.MinWidth = ScrollViewer.Offset.X + ScrollViewer.Bounds.Size.Width;
 		}
 
 		public void SeekBackward()

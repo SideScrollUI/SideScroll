@@ -174,7 +174,7 @@ namespace Atlas.Core
 				double averageSum = period.Sum / period.SummedDurations.Min(period.Duration).TotalMinutes;
 				double chartSum = averageSum * periodDuration.TotalMinutes;
 				//double averageSum = period.Sum * (period.SummedDurations.TotalMinutes / period.Duration.TotalMinutes);
-				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, chartSum, period.Tags.ToArray()));
+				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, chartSum, period.Tags));
 			}
 			return timeRangeValues;
 		}
@@ -188,7 +188,7 @@ namespace Atlas.Core
 				if (period.SummedDurations.TotalMinutes == 0.0)
 					continue;
 
-				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.MinValue, period.Tags.ToArray()));
+				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.MinValue, period.Tags));
 			}
 			return timeRangeValues;
 		}
@@ -202,7 +202,7 @@ namespace Atlas.Core
 				if (period.SummedDurations.TotalMinutes == 0.0)
 					continue;
 
-				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.MaxValue, period.Tags.ToArray()));
+				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.MaxValue, period.Tags));
 			}
 			return timeRangeValues;
 		}
@@ -228,7 +228,7 @@ namespace Atlas.Core
 			{
 				//if (period.Count == 0)
 				//	continue;
-				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.Count, period.Tags.ToArray()));
+				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.Count, period.Tags));
 			}
 			return timeRangeValues;
 		}

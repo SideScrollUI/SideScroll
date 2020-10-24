@@ -6,22 +6,22 @@ namespace Atlas.Network
 {
 	public class CachedHttp : HTTP
 	{
-		private HttpCache httpCache;
+		public HttpCache HttpCache;
 
 		public CachedHttp(Call call, HttpCache httpCache) : 
 			base(call)
 		{
-			this.httpCache = httpCache;
+			HttpCache = httpCache;
 		}
 
 		public override byte[] GetBytes(string uri)
 		{
-			byte[] bytes = httpCache.GetBytes(uri);
+			byte[] bytes = HttpCache.GetBytes(uri);
 			if (bytes != null)
 				return bytes;
 
 			bytes = base.GetBytes(uri);
-			httpCache.AddEntry(uri, bytes);
+			HttpCache.AddEntry(uri, bytes);
 			return bytes;
 		}
 

@@ -1,7 +1,7 @@
 ﻿using Atlas.Core;
 using System;
 
-namespace Atlas.Tabs.Test
+namespace Atlas.Tabs.Test.Exceptions
 {
 	public class TabTestLoadException : ITab
 	{

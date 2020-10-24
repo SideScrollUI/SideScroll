@@ -4,7 +4,6 @@ using Atlas.UI.Avalonia.Tabs;
 using Atlas.Tabs;
 using Avalonia.Controls;
 using System;
-using System.Collections;
 using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia.View

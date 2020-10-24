@@ -10,8 +10,6 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			//private ItemCollection<SampleItem> sampleItems;
-
 			public override void Load(Call call, TabModel model)
 			{
 				//tabModel.Items = project.navigator.History;
@@ -27,33 +25,7 @@ namespace Atlas.Tabs.Test
 				};
 
 				model.Notes = "The Navigator class creates a bookmark for every tab change you make, and allows you to move backwards and forwards. The Back/Forward buttons currently use this. Eventually a list/drop down could be used to select the bookmark";
-
-				// Replace this
-				/*sampleItems = new ItemCollection<SampleItem>();
-
-				tabModel.Actions = new ItemCollection<TaskCreator>()
-				{
-					new TaskDelegate("Sleep", Sleep),
-					new TaskAction("Add 5 Items", new Action(() => AddItems(5)), false), // Foreground task so we can modify collection
-				};*/
 			}
-
-			/*private void Sleep(Call call)
-			{
-				call.taskInstance.ProgressMax = 10;
-				for (int i = 0; i < 10; i++)
-				{
-					System.Threading.Thread.Sleep(1000);
-					call.Log.Add("Slept 1 second");
-					call.taskInstance.Progress++;
-				}
-			}
-
-			private void AddItems(int count)
-			{
-				for (int i = 0; i < count; i++)
-					sampleItems.Add(new SampleItem(sampleItems.Count, "Item " + sampleItems.Count.ToString()));
-			}*/
 		}
 	}
 }

@@ -8,9 +8,9 @@ namespace Atlas.Network
 {
 	public class HttpCache : IDisposable
 	{
-		public const uint latestVersion = 1;
+		public const uint LatestVersion = 1;
 
-		public uint currentVersion = 1;
+		public uint CurrentVersion = 1;
 
 		public class Entry
 		{
@@ -45,26 +45,26 @@ namespace Atlas.Network
 
 		private Dictionary<string, Entry> cache = new Dictionary<string, Entry>();
 		public string BasePath { get; set; }
-		public long Size => dataStream.Length;
-		private string indexPath;
-		private string dataPath;
-		private Stream indexStream;
-		private Stream dataStream;
-		private object entryLock = new object();
+		public long Size => _dataStream.Length;
+		private string _indexPath;
+		private string _dataPath;
+		private Stream _indexStream;
+		private Stream _dataStream;
+		private object _entryLock = new object();
 
 		public HttpCache(string basePath, bool writeable)
 		{
 			BasePath = basePath;
 			Directory.CreateDirectory(basePath);
 
-			indexPath = Paths.Combine(basePath, "http.index");
-			dataPath = Paths.Combine(basePath, "http.data");
+			_indexPath = Paths.Combine(basePath, "http.index");
+			_dataPath = Paths.Combine(basePath, "http.data");
 
 			FileAccess fileAccess = writeable ? FileAccess.ReadWrite : FileAccess.Read;
-			indexStream = new FileStream(indexPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
-			dataStream = new FileStream(dataPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
+			_indexStream = new FileStream(_indexPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
+			_dataStream = new FileStream(_dataPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
 
-			if (indexStream.Length == 0)
+			if (_indexStream.Length == 0)
 				SaveHeader();
 			
 			LoadIndex();
@@ -72,29 +72,29 @@ namespace Atlas.Network
 
 		public void Dispose()
 		{
-			indexStream.Dispose();
-			dataStream.Dispose();
+			_indexStream.Dispose();
+			_dataStream.Dispose();
 		}
 
 		public override string ToString() => BasePath;
 
 		private void LoadHeader(BinaryReader indexReader)
 		{
-			currentVersion = indexReader.ReadUInt32();
+			CurrentVersion = indexReader.ReadUInt32();
 		}
 
 		private void SaveHeader()
 		{
-			using (BinaryWriter indexWriter = new BinaryWriter(indexStream, Encoding.Default, true))
+			using (BinaryWriter indexWriter = new BinaryWriter(_indexStream, Encoding.Default, true))
 			{
-				indexWriter.Write(latestVersion);
+				indexWriter.Write(LatestVersion);
 			}
 		}
 
 		private void LoadIndex()
 		{
-			indexStream.Seek(0, SeekOrigin.Begin);
-			using (var indexReader = new BinaryReader(indexStream, Encoding.Default, true))
+			_indexStream.Seek(0, SeekOrigin.Begin);
+			using (var indexReader = new BinaryReader(_indexStream, Encoding.Default, true))
 			{
 				LoadHeader(indexReader);
 				while (indexReader.PeekChar() >= 0)
@@ -144,7 +144,7 @@ namespace Atlas.Network
 
 		public void AddEntry(string uri, byte[] bytes)
 		{
-			lock (entryLock)
+			lock (_entryLock)
 			{
 				// todo: add support for updating entries
 				if (cache.TryGetValue(uri, out Entry entry))
@@ -158,14 +158,14 @@ namespace Atlas.Network
 				};
 
 				// todo: seek to last entry instead since the last entry might be incomplete
-				using (var dataWriter = new BinaryWriter(dataStream, Encoding.Default, true))
+				using (var dataWriter = new BinaryWriter(_dataStream, Encoding.Default, true))
 				{
 					dataWriter.Seek(0, SeekOrigin.End);
-					entry.Offset = dataStream.Position;
+					entry.Offset = _dataStream.Position;
 					dataWriter.Write(bytes);
 				}
 
-				using (var indexWriter = new BinaryWriter(indexStream, Encoding.Default, true))
+				using (var indexWriter = new BinaryWriter(_indexStream, Encoding.Default, true))
 				{
 					indexWriter.Seek(0, SeekOrigin.End);
 					indexWriter.Write(entry.Uri);
@@ -184,13 +184,13 @@ namespace Atlas.Network
 
 		public byte[] GetBytes(string uri)
 		{
-			lock (entryLock)
+			lock (_entryLock)
 			{
 				if (!cache.TryGetValue(uri, out Entry entry))
 					return null;
 
-				dataStream.Position = entry.Offset;
-				using (var dataReader = new BinaryReader(dataStream, Encoding.Default, true))
+				_dataStream.Position = entry.Offset;
+				using (var dataReader = new BinaryReader(_dataStream, Encoding.Default, true))
 				{
 					byte[] data = dataReader.ReadBytes(entry.Size);
 					return data;

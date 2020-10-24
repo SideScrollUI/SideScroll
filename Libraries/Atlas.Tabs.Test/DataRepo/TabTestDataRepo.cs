@@ -1,8 +1,7 @@
 ﻿using Atlas.Core;
 using Atlas.Tabs.Tools;
 
-//namespace Atlas.Tabs.Test.DataRepo // good idea?
-namespace Atlas.Tabs.Test
+namespace Atlas.Tabs.Test.DataRepo
 {
 	public class TabTestDataRepo : ITab
 	{

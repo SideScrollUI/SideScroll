@@ -78,7 +78,6 @@ namespace Atlas.UI.Avalonia.Controls
 			_tabControlDataGrid.AddColumn("   %   ", nameof(TaskInstance.Percent));
 			_tabControlDataGrid.AddColumn("Status", nameof(TaskInstance.Status));
 			//tabControlDataGrid.AddColumn("Message", nameof(TaskInstance.Message));
-			//tabDataGrid.AddButtonColumn("<>", nameof(TaskInstance.Cancel)); // todo: No Button Column support
 
 			//tabDataGrid.AutoLoad = tabModel.AutoLoad;
 			_tabControlDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;

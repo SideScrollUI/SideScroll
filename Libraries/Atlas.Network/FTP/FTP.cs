@@ -14,10 +14,10 @@ namespace Atlas.Network
 		public long Size { get; set; }
 		public DateTime Modified { get; set; }
 
-		public bool directory;
-		public string fullPath;
+		public bool Directory;
+		public string FullPath;
 
-		public override string ToString() => fullPath ?? "(null)";
+		public override string ToString() => FullPath ?? "(null)";
 	}
 
 	public class FtpFileInfo
@@ -247,7 +247,7 @@ namespace Atlas.Network
 					List<FtpItem> fileInfos = GetDirectoryListDetailed(Path.GetDirectoryName(filePath));
 					foreach (FtpItem fileInfo in fileInfos)
 					{
-						if (fileInfo.fullPath == filePath)
+						if (fileInfo.FullPath == filePath)
 							return fileInfo.Size;
 					}
 				}
@@ -314,7 +314,7 @@ namespace Atlas.Network
 				string line = ftpReader.ReadLine();
 				string[] columns = line.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 				FtpItem fileData = new FtpItem();
-				fileData.directory = (columns[0][0] == 'd');
+				fileData.Directory = (columns[0][0] == 'd');
 				fileData.Size = long.Parse(columns[4]);
 
 				string month = columns[5];	// "Sep"
@@ -325,7 +325,7 @@ namespace Atlas.Network
 				fileData.Filename = columns[8]; // "alt_allele_attrib.txt.gz"
 				string nativePath = Paths.Combine(directory, fileData.Filename);
 				string linuxPath = nativePath.Replace('\\', '/');
-				fileData.fullPath = linuxPath;
+				fileData.FullPath = linuxPath;
 				//fileInfo.modified = new DateTime();
 				files.Add(fileData);
 			}

@@ -36,7 +36,7 @@ namespace Atlas.Tabs.Tools
 				var files = new ItemCollection<ListFile>();
 				foreach (FtpItem fileData in fileDatas)
 				{
-					if (fileData.directory)
+					if (fileData.Directory)
 					{
 						var listDirectory = new ListDirectory(Tab.FtpInfo, fileData);
 						directories.Add(listDirectory);
@@ -69,7 +69,7 @@ namespace Atlas.Tabs.Tools
 			{
 				this.ftpInfo = ftpInfo;
 				this.fileData = fileData;
-				this.directoryPath = fileData.fullPath;
+				this.directoryPath = fileData.FullPath;
 				Directory = System.IO.Path.GetFileName(directoryPath);
 				iTab = new TabFtpDirectory(ftpInfo, directoryPath);
 			}
@@ -97,7 +97,7 @@ namespace Atlas.Tabs.Tools
 			{
 				FtpInfo = ftpInfo;
 				FileData = fileData;
-				FilePath = fileData.fullPath;
+				FilePath = fileData.FullPath;
 
 				Filename = fileData.Filename;
 				Size = fileData.Size;

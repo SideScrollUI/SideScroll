@@ -33,35 +33,62 @@ namespace Atlas.Serialize.Test
 				items[i] = i;
 			}
 
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
-			int count = items.Values.Count;
-
-			stopwatch.Stop();
+			using (CallTimer callTimer = Call.Timer("Get Count"))
+			{
+				int count = items.Values.Count;
+			}
 		}
 
 		[Test]
 		public void TimeRangeValue()
 		{
-			var input = new List<TimeRangeValue>();
-
-			for (int i = 0; i < 100000; i++)
-			{
-				var timeRangeValue = new TimeRangeValue()
-				{
-					StartTime = new DateTime(1980, 10, 23),
-					EndTime = new DateTime(2020, 10, 24),
-				};
-				input.Add(timeRangeValue);
-			}
-
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
+			TimeRangeValue input = TimeRangeSample;
 
 			serializer.Save(Call, input);
-			var output = serializer.Load<List<TimeRangeValue>>(Call);
-
-			stopwatch.Stop();
+			var output = serializer.Load<TimeRangeValue>(Call);
 		}
+
+		[Test]
+		public void TimeRangeValues()
+		{
+			List<TimeRangeValue> input = TimeRangeSamples(1000000);
+
+			using (CallTimer callTimer = Call.Timer("Cloning"))
+			{
+				serializer.Save(callTimer, input);
+				var output = serializer.Load<List<TimeRangeValue>>(callTimer);
+			}
+		}
+
+		[Test]
+		public void JsonTimeRangeValues()
+		{
+			List<TimeRangeValue> input = TimeRangeSamples(1000000);
+
+			using (CallTimer callTimer = Call.Timer("Cloning"))
+			{
+				var jsonSerializer = new SerializerMemoryJson();
+				jsonSerializer.Save(Call, input);
+				var output = jsonSerializer.Load<List<TimeRangeValue>>(Call);
+			}
+		}
+
+		private static List<TimeRangeValue> TimeRangeSamples(int count)
+		{
+			var input = new List<TimeRangeValue>();
+
+			for (int i = 0; i < count; i++)
+			{
+				input.Add(TimeRangeSample);
+			}
+
+			return input;
+		}
+
+		private static TimeRangeValue TimeRangeSample => new TimeRangeValue()
+		{
+			StartTime = new DateTime(1980, 10, 23),
+			EndTime = new DateTime(2020, 10, 24),
+		};
 	}
 }

@@ -67,7 +67,6 @@ namespace Atlas.Network
 					}
 					if (attempt >= MaxAttempts)
 						break;
-					//System.Threading.Thread.Sleep(SleedMilliseconds * (int)Math.Pow(2, attempt));
 					System.Threading.Thread.Sleep(SleepMilliseconds * attempt);
 				}
 				throw new Exception("HTTP request failed " + MaxAttempts + " times: " + uri);

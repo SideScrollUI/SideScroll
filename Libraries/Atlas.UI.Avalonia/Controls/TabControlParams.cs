@@ -85,7 +85,7 @@ namespace Atlas.UI.Avalonia.Controls
 			int rowIndex = AddRowDefinition();
 			int columnIndex = 0;
 
-			/*RowDefinition spacerRow = new RowDefinition();
+			/*var spacerRow = new RowDefinition();
 			spacerRow.Height = new GridLength(5);
 			RowDefinitions.Add(spacerRow);*/
 

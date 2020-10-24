@@ -1,6 +1,6 @@
 ﻿using Atlas.Core;
 
-namespace Atlas.Tabs.Test.DataGrid
+namespace Atlas.Tabs.Test.Exceptions
 {
 	public class TabTestExceptions : ITab
 	{

@@ -41,7 +41,7 @@
     <None Remove="View\TabAvalonEdit.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\ToolBar\ToolbarButton.dat">
+    <EmbeddedResource Include="Controls\Toolbar\ToolbarButton.dat">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -69,7 +69,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Controls\ToolBar\ToolbarButton2.xaml">
+    <EmbeddedResource Update="Controls\Toolbar\ToolbarButton2.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Theme\Accents\BaseLight.xaml">
@@ -83,7 +83,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Update="Controls\ToolBar\ToolbarButton2.xaml">
+    <None Update="Controls\Toolbar\ToolbarButton2.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
   </ItemGroup>

@@ -2,6 +2,9 @@
 using Atlas.Tabs.Test.Actions;
 using Atlas.Tabs.Test.Chart;
 using Atlas.Tabs.Test.DataGrid;
+using Atlas.Tabs.Test.DataRepo;
+using Atlas.Tabs.Test.Exceptions;
+using Atlas.Tabs.Test.Loading;
 using Atlas.Tabs.Test.Objects;
 
 namespace Atlas.Tabs.Test

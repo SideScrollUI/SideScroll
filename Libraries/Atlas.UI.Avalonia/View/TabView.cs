@@ -514,7 +514,7 @@ namespace Atlas.UI.Avalonia.View
 
 		protected void AddControlString(string text)
 		{
-			/*TextBlock textBlock = new TextBlock()
+			/*var textBlock = new TextBlock()
 			{
 				Text = text,
 				TextWrapping = TextWrapping.Wrap,

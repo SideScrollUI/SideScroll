@@ -45,6 +45,14 @@ namespace Atlas.Core
 			Tags = tags.ToList();
 		}
 
+		public TimeRangeValue(DateTime startTime, DateTime endTime, double value, List<Tag> tags)
+		{
+			StartTime = startTime;
+			EndTime = endTime;
+			Value = value;
+			Tags = tags;
+		}
+
 		public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration)
 		{
 			return TimeRangePeriod.SumPeriods(timeRangeValues, StartTime, EndTime, periodDuration);

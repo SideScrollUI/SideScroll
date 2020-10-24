@@ -34,7 +34,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public TabInstance TabInstance;
 		public TabDataSettings TabDataSettings;
 		public IList List;
-		private Type elementType;
+		private Type _elementType;
 
 		public bool AutoSelectFirst = true;
 		public bool AutoSelectNew = true;
@@ -151,7 +151,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}*/
 
 			Type listType = List.GetType();
-			elementType = listType.GetElementTypeForAll();
+			_elementType = listType.GetElementTypeForAll();
 
 			InitializeControls();
 			AddListUpdatedDispatcher();
@@ -539,13 +539,13 @@ namespace Atlas.UI.Avalonia.Controls
 			columnNames = new Dictionary<DataGridColumn, string>();
 			columnProperties = new List<PropertyInfo>();
 
-			List<TabDataSettings.MethodColumn> methodColumns = TabDataSettings.GetButtonMethods(elementType);
+			List<TabDataSettings.MethodColumn> methodColumns = TabDataSettings.GetButtonMethods(_elementType);
 			foreach (TabDataSettings.MethodColumn methodColumn in methodColumns)
 			{
 				AddButtonColumn(methodColumn);
 			}
 
-			List<TabDataSettings.PropertyColumn> propertyColumns = TabDataSettings.GetPropertiesAsColumns(elementType);
+			List<TabDataSettings.PropertyColumn> propertyColumns = TabDataSettings.GetPropertiesAsColumns(_elementType);
 			if (propertyColumns.Count == 0)
 				return;
 
@@ -571,7 +571,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void AddColumn(string label, string propertyName)
 		{
-			PropertyInfo propertyInfo = elementType.GetProperty(propertyName);
+			PropertyInfo propertyInfo = _elementType.GetProperty(propertyName);
 			AddColumn(label, propertyInfo);
 		}
 
@@ -702,7 +702,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void AddButtonColumn(string methodName)
 		{
-			MethodInfo methodInfo = elementType.GetMethod(methodName);
+			MethodInfo methodInfo = _elementType.GetMethod(methodName);
 			AddButtonColumn(new TabDataSettings.MethodColumn(methodInfo));
 		}
 

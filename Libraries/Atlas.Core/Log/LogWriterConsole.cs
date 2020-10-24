@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 
 namespace Atlas.Core
@@ -26,7 +24,7 @@ namespace Atlas.Core
 		private void LogEntry_OnMessage(object sender, EventLogMessage e)
 		{
 			string Indendation = "";
-			foreach (LogEntry logEntry in e.Entries)
+			for (int i = 1; i < e.Entries.Count; i++)
 				Indendation += '\t';
 			LogEntry newLog = e.Entries[0];
 			//string line = log.Created.ToString("yyyy-MM-dd HH:mm:ss") + Indendation + log.ToString();
