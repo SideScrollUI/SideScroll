@@ -295,13 +295,13 @@ namespace Atlas.Core
 		private void UpdateDuration()
 		{
 			if (Log != null)
-				Log.Duration = _stopwatch.ElapsedMilliseconds / 1000.0f;
+				Log.Duration = ElapsedMilliseconds / 1000.0f;
 		}
 
 		public void Dispose()
 		{
-			TaskInstance?.SetFinished();
 			Stop();
+			TaskInstance?.SetFinished();
 		}
 	}
 }

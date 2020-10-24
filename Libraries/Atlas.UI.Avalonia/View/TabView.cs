@@ -545,14 +545,14 @@ namespace Atlas.UI.Avalonia.View
 
 		public void Invalidate()
 		{
-			Instance.loadCalled = false;
+			Instance.LoadCalled = false;
 		}
 
 		public void Load()
 		{
-			if (Instance.loadCalled)
+			if (Instance.LoadCalled)
 				return;
-			Instance.loadCalled = true;
+			Instance.LoadCalled = true;
 
 			Instance.StartAsync(LoadBackgroundAsync);
 		}

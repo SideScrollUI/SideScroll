@@ -67,8 +67,9 @@ namespace Atlas.Tabs
 				AddData(value);
 			}
 		}
-		public bool Editing { get; set; } = false;
-		public bool Skippable { get; set; } = false;
+		public bool Editing { get; set; }
+		public bool Skippable { get; set; }
+
 		public int MinDesiredWidth { get; set; } = 0;
 		public int MaxDesiredWidth { get; set; } = 1500;
 

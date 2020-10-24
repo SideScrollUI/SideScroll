@@ -14,7 +14,7 @@ namespace Atlas.Serialize
 		{
 		}
 
-		private Serializer Create()
+		private new Serializer Create()
 		{
 			return new Serializer()
 			{
@@ -57,14 +57,14 @@ namespace Atlas.Serialize
 		}
 
 		//public static T Clone<T>(Call call, T obj)
-		public override T DeepCloneInternal<T>(Call call, T obj)
+		protected override T DeepCloneInternal<T>(Call call, T obj)
 		{
 			Save(call, obj);
 			T copy = Load<T>(call);
 			return copy;
 		}
 
-		public override object DeepCloneInternal(Call call, object obj)
+		protected override object DeepCloneInternal(Call call, object obj)
 		{
 			Save(call, obj);
 			object copy = Load(call);

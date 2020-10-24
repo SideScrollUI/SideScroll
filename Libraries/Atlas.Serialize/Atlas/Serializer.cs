@@ -168,7 +168,7 @@ namespace Atlas.Serialize
 
 		public void Save(Call call, BinaryWriter writer)
 		{
-			using (CallTimer callSaving = call.Timer("Saving to disk"))
+			using (CallTimer callSaving = call.Timer("Saving object"))
 			{
 				AddObjectMemberTypes(callSaving.Log);
 				//UpdateTypeSchemaDerived();

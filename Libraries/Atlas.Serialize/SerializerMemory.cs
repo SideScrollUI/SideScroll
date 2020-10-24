@@ -21,7 +21,7 @@ namespace Atlas.Serialize
 		public abstract object Load(Call call = null);
 
 		// Save an object to a memory stream and then load it
-		//public static T Clone<T>(Call call, T obj)
+		//public static T DeepClone<T>(Call call, T obj)
 		public static T DeepClone<T>(Call call, T obj, bool publicOnly = false)
 		{
 			if (typeof(T) != obj.GetType())
@@ -33,7 +33,10 @@ namespace Atlas.Serialize
 			{
 				var memorySerializer = Create();
 				memorySerializer.PublicOnly = publicOnly;
-				return memorySerializer.DeepCloneInternal(call, obj);
+				using (CallTimer timer = call.Timer("Deep Cloning", new Tag("Object", obj.Formatted())))
+				{
+					return memorySerializer.DeepCloneInternal(timer, obj);
+				}
 			}
 			catch (Exception e)
 			{
@@ -57,9 +60,9 @@ namespace Atlas.Serialize
 			return null;
 		}
 
-		public abstract T DeepCloneInternal<T>(Call call, T obj);
+		protected abstract T DeepCloneInternal<T>(Call call, T obj);
 
-		public abstract object DeepCloneInternal(Call call, object obj);
+		protected abstract object DeepCloneInternal(Call call, object obj);
 
 		public string ToBase64String()
 		{

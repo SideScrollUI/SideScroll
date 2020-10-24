@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using Newtonsoft.Json;
-using System.Text;
 
 namespace Atlas.Serialize
 {
@@ -31,14 +30,14 @@ namespace Atlas.Serialize
 		}
 
 		//public static T Clone<T>(Call call, T obj)
-		public override T DeepCloneInternal<T>(Call call, T obj)
+		protected override T DeepCloneInternal<T>(Call call, T obj)
 		{
 			Save(call, obj);
 			T copy = Load<T>(call);
 			return copy;
 		}
 
-		public override object DeepCloneInternal(Call call, object obj)
+		protected override object DeepCloneInternal(Call call, object obj)
 		{
 			Save(call, obj);
 			object copy = Load(call);

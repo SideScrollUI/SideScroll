@@ -362,6 +362,7 @@ namespace Atlas.UI.Avalonia.Controls
 				SelectionColor = OxyColors.Blue,
 			};
 
+			ListGroup.SortByTotal();
 			foreach (ListSeries listSeries in ListGroup.Series)
 			{
 				AddSeries(listSeries);

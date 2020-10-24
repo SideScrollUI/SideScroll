@@ -144,9 +144,10 @@ namespace Atlas.Tabs
 		private string LoadedPath => "Loaded/" + Model.ObjectTypePath;
 
 		// Reload to initial state
-		public bool isLoaded = false;
-		public bool loadCalled = false; // Used by the view
-		public bool StaticModel = false;
+		public bool IsLoaded { get; set; }
+		public bool LoadCalled { get; set; } // Used by the view
+		public bool StaticModel { get; set; }
+		public bool ShowTasks { get; set; }
 		public IList SelectedItems { get; set; }
 
 		protected IDataRepoInstance DataRepoInstance { get; set; } // Bookmarks use this for saving/loading DataRepo values
@@ -307,8 +308,8 @@ namespace Atlas.Tabs
 		{
 			call = call ?? new Call(taskCreator.Label);
 			TaskInstance taskInstance = taskCreator.Start(call);
-			taskInstance.ShowTask = showTask;
-			if (showTask)
+			taskInstance.ShowTask = showTask || ShowTasks;
+			if (taskInstance.ShowTask)
 				Model.Tasks.Add(taskInstance);
 		}
 
@@ -396,13 +397,13 @@ namespace Atlas.Tabs
 
 		public void Reintialize(bool force)
 		{
-			if (!force && isLoaded)
+			if (!force && IsLoaded)
 				return;
 
-			isLoaded = true;
-			loadCalled = false; // allow TabView to reload
+			IsLoaded = true;
+			LoadCalled = false; // allow TabView to reload
 
-			StartAsync(ReintializeAsync);
+			StartAsync(ReintializeAsync, TaskInstance.Call);
 		}
 
 		public async Task ReintializeAsync(Call call)
@@ -515,14 +516,14 @@ namespace Atlas.Tabs
 			LoadSettings(); // Load() initializes the tabModel.Object & CustomSettingsPath which gets used for the settings path
 			OnModelChanged?.Invoke(this, new EventArgs());
 
-			isLoaded = true;
+			IsLoaded = true;
 		}
 
 		// calls Load and then Refresh
 		public void Reload()
 		{
-			isLoaded = false;
-			loadCalled = false;
+			IsLoaded = false;
+			LoadCalled = false;
 			if (OnReload != null)
 			{
 				if (this is ITabAsync tabAsync)
@@ -536,7 +537,7 @@ namespace Atlas.Tabs
 		// Reloads Controls & Settings
 		public void Refresh()
 		{
-			isLoaded = false;
+			IsLoaded = false;
 			if (OnRefresh != null)
 			{
 				var onRefresh = OnRefresh; // create temporary copy since this gets delayed
