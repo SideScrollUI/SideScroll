@@ -790,6 +790,8 @@ namespace Atlas.UI.Avalonia.View
 			_tabChildControls.SetControls(newChildControls, orderedChildControls);
 			UpdateSelectedTabInstances();
 
+			if (Instance.TabBookmark != null)
+				Instance.SaveTabSettings();
 			Instance.TabBookmark = null; // clear so user can navigate and save prefs
 		}
 

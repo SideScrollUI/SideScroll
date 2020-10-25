@@ -459,6 +459,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
+			// ignore if clearing selection before setting
 			if (_ignoreSelectionChanged)
 				return;
 
