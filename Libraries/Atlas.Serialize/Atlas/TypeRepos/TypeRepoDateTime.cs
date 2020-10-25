@@ -21,21 +21,9 @@ namespace Atlas.Serialize
 		{
 		}
 
-
-		public override void InitializeLoading(Log log)
-		{
-			/*FileStream primaryStream = reader.BaseStream as FileStream;
-			stream = new FileStream(primaryStream.Name, FileMode.Open, FileAccess.Read, FileShare.Read);
-			localReader = new BinaryReader(stream);*/
-		}
-
 		public static bool CanAssign(Type type)
 		{
 			return type == typeof(DateTime);
-		}
-
-		public override void AddChildObjects(object obj)
-		{
 		}
 
 		public override void SaveObject(BinaryWriter writer, object obj)
@@ -43,15 +31,6 @@ namespace Atlas.Serialize
 			DateTime dateTime = (DateTime)obj;
 			writer.Write(dateTime.Ticks);
 			writer.Write((byte)dateTime.Kind);
-		}
-
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
-		{
-			long value = BitConverter.ToInt64(bytes, byteOffset);
-			object obj = new DateTime(value);
-			byteOffset += sizeof(long);
-			Objects[objectIndex] = obj;
-			return obj;
 		}
 
 		protected override object CreateObject(int objectIndex)
@@ -85,21 +64,9 @@ namespace Atlas.Serialize
 			return obj;
 		}
 
-		public override void LoadObjectData(object obj)
-		{
-		}
-
 		public override object LoadObject()
 		{
 			object obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
-			return obj;
-		}
-
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
-		{
-			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(TypeSchema.Type, value);
-			byteOffset += sizeof(int);
 			return obj;
 		}
 

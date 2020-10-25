@@ -22,21 +22,9 @@ namespace Atlas.Serialize
 		{
 		}
 
-
-		public override void InitializeLoading(Log log)
-		{
-			/*FileStream primaryStream = reader.BaseStream as FileStream;
-			stream = new FileStream(primaryStream.Name, FileMode.Open, FileAccess.Read, FileShare.Read);
-			localReader = new BinaryReader(stream);*/
-		}
-
 		public static bool CanAssign(Type type)
 		{
 			return type.IsPrimitive;
-		}
-
-		public override void AddChildObjects(object obj)
-		{
 		}
 
 		public override void SaveObject(BinaryWriter writer, object obj)
@@ -60,23 +48,14 @@ namespace Atlas.Serialize
 				Debug.Assert(true);
 		}
 
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
-		{
-			return null;
-		}
-
 		protected override object CreateObject(int objectIndex)
 		{
 			return null;
 		}
 
-		public override void LoadObjectData(object obj)
-		{
-		}
-
 		public override object LoadObject()
 		{
-			object obj = null;
+			object obj;
 			if (Type == typeof(uint))
 				obj = Reader.ReadUInt32();
 			else if (Type == typeof(int))
@@ -94,34 +73,6 @@ namespace Atlas.Serialize
 			else
 				throw new Exception("Unhandled primitive type");
 
-			return obj;
-		}
-
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
-		{
-			object obj = null;
-			if (Type == typeof(uint))
-			{
-				obj = BitConverter.ToUInt32(bytes, byteOffset);
-				byteOffset += sizeof(uint);
-			}
-			else if (Type == typeof(int))
-			{
-				obj = BitConverter.ToInt32(bytes, byteOffset);
-				byteOffset += sizeof(int);
-			}
-			else if (Type == typeof(double))
-			{
-				obj = BitConverter.ToDouble(bytes, byteOffset);
-				byteOffset += sizeof(double);
-			}
-			else if (Type == typeof(bool))
-			{
-				obj = BitConverter.ToBoolean(bytes, byteOffset);
-				byteOffset += sizeof(bool);
-			}
-			else
-				throw new Exception("Unhandled primitive type");
 			return obj;
 		}
 

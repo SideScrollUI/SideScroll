@@ -21,25 +21,9 @@ namespace Atlas.Serialize
 		{
 		}
 
-		public override void InitializeLoading(Log log)
-		{
-		}
-
-		public override void AddChildObjects(object obj)
-		{
-		}
-
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
 			writer.Write(((Type)obj).AssemblyQualifiedName);
-		}
-
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
-		{
-			string assemblyQualifiedName = BitConverter.ToString(bytes, byteOffset);
-			object obj = Type.GetType(assemblyQualifiedName, false);
-			byteOffset += assemblyQualifiedName.Length + 1; // 2?
-			return obj;
 		}
 
 		protected override object CreateObject(int objectIndex)
@@ -53,10 +37,6 @@ namespace Atlas.Serialize
 
 			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;
-		}
-
-		public override void LoadObjectData(object obj)
-		{
 		}
 
 		public override void Clone(object source, object dest)

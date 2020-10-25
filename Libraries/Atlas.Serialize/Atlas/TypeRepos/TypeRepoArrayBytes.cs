@@ -29,10 +29,6 @@ namespace Atlas.Serialize
 			return typeof(byte[]).IsAssignableFrom(type);
 		}
 
-		public override void InitializeLoading(Log log)
-		{
-		}
-
 		public override void SaveCustomHeader(BinaryWriter writer)
 		{
 			foreach (IList list in Objects)
@@ -49,10 +45,6 @@ namespace Atlas.Serialize
 				int count = Reader.ReadInt32();
 				sizes[i] = count;
 			}
-		}
-
-		public override void AddChildObjects(object obj)
-		{
 		}
 
 		public override void SaveObject(BinaryWriter writer, object obj)
@@ -79,19 +71,6 @@ namespace Atlas.Serialize
 		{
 			byte[] array = (byte[])obj;
 			Reader.Read(array, 0, array.Length);
-		}
-
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
-		{
-			int count = BitConverter.ToInt32(bytes, byteOffset);
-			byteOffset += sizeof(int);
-			byte[] array = new byte[count];
-			ObjectsLoaded[objectIndex] = array;
-
-			//Array.Copy(bytes, byteOffset, array, count);
-			Buffer.BlockCopy(bytes, byteOffset, array, 0, count);
-			byteOffset += count;
-			return array;
 		}
 
 		public override void Clone(object source, object dest)

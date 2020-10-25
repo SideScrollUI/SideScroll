@@ -21,37 +21,15 @@ namespace Atlas.Serialize
 		{
 		}
 
-
-		public override void InitializeLoading(Log log)
-		{
-			/*FileStream primaryStream = reader.BaseStream as FileStream;
-			stream = new FileStream(primaryStream.Name, FileMode.Open, FileAccess.Read, FileShare.Read);
-			localReader = new BinaryReader(stream);*/
-		}
-
 		public static bool CanAssign(Type type)
 		{
 			return type == typeof(DateTimeOffset);
-		}
-
-		public override void AddChildObjects(object obj)
-		{
 		}
 
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
 			DateTime dateTime = ((DateTimeOffset)obj).UtcDateTime;
 			writer.Write(dateTime.Ticks);
-		}
-
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
-		{
-			long value = BitConverter.ToInt64(bytes, byteOffset);
-			var dateTime = new DateTime(value);
-			byteOffset += sizeof(long);
-			var offset = new DateTimeOffset(dateTime);
-			Objects[objectIndex] = offset;
-			return offset;
 		}
 
 		protected override object CreateObject(int objectIndex)
@@ -83,24 +61,10 @@ namespace Atlas.Serialize
 			return obj;
 		}
 
-		public override void LoadObjectData(object obj)
-		{
-		}
-
 		public override object LoadObject()
 		{
 			object obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
 			return obj;
-		}
-
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
-		{
-			long value = BitConverter.ToInt64(bytes, byteOffset);
-			var dateTime = new DateTime(value, DateTimeKind.Utc);
-			byteOffset += sizeof(long);
-			var offset = new DateTimeOffset(dateTime);
-			//objects[objectIndex] = offset;
-			return offset;
 		}
 
 		// not called, it's a struct and a value

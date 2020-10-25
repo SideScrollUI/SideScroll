@@ -74,16 +74,15 @@ namespace Atlas.Tabs.Tools
 	public class ListDirectory
 	{
 		public string Directory { get; set; }
-		[HiddenColumn]
-		[InnerValue]
-		public ITab iTab;
+		[HiddenColumn, InnerValue]
+		public ITab Tab;
 		public string DirectoryPath;
 
 		public ListDirectory(string directoryPath)
 		{
 			DirectoryPath = directoryPath;
 			Directory = Path.GetFileName(directoryPath);
-			iTab = new TabDirectory(directoryPath);
+			Tab = new TabDirectory(directoryPath);
 		}
 
 		public override string ToString()
@@ -97,9 +96,8 @@ namespace Atlas.Tabs.Tools
 		public string Filename { get; set; }
 		public long Size { get; set; }
 		public DateTime Modified { get; set; }
-		[HiddenColumn]
-		[InnerValue]
-		public ITab iTab;
+		[HiddenColumn, InnerValue]
+		public ITab Tab;
 
 		public string FilePath;
 		public FileInfo FileInfo;
@@ -113,9 +111,9 @@ namespace Atlas.Tabs.Tools
 			Size = FileInfo.Length;
 			Modified = FileInfo.LastWriteTime;
 			if (Filename.EndsWith(".atlas"))
-				iTab = new TabFileSerialized(filePath);
+				Tab = new TabFileSerialized(filePath);
 			else
-				iTab = new TabFile(filePath);
+				Tab = new TabFile(filePath);
 		}
 
 		public override string ToString()

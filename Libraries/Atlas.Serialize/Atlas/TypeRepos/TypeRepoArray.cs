@@ -63,6 +63,7 @@ namespace Atlas.Serialize
 				Serializer.AddObjectRef(item);
 			}
 		}
+
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
 			Array array = (Array)obj;
@@ -98,25 +99,6 @@ namespace Atlas.Serialize
 				object item = listTypeRepo.LoadObjectRef();
 				iList[j] = item;
 			}
-		}
-
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
-		{
-			// Can't use Activator because Array requires parameters in it's constructor
-			int count = BitConverter.ToInt32(bytes, byteOffset);
-			byteOffset += sizeof(int);
-
-			Array array = Array.CreateInstance(TypeSchema.Type.GetElementType(), count);
-			Objects[objectIndex] = array;
-
-			IList iList = (IList)array;
-
-			for (int j = 0; j < iList.Count; j++)
-			{
-				object obj = listTypeRepo.LoadObjectRef(bytes, ref byteOffset);
-				iList[j] = obj;
-			}
-			return iList;
 		}
 
 		public override void Clone(object source, object dest)

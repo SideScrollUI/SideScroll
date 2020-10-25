@@ -1,6 +1,5 @@
 ﻿using Atlas.Core;
 using Atlas.Serialize;
-using Atlas.Tabs;
 using System;
 using System.Collections.Generic;
 

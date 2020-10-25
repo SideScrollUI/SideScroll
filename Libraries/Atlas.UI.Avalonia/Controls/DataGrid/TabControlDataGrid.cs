@@ -421,6 +421,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (!selectItemEnabled)
 				return;
+
 			_disableSaving++;
 			_isAutoSelecting++;
 			SelectedItem = selectedItem;

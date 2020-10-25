@@ -58,13 +58,10 @@ namespace Atlas.Serialize
 
 		public int Cloned = 0; // for stats
 
-
-		//protected abstract void SaveObjectData(BinaryWriter writer);
 		public abstract void SaveObject(BinaryWriter writer, object obj);
-		public abstract void LoadObjectData(object obj);
-		protected abstract object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex);
+		public virtual void LoadObjectData(object obj) { }
 		public abstract void Clone(object source, object dest);
-		public abstract void AddChildObjects(object obj);
+		public virtual void AddChildObjects(object obj) {}
 		public virtual void InitializeLoading(Log log)	{ }
 		public virtual void InitializeSaving() { }
 		public virtual void SaveCustomHeader(BinaryWriter writer) { }
@@ -224,7 +221,6 @@ namespace Atlas.Serialize
 			using (LogTimer logTimer = log.Timer("Serializing (" + TypeSchema.Name + ")"))
 			{
 				//long start = writer.BaseStream.Position;
-				//SaveObjectData(writer);
 
 				ObjectSizes = new int[Objects.Count];
 				int index = 0;
@@ -297,21 +293,6 @@ namespace Atlas.Serialize
 			}
 			return index;
 		}
-
-		/*public void WriteObjectRef(object obj, int objectIndex, BinaryWriter writer)
-		{
-			if (obj == null)
-			{
-				writer.Write(true);
-			}
-			else
-			{
-				writer.Write(false);
-				if (!type.IsSealed) // sealed classes can't have sub-classes
-					writer.Write(typeIndex); // could compress by storing Base Class subtype offset only
-				writer.Write(objectIndex);
-			}
-		}*/
 
 		public TypeRef LoadLazyObjectRef()
 		{
@@ -405,6 +386,7 @@ namespace Atlas.Serialize
 					int typeIndex = Reader.ReadInt16();
 					if (typeIndex >= Serializer.TypeRepos.Count)
 						return null;
+
 					TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
 					if (typeRepo.TypeSchema.IsPrimitive) // object ref can point to primitives
 						return typeRepo.LoadObject();
@@ -429,14 +411,12 @@ namespace Atlas.Serialize
 			if (LoadableType.IsPrimitive)
 			{
 				return LoadObject();
-				//return LoadObjectData(bytes, ref byteOffset);
 			}
 
 			int objectIndex = BitConverter.ToInt32(bytes, byteOffset);
 			byteOffset += sizeof(int);
 			if (!TypeSchema.HasSubType)
 			{
-				//return LoadObjectData(bytes, ref byteOffset, objectIndex);
 				return LoadObject(objectIndex);
 			}
 			else
@@ -457,11 +437,6 @@ namespace Atlas.Serialize
 			return null;
 		}
 
-		protected virtual object LoadObjectData(byte[] bytes, ref int byteOffset)
-		{
-			return null;
-		}
-
 		public void LoadObjectData(int objectIndex)
 		{
 			object obj = ObjectsLoaded[objectIndex];
@@ -474,24 +449,6 @@ namespace Atlas.Serialize
 			{
 			}
 		}
-
-		/*public virtual object LoadObject(int objectIndex)
-		{
-			if (objects[objectIndex] != null)
-				return objects[objectIndex];
-
-			int size = objectSizes[objectIndex];
-			byte[] array = new byte[size];
-
-			reader.BaseStream.Position = objectOffsets[objectIndex];
-			reader.Read(array, 0, array.Length);
-
-			//object obj = CreateObject(bytes, ref byteOffset);
-			//objects[objectIndex] = obj; // must assign before loading any more refs
-
-			int byteOffset = 0;
-			return LoadObjectData(reader, array, ref byteOffset, objectIndex);
-		}*/
 
 		public object LoadObject(int objectIndex)
 		{
@@ -536,90 +493,5 @@ namespace Atlas.Serialize
 		{
 			
 		}
-
-		/*
-		
-		public object LoadObjectRef()
-		{
-			bool isNull = reader.ReadBoolean();
-			if (isNull)
-				return null;
-
-			int objectIndex = reader.ReadInt32();
-			if (type.IsSealed)
-			{
-				//return objects[objectIndex];
-
-				if (objects[objectIndex] != null)
-					return objects[objectIndex];
-
-				//return typeRepo.objects[objectIndex];
-				return LoadObjectData(reader, objectIndex);
-			}
-			else
-			{
-				int typeIndex = reader.ReadInt32(); // not saved for sealed classes
-				TypeRepo typeRepo = serializer.typeRepos[typeIndex];
-				//if (type == null) // type might have disappeared or been renamed
-				//	return null;
-
-				if (typeRepo.objects[objectIndex] != null)
-					return typeRepo.objects[objectIndex];
-
-				//return typeRepo.objects[objectIndex];
-				return typeRepo.LoadObjectData(reader, objectIndex);
-			}
-		}
-		*/
-
-		/*
-		// todo: test speed and size, this is a lot cleaner model
-		public void SaveObjectRef(object obj, BinaryWriter writer)
-		{
-			if (obj == null)
-			{
-				writer.Write(0);
-			}
-			else
-			{
-				writer.Write(typeIndex); // could compress by storing Base Class subtype offset only
-				int index = idxObjectToIndex[obj];
-				writer.Write(index);
-			}
-		}
-
-		public object LoadObjectRef()
-		{
-			int typeIndex = reader.ReadInt32();
-			if (typeIndex == 0)
-				return null;
-
-			int objectIndex = reader.ReadInt32();
-			//if (type == null) // type might have disappeared or been renamed
-			//	return null;
-			
-			return objects[objectIndex];
-		}
-
-		*/
-
-		/*public void AddObject(Serializer serializer, object obj)
-		{
-			// todo: switch to TryGetValue
-			if (!idxObjectToIndex.ContainsKey(obj))
-			{
-				//Debug.Assert(objects.Count == idxObjectToIndex.Count);
-				//idxObjectToIndex.Add(obj, objects.Count);
-				//idxObjectToIndex[obj] = idxObjectToIndex.Count;
-				//Debug.Assert(idxObjectToIndex.ContainsKey(obj));
-				//objects.Add(obj);
-				//Debug.Assert(objects.Contains(obj));
-				//Debug.Assert(objects.Count == idxObjectToIndex.Count);
-
-				//idxObjectToIndex.
-
-				AddObjectData(serializer, obj, binaryWriter);
-			}
-		}*/
 	}
 }

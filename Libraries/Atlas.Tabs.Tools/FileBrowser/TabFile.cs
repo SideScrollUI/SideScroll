@@ -14,6 +14,7 @@ namespace Atlas.Tabs.Tools
             ".fna",
 			".faa"
 		};
+
 		public string Path;
 
 		public TabFile(string path)
@@ -73,14 +74,6 @@ namespace Atlas.Tabs.Tools
 					}
 				}
 				model.Items = items;
-
-				/*var actions = new ItemCollection<TaskCreator>();
-				actions.Add(new TaskDelegate("Save", Save));
-				model.Actions = actions;*/
-			}
-
-			private void Save(Call call)
-			{
 			}
 		}
 	}

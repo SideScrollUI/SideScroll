@@ -273,9 +273,6 @@ namespace Atlas.Serialize
 						TypeIndex = i,
 					};
 					TypeSchemas.Add(typeSchema);
-
-					//TypeRepo typeRepo = TypeRepo.Create(this, typeSchema);
-					//AddTypeRepo(typeRepo);
 				}
 			}
 			catch (Exception e)
@@ -356,7 +353,7 @@ namespace Atlas.Serialize
 
 			using (LogTimer logSerialize = log.Timer("Serializing Object Data"))
 			{
-				// todo: add parallel param, switch to async
+				// todo: switch to async
 				/*Parallel.ForEach(writers, new ParallelOptions() { MaxDegreeOfParallelism = 3 }, typeRepoWriter =>
 				{
 					using (BinaryWriter binaryWriter = new BinaryWriter(typeRepoWriter.memoryStream, System.Text.Encoding.Default, true))
@@ -541,9 +538,7 @@ namespace Atlas.Serialize
 		public Queue<Action> CloneQueue = new Queue<Action>();
 		public TaskInstance TaskInstance;
 
-		//private object CreateInstance(Type, )
-
-		public object Clone(object obj)//, bool throwExceptions)
+		public object Clone(object obj)
 		{
 			if (obj == null)
 				return null;
@@ -568,26 +563,20 @@ namespace Atlas.Serialize
 				return obj;
 			}
 
-			//if (throwExceptions)
+			if (typeRepo is TypeRepoArray || typeRepo is TypeRepoArrayBytes)
 			{
-				if (typeRepo is TypeRepoArray || typeRepo is TypeRepoArrayBytes)
-				{
-					clone = Array.CreateInstance(type.GetElementType(), (obj as Array).Length);
-				}
-				else if (type.IsValueType)
-				{
-					// struct
-					return obj; // move this earlier to primitive check?
-				}
-				else
-				{
-					clone = Activator.CreateInstance(type, true);
-				}
+				clone = Array.CreateInstance(type.GetElementType(), (obj as Array).Length);
 			}
-			//else
+			else if (type.IsValueType)
 			{
+				// struct
+				return obj; // move this earlier to primitive check?
+			}
+			else
+			{
+				clone = Activator.CreateInstance(type, true);
+			}
 
-			}
 			Clones[obj] = clone;
 			typeRepo.Cloned++;
 			Action action = new Action(() => typeRepo.Clone(obj, clone));

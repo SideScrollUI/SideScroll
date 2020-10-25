@@ -263,16 +263,6 @@ namespace Atlas.Serialize
 			LoadProperties(obj);
 		}
 
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
-		{
-			object obj = Activator.CreateInstance(LoadableType, true);
-			Objects[objectIndex] = obj; // must assign before loading any more refs
-
-			LoadFields(bytes, ref byteOffset, obj);
-			LoadProperties(bytes, ref byteOffset, obj);
-			return obj;
-		}
-
 		private void AddFields(object obj)
 		{
 			foreach (FieldSchema fieldSchema in TypeSchema.FieldSchemas)

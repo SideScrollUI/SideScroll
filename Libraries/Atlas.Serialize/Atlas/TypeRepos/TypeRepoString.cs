@@ -20,31 +20,10 @@ namespace Atlas.Serialize
 			base(serializer, typeSchema)
 		{
 		}
-		
-		public override void InitializeLoading(Log log)
-		{
-			/*FileStream primaryStream = reader.BaseStream as FileStream;
-			stream = new FileStream(primaryStream.Name, FileMode.Open, FileAccess.Read, FileShare.Read);
-			localReader = new BinaryReader(stream);*/
-		}
-
-		public override void AddChildObjects(object obj)
-		{
-		}
 
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
 			writer.Write((string)obj);
-		}
-
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
-		{
-			string value = System.Text.Encoding.UTF8.GetString(bytes);
-
-			//string value = BitConverter.ToString(bytes, byteOffset);
-			object obj = value;
-			byteOffset += value.Length + 1; // 2?
-			return obj;
 		}
 
 		protected override object CreateObject(int objectIndex)
@@ -57,10 +36,6 @@ namespace Atlas.Serialize
 
 			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;
-		}
-
-		public override void LoadObjectData(object obj)
-		{
 		}
 		
 		public override void Clone(object source, object dest)

@@ -21,34 +21,14 @@ namespace Atlas.Serialize
 		{
 		}
 
-		public override void InitializeLoading(Log log)
-		{
-			/*FileStream primaryStream = reader.BaseStream as FileStream;
-			stream = new FileStream(primaryStream.Name, FileMode.Open, FileAccess.Read, FileShare.Read);
-			localReader = new BinaryReader(stream);*/
-		}
-
 		public static bool CanAssign(Type type)
 		{
 			return type.IsEnum;
 		}
 
-		public override void AddChildObjects(object obj)
-		{
-		}
-
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
 			writer.Write((int)obj);
-		}
-
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
-		{
-			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(TypeSchema.Type, value);
-			byteOffset += sizeof(int);
-			Objects[objectIndex] = obj;
-			return obj;
 		}
 
 		protected override object CreateObject(int objectIndex)
@@ -74,21 +54,9 @@ namespace Atlas.Serialize
 			return obj;
 		}
 
-		public override void LoadObjectData(object obj)
-		{
-		}
-
 		public override object LoadObject()
 		{
 			object obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
-			return obj;
-		}
-
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset)
-		{
-			int value = BitConverter.ToInt32(bytes, byteOffset);
-			object obj = Enum.ToObject(TypeSchema.Type, value);
-			byteOffset += sizeof(int);
 			return obj;
 		}
 

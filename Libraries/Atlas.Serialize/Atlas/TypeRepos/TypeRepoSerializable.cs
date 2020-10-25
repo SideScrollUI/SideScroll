@@ -46,14 +46,6 @@ namespace Atlas.Serialize
 		{
 		}
 
-		protected override void SaveObjectData(BinaryWriter writer)
-		{
-		}
-		
-		protected override object LoadObjectData(BinaryReader reader, byte[] bytes, ref int byteOffset, int objectIndex)
-		{
-		}
-
 		public override void Clone(object source, object dest)
 		{
 			/*byte[] iSource = (byte[])source;

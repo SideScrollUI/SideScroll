@@ -89,26 +89,6 @@ namespace Atlas.Serialize
 			}
 		}
 
-		protected override object LoadObjectData(byte[] bytes, ref int byteOffset, int objectIndex)
-		{
-			object obj = Activator.CreateInstance(LoadableType, true);
-			Objects[objectIndex] = obj; // must assign before loading any more refs
-
-			IDictionary iCollection = (IDictionary)obj;
-			int count = BitConverter.ToInt32(bytes, byteOffset);
-			byteOffset += sizeof(int);
-
-			for (int j = 0; j < count; j++)
-			{
-				object key = list1TypeRepo.LoadObjectRef(bytes, ref byteOffset);
-				object value = list2TypeRepo.LoadObjectRef(bytes, ref byteOffset);
-
-				if (key != null)
-					addMethod.Invoke(iCollection, new object[] { key, value });
-			}
-			return obj;
-		}
-
 		public override void Clone(object source, object dest)
 		{
 			IDictionary iSource = (IDictionary)source;
