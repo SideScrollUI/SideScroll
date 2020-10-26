@@ -20,11 +20,11 @@ namespace Atlas.Core
 			Log = log;
 			SaveFilePath = saveFilePath + ".log.txt";
 
-			string parentDirectory = Path.GetDirectoryName(this.SaveFilePath);
+			string parentDirectory = Path.GetDirectoryName(SaveFilePath);
 			if (!Directory.Exists(parentDirectory))
 				Directory.CreateDirectory(parentDirectory);
 			
-			txtStreamWriter = new StreamWriter(this.SaveFilePath);
+			txtStreamWriter = new StreamWriter(SaveFilePath);
 			context = SynchronizationContext.Current;
 			context = context ?? new SynchronizationContext();
 			

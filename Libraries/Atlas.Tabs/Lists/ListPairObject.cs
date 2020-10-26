@@ -13,7 +13,7 @@ namespace Atlas.Tabs
 		public object Value { get; set; }
 		[HiddenColumn, InnerValue]
 		public object Object { get; set; }
-		public bool autoLoad = true;
+		public bool AutoLoad = true;
 
 		[HiddenColumn]
 		public int? MaxDesiredWidth { get; set; }

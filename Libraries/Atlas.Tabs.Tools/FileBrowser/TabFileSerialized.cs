@@ -7,11 +7,11 @@ namespace Atlas.Tabs.Tools
 {
 	public class TabFileSerialized : ITab
 	{
-		public string path;
+		public string Path;
 
 		public TabFileSerialized(string path)
 		{
-			this.path = path;
+			Path = path;
 		}
 
 		public TabInstance Create() => new Instance(this);
@@ -33,7 +33,7 @@ namespace Atlas.Tabs.Tools
 			{
 				var items = new ItemCollection<ListItem>();
 
-				var serializerFile = new SerializerFileAtlas(Tab.path);
+				var serializerFile = new SerializerFileAtlas(Tab.Path);
 
 				serializer = serializerFile.LoadSchema(call);
 
@@ -49,7 +49,7 @@ namespace Atlas.Tabs.Tools
 
 			private void LoadData(Call call)
 			{
-				var serializerFile = new SerializerFileAtlas(Tab.path);
+				var serializerFile = new SerializerFileAtlas(Tab.Path);
 
 				Object = serializerFile.Load(call);
 				listData.Value = Object;

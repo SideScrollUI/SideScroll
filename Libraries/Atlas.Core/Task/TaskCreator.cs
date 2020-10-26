@@ -19,8 +19,8 @@ namespace Atlas.Core
 		[HiddenColumn]
 		public bool ShowTask { get; set; }
 		[HiddenColumn]
-		public bool UseTask { get; set; } = false; // Blocks, Action uses UI thread if false
-		public int TimesRun { get; set; } = 0;
+		public bool UseTask { get; set; } // Blocks, Action uses UI thread if false
+		public int TimesRun { get; set; }
 
 		[HiddenColumn]
 		public SynchronizationContext Context;

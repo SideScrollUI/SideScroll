@@ -48,6 +48,7 @@ namespace Atlas.UI.Avalonia.View
 			}
 			if (value == null)
 				return null;
+
 			if (labelOverride != null)
 				label = labelOverride;
 

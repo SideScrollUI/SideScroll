@@ -65,11 +65,11 @@ namespace Atlas.Tabs.Test.DataGrid
 			public int SmallNumber { get; set; } = 0;
 			public long BigNumber { get; set; } = 1234567890123456789;
 
-			protected SynchronizationContext context;
+			protected SynchronizationContext Context;
 
 			public TestItem(SynchronizationContext context)
 			{
-				this.context = context;
+				Context = context;
 			}
 
 			public override string ToString()
@@ -88,7 +88,7 @@ namespace Atlas.Tabs.Test.DataGrid
 
 			public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 			{
-				context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
+				Context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
 				//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 			}
 

@@ -49,7 +49,7 @@ namespace Atlas.Tabs
 				tab = (ITab)Activator.CreateInstance(bookmarkCopy.Type);
 			TabInstance tabInstance = tab.Create();
 			tabInstance.Project = Project.Open(bookmarkCopy); 
-			tabInstance.iTab = this;
+			tabInstance.Tab = this;
 			tabInstance.SelectBookmark(bookmarkCopy.TabBookmark);
 			return tabInstance;
 		}

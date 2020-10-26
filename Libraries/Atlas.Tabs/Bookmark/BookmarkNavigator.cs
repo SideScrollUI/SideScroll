@@ -44,6 +44,7 @@ namespace Atlas.Tabs
 		{
 			if (bookmark == null)
 				return;
+
 			// trim Past?
 			//bookmark = Serialize.SerializerMemory.Clone<Bookmark>(new Core.Log(), bookmark); // sanitize
 			//int trimAt = currentIndex + 1;
@@ -59,6 +60,7 @@ namespace Atlas.Tabs
 		{
 			if (bookmark == null)
 				return;
+
 			Bookmark currentBookmark = History[CurrentIndex];
 			//bookmark = Serialize.SerializerMemory.Clone<Bookmark>(new Core.Log(), bookmark); // sanitize
 			currentBookmark.TabBookmark = bookmark.TabBookmark;

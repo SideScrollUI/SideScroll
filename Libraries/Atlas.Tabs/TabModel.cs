@@ -103,7 +103,7 @@ namespace Atlas.Tabs
 			if (ObjectHasLinks(obj) == false)
 				return null;
 
-			TabModel tabModel = new TabModel(name);
+			var tabModel = new TabModel(name);
 			tabModel.AddData(obj);
 			if (tabModel.ItemList.Count == 0)
 				return null;
@@ -210,6 +210,7 @@ namespace Atlas.Tabs
 			{
 				if (ItemList[0] is IItemCollection itemCollection && itemCollection.Skippable == false)
 					return;
+
 				var firstItem = ItemList[0][0];
 				var skippableAttribute = firstItem.GetType().GetCustomAttribute<SkippableAttribute>();
 				if (skippableAttribute != null)
@@ -402,9 +403,11 @@ namespace Atlas.Tabs
 		{
 			if (obj == null)
 				return false;
+
 			object value = obj.GetInnerValue();
 			if (value == null)
 				return false;
+
 			if (value is ListItem listItem)
 				value = listItem.Value;
 			if (value is ListMember listMember)

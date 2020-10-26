@@ -194,11 +194,11 @@ namespace Atlas.Core
 	// Would be nice to make this thread safe to make storing logs easier?
 	/*public class ItemCollectionView<T> : ItemCollection<T> //, IRaiseItemChangedEvents //
 	{
-		private ItemCollection<T> itemCollection;
+		private ItemCollection<T> ItemCollection;
 
 		public ItemCollectionView(ItemCollection<T> itemCollection)
 		{
-			this.itemCollection = itemCollection;
+			ItemCollection = itemCollection;
 		}
 
 		// Don't implement List<T>, it isn't sortable

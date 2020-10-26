@@ -12,17 +12,16 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Lazy Base")]
 		public void ILMethod()
 		{
-			LazyClass lazyClass = new LazyClass();
+			var lazyClass = new LazyClass();
 
-			object obj = Activator.CreateInstance(lazyClass.newType, true);
-			FieldInfo fieldInfo = lazyClass.newType.GetField("typeRef");
+			object obj = Activator.CreateInstance(lazyClass.NewType, true);
+			FieldInfo fieldInfo = lazyClass.NewType.GetField("typeRef");
 			fieldInfo.SetValue(obj, new TypeRef());
 
-			PropertyInfo propertyInfo = lazyClass.newType.GetProperty("prop");
+			PropertyInfo propertyInfo = lazyClass.NewType.GetProperty("prop");
 			object result = propertyInfo.GetValue(obj);
 		}
 	}
-
 
 	public class TypeRef
 	{
@@ -34,19 +33,19 @@ namespace Atlas.Serialize.Test
 
 	public class PropertyRef
 	{
-		public TypeRepo typeRepo;
-		public PropertyBuilder propertyBuilder;
-		public FieldBuilder fieldBuilderTypeRef;
+		public TypeRepo TypeRepo;
+		public PropertyBuilder PropertyBuilder;
+		public FieldBuilder FieldBuilderTypeRef;
 	}
 
 	public class LazyClass
 	{
-		public Type newType;
-		public Dictionary<PropertyInfo, PropertyRef> propertyRefs = new Dictionary<PropertyInfo, PropertyRef>();
+		public Type NewType;
+		public Dictionary<PropertyInfo, PropertyRef> PropertyRefs = new Dictionary<PropertyInfo, PropertyRef>();
 
 		public LazyClass()
 		{
-			newType = CompileResultType();
+			NewType = CompileResultType();
 		}
 
 		public Type CompileResultType()

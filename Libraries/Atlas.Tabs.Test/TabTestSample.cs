@@ -61,12 +61,12 @@ DataGrids
 
 	public class SampleItem
 	{
-		public int ID { get; set; }
+		public int Id { get; set; }
 		public string Name { get; set; }
 
 		public SampleItem(int id, string name)
 		{
-			ID = id;
+			Id = id;
 			Name = name;
 		}
 

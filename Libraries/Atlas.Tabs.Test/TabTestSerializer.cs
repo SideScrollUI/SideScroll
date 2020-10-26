@@ -59,7 +59,7 @@ namespace Atlas.Tabs.Test
 
 		public class SampleItem
 		{
-			public int ID { get; set; }
+			public int Id { get; set; }
 			public string Name { get; set; }
 
 			public SampleItem()
@@ -68,7 +68,7 @@ namespace Atlas.Tabs.Test
 
 			public SampleItem(int id, string name)
 			{
-				ID = id;
+				Id = id;
 				Name = name;
 			}
 

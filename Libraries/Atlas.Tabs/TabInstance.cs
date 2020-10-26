@@ -83,7 +83,7 @@ namespace Atlas.Tabs
 		public const string CurrentBookmarkName = "Current";
 
 		public Project Project { get; set; }
-		public ITab iTab; // Collision with derived Tab
+		public ITab Tab; // Collision with derived Tab
 		//public Log Log => TaskInstance.Log;
 		public TaskInstance TaskInstance { get; set; } = new TaskInstance();
 		public TabModel Model { get; set; } = new TabModel();
@@ -109,7 +109,7 @@ namespace Atlas.Tabs
 		public TabInstance ParentTabInstance { get; set; }
 		public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = new Dictionary<object, TabInstance>();
 
-		public SynchronizationContext uiContext;
+		public SynchronizationContext UiContext;
 		public TabBookmark FilterBookmarkNode;
 
 		public event EventHandler<EventArgs> OnRefresh;
@@ -173,8 +173,9 @@ namespace Atlas.Tabs
 			TabInstance tabInstance = iTab.Create();
 			if (tabInstance == null)
 				return null;
+
 			tabInstance.Project = tabInstance.Project ?? Project;
-			tabInstance.iTab = iTab;
+			tabInstance.Tab = iTab;
 			tabInstance.ParentTabInstance = this;
 			//tabInstance.taskInstance.call.Log =
 			//tabInstance.taskInstance = taskInstance.AddSubTask(taskInstance.call); // too slow?
@@ -227,7 +228,7 @@ namespace Atlas.Tabs
 		private void InitializeContext()
 		{
 			//Debug.Assert(context == null || SynchronizationContext.Current == context);
-			uiContext = uiContext ?? SynchronizationContext.Current ?? new SynchronizationContext();
+			UiContext = UiContext ?? SynchronizationContext.Current ?? new SynchronizationContext();
 		}
 
 		public TabInstance RootInstance
@@ -265,31 +266,31 @@ namespace Atlas.Tabs
 
 		public void Invoke(Action action)
 		{
-			uiContext.Post(ActionCallback, action);
+			UiContext.Post(ActionCallback, action);
 		}
 
 		public void Invoke(SendOrPostCallback callback, object param = null)
 		{
-			uiContext.Post(callback, param);
+			UiContext.Post(callback, param);
 		}
 
 		public void Invoke(Call call, Action action)
 		{
-			uiContext.Post(ActionCallback, action);
+			UiContext.Post(ActionCallback, action);
 		}
 
 		// switch to SendOrPostCallback?
 		public void Invoke(CallActionParams callAction, params object[] objects)
 		{
 			var taskDelegate = new TaskDelegateParams(null, callAction.Method.Name, callAction, false, null, objects);
-			uiContext.Post(ActionParamsCallback, taskDelegate);
+			UiContext.Post(ActionParamsCallback, taskDelegate);
 		}
 
 		// switch to SendOrPostCallback?
 		public void Invoke(Call call, CallActionParams callAction, params object[] objects)
 		{
 			var taskDelegate = new TaskDelegateParams(call, callAction.Method.Name, callAction, false, null, objects);
-			uiContext.Post(CallActionParamsCallback, taskDelegate);
+			UiContext.Post(CallActionParamsCallback, taskDelegate);
 		}
 
 		private void CallActionParamsCallback(object state)
@@ -529,7 +530,7 @@ namespace Atlas.Tabs
 				if (this is ITabAsync tabAsync)
 					OnReload.Invoke(this, new EventArgs());
 				else
-					uiContext.Send(_ => OnReload(this, new EventArgs()), null);
+					UiContext.Send(_ => OnReload(this, new EventArgs()), null);
 			}
 			// todo: this needs to actually wait for reload
 		}
@@ -541,7 +542,7 @@ namespace Atlas.Tabs
 			if (OnRefresh != null)
 			{
 				var onRefresh = OnRefresh; // create temporary copy since this gets delayed
-				uiContext.Send(_ => onRefresh(this, new EventArgs()), null);
+				UiContext.Send(_ => onRefresh(this, new EventArgs()), null);
 				// todo: this needs to actually wait for refresh?
 			}
 		}
@@ -551,7 +552,7 @@ namespace Atlas.Tabs
 			if (OnResize != null)
 			{
 				var onResize = OnResize; // create temporary copy since this gets delayed
-				uiContext.Send(_ => onResize(this, new EventArgs()), null);
+				UiContext.Send(_ => onResize(this, new EventArgs()), null);
 			}
 		}
 
@@ -561,15 +562,19 @@ namespace Atlas.Tabs
 			{
 				if (TabViewSettings == null)
 					return false;
+
 				//if (TabViewSettings.SelectionType == SelectionType.User && TabViewSettings.SelectedRows.Count == 0) // Need to split apart user selected rows?
 				if (TabViewSettings.SelectedRows.Count == 0)
 					return false;
+
 				// Only data is skippable?
 				if (Model.Objects.Count > 0 || Model.ItemList.Count == 0 || Model.ItemList[0].Count != 1)
 					return false;
+
 				var skippableAttribute = Model.ItemList[0][0].GetType().GetCustomAttribute<SkippableAttribute>();
 				if (skippableAttribute == null && Model.Actions != null && Model.Actions.Count > 0)
 					return false; 
+
 				return Model.Skippable;
 			}
 		}
@@ -578,7 +583,7 @@ namespace Atlas.Tabs
 		{
 			if (OnSelectItem != null)
 			{
-				uiContext.Send(_ => OnSelectItem(this, new EventSelectItem(obj)), null);
+				UiContext.Send(_ => OnSelectItem(this, new EventSelectItem(obj)), null);
 			}
 			else
 			{
@@ -589,14 +594,14 @@ namespace Atlas.Tabs
 		public void ClearSelection()
 		{
 			if (OnClearSelection != null)
-				uiContext.Send(_ => OnClearSelection(this, new EventArgs()), null);
+				UiContext.Send(_ => OnClearSelection(this, new EventArgs()), null);
 		}
 
 		public bool IsLinkable
 		{
 			get
 			{
-				Type type = iTab?.GetType();
+				Type type = Tab?.GetType();
 				if (type == null)
 					return false;
 				return TypeSchema.HasEmptyConstructor(type);
@@ -607,7 +612,7 @@ namespace Atlas.Tabs
 		{
 			var bookmark = new Bookmark
 			{
-				Type = iTab?.GetType(),
+				Type = Tab?.GetType(),
 			};
 			GetBookmark(bookmark.TabBookmark);
 			bookmark = bookmark.DeepClone(TaskInstance.Call); // Sanitize and test bookmark
@@ -640,12 +645,12 @@ namespace Atlas.Tabs
 					tabBookmark.DataRepoItems.Add(dataRepoItem);
 				}
 			}*/
-			if (iTab is IInnerTab innerTab)
-				iTab = innerTab.Tab;
-			if (iTab?.GetType().GetCustomAttribute<TabRootAttribute>() != null)
+			if (Tab is IInnerTab innerTab)
+				Tab = innerTab.Tab;
+			if (Tab?.GetType().GetCustomAttribute<TabRootAttribute>() != null)
 			{
 				tabBookmark.IsRoot = true;
-				tabBookmark.Tab = iTab;
+				tabBookmark.Tab = Tab;
 			}
 
 			foreach (TabInstance tabInstance in ChildTabInstances.Values)
@@ -673,7 +678,7 @@ namespace Atlas.Tabs
 			TabViewSettings = tabBookmark.ViewSettings;
 			TabBookmark = tabBookmark;
 			if (OnLoadBookmark != null)
-				uiContext.Send(_ => OnLoadBookmark(this, new EventArgs()), null);
+				UiContext.Send(_ => OnLoadBookmark(this, new EventArgs()), null);
 			//this.bookmarkNode = null; // have to wait until TabData's Load, which might be after this
 			/*foreach (TabInstance tabInstance in children)
 			{
@@ -850,17 +855,18 @@ namespace Atlas.Tabs
 				return true;
 
 			Type type = obj.GetType();
-			if (iTab != null && type == iTab.GetType())
+			if (Tab != null && type == Tab.GetType())
 			{
 				foreach (PropertyInfo propertyInfo in type.GetProperties())
 				{
 					if (propertyInfo.GetCustomAttribute<DataKeyAttribute>() != null)
 					{
 						var objKey = propertyInfo.GetValue(obj);
-						var tabKey = propertyInfo.GetValue(iTab);
+						var tabKey = propertyInfo.GetValue(Tab);
 						// todo: support multiple [Key]s?
 						if (objKey == tabKey)
 							return true;
+
 						if (objKey.GetType() == typeof(string) && Equals(objKey, tabKey))
 							return true;
 					}

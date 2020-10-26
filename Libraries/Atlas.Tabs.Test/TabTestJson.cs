@@ -4,7 +4,7 @@ namespace Atlas.Tabs.Test
 {
 	public class TabTestJson : ITab
 	{
-		public readonly static string json1 =
+		public readonly static string Json1 =
 @"
 {
 ""id"":""abc"",
@@ -29,7 +29,7 @@ namespace Atlas.Tabs.Test
 			{
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Sample Text", LazyJsonNode.Parse(json1)),
+					new ListItem("Sample Text", LazyJsonNode.Parse(Json1)),
 				};
 			}
 		}

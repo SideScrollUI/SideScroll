@@ -46,34 +46,34 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Test Log Big")]
 		public void SerializeTestLogBig()
 		{
-			var testLog = new TestLogBig();
-			testLog.Child("test");
-			serializer.Save(Call, testLog);
+			var input = new TestLogBig();
+			input.Child("test");
+			serializer.Save(Call, input);
 			TestLogBig output = serializer.Load<TestLogBig>(Call);
 		}
 
 		[Test, Description("Serialize Test Log")]
 		public void SerializeTestLog()
 		{
-			TestLog testLog = new TestLog();
-			serializer.Save(Call, testLog);
+			var input = new TestLog();
+			serializer.Save(Call, input);
 			TestLog output = serializer.Load<TestLog>(Call);
 		}
 
 		[Test, Description("Serialize Log Timer 2")]
 		public void SerializeLogTimer2()
 		{
-			Log testLog = new Log();
-			using (testLog.Timer("timing"))
-				testLog.Add("child");
-			serializer.Save(Call, testLog);
+			var input = new Log();
+			using (input.Timer("timing"))
+				input.Add("child");
+			serializer.Save(Call, input);
 			Log output = serializer.Load<Log>(Call);
 		}
 
 		[Test, Description("Serialize Log Entry")]
 		public void SerializeLogEntry()
 		{
-			LogEntry input = new LogEntry();
+			var input = new LogEntry();
 			serializer.Save(Call, input);
 			LogEntry output = serializer.Load<LogEntry>(Call);
 		}
@@ -81,35 +81,35 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Log")]
 		public void SerializeLog()
 		{
-			Log testLog = new Log();
-			serializer.Save(Call, testLog);
+			var input = new Log();
+			serializer.Save(Call, input);
 			Log output = serializer.Load<Log>(Call);
 		}
 
 		[Test, Description("Serialize Log Unknown")]
 		public void SerializeLogUnknown()
 		{
-			LogUnknown testLog = new LogUnknown();
-			serializer.Save(Call, testLog);
+			var input = new LogUnknown();
+			serializer.Save(Call, input);
 			LogUnknown output = serializer.Load<LogUnknown>(Call);
 		}
 
 		[Test, Description("Serialize Log Child")]
 		public void SerializeLogChild()
 		{
-			Log testLog = new Log();
-			testLog.Call("test");
+			var input = new Log();
+			input.Call("test");
 
-			serializer.Save(Call, testLog);
+			serializer.Save(Call, input);
 			Log output = serializer.Load<Log>(Call);
 		}
 
 		[Test, Description("Serialize Log Timer")]
 		public void SerializeLogTimer()
 		{
-			LogTimer testLog = new LogTimer();
+			var input = new LogTimer();
 
-			serializer.Save(Call, testLog);
+			serializer.Save(Call, input);
 			LogTimer output = serializer.Load<LogTimer>(Call);
 		}
 
@@ -122,42 +122,42 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Log Entry Tags")]
 		public void SerializeLogEntryTags()
 		{
-			LogEntryTest2 testLog = new LogEntryTest2();
-			testLog.Tags = new Tag[] { new Tag("abc", 123) };
+			var input = new LogEntryTest2();
+			input.Tags = new Tag[] { new Tag("abc", 123) };
 
-			serializer.Save(Call, testLog);
+			serializer.Save(Call, input);
 			LogEntryTest2 output = serializer.Load<LogEntryTest2>(Call);
 		}
 
 		[Test, Description("Serialize Log Timer Child Unknown")]
 		public void SerializeLogTimerChildUnknown()
 		{
-			var testLog = new LogTest2();
-			testLog.Add(new Tag("abc", 123));
+			var input = new LogTest2();
+			input.Add(new Tag("abc", 123));
 
-			serializer.Save(Call, testLog);
+			serializer.Save(Call, input);
 			LogTest2 output = serializer.Load<LogTest2>(Call);
 		}
 
 		[Test, Description("Serialize Log Timer Child")]
 		public void SerializeLogTimerChild()
 		{
-			Log testLog = new Log();
-			using (testLog.Timer("test")) { }
+			var input = new Log();
+			using (input.Timer("test")) { }
 
-			serializer.Save(Call, testLog);
+			serializer.Save(Call, input);
 			Log output = serializer.Load<Log>(Call);
 		}
 
 		public class SelectedItem
 		{
-			public string label;
-			public bool pinned;
+			public string Label;
+			public bool Pinned;
 		}
 
 		public class TabInstanceConfiguration
 		{
-			public HashSet<SelectedItem> selected = new HashSet<SelectedItem>();
+			public HashSet<SelectedItem> Selected = new HashSet<SelectedItem>();
 			public int? SplitterDistance;
 			public int NumColumns;
 		}
@@ -171,7 +171,6 @@ namespace Atlas.Serialize.Test
 		{
 			public List<LogEntryUnknown> Items = new List<LogEntryUnknown>();
 		}
-		
 
 		public class LogEntryTest2
 		{
@@ -197,7 +196,7 @@ namespace Atlas.Serialize.Test
 
 			public void Add(params Tag[] tags)
 			{
-				LogEntryTest2 logEntry = new LogEntryTest2(tags);
+				var logEntry = new LogEntryTest2(tags);
 				Items.Add(logEntry);
 			}
 		}

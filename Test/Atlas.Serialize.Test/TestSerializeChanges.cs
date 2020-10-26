@@ -39,6 +39,5 @@ namespace Atlas.Serialize.Test
 		{
 			public int NumColumns;
 		}
-		
 	}
 }

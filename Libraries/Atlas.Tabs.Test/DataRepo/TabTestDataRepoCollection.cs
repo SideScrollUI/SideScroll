@@ -103,7 +103,7 @@ namespace Atlas.Tabs.Test.DataRepo
 		public class SampleItem
 		{
 			[DataKey]
-			public int ID { get; set; }
+			public int Id { get; set; }
 			public string Name { get; set; }
 
 			public SampleItem()
@@ -112,7 +112,7 @@ namespace Atlas.Tabs.Test.DataRepo
 
 			public SampleItem(int id, string name)
 			{
-				ID = id;
+				Id = id;
 				Name = name;
 			}
 

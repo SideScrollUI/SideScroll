@@ -26,10 +26,10 @@ namespace Atlas.Tabs.Test.DataGrid
 				for (int i = 0; i < 100; i++)
 				{
 					var testItem = new TestWideItem();
-					testItem.smallNumber = i;
-					testItem.bigNumber += i;
+					testItem.SmallNumber = i;
+					testItem.BigNumber += i;
 					if (i % 3 == 0)
-						testItem.longText1 += testItem.longText0;
+						testItem.LongText1 += testItem.LongText0;
 					items.Add(testItem);
 				}
 			}
@@ -37,23 +37,23 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class TestWideItem
 		{
-			public int smallNumber { get; set; } = 0;
-			public long bigNumber { get; set; } = 1234567890123456789;
-			public string longText0 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
+			public int SmallNumber { get; set; } = 0;
+			public long BigNumber { get; set; } = 1234567890123456789;
+			public string LongText0 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 			[MaxWidth(200), WordWrap]
-			public string longText1 { get; set; } = "abcdefghijklmnopqrz";
-			public string longText2 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
-			public string longText3 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
-			public string longText4 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
-			public string longText5 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
-			public string longText6 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
-			public string longText7 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
-			public string longText8 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
-			public string longText9 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
+			public string LongText1 { get; set; } = "abcdefghijklmnopqrz";
+			public string LongText2 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
+			public string LongText3 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
+			public string LongText4 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
+			public string LongText5 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
+			public string LongText6 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
+			public string LongText7 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
+			public string LongText8 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
+			public string LongText9 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 
 			public override string ToString()
 			{
-				return smallNumber.ToString();
+				return SmallNumber.ToString();
 			}
 		}
 	}

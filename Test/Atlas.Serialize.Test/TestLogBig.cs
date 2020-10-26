@@ -24,7 +24,7 @@ namespace Atlas.Serialize.Test
 		{
 			get
 			{
-				if (tags == null)
+				if (Tags == null)
 					return Text;
 				//if (tags.Count == 0)
 				if (TagText == "")
@@ -41,21 +41,20 @@ namespace Atlas.Serialize.Test
 			get
 			{
 				string line = "";
-				if (tags == null)
+				if (Tags == null)
 					return line;
 
-				foreach (Tag tag in tags)
+				foreach (Tag tag in Tags)
 				{
 					line += tag.ToString() + " ";
 				}
 				return line;
 			}
 		}
-		public Tag[] tags;
+		public Tag[] Tags;
 
 		[InnerValue]
-		public ItemCollection<TestLogBig> items; // change to LRU for performance? No Binding?
-		//private int contextID = 0;
+		public ItemCollection<TestLogBig> Items; // change to LRU for performance? No Binding?
 
 		public TestLogBig()
 		{
@@ -67,11 +66,11 @@ namespace Atlas.Serialize.Test
 			TestLogBig logEntry = new TestLogBig();
 			//log.Type = logType;
 			//logEntry = new Log(context, contextID, settings, "replacing log with local", new Tag[] { });
-			if (items == null)
-				items = new ItemCollection<TestLogBig>();
+			if (Items == null)
+				Items = new ItemCollection<TestLogBig>();
 			//if (items.Count > settings.MaxLogItems)
 			//	items.RemoveAt(0);
-			items.Add(logEntry);
+			Items.Add(logEntry);
 		}
 	}
 }

@@ -2,7 +2,6 @@
 using Atlas.Network;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Atlas.Tabs.Tools
 {
@@ -57,21 +56,21 @@ namespace Atlas.Tabs.Tools
 
 		public class ListDirectory
 		{
-			public FTP.Info ftpInfo;
+			public FTP.Info FtpInfo;
 			public string Directory { get; set; }
 			[HiddenColumn]
 			[InnerValue]
-			public ITab iTab;
-			private string directoryPath;
-			private FtpItem fileData;
+			public ITab Tab;
+			public string DirectoryPath;
+			public FtpItem FileData;
 
 			public ListDirectory(FTP.Info ftpInfo, FtpItem fileData)
 			{
-				this.ftpInfo = ftpInfo;
-				this.fileData = fileData;
-				this.directoryPath = fileData.FullPath;
-				Directory = System.IO.Path.GetFileName(directoryPath);
-				iTab = new TabFtpDirectory(ftpInfo, directoryPath);
+				FtpInfo = ftpInfo;
+				FileData = fileData;
+				DirectoryPath = fileData.FullPath;
+				Directory = System.IO.Path.GetFileName(DirectoryPath);
+				Tab = new TabFtpDirectory(ftpInfo, DirectoryPath);
 			}
 
 			public override string ToString()
@@ -88,7 +87,7 @@ namespace Atlas.Tabs.Tools
 			public DateTime Modified { get; set; }
 			[HiddenColumn]
 			[InnerValue]
-			public ITab iTab;
+			public ITab Tab;
 
 			public string FilePath;
 			public FtpItem FileData;

@@ -902,15 +902,15 @@ namespace Atlas.UI.Avalonia.Controls
 
 		/*private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			lock (this.plotModel.SyncRoot)
+			lock (PlotModel.SyncRoot)
 			{
-				//this.Update();
+				//Update();
 				int index = ListToTabIndex[(IList)sender];
 				ListSeries listSeries = ListToTabSeries[(IList)sender];
 				AddPoints((OxyPlot.Series.LineSeries)plotModel.Series[index], listSeries, e.NewItems);
 			}
 
-			Dispatcher.UIThread.InvokeAsync(() => this.plotModel.InvalidatePlot(true), DispatcherPriority.Background);
+			Dispatcher.UIThread.InvokeAsync(() => PlotModel.InvalidatePlot(true), DispatcherPriority.Background);
 		}*/
 
 		public void Dispose()

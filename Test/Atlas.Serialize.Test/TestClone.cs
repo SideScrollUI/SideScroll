@@ -464,7 +464,7 @@ namespace Atlas.Serialize.Test
 			
 			var output = serializer.Clone(log, input);
 
-			Assert.AreEqual(output.subSclass.A, input.subSclass.A);
+			Assert.AreEqual(output.SubClass.A, input.SubClass.A);
 		}
 
 		[Test, Description("Clone List Containing Subclass of Type")]
@@ -506,7 +506,7 @@ namespace Atlas.Serialize.Test
 
 		public class SubClassContainer
 		{
-			public SubClass subSclass = new SubClass()
+			public SubClass SubClass = new SubClass()
 			{
 				A = 3
 			};

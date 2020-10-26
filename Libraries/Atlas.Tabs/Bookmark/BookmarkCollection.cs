@@ -11,14 +11,15 @@ namespace Atlas.Tabs
 		public static string DataKey = "Bookmarks";
 		//public event EventHandler<EventArgs> OnDelete;
 
-		private Project project;
+		public Project Project;
 		public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new ItemCollectionUI<TabBookmarkItem>();
 		public TabBookmarkItem NewBookmark { get; set; }
+
 		private DataRepoView<Bookmark> dataRepoBookmarks;
 
 		public BookmarkCollection(Project project)
 		{
-			this.project = project;
+			Project = project;
 			Reload();
 			//Items.CollectionChanged += Items_CollectionChanged;
 		}
@@ -40,7 +41,7 @@ namespace Atlas.Tabs
 				Names.Add(bookmarkName);
 			}*/
 
-			dataRepoBookmarks = project.DataApp.OpenView<Bookmark>(null, DataKey);
+			dataRepoBookmarks = Project.DataApp.OpenView<Bookmark>(null, DataKey);
 			dataRepoBookmarks.SortBy(nameof(Bookmark.TimeStamp));
 			foreach (Bookmark bookmark in dataRepoBookmarks.Items.Values)
 			{
@@ -52,7 +53,7 @@ namespace Atlas.Tabs
 
 		public TabBookmarkItem Add(Bookmark bookmark)
 		{
-			var tabItem = new TabBookmarkItem(bookmark, project);
+			var tabItem = new TabBookmarkItem(bookmark, Project);
 			tabItem.OnDelete += Item_OnDelete;
 			Items.Add(tabItem);
 			return tabItem;

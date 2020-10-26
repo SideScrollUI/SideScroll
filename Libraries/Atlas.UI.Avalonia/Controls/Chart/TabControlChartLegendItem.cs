@@ -22,8 +22,9 @@ namespace Atlas.UI.Avalonia.Controls
 		public OxyPlot.Series.Series Series;
 		public ListGroup ListGroup;
 		//public string Label { get; set; }
-		public TextBlock textBlock;
+		public TextBlock TextBlock;
 		public TextBlock textBlockSum;
+
 		private Polygon polygon;
 		private Color color = Colors.Green;
 		private OxyColor oxyColor;
@@ -36,7 +37,7 @@ namespace Atlas.UI.Avalonia.Controls
 			set
 			{
 				_index = value;
-				textBlock.Text = value.ToString() + ". " + Series.Title;
+				TextBlock.Text = value.ToString() + ". " + Series.Title;
 			}
 		}
 		public int Count { get; set; }
@@ -182,7 +183,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddTextBlock()
 		{
-			textBlock = new TextBlock()
+			TextBlock = new TextBlock()
 			{
 				Text = Series.Title,
 				Foreground = Brushes.LightGray,
@@ -193,9 +194,9 @@ namespace Atlas.UI.Avalonia.Controls
 				[Grid.ColumnProperty] = 1,
 			};
 			if (Index > 0)
-				textBlock.Text = Index.ToString() + ": " + textBlock.Text;
-			textBlock.Tapped += TextBox_Tapped;
-			Children.Add(textBlock);
+				TextBlock.Text = Index.ToString() + ": " + TextBlock.Text;
+			TextBlock.Tapped += TextBox_Tapped;
+			Children.Add(TextBlock);
 		}
 
 		private void AddSumTextBlock()
@@ -242,7 +243,7 @@ namespace Atlas.UI.Avalonia.Controls
 						Legend.UpdateHighlight(true);
 						OnVisibleChanged?.Invoke(this, null);
 					}
-					textBlock.Foreground = Theme.GridBackgroundSelected;
+					TextBlock.Foreground = Theme.GridBackgroundSelected;
 					if (textBlockSum != null)
 						textBlockSum.Foreground = Theme.GridBackgroundSelected;
 				}
@@ -257,7 +258,7 @@ namespace Atlas.UI.Avalonia.Controls
 						Legend.UpdateHighlight(false);
 						OnVisibleChanged?.Invoke(this, null);
 					}
-					textBlock.Foreground = Brushes.LightGray;
+					TextBlock.Foreground = Brushes.LightGray;
 					if (textBlockSum != null)
 						textBlockSum.Foreground = Brushes.LightGray;
 				}

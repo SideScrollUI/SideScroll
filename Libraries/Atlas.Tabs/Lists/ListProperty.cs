@@ -21,6 +21,7 @@ namespace Atlas.Tabs
 	{
 		public PropertyInfo PropertyInfo;
 		public bool Cached;
+
 		private bool _valueCached;
 		private object _valueObject = null;
 

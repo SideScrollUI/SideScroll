@@ -15,8 +15,8 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabTreeView : TabControl //, IDisposable
 	{
-		public TabDataSettings tabDataConfiguration;
-		private IList iList;
+		public TabDataSettings DataSettings;
+		private IList List;
 		private Type elementType;
 
 
@@ -35,11 +35,11 @@ namespace Atlas.UI.Avalonia.Controls
 		private Stopwatch stopwatch = new Stopwatch();
 		//private object autoSelectItem = null;
 
-		public TabTreeView(TabInstance tabInstance, TabDataSettings tabDataConfiguration, IList iList) : base(tabInstance)
+		public TabTreeView(TabInstance tabInstance, TabDataSettings dataSettings, IList list) : base(tabInstance)
 		{
-			this.tabDataConfiguration = tabDataConfiguration;
-			this.iList = iList;
-			Debug.Assert(tabDataConfiguration != null);
+			DataSettings = dataSettings;
+			List = list;
+			Debug.Assert(dataSettings != null);
 			Initialize();
 		}
 
@@ -57,7 +57,7 @@ namespace Atlas.UI.Avalonia.Controls
 				brushConverter.EditableBrush = (SolidColorBrush)Resources[Keys.EditableBrush];
 			}*/
 
-			Type listType = iList.GetType();
+			Type listType = List.GetType();
 			elementType = listType.GenericTypeArguments[0];
 
 			/*collectionView = CollectionViewSource.GetDefaultView(iList); // This fails if an object's ToString() has a -> in it
@@ -113,7 +113,7 @@ namespace Atlas.UI.Avalonia.Controls
 				Background = new SolidColorBrush(Colors.White),
 				//Width = 50,
 				//Height = 500, // does work
-				Items = iList,
+				Items = List,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch, // doesn't work
 				//Items = new Bind
@@ -174,7 +174,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void SaveSelectedItems()
 		{
-			tabDataConfiguration.SelectedRows.Clear();
+			DataSettings.SelectedRows.Clear();
 			/*Dictionary<object, List<DataGridCellInfo>> orderedRows = new Dictionary<object, List<DataGridCellInfo>>();
 			foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
 			{
@@ -214,7 +214,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					selectedItem.Label = null;
 				}
-				tabDataConfiguration.SelectedRows.Add(selectedItem);
+				DataSettings.SelectedRows.Add(selectedItem);
 			}
 		}
 	}

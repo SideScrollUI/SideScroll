@@ -16,7 +16,7 @@ namespace Atlas.Core
 		public bool ShowOrder { get; set; } = true;
 		public string UnitName { get; set; }
 		public bool ShowLegend { get; set; } = true;
-		public bool ShowTimeTracker { get; set; } = false;
+		public bool ShowTimeTracker { get; set; }
 		public double? MinValue { get; set; }
 		public ItemCollection<ListSeries> Series { get; set; } = new ItemCollection<ListSeries>();
 

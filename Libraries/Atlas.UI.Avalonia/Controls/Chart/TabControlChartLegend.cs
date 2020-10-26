@@ -86,12 +86,12 @@ namespace Atlas.UI.Avalonia.Controls
 			var legendItem = new TabChartLegendItem(this, oxyListSeries);
 			legendItem.OnSelectionChanged += LegendItem_SelectionChanged;
 			legendItem.OnVisibleChanged += LegendItem_VisibleChanged;
-			legendItem.textBlock.PointerPressed += (s, e) =>
+			legendItem.TextBlock.PointerPressed += (s, e) =>
 			{
 				if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
 					SelectLegendItem(legendItem);
 			};
-			//this.Children.Add(legendItem);
+			//Children.Add(legendItem);
 			LegendItems.Add(legendItem);
 			if (series.Title != null)
 				_idxLegendItems.Add(series.Title, legendItem);

@@ -51,7 +51,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public AvaloniaEdit.TextEditor TextEditor;
 		public double MaxDesiredWidth = 1000;
 
-		public bool focusTab { get; set; } = false;
+		public bool FocusTab { get; set; }
 
 		public TabControlAvaloniaEdit(TabInstance tabInstance)
 		{
@@ -158,7 +158,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		protected bool FocusTab { get => focusTab; set => focusTab = value; }
+		protected bool FocusTab { get => FocusTab; set => FocusTab = value; }
 
 		public void EnableEditing(ListMember listMember)
 		{

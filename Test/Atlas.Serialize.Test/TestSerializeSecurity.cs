@@ -1,10 +1,7 @@
 ﻿using Atlas.Core;
-using Atlas.Core.Time;
 using NUnit.Framework;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Atlas.Serialize.Test
 {
@@ -24,7 +21,6 @@ namespace Atlas.Serialize.Test
 		{
 			serializer = new SerializerMemoryAtlas();
 		}
-
 
 		public class NonSerializedTest
 		{

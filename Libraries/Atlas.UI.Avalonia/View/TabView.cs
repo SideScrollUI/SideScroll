@@ -387,7 +387,7 @@ namespace Atlas.UI.Avalonia.View
 			}
 		}
 
-		public bool IsLoaded { get; set; } = false;
+		public bool IsLoaded { get; set; }
 
 		public void ReloadControls()
 		{

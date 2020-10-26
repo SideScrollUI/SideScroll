@@ -26,7 +26,7 @@ namespace Atlas.UI.Avalonia
 		}
 		internal static BrushColors StyleBrushes { get; set; } = new BrushColors();
 
-		public bool Editable { get; set; } = false;
+		public bool Editable { get; set; }
 
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
@@ -108,7 +108,7 @@ namespace Atlas.UI.Avalonia
 		}
 		internal static BrushColors StyleBrushes { get; set; } = new BrushColors();
 
-		public bool Editable { get; set; } = false;
+		public bool Editable { get; set; }
 
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{

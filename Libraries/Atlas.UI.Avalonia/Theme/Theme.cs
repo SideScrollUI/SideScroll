@@ -46,6 +46,7 @@ namespace Atlas.UI.Avalonia
 		{
 			if (Application.Current.Styles.TryGetResource(brushName, out object obj))
 				return (SolidColorBrush)obj;
+
 			throw new Exception("Brush not found: " + brushName);
 		}
 	}

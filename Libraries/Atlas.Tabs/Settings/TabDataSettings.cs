@@ -51,16 +51,17 @@ namespace Atlas.Tabs
 			return GetVisibleProperties(elementType);
 		}
 
-		private static Dictionary<Type, List<PropertyInfo>> visiblePropertiesCache = new Dictionary<Type, List<PropertyInfo>>();
+		private static Dictionary<Type, List<PropertyInfo>> _visiblePropertiesCache = new Dictionary<Type, List<PropertyInfo>>();
+
 		public static List<PropertyInfo> GetVisibleProperties(Type type)
 		{
-			lock (visiblePropertiesCache)
+			lock (_visiblePropertiesCache)
 			{
-				if (visiblePropertiesCache.TryGetValue(type, out List<PropertyInfo> list))
+				if (_visiblePropertiesCache.TryGetValue(type, out List<PropertyInfo> list))
 					return list;
 
 				list = GetVisibleTypeProperties(type);
-				visiblePropertiesCache.Add(type, list);
+				_visiblePropertiesCache.Add(type, list);
 				return list;
 			}
 		}

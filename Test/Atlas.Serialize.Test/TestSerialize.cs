@@ -369,13 +369,13 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new DerivedClassReference()
 			{
-				baseClass = new DerivedClass(),
+				BaseClass = new DerivedClass(),
 			};
 
 			serializer.Save(Call, input);
 			DerivedClassReference output = serializer.Load<DerivedClassReference>(Call);
 
-			Assert.AreEqual(output.baseClass.A, input.baseClass.A);
+			Assert.AreEqual(output.BaseClass.A, input.BaseClass.A);
 		}
 
 		[Test, Description("Serialize Type Dictionary")]
@@ -397,12 +397,12 @@ namespace Atlas.Serialize.Test
 		public void SerializeCircular()
 		{
 			var input = new Circular();
-			input.self = input;
+			input.Self = input;
 
 			serializer.Save(Call, input);
 			Circular output = serializer.Load<Circular>(Call);
 
-			Assert.AreEqual(output.self, output);
+			Assert.AreEqual(output.Self, output);
 		}
 
 		[Test, Description("Serialize Parent Child")]
@@ -410,13 +410,13 @@ namespace Atlas.Serialize.Test
 		{
 			var parent = new Parent();
 			var child = new Child();
-			parent.child = child;
-			child.parent = parent;
+			parent.Child = child;
+			child.Parent = parent;
 
 			serializer.Save(Call, parent);
 			Parent loaded = serializer.Load<Parent>(Call);
 
-			Assert.AreEqual(loaded.child.parent, loaded);
+			Assert.AreEqual(loaded.Child.Parent, loaded);
 		}
 
 		[Test, Description("Serialize String List")]
@@ -571,22 +571,22 @@ namespace Atlas.Serialize.Test
 
 		public class DerivedClassReference
 		{
-			public BaseClass baseClass;
+			public BaseClass BaseClass;
 		}
 
 		public class Circular
 		{
-			public Circular self;
+			public Circular Self;
 		}
 
 		public class Parent
 		{
-			public Child child;
+			public Child Child;
 		}
 
 		public class Child
 		{
-			public Parent parent;
+			public Parent Parent;
 		}
 
 		public class DictionaryTest
@@ -597,8 +597,8 @@ namespace Atlas.Serialize.Test
 			{
 				Parent parent = new Parent();
 				Child child = new Child();
-				parent.child = child;
-				child.parent = parent;
+				parent.Child = child;
+				child.Parent = parent;
 				items[parent] = child;
 			}
 		}
@@ -623,7 +623,7 @@ namespace Atlas.Serialize.Test
 			serializer.Save(Call, input);
 			var output = serializer.Load<SubClassContainer>(Call);
 
-			Assert.AreEqual(output.subSclass.A, input.subSclass.A);
+			Assert.AreEqual(output.SubClass.A, input.SubClass.A);
 		}
 
 		[Test, Description("Serialize List Containing Subclass of Type")]
@@ -670,7 +670,7 @@ namespace Atlas.Serialize.Test
 
 		public class SubClassContainer
 		{
-			public SubClass subSclass = new SubClass()
+			public SubClass SubClass = new SubClass()
 			{
 				A = 3
 			};

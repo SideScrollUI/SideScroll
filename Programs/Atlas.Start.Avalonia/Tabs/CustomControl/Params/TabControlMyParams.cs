@@ -7,15 +7,15 @@ namespace Atlas.Start.Avalonia.Tabs
 {
 	public class TabControlMyParams : Grid
 	{
-		private TabInstance tabInstance;
-		private MyParams myParams;
+		public TabInstance TabInstance;
+		public MyParams MyParams;
 
 		//public event EventHandler<EventArgs> OnSelectionChanged;
 
 		public TabControlMyParams(TabInstance tabInstance, MyParams myParams)
 		{
-			this.tabInstance = tabInstance;
-			this.myParams = myParams;
+			TabInstance = tabInstance;
+			MyParams = myParams;
 
 			InitializeControls();
 		}
@@ -27,12 +27,12 @@ namespace Atlas.Start.Avalonia.Tabs
 			ColumnDefinitions = new ColumnDefinitions("Auto");
 			RowDefinitions = new RowDefinitions("Auto");
 
-			var controlParams = new TabControlParams(tabInstance, myParams, false)
+			var controlParams = new TabControlParams(TabInstance, MyParams, false)
 			{
 				[Grid.RowProperty] = 0,
 			};
-			controlParams.AddPropertyRow(nameof(myParams.Name));
-			controlParams.AddPropertyRow(nameof(myParams.Amount));
+			controlParams.AddPropertyRow(nameof(MyParams.Name));
+			controlParams.AddPropertyRow(nameof(MyParams.Amount));
 			Children.Add(controlParams);
 		}
 	}

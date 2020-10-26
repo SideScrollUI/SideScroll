@@ -19,7 +19,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			public override void Load(Call call, TabModel model)
 			{
 				//tabModel.Items = items;
-				/*SerilogLogger serilogLogger = new SerilogLogger()
+				/*var serilogLogger = new SerilogLogger()
 				{
 
 				};*/
