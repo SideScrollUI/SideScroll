@@ -40,12 +40,12 @@ namespace Atlas.Tabs.Test.Objects
 
 	public class ValueBase
 	{
-		public int value = 1;
+		public int Value = 1;
 	}
 
 	public class ValueSub : ValueBase
 	{
-		public new int value = 2;
+		public new int Value = 2;
 	}
 
 	public class UriTest : ISerializable

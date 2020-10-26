@@ -43,9 +43,11 @@ namespace Atlas.Network
 			}*/
 		}
 
-		private Dictionary<string, Entry> cache = new Dictionary<string, Entry>();
 		public string BasePath { get; set; }
 		public long Size => _dataStream.Length;
+
+		private Dictionary<string, Entry> _cache = new Dictionary<string, Entry>();
+
 		private string _indexPath;
 		private string _dataPath;
 		private Stream _indexStream;
@@ -105,7 +107,7 @@ namespace Atlas.Network
 					entry.Size = indexReader.ReadInt32();
 					long ticks = indexReader.ReadInt64();
 					entry.Downloaded = new DateTime(ticks);
-					cache[entry.Uri] = entry;
+					_cache[entry.Uri] = entry;
 				}
 			}
 		}
@@ -115,7 +117,7 @@ namespace Atlas.Network
 			get
 			{
 				var entries = new List<Entry>();
-				foreach (Entry entry in cache.Values)
+				foreach (Entry entry in _cache.Values)
 					entries.Add(entry);
 				return entries;
 			}
@@ -126,7 +128,7 @@ namespace Atlas.Network
 			get
 			{
 				var entries = new List<LoadableEntry>();
-				foreach (Entry entry in cache.Values)
+				foreach (Entry entry in _cache.Values)
 				{
 					var loadableEntry = new LoadableEntry()
 					{
@@ -147,7 +149,7 @@ namespace Atlas.Network
 			lock (_entryLock)
 			{
 				// todo: add support for updating entries
-				if (cache.TryGetValue(uri, out Entry entry))
+				if (_cache.TryGetValue(uri, out Entry entry))
 					return;
 
 				entry = new Entry()
@@ -173,20 +175,20 @@ namespace Atlas.Network
 					indexWriter.Write(entry.Size);
 					indexWriter.Write(entry.Downloaded.Ticks);
 				}
-				cache[uri] = entry;
+				_cache[uri] = entry;
 			}
 		}
 
 		public bool Contains(string uri)
 		{
-			return cache.ContainsKey(uri);
+			return _cache.ContainsKey(uri);
 		}
 
 		public byte[] GetBytes(string uri)
 		{
 			lock (_entryLock)
 			{
-				if (!cache.TryGetValue(uri, out Entry entry))
+				if (!_cache.TryGetValue(uri, out Entry entry))
 					return null;
 
 				_dataStream.Position = entry.Offset;

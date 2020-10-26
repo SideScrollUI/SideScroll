@@ -13,6 +13,7 @@ namespace Atlas.Tabs
 		{
 			if (jsonValue == null)
 				return null;
+
 			switch (jsonValue.JsonType)
 			{
 				case JsonType.String: return (string)jsonValue;
@@ -40,8 +41,8 @@ namespace Atlas.Tabs
 	public class LazyJsonArray : LazyJsonNode
 	{
 		public JsonArray JsonArray;
-		private List<object> _items;
 
+		private List<object> _items;
 		[InnerValue, StyleValue]
 		public List<object> Items
 		{
@@ -72,7 +73,6 @@ namespace Atlas.Tabs
 		private JsonObject JsonObject;
 
 		private List<LazyJsonProperty> _items;
-
 		[InnerValue, StyleValue]
 		public List<LazyJsonProperty> Items
 		{

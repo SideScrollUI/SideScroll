@@ -1,7 +1,6 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 

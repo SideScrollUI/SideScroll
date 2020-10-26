@@ -83,7 +83,7 @@ namespace Atlas.Tabs
 		public const string CurrentBookmarkName = "Current";
 
 		public Project Project { get; set; }
-		public ITab Tab; // Collision with derived Tab
+		public ITab iTab; // Collision with derived Tab
 		//public Log Log => TaskInstance.Log;
 		public TaskInstance TaskInstance { get; set; } = new TaskInstance();
 		public TabModel Model { get; set; } = new TabModel();
@@ -175,7 +175,7 @@ namespace Atlas.Tabs
 				return null;
 
 			tabInstance.Project = tabInstance.Project ?? Project;
-			tabInstance.Tab = iTab;
+			tabInstance.iTab = iTab;
 			tabInstance.ParentTabInstance = this;
 			//tabInstance.taskInstance.call.Log =
 			//tabInstance.taskInstance = taskInstance.AddSubTask(taskInstance.call); // too slow?
@@ -601,7 +601,7 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				Type type = Tab?.GetType();
+				Type type = iTab?.GetType();
 				if (type == null)
 					return false;
 				return TypeSchema.HasEmptyConstructor(type);
@@ -612,7 +612,7 @@ namespace Atlas.Tabs
 		{
 			var bookmark = new Bookmark
 			{
-				Type = Tab?.GetType(),
+				Type = iTab?.GetType(),
 			};
 			GetBookmark(bookmark.TabBookmark);
 			bookmark = bookmark.DeepClone(TaskInstance.Call); // Sanitize and test bookmark
@@ -645,12 +645,12 @@ namespace Atlas.Tabs
 					tabBookmark.DataRepoItems.Add(dataRepoItem);
 				}
 			}*/
-			if (Tab is IInnerTab innerTab)
-				Tab = innerTab.Tab;
-			if (Tab?.GetType().GetCustomAttribute<TabRootAttribute>() != null)
+			if (iTab is IInnerTab innerTab)
+				iTab = innerTab.Tab;
+			if (iTab?.GetType().GetCustomAttribute<TabRootAttribute>() != null)
 			{
 				tabBookmark.IsRoot = true;
-				tabBookmark.Tab = Tab;
+				tabBookmark.Tab = iTab;
 			}
 
 			foreach (TabInstance tabInstance in ChildTabInstances.Values)
@@ -734,6 +734,7 @@ namespace Atlas.Tabs
 		{
 			if (TabBookmark != null)
 				return TabBookmark.GetData<T>(name);
+
 			return default;
 		}
 
@@ -855,14 +856,14 @@ namespace Atlas.Tabs
 				return true;
 
 			Type type = obj.GetType();
-			if (Tab != null && type == Tab.GetType())
+			if (iTab != null && type == iTab.GetType())
 			{
 				foreach (PropertyInfo propertyInfo in type.GetProperties())
 				{
 					if (propertyInfo.GetCustomAttribute<DataKeyAttribute>() != null)
 					{
 						var objKey = propertyInfo.GetValue(obj);
-						var tabKey = propertyInfo.GetValue(Tab);
+						var tabKey = propertyInfo.GetValue(iTab);
 						// todo: support multiple [Key]s?
 						if (objKey == tabKey)
 							return true;

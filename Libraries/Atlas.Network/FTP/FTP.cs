@@ -22,8 +22,6 @@ namespace Atlas.Network
 
 	public class FtpFileInfo
 	{
-		private const string ftpPath = @"/pub/databases/genenames/new/tsv/hgnc_complete_set.txt";
-
 		public string LocalBasePath { get; set; }
 		public string FtpHost { get; set; }
 		public string RemotePath { get; set; }

@@ -279,11 +279,13 @@ namespace Atlas.Tabs
 					ChildBookmarks.Add(nodeEntry.Key, nodeEntry.Value);
 				}
 			}
+
 			if (ViewSettings == null)
 			{
 				ViewSettings = node.ViewSettings;
 				return;
 			}
+
 			Name = " + " + node.Name;
 			for (int i = 0; i < ViewSettings.TabDataSettings.Count; i++)
 			{

@@ -28,8 +28,8 @@ namespace Atlas.Tabs.Test.DataGrid
 				for (int i = 0; i < 20; i++)
 				{
 					var testItem = new TabTestGridCollectionSize.TestItem();
-					testItem.smallNumber = i;
-					testItem.bigNumber += i;
+					testItem.SmallNumber = i;
+					testItem.BigNumber += i;
 					items.Add(testItem);
 				}
 			}

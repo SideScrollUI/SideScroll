@@ -53,6 +53,7 @@ namespace Atlas.Core
 			{
 				if (text.Length > maxLength)
 					return text.Substring(0, maxLength);
+
 				return text;
 			}
 			else if (obj is IDictionary dictionary)
@@ -108,6 +109,7 @@ namespace Atlas.Core
 			var strings = new List<string>();
 			foreach (var item in enumerable)
 				strings.Add(item.ToString());
+
 			string joined = string.Join(", ", strings);
 			return joined;
 			//return "[" + joined + "]";
@@ -118,6 +120,7 @@ namespace Atlas.Core
 			var strings = new List<string>();
 			foreach (var item in collection)
 				strings.Add(item.ToString());
+
 			string joined = string.Join(", ", strings);
 			return joined;
 			//return "[" + joined + "]";
@@ -155,6 +158,7 @@ namespace Atlas.Core
 					return null;
 				return (string)result;
 			}
+
 			if (obj is DictionaryEntry dictionaryEntry)
 				return dictionaryEntry.Key.ToString();
 

@@ -27,6 +27,7 @@ namespace Atlas.Extensions
 
 			while (input.StartsWith(prefix))
 				input = input.Substring(prefix.Length);
+
 			return input;
 		}
 
@@ -34,6 +35,7 @@ namespace Atlas.Extensions
 		{
 			if (input.EndsWith(postfix))
 				return input.Substring(0, input.Length - postfix.Length);
+
 			return input;
 		}
 
@@ -43,6 +45,7 @@ namespace Atlas.Extensions
 			end = Math.Min(end, input.Length);
 			if (end < start)
 				return "";
+
 			return input.Substring(start, end - start);
 		}
 
@@ -50,6 +53,7 @@ namespace Atlas.Extensions
 		{
 			if (input.Length < start)
 				return "";
+
 			return input.Substring(start, input.Length - start);
 		}
 
@@ -61,6 +65,7 @@ namespace Atlas.Extensions
 		{
 			if (string.IsNullOrWhiteSpace(text))
 				return "";
+
 			var newText = new StringBuilder(text.Length * 2);
 			bool upperCaseNext = true;
 			char prevChar = ' ';
@@ -123,12 +128,14 @@ namespace Atlas.Extensions
 		{
 			if (string.IsNullOrEmpty(value))
 				throw new ArgumentException("the string to find may not be empty", "value");
+
 			var indexes = new List<int>();
 			for (int index = 0; ; index += value.Length)
 			{
 				index = str.IndexOf(value, index);
 				if (index == -1)
 					return indexes;
+
 				indexes.Add(index);
 			}
 		}
@@ -137,11 +144,13 @@ namespace Atlas.Extensions
 		{
 			if (string.IsNullOrEmpty(value))
 				throw new ArgumentException("the string to find may not be empty", "value");
+
 			for (int index = 0; ; index += value.Length)
 			{
 				index = str.IndexOf(value, index);
 				if (index == -1)
 					break;
+
 				yield return index;
 			}
 		}

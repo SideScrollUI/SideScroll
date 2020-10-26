@@ -122,6 +122,7 @@ namespace Atlas.UI.Avalonia.Controls
 					UpdateSelection();
 				else
 					_tabControlDataGrid.SelectedItem = taskInstance;
+
 				// use lock internally?
 				if (taskInstance.Finished)
 				{
@@ -131,6 +132,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					taskInstance.OnComplete = () => Dispatcher.UIThread.Post(() => TaskCompleted(taskInstance), DispatcherPriority.SystemIdle);
 				}
+
 				int lineHeight = 26;
 				_tabControlDataGrid.MinHeight = Math.Min(TabInstance.Model.Tasks.Count * lineHeight + lineHeight, 6 * lineHeight);
 			}

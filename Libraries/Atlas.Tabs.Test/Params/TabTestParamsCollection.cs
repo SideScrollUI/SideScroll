@@ -16,7 +16,8 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			private const string dataKey = "Params";
+			private const string DataKey = "Params";
+
 			private ItemCollection<ParamTestItem> items;
 			private ParamTestItem paramTestItem;
 			private DataRepoInstance<ParamTestItem> dataRepoParams;
@@ -30,7 +31,7 @@ namespace Atlas.Tabs.Test
 					new TaskDelegate("Add", Add),
 				};*/
 
-				paramTestItem = LoadData<ParamTestItem>(dataKey);
+				paramTestItem = LoadData<ParamTestItem>(DataKey);
 				model.AddObject(paramTestItem);
 
 				var toolbar = new Toolbar();

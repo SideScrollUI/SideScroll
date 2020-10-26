@@ -87,6 +87,7 @@ namespace Atlas.Core
 			double value = Convert.ToDouble(obj);
 			if (double.IsNaN(value))
 				return 0;
+
 			return value;
 		}
 

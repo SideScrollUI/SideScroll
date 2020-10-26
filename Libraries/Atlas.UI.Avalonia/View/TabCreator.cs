@@ -34,6 +34,7 @@ namespace Atlas.UI.Avalonia.View
 						value = tabBookmark.TabModel;
 				}
 			}
+
 			string labelOverride = null;
 			if (value is Exception)
 			{

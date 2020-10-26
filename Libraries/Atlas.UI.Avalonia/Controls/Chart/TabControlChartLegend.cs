@@ -237,6 +237,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (PlotView.Model == null)
 				return;
+
 			foreach (OxyPlot.Series.Series series in PlotView.Model.Series)
 			{
 				if (series is OxyPlot.Series.LineSeries lineSeries)

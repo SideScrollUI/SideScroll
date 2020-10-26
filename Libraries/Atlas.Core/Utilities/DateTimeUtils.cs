@@ -31,6 +31,7 @@ namespace Atlas.Core
 				dateTime = epochTime.AddSeconds(epochValue);
 				return dateTime;
 			}
+
 			if (text.Length == 13 && long.TryParse(text, out long epochValueMilliseconds))
 			{
 				dateTime = epochTime.AddMilliseconds(epochValueMilliseconds);

@@ -60,6 +60,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 			if (CallActionAsync != null)
 				Toolbar.TabInstance.StartAsync(CallActionAsync, null, ShowTask);
+
 			if (CallAction != null)
 				Toolbar.TabInstance.StartTask(CallAction, false, ShowTask);
 		}

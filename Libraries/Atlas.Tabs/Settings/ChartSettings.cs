@@ -57,6 +57,7 @@ namespace Atlas.Tabs
 			{
 				if (propertyInfo.DeclaringType.IsNotPublic)
 					continue;
+
 				if (propertyInfo.PropertyType.IsNumeric())
 				{
 					var listSeries = new ListSeries(iList, xAxisPropertyInfo, propertyInfo);

@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Test
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				//tabModel.Items = project.navigator.History;
+				//model.Items = Project.Navigator.History;
 
 				BookmarkNavigator navigator = Project.Navigator.DeepClone(call);
 				navigator.History.RemoveAt(navigator.History.Count - 1); // remove the current in progress bookmark

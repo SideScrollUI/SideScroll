@@ -21,6 +21,7 @@ namespace Atlas.Serialize
 			{
 				if (attempt > 0)
 					System.Threading.Thread.Sleep(attempt * 10);
+
 				try
 				{
 					using (var stream = new FileStream(DataPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))

@@ -58,7 +58,7 @@ namespace Atlas.UI.Avalonia.Controls
 			borderTitle.Child = labelTitle;
 			stackPanel.Children.Add(borderTitle);*/
 
-			Grid containerGrid = new Grid()
+			var containerGrid = new Grid()
 			{
 				ColumnDefinitions = new ColumnDefinitions("Auto,*"),
 				//RowDefinitions = new RowDefinitions("*"),

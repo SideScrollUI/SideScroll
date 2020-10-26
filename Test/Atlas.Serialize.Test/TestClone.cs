@@ -99,8 +99,8 @@ namespace Atlas.Serialize.Test
 
 		private class MultipleArrays
 		{
-			public int[] array1 = { 1, 2 };
-			//public int[] array2 = { 3, 4 };
+			public int[] Array1 = { 1, 2 };
+			//public int[] Array2 = { 3, 4 };
 		}
 
 		[Test, Description("ArrayMultipleTest")]
@@ -230,13 +230,13 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new NullablePrimitiveProperties()
 			{
-				uintTest = 5,
-				doubleTest = 2.5
+				UintTest = 5,
+				DoubleTest = 2.5
 			};
 			var output = serializer.Clone(log, input);
 
-			Assert.AreEqual(output.uintTest, input.uintTest);
-			Assert.AreEqual(output.doubleTest, input.doubleTest);
+			Assert.AreEqual(output.UintTest, input.UintTest);
+			Assert.AreEqual(output.DoubleTest, input.DoubleTest);
 		}
 
 		[Test, Description("Clone Nullable Primitive")]
@@ -384,8 +384,8 @@ namespace Atlas.Serialize.Test
 
 		public class NullablePrimitiveProperties
 		{
-			public uint? uintTest { get; set; } = 1;
-			public double? doubleTest { get; set; } = 2.3;
+			public uint? UintTest { get; set; } = 1;
+			public double? DoubleTest { get; set; } = 2.3;
 		}
 
 		public class NullablePrimitives

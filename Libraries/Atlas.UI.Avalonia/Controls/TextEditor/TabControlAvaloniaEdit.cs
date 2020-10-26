@@ -158,8 +158,6 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		protected bool FocusTab { get => FocusTab; set => FocusTab = value; }
-
 		public void EnableEditing(ListMember listMember)
 		{
 			ListProperty = listMember as ListProperty;

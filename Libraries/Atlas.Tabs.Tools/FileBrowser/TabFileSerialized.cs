@@ -21,7 +21,8 @@ namespace Atlas.Tabs.Tools
 			public TabFileSerialized Tab;
 
 			public object Object;
-			public Serializer serializer;
+			public Serializer Serializer;
+
 			private ListItem listData = new ListItem("Object", null);
 
 			public Instance(TabFileSerialized tab)
@@ -35,9 +36,9 @@ namespace Atlas.Tabs.Tools
 
 				var serializerFile = new SerializerFileAtlas(Tab.Path);
 
-				serializer = serializerFile.LoadSchema(call);
+				Serializer = serializerFile.LoadSchema(call);
 
-				items.Add(new ListItem("Schema", serializer));
+				items.Add(new ListItem("Schema", Serializer));
 				items.Add(listData);
 				model.Items = items;
 

@@ -95,6 +95,7 @@ namespace Atlas.Serialize
 				typeRepoUnknown.Reader = serializer.Reader;
 				return typeRepoUnknown;
 			}
+
 			if (serializer.PublicOnly && !typeSchema.IsPublic)
 			{
 				if (!typeSchema.IsPrivate)
@@ -107,6 +108,7 @@ namespace Atlas.Serialize
 				typeRepoUnknown.Reader = serializer.Reader;
 				return typeRepoUnknown;
 			}
+
 			TypeRepo typeRepo;
 
 			foreach (var creator in RepoCreators)
@@ -118,6 +120,7 @@ namespace Atlas.Serialize
 					return typeRepo;
 				}
 			}
+
 			if (!typeSchema.HasConstructor)
 			{
 				typeRepo = new TypeRepoUnknown(serializer, typeSchema);
@@ -369,9 +372,7 @@ namespace Atlas.Serialize
 				return null;
 
 			if (TypeSchema.IsPrimitive)
-			{
 				return LoadObject();
-			}
 
 			if (TypeSchema.HasSubType)
 			{
@@ -409,9 +410,7 @@ namespace Atlas.Serialize
 				return null;
 
 			if (LoadableType.IsPrimitive)
-			{
 				return LoadObject();
-			}
 
 			int objectIndex = BitConverter.ToInt32(bytes, byteOffset);
 			byteOffset += sizeof(int);
@@ -454,12 +453,15 @@ namespace Atlas.Serialize
 		{
 			if (LoadableType == null) // type might have disappeared or been renamed
 				return null; // should we pass a "ref bool valid"?
+
 			if (objectIndex >= ObjectsLoaded.Length)
 				return null;
+
 			if (ObjectsLoaded[objectIndex] != null)
 				return ObjectsLoaded[objectIndex];
 
 			ObjectsLoadedCount++;
+
 			object obj = CreateObject(objectIndex);
 			return obj;
 		}

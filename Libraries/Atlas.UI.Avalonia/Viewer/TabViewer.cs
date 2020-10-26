@@ -276,7 +276,7 @@ namespace Atlas.UI.Avalonia
 		{
 			TabInstance tabInstance = tab.Create();
 			tabInstance.Model.Name = "Start";
-			tabInstance.Tab = tab;
+			tabInstance.iTab = tab;
 			tabInstance.Project = Project;
 			if (LoadBookmarkUri != null)
 			{

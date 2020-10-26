@@ -31,6 +31,7 @@ namespace Atlas.Tabs
 			foreach (Bookmark bookmark in bookmarks)
 				nodes.Add(bookmark.node);
 			node.MergeNodes(nodes);*/
+
 			foreach (Bookmark bookmark in bookmarks)
 				TabBookmark.MergeNode(bookmark.TabBookmark);
 		}
@@ -45,6 +46,7 @@ namespace Atlas.Tabs
 			var serializer = SerializerMemory.Create();
 			serializer.PublicOnly = publicOnly;
 			serializer.LoadBase64String(encoded);
+
 			Bookmark bookmark = serializer.Load<Bookmark>(call);
 			bookmark.Imported = true;
 			return bookmark;

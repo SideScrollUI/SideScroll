@@ -38,6 +38,7 @@ namespace Atlas.Core
 			List<string> parts = version.Split('.').ToList();
 			while (parts.Count < 2)
 				parts.Add("0");
+
 			return new Version(string.Join(".", parts));
 		}
 	}

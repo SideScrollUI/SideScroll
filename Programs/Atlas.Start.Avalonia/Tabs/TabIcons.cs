@@ -1,10 +1,8 @@
 ﻿using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
-using Atlas.UI.Avalonia;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using System.IO;
 

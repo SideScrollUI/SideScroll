@@ -41,7 +41,7 @@ namespace Atlas.Core
 		public Call Child([CallerMemberName] string name = "", params Tag[] tags)
 		{
 			Log = Log ?? new Log();
-			Call call = new Call()
+			var call = new Call()
 			{
 				Name = name,
 				ParentCall = this,
@@ -70,6 +70,7 @@ namespace Atlas.Core
 			TaskInstance = TaskInstance ?? new TaskInstance();
 			if (TaskInstance.TaskCount == 0)
 				TaskInstance.TaskCount = 1;
+
 			var allTags = tags.ToList();
 			allTags.Add(new Tag("Count", taskCount));
 			CallTimer timer = Timer(name, allTags.ToArray());

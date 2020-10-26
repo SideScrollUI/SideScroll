@@ -16,8 +16,8 @@ namespace Atlas.Tabs.Test.DataGrid
 				{
 					testItems[i] = new TestItem()
 					{
-						smallNumber = i,
-						bigNumber = i * 1000,
+						SmallNumber = i,
+						BigNumber = i * 1000,
 					};
 				}
 				//model.Items = testItems;
@@ -27,12 +27,12 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public struct TestItem
 		{
-			public int smallNumber { get; set; }
-			public long bigNumber { get; set; }
+			public int SmallNumber { get; set; }
+			public long BigNumber { get; set; }
 
 			public override string ToString()
 			{
-				return smallNumber.ToString();
+				return SmallNumber.ToString();
 			}
 		}
 	}

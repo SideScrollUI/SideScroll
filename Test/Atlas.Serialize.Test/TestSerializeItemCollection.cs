@@ -35,7 +35,7 @@ namespace Atlas.Serialize.Test
 
 		public class ReferencedClass
 		{
-			public int intField = 1;
+			public int IntField = 1;
 		}
 
 		public class TestBindingList

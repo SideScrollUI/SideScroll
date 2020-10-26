@@ -30,6 +30,7 @@ namespace Atlas.Network
 			byte[] bytes = GetBytes(uri);
 			if (bytes != null)
 				return Encoding.ASCII.GetString(bytes);
+
 			return null;
 		}
 	}

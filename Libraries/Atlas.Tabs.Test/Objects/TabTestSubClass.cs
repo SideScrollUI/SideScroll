@@ -24,6 +24,7 @@ namespace Atlas.Tabs.Test.Objects
 		{
 			//public string stringProperty { get; set; } = "test";
 			public ChildClass child { get; set; } = new ChildClass();
+
 			public override string ToString()
 			{
 				return "";
@@ -34,6 +35,7 @@ namespace Atlas.Tabs.Test.Objects
 		public class ChildClass
 		{
 			public string Text { get; set; } = "test";
+
 			public override string ToString()
 			{
 				return "";

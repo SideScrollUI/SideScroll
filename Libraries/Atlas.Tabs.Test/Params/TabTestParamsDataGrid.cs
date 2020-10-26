@@ -9,7 +9,6 @@ namespace Atlas.Tabs.Test.Actions
 
 		public class Instance : TabInstance
 		{
-			//private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
 			private LogEntry logEntry = new LogEntry()
 			{
 				Text = "Test Entry",

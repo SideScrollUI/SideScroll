@@ -12,6 +12,7 @@ namespace Atlas.Tabs
 	{
 		bool Editable { get; }
 	}
+
 	public interface IMaxDesiredWidth
 	{
 		int? MaxDesiredWidth { get; }
@@ -43,6 +44,7 @@ namespace Atlas.Tabs
 				var maxWidthAttribute = PropertyInfo.GetCustomAttribute<MaxWidthAttribute>();
 				if (maxWidthAttribute != null)
 					return maxWidthAttribute.MaxWidth;
+
 				return null;
 			}
 		}
@@ -123,6 +125,7 @@ namespace Atlas.Tabs
 				{
 					if (propertyInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
 						continue;
+
 					if (propertyInfo.DeclaringType.IsNotPublic)
 						continue;
 

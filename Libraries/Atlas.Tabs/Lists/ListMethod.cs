@@ -89,6 +89,7 @@ namespace Atlas.Tabs
 			var result = Task.Run(() => MethodInfo.Invoke(Object, new object[] { new Call() })).GetAwaiter().GetResult();
 			if (result is Task task)
 				return (object)((dynamic)result).Result;
+
 			return result;
 		}
 
@@ -102,14 +103,17 @@ namespace Atlas.Tabs
 			{
 				if (methodInfo.DeclaringType.IsNotPublic)
 					continue;
+
 				if (methodInfo.ReturnType == null)
 					continue;
+
 				if (methodInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
 					continue;
 
 				ParameterInfo[] parameterInfos = methodInfo.GetParameters();
 				if (parameterInfos.Length != 1 || parameterInfos[0].ParameterType != typeof(Call))
 					continue;
+
 				if (methodInfo.GetCustomAttribute<ItemAttribute>() == null)
 					continue;
 

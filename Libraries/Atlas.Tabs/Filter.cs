@@ -24,6 +24,7 @@ namespace Atlas.Tabs
 					// require whitespace or start/end
 					if (index > 0 && !Char.IsWhiteSpace(valueUppercase[index - 1]))
 						return false;
+
 					int nextChar = index + TextUppercase.Length;
 					if (nextChar < valueUppercase.Length && !Char.IsWhiteSpace(valueUppercase[nextChar]))
 						return false;
@@ -52,9 +53,7 @@ namespace Atlas.Tabs
 
 			Match match = regex.Match(filterText);
 			if (!match.Success)
-			{
 				return;
-			}
 
 			string depthText = match.Groups["Depth"].Value;
 			if (depthText.Length > 0)
@@ -69,6 +68,7 @@ namespace Atlas.Tabs
 				string text = filter.Trim();
 				if (text.Length == 0)
 					continue;
+
 				var filterExpression = new FilterExpression();
 				if (text.First() == '"' && text.Last() == '"')
 				{
@@ -123,6 +123,7 @@ namespace Atlas.Tabs
 				string valueText = value.ToString();
 				if (valueText == null)
 					continue;
+
 				allValuesUppercase += valueText;
 			}
 

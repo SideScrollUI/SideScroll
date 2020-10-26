@@ -40,6 +40,7 @@ namespace Atlas.UI.Avalonia
 
 				targetType = Nullable.GetUnderlyingType(targetType);
 			}
+
 			if (value is string text)
 			{
 				if (text.Length == 0)
@@ -50,10 +51,13 @@ namespace Atlas.UI.Avalonia
 			{
 				if (value is DateTime dateTime)
 					return dateTime.ToUniversalTime().ToString("yyyy-M-d H:mm:ss.FFF");
+
 				if (value is DateTimeOffset dateTimeOffset)
 					return dateTimeOffset.UtcDateTime.ToString("yyyy-M-d H:mm:ss.FFF");
+
 				if (value is TimeSpan timeSpan)
 					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
+
 				//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above
 
 				return value.Formatted(maxLength);

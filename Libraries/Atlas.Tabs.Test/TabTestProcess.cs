@@ -16,6 +16,7 @@ namespace Atlas.Tabs.Test
 				{
 					new ListItem("Sample Text", "This is some sample text\n\n1\n2\n3"),
 				};*/
+
 				model.Actions = new List<TaskCreator>
 				{
 					new TaskDelegate("Open Folder", OpenFolder, true),

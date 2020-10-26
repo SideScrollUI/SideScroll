@@ -34,8 +34,8 @@ namespace Atlas.Tabs.Test.DataGrid
 				{
 					int number = items.Count;
 					var testItem = new TestItem();
-					testItem.smallNumber = number;
-					testItem.bigNumber += number;
+					testItem.SmallNumber = number;
+					testItem.BigNumber += number;
 					if (number > 0)
 						testItem.Size = number * 100;
 					items.Add(testItem);
@@ -51,9 +51,9 @@ namespace Atlas.Tabs.Test.DataGrid
 
 			}
 
-			public int smallNumber { get; set; } = 0;
-			public long bigNumber { get; set; } = 1234567890123456789;
-			public string longText0 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
+			public int SmallNumber { get; set; } = 0;
+			public long BigNumber { get; set; } = 1234567890123456789;
+			public string LongText0 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 
 			public Uri Uri { get; set; } = new Uri("http://localhost");
 			public int? Size { get; set; }
@@ -61,7 +61,7 @@ namespace Atlas.Tabs.Test.DataGrid
 
 			public override string ToString()
 			{
-				return smallNumber.ToString();
+				return SmallNumber.ToString();
 			}
 		}
 	}
