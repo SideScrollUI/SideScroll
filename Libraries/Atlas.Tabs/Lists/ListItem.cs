@@ -69,12 +69,6 @@ namespace Atlas.Tabs
 
 				int metadataToken = listProperty.PropertyInfo.GetGetMethod(false).MetadataToken;
 
-				if (listProperty.PropertyInfo.GetCustomAttribute<HideNullAttribute>() != null)
-				{
-					if (listProperty.Value == null)
-						continue;
-				}
-
 				listItems.Add(metadataToken, listProperty);
 			}
 

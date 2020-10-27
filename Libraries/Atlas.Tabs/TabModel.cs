@@ -297,21 +297,7 @@ namespace Atlas.Tabs
 		// Adds the fields and properties as one list, and methods as another list (disabled right now)
 		private void AddObject(object obj, Type type)
 		{
-			var itemCollection = new ItemCollection<ListMember>();
-
-			// Add in correct order?
-			//obj.GetType().GetMembers
-
-			var listProperties = ListProperty.Create(obj);
-			itemCollection.AddRange(listProperties);
-
-			var listFields = ListField.Create(obj);
-			itemCollection.AddRange(listFields);
-
-			var listMethods = ListMethod.Create(obj);
-			itemCollection.AddRange(listMethods);
-
-			//itemCollection = new ItemCollection<ListMember>(itemCollection.OrderBy(x => x.MemberInfo.MetadataToken).ToList());
+			var itemCollection = ListMember.Create(obj);
 			ItemList.Add(itemCollection);
 
 			AddMethods(type);
@@ -412,6 +398,7 @@ namespace Atlas.Tabs
 				value = listItem.Value;
 			if (value is ListMember listMember)
 				value = listMember.Value;
+
 			Type type = value.GetType();
 			if (type.IsPrimitive ||
 				type.IsEnum ||
@@ -429,6 +416,7 @@ namespace Atlas.Tabs
 				{
 					if (collection.Count == 0)
 						return false;
+
 					Type elementType = collection.GetType().GetElementTypeForAll();
 					if (elementType != null && elementType.IsPrimitive)
 						return false;

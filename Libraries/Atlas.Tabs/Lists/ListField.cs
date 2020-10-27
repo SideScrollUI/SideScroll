@@ -61,7 +61,7 @@ namespace Atlas.Tabs
 
 		public override string ToString() => Name;
 
-		public static ItemCollection<ListField> Create(object obj)
+		public static new ItemCollection<ListField> Create(object obj)
 		{
 			FieldInfo[] fieldInfos = obj.GetType().GetFields().OrderBy(x => x.MetadataToken).ToArray();
 			var listFields = new ItemCollection<ListField>();

@@ -93,7 +93,7 @@ namespace Atlas.Tabs
 			return result;
 		}
 
-		public static ItemCollection<ListMethod> Create(object obj)
+		public static new ItemCollection<ListMethod> Create(object obj)
 		{
 			// this doesn't work for virtual methods (or any method modifier?)
 			MethodInfo[] methodInfos = obj.GetType().GetMethods().OrderBy(x => x.MetadataToken).ToArray();

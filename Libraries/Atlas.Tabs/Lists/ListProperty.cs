@@ -113,7 +113,7 @@ namespace Atlas.Tabs
 				Name = attribute.Name;
 		}
 
-		public static ItemCollection<ListProperty> Create(object obj)
+		public static new ItemCollection<ListProperty> Create(object obj)
 		{
 			// this doesn't work for virtual methods (or any method modifier?)
 			PropertyInfo[] propertyInfos = obj.GetType().GetProperties().OrderBy(x => x.MetadataToken).ToArray();
@@ -130,6 +130,13 @@ namespace Atlas.Tabs
 						continue;
 
 					var listProperty = new ListProperty(obj, propertyInfo);
+
+					// move this to later?
+					if (propertyInfo.GetCustomAttribute<HideNullAttribute>() != null)
+					{
+						if (listProperty.Value == null)
+							continue;
+					}
 
 					if (propertyToIndex.TryGetValue(propertyInfo.Name, out int index))
 					{

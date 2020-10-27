@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -109,6 +110,27 @@ namespace Atlas.Tabs
 			var linkSorted = new ItemCollection<ListMember>(autoSorted.OrderByDescending(i => TabModel.ObjectHasLinks(i, true)).ToList());
 
 			return linkSorted;
+		}
+
+		public static ItemCollection<ListMember> Create(object obj)
+		{
+			var listMembers = new ItemCollection<ListMember>();
+
+			// Add in correct order?
+			//obj.GetType().GetMembers
+
+			var listProperties = ListProperty.Create(obj);
+			listMembers.AddRange(listProperties);
+
+			var listFields = ListField.Create(obj);
+			listMembers.AddRange(listFields);
+
+			var listMethods = ListMethod.Create(obj);
+			listMembers.AddRange(listMethods);
+
+			//listMembers = itemCollection.OrderBy(x => x.MemberInfo.MetadataToken).ToList();
+
+			return listMembers;
 		}
 	}
 }

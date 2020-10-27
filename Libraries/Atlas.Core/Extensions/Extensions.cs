@@ -177,8 +177,10 @@ namespace Atlas.Extensions // rename to Core?
 		{
 			if (value == null)
 				return null;
+
 			if (value is ILoadAsync)
 				return value;
+
 			Type type = value.GetType();
 			foreach (PropertyInfo propertyInfo in type.GetProperties())
 			{
