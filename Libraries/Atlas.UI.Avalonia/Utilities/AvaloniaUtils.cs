@@ -60,21 +60,25 @@ namespace Atlas.UI.Avalonia
 			IControl parentControl = control?.Parent;
 			while (parentControl != null)
 			{
-				// Get control bounds in Parent control coordinates
-				Point? translatedTopLeft = control.TranslatePoint(controlTopLeftPoint, parentControl);
-				Point? translatedBottomRight = control.TranslatePoint(controlBottomRight, parentControl);
-				if (translatedTopLeft == null || translatedBottomRight == null)
-					return false;
+				// sometimes controls don't update their bounds correctly, so only use the Window for now
+				if (parentControl is Window)
+				{
+					// Get control bounds in Parent control coordinates
+					Point? translatedTopLeft = control.TranslatePoint(controlTopLeftPoint, parentControl);
+					Point? translatedBottomRight = control.TranslatePoint(controlBottomRight, parentControl);
+					if (translatedTopLeft == null || translatedBottomRight == null)
+						return false;
 
-				var parentBounds = new Rect(translatedTopLeft.Value, translatedBottomRight.Value);
-				parentBounds = parentBounds.WithX(parentBounds.X + parentControl.Bounds.X);
-				parentBounds = parentBounds.WithY(parentBounds.Y + parentControl.Bounds.Y);
+					var parentBounds = new Rect(translatedTopLeft.Value, translatedBottomRight.Value);
+					parentBounds = parentBounds.WithX(parentBounds.X + parentControl.Bounds.X);
+					parentBounds = parentBounds.WithY(parentBounds.Y + parentControl.Bounds.Y);
 
-				if (parentBounds.X > parentControl.Bounds.Right ||
-					parentBounds.Y > parentControl.Bounds.Bottom ||
-					parentBounds.Right < parentControl.Bounds.X ||
-					parentBounds.Bottom < parentControl.Bounds.Y)
-					return false;
+					if (parentBounds.X > parentControl.Bounds.Right ||
+						parentBounds.Y > parentControl.Bounds.Bottom ||
+						parentBounds.Right < parentControl.Bounds.X ||
+						parentBounds.Bottom < parentControl.Bounds.Y)
+						return false;
+				}
 
 				parentControl = parentControl.Parent;
 			}

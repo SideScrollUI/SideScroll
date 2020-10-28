@@ -1291,7 +1291,7 @@ namespace Atlas.UI.Avalonia.Controls
 		// This sometimes runs into rare issues where this doesn't display when it should
 		public override void Render(DrawingContext context)
 		{
-			Dispatcher.UIThread.Post(UpdateVisible, DispatcherPriority.Background);
+			Dispatcher.UIThread.Post(UpdateVisible, DispatcherPriority.ContextIdle);
 			base.Render(context);
 		}
 

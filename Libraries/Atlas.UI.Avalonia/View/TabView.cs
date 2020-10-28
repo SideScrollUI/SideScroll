@@ -628,6 +628,7 @@ namespace Atlas.UI.Avalonia.View
 				// Only add children if they'll be visible
 				if (IsVisible == false)
 					return false;
+
 				if (_tabChildControls == null) // TabTasks hiding can sometimes trigger this, todo: figure out why
 					return false;
 
@@ -636,8 +637,10 @@ namespace Atlas.UI.Avalonia.View
 
 				if (Instance.Depth > 50)
 					return false;
+
 				if (double.IsNaN(_tabParentControls.arrangeOverrideFinalSize.Width))
 					return false;
+
 				if (_tabChildControls.Width < 30)
 					return false;
 

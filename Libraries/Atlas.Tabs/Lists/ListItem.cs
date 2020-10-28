@@ -52,7 +52,7 @@ namespace Atlas.Tabs
 
 		// todo: move into IListItem after upgrading to .Net Standard 2.1
 		// Get list items for all public properties and any methods marked with [Item]
-		public static List<IListItem> Create(object obj, bool includeBaseTypes)
+		public static ItemCollection<IListItem> Create(object obj, bool includeBaseTypes)
 		{
 			var listItems = new SortedDictionary<int, IListItem>();
 
@@ -81,7 +81,7 @@ namespace Atlas.Tabs
 				listItems.Add(listMethod.MethodInfo.MetadataToken, listMethod);
 			}
 
-			return listItems.Values.ToList();
+			return new ItemCollection<IListItem>(listItems.Values);
 		}
 	}
 

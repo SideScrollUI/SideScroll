@@ -91,17 +91,25 @@ namespace Atlas.Core
 			return value;
 		}
 
+		public double CalculateTotal(DateTime? startTime, DateTime? endTime)
+		{
+			Total = GetTotal(startTime, endTime);
+			if (Total > 50)
+				Total = Math.Floor(Total);
+			return Total;
+		}
+
 		public double GetTotal(DateTime? startTime, DateTime? endTime)
 		{
 			if (startTime == null || endTime == null || PeriodDuration == null || XPropertyInfo == null || XPropertyInfo.PropertyType != typeof(DateTime))
-				return Total = GetSum();
+				return GetSum();
 
 			switch (SeriesType)
 			{
-				case SeriesType.Sum: return Total = TimeRangePeriod.TotalSum(TimeRangeValues, startTime.Value, endTime.Value, PeriodDuration.Value);
-				case SeriesType.Minimum: return Total = TimeRangePeriod.TotalMinimum(TimeRangeValues);
-				case SeriesType.Maximum: return Total = TimeRangePeriod.TotalMaximum(TimeRangeValues);
-				default: return Total = TimeRangePeriod.TotalAverage(TimeRangeValues, startTime.Value, endTime.Value, PeriodDuration.Value);
+				case SeriesType.Sum: return TimeRangePeriod.TotalSum(TimeRangeValues, startTime.Value, endTime.Value, PeriodDuration.Value);
+				case SeriesType.Minimum: return TimeRangePeriod.TotalMinimum(TimeRangeValues);
+				case SeriesType.Maximum: return TimeRangePeriod.TotalMaximum(TimeRangeValues);
+				default: return TimeRangePeriod.TotalAverage(TimeRangeValues, startTime.Value, endTime.Value, PeriodDuration.Value);
 			}
 		}
 
