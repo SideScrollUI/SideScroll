@@ -37,6 +37,10 @@ namespace Atlas.UI.Avalonia
 
 				targetType = Nullable.GetUnderlyingType(targetType);
 			}
+
+			if (value.GetType() == targetType)
+				return value;
+
 			if (value is string text)
 			{
 				if (text.Length == 0)
@@ -51,6 +55,7 @@ namespace Atlas.UI.Avalonia
 
 			if (value.GetType().IsPrimitive == false && targetType == typeof(string))
 				return value.Formatted();
+
 			try
 			{
 				return System.Convert.ChangeType(value, targetType);
