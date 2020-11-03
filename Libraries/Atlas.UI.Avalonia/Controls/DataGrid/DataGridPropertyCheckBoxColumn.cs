@@ -28,6 +28,7 @@ namespace Atlas.UI.Avalonia
 				checkbox.Bind(CheckBox.IsCheckedProperty, Binding);
 
 			checkbox.Margin = new Thickness(10, 4);
+			checkbox.IsEnabled = !IsReadOnly;
 			/*var checkbox = new CheckBox()
 			{
 				Margin = new Thickness(10, 0, 0, 0), // aligns with header title better than centering

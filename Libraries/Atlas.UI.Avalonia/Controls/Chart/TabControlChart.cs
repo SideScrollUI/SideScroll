@@ -231,6 +231,8 @@ namespace Atlas.UI.Avalonia.Controls
 			Legend.OnSelectionChanged += Legend_OnSelectionChanged;
 			Legend.OnVisibleChanged += Legend_OnVisibleChanged;
 
+			OnMouseCursorChanged += TabControlChart_OnMouseCursorChanged;
+
 			Children.Add(containerGrid);
 
 			Focusable = true;
@@ -877,8 +879,6 @@ namespace Atlas.UI.Avalonia.Controls
 			PlotModel.Annotations.Add(_trackerAnnotation);
 			PlotModel.MouseMove += PlotModel_MouseMove;
 			PlotModel.MouseLeave += PlotModel_MouseLeave;
-
-			OnMouseCursorChanged += TabControlChart_OnMouseCursorChanged;
 		}
 
 		private void PlotModel_MouseMove(object sender, OxyMouseEventArgs e)
@@ -896,6 +896,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void TabControlChart_OnMouseCursorChanged(object sender, MouseCursorMovedEventArgs e)
 		{
+			if (sender == PlotView?.Controller || _trackerAnnotation == null)
+				return;
+
 			_trackerAnnotation.X = e.X;
 			Dispatcher.UIThread.Post(() => PlotModel.InvalidatePlot(false), DispatcherPriority.Background);
 		}
