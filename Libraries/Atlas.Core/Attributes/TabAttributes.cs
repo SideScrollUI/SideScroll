@@ -87,6 +87,12 @@ namespace Atlas.Core
 
 	// 
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class WordSpacedAttribute : Attribute
+	{
+	}
+
+	// 
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class WordWrapAttribute : Attribute
 	{
 	}

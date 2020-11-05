@@ -27,7 +27,6 @@
     <None Remove="Assets\**" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Controls\ToolbarButton.dat" />
     <None Remove="Controls\ToolbarButton2.xaml" />
     <None Remove="DefaultTheme.xaml" />
     <None Remove="if_help_62217.png" />
@@ -39,11 +38,6 @@
     <None Remove="Theme\Accents\BaseDark.xaml" />
     <None Remove="Theme\TabButton.xaml" />
     <None Remove="View\TabAvalonEdit.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Controls\Toolbar\ToolbarButton.dat">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
@@ -69,9 +63,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Controls\Toolbar\ToolbarButton2.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Theme\Accents\BaseLight.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -81,11 +72,6 @@
     <EmbeddedResource Update="Theme\TabButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Controls\Toolbar\ToolbarButton2.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
   </ItemGroup>
   <!--
   <ItemGroup>
