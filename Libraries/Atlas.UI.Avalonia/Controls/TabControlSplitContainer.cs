@@ -114,26 +114,26 @@ namespace Atlas.UI.Avalonia.Controls
 				Fill = fill,
 			};
 			_gridItems.Add(item);
-			AddSeparatorRowDefinition(RowDefinitions.Count);
-			/*if (separatorType == SeparatorType.Splitter && fill)
+			int splitterIndex = RowDefinitions.Count;
+			AddRowDefinition(false, splitterIndex);
+			bool addSplitter = false;
+			if (separatorType == SeparatorType.Splitter && fill)
 			{
 				// Add a Grid Splitter if there's been a single star row definition before this one
-				for (int rowIndex = RowDefinitions.Count - 2; rowIndex >= 0; rowIndex--)
+				for (int prevRowIndex = splitterIndex - 1; prevRowIndex >= 0; prevRowIndex--)
 				{
-					if (RowDefinitions[rowIndex].Height.IsStar)
-					{
-						AddHorizontalGridSplitter(RowDefinitions.Count - 1);
-						break;
-					}
+					// Grid Splitter doesn't work due to the Tasks being a fixed sized between the 2 stars (bug?)
+					//addSplitter |= (RowDefinitions[prevRowIndex].Height.IsStar);
 				}
-			}*/
-			//else if (separatorType == SeparatorType.Splitter)
-			//	AddRowSpacer(RowDefinitions.Count);
-			AddRowDefinition(fill);
+			}
+			int controlIndex = splitterIndex + 1;
+			AddRowDefinition(fill, controlIndex);
 
-			SetRow(control, RowDefinitions.Count - 1);
-			//SetRow(control, Children.Count);
+			SetRow(control, controlIndex);
 			Children.Add(control);
+
+			if (addSplitter)
+				AddHorizontalGridSplitter(splitterIndex);
 
 			//gridControls[oldChild.Key] = control;
 			InvalidateMeasure();
@@ -161,7 +161,7 @@ namespace Atlas.UI.Avalonia.Controls
 		// always add a RowDefinition before and after
 		public void InsertControl(Control control, bool fill, int rowIndex)
 		{
-			AddSeparatorRowDefinition(rowIndex - 1);
+			AddRowDefinition(false, rowIndex - 1);
 
 			AddRowDefinition(fill, rowIndex);
 
@@ -203,25 +203,15 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private void AddSeparatorRowDefinition(int rowIndex)
-		{
-			var rowDefinition = new RowDefinition()
-			{
-				Height = GridLength.Auto,
-			};
-			RowDefinitions.Insert(rowIndex, rowDefinition);
-		}
-
 		private void AddHorizontalGridSplitter(int rowIndex)
 		{
-			/*var rowDefinition = new RowDefinition();
-			rowDefinition.Height = new GridLength(6);
-			RowDefinitions.Insert(index, rowDefinition);*/
+			//AddRowDefinition(false, rowIndex);
 
 			var gridSplitter = new GridSplitter()
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				Background = Brushes.Black,
+				
 				//ShowsPreview = true,
 				//HorizontalAlignment.Stretch,
 				//VerticalAlignment = VerticalAlignment.Center,
@@ -260,10 +250,6 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			//if (Children.Count <= 1)
 			//	return;
-
-			/*var rowDefinition = new RowDefinition();
-			rowDefinition.Height = new GridLength(5);
-			RowDefinitions.Add(rowDefinition);*/
 
 			var border = new Border
 			{

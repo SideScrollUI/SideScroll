@@ -502,7 +502,7 @@ namespace Atlas.UI.Avalonia.View
 		protected void AddControl(Control control, bool fill)
 		{
 			//tabData.OnSelectionChanged += ParentListSelectionChanged;
-			_tabParentControls.AddControl(control, fill, SeparatorType.Spacer);
+			_tabParentControls.AddControl(control, fill, SeparatorType.Splitter);
 		}
 
 		protected void AddITabControl(ITabSelector control, bool fill)
