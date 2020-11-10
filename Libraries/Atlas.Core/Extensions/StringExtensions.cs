@@ -172,5 +172,10 @@ namespace Atlas.Extensions
 				return builder.ToString();
 			}
 		}
+
+		public static bool IsNullOrEmpty(this string text)
+		{
+			return string.IsNullOrEmpty(text);
+		}
 	}
 }
