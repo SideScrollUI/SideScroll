@@ -97,7 +97,10 @@ namespace Atlas.Core
 			{
 				try
 				{
-					return await func(callTimer, item);
+					T2 result = await func(callTimer, item);
+					if (result == null)
+						callTimer.Log.Add("No result");
+					return result;
 				}
 				catch (Exception e)
 				{
@@ -113,7 +116,10 @@ namespace Atlas.Core
 			{
 				try
 				{
-					return await func(callTimer, item, param1);
+					T3 result = await func(callTimer, item, param1);
+					if (result == null)
+						callTimer.Log.Add("No result");
+					return result;
 				}
 				catch (Exception e)
 				{
@@ -129,7 +135,10 @@ namespace Atlas.Core
 			{
 				try
 				{
-					return await func(callTimer, item, param1, param2);
+					T4 result = await func(callTimer, item, param1, param2);
+					if (result == null)
+						callTimer.Log.Add("No result");
+					return result;
 				}
 				catch (Exception e)
 				{
@@ -177,7 +186,16 @@ namespace Atlas.Core
 							{
 								T2 result = await RunFuncAsync(callTimer, func, item);
 								if (result != null)
-									results.Add(result);
+								{
+									lock (results)
+									{
+										results.Add(result);
+									}
+								}
+							}
+							catch (Exception e)
+							{
+								Log.Add(e);
 							}
 							finally
 							{
@@ -213,7 +231,16 @@ namespace Atlas.Core
 							{
 								T3 result = await RunFuncAsync(callTimer, func, item, param1);
 								if (result != null)
-									results.Add(result);
+								{
+									lock (results)
+									{
+										results.Add(result);
+									}
+								}
+							}
+							catch (Exception e)
+							{
+								Log.Add(e);
 							}
 							finally
 							{
@@ -249,7 +276,16 @@ namespace Atlas.Core
 							{
 								T4 result = await RunFuncAsync(callTimer, func, item, param1, param2);
 								if (result != null)
-									results.Add(result);
+								{
+									lock (results)
+									{
+										results.Add(result);
+									}
+								}
+							}
+							catch (Exception e)
+							{
+								Log.Add(e);
 							}
 							finally
 							{

@@ -216,8 +216,10 @@ namespace Atlas.Tabs
 		public virtual void Dispose()
 		{
 			ChildTabInstances.Clear();
+
 			if (!StaticModel)
 				Model.Clear();
+
 			foreach (TaskInstance taskInstance in Model.Tasks)
 			{
 				taskInstance.Cancel();

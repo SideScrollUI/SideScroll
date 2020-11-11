@@ -14,6 +14,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using WeakEvent;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -51,7 +52,7 @@ namespace Atlas.UI.Avalonia.Controls
 		}
 	}
 
-	public class TabControlChart : Grid //, IDisposable
+	public class TabControlChart : Grid, IDisposable
 	{
 		public static int SeriesLimit { get; set; } = 25;
 		private const double MarginPercent = 0.1; // This needs a min height so this can be lowered
@@ -123,7 +124,13 @@ namespace Atlas.UI.Avalonia.Controls
 		}
 
 		public event EventHandler<SeriesSelectedEventArgs> OnSelectionChanged;
-		public static event EventHandler<MouseCursorMovedEventArgs> OnMouseCursorChanged;
+
+		private static readonly WeakEventSource<MouseCursorMovedEventArgs> _mouseCursorChangedEventSource = new WeakEventSource<MouseCursorMovedEventArgs>();
+		public static event EventHandler<MouseCursorMovedEventArgs> OnMouseCursorChanged
+		{
+			add { _mouseCursorChangedEventSource.Subscribe(value); }
+			remove { _mouseCursorChangedEventSource.Unsubscribe(value); }
+		}
 
 		public TabControlChart(TabInstance tabInstance, ListGroup listGroup, bool fillHeight = false)
 		{
@@ -736,6 +743,17 @@ namespace Atlas.UI.Avalonia.Controls
 			return null;
 		}
 
+		private void ClearListeners()
+		{
+			if (Legend != null)
+			{
+				Legend.OnSelectionChanged -= Legend_OnSelectionChanged;
+				Legend.OnVisibleChanged -= Legend_OnVisibleChanged;
+			}
+
+			OnMouseCursorChanged -= TabControlChart_OnMouseCursorChanged;
+		}
+
 		private void UnloadModel()
 		{
 			PlotView.Model = null;
@@ -885,13 +903,13 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			DataPoint dataPoint = OxyPlot.Axes.DateTimeAxis.InverseTransform(e.Position, DateTimeAxis, ValueAxis);
 			var moveEvent = new MouseCursorMovedEventArgs(dataPoint.X);
-			OnMouseCursorChanged?.Invoke(sender, moveEvent);
+			_mouseCursorChangedEventSource?.Raise(sender, moveEvent);
 		}
 
 		private void PlotModel_MouseLeave(object sender, OxyMouseEventArgs e)
 		{
 			var moveEvent = new MouseCursorMovedEventArgs(0);
-			OnMouseCursorChanged?.Invoke(sender, moveEvent);
+			_mouseCursorChangedEventSource?.Raise(sender, moveEvent);
 		}
 
 		private void TabControlChart_OnMouseCursorChanged(object sender, MouseCursorMovedEventArgs e)
@@ -918,6 +936,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void Dispose()
 		{
+			ClearListeners();
 			UnloadModel();
 		}
 	}
