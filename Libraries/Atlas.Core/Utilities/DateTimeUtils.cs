@@ -11,6 +11,9 @@ namespace Atlas.Core
 		public static TimeSpan? ConvertTextToTimeSpan(string text)
 		{
 			TimeSpan timeSpan;
+			if (TimeSpan.TryParseExact(text, @"h\:m\:s\.FFFFFFF", CultureInfo.InvariantCulture, out timeSpan))
+				return timeSpan;
+
 			if (TimeSpan.TryParseExact(text, @"h\:m\:s", CultureInfo.InvariantCulture, out timeSpan))
 				return timeSpan;
 

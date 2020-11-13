@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -295,7 +296,7 @@ namespace Atlas.Network
 		// List Directory Contents in Detail (Name, Size, Modified, etc.)
 		public List<FtpItem> GetDirectoryListDetailed(string directory)
 		{
-			if (directory == null || directory.Length == 0)
+			if (directory.IsNullOrEmpty())
 				directory = "/";
 			var files = new List<FtpItem>();
 
