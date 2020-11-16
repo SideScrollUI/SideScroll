@@ -1,5 +1,6 @@
 ﻿using Atlas.Core;
 using System;
+using System.Reflection;
 
 namespace Atlas.Tabs
 {
@@ -21,5 +22,7 @@ namespace Atlas.Tabs
 					return Paths.Combine(Paths.AppDataPath, Name);
 			}
 		}
+
+		public static Version ProgramVersion() => Assembly.GetEntryAssembly().GetName().Version;
 	}
 }

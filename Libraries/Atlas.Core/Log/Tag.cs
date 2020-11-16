@@ -1,4 +1,6 @@
-﻿namespace Atlas.Core
+﻿using Atlas.Extensions;
+
+namespace Atlas.Core
 {
 	public class Tag
 	{
