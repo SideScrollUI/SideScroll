@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 
 namespace Atlas.Serialize
 {
@@ -31,11 +32,19 @@ namespace Atlas.Serialize
 			Reader.BaseStream.Position = ObjectOffsets[objectIndex];
 			
 			string assemblyQualifiedName = Reader.ReadString();
-			object obj = Type.GetType(assemblyQualifiedName, false);
+			//object obj = Type.GetType(assemblyQualifiedName, false);
+			object obj = Type.GetType(assemblyQualifiedName, AssemblyResolver, null);
 			Reader.BaseStream.Position = position;
 
 			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;
+		}
+
+		// ignore Assembly version to allow loading shared 
+		private static Assembly AssemblyResolver(AssemblyName assemblyName)
+		{
+			assemblyName.Version = null;
+			return Assembly.Load(assemblyName);
 		}
 
 		public override void Clone(object source, object dest)
