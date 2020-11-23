@@ -48,13 +48,13 @@ namespace Atlas.Core
 		public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Count;
 
 		// Sum the provided datapoints using the specified period
-		public static List<TimeRangePeriod> Periods(List<TimeRangeValue> timeRangeValues, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
+		public static List<TimeRangePeriod> Periods(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
 			double periodSeconds = (int)periodDuration.TotalSeconds;
-			double duration = Math.Ceiling(endTime.Subtract(startTime).TotalSeconds);
+			double duration = Math.Ceiling(timeWindow.Duration.TotalSeconds);
 			int numPeriods = (int)Math.Ceiling((duration + 1) / periodSeconds);
 
-			startTime = startTime.Trim();
+			DateTime startTime = timeWindow.StartTime.Trim();
 
 			if (duration <= 1)
 				return null;
@@ -80,7 +80,7 @@ namespace Atlas.Core
 					timeRangeValue.EndTime = timeRangeValue.StartTime.Add(periodDuration);
 
 				DateTime valueStartTime = timeRangeValue.StartTime.Max(startTime);
-				DateTime valueEndTime = timeRangeValue.EndTime.Min(endTime);
+				DateTime valueEndTime = timeRangeValue.EndTime.Min(timeWindow.EndTime);
 
 				for (DateTime valueBinStartTime = valueStartTime; valueBinStartTime < valueEndTime;)
 				{
@@ -118,9 +118,9 @@ namespace Atlas.Core
 			return timeRangePeriods;
 		}
 
-		public static double TotalAverage(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
+		public static double TotalAverage(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
-			var periods = Periods(dataPoints, startTime, endTime, periodDuration);
+			var periods = Periods(dataPoints, timeWindow, periodDuration);
 			double totalSum = 0;
 			TimeSpan totalDuration;
 			foreach (var period in periods)
@@ -131,9 +131,9 @@ namespace Atlas.Core
 			return totalSum / (totalDuration.TotalSeconds / periodDuration.TotalSeconds);
 		}
 
-		public static double TotalSum(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
+		public static double TotalSum(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
-			var periods = Periods(dataPoints, startTime, endTime, periodDuration);
+			var periods = Periods(dataPoints, timeWindow, periodDuration);
 			double total = 0;
 			foreach (var period in periods)
 			{
@@ -162,9 +162,9 @@ namespace Atlas.Core
 			return max;
 		}
 
-		public static List<TimeRangeValue> SumPeriods(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
+		public static List<TimeRangeValue> SumPeriods(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
-			var periods = Periods(dataPoints, startTime, endTime, periodDuration);
+			var periods = Periods(dataPoints, timeWindow, periodDuration);
 			var timeRangeValues = new List<TimeRangeValue>();
 			foreach (var period in periods)
 			{
@@ -179,9 +179,9 @@ namespace Atlas.Core
 			return timeRangeValues;
 		}
 
-		public static List<TimeRangeValue> MinPeriods(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
+		public static List<TimeRangeValue> MinPeriods(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
-			var periods = Periods(dataPoints, startTime, endTime, periodDuration);
+			var periods = Periods(dataPoints, timeWindow, periodDuration);
 			var timeRangeValues = new List<TimeRangeValue>();
 			foreach (var period in periods)
 			{
@@ -193,9 +193,9 @@ namespace Atlas.Core
 			return timeRangeValues;
 		}
 
-		public static List<TimeRangeValue> MaxPeriods(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
+		public static List<TimeRangeValue> MaxPeriods(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
-			var periods = Periods(dataPoints, startTime, endTime, periodDuration);
+			var periods = Periods(dataPoints, timeWindow, periodDuration);
 			var timeRangeValues = new List<TimeRangeValue>();
 			foreach (var period in periods)
 			{
@@ -209,17 +209,22 @@ namespace Atlas.Core
 
 		public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, int minPeriods, int maxPeriods)
 		{
-			double durationSeconds = Math.Ceiling(endTime.Subtract(startTime).TotalSeconds);
-			int numPeriods = Math.Max(minPeriods, Math.Min(maxPeriods, (int)durationSeconds));
-			double periodDuration = Math.Ceiling(durationSeconds / numPeriods);
-			startTime = startTime.Trim();
-
-			return PeriodCounts(dataPoints, startTime, endTime, TimeSpan.FromSeconds(periodDuration));
+			return PeriodCounts( dataPoints, new TimeWindow(startTime, endTime), minPeriods, maxPeriods);
 		}
 
-		public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
+		public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, int minPeriods, int maxPeriods)
 		{
-			var periods = Periods(dataPoints, startTime, endTime, periodDuration);
+			double durationSeconds = Math.Ceiling(timeWindow.Duration.TotalSeconds);
+			int numPeriods = Math.Max(minPeriods, Math.Min(maxPeriods, (int)durationSeconds));
+			double periodDuration = Math.Ceiling(durationSeconds / numPeriods);
+			DateTime startTime = timeWindow.StartTime.Trim();
+
+			return PeriodCounts(dataPoints, timeWindow, TimeSpan.FromSeconds(periodDuration));
+		}
+
+		public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+		{
+			var periods = Periods(dataPoints, timeWindow, periodDuration);
 			if (periods == null)
 				return null;
 

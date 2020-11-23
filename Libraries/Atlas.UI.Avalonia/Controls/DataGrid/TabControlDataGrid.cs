@@ -229,11 +229,10 @@ namespace Atlas.UI.Avalonia.Controls
 			DataGrid.SelectedItem = null;
 
 			DataGrid.SelectionChanged += DataGrid_SelectionChanged;
-
 			DataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // Add one click deselection
+			DataGrid.ColumnReordered += DataGrid_ColumnReordered;
 
 			//PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => x.DataGridRow_PointerPressed(e), handledEventsToo: true);
-			DataGrid.ColumnReordered += DataGrid_ColumnReordered;
 			LayoutUpdated += TabControlDataGrid_LayoutUpdated;
 
 			Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
@@ -324,6 +323,7 @@ namespace Atlas.UI.Avalonia.Controls
 				originalWidths[column] = column.Width;
 				column.Width = new DataGridLength(column.ActualWidth, DataGridLengthUnitType.Auto); // remove Star sizing so columns don't interfere with each other
 			}
+
 			foreach (DataGridColumn column in DataGrid.Columns)
 			{
 				DataGridLength originalWidth = originalWidths[column];
@@ -351,10 +351,12 @@ namespace Atlas.UI.Avalonia.Controls
 					column.Width = new DataGridLength(desiredWidth, DataGridLengthUnitType.Star);
 				}
 			}
+
 			//dataGrid.MinColumnWidth = 40; // doesn't do anything
 			// If 1 or 2 columns, make the last column stretch
 			if (DataGrid.Columns.Count == 1)
 				DataGrid.Columns[0].Width = new DataGridLength(DataGrid.Columns[0].ActualWidth, DataGridLengthUnitType.Star);
+
 			if (DataGrid.Columns.Count == 2)
 				DataGrid.Columns[1].Width = new DataGridLength(DataGrid.Columns[1].ActualWidth, DataGridLengthUnitType.Star);
 		}
@@ -568,7 +570,9 @@ namespace Atlas.UI.Avalonia.Controls
 			//if (dataGrid.Columns.Count == 1)
 			//	dataGrid.Columns[0].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
 
-			if (propertyColumns.Count == 1)
+			// 2 columns need headers for resizing first column?
+			// For visual color separation due to HasLinks background color being too close to title
+			if (propertyColumns.Count == 1)// || typeof(IListPair).IsAssignableFrom(_elementType))
 				DataGrid.HeadersVisibility = DataGridHeadersVisibility.None;
 		}
 

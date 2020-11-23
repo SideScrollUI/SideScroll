@@ -22,6 +22,8 @@ namespace Atlas.UI.Avalonia.Controls
 		// DataPoint is sealed
 		private Dictionary<DataPoint, object> _datapointLookup = new Dictionary<DataPoint, object>();
 
+		public override string ToString() => ListSeries?.ToString();
+
 		public TabChartLineSeries(TabControlChart chart, ListSeries listSeries, bool useDateTimeAxis)
 		{
 			Chart = chart;
@@ -36,6 +38,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Title = listSeries.Name;
 			if (Title?.Length == 0)
 				Title = "<NA>";
+
 			LineStyle = LineStyle.Solid;
 			StrokeThickness = 2;
 			TextColor = OxyColors.Black;
@@ -208,6 +211,7 @@ namespace Atlas.UI.Avalonia.Controls
 				int bin = (int)((dataPoint.X - firstBin) / listSeries.XBinSize);
 				bins[bin] += dataPoint.Y;
 			}
+
 			var binDataPoints = new List<DataPoint>();
 			for (int i = 0; i < numBins; i++)
 			{

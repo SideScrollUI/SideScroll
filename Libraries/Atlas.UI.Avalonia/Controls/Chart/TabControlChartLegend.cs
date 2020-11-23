@@ -32,6 +32,7 @@ namespace Atlas.UI.Avalonia.Controls
 			TabControlChart = tabControlChart;
 			PlotView = tabControlChart.PlotView;
 			ListGroup = tabControlChart.ListGroup;
+
 			InitializeControls();
 		}
 
@@ -78,11 +79,13 @@ namespace Atlas.UI.Avalonia.Controls
 		private TabChartLegendItem AddSeries(OxyListSeries oxyListSeries)
 		{
 			OxyPlot.Series.Series series = oxyListSeries.OxySeries;
+
 			Color color = Colors.Green;
 			if (series is OxyPlot.Series.LineSeries lineSeries)
 				color = lineSeries.Color.ToColor();
 			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
 				color = scatterSeries.MarkerFill.ToColor();
+
 			var legendItem = new TabChartLegendItem(this, oxyListSeries);
 			legendItem.OnSelectionChanged += LegendItem_SelectionChanged;
 			legendItem.OnVisibleChanged += LegendItem_VisibleChanged;
@@ -133,6 +136,7 @@ namespace Atlas.UI.Avalonia.Controls
 				if (item.IsChecked == true)
 					selectedCount++;
 			}
+
 			if (legendItem.IsChecked == false || selectedCount > 1)
 			{
 				SetAllVisible(false);
@@ -143,6 +147,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				SetAllVisible(true);
 			}
+
 			UpdateVisibleSeries();
 			OnSelectionChanged?.Invoke(this, null);
 			//if (legendItem.checkBox.IsChecked == true)
@@ -153,6 +158,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (oxySeries.Title == null)
 				return;
+
 			if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
 			{
 				SelectLegendItem(legendItem);
@@ -163,9 +169,11 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (oxySeries.Title == null)
 				return;
+
 			// Clear all first before setting to avoid event race conditions
 			foreach (TabChartLegendItem item in LegendItems)
 				item.Highlight = false;
+
 			if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
 			{
 				foreach (TabChartLegendItem item in LegendItems)
@@ -176,11 +184,14 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void SetAllVisible(bool selected, bool update = false)
 		{
+			bool changed = false;
 			foreach (TabChartLegendItem legendItem in LegendItems)
 			{
+				changed |= (legendItem.IsChecked != selected);
 				legendItem.IsChecked = selected;
 			}
-			if (update)
+
+			if (update && changed)
 			{
 				UpdateVisibleSeries();
 				OnSelectionChanged?.Invoke(this, null);
@@ -198,6 +209,7 @@ namespace Atlas.UI.Avalonia.Controls
 				string title = oxyListSeries.OxySeries.Title;
 				if (title == null)
 					continue;
+
 				if (!_idxLegendItems.TryGetValue(title, out TabChartLegendItem legendItem))
 				{
 					legendItem = AddSeries(oxyListSeries);
@@ -249,6 +261,7 @@ namespace Atlas.UI.Avalonia.Controls
 						legendItem.UpdateVisible(lineSeries);
 					}
 				}
+
 				if (series is OxyPlot.Series.ScatterSeries scatterSeries)
 				{
 					if (scatterSeries.Title == null)

@@ -56,7 +56,8 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		public static int SeriesLimit { get; set; } = 25;
 		private const double MarginPercent = 0.1; // This needs a min height so this can be lowered
-		private static OxyColor nowColor = OxyColors.Green;
+		private const int MinSelectionWidth = 10;
+		private static OxyColor NowColor = OxyColors.Green;
 		//private static OxyColor timeTrackerColor = Theme.TitleBackground;
 
 		private TabInstance TabInstance;
@@ -132,6 +133,8 @@ namespace Atlas.UI.Avalonia.Controls
 			remove { _mouseCursorChangedEventSource.Unsubscribe(value); }
 		}
 
+		public override string ToString() => ListGroup.ToString();
+
 		public TabControlChart(TabInstance tabInstance, ListGroup listGroup, bool fillHeight = false)
 		{
 			TabInstance = tabInstance;
@@ -141,11 +144,6 @@ namespace Atlas.UI.Avalonia.Controls
 			InitializeControls();
 		}
 
-		public override string ToString()
-		{
-			return ListGroup.ToString();
-		}
-
 		private void InitializeControls()
 		{
 			HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch; // OxyPlot import collision
@@ -153,8 +151,10 @@ namespace Atlas.UI.Avalonia.Controls
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Top;
 			else
 				VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch;
+
 			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("*");
+
 			MaxWidth = 1500;
 			MaxHeight = 645; // 25 Items
 
@@ -170,8 +170,8 @@ namespace Atlas.UI.Avalonia.Controls
 				BorderBrush = Brushes.LightGray,
 				IsMouseWheelEnabled = false,
 				//DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
-				MinHeight = 100,
 				MinWidth = 150,
+				MinHeight = 100,
 				[Grid.RowProperty] = 1,
 			};
 
@@ -239,6 +239,8 @@ namespace Atlas.UI.Avalonia.Controls
 			Legend.OnVisibleChanged += Legend_OnVisibleChanged;
 
 			OnMouseCursorChanged += TabControlChart_OnMouseCursorChanged;
+			if (ListGroup.TimeWindow != null)
+				ListGroup.TimeWindow.OnSelectionChanged += ListGroup_OnTimesChanged;
 
 			Children.Add(containerGrid);
 
@@ -327,6 +329,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void Legend_OnSelectionChanged(object sender, EventArgs e)
 		{
+			StopSelecting();
 			UpdateValueAxis();
 			OnSelectionChanged?.Invoke(sender, new SeriesSelectedEventArgs(SelectedSeries));
 		}
@@ -404,28 +407,31 @@ namespace Atlas.UI.Avalonia.Controls
 		}
 
 		private bool UseDateTimeAxis => (xAxisPropertyInfo?.PropertyType == typeof(DateTime)) ||
-				(ListGroup.StartTime != null && ListGroup.EndTime != null);
+				(ListGroup.TimeWindow != null);
 
 		private void AddAxis()
 		{
 			if (UseDateTimeAxis)
 			{
-				AddDateTimeAxis(ListGroup.StartTime, ListGroup.EndTime);
+				AddDateTimeAxis(ListGroup.TimeWindow);
 				AddNowTime();
 				if (ListGroup.ShowTimeTracker)
 					AddTrackerLine();
+
+				AddMouseListeners();
 			}
 			else
 			{
 				AddLinearAxis();
 			}
+
 			if (ListGroup.Series.Count > 0 && ListGroup.Series[0].IsStacked)
 				AddCategoryAxis();
 			else
 				AddValueAxis();
 		}
 
-		public OxyPlot.Axes.DateTimeAxis AddDateTimeAxis(DateTime? startTime = null, DateTime? endTime = null)
+		public OxyPlot.Axes.DateTimeAxis AddDateTimeAxis(TimeWindow timeWindow = null)
 		{
 			DateTimeAxis = new OxyPlot.Axes.DateTimeAxis
 			{
@@ -454,16 +460,22 @@ namespace Atlas.UI.Avalonia.Controls
 				TitleColor = OxyColors.LightGray,
 				TextColor = OxyColors.LightGray,
 			};
-			if (startTime != null && endTime != null)
+
+			if (timeWindow != null)
 			{
-				double duration = endTime.Value.Subtract(startTime.Value).TotalSeconds;
-				DateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(startTime.Value);
-				DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value);
-				//DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.Value.AddSeconds(duration / 25.0)); // labels get clipped without this
-				UpdateDateTimeInterval(duration);
+				UpdateDateTimeAxis(timeWindow);
 			}
+
 			PlotModel.Axes.Add(DateTimeAxis);
 			return DateTimeAxis;
+		}
+
+		private void UpdateDateTimeAxis(TimeWindow timeWindow)
+		{
+			DateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(timeWindow.StartTime);
+			DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(timeWindow.EndTime);
+			//DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.AddSeconds(duration / 25.0)); // labels get clipped without this
+			UpdateDateTimeInterval(timeWindow.Duration.TotalSeconds);
 		}
 
 		private void UpdateDateTimeInterval(double duration)
@@ -471,6 +483,7 @@ namespace Atlas.UI.Avalonia.Controls
 			var dateFormat = GetDateTimeFormat(duration);
 			DateTimeAxis.StringFormat = dateFormat.TextFormat;
 			DateTimeAxis.MinimumMajorStep = dateFormat.StepSize.TotalDays;
+
 			double widthPerLabel = 6 * DateTimeAxis.StringFormat.Length + 25;
 			DateTimeAxis.IntervalLength = Math.Max(50, widthPerLabel);
 		}
@@ -617,6 +630,9 @@ namespace Atlas.UI.Avalonia.Controls
 					{
 						double y = dataPoint.Y;
 						if (double.IsNaN(y))
+							continue;
+
+						if (dataPoint.X < DateTimeAxis.Minimum || dataPoint.X > DateTimeAxis.Maximum)
 							continue;
 
 						hasFraction |= (y % 1 != 0.0);
@@ -786,14 +802,14 @@ namespace Atlas.UI.Avalonia.Controls
 			var prevListSeries = IdxNameToSeries;
 			ClearSeries();
 			ListGroup.Series = listGroup.Series;
-			ListGroup.StartTime = listGroup.StartTime ?? ListGroup.StartTime;
-			ListGroup.EndTime = listGroup.EndTime ?? ListGroup.EndTime;
+			ListGroup.TimeWindow = listGroup.TimeWindow ?? ListGroup.TimeWindow;
 			ListGroup.SortByTotal();
 			foreach (var series in listGroup.Series)
 			{
 				OxyColor? oxyColor = null;
 				if (series.Name != null && prevListSeries.TryGetValue(series.Name, out OxyListSeries prevSeries))
 					oxyColor = ((TabChartLineSeries)prevSeries.OxySeries).Color;
+
 				AddSeries(series, oxyColor);
 			}
 		}
@@ -851,6 +867,11 @@ namespace Atlas.UI.Avalonia.Controls
 				e.Handled = true;
 			};
 
+			lineSeries.MouseUp += (s, e) =>
+			{
+				e.Handled = true; // Handle so zooming doesn't use?
+			};
+
 			OxyListSeriesList.Add(oxyListSeries);
 			ListToTabSeries[listSeries.List] = listSeries;
 			ListToTabIndex[listSeries.List] = ListToTabIndex.Count;
@@ -868,13 +889,14 @@ namespace Atlas.UI.Avalonia.Controls
 		private void AddNowTime()
 		{
 			var now = DateTime.UtcNow;
-			if (ListGroup.EndTime < now.AddMinutes(1))
+			if (ListGroup.TimeWindow.EndTime < now.AddMinutes(1))
 				return;
+
 			var annotation = new OxyPlot.Annotations.LineAnnotation
 			{
 				Type = LineAnnotationType.Vertical,
 				X = OxyPlot.Axes.DateTimeAxis.ToDouble(now.ToUniversalTime()),
-				Color = nowColor,
+				Color = NowColor,
 				// LineStyle = LineStyle.Dot, // doesn't work for vertical?
 			};
 
@@ -895,8 +917,50 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 
 			PlotModel.Annotations.Add(_trackerAnnotation);
+		}
+
+		private void AddMouseListeners()
+		{
+			PlotModel.MouseDown += PlotModel_MouseDown;
 			PlotModel.MouseMove += PlotModel_MouseMove;
+			PlotModel.MouseUp += PlotModel_MouseUp;
 			PlotModel.MouseLeave += PlotModel_MouseLeave;
+		}
+
+		private bool _selecting;
+		private ScreenPoint _startScreenPoint;
+		private DataPoint? _startDataPoint;
+		private DataPoint? _endDataPoint;
+		private OxyPlot.Annotations.RectangleAnnotation _rectangleAnnotation;
+
+		private void UpdateMouseSelection(DataPoint endDataPoint)
+		{
+			if (_rectangleAnnotation == null)
+			{
+				_rectangleAnnotation = new OxyPlot.Annotations.RectangleAnnotation()
+				{
+					Fill = OxyColor.FromAColor(128, Theme.GridBackgroundSelected.ToOxyColor()),
+				};
+			}
+			if (!PlotModel.Annotations.Contains(_rectangleAnnotation))
+				PlotModel.Annotations.Add(_rectangleAnnotation);
+
+			_rectangleAnnotation.MinimumX = Math.Min(_startDataPoint.Value.X, endDataPoint.X);
+			_rectangleAnnotation.MaximumX = Math.Max(_startDataPoint.Value.X, endDataPoint.X);
+			_rectangleAnnotation.MinimumY = ValueAxis.Minimum;
+			_rectangleAnnotation.MaximumY = ValueAxis.Maximum;
+
+			Dispatcher.UIThread.Post(() => PlotModel.InvalidatePlot(false), DispatcherPriority.Background);
+		}
+
+		private void PlotModel_MouseDown(object sender, OxyMouseDownEventArgs e)
+		{
+			if (!_selecting || _startDataPoint == null)
+			{
+				_startDataPoint = OxyPlot.Axes.DateTimeAxis.InverseTransform(e.Position, DateTimeAxis, ValueAxis);
+				_startScreenPoint = e.Position;
+				_selecting = true;
+			}
 		}
 
 		private void PlotModel_MouseMove(object sender, OxyMouseEventArgs e)
@@ -904,14 +968,65 @@ namespace Atlas.UI.Avalonia.Controls
 			DataPoint dataPoint = OxyPlot.Axes.DateTimeAxis.InverseTransform(e.Position, DateTimeAxis, ValueAxis);
 			var moveEvent = new MouseCursorMovedEventArgs(dataPoint.X);
 			_mouseCursorChangedEventSource?.Raise(sender, moveEvent);
+
+			if (_selecting && _startDataPoint != null)
+			{
+				_endDataPoint = OxyPlot.Axes.DateTimeAxis.InverseTransform(e.Position, DateTimeAxis, ValueAxis);
+				UpdateMouseSelection(_endDataPoint.Value);
+			}
 		}
 
+		private void PlotModel_MouseUp(object sender, OxyMouseEventArgs e)
+		{
+			if (_selecting && _startDataPoint != null)
+			{
+				_endDataPoint = OxyPlot.Axes.DateTimeAxis.InverseTransform(e.Position, DateTimeAxis, ValueAxis);
+				double width = Math.Abs(e.Position.X - _startScreenPoint.X);
+				if (width > MinSelectionWidth)
+				{
+					DateTimeAxis.Minimum = Math.Min(_startDataPoint.Value.X, _endDataPoint.Value.X);
+					DateTimeAxis.Maximum = Math.Max(_startDataPoint.Value.X, _endDataPoint.Value.X);
+
+					DateTime startTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Minimum);
+					DateTime endTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Maximum);
+					ListGroup.TimeWindow.Select(new TimeWindow(startTime, endTime));
+				}
+				else
+				{
+					if (ListGroup.TimeWindow != null)
+					{
+						UpdateDateTimeAxis(ListGroup.TimeWindow);
+						ListGroup.TimeWindow.Select(null);
+					}
+				}
+				StopSelecting();
+			}
+		}
+
+		private void ListGroup_OnTimesChanged(object sender, TimeWindowEventArgs e)
+		{
+			UpdateDateTimeAxis(e.TimeWindow);
+			UpdateValueAxis();
+
+			PlotView.InvalidatePlot(true);
+			PlotView.Model.InvalidatePlot(true);
+		}
+
+		private void StopSelecting()
+		{
+			if (_rectangleAnnotation != null)
+				PlotModel.Annotations.Remove(_rectangleAnnotation);
+			_selecting = false;
+		}
+
+		// Hide cursor when out of scope
 		private void PlotModel_MouseLeave(object sender, OxyMouseEventArgs e)
 		{
 			var moveEvent = new MouseCursorMovedEventArgs(0);
 			_mouseCursorChangedEventSource?.Raise(sender, moveEvent);
 		}
 
+		// Update mouse tracker
 		private void TabControlChart_OnMouseCursorChanged(object sender, MouseCursorMovedEventArgs e)
 		{
 			if (sender == PlotView?.Controller || _trackerAnnotation == null)

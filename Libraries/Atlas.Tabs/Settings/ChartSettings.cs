@@ -118,12 +118,11 @@ namespace Atlas.Tabs
 			ListSeries.Add(listSeries);
 		}
 
-		public void SetTimeWindow(DateTime startTime, DateTime endTime)
+		public void SetTimeWindow(TimeWindow timeWindow)
 		{
 			foreach (ListGroup listGroup in ListGroups.Values)
 			{
-				listGroup.StartTime = startTime;
-				listGroup.EndTime = endTime;
+				listGroup.TimeWindow = timeWindow;
 			}
 		}
 

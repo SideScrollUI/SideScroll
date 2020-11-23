@@ -114,7 +114,7 @@ namespace Atlas.Tabs
 		public void AddObject(object obj, bool fill = false)
 		{
 			if (obj == null)
-				throw new Exception("Object is null");
+				obj = "(null)";
 
 			Objects.Add(new TabObject() { Object = obj, Fill = fill });
 			if (obj is ChartSettings)

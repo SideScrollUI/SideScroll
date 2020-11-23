@@ -10,25 +10,32 @@ namespace Atlas.Core
 	public class ListGroup
 	{
 		public string Name { get; set; }
-		public bool Horizontal { get; set; }
-		public DateTime? StartTime { get; set; }
-		public DateTime? EndTime { get; set; }
-		public bool ShowOrder { get; set; } = true;
 		public string UnitName { get; set; }
-		public bool ShowLegend { get; set; } = true;
-		public bool ShowTimeTracker { get; set; }
-		public double? MinValue { get; set; }
-		public ItemCollection<ListSeries> Series { get; set; } = new ItemCollection<ListSeries>();
 
+		public bool Horizontal { get; set; }
+		public bool ShowLegend { get; set; } = true;
+		public bool ShowOrder { get; set; } = true;
+		public bool ShowTimeTracker { get; set; }
+
+		public double? MinValue { get; set; }
 		public double XBinSize { get; set; }
+
+		public TimeWindow TimeWindow { get; set; }
+
+		public ItemCollection<ListSeries> Series { get; set; } = new ItemCollection<ListSeries>();
 
 		public override string ToString() => Name;
 
-		public ListGroup(string name = null, DateTime? startTime = null, DateTime? endTime = null)
+		public ListGroup(string name = null, TimeWindow timeWindow = null)
 		{
 			Name = name;
-			StartTime = startTime;
-			EndTime = endTime;
+			TimeWindow = timeWindow;
+		}
+
+		public ListGroup(string name, DateTime startTime, DateTime endTime)
+		{
+			Name = name;
+			TimeWindow = new TimeWindow(startTime, endTime);
 		}
 
 		public void AddDimensions(IList iList, string categoryPropertyName, string xPropertyName, string yPropertyName)
@@ -64,7 +71,7 @@ namespace Atlas.Core
 		{
 			var sums = new Dictionary<ListSeries, double>();
 			foreach (var listSeries in Series)
-				sums.Add(listSeries, listSeries.CalculateTotal(StartTime, EndTime));
+				sums.Add(listSeries, listSeries.CalculateTotal(TimeWindow));
 
 			var sortedDict = from entry in sums orderby entry.Value descending select entry.Key;
 

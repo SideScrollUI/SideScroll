@@ -24,6 +24,7 @@ namespace Atlas.Core
 		//[Tags]
 		public List<Tag> Tags { get; set; } = new List<Tag>();
 		public string Description => string.Join(", ", Tags);
+		public TimeWindow TimeWindow => new TimeWindow(StartTime, EndTime);
 
 		public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Value;
 
@@ -55,7 +56,7 @@ namespace Atlas.Core
 
 		public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration)
 		{
-			return TimeRangePeriod.SumPeriods(timeRangeValues, StartTime, EndTime, periodDuration);
+			return TimeRangePeriod.SumPeriods(timeRangeValues, TimeWindow, periodDuration);
 		}
 
 		private static TimeSpan GetMinGap(List<TimeRangeValue> input, TimeSpan periodDuration)
