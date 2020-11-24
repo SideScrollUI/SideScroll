@@ -25,7 +25,7 @@ namespace Atlas.Core
 		public void Select(TimeWindow timeWindow)
 		{
 			Selection = timeWindow;
-			OnSelectionChanged.Invoke(this, new TimeWindowEventArgs(timeWindow ?? this));
+			OnSelectionChanged?.Invoke(this, new TimeWindowEventArgs(timeWindow ?? this));
 		}
 	}
 

@@ -214,6 +214,10 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					legendItem = AddSeries(oxyListSeries);
 				}
+				else
+				{
+					legendItem.UpdateTotal();
+				}
 				if (!_wrapPanel.Children.Contains(legendItem))
 					_wrapPanel.Children.Add(legendItem);
 			}

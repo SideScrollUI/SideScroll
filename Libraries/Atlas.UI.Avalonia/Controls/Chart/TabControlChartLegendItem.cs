@@ -98,12 +98,14 @@ namespace Atlas.UI.Avalonia.Controls
 			polygon.Fill = new SolidColorBrush(filled && Count > 0 ? color : Colors.Transparent);
 		}
 
-		private void UpdateTotal()
+		public void UpdateTotal()
 		{
 			if (OxyListSeries.ListSeries != null)
 			{
 				Total = OxyListSeries.ListSeries.Total;
 				Count = OxyListSeries.ListSeries.List.Count;
+				if (textBlockSum != null)
+					textBlockSum.Text = Total.Formatted();
 				return;
 			}
 			Total = 0;

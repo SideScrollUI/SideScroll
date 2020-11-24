@@ -1007,6 +1007,8 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			UpdateDateTimeAxis(e.TimeWindow);
 			UpdateValueAxis();
+			ListGroup.SortByTotal();
+			Legend.RefreshModel();
 
 			PlotView.InvalidatePlot(true);
 			PlotView.Model.InvalidatePlot(true);

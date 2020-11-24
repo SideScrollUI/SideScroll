@@ -142,22 +142,24 @@ namespace Atlas.Core
 			return total;
 		}
 
-		public static double TotalMinimum(List<TimeRangeValue> dataPoints)
+		public static double TotalMinimum(List<TimeRangeValue> dataPoints, TimeWindow timeWindow)
 		{
 			double min = 0;
 			foreach (var period in dataPoints)
 			{
-				min = Math.Min(min, period.Value);
+				if (period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
+					min = Math.Min(min, period.Value);
 			}
 			return min;
 		}
 
-		public static double TotalMaximum(List<TimeRangeValue> dataPoints)
+		public static double TotalMaximum(List<TimeRangeValue> dataPoints, TimeWindow timeWindow)
 		{
 			double max = 0;
 			foreach (var period in dataPoints)
 			{
-				max = Math.Max(max, period.Value);
+				if (period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
+					max = Math.Max(max, period.Value);
 			}
 			return max;
 		}

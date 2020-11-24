@@ -93,6 +93,7 @@ namespace Atlas.Core
 
 		public double CalculateTotal(TimeWindow timeWindow)
 		{
+			timeWindow = timeWindow.Selection ?? timeWindow;
 			Total = GetTotal(timeWindow);
 			if (Total > 50)
 				Total = Math.Floor(Total);
@@ -101,15 +102,16 @@ namespace Atlas.Core
 
 		public double GetTotal(TimeWindow timeWindow)
 		{
-			if (timeWindow == null || PeriodDuration == null || XPropertyInfo == null || XPropertyInfo.PropertyType != typeof(DateTime))
+			var timeRangeValues = TimeRangeValues;
+			if (timeWindow == null || PeriodDuration == null || timeRangeValues == null)
 				return GetSum();
 
 			switch (SeriesType)
 			{
-				case SeriesType.Sum: return TimeRangePeriod.TotalSum(TimeRangeValues, timeWindow, PeriodDuration.Value);
-				case SeriesType.Minimum: return TimeRangePeriod.TotalMinimum(TimeRangeValues);
-				case SeriesType.Maximum: return TimeRangePeriod.TotalMaximum(TimeRangeValues);
-				default: return TimeRangePeriod.TotalAverage(TimeRangeValues, timeWindow, PeriodDuration.Value);
+				case SeriesType.Sum: return TimeRangePeriod.TotalSum(timeRangeValues, timeWindow, PeriodDuration.Value);
+				case SeriesType.Minimum: return TimeRangePeriod.TotalMinimum(timeRangeValues, timeWindow);
+				case SeriesType.Maximum: return TimeRangePeriod.TotalMaximum(timeRangeValues, timeWindow);
+				default: return TimeRangePeriod.TotalAverage(timeRangeValues, timeWindow, PeriodDuration.Value);
 			}
 		}
 
@@ -140,6 +142,9 @@ namespace Atlas.Core
 		{
 			get
 			{
+				if (XPropertyInfo?.PropertyType != typeof(DateTime))
+					return null;
+
 				var timeRangeValues = new List<TimeRangeValue>();
 				foreach (object obj in List)
 				{
