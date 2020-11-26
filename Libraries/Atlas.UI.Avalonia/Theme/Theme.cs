@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Media;
 using System;
+using System.Resources;
 
 namespace Atlas.UI.Avalonia
 {
@@ -42,12 +43,24 @@ namespace Atlas.UI.Avalonia
 
 		public static SolidColorBrush ControlBackgroundHover => Get("ControlBackgroundHoverBrush");
 
+		// Chart 
+		public static SolidColorBrush ChartBackgroundSelected => Get("ThemeChartBackgroundSelectedBrush");
+		public static double ChartBackgroundSelectedAlpha => GetDouble("ChartBackgroundSelectedAlpha");
+
 		public static SolidColorBrush Get(string brushName)
 		{
 			if (Application.Current.Styles.TryGetResource(brushName, out object obj))
 				return (SolidColorBrush)obj;
 
 			throw new Exception("Brush not found: " + brushName);
+		}
+
+		private static double GetDouble(string name)
+		{
+			if (Application.Current.Styles.TryGetResource(name, out object value))
+				return (double)value;
+
+			throw new Exception("Double not found: " + name);
 		}
 	}
 }

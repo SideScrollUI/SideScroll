@@ -77,6 +77,9 @@
         <SolidColorBrush x:Key="ThemeGridForegroundSelectedBrush">#f0f0f0</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridHighBrush">#3060c0</SolidColorBrush>
 
+        <!-- Chart -->
+        <SolidColorBrush x:Key="ThemeChartBackgroundSelectedBrush">#448dff</SolidColorBrush>
+
         <!-- Buttons -->
         <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">#1a1940</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonForegroundBrush">#60bdff</SolidColorBrush>

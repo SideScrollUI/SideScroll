@@ -73,6 +73,12 @@
         <SolidColorBrush x:Key="ThemeGridForegroundSelectedBrush">Black</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeGridHighBrush">#92F397</SolidColorBrush>
 
+        <!-- Chart -->
+        <!--SolidColorBrush x:Key="ThemeChartBackgroundSelectedBrush">#326db8</SolidColorBrush-->
+        <!--SolidColorBrush x:Key="ThemeChartBackgroundSelectedBrush">#427dd8</SolidColorBrush-->
+        <SolidColorBrush x:Key="ThemeChartBackgroundSelectedBrush">#448dff</SolidColorBrush>
+        <sys:Double x:Key="ChartBackgroundSelectedAlpha">64</sys:Double>
+
         <!-- Buttons -->
         <SolidColorBrush x:Key="ThemeButtonBackgroundBrush">#27204a</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeButtonForegroundBrush">#60bdff</SolidColorBrush>

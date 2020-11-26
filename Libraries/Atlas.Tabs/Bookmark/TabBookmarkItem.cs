@@ -20,7 +20,7 @@ namespace Atlas.Tabs
 
 		[Name("Bookmark"), WordWrap]
 		public string Name => Bookmark.Name ?? Bookmark.Address;
-		public TimeSpan Age => DateTime.UtcNow.Subtract(Bookmark.TimeStamp).Trim();
+		public TimeSpan Age => Bookmark.TimeStamp.Age();
 		[HiddenColumn]
 		public Bookmark Bookmark { get; set; }
 		private Project Project { get; set; }

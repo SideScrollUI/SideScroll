@@ -939,7 +939,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				_rectangleAnnotation = new OxyPlot.Annotations.RectangleAnnotation()
 				{
-					Fill = OxyColor.FromAColor(128, Theme.GridBackgroundSelected.ToOxyColor()),
+					Fill = OxyColor.FromAColor((byte)Theme.ChartBackgroundSelectedAlpha, Theme.ChartBackgroundSelected.ToOxyColor()),
 				};
 			}
 			if (!PlotModel.Annotations.Contains(_rectangleAnnotation))
@@ -984,8 +984,11 @@ namespace Atlas.UI.Avalonia.Controls
 				double width = Math.Abs(e.Position.X - _startScreenPoint.X);
 				if (width > MinSelectionWidth)
 				{
-					DateTimeAxis.Minimum = Math.Min(_startDataPoint.Value.X, _endDataPoint.Value.X);
-					DateTimeAxis.Maximum = Math.Max(_startDataPoint.Value.X, _endDataPoint.Value.X);
+					double left = Math.Min(_startDataPoint.Value.X, _endDataPoint.Value.X);
+					double right = Math.Max(_startDataPoint.Value.X, _endDataPoint.Value.X);
+
+					DateTimeAxis.Minimum = Math.Max(left, DateTimeAxis.Minimum);
+					DateTimeAxis.Maximum = Math.Min(right, DateTimeAxis.Maximum);
 
 					DateTime startTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Minimum);
 					DateTime endTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Maximum);

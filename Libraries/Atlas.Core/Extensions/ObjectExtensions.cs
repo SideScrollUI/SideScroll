@@ -36,7 +36,12 @@ namespace Atlas.Extensions
 					return dateTime.ToString("yyyy-M-d H:mm:ss.FFFFFF");
 
 				if (obj is TimeSpan timeSpan)
-					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
+				{
+					if (timeSpan.TotalSeconds < 1)
+						return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
+					else
+						return timeSpan.FormattedDecimal();
+				}
 
 				// use any ToString() that overrides the base
 				MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes);
