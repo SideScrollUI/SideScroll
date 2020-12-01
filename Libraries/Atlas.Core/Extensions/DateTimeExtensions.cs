@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Atlas.Extensions
 {
@@ -55,27 +56,45 @@ namespace Atlas.Extensions
 			return new TimeSpan(Math.Min(first.Ticks, second.Ticks));
 		}
 
+		public class TimeUnit
+		{
+			public TimeSpan TimeSpan { get; set; }
+			public string Name { get; set; }
+
+			public TimeUnit(TimeSpan timeSpan, string name)
+			{
+				TimeSpan = timeSpan;
+				Name = name;
+			}
+		}
+
+		public static List<TimeUnit> TimeUnits = new List<TimeUnit>()
+		{
+			new TimeUnit(TimeSpan.FromDays(7), "Week"),
+			new TimeUnit(TimeSpan.FromDays(1), "Day"),
+			new TimeUnit(TimeSpan.FromHours(1), "Hour"),
+			new TimeUnit(TimeSpan.FromMinutes(1), "Minute"),
+			new TimeUnit(TimeSpan.FromSeconds(1), "Second"),
+			new TimeUnit(TimeSpan.FromMilliseconds(1), "Millisecond"),
+		};
+
 		public static string FormattedDecimal(this TimeSpan timeSpan)
 		{
 			string format = "#,0.#";
-			if (timeSpan.TotalDays > 7)
-				return (timeSpan.TotalDays / 7).ToString(format) + " Weeks";
-			else if (timeSpan.TotalDays == 7)
-				return (timeSpan.TotalDays / 7).ToString(format) + " Week";
-			else if (timeSpan.TotalDays > 1)
-				return timeSpan.TotalDays.ToString(format) + " Days";
-			else if (timeSpan.TotalDays == 1)
-				return timeSpan.TotalDays.ToString(format) + " Day";
-			else if (timeSpan.TotalHours > 1)
-				return timeSpan.TotalHours.ToString(format) + " Hours";
-			else if (timeSpan.TotalHours == 1)
-				return timeSpan.TotalHours.ToString(format) + " Hour";
-			else if (timeSpan.TotalMinutes > 1)
-				return timeSpan.TotalMinutes.ToString(format) + " Minutes";
-			else if (timeSpan.TotalMinutes == 1)
-				return timeSpan.TotalMinutes.ToString(format) + " Minute";
-			else
-				return timeSpan.TotalSeconds + " Seconds";
+			foreach (TimeUnit timeUnit in TimeUnits)
+			{
+				if (timeSpan < timeUnit.TimeSpan)
+					continue;
+
+				double units = timeSpan.TotalSeconds / timeUnit.TimeSpan.TotalSeconds;
+				string value = units.ToString(format) + " " + timeUnit.Name;
+
+				if (timeSpan.TotalSeconds > timeUnit.TimeSpan.TotalSeconds)
+					value += "s";
+				
+				return value;
+			}
+			return timeSpan.TotalSeconds + " Seconds";
 		}
 	}
 }

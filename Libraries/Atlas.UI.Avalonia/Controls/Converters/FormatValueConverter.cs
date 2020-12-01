@@ -57,10 +57,8 @@ namespace Atlas.UI.Avalonia
 
 				if (value is TimeSpan timeSpan)
 				{
-					if (timeSpan.TotalSeconds < 1)
-						return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
-					else
-						return timeSpan.FormattedDecimal();
+					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
+					//return timeSpan.FormattedDecimal();
 				}
 
 				//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above

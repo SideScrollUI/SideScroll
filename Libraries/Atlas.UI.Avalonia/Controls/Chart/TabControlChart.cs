@@ -940,6 +940,8 @@ namespace Atlas.UI.Avalonia.Controls
 				_rectangleAnnotation = new OxyPlot.Annotations.RectangleAnnotation()
 				{
 					Fill = OxyColor.FromAColor((byte)Theme.ChartBackgroundSelectedAlpha, Theme.ChartBackgroundSelected.ToOxyColor()),
+					Stroke = OxyColor.FromAColor((byte)180, Theme.ChartBackgroundSelected.ToOxyColor()),
+					StrokeThickness = 1,
 				};
 			}
 			if (!PlotModel.Annotations.Contains(_rectangleAnnotation))
@@ -992,7 +994,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 					DateTime startTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Minimum);
 					DateTime endTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Maximum);
-					ListGroup.TimeWindow.Select(new TimeWindow(startTime, endTime));
+					var timeWindow = new TimeWindow(startTime, endTime);
+					UpdateDateTimeAxis(timeWindow);
+					ListGroup.TimeWindow.Select(timeWindow);
 				}
 				else
 				{
