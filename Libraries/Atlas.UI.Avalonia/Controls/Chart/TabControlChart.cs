@@ -178,7 +178,6 @@ namespace Atlas.UI.Avalonia.Controls
 			// Show Hover text on mouse over instead of requiring holding the mouse down (why isn't this the default?)
 			PlotView.ActualController.UnbindMouseDown(OxyMouseButton.Left); // remove default
 			PlotView.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack); // show when hovering
-			PlotView.PointerPressed += PlotView_PointerPressed;
 			PointerLeave += PlotView_PointerLeave; // doesn't work on PlotView
 
 			PlotView.ActualController.BindMouseEnter(new DelegatePlotCommand<OxyMouseEventArgs>(
@@ -320,11 +319,6 @@ namespace Atlas.UI.Avalonia.Controls
 				HoverSeries = null;
 				Legend.UnhighlightAll(true);
 			}
-		}
-
-		private void PlotView_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e)
-		{
-			Legend.SetAllVisible(true, true);
 		}
 
 		private void Legend_OnSelectionChanged(object sender, EventArgs e)
@@ -962,6 +956,7 @@ namespace Atlas.UI.Avalonia.Controls
 				_startDataPoint = OxyPlot.Axes.DateTimeAxis.InverseTransform(e.Position, DateTimeAxis, ValueAxis);
 				_startScreenPoint = e.Position;
 				_selecting = true;
+				e.Handled = true;
 			}
 		}
 
@@ -986,6 +981,7 @@ namespace Atlas.UI.Avalonia.Controls
 				double width = Math.Abs(e.Position.X - _startScreenPoint.X);
 				if (width > MinSelectionWidth)
 				{
+					// Zoom In
 					double left = Math.Min(_startDataPoint.Value.X, _endDataPoint.Value.X);
 					double right = Math.Max(_startDataPoint.Value.X, _endDataPoint.Value.X);
 
@@ -998,13 +994,16 @@ namespace Atlas.UI.Avalonia.Controls
 					UpdateDateTimeAxis(timeWindow);
 					ListGroup.TimeWindow.Select(timeWindow);
 				}
+				else if (ListGroup.TimeWindow?.Selection != null)
+				{
+					// Zoom Out
+					UpdateDateTimeAxis(ListGroup.TimeWindow);
+					ListGroup.TimeWindow.Select(null);
+				}
 				else
 				{
-					if (ListGroup.TimeWindow != null)
-					{
-						UpdateDateTimeAxis(ListGroup.TimeWindow);
-						ListGroup.TimeWindow.Select(null);
-					}
+					// Deselect All
+					Legend.SetAllVisible(true, true);
 				}
 				StopSelecting();
 			}
