@@ -48,6 +48,10 @@ namespace Atlas.UI.Avalonia
 			menuItemCopySelected.Click += MenuItemCopySelected_Click;
 			list.Add(menuItemCopySelected);
 
+			var menuItemCopySelectedCsv = new MenuItem() { Header = "Copy - Selected - CSV" };
+			menuItemCopySelectedCsv.Click += MenuItemCopySelectedCsv_Click;
+			list.Add(menuItemCopySelectedCsv);
+
 			var menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopyDataGrid.Click += MenuItemCopyDataGrid_Click;
 			list.Add(menuItemCopyDataGrid);
@@ -88,6 +92,13 @@ namespace Atlas.UI.Avalonia
 		private async void MenuItemCopySelected_Click(object sender, RoutedEventArgs e)
 		{
 			string text = DataGrid.SelectedToString();
+			if (text != null)
+				await ClipBoardUtils.SetTextAsync(text);
+		}
+
+		private async void MenuItemCopySelectedCsv_Click(object sender, RoutedEventArgs e)
+		{
+			string text = DataGrid.SelectedToCsv();
 			if (text != null)
 				await ClipBoardUtils.SetTextAsync(text);
 		}

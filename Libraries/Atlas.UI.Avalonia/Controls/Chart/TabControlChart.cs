@@ -54,7 +54,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 	public class TabControlChart : Grid, IDisposable
 	{
-		public static int SeriesLimit { get; set; } = 25;
+		public int SeriesLimit { get; set; } = 25;
 		private const double MarginPercent = 0.1; // This needs a min height so this can be lowered
 		private const int MinSelectionWidth = 10;
 		private static OxyColor NowColor = OxyColors.Green;

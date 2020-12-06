@@ -1,5 +1,4 @@
 ﻿using Atlas.Core;
-using Atlas.Extensions;
 using Atlas.UI.Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -85,6 +84,18 @@ namespace Atlas.Extensions
 			return TableToString(columns, contentRows);
 		}
 
+		public static string SelectedToCsv(this DataGrid dataGrid)
+		{
+			if (dataGrid == null)
+				return null;
+
+			GetDataGridContents(dataGrid, dataGrid.SelectedItems,
+				out List<ColumnInfo> columns,
+				out List<List<string>> contentRows);
+
+			return TableToCsv(columns, contentRows);
+		}
+
 		public static string ToStringTable(this DataGrid dataGrid)
 		{
 			if (dataGrid == null)
@@ -106,6 +117,11 @@ namespace Atlas.Extensions
 				out List<ColumnInfo> columns,
 				out List<List<string>> contentRows);
 
+			return TableToCsv(columns, contentRows);
+		}
+
+		private static string TableToCsv(List<ColumnInfo> columns, List<List<string>> contentRows)
+		{
 			var stringBuilder = new StringBuilder();
 			bool addComma = false;
 			foreach (ColumnInfo columnInfo in columns)
