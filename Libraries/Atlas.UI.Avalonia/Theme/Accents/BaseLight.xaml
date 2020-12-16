@@ -91,7 +91,7 @@
         <!-- Toolbar -->
         <SolidColorBrush x:Key="ToolbarButtonBackgroundBrush">#27204a</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarButtonBackgroundHoverBrush">#2040a0</SolidColorBrush>
-        <SolidColorBrush x:Key="ToolbarButtonSeparatorBrush">#004db0</SolidColorBrush>
+        <SolidColorBrush x:Key="ToolbarButtonSeparatorBrush">#303d90</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarTextForegroundBrush">#8888FF</SolidColorBrush>
     
         <SolidColorBrush x:Key="ControlBackgroundHoverBrush">#ddffdd</SolidColorBrush>
