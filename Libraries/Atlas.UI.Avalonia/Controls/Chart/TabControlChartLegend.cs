@@ -133,14 +133,14 @@ namespace Atlas.UI.Avalonia.Controls
 			int selectedCount = 0;
 			foreach (TabChartLegendItem item in LegendItems)
 			{
-				if (item.IsChecked == true)
+				if (item.IsSelected == true)
 					selectedCount++;
 			}
 
-			if (legendItem.IsChecked == false || selectedCount > 1)
+			if (legendItem.IsSelected == false || selectedCount > 1)
 			{
 				SetAllVisible(false);
-				legendItem.IsChecked = true;
+				legendItem.IsSelected = true;
 				//OnSelectionChanged?.Invoke(this, legendItem.oxyListSeries);
 			}
 			else
@@ -187,8 +187,8 @@ namespace Atlas.UI.Avalonia.Controls
 			bool changed = false;
 			foreach (TabChartLegendItem legendItem in LegendItems)
 			{
-				changed |= (legendItem.IsChecked != selected);
-				legendItem.IsChecked = selected;
+				changed |= (legendItem.IsSelected != selected);
+				legendItem.IsSelected = selected;
 			}
 
 			if (update && changed)

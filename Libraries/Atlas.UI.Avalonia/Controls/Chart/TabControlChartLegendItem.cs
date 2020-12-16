@@ -44,17 +44,18 @@ namespace Atlas.UI.Avalonia.Controls
 		public int Count { get; set; }
 		public double Total { get; set; }
 
-		private bool _isChecked = true;
-		public bool IsChecked
+		private bool _isSelected = true;
+		public bool IsSelected
 		{
 			get
 			{
-				return _isChecked;
+				return _isSelected;
 			}
 			set
 			{
+				OxyListSeries.IsSelected = value;
 				OxyListSeries.IsVisible = value;
-				_isChecked = value;
+				_isSelected = value;
 				SetFilled(value);
 			}
 		}
@@ -164,7 +165,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (Count > 0)
 				polygon.Fill = new SolidColorBrush(color);
 			else
-				IsChecked = false;
+				IsSelected = false;
 			UpdatePolygonPoints(width, height);
 			polygon.PointerPressed += Polygon_PointerPressed;
 			Children.Add(polygon);
@@ -220,7 +221,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
 			{
-				IsChecked = !IsChecked;
+				IsSelected = !IsSelected;
 				OnSelectionChanged?.Invoke(this, null);
 			}
 		}
@@ -257,7 +258,7 @@ namespace Atlas.UI.Avalonia.Controls
 					{
 						_highlight = false;
 						UpdateVisible(lineSeries);
-						SetFilled(IsChecked);
+						SetFilled(IsSelected);
 						Legend.UpdateHighlight(false);
 						OnVisibleChanged?.Invoke(this, null);
 					}
@@ -286,7 +287,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public void UpdateVisible(OxyPlot.Series.LineSeries lineSeries)
 		{
 			Series = lineSeries;
-			if (IsChecked == true || _highlight)
+			if (IsSelected == true || _highlight)
 			{
 				if (Points != null)
 				{
@@ -321,7 +322,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public void UpdateVisible(OxyPlot.Series.ScatterSeries scatterSeries)
 		{
 			Series = scatterSeries;
-			if (IsChecked == true || Highlight)
+			if (IsSelected == true || Highlight)
 			{
 				scatterSeries.ItemsSource = scatterSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
 				//ItemsSource = null;

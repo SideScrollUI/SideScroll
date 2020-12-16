@@ -118,11 +118,12 @@ namespace Atlas.Tabs
 			ListSeries.Add(listSeries);
 		}
 
-		public void SetTimeWindow(TimeWindow timeWindow)
+		public void SetTimeWindow(TimeWindow timeWindow, bool showTimeTracker)
 		{
 			foreach (ListGroup listGroup in ListGroups.Values)
 			{
 				listGroup.TimeWindow = timeWindow;
+				listGroup.ShowTimeTracker = showTimeTracker;
 			}
 		}
 

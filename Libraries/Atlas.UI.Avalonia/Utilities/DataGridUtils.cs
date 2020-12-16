@@ -1,5 +1,4 @@
-﻿using Atlas.Core;
-using Atlas.Extensions;
+﻿using Atlas.Extensions;
 using Avalonia.Media;
 using System;
 using System.Collections;
@@ -10,6 +9,8 @@ namespace Atlas.UI.Avalonia
 {
 	public class DataGridUtils
 	{
+		// private const int MaxColumnWidth = 100;
+
 		public class ColumnInfo
 		{
 			public string Name { get; set; }

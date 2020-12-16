@@ -1003,7 +1003,8 @@ namespace Atlas.UI.Avalonia.Controls
 						//dataGrid.SelectedItems.Add(value);
 						DataGrid.SelectedItem = value;
 				}
-				if (value != null && DataGrid.IsEffectivelyVisible && DataGrid.IsInitialized)
+				// DataGrid.IsInitialized is unreliable and can still be false while showing
+				if (value != null && DataGrid.IsEffectivelyVisible)
 				{
 					try
 					{

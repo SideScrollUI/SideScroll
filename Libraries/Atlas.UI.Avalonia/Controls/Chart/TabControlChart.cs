@@ -22,13 +22,15 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		public ListSeries ListSeries { get; set; }
 		public OxyPlot.Series.Series OxySeries { get; set; }
-		public bool IsVisible { get; set; }
+		public bool IsVisible { get; set; } = true;
+		public bool IsSelected { get; set; }
+
+		public override string ToString() => ListSeries.ToString();
 
 		public OxyListSeries(ListSeries listSeries, OxyPlot.Series.Series oxySeries)
 		{
 			ListSeries = listSeries;
 			OxySeries = oxySeries;
-			IsVisible = true;
 		}
 	}
 
@@ -77,7 +79,7 @@ namespace Atlas.UI.Avalonia.Controls
 				var selected = new List<ListSeries>();
 				foreach (var oxyListSeries in OxyListSeriesList)
 				{
-					if (oxyListSeries.IsVisible)
+					if (oxyListSeries.IsSelected)
 						selected.Add(oxyListSeries.ListSeries);
 				}
 				if (selected.Count == OxyListSeriesList.Count && selected.Count > 1)
