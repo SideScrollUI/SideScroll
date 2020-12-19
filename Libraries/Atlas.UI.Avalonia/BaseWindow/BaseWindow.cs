@@ -1,4 +1,5 @@
-﻿using Atlas.Resources;
+﻿using Atlas.Core;
+using Atlas.Resources;
 using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
@@ -22,6 +23,8 @@ namespace Atlas.UI.Avalonia
 
 		public BaseWindow(Project project) : base()
 		{
+			AtlasInit.Initialize();
+
 			LoadProject(project);
 #if DEBUG
 			this.AttachDevTools();
