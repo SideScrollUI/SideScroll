@@ -8,7 +8,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build Atlas.Avalonia",
-            "program": "${workspaceFolder}/Programs/Atlas.Start.Avalonia/bin/Debug/netcoreapp2.0/Atlas.Start.Avalonia.dll",
+            "program": "${workspaceFolder}/Programs/Atlas.Start.Avalonia/bin/Debug/netcoreapp3.1/Atlas.Start.Avalonia.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Programs/Atlas.Start.Avalonia",
             "stopAtEntry": false,
