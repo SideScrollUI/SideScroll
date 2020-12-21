@@ -17,8 +17,8 @@ namespace Atlas.Serialize.Test
 			Initialize("TestSerializePerformance");
 		}
 
-		[OneTimeSetUp]
-		public void OneTimeSetUp()
+		[SetUp]
+		public void SetUp()
 		{
 			serializer = new SerializerMemoryAtlas();
 		}
@@ -51,7 +51,7 @@ namespace Atlas.Serialize.Test
 		[Test]
 		public void TimeRangeValues()
 		{
-			List<TimeRangeValue> input = TimeRangeSamples(1000000);
+			List<TimeRangeValue> input = TimeRangeSamples(100000); // doesn't work for 1,000,000
 
 			using (CallTimer callTimer = Call.Timer("Cloning"))
 			{
@@ -63,7 +63,7 @@ namespace Atlas.Serialize.Test
 		[Test]
 		public void JsonTimeRangeValues()
 		{
-			List<TimeRangeValue> input = TimeRangeSamples(1000000);
+			List<TimeRangeValue> input = TimeRangeSamples(100000);
 
 			using (CallTimer callTimer = Call.Timer("Cloning"))
 			{

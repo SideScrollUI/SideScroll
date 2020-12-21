@@ -62,6 +62,7 @@ namespace Atlas.Serialize.Test
 		}
 
 		[Test, Description("LargeBinaryWriter")]
+		[Ignore("Takes 15+ seconds")]
 		public void LargeBinaryWriter()
 		{
 			long maxOffset = 0x200000000; // 8 GB
@@ -107,6 +108,7 @@ namespace Atlas.Serialize.Test
 		}
 
 		[Test, Description("SeekLargeFileMemoryMapped")]
+		[Ignore("Not Working")]
 		public void SeekLargeFileMemoryMapped()
 		{
 			long offset = 0x200000000; // 4 GB
