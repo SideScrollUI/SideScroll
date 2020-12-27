@@ -17,15 +17,27 @@ namespace Atlas.UI.Avalonia.Tabs
 		Type IStyleable.StyleKey => typeof(Button);
 
 		public TabControlToolbar Toolbar;
+		public string Label { get; set; }
+		public string Tooltip { get; set; }
+
 		public TaskDelegate.CallAction CallAction;
 		public TaskDelegateAsync.CallActionAsync CallActionAsync;
 		public bool ShowTask;
 
-		public ToolbarButton(TabControlToolbar toolbar, string tooltip, Stream stream, ICommand command = null) : base()
+		public ToolbarButton(TabControlToolbar toolbar, string label, string tooltip, Stream bitmapStream, ICommand command = null) : base()
 		{
 			Toolbar = toolbar;
-			stream.Position = 0;
-			var bitmap = new Bitmap(stream);
+			Label = label;
+			Tooltip = tooltip;
+
+			bitmapStream.Position = 0;
+			var bitmap = new Bitmap(bitmapStream);
+
+			var grid = new Grid()
+			{
+				ColumnDefinitions = new ColumnDefinitions("Auto,Auto"),
+				RowDefinitions = new RowDefinitions("Auto"),
+			};
 
 			var image = new Image()
 			{
@@ -34,8 +46,22 @@ namespace Atlas.UI.Avalonia.Tabs
 				//MaxHeight = 24,
 				Stretch = Stretch.None,
 			};
+			grid.Children.Add(image);
 
-			Content = image;
+			if (label != null)
+			{
+				var textBlock = new TextBlock()
+				{
+					Text = label,
+					FontSize = 15,
+					Foreground = new SolidColorBrush(Color.Parse("#759eeb")),
+					Margin = new Thickness(6),
+					[Grid.ColumnProperty] = 1,
+				};
+				grid.Children.Add(textBlock);
+			}
+
+			Content = grid;
 			Command = command;
 			Background = Theme.ToolbarButtonBackground;
 			BorderBrush = Background;

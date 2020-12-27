@@ -60,12 +60,7 @@ namespace Atlas.UI.Avalonia
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
-			Toolbar = new TabViewerToolbar(this);
-			Toolbar.ButtonLink.AddAsync(LinkAsync);
-			Toolbar.ButtonImport.AddAsync(ImportBookmarkAsync);
-			Toolbar.ButtonSnapshot?.Add(Snapshot);
-			Toolbar.ButtonSnapshotCancel?.Add(CloseSnapshot);
-			Children.Add(Toolbar);
+			AddToolbar();
 
 			BottomGrid = new Grid()
 			{
@@ -104,6 +99,19 @@ namespace Atlas.UI.Avalonia
 			Grid scrollButtons = CreateScrollButtons();
 
 			BottomGrid.Children.Add(scrollButtons);
+		}
+
+		private void AddToolbar()
+		{
+			if (Project.ProjectSettings.ShowToolbar == false)
+				return;
+
+			Toolbar = new TabViewerToolbar(this);
+			Toolbar.ButtonLink.AddAsync(LinkAsync);
+			Toolbar.ButtonImport.AddAsync(ImportBookmarkAsync);
+			Toolbar.ButtonSnapshot?.Add(Snapshot);
+			Toolbar.ButtonSnapshotCancel?.Add(CloseSnapshot);
+			Children.Add(Toolbar);
 		}
 
 		public void Reload()

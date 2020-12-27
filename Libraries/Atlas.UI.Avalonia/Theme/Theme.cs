@@ -31,6 +31,8 @@ namespace Atlas.UI.Avalonia
 		public static SolidColorBrush TitleBackground => Get("TitleBackgroundBrush");
 		public static SolidColorBrush TitleForeground => Get("TitleForegroundBrush");
 
+		public static SolidColorBrush TextBackgroundBrush => Get("ThemeTextBackgroundBrush");
+
 		public static SolidColorBrush TextBackgroundDisabled => Get("TextBackgroundDisabledBrush");
 
 		public static SolidColorBrush Editable => Get("EditableBrush");

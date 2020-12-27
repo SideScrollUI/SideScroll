@@ -67,14 +67,14 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public ToolbarButton AddButton(string tooltip, Stream resource, ICommand command = null)
 		{
-			var button = new ToolbarButton(this, tooltip, resource, command);
+			var button = new ToolbarButton(this, null, tooltip, resource, command);
 			AddControl(button);
 			return button;
 		}
 
 		public ToolbarButton AddButton(ToolButton toolButton)
 		{
-			var button = new ToolbarButton(this, toolButton.Label, toolButton.Icon);
+			var button = new ToolbarButton(this, toolButton.Label, toolButton.Tooltip, toolButton.Icon);
 			button.Add(toolButton.Action);
 			button.AddAsync(toolButton.ActionAsync);
 			button.ShowTask = toolButton.ShowTask;

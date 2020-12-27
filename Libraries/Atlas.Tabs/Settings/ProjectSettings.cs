@@ -12,6 +12,8 @@ namespace Atlas.Tabs
 		public Version Version { get; set; } = new Version();
 		public Version DataVersion { get; set; } = new Version(); // What Data Repo version to use, bump to current Version when you make a breaking serialization change, (like a breaking NameSpace change, no renaming support yet)
 
+		public bool ShowToolbar { get; set; } = true;
+
 		public string DefaultProjectPath
 		{
 			get

@@ -7,6 +7,7 @@ namespace Atlas.Tabs
 {
 	public class ToolButton
 	{
+		public string Tooltip { get; set; }
 		public string Label { get; set; }
 		public Stream Icon { get; set; }
 		public bool ShowTask { get; set; }
@@ -14,16 +15,16 @@ namespace Atlas.Tabs
 		public TaskDelegate.CallAction Action { get; set; }
 		public TaskDelegateAsync.CallActionAsync ActionAsync { get; set; }
 
-		public ToolButton(string label, Stream icon, TaskDelegate.CallAction action = null)
+		public ToolButton(string tooltip, Stream icon, TaskDelegate.CallAction action = null)
 		{
-			Label = label;
+			Tooltip = tooltip;
 			Icon = icon;
 			Action = action;
 		}
 
-		public ToolButton(string label, Stream icon, TaskDelegateAsync.CallActionAsync actionAsync)
+		public ToolButton(string tooltip, Stream icon, TaskDelegateAsync.CallActionAsync actionAsync)
 		{
-			Label = label;
+			Tooltip = tooltip;
 			Icon = icon;
 			ActionAsync = actionAsync;
 		}
