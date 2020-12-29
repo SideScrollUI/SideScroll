@@ -802,6 +802,9 @@ namespace Atlas.UI.Avalonia.Controls
 			if (TabDataSettings.SelectionType == SelectionType.None)
 				return false;
 
+			if (TabModel.AutoSelect == TabModel.AutoSelectType.First)
+				return false;
+
 			if (TabModel.AutoSelect == TabModel.AutoSelectType.None)
 				return true;
 
@@ -835,6 +838,7 @@ namespace Atlas.UI.Avalonia.Controls
 				object value = obj;
 				if (value == null)
 					continue;
+
 				value = value.GetInnerValue();
 				if (value == null)
 					continue;

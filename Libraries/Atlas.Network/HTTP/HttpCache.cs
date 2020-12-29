@@ -27,17 +27,11 @@ namespace Atlas.Network
 			public HttpCache httpCache;
 
 			[HiddenColumn]
-			public string Text
-			{
-				get
-				{
-					return httpCache.GetString(Uri);
-				}
-			}
+			public string Text => httpCache.GetString(Uri);
 
 			/*public void Download(Call call)
 			{
-				CachedHTTP cachedHttp = new CachedHTTP(call, httpCache);
+				var cachedHttp = new CachedHTTP(call, httpCache);
 				byte[] bytes = cachedHttp.GetBytes(Uri.ToString());
 				httpCache.AddEntry(Uri, bytes); // todo: fix function to allow updating
 			}*/

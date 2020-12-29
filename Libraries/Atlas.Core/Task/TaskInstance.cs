@@ -45,19 +45,19 @@ namespace Atlas.Core
 
 		public TaskInstance ParentTask { get; set; }
 		public List<TaskInstance> SubTasks { get; set; } = new List<TaskInstance>();
-		private int? _NumSubTasks;
+		private int? _numSubTasks;
 		public int TaskCount
 		{
 			get
 			{
-				if (_NumSubTasks != null)
-					return (int)_NumSubTasks;
+				if (_numSubTasks != null)
+					return (int)_numSubTasks;
 				else
 					return (SubTasks != null) ? SubTasks.Count : 0;
 			}
 			set
 			{
-				_NumSubTasks = value;
+				_numSubTasks = value;
 				ProgressMax = 100 * value;
 			}
 		}
@@ -179,7 +179,7 @@ namespace Atlas.Core
 
 		private void OnFinished(object state)
 		{
-			/*EventCompleted eventCompleted = new EventCompleted();
+			/*var eventCompleted = new EventCompleted();
 			eventCompleted.taskCheckFileSize = this;
 			OnComplete?.Invoke(this, eventCompleted);*/
 			Finished = true;

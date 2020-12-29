@@ -17,8 +17,10 @@ namespace Atlas.UI.Avalonia
 {
 	public class TabViewer : Grid
 	{
-		public int DefaultIncrementWidth = 1000; // should we also use a max percent?
-		public int KeyboardIncrementWidth = 500;
+		public int MaxScrollWidth = 1000; // should we also use a max percent?
+		public double ScrollPercent = 0.5;
+		public int DefaultScrollWidth => Math.Min(MaxScrollWidth, (int)(ScrollViewer.Viewport.Width * ScrollPercent));
+		public int KeyboardScrollWidth = 500;
 
 		public static TabViewer BaseViewer;
 		public static string LoadBookmarkUri { get; set; }
@@ -251,12 +253,12 @@ namespace Atlas.UI.Avalonia
 
 		private void ButtonExpand_Click(object sender, RoutedEventArgs e)
 		{
-			ScrollRight(DefaultIncrementWidth);
+			ScrollRight(DefaultScrollWidth);
 		}
 
 		private void ButtonCollapse_Click(object sender, RoutedEventArgs e)
 		{
-			ScrollLeft(DefaultIncrementWidth);
+			ScrollLeft(DefaultScrollWidth);
 		}
 
 		private void ScrollLeft(int amount)
@@ -336,7 +338,7 @@ namespace Atlas.UI.Avalonia
 				if (e.KeyModifiers.HasFlag(KeyModifiers.Alt))
 					SeekBackward();
 				else
-					ScrollLeft(KeyboardIncrementWidth);
+					ScrollLeft(KeyboardScrollWidth);
 				e.Handled = true;
 				return;
 			}
@@ -346,7 +348,7 @@ namespace Atlas.UI.Avalonia
 				if (e.KeyModifiers.HasFlag(KeyModifiers.Alt))
 					SeekForward();
 				else
-					ScrollRight(KeyboardIncrementWidth);
+					ScrollRight(KeyboardScrollWidth);
 				e.Handled = true;
 				return;
 			}

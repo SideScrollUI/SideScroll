@@ -41,6 +41,7 @@ namespace Atlas.Tabs
 			None,
 			FirstSavedOrNew,
 			AnyNewOrSaved,
+			First,
 		}
 
 		public string Id { get; set; } // todo: Unique key for bookmarks?
