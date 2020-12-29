@@ -689,5 +689,16 @@ namespace Atlas.Serialize.Test
 
 			Assert.AreEqual(true, output["default"]);
 		}
+
+		[Test, Description("Serialize Version")]
+		public void SerializeVersion()
+		{
+			var input = new Version("2.4");
+
+			serializer.Save(Call, input);
+			var output = serializer.Load<Version>(Call);
+
+			Assert.AreEqual(input, output);
+		}
 	}
 }

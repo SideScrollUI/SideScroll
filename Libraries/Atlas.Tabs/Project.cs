@@ -20,7 +20,7 @@ namespace Atlas.Tabs
 		public DataRepo DataShared => new DataRepo(DataRepoPath, "Shared");
 		public DataRepo DataApp => new DataRepo(DataRepoPath, "Versions/" + ProjectSettings.DataVersion);
 
-		public HttpCacheManager httpCacheManager = new HttpCacheManager();
+		public HttpCacheManager Http = new HttpCacheManager();
 
 		public TypeObjectStore TypeObjectStore { get; set; } = new TypeObjectStore();
 		public BookmarkNavigator Navigator { get; set; } = new BookmarkNavigator();
@@ -37,6 +37,7 @@ namespace Atlas.Tabs
 			}
 		}
 
+		public override string ToString() => Name;
 
 		public Project()
 		{
@@ -55,11 +56,6 @@ namespace Atlas.Tabs
 		{
 			ProjectSettings = projectSettings;
 			UserSettings = userSettings;
-		}
-
-		public override string ToString()
-		{
-			return Name;
 		}
 
 		public void SaveSettings()

@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Reflection.Emit;
 
 namespace Atlas.Serialize
 {
@@ -34,6 +32,7 @@ namespace Atlas.Serialize
 			new TypeRepoList.Creator(),
 			new TypeRepoDictionary.Creator(),
 			new TypeRepoEnumerable.Creator(),
+			new TypeRepoVersion.Creator(),
 			//new TypeRepoUnknown.NoConstructorCreator(),
 			//new TypeRepoObject.Creator(),
 		};

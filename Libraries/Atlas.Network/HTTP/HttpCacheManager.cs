@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace Atlas.Network
 {
     public class HttpCacheManager
     {
+        public HttpMemoryCache MemoryCache { get; set; } = new HttpMemoryCache();
+
         private Dictionary<string, HttpCache> _httpCaches = new Dictionary<string, HttpCache>();
 
         // should we keep the imports open all the time?
