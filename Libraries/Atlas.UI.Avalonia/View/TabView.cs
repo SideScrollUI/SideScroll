@@ -395,27 +395,14 @@ namespace Atlas.UI.Avalonia.View
 
 			InitializeControls();
 
-			AddToolbars();
+			AddObjects();
 			AddActions();
 			AddTasks();
-			AddObjects();
 			AddData();
 
 			IsLoaded = true;
 
 			UpdateChildControls();
-		}
-
-		protected void AddToolbars()
-		{
-			foreach (TabObject tabObject in Model.Objects)
-			{
-				object obj = tabObject.Object;
-				if (obj is TabToolbar toolbar)
-				{
-					AddToolbar(toolbar);
-				}
-			}
 		}
 
 		protected void AddObjects()
@@ -427,9 +414,9 @@ namespace Atlas.UI.Avalonia.View
 				{
 					AddChart(chartSettings);
 				}
-				else if (obj is TabToolbar)
+				else if (obj is TabToolbar toolbar)
 				{
-					continue; // Added earlier
+					AddToolbar(toolbar);
 				}
 				else if (obj is ITabSelector tabSelector)
 				{
