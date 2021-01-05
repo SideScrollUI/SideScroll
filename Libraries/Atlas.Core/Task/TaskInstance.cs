@@ -45,19 +45,19 @@ namespace Atlas.Core
 
 		public TaskInstance ParentTask { get; set; }
 		public List<TaskInstance> SubTasks { get; set; } = new List<TaskInstance>();
-		private int? _numSubTasks;
+		private int? _taskCount;
 		public int TaskCount
 		{
 			get
 			{
-				if (_numSubTasks != null)
-					return (int)_numSubTasks;
+				if (_taskCount != null)
+					return (int)_taskCount;
 				else
 					return (SubTasks != null) ? SubTasks.Count : 0;
 			}
 			set
 			{
-				_numSubTasks = value;
+				_taskCount = value;
 				ProgressMax = 100 * value;
 			}
 		}
@@ -67,6 +67,18 @@ namespace Atlas.Core
 		public override string ToString() => Label;
 
 		public TaskInstance()
+		{
+			Initialize();
+		}
+
+		public TaskInstance(string label)
+		{
+			Label = label;
+
+			Initialize();
+		}
+
+		private void Initialize()
 		{
 			Call.TaskInstance = this;
 			_stopwatch.Start();
@@ -86,7 +98,7 @@ namespace Atlas.Core
 			}
 		}
 
-		private long prevPercent;
+		private long _prevPercent;
 		private long _progress;
 		public long Progress
 		{
@@ -101,8 +113,8 @@ namespace Atlas.Core
 				UpdatePercent();
 				if (ParentTask != null)
 				{
-					ParentTask.AddProgress(Percent - prevPercent);
-					prevPercent = Percent;
+					ParentTask.AddProgress(Percent - _prevPercent);
+					_prevPercent = Percent;
 				}
 			}
 		}
@@ -174,7 +186,10 @@ namespace Atlas.Core
 				return;
 
 			_stopwatch.Stop(); // Both Send and Post adds some delay
-			Creator?.Context.Post(new SendOrPostCallback(OnFinished), null);
+			if (Creator != null)
+				Creator.Context.Post(new SendOrPostCallback(OnFinished), null);
+			else
+				OnFinished(null);
 		}
 
 		private void OnFinished(object state)
@@ -214,11 +229,14 @@ namespace Atlas.Core
 					Message = Log.Summary;
 				}
 			}
+
 			NotifyPropertyChanged(nameof(Status));
 			NotifyPropertyChanged(nameof(TaskStatus));
 			NotifyPropertyChanged(nameof(Finished));
 			NotifyPropertyChanged(nameof(CancelVisible));
+
 			Call.Log.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));
+
 			Creator?.OnComplete?.Invoke();
 			OnComplete?.Invoke();
 		}

@@ -32,7 +32,6 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public IList SelectedItems => _tabControlDataGrid.SelectedItems;
 
-
 		private TabControlDataGrid _tabControlDataGrid;
 
 		public override string ToString() => TabInstance.Model.Name;
@@ -144,7 +143,7 @@ namespace Atlas.UI.Avalonia.Controls
 			IsVisible = ShowTasks;
 
 			// Unselect running if no error
-			if (AutoSelectNew && !taskInstance.Errored)
+			if (AutoSelectNew && !taskInstance.ShowTask)
 			{
 				IList selectedItems = _tabControlDataGrid.SelectedItems;
 				if (selectedItems.Count == 1 && selectedItems[0] == taskInstance)

@@ -282,7 +282,7 @@ namespace Atlas.UI.Avalonia
 		}
 
 		// How to set the main Content
-		public void AddTab(ITab tab)
+		public TabInstance AddTab(ITab tab)
 		{
 			TabInstance tabInstance = tab.Create();
 			tabInstance.Model.Name = "Start";
@@ -307,6 +307,8 @@ namespace Atlas.UI.Avalonia
 
 			//scrollViewer.Content = tabView;
 			ContentGrid.Children.Add(TabView);
+
+			return tabInstance;
 		}
 
 		// don't allow the scroll viewer to jump back to the left while we're loading content and the content grid width is fluctuating
