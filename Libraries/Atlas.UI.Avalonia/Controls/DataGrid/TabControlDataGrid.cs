@@ -161,7 +161,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				TabInstance.SetEndLoad();
 				_disableSaving--;
-				if (selectionModified)
+				if (_selectionModified)
 					TabInstance.SaveTabSettings(); // selection has probably changed
 			}, DispatcherPriority.Background);
 
@@ -361,7 +361,7 @@ namespace Atlas.UI.Avalonia.Controls
 				DataGrid.Columns[1].Width = new DataGridLength(DataGrid.Columns[1].ActualWidth, DataGridLengthUnitType.Star);
 		}
 
-		private bool selectionModified = false;
+		private bool _selectionModified = false;
 
 		private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
@@ -373,19 +373,19 @@ namespace Atlas.UI.Avalonia.Controls
 				// Group up any new items after the 1st one
 				//if (SelectedRows.Count == 0 || (dataGrid.SelectedCells.Count == 1 && dataGrid.CurrentCell.Item == dataGrid.Items[dataGrid.Items.Count - 1]))
 				// autoSelectNew not exposed
-				if (AutoSelectFirst && (AutoSelectNew || TabModel.AutoSelect == TabModel.AutoSelectType.AnyNewOrSaved) && (textBoxSearch.Text == null || textBoxSearch.Text.Length == 0))// && finishedLoading)
+				if (AutoSelectFirst && (AutoSelectNew || TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved) && (textBoxSearch.Text == null || textBoxSearch.Text.Length == 0))// && finishedLoading)
 				{
 					//CancellationTokenSource tokenSource = new CancellationTokenSource();
 					//this.Dispatcher.Invoke(() => SelectedItem = e.NewItems[0], System.Windows.Threading.DispatcherPriority.SystemIdle, tokenSource.Token, TimeSpan.FromSeconds(1));
 
-					selectItemEnabled = true;
+					_selectItemEnabled = true;
 					object item = List[List.Count - 1];
 					// don't update the selection too often or we'll slow things down
 					if (!_notifyItemChangedStopwatch.IsRunning || _notifyItemChangedStopwatch.ElapsedMilliseconds > 1000)
 					{
 						// change to dispatch here?
 						_autoSelectItem = null;
-						selectionModified = true;
+						_selectionModified = true;
 						//SelectedItem = e.NewItems[0];
 						Dispatcher.UIThread.Post(() => SetSelectedItem(item), DispatcherPriority.Background);
 						_notifyItemChangedStopwatch.Reset();
@@ -418,11 +418,11 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private bool selectItemEnabled;
+		private bool _selectItemEnabled;
 
 		private void SetSelectedItem(object selectedItem)
 		{
-			if (!selectItemEnabled)
+			if (!_selectItemEnabled)
 				return;
 
 			_disableSaving++;
@@ -802,10 +802,10 @@ namespace Atlas.UI.Avalonia.Controls
 			if (TabDataSettings.SelectionType == SelectionType.None)
 				return false;
 
-			if (TabModel.AutoSelect == TabModel.AutoSelectType.First)
+			if (TabModel.AutoSelect == AutoSelectType.First)
 				return false;
 
-			if (TabModel.AutoSelect == TabModel.AutoSelectType.None)
+			if (TabModel.AutoSelect == AutoSelectType.None)
 				return true;
 
 			if (List.Count == 0)
@@ -819,7 +819,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 
 			if (TabDataSettings.SelectedRows.Count == 0)
-				return true; // clear too?
+				return (TabModel.AutoSelect != AutoSelectType.AnyNewOrSaved); // clear too?
 
 			List<object> matchingItems = GetMatchingRowObjects();
 			if (matchingItems.Count > 0)
@@ -997,7 +997,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				//autoSelectItem = null;
 				if (value == null)
-					selectItemEnabled = false;
+					_selectItemEnabled = false;
 				// don't reselect if already selected				
 				if (DataGrid.SelectedItems.Count != 1 || DataGrid.SelectedItems[0] != value)
 				{
@@ -1040,7 +1040,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				// todo: cell selection not supported yet
 				var selectedRows = new HashSet<SelectedRow>();
-				/*Dictionary<object, List<DataGridCellInfo>> orderedRows = new Dictionary<object, List<DataGridCellInfo>>();
+				/*var orderedRows = new Dictionary<object, List<DataGridCellInfo>>();
 				foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
 				{
 					if (cellInfo.Column == null)
@@ -1054,7 +1054,7 @@ namespace Atlas.UI.Avalonia.Controls
 					object obj = selectedRow.Key;
 					List<DataGridCellInfo> cellsInfos = selectedRow.Value;
 					Type type = obj.GetType();
-					SelectedRow selectedItem = new SelectedRow();
+					var selectedItem = new SelectedRow();
 					selectedItem.label = obj.ObjectToUniqueString();
 					selectedItem.index = dataGrid.Items.IndexOf(obj);
 					if (selectedItem.label == type.FullName)
@@ -1072,7 +1072,7 @@ namespace Atlas.UI.Avalonia.Controls
 				if (obj != null)
 				{
 					Type type = obj.GetType();
-					SelectedRow selectedItem = new SelectedRow();
+					var selectedItem = new SelectedRow();
 					selectedItem.label = obj.ObjectToUniqueString();
 					//selectedItem.index = dataGrid.Items.IndexOf(obj);
 					if (selectedItem.label == type.FullName)

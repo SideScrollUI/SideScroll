@@ -32,17 +32,17 @@ namespace Atlas.Tabs
 		public bool Fill { get; set; }
 	}
 
+	public enum AutoSelectType
+	{
+		None,
+		FirstSavedOrNew,
+		AnyNewOrSaved, // Restores saved if multiple, otherwise first
+		First,
+	}
+
 	public class TabModel
 	{
 		public static List<Type> IgnoreHighlightTypes { get; set; } = new List<Type>();
-		
-		public enum AutoSelectType
-		{
-			None,
-			FirstSavedOrNew,
-			AnyNewOrSaved,
-			First,
-		}
 
 		public string Id { get; set; } // todo: Unique key for bookmarks?
 		public string Name { get; set; } = "<TabModel>";

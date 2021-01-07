@@ -314,6 +314,7 @@ namespace Atlas.UI.Avalonia.View
 			if (_isDragging == false)
 				return;
 			_isDragging = false;
+
 			InvalidateMeasure();
 			InvalidateArrange();
 			//TabViewSettings.SplitterDistance = (int)Math.Ceiling(e.Vector.Y); // backwards
@@ -397,7 +398,8 @@ namespace Atlas.UI.Avalonia.View
 
 			AddObjects();
 			AddActions();
-			AddTasks();
+			if (TabTasks == null)
+				AddTasks();
 			AddData();
 
 			IsLoaded = true;
@@ -417,6 +419,7 @@ namespace Atlas.UI.Avalonia.View
 				else if (obj is TabToolbar toolbar)
 				{
 					AddToolbar(toolbar);
+					AddTasks();
 				}
 				else if (obj is ITabSelector tabSelector)
 				{

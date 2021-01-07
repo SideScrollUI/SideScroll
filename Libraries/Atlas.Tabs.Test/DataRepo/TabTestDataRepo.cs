@@ -21,7 +21,7 @@ namespace Atlas.Tabs.Test.DataRepo
 				{
 					new TaskDelegate("Delete Repos", DeleteRepos),
 				};
-				model.AutoSelect = TabModel.AutoSelectType.AnyNewOrSaved;
+				model.AutoSelect = AutoSelectType.AnyNewOrSaved;
 
 				model.Notes = "Data Repos store C# objects as serialized data.";
 			}
