@@ -168,7 +168,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 				if (dataPoints.Count > 0 && listSeries.XBinSize > 0)
 				{
-					dataPoints = BinDataPoints(listSeries, dataPoints);
+					dataPoints = BinDataPoints(listSeries, dataPoints, listSeries.XBinSize);
 				}
 			}
 			else
@@ -200,22 +200,37 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private static List<DataPoint> BinDataPoints(ListSeries listSeries, List<DataPoint> dataPoints)
+		private static List<DataPoint> BinDataPoints(ListSeries listSeries, List<DataPoint> dataPoints, double xBinSize)
 		{
-			double firstBin = dataPoints.First().X;
-			double lastBin = dataPoints.Last().X;
-			int numBins = (int)Math.Ceiling((lastBin - firstBin) / listSeries.XBinSize) + 1;
+			double firstX = dataPoints.First().X;
+			double firstBinX = ((int)(firstX / xBinSize)) * xBinSize; // use start of interval
+			double lastBinX = dataPoints.Last().X;
+			int numBins = (int)Math.Ceiling((lastBinX - firstBinX) / xBinSize) + 1;
 			double[] bins = new double[numBins];
 			foreach (DataPoint dataPoint in dataPoints)
 			{
-				int bin = (int)((dataPoint.X - firstBin) / listSeries.XBinSize);
+				int bin = (int)((dataPoint.X - firstBinX) / xBinSize);
 				bins[bin] += dataPoint.Y;
 			}
 
+			bool prevNan = false;
 			var binDataPoints = new List<DataPoint>();
 			for (int i = 0; i < numBins; i++)
 			{
-				binDataPoints.Add(new DataPoint(firstBin + i * listSeries.XBinSize, bins[i]));
+				double value = bins[i];
+				if (value == 0)
+				{
+					if (prevNan)
+						continue;
+
+					prevNan = true;
+					value = double.NaN;
+				}
+				else
+				{
+					prevNan = true;
+				}
+				binDataPoints.Add(new DataPoint(firstBinX + i * xBinSize, value));
 			}
 
 			return binDataPoints;

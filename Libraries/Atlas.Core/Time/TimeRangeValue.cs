@@ -54,9 +54,14 @@ namespace Atlas.Core
 			Tags = tags;
 		}
 
-		public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration)
+		public List<TimeRangeValue> PeriodAverages(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration)
 		{
-			return TimeRangePeriod.SumPeriods(timeRangeValues, TimeWindow, periodDuration);
+			return TimeRangePeriod.PeriodAverages(timeRangeValues, TimeWindow, periodDuration);
+		}
+
+		public List<TimeRangeValue> PeriodSums(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration)
+		{
+			return TimeRangePeriod.PeriodSums(timeRangeValues, TimeWindow, periodDuration);
 		}
 
 		private static TimeSpan GetMinGap(List<TimeRangeValue> input, TimeSpan periodDuration)
@@ -114,29 +119,56 @@ namespace Atlas.Core
 			return output;
 		}
 
-		public static List<TimeRangeValue> FillGaps(List<TimeRangeValue> input, DateTime startTime, DateTime endTime, int periodDuration)
+		public static List<TimeRangeValue> AddGaps(List<TimeRangeValue> input, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
 		{
 			var output = new List<TimeRangeValue>();
 			if (input.Count == 0)
 			{
-				FillGaps(startTime, endTime, periodDuration, output);
+				AddGap(startTime, endTime, periodDuration, output);
 				return output;
 			}
 			var sorted = input.OrderBy(p => p.StartTime).ToList();
 
-			DateTime prevTime = startTime;
+			// Merge continuous points with the same value together to improve storage speeds
+			var merged = new List<TimeRangeValue>();
+			TimeRangeValue prevPoint = null;
 			foreach (TimeRangeValue point in sorted)
 			{
-				prevTime = FillGaps(prevTime, point.StartTime, periodDuration, output);
+				if (prevPoint != null && prevPoint.EndTime == point.StartTime && prevPoint.Value == point.Value)
+				{
+					prevPoint.EndTime = point.EndTime;
+					continue;
+				}
+				merged.Add(point);
+				prevPoint = point;
+			}
+
+			bool hasDuration = merged.First().Duration.TotalSeconds > 0;
+			DateTime prevTime = startTime;
+			foreach (TimeRangeValue point in merged)
+			{
+				AddGap(prevTime, point.StartTime, periodDuration, output);
 				output.Add(point);
 				prevTime = point.EndTime;
 			}
-			prevTime = FillGaps(prevTime, endTime, periodDuration, output);
+			AddGap(prevTime, endTime, periodDuration, output);
 			return output;
 		}
 
+		private static void AddGap(DateTime startTime, DateTime endTime, TimeSpan periodDuration, List<TimeRangeValue> output)
+		{
+			var timeRangeValue = new TimeRangeValue()
+			{
+				StartTime = startTime,
+				EndTime = endTime,
+				Value = double.NaN,
+			};
+			if (timeRangeValue.Duration >= periodDuration)
+				output.Add(timeRangeValue);
+		}
+
 		// Add NaN points for each period duration between the start/end times
-		private static DateTime FillGaps(DateTime startTime, DateTime endTime, int periodDuration, List<TimeRangeValue> output)
+		/*private static DateTime FillGaps(DateTime startTime, DateTime endTime, int periodDuration, List<TimeRangeValue> output)
 		{
 			int maxGap = periodDuration * 2;
 
@@ -159,6 +191,6 @@ namespace Atlas.Core
 			}
 
 			return startTime;
-		}
+		}*/
 	}
 }
