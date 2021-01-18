@@ -37,10 +37,10 @@ namespace Atlas.UI.Avalonia.Controls
 			//DataStore = (IEnumerable<object>)tabModel.Actions;
 
 			// we don't need to resize so don't use Grid?
-			/*StackPanel stackPanel = new StackPanel();
+			/*var stackPanel = new StackPanel();
 			stackPanel.Orientation = Orientation.Vertical;
 
-			TextBlock labelTitle = new TextBlock()
+			var labelTitle = new TextBlock()
 			{
 				Text = "Actions",
 				//Margin = new Thickness(10, 0, 0, 0), // needs Padding so Border not required
@@ -49,7 +49,7 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			//stackPanel.Children.Add(labelTitle);
 
-			Border borderTitle = new Border()
+			var borderTitle = new Border()
 			{
 				BorderThickness = new Thickness(5, 2, 2, 2),
 				//Background = new SolidColorBrush(Theme.GridColumnHeaderBackgroundColor),
@@ -102,21 +102,21 @@ namespace Atlas.UI.Avalonia.Controls
 			Content = containerGrid;
 
 
-			/*Grid containerGrid = new Grid()
+			/*var containerGrid = new Grid()
 			{
 				ColumnDefinitions = new ColumnDefinitions("Auto,Auto,*"),
 				RowDefinitions = new RowDefinitions("*"),
 				//HorizontalAlignment = HorizontalAlignment.Stretch
 			};
 
-			Grid leftGrid = new Grid()
+			var leftGrid = new Grid()
 			{
 				[Grid.ColumnProperty] = 0,
 				HorizontalAlignment = HorizontalAlignment.Stretch
 			};
 			containerGrid.Children.Add(leftGrid);
 
-			TextBlock title = new TextBlock()
+			var title = new TextBlock()
 			{
 				Text = tabModel.Name,
 				Background = new SolidColorBrush(Color.Parse("#4f52bb")),
@@ -127,7 +127,7 @@ namespace Atlas.UI.Avalonia.Controls
 			//leftGrid.Children.Add(title);
 			AddParentControl(title, false, false);
 
-			/*GridSplitter gridSplitter = new GridSplitter { [Grid.ColumnProperty] = 1, Background = Brushes.Black };
+			/*var gridSplitter = new GridSplitter { [Grid.ColumnProperty] = 1, Background = Brushes.Black };
 			if (tabConfiguration.SplitterDistance != null)
 				leftGrid.Width = (double)tabConfiguration.SplitterDistance;
 			containerGrid.Children.Add(gridSplitter);
@@ -140,7 +140,7 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			containerGrid.Children.Add(rightGrid);
 
-			TextBlock child = new TextBlock()
+			var child = new TextBlock()
 			{
 				Text = "Child",
 			};

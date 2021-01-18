@@ -169,7 +169,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (ListProperty != null)
 				ListProperty.PropertyChanged += ListProperty_PropertyChanged;
 
-			/*Binding binding = new Binding
+			/*var binding = new Binding
 			{
 				Path = new PropertyPath("BindableValueText"),
 				Mode = BindingMode.TwoWay,

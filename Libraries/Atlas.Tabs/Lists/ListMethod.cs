@@ -21,9 +21,7 @@ namespace Atlas.Tabs
 			get
 			{
 				var maxWidthAttribute = MethodInfo.GetCustomAttribute<MaxWidthAttribute>();
-				if (maxWidthAttribute != null)
-					return maxWidthAttribute.MaxWidth;
-				return null;
+				return maxWidthAttribute?.MaxWidth;
 			}
 		}
 

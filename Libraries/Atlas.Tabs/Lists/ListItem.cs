@@ -2,8 +2,6 @@
 using Atlas.Extensions;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
 
 namespace Atlas.Tabs
 {
@@ -40,14 +38,8 @@ namespace Atlas.Tabs
 		// DataGrid columns bind to this
 		public string Name
 		{
-			get
-			{
-				return Key.Formatted();
-			}
-			set
-			{
-				Key = value;
-			}
+			get => Key.Formatted();
+			set => Key = value;
 		}
 
 		// todo: move into IListItem after upgrading to .Net Standard 2.1

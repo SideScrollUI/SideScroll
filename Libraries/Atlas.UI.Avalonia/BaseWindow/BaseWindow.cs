@@ -97,6 +97,7 @@ namespace Atlas.UI.Avalonia
 				Rect bounds = Bounds;
 				if (maximized && TransformedBounds != null)
 					bounds = TransformedBounds.Value.Bounds;
+
 				var windowSettings = new WindowSettings()
 				{
 					Maximized = maximized,

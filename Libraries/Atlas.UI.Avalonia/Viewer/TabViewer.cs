@@ -216,10 +216,10 @@ namespace Atlas.UI.Avalonia
 				[ToolTip.TipProperty] = "Scroll Right ( -> )",
 				[Grid.RowProperty] = 0,
 			};
-			grid.Children.Add(buttonExpand);
 			buttonExpand.Click += ButtonExpand_Click;
 			buttonExpand.PointerEnter += Button_PointerEnter;
 			buttonExpand.PointerLeave += Button_PointerLeave;
+			grid.Children.Add(buttonExpand);
 
 			var buttonCollapse = new Button()
 			{
@@ -231,10 +231,10 @@ namespace Atlas.UI.Avalonia
 				[ToolTip.TipProperty] = "Scroll Left ( <- )",
 				[Grid.RowProperty] = 1,
 			};
-			grid.Children.Add(buttonCollapse);
 			buttonCollapse.Click += ButtonCollapse_Click;
 			buttonCollapse.PointerEnter += Button_PointerEnter;
 			buttonCollapse.PointerLeave += Button_PointerLeave;
+			grid.Children.Add(buttonCollapse);
 
 			return grid;
 		}

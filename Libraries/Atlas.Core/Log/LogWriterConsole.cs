@@ -7,7 +7,7 @@ namespace Atlas.Core
 	{
 		public Log Log;
 		
-		private SynchronizationContext context;
+		public SynchronizationContext Context;
 
 		public override string ToString() => "Console";
 
@@ -15,8 +15,8 @@ namespace Atlas.Core
 		{
 			Log = log;
 			
-			context = SynchronizationContext.Current;
-			context = context ?? new SynchronizationContext();
+			Context = SynchronizationContext.Current;
+			Context = Context ?? new SynchronizationContext();
 			
 			log.OnMessage += LogEntry_OnMessage;
 		}

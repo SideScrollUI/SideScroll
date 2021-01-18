@@ -12,10 +12,13 @@ namespace Atlas.UI.Avalonia
 {
 	public class ScreenCapture : Grid
 	{
-		private RenderTargetBitmap correctedBitmap;
-		private RenderTargetBitmap selectionBitmap;
-		private Image backgroundImage;
-		private Image selectionImage;
+		private RenderTargetBitmap _correctedBitmap;
+		private RenderTargetBitmap _selectionBitmap;
+		private Image _backgroundImage;
+		private Image _selectionImage;
+
+		private Point? _startPoint;
+		private Rect _selectionRect;
 
 		public ScreenCapture(IVisual visual)
 		{
@@ -34,14 +37,14 @@ namespace Atlas.UI.Avalonia
 
 			AddBackgroundImage(visual);
 
-			selectionImage = new Image()
+			_selectionImage = new Image()
 			{
 				//[Grid.ColumnProperty] = 2,
 				//[Grid.RowProperty] = 2,
 				[Grid.ColumnSpanProperty] = 5,
 				[Grid.RowSpanProperty] = 5,
 			};
-			Children.Add(selectionImage);
+			Children.Add(_selectionImage);
 
 			//rtb.Save(Path.Combine(OutputPath, testName + ".out.png"));
 
@@ -58,22 +61,22 @@ namespace Atlas.UI.Avalonia
 			var sourceBitmap = new RenderTargetBitmap(new PixelSize((int)bounds.Right, (int)bounds.Bottom), new Vector(96, 96));
 			sourceBitmap.Render(visual);
 
-			correctedBitmap = new RenderTargetBitmap(new PixelSize((int)bounds.Width, (int)bounds.Height), new Vector(96, 96));
+			_correctedBitmap = new RenderTargetBitmap(new PixelSize((int)bounds.Width, (int)bounds.Height), new Vector(96, 96));
 
-			using (var ctx = correctedBitmap.CreateDrawingContext(null))
+			using (var ctx = _correctedBitmap.CreateDrawingContext(null))
 			{
 				var destRect = new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
 				ctx.DrawImage(sourceBitmap.PlatformImpl, 0.75, bounds, destRect);
 			}
 
-			backgroundImage = new Image()
+			_backgroundImage = new Image()
 			{
-				Source = correctedBitmap,
+				Source = _correctedBitmap,
 				//[Grid.RowProperty] = 1,
 				[Grid.ColumnSpanProperty] = 5,
 				[Grid.RowSpanProperty] = 5,
 			};
-			Children.Add(backgroundImage);
+			Children.Add(_backgroundImage);
 		}
 
 		private void AddSplitters()
@@ -118,21 +121,18 @@ namespace Atlas.UI.Avalonia
 			//splitter.DragCompleted += GridSplitter_DragCompleted; // bug, this is firing when double clicking splitter
 		}
 
-		private Point? startPoint;
-		private Rect selectionRect;
-
 		private RenderTargetBitmap GetSelectedBitmap()
 		{
-			if (selectionRect.Width == 0 || selectionRect.Height == 0)
+			if (_selectionRect.Width == 0 || _selectionRect.Height == 0)
 				return null;
 
-			var destRect = new Rect(0, 0, selectionRect.Width, selectionRect.Height);
+			var destRect = new Rect(0, 0, _selectionRect.Width, _selectionRect.Height);
 
 			var bitmap = new RenderTargetBitmap(new PixelSize((int)destRect.Width, (int)destRect.Height), new Vector(96, 96));
 
 			using (var ctx = bitmap.CreateDrawingContext(null))
 			{
-				ctx.DrawImage(correctedBitmap.PlatformImpl, 1, selectionRect, destRect);
+				ctx.DrawImage(_correctedBitmap.PlatformImpl, 1, _selectionRect, destRect);
 			};
 			return bitmap;
 		}
@@ -141,14 +141,14 @@ namespace Atlas.UI.Avalonia
 		{
 			//if (startPoint == null)
 			{
-				startPoint = e.GetPosition(backgroundImage);
+				_startPoint = e.GetPosition(_backgroundImage);
 				//PointerMoved += ScreenCapture_PointerMoved;
 			}
 		}
 
 		private void ScreenCapture_PointerReleased(object sender, PointerReleasedEventArgs e)
 		{
-			if (startPoint == null)
+			if (_startPoint == null)
 				return;
 
 			//PointerReleased -= ScreenCapture_PointerReleased;
@@ -156,42 +156,42 @@ namespace Atlas.UI.Avalonia
 			//ClipBoardUtils.SetTextAsync(bitmap);
 			//ClipboardUtils.SetBitmapAsync(bitmap);
 
-			startPoint = null;
+			_startPoint = null;
 
 			//AddSplitters();
 		}
 
 		private void ScreenCapture_PointerMoved(object sender, PointerEventArgs e)
 		{
-			if (startPoint == null)
+			if (_startPoint == null)
 				return;
 
-			var mousePosition = e.GetPosition(backgroundImage);
-			Size sourceSize = correctedBitmap.Size;
+			var mousePosition = e.GetPosition(_backgroundImage);
+			Size sourceSize = _correctedBitmap.Size;
 
-			double scaleX = sourceSize.Width / backgroundImage.Bounds.Width;
-			double scaleY = sourceSize.Height / backgroundImage.Bounds.Height;
+			double scaleX = sourceSize.Width / _backgroundImage.Bounds.Width;
+			double scaleY = sourceSize.Height / _backgroundImage.Bounds.Height;
 
-			var scaledStartPoint = new Point(startPoint.Value.X * scaleX, startPoint.Value.Y * scaleY);
+			var scaledStartPoint = new Point(_startPoint.Value.X * scaleX, _startPoint.Value.Y * scaleY);
 			var scaledEndPoint = new Point(mousePosition.X * scaleX, mousePosition.Y * scaleY);
 
 			Point topLeft = new Point(Math.Min(scaledStartPoint.X, scaledEndPoint.X), Math.Min(scaledStartPoint.Y, scaledEndPoint.Y));
 			Point bottomRight = new Point(Math.Max(scaledStartPoint.X, scaledEndPoint.X), Math.Max(scaledStartPoint.Y, scaledEndPoint.Y));
 
-			selectionRect = new Rect(topLeft, bottomRight);
+			_selectionRect = new Rect(topLeft, bottomRight);
 			//var destRect = new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
 
 			//var selectionBitmap = GetSelectedBitmap();
 
-			selectionBitmap = new RenderTargetBitmap(new PixelSize((int)sourceSize.Width, (int)sourceSize.Height), new Vector(96, 96));
+			_selectionBitmap = new RenderTargetBitmap(new PixelSize((int)sourceSize.Width, (int)sourceSize.Height), new Vector(96, 96));
 
 			var borderPen = new Pen(Brushes.Red, lineCap: PenLineCap.Square);
-			using (var ctx = selectionBitmap.CreateDrawingContext(null))
+			using (var ctx = _selectionBitmap.CreateDrawingContext(null))
 			{
-				ctx.DrawImage(correctedBitmap.PlatformImpl, 1, selectionRect, selectionRect);
-				ctx.DrawRectangle(borderPen, selectionRect);
+				ctx.DrawImage(_correctedBitmap.PlatformImpl, 1, _selectionRect, _selectionRect);
+				ctx.DrawRectangle(borderPen, _selectionRect);
 			}
-			selectionImage.Source = selectionBitmap;
+			_selectionImage.Source = _selectionBitmap;
 			//selectionImage.Posit
 		}
 	}

@@ -24,7 +24,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public ListGroup ListGroup;
 		//public string Label { get; set; }
 		public TextBlock TextBlock;
-		public TextBlock textBlockSum;
+		public TextBlock TextBlockSum;
 
 		private Polygon polygon;
 		private Color color = Colors.Green;
@@ -105,8 +105,8 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				Total = OxyListSeries.ListSeries.Total;
 				Count = OxyListSeries.ListSeries.List.Count;
-				if (textBlockSum != null)
-					textBlockSum.Text = Total.Formatted();
+				if (TextBlockSum != null)
+					TextBlockSum.Text = Total.Formatted();
 				return;
 			}
 			Total = 0;
@@ -205,7 +205,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddSumTextBlock()
 		{
-			textBlockSum = new TextBlock()
+			TextBlockSum = new TextBlock()
 			{
 				Text = Total.Formatted(),
 				Foreground = Brushes.LightGray,
@@ -213,8 +213,8 @@ namespace Atlas.UI.Avalonia.Controls
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Right,
 				[Grid.ColumnProperty] = 2,
 			};
-			textBlockSum.Tapped += TextBox_Tapped;
-			Children.Add(textBlockSum);
+			TextBlockSum.Tapped += TextBox_Tapped;
+			Children.Add(TextBlockSum);
 		}
 
 		private void Polygon_PointerPressed(object sender, PointerPressedEventArgs e)
@@ -248,8 +248,8 @@ namespace Atlas.UI.Avalonia.Controls
 						OnVisibleChanged?.Invoke(this, null);
 					}
 					TextBlock.Foreground = Theme.GridBackgroundSelected;
-					if (textBlockSum != null)
-						textBlockSum.Foreground = Theme.GridBackgroundSelected;
+					if (TextBlockSum != null)
+						TextBlockSum.Foreground = Theme.GridBackgroundSelected;
 				}
 				else
 				{
@@ -263,8 +263,8 @@ namespace Atlas.UI.Avalonia.Controls
 						OnVisibleChanged?.Invoke(this, null);
 					}
 					TextBlock.Foreground = Brushes.LightGray;
-					if (textBlockSum != null)
-						textBlockSum.Foreground = Brushes.LightGray;
+					if (TextBlockSum != null)
+						TextBlockSum.Foreground = Brushes.LightGray;
 				}
 			}
 		}

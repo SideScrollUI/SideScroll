@@ -16,6 +16,8 @@ namespace Atlas.Tabs
 		//public ItemCollection<ListGroup> ListGroups { get; set; } = new ItemCollection<ListGroup>();
 		public ItemCollection<ListSeries> ListSeries { get; set; } = new ItemCollection<ListSeries>();
 
+		public override string ToString() => string.Join(" ", ListSeries);
+
 		public ChartSettings()
 		{
 		}
@@ -31,8 +33,6 @@ namespace Atlas.Tabs
 			DefaultListGroup.Name = name ?? DefaultListGroup.Name;
 			LoadList(iList);
 		}
-
-		public override string ToString() => string.Join(" ", ListSeries);
 
 		public void LoadList(IList iList)
 		{

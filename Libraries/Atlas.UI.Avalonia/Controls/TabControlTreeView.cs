@@ -101,7 +101,6 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 
 			//Background = new SolidColorBrush(Colors.Blue);
-			//Background = new SolidColorBrush(Colors.Orange);
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 			//Orientation = Orientation.Vertical;
@@ -140,7 +139,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			/*get
 			{
-				SortedDictionary<int, object> orderedRows = new SortedDictionary<int, object>();
+				var orderedRows = new SortedDictionary<int, object>();
 				foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
 				{
 					orderedRows[dataGrid.Items.IndexOf(cellInfo.Item)] = cellInfo.Item;
@@ -152,7 +151,7 @@ namespace Atlas.UI.Avalonia.Controls
 				foreach (object obj in value)
 					dataGrid.SelectedItems.Add(obj);
 				/*
-		  HashSet<object> idxSelected = new HashSet<object>();
+		  var idxSelected = new HashSet<object>();
 		  foreach (object obj in value)
 			  idxSelected.Add(obj);
 
@@ -175,11 +174,12 @@ namespace Atlas.UI.Avalonia.Controls
 		public void SaveSelectedItems()
 		{
 			DataSettings.SelectedRows.Clear();
-			/*Dictionary<object, List<DataGridCellInfo>> orderedRows = new Dictionary<object, List<DataGridCellInfo>>();
+			/*var orderedRows = new Dictionary<object, List<DataGridCellInfo>>();
 			foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
 			{
 				if (cellInfo.Column == null)
 					continue; // this shouldn't happen, but it does
+
 				if (!orderedRows.ContainsKey(cellInfo.Item))
 					orderedRows[cellInfo.Item] = new List<DataGridCellInfo>();
 				orderedRows[cellInfo.Item].Add(cellInfo);
@@ -189,7 +189,7 @@ namespace Atlas.UI.Avalonia.Controls
 				object obj = selectedRow.Key;
 				List<DataGridCellInfo> cellsInfos = selectedRow.Value;
 				Type type = obj.GetType();
-				SelectedRow selectedItem = new SelectedRow();
+				var selectedItem = new SelectedRow();
 				selectedItem.label = obj.ObjectToUniqueString();
 				selectedItem.index = dataGrid.Items.IndexOf(obj);
 				if (selectedItem.label == type.FullName)

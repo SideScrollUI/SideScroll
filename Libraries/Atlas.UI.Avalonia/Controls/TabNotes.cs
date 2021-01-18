@@ -50,7 +50,7 @@ namespace Atlas.UI.Avalonia
 			//SearchPanel.Install(this.textEditor);
 
 			//Button button = TabButton.Create();
-			Button button = new Button()
+			var button = new Button()
 			{
 				Content = "^",
 				Foreground = new SolidColorBrush(Theme.NotesButtonForegroundColor),

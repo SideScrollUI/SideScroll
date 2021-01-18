@@ -84,6 +84,8 @@ namespace Atlas.Tabs
 			}
 		}
 
+		public override string ToString() => Name;
+
 		public ListMember(object obj, MemberInfo memberInfo)
 		{
 			Object = obj;
@@ -91,11 +93,6 @@ namespace Atlas.Tabs
 			
 			if (obj is INotifyPropertyChanged)
 				(obj as INotifyPropertyChanged).PropertyChanged += ListProperty_PropertyChanged;
-		}
-
-		public override string ToString()
-		{
-			return Name;
 		}
 
 		private void ListProperty_PropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -86,10 +86,11 @@ namespace Atlas.Tabs
 				{
 					if (methodInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
 						continue;
+
 					if (methodInfo.DeclaringType.IsNotPublic)
 						continue;
 
-					ListMethodObject listMethod = new ListMethodObject(obj, methodInfo);
+					var listMethod = new ListMethodObject(obj, methodInfo);
 
 					int index;
 					if (propertyToIndex.TryGetValue(methodInfo.Name, out index))

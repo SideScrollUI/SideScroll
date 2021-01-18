@@ -43,6 +43,7 @@ using System.Linq;
 			_cultureSensitiveComparer = new Lazy<CultureSensitiveComparer>(() => new CultureSensitiveComparer(culture ?? CultureInfo.CurrentCulture));
 			_comparer = new Lazy<IComparer<object>>(() => Comparer<object>.Create((x, y) => Compare(x, y)));
 		}
+
 		private CustomSortDescription(CustomSortDescription inner, bool descending)
 		{
 			_propertyPath = inner._propertyPath;
@@ -76,6 +77,7 @@ using System.Linq;
 			else
 				return (typeof(Comparer<>).MakeGenericType(type).GetProperty("Default")).GetValue(null, null) as IComparer;
 		}
+
 		private Type GetPropertyType(object o)
 		{
 			return o.GetType().GetNestedPropertyType(_propertyPath);
@@ -120,6 +122,7 @@ using System.Linq;
 			if (_internalComparer == null && _propertyType != null)
 				_internalComparer = GetComparerForType(_propertyType);
 		}
+
 		public override IOrderedEnumerable<object> OrderBy(IEnumerable<object> seq)
 		{
 			if (_descending)
@@ -131,6 +134,7 @@ using System.Linq;
 				return seq.OrderBy(o => GetValue(o), InternalComparer);
 			}
 		}
+
 		public override IOrderedEnumerable<object> ThenBy(IOrderedEnumerable<object> seq)
 		{
 			if (_descending)

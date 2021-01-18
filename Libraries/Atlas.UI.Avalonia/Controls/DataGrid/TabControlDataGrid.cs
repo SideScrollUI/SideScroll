@@ -41,13 +41,13 @@ namespace Atlas.UI.Avalonia.Controls
 		public bool AutoGenerateColumns = true;
 
 		public DataGrid DataGrid;
-		public TextBox textBoxSearch;
+		public TextBox TextBoxSearch;
 
 		//private HashSet<int> pinnedItems = new HashSet<int>(); // starred items?
 		public DataGridCollectionView CollectionView;
-		private Dictionary<string, DataGridColumn> columnObjects = new Dictionary<string, DataGridColumn>();
-		private Dictionary<DataGridColumn, string> columnNames = new Dictionary<DataGridColumn, string>();
-		private List<PropertyInfo> columnProperties = new List<PropertyInfo>(); // makes filtering faster, could change other Dictionaries strings to PropertyInfo
+		private Dictionary<string, DataGridColumn> _columnObjects = new Dictionary<string, DataGridColumn>();
+		private Dictionary<DataGridColumn, string> _columnNames = new Dictionary<DataGridColumn, string>();
+		private List<PropertyInfo> _columnProperties = new List<PropertyInfo>(); // makes filtering faster, could change other Dictionaries strings to PropertyInfo
 
 		public event EventHandler<EventArgs> OnSelectionChanged;
 
@@ -178,17 +178,17 @@ namespace Atlas.UI.Avalonia.Controls
 			MaxHeight = 4000;
 			AddDataGrid();
 
-			textBoxSearch = new TextBox()
+			TextBoxSearch = new TextBox()
 			{
 				IsVisible = false,
 			};
 			//textBoxSearch.TextInput += TextBoxSearch_TextInput; // doesn't work
-			textBoxSearch.KeyDown += TextBoxSearch_KeyDown;
-			textBoxSearch.KeyUp += TextBoxSearch_KeyUp;
+			TextBoxSearch.KeyDown += TextBoxSearch_KeyDown;
+			TextBoxSearch.KeyUp += TextBoxSearch_KeyUp;
 
 			LoadSettings();
 
-			Children.Add(textBoxSearch);
+			Children.Add(TextBoxSearch);
 		}
 
 		private void AddDataGrid()
@@ -373,9 +373,9 @@ namespace Atlas.UI.Avalonia.Controls
 				// Group up any new items after the 1st one
 				//if (SelectedRows.Count == 0 || (dataGrid.SelectedCells.Count == 1 && dataGrid.CurrentCell.Item == dataGrid.Items[dataGrid.Items.Count - 1]))
 				// autoSelectNew not exposed
-				if (AutoSelectFirst && (AutoSelectNew || TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved) && (textBoxSearch.Text == null || textBoxSearch.Text.Length == 0))// && finishedLoading)
+				if (AutoSelectFirst && (AutoSelectNew || TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved) && (TextBoxSearch.Text == null || TextBoxSearch.Text.Length == 0))// && finishedLoading)
 				{
-					//CancellationTokenSource tokenSource = new CancellationTokenSource();
+					//var tokenSource = new CancellationTokenSource();
 					//this.Dispatcher.Invoke(() => SelectedItem = e.NewItems[0], System.Windows.Threading.DispatcherPriority.SystemIdle, tokenSource.Token, TimeSpan.FromSeconds(1));
 
 					_selectItemEnabled = true;
@@ -431,12 +431,12 @@ namespace Atlas.UI.Avalonia.Controls
 			_isAutoSelecting--;
 			_disableSaving--;
 
-			if (scrollIntoViewObject != null && DataGrid.IsEffectivelyVisible && DataGrid.IsInitialized)
+			if (_scrollIntoViewObject != null && DataGrid.IsEffectivelyVisible && DataGrid.IsInitialized)
 			{
 				try
 				{
 					//if (collectionView.Contains(value))
-					DataGrid.ScrollIntoView(scrollIntoViewObject, DataGrid.CurrentColumn);
+					DataGrid.ScrollIntoView(_scrollIntoViewObject, DataGrid.CurrentColumn);
 				}
 				catch (Exception)
 				{
@@ -444,7 +444,7 @@ namespace Atlas.UI.Avalonia.Controls
 					//Parameter name: index
 					//   at Avalonia.Collections.DataGridCollectionView.GetItemAt(Int32 index) in D:\a\1\s\src\Avalonia.Controls.DataGrid\Collections\DataGridCollectionView.cs:line 1957
 				}
-				scrollIntoViewObject = null;
+				_scrollIntoViewObject = null;
 			}
 		}
 
@@ -452,7 +452,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			var orderedColumns = new SortedDictionary<int, string>();
 			foreach (DataGridColumn column in DataGrid.Columns)
-				orderedColumns[column.DisplayIndex] = columnNames[column];
+				orderedColumns[column.DisplayIndex] = _columnNames[column];
 
 			TabDataSettings.ColumnNameOrder.Clear();
 			TabDataSettings.ColumnNameOrder.AddRange(orderedColumns.Values);
@@ -523,8 +523,8 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (e.Key == Key.Escape)
 			{
-				textBoxSearch.IsVisible = false;
-				textBoxSearch.Text = "";
+				TextBoxSearch.IsVisible = false;
+				TextBoxSearch.Text = "";
 				FilterText = "";
 				TabInstance.SaveTabSettings();
 			}
@@ -532,7 +532,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void TextBoxSearch_KeyUp(object sender, KeyEventArgs e)
 		{
-			FilterText = textBoxSearch.Text;
+			FilterText = TextBoxSearch.Text;
 			AutoSelect();
 			if (_disableSaving == 0)
 				TabInstance.SaveTabSettings();
@@ -540,9 +540,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddColumns()
 		{
-			columnObjects = new Dictionary<string, DataGridColumn>();
-			columnNames = new Dictionary<DataGridColumn, string>();
-			columnProperties = new List<PropertyInfo>();
+			_columnObjects = new Dictionary<string, DataGridColumn>();
+			_columnNames = new Dictionary<DataGridColumn, string>();
+			_columnProperties = new List<PropertyInfo>();
 
 			List<TabDataSettings.MethodColumn> methodColumns = TabDataSettings.GetButtonMethods(_elementType);
 			foreach (TabDataSettings.MethodColumn methodColumn in methodColumns)
@@ -702,9 +702,9 @@ namespace Atlas.UI.Avalonia.Controls
 			column.Binding = binding;*/
 
 			DataGrid.Columns.Add(column);
-			columnObjects[propertyInfo.Name] = column;
-			columnNames[column] = propertyInfo.Name;
-			columnProperties.Add(propertyInfo);
+			_columnObjects[propertyInfo.Name] = column;
+			_columnNames[column] = propertyInfo.Name;
+			_columnProperties.Add(propertyInfo);
 		}
 
 		public void AddButtonColumn(string methodName)
@@ -717,7 +717,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			var column = new DataGridButtonColumn(methodColumn.MethodInfo, methodColumn.Label);
 			DataGrid.Columns.Add(column);
-			columnNames[column] = methodColumn.Label;
+			_columnNames[column] = methodColumn.Label;
 		}
 
 		public void LoadSettings()
@@ -727,15 +727,15 @@ namespace Atlas.UI.Avalonia.Controls
 				SortSavedColumn();
 				if (TabDataSettings.Filter != null && TabDataSettings.Filter.Length > 0)
 				{
-					textBoxSearch.Text = TabDataSettings.Filter;
-					FilterText = textBoxSearch.Text; // change to databinding?
-					textBoxSearch.IsVisible = true;
+					TextBoxSearch.Text = TabDataSettings.Filter;
+					FilterText = TextBoxSearch.Text; // change to databinding?
+					TextBoxSearch.IsVisible = true;
 				}
 				else
 				{
-					textBoxSearch.Text = "";
+					TextBoxSearch.Text = "";
 					//FilterText = textBoxSearch.Text;
-					textBoxSearch.IsVisible = false;
+					TextBoxSearch.IsVisible = false;
 				}
 				if (!SelectSavedItems()) // sorting must happen before this
 					AutoSelect();
@@ -843,8 +843,6 @@ namespace Atlas.UI.Avalonia.Controls
 				if (value == null)
 					continue;
 
-				//ListItem listItem = obj as ListItem;
-				//if (listItem != null)
 				if (obj is ListItem listItem)
 				{
 					if (listItem.AutoLoad == false)
@@ -899,7 +897,7 @@ namespace Atlas.UI.Avalonia.Controls
 				UpdateSelection();
 		}
 
-		private object scrollIntoViewObject;
+		private object _scrollIntoViewObject;
 		public IList SelectedItems
 		{
 			get
@@ -944,7 +942,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//if (value.Count > 0)
 				//	dataGrid.ScrollIntoView(value[0], null);
 				if (value.Count > 0)
-					scrollIntoViewObject = value[0];
+					_scrollIntoViewObject = value[0];
 				_disableSaving--;
 			}
 			/*get
@@ -1004,7 +1002,6 @@ namespace Atlas.UI.Avalonia.Controls
 					DataGrid.SelectedItems.Clear();
 					DataGrid.SelectedItem = null; // need both of these
 					if (value != null)
-						//dataGrid.SelectedItems.Add(value);
 						DataGrid.SelectedItem = value;
 				}
 				// DataGrid.IsInitialized is unreliable and can still be false while showing
@@ -1087,6 +1084,7 @@ namespace Atlas.UI.Avalonia.Controls
 					{
 						if (obj == null)
 							continue;
+
 						SelectedRow selectedRow = GetSelectedRow(obj);
 						selectedRows.Add(selectedRow);
 					}
@@ -1154,6 +1152,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Type type = obj.GetType();
 			if (type.GetCustomAttribute<DataKeyAttribute>() != null)
 				return obj;
+
 			var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
 			var valueFields = type.GetFieldsWithAttribute<DataValueAttribute>();
 			if (valueProperties.Count > 0)
@@ -1206,7 +1205,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			else
 			{
-				return filter.Matches(obj, columnProperties);
+				return filter.Matches(obj, _columnProperties);
 			}
 		}
 
@@ -1255,8 +1254,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 			DataGrid.Items = null;
 
-			textBoxSearch.KeyDown -= TextBoxSearch_KeyDown;
-			textBoxSearch.KeyUp -= TextBoxSearch_KeyUp;
+			TextBoxSearch.KeyDown -= TextBoxSearch_KeyDown;
+			TextBoxSearch.KeyUp -= TextBoxSearch_KeyUp;
 
 			//KeyDown -= UserControl_KeyDown;
 
@@ -1275,9 +1274,9 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (e.Key == Key.F)
 				{
-					textBoxSearch.IsVisible = !textBoxSearch.IsVisible;
-					if (textBoxSearch.IsVisible)
-						textBoxSearch.Focus();
+					TextBoxSearch.IsVisible = !TextBoxSearch.IsVisible;
+					if (TextBoxSearch.IsVisible)
+						TextBoxSearch.Focus();
 					return;
 				}
 
@@ -1291,8 +1290,8 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			else if (e.Key == Key.Escape)
 			{
-				textBoxSearch.IsVisible = false;
-				textBoxSearch.Text = "";
+				TextBoxSearch.IsVisible = false;
+				TextBoxSearch.Text = "";
 				FilterText = "";
 				TabInstance.SaveTabSettings();
 			}
@@ -1327,12 +1326,13 @@ namespace Atlas.UI.Avalonia.Controls
 
 public List<DataGridCellInfo> GetMatchingCellInfos()
 {
-	List<DataGridCellInfo> cellInfos = new List<DataGridCellInfo>();
+	var cellInfos = new List<DataGridCellInfo>();
 	var keys = new Dictionary<string, object>(); // todo: change to unordered?
 	foreach (object listItem in iList)
 	{
 		if (listItem == null)
 			continue;
+
 		string id = listItem.ObjectToUniqueString();
 		if (id != null)
 			keys[id] = listItem;
@@ -1397,8 +1397,8 @@ public void SelectSavedItems()
 
 	//SuspendLayout();
 	//ClearSelection();
-	List<DataGridCellInfo> matchingCellInfos = new List<DataGridCellInfo>();
-	List<DataGridCellInfo> removedCellInfos = new List<DataGridCellInfo>();
+	var matchingCellInfos = new List<DataGridCellInfo>();
+	var removedCellInfos = new List<DataGridCellInfo>();
 	foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
 	{
 		if (cellInfo.Column == null)

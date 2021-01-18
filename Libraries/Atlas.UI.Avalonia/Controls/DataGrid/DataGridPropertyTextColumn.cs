@@ -28,9 +28,9 @@ namespace Atlas.UI.Avalonia
 		public bool AutoSize { get; set; }
 		public bool WordWrap { get; set; }
 
-		private Binding formattedBinding;
+		private Binding _formattedBinding;
 		//private Binding unformattedBinding;
-		private FormatValueConverter formatConverter = new FormatValueConverter();
+		private FormatValueConverter _formatConverter = new FormatValueConverter();
 
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{
@@ -44,7 +44,7 @@ namespace Atlas.UI.Avalonia
 			if (maxHeightAttribute != null)
 			{
 				MaxDesiredHeight = maxHeightAttribute.MaxHeight;
-				formatConverter.MaxLength = MaxDesiredHeight * 10;
+				_formatConverter.MaxLength = MaxDesiredHeight * 10;
 			}
 			if (DataGridUtils.IsTypeAutoSize(propertyInfo.PropertyType))
 				AutoSize = true;
@@ -223,18 +223,18 @@ namespace Atlas.UI.Avalonia
 		{
 			Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);
 
-			if (formattedBinding == null)
+			if (_formattedBinding == null)
 			{
-				formattedBinding = new Binding
+				_formattedBinding = new Binding
 				{
 					Path = binding.Path,
 					Mode = BindingMode.OneTime,
 				};
 				if (IsReadOnly)
-					formattedBinding.Converter = formatConverter;
+					_formattedBinding.Converter = _formatConverter;
 			}
 
-			return formattedBinding;
+			return _formattedBinding;
 		}
 
 		// todo: set default background brush to white so context menu's work, hover breaks if it's set though

@@ -26,7 +26,7 @@ namespace Atlas.Tabs
 		public DataRepoView<TDataType> DataRepoView;
 		public DataRepoView<TDataType> DataRepoSecondary; // saves and deletes goto a 2nd copy
 		public object[] TabParams;
-		private Dictionary<TTabType, IDataItem> dataItemLookup;
+		private Dictionary<TTabType, IDataItem> _dataItemLookup;
 
 		public DataCollection(DataRepoView<TDataType> dataRepoView, params object[] tabParams)
 		{
@@ -62,7 +62,7 @@ namespace Atlas.Tabs
 		public void Reload()
 		{
 			Items.Clear();
-			dataItemLookup = new Dictionary<TTabType, IDataItem>();
+			_dataItemLookup = new Dictionary<TTabType, IDataItem>();
 
 			//dataRepoBookmarks = project.DataApp.Open<TDataType>(null, DataKey);
 			foreach (DataItem<TDataType> dataItem in DataRepoView.Items)
@@ -80,7 +80,7 @@ namespace Atlas.Tabs
 			tabItem.Load(new Call(), dataItem.Object, TabParams);
 			tabItem.OnDelete += Item_OnDelete;
 			Items.Add(tabItem);
-			dataItemLookup.Add(tabItem, dataItem);
+			_dataItemLookup.Add(tabItem, dataItem);
 			return tabItem;
 		}
 
@@ -103,7 +103,7 @@ namespace Atlas.Tabs
 		private void Item_OnDelete(object sender, EventArgs e)
 		{
 			TTabType tab = (TTabType)sender;
-			if (!dataItemLookup.TryGetValue(tab, out IDataItem dataItem))
+			if (!_dataItemLookup.TryGetValue(tab, out IDataItem dataItem))
 				return;
 
 			DataRepoView.Delete(dataItem.Key);

@@ -71,6 +71,7 @@ namespace Atlas.Tabs
 			{
 				if (fieldInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
 					continue;
+
 				var listField = new ListField(obj, fieldInfo);
 				if (fieldToIndex.TryGetValue(fieldInfo.Name, out int index))
 				{
