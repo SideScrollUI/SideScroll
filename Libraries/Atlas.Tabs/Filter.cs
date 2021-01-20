@@ -22,11 +22,11 @@ namespace Atlas.Tabs
 				if (MatchWord)
 				{
 					// require whitespace or start/end
-					if (index > 0 && !Char.IsWhiteSpace(valueUppercase[index - 1]))
+					if (index > 0 && !char.IsWhiteSpace(valueUppercase[index - 1]))
 						return false;
 
 					int nextChar = index + TextUppercase.Length;
-					if (nextChar < valueUppercase.Length && !Char.IsWhiteSpace(valueUppercase[nextChar]))
+					if (nextChar < valueUppercase.Length && !char.IsWhiteSpace(valueUppercase[nextChar]))
 						return false;
 				}
 				return true;

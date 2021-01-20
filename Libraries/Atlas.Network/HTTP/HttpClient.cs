@@ -1,6 +1,8 @@
 ﻿using Atlas.Core;
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 
@@ -20,21 +22,7 @@ namespace Atlas.Network
 			return null;
 		}
 
-		public class ByteResponse
-		{
-			public WebResponse Response { get; set; }
-			public byte[] Bytes { get; set; }
-
-			public ByteResponse() {}
-
-			public ByteResponse(WebResponse response, byte[] bytes)
-			{
-				Response = response;
-				Bytes = bytes;
-			}
-		}
-
-		public static ByteResponse GetBytes(Call call, string uri)
+		public static ViewHttpResponse GetBytes(Call call, string uri)
 		{
 			using (CallTimer getCall = call.Timer("Get Uri", new Tag("Uri", uri)))
 			{
@@ -47,18 +35,30 @@ namespace Atlas.Network
 					request.Method = "GET";
 					try
 					{
-						WebResponse response = request.GetResponse();
+						Stopwatch stopwatch = Stopwatch.StartNew();
+						HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 						Stream dataStream = response.GetResponseStream();
 
 						var memoryStream = new MemoryStream();
 						dataStream.CopyTo(memoryStream);
-						byte[] data = memoryStream.ToArray();
+						byte[] bytes = memoryStream.ToArray();
 
 						dataStream.Close();
+						stopwatch.Stop();
+
+						var viewResponse = new ViewHttpResponse()
+						{
+							Uri = uri,
+							Filename = request.RequestUri.Segments.Last(),
+							Milliseconds = stopwatch.ElapsedMilliseconds,
+							Bytes = bytes,
+							Response = response,
+						};
+
 						//response.Close(); // We want the Headers still (might need to copy them elsewhere if this causes problems)
 						call.Log.Add("Uri Response", new Tag("Uri", request.RequestUri), new Tag("Size", memoryStream.Length));
 
-						return new ByteResponse(response, data);
+						return viewResponse;
 					}
 					catch (WebException exception)
 					{
@@ -113,6 +113,33 @@ namespace Atlas.Network
 				}
 				return null;
 			}
+		}
+	}
+
+	public class ViewHttpResponse
+	{
+		[HiddenColumn]
+		public string Uri { get; set; }
+		public string Filename { get; set; }
+		[HiddenColumn]
+		public string Body => Encoding.ASCII.GetString(Bytes);
+		public HttpStatusCode? Status => Response?.StatusCode;
+		[HiddenRow]
+		public byte[] Bytes { get; set; }
+		public double Milliseconds { get; set; }
+		[HiddenColumn, HideNull]
+		public object View { get; set; }
+		[HiddenColumn]
+		public HttpWebResponse Response { get; set; }
+
+		public override string ToString() => Filename;
+
+		public ViewHttpResponse() { }
+
+		public ViewHttpResponse(HttpWebResponse response, byte[] bytes)
+		{
+			Response = response;
+			Bytes = bytes;
 		}
 	}
 }
