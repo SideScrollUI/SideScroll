@@ -2,6 +2,7 @@
 using Atlas.Extensions;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection; // required for #if
 
 namespace Atlas.Tabs
 {
