@@ -23,6 +23,9 @@
         <SolidColorBrush x:Key="ThemeBorderDarkBrush">#000000</SolidColorBrush>    <!-- DataGrid only -->
 
         <!-- Controls -->
+        <Color x:Key="ThemeBorderLowColor">#000000</Color>
+        <Color x:Key="ThemeBorderHighColor">#1e1e1e</Color> <!-- DataGrid Lines -->
+      
         <SolidColorBrush x:Key="ThemeControlLightBrush">#FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeControlMidBrush">#2a2954</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeControlMidHighBrush">#9e9e9e</SolidColorBrush>
@@ -120,6 +123,9 @@
         <sys:Double x:Key="ScrollBarThumbThickness">12</sys:Double>
 
         <sys:Double x:Key="LargeChange">20</sys:Double>
+      
+      
+        <sys:Double x:Key="SplitterSize">5</sys:Double>
 
     </Style.Resources>
 </Style>

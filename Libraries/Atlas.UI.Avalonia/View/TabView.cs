@@ -208,6 +208,7 @@ namespace Atlas.UI.Avalonia.View
 				Background = Brushes.Black,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				[Grid.ColumnProperty] = 1,
+				Width = Theme.SplitterSize,
 			};
 			_containerGrid.Children.Add(_parentChildGridSplitter);
 			_parentChildGridSplitter.DragDelta += GridSplitter_DragDelta;

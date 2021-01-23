@@ -211,11 +211,11 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				Background = Brushes.Black,
-				
+
 				//ShowsPreview = true,
 				//HorizontalAlignment.Stretch,
 				//VerticalAlignment = VerticalAlignment.Center,
-				Height = 6,
+				Height = Theme.SplitterSize,
 			};
 			GridSplitters.Add(gridSplitter);
 			//gridSplitter.DragCompleted += verticalGridSplitter_DragCompleted;
@@ -237,7 +237,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//ShowsPreview = true,
 				//HorizontalAlignment.Stretch,
 				//VerticalAlignment = VerticalAlignment.Center,
-				Height = 6,
+				Width = Theme.SplitterSize,
 			};
 			//GridSplitters.Add(gridSplitter);
 			//gridSplitter.DragCompleted += verticalGridSplitter_DragCompleted;

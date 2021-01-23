@@ -48,6 +48,7 @@ namespace Atlas.UI.Avalonia
 		// Chart 
 		public static SolidColorBrush ChartBackgroundSelected => Get("ThemeChartBackgroundSelectedBrush");
 		public static double ChartBackgroundSelectedAlpha => GetDouble("ChartBackgroundSelectedAlpha");
+		public static double SplitterSize => GetDouble("SplitterSize");
 
 		public static SolidColorBrush Get(string brushName)
 		{

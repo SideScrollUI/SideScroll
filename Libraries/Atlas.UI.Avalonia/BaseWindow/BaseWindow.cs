@@ -27,7 +27,7 @@ namespace Atlas.UI.Avalonia
 
 			LoadProject(project);
 #if DEBUG
-			this.AttachDevTools();
+			//this.AttachDevTools();
 #endif
 			Closed += BaseWindow_Closed;
 		}

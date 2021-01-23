@@ -22,7 +22,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public readonly ListProperty Property;
 
 		private DateTimeValueConverter dateTimeConverter;
-		private DatePicker datePicker;
+		private CalendarDatePicker datePicker;
 		private TabControlTextBox textBox;
 
 		public TabDateTimePicker(ListProperty property)
@@ -33,21 +33,24 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeComponent()
 		{
-			ColumnDefinitions = new ColumnDefinitions("*,*");
+			ColumnDefinitions = new ColumnDefinitions("*,*,Auto");
+			RowDefinitions = new RowDefinitions("Auto");
 			var backgroundColor = Property.Editable ? Theme.Background : Brushes.LightGray;
-			datePicker = new DatePicker()
+			var datePicker = new CalendarDatePicker()
 			{
 				Background = backgroundColor,
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				BorderThickness = new Thickness(1),
-				SelectedDateFormat = DatePickerFormat.Custom,
+				SelectedDateFormat = CalendarDatePickerFormat.Custom,
 				CustomDateFormatString = "yyyy/M/d",
 				Watermark = "yyyy/M/d",
 				MinWidth = 90,
 				MaxWidth = 300,
 				IsEnabled = Property.Editable,
-				[Grid.ColumnProperty] = 0,
+				
+				//MaxWidth = 200,
+				//[Grid.ColumnProperty] = 0,
 			};
 			dateTimeConverter = new DateTimeValueConverter();
 			var binding = new Binding(Property.PropertyInfo.Name)
@@ -57,7 +60,7 @@ namespace Atlas.UI.Avalonia.Controls
 				Mode = BindingMode.TwoWay,
 				Source = Property.Object,
 			};
-			datePicker.Bind(DatePicker.SelectedDateProperty, binding);
+			datePicker.Bind(CalendarDatePicker.SelectedDateProperty, binding);
 			Children.Add(datePicker);
 
 			textBox = new TabControlTextBox()
@@ -73,13 +76,6 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			if (!Property.Editable)
 				textBox.Background = Theme.TextBackgroundDisabled;
-			binding = new Binding(Property.PropertyInfo.Name)
-			{
-				Converter = dateTimeConverter,
-				//StringFormat = "Hello {0}",
-				Mode = BindingMode.TwoWay,
-				Source = Property.Object,
-			};
 			textBox.Bind(TextBlock.TextProperty, binding);
 			Children.Add(textBox);
 

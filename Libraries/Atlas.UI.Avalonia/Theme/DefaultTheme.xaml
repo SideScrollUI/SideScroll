@@ -26,6 +26,10 @@
         <Setter Property="Fill" Value="{DynamicResource ThemeGridHighBrush}" />
     </Style>
 
+    <Style Selector="dg|DataGrid">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
     <Style Selector="dg|DataGridRow:selected">
         <Setter Property="Foreground" Value="{DynamicResource ThemeGridForegroundSelectedBrush}" />
     </Style>

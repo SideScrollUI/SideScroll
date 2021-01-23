@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using Avalonia.Logging.Serilog;
 using OxyPlot.Avalonia;
 
 namespace Atlas.Start.Avalonia

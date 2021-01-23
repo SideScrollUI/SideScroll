@@ -137,7 +137,7 @@ namespace Atlas.UI.Wpf
 
 			foreach (TabDataSettings.PropertyColumn propertyColumn in propertyColumns)
 			{
-				AddColumn(propertyColumn.label, propertyColumn.propertyInfo);
+				AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo);
 			}
 		}
 
@@ -204,7 +204,7 @@ namespace Atlas.UI.Wpf
 		private void dataGrid_Loaded(object sender, RoutedEventArgs e)
 		{
 			disableSaving++;
-			if (tabInstance.tabViewSettings.SplitterDistance == null)
+			if (tabInstance.TabViewSettings.SplitterDistance == null)
 			{
 				if (dataGrid.ActualWidth > MaxDefaultWidth)
 					dataGrid.Width = MaxDefaultWidth;
@@ -367,15 +367,15 @@ namespace Atlas.UI.Wpf
 					List<DataGridCellInfo> cellsInfos = rowCells.Value;
 					Type type = obj.GetType();
 					SelectedRow selectedItem = new SelectedRow();
-					selectedItem.label = obj.ToUniqueString();
-					selectedItem.rowIndex = dataGrid.Items.IndexOf(obj);
-					if (selectedItem.label == type.FullName)
+					selectedItem.Label = obj.ToUniqueString();
+					selectedItem.RowIndex = dataGrid.Items.IndexOf(obj);
+					if (selectedItem.Label == type.FullName)
 					{
-						selectedItem.label = null;
+						selectedItem.Label = null;
 					}
 					foreach (DataGridCellInfo cellInfo in cellsInfos)
 					{
-						selectedItem.selectedColumns.Add(columnNames[cellInfo.Column]);
+						selectedItem.SelectedColumns.Add(columnNames[cellInfo.Column]);
 					}
 					//selectedItem.pinned = pinnedItems.Contains(row.Index);
 					selectedRows.Add(selectedItem);
@@ -399,7 +399,7 @@ namespace Atlas.UI.Wpf
 				Atlas.Tabs.ListItem listItem = obj as Atlas.Tabs.ListItem;
 				if (listItem != null)
 				{
-					if (listItem.autoLoad == false)
+					if (listItem.AutoLoad == false)
 						continue;
 				}
 
@@ -413,7 +413,7 @@ namespace Atlas.UI.Wpf
 					firstValidObject = obj;
 
 				Type type = value.GetType();
-				if (TabModel.ObjectHasChildren(value) && type.IsEnum == false)
+				if (TabModel.ObjectHasLinks(value) && type.IsEnum == false)
 				{
 					// make sure there's something present
 					if (typeof(ICollection).IsAssignableFrom(type))
@@ -545,20 +545,20 @@ namespace Atlas.UI.Wpf
 			foreach (SelectedRow selectedRow in tabDataSettings.SelectedRows)
 			{
 				object listItem;
-				if (selectedRow.obj != null)
+				if (selectedRow.Object != null)
 				{
-					listItem = selectedRow.obj;
+					listItem = selectedRow.Object;
 				}
-				else if (selectedRow.label != null)
+				else if (selectedRow.Label != null)
 				{
-					if (!keys.TryGetValue(selectedRow.label, out listItem))
+					if (!keys.TryGetValue(selectedRow.Label, out listItem))
 						continue;
 				}
 				else
 				{
-					if (selectedRow.rowIndex < 0 || selectedRow.rowIndex >= dataGrid.Items.Count) // some items might be filtered or have changed
+					if (selectedRow.RowIndex < 0 || selectedRow.RowIndex >= dataGrid.Items.Count) // some items might be filtered or have changed
 						continue;
-					listItem = dataGrid.Items[selectedRow.rowIndex];
+					listItem = dataGrid.Items[selectedRow.RowIndex];
 				}
 				if (tabInstance.IsOwnerObject(listItem.GetInnerValue())) // stops self referencing loops
 					continue;
@@ -567,7 +567,7 @@ namespace Atlas.UI.Wpf
 				{
 					pinnedItems.Add(rowIndex);
 				}*/
-				if (selectedRow.selectedColumns.Count == 0)
+				if (selectedRow.SelectedColumns.Count == 0)
 				{
 					// select all columns
 					foreach (DataGridColumn dataGridColumn in columnObjects.Values)
@@ -579,7 +579,7 @@ namespace Atlas.UI.Wpf
 				}
 				else
 				{
-					foreach (var columnName in selectedRow.selectedColumns)
+					foreach (var columnName in selectedRow.SelectedColumns)
 					{
 						DataGridColumn dataGridColumn;
 						if (columnObjects.TryGetValue(columnName, out dataGridColumn)) // column might have been renamed/removed
@@ -661,14 +661,14 @@ namespace Atlas.UI.Wpf
 				tabDataSettings.Filter = value;
 				filter = new Filter(value);
 
-				if (filter.filterExpressions.Count > 0)
+				if (filter.FilterExpressions.Count > 0)
 				{
-					if (filter.depth > 0)
+					if (filter.Depth > 0)
 					{
 						// create a new collection because this one might have multiple lists
 						TabModel tabModel = TabModel.Create(this.tabModel.Name, iList);
-						TabBookmark bookmarkNode = tabModel.FindMatches(filter, filter.depth);
-						tabInstance.filterBookmarkNode = bookmarkNode;
+						TabBookmark bookmarkNode = tabModel.FindMatches(filter, filter.Depth);
+						tabInstance.FilterBookmarkNode = bookmarkNode;
 						collectionView.Filter = FilterPredicate;
 						tabInstance.SelectBookmark(bookmarkNode);
 					}
@@ -686,9 +686,9 @@ namespace Atlas.UI.Wpf
 
 		private bool FilterPredicate(object obj)
 		{
-			if (tabInstance.filterBookmarkNode != null)
+			if (tabInstance.FilterBookmarkNode != null)
 			{
-				return tabInstance.filterBookmarkNode.selectedObjects.Contains(obj);
+				return tabInstance.FilterBookmarkNode.SelectedObjects.Contains(obj);
 			}
 			else
 			{

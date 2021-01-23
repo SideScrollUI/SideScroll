@@ -1,7 +1,5 @@
 ﻿using Atlas.Core;
 using Atlas.Tabs;
-using Avalonia.Logging.Serilog;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -23,8 +21,8 @@ namespace Atlas.Start.Avalonia.Tabs
 				{
 
 				};*/
-				var logger = CreateLogger();
-				logger.Debug("test");
+				//var logger = CreateLogger();
+				//logger.Debug("test");
 
 				model.Actions = new List<TaskCreator>()
 				{
@@ -32,7 +30,7 @@ namespace Atlas.Start.Avalonia.Tabs
 					new TaskDelegate("Task Instance Progress", SubTaskInstances),
 				};
 			}
-
+			/*
 			private Serilog.Core.Logger CreateLogger()
 			{
 				var logConfig = new LoggerConfiguration()
@@ -41,7 +39,7 @@ namespace Atlas.Start.Avalonia.Tabs
 				Serilog.Core.Logger logger = logConfig.CreateLogger();
 				SerilogLogger.Initialize(logger);
 				return logger;
-			}
+			}*/
 
 			private void AddEntry(Call call)
 			{

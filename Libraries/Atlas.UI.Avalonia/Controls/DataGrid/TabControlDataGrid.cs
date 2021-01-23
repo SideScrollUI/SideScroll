@@ -229,11 +229,12 @@ namespace Atlas.UI.Avalonia.Controls
 			DataGrid.SelectedItem = null;
 
 			DataGrid.SelectionChanged += DataGrid_SelectionChanged;
+
 			DataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // Add one click deselection
 			DataGrid.ColumnReordered += DataGrid_ColumnReordered;
 
 			//PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => x.DataGridRow_PointerPressed(e), handledEventsToo: true);
-			LayoutUpdated += TabControlDataGrid_LayoutUpdated;
+			//LayoutUpdated += TabControlDataGrid_LayoutUpdated;
 
 			Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 
@@ -892,7 +893,9 @@ namespace Atlas.UI.Avalonia.Controls
 			object firstValidObject = GetAutoSelectValue();
 			if (firstValidObject != null && DataGrid.SelectedItems.Count == 0)
 				SelectedItem = firstValidObject;
+
 			//SaveSelectedItems();
+
 			if (firstValidObject != null)
 				UpdateSelection();
 		}
@@ -947,7 +950,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			/*get
 			{
-				SortedDictionary<int, object> orderedRows = new SortedDictionary<int, object>();
+				var orderedRows = new SortedDictionary<int, object>();
 
 				foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
 				{
@@ -960,7 +963,7 @@ namespace Atlas.UI.Avalonia.Controls
 				foreach (object obj in value)
 					dataGrid.SelectedItems.Add(obj);
 
-				HashSet<object> idxSelected = new HashSet<object>();
+				var idxSelected = new HashSet<object>();
 				foreach (object obj in value)
 					idxSelected.Add(obj);
 
