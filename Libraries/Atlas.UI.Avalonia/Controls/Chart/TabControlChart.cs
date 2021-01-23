@@ -628,7 +628,7 @@ namespace Atlas.UI.Avalonia.Controls
 						if (double.IsNaN(y))
 							continue;
 
-						if (dataPoint.X < DateTimeAxis.Minimum || dataPoint.X > DateTimeAxis.Maximum)
+						if (DateTimeAxis != null && (dataPoint.X < DateTimeAxis.Minimum || dataPoint.X > DateTimeAxis.Maximum))
 							continue;
 
 						hasFraction |= (y % 1 != 0.0);
@@ -885,7 +885,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private void AddNowTime()
 		{
 			var now = DateTime.UtcNow;
-			if (ListGroup.TimeWindow.EndTime < now.AddMinutes(1))
+			if (ListGroup.TimeWindow != null && ListGroup.TimeWindow.EndTime < now.AddMinutes(1))
 				return;
 
 			var annotation = new OxyPlot.Annotations.LineAnnotation

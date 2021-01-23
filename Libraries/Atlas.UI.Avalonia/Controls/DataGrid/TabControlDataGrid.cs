@@ -234,7 +234,6 @@ namespace Atlas.UI.Avalonia.Controls
 			DataGrid.ColumnReordered += DataGrid_ColumnReordered;
 
 			//PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => x.DataGridRow_PointerPressed(e), handledEventsToo: true);
-			//LayoutUpdated += TabControlDataGrid_LayoutUpdated;
 
 			Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 
@@ -262,12 +261,6 @@ namespace Atlas.UI.Avalonia.Controls
 					_dispatcherTimer.Start();
 				}
 			}
-		}
-
-		// The DataGrid needs this to update sometimes
-		private void TabControlDataGrid_LayoutUpdated(object sender, EventArgs e)
-		{
-			DataGrid.InvalidateMeasure();
 		}
 
 		// Double click handling?
@@ -1260,8 +1253,6 @@ namespace Atlas.UI.Avalonia.Controls
 			DataGrid.SelectionChanged -= DataGrid_SelectionChanged;
 			DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
 			DataGrid.ColumnReordered -= DataGrid_ColumnReordered;
-
-			LayoutUpdated -= TabControlDataGrid_LayoutUpdated;
 
 			DataGrid.Items = null;
 
