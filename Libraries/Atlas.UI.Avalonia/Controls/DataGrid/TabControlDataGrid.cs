@@ -756,6 +756,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (listItem == null)
 					continue;
+
 				string id = GetItemId(listItem);
 				if (id != null)
 					keys[id] = listItem;
@@ -793,6 +794,13 @@ namespace Atlas.UI.Avalonia.Controls
 					pinnedItems.Add(rowIndex);
 				}*/
 				rowObjects.Add(listItem);
+			}
+
+			if (TabInstance.TabBookmark?.Bookmark.Imported == true && rowObjects.Count != TabDataSettings.SelectedRows.Count)
+			{
+				// Replace with call and CallDebugLogger?
+				Debug.Print("Failed to find all bookmarked rows, Found: " + string.Join(", ", TabDataSettings.SelectedRows) + string.Join(", ", rowObjects));
+				Debug.Print("Possible Causes: Object ToString() changed. Try adding [DataKey] to object field/property");
 			}
 
 			return rowObjects;
