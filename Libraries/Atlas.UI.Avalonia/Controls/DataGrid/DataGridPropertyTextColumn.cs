@@ -228,7 +228,7 @@ namespace Atlas.UI.Avalonia
 				_formattedBinding = new Binding
 				{
 					Path = binding.Path,
-					Mode = BindingMode.OneTime,
+					Mode = BindingMode.Default,
 				};
 				if (IsReadOnly)
 					_formattedBinding.Converter = _formatConverter;
