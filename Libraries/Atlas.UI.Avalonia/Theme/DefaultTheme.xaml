@@ -100,4 +100,12 @@
         <Setter Property="Fill" Value="{DynamicResource ThemeBorderHighRadioBrush}"/>
     </Style>
 
+    <Style Selector="CalendarDayButton">
+      <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+    </Style>
+  
+    <Style Selector="CalendarDatePicker /template/ Button.CalendarDropDown /template/ Border#Background">
+      <Setter Property="Background" Value="#e3e3e3"/>
+    </Style>
+
 </Styles>

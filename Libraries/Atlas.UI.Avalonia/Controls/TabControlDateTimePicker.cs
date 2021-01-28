@@ -21,13 +21,16 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public readonly ListProperty Property;
 
-		private DateTimeValueConverter dateTimeConverter;
-		private CalendarDatePicker datePicker;
-		private TabControlTextBox textBox;
+		public Binding Binding { get; set; }
+
+		private DateTimeValueConverter _dateTimeConverter;
+		private CalendarDatePicker _datePicker;
+		private TabControlTextBox _textBox;
 
 		public TabDateTimePicker(ListProperty property)
 		{
 			Property = property;
+
 			InitializeComponent();
 		}
 
@@ -35,35 +38,48 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			ColumnDefinitions = new ColumnDefinitions("*,*,Auto");
 			RowDefinitions = new RowDefinitions("Auto");
-			var backgroundColor = Property.Editable ? Theme.Background : Brushes.LightGray;
-			var datePicker = new CalendarDatePicker()
+
+			_dateTimeConverter = new DateTimeValueConverter();
+
+			Binding = new Binding(Property.PropertyInfo.Name)
 			{
-				Background = backgroundColor,
-				BorderBrush = new SolidColorBrush(Colors.Black),
+				Converter = _dateTimeConverter,
+				//StringFormat = "Hello {0}",
+				Mode = BindingMode.TwoWay,
+				Source = Property.Object,
+			};
+
+			AddDatePicker();
+			AddTextBox();
+
+			Button buttonImport = AddButton("Import Clipboard", Icons.Streams.Paste);
+			buttonImport.Click += ButtonImport_Click;
+			Children.Add(buttonImport);
+		}
+
+		private void AddDatePicker()
+		{
+			_datePicker = new CalendarDatePicker()
+			{
+				Background = Property.Editable ? Theme.Background : Brushes.LightGray,
+				BorderBrush = Brushes.Black,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				BorderThickness = new Thickness(1),
 				SelectedDateFormat = CalendarDatePickerFormat.Custom,
 				CustomDateFormatString = "yyyy/M/d",
 				Watermark = "yyyy/M/d",
-				MinWidth = 90,
+				MinWidth = 100,
 				MaxWidth = 300,
 				IsEnabled = Property.Editable,
-				
-				//MaxWidth = 200,
-				//[Grid.ColumnProperty] = 0,
 			};
-			dateTimeConverter = new DateTimeValueConverter();
-			var binding = new Binding(Property.PropertyInfo.Name)
-			{
-				Converter = dateTimeConverter,
-				//StringFormat = "Hello {0}",
-				Mode = BindingMode.TwoWay,
-				Source = Property.Object,
-			};
-			datePicker.Bind(CalendarDatePicker.SelectedDateProperty, binding);
-			Children.Add(datePicker);
 
-			textBox = new TabControlTextBox()
+			_datePicker.Bind(CalendarDatePicker.SelectedDateProperty, Binding);
+			Children.Add(_datePicker);
+		}
+
+		private void AddTextBox()
+		{
+			_textBox = new TabControlTextBox()
 			{
 				IsReadOnly = !Property.Editable,
 				Watermark = "15:30:45",
@@ -71,17 +87,14 @@ namespace Atlas.UI.Avalonia.Controls
 				MinWidth = 75,
 				MaxWidth = 300,
 				Focusable = true, // already set?
-				//[Grid.RowProperty] = 0,
 				[Grid.ColumnProperty] = 1,
 			};
-			if (!Property.Editable)
-				textBox.Background = Theme.TextBackgroundDisabled;
-			textBox.Bind(TextBlock.TextProperty, binding);
-			Children.Add(textBox);
 
-			Button buttonImport = AddButton("Import Clipboard", Icons.Streams.Paste);
-			buttonImport.Click += ButtonImport_Click;
-			Children.Add(buttonImport);
+			if (!Property.Editable)
+				_textBox.Background = Theme.TextBackgroundDisabled;
+
+			_textBox.Bind(TextBlock.TextProperty, Binding);
+			Children.Add(_textBox);
 		}
 
 		private void ButtonImport_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
@@ -90,9 +103,9 @@ namespace Atlas.UI.Avalonia.Controls
 			TimeSpan? timeSpan = DateTimeUtils.ConvertTextToTimeSpan(clipboardText);
 			if (timeSpan != null)
 			{
-				DateTime? newDateTime = dateTimeConverter.Convert(timeSpan, typeof(string), null, null) as DateTime?;
+				DateTime? newDateTime = _dateTimeConverter.Convert(timeSpan, typeof(string), null, null) as DateTime?;
 				Property.PropertyInfo.SetValue(Property.Object, newDateTime);
-				textBox.Text = timeSpan.ToString();
+				_textBox.Text = timeSpan.ToString();
 				e.Handled = true;
 			}
 			else
@@ -101,8 +114,8 @@ namespace Atlas.UI.Avalonia.Controls
 				if (dateTime != null)
 				{
 					Property.PropertyInfo.SetValue(Property.Object, dateTime);
-					datePicker.SelectedDate = dateTime;
-					textBox.Text = (string)dateTimeConverter.Convert(dateTime, typeof(string), null, null);
+					_datePicker.SelectedDate = dateTime;
+					_textBox.Text = (string)_dateTimeConverter.Convert(dateTime, typeof(string), null, null);
 					e.Handled = true;
 				}
 			}

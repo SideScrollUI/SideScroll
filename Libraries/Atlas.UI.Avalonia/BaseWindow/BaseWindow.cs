@@ -53,8 +53,6 @@ namespace Atlas.UI.Avalonia
 			MinWidth = MinWindowSize;
 			MinHeight = MinWindowSize;
 
-			Resources["FontSizeSmall"] = 14; // stop DatePicker using a small font size
-
 			Icon = new WindowIcon(Icons.Streams.Logo);
 
 			Content = TabViewer = new TabViewer(Project);
