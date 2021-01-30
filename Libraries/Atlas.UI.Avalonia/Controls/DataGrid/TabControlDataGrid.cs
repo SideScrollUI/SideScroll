@@ -656,11 +656,16 @@ namespace Atlas.UI.Avalonia.Controls
 					//else
 					//	column = new DataGridTextColumn();
 
-					if (propertyInfo.PropertyType == typeof(string) && !textColumn.WordWrap)
+					if (!textColumn.WordWrap && (propertyInfo.PropertyType == typeof(string) || propertyInfo.PropertyType == typeof(object)))
 					{
 						for (int i = 0; i < 30 && i < List.Count; i++)
 						{
-							if (propertyInfo.GetValue(List[i]) is string text && text.Length > EnableWordWrapMinStringLength)
+							object value = propertyInfo.GetValue(List[i]);
+							if (value == null)
+								continue;
+
+							string text = value.ToString();
+							if (text.Length > EnableWordWrapMinStringLength)
 								textColumn.WordWrap = true;
 						}
 					}

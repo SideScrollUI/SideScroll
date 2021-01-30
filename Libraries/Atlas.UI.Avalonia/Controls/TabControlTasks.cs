@@ -12,6 +12,8 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabControlTasks : Grid, IDisposable
 	{
+		private const int LineHeight = 30;
+
 		public TabInstance TabInstance;
 
 		public event EventHandler<EventArgs> OnSelectionChanged;
@@ -132,8 +134,7 @@ namespace Atlas.UI.Avalonia.Controls
 					taskInstance.OnComplete = () => Dispatcher.UIThread.Post(() => TaskCompleted(taskInstance), DispatcherPriority.SystemIdle);
 				}
 
-				int lineHeight = 26;
-				_tabControlDataGrid.MinHeight = Math.Min(TabInstance.Model.Tasks.Count * lineHeight + lineHeight, 6 * lineHeight);
+				_tabControlDataGrid.MinHeight = Math.Min(TabInstance.Model.Tasks.Count * LineHeight + LineHeight, 6 * LineHeight);
 			}
 		}
 
