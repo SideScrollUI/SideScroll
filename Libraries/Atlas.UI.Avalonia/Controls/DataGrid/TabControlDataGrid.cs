@@ -55,7 +55,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private int _isAutoSelecting = 0; // enables saving if > 0
 		private bool _ignoreSelectionChanged = false;
 
-		private Stopwatch _notifyItemChangedStopwatch = new Stopwatch();
+		private readonly Stopwatch _notifyItemChangedStopwatch = new Stopwatch();
 		private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
 		private object _autoSelectItem = null;
 

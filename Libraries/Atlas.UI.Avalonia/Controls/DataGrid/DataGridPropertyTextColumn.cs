@@ -31,7 +31,7 @@ namespace Atlas.UI.Avalonia
 
 		private Binding _formattedBinding;
 		//private Binding unformattedBinding;
-		private FormatValueConverter _formatConverter = new FormatValueConverter();
+		private readonly FormatValueConverter _formatConverter = new FormatValueConverter();
 
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{

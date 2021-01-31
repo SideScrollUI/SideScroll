@@ -26,9 +26,7 @@ namespace Atlas.UI.Avalonia
 			AtlasInit.Initialize();
 
 			LoadProject(project);
-#if DEBUG
-			//this.AttachDevTools();
-#endif
+
 			Closed += BaseWindow_Closed;
 		}
 
@@ -121,7 +119,7 @@ namespace Atlas.UI.Avalonia
 				double left = Math.Min(Math.Max(minLeft, value.Left), MaxWidth - Width + minLeft); // values can be negative
 				double maxHeight = MaxHeight;
 				if (!IsMaximized())
-					maxHeight -= 12; // On windows, the menu header takes up an extra 12 pixels when maximized
+					maxHeight -= 12; // On windows, the menu header takes up an extra 12 pixels when not maximized
 				double top = Math.Min(Math.Max(0, value.Top), maxHeight - Height);
 				Position = new PixelPoint((int)left, (int)top);
 				//Height = Math.Max(MinWindowSize, value.Height + 500); // reproduces black bar problem, not subtracting bottom toolbar for Height

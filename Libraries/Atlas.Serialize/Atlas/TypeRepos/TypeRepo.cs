@@ -192,7 +192,7 @@ namespace Atlas.Serialize
 				}
 				SaveCustomHeader(writer);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 			}
 		}

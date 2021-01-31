@@ -58,9 +58,8 @@ namespace Atlas.Tabs
 					{
 						return null;
 					}
-					else if (value is string)
+					else if (value is string text)
 					{
-						string text = (string)value;
 						if (text.Length > MaxStringLength)
 							return text.Substring(0, MaxStringLength);
 					}
@@ -91,8 +90,8 @@ namespace Atlas.Tabs
 			Object = obj;
 			MemberInfo = memberInfo;
 			
-			if (obj is INotifyPropertyChanged)
-				(obj as INotifyPropertyChanged).PropertyChanged += ListProperty_PropertyChanged;
+			if (obj is INotifyPropertyChanged notifyPropertyChanged)
+				notifyPropertyChanged.PropertyChanged += ListProperty_PropertyChanged;
 		}
 
 		private void ListProperty_PropertyChanged(object sender, PropertyChangedEventArgs e)
