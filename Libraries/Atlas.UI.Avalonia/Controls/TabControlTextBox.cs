@@ -36,12 +36,11 @@ namespace Atlas.UI.Avalonia.Controls
 			if (attribute != null)
 				Watermark = attribute.Text;
 
-			// todo: re-enable when wordwrap works again
-			/*if (property.propertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
+			if (property.PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
 			{
 				TextWrapping = TextWrapping.Wrap;
-				MinHeight = 80;
-			}*/
+				AcceptsReturn = true;
+			}
 
 			var binding = new Binding(property.PropertyInfo.Name)
 			{

@@ -4,6 +4,7 @@ using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using System;
 using System.Runtime.InteropServices;
 
@@ -81,8 +82,6 @@ namespace Atlas.UI.Avalonia
 			}
 			MaxWidth = maxWidth;
 			MaxHeight = maxHeight;
-			//scrollViewer.MaxWidth = PlatformImpl.MaxClientSize.Width + 10;
-			//scrollViewer.MaxHeight = PlatformImpl.MaxClientSize.Height + 10;
 		}
 
 		protected WindowSettings WindowSettings
@@ -163,7 +162,7 @@ namespace Atlas.UI.Avalonia
 		protected override void HandleWindowStateChanged(WindowState state)
 		{
 			base.HandleWindowStateChanged(state);
-			SaveWindowSettings();
+			Dispatcher.UIThread.Post(SaveWindowSettings, DispatcherPriority.ApplicationIdle);
 		}
 
 		// this fires too often, could attach a dispatch timer, or add an override method
