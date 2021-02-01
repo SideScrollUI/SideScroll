@@ -22,6 +22,8 @@ namespace Atlas.UI.Avalonia
 
 		private bool _loadComplete = false;
 
+		private Rect? _normalSizeBounds = null; // used for saving when maximized
+
 		public BaseWindow(Project project) : base()
 		{
 			AtlasInit.Initialize();
@@ -78,7 +80,15 @@ namespace Atlas.UI.Avalonia
 			foreach (var screen in Screens.All)
 			{
 				maxWidth += screen.Bounds.Width;
-				maxHeight = Math.Max(maxHeight, screen.WorkingArea.Height - 20);
+				double workingHeight = screen.WorkingArea.Height;
+				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || !_loadComplete)
+				{
+					// OSX doesn't resize to smaller correctly if maximized at start
+					workingHeight -= 20;
+					if (WindowState == WindowState.Maximized)
+						maxHeight -= 12; // On windows, the menu header takes up an extra 12 pixels when not maximized
+				}
+				maxHeight = Math.Max(maxHeight, workingHeight);
 			}
 			MaxWidth = maxWidth;
 			MaxHeight = maxHeight;
@@ -88,22 +98,30 @@ namespace Atlas.UI.Avalonia
 		{
 			get
 			{
-				bool maximized = IsMaximized();
+				bool maximized = (WindowState == WindowState.Maximized);
 				Rect bounds = Bounds;
-				if (maximized && TransformedBounds != null)
-					bounds = TransformedBounds.Value.Bounds;
+				if (maximized)
+				{
+					bounds = _normalSizeBounds ?? bounds;
+				}
+				else
+				{
+					// Bounds.Position is blank on OSX
+					bounds = new Rect(Position.X, Position.Y, bounds.Width, bounds.Height);
+					_normalSizeBounds = bounds;
+				}
 
 				var windowSettings = new WindowSettings()
 				{
 					Maximized = maximized,
 					Width = bounds.Width,
 					Height = bounds.Height,
-					Left = maximized ? bounds.Position.X : Position.X,
-					Top = maximized ? bounds.Position.Y : Position.Y,
+					Left = bounds.Left,
+					Top = bounds.Top,
 				};
-				if (windowSettings.Width == 0)
+				if (windowSettings.Width <= 0)
 					windowSettings.Width = DefaultWindowWidth;
-				if (windowSettings.Height == 0)
+				if (windowSettings.Height <= 0)
 					windowSettings.Height = DefaultWindowHeight;
 
 				return windowSettings;
@@ -117,22 +135,15 @@ namespace Atlas.UI.Avalonia
 				double minLeft = -10; // Left position for windows starts at -10
 				double left = Math.Min(Math.Max(minLeft, value.Left), MaxWidth - Width + minLeft); // values can be negative
 				double maxHeight = MaxHeight;
-				if (!IsMaximized())
-					maxHeight -= 12; // On windows, the menu header takes up an extra 12 pixels when not maximized
 				double top = Math.Min(Math.Max(0, value.Top), maxHeight - Height);
 				Position = new PixelPoint((int)left, (int)top);
 				//Height = Math.Max(MinWindowSize, value.Height + 500); // reproduces black bar problem, not subtracting bottom toolbar for Height
 				//Measure(Bounds.Size);
-				WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
+				
+				// Avalonia bug? WindowState doesn't update correctly for MacOS
+				if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+					WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
 			}
-		}
-
-		private bool IsMaximized()
-		{
-			bool maximized = (WindowState == WindowState.Maximized);
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) // Avalonia bug? WindowState doesn't update correctly for MacOS
-				maximized = false;
-			return maximized;
 		}
 
 		protected void LoadWindowSettings()
@@ -145,24 +156,28 @@ namespace Atlas.UI.Avalonia
 		// Still saving due to a HandleResized calls after IsActive (loadComplete does nothing)
 		private void SaveWindowSettings()
 		{
-			if (_loadComplete)// && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
-				Project.DataApp.Save(WindowSettings);
-
 			// need a better trigger for when the screen size changes
 			SetMaxBounds();
+			
+			if (_loadComplete)// && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
+				Dispatcher.UIThread.Post(SaveWindowSettingsInternal, DispatcherPriority.SystemIdle);
+		}
+		
+		private void SaveWindowSettingsInternal()
+		{
+			Project.DataApp.Save(WindowSettings);
 		}
 
 		private void BaseWindow_Closed(object sender, EventArgs e)
 		{
 			// todo: split saving position out
-			//project.DataApp.Save(WindowSettings);
 			//SaveWindowSettings();
 		}
 
 		protected override void HandleWindowStateChanged(WindowState state)
 		{
 			base.HandleWindowStateChanged(state);
-			Dispatcher.UIThread.Post(SaveWindowSettings, DispatcherPriority.ApplicationIdle);
+			SaveWindowSettings();
 		}
 
 		// this fires too often, could attach a dispatch timer, or add an override method
