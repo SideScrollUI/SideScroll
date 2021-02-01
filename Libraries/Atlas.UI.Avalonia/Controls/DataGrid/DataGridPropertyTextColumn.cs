@@ -6,6 +6,7 @@ using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 using System;
 using System.Reflection;
 
@@ -30,7 +31,7 @@ namespace Atlas.UI.Avalonia
 
 		private Binding _formattedBinding;
 		//private Binding unformattedBinding;
-		private FormatValueConverter _formatConverter = new FormatValueConverter();
+		private readonly FormatValueConverter _formatConverter = new FormatValueConverter();
 
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{
@@ -155,30 +156,27 @@ namespace Atlas.UI.Avalonia
 			public readonly DataGridPropertyTextColumn Column;
 			public readonly PropertyInfo PropertyInfo;
 
+			public new Size DesiredSize { get; set;  }
+
 			public TextBlockElement(DataGridPropertyTextColumn column, PropertyInfo propertyInfo)
 			{
 				Column = column;
 				PropertyInfo = propertyInfo;
 			}
 
-			protected Size GetMaxSize(Size size)
+			protected override Size MeasureCore(Size availableSize)
 			{
+				Size measured = base.MeasureCore(availableSize);
+
+				// override the default DesiredSize so the desired max width is used for sizing
+				// control will still fill all available space
 				double maxDesiredWidth = MaxDesiredWidth;
 				if (DataContext is IMaxDesiredWidth iMaxWidth && Column.DisplayIndex == 1 && iMaxWidth.MaxDesiredWidth != null)
 				{
 					maxDesiredWidth = iMaxWidth.MaxDesiredWidth.Value;
 				}
+				DesiredSize = measured.WithWidth(Math.Min(maxDesiredWidth, measured.Width));
 
-				Size maxSize = new Size(Math.Min(maxDesiredWidth, size.Width), size.Height);
-				return maxSize;
-			}
-
-			// can't override DesiredSize
-			protected override Size MeasureCore(Size availableSize)
-			{
-				availableSize = GetMaxSize(availableSize);
-				Size measured = base.MeasureCore(availableSize);
-				measured = GetMaxSize(measured);
 				return measured;
 			}
 		}
@@ -228,7 +226,7 @@ namespace Atlas.UI.Avalonia
 				_formattedBinding = new Binding
 				{
 					Path = binding.Path,
-					Mode = BindingMode.OneTime,
+					Mode = BindingMode.Default,
 				};
 				if (IsReadOnly)
 					_formattedBinding.Converter = _formatConverter;

@@ -208,6 +208,7 @@ namespace Atlas.UI.Avalonia.View
 				Background = Brushes.Black,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				[Grid.ColumnProperty] = 1,
+				Width = Theme.SplitterSize,
 			};
 			_containerGrid.Children.Add(_parentChildGridSplitter);
 			_parentChildGridSplitter.DragDelta += GridSplitter_DragDelta;
@@ -517,15 +518,6 @@ namespace Atlas.UI.Avalonia.View
 
 		protected void AddControlString(string text)
 		{
-			/*var textBlock = new TextBlock()
-			{
-				Text = text,
-				TextWrapping = TextWrapping.Wrap,
-				MaxWidth = 1000,
-				Foreground = new SolidColorBrush(Colors.White),
-				FontSize = 16,
-				Margin = new Thickness(4),
-			};*/
 			var textBox = new TextBox()
 			{
 				Text = text,
@@ -537,10 +529,10 @@ namespace Atlas.UI.Avalonia.View
 				FontSize = 16,
 				Padding = new Thickness(6, 3),
 				//Margin = new Thickness(4),
-				//Focusable = true, // already set?
 				MinWidth = 50,
 				MaxWidth = 1000,
 				TextWrapping = TextWrapping.Wrap,
+				AcceptsReturn = true,
 			};
 			//control.OnSelectionChanged += ParentListSelectionChanged;
 			_tabParentControls.AddControl(textBox, false, SeparatorType.Spacer);

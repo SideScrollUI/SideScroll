@@ -52,8 +52,7 @@ namespace Atlas.Tabs
 			FieldInfo = fieldInfo;
 			AutoLoad = !fieldInfo.IsStatic;
 
-			Name = fieldInfo.Name;
-			Name = Name.WordSpaced();
+			Name = fieldInfo.Name.WordSpaced();
 			NameAttribute attribute = fieldInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;

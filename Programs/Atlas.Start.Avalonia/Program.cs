@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using Avalonia.Logging.Serilog;
 using OxyPlot.Avalonia;
 
 namespace Atlas.Start.Avalonia
@@ -9,12 +8,12 @@ namespace Atlas.Start.Avalonia
 		static int Main(string[] args)
 		{
 			OxyPlotModule.EnsureLoaded();
-			AppBuilder builder = BuildAvaloniaApp(args);
+			AppBuilder builder = BuildAvaloniaApp();
 
 			return builder.StartWithClassicDesktopLifetime(args);
 		}
 
-		public static AppBuilder BuildAvaloniaApp(string[] args)
+		public static AppBuilder BuildAvaloniaApp()
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
 				.With(new Win32PlatformOptions
@@ -22,6 +21,6 @@ namespace Atlas.Start.Avalonia
 					//UseDeferredRendering = false, // Causes DataGrid blank columns when scrolling right?
 					AllowEglInitialization = true,
 				})
-				.LogToDebug();
+				.LogToTrace();
 	}
 }

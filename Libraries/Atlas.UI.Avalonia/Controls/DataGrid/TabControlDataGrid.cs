@@ -55,7 +55,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private int _isAutoSelecting = 0; // enables saving if > 0
 		private bool _ignoreSelectionChanged = false;
 
-		private Stopwatch _notifyItemChangedStopwatch = new Stopwatch();
+		private readonly Stopwatch _notifyItemChangedStopwatch = new Stopwatch();
 		private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
 		private object _autoSelectItem = null;
 
@@ -229,11 +229,11 @@ namespace Atlas.UI.Avalonia.Controls
 			DataGrid.SelectedItem = null;
 
 			DataGrid.SelectionChanged += DataGrid_SelectionChanged;
+
 			DataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // Add one click deselection
 			DataGrid.ColumnReordered += DataGrid_ColumnReordered;
 
 			//PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => x.DataGridRow_PointerPressed(e), handledEventsToo: true);
-			LayoutUpdated += TabControlDataGrid_LayoutUpdated;
 
 			Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 
@@ -261,12 +261,6 @@ namespace Atlas.UI.Avalonia.Controls
 					_dispatcherTimer.Start();
 				}
 			}
-		}
-
-		// The DataGrid needs this to update sometimes
-		private void TabControlDataGrid_LayoutUpdated(object sender, EventArgs e)
-		{
-			DataGrid.InvalidateMeasure();
 		}
 
 		// Double click handling?
@@ -662,11 +656,16 @@ namespace Atlas.UI.Avalonia.Controls
 					//else
 					//	column = new DataGridTextColumn();
 
-					if (propertyInfo.PropertyType == typeof(string) && !textColumn.WordWrap)
+					if (!textColumn.WordWrap && (propertyInfo.PropertyType == typeof(string) || propertyInfo.PropertyType == typeof(object)))
 					{
 						for (int i = 0; i < 30 && i < List.Count; i++)
 						{
-							if (propertyInfo.GetValue(List[i]) is string text && text.Length > EnableWordWrapMinStringLength)
+							object value = propertyInfo.GetValue(List[i]);
+							if (value == null)
+								continue;
+
+							string text = value.ToString();
+							if (text.Length > EnableWordWrapMinStringLength)
 								textColumn.WordWrap = true;
 						}
 					}
@@ -755,6 +754,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (listItem == null)
 					continue;
+
 				string id = GetItemId(listItem);
 				if (id != null)
 					keys[id] = listItem;
@@ -792,6 +792,13 @@ namespace Atlas.UI.Avalonia.Controls
 					pinnedItems.Add(rowIndex);
 				}*/
 				rowObjects.Add(listItem);
+			}
+
+			if (TabInstance.TabBookmark?.Bookmark.Imported == true && rowObjects.Count != TabDataSettings.SelectedRows.Count)
+			{
+				// Replace with call and CallDebugLogger?
+				Debug.Print("Failed to find all bookmarked rows, Found: " + string.Join(", ", TabDataSettings.SelectedRows) + string.Join(", ", rowObjects));
+				Debug.Print("Possible Causes: Object ToString() changed. Try adding [DataKey] to object field/property");
 			}
 
 			return rowObjects;
@@ -892,7 +899,9 @@ namespace Atlas.UI.Avalonia.Controls
 			object firstValidObject = GetAutoSelectValue();
 			if (firstValidObject != null && DataGrid.SelectedItems.Count == 0)
 				SelectedItem = firstValidObject;
+
 			//SaveSelectedItems();
+
 			if (firstValidObject != null)
 				UpdateSelection();
 		}
@@ -947,7 +956,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			/*get
 			{
-				SortedDictionary<int, object> orderedRows = new SortedDictionary<int, object>();
+				var orderedRows = new SortedDictionary<int, object>();
 
 				foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
 				{
@@ -960,7 +969,7 @@ namespace Atlas.UI.Avalonia.Controls
 				foreach (object obj in value)
 					dataGrid.SelectedItems.Add(obj);
 
-				HashSet<object> idxSelected = new HashSet<object>();
+				var idxSelected = new HashSet<object>();
 				foreach (object obj in value)
 					idxSelected.Add(obj);
 
@@ -1249,8 +1258,6 @@ namespace Atlas.UI.Avalonia.Controls
 			DataGrid.SelectionChanged -= DataGrid_SelectionChanged;
 			DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
 			DataGrid.ColumnReordered -= DataGrid_ColumnReordered;
-
-			LayoutUpdated -= TabControlDataGrid_LayoutUpdated;
 
 			DataGrid.Items = null;
 

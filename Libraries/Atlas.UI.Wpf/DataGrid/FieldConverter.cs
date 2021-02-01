@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+﻿using Atlas.Extensions;
 using System;
 using System.Globalization;
 using System.Windows.Data;

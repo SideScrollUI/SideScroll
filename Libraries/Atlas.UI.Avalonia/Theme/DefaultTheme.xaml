@@ -26,6 +26,10 @@
         <Setter Property="Fill" Value="{DynamicResource ThemeGridHighBrush}" />
     </Style>
 
+    <Style Selector="dg|DataGrid">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
     <Style Selector="dg|DataGridRow:selected">
         <Setter Property="Foreground" Value="{DynamicResource ThemeGridForegroundSelectedBrush}" />
     </Style>
@@ -94,6 +98,14 @@
 
     <Style Selector="RadioButton /template/ Ellipse#checkMark">
         <Setter Property="Fill" Value="{DynamicResource ThemeBorderHighRadioBrush}"/>
+    </Style>
+
+    <Style Selector="CalendarDayButton">
+      <Setter Property="FontSize" Value="{DynamicResource FontSizeNormal}"/>
+    </Style>
+  
+    <Style Selector="CalendarDatePicker /template/ Button.CalendarDropDown /template/ Border#Background">
+      <Setter Property="Background" Value="#e3e3e3"/>
     </Style>
 
 </Styles>

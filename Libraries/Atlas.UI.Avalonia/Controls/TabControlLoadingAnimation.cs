@@ -55,7 +55,7 @@ namespace Atlas.UI.Avalonia.Controls
 			base.Render(context);
 		}*/
 
-		public override void Render(DrawingContext context)
+		/*public override void Render(DrawingContext context)
 		{
 			int sourceWidth = (int)source.Size.Width;
 			int sourceHeight = (int)source.Size.Height;
@@ -80,7 +80,7 @@ namespace Atlas.UI.Avalonia.Controls
 				new Rect(0, 0, maxWidth, maxWidth));
 			Dispatcher.UIThread.Post(InvalidateVisual, DispatcherPriority.Background);
 			base.Render(context);
-		}
+		}*/
 	}
 }
 /*

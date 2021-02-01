@@ -66,7 +66,7 @@ namespace Atlas.UI.Avalonia
 			using (var ctx = _correctedBitmap.CreateDrawingContext(null))
 			{
 				var destRect = new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
-				ctx.DrawImage(sourceBitmap.PlatformImpl, 0.75, bounds, destRect);
+				ctx.DrawBitmap(sourceBitmap.PlatformImpl, 0.75, bounds, destRect);
 			}
 
 			_backgroundImage = new Image()
@@ -86,7 +86,7 @@ namespace Atlas.UI.Avalonia
 			AddSplitter(2, 1, HorizontalAlignment.Right, VerticalAlignment.Stretch);
 			AddSplitter(1, 2, HorizontalAlignment.Stretch, VerticalAlignment.Bottom);
 
-			/*Panel panel = new Panel()
+			/*var panel = new Panel()
 			{
 				Background = Brushes.Blue,
 				[Grid.ColumnProperty] = 2,
@@ -94,7 +94,7 @@ namespace Atlas.UI.Avalonia
 			};
 			Children.Add(panel);*/
 
-			/*Border selectionBorder = new Border()
+			/*var selectionBorder = new Border()
 			{
 				BorderThickness = new Thickness(1),
 				BorderBrush = Brushes.Red,
@@ -132,7 +132,7 @@ namespace Atlas.UI.Avalonia
 
 			using (var ctx = bitmap.CreateDrawingContext(null))
 			{
-				ctx.DrawImage(_correctedBitmap.PlatformImpl, 1, _selectionRect, destRect);
+				ctx.DrawBitmap(_correctedBitmap.PlatformImpl, 1, _selectionRect, destRect);
 			};
 			return bitmap;
 		}
@@ -188,8 +188,8 @@ namespace Atlas.UI.Avalonia
 			var borderPen = new Pen(Brushes.Red, lineCap: PenLineCap.Square);
 			using (var ctx = _selectionBitmap.CreateDrawingContext(null))
 			{
-				ctx.DrawImage(_correctedBitmap.PlatformImpl, 1, _selectionRect, _selectionRect);
-				ctx.DrawRectangle(borderPen, _selectionRect);
+				ctx.DrawBitmap(_correctedBitmap.PlatformImpl, 1, _selectionRect, _selectionRect);
+				//ctx.DrawRectangle(borderPen, selectionRect);
 			}
 			_selectionImage.Source = _selectionBitmap;
 			//selectionImage.Posit

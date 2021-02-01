@@ -93,7 +93,7 @@ namespace Atlas.Core
 
 		public double CalculateTotal(TimeWindow timeWindow)
 		{
-			timeWindow = timeWindow.Selection ?? timeWindow;
+			timeWindow = timeWindow?.Selection ?? timeWindow;
 			Total = GetTotal(timeWindow);
 			if (Total > 50)
 				Total = Math.Floor(Total);

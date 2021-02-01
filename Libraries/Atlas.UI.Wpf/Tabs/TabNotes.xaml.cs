@@ -74,7 +74,7 @@ namespace Atlas.UI.Wpf
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
-			tabInstance.ParentTabInstance.tabViewSettings.NotesVisible = false;
+			tabInstance.ParentTabInstance.TabViewSettings.NotesVisible = false;
 			tabInstance.ParentTabInstance.SaveTabSettings();
 			tabInstance.ParentTabInstance.Reload();
 		}

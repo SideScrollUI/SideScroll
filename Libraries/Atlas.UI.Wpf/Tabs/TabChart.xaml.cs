@@ -63,9 +63,9 @@ namespace Atlas.UI.Wpf
 				//Fill = null, // how to disable 
 			};
 
-			AddItems(lineSeries, listSeries, listSeries.iList);
+			AddItems(lineSeries, listSeries, listSeries.List);
 
-			INotifyCollectionChanged iNotifyCollectionChanged = listSeries.iList as INotifyCollectionChanged;
+			INotifyCollectionChanged iNotifyCollectionChanged = listSeries.List as INotifyCollectionChanged;
 			if (iNotifyCollectionChanged != null)
 			{
 				iNotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object sender, NotifyCollectionChangedEventArgs e)
@@ -81,11 +81,11 @@ namespace Atlas.UI.Wpf
 
 		private void AddItems(LineSeries lineSeries, ListSeries listSeries, IList iList)
 		{
-			if (listSeries.yPropertyInfo != null)
+			if (listSeries.YPropertyInfo != null)
 			{
 				foreach (object obj in iList)
 				{
-					object value = listSeries.yPropertyInfo.GetValue(obj);
+					object value = listSeries.YPropertyInfo.GetValue(obj);
 					lineSeries.Values.Add((double)(dynamic)value);
 				}
 			}
@@ -119,7 +119,7 @@ namespace Atlas.UI.Wpf
 		{
 			foreach (ListSeries listSeries in ChartSettings.ListSeries)
 			{
-				INotifyCollectionChanged iNotifyCollectionChanged = listSeries.iList as INotifyCollectionChanged;
+				INotifyCollectionChanged iNotifyCollectionChanged = listSeries.List as INotifyCollectionChanged;
 				//if (iNotifyCollectionChanged != null)
 				//	iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
 			}

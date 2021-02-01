@@ -164,6 +164,7 @@ namespace Atlas.Tabs
 			Project = project;
 			Model = model;
 			StaticModel = true;
+
 			InitializeContext();
 			SetStartLoad();
 		}
@@ -430,8 +431,11 @@ namespace Atlas.Tabs
 
 		private async Task<TabModel> LoadModelAsync(Call call)
 		{
-			var model = new TabModel(Model.Name);
-			model.Tasks = Model.Tasks;
+			var model = new TabModel(Model.Name)
+			{
+				Tasks = Model.Tasks,
+			};
+
 			if (this is ITabAsync tabAsync)
 			{
 				try

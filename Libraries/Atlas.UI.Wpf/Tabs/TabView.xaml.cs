@@ -24,12 +24,12 @@ namespace Atlas.UI.Wpf
 		{
 			get
 			{
-				return tabInstance.tabViewSettings;
+				return tabInstance.TabViewSettings;
 			}
 			set
 			{
-				tabInstance.tabViewSettings = value;
-				if (tabInstance.tabViewSettings.SplitterDistance == null)
+				tabInstance.TabViewSettings = value;
+				if (tabInstance.TabViewSettings.SplitterDistance == null)
 					gridColumnLists.Width = new GridLength(1, GridUnitType.Auto);
 				else
 					gridColumnLists.Width = new GridLength((int)value.SplitterDistance);
@@ -119,10 +119,7 @@ namespace Atlas.UI.Wpf
 
 		private void Reset()
 		{
-			tabSettings = new TabViewSettings()
-			{
-				Name = tabModel.Name,
-			};
+			tabSettings = new TabViewSettings();
 		}
 
 		private void LoadTabSettings()
@@ -135,23 +132,23 @@ namespace Atlas.UI.Wpf
 			if (grid.Children.Count <= 1)
 				return;
 
-			RowDefinition gridRow = new RowDefinition();
+			var gridRow = new RowDefinition();
 			gridRow.Height = new GridLength(5);
 			grid.RowDefinitions.Add(gridRow);
 
 			// Add a dummy panel so the children count equals the rowdefinition count, otherwise we need to track which rowdefinitions belong to which control
-			Rectangle panel = new Rectangle();
+			var panel = new Rectangle();
 			Grid.SetRow(panel, index);
 			grid.Children.Add(panel);
 		}
 
 		private void AddRowSplitter(Grid grid, int index)
 		{
-			RowDefinition gridRow = new RowDefinition();
+			var gridRow = new RowDefinition();
 			gridRow.Height = new GridLength(6);
 			grid.RowDefinitions.Insert(index, gridRow);
 
-			GridSplitter gridSplitter = new GridSplitter()
+			var gridSplitter = new GridSplitter()
 			{
 				Background = (SolidColorBrush)Resources[Keys.SplitterBrush],
 				ShowsPreview = true,
@@ -170,7 +167,7 @@ namespace Atlas.UI.Wpf
 				AddRowSplitter(gridParentControls, gridParentControls.RowDefinitions.Count);
 			else
 				AddRowSpacer(gridParentControls, gridParentControls.RowDefinitions.Count);
-			RowDefinition rowDefinition = new RowDefinition();
+			var rowDefinition = new RowDefinition();
 			if (fill)
 				rowDefinition.Height = new GridLength(1, GridUnitType.Star);
 			else
@@ -512,12 +509,12 @@ namespace Atlas.UI.Wpf
 			// can we move this into the instance?
 			// FindMatches uses this with bookmarks
 			TabBookmark bookmarkNode = null;
-			if (tabInstance.tabBookmark != null && tabInstance.tabBookmark.ChildBookmarks != null)
+			if (tabInstance.TabBookmark != null && tabInstance.TabBookmark.ChildBookmarks != null)
 			{
-				if (tabInstance.tabBookmark.ChildBookmarks.TryGetValue(name, out bookmarkNode))
+				if (tabInstance.TabBookmark.ChildBookmarks.TryGetValue(name, out bookmarkNode))
 				{
-					if (bookmarkNode.tabModel != null)
-						value = bookmarkNode.tabModel;
+					if (bookmarkNode.TabModel != null)
+						value = bookmarkNode.TabModel;
 				}
 				/*foreach (Bookmark.Node node in tabInstance.bookmarkNode.nodes)
 				{
@@ -547,7 +544,7 @@ namespace Atlas.UI.Wpf
 			{
 				TabView tabView = (TabView)value;
 				tabView.tabInstance.ParentTabInstance = tabInstance;
-				tabView.tabInstance.tabBookmark = bookmarkNode;
+				tabView.tabInstance.TabBookmark = bookmarkNode;
 				tabView.Label = name;
 				tabView.Load();
 				return tabView;
@@ -561,7 +558,7 @@ namespace Atlas.UI.Wpf
 			{
 				FilePath filePath = (FilePath)value;
 				TabAvalonEdit tabAvalonEdit = new TabAvalonEdit(name);
-				tabAvalonEdit.Load(filePath.path);
+				tabAvalonEdit.Load(filePath.Path);
 				return tabAvalonEdit;
 			}
 			else if (value is string || type.IsPrimitive)
@@ -634,7 +631,7 @@ namespace Atlas.UI.Wpf
 		private void toolStripMenuItemDebug_Click(object sender, EventArgs e)
 		{
 			TabModel debugListCollection = new TabModel("Debug");
-			TabView tabView = this.Clone<TabView>(tabInstance.TaskInstance.Call);
+			TabView tabView = this.DeepClone<TabView>(tabInstance.TaskInstance.Call);
 			debugListCollection.AddData(tabView);
 			Control debugControl = CreateChildControl("Debug", debugListCollection);
 		}
@@ -663,7 +660,7 @@ namespace Atlas.UI.Wpf
 
 		private void LoadBookmark()
 		{
-			TabBookmark bookmarkNode = tabInstance.tabBookmark;
+			TabBookmark bookmarkNode = tabInstance.TabBookmark;
 			tabSettings = bookmarkNode.ViewSettings;
 
 			//LoadTabSettings();
@@ -695,7 +692,7 @@ namespace Atlas.UI.Wpf
 
 		private void TabInstance_OnSelectItem(object sender, TabInstance.EventSelectItem e)
 		{
-			tabDatas[0].SelectedItem = e.obj;
+			tabDatas[0].SelectedItem = e.Object;
 		}
 
 		private void TabInstance_OnModelChanged(object sender, EventArgs e)
