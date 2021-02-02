@@ -794,7 +794,7 @@ namespace Atlas.UI.Avalonia.Controls
 				rowObjects.Add(listItem);
 			}
 
-			if (TabInstance.TabBookmark?.Bookmark.Imported == true && rowObjects.Count != TabDataSettings.SelectedRows.Count)
+			if (TabInstance.TabBookmark?.Bookmark?.Imported == true && rowObjects.Count != TabDataSettings.SelectedRows.Count)
 			{
 				// Replace with call and CallDebugLogger?
 				Debug.Print("Failed to find all bookmarked rows, Found: " + string.Join(", ", TabDataSettings.SelectedRows) + string.Join(", ", rowObjects));
