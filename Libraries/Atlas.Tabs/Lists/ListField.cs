@@ -63,11 +63,16 @@ namespace Atlas.Tabs
 		public static new ItemCollection<ListField> Create(object obj)
 		{
 			FieldInfo[] fieldInfos = obj.GetType().GetFields().OrderBy(x => x.MetadataToken).ToArray();
+
 			var listFields = new ItemCollection<ListField>();
 			// replace any overriden/new field & properties
 			var fieldToIndex = new Dictionary<string, int>();
 			foreach (FieldInfo fieldInfo in fieldInfos)
 			{
+				// Ignore const, add override?
+				if (fieldInfo.IsLiteral && !fieldInfo.IsInitOnly)
+					continue;
+
 				if (fieldInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
 					continue;
 
