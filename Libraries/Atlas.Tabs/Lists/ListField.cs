@@ -73,6 +73,9 @@ namespace Atlas.Tabs
 				if (fieldInfo.IsLiteral && !fieldInfo.IsInitOnly)
 					continue;
 
+				if (fieldInfo.GetCustomAttribute<HiddenAttribute>() != null)
+					continue;
+
 				if (fieldInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
 					continue;
 

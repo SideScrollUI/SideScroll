@@ -8,6 +8,8 @@
 - (If Required) Updating sub-module git repos
   - `git submodule sync --recursive`
   - `git submodule update --init --recursive --remote`
+- Pulling afterwards
+  - `git pull --recurse-submodules`
 
 ## Console
 - Build

@@ -105,6 +105,9 @@ namespace Atlas.Tabs
 				if (methodInfo.ReturnType == null)
 					continue;
 
+				if (methodInfo.GetCustomAttribute<HiddenAttribute>() != null)
+					continue;
+
 				if (methodInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
 					continue;
 

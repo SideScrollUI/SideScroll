@@ -194,7 +194,7 @@ namespace Atlas.Tabs
 
 			foreach (FieldInfo fieldInfo in fieldInfos)
 			{
-				if (fieldInfo.GetCustomAttribute(typeof(InheritAttribute)) == null)
+				if (fieldInfo.GetCustomAttribute<InheritAttribute>() == null)
 					continue;
 
 				object obj = Project.TypeObjectStore.Get(fieldInfo.FieldType);
@@ -205,7 +205,7 @@ namespace Atlas.Tabs
 			{
 				//if (!propertyInfo.DeclaringType.IsNotPublic)
 				{
-					if (propertyInfo.GetCustomAttribute(typeof(InheritAttribute)) == null)
+					if (propertyInfo.GetCustomAttribute<InheritAttribute>() == null)
 						continue;
 
 					object obj = Project.TypeObjectStore.Get(propertyInfo.PropertyType);

@@ -131,7 +131,13 @@ namespace Atlas.Extensions // rename to Core?
 			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
-				if (propertyInfo.GetCustomAttribute(typeof(HiddenColumnAttribute)) != null)
+				if (propertyInfo.GetCustomAttribute<HiddenAttribute>() != null)
+					continue;
+
+				if (propertyInfo.GetCustomAttribute<HiddenColumnAttribute>() != null)
+					continue;
+
+				if (propertyInfo.GetIndexParameters().Any())
 					continue;
 
 				visibleProperties.Add(propertyInfo);

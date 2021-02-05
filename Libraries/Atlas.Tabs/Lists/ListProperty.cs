@@ -123,6 +123,9 @@ namespace Atlas.Tabs
 			{
 				if (!propertyInfo.DeclaringType.IsNotPublic)
 				{
+					if (propertyInfo.GetCustomAttribute<HiddenAttribute>() != null)
+						continue;
+
 					if (propertyInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
 						continue;
 

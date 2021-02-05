@@ -146,6 +146,12 @@ namespace Atlas.Core
 	{
 	}
 
+	// Don't show this field/property as a column or row
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class HiddenAttribute : Attribute
+	{
+	}
+
 	// Don't show this field/property as a column
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class HiddenColumnAttribute : Attribute
