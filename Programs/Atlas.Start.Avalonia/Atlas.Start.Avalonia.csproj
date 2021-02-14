@@ -36,7 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Imports\AvaloniaUI\AvaloniaEdit\src\AvaloniaEdit\AvaloniaEdit.csproj" />
     <ProjectReference Include="..\..\Imports\AvaloniaUI\OxyPlot.Avalonia\Source\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.UI.Avalonia\Atlas.UI.Avalonia.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.Resources\Atlas.Resources.csproj" />

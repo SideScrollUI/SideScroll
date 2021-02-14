@@ -38,9 +38,9 @@ namespace Atlas.UI.Avalonia.Tabs
 			var properties = toolbar.GetType().GetVisibleProperties();
 			foreach (PropertyInfo propertyInfo in properties)
 			{
-				if (propertyInfo.GetCustomAttribute<SeparatorAttribute>() != null)
-					AddSeparator();
 				var propertyValue = propertyInfo.GetValue(toolbar);
+				if (propertyValue != null && propertyInfo.GetCustomAttribute<SeparatorAttribute>() != null)
+					AddSeparator();
 				if (propertyValue is ToolButton toolButton)
 				{
 					AddButton(toolButton);
@@ -84,6 +84,10 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public void AddSeparator()
 		{
+			// For optional null controls
+			if (Children.Count == 0)
+				return;
+
 			var panel = new Panel()
 			{
 				Background = Theme.ToolbarButtonSeparator,

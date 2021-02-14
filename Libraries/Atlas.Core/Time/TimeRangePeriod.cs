@@ -151,6 +151,9 @@ namespace Atlas.Core
 			double min = 0;
 			foreach (var period in dataPoints)
 			{
+				if (double.IsNaN(period.Value))
+					continue;
+
 				if (period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
 					min = Math.Min(min, period.Value);
 			}
@@ -162,6 +165,9 @@ namespace Atlas.Core
 			double max = 0;
 			foreach (var period in dataPoints)
 			{
+				if (double.IsNaN(period.Value))
+					continue;
+
 				if (period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
 					max = Math.Max(max, period.Value);
 			}
