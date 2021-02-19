@@ -91,7 +91,7 @@ namespace Atlas.Tabs
 			}
 		}
 
-		[HiddenColumn, HiddenRow]
+		[Hidden]
 		public Type UnderlyingType => PropertyInfo.PropertyType.GetNonNullableType();
 
 		public override string ToString() => Name;

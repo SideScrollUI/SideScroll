@@ -139,6 +139,7 @@ namespace Atlas.Serialize
 					fieldSchema.TypeSchema = GetOrCreateRepo(log, type).TypeSchema;
 					fieldSchema.TypeIndex = fieldSchema.TypeSchema.TypeIndex;
 				}
+
 				foreach (PropertySchema propertySchema in typeSchema.PropertySchemas)
 				{
 					Type type = propertySchema.NonNullableType;
@@ -423,7 +424,7 @@ namespace Atlas.Serialize
 			//if (type.IsInterface || type.IsAbstract)
 			//	return null;
 
-			var typeSchema = new TypeSchema(type)
+			var typeSchema = new TypeSchema(type, this)
 			{
 				TypeIndex = TypeSchemas.Count,
 			};

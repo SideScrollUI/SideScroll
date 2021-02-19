@@ -141,7 +141,7 @@ namespace Atlas.Core
 			double total = 0;
 			foreach (var period in periods)
 			{
-				total += period.Sum;
+				total += period.Sum * period.SummedDurations.TotalSeconds / periodDuration.TotalSeconds;
 			}
 			return total;
 		}

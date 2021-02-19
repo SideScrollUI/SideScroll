@@ -148,6 +148,12 @@ namespace Atlas.Core
 				var timeRangeValues = new List<TimeRangeValue>();
 				foreach (object obj in List)
 				{
+					if (obj is TimeRangeValue timeRangeValue)
+					{
+						timeRangeValues.Add(timeRangeValue);
+						continue;
+					}
+
 					DateTime timeStamp = (DateTime)XPropertyInfo.GetValue(obj);
 					double value = 1;
 					if (YPropertyInfo != null)
@@ -155,7 +161,7 @@ namespace Atlas.Core
 						object yObj = YPropertyInfo.GetValue(obj);
 						value = Convert.ToDouble(yObj);
 					}
-					var timeRangeValue = new TimeRangeValue(timeStamp, timeStamp, value);
+					timeRangeValue = new TimeRangeValue(timeStamp, timeStamp, value);
 					timeRangeValues.Add(timeRangeValue);
 				}
 				var ordered = timeRangeValues.OrderBy(t => t.StartTime).ToList();

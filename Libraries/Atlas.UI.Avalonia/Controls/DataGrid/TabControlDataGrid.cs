@@ -660,7 +660,11 @@ namespace Atlas.UI.Avalonia.Controls
 					{
 						for (int i = 0; i < 30 && i < List.Count; i++)
 						{
-							object value = propertyInfo.GetValue(List[i]);
+							object obj = List[i];
+							if (obj == null)
+								continue;
+
+							object value = propertyInfo.GetValue(obj);
 							if (value == null)
 								continue;
 

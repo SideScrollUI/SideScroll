@@ -16,6 +16,7 @@ namespace Atlas.Core
 		public bool ShowLegend { get; set; } = true;
 		public bool ShowOrder { get; set; } = true;
 		public bool ShowTimeTracker { get; set; }
+		public bool Logarithmic { get; set; }
 
 		public double? MinValue { get; set; }
 		public double XBinSize { get; set; }

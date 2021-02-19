@@ -35,7 +35,7 @@ namespace Atlas.Tabs
 		[HiddenColumn]
 		public object Key => Name;
 
-		[HiddenColumn, HiddenRow]
+		[Hidden]
 		public int Order { get; set; } = 0;
 
 		[HiddenColumn]

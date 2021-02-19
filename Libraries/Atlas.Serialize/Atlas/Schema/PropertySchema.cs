@@ -21,6 +21,7 @@ namespace Atlas.Serialize
 
 		public bool IsSerialized;
 		public bool IsLoadable;
+		public bool IsPrivate;
 
 		public override string ToString() => PropertyName;
 
@@ -28,15 +29,15 @@ namespace Atlas.Serialize
 		{
 			PropertyName = propertyInfo.Name;
 			PropertyInfo = propertyInfo;
-			Type = propertyInfo.PropertyType;
-			NonNullableType = Type.GetNonNullableType();
-			IsSerialized = GetIsSerialized();
+
+			Initialize();
 		}
 
 		public PropertySchema(TypeSchema typeSchema, BinaryReader reader)
 		{
 			OwnerTypeSchema = typeSchema;
 			Load(reader);
+
 			try
 			{
 				if (typeSchema.Type != null)
@@ -47,6 +48,12 @@ namespace Atlas.Serialize
 			catch (Exception)
 			{
 			}
+
+			Initialize();
+		}
+
+		private void Initialize()
+		{
 			IsSerialized = GetIsSerialized();
 
 			if (PropertyInfo != null)
@@ -54,6 +61,7 @@ namespace Atlas.Serialize
 				Type = PropertyInfo.PropertyType;
 				NonNullableType = Type.GetNonNullableType();
 				IsLoadable = IsSerialized; // typeIndex >= 0 && // derived types won't have entries for base type
+				IsPrivate = (PropertyInfo.GetCustomAttribute<PrivateDataAttribute>() != null);
 			}
 		}
 

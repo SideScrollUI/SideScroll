@@ -95,7 +95,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public PlotView PlotView;
 		private PropertyInfo xAxisPropertyInfo;
 		public TabControlChartLegend Legend;
-		public OxyPlot.Axes.LinearAxis ValueAxis; // left/right?
+		public OxyPlot.Axes.Axis ValueAxis; // left/right?
 		private OxyPlot.Axes.CategoryAxis categoryAxis;
 
 		public OxyPlot.Axes.LinearAxis LinearAxis;
@@ -499,32 +499,35 @@ namespace Atlas.UI.Avalonia.Controls
 			PlotModel.Axes.Add(LinearAxis);
 		}
 
-		public OxyPlot.Axes.LinearAxis AddValueAxis(AxisPosition axisPosition = AxisPosition.Left, string key = null)
+		public OxyPlot.Axes.Axis AddValueAxis(AxisPosition axisPosition = AxisPosition.Left, string key = null)
 		{
-			ValueAxis = new OxyPlot.Axes.LinearAxis
-			{
-				Position = axisPosition,
-				MajorGridlineStyle = LineStyle.Solid,
-				MajorGridlineColor = GridLineColor,
-				MinorGridlineStyle = LineStyle.None,
-				IntervalLength = 25,
-				//MinorStep = 20,
-				//MajorStep = 10,
-				//MinimumMinorStep = 20,
-				MinorTickSize = 0,
-				IsAxisVisible = true,
-				IsPanEnabled = false,
-				AxislineColor = GridLineColor,
-				AxislineStyle = LineStyle.Solid,
-				AxislineThickness = 2,
-				TickStyle = TickStyle.Outside,
-				TicklineColor = GridLineColor,
-				//MajorTickSize = 2,
-				MinorGridlineColor = OxyColors.Gray,
-				TitleColor = OxyColors.LightGray,
-				TextColor = OxyColors.LightGray,
-				LabelFormatter = ValueFormatter,
-			};
+			if (ListGroup.Logarithmic)
+				ValueAxis = new OxyPlot.Axes.LogarithmicAxis();
+			else
+				ValueAxis = new OxyPlot.Axes.LinearAxis();
+
+			ValueAxis.Position = axisPosition;
+			ValueAxis.MajorGridlineStyle = LineStyle.Solid;
+			ValueAxis.MajorGridlineColor = GridLineColor;
+			ValueAxis.MinorGridlineStyle = LineStyle.None;
+			ValueAxis.IntervalLength = 25;
+			//ValueAxis.MinorStep = 20;
+			//ValueAxis.MajorStep = 10;
+			//ValueAxis.MinimumMinorStep = 20;
+			ValueAxis.MinorTickSize = 0;
+			ValueAxis.IsAxisVisible = true;
+			ValueAxis.IsPanEnabled = false;
+			ValueAxis.AxislineColor = GridLineColor;
+			ValueAxis.AxislineStyle = LineStyle.Solid;
+			ValueAxis.AxislineThickness = 2;
+			ValueAxis.TickStyle = TickStyle.Outside;
+			ValueAxis.TicklineColor = GridLineColor;
+			//ValueAxis.MajorTickSize = 2;
+			ValueAxis.MinorGridlineColor = OxyColors.Gray;
+			ValueAxis.TitleColor = OxyColors.LightGray;
+			ValueAxis.TextColor = OxyColors.LightGray;
+			ValueAxis.LabelFormatter = ValueFormatter;
+
 			if (key != null)
 				ValueAxis.Key = key;
 			PlotModel.Axes.Add(ValueAxis);
@@ -680,12 +683,20 @@ namespace Atlas.UI.Avalonia.Controls
 			if (ListGroup.MinValue is double minValue)
 				minimum = minValue;
 
-			var margin = (maximum - minimum) * MarginPercent;
-			if (minimum == maximum)
-				margin = Math.Abs(minimum);
+			if (ListGroup.Logarithmic)
+			{
+				ValueAxis.Minimum = minimum * 0.90;
+				ValueAxis.Maximum = maximum * 1.1;
+			}
+			else
+			{
+				var margin = (maximum - minimum) * MarginPercent;
+				if (minimum == maximum)
+					margin = Math.Abs(minimum);
 
-			ValueAxis.Minimum = minimum - margin;
-			ValueAxis.Maximum = maximum + margin;
+				ValueAxis.Minimum = minimum - margin;
+				ValueAxis.Maximum = maximum + margin;
+			}
 		}
 
 		private void UpdateDateTimeAxis()
@@ -699,21 +710,22 @@ namespace Atlas.UI.Avalonia.Controls
 		private static string ValueFormatter(double d)
 		{
 			double ad = Math.Abs(d);
+			string prefix = "{0:#,0.###} ";
 			if (ad >= 1E12)
 			{
-				return string.Format("{0} T", d / 1E12);
+				return string.Format(prefix + "T", d / 1E12);
 			}
 			else if (ad >= 1E9)
 			{
-				return string.Format("{0} G", d / 1E9);
+				return string.Format(prefix + "G", d / 1E9);
 			}
 			else if (ad >= 1E6)
 			{
-				return string.Format("{0} M", d / 1E6);
+				return string.Format(prefix + "M", d / 1E6);
 			}
 			else if (ad >= 1E3)
 			{
-				return string.Format("{0} K", d / 1E3);
+				return string.Format(prefix + "K", d / 1E3);
 			}
 			else
 			{

@@ -30,7 +30,7 @@ namespace Atlas.Core
 		public TimeSpan Time => Created.Subtract(RootLog.Created);
 		public LogType OriginalType = LogType.Info;
 		public LogType Type { get; set; } = LogType.Info;
-		[HiddenColumn, HiddenRow]
+		[Hidden]
 		public string Text { get; set; }
 		[WordWrap, MinWidth(300)]
 		public string Message
@@ -46,7 +46,7 @@ namespace Atlas.Core
 			}
 		}
 
-		[HiddenColumn, HiddenRow]
+		[Hidden]
 		public virtual string Summary => Text;
 		protected int _entries;
 		public int Entries => _entries;

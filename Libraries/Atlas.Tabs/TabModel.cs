@@ -137,12 +137,13 @@ namespace Atlas.Tabs
 				Type elementType = type.GetElementTypeForAll();
 				if (elementType != null)
 				{
+					List<PropertyInfo> visibleProperties = elementType.GetVisibleProperties();
 					if (elementType == typeof(string))
 					{
 						// string properties don't display well
 						AddEnumerable((IEnumerable)obj);
 					}
-					else if (type.GenericTypeArguments.Length > 0 && elementType.GetProperties().Length > 0)
+					else if (type.GenericTypeArguments.Length > 0 && visibleProperties.Count > 0)
 					{
 						// list element type has properties (should check if they're visible properties?)
 						ItemList.Add(iList);
@@ -152,7 +153,7 @@ namespace Atlas.Tabs
 						// todo: create a List<elementType>
 					}
 					else*/
-					else if (elementType.GetProperties().Length == 0)
+					else if (visibleProperties.Count == 0)
 					{
 						ItemList.Add(ListToString.Create(iList));
 					}

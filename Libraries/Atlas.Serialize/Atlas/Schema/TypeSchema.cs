@@ -57,7 +57,7 @@ namespace Atlas.Serialize
 		// Type lookup can take a long time, especially when there's missing types
 		private static Dictionary<string, Type> _typeCache = new Dictionary<string, Type>();
 
-		public TypeSchema(Type type)
+		public TypeSchema(Type type, Serializer serializer)
 		{
 			Type = type;
 			Name = type.ToString(); // better than FullName (don't remember why)
@@ -74,6 +74,9 @@ namespace Atlas.Serialize
 					if (!fieldSchema.IsSerialized)
 						continue;
 
+					if (fieldSchema.IsPrivate && serializer.PublicOnly)
+						continue;
+
 					FieldSchemas.Add(fieldSchema);
 				}
 
@@ -81,6 +84,9 @@ namespace Atlas.Serialize
 				{
 					var propertySchema = new PropertySchema(propertyInfo);
 					if (!propertySchema.IsSerialized)
+						continue;
+
+					if (propertySchema.IsPrivate && serializer.PublicOnly)
 						continue;
 
 					PropertySchemas.Add(propertySchema);
@@ -123,17 +129,23 @@ namespace Atlas.Serialize
 		{
 			if (IsPrivate)
 				return false;
+
 			if (Type.IsPrimitive || Type.IsEnum || Type.IsInterface)
 				return true;
+
 			// Might need to modify this later if we ever add dynamic loading
 			if (Type.GetCustomAttribute<PublicDataAttribute>() != null)
 				return true;
+
 			if (AllowedTypes.Contains(Type))
 				return true;
+
 			if (typeof(Type).IsAssignableFrom(Type))
 				return true;
+
 			//if (Type.IsSecurityCritical) // useful?
 			//	return true;
+
 			if (Type.IsGenericType)
 			{
 				Type genericType = Type.GetGenericTypeDefinition();

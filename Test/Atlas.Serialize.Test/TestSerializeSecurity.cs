@@ -158,5 +158,49 @@ namespace Atlas.Serialize.Test
 
 			Assert.IsNull(output);
 		}
+
+		[PublicData]
+		public class PrivatePropertyClass
+		{
+			[PrivateData]
+			public string Confidential { get; set; }
+		}
+
+		[Test]
+		public void SerializePrivateProperty()
+		{
+			var input = new PrivatePropertyClass()
+			{
+				Confidential = "secrets",
+			};
+
+			serializer.PublicOnly = true;
+			serializer.Save(Call, input);
+			var output = serializer.Load<PrivatePropertyClass>(Call);
+
+			Assert.IsNull(output.Confidential);
+		}
+
+		[PublicData]
+		public class PrivateFieldClass
+		{
+			[PrivateData]
+			public string Confidential;
+		}
+
+		[Test]
+		public void SerializePrivateField()
+		{
+			var input = new PrivateFieldClass()
+			{
+				Confidential = "secrets",
+			};
+
+			serializer.PublicOnly = true;
+			serializer.Save(Call, input);
+			var output = serializer.Load<PrivateFieldClass>(Call);
+
+			Assert.IsNull(output.Confidential);
+		}
 	}
 }

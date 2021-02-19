@@ -100,8 +100,10 @@ namespace Atlas.Serialize
 				if (!typeSchema.IsPrivate)
 				{
 					string message = "Type " + typeSchema.Name + " does not specify [PublicData] or [PrivateData], ignoring";
-					//Debug.Print(message);
-					Debug.Fail(message);
+					if (Debugger.IsAttached)
+						Debug.Fail(message);
+					else
+						Debug.Print(message); // For unit tests
 					log.Add(message);
 				}
 				var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema);

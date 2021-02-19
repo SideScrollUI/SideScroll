@@ -220,7 +220,9 @@ namespace Atlas.Serialize
 					Type propertyType = propertySchema.PropertyInfo.PropertyType.GetNonNullableType();
 					typeRepo = Serializer.GetOrCreateRepo(log, propertyType);
 				}
+
 				propertySchema.PropertyTypeSchema = typeRepo.TypeSchema;
+
 				if (typeRepo != null)
 				{
 					var propertyRepo = new PropertyRepo(propertySchema, typeRepo);
