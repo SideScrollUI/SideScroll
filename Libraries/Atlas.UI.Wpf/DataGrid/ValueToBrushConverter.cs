@@ -25,11 +25,11 @@ namespace Atlas.UI.Wpf
 			{
 				if (dataGridCell.Column.DisplayIndex == 1 && (obj is ListItem || obj is ListMember))
 				{
-					bool hasChildren = TabModel.ObjectHasLinks(obj, true);
+					bool hasChildren = TabUtils.ObjectHasLinks(obj, true);
 					if (hasChildren)
 						return HasChildrenBrush;
 						//return Brushes.Moccasin;
-					else if (Editable && (obj is ListMember) && ((ListMember)obj).Editable)
+					else if (Editable && (obj is ListMember listMember) && listMember.Editable)
 						return EditableBrush;
 					else
 						return Brushes.LightGray;

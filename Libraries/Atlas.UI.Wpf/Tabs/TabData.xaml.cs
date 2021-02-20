@@ -23,8 +23,8 @@ namespace Atlas.UI.Wpf
 	{
 		private const double MaxDefaultWidth = 1500;
 		// Params
-		private TabModel tabModel;
-		private TabInstance tabInstance;
+		private readonly TabModel tabModel;
+		private readonly TabInstance tabInstance;
 		public TabDataSettings tabDataSettings;
 		private IList iList;
 
@@ -46,7 +46,7 @@ namespace Atlas.UI.Wpf
 		private Filter filter;
 		private Type listElementType;
 
-		private Stopwatch stopwatch = new Stopwatch();
+		private readonly Stopwatch stopwatch = new Stopwatch();
 		private object autoSelectItem = null;
 
 		public TabData(TabInstance tabInstance, IList iList, TabDataSettings tabDataSettings = null)
@@ -86,8 +86,7 @@ namespace Atlas.UI.Wpf
 			collectionView = CollectionViewSource.GetDefaultView(iList); // This fails if an object's ToString() has a -> in it
 			dataGrid.ItemsSource = collectionView;
 
-			INotifyCollectionChanged iNotifyCollectionChanged = iList as INotifyCollectionChanged;
-			if (iNotifyCollectionChanged != null)
+			if (iList is INotifyCollectionChanged iNotifyCollectionChanged)
 			{
 				iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
 
@@ -201,7 +200,7 @@ namespace Atlas.UI.Wpf
 			tabInstance.ItemModified();
 		}
 
-		private void dataGrid_Loaded(object sender, RoutedEventArgs e)
+		private void DataGrid_Loaded(object sender, RoutedEventArgs e)
 		{
 			disableSaving++;
 			if (tabInstance.TabViewSettings.SplitterDistance == null)
@@ -225,7 +224,7 @@ namespace Atlas.UI.Wpf
 				column.Width = new DataGridLength(starSize, DataGridLengthUnitType.Star);
 			}*/
 
-			dataGrid.Loaded -= dataGrid_Loaded;
+			dataGrid.Loaded -= DataGrid_Loaded;
 			//dataGrid.SelectionChanged += DataGrid_SelectionChanged; // doesn't catch cell selection, only row selections
 			//dataGrid.CurrentCellChanged += DataGrid_CurrentCellChanged; // happens before selection changes
 			dataGrid.SelectedCellsChanged += DataGrid_SelectedCellsChanged;
@@ -366,9 +365,11 @@ namespace Atlas.UI.Wpf
 					object obj = rowCells.Key;
 					List<DataGridCellInfo> cellsInfos = rowCells.Value;
 					Type type = obj.GetType();
-					SelectedRow selectedItem = new SelectedRow();
-					selectedItem.Label = obj.ToUniqueString();
-					selectedItem.RowIndex = dataGrid.Items.IndexOf(obj);
+					var selectedItem = new SelectedRow()
+					{
+						Label = obj.ToUniqueString(),
+						RowIndex = dataGrid.Items.IndexOf(obj),
+					};
 					if (selectedItem.Label == type.FullName)
 					{
 						selectedItem.Label = null;
@@ -396,16 +397,14 @@ namespace Atlas.UI.Wpf
 				if (value == null)
 					continue;
 
-				Atlas.Tabs.ListItem listItem = obj as Atlas.Tabs.ListItem;
-				if (listItem != null)
+				if (obj is ListItem listItem)
 				{
 					if (listItem.AutoLoad == false)
 						continue;
 				}
 
-				if (value is TabView)
+				if (value is TabView tabView)
 				{
-					TabView tabView = (TabView)value;
 					if (tabView.tabModel.AutoLoad == false)
 						continue;
 				}
@@ -413,7 +412,7 @@ namespace Atlas.UI.Wpf
 					firstValidObject = obj;
 
 				Type type = value.GetType();
-				if (TabModel.ObjectHasLinks(value) && type.IsEnum == false)
+				if (TabUtils.ObjectHasLinks(value) && type.IsEnum == false)
 				{
 					// make sure there's something present
 					if (typeof(ICollection).IsAssignableFrom(type))
@@ -581,8 +580,7 @@ namespace Atlas.UI.Wpf
 				{
 					foreach (var columnName in selectedRow.SelectedColumns)
 					{
-						DataGridColumn dataGridColumn;
-						if (columnObjects.TryGetValue(columnName, out dataGridColumn)) // column might have been renamed/removed
+						if (columnObjects.TryGetValue(columnName, out DataGridColumn dataGridColumn)) // column might have been renamed/removed
 						{
 							DataGridCellInfo cellInfo = new DataGridCellInfo(listItem, dataGridColumn);
 							cellInfos.Add(cellInfo);
@@ -698,8 +696,7 @@ namespace Atlas.UI.Wpf
 
 		private void SortSavedColumn()
 		{
-			ListCollectionView listCollectionView = collectionView as ListCollectionView;
-			if (listCollectionView != null && tabDataSettings.SortColumnName != null)
+			if (collectionView is ListCollectionView listCollectionView && tabDataSettings.SortColumnName != null)
 			{
 				DataGridColumn matchingColumn = null;
 				foreach (DataGridColumn column in dataGrid.Columns)
@@ -721,7 +718,7 @@ namespace Atlas.UI.Wpf
 			}
 		}
 
-		private void textBoxSearch_PreviewKeyDown(object sender, KeyEventArgs e)
+		private void TextBoxSearch_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Enter || e.Key == Key.Tab)
 			{
@@ -798,30 +795,28 @@ namespace Atlas.UI.Wpf
 			if (dataGridRow == null)
 				return;
 
-			FrameworkElement frameworkElement = dependency as FrameworkElement;
-			if (frameworkElement == null)
+			if (!(dependency is FrameworkElement))
 				return;
 
-			DataGridCell dataGridCell = ((FrameworkElement)dependency).Parent as DataGridCell;
-			if (dataGridCell == null)
-				return;
-
-			if (dataGridCell.Column is DataGridCheckBoxColumn)
-				return;
-
-			if (dataGrid.SelectedCells != null && dataGrid.SelectedCells.Count == 1)
+			if (((FrameworkElement)dependency).Parent is DataGridCell dataGridCell)
 			{
-				//DataGridRow dataGridRow = dataGrid.ItemContainerGenerator.ContainerFromItem(dataGrid.SelectedItem) as DataGridRow;
-				if (dataGridCell.IsSelected)
+				if (dataGridCell.Column is DataGridCheckBoxColumn)
+					return;
+
+				if (dataGrid.SelectedCells != null && dataGrid.SelectedCells.Count == 1)
 				{
-					dataGridCell.IsSelected = false;
-					e.Handled = true;
+					//DataGridRow dataGridRow = dataGrid.ItemContainerGenerator.ContainerFromItem(dataGrid.SelectedItem) as DataGridRow;
+					if (dataGridCell.IsSelected)
+					{
+						dataGridCell.IsSelected = false;
+						e.Handled = true;
+					}
 				}
 			}
 		}
 
 		// don't append an extra newline when copying cells, really annoying when copying a single cell value
-		private void dataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+		private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Enter)
 			{
@@ -859,11 +854,10 @@ namespace Atlas.UI.Wpf
 				bookmark.Changed = String.Join(",", tabDataSettings.SelectedRows);
 		}
 
-		private void dataGrid_Sorting(object sender, DataGridSortingEventArgs e)
+		private void DataGrid_Sorting(object sender, DataGridSortingEventArgs e)
 		{
 			// could possibly use "DataGridSort.Comparer.Set(Column, comparer)" instead
-			ListCollectionView listCollectionView = collectionView as ListCollectionView;
-			if (e.Column != null && e.Column.CanUserSort == true && listCollectionView != null)
+			if (e.Column != null && e.Column.CanUserSort == true && collectionView is ListCollectionView listCollectionView)
 			{
 				if (e.Column.SortDirection == ListSortDirection.Ascending)
 				{
@@ -887,7 +881,7 @@ namespace Atlas.UI.Wpf
 			}
 		}
 
-		private void dataGrid_ColumnReordered(object sender, DataGridColumnEventArgs e)
+		private void DataGrid_ColumnReordered(object sender, DataGridColumnEventArgs e)
 		{
 			SortedDictionary<int, string> orderedColumns = new SortedDictionary<int, string>();
 			foreach (DataGridColumn column in dataGrid.Columns)
@@ -899,18 +893,17 @@ namespace Atlas.UI.Wpf
 			tabInstance.SaveTabSettings();
 		}
 
-		private void dataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+		private void DataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
 		{
-			object obj = e.Row.DataContext;
-			if ((obj is ListProperty) && !e.Column.IsReadOnly)
+			if ((e.Row.DataContext is ListProperty listProperty) && !e.Column.IsReadOnly)
 			{
-				if (!((ListProperty)obj).Editable)
+				if (!listProperty.Editable)
 					e.Cancel = true;
 			}
 		}
 
 		// use Formatted() formatting instead of default
-		private void dataGrid_CopyingRowClipboardContent(object sender, DataGridRowClipboardEventArgs e)
+		private void DataGrid_CopyingRowClipboardContent(object sender, DataGridRowClipboardEventArgs e)
 		{
 			var rowContents = e.ClipboardRowContent.ToList(); // create a copy before clearing
 			e.ClipboardRowContent.Clear();
@@ -978,17 +971,16 @@ namespace Atlas.UI.Wpf
 
 			dataGrid.SelectedCellsChanged -= DataGrid_SelectedCellsChanged;
 			dataGrid.PreviewMouseLeftButtonDown -= DataGrid_PreviewMouseLeftButtonDown;
-			dataGrid.BeginningEdit -= dataGrid_BeginningEdit;
-			dataGrid.CopyingRowClipboardContent -= dataGrid_CopyingRowClipboardContent;
-			dataGrid.ColumnReordered -= dataGrid_ColumnReordered;
+			dataGrid.BeginningEdit -= DataGrid_BeginningEdit;
+			dataGrid.CopyingRowClipboardContent -= DataGrid_CopyingRowClipboardContent;
+			dataGrid.ColumnReordered -= DataGrid_ColumnReordered;
 			dataGrid.ItemsSource = null;
 
-			textBoxSearch.PreviewKeyDown -= textBoxSearch_PreviewKeyDown;
+			textBoxSearch.PreviewKeyDown -= TextBoxSearch_PreviewKeyDown;
 
 			KeyDown -= UserControl_KeyDown;
 
-			INotifyCollectionChanged iNotifyCollectionChanged = iList as INotifyCollectionChanged;
-			if (iNotifyCollectionChanged != null)
+			if (iList is INotifyCollectionChanged iNotifyCollectionChanged)
 				iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
 
 			iList = null;

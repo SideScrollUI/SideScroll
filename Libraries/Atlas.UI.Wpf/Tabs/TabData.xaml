@@ -39,7 +39,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TextBox Name="textBoxSearch" Grid.Row="0" Visibility="Collapsed" PreviewKeyDown="textBoxSearch_PreviewKeyDown">
+        <TextBox Name="textBoxSearch" Grid.Row="0" Visibility="Collapsed" PreviewKeyDown="TextBoxSearch_PreviewKeyDown">
             <!--TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding Path=SearchCommand, RelativeSource={RelativeSource Self}}"/>
                 <KeyBinding Key="Tab" Command="{Binding Path=SearchCommand, RelativeSource={RelativeSource Self}}"/>
