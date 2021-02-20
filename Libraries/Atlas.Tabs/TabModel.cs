@@ -42,8 +42,6 @@ namespace Atlas.Tabs
 
 	public class TabModel
 	{
-		public static List<Type> IgnoreHighlightTypes { get; set; } = new List<Type>();
-
 		public string Id { get; set; } // todo: Unique key for bookmarks?
 		public string Name { get; set; } = "<TabModel>";
 		public string Notes { get; set; } // not used anymore
@@ -101,7 +99,7 @@ namespace Atlas.Tabs
 
 		public static TabModel Create(string name, object obj)
 		{
-			if (ObjectHasLinks(obj) == false)
+			if (TabUtils.ObjectHasLinks(obj) == false)
 				return null;
 
 			var tabModel = new TabModel(name);
@@ -194,7 +192,7 @@ namespace Atlas.Tabs
 				var values = Enum.GetValues(type);
 				AddEnumerable(values);
 			}
-			else if (ObjectHasLinks(obj))
+			else if (TabUtils.ObjectHasLinks(obj))
 			{
 				// show as Name/Value columns for fields and properties
 				AddObject(obj, type);
@@ -384,54 +382,6 @@ namespace Atlas.Tabs
 			}
 
 			return tabBookmark;
-		}
-
-		// Might want to move this elsewhere or refactor
-		public static bool ObjectHasLinks(object obj, bool ignoreEmpty = false)
-		{
-			if (obj == null)
-				return false;
-
-			object value = obj.GetInnerValue();
-			if (value == null)
-				return false;
-
-			if (value is ListItem listItem)
-				value = listItem.Value;
-			if (value is ListMember listMember)
-				value = listMember.Value;
-
-			Type type = value.GetType();
-			if (type.IsPrimitive ||
-				type.IsEnum ||
-				type.Equals(typeof(string)) ||
-				type.Equals(typeof(decimal)) ||
-				type.Equals(typeof(DateTime)) ||
-				type.Equals(typeof(TimeSpan)))
-			{
-				return false;
-			}
-
-			if (ignoreEmpty)
-			{
-				if (value is ICollection collection)
-				{
-					if (collection.Count == 0)
-						return false;
-
-					Type elementType = collection.GetType().GetElementTypeForAll();
-					if (elementType != null && elementType.IsPrimitive)
-						return false;
-				}
-
-				foreach (Type ignoreType in IgnoreHighlightTypes)
-				{
-					if (ignoreType.IsAssignableFrom(type))
-						return false;
-				}
-			}
-
-			return true;
 		}
 	}
 }

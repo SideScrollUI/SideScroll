@@ -160,7 +160,7 @@ namespace Atlas.Tabs
 		public static ItemCollection<ListProperty> Sort(ItemCollection<ListProperty> listProperties)
 		{
 			var autoSorted = new ItemCollection<ListProperty>(listProperties.OrderByDescending(i => i.PropertyInfo.GetCustomAttribute<AutoSelectAttribute>() != null).ToList());
-			var linkSorted = new ItemCollection<ListProperty>(autoSorted.OrderByDescending(i => TabModel.ObjectHasLinks(i, true)).ToList());
+			var linkSorted = new ItemCollection<ListProperty>(autoSorted.OrderByDescending(i => TabUtils.ObjectHasLinks(i, true)).ToList());
 			return linkSorted;
 		}
 	}

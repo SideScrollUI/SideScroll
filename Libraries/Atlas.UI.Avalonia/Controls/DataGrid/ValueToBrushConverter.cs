@@ -36,7 +36,7 @@ namespace Atlas.UI.Avalonia
 					return Theme.ButtonBackground;
 				if (value is DictionaryEntry || PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
-					bool hasLinks = TabModel.ObjectHasLinks(value, true);
+					bool hasLinks = TabUtils.ObjectHasLinks(value, true);
 					if (hasLinks)
 						return StyleBrushes.HasLinks; // null?
 					else if (Editable && value is ListMember listMember && listMember.Editable)
@@ -119,7 +119,7 @@ namespace Atlas.UI.Avalonia
 				if (value is DictionaryEntry || 
 					PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
-					bool hasLinks = TabModel.ObjectHasLinks(value, true);
+					bool hasLinks = TabUtils.ObjectHasLinks(value, true);
 					if (!hasLinks)
 						return new SolidColorBrush(Color.Parse("#d0d0e8")); //Brushes.Black;// StyleBrushes.HasLinks;
 					else

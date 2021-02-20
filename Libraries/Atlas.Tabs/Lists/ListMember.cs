@@ -103,7 +103,7 @@ namespace Atlas.Tabs
 		{
 			var autoSorted = new ItemCollection<ListMember>(items.OrderByDescending(i => i.MemberInfo.GetCustomAttribute<AutoSelectAttribute>() != null).ToList());
 
-			var linkSorted = new ItemCollection<ListMember>(autoSorted.OrderByDescending(i => TabModel.ObjectHasLinks(i, true)).ToList());
+			var linkSorted = new ItemCollection<ListMember>(autoSorted.OrderByDescending(i => TabUtils.ObjectHasLinks(i, true)).ToList());
 
 			return linkSorted;
 		}

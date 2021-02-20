@@ -87,9 +87,9 @@ namespace Atlas.Serialize
 		{
 			if (!typeSchema.IsSerialized)
 			{
-				string message = "Type " + typeSchema.Name + " is not serializable";
-				Debug.Print(message);
-				log.Add(message);
+				//string message = "Type " + typeSchema.Name + " is not serializable";
+				//Debug.Print(message);
+				//log.Add(message);
 				var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema);
 				typeRepoUnknown.Reader = serializer.Reader;
 				return typeRepoUnknown;
@@ -446,7 +446,7 @@ namespace Atlas.Serialize
 			{
 				LoadObjectData(obj);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 			}
 		}
