@@ -100,13 +100,13 @@ namespace Atlas.UI.Avalonia
 			{
 				bool maximized = (WindowState == WindowState.Maximized);
 				Rect bounds = Bounds;
-				if (maximized)
+				if (maximized || bounds.Width > 0.8 * MaxWidth)
 				{
 					bounds = _normalSizeBounds ?? bounds;
 				}
 				else
 				{
-					// Bounds.Position is blank on OSX
+					// Bounds.Position is 0, 0 (Windows & OSX)
 					bounds = new Rect(Position.X, Position.Y, bounds.Width, bounds.Height);
 					_normalSizeBounds = bounds;
 				}

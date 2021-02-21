@@ -474,7 +474,7 @@ namespace Atlas.Serialize
 		{
 			if (obj == null)
 			{
-				writer.Write((byte)0);
+				writer.Write((byte)ObjectType.Null);
 			}
 			else
 			{
@@ -482,13 +482,16 @@ namespace Atlas.Serialize
 				TypeRepo typeRepo = IdxTypeToRepo[type];
 				if (typeRepo is TypeRepoUnknown)
 				{
-					writer.Write((byte)0);
+					// different value for non-null?
+					writer.Write((byte)ObjectType.Null);
 					return;
 				}
+
 				if (type == baseType)
-					writer.Write((byte)1);
+					writer.Write((byte)ObjectType.BaseType);
 				else
-					writer.Write((byte)2);
+					writer.Write((byte)ObjectType.DerivedType);
+
 				if (baseType != null && baseType.IsPrimitive)
 				{
 					//if (type != baseType)

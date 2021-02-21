@@ -45,6 +45,35 @@ namespace Atlas.Serialize.Test
 			Assert.AreEqual(output.Serialized, 10);
 		}
 
+		[Unserialized]
+		public class UnserializedClass
+		{
+			public int Value = 1;
+		}
+
+		public class UnserializedPropertyClass
+		{
+			public UnserializedClass UnserializedField = new UnserializedClass();
+			public UnserializedClass UnserializedProperty { get; set; } = new UnserializedClass();
+		}
+
+		[Test, Description("Serialize Field and Property with [Unserialized] classes")]
+		public void SerializeUnserializedPropertyClass()
+		{
+			var input = new UnserializedPropertyClass();
+			input.UnserializedField.Value = 42;
+			input.UnserializedProperty.Value = 42;
+
+			serializer.Save(Call, input);
+			var output = serializer.Load<UnserializedPropertyClass>(Call);
+
+			Assert.IsNotNull(output.UnserializedField);
+			Assert.IsNotNull(output.UnserializedProperty);
+
+			Assert.AreEqual(1, output.UnserializedField.Value);
+			Assert.AreEqual(1, output.UnserializedProperty.Value);
+		}
+
 		private PrivateDataContainer privateDataContainer = new PrivateDataContainer()
 		{
 			PrivateField = new PrivateClass()

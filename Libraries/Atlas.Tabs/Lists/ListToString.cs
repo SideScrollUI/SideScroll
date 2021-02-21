@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace Atlas.Tabs
 {
+	[Skippable]
 	public class ListToString
 	{
 		private const int MaxItems = 200000;

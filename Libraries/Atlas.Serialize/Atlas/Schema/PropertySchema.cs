@@ -54,12 +54,11 @@ namespace Atlas.Serialize
 
 		private void Initialize()
 		{
-			IsSerialized = GetIsSerialized();
-
 			if (PropertyInfo != null)
 			{
 				Type = PropertyInfo.PropertyType;
 				NonNullableType = Type.GetNonNullableType();
+				IsSerialized = GetIsSerialized();
 				IsLoadable = IsSerialized; // typeIndex >= 0 && // derived types won't have entries for base type
 				IsPrivate = (PropertyInfo.GetCustomAttribute<PrivateDataAttribute>() != null);
 			}
@@ -67,10 +66,7 @@ namespace Atlas.Serialize
 
 		private bool GetIsSerialized()
 		{
-			if (PropertyInfo == null)
-				return false;
-
-			Attribute attribute = Type?.GetCustomAttribute<UnserializedAttribute>();
+			Attribute attribute = Type.GetCustomAttribute<UnserializedAttribute>();
 			if (attribute != null)
 				return false;
 

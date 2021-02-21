@@ -6,6 +6,13 @@ using System.IO;
 
 namespace Atlas.Serialize
 {
+	public enum ObjectType
+	{
+		Null,
+		BaseType,
+		DerivedType,
+	};
+
 	public interface IRepoCreator
 	{
 		// needs to handle generics (lists, arrays, dictionaries)
@@ -301,19 +308,19 @@ namespace Atlas.Serialize
 
 		public TypeRef LoadLazyObjectRef()
 		{
-			byte flags = Reader.ReadByte();
-			if (flags == 0)
+			ObjectType objectType = (ObjectType)Reader.ReadByte();
+			if (objectType == ObjectType.Null)
 				return null;
 
 			var typeRef = new TypeRef();
 
 			if (TypeSchema.HasSubType)
 			{
-				if (flags == 1)
+				if (objectType == ObjectType.BaseType)
 				{
 					typeRef.TypeRepo = this;
 				}
-				else
+				else if (objectType == ObjectType.DerivedType)
 				{
 					int typeIndex = Reader.ReadInt16(); // not saved for sealed classes
 					typeRef.TypeRepo = Serializer.TypeRepos[typeIndex];
@@ -335,8 +342,8 @@ namespace Atlas.Serialize
 
 		public void SkipObjectRef()
 		{
-			byte flags = Reader.ReadByte();
-			if (flags == 0)
+			ObjectType objectType = (ObjectType)Reader.ReadByte();
+			if (objectType == ObjectType.Null)
 				return;
 
 			if (TypeSchema.IsPrimitive)
@@ -347,11 +354,11 @@ namespace Atlas.Serialize
 
 			if (TypeSchema.HasSubType)
 			{
-				if (flags == 1)
+				if (objectType == ObjectType.BaseType)
 				{
 					Reader.ReadInt32(); // objectIndex
 				}
-				else
+				else if (objectType == ObjectType.DerivedType)
 				{
 					int typeIndex = Reader.ReadInt16(); // not saved for sealed classes
 					TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
@@ -369,8 +376,8 @@ namespace Atlas.Serialize
 
 		public object LoadObjectRef()
 		{
-			byte flags = Reader.ReadByte();
-			if (flags == 0)
+			ObjectType objectType = (ObjectType)Reader.ReadByte();
+			if (objectType == ObjectType.Null)
 				return null;
 
 			if (TypeSchema.IsPrimitive)
@@ -378,14 +385,13 @@ namespace Atlas.Serialize
 
 			if (TypeSchema.HasSubType)
 			{
-				if (flags == 1)
+				if (objectType == ObjectType.BaseType)
 				{
 					int objectIndex = Reader.ReadInt32();
 					return LoadObject(objectIndex);
 				}
-				else
+				else if (objectType == ObjectType.DerivedType)
 				{
-					// has a derived type
 					int typeIndex = Reader.ReadInt16();
 					if (typeIndex >= Serializer.TypeRepos.Count)
 						return null;
@@ -396,6 +402,10 @@ namespace Atlas.Serialize
 
 					int objectIndex = Reader.ReadInt32();
 					return typeRepo.LoadObject(objectIndex);
+				}
+				else
+				{
+					return null;
 				}
 			}
 			else

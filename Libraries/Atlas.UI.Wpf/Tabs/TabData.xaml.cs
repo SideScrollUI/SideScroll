@@ -641,7 +641,7 @@ namespace Atlas.UI.Wpf
 			{
 				if (format.Equals("UnicodeText") || format.Equals("Text"))
 				{
-					newData.SetData(format, Regex.Replace(((String)oldData.GetData(format)), "\r\n$", ""));
+					newData.SetData(format, Regex.Replace((string)oldData.GetData(format), "\r\n$", ""));
 				}
 				else
 				{
@@ -851,7 +851,7 @@ namespace Atlas.UI.Wpf
 				tabInstance.SaveTabSettings(); // selection has probably changed
 			}
 			if (bookmark != null)
-				bookmark.Changed = String.Join(",", tabDataSettings.SelectedRows);
+				bookmark.Changed = string.Join(",", tabDataSettings.SelectedRows);
 		}
 
 		private void DataGrid_Sorting(object sender, DataGridSortingEventArgs e)
