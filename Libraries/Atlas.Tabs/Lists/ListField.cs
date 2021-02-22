@@ -7,24 +7,12 @@ using System.Reflection;
 
 namespace Atlas.Tabs
 {
-	public class ListField : ListMember, IPropertyEditable, IMaxDesiredWidth
+	public class ListField : ListMember, IPropertyEditable
 	{
 		public FieldInfo FieldInfo;
 		
 		[HiddenColumn]
 		public override bool Editable => true;
-
-		[HiddenColumn]
-		public int? MaxDesiredWidth
-		{
-			get
-			{
-				var maxWidthAttribute = FieldInfo.GetCustomAttribute<MaxWidthAttribute>();
-				if (maxWidthAttribute != null)
-					return maxWidthAttribute.MaxWidth;
-				return null;
-			}
-		}
 
 		[Editing, InnerValue]
 		public override object Value

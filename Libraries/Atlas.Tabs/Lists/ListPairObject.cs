@@ -9,10 +9,13 @@ namespace Atlas.Tabs
 	{
 		[StyleLabel]
 		public object Key { get; set; }
+
 		[StyleValue]
 		public object Value { get; set; }
+
 		[HiddenColumn, InnerValue]
 		public object Object { get; set; }
+
 		public bool AutoLoad = true;
 
 		[HiddenColumn]

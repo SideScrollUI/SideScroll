@@ -22,13 +22,26 @@ namespace Atlas.Tabs
 		object Value { get; set; }
 	}
 
-	public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged, IListAutoSelect
+	public interface IMaxDesiredWidth
+	{
+		int? MaxDesiredWidth { get; }
+	}
+
+	public interface IMaxDesiredHeight
+	{
+		int? MaxDesiredHeight { get; }
+	}
+
+	public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged, IListAutoSelect, IMaxDesiredWidth, IMaxDesiredHeight
 	{
 		public const int MaxStringLength = 1000;
 
 		public event PropertyChangedEventHandler PropertyChanged;
+
 		public MemberInfo MemberInfo;
+
 		public object Object;
+
 		[StyleLabel]
 		public string Name { get; set; }
 
@@ -40,7 +53,14 @@ namespace Atlas.Tabs
 
 		[HiddenColumn]
 		public virtual bool Editable => true;
+
 		public bool AutoLoad = true;
+
+		[HiddenColumn]
+		public int? MaxDesiredWidth => GetCustomAttribute<MaxWidthAttribute>()?.MaxWidth;
+
+		[HiddenColumn]
+		public int? MaxDesiredHeight => GetCustomAttribute<MaxHeightAttribute>()?.MaxHeight;
 
 		//[HiddenColumn]
 		[StyleValue, InnerValue, WordWrap]
@@ -97,6 +117,12 @@ namespace Atlas.Tabs
 		private void ListProperty_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			PropertyChanged?.Invoke(this, e);
+		}
+
+
+		public T GetCustomAttribute<T>() where T : Attribute
+		{
+			return MemberInfo.GetCustomAttribute<T>();
 		}
 
 		public static ItemCollection<ListMember> Sort(ItemCollection<ListMember> items)

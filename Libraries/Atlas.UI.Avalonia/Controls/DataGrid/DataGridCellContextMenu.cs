@@ -44,6 +44,8 @@ namespace Atlas.UI.Avalonia
 			menuItemCopyRow.Click += MenuItemCopyRow_Click;
 			list.Add(menuItemCopyRow);
 
+			list.Add(new Separator());
+
 			var menuItemCopySelected = new MenuItem() { Header = "Copy - _Selected" };
 			menuItemCopySelected.Click += MenuItemCopySelected_Click;
 			list.Add(menuItemCopySelected);
@@ -51,6 +53,8 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopySelectedCsv = new MenuItem() { Header = "Copy - Selected - CSV" };
 			menuItemCopySelectedCsv.Click += MenuItemCopySelectedCsv_Click;
 			list.Add(menuItemCopySelectedCsv);
+
+			list.Add(new Separator());
 
 			var menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
 			menuItemCopyDataGrid.Click += MenuItemCopyDataGrid_Click;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Atlas.Core
 {
@@ -97,6 +98,12 @@ namespace Atlas.Core
 	{
 	}
 
+	// Round value when displaying (i.e. show TimeSpan as short value like "1.6 Days")
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class RoundedAttribute : Attribute
+	{
+	}
+
 	// Put Serialize here so others don't have to reference a serializer directly?
 	// Serialize: Shows the field/property instead of the parent class as the nested tab
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
@@ -168,6 +175,21 @@ namespace Atlas.Core
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class HideNullAttribute : Attribute
 	{
+	}
+
+	// Don't show row if value matches
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class HideAttribute : Attribute
+	{
+		public readonly List<object> Values;
+
+		// passing a null param passes a null array :(
+		public HideAttribute(object value, params object[] additonalValues)
+		{
+			// Combine both params into a single list
+			Values = new List<object>(additonalValues);
+			Values.Add(value);
+		}
 	}
 
 	// Allow Tab to be collapsed

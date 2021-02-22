@@ -8,10 +8,13 @@ namespace Atlas.UI.Avalonia
 {
 	public class FormatValueConverter : IValueConverter
 	{
+		public int MaxLength { get; set; } = 1000;
+
 		// add a map to store original mappings?
 		//public Dictionary<object, object> { get; set; }
+		
 		public bool ConvertBackEnabled { get; set; } = true;
-		public int MaxLength { get; set; } = 1000;
+		public bool Rounded { get; set; }
 
 		private object _originalValue;
 
@@ -21,7 +24,7 @@ namespace Atlas.UI.Avalonia
 			if (value == null)
 				return null;
 
-			object result = ChangeType(value, targetType, MaxLength);
+			object result = ChangeType(value, targetType, MaxLength, Rounded);
 			return result;
 		}
 
@@ -31,7 +34,7 @@ namespace Atlas.UI.Avalonia
 			return _originalValue;
 		}
 
-		public static object ChangeType(object value, Type targetType, int maxLength)
+		public static object ChangeType(object value, Type targetType, int maxLength, bool rounded)
 		{
 			if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
 			{
@@ -57,8 +60,10 @@ namespace Atlas.UI.Avalonia
 
 				if (value is TimeSpan timeSpan)
 				{
-					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
-					//return timeSpan.FormattedDecimal();
+					if (rounded)
+						return timeSpan.FormattedDecimal();
+					else
+						return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
 				}
 
 				//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above

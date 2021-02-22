@@ -8,22 +8,13 @@ using System.Threading.Tasks;
 
 namespace Atlas.Tabs
 {
-	public class ListMethod : ListMember, IPropertyEditable, IMaxDesiredWidth, ILoadAsync
+	public class ListMethod : ListMember, IPropertyEditable, ILoadAsync
 	{
 		public MethodInfo MethodInfo;
 		private bool CacheEnabled { get; set; }
-		private bool valueCached;
-		private object valueObject = null;
 
-		[HiddenColumn]
-		public int? MaxDesiredWidth
-		{
-			get
-			{
-				var maxWidthAttribute = MethodInfo.GetCustomAttribute<MaxWidthAttribute>();
-				return maxWidthAttribute?.MaxWidth;
-			}
-		}
+		private bool _valueCached;
+		private object _valueObject = null;
 
 		[Editing, InnerValue, WordWrap]
 		public override object Value
@@ -34,12 +25,12 @@ namespace Atlas.Tabs
 				{
 					if (CacheEnabled)
 					{
-						if (!valueCached)
+						if (!_valueCached)
 						{
-							valueCached = true;
-							valueObject = GetValue();
+							_valueCached = true;
+							_valueObject = GetValue();
 						}
-						return valueObject;
+						return _valueObject;
 					}
 					return GetValue();
 				}
@@ -50,8 +41,8 @@ namespace Atlas.Tabs
 			}
 			set
 			{
-				valueObject = value;
-				valueCached = true;
+				_valueObject = value;
+				_valueCached = true;
 			}
 		}
 

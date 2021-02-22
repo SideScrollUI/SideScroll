@@ -19,15 +19,16 @@ namespace Atlas.UI.Avalonia
 		public SolidColorBrush BrushValue { get; set; } = new SolidColorBrush(Colors.LightGray);
 		public SolidColorBrush BrushBackground { get; set; } = new SolidColorBrush(Colors.White);
 
-		//public bool Editable { get; set; } = false;
 		public DataGrid DataGrid;
 		public PropertyInfo PropertyInfo;
 
 		public int MinDesiredWidth { get; set; } = 40;
 		public int MaxDesiredWidth { get; set; } = 500;
 		public int MaxDesiredHeight { get; set; } = 100;
+
 		public bool AutoSize { get; set; }
 		public bool WordWrap { get; set; }
+		//public bool Editable { get; set; } = false;
 
 		private Binding _formattedBinding;
 		//private Binding unformattedBinding;
@@ -39,14 +40,17 @@ namespace Atlas.UI.Avalonia
 			PropertyInfo = propertyInfo;
 			IsReadOnly = isReadOnly;
 			MaxDesiredWidth = maxDesiredWidth;
+			
 			Binding = GetFormattedTextBinding();
-			//Binding = GetTextBinding();
+
 			var maxHeightAttribute = propertyInfo.GetCustomAttribute<MaxHeightAttribute>();
 			if (maxHeightAttribute != null)
 			{
 				MaxDesiredHeight = maxHeightAttribute.MaxHeight;
 				_formatConverter.MaxLength = MaxDesiredHeight * 10;
 			}
+			_formatConverter.Rounded = (propertyInfo.GetCustomAttribute<RoundedAttribute>() != null);
+
 			if (DataGridUtils.IsTypeAutoSize(propertyInfo.PropertyType))
 				AutoSize = true;
 
@@ -94,7 +98,6 @@ namespace Atlas.UI.Avalonia
 			{
 				//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
 				TextBlock textBlock = CreateTextBlock(cell, dataItem);
-				textBlock.MaxHeight = MaxDesiredHeight;
 
 				/*var style = new Style(x => x.OfType<DataGridCell>())
 				{
@@ -152,6 +155,7 @@ namespace Atlas.UI.Avalonia
 			Type IStyleable.StyleKey => typeof(TextBlock);
 
 			public double MaxDesiredWidth { get; set; } = 500;
+			public double MaxDesiredHeight { get; set; } = 500;
 
 			public readonly DataGridPropertyTextColumn Column;
 			public readonly PropertyInfo PropertyInfo;
@@ -175,7 +179,16 @@ namespace Atlas.UI.Avalonia
 				{
 					maxDesiredWidth = iMaxWidth.MaxDesiredWidth.Value;
 				}
-				DesiredSize = measured.WithWidth(Math.Min(maxDesiredWidth, measured.Width));
+
+				double maxDesiredHeight = MaxDesiredHeight;
+				if (DataContext is IMaxDesiredHeight iMaxHeight && iMaxHeight.MaxDesiredHeight != null)
+				{
+					maxDesiredHeight = iMaxHeight.MaxDesiredHeight.Value;
+				}
+
+				DesiredSize = measured.
+					WithWidth(Math.Min(maxDesiredWidth, measured.Width)).
+					WithHeight(Math.Min(maxDesiredHeight, measured.Height));
 
 				return measured;
 			}
@@ -188,11 +201,11 @@ namespace Atlas.UI.Avalonia
 				Margin = new Thickness(5),
 				VerticalAlignment = VerticalAlignment.Center,
 				MaxDesiredWidth = this.MaxDesiredWidth,
+				MaxDesiredHeight = this.MaxDesiredHeight,
 				//FontFamily
 				//FontSize
 				//FontStyle
 				//FontWeight
-				//Foreground
 			};
 			if (WordWrap)
 				textBlockElement.TextWrapping = TextWrapping.Wrap;

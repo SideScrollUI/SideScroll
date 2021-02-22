@@ -13,12 +13,7 @@ namespace Atlas.Tabs
 		bool Editable { get; }
 	}
 
-	public interface IMaxDesiredWidth
-	{
-		int? MaxDesiredWidth { get; }
-	}
-
-	public class ListProperty : ListMember, IPropertyEditable, IMaxDesiredWidth
+	public class ListProperty : ListMember, IPropertyEditable
 	{
 		public PropertyInfo PropertyInfo;
 		public bool Cached;
@@ -33,19 +28,6 @@ namespace Atlas.Tabs
 			{
 				bool propertyReadOnly = (PropertyInfo.GetCustomAttribute<ReadOnlyAttribute>() != null);
 				return PropertyInfo.CanWrite && !propertyReadOnly;
-			}
-		}
-
-		[HiddenColumn]
-		public int? MaxDesiredWidth
-		{
-			get
-			{
-				var maxWidthAttribute = PropertyInfo.GetCustomAttribute<MaxWidthAttribute>();
-				if (maxWidthAttribute != null)
-					return maxWidthAttribute.MaxWidth;
-
-				return null;
 			}
 		}
 
@@ -101,16 +83,18 @@ namespace Atlas.Tabs
 		{
 			PropertyInfo = propertyInfo;
 			Cached = cached;
+
 			var accessors = propertyInfo.GetAccessors(true);
 			AutoLoad = !accessors[0].IsStatic;
 
-			Name = propertyInfo.Name;
-			if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
-				Name = "*" + Name;
-			Name = Name.WordSpaced();
 			NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;
+			else
+				Name = propertyInfo.Name.WordSpaced();
+
+			if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+				Name = "* " + Name;
 		}
 
 		public static new ItemCollection<ListProperty> Create(object obj)
@@ -138,6 +122,13 @@ namespace Atlas.Tabs
 					if (propertyInfo.GetCustomAttribute<HideNullAttribute>() != null)
 					{
 						if (listProperty.Value == null)
+							continue;
+					}
+
+					var hideAttribute = propertyInfo.GetCustomAttribute<HideAttribute>();
+					if (hideAttribute != null && hideAttribute.Values != null)
+					{
+						if (hideAttribute.Values.Contains(listProperty.Value))
 							continue;
 					}
 
