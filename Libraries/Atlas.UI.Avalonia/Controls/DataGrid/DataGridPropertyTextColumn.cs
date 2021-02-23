@@ -44,7 +44,7 @@ namespace Atlas.UI.Avalonia
 			Binding = GetFormattedTextBinding();
 
 			var maxHeightAttribute = propertyInfo.GetCustomAttribute<MaxHeightAttribute>();
-			if (maxHeightAttribute != null)
+			if (maxHeightAttribute != null && typeof(IListItem).IsAssignableFrom(PropertyInfo.PropertyType))
 			{
 				MaxDesiredHeight = maxHeightAttribute.MaxHeight;
 				_formatConverter.MaxLength = MaxDesiredHeight * 10;
@@ -96,8 +96,7 @@ namespace Atlas.UI.Avalonia
 			}
 			else*/
 			{
-				//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
-				TextBlock textBlock = CreateTextBlock(cell, dataItem);
+				TextBlock textBlock = CreateTextBlock(cell);
 
 				/*var style = new Style(x => x.OfType<DataGridCell>())
 				{
@@ -154,9 +153,6 @@ namespace Atlas.UI.Avalonia
 		{
 			Type IStyleable.StyleKey => typeof(TextBlock);
 
-			public double MaxDesiredWidth { get; set; } = 500;
-			public double MaxDesiredHeight { get; set; } = 500;
-
 			public readonly DataGridPropertyTextColumn Column;
 			public readonly PropertyInfo PropertyInfo;
 
@@ -166,6 +162,8 @@ namespace Atlas.UI.Avalonia
 			{
 				Column = column;
 				PropertyInfo = propertyInfo;
+
+				Margin = new Thickness(5);
 			}
 
 			protected override Size MeasureCore(Size availableSize)
@@ -174,14 +172,14 @@ namespace Atlas.UI.Avalonia
 
 				// override the default DesiredSize so the desired max width is used for sizing
 				// control will still fill all available space
-				double maxDesiredWidth = MaxDesiredWidth;
-				if (DataContext is IMaxDesiredWidth iMaxWidth && Column.DisplayIndex == 1 && iMaxWidth.MaxDesiredWidth != null)
+				double maxDesiredWidth = Column.MaxDesiredWidth;
+				if (DataContext is IMaxDesiredWidth iMaxWidth && Column.DisplayIndex == 1 && iMaxWidth.MaxDesiredWidth != null && DataContext is IListPair)
 				{
 					maxDesiredWidth = iMaxWidth.MaxDesiredWidth.Value;
 				}
 
-				double maxDesiredHeight = MaxDesiredHeight;
-				if (DataContext is IMaxDesiredHeight iMaxHeight && iMaxHeight.MaxDesiredHeight != null)
+				double maxDesiredHeight = Column.MaxDesiredHeight;
+				if (DataContext is IMaxDesiredHeight iMaxHeight && iMaxHeight.MaxDesiredHeight != null && DataContext is IListItem)
 				{
 					maxDesiredHeight = iMaxHeight.MaxDesiredHeight.Value;
 				}
@@ -194,21 +192,15 @@ namespace Atlas.UI.Avalonia
 			}
 		}
 
-		protected TextBlock CreateTextBlock(DataGridCell cell, object dataItem)
+		protected TextBlock CreateTextBlock(DataGridCell cell)
 		{
-			var textBlockElement = new TextBlockElement(this, PropertyInfo)
-			{
-				Margin = new Thickness(5),
-				VerticalAlignment = VerticalAlignment.Center,
-				MaxDesiredWidth = this.MaxDesiredWidth,
-				MaxDesiredHeight = this.MaxDesiredHeight,
-				//FontFamily
-				//FontSize
-				//FontStyle
-				//FontWeight
-			};
+			var textBlockElement = new TextBlockElement(this, PropertyInfo);
+
 			if (WordWrap)
 				textBlockElement.TextWrapping = TextWrapping.Wrap;
+			else
+				textBlockElement.VerticalAlignment = VerticalAlignment.Center;
+
 			textBlockElement.TextAlignment = DataGridUtils.GetTextAlignment(PropertyInfo.PropertyType);
 
 			cell.IsHitTestVisible = true;
@@ -218,19 +210,11 @@ namespace Atlas.UI.Avalonia
 			if (Binding != null)
 			{
 				textBlockElement.Bind(TextBlock.TextProperty, Binding);
-				
-				/*var directBindingsField = textBlockElement.GetType().GetField("_directBindings", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-				if (directBindingsField.GetValue(textBlockElement) == null)
-				{
-					directBindingsField.SetValue(textBlockElement, new List<AvaloniaObject.DirectBindingSubscription>();
-				}
-
-				return new AvaloniaObject.DirectBindingSubscription(textBlockElement, TextBlock.TextProperty, Binding);*/
 			}
 			return textBlockElement;
 		}
 
-		Binding GetFormattedTextBinding()
+		private Binding GetFormattedTextBinding()
 		{
 			Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);
 

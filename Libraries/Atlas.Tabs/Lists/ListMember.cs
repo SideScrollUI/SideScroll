@@ -35,6 +35,7 @@ namespace Atlas.Tabs
 	public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged, IListAutoSelect, IMaxDesiredWidth, IMaxDesiredHeight
 	{
 		public const int MaxStringLength = 1000;
+		private const int DefaultMaxDesiredHeight = 500;
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -60,7 +61,7 @@ namespace Atlas.Tabs
 		public int? MaxDesiredWidth => GetCustomAttribute<MaxWidthAttribute>()?.MaxWidth;
 
 		[HiddenColumn]
-		public int? MaxDesiredHeight => GetCustomAttribute<MaxHeightAttribute>()?.MaxHeight;
+		public int? MaxDesiredHeight => GetCustomAttribute<MaxHeightAttribute>()?.MaxHeight ?? DefaultMaxDesiredHeight;
 
 		//[HiddenColumn]
 		[StyleValue, InnerValue, WordWrap]
