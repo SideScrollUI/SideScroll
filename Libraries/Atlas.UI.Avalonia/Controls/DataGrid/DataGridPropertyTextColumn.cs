@@ -8,12 +8,16 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 using System;
+using System.Collections;
 using System.Reflection;
 
 namespace Atlas.UI.Avalonia
 {
 	public class DataGridPropertyTextColumn : DataGridTextColumn
 	{
+		private const int EnableWordWrapMinStringLength = 64; // Don't enable wordwrap unless we have to (expensive and not always wanted)
+		private const int MaxRowScanProperties = 30;
+
 		public SolidColorBrush BrushHasLinks => Theme.HasLinksBackground;
 		public SolidColorBrush BrushEditable { get; set; } = Theme.Editable;
 		public SolidColorBrush BrushValue { get; set; } = new SolidColorBrush(Colors.LightGray);
@@ -62,6 +66,41 @@ namespace Atlas.UI.Avalonia
 		}
 
 		public override string ToString() => PropertyInfo.Name;
+
+		// Check first x rows for [Hide()] and apply WordWrap to strings/objects automatically
+		public void ScanItemAttributes(IList List)
+		{
+			bool checkWordWrap = (!WordWrap && (PropertyInfo.PropertyType == typeof(string) || PropertyInfo.PropertyType == typeof(object)));
+
+			var hideAttribute = PropertyInfo.GetCustomAttribute<HideAttribute>();
+
+			if (checkWordWrap || hideAttribute != null)
+			{
+				if (hideAttribute != null && List.Count > 0)
+					IsVisible = false;
+
+				for (int i = 0; i < MaxRowScanProperties && i < List.Count; i++)
+				{
+					object obj = List[i];
+					if (obj == null)
+						continue;
+
+					object value = PropertyInfo.GetValue(obj);
+					if (hideAttribute != null)
+					{
+						if (!hideAttribute.Values.Contains(value))
+							IsVisible = true;
+					}
+
+					if (checkWordWrap && value != null)
+					{
+						string text = value.ToString();
+						if (text.Length > EnableWordWrapMinStringLength)
+							WordWrap = true;
+					}
+				}
+			}
+		}
 
 		// never gets triggered, can't override since it's internal?
 		// Owning Grid also internal so can't add our own handler

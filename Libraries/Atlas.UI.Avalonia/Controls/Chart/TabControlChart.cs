@@ -685,8 +685,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 			if (ListGroup.Logarithmic)
 			{
-				ValueAxis.Minimum = minimum * 0.90;
-				ValueAxis.Maximum = maximum * 1.1;
+				ValueAxis.Minimum = minimum * 0.85;
+				ValueAxis.Maximum = maximum * 1.15;
 			}
 			else
 			{

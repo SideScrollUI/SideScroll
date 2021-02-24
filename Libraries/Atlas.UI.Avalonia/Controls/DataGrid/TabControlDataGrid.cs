@@ -26,8 +26,6 @@ namespace Atlas.UI.Avalonia.Controls
 		private const int ColumnPercentBased = 150;
 		private const int MaxMinColumnWidth = 150;
 		private const int MaxAutoSizeMinColumnWidth = 250;
-		private const int EnableWordWrapMinStringLength = 64; // Don't enable wordwrap unless we have to (expensive and not always wanted)
-
 		public int MaxColumnWidth = 600;
 
 		public TabModel TabModel;
@@ -320,6 +318,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 			foreach (DataGridColumn column in DataGrid.Columns)
 			{
+				if (!column.IsVisible)
+					continue;
+
 				DataGridLength originalWidth = originalWidths[column];
 				column.MaxWidth = 2000;
 				if (column.MinWidth == 0)
@@ -584,50 +585,12 @@ namespace Atlas.UI.Avalonia.Controls
 			AutoSizeAttribute attributeAutoSize = propertyInfo.GetCustomAttribute<AutoSizeAttribute>();
 			bool isReadOnly = true;// (tabModel.Editing == false || propertyEditable == false || !propertyInfo.CanWrite);
 
-			//DataGridBoundColumn column;
-			/*if (tabModel.Editing == false)
-			{
-			  //DataGridTemplateColumn templateColumn = new DataGridTemplateColumn();
-			  FormattedTemplateColumn templateColumn = new FormattedTemplateColumn();
-			  templateColumn.Header = label;
-			  templateColumn.MaxWidth = 500;
-			  dataGrid.Columns.Add(templateColumn);
-			  return;
-			}
-			else*/
-			{
-				/*if (propertyInfo.PropertyType == typeof(bool))
-				{
-					FormattedCheckBoxColumn checkBoxColumn = new FormattedCheckBoxColumn(propertyInfo);
-					if (!isReadOnly)
-						checkBoxColumn.OnModified += Item_OnModified;
-					column = checkBoxColumn;
-				}
-				else
-					column = new FormattedTextColumn(propertyInfo);*/
-			}
-
-
-			//AvaloniaProperty avaloniaProperty = new AvaloniaProperty(propertyInfo.Name, propertyInfo.PropertyType, propertyInfo.DeclaringType, );
-
-			//MethodInfo methodInfo = typeof(AvaloniaProperty).GetMethod("DirectProperty", new Type[] { propertyInfo.DeclaringType,  });
-			//MethodInfo genericMethodInfo = methodInfo.MakeGenericMethod(propertyInfo.PropertyType);
-			//textBoxCell.Binding = (IIndirectBinding<T>)genericMethodInfo.Invoke(null, new object[] { propertyInfo.Name });
-
-			//object obj = Activator.CreateInstance(type, true);
-			//textBoxCell.Binding = Binding.Property<string>((obj) => BindingProperty(obj));
-			//actions.Add(new TaskAction("Add 5 Items", new Action(() => AddItems(5)), false)); // Foreground task so we can modify collection
-			// public static IndirectBinding<TValue> Property<T, TValue>(Expression<Func<T, TValue>> propertyExpression);
-			//textBoxCell.Binding = Binding.Property<string>(propertyInfo.Name); // TextBoxCell requires a string cast, but property value might not be castable to a string (like a class)
-
-			//AvaloniaProperty avaloniaProperty = AvaloniaProperty.DirectProperty<propertyInfo.DeclaringType, propertyInfo.PropertyType> ()
-
 			int maxDesiredWidth = attributeMaxWidth != null ? attributeMaxWidth.MaxWidth : MaxColumnWidth;
 			DataGridBoundColumn column;
 			/*if (tabModel.Editing == false)
 			{
-				//DataGridTemplateColumn templateColumn = new DataGridTemplateColumn();
-				FormattedTemplateColumn templateColumn = new FormattedTemplateColumn();
+				//var templateColumn = new DataGridTemplateColumn();
+				var templateColumn = new FormattedTemplateColumn();
 				templateColumn.Header = label;
 				templateColumn.MaxWidth = 500;
 				dataGrid.Columns.Add(templateColumn);
@@ -638,71 +601,29 @@ namespace Atlas.UI.Avalonia.Controls
 				if (propertyInfo.PropertyType == typeof(bool))
 				{
 					var checkBoxColumn = new DataGridPropertyCheckBoxColumn(propertyInfo, isReadOnly);
-					//checkBoxColumn.PropertyChanged
-					//if (!isReadOnly)
-					//	checkBoxColumn.OnModified += Item_OnModified;
 					column = checkBoxColumn;
 					column.Binding = new Binding(propertyInfo.Name);
 				}
 				else
 				{
-					//if (isReadOnly)
 					var textColumn = new DataGridPropertyTextColumn(DataGrid, propertyInfo, isReadOnly, maxDesiredWidth);
+
 					if (attributeMinWidth != null)
 						textColumn.MinDesiredWidth = attributeMinWidth.MinWidth;
+
 					if (attributeAutoSize != null)
 						textColumn.AutoSize = true;
+
+					textColumn.ScanItemAttributes(List);
+
 					column = textColumn;
-					//else
-					//	column = new DataGridTextColumn();
-
-					if (!textColumn.WordWrap && (propertyInfo.PropertyType == typeof(string) || propertyInfo.PropertyType == typeof(object)))
-					{
-						for (int i = 0; i < 30 && i < List.Count; i++)
-						{
-							object obj = List[i];
-							if (obj == null)
-								continue;
-
-							object value = propertyInfo.GetValue(obj);
-							if (value == null)
-								continue;
-
-							string text = value.ToString();
-							if (text.Length > EnableWordWrapMinStringLength)
-								textColumn.WordWrap = true;
-						}
-					}
 				}
 			}
-			//var column = new DataGridTextColumn();
 			column.Header = label;
 			column.IsReadOnly = isReadOnly;
-			//column.Bind(avaloniaProperty, iList);
-			//column.Width = new DataGridLength(200);// new DataGridLength(1, DataGridLengthUnitType.Star);
 			column.MaxWidth = attributeMaxWidth != null ? attributeMaxWidth.MaxWidth : MaxColumnWidth;
 			if (attributeMinWidth != null)
 				column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto, attributeMinWidth.MinWidth, double.NaN);
-			//column.HeaderCell.AreSeparatorsVisible = true;
-			//column.HeaderCell.SeparatorBrush = new SolidColorBrush(Colors.Black); // Header Cell styles aren't implemented yet :(
-
-			/*Binding binding = new Binding(propertyInfo.Name);
-			if (column.IsReadOnly)
-			{
-				if (typeof(INotifyPropertyChanged).IsAssignableFrom(elementType))
-					binding.Mode = BindingMode.OneWay; // leaks memory without INotifyPropertyChanged
-				else
-					binding.Mode = BindingMode.OneTime;
-			}
-			else
-			{
-				if (typeof(INotifyPropertyChanged).IsAssignableFrom(elementType))
-					binding.Mode = BindingMode.TwoWay;
-				else
-					binding.Mode = BindingMode.OneTime;
-				binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-			}
-			column.Binding = binding;*/
 
 			DataGrid.Columns.Add(column);
 			_columnObjects[propertyInfo.Name] = column;
