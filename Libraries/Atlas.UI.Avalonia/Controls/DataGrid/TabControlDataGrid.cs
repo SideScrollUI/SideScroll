@@ -162,8 +162,6 @@ namespace Atlas.UI.Avalonia.Controls
 				if (_selectionModified)
 					TabInstance.SaveTabSettings(); // selection has probably changed
 			}, DispatcherPriority.Background);
-
-			//Debug.Assert(dataGrid.Columns.Count > 0); // make sure something is databindable, not all lists have a property, add a ListToString wrapper around ToString()?
 		}
 
 		private void InitializeControls()
@@ -218,7 +216,6 @@ namespace Atlas.UI.Avalonia.Controls
 			// Add a style for selected & focused here?
 			//var styles = dataGrid.Styles;
 
-			//dataGrid.AutoGenerateColumns = true;
 			if (AutoGenerateColumns)
 				AddColumns();
 
@@ -322,11 +319,14 @@ namespace Atlas.UI.Avalonia.Controls
 					continue;
 
 				DataGridLength originalWidth = originalWidths[column];
+
 				column.MaxWidth = 2000;
+
 				if (column.MinWidth == 0)
 					column.MinWidth = Math.Min(MaxMinColumnWidth, originalWidth.DesiredValue);
 				else
 					column.MinWidth = Math.Max(column.MinWidth, Math.Min(100, originalWidth.DesiredValue));
+
 				double desiredWidth = Math.Max(column.MinWidth, originalWidth.DesiredValue);
 				if (column is DataGridPropertyTextColumn textColumn)
 				{
@@ -340,6 +340,7 @@ namespace Atlas.UI.Avalonia.Controls
 						continue;
 					}
 				}
+
 				if (desiredWidth >= ColumnPercentBased)
 				{
 					// Changes ActualWidth
@@ -366,13 +367,8 @@ namespace Atlas.UI.Avalonia.Controls
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
 				// Group up any new items after the 1st one
-				//if (SelectedRows.Count == 0 || (dataGrid.SelectedCells.Count == 1 && dataGrid.CurrentCell.Item == dataGrid.Items[dataGrid.Items.Count - 1]))
-				// autoSelectNew not exposed
 				if (AutoSelectFirst && (AutoSelectNew || TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved) && (TextBoxSearch.Text == null || TextBoxSearch.Text.Length == 0))// && finishedLoading)
 				{
-					//var tokenSource = new CancellationTokenSource();
-					//this.Dispatcher.Invoke(() => SelectedItem = e.NewItems[0], System.Windows.Threading.DispatcherPriority.SystemIdle, tokenSource.Token, TimeSpan.FromSeconds(1));
-
 					_selectItemEnabled = true;
 					object item = List[List.Count - 1];
 					// don't update the selection too often or we'll slow things down
@@ -381,20 +377,15 @@ namespace Atlas.UI.Avalonia.Controls
 						// change to dispatch here?
 						_autoSelectItem = null;
 						_selectionModified = true;
-						//SelectedItem = e.NewItems[0];
 						Dispatcher.UIThread.Post(() => SetSelectedItem(item), DispatcherPriority.Background);
 						_notifyItemChangedStopwatch.Reset();
 						_notifyItemChangedStopwatch.Start();
-						//collectionView.Refresh();
 					}
 					else
 					{
 						_autoSelectItem = item;
 					}
 				}
-				// causing Invalid thread issues when removing items, remove completely?
-				DataGrid.InvalidateArrange(); // not resizing when adding new item, not needed?
-				DataGrid.InvalidateMeasure(); // not resizing when adding new item, not needed?
 			}
 			else if (e.Action == NotifyCollectionChangedAction.Reset) // Clear() will trigger this
 			{
@@ -425,22 +416,6 @@ namespace Atlas.UI.Avalonia.Controls
 			SelectedItem = selectedItem;
 			_isAutoSelecting--;
 			_disableSaving--;
-
-			if (_scrollIntoViewObject != null && DataGrid.IsEffectivelyVisible && DataGrid.IsInitialized)
-			{
-				try
-				{
-					//if (collectionView.Contains(value))
-					DataGrid.ScrollIntoView(_scrollIntoViewObject, DataGrid.CurrentColumn);
-				}
-				catch (Exception)
-				{
-					// {System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
-					//Parameter name: index
-					//   at Avalonia.Collections.DataGridCollectionView.GetItemAt(Int32 index) in D:\a\1\s\src\Avalonia.Controls.DataGrid\Collections\DataGridCollectionView.cs:line 1957
-				}
-				_scrollIntoViewObject = null;
-			}
 		}
 
 		private void DataGrid_ColumnReordered(object sender, DataGridColumnEventArgs e)
@@ -501,6 +476,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (e.Cell.Content is CheckBox)
 					return;
+
 				if (DataGrid.SelectedItems.Contains(e.Row.DataContext))
 				{
 					Dispatcher.UIThread.Post(ClearSelection, DispatcherPriority.Background);
@@ -553,9 +529,6 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				propertyColumns[0].Label = itemCollection.ColumnName;
 			}
-
-			//if (propertyColumns.Count == 1 && propertyColumns[0].label == "Name")
-			//	propertyColumns[0].label = " ";
 
 			foreach (TabDataSettings.PropertyColumn propertyColumn in propertyColumns)
 			{
@@ -831,7 +804,6 @@ namespace Atlas.UI.Avalonia.Controls
 				UpdateSelection();
 		}
 
-		private object _scrollIntoViewObject;
 		public IList SelectedItems
 		{
 			get
@@ -852,33 +824,37 @@ namespace Atlas.UI.Avalonia.Controls
 					if (match)
 						return;
 				}
+
 				_disableSaving++;
+
 				// datagrid has a bug and doesn't reselect cleared records correctly
 				// Could try only removing removed items, and adding new items, need to check SelectedItems order is correct after
 				if (value.Count > 0)
 					_ignoreSelectionChanged = true;
+
 				DataGrid.SelectedItems.Clear();
 				DataGrid.SelectedItem = null; // need both of these
+
 				_ignoreSelectionChanged = false;
+
 				//foreach (object obj in dataGrid.SelectedItems)
 				// remove all items so the we have to worry about this order changing?
 				//while (dataGrid.SelectedItems.Count > 0)
 				//dataGrid.SelectedItems.RemoveAt(0);
+
 				foreach (object obj in value)
 				{
 					if (List.Contains(obj))
 						DataGrid.SelectedItems.Add(obj);
 				}
-				//dataGrid.Render(); //Can't get data grid to flush this correctly, see DataGrid.FlushSelectionChanged()
 				DataGrid.InvalidateVisual(); // required for autoselection to work
-				//Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);
-				//dataGrid.Flush(); //Can't get data grid to flush this correctly,
-				//if (value.Count > 0)
-				//	dataGrid.ScrollIntoView(value[0], null);
 				if (value.Count > 0)
-					_scrollIntoViewObject = value[0];
+				{
+					Dispatcher.UIThread.Post(() => ScrollIntoView(value[0]), DispatcherPriority.ApplicationIdle);
+				}
 				_disableSaving--;
 			}
+			// save for future cell selection support?
 			/*get
 			{
 				var orderedRows = new SortedDictionary<int, object>();
@@ -909,27 +885,19 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public int SelectedIndex
 		{
-			get
-			{
-				return DataGrid.SelectedIndex;
-			}
-			set
-			{
-				DataGrid.SelectedIndex = value;
-			}
+			get => DataGrid.SelectedIndex;
+			set => DataGrid.SelectedIndex = value;
 		}
 
 		public object SelectedItem
 		{
-			get
-			{
-				return DataGrid.SelectedItem;
-			}
+			get => DataGrid.SelectedItem;
 			set
 			{
 				//autoSelectItem = null;
 				if (value == null)
 					_selectItemEnabled = false;
+
 				// don't reselect if already selected				
 				if (DataGrid.SelectedItems.Count != 1 || DataGrid.SelectedItems[0] != value)
 				{
@@ -938,21 +906,26 @@ namespace Atlas.UI.Avalonia.Controls
 					if (value != null)
 						DataGrid.SelectedItem = value;
 				}
-				// DataGrid.IsInitialized is unreliable and can still be false while showing
-				if (value != null && DataGrid.IsEffectivelyVisible)
-				{
-					try
-					{
-						//if (collectionView.Contains(value))
-							DataGrid.ScrollIntoView(value, DataGrid.CurrentColumn);
-					}
-					catch (Exception)
-					{
-						// {System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
-						//Parameter name: index
-						//   at Avalonia.Collections.DataGridCollectionView.GetItemAt(Int32 index) in D:\a\1\s\src\Avalonia.Controls.DataGrid\Collections\DataGridCollectionView.cs:line 1957
-					}
-				}
+				ScrollIntoView(value);
+			}
+		}
+
+		private void ScrollIntoView(object value)
+		{
+			// DataGrid.IsInitialized is unreliable and can still be false while showing
+			if (value == null || !DataGrid.IsEffectivelyVisible)
+				return;
+			
+			try
+			{
+				//if (collectionView.Contains(value))
+				DataGrid.ScrollIntoView(value, DataGrid.CurrentColumn);
+			}
+			catch (Exception)
+			{
+				// {System.ArgumentOutOfRangeException: Specified argument was out of the range of valid values.
+				//Parameter name: index
+				//   at Avalonia.Collections.DataGridCollectionView.GetItemAt(Int32 index) in D:\a\1\s\src\Avalonia.Controls.DataGrid\Collections\DataGridCollectionView.cs:line 1957
 			}
 		}
 
@@ -1012,6 +985,7 @@ namespace Atlas.UI.Avalonia.Controls
 					}
 					tabDataConfiguration.selectedRows.Add(selectedItem);
 				}*/
+
 				try
 				{
 					foreach (object obj in DataGrid.SelectedItems)
@@ -1043,9 +1017,11 @@ namespace Atlas.UI.Avalonia.Controls
 				DataValue = TabUtils.GetDataValue(obj),
 				Object = obj,
 			};
+
 			// Use the DataValue's DataKey if no DataKey found
 			if (selectedRow.DataKey == null && selectedRow.DataValue != null)
 				selectedRow.DataKey = TabUtils.GetDataKey(selectedRow.DataValue);
+
 			if (selectedRow.Label == type.FullName)
 				selectedRow.Label = null;
 			

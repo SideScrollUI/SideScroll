@@ -20,6 +20,7 @@ namespace Atlas.UI.Avalonia.View
 	public class TabView : Grid, IDisposable
 	{
 		private const string TempPanelId = "TempPanelID";
+		private const int MinDesiredSplitterDistance = 50;
 
 		// Maybe this control should own it's own settings?
 		//private TabViewSettings _tabViewSettings = new TabViewSettings();
@@ -377,15 +378,15 @@ namespace Atlas.UI.Avalonia.View
 			if (_containerGrid == null)
 				return;
 
-			if (Instance.TabViewSettings.SplitterDistance == null || Instance.TabViewSettings.SplitterDistance <= 0.0)
+			if (TabViewSettings.SplitterDistance is double splitterDistance && splitterDistance > MinDesiredSplitterDistance)
 			{
-				_containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
+				_containerGrid.ColumnDefinitions[0].Width = new GridLength((int)splitterDistance);
+				if (_tabParentControls != null)
+					_tabParentControls.Width = (double)splitterDistance;
 			}
 			else
 			{
-				_containerGrid.ColumnDefinitions[0].Width = new GridLength((int)TabViewSettings.SplitterDistance);
-				if (_tabParentControls != null)
-					_tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
+				_containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 			}
 		}
 
@@ -883,6 +884,9 @@ namespace Atlas.UI.Avalonia.View
 				Control control = TabCreator.CreateChildControl(Instance, obj, label, tabControl);
 				if (control is TabView tabView && selectedRow != null)
 					tabView.Instance.SelectedRow = selectedRow;
+
+				TabViewer.BaseViewer.TabLoaded(obj, control);
+
 				return control;
 			}
 			catch (Exception e)

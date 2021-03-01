@@ -11,6 +11,8 @@ namespace Atlas.UI.Avalonia
 	{
 		Type IStyleable.StyleKey => typeof(ContextMenu);
 
+		private const int MaxCellValueLength = 10000;
+
 		public DataGrid DataGrid;
 		public DataGridPropertyTextColumn Column;
 		public DataGridCell Cell;
@@ -76,7 +78,8 @@ namespace Atlas.UI.Avalonia
 
 		private async void MenuItemCopyCellContents_Click(object sender, RoutedEventArgs e)
 		{
-			await ClipBoardUtils.SetTextAsync(TextBlock.Text);
+			string value = FormatValueConverter.ObjectToString(Column.PropertyInfo.GetValue(TextBlock.DataContext), MaxCellValueLength, Column.FormatConverter.IsFormatted);
+			await ClipBoardUtils.SetTextAsync(value);
 		}
 
 		private async void MenuItemCopyColumn_Click(object sender, RoutedEventArgs e)

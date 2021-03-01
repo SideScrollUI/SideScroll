@@ -34,9 +34,9 @@ namespace Atlas.UI.Avalonia
 		public bool WordWrap { get; set; }
 		//public bool Editable { get; set; } = false;
 
-		private Binding _formattedBinding;
+		public Binding FormattedBinding;
 		//private Binding unformattedBinding;
-		private readonly FormatValueConverter _formatConverter = new FormatValueConverter();
+		public readonly FormatValueConverter FormatConverter = new FormatValueConverter();
 
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{
@@ -51,9 +51,9 @@ namespace Atlas.UI.Avalonia
 			if (maxHeightAttribute != null && typeof(IListItem).IsAssignableFrom(PropertyInfo.PropertyType))
 			{
 				MaxDesiredHeight = maxHeightAttribute.MaxHeight;
-				_formatConverter.MaxLength = MaxDesiredHeight * 10;
+				FormatConverter.MaxLength = MaxDesiredHeight * 10;
 			}
-			_formatConverter.Rounded = (propertyInfo.GetCustomAttribute<RoundedAttribute>() != null);
+			FormatConverter.IsFormatted = (propertyInfo.GetCustomAttribute<FormattedAttribute>() != null);
 
 			if (DataGridUtils.IsTypeAutoSize(propertyInfo.PropertyType))
 				AutoSize = true;
@@ -188,59 +188,9 @@ namespace Atlas.UI.Avalonia
 			}
 		}
 
-		public class TextBlockElement : TextBlock, IStyleable, ILayoutable
-		{
-			Type IStyleable.StyleKey => typeof(TextBlock);
-
-			public readonly DataGridPropertyTextColumn Column;
-			public readonly PropertyInfo PropertyInfo;
-
-			public new Size DesiredSize { get; set;  }
-
-			public TextBlockElement(DataGridPropertyTextColumn column, PropertyInfo propertyInfo)
-			{
-				Column = column;
-				PropertyInfo = propertyInfo;
-
-				Margin = new Thickness(5);
-			}
-
-			protected override Size MeasureCore(Size availableSize)
-			{
-				Size measured = base.MeasureCore(availableSize);
-
-				// override the default DesiredSize so the desired max width is used for sizing
-				// control will still fill all available space
-				double maxDesiredWidth = Column.MaxDesiredWidth;
-				if (DataContext is IMaxDesiredWidth iMaxWidth && Column.DisplayIndex == 1 && iMaxWidth.MaxDesiredWidth != null && DataContext is IListPair)
-				{
-					maxDesiredWidth = iMaxWidth.MaxDesiredWidth.Value;
-				}
-
-				double maxDesiredHeight = Column.MaxDesiredHeight;
-				if (DataContext is IMaxDesiredHeight iMaxHeight && iMaxHeight.MaxDesiredHeight != null && DataContext is IListItem)
-				{
-					maxDesiredHeight = iMaxHeight.MaxDesiredHeight.Value;
-				}
-
-				DesiredSize = measured.
-					WithWidth(Math.Min(maxDesiredWidth, measured.Width)).
-					WithHeight(Math.Min(maxDesiredHeight, measured.Height));
-
-				return measured;
-			}
-		}
-
 		protected TextBlock CreateTextBlock(DataGridCell cell)
 		{
 			var textBlockElement = new TextBlockElement(this, PropertyInfo);
-
-			if (WordWrap)
-				textBlockElement.TextWrapping = TextWrapping.Wrap;
-			else
-				textBlockElement.VerticalAlignment = VerticalAlignment.Center;
-
-			textBlockElement.TextAlignment = DataGridUtils.GetTextAlignment(PropertyInfo.PropertyType);
 
 			cell.IsHitTestVisible = true;
 			cell.Focusable = true;
@@ -257,18 +207,18 @@ namespace Atlas.UI.Avalonia
 		{
 			Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);
 
-			if (_formattedBinding == null)
+			if (FormattedBinding == null)
 			{
-				_formattedBinding = new Binding
+				FormattedBinding = new Binding
 				{
 					Path = binding.Path,
 					Mode = BindingMode.Default,
 				};
 				if (IsReadOnly)
-					_formattedBinding.Converter = _formatConverter;
+					FormattedBinding.Converter = FormatConverter;
 			}
 
-			return _formattedBinding;
+			return FormattedBinding;
 		}
 
 		// todo: set default background brush to white so context menu's work, hover breaks if it's set though
@@ -380,5 +330,61 @@ namespace Atlas.UI.Avalonia
 
 			return unformattedBinding;
 		}*/
+	}
+
+	public class TextBlockElement : TextBlock, IStyleable, ILayoutable
+	{
+		Type IStyleable.StyleKey => typeof(TextBlock);
+
+		public readonly DataGridPropertyTextColumn Column;
+		public readonly PropertyInfo PropertyInfo;
+
+		public new Size DesiredSize { get; set; }
+
+		public TextBlockElement(DataGridPropertyTextColumn column, PropertyInfo propertyInfo)
+		{
+			Column = column;
+			PropertyInfo = propertyInfo;
+
+			Initialize();
+		}
+
+		private void Initialize()
+		{
+			Margin = new Thickness(5);
+
+			if (!Column.FormatConverter.IsFormatted)
+				TextAlignment = DataGridUtils.GetTextAlignment(PropertyInfo.PropertyType);
+
+			if (Column.WordWrap)
+				TextWrapping = TextWrapping.Wrap;
+			else
+				VerticalAlignment = VerticalAlignment.Center;
+		}
+
+		protected override Size MeasureCore(Size availableSize)
+		{
+			Size measured = base.MeasureCore(availableSize);
+
+			// override the default DesiredSize so the desired max width is used for sizing
+			// control will still fill all available space
+			double maxDesiredWidth = Column.MaxDesiredWidth;
+			if (DataContext is IMaxDesiredWidth iMaxWidth && Column.DisplayIndex == 1 && iMaxWidth.MaxDesiredWidth != null && DataContext is IListPair)
+			{
+				maxDesiredWidth = iMaxWidth.MaxDesiredWidth.Value;
+			}
+
+			double maxDesiredHeight = Column.MaxDesiredHeight;
+			if (DataContext is IMaxDesiredHeight iMaxHeight && iMaxHeight.MaxDesiredHeight != null && DataContext is IListItem)
+			{
+				maxDesiredHeight = iMaxHeight.MaxDesiredHeight.Value;
+			}
+
+			DesiredSize = measured.
+				WithWidth(Math.Min(maxDesiredWidth, measured.Width)).
+				WithHeight(Math.Min(maxDesiredHeight, measured.Height));
+
+			return measured;
+		}
 	}
 }

@@ -112,16 +112,6 @@ namespace Atlas.Tabs
 		public SynchronizationContext UiContext;
 		public TabBookmark FilterBookmarkNode;
 
-		public event EventHandler<EventArgs> OnRefresh;
-		public event EventHandler<EventArgs> OnReload;
-		public event EventHandler<EventArgs> OnModelChanged;
-		public event EventHandler<EventArgs> OnLoadBookmark;
-		public event EventHandler<EventArgs> OnClearSelection;
-		public event EventHandler<EventSelectItem> OnSelectItem;
-		public event EventHandler<EventSelectItem> OnSelectionChanged;
-		public event EventHandler<EventArgs> OnModified;
-		public event EventHandler<EventArgs> OnResize;
-
 		public class EventSelectItem : EventArgs
 		{
 			public object Object;
@@ -131,6 +121,16 @@ namespace Atlas.Tabs
 				Object = obj;
 			}
 		}
+
+		public event EventHandler<EventArgs> OnRefresh;
+		public event EventHandler<EventArgs> OnReload;
+		public event EventHandler<EventArgs> OnModelChanged;
+		public event EventHandler<EventArgs> OnLoadBookmark;
+		public event EventHandler<EventArgs> OnClearSelection;
+		public event EventHandler<EventSelectItem> OnSelectItem;
+		public event EventHandler<EventSelectItem> OnSelectionChanged;
+		public event EventHandler<EventArgs> OnModified;
+		public event EventHandler<EventArgs> OnResize;
 
 		// Relative paths for where all the TabSettings get stored, primarily used for loading future defaults
 		// paths get hashed later to avoid having to encode and super long names breaking path limits
@@ -449,6 +449,7 @@ namespace Atlas.Tabs
 				}
 				//StartAsync(ReintializeAsync);
 			}
+
 			if (CanLoad)
 			{
 				try
@@ -460,6 +461,7 @@ namespace Atlas.Tabs
 					call.Log.Add(e);
 					model.AddData(e);
 				}
+
 				// Task.OnFinished hasn't always been called by this point
 				if (call.Log.Type >= LogEntry.LogType.Error && !Model.Tasks.Contains(call.TaskInstance))
 					Model.Tasks.Add(call.TaskInstance);

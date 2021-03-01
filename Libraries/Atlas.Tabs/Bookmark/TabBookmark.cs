@@ -59,12 +59,14 @@ namespace Atlas.Tabs
 				}
 			}
 		}
+
 		//public List<DataRepoItem> DataRepoItems { get; set; } = new List<DataRepoItem>();
 		public string DataRepoDirectory { get; set; }
 
 		// Temporary, Only FindMatches() uses, refactor these out?
 		[NonSerialized]
 		public HashSet<object> SelectedObjects = new HashSet<object>(); // does this work with multiple TabDatas?
+
 		[NonSerialized]
 		public TabModel TabModel;
 

@@ -121,10 +121,7 @@ namespace Atlas.UI.Avalonia.Controls
 			OxyColors.MediumSpringGreen,
 		};
 
-		public static OxyColor GetColor(int index)
-		{
-			return Colors[index % Colors.Length];
-		}
+		public static OxyColor GetColor(int index) => Colors[index % Colors.Length];
 
 		public event EventHandler<SeriesSelectedEventArgs> OnSelectionChanged;
 
@@ -609,7 +606,7 @@ namespace Atlas.UI.Avalonia.Controls
 			LinearAxis.Maximum = maximum;
 		}
 
-		private void UpdateValueAxis() // OxyPlot.Axes.LinearAxis valueAxis, string axisKey = null
+		public void UpdateValueAxis() // OxyPlot.Axes.LinearAxis valueAxis, string axisKey = null
 		{
 			if (ValueAxis == null)
 				return;
@@ -864,7 +861,7 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			xAxisPropertyInfo = lineSeries.XAxisPropertyInfo;
 
-			PlotModel.Series.Add(lineSeries);
+			PlotModel.Series.Insert(0, lineSeries);
 
 			var oxyListSeries = new OxyListSeries(listSeries, lineSeries);
 

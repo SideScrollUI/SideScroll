@@ -1,5 +1,4 @@
-﻿using Atlas.Core;
-using Atlas.Extensions;
+﻿using Atlas.Extensions;
 using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
@@ -14,7 +13,7 @@ namespace Atlas.UI.Avalonia
 		//public Dictionary<object, object> { get; set; }
 		
 		public bool ConvertBackEnabled { get; set; } = true;
-		public bool Rounded { get; set; }
+		public bool IsFormatted { get; set; }
 
 		private object _originalValue;
 
@@ -24,7 +23,7 @@ namespace Atlas.UI.Avalonia
 			if (value == null)
 				return null;
 
-			object result = ChangeType(value, targetType, MaxLength, Rounded);
+			object result = ChangeType(value, targetType, MaxLength, IsFormatted);
 			return result;
 		}
 
@@ -34,7 +33,7 @@ namespace Atlas.UI.Avalonia
 			return _originalValue;
 		}
 
-		public static object ChangeType(object value, Type targetType, int maxLength, bool rounded)
+		public static object ChangeType(object value, Type targetType, int maxLength, bool formatted)
 		{
 			if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
 			{
@@ -52,24 +51,9 @@ namespace Atlas.UI.Avalonia
 
 			if (targetType == typeof(string))
 			{
-				if (value is DateTime dateTime)
-					return dateTime.ToUniversalTime().ToString("yyyy-M-d H:mm:ss.FFF");
-
-				if (value is DateTimeOffset dateTimeOffset)
-					return dateTimeOffset.UtcDateTime.ToString("yyyy-M-d H:mm:ss.FFF");
-
-				if (value is TimeSpan timeSpan)
-				{
-					if (rounded)
-						return timeSpan.FormattedDecimal();
-					else
-						return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
-				}
-
-				//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above
-
-				return value.Formatted(maxLength);
+				return ObjectToString(value, maxLength, formatted);
 			}
+
 			try
 			{
 				return System.Convert.ChangeType(value, targetType);
@@ -78,6 +62,27 @@ namespace Atlas.UI.Avalonia
 			{
 				return null;
 			}
+		}
+
+		public static string ObjectToString(object value, int maxLength, bool formatted)
+		{
+			if (value is DateTime dateTime)
+				return dateTime.ToUniversalTime().ToString("yyyy-M-d H:mm:ss.FFF");
+
+			if (value is DateTimeOffset dateTimeOffset)
+				return dateTimeOffset.UtcDateTime.ToString("yyyy-M-d H:mm:ss.FFF");
+
+			if (value is TimeSpan timeSpan)
+			{
+				if (formatted)
+					return timeSpan.FormattedDecimal();
+				else
+					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
+			}
+
+			//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above
+
+			return value.Formatted(maxLength);
 		}
 	}
 }

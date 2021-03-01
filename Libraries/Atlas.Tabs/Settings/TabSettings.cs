@@ -29,7 +29,9 @@ namespace Atlas.Tabs
 				return address;
 			}
 		}
+
 		public bool NotesVisible { get; set; }
+
 		public double? SplitterDistance { get; set; }
 
 		public List<TabDataSettings> TabDataSettings { get; set; } = new List<TabDataSettings>();

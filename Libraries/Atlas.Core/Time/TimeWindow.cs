@@ -4,22 +4,26 @@ namespace Atlas.Core
 {
 	public class TimeWindow
 	{
+		public string Name { get; set; }
+
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
+
 		public TimeSpan Duration => EndTime.Subtract(StartTime);
 
 		public TimeWindow Selection { get; set; } // For zooming in
 
 		public event EventHandler<TimeWindowEventArgs> OnSelectionChanged;
 
-		public override string ToString() => DateTimeUtils.FormatTimeRange(StartTime, EndTime);
+		public override string ToString() => Name ?? Selection?.ToString() ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime);
 
 		public TimeWindow() { }
 
-		public TimeWindow(DateTime startTime, DateTime endTime)
+		public TimeWindow(DateTime startTime, DateTime endTime, string name = null)
 		{
 			StartTime = startTime;
 			EndTime = endTime;
+			Name = name;
 		}
 
 		public void Select(TimeWindow timeWindow)

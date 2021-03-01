@@ -15,6 +15,16 @@ using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia
 {
+	public class EventTabLoaded : EventArgs
+	{
+		public object Object;
+
+		public EventTabLoaded(object obj)
+		{
+			Object = obj;
+		}
+	}
+
 	public class TabViewer : Grid
 	{
 		public int MaxScrollWidth = 1000; // should we also use a max percent?
@@ -36,6 +46,8 @@ namespace Atlas.UI.Avalonia
 		public TabView TabView;
 
 		protected ScreenCapture ScreenCapture;
+
+		public event EventHandler<EventTabLoaded> OnTabLoaded;
 
 		public TabViewer(Project project) : base()
 		{
@@ -364,6 +376,11 @@ namespace Atlas.UI.Avalonia
 					return;
 				}
 			}
+		}
+
+		internal void TabLoaded(object obj, Control control)
+		{
+			OnTabLoaded?.Invoke(control, new EventTabLoaded(obj));
 		}
 	}
 }

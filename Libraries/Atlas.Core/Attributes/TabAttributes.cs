@@ -100,7 +100,7 @@ namespace Atlas.Core
 
 	// Round value when displaying (i.e. show TimeSpan as short value like "1.6 Days")
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-	public class RoundedAttribute : Attribute
+	public class FormattedAttribute : Attribute
 	{
 	}
 
