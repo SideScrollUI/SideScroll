@@ -9,7 +9,7 @@ namespace Atlas.UI.Avalonia
 {
 	public class DataGridUtils
 	{
-		// private const int MaxColumnWidth = 100;
+		private const int MaxColumnWidth = 100;
 
 		public class ColumnInfo
 		{
@@ -22,20 +22,53 @@ namespace Atlas.UI.Avalonia
 			}
 		}
 
-		public static string TableToString(List<ColumnInfo> columns, List<List<string>> contentRows)
+		public static string TableToString(List<ColumnInfo> columns, List<List<string>> contentRows, int maxColumnWidth = MaxColumnWidth)
 		{
 			var columnWidths = new List<int>();
 			for (int column = 0; column < columns.Count; column++)
 			{
 				string header = columns[column].Name;
-				int maxWidth = header.Length;
-				foreach (List<string> row in contentRows)
+				columnWidths.Add(header.Length);
+			}
+
+			// Get formatted cell values and wrap text across multiple lines
+			var cellValues = new List<List<string>>();
+			foreach (List<string> row in contentRows)
+			{
+				var rowValues = new List<string>();
+				foreach (string value in row)
 				{
-					string value = row[column];
-					if (value != null)
-						maxWidth = Math.Max(maxWidth, value.Length);
+					string text = value?.Replace("\n", " ").Replace("\r", "").Replace("\t", "    ") ?? "";
+					rowValues.Add(text);
 				}
-				columnWidths.Add(maxWidth);
+
+				while (true)
+				{
+					bool overflowed = false;
+					var lineValues = new List<string>();
+					for (int column = 0; column < rowValues.Count; column++)
+					{
+						string value = rowValues[column];
+						string text = value;
+						if (text.Length > maxColumnWidth)
+						{
+							text = text.Substring(0, maxColumnWidth);
+							int position = text.LastIndexOf(' ');
+							if (position > 0)
+								text = text.Substring(0, position);
+						}
+
+						string remaining = value.Substring(text.Length);
+						rowValues[column] = remaining;
+						lineValues.Add(text);
+						overflowed |= (remaining.Length > 0);
+						columnWidths[column] = Math.Max(text.Length, columnWidths[column]);
+					}
+
+					cellValues.Add(lineValues);
+					if (!overflowed)
+						break;
+				}
 			}
 
 			string line = "-";
@@ -69,17 +102,16 @@ namespace Atlas.UI.Avalonia
 			stringBuilder.Append('\n');
 
 			// Content Cells
-			foreach (var row in contentRows)
+			foreach (var row in cellValues)
 			{
 				stringBuilder.Append("|");
 				columnIndex = 0;
 				foreach (string value in row)
 				{
-					string text = value?.Replace("\n", "").Replace("\r", "") ?? "";
 					if (columns[columnIndex].RightAlign == TextAlignment.Right)
-						stringBuilder.Append(" " + text.PadLeft(columnWidths[columnIndex++], ' ') + " |");
+						stringBuilder.Append(" " + value.PadLeft(columnWidths[columnIndex++], ' ') + " |");
 					else
-						stringBuilder.Append(" " + text.PadRight(columnWidths[columnIndex++], ' ') + " |");
+						stringBuilder.Append(" " + value.PadRight(columnWidths[columnIndex++], ' ') + " |");
 				}
 				stringBuilder.Append('\n');
 			}
