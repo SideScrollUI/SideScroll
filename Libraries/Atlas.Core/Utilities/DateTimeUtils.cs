@@ -10,6 +10,9 @@ namespace Atlas.Core
 
 		public static TimeSpan? ConvertTextToTimeSpan(string text)
 		{
+			if (text == null)
+				return null;
+
 			TimeSpan timeSpan;
 			if (TimeSpan.TryParseExact(text, @"h\:m\:s\.FFFFFFF", CultureInfo.InvariantCulture, out timeSpan))
 				return timeSpan;
@@ -25,6 +28,9 @@ namespace Atlas.Core
 
 		public static DateTime? ConvertTextToDateTime(string text)
 		{
+			if (text == null)
+				return null;
+
 			DateTime dateTime;
 
 			// convert epoch 1569998557298

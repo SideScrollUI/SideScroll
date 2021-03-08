@@ -7,6 +7,8 @@ namespace Atlas.UI.Avalonia
 {
 	public class FormatValueConverter : IValueConverter
 	{
+		private const string StringFormat = "yyyy-M-d H:mm:ss.FFF";
+
 		public int MaxLength { get; set; } = 1000;
 
 		// add a map to store original mappings?
@@ -67,10 +69,10 @@ namespace Atlas.UI.Avalonia
 		public static string ObjectToString(object value, int maxLength, bool formatted)
 		{
 			if (value is DateTime dateTime)
-				return dateTime.ToUniversalTime().ToString("yyyy-M-d H:mm:ss.FFF");
+				return dateTime.ToUniversalTime().ToString(StringFormat);
 
 			if (value is DateTimeOffset dateTimeOffset)
-				return dateTimeOffset.UtcDateTime.ToString("yyyy-M-d H:mm:ss.FFF");
+				return dateTimeOffset.UtcDateTime.ToString(StringFormat);
 
 			if (value is TimeSpan timeSpan)
 			{

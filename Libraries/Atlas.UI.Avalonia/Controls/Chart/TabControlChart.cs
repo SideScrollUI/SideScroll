@@ -170,7 +170,7 @@ namespace Atlas.UI.Avalonia.Controls
 				IsMouseWheelEnabled = false,
 				//DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
 				MinWidth = 150,
-				MinHeight = 100,
+				MinHeight = 80,
 				[Grid.RowProperty] = 1,
 			};
 
@@ -199,22 +199,26 @@ namespace Atlas.UI.Avalonia.Controls
 				Background = Theme.TabBackground, // grid lines look bad when hovering without this
 			};
 
-			var title = new TextBlock()
+			string title = ListGroup?.Name;
+			if (title != null)
 			{
-				Text = ListGroup?.Name,
-				FontSize = 16,
-				//Foreground = Brushes.LightGray,
-				//Foreground = Theme.ToolbarTextForeground,
-				Foreground = Theme.BackgroundText,
-				Margin = new Thickness(10, 5),
-				//FontWeight = FontWeight.Medium,
-				[Grid.ColumnSpanProperty] = 2,
-			};
-			if (!ListGroup.ShowOrder || ListGroup.Horizontal)
-				title.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Center;
-			else
-				title.Margin = new Thickness(40, 5, 5, 5);
-			containerGrid.Children.Add(title);
+				var titleTextBlock = new TextBlock()
+				{
+					Text = ListGroup?.Name,
+					FontSize = 16,
+					//Foreground = Brushes.LightGray,
+					//Foreground = Theme.ToolbarTextForeground,
+					Foreground = Theme.BackgroundText,
+					Margin = new Thickness(10, 5),
+					//FontWeight = FontWeight.Medium,
+					[Grid.ColumnSpanProperty] = 2,
+				};
+				if (!ListGroup.ShowOrder || ListGroup.Horizontal)
+					titleTextBlock.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Center;
+				else
+					titleTextBlock.Margin = new Thickness(40, 5, 5, 5);
+				containerGrid.Children.Add(titleTextBlock);
+			}
 
 			containerGrid.Children.Add(PlotView);
 

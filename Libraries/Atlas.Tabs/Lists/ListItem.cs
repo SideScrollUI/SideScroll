@@ -11,8 +11,10 @@ namespace Atlas.Tabs
 	{
 		[HiddenColumn]
 		public object Key { get; set; }
+
 		[HiddenColumn, InnerValue]
 		public object Value { get; set; }
+
 		public bool AutoLoad = true;
 
 #pragma warning disable 414

@@ -15,6 +15,8 @@ namespace Atlas.UI.Avalonia.Tabs
 {
 	public class TabControlToolbar : Grid
 	{
+		public static Thickness DefaultMargin = new Thickness(6, 3);
+
 		public TabInstance TabInstance;
 
 		public TabControlToolbar(TabInstance tabInstance, TabToolbar toolbar = null)
@@ -92,7 +94,7 @@ namespace Atlas.UI.Avalonia.Tabs
 			{
 				Background = Theme.ToolbarButtonSeparator,
 				Width = 2,
-				Margin = new Thickness(4),
+				Margin = new Thickness(2),
 			};
 			AddControl(panel);
 		}
@@ -120,7 +122,7 @@ namespace Atlas.UI.Avalonia.Tabs
 				TextWrapping = TextWrapping.NoWrap,
 				VerticalAlignment = VerticalAlignment.Center,
 				IsReadOnly = true,
-				Margin = new Thickness(6),
+				Margin = DefaultMargin,
 				BorderThickness = new Thickness(0),
 				BorderBrush = Brushes.Transparent,
 				Background = Brushes.Transparent,
@@ -140,7 +142,7 @@ namespace Atlas.UI.Avalonia.Tabs
 				//Foreground = new SolidColorBrush(Colors.Black),
 				Text = text,
 				MinWidth = minWidth,
-				Margin = new Thickness(6),
+				Margin = DefaultMargin,
 				BorderThickness = new Thickness(1),
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				TextWrapping = TextWrapping.NoWrap,
@@ -161,7 +163,7 @@ namespace Atlas.UI.Avalonia.Tabs
 		{
 			Foreground = Theme.TitleForeground;
 			Text = text;
-			Margin = new Thickness(6);
+			Margin = TabControlToolbar.DefaultMargin;
 			TextWrapping = TextWrapping.NoWrap;
 			VerticalAlignment = VerticalAlignment.Center;
 		}
@@ -175,7 +177,7 @@ namespace Atlas.UI.Avalonia.Tabs
 		{
 			Foreground = Theme.TitleForeground;
 			Content = text;
-			Margin = new Thickness(6);
+			Margin = TabControlToolbar.DefaultMargin;
 			VerticalAlignment = VerticalAlignment.Center;
 		}
 	}

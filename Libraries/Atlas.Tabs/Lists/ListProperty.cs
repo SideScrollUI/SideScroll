@@ -16,7 +16,7 @@ namespace Atlas.Tabs
 	public class ListProperty : ListMember, IPropertyEditable
 	{
 		public PropertyInfo PropertyInfo;
-		public bool Cached;
+		public bool Cachable;
 
 		private bool _valueCached;
 		private object _valueObject = null;
@@ -31,6 +31,9 @@ namespace Atlas.Tabs
 			}
 		}
 
+		[Hidden]
+		public bool IsFormatted => (PropertyInfo.GetCustomAttribute<FormattedAttribute>() != null);
+
 		[Editing, InnerValue, WordWrap]
 		public override object Value
 		{
@@ -38,12 +41,15 @@ namespace Atlas.Tabs
 			{
 				try
 				{
-					if (Cached)
+					if (Cachable)
 					{
 						if (!_valueCached)
 						{
 							_valueCached = true;
 							_valueObject = PropertyInfo.GetValue(Object);
+
+							if (IsFormatted)
+								_valueObject = _valueObject.Formatted();
 						}
 						return _valueObject;
 					}
@@ -78,11 +84,11 @@ namespace Atlas.Tabs
 
 		public override string ToString() => Name;
 
-		public ListProperty(object obj, PropertyInfo propertyInfo, bool cached = true) : 
+		public ListProperty(object obj, PropertyInfo propertyInfo, bool cachable = true) : 
 			base(obj, propertyInfo)
 		{
 			PropertyInfo = propertyInfo;
-			Cached = cached;
+			Cachable = cachable;
 
 			var accessors = propertyInfo.GetAccessors(true);
 			AutoLoad = !accessors[0].IsStatic;
