@@ -653,7 +653,7 @@ namespace Atlas.UI.Avalonia.Controls
 				if (listItem == null)
 					continue;
 
-				string id = TabUtils.GetItemId(listItem);
+				string id = DataUtils.GetItemId(listItem);
 				if (id != null)
 					keys[id] = listItem;
 			}
@@ -1013,14 +1013,14 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				Label = obj.ToUniqueString(),
 				RowIndex = List.IndexOf(obj),
-				DataKey = TabUtils.GetDataKey(obj), // overrides label
-				DataValue = TabUtils.GetDataValue(obj),
+				DataKey = DataUtils.GetDataKey(obj), // overrides label
+				DataValue = DataUtils.GetDataValue(obj),
 				Object = obj,
 			};
 
 			// Use the DataValue's DataKey if no DataKey found
 			if (selectedRow.DataKey == null && selectedRow.DataValue != null)
-				selectedRow.DataKey = TabUtils.GetDataKey(selectedRow.DataValue);
+				selectedRow.DataKey = DataUtils.GetDataKey(selectedRow.DataValue);
 
 			if (selectedRow.Label == type.FullName)
 				selectedRow.Label = null;

@@ -115,7 +115,7 @@ namespace Atlas.Tabs
 		public void Remove(string key)
 		{
 			DataRepoView.Delete(key);
-			TTabType existing = Items.FirstOrDefault(i => i.ToString() == key);
+			TTabType existing = Items.FirstOrDefault(i => DataUtils.GetItemId(i) == key);
 			if (existing != null)
 				Items.Remove(existing);
 		}

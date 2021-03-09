@@ -28,8 +28,8 @@ namespace Atlas.Tabs
 				return;
 
 			Value = obj.ToString();
-			DataKey = TabUtils.GetDataKey(obj);
-			DataValue = TabUtils.GetDataValue(obj);
+			DataKey = DataUtils.GetDataKey(obj);
+			DataValue = DataUtils.GetDataValue(obj);
 		}
 
 		public static ItemCollection<ListToString> Create(IEnumerable enumerable, int limit = MaxItems)
