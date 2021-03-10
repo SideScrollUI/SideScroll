@@ -25,8 +25,11 @@ namespace Atlas.Tabs
 
 		public DataRepoView<TDataType> DataRepoView;
 		public DataRepoView<TDataType> DataRepoSecondary; // saves and deletes goto a 2nd copy
+
 		public object[] TabParams;
+
 		private Dictionary<TTabType, IDataItem> _dataItemLookup;
+		private Dictionary<IDataItem, TTabType> _valueLookup;
 
 		public DataCollection(DataRepoView<TDataType> dataRepoView, params object[] tabParams)
 		{
@@ -50,7 +53,7 @@ namespace Atlas.Tabs
 			{
 				foreach (IDataItem item in e.OldItems)
 				{
-					Remove(item.Key);
+					Remove(item);
 				}
 			}
 			else if (e.Action == NotifyCollectionChangedAction.Reset)
@@ -63,6 +66,7 @@ namespace Atlas.Tabs
 		{
 			Items.Clear();
 			_dataItemLookup = new Dictionary<TTabType, IDataItem>();
+			_valueLookup = new Dictionary<IDataItem, TTabType>();
 
 			//dataRepoBookmarks = project.DataApp.Open<TDataType>(null, DataKey);
 			foreach (DataItem<TDataType> dataItem in DataRepoView.Items)
@@ -81,6 +85,7 @@ namespace Atlas.Tabs
 			tabItem.OnDelete += Item_OnDelete;
 			Items.Add(tabItem);
 			_dataItemLookup.Add(tabItem, dataItem);
+			_valueLookup.Add(dataItem, tabItem);
 			return tabItem;
 		}
 
@@ -106,18 +111,20 @@ namespace Atlas.Tabs
 			if (!_dataItemLookup.TryGetValue(tab, out IDataItem dataItem))
 				return;
 
-			DataRepoView.Delete(dataItem.Key);
-			DataRepoSecondary?.Delete(dataItem.Key);
-			Items.Remove(tab);
+			Remove(dataItem);
 			//Reload();
 		}
 
-		public void Remove(string key)
+		public void Remove(IDataItem dataItem)
 		{
-			DataRepoView.Delete(key);
-			TTabType existing = Items.FirstOrDefault(i => DataUtils.GetItemId(i) == key);
-			if (existing != null)
+			DataRepoView.Delete(dataItem.Key);
+			DataRepoSecondary?.Delete(dataItem.Key);
+			if (_valueLookup.TryGetValue(dataItem, out TTabType existing))
+			{
+				_valueLookup.Remove(dataItem);
+				_dataItemLookup.Remove(existing);
 				Items.Remove(existing);
+			}
 		}
 
 		public void AddDataRepo(DataRepoView<TDataType> dataRepoView)

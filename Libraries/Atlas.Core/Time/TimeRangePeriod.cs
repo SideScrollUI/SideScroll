@@ -87,7 +87,7 @@ namespace Atlas.Core
 				{
 					double offset = valueBinStartTime.Subtract(startTime).TotalSeconds;
 					int period = (int)(offset / periodSeconds);
-					Debug.Assert(period < timeRangePeriods.Count);
+					Debug.Assert(period >= 0 && period < timeRangePeriods.Count);
 					TimeRangePeriod bin = timeRangePeriods[period];
 
 					DateTime binStartTime = valueStartTime.Max(bin.StartTime);

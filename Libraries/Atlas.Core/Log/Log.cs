@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -118,6 +119,9 @@ namespace Atlas.Core
 
 		public void AddLogEntry(LogEntry logEntry)
 		{
+			if (logEntry.Type >= LogType.Warn)
+				Debug.Print(logEntry.ToString());
+
 			logEntry.RootLog = RootLog;
 			logEntry.Context = Context;
 			if (Context != null)
