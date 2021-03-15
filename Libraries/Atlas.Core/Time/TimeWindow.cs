@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Atlas.Extensions;
+using System;
 
 namespace Atlas.Core
 {
@@ -30,6 +31,23 @@ namespace Atlas.Core
 		{
 			Selection = timeWindow;
 			OnSelectionChanged?.Invoke(this, new TimeWindowEventArgs(timeWindow ?? this));
+		}
+
+		public TimeWindow Trim()
+		{
+			return Trim(Duration.PeriodDuration());
+		}
+
+		public TimeWindow Trim(long ticks)
+		{
+			StartTime = StartTime.Trim(ticks);
+			EndTime = EndTime.Trim(ticks);
+			return this;
+		}
+
+		public TimeWindow Trim(TimeSpan timeSpan)
+		{
+			return Trim(timeSpan.Ticks);
 		}
 	}
 

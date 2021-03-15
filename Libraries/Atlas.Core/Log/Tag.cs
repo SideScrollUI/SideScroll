@@ -5,6 +5,7 @@ namespace Atlas.Core
 	public class Tag
 	{
 		public string Name { get; set; }
+
 		[InnerValue]
 		public object Value { get; set; }
 

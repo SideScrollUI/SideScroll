@@ -13,6 +13,8 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabChartLineSeries : OxyPlot.Series.LineSeries
 	{
+		private const int MaxPointsToShowMarkers = 10;
+
 		public TabControlChart Chart;
 		public ListSeries ListSeries;
 		private bool UseDateTimeAxis;
@@ -45,7 +47,7 @@ namespace Atlas.UI.Avalonia.Controls
 			CanTrackerInterpolatePoints = false;
 			MinimumSegmentLength = 2;
 			MarkerSize = 3;
-			MarkerType = listSeries.List.Count < 20 ? MarkerType.Circle : MarkerType.None;
+			MarkerType = listSeries.List.Count <= MaxPointsToShowMarkers ? MarkerType.Circle : MarkerType.None;
 			LoadTrackFormat();
 
 			// can't add gaps with ItemSource so convert to DataPoint ourselves

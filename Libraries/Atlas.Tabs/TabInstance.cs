@@ -874,6 +874,9 @@ namespace Atlas.Tabs
 					if (propertyInfo.GetCustomAttribute<DataKeyAttribute>() != null)
 					{
 						var objKey = propertyInfo.GetValue(obj);
+						if (objKey == null)
+							continue;
+
 						var tabKey = propertyInfo.GetValue(iTab);
 						// todo: support multiple [Key]s?
 						if (objKey == tabKey)

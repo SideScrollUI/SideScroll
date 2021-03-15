@@ -1005,7 +1005,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 					DateTime startTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Minimum);
 					DateTime endTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Maximum);
-					var timeWindow = new TimeWindow(startTime, endTime);
+					var timeWindow = new TimeWindow(startTime, endTime).Trim();
+
 					UpdateDateTimeAxis(timeWindow);
 					ListGroup.TimeWindow.Select(timeWindow);
 				}

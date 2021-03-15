@@ -101,7 +101,7 @@ namespace Atlas.Core
 					TimeSpan binDuration = binEndTime.Subtract(binStartTime);
 
 					double totalSeconds = binDuration.Min(timeRangeValue.Duration).TotalSeconds;
-					bin.Sum += binDuration.TotalSeconds / totalSeconds * timeRangeValue.Value;
+					bin.Sum += binDuration.TotalSeconds / timeRangeValue.Duration.TotalSeconds * timeRangeValue.Value;
 					bin.SummedDurations += binDuration;
 					bin.SummedSecondValues += totalSeconds * timeRangeValue.Value;
 					bin.Count++;
@@ -112,10 +112,9 @@ namespace Atlas.Core
 
 			foreach (var bin in timeRangePeriods)
 			{
-				if (bin.SummedDurations.TotalMinutes == 0.0)
+				if (bin.SummedDurations.TotalSeconds == 0.0)
 					continue;
 
-				//double binMinutes = bin.Duration.TotalMinutes;
 				bin.StartTime = bin.MinStartTime ?? bin.StartTime;
 				bin.EndTime = bin.MaxEndTime ?? bin.EndTime;
 			}
@@ -132,6 +131,9 @@ namespace Atlas.Core
 				totalDuration = totalDuration.Add(period.SummedDurations);
 				totalSum += period.SummedSecondValues;
 			}
+			if (totalDuration.TotalSeconds == 0.0)
+				return 0;
+
 			return totalSum / totalDuration.TotalSeconds;
 		}
 
@@ -141,7 +143,7 @@ namespace Atlas.Core
 			double total = 0;
 			foreach (var period in periods)
 			{
-				total += period.Sum * period.SummedDurations.TotalSeconds / periodDuration.TotalSeconds;
+				total += period.Sum;
 			}
 			return total;
 		}
