@@ -95,6 +95,7 @@ namespace Atlas.Core
 
 					bin.MinStartTime = bin.MinStartTime?.Min(binStartTime) ?? binStartTime;
 					bin.MaxEndTime = bin.MaxEndTime?.Max(binEndTime) ?? binEndTime;
+
 					bin.MinValue = Math.Min(bin.MinValue, timeRangeValue.Value);
 					bin.MaxValue = Math.Max(bin.MaxValue, timeRangeValue.Value);
 

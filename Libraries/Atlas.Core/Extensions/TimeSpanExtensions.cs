@@ -68,7 +68,7 @@ namespace Atlas.Extensions
 			TimeSpan.FromSeconds(1),
 		};
 
-		public static TimeSpan PeriodDuration(this TimeSpan timeSpan, double numPeriods = 100.0)
+		public static TimeSpan PeriodDuration(this TimeSpan timeSpan, int numPeriods = 100)
 		{
 			TimeSpan maxPeriodDuration = TimeSpan.FromSeconds((timeSpan.TotalSeconds * 2 / numPeriods));
 			foreach (TimeSpan periodMin in CommonTimeSpans)
