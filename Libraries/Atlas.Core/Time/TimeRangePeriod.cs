@@ -26,6 +26,7 @@ namespace Atlas.Core
 		{
 			get
 			{
+				// Concatenate tag values with the same tag name
 				var lookup = new Dictionary<string, Tag>();
 				foreach (Tag tag in AllTags)
 				{
@@ -39,7 +40,7 @@ namespace Atlas.Core
 					}
 					else
 					{
-						lookup.Add(tag.Name, tag);
+						lookup.Add(tag.Name, new Tag(tag));
 					}
 				}
 				return lookup.Values.ToList();

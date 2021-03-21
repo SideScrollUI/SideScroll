@@ -59,10 +59,10 @@ namespace Atlas.UI.Avalonia.Controls
 		public int SeriesLimit { get; set; } = 25;
 		private const double MarginPercent = 0.1; // This needs a min height so this can be lowered
 		private const int MinSelectionWidth = 10;
-		private static OxyColor NowColor = OxyColors.Green;
+		private static readonly OxyColor NowColor = OxyColors.Green;
 		//private static OxyColor timeTrackerColor = Theme.TitleBackground;
 
-		private TabInstance TabInstance;
+		private readonly TabInstance TabInstance;
 		//public ChartSettings ChartSettings { get; set; }
 		public ListGroup ListGroup { get; set; }
 		public bool FillHeight { get; set; }
@@ -700,13 +700,13 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private void UpdateDateTimeAxis()
+		/*private void UpdateDateTimeAxis()
 		{
 			if (DateTimeAxis == null)
 				return;
 
 			//UpdateDateTimeInterval(double duration);
-		}
+		}*/
 
 		private static string ValueFormatter(double d)
 		{
@@ -831,9 +831,9 @@ namespace Atlas.UI.Avalonia.Controls
 				AddListSeries(listSeries, oxyColor);
 		}
 
-		private void AddBarSeries(ListSeries listSeries)
+		/*private void AddBarSeries(ListSeries listSeries)
 		{
-			/*var barSeries = new OxyPlot.Series.BarSeries
+			var barSeries = new OxyPlot.Series.BarSeries
 			{
 				Title = listSeries.Name,
 				StrokeThickness = 2,
@@ -848,11 +848,11 @@ namespace Atlas.UI.Avalonia.Controls
 				barSeries.Items.Add(new BarItem(dataPoint.X, (int)dataPoint.Y));
 			}
 
-			plotModel.Series.Add(barSeries);*/
+			plotModel.Series.Add(barSeries);
 
-			/*ListToTabSeries[listSeries.iList] = listSeries;
-			ListToTabIndex[listSeries.iList] = ListToTabIndex.Count;*/
-		}
+			//ListToTabSeries[listSeries.iList] = listSeries;
+			//ListToTabIndex[listSeries.iList] = ListToTabIndex.Count;
+		}*/
 
 		public OxyPlot.Series.LineSeries AddListSeries(ListSeries listSeries, OxyColor? oxyColor = null)
 		{

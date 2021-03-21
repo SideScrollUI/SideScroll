@@ -20,9 +20,13 @@ namespace Atlas.Tabs
 
 		[Name("Bookmark"), WordWrap]
 		public string Name => Bookmark.Name ?? Bookmark.Address;
+
+		[Formatted]
 		public TimeSpan Age => Bookmark.TimeStamp.Age();
+
 		[HiddenColumn]
 		public Bookmark Bookmark { get; set; }
+
 		private Project Project { get; set; }
 
 		[HiddenColumn]

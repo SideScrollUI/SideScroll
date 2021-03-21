@@ -21,6 +21,12 @@ namespace Atlas.Core
 			Value = value;
 		}
 
+		public Tag(Tag tag)
+		{
+			Name = tag.Name;
+			Value = tag.Value;
+		}
+
 		public Tag(string name, object value, bool verbose = true)
 		{
 			Name = name;

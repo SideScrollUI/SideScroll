@@ -115,12 +115,6 @@ namespace Atlas.Serialize
 				if (!fieldSchema.IsSerialized)
 					continue;
 
-				Type fieldType = fieldSchema.FieldInfo.FieldType.GetNonNullableType();
-				//TypeRepo typeRepo = serializer.GetOrCreateRepo(fieldType);
-				//fieldSchema.fileDataOffset = writer.BaseStream.Position;
-				//if (fieldType != null && serializer.idxTypeToRepo.ContainsKey(fieldType))
-				//	fieldSchema.typeIndex = serializer.idxTypeToRepo[fieldType].typeIndex;
-
 				FieldRepos.Add(new FieldRepo(fieldSchema));
 			}
 
@@ -128,10 +122,6 @@ namespace Atlas.Serialize
 			{
 				if (!propertySchema.IsSerialized)
 					continue;
-
-				Type propertyType = propertySchema.PropertyInfo.PropertyType.GetNonNullableType();
-				//if (propertyType != null && serializer.idxTypeToRepo.ContainsKey(propertyType))
-				//	propertySchema.typeIndex = serializer.idxTypeToRepo[propertyType].typeIndex;
 
 				PropertyRepos.Add(new PropertyRepo(propertySchema));
 			}
@@ -295,16 +285,6 @@ namespace Atlas.Serialize
 			}
 		}
 
-		private void LoadFields(byte[] bytes, ref int byteOffset, object obj)
-		{
-			foreach (FieldRepo fieldRepo in FieldRepos)
-			{
-				object valueObject = fieldRepo.TypeRepo.LoadObjectRef(bytes, ref byteOffset);
-				// todo: 36% of current cpu usage, break into explicit operators? (is that even possible?)
-				fieldRepo.FieldSchema.FieldInfo.SetValue(obj, valueObject); // else set to null?
-			}
-		}
-
 		private void AddProperties(object value)
 		{
 			foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
@@ -349,15 +329,6 @@ namespace Atlas.Serialize
 			foreach (PropertyRepo propertyRepo in PropertyRepos)
 			{
 				propertyRepo.Load(obj);
-			}
-		}
-
-		private void LoadProperties(byte[] bytes, ref int byteOffset, object obj)
-		{
-			foreach (PropertyRepo propertyRepo in PropertyRepos)
-			{
-				object valueObject = propertyRepo.TypeRepo.LoadObjectRef(bytes, ref byteOffset);
-				propertyRepo.PropertySchema.PropertyInfo.SetValue(obj, valueObject); // set to null if not Loadable?
 			}
 		}
 

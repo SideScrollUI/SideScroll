@@ -16,6 +16,7 @@ namespace Atlas.Core
 	{
 		[HiddenRow]
 		public LogEntry RootLog;
+
 		public enum LogType
 		{
 			Debug,
@@ -24,14 +25,20 @@ namespace Atlas.Core
 			Error,
 			Alert
 		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
+
 		[HiddenColumn]
 		public DateTime Created { get; set; }
+
 		public TimeSpan Time => Created.Subtract(RootLog.Created);
+
 		public LogType OriginalType = LogType.Info;
 		public LogType Type { get; set; } = LogType.Info;
+
 		[Hidden]
 		public string Text { get; set; }
+
 		[WordWrap, MinWidth(300)]
 		public string Message
 		{
@@ -39,15 +46,18 @@ namespace Atlas.Core
 			{
 				if (Tags == null)
 					return Text;
+
 				string tagText = TagText;
 				if (tagText == "")
 					return Text;
+
 				return Text + " " + tagText;
 			}
 		}
 
 		[Hidden]
 		public virtual string Summary => Text;
+
 		protected int _entries;
 		public int Entries => _entries;
 
@@ -65,8 +75,6 @@ namespace Atlas.Core
 			}
 		}
 
-		//[AttributeName("Tags")]
-		//[HiddenColumn]
 		private string TagText
 		{
 			get
@@ -82,8 +90,10 @@ namespace Atlas.Core
 				return line;
 			}
 		}
+
 		[HiddenColumn]
 		public Tag[] Tags { get; set; }
+
 		[HiddenRow]
 		public SynchronizationContext Context; // inherited from creator (which can be a Parent Log)
 
@@ -104,7 +114,7 @@ namespace Atlas.Core
 			Created = DateTime.Now;
 		}
 
-		private void InitializeContext()
+		protected void InitializeContext()
 		{
 			Context = Context ?? SynchronizationContext.Current ?? new SynchronizationContext();
 		}

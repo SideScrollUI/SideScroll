@@ -17,12 +17,12 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public TabControlChart Chart;
 		public ListSeries ListSeries;
-		private bool UseDateTimeAxis;
+		private readonly bool UseDateTimeAxis;
 
 		public PropertyInfo XAxisPropertyInfo;
 
 		// DataPoint is sealed
-		private Dictionary<DataPoint, object> _datapointLookup = new Dictionary<DataPoint, object>();
+		private readonly Dictionary<DataPoint, object> _datapointLookup = new Dictionary<DataPoint, object>();
 
 		public override string ToString() => ListSeries?.ToString();
 

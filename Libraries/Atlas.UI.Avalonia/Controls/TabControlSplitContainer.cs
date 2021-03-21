@@ -22,10 +22,12 @@ namespace Atlas.UI.Avalonia.Controls
 	public class TabControlSplitContainer : Grid
 	{
 		public Dictionary<object, Control> GridControls = new Dictionary<object, Control>();
-		//public Dictionary<int, GridSplitter> GridSplitters = new Dictionary<int, GridSplitter>(); // reattach each time controls change
 		public List<GridSplitter> GridSplitters = new List<GridSplitter>(); // reattach each time controls change
+
 		public double MinDesiredWidth = 100;
 		public double MaxDesiredWidth = double.MaxValue;
+
+		public bool IsArrangeValid;
 
 		private List<Item> _gridItems = new List<Item>();
 
@@ -40,8 +42,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch; // not taking up maximum
-			//ColumnDefinition columnDefinition = new ColumnDefinition(1, GridUnitType.Star);
-			//ColumnDefinitions.Add(columnDefinition);
+
 			Focusable = true;
 
 			GotFocus += TabView_GotFocus;
@@ -77,10 +78,9 @@ namespace Atlas.UI.Avalonia.Controls
 			return maxSize;
 		}*/
 
-		public Size arrangeOverrideFinalSize;
 		protected override Size ArrangeOverride(Size finalSize)
 		{
-			arrangeOverrideFinalSize = finalSize;
+			IsArrangeValid = !double.IsNaN(finalSize.Width);
 			return base.ArrangeOverride(finalSize);
 		}
 
@@ -114,10 +114,12 @@ namespace Atlas.UI.Avalonia.Controls
 				Fill = fill,
 			};
 			_gridItems.Add(item);
+
 			int splitterIndex = RowDefinitions.Count;
 			AddRowDefinition(false, splitterIndex);
 			bool addSplitter = false;
-			if (separatorType == SeparatorType.Splitter && fill)
+
+			/*if (separatorType == SeparatorType.Splitter && fill)
 			{
 				// Add a Grid Splitter if there's been a single star row definition before this one
 				for (int prevRowIndex = splitterIndex - 1; prevRowIndex >= 0; prevRowIndex--)
@@ -125,9 +127,11 @@ namespace Atlas.UI.Avalonia.Controls
 					// Grid Splitter doesn't work due to the Tasks being a fixed sized between the 2 stars (bug?)
 					//addSplitter |= (RowDefinitions[prevRowIndex].Height.IsStar);
 				}
-			}
+			}*/
+
 			int controlIndex = splitterIndex + 1;
-			AddRowDefinition(fill, controlIndex);
+			RowDefinition rowDefinition = AddRowDefinition(fill, controlIndex);
+			rowDefinition.MaxHeight = control.MaxHeight;
 
 			SetRow(control, controlIndex);
 			Children.Add(control);
@@ -139,8 +143,7 @@ namespace Atlas.UI.Avalonia.Controls
 			InvalidateMeasure();
 		}
 
-		private bool filled = false;
-		private void AddRowDefinition(bool fill, int? index = null)
+		private RowDefinition AddRowDefinition(bool fill, int? index = null)
 		{
 			var rowDefinition = new RowDefinition();
 			if (fill)
@@ -153,7 +156,7 @@ namespace Atlas.UI.Avalonia.Controls
 			else
 				RowDefinitions.Add(rowDefinition);
 
-			filled |= fill;
+			return rowDefinition;
 		}
 
 		// always show splitters if their is a fill before or after?
@@ -187,18 +190,17 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (index > 0)
 					AddHorizontalGridSplitter(index);
-				index++;
+				
 				// separator
+				index++;
+				
 				RowDefinition rowDefinition = RowDefinitions[index];
 				if (gridItem.Fill)
-					//rowDefinition.Height = new GridLength(1000);
-					RowDefinitions[index].Height = new GridLength(1, GridUnitType.Star);
+					rowDefinition.Height = new GridLength(1, GridUnitType.Star);
 				else
-					RowDefinitions[index].Height = GridLength.Auto;
+					rowDefinition.Height = GridLength.Auto;
 
 				SetRow(gridItem.Control, index);
-				//Children.Insert(index, gridSplitter.Value);
-				//Children.Add(index, gridSplitter.Value);
 				index++;
 			}
 		}
@@ -213,12 +215,9 @@ namespace Atlas.UI.Avalonia.Controls
 				Background = Brushes.Black,
 
 				//ShowsPreview = true,
-				//HorizontalAlignment.Stretch,
-				//VerticalAlignment = VerticalAlignment.Center,
 				Height = Theme.SplitterSize,
 			};
 			GridSplitters.Add(gridSplitter);
-			//gridSplitter.DragCompleted += verticalGridSplitter_DragCompleted;
 			SetRow(gridSplitter, rowIndex);
 			//Children.Insert(index, gridSplitter);
 			Children.Add(gridSplitter);
@@ -226,21 +225,13 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddVerticalGridSplitter(int columnIndex)
 		{
-			/*var rowDefinition = new RowDefinition();
-			rowDefinition.Height = new GridLength(6);
-			RowDefinitions.Insert(index, rowDefinition);*/
-
 			var gridSplitter = new GridSplitter()
 			{
 				VerticalAlignment = VerticalAlignment.Stretch,
 				Background = Brushes.Black,
-				//ShowsPreview = true,
-				//HorizontalAlignment.Stretch,
-				//VerticalAlignment = VerticalAlignment.Center,
 				Width = Theme.SplitterSize,
 			};
 			//GridSplitters.Add(gridSplitter);
-			//gridSplitter.DragCompleted += verticalGridSplitter_DragCompleted;
 			SetColumn(gridSplitter, columnIndex);
 			//Children.Insert(index, gridSplitter);
 			Children.Add(gridSplitter);
@@ -270,6 +261,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				hashedControls.Add(pair.Value);
 			}
+
 			// Remove any children not in use anymore
 			foreach (var oldChild in controls)
 			{
@@ -287,7 +279,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private void AddControls(Dictionary<object, Control> oldControls, List<Control> orderedControls)
+		private void AddControls(List<Control> orderedControls)
 		{
 			//RowDefinitions.Clear();
 			_gridItems.Clear();
@@ -323,7 +315,7 @@ namespace Atlas.UI.Avalonia.Controls
 			BeginInit();
 
 			RemoveControls(oldControls);
-			AddControls(oldControls, orderedControls);
+			AddControls(orderedControls);
 
 			ReattachSplitters();
 

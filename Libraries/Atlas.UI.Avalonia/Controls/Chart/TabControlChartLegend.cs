@@ -218,6 +218,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					legendItem.UpdateTotal();
 				}
+
 				if (!_wrapPanel.Children.Contains(legendItem))
 					_wrapPanel.Children.Add(legendItem);
 			}
@@ -260,6 +261,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					if (lineSeries.Title == null)
 						continue;
+
 					if (_idxLegendItems.TryGetValue(lineSeries.Title, out TabChartLegendItem legendItem))
 					{
 						legendItem.UpdateVisible(lineSeries);
@@ -270,6 +272,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					if (scatterSeries.Title == null)
 						continue;
+
 					if (_idxLegendItems.TryGetValue(scatterSeries.Title, out TabChartLegendItem legendItem))
 					{
 						legendItem.UpdateVisible(scatterSeries);
@@ -297,6 +300,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				item.Highlight = false;
 			}
+
 			if (update)
 				UpdateVisibleSeries();
 		}

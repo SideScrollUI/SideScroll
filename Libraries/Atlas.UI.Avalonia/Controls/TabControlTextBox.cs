@@ -40,6 +40,8 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				TextWrapping = TextWrapping.Wrap;
 				AcceptsReturn = true;
+				MaxHeight = 500;
+				Padding = new Thickness(6, 3, 0, 3); // Avalonia bug? shows margin to right of ScrollBar
 			}
 
 			var binding = new Binding(property.PropertyInfo.Name)

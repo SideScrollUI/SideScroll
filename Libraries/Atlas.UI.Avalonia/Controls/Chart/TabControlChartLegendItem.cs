@@ -38,7 +38,7 @@ namespace Atlas.UI.Avalonia.Controls
 			set
 			{
 				_index = value;
-				TextBlock.Text = value.ToString() + ". " + Series.Title;
+				UpdateTitleText();
 			}
 		}
 		public int Count { get; set; }
@@ -88,7 +88,7 @@ namespace Atlas.UI.Avalonia.Controls
 			AddCheckBox();
 			AddTextBlock();
 			if (ListGroup.ShowOrder && !ListGroup.Horizontal)
-				AddSumTextBlock();
+				AddTotalTextBlock();
 
 			PointerEnter += TabChartLegendItem_PointerEnter;
 			PointerLeave += TabChartLegendItem_PointerLeave;
@@ -189,7 +189,6 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			TextBlock = new TextBlock()
 			{
-				Text = Series.Title,
 				Foreground = Brushes.LightGray,
 				//Background = new SolidColorBrush(Theme.BackgroundColor),
 				Margin = new Thickness(2, 2, 6, 2),
@@ -197,13 +196,21 @@ namespace Atlas.UI.Avalonia.Controls
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 				[Grid.ColumnProperty] = 1,
 			};
-			if (Index > 0)
-				TextBlock.Text = Index.ToString() + ": " + TextBlock.Text;
+			UpdateTitleText();
 			TextBlock.Tapped += TextBox_Tapped;
 			Children.Add(TextBlock);
 		}
 
-		private void AddSumTextBlock()
+		private void UpdateTitleText()
+		{
+			string prefix = "";
+			if (Index > 0 && ListGroup.Series.Count > 1)
+				prefix = Index.ToString() + ". ";
+
+			TextBlock.Text = prefix + Series.Title;
+		}
+
+		private void AddTotalTextBlock()
 		{
 			TextBlockSum = new TextBlock()
 			{
