@@ -3,14 +3,41 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
+using Avalonia.Media;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia
 {
 	public class AvaloniaUtils
 	{
-		public static void AddTextBoxContextMenu(TextBox textBox)
+		// TextBlock control doesn't allow selecting text, so add a Copy command to the context menu
+		public static void AddContextMenu(TextBlock textBlock)
+		{
+			var contextMenu = new ContextMenu();
+
+			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+
+			var list = new AvaloniaList<object>();
+
+			var menuItemCopy = new MenuItem()
+			{
+				Header = "_Copy",
+				Foreground = Brushes.Black,
+			};
+			menuItemCopy.Click += delegate
+			{
+				Task.Run(() => ClipBoardUtils.SetTextAsync(textBlock.Text));
+			};
+			list.Add(menuItemCopy);
+
+			contextMenu.Items = list;
+
+			textBlock.ContextMenu = contextMenu;
+		}
+
+		public static void AddContextMenu(TextBox textBox)
 		{
 			var contextMenu = new ContextMenu();
 

@@ -56,7 +56,7 @@ namespace Atlas.UI.Avalonia.Controls
 			else
 				binding.Mode = BindingMode.OneWay;
 			this.Bind(TextBlock.TextProperty, binding);
-			AvaloniaUtils.AddTextBoxContextMenu(this);
+			AvaloniaUtils.AddContextMenu(this);
 		}
 
 		private void InitializeComponent()

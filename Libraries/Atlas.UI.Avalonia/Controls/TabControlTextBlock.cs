@@ -48,7 +48,7 @@ namespace Atlas.UI.Avalonia.Controls
 				FontSize = 14,
 				Text = Text,
 			};
-			AddContextMenu();
+			AvaloniaUtils.AddContextMenu(TextBlock);
 
 			var scrollViewer = new ScrollViewer()
 			{
@@ -63,31 +63,6 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 
 			Child = scrollViewer;
-		}
-
-		// TextBlock control doesn't allow selecting text, so add a Copy command to the context menu
-		private void AddContextMenu()
-		{
-			var contextMenu = new ContextMenu();
-
-			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
-
-			var list = new AvaloniaList<object>();
-
-			var menuItemCopy = new MenuItem()
-			{
-				Header = "_Copy",
-				Foreground = Brushes.Black,
-			};
-			menuItemCopy.Click += delegate
-			{
-				Task.Run(() => ClipBoardUtils.SetTextAsync(TextBlock.Text));
-			};
-			list.Add(menuItemCopy);
-
-			contextMenu.Items = list;
-
-			TextBlock.ContextMenu = contextMenu;
 		}
 	}
 }

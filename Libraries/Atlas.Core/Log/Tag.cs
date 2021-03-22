@@ -9,6 +9,8 @@ namespace Atlas.Core
 		[InnerValue]
 		public object Value { get; set; }
 
+		public bool Unique;
+
 		public override string ToString() => "[ " + Name + " = " + Value.Formatted() + " ]";
 
 		public Tag()
@@ -25,21 +27,14 @@ namespace Atlas.Core
 		{
 			Name = tag.Name;
 			Value = tag.Value;
+			Unique = tag.Unique;
 		}
 
-		public Tag(string name, object value, bool verbose = true)
+		public Tag(string name, object value, bool unique = true)
 		{
 			Name = name;
-
-			if (verbose)
-				Value = value;
-			else
-				Value = value.ToString();
-		}
-
-		public static Tag Add(object value, bool verbose = true)
-		{
-			return new Tag(value.ToString(), value, verbose);
+			Value = value;
+			Unique = unique;
 		}
 	}
 }

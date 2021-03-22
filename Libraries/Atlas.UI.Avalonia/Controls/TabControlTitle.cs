@@ -59,6 +59,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//[ToolTip.TipProperty] = Label, // re-enable when foreground fixed
 				//[ToolTip.ForegroundProperty] = Brushes.Black, // this overrides the TextBlock Foreground property
 			};
+			AvaloniaUtils.AddContextMenu(TextBlock);
 
 			var borderPaddingTitle = new Border()
 			{
