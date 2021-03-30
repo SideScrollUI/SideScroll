@@ -70,7 +70,6 @@ namespace Atlas.Tabs
 
 		private object GetValue()
 		{
-			//return Task.Run(() => callAction.Invoke(call)).GetAwaiter().GetResult();
 			return Task.Run(() => LoadAction.Invoke(new Call())).GetAwaiter().GetResult();
 		}
 

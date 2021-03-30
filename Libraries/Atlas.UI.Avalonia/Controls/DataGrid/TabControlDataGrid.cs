@@ -552,11 +552,11 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void AddColumn(string label, PropertyInfo propertyInfo)
 		{
-			//bool propertyEditable = (propertyInfo.GetCustomAttribute(typeof(EditingAttribute)) != null);
 			MinWidthAttribute attributeMinWidth = propertyInfo.GetCustomAttribute<MinWidthAttribute>();
 			MaxWidthAttribute attributeMaxWidth = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
 			AutoSizeAttribute attributeAutoSize = propertyInfo.GetCustomAttribute<AutoSizeAttribute>();
-			bool isReadOnly = true;// (tabModel.Editing == false || propertyEditable == false || !propertyInfo.CanWrite);
+
+			bool isReadOnly = true;
 
 			int maxDesiredWidth = attributeMaxWidth != null ? attributeMaxWidth.MaxWidth : MaxColumnWidth;
 			DataGridBoundColumn column;
@@ -573,6 +573,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (propertyInfo.PropertyType == typeof(bool))
 				{
+					isReadOnly = (propertyInfo.GetCustomAttribute<EditingAttribute>() == null);
 					var checkBoxColumn = new DataGridPropertyCheckBoxColumn(propertyInfo, isReadOnly);
 					column = checkBoxColumn;
 					column.Binding = new Binding(propertyInfo.Name);

@@ -206,8 +206,6 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					Text = ListGroup?.Name,
 					FontSize = 16,
-					//Foreground = Brushes.LightGray,
-					//Foreground = Theme.ToolbarTextForeground,
 					Foreground = Theme.BackgroundText,
 					Margin = new Thickness(10, 5),
 					//FontWeight = FontWeight.Medium,

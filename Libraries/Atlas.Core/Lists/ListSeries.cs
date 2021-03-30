@@ -115,6 +115,22 @@ namespace Atlas.Core
 			}
 		}
 
+		public List<TimeRangeValue> GroupByPeriod(TimeWindow timeWindow)
+		{
+			var timeRangeValues = TimeRangeValues;
+			if (timeWindow == null || PeriodDuration == null || timeRangeValues == null)
+				return timeRangeValues;
+
+			switch (SeriesType)
+			{
+				case SeriesType.Sum: return TimeRangePeriod.PeriodSums(timeRangeValues, timeWindow, PeriodDuration.Value);
+				case SeriesType.Minimum: return TimeRangePeriod.PeriodMins(timeRangeValues, timeWindow, PeriodDuration.Value
+					);
+				case SeriesType.Maximum: return TimeRangePeriod.PeriodMaxes(timeRangeValues, timeWindow, PeriodDuration.Value);
+				default: return TimeRangePeriod.PeriodAverages(timeRangeValues, timeWindow, PeriodDuration.Value);
+			}
+		}
+
 		public double GetSum()
 		{
 			double sum = 0;

@@ -15,9 +15,11 @@ namespace Atlas.Core
 		private const int MaxRequestsPerSecond = 10;
 
 		public string Name { get; set; } = "";
+
 		public Log Log { get; set; }
 
 		public Call ParentCall { get; set; }
+
 		[Unserialized]
 		public TaskInstance TaskInstance { get; set; } // Shows the Task Status and let's you stop them
 

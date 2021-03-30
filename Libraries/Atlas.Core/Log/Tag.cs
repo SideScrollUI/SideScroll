@@ -30,7 +30,7 @@ namespace Atlas.Core
 			Unique = tag.Unique;
 		}
 
-		public Tag(string name, object value, bool unique = true)
+		public Tag(string name, object value, bool unique = false)
 		{
 			Name = name;
 			Value = value;
