@@ -11,9 +11,19 @@ namespace Atlas.Core
 
 		public override string ToString() => Label;
 
+		// Lists read easier with the label as the first param
 		public TaskDelegate(string label, CallAction callAction, bool useTask = false, bool showTask = false, string description = null)
 		{
 			Label = label;
+			Action = callAction;
+			UseTask = useTask;
+			ShowTask = showTask;
+			Description = description;
+		}
+
+		public TaskDelegate(CallAction callAction, bool useTask = false, bool showTask = false, string description = null)
+		{
+			Label = callAction.Method.Name;
 			Action = callAction;
 			UseTask = useTask;
 			ShowTask = showTask;

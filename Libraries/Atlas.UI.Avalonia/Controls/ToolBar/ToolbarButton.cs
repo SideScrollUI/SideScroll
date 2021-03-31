@@ -22,6 +22,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public TaskDelegate.CallAction CallAction;
 		public TaskDelegateAsync.CallActionAsync CallActionAsync;
+
 		public bool ShowTask;
 
 		public ToolbarButton(TabControlToolbar toolbar, string label, string tooltip, Stream bitmapStream, ICommand command = null) : base()
@@ -84,11 +85,35 @@ namespace Atlas.UI.Avalonia.Tabs
 				return;
 			}
 
-			if (CallActionAsync != null)
-				Toolbar.TabInstance.StartAsync(CallActionAsync, null, ShowTask);
+			// Allow both
+			StartTaskAsync();
+			StartTask();
+		}
 
-			if (CallAction != null)
-				Toolbar.TabInstance.StartTask(CallAction, ShowTask, ShowTask);
+		private void StartTaskAsync()
+		{
+			if (CallActionAsync == null)
+				return;
+			
+			IsEnabled = false;
+			var taskDelegate = new TaskDelegateAsync(CallActionAsync, true)
+			{
+				OnComplete = () => IsEnabled = true,
+			};
+			Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
+		}
+
+		private void StartTask()
+		{
+			if (CallAction == null)
+				return;
+			
+			IsEnabled = false;
+			var taskDelegate = new TaskDelegate(CallAction, ShowTask)
+			{
+				OnComplete = () => IsEnabled = true,
+			};
+			Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
 		}
 
 		public void Add(TaskDelegate.CallAction callAction)

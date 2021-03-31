@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Atlas.Extensions;
+using System;
 using System.Threading.Tasks;
 
 namespace Atlas.Core
@@ -11,9 +12,19 @@ namespace Atlas.Core
 
 		public override string ToString() => Label;
 
+		// Lists read easier with the label as the first param
 		public TaskDelegateAsync(string label, CallActionAsync callAction, bool showTask = false, string description = null)
 		{
 			Label = label;
+			CallAction = callAction;
+			UseTask = true;
+			ShowTask = showTask;
+			Description = description;
+		}
+
+		public TaskDelegateAsync(CallActionAsync callAction, bool showTask = false, string description = null)
+		{
+			Label = callAction.Method.Name.TrimEnd("Async");
 			CallAction = callAction;
 			UseTask = true;
 			ShowTask = showTask;

@@ -80,6 +80,8 @@ namespace Atlas.Tabs
 	//	An Instance of a TabModel, created by TabView
 	public class TabInstance : IDisposable
 	{
+		private const int MaxPreloadItems = 50; // preload all rows that might be visible to avoid freezing UI
+
 		public const string CurrentBookmarkName = "Current";
 
 		public Project Project { get; set; }
@@ -151,6 +153,8 @@ namespace Atlas.Tabs
 		public IList SelectedItems { get; set; }
 
 		protected IDataRepoInstance DataRepoInstance { get; set; } // Bookmarks use this for saving/loading DataRepo values
+
+		public TabInstance RootInstance => ParentTabInstance?.RootInstance ?? this;
 
 		public override string ToString() => Label;
 
@@ -234,16 +238,6 @@ namespace Atlas.Tabs
 			UiContext = UiContext ?? SynchronizationContext.Current ?? new SynchronizationContext();
 		}
 
-		public TabInstance RootInstance
-		{
-			get
-			{
-				if (ParentTabInstance == null)
-					return this;
-				return ParentTabInstance.RootInstance;
-			}
-		}
-
 		private void ActionCallback(object state)
 		{
 			Action action = (Action)state;
@@ -299,34 +293,29 @@ namespace Atlas.Tabs
 		private void CallActionParamsCallback(object state)
 		{
 			var taskDelegate = (TaskDelegateParams)state;
-			CallTask(taskDelegate, false);
+			StartTask(taskDelegate, false);
 		}
 
-		// subtask?
-		public void CallTask(TaskDelegateParams taskCreator, bool showTask)
-		{
-			taskCreator.Start(taskCreator.Call);
-		}
-
-		public void StartTask(TaskCreator taskCreator, bool showTask, Call call = null)
+		public TaskInstance StartTask(TaskCreator taskCreator, bool showTask, Call call = null)
 		{
 			call = call ?? new Call(taskCreator.Label);
 			TaskInstance taskInstance = taskCreator.Start(call);
 			taskInstance.ShowTask = showTask || ShowTasks;
 			if (taskInstance.ShowTask)
 				Model.Tasks.Add(taskInstance);
+			return taskInstance;
 		}
 
-		public void StartTask(CallAction callAction, bool useTask, bool showTask)
+		public TaskInstance StartTask(CallAction callAction, bool useTask, bool showTask)
 		{
-			var taskDelegate = new TaskDelegate(callAction.Method.Name.TrimEnd("Async"), callAction, useTask);
-			StartTask(taskDelegate, showTask);
+			var taskDelegate = new TaskDelegate(callAction, useTask);
+			return StartTask(taskDelegate, showTask);
 		}
 
-		public void StartAsync(CallActionAsync callAction, Call call = null, bool showTask = false)
+		public TaskInstance StartAsync(CallActionAsync callAction, Call call = null, bool showTask = false)
 		{
-			var taskDelegate = new TaskDelegateAsync(callAction.Method.Name.TrimEnd("Async"), callAction, true);
-			StartTask(taskDelegate, showTask, call);
+			var taskDelegate = new TaskDelegateAsync(callAction, true);
+			return StartTask(taskDelegate, showTask, call);
 		}
 
 		public void StartTask(CallActionParams callAction, bool useTask, bool showTask, params object[] objects)
@@ -489,7 +478,7 @@ namespace Atlas.Tabs
 						propertyColumn.PropertyInfo.GetValue(obj);
 					}
 					itemCount++;
-					if (itemCount > 50)
+					if (itemCount > MaxPreloadItems)
 						break;
 				}
 
@@ -498,7 +487,6 @@ namespace Atlas.Tabs
 
 				if (iList is ItemCollection<ListMember> memberList)
 					model.ItemList[i] = ListMember.Sort(memberList);
-				i++;
 			}
 		}
 
@@ -615,6 +603,7 @@ namespace Atlas.Tabs
 				Type type = iTab?.GetType();
 				if (type == null)
 					return false;
+
 				return TypeSchema.HasEmptyConstructor(type);
 			}
 		}
@@ -643,6 +632,7 @@ namespace Atlas.Tabs
 			tabBookmark.ViewSettings = TabViewSettings.DeepClone();
 			tabBookmark.DataRepoDirectory = DataRepoInstance?.Directory;
 			tabBookmark.SelectedRow = SelectedRow;
+
 			/*if (DataRepoInstance != null)
 			{
 				foreach (var item in tabViewSettings.SelectedRows)
@@ -656,8 +646,10 @@ namespace Atlas.Tabs
 					tabBookmark.DataRepoItems.Add(dataRepoItem);
 				}
 			}*/
+
 			if (iTab is IInnerTab innerTab)
 				iTab = innerTab.Tab;
+
 			if (iTab?.GetType().GetCustomAttribute<TabRootAttribute>() != null)
 			{
 				tabBookmark.IsRoot = true;
@@ -686,14 +678,12 @@ namespace Atlas.Tabs
 
 		public virtual void SelectBookmark(TabBookmark tabBookmark)
 		{
-			TabViewSettings = tabBookmark.ViewSettings;
 			TabBookmark = tabBookmark;
+			TabViewSettings = tabBookmark.ViewSettings;
+
 			if (OnLoadBookmark != null)
 				UiContext.Send(_ => OnLoadBookmark(this, new EventArgs()), null);
-			//this.bookmarkNode = null; // have to wait until TabData's Load, which might be after this
-			/*foreach (TabInstance tabInstance in children)
-			{
-			}*/
+
 			SaveTabSettings();
 		}
 
@@ -705,12 +695,6 @@ namespace Atlas.Tabs
 
 			bookmark.Name = CurrentBookmarkName;
 			Project.DataApp.Save(bookmark.Name, bookmark, TaskInstance.Call);
-
-			//project.navigator.Add(bookmark);
-
-			/*
-			Bookmark clonedBookmark = bookmark.DeepClone();
-			project.navigator.Add(clonedBookmark);*/
 		}
 
 		public void LoadDefaultBookmark()
@@ -927,11 +911,7 @@ namespace Atlas.Tabs
 				if (tabChildBookmark.TabModel != null)
 					return tabChildBookmark.TabModel;
 			}
-			/*foreach (Bookmark.Node node in tabInstance.tabBookmark.nodes)
-			{
-				tabChildBookmark = node;
-				break;
-			}*/
+
 			return tabChildBookmark;
 		}
 

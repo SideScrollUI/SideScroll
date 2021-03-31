@@ -12,6 +12,7 @@ namespace Atlas.Core
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 		//public event EventHandler<EventArgs> OnComplete;
+
 		public Action OnComplete;
 
 		private string _label;
@@ -21,6 +22,7 @@ namespace Atlas.Core
 			set => _label = value;
 		}
 		public TaskCreator Creator { get; set; }
+
 		[HiddenColumn]
 		public Call Call { get; set; } = new Call();
 
@@ -32,6 +34,7 @@ namespace Atlas.Core
 
 		public Task Task { get; set; }
 		public TaskStatus TaskStatus => Task?.Status ?? TaskStatus.Created;
+
 		public CancellationTokenSource TokenSource = new CancellationTokenSource();
 		public CancellationToken CancelToken => TokenSource.Token;
 
@@ -45,6 +48,7 @@ namespace Atlas.Core
 
 		public TaskInstance ParentTask { get; set; }
 		public List<TaskInstance> SubTasks { get; set; } = new List<TaskInstance>();
+
 		private int? _taskCount;
 		public int TaskCount
 		{
@@ -206,6 +210,7 @@ namespace Atlas.Core
 			else
 			{
 				Progress = ProgressMax;
+
 				if (Call.Log.Type >= LogEntry.LogType.Error)
 				{
 					Status = Call.Log.Type.ToString();

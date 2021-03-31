@@ -14,7 +14,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public bool GridInitialized { get; private set; }
 
-		private Dictionary<Button, TaskCreator> _taskCreators = new Dictionary<Button, TaskCreator>();
+		private readonly Dictionary<Button, TaskCreator> _taskCreators = new Dictionary<Button, TaskCreator>();
 
 		public TabControlActions(TabInstance tabInstance, TabModel tabModel, ItemCollection<TaskCreator> taskItems)
 		{
@@ -68,8 +68,10 @@ namespace Atlas.UI.Avalonia.Controls
 			int rowIndex = 0;
 			foreach (TaskCreator taskCreator in TabModel.Actions)
 			{
-				var rowDefinition = new RowDefinition();
-				rowDefinition.Height = new GridLength(1, GridUnitType.Auto);
+				var rowDefinition = new RowDefinition()
+				{
+					Height = new GridLength(1, GridUnitType.Auto),
+				};
 				containerGrid.RowDefinitions.Add(rowDefinition);
 
 				var button = new TabControlButton(taskCreator.Label);
