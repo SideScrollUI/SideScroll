@@ -25,6 +25,7 @@ namespace Atlas.Serialize
 		{
 			typeof(List<>),
 			typeof(Dictionary<,>),
+			typeof(SortedDictionary<,>),
 			typeof(HashSet<>),
 		};
 

@@ -2,6 +2,13 @@
 
 namespace Atlas.Core
 {
+	public enum TagType
+	{
+		Default,
+		Unique, // Only show for original set of Tags
+		Required, // Show in all Tag combinations
+	};
+
 	public class Tag
 	{
 		public string Name { get; set; }
@@ -9,7 +16,7 @@ namespace Atlas.Core
 		[InnerValue]
 		public object Value { get; set; }
 
-		public bool Unique;
+		public TagType Type;
 
 		public override string ToString() => "[ " + Name + " = " + Value.Formatted() + " ]";
 
@@ -27,14 +34,14 @@ namespace Atlas.Core
 		{
 			Name = tag.Name;
 			Value = tag.Value;
-			Unique = tag.Unique;
+			Type = tag.Type;
 		}
 
-		public Tag(string name, object value, bool unique = false)
+		public Tag(string name, object value, TagType type = TagType.Default)
 		{
 			Name = name;
 			Value = value;
-			Unique = unique;
+			Type = type;
 		}
 	}
 }

@@ -53,10 +53,10 @@ namespace Atlas.Core
 		public static List<TimeRangePeriod> Periods(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
 			double windowSeconds = Math.Ceiling(timeWindow.Duration.TotalSeconds);
-			if (windowSeconds <= 1)
+			double periodSeconds = (int)periodDuration.TotalSeconds;
+			if (windowSeconds < 1 || periodSeconds < 1)
 				return null;
 
-			double periodSeconds = (int)periodDuration.TotalSeconds;
 			int numPeriods = (int)Math.Ceiling((windowSeconds + 1) / periodSeconds);
 
 			DateTime startTime = timeWindow.StartTime.Trim();
@@ -126,6 +126,9 @@ namespace Atlas.Core
 		public static double TotalAverage(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
 			var periods = Periods(dataPoints, timeWindow, periodDuration);
+			if (periods == null)
+				return 0;
+
 			double totalSum = 0;
 			TimeSpan totalDuration;
 			foreach (var period in periods)
@@ -142,6 +145,9 @@ namespace Atlas.Core
 		public static double TotalSum(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
 			var periods = Periods(dataPoints, timeWindow, periodDuration);
+			if (periods == null)
+				return 0;
+
 			double total = 0;
 			foreach (var period in periods)
 			{
@@ -181,6 +187,9 @@ namespace Atlas.Core
 		public static List<TimeRangeValue> PeriodAverages(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
 			var periods = Periods(dataPoints, timeWindow, periodDuration);
+			if (periods == null)
+				return null;
+
 			var timeRangeValues = new List<TimeRangeValue>();
 			foreach (var period in periods)
 			{
@@ -196,6 +205,9 @@ namespace Atlas.Core
 		public static List<TimeRangeValue> PeriodSums(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
 			var periods = Periods(dataPoints, timeWindow, periodDuration);
+			if (periods == null)
+				return null;
+
 			var timeRangeValues = new List<TimeRangeValue>();
 			foreach (var period in periods)
 			{
@@ -210,6 +222,9 @@ namespace Atlas.Core
 		public static List<TimeRangeValue> PeriodMins(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
 			var periods = Periods(dataPoints, timeWindow, periodDuration);
+			if (periods == null)
+				return null;
+
 			var timeRangeValues = new List<TimeRangeValue>();
 			foreach (var period in periods)
 			{
@@ -224,6 +239,9 @@ namespace Atlas.Core
 		public static List<TimeRangeValue> PeriodMaxes(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
 			var periods = Periods(dataPoints, timeWindow, periodDuration);
+			if (periods == null)
+				return null;
+
 			var timeRangeValues = new List<TimeRangeValue>();
 			foreach (var period in periods)
 			{

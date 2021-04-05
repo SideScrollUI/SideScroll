@@ -139,15 +139,6 @@ namespace Atlas.UI.Avalonia.Controls
 		private void Initialize()
 		{
 			_disableSaving++;
-			/*ValueToBrushConverter brushConverter = (ValueToBrushConverter)dataGrid.Resources["colorConverter"];
-			brushConverter.HasChildrenBrush = (SolidColorBrush)Resources[Keys.HasChildrenBrush];
-
-			if (tabModel.Editing == true)
-			{
-				dataGrid.IsReadOnly = false;
-				brushConverter.Editable = true;
-				brushConverter.EditableBrush = (SolidColorBrush)Resources[Keys.EditableBrush];
-			}*/
 
 			Type listType = List.GetType();
 			_elementType = listType.GetElementTypeForAll();
@@ -250,7 +241,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					_dispatcherTimer = new DispatcherTimer()
 					{
-						Interval = new TimeSpan(0, 0, 1), // Tick event doesn't fire if set to < 1 second
+						Interval = TimeSpan.FromSeconds(1), // Tick event doesn't fire if set to < 1 second
 					};
 					_dispatcherTimer.Tick += DispatcherTimer_Tick;
 					_dispatcherTimer.Start();
@@ -696,7 +687,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (TabInstance.TabBookmark?.Bookmark?.Imported == true && rowObjects.Count != TabDataSettings.SelectedRows.Count)
 			{
 				// Replace with call and CallDebugLogger?
-				Debug.Print("Failed to find all bookmarked rows, Found: " + string.Join(", ", TabDataSettings.SelectedRows) + string.Join(", ", rowObjects));
+				Debug.Print("Failed to find all bookmarked rows, Selected: " + string.Join(", ", TabDataSettings.SelectedRows) + ", Found: " + string.Join(", ", rowObjects));
 				Debug.Print("Possible Causes: Object ToString() changed. Try adding [DataKey] to object field/property");
 			}
 

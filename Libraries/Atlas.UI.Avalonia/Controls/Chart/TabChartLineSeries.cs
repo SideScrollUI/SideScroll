@@ -13,7 +13,7 @@ namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabChartLineSeries : OxyPlot.Series.LineSeries
 	{
-		private const int MaxPointsToShowMarkers = 10;
+		private const int MaxPointsToShowMarkers = 8;
 
 		public TabControlChart Chart;
 		public ListSeries ListSeries;

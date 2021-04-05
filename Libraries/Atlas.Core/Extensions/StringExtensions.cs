@@ -115,6 +115,13 @@ namespace Atlas.Extensions
 			return newText.ToString();
 		}
 
+		public static string CamelCased(this string text)
+		{
+			string lowerCased = text.ToLower();
+			string camelCased = char.ToUpper(lowerCased[0]) + lowerCased.Substring(1);
+			return camelCased;
+		}
+
 		public static IEnumerable<int> GetAllIndexes(this string source, string matchString)
 		{
 			matchString = Regex.Escape(matchString);

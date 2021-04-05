@@ -85,35 +85,35 @@ namespace Atlas.UI.Avalonia.Tabs
 				return;
 			}
 
-			// Allow both
-			StartTaskAsync();
-			StartTask();
+			// Only allow one since we don't block for completion of first
+			if (StartTaskAsync() == null)
+				StartTask();
 		}
 
-		private void StartTaskAsync()
+		private TaskInstance StartTaskAsync()
 		{
 			if (CallActionAsync == null)
-				return;
+				return null;
 			
 			IsEnabled = false;
 			var taskDelegate = new TaskDelegateAsync(CallActionAsync, true)
 			{
 				OnComplete = () => IsEnabled = true,
 			};
-			Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
+			return Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
 		}
 
-		private void StartTask()
+		private TaskInstance StartTask()
 		{
 			if (CallAction == null)
-				return;
+				return null;
 			
 			IsEnabled = false;
 			var taskDelegate = new TaskDelegate(CallAction, ShowTask)
 			{
 				OnComplete = () => IsEnabled = true,
 			};
-			Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
+			return Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
 		}
 
 		public void Add(TaskDelegate.CallAction callAction)

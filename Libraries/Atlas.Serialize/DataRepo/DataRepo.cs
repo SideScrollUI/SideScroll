@@ -74,7 +74,7 @@ namespace Atlas.Serialize
 			Save(obj.GetType().AssemblyQualifiedName, obj, call);
 		}
 
-		public T Load<T>(string name, Call call, bool createIfNeeded = false, bool lazy = false)
+		public T Load<T>(string name, Call call = null, bool createIfNeeded = false, bool lazy = false)
 		{
 			return Load<T>(DefaultDirectory, name, call, createIfNeeded, lazy);
 		}
@@ -239,7 +239,7 @@ namespace Atlas.Serialize
 		// Don't use GetHashCode(), it returns a different value each time the process is run
 		public string GetTypePath(Type type, string name = null)
 		{
-			string path = Paths.Combine(RepoPath, RepoName, type.FullName);
+			string path = Paths.Combine(RepoPath, RepoName, type.GetNonNullableType().FullName);
 			if (name != null)
 				path += "/" + name.HashSha256();
 			return path;

@@ -811,7 +811,7 @@ namespace Atlas.UI.Avalonia.Controls
 			ListGroup.Series = listGroup.Series;
 			ListGroup.TimeWindow = listGroup.TimeWindow ?? ListGroup.TimeWindow;
 			ListGroup.SortByTotal();
-			foreach (var series in listGroup.Series)
+			foreach (var series in ListGroup.Series)
 			{
 				OxyColor? oxyColor = null;
 				if (series.Name != null && prevListSeries.TryGetValue(series.Name, out OxyListSeries prevSeries))

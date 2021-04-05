@@ -237,6 +237,7 @@ namespace Atlas.Tabs
 
 				project.DataApp.Save(DataRepoDirectory, dataKey, row.DataValue);
 			}
+
 			foreach (TabBookmark tabBookmark in ChildBookmarks.Values)
 				tabBookmark.Import(project);
 		}

@@ -15,7 +15,7 @@ namespace Atlas.Tabs
 		public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new ItemCollectionUI<TabBookmarkItem>();
 		public TabBookmarkItem NewBookmark { get; set; }
 
-		private DataRepoView<Bookmark> dataRepoBookmarks;
+		public DataRepoView<Bookmark> DataRepoBookmarks;
 
 		public BookmarkCollection(Project project)
 		{
@@ -31,22 +31,15 @@ namespace Atlas.Tabs
 		public void Reload()
 		{
 			Items.Clear();
-			// Add ID indices?
-			/*ItemCollection<string> ids = project.DataShared.GetObjectIds(typeof(Bookmark));
-			foreach (string id in ids)
-			{
-				if (id == TabInstance.CurrentBookmarkName)
-					continue;
-				BookmarkName bookmarkName = new BookmarkName(id);
-				Names.Add(bookmarkName);
-			}*/
 
-			dataRepoBookmarks = Project.DataApp.OpenView<Bookmark>(null, DataKey);
-			dataRepoBookmarks.SortBy(nameof(Bookmark.TimeStamp));
-			foreach (Bookmark bookmark in dataRepoBookmarks.Items.Values)
+			DataRepoBookmarks = Project.DataApp.OpenView<Bookmark>(null, DataKey);
+			DataRepoBookmarks.SortBy(nameof(Bookmark.TimeStamp));
+
+			foreach (Bookmark bookmark in DataRepoBookmarks.Items.Values)
 			{
 				if (bookmark.Name == TabInstance.CurrentBookmarkName)
 					continue;
+
 				Add(bookmark);
 			}
 		}
@@ -62,22 +55,22 @@ namespace Atlas.Tabs
 		public void AddNew(Call call, Bookmark bookmark)
 		{
 			Remove(bookmark.Address); // Remove previous bookmark
-			dataRepoBookmarks.Save(call, bookmark.Address, bookmark);
+			DataRepoBookmarks.Save(call, bookmark.Address, bookmark);
 			NewBookmark = Add(bookmark);
 		}
 
 		private void Item_OnDelete(object sender, EventArgs e)
 		{
 			TabBookmarkItem bookmark = (TabBookmarkItem)sender;
-			dataRepoBookmarks.Delete(bookmark.Bookmark.Address);
+			DataRepoBookmarks.Delete(bookmark.Bookmark.Address);
 			Items.Remove(bookmark);
 			//Reload();
 		}
 
 		public void Remove(string key)
 		{
-			dataRepoBookmarks.Delete(key);
-			TabBookmarkItem existing = Items.SingleOrDefault(i => i.Name == key);
+			DataRepoBookmarks.Delete(key);
+			TabBookmarkItem existing = Items.SingleOrDefault(i => i.Bookmark.Address == key);
 			if (existing != null)
 				Items.Remove(existing);
 		}

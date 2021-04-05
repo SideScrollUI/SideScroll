@@ -137,7 +137,12 @@ namespace Atlas.UI.Avalonia
 		private async Task LinkAsync(Call call)
 		{
 			Bookmark bookmark = TabView.Instance.CreateBookmark();
-			bookmark.TabBookmark = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
+			TabBookmark leafNode = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
+			if (leafNode != bookmark.TabBookmark)
+			{
+				bookmark.Name = leafNode.Tab.ToString();
+				bookmark.TabBookmark = leafNode;
+			}
 			string uri = Project.Linker.GetLinkUri(call, bookmark);
 			await ClipBoardUtils.SetTextAsync(uri);
 		}

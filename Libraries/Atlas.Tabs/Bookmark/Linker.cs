@@ -7,7 +7,7 @@ namespace Atlas.Tabs
 		private const string AtlasPrefix = @"atlas://";
 
 		public bool PublicOnly { get; set; }
-		public long MaxLength { get; set; } = 100000;
+		public long MaxLength { get; set; } = 65500; // Uri.EscapeDataString limit
 
 		public virtual string GetLinkUri(Call call, Bookmark bookmark)
 		{
@@ -21,14 +21,18 @@ namespace Atlas.Tabs
 		public virtual Bookmark GetBookmark(Call call, string uri, bool checkVersion)
 		{
 			if (!uri.StartsWith(AtlasPrefix))
+			{
+				call.Log.AddError("Invalid prefix");
 				return null;
+			}
 
 			string base64 = uri.Substring(AtlasPrefix.Length);
-			if (base64 == null)
-				return null;
 
 			if (uri.Length > MaxLength)
+			{
+				call.Log.AddError("Bookmark too large", new Tag("Length", uri.Length), new Tag("MaxLength", MaxLength));
 				return null;
+			}
 
 			Bookmark bookmark = Bookmark.Create(call, base64, PublicOnly);
 			return bookmark;

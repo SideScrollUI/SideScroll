@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Atlas.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,6 +9,26 @@ namespace Atlas.Core
 {
 	public class ProcessUtils
 	{
+		public static OSPlatform GetOSPlatform()
+		{
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			{
+				return OSPlatform.Windows;
+			}
+			else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+			{
+				return OSPlatform.Linux;
+			}
+			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+			{
+				return OSPlatform.OSX;
+			}
+
+			return OSPlatform.Create("Unknown");
+		}
+
+		public static string OSPlatformName => GetOSPlatform().ToString().CamelCased();
+
 		public static void OpenBrowser(string url)
 		{
 			// not working

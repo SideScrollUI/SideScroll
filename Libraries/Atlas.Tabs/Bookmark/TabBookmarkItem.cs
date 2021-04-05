@@ -18,8 +18,8 @@ namespace Atlas.Tabs
 			OnDelete?.Invoke(this, null);
 		}
 
-		[Name("Bookmark"), WordWrap]
-		public string Name => Bookmark.Name ?? Bookmark.Address;
+		[WordWrap]
+		public string Path => (Bookmark?.Name != null ? (Bookmark.Name + " : ") : "") + Bookmark.Address;
 
 		[Formatted]
 		public TimeSpan Age => Bookmark.TimeStamp.Age();
@@ -32,7 +32,7 @@ namespace Atlas.Tabs
 		[HiddenColumn]
 		public ITab Tab => Bookmark.TabBookmark.Tab;
 
-		public override string ToString() => Name;
+		public override string ToString() => Bookmark.Name ?? Bookmark.Address;
 
 		public TabBookmarkItem(Bookmark bookmark, Project project)
 		{

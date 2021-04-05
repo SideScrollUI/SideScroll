@@ -74,6 +74,7 @@ namespace Atlas.Tabs
 
 		[Name("Bookmark")]
 		public string Name => Bookmark.Name;
+
 		[HiddenColumn]
 		public Bookmark Bookmark { get; set; }
 

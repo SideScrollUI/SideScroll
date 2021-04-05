@@ -597,8 +597,10 @@ namespace Atlas.UI.Avalonia.View
 		{
 			if (_dispatcherTimer == null)
 			{
-				_dispatcherTimer = new DispatcherTimer();
-				_dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10); // Every 10 milliseconds
+				_dispatcherTimer = new DispatcherTimer()
+				{
+					Interval = TimeSpan.FromMilliseconds(10),
+				};
 				_dispatcherTimer.Tick += DispatcherTimer_Tick;
 				_dispatcherTimer.Start();
 			}
