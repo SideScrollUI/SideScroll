@@ -71,6 +71,7 @@ namespace Atlas.UI.Avalonia
 			// ScrollViewer | Buttons
 			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("Auto,*");
+
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
 
@@ -89,10 +90,10 @@ namespace Atlas.UI.Avalonia
 			// Placed inside scroll viewer
 			ContentGrid = new Grid()
 			{
-				HorizontalAlignment = HorizontalAlignment.Left,
-				VerticalAlignment = VerticalAlignment.Stretch,
 				ColumnDefinitions = new ColumnDefinitions("Auto"),
 				RowDefinitions = new RowDefinitions("*"),
+				HorizontalAlignment = HorizontalAlignment.Left,
+				VerticalAlignment = VerticalAlignment.Stretch,
 				MaxWidth = 10000,
 				MaxHeight = 5000,
 			};
@@ -172,6 +173,7 @@ namespace Atlas.UI.Avalonia
 				// Add Bookmark to bookmark manager
 				TabView.Instance.SelectItem(TabBookmarks.Global); // select bookmarks first so the child tab autoselects the new bookmark
 				TabBookmarks.Global.AddBookmark(call, bookmark);
+				ScrollViewer.Offset = new Vector(0, 0);
 			}
 			else if (TabView != null)
 			{

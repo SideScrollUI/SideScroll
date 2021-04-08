@@ -8,8 +8,10 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using System;
 using System.Collections;
@@ -219,14 +221,24 @@ namespace Atlas.UI.Avalonia.Controls
 			DataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // Add one click deselection
 			DataGrid.ColumnReordered += DataGrid_ColumnReordered;
 
+			DataGrid.AddHandler(KeyDownEvent, DataGrid_KeyDown, RoutingStrategies.Tunnel);
+
 			//PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => x.DataGridRow_PointerPressed(e), handledEventsToo: true);
 
 			Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 
-			//var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 			//AddContextMenu();
 
 			Children.Add(DataGrid);
+		}
+
+		private void DataGrid_KeyDown(object sender, KeyEventArgs e)
+		{
+			// These keys are used for navigating in the TabViewer
+			if (e.Key == Key.Left || e.Key == Key.Right)
+			{
+				RaiseEvent(e);
+			}
 		}
 
 		private void AddListUpdatedDispatcher()
@@ -358,10 +370,15 @@ namespace Atlas.UI.Avalonia.Controls
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
 				// Group up any new items after the 1st one
-				if (AutoSelectFirst && (AutoSelectNew || TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved) && (TextBoxSearch.Text == null || TextBoxSearch.Text.Length == 0))// && finishedLoading)
+				if (AutoSelectFirst && (
+					AutoSelectNew || 
+					TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved || 
+					TabModel.AutoSelect == AutoSelectType.FirstSavedOrNew)
+					&& (TextBoxSearch.Text == null || TextBoxSearch.Text.Length == 0))// && finishedLoading)
 				{
 					_selectItemEnabled = true;
-					object item = List[List.Count - 1];
+					object item = e.NewItems[0];
+					//object item = List[List.Count - 1];
 					// don't update the selection too often or we'll slow things down
 					if (!_notifyItemChangedStopwatch.IsRunning || _notifyItemChangedStopwatch.ElapsedMilliseconds > 1000)
 					{
@@ -525,6 +542,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo);
 			}
+
 			// 1 column should take up entire grid
 			//if (dataGrid.Columns.Count == 1)
 			//	dataGrid.Columns[0].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
@@ -745,6 +763,7 @@ namespace Atlas.UI.Avalonia.Controls
 					if (listItem.AutoLoad == false)
 						continue;
 				}
+
 				if (obj is ListMember listMember)
 				{
 					if (listMember.AutoLoad == false)
@@ -756,6 +775,7 @@ namespace Atlas.UI.Avalonia.Controls
 					if (tabView.Model.AutoLoad == false)
 						continue;
 				}
+
 				if (firstValidObject == null)
 					firstValidObject = obj;
 

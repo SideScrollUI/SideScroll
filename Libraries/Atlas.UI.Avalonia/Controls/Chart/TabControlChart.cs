@@ -22,6 +22,7 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		public ListSeries ListSeries { get; set; }
 		public OxyPlot.Series.Series OxySeries { get; set; }
+
 		public bool IsVisible { get; set; } = true;
 		public bool IsSelected { get; set; }
 

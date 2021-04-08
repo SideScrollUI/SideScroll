@@ -10,18 +10,25 @@ namespace Atlas.Core
 	{
 		public DateTime StartTime { get; set; }
 		public DateTime? MinStartTime { get; set; }
+
 		public DateTime EndTime { get; set; }
 		public DateTime? MaxEndTime { get; set; }
+
 		public TimeSpan Duration => EndTime.Subtract(StartTime);
 
 		public string Name { get; set; }
+
 		public double MinValue { get; set; } = double.MaxValue;
 		public double MaxValue { get; set; } = double.MinValue;
+
 		public double Sum { get; set; }
 		public double SummedSecondValues { get; set; } // Total of all values each second
 		public TimeSpan SummedDurations { get; set; }
+
 		public int Count { get; set; }
+
 		public List<Tag> AllTags { get; set; } = new List<Tag>();
+
 		public List<Tag> Tags
 		{
 			get

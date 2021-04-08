@@ -13,6 +13,7 @@ namespace Atlas.UI.Avalonia
 	public class BaseWindow : Window
 	{
 		private const int MinWindowSize = 700;
+
 		private const int DefaultWindowWidth = 1280;
 		private const int DefaultWindowHeight = 800;
 
@@ -30,6 +31,7 @@ namespace Atlas.UI.Avalonia
 
 			LoadProject(project);
 
+			Opened += BaseWindow_Opened;
 			Closed += BaseWindow_Closed;
 		}
 
@@ -166,6 +168,11 @@ namespace Atlas.UI.Avalonia
 		private void SaveWindowSettingsInternal()
 		{
 			Project.DataApp.Save(WindowSettings);
+		}
+
+		private void BaseWindow_Opened(object sender, EventArgs e)
+		{
+			TabViewer.Focus();
 		}
 
 		private void BaseWindow_Closed(object sender, EventArgs e)

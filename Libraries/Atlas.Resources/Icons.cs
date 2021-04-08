@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Atlas.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -48,7 +49,7 @@ namespace Atlas.Resources
 
 		public const string Screenshot = "screenshot.png";
 
-		public class Streams
+		public class Streams : NamedItemCollection<Streams, Stream>
 		{
 			public static Stream Logo => Get(Icons.Logo, "Logo");
 
@@ -94,37 +95,6 @@ namespace Atlas.Resources
 				var assembly = Assembly.GetExecutingAssembly();
 				return assembly.GetManifestResourceStream("Atlas.Resources.Icons." + resourceType + "." + resourceName);
 			}
-
-			public static List<Stream> All { get; set; } = new List<Stream>()
-			{
-				Logo,
-				Pin,
-				Add,
-				Delete,
-				Back,
-				Forward,
-				Search,
-				ClearSearch,
-				Info,
-				BlankDocument,
-				Save,
-				Browser,
-				Unlock,
-				Password,
-				Enter,
-				PadNote,
-				Paste,
-				Eraser,
-				Refresh,
-				Stats,
-				List1,
-				List2,
-				DeleteList,
-				Link,
-				Bookmark,
-				Import,
-				Screenshot,
-			};
 		}
 	}
 

@@ -90,4 +90,8 @@
     <EmbeddedResource Include="Icons\png\unlock.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Atlas.Core\Atlas.Core.csproj" />
+  </ItemGroup>
+
 </Project>
