@@ -10,8 +10,10 @@ namespace Atlas.Tabs
 {
 	public class ChartSettings
 	{
+		private const string DefaultGroupName = "Default";
+
 		public string Name { get; set; }
-		private ListGroup DefaultListGroup { get; set; } = new ListGroup("Default");
+		private ListGroup DefaultListGroup { get; set; } = new ListGroup(DefaultGroupName);
 		public Dictionary<string, ListGroup> ListGroups { get; set; } = new Dictionary<string, ListGroup>();
 		//public ItemCollection<ListGroup> ListGroups { get; set; } = new ItemCollection<ListGroup>();
 		public ItemCollection<ListSeries> ListSeries { get; set; } = new ItemCollection<ListSeries>();
@@ -25,6 +27,14 @@ namespace Atlas.Tabs
 		public ChartSettings(ListGroup listGroup)
 		{
 			AddGroup(listGroup);
+		}
+
+		public ChartSettings(ListSeries listSeries, string name = null)
+		{
+			Name = name;
+			DefaultListGroup.Name = name ?? DefaultListGroup.Name;
+
+			AddSeries(listSeries);
 		}
 
 		public ChartSettings(IList iList, string name = null)
@@ -111,7 +121,8 @@ namespace Atlas.Tabs
 		public void AddSeries(ListSeries listSeries)
 		{
 			ListGroup listGroup = DefaultListGroup;
-			listGroup.Name = listSeries.Name ?? listGroup.Name;
+			if (listGroup.Name == DefaultGroupName)
+				listGroup.Name = listSeries.Name ?? listGroup.Name;
 			// Will add to Default Group if no Unit specified, and add the Default Group if needed
 			ListGroups.Add(listGroup.Name, listGroup);
 			listGroup.Series.Add(listSeries);

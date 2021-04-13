@@ -14,6 +14,7 @@ namespace Atlas.Core
 		Count,
 		Minimum,
 		Maximum,
+		Other,
 	}
 
 	public class ListSeries

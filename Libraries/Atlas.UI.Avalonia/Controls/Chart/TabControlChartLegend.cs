@@ -64,7 +64,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				_textBlockSum = new TextBlock()
 				{
-					Text = "Total",
+					Text = GetTotalName(),
 					Foreground = Theme.BackgroundText,
 					Margin = new Thickness(2, 2, 2, 2),
 					HorizontalAlignment = HorizontalAlignment.Right,
@@ -74,6 +74,21 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 
 			RefreshModel();
+		}
+
+		private string GetTotalName()
+		{
+			var seriesType = SeriesType.Other;
+
+			foreach (var series in ListGroup.Series)
+			{
+				if (seriesType == SeriesType.Other)
+					seriesType = series.SeriesType;
+				else if (series.SeriesType != seriesType)
+					return "Total";
+			}
+
+			return seriesType.ToString();
 		}
 
 		private TabChartLegendItem AddSeries(OxyListSeries oxyListSeries)

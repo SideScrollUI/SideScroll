@@ -102,6 +102,8 @@ namespace Atlas.UI.Avalonia.Controls
 		public OxyPlot.Axes.LinearAxis LinearAxis;
 		public OxyPlot.Axes.DateTimeAxis DateTimeAxis;
 
+		public TextBlock TitleTextBlock { get; protected set; }
+
 		private static OxyColor GridLineColor = OxyColor.Parse("#333333");
 		public static OxyColor[] Colors { get; set; } = new OxyColor[]
 		{
@@ -123,6 +125,11 @@ namespace Atlas.UI.Avalonia.Controls
 		};
 
 		public static OxyColor GetColor(int index) => Colors[index % Colors.Length];
+
+		private bool UseDateTimeAxis => (xAxisPropertyInfo?.PropertyType == typeof(DateTime)) ||
+				(ListGroup.TimeWindow != null);
+
+		public bool IsTitleSelectable { get; set; }
 
 		public event EventHandler<SeriesSelectedEventArgs> OnSelectionChanged;
 
@@ -203,7 +210,7 @@ namespace Atlas.UI.Avalonia.Controls
 			string title = ListGroup?.Name;
 			if (title != null)
 			{
-				var titleTextBlock = new TextBlock()
+				TitleTextBlock = new TextBlock()
 				{
 					Text = ListGroup?.Name,
 					FontSize = 16,
@@ -213,10 +220,12 @@ namespace Atlas.UI.Avalonia.Controls
 					[Grid.ColumnSpanProperty] = 2,
 				};
 				if (!ListGroup.ShowOrder || ListGroup.Horizontal)
-					titleTextBlock.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Center;
+					TitleTextBlock.HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Center;
 				else
-					titleTextBlock.Margin = new Thickness(40, 5, 5, 5);
-				containerGrid.Children.Add(titleTextBlock);
+					TitleTextBlock.Margin = new Thickness(40, 5, 5, 5);
+				TitleTextBlock.PointerEnter += TitleTextBlock_PointerEnter;
+				TitleTextBlock.PointerLeave += TitleTextBlock_PointerLeave;
+				containerGrid.Children.Add(TitleTextBlock);
 			}
 
 			containerGrid.Children.Add(PlotView);
@@ -246,6 +255,17 @@ namespace Atlas.UI.Avalonia.Controls
 			Children.Add(containerGrid);
 
 			Focusable = true;
+		}
+
+		private void TitleTextBlock_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			if (IsTitleSelectable)
+				TitleTextBlock.Foreground = Theme.GridBackgroundSelected;
+		}
+
+		private void TitleTextBlock_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		{
+			TitleTextBlock.Foreground = Theme.BackgroundText;
 		}
 
 		private void UpdateVisible()
@@ -401,9 +421,6 @@ namespace Atlas.UI.Avalonia.Controls
 			IsVisible = false;
 			UnloadModel();
 		}
-
-		private bool UseDateTimeAxis => (xAxisPropertyInfo?.PropertyType == typeof(DateTime)) ||
-				(ListGroup.TimeWindow != null);
 
 		private void AddAxis()
 		{
@@ -707,7 +724,8 @@ namespace Atlas.UI.Avalonia.Controls
 			//UpdateDateTimeInterval(double duration);
 		}*/
 
-		private static string ValueFormatter(double d)
+		// todo: centralize and add units
+		internal static string ValueFormatter(double d)
 		{
 			double ad = Math.Abs(d);
 			string prefix = "{0:#,0.###} ";

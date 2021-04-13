@@ -20,6 +20,9 @@ namespace Atlas.Tabs
 
 		public virtual Bookmark GetBookmark(Call call, string uri, bool checkVersion)
 		{
+			if (uri == null)
+				return null;
+
 			if (!uri.StartsWith(AtlasPrefix))
 			{
 				call.Log.AddError("Invalid prefix");
