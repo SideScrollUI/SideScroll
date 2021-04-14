@@ -59,12 +59,25 @@ namespace Atlas.Serialize
 			Save(null, name, obj, call);
 		}
 
+		public void Save<T>(string name, T obj, Call call = null)
+		{
+			Save<T>(null, name, obj, call);
+		}
+
 		public void Save(string directory, string name, object obj, Call call = null)
+		{
+			Save(obj.GetType(), directory, name, obj, call);
+		}
+
+		public void Save<T>(string directory, string name, T obj, Call call = null)
+		{
+			Save(typeof(T), directory, name, obj, call);
+		}
+
+		public void Save(Type type, string directory, string name, object obj, Call call = null)
 		{
 			directory = directory ?? DefaultDirectory;
 			call = call ?? new Call();
-			//using (Call call = call.Child(this,
-			Type type = obj.GetType();
 			SerializerFile serializer = GetSerializerFile(type, directory, name); // use hash since filesystems can't handle long names
 			serializer.Save(call, obj, name);
 		}

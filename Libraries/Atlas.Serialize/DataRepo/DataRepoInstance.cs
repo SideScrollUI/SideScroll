@@ -27,12 +27,12 @@ namespace Atlas.Serialize
 
 		public virtual void Save(Call call, T item)
 		{
-			DataRepo.Save(Directory, DefaultName, item, call);
+			DataRepo.Save<T>(Directory, DefaultName, item, call);
 		}
 
 		public virtual void Save(Call call, string key, T item)
 		{
-			DataRepo.Save(Directory, key, item, call);
+			DataRepo.Save<T>(Directory, key, item, call);
 		}
 
 		public virtual T Load(Call call, string key = null, bool createIfNeeded = false, bool lazy = false)
