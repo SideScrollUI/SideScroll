@@ -92,7 +92,7 @@ namespace Atlas.UI.Avalonia
 					if (checkWordWrap && value != null)
 					{
 						string text = value.ToString();
-						if (text.Length > EnableWordWrapMinStringLength)
+						if (text != null && text.Length > EnableWordWrapMinStringLength)
 							WordWrap = true;
 					}
 				}
