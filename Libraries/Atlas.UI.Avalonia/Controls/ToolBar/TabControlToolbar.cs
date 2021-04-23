@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Controls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -43,9 +44,14 @@ namespace Atlas.UI.Avalonia.Tabs
 				var propertyValue = propertyInfo.GetValue(toolbar);
 				if (propertyValue != null && propertyInfo.GetCustomAttribute<SeparatorAttribute>() != null)
 					AddSeparator();
+
 				if (propertyValue is ToolButton toolButton)
 				{
 					AddButton(toolButton);
+				}
+				else if (propertyValue is IToolComboBox comboBox)
+				{
+					AddComboBox(comboBox);
 				}
 				else if (propertyValue is string text)
 				{
@@ -82,6 +88,20 @@ namespace Atlas.UI.Avalonia.Tabs
 			button.ShowTask = toolButton.ShowTask;
 			AddControl(button);
 			return button;
+		}
+
+		public TabControlFormattedComboBox AddComboBox(IToolComboBox toolComboBox)
+		{
+			var textBlock = new ToolbarTextBlock(toolComboBox.Label);
+			AddControl(textBlock);
+
+			PropertyInfo propertyInfo = toolComboBox.GetType().GetProperty(nameof(IToolComboBox.SelectedObject));
+			var comboBox = new TabControlFormattedComboBox(new ListProperty(toolComboBox, propertyInfo))
+			{
+				Items = toolComboBox.GetItems(),
+			};
+			AddControl(comboBox);
+			return comboBox;
 		}
 
 		public void AddSeparator()
@@ -143,8 +163,6 @@ namespace Atlas.UI.Avalonia.Tabs
 				Text = text,
 				MinWidth = minWidth,
 				Margin = DefaultMargin,
-				BorderThickness = new Thickness(1),
-				BorderBrush = new SolidColorBrush(Colors.Black),
 				TextWrapping = TextWrapping.NoWrap,
 				VerticalAlignment = VerticalAlignment.Center,
 			};

@@ -22,13 +22,13 @@ namespace Atlas.Serialize
 		public abstract object Load(Call call = null);
 
 		// Save an object to a memory stream and then load it
-		//public static T DeepClone<T>(Call call, T obj)
 		public static T DeepClone<T>(Call call, T obj, bool publicOnly = false)
 		{
-			if (typeof(T) != obj.GetType())
+			if (!typeof(T).IsAssignableFrom(obj.GetType()))
 			{
 				throw new Exception("Cloned types do not match [" + typeof(T).ToString() + "], [" + obj.GetType().ToString() +"]");
 			}
+
 			//	return default;
 			try
 			{

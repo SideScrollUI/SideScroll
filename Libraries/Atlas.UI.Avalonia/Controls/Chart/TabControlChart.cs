@@ -134,6 +134,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public event EventHandler<SeriesSelectedEventArgs> OnSelectionChanged;
 
 		private static readonly WeakEventSource<MouseCursorMovedEventArgs> _mouseCursorChangedEventSource = new WeakEventSource<MouseCursorMovedEventArgs>();
+
 		public static event EventHandler<MouseCursorMovedEventArgs> OnMouseCursorChanged
 		{
 			add { _mouseCursorChangedEventSource.Subscribe(value); }

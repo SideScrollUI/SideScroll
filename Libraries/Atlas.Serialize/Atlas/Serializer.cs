@@ -41,6 +41,8 @@ namespace Atlas.Serialize
 		public List<TypeRepo> TypeRepos = new List<TypeRepo>();
 		public Dictionary<Type, TypeRepo> IdxTypeToRepo = new Dictionary<Type, TypeRepo>();
 
+		public TypeRepoString TypeRepoString; // Reuse string instances to reduce memory use when deep cloning
+
 		public BinaryReader Reader;
 		public bool Lazy;
 		public bool PublicOnly = false;
@@ -195,6 +197,7 @@ namespace Atlas.Serialize
 		{
 			Reader = reader;
 			Lazy = lazy;
+
 			using (LogTimer logTimer = call.Log.Timer("Loading object"))
 			{
 				Header.Load(reader);
@@ -203,14 +206,17 @@ namespace Atlas.Serialize
 					logTimer.AddError("Header version doesn't match", new Tag("Header", Header));
 					return;
 				}
+
 				long fileLength = reader.ReadInt64();
 				if (reader.BaseStream.Length != fileLength)
 				{
 					logTimer.AddError("File size doesn't match", new Tag("Expected", fileLength), new Tag("Actual", reader.BaseStream.Length));
 					return;
 				}
+
 				LoadSchemas(logTimer, reader);
 				LoadPrimitives(logTimer, reader);
+
 				if (loadData)
 					LoadTypeRepos(logTimer);
 			}
@@ -238,6 +244,7 @@ namespace Atlas.Serialize
 					Primitives.Add(null);
 					continue;
 				}
+
 				int typeIndex = reader.ReadInt16();
 				TypeRepo typeRepo = TypeRepos[typeIndex];
 				if (typeRepo.TypeSchema.IsPrimitive) // object ref can point to primitives
@@ -286,6 +293,13 @@ namespace Atlas.Serialize
 				typeSchema.Validate(TypeSchemas);
 
 				TypeRepo typeRepo = TypeRepo.Create(log, this, typeSchema);
+
+				// Return same input string references for Deep Cloning
+				if (TypeRepoString != null && typeRepo is TypeRepoString)
+				{
+					typeRepo.ObjectsLoaded = TypeRepoString.Objects.ToArray();
+				}
+
 				if (typeRepo != null)
 					AddTypeRepo(typeRepo);
 			}
@@ -556,11 +570,16 @@ namespace Atlas.Serialize
 
 			Log log = new Log();
 			TypeRepo typeRepo = GetOrCreateRepo(log, type);
-			if (typeRepo is TypeRepoPrimitive || typeRepo is TypeRepoString || typeRepo is TypeRepoEnum || typeRepo is TypeRepoType)// || typeRepo.typeSchema.isStatic)
+
+			if (typeRepo is TypeRepoPrimitive || 
+				typeRepo is TypeRepoString || 
+				typeRepo is TypeRepoEnum || 
+				typeRepo is TypeRepoType)
 			{
 				Clones[obj] = obj; // optional
 				return obj;
 			}
+
 			if (typeRepo.TypeSchema.IsStatic)
 			{
 				Clones[obj] = obj; // optional
@@ -638,6 +657,7 @@ namespace Atlas.Serialize
 		{
 			foreach (TypeRepo typeRepo in TypeRepos)
 				typeRepo.Dispose();
+
 			if (Reader != null)
 				Reader.Dispose();
 		}

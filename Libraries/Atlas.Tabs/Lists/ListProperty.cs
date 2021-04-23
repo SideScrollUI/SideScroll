@@ -69,7 +69,13 @@ namespace Atlas.Tabs
 					{
 						type = type.GetNonNullableType();
 					}
-					PropertyInfo.SetValue(Object, Convert.ChangeType(value, type));
+
+					if (!type.IsAssignableFrom(value.GetType()))
+					{
+						value = Convert.ChangeType(value, type);
+					}
+
+					PropertyInfo.SetValue(Object, value);
 
 					if (Object is INotifyPropertyChanged notifyPropertyChanged)
 					{

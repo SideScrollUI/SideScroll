@@ -1,27 +1,30 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
 
 namespace Atlas.Core
 {
-	public class LogTimer : Log, IDisposable
+	public class CallTimer : Call, IDisposable
 	{
 		private Stopwatch _stopwatch = new Stopwatch();
 		private System.Timers.Timer _timer = new System.Timers.Timer();
 
-		public LogTimer()
-		{
-		}
+		public long ElapsedMilliseconds => _stopwatch.ElapsedMilliseconds;
 
-		public LogTimer(string text, SynchronizationContext context) :
-			base(text, context)
+		public CallTimer()
 		{
-			Add(text);
 			_stopwatch.Start();
 
 			_timer.Interval = 1000.0;
 			_timer.Elapsed += Timer_Elapsed;
 			_timer.Start();
+		}
+
+		public void Stop()
+		{
+			_timer.Stop();
+			_stopwatch.Stop();
+			_timer.Elapsed -= Timer_Elapsed;
+			UpdateDuration();
 		}
 
 		private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -31,19 +34,17 @@ namespace Atlas.Core
 
 		private void UpdateDuration()
 		{
-			Duration = _stopwatch.ElapsedMilliseconds / 1000.0f;
-			CreateEventPropertyChanged(nameof(Duration));
+			if (Log != null)
+				Log.Duration = ElapsedMilliseconds / 1000.0f;
 		}
 
 		public void Dispose()
 		{
-			_timer.Elapsed -= Timer_Elapsed;
-			_timer.Stop();
+			Stop();
 			_timer.Dispose();
-			_stopwatch.Stop();
-			UpdateDuration();
-			
-			Add("Finished", new Tag("Duration", Duration));
+			TaskInstance?.SetFinished();
+			if (TaskInstance == null)
+				Log.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));
 		}
 	}
 }

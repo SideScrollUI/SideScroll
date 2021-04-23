@@ -17,9 +17,9 @@ namespace Atlas.Core
 
 			BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Static;
 
-			List<T2> propertyValues = collectionType.GetProperties(bindingFlags).Where(p => p.PropertyType == elementType).OrderBy(x => x.MetadataToken).Select(p => (T2)p.GetValue(null)).ToList();
+			List<T2> propertyValues = collectionType.GetProperties(bindingFlags).Where(p => elementType.IsAssignableFrom(p.PropertyType)).OrderBy(x => x.MetadataToken).Select(p => (T2)p.GetValue(null)).ToList();
 
-			IEnumerable<T2> fieldValues = collectionType.GetFields(bindingFlags).Where(p => p.FieldType == elementType).OrderBy(x => x.MetadataToken).Select(f => (T2)f.GetValue(null));
+			IEnumerable<T2> fieldValues = collectionType.GetFields(bindingFlags).Where(f => elementType.IsAssignableFrom(f.FieldType)).OrderBy(x => x.MetadataToken).Select(f => (T2)f.GetValue(null));
 
 			propertyValues.AddRange(fieldValues);
 

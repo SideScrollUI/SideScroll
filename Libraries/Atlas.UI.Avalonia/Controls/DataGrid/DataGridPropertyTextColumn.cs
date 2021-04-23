@@ -191,7 +191,9 @@ namespace Atlas.UI.Avalonia
 
 			cell.IsHitTestVisible = true;
 			cell.Focusable = true;
-			cell.ContextMenu = new DataGridCellContextMenu(DataGrid, this, cell, textBlockElement);
+			
+			// These are slow to create
+			cell.PointerEnter += (s, e) => cell.ContextMenu = cell.ContextMenu ?? new DataGridCellContextMenu(DataGrid, this, cell, textBlockElement);
 
 			if (Binding != null)
 			{

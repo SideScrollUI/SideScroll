@@ -42,17 +42,20 @@ namespace Atlas.UI.Avalonia.Controls
 				var values = type.GetEnumValues();
 				Items = values;
 			}
+			Bind(property.Object, property.PropertyInfo.Name);
+		}
 
-			var binding = new Binding(property.PropertyInfo.Name)
+		public void Bind(object obj, string path)
+		{
+			var binding = new Binding(path)
 			{
-				//Converter = new EditValueConverter(),
-				//StringFormat = "Hello {0}",
+				//Converter = new FormatValueConverter(),
 				Mode = BindingMode.TwoWay,
-				Source = property.Object,
+				Source = obj,
 			};
 			this.Bind(SelectedItemProperty, binding);
 
-			if ((property.Object == null || SelectedItem == null) && Items.GetEnumerator().MoveNext())
+			if ((obj == null || SelectedItem == null) && Items.GetEnumerator().MoveNext())
 				SelectedIndex = 0;
 		}
 
@@ -60,9 +63,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			//MaxWidth = TabControlParams.ControlMaxWidth;
 
-			BorderBrush = new SolidColorBrush(Colors.Black);
 			HorizontalAlignment = HorizontalAlignment.Stretch;
-			BorderThickness = new Thickness(1);
 		}
 	}
 }

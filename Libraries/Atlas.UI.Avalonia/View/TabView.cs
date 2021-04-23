@@ -394,7 +394,7 @@ namespace Atlas.UI.Avalonia.View
 
 		public void ReloadControls()
 		{
-			ClearControls();
+			ClearControls(false);
 
 			InitializeControls();
 
@@ -555,7 +555,7 @@ namespace Atlas.UI.Avalonia.View
 
 		public void ShowLoading()
 		{
-			ClearControls();
+			ClearControls(true);
 
 			// This will get cleared when the view reloads
 			var progressBar = new ProgressBar()
@@ -920,7 +920,7 @@ namespace Atlas.UI.Avalonia.View
 			Instance.UpdateNavigator();
 		}
 
-		private void ClearControls()
+		private void ClearControls(bool dispose)
 		{
 			IsLoaded = false;
 			RemoveListeners();
@@ -955,13 +955,13 @@ namespace Atlas.UI.Avalonia.View
 
 			if (_tabParentControls != null)
 			{
-				_tabParentControls.Clear();
+				_tabParentControls.Clear(dispose);
 				_tabParentControls = null;
 			}
 
 			if (_tabChildControls != null)
 			{
-				_tabChildControls.Clear();
+				_tabChildControls.Clear(dispose);
 				_tabChildControls = null;
 			}
 
@@ -1066,7 +1066,7 @@ namespace Atlas.UI.Avalonia.View
 				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
 				// TODO: set large fields to null.
 
-				ClearControls();
+				ClearControls(true);
 
 				Instance.OnModelChanged -= TabInstance_OnModelChanged;
 				if (Instance is ITabSelector tabSelector)

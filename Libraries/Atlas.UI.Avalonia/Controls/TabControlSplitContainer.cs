@@ -327,14 +327,17 @@ namespace Atlas.UI.Avalonia.Controls
 			//UpdateSelectedTabInstances();
 		}
 
-		internal void Clear()
+		internal void Clear(bool dispose)
 		{
 			// objects might still be referenced and re-added again
-			/*foreach (object obj in Children)
+			if (dispose)
 			{
-				if (obj is IDisposable disposable)
-					disposable.Dispose(); // does Children.Clear() already handle this?
-			}*/
+				foreach (object obj in Children)
+				{
+					if (obj is IDisposable disposable)
+						disposable.Dispose(); // does Children.Clear() already handle this?
+				}
+			}
 			RowDefinitions.Clear();
 			Children.Clear();
 		}

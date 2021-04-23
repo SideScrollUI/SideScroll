@@ -62,8 +62,6 @@ namespace Atlas.UI.Avalonia.Controls
 		private void InitializeComponent()
 		{
 			Background = Theme.Background;
-			BorderBrush = new SolidColorBrush(Colors.Black);
-			BorderThickness = new Thickness(1);
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			MinWidth = 50;
 			Padding = new Thickness(6, 3);

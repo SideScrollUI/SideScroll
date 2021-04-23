@@ -1,5 +1,7 @@
 ﻿using Atlas.Core;
+using Atlas.Extensions;
 using Atlas.Resources;
+using System;
 
 namespace Atlas.Tabs.Test
 {
@@ -10,8 +12,13 @@ namespace Atlas.Tabs.Test
 		public class TestToolbar : TabToolbar
 		{
 			public ToolButton ButtonRefresh { get; set; } = new ToolButton("Refresh", Icons.Streams.Refresh);
+
 			[Separator]
 			public ToolButton ButtonOpenBrowser { get; set; } = new ToolButton("Open in Browser", Icons.Streams.Browser);
+
+			[Separator]
+			public ToolComboBox<TimeSpan> Duration { get; set; } = new ToolComboBox<TimeSpan>("Duration", TimeSpanExtensions.CommonTimeSpans, TimeSpan.FromMinutes(5));
+
 			[Separator]
 			public string Label => "(Status)";
 		}

@@ -28,7 +28,6 @@ namespace Atlas.UI.Avalonia.Controls
 			Background = BackgroundBrush;
 			Foreground = ForegroundBrush;
 			BorderBrush = new SolidColorBrush(Colors.Black);
-			BorderThickness = new Thickness(1);
 
 			PointerEnter += Button_PointerEnter;
 			PointerLeave += Button_PointerLeave;

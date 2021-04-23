@@ -1,7 +1,6 @@
 ﻿using Atlas.Core;
 using System;
 using System.IO;
-using System.IO.Compression;
 using System.Text;
 
 namespace Atlas.Serialize
@@ -9,6 +8,8 @@ namespace Atlas.Serialize
 	public class SerializerMemoryAtlas : SerializerMemory
 	{
 		//private MemoryStream stream = new MemoryStream();
+
+		private TypeRepoString _typeRepoString; // Reuse string instances to reduce memory use when deep cloning
 
 		public SerializerMemoryAtlas()
 		{
@@ -31,6 +32,9 @@ namespace Atlas.Serialize
 					var serializer = Create();
 					serializer.AddObject(callTimer, obj);
 					serializer.Save(callTimer, writer);
+
+					if (serializer.IdxTypeToRepo.TryGetValue(typeof(string), out TypeRepo typeRepo))
+						_typeRepoString = (TypeRepoString)typeRepo;
 				}
 			}
 		}
@@ -44,6 +48,7 @@ namespace Atlas.Serialize
 				using (var reader = new BinaryReader(Stream))
 				{
 					var serializer = Create();
+					serializer.TypeRepoString = _typeRepoString;
 					serializer.Load(callTimer, reader);
 					return (T)serializer.BaseObject(callTimer);
 				}
