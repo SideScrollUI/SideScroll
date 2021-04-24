@@ -30,6 +30,7 @@ namespace Atlas.Start.Avalonia.Tabs
 					new TaskDelegate("Task Instance Progress", SubTaskInstances),
 				};
 			}
+
 			/*
 			private Serilog.Core.Logger CreateLogger()
 			{

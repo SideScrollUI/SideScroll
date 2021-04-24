@@ -62,10 +62,13 @@ namespace Atlas.Serialize
 			}
 			serializer.LogLoadedTypes(call);
 			//logTimer.Add("Type Repos", new Tag("Repos", serializer.typeRepos)); // fields don't appear in columns
+
 			if (taskInstance != null)
 				taskInstance.Percent = 100;
+
 			if (!lazy)
 				serializer.Dispose();
+
 			return obj;
 		}
 
@@ -100,11 +103,13 @@ namespace Atlas.Serialize
 		public T LoadOrCreate<T>(Call call = null, bool lazy = false, TaskInstance taskInstance = null)
 		{
 			call = call ?? new Call();
+
 			T result = default;
 			if (Exists)
 			{
 				result = Load<T>(call, lazy, taskInstance);
 			}
+
 			if (result == null)
 			{
 				T newObject = Activator.CreateInstance<T>();

@@ -78,6 +78,7 @@ namespace Atlas.Extensions
 					upperCaseNext = false;
 					c = char.ToUpper(c);
 				}
+
 				if (c == '_')
 				{
 					c = ' ';

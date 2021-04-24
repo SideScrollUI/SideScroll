@@ -164,7 +164,9 @@ namespace Atlas.UI.Avalonia.View
 			if (Children.Count == 0)
 				Children.Add(_containerGrid);
 
-			ContextMenu = new TabViewContextMenu(this, Instance);
+			// Reassigning leaks memory
+			if (ContextMenu == null)
+				ContextMenu = new TabViewContextMenu(this, Instance);
 
 			Dispatcher.UIThread.Post(AutoSizeParentControls, DispatcherPriority.Background);
 		}

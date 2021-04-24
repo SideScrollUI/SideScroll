@@ -116,6 +116,7 @@ namespace Atlas.Extensions // rename to Core?
 				object existingValue = propertyInfo.GetValue(obj);
 				if (existingValue != null)
 					continue;
+
 				object newValue = propertyInfo.GetValue(newObject);
 				propertyInfo.SetValue(obj, newValue);
 			}
@@ -196,6 +197,7 @@ namespace Atlas.Extensions // rename to Core?
 					return GetInnerValue(value);
 				}
 			}
+
 			foreach (FieldInfo fieldInfo in type.GetFields())
 			{
 				if (fieldInfo.GetCustomAttribute<InnerValueAttribute>() != null)
@@ -204,6 +206,7 @@ namespace Atlas.Extensions // rename to Core?
 					return GetInnerValue(value);
 				}
 			}
+
 			if (value is DictionaryEntry dictionaryEntry)
 			{
 				if (dictionaryEntry.Key is string)

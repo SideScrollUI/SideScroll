@@ -98,6 +98,7 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					result.Text = ListSeries.Name + "\nTime: " + timeRangeValue.TimeText + "\nDuration: " + timeRangeValue.Duration.FormattedDecimal() + "\nValue: " + timeRangeValue.Value.Formatted();
 				}
+
 				if (obj is ITags tags && tags.Tags.Count > 0)
 				{
 					result.Text += "\n";

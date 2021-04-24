@@ -1,5 +1,4 @@
-﻿using Atlas.Core;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -43,7 +42,6 @@ namespace Atlas.Serialize
 				writer.Write(b); // 1 byte
 			else if (obj is char c)
 				writer.Write(c); // there's no ReadFloat() routine
-
 			else
 				Debug.Assert(true);
 		}

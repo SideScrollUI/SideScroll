@@ -227,7 +227,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 
-			//AddContextMenu();
+			DataGrid.ContextMenu = new DataGridContextMenu(DataGrid);
 
 			Children.Add(DataGrid);
 		}
@@ -281,29 +281,6 @@ namespace Atlas.UI.Avalonia.Controls
 					e.Handled = OwningGrid.UpdateStateOnMouseLeftButtonDown(e, -1, Slot, false);
 				}
 			}
-		}*/
-
-		/*private void AddContextMenu()
-		{
-			var list = new AvaloniaList<object>();
-
-			var menuItemCopy = new MenuItem() { Header = "Copy - _DataGrid" };
-			menuItemCopy.Click += delegate
-			{
-				string text = DataGrid.ToStringTable();
-				if (text != null)
-					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
-			};
-			list.Add(menuItemCopy);
-
-			//list.Add(new Separator());
-
-			var contextMenu = new ContextMenu
-			{
-				Items = list,
-			};
-
-			DataGrid.ContextMenu = contextMenu;
 		}*/
 
 		private void AutoSizeColumns()

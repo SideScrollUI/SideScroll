@@ -520,15 +520,21 @@ namespace Atlas.UI.Avalonia.Controls
 		public OxyPlot.Axes.Axis AddValueAxis(AxisPosition axisPosition = AxisPosition.Left, string key = null)
 		{
 			if (ListGroup.Logarithmic)
+			{
 				ValueAxis = new OxyPlot.Axes.LogarithmicAxis();
+			}
 			else
-				ValueAxis = new OxyPlot.Axes.LinearAxis();
+			{
+				ValueAxis = new OxyPlot.Axes.LinearAxis()
+				{
+					IntervalLength = 25,
+				};
+			}
 
 			ValueAxis.Position = axisPosition;
 			ValueAxis.MajorGridlineStyle = LineStyle.Solid;
 			ValueAxis.MajorGridlineColor = GridLineColor;
 			ValueAxis.MinorGridlineStyle = LineStyle.None;
-			ValueAxis.IntervalLength = 25;
 			//ValueAxis.MinorStep = 20;
 			//ValueAxis.MajorStep = 10;
 			//ValueAxis.MinimumMinorStep = 20;
@@ -729,7 +735,7 @@ namespace Atlas.UI.Avalonia.Controls
 		internal static string ValueFormatter(double d)
 		{
 			double ad = Math.Abs(d);
-			string prefix = "{0:#,0.###} ";
+			string prefix = "{0:#,0.#} ";
 			if (ad >= 1E12)
 			{
 				return string.Format(prefix + "T", d / 1E12);
@@ -802,8 +808,11 @@ namespace Atlas.UI.Avalonia.Controls
 			PlotView.Model = null;
 			LinearAxis = null;
 			DateTimeAxis = null;
+
 			Legend?.Unload();
+
 			ClearSeries();
+
 			//if (plotModel != null)
 			//	plotModel.Series.Clear();
 			/*foreach (ListSeries listSeries in ChartSettings.ListSeries)
@@ -828,9 +837,11 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			var prevListSeries = IdxNameToSeries;
 			ClearSeries();
+
 			ListGroup.Series = listGroup.Series;
 			ListGroup.TimeWindow = listGroup.TimeWindow ?? ListGroup.TimeWindow;
 			ListGroup.SortByTotal();
+
 			foreach (var series in ListGroup.Series)
 			{
 				OxyColor? oxyColor = null;

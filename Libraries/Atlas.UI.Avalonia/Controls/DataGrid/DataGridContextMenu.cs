@@ -7,7 +7,7 @@ using System;
 
 namespace Atlas.UI.Avalonia
 {
-	public class DataGridCellContextMenu : ContextMenu, IStyleable
+	public class DataGridContextMenu : ContextMenu, IStyleable
 	{
 		Type IStyleable.StyleKey => typeof(ContextMenu);
 
@@ -16,14 +16,10 @@ namespace Atlas.UI.Avalonia
 		public DataGrid DataGrid;
 		public DataGridPropertyTextColumn Column;
 		public DataGridCell Cell;
-		public TextBlock TextBlock;
 
-		public DataGridCellContextMenu(DataGrid dataGrid, DataGridPropertyTextColumn column, DataGridCell cell, TextBlock textBlock)
+		public DataGridContextMenu(DataGrid dataGrid)
 		{
 			DataGrid = dataGrid;
-			Column = column;
-			Cell = cell;
-			TextBlock = textBlock;
 
 			Initialize();
 		}
@@ -67,6 +63,14 @@ namespace Atlas.UI.Avalonia
 			list.Add(menuItemCopyDataGridCsv);
 
 			Items = list;
+
+			DataGrid.CellPointerPressed += DataGrid_CellPointerPressed;
+		}
+
+		private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
+		{
+			Cell = e.Cell;
+			Column = e.Column as DataGridPropertyTextColumn;
 		}
 
 		private async void MenuItemCopyDataGrid_Click(object sender, RoutedEventArgs e)
@@ -78,15 +82,21 @@ namespace Atlas.UI.Avalonia
 
 		private async void MenuItemCopyCellContents_Click(object sender, RoutedEventArgs e)
 		{
-			string value = FormatValueConverter.ObjectToString(Column.PropertyInfo.GetValue(TextBlock.DataContext), MaxCellValueLength, Column.FormatConverter.IsFormatted);
-			await ClipBoardUtils.SetTextAsync(value);
+			if (Column != null && Cell.Content is TextBlock textBlock)
+			{
+				string value = FormatValueConverter.ObjectToString(Column.PropertyInfo.GetValue(textBlock.DataContext), MaxCellValueLength, Column.FormatConverter.IsFormatted);
+				await ClipBoardUtils.SetTextAsync(value);
+			}
 		}
 
 		private async void MenuItemCopyColumn_Click(object sender, RoutedEventArgs e)
 		{
-			string text = DataGrid.ColumnToStringTable(Column);
-			if (text != null)
-				await ClipBoardUtils.SetTextAsync(text);
+			if (Column is DataGridPropertyTextColumn column)
+			{
+				string text = DataGrid.ColumnToStringTable(column);
+				if (text != null)
+					await ClipBoardUtils.SetTextAsync(text);
+			}
 		}
 
 		private async void MenuItemCopyRow_Click(object sender, RoutedEventArgs e)

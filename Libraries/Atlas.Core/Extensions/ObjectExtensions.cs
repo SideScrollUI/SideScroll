@@ -75,6 +75,7 @@ namespace Atlas.Extensions
 				return collection.Count.ToString("N0");
 				//return "[" + collection.Count.ToString("N0") + "]";
 			}
+
 			if (typeof(IEnumerable).IsAssignableFrom(type))
 			{
 				PropertyInfo countProp = type.GetProperty("Count");
@@ -84,6 +85,7 @@ namespace Atlas.Extensions
 					return "[" + count.ToString("N0") + "]";
 				}
 			}
+
 			if (obj is Stream stream)
 			{
 				try
@@ -95,6 +97,7 @@ namespace Atlas.Extensions
 				{
 				}
 			}
+
 			if (obj is DictionaryEntry dictionaryEntry)
 				return dictionaryEntry.Key.ToString();
 
@@ -103,6 +106,7 @@ namespace Atlas.Extensions
 			{
 				return '(' + type.Name + ')';
 			}
+
 			if (valueString.Length > maxLength)
 				return valueString.Substring(0, maxLength);
 

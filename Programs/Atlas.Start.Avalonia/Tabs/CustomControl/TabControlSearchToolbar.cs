@@ -29,10 +29,13 @@ namespace Atlas.Start.Avalonia.Tabs
 			ButtonSearch = AddButton("Search", Icons.Streams.Search);
 			ButtonLoadNext = AddButton("Next", Icons.Streams.Forward);
 			ButtonSleep = AddButton("Sleep", Icons.Streams.Refresh);
+
 			AddSeparator();
 			ButtonLoadAdd = AddButton("Add", Icons.Streams.Add);
+
 			AddSeparator();
 			AddButton("Save", Icons.Streams.Save);
+
 			AddSeparator();
 			ButtonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
 			TextBoxStatus = AddLabelText("Status");
