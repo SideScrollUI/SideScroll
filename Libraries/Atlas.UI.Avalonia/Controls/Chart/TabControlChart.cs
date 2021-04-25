@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using WeakEvent;
+using Avalonia.Interactivity;
+using Avalonia.Input;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -188,6 +190,8 @@ namespace Atlas.UI.Avalonia.Controls
 			PlotView.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack); // show when hovering
 			PointerLeave += PlotView_PointerLeave; // doesn't work on PlotView
 
+			PlotView.AddHandler(KeyDownEvent, PlotView_KeyDown, RoutingStrategies.Tunnel);
+
 			PlotView.ActualController.BindMouseEnter(new DelegatePlotCommand<OxyMouseEventArgs>(
 				(view, controller, args) =>
 				controller.AddHoverManipulator(view, new MouseHoverManipulator(this), args)));
@@ -254,6 +258,15 @@ namespace Atlas.UI.Avalonia.Controls
 				ListGroup.TimeWindow.OnSelectionChanged += ListGroup_OnTimesChanged;
 
 			Children.Add(containerGrid);
+		}
+
+		private void PlotView_KeyDown(object sender, KeyEventArgs e)
+		{
+			// These keys are used for navigating in the TabViewer
+			if (e.Key == Key.Left || e.Key == Key.Right)
+			{
+				RaiseEvent(e);
+			}
 		}
 
 		private void TitleTextBlock_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
