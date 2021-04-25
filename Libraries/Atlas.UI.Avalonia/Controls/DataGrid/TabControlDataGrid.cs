@@ -81,6 +81,7 @@ namespace Atlas.UI.Avalonia.Controls
 					collectionView.Refresh();
 				}
 				else*/
+				if (DataGrid != null)
 				{
 					CollectionView = new DataGridCollectionView(List);
 					DataGrid.Items = CollectionView;
@@ -285,6 +286,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AutoSizeColumns()
 		{
+			if (DataGrid == null)
+				return;
+
 			// The star column widths will change as other column widths are changed
 			var originalWidths = new Dictionary<DataGridColumn, DataGridLength>();
 			foreach (DataGridColumn column in DataGrid.Columns)
@@ -902,7 +906,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private void ScrollIntoView(object value)
 		{
 			// DataGrid.IsInitialized is unreliable and can still be false while showing
-			if (value == null || !DataGrid.IsEffectivelyVisible)
+			if (value == null || DataGrid == null || !DataGrid.IsEffectivelyVisible)
 				return;
 			
 			try
@@ -1097,22 +1101,35 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			_notifyItemChangedStopwatch.Stop();
 
-			DataGrid.SelectionChanged -= DataGrid_SelectionChanged;
-			DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
-			DataGrid.ColumnReordered -= DataGrid_ColumnReordered;
+			if (DataGrid != null)
+			{
+				DataGrid.SelectionChanged -= DataGrid_SelectionChanged;
+				DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
+				DataGrid.ColumnReordered -= DataGrid_ColumnReordered;
 
-			DataGrid.Items = null;
+				DataGrid.Items = null;
 
-			TextBoxSearch.KeyDown -= TextBoxSearch_KeyDown;
-			TextBoxSearch.KeyUp -= TextBoxSearch_KeyUp;
+				if (DataGrid.ContextMenu is IDisposable contextMenu)
+				{
+					contextMenu.Dispose();
+				}
+				DataGrid.ContextMenu = null;
+			}
 
-			//KeyDown -= UserControl_KeyDown;
+			if (TextBoxSearch != null)
+			{
+				TextBoxSearch.KeyDown -= TextBoxSearch_KeyDown;
+				TextBoxSearch.KeyUp -= TextBoxSearch_KeyUp;
+				TextBoxSearch = null;
+			}
 
 			if (List is INotifyCollectionChanged iNotifyCollectionChanged) // as AutoLoad
 				iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
 
 			List = null;
 			CollectionView = null;
+
+			Children.Clear();
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e)

@@ -469,9 +469,6 @@ namespace Atlas.UI.Avalonia.View
 			if (Model.Actions == null && Model.Objects == null)
 				return;
 
-			//if (tabModel.Tasks == null)
-			//	tabModel.Tasks = new TaskInstanceCollection();
-
 			TabTasks = new TabControlTasks(Instance);
 			TabTasks.OnSelectionChanged += ParentListSelectionChanged;
 
@@ -495,8 +492,6 @@ namespace Atlas.UI.Avalonia.View
 			foreach (IList iList in Model.ItemList)
 			{
 				var tabData = new TabControlDataGrid(Instance, iList, true, TabViewSettings.GetData(index));
-				//tabData.HorizontalAlignment = HorizontalAlignment.Stretch;
-				//tabData.VerticalAlignment = VerticalAlignment.Stretch;
 				tabData.OnSelectionChanged += ParentListSelectionChanged;
 				bool addSplitter = (TabDatas.Count > 0);
 				_tabParentControls.AddControl(tabData, true, SeparatorType.Splitter);
@@ -955,6 +950,12 @@ namespace Atlas.UI.Avalonia.View
 				TabTasks = null;
 			}
 
+			if (_tabTitle != null)
+			{
+				_tabTitle.Dispose();
+				_tabTitle = null;
+			}
+
 			if (_tabParentControls != null)
 			{
 				_tabParentControls.Clear(dispose);
@@ -1054,11 +1055,11 @@ namespace Atlas.UI.Avalonia.View
 		}
 
 		#region IDisposable Support
-		private bool disposedValue = false; // To detect redundant calls
+		private bool _disposedValue = false; // To detect redundant calls
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!disposedValue)
+			if (!_disposedValue)
 			{
 				if (disposing)
 				{
@@ -1076,7 +1077,13 @@ namespace Atlas.UI.Avalonia.View
 
 				Instance.Dispose();
 
-				disposedValue = true;
+				if (ContextMenu is IDisposable contextMenu)
+				{
+					contextMenu.Dispose();
+					ContextMenu = null;
+				}
+
+				_disposedValue = true;
 			}
 		}
 

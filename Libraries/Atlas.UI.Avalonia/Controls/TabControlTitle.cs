@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Atlas.UI.Avalonia.Controls
 {
-	public class TabControlTitle : UserControl
+	public class TabControlTitle : UserControl, IDisposable
 	{
 		public TabInstance TabInstance;
 		public string Label { get; set; }
@@ -99,6 +99,17 @@ namespace Atlas.UI.Avalonia.Controls
 			borderContent.Child = containerGrid;
 
 			Content = borderContent;
+		}
+
+		public void Dispose()
+		{
+			if (TextBlock != null)
+			{
+				TextBlock.ContextMenu.Items = null;
+				TextBlock.ContextMenu = null;
+				TextBlock = null;
+			}
+			Content = null;
 		}
 
 		/*private void CheckBox_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)

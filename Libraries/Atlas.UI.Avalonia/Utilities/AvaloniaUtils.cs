@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using Atlas.UI.Avalonia.View;
+using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -21,7 +22,7 @@ namespace Atlas.UI.Avalonia
 
 			var list = new AvaloniaList<object>();
 
-			var menuItemCopy = new MenuItem()
+			var menuItemCopy = new TabMenuItem()
 			{
 				Header = "_Copy",
 				Foreground = Brushes.Black,
@@ -44,15 +45,15 @@ namespace Atlas.UI.Avalonia
 			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 
 			var list = new AvaloniaList<object>();
-			var menuItemCut = new MenuItem() { Header = "Cut" };
+			var menuItemCut = new TabMenuItem("Cut");
 			menuItemCut.Click += delegate { SendTextBoxKey(textBox, keymap.Cut); };
 			list.Add(menuItemCut);
 
-			var menuItemCopy = new MenuItem() { Header = "_Copy" };
+			var menuItemCopy = new TabMenuItem("_Copy");
 			menuItemCopy.Click += delegate { SendTextBoxKey(textBox, keymap.Copy); };
 			list.Add(menuItemCopy);
 
-			var menuItemPaste = new MenuItem() { Header = "Paste" };
+			var menuItemPaste = new TabMenuItem("Paste");
 			menuItemPaste.Click += delegate { SendTextBoxKey(textBox, keymap.Paste); };
 			list.Add(menuItemPaste);
 

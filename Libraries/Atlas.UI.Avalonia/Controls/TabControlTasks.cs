@@ -17,6 +17,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public TabInstance TabInstance;
 
 		public event EventHandler<EventArgs> OnSelectionChanged;
+
 		public bool AutoSelectNew = true;
 
 		private bool ShowTasks
@@ -169,8 +170,12 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public void Dispose()
 		{
-			_tabControlDataGrid.OnSelectionChanged -= TabData_OnSelectionChanged;
-			_tabControlDataGrid.Dispose();
+			if (_tabControlDataGrid != null)
+			{
+				_tabControlDataGrid.OnSelectionChanged -= TabData_OnSelectionChanged;
+				_tabControlDataGrid.Dispose();
+				_tabControlDataGrid = null;
+			}
 
 			if (TabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
 				iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;

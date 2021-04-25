@@ -1,4 +1,5 @@
 ﻿using Atlas.Extensions;
+using Atlas.UI.Avalonia.View;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -7,7 +8,7 @@ using System;
 
 namespace Atlas.UI.Avalonia
 {
-	public class DataGridContextMenu : ContextMenu, IStyleable
+	public class DataGridContextMenu : ContextMenu, IStyleable, IDisposable
 	{
 		Type IStyleable.StyleKey => typeof(ContextMenu);
 
@@ -28,37 +29,37 @@ namespace Atlas.UI.Avalonia
 		{
 			var list = new AvaloniaList<object>();
 
-			var menuItemCopyCellContents = new MenuItem() { Header = "Copy - _Cell Contents" };
+			var menuItemCopyCellContents = new TabMenuItem("Copy - _Cell Contents");
 			menuItemCopyCellContents.Click += MenuItemCopyCellContents_Click;
 			list.Add(menuItemCopyCellContents);
 
 			list.Add(new Separator());
 
-			var menuItemCopyColumn = new MenuItem() { Header = "Copy - Co_lumn" };
+			var menuItemCopyColumn = new TabMenuItem("Copy - Co_lumn");
 			menuItemCopyColumn.Click += MenuItemCopyColumn_Click;
 			list.Add(menuItemCopyColumn);
 
-			var menuItemCopyRow = new MenuItem() { Header = "Copy - _Row" };
+			var menuItemCopyRow = new TabMenuItem("Copy - _Row");
 			menuItemCopyRow.Click += MenuItemCopyRow_Click;
 			list.Add(menuItemCopyRow);
 
 			list.Add(new Separator());
 
-			var menuItemCopySelected = new MenuItem() { Header = "Copy - _Selected" };
+			var menuItemCopySelected = new TabMenuItem("Copy - _Selected");
 			menuItemCopySelected.Click += MenuItemCopySelected_Click;
 			list.Add(menuItemCopySelected);
 
-			var menuItemCopySelectedCsv = new MenuItem() { Header = "Copy - Selected - CSV" };
+			var menuItemCopySelectedCsv = new TabMenuItem("Copy - Selected - CSV");
 			menuItemCopySelectedCsv.Click += MenuItemCopySelectedCsv_Click;
 			list.Add(menuItemCopySelectedCsv);
 
 			list.Add(new Separator());
 
-			var menuItemCopyDataGrid = new MenuItem() { Header = "Copy - _DataGrid" };
+			var menuItemCopyDataGrid = new TabMenuItem("Copy - _DataGrid");
 			menuItemCopyDataGrid.Click += MenuItemCopyDataGrid_Click;
 			list.Add(menuItemCopyDataGrid);
 
-			var menuItemCopyDataGridCsv = new MenuItem() { Header = "Copy - DataGrid - CS_V" };
+			var menuItemCopyDataGridCsv = new TabMenuItem("Copy - DataGrid - CS_V");
 			menuItemCopyDataGridCsv.Click += MenuItemCopyDataGridCsv_Click;
 			list.Add(menuItemCopyDataGridCsv);
 
@@ -125,6 +126,15 @@ namespace Atlas.UI.Avalonia
 			string text = DataGrid.ToCsv();
 			if (text != null)
 				await ClipBoardUtils.SetTextAsync(text);
+		}
+
+		public void Dispose()
+		{
+			DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
+			DataGrid = null;
+			Column = null;
+			Cell = null;
+			Items = null;
 		}
 	}
 }

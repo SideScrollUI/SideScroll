@@ -340,6 +340,8 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			RowDefinitions.Clear();
 			Children.Clear();
+			GridControls = null;
+			_gridItems = null;
 		}
 	}
 }

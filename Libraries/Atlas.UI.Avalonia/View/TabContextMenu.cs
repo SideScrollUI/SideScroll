@@ -9,7 +9,18 @@ using System;
 
 namespace Atlas.UI.Avalonia.View
 {
-	public class TabViewContextMenu : ContextMenu, IStyleable, ILayoutable
+	public class TabMenuItem : MenuItem, IStyleable
+	{
+		Type IStyleable.StyleKey => typeof(MenuItem);
+
+		public TabMenuItem(string header = null)
+		{
+			Header = header;
+			Items = null; // Clear to avoid weak event handler leaks
+		}
+	}
+
+	public class TabViewContextMenu : ContextMenu, IStyleable, ILayoutable, IDisposable
 	{
 		public TabView TabView;
 		public TabInstance TabInstance;
@@ -29,20 +40,21 @@ namespace Atlas.UI.Avalonia.View
 		private void Initialize()
 		{
 			var list = new AvaloniaList<object>();
-			var menuItemRefresh = new MenuItem() { Header = "_Refresh" };
+
+			var menuItemRefresh = new TabMenuItem("_Refresh");
 			menuItemRefresh.Click += MenuItemRefresh_Click;
 			list.Add(menuItemRefresh);
 
-			var menuItemReload = new MenuItem() { Header = "_Reload" };
+			var menuItemReload = new TabMenuItem("_Reload");
 			menuItemReload.Click += MenuItemReload_Click;
 			list.Add(menuItemReload);
 
-			var menuItemReset = new MenuItem() { Header = "Re_set" };
+			var menuItemReset = new TabMenuItem("Re_set");
 			menuItemReset.Click += MenuItemReset_Click;
 			list.Add(menuItemReset);
 
 #if DEBUG
-			var menuItemDebug = new MenuItem() { Header = "_Debug" };
+			var menuItemDebug = new TabMenuItem("_Debug");
 			menuItemDebug.Click += MenuItemDebug_Click;
 			list.Add(menuItemDebug);
 
@@ -52,7 +64,7 @@ namespace Atlas.UI.Avalonia.View
 			{
 				IsChecked = TabInstance.Project.UserSettings.AutoLoad,
 			};
-			var menuItemAutoLoad = new MenuItem()
+			var menuItemAutoLoad = new TabMenuItem()
 			{
 				Header = "_AutoLoad",
 				Icon = _checkboxAutoLoad,
@@ -97,6 +109,13 @@ namespace Atlas.UI.Avalonia.View
 			TabView clone = TabView.DeepClone();
 			debugModel.AddData(clone);
 			//Control debugControl = clone.CreateChildControl(debugModel, "Debug");
+		}
+
+		public void Dispose()
+		{
+			TabView = null;
+			TabInstance = null;
+			Items = null;
 		}
 	}
 }

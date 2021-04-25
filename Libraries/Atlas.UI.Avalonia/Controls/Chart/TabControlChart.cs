@@ -254,8 +254,6 @@ namespace Atlas.UI.Avalonia.Controls
 				ListGroup.TimeWindow.OnSelectionChanged += ListGroup_OnTimesChanged;
 
 			Children.Add(containerGrid);
-
-			Focusable = true;
 		}
 
 		private void TitleTextBlock_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
