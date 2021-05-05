@@ -9,6 +9,8 @@ namespace Atlas.Core
 {
 	public class ProcessUtils
 	{
+		public static string OSPlatformName => GetOSPlatform().ToString().CamelCased();
+
 		public static OSPlatform GetOSPlatform()
 		{
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -27,13 +29,12 @@ namespace Atlas.Core
 			return OSPlatform.Create("Unknown");
 		}
 
-		public static string OSPlatformName => GetOSPlatform().ToString().CamelCased();
-
 		public static void OpenBrowser(string url)
 		{
 			// not working
 			//if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
 			//	throw new Exception("Invalid url: " + url);
+
 			try
 			{
 				Process.Start(url);
@@ -41,6 +42,7 @@ namespace Atlas.Core
 			catch
 			{
 				// hack because of this: https://github.com/dotnet/corefx/issues/10361
+				// Can fix after updating to .Net Standard 2.1
 				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 				{
 					url = url.Replace("&", "^&");
@@ -68,6 +70,7 @@ namespace Atlas.Core
 				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 				{
 					path = path.Replace('/', '\\');
+
 					string argument;
 					if (File.Exists(path))
 						argument = "/select,\"" + path + "\"";
@@ -93,6 +96,7 @@ namespace Atlas.Core
 				Arguments = arguments,
 				WorkingDirectory = Directory.GetCurrentDirectory(),
 			};
+
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 			{
 				processStartInfo.FileName = "/usr/local/share/dotnet/dotnet";
@@ -109,6 +113,7 @@ namespace Atlas.Core
 				processStartInfo.CreateNoWindow = true;
 				//processStartInfo.UseShellExecute = true, // doesn't work on mac yet, last checked for dotnet 3.1
 			}
+
 			Process process = Process.Start(processStartInfo);
 			return process;
 		}

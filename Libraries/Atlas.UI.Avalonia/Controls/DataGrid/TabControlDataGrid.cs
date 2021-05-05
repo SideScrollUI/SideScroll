@@ -112,6 +112,11 @@ namespace Atlas.UI.Avalonia.Controls
 			Initialize();
 		}
 
+		static TabControlDataGrid()
+		{
+			PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => DataGridRow_PointerPressed(x, e), RoutingStrategies.Tunnel, true);
+		}
+
 		public override string ToString() => TabModel.Name;
 
 		// this breaks when content is too wide for Tab
@@ -223,8 +228,6 @@ namespace Atlas.UI.Avalonia.Controls
 			DataGrid.ColumnReordered += DataGrid_ColumnReordered;
 
 			DataGrid.AddHandler(KeyDownEvent, DataGrid_KeyDown, RoutingStrategies.Tunnel);
-
-			//PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => x.DataGridRow_PointerPressed(e), handledEventsToo: true);
 
 			Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 
@@ -457,6 +460,7 @@ namespace Atlas.UI.Avalonia.Controls
 			return null;
 		}
 
+		// Single click deselect
 		private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
 		{
 			// Single click deselect
@@ -473,10 +477,35 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
+		// Single click deselect (cells don't always occupy their entire contents)
+		private static void DataGridRow_PointerPressed(DataGridRow row, PointerPressedEventArgs e)
+		{
+			if (!e.GetCurrentPoint(row).Properties.IsLeftButtonPressed)
+				return;
+
+			// Can't access row.OwningGrid, so we have to do this the hard way
+			if (row?.Parent?.Parent?.Parent?.Parent is DataGrid dataGrid)
+			{
+				if (!e.GetCurrentPoint(row).Properties.IsLeftButtonPressed || dataGrid.SelectedItems == null || dataGrid.SelectedItems.Count != 1)
+					return;
+
+				if (dataGrid.SelectedItems.Contains(row.DataContext))
+				{
+					Dispatcher.UIThread.Post(() => ClearSelection(dataGrid), DispatcherPriority.Background);
+					e.Handled = true;
+				}
+			}
+		}
+
 		private void ClearSelection()
 		{
-			DataGrid.SelectedItems.Clear();
-			DataGrid.SelectedItem = null;
+			ClearSelection(DataGrid);
+		}
+
+		private static void ClearSelection(DataGrid dataGrid)
+		{
+			dataGrid.SelectedItems.Clear();
+			dataGrid.SelectedItem = null;
 		}
 
 		private void TextBoxSearch_KeyDown(object sender, KeyEventArgs e)

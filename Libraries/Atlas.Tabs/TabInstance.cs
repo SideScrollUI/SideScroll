@@ -81,6 +81,7 @@ namespace Atlas.Tabs
 	public class TabInstance : IDisposable
 	{
 		private const int MaxPreloadItems = 50; // preload all rows that might be visible to avoid freezing UI
+		private const double DefaultTaskRateLimitSeconds = 2;
 
 		public const string CurrentBookmarkName = "Current";
 
@@ -310,6 +311,31 @@ namespace Atlas.Tabs
 		{
 			var taskDelegate = new TaskDelegate(callAction, useTask);
 			return StartTask(taskDelegate, showTask);
+		}
+
+		private Dictionary<CallActionAsync, TaskInstance> _activeTasks = new Dictionary<CallActionAsync, TaskInstance>();
+
+		// Don't allow starting a 2nd unless the first has completed or the duration has past
+		public TaskInstance StartRateLimitAsync(CallActionAsync callAction, Call call = null, bool showTask = false, double waitSeconds = DefaultTaskRateLimitSeconds)
+		{
+			var taskDelegate = new TaskDelegateAsync(callAction, true)
+			{
+				OnComplete = () => { lock (_activeTasks) _activeTasks.Remove(callAction); },
+			};
+
+			lock (_activeTasks)
+			{
+				if (_activeTasks.TryGetValue(callAction, out TaskInstance taskInstance))
+				{
+					TimeSpan age = taskInstance.Started.Age();
+					if (age < TimeSpan.FromSeconds(waitSeconds))
+						return taskInstance;
+				}
+
+				taskInstance = StartTask(taskDelegate, showTask, call);
+				_activeTasks[callAction] = taskInstance;
+				return taskInstance;
+			}
 		}
 
 		public TaskInstance StartAsync(CallActionAsync callAction, Call call = null, bool showTask = false)

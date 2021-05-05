@@ -66,6 +66,8 @@ namespace Atlas.Core
 			}
 		}
 
+		public DateTime Started = DateTime.UtcNow;
+
 		private readonly Stopwatch _stopwatch = new Stopwatch();
 
 		public override string ToString() => Label;
@@ -242,7 +244,8 @@ namespace Atlas.Core
 
 			Call.Log.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));
 
-			Creator?.OnComplete?.Invoke();
+			if (ParentTask == null)
+				Creator?.OnComplete?.Invoke();
 			OnComplete?.Invoke();
 		}
 

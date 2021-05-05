@@ -28,6 +28,7 @@ namespace Atlas.Core
 
 		public string XPropertyName;
 		public string YPropertyName;
+		public string YPropertyLabel;
 		public double XBinSize;
 		public string Description { get; set; }
 

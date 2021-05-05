@@ -13,13 +13,18 @@ namespace Atlas.Core
 
 		[HiddenColumn]
 		public string Label { get; set; } // used for Button Label
+
 		[HiddenColumn]
 		public string Description { get; set; } // Button hint text
+
 		public string Info { get { return Description != null ? ">" : null; } } // Button hint text
+
 		[HiddenColumn]
 		public bool ShowTask { get; set; }
+
 		[HiddenColumn]
 		public bool UseTask { get; set; } // Blocks, Action uses UI thread if false
+
 		public int TimesRun { get; set; }
 
 		[HiddenColumn]
@@ -51,7 +56,7 @@ namespace Atlas.Core
 			call.TaskInstance = taskInstance;
 
 			Action action = CreateAction(call);
-			if (UseTask == true)
+			if (UseTask)
 			{
 				taskInstance.Task = new Task(action);
 				//currentTask.CreationOptions = TaskCreationOptions.

@@ -92,11 +92,13 @@ namespace Atlas.UI.Avalonia.Controls
 			if (result == null)
 				return null;
 
+			string valueLabel = ListSeries.YPropertyLabel ?? "Value";
+
 			if (_datapointLookup.TryGetValue(result.DataPoint, out object obj))
 			{
 				if (obj is TimeRangeValue timeRangeValue)
 				{
-					result.Text = ListSeries.Name + "\nTime: " + timeRangeValue.TimeText + "\nDuration: " + timeRangeValue.Duration.FormattedDecimal() + "\nValue: " + timeRangeValue.Value.Formatted();
+					result.Text = ListSeries.Name + "\nTime: " + timeRangeValue.TimeText + "\nDuration: " + timeRangeValue.Duration.FormattedDecimal() + "\n" + valueLabel + ": " + timeRangeValue.Value.Formatted();
 				}
 
 				if (obj is ITags tags && tags.Tags.Count > 0)
