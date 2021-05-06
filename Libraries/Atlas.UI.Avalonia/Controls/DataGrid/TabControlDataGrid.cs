@@ -463,7 +463,6 @@ namespace Atlas.UI.Avalonia.Controls
 		// Single click deselect
 		private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
 		{
-			// Single click deselect
 			var pointer = e.PointerPressedEventArgs.GetCurrentPoint(this);
 			if (pointer.Properties.IsLeftButtonPressed && e.Row != null && DataGrid.SelectedItems != null && DataGrid.SelectedItems.Count == 1)
 			{

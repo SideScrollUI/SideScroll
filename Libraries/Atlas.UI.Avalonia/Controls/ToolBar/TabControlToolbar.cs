@@ -58,6 +58,7 @@ namespace Atlas.UI.Avalonia.Tabs
 					AddLabel(text);
 				}
 			}
+
 			if (toolbar.Buttons.Count > 0)
 			{
 				AddSeparator();
@@ -82,10 +83,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public ToolbarButton AddButton(ToolButton toolButton)
 		{
-			var button = new ToolbarButton(this, toolButton.Label, toolButton.Tooltip, toolButton.Icon);
-			button.Add(toolButton.Action);
-			button.AddAsync(toolButton.ActionAsync);
-			button.ShowTask = toolButton.ShowTask;
+			var button = new ToolbarButton(this, toolButton);
 			AddControl(button);
 			return button;
 		}

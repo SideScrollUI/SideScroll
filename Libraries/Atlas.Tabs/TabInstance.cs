@@ -135,6 +135,8 @@ namespace Atlas.Tabs
 		public event EventHandler<EventArgs> OnModified;
 		public event EventHandler<EventArgs> OnResize;
 
+		public Action DefaultAction; // Default action when Enter pressed
+
 		// Relative paths for where all the TabSettings get stored, primarily used for loading future defaults
 		// paths get hashed later to avoid having to encode and super long names breaking path limits
 		private string CustomPath => (Model.CustomSettingsPath != null) ? "Custom/" + GetType().FullName + "/" + Model.CustomSettingsPath : null;
@@ -311,31 +313,6 @@ namespace Atlas.Tabs
 		{
 			var taskDelegate = new TaskDelegate(callAction, useTask);
 			return StartTask(taskDelegate, showTask);
-		}
-
-		private Dictionary<CallActionAsync, TaskInstance> _activeTasks = new Dictionary<CallActionAsync, TaskInstance>();
-
-		// Don't allow starting a 2nd unless the first has completed or the duration has past
-		public TaskInstance StartRateLimitAsync(CallActionAsync callAction, Call call = null, bool showTask = false, double waitSeconds = DefaultTaskRateLimitSeconds)
-		{
-			var taskDelegate = new TaskDelegateAsync(callAction, true)
-			{
-				OnComplete = () => { lock (_activeTasks) _activeTasks.Remove(callAction); },
-			};
-
-			lock (_activeTasks)
-			{
-				if (_activeTasks.TryGetValue(callAction, out TaskInstance taskInstance))
-				{
-					TimeSpan age = taskInstance.Started.Age();
-					if (age < TimeSpan.FromSeconds(waitSeconds))
-						return taskInstance;
-				}
-
-				taskInstance = StartTask(taskDelegate, showTask, call);
-				_activeTasks[callAction] = taskInstance;
-				return taskInstance;
-			}
 		}
 
 		public TaskInstance StartAsync(CallActionAsync callAction, Call call = null, bool showTask = false)

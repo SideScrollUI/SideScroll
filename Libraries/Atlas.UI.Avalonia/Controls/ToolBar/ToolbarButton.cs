@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Input;
 using Atlas.Core;
+using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -25,12 +26,37 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public bool ShowTask;
 
+		public TimeSpan MinWaitTime = TimeSpan.FromSeconds(1); // Wait time between clicks
+
+		private DateTime _lastInvoked;
+
+		public ToolbarButton(TabControlToolbar toolbar, ToolButton toolButton) : base()
+		{
+			Toolbar = toolbar;
+			Label = toolButton.Label;
+			Tooltip = toolButton.Tooltip;
+			ShowTask = toolButton.ShowTask;
+
+			CallAction = toolButton.Action;
+			CallActionAsync = toolButton.ActionAsync;
+
+			Initialize(toolButton.Icon);
+
+			if (toolButton.Default)
+				SetDefault();
+		}
+
 		public ToolbarButton(TabControlToolbar toolbar, string label, string tooltip, Stream bitmapStream, ICommand command = null) : base()
 		{
 			Toolbar = toolbar;
 			Label = label;
 			Tooltip = tooltip;
 
+			Initialize(bitmapStream, command);
+		}
+
+		private void Initialize(Stream bitmapStream, ICommand command = null)
+		{
 			bitmapStream.Position = 0;
 			var bitmap = new Bitmap(bitmapStream);
 
@@ -49,11 +75,11 @@ namespace Atlas.UI.Avalonia.Tabs
 			};
 			grid.Children.Add(image);
 
-			if (label != null)
+			if (Label != null)
 			{
 				var textBlock = new TextBlock()
 				{
-					Text = label,
+					Text = Label,
 					FontSize = 15,
 					Foreground = new SolidColorBrush(Color.Parse("#759eeb")),
 					Margin = new Thickness(6),
@@ -71,7 +97,7 @@ namespace Atlas.UI.Avalonia.Tabs
 			//BorderThickness = new Thickness(2),
 			//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
 			//BorderBrush = new SolidColorBrush(Colors.Black),
-			ToolTip.SetTip(this, tooltip);
+			ToolTip.SetTip(this, Tooltip);
 
 			BorderBrush = Background;
 			Click += ToolbarButton_Click;
@@ -79,6 +105,25 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		private void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
+			Invoke();
+		}
+
+		public void SetDefault()
+		{
+			Toolbar.TabInstance.DefaultAction = () => Invoke();
+		}
+
+		private void Invoke()
+		{
+			if (!IsEnabled)
+				return;
+
+			TimeSpan timeSpan = DateTime.UtcNow.Subtract(_lastInvoked);
+			if (timeSpan < MinWaitTime)
+				return;
+
+			_lastInvoked = DateTime.UtcNow;
+
 			if (Toolbar.TabInstance == null)
 			{
 				InvokeAction(new Call());

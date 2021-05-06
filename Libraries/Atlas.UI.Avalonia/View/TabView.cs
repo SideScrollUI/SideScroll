@@ -5,6 +5,7 @@ using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.Tabs;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -202,6 +203,17 @@ namespace Atlas.UI.Avalonia.View
 
 			_tabTitle = new TabControlTitle(Instance, Model.Name);
 			_tabParentControls.AddControl(_tabTitle, false, SeparatorType.None);
+
+			_tabParentControls.KeyDown += ParentControls_KeyDown;
+		}
+
+		private void ParentControls_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Enter)
+			{
+				Instance.DefaultAction?.Invoke();
+				e.Handled = true;
+			}
 		}
 
 		private void AddGridColumnSplitter()
@@ -288,7 +300,7 @@ namespace Atlas.UI.Avalonia.View
 			_containerGrid.ColumnDefinitions[0].Width = GridLength.Auto;
 		}
 
-		private void GridSplitter_DragDelta(object sender, global::Avalonia.Input.VectorEventArgs e)
+		private void GridSplitter_DragDelta(object sender, VectorEventArgs e)
 		{
 			if (TabViewSettings.SplitterDistance != null)
 				_tabParentControls.Width = _containerGrid.ColumnDefinitions[0].ActualWidth;
@@ -308,12 +320,12 @@ namespace Atlas.UI.Avalonia.View
 			//	containerGrid.ColumnDefinitions[0].Width = new GridLength((double)containerGrid.ColumnDefinitions[1].);
 		}
 
-		private void GridSplitter_DragStarted(object sender, global::Avalonia.Input.VectorEventArgs e)
+		private void GridSplitter_DragStarted(object sender, VectorEventArgs e)
 		{
 			_isDragging = true;
 		}
 
-		private void GridSplitter_DragCompleted(object sender, global::Avalonia.Input.VectorEventArgs e)
+		private void GridSplitter_DragCompleted(object sender, VectorEventArgs e)
 		{
 			if (_isDragging == false)
 				return;
@@ -958,6 +970,7 @@ namespace Atlas.UI.Avalonia.View
 
 			if (_tabParentControls != null)
 			{
+				_tabParentControls.KeyDown -= ParentControls_KeyDown;
 				_tabParentControls.Clear(dispose);
 				_tabParentControls = null;
 			}
