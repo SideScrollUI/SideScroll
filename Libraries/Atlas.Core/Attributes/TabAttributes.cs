@@ -86,6 +86,12 @@ namespace Atlas.Core
 	{
 	}
 
+	// Round value when displaying (i.e. show TimeSpan as short value like "1.6 Days")
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class FormattedAttribute : Attribute
+	{
+	}
+
 	// 
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class WordSpacedAttribute : Attribute
@@ -98,9 +104,9 @@ namespace Atlas.Core
 	{
 	}
 
-	// Round value when displaying (i.e. show TimeSpan as short value like "1.6 Days")
+	// Right align contents in parent control
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-	public class FormattedAttribute : Attribute
+	public class RightAlignAttribute : Attribute
 	{
 	}
 

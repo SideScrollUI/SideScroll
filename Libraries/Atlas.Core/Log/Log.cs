@@ -52,6 +52,8 @@ namespace Atlas.Core
 
 		public LogEntry AddError(string text, params Tag[] tags)
 		{
+			Debug.Print("Error: " + text);
+
 			return Add(LogType.Error, text, tags);
 		}
 
@@ -64,6 +66,8 @@ namespace Atlas.Core
 
 		public LogEntry Add(Exception e)
 		{
+			Debug.Print("Exception: " + e.Message);
+
 			if (e is TaskCanceledException)
 			{
 				return Add(e.Message, new Tag(e));

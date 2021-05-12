@@ -55,6 +55,9 @@ namespace Atlas.UI.Avalonia.Tabs
 				}
 				else if (propertyValue is string text)
 				{
+					if (propertyInfo.GetCustomAttribute<RightAlignAttribute>() != null)
+						AddFill();
+
 					AddLabel(text);
 				}
 			}
@@ -67,10 +70,13 @@ namespace Atlas.UI.Avalonia.Tabs
 			}
 		}
 
-		public void AddControl(Control control)
+		public void AddControl(Control control, bool fill = false)
 		{
 			Grid.SetColumn(control, ColumnDefinitions.Count);
-			ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+			if (fill)
+				ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
+			else
+				ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
 			Children.Add(control);
 		}
 
@@ -117,10 +123,20 @@ namespace Atlas.UI.Avalonia.Tabs
 			AddControl(panel);
 		}
 
-		public ToolbarTextBlock AddLabel(string text = "")
+		// For right aligning
+		public void AddFill()
+		{
+			var panel = new Panel()
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+			};
+			AddControl(panel, true);
+		}
+
+		public ToolbarTextBlock AddLabel(string text = "", bool fill = false)
 		{
 			var textBlock = new ToolbarTextBlock(text);
-			AddControl(textBlock);
+			AddControl(textBlock, fill);
 			return textBlock;
 		}
 

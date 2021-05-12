@@ -60,6 +60,7 @@ namespace Atlas.UI.Avalonia.Controls
 	public class TabControlChart : Grid, IDisposable
 	{
 		public int SeriesLimit { get; set; } = 25;
+
 		private const double MarginPercent = 0.1; // This needs a min height so this can be lowered
 		private const int MinSelectionWidth = 10;
 		private static readonly OxyColor NowColor = OxyColors.Green;
@@ -179,11 +180,13 @@ namespace Atlas.UI.Avalonia.Controls
 				Background = Brushes.Transparent,
 				BorderBrush = Brushes.LightGray,
 				IsMouseWheelEnabled = false,
+				ClipToBounds = false,
 				//DisconnectCanvasWhileUpdating = false, // Tracker will show behind grid lines if the PlotView is resized and this is set
 				MinWidth = 150,
 				MinHeight = 80,
 				[Grid.RowProperty] = 1,
 			};
+			ClipToBounds = true; // Slows things down too much without this, could possible change while tracker visible?
 
 			// Show Hover text on mouse over instead of requiring holding the mouse down (why isn't this the default?)
 			PlotView.ActualController.UnbindMouseDown(OxyMouseButton.Left); // remove default

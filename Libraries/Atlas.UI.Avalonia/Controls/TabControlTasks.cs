@@ -145,7 +145,7 @@ namespace Atlas.UI.Avalonia.Controls
 			IsVisible = ShowTasks;
 
 			// Unselect running if no error
-			if (AutoSelectNew && !taskInstance.Errored)
+			if (AutoSelectNew && !taskInstance.Errored && _tabControlDataGrid != null)
 			{
 				IList selectedItems = _tabControlDataGrid.SelectedItems;
 				if (selectedItems.Count == 1 && selectedItems[0] == taskInstance)
