@@ -96,6 +96,11 @@ namespace Atlas.Serialize
 
 		public static string ToBase64String(Call call, object obj, bool publicOnly = false)
 		{
+			if (obj == null)
+				return null;
+
+			call = call ?? new Call();
+
 			var serializer = Create();
 			serializer.PublicOnly = publicOnly;
 			serializer.Save(call, obj);

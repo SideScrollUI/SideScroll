@@ -37,7 +37,7 @@ namespace Atlas.Core
 		public SeriesType SeriesType { get; set; } = SeriesType.Sum;
 		public double Total { get; set; }
 
-		public override string ToString() => Name;
+		public override string ToString() => Name + "[" + List?.Count + "]";
 
 		public ListSeries(IList list)
 		{
@@ -93,7 +93,7 @@ namespace Atlas.Core
 			return value;
 		}
 
-		public double CalculateTotal(TimeWindow timeWindow)
+		public double CalculateTotal(TimeWindow timeWindow = null)
 		{
 			timeWindow = timeWindow?.Selection ?? timeWindow;
 			Total = GetTotal(timeWindow);

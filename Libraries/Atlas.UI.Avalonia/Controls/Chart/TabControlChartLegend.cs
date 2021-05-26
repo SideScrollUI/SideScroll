@@ -294,7 +294,7 @@ namespace Atlas.UI.Avalonia.Controls
 					}
 				}
 			}
-			Dispatcher.UIThread.InvokeAsync(() => PlotView.Model.InvalidatePlot(true), DispatcherPriority.Background);
+			Dispatcher.UIThread.InvokeAsync(() => PlotView.Model?.InvalidatePlot(true), DispatcherPriority.Background);
 		}
 
 		private void LegendItem_SelectionChanged(object sender, EventArgs e)

@@ -14,7 +14,7 @@ using System.Windows.Input;
 
 namespace Atlas.UI.Avalonia.Tabs
 {
-	public class TabControlToolbar : Grid
+	public class TabControlToolbar : Grid, IDisposable
 	{
 		public static Thickness DefaultMargin = new Thickness(6, 3);
 
@@ -184,6 +184,15 @@ namespace Atlas.UI.Avalonia.Tabs
 			AddControl(textBox);
 
 			return textBox;
+		}
+
+		public void Dispose()
+		{
+			foreach (IControl control in Children)
+			{
+				if (control is IDisposable disposable)
+					disposable.Dispose();
+			}
 		}
 	}
 

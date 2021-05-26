@@ -272,13 +272,13 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private void TitleTextBlock_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void TitleTextBlock_PointerEnter(object sender, PointerEventArgs e)
 		{
 			if (IsTitleSelectable)
 				TitleTextBlock.Foreground = Theme.GridBackgroundSelected;
 		}
 
-		private void TitleTextBlock_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void TitleTextBlock_PointerLeave(object sender, PointerEventArgs e)
 		{
 			TitleTextBlock.Foreground = Theme.BackgroundText;
 		}
@@ -349,7 +349,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		private void PlotView_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void PlotView_PointerLeave(object sender, PointerEventArgs e)
 		{
 			if (HoverSeries != null)
 			{
@@ -500,10 +500,21 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void UpdateDateTimeAxis(TimeWindow timeWindow)
 		{
-			DateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(timeWindow.StartTime);
-			DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(timeWindow.EndTime);
-			//DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.AddSeconds(duration / 25.0)); // labels get clipped without this
-			UpdateDateTimeInterval(timeWindow.Duration.TotalSeconds);
+			if (timeWindow == null)
+			{
+				DateTimeAxis.Minimum = double.NaN;
+				DateTimeAxis.Maximum = double.NaN;
+				DateTimeAxis.IntervalLength = 75;
+				DateTimeAxis.StringFormat = null;
+				//UpdateDateTimeInterval(timeWindow.Duration.TotalSeconds);
+			}
+			else
+			{
+				DateTimeAxis.Minimum = OxyPlot.Axes.DateTimeAxis.ToDouble(timeWindow.StartTime);
+				DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(timeWindow.EndTime);
+				//DateTimeAxis.Maximum = OxyPlot.Axes.DateTimeAxis.ToDouble(endTime.AddSeconds(duration / 25.0)); // labels get clipped without this
+				UpdateDateTimeInterval(timeWindow.Duration.TotalSeconds);
+			}
 		}
 
 		private void UpdateDateTimeInterval(double duration)
@@ -678,6 +689,7 @@ namespace Atlas.UI.Avalonia.Controls
 						maximum = Math.Max(maximum, y);
 					}
 				}
+
 				if (series is OxyPlot.Series.ScatterSeries scatterSeries)
 				{
 					if (scatterSeries.ItemsSource == null)
@@ -737,13 +749,49 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		/*private void UpdateDateTimeAxis()
+		private void UpdateDateTimeAxisRange()
 		{
 			if (DateTimeAxis == null)
 				return;
 
+			double minimum = double.MaxValue;
+			double maximum = double.MinValue;
+
+			foreach (OxyPlot.Series.Series series in PlotModel.Series)
+			{
+				if (series is OxyPlot.Series.LineSeries lineSeries)
+				{
+					if (lineSeries.LineStyle == LineStyle.None)
+						continue;
+
+					foreach (var dataPoint in lineSeries.Points)
+					{
+						double x = dataPoint.X;
+						if (double.IsNaN(x))
+							continue;
+
+						minimum = Math.Min(minimum, x);
+						maximum = Math.Max(maximum, x);
+					}
+				}
+			}
+
+			if (minimum != double.MaxValue)
+			{
+				DateTimeAxis.Minimum = minimum;
+				DateTimeAxis.Maximum = maximum;
+			}
+
+			if (ListGroup.TimeWindow == null)
+			{
+				DateTime startTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Minimum);
+				DateTime endTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Maximum);
+
+				ListGroup.TimeWindow = new TimeWindow(startTime, endTime).Trim();
+			}
+
 			//UpdateDateTimeInterval(double duration);
-		}*/
+		}
 
 		// todo: centralize and add units
 		internal static string ValueFormatter(double d)
@@ -996,8 +1044,15 @@ namespace Atlas.UI.Avalonia.Controls
 					StrokeThickness = 1,
 				};
 			}
-			if (!PlotModel.Annotations.Contains(_rectangleAnnotation))
-				PlotModel.Annotations.Add(_rectangleAnnotation);
+
+			try
+			{
+				if (!PlotModel.Annotations.Contains(_rectangleAnnotation))
+					PlotModel.Annotations.Add(_rectangleAnnotation);
+			}
+			catch (Exception)
+			{
+			}
 
 			_rectangleAnnotation.MinimumX = Math.Min(_startDataPoint.Value.X, endDataPoint.X);
 			_rectangleAnnotation.MaximumX = Math.Max(_startDataPoint.Value.X, endDataPoint.X);
@@ -1039,25 +1094,11 @@ namespace Atlas.UI.Avalonia.Controls
 				double width = Math.Abs(e.Position.X - _startScreenPoint.X);
 				if (width > MinSelectionWidth)
 				{
-					// Zoom In
-					double left = Math.Min(_startDataPoint.Value.X, _endDataPoint.Value.X);
-					double right = Math.Max(_startDataPoint.Value.X, _endDataPoint.Value.X);
-
-					DateTimeAxis.Minimum = Math.Max(left, DateTimeAxis.Minimum);
-					DateTimeAxis.Maximum = Math.Min(right, DateTimeAxis.Maximum);
-
-					DateTime startTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Minimum);
-					DateTime endTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Maximum);
-					var timeWindow = new TimeWindow(startTime, endTime).Trim();
-
-					UpdateDateTimeAxis(timeWindow);
-					ListGroup.TimeWindow.Select(timeWindow);
+					ZoomIn();
 				}
 				else if (ListGroup.TimeWindow?.Selection != null)
 				{
-					// Zoom Out
-					UpdateDateTimeAxis(ListGroup.TimeWindow);
-					ListGroup.TimeWindow.Select(null);
+					ZoomOut();
 				}
 				else
 				{
@@ -1068,9 +1109,49 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
+		private void ZoomIn()
+		{
+			double left = Math.Min(_startDataPoint.Value.X, _endDataPoint.Value.X);
+			double right = Math.Max(_startDataPoint.Value.X, _endDataPoint.Value.X);
+
+			if (double.IsNaN(DateTimeAxis.Minimum))
+				UpdateDateTimeAxisRange();
+
+			DateTimeAxis.Minimum = Math.Max(left, DateTimeAxis.Minimum);
+			DateTimeAxis.Maximum = Math.Min(right, DateTimeAxis.Maximum);
+
+			DateTime startTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Minimum);
+			DateTime endTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Maximum);
+			var timeWindow = new TimeWindow(startTime, endTime).Trim();
+
+			UpdateDateTimeAxis(timeWindow);
+			if (ListGroup.TimeWindow != null)
+				ListGroup.TimeWindow.Select(timeWindow);
+			else
+				UpdateTimeWindow(timeWindow);
+		}
+
+		private void ZoomOut()
+		{
+			if (ListGroup.TimeWindow != null)
+			{
+				UpdateDateTimeAxis(ListGroup.TimeWindow);
+				ListGroup.TimeWindow.Select(null);
+			}
+			else
+			{
+				UpdateTimeWindow(null);
+			}
+		}
+
 		private void ListGroup_OnTimesChanged(object sender, TimeWindowEventArgs e)
 		{
-			UpdateDateTimeAxis(e.TimeWindow);
+			UpdateTimeWindow(e.TimeWindow);
+		}
+
+		private void UpdateTimeWindow(TimeWindow timeWindow)
+		{
+			UpdateDateTimeAxis(timeWindow);
 			UpdateValueAxis();
 			ListGroup.SortByTotal();
 			Legend.RefreshModel();

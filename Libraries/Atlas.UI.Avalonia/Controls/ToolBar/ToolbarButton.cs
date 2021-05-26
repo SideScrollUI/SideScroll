@@ -10,10 +10,11 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
+using Avalonia.Threading;
 
 namespace Atlas.UI.Avalonia.Tabs
 {
-	public class ToolbarButton : Button, IStyleable, ILayoutable
+	public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 	{
 		Type IStyleable.StyleKey => typeof(Button);
 
@@ -29,6 +30,7 @@ namespace Atlas.UI.Avalonia.Tabs
 		public TimeSpan MinWaitTime = TimeSpan.FromSeconds(1); // Wait time between clicks
 
 		private DateTime _lastInvoked;
+		private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
 
 		public ToolbarButton(TabControlToolbar toolbar, ToolButton toolButton) : base()
 		{
@@ -113,14 +115,27 @@ namespace Atlas.UI.Avalonia.Tabs
 			Toolbar.TabInstance.DefaultAction = () => Invoke();
 		}
 
-		private void Invoke()
+		private void Invoke(bool canDelay = true)
 		{
 			if (!IsEnabled)
 				return;
 
 			TimeSpan timeSpan = DateTime.UtcNow.Subtract(_lastInvoked);
-			if (timeSpan < MinWaitTime)
+			if (canDelay && timeSpan < MinWaitTime)
+			{
+				// Rate limiting can delay these
+				if (_dispatcherTimer == null)
+				{
+					_dispatcherTimer = new DispatcherTimer()
+					{
+						Interval = TimeSpan.FromSeconds(1),
+					};
+					_dispatcherTimer.Tick += DispatcherTimer_Tick;
+				}
+				if (!_dispatcherTimer.IsEnabled)
+					_dispatcherTimer.Start();
 				return;
+			}
 
 			_lastInvoked = DateTime.UtcNow;
 
@@ -197,6 +212,22 @@ namespace Atlas.UI.Avalonia.Tabs
 			base.OnPointerLeave(e);
 			Background = Theme.ToolbarButtonBackground;
 			BorderBrush = Background;
+		}
+
+		private void DispatcherTimer_Tick(object sender, EventArgs e)
+		{
+			_dispatcherTimer.Stop();
+			Invoke(false);
+		}
+
+		public void Dispose()
+		{
+			if (_dispatcherTimer != null)
+			{
+				_dispatcherTimer.Stop();
+				_dispatcherTimer.Tick -= DispatcherTimer_Tick;
+				_dispatcherTimer = null;
+			}
 		}
 	}
 }

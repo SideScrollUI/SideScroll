@@ -49,6 +49,14 @@ namespace Atlas.Core
 		{
 			return Trim(timeSpan.Ticks);
 		}
+
+		public void Update(TimeWindow timeWindow)
+		{
+			Name = timeWindow.Name;
+			StartTime = timeWindow.StartTime;
+			EndTime = timeWindow.EndTime;
+			Selection = timeWindow.Selection;
+		}
 	}
 
 	public class TimeWindowEventArgs : EventArgs
