@@ -33,7 +33,7 @@ namespace Atlas.Tabs
 		{
 			get
 			{
-				if (ChildBookmarks.Count > 0)
+				if (ChildBookmarks?.Count > 0)
 				{
 					string comma = "";
 					string address = "";
@@ -190,6 +190,7 @@ namespace Atlas.Tabs
 				};
 				selectedRows.Add(selectedRow);
 			}
+
 			ViewSettings = new TabViewSettings()
 			{
 				TabDataSettings = new List<TabDataSettings>()
@@ -290,6 +291,7 @@ namespace Atlas.Tabs
 			}
 
 			Name = " + " + node.Name;
+
 			for (int i = 0; i < ViewSettings.TabDataSettings.Count; i++)
 			{
 				var currentSelection = ViewSettings.TabDataSettings[i].SelectedRows;

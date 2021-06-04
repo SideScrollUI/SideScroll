@@ -274,7 +274,7 @@ namespace Atlas.Core
 			return PeriodCounts(dataPoints, timeWindow, TimeSpan.FromSeconds(periodDuration));
 		}
 
-		public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+		public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration, bool addGaps = false)
 		{
 			var periods = Periods(dataPoints, timeWindow, periodDuration);
 			if (periods == null)
@@ -283,10 +283,15 @@ namespace Atlas.Core
 			var timeRangeValues = new List<TimeRangeValue>();
 			foreach (var period in periods)
 			{
-				//if (period.Count == 0)
-				//	continue;
+				if (addGaps && period.Count == 0)
+					continue;
+
 				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.Count, period.Tags));
 			}
+
+			if (addGaps)
+				return TimeRangeValue.AddGaps(timeRangeValues, timeWindow.StartTime, timeWindow.EndTime, periodDuration);
+
 			return timeRangeValues;
 		}
 

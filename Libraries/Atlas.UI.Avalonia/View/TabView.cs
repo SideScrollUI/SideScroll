@@ -1041,6 +1041,16 @@ namespace Atlas.UI.Avalonia.View
 					TabDatas[0].SelectedItem = e.Object;
 				}
 			}
+			else if (CustomTabControls.Count > 0)
+			{
+				foreach (ITabSelector tabSelector in CustomTabControls)
+				{
+					if (tabSelector is ISelectedItem itemSelector)
+					{
+						itemSelector.SelectedItem = e.Object;
+					}
+				}
+			}
 		}
 
 		private void LoadBookmark()

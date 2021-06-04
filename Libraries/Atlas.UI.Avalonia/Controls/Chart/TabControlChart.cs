@@ -426,7 +426,9 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			UpdateValueAxis();
 			UpdateLinearAxis();
+
 			Legend.RefreshModel();
+
 			PlotView.InvalidatePlot(true);
 			PlotView.Model.InvalidatePlot(true);
 		}

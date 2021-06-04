@@ -113,6 +113,11 @@ namespace Atlas.Extensions
 			return valueString;
 		}
 
+		public static string FormattedDecimal(this double d)
+		{
+			return d.ToString("#,0.#");
+		}
+
 		public static string EnumerableToString(this IEnumerable enumerable)
 		{
 			var strings = new List<string>();

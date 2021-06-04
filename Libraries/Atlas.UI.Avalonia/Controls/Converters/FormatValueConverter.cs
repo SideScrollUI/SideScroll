@@ -82,6 +82,9 @@ namespace Atlas.UI.Avalonia
 					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
 			}
 
+			if (value is double d && formatted)
+				return d.FormattedDecimal();
+
 			//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above
 
 			return value.Formatted(maxLength);

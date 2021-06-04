@@ -98,7 +98,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (obj is TimeRangeValue timeRangeValue)
 				{
-					result.Text = ListSeries.Name + "\nTime: " + timeRangeValue.TimeText + "\nDuration: " + timeRangeValue.Duration.FormattedDecimal() + "\n" + valueLabel + ": " + timeRangeValue.Value.Formatted();
+					result.Text = ListSeries.Name + "\n\nTime: " + timeRangeValue.TimeText + "\nDuration: " + timeRangeValue.Duration.FormattedDecimal() + "\n" + valueLabel + ": " + timeRangeValue.Value.Formatted();
 				}
 
 				if (obj is ITags tags && tags.Tags.Count > 0)

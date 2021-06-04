@@ -9,11 +9,17 @@ using System.Threading.Tasks;
 
 namespace Atlas.Tabs
 {
+	// Generates an event when the SelectedItems change
 	public interface ITabSelector
 	{
 		IList SelectedItems { get; }
 
 		event EventHandler<EventArgs> OnSelectionChanged;
+	}
+
+	public interface ISelectedItem
+	{
+		object SelectedItem { get; set; }
 	}
 
 	public interface ITabCreator

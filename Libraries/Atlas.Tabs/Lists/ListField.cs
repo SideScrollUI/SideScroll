@@ -17,7 +17,6 @@ namespace Atlas.Tabs
 		[Hidden]
 		public bool IsFormatted => (FieldInfo.GetCustomAttribute<FormattedAttribute>() != null);
 
-
 		[Editing, InnerValue]
 		public override object Value
 		{
@@ -26,7 +25,6 @@ namespace Atlas.Tabs
 				try
 				{
 					var value = FieldInfo.GetValue(Object);
-
 
 					if (IsFormatted)
 						value = value.Formatted();
