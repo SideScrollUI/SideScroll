@@ -110,6 +110,7 @@ namespace Atlas.Core
 
 			switch (SeriesType)
 			{
+				case SeriesType.Count: return TimeRangePeriod.TotalCounts(timeRangeValues, timeWindow, PeriodDuration.Value);
 				case SeriesType.Sum: return TimeRangePeriod.TotalSum(timeRangeValues, timeWindow, PeriodDuration.Value);
 				case SeriesType.Minimum: return TimeRangePeriod.TotalMinimum(timeRangeValues, timeWindow);
 				case SeriesType.Maximum: return TimeRangePeriod.TotalMaximum(timeRangeValues, timeWindow);

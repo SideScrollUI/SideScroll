@@ -18,7 +18,14 @@ namespace Atlas.Core
 
 		public TagType Type;
 
-		public override string ToString() => "[ " + Name + " = " + Value.Formatted() + " ]";
+		public override string ToString()
+		{
+			string text = Value.Formatted();
+			if (text?.Contains(" ") == true)
+				text = '"' + text + '"';
+
+			return "[ " + Name + " = " + text + " ]";
+		}
 
 		public Tag()
 		{

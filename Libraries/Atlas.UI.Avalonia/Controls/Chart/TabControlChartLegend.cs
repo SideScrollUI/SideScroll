@@ -15,14 +15,15 @@ namespace Atlas.UI.Avalonia.Controls
 	public class TabControlChartLegend : Grid
 	{
 		public TabControlChart TabControlChart;
-		public PlotView PlotView;
-		public ListGroup ListGroup;
+		public PlotView PlotView => TabControlChart.PlotView;
+		public ListGroup ListGroup => TabControlChart.ListGroup;
+
 		public List<TabChartLegendItem> LegendItems = new List<TabChartLegendItem>();
 		private Dictionary<string, TabChartLegendItem> _idxLegendItems = new Dictionary<string, TabChartLegendItem>();
 
 		private ScrollViewer _scrollViewer;
 		private WrapPanel _wrapPanel;
-		private TextBlock _textBlockSum;
+		private TextBlock _textBlockTotal;
 
 		public event EventHandler<EventArgs> OnSelectionChanged;
 		public event EventHandler<EventArgs> OnVisibleChanged;
@@ -30,8 +31,6 @@ namespace Atlas.UI.Avalonia.Controls
 		public TabControlChartLegend(TabControlChart tabControlChart)
 		{
 			TabControlChart = tabControlChart;
-			PlotView = tabControlChart.PlotView;
-			ListGroup = tabControlChart.ListGroup;
 
 			InitializeControls();
 		}
@@ -62,15 +61,14 @@ namespace Atlas.UI.Avalonia.Controls
 
 			if (ListGroup.ShowLegend && ListGroup.ShowOrder && !ListGroup.Horizontal)
 			{
-				_textBlockSum = new TextBlock()
+				_textBlockTotal = new TextBlock()
 				{
-					Text = GetTotalName(),
 					Foreground = Theme.BackgroundText,
 					Margin = new Thickness(2, 2, 2, 2),
 					HorizontalAlignment = HorizontalAlignment.Right,
 				};
 				if (ListGroup.UnitName != null)
-					_textBlockSum.Text += " - " + ListGroup.UnitName;
+					_textBlockTotal.Text += " - " + ListGroup.UnitName;
 			}
 
 			RefreshModel();
@@ -120,8 +118,8 @@ namespace Atlas.UI.Avalonia.Controls
 		private void UpdatePositions()
 		{
 			_wrapPanel.Children.Clear();
-			if (_textBlockSum != null)
-				_wrapPanel.Children.Add(_textBlockSum);
+			if (_textBlockTotal != null)
+				_wrapPanel.Children.Add(_textBlockTotal);
 
 			var nonzero = new List<TabChartLegendItem>();
 			var unused = new List<TabChartLegendItem>();
@@ -238,6 +236,9 @@ namespace Atlas.UI.Avalonia.Controls
 					_wrapPanel.Children.Add(legendItem);
 			}
 			UpdatePositions();
+
+			if (_textBlockTotal != null)
+				_textBlockTotal.Text = GetTotalName();
 
 			// Possibly faster? But more likely to cause problems
 			/*var prevLegends = idxLegendItems.Clone<Dictionary<string, TabChartLegendItem>>();

@@ -66,7 +66,8 @@ namespace Atlas.Core
 
 			int numPeriods = (int)Math.Ceiling((windowSeconds + 1) / periodSeconds);
 
-			DateTime startTime = timeWindow.StartTime.Trim();
+			DateTime minStartTime = timeWindow.StartTime.Trim();
+			DateTime maxEndTime = timeWindow.EndTime.Add(periodDuration);
 
 			var timeRangePeriods = new List<TimeRangePeriod>();
 
@@ -74,8 +75,8 @@ namespace Atlas.Core
 			{
 				var bin = new TimeRangePeriod()
 				{
-					StartTime = startTime.AddSeconds(i * periodSeconds),
-					EndTime = startTime.AddSeconds((i + 1) * periodSeconds),
+					StartTime = minStartTime.AddSeconds(i * periodSeconds),
+					EndTime = minStartTime.AddSeconds((i + 1) * periodSeconds),
 				};
 				timeRangePeriods.Add(bin);
 			}
@@ -88,12 +89,12 @@ namespace Atlas.Core
 				if (timeRangeValue.StartTime == timeRangeValue.EndTime)
 					timeRangeValue.EndTime = timeRangeValue.StartTime.Add(periodDuration);
 
-				DateTime valueStartTime = timeRangeValue.StartTime.Max(startTime);
-				DateTime valueEndTime = timeRangeValue.EndTime.Min(timeWindow.EndTime);
+				DateTime valueStartTime = timeRangeValue.StartTime.Max(minStartTime);
+				DateTime valueEndTime = timeRangeValue.EndTime.Min(maxEndTime);
 
 				for (DateTime valueBinStartTime = valueStartTime; valueBinStartTime < valueEndTime;)
 				{
-					double offset = valueBinStartTime.Subtract(startTime).TotalSeconds;
+					double offset = valueBinStartTime.Subtract(minStartTime).TotalSeconds;
 					int period = (int)(offset / periodSeconds);
 					Debug.Assert(period >= 0 && period < timeRangePeriods.Count);
 					TimeRangePeriod bin = timeRangePeriods[period];
@@ -155,11 +156,17 @@ namespace Atlas.Core
 			if (periods == null)
 				return 0;
 
-			double total = 0;
-			foreach (var period in periods)
-			{
-				total += period.Sum;
-			}
+			double total = periods.Sum(p => p.Sum);
+			return total;
+		}
+
+		public static int TotalCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+		{
+			var periods = Periods(dataPoints, timeWindow, periodDuration);
+			if (periods == null)
+				return 0;
+
+			int total = periods.Sum(p => p.Count);
 			return total;
 		}
 

@@ -11,20 +11,39 @@ namespace Atlas.Core
 		public List<LogEntry> Entries = new List<LogEntry>(); // 1st is new log message, last is highest parent log message
 	}
 
+	public class LogSettings
+	{
+		public int MaxLogItems = 10000;
+
+		public LogLevel DebugPrintLogLevel { get; set; } = LogLevel.Warn;
+
+		internal object Lock = new object(); // todo: replace this with individual ones? (deadlock territory if circular) or a non-blocking version
+
+		[HiddenRow]
+		public SynchronizationContext Context; // inherited from creator (which can be a Parent Log)
+
+		/*protected void InitializeContext()
+		{
+			Context = Context ?? SynchronizationContext.Current ?? new SynchronizationContext();
+		}*/
+	}
+
+	public enum LogLevel
+	{
+		Debug,
+		Info,
+		Warn,
+		Error,
+		Alert
+	}
+
 	[Skippable(false)]
 	public class LogEntry : INotifyPropertyChanged
 	{
+		public LogSettings Settings { get; set; }
+
 		[HiddenRow]
 		public LogEntry RootLog;
-
-		public enum LogType
-		{
-			Debug,
-			Info,
-			Warn,
-			Error,
-			Alert
-		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -33,8 +52,8 @@ namespace Atlas.Core
 
 		public TimeSpan Time => Created.Subtract(RootLog.Created);
 
-		public LogType OriginalType = LogType.Info;
-		public LogType Type { get; set; } = LogType.Info;
+		public LogLevel OriginalLevel = LogLevel.Info;
+		public LogLevel Level { get; set; } = LogLevel.Info;
 
 		[Hidden]
 		public string Text { get; set; }
@@ -94,34 +113,36 @@ namespace Atlas.Core
 		[HiddenColumn]
 		public Tag[] Tags { get; set; }
 
-		[HiddenRow]
-		public SynchronizationContext Context; // inherited from creator (which can be a Parent Log)
-
 		public override string ToString() => Message;
 
 		public LogEntry()
 		{
 			RootLog = this;
+
+			// Don't initialize for faster deserializing?
 		}
 
-		public LogEntry(LogType logType, string text, Tag[] tags)
+		public LogEntry(LogSettings logSettings, LogLevel logLevel, string text, Tag[] tags)
 		{
+			Settings = logSettings;
 			RootLog = this;
-			OriginalType = logType;
-			Type = logType;
+			OriginalLevel = logLevel;
+			Level = logLevel;
 			Text = text;
 			Tags = tags;
-			Created = DateTime.Now;
+
+			Initialize();
 		}
 
-		protected void InitializeContext()
+		protected void Initialize()
 		{
-			Context = Context ?? SynchronizationContext.Current ?? new SynchronizationContext();
+			Created = DateTime.Now;
+			Settings = Settings ?? new LogSettings();
 		}
 
 		protected void CreateEventPropertyChanged([CallerMemberName] string propertyName = "")
 		{
-			Context?.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
+			Settings.Context?.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
 			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 

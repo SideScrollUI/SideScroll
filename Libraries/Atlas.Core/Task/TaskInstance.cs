@@ -213,16 +213,16 @@ namespace Atlas.Core
 			{
 				Progress = ProgressMax;
 
-				if (Call.Log.Type >= LogEntry.LogType.Error)
+				if (Call.Log.Level >= LogLevel.Error)
 				{
-					Status = Call.Log.Type.ToString();
+					Status = Call.Log.Level.ToString();
 					Errored = true;
 					ShowTask = true;
 				}
-				else if (Call.Log.Type == LogEntry.LogType.Warn)
+				else if (Call.Log.Level == LogLevel.Warn)
 				{
 					if (!Errored)
-						Status = Call.Log.Type.ToString();
+						Status = Call.Log.Level.ToString();
 					ShowTask = true;
 				}
 				else if (Task == null || TaskStatus == TaskStatus.RanToCompletion)

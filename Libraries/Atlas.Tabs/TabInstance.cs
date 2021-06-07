@@ -455,7 +455,7 @@ namespace Atlas.Tabs
 				}
 
 				// Task.OnFinished hasn't always been called by this point
-				if (call.Log.Type >= LogEntry.LogType.Error && !Model.Tasks.Contains(call.TaskInstance))
+				if (call.Log.Level >= LogLevel.Error && !Model.Tasks.Contains(call.TaskInstance))
 					Model.Tasks.Add(call.TaskInstance);
 			}
 			return model;

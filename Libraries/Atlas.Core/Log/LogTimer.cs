@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
 
 namespace Atlas.Core
 {
@@ -13,8 +12,8 @@ namespace Atlas.Core
 		{
 		}
 
-		public LogTimer(string text, SynchronizationContext context) :
-			base(text, context)
+		public LogTimer(string text, LogSettings logSettings) :
+			base(text, logSettings)
 		{
 			Add(text);
 			_stopwatch.Start();

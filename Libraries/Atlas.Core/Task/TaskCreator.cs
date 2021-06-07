@@ -46,7 +46,7 @@ namespace Atlas.Core
 			//call = call.Child(Label);
 			TimesRun++;
 			Context = SynchronizationContext.Current ?? new SynchronizationContext();
-			call.Log.Context = Context;
+			call.Log.Settings.Context = Context;
 
 			var taskInstance = new TaskInstance()
 			{

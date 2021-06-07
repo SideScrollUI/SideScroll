@@ -9,11 +9,9 @@ namespace Atlas.Core
 	[Skippable(false)]
 	public class Log : LogEntry
 	{
-		private const int MaxLogItems = 10000;
-
 		[InnerValue]
 		public ItemCollection<LogEntry> Items { get; set; } = new ItemCollection<LogEntry>(); // change to LRU for performance? No Binding?
-		private static object _locker = new object(); // todo: replace this with individual ones? (deadlock territory if circular) or a non-blocking version
+	
 		private string SummaryText;
 
 		[HiddenColumn]
@@ -23,43 +21,42 @@ namespace Atlas.Core
 
 		public Log()
 		{
-			Created = DateTime.Now;
+			Initialize();
 		}
 
-		public Log(string text = null, SynchronizationContext context = null, Tag[] tags = null)
+		public Log(string text = null, LogSettings logSettings = null, Tag[] tags = null)
 		{
-			Context = context;
 			Text = text;
+			Settings = logSettings;
 			Tags = tags;
-			Created = DateTime.Now;
+
+			Initialize();
 		}
 
 		// use caller instead?
 		public Log Call(string name, params Tag[] tags)
 		{
-			return AddChildEntry(LogType.Info, name, tags);
+			return AddChildEntry(LogLevel.Info, name, tags);
 		}
 
 		public LogEntry Add(string text, params Tag[] tags)
 		{
-			return Add(LogType.Info, text, tags);
+			return Add(LogLevel.Info, text, tags);
 		}
 
 		public LogEntry AddWarning(string text, params Tag[] tags)
 		{
-			return Add(LogType.Warn, text, tags);
+			return Add(LogLevel.Warn, text, tags);
 		}
 
 		public LogEntry AddError(string text, params Tag[] tags)
 		{
-			Debug.Print("Error: " + text);
-
-			return Add(LogType.Error, text, tags);
+			return Add(LogLevel.Error, text, tags);
 		}
 
-		public LogEntry Add(LogType logType, string text, params Tag[] tags)
+		public LogEntry Add(LogLevel logLevel, string text, params Tag[] tags)
 		{
-			var logEntry = new LogEntry(logType, text, tags);
+			var logEntry = new LogEntry(Settings, logLevel, text, tags);
 			AddLogEntry(logEntry);
 			return logEntry;
 		}
@@ -92,7 +89,7 @@ namespace Atlas.Core
 
 		public LogTimer Timer(string text, params Tag[] tags)
 		{
-			var logTimer = new LogTimer(text, Context)
+			var logTimer = new LogTimer(text, Settings)
 			{
 				Tags = tags,
 			};
@@ -110,12 +107,12 @@ namespace Atlas.Core
 			return stringBuilder.ToString();
 		}
 
-		private Log AddChildEntry(LogType logType, string name, params Tag[] tags)
+		private Log AddChildEntry(LogLevel logLevel, string name, params Tag[] tags)
 		{
-			Log log = new Log(name, Context, tags)
+			Log log = new Log(name, Settings, tags)
 			{
-				OriginalType = logType,
-				Type = logType,
+				OriginalLevel = logLevel,
+				Level = logLevel,
 			};
 			AddLogEntry(log);
 			return log;
@@ -123,13 +120,16 @@ namespace Atlas.Core
 
 		public void AddLogEntry(LogEntry logEntry)
 		{
-			if (logEntry.Type >= LogType.Warn)
-				Debug.Print(logEntry.ToString());
+			if (logEntry.Level >= Settings.DebugPrintLogLevel)
+			{
+				Debug.Print(logEntry.Level + ": " + logEntry.ToString());
+			}
 
 			logEntry.RootLog = RootLog;
-			logEntry.Context = Context;
-			if (Context != null)
-				Context.Post(new SendOrPostCallback(AddEntryCallback), logEntry);
+			logEntry.Settings = Settings;
+
+			if (Settings.Context != null)
+				Settings.Context.Post(new SendOrPostCallback(AddEntryCallback), logEntry);
 			else
 				AddEntryCallback(logEntry);
 		}
@@ -137,7 +137,7 @@ namespace Atlas.Core
 		// Thread safe callback, only works if the context is the same
 		private void AddEntryCallback(object state)
 		{
-			lock (_locker)
+			lock (Settings.Lock)
 			{
 				AddEntry((LogEntry)state);
 			}
@@ -146,7 +146,7 @@ namespace Atlas.Core
 		private void AddEntry(LogEntry logEntry)
 		{
 			Items.Add(logEntry);
-			if (Items.Count > MaxLogItems)
+			if (Items.Count > Settings.MaxLogItems)
 			{
 				// subtract entries or leave them?
 				Items.RemoveAt(0);
@@ -168,10 +168,10 @@ namespace Atlas.Core
 		private void UpdateStats(LogEntry logEntry)
 		{
 			Interlocked.Add(ref _entries, logEntry.Entries + 1);
-			if (logEntry.Type > Type)
+			if (logEntry.Level > Level)
 			{
-				Type = logEntry.Type;
-				CreateEventPropertyChanged(nameof(Type));
+				Level = logEntry.Level;
+				CreateEventPropertyChanged(nameof(Level));
 			}
 			CreateEventPropertyChanged(nameof(Entries));
 		}

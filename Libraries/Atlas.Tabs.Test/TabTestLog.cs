@@ -26,7 +26,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Task Instance Log", TaskInstance.Log),
 					new ListItem("Sample Call", sampleCall),
 					new ListItem("Sample Call Log", sampleCall.Log),
-					new ListItem("Log Entry", new LogEntry(LogEntry.LogType.Info, "test", null)),
+					new ListItem("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),
 				};
 
 				model.Actions = new List<TaskCreator>()

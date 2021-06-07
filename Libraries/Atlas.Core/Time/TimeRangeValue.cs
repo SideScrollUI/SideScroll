@@ -138,21 +138,7 @@ namespace Atlas.Core
 				AddGap(startTime, endTime, periodDuration, output);
 				return output;
 			}
-			var sorted = input.OrderBy(p => p.StartTime).ToList();
-
-			// Merge continuous points with the same value together to improve storage speeds
-			var merged = new List<TimeRangeValue>();
-			TimeRangeValue prevPoint = null;
-			foreach (TimeRangeValue point in sorted)
-			{
-				if (prevPoint != null && prevPoint.EndTime == point.StartTime && prevPoint.Value == point.Value)
-				{
-					prevPoint.EndTime = point.EndTime;
-					continue;
-				}
-				merged.Add(point);
-				prevPoint = point;
-			}
+			List<TimeRangeValue> merged = MergeIdenticalMiddleValues(input);
 
 			bool hasDuration = merged.First().Duration.TotalSeconds > 0;
 			DateTime prevTime = startTime;
@@ -164,6 +150,66 @@ namespace Atlas.Core
 			}
 			AddGap(prevTime, endTime, periodDuration, output);
 			return output;
+		}
+
+		private static List<TimeRangeValue> MergeIdenticalValues(List<TimeRangeValue> input)
+		{
+			var sorted = input.OrderBy(p => p.StartTime).ToList();
+
+			// Merge continuous points with the same value together to improve storage speeds
+			var merged = new List<TimeRangeValue>();
+			TimeRangeValue prevPoint = null;
+			foreach (TimeRangeValue timeRangeValue in sorted)
+			{
+				if (prevPoint != null && prevPoint.EndTime == timeRangeValue.StartTime && prevPoint.Value == timeRangeValue.Value)
+				{
+					prevPoint.EndTime = timeRangeValue.EndTime;
+					continue;
+				}
+				merged.Add(timeRangeValue);
+				prevPoint = timeRangeValue;
+			}
+
+			return merged;
+		}
+
+		// Merge all continuous identical values, increasing the size of the first and leaving the last
+		// This works better for line graphs since the end point will still be represented
+		private static List<TimeRangeValue> MergeIdenticalMiddleValues(List<TimeRangeValue> input)
+		{
+			var sorted = input.OrderBy(p => p.StartTime).ToList();
+
+			// Merge continuous points with the same value together to improve storage speeds
+			TimeRangeValue firstValue = null;
+			var merged = new List<TimeRangeValue>();
+			foreach (TimeRangeValue timeRangeValue in sorted)
+			{
+				TimeRangeValue previousValue = merged.LastOrDefault();
+				if (previousValue != null)
+				{
+					// Todo: handle Tags
+					if (previousValue.EndTime == timeRangeValue.StartTime && previousValue.Value == timeRangeValue.Value)
+					{
+						if (firstValue != null)
+						{
+							firstValue.EndTime = timeRangeValue.EndTime;
+							merged.RemoveAt(merged.Count - 1);
+						}
+						else
+						{
+							firstValue = previousValue;
+						}
+					}
+					else
+					{
+						firstValue = null;
+					}
+				}
+
+				merged.Add(timeRangeValue);
+			}
+
+			return merged;
 		}
 
 		private static void AddGap(DateTime startTime, DateTime endTime, TimeSpan periodDuration, List<TimeRangeValue> output)
