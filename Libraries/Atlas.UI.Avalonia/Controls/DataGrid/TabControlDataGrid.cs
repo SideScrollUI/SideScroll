@@ -36,8 +36,8 @@ namespace Atlas.UI.Avalonia.Controls
 		public IList List;
 		private Type _elementType;
 
-		public bool AutoSelectFirst = true;
 		public bool AutoSelectNew = true;
+
 		public bool AutoGenerateColumns = true;
 
 		public DataGrid DataGrid;
@@ -45,6 +45,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		//private HashSet<int> pinnedItems = new HashSet<int>(); // starred items?
 		public DataGridCollectionView CollectionView;
+
 		private Dictionary<string, DataGridColumn> _columnObjects = new Dictionary<string, DataGridColumn>();
 		private Dictionary<DataGridColumn, string> _columnNames = new Dictionary<DataGridColumn, string>();
 		private List<PropertyInfo> _columnProperties = new List<PropertyInfo>(); // makes filtering faster, could change other Dictionaries strings to PropertyInfo
@@ -59,7 +60,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
 		private object _autoSelectItem = null;
 
-		public bool AutoLoad { get; internal set; }
+		public AutoSelectType AutoSelect { get; set; } = AutoSelectType.FirstSavedOrNew;
 
 		private Filter filter;
 
@@ -84,7 +85,14 @@ namespace Atlas.UI.Avalonia.Controls
 				if (DataGrid != null)
 				{
 					CollectionView = new DataGridCollectionView(List);
-					DataGrid.Items = CollectionView;
+
+					bool clearSelection = (AutoSelect == AutoSelectType.None);
+
+					DataGrid.Items = CollectionView; // DataGrid autoselects on assignment :(
+
+					if (clearSelection)
+						ClearSelection();
+
 					Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 				}
 				//dataGrid.SelectedItem = null;
@@ -96,11 +104,11 @@ namespace Atlas.UI.Avalonia.Controls
 			Initialize();
 		}
 
-		public TabControlDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns, TabDataSettings tabDataSettings = null)
+		public TabControlDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns, TabDataSettings tabDataSettings = null, TabModel model = null)
 		{
 			TabInstance = tabInstance;
-			TabModel = tabInstance.Model;
-			AutoLoad = TabModel.AutoLoad;
+			TabModel = model ?? TabInstance.Model;
+			AutoSelect = TabModel.AutoSelect;
 			List = iList;
 			AutoGenerateColumns = autoGenerateColumns;
 			TabDataSettings = tabDataSettings ?? new TabDataSettings();
@@ -354,8 +362,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
 				// Group up any new items after the 1st one
-				if (AutoSelectFirst && (
-					AutoSelectNew || 
+				if ((AutoSelectNew || 
 					TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved || 
 					TabModel.AutoSelect == AutoSelectType.FirstSavedOrNew)
 					&& (TextBoxSearch.Text == null || TextBoxSearch.Text.Length == 0))// && finishedLoading)
@@ -521,7 +528,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private void TextBoxSearch_KeyUp(object sender, KeyEventArgs e)
 		{
 			FilterText = TextBoxSearch.Text;
-			AutoSelect();
+			SelectDefaultItems();
 			if (_disableSaving == 0)
 				TabInstance.SaveTabSettings();
 		}
@@ -654,7 +661,7 @@ namespace Atlas.UI.Avalonia.Controls
 					TextBoxSearch.IsVisible = false;
 				}
 				if (!SelectSavedItems()) // sorting must happen before this
-					AutoSelect();
+					SelectDefaultItems();
 				//UpdateSelection(); // datagrid not fully loaded yet
 			}
 			OnSelectionChanged?.Invoke(this, null);
@@ -781,7 +788,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 				if (value is TabView tabView)
 				{
-					if (tabView.Model.AutoLoad == false)
+					if (tabView.Model.AutoSelect == AutoSelectType.None)
 						continue;
 				}
 
@@ -810,9 +817,9 @@ namespace Atlas.UI.Avalonia.Controls
 			return firstValidObject;
 		}
 
-		private void AutoSelect()
+		private void SelectDefaultItems()
 		{
-			if (AutoSelectFirst == false)
+			if (AutoSelect == AutoSelectType.None)
 				return;
 
 			object firstValidObject = GetAutoSelectValue();

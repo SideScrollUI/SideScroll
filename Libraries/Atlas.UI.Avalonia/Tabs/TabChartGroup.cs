@@ -90,7 +90,7 @@ namespace Atlas.UI.Avalonia
 				//Orientation = Orientation.Vertical;
 
 				// autogenerate columns
-				tabDataGrid = new TabControlDataGrid(this, Tab.ChartSettings.ListSeries, true, TabViewSettings.ChartDataSettings[0]);
+				tabDataGrid = new TabControlDataGrid(this, Tab.ChartSettings.ListSeries, true, TabViewSettings.ChartDataSettings[0], model);
 				//Grid.SetRow(tabDataGrid, 1);
 
 				//tabDataGrid.AddButtonColumn("<>", nameof(TaskInstance.Cancel));

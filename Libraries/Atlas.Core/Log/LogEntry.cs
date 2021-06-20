@@ -40,6 +40,7 @@ namespace Atlas.Core
 	[Skippable(false)]
 	public class LogEntry : INotifyPropertyChanged
 	{
+		[Hidden]
 		public LogSettings Settings { get; set; }
 
 		[HiddenRow]

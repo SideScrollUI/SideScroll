@@ -52,8 +52,14 @@ namespace Atlas.Tabs
 		public string Name { get; set; } = "<TabModel>";
 		public string Notes { get; set; } // not used anymore
 		public object Object { get; set; } // optional
-		public bool AutoLoad { get; set; } = true;
+
 		public AutoSelectType AutoSelect { get; set; } = AutoSelectType.FirstSavedOrNew;
+
+		public bool Editing { get; set; }
+		public bool Skippable { get; set; }
+
+		public int MinDesiredWidth { get; set; } = 0;
+		public int MaxDesiredWidth { get; set; } = 1500;
 
 		public IList Actions { get; set; }
 		public TaskInstanceCollection Tasks { get; set; } = new TaskInstanceCollection();
@@ -72,11 +78,6 @@ namespace Atlas.Tabs
 				AddData(value);
 			}
 		}
-		public bool Editing { get; set; }
-		public bool Skippable { get; set; }
-
-		public int MinDesiredWidth { get; set; } = 0;
-		public int MaxDesiredWidth { get; set; } = 1500;
 
 		// used for saving/loading TabViewSettings
 		public string CustomSettingsPath { get; set; }

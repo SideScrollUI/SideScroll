@@ -45,17 +45,24 @@ namespace Atlas.UI.Avalonia
 			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 
 			var list = new AvaloniaList<object>();
-			var menuItemCut = new TabMenuItem("Cut");
-			menuItemCut.Click += delegate { SendTextBoxKey(textBox, keymap.Cut); };
-			list.Add(menuItemCut);
+
+			if (!textBox.IsReadOnly)
+			{
+				var menuItemCut = new TabMenuItem("Cut");
+				menuItemCut.Click += delegate { SendTextBoxKey(textBox, keymap.Cut); };
+				list.Add(menuItemCut);
+			}
 
 			var menuItemCopy = new TabMenuItem("_Copy");
 			menuItemCopy.Click += delegate { SendTextBoxKey(textBox, keymap.Copy); };
 			list.Add(menuItemCopy);
 
-			var menuItemPaste = new TabMenuItem("Paste");
-			menuItemPaste.Click += delegate { SendTextBoxKey(textBox, keymap.Paste); };
-			list.Add(menuItemPaste);
+			if (!textBox.IsReadOnly)
+			{
+				var menuItemPaste = new TabMenuItem("Paste");
+				menuItemPaste.Click += delegate { SendTextBoxKey(textBox, keymap.Paste); };
+				list.Add(menuItemPaste);
+			}
 
 			//list.Add(new Separator());
 

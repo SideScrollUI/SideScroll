@@ -36,7 +36,7 @@ namespace Atlas.UI.Avalonia
 			TextBlock textBlock = CreateTextBlock(cell, dataItem);
 			//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
 			textBlock.TextAlignment = DataGridUtils.GetTextAlignment(DataColumn.DataType);
-			AddTextBoxContextMenu(textBlock);
+			AddTextBlockContextMenu(textBlock);
 			return textBlock;
 		}
 
@@ -115,7 +115,7 @@ namespace Atlas.UI.Avalonia
 		}*/
 
 		// Adds a context menu to the text block
-		private void AddTextBoxContextMenu(TextBlock textBlock)
+		private void AddTextBlockContextMenu(TextBlock textBlock)
 		{
 			var contextMenu = new ContextMenu();
 

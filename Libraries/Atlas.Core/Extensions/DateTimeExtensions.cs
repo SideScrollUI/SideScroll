@@ -21,6 +21,11 @@ namespace Atlas.Extensions
 			return new DateTimeOffset(dateTime.Trim(ticks));
 		}
 
+		public static DateTime Ceil(this DateTime date, long ticks = TimeSpan.TicksPerSecond)
+		{
+			return new DateTime(date.Ticks + ticks - 1, date.Kind).Trim();
+		}
+
 		public static DateTime Max(this DateTime first, DateTime second)
 		{
 			return new DateTime(Math.Max(first.Ticks, second.Ticks), DateTimeKind.Utc);

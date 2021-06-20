@@ -544,6 +544,7 @@ namespace Atlas.UI.Avalonia.View
 				TextWrapping = TextWrapping.Wrap,
 				AcceptsReturn = true,
 			};
+			AvaloniaUtils.AddContextMenu(textBox);
 			//control.OnSelectionChanged += ParentListSelectionChanged;
 			_tabParentControls.AddControl(textBox, false, SeparatorType.Spacer);
 		}
