@@ -53,7 +53,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public event EventHandler<EventArgs> OnSelectionChanged;
 
 		private int _disableSaving = 0; // enables saving if > 0
-		private int _isAutoSelecting = 0; // enables saving if > 0
+		private int _isAutoSelecting = 0; // enables auto selecting if > 0
 		private bool _ignoreSelectionChanged = false;
 
 		private readonly Stopwatch _notifyItemChangedStopwatch = new Stopwatch();
@@ -66,10 +66,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public IList Items
 		{
-			get
-			{
-				return List;
-			}
+			get => List;
 			set
 			{
 				List = value;
@@ -86,16 +83,13 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					CollectionView = new DataGridCollectionView(List);
 
-					bool clearSelection = (AutoSelect == AutoSelectType.None);
-
 					DataGrid.Items = CollectionView; // DataGrid autoselects on assignment :(
 
-					if (clearSelection)
+					if (AutoSelect == AutoSelectType.None)
 						ClearSelection();
 
 					Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 				}
-				//dataGrid.SelectedItem = null;
 			}
 		}
 
@@ -175,10 +169,12 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
-			Focusable = true;
 
 			MaxWidth = 4000;
 			MaxHeight = 4000;
+
+			Focusable = true;
+
 			AddDataGrid();
 
 			TextBoxSearch = new TextBox()
