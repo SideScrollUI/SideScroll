@@ -1,5 +1,6 @@
 ﻿using Atlas.Extensions;
 using System;
+using System.Collections.Generic;
 
 namespace Atlas.Core
 {
@@ -56,6 +57,21 @@ namespace Atlas.Core
 			StartTime = timeWindow.StartTime;
 			EndTime = timeWindow.EndTime;
 			Selection = timeWindow.Selection;
+		}
+
+		public List<TimeRangeValue> PeriodAverages(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration)
+		{
+			return TimeRangePeriod.PeriodAverages(timeRangeValues, this, periodDuration);
+		}
+
+		public List<TimeRangeValue> PeriodSums(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration)
+		{
+			return TimeRangePeriod.PeriodSums(timeRangeValues, this, periodDuration);
+		}
+
+		public List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration, bool addGaps = false)
+		{
+			return TimeRangePeriod.PeriodCounts(timeRangeValues, this, periodDuration, addGaps);
 		}
 	}
 

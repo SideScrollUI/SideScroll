@@ -34,6 +34,7 @@ namespace Atlas.UI.Avalonia
 			{
 				if (PropertyInfo.IsDefined(typeof(StyleLabelAttribute)))
 					return Theme.ButtonBackground;
+
 				if (value is DictionaryEntry || PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					bool hasLinks = TabUtils.ObjectHasLinks(value, true);

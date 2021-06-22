@@ -79,6 +79,9 @@ namespace Atlas.Core
 		{
 			List = list;
 
+			if (list == null)
+				return;
+
 			Type elementType = list.GetType().GetElementTypeForAll();
 			XPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
 			YPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();

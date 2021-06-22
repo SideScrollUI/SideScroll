@@ -1,9 +1,7 @@
-﻿using Atlas.Core;
-using Atlas.Extensions;
+﻿using Atlas.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace Atlas.Tabs
 {
@@ -22,6 +20,7 @@ namespace Atlas.Tabs
 
 			if (value is ListItem listItem)
 				value = listItem.Value;
+
 			if (value is ListMember listMember)
 				value = listMember.Value;
 

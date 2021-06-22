@@ -60,21 +60,6 @@ namespace Atlas.Core
 			Tags = tags;
 		}
 
-		public List<TimeRangeValue> PeriodAverages(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration)
-		{
-			return TimeRangePeriod.PeriodAverages(timeRangeValues, TimeWindow, periodDuration);
-		}
-
-		public List<TimeRangeValue> PeriodSums(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration)
-		{
-			return TimeRangePeriod.PeriodSums(timeRangeValues, TimeWindow, periodDuration);
-		}
-
-		public List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration, bool addGaps = false)
-		{
-			return TimeRangePeriod.PeriodCounts(timeRangeValues, TimeWindow, periodDuration, addGaps);
-		}
-
 		private static TimeSpan GetMinGap(List<TimeRangeValue> input, TimeSpan periodDuration)
 		{
 			if (input.Count < 10)
