@@ -14,6 +14,7 @@ namespace Atlas.UI.Avalonia.Controls
 	public class TabChartLineSeries : OxyPlot.Series.LineSeries
 	{
 		private const int MaxPointsToShowMarkers = 8;
+		private const int MaxTitleLength = 200;
 
 		public TabControlChart Chart;
 		public ListSeries ListSeries;
@@ -37,6 +38,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeComponent(ListSeries listSeries)
 		{
+			// Title must be unique among all series
 			Title = listSeries.Name;
 			if (Title?.Length == 0)
 				Title = "<NA>";
@@ -98,7 +100,11 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (obj is TimeRangeValue timeRangeValue)
 				{
-					result.Text = ListSeries.Name + "\n\nTime: " + timeRangeValue.TimeText + "\nDuration: " + timeRangeValue.Duration.FormattedDecimal() + "\n" + valueLabel + ": " + timeRangeValue.Value.Formatted();
+					string title = ListSeries.Name;
+					if (title != null && title.Length > MaxTitleLength)
+						title = title.Substring(0, MaxTitleLength) + "...";
+
+					result.Text = title + "\n\nTime: " + timeRangeValue.TimeText + "\nDuration: " + timeRangeValue.Duration.FormattedDecimal() + "\n" + valueLabel + ": " + timeRangeValue.Value.Formatted();
 				}
 
 				if (obj is ITags tags && tags.Tags.Count > 0)
