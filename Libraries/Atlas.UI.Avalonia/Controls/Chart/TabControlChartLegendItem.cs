@@ -78,15 +78,16 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			//HorizontalAlignment = HorizontalAlignment.Right;
 			ColumnDefinitions = new ColumnDefinitions("Auto, *, Auto");
 			RowDefinitions = new RowDefinitions("Auto");
-			//Margin = new Thickness(6);
+
 			Background = Theme.TabBackground;
 
 			UpdateTotal();
+
 			AddCheckBox();
 			AddTextBlock();
+
 			if (ListGroup.ShowOrder && !ListGroup.Horizontal)
 				AddTotalTextBlock();
 

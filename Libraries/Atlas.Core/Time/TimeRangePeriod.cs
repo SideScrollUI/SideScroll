@@ -59,6 +59,11 @@ namespace Atlas.Core
 		// Sum the provided datapoints using the specified period
 		public static List<TimeRangePeriod> Periods(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 		{
+			if (timeWindow.Duration.TotalSeconds == 0.0)
+			{
+				timeWindow = new TimeWindow(timeWindow.StartTime, timeWindow.StartTime.Add(periodDuration));
+			}
+
 			double windowSeconds = Math.Ceiling(timeWindow.Duration.TotalSeconds);
 			double periodSeconds = (int)periodDuration.TotalSeconds;
 			if (windowSeconds < 1 || periodSeconds < 1)

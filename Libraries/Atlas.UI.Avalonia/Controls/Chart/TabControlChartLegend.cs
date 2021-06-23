@@ -28,6 +28,8 @@ namespace Atlas.UI.Avalonia.Controls
 		public event EventHandler<EventArgs> OnSelectionChanged;
 		public event EventHandler<EventArgs> OnVisibleChanged;
 
+		public override string ToString() => ListGroup.ToString();
+
 		public TabControlChartLegend(TabControlChart tabControlChart)
 		{
 			TabControlChart = tabControlChart;

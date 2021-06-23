@@ -141,7 +141,7 @@ namespace Atlas.UI.Avalonia
 			TabBookmark leafNode = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
 			if (leafNode != bookmark.TabBookmark)
 			{
-				bookmark.Name = leafNode.Tab.ToString();
+				bookmark.Name = leafNode.Tab?.ToString();
 				bookmark.TabBookmark = leafNode;
 			}
 			string uri = Project.Linker.GetLinkUri(call, bookmark);
