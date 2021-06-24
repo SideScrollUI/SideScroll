@@ -123,9 +123,10 @@ namespace Atlas.Core
 				AddGap(startTime, endTime, periodDuration, output);
 				return output;
 			}
+
 			List<TimeRangeValue> merged = MergeIdenticalMiddleValues(input);
 
-			bool hasDuration = merged.First().Duration.TotalSeconds > 0;
+			//bool hasDuration = merged.First().Duration.TotalSeconds > 0;
 			DateTime prevTime = startTime;
 			foreach (TimeRangeValue point in merged)
 			{
@@ -177,7 +178,8 @@ namespace Atlas.Core
 					{
 						if (firstValue != null)
 						{
-							firstValue.EndTime = timeRangeValue.EndTime;
+							// Add the previous value's length onto the first value and remove the previous
+							firstValue.EndTime = previousValue.EndTime;
 							merged.RemoveAt(merged.Count - 1);
 						}
 						else

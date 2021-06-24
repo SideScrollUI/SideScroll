@@ -57,22 +57,19 @@ namespace Atlas.Core
 		public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Count;
 
 		// Sum the provided datapoints using the specified period
-		public static List<TimeRangePeriod> Periods(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
+		public static List<TimeRangePeriod> Periods(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration, bool trimPeriods = true)
 		{
-			if (timeWindow.Duration.TotalSeconds == 0.0)
-			{
-				timeWindow = new TimeWindow(timeWindow.StartTime, timeWindow.StartTime.Add(periodDuration));
-			}
+			var periodTimeWindow = new TimeWindow(timeWindow.StartTime, timeWindow.EndTime.Add(periodDuration));
 
-			double windowSeconds = Math.Ceiling(timeWindow.Duration.TotalSeconds);
+			double windowSeconds = Math.Ceiling(periodTimeWindow.Duration.TotalSeconds);
 			double periodSeconds = (int)periodDuration.TotalSeconds;
 			if (windowSeconds < 1 || periodSeconds < 1)
 				return null;
 
-			int numPeriods = (int)Math.Ceiling((windowSeconds + 1) / periodSeconds);
+			int numPeriods = (int)(windowSeconds / periodSeconds);
 
-			DateTime minStartTime = timeWindow.StartTime.Trim();
-			DateTime maxEndTime = timeWindow.EndTime.Add(periodDuration);
+			DateTime minStartTime = periodTimeWindow.StartTime.Trim();
+			DateTime maxEndTime = periodTimeWindow.EndTime;
 
 			var timeRangePeriods = new List<TimeRangePeriod>();
 
@@ -91,13 +88,15 @@ namespace Atlas.Core
 				if (double.IsNaN(timeRangeValue.Value))
 					continue;
 
-				if (timeRangeValue.StartTime == timeRangeValue.EndTime)
-					timeRangeValue.EndTime = timeRangeValue.StartTime.Add(periodDuration);
+				if (timeRangeValue.EndTime < minStartTime || timeRangeValue.StartTime > maxEndTime)
+					continue;
+
+				bool hasDuration = (timeRangeValue.EndTime > timeRangeValue.StartTime);
 
 				DateTime valueStartTime = timeRangeValue.StartTime.Max(minStartTime);
 				DateTime valueEndTime = timeRangeValue.EndTime.Min(maxEndTime);
 
-				for (DateTime valueBinStartTime = valueStartTime; valueBinStartTime < valueEndTime;)
+				for (DateTime valueBinStartTime = valueStartTime; valueBinStartTime < valueEndTime || !hasDuration;)
 				{
 					double offset = valueBinStartTime.Subtract(minStartTime).TotalSeconds;
 					int period = (int)(offset / periodSeconds);
@@ -114,24 +113,38 @@ namespace Atlas.Core
 					bin.MaxValue = Math.Max(bin.MaxValue, timeRangeValue.Value);
 
 					TimeSpan binDuration = binEndTime.Subtract(binStartTime);
-
-					double totalSeconds = binDuration.Min(timeRangeValue.Duration).TotalSeconds;
-					bin.Sum += binDuration.TotalSeconds / timeRangeValue.Duration.TotalSeconds * timeRangeValue.Value;
-					bin.SummedDurations += binDuration;
-					bin.SummedSecondValues += totalSeconds * timeRangeValue.Value;
 					bin.Count++;
 					bin.AllTags.AddRange(timeRangeValue.Tags);
-					valueBinStartTime += binDuration;
+
+					if (hasDuration)
+					{
+						double totalSeconds = binDuration.Min(timeRangeValue.Duration).TotalSeconds;
+						//bin.Sum += binDuration.TotalSeconds / timeRangeValue.Duration.TotalSeconds * timeRangeValue.Value;
+						bin.Sum += binDuration.TotalSeconds / totalSeconds * timeRangeValue.Value;
+						bin.SummedDurations += binDuration;
+						bin.SummedSecondValues += totalSeconds * timeRangeValue.Value;
+						valueBinStartTime += binDuration;
+					}
+					else
+					{
+						bin.Sum += timeRangeValue.Value;
+						bin.SummedDurations += periodDuration;
+						bin.SummedSecondValues += periodDuration.TotalSeconds * timeRangeValue.Value;
+						break;
+					}
 				}
 			}
 
-			foreach (var bin in timeRangePeriods)
+			if (trimPeriods)
 			{
-				if (bin.SummedDurations.TotalSeconds == 0.0)
-					continue;
+				foreach (var bin in timeRangePeriods)
+				{
+					if (bin.SummedDurations.TotalSeconds == 0.0)
+						continue;
 
-				bin.StartTime = bin.MinStartTime ?? bin.StartTime;
-				bin.EndTime = bin.MaxEndTime ?? bin.EndTime;
+					bin.StartTime = bin.MinStartTime ?? bin.StartTime;
+					bin.EndTime = bin.MaxEndTime ?? bin.EndTime;
+				}
 			}
 			return timeRangePeriods;
 		}
@@ -288,7 +301,7 @@ namespace Atlas.Core
 
 		public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration, bool addGaps = false)
 		{
-			var periods = Periods(dataPoints, timeWindow, periodDuration);
+			var periods = Periods(dataPoints, timeWindow, periodDuration, false);
 			if (periods == null)
 				return null;
 
@@ -299,6 +312,13 @@ namespace Atlas.Core
 					continue;
 
 				timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.Count, period.Tags));
+			}
+
+			double total = 0;
+			foreach (var value in timeRangeValues)
+			{
+				if (!double.IsNaN(value.Value))
+					total += value.Value;
 			}
 
 			if (addGaps)
