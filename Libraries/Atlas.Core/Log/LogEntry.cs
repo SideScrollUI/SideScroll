@@ -15,6 +15,8 @@ namespace Atlas.Core
 	{
 		public int MaxLogItems = 10000;
 
+		public LogLevel MinLogLevel { get; set; } = LogLevel.Info; // Logs below this level won't be added
+
 		public LogLevel DebugPrintLogLevel { get; set; } = LogLevel.Warn;
 
 		internal object Lock = new object(); // todo: replace this with individual ones? (deadlock territory if circular) or a non-blocking version

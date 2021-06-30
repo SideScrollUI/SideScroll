@@ -8,6 +8,7 @@ namespace Atlas.Core.Test
 	public class TestTimeRangePeriod : TestBase
 	{
 		private static DateTime StartTime = new DateTime(2000, 1, 1);
+
 		[OneTimeSetUp]
 		public void BaseSetup()
 		{

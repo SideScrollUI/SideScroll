@@ -124,9 +124,6 @@ namespace Atlas.Tabs
 			}
 		}*/
 
-		public override string ToString()
-		{
-			return Key;
-		}
+		public override string ToString() => Key;
 	}
 }

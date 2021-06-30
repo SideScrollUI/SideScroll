@@ -1058,6 +1058,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			_rectangleAnnotation.MinimumX = Math.Min(_startDataPoint.Value.X, endDataPoint.X);
 			_rectangleAnnotation.MaximumX = Math.Max(_startDataPoint.Value.X, endDataPoint.X);
+
 			_rectangleAnnotation.MinimumY = ValueAxis.Minimum;
 			_rectangleAnnotation.MaximumY = ValueAxis.Maximum;
 
@@ -1155,6 +1156,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			UpdateDateTimeAxis(timeWindow);
 			UpdateValueAxis();
+
 			ListGroup.SortByTotal();
 			Legend.RefreshModel();
 

@@ -44,6 +44,11 @@ namespace Atlas.Core
 			return Add(LogLevel.Info, text, tags);
 		}
 
+		public LogEntry AddDebug(string text, params Tag[] tags)
+		{
+			return Add(LogLevel.Debug, text, tags);
+		}
+
 		public LogEntry AddWarning(string text, params Tag[] tags)
 		{
 			return Add(LogLevel.Warn, text, tags);
@@ -56,6 +61,9 @@ namespace Atlas.Core
 
 		public LogEntry Add(LogLevel logLevel, string text, params Tag[] tags)
 		{
+			if (logLevel < Settings.MinLogLevel)
+				return null;
+
 			var logEntry = new LogEntry(Settings, logLevel, text, tags);
 			AddLogEntry(logEntry);
 			return logEntry;
