@@ -96,7 +96,7 @@ namespace Atlas.UI.Avalonia
 			while (parentControl != null)
 			{
 				// sometimes controls don't update their bounds correctly, so only use the Window for now
-				if (parentControl is Window)
+				//if (parentControl is Window)
 				{
 					// Get control bounds in Parent control coordinates
 					Point? translatedTopLeft = control.TranslatePoint(controlTopLeftPoint, parentControl);

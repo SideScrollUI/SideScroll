@@ -199,6 +199,21 @@ namespace Atlas.UI.Avalonia.Controls
 
 			return control;
 		}
+
+		// Focus first input control
+		// Add [Focus] attribute if more control needed?
+		public new void Focus()
+		{
+			foreach (IControl control in Children)
+			{
+				if (control is TextBox textBox)
+				{
+					textBox.Focus();
+					return;
+				}
+			}
+			base.Focus();
+		}
 	}
 }
 

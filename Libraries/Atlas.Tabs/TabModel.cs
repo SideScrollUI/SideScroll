@@ -117,14 +117,23 @@ namespace Atlas.Tabs
 			return tabModel;
 		}
 
-		public void AddObject(object obj, bool fill = false)
+		public TabObject AddObject(object obj, bool fill = false)
 		{
 			if (obj == null)
 				obj = "(null)";
 
-			Objects.Add(new TabObject() { Object = obj, Fill = fill });
 			if (obj is ChartSettings)
 				MinDesiredWidth = 800;
+
+			var tabObject = new TabObject()
+			{
+				Object = obj,
+				Fill = fill,
+			};
+
+			Objects.Add(tabObject);
+
+			return tabObject;
 		}
 
 		public void AddData(object obj)

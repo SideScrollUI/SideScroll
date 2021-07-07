@@ -116,6 +116,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		static TabControlDataGrid()
 		{
+			// DataGridRow event triggers before DataGridCell :(
 			PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => DataGridRow_PointerPressed(x, e), RoutingStrategies.Tunnel, true);
 		}
 
@@ -203,9 +204,8 @@ namespace Atlas.UI.Avalonia.Controls
 				RowBackground = Theme.GridBackground,
 				AlternatingRowBackground = Theme.GridBackground,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch, // doesn't work
-				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, // todo: can't get working
-				//HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // Use scrollviewer instead for now 
+				VerticalAlignment = VerticalAlignment.Stretch,
+				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
 				//BorderThickness = new Thickness(0), // DataGrid bug, setting this breaks the background OnFocus, but fixes the extra border
 				//Padding = new Thickness(0),
 				
@@ -488,7 +488,7 @@ namespace Atlas.UI.Avalonia.Controls
 			// Can't access row.OwningGrid, so we have to do this the hard way
 			if (row?.Parent?.Parent?.Parent?.Parent is DataGrid dataGrid)
 			{
-				if (!e.GetCurrentPoint(row).Properties.IsLeftButtonPressed || dataGrid.SelectedItems == null || dataGrid.SelectedItems.Count != 1)
+				if (dataGrid.SelectedItems == null || dataGrid.SelectedItems.Count != 1)
 					return;
 
 				if (dataGrid.SelectedItems.Contains(row.DataContext))

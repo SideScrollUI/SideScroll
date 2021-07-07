@@ -89,6 +89,11 @@ namespace Atlas.Extensions
 			return Trim(timeSpan, roundingInterval.Ticks);
 		}
 
+		public static TimeSpan Ceil(this TimeSpan timeSpan, long ticks = TimeSpan.TicksPerSecond)
+		{
+			return new TimeSpan(ticks * ((timeSpan.Ticks + ticks - 1) / ticks));
+		}
+
 		public static TimeSpan Max(this TimeSpan first, TimeSpan second)
 		{
 			return new TimeSpan(Math.Max(first.Ticks, second.Ticks));
