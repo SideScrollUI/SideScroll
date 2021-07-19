@@ -200,7 +200,7 @@ namespace Atlas.UI.Avalonia
 				ScrollViewer.Offset = new Vector(0, 0);
 				TabView.Focus();
 			}
-			TabView.Instance.SelectBookmark(TabBookmark.Create("Search"), reload);
+			TabView.Instance.SelectBookmark(tabBookmark, reload);
 		}
 
 		private void Snapshot(Call call)
