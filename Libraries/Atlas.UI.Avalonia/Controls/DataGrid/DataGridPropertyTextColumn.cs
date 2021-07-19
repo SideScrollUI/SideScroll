@@ -15,11 +15,6 @@ namespace Atlas.UI.Avalonia
 		private const int EnableWordWrapMinStringLength = 64; // Don't enable wordwrap unless we have to (expensive and not always wanted)
 		private const int MaxRowScanProperties = 30;
 
-		public SolidColorBrush BrushHasLinks => Theme.HasLinksBackground;
-		public SolidColorBrush BrushEditable { get; set; } = Theme.Editable;
-		public SolidColorBrush BrushValue { get; set; } = new SolidColorBrush(Colors.LightGray);
-		public SolidColorBrush BrushBackground { get; set; } = new SolidColorBrush(Colors.White);
-
 		public DataGrid DataGrid;
 		public PropertyInfo PropertyInfo;
 
@@ -109,7 +104,6 @@ namespace Atlas.UI.Avalonia
 
 		protected override IControl GenerateElement(DataGridCell cell, object dataItem)
 		{
-			//cell.Background = GetCellBrush(cell, dataItem);
 			//cell.MaxHeight = MaxDesiredHeight; // don't let them have more than a few lines each
 
 			// Support mixed control types?
@@ -143,6 +137,8 @@ namespace Atlas.UI.Avalonia
 				};
 				cell.Styles.Add(style);*/
 
+				//if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
+
 				if (DisplayIndex == 1 || PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					// Update the cell color based on the object
@@ -160,26 +156,6 @@ namespace Atlas.UI.Avalonia
 					};
 					textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
 				}
-
-				/*if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
-				{
-					var foregroundBinding = new Binding()
-					{
-						Converter = new ValueToForegroundBrushConverter(propertyInfo),
-						Mode = BindingMode.OneWay,
-					};
-					cell.Bind(DataGridCell.ForegroundProperty, foregroundBinding);
-				}*/
-
-				/*if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
-				{
-					var foregroundBinding = new Binding()
-					{
-						Converter = new ValueToForegroundBrushConverter(propertyInfo),
-						Mode = BindingMode.OneWay,
-					};
-					textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
-				}*/
 
 				return textBlock;
 			}
@@ -216,34 +192,6 @@ namespace Atlas.UI.Avalonia
 
 			return FormattedBinding;
 		}
-
-		// todo: set default background brush to white so context menu's work, hover breaks if it's set though
-		/*private IBrush GetCellBrush(DataGridCell dataGridCell, object dataItem)
-		{
-			try
-			{
-				if (PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
-				//if (this.DisplayIndex == 1 && (dataItem is ListItem || dataItem is ListMember))
-				{
-					bool hasLinks = TabModel.ObjectHasLinks(dataItem, true);
-					if (hasLinks)
-						return BrushHasLinks;
-					//return Brushes.Moccasin;
-					else if (!IsReadOnly && (dataItem is ListMember) && ((ListMember)dataItem).Editable)
-						return BrushEditable;
-					else
-						return BrushValue;
-				}
-			}
-			catch (InvalidCastException)
-			{
-			}
-
-			if (IsReadOnly)
-				return null; // checkbox column requires a valid value
-			else
-				return BrushEditable;
-		}*/
 
 		/*protected override FrameworkElement GenerateElement(DataGridCell cell, object dataItem)
 		{

@@ -18,6 +18,7 @@ namespace Atlas.Resources
 		public const string Forward = "right-arrow-blue.png";
 
 		public const string Search = "search.png";
+		public const string Search16 = "search_right_light_16.png";
 		public const string ClearSearch = "clear_search.png";
 
 		public const string Info1 = "info_24_759eeb.png"; // 759eeb
@@ -62,6 +63,7 @@ namespace Atlas.Resources
 
 			public static Stream ClearSearch => Get(Icons.ClearSearch);
 			public static Stream Search => Get(Icons.Search);
+			public static Stream Search16 => Get(Icons.Search16);
 
 			public static Stream Info => Get(Icons.Info1);
 

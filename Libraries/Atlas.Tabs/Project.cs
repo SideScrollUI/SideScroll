@@ -17,8 +17,8 @@ namespace Atlas.Tabs
 
 		public Linker Linker { get; set; } = new Linker();
 
-		public DataRepo DataShared => new DataRepo(DataRepoPath, "Shared");
-		public DataRepo DataApp => new DataRepo(DataRepoPath, "Versions/" + ProjectSettings.DataVersion);
+		public DataRepo DataShared => new DataRepo(DataSharedPath, DataRepoName);
+		public DataRepo DataApp => new DataRepo(DataAppPath, DataRepoName);
 
 		public HttpCacheManager Http = new HttpCacheManager();
 
@@ -26,14 +26,17 @@ namespace Atlas.Tabs
 		public BookmarkNavigator Navigator { get; set; } = new BookmarkNavigator();
 		public TaskInstanceCollection Tasks { get; set; } = new TaskInstanceCollection();
 
-		private string DataRepoPath
+		private string DataSharedPath => Paths.Combine(UserSettings.ProjectPath, "Shared");
+		private string DataAppPath => Paths.Combine(UserSettings.ProjectPath, "Versions", ProjectSettings.DataVersion.ToString());
+
+		private string DataRepoName
 		{
 			get
 			{
 				if (UserSettings.BookmarkPath != null)
-					return Paths.Combine(UserSettings.ProjectPath, "Bookmarks", UserSettings.BookmarkPath.HashSha256(), "Data");
+					return Paths.Combine("Bookmarks", UserSettings.BookmarkPath.HashSha256());
 				else
-					return Paths.Combine(UserSettings.ProjectPath, "Current", "Data");
+					return Paths.Combine("Current");
 			}
 		}
 

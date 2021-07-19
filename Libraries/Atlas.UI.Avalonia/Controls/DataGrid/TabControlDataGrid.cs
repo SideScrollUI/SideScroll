@@ -11,7 +11,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Styling;
 using Avalonia.Threading;
 using System;
 using System.Collections;
@@ -830,10 +829,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public IList SelectedItems
 		{
-			get
-			{
-				return DataGrid.SelectedItems;
-			}
+			get => DataGrid.SelectedItems;
 			set
 			{
 				var dataGridSelectedItems = DataGrid.SelectedItems;

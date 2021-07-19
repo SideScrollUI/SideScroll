@@ -2,57 +2,56 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Atlas.Serialize
 {
 	public interface IDataRepoInstance
 	{
-		string Directory { get; }
+		string GroupId { get; }
 		//object GetObject(string key);
 	}
 
 	public class DataRepoInstance<T> : IDataRepoInstance
 	{
-		private const string DefaultName = ".Default"; // todo: support multiple directory levels?
+		private const string DefaultKey = ".Default"; // todo: support multiple directory levels?
 
 		public DataRepo DataRepo;
-		public string Directory { get; set; }
+		public string GroupId { get; set; }
 
-		public DataRepoInstance(DataRepo dataRepo, string saveDirectory)
+		public DataRepoInstance(DataRepo dataRepo, string groupId)
 		{
 			DataRepo = dataRepo;
-			Directory = saveDirectory;
+			GroupId = groupId;
 		}
 
 		public virtual void Save(Call call, T item)
 		{
-			DataRepo.Save<T>(Directory, DefaultName, item, call);
+			DataRepo.Save<T>(GroupId, DefaultKey, item, call);
 		}
 
 		public virtual void Save(Call call, string key, T item)
 		{
-			DataRepo.Save<T>(Directory, key, item, call);
+			DataRepo.Save<T>(GroupId, key, item, call);
 		}
 
 		public virtual T Load(Call call, string key = null, bool createIfNeeded = false, bool lazy = false)
 		{
-			return DataRepo.Load<T>(Directory, key ?? DefaultName, call, createIfNeeded, lazy);
+			return DataRepo.Load<T>(GroupId, key ?? DefaultKey, call, createIfNeeded, lazy);
 		}
 
 		public DataItemCollection<T> LoadAll(Call call = null, bool lazy = false)
 		{
-			return DataRepo.LoadAll<T>(call, Directory, lazy);
+			return DataRepo.LoadAll<T>(call, GroupId, lazy);
 		}
 
 		public SortedDictionary<string, T> LoadAllSorted(Call call = null, bool lazy = false)
 		{
-			return DataRepo.LoadAllSorted<T>(call, Directory, lazy);
+			return DataRepo.LoadAllSorted<T>(call, GroupId, lazy);
 		}
 
 		public virtual void Delete(string key = null)
 		{
-			DataRepo.Delete<T>(Directory, key ?? DefaultName);
+			DataRepo.Delete<T>(GroupId, key ?? DefaultKey);
 		}
 
 		public virtual void DeleteAll()
@@ -67,12 +66,12 @@ namespace Atlas.Serialize
 
 		public DataItemCollection<T> Items { get; set; }
 
-		public DataRepoView(DataRepo dataRepo, string saveDirectory) : base(dataRepo, saveDirectory)
+		public DataRepoView(DataRepo dataRepo, string groupId) : base(dataRepo, groupId)
 		{
 			Initialize();
 		}
 
-		public DataRepoView(DataRepoInstance<T> dataRepo) : base(dataRepo.DataRepo, dataRepo.Directory)
+		public DataRepoView(DataRepoInstance<T> dataRepo) : base(dataRepo.DataRepo, dataRepo.GroupId)
 		{
 			Initialize();
 		}
@@ -108,79 +107,5 @@ namespace Atlas.Serialize
 			var ordered = Items.OrderBy(memberName);
 			Items = new DataItemCollection<T>(ordered);
 		}
-	}
-
-	public class DataItemCollection<T> : ItemCollection<DataItem<T>>
-	{
-		public SortedDictionary<string, T> Lookup { get; set; } = new SortedDictionary<string, T>();
-
-		public DataItemCollection()
-		{
-		}
-
-		// Don't implement List<T>, it isn't sortable
-		public DataItemCollection(IEnumerable<DataItem<T>> iEnumerable) : base(iEnumerable)
-		{
-			Lookup = Map();
-		}
-
-		public List<T> Values => this.Select(o => o.Value).ToList();
-
-		private SortedDictionary<string, T> Map()
-		{
-			var entries = new SortedDictionary<string, T>();
-			foreach (DataItem<T> item in ToList())
-				entries.Add(item.Key, item.Value);
-			return entries;
-		}
-
-		public IEnumerable<DataItem<T>> OrderBy(string memberName)
-		{
-			PropertyInfo propertyInfo = typeof(T).GetProperty(memberName);
-			return ToList().OrderBy(i => propertyInfo.GetValue(i.Value));
-		}
-
-		public void Add(string key, T value)
-		{
-			Add(new DataItem<T>(key, value));
-			Lookup.Add(key, value);
-		}
-
-		public new void Remove(DataItem<T> item)
-		{
-			base.Remove(item);
-			Lookup.Remove(item.Key);
-		}
-
-		public new void Clear()
-		{
-			base.Clear();
-			Lookup.Clear();
-		}
-	}
-
-	public interface IDataItem
-	{
-		string Key { get; }
-		object Object { get; }
-	}
-
-	public class DataItem<T> : IDataItem
-	{
-		public string Key { get; set; }
-		public T Value { get; set; }
-		public object Object => Value;
-
-		public DataItem()
-		{
-		}
-
-		public DataItem(string key, T value)
-		{
-			Key = key;
-			Value = value;
-		}
-
-		public override string ToString() => Key;
 	}
 }

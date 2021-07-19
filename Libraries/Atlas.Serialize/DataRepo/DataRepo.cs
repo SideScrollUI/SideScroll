@@ -9,77 +9,78 @@ namespace Atlas.Serialize
 {
 	public class DataRepo
 	{
-		private const string DefaultDirectory = ".Default";
+		private const string DefaultGroupId = ".Default";
 
 		public string RepoPath { get; set; }
 		public string RepoName { get; set; }
 
 		//public RepoSettings Settings;
 
+		public override string ToString() => RepoPath;
+
 		public DataRepo(string repoPath, string repoName)
 		{
 			RepoPath = repoPath;
 			RepoName = repoName;
-			Debug.Assert(repoName != null);
+
+			Debug.Assert(repoPath != null);
 		}
 
-		public override string ToString() => RepoName;
-
-		public DataRepoInstance<T> Open<T>(Call call, string saveDirectory)
+		public DataRepoInstance<T> Open<T>(Call call, string groupId)
 		{
-			return new DataRepoInstance<T>(this, saveDirectory);
+			return new DataRepoInstance<T>(this, groupId);
 		}
 
-		public DataRepoView<T> OpenView<T>(Call call, string saveDirectory)
+		public DataRepoView<T> OpenView<T>(Call call, string groupId)
 		{
-			return new DataRepoView<T>(this, saveDirectory);
+			return new DataRepoView<T>(this, groupId);
 		}
 
-		public FileInfo GetFileInfo(Type type, string name)
+		public FileInfo GetFileInfo(Type type, string groupId, string key)
 		{
-			string dataPath = GetHashedDataPath(type, name);
+			string dataPath = GetDataPath(type, groupId, key);
 			return new FileInfo(dataPath);
 		}
 
-		public SerializerFile GetSerializerFile(Type type, string name)
+		public SerializerFile GetSerializerFile(Type type, string key)
 		{
-			return GetSerializerFile(type, DefaultDirectory, name);
+			return GetSerializerFile(type, DefaultGroupId, key);
 		}
 
-		public SerializerFile GetSerializerFile(Type type, string directory, string name)
+		public SerializerFile GetSerializerFile(Type type, string groupId, string key)
 		{
-			string dataPath = GetHashedDataPath(type, directory, name);
-			var serializer = SerializerFile.Create(dataPath, name);
+			string dataPath = GetDataPath(type, groupId, key);
+			var serializer = SerializerFile.Create(dataPath, key);
 			return serializer;
 		}
 
-		// Use ToString()? for name?
-		public void Save(string name, object obj, Call call = null)
+		// Use ToString()? for key?
+		public void Save(string key, object obj, Call call = null)
 		{
-			Save(null, name, obj, call);
+			Save(null, key, obj, call);
 		}
 
-		public void Save<T>(string name, T obj, Call call = null)
+		public void Save<T>(string key, T obj, Call call = null)
 		{
-			Save<T>(null, name, obj, call);
+			Save<T>(null, key, obj, call);
 		}
 
-		public void Save(string directory, string name, object obj, Call call = null)
+		public void Save(string groupId, string key, object obj, Call call = null)
 		{
-			Save(obj.GetType(), directory, name, obj, call);
+			Save(obj.GetType(), groupId, key, obj, call);
 		}
 
-		public void Save<T>(string directory, string name, T obj, Call call = null)
+		public void Save<T>(string groupId, string key, T obj, Call call = null)
 		{
-			Save(typeof(T), directory, name, obj, call);
+			Save(typeof(T), groupId, key, obj, call);
 		}
 
-		public void Save(Type type, string directory, string name, object obj, Call call = null)
+		public void Save(Type type, string groupId, string key, object obj, Call call = null)
 		{
-			directory = directory ?? DefaultDirectory;
+			groupId = groupId ?? DefaultGroupId;
 			call = call ?? new Call();
-			SerializerFile serializer = GetSerializerFile(type, directory, name); // use hash since filesystems can't handle long names
-			serializer.Save(call, obj, name);
+			SerializerFile serializer = GetSerializerFile(type, groupId, key); // use hash since filesystems can't handle long names
+			serializer.Save(call, obj, key);
 		}
 
 		public void Save(object obj, Call call = null)
@@ -87,14 +88,14 @@ namespace Atlas.Serialize
 			Save(obj.GetType().AssemblyQualifiedName, obj, call);
 		}
 
-		public T Load<T>(string name, Call call = null, bool createIfNeeded = false, bool lazy = false)
+		public T Load<T>(string key, Call call = null, bool createIfNeeded = false, bool lazy = false)
 		{
-			return Load<T>(DefaultDirectory, name, call, createIfNeeded, lazy);
+			return Load<T>(DefaultGroupId, key, call, createIfNeeded, lazy);
 		}
 
-		public T Load<T>(string directory, string name, Call call, bool createIfNeeded = false, bool lazy = false)
+		public T Load<T>(string groupId, string key, Call call, bool createIfNeeded = false, bool lazy = false)
 		{
-			SerializerFile serializerFile = GetSerializerFile(typeof(T), directory, name);
+			SerializerFile serializerFile = GetSerializerFile(typeof(T), groupId, key);
 			
 			if (serializerFile.Exists)
 			{
@@ -118,10 +119,10 @@ namespace Atlas.Serialize
 			return Load<T>(typeof(T).AssemblyQualifiedName, call, createIfNeeded, lazy);
 		}
 
-		public DataItemCollection<T> LoadAll<T>(Call call = null, string directory = null, bool lazy = false)
+		public DataItemCollection<T> LoadAll<T>(Call call = null, string groupId = null, bool lazy = false)
 		{
 			call = call ?? new Call();
-			directory = directory ?? DefaultDirectory;
+			groupId = groupId ?? DefaultGroupId;
 
 			/*ItemCollection<string> objectIds = GetObjectIds(typeof(T));
 
@@ -134,10 +135,10 @@ namespace Atlas.Serialize
 			}*/
 			var entries = new DataItemCollection<T>();
 
-			string typePath = GetTypePath(typeof(T), directory);
-			if (Directory.Exists(typePath))
+			string groupPath = GetGroupPath(typeof(T), groupId);
+			if (Directory.Exists(groupPath))
 			{
-				foreach (string filePath in Directory.EnumerateDirectories(typePath))
+				foreach (string filePath in Directory.EnumerateDirectories(groupPath))
 				{
 					var serializerFile = SerializerFile.Create(filePath);
 					if (serializerFile.Exists)
@@ -151,48 +152,48 @@ namespace Atlas.Serialize
 			return entries;
 		}
 
-		public SortedDictionary<string, T> LoadAllSorted<T>(Call call = null, string directory = null, bool lazy = false)
+		public SortedDictionary<string, T> LoadAllSorted<T>(Call call = null, string groupId = null, bool lazy = false)
 		{
-			return LoadAll<T>(call, directory, lazy).Lookup;
+			return LoadAll<T>(call, groupId, lazy).Lookup;
 		}
 
-		public ItemCollection<Header> LoadHeaders(Type type, string directory = null, Call call = null)
+		public ItemCollection<Header> LoadHeaders(Type type, string groupId = null, Call call = null)
 		{
 			call = call ?? new Call();
-			directory = directory ?? DefaultDirectory;
+			groupId = groupId ?? DefaultGroupId;
 
-			var list = new ItemCollection<Header>();
+			var headers = new ItemCollection<Header>();
 
-			string typePath = GetTypePath(type, directory);
-			if (Directory.Exists(typePath))
+			string groupPath = GetGroupPath(type, groupId);
+			if (Directory.Exists(groupPath))
 			{
-				foreach (string filePath in Directory.EnumerateDirectories(typePath))
+				foreach (string filePath in Directory.EnumerateDirectories(groupPath))
 				{
 					var serializerFile = SerializerFile.Create(filePath);
 					if (serializerFile.Exists)
 					{
 						Header header = serializerFile.LoadHeader(call);
 						if (header != null)
-							list.Add(header);
+							headers.Add(header);
 					}
 				}
 			}
-			return list;
+			return headers;
 		}
 
-		public void DeleteAll<T>(string directory = null)
+		public void DeleteAll<T>(string groupId = null)
 		{
-			DeleteAll(typeof(T), directory);
+			DeleteAll(typeof(T), groupId);
 		}
 
-		public void DeleteAll(Type type, string directory = null)
+		public void DeleteAll(Type type, string groupId = null)
 		{
-			string directoryPath = GetTypePath(type, directory);
-			if (Directory.Exists(directoryPath))
+			string groupPath = GetGroupPath(type, groupId);
+			if (Directory.Exists(groupPath))
 			{
 				try
 				{
-					Directory.Delete(directoryPath, true);
+					Directory.Delete(groupPath, true);
 				}
 				catch (Exception)
 				{
@@ -201,27 +202,33 @@ namespace Atlas.Serialize
 		}
 
 		// remove all other deletes and add null defaults?
-		public void Delete<T>(string directory, string name)
+		public void Delete<T>(string groupId, string key)
 		{
-			Delete(typeof(T), directory, name);
+			Delete(typeof(T), groupId, key);
 		}
 
-		public void Delete<T>(string name)
+		public void Delete<T>(string key)
 		{
-			if (name == null)
-				throw new ArgumentNullException(name);
-			Delete(typeof(T), null, name);
+			Delete(typeof(T), null, key);
 		}
 
-		public void Delete(Type type, string directory, string name)
+		public void Delete(Type type, string key)
 		{
-			directory = directory ?? DefaultDirectory;
-			string directoryPath = GetDirectoryPath(type, directory, name);
-			if (Directory.Exists(directoryPath))
+			Delete(type, null, key);
+		}
+
+		public void Delete(Type type, string groupId, string key)
+		{
+			if (key == null)
+				throw new ArgumentNullException(key);
+
+			groupId = groupId ?? DefaultGroupId;
+			string dataPath = GetDataPath(type, groupId, key);
+			if (Directory.Exists(dataPath))
 			{
 				try
 				{
-					Directory.Delete(directoryPath, true);
+					Directory.Delete(dataPath, true);
 				}
 				catch (Exception)
 				{
@@ -229,19 +236,13 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public void Delete(Type type, string name)
-		{
-			Delete(type, null, name);
-		}
-
 		public void DeleteRepo()
 		{
-			string path = Paths.Combine(RepoPath, RepoName);
-			if (Directory.Exists(path))
+			if (Directory.Exists(RepoPath))
 			{
 				try
 				{
-					Directory.Delete(path, true);
+					Directory.Delete(RepoPath, true);
 				}
 				catch (Exception)
 				{
@@ -250,39 +251,25 @@ namespace Atlas.Serialize
 		}
 
 		// Don't use GetHashCode(), it returns a different value each time the process is run
-		public string GetTypePath(Type type, string name = null)
+		public string GetGroupPath(Type type, string groupId)
 		{
-			string path = Paths.Combine(RepoPath, RepoName, type.GetNonNullableType().FullName);
-			if (name != null)
-				path += "/" + name.HashSha256();
-			return path;
+			string groupHash = (type.GetNonNullableType().FullName + ';' + RepoName + ';' + groupId).HashSha256();
+			return Paths.Combine(RepoPath, groupHash);
 		}
 
-		public string GetHashedDataPath(Type type, string name)
+		public string GetDataPath(Type type, string groupId, string key)
 		{
-			string typePath = GetTypePath(type, name);
-			return typePath;
-		}
-
-		public string GetHashedDataPath(Type type, string directory, string name)
-		{
-			string typePath = GetDirectoryPath(type, directory, name);
-			return typePath;
-		}
-
-		public string GetDirectoryPath(Type type, string directory, string name)
-		{
-			string directoryPath = GetTypePath(type, directory);
-			string dataPath = name.HashSha256();
-			return Paths.Combine(directoryPath, dataPath);
+			string groupPath = GetGroupPath(type, groupId);
+			string nameHash = key.HashSha256();
+			return Paths.Combine(groupPath, nameHash);
 		}
 
 		// clean this up?
-		/*private ItemCollection<string> GetObjectIds(Type type, string name = null)
+		/*private ItemCollection<string> GetObjectIds(Type type, string key = null)
 		{
 			var list = new ItemCollection<string>();
 
-			string typePath = GetTypePath(type, name);
+			string typePath = GetTypePath(type, key);
 			if (Directory.Exists(typePath))
 			{
 				foreach (string filePath in Directory.EnumerateDirectories(typePath))

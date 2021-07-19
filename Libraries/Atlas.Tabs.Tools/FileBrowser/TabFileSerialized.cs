@@ -2,6 +2,7 @@
 using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Atlas.Tabs.Tools
 {
@@ -34,7 +35,7 @@ namespace Atlas.Tabs.Tools
 			{
 				var items = new ItemCollection<ListItem>();
 
-				var serializerFile = new SerializerFileAtlas(Tab.Path);
+				var serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(Tab.Path));
 
 				Serializer = serializerFile.LoadSchema(call);
 

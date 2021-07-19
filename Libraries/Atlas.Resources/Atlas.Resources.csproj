@@ -44,6 +44,7 @@
     <None Remove="Icons\png\screenshot.png" />
     <None Remove="Icons\png\screenshot2.png" />
     <None Remove="Icons\png\search.png" />
+    <None Remove="Icons\png\search_right_light_16.png" />
     <None Remove="Icons\png\shutter.png" />
     <None Remove="Icons\png\stats.png" />
     <None Remove="Icons\png\unlock.png" />
@@ -85,6 +86,7 @@
     <EmbeddedResource Include="Icons\png\save-file-option.png" />
     <EmbeddedResource Include="Icons\png\screenshot.png" />
     <EmbeddedResource Include="Icons\png\search.png" />
+    <EmbeddedResource Include="Icons\png\search_right_light_16.png" />
     <EmbeddedResource Include="Icons\png\shutter.png" />
     <EmbeddedResource Include="Icons\png\stats.png" />
     <EmbeddedResource Include="Icons\png\unlock.png" />

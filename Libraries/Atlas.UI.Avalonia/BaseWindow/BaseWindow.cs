@@ -27,6 +27,16 @@ namespace Atlas.UI.Avalonia
 
 		public BaseWindow(Project project) : base()
 		{
+			Initialize(project);
+		}
+
+		public BaseWindow(ProjectSettings settings) : base()
+		{
+			Initialize(new Project(settings));
+		}
+
+		private void Initialize(Project project)
+		{
 			AtlasInit.Initialize();
 
 			LoadProject(project);

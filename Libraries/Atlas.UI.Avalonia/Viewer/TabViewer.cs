@@ -193,6 +193,16 @@ namespace Atlas.UI.Avalonia
 			return bookmark;
 		}
 
+		public void SelectBookmark(TabBookmark tabBookmark, bool reload)
+		{
+			if (reload)
+			{
+				ScrollViewer.Offset = new Vector(0, 0);
+				TabView.Focus();
+			}
+			TabView.Instance.SelectBookmark(TabBookmark.Create("Search"), reload);
+		}
+
 		private void Snapshot(Call call)
 		{
 			ScreenCapture = new ScreenCapture(ScrollViewer)
@@ -228,7 +238,7 @@ namespace Atlas.UI.Avalonia
 			{
 				Content = ">",
 				Background = Theme.ToolbarButtonBackground,
-				Foreground = Theme.ToolbarTextForeground,
+				Foreground = Theme.ToolbarLabelForeground,
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				[ToolTip.ShowDelayProperty] = 5,
@@ -244,7 +254,7 @@ namespace Atlas.UI.Avalonia
 			{
 				Content = "<",
 				Background = Theme.ToolbarButtonBackground,
-				Foreground = Theme.ToolbarTextForeground,
+				Foreground = Theme.ToolbarLabelForeground,
 				BorderBrush = new SolidColorBrush(Colors.Black),
 				BorderThickness = new Thickness(1),
 				[ToolTip.TipProperty] = "Scroll Left ( <- )",

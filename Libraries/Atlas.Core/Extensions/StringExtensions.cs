@@ -163,6 +163,8 @@ namespace Atlas.Extensions
 			}
 		}
 
+		// Returns a 64 character hash of the string
+		// If length becomes an issue, can switch from base16 (hex) to base32 to save 12 characters
 		public static string HashSha256(this string rawData)
 		{
 			if (rawData == null)
@@ -170,7 +172,7 @@ namespace Atlas.Extensions
 
 			using (SHA256 sha256Hash = SHA256.Create())
 			{
-				byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+				byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData)); // 32 bytes
 
 				var builder = new StringBuilder();
 				foreach (byte b in bytes)

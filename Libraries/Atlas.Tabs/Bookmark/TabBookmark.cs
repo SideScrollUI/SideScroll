@@ -61,7 +61,7 @@ namespace Atlas.Tabs
 		}
 
 		//public List<DataRepoItem> DataRepoItems { get; set; } = new List<DataRepoItem>();
-		public string DataRepoDirectory { get; set; }
+		public string DataRepoGroupId { get; set; }
 
 		// Temporary, Only FindMatches() uses, refactor these out?
 		[NonSerialized]
@@ -121,7 +121,7 @@ namespace Atlas.Tabs
 				Bookmark = Bookmark,
 				Name = Name,
 				SelectedRow = SelectedRow,
-				DataRepoDirectory = DataRepoDirectory,
+				DataRepoGroupId = DataRepoGroupId,
 				BookmarkData = BookmarkData,
 			};
 		}
@@ -236,7 +236,7 @@ namespace Atlas.Tabs
 				if (dataKey == null || row.DataValue == null)
 					continue;
 
-				project.DataApp.Save(DataRepoDirectory, dataKey, row.DataValue);
+				project.DataApp.Save(DataRepoGroupId, dataKey, row.DataValue);
 			}
 
 			foreach (TabBookmark tabBookmark in ChildBookmarks.Values)

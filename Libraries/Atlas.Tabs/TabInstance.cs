@@ -633,7 +633,7 @@ namespace Atlas.Tabs
 		{
 			tabBookmark.Name = Label;
 			tabBookmark.ViewSettings = TabViewSettings.DeepClone();
-			tabBookmark.DataRepoDirectory = DataRepoInstance?.Directory;
+			tabBookmark.DataRepoGroupId = DataRepoInstance?.GroupId;
 			tabBookmark.SelectedRow = SelectedRow;
 
 			/*if (DataRepoInstance != null)
@@ -679,8 +679,11 @@ namespace Atlas.Tabs
 			return TabViewSettings; // remove?
 		}
 
-		public virtual void SelectBookmark(TabBookmark tabBookmark)
+		public virtual void SelectBookmark(TabBookmark tabBookmark, bool reload = false)
 		{
+			if (reload)
+				ClearSelection();
+
 			TabBookmark = tabBookmark;
 			TabViewSettings = tabBookmark.ViewSettings;
 
