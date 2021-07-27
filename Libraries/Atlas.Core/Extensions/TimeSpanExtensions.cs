@@ -31,15 +31,16 @@ namespace Atlas.Extensions
 		public static string FormattedDecimal(this TimeSpan timeSpan)
 		{
 			string format = "#,0.#";
+			var absTimeSpan = new TimeSpan(Math.Abs(timeSpan.Ticks));
 			foreach (TimeUnit timeUnit in TimeUnits)
 			{
-				if (timeSpan < timeUnit.TimeSpan)
+				if (absTimeSpan < timeUnit.TimeSpan)
 					continue;
 
 				double units = timeSpan.TotalSeconds / timeUnit.TimeSpan.TotalSeconds;
 				string value = units.ToString(format) + " " + timeUnit.Name;
 
-				if (timeSpan.TotalSeconds > timeUnit.TimeSpan.TotalSeconds)
+				if (absTimeSpan.TotalSeconds > timeUnit.TimeSpan.TotalSeconds)
 					value += "s";
 				
 				return value;

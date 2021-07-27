@@ -38,6 +38,11 @@ namespace Atlas.UI.Avalonia.Controls
 				Tab = tab;
 			}
 
+			public override void Load(Call call, TabModel model)
+			{
+				Tab.Bookmarks.Reload();
+			}
+
 			public override void LoadUI(Call call, TabModel model)
 			{
 				/*toolbar = new Toolbar();

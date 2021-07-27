@@ -8,4 +8,10 @@ namespace Atlas.Core
 	{
 		Task<object> LoadAsync(Call call);
 	}
+
+	// Called after object loaded when deserializing
+	public interface IInitializer
+	{
+		void Initialize();
+	}
 }

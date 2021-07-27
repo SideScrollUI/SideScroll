@@ -20,7 +20,6 @@ namespace Atlas.Tabs
 		public BookmarkCollection(Project project)
 		{
 			Project = project;
-			Reload();
 			//Items.CollectionChanged += Items_CollectionChanged;
 		}
 
@@ -44,7 +43,7 @@ namespace Atlas.Tabs
 			}
 		}
 
-		public TabBookmarkItem Add(Bookmark bookmark)
+		private TabBookmarkItem Add(Bookmark bookmark)
 		{
 			var tabItem = new TabBookmarkItem(bookmark, Project);
 			tabItem.OnDelete += Item_OnDelete;
@@ -54,6 +53,9 @@ namespace Atlas.Tabs
 
 		public void AddNew(Call call, Bookmark bookmark)
 		{
+			if (DataRepoBookmarks == null)
+				Reload();
+
 			Remove(bookmark.Address); // Remove previous bookmark
 			DataRepoBookmarks.Save(call, bookmark.Address, bookmark);
 			NewBookmark = Add(bookmark);

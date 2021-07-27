@@ -78,7 +78,7 @@ namespace Atlas.Serialize
 			Serializer = serializer;
 			TypeSchema = typeSchema;
 			Type = typeSchema.Type;
-			if (typeSchema.IsSerialized && (!serializer.PublicOnly || TypeSchema.IsPublic))
+			if (!typeSchema.IsUnserialized && (!serializer.PublicOnly || TypeSchema.IsPublic))
 				LoadableType = Type;
 			//objects.Capacity = typeSchema.numObjects;
 			ObjectsLoaded = new object[typeSchema.NumObjects];
@@ -92,7 +92,7 @@ namespace Atlas.Serialize
 
 		public static TypeRepo Create(Log log, Serializer serializer, TypeSchema typeSchema)
 		{
-			if (!typeSchema.IsSerialized)
+			if (typeSchema.IsUnserialized)
 			{
 				//string message = "Type " + typeSchema.Name + " is not serializable";
 				//Debug.Print(message);
@@ -130,7 +130,8 @@ namespace Atlas.Serialize
 				}
 			}
 
-			if (!typeSchema.HasConstructor)
+			// Derived types can still have valid constructors
+			if (!typeSchema.HasConstructor && !typeSchema.IsSerialized)
 			{
 				typeRepo = new TypeRepoUnknown(serializer, typeSchema);
 				log.AddWarning("Type has no constructor", new Tag(typeSchema));
@@ -456,6 +457,8 @@ namespace Atlas.Serialize
 			try
 			{
 				LoadObjectData(obj);
+				if (obj is IInitializer initializer)
+					initializer.Initialize();
 			}
 			catch (Exception)
 			{

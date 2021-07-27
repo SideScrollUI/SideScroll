@@ -52,6 +52,7 @@ namespace Atlas.Serialize
 		public bool IsPublic; // [PublicData], will get exported if PublicOnly set
 		public bool IsStatic;
 		public bool IsSerialized;
+		public bool IsUnserialized;
 		public bool HasConstructor;
 		public bool HasSubType;
 
@@ -104,7 +105,8 @@ namespace Atlas.Serialize
 			IsPrimitive = NonNullableType.IsPrimitive;
 			HasConstructor = HasEmptyConstructor(Type);
 
-			IsSerialized = (Type.GetCustomAttribute<UnserializedAttribute>() == null);
+			IsSerialized = (Type.GetCustomAttribute<SerializedAttribute>() != null);
+			IsUnserialized = (Type.GetCustomAttribute<UnserializedAttribute>() != null);
 			IsStatic = (Type.GetCustomAttribute<StaticAttribute>() != null);
 			IsPrivate = (Type.GetCustomAttribute<PrivateDataAttribute>() != null);
 			IsPublic = GetIsPublic();
@@ -286,6 +288,7 @@ namespace Atlas.Serialize
 			{
 				fieldSchema.Validate(typeSchemas);
 			}
+
 			foreach (PropertySchema propertySchema in PropertySchemas)
 			{
 				propertySchema.Validate(typeSchemas);

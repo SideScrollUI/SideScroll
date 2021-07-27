@@ -96,8 +96,8 @@ namespace Atlas.Serialize.Test
 			serializer.Save(Call, input);
 			var output = serializer.Load<PrivateDataContainer>(Call);
 
-			Assert.IsNull(output.PrivateField);
-			Assert.IsNull(output.PrivateProperty);
+			Assert.IsNull(output.PrivateField.Confidential);
+			Assert.IsNull(output.PrivateProperty.Confidential);
 			Assert.AreEqual("test", output.PublicData);
 		}
 
@@ -111,16 +111,16 @@ namespace Atlas.Serialize.Test
 			serializer.PublicOnly = true;
 			var output = serializer.Load<PrivateDataContainer>(Call);
 
-			Assert.IsNull(output.PrivateField);
-			Assert.IsNull(output.PrivateProperty);
+			Assert.IsNull(output.PrivateField.Confidential);
+			Assert.IsNull(output.PrivateProperty.Confidential);
 			Assert.AreEqual("test", output.PublicData);
 		}
 
 		[PublicData]
 		public class PrivateDataContainer
 		{
-			public PrivateClass PrivateField;
-			public PrivateClass PrivateProperty { get; set; }
+			public PrivateClass PrivateField = new PrivateClass();
+			public PrivateClass PrivateProperty { get; set; } = new PrivateClass();
 			public string PublicData;
 		}
 
@@ -214,7 +214,7 @@ namespace Atlas.Serialize.Test
 		public class PrivateFieldClass
 		{
 			[PrivateData]
-			public string Confidential;
+			public string Confidential = "default";
 		}
 
 		[Test]
@@ -229,7 +229,7 @@ namespace Atlas.Serialize.Test
 			serializer.Save(Call, input);
 			var output = serializer.Load<PrivateFieldClass>(Call);
 
-			Assert.IsNull(output.Confidential);
+			Assert.AreEqual("default", output.Confidential);
 		}
 	}
 }

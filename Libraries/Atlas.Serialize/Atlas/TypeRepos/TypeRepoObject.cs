@@ -14,7 +14,7 @@ namespace Atlas.Serialize
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 			{
 				// todo: support matching constructors with name params & types to fields/properties
-				if (typeSchema.HasConstructor)
+				if (typeSchema.HasConstructor || typeSchema.IsSerialized)
 					return new TypeRepoObject(serializer, typeSchema);
 				return null;
 			}
@@ -30,13 +30,16 @@ namespace Atlas.Serialize
 			public FieldSchema FieldSchema;
 			public TypeRepo TypeRepo;
 
+			public override string ToString() => "Field Repo: " + FieldSchema.FieldName;
+
 			public FieldRepo(FieldSchema fieldSchema, TypeRepo typeRepo = null)
 			{
 				FieldSchema = fieldSchema;
 				TypeRepo = typeRepo;
-			}
 
-			public override string ToString() => "Field Repo: " + FieldSchema.FieldName;
+				if (typeRepo?.Serializer.PublicOnly == true && FieldSchema.IsPrivate)
+					FieldSchema.IsLoadable = false;
+			}
 
 			public void Load(object obj)
 			{
@@ -59,15 +62,15 @@ namespace Atlas.Serialize
 			public TypeRepo TypeRepo;
 			public LazyProperty LazyProperty;
 
+			public override string ToString() => PropertySchema.ToString() + " (" + TypeRepo.ToString() + ")";
+
 			public PropertyRepo(PropertySchema propertySchema, TypeRepo typeRepo = null)
 			{
 				PropertySchema = propertySchema;
 				TypeRepo = typeRepo;
-			}
 
-			public override string ToString()
-			{
-				return PropertySchema.ToString() + " (" + TypeRepo.ToString() + ")";
+				if (typeRepo?.Serializer.PublicOnly == true && PropertySchema.IsPrivate)
+					PropertySchema.IsLoadable = false;
 			}
 
 			// Load serialized data into object

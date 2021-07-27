@@ -60,7 +60,7 @@ namespace Atlas.Serialize
 				NonNullableType = Type.GetNonNullableType();
 				IsSerialized = GetIsSerialized();
 				IsLoadable = IsSerialized; // typeIndex >= 0 && // derived types won't have entries for base type
-				IsPrivate = (PropertyInfo.GetCustomAttribute<PrivateDataAttribute>() != null);
+				IsPrivate = (PropertyInfo.GetCustomAttribute<PrivateDataAttribute>() != null || Type.GetCustomAttribute<PrivateDataAttribute>() != null);
 			}
 		}
 
