@@ -131,8 +131,10 @@ namespace Atlas.UI.Avalonia
 					Left = bounds.Left,
 					Top = bounds.Top,
 				};
+
 				if (windowSettings.Width <= 0)
 					windowSettings.Width = DefaultWindowWidth;
+
 				if (windowSettings.Height <= 0)
 					windowSettings.Height = DefaultWindowHeight;
 

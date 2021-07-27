@@ -199,6 +199,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (listSeries.XPropertyInfo != null)
 					XAxisPropertyInfo = listSeries.XPropertyInfo;
+
 				if (XAxisPropertyInfo == null)
 				{
 					Type elementType = listSeries.List.GetType().GetElementTypeForAll();

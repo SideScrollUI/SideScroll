@@ -1,13 +1,10 @@
 ﻿using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Input.Platform;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using System;
-using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia.Controls
 {

@@ -50,10 +50,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			//[InnerValue]
 			public TestFilterItem Child;
 
-			public override string ToString()
-			{
-				return Text;
-			}
+			public override string ToString() => Text;
 		}
 	}
 }

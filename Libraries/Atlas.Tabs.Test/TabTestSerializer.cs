@@ -9,12 +9,12 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			private ItemCollectionUI<ListItem> items;
+			private ItemCollectionUI<ListItem> _items;
 
 			public override void Load(Call call, TabModel model)
 			{
-				items = new ItemCollectionUI<ListItem>();
-				model.Items = items;
+				_items = new ItemCollectionUI<ListItem>();
+				model.Items = _items;
 
 				model.Actions = new List<TaskCreator>()
 				{
@@ -30,13 +30,13 @@ namespace Atlas.Tabs.Test
 				var sampleItem = new SampleItem(1, "Sample Item");
 				
 				Project.DataApp.Save(sampleItem, call);
-				items.Add(new ListItem("Sample Item", sampleItem));
+				_items.Add(new ListItem("Sample Item", sampleItem));
 			}
 
 			private void Deserialize(Call call)
 			{
 				SampleItem sampleItem = Project.DataApp.Load<SampleItem>(false, false, call);
-				items.Add(new ListItem("Deserialized Sample Item", sampleItem));
+				_items.Add(new ListItem("Deserialized Sample Item", sampleItem));
 			}
 
 			private void SerializeOneMillionObjects(Call call)
@@ -47,13 +47,13 @@ namespace Atlas.Tabs.Test
 					sampleItems.Add(new SampleItem(i, "Item " + i.ToString()));
 				}
 				Project.DataApp.Save(sampleItems, call);
-				items.Add(new ListItem("SerializeOneMillionObjects", sampleItems));
+				_items.Add(new ListItem("SerializeOneMillionObjects", sampleItems));
 			}
 
 			private void DeserializeOneMillionObjects(Call call)
 			{
 				List<SampleItem> sampleItems = Project.DataApp.Load<List<SampleItem>>(false, false, call);
-				items.Add(new ListItem("DeserializeOneMillionObjects", sampleItems));
+				_items.Add(new ListItem("DeserializeOneMillionObjects", sampleItems));
 			}
 		}
 

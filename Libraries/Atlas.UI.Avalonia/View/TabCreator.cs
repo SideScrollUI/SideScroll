@@ -148,6 +148,7 @@ namespace Atlas.UI.Avalonia.View
 
 				TabInstance childTabInstance = parentTabInstance.CreateChild(childTabModel);
 				childTabInstance.Label = label;
+
 				var tabModelView = new TabView(childTabInstance);
 				tabModelView.Load();
 				return tabModelView;

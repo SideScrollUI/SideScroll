@@ -10,11 +10,10 @@ namespace Atlas.Tabs.Test
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				// Replace this
-				var sampleItems = new ItemCollection<SampleItem>();
-				sampleItems.Add(new SampleItem(sampleItems.Count, "Item " + sampleItems.Count));
-
-				model.AddData("This should be skipped");
+				var sampleItems = new ItemCollection<SampleItem>()
+				{
+					new SampleItem(1, "Item 1"),
+				};
 
 				model.Items = new ItemCollection<ListItem>()
 				{

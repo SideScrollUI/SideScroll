@@ -59,10 +59,10 @@ Actions add Buttons to the tab. When clicked, it will:
 				log.Add("If you log and no one's listening, are you really logging?");
 			}
 
-			private int counter = 1;
+			private int _counter = 1;
 			private void AddEntry(Call call)
 			{
-				call.Log.Add("New Log entry", new Tag("counter", counter++));
+				call.Log.Add("New Log entry", new Tag("counter", _counter++));
 			}
 
 			private void TestException(Call call)

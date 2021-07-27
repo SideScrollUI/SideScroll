@@ -9,13 +9,13 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			private ItemCollection<TestItem> items;
+			private ItemCollection<TestItem> _items;
 
 			public override void Load(Call call, TabModel model)
 			{
-				items = new ItemCollection<TestItem>();
+				_items = new ItemCollection<TestItem>();
 				AddEntries(20);
-				model.Items = items;
+				model.Items = _items;
 
 				model.Actions =  new ItemCollection<TaskCreator>()
 				{
@@ -32,13 +32,13 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 				for (int i = 0; i < count; i++)
 				{
-					int number = items.Count;
+					int number = _items.Count;
 					var testItem = new TestItem();
 					testItem.SmallNumber = number;
 					testItem.BigNumber += number;
 					if (number > 0)
 						testItem.Size = number * 100;
-					items.Add(testItem);
+					_items.Add(testItem);
 				}
 			}
 		}
@@ -58,10 +58,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			public Uri Uri { get; set; } = new Uri("http://localhost");
 			public int? Size { get; set; }
 
-			public override string ToString()
-			{
-				return SmallNumber.ToString();
-			}
+			public override string ToString() => SmallNumber.ToString();
 		}
 	}
 }

@@ -10,11 +10,11 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			private PropertyTest propertyTest = new PropertyTest();
+			private PropertyTest _propertyTest = new PropertyTest();
 
 			public override void Load(Call call, TabModel model)
 			{
-				model.Items = ListProperty.Create(propertyTest);
+				model.Items = ListProperty.Create(_propertyTest);
 				model.Editing = true;
 
 				model.Actions =  new ItemCollection<TaskCreator>()
@@ -25,27 +25,25 @@ namespace Atlas.Tabs.Test.DataGrid
 
 			private void Toggle(Call call)
 			{
-				propertyTest.Boolean = !propertyTest.Boolean;
+				_propertyTest.Boolean = !_propertyTest.Boolean;
 			}
 		}
 	}
 
 	public class PropertyTest : INotifyPropertyChanged
 	{
-		private bool _boolean;
 		[Editing]
 		public bool Boolean
 		{
-			get
-			{
-				return _boolean;
-			}
+			get => _boolean;
 			set
 			{
 				_boolean = value;
 				NotifyPropertyChangedContext(nameof(Boolean));
 			}
 		}
+		private bool _boolean;
+
 		public event PropertyChangedEventHandler PropertyChanged;
 		
 		private void NotifyPropertyChangedContext(string propertyName)

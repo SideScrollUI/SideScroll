@@ -46,6 +46,7 @@ namespace Atlas.Tabs.Tools
 						files.Add(listFile);
 					}
 				}
+
 				if (directories.Count > 0)
 					model.ItemList.Add(directories);
 
@@ -58,8 +59,10 @@ namespace Atlas.Tabs.Tools
 		{
 			public FTP.Info FtpInfo;
 			public string Directory { get; set; }
+
 			[HiddenColumn, InnerValue]
 			public ITab Tab;
+
 			public string DirectoryPath;
 			public FtpItem FileData;
 
@@ -84,6 +87,7 @@ namespace Atlas.Tabs.Tools
 			public string Filename { get; set; }
 			public long Size { get; set; }
 			public DateTime Modified { get; set; }
+
 			[HiddenColumn, InnerValue]
 			public ITab Tab;
 

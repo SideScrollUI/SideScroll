@@ -10,7 +10,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				TestItem?[] testItems = new TestItem?[10];
+				var testItems = new TestItem?[10];
 
 				for (int i = 0; i < testItems.Length; i++)
 				{
@@ -30,10 +30,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			public int SmallNumber { get; set; }
 			public long BigNumber { get; set; }
 
-			public override string ToString()
-			{
-				return SmallNumber.ToString();
-			}
+			public override string ToString() => SmallNumber.ToString();
 		}
 	}
 }

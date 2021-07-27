@@ -42,6 +42,8 @@ namespace Atlas.Tabs
 			}
 		}
 
+		public override string ToString() => Name;
+
 		public ListField(object obj, FieldInfo fieldInfo) : 
 			base(obj, fieldInfo)
 		{
@@ -53,8 +55,6 @@ namespace Atlas.Tabs
 			if (attribute != null)
 				Name = attribute.Name;
 		}
-
-		public override string ToString() => Name;
 
 		public static new ItemCollection<ListField> Create(object obj)
 		{

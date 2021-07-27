@@ -13,7 +13,8 @@ namespace Atlas.Tabs
 		public LoadObjectAsync LoadAction;
 		public MethodInfo MethodInfo;
 
-		private bool CacheEnabled { get; set; }
+		public bool CacheEnabled { get; set; }
+
 		private bool _valueCached;
 		private object _valueObject = null;
 

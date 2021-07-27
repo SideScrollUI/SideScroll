@@ -11,12 +11,12 @@ namespace Atlas.Tabs.Test.Actions
 
 		public class Instance : TabInstance, ITabAsync
 		{
-			private const int delayMs = 2000;
+			private const int DelayMs = 2000;
 
 			public async Task LoadAsync(Call call, TabModel model)
 			{
-				call.Log.Add("Sleeping", new Tag("Milliseconds", delayMs));
-				await Task.Delay(delayMs);
+				call.Log.Add("Sleeping", new Tag("Milliseconds", DelayMs));
+				await Task.Delay(DelayMs);
 				model.AddObject("Finished");
 
 				model.Items = new List<int>()

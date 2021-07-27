@@ -123,6 +123,7 @@ namespace Atlas.Tabs
 			ListGroup listGroup = DefaultListGroup;
 			if (listGroup.Name == DefaultGroupName)
 				listGroup.Name = listSeries.Name ?? listGroup.Name;
+
 			// Will add to Default Group if no Unit specified, and add the Default Group if needed
 			ListGroups.Add(listGroup.Name, listGroup);
 			listGroup.Series.Add(listSeries);

@@ -37,6 +37,7 @@ namespace Atlas.Tabs.Test
 			private void Add(Call call)
 			{
 				SaveData(dataKey, paramTestItem);
+
 				ParamTestItem clone = paramTestItem.DeepClone(call);
 				var result = new ParamTestResult()
 				{
@@ -48,6 +49,7 @@ namespace Atlas.Tabs.Test
 			private async Task LongTaskAsync(Call call)
 			{
 				call.TaskInstance.ProgressMax = 10;
+
 				for (int i = 0; i < 10; i++)
 				{
 					await Task.Delay(1000);

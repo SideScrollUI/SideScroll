@@ -11,16 +11,16 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			private ItemCollection<SampleItem> sampleItems;
+			private ItemCollection<SampleItem> _sampleItems;
 
 			public override void Load(Call call, TabModel model)
 			{
-				sampleItems = new ItemCollection<SampleItem>();
+				_sampleItems = new ItemCollection<SampleItem>();
 				AddItems(5);
 
 				model.Items = new ItemCollection<ListItem>("Items")
 				{
-					new ListItem("Sample Items", sampleItems),
+					new ListItem("Sample Items", _sampleItems),
 					new ListItem("Collections", new TabTestGridCollectionSize()),
 					new ListItem("Recursive Copy", new TabSample()),
 				};
@@ -54,7 +54,7 @@ DataGrids
 			private void AddItems(int count)
 			{
 				for (int i = 0; i < count; i++)
-					sampleItems.Add(new SampleItem(sampleItems.Count, "Item " + sampleItems.Count));
+					_sampleItems.Add(new SampleItem(_sampleItems.Count, "Item " + _sampleItems.Count));
 			}
 		}
 	}

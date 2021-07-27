@@ -23,10 +23,13 @@ namespace Atlas.Tabs.Test.DataGrid
 						TimeSpan = TimeSpan.FromHours(i),
 						Bool = (i % 2 == 1),
 					};
+
 					if (i % 2 == 0)
 						testItem.Object = (i % 4 == 0);
+
 					for (int j = 0; j < i; j++)
 						testItem.IntegerList.Add(j);
+
 					testItem.LongString = testItem.LongString + i; // make as a unique string
 					items.Add(testItem);
 				}

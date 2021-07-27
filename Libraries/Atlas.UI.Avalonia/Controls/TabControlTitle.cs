@@ -16,6 +16,16 @@ namespace Atlas.UI.Avalonia.Controls
 		public TextBlock TextBlock;
 		//private CheckBox checkBox;
 
+		public string Text
+		{
+			get => Label;
+			set
+			{
+				Label = value;
+				TextBlock.Text = value;
+			}
+		}
+
 		public TabControlTitle(TabInstance tabInstance, string name = null)
 		{
 			TabInstance = tabInstance;
@@ -23,13 +33,6 @@ namespace Atlas.UI.Avalonia.Controls
 			Label = new StringReader(Label).ReadLine();
 
 			InitializeControl();
-		}
-
-		protected override Size MeasureCore(Size availableSize)
-		{
-			Size measured = base.MeasureCore(availableSize);
-			Size maxSize = new Size(Math.Min(50, measured.Width), measured.Height);
-			return maxSize;
 		}
 
 		public void InitializeControl()
@@ -112,24 +115,18 @@ namespace Atlas.UI.Avalonia.Controls
 			Content = null;
 		}
 
+		protected override Size MeasureCore(Size availableSize)
+		{
+			Size measured = base.MeasureCore(availableSize);
+			Size maxSize = new Size(Math.Min(50, measured.Width), measured.Height);
+			return maxSize;
+		}
+
 		/*private void CheckBox_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			tabInstance.tabViewSettings.NotesVisible = (bool)checkBox.IsChecked;
 			tabInstance.SaveTabSettings();
 			tabInstance.Reload();
 		}*/
-
-		public string Text
-		{
-			get
-			{
-				return Label;
-			}
-			set
-			{
-				Label = value;
-				TextBlock.Text = value;
-			}
-		}
 	}
 }

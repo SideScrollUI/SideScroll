@@ -9,13 +9,13 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			private ItemCollection<TestItem> items;
+			private ItemCollection<TestItem> _items;
 
 			public override void Load(Call call, TabModel model)
 			{
-				items = new ItemCollection<TestItem>();
+				_items = new ItemCollection<TestItem>();
 				AddEntries(50);
-				model.Items = items;
+				model.Items = _items;
 
 				model.Actions =  new ItemCollection<TaskCreator>()
 				{
@@ -30,12 +30,12 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 				for (int i = 0; i < count; i++)
 				{
-					int number = items.Count;
+					int number = _items.Count;
 					var testItem = new TestItem()
 					{
 						Index = number,
 					};
-					items.Add(testItem);
+					_items.Add(testItem);
 				}
 			}
 		}

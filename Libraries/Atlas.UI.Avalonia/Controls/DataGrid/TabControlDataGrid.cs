@@ -92,6 +92,8 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
+		public override string ToString() => TabModel.Name;
+
 		private TabControlDataGrid()
 		{
 			Initialize();
@@ -118,8 +120,6 @@ namespace Atlas.UI.Avalonia.Controls
 			// DataGridRow event triggers before DataGridCell :(
 			PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => DataGridRow_PointerPressed(x, e), RoutingStrategies.Tunnel, true);
 		}
-
-		public override string ToString() => TabModel.Name;
 
 		// this breaks when content is too wide for Tab
 		// real DesiredSize doesn't work because of HorizontalAlign = Stretch?

@@ -527,6 +527,7 @@ namespace Atlas.Tabs
 		{
 			IsLoaded = false;
 			LoadCalled = false;
+
 			if (OnReload != null)
 			{
 				if (this is ITabAsync tabAsync)
@@ -541,6 +542,7 @@ namespace Atlas.Tabs
 		public void Refresh()
 		{
 			IsLoaded = false;
+
 			if (OnRefresh != null)
 			{
 				var onRefresh = OnRefresh; // create temporary copy since this gets delayed

@@ -8,17 +8,13 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			private ItemCollection<TestWideItem> items;
+			private ItemCollection<TestWideItem> _items;
 
 			public override void Load(Call call, TabModel model)
 			{
-				items = new ItemCollection<TestWideItem>();
+				_items = new ItemCollection<TestWideItem>();
 				AddEntries();
-				model.Items = items;
-
-				/*ItemCollection<TaskCreator> actions = new ItemCollection<TaskCreator>();
-				//actions.Add(new TaskAction("Add Entries", AddEntries));
-				tabModel.Actions = actions;*/
+				model.Items = _items;
 			}
 
 			private void AddEntries()
@@ -30,7 +26,7 @@ namespace Atlas.Tabs.Test.DataGrid
 					testItem.BigNumber += i;
 					if (i % 3 == 0)
 						testItem.LongText1 += testItem.LongText0;
-					items.Add(testItem);
+					_items.Add(testItem);
 				}
 			}
 		}
@@ -39,6 +35,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		{
 			public int SmallNumber { get; set; } = 0;
 			public long BigNumber { get; set; } = 1234567890123456789;
+
 			public string LongText0 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 			[MaxWidth(200), WordWrap]
 			public string LongText1 { get; set; } = "abcdefghijklmnopqrz";
@@ -51,10 +48,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			public string LongText8 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 			public string LongText9 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 
-			public override string ToString()
-			{
-				return SmallNumber.ToString();
-			}
+			public override string ToString() => SmallNumber.ToString();
 		}
 	}
 }
