@@ -46,6 +46,7 @@ namespace Atlas.UI.Avalonia
 
 		public static SolidColorBrush ToolbarTextBackground => Get("ToolbarTextBackgroundBrush");
 		public static SolidColorBrush ToolbarTextForeground => Get("ToolbarTextForegroundBrush");
+		public static SolidColorBrush ToolbarCaret => Get("ToolbarCaretBrush");
 
 		public static SolidColorBrush ToolbarBorderMid => Get("ToolbarBorderMidBrush");
 		public static SolidColorBrush ToolbarBorderHigh => Get("ToolbarBorderHighBrush");

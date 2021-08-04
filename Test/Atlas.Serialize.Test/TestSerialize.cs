@@ -21,28 +21,6 @@ namespace Atlas.Serialize.Test
 			_serializer = new SerializerMemoryAtlas();
 		}
 
-		[Test, Description("Serialize Nullable int")]
-		public void SerializeNullableInt()
-		{
-			int? input = 1;
-
-			_serializer.Save(Call, input);
-			int? output = _serializer.Load<int?>(Call);
-
-			Assert.AreEqual(output, input);
-		}
-
-		[Test, Description("Serialize Nullable Primitive")]
-		public void SerializeNullablePrimitive()
-		{
-			int? input = 5;
-
-			_serializer.Save(Call, input);
-			int? output = _serializer.Load<int?>(Call);
-
-			Assert.AreEqual(output, input);
-		}
-
 		[Test, Description("Serialize int")]
 		public void SerializeInt()
 		{
@@ -52,6 +30,17 @@ namespace Atlas.Serialize.Test
 			int output = _serializer.Load<int>(Call);
 
 			Assert.AreEqual(input, output);
+		}
+
+		[Test, Description("Serialize Nullable int")]
+		public void SerializeNullableInt()
+		{
+			int? input = 1;
+
+			_serializer.Save(Call, input);
+			int? output = _serializer.Load<int?>(Call);
+
+			Assert.AreEqual(output, input);
 		}
 
 		[Test, Description("Serialize Enum")]

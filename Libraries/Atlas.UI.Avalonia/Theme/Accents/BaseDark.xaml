@@ -98,6 +98,7 @@
 
         <SolidColorBrush x:Key="ToolbarTextBackgroundBrush">#453e77</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarTextForegroundBrush">#d0d0e8</SolidColorBrush>
+        <SolidColorBrush x:Key="ToolbarCaretBrush">#b0b0d8</SolidColorBrush>
         
         <SolidColorBrush x:Key="ToolbarBorderMidBrush">#1e1e1e</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarBorderHighBrush">#655ea7</SolidColorBrush>

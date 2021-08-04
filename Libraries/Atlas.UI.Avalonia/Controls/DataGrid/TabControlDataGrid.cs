@@ -40,7 +40,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public bool AutoGenerateColumns = true;
 
 		public DataGrid DataGrid;
-		public TextBox TextBoxSearch;
+		public TabControlSearch SearchControl;
 
 		//private HashSet<int> pinnedItems = new HashSet<int>(); // starred items?
 		public DataGridCollectionView CollectionView;
@@ -61,7 +61,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public AutoSelectType AutoSelect { get; set; } = AutoSelectType.FirstSavedOrNew;
 
-		private Filter filter;
+		private Filter _filter;
 
 		public IList Items
 		{
@@ -175,19 +175,23 @@ namespace Atlas.UI.Avalonia.Controls
 
 			Focusable = true;
 
+			AddSearch();
 			AddDataGrid();
 
-			TextBoxSearch = new TextBox()
+			LoadSettings();
+		}
+
+		private void AddSearch()
+		{
+			SearchControl = new TabControlSearch()
 			{
 				IsVisible = false,
 			};
-			//textBoxSearch.TextInput += TextBoxSearch_TextInput; // doesn't work
-			TextBoxSearch.KeyDown += TextBoxSearch_KeyDown;
-			TextBoxSearch.KeyUp += TextBoxSearch_KeyUp;
 
-			LoadSettings();
+			SearchControl.KeyDown += SearchControl_KeyDown;
+			SearchControl.KeyUp += SearchControl_KeyUp;
 
-			Children.Add(TextBoxSearch);
+			Children.Add(SearchControl);
 		}
 
 		private void AddDataGrid()
@@ -360,7 +364,7 @@ namespace Atlas.UI.Avalonia.Controls
 				if ((AutoSelectNew || 
 					TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved || 
 					TabModel.AutoSelect == AutoSelectType.FirstSavedOrNew)
-					&& (TextBoxSearch.Text == null || TextBoxSearch.Text.Length == 0))// && finishedLoading)
+					&& (SearchControl.Text == null || SearchControl.Text.Length == 0))// && finishedLoading)
 				{
 					_selectItemEnabled = true;
 					object item = e.NewItems[0];
@@ -509,20 +513,29 @@ namespace Atlas.UI.Avalonia.Controls
 			dataGrid.SelectedItem = null;
 		}
 
-		private void TextBoxSearch_KeyDown(object sender, KeyEventArgs e)
+		private void ClearSearch()
+		{
+			if (!TabModel.ShowSearch)
+				SearchControl.IsVisible = false;
+
+			SearchControl.Text = "";
+			FilterText = "";
+			Focus();
+
+			TabInstance.SaveTabSettings();
+		}
+
+		private void SearchControl_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Escape)
 			{
-				TextBoxSearch.IsVisible = false;
-				TextBoxSearch.Text = "";
-				FilterText = "";
-				TabInstance.SaveTabSettings();
+				ClearSearch();
 			}
 		}
 
-		private void TextBoxSearch_KeyUp(object sender, KeyEventArgs e)
+		private void SearchControl_KeyUp(object sender, KeyEventArgs e)
 		{
-			FilterText = TextBoxSearch.Text;
+			FilterText = SearchControl.Text;
 			SelectDefaultItems();
 			if (_disableSaving == 0)
 				TabInstance.SaveTabSettings();
@@ -643,20 +656,23 @@ namespace Atlas.UI.Avalonia.Controls
 			if (TabInstance.Project.UserSettings.AutoLoad)
 			{
 				SortSavedColumn();
-				if (TabDataSettings.Filter != null && TabDataSettings.Filter.Length > 0)
+
+				if (TabModel.ShowSearch || (TabDataSettings.Filter != null && TabDataSettings.Filter.Length > 0))
 				{
-					TextBoxSearch.Text = TabDataSettings.Filter;
-					FilterText = TextBoxSearch.Text; // change to databinding?
-					TextBoxSearch.IsVisible = true;
+					SearchControl.Text = TabDataSettings.Filter;
+					FilterText = SearchControl.Text; // change to databinding?
+					SearchControl.IsVisible = true;
 				}
 				else
 				{
-					TextBoxSearch.Text = "";
+					SearchControl.Text = "";
 					//FilterText = textBoxSearch.Text;
-					TextBoxSearch.IsVisible = false;
+					SearchControl.IsVisible = false;
 				}
+
 				if (!SelectSavedItems()) // sorting must happen before this
 					SelectDefaultItems();
+
 				//UpdateSelection(); // datagrid not fully loaded yet
 			}
 			OnSelectionChanged?.Invoke(this, null);
@@ -1053,15 +1069,15 @@ namespace Atlas.UI.Avalonia.Controls
 			set
 			{
 				TabDataSettings.Filter = value;
-				filter = new Filter(value);
+				_filter = new Filter(value);
 
-				if (filter.FilterExpressions.Count > 0)
+				if (_filter.FilterExpressions.Count > 0)
 				{
-					if (filter.Depth > 0)
+					if (_filter.Depth > 0)
 					{
 						// create a new collection because this one might have multiple lists
 						TabModel tabModel = TabModel.Create(this.TabModel.Name, List);
-						TabBookmark bookmarkNode = tabModel.FindMatches(filter, filter.Depth);
+						TabBookmark bookmarkNode = tabModel.FindMatches(_filter, _filter.Depth);
 						TabInstance.FilterBookmarkNode = bookmarkNode;
 						CollectionView.Filter = FilterPredicate;
 						TabInstance.SelectBookmark(bookmarkNode);
@@ -1087,7 +1103,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			else
 			{
-				return filter.Matches(obj, _columnProperties);
+				return _filter.Matches(obj, _columnProperties);
 			}
 		}
 
@@ -1143,11 +1159,11 @@ namespace Atlas.UI.Avalonia.Controls
 				DataGrid.ContextMenu = null;
 			}
 
-			if (TextBoxSearch != null)
+			if (SearchControl != null)
 			{
-				TextBoxSearch.KeyDown -= TextBoxSearch_KeyDown;
-				TextBoxSearch.KeyUp -= TextBoxSearch_KeyUp;
-				TextBoxSearch = null;
+				SearchControl.KeyDown -= SearchControl_KeyDown;
+				SearchControl.KeyUp -= SearchControl_KeyUp;
+				SearchControl = null;
 			}
 
 			if (List is INotifyCollectionChanged iNotifyCollectionChanged) // as AutoLoad
@@ -1167,9 +1183,9 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (e.Key == Key.F)
 				{
-					TextBoxSearch.IsVisible = !TextBoxSearch.IsVisible;
-					if (TextBoxSearch.IsVisible)
-						TextBoxSearch.Focus();
+					SearchControl.IsVisible = !SearchControl.IsVisible;
+					if (SearchControl.IsVisible)
+						SearchControl.Focus();
 					return;
 				}
 
@@ -1183,10 +1199,7 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 			else if (e.Key == Key.Escape)
 			{
-				TextBoxSearch.IsVisible = false;
-				TextBoxSearch.Text = "";
-				FilterText = "";
-				TabInstance.SaveTabSettings();
+				ClearSearch();
 			}
 		}
 

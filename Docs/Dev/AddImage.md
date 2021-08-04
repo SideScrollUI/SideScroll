@@ -1,5 +1,8 @@
 # Adding new Image Resources
 
+- Location
+  - [Icons](../../Images/Libraries/Atlas.Resources/Icons/)
+
 * Find new icon:
   - FlatIcon
     - https://www.flaticon.com/

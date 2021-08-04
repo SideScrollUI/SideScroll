@@ -57,6 +57,7 @@ namespace Atlas.Tabs
 
 		public bool Editing { get; set; }
 		public bool Skippable { get; set; }
+		public bool ShowSearch { get; set; } // Show search filter above DataGrids
 
 		public int MinDesiredWidth { get; set; } = 0;
 		public int MaxDesiredWidth { get; set; } = 1500;

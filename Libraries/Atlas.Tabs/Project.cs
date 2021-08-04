@@ -73,7 +73,10 @@ namespace Atlas.Tabs
 		{
 			UserSettings userSettings = UserSettings.DeepClone();
 			userSettings.BookmarkPath = bookmark.Address;
-			var project = new Project(ProjectSettings, userSettings);
+			var project = new Project(ProjectSettings, userSettings)
+			{
+				Linker = Linker,
+			};
 			//project.Import(bookmark);
 			bookmark.TabBookmark.Import(project);
 			return project;

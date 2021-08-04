@@ -609,7 +609,7 @@ namespace Atlas.Tabs
 				if (type == null)
 					return false;
 
-				return TypeSchema.HasEmptyConstructor(type);
+				return TypeSchema.HasEmptyConstructor(type) && type.GetCustomAttribute<PublicDataAttribute>() != null;
 			}
 		}
 

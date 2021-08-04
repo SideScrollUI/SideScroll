@@ -130,10 +130,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public string Text
 		{
-			get
-			{
-				return TextEditor.Text;
-			}
+			get => TextEditor.Text;
 			set
 			{
 				if (value is string s && s.StartsWith("{") && !s.Contains("\n"))

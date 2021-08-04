@@ -46,12 +46,12 @@ namespace Atlas.Tabs
 		// +3 "ABC" | 123
 		public Filter(string filterText)
 		{
-			FilterText = filterText;
+			FilterText = filterText ?? "";
 
 			string pattern = @"^(?<Depth>\+\d+ )?(?<Filters>.+)$";
 			Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
 
-			Match match = regex.Match(filterText);
+			Match match = regex.Match(FilterText);
 			if (!match.Success)
 				return;
 
@@ -128,7 +128,7 @@ namespace Atlas.Tabs
 			}
 
 			object innerValue = obj.GetInnerValue();
-			if (innerValue != obj)
+			if (innerValue != null && innerValue != obj)
 			{
 				Type innerType = innerValue.GetType();
 				if (innerValue is IList list)
