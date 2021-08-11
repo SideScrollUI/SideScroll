@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Timers;
 
 namespace Atlas.Core
 {
 	public class LogTimer : Log, IDisposable
 	{
 		private Stopwatch _stopwatch = new Stopwatch();
-		private System.Timers.Timer _timer = new System.Timers.Timer();
+		private Timer _timer = new Timer();
 
 		public LogTimer()
 		{
 		}
 
-		public LogTimer(string text, LogSettings logSettings) :
+		public LogTimer(string text, LogSettings logSettings, Tag[] tags) :
 			base(text, logSettings)
 		{
-			Add(text);
+			Tags = tags;
+
+			Add(text, tags);
 			_stopwatch.Start();
 
 			_timer.Interval = 1000.0;

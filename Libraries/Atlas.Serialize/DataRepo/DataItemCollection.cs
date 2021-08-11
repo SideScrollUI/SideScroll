@@ -36,6 +36,12 @@ namespace Atlas.Serialize
 			return ToList().OrderBy(i => propertyInfo.GetValue(i.Value));
 		}
 
+		public IEnumerable<DataItem<T>> OrderByDescending(string memberName)
+		{
+			PropertyInfo propertyInfo = typeof(T).GetProperty(memberName);
+			return ToList().OrderByDescending(i => propertyInfo.GetValue(i.Value));
+		}
+
 		public void Add(string key, T value)
 		{
 			Add(new DataItem<T>(key, value));

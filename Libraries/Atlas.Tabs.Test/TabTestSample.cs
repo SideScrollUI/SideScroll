@@ -5,8 +5,11 @@ using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test
 {
+	[PublicData]
 	public class TabSample : ITab
 	{
+		public override string ToString() => "Sample";
+
 		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance

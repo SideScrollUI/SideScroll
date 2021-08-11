@@ -20,7 +20,7 @@ namespace Atlas.UI.Avalonia.View
 {
 	public class TabView : Grid, IDisposable
 	{
-		private const string TempPanelId = "TempPanelID";
+		private const string FillerPanelId = "FillerPanelId";
 		private const int MinDesiredSplitterDistance = 50;
 
 		// Maybe this control should own it's own settings?
@@ -108,6 +108,7 @@ namespace Atlas.UI.Avalonia.View
 			catch (Exception)
 			{
 			}
+
 			if (!_childControlsFinishedLoading)
 			{
 				AddDispatchLoader();
@@ -138,7 +139,6 @@ namespace Atlas.UI.Avalonia.View
 					RowDefinitions = new RowDefinitions("*"), // Single Row
 					HorizontalAlignment = HorizontalAlignment.Stretch,
 					VerticalAlignment = VerticalAlignment.Stretch,
-					//Background = new SolidColorBrush(Theme.BackgroundColor),
 				};
 			}
 			else
@@ -197,7 +197,6 @@ namespace Atlas.UI.Avalonia.View
 			};
 			//if (TabViewSettings.SplitterDistance != null)
 			//	tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
-			//Grid.SetColumn(tabParentControls, 0);
 			_containerGrid.Children.Add(_tabParentControls);
 			UpdateSplitterDistance();
 
@@ -230,33 +229,6 @@ namespace Atlas.UI.Avalonia.View
 			_parentChildGridSplitter.DragStarted += GridSplitter_DragStarted;
 			_parentChildGridSplitter.DragCompleted += GridSplitter_DragCompleted; // bug, this is firing when double clicking splitter
 			_parentChildGridSplitter.DoubleTapped += GridSplitter_DoubleTapped;
-
-			//AddLinkButton();
-		}
-
-		private void AddLinkButton()
-		{
-			// todo: add more checks for validity
-			if (!Instance.IsLinkable)
-				return;
-
-			var linkButton = new TabControlButton
-			{
-				VerticalAlignment = VerticalAlignment.Top,
-				Height = 26,
-				Content = "~",
-				Padding = new Thickness(1),
-				[Grid.ColumnProperty] = 1,
-			};
-			linkButton.Click += LinkButton_Click;
-			_containerGrid.Children.Add(linkButton);
-		}
-
-		private async void LinkButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			Bookmark bookmark = Instance.CreateBookmark();
-			string uri = Instance.Project.Linker.GetLinkUri(new Call(), bookmark);
-			await ClipBoardUtils.SetTextAsync(uri);
 		}
 
 		private void AddChildControls()
@@ -264,7 +236,6 @@ namespace Atlas.UI.Avalonia.View
 			_tabChildControls = new TabControlSplitContainer()
 			{
 				ColumnDefinitions = new ColumnDefinitions("Auto"),
-				//MinWidth = 100,
 			};
 			Grid.SetColumn(_tabChildControls, 2);
 			_containerGrid.Children.Add(_tabChildControls);
@@ -310,12 +281,6 @@ namespace Atlas.UI.Avalonia.View
 			TabViewSettings.SplitterDistance = width;
 			_tabParentControls.Width = width;
 
-			// remove these lines? do they do anything?
-			InvalidateMeasure();
-			InvalidateArrange();
-			_tabParentControls.InvalidateArrange();
-			_tabParentControls.InvalidateMeasure();
-
 			//if (TabViewSettings.SplitterDistance != null)
 			//	containerGrid.ColumnDefinitions[0].Width = new GridLength((double)containerGrid.ColumnDefinitions[1].);
 		}
@@ -333,13 +298,15 @@ namespace Atlas.UI.Avalonia.View
 
 			InvalidateMeasure();
 			InvalidateArrange();
+
 			//TabViewSettings.SplitterDistance = (int)Math.Ceiling(e.Vector.Y); // backwards
 			double width = (int)_containerGrid.ColumnDefinitions[0].ActualWidth;
 			TabViewSettings.SplitterDistance = width;
 			_tabParentControls.Width = width;
 			_containerGrid.ColumnDefinitions[0].Width = new GridLength(width);
+
 			//UpdateSplitterDistance();
-			SaveSplitterDistance();
+			Instance.SaveTabSettings();
 			UpdateSplitterFiller();
 			_tabParentControls.InvalidateMeasure();
 		}
@@ -374,17 +341,8 @@ namespace Atlas.UI.Avalonia.View
 			containerGrid.Measure(this.Bounds.Size);*/
 
 			//containerGrid.ColumnDefinitions[0].Width = new GridLength(tabParentControls.DesiredSize.Width); // DesiredSize too large, can we try not setting grid width?
-			SaveSplitterDistance();
-			UpdateSplitterFiller();
-		}
-
-		private void SaveSplitterDistance()
-		{
-			/*if (gridColumnLists.Width.IsAbsolute)
-				tabConfiguration.SplitterDistance = (int)Math.Ceiling(gridColumnLists.Width.Value);
-			else
-				tabConfiguration.SplitterDistance = null;*/
 			Instance.SaveTabSettings();
+			UpdateSplitterFiller();
 		}
 
 		public void UpdateSplitterDistance()
@@ -404,8 +362,6 @@ namespace Atlas.UI.Avalonia.View
 			}
 		}
 
-		public bool IsLoaded { get; set; }
-
 		public void ReloadControls()
 		{
 			ClearControls(false);
@@ -417,8 +373,6 @@ namespace Atlas.UI.Avalonia.View
 			if (TabTasks == null)
 				AddTasks();
 			AddData();
-
-			IsLoaded = true;
 
 			UpdateChildControls();
 		}
@@ -505,7 +459,6 @@ namespace Atlas.UI.Avalonia.View
 			{
 				var tabData = new TabControlDataGrid(Instance, iList, true, TabViewSettings.GetData(index));
 				tabData.OnSelectionChanged += ParentListSelectionChanged;
-				bool addSplitter = (TabDatas.Count > 0);
 				_tabParentControls.AddControl(tabData, true, SeparatorType.Splitter);
 				TabDatas.Add(tabData);
 				index++;
@@ -515,7 +468,6 @@ namespace Atlas.UI.Avalonia.View
 		// should we check for a Grid stretch instead of passing that parameter?
 		protected void AddControl(Control control, bool fill)
 		{
-			//tabData.OnSelectionChanged += ParentListSelectionChanged;
 			_tabParentControls.AddControl(control, fill, SeparatorType.Splitter);
 		}
 
@@ -545,7 +497,6 @@ namespace Atlas.UI.Avalonia.View
 				AcceptsReturn = true,
 			};
 			AvaloniaUtils.AddContextMenu(textBox);
-			//control.OnSelectionChanged += ParentListSelectionChanged;
 			_tabParentControls.AddControl(textBox, false, SeparatorType.Spacer);
 		}
 
@@ -585,9 +536,13 @@ namespace Atlas.UI.Avalonia.View
 		public void LoadSettings()
 		{
 			if (Instance.TabBookmark != null && Instance.TabBookmark.ViewSettings != null)
+			{
 				Instance.TabViewSettings = Instance.TabBookmark.ViewSettings;
+			}
 			else if (Instance.Project.UserSettings.AutoLoad)
+			{
 				LoadDefaultTabSettings();
+			}
 		}
 
 		private void LoadDefaultTabSettings()
@@ -695,44 +650,6 @@ namespace Atlas.UI.Avalonia.View
 			}
 		}
 
-		// The GridSplitter doesn't work well if there's not a control on each side of the splitter, so add a filler panel
-		/*private double GetControlOffset(IControl control)
-		{
-			if (cont
-		}*/
-		/*public class FillerPanel : Panel
-		{
-			public FillerPanel()
-			{
-				HorizontalAlignment = HorizontalAlignment.Stretch;
-				VerticalAlignment = VerticalAlignment.Stretch;
-				Background = new SolidColorBrush(Colors.Azure);
-			}
-
-			protected override Size MeasureCore(Size availableSize)
-			{
-				Size size = base.MeasureCore(availableSize);
-				return size;
-			}
-
-			protected override Size MeasureOverride(Size availableSize)
-			{
-				Size size = base.MeasureOverride(availableSize);
-				return size;
-			}
-
-			protected override void ArrangeCore(Rect finalRect)
-			{
-				base.ArrangeCore(finalRect);
-			}
-
-			protected override Size ArrangeOverride(Size finalSize)
-			{
-				Size size = base.ArrangeOverride(finalSize);
-				return size;
-			}
-		}*/
-
 		private double GetFillerPanelWidth()
 		{
 			IControl control = Parent;
@@ -796,7 +713,7 @@ namespace Atlas.UI.Avalonia.View
 					Width = GetFillerPanelWidth(), // should update this after moving grid splitter
 				};
 				orderedChildControls.Add(_fillerPanel);
-				newChildControls[TempPanelId] = _fillerPanel;
+				newChildControls[FillerPanelId] = _fillerPanel;
 			}
 			_tabChildControls.SetControls(newChildControls, orderedChildControls);
 			UpdateSelectedTabInstances();
@@ -822,11 +739,13 @@ namespace Atlas.UI.Avalonia.View
 			{
 				CreateChildControls(tabControl.SelectedItems, oldChildControls, newChildControls, orderedChildControls, tabControl);
 			}
+
 			if (TabActions != null)
 			{
 				// show action help?
 				//CreateChildControls(tabActions.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 			}
+
 			if (TabTasks != null && TabTasks.IsVisible)
 			{
 				CreateChildControls(TabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
@@ -932,7 +851,6 @@ namespace Atlas.UI.Avalonia.View
 
 		private void ClearControls(bool dispose)
 		{
-			IsLoaded = false;
 			RemoveListeners();
 
 			ClearDispatchLoader();

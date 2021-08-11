@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Atlas.Serialize
@@ -60,7 +61,7 @@ namespace Atlas.Serialize
 			public override string ToString() => TypeRepo.ToString() + " - " + Index;
 		}
 
-		public Queue<LoadItem> LoadQueue = new Queue<LoadItem>();
+		private Queue<LoadItem> _loadQueue = new Queue<LoadItem>();
 
 		public Serializer()
 		{
@@ -98,9 +99,9 @@ namespace Atlas.Serialize
 
 		public void ProcessLoadQueue()
 		{
-			while (LoadQueue.Count > 0)
+			while (_loadQueue.Count > 0)
 			{
-				LoadItem loadItem = LoadQueue.Dequeue();
+				LoadItem loadItem = _loadQueue.Dequeue();
 				loadItem.TypeRepo.LoadObjectData(loadItem.Index);
 			}
 		}
@@ -132,14 +133,15 @@ namespace Atlas.Serialize
 			for (int i = 0; i < TypeSchemas.Count; i++)
 			{
 				TypeSchema typeSchema = TypeSchemas[i];
-				if (PublicOnly && !typeSchema.IsPublic)
+				if (PublicOnly && !typeSchema.IsPublicOnly)
 					continue;
 
 				foreach (FieldSchema fieldSchema in typeSchema.FieldSchemas)
 				{
 					Type type = fieldSchema.NonNullableType;
-					fieldSchema.TypeSchema = GetOrCreateRepo(log, type).TypeSchema;
-					fieldSchema.TypeIndex = fieldSchema.TypeSchema.TypeIndex;
+					TypeRepo typeRepo = GetOrCreateRepo(log, type);
+					fieldSchema.FieldTypeSchema = GetOrCreateRepo(log, type).TypeSchema;
+					fieldSchema.TypeIndex = fieldSchema.FieldTypeSchema.TypeIndex;
 				}
 
 				foreach (PropertySchema propertySchema in typeSchema.PropertySchemas)
@@ -374,10 +376,12 @@ namespace Atlas.Serialize
 					using (BinaryWriter binaryWriter = new BinaryWriter(typeRepoWriter.memoryStream, System.Text.Encoding.Default, true))
 						typeRepoWriter.typeRepo.SaveObjects(logSerialize, binaryWriter);
 				});*/
-				foreach (var typeRepoWriter in writers)
+				foreach (TypeRepoWriter typeRepoWriter in writers)
 				{
 					using (var binaryWriter = new BinaryWriter(typeRepoWriter.MemoryStream, System.Text.Encoding.Default, true))
+					{
 						typeRepoWriter.TypeRepo.SaveObjects(logSerialize, binaryWriter);
+					}
 				}
 			}
 
@@ -650,7 +654,7 @@ namespace Atlas.Serialize
 				Index = objectIndex
 			};
 
-			LoadQueue.Enqueue(loadItem);
+			_loadQueue.Enqueue(loadItem);
 		}
 
 		public void Dispose()

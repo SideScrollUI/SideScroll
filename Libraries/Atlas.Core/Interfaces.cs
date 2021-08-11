@@ -10,8 +10,8 @@ namespace Atlas.Core
 	}
 
 	// Called after object loaded when deserializing
-	public interface IInitializer
+	public interface IReload
 	{
-		void Initialize();
+		void Reload();
 	}
 }

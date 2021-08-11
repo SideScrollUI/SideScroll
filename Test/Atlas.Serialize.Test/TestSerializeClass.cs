@@ -178,19 +178,14 @@ namespace Atlas.Serialize.Test
 			}
 		}
 
-		public class DerivedClassWithConstructor : NoConstructorBaseClass, IInitializer
+		public class DerivedClassWithConstructor : NoConstructorBaseClass
 		{
 			public DerivedClassWithConstructor() : base(0)
 			{
 			}
+
 			public DerivedClassWithConstructor(int a) : base(a)
 			{
-				Initialize();
-			}
-
-			public void Initialize()
-			{
-				B = A;
 			}
 		}
 

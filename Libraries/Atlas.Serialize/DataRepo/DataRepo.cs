@@ -26,14 +26,28 @@ namespace Atlas.Serialize
 			Debug.Assert(repoPath != null);
 		}
 
-		public DataRepoInstance<T> Open<T>(Call call, string groupId)
+		public DataRepoInstance<T> Open<T>(string groupId)
 		{
 			return new DataRepoInstance<T>(this, groupId);
 		}
 
-		public DataRepoView<T> OpenView<T>(Call call, string groupId)
+		public DataRepoView<T> OpenView<T>(string groupId)
 		{
 			return new DataRepoView<T>(this, groupId);
+		}
+
+		public DataRepoView<T> LoadView<T>(Call call, string groupId)
+		{
+			var view = new DataRepoView<T>(this, groupId);
+			view.LoadAll(call);
+			return view;
+		}
+
+		public DataRepoView<T> LoadView<T>(Call call, string groupId, string orderByMemberName)
+		{
+			var view = new DataRepoView<T>(this, groupId);
+			view.LoadAllOrderBy(call, orderByMemberName);
+			return view;
 		}
 
 		public FileInfo GetFileInfo(Type type, string groupId, string key)

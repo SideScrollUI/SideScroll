@@ -5,25 +5,35 @@ using System.Collections.Generic;
 
 namespace Atlas.Tabs
 {
+	public enum BookmarkType
+	{
+		Default = 0,
+		Full = 1, // Full path from Start
+		Leaf = 2, // Can replace Full if a single leaf is found
+		Tab = 3, // Clicking the Tab Link
+	};
+
 	[PublicData]
 	public class Bookmark
 	{
 		[Name("Bookmark")]
 		public string Name { get; set; }
 		public string Changed { get; set; } // what was just selected, used for naming, find better default name
-		public Type Type { get; set; }
+		public Type Type { get; set; } // Must be ITab
 		public string Address => TabBookmark.Address;
+		public string Path => (Name != null ? (Name + ":\n") : "") + Address;
 		public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
 		public TabBookmark TabBookmark { get; set; } = new TabBookmark();
 		public bool Imported { get; set; }
+		public BookmarkType BookmarkType { get; set; }
+
+		public override string ToString() => Path;
 
 		public Bookmark()
 		{
 			TabBookmark.Bookmark = this;
 			TabBookmark.IsRoot = true;
 		}
-
-		public override string ToString() => Address;
 
 		public void MergeBookmarks(List<Bookmark> bookmarks)
 		{
@@ -33,7 +43,9 @@ namespace Atlas.Tabs
 			node.MergeNodes(nodes);*/
 
 			foreach (Bookmark bookmark in bookmarks)
+			{
 				TabBookmark.MergeNode(bookmark.TabBookmark);
+			}
 		}
 
 		public string ToBase64String(Call call, bool publicOnly)
@@ -54,33 +66,12 @@ namespace Atlas.Tabs
 
 		public static Bookmark Create(params string[] labels)
 		{
-			var bookmark = new Bookmark();
+			var bookmark = new Bookmark()
+			{
+				Imported = true,
+			};
 			bookmark.TabBookmark = TabBookmark.Create(labels);
-			bookmark.Imported = true;
 			return bookmark;
-		}
-	}
-
-	// Display Class
-	public class ViewBookmark
-	{
-		/*public event EventHandler<EventArgs> OnDelete;
-
-		[ButtonColumn("-")]
-		public void Delete()
-		{
-
-		}*/
-
-		[Name("Bookmark")]
-		public string Name => Bookmark.Name;
-
-		[HiddenColumn]
-		public Bookmark Bookmark { get; set; }
-
-		public ViewBookmark(Bookmark bookmark)
-		{
-			Bookmark = bookmark;
 		}
 	}
 }

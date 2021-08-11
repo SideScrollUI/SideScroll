@@ -13,7 +13,7 @@ namespace Atlas.Serialize
 		public int TypeIndex = -1;
 
 		public TypeSchema OwnerTypeSchema;
-		public TypeSchema TypeSchema;
+		public TypeSchema FieldTypeSchema;
 		public FieldInfo FieldInfo; // can be null
 
 		public Type Type; // might be null
@@ -22,13 +22,15 @@ namespace Atlas.Serialize
 		public bool IsSerialized;
 		public bool IsLoadable;
 		public bool IsPrivate;
+		public bool IsPublic;
 
 		public override string ToString() => FieldName;
 
-		public FieldSchema(FieldInfo fieldInfo)
+		public FieldSchema(TypeSchema typeSchema, FieldInfo fieldInfo)
 		{
-			FieldName = fieldInfo.Name;
+			OwnerTypeSchema = typeSchema;
 			FieldInfo = fieldInfo;
+			FieldName = fieldInfo.Name;
 
 			Initialize();
 		}
@@ -36,6 +38,7 @@ namespace Atlas.Serialize
 		public FieldSchema(TypeSchema typeSchema, BinaryReader reader)
 		{
 			OwnerTypeSchema = typeSchema;
+
 			Load(reader);
 
 			if (typeSchema.Type != null)
@@ -52,8 +55,40 @@ namespace Atlas.Serialize
 				NonNullableType = Type.GetNonNullableType();
 				IsSerialized = GetIsSerialized();
 				IsLoadable = IsSerialized; // derived types won't have entries for base type
-				IsPrivate = (FieldInfo.GetCustomAttribute<PrivateDataAttribute>() != null || Type.GetCustomAttribute<PrivateDataAttribute>() != null);
+				IsPrivate = GetIsPrivate();
+				IsPublic = GetIsPublic();
 			}
+		}
+
+		private bool GetIsPrivate()
+		{
+			if (FieldInfo.GetCustomAttribute<PrivateDataAttribute>() != null)
+				return true;
+
+			if (Type.GetCustomAttribute<PrivateDataAttribute>() != null)
+				return true;
+
+			return false;
+		}
+
+		private bool GetIsPublic()
+		{
+			if (FieldInfo.GetCustomAttribute<PublicDataAttribute>() != null)
+				return true;
+
+			if (FieldInfo.GetCustomAttribute<ProtectedDataAttribute>() != null)
+				return true;
+
+			if (FieldInfo.FieldType.GetCustomAttribute<PublicDataAttribute>() != null)
+				return true;
+
+			if (FieldInfo.FieldType.GetCustomAttribute<ProtectedDataAttribute>() != null)
+				return true;
+
+			if (OwnerTypeSchema.IsProtected)
+				return false;
+
+			return true;
 		}
 
 		private bool GetIsSerialized()

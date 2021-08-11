@@ -73,21 +73,18 @@ namespace Atlas.Serialize
 		public virtual void SaveCustomHeader(BinaryWriter writer) { }
 		public virtual void LoadCustomHeader() { }
 
+		public override string ToString() => TypeSchema.Name;
+
 		public TypeRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			Serializer = serializer;
 			TypeSchema = typeSchema;
 			Type = typeSchema.Type;
-			if (!typeSchema.IsUnserialized && (!serializer.PublicOnly || TypeSchema.IsPublic))
+			if (!typeSchema.IsUnserialized && (!serializer.PublicOnly || TypeSchema.IsPublicOnly))
 				LoadableType = Type;
 			//objects.Capacity = typeSchema.numObjects;
 			ObjectsLoaded = new object[typeSchema.NumObjects];
 			//CreateObjects();
-		}
-
-		public override string ToString()
-		{
-			return TypeSchema.Name;
 		}
 
 		public static TypeRepo Create(Log log, Serializer serializer, TypeSchema typeSchema)
@@ -97,24 +94,28 @@ namespace Atlas.Serialize
 				//string message = "Type " + typeSchema.Name + " is not serializable";
 				//Debug.Print(message);
 				//log.Add(message);
-				var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema);
-				typeRepoUnknown.Reader = serializer.Reader;
+				var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema)
+				{
+					Reader = serializer.Reader,
+				};
 				return typeRepoUnknown;
 			}
 
-			if (serializer.PublicOnly && !typeSchema.IsPublic)
+			if (serializer.PublicOnly && !(typeSchema.IsPublicOnly))
 			{
 				if (!typeSchema.IsPrivate)
 				{
-					string message = "Type " + typeSchema.Name + " does not specify [PublicData] or [PrivateData], ignoring";
+					string message = "Type " + typeSchema.Name + " does not specify [PublicData], [ProtectedData], or [PrivateData], ignoring";
 					if (Debugger.IsAttached)
 						Debug.Fail(message);
 					else
 						Debug.Print(message); // For unit tests
 					log.Add(message);
 				}
-				var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema);
-				typeRepoUnknown.Reader = serializer.Reader;
+				var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema)
+				{
+					Reader = serializer.Reader,
+				};
 				return typeRepoUnknown;
 			}
 
@@ -245,6 +246,8 @@ namespace Atlas.Serialize
 					//objectOffsets.Add(objectStart);
 					//objectSizes.Add((int)(objectEnd - objectStart));
 					ObjectSizes[index++] = (int)(objectEnd - objectStart);
+
+					logTimer.AddDebug("Saved Object", new Tag(TypeSchema.Name, obj));
 				}
 
 				//long end = writer.BaseStream.Position;
@@ -252,11 +255,10 @@ namespace Atlas.Serialize
 				//typeSchema.fileDataOffset = start;
 				//typeSchema.dataSize = end - start;
 
-				logTimer.Add("Saved Object",
+				logTimer.Add("Saved Type Objects",
 					new Tag("Type", Type),
 					new Tag("Count", Objects.Count),
-					new Tag("Offset", TypeSchema.FileDataOffset),
-					new Tag("Bytes", TypeSchema.DataSize));
+					new Tag("Bytes", writer.BaseStream.Position));
 			}
 		}
 
@@ -457,8 +459,6 @@ namespace Atlas.Serialize
 			try
 			{
 				LoadObjectData(obj);
-				if (obj is IInitializer initializer)
-					initializer.Initialize();
 			}
 			catch (Exception)
 			{

@@ -1,7 +1,6 @@
 ﻿using Atlas.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Atlas.Serialize
 {
@@ -57,55 +56,6 @@ namespace Atlas.Serialize
 		public virtual void DeleteAll()
 		{
 			DataRepo.DeleteAll<T>();
-		}
-	}
-
-	public class DataRepoView<T> : DataRepoInstance<T>
-	{
-		//public DataRepo<T> dataRepo;
-
-		public DataItemCollection<T> Items { get; set; }
-
-		public DataRepoView(DataRepo dataRepo, string groupId) : base(dataRepo, groupId)
-		{
-			Initialize();
-		}
-
-		public DataRepoView(DataRepoInstance<T> dataRepo) : base(dataRepo.DataRepo, dataRepo.GroupId)
-		{
-			Initialize();
-		}
-
-		private void Initialize()
-		{
-			Items = LoadAll();
-		}
-
-		public override void Save(Call call, string key, T item)
-		{
-			Delete(key);
-			base.Save(call, key, item);
-			Items.Add(key, item);
-		}
-
-		public override void Delete(string key = null)
-		{
-			base.Delete(key);
-			var item = Items.Where(d => d.Key == key).FirstOrDefault();
-			if (item != null)
-				Items.Remove(item);
-		}
-
-		public override void DeleteAll()
-		{
-			base.DeleteAll();
-			Items.Clear();
-		}
-
-		public void SortBy(string memberName)
-		{
-			var ordered = Items.OrderBy(memberName);
-			Items = new DataItemCollection<T>(ordered);
 		}
 	}
 }

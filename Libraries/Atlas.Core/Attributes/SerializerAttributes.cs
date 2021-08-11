@@ -22,8 +22,16 @@ namespace Atlas.Core
 	}
 
 	// Serialized when exported for public usage
+	// Fields & Properties will default to [PublicData] unless overriden with another permission
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
 	public class PublicDataAttribute : Attribute
+	{
+	}
+
+	// All class members will default to [PrivateData]
+	// Members can override if reference or type specifies [PublicData]/[ProtectedData]
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+	public class ProtectedDataAttribute : Attribute
 	{
 	}
 

@@ -1,7 +1,6 @@
 ﻿using Atlas.Core;
 using Atlas.Serialize;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Atlas.Tabs
@@ -9,37 +8,40 @@ namespace Atlas.Tabs
 	public class BookmarkCollection
 	{
 		public static string DataKey = "Bookmarks";
-		//public event EventHandler<EventArgs> OnDelete;
 
 		public Project Project;
-		public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new ItemCollectionUI<TabBookmarkItem>();
+		public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new ItemCollectionUI<TabBookmarkItem>()
+		{
+			PostOnly = true,
+		};
 		public TabBookmarkItem NewBookmark { get; set; }
 
-		public DataRepoView<Bookmark> DataRepoBookmarks;
+		private DataRepoView<Bookmark> _dataRepoBookmarks;
 
 		public BookmarkCollection(Project project)
 		{
 			Project = project;
-			//Items.CollectionChanged += Items_CollectionChanged;
+			_dataRepoBookmarks = Project.DataApp.OpenView<Bookmark>(DataKey);
 		}
 
-		/*private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		public void Load(Call call, bool reload)
 		{
-		}*/
-
-		public void Reload()
-		{
-			Items.Clear();
-
-			DataRepoBookmarks = Project.DataApp.OpenView<Bookmark>(null, DataKey);
-			DataRepoBookmarks.SortBy(nameof(Bookmark.TimeStamp));
-
-			foreach (Bookmark bookmark in DataRepoBookmarks.Items.Values)
+			lock (DataKey)
 			{
-				if (bookmark.Name == TabInstance.CurrentBookmarkName)
-					continue;
+				if (!reload && Items.Count > 0)
+					return;
 
-				Add(bookmark);
+				Items.Clear();
+
+				_dataRepoBookmarks.LoadAllOrderBy(call, nameof(Bookmark.TimeStamp));
+
+				foreach (Bookmark bookmark in _dataRepoBookmarks.Items.Values)
+				{
+					if (bookmark.Name == TabInstance.CurrentBookmarkName)
+						continue;
+
+					Add(bookmark);
+				}
 			}
 		}
 
@@ -47,34 +49,45 @@ namespace Atlas.Tabs
 		{
 			var tabItem = new TabBookmarkItem(bookmark, Project);
 			tabItem.OnDelete += Item_OnDelete;
-			Items.Add(tabItem);
+			lock (DataKey)
+			{
+				Items.Add(tabItem);
+			}
 			return tabItem;
 		}
 
 		public void AddNew(Call call, Bookmark bookmark)
 		{
-			if (DataRepoBookmarks == null)
-				Reload();
+			lock (DataKey)
+			{
+				Load(call, false);
 
-			Remove(bookmark.Address); // Remove previous bookmark
-			DataRepoBookmarks.Save(call, bookmark.Address, bookmark);
-			NewBookmark = Add(bookmark);
+				Remove(bookmark.Path); // Remove previous bookmark
+				_dataRepoBookmarks.Save(call, bookmark.Path, bookmark);
+				NewBookmark = Add(bookmark);
+			}
 		}
 
 		private void Item_OnDelete(object sender, EventArgs e)
 		{
 			TabBookmarkItem bookmark = (TabBookmarkItem)sender;
-			DataRepoBookmarks.Delete(bookmark.Bookmark.Address);
-			Items.Remove(bookmark);
-			//Reload();
+			lock (DataKey)
+			{
+				_dataRepoBookmarks.Delete(bookmark.Bookmark.Path);
+				Items.Remove(bookmark);
+			}
 		}
 
 		public void Remove(string key)
 		{
-			DataRepoBookmarks.Delete(key);
-			TabBookmarkItem existing = Items.SingleOrDefault(i => i.Bookmark.Address == key);
-			if (existing != null)
-				Items.Remove(existing);
+			lock (DataKey)
+			{
+				_dataRepoBookmarks.Delete(key);
+
+				TabBookmarkItem existing = Items.SingleOrDefault(i => i.Bookmark.Path == key);
+				if (existing != null)
+					Items.Remove(existing);
+			}
 		}
 	}
 }

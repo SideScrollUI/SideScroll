@@ -143,6 +143,11 @@ namespace Atlas.UI.Avalonia
 			{
 				bookmark.Name = leafNode.Tab?.ToString();
 				bookmark.TabBookmark = leafNode;
+				bookmark.BookmarkType = BookmarkType.Leaf;
+			}
+			else
+			{
+				bookmark.BookmarkType = BookmarkType.Full;
 			}
 			string uri = Project.Linker.GetLinkUri(call, bookmark);
 			await ClipBoardUtils.SetTextAsync(uri);

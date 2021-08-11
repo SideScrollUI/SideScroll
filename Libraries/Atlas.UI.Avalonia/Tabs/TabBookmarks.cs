@@ -40,7 +40,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 			public override void Load(Call call, TabModel model)
 			{
-				Tab.Bookmarks.Reload();
+				Tab.Bookmarks.Load(call, true);
 			}
 
 			public override void LoadUI(Call call, TabModel model)
@@ -50,13 +50,18 @@ namespace Atlas.UI.Avalonia.Controls
 				model.AddObject(toolbar);*/
 
 				model.AddData(Tab.Bookmarks.Items);
+
 				if (Tab.Bookmarks.NewBookmark != null)
+				{
 					SelectItem(Tab.Bookmarks.NewBookmark);
+					Tab.Bookmarks.NewBookmark = null;
+				}
 			}
 
 			public override void GetBookmark(TabBookmark tabBookmark)
 			{
 				base.GetBookmark(tabBookmark);
+
 				foreach (var child in tabBookmark.ChildBookmarks.Values)
 					child.IsRoot = true;
 			}

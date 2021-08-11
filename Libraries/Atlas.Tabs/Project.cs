@@ -12,8 +12,8 @@ namespace Atlas.Tabs
 		public string Name => ProjectSettings.Name; // for viewing purposes
 		public string LinkType => ProjectSettings.LinkType; // for bookmarking
 		public Version Version => ProjectSettings.Version;
-		public virtual ProjectSettings ProjectSettings { get; set; }
-		public virtual UserSettings UserSettings { get; set; }
+		public virtual ProjectSettings ProjectSettings { get; set; } = new ProjectSettings();
+		public virtual UserSettings UserSettings { get; set; } = new UserSettings();
 
 		public Linker Linker { get; set; } = new Linker();
 
@@ -72,7 +72,7 @@ namespace Atlas.Tabs
 		public Project Open(Bookmark bookmark)
 		{
 			UserSettings userSettings = UserSettings.DeepClone();
-			userSettings.BookmarkPath = bookmark.Address;
+			userSettings.BookmarkPath = bookmark.Path;
 			var project = new Project(ProjectSettings, userSettings)
 			{
 				Linker = Linker,

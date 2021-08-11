@@ -18,8 +18,8 @@ namespace Atlas.Tabs.Test
 		{
 			private const string DataKey = "Params";
 
-			private ParamTestItem paramTestItem;
-			private DataRepoView<ParamTestItem> dataRepoParams;
+			private ParamTestItem _paramTestItem;
+			private DataRepoView<ParamTestItem> _dataRepoParams;
 
 			public override void Load(Call call, TabModel model)
 			{
@@ -30,8 +30,8 @@ namespace Atlas.Tabs.Test
 					new TaskDelegate("Add", Add),
 				};*/
 
-				paramTestItem = LoadData<ParamTestItem>(DataKey);
-				model.AddObject(paramTestItem);
+				_paramTestItem = LoadData<ParamTestItem>(DataKey);
+				model.AddObject(_paramTestItem);
 
 				var toolbar = new Toolbar();
 				toolbar.ButtonNew.Action = New;
@@ -41,10 +41,10 @@ namespace Atlas.Tabs.Test
 
 			private void LoadSavedItems(Call call, TabModel model)
 			{
-				dataRepoParams = DataApp.OpenView<ParamTestItem>(call, "CollectionTest");
-				DataRepoInstance = dataRepoParams;
+				_dataRepoParams = DataApp.LoadView<ParamTestItem>(call, "CollectionTest");
+				DataRepoInstance = _dataRepoParams;
 
-				var dataCollection = new DataCollection<ParamTestItem, TabParamItem>(dataRepoParams);
+				var dataCollection = new DataCollection<ParamTestItem, TabParamItem>(_dataRepoParams);
 				model.Items = dataCollection.Items;
 			}
 
@@ -54,8 +54,8 @@ namespace Atlas.Tabs.Test
 
 			private void Save(Call call)
 			{
-				ParamTestItem clone = paramTestItem.DeepClone(call);
-				dataRepoParams.Save(call, clone.ToString(), clone);
+				ParamTestItem clone = _paramTestItem.DeepClone(call);
+				_dataRepoParams.Save(call, clone.ToString(), clone);
 			}
 		}
 	}

@@ -2,7 +2,6 @@
 using Atlas.Extensions;
 using Atlas.Serialize;
 using System;
-using System.Collections.Generic;
 
 namespace Atlas.Tabs
 {
@@ -19,7 +18,7 @@ namespace Atlas.Tabs
 		}
 
 		[WordWrap]
-		public string Path => (Bookmark?.Name != null ? (Bookmark.Name + " : ") : "") + Bookmark.Address;
+		public string Path => Bookmark.Path;
 
 		[Formatted]
 		public TimeSpan Age => Bookmark.TimeStamp.Age();
@@ -32,7 +31,7 @@ namespace Atlas.Tabs
 		[HiddenColumn]
 		public ITab Tab => Bookmark.TabBookmark.Tab;
 
-		public override string ToString() => Bookmark.Name ?? Bookmark.Address;
+		public override string ToString() => Bookmark.Name ?? Bookmark.Path;
 
 		public TabBookmarkItem(Bookmark bookmark, Project project)
 		{
@@ -45,6 +44,9 @@ namespace Atlas.Tabs
 			if (Bookmark.Type == null)
 				return null;
 
+			if (!typeof(ITab).IsAssignableFrom(Bookmark.Type))
+				throw new Exception("Bookmark.Type must implement ITab");
+
 			var call = new Call();
 			Bookmark bookmarkCopy = Bookmark.DeepClone(call, true); // This will get modified as users navigate
 
@@ -52,9 +54,13 @@ namespace Atlas.Tabs
 			if (tab == null)
 				tab = (ITab)Activator.CreateInstance(bookmarkCopy.Type);
 
+			if (tab is IReload reloadable)
+				reloadable.Reload();
+
 			TabInstance tabInstance = tab.Create();
 			tabInstance.Project = Project.Open(bookmarkCopy); 
 			tabInstance.iTab = this;
+			tabInstance.IsRoot = true;
 			tabInstance.SelectBookmark(bookmarkCopy.TabBookmark);
 			return tabInstance;
 		}

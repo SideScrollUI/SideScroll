@@ -28,6 +28,19 @@ namespace Atlas.Tabs
 		public ListSortDirection SortDirection { get; set; }
 
 		public string Filter { get; set; }
+		public string Address
+		{
+			get
+			{
+				var labels = SelectedRows.Select(s => s.Label).ToList();
+				if (labels.Count <= 1)
+					return labels.FirstOrDefault();
+				
+				return "[" + string.Join(", ", labels) + "] ";
+			}
+		}
+
+		public override string ToString() => Address;
 
 		public static List<MethodColumn> GetButtonMethods(Type type)
 		{

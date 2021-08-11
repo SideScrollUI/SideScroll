@@ -52,6 +52,15 @@ namespace Atlas.Core
 			return call;
 		}
 
+		public Call DebugLogAll()
+		{
+			var child = Child("LogDebug");
+			child.Log.Settings = child.Log.Settings.Clone();
+			child.Log.Settings.MinLogLevel = LogLevel.Debug;
+			child.Log.Settings.DebugPrintLogLevel = LogLevel.Debug;
+			return child;
+		}
+
 		public CallTimer Timer([CallerMemberName] string name = "", params Tag[] tags)
 		{
 			Log = Log ?? new Log();

@@ -97,10 +97,7 @@ namespace Atlas.Core
 
 		public LogTimer Timer(string text, params Tag[] tags)
 		{
-			var logTimer = new LogTimer(text, Settings)
-			{
-				Tags = tags,
-			};
+			var logTimer = new LogTimer(text, Settings, tags);
 			AddLogEntry(logTimer);
 			return logTimer;
 		}
@@ -128,7 +125,9 @@ namespace Atlas.Core
 
 		public void AddLogEntry(LogEntry logEntry)
 		{
-			if (logEntry.Level >= Settings.DebugPrintLogLevel)
+			// LogTimer calls this once for a new child message, and once for adding to parent log
+			// So only add it for the initial child message
+			if (logEntry.Level >= Settings.DebugPrintLogLevel && logEntry.Entries == 0)
 			{
 				Debug.Print(logEntry.Level + ": " + logEntry.ToString());
 			}

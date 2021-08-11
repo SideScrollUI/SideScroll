@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Media;
 using System;
-using System.Resources;
 
 namespace Atlas.UI.Avalonia
 {

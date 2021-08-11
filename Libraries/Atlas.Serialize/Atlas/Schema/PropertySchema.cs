@@ -22,13 +22,15 @@ namespace Atlas.Serialize
 		public bool IsSerialized;
 		public bool IsLoadable;
 		public bool IsPrivate;
+		public bool IsPublic;
 
 		public override string ToString() => PropertyName;
 
-		public PropertySchema(PropertyInfo propertyInfo)
+		public PropertySchema(TypeSchema typeSchema, PropertyInfo propertyInfo)
 		{
-			PropertyName = propertyInfo.Name;
+			OwnerTypeSchema = typeSchema;
 			PropertyInfo = propertyInfo;
+			PropertyName = propertyInfo.Name;
 
 			Initialize();
 		}
@@ -36,6 +38,7 @@ namespace Atlas.Serialize
 		public PropertySchema(TypeSchema typeSchema, BinaryReader reader)
 		{
 			OwnerTypeSchema = typeSchema;
+
 			Load(reader);
 
 			try
@@ -60,7 +63,8 @@ namespace Atlas.Serialize
 				NonNullableType = Type.GetNonNullableType();
 				IsSerialized = GetIsSerialized();
 				IsLoadable = IsSerialized; // typeIndex >= 0 && // derived types won't have entries for base type
-				IsPrivate = (PropertyInfo.GetCustomAttribute<PrivateDataAttribute>() != null || Type.GetCustomAttribute<PrivateDataAttribute>() != null);
+				IsPrivate = GetIsPrivate();
+				IsPublic = GetIsPublic();
 			}
 		}
 
@@ -82,6 +86,37 @@ namespace Atlas.Serialize
 				return false;
 
 			if (PropertyInfo.GetIndexParameters().Length > 0)
+				return false;
+
+			return true;
+		}
+
+		private bool GetIsPrivate()
+		{
+			if (PropertyInfo.GetCustomAttribute<PrivateDataAttribute>() != null)
+				return true;
+
+			if (Type.GetCustomAttribute<PrivateDataAttribute>() != null)
+				return true;
+
+			return false;
+		}
+
+		private bool GetIsPublic()
+		{
+			if (PropertyInfo.GetCustomAttribute<PublicDataAttribute>() != null)
+				return true;
+
+			if (PropertyInfo.GetCustomAttribute<ProtectedDataAttribute>() != null)
+				return true;
+
+			if (PropertyInfo.PropertyType.GetCustomAttribute<PublicDataAttribute>() != null)
+				return true;
+
+			if (PropertyInfo.PropertyType.GetCustomAttribute<ProtectedDataAttribute>() != null)
+				return true;
+
+			if (OwnerTypeSchema.IsProtected)
 				return false;
 
 			return true;

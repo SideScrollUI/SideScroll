@@ -11,6 +11,9 @@ namespace Atlas.Tabs
 
 		public virtual string GetLinkUri(Call call, Bookmark bookmark)
 		{
+#if DEBUG
+			call = call.DebugLogAll();
+#endif
 			string base64 = bookmark.ToBase64String(call, PublicOnly);
 			if (base64.Length > MaxLength)
 				return "Bookmark size " + base64.Length + " > " + MaxLength;
@@ -22,6 +25,9 @@ namespace Atlas.Tabs
 		{
 			if (uri == null)
 				return null;
+#if DEBUG
+			call = call.DebugLogAll();
+#endif
 
 			if (!uri.StartsWith(AtlasPrefix))
 			{

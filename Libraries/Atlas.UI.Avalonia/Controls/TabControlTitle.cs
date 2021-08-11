@@ -1,6 +1,8 @@
-﻿using Atlas.Tabs;
+﻿using Atlas.Core;
+using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using System;
@@ -15,6 +17,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public TextBlock TextBlock;
 		//private CheckBox checkBox;
+		private Grid _containerGrid;
 
 		public string Text
 		{
@@ -30,7 +33,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			TabInstance = tabInstance;
 			Label = name ?? tabInstance.Label;
-			Label = new StringReader(Label).ReadLine();
+			Label = new StringReader(Label).ReadLine(); // Remove anything after first line
 
 			InitializeControl();
 		}
@@ -39,13 +42,12 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			Background = Theme.TitleBackground;
 
-			var containerGrid = new Grid()
+			_containerGrid = new Grid()
 			{
-				ColumnDefinitions = new ColumnDefinitions("*,Auto"),
-				RowDefinitions = new RowDefinitions("Auto"), // Header, Body
+				ColumnDefinitions = new ColumnDefinitions("Auto,*"),
+				RowDefinitions = new RowDefinitions("Auto"),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
-				//Background = new SolidColorBrush(Theme.BackgroundColor),
 			};
 
 			// Add a wrapper class with a border?
@@ -55,10 +57,8 @@ namespace Atlas.UI.Avalonia.Controls
 				Text = Label,
 				FontSize = 15,
 				//Margin = new Thickness(2), // Shows as black, Need Padding so Border not needed
-				//Background = new SolidColorBrush(Theme.TitleBackgroundColor),
 				Foreground = Theme.TitleForeground,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				//HorizontalAlignment = HorizontalAlignment.Left,
 				//[ToolTip.TipProperty] = Label, // re-enable when foreground fixed
 				//[ToolTip.ForegroundProperty] = Brushes.Black, // this overrides the TextBlock Foreground property
 			};
@@ -69,8 +69,9 @@ namespace Atlas.UI.Avalonia.Controls
 				BorderThickness = new Thickness(5, 2, 2, 2),
 				BorderBrush = Theme.TitleBackground,
 				Child = TextBlock,
+				[Grid.ColumnProperty] = 1,
 			};
-			containerGrid.Children.Add(borderPaddingTitle);
+			_containerGrid.Children.Add(borderPaddingTitle);
 
 			// Notes
 			// Add checkbox here for tabModel.Notes
@@ -84,24 +85,54 @@ namespace Atlas.UI.Avalonia.Controls
 			};
 			checkBox.Click += CheckBox_Click;*/
 
-			if (TabInstance.Model.Notes != null && TabInstance.Model.Notes.Length > 0)
+			/*if (TabInstance.Model.Notes != null && TabInstance.Model.Notes.Length > 0)
 			{
 				//Button button = new Button();
-				Image image = AvaloniaAssets.Images.Info;
+				Image image = AvaloniaAssets.Images.Link;
 				image.Height = 20;
 				Grid.SetColumn(image, 1);
-				containerGrid.Children.Add(image); // always enable so they can add notes? (future thing)
-				//containerGrid.Children.Add(checkBox); // always enable so they can add notes? (future thing)
-			}
+				_containerGrid.Children.Add(image);
+				//containerGrid.Children.Add(checkBox);
+			}*/
+
+			AddLinkButton();
 
 			var borderContent = new Border()
 			{
 				BorderThickness = new Thickness(1),
 				BorderBrush = new SolidColorBrush(Colors.Black),
 			};
-			borderContent.Child = containerGrid;
+			borderContent.Child = _containerGrid;
 
 			Content = borderContent;
+		}
+
+		private void AddLinkButton()
+		{
+			if (!TabInstance.IsLinkable)
+				return;
+
+			var linkButton = new TabControlButton
+			{
+				VerticalAlignment = VerticalAlignment.Stretch,
+				HorizontalAlignment = HorizontalAlignment.Left,
+				Content = "~",
+				ClipToBounds = false,
+				Margin = new Thickness(-7, 0, 0, 0),
+				Padding = new Thickness(0, 0, 0, 0),
+				[Grid.ColumnProperty] = 0,
+			};
+			ClipToBounds = false;
+			linkButton.Click += LinkButton_Click;
+			_containerGrid.Children.Add(linkButton);
+		}
+
+		private async void LinkButton_Click(object sender, RoutedEventArgs e)
+		{
+			Bookmark bookmark = TabInstance.CreateBookmark();
+			bookmark.BookmarkType = BookmarkType.Tab;
+			string uri = TabInstance.Project.Linker.GetLinkUri(new Call(), bookmark);
+			await ClipBoardUtils.SetTextAsync(uri);
 		}
 
 		public void Dispose()
@@ -122,7 +153,7 @@ namespace Atlas.UI.Avalonia.Controls
 			return maxSize;
 		}
 
-		/*private void CheckBox_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		/*private void CheckBox_Click(object sender, RoutedEventArgs e)
 		{
 			tabInstance.tabViewSettings.NotesVisible = (bool)checkBox.IsChecked;
 			tabInstance.SaveTabSettings();

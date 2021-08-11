@@ -65,16 +65,22 @@ namespace Atlas.Serialize
 
 		protected abstract object DeepCloneInternal(Call call, object obj);
 
-		public string ToBase64String()
+		public string ToBase64String(Call call)
 		{
 			Stream.Seek(0, SeekOrigin.Begin);
 			using (var outStream = new MemoryStream())
 			{
 				using (var tinyStream = new GZipStream(outStream, CompressionMode.Compress))
+				{
 					Stream.CopyTo(tinyStream);
+				}
 
 				byte[] compressed = outStream.ToArray();
 				string base64 = Convert.ToBase64String(compressed);
+				call.Log.Add("ToBase64String", 
+					new Tag("Original", Stream.Length),
+					new Tag("Compressed", compressed.Length),
+					new Tag("Base64", base64.Length));
 				return base64;
 			}
 		}
@@ -85,7 +91,9 @@ namespace Atlas.Serialize
 			using (var inStream = new MemoryStream(bytes))
 			{
 				using (var tinyStream = new GZipStream(inStream, CompressionMode.Decompress))
+				{
 					tinyStream.CopyTo(outStream);
+				}
 			}
 		}
 
@@ -104,7 +112,7 @@ namespace Atlas.Serialize
 			var serializer = Create();
 			serializer.PublicOnly = publicOnly;
 			serializer.Save(call, obj);
-			string data = serializer.ToBase64String();
+			string data = serializer.ToBase64String(call);
 			return data;
 		}
 

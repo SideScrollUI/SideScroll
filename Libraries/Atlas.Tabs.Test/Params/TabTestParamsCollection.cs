@@ -42,7 +42,7 @@ namespace Atlas.Tabs.Test
 
 			private void LoadSavedItems(Call call, TabModel model)
 			{
-				dataRepoParams = DataApp.Open<ParamTestItem>(call, "CollectionTest");
+				dataRepoParams = DataApp.Open<ParamTestItem>("CollectionTest");
 				DataRepoInstance = dataRepoParams;
 				items = new ItemCollection<ParamTestItem>();
 				var dataRefs = dataRepoParams.LoadAllSorted(call);

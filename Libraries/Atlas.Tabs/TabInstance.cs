@@ -153,6 +153,8 @@ namespace Atlas.Tabs
 		public bool LoadCalled { get; set; } // Used by the view
 		public bool StaticModel { get; set; }
 		public bool ShowTasks { get; set; }
+		public bool IsRoot { get; set; }
+
 		public IList SelectedItems { get; set; }
 
 		protected IDataRepoInstance DataRepoInstance { get; set; } // Bookmarks use this for saving/loading DataRepo values
@@ -617,8 +619,10 @@ namespace Atlas.Tabs
 		{
 			var bookmark = new Bookmark
 			{
+				Name = Label,
 				Type = iTab?.GetType(),
 			};
+			bookmark.TabBookmark.IsRoot = true;
 			GetBookmark(bookmark.TabBookmark);
 			bookmark = bookmark.DeepClone(TaskInstance.Call); // Sanitize and test bookmark
 			return bookmark;
@@ -655,10 +659,19 @@ namespace Atlas.Tabs
 			if (iTab is IInnerTab innerTab)
 				iTab = innerTab.Tab;
 
-			if (iTab?.GetType().GetCustomAttribute<TabRootAttribute>() != null)
+			if (iTab != null)
 			{
-				tabBookmark.IsRoot = true;
-				tabBookmark.Tab = iTab;
+				Type type = iTab.GetType();
+				if (type.GetCustomAttribute<TabRootAttribute>() != null)
+				{
+					tabBookmark.IsRoot = true;
+					tabBookmark.Tab = iTab;
+				}
+				else if (type.GetCustomAttribute<PublicDataAttribute>() != null && (tabBookmark.IsRoot || IsRoot))
+				{
+					tabBookmark.Tab = iTab;
+					tabBookmark.Bookmark.Name = iTab.ToString();
+				}
 			}
 
 			foreach (TabInstance tabInstance in ChildTabInstances.Values)

@@ -6,6 +6,8 @@ namespace Atlas.Tabs.Test
 {
 	public class TabTestBookmarks : ITab
 	{
+		public override string ToString() => "Bookmarks";
+
 		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance

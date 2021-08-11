@@ -24,6 +24,16 @@ namespace Atlas.Core
 		[HiddenRow]
 		public SynchronizationContext Context; // inherited from creator (which can be a Parent Log)
 
+		public LogSettings Clone()
+		{
+			return new LogSettings()
+			{
+				MaxLogItems = MaxLogItems,
+				MinLogLevel = MinLogLevel,
+				DebugPrintLogLevel = DebugPrintLogLevel,
+			};
+		}
+
 		/*protected void InitializeContext()
 		{
 			Context = Context ?? SynchronizationContext.Current ?? new SynchronizationContext();

@@ -49,7 +49,9 @@ namespace Atlas.Serialize
 
 		public bool IsPrimitive;
 		public bool IsPrivate;
+		public bool IsProtected;
 		public bool IsPublic; // [PublicData], will get exported if PublicOnly set
+		public bool IsPublicOnly => IsPublic || IsProtected;
 		public bool IsStatic;
 		public bool IsSerialized;
 		public bool IsUnserialized;
@@ -58,6 +60,8 @@ namespace Atlas.Serialize
 
 		// Type lookup can take a long time, especially when there's missing types
 		private static Dictionary<string, Type> _typeCache = new Dictionary<string, Type>();
+
+		private BindingFlags _bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
 
 		public TypeSchema(Type type, Serializer serializer)
 		{
@@ -69,30 +73,8 @@ namespace Atlas.Serialize
 
 			if (!IsCollection)
 			{
-				// FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance); // For Atlas only?
-				foreach (FieldInfo fieldInfo in type.GetFields())
-				{
-					var fieldSchema = new FieldSchema(fieldInfo);
-					if (!fieldSchema.IsSerialized)
-						continue;
-
-					if (fieldSchema.IsPrivate && serializer.PublicOnly)
-						continue;
-
-					FieldSchemas.Add(fieldSchema);
-				}
-
-				foreach (PropertyInfo propertyInfo in type.GetProperties())
-				{
-					var propertySchema = new PropertySchema(propertyInfo);
-					if (!propertySchema.IsSerialized)
-						continue;
-
-					if (propertySchema.IsPrivate && serializer.PublicOnly)
-						continue;
-
-					PropertySchemas.Add(propertySchema);
-				}
+				InitializeFields(serializer);
+				InitializeProperties(serializer);
 			}
 		}
 
@@ -109,7 +91,53 @@ namespace Atlas.Serialize
 			IsUnserialized = (Type.GetCustomAttribute<UnserializedAttribute>() != null);
 			IsStatic = (Type.GetCustomAttribute<StaticAttribute>() != null);
 			IsPrivate = (Type.GetCustomAttribute<PrivateDataAttribute>() != null);
+			IsProtected = (Type.GetCustomAttribute<ProtectedDataAttribute>() != null);
 			IsPublic = GetIsPublic();
+		}
+
+		private void InitializeFields(Serializer serializer)
+		{
+			foreach (FieldInfo fieldInfo in Type.GetFields(_bindingFlags))
+			{
+				var fieldSchema = new FieldSchema(this, fieldInfo);
+				if (!fieldSchema.IsSerialized)
+					continue;
+
+				if (serializer.PublicOnly)
+				{
+					if (fieldSchema.IsPrivate)
+						continue;
+
+					if (!fieldSchema.IsPublic)
+						continue;
+				}
+
+				FieldSchemas.Add(fieldSchema);
+			}
+		}
+
+		private void InitializeProperties(Serializer serializer)
+		{
+			foreach (PropertyInfo propertyInfo in Type.GetProperties(_bindingFlags))
+			{
+				var propertySchema = new PropertySchema(this, propertyInfo);
+				if (!propertySchema.IsSerialized)
+					continue;
+
+				if (propertySchema.IsPrivate && serializer.PublicOnly)
+					continue;
+
+				if (serializer.PublicOnly)
+				{
+					if (propertySchema.IsPrivate)
+						continue;
+
+					if (!propertySchema.IsPublic)
+						continue;
+				}
+
+				PropertySchemas.Add(propertySchema);
+			}
 		}
 
 		public static bool HasEmptyConstructor(Type type)

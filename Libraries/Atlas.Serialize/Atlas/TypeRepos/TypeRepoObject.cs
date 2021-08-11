@@ -178,7 +178,7 @@ namespace Atlas.Serialize
 					Type fieldType = fieldSchema.FieldInfo.FieldType.GetNonNullableType();
 					typeRepo = Serializer.GetOrCreateRepo(log, fieldType);
 				}
-				fieldSchema.TypeSchema = typeRepo.TypeSchema;
+				fieldSchema.FieldTypeSchema = typeRepo.TypeSchema;
 				//TypeRepo typeRepo = serializer.typeRepos[fieldSchema.typeIndex];
 				//if (typeRepo == null)
 				//	continue;

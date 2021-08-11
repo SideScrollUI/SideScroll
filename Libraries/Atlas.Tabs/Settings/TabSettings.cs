@@ -36,17 +36,6 @@ namespace Atlas.Tabs
 
 		public List<TabDataSettings> TabDataSettings { get; set; } = new List<TabDataSettings>();
 
-		// change to string id?
-		public TabDataSettings GetData(int index)
-		{
-			// Creates new Settings if necessary
-			while (TabDataSettings.Count <= index)
-			{
-				TabDataSettings.Add(new TabDataSettings());
-			}
-			return TabDataSettings[index];
-		}
-
 		public List<TabDataSettings> ChartDataSettings { get; set; } = new List<TabDataSettings>(); // for the Chart's internal Data List
 
 		public List<SelectedRow> SelectedRows
@@ -80,6 +69,19 @@ namespace Atlas.Tabs
 
 				return SelectionType.None;
 			}
+		}
+
+		public override string ToString() => Address;
+
+		// change to string id?
+		public TabDataSettings GetData(int index)
+		{
+			// Creates new Settings if necessary
+			while (TabDataSettings.Count <= index)
+			{
+				TabDataSettings.Add(new TabDataSettings());
+			}
+			return TabDataSettings[index];
 		}
 
 		/*public override string ToString()
