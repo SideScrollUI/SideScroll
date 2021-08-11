@@ -67,9 +67,9 @@ namespace Atlas.Serialize
 		public abstract void SaveObject(BinaryWriter writer, object obj);
 		public virtual void LoadObjectData(object obj) { }
 		public abstract void Clone(object source, object dest);
-		public virtual void AddChildObjects(object obj) {}
-		public virtual void InitializeLoading(Log log)	{ }
+		public virtual void AddChildObjects(object obj) { }
 		public virtual void InitializeSaving() { }
+		public virtual void InitializeLoading(Log log)	{ }
 		public virtual void SaveCustomHeader(BinaryWriter writer) { }
 		public virtual void LoadCustomHeader() { }
 

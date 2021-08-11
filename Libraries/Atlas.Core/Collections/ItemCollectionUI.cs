@@ -157,15 +157,15 @@ namespace Atlas.Core
 		{
 			if (Context == null)
 			{
-				base.RemoveItem(index);
-			}
-			else if (Context == SynchronizationContext.Current)
-			{
 				RemoveItemCallback(index);
+			}
+			else if (PostOnly || Context != SynchronizationContext.Current)
+			{
+				Context.Post(new SendOrPostCallback(RemoveItemCallback), index);
 			}
 			else
 			{
-				Context.Post(new SendOrPostCallback(RemoveItemCallback), index);
+				RemoveItemCallback(index);
 			}
 		}
 
