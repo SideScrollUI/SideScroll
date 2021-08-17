@@ -119,8 +119,9 @@ namespace Atlas.UI.Avalonia.Controls
 				Content = "~",
 				ClipToBounds = false,
 				Margin = new Thickness(-7, 0, 0, 0),
-				Padding = new Thickness(0, 0, 0, 0),
+				Padding = new Thickness(0),
 				[Grid.ColumnProperty] = 0,
+				[ToolTip.TipProperty] = "Copy Tab Link",
 			};
 			ClipToBounds = false;
 			linkButton.Click += LinkButton_Click;

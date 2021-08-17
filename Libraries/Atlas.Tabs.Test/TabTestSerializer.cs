@@ -62,6 +62,8 @@ namespace Atlas.Tabs.Test
 			public int Id { get; set; }
 			public string Name { get; set; }
 
+			public override string ToString() => Name;
+
 			public SampleItem()
 			{
 			}
@@ -70,11 +72,6 @@ namespace Atlas.Tabs.Test
 			{
 				Id = id;
 				Name = name;
-			}
-
-			public override string ToString()
-			{
-				return Name;
 			}
 		}
 	}

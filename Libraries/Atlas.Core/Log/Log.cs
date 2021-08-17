@@ -39,6 +39,11 @@ namespace Atlas.Core
 			return AddChildEntry(LogLevel.Info, name, tags);
 		}
 
+		public Log Call(LogLevel logLevel, string name, params Tag[] tags)
+		{
+			return AddChildEntry(logLevel, name, tags);
+		}
+
 		public LogEntry Add(string text, params Tag[] tags)
 		{
 			return Add(LogLevel.Info, text, tags);

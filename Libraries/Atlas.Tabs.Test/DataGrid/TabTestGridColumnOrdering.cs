@@ -32,10 +32,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			public virtual string Overriden { get; set; } = "4";
 			public abstract string Abstract { get; }
 
-			public override string ToString()
-			{
-				return Original;
-			}
+			public override string ToString() => Original;
 		}
 
 		public class TestChild : TestParent
@@ -43,10 +40,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			public override string Overriden { get; set; } = "5";
 			public override string Abstract { get; } = "6";
 
-			public override string ToString()
-			{
-				return Original;
-			}
+			public override string ToString() => Original;
 		}
 	}
 }

@@ -38,7 +38,7 @@ namespace Atlas.Serialize
 			if (!Directory.Exists(BasePath))
 				Directory.CreateDirectory(BasePath);
 
-			using (CallTimer callTimer = call.Timer("Saving object: " + name, new Tag("Path", BasePath)))
+			using (CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object: " + name, new Tag("Path", BasePath)))
 			{
 				SaveInternal(callTimer, obj, name);
 			}
@@ -66,7 +66,7 @@ namespace Atlas.Serialize
 
 		public object Load(Call call, bool lazy = false, TaskInstance taskInstance = null)
 		{
-			using (CallTimer callTimer = call.Timer("Loading object: " + Name))
+			using (CallTimer callTimer = call.Timer(LogLevel.Debug, "Loading object: " + Name))
 			{
 				try
 				{
@@ -84,7 +84,7 @@ namespace Atlas.Serialize
 		{
 			call = call ?? new Call();
 
-			using (CallTimer callReadAllBytes = call.Timer("Loading header: " + Name))
+			using (CallTimer callReadAllBytes = call.Timer(LogLevel.Debug, "Loading header: " + Name))
 			{
 				var memoryStream = new MemoryStream(File.ReadAllBytes(HeaderPath));
 

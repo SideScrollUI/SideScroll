@@ -10,7 +10,7 @@ namespace Atlas.Serialize
 {
 	public class TypeSchema
 	{
-		public static HashSet<Type> AllowedTypes = new HashSet<Type>()
+		public static HashSet<Type> PublicTypes = new HashSet<Type>()
 		{
 			typeof(string),
 			typeof(DateTime),
@@ -21,7 +21,7 @@ namespace Atlas.Serialize
 			typeof(object),
 		};
 
-		public static HashSet<Type> AllowedGenericTypes = new HashSet<Type>()
+		public static HashSet<Type> PublicGenericTypes = new HashSet<Type>()
 		{
 			typeof(List<>),
 			typeof(Dictionary<,>),
@@ -63,6 +63,8 @@ namespace Atlas.Serialize
 
 		private BindingFlags _bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
 
+		public override string ToString() => Name;
+
 		public TypeSchema(Type type, Serializer serializer)
 		{
 			Type = type;
@@ -76,6 +78,11 @@ namespace Atlas.Serialize
 				InitializeFields(serializer);
 				InitializeProperties(serializer);
 			}
+		}
+
+		public TypeSchema(Log log, BinaryReader reader)
+		{
+			Load(log, reader);
 		}
 
 		private void InitializeType()
@@ -148,13 +155,6 @@ namespace Atlas.Serialize
 			return (constructorInfo != null || constructors.Length == 0);
 		}
 
-		public TypeSchema(Log log, BinaryReader reader)
-		{
-			Load(log, reader);
-		}
-
-		public override string ToString() => Name;
-
 		// BinaryFormatter uses [Serializable], should we allow that?
 		private bool GetIsPublic()
 		{
@@ -168,7 +168,7 @@ namespace Atlas.Serialize
 			if (Type.GetCustomAttribute<PublicDataAttribute>() != null)
 				return true;
 
-			if (AllowedTypes.Contains(Type))
+			if (PublicTypes.Contains(Type))
 				return true;
 
 			if (typeof(Type).IsAssignableFrom(Type))
@@ -180,7 +180,7 @@ namespace Atlas.Serialize
 			if (Type.IsGenericType)
 			{
 				Type genericType = Type.GetGenericTypeDefinition();
-				if (AllowedGenericTypes.Contains(genericType))
+				if (PublicGenericTypes.Contains(genericType))
 					return true;
 			}
 
@@ -212,6 +212,7 @@ namespace Atlas.Serialize
 			NumObjects = reader.ReadInt32();
 			FileDataOffset = reader.ReadInt64();
 			DataSize = reader.ReadInt64();
+
 			LoadType(log);
 			if (Type == null)
 			{

@@ -99,10 +99,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			public int Num48 { get; set; } = 8;
 			public int Num49 { get; set; } = 9;
 
-			public override string ToString()
-			{
-				return Index.ToString();
-			}
+			public override string ToString() => Index.ToString();
 		}
 	}
 }

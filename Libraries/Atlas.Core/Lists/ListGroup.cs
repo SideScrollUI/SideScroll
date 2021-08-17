@@ -72,7 +72,9 @@ namespace Atlas.Core
 		{
 			var sums = new Dictionary<ListSeries, double>();
 			foreach (var listSeries in Series)
+			{
 				sums.Add(listSeries, listSeries.CalculateTotal(TimeWindow));
+			}
 
 			var sortedDict = from entry in sums orderby entry.Value descending select entry.Key;
 

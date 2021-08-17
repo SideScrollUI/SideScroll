@@ -63,6 +63,11 @@ namespace Atlas.Core
 
 		public CallTimer Timer([CallerMemberName] string name = "", params Tag[] tags)
 		{
+			return Timer(LogLevel.Info, name, tags);
+		}
+
+		public CallTimer Timer(LogLevel logLevel, [CallerMemberName] string name = "", params Tag[] tags)
+		{
 			Log = Log ?? new Log();
 			var call = new CallTimer()
 			{
@@ -70,7 +75,7 @@ namespace Atlas.Core
 				ParentCall = this,
 			};
 			call.TaskInstance = TaskInstance?.AddSubTask(call);
-			call.Log = Log.Call(name, tags);
+			call.Log = Log.Call(logLevel, name, tags);
 
 			return call;
 		}

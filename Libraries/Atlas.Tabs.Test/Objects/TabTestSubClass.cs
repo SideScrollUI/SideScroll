@@ -23,12 +23,9 @@ namespace Atlas.Tabs.Test.Objects
 		public class ParentClass
 		{
 			//public string stringProperty { get; set; } = "test";
-			public ChildClass child { get; set; } = new ChildClass();
+			public ChildClass Child { get; set; } = new ChildClass();
 
-			public override string ToString()
-			{
-				return "";
-			}
+			public override string ToString() => Child.ToString();
 		}
 
 
@@ -36,23 +33,7 @@ namespace Atlas.Tabs.Test.Objects
 		{
 			public string Text { get; set; } = "test";
 
-			public override string ToString()
-			{
-				return "";
-			}
+			public override string ToString() => Text;
 		}
 	}
 }
-/*
-ETO's DataGrid doesn't handle this Test properly
-throws
-: 'Object must implement IConvertible.'
-
-
-TabView class
-// Object must implement IConvertible - can't databind non-primitives
-// URI class has this problem
-// Call ToString() on any non-primitive
-stackLayoutChildControls.Items.Add(layoutItem);
-
-*/
