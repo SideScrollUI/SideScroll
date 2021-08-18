@@ -50,6 +50,8 @@ namespace Atlas.Tabs.Test.DataGrid
 			public object Object { get; set; }
 			public string SmallString { get; set; } = "Text";
 			public string LongString { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
+
+			public override string ToString() => Integer.ToString();
 		}
 	}
 }

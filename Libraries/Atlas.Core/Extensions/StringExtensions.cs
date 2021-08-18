@@ -57,7 +57,7 @@ namespace Atlas.Extensions
 			return input.Substring(start, input.Length - start);
 		}
 
-		private static HashSet<char> wordSpacedSymbols = new HashSet<char>() { '|', '/', '-' };
+		private static HashSet<char> _wordSpacedSymbols = new HashSet<char>() { '|', '/', '-' };
 
 		// Adds spaces between words
 		// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'
@@ -83,7 +83,7 @@ namespace Atlas.Extensions
 				{
 					c = ' ';
 				}
-				else if (wordSpacedSymbols.Contains(c))
+				else if (_wordSpacedSymbols.Contains(c))
 				{
 					newText.Append(' ');
 					newText.Append(c);

@@ -1,5 +1,7 @@
-﻿using Avalonia;
+﻿using Atlas.Core;
+using Avalonia;
 using OxyPlot.Avalonia;
+using System;
 
 namespace Atlas.Start.Avalonia
 {
@@ -10,7 +12,15 @@ namespace Atlas.Start.Avalonia
 			OxyPlotModule.EnsureLoaded();
 			AppBuilder builder = BuildAvaloniaApp();
 
-			return builder.StartWithClassicDesktopLifetime(args);
+			try
+			{
+				return builder.StartWithClassicDesktopLifetime(args);
+			}
+			catch (Exception e)
+			{
+				LogUtils.LogException(e, "Atlas", "Atlas.Start.Avalonia");
+				return 1;
+			}
 		}
 
 		public static AppBuilder BuildAvaloniaApp()

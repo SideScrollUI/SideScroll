@@ -10,5 +10,7 @@ namespace Atlas.Start.Avalonia.Tabs
 		public int Amount { get; set; } = 3;
 		public DateTime? Start { get; set; }
 		public DateTime? End { get; set; }
+
+		public override string ToString() => Name;
 	}
 }
