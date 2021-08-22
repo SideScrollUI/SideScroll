@@ -606,7 +606,7 @@ namespace Atlas.Serialize
 
 			Clones[obj] = clone;
 			typeRepo.Cloned++;
-			Action action = new Action(() => typeRepo.Clone(obj, clone));
+			Action action = () => typeRepo.Clone(obj, clone);
 			CloneQueue.Enqueue(action);
 			return clone;
 		}

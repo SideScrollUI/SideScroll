@@ -27,7 +27,7 @@ namespace Atlas.Tabs.Test.Actions
 					new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
 					new TaskDelegate("Parallel Task Progress", ParallelTaskProgress, true),
 					new TaskDelegateAsync("Task Progress", SubTaskProgressAsync, true),
-					new TaskAction("Action", new Action(() => PassParams(1, "abc"))),
+					new TaskAction("Action", () => PassParams(1, "abc")),
 					new TaskDelegateAsync("Long load (Async)", SleepAsync, true),
 					new TaskDelegate("StartAsync error", StartAsyncError),
 				};

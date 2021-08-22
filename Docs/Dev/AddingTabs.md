@@ -83,34 +83,34 @@ namespace Atlas.Tabs.Test
 {
 	public class TabSample : ITab
 	{
-		private int count;
+		private int Count;
 
 		public TabSample(int count)
 		{
-			this.count = count;
+			Count = count;
 		}
 
 		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance
 		{
-			private TabSample tab;
+			private TabSample Tab;
 
-			private ItemCollectionUI<SampleItem> sampleItems;
+			private ItemCollectionUI<SampleItem> _sampleItems;
 
 			public Instance(TabSample tab)
 			{
-				this.tab = tab;
+				Tab = tab;
 			}
 
 			public override void Load(Call call, TabModel model)
 			{
-				sampleItems = new ItemCollectionUI<SampleItem>();
-				AddItems(tab.count);
+				_sampleItems = new ItemCollectionUI<SampleItem>();
+				AddItems(Tab.Count);
 
 				model.Items = new ItemCollection<ListItem>("Items")
 				{
-					new ListItem("Sample Items", sampleItems),
+					new ListItem("Sample Items", _sampleItems),
 					new ListItem("Collections", new TabTestGridCollectionSize()),
 					new ListItem("Recursive Tab", new TabSample()), // recursive
 				};
@@ -136,23 +136,25 @@ namespace Atlas.Tabs.Test
 			private void AddItems(int count)
 			{
 				for (int i = 0; i < count; i++)
-					sampleItems.Add(new SampleItem(sampleItems.Count, "Item " + sampleItems.Count));
+				{
+					_sampleItems.Add(new SampleItem(_sampleItems.Count, "Item " + _sampleItems.Count));
+				}
 			}
 		}
 	}
 
 	public class SampleItem
 	{
-		public int ID { get; set; }
+		public int Id { get; set; }
 		public string Name { get; set; }
+
+		public override string ToString() => Name;
 
 		public SampleItem(int id, string name)
 		{
-			ID = id;
+			Id = id;
 			Name = name;
 		}
-
-		public override string ToString() => Name;
 	}
 }
 ```
@@ -189,10 +191,10 @@ namespace Atlas.Tabs.Test.Actions
 				};
 			}
 
-			private int counter = 1;
+			private int _counter = 1;
 			private void AddEntry(Call call)
 			{
-				call.Log.Add("New Log entry", new Tag("counter", counter++));
+				call.Log.Add("New Log entry", new Tag("counter", _counter++));
 			}
 
 			private async Task SleepAsync(Call call)

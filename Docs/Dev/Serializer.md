@@ -27,13 +27,15 @@ public class MyClass
 You can call the Serializer.Clone<Type> to do a deep clone of any object that can be serialized. Additionally, any class with a [Static] will not be cloned to speed things up (useful for objects that won't change). This can be useful for simulating things where 90% of the data doesn't change and you want to take snapshots at intervals.
 
 ## Restricting Types
-- When importing or exporting data, you might want to restrict which data can be exported
-- When calling any SerializerMemory method, you can set `publicOnly=true` to disable exporting any data without the `[PublicData]` attribute
-- Currently, when serializing or deserializing, the debug output will print a warning whenever it encounters a type without the `[PublicData]` or `[PrivateData]` attribute. A warning log entry will also be added.
+- When importing or exporting data like bookmarks, you might want to restrict which data can be exported
+- When calling any SerializerMemory method, you can set `publicOnly = true` to disable exporting any data without the `[PublicData]` / `[ProtectedData]` attribute
+- Currently, when serializing or deserializing, the debug output will print a warning whenever it encounters a type without a `[PublicData]`, `[ProtectedData]`, or `[PrivateData]` attribute. A warning log entry will also be added.
 - `[PublicData]`
-  - Any types that specify this attribute will be included
+  - Any type or class members that specify this attribute will be included
+- `[ProtectedData]`
+  - All class members will default to [PrivateData], but can be overridden with a [PublicData]
 - `[PrivateData]`
-  - Any types that specify this attribute will be ignored, and the debug output will not output a warning for them
+  - Any types or class members that specify this attribute will be ignored, and the debug output will not output a warning for them
 - The following types are also allowed
   - `string`
   - `DateTime`

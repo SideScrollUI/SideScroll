@@ -31,7 +31,7 @@ namespace Atlas.Tabs.Test
 				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Sleep 10s", Sleep, true),
-					new TaskAction("Add 5 Items", new Action(() => AddItems(5)), false), // Foreground task so we can modify collection
+					new TaskAction("Add 5 Items", () => AddItems(5), false), // Foreground task so we can modify collection
 				};
 
 				model.Notes =

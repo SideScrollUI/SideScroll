@@ -1,13 +1,14 @@
 # Atlas
-Atlas is a tool for exploring multiple paths of a tree at once
+Atlas is an AvaloniaUI library for exploring multiple paths of a tree at once
 
 # Features
-* Cross Platform GUI Framework written in C#
-* Navigator remembers all previous selections, and can bookmark trees for future reference
-* Custom serializer that can save & load any object without any extra code
-* Follow tabs 20 or more levels deep. Your view will scroll as needed
+* Cross Platform UI Framework written in C#
+* Navigator remembers all previous selections
+* Create Bookmarks to share links between users
+* Data Repos let you specify attributes for saving & loading data and links locally
+* Follow tabs 20 or more levels deep. New tabs will load as you scroll
 
-![Atlas UI](/Images/Screenshots/DataGridAndCustomControl.png)
+![Atlas UI](/Images/Screenshots/Sample_Chart_CustomControl.png)
 
 * [Demo Project - Video Game Database](https://github.com/garyhertel/VideoGamesDB)
 * [Setup](Docs/Setup.md)

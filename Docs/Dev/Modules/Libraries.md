@@ -1,46 +1,41 @@
 # Libraries
 
+- All libraries use .NET Standard 2.0
 
 ## Core Libraries
 
-* Atlas.Core (.NET Standard)
+* Atlas.Core
 
   - UI Tab Interface
   -	Logging
   - Utilities - (Extensions, Attributes, etc)
 
-* Atlas.Serialize (.NET Standard)
+* Atlas.Serialize
   - Serializes all objects into a customer data store
   - Supports lazy loading and circular references
   - This is growing so big it should probably be it's own library)
   - [Serializer.md]
-* Atlas.Network (.NET Standard)
+* Atlas.Network
   - HTTP - (downloading files)
   - FTP - (downloading files)
   
 ## Tab Libraries
 
-* Atlas.Tabs (.NET Standard)
+* Atlas.Tabs
   - Defines the UI menus
   - Contains all the Tab interface logic for everything
-  - Shared across UIs
+  - Shared across UI frameworks
+    - Currently only AvaloniaUI
   
-* Atlas.Tabs.Tools (.NET Standard)
+* Atlas.Tabs.Tools
   - File Browser
   
-* Atlas.Tabs.Test (.NET Standard)
-  - `*Test` tabs that show up in debug mode
+* Atlas.Tabs.Test
+  - `* Test` tabs that show up in debug mode
   - Used for testing UI features
 
 ## User Interface Libraries
   
-* Atlas.UI.Avalonia (.NET Standard)
+* Atlas.UI.Avalonia
   - Cross Platform UI Controls
   - Works on Windows, Linux, and Mac
-  - Still early beta
-  
-* Atlas.UI.WPF (.NET Framework)
-  - Windows only UI Controls
-  - Furthest along of the UI interfaces
-  - Has a lot better layout controls than WinForms
-  - Ideally would eventually get deprecated for a cross platform solution

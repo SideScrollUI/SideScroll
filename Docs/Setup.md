@@ -26,15 +26,10 @@
       - Visual Studio Code
       - JetBrains Rider?
   - Mac
-      - Visual Studio
-        - Note this is a completely different Visual Studio than the windows version
       - JetBrains Rider
 - Start Atlas in Debug Mode
   - Set the start project to one of the programs
   - `Programs / Atlas.Start.Avalonia`
     - .NET Core
       - Cross platform (Windows, Linux, Mac)
-  - `Programs / Atlas.Start.Wpf`
-    - .NET Framework
-      - Windows Only
     

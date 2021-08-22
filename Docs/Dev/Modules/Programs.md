@@ -1,10 +1,6 @@
 # Programs (in order of % Complete)
-* Atlas.Start.WPF (.NET Framework 4.6.1)
-  - The primary application that loads all the other modules
-  - Uses the `Atlas.UI.WPF` controls with the `Atlas.Tabs.Test` interface
-  - Windows only
 
-* Atlas.Start.Avalonia (.NET Standard 2.0)
+* Atlas.Start.Avalonia (.NET Core 3.1)
   - The primary application that loads all the other modules
   - Uses the `Atlas.UI.Avalonia` controls with the `Atlas.Tabs.Test` interface
   - Cross Platform (Windows, Mac, Ubuntu)

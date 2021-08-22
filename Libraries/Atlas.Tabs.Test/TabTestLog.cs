@@ -31,18 +31,18 @@ namespace Atlas.Tabs.Test
 
 				model.Actions = new List<TaskCreator>()
 				{
-					new TaskAction("Add 1 Entry", new Action(() => AddEntries(1))),
-					new TaskAction("Add 10 Entries", new Action(() => AddEntries(10))),
-					new TaskAction("Add 100 Entries", new Action(() => AddEntries(100))),
-					new TaskAction("Add 1,000 Entries", new Action(() => AddEntries(1000))),
-					new TaskAction("Add 10,000 Entries", new Action(() => AddEntries(10000))),
+					new TaskAction("Add 1 Entry", () => AddEntries(1)),
+					new TaskAction("Add 10 Entries",() => AddEntries(10)),
+					new TaskAction("Add 100 Entries", () => AddEntries(100)),
+					new TaskAction("Add 1,000 Entries", () => AddEntries(1000)),
+					new TaskAction("Add 10,000 Entries", () => AddEntries(10000)),
 					new TaskDelegate("Reset", Reset),
 					// Tests different threading contexts
-					new TaskAction("System.Timer: Log 1 Entry / second", new Action(() => StartSystemTimer())),
-					new TaskAction("Threading.Timer: Log 1 Entry / second", new Action(() => StartThreadTimer())),
+					new TaskAction("System.Timer: Log 1 Entry / second", () => StartSystemTimer()),
+					new TaskAction("Threading.Timer: Log 1 Entry / second", () => StartThreadTimer()),
 					new TaskDelegate("Task Delegate Thread:  Log 1 Entry / second", SubTaskInstances, true),
 				};
-				//actions.Add(new TaskAction("Add Child Entry", new Action(() => AddChildEntry())));
+				//actions.Add(new TaskAction("Add Child Entry", () => AddChildEntry()));
 			}
 
 			private void Reset(Call call)
