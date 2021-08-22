@@ -104,8 +104,12 @@
         
         <SolidColorBrush x:Key="ToolbarBorderMidBrush">#1e1e1e</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarBorderHighBrush">#655ea7</SolidColorBrush>
-    
+
         <SolidColorBrush x:Key="ControlBackgroundHoverBrush">#ddffdd</SolidColorBrush>
+
+        <!-- ToolTip -->
+        <SolidColorBrush x:Key="ToolTipBackgroundBrush">#58588f</SolidColorBrush>
+        <SolidColorBrush x:Key="ToolTipForegroundBrush">#d0d0e8</SolidColorBrush>
 
         <!-- Title -->
         <SolidColorBrush x:Key="TitleBackgroundBrush">#4f52bb</SolidColorBrush>

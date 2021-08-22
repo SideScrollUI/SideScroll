@@ -35,8 +35,10 @@
     </Style>
 
     <Style Selector="ToolTip">
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Background" Value="{DynamicResource ToolTipBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ToolTipForegroundBrush}"/>
         <Setter Property="BorderBrush" Value="#FF000000" />
+        <Setter Property="BorderThickness" Value="1" />
     </Style>
 
     <Style Selector="ScrollBar /template/ Border">

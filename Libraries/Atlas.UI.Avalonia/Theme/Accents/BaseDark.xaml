@@ -105,6 +105,10 @@
 
         <SolidColorBrush x:Key="ControlBackgroundHoverBrush">#4e8ef7</SolidColorBrush>
 
+        <!-- ToolTip -->
+        <SolidColorBrush x:Key="ToolTipBackgroundBrush">#58588f</SolidColorBrush>
+        <SolidColorBrush x:Key="ToolTipForegroundBrush">#d0d0e8</SolidColorBrush>
+
         <!-- Title -->
         <SolidColorBrush x:Key="TitleBackgroundBrush">#5732c3</SolidColorBrush>
         <SolidColorBrush x:Key="TitleForegroundBrush">#d8d8e9</SolidColorBrush>

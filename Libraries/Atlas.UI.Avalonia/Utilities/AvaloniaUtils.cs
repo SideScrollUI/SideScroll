@@ -40,7 +40,10 @@ namespace Atlas.UI.Avalonia
 
 		public static void AddContextMenu(TextBox textBox)
 		{
-			var contextMenu = new ContextMenu();
+			var contextMenu = new ContextMenu()
+			{
+				Foreground = Theme.Foreground,
+			};
 
 			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 

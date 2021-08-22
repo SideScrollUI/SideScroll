@@ -12,6 +12,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -420,7 +421,9 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			var orderedColumns = new SortedDictionary<int, string>();
 			foreach (DataGridColumn column in DataGrid.Columns)
+			{
 				orderedColumns[column.DisplayIndex] = _columnNames[column];
+			}
 
 			TabDataSettings.ColumnNameOrder.Clear();
 			TabDataSettings.ColumnNameOrder.AddRange(orderedColumns.Values);
@@ -482,6 +485,19 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
+		private static bool IsControlSelectable(IVisual visual)
+		{
+			if (visual == null)
+				return false;
+
+			Type type = visual.GetType();
+
+			return 
+				typeof(CheckBox).IsAssignableFrom(type) || 
+				typeof(Button).IsAssignableFrom(type) || 
+				IsControlSelectable(visual.VisualParent);
+		}
+
 		// Single click deselect (cells don't always occupy their entire contents)
 		private static void DataGridRow_PointerPressed(DataGridRow row, PointerPressedEventArgs e)
 		{
@@ -494,6 +510,13 @@ namespace Atlas.UI.Avalonia.Controls
 				if (dataGrid.SelectedItems == null || dataGrid.SelectedItems.Count != 1)
 					return;
 
+				// Ignore if toggling CheckBox or clicking Button
+				// ReadOnly CheckBoxes will return the Cell Grid instead of a child Border control
+				PointerPoint point = e.GetCurrentPoint(row);
+				IInputElement input = row.InputHitTest(point.Position);
+				if (IsControlSelectable(input))
+					return;
+	
 				if (dataGrid.SelectedItems.Contains(row.DataContext))
 				{
 					Dispatcher.UIThread.Post(() => ClearSelection(dataGrid), DispatcherPriority.Background);

@@ -46,7 +46,6 @@ namespace Atlas.UI.Avalonia.Controls
 			TextBoxSearch = new TextBox()
 			{
 				Padding = new Thickness(5, 3, 25, 3),
-				Margin = new Thickness(5),
 				Watermark = "Search",
 				Background = Theme.ToolbarTextBackground,
 				Foreground = Theme.ToolbarTextForeground,

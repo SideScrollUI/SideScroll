@@ -103,8 +103,8 @@ namespace Atlas.UI.Avalonia
 
 		public sealed class BrushColors
 		{
-			public ISolidColorBrush HasLinks => Theme.HasLinksBackground;
-			public ISolidColorBrush NoLinks => Theme.NoLinksBackground;
+			public ISolidColorBrush HasLinks => Theme.ToolbarTextForeground; //Theme.TitleForeground;
+			public ISolidColorBrush NoLinks => Theme.ToolbarTextForeground; // Should this be different?
 			public ISolidColorBrush Editable { get; set; } = Theme.Editable;
 		}
 		internal static BrushColors StyleBrushes { get; set; } = new BrushColors();
@@ -115,16 +115,14 @@ namespace Atlas.UI.Avalonia
 		{
 			try
 			{
-				//if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
-				//	return Theme.TitleForeground;
 				if (value is DictionaryEntry || 
 					PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					bool hasLinks = TabUtils.ObjectHasLinks(value, true);
-					if (!hasLinks)
-						return new SolidColorBrush(Color.Parse("#d0d0e8")); //Brushes.Black;// StyleBrushes.HasLinks;
+					if (hasLinks)
+						return StyleBrushes.HasLinks;
 					else
-						return new SolidColorBrush(Color.Parse("#d0d0e8")); //Theme.TitleForeground;
+						return StyleBrushes.NoLinks;
 				}
 			}
 			catch (InvalidCastException)

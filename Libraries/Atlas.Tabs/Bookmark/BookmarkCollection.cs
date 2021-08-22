@@ -89,5 +89,10 @@ namespace Atlas.Tabs
 					Items.Remove(existing);
 			}
 		}
+
+		public void DeleteAll()
+		{
+			_dataRepoBookmarks.DeleteAll();
+		}
 	}
 }

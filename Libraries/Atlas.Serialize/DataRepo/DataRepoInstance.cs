@@ -55,7 +55,7 @@ namespace Atlas.Serialize
 
 		public virtual void DeleteAll()
 		{
-			DataRepo.DeleteAll<T>();
+			DataRepo.DeleteAll<T>(GroupId);
 		}
 	}
 }

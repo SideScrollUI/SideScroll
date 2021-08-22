@@ -25,7 +25,11 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public class Toolbar : TabToolbar
 		{
-			public ToolButton ButtonReset { get; set; } = new ToolButton("Reset", Icons.Streams.Refresh);
+			public ToolButton ButtonRefresh { get; set; } = new ToolButton("Refresh", Icons.Streams.Refresh);
+			//public ToolButton ButtonReset { get; set; } = new ToolButton("Reset", Icons.Streams.Refresh);
+
+			[Separator]
+			public ToolButton ButtonDeleteAll { get; set; } = new ToolButton("Delete All", Icons.Streams.DeleteList);
 		}
 
 		public class Instance : TabInstance
@@ -45,9 +49,11 @@ namespace Atlas.UI.Avalonia.Controls
 
 			public override void LoadUI(Call call, TabModel model)
 			{
-				/*toolbar = new Toolbar();
-				toolbar.ButtonReset.Action = Reset;
-				model.AddObject(toolbar);*/
+				var toolbar = new Toolbar();
+				toolbar.ButtonRefresh.Action = Refresh;
+				//toolbar.ButtonReset.Action = Reset;
+				toolbar.ButtonDeleteAll.Action = DeleteAll;
+				model.AddObject(toolbar);
 
 				model.AddData(Tab.Bookmarks.Items);
 
@@ -66,12 +72,23 @@ namespace Atlas.UI.Avalonia.Controls
 					child.IsRoot = true;
 			}
 
-			private void Reset(Call call)
+			private void Refresh(Call call)
+			{
+				Refresh();
+			}
+
+			/*private void Reset(Call call)
 			{
 				foreach (TabBookmarkItem item in SelectedItems)
 				{
 					SelectItem(item);
 				}
+			}*/
+
+			private void DeleteAll(Call call)
+			{
+				Tab.Bookmarks.DeleteAll();
+				Tab.Bookmarks.Load(call, true);
 			}
 		}
 	}
