@@ -6,6 +6,8 @@ namespace Atlas.Serialize
 {
 	public static class SerializerExtensions
 	{
+		private const BindingFlags CloneBindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
+
 		public static T DeepClone<T>(this T obj, Call call = null, bool publicOnly = false)
 		{
 			call = call ?? new Call();
@@ -26,9 +28,9 @@ namespace Atlas.Serialize
 			if (!outputType.Equals(inputType) && !outputType.IsSubclassOf(inputType))
 				throw new ArgumentException(string.Format("{0} is not a sublcass of {1}", outputType, inputType));
 
-			PropertyInfo[] properties = inputType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+			PropertyInfo[] properties = inputType.GetProperties(CloneBindingAttr);
 
-			FieldInfo[] fields = inputType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+			FieldInfo[] fields = inputType.GetFields(CloneBindingAttr);
 
 			foreach (PropertyInfo property in properties)
 			{

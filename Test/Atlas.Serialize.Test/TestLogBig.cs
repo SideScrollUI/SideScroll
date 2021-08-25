@@ -63,7 +63,7 @@ namespace Atlas.Serialize.Test
 		// Todo: use caller instead
 		public void Child(string name)
 		{
-			TestLogBig logEntry = new TestLogBig();
+			var logEntry = new TestLogBig();
 			//log.Type = logType;
 			//logEntry = new Log(context, contextID, settings, "replacing log with local", new Tag[] { });
 			if (Items == null)

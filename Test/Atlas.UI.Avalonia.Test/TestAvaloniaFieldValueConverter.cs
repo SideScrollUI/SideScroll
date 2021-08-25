@@ -17,7 +17,7 @@ namespace Atlas.UI.Avalonia.Test
 		public void ConvertDateTime()
 		{
 			DateTime dateTime = new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc);
-			FormatValueConverter converter = new FormatValueConverter();
+			var converter = new FormatValueConverter();
 			string converted = (string)converter.Convert(dateTime, typeof(string), null, null);
 			DateTime processedDateTime = (DateTime)converter.Convert(converted, typeof(DateTime), null, null);
 			Assert.AreEqual(dateTime, processedDateTime);

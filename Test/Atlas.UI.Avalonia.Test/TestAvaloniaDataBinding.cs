@@ -49,7 +49,7 @@ namespace Atlas.UI.Avalonia.Test
 
 		public void TestBind(int count)
 		{
-			Binding binding = new Binding
+			var binding = new Binding
 			{
 				Path = nameof(TestItem.Name),
 				Mode = BindingMode.OneWay, // copying a value to the clipboard triggers an infinite loop without this?
@@ -57,8 +57,8 @@ namespace Atlas.UI.Avalonia.Test
 
 			for (int i = 0; i < count; i++)
 			{
-				TextBlock textBlock = new TextBlock();
-				//TestItem testItem = new TestItem();
+				var textBlock = new TextBlock();
+				//var testItem = new TestItem();
 
 				textBlock.Bind(TextBlock.TextProperty, binding);
 			}
