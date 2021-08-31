@@ -107,6 +107,13 @@ namespace Atlas.Core
 			return logTimer;
 		}
 
+		public LogTimer TimerDebug(string text, params Tag[] tags)
+		{
+			var logTimer = new LogTimer(LogLevel.Debug, text, Settings, tags);
+			AddLogEntry(logTimer);
+			return logTimer;
+		}
+
 		public string EntriesText()
 		{
 			var stringBuilder = new StringBuilder();

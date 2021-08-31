@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Threading;
 
 namespace Atlas.Core
 {
@@ -67,10 +66,7 @@ namespace Atlas.Core
 
 		public List<T> ToList()
 		{
-			var list = new List<T>();
-			foreach (T item in this)
-				list.Add(item);
-			return list;
+			return new List<T>(this);
 		}
 
 		/*public new void Add(T item)
@@ -80,7 +76,6 @@ namespace Atlas.Core
 		}*/
 	}
 
-	// Winforms really need IBindingList, but Wpf DataGrid tries to use IBindingList to sort if available (bad)
 	public class ItemCollection<T, T2> : ObservableCollection<T>, IList, ICollection, IEnumerable //, IRaiseItemChangedEvents //
 	{
 		public ItemCollection()

@@ -95,7 +95,6 @@ namespace Atlas.UI.Avalonia.View
 
 		private void MenuItemReset_Click(object sender, RoutedEventArgs e)
 		{
-			//tabInstance.Reset()
 			TabView.TabViewSettings = new TabViewSettings();
 			TabInstance.SaveTabSettings();
 			TabInstance.Reintialize(true);

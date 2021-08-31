@@ -50,17 +50,6 @@ namespace Atlas.UI.Avalonia.Controls
 			InitializeControls();
 		}
 
-		/*protected override Size MeasureOverride(Size availableSize)
-		{
-			return base.MeasureOverride(availableSize);
-		}
-
-		protected override void OnMeasureInvalidated()
-		{
-			base.OnMeasureInvalidated();
-			//Size size = tabDataGrid.dataGrid.DesiredSize;
-		}*/
-
 		private void InitializeControls()
 		{
 			ColumnDefinitions = new ColumnDefinitions("*");
@@ -81,9 +70,7 @@ namespace Atlas.UI.Avalonia.Controls
 			_tabControlDataGrid.AddColumn("Status", nameof(TaskInstance.Status));
 			//tabControlDataGrid.AddColumn("Message", nameof(TaskInstance.Message));
 
-			//tabDataGrid.AutoLoad = tabModel.AutoLoad;
 			_tabControlDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;
-			//tabDataGrid.Initialize();
 			Children.Add(_tabControlDataGrid);
 
 			if (TabInstance.Model.Tasks.Count > 0)
@@ -109,12 +96,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			_tabControlDataGrid.MinHeight = _tabControlDataGrid.DesiredSize.Height;
 			MinHeight = _tabControlDataGrid.MinHeight;
-			//tabDataGrid.dataGrid._measured = false; doesn't work
-			//tabDataGrid.Measure(new Size(2000, 2000));
 			_tabControlDataGrid.InvalidateMeasure();
-			//tabDataGrid.Height
-			//InvalidateMeasure();
-			//IsVisible = true;
 			IsVisible = ShowTasks;
 
 			if (AutoSelectNew && TabInstance.Model.Tasks.Count > 0)

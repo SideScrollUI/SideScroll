@@ -19,6 +19,21 @@ namespace Atlas.Core
 			Tags = tags;
 
 			Add(text, tags);
+			InitializeTimer();
+		}
+
+		public LogTimer(LogLevel logLevel, string text, LogSettings logSettings, Tag[] tags) :
+			base(text, logSettings)
+		{
+			Level = logLevel;
+			Tags = tags;
+
+			Add(logLevel, text, tags);
+			InitializeTimer();
+		}
+
+		private void InitializeTimer()
+		{
 			_stopwatch.Start();
 
 			_timer.Interval = 1000.0;
