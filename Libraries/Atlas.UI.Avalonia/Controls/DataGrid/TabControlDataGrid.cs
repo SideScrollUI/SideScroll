@@ -297,7 +297,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AutoSizeColumns()
 		{
-			if (DataGrid == null)
+			// Only works with Stretch right now
+			if (DataGrid == null || HorizontalAlignment != HorizontalAlignment.Stretch)
 				return;
 
 			// The star column widths will change as other column widths are changed

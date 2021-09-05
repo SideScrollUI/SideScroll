@@ -33,7 +33,9 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			ColumnDefinitions = new ColumnDefinitions(columnDefinitions);
+
 			Margin = new Thickness(15, 6);
+
 			MinWidth = 100;
 			MaxWidth = 2000;
 		}

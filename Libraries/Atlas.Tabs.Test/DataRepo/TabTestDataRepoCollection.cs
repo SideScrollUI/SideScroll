@@ -11,14 +11,15 @@ namespace Atlas.Tabs.Test.DataRepo
 
 		public class Instance : TabInstance
 		{
-			private ItemCollection<SampleItem> sampleItems;
-			private string saveDirectory = null;
-			private DataRepoInstance<SampleItem> dataRepoItems;
+			private const string RepoId = "TestRepo";
+
+			private ItemCollection<SampleItem> _sampleItems;
+			private DataRepoInstance<SampleItem> _dataRepoItems;
 
 			public override void Load(Call call, TabModel model)
 			{
 				LoadSavedItems(call);
-				model.Items = sampleItems;
+				model.Items = _sampleItems;
 
 				model.Actions =  new ItemCollection<TaskCreator>()
 				{
@@ -34,14 +35,11 @@ namespace Atlas.Tabs.Test.DataRepo
 
 			private void LoadSavedItems(Call call)
 			{
-				dataRepoItems = DataApp.Open<SampleItem>(saveDirectory);
-				DataRepoInstance = dataRepoItems;
-				sampleItems = new ItemCollection<SampleItem>();
-				var dataRefs = dataRepoItems.LoadAllSorted(call);
-				foreach (var dataRef in dataRefs)
-				{
-					sampleItems.Add(dataRef.Value);
-				}
+				_dataRepoItems = DataApp.Open<SampleItem>(RepoId);
+				DataRepoInstance = _dataRepoItems;
+
+				var dataRefs = _dataRepoItems.LoadAllSorted(call);
+				_sampleItems = new ItemCollection<SampleItem>(dataRefs.Values);
 			}
 
 			private void Clear(Call call)
@@ -51,10 +49,10 @@ namespace Atlas.Tabs.Test.DataRepo
 
 			private void Add(Call call)
 			{
-				var sampleItem = new SampleItem(sampleItems.Count, "Item " + sampleItems.Count);
+				var sampleItem = new SampleItem(_sampleItems.Count, "Item " + _sampleItems.Count);
 				RemoveItem(sampleItem.Name); // Remove previous result so refocus works
-				dataRepoItems.Save(call, sampleItem.ToString(), sampleItem);
-				sampleItems.Add(sampleItem);
+				_dataRepoItems.Save(call, sampleItem.ToString(), sampleItem);
+				_sampleItems.Add(sampleItem);
 			}
 
 			private void Add10(Call call)
@@ -65,10 +63,10 @@ namespace Atlas.Tabs.Test.DataRepo
 
 			private void Replace(Call call)
 			{
-				var sampleItem = new SampleItem(sampleItems.Count, "Item 0");
+				var sampleItem = new SampleItem(_sampleItems.Count, "Item 0");
 				RemoveItem(sampleItem.Name); // Remove previous result so refocus works
-				dataRepoItems.Save(call, sampleItem.ToString(), sampleItem);
-				sampleItems.Add(sampleItem);
+				_dataRepoItems.Save(call, sampleItem.ToString(), sampleItem);
+				_sampleItems.Add(sampleItem);
 			}
 
 			private void Delete(Call call)
@@ -79,6 +77,7 @@ namespace Atlas.Tabs.Test.DataRepo
 				{
 					selectedItems.Add(item);
 				}
+
 				foreach (SampleItem item in selectedItems)
 				{
 					RemoveItem(item.Name);
@@ -87,16 +86,16 @@ namespace Atlas.Tabs.Test.DataRepo
 
 			private void DeleteAll(Call call)
 			{
-				dataRepoItems.DeleteAll();
-				sampleItems.Clear();
+				_dataRepoItems.DeleteAll();
+				_sampleItems.Clear();
 			}
 
 			public void RemoveItem(string key)
 			{
-				dataRepoItems.Delete(key);
-				SampleItem existing = sampleItems.SingleOrDefault(i => i.Name == key);
+				_dataRepoItems.Delete(key);
+				SampleItem existing = _sampleItems.SingleOrDefault(i => i.Name == key);
 				if (existing != null)
-					sampleItems.Remove(existing);
+					_sampleItems.Remove(existing);
 			}
 		}
 

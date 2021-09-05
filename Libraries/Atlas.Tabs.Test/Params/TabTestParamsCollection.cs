@@ -18,9 +18,9 @@ namespace Atlas.Tabs.Test
 		{
 			private const string DataKey = "Params";
 
-			private ItemCollection<ParamTestItem> items;
-			private ParamTestItem paramTestItem;
-			private DataRepoInstance<ParamTestItem> dataRepoParams;
+			private ItemCollection<ParamTestItem> _items;
+			private ParamTestItem _paramTestItem;
+			private DataRepoInstance<ParamTestItem> _dataRepoParams;
 
 			public override void Load(Call call, TabModel model)
 			{
@@ -31,8 +31,8 @@ namespace Atlas.Tabs.Test
 					new TaskDelegate("Add", Add),
 				};*/
 
-				paramTestItem = LoadData<ParamTestItem>(DataKey);
-				model.AddObject(paramTestItem);
+				_paramTestItem = LoadData<ParamTestItem>(DataKey);
+				model.AddObject(_paramTestItem);
 
 				var toolbar = new Toolbar();
 				toolbar.ButtonNew.Action = New;
@@ -42,15 +42,12 @@ namespace Atlas.Tabs.Test
 
 			private void LoadSavedItems(Call call, TabModel model)
 			{
-				dataRepoParams = DataApp.Open<ParamTestItem>("CollectionTest");
-				DataRepoInstance = dataRepoParams;
-				items = new ItemCollection<ParamTestItem>();
-				var dataRefs = dataRepoParams.LoadAllSorted(call);
-				foreach (var dataRef in dataRefs)
-				{
-					items.Add(dataRef.Value);
-				}
-				model.Items = items;
+				_dataRepoParams = DataApp.Open<ParamTestItem>("CollectionTest");
+				DataRepoInstance = _dataRepoParams;
+
+				var dataRefs = _dataRepoParams.LoadAllSorted(call);
+				_items = new ItemCollection<ParamTestItem>(dataRefs.Values);
+				model.Items = _items;
 			}
 
 			private void New(Call call)
@@ -59,14 +56,14 @@ namespace Atlas.Tabs.Test
 
 			private void Save(Call call)
 			{
-				ParamTestItem clone = paramTestItem.DeepClone(call);
-				dataRepoParams.Save(call, clone.ToString(), clone);
+				ParamTestItem clone = _paramTestItem.DeepClone(call);
+				_dataRepoParams.Save(call, clone.ToString(), clone);
 				//SaveData(dataKey, paramTestItem);
 				/*var result = new ParamTestResult()
 				{
 					parameters = clone,
 				};*/
-				items.Add(clone);
+				_items.Add(clone);
 			}
 		}
 	}

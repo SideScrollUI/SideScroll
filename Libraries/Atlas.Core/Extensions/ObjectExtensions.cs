@@ -170,6 +170,7 @@ namespace Atlas.Extensions
 				object result = toStringMethod.Invoke(obj, new object[] { format });
 				if (result == null)
 					return null;
+
 				return (string)result;
 			}
 
@@ -183,6 +184,7 @@ namespace Atlas.Extensions
 			// it's using the base to string
 			// No unique identifier found yet, start looking in the properties and fields
 
+			// Return first non-null property value
 			PropertyInfo[] properties = type.GetProperties();
 			foreach (PropertyInfo propertyInfo in properties)
 			{
@@ -195,6 +197,7 @@ namespace Atlas.Extensions
 				}
 			}
 
+			// Return first non-null field value
 			FieldInfo[] fields = type.GetFields();
 			foreach (FieldInfo fieldInfo in fields)
 			{
