@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using Atlas.UI.Avalonia.Utilities;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
@@ -7,13 +8,20 @@ using Avalonia.Media.Imaging;
 using Avalonia.VisualTree;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia
 {
 	public class ScreenCapture : Grid
 	{
-		private RenderTargetBitmap _correctedBitmap;
+		private const int MinClipboardSize = 10;
+
+		private RenderTargetBitmap _originalBitmap;
+		private RenderTargetBitmap _backgroundBitmap; // 50% faded
 		private RenderTargetBitmap _selectionBitmap;
+
 		private Image _backgroundImage;
 		private Image _selectionImage;
 
@@ -28,25 +36,19 @@ namespace Atlas.UI.Avalonia
 		private void InitializeComponent(IVisual visual)
 		{
 			Background = Brushes.Black;
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
 
-			ColumnDefinitions = new ColumnDefinitions("*,Auto,*,Auto,*");
-			RowDefinitions = new RowDefinitions("*,Auto,*,Auto,*");
+			HorizontalAlignment = HorizontalAlignment.Left;
+			VerticalAlignment = VerticalAlignment.Top;
+
+			ColumnDefinitions = new ColumnDefinitions("*");
+			RowDefinitions = new RowDefinitions("*");
+
 			Cursor = new Cursor(StandardCursorType.Cross);
 
 			AddBackgroundImage(visual);
 
-			_selectionImage = new Image()
-			{
-				//[Grid.ColumnProperty] = 2,
-				//[Grid.RowProperty] = 2,
-				[Grid.ColumnSpanProperty] = 5,
-				[Grid.RowSpanProperty] = 5,
-			};
+			_selectionImage = new Image();
 			Children.Add(_selectionImage);
-
-			//rtb.Save(Path.Combine(OutputPath, testName + ".out.png"));
 
 			PointerPressed += ScreenCapture_PointerPressed;
 			PointerReleased += ScreenCapture_PointerReleased;
@@ -55,75 +57,28 @@ namespace Atlas.UI.Avalonia
 
 		private void AddBackgroundImage(IVisual visual)
 		{
-			// visual is offset by the Toolbar height
 			var bounds = visual.Bounds;
 
-			var sourceBitmap = new RenderTargetBitmap(new PixelSize((int)bounds.Right, (int)bounds.Bottom), new Vector(96, 96));
-			sourceBitmap.Render(visual);
+			_originalBitmap = new RenderTargetBitmap(new PixelSize((int)bounds.Right, (int)bounds.Bottom), new Vector(96, 96));
+			_originalBitmap.Render(visual);
 
-			_correctedBitmap = new RenderTargetBitmap(new PixelSize((int)bounds.Width, (int)bounds.Height), new Vector(96, 96));
+			_backgroundBitmap = new RenderTargetBitmap(new PixelSize((int)bounds.Width, (int)bounds.Height), new Vector(96, 96));
 
-			using (var ctx = _correctedBitmap.CreateDrawingContext(null))
+			using (var ctx = _backgroundBitmap.CreateDrawingContext(null))
 			{
-				var destRect = new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
-				ctx.DrawBitmap(sourceBitmap.PlatformImpl, 0.75, bounds, destRect);
+				ctx.DrawBitmap(_originalBitmap.PlatformImpl, 0.5, bounds, bounds);
 			}
 
 			_backgroundImage = new Image()
 			{
-				Source = _correctedBitmap,
-				//[Grid.RowProperty] = 1,
-				[Grid.ColumnSpanProperty] = 5,
-				[Grid.RowSpanProperty] = 5,
+				Source = _backgroundBitmap,
 			};
 			Children.Add(_backgroundImage);
 		}
 
-		private void AddSplitters()
-		{
-			AddSplitter(1, 0, HorizontalAlignment.Stretch, VerticalAlignment.Top);
-			AddSplitter(0, 1, HorizontalAlignment.Left, VerticalAlignment.Stretch);
-			AddSplitter(2, 1, HorizontalAlignment.Right, VerticalAlignment.Stretch);
-			AddSplitter(1, 2, HorizontalAlignment.Stretch, VerticalAlignment.Bottom);
-
-			/*var panel = new Panel()
-			{
-				Background = Brushes.Blue,
-				[Grid.ColumnProperty] = 2,
-				[Grid.RowProperty] = 2,
-			};
-			Children.Add(panel);*/
-
-			/*var selectionBorder = new Border()
-			{
-				BorderThickness = new Thickness(1),
-				BorderBrush = Brushes.Red,
-				Child = selectionImage,
-			};
-
-			Children.Add(selectionBorder);*/
-		}
-
-		private void AddSplitter(int column, int row, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)
-		{
-			var splitter = new GridSplitter
-			{
-				Background = Brushes.White,
-				VerticalAlignment = verticalAlignment,
-				HorizontalAlignment = horizontalAlignment,
-				Width = 1,
-				Height = 1,
-				[Grid.RowProperty] = row + 1,
-				[Grid.ColumnProperty] = column + 1,
-			};
-			Children.Add(splitter);
-			//splitter.DragDelta += GridSplitter_DragDelta;
-			//splitter.DragCompleted += GridSplitter_DragCompleted; // bug, this is firing when double clicking splitter
-		}
-
 		private RenderTargetBitmap GetSelectedBitmap()
 		{
-			if (_selectionRect.Width == 0 || _selectionRect.Height == 0)
+			if (_selectionRect.Width < MinClipboardSize || _selectionRect.Height < MinClipboardSize)
 				return null;
 
 			var destRect = new Rect(0, 0, _selectionRect.Width, _selectionRect.Height);
@@ -132,18 +87,14 @@ namespace Atlas.UI.Avalonia
 
 			using (var ctx = bitmap.CreateDrawingContext(null))
 			{
-				ctx.DrawBitmap(_correctedBitmap.PlatformImpl, 1, _selectionRect, destRect);
+				ctx.DrawBitmap(_originalBitmap.PlatformImpl, 1, _selectionRect, destRect);
 			};
 			return bitmap;
 		}
 
 		private void ScreenCapture_PointerPressed(object sender, PointerPressedEventArgs e)
 		{
-			//if (startPoint == null)
-			{
-				_startPoint = e.GetPosition(_backgroundImage);
-				//PointerMoved += ScreenCapture_PointerMoved;
-			}
+			_startPoint = e.GetPosition(_backgroundImage);
 		}
 
 		private void ScreenCapture_PointerReleased(object sender, PointerReleasedEventArgs e)
@@ -151,14 +102,24 @@ namespace Atlas.UI.Avalonia
 			if (_startPoint == null)
 				return;
 
-			//PointerReleased -= ScreenCapture_PointerReleased;
 			var bitmap = GetSelectedBitmap();
-			//ClipBoardUtils.SetTextAsync(bitmap);
-			//ClipboardUtils.SetBitmapAsync(bitmap);
+			if (bitmap == null)
+				return;
+
+			//ClipBoardUtils.SetTextAsync(bitmap); // AvaloniaUI will probably eventually support this
+			try
+			{
+				using (bitmap)
+				{
+					Task.Run(() => Win32ClipboardUtils.SetBitmapAsync(bitmap)).GetAwaiter().GetResult();
+				}
+			}
+			catch
+			{
+
+			}
 
 			_startPoint = null;
-
-			//AddSplitters();
 		}
 
 		private void ScreenCapture_PointerMoved(object sender, PointerEventArgs e)
@@ -166,33 +127,47 @@ namespace Atlas.UI.Avalonia
 			if (_startPoint == null)
 				return;
 
-			var mousePosition = e.GetPosition(_backgroundImage);
-			Size sourceSize = _correctedBitmap.Size;
+			Point mousePosition = e.GetPosition(_backgroundImage);
+			Size sourceSize = _originalBitmap.Size;
 
 			double scaleX = sourceSize.Width / _backgroundImage.Bounds.Width;
 			double scaleY = sourceSize.Height / _backgroundImage.Bounds.Height;
 
-			var scaledStartPoint = new Point(_startPoint.Value.X * scaleX, _startPoint.Value.Y * scaleY);
-			var scaledEndPoint = new Point(mousePosition.X * scaleX, mousePosition.Y * scaleY);
+			double startX = Math.Max(0, _startPoint.Value.X);
+			double startY = Math.Max(0, _startPoint.Value.Y);
 
-			Point topLeft = new Point(Math.Min(scaledStartPoint.X, scaledEndPoint.X), Math.Min(scaledStartPoint.Y, scaledEndPoint.Y));
-			Point bottomRight = new Point(Math.Max(scaledStartPoint.X, scaledEndPoint.X), Math.Max(scaledStartPoint.Y, scaledEndPoint.Y));
+			double endX = Math.Max(0, mousePosition.X);
+			double endY = Math.Max(0, mousePosition.Y);
+
+			var scaledStartPoint = new Point(startX * scaleX, startY * scaleY);
+			var scaledEndPoint = new Point(endX * scaleX, endY * scaleY);
+
+			var topLeft = new Point(
+				Math.Min(scaledStartPoint.X, scaledEndPoint.X), 
+				Math.Min(scaledStartPoint.Y, scaledEndPoint.Y));
+
+			var bottomRight = new Point(
+				Math.Max(scaledStartPoint.X, scaledEndPoint.X), 
+				Math.Max(scaledStartPoint.Y, scaledEndPoint.Y));
 
 			_selectionRect = new Rect(topLeft, bottomRight);
-			//var destRect = new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
-
-			//var selectionBitmap = GetSelectedBitmap();
 
 			_selectionBitmap = new RenderTargetBitmap(new PixelSize((int)sourceSize.Width, (int)sourceSize.Height), new Vector(96, 96));
 
-			var borderPen = new Pen(Brushes.Red, lineCap: PenLineCap.Square);
+			var borderRect = new Rect(topLeft, bottomRight).Inflate(2);
+
+			//var brush = new SolidColorBrush(Color.Parse("#8818ff"));
+			//var brush = Theme.GridBackgroundSelected;
+			var brush = Brushes.Red;
+			var borderPen = new Pen(brush, 2, lineCap: PenLineCap.Square);
+			var borderBlackPen = new Pen(Brushes.Black, 4, lineCap: PenLineCap.Square);
 			using (var ctx = _selectionBitmap.CreateDrawingContext(null))
 			{
-				ctx.DrawBitmap(_correctedBitmap.PlatformImpl, 1, _selectionRect, _selectionRect);
-				//ctx.DrawRectangle(borderPen, selectionRect);
+				ctx.DrawBitmap(_originalBitmap.PlatformImpl, 1, _selectionRect, _selectionRect);
+				ctx.DrawRectangle(null, borderBlackPen, borderRect);
+				ctx.DrawRectangle(null, borderPen, borderRect);
 			}
 			_selectionImage.Source = _selectionBitmap;
-			//selectionImage.Posit
 		}
 	}
 }

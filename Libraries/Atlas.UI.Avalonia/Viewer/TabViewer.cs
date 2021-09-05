@@ -210,6 +210,8 @@ namespace Atlas.UI.Avalonia
 
 		private void Snapshot(Call call)
 		{
+			CloseSnapshot(call);
+
 			ScreenCapture = new ScreenCapture(ScrollViewer)
 			{
 				[Grid.RowProperty] = 1,
@@ -224,8 +226,12 @@ namespace Atlas.UI.Avalonia
 		{
 			Toolbar.SetSnapshotVisible(false);
 
+			if (ScreenCapture == null)
+				return;
+
 			Children.Remove(ScreenCapture);
-			Children.Add(BottomGrid);
+			if (BottomGrid.Parent == null)
+				Children.Add(BottomGrid);
 		}
 
 		private Grid CreateScrollButtons()
