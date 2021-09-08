@@ -19,6 +19,7 @@ namespace Atlas.Tabs.Test.DataGrid
 					new ListItem("Nullable Array", new TabTestNullableArray()),
 					new ListItem("Memory", new TabTestMemory()),
 					new ListItem("Object Properties", new TabTestObjectProperties()),
+					new ListItem("Instance List Items", new TabTestInstanceListItems()),
 					new ListItem("Wide Columns", new TabTestWideColumns()),
 					new ListItem("Column Types", new TabTestGridColumnTypes()),
 					new ListItem("Column Ordering", new TabTestGridColumnOrdering()),

@@ -20,7 +20,7 @@ namespace Atlas.UI.Avalonia.View
 			{
 				// use object? or inner value?
 				label = obj.Formatted();
-				if (label == null || label.Length == 0)
+				if (label.IsNullOrEmpty())
 					label = "(" + obj.GetType().Name + ")";
 			}
 
@@ -58,9 +58,9 @@ namespace Atlas.UI.Avalonia.View
 			{
 				value = new TabText(value.ToString()); // create an ITab
 			}
-			/*else if (value is Uri)
+			/*else if (value is Uri uri)
 			{
-				TabWebBrowser tabWebBrowser = new TabWebBrowser((Uri)value);
+				var tabWebBrowser = new TabWebBrowser(uri);
 				value = tabWebBrowser;
 			}*/
 
@@ -72,9 +72,7 @@ namespace Atlas.UI.Avalonia.View
 					TabBookmark = tabBookmark,
 				};
 				childTabInstance.Model.Name = label;
-				var tabView = new TabView(childTabInstance);
-				tabView.Load();
-				return tabView;
+				value = new TabView(childTabInstance);
 			}
 			
 			if (value is ITabCreatorAsync creatorAsync)
@@ -111,10 +109,9 @@ namespace Atlas.UI.Avalonia.View
 			{
 				return control;
 			}
-			/*else if (value is FilePath)
+			/*else if (value is FilePath filePath)
 			{
-				FilePath filePath = (FilePath)value;
-				TabAvalonEdit tabAvalonEdit = new TabAvalonEdit(name);
+				var tabAvalonEdit = new TabAvalonEdit(name);
 				tabAvalonEdit.Load(filePath.path);
 				return tabAvalonEdit;
 			}*/
@@ -131,15 +128,6 @@ namespace Atlas.UI.Avalonia.View
 				}
 				else
 				{
-					// skip count 1, needs to be visible to users, and not autocollapse some types
-					/*if (value is IList)
-					{
-						IList list = (IList)value;
-						if (list.Count == 1)
-						{
-							value = list[0];
-						}
-					}*/
 					childTabModel = TabModel.Create(label, value);
 					if (childTabModel == null)
 						return null;

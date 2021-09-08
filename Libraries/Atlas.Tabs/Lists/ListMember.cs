@@ -140,7 +140,8 @@ namespace Atlas.Tabs
 			var listMembers = new ItemCollection<ListMember>();
 
 			// Add in correct order?
-			//obj.GetType().GetMembers
+			// ListItem.Create() has correct order by using property get, but doesn't work with fields
+			//var members = obj.GetType().GetMembers();
 
 			var listProperties = ListProperty.Create(obj);
 			listMembers.AddRange(listProperties);
@@ -148,7 +149,7 @@ namespace Atlas.Tabs
 			var listFields = ListField.Create(obj);
 			listMembers.AddRange(listFields);
 
-			var listMethods = ListMethod.Create(obj);
+			var listMethods = ListMethod.Create(obj); // order doesn't match up with properties and fields
 			listMembers.AddRange(listMethods);
 
 			//listMembers = itemCollection.OrderBy(x => x.MemberInfo.MetadataToken).ToList();

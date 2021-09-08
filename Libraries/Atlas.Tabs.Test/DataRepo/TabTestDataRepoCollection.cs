@@ -35,8 +35,7 @@ namespace Atlas.Tabs.Test.DataRepo
 
 			private void LoadSavedItems(Call call)
 			{
-				_dataRepoItems = DataApp.Open<SampleItem>(RepoId);
-				DataRepoInstance = _dataRepoItems;
+				DataRepoInstance = _dataRepoItems = DataApp.Open<SampleItem>(RepoId);
 
 				var dataRefs = _dataRepoItems.LoadAllSorted(call);
 				_sampleItems = new ItemCollection<SampleItem>(dataRefs.Values);

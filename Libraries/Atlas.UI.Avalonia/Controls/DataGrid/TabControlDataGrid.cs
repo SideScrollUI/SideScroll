@@ -796,6 +796,19 @@ namespace Atlas.UI.Avalonia.Controls
 			return false;
 		}
 
+		private object GetDefaultSelectedItem()
+		{
+			if (TabModel.DefaultSelectedItem == null)
+				return null;
+
+			foreach (object obj in CollectionView)
+			{
+				if (obj.ToUniqueString() == TabModel.DefaultSelectedItem.ToUniqueString())
+					return obj;
+			}
+			return null;
+		}
+
 		private object GetAutoSelectValue()
 		{
 			object firstValidObject = null;
@@ -857,7 +870,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (AutoSelect == AutoSelectType.None)
 				return;
 
-			object firstValidObject = GetAutoSelectValue();
+			object firstValidObject = GetDefaultSelectedItem() ?? GetAutoSelectValue();
 			if (firstValidObject != null && DataGrid.SelectedItems.Count == 0)
 				SelectedItem = firstValidObject;
 

@@ -9,7 +9,7 @@ namespace Atlas.Tabs.Test.Actions
 
 		public class Instance : TabInstance
 		{
-			private LogEntry logEntry = new LogEntry()
+			private LogEntry _logEntry = new LogEntry()
 			{
 				Text = "Test Entry",
 			};
@@ -17,9 +17,8 @@ namespace Atlas.Tabs.Test.Actions
 			public override void Load(Call call, TabModel model)
 			{
 				// uses DataGrid internally, doesn't work well yet
-				model.AddData(logEntry);
+				model.AddData(_logEntry);
 				model.Editing = true;
-				//model.AddInput(logEntry);
 
 				model.Actions = new List<TaskCreator>()
 				{
@@ -31,8 +30,7 @@ namespace Atlas.Tabs.Test.Actions
 
 			private void AddEntry(Call call)
 			{
-				//LogEntry logEntry = (LogEntry)call.Params;
-				call.Log.AddLogEntry(logEntry);
+				call.Log.AddLogEntry(_logEntry);
 			}
 
 		}

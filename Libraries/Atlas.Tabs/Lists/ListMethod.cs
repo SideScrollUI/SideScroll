@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Atlas.Tabs
 {
-	public class ListMethod : ListMember, IPropertyEditable, ILoadAsync
+	public class ListMethod : ListMember
 	{
 		public MethodInfo MethodInfo;
 		private bool CacheEnabled { get; set; }
@@ -55,7 +55,7 @@ namespace Atlas.Tabs
 			CacheEnabled = cached;
 
 			Name = methodInfo.Name;
-			Name = Name.WordSpaced();
+			Name = Name.TrimEnd("Async").WordSpaced();
 			NameAttribute attribute = methodInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;
@@ -65,17 +65,24 @@ namespace Atlas.Tabs
 				Name = itemAttribute.Name;
 		}
 
-		public async Task<object> LoadAsync(Call call)
+		/*public async Task<object> LoadAsync(Call call)
 		{
 			Task task = (Task)MethodInfo.Invoke(Object, new object[] { call });
 			await task.ConfigureAwait(false);
 			return (object)((dynamic)task).Result;
-		}
+		}*/
 
 		private object GetValue()
 		{
-			//return Task.Run(() => callAction.Invoke(call)).GetAwaiter().GetResult();
-			var result = Task.Run(() => MethodInfo.Invoke(Object, new object[] { new Call() })).GetAwaiter().GetResult();
+			var parameters = new object[] { };
+			ParameterInfo[] parameterInfos = MethodInfo.GetParameters();
+			if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType == typeof(Call))
+			{
+				parameters = new object[] { new Call() };
+			}
+
+			var result = Task.Run(() => MethodInfo.Invoke(Object, parameters)).GetAwaiter().GetResult();
+
 			if (result is Task task)
 				return (object)((dynamic)result).Result;
 
@@ -90,23 +97,7 @@ namespace Atlas.Tabs
 			var propertyToIndex = new Dictionary<string, int>();
 			foreach (MethodInfo methodInfo in methodInfos)
 			{
-				if (methodInfo.DeclaringType.IsNotPublic)
-					continue;
-
-				if (methodInfo.ReturnType == null)
-					continue;
-
-				if (methodInfo.GetCustomAttribute<HiddenAttribute>() != null)
-					continue;
-
-				if (methodInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
-					continue;
-
-				ParameterInfo[] parameterInfos = methodInfo.GetParameters();
-				if (parameterInfos.Length != 1 || parameterInfos[0].ParameterType != typeof(Call))
-					continue;
-
-				if (methodInfo.GetCustomAttribute<ItemAttribute>() == null)
+				if (!IsVisible(methodInfo))
 					continue;
 
 				var listMethod = new ListMethod(obj, methodInfo);
@@ -124,6 +115,23 @@ namespace Atlas.Tabs
 				}
 			}
 			return listMethods;
+		}
+
+		public static bool IsVisible(MethodInfo methodInfo)
+		{
+			if (methodInfo.DeclaringType.IsNotPublic ||
+				methodInfo.ReturnType == null ||
+				methodInfo.GetCustomAttribute<HiddenAttribute>() != null || // [Hidden]
+				methodInfo.GetCustomAttribute<HiddenRowAttribute>() != null || // [HiddenRow]
+				methodInfo.GetCustomAttribute<ItemAttribute>() == null // These are treated as Data Members
+				)
+				return false;
+
+			ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+			if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType != typeof(Call))
+				return false;
+
+			return true;
 		}
 	}
 }

@@ -58,21 +58,14 @@ namespace Atlas.Tabs
 
 		public static new ItemCollection<ListField> Create(object obj)
 		{
-			FieldInfo[] fieldInfos = obj.GetType().GetFields().OrderBy(x => x.MetadataToken).ToArray();
+			var fieldInfos = obj.GetType().GetFields().OrderBy(x => x.MetadataToken);
 
 			var listFields = new ItemCollection<ListField>();
 			// replace any overriden/new field & properties
 			var fieldToIndex = new Dictionary<string, int>();
 			foreach (FieldInfo fieldInfo in fieldInfos)
 			{
-				// Ignore const, add override?
-				if (fieldInfo.IsLiteral && !fieldInfo.IsInitOnly)
-					continue;
-
-				if (fieldInfo.GetCustomAttribute<HiddenAttribute>() != null)
-					continue;
-
-				if (fieldInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
+				if (!IsVisible(fieldInfo))
 					continue;
 
 				var listField = new ListField(obj, fieldInfo);
@@ -88,6 +81,15 @@ namespace Atlas.Tabs
 				}
 			}
 			return listFields;
+		}
+
+		public static bool IsVisible(FieldInfo fieldInfo)
+		{
+			if (fieldInfo.IsLiteral && !fieldInfo.IsInitOnly)
+				return false;
+
+			return fieldInfo.GetCustomAttribute<HiddenAttribute>() == null && // [Hidden]
+				fieldInfo.GetCustomAttribute<HiddenRowAttribute>() == null; // [HiddenRow]
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace Atlas.Serialize
 			{
 				var memorySerializer = Create();
 				memorySerializer.PublicOnly = publicOnly;
-				using (CallTimer timer = call.Timer("Deep Cloning", new Tag("Object", obj.Formatted())))
+				using (CallTimer timer = call.Timer(LogLevel.Debug, "Deep Cloning", new Tag("Object", obj.Formatted())))
 				{
 					return memorySerializer.DeepCloneInternal(timer, obj);
 				}
