@@ -127,6 +127,11 @@ namespace Atlas.Tabs
 				)
 				return false;
 
+#if !DEBUG
+			if (methodInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+				return false;
+#endif
+
 			ParameterInfo[] parameterInfos = methodInfo.GetParameters();
 			if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType != typeof(Call))
 				return false;

@@ -88,6 +88,11 @@ namespace Atlas.Tabs
 			if (fieldInfo.IsLiteral && !fieldInfo.IsInitOnly)
 				return false;
 
+#if !DEBUG
+			if (fieldInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+				return false;
+#endif
+
 			return fieldInfo.GetCustomAttribute<HiddenAttribute>() == null && // [Hidden]
 				fieldInfo.GetCustomAttribute<HiddenRowAttribute>() == null; // [HiddenRow]
 		}

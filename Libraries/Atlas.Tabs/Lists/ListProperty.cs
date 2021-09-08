@@ -149,12 +149,18 @@ namespace Atlas.Tabs
 			}
 			return listProperties;
 		}
-
 		public static bool IsVisible(PropertyInfo propertyInfo)
 		{
+			if (propertyInfo.DeclaringType.IsNotPublic)
+				return false;
+
+#if !DEBUG
+			if (propertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+				return false;
+#endif
+
 			return propertyInfo.GetCustomAttribute<HiddenAttribute>() == null && // [Hidden]
-				propertyInfo.GetCustomAttribute<HiddenRowAttribute>() == null && // [HiddenRow]
-				!propertyInfo.DeclaringType.IsNotPublic;
+				propertyInfo.GetCustomAttribute<HiddenRowAttribute>() == null; // [HiddenRow]
 		}
 
 		// This can be slow due to lazy property loading
