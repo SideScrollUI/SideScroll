@@ -65,8 +65,8 @@ namespace Atlas.UI.Avalonia
 		{
 			_contentGrid = new Grid()
 			{
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
+				HorizontalAlignment = HorizontalAlignment.Left,
+				VerticalAlignment = VerticalAlignment.Top,
 				Cursor = new Cursor(StandardCursorType.Cross),
 				[Grid.RowProperty] = 1,
 			};
@@ -74,7 +74,10 @@ namespace Atlas.UI.Avalonia
 
 			AddBackgroundImage(visual);
 
-			_selectionImage = new Image();
+			_selectionImage = new Image()
+			{
+				Stretch = Stretch.None,
+			};
 			_contentGrid.Children.Add(_selectionImage);
 
 			_contentGrid.PointerPressed += ScreenCapture_PointerPressed;
@@ -164,6 +167,9 @@ namespace Atlas.UI.Avalonia
 
 			_backgroundImage = new Image()
 			{
+				HorizontalAlignment = HorizontalAlignment.Left,
+				VerticalAlignment = VerticalAlignment.Top,
+				Stretch = Stretch.None,
 				Source = _backgroundBitmap,
 			};
 			_contentGrid.Children.Add(_backgroundImage);
@@ -238,20 +244,23 @@ namespace Atlas.UI.Avalonia
 			Size sourceSize = _originalBitmap.Size;
 			_selectionBitmap = new RenderTargetBitmap(new PixelSize((int)sourceSize.Width, (int)sourceSize.Height), new Vector(96, 96));
 
-			var borderRect = _selectionRect.Inflate(2);
-			//borderRect = borderRect.WithY(Math.Max(0, borderRect.Top));
-			borderRect = new Rect(new Point(Math.Max(0, borderRect.Left), Math.Max(0, borderRect.Top)), borderRect.BottomRight);
+			var borderRect = new Rect(
+				new Point(
+					Math.Max(2, _selectionRect.Left),
+					Math.Max(2, _selectionRect.Top)),
+				_selectionRect.BottomRight);
 
 			//var brush = new SolidColorBrush(Color.Parse("#8818ff"));
-			//var brush = Theme.GridBackgroundSelected;
-			var brush = Brushes.Red;
-			var borderPen = new Pen(brush, 2, lineCap: PenLineCap.Square);
-			var borderBlackPen = new Pen(Brushes.Black, 4, lineCap: PenLineCap.Square);
+			//var brush = Theme.ToolbarTextForeground;
+			var brush = Theme.ToolbarLabelForeground;
+			//var brush = Brushes.White;
+			var innerPen = new Pen(Brushes.Black, 2, lineCap: PenLineCap.Square);
+			var outerPen = new Pen(brush, 4, lineCap: PenLineCap.Square);
 			using (var ctx = _selectionBitmap.CreateDrawingContext(null))
 			{
 				ctx.DrawBitmap(_originalBitmap.PlatformImpl, 1, _selectionRect, _selectionRect);
-				ctx.DrawRectangle(null, borderBlackPen, borderRect);
-				ctx.DrawRectangle(null, borderPen, borderRect);
+				ctx.DrawRectangle(null, outerPen, borderRect.Inflate(1));
+				ctx.DrawRectangle(null, innerPen, borderRect);
 			}
 			_selectionImage.Source = _selectionBitmap;
 		}
