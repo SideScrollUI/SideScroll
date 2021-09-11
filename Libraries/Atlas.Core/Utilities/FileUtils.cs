@@ -16,6 +16,8 @@ namespace Atlas.Core
 
 	public class FileUtils
 	{
+		public static string TimestampString => DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+
 		[DllImport("libc", SetLastError = true)]
 		public static extern int chmod(string path, int mode);
 

@@ -18,9 +18,6 @@ namespace Atlas.UI.Avalonia
 		public ToolbarButton ButtonRefresh;
 
 		public ToolbarButton ButtonSnapshot;
-		public ToolbarButton ButtonSnapshotClipboard;
-		public ToolbarButton ButtonSnapshotEmbed;
-		public ToolbarButton ButtonSnapshotCancel;
 
 		public RelayCommand CommandBindingBack;
 		public RelayCommand CommandBindingForward;
@@ -77,8 +74,6 @@ namespace Atlas.UI.Avalonia
 #if DEBUG
 			AddSeparator();
 			ButtonSnapshot = AddButton("Snapshot", Icons.Streams.Screenshot);
-			ButtonSnapshotCancel = AddButton("Cancel Snapshot", Icons.Streams.Delete);
-			SetSnapshotVisible(false);
 #endif
 
 			// Handle in BaseWindow
@@ -124,11 +119,6 @@ namespace Atlas.UI.Avalonia
 		{
 			return true;
 			//return project.Navigator.CanSeekForward;
-		}
-
-		public void SetSnapshotVisible(bool visible)
-		{
-			ButtonSnapshotCancel.IsVisible = visible;
 		}
 	}
 }

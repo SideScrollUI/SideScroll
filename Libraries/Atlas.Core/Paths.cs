@@ -53,6 +53,8 @@ namespace Atlas.Core
 
 		public static string DownloadPath => Combine(HomePath, "Downloads");
 
+		public static string PicturesPath => Combine(HomePath, "Pictures");
+
 		public static string HomePath
 		{
 			get

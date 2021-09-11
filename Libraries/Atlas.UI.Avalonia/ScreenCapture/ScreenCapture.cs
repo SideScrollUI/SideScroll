@@ -1,4 +1,5 @@
-﻿using Atlas.UI.Avalonia.Utilities;
+﻿using Atlas.Core;
+using Atlas.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -8,8 +9,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.VisualTree;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia
@@ -22,14 +22,19 @@ namespace Atlas.UI.Avalonia
 		private RenderTargetBitmap _backgroundBitmap; // 50% faded
 		private RenderTargetBitmap _selectionBitmap;
 
+		private Grid _contentGrid;
 		private Image _backgroundImage;
 		private Image _selectionImage;
 
 		private Point? _startPoint;
 		private Rect _selectionRect;
 
-		public ScreenCapture(IVisual visual)
+		public TabViewer TabViewer;
+
+		public ScreenCapture(TabViewer tabViewer, IVisual visual)
 		{
+			TabViewer = tabViewer;
+
 			InitializeComponent(visual);
 		}
 
@@ -41,18 +46,106 @@ namespace Atlas.UI.Avalonia
 			VerticalAlignment = VerticalAlignment.Top;
 
 			ColumnDefinitions = new ColumnDefinitions("*");
-			RowDefinitions = new RowDefinitions("*");
+			RowDefinitions = new RowDefinitions("Auto,*");
 
-			Cursor = new Cursor(StandardCursorType.Cross);
+			AddToolbar();
+			AddContent(visual);
+		}
+
+		private void AddToolbar()
+		{
+			var toolbar = new ScreenCaptureToolbar(TabViewer);
+			toolbar.ButtonCopyClipboard.Add(CopyClipboard);
+			toolbar.ButtonSave.AddAsync(SaveAsync);
+			toolbar.ButtonClose.Add(Close);
+			Children.Add(toolbar);
+		}
+
+		private void AddContent(IVisual visual)
+		{
+			_contentGrid = new Grid()
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch,
+				Cursor = new Cursor(StandardCursorType.Cross),
+				[Grid.RowProperty] = 1,
+			};
+			Children.Add(_contentGrid);
 
 			AddBackgroundImage(visual);
 
 			_selectionImage = new Image();
-			Children.Add(_selectionImage);
+			_contentGrid.Children.Add(_selectionImage);
 
-			PointerPressed += ScreenCapture_PointerPressed;
-			PointerReleased += ScreenCapture_PointerReleased;
-			PointerMoved += ScreenCapture_PointerMoved;
+			_contentGrid.PointerPressed += ScreenCapture_PointerPressed;
+			_contentGrid.PointerReleased += ScreenCapture_PointerReleased;
+			_contentGrid.PointerMoved += ScreenCapture_PointerMoved;
+		}
+
+		private void CopyClipboard(Call call)
+		{
+			OSPlatform platform = ProcessUtils.GetOSPlatform();
+			if (platform != OSPlatform.Windows)
+				return;
+
+			RenderTargetBitmap bitmap = GetSelectedBitmap();
+			if (bitmap == null)
+				return;
+
+			//ClipBoardUtils.SetTextAsync(bitmap); // AvaloniaUI will probably eventually support this
+			try
+			{
+				using (bitmap)
+				{
+					Task.Run(() => Win32ClipboardUtils.SetBitmapAsync(bitmap)).GetAwaiter().GetResult();
+				}
+			}
+			catch
+			{
+
+			}
+		}
+
+		private async Task SaveAsync(Call call)
+		{
+			RenderTargetBitmap bitmap = GetSelectedBitmap();
+			if (bitmap == null)
+				return;
+
+			var fileDialog = new SaveFileDialog()
+			{
+				Directory = Paths.PicturesPath,
+				InitialFileName = TabViewer.Project.Name + '.' + FileUtils.TimestampString + ".png",
+				DefaultExtension = "png",
+				Filters = new List<FileDialogFilter>()
+				{
+					new FileDialogFilter()
+					{
+						Name = "Portable Network Graphic file (PNG)",
+						Extensions = new List<string>() { "png" }
+					}
+				},
+			};
+			var window = GetWindow(this);
+			string filePath = await fileDialog.ShowAsync(window);
+			if (filePath != null)
+				bitmap.Save(filePath);
+		}
+
+		private Window GetWindow(IControl control)
+		{
+			if (control is Window window)
+				return window;
+
+			if (control.Parent == null)
+				return null;
+
+			return GetWindow(control.Parent);
+		}
+
+		private void Close(Call call)
+		{
+			TabViewer.CloseSnapshot(call);
 		}
 
 		private void AddBackgroundImage(IVisual visual)
@@ -73,7 +166,7 @@ namespace Atlas.UI.Avalonia
 			{
 				Source = _backgroundBitmap,
 			};
-			Children.Add(_backgroundImage);
+			_contentGrid.Children.Add(_backgroundImage);
 		}
 
 		private RenderTargetBitmap GetSelectedBitmap()
@@ -102,22 +195,7 @@ namespace Atlas.UI.Avalonia
 			if (_startPoint == null)
 				return;
 
-			var bitmap = GetSelectedBitmap();
-			if (bitmap == null)
-				return;
-
-			//ClipBoardUtils.SetTextAsync(bitmap); // AvaloniaUI will probably eventually support this
-			try
-			{
-				using (bitmap)
-				{
-					Task.Run(() => Win32ClipboardUtils.SetBitmapAsync(bitmap)).GetAwaiter().GetResult();
-				}
-			}
-			catch
-			{
-
-			}
+			CopyClipboard(new Call());
 
 			_startPoint = null;
 		}
@@ -143,18 +221,26 @@ namespace Atlas.UI.Avalonia
 			var scaledEndPoint = new Point(endX * scaleX, endY * scaleY);
 
 			var topLeft = new Point(
-				Math.Min(scaledStartPoint.X, scaledEndPoint.X), 
+				Math.Min(scaledStartPoint.X, scaledEndPoint.X),
 				Math.Min(scaledStartPoint.Y, scaledEndPoint.Y));
 
 			var bottomRight = new Point(
-				Math.Max(scaledStartPoint.X, scaledEndPoint.X), 
+				Math.Max(scaledStartPoint.X, scaledEndPoint.X),
 				Math.Max(scaledStartPoint.Y, scaledEndPoint.Y));
 
 			_selectionRect = new Rect(topLeft, bottomRight);
 
+			UpdateSelectionImage();
+		}
+
+		private void UpdateSelectionImage()
+		{
+			Size sourceSize = _originalBitmap.Size;
 			_selectionBitmap = new RenderTargetBitmap(new PixelSize((int)sourceSize.Width, (int)sourceSize.Height), new Vector(96, 96));
 
-			var borderRect = new Rect(topLeft, bottomRight).Inflate(2);
+			var borderRect = _selectionRect.Inflate(2);
+			//borderRect = borderRect.WithY(Math.Max(0, borderRect.Top));
+			borderRect = new Rect(new Point(Math.Max(0, borderRect.Left), Math.Max(0, borderRect.Top)), borderRect.BottomRight);
 
 			//var brush = new SolidColorBrush(Color.Parse("#8818ff"));
 			//var brush = Theme.GridBackgroundSelected;

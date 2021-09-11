@@ -31,7 +31,7 @@ namespace Atlas.Resources
 		public const string Password = "password.png";
 		public const string Enter = "enter.png";
 
-		public const string PadNote = "padnote.png";
+		public const string Clipboard = "clipboard.png";
 		public const string Paste = "paste_16.png";
 		public const string Eraser = "eraser.png";
 
@@ -74,7 +74,7 @@ namespace Atlas.Resources
 			public static Stream Password => Get(Icons.Password);
 			public static Stream Enter => Get(Icons.Enter);
 
-			public static Stream PadNote => Get(Icons.PadNote);
+			public static Stream Clipboard => Get(Icons.Clipboard);
 			public static Stream Paste => Get(Icons.Paste);
 			public static Stream Eraser => Get(Icons.Eraser);
 

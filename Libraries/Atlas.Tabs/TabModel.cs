@@ -203,11 +203,11 @@ namespace Atlas.Tabs
 				// Show as Key/Value columns, change to keys only?
 				AddDictionary(type);
 			}
-			else if (typeof(IEnumerable).IsAssignableFrom(type))
+			else if (obj is IEnumerable enumerable)
 			{
 				// show inner type as list (but only one column using a ToString for the label)
 				//AddObject(type);
-				AddEnumerable((IEnumerable)obj);
+				AddEnumerable(enumerable);
 			}
 			else if (type.IsEnum)
 			{

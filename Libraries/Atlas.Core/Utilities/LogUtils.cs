@@ -7,7 +7,7 @@ namespace Atlas.Core
 	{
 		public static void LogException(Exception e, string domain, string projectName)
 		{
-			string filename = projectName + ".Exception." + DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss") + ".log";
+			string filename = projectName + ".Exception." + FileUtils.TimestampString + ".log";
 			string directory = Paths.Combine(Paths.AppDataPath, domain, projectName, "Exceptions");
 			string filePath = Paths.Combine(directory, filename);
 			string message = e.ToString();

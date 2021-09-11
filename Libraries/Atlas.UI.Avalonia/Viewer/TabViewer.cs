@@ -62,7 +62,6 @@ namespace Atlas.UI.Avalonia
 			InitializeComponent();
 		}
 
-		// Load here instead of in xaml for better control
 		private void InitializeComponent()
 		{
 			Background = Theme.TabBackground;
@@ -125,7 +124,6 @@ namespace Atlas.UI.Avalonia
 			Toolbar.ButtonLink.AddAsync(LinkAsync);
 			Toolbar.ButtonImport.AddAsync(ImportBookmarkAsync);
 			Toolbar.ButtonSnapshot?.Add(Snapshot);
-			Toolbar.ButtonSnapshotCancel?.Add(CloseSnapshot);
 			Children.Add(Toolbar);
 		}
 
@@ -212,20 +210,17 @@ namespace Atlas.UI.Avalonia
 		{
 			CloseSnapshot(call);
 
-			ScreenCapture = new ScreenCapture(ScrollViewer)
+			ScreenCapture = new ScreenCapture(this, ScrollViewer)
 			{
-				[Grid.RowProperty] = 1,
+				[Grid.RowSpanProperty] = 2,
 			};
-			Toolbar.SetSnapshotVisible(true);
 
 			Children.Remove(BottomGrid);
 			Children.Add(ScreenCapture);
 		}
 
-		private void CloseSnapshot(Call call)
+		public void CloseSnapshot(Call call)
 		{
-			Toolbar.SetSnapshotVisible(false);
-
 			if (ScreenCapture == null)
 				return;
 
