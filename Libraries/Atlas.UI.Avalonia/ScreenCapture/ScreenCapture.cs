@@ -9,6 +9,8 @@ using Avalonia.Media.Imaging;
 using Avalonia.VisualTree;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -17,6 +19,9 @@ namespace Atlas.UI.Avalonia
 	public class ScreenCapture : Grid
 	{
 		private const int MinClipboardSize = 10;
+
+		public static string OsxClipboardAppPath;
+		public static string OsxClipboardAppArg;
 
 		private RenderTargetBitmap _originalBitmap;
 		private RenderTargetBitmap _backgroundBitmap; // 50% faded
@@ -87,10 +92,6 @@ namespace Atlas.UI.Avalonia
 
 		private void CopyClipboard(Call call)
 		{
-			OSPlatform platform = ProcessUtils.GetOSPlatform();
-			if (platform != OSPlatform.Windows)
-				return;
-
 			RenderTargetBitmap bitmap = GetSelectedBitmap();
 			if (bitmap == null)
 				return;
@@ -100,13 +101,38 @@ namespace Atlas.UI.Avalonia
 			{
 				using (bitmap)
 				{
-					Task.Run(() => Win32ClipboardUtils.SetBitmapAsync(bitmap)).GetAwaiter().GetResult();
+					OSPlatform platform = ProcessUtils.GetOSPlatform();
+					if (platform == OSPlatform.Windows)
+					{
+						CopyClipboardWindows(bitmap);
+					}
+					else if (platform == OSPlatform.OSX && OsxClipboardAppPath != null)
+					{
+						CopyClipboardOsx(bitmap);
+					}
 				}
 			}
-			catch
+			catch (Exception e)
 			{
-
+				Debug.WriteLine(e);
 			}
+		}
+
+		private static void CopyClipboardWindows(RenderTargetBitmap bitmap)
+		{
+			Task.Run(() => Win32ClipboardUtils.SetBitmapAsync(bitmap)).GetAwaiter().GetResult();
+		}
+
+		private void CopyClipboardOsx(RenderTargetBitmap bitmap)
+		{
+			string directory = TabViewer.Project.ProjectSettings.DefaultProjectPath;
+			string filePath = Paths.Combine(directory, "clipboard.png");
+
+			Directory.CreateDirectory(directory);
+
+			bitmap.Save(filePath);
+
+			Process.Start(OsxClipboardAppPath, OsxClipboardAppArg + " " + filePath);
 		}
 
 		private async Task SaveAsync(Call call)

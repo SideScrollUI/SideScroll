@@ -1,6 +1,8 @@
-﻿using Atlas.Resources;
+﻿using Atlas.Core;
+using Atlas.Resources;
 using Atlas.UI.Avalonia.Tabs;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Atlas.UI.Avalonia
 {
@@ -21,7 +23,11 @@ namespace Atlas.UI.Avalonia
 
 		private void InitializeControls()
 		{
-			ButtonCopyClipboard = AddButton("Copy to Clipboard", Icons.Streams.Clipboard);
+			OSPlatform platform = ProcessUtils.GetOSPlatform();
+			if (platform != OSPlatform.Linux)
+			{
+				ButtonCopyClipboard = AddButton("Copy to Clipboard", Icons.Streams.Clipboard);
+			}
 			ButtonSave = AddButton("Save", Icons.Streams.Save);
 
 			AddSeparator();
