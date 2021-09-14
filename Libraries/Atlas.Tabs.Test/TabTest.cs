@@ -39,6 +39,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Process", new TabTestProcess()),
 					new ListItem("Loading", new TabTestLoading()),
 					new ListItem("Data Repos", new TabTestDataRepo()),
+					new ListItem("Icons", new TabIcons()),
 				};
 			}
 		}

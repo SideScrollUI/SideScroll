@@ -13,12 +13,12 @@ namespace Atlas.Tabs.Test.Loading
 			{
 				model.Items = new ItemCollection<IListItem>()
 				{
-					new ListDelegate(SlowAsyncItem),
+					new ListDelegate(SlowItemAsync),
 				};
 			}
 
 			// todo: fix, this is being called twice and blocking the UI the 1st time
-			public async Task<object> SlowAsyncItem(Call call)
+			public async Task<object> SlowItemAsync(Call call)
 			{
 				await Task.Delay(1000);
 				return "finished";

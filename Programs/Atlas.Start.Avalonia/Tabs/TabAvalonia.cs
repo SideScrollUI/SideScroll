@@ -17,7 +17,6 @@ namespace Atlas.Start.Avalonia.Tabs
 				{
 					new ListItem("Test", new TabTest()),
 					new ListItem("Custom Control", new TabCustomControl()),
-					new ListItem("Icons", new TabIcons()),
 					new ListItem("Bookmarks", new TabBookmarks(Project)),
 					//new ListItem("Demo", new TabDemo()),
 					//new ListItem("SeriLog", new TabSeriLog()),

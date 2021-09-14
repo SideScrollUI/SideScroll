@@ -7,9 +7,6 @@ namespace Atlas.Console
 {
 	public class Console
 	{
-		private CancellationTokenSource tokenSource = new CancellationTokenSource();
-		private CancellationToken cancellationToken;
-
 		public Project project;
 		public Call call;
 		public ProjectSettings settings = new ProjectSettings();
@@ -18,17 +15,16 @@ namespace Atlas.Console
 
 		static void Main(string[] args)
 		{
-			Console console = new Console();
+			var console = new Console();
 		}
 
 		public Console()
 		{
 			// setup
-			Project project = new Project(Settings);
+			var project = new Project(Settings);
 			call = new Call(GetType().Name);
 			logWriterConsole = new LogWriterConsole(call.Log);
-			logWriterText = new LogWriterText(call.Log, project.DataApp.GetTypePath(typeof(Console)) + "/Logs/Main");
-			cancellationToken = tokenSource.Token;
+			logWriterText = new LogWriterText(call.Log, project.DataApp.GetGroupPath(typeof(Console)) + "/Logs/Main");
 
 			//for (int i = 0; i < 100; i++)
 			//	TestDictionarySpeed();
