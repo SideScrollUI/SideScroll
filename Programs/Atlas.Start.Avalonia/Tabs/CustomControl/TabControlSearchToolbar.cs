@@ -37,7 +37,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			AddButton("Save", Icons.Streams.Save);
 
 			AddSeparator();
-			ButtonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Streams.Clipboard);
+			ButtonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
 			TextBoxStatus = AddLabelText("Status");
 		}
 	}

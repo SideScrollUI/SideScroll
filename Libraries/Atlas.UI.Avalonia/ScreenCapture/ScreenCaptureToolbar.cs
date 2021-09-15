@@ -26,7 +26,7 @@ namespace Atlas.UI.Avalonia
 			OSPlatform platform = ProcessUtils.GetOSPlatform();
 			if (platform != OSPlatform.Linux)
 			{
-				ButtonCopyClipboard = AddButton("Copy to Clipboard", Icons.Streams.Clipboard);
+				ButtonCopyClipboard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
 			}
 			ButtonSave = AddButton("Save", Icons.Streams.Save);
 

@@ -16,7 +16,6 @@
     <None Remove="Icons\png\cancel.png" />
     <None Remove="Icons\png\cancel_red.png" />
     <None Remove="Icons\png\clear_search.png" />
-    <None Remove="Icons\png\clipboard.png" />
     <None Remove="Icons\png\delete_list.png" />
     <None Remove="Icons\png\enter.png" />
     <None Remove="Icons\png\eraser.png" />
@@ -32,6 +31,7 @@
     <None Remove="Icons\png\link.png" />
     <None Remove="Icons\png\list1.png" />
     <None Remove="Icons\png\list2.png" />
+    <None Remove="Icons\png\padnote.png" />
     <None Remove="Icons\png\password.png" />
     <None Remove="Icons\png\paste.png" />
     <None Remove="Icons\png\paste_16.png" />
@@ -62,7 +62,6 @@
     <EmbeddedResource Include="Icons\png\cancel.png" />
     <EmbeddedResource Include="Icons\png\cancel_red.png" />
     <EmbeddedResource Include="Icons\png\clear_search.png" />
-    <EmbeddedResource Include="Icons\png\clipboard.png" />
     <EmbeddedResource Include="Icons\png\delete_list.png" />
     <EmbeddedResource Include="Icons\png\enter.png" />
     <EmbeddedResource Include="Icons\png\eraser.png" />
@@ -76,6 +75,7 @@
     <EmbeddedResource Include="Icons\png\link.png" />
     <EmbeddedResource Include="Icons\png\list1.png" />
     <EmbeddedResource Include="Icons\png\list2.png" />
+    <EmbeddedResource Include="Icons\png\padnote.png" />
     <EmbeddedResource Include="Icons\png\password.png" />
     <EmbeddedResource Include="Icons\png\paste.png" />
     <EmbeddedResource Include="Icons\png\paste_16.png" />
