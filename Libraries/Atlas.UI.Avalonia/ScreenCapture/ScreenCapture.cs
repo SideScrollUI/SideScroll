@@ -20,8 +20,8 @@ namespace Atlas.UI.Avalonia
 	{
 		private const int MinClipboardSize = 10;
 
-		public static string OsxClipboardAppPath;
-		public static string OsxClipboardAppArg;
+		private const string OsxCopyClipboardApplication = "osascript";
+		private const string OsxCopyClipboardScriptPath = "Native/OSX/load-image-clipboard.scpt";
 
 		private RenderTargetBitmap _originalBitmap;
 		private RenderTargetBitmap _backgroundBitmap; // 50% faded
@@ -106,8 +106,13 @@ namespace Atlas.UI.Avalonia
 					{
 						CopyClipboardWindows(bitmap);
 					}
-					else if (platform == OSPlatform.OSX && OsxClipboardAppPath != null)
+					else if (platform == OSPlatform.OSX)
 					{
+						/*
+						on run argv
+							set the clipboard to (read (item 1 of argv) as TIFF picture)
+						end run
+						*/
 						CopyClipboardOsx(bitmap);
 					}
 				}
@@ -132,7 +137,7 @@ namespace Atlas.UI.Avalonia
 
 			bitmap.Save(filePath);
 
-			Process.Start(OsxClipboardAppPath, OsxClipboardAppArg + " " + filePath);
+			Process.Start(OsxCopyClipboardApplication, OsxCopyClipboardScriptPath + " " + filePath);
 		}
 
 		private async Task SaveAsync(Call call)
@@ -276,10 +281,7 @@ namespace Atlas.UI.Avalonia
 					Math.Max(2, _selectionRect.Top)),
 				_selectionRect.BottomRight);
 
-			//var brush = new SolidColorBrush(Color.Parse("#8818ff"));
-			//var brush = Theme.ToolbarTextForeground;
 			var brush = Theme.ToolbarLabelForeground;
-			//var brush = Brushes.White;
 			var innerPen = new Pen(Brushes.Black, 2, lineCap: PenLineCap.Square);
 			var outerPen = new Pen(brush, 4, lineCap: PenLineCap.Square);
 			using (var ctx = _selectionBitmap.CreateDrawingContext(null))
