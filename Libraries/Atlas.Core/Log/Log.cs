@@ -143,6 +143,8 @@ namespace Atlas.Core
 			{
 				Debug.Print(logEntry.Level + ": " + logEntry.ToString());
 			}
+			if (logEntry.Level < Settings.MinLogLevel)
+				return;
 
 			logEntry.RootLog = RootLog;
 			logEntry.Settings = Settings;

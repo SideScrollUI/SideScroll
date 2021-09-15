@@ -80,6 +80,8 @@ namespace Atlas.Tabs
 			}
 		}
 
+		public object DefaultSelectedItem { get; set; }
+
 		// used for saving/loading TabViewSettings
 		public string CustomSettingsPath { get; set; }
 		public string ObjectTypePath
@@ -326,7 +328,7 @@ namespace Atlas.Tabs
 			var itemCollection = ListMember.Create(obj);
 			ItemList.Add(itemCollection);
 
-			AddMethods(type);
+			//AddMethods(type);
 		}
 
 		public void Clear()
@@ -336,7 +338,8 @@ namespace Atlas.Tabs
 			Actions = null;
 		}
 
-		private void AddMethods(Type type)
+		// todo: split Actions out of ListMethod since those return values?
+		/*private void AddMethods(Type type)
 		{
 			var visibleMethods = ListMethod.Create(Object);
 
@@ -344,17 +347,12 @@ namespace Atlas.Tabs
 			var methods = new ItemCollection<TaskCreator>();
 			foreach (ListMethod listMethod in visibleMethods)
 			{
-				// todo: check parameter types, assuming Log param now
-				/*if (methodInfo.IsPublic && methodInfo.ReturnType.IsAssignableFrom(typeof(Task)))
-				{
-					//methods.Add(new TaskMethod(methodInfo, Object));
-				}*/
-
-				methods.Add(new TaskDelegate(listMethod.Name, (TaskDelegate.CallAction)Delegate.CreateDelegate(typeof(TaskDelegate.CallAction), listMethod.MethodInfo)));
+				var taskDelegate = new TaskDelegate(Name, (TaskDelegate.CallAction)Delegate.CreateDelegate(typeof(TaskDelegate.CallAction), MethodInfo));
+				methods.Add(taskDelegate);
 			}
 			if (methods.Count > 0)
 				Actions = methods;
-		}
+		}*/
 
 		public TabBookmark FindMatches(Filter filter, int depth)
 		{

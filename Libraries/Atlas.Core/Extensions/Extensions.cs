@@ -146,45 +146,36 @@ namespace Atlas.Extensions // rename to Core?
 			return visibleProperties;
 		}
 
-		public static PropertyInfo GetPropertyWithAttribute<T>(this Type type)
+		public static PropertyInfo GetPropertyWithAttribute<T>(this Type type) where T : Attribute
 		{
-			List<PropertyInfo> matchingProperties = GetPropertiesWithAttribute<T>(type);
-			if (matchingProperties.Count > 0)
-				return matchingProperties[0];
-			return null;
+			return GetPropertiesWithAttribute<T>(type).FirstOrDefault();
 		}
 
-		public static List<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type)
+		public static List<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type) where T : Attribute
 		{
-			var matchingProperties = new List<PropertyInfo>();
 			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
-			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
-			foreach (PropertyInfo propertyInfo in propertyInfos)
-			{
-				if (propertyInfo.GetCustomAttribute(typeof(T)) != null)
-					matchingProperties.Add(propertyInfo);
-			}
-			return matchingProperties;
+			return type.GetProperties()
+				.Where(p => p.GetCustomAttribute<T>() != null)
+				.OrderBy(p => p.MetadataToken)
+				.ToList();
 		}
 
-		public static List<FieldInfo> GetFieldsWithAttribute<T>(this Type type)
+		public static List<FieldInfo> GetFieldsWithAttribute<T>(this Type type) where T : Attribute
 		{
-			var matchingFields = new List<FieldInfo>();
 			// Fields are returned in a random order, so sort them by the MetadataToken to get the original order
-			FieldInfo[] fieldInfos = type.GetFields().OrderBy(x => x.MetadataToken).ToArray();
-			foreach (FieldInfo fieldInfo in fieldInfos)
-			{
-				if (fieldInfo.GetCustomAttribute(typeof(T)) != null)
-					matchingFields.Add(fieldInfo);
-			}
-			return matchingFields;
+			return type.GetFields()
+				.Where(f => f.GetCustomAttribute<T>() != null)
+				.OrderBy(f => f.MetadataToken)
+				.ToList();
 		}
 
+		// Returns value of first property or field that sets [InnerValue]
 		public static object GetInnerValue(this object value)
 		{
 			if (value == null)
 				return null;
 
+			// will be loaded later
 			if (value is ILoadAsync)
 				return value;
 

@@ -1,5 +1,6 @@
 ﻿using Atlas.Core;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Atlas.Tabs
 {
@@ -38,20 +39,7 @@ namespace Atlas.Tabs
 
 		public List<TabDataSettings> ChartDataSettings { get; set; } = new List<TabDataSettings>(); // for the Chart's internal Data List
 
-		public List<SelectedRow> SelectedRows
-		{
-			get
-			{
-				var selectedRows = new List<SelectedRow>();
-				if (TabDataSettings == null)
-					return selectedRows;
-
-				foreach (TabDataSettings dataSettings in TabDataSettings)
-					selectedRows.AddRange(dataSettings.SelectedRows);
-
-				return selectedRows;
-			}
-		}
+		public List<SelectedRow> SelectedRows => TabDataSettings?.SelectMany(d => d.SelectedRows).ToList() ?? new List<SelectedRow>();
 
 		// Store Skipped bool instead?
 		public SelectionType SelectionType

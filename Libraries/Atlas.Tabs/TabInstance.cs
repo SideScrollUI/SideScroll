@@ -887,7 +887,7 @@ namespace Atlas.Tabs
 						if (objKey == tabKey)
 							return true;
 
-						if (objKey.GetType() == typeof(string) && Equals(objKey, tabKey))
+						if (objKey.GetType() == typeof(string) && propertyInfo.PropertyType == type && Equals(objKey, tabKey))
 							return true;
 					}
 				}

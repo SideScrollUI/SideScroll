@@ -40,7 +40,11 @@ namespace Atlas.UI.Avalonia.View
 		}
 		public TabInstance Instance;
 		public TabModel Model => Instance.Model;
-		public string Label { get { return Model.Name; } set { Model.Name = value; } }
+		public string Label
+		{ 
+			get => Model.Name;
+			set => Model.Name = value;
+		}
 
 		// Created Controls
 		public TabControlActions TabActions;

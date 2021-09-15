@@ -161,10 +161,13 @@ namespace Atlas.Tabs
 	{
 		public string Label; // null if ToString() returns type
 		public int RowIndex;
+
 		[NonSerialized]
 		public object Object; // used for bookmark searches, dangerous to keep these references around otherwise
+
 		public string DataKey;
 		public object DataValue;
+
 		//public bool Pinned;
 		public List<string> SelectedColumns = new List<string>();
 

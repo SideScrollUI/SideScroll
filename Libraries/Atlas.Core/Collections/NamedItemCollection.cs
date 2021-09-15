@@ -7,23 +7,37 @@ namespace Atlas.Core
 {
 	public class NamedItemCollection<T1, T2>
 	{
-		public static List<T2> All => _all = _all ?? GetAll();
-		private static List<T2> _all;
+		public static List<KeyValuePair<MemberInfo, T2>> Items => _items = _items ?? GetItems();
+		private static List<KeyValuePair<MemberInfo, T2>> _items;
 
-		private static List<T2> GetAll()
+		public static List<T2> Values => _values = _values ?? Items.Select(v => v.Value).ToList();
+		private static List<T2> _values;
+
+		public static List<KeyValuePair<MemberInfo, T2>> GetItems()
 		{
 			Type collectionType = typeof(T1);
 			Type elementType = typeof(T2);
 
 			BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Static;
 
-			List<T2> propertyValues = collectionType.GetProperties(bindingFlags).Where(p => elementType.IsAssignableFrom(p.PropertyType)).OrderBy(x => x.MetadataToken).Select(p => (T2)p.GetValue(null)).ToList();
+			// Add PropertyInfo's
+			List<KeyValuePair<MemberInfo, T2>> keyValues = collectionType
+				.GetProperties(bindingFlags)
+				.Where(p => elementType.IsAssignableFrom(p.PropertyType))
+				.OrderBy(x => x.MetadataToken)
+				.Select(p => new KeyValuePair<MemberInfo, T2>(p, (T2)p.GetValue(null)))
+				.ToList();
 
-			IEnumerable<T2> fieldValues = collectionType.GetFields(bindingFlags).Where(f => elementType.IsAssignableFrom(f.FieldType)).OrderBy(x => x.MetadataToken).Select(f => (T2)f.GetValue(null));
+			// Add FieldInfo's
+			IEnumerable<KeyValuePair<MemberInfo, T2>> fieldValues = collectionType
+				.GetFields(bindingFlags)
+				.Where(f => elementType.IsAssignableFrom(f.FieldType))
+				.OrderBy(x => x.MetadataToken)
+				.Select(f => new KeyValuePair<MemberInfo, T2>(f, (T2)f.GetValue(null)));
 
-			propertyValues.AddRange(fieldValues);
+			keyValues.AddRange(fieldValues);
 
-			return propertyValues;
+			return keyValues;
 		}
 	}
 }

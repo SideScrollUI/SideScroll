@@ -54,9 +54,11 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("Auto"); // doesn't work
-			IsVisible = ShowTasks;
+
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
+
+			IsVisible = ShowTasks;
 
 			_tabControlDataGrid = new TabControlDataGrid(TabInstance, TabInstance.Model.Tasks, false) // don't autogenerate
 			{

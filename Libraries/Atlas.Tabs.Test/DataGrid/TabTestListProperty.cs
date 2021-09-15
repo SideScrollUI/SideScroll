@@ -17,7 +17,7 @@ namespace Atlas.Tabs.Test.DataGrid
 				model.Items = ListProperty.Create(_propertyTest);
 				model.Editing = true;
 
-				model.Actions =  new ItemCollection<TaskCreator>()
+				model.Actions = new ItemCollection<TaskCreator>()
 				{
 					new TaskDelegate("Toggle", Toggle),
 				};

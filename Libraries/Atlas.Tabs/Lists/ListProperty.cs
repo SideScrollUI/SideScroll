@@ -112,51 +112,55 @@ namespace Atlas.Tabs
 		public static new ItemCollection<ListProperty> Create(object obj)
 		{
 			// this doesn't work for virtual methods (or any method modifier?)
-			PropertyInfo[] propertyInfos = obj.GetType().GetProperties().OrderBy(x => x.MetadataToken).ToArray();
+			var propertyInfos = obj.GetType().GetProperties().OrderBy(x => x.MetadataToken);
 			var listProperties = new ItemCollection<ListProperty>();
 			var propertyToIndex = new Dictionary<string, int>();
 			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
-				if (!propertyInfo.DeclaringType.IsNotPublic)
+				if (!IsVisible(propertyInfo))
+					continue;
+
+				var listProperty = new ListProperty(obj, propertyInfo);
+
+				// move this to later?
+				if (propertyInfo.GetCustomAttribute<HideNullAttribute>() != null)
 				{
-					if (propertyInfo.GetCustomAttribute<HiddenAttribute>() != null)
+					if (listProperty.Value == null)
 						continue;
+				}
 
-					if (propertyInfo.GetCustomAttribute<HiddenRowAttribute>() != null)
+				var hideAttribute = propertyInfo.GetCustomAttribute<HideAttribute>();
+				if (hideAttribute != null && hideAttribute.Values != null)
+				{
+					if (hideAttribute.Values.Contains(listProperty.Value))
 						continue;
+				}
 
-					if (propertyInfo.DeclaringType.IsNotPublic)
-						continue;
-
-					var listProperty = new ListProperty(obj, propertyInfo);
-
-					// move this to later?
-					if (propertyInfo.GetCustomAttribute<HideNullAttribute>() != null)
-					{
-						if (listProperty.Value == null)
-							continue;
-					}
-
-					var hideAttribute = propertyInfo.GetCustomAttribute<HideAttribute>();
-					if (hideAttribute != null && hideAttribute.Values != null)
-					{
-						if (hideAttribute.Values.Contains(listProperty.Value))
-							continue;
-					}
-
-					if (propertyToIndex.TryGetValue(propertyInfo.Name, out int index))
-					{
-						listProperties.RemoveAt(index);
-						listProperties.Insert(index, listProperty);
-					}
-					else
-					{
-						propertyToIndex[propertyInfo.Name] = listProperties.Count;
-						listProperties.Add(listProperty);
-					}
+				if (propertyToIndex.TryGetValue(propertyInfo.Name, out int index))
+				{
+					listProperties.RemoveAt(index);
+					listProperties.Insert(index, listProperty);
+				}
+				else
+				{
+					propertyToIndex[propertyInfo.Name] = listProperties.Count;
+					listProperties.Add(listProperty);
 				}
 			}
 			return listProperties;
+		}
+		public static bool IsVisible(PropertyInfo propertyInfo)
+		{
+			if (propertyInfo.DeclaringType.IsNotPublic)
+				return false;
+
+#if !DEBUG
+			if (propertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+				return false;
+#endif
+
+			return propertyInfo.GetCustomAttribute<HiddenAttribute>() == null && // [Hidden]
+				propertyInfo.GetCustomAttribute<HiddenRowAttribute>() == null; // [HiddenRow]
 		}
 
 		// This can be slow due to lazy property loading
