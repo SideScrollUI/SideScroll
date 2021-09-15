@@ -31,7 +31,7 @@ namespace Atlas.Resources
 		public const string Password = "password.png";
 		public const string Enter = "enter.png";
 
-		public const string PadNote = "clipboard.png";
+		public const string PadNote = "padnote.png";
 		public const string Paste = "paste_16.png";
 		public const string Eraser = "eraser.png";
 
