@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Atlas.UI.Avalonia
 {
 	public static class Win32UnmanagedMethods
-    {
+	{
 		private const string Library = "user32.dll";
 
 		public enum ClipboardFormat
@@ -16,7 +16,7 @@ namespace Atlas.UI.Avalonia
 			CF_HDROP = 15,
 		}
 
-        [DllImport(Library, SetLastError = true)]
+		[DllImport(Library, SetLastError = true)]
 		public static extern bool OpenClipboard(IntPtr hWndOwner);
 
 		[DllImport(Library, SetLastError = true)]
@@ -28,7 +28,7 @@ namespace Atlas.UI.Avalonia
 		[DllImport(Library)]
 		public static extern IntPtr SetClipboardData(ClipboardFormat uFormat, IntPtr hMem);
 
-        [DllImport(Library, ExactSpelling = true)]
-        public static extern IntPtr GetDC(IntPtr hWnd);
-    }
+		[DllImport(Library, ExactSpelling = true)]
+		public static extern IntPtr GetDC(IntPtr hWnd);
+	}
 }
