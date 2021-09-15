@@ -28,6 +28,7 @@ namespace Atlas.UI.Avalonia.Controls
 		private const int ColumnPercentBased = 150;
 		private const int MaxMinColumnWidth = 150;
 		private const int MaxAutoSizeMinColumnWidth = 250;
+
 		public int MaxColumnWidth = 600;
 
 		public TabModel TabModel;
@@ -273,28 +274,6 @@ namespace Atlas.UI.Avalonia.Controls
 			}
 		}
 
-		// Double click handling?
-		/*private void DataGridRow_PointerPressed(PointerPressedEventArgs e)
-		{
-			if (e.MouseButton != MouseButton.Left)
-			{
-				return;
-			}
-
-			if (OwningGrid != null)
-			{
-				OwningGrid.IsDoubleClickRecordsClickOnCall(this);
-				if (OwningGrid.UpdatedStateOnMouseLeftButtonDown)
-				{
-					OwningGrid.UpdatedStateOnMouseLeftButtonDown = false;
-				}
-				else
-				{
-					e.Handled = OwningGrid.UpdateStateOnMouseLeftButtonDown(e, -1, Slot, false);
-				}
-			}
-		}*/
-
 		private void AutoSizeColumns()
 		{
 			// Only works with Stretch right now
@@ -366,7 +345,7 @@ namespace Atlas.UI.Avalonia.Controls
 				if ((AutoSelectNew || 
 					TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved || 
 					TabModel.AutoSelect == AutoSelectType.FirstSavedOrNew)
-					&& (SearchControl.Text == null || SearchControl.Text.Length == 0))// && finishedLoading)
+					&& (SearchControl.Text == null || SearchControl.Text.Length == 0))
 				{
 					_selectItemEnabled = true;
 					object item = e.NewItems[0];
@@ -1265,8 +1244,6 @@ namespace Atlas.UI.Avalonia.Controls
 
 /* From Atlas.UI.Wpf
 
-/*
-
 public List<DataGridCellInfo> GetMatchingCellInfos()
 {
 	var cellInfos = new List<DataGridCellInfo>();
@@ -1301,10 +1278,7 @@ public List<DataGridCellInfo> GetMatchingCellInfos()
 		if (tabInstance.IsOwnerObject(listItem.GetInnerValue())) // stops self referencing loops
 			continue;
 
-		/*if (item.pinned)
-  {
-	  pinnedItems.Add(rowIndex);
-  }*//*
+
 		if (selectedRow.columns.Count == 0)
 		{
 			// select all columns
@@ -1400,76 +1374,10 @@ if (cellInfos.Count > 0)
 
   dataGrid.CurrentCell = cellInfos[0];
   dataGrid.ScrollIntoView(cellInfos[0].Item);
-  }*//*
+  }
 
 	//ResumeLayout();
 }
-
-/*
-
-// Travel up the list and select all the references from matching items
-private void UpdateSelected(TabView tabView)
-{
-/*if (tabView != this)
-{
-
-}
-if (Parent is TabView)
-{
-  ((TabView)Parent).UpdateSelected(tabView);
-  foreach (int index in tabView.dataGrid.SelectedIndices)
-  {
-	  dataGrid.SetSelected(index, true);
-  }
-}*//*
-}
-
-private void SelectPinnedItems()
-{
-foreach (int rowIndex in pinnedItems)
-{
-	dataGrid.Rows[rowIndex].Selected = true;
-}
-}*//*
-
-/*private ICommand searchCommand;
-public ICommand SearchCommand
-{
-get
-{
-  return searchCommand
-	  ?? (searchCommand = new ActionCommand(() =>
-	  {
-		  FilterText = textBoxSearch.Text;
-		  if (enableSaving)
-			  tabInstance.SaveConfiguration();
-	  }));
-}
-}*//*
-
-/*
-private void dataGrid_MouseDown(object sender, MouseEventArgs e)
-{
-if (e.Button == MouseButtons.Right)
-{
-  // pin or unpin a row
-  DataGridView.HitTestInfo hit = dataGrid.HitTest(e.X, e.Y);
-  if (hit.RowIndex >= 0)
-  {
-	  if (pinnedItems.Contains(hit.RowIndex))
-	  {
-		  pinnedItems.Remove(hit.RowIndex);
-		  dataGrid.Rows[hit.RowIndex].Selected = false;
-	  }
-	  else
-	  {
-		  pinnedItems.Add(hit.RowIndex);
-		  dataGrid.Rows[hit.RowIndex].Selected = true;
-	  }
-  }
-}
-}
-//*
 
 private void dataGrid_Sorting(object sender, DataGridSortingEventArgs e)
 {
@@ -1508,44 +1416,4 @@ private void dataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArg
 			e.Cancel = true;
 	}
 }
-
-/*public class DynamicTemplateSelector : DataTemplateSelector
-{
-	public DataTemplate CheckboxTemplate { get; set; }
-
-	public override DataTemplate DynamicTemplateSelector(object item, DependencyObject container)
-	{
-		MyObject obj = item as MyObject;
-
-		if (obj != null)
-		{
-			// custom logic to select appropriate data template and return
-		}
-		else
-		{
-			return base.SelectTemplate(item, container);
-		}
-	}
-}*/
-
-/*public class ActionCommand : ICommand
-{
-	private readonly Action _action;
-
-	public ActionCommand(Action action)
-	{
-		_action = action;
-	}
-
-	public void Execute(object parameter)
-	{
-		_action();
-	}
-
-	public bool CanExecute(object parameter)
-	{
-		return true;
-	}
-
-	public event EventHandler CanExecuteChanged;
-}*/
+*/

@@ -265,7 +265,7 @@ namespace Atlas.Serialize
 		}
 
 		// Don't use GetHashCode(), it returns a different value each time the process is run
-		public string GetGroupPath(Type type, string groupId)
+		public string GetGroupPath(Type type, string groupId = null)
 		{
 			groupId = groupId ?? DefaultGroupId;
 			string groupHash = (type.GetNonNullableType().FullName + ';' + RepoName + ';' + groupId).HashSha256();
