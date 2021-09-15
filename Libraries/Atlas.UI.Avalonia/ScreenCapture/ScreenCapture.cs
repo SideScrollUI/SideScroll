@@ -18,10 +18,10 @@ namespace Atlas.UI.Avalonia
 {
 	public class ScreenCapture : Grid
 	{
-		private const int MinClipboardSize = 10;
+		public static string OsxCopyClipboardApplication = "osascript";
+		public static string OsxCopyClipboardScriptPath = "Native/OSX/load-image-clipboard.scpt";
 
-		private const string OsxCopyClipboardApplication = "osascript";
-		private const string OsxCopyClipboardScriptPath = "Native/OSX/load-image-clipboard.scpt";
+		private const int MinClipboardSize = 10;
 
 		private RenderTargetBitmap _originalBitmap;
 		private RenderTargetBitmap _backgroundBitmap; // 50% faded

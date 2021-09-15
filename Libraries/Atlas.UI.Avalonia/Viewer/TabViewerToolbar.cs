@@ -71,10 +71,8 @@ namespace Atlas.UI.Avalonia
 			ButtonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
 			ButtonImport = AddButton("Import Link from Clipboard", Icons.Streams.Import);
 
-#if DEBUG
 			AddSeparator();
 			ButtonSnapshot = AddButton("Snapshot", Icons.Streams.Screenshot);
-#endif
 
 			// Handle in BaseWindow
 			//var refreshGesture = new KeyGesture { Key = Key.F5 };
