@@ -47,8 +47,8 @@ namespace Atlas.UI.Avalonia
 		{
 			Background = Brushes.Black;
 
-			HorizontalAlignment = HorizontalAlignment.Left;
-			VerticalAlignment = VerticalAlignment.Top;
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Stretch;
 
 			ColumnDefinitions = new ColumnDefinitions("*");
 			RowDefinitions = new RowDefinitions("Auto,*");

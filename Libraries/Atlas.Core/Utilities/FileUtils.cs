@@ -39,6 +39,9 @@ namespace Atlas.Core
 		public const int S_IWOTH = 0x2;
 		public const int S_IXOTH = 0x1;
 
+		// Disallow setting group and other permissions, only allow user
+		private const int UmaskUserOnlyPermissions = S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH;
+
 		private static bool CanSetPermissions()
 		{
 			return RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || Environment.OSVersion.Platform == PlatformID.Unix;
@@ -49,8 +52,7 @@ namespace Atlas.Core
 			if (!CanSetPermissions())
 				return 0;
 
-			// Disallow setting group and other permissions, only allow user
-			return umask(S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH);
+			return umask(UmaskUserOnlyPermissions);
 		}
 
 		public static void DirectoryCopy(Call call, string sourceDirPath, string destDirPath, bool copySubDirs)
