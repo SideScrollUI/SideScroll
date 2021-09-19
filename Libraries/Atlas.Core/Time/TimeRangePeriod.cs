@@ -165,6 +165,8 @@ namespace Atlas.Core
 			if (totalDuration.TotalSeconds == 0.0)
 				return 0;
 
+			totalDuration = totalDuration.Max(timeWindow.Duration);
+
 			return totalSum / totalDuration.TotalSeconds;
 		}
 

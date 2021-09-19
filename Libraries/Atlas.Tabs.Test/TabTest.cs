@@ -29,7 +29,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Json", new TabTestJson()),
 					new ListItem("Bookmarks", new TabTestBookmarks()),
 					new ListItem("Skip", new TabTestSkip()), // move into new Lists?
-					new ListItem("Exceptions", new TabTestExceptions()), // move into new Lists?
+					new ListItem("Exceptions", new TabTestExceptions()),
 
 					new ListItem("Web Browser", new TabTestBrowser()),
 					new ListItem("Text Editor", new TabTestTextEditor()),

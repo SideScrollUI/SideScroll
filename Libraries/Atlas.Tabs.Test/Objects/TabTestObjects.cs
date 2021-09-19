@@ -1,6 +1,5 @@
 ﻿using Atlas.Core;
 using System;
-using System.Runtime.Serialization;
 
 namespace Atlas.Tabs.Test.Objects
 {
@@ -14,7 +13,7 @@ namespace Atlas.Tabs.Test.Objects
 			{
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("UriTest", new UriTest("test")),
+					new ListItem("Object Members", new TestObjectMembers()),
 					new ListItem("Tags", new Tag[] { new Tag("abc", 1.1) }),
 					new ListItem("Subclass Property", new TabTestSubClassProperty()),
 					new ListItem("Subclass", new ValueSub()),
@@ -48,41 +47,20 @@ namespace Atlas.Tabs.Test.Objects
 		public new int Value = 2;
 	}
 
-	public class UriTest : ISerializable
+	public class TestObjectMembers
 	{
-		public static readonly string SchemeDelimiter;
+		public static readonly string StaticStringField;
 
+		public bool BoolField;
+		public bool BoolProperty { get; }
 
-		public bool IsDefaultPort { get; }
-		public string Authority { get; }
-		public string DnsSafeHost { get; }
-		public string Fragment { get; }
-		public string Host { get; }
-		public UriHostNameType HostNameType { get; }
-		public string IdnHost { get; }
-		public bool IsAbsoluteUri { get; }
-		public bool IsFile { get; }
-		public string[] Segments { get; }
-		public bool IsUnc { get; }
-		public string LocalPath { get; }
-		public string OriginalString { get; }
-		public string PathAndQuery { get; }
-		public int Port { get; }
-		public string Query { get; }
-		public string Scheme { get; }
-		public string AbsoluteUri { get; }
-		public bool IsLoopback { get; }
-		public string AbsolutePath { get; }
-		public string UserInfo { get; }
-		public bool UserEscaped { get; }
+		[Item]
+		public bool BoolMethod() => true;
 
-		public UriTest(string uriString)
-		{
-		}
+		public string StringField;
+		public string StringProperty { get; }
 
-		public void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			throw new NotImplementedException();
-		}
+		[Item]
+		public string StringMethod() => "string";
 	}
 }

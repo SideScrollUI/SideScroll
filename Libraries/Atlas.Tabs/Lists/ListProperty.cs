@@ -109,7 +109,7 @@ namespace Atlas.Tabs
 				Name = "* " + Name;
 		}
 
-		public static new ItemCollection<ListProperty> Create(object obj)
+		public static new ItemCollection<ListProperty> Create(object obj, bool includeBaseTypes = true)
 		{
 			// this doesn't work for virtual methods (or any method modifier?)
 			var propertyInfos = obj.GetType().GetProperties().OrderBy(x => x.MetadataToken);
@@ -118,6 +118,9 @@ namespace Atlas.Tabs
 			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
 				if (!IsVisible(propertyInfo))
+					continue;
+
+				if (!includeBaseTypes && propertyInfo.DeclaringType != obj.GetType())
 					continue;
 
 				var listProperty = new ListProperty(obj, propertyInfo);
@@ -166,8 +169,11 @@ namespace Atlas.Tabs
 		// This can be slow due to lazy property loading
 		public static ItemCollection<ListProperty> Sort(ItemCollection<ListProperty> listProperties)
 		{
-			var autoSorted = new ItemCollection<ListProperty>(listProperties.OrderByDescending(i => i.PropertyInfo.GetCustomAttribute<AutoSelectAttribute>() != null).ToList());
-			var linkSorted = new ItemCollection<ListProperty>(autoSorted.OrderByDescending(i => TabUtils.ObjectHasLinks(i, true)).ToList());
+			var sortedProperties = listProperties
+				.OrderByDescending(i => i.PropertyInfo.GetCustomAttribute<AutoSelectAttribute>() != null)
+				.OrderByDescending(i => TabUtils.ObjectHasLinks(i, true));
+
+			var linkSorted = new ItemCollection<ListProperty>(sortedProperties);
 			return linkSorted;
 		}
 	}

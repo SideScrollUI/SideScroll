@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test.DataGrid
 {
@@ -11,21 +12,21 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			private ItemCollection<TestItem> items;
-			protected SynchronizationContext context;
+			private ItemCollection<TestItem> _items;
+			protected SynchronizationContext Context;
 
 			public Instance()
 			{
-				context = SynchronizationContext.Current ?? new SynchronizationContext();
+				Context = SynchronizationContext.Current ?? new SynchronizationContext();
 			}
 
 			public override void Load(Call call, TabModel model)
 			{
-				items = new ItemCollection<TestItem>();
+				_items = new ItemCollection<TestItem>();
 				AddEntries();
-				model.Items = items;
+				model.Items = _items;
 
-				model.Actions =  new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					//new TaskAction("Add Entries", AddEntries),
 					new TaskDelegate("Start bigNumber++ Thread", UpdateCounter, true),
@@ -36,10 +37,10 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 				for (int i = 0; i < 20; i++)
 				{
-					var testItem = new TestItem(context);
+					var testItem = new TestItem(Context);
 					testItem.SmallNumber = i;
 					testItem.BigNumber += i;
-					items.Add(testItem);
+					_items.Add(testItem);
 				}
 			}
 
@@ -50,7 +51,7 @@ namespace Atlas.Tabs.Test.DataGrid
 					for (int i = 0; i < 10000; i++)
 					{
 						Thread.Sleep(10);
-						foreach (TestItem testItem in items)
+						foreach (TestItem testItem in _items)
 						{
 							testItem.BigNumber++;
 							testItem.Update();

@@ -745,6 +745,9 @@ namespace Atlas.UI.Avalonia.Controls
 				var margin = (maximum - minimum) * MarginPercent;
 				if (minimum == maximum)
 					margin = Math.Abs(minimum);
+				
+				if (margin == 0)
+					margin = 1;
 
 				ValueAxis.Minimum = minimum - margin;
 				ValueAxis.Maximum = maximum + margin;

@@ -21,7 +21,7 @@ namespace Atlas.Tabs.Test.DataRepo
 				LoadSavedItems(call);
 				model.Items = _sampleItems;
 
-				model.Actions =  new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Add", Add), // Foreground task so we can modify collection
 					new TaskDelegate("Add 10", Add10),

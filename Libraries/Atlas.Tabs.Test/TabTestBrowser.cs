@@ -1,5 +1,6 @@
 ﻿using Atlas.Core;
 using System;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test
 {
@@ -11,12 +12,12 @@ namespace Atlas.Tabs.Test
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				model.Items = new ItemCollection<ListItem>()
+				model.Items = new List<ListItem>()
 				{
 					new ListItem("Uri", new Uri("https://wikipedia.org")),
 				};
 
-				model.Actions =  new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Open Browser", OpenBrowser),
 				};

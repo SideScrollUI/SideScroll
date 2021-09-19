@@ -1,5 +1,6 @@
 ﻿using Atlas.Core;
 using Atlas.Tabs.Tools;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test.DataRepo
 {
@@ -11,13 +12,13 @@ namespace Atlas.Tabs.Test.DataRepo
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				model.Items = new ItemCollection<ListItem>()
+				model.Items = new List<ListItem>()
 				{
 					new ListItem("Sample Data Repo", new TabTestDataRepoCollection()),
 					new ListItem("Local Directories", new TabDirectory(Project.DataApp.RepoPath)),
 				};
 
-				model.Actions =  new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Delete Repos", DeleteRepos),
 				};

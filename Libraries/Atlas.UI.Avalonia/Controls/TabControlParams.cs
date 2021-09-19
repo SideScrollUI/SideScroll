@@ -15,12 +15,10 @@ namespace Atlas.UI.Avalonia.Controls
 	public class TabControlParams : Grid
 	{
 		public const int ControlMaxWidth = 500;
-		public TabInstance TabInstance; // remove?
 		public object Object;
 
-		public TabControlParams(TabInstance tabInstance, object obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
+		public TabControlParams(object obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
 		{
-			TabInstance = tabInstance;
 			Object = obj;
 
 			InitializeControls(columnDefinitions);
@@ -86,10 +84,6 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			int rowIndex = AddRowDefinition();
 			int columnIndex = 0;
-
-			/*var spacerRow = new RowDefinition();
-			spacerRow.Height = new GridLength(5);
-			RowDefinitions.Add(spacerRow);*/
 
 			var controls = new List<Control>();
 			foreach (PropertyInfo propertyInfo in obj.GetType().GetVisibleProperties())

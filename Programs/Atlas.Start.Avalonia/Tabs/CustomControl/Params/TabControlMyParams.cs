@@ -27,7 +27,7 @@ namespace Atlas.Start.Avalonia.Tabs
 			ColumnDefinitions = new ColumnDefinitions("Auto");
 			RowDefinitions = new RowDefinitions("Auto");
 
-			var controlParams = new TabControlParams(TabInstance, MyParams, false)
+			var controlParams = new TabControlParams(MyParams, false)
 			{
 				[Grid.RowProperty] = 0,
 			};

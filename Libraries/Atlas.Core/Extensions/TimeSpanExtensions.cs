@@ -50,34 +50,34 @@ namespace Atlas.Extensions
 
 		public static List<TimeSpan> CommonTimeSpans { get; set; } = new List<TimeSpan>()
 		{
-			TimeSpan.FromDays(28),
-			TimeSpan.FromDays(7),
-			TimeSpan.FromDays(3),
-			TimeSpan.FromDays(2),
-			TimeSpan.FromDays(1),
-			TimeSpan.FromHours(12),
-			TimeSpan.FromHours(6),
-			TimeSpan.FromHours(2),
-			TimeSpan.FromHours(1),
-			TimeSpan.FromMinutes(30),
-			TimeSpan.FromMinutes(10),
-			TimeSpan.FromMinutes(5),
-			TimeSpan.FromMinutes(1),
-			TimeSpan.FromSeconds(30),
-			TimeSpan.FromSeconds(10),
-			TimeSpan.FromSeconds(5),
 			TimeSpan.FromSeconds(1),
+			TimeSpan.FromSeconds(5),
+			TimeSpan.FromSeconds(10),
+			TimeSpan.FromSeconds(30),
+			TimeSpan.FromMinutes(1),
+			TimeSpan.FromMinutes(5),
+			TimeSpan.FromMinutes(10),
+			TimeSpan.FromMinutes(30),
+			TimeSpan.FromHours(1),
+			TimeSpan.FromHours(2),
+			TimeSpan.FromHours(6),
+			TimeSpan.FromHours(12),
+			TimeSpan.FromDays(1),
+			TimeSpan.FromDays(2),
+			TimeSpan.FromDays(3),
+			TimeSpan.FromDays(7),
+			TimeSpan.FromDays(28),
 		};
 
 		public static TimeSpan PeriodDuration(this TimeSpan timeSpan, int numPeriods = 100)
 		{
 			TimeSpan maxPeriodDuration = TimeSpan.FromSeconds(timeSpan.TotalSeconds * 2 / numPeriods);
-			foreach (TimeSpan periodMin in CommonTimeSpans)
+			foreach (TimeSpan periodMin in CommonTimeSpans.Reverse<TimeSpan>())
 			{
 				if (periodMin <= maxPeriodDuration)
 					return periodMin;
 			}
-			return CommonTimeSpans.Last();
+			return CommonTimeSpans.First();
 		}
 
 		public static TimeSpan Trim(this TimeSpan timeSpan, long ticks = TimeSpan.TicksPerSecond)

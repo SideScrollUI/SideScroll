@@ -128,33 +128,40 @@ namespace Atlas.Tabs
 
 		public static ItemCollection<ListMember> Sort(ItemCollection<ListMember> items)
 		{
-			var autoSorted = new ItemCollection<ListMember>(items.OrderByDescending(i => i.MemberInfo.GetCustomAttribute<AutoSelectAttribute>() != null).ToList());
+			var sortedMembers = items
+				.OrderByDescending(i => i.MemberInfo.GetCustomAttribute<AutoSelectAttribute>() != null)
+				.OrderByDescending(i => TabUtils.ObjectHasLinks(i, true));
 
-			var linkSorted = new ItemCollection<ListMember>(autoSorted.OrderByDescending(i => TabUtils.ObjectHasLinks(i, true)).ToList());
-
+			var linkSorted = new ItemCollection<ListMember>(sortedMembers);
 			return linkSorted;
 		}
 
-		public static ItemCollection<ListMember> Create(object obj)
+		public static ItemCollection<ListMember> Create(object obj, bool includeBaseTypes = true)
 		{
-			var listMembers = new ItemCollection<ListMember>();
+			var methodMembers = new SortedDictionary<int, ListMember>();
 
-			// Add in correct order?
-			// ListItem.Create() has correct order by using property get, but doesn't work with fields
-			//var members = obj.GetType().GetMembers();
+			var properties = ListProperty.Create(obj, includeBaseTypes);
+			foreach (ListProperty listProperty in properties)
+			{
+				int metadataToken = listProperty.PropertyInfo.GetGetMethod(false).MetadataToken;
 
-			var listProperties = ListProperty.Create(obj);
-			listMembers.AddRange(listProperties);
+				methodMembers.Add(metadataToken, listProperty);
+			}
 
+			var methods = ListMethod.Create(obj, includeBaseTypes);
+			foreach (ListMethod listMethod in methods)
+			{
+				methodMembers.Add(listMethod.MethodInfo.MetadataToken, listMethod);
+			}
+
+			var listMembers = methodMembers.Values.ToList();
+
+			// field MetadataToken's don't line up with the method tokens
+			// Could provider approximate ordering using property MetadataTokens?
 			var listFields = ListField.Create(obj);
 			listMembers.AddRange(listFields);
 
-			var listMethods = ListMethod.Create(obj); // order doesn't match up with properties and fields
-			listMembers.AddRange(listMethods);
-
-			//listMembers = itemCollection.OrderBy(x => x.MemberInfo.MetadataToken).ToList();
-
-			return listMembers;
+			return new ItemCollection<ListMember>(listMembers);
 		}
 	}
 }

@@ -189,5 +189,17 @@ namespace Atlas.Core
 				return ordered;
 			}
 		}
+
+		public TimeWindow GetTimeWindow()
+		{
+			DateTime startTime = DateTime.MaxValue;
+			DateTime endTime = DateTime.MinValue;
+			foreach (TimeRangeValue timeRangeValue in TimeRangeValues)
+			{
+				startTime = startTime.Min(timeRangeValue.StartTime);
+				endTime = endTime.Max(timeRangeValue.EndTime);
+			}
+			return new TimeWindow(startTime, endTime);
+		}
 	}
 }

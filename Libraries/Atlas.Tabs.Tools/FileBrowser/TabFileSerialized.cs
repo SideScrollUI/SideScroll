@@ -2,7 +2,6 @@
 using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Atlas.Tabs.Tools
 {
@@ -33,7 +32,7 @@ namespace Atlas.Tabs.Tools
 
 			public override void Load(Call call, TabModel model)
 			{
-				var items = new ItemCollection<ListItem>();
+				var items = new List<ListItem>();
 
 				var serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(Tab.Path));
 
@@ -43,7 +42,7 @@ namespace Atlas.Tabs.Tools
 				items.Add(listData);
 				model.Items = items;
 
-				var actions = new ItemCollection<TaskCreator>();
+				var actions = new List<TaskCreator>();
 				if (Object == null)
 					actions.Add(new TaskDelegate("Load Data", LoadData));
 				model.Actions = actions;

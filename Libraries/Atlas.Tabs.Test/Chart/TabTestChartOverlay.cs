@@ -13,7 +13,6 @@ namespace Atlas.Tabs.Test.Chart
 		public class Instance : TabInstance
 		{
 			//private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
-			//private ItemCollection<int> series = new ItemCollection<int>();
 			private ItemCollection<ChartSample> samples = new ItemCollection<ChartSample>();
 			private Random random = new Random();
 			private bool ChartInitialized = false;
@@ -47,7 +46,7 @@ namespace Atlas.Tabs.Test.Chart
 				//items.Add(new ListItem("Log", series));
 				//tabModel.Items = items;
 
-				model.Actions =  new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Add Entry", AddEntry),
 					new TaskDelegate("Start: 1 Entry / second", StartTask, true),

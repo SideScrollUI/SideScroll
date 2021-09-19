@@ -2,10 +2,18 @@
 using Atlas.Extensions;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Reflection; // required for #if
 
 namespace Atlas.Tabs
 {
+	public interface IListItem
+	{
+		[Name("Name")]
+		object Key { get; }
+
+		[HiddenColumn, InnerValue, StyleValue]
+		object Value { get; set; }
+	}
+
 	// implement INotifyPropertyChanged to prevent memory leaks
 	public class ListItem : IListItem, INotifyPropertyChanged
 	{
@@ -15,10 +23,19 @@ namespace Atlas.Tabs
 		[HiddenColumn, InnerValue]
 		public object Value { get; set; }
 
+		// DataGrid columns bind to this
+		public string Name
+		{
+			get => Key?.Formatted();
+			set => Key = value;
+		}
+
 		public bool AutoLoad = true;
 
 #pragma warning disable 414
 		public event PropertyChangedEventHandler PropertyChanged = null;
+
+		public override string ToString() => Key?.ToString() ?? "";
 
 		public ListItem(object key, object value)
 		{
@@ -26,23 +43,9 @@ namespace Atlas.Tabs
 			Value = value;
 		}
 
-		public override string ToString()
+		public static implicit operator ListItem((object key, object value) pair)
 		{
-			if (Key != null)
-			{
-				string description = Key.ToString();
-				if (description != null)
-					return description;
-			}
-
-			return "";
-		}
-		
-		// DataGrid columns bind to this
-		public string Name
-		{
-			get => Key.Formatted();
-			set => Key = value;
+			return new ListItem(pair.key, pair.value);
 		}
 
 		// todo: move into IListItem after upgrading to .Net Standard 2.1
@@ -51,41 +54,21 @@ namespace Atlas.Tabs
 		{
 			var listItems = new SortedDictionary<int, IListItem>();
 
-			var properties = ListProperty.Create(obj);
+			var properties = ListProperty.Create(obj, includeBaseTypes);
 			foreach (ListProperty listProperty in properties)
 			{
-				if (!includeBaseTypes && listProperty.PropertyInfo.DeclaringType != obj.GetType())
-					continue;
-#if !DEBUG
-				// Only show [DebugOnly] in debug mode
-				if (listProperty.PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
-					continue;
-#endif
-
 				int metadataToken = listProperty.PropertyInfo.GetGetMethod(false).MetadataToken;
 
 				listItems.Add(metadataToken, listProperty);
 			}
 
-			var methods = ListMethod.Create(obj);
+			var methods = ListMethod.Create(obj, includeBaseTypes);
 			foreach (ListMethod listMethod in methods)
 			{
-				if (!includeBaseTypes && listMethod.MethodInfo.DeclaringType != obj.GetType())
-					continue;
-
 				listItems.Add(listMethod.MethodInfo.MetadataToken, listMethod);
 			}
 
 			return new ItemCollection<IListItem>(listItems.Values);
 		}
-	}
-
-	public interface IListItem
-	{
-		[Name("Name")]
-		object Key { get; }
-
-		[HiddenColumn, InnerValue, StyleValue]
-		object Value { get; set; }
 	}
 }

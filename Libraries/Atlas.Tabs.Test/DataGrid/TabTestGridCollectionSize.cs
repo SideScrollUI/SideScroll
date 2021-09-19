@@ -1,5 +1,6 @@
 ﻿using Atlas.Core;
 using System;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test.DataGrid
 {
@@ -17,7 +18,7 @@ namespace Atlas.Tabs.Test.DataGrid
 				AddEntries(20);
 				model.Items = _items;
 
-				model.Actions =  new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskAction("Add 100 Entries", () => AddEntries(100)),
 					new TaskAction("Add 1,000 Entries", () => AddEntries(1000)),

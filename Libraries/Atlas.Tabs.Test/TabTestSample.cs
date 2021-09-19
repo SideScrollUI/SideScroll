@@ -2,6 +2,7 @@
 using Atlas.Tabs.Test.DataGrid;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Atlas.Tabs.Test
 {
@@ -23,9 +24,9 @@ namespace Atlas.Tabs.Test
 
 				model.Items = new ItemCollection<ListItem>("Items")
 				{
-					new ListItem("Sample Items", _sampleItems),
-					new ListItem("Collections", new TabTestGridCollectionSize()),
-					new ListItem("Recursive Copy", new TabSample()),
+					("Sample Items", _sampleItems),
+					("Collections", new TabTestGridCollectionSize()),
+					("Recursive Copy", new TabSample()),
 				};
 
 				model.Actions = new List<TaskCreator>()
@@ -48,7 +49,7 @@ DataGrids
 				call.TaskInstance.ProgressMax = 10;
 				for (int i = 0; i < 10; i++)
 				{
-					System.Threading.Thread.Sleep(1000);
+					Thread.Sleep(1000);
 					call.Log.Add("Slept 1 second");
 					call.TaskInstance.Progress++;
 				}
@@ -57,7 +58,10 @@ DataGrids
 			private void AddItems(int count)
 			{
 				for (int i = 0; i < count; i++)
-					_sampleItems.Add(new SampleItem(_sampleItems.Count, "Item " + _sampleItems.Count));
+				{
+					int id = _sampleItems.Count;
+					_sampleItems.Add(new SampleItem(id, "Item " + id));
+				}
 			}
 		}
 	}

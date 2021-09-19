@@ -412,7 +412,7 @@ namespace Atlas.UI.Avalonia.View
 					ParamsAttribute attribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
 					if (attribute != null)
 					{
-						AddControl(new TabControlParams(Instance, obj), tabObject.Fill);
+						AddControl(new TabControlParams(obj), tabObject.Fill);
 					}
 				}
 			}

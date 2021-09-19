@@ -30,11 +30,10 @@ namespace Atlas.Tabs.Tools
 				if (!Directory.Exists(Tab.Path))
 					return;
 
-				var actions = new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Delete", Delete, true),
 				};
-				model.Actions = actions;
 
 
 				var directories = new ItemCollection<ListDirectory>();

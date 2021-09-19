@@ -89,7 +89,7 @@ namespace Atlas.Tabs
 			return result;
 		}
 
-		public static new ItemCollection<ListMethod> Create(object obj)
+		public static new ItemCollection<ListMethod> Create(object obj, bool includeBaseTypes)
 		{
 			// this doesn't work for virtual methods (or any method modifier?)
 			MethodInfo[] methodInfos = obj.GetType().GetMethods().OrderBy(x => x.MetadataToken).ToArray();
@@ -98,6 +98,9 @@ namespace Atlas.Tabs
 			foreach (MethodInfo methodInfo in methodInfos)
 			{
 				if (!IsVisible(methodInfo))
+					continue;
+
+				if (!includeBaseTypes && methodInfo.DeclaringType != obj.GetType())
 					continue;
 
 				var listMethod = new ListMethod(obj, methodInfo);

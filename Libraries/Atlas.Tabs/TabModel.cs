@@ -109,7 +109,7 @@ namespace Atlas.Tabs
 
 		public static TabModel Create(string name, object obj)
 		{
-			if (TabUtils.ObjectHasLinks(obj) == false)
+			if (TabUtils.ObjectHasLinks(obj) == false && !(obj is Enum))
 				return null;
 
 			var tabModel = new TabModel(name);

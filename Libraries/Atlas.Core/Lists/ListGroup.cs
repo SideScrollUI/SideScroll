@@ -70,15 +70,36 @@ namespace Atlas.Core
 
 		public void SortByTotal()
 		{
+			var timeWindow = TimeWindow;
+			int averageCount = Series.Where(s => s.SeriesType == SeriesType.Average).Count();
+			if (averageCount == Series.Count)
+			{
+				// Use the Min/Max times from the series data points (should this be configurable?)
+				timeWindow = GetSeriesTimeWindow();
+			}
+
 			var sums = new Dictionary<ListSeries, double>();
 			foreach (var listSeries in Series)
 			{
-				sums.Add(listSeries, listSeries.CalculateTotal(TimeWindow));
+				sums.Add(listSeries, listSeries.CalculateTotal(timeWindow));
 			}
 
 			var sortedDict = from entry in sums orderby entry.Value descending select entry.Key;
 
 			Series = new ItemCollection<ListSeries>(sortedDict);
+		}
+
+		public TimeWindow GetSeriesTimeWindow()
+		{
+			DateTime startTime = DateTime.MaxValue;
+			DateTime endTime = DateTime.MinValue;
+			foreach (ListSeries listSeries in Series)
+			{
+				TimeWindow seriesWindow = listSeries.GetTimeWindow();
+				startTime = startTime.Min(seriesWindow.StartTime);
+				endTime = endTime.Max(seriesWindow.EndTime);
+			}
+			return new TimeWindow(startTime, endTime);
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace Atlas.Tabs.Test.Actions
 					new ListItem("Async Load", new TabTestLoadAsync()),
 				};
 
-				model.Actions =  new ItemCollection<TaskCreator>()
+				model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Add Log Entry", AddEntry),
 					new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
