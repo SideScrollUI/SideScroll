@@ -11,21 +11,22 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			private Call sampleCall;
-			private int counter = 0;
+			private Call _sampleCall;
+			private int _counter = 0;
 
 			public override void Load(Call call, TabModel model)
 			{
 				TaskInstance = new TaskInstance();
 				TaskInstance.Log.Add("Double Tag Test", new Tag("Double", 0.5));
-				sampleCall = new Call(Label);
-				counter = 0;
+
+				_sampleCall = new Call(Label);
+				_counter = 0;
 
 				model.Items = new ItemCollection<ListItem>()
 				{
 					new ListItem("Task Instance Log", TaskInstance.Log),
-					new ListItem("Sample Call", sampleCall),
-					new ListItem("Sample Call Log", sampleCall.Log),
+					new ListItem("Sample Call", _sampleCall),
+					new ListItem("Sample Call Log", _sampleCall.Log),
 					new ListItem("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),
 				};
 
@@ -57,10 +58,10 @@ namespace Atlas.Tabs.Test
 				for (int i = 0; !token.IsCancellationRequested; i++)
 				{
 					//log.Add("New Log Entry", new Tag("i", counter));
-					call.Log.Add("New Call Log Entry", new Tag("i", counter));
-					sampleCall.Log.Add("New Sample Log Entry", new Tag("counter", counter));
+					call.Log.Add("New Call Log Entry", new Tag("i", _counter));
+					_sampleCall.Log.Add("New Sample Log Entry", new Tag("counter", _counter));
 					logChild.Add("New Child Log Entry", new Tag("i", i));
-					counter++;
+					_counter++;
 					Thread.Sleep(1000);
 				}
 			}
@@ -70,9 +71,9 @@ namespace Atlas.Tabs.Test
 				for (int i = 0; i < count; i++)
 				{
 					//log.Add("test " + counter.ToString());
-					counter++;
+					_counter++;
 					//call.Log.Add("New Log entry", new Tag("name", "value"));
-					sampleCall.Log.Add("New Log entry", new Tag("name", "value"));
+					_sampleCall.Log.Add("New Log entry", new Tag("name", "value"));
 				}
 			}
 
@@ -92,10 +93,7 @@ namespace Atlas.Tabs.Test
 			private void StartThreadTimer()
 			{
 				// would be nice to be able cancel this through the task (Start/Stop) Methods
-				if (_timer == null)
-				{
-					_timer = new Timer(TimerCallback, null, 0, 1000);
-				}
+				_timer = _timer ?? new Timer(TimerCallback, null, 0, 1000);
 			}
 
 			public void TimerCallback(object state)

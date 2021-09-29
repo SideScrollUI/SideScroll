@@ -101,7 +101,7 @@ namespace Atlas.Serialize
 				return typeRepoUnknown;
 			}
 
-			if (serializer.PublicOnly && !(typeSchema.IsPublicOnly))
+			if (serializer.PublicOnly && !typeSchema.IsPublicOnly)
 			{
 				if (!typeSchema.IsPrivate)
 				{
@@ -121,7 +121,7 @@ namespace Atlas.Serialize
 
 			TypeRepo typeRepo;
 
-			foreach (var creator in RepoCreators)
+			foreach (IRepoCreator creator in RepoCreators)
 			{
 				typeRepo = creator.TryCreateRepo(serializer, typeSchema);
 				if (typeRepo != null)

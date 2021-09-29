@@ -43,7 +43,6 @@ namespace Atlas.Core
 		// Creates, Starts, and returns a new Task
 		public TaskInstance Start(Call call)
 		{
-			//call = call.Child(Label);
 			TimesRun++;
 			Context = SynchronizationContext.Current ?? new SynchronizationContext();
 			call.Log.Settings.Context = Context;

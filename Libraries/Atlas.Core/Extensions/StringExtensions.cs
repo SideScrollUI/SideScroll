@@ -100,7 +100,7 @@ namespace Atlas.Extensions
 						//if (nextChar
 						newText.Append(' ');
 					}
-					else if (char.IsNumber(c) && !char.IsNumber(prevChar)) // Add space before 1st Number, Number10
+					else if (char.IsNumber(c) && !char.IsNumber(prevChar) && prevChar != '.' && newText.Length > 1) // Add space before 1st Number, Number10
 					{
 						newText.Append(' ');
 					}

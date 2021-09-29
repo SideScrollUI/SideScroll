@@ -51,7 +51,7 @@ namespace Atlas.Tabs
 	{
 		public ITabCreatorAsync CreatorAsync;
 
-		private TabInstance innerChildInstance;
+		private TabInstance _innerChildInstance;
 
 		public TabCreatorAsync(ITabCreatorAsync creatorAsync)
 		{
@@ -61,14 +61,14 @@ namespace Atlas.Tabs
 		public async Task LoadAsync(Call call, TabModel model)
 		{
 			ITab iTab = await CreatorAsync.CreateAsync(call);
-			innerChildInstance = CreateChildTab(iTab);
-			if (innerChildInstance is ITabAsync tabAsync)
+			_innerChildInstance = CreateChildTab(iTab);
+			if (_innerChildInstance is ITabAsync tabAsync)
 				await tabAsync.LoadAsync(call, model);
 		}
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			innerChildInstance.LoadUI(call, model);
+			_innerChildInstance.LoadUI(call, model);
 		}
 	}
 
@@ -745,7 +745,7 @@ namespace Atlas.Tabs
 			return TabBookmark?.GetSelectedData<T>() ?? new SortedDictionary<string, T>();
 		}
 
-		protected T GetBookmarkData<T>(string name = TabBookmark.DefaultDataName)
+		public T GetBookmarkData<T>(string name = TabBookmark.DefaultDataName)
 		{
 			if (TabBookmark != null)
 				return TabBookmark.GetData<T>(name);
@@ -835,7 +835,9 @@ namespace Atlas.Tabs
 		public void SaveTabSettings()
 		{
 			if (CustomPath != null)
+			{
 				Project.DataApp.Save(CustomPath, TabViewSettings, TaskInstance.Call);
+			}
 
 			Type type = GetType();
 			if (type != typeof(TabInstance))

@@ -158,7 +158,7 @@ namespace Atlas.Tabs
 
 			// field MetadataToken's don't line up with the method tokens
 			// Could provider approximate ordering using property MetadataTokens?
-			var listFields = ListField.Create(obj);
+			var listFields = ListField.Create(obj, includeBaseTypes);
 			listMembers.AddRange(listFields);
 
 			return new ItemCollection<ListMember>(listMembers);

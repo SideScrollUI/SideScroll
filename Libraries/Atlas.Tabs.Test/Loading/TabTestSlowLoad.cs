@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using System.Threading;
 
 namespace Atlas.Tabs.Test.Loading
 {
@@ -10,7 +11,7 @@ namespace Atlas.Tabs.Test.Loading
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				System.Threading.Thread.Sleep(5000);
+				Thread.Sleep(5000);
 				model.AddObject("Finished");
 			}
 		}

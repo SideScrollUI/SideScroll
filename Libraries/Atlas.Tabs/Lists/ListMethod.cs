@@ -54,13 +54,18 @@ namespace Atlas.Tabs
 			MethodInfo = methodInfo;
 			CacheEnabled = cached;
 
-			Name = methodInfo.Name;
+			UpdateName();
+		}
+
+		private void UpdateName()
+		{
+			Name = MethodInfo.Name;
 			Name = Name.TrimEnd("Async").WordSpaced();
-			NameAttribute attribute = methodInfo.GetCustomAttribute<NameAttribute>();
+			NameAttribute attribute = MethodInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;
 
-			ItemAttribute itemAttribute = methodInfo.GetCustomAttribute<ItemAttribute>();
+			ItemAttribute itemAttribute = MethodInfo.GetCustomAttribute<ItemAttribute>();
 			if (itemAttribute != null && itemAttribute.Name != null)
 				Name = itemAttribute.Name;
 		}
@@ -92,7 +97,7 @@ namespace Atlas.Tabs
 		public static new ItemCollection<ListMethod> Create(object obj, bool includeBaseTypes)
 		{
 			// this doesn't work for virtual methods (or any method modifier?)
-			MethodInfo[] methodInfos = obj.GetType().GetMethods().OrderBy(x => x.MetadataToken).ToArray();
+			var methodInfos = obj.GetType().GetMethods().OrderBy(x => x.MetadataToken);
 			var listMethods = new ItemCollection<ListMethod>();
 			var propertyToIndex = new Dictionary<string, int>();
 			foreach (MethodInfo methodInfo in methodInfos)

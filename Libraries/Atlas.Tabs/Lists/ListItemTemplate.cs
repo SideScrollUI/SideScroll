@@ -16,23 +16,13 @@ namespace Atlas.Tabs
 #pragma warning disable 414
 		public event PropertyChangedEventHandler PropertyChanged = null;
 
+		public override string ToString() => Key?.ToString() ?? "";
+
 		public ListItem(T1 key, T2 value, object obj)
 		{
 			Key = key;
 			Value = value;
 			Object = obj;
-		}
-
-		public override string ToString()
-		{
-			if (Key != null)
-			{
-				string description = Key.ToString();
-				if (description != null)
-					return description;
-			}
-
-			return "";
 		}
 	}
 }

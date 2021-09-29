@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using System.Threading;
 
 namespace Atlas.Tabs.Test.Loading
 {
@@ -28,7 +29,7 @@ namespace Atlas.Tabs.Test.Loading
 				{
 					if (_text == null)
 					{
-						System.Threading.Thread.Sleep(5000);
+						Thread.Sleep(5000);
 						_text = "Text";
 					}
 					return _text;

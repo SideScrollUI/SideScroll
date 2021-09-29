@@ -23,8 +23,7 @@ namespace Atlas.Core
 		string CustomSettingsPath { get; set; }
 	}
 
-	// Winforms really need IBindingList, but Wpf DataGrid tries to use IBindingList to sort if available (bad)
-	// Would be nice to make this thread safe to make storing logs easier?
+	// See ItemCollectionUI for a thread safe version
 	public class ItemCollection<T> : ObservableCollection<T>, IList, IItemCollection, ICollection, IEnumerable, IComparer //, IRaiseItemChangedEvents //
 	{
 		public string ColumnName { get; set; }

@@ -56,7 +56,7 @@ namespace Atlas.Tabs
 				Name = attribute.Name;
 		}
 
-		public static new ItemCollection<ListField> Create(object obj)
+		public static new ItemCollection<ListField> Create(object obj, bool includeBaseTypes = true)
 		{
 			var fieldInfos = obj.GetType().GetFields().OrderBy(x => x.MetadataToken);
 
@@ -66,6 +66,9 @@ namespace Atlas.Tabs
 			foreach (FieldInfo fieldInfo in fieldInfos)
 			{
 				if (!IsVisible(fieldInfo))
+					continue;
+
+				if (!includeBaseTypes && fieldInfo.DeclaringType != obj.GetType())
 					continue;
 
 				var listField = new ListField(obj, fieldInfo);

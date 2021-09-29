@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test
 {
@@ -10,7 +11,7 @@ namespace Atlas.Tabs.Test
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				var sampleItems = new ItemCollection<SampleItem>()
+				var sampleItems = new List<SampleItem>()
 				{
 					new SampleItem(1, "Item 1"),
 				};
@@ -23,7 +24,3 @@ namespace Atlas.Tabs.Test
 		}
 	}
 }
-/*
-Should we just collapse instead?
-	Performance reasons?
-*/

@@ -24,40 +24,14 @@ namespace Atlas.Tabs
 #pragma warning disable 414
 		public event PropertyChangedEventHandler PropertyChanged = null;
 
+		public override string ToString() => Key?.ToString() ?? "";
+
 		public ListPair(object key, object value, object obj = null, int? maxDesiredWidth = null)
 		{
 			Key = key;
 			Value = value;
-			if (obj != null)
-				Object = obj;
-			else
-				Object = value;
+			Object = obj ?? value;
 			MaxDesiredWidth = maxDesiredWidth;
 		}
-
-		public override string ToString()
-		{
-			if (Key != null)
-			{
-				string description = Key.ToString();
-				if (description != null)
-					return description;
-			}
-
-			return "";
-		}
-
-		// DataGrid columns bind to this
-		/*public string Name
-		{
-			get
-			{
-				return Key.Formatted();
-			}
-			set
-			{
-				Key = value;
-			}
-		}*/
 	}
 }

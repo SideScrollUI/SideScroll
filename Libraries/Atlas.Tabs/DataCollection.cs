@@ -10,6 +10,7 @@ namespace Atlas.Tabs
 	public interface IDataTab
 	{
 		void Load(Call call, object obj, params object[] tabParams);
+
 		event EventHandler<EventArgs> OnDelete;
 	}
 

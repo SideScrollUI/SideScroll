@@ -24,6 +24,7 @@ namespace Atlas.Serialize.Test
 		}
 
 		[Test, Description("WriteMemoryMappedFile")]
+		[Ignore("Todo: For prototyping, handle file cleanup")]
 		public void WriteMemoryMappedFile()
 		{
 			long offset = 0x200000000; // 8 GB
