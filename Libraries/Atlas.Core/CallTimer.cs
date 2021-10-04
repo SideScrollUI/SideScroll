@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Timers;
 
 namespace Atlas.Core
 {
 	public class CallTimer : Call, IDisposable
 	{
 		private Stopwatch _stopwatch = new Stopwatch();
-		private System.Timers.Timer _timer = new System.Timers.Timer();
+		private Timer _timer = new Timer();
 
 		public long ElapsedMilliseconds => _stopwatch.ElapsedMilliseconds;
 
@@ -21,13 +22,15 @@ namespace Atlas.Core
 
 		public void Stop()
 		{
-			_timer.Stop();
 			_stopwatch.Stop();
+
+			_timer.Stop();
 			_timer.Elapsed -= Timer_Elapsed;
+
 			UpdateDuration();
 		}
 
-		private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
 			UpdateDuration();
 		}
@@ -41,7 +44,9 @@ namespace Atlas.Core
 		public void Dispose()
 		{
 			Stop();
+
 			_timer.Dispose();
+
 			TaskInstance?.SetFinished();
 			if (TaskInstance == null)
 				Log.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));

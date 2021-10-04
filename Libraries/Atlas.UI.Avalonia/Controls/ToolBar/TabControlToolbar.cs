@@ -23,7 +23,9 @@ namespace Atlas.UI.Avalonia.Tabs
 		public TabControlToolbar(TabInstance tabInstance, TabToolbar toolbar = null)
 		{
 			TabInstance = tabInstance;
+
 			InitializeControls();
+
 			if (toolbar != null)
 				LoadToolbar(toolbar);
 		}
@@ -31,8 +33,10 @@ namespace Atlas.UI.Avalonia.Tabs
 		private void InitializeControls()
 		{
 			RowDefinitions = new RowDefinitions("Auto");
+
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Top;
+
 			Background = Theme.ToolbarButtonBackground;
 		}
 
@@ -226,24 +230,24 @@ namespace Atlas.UI.Avalonia.Tabs
 	// todo: replace with version that uses IObservable
 	public class RelayCommand : ICommand
 	{
-		readonly Func<object, bool> canExecute;
-		readonly Action<object> execute;
+		public readonly Func<object, bool> CanExecuteFunc;
+		public readonly Action<object> ExecuteAction;
 
 		public RelayCommand(Func<object, bool> canExecute = null, Action<object> execute = null)
 		{
-			this.canExecute = canExecute ?? (_ => true);
-			this.execute = execute ?? (_ => { });
+			CanExecuteFunc = canExecute ?? (_ => true);
+			ExecuteAction = execute ?? (_ => { });
 		}
 
 		public event EventHandler CanExecuteChanged;
 
-		bool? prevCanExecute = null;
+		private bool? _prevCanExecute = null;
 		public bool CanExecute(object parameter)
 		{
-			var ce = canExecute(parameter);
-			if (CanExecuteChanged != null && (!prevCanExecute.HasValue || ce != prevCanExecute))
+			var ce = CanExecuteFunc(parameter);
+			if (CanExecuteChanged != null && (!_prevCanExecute.HasValue || ce != _prevCanExecute))
 			{
-				prevCanExecute = ce;
+				_prevCanExecute = ce;
 				CanExecuteChanged(this, EventArgs.Empty);
 			}
 
@@ -252,7 +256,7 @@ namespace Atlas.UI.Avalonia.Tabs
 
 		public void Execute(object parameter)
 		{
-			execute(parameter);
+			ExecuteAction(parameter);
 		}
 	}
 }

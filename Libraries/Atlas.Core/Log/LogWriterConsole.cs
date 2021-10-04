@@ -15,8 +15,7 @@ namespace Atlas.Core
 		{
 			Log = log;
 			
-			Context = SynchronizationContext.Current;
-			Context = Context ?? new SynchronizationContext();
+			Context = SynchronizationContext.Current ?? new SynchronizationContext();
 			
 			log.OnMessage += LogEntry_OnMessage;
 		}
@@ -26,6 +25,7 @@ namespace Atlas.Core
 			string Indendation = "";
 			for (int i = 1; i < e.Entries.Count; i++)
 				Indendation += '\t';
+
 			LogEntry newLog = e.Entries[0];
 			//string line = log.Created.ToString("yyyy-MM-dd HH:mm:ss") + Indendation + log.ToString();
 

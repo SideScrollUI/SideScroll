@@ -26,6 +26,7 @@ namespace Atlas.Core.Time
 		{
 			Abbreviation = abbreviation;
 			Name = name;
+
 			try
 			{
 				TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(name);

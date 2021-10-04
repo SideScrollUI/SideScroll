@@ -12,6 +12,7 @@ namespace Atlas.Tabs.Test.Loading
 			public override void Load(Call call, TabModel model)
 			{
 				Thread.Sleep(5000);
+
 				model.AddObject("Finished");
 			}
 		}

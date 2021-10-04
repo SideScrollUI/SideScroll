@@ -25,10 +25,12 @@ namespace Atlas.UI.Avalonia.Controls
 		public TabControlComboBox(ListProperty property, BindListAttribute propertyListAttribute)
 		{
 			Property = property;
+
 			InitializeComponent();
 
 			IsEnabled = property.Editable;
 			MaxWidth = TabControlParams.ControlMaxWidth;
+
 			Type type = property.UnderlyingType;
 
 			if (propertyListAttribute != null)

@@ -58,8 +58,8 @@ namespace Atlas.Tabs
 			string depthText = match.Groups["Depth"].Value;
 			if (depthText.Length > 0)
 				Depth = int.Parse(depthText.Substring(1));
-			string filters = match.Groups["Filters"].Value;
 
+			string filters = match.Groups["Filters"].Value;
 			filters = filters.ToUpper();
 			string[] parts = filters.Split('|', '&'); // use a tree or something better later
 			IsAnd = filters.Contains('&');

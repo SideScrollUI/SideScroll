@@ -39,7 +39,9 @@ namespace Atlas.Tabs
 
 			if (uri.Length > MaxLength)
 			{
-				call.Log.AddError("Bookmark too large", new Tag("Length", uri.Length), new Tag("MaxLength", MaxLength));
+				call.Log.AddError("Bookmark too large", 
+					new Tag("Length", uri.Length), 
+					new Tag("MaxLength", MaxLength));
 				return null;
 			}
 

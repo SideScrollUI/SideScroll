@@ -135,24 +135,15 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (value is string s && s.StartsWith("{") && !s.Contains("\n"))
 				{
-					value = GetFormattedJson(s);
+					TextEditor.FontFamily = new FontFamily("Courier New");
 				}
 				TextEditor.Text = value;
 			}
 		}
 
-		public static string GetFormattedJson(string text)
+		public void SetFormattedJson(string text)
 		{
-			try
-			{
-				dynamic parsedJson = JsonConvert.DeserializeObject(text);
-				string formatted = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
-				return formatted;
-			}
-			catch (Exception)
-			{
-				return text;
-			}
+			Text = JsonUtils.Format(text);
 		}
 
 		public void EnableEditing(ListMember listMember)

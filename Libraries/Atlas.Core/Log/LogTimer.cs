@@ -19,6 +19,7 @@ namespace Atlas.Core
 			Tags = tags;
 
 			Add(text, tags);
+
 			InitializeTimer();
 		}
 
@@ -29,6 +30,7 @@ namespace Atlas.Core
 			Tags = tags;
 
 			Add(logLevel, text, tags);
+
 			InitializeTimer();
 		}
 
@@ -49,6 +51,7 @@ namespace Atlas.Core
 		private void UpdateDuration()
 		{
 			Duration = _stopwatch.ElapsedMilliseconds / 1000.0f;
+
 			CreateEventPropertyChanged(nameof(Duration));
 		}
 
@@ -57,7 +60,9 @@ namespace Atlas.Core
 			_timer.Elapsed -= Timer_Elapsed;
 			_timer.Stop();
 			_timer.Dispose();
+
 			_stopwatch.Stop();
+
 			UpdateDuration();
 			
 			Add("Finished", new Tag("Duration", Duration));

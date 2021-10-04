@@ -16,7 +16,9 @@ namespace Atlas.Tabs.Test.Actions
 			public async Task LoadAsync(Call call, TabModel model)
 			{
 				call.Log.Add("Sleeping", new Tag("Milliseconds", DelayMs));
+
 				await Task.Delay(DelayMs);
+
 				model.AddObject("Finished");
 
 				model.Items = new List<int>()

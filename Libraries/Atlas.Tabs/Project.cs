@@ -63,7 +63,7 @@ namespace Atlas.Tabs
 
 		public void SaveSettings()
 		{
-			//tabInstance.project.DataApp.Save(projectSettings, new Call());
+			//DataApp.Save(projectSettings, new Call());
 
 			var serializer = SerializerFile.Create(UserSettings.SettingsPath, "");
 			serializer.Save(new Call(), ProjectSettings);

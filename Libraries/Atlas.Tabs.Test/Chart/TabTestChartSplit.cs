@@ -11,11 +11,8 @@ namespace Atlas.Tabs.Test.Chart
 
 		public class Instance : TabInstance
 		{
-			//private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
-			//private ItemCollection<int> series = new ItemCollection<int>();
-			private ItemCollection<ChartSample> samples = new ItemCollection<ChartSample>();
-			private Random random = new Random();
-			private bool ChartInitialized = false;
+			private ItemCollection<ChartSample> _samples = new ItemCollection<ChartSample>();
+			private Random _random = new Random();
 
 			public class TestItem
 			{
@@ -24,7 +21,6 @@ namespace Atlas.Tabs.Test.Chart
 
 			public class ChartSample
 			{
-				//public string Group { get; set; } = "Group";
 				public string Name { get; set; }
 				// Add [UnitType]
 				public int SeriesAlpha { get; set; }
@@ -40,7 +36,6 @@ namespace Atlas.Tabs.Test.Chart
 
 			public override void Load(Call call, TabModel model)
 			{
-				//items.Add(new ListItem("Log", series));
 				//tabModel.Items = items;
 
 				model.Actions = new List<TaskCreator>()
@@ -54,15 +49,13 @@ namespace Atlas.Tabs.Test.Chart
 					AddSample(i);
 				}
 
-				var chartSettings = new ChartSettings(samples);
+				var chartSettings = new ChartSettings(_samples);
 				model.AddObject(chartSettings);
-				//model.ChartSettings.ListSeries.
 			}
 
 			private void AddEntry(Call call)
 			{
 				Invoke(new SendOrPostCallback(AddSampleCallback), call);
-				//context.Send(, log);
 			}
 
 			private void StartTask(Call call)
@@ -77,53 +70,29 @@ namespace Atlas.Tabs.Test.Chart
 
 			private void AddSample(int i)
 			{
-				//series.Add(random.Next(1050, 1095));
-
 				var sample = new ChartSample()
 				{
 					Name = "Name " + i.ToString(),
-					SeriesAlpha = random.Next(0, 100),
-					SeriesBeta = random.Next(50, 100),
-					SeriesGamma = random.Next(0, 1000000000),
-					SeriesEpsilon = 1000000000 + random.Next(0, 10),
+					SeriesAlpha = _random.Next(0, 100),
+					SeriesBeta = _random.Next(50, 100),
+					SeriesGamma = _random.Next(0, 1000000000),
+					SeriesEpsilon = 1000000000 + _random.Next(0, 10),
 					testItem = new TestItem()
 					{
-						Amount = random.Next(0, 100),
+						Amount = _random.Next(0, 100),
 					},
 				};
-				samples.Add(sample);
-			}
-
-			private void Initialize()
-			{
-				if (ChartInitialized)
-					return;
-				ChartInitialized = true;
-
-				//tabChart.chart.Series.Clear();
-				//tabChart.BindListToChart(samples);
-
-				//tabChart.chart.DataBindTable(samples); // databinds class Properties, throws exception when binding non Primitive properties
-				//tabChart.chart.DataBind();
-
-
-				//tabChart.chart.Update();
+				_samples.Add(sample);
 			}
 
 			// UI context
 			private void AddSampleCallback(object state)
 			{
 				Call call = (Call)state;
-				Initialize();
 
 				call.Log.Add("test");
-				//call.Log.Add("New Log entry", new Tag("name", "value"));
 
-				//var random = new Random();
-				AddSample(samples.Count);
-				//tabChart.chart.Series[0].Points.DataBindY(tabModel.Chart); // required to refresh, any alternatives?
-				//tabChart.chart.DataBind();
-				//tabChart.chart.In
+				AddSample(_samples.Count);
 			}
 		}
 	}

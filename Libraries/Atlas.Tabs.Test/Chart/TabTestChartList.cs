@@ -11,20 +11,12 @@ namespace Atlas.Tabs.Test.Chart
 
 		public class Instance : TabInstance
 		{
-			//private ItemCollection<ListItem> items = new ItemCollection<ListItem>();
-			private List<ItemCollection<int>> series;
-			private Random random = new Random();
-			private bool ChartInitialized = false;
-
-			public class TestItem
-			{
-				public int Amount { get; set; }
-			}
+			private List<ItemCollection<int>> _series;
+			private Random _random = new Random();
 
 			public override void Load(Call call, TabModel model)
 			{
-				series = new List<ItemCollection<int>>();
-				//items.Add(new ListItem("Log", series));
+				_series = new List<ItemCollection<int>>();
 				//model.Items = items;
 
 				model.Actions = new List<TaskCreator>()
@@ -38,7 +30,7 @@ namespace Atlas.Tabs.Test.Chart
 				{
 					var list = new ItemCollection<int>();
 					chartSettings.AddList("Series " + i, list);
-					series.Add(list);
+					_series.Add(list);
 				}
 
 				for (int i = 0; i < 10; i++)
@@ -46,12 +38,11 @@ namespace Atlas.Tabs.Test.Chart
 					AddSample();
 				}
 				model.AddObject(chartSettings);
-				//tabModel.ChartSettings.ListSeries.
 			}
 
 			private void AddEntry(Call call)
 			{
-				Invoke(call, AddSampleCallback);
+				Invoke(call, AddSampleUI);
 			}
 
 			private void StartTask(Call call)
@@ -59,7 +50,7 @@ namespace Atlas.Tabs.Test.Chart
 				CancellationToken token = call.TaskInstance.TokenSource.Token;
 				for (int i = 0; !token.IsCancellationRequested; i++)
 				{
-					Invoke(AddSampleCallback, call);
+					Invoke(AddSampleUI, call);
 					Thread.Sleep(1000);
 				}
 			}
@@ -67,35 +58,17 @@ namespace Atlas.Tabs.Test.Chart
 			private void AddSample()
 			{
 				int multiplier = 1;
-				foreach (var list in series)
+				foreach (var list in _series)
 				{
-					int amount = (random.Next() % 1000) * multiplier;
+					int amount = (_random.Next() % 1000) * multiplier;
 					list.Add(amount);
 					multiplier++;
 				}
 			}
 
-			private void Initialize()
-			{
-				if (ChartInitialized)
-					return;
-				ChartInitialized = true;
-
-				//tabChart.chart.Series.Clear();
-				//tabChart.BindListToChart(samples);
-
-				//tabChart.chart.DataBindTable(samples); // databinds class Properties, throws exception when binding non Primitive properties
-				//tabChart.chart.DataBind();
-
-
-				//tabChart.chart.Update();
-			}
-
 			// UI context
-			private void AddSampleCallback(Call call, object state)
+			private void AddSampleUI(Call call, object state)
 			{
-				Initialize();
-
 				AddSample();
 			}
 		}

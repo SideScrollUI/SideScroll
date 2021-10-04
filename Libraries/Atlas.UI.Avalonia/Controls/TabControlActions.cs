@@ -48,7 +48,10 @@ namespace Atlas.UI.Avalonia.Controls
 				};
 				containerGrid.RowDefinitions.Add(rowDefinition);
 
-				var button = new TabControlButton(taskCreator.Label);
+				var button = new TabControlButton(taskCreator.Label)
+				{
+					Margin = new Thickness(4, 2),
+				};
 				/*button.Styles.Add(new Style(x => x.OfType<Button>()) // .Class("ContentPresenter").Class("bar").Class("baz")
 				{
 					Setters = new[]
@@ -56,7 +59,6 @@ namespace Atlas.UI.Avalonia.Controls
 						new Setter(Button.BackgroundProperty, new SolidColorBrush(Theme.ButtonBackgroundColor)),
 					}
 				});*/
-				button.Margin = new Thickness(4, 2);
 				button.Click += Button_Click;
 				_taskCreators[button] = taskCreator;
 				Grid.SetRow(button, rowIndex++);

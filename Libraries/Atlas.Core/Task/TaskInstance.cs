@@ -87,6 +87,7 @@ namespace Atlas.Core
 		private void Initialize()
 		{
 			Call.TaskInstance = this;
+
 			_stopwatch.Start();
 		}
 
@@ -116,7 +117,9 @@ namespace Atlas.Core
 
 				_progress = Math.Min(value, ProgressMax);
 				NotifyPropertyChanged(nameof(Progress));
+
 				UpdatePercent();
+
 				if (ParentTask != null)
 				{
 					ParentTask.AddProgress(Percent - _prevPercent);
@@ -192,6 +195,7 @@ namespace Atlas.Core
 				return;
 
 			_stopwatch.Stop(); // Both Send and Post adds some delay
+
 			if (Creator != null)
 				Creator.Context.Post(new SendOrPostCallback(OnFinished), null);
 			else

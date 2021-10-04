@@ -54,6 +54,9 @@ namespace Atlas.Tabs
 			NameAttribute attribute = fieldInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;
+
+			if (FieldInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+				Name = "* " + Name;
 		}
 
 		public static new ItemCollection<ListField> Create(object obj, bool includeBaseTypes = true)

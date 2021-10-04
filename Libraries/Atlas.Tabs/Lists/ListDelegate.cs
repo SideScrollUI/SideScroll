@@ -57,8 +57,8 @@ namespace Atlas.Tabs
 			CacheEnabled = cached;
 			MethodInfo = loadAction.Method;
 
-			Name = MethodInfo.Name;
-			Name = Name.WordSpaced();
+			Name = MethodInfo.Name.WordSpaced();
+
 			NameAttribute attribute = MethodInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;

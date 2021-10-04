@@ -106,6 +106,7 @@ namespace Atlas.Tabs
 	public class LazyJsonProperty : LazyJsonNode
 	{
 		public string Key { get; set; }
+
 		[InnerValue, StyleValue]
 		public object Value { get; set; }
 

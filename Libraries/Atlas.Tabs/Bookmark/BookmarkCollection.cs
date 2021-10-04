@@ -10,10 +10,12 @@ namespace Atlas.Tabs
 		public static string DataKey = "Bookmarks";
 
 		public Project Project;
+
 		public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new ItemCollectionUI<TabBookmarkItem>()
 		{
 			PostOnly = true,
 		};
+
 		public TabBookmarkItem NewBookmark { get; set; }
 
 		private DataRepoView<Bookmark> _dataRepoBookmarks;
@@ -21,6 +23,7 @@ namespace Atlas.Tabs
 		public BookmarkCollection(Project project)
 		{
 			Project = project;
+
 			_dataRepoBookmarks = Project.DataApp.OpenView<Bookmark>(DataKey);
 		}
 
@@ -49,6 +52,7 @@ namespace Atlas.Tabs
 		{
 			var tabItem = new TabBookmarkItem(bookmark, Project);
 			tabItem.OnDelete += Item_OnDelete;
+
 			lock (DataKey)
 			{
 				Items.Add(tabItem);

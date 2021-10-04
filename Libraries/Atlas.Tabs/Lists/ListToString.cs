@@ -28,6 +28,7 @@ namespace Atlas.Tabs
 				return;
 
 			Value = obj.ToString();
+
 			DataKey = DataUtils.GetDataKey(obj);
 			DataValue = DataUtils.GetDataValue(obj);
 		}

@@ -12,13 +12,14 @@ namespace Atlas.Tabs.Test
 
 		public class Instance : TabInstance
 		{
-			private const string dataKey = "Params";
-			private ItemCollection<ParamTestResult> items = new ItemCollection<ParamTestResult>();
-			private ParamTestItem paramTestItem;
+			private const string DataKey = "Params";
+
+			private ItemCollectionUI<ParamTestResult> _items = new ItemCollectionUI<ParamTestResult>();
+			private ParamTestItem _paramTestItem;
 
 			public override void Load(Call call, TabModel model)
 			{
-				model.Items = items;
+				model.Items = _items;
 
 				model.Actions = new List<TaskCreator>()
 				{
@@ -26,24 +27,24 @@ namespace Atlas.Tabs.Test
 					new TaskDelegateAsync("10s Task", LongTaskAsync, true),
 				};
 
-				paramTestItem = LoadData<ParamTestItem>(dataKey);
-				if (paramTestItem.DateTime.Ticks == 0)
-					paramTestItem.DateTime = DateTime.Now; // in case the serializer loses it
-				model.AddObject(paramTestItem);
+				_paramTestItem = LoadData<ParamTestItem>(DataKey);
+				if (_paramTestItem.DateTime.Ticks == 0)
+					_paramTestItem.DateTime = DateTime.Now; // in case the serializer loses it
+				model.AddObject(_paramTestItem);
 
 				model.Notes = "Adding a class of type [Params] to a tabModel creates a TabControlParam\nParameter values can be saved between Tasks";
 			}
 
 			private void Add(Call call)
 			{
-				SaveData(dataKey, paramTestItem);
+				SaveData(DataKey, _paramTestItem);
 
-				ParamTestItem clone = paramTestItem.DeepClone(call);
+				ParamTestItem clone = _paramTestItem.DeepClone(call);
 				var result = new ParamTestResult()
 				{
 					Parameters = clone,
 				};
-				items.Add(result);
+				_items.Add(result);
 			}
 
 			private async Task LongTaskAsync(Call call)

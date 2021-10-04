@@ -20,8 +20,11 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			//VerticalAlignment = VerticalAlignment.Stretch;
 			HorizontalAlignment = HorizontalAlignment.Stretch;
+
 			ColumnDefinitions = new ColumnDefinitions("Auto,*");
+
 			Margin = new Thickness(15);
+
 			MinWidth = 100;
 			MaxWidth = 1000;
 		}

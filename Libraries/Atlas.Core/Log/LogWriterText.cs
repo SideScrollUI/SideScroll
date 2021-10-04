@@ -25,8 +25,8 @@ namespace Atlas.Core
 				Directory.CreateDirectory(parentDirectory);
 			
 			txtStreamWriter = new StreamWriter(SaveFilePath);
-			context = SynchronizationContext.Current;
-			context = context ?? new SynchronizationContext();
+
+			context = SynchronizationContext.Current ?? new SynchronizationContext();
 			
 			log.OnMessage += LogEntry_OnMessage;
 		}
@@ -36,6 +36,7 @@ namespace Atlas.Core
 			string Indendation = "";
 			foreach (LogEntry logEntry in e.Entries)
 				Indendation += '\t';
+
 			LogEntry newLog = e.Entries[0];
 			string line = Log.Created.ToString("yyyy-M-d H:mm:ss") + Indendation + newLog.Message;
 			txtStreamWriter.WriteLine(line);

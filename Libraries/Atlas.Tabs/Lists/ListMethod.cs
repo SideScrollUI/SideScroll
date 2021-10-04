@@ -59,8 +59,8 @@ namespace Atlas.Tabs
 
 		private void UpdateName()
 		{
-			Name = MethodInfo.Name;
-			Name = Name.TrimEnd("Async").WordSpaced();
+			Name = MethodInfo.Name.TrimEnd("Async").WordSpaced();
+
 			NameAttribute attribute = MethodInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 				Name = attribute.Name;

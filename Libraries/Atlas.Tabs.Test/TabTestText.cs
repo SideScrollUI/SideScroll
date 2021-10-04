@@ -1,4 +1,5 @@
 ﻿using Atlas.Core;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Atlas.Tabs.Test
@@ -11,25 +12,33 @@ namespace Atlas.Tabs.Test
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				string shortText = GetString(1000);
-				string longText = GetString(10000);
-				string reallyLongText = GetString(100000);
-
-				model.Items = new ItemCollection<ListItem>()
+				model.Items = new List<ListItem>()
 				{
 					new ListItem("Sample Text", "This is some sample text\n\n1\n2\n3"),
-					new ListItem("Short Text - [" + shortText.Length + "]", shortText),
-					new ListItem("Medium Text - [" + longText.Length + "]", longText),
-					new ListItem("Long Text - [" + reallyLongText.Length + "]", reallyLongText),
+					new ListItem("Json", @"{""key"": ""value"", ""number"": 123}"),
+					GetListItem("1k", 1000),
+					GetListItem("10k", 10000),
+					GetListItem("100k", 100000),
+					GetListItem("500k", 500000),
+					GetListItem("1m", 1000000),
 				};
+			}
+
+			private ListItem GetListItem(string label, int length)
+			{
+				string text = GetString(length);
+
+				return new ListItem(label + " Characters", text);
 			}
 
 			private string GetString(int length)
 			{
-				var stringBuilder = new StringBuilder();
-				while (stringBuilder.Length < length)
-					stringBuilder.Append("StringBuilder ");
-				return stringBuilder.ToString();
+				var sb = new StringBuilder();
+				while (sb.Length < length)
+				{
+					sb.Append("StringBuilder ");
+				}
+				return sb.ToString();
 			}
 		}
 	}

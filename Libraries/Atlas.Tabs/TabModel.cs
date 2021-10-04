@@ -293,8 +293,8 @@ namespace Atlas.Tabs
 				ItemList.Add(ListToString.Create(iEnumerable));
 				return;
 			}
-			Type elementType = GetElementType(type);
 
+			Type elementType = GetElementType(type);
 			Type genericType = typeof(ItemCollection<>).MakeGenericType(elementType);
 			IList iList = (IList)Activator.CreateInstance(genericType);
 			foreach (var item in iEnumerable)

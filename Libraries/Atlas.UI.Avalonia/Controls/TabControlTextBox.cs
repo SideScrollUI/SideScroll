@@ -2,6 +2,7 @@
 using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -24,6 +25,50 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			InitializeComponent();
 
+			InitializeProperty(property);
+		}
+
+		private void InitializeComponent()
+		{
+			HorizontalAlignment = HorizontalAlignment.Stretch;
+			VerticalAlignment = VerticalAlignment.Top;
+
+			Background = Theme.Background;
+
+			MinWidth = 50;
+			MaxWidth = 3000;
+
+			InitializeBorder();
+		}
+
+		// Default Padding shows a gap between ScrollBar and Border
+		// Workaround: Move the Padding into the inner controls Margin
+		private void InitializeBorder()
+		{
+			Padding = new Thickness(0);
+
+			// add back the Padding we removed to just the presenter
+			var style = new Style(x => x.OfType<TextPresenter>())
+			{
+				Setters =
+				{
+					new Setter(TextPresenter.MarginProperty, new Thickness(6, 3)),
+				}
+			};
+			Styles.Add(style);
+
+			style = new Style(x => x.OfType<TextBlock>())
+			{
+				Setters =
+				{
+					new Setter(TextBlock.MarginProperty, new Thickness(6, 3)),
+				}
+			};
+			Styles.Add(style);
+		}
+
+		private void InitializeProperty(ListProperty property)
+		{
 			IsReadOnly = !property.Editable;
 			if (IsReadOnly)
 				Background = Theme.TextBackgroundDisabled;
@@ -41,9 +86,15 @@ namespace Atlas.UI.Avalonia.Controls
 				TextWrapping = TextWrapping.Wrap;
 				AcceptsReturn = true;
 				MaxHeight = 500;
-				Padding = new Thickness(6, 3, 0, 3); // Avalonia bug? shows margin to right of ScrollBar
 			}
 
+			BindProperty(property);
+
+			AvaloniaUtils.AddContextMenu(this); // Custom menu to handle ReadOnly items better
+		}
+
+		private void BindProperty(ListProperty property)
+		{
 			var binding = new Binding(property.PropertyInfo.Name)
 			{
 				Converter = new EditValueConverter(),
@@ -56,19 +107,31 @@ namespace Atlas.UI.Avalonia.Controls
 			else
 				binding.Mode = BindingMode.OneWay;
 			this.Bind(TextBlock.TextProperty, binding);
-
-			AvaloniaUtils.AddContextMenu(this);
 		}
 
-		private void InitializeComponent()
+		public void DisableHover()
 		{
-			Background = Theme.Background;
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			MinWidth = 50;
-			Padding = new Thickness(6, 3);
-			Focusable = true; // already set?
-			MaxWidth = TabControlParams.ControlMaxWidth;
-			//TextWrapping = TextWrapping.Wrap, // would be a useful feature if it worked
+			Resources.Add("ThemeBackgroundHoverBrush", Background); // Highlighting is too distracting for large controls
+		}
+
+		// Move formatting to a FormattedText method/property?
+		public new string Text
+		{
+			get => base.Text;
+			set
+			{
+				if (value is string s && s.StartsWith("{") && s.Contains("\n"))
+				{
+					FontFamily = new FontFamily("Courier New");
+				}
+
+				base.Text = value;
+			}
+		}
+
+		public void SetFormattedJson(string text)
+		{
+			Text = JsonUtils.Format(text);
 		}
 	}
 }

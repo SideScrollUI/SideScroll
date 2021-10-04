@@ -80,13 +80,15 @@ namespace Atlas.UI.Avalonia.Controls
 			Children.Add(textBlock);
 		}
 
-		public List<Control> AddObjectRow(object obj)
+		public List<Control> AddObjectRow(object obj, List<PropertyInfo> properties = null)
 		{
+			properties = properties ?? obj.GetType().GetVisibleProperties();
+
 			int rowIndex = AddRowDefinition();
 			int columnIndex = 0;
 
 			var controls = new List<Control>();
-			foreach (PropertyInfo propertyInfo in obj.GetType().GetVisibleProperties())
+			foreach (PropertyInfo propertyInfo in properties)
 			{
 				var property = new ListProperty(obj, propertyInfo);
 				Control control = CreatePropertyControl(property);
