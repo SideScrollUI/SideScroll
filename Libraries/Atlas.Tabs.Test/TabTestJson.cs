@@ -5,8 +5,7 @@ namespace Atlas.Tabs.Test
 	public class TabTestJson : ITab
 	{
 		public readonly static string Json1 =
-@"
-{
+@"{
 ""id"":""abc"",
 ""value"": 123,
 ""map"":
@@ -19,8 +18,7 @@ namespace Atlas.Tabs.Test
 	  {""type"": ""Turtle"", ""Age"": 11}
     ]
   }
-}
-";
+}";
 		public TabInstance Create() => new Instance();
 
 		public class Instance : TabInstance

@@ -15,7 +15,7 @@ namespace Atlas.Tabs.Test
 				model.Items = new List<ListItem>()
 				{
 					new ListItem("Sample Text", "This is some sample text\n\n1\n2\n3"),
-					new ListItem("Json", @"{""key"": ""value"", ""number"": 123}"),
+					new ListItem("Json", TabTestJson.Json1),
 					GetListItem("1k", 1000),
 					GetListItem("10k", 10000),
 					GetListItem("100k", 100000),

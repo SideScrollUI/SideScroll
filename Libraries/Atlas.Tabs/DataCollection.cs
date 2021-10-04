@@ -36,9 +36,10 @@ namespace Atlas.Tabs
 		{
 			DataRepoView = dataRepoView;
 			TabParams = tabParams;
+
 			DataRepoView.Items.CollectionChanged += Items_CollectionChanged;
+
 			Reload();
-			//Items.CollectionChanged += Items_CollectionChanged;
 		}
 
 		private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -66,6 +67,7 @@ namespace Atlas.Tabs
 		public void Reload()
 		{
 			Items.Clear();
+
 			_dataItemLookup = new Dictionary<TTabType, IDataItem>();
 			_valueLookup = new Dictionary<IDataItem, TTabType>();
 
@@ -84,9 +86,11 @@ namespace Atlas.Tabs
 			var tabItem = new TTabType();
 			tabItem.Load(new Call(), dataItem.Object, TabParams);
 			tabItem.OnDelete += Item_OnDelete;
+
 			Items.Add(tabItem);
 			_dataItemLookup.Add(tabItem, dataItem);
 			_valueLookup.Add(dataItem, tabItem);
+
 			return tabItem;
 		}
 
@@ -120,6 +124,7 @@ namespace Atlas.Tabs
 		{
 			DataRepoView.Delete(dataItem.Key);
 			DataRepoSecondary?.Delete(dataItem.Key);
+
 			if (_valueLookup.TryGetValue(dataItem, out TTabType existing))
 			{
 				_valueLookup.Remove(dataItem);
