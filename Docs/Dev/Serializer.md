@@ -11,7 +11,7 @@ Atlas includes it's own serializer, which allows it to load gigabytes of data in
   
 ## Limitations
 - You must add a default constructor if you add a constructor with parameters
-```
+```csharp
 public class MyClass
 {
     public MyClass() {}

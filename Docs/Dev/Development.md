@@ -12,6 +12,7 @@
 * [AddingTabs](AddingTabs.md)
 * [Logs](Logs.md)
 * [Serializer](Serializer.md)
+* [Bookmarks](Bookmarks.md)
 
 ## Links
 - [Color Legend](https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.colors?view=netframework-4.8)

@@ -13,7 +13,7 @@ namespace Atlas.UI.Avalonia.View
 		public static Control CreateChildControl(TabInstance parentTabInstance, object obj, string label = null, ITabSelector tabControl = null)
 		{
 			object value = obj.GetInnerValue();
-			if (value == null)
+			if (value == null || value is bool)
 				return null;
 
 			if (label == null)
