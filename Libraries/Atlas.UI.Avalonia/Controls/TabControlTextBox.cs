@@ -88,6 +88,8 @@ namespace Atlas.UI.Avalonia.Controls
 				MaxHeight = 500;
 			}
 
+			MaxWidth = TabControlParams.ControlMaxWidth;
+
 			BindProperty(property);
 
 			AvaloniaUtils.AddContextMenu(this); // Custom menu to handle ReadOnly items better
