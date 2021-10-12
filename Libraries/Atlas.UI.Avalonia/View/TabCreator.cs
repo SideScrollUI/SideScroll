@@ -93,7 +93,6 @@ namespace Atlas.UI.Avalonia.View
 				//childTabInstance.Reintialize(); // todo: fix, called in TabView
 				childTabInstance.Model.Name = label;
 				var tabView = new TabView(childTabInstance);
-				//tabView.Label = label;
 				tabView.Load();
 				return tabView;
 			}

@@ -6,7 +6,7 @@ namespace Atlas.Serialize
 {
 	public class TypeRepoArrayBytes : TypeRepo
 	{
-		private int[] sizes;
+		private int[] _sizes;
 
 		public class Creator : IRepoCreator
 		{
@@ -38,11 +38,11 @@ namespace Atlas.Serialize
 
 		public override void LoadCustomHeader()
 		{
-			sizes = new int[TypeSchema.NumObjects];
+			_sizes = new int[TypeSchema.NumObjects];
 			for (int i = 0; i < TypeSchema.NumObjects; i++)
 			{
 				int count = Reader.ReadInt32();
-				sizes[i] = count;
+				_sizes[i] = count;
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace Atlas.Serialize
 		protected override object CreateObject(int objectIndex)
 		{
 			//int count = reader.ReadInt32();
-			int count = sizes[objectIndex];
+			int count = _sizes[objectIndex];
 
 			byte[] array = new byte[count];
 			ObjectsLoaded[objectIndex] = array;

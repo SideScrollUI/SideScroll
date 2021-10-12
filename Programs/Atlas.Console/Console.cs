@@ -26,8 +26,6 @@ namespace Atlas.Console
 			logWriterConsole = new LogWriterConsole(call.Log);
 			logWriterText = new LogWriterText(call.Log, project.DataApp.GetGroupPath(typeof(Console)) + "/Logs/Main");
 
-			//for (int i = 0; i < 100; i++)
-			//	TestDictionarySpeed();
 			//TestLogWriter();
 		}
 

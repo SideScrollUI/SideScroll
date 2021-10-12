@@ -50,7 +50,9 @@ namespace Atlas.Serialize
 
 			MemoryStream memoryStream;
 			using (CallTimer callReadAllBytes = call.Timer("Loading file: " + Name))
+			{
 				memoryStream = new MemoryStream(File.ReadAllBytes(DataPath));
+			}
 
 			var reader = new BinaryReader(memoryStream);
 

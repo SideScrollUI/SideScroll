@@ -34,7 +34,6 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public class Instance : TabInstance
 		{
-			//private Toolbar toolbar;
 			public TabBookmarks Tab;
 
 			public Instance(TabBookmarks tab)

@@ -4,6 +4,7 @@ using System.Threading;
 
 namespace Atlas.Tabs.Tools
 {
+	// Unused
 	public class TabQueue : ITab
 	{
 		public IList Tasks;

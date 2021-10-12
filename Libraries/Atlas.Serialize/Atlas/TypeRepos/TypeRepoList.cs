@@ -18,16 +18,16 @@ namespace Atlas.Serialize
 			}
 		}
 
-		private TypeRepo listTypeRepo;
-		private PropertyInfo propertyInfoCapacity;
-		private Type elementType;
+		private TypeRepo _listTypeRepo;
+		private PropertyInfo _propertyInfoCapacity;
+		private Type _elementType;
 
 		public TypeRepoList(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{
 			Type[] types = Type.GetGenericArguments();
 			if (types.Length > 0)
-				elementType = types[0];
+				_elementType = types[0];
 		}
 
 		public static bool CanAssign(Type type)
@@ -37,10 +37,10 @@ namespace Atlas.Serialize
 
 		public override void InitializeLoading(Log log)
 		{
-			if (elementType != null)
-				listTypeRepo = Serializer.GetOrCreateRepo(log, elementType);
+			if (_elementType != null)
+				_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
 			
-			propertyInfoCapacity = LoadableType.GetProperty("Capacity");
+			_propertyInfoCapacity = LoadableType.GetProperty("Capacity");
 		}
 
 		public override void AddChildObjects(object obj)
@@ -61,7 +61,7 @@ namespace Atlas.Serialize
 			writer.Write(iList.Count);
 			foreach (var item in iList)
 			{
-				Serializer.WriteObjectRef(elementType, item, writer);
+				Serializer.WriteObjectRef(_elementType, item, writer);
 			}
 		}
 
@@ -69,12 +69,12 @@ namespace Atlas.Serialize
 		{
 			IList iList = (IList)obj;
 			int count = Reader.ReadInt32();
-			if (propertyInfoCapacity != null)
-				propertyInfoCapacity.SetValue(iList, count);
+			if (_propertyInfoCapacity != null)
+				_propertyInfoCapacity.SetValue(iList, count);
 
 			for (int j = 0; j < count; j++)
 			{
-				object valueObject = listTypeRepo.LoadObjectRef();
+				object valueObject = _listTypeRepo.LoadObjectRef();
 				iList.Add(valueObject);
 			}
 		}

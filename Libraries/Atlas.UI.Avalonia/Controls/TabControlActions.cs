@@ -52,13 +52,6 @@ namespace Atlas.UI.Avalonia.Controls
 				{
 					Margin = new Thickness(4, 2),
 				};
-				/*button.Styles.Add(new Style(x => x.OfType<Button>()) // .Class("ContentPresenter").Class("bar").Class("baz")
-				{
-					Setters = new[]
-					{
-						new Setter(Button.BackgroundProperty, new SolidColorBrush(Theme.ButtonBackgroundColor)),
-					}
-				});*/
 				button.Click += Button_Click;
 				_taskCreators[button] = taskCreator;
 				Grid.SetRow(button, rowIndex++);

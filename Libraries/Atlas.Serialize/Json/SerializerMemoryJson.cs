@@ -6,7 +6,6 @@ namespace Atlas.Serialize
 {
 	public class SerializerMemoryJson : SerializerMemory
 	{
-		//private MemoryStream stream = new MemoryStream();
 		private string _json;
 
 		public SerializerMemoryJson()

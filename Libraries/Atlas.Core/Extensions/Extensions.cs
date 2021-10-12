@@ -13,7 +13,9 @@ namespace Atlas.Extensions // rename to Core?
 		private static HashSet<Type> NumericTypes = new HashSet<Type>
 		{
 			typeof(byte), typeof(sbyte),
-			typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong),
+			typeof(short), typeof(ushort),
+			typeof(int), typeof(uint),
+			typeof(long), typeof(ulong),
 			typeof(float), typeof(double), typeof(decimal),
 		};
 
@@ -210,23 +212,5 @@ namespace Atlas.Extensions // rename to Core?
 		{
 			return version.ToString().TrimEnd(".0").TrimEnd(".0").TrimEnd(".0");
 		}
-
-		/*public static bool IsAction(object obj)
-		{
-			if (obj == null)
-				return false;
-
-			Type[] types = new[]
-			{
-				typeof(Action), typeof(Action<>), typeof(Action<,>),
-				typeof(Func<>), typeof(Func<,>), typeof(Func<,,>),
-			};
-			//return types.Contains(value.GetType());
-			Type type = obj.GetType();
-			//if (type.IsAssignableFrom(typeof(MethodInfo)))
-			if (obj is MethodInfo)
-				return true;
-			return (types.Contains(type) || (type.IsGenericType && types.Contains(type.GetGenericTypeDefinition())));
-		}*/
 	}
 }

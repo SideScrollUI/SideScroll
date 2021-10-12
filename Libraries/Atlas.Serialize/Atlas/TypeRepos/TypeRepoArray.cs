@@ -17,14 +17,14 @@ namespace Atlas.Serialize
 			}
 		}
 
-		private TypeRepo listTypeRepo;
-		private int[] sizes;
-		private Type elementType;
+		private TypeRepo _listTypeRepo;
+		private int[] _sizes;
+		private Type _elementType;
 
 		public TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
 		{
-			elementType = typeSchema.Type.GetElementType();
+			_elementType = typeSchema.Type.GetElementType();
 		}
 
 		public static bool CanAssign(Type type)
@@ -34,7 +34,7 @@ namespace Atlas.Serialize
 
 		public override void InitializeLoading(Log log)
 		{
-			listTypeRepo = Serializer.GetOrCreateRepo(log, elementType);
+			_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
 		}
 
 		public override void SaveCustomHeader(BinaryWriter writer)
@@ -47,11 +47,11 @@ namespace Atlas.Serialize
 
 		public override void LoadCustomHeader()
 		{
-			sizes = new int[TypeSchema.NumObjects];
+			_sizes = new int[TypeSchema.NumObjects];
 			for (int i = 0; i < TypeSchema.NumObjects; i++)
 			{
 				int count = Reader.ReadInt32();
-				sizes[i] = count;
+				_sizes[i] = count;
 			}
 		}
 
@@ -71,7 +71,7 @@ namespace Atlas.Serialize
 			//writer.Write(array.Length);
 			foreach (var item in array)
 			{
-				Serializer.WriteObjectRef(elementType, item, writer);
+				Serializer.WriteObjectRef(_elementType, item, writer);
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace Atlas.Serialize
 		{
 			// Can't use Activator because Array requires parameters in it's constructor
 			//int count = reader.ReadInt32();
-			int count = sizes[objectIndex];
+			int count = _sizes[objectIndex];
 
 			Array array = Array.CreateInstance(TypeSchema.Type.GetElementType(), count);
 			ObjectsLoaded[objectIndex] = array;
@@ -96,7 +96,7 @@ namespace Atlas.Serialize
 
 			for (int j = 0; j < iList.Count; j++)
 			{
-				object item = listTypeRepo.LoadObjectRef();
+				object item = _listTypeRepo.LoadObjectRef();
 				iList[j] = item;
 			}
 		}
