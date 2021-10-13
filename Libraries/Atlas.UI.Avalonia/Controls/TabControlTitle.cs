@@ -59,8 +59,7 @@ namespace Atlas.UI.Avalonia.Controls
 				//Margin = new Thickness(2), // Shows as black, Need Padding so Border not needed
 				Foreground = Theme.TitleForeground,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				//[ToolTip.TipProperty] = Label, // re-enable when foreground fixed
-				//[ToolTip.ForegroundProperty] = Brushes.Black, // this overrides the TextBlock Foreground property
+				// [ToolTip.TipProperty] = Label, // Enable?
 			};
 			AvaloniaUtils.AddContextMenu(TextBlock);
 

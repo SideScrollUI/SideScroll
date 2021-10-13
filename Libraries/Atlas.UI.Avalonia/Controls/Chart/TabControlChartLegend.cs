@@ -109,7 +109,6 @@ namespace Atlas.UI.Avalonia.Controls
 				if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
 					SelectLegendItem(legendItem);
 			};
-			//Children.Add(legendItem);
 			LegendItems.Add(legendItem);
 			if (series.Title != null)
 				_idxLegendItems.Add(series.Title, legendItem);

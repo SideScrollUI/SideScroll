@@ -199,7 +199,6 @@ namespace Atlas.UI.Avalonia.Controls
 			TextBlock = new TextBlock()
 			{
 				Foreground = Brushes.LightGray,
-				//Background = new SolidColorBrush(Theme.BackgroundColor),
 				Margin = new Thickness(2, 2, 6, 2),
 				//VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Center,
 				HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,

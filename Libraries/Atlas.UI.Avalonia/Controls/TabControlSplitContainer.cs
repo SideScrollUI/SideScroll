@@ -27,7 +27,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public double MinDesiredWidth = 100;
 		public double MaxDesiredWidth = double.MaxValue;
 
-		public bool IsArrangeValid;
+		public new bool IsArrangeValid;
 
 		private List<Item> _gridItems = new List<Item>();
 

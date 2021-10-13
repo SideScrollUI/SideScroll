@@ -47,7 +47,6 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			Padding = new Thickness(0);
 
-			// add back the Padding we removed to just the presenter
 			var style = new Style(x => x.OfType<TextPresenter>())
 			{
 				Setters =
@@ -111,9 +110,10 @@ namespace Atlas.UI.Avalonia.Controls
 			this.Bind(TextBlock.TextProperty, binding);
 		}
 
+		// Highlighting is too distracting for large controls
 		public void DisableHover()
 		{
-			Resources.Add("ThemeBackgroundHoverBrush", Background); // Highlighting is too distracting for large controls
+			Resources.Add("ThemeBackgroundHoverBrush", Background);
 		}
 
 		// Move formatting to a FormattedText method/property?

@@ -19,11 +19,13 @@ namespace Atlas.Serialize
 			}
 		}
 
-		private Type typeKey;
-		private Type typeValue;
-		private TypeRepo list1TypeRepo;
-		private TypeRepo list2TypeRepo;
-		private MethodInfo addMethod;
+		private Type _typeKey;
+		private Type _typeValue;
+
+		private TypeRepo _list1TypeRepo;
+		private TypeRepo _list2TypeRepo;
+
+		private MethodInfo _addMethod;
 
 		public TypeRepoDictionary(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)
@@ -31,10 +33,11 @@ namespace Atlas.Serialize
 			Type[] types = LoadableType.GetGenericArguments();
 			if (types.Length > 0)
 			{
-				typeKey = types[0];
-				typeValue = types[1];
+				_typeKey = types[0];
+				_typeValue = types[1];
 			}
-			addMethod = LoadableType.GetMethods()
+
+			_addMethod = LoadableType.GetMethods()
 				.Where(m => m.Name == "Add" && m.GetParameters().Count() == 2).FirstOrDefault();
 		}
 
@@ -46,10 +49,11 @@ namespace Atlas.Serialize
 		public override void InitializeLoading(Log log)
 		{
 			// these base types might not be serialized
-			if (typeKey != null)
-				list1TypeRepo = Serializer.GetOrCreateRepo(log, typeKey);
-			if (typeValue != null)
-				list2TypeRepo = Serializer.GetOrCreateRepo(log, typeValue);
+			if (_typeKey != null)
+				_list1TypeRepo = Serializer.GetOrCreateRepo(log, _typeKey);
+
+			if (_typeValue != null)
+				_list2TypeRepo = Serializer.GetOrCreateRepo(log, _typeValue);
 		}
 
 		public override void AddChildObjects(object obj)
@@ -69,8 +73,8 @@ namespace Atlas.Serialize
 			writer.Write(dictionary.Count);
 			foreach (DictionaryEntry item in dictionary)
 			{
-				Serializer.WriteObjectRef(typeKey, item.Key, writer);
-				Serializer.WriteObjectRef(typeValue, item.Value, writer);
+				Serializer.WriteObjectRef(_typeKey, item.Key, writer);
+				Serializer.WriteObjectRef(_typeValue, item.Value, writer);
 			}
 		}
 
@@ -81,11 +85,11 @@ namespace Atlas.Serialize
 
 			for (int j = 0; j < count; j++)
 			{
-				object key = list1TypeRepo.LoadObjectRef();
-				object value = list2TypeRepo.LoadObjectRef();
+				object key = _list1TypeRepo.LoadObjectRef();
+				object value = _list2TypeRepo.LoadObjectRef();
 
 				if (key != null)
-					addMethod.Invoke(iCollection, new object[] { key, value });
+					_addMethod.Invoke(iCollection, new object[] { key, value });
 			}
 		}
 
@@ -97,7 +101,7 @@ namespace Atlas.Serialize
 			{
 				object key = Serializer.Clone(item.Key);
 				object value = Serializer.Clone(item.Value);
-				addMethod.Invoke(iDest, new object[] { key, value });
+				_addMethod.Invoke(iDest, new object[] { key, value });
 			}
 		}
 	}

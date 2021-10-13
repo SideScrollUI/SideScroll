@@ -27,16 +27,10 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			//HorizontalContentAlignment = HorizontalAlignment.Stretch;
-			//VerticalContentAlignment = VerticalAlignment.Stretch;
-
-			//AddColumn("Action", "Label");
-
 			var containerGrid = new Grid()
 			{
 				ColumnDefinitions = new ColumnDefinitions("Auto,*"),
-				//RowDefinitions = new RowDefinitions("*"),
-				//HorizontalAlignment = HorizontalAlignment.Stretch
+				RowDefinitions = new RowDefinitions("Auto"),
 			};
 
 			int rowIndex = 0;
@@ -66,7 +60,6 @@ namespace Atlas.UI.Avalonia.Controls
 			Button button = (Button)sender;
 			TaskCreator taskCreator = _taskCreators[button];
 			TabInstance.StartTask(taskCreator, taskCreator.ShowTask);
-			//this.UnselectAll();
 		}
 	}
 }
