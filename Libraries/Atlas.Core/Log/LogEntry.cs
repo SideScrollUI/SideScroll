@@ -36,7 +36,7 @@ namespace Atlas.Core
 
 		/*protected void InitializeContext()
 		{
-			Context = Context ?? SynchronizationContext.Current ?? new SynchronizationContext();
+			Context ??= SynchronizationContext.Current ?? new SynchronizationContext();
 		}*/
 	}
 
@@ -150,7 +150,7 @@ namespace Atlas.Core
 		protected void Initialize()
 		{
 			Created = DateTime.Now;
-			Settings = Settings ?? new LogSettings();
+			Settings ??= new LogSettings();
 		}
 
 		protected void CreateEventPropertyChanged([CallerMemberName] string propertyName = "")

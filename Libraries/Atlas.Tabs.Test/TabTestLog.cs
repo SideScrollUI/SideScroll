@@ -93,7 +93,7 @@ namespace Atlas.Tabs.Test
 			private void StartThreadTimer()
 			{
 				// would be nice to be able cancel this through the task (Start/Stop) Methods
-				_timer = _timer ?? new Timer(TimerCallback, null, 0, 1000);
+				_timer ??= new Timer(TimerCallback, null, 0, 1000);
 			}
 
 			public void TimerCallback(object state)

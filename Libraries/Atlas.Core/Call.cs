@@ -41,7 +41,7 @@ namespace Atlas.Core
 
 		public Call Child([CallerMemberName] string name = "", params Tag[] tags)
 		{
-			Log = Log ?? new Log();
+			Log ??= new Log();
 			var call = new Call()
 			{
 				Name = name,
@@ -68,7 +68,7 @@ namespace Atlas.Core
 
 		public CallTimer Timer(LogLevel logLevel, [CallerMemberName] string name = "", params Tag[] tags)
 		{
-			Log = Log ?? new Log();
+			Log ??= new Log();
 			var call = new CallTimer()
 			{
 				Name = name,
@@ -82,12 +82,13 @@ namespace Atlas.Core
 
 		public CallTimer Timer(int taskCount, [CallerMemberName] string name = "", params Tag[] tags)
 		{
-			TaskInstance = TaskInstance ?? new TaskInstance();
+			TaskInstance ??= new TaskInstance();
 			if (TaskInstance.TaskCount == 0)
 				TaskInstance.TaskCount = 1;
 
 			var allTags = tags.ToList();
 			allTags.Add(new Tag("Count", taskCount));
+
 			CallTimer timer = Timer(name, allTags.ToArray());
 			timer.TaskInstance.TaskCount = taskCount;
 			return timer;
@@ -108,58 +109,55 @@ namespace Atlas.Core
 
 		private async Task<T2> RunFuncAsync<T1, T2>(Call call, Func<Call, T1, Task<T2>> func, T1 item)
 		{
-			using (CallTimer callTimer = call.Timer(item.ToString()))
+			using CallTimer callTimer = call.Timer(item.ToString());
+			
+			try
 			{
-				try
-				{
-					T2 result = await func(callTimer, item);
-					if (result == null)
-						callTimer.Log.Add("No result");
-					return result;
-				}
-				catch (Exception e)
-				{
-					callTimer.Log.Add(e);
-					return default;
-				}
+				T2 result = await func(callTimer, item);
+				if (result == null)
+					callTimer.Log.Add("No result");
+				return result;
+			}
+			catch (Exception e)
+			{
+				callTimer.Log.Add(e);
+				return default;
 			}
 		}
 
 		private async Task<T3> RunFuncAsync<T1, T2, T3>(Call call, Func<Call, T1, T2, Task<T3>> func, T1 item, T2 param1)
 		{
-			using (CallTimer callTimer = call.Timer(item.ToString()))
+			using CallTimer callTimer = call.Timer(item.ToString());
+			
+			try
 			{
-				try
-				{
-					T3 result = await func(callTimer, item, param1);
-					if (result == null)
-						callTimer.Log.Add("No result");
-					return result;
-				}
-				catch (Exception e)
-				{
-					callTimer.Log.Add(e);
-					return default;
-				}
+				T3 result = await func(callTimer, item, param1);
+				if (result == null)
+					callTimer.Log.Add("No result");
+				return result;
+			}
+			catch (Exception e)
+			{
+				callTimer.Log.Add(e);
+				return default;
 			}
 		}
 
 		private async Task<T4> RunFuncAsync<T1, T2, T3, T4>(Call call, Func<Call, T1, T2, T3, Task<T4>> func, T1 item, T2 param1, T3 param2)
 		{
-			using (CallTimer callTimer = call.Timer(item.ToString()))
+			using CallTimer callTimer = call.Timer(item.ToString());
+			
+			try
 			{
-				try
-				{
-					T4 result = await func(callTimer, item, param1, param2);
-					if (result == null)
-						callTimer.Log.Add("No result");
-					return result;
-				}
-				catch (Exception e)
-				{
-					callTimer.Log.Add(e);
-					return default;
-				}
+				T4 result = await func(callTimer, item, param1, param2);
+				if (result == null)
+					callTimer.Log.Add("No result");
+				return result;
+			}
+			catch (Exception e)
+			{
+				callTimer.Log.Add(e);
+				return default;
 			}
 		}
 
@@ -181,137 +179,134 @@ namespace Atlas.Core
 		// Call func for every item in the list using the specified parameters
 		public async Task<List<T2>> RunAsync<T1, T2>(string name, Func<Call, T1, Task<T2>> func, List<T1> items, int maxRequestsPerSecond = MaxRequestsPerSecond)
 		{
+			using CallTimer callTimer = Timer(items.Count, name);
+
+			using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
+				
+			var tasks = new List<Task>();
 			var results = new List<T2>();
-			using (CallTimer callTimer = Timer(items.Count, name))
+			foreach (var item in items)
 			{
-				using (var throttler = new SemaphoreSlim(maxRequestsPerSecond))
+				await throttler.WaitAsync();
+				if (TaskInstance?.CancelToken.IsCancellationRequested == true)
 				{
-					var tasks = new List<Task>();
-					foreach (var item in items)
-					{
-						await throttler.WaitAsync();
-						if (TaskInstance?.CancelToken.IsCancellationRequested == true)
-						{
-							Log.Add("Cancelled");
-							break;
-						}
-						tasks.Add(Task.Run(async () =>
-						{
-							try
-							{
-								T2 result = await RunFuncAsync(callTimer, func, item);
-								if (result != null)
-								{
-									lock (results)
-									{
-										results.Add(result);
-									}
-								}
-							}
-							catch (Exception e)
-							{
-								Log.Add(e);
-							}
-							finally
-							{
-								throttler.Release();
-							}
-						}));
-					}
-					await Task.WhenAll(tasks);
+					Log.Add("Cancelled");
+					break;
 				}
-				return results;
+				tasks.Add(Task.Run(async () =>
+				{
+					try
+					{
+						T2 result = await RunFuncAsync(callTimer, func, item);
+						if (result != null)
+						{
+							lock (results)
+							{
+								results.Add(result);
+							}
+						}
+					}
+					catch (Exception e)
+					{
+						Log.Add(e);
+					}
+					finally
+					{
+						throttler.Release();
+					}
+				}));
 			}
+			await Task.WhenAll(tasks);
+			
+			return results;
 		}
 
 		public async Task<List<T3>> RunAsync<T1, T2, T3>(string name, Func<Call, T1, T2, Task<T3>> func, List<T1> items, T2 param1, int maxRequestsPerSecond = MaxRequestsPerSecond)
 		{
+			using CallTimer callTimer = Timer(items.Count, name);
+
+			using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
+
+			var tasks = new List<Task>();
 			var results = new List<T3>();
-			using (CallTimer callTimer = Timer(items.Count, name))
+			foreach (var item in items)
 			{
-				using (var throttler = new SemaphoreSlim(maxRequestsPerSecond))
+				await throttler.WaitAsync();
+				if (TaskInstance?.CancelToken.IsCancellationRequested == true)
 				{
-					var tasks = new List<Task>();
-					foreach (var item in items)
-					{
-						await throttler.WaitAsync();
-						if (TaskInstance?.CancelToken.IsCancellationRequested == true)
-						{
-							Log.Add("Cancelled");
-							break;
-						}
-						tasks.Add(Task.Run(async () =>
-						{
-							try
-							{
-								T3 result = await RunFuncAsync(callTimer, func, item, param1);
-								if (result != null)
-								{
-									lock (results)
-									{
-										results.Add(result);
-									}
-								}
-							}
-							catch (Exception e)
-							{
-								Log.Add(e);
-							}
-							finally
-							{
-								throttler.Release();
-							}
-						}));
-					}
-					await Task.WhenAll(tasks);
+					Log.Add("Cancelled");
+					break;
 				}
-				return results;
+				tasks.Add(Task.Run(async () =>
+				{
+					try
+					{
+						T3 result = await RunFuncAsync(callTimer, func, item, param1);
+						if (result != null)
+						{
+							lock (results)
+							{
+								results.Add(result);
+							}
+						}
+					}
+					catch (Exception e)
+					{
+						Log.Add(e);
+					}
+					finally
+					{
+						throttler.Release();
+					}
+				}));
 			}
+			await Task.WhenAll(tasks);
+			
+			return results;
 		}
 
 		public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(string name, Func<Call, T1, T2, T3, Task<T4>> func, List<T1> items, T2 param1, T3 param2, int maxRequestsPerSecond = MaxRequestsPerSecond)
 		{
+			using CallTimer callTimer = Timer(items.Count, name);
+
+			using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
+
+			var tasks = new List<Task>();
 			var results = new List<T4>();
-			using (CallTimer callTimer = Timer(items.Count, name))
+			foreach (var item in items)
 			{
-				using (var throttler = new SemaphoreSlim(maxRequestsPerSecond))
+				await throttler.WaitAsync();
+				if (TaskInstance?.CancelToken.IsCancellationRequested == true)
 				{
-					var tasks = new List<Task>();
-					foreach (var item in items)
-					{
-						await throttler.WaitAsync();
-						if (TaskInstance?.CancelToken.IsCancellationRequested == true)
-						{
-							Log.Add("Cancelled");
-							break;
-						}
-						tasks.Add(Task.Run(async () =>
-						{
-							try
-							{
-								T4 result = await RunFuncAsync(callTimer, func, item, param1, param2);
-								if (result != null)
-								{
-									lock (results)
-									{
-										results.Add(result);
-									}
-								}
-							}
-							catch (Exception e)
-							{
-								Log.Add(e);
-							}
-							finally
-							{
-								throttler.Release();
-							}
-						}));
-					}
-					await Task.WhenAll(tasks);
+					Log.Add("Cancelled");
+					break;
 				}
-				return results;
+				tasks.Add(Task.Run(async () =>
+				{
+					try
+					{
+						T4 result = await RunFuncAsync(callTimer, func, item, param1, param2);
+						if (result != null)
+						{
+							lock (results)
+							{
+								results.Add(result);
+							}
+						}
+					}
+					catch (Exception e)
+					{
+						Log.Add(e);
+					}
+					finally
+					{
+						throttler.Release();
+					}
+				}));
 			}
+			await Task.WhenAll(tasks);
+
+			return results;
 		}
 	}
 }

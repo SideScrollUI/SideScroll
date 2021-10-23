@@ -76,7 +76,7 @@ namespace Atlas.Serialize
 
 		/*public Header LoadHeader(Call call)
 		{
-			call = call ?? new Call();
+			call ??= new Call();
 
 			using (CallTimer callReadAllBytes = call.Timer("Loading header: " + Name))
 			{
@@ -104,7 +104,7 @@ namespace Atlas.Serialize
 
 		public T LoadOrCreate<T>(Call call = null, bool lazy = false, TaskInstance taskInstance = null)
 		{
-			call = call ?? new Call();
+			call ??= new Call();
 
 			T result = default;
 			if (Exists)

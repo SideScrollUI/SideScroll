@@ -210,7 +210,10 @@ namespace Atlas.Extensions // rename to Core?
 
 		public static string Formatted(this Version version)
 		{
-			return version.ToString().TrimEnd(".0").TrimEnd(".0").TrimEnd(".0");
+			return version.ToString()
+				.TrimEnd(".0")
+				.TrimEnd(".0")
+				.TrimEnd(".0");
 		}
 	}
 }

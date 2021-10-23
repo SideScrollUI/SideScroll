@@ -184,7 +184,7 @@ namespace Atlas.Tabs
 			if (tabInstance == null)
 				return null;
 
-			tabInstance.Project = tabInstance.Project ?? Project;
+			tabInstance.Project ??= Project;
 			tabInstance.iTab = iTab;
 			tabInstance.ParentTabInstance = this;
 			//tabInstance.taskInstance.call.Log =
@@ -240,7 +240,7 @@ namespace Atlas.Tabs
 		private void InitializeContext()
 		{
 			//Debug.Assert(context == null || SynchronizationContext.Current == context);
-			UiContext = UiContext ?? SynchronizationContext.Current ?? new SynchronizationContext();
+			UiContext ??= SynchronizationContext.Current ?? new SynchronizationContext();
 		}
 
 		private void ActionCallback(object state)
@@ -303,7 +303,7 @@ namespace Atlas.Tabs
 
 		public TaskInstance StartTask(TaskCreator taskCreator, bool showTask, Call call = null)
 		{
-			call = call ?? new Call(taskCreator.Label);
+			call ??= new Call(taskCreator.Label);
 			TaskInstance taskInstance = taskCreator.Start(call);
 			taskInstance.ShowTask = showTask || ShowTasks;
 			if (taskInstance.ShowTask)

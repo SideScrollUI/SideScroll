@@ -13,7 +13,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public TabBookmarks(Project project)
 		{
 			Bookmarks = new BookmarkCollection(project);
-			Global = Global ?? this;
+			Global ??= this;
 		}
 
 		public void AddBookmark(Call call, Bookmark bookmark)

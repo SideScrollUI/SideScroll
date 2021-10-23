@@ -91,8 +91,8 @@ namespace Atlas.Serialize
 
 		public void Save(Type type, string groupId, string key, object obj, Call call = null)
 		{
-			groupId = groupId ?? DefaultGroupId;
-			call = call ?? new Call();
+			groupId ??= DefaultGroupId;
+			call ??= new Call();
 			SerializerFile serializer = GetSerializerFile(type, groupId, key); // use hash since filesystems can't handle long names
 			serializer.Save(call, obj, key);
 		}
@@ -129,14 +129,14 @@ namespace Atlas.Serialize
 
 		public T Load<T>(bool createIfNeeded = false, bool lazy = false, Call call = null)
 		{
-			call = call ?? new Call();
+			call ??= new Call();
 			return Load<T>(typeof(T).AssemblyQualifiedName, call, createIfNeeded, lazy);
 		}
 
 		public DataItemCollection<T> LoadAll<T>(Call call = null, string groupId = null, bool lazy = false)
 		{
-			call = call ?? new Call();
-			groupId = groupId ?? DefaultGroupId;
+			call ??= new Call();
+			groupId ??= DefaultGroupId;
 
 			/*ItemCollection<string> objectIds = GetObjectIds(typeof(T));
 
@@ -173,8 +173,8 @@ namespace Atlas.Serialize
 
 		public ItemCollection<Header> LoadHeaders(Type type, string groupId = null, Call call = null)
 		{
-			call = call ?? new Call();
-			groupId = groupId ?? DefaultGroupId;
+			call ??= new Call();
+			groupId ??= DefaultGroupId;
 
 			var headers = new ItemCollection<Header>();
 
@@ -236,7 +236,7 @@ namespace Atlas.Serialize
 			if (key == null)
 				throw new ArgumentNullException(key);
 
-			groupId = groupId ?? DefaultGroupId;
+			groupId ??= DefaultGroupId;
 			string dataPath = GetDataPath(type, groupId, key);
 			if (Directory.Exists(dataPath))
 			{
@@ -267,7 +267,7 @@ namespace Atlas.Serialize
 		// Don't use GetHashCode(), it returns a different value each time the process is run
 		public string GetGroupPath(Type type, string groupId = null)
 		{
-			groupId = groupId ?? DefaultGroupId;
+			groupId ??= DefaultGroupId;
 			string groupHash = (type.GetNonNullableType().FullName + ';' + RepoName + ';' + groupId).HashSha256();
 			return Paths.Combine(RepoPath, groupHash);
 		}

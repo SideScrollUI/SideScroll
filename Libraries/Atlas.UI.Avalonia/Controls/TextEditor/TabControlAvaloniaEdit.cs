@@ -115,12 +115,11 @@ namespace Atlas.UI.Avalonia.Controls
 			if (fileInfo.Length > MaxAutoLoadSize)
 			{
 				// todo: add load button to load rest of content
-				using (StreamReader streamReader = File.OpenText(path))
-				{
-					char[] buffer = new char[MaxAutoLoadSize];
-					streamReader.Read(buffer, 0, buffer.Length);
-					TextEditor.Text = new string(buffer);
-				}
+				using StreamReader streamReader = File.OpenText(path);
+				
+				char[] buffer = new char[MaxAutoLoadSize];
+				streamReader.Read(buffer, 0, buffer.Length);
+				TextEditor.Text = new string(buffer);
 			}
 			else
 			{

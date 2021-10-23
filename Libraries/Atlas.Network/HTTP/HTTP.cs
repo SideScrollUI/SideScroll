@@ -33,44 +33,43 @@ namespace Atlas.Network
 
 		private byte[] GetResponse(string uri, string accept = null)
 		{
-			using (CallTimer getCall = Call.Timer("Get Uri", new Tag("URI", uri)))
+			using CallTimer getCall = Call.Timer("Get Uri", new Tag("URI", uri));
+			
+			for (int attempt = 1; ; attempt++)
 			{
-				for (int attempt = 1; ; attempt++)
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri); // requests can't be reused between attempts
+				request.Method = "GET";
+				request.Accept = accept;
+				try
 				{
-					HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri); // requests can't be reused between attempts
-					request.Method = "GET";
-					request.Accept = accept;
-					try
-					{
-						WebResponse response = request.GetResponse();
-						Stream dataStream = response.GetResponseStream();
+					WebResponse response = request.GetResponse();
+					Stream dataStream = response.GetResponseStream();
 
-						var memoryStream = new MemoryStream();
-						dataStream.CopyTo(memoryStream);
-						byte[] data = memoryStream.ToArray();
+					var memoryStream = new MemoryStream();
+					dataStream.CopyTo(memoryStream);
+					byte[] data = memoryStream.ToArray();
 						
-						dataStream.Close();
-						response.Close();
-						getCall.Log.Add("Downloaded HTTP File", new Tag("URI", request.RequestUri), new Tag("Size", memoryStream.Length));
+					dataStream.Close();
+					response.Close();
+					getCall.Log.Add("Downloaded HTTP File", new Tag("URI", request.RequestUri), new Tag("Size", memoryStream.Length));
 
-						return data;
-					}
-					catch (WebException exception)
-					{
-						getCall.Log.AddError("URI request " + request.RequestUri + " failed: " + exception.Message);
-
-						if (exception.Response != null)
-						{
-							string response = new StreamReader(exception.Response.GetResponseStream()).ReadToEnd();
-							Call.Log.AddError(response);
-						}
-					}
-					if (attempt >= MaxAttempts)
-						break;
-					System.Threading.Thread.Sleep(SleepMilliseconds * attempt);
+					return data;
 				}
-				throw new Exception("HTTP request failed " + MaxAttempts + " times: " + uri);
+				catch (WebException exception)
+				{
+					getCall.Log.AddError("URI request " + request.RequestUri + " failed: " + exception.Message);
+
+					if (exception.Response != null)
+					{
+						string response = new StreamReader(exception.Response.GetResponseStream()).ReadToEnd();
+						Call.Log.AddError(response);
+					}
+				}
+				if (attempt >= MaxAttempts)
+					break;
+				System.Threading.Thread.Sleep(SleepMilliseconds * attempt);
 			}
+			throw new Exception("HTTP request failed " + MaxAttempts + " times: " + uri);
 		}
 	}
 }

@@ -131,13 +131,7 @@ namespace Atlas.Extensions
 
 		public static string CollectionToString(this ICollection collection)
 		{
-			var strings = new List<string>();
-			foreach (var item in collection)
-				strings.Add(item.ToString());
-
-			string joined = string.Join(", ", strings);
-			return joined;
-			//return "[" + joined + "]";
+			return EnumerableToString(collection);
 		}
 
 		public static string ToUniqueString(this object obj)

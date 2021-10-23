@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Atlas.Tabs.Test</AssemblyName>
     <RootNamespace>Atlas.Tabs.Test</RootNamespace>
     <Configurations>Debug;Release;DebugX86</Configurations>

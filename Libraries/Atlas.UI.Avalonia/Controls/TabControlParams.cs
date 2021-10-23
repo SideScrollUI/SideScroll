@@ -82,7 +82,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public List<Control> AddObjectRow(object obj, List<PropertyInfo> properties = null)
 		{
-			properties = properties ?? obj.GetType().GetVisibleProperties();
+			properties ??= obj.GetType().GetVisibleProperties();
 
 			int rowIndex = AddRowDefinition();
 			int columnIndex = 0;
@@ -175,7 +175,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Type type = property.UnderlyingType;
 
 			BindListAttribute listAttribute = type.GetCustomAttribute<BindListAttribute>();
-			listAttribute = listAttribute ?? property.PropertyInfo.GetCustomAttribute<BindListAttribute>();
+			listAttribute ??= property.PropertyInfo.GetCustomAttribute<BindListAttribute>();
 
 			Control control = null;
 			if (type == typeof(bool))

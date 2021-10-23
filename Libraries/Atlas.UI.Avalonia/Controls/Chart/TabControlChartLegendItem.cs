@@ -339,7 +339,7 @@ namespace Atlas.UI.Avalonia.Controls
 			Series = scatterSeries;
 			if (IsSelected == true || Highlight)
 			{
-				scatterSeries.ItemsSource = scatterSeries.ItemsSource ?? ItemsSource; // never gonna let you go...
+				scatterSeries.ItemsSource ??= ItemsSource; // never gonna let you go...
 				//ItemsSource = null;
 				scatterSeries.MarkerType = markerType;
 				scatterSeries.Selectable = true;

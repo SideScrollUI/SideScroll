@@ -34,7 +34,7 @@ namespace Atlas.Serialize
 
 		public void Save(Call call, object obj, string name = null)
 		{
-			name = name ?? "<Default>";
+			name ??= "<Default>";
 			if (!Directory.Exists(BasePath))
 				Directory.CreateDirectory(BasePath);
 
@@ -48,7 +48,7 @@ namespace Atlas.Serialize
 
 		public T Load<T>(Call call = null, bool lazy = false, TaskInstance taskInstance = null)
 		{
-			call = call ?? new Call();
+			call ??= new Call();
 			object obj = Load(call, lazy, taskInstance);
 			if (obj == null)
 				return default;
@@ -82,7 +82,7 @@ namespace Atlas.Serialize
 
 		public Header LoadHeader(Call call)
 		{
-			call = call ?? new Call();
+			call ??= new Call();
 
 			using (CallTimer callReadAllBytes = call.Timer(LogLevel.Debug, "Loading header: " + Name))
 			{

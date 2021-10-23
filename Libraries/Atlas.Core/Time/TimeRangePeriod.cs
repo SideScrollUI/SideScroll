@@ -156,7 +156,7 @@ namespace Atlas.Core
 				return 0;
 
 			double totalSum = 0;
-			TimeSpan totalDuration;
+			var totalDuration = TimeSpan.Zero;
 			foreach (var period in periods)
 			{
 				totalDuration = totalDuration.Add(period.SummedDurations);

@@ -107,7 +107,7 @@ namespace Atlas.Serialize
 			if (obj == null)
 				return null;
 
-			call = call ?? new Call();
+			call ??= new Call();
 
 			var serializer = Create();
 			serializer.PublicOnly = publicOnly;

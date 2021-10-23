@@ -232,7 +232,7 @@ namespace Atlas.Core
 				else if (Task == null || TaskStatus == TaskStatus.RanToCompletion)
 				{
 					Status = "Complete";
-					Message = Message ?? "Success";
+					Message ??= "Success";
 				}
 				else
 				{

@@ -89,7 +89,7 @@ namespace Atlas.UI.Avalonia.View
 				if (childTabInstance == null)
 					return null;
 
-				childTabInstance.TabBookmark = childTabInstance.TabBookmark ?? tabBookmark;
+				childTabInstance.TabBookmark ??= tabBookmark;
 				//childTabInstance.Reintialize(); // todo: fix, called in TabView
 				childTabInstance.Model.Name = label;
 				var tabView = new TabView(childTabInstance);

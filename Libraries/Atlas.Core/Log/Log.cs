@@ -189,11 +189,13 @@ namespace Atlas.Core
 		private void UpdateStats(LogEntry logEntry)
 		{
 			Interlocked.Add(ref _entries, logEntry.Entries + 1);
+
 			if (logEntry.Level > Level)
 			{
 				Level = logEntry.Level;
 				CreateEventPropertyChanged(nameof(Level));
 			}
+
 			CreateEventPropertyChanged(nameof(Entries));
 		}
 

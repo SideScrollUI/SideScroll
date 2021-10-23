@@ -170,17 +170,16 @@ namespace Atlas.Extensions
 			if (rawData == null)
 				return null;
 
-			using (SHA256 sha256Hash = SHA256.Create())
-			{
-				byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData)); // 32 bytes
+			using SHA256 sha256Hash = SHA256.Create();
+			
+			byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData)); // 32 bytes
 
-				var builder = new StringBuilder();
-				foreach (byte b in bytes)
-				{
-					builder.Append(b.ToString("x2"));
-				}
-				return builder.ToString();
+			var builder = new StringBuilder();
+			foreach (byte b in bytes)
+			{
+				builder.Append(b.ToString("x2"));
 			}
+			return builder.ToString();
 		}
 
 		public static bool IsNullOrEmpty(this string text)

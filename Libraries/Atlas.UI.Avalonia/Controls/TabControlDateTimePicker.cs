@@ -122,7 +122,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public Button AddButton(string tooltip, Stream resource)
 		{
-			//command = command ?? new RelayCommand(
+			//command ??= new RelayCommand(
 			//	(obj) => CommandDefaultCanExecute(obj),
 			//	(obj) => CommandDefaultExecute(obj));
 			Bitmap bitmap;

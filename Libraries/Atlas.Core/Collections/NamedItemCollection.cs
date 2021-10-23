@@ -7,10 +7,10 @@ namespace Atlas.Core
 {
 	public class NamedItemCollection<T1, T2>
 	{
-		public static List<KeyValuePair<MemberInfo, T2>> Items => _items = _items ?? GetItems();
+		public static List<KeyValuePair<MemberInfo, T2>> Items => _items ??= GetItems();
 		private static List<KeyValuePair<MemberInfo, T2>> _items;
 
-		public static List<T2> Values => _values = _values ?? Items.Select(v => v.Value).ToList();
+		public static List<T2> Values => _values ??= Items.Select(v => v.Value).ToList();
 		private static List<T2> _values;
 
 		public static List<KeyValuePair<MemberInfo, T2>> GetItems()

@@ -107,7 +107,7 @@ namespace Atlas.Tabs
 				if (tabBookmark != null)
 					tabBookmark.ChildBookmarks.Add(prevLabel, newBookmark);
 				tabBookmark = newBookmark;
-				rootBookmark = rootBookmark ?? tabBookmark;
+				rootBookmark ??= tabBookmark;
 				prevLabel = label;
 			}
 			return rootBookmark;
@@ -134,12 +134,12 @@ namespace Atlas.Tabs
 			{
 				Label = tabBookmark.Name,
 			};
-			ViewSettings = ViewSettings ?? new TabViewSettings();
+			ViewSettings ??= new TabViewSettings();
 			ViewSettings.TabDataSettings = ViewSettings.TabDataSettings ?? new List<TabDataSettings>();
 			if (ViewSettings.TabDataSettings.Count == 0)
 				ViewSettings.TabDataSettings.Add(new TabDataSettings());
 			ViewSettings.TabDataSettings[0].SelectionType = SelectionType.User;
-			ViewSettings.TabDataSettings[0].SelectedRows = ViewSettings.TabDataSettings[0].SelectedRows ?? new HashSet<SelectedRow>();
+			ViewSettings.TabDataSettings[0].SelectedRows ??= new HashSet<SelectedRow>();
 			ViewSettings.TabDataSettings[0].SelectedRows.Add(selectedRow);
 			//Select(ChildBookmarks.Keys);
 		}
@@ -166,8 +166,8 @@ namespace Atlas.Tabs
 
 		public void SetData(string name, object obj)
 		{
-			ViewSettings = ViewSettings ?? new TabViewSettings();
-			BookmarkData = BookmarkData ?? new Dictionary<string, object>();
+			ViewSettings ??= new TabViewSettings();
+			BookmarkData ??= new Dictionary<string, object>();
 			BookmarkData[name] = obj;
 		}
 

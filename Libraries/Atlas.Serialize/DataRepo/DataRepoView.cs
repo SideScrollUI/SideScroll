@@ -32,6 +32,7 @@ namespace Atlas.Serialize
 			lock (DataRepo)
 			{
 				base.Delete(key);
+
 				var item = Items.Where(d => d.Key == key).FirstOrDefault();
 				if (item != null)
 					Items.Remove(item);

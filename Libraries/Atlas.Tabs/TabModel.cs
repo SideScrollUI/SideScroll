@@ -151,7 +151,7 @@ namespace Atlas.Tabs
 
 			if (obj is IItemCollection itemCollection)
 			{
-				CustomSettingsPath = CustomSettingsPath ?? itemCollection.CustomSettingsPath;
+				CustomSettingsPath ??= itemCollection.CustomSettingsPath;
 			}
 
 			if (obj is IList iList)
