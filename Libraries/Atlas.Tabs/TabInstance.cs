@@ -331,14 +331,7 @@ namespace Atlas.Tabs
 
 		protected ItemCollection<ListProperty> GetListProperties()
 		{
-			var items = ListProperty.Create(this, false);
-			var properties = new ItemCollection<ListProperty>();
-			foreach (ListProperty listProperty in items)
-			{
-				properties.Add(listProperty);
-			}
-
-			return properties;
+			return ListProperty.Create(this, false);
 		}
 
 		protected ItemCollection<IListItem> GetListItems()
