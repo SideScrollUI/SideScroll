@@ -68,14 +68,14 @@ namespace Atlas.Tabs.Test.DataGrid
 
 			protected SynchronizationContext Context;
 
+			public event PropertyChangedEventHandler PropertyChanged;
+
 			public override string ToString() => SmallNumber.ToString();
 
 			public TestItem(SynchronizationContext context)
 			{
 				Context = context;
 			}
-
-			public event PropertyChangedEventHandler PropertyChanged;
 
 			public void Update()
 			{

@@ -30,8 +30,8 @@ namespace Atlas.Tabs.Test.Chart
 				public int SeriesGamma { get; set; }
 				// Add [UnitType]
 				public int SeriesEpsilon { get; set; }  // High Value, small delta
-				public TestItem testItem { get; set; } = new TestItem();
-				public int InstanceAmount => testItem.Amount;
+				public TestItem TestItem { get; set; } = new TestItem();
+				public int InstanceAmount => TestItem.Amount;
 			}
 
 			public override void Load(Call call, TabModel model)
@@ -77,7 +77,7 @@ namespace Atlas.Tabs.Test.Chart
 					SeriesBeta = _random.Next(50, 100),
 					SeriesGamma = _random.Next(0, 1000000000),
 					SeriesEpsilon = 1000000000 + _random.Next(0, 10),
-					testItem = new TestItem()
+					TestItem = new TestItem()
 					{
 						Amount = _random.Next(0, 100),
 					},

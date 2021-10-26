@@ -1,6 +1,7 @@
 ﻿using Atlas.Core;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Atlas.Tabs.Tools
 {
@@ -12,9 +13,11 @@ namespace Atlas.Tabs.Tools
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				var items = new ItemCollection<ListItem>();
-				items.Add(new ListItem("Data", new TabDirectory(Project.UserSettings.ProjectPath)));
-				model.Items = items;
+				model.Items = new List<ListItem>()
+				{
+					new ListItem("Current", new TabDirectory(Directory.GetCurrentDirectory())),
+					new ListItem("Root", new TabDirectory("")),
+				};
 			}
 		}
 	}

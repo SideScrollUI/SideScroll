@@ -36,18 +36,18 @@ namespace Atlas.Tabs.Tools
 				};
 
 
-				var directories = new ItemCollection<ListDirectory>();
+				var directories = new ItemCollection<DirectoryView>();
 				foreach (string directoryPath in Directory.EnumerateDirectories(Tab.Path))
 				{
-					var listDirectory = new ListDirectory(directoryPath);
+					var listDirectory = new DirectoryView(directoryPath);
 					directories.Add(listDirectory);
 				}
 				model.ItemList.Add(directories);
 
-				var files = new ItemCollection<ListFile>();
+				var files = new ItemCollection<FileView>();
 				foreach (string filePath in Directory.EnumerateFiles(Tab.Path))
 				{
-					var listFile = new ListFile(filePath);
+					var listFile = new FileView(filePath);
 					files.Add(listFile);
 				}
 				if (files.Count > 0)
@@ -70,38 +70,40 @@ namespace Atlas.Tabs.Tools
 		}
 	}
 
-	public class ListDirectory
+	public class DirectoryView
 	{
 		public string Directory { get; set; }
+
 		[HiddenColumn, InnerValue]
 		public ITab Tab;
+
 		public string DirectoryPath;
 
-		public ListDirectory(string directoryPath)
+		public DirectoryView(string directoryPath)
 		{
 			DirectoryPath = directoryPath;
 			Directory = Path.GetFileName(directoryPath);
 			Tab = new TabDirectory(directoryPath);
 		}
 
-		public override string ToString()
-		{
-			return Directory;
-		}
+		public override string ToString() => Directory;
 	}
 
-	public class ListFile
+	public class FileView
 	{
 		public string Filename { get; set; }
 		public long Size { get; set; }
 		public DateTime Modified { get; set; }
+
 		[HiddenColumn, InnerValue]
 		public ITab Tab;
 
 		public string FilePath;
 		public FileInfo FileInfo;
 
-		public ListFile(string filePath)
+		public override string ToString() => Filename;
+
+		public FileView(string filePath)
 		{
 			FilePath = filePath;
 			FileInfo = new FileInfo(filePath);
@@ -109,15 +111,11 @@ namespace Atlas.Tabs.Tools
 			Filename = Path.GetFileName(filePath);
 			Size = FileInfo.Length;
 			Modified = FileInfo.LastWriteTime;
+
 			if (Filename.EndsWith(".atlas"))
 				Tab = new TabFileSerialized(filePath);
 			else
 				Tab = new TabFile(filePath);
-		}
-
-		public override string ToString()
-		{
-			return Filename;
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace Atlas.Tabs.Test.Loading
 			{
 				public int Integer { get; set; }
 
-				// doesn't work yet
+				[Item]
 				public async Task<string> Text(Call call)
 				{
 					await Task.Delay(1000);

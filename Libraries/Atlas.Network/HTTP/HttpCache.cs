@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Atlas.Network
@@ -48,6 +49,8 @@ namespace Atlas.Network
 		private Stream _dataStream;
 		private object _entryLock = new object();
 
+		public override string ToString() => BasePath;
+
 		public HttpCache(string basePath, bool writeable)
 		{
 			BasePath = basePath;
@@ -72,8 +75,6 @@ namespace Atlas.Network
 			_dataStream.Dispose();
 		}
 
-		public override string ToString() => BasePath;
-
 		private void LoadHeader(BinaryReader indexReader)
 		{
 			CurrentVersion = indexReader.ReadUInt32();
@@ -81,10 +82,9 @@ namespace Atlas.Network
 
 		private void SaveHeader()
 		{
-			using (BinaryWriter indexWriter = new BinaryWriter(_indexStream, Encoding.Default, true))
-			{
-				indexWriter.Write(LatestVersion);
-			}
+			using BinaryWriter indexWriter = new BinaryWriter(_indexStream, Encoding.Default, true);
+			
+			indexWriter.Write(LatestVersion);
 		}
 
 		private void LoadIndex()
@@ -106,16 +106,7 @@ namespace Atlas.Network
 			}
 		}
 
-		public List<Entry> Entries
-		{
-			get
-			{
-				var entries = new List<Entry>();
-				foreach (Entry entry in _cache.Values)
-					entries.Add(entry);
-				return entries;
-			}
-		}
+		public List<Entry> Entries => _cache.Values.ToList();
 
 		public List<LoadableEntry> LoadableEntries
 		{
@@ -186,11 +177,10 @@ namespace Atlas.Network
 					return null;
 
 				_dataStream.Position = entry.Offset;
-				using (var dataReader = new BinaryReader(_dataStream, Encoding.Default, true))
-				{
-					byte[] data = dataReader.ReadBytes(entry.Size);
-					return data;
-				}
+				using var dataReader = new BinaryReader(_dataStream, Encoding.Default, true);
+				
+				byte[] data = dataReader.ReadBytes(entry.Size);
+				return data;
 			}
 		}
 

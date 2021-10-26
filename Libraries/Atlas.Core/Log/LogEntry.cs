@@ -19,7 +19,7 @@ namespace Atlas.Core
 
 		public LogLevel DebugPrintLogLevel { get; set; } = LogLevel.Warn;
 
-		internal object Lock = new object(); // todo: replace this with individual ones? (deadlock territory if circular) or a non-blocking version
+		internal object Lock = new object(); // todo: replace this with individual ones? or a non-blocking version
 
 		[HiddenRow]
 		public SynchronizationContext Context; // inherited from creator (which can be a Parent Log)

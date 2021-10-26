@@ -129,23 +129,12 @@ namespace Atlas.Extensions // rename to Core?
 
 		public static List<PropertyInfo> GetVisibleProperties(this Type type)
 		{
-			var visibleProperties = new List<PropertyInfo>();
-			// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
-			PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
-			foreach (PropertyInfo propertyInfo in propertyInfos)
-			{
-				if (propertyInfo.GetCustomAttribute<HiddenAttribute>() != null)
-					continue;
-
-				if (propertyInfo.GetCustomAttribute<HiddenColumnAttribute>() != null)
-					continue;
-
-				if (propertyInfo.GetIndexParameters().Any())
-					continue;
-
-				visibleProperties.Add(propertyInfo);
-			}
-			return visibleProperties;
+			return type.GetProperties()
+				.Where(p => p.GetCustomAttribute<HiddenAttribute>() == null)
+				.Where(p => p.GetCustomAttribute<HiddenColumnAttribute>() == null)
+				.Where(p => p.GetIndexParameters().Any() == false)
+				.OrderBy(x => x.MetadataToken)
+				.ToList();
 		}
 
 		public static PropertyInfo GetPropertyWithAttribute<T>(this Type type) where T : Attribute

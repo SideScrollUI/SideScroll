@@ -101,23 +101,22 @@ Actions add Buttons to the tab. When clicked, it will:
 
 			public static async Task<int> DoTask(Call call, int id)
 			{
-				using (CallTimer callTimer = call.Timer("Task", new Tag(id)))
+				using CallTimer callTimer = call.Timer("Task", new Tag(id));
+				
+				for (int i = 0; i < id && !callTimer.TaskInstance.CancelToken.IsCancellationRequested; i++)
 				{
-					for (int i = 0; i < id && !callTimer.TaskInstance.CancelToken.IsCancellationRequested; i++)
-					{
-						callTimer.Log.Add("Sleeping");
-						await Task.Delay(1000, callTimer.TaskInstance.CancelToken);
-					}
+					callTimer.Log.Add("Sleeping");
+					await Task.Delay(1000, callTimer.TaskInstance.CancelToken);
 				}
+				
 				return id;
 			}
 
 			private async Task SleepAsync(Call call)
 			{
-				using (CallTimer callTimer = call.Timer("long op"))
-				{
-					await Task.Delay(1000);
-				}
+				using CallTimer callTimer = call.Timer("long op");
+				
+				await Task.Delay(1000);
 			}
 		}
 	}

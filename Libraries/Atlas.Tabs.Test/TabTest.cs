@@ -6,6 +6,7 @@ using Atlas.Tabs.Test.DataRepo;
 using Atlas.Tabs.Test.Exceptions;
 using Atlas.Tabs.Test.Loading;
 using Atlas.Tabs.Test.Objects;
+using Atlas.Tabs.Tools;
 
 namespace Atlas.Tabs.Test
 {
@@ -40,6 +41,7 @@ namespace Atlas.Tabs.Test
 					new ListItem("Loading", new TabTestLoading()),
 					new ListItem("Data Repos", new TabTestDataRepo()),
 					new ListItem("Icons", new TabIcons()),
+					new ListItem("Tools", new TabTools()),
 				};
 			}
 		}
