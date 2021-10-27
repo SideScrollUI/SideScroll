@@ -5,8 +5,8 @@
     "tasks": [
         // Includes Avalonia, Web Servers, and Core Libraries
         {
-            "label": "build Atlas.Avalonia",
-            "command": "dotnet build Atlas.Avalonia.sln",
+            "label": "build Atlas",
+            "command": "dotnet build Atlas.sln",
             "type": "shell",
             "group": "build",
             "presentation": {
