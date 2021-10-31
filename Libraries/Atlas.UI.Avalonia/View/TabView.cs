@@ -12,6 +12,7 @@ using Avalonia.Threading;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -38,8 +39,10 @@ namespace Atlas.UI.Avalonia.View
 				//_tabViewSettings = value;
 			}
 		}
+
 		public TabInstance Instance;
 		public TabModel Model => Instance.Model;
+
 		public string Label
 		{ 
 			get => Model.Name;
@@ -251,7 +254,7 @@ namespace Atlas.UI.Avalonia.View
 			Instance.OnReload += TabInstance_OnReload;
 			Instance.OnLoadBookmark += TabInstance_OnLoadBookmark;
 			Instance.OnClearSelection += TabInstance_OnClearSelection; // data controls should attach these instead?
-			Instance.OnSelectItem += TabInstance_OnSelectItem;
+			Instance.OnSelectItems += TabInstance_OnSelectItems;
 			Instance.OnResize += TabInstance_OnResize;
 		}
 
@@ -261,7 +264,7 @@ namespace Atlas.UI.Avalonia.View
 			Instance.OnReload -= TabInstance_OnReload;
 			Instance.OnLoadBookmark -= TabInstance_OnLoadBookmark;
 			Instance.OnClearSelection -= TabInstance_OnClearSelection;
-			Instance.OnSelectItem -= TabInstance_OnSelectItem;
+			Instance.OnSelectItems -= TabInstance_OnSelectItems;
 			Instance.OnResize -= TabInstance_OnResize;
 		}
 
@@ -795,10 +798,15 @@ namespace Atlas.UI.Avalonia.View
 			{
 				// Reuse existing control
 				Control control = oldChildControls[obj];
-				newChildControls.Add(obj, control);
-				orderedChildControls.Add(control);
-
-				//oldChildControls.Remove(obj);
+				if (newChildControls.ContainsKey(obj))
+				{
+					Debug.WriteLine("TabView has already added child control " + obj.ToString());
+				}
+				else
+				{
+					newChildControls.Add(obj, control);
+					orderedChildControls.Add(control);
+				}
 			}
 			else
 			{
@@ -947,30 +955,34 @@ namespace Atlas.UI.Avalonia.View
 			LoadBookmark();
 		}
 
-		private void TabInstance_OnSelectItem(object sender, TabInstance.EventSelectItem e)
+		private void TabInstance_OnSelectItems(object sender, TabInstance.EventSelectItems e)
 		{
 			if (TabDatas.Count > 0)
 			{
-				if (e.Object is ITab itab)
+				if (e.List.Count == 0)
+				{
+					TabDatas[0].SelectedItem = null;
+				}
+				else if (e.List[0] is ITab itab)
 				{
 					foreach (var obj in TabDatas[0].Items)
 					{
 						if (obj == itab || obj.GetInnerValue() == itab)
-							TabDatas[0].SelectedItem = obj;
+							TabDatas[0].SelectedItems = e.List;
 					}
 				}
 				else
 				{
-					TabDatas[0].SelectedItem = e.Object;
+					TabDatas[0].SelectedItems = e.List;
 				}
 			}
 			else if (CustomTabControls.Count > 0)
 			{
 				foreach (ITabSelector tabSelector in CustomTabControls)
 				{
-					if (tabSelector is ISelectedItem itemSelector)
+					if (tabSelector is IItemSelector itemSelector)
 					{
-						itemSelector.SelectedItem = e.Object;
+						itemSelector.SelectedItems = e.List;
 					}
 				}
 			}
@@ -1102,20 +1114,6 @@ private void horizontalSplitter_DragCompleted(object sender, System.Windows.Cont
 		control.Width = splitContainer.SplitterDistance;
 		control.AutoSize = true;
 	}*//*
-}
-
-private void verticalGridSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-{
-	//SaveSplitterDistance();
-}
-
-private void gridParentControls_MouseDown(object sender, MouseButtonEventArgs e)
-{
-	if (tabDatas.Count > 0)
-	{
-		tabDatas[0].dataGrid.Focus();
-		e.Handled = true;
-	}
 }
 
 */

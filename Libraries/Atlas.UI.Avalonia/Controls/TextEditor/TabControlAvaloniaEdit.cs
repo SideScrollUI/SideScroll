@@ -44,8 +44,6 @@ namespace Atlas.UI.Avalonia.Controls
 		public AvaloniaEdit.TextEditor TextEditor;
 		public double MaxDesiredWidth = 1000;
 
-		public bool FocusTab { get; set; }
-
 		public TabControlAvaloniaEdit(TabInstance tabInstance)
 		{
 			TabInstance = tabInstance;
@@ -54,7 +52,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			Background = Theme.TabBackground;
+			Background = Brushes.Transparent;
 			MaxWidth = 3000;
 
 			ColumnDefinitions = new ColumnDefinitions("*");
@@ -83,22 +81,9 @@ namespace Atlas.UI.Avalonia.Controls
 			TextEditor.Options.AllowScrollBelowDocument = false; // Breaks top alignment
 			Children.Add(TextEditor);
 
-			// Add hover effect here or in SplitContainer?
-			var fillerPanel = new Panel()
-			{
-				VerticalAlignment = VerticalAlignment.Stretch,
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				[Grid.RowProperty] = 1,
-			};
-			Children.Add(fillerPanel);
-
 			//textEditor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
 			/*ShowLineNumbers = true;
-			SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
-			TextArea.TextEntering += textEditor_TextArea_TextEntering;
-			TextArea.IndentationStrategy = new Indentation.CSharp.CSharpIndentationStrategy();*/
-
-			//SearchPanel.Install(this.textEditor);
+			SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");*/
 		}
 
 		public void Load(string path)
@@ -110,7 +95,7 @@ namespace Atlas.UI.Avalonia.Controls
 				// todo: add load button to load rest of content
 				using StreamReader streamReader = File.OpenText(path);
 				
-				char[] buffer = new char[MaxAutoLoadSize];
+				var buffer = new char[MaxAutoLoadSize];
 				streamReader.Read(buffer, 0, buffer.Length);
 				TextEditor.Text = new string(buffer);
 			}
@@ -127,7 +112,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (value is string s && s.StartsWith("{") && !s.Contains("\n"))
 				{
-					TextEditor.FontFamily = new FontFamily("Courier New");
+					TextEditor.FontFamily = new FontFamily("Courier New"); // Use monospaced font for Json
 				}
 				TextEditor.Text = value;
 			}

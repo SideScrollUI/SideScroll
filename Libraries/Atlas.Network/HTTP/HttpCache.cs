@@ -41,13 +41,13 @@ namespace Atlas.Network
 		public string BasePath { get; set; }
 		public long Size => _dataStream.Length;
 
-		private Dictionary<string, Entry> _cache = new Dictionary<string, Entry>();
+		private readonly Dictionary<string, Entry> _cache = new Dictionary<string, Entry>();
 
-		private string _indexPath;
-		private string _dataPath;
-		private Stream _indexStream;
-		private Stream _dataStream;
-		private object _entryLock = new object();
+		private readonly string _indexPath;
+		private readonly string _dataPath;
+		private readonly Stream _indexStream;
+		private readonly Stream _dataStream;
+		private readonly object _entryLock = new object();
 
 		public override string ToString() => BasePath;
 
@@ -90,19 +90,18 @@ namespace Atlas.Network
 		private void LoadIndex()
 		{
 			_indexStream.Seek(0, SeekOrigin.Begin);
-			using (var indexReader = new BinaryReader(_indexStream, Encoding.Default, true))
+			using var indexReader = new BinaryReader(_indexStream, Encoding.Default, true);
+			
+			LoadHeader(indexReader);
+			while (indexReader.PeekChar() >= 0)
 			{
-				LoadHeader(indexReader);
-				while (indexReader.PeekChar() >= 0)
-				{
-					var entry = new Entry();
-					entry.Uri = indexReader.ReadString();
-					entry.Offset = indexReader.ReadInt64();
-					entry.Size = indexReader.ReadInt32();
-					long ticks = indexReader.ReadInt64();
-					entry.Downloaded = new DateTime(ticks);
-					_cache[entry.Uri] = entry;
-				}
+				var entry = new Entry();
+				entry.Uri = indexReader.ReadString();
+				entry.Offset = indexReader.ReadInt64();
+				entry.Size = indexReader.ReadInt32();
+				long ticks = indexReader.ReadInt64();
+				entry.Downloaded = new DateTime(ticks);
+				_cache[entry.Uri] = entry;
 			}
 		}
 

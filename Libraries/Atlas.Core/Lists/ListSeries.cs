@@ -111,14 +111,14 @@ namespace Atlas.Core
 			if (timeWindow == null || PeriodDuration == null || timeRangeValues == null)
 				return GetSum();
 
-			switch (SeriesType)
+			return SeriesType switch
 			{
-				case SeriesType.Count: return TimeRangePeriod.TotalCounts(timeRangeValues, timeWindow, PeriodDuration.Value);
-				case SeriesType.Sum: return TimeRangePeriod.TotalSum(timeRangeValues, timeWindow, PeriodDuration.Value);
-				case SeriesType.Minimum: return TimeRangePeriod.TotalMinimum(timeRangeValues, timeWindow);
-				case SeriesType.Maximum: return TimeRangePeriod.TotalMaximum(timeRangeValues, timeWindow);
-				default: return TimeRangePeriod.TotalAverage(timeRangeValues, timeWindow, PeriodDuration.Value);
-			}
+				SeriesType.Count => TimeRangePeriod.TotalCounts(timeRangeValues, timeWindow, PeriodDuration.Value),
+				SeriesType.Sum => TimeRangePeriod.TotalSum(timeRangeValues, timeWindow, PeriodDuration.Value),
+				SeriesType.Minimum => TimeRangePeriod.TotalMinimum(timeRangeValues, timeWindow),
+				SeriesType.Maximum => TimeRangePeriod.TotalMaximum(timeRangeValues, timeWindow),
+				_ => TimeRangePeriod.TotalAverage(timeRangeValues, timeWindow, PeriodDuration.Value),
+			};
 		}
 
 		public List<TimeRangeValue> GroupByPeriod(TimeWindow timeWindow)
@@ -127,13 +127,13 @@ namespace Atlas.Core
 			if (timeWindow == null || PeriodDuration == null || timeRangeValues == null)
 				return timeRangeValues;
 
-			switch (SeriesType)
+			return SeriesType switch
 			{
-				case SeriesType.Sum: return TimeRangePeriod.PeriodSums(timeRangeValues, timeWindow, PeriodDuration.Value);
-				case SeriesType.Minimum: return TimeRangePeriod.PeriodMins(timeRangeValues, timeWindow, PeriodDuration.Value);
-				case SeriesType.Maximum: return TimeRangePeriod.PeriodMaxes(timeRangeValues, timeWindow, PeriodDuration.Value);
-				default: return TimeRangePeriod.PeriodAverages(timeRangeValues, timeWindow, PeriodDuration.Value);
-			}
+				SeriesType.Sum => TimeRangePeriod.PeriodSums(timeRangeValues, timeWindow, PeriodDuration.Value),
+				SeriesType.Minimum => TimeRangePeriod.PeriodMins(timeRangeValues, timeWindow, PeriodDuration.Value),
+				SeriesType.Maximum => TimeRangePeriod.PeriodMaxes(timeRangeValues, timeWindow, PeriodDuration.Value),
+				_ => TimeRangePeriod.PeriodAverages(timeRangeValues, timeWindow, PeriodDuration.Value),
+			};
 		}
 
 		public double GetSum()

@@ -18,7 +18,7 @@ namespace Atlas.Tabs
 
 		public TabBookmarkItem NewBookmark { get; set; }
 
-		private DataRepoView<Bookmark> _dataRepoBookmarks;
+		private readonly DataRepoView<Bookmark> _dataRepoBookmarks;
 
 		public BookmarkCollection(Project project)
 		{

@@ -38,7 +38,11 @@ namespace Atlas.UI.Avalonia
 				var rowValues = new List<string>();
 				foreach (string value in row)
 				{
-					string text = value?.Replace("\n", " ").Replace("\r", "").Replace("\t", "    ") ?? "";
+					string text = value?
+						.Replace("\n", " ")
+						.Replace("\r", "")
+						.Replace("\t", "    ")
+						?? "";
 					rowValues.Add(text);
 				}
 
@@ -58,7 +62,7 @@ namespace Atlas.UI.Avalonia
 								text = text.Substring(0, position);
 						}
 
-						string remaining = value.Substring(text.Length);
+						string remaining = value[text.Length..];
 						rowValues[column] = remaining;
 						lineValues.Add(text);
 						overflowed |= (remaining.Length > 0);

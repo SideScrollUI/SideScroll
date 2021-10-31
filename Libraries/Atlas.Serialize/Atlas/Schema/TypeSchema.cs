@@ -59,9 +59,9 @@ namespace Atlas.Serialize
 		public bool HasSubType;
 
 		// Type lookup can take a long time, especially when there's missing types
-		private static Dictionary<string, Type> _typeCache = new Dictionary<string, Type>();
+		private static readonly Dictionary<string, Type> _typeCache = new Dictionary<string, Type>();
 
-		private BindingFlags _bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
+		private static readonly BindingFlags _bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
 
 		public override string ToString() => Name;
 

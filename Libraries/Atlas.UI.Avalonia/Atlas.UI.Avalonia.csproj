@@ -5,13 +5,16 @@
     <ApplicationIcon />
     <StartupObject />
     <Configurations>Debug;Release;DebugX86</Configurations>
+    <Version>$(AtlasVersion)</Version>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugX86|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
+
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
@@ -20,11 +23,13 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="Assets\**" />
     <EmbeddedResource Remove="Assets\**" />
     <None Remove="Assets\**" />
   </ItemGroup>
+
   <ItemGroup>
     <None Remove="DefaultTheme.xaml" />
     <None Remove="if_help_62217.png" />
@@ -37,14 +42,16 @@
     <None Remove="Theme\TabButton.xaml" />
     <None Remove="View\TabAvalonEdit.xaml" />
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.AvaloniaEdit" Version="0.10.9" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEditVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="ThomasLevesque.WeakEvent" Version="4.1.0" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\Imports\AvaloniaUI\OxyPlot.Avalonia\Source\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
     <ProjectReference Include="..\Atlas.Core\Atlas.Core.csproj" />
@@ -52,6 +59,7 @@
     <ProjectReference Include="..\Atlas.Serialize\Atlas.Serialize.csproj" />
     <ProjectReference Include="..\Atlas.Tabs\Atlas.Tabs.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <Compile Update="Theme\DefaultTheme.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
@@ -61,6 +69,7 @@
       <DependentUpon>TabAvalonEdit.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Update="Theme\Accents\BaseLight.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -72,6 +81,7 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
+
   <ItemGroup>
     <Folder Include="Native\OSX" />
   </ItemGroup>
@@ -81,6 +91,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  
   <!--
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Public\AvaloniaUI\DataGrid\src\Avalonia.DataGrid\Avalonia.DataGrid.csproj" />

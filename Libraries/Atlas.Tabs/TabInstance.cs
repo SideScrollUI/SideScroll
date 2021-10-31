@@ -125,12 +125,22 @@ namespace Atlas.Tabs
 			}
 		}
 
+		public class EventSelectItems : EventArgs
+		{
+			public IList List;
+
+			public EventSelectItems(IList list)
+			{
+				List = list;
+			}
+		}
+
 		public event EventHandler<EventArgs> OnRefresh;
 		public event EventHandler<EventArgs> OnReload;
 		public event EventHandler<EventArgs> OnModelChanged;
 		public event EventHandler<EventArgs> OnLoadBookmark;
 		public event EventHandler<EventArgs> OnClearSelection;
-		public event EventHandler<EventSelectItem> OnSelectItem;
+		public event EventHandler<EventSelectItems> OnSelectItems;
 		public event EventHandler<EventSelectItem> OnSelectionChanged;
 		public event EventHandler<EventArgs> OnModified;
 		public event EventHandler<EventArgs> OnResize;
@@ -579,13 +589,18 @@ namespace Atlas.Tabs
 
 		public void SelectItem(object obj)
 		{
-			if (OnSelectItem != null)
+			SelectItems(new List<object> { obj });
+		}
+
+		public void SelectItems(IList items)
+		{
+			if (OnSelectItems != null)
 			{
-				UiContext.Send(_ => OnSelectItem(this, new EventSelectItem(obj)), null);
+				UiContext.Send(_ => OnSelectItems(this, new EventSelectItems(items)), null);
 			}
 			else
 			{
-				TabBookmark = TabBookmark.Create(obj);
+				TabBookmark = TabBookmark.CreateList(items);
 			}
 		}
 

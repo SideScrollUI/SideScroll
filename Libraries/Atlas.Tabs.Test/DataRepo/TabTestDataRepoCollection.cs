@@ -41,11 +41,6 @@ namespace Atlas.Tabs.Test.DataRepo
 				_sampleItems = new ItemCollection<SampleItem>(dataRefs.Values);
 			}
 
-			private void Clear(Call call)
-			{
-				Reload();
-			}
-
 			private void Add(Call call)
 			{
 				var sampleItem = new SampleItem(_sampleItems.Count, "Item " + _sampleItems.Count);

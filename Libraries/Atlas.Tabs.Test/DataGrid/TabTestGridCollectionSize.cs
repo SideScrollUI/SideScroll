@@ -34,8 +34,10 @@ namespace Atlas.Tabs.Test.DataGrid
 				for (int i = 0; i < count; i++)
 				{
 					int number = _items.Count;
-					var testItem = new TestItem();
-					testItem.SmallNumber = number;
+					var testItem = new TestItem
+					{
+						SmallNumber = number
+					};
 					testItem.BigNumber += number;
 					if (number > 0)
 						testItem.Size = number * 100;

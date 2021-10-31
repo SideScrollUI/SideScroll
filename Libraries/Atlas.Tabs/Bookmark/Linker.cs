@@ -35,7 +35,7 @@ namespace Atlas.Tabs
 				return null;
 			}
 
-			string base64 = uri.Substring(AtlasPrefix.Length);
+			string base64 = uri[AtlasPrefix.Length..];
 
 			if (uri.Length > MaxLength)
 			{

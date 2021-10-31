@@ -50,7 +50,7 @@ namespace Atlas.Core
 						}
 					}
 
-					currentType = obj != null ? obj.GetType() : null; //property.PropertyType;
+					currentType = obj?.GetType(); //property.PropertyType;
 				}
 				else return null;
 			}

@@ -59,9 +59,10 @@ namespace Atlas.Tabs
 			if (Items.Contains(SelectedItem))
 				return Items;
 
-			var items = new List<T>(Items);
-			items.Add(SelectedItem);
-			return items;
+			return new List<T>(Items)
+			{
+				SelectedItem
+			};
 		}
 	}
 }

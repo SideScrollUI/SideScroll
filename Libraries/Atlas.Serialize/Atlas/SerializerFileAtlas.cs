@@ -24,17 +24,15 @@ namespace Atlas.Serialize
 
 				try
 				{
-					using (var stream = new FileStream(DataPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
-					{
-						using (var writer = new BinaryWriter(stream))
-						{
-							var serializer = new Serializer();
-							serializer.Header.Name = name;
-							serializer.AddObject(call, obj);
-							serializer.Save(call, writer);
-							break;
-						}
-					}
+					using var stream = new FileStream(DataPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+
+					using var writer = new BinaryWriter(stream);
+					
+					var serializer = new Serializer();
+					serializer.Header.Name = name;
+					serializer.AddObject(call, obj);
+					serializer.Save(call, writer);
+					break;
 				}
 				catch (Exception e)
 				{
@@ -45,8 +43,10 @@ namespace Atlas.Serialize
 
 		protected override object LoadInternal(Call call, bool lazy, TaskInstance taskInstance)
 		{
-			var serializer = new Serializer();
-			serializer.TaskInstance = taskInstance;
+			var serializer = new Serializer
+			{
+				TaskInstance = taskInstance
+			};
 
 			MemoryStream memoryStream;
 			using (CallTimer callReadAllBytes = call.Timer("Loading file: " + Name))
@@ -91,15 +91,13 @@ namespace Atlas.Serialize
 
 		public Serializer LoadSchema(Call call)
 		{
-			using (var stream = new FileStream(HeaderPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-			{
-				using (var reader = new BinaryReader(stream))
-				{
-					var serializer = new Serializer();
-					serializer.Load(call, reader, false);
-					return serializer;
-				}
-			}
+			using var stream = new FileStream(HeaderPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+			
+			using var reader = new BinaryReader(stream);
+			
+			var serializer = new Serializer();
+			serializer.Load(call, reader, false);
+			return serializer;
 		}
 
 		public T LoadOrCreate<T>(Call call = null, bool lazy = false, TaskInstance taskInstance = null)

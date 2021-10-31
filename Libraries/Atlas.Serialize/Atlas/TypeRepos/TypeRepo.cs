@@ -210,56 +210,54 @@ namespace Atlas.Serialize
 
 		public void LoadHeader(Log log)
 		{
-			using (LogTimer logTimer = log.Timer("Loading Headers", new Tag("Type", TypeSchema.Name), new Tag("Count", TypeSchema.NumObjects)))
+			using LogTimer logTimer = log.Timer("Loading Headers", new Tag("Type", TypeSchema.Name), new Tag("Count", TypeSchema.NumObjects));
+			
+			ObjectOffsets = new long[TypeSchema.NumObjects];
+			ObjectSizes = new int[TypeSchema.NumObjects];
+			long offset = TypeSchema.FileDataOffset;
+			for (int i = 0; i < TypeSchema.NumObjects; i++)
 			{
-				ObjectOffsets = new long[TypeSchema.NumObjects];
-				ObjectSizes = new int[TypeSchema.NumObjects];
-				long offset = TypeSchema.FileDataOffset;
-				for (int i = 0; i < TypeSchema.NumObjects; i++)
-				{
-					int size = Reader.ReadInt32();
-					ObjectOffsets[i] = offset;
-					ObjectSizes[i] = size;
-					offset += size;
-				}
-				//objects.AddRange(Enumerable.Repeat(null, count));
-				//for (int i = 0; i < count; i++)
-				//	objects.Add(null);
-
-				LoadCustomHeader();
+				int size = Reader.ReadInt32();
+				ObjectOffsets[i] = offset;
+				ObjectSizes[i] = size;
+				offset += size;
 			}
+			//objects.AddRange(Enumerable.Repeat(null, count));
+			//for (int i = 0; i < count; i++)
+			//	objects.Add(null);
+
+			LoadCustomHeader();
 		}
 
 		public void SaveObjects(Log log, BinaryWriter writer)
 		{
-			using (LogTimer logTimer = log.Timer("Serializing (" + TypeSchema.Name + ")"))
+			using LogTimer logTimer = log.Timer("Serializing (" + TypeSchema.Name + ")");
+			
+			//long start = writer.BaseStream.Position;
+
+			ObjectSizes = new int[Objects.Count];
+			int index = 0;
+			foreach (object obj in Objects)
 			{
-				//long start = writer.BaseStream.Position;
+				long objectStart = writer.BaseStream.Position;
+				SaveObject(writer, obj);
+				long objectEnd = writer.BaseStream.Position;
+				//objectOffsets.Add(objectStart);
+				//objectSizes.Add((int)(objectEnd - objectStart));
+				ObjectSizes[index++] = (int)(objectEnd - objectStart);
 
-				ObjectSizes = new int[Objects.Count];
-				int index = 0;
-				foreach (object obj in Objects)
-				{
-					long objectStart = writer.BaseStream.Position;
-					SaveObject(writer, obj);
-					long objectEnd = writer.BaseStream.Position;
-					//objectOffsets.Add(objectStart);
-					//objectSizes.Add((int)(objectEnd - objectStart));
-					ObjectSizes[index++] = (int)(objectEnd - objectStart);
-
-					logTimer.AddDebug("Saved Object", new Tag(TypeSchema.Name, obj));
-				}
-
-				//long end = writer.BaseStream.Position;
-
-				//typeSchema.fileDataOffset = start;
-				//typeSchema.dataSize = end - start;
-
-				logTimer.Add("Saved Type Objects",
-					new Tag("Type", Type),
-					new Tag("Count", Objects.Count),
-					new Tag("Bytes", writer.BaseStream.Position));
+				logTimer.AddDebug("Saved Object", new Tag(TypeSchema.Name, obj));
 			}
+
+			//long end = writer.BaseStream.Position;
+
+			//typeSchema.fileDataOffset = start;
+			//typeSchema.dataSize = end - start;
+
+			logTimer.Add("Saved Type Objects",
+				new Tag("Type", Type),
+				new Tag("Count", Objects.Count),
+				new Tag("Bytes", writer.BaseStream.Position));
 		}
 
 		/*public void LoadObjects(Log log)

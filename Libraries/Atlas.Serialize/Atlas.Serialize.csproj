@@ -5,6 +5,7 @@
     <AssemblyName>Atlas.Serialize</AssemblyName>
     <RootNamespace>Atlas.Serialize</RootNamespace>
     <Configurations>Debug;Release;DebugX86</Configurations>
+    <Version>$(AtlasVersion)</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

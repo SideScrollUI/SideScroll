@@ -44,15 +44,17 @@ namespace Atlas.Core
 		}
 	}
 
-	// [Example("0123456789abcdef")]
+	// [Watermark("0123456789abcdef")]
 	[AttributeUsage(AttributeTargets.All)]
-	public class ExampleAttribute : Attribute
+	public class WatermarkAttribute : Attribute
 	{
 		public readonly string Text;
+		public readonly string MemberName; // Field or Property name, overrides Text if set
 
-		public ExampleAttribute(string text)
+		public WatermarkAttribute(string text, string memberName = null)
 		{
 			Text = text;
+			MemberName = memberName;
 		}
 	}
 
@@ -92,16 +94,29 @@ namespace Atlas.Core
 	{
 	}
 
-	// 
+	// Adds spaces between words in a string
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class WordSpacedAttribute : Attribute
 	{
 	}
 
-	// 
+	// Wrap the text, Accepts return by default
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class WordWrapAttribute : Attribute
 	{
+	}
+
+	// Applies only to Params/TextBoxes
+	// Allow return key to add a new line
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class AcceptsReturnAttribute : Attribute
+	{
+		public readonly bool Allow;
+
+		public AcceptsReturnAttribute(bool allow = true)
+		{
+			Allow = allow;
+		}
 	}
 
 	// Right align contents in parent control

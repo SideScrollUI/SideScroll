@@ -11,7 +11,7 @@ namespace Atlas.Tabs.Test
 		[DataKey]
 		public string Name { get; set; } = "Test";
 
-		[Example("Description")]
+		[Watermark("Description")]
 		public string Description { get; set; }
 
 		public bool Boolean { get; set; } = true;
