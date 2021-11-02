@@ -8,6 +8,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls
@@ -76,9 +77,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (passwordCharAttribute != null)
 				PasswordChar = passwordCharAttribute.Character;
 
-			ExampleAttribute attribute = property.PropertyInfo.GetCustomAttribute<ExampleAttribute>();
-			if (attribute != null)
-				Watermark = attribute.Text;
+			SetWatermark(property);
 
 			if (property.PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
 			{
@@ -87,11 +86,45 @@ namespace Atlas.UI.Avalonia.Controls
 				MaxHeight = 500;
 			}
 
+			AcceptsReturnAttribute acceptsReturnAttribute = property.PropertyInfo.GetCustomAttribute<AcceptsReturnAttribute>();
+			if (acceptsReturnAttribute != null)
+			{
+				AcceptsReturn = acceptsReturnAttribute.Allow;
+			}
+
 			MaxWidth = TabControlParams.ControlMaxWidth;
 
 			BindProperty(property);
 
 			AvaloniaUtils.AddContextMenu(this); // Custom menu to handle ReadOnly items better
+		}
+
+		private void SetWatermark(ListProperty property)
+		{
+			WatermarkAttribute attribute = property.PropertyInfo.GetCustomAttribute<WatermarkAttribute>();
+			if (attribute == null)
+				return;
+
+			if (attribute.MemberName != null)
+			{
+				MemberInfo[] memberInfos = property.Object.GetType().GetMember(attribute.MemberName);
+				if (memberInfos.Length != 1)
+				{
+					throw new Exception("Found " + memberInfos.Length + " members with name " + attribute.MemberName);
+				}
+
+				MemberInfo memberInfo = memberInfos.First();
+				if (memberInfo is PropertyInfo propertyInfo)
+				{
+					Watermark = propertyInfo.GetValue(property.Object)?.ToString();
+				}
+				else if (memberInfo is FieldInfo fieldInfo)
+				{
+					Watermark = fieldInfo.GetValue(property.Object)?.ToString();
+				}
+
+			}
+			Watermark ??= attribute.Text;
 		}
 
 		private void BindProperty(ListProperty property)
@@ -124,7 +157,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (value is string s && s.StartsWith("{") && s.Contains("\n"))
 				{
-					FontFamily = new FontFamily("Courier New");
+					FontFamily = new FontFamily("Courier New"); // Use monospaced font for Json
 				}
 
 				base.Text = value;

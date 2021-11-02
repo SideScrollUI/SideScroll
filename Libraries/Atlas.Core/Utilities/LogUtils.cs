@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace Atlas.Core
@@ -19,6 +20,8 @@ namespace Atlas.Core
 			Console.WriteLine(filePath);
 			Console.WriteLine();
 			Console.WriteLine(message);
+
+			Debug.Fail(message);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Atlas.Core;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -111,6 +112,20 @@ namespace Atlas.Tabs
 				prevLabel = label;
 			}
 			return rootBookmark;
+		}
+
+		// Single level multi-select
+		public static TabBookmark CreateList(IList list)
+		{
+			var labels = new List<string>();
+			foreach (object obj in list)
+			{
+				labels.Add(obj.ToString());
+			}
+
+			var tabBookmark = new TabBookmark();
+			tabBookmark.Select(labels.ToArray());
+			return tabBookmark;
 		}
 
 		// Shallow Clone

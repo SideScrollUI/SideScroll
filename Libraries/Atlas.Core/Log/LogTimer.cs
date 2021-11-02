@@ -6,8 +6,8 @@ namespace Atlas.Core
 {
 	public class LogTimer : Log, IDisposable
 	{
-		private Stopwatch _stopwatch = new Stopwatch();
-		private Timer _timer = new Timer();
+		private readonly Stopwatch _stopwatch = new Stopwatch();
+		private readonly Timer _timer = new Timer();
 
 		public LogTimer()
 		{

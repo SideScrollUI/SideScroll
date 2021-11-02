@@ -52,12 +52,11 @@ namespace Atlas.Tabs.Tools
 						try
 						{
 							// doesn't work
-							using (StreamReader streamReader = File.OpenText(Tab.Path))
-							{
-								char[] buffer = new char[100];
-								streamReader.Read(buffer, 0, buffer.Length);
-								isText = true;
-							}
+							using StreamReader streamReader = File.OpenText(Tab.Path);
+							
+							var buffer = new char[100];
+							streamReader.Read(buffer, 0, buffer.Length);
+							isText = true;
 						}
 						catch (Exception)
 						{

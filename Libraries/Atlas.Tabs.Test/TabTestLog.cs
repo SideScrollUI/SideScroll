@@ -82,8 +82,10 @@ namespace Atlas.Tabs.Test
 				// would be nice to be able cancel this through the task (Start/Stop) Methods
 				//if (systemTimer == null)
 				{
-					var systemTimer = new System.Timers.Timer();
-					systemTimer.Interval = 1000;
+					var systemTimer = new System.Timers.Timer
+					{
+						Interval = 1000
+					};
 					systemTimer.Elapsed += SystemTimer_Elapsed;
 					systemTimer.Start();
 				}

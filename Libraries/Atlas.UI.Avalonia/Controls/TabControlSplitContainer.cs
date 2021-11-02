@@ -273,9 +273,8 @@ namespace Atlas.UI.Avalonia.Controls
 
 				Children.Remove(oldChild.Value);
 
-				IDisposable iDisposable = oldChild.Value as IDisposable;
-				if (iDisposable != null)
-					iDisposable.Dispose();
+				if (oldChild.Value is IDisposable disposable)
+					disposable.Dispose();
 			}
 		}
 

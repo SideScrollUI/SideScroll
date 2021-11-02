@@ -26,7 +26,7 @@ namespace Atlas.Extensions
 				return input;
 
 			while (input.StartsWith(prefix))
-				input = input.Substring(prefix.Length);
+				input = input[prefix.Length..];
 
 			return input;
 		}
@@ -46,7 +46,7 @@ namespace Atlas.Extensions
 			if (end < start)
 				return "";
 
-			return input.Substring(start, end - start);
+			return input[start..end];
 		}
 
 		public static string Range(this string input, int start)
@@ -54,10 +54,10 @@ namespace Atlas.Extensions
 			if (input.Length < start)
 				return "";
 
-			return input.Substring(start, input.Length - start);
+			return input[start..];
 		}
 
-		private static HashSet<char> _wordSpacedSymbols = new HashSet<char>() { '|', '/', '-' };
+		private static readonly HashSet<char> _wordSpacedSymbols = new HashSet<char>() { '|', '/', '-' };
 
 		// Adds spaces between words
 		// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'
@@ -119,7 +119,7 @@ namespace Atlas.Extensions
 		public static string CamelCased(this string text)
 		{
 			string lowerCased = text.ToLower();
-			string camelCased = char.ToUpper(lowerCased[0]) + lowerCased.Substring(1);
+			string camelCased = char.ToUpper(lowerCased[0]) + lowerCased[1..];
 			return camelCased;
 		}
 

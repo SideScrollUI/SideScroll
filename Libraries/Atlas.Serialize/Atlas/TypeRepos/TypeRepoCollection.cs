@@ -21,8 +21,8 @@ namespace Atlas.Serialize
 		}*/
 
 		private TypeRepo _listTypeRepo;
-		private MethodInfo _addMethod;
-		private Type _elementType;
+		private readonly MethodInfo _addMethod;
+		private readonly Type _elementType;
 
 		public TypeRepoCollection(Serializer serializer, TypeSchema typeSchema) : 
 			base(serializer, typeSchema)

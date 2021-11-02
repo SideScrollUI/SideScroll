@@ -57,7 +57,7 @@ namespace Atlas.Tabs
 
 			string depthText = match.Groups["Depth"].Value;
 			if (depthText.Length > 0)
-				Depth = int.Parse(depthText.Substring(1));
+				Depth = int.Parse(depthText[1..]);
 
 			string filters = match.Groups["Filters"].Value;
 			filters = filters.ToUpper();
@@ -73,8 +73,7 @@ namespace Atlas.Tabs
 				if (text.First() == '"' && text.Last() == '"')
 				{
 					filterExpression.MatchWord = true;
-					text = text.Substring(1);
-					text = text.Substring(0, text.Length - 1);
+					text = text[1..^1];
 				}
 				filterExpression.TextUppercase = text.ToUpper();
 				FilterExpressions.Add(filterExpression);

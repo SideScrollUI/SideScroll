@@ -122,8 +122,10 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Serialize Log Entry Tags")]
 		public void SerializeLogEntryTags()
 		{
-			var input = new LogEntryTest2();
-			input.Tags = new Tag[] { new Tag("abc", 123) };
+			var input = new LogEntryTest2
+			{
+				Tags = new Tag[] { new Tag("abc", 123) }
+			};
 
 			serializer.Save(Call, input);
 			LogEntryTest2 output = serializer.Load<LogEntryTest2>(Call);

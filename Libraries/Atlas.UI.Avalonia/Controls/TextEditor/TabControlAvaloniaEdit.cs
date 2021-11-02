@@ -3,9 +3,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
-using AvaloniaEdit.CodeCompletion;
-using AvaloniaEdit.Document;
-using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using Avalonia.Layout;
 using System;
@@ -13,7 +10,6 @@ using System.Collections.Generic;
 using System.IO;
 using Avalonia.Styling;
 using Atlas.Core;
-using Newtonsoft.Json;
 
 namespace Atlas.UI.Avalonia.Controls
 {
@@ -21,15 +17,12 @@ namespace Atlas.UI.Avalonia.Controls
 	{
 		Type IStyleable.StyleKey => typeof(AvaloniaEdit.TextEditor);
 
-		public int BottomPadding { get; set; } = 12; // Compensate for AvaloniaEdit margin/padding bug
-
 		protected override Size MeasureOverride(Size constraint)
 		{
 			Size measureOverrideSize = constraint;
 			try
 			{
 				measureOverrideSize = base.MeasureOverride(constraint);
-				measureOverrideSize = new Size(measureOverrideSize.Width, Math.Min(constraint.Height, measureOverrideSize.Height + BottomPadding));
 			}
 			catch
 			{
@@ -51,8 +44,6 @@ namespace Atlas.UI.Avalonia.Controls
 		public AvaloniaEdit.TextEditor TextEditor;
 		public double MaxDesiredWidth = 1000;
 
-		public bool FocusTab { get; set; }
-
 		public TabControlAvaloniaEdit(TabInstance tabInstance)
 		{
 			TabInstance = tabInstance;
@@ -61,51 +52,38 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void InitializeControls()
 		{
-			Background = Theme.TabBackground;
+			Background = Brushes.Transparent;
 			MaxWidth = 3000;
 
 			ColumnDefinitions = new ColumnDefinitions("*");
-			RowDefinitions = new RowDefinitions("*");
+			RowDefinitions = new RowDefinitions("Auto, *");
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Top;
+			VerticalAlignment = VerticalAlignment.Stretch;
 
 			TextEditor = new TabControlTextEditor()
 			{
 				IsReadOnly = true,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Top,
 				MaxWidth = 3000,
 				MaxHeight = 2000,
 				Foreground = Theme.GridForeground,
 				Background = Theme.GridBackground,
-				WordWrap = true,
-				//HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // WordWrap requires Disabled
-				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, // WordWrap requires Disabled, but it doesn't work
+				// WordWrap = true, // Doesn't work yet
+				// HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // WordWrap requires Disabled
+				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
 				VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
 				Padding = new Thickness(6),
 				FontSize = 14,
 				SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"), // handles JSON too
 			};
-
-			// Anchor the Text Editor at the top
-			var border = new Border()
-			{
-				Child = TextEditor,
-				Background = Theme.GridBackground,
-				VerticalAlignment = VerticalAlignment.Top,
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-			};
-
-			Children.Add(border);
+			TextEditor.Options.AllowScrollBelowDocument = false; // Breaks top alignment
+			Children.Add(TextEditor);
 
 			//textEditor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
 			/*ShowLineNumbers = true;
-			SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
-			TextArea.TextEntering += textEditor_TextArea_TextEntering;
-			TextArea.IndentationStrategy = new Indentation.CSharp.CSharpIndentationStrategy();*/
-
-			//SearchPanel.Install(this.textEditor);
+			SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");*/
 		}
 
 		public void Load(string path)
@@ -117,7 +95,7 @@ namespace Atlas.UI.Avalonia.Controls
 				// todo: add load button to load rest of content
 				using StreamReader streamReader = File.OpenText(path);
 				
-				char[] buffer = new char[MaxAutoLoadSize];
+				var buffer = new char[MaxAutoLoadSize];
 				streamReader.Read(buffer, 0, buffer.Length);
 				TextEditor.Text = new string(buffer);
 			}
@@ -134,7 +112,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (value is string s && s.StartsWith("{") && !s.Contains("\n"))
 				{
-					TextEditor.FontFamily = new FontFamily("Courier New");
+					TextEditor.FontFamily = new FontFamily("Courier New"); // Use monospaced font for Json
 				}
 				TextEditor.Text = value;
 			}

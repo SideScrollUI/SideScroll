@@ -17,9 +17,9 @@ namespace Atlas.Tabs
 		event EventHandler<EventArgs> OnSelectionChanged;
 	}
 
-	public interface ISelectedItem
+	public interface IItemSelector
 	{
-		object SelectedItem { get; set; }
+		IList SelectedItems { get; set; }
 	}
 
 	public interface ITabCreator

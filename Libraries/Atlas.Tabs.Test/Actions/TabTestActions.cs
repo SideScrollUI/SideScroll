@@ -55,10 +55,12 @@ Actions add Buttons to the tab. When clicked, it will:
 				call.Log.AddError("This should show the task");
 			}
 
-			private void PassParams(int v1, string v2)
+			private void PassParams(int param1, string param2)
 			{
 				Log log = new Log();
-				log.Add("If you log and no one's listening, are you really logging?");
+				log.Add("If you log and no one's listening, are you really logging?", 
+					new Tag("param1", param1), 
+					new Tag("param2", param2));
 			}
 
 			private int _counter = 1;
@@ -77,15 +79,14 @@ Actions add Buttons to the tab. When clicked, it will:
 				var downloads = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 				Parallel.ForEach(downloads, new ParallelOptions() { MaxDegreeOfParallelism = 10 }, i =>
 				{
-					using (CallTimer sleepCall = call.Timer(i.ToString()))
+					using CallTimer sleepCall = call.Timer(i.ToString());
+					
+					sleepCall.AddSubTask();
+					sleepCall.TaskInstance.ProgressMax = i;
+					for (int j = 0; j < i; j++)
 					{
-						sleepCall.AddSubTask();
-						sleepCall.TaskInstance.ProgressMax = i;
-						for (int j = 0; j < i; j++)
-						{
-							System.Threading.Thread.Sleep(1000);
-							sleepCall.TaskInstance.Progress = j + 1;
-						}
+						System.Threading.Thread.Sleep(1000);
+						sleepCall.TaskInstance.Progress = j + 1;
 					}
 				});
 			}

@@ -7,11 +7,11 @@ namespace Atlas.Core
 {
 	public class LogWriterText : IDisposable
 	{
-		private Log Log;
+		private readonly Log Log;
 		public string SaveFilePath;
 
-		private StreamWriter txtStreamWriter;
-		private SynchronizationContext context;
+		private readonly StreamWriter _textStreamWriter;
+		private readonly SynchronizationContext _context;
 
 		public override string ToString() => SaveFilePath;
 
@@ -24,9 +24,9 @@ namespace Atlas.Core
 			if (!Directory.Exists(parentDirectory))
 				Directory.CreateDirectory(parentDirectory);
 			
-			txtStreamWriter = new StreamWriter(SaveFilePath);
+			_textStreamWriter = new StreamWriter(SaveFilePath);
 
-			context = SynchronizationContext.Current ?? new SynchronizationContext();
+			_context = SynchronizationContext.Current ?? new SynchronizationContext();
 			
 			log.OnMessage += LogEntry_OnMessage;
 		}
@@ -39,13 +39,13 @@ namespace Atlas.Core
 
 			LogEntry newLog = e.Entries[0];
 			string line = Log.Created.ToString("yyyy-M-d H:mm:ss") + Indendation + newLog.Message;
-			txtStreamWriter.WriteLine(line);
-			txtStreamWriter.Flush();
+			_textStreamWriter.WriteLine(line);
+			_textStreamWriter.Flush();
 		}
 
 		public virtual void Dispose()
 		{
-			txtStreamWriter.Close();
+			_textStreamWriter.Close();
 		}
 	}
 }

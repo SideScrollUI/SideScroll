@@ -468,9 +468,10 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Clone List Containing Subclass of Type")]
 		public void CloneListContainingSubclassOfType()
 		{
-			var input = new List<Base>();
-
-			input.Add(new SubClass() { A = 5 });
+			var input = new List<Base>
+			{
+				new SubClass() { A = 5 }
+			};
 			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output[0].A, 5);

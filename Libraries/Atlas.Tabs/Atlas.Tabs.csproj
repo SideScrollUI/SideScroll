@@ -5,6 +5,7 @@
     <AssemblyName>Atlas.Tabs</AssemblyName>
     <RootNamespace>Atlas.Tabs</RootNamespace>
     <Configurations>Debug;Release;DebugX86</Configurations>
+    <Version>$(AtlasVersion)</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -35,13 +35,13 @@ namespace Atlas.Serialize
 		public void Save(Call call, object obj, string name = null)
 		{
 			name ??= "<Default>";
+
+			using CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object: " + name, new Tag("Path", BasePath));
+
 			if (!Directory.Exists(BasePath))
 				Directory.CreateDirectory(BasePath);
-
-			using (CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object: " + name, new Tag("Path", BasePath)))
-			{
-				SaveInternal(callTimer, obj, name);
-			}
+			
+			SaveInternal(callTimer, obj, name);
 		}
 
 		public abstract void SaveInternal(Call call, object obj, string name = null);
@@ -66,17 +66,16 @@ namespace Atlas.Serialize
 
 		public object Load(Call call, bool lazy = false, TaskInstance taskInstance = null)
 		{
-			using (CallTimer callTimer = call.Timer(LogLevel.Debug, "Loading object: " + Name))
+			using CallTimer callTimer = call.Timer(LogLevel.Debug, "Loading object: " + Name);
+			
+			try
 			{
-				try
-				{
-					return LoadInternal(callTimer, lazy, taskInstance);
-				}
-				catch (Exception e)
-				{
-					callTimer.Log.AddError("Exception loading file", new Tag("Exception", e.ToString()));
-					return null; // returns null if reference type, otherwise default value (i.e. 0)
-				}
+				return LoadInternal(callTimer, lazy, taskInstance);
+			}
+			catch (Exception e)
+			{
+				callTimer.Log.AddError("Exception loading file", new Tag("Exception", e.ToString()));
+				return null; // returns null if reference type, otherwise default value (i.e. 0)
 			}
 		}
 
@@ -84,15 +83,14 @@ namespace Atlas.Serialize
 		{
 			call ??= new Call();
 
-			using (CallTimer callReadAllBytes = call.Timer(LogLevel.Debug, "Loading header: " + Name))
-			{
-				var memoryStream = new MemoryStream(File.ReadAllBytes(HeaderPath));
+			using CallTimer callReadAllBytes = call.Timer(LogLevel.Debug, "Loading header: " + Name);
+			
+			var memoryStream = new MemoryStream(File.ReadAllBytes(HeaderPath));
 
-				var reader = new BinaryReader(memoryStream);
-				var header = new Header();
-				header.Load(reader);
-				return header;
-			}
+			var reader = new BinaryReader(memoryStream);
+			var header = new Header();
+			header.Load(reader);
+			return header;
 		}
 
 		protected abstract object LoadInternal(Call call, bool lazy, TaskInstance taskInstance);

@@ -10,7 +10,7 @@ namespace Atlas.Extensions // rename to Core?
 {
 	public static class AtlasExtensions
 	{
-		private static HashSet<Type> NumericTypes = new HashSet<Type>
+		private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
 		{
 			typeof(byte), typeof(sbyte),
 			typeof(short), typeof(ushort),
@@ -19,7 +19,7 @@ namespace Atlas.Extensions // rename to Core?
 			typeof(float), typeof(double), typeof(decimal),
 		};
 
-		private static HashSet<Type> DecimalTypes = new HashSet<Type>
+		private static readonly HashSet<Type> DecimalTypes = new HashSet<Type>
 		{
 			typeof(float), typeof(double), typeof(decimal),
 		};

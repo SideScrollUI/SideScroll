@@ -2,11 +2,13 @@
 *.diff
 *.dll
 *.exe
+*.nupkg
 *.pdb
 *.psess
 *.suo
 *.tmp
 *.vspx
+*.zip
 *.DS_Store
 .idea/
 .vs/
