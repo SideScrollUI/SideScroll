@@ -6,7 +6,11 @@ namespace Atlas.Serialize
 {
 	public static class SerializerExtensions
 	{
-		private const BindingFlags CloneBindingAttr = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
+		private const BindingFlags CloneBindingAttr = 
+			BindingFlags.Public | 
+			BindingFlags.NonPublic | 
+			BindingFlags.Instance | 
+			BindingFlags.FlattenHierarchy;
 
 		public static T DeepClone<T>(this T obj, Call call = null, bool publicOnly = false)
 		{

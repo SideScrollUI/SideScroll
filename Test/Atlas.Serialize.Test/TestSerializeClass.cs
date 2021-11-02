@@ -348,5 +348,19 @@ namespace Atlas.Serialize.Test
 				Items[parent] = child;
 			}
 		}
+
+		[Test]
+		public void ToBase64String()
+		{
+			var input = new Properties()
+			{
+				UintTest = 5,
+				DoubleTest = 2.5,
+				StringTest = "abc",
+			};
+
+			string base64 = SerializerMemory.ToBase64String(Call, input);
+			Assert.AreEqual(408, base64.Length);
+		}
 	}
 }

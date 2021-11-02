@@ -70,13 +70,16 @@ namespace Atlas.Serialize
 			Stream.Seek(0, SeekOrigin.Begin);
 
 			using var outStream = new MemoryStream();
-			using var tinyStream = new GZipStream(outStream, CompressionMode.Compress);
 			
-			Stream.CopyTo(tinyStream);
+			// The GZip stream must be disposed before calling outStream
+			using (var tinyStream = new GZipStream(outStream, CompressionMode.Compress))
+			{
+				Stream.CopyTo(tinyStream);
+			}
 
 			byte[] compressed = outStream.ToArray();
 			string base64 = Convert.ToBase64String(compressed);
-			call.Log.Add("ToBase64String", 
+			call.Log.Add("ToBase64String",
 				new Tag("Original", Stream.Length),
 				new Tag("Compressed", compressed.Length),
 				new Tag("Base64", base64.Length));
