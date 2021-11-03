@@ -963,13 +963,19 @@ namespace Atlas.UI.Avalonia.View
 				{
 					TabDatas[0].SelectedItem = null;
 				}
-				else if (e.List[0] is ITab itab)
+				else if (e.List[0] is ITab)
 				{
+					var newItems = new HashSet<object>();
+					foreach (var obj in e.List)
+						newItems.Add(obj);
+
+					var matching = new List<object>();
 					foreach (var obj in TabDatas[0].Items)
 					{
-						if (obj == itab || obj.GetInnerValue() == itab)
-							TabDatas[0].SelectedItems = e.List;
+						if (newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()))
+							matching.Add(obj);
 					}
+					TabDatas[0].SelectedItems = matching;
 				}
 				else
 				{
