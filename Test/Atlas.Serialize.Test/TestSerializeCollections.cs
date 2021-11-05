@@ -178,8 +178,8 @@ namespace Atlas.Serialize.Test
 
 		public class SelectedItem
 		{
-			public string label;
-			public bool pinned;
+			public string Label;
+			public bool Pinned;
 		}
 
 		public class TabInstanceConfiguration
@@ -195,8 +195,8 @@ namespace Atlas.Serialize.Test
 			var input = new HashSet<SelectedItem>();
 			var inputItem = new SelectedItem()
 			{
-				label = "abc",
-				pinned = true,
+				Label = "abc",
+				Pinned = true,
 			};
 			input.Add(inputItem);
 

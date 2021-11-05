@@ -16,15 +16,40 @@ namespace Atlas.Tabs.Test
 				{
 					new ListItem("Sample Text", "This is some sample text\n\n1\n2\n3"),
 					new ListItem("Json", TabTestJson.Json1),
-					GetListItem("1k", 1000),
-					GetListItem("10k", 10000),
-					GetListItem("100k", 100000),
-					GetListItem("500k", 500000),
-					GetListItem("1m", 1000000),
+
+					GetStringItem("1k", 1000),
+					GetStringItem("10k", 10000),
+					GetStringItem("100k", 100000),
+					//GetStringItem("500k", 500000), // Too slow
+					//GetStringItem("1m", 1000000),
+
+					GetLinesItem("100", 100),
+					GetLinesItem("1k", 1000),
+					GetLinesItem("10k", 10000),
+					GetLinesItem("100k", 100000),
+					GetLinesItem("500k", 500000),
+					GetLinesItem("1m", 1000000),
 				};
 			}
 
-			private ListItem GetListItem(string label, int length)
+			private ListItem GetLinesItem(string label, int lines)
+			{
+				string text = GetLines(lines);
+
+				return new ListItem(label + " Lines", text);
+			}
+
+			private string GetLines(int lines)
+			{
+				var sb = new StringBuilder();
+				for (int i = 0; i < lines; i++)
+				{
+					sb.Append("Lots of Lines\n");
+				}
+				return sb.ToString();
+			}
+
+			private ListItem GetStringItem(string label, int length)
 			{
 				string text = GetString(length);
 
@@ -36,7 +61,7 @@ namespace Atlas.Tabs.Test
 				var sb = new StringBuilder();
 				while (sb.Length < length)
 				{
-					sb.Append("StringBuilder ");
+					sb.Append("Long String ");
 				}
 				return sb.ToString();
 			}

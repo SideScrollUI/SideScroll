@@ -56,7 +56,7 @@ namespace Atlas.UI.Avalonia.Controls
 			MaxWidth = 3000;
 
 			ColumnDefinitions = new ColumnDefinitions("*");
-			RowDefinitions = new RowDefinitions("Auto, *");
+			RowDefinitions = new RowDefinitions("*");
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
 			VerticalAlignment = VerticalAlignment.Stretch;
