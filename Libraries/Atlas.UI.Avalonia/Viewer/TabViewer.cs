@@ -41,11 +41,11 @@ namespace Atlas.UI.Avalonia
 		// Controls
 		public TabViewerToolbar Toolbar;
 		protected Grid BottomGrid;
-		protected ScrollViewer ScrollViewer;
-		protected Grid ContentGrid;
+		public ScrollViewer ScrollViewer;
+		public Grid ContentGrid;
 		public TabView TabView;
 
-		protected ScreenCapture ScreenCapture;
+		public Control ContentControl;
 
 		public event EventHandler<EventTabLoaded> OnTabLoaded;
 
@@ -123,7 +123,7 @@ namespace Atlas.UI.Avalonia
 			Toolbar = new TabViewerToolbar(this);
 			Toolbar.ButtonLink.AddAsync(LinkAsync);
 			Toolbar.ButtonImport.AddAsync(ImportBookmarkAsync);
-			Toolbar.ButtonSnapshot?.Add(Snapshot);
+			//Toolbar.ButtonSnapshot?.Add(Snapshot);
 			Children.Add(Toolbar);
 		}
 
@@ -206,25 +206,24 @@ namespace Atlas.UI.Avalonia
 			TabView.Instance.SelectBookmark(tabBookmark, reload);
 		}
 
-		private void Snapshot(Call call)
+		public void SetContent(Control control)
 		{
-			CloseSnapshot(call);
+			ClearContent();
 
-			ScreenCapture = new ScreenCapture(this, ScrollViewer)
-			{
-				[Grid.RowSpanProperty] = 2,
-			};
+			ContentControl = control;
+
+			Grid.SetRowSpan(control, 2);
 
 			Children.Remove(BottomGrid);
-			Children.Add(ScreenCapture);
+			Children.Add(control);
 		}
 
-		public void CloseSnapshot(Call call)
+		public void ClearContent()
 		{
-			if (ScreenCapture == null)
+			if (ContentControl == null)
 				return;
 
-			Children.Remove(ScreenCapture);
+			Children.Remove(ContentControl);
 			if (BottomGrid.Parent == null)
 				Children.Add(BottomGrid);
 		}

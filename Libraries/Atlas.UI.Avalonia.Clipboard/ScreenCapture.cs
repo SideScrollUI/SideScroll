@@ -1,5 +1,6 @@
 ﻿using Atlas.Core;
-using Atlas.UI.Avalonia.Utilities;
+using Atlas.Resources;
+using Atlas.UI.Avalonia.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -14,11 +15,12 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace Atlas.UI.Avalonia
+namespace Atlas.UI.Avalonia.ScreenCapture
 {
 	public class ScreenCapture : Grid
 	{
 		public static string OsxCopyClipboardApplication = "osascript";
+
 		public static string OsxCopyClipboardScriptPath = "Native/OSX/load-image-clipboard.scpt";
 
 		private const int MinClipboardSize = 10;
@@ -41,6 +43,18 @@ namespace Atlas.UI.Avalonia
 			TabViewer = tabViewer;
 
 			InitializeComponent(visual);
+		}
+
+		public static void Initialize(TabViewer tabViewer)
+		{
+			tabViewer.Toolbar.AddSeparator();
+
+			ToolbarButton snapshotButton = tabViewer.Toolbar.AddButton("Snapshot", Icons.Streams.Screenshot);
+			snapshotButton.Click += (s, e) =>
+			{
+				var screenCapture = new ScreenCapture(tabViewer, tabViewer.ScrollViewer);
+				tabViewer.SetContent(screenCapture);
+			};
 		}
 
 		private void InitializeComponent(IVisual visual)
@@ -179,7 +193,7 @@ namespace Atlas.UI.Avalonia
 
 		private void Close(Call call)
 		{
-			TabViewer.CloseSnapshot(call);
+			TabViewer.ClearContent();
 		}
 
 		private void AddBackgroundImage(IVisual visual)

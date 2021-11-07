@@ -81,16 +81,6 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Native\OSX" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Native\OSX\load-image-clipboard.scpt" />
-    <Content Include="Native\OSX\load-image-clipboard.scpt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
   
   <!--
   <ItemGroup>

@@ -17,8 +17,6 @@ namespace Atlas.UI.Avalonia
 		public ToolbarButton ButtonImport;
 		public ToolbarButton ButtonRefresh;
 
-		public ToolbarButton ButtonSnapshot;
-
 		public RelayCommand CommandBindingBack;
 		public RelayCommand CommandBindingForward;
 
@@ -70,9 +68,6 @@ namespace Atlas.UI.Avalonia
 			AddSeparator();
 			ButtonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
 			ButtonImport = AddButton("Import Link from Clipboard", Icons.Streams.Import);
-
-			AddSeparator();
-			ButtonSnapshot = AddButton("Snapshot", Icons.Streams.Screenshot);
 
 			// Handle in BaseWindow
 			//var refreshGesture = new KeyGesture { Key = Key.F5 };

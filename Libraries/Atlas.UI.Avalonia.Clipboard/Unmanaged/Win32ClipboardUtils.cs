@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace Atlas.UI.Avalonia.Utilities
+namespace Atlas.UI.Avalonia.ScreenCapture
 {
 	public static class Win32ClipboardUtils
 	{

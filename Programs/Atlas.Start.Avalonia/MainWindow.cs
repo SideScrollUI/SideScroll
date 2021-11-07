@@ -1,6 +1,7 @@
 ﻿using Atlas.Start.Avalonia.Tabs;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia;
+using Atlas.UI.Avalonia.ScreenCapture;
 using System;
 
 namespace Atlas.Start.Avalonia
@@ -10,6 +11,8 @@ namespace Atlas.Start.Avalonia
 		public MainWindow() : base(new Project(Settings))
 		{
 			AddTab(new TabAvalonia());
+
+			ScreenCapture.Initialize(TabViewer);
 		}
 
 		public static ProjectSettings Settings => new ProjectSettings()
