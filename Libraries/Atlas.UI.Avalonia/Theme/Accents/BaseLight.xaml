@@ -28,7 +28,7 @@
       
         <SolidColorBrush x:Key="ThemeControlLightBrush">#FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeControlMidBrush">#2a2954</SolidColorBrush>
-        <SolidColorBrush x:Key="ThemeControlMidHighBrush">#9e9e9e</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeControlMidHighBrush">#2a2954</SolidColorBrush> <!-- DataGrid background elements -->
         <SolidColorBrush x:Key="ThemeControlHighBrush">#3070d0</SolidColorBrush> <!-- Button Pressed, ScrollBar -->
         <SolidColorBrush x:Key="ThemeControlDarkBrush">#888888</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeControlHighlightMidBrush">#92F397</SolidColorBrush>
