@@ -1,8 +1,12 @@
 ﻿using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Controls;
+using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
 using OxyPlot;
@@ -13,12 +17,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
 using WeakEvent;
-using Avalonia.Interactivity;
-using Avalonia.Input;
 
-namespace Atlas.UI.Avalonia.Controls
+namespace Atlas.UI.Avalonia.Charts
 {
 	public class OxyListSeries
 	{
@@ -54,6 +55,27 @@ namespace Atlas.UI.Avalonia.Controls
 		public MouseCursorMovedEventArgs(double x)
 		{
 			X = x;
+		}
+	}
+
+	public class ChartGroupControl : IControlCreator
+	{
+		public static void Register()
+		{
+			TabView.ControlCreators[typeof(ChartSettings)] = new ChartGroupControl();
+		}
+
+		public void AddControl(TabInstance tabInstance, TabControlSplitContainer container, object obj)
+		{
+			var chartSettings = (ChartSettings)obj;
+
+			foreach (var listGroupPair in chartSettings.ListGroups)
+			{
+				var tabChart = new TabControlChart(tabInstance, listGroupPair.Value, true);
+
+				container.AddControl(tabChart, true, SeparatorType.Spacer);
+				//tabChart.OnSelectionChanged += ListData_OnSelectionChanged;
+			}
 		}
 	}
 

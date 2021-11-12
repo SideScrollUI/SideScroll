@@ -38,14 +38,7 @@ namespace Atlas.UI.Avalonia.ScreenCapture
 
 		public TabViewer TabViewer;
 
-		public ScreenCapture(TabViewer tabViewer, IVisual visual)
-		{
-			TabViewer = tabViewer;
-
-			InitializeComponent(visual);
-		}
-
-		public static void Initialize(TabViewer tabViewer)
+		public static void AddControlTo(TabViewer tabViewer)
 		{
 			tabViewer.Toolbar.AddSeparator();
 
@@ -55,6 +48,13 @@ namespace Atlas.UI.Avalonia.ScreenCapture
 				var screenCapture = new ScreenCapture(tabViewer, tabViewer.ScrollViewer);
 				tabViewer.SetContent(screenCapture);
 			};
+		}
+
+		public ScreenCapture(TabViewer tabViewer, IVisual visual)
+		{
+			TabViewer = tabViewer;
+
+			InitializeComponent(visual);
 		}
 
 		private void InitializeComponent(IVisual visual)

@@ -9,7 +9,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 
-namespace Atlas.UI.Avalonia.Controls
+namespace Atlas.UI.Avalonia.Charts
 {
 	public class TabChartLineSeries : OxyPlot.Series.LineSeries
 	{

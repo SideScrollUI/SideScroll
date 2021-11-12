@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Atlas.UI.Avalonia.Controls
+namespace Atlas.UI.Avalonia.Charts
 {
 	public class TabControlChartLegend : Grid
 	{

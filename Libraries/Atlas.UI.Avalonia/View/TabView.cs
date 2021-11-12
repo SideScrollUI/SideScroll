@@ -19,10 +19,18 @@ using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia.View
 {
+	public interface IControlCreator
+	{
+		void AddControl(TabInstance tabInstance, TabControlSplitContainer container, object obj);
+	}
+
 	public class TabView : Grid, IDisposable
 	{
 		private const string FillerPanelId = "FillerPanelId";
 		private const int MinDesiredSplitterDistance = 50;
+
+		// Model.Objects
+		public static Dictionary<Type, IControlCreator> ControlCreators = new Dictionary<Type, IControlCreator>();
 
 		// Maybe this control should own it's own settings?
 		//private TabViewSettings _tabViewSettings = new TabViewSettings();
@@ -389,9 +397,9 @@ namespace Atlas.UI.Avalonia.View
 			foreach (TabObject tabObject in Model.Objects)
 			{
 				object obj = tabObject.Object;
-				if (obj is ChartSettings chartSettings)
+				if (ControlCreators.TryGetValue(obj.GetType(), out IControlCreator controlCreator))
 				{
-					AddChart(chartSettings);
+					controlCreator.AddControl(Instance, _tabParentControls, obj);
 				}
 				else if (obj is TabToolbar toolbar)
 				{
@@ -446,17 +454,6 @@ namespace Atlas.UI.Avalonia.View
 			TabTasks.OnSelectionChanged += ParentListSelectionChanged;
 
 			_tabParentControls.AddControl(TabTasks, false, SeparatorType.Spacer);
-		}
-
-		protected void AddChart(ChartSettings chartSettings)
-		{
-			foreach (var listGroupPair in chartSettings.ListGroups)
-			{
-				var tabChart = new TabControlChart(Instance, listGroupPair.Value, true);
-
-				_tabParentControls.AddControl(tabChart, true, SeparatorType.Spacer);
-				//tabChart.OnSelectionChanged += ListData_OnSelectionChanged;
-			}
 		}
 
 		protected void AddData()
