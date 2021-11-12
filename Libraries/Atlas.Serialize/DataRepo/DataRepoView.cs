@@ -3,9 +3,10 @@ using System.Linq;
 
 namespace Atlas.Serialize
 {
+	// Holds an in memory copy of the DataRepo
 	public class DataRepoView<T> : DataRepoInstance<T>
 	{
-		//public DataRepo<T> DataRepo;
+		//public DataRepo<T> DataRepo; // Add template version?
 
 		public DataItemCollection<T> Items { get; set; }
 
@@ -15,37 +16,6 @@ namespace Atlas.Serialize
 
 		public DataRepoView(DataRepoInstance<T> dataRepo) : base(dataRepo.DataRepo, dataRepo.GroupId)
 		{
-		}
-
-		public override void Save(Call call, string key, T item)
-		{
-			lock (DataRepo)
-			{
-				Delete(key);
-				base.Save(call, key, item);
-				Items.Add(key, item);
-			}
-		}
-
-		public override void Delete(string key = null)
-		{
-			lock (DataRepo)
-			{
-				base.Delete(key);
-
-				var item = Items.Where(d => d.Key == key).FirstOrDefault();
-				if (item != null)
-					Items.Remove(item);
-			}
-		}
-
-		public override void DeleteAll()
-		{
-			lock (DataRepo)
-			{
-				base.DeleteAll();
-				Items.Clear();
-			}
 		}
 
 		public void LoadAll(Call call)
@@ -80,6 +50,42 @@ namespace Atlas.Serialize
 			{
 				var ordered = Items.OrderByDescending(memberName);
 				Items = new DataItemCollection<T>(ordered);
+			}
+		}
+
+		public override void Save(Call call, T item)
+		{
+			Save(call, item.ToString(), item);
+		}
+
+		public override void Save(Call call, string key, T item)
+		{
+			lock (DataRepo)
+			{
+				Delete(key);
+				base.Save(call, key, item);
+				Items.Add(key, item);
+			}
+		}
+
+		public override void Delete(string key = null)
+		{
+			lock (DataRepo)
+			{
+				base.Delete(key);
+
+				var item = Items.Where(d => d.Key == key).FirstOrDefault();
+				if (item != null)
+					Items.Remove(item);
+			}
+		}
+
+		public override void DeleteAll()
+		{
+			lock (DataRepo)
+			{
+				base.DeleteAll();
+				Items.Clear();
 			}
 		}
 	}

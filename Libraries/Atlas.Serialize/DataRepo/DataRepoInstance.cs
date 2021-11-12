@@ -7,6 +7,7 @@ namespace Atlas.Serialize
 	public interface IDataRepoInstance
 	{
 		string GroupId { get; }
+
 		//object GetObject(string key);
 	}
 

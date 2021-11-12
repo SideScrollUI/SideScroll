@@ -1,9 +1,10 @@
 ﻿using Atlas.Core;
+using Atlas.Serialize;
 using System;
 
 namespace Atlas.Tabs.Test
 {
-	public class TabParamItem : ITab, IDataTab
+	public class TabParamItem : ITab, IDataView
 	{
 		public ParamTestItem TestItem;
 
@@ -30,7 +31,7 @@ namespace Atlas.Tabs.Test
 			TestItem = testItem;
 		}
 
-		public void Load(Call call, object obj, object[] tabParams)
+		public void Load(object obj, object[] tabParams)
 		{
 			TestItem = (ParamTestItem)obj;
 		}

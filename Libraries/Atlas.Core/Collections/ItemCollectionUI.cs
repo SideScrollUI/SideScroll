@@ -13,6 +13,7 @@ namespace Atlas.Core
 		void InitializeContext(bool reset = false);
 	}
 
+	// Allows updating UI after initialization
 	public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollection, ICollection, IEnumerable, IContext //, IRaiseItemChangedEvents //
 	{
 		public string ColumnName { get; set; }

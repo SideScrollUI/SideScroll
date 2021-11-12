@@ -44,7 +44,7 @@ namespace Atlas.Tabs.Test
 				_dataRepoParams = DataApp.LoadView<ParamTestItem>(call, "CollectionTest");
 				DataRepoInstance = _dataRepoParams;
 
-				var dataCollection = new DataCollection<ParamTestItem, TabParamItem>(_dataRepoParams);
+				var dataCollection = new DataViewCollection<ParamTestItem, TabParamItem>(_dataRepoParams);
 				model.Items = dataCollection.Items;
 			}
 

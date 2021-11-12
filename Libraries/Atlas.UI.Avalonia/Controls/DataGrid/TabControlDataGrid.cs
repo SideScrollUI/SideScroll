@@ -211,7 +211,7 @@ namespace Atlas.UI.Avalonia.Controls
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Stretch,
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-				//BorderThickness = new Thickness(0), // DataGrid bug, setting this breaks the background OnFocus, but fixes the extra border
+				//BorderThickness = new Thickness(0), // DataGrid bug, fixes the extra border below the scrollbar, but then there's no border
 				//Padding = new Thickness(0),
 				
 				BorderThickness = new Thickness(1),
