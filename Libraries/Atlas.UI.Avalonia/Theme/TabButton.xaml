@@ -26,7 +26,7 @@
     <Style Selector="atlas|TabControlButton:pointerover /template/ ContentPresenter">
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}"/>
     </Style>
-    <Style Selector="atlas|TabControlButton:pressed  /template/ ContentPresenter">
+    <Style Selector="atlas|TabControlButton:pressed /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundPressedBrush}"/>
     </Style>
     <Style Selector="atlas|TabControlButton:disabled">

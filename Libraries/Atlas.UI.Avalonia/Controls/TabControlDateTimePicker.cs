@@ -67,7 +67,7 @@ namespace Atlas.UI.Avalonia.Controls
 				SelectedDateFormat = CalendarDatePickerFormat.Custom,
 				CustomDateFormatString = "yyyy/M/d",
 				Watermark = "yyyy/M/d",
-				MinWidth = 100,
+				MinWidth = 105,
 				MaxWidth = 300,
 				IsEnabled = Property.Editable,
 			};

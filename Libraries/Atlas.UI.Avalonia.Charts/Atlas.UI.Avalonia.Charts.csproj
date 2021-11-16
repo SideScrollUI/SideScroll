@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Version>$(AtlasVersion)</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="ThomasLevesque.WeakEvent" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Imports\AvaloniaUI\OxyPlot.Avalonia\Source\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
+    <ProjectReference Include="..\Atlas.Core\Atlas.Core.csproj" />
+    <ProjectReference Include="..\Atlas.Tabs\Atlas.Tabs.csproj" />
+    <ProjectReference Include="..\Atlas.UI.Avalonia\Atlas.UI.Avalonia.csproj" />
+  </ItemGroup>
+
+</Project>

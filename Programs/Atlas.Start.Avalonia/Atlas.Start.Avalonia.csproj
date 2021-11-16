@@ -39,6 +39,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Imports\AvaloniaUI\OxyPlot.Avalonia\Source\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
+    <ProjectReference Include="..\..\Libraries\Atlas.UI.Avalonia.ScreenCapture\Atlas.UI.Avalonia.ScreenCapture.csproj" />
+    <ProjectReference Include="..\..\Libraries\Atlas.UI.Avalonia.Charts\Atlas.UI.Avalonia.Charts.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.UI.Avalonia\Atlas.UI.Avalonia.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.Resources\Atlas.Resources.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.Tabs\Atlas.Tabs.csproj" />

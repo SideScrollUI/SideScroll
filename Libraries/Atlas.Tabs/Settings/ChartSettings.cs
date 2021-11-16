@@ -8,6 +8,7 @@ using System.Reflection;
 
 namespace Atlas.Tabs
 {
+	// Call ChartGroupControl.Register() to register UI Control
 	public class ChartSettings
 	{
 		private const string DefaultGroupName = "Default";

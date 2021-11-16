@@ -4,7 +4,7 @@ using Atlas.UI.Avalonia.Tabs;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Atlas.UI.Avalonia
+namespace Atlas.UI.Avalonia.ScreenCapture
 {
 	public class ScreenCaptureToolbar : TabControlToolbar
 	{

@@ -41,7 +41,7 @@ namespace Atlas.Tabs.Test
 
 			private void LoadSavedItems(Call call, TabModel model)
 			{
-				_dataRepoParams = DataApp.LoadView<ParamTestItem>(call, "CollectionTest");
+				_dataRepoParams = DataApp.LoadView<ParamTestItem>(call, "CollectionTest", nameof(ParamTestItem.Name));
 				DataRepoInstance = _dataRepoParams;
 
 				var dataCollection = new DataViewCollection<ParamTestItem, TabParamItem>(_dataRepoParams);

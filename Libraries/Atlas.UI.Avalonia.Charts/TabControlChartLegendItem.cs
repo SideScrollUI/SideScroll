@@ -11,7 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Atlas.UI.Avalonia.Controls
+namespace Atlas.UI.Avalonia.Charts
 {
 	public class TabChartLegendItem : Grid
 	{
