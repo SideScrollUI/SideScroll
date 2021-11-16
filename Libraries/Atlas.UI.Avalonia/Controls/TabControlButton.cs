@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Styling;
 using System;
@@ -33,13 +34,13 @@ namespace Atlas.UI.Avalonia.Controls
 			PointerLeave += Button_PointerLeave;
 		}
 
-		private void Button_PointerEnter(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void Button_PointerEnter(object sender, PointerEventArgs e)
 		{
 			//BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
 			Background = HoverBrush;
 		}
 
-		private void Button_PointerLeave(object sender, global::Avalonia.Input.PointerEventArgs e)
+		private void Button_PointerLeave(object sender, PointerEventArgs e)
 		{
 			Background = BackgroundBrush;
 			//BorderBrush = button.Background;
