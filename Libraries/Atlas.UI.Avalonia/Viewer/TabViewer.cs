@@ -123,7 +123,6 @@ namespace Atlas.UI.Avalonia
 			Toolbar = new TabViewerToolbar(this);
 			Toolbar.ButtonLink.AddAsync(LinkAsync);
 			Toolbar.ButtonImport.AddAsync(ImportBookmarkAsync);
-			//Toolbar.ButtonSnapshot?.Add(Snapshot);
 			Children.Add(Toolbar);
 		}
 
