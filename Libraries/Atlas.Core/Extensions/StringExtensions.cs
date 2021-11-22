@@ -58,6 +58,7 @@ namespace Atlas.Extensions
 		}
 
 		private static readonly HashSet<char> _wordSpacedSymbols = new HashSet<char>() { '|', '/', '-' };
+		private static readonly HashSet<char> _wordSpacedNumberConnectors = new HashSet<char>() { '-', ':', '.' };
 
 		// Adds spaces between words
 		// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'
@@ -68,6 +69,7 @@ namespace Atlas.Extensions
 
 			var newText = new StringBuilder(text.Length * 2);
 			bool upperCaseNext = true;
+			bool numberMode = false; // don't split apart decimals or dates
 			char prevChar = ' ';
 			for (int i = 0; i < text.Length; i++)
 			{
@@ -83,8 +85,9 @@ namespace Atlas.Extensions
 				{
 					c = ' ';
 				}
-				else if (_wordSpacedSymbols.Contains(c))
+				else if (_wordSpacedSymbols.Contains(c) && (!numberMode || !_wordSpacedNumberConnectors.Contains(c)))
 				{
+					numberMode = false;
 					newText.Append(' ');
 					newText.Append(c);
 					c = ' ';
@@ -99,19 +102,27 @@ namespace Atlas.Extensions
 					{
 						//if (nextChar
 						newText.Append(' ');
+						numberMode = false;
 					}
-					else if (char.IsNumber(c) && !char.IsNumber(prevChar) && prevChar != '.' && newText.Length > 1) // Add space before 1st Number, Number10
+					// Add space before 1st Number, Number10
+					else if (!numberMode && newText.Length > 1 && char.IsNumber(c))
 					{
 						newText.Append(' ');
+						numberMode = false;
 					}
 					else if (char.IsUpper(prevChar) && char.IsUpper(c) && char.IsLower(nextChar))
 					{
 						if (nextChar != 's')
+						{
 							newText.Append(' '); // Add a space before first capital after caps string, assume CamelCase, CAPSName
+							numberMode = false;
+						}
 					}
 				}
 				newText.Append(c);
 				prevChar = c;
+				if (char.IsDigit(c))
+					numberMode = true;
 			}
 			return newText.ToString();
 		}

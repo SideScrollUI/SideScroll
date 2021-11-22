@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Atlas.Serialize
@@ -256,8 +257,30 @@ namespace Atlas.Serialize
 			}
 			catch (Exception e)
 			{
-				// why doesn't the false flag work above?
 				log.AddWarning("Missing Unversioned Type", new Tag("TypeSchema", this), new Tag("Message", e.Message));
+			}
+
+			// Get Type with just Namespace, but without assembly
+			if (Type == null)
+			{
+				string typeName = AssemblyQualifiedName.Split(',').First();
+				try
+				{
+					Type = Type.GetType(
+						AssemblyQualifiedName,
+						(name) =>
+						{
+							return AppDomain.CurrentDomain.GetAssemblies()
+								.Where(a => a.GetType(typeName) != null)
+								.FirstOrDefault();
+						},
+						null,
+						true);
+				}
+				catch (Exception e)
+				{
+					log.AddWarning("Missing Namespaced Type", new Tag("TypeSchema", this), new Tag("Message", e.Message));
+				}
 			}
 
 			lock (_typeCache)

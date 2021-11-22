@@ -7,11 +7,9 @@ namespace Atlas.Console
 {
 	public class Console
 	{
-		public Project project;
-		public Call call;
-		public ProjectSettings settings = new ProjectSettings();
-		public LogWriterConsole logWriterConsole;
-		public LogWriterText logWriterText;
+		private Call _call;
+		private LogWriterConsole _logWriterConsole;
+		private LogWriterText _logWriterText;
 
 		static void Main(string[] args)
 		{
@@ -22,9 +20,9 @@ namespace Atlas.Console
 		{
 			// setup
 			var project = new Project(Settings);
-			call = new Call(GetType().Name);
-			logWriterConsole = new LogWriterConsole(call.Log);
-			logWriterText = new LogWriterText(call.Log, project.DataApp.GetGroupPath(typeof(Console)) + "/Logs/Main");
+			_call = new Call(GetType().Name);
+			_logWriterConsole = new LogWriterConsole(_call.Log);
+			_logWriterText = new LogWriterText(_call.Log, project.DataApp.GetGroupPath(typeof(Console)) + "/Logs/Main");
 
 			//TestLogWriter();
 		}
@@ -39,7 +37,7 @@ namespace Atlas.Console
 
 		void TestLogWriter()
 		{
-			call.Log.Add("test");
+			_call.Log.Add("test");
 		}
 	}
 }

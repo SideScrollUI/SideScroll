@@ -18,7 +18,7 @@ namespace Atlas.UI.Avalonia
 		public DataGrid DataGrid;
 		public PropertyInfo PropertyInfo;
 
-		public int MinDesiredWidth { get; set; } = 40;
+		public int MinDesiredWidth { get; set; } = 25;
 		public int MaxDesiredWidth { get; set; } = 500;
 		public int MaxDesiredHeight { get; set; } = 100;
 

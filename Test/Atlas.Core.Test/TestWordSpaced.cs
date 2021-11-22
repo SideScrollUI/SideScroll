@@ -53,5 +53,14 @@ namespace Atlas.Core.Test
 
 			Assert.AreEqual(input, text);
 		}
+
+		[Test, Description("WordSpaced Timestamp")]
+		public void WordSpacedTimestamp()
+		{
+			string input = "2021-11-10T18:02:23.225Z";
+			string text = input.WordSpaced();
+
+			Assert.AreEqual("2021-11-10 T 18:02:23.225 Z", text);
+		}
 	}
 }
