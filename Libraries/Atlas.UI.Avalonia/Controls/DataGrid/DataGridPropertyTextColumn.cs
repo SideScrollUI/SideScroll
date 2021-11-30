@@ -30,6 +30,8 @@ namespace Atlas.UI.Avalonia
 		//private Binding unformattedBinding;
 		public readonly FormatValueConverter FormatConverter = new FormatValueConverter();
 
+		public override string ToString() => PropertyInfo.Name;
+
 		public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 		{
 			DataGrid = dataGrid;
@@ -56,8 +58,6 @@ namespace Atlas.UI.Avalonia
 
 			//CellStyleClasses = new Classes()
 		}
-
-		public override string ToString() => PropertyInfo.Name;
 
 		// Check first x rows for [Hide()] and apply WordWrap to strings/objects automatically
 		public void ScanItemAttributes(IList List)

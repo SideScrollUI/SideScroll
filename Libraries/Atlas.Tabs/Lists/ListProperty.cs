@@ -100,10 +100,8 @@ namespace Atlas.Tabs
 			AutoLoad = !accessors[0].IsStatic;
 
 			NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
-			if (attribute != null)
-				Name = attribute.Name;
-			else
-				Name = propertyInfo.Name.WordSpaced();
+
+			Name = attribute?.Name ?? propertyInfo.Name.WordSpaced();
 
 			if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
 				Name = "* " + Name;
@@ -112,17 +110,15 @@ namespace Atlas.Tabs
 		public static new ItemCollection<ListProperty> Create(object obj, bool includeBaseTypes = true)
 		{
 			// this doesn't work for virtual methods (or any method modifier?)
-			var propertyInfos = obj.GetType().GetProperties().OrderBy(x => x.MetadataToken);
+			var propertyInfos = obj.GetType().GetProperties()
+				.Where(p => IsVisible(p))
+				.Where(p => includeBaseTypes || p.DeclaringType == obj.GetType())
+				.OrderBy(p => p.MetadataToken);
+
 			var listProperties = new ItemCollection<ListProperty>();
 			var propertyToIndex = new Dictionary<string, int>();
 			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
-				if (!IsVisible(propertyInfo))
-					continue;
-
-				if (!includeBaseTypes && propertyInfo.DeclaringType != obj.GetType())
-					continue;
-
 				var listProperty = new ListProperty(obj, propertyInfo);
 
 				// move this to later?

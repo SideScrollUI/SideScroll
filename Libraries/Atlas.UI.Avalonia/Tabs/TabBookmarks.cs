@@ -44,6 +44,8 @@ namespace Atlas.UI.Avalonia.Controls
 			public override void Load(Call call, TabModel model)
 			{
 				Tab.Bookmarks.Load(call, true);
+
+				model.AddData(Tab.Bookmarks.Items);
 			}
 
 			public override void LoadUI(Call call, TabModel model)
@@ -53,8 +55,6 @@ namespace Atlas.UI.Avalonia.Controls
 				//toolbar.ButtonReset.Action = Reset;
 				toolbar.ButtonDeleteAll.Action = DeleteAll;
 				model.AddObject(toolbar);
-
-				model.AddData(Tab.Bookmarks.Items);
 
 				if (Tab.Bookmarks.NewBookmark != null)
 				{

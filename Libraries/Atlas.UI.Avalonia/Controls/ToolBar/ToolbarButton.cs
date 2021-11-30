@@ -12,7 +12,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.Threading;
 
-namespace Atlas.UI.Avalonia.Tabs
+namespace Atlas.UI.Avalonia.Controls
 {
 	public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 	{

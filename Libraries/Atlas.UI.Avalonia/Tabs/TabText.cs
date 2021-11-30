@@ -4,7 +4,6 @@ using Atlas.UI.Avalonia.Controls;
 using Avalonia.Media;
 using System;
 using System.Collections.Generic;
-using System.Json;
 
 namespace Atlas.UI.Avalonia.Tabs
 {

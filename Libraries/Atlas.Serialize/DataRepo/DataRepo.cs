@@ -203,15 +203,15 @@ namespace Atlas.Serialize
 		public void DeleteAll(Type type, string groupId = null)
 		{
 			string groupPath = GetGroupPath(type, groupId);
-			if (Directory.Exists(groupPath))
+			if (!Directory.Exists(groupPath))
+				return;
+			
+			try
 			{
-				try
-				{
-					Directory.Delete(groupPath, true);
-				}
-				catch (Exception)
-				{
-				}
+				Directory.Delete(groupPath, true);
+			}
+			catch (Exception)
+			{
 			}
 		}
 
@@ -238,29 +238,30 @@ namespace Atlas.Serialize
 
 			groupId ??= DefaultGroupId;
 			string dataPath = GetDataPath(type, groupId, key);
-			if (Directory.Exists(dataPath))
+			if (!Directory.Exists(dataPath))
+				return;
+
+			
+			try
 			{
-				try
-				{
-					Directory.Delete(dataPath, true);
-				}
-				catch (Exception)
-				{
-				}
+				Directory.Delete(dataPath, true);
+			}
+			catch (Exception)
+			{
 			}
 		}
 
 		public void DeleteRepo()
 		{
-			if (Directory.Exists(RepoPath))
+			if (!Directory.Exists(RepoPath))
+				return;
+			
+			try
 			{
-				try
-				{
-					Directory.Delete(RepoPath, true);
-				}
-				catch (Exception)
-				{
-				}
+				Directory.Delete(RepoPath, true);
+			}
+			catch (Exception)
+			{
 			}
 		}
 

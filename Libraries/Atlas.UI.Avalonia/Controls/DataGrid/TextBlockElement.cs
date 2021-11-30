@@ -46,13 +46,18 @@ namespace Atlas.UI.Avalonia
 			// override the default DesiredSize so the desired max width is used for sizing
 			// control will still fill all available space
 			double maxDesiredWidth = Column.MaxDesiredWidth;
-			if (DataContext is IMaxDesiredWidth iMaxWidth && Column.DisplayIndex == 1 && iMaxWidth.MaxDesiredWidth != null && DataContext is IListPair)
+			if (Column.DisplayIndex == 1 &&
+				DataContext is IMaxDesiredWidth iMaxWidth &&
+				iMaxWidth.MaxDesiredWidth != null &&
+				DataContext is IListPair)
 			{
 				maxDesiredWidth = iMaxWidth.MaxDesiredWidth.Value;
 			}
 
 			double maxDesiredHeight = Column.MaxDesiredHeight;
-			if (DataContext is IMaxDesiredHeight iMaxHeight && iMaxHeight.MaxDesiredHeight != null && DataContext is IListItem)
+			if (DataContext is IMaxDesiredHeight iMaxHeight && 
+				iMaxHeight.MaxDesiredHeight != null && 
+				DataContext is IListItem)
 			{
 				maxDesiredHeight = iMaxHeight.MaxDesiredHeight.Value;
 			}

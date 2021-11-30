@@ -81,7 +81,6 @@ namespace Atlas.Tabs
 	public class TabInstance : IDisposable
 	{
 		private const int MaxPreloadItems = 50; // preload all rows that might be visible to avoid freezing UI
-		private const double DefaultTaskRateLimitSeconds = 2;
 
 		public const string CurrentBookmarkName = "Current";
 
@@ -499,6 +498,10 @@ namespace Atlas.Tabs
 
 		public void LoadModelUI(Call call, TabModel model)
 		{
+			// Set the model before calling LoadUI() in case the Settings are needed
+			// Load() initializes the tabModel.Object & CustomSettingsPath which gets used for the settings path
+			Model = model;
+
 			if (CanLoadUI)
 			{
 				try
@@ -519,8 +522,7 @@ namespace Atlas.Tabs
 					context.InitializeContext(true);
 			}
 
-			Model = model;
-			LoadSettings(); // Load() initializes the tabModel.Object & CustomSettingsPath which gets used for the settings path
+			LoadSettings(false);
 			OnModelChanged?.Invoke(this, new EventArgs());
 
 			IsLoaded = true;
@@ -735,8 +737,13 @@ namespace Atlas.Tabs
 				TabBookmark = bookmark.TabBookmark;
 		}
 
-		public TabViewSettings LoadSettings()
+		private bool _settingLoaded = false;
+
+		public TabViewSettings LoadSettings(bool reload)
 		{
+			if (_settingLoaded && !reload && TabViewSettings != null)
+				return TabViewSettings;
+			
 			if (TabBookmark != null && TabBookmark.ViewSettings != null)
 			{
 				TabViewSettings = TabBookmark.ViewSettings;
@@ -745,6 +752,7 @@ namespace Atlas.Tabs
 			{
 				LoadDefaultTabSettings();
 			}
+			_settingLoaded = true;
 			return TabViewSettings;
 		}
 

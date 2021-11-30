@@ -17,7 +17,7 @@ namespace Atlas.Tabs
 			OnDelete?.Invoke(this, null);
 		}
 
-		[WordWrap]
+		[DataKey, WordWrap]
 		public string Path => Bookmark.Path;
 
 		[Formatted]
@@ -26,7 +26,8 @@ namespace Atlas.Tabs
 		[HiddenColumn]
 		public Bookmark Bookmark { get; set; }
 
-		private Project Project { get; set; }
+		[Hidden]
+		public Project Project { get; set; }
 
 		[HiddenColumn]
 		public ITab Tab => Bookmark.TabBookmark.Tab;

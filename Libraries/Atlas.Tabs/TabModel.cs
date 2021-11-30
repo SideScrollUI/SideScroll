@@ -72,7 +72,7 @@ namespace Atlas.Tabs
 
 		public IList Items
 		{
-			get => ItemList.First();
+			get => ItemList.FirstOrDefault();
 			set
 			{
 				ItemList.Clear();
@@ -83,7 +83,7 @@ namespace Atlas.Tabs
 		public object DefaultSelectedItem { get; set; }
 
 		// used for saving/loading TabViewSettings
-		public string CustomSettingsPath { get; set; }
+		public string CustomSettingsPath { get; set; } // Must be set before LoadUI()
 		public string ObjectTypePath
 		{
 			get

@@ -12,7 +12,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Input;
 
-namespace Atlas.UI.Avalonia.Tabs
+namespace Atlas.UI.Avalonia.Controls
 {
 	public class TabControlToolbar : Grid, IDisposable
 	{

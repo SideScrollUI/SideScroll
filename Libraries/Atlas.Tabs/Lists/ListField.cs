@@ -50,10 +50,9 @@ namespace Atlas.Tabs
 			FieldInfo = fieldInfo;
 			AutoLoad = !fieldInfo.IsStatic;
 
-			Name = fieldInfo.Name.WordSpaced();
 			NameAttribute attribute = fieldInfo.GetCustomAttribute<NameAttribute>();
-			if (attribute != null)
-				Name = attribute.Name;
+
+			Name = attribute?.Name ?? fieldInfo.Name.WordSpaced();
 
 			if (FieldInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
 				Name = "* " + Name;
@@ -61,19 +60,16 @@ namespace Atlas.Tabs
 
 		public static new ItemCollection<ListField> Create(object obj, bool includeBaseTypes = true)
 		{
-			var fieldInfos = obj.GetType().GetFields().OrderBy(x => x.MetadataToken);
+			var fieldInfos = obj.GetType().GetFields()
+				.Where(f => IsVisible(f))
+				.Where(f => includeBaseTypes || f.DeclaringType == obj.GetType())
+				.OrderBy(f => f.MetadataToken);
 
 			var listFields = new ItemCollection<ListField>();
 			// replace any overriden/new field & properties
 			var fieldToIndex = new Dictionary<string, int>();
 			foreach (FieldInfo fieldInfo in fieldInfos)
 			{
-				if (!IsVisible(fieldInfo))
-					continue;
-
-				if (!includeBaseTypes && fieldInfo.DeclaringType != obj.GetType())
-					continue;
-
 				var listField = new ListField(obj, fieldInfo);
 				if (fieldToIndex.TryGetValue(fieldInfo.Name, out int index))
 				{

@@ -90,7 +90,7 @@ namespace Atlas.UI.Avalonia.View
 
 		private void MenuItemReload_Click(object sender, RoutedEventArgs e)
 		{
-			TabInstance.LoadSettings(); // reloads tab settings, recreates all controls
+			TabInstance.LoadSettings(true); // reloads tab settings, recreates all controls
 		}
 
 		private void MenuItemReset_Click(object sender, RoutedEventArgs e)

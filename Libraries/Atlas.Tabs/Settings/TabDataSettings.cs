@@ -172,5 +172,16 @@ namespace Atlas.Tabs
 		public List<string> SelectedColumns = new List<string>();
 
 		public override string ToString() => Label;
+
+		public SelectedRow() { }
+
+		public SelectedRow(object obj)
+		{
+			Object = obj;
+
+			Label = obj.ToString();
+			DataKey = DataUtils.GetDataKey(obj); // overrides label
+			DataValue = DataUtils.GetDataValue(obj);
+		}
 	}
 }

@@ -53,10 +53,7 @@ namespace Atlas.Tabs
 				}
 				else
 				{
-					if (ViewSettings == null)
-						return "";
-
-					return ViewSettings.Address;
+					return ViewSettings?.Address ?? "";
 				}
 			}
 		}
@@ -70,26 +67,6 @@ namespace Atlas.Tabs
 
 		[NonSerialized]
 		public TabModel TabModel;
-
-		// too complicated, for now
-		/*public void MergeNodes(List<Node> nodes)
-		{
-			foreach (Node node in nodes)
-			{
-				foreach (var nodeEntry in node.nodes)
-				{
-					Node existingNode;
-					if (this.nodes.TryGetValue(nodeEntry.Key, out existingNode))
-					{
-
-					}
-					else
-					{
-						this.nodes.Add(nodeEntry.Key, nodeEntry.Value);
-					}
-				}
-			}
-		}*/
 
 		public override string ToString() => Name;
 
@@ -117,14 +94,14 @@ namespace Atlas.Tabs
 		// Single level multi-select
 		public static TabBookmark CreateList(IList list)
 		{
-			var labels = new List<string>();
+			var selectedRows = new HashSet<SelectedRow>();
 			foreach (object obj in list)
 			{
-				labels.Add(obj.ToString());
+				selectedRows.Add(new SelectedRow(obj));
 			}
 
 			var tabBookmark = new TabBookmark();
-			tabBookmark.Select(labels.ToArray());
+			tabBookmark.SelectRows(selectedRows);
 			return tabBookmark;
 		}
 
@@ -205,7 +182,11 @@ namespace Atlas.Tabs
 				};
 				selectedRows.Add(selectedRow);
 			}
+			SelectRows(selectedRows);
+		}
 
+		private void SelectRows(HashSet<SelectedRow> selectedRows)
+		{
 			ViewSettings = new TabViewSettings()
 			{
 				TabDataSettings = new List<TabDataSettings>()

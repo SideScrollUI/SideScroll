@@ -63,11 +63,10 @@ namespace Atlas.Tabs
 		[HiddenColumn]
 		public int? MaxDesiredHeight => GetCustomAttribute<MaxHeightAttribute>()?.MaxHeight ?? DefaultMaxDesiredHeight;
 
-		//[HiddenColumn]
 		[StyleValue, InnerValue, WordWrap]
 		public abstract object Value { get; set; }
 
-		[HiddenColumn, Name("Value"), StyleValue, Editing]
+		[HiddenColumn]
 		public object ValueText
 		{
 			get
@@ -97,8 +96,6 @@ namespace Atlas.Tabs
 			}
 			set
 			{
-				// hide this for Avalonia
-				//if (memberInfo.GetType().Has)
 				Value = value;
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValueText)));
 			}

@@ -22,6 +22,11 @@ namespace Atlas.Serialize
 			typeof(object),
 		};
 
+		public static HashSet<Type> PrivateTypes = new HashSet<Type>()
+		{
+			typeof(MemoryStream),
+		};
+
 		public static HashSet<Type> PublicGenericTypes = new HashSet<Type>()
 		{
 			typeof(List<>),
@@ -98,7 +103,7 @@ namespace Atlas.Serialize
 			IsSerialized = (Type.GetCustomAttribute<SerializedAttribute>() != null);
 			IsUnserialized = (Type.GetCustomAttribute<UnserializedAttribute>() != null);
 			IsStatic = (Type.GetCustomAttribute<StaticAttribute>() != null);
-			IsPrivate = (Type.GetCustomAttribute<PrivateDataAttribute>() != null);
+			IsPrivate = GetIsPrivate();
 			IsProtected = (Type.GetCustomAttribute<ProtectedDataAttribute>() != null);
 			IsPublic = GetIsPublic();
 		}
@@ -154,6 +159,17 @@ namespace Atlas.Serialize
 			ConstructorInfo constructorInfo = type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
 			var constructors = type.GetConstructors();
 			return (constructorInfo != null || constructors.Length == 0);
+		}
+
+		private bool GetIsPrivate()
+		{
+			if (Type.GetCustomAttribute<PrivateDataAttribute>() != null)
+				return true;
+
+			if (PrivateTypes.Contains(Type))
+				return true;
+
+			return false;
 		}
 
 		// BinaryFormatter uses [Serializable], should we allow that?

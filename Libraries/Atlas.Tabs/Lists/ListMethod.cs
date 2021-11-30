@@ -97,17 +97,15 @@ namespace Atlas.Tabs
 		public static new ItemCollection<ListMethod> Create(object obj, bool includeBaseTypes)
 		{
 			// this doesn't work for virtual methods (or any method modifier?)
-			var methodInfos = obj.GetType().GetMethods().OrderBy(x => x.MetadataToken);
+			var methodInfos = obj.GetType().GetMethods()
+				.Where(m => IsVisible(m))
+				.Where(m => includeBaseTypes || m.DeclaringType == obj.GetType())
+				.OrderBy(m => m.MetadataToken);
+
 			var listMethods = new ItemCollection<ListMethod>();
 			var propertyToIndex = new Dictionary<string, int>();
 			foreach (MethodInfo methodInfo in methodInfos)
 			{
-				if (!IsVisible(methodInfo))
-					continue;
-
-				if (!includeBaseTypes && methodInfo.DeclaringType != obj.GetType())
-					continue;
-
 				var listMethod = new ListMethod(obj, methodInfo);
 
 				if (propertyToIndex.TryGetValue(methodInfo.Name, out int index))
