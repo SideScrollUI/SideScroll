@@ -170,6 +170,8 @@ namespace Atlas.Tabs
 
 		public TabInstance RootInstance => ParentTabInstance?.RootInstance ?? this;
 
+		private bool _settingLoaded = false;
+
 		public override string ToString() => Label;
 
 		public TabInstance()
@@ -407,6 +409,7 @@ namespace Atlas.Tabs
 
 		public async Task ReintializeAsync(Call call)
 		{
+			_settingLoaded = false;
 			TabModel model = Model;
 			if (!StaticModel)
 				model = await LoadModelAsync(call);
@@ -736,8 +739,6 @@ namespace Atlas.Tabs
 			if (bookmark != null)
 				TabBookmark = bookmark.TabBookmark;
 		}
-
-		private bool _settingLoaded = false;
 
 		public TabViewSettings LoadSettings(bool reload)
 		{
