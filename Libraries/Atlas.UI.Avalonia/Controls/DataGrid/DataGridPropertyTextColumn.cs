@@ -25,6 +25,7 @@ namespace Atlas.UI.Avalonia
 		public bool AutoSize { get; set; }
 		public bool WordWrap { get; set; }
 		//public bool Editable { get; set; } = false;
+		public bool StyleCells { get; set; } // True if any column has a Style applied, so we can manually draw the horizontal lines
 
 		public Binding FormattedBinding;
 		//private Binding unformattedBinding;
@@ -128,47 +129,47 @@ namespace Atlas.UI.Avalonia
 			{
 				TextBlock textBlock = CreateTextBlock(cell);
 
-				/*var style = new Style(x => x.OfType<DataGridCell>())
-				{
-					Setters = new[]
-					{
-						new Setter(DataGridCell.BackgroundProperty, BrushEditable),
-					},
-				};
-				cell.Styles.Add(style);*/
+				if (StyleCells)
+					return AddStyling(cell, textBlock);
 
-				//if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
-
-				var border = new Border()
-				{
-					BorderThickness = new Thickness(0, 0, 0, 1), // Bottom only
-					BorderBrush = Brushes.LightGray,
-					Child = textBlock,
-				};
-
-				if (PropertyInfo.IsDefined(typeof(StyleValueAttribute)) ||
-					(DisplayIndex == 1 && typeof(DictionaryEntry).IsAssignableFrom(PropertyInfo.DeclaringType)))
-				{
-					// Update the cell color based on the object
-					var binding = new Binding()
-					{
-						Converter = new ValueToBrushConverter(PropertyInfo),
-						Mode = BindingMode.OneWay,
-					};
-					cell.Bind(DataGridCell.BackgroundProperty, binding);
-
-					var foregroundBinding = new Binding()
-					{
-						Converter = new ValueToForegroundBrushConverter(PropertyInfo),
-						Mode = BindingMode.OneWay,
-					};
-					textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
-
-					border.BorderBrush = Theme.GridStyledLinesBrush;
-				}
-
-				return border;
+				return textBlock;
 			}
+		}
+
+		// Styled columns have a different line color, so we have to draw them manually
+		// They also use different background colors, with different shades for links vs non-links
+		private IControl AddStyling(DataGridCell cell, TextBlock textBlock)
+		{
+			var border = new Border()
+			{
+				BorderThickness = new Thickness(0, 0, 0, 1), // Bottom only
+				BorderBrush = Brushes.LightGray,
+				Child = textBlock,
+			};
+
+			if (PropertyInfo.IsDefined(typeof(StyleValueAttribute)) ||
+				(DisplayIndex == 1 && typeof(DictionaryEntry).IsAssignableFrom(PropertyInfo.DeclaringType)))
+			{
+				// Update the cell color based on the object
+				var binding = new Binding()
+				{
+					Converter = new ValueToBrushConverter(PropertyInfo),
+					Mode = BindingMode.OneWay,
+				};
+				cell.Bind(DataGridCell.BackgroundProperty, binding);
+
+				var foregroundBinding = new Binding()
+				{
+					Converter = new ValueToForegroundBrushConverter(PropertyInfo),
+					Mode = BindingMode.OneWay,
+				};
+				textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
+
+				border.BorderBrush = Theme.GridStyledLinesBrush;
+				border.BorderThickness = new Thickness(1, 0, 0, 1); // Left and Bottom
+			}
+
+			return border;
 		}
 
 		protected TextBlock CreateTextBlock(DataGridCell cell)

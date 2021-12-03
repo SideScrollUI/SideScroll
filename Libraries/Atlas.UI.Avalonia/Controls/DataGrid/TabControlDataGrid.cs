@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -218,7 +219,7 @@ namespace Atlas.UI.Avalonia.Controls
 				
 				BorderThickness = new Thickness(1),
 				IsReadOnly = !TabModel.Editing,
-				GridLinesVisibility = DataGridGridLinesVisibility.Vertical,
+				GridLinesVisibility = DataGridGridLinesVisibility.All,
 				MaxWidth = 4000,
 				MaxHeight = this.MaxHeight,
 				[Grid.RowProperty] = 1,
@@ -567,9 +568,18 @@ namespace Atlas.UI.Avalonia.Controls
 				propertyColumns[0].Label = itemCollection.ColumnName;
 			}
 
+			bool styleCells = methodColumns.Count > 0 || 
+				propertyColumns
+				.Select(p => p.IsStyled())
+				.Max();
+
+			// Styling lines adds a performance hit, so only add it if necessary
+			if (styleCells)
+				DataGrid.GridLinesVisibility = DataGridGridLinesVisibility.Vertical;
+
 			foreach (TabDataSettings.PropertyColumn propertyColumn in propertyColumns)
 			{
-				AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo);
+				AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo, styleCells);
 			}
 
 			// 1 column should take up entire grid
@@ -582,13 +592,13 @@ namespace Atlas.UI.Avalonia.Controls
 				DataGrid.HeadersVisibility = DataGridHeadersVisibility.None;
 		}
 
-		public void AddColumn(string label, string propertyName)
+		public void AddColumn(string label, string propertyName, bool styleCells = false)
 		{
 			PropertyInfo propertyInfo = _elementType.GetProperty(propertyName);
-			AddColumn(label, propertyInfo);
+			AddColumn(label, propertyInfo, styleCells);
 		}
 
-		public void AddColumn(string label, PropertyInfo propertyInfo)
+		public void AddColumn(string label, PropertyInfo propertyInfo, bool styleCells = false)
 		{
 			MinWidthAttribute attributeMinWidth = propertyInfo.GetCustomAttribute<MinWidthAttribute>();
 			MaxWidthAttribute attributeMaxWidth = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
@@ -618,7 +628,10 @@ namespace Atlas.UI.Avalonia.Controls
 				}
 				else
 				{
-					var textColumn = new DataGridPropertyTextColumn(DataGrid, propertyInfo, isReadOnly, maxDesiredWidth);
+					var textColumn = new DataGridPropertyTextColumn(DataGrid, propertyInfo, isReadOnly, maxDesiredWidth)
+					{
+						StyleCells = styleCells,
+					};
 
 					if (attributeMinWidth != null)
 						textColumn.MinDesiredWidth = attributeMinWidth.MinWidth;
