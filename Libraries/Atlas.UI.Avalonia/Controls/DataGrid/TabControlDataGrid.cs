@@ -622,7 +622,10 @@ namespace Atlas.UI.Avalonia.Controls
 				if (propertyInfo.PropertyType == typeof(bool))
 				{
 					isReadOnly = (propertyInfo.GetCustomAttribute<EditingAttribute>() == null);
-					var checkBoxColumn = new DataGridPropertyCheckBoxColumn(propertyInfo, isReadOnly);
+					var checkBoxColumn = new DataGridPropertyCheckBoxColumn(propertyInfo, isReadOnly)
+					{
+						StyleCells = styleCells,
+					};
 					column = checkBoxColumn;
 					column.Binding = new Binding(propertyInfo.Name);
 				}

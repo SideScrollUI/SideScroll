@@ -9,7 +9,9 @@ namespace Atlas.UI.Avalonia
 	{
 		public PropertyInfo PropertyInfo;
 
-		private Binding formattedBinding;
+		public bool StyleCells { get; set; } // True if any column has a Style applied, so we can manually draw the horizontal lines
+
+		private Binding _formattedBinding;
 
 		public DataGridPropertyCheckBoxColumn(PropertyInfo propertyInfo, bool isReadOnly)
 		{
@@ -37,6 +39,9 @@ namespace Atlas.UI.Avalonia
 			if (IsReadOnly)
 				checkbox.IsHitTestVisible = false; // disable changing*/
 
+			if (!StyleCells)
+				return checkbox;
+
 			return new Border()
 			{
 				BorderThickness = new Thickness(0, 0, 0, 1), // Bottom only
@@ -49,16 +54,16 @@ namespace Atlas.UI.Avalonia
 		{
 			Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);
 
-			if (formattedBinding == null)
+			if (_formattedBinding == null)
 			{
-				formattedBinding = new Binding
+				_formattedBinding = new Binding
 				{
 					Path = binding.Path,
 					Mode = BindingMode.TwoWay, // copying a value to the clipboard triggers an infinite loop without this?
 				};
 			}
 
-			return formattedBinding;
+			return _formattedBinding;
 		}
 	}
 }
