@@ -15,7 +15,6 @@
         <SolidColorBrush x:Key="ThemeForegroundLowBrush">#5860CA</SolidColorBrush>
 
         <!-- Border -->
-        <SolidColorBrush x:Key="ThemeBorderLightBrush">#1e1e1e</SolidColorBrush> <!-- DataGrid Lines -->
         <SolidColorBrush x:Key="ThemeBorderLowBrush">#000000</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#000000</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighBrush">#000000</SolidColorBrush> <!-- RadioButton circle border -->
@@ -24,7 +23,7 @@
 
         <!-- Controls -->
         <Color x:Key="ThemeBorderLowColor">#000000</Color>
-        <Color x:Key="ThemeBorderHighColor">#1e1e1e</Color> <!-- DataGrid Lines -->
+        <Color x:Key="ThemeBorderHighColor">#d3d3d3</Color> <!-- DataGrid Lines -->
       
         <SolidColorBrush x:Key="ThemeControlLightBrush">#FFFFFF</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeControlMidBrush">#2a2954</SolidColorBrush>
@@ -63,6 +62,7 @@
         <SolidColorBrush x:Key="ThemeNoLinksBrush">#3c3a54</SolidColorBrush>
         <!--SolidColorBrush x:Key="ThemeNoLinksBrush">#cccfea</SolidColorBrush-->
         <!--SolidColorBrush x:Key="ThemeNoLinksBrush">#c8c9e5</SolidColorBrush-->
+        <SolidColorBrush x:Key="ThemeGridStyledLinesBrush">#1c1a34</SolidColorBrush>
 
         <!-- ScrollBar -->
         <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush">#38409a</SolidColorBrush>

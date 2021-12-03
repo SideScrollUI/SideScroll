@@ -101,6 +101,12 @@ namespace Atlas.Tabs
 				PropertyInfo = propertyInfo;
 				Label = label;
 			}
+
+			public bool IsStyled()
+			{
+				return PropertyInfo.IsDefined(typeof(StyleValueAttribute)) ||
+					typeof(DictionaryEntry).IsAssignableFrom(PropertyInfo.DeclaringType);
+			}
 		}
 
 		private List<PropertyInfo> GetPropertyColumns(Type elementType)
