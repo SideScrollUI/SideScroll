@@ -139,7 +139,15 @@ namespace Atlas.UI.Avalonia
 
 				//if (propertyInfo.IsDefined(typeof(StyleLabelAttribute)))
 
-				if (DisplayIndex == 1 || PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
+				var border = new Border()
+				{
+					BorderThickness = new Thickness(0, 0, 0, 1), // Bottom only
+					BorderBrush = Brushes.LightGray,
+					Child = textBlock,
+				};
+
+				if (PropertyInfo.IsDefined(typeof(StyleValueAttribute)) ||
+					(DisplayIndex == 1 && typeof(DictionaryEntry).IsAssignableFrom(PropertyInfo.DeclaringType)))
 				{
 					// Update the cell color based on the object
 					var binding = new Binding()
@@ -155,9 +163,11 @@ namespace Atlas.UI.Avalonia
 						Mode = BindingMode.OneWay,
 					};
 					textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
+
+					border.BorderBrush = Theme.GridStyledLinesBrush;
 				}
 
-				return textBlock;
+				return border;
 			}
 		}
 

@@ -12,6 +12,9 @@ namespace Atlas.UI.Avalonia
 		public static SolidColorBrush BackgroundText => Get("ThemeBackgroundTextBrush");
 		public static SolidColorBrush TabBackground => Get("ThemeTabBackgroundBrush");
 
+		public static SolidColorBrush ThemeBorderHighBrush => GetColorBrush("ThemeBorderHighColor");
+		public static SolidColorBrush GridStyledLinesBrush => Get("ThemeGridStyledLinesBrush");
+
 		// Content
 		public static SolidColorBrush GridForeground => Get("ThemeGridForegroundBrush");
 		public static SolidColorBrush GridBackground => Get("ThemeGridBackgroundBrush");
@@ -63,6 +66,19 @@ namespace Atlas.UI.Avalonia
 				return (SolidColorBrush)obj;
 
 			throw new Exception("Brush not found: " + brushName);
+		}
+
+		public static Color GetColor(string colorName)
+		{
+			if (Application.Current.Styles.TryGetResource(colorName, out object obj))
+				return (Color)obj;
+
+			throw new Exception("Color not found: " + colorName);
+		}
+
+		public static SolidColorBrush GetColorBrush(string colorName)
+		{
+			return new SolidColorBrush(GetColor(colorName));
 		}
 
 		private static double GetDouble(string name)

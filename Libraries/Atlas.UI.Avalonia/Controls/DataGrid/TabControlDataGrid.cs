@@ -218,7 +218,7 @@ namespace Atlas.UI.Avalonia.Controls
 				
 				BorderThickness = new Thickness(1),
 				IsReadOnly = !TabModel.Editing,
-				GridLinesVisibility = DataGridGridLinesVisibility.All,
+				GridLinesVisibility = DataGridGridLinesVisibility.Vertical,
 				MaxWidth = 4000,
 				MaxHeight = this.MaxHeight,
 				[Grid.RowProperty] = 1,

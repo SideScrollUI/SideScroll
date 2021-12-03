@@ -15,6 +15,9 @@
         <SolidColorBrush x:Key="ThemeForegroundLightBrush">#808080</SolidColorBrush>
 
         <!-- Border -->
+        <Color x:Key="ThemeBorderLowColor">#000000</Color>
+        <Color x:Key="ThemeBorderHighColor">LightGray</Color>
+      
         <SolidColorBrush x:Key="ThemeBorderLightBrush">#181818</SolidColorBrush> <!-- DataGrid Lines -->
         <SolidColorBrush x:Key="ThemeBorderMidBrush">#106090</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeBorderHighBrush">#3168a2</SolidColorBrush>

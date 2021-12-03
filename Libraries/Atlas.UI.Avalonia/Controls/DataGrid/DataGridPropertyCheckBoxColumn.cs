@@ -36,7 +36,13 @@ namespace Atlas.UI.Avalonia
 			//unformattedBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 			if (IsReadOnly)
 				checkbox.IsHitTestVisible = false; // disable changing*/
-			return checkbox;
+
+			return new Border()
+			{
+				BorderThickness = new Thickness(0, 0, 0, 1), // Bottom only
+				BorderBrush = Theme.ThemeBorderHighBrush,
+				Child = checkbox,
+			};
 		}
 
 		private Binding GetBinding()
