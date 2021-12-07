@@ -83,7 +83,14 @@ namespace Atlas.UI.Avalonia
 
 		private async void MenuItemCopyCellContents_Click(object sender, RoutedEventArgs e)
 		{
-			if (Column != null && Cell.Content is TextBlock textBlock)
+			if (Column == null)
+				return;
+
+			object content = Cell.Content;
+			if (content is Border border)
+				content = border.Child;
+
+			if (content is TextBlock textBlock)
 			{
 				string value = FormatValueConverter.ObjectToString(Column.PropertyInfo.GetValue(textBlock.DataContext), MaxCellValueLength, Column.FormatConverter.IsFormatted);
 				await ClipBoardUtils.SetTextAsync(value);

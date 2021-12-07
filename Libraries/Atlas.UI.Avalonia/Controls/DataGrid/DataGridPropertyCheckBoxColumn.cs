@@ -13,6 +13,8 @@ namespace Atlas.UI.Avalonia
 
 		private Binding _formattedBinding;
 
+		public override string ToString() => PropertyInfo.Name;
+
 		public DataGridPropertyCheckBoxColumn(PropertyInfo propertyInfo, bool isReadOnly)
 		{
 			PropertyInfo = propertyInfo;
@@ -20,8 +22,6 @@ namespace Atlas.UI.Avalonia
 			Binding = GetBinding();
 			CanUserSort = true;
 		}
-
-		public override string ToString() => PropertyInfo.Name;
 
 		protected override IControl GenerateElement(DataGridCell cell, object dataItem)
 		{
