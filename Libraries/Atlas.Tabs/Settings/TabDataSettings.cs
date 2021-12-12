@@ -188,6 +188,14 @@ namespace Atlas.Tabs
 			Label = obj.ToString();
 			DataKey = DataUtils.GetDataKey(obj); // overrides label
 			DataValue = DataUtils.GetDataValue(obj);
+
+			// Use the DataValue's DataKey if no DataKey found
+			if (DataKey == null && DataValue != null)
+				DataKey = DataUtils.GetDataKey(DataValue);
+
+			Type type = obj.GetType();
+			if (Label == type.FullName)
+				Label = null;
 		}
 	}
 }

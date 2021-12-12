@@ -1,5 +1,4 @@
-﻿using Atlas.Core;
-using Atlas.Extensions;
+﻿using Atlas.Extensions;
 using System;
 using System.Reflection;
 
@@ -26,11 +25,11 @@ namespace Atlas.Core
 			var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
 			if (keyProperties.Count > 0)
 			{
-				return keyProperties[0].GetValue(obj)?.ToString();
+				return keyProperties[0].GetValue(obj)?.ToUniqueString();
 			}
 			else if (keyFields.Count > 0)
 			{
-				return keyFields[0].GetValue(obj)?.ToString();
+				return keyFields[0].GetValue(obj)?.ToUniqueString();
 			}
 			return null;
 		}

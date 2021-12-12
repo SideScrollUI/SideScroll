@@ -481,21 +481,34 @@ namespace Atlas.UI.Avalonia.Controls
 				IsControlSelectable(visual.VisualParent);
 		}
 
+		private static DataGrid GetOwningDataGrid(IControl control)
+		{
+			if (control == null)
+				return null;
+
+			if (control is DataGrid dataGrid)
+				return dataGrid;
+
+			return GetOwningDataGrid(control.Parent);
+		}
+
 		// Single click deselect (cells don't always occupy their entire contents)
 		private static void DataGridRow_PointerPressed(DataGridRow row, PointerPressedEventArgs e)
 		{
-			if (!e.GetCurrentPoint(row).Properties.IsLeftButtonPressed)
+			PointerPoint point = e.GetCurrentPoint(row);
+
+			if (!point.Properties.IsLeftButtonPressed)
 				return;
 
+			DataGrid dataGrid = GetOwningDataGrid(row);
 			// Can't access row.OwningGrid, so we have to do this the hard way
-			if (row?.Parent?.Parent?.Parent?.Parent is DataGrid dataGrid)
+			if (dataGrid != null)
 			{
 				if (dataGrid.SelectedItems == null || dataGrid.SelectedItems.Count != 1)
 					return;
 
 				// Ignore if toggling CheckBox or clicking Button
 				// ReadOnly CheckBoxes will return the Cell Grid instead of a child Border control
-				PointerPoint point = e.GetCurrentPoint(row);
 				IInputElement input = row.InputHitTest(point.Position);
 				if (IsControlSelectable(input))
 					return;
@@ -747,6 +760,7 @@ namespace Atlas.UI.Avalonia.Controls
 						continue;
 					listItem = List[rowIndex];
 				}
+
 				if (TabDataSettings.SelectionType != SelectionType.User &&
 					TabInstance.IsOwnerObject(listItem.GetInnerValue())) // stops self referencing loops
 					continue;
@@ -761,7 +775,7 @@ namespace Atlas.UI.Avalonia.Controls
 			if (TabInstance.TabBookmark?.Bookmark?.Imported == true && rowObjects.Count != TabDataSettings.SelectedRows.Count)
 			{
 				// Replace with call and CallDebugLogger?
-				Debug.Print("Failed to find all bookmarked rows, Selected: " + string.Join(", ", TabDataSettings.SelectedRows) + ", Found: " + string.Join(", ", rowObjects));
+				Debug.Print("Failed to find all bookmarked rows, Selected: [" + string.Join(", ", TabDataSettings.SelectedRows) + "], Found: [" + string.Join(", ", rowObjects) + "]");
 				Debug.Print("Possible Causes: Object ToString() changed. Try adding [DataKey] to object field/property");
 			}
 
@@ -1086,20 +1100,10 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private SelectedRow GetSelectedRow(object obj)
 		{
-			Type type = obj.GetType();
-			var selectedRow = new SelectedRow(obj)
+			return new SelectedRow(obj)
 			{
 				RowIndex = List.IndexOf(obj),
 			};
-
-			// Use the DataValue's DataKey if no DataKey found
-			if (selectedRow.DataKey == null && selectedRow.DataValue != null)
-				selectedRow.DataKey = DataUtils.GetDataKey(selectedRow.DataValue);
-
-			if (selectedRow.Label == type.FullName)
-				selectedRow.Label = null;
-			
-			return selectedRow;
 		}
 
 		private string FilterText
