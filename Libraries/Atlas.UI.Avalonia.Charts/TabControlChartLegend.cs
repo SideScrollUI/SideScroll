@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -19,7 +19,7 @@ namespace Atlas.UI.Avalonia.Charts
 		public ListGroup ListGroup => TabControlChart.ListGroup;
 
 		public List<TabChartLegendItem> LegendItems = new List<TabChartLegendItem>();
-		private Dictionary<string, TabChartLegendItem> _idxLegendItems = new Dictionary<string, TabChartLegendItem>();
+		private readonly Dictionary<string, TabChartLegendItem> _idxLegendItems = new Dictionary<string, TabChartLegendItem>();
 
 		private ScrollViewer _scrollViewer;
 		private WrapPanel _wrapPanel;

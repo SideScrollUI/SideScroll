@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
@@ -81,7 +81,7 @@ namespace Atlas.Tabs
 					else if (value is string text)
 					{
 						if (text.Length > MaxStringLength)
-							return text.Substring(0, MaxStringLength);
+							return text[..MaxStringLength];
 					}
 					else if (!value.GetType().IsPrimitive)
 					{
@@ -107,7 +107,7 @@ namespace Atlas.Tabs
 		{
 			Object = obj;
 			MemberInfo = memberInfo;
-			
+
 			if (obj is INotifyPropertyChanged notifyPropertyChanged)
 				notifyPropertyChanged.PropertyChanged += ListProperty_PropertyChanged;
 		}

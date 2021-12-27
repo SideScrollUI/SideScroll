@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ namespace Atlas.Serialize.Test
 	public class TestSerializeCollections : TestSerializeBase
 	{
 		private SerializerMemory _serializer;
-		
+
 		[OneTimeSetUp]
 		public void BaseSetup()
 		{

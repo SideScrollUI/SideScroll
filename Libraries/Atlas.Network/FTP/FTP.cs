@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace Atlas.Network
 		public string LocalBasePath { get; set; }
 		public string FtpHost { get; set; }
 		public string RemotePath { get; set; }
-		
+
 		public string LocalPath { get; set; }
 
 		public FtpFileInfo(string localBasePath, string ftpHost, string remotePath)
@@ -34,7 +34,7 @@ namespace Atlas.Network
 			LocalBasePath = localBasePath;
 			FtpHost = ftpHost;
 			RemotePath = remotePath;
-			
+
 			LocalPath = Paths.Combine(localBasePath, RemotePath);
 		}
 	}
@@ -84,19 +84,17 @@ namespace Atlas.Network
 			if (!Directory.Exists(directoryPath))
 				Directory.CreateDirectory(directoryPath);
 
-			using (LogTimer logTimer = Log.Timer("Downloading", new Tag("File", remoteFile)))
+			using LogTimer logTimer = Log.Timer("Downloading", new Tag("File", remoteFile));
+			for (int attempt = 0; attempt < 3; attempt++)
 			{
-				for (int attempt = 0; attempt < 3; attempt++)
+				try
 				{
-					try
-					{
-						DownloadInternal(logTimer, remoteFile, localFile, taskInstance, maxBytes);
-						break;
-					}
-					catch (Exception e)
-					{
-						logTimer.AddError("Exception downloading file", new Tag("Exception", e.ToString()));
-					}
+					DownloadInternal(logTimer, remoteFile, localFile, taskInstance, maxBytes);
+					break;
+				}
+				catch (Exception e)
+				{
+					logTimer.AddError("Exception downloading file", new Tag("Exception", e.ToString()));
 				}
 			}
 		}
@@ -110,7 +108,7 @@ namespace Atlas.Network
 
 			FileStream localFileStream = new FileStream(localFile, FileMode.Create);
 			byte[] byteBuffer = new byte[info.BufferSize];
-			
+
 			long bytesTransferred = 0;
 			while (bytesTransferred < maxBytes)
 			{
@@ -148,15 +146,15 @@ namespace Atlas.Network
 			if (ftpStream.CanRead)
 				ftpRequest.Abort();
 
-			log.Add("Download Finished", 
-				new Tag("Bytes Transferred", bytesTransferred), 
+			log.Add("Download Finished",
+				new Tag("Bytes Transferred", bytesTransferred),
 				new Tag("Size", ftpResponse.ContentLength));
 
 			localFileStream.Close();
 			ftpStream.Close();
 			ftpResponse.Close();
 		}
-		
+
 		public void Upload(string remoteFile, string localFile)
 		{
 			try
@@ -188,7 +186,7 @@ namespace Atlas.Network
 				Log.Add(ex.ToString());
 			}
 		}
-		
+
 		public void Delete(string deleteFile)
 		{
 			FtpWebRequest ftpRequest = info.CreateRequest(deleteFile);
@@ -196,7 +194,7 @@ namespace Atlas.Network
 			FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
 			ftpResponse.Close();
 		}
-		
+
 		public void Rename(string currentFileNameAndPath, string newFileName)
 		{
 			FtpWebRequest ftpRequest = info.CreateRequest(currentFileNameAndPath);
@@ -205,7 +203,7 @@ namespace Atlas.Network
 			FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
 			ftpResponse.Close();
 		}
-		
+
 		public void CreateDirectory(string newDirectory)
 		{
 			FtpWebRequest ftpRequest = info.CreateRequest(newDirectory);
@@ -213,7 +211,7 @@ namespace Atlas.Network
 			FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
 			ftpResponse.Close();
 		}
-		
+
 		public DateTime GetFileModifiedDateTime(string filePath)
 		{
 			FtpWebRequest ftpRequest = info.CreateRequest(filePath);
@@ -223,7 +221,7 @@ namespace Atlas.Network
 			StreamReader ftpReader = new StreamReader(ftpStream);
 
 			string fileInfo = ftpReader.ReadToEnd();
-			
+
 			ftpReader.Close();
 			ftpStream.Close();
 			ftpResponse.Close();
@@ -236,40 +234,38 @@ namespace Atlas.Network
 
 			return ftpResponse.LastModified;
 		}
-		
+
 		public long GetFileSize(string filePath)
 		{
-			using (LogTimer logTimer = Log.Timer("Retrieving Remote File Size", new Tag("File Path", filePath)))
+			using LogTimer logTimer = Log.Timer("Retrieving Remote File Size", new Tag("File Path", filePath));
+			if (info.FileSizeSupported == false)
 			{
-				if (info.FileSizeSupported == false)
+				List<FtpItem> fileInfos = GetDirectoryListDetailed(Path.GetDirectoryName(filePath));
+				foreach (FtpItem fileInfo in fileInfos)
 				{
-					List<FtpItem> fileInfos = GetDirectoryListDetailed(Path.GetDirectoryName(filePath));
-					foreach (FtpItem fileInfo in fileInfos)
-					{
-						if (fileInfo.FullPath == filePath)
-							return fileInfo.Size;
-					}
+					if (fileInfo.FullPath == filePath)
+						return fileInfo.Size;
 				}
-				FtpWebRequest ftpRequest = info.CreateRequest(filePath);
-				ftpRequest.Method = WebRequestMethods.Ftp.GetFileSize;
-				FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
-				Stream ftpStream = ftpResponse.GetResponseStream();
-				StreamReader ftpReader = new StreamReader(ftpStream);
-				/*string fileInfo = null;
-				while (ftpReader.Peek() != -1)
-				{
-					fileInfo = ftpReader.ReadToEnd(); // filesize ever?
-				}*/
-
-				ftpReader.Close();
-				ftpStream.Close();
-				ftpResponse.Close();
-
-				logTimer.Add("Retrieved Remote File Size",
-					new Tag("File Path", filePath),
-					new Tag("Size", ftpResponse.ContentLength));
-				return ftpResponse.ContentLength;
 			}
+			FtpWebRequest ftpRequest = info.CreateRequest(filePath);
+			ftpRequest.Method = WebRequestMethods.Ftp.GetFileSize;
+			FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+			Stream ftpStream = ftpResponse.GetResponseStream();
+			StreamReader ftpReader = new StreamReader(ftpStream);
+			/*string fileInfo = null;
+			while (ftpReader.Peek() != -1)
+			{
+				fileInfo = ftpReader.ReadToEnd(); // filesize ever?
+			}*/
+
+			ftpReader.Close();
+			ftpStream.Close();
+			ftpResponse.Close();
+
+			logTimer.Add("Retrieved Remote File Size",
+				new Tag("File Path", filePath),
+				new Tag("Size", ftpResponse.ContentLength));
+			return ftpResponse.ContentLength;
 		}
 
 		// List Directory Contents File/Folder Name Only
@@ -289,7 +285,7 @@ namespace Atlas.Network
 			ftpReader.Close();
 			ftpStream.Close();
 			ftpResponse.Close();
-			
+
 			return files;
 		}
 
@@ -312,12 +308,14 @@ namespace Atlas.Network
 				// "-rwxrwxr-x   1 proftpd  proftpd      4580 Sep 30 00:49 alt_allele_group.txt.gz"
 				string line = ftpReader.ReadLine();
 				string[] columns = line.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-				FtpItem fileData = new FtpItem();
-				fileData.Directory = (columns[0][0] == 'd');
-				fileData.Size = long.Parse(columns[4]);
+				FtpItem fileData = new FtpItem
+				{
+					Directory = (columns[0][0] == 'd'),
+					Size = long.Parse(columns[4])
+				};
 
-				string month = columns[5];	// "Sep"
-				string day = columns[6];	// "30"
+				string month = columns[5];  // "Sep"
+				string day = columns[6];    // "30"
 				string time = columns[7];   // "00:49"
 
 				//fileData.modified = new DateTime(

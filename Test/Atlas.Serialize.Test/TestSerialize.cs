@@ -1,4 +1,4 @@
-﻿using Atlas.Core.Time;
+using Atlas.Core.Time;
 using NUnit.Framework;
 using System;
 
@@ -8,7 +8,7 @@ namespace Atlas.Serialize.Test
 	public class SerializeTypes : TestSerializeBase
 	{
 		private SerializerMemory _serializer;
-		
+
 		[OneTimeSetUp]
 		public void BaseSetup()
 		{

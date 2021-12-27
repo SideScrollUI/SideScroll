@@ -1,4 +1,4 @@
-﻿using Atlas.Extensions;
+using Atlas.Extensions;
 using System;
 using System.Globalization;
 
@@ -13,8 +13,7 @@ namespace Atlas.Core
 			if (text == null)
 				return null;
 
-			TimeSpan timeSpan;
-			if (TimeSpan.TryParseExact(text, @"h\:m\:s\.FFFFFFF", CultureInfo.InvariantCulture, out timeSpan))
+			if (TimeSpan.TryParseExact(text, @"h\:m\:s\.FFFFFFF", CultureInfo.InvariantCulture, out TimeSpan timeSpan))
 				return timeSpan;
 
 			if (TimeSpan.TryParseExact(text, @"h\:m\:s", CultureInfo.InvariantCulture, out timeSpan))

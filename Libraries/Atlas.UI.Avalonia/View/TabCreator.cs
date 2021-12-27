@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.UI.Avalonia.Tabs;
 using Atlas.Tabs;
@@ -74,7 +74,7 @@ namespace Atlas.UI.Avalonia.View
 				childTabInstance.Model.Name = label;
 				value = new TabView(childTabInstance);
 			}
-			
+
 			if (value is ITabCreatorAsync creatorAsync)
 			{
 				//value = new TabCreatorAsync(creatorAsync);

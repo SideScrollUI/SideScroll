@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -98,7 +98,6 @@ namespace Atlas.Serialize.Test
 			//getIl.Emit(OpCodes.Ldnull); // load 1 (true)
 
 			getIl.Emit(OpCodes.Ldarg_0); // load this
-			//getIl.Emit(OpCodes.Ldarg_0); // load this
 			getIl.Emit(OpCodes.Ldfld, fieldBuilderTypeRef);
 			//getIl.Emit(OpCodes.Ldarg_1);
 			getIl.Emit(OpCodes.Call, methodInfoLoad);

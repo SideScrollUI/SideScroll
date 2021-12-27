@@ -1,4 +1,4 @@
-﻿using Atlas.Resources;
+using Atlas.Resources;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
 using Avalonia.Controls;

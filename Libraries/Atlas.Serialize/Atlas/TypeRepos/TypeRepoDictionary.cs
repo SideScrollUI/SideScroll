@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections;
 using System.IO;
@@ -27,7 +27,7 @@ namespace Atlas.Serialize
 		private TypeRepo _list1TypeRepo;
 		private TypeRepo _list2TypeRepo;
 
-		public TypeRepoDictionary(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoDictionary(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{
 			Type[] types = LoadableType.GetGenericArguments();
@@ -69,7 +69,7 @@ namespace Atlas.Serialize
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
 			IDictionary dictionary = (IDictionary)obj;
-			
+
 			writer.Write(dictionary.Count);
 			foreach (DictionaryEntry item in dictionary)
 			{

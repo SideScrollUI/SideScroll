@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -65,7 +65,7 @@ namespace Atlas.Network
 
 			if (_indexStream.Length == 0)
 				SaveHeader();
-			
+
 			LoadIndex();
 		}
 
@@ -83,7 +83,7 @@ namespace Atlas.Network
 		private void SaveHeader()
 		{
 			using BinaryWriter indexWriter = new BinaryWriter(_indexStream, Encoding.Default, true);
-			
+
 			indexWriter.Write(LatestVersion);
 		}
 
@@ -91,14 +91,16 @@ namespace Atlas.Network
 		{
 			_indexStream.Seek(0, SeekOrigin.Begin);
 			using var indexReader = new BinaryReader(_indexStream, Encoding.Default, true);
-			
+
 			LoadHeader(indexReader);
 			while (indexReader.PeekChar() >= 0)
 			{
-				var entry = new Entry();
-				entry.Uri = indexReader.ReadString();
-				entry.Offset = indexReader.ReadInt64();
-				entry.Size = indexReader.ReadInt32();
+				var entry = new Entry
+				{
+					Uri = indexReader.ReadString(),
+					Offset = indexReader.ReadInt64(),
+					Size = indexReader.ReadInt32()
+				};
 				long ticks = indexReader.ReadInt64();
 				entry.Downloaded = new DateTime(ticks);
 				_cache[entry.Uri] = entry;
@@ -177,7 +179,7 @@ namespace Atlas.Network
 
 				_dataStream.Position = entry.Offset;
 				using var dataReader = new BinaryReader(_dataStream, Encoding.Default, true);
-				
+
 				byte[] data = dataReader.ReadBytes(entry.Size);
 				return data;
 			}

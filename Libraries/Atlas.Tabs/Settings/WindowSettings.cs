@@ -1,4 +1,4 @@
-﻿namespace Atlas.Tabs
+namespace Atlas.Tabs
 {
 	public class WindowSettings
 	{

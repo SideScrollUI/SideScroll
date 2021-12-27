@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Atlas.Serialize
@@ -14,7 +14,7 @@ namespace Atlas.Serialize
 				return null;
 			}
 		}
-		
+
 		public class NoConstructorCreator : IRepoCreator
 		{
 			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)

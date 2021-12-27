@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
@@ -19,7 +19,7 @@ namespace Atlas.UI.Avalonia
 			}
 
 			previousDateTime = value as DateTime?;
-			
+
 			if (targetType == typeof(string))
 			{
 				if (previousDateTime == null)

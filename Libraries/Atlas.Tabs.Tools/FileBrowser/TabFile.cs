@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,9 +10,7 @@ namespace Atlas.Tabs.Tools
 		public static HashSet<string> TextExtensions = new HashSet<string>()
 		{
 			".txt",
-            ".md",
-            ".fna",
-			".faa"
+			".md",
 		};
 
 		public string Path;
@@ -53,7 +51,7 @@ namespace Atlas.Tabs.Tools
 						{
 							// doesn't work
 							using StreamReader streamReader = File.OpenText(Tab.Path);
-							
+
 							var buffer = new char[100];
 							streamReader.Read(buffer, 0, buffer.Length);
 							isText = true;

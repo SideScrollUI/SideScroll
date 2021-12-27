@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -67,7 +67,7 @@ namespace Atlas.Core
 				action.Invoke();
 				taskInstance.SetFinished();
 			}
-			
+
 			return taskInstance;
 		}
 

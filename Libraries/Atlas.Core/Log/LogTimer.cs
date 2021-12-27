@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Timers;
 
@@ -64,7 +64,7 @@ namespace Atlas.Core
 			_stopwatch.Stop();
 
 			UpdateDuration();
-			
+
 			Add("Finished", new Tag("Duration", Duration));
 		}
 	}

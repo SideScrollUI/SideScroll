@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -34,7 +34,7 @@ namespace Atlas.Extensions
 		public static string TrimEnd(this string input, string postfix)
 		{
 			if (input.EndsWith(postfix))
-				return input.Substring(0, input.Length - postfix.Length);
+				return input[..^postfix.Length];
 
 			return input;
 		}
@@ -182,7 +182,7 @@ namespace Atlas.Extensions
 				return null;
 
 			using SHA256 sha256Hash = SHA256.Create();
-			
+
 			byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData)); // 32 bytes
 
 			var builder = new StringBuilder();

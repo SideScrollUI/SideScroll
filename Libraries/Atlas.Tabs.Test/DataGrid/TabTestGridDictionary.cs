@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test.DataGrid

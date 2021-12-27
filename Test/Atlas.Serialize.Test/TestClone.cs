@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -265,7 +265,7 @@ namespace Atlas.Serialize.Test
 		public void CloneInt()
 		{
 			int input = 5;
-			
+
 			int output = serializer.Clone(log, input);
 
 			Assert.AreEqual(input, output);
@@ -278,7 +278,7 @@ namespace Atlas.Serialize.Test
 			{
 				TestEnum = EnumTest.MyEnum.b,
 			};
-			
+
 			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.TestEnum, input.TestEnum);
@@ -288,7 +288,7 @@ namespace Atlas.Serialize.Test
 		public void CloneType()
 		{
 			Type type = typeof(string);
-			
+
 			Type output = serializer.Clone(log, type);
 
 			Assert.AreEqual(type, output);
@@ -297,9 +297,11 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Clone Type Dictionary")]
 		public void CloneTypeDictionary()
 		{
-			var input = new Dictionary<Type, string>();
-			input[typeof(int)] = "integer";
-			
+			var input = new Dictionary<Type, string>
+			{
+				[typeof(int)] = "integer"
+			};
+
 			var output = serializer.Clone(log, input);
 
 			Assert.IsTrue(output.ContainsKey(typeof(int)));
@@ -311,7 +313,7 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new Circular();
 			input.Self = input;
-			
+
 			Circular output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.Self, output);
@@ -324,7 +326,7 @@ namespace Atlas.Serialize.Test
 			Child child = new Child();
 			parent.Child = child;
 			child.Parent = parent;
-			
+
 			Parent loaded = serializer.Clone(log, parent);
 
 			Assert.AreEqual(loaded.Child.Parent, loaded);
@@ -334,7 +336,7 @@ namespace Atlas.Serialize.Test
 		public void CloneDictionary()
 		{
 			var input = new DictionaryTest();
-			
+
 			var output = serializer.Clone(log, input);
 
 			//Assert.AreEqual(input, output);
@@ -345,7 +347,7 @@ namespace Atlas.Serialize.Test
 		{
 			int[] input = { 1, 2 };
 			input[0] = 5;
-			
+
 			int[] output = serializer.Clone(log, input);
 
 			Assert.AreEqual(2, output.Length);
@@ -356,9 +358,11 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Clone HashSet")]
 		public void CloneHashSet()
 		{
-			var input = new HashSet<string>();
-			input.Add("test");
-			
+			var input = new HashSet<string>
+			{
+				"test"
+			};
+
 			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(input.Count, output.Count);
@@ -373,7 +377,7 @@ namespace Atlas.Serialize.Test
 				NonSerialized = 5,
 				Serialized = 10,
 			};
-			
+
 			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.NonSerialized, 1);
@@ -454,12 +458,11 @@ namespace Atlas.Serialize.Test
 			public int Serialized = 2;
 		}
 
-		
 		[Test, Description("Clone List Containing Subclass of Type")]
 		public void CloneSubClassContainer()
 		{
 			var input = new SubClassContainer();
-			
+
 			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(output.SubClass.A, input.SubClass.A);
@@ -484,10 +487,12 @@ namespace Atlas.Serialize.Test
 			var input = new Dictionary<Base, Base>();
 
 			Base b = new Base();
-			SubClass s = new SubClass();
-			s.B = 3;
+			SubClass s = new SubClass
+			{
+				B = 3
+			};
 			input[s] = b;
-			
+
 			var output = serializer.Clone(log, input);
 
 			Assert.AreEqual(s.B, 3);

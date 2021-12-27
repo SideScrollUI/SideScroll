@@ -1,4 +1,4 @@
-﻿
+
 namespace Atlas.Core
 {
 	public class AtlasInit

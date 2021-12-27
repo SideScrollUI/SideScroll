@@ -1,4 +1,4 @@
-﻿using Atlas.Serialize;
+using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
 

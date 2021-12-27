@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -61,7 +61,7 @@ namespace Atlas.Serialize
 			public override string ToString() => TypeRepo.ToString() + " - " + Index;
 		}
 
-		private Queue<LoadItem> _loadQueue = new Queue<LoadItem>();
+		private readonly Queue<LoadItem> _loadQueue = new Queue<LoadItem>();
 
 		public Serializer()
 		{
@@ -82,10 +82,8 @@ namespace Atlas.Serialize
 				//return typeRepo.LoadObject();
 			}
 
-			using (CallTimer callSaving = call.Timer("Load BaseObject"))
-			{
-				return LoadObject(typeRepo, 0);
-			}
+			using CallTimer callSaving = call.Timer("Load BaseObject");
+			return LoadObject(typeRepo, 0);
 		}
 
 		public object LoadObject(TypeRepo typeRepo, int index)
@@ -177,22 +175,21 @@ namespace Atlas.Serialize
 
 		public void Save(Call call, BinaryWriter writer)
 		{
-			using (CallTimer callSaving = call.Timer("Saving object"))
-			{
-				AddObjectMemberTypes(callSaving.Log);
-				//UpdateTypeSchemaDerived();
-				Header.Save(writer);
-				long schemaPosition = writer.BaseStream.Position;
-				writer.Write((long)0); // will write correct value at end
-				SaveSchemas(writer);
-				SavePrimitives(callSaving, writer);
-				SaveObjects(callSaving.Log, writer);
+			using CallTimer callSaving = call.Timer("Saving object");
 
-				// write out schema again for file offsets and size
-				writer.Seek((int)schemaPosition, SeekOrigin.Begin);
-				writer.Write(writer.BaseStream.Length);
-				SaveSchemas(writer);
-			}
+			AddObjectMemberTypes(callSaving.Log);
+			//UpdateTypeSchemaDerived();
+			Header.Save(writer);
+			long schemaPosition = writer.BaseStream.Position;
+			writer.Write((long)0); // will write correct value at end
+			SaveSchemas(writer);
+			SavePrimitives(callSaving, writer);
+			SaveObjects(callSaving.Log, writer);
+
+			// write out schema again for file offsets and size
+			writer.Seek((int)schemaPosition, SeekOrigin.Begin);
+			writer.Write(writer.BaseStream.Length);
+			SaveSchemas(writer);
 		}
 
 		public void Load(Call call, BinaryReader reader, bool lazy = false, bool loadData = true)
@@ -200,28 +197,27 @@ namespace Atlas.Serialize
 			Reader = reader;
 			Lazy = lazy;
 
-			using (LogTimer logTimer = call.Log.Timer("Loading object"))
+			using LogTimer logTimer = call.Log.Timer("Loading object");
+
+			Header.Load(reader);
+			if (Header.Version != Header.LatestVersion)
 			{
-				Header.Load(reader);
-				if (Header.Version != Header.LatestVersion)
-				{
-					logTimer.AddError("Header version doesn't match", new Tag("Header", Header));
-					return;
-				}
-
-				long fileLength = reader.ReadInt64();
-				if (reader.BaseStream.Length != fileLength)
-				{
-					logTimer.AddError("File size doesn't match", new Tag("Expected", fileLength), new Tag("Actual", reader.BaseStream.Length));
-					return;
-				}
-
-				LoadSchemas(logTimer, reader);
-				LoadPrimitives(logTimer, reader);
-
-				if (loadData)
-					LoadTypeRepos(logTimer);
+				logTimer.AddError("Header version doesn't match", new Tag("Header", Header));
+				return;
 			}
+
+			long fileLength = reader.ReadInt64();
+			if (reader.BaseStream.Length != fileLength)
+			{
+				logTimer.AddError("File size doesn't match", new Tag("Expected", fileLength), new Tag("Actual", reader.BaseStream.Length));
+				return;
+			}
+
+			LoadSchemas(logTimer, reader);
+			LoadPrimitives(logTimer, reader);
+
+			if (loadData)
+				LoadTypeRepos(logTimer);
 		}
 
 		private void SavePrimitives(Call call, BinaryWriter writer)
@@ -378,10 +374,8 @@ namespace Atlas.Serialize
 				});*/
 				foreach (TypeRepoWriter typeRepoWriter in writers)
 				{
-					using (var binaryWriter = new BinaryWriter(typeRepoWriter.MemoryStream, System.Text.Encoding.Default, true))
-					{
-						typeRepoWriter.TypeRepo.SaveObjects(logSerialize, binaryWriter);
-					}
+					using var binaryWriter = new BinaryWriter(typeRepoWriter.MemoryStream, System.Text.Encoding.Default, true);
+					typeRepoWriter.TypeRepo.SaveObjects(logSerialize, binaryWriter);
 				}
 			}
 
@@ -398,13 +392,11 @@ namespace Atlas.Serialize
 				}
 			}
 
-			using (LogTimer logTimer = log.Timer("Saving Type Repo headers"))
+			using LogTimer logTimer = log.Timer("Saving Type Repo headers");
+			writer.Seek((int)headerPosition, SeekOrigin.Begin);
+			foreach (TypeRepo typeRepo in OrderedTypes)
 			{
-				writer.Seek((int)headerPosition, SeekOrigin.Begin);
-				foreach (TypeRepo typeRepo in OrderedTypes)
-				{
-					typeRepo.SaveHeader(writer);
-				}
+				typeRepo.SaveHeader(writer);
 			}
 		}
 
@@ -412,7 +404,7 @@ namespace Atlas.Serialize
 		{
 			uint id = Reader.ReadUInt32();
 			Debug.Assert(id == HeaderId);
-			
+
 			using (LogTimer logTimer = log.Timer("Loading Type Repo headers"))
 			{
 				foreach (TypeRepo typeRepo in OrderedTypes)
@@ -538,21 +530,20 @@ namespace Atlas.Serialize
 		// speed issue, we don't know what objects index will be when enqueued, so we have to lookup again later
 		public void AddObject(Call call, object obj)
 		{
-			using (CallTimer callTimer = call.Timer("Parsing object", new Tag("Object", obj.ToString())))
-			{
-				TypeRepo typeRepo = GetOrCreateRepo(callTimer.Log, obj.GetType());
-				int objectIndex = typeRepo.GetOrAddObjectRef(obj);
-				//ParserQueue.Enqueue(obj);
-				if (objectIndex < 0)
-					Primitives.Add(obj);
+			using CallTimer callTimer = call.Timer("Parsing object", new Tag("Object", obj.ToString()));
 
-				while (ParserQueue.Count > 0)
-				{
-					obj = ParserQueue.Dequeue();
-					Type type = obj.GetType();
-					typeRepo = IdxTypeToRepo[type]; // optimization? could save the object and TypeRepo reference in a Link struct 
-					typeRepo.AddChildObjects(obj);
-				}
+			TypeRepo typeRepo = GetOrCreateRepo(callTimer.Log, obj.GetType());
+			int objectIndex = typeRepo.GetOrAddObjectRef(obj);
+			//ParserQueue.Enqueue(obj);
+			if (objectIndex < 0)
+				Primitives.Add(obj);
+
+			while (ParserQueue.Count > 0)
+			{
+				obj = ParserQueue.Dequeue();
+				Type type = obj.GetType();
+				typeRepo = IdxTypeToRepo[type]; // optimization? could save the object and TypeRepo reference in a Link struct 
+				typeRepo.AddChildObjects(obj);
 			}
 		}
 
@@ -575,9 +566,9 @@ namespace Atlas.Serialize
 			Log log = new Log();
 			TypeRepo typeRepo = GetOrCreateRepo(log, type);
 
-			if (typeRepo is TypeRepoPrimitive || 
-				typeRepo is TypeRepoString || 
-				typeRepo is TypeRepoEnum || 
+			if (typeRepo is TypeRepoPrimitive ||
+				typeRepo is TypeRepoString ||
+				typeRepo is TypeRepoEnum ||
 				typeRepo is TypeRepoType)
 			{
 				Clones[obj] = obj; // optional
@@ -606,11 +597,11 @@ namespace Atlas.Serialize
 
 			Clones[obj] = clone;
 			typeRepo.Cloned++;
-			Action action = () => typeRepo.Clone(obj, clone);
+			void action() => typeRepo.Clone(obj, clone);
 			CloneQueue.Enqueue(action);
 			return clone;
 		}
-		
+
 		public T Clone<T>(Log log, T obj)
 		{
 			T clone = (T)Clone(obj);
@@ -624,7 +615,7 @@ namespace Atlas.Serialize
 					//Type type = obj.GetType();
 					//typeRepo = idxTypeToInstances[type]; // optimization? could save the object and TypeRepo reference in a Link class 
 				}
-				
+
 				logClone.Add("Clone Finished", new Tag("Objects", Clones.Count));
 				LogClonedTypes(logClone);
 			}

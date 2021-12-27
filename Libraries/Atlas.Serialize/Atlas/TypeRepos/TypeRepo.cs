@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -69,7 +69,7 @@ namespace Atlas.Serialize
 		public abstract void Clone(object source, object dest);
 		public virtual void AddChildObjects(object obj) { }
 		public virtual void InitializeSaving() { }
-		public virtual void InitializeLoading(Log log)	{ }
+		public virtual void InitializeLoading(Log log) { }
 		public virtual void SaveCustomHeader(BinaryWriter writer) { }
 		public virtual void LoadCustomHeader() { }
 
@@ -211,7 +211,7 @@ namespace Atlas.Serialize
 		public void LoadHeader(Log log)
 		{
 			using LogTimer logTimer = log.Timer("Loading Headers", new Tag("Type", TypeSchema.Name), new Tag("Count", TypeSchema.NumObjects));
-			
+
 			ObjectOffsets = new long[TypeSchema.NumObjects];
 			ObjectSizes = new int[TypeSchema.NumObjects];
 			long offset = TypeSchema.FileDataOffset;
@@ -232,7 +232,7 @@ namespace Atlas.Serialize
 		public void SaveObjects(Log log, BinaryWriter writer)
 		{
 			using LogTimer logTimer = log.Timer("Serializing (" + TypeSchema.Name + ")");
-			
+
 			//long start = writer.BaseStream.Position;
 
 			ObjectSizes = new int[Objects.Count];
@@ -439,7 +439,7 @@ namespace Atlas.Serialize
 				TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
 				//if (type == null) // type might have disappeared or been renamed
 				//	return null;
-				
+
 				return typeRepo.LoadObject(objectIndex);
 			}
 		}
@@ -479,7 +479,7 @@ namespace Atlas.Serialize
 			object obj = CreateObject(objectIndex);
 			return obj;
 		}
-		
+
 		public object LoadFullObject(int objectIndex)
 		{
 			if (ObjectsLoaded[objectIndex] != null)
@@ -507,7 +507,7 @@ namespace Atlas.Serialize
 
 		public virtual void Dispose()
 		{
-			
+
 		}
 	}
 }

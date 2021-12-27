@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using Avalonia.Threading;
 using OxyPlot;
@@ -102,7 +102,7 @@ namespace Atlas.UI.Avalonia.Charts
 				{
 					string title = ListSeries.Name;
 					if (title != null && title.Length > MaxTitleLength)
-						title = title.Substring(0, MaxTitleLength) + "...";
+						title = title[..MaxTitleLength] + "...";
 
 					result.Text = title + "\n\nTime: " + timeRangeValue.TimeText + "\nDuration: " + timeRangeValue.Duration.FormattedDecimal() + "\n" + valueLabel + ": " + timeRangeValue.Value.Formatted();
 				}

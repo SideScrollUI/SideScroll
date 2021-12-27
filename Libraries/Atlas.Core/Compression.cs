@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -18,11 +18,11 @@ namespace Atlas.Core
 			using CallTimer compressCall = call.Timer("Compressing", new Tag("File", fileToCompress.FullName));
 
 			using FileStream originalFileStream = fileToCompress.OpenRead();
-			
+
 			using FileStream compressedFileStream = File.Create(fileToCompress.FullName + ".gz");
 
 			using GZipStream compressionStream = new GZipStream(compressedFileStream, CompressionMode.Compress);
-				
+
 			originalFileStream.CopyTo(compressionStream);
 
 			compressCall.Log.Add("Finished Compressing",
@@ -35,7 +35,7 @@ namespace Atlas.Core
 		public static void Decompress(Call call, FileInfo fileToDecompress)
 		{
 			using CallTimer decompressCall = call.Timer("Decompressing", new Tag("File", fileToDecompress.FullName));
-			
+
 			if (fileToDecompress.Extension == ".zip")
 			{
 				string targetPath = Path.ChangeExtension(fileToDecompress.FullName, null);
@@ -48,14 +48,14 @@ namespace Atlas.Core
 			else if (fileToDecompress.Extension == ".gz")
 			{
 				using FileStream originalFileStream = fileToDecompress.OpenRead();
-				
+
 				string currentFileName = fileToDecompress.FullName;
 				string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
 
 				using FileStream decompressedFileStream = File.Create(newFileName);
 
 				using GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress);
-				
+
 				decompressionStream.CopyTo(decompressedFileStream);
 
 				decompressCall.Log.Add("Finished Decompressing",

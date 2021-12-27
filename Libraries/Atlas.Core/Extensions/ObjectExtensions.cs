@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,7 +49,7 @@ namespace Atlas.Extensions
 				{
 					string toString = obj.ToString();
 					if (toString != null && toString.Length > maxLength)
-						return toString.Substring(0, maxLength);
+						return toString[..maxLength];
 					return toString;
 				}
 			}
@@ -57,7 +57,7 @@ namespace Atlas.Extensions
 			if (obj is string text)
 			{
 				if (text.Length > maxLength)
-					return text.Substring(0, maxLength);
+					return text[..maxLength];
 
 				return text;
 			}
@@ -108,7 +108,7 @@ namespace Atlas.Extensions
 			}
 
 			if (valueString.Length > maxLength)
-				return valueString.Substring(0, maxLength);
+				return valueString[..maxLength];
 
 			return valueString;
 		}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Atlas.Serialize
@@ -15,7 +15,7 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{
 		}

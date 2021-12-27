@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections.Generic;
 
@@ -30,7 +30,7 @@ namespace Atlas.Tabs.Test.DataGrid
 					for (int j = 0; j < i; j++)
 						testItem.IntegerList.Add(j);
 
-					testItem.LongString = testItem.LongString + i; // make as a unique string
+					testItem.LongString += i; // make as a unique string
 					items.Add(testItem);
 				}
 				model.Items = items;

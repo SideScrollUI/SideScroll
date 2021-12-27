@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections.Generic;
 
@@ -59,7 +59,7 @@ namespace Atlas.Serialize.Test
 		public TestLogBig()
 		{
 		}
-		
+
 		// Todo: use caller instead
 		public void Child(string name)
 		{

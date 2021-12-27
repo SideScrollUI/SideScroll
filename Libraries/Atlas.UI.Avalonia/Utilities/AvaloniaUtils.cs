@@ -1,4 +1,4 @@
-﻿using Atlas.UI.Avalonia.View;
+using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;

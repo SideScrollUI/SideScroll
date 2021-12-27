@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,7 +11,7 @@ namespace Atlas.Tabs.Test.Chart
 
 		public class Instance : TabInstance, ITabAsync
 		{
-			private Random random = new Random();
+			private readonly Random random = new Random();
 
 			public async Task LoadAsync(Call call, TabModel model)
 			{

@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test.DataGrid
@@ -27,8 +27,10 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 				for (int i = 0; i < 20; i++)
 				{
-					var testItem = new TabTestGridCollectionSize.TestItem();
-					testItem.SmallNumber = i;
+					var testItem = new TabTestGridCollectionSize.TestItem
+					{
+						SmallNumber = i
+					};
 					testItem.BigNumber += i;
 					items.Add(testItem);
 				}

@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
@@ -39,7 +39,7 @@ namespace Atlas.UI.Avalonia
 			PropertyInfo = propertyInfo;
 			IsReadOnly = isReadOnly;
 			MaxDesiredWidth = maxDesiredWidth;
-			
+
 			Binding = GetFormattedTextBinding();
 
 			var maxHeightAttribute = propertyInfo.GetCustomAttribute<MaxHeightAttribute>();

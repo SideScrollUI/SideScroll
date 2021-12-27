@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.Collections;
@@ -35,7 +35,7 @@ namespace Atlas.Tabs
 				var labels = SelectedRows.Select(s => s.Label).ToList();
 				if (labels.Count <= 1)
 					return labels.FirstOrDefault();
-				
+
 				return "[" + string.Join(", ", labels) + "] ";
 			}
 		}
@@ -64,7 +64,7 @@ namespace Atlas.Tabs
 			return GetVisibleProperties(elementType);
 		}
 
-		private static Dictionary<Type, List<PropertyInfo>> _visiblePropertiesCache = new Dictionary<Type, List<PropertyInfo>>();
+		private static readonly Dictionary<Type, List<PropertyInfo>> _visiblePropertiesCache = new Dictionary<Type, List<PropertyInfo>>();
 
 		public static List<PropertyInfo> GetVisibleProperties(Type type)
 		{

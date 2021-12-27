@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.IO;
 
@@ -40,7 +40,7 @@ namespace Atlas.Serialize
 
 			if (!Directory.Exists(BasePath))
 				Directory.CreateDirectory(BasePath);
-			
+
 			SaveInternal(callTimer, obj, name);
 		}
 
@@ -67,7 +67,7 @@ namespace Atlas.Serialize
 		public object Load(Call call, bool lazy = false, TaskInstance taskInstance = null)
 		{
 			using CallTimer callTimer = call.Timer(LogLevel.Debug, "Loading object: " + Name);
-			
+
 			try
 			{
 				return LoadInternal(callTimer, lazy, taskInstance);
@@ -84,7 +84,7 @@ namespace Atlas.Serialize
 			call ??= new Call();
 
 			using CallTimer callReadAllBytes = call.Timer(LogLevel.Debug, "Loading header: " + Name);
-			
+
 			var memoryStream = new MemoryStream(File.ReadAllBytes(HeaderPath));
 
 			var reader = new BinaryReader(memoryStream);

@@ -1,4 +1,4 @@
-﻿using Atlas.Tabs;
+using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -94,7 +94,7 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				// todo: add load button to load rest of content
 				using StreamReader streamReader = File.OpenText(path);
-				
+
 				var buffer = new char[MaxAutoLoadSize];
 				streamReader.Read(buffer, 0, buffer.Length);
 				TextEditor.Text = new string(buffer);

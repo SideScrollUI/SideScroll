@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace Atlas.Tabs.Test
 		{
 			private const string DataKey = "Params";
 
-			private ItemCollectionUI<ParamTestResult> _items = new ItemCollectionUI<ParamTestResult>();
+			private readonly ItemCollectionUI<ParamTestResult> _items = new ItemCollectionUI<ParamTestResult>();
 			private ParamTestItem _paramTestItem;
 
 			public override void Load(Call call, TabModel model)

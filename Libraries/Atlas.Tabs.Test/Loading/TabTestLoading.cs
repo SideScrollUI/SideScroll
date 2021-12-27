@@ -1,8 +1,8 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 
 namespace Atlas.Tabs.Test.Loading
 {
-	public class TabTestLoading: ITab
+	public class TabTestLoading : ITab
 	{
 		public TabInstance Create() => new Instance();
 

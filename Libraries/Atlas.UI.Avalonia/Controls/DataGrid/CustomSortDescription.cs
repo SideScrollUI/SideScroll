@@ -1,4 +1,4 @@
-﻿using Avalonia.Collections;
+using Avalonia.Collections;
 using System;
 using System.Collections;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Atlas.Serialize
@@ -15,7 +15,7 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public TypeRepoString(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoString(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{
 		}
@@ -36,7 +36,7 @@ namespace Atlas.Serialize
 			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 			return obj;
 		}
-		
+
 		public override void Clone(object source, object dest)
 		{
 			// assigning won't do anything since it's not a ref

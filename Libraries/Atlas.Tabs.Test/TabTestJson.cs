@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 
 namespace Atlas.Tabs.Test
 {

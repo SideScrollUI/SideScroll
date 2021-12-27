@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Serialize;
 using System;
@@ -59,7 +59,7 @@ namespace Atlas.Tabs
 				reloadable.Reload();
 
 			TabInstance tabInstance = tab.Create();
-			tabInstance.Project = Project.Open(bookmarkCopy); 
+			tabInstance.Project = Project.Open(bookmarkCopy);
 			tabInstance.iTab = this;
 			tabInstance.IsRoot = true;
 			tabInstance.SelectBookmark(bookmarkCopy.TabBookmark);

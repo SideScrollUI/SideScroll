@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Media;
 using System;
 
@@ -19,7 +19,7 @@ namespace Atlas.UI.Avalonia
 		public static SolidColorBrush GridForeground => Get("ThemeGridForegroundBrush");
 		public static SolidColorBrush GridBackground => Get("ThemeGridBackgroundBrush");
 		public static SolidColorBrush GridBackgroundSelected => Get("ThemeGridBackgroundSelectedBrush");
-		
+
 		// Links
 		public static SolidColorBrush HasLinksBackground => Get("ThemeHasLinksBrush");
 		public static SolidColorBrush NoLinksBackground => Get("ThemeNoLinksBrush");

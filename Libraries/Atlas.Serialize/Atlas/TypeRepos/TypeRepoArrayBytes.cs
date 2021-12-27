@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.IO;
 
@@ -18,7 +18,7 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{
 		}
@@ -49,7 +49,7 @@ namespace Atlas.Serialize
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
 			byte[] array = (byte[])obj;
-			
+
 			//writer.Write(array.Length);
 			writer.Write(array);
 		}

@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections;
 using System.IO;
@@ -20,9 +20,9 @@ namespace Atlas.Serialize
 
 		private TypeRepo _listTypeRepo;
 		private PropertyInfo _propertyInfoCapacity;
-		private Type _elementType;
+		private readonly Type _elementType;
 
-		public TypeRepoList(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoList(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{
 			Type[] types = Type.GetGenericArguments();
@@ -39,7 +39,7 @@ namespace Atlas.Serialize
 		{
 			if (_elementType != null)
 				_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
-			
+
 			_propertyInfoCapacity = LoadableType.GetProperty("Capacity");
 		}
 
@@ -57,7 +57,7 @@ namespace Atlas.Serialize
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
 			IList iList = (IList)obj;
-			
+
 			writer.Write(iList.Count);
 			foreach (var item in iList)
 			{

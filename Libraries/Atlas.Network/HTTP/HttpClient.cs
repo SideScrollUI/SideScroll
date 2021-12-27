@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -25,7 +25,7 @@ namespace Atlas.Network
 		public static ViewHttpResponse GetBytes(Call call, string uri)
 		{
 			using CallTimer getCall = call.Timer("Get Uri", new Tag("Uri", uri));
-			
+
 			for (int attempt = 1; attempt <= MaxAttempts; attempt++)
 			{
 				if (attempt > 1)
@@ -75,13 +75,12 @@ namespace Atlas.Network
 				}
 			}
 			return null;
-			
 		}
 
 		public static WebResponse GetHead(Call call, string uri)
 		{
 			using CallTimer headCall = call.Timer("Head Uri", new Tag("Uri", uri));
-			
+
 			for (int attempt = 1; attempt <= MaxAttempts; attempt++)
 			{
 				if (attempt > 1)

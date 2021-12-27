@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using Avalonia;
 using Avalonia.Controls;
@@ -339,8 +339,8 @@ namespace Atlas.UI.Avalonia.Charts
 			Series = scatterSeries;
 			if (IsSelected == true || Highlight)
 			{
-				scatterSeries.ItemsSource ??= ItemsSource; // never gonna let you go...
-				//ItemsSource = null;
+				scatterSeries.ItemsSource ??= ItemsSource;
+				// ItemsSource = null;
 				scatterSeries.MarkerType = markerType;
 				scatterSeries.Selectable = true;
 			}
@@ -362,7 +362,7 @@ namespace Atlas.UI.Avalonia.Charts
 				newColor = oxyColor;
 			else
 				newColor = OxyColor.FromAColor(32, oxyColor);
-			
+
 			if (Series is OxyPlot.Series.LineSeries lineSeries)
 			{
 				lineSeries.MarkerFill = newColor;

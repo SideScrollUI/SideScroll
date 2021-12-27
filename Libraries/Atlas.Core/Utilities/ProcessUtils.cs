@@ -1,4 +1,4 @@
-﻿using Atlas.Extensions;
+using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections;
 using System.IO;
@@ -19,9 +19,9 @@ namespace Atlas.Serialize
 
 		private TypeRepo _listTypeRepo;
 		private int[] _sizes;
-		private Type _elementType;
+		private readonly Type _elementType;
 
-		public TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoArray(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{
 			_elementType = typeSchema.Type.GetElementType();
@@ -67,7 +67,7 @@ namespace Atlas.Serialize
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
 			Array array = (Array)obj;
-			
+
 			//writer.Write(array.Length);
 			foreach (var item in array)
 			{

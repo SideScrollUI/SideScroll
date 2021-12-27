@@ -1,4 +1,4 @@
-﻿using Atlas.Tabs;
+using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -55,8 +55,8 @@ namespace Atlas.UI.Avalonia
 			}
 
 			double maxDesiredHeight = Column.MaxDesiredHeight;
-			if (DataContext is IMaxDesiredHeight iMaxHeight && 
-				iMaxHeight.MaxDesiredHeight != null && 
+			if (DataContext is IMaxDesiredHeight iMaxHeight &&
+				iMaxHeight.MaxDesiredHeight != null &&
 				DataContext is IListItem)
 			{
 				maxDesiredHeight = iMaxHeight.MaxDesiredHeight.Value;

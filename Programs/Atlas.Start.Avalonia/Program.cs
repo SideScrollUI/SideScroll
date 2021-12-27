@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Avalonia;
 using OxyPlot.Avalonia;
 using System;

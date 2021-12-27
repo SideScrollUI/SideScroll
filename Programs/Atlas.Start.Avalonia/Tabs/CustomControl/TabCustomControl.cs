@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Tabs;
 using Avalonia.Interactivity;
 using System;

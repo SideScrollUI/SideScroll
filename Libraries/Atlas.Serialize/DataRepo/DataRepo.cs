@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
@@ -110,7 +110,7 @@ namespace Atlas.Serialize
 		public T Load<T>(string groupId, string key, Call call, bool createIfNeeded = false, bool lazy = false)
 		{
 			SerializerFile serializerFile = GetSerializerFile(typeof(T), groupId, key);
-			
+
 			if (serializerFile.Exists)
 			{
 				T obj = serializerFile.Load<T>(call, lazy);
@@ -205,7 +205,7 @@ namespace Atlas.Serialize
 			string groupPath = GetGroupPath(type, groupId);
 			if (!Directory.Exists(groupPath))
 				return;
-			
+
 			try
 			{
 				Directory.Delete(groupPath, true);
@@ -241,7 +241,7 @@ namespace Atlas.Serialize
 			if (!Directory.Exists(dataPath))
 				return;
 
-			
+
 			try
 			{
 				Directory.Delete(dataPath, true);
@@ -255,7 +255,7 @@ namespace Atlas.Serialize
 		{
 			if (!Directory.Exists(RepoPath))
 				return;
-			
+
 			try
 			{
 				Directory.Delete(RepoPath, true);

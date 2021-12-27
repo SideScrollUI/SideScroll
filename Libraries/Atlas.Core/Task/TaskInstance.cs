@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -17,7 +17,7 @@ namespace Atlas.Core
 
 		private string _label;
 		public string Label
-		{ 
+		{
 			get => _label ?? Creator?.Label;
 			set => _label = value;
 		}
@@ -99,7 +99,7 @@ namespace Atlas.Core
 			{
 				if (_percent == value)
 					return;
-				
+
 				_percent = value;
 				NotifyPropertyChanged(nameof(Percent));
 			}

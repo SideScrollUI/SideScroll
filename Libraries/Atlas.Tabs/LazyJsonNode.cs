@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
@@ -70,7 +70,7 @@ namespace Atlas.Tabs
 
 	public class LazyJsonObject : LazyJsonNode
 	{
-		private JsonObject JsonObject;
+		private readonly JsonObject JsonObject;
 
 		private List<LazyJsonProperty> _items;
 		[InnerValue, StyleValue]

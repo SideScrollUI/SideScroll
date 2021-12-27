@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
@@ -129,7 +129,7 @@ namespace Atlas.UI.Avalonia.Charts
 
 		public TextBlock TitleTextBlock { get; protected set; }
 
-		private static OxyColor GridLineColor = OxyColor.Parse("#333333");
+		private static readonly OxyColor GridLineColor = OxyColor.Parse("#333333");
 		public static OxyColor[] Colors { get; set; } = new OxyColor[]
 		{
 			OxyColors.LawnGreen,
@@ -767,7 +767,7 @@ namespace Atlas.UI.Avalonia.Charts
 				var margin = (maximum - minimum) * MarginPercent;
 				if (minimum == maximum)
 					margin = Math.Abs(minimum);
-				
+
 				if (margin == 0)
 					margin = 1;
 
@@ -946,7 +946,7 @@ namespace Atlas.UI.Avalonia.Charts
 			//if (listSeries.IsStacked)
 			//	AddBarSeries(listSeries);
 			//else
-				AddListSeries(listSeries, oxyColor);
+			AddListSeries(listSeries, oxyColor);
 		}
 
 		/*private void AddBarSeries(ListSeries listSeries)

@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Text;
 
@@ -8,7 +8,7 @@ namespace Atlas.Network
 	{
 		public HttpCache HttpCache;
 
-		public CachedHttp(Call call, HttpCache httpCache) : 
+		public CachedHttp(Call call, HttpCache httpCache) :
 			base(call)
 		{
 			HttpCache = httpCache;

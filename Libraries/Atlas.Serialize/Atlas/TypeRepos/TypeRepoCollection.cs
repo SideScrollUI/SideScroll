@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections;
 using System.IO;
@@ -24,7 +24,7 @@ namespace Atlas.Serialize
 		private readonly MethodInfo _addMethod;
 		private readonly Type _elementType;
 
-		public TypeRepoCollection(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoCollection(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{
 			Type[] types = LoadableType.GetGenericArguments();
@@ -53,7 +53,7 @@ namespace Atlas.Serialize
 		public override void SaveObject(BinaryWriter writer, object obj)
 		{
 			ICollection iCollection = (ICollection)obj;
-			
+
 			writer.Write(iCollection.Count);
 			foreach (var item in iCollection)
 			{

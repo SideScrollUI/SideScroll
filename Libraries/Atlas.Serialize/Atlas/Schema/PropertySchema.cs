@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
@@ -138,7 +138,7 @@ namespace Atlas.Serialize
 		{
 			if (TypeIndex < 0)
 				return;
-			
+
 			TypeSchema typeSchema = typeSchemas[TypeIndex];
 			if (PropertyInfo != null)
 			{

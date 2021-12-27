@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 
 namespace Atlas.Core
@@ -6,7 +6,7 @@ namespace Atlas.Core
 	public class LogWriterConsole
 	{
 		public Log Log;
-		
+
 		public SynchronizationContext Context;
 
 		public override string ToString() => "Console";
@@ -14,9 +14,9 @@ namespace Atlas.Core
 		public LogWriterConsole(Log log)
 		{
 			Log = log;
-			
+
 			Context = SynchronizationContext.Current ?? new SynchronizationContext();
-			
+
 			log.OnMessage += LogEntry_OnMessage;
 		}
 

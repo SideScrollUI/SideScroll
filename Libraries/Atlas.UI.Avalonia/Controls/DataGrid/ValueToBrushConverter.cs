@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Tabs;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
@@ -115,7 +115,7 @@ namespace Atlas.UI.Avalonia
 		{
 			try
 			{
-				if (value is DictionaryEntry || 
+				if (value is DictionaryEntry ||
 					PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 				{
 					bool hasLinks = TabUtils.ObjectHasLinks(value, true);

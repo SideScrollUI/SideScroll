@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -33,10 +33,9 @@ namespace Atlas.Serialize.Test
 				items[i] = i;
 			}
 
-			using (CallTimer callTimer = Call.Timer("Get Count"))
-			{
-				int count = items.Values.Count;
-			}
+			using CallTimer callTimer = Call.Timer("Get Count");
+
+			int count = items.Values.Count;
 		}
 
 		[Test]
@@ -53,11 +52,10 @@ namespace Atlas.Serialize.Test
 		{
 			List<TimeRangeValue> input = TimeRangeSamples(100000); // doesn't work for 1,000,000
 
-			using (CallTimer callTimer = Call.Timer("Cloning"))
-			{
-				serializer.Save(callTimer, input);
-				var output = serializer.Load<List<TimeRangeValue>>(callTimer);
-			}
+			using CallTimer callTimer = Call.Timer("Cloning");
+
+			serializer.Save(callTimer, input);
+			var output = serializer.Load<List<TimeRangeValue>>(callTimer);
 		}
 
 		[Test]
@@ -65,12 +63,11 @@ namespace Atlas.Serialize.Test
 		{
 			List<TimeRangeValue> input = TimeRangeSamples(100000);
 
-			using (CallTimer callTimer = Call.Timer("Cloning"))
-			{
-				var jsonSerializer = new SerializerMemoryJson();
-				jsonSerializer.Save(Call, input);
-				var output = jsonSerializer.Load<List<TimeRangeValue>>(Call);
-			}
+			using CallTimer callTimer = Call.Timer("Cloning");
+
+			var jsonSerializer = new SerializerMemoryJson();
+			jsonSerializer.Save(Call, input);
+			var output = jsonSerializer.Load<List<TimeRangeValue>>(Call);
 		}
 
 		private static List<TimeRangeValue> TimeRangeSamples(int count)

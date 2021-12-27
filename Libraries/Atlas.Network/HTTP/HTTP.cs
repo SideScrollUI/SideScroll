@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.IO;
 using System.Net;
@@ -34,7 +34,7 @@ namespace Atlas.Network
 		private byte[] GetResponse(string uri, string accept = null)
 		{
 			using CallTimer getCall = Call.Timer("Get Uri", new Tag("URI", uri));
-			
+
 			for (int attempt = 1; ; attempt++)
 			{
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri); // requests can't be reused between attempts
@@ -48,7 +48,7 @@ namespace Atlas.Network
 					var memoryStream = new MemoryStream();
 					dataStream.CopyTo(memoryStream);
 					byte[] data = memoryStream.ToArray();
-						
+
 					dataStream.Close();
 					response.Close();
 					getCall.Log.Add("Downloaded HTTP File", new Tag("URI", request.RequestUri), new Tag("Size", memoryStream.Length));

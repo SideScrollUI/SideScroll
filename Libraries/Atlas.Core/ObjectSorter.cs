@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.ComponentModel;
 
@@ -56,7 +56,7 @@ namespace Atlas.Core
 	{
 		public ListSortDescriptionCollection Sorts;
 		public ListSortDirection SortDirection;
-		
+
 		public override int Compare(object x, object y)
 		{
 			PropertyDescriptor descriptor = Sorts[0].PropertyDescriptor;

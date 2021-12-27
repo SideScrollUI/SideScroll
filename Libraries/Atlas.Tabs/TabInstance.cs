@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Serialize;
 using System;
@@ -86,7 +86,6 @@ namespace Atlas.Tabs
 
 		public Project Project { get; set; }
 		public ITab iTab; // Collision with derived Tab
-		//public Log Log => TaskInstance.Log;
 		public TaskInstance TaskInstance { get; set; } = new TaskInstance();
 		public TabModel Model { get; set; } = new TabModel();
 		public string Label { get { return Model.Name; } set { Model.Name = value; } }
@@ -586,7 +585,7 @@ namespace Atlas.Tabs
 
 				var skippableAttribute = Model.ItemList[0][0].GetType().GetCustomAttribute<SkippableAttribute>();
 				if (skippableAttribute == null && Model.Actions != null && Model.Actions.Count > 0)
-					return false; 
+					return false;
 
 				return Model.Skippable;
 			}
@@ -744,7 +743,7 @@ namespace Atlas.Tabs
 		{
 			if (_settingLoaded && !reload && TabViewSettings != null)
 				return TabViewSettings;
-			
+
 			if (TabBookmark != null && TabBookmark.ViewSettings != null)
 			{
 				TabViewSettings = TabBookmark.ViewSettings;
@@ -943,7 +942,7 @@ namespace Atlas.Tabs
 		{
 			if (TabBookmark == null)
 				return null;
-			
+
 			// FindMatches uses bookmarks
 			if (TabBookmark.ChildBookmarks.TryGetValue(name, out TabBookmark tabChildBookmark))
 			{

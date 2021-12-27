@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Atlas.Core
@@ -208,8 +208,10 @@ namespace Atlas.Core
 		public HideAttribute(object value, params object[] additonalValues)
 		{
 			// Combine both params into a single list
-			Values = new List<object>(additonalValues);
-			Values.Add(value);
+			Values = new List<object>(additonalValues)
+			{
+				value
+			};
 		}
 	}
 

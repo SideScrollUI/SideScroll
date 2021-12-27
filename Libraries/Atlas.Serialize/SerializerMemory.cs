@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.IO;
@@ -26,7 +26,7 @@ namespace Atlas.Serialize
 		{
 			if (!typeof(T).IsAssignableFrom(obj.GetType()))
 			{
-				throw new Exception("Cloned types do not match [" + typeof(T).ToString() + "], [" + obj.GetType().ToString() +"]");
+				throw new Exception("Cloned types do not match [" + typeof(T).ToString() + "], [" + obj.GetType().ToString() + "]");
 			}
 
 			//	return default;
@@ -34,10 +34,8 @@ namespace Atlas.Serialize
 			{
 				var memorySerializer = Create();
 				memorySerializer.PublicOnly = publicOnly;
-				using (CallTimer timer = call.Timer(LogLevel.Debug, "Deep Cloning", new Tag("Object", obj.Formatted())))
-				{
-					return memorySerializer.DeepCloneInternal(timer, obj);
-				}
+				using CallTimer timer = call.Timer(LogLevel.Debug, "Deep Cloning", new Tag("Object", obj.Formatted()));
+				return memorySerializer.DeepCloneInternal(timer, obj);
 			}
 			catch (Exception e)
 			{
@@ -70,7 +68,7 @@ namespace Atlas.Serialize
 			Stream.Seek(0, SeekOrigin.Begin);
 
 			using var outStream = new MemoryStream();
-			
+
 			// The GZip stream must be disposed before calling outStream
 			using (var tinyStream = new GZipStream(outStream, CompressionMode.Compress))
 			{
@@ -91,7 +89,7 @@ namespace Atlas.Serialize
 			byte[] bytes = Convert.FromBase64String(base64);
 			using var inStream = new MemoryStream(bytes);
 			using var tinyStream = new GZipStream(inStream, CompressionMode.Decompress);
-			
+
 			tinyStream.CopyTo(outStream);
 		}
 

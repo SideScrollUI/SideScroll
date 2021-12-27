@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Serialize;
 using Atlas.Tabs;
 using NUnit.Framework;
@@ -11,7 +11,7 @@ namespace Atlas.UI.Avalonia.Test
 	public class TestSerializeAvaloniaUI : TestBase
 	{
 		private SerializerMemory serializer;
-		
+
 		[OneTimeSetUp]
 		public void BaseSetup()
 		{

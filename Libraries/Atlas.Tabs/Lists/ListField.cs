@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace Atlas.Tabs
 	public class ListField : ListMember, IPropertyEditable
 	{
 		public FieldInfo FieldInfo;
-		
+
 		[HiddenColumn]
 		public override bool Editable => true;
 
@@ -44,7 +44,7 @@ namespace Atlas.Tabs
 
 		public override string ToString() => Name;
 
-		public ListField(object obj, FieldInfo fieldInfo) : 
+		public ListField(object obj, FieldInfo fieldInfo) :
 			base(obj, fieldInfo)
 		{
 			FieldInfo = fieldInfo;

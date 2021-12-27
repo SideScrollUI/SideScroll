@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.View;
@@ -216,7 +216,7 @@ namespace Atlas.UI.Avalonia.Controls
 				HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
 				//BorderThickness = new Thickness(0), // DataGrid bug, fixes the extra border below the scrollbar, but then there's no border
 				//Padding = new Thickness(0),
-				
+
 				BorderThickness = new Thickness(1),
 				IsReadOnly = !TabModel.Editing,
 				GridLinesVisibility = DataGridGridLinesVisibility.All,
@@ -345,8 +345,8 @@ namespace Atlas.UI.Avalonia.Controls
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
 				// Group up any new items after the 1st one
-				if ((AutoSelectNew || 
-					TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved || 
+				if ((AutoSelectNew ||
+					TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved ||
 					TabModel.AutoSelect == AutoSelectType.FirstSavedOrNew)
 					&& (SearchControl.Text == null || SearchControl.Text.Length == 0))
 				{
@@ -475,9 +475,9 @@ namespace Atlas.UI.Avalonia.Controls
 
 			Type type = visual.GetType();
 
-			return 
-				typeof(CheckBox).IsAssignableFrom(type) || 
-				typeof(Button).IsAssignableFrom(type) || 
+			return
+				typeof(CheckBox).IsAssignableFrom(type) ||
+				typeof(Button).IsAssignableFrom(type) ||
 				IsControlSelectable(visual.VisualParent);
 		}
 
@@ -512,7 +512,7 @@ namespace Atlas.UI.Avalonia.Controls
 				IInputElement input = row.InputHitTest(point.Position);
 				if (IsControlSelectable(input))
 					return;
-	
+
 				if (dataGrid.SelectedItems.Contains(row.DataContext))
 				{
 					Dispatcher.UIThread.Post(() => ClearSelection(dataGrid), DispatcherPriority.Background);
@@ -581,7 +581,7 @@ namespace Atlas.UI.Avalonia.Controls
 				propertyColumns[0].Label = itemCollection.ColumnName;
 			}
 
-			bool styleCells = methodColumns.Count > 0 || 
+			bool styleCells = methodColumns.Count > 0 ||
 				propertyColumns
 				.Select(p => p.IsStyled())
 				.Max();
@@ -1007,7 +1007,7 @@ namespace Atlas.UI.Avalonia.Controls
 			// DataGrid.IsInitialized is unreliable and can still be false while showing
 			if (value == null || DataGrid == null || !DataGrid.IsEffectivelyVisible)
 				return;
-			
+
 			try
 			{
 				//if (collectionView.Contains(value))

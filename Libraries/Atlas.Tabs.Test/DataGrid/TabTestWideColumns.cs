@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 
 namespace Atlas.Tabs.Test.DataGrid
 {
@@ -21,8 +21,10 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 				for (int i = 0; i < 100; i++)
 				{
-					var testItem = new TestWideItem();
-					testItem.SmallNumber = i;
+					var testItem = new TestWideItem
+					{
+						SmallNumber = i
+					};
 					testItem.BigNumber += i;
 					if (i % 3 == 0)
 						testItem.LongText1 += testItem.LongText0;

@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -27,7 +27,7 @@ namespace Atlas.Serialize
 					using var stream = new FileStream(DataPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
 
 					using var writer = new BinaryWriter(stream);
-					
+
 					var serializer = new Serializer();
 					serializer.Header.Name = name;
 					serializer.AddObject(call, obj);
@@ -92,9 +92,9 @@ namespace Atlas.Serialize
 		public Serializer LoadSchema(Call call)
 		{
 			using var stream = new FileStream(HeaderPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-			
+
 			using var reader = new BinaryReader(stream);
-			
+
 			var serializer = new Serializer();
 			serializer.Load(call, reader, false);
 			return serializer;

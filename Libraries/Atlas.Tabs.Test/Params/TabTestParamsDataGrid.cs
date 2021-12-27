@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test.Actions
@@ -9,7 +9,7 @@ namespace Atlas.Tabs.Test.Actions
 
 		public class Instance : TabInstance
 		{
-			private LogEntry _logEntry = new LogEntry()
+			private readonly LogEntry _logEntry = new LogEntry()
 			{
 				Text = "Test Entry",
 			};

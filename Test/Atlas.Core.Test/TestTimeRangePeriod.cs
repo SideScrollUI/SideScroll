@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
@@ -7,7 +7,7 @@ namespace Atlas.Core.Test
 	[Category("Core")]
 	public class TestTimeRangePeriod : TestBase
 	{
-		private static DateTime StartTime = new DateTime(2000, 1, 1);
+		private static readonly DateTime StartTime = new DateTime(2000, 1, 1);
 
 		[OneTimeSetUp]
 		public void BaseSetup()

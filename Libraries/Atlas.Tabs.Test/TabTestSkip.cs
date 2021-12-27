@@ -1,9 +1,9 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test
 {
-	public class TabTestSkip: ITab
+	public class TabTestSkip : ITab
 	{
 		public TabInstance Create() => new Instance();
 

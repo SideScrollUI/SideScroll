@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using Atlas.Core;
 using Atlas.Tabs;
@@ -7,9 +7,9 @@ namespace Atlas.Console
 {
 	public class Console
 	{
-		private Call _call;
-		private LogWriterConsole _logWriterConsole;
-		private LogWriterText _logWriterText;
+		private readonly Call _call;
+		private readonly LogWriterConsole _logWriterConsole;
+		private readonly LogWriterText _logWriterText;
 
 		static void Main(string[] args)
 		{

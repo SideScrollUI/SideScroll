@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Windows.Input;
 using Atlas.Core;
@@ -154,7 +154,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (CallActionAsync == null)
 				return null;
-			
+
 			IsEnabled = false;
 			var taskDelegate = new TaskDelegateAsync(CallActionAsync, true)
 			{
@@ -167,7 +167,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			if (CallAction == null)
 				return null;
-			
+
 			IsEnabled = false;
 			var taskDelegate = new TaskDelegate(CallAction, ShowTask)
 			{

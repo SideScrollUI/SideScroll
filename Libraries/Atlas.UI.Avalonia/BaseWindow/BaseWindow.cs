@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
 using Avalonia;
@@ -153,7 +153,7 @@ namespace Atlas.UI.Avalonia
 				Position = new PixelPoint((int)left, (int)top);
 				//Height = Math.Max(MinWindowSize, value.Height + 500); // reproduces black bar problem, not subtracting bottom toolbar for Height
 				//Measure(Bounds.Size);
-				
+
 				// Avalonia bug? WindowState doesn't update correctly for MacOS
 				if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 					WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
@@ -172,11 +172,11 @@ namespace Atlas.UI.Avalonia
 		{
 			// need a better trigger for when the screen size changes
 			SetMaxBounds();
-			
+
 			if (_loadComplete)// && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
 				Dispatcher.UIThread.Post(SaveWindowSettingsInternal, DispatcherPriority.SystemIdle);
 		}
-		
+
 		private void SaveWindowSettingsInternal()
 		{
 			Project.DataApp.Save(WindowSettings);

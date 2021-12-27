@@ -1,4 +1,4 @@
-﻿using Atlas.Extensions;
+using Atlas.Extensions;
 using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
@@ -13,7 +13,7 @@ namespace Atlas.UI.Avalonia
 
 		// add a map to store original mappings?
 		//public Dictionary<object, object> { get; set; }
-		
+
 		public bool ConvertBackEnabled { get; set; } = true;
 		public bool IsFormatted { get; set; }
 

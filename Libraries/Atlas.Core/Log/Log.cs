@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
@@ -11,8 +11,8 @@ namespace Atlas.Core
 	{
 		[InnerValue]
 		public ItemCollection<LogEntry> Items { get; set; } = new ItemCollection<LogEntry>(); // change to LRU for performance? No Binding?
-	
-		private string SummaryText;
+
+		private readonly string SummaryText;
 
 		[HiddenColumn]
 		public override string Summary => SummaryText;

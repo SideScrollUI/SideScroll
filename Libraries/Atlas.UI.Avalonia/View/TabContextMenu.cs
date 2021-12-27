@@ -1,4 +1,4 @@
-﻿using Atlas.Serialize;
+using Atlas.Serialize;
 using Atlas.Tabs;
 using Avalonia.Collections;
 using Avalonia.Controls;

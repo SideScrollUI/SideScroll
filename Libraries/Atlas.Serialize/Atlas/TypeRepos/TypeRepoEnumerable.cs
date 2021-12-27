@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,11 +20,11 @@ namespace Atlas.Serialize
 			}
 		}
 
-		private Type _elementType;
+		private readonly Type _elementType;
 		private TypeRepo _listTypeRepo;
-		private MethodInfo _addMethod;
+		private readonly MethodInfo _addMethod;
 
-		public TypeRepoEnumerable(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoEnumerable(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{
 			Type[] types = LoadableType.GetGenericArguments();
@@ -59,7 +59,7 @@ namespace Atlas.Serialize
 		{
 			PropertyInfo countProp = LoadableType.GetProperty("Count"); // IEnumerable isn't required to implement this
 			IEnumerable iEnumerable = (IEnumerable)obj;
-			
+
 			int count = (int)countProp.GetValue(iEnumerable, null);
 			writer.Write(count);
 			foreach (object item in iEnumerable)

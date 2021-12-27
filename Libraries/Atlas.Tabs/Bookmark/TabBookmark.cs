@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -127,7 +127,7 @@ namespace Atlas.Tabs
 				Label = tabBookmark.Name,
 			};
 			ViewSettings ??= new TabViewSettings();
-			ViewSettings.TabDataSettings = ViewSettings.TabDataSettings ?? new List<TabDataSettings>();
+			ViewSettings.TabDataSettings ??= new List<TabDataSettings>();
 			if (ViewSettings.TabDataSettings.Count == 0)
 				ViewSettings.TabDataSettings.Add(new TabDataSettings());
 			ViewSettings.TabDataSettings[0].SelectionType = SelectionType.User;

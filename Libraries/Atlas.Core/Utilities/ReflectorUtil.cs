@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -22,7 +22,7 @@ namespace Atlas.Core
 				{
 					int brackStart = propertyName.IndexOf("[");
 					int brackEnd = propertyName.IndexOf("]");
-					string subPropertyName = brackStart > 0 ? propertyName.Substring(0, brackStart) : propertyName;
+					string subPropertyName = brackStart > 0 ? propertyName[..brackStart] : propertyName;
 
 					var properties = currentType.GetProperties().Where(x => x.Name == subPropertyName);
 					PropertyInfo property = properties.FirstOrDefault(x => x.DeclaringType == currentType) ?? properties.First();

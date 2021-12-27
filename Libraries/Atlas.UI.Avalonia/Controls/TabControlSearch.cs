@@ -1,4 +1,4 @@
-﻿using Atlas.Resources;
+using Atlas.Resources;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -18,7 +18,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public string Text
 		{
-			get	=> TextBoxSearch.Text;
+			get => TextBoxSearch.Text;
 			set => TextBoxSearch.Text = value;
 		}
 

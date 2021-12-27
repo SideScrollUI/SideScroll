@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test
@@ -28,7 +28,7 @@ namespace Atlas.Tabs.Test
 			private void Serialize(Call call)
 			{
 				var sampleItem = new SampleItem(1, "Sample Item");
-				
+
 				Project.DataApp.Save(sampleItem, call);
 				_items.Add(new ListItem("Sample Item", sampleItem));
 			}

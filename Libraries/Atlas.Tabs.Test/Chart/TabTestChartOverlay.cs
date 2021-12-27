@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
@@ -12,9 +12,9 @@ namespace Atlas.Tabs.Test.Chart
 
 		public class Instance : TabInstance
 		{
-			private ItemCollection<ChartSample> _samples = new ItemCollection<ChartSample>();
-			private Random _random = new Random();
-			private DateTime _baseDateTime = DateTime.Now.Trim(TimeSpan.FromMinutes(1));
+			private readonly ItemCollection<ChartSample> _samples = new ItemCollection<ChartSample>();
+			private readonly Random _random = new Random();
+			private readonly DateTime _baseDateTime = DateTime.Now.Trim(TimeSpan.FromMinutes(1));
 
 			public class TestItem
 			{

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -23,11 +23,11 @@ namespace Atlas.Core
 			string parentDirectory = Path.GetDirectoryName(SaveFilePath);
 			if (!Directory.Exists(parentDirectory))
 				Directory.CreateDirectory(parentDirectory);
-			
+
 			_textStreamWriter = new StreamWriter(SaveFilePath);
 
 			_context = SynchronizationContext.Current ?? new SynchronizationContext();
-			
+
 			log.OnMessage += LogEntry_OnMessage;
 		}
 

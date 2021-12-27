@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System.IO;
 using System.Reflection;
 
@@ -20,7 +20,8 @@ namespace Atlas.Resources
 		public const string ClearSearch = "clear_search.png";
 
 		public const string Info1 = "info_24_759eeb.png"; // 759eeb
-		//public const string Info2 = "info_24_c8c2f9.png"; // C8C2F9
+
+		// public const string Info2 = "info_24_c8c2f9.png"; // C8C2F9
 
 		public const string BlankDocument = "blank-document.png";
 		public const string Save = "save-file-option.png";

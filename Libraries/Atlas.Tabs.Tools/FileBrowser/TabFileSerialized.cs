@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace Atlas.Tabs.Tools
 			public object Object;
 			public Serializer Serializer;
 
-			private ListItem listData = new ListItem("Object", null);
+			private readonly ListItem listData = new ListItem("Object", null);
 
 			public Instance(TabFileSerialized tab)
 			{

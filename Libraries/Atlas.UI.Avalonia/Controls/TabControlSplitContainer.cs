@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
@@ -190,10 +190,10 @@ namespace Atlas.UI.Avalonia.Controls
 			{
 				if (index > 0)
 					AddHorizontalGridSplitter(index);
-				
+
 				// separator
 				index++;
-				
+
 				RowDefinition rowDefinition = RowDefinitions[index];
 				if (gridItem.Fill)
 					rowDefinition.Height = new GridLength(1, GridUnitType.Star);

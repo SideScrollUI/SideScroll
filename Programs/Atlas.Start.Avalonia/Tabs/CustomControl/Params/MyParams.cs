@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 
 namespace Atlas.Start.Avalonia.Tabs

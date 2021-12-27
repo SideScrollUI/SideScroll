@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System.Collections;
 
 namespace Atlas.Tabs
@@ -10,7 +10,7 @@ namespace Atlas.Tabs
 
 		[InnerValue]
 		public object Object;
-		
+
 		public string Value { get; set; }
 
 		[DataKey]

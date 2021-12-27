@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using NUnit.Framework;
 
 namespace Atlas.Serialize.Test
@@ -7,7 +7,7 @@ namespace Atlas.Serialize.Test
 	public class TestSerializePermissions : TestSerializeBase
 	{
 		private SerializerMemory _serializer;
-		
+
 		[OneTimeSetUp]
 		public void BaseSetup()
 		{
@@ -20,7 +20,7 @@ namespace Atlas.Serialize.Test
 			_serializer = new SerializerMemoryAtlas();
 		}
 
-		private PrivateDataContainer privateDataContainer = new PrivateDataContainer()
+		private readonly PrivateDataContainer privateDataContainer = new PrivateDataContainer()
 		{
 			PrivateField = new PrivateClass()
 			{

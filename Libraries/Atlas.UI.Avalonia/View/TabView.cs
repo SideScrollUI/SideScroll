@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
@@ -52,7 +52,7 @@ namespace Atlas.UI.Avalonia.View
 		public TabModel Model => Instance.Model;
 
 		public string Label
-		{ 
+		{
 			get => Model.Name;
 			set => Model.Name = value;
 		}

@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
@@ -106,7 +106,7 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public TypeRepoObject(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoObject(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{
 		}
@@ -240,7 +240,7 @@ namespace Atlas.Serialize
 			}*/
 		}
 
-		public override void AddChildObjects( object obj)
+		public override void AddChildObjects(object obj)
 		{
 			AddFields(obj);
 			AddProperties(obj);

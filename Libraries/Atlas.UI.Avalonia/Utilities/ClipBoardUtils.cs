@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Input.Platform;
 using System.Threading.Tasks;
 

@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.IO;
 using System.Text;
@@ -28,7 +28,7 @@ namespace Atlas.Serialize
 			using CallTimer callTimer = call.Timer("Save");
 
 			using var writer = new BinaryWriter(Stream, Encoding.Default, true);
-			
+
 			var serializer = Create();
 			serializer.AddObject(callTimer, obj);
 			serializer.Save(callTimer, writer);
@@ -41,10 +41,10 @@ namespace Atlas.Serialize
 		{
 			call ??= new Call();
 			using CallTimer callTimer = call.Timer("Load");
-			
+
 			Stream.Seek(0, SeekOrigin.Begin);
 			using var reader = new BinaryReader(Stream);
-			
+
 			var serializer = Create();
 			serializer.TypeRepoString = _typeRepoString;
 			serializer.Load(callTimer, reader);
@@ -56,7 +56,7 @@ namespace Atlas.Serialize
 			call ??= new Call();
 			Stream.Seek(0, SeekOrigin.Begin);
 			using var reader = new BinaryReader(Stream);
-			
+
 			var serializer = Create();
 			serializer.Load(call, reader);
 			return serializer.BaseObject(call);

@@ -1,10 +1,10 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 
 namespace Atlas.Network
 {
 	public class HttpFile
-	{		
+	{
 		public Uri Uri { get; set; }
 		public int? Size { get; set; }
 

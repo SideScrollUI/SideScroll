@@ -1,9 +1,9 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System.Threading;
 
 namespace Atlas.Tabs.Test.Loading
 {
-	public class TabTestSlowModel: ITab
+	public class TabTestSlowModel : ITab
 	{
 		public TabInstance Create() => new Instance();
 

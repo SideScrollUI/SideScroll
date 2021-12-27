@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Test.Chart
 		public class Instance : TabInstance
 		{
 			private List<ItemCollection<int>> _series;
-			private Random _random = new Random();
+			private readonly Random _random = new Random();
 
 			public override void Load(Call call, TabModel model)
 			{

@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System.ComponentModel;
 using System.Threading;
 using System.Runtime.CompilerServices;
@@ -37,8 +37,10 @@ namespace Atlas.Tabs.Test.DataGrid
 			{
 				for (int i = 0; i < 20; i++)
 				{
-					var testItem = new TestItem(Context);
-					testItem.SmallNumber = i;
+					var testItem = new TestItem(Context)
+					{
+						SmallNumber = i
+					};
 					testItem.BigNumber += i;
 					_items.Add(testItem);
 				}

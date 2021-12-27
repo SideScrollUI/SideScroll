@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 
@@ -16,7 +16,7 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public TypeRepoType(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoType(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{
 		}
@@ -30,7 +30,7 @@ namespace Atlas.Serialize
 		{
 			long position = Reader.BaseStream.Position;
 			Reader.BaseStream.Position = ObjectOffsets[objectIndex];
-			
+
 			string assemblyQualifiedName = Reader.ReadString();
 			//object obj = Type.GetType(assemblyQualifiedName, false);
 			object obj = Type.GetType(assemblyQualifiedName, AssemblyResolver, null);

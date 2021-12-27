@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -32,17 +32,14 @@ namespace Atlas.Serialize
 
 		public void SaveHeader(Call call, string name = null)
 		{
-			using (var stream = new FileStream(HeaderPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
+			using var stream = new FileStream(HeaderPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+			using var writer = new BinaryWriter(stream);
+
+			var header = new Header()
 			{
-				using (var writer = new BinaryWriter(stream))
-				{
-					var header = new Header()
-					{
-						Name = name,
-					};
-					header.Save(writer);
-				}
-			}
+				Name = name,
+			};
+			header.Save(writer);
 		}
 	}
 }

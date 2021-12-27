@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -42,7 +42,7 @@ namespace Atlas.Extensions
 
 				if (absTimeSpan.TotalSeconds > timeUnit.TimeSpan.TotalSeconds)
 					value += "s";
-				
+
 				return value;
 			}
 			return timeSpan.TotalSeconds + " Seconds";

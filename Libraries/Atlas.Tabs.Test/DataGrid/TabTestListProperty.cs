@@ -1,4 +1,4 @@
-﻿using Atlas.Core;
+using Atlas.Core;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -10,7 +10,7 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			private PropertyTest _propertyTest = new PropertyTest();
+			private readonly PropertyTest _propertyTest = new PropertyTest();
 
 			public override void Load(Call call, TabModel model)
 			{
@@ -45,7 +45,7 @@ namespace Atlas.Tabs.Test.DataGrid
 		private bool _boolean;
 
 		public event PropertyChangedEventHandler PropertyChanged;
-		
+
 		private void NotifyPropertyChangedContext(string propertyName)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

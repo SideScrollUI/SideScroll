@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -16,7 +16,7 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : 
+		public TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) :
 			base(serializer, typeSchema)
 		{
 		}
