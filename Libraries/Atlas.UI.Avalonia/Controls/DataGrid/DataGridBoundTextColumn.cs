@@ -32,7 +32,7 @@ namespace Atlas.UI.Avalonia
 		{
 			cell.MaxHeight = 100; // don't let them have more than a few lines each
 
-			TextBlock textBlock = CreateTextBlock(cell, dataItem);
+			TextBlock textBlock = CreateTextBlock();
 			//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
 			textBlock.TextAlignment = DataGridUtils.GetTextAlignment(DataColumn.DataType);
 			AddTextBlockContextMenu(textBlock);
@@ -56,7 +56,7 @@ namespace Atlas.UI.Avalonia
 			}
 		}
 
-		protected TextBlock CreateTextBlock(DataGridCell cell, object dataItem)
+		protected TextBlock CreateTextBlock()
 		{
 			var textBlockElement = new TextBlockElement()
 			{
