@@ -49,8 +49,7 @@ namespace Atlas.UI.Avalonia
 
 			if (value is DateTime dateTime)
 			{
-				if (dateTime != null)
-					return dateTime.ToString("yyyy-M-d H:mm:ss.ffffff");
+				return dateTime.ToString("yyyy-M-d H:mm:ss.ffffff");
 			}
 
 			if (value.GetType().IsPrimitive == false && targetType == typeof(string))

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <Configurations>Debug;Release;DebugX86</Configurations>
     <Version>$(AtlasVersion)</Version>

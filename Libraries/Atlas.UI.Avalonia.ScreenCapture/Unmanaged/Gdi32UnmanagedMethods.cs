@@ -9,22 +9,22 @@ namespace Atlas.UI.Avalonia.ScreenCapture
 
 
 		[DllImport(Library, ExactSpelling = true)]
-		public static extern IntPtr CreateCompatibleDC(IntPtr hdc);
+		internal static extern IntPtr CreateCompatibleDC(IntPtr hdc);
 
 		[DllImport(Library, ExactSpelling = true)]
-		public static extern bool DeleteDC(IntPtr hdc);
+		internal static extern bool DeleteDC(IntPtr hdc);
 
 
 		[DllImport(Library, ExactSpelling = true)]
-		public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int cx, int cy);
+		internal static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int cx, int cy);
 
 
 		[DllImport(Library, SetLastError = true, ExactSpelling = true)]
-		public static extern IntPtr SelectObject(IntPtr hdc, IntPtr h);
+		internal static extern IntPtr SelectObject(IntPtr hdc, IntPtr h);
 
 
 		[DllImport(Library, SetLastError = true, ExactSpelling = true)]
-		public static extern bool BitBlt(
+		internal static extern bool BitBlt(
 			IntPtr hdc,
 			int x,
 			int y,

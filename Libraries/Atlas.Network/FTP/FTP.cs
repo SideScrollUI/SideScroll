@@ -220,7 +220,7 @@ namespace Atlas.Network
 			Stream ftpStream = ftpResponse.GetResponseStream();
 			StreamReader ftpReader = new StreamReader(ftpStream);
 
-			string fileInfo = ftpReader.ReadToEnd();
+			//string fileInfo = ftpReader.ReadToEnd();
 
 			ftpReader.Close();
 			ftpStream.Close();
@@ -314,9 +314,9 @@ namespace Atlas.Network
 					Size = long.Parse(columns[4])
 				};
 
-				string month = columns[5];  // "Sep"
-				string day = columns[6];    // "30"
-				string time = columns[7];   // "00:49"
+				//string month = columns[5];  // "Sep"
+				//string day = columns[6];    // "30"
+				//string time = columns[7];   // "00:49"
 
 				//fileData.modified = new DateTime(
 				fileData.Filename = columns[8]; // "alt_allele_attrib.txt.gz"
