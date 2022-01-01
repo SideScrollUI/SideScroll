@@ -1,4 +1,5 @@
 using Atlas.Core;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test.Chart
 {
@@ -10,12 +11,12 @@ namespace Atlas.Tabs.Test.Chart
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				model.Items = new ItemCollection<ListItem>()
+				model.Items = new List<ListItem>()
 				{
-					new ListItem("List", new TabTestChartList()),
-					//new ListItem("Split", new TabTestChartSplit()),
-					new ListItem("Overlay", new TabTestChartOverlay()),
-					new ListItem("Time Range", new TabTestChartTimeRangeValue()),
+					new("List", new TabTestChartList()),
+					//new("Split", new TabTestChartSplit()),
+					new("Overlay", new TabTestChartOverlay()),
+					new("Time Range", new TabTestChartTimeRangeValue()),
 				};
 			}
 		}

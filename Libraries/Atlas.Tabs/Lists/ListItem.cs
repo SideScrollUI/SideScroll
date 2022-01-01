@@ -43,11 +43,6 @@ namespace Atlas.Tabs
 			Value = value;
 		}
 
-		public static implicit operator ListItem((object key, object value) pair)
-		{
-			return new ListItem(pair.key, pair.value);
-		}
-
 		// todo: move into IListItem after upgrading to .Net Standard 2.1
 		// Get list items for all public properties and any methods marked with [Item]
 		public static ItemCollection<IListItem> Create(object obj, bool includeBaseTypes)

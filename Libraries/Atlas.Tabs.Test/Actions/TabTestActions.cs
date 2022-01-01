@@ -16,10 +16,10 @@ namespace Atlas.Tabs.Test.Actions
 			{
 				model.MinDesiredWidth = 250;
 
-				model.Items = new ItemCollection<ListItem>()
+				model.Items = new List<ListItem>()
 				{
-					new ListItem("Parameters", new TabParamsDataGrid()),
-					new ListItem("Async Load", new TabTestLoadAsync()),
+					new("Parameters", new TabParamsDataGrid()),
+					new("Async Load", new TabTestLoadAsync()),
 				};
 
 				model.Actions = new List<TaskCreator>()
@@ -55,9 +55,9 @@ Actions add Buttons to the tab. When clicked, it will:
 				call.Log.AddError("This should show the task");
 			}
 
-			private void PassParams(int param1, string param2)
+			private static void PassParams(int param1, string param2)
 			{
-				Log log = new Log();
+				Log log = new();
 				log.Add("If you log and no one's listening, are you really logging?",
 					new Tag("param1", param1),
 					new Tag("param2", param2));

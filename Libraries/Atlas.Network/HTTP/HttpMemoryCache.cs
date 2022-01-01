@@ -59,7 +59,7 @@ namespace Atlas.Network
 				return true;
 			}
 
-			string text = HttpClient.GetString(call, uri);
+			string text = HttpUtils.GetString(call, uri);
 			if (text != null)
 			{
 				try

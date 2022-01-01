@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Test.Chart
 		public class Instance : TabInstance
 		{
 			private List<ItemCollection<int>> _series;
-			private readonly Random _random = new Random();
+			private readonly Random _random = new();
 
 			public override void Load(Call call, TabModel model)
 			{

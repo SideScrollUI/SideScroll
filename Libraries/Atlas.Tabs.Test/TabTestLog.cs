@@ -22,12 +22,12 @@ namespace Atlas.Tabs.Test
 				_sampleCall = new Call(Label);
 				_counter = 0;
 
-				model.Items = new ItemCollection<ListItem>()
+				model.Items = new List<ListItem>()
 				{
-					new ListItem("Task Instance Log", TaskInstance.Log),
-					new ListItem("Sample Call", _sampleCall),
-					new ListItem("Sample Call Log", _sampleCall.Log),
-					new ListItem("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),
+					new("Task Instance Log", TaskInstance.Log),
+					new("Sample Call", _sampleCall),
+					new("Sample Call Log", _sampleCall.Log),
+					new("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),
 				};
 
 				model.Actions = new List<TaskCreator>()
@@ -108,10 +108,10 @@ namespace Atlas.Tabs.Test
 				AddEntries(1);
 			}
 
-			private void AddChildEntry()
+			/*private void AddChildEntry()
 			{
 				//log.items[log.items.Count - 1].Add("Child Message");
-			}
+			}*/
 		}
 	}
 }

@@ -13,12 +13,12 @@ namespace Atlas.Tabs.Test
 			{
 				var sampleItems = new List<SampleItem>()
 				{
-					new SampleItem(1, "Item 1"),
+					new(1, "Item 1"),
 				};
 
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Sample Items", sampleItems),
+					new("Sample Items", sampleItems),
 				};
 			}
 		}

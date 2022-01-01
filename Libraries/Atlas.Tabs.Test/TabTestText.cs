@@ -32,14 +32,14 @@ namespace Atlas.Tabs.Test
 				};
 			}
 
-			private ListItem GetLinesItem(string label, int lines)
+			private static ListItem GetLinesItem(string label, int lines)
 			{
 				string text = GetLines(lines);
 
 				return new ListItem(label + " Lines", text);
 			}
 
-			private string GetLines(int lines)
+			private static string GetLines(int lines)
 			{
 				var sb = new StringBuilder();
 				for (int i = 0; i < lines; i++)
@@ -49,14 +49,14 @@ namespace Atlas.Tabs.Test
 				return sb.ToString();
 			}
 
-			private ListItem GetStringItem(string label, int length)
+			private static ListItem GetStringItem(string label, int length)
 			{
 				string text = GetString(length);
 
 				return new ListItem(label + " Characters", text);
 			}
 
-			private string GetString(int length)
+			private static string GetString(int length)
 			{
 				var sb = new StringBuilder();
 				while (sb.Length < length)

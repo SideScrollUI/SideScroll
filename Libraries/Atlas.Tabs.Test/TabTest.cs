@@ -7,6 +7,7 @@ using Atlas.Tabs.Test.Exceptions;
 using Atlas.Tabs.Test.Loading;
 using Atlas.Tabs.Test.Objects;
 using Atlas.Tabs.Tools;
+using System.Collections.Generic;
 
 namespace Atlas.Tabs.Test
 {
@@ -18,30 +19,30 @@ namespace Atlas.Tabs.Test
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				model.Items = new ItemCollection<ListItem>()
+				model.Items = new List<ListItem>()
 				{
-					new ListItem("Sample", new TabSample()),
+					new("Sample", new TabSample()),
 
-					new ListItem("Objects", new TabTestObjects()),
-					new ListItem("Data Grid", new TabTestDataGrid()),
-					new ListItem("Params", new TabTestParams()),
-					new ListItem("Log", new TabTestLog()),
-					new ListItem("Actions", new TabActions()),
-					new ListItem("Json", new TabTestJson()),
-					new ListItem("Bookmarks", new TabTestBookmarks()),
-					new ListItem("Skip", new TabTestSkip()), // move into new Lists?
-					new ListItem("Exceptions", new TabTestExceptions()),
+					new("Objects", new TabTestObjects()),
+					new("Data Grid", new TabTestDataGrid()),
+					new("Params", new TabTestParams()),
+					new("Log", new TabTestLog()),
+					new("Actions", new TabActions()),
+					new("Json", new TabTestJson()),
+					new("Bookmarks", new TabTestBookmarks()),
+					new("Skip", new TabTestSkip()), // move into new Lists?
+					new("Exceptions", new TabTestExceptions()),
 
-					new ListItem("Web Browser", new TabTestBrowser()),
-					new ListItem("Text Editor", new TabTestTextEditor()),
-					new ListItem("Chart", new TabTestChart()),
-					new ListItem("Toolbar", new TabTestToolbar()),
-					new ListItem("Serializer", new TabSerializer()),
-					new ListItem("Process", new TabTestProcess()),
-					new ListItem("Loading", new TabTestLoading()),
-					new ListItem("Data Repos", new TabTestDataRepo()),
-					new ListItem("Icons", new TabIcons()),
-					new ListItem("Tools", new TabTools()),
+					new("Web Browser", new TabTestBrowser()),
+					new("Text Editor", new TabTestTextEditor()),
+					new("Chart", new TabTestChart()),
+					new("Toolbar", new TabTestToolbar()),
+					new("Serializer", new TabSerializer()),
+					new("Process", new TabTestProcess()),
+					new("Loading", new TabTestLoading()),
+					new("Data Repos", new TabTestDataRepo()),
+					new("Icons", new TabIcons()),
+					new("Tools", new TabTools()),
 				};
 			}
 		}
