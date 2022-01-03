@@ -32,6 +32,11 @@ namespace Atlas.Network
 			return null;
 		}
 
+		public static ViewHttpResponse GetBytes(Call call, string uri)
+		{
+			return Task.Run(() => GetBytesAsync(call, uri)).GetAwaiter().GetResult();
+		}
+
 		public static async Task<ViewHttpResponse> GetBytesAsync(Call call, string uri)
 		{
 			using CallTimer getCall = call.Timer("Get Uri", new Tag("Uri", uri));
@@ -83,7 +88,12 @@ namespace Atlas.Network
 			return null;
 		}
 
-		public static async Task<HttpResponseMessage> GetHead(Call call, string uri)
+		public static HttpResponseMessage GetHead(Call call, string uri)
+		{
+			return Task.Run(() => GetHeadAsync(call, uri)).GetAwaiter().GetResult();
+		}
+
+		public static async Task<HttpResponseMessage> GetHeadAsync(Call call, string uri)
 		{
 			using CallTimer headCall = call.Timer("Head Uri", new Tag("Uri", uri));
 

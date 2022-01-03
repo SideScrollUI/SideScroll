@@ -64,7 +64,7 @@ namespace Atlas.Tabs
 			return GetVisibleProperties(elementType);
 		}
 
-		private static readonly Dictionary<Type, List<PropertyInfo>> _visiblePropertiesCache = new Dictionary<Type, List<PropertyInfo>>();
+		private static readonly Dictionary<Type, List<PropertyInfo>> _visiblePropertiesCache = new();
 
 		public static List<PropertyInfo> GetVisibleProperties(Type type)
 		{
@@ -175,7 +175,7 @@ namespace Atlas.Tabs
 		public object DataValue;
 
 		//public bool Pinned;
-		public List<string> SelectedColumns = new List<string>();
+		public List<string> SelectedColumns = new();
 
 		public override string ToString() => Label;
 

@@ -12,19 +12,19 @@ namespace Atlas.Tabs
 		public string Name => ProjectSettings.Name; // for viewing purposes
 		public string LinkType => ProjectSettings.LinkType; // for bookmarking
 		public Version Version => ProjectSettings.Version;
-		public virtual ProjectSettings ProjectSettings { get; set; } = new ProjectSettings();
-		public virtual UserSettings UserSettings { get; set; } = new UserSettings();
+		public virtual ProjectSettings ProjectSettings { get; set; } = new();
+		public virtual UserSettings UserSettings { get; set; } = new();
 
 		public Linker Linker { get; set; } = new Linker();
 
-		public DataRepo DataShared => new DataRepo(DataSharedPath, DataRepoName);
-		public DataRepo DataApp => new DataRepo(DataAppPath, DataRepoName);
+		public DataRepo DataShared => new(DataSharedPath, DataRepoName);
+		public DataRepo DataApp => new(DataAppPath, DataRepoName);
 
-		public HttpCacheManager Http = new HttpCacheManager();
+		public HttpCacheManager Http = new();
 
-		public TypeObjectStore TypeObjectStore { get; set; } = new TypeObjectStore();
-		public BookmarkNavigator Navigator { get; set; } = new BookmarkNavigator();
-		public TaskInstanceCollection Tasks { get; set; } = new TaskInstanceCollection();
+		public TypeObjectStore TypeObjectStore { get; set; } = new();
+		public BookmarkNavigator Navigator { get; set; } = new();
+		public TaskInstanceCollection Tasks { get; set; } = new();
 
 		private string DataSharedPath => Paths.Combine(UserSettings.ProjectPath, "Shared");
 		private string DataAppPath => Paths.Combine(UserSettings.ProjectPath, "Versions", ProjectSettings.DataVersion.ToString());

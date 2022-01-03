@@ -21,6 +21,7 @@ namespace Atlas.Tabs
 				case JsonType.Boolean: return jsonValue.ToString();
 				case JsonType.Object: return new LazyJsonObject((JsonObject)jsonValue);
 				case JsonType.Array: return new LazyJsonArray((JsonArray)jsonValue);
+				default: break;
 			}
 			throw new Exception("Invalid JSON Node Type");
 		}

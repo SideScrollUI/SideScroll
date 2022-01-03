@@ -21,13 +21,13 @@
 - Open `Atlas.sln`
 - Operating system
   - Windows
-    - Visual Studio 2019 - (recommended) (community edition or higher)
+    - Visual Studio 2022 - (recommended) (community edition or higher)
+    - JetBrains Rider
+  - Mac
     - JetBrains Rider
   - Linux
     - JetBrains Rider
     - Visual Studio Code
-  - Mac
-    - JetBrains Rider
 - Start Atlas in Debug Mode
   - Set the start project to one of the programs
   - `Programs / Atlas.Start.Avalonia`

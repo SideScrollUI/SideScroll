@@ -85,7 +85,7 @@ namespace Atlas.UI.Avalonia
 			var stringBuilder = new StringBuilder(line);
 
 			// Column Headers
-			stringBuilder.Append("|");
+			stringBuilder.Append('|');
 			int columnIndex = 0;
 			foreach (var columnInfo in columns)
 			{
@@ -97,18 +97,18 @@ namespace Atlas.UI.Avalonia
 			stringBuilder.Append('\n');
 
 			// Separator
-			stringBuilder.Append("|");
+			stringBuilder.Append('|');
 			foreach (int columnWidth in columnWidths)
 			{
 				stringBuilder.Append(new string('-', columnWidth + 2));
-				stringBuilder.Append("|");
+				stringBuilder.Append('|');
 			}
 			stringBuilder.Append('\n');
 
 			// Content Cells
 			foreach (var row in cellValues)
 			{
-				stringBuilder.Append("|");
+				stringBuilder.Append('|');
 				columnIndex = 0;
 				foreach (string value in row)
 				{

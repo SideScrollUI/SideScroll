@@ -63,11 +63,11 @@ namespace Atlas.Tabs
 		public int MaxDesiredWidth { get; set; } = 1500;
 
 		public IList Actions { get; set; }
-		public TaskInstanceCollection Tasks { get; set; } = new TaskInstanceCollection();
+		public TaskInstanceCollection Tasks { get; set; } = new();
 
-		public List<IList> ItemList { get; set; } = new List<IList>();
+		public List<IList> ItemList { get; set; } = new();
 
-		public List<TabObject> Objects { get; set; } = new List<TabObject>();
+		public List<TabObject> Objects { get; set; } = new();
 		//public List<ITabControl> CustomTabControls { get; set; } = new List<ITabControl>(); // should everything be a custom control? tabControls?
 
 		public IList Items

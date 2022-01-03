@@ -107,7 +107,7 @@ namespace Atlas.Core
 			return AddSubTask(name).Call;
 		}
 
-		private async Task<T2> RunFuncAsync<T1, T2>(Call call, Func<Call, T1, Task<T2>> func, T1 item)
+		private static async Task<T2> RunFuncAsync<T1, T2>(Call call, Func<Call, T1, Task<T2>> func, T1 item)
 		{
 			using CallTimer callTimer = call.Timer(item.ToString());
 
@@ -125,7 +125,7 @@ namespace Atlas.Core
 			}
 		}
 
-		private async Task<T3> RunFuncAsync<T1, T2, T3>(Call call, Func<Call, T1, T2, Task<T3>> func, T1 item, T2 param1)
+		private static async Task<T3> RunFuncAsync<T1, T2, T3>(Call call, Func<Call, T1, T2, Task<T3>> func, T1 item, T2 param1)
 		{
 			using CallTimer callTimer = call.Timer(item.ToString());
 
@@ -143,7 +143,7 @@ namespace Atlas.Core
 			}
 		}
 
-		private async Task<T4> RunFuncAsync<T1, T2, T3, T4>(Call call, Func<Call, T1, T2, T3, Task<T4>> func, T1 item, T2 param1, T3 param2)
+		private static async Task<T4> RunFuncAsync<T1, T2, T3, T4>(Call call, Func<Call, T1, T2, T3, Task<T4>> func, T1 item, T2 param1, T3 param2)
 		{
 			using CallTimer callTimer = call.Timer(item.ToString());
 

@@ -77,10 +77,10 @@ namespace Atlas.Tabs
 
 					PropertyInfo.SetValue(Object, value);
 
-					if (Object is INotifyPropertyChanged notifyPropertyChanged)
+					/*if (Object is INotifyPropertyChanged notifyPropertyChanged)
 					{
 						//notifyPropertyChanged.PropertyChanged?.Invoke(obj, new PropertyChangedEventArgs(propertyName));
-					}
+					}*/
 				}
 			}
 		}

@@ -48,7 +48,7 @@ namespace Atlas.Core
 			}
 		}
 
-		private void InvokeAction2(Call call)
+		/*private void InvokeAction2(Call call)
 		{
 			try
 			{
@@ -58,6 +58,6 @@ namespace Atlas.Core
 			{
 				call.Log.Add(e);
 			}
-		}
+		}*/
 	}
 }

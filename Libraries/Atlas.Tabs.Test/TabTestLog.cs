@@ -40,7 +40,7 @@ namespace Atlas.Tabs.Test
 					new TaskDelegate("Reset", Reset),
 					// Tests different threading contexts
 					new TaskAction("System.Timer: Log 1 Entry / second", () => StartSystemTimer()),
-					new TaskAction("Threading.Timer: Log 1 Entry / second", () => StartThreadTimer()),
+					//new TaskAction("Threading.Timer: Log 1 Entry / second", () => StartThreadTimer()),
 					new TaskDelegate("Task Delegate Thread:  Log 1 Entry / second", SubTaskInstances, true),
 				};
 				//actions.Add(new TaskAction("Add Child Entry", () => AddChildEntry()));
@@ -91,12 +91,12 @@ namespace Atlas.Tabs.Test
 				}
 			}
 
-			private Timer _timer;
+			/*private Timer _timer;
 			private void StartThreadTimer()
 			{
 				// would be nice to be able cancel this through the task (Start/Stop) Methods
 				_timer ??= new Timer(TimerCallback, null, 0, 1000);
-			}
+			}*/
 
 			public void TimerCallback(object state)
 			{

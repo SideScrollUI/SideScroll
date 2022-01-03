@@ -86,13 +86,13 @@ namespace Atlas.Tabs
 
 		public Project Project { get; set; }
 		public ITab iTab; // Collision with derived Tab
-		public TaskInstance TaskInstance { get; set; } = new TaskInstance();
-		public TabModel Model { get; set; } = new TabModel();
+		public TaskInstance TaskInstance { get; set; } = new();
+		public TabModel Model { get; set; } = new();
 		public string Label { get { return Model.Name; } set { Model.Name = value; } }
 
 		public DataRepo DataApp => Project.DataApp;
 
-		public TabViewSettings TabViewSettings = new TabViewSettings();
+		public TabViewSettings TabViewSettings = new();
 		public TabBookmark TabBookmark { get; set; }
 		public SelectedRow SelectedRow { get; set; } // The parent selection that points to this tab
 
@@ -108,7 +108,7 @@ namespace Atlas.Tabs
 		}
 
 		public TabInstance ParentTabInstance { get; set; }
-		public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = new Dictionary<object, TabInstance>();
+		public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = new();
 
 		public SynchronizationContext UiContext;
 		public TabBookmark FilterBookmarkNode;
@@ -266,12 +266,12 @@ namespace Atlas.Tabs
 		}
 
 		// make generic? not useful yet, causes flickering
-		public void ScheduleTask(int milliSeconds, Action action)
+		public static void ScheduleTask(int milliSeconds, Action action)
 		{
 			Task.Delay(milliSeconds).ContinueWith(t => action());
 		}
 
-		public void ScheduleTask(TimeSpan timeSpan, Action action)
+		public static void ScheduleTask(TimeSpan timeSpan, Action action)
 		{
 			Task.Delay(timeSpan).ContinueWith(t => action());
 		}

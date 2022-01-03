@@ -93,8 +93,8 @@ namespace Atlas.UI.Avalonia
 		// Add padding to avoid poppin effect?
 		public static bool IsControlVisible(IControl control)
 		{
-			Point controlTopLeftPoint = new Point(0, 0);
-			Point controlBottomRight = new Point(control.Bounds.Width, control.Bounds.Height);
+			Point controlTopLeftPoint = new(0, 0);
+			Point controlBottomRight = new(control.Bounds.Width, control.Bounds.Height);
 			IControl parentControl = control?.Parent;
 			while (parentControl != null)
 			{

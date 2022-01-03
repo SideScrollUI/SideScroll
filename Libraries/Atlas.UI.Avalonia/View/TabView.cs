@@ -30,7 +30,7 @@ namespace Atlas.UI.Avalonia.View
 		private const int MinDesiredSplitterDistance = 50;
 
 		// Model.Objects
-		public static Dictionary<Type, IControlCreator> ControlCreators = new Dictionary<Type, IControlCreator>();
+		public static Dictionary<Type, IControlCreator> ControlCreators = new();
 
 		// Maybe this control should own it's own settings?
 		//private TabViewSettings _tabViewSettings = new TabViewSettings();
@@ -60,7 +60,7 @@ namespace Atlas.UI.Avalonia.View
 		// Created Controls
 		public TabControlActions TabActions;
 		public TabControlTasks TabTasks;
-		public List<TabControlDataGrid> TabDatas = new List<TabControlDataGrid>();
+		public List<TabControlDataGrid> TabDatas = new();
 		public List<ITabSelector> CustomTabControls { get; set; } = new List<ITabSelector>(); // should everything use this?
 
 		// Layout Controls

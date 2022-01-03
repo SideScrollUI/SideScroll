@@ -79,7 +79,7 @@ namespace Atlas.Tabs
 
 		private object GetValue()
 		{
-			var parameters = new object[] { };
+			var parameters = Array.Empty<object>();
 			ParameterInfo[] parameterInfos = MethodInfo.GetParameters();
 			if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType == typeof(Call))
 			{
