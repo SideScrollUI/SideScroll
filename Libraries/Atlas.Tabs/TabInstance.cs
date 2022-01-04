@@ -265,17 +265,6 @@ namespace Atlas.Tabs
 			StartTask(taskDelegate, false);
 		}
 
-		// make generic? not useful yet, causes flickering
-		public static void ScheduleTask(int milliSeconds, Action action)
-		{
-			Task.Delay(milliSeconds).ContinueWith(t => action());
-		}
-
-		public static void ScheduleTask(TimeSpan timeSpan, Action action)
-		{
-			Task.Delay(timeSpan).ContinueWith(t => action());
-		}
-
 		public void Invoke(Action action)
 		{
 			UiContext.Post(ActionCallback, action);
