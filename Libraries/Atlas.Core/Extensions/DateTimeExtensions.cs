@@ -37,7 +37,7 @@ namespace Atlas.Extensions
 
 		public static TimeSpan Age(this DateTime dateTime)
 		{
-			return DateTime.UtcNow.Subtract(dateTime).Trim();
+			return DateTime.UtcNow.Subtract(dateTime.ToUniversalTime()).Trim();
 		}
 	}
 }
