@@ -8,7 +8,7 @@ namespace Atlas.Extensions
 {
 	public static class TypeExtensions
 	{
-		private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
+		private static readonly HashSet<Type> NumericTypes = new()
 		{
 			typeof(byte), typeof(sbyte),
 			typeof(short), typeof(ushort),
@@ -17,7 +17,7 @@ namespace Atlas.Extensions
 			typeof(float), typeof(double), typeof(decimal),
 		};
 
-		private static readonly HashSet<Type> DecimalTypes = new HashSet<Type>
+		private static readonly HashSet<Type> DecimalTypes = new()
 		{
 			typeof(float), typeof(double), typeof(decimal),
 		};

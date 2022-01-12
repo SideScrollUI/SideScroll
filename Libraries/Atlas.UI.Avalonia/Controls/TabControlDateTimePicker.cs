@@ -14,6 +14,18 @@ using System.IO;
 
 namespace Atlas.UI.Avalonia.Controls
 {
+	public class TabCalendarDatePicker : CalendarDatePicker, IStyleable
+	{
+		Type IStyleable.StyleKey => typeof(CalendarDatePicker);
+
+		// Default behavior increments and decrements Date when scrolling left/right with the mousepad
+		// This is probably useful for Mobile devices, but not Desktop
+		// Override and do nothing instead
+		protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
+		{
+		}
+	}
+
 	public class TabDateTimePicker : Grid, IStyleable
 	{
 		Type IStyleable.StyleKey => typeof(TabDateTimePicker);
@@ -23,7 +35,7 @@ namespace Atlas.UI.Avalonia.Controls
 		public Binding Binding { get; set; }
 
 		private DateTimeValueConverter _dateTimeConverter;
-		private CalendarDatePicker _datePicker;
+		private TabCalendarDatePicker _datePicker;
 		private TabControlTextBox _timeTextBox;
 
 		public TabDateTimePicker(ListProperty property)
@@ -58,7 +70,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		private void AddDatePicker()
 		{
-			_datePicker = new CalendarDatePicker()
+			_datePicker = new TabCalendarDatePicker()
 			{
 				Background = Property.Editable ? Theme.Background : Brushes.LightGray,
 				BorderBrush = Brushes.Black,

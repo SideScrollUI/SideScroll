@@ -35,11 +35,33 @@ namespace Atlas.Tabs
 		}
 	}
 
+	public class SearchFilter
+	{
+		public Filter Filter { get; set; }
+
+		public TabBookmark FindMatches(IList list)
+		{
+			TabModel tabModel = TabModel.Create("", list);
+			TabBookmark bookmarkNode = tabModel.FindMatches(Filter, Filter.Depth);
+			return bookmarkNode;
+		}
+
+		public bool IsMatch(object obj)
+		{
+			if (Filter == null || Filter.FilterText.IsNullOrEmpty())
+				return true;
+
+			TabModel tabModel = TabModel.Create("Search", obj);
+			TabBookmark bookmarkNode = tabModel.FindMatches(Filter, Filter.Depth);
+			return bookmarkNode.SelectedObjects.Count > 0;
+		}
+	}
+
 	public class Filter
 	{
 		public string FilterText { get; set; }
 		public int Depth { get; set; } = 0;
-		public List<FilterExpression> FilterExpressions { get; set; } = new List<FilterExpression>();
+		public List<FilterExpression> FilterExpressions { get; set; } = new();
 		public bool IsAnd { get; set; }
 
 		// "ABC" | 123
@@ -79,6 +101,7 @@ namespace Atlas.Tabs
 				FilterExpressions.Add(filterExpression);
 			}
 		}
+
 		public bool Matches(IList iList)
 		{
 			Type listType = iList.GetType();

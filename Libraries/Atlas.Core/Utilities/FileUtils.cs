@@ -18,11 +18,11 @@ namespace Atlas.Core
 	{
 		public static string TimestampString => DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
-		[DllImport("libc", SetLastError = true)]
-		public static extern int chmod(string path, int mode);
+		[DllImport("libc", SetLastError = true, CharSet = CharSet.Unicode)]
+		internal static extern int chmod(string path, int mode);
 
 		[DllImport("libc", SetLastError = true)]
-		public static extern int umask(uint mask);
+		internal static extern int umask(uint mask);
 
 		// User
 		public const int S_IRUSR = 0x100;

@@ -681,7 +681,7 @@ namespace Atlas.UI.Avalonia.View
 				_fillerPanel.Width = GetFillerPanelWidth();
 		}
 
-		private void UpdateChildControls()
+		private void UpdateChildControls(bool recreate = false)
 		{
 			// These need to be set regardless of if the children show
 			if (TabDatas.Count > 0)
@@ -705,7 +705,7 @@ namespace Atlas.UI.Avalonia.View
 			//Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
 			//tabChildControls.gridControls = new Dictionary<object, Control>();
 
-			List<Control> orderedChildControls = CreateAllChildControls(out Dictionary<object, Control> newChildControls);
+			List<Control> orderedChildControls = CreateAllChildControls(recreate, out Dictionary<object, Control> newChildControls);
 
 			_fillerPanel = null;
 
@@ -727,9 +727,9 @@ namespace Atlas.UI.Avalonia.View
 			Instance.TabBookmark = null; // clear so user can navigate and save prefs
 		}
 
-		private List<Control> CreateAllChildControls(out Dictionary<object, Control> newChildControls)
+		private List<Control> CreateAllChildControls(bool recreate, out Dictionary<object, Control> newChildControls)
 		{
-			Dictionary<object, Control> oldChildControls = _tabChildControls.GridControls;
+			Dictionary<object, Control> oldChildControls = recreate ? new() : _tabChildControls.GridControls;
 			newChildControls = new Dictionary<object, Control>();
 			var orderedChildControls = new List<Control>();
 			//AddNotes(newChildControls, oldChildControls, orderedChildControls);
@@ -849,9 +849,11 @@ namespace Atlas.UI.Avalonia.View
 			}
 		}
 
-		private void ParentListSelectionChanged(object sender, EventArgs e)
+		private void ParentListSelectionChanged(object sender, TabSelectionChangedEventArgs e)
 		{
-			UpdateChildControls();
+			e ??= new TabSelectionChangedEventArgs();
+
+			UpdateChildControls(e.Recreate);
 
 			Instance.SelectionChanged(sender, e);
 

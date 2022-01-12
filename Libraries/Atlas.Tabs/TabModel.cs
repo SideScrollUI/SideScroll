@@ -14,7 +14,17 @@ namespace Atlas.Tabs
 	{
 		IList SelectedItems { get; }
 
-		event EventHandler<EventArgs> OnSelectionChanged;
+		event EventHandler<TabSelectionChangedEventArgs> OnSelectionChanged;
+	}
+
+	public class TabSelectionChangedEventArgs : EventArgs
+	{
+		public bool Recreate;
+
+		public TabSelectionChangedEventArgs(bool recreate = false)
+		{
+			Recreate = recreate;
+		}
 	}
 
 	public interface IItemSelector
@@ -58,6 +68,8 @@ namespace Atlas.Tabs
 		public bool Editing { get; set; }
 		public bool Skippable { get; set; }
 		public bool ShowSearch { get; set; } // Show search filter above DataGrids
+
+		public SearchFilter SearchFilter { get; set; } // DataGrid filtering will also update this filter
 
 		public int MinDesiredWidth { get; set; } = 0;
 		public int MaxDesiredWidth { get; set; } = 1500;
@@ -219,7 +231,7 @@ namespace Atlas.Tabs
 			else if (TabUtils.ObjectHasLinks(obj))
 			{
 				// show as Name/Value columns for fields and properties
-				AddObject(obj, type);
+				AddObject(obj);
 			}
 		}
 
@@ -323,12 +335,12 @@ namespace Atlas.Tabs
 		}
 
 		// Adds the fields and properties as one list, and methods as another list (disabled right now)
-		private void AddObject(object obj, Type type)
+		private void AddObject(object obj)
 		{
 			var itemCollection = ListMember.Create(obj);
 			ItemList.Add(itemCollection);
 
-			//AddMethods(type);
+			//AddMethods(obj);
 		}
 
 		public void Clear()
@@ -339,9 +351,9 @@ namespace Atlas.Tabs
 		}
 
 		// todo: split Actions out of ListMethod since those return values?
-		/*private void AddMethods(Type type)
+		/*private void AddMethods(object obj)
 		{
-			var visibleMethods = ListMethod.Create(Object);
+			var visibleMethods = ListMethod.Create(obj);
 
 			// Add any methods that return a Task object
 			var methods = new ItemCollection<TaskCreator>();

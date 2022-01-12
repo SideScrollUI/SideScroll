@@ -69,7 +69,7 @@ namespace Atlas.UI.Avalonia.Controls
 				Width = 16,
 				Height = 16,
 				Source = new Bitmap(stream),
-				Margin = new Thickness(10, 4),
+				Margin = new Thickness(7, 4),
 				HorizontalAlignment = HorizontalAlignment.Right,
 			};
 			Children.Add(image);

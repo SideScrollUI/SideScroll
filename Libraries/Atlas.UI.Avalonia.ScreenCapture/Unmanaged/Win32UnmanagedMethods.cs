@@ -17,18 +17,18 @@ namespace Atlas.UI.Avalonia.ScreenCapture
 		}
 
 		[DllImport(Library, SetLastError = true)]
-		public static extern bool OpenClipboard(IntPtr hWndOwner);
+		internal static extern bool OpenClipboard(IntPtr hWndOwner);
 
 		[DllImport(Library, SetLastError = true)]
-		public static extern bool CloseClipboard();
+		internal static extern bool CloseClipboard();
 
 		[DllImport(Library)]
-		public static extern bool EmptyClipboard();
+		internal static extern bool EmptyClipboard();
 
 		[DllImport(Library)]
-		public static extern IntPtr SetClipboardData(ClipboardFormat uFormat, IntPtr hMem);
+		internal static extern IntPtr SetClipboardData(ClipboardFormat uFormat, IntPtr hMem);
 
 		[DllImport(Library, ExactSpelling = true)]
-		public static extern IntPtr GetDC(IntPtr hWnd);
+		internal static extern IntPtr GetDC(IntPtr hWnd);
 	}
 }

@@ -10,7 +10,7 @@ namespace Atlas.Extensions
 	{
 		public static bool CaseInsensitiveContains(this string text, string value, StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase)
 		{
-			return text.IndexOf(value, stringComparison) >= 0;
+			return text.Contains(value, stringComparison);
 		}
 
 		public static string Reverse(this string input)
@@ -57,8 +57,8 @@ namespace Atlas.Extensions
 			return input[start..];
 		}
 
-		private static readonly HashSet<char> _wordSpacedSymbols = new HashSet<char>() { '|', '/', '-' };
-		private static readonly HashSet<char> _wordSpacedNumberConnectors = new HashSet<char>() { '-', ':', '.' };
+		private static readonly HashSet<char> _wordSpacedSymbols = new() { '|', '/', '-' };
+		private static readonly HashSet<char> _wordSpacedNumberConnectors = new() { '-', ':', '.' };
 
 		// Adds spaces between words
 		// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'
@@ -146,7 +146,7 @@ namespace Atlas.Extensions
 		public static List<int> AllIndexesOf(this string str, string value)
 		{
 			if (string.IsNullOrEmpty(value))
-				throw new ArgumentException("the string to find may not be empty", "value");
+				throw new ArgumentException("the string to find may not be empty", nameof(value));
 
 			var indexes = new List<int>();
 			for (int index = 0; ; index += value.Length)
@@ -162,7 +162,7 @@ namespace Atlas.Extensions
 		public static IEnumerable<int> AllIndexesOfYield(this string str, string value)
 		{
 			if (string.IsNullOrEmpty(value))
-				throw new ArgumentException("the string to find may not be empty", "value");
+				throw new ArgumentException("the string to find may not be empty", nameof(value));
 
 			for (int index = 0; ; index += value.Length)
 			{

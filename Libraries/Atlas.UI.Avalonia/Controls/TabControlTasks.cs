@@ -16,7 +16,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public TabInstance TabInstance;
 
-		public event EventHandler<EventArgs> OnSelectionChanged;
+		public event EventHandler<TabSelectionChangedEventArgs> OnSelectionChanged;
 
 		public bool AutoSelectNew = true;
 

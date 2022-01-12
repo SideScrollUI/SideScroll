@@ -8,7 +8,7 @@ namespace Atlas.Core
 {
 	public class EventLogMessage : EventArgs
 	{
-		public List<LogEntry> Entries = new List<LogEntry>(); // 1st is new log message, last is highest parent log message
+		public List<LogEntry> Entries = new(); // 1st is new log message, last is highest parent log message
 	}
 
 	public class LogSettings
@@ -19,7 +19,7 @@ namespace Atlas.Core
 
 		public LogLevel DebugPrintLogLevel { get; set; } = LogLevel.Warn;
 
-		internal object Lock = new object(); // todo: replace this with individual ones? or a non-blocking version
+		internal object Lock = new(); // todo: replace this with individual ones? or a non-blocking version
 
 		[HiddenRow]
 		public SynchronizationContext Context; // inherited from creator (which can be a Parent Log)

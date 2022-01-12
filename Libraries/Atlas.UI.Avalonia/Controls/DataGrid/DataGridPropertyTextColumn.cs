@@ -29,7 +29,7 @@ namespace Atlas.UI.Avalonia
 
 		public Binding FormattedBinding;
 		//private Binding unformattedBinding;
-		public readonly FormatValueConverter FormatConverter = new FormatValueConverter();
+		public readonly FormatValueConverter FormatConverter = new();
 
 		public override string ToString() => PropertyInfo.Name;
 
@@ -142,7 +142,6 @@ namespace Atlas.UI.Avalonia
 		{
 			var border = new Border()
 			{
-				BorderThickness = new Thickness(0, 0, 0, 1), // Bottom only
 				BorderBrush = Brushes.LightGray,
 				Child = textBlock,
 			};
@@ -166,7 +165,15 @@ namespace Atlas.UI.Avalonia
 				textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
 
 				border.BorderBrush = Theme.GridStyledLinesBrush;
+			}
+
+			if (DisplayIndex > 0)
+			{
 				border.BorderThickness = new Thickness(1, 0, 0, 1); // Left and Bottom
+			}
+			else
+			{
+				border.BorderThickness = new Thickness(0, 0, 1, 1); // Right and Bottom
 			}
 
 			return border;

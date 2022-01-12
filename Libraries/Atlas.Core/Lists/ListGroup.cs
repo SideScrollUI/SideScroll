@@ -23,7 +23,7 @@ namespace Atlas.Core
 
 		public TimeWindow TimeWindow { get; set; }
 
-		public ItemCollection<ListSeries> Series { get; set; } = new ItemCollection<ListSeries>();
+		public ItemCollection<ListSeries> Series { get; set; } = new();
 
 		public override string ToString() => Name;
 

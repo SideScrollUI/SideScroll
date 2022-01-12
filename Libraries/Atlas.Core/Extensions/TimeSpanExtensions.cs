@@ -18,7 +18,7 @@ namespace Atlas.Extensions
 			}
 		}
 
-		public static List<TimeUnit> TimeUnits = new List<TimeUnit>()
+		public static List<TimeUnit> TimeUnits { get; set; } = new List<TimeUnit>()
 		{
 			new TimeUnit(TimeSpan.FromDays(7), "Week"),
 			new TimeUnit(TimeSpan.FromDays(1), "Day"),

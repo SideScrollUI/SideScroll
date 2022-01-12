@@ -6,8 +6,8 @@ namespace Atlas.Core
 {
 	public class CallTimer : Call, IDisposable
 	{
-		private readonly Stopwatch _stopwatch = new Stopwatch();
-		private readonly Timer _timer = new Timer();
+		private readonly Stopwatch _stopwatch = new();
+		private readonly Timer _timer = new();
 
 		public long ElapsedMilliseconds => _stopwatch.ElapsedMilliseconds;
 
@@ -49,7 +49,7 @@ namespace Atlas.Core
 
 			TaskInstance?.SetFinished();
 			if (TaskInstance == null)
-				Log.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));
+				Log.Add("Finished", new Tag("Time", ElapsedMilliseconds / 1000.0));
 		}
 	}
 }
