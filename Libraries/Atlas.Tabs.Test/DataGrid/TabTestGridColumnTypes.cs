@@ -44,7 +44,7 @@ namespace Atlas.Tabs.Test.DataGrid
 			public decimal Decimal { get; set; } = 123456789.0123456789M;
 			public bool Bool { get; set; }
 			public byte[] ByteArray { get; set; } = new byte[256];
-			public List<int> IntegerList { get; set; } = new List<int>();
+			public List<int> IntegerList { get; set; } = new();
 			public DateTime DateTime { get; set; }
 			public TimeSpan TimeSpan { get; set; }
 			public object Object { get; set; }

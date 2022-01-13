@@ -21,7 +21,7 @@ namespace Atlas.Resources
 				return assembly.GetManifestResourceStream("Atlas.Resources.Assets." + resourceName);
 			}
 
-			public static List<Stream> All { get; set; } = new List<Stream>()
+			public static List<Stream> All { get; set; } = new()
 			{
 				Hourglass,
 				Shutter,

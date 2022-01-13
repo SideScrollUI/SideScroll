@@ -24,7 +24,7 @@ namespace Atlas.UI.Avalonia
 			public ISolidColorBrush NoLinks => Theme.NoLinksBackground;
 			public ISolidColorBrush Editable { get; set; } = Theme.Editable;
 		}
-		internal static BrushColors StyleBrushes { get; set; } = new BrushColors();
+		internal static BrushColors StyleBrushes { get; set; } = new();
 
 		public bool Editable { get; set; }
 
@@ -107,7 +107,7 @@ namespace Atlas.UI.Avalonia
 			public ISolidColorBrush NoLinks => Theme.ToolbarTextForeground; // Should this be different?
 			public ISolidColorBrush Editable { get; set; } = Theme.Editable;
 		}
-		internal static BrushColors StyleBrushes { get; set; } = new BrushColors();
+		internal static BrushColors StyleBrushes { get; set; } = new();
 
 		public bool Editable { get; set; }
 

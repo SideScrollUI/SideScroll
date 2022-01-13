@@ -95,9 +95,9 @@ namespace Atlas.UI.Avalonia.Charts
 
 		//private List<ListSeries> ListSeries { get; set; }
 		public List<OxyListSeries> OxyListSeriesList = new();
-		private Dictionary<string, OxyListSeries> IdxNameToSeries { get; set; } = new Dictionary<string, OxyListSeries>();
-		private Dictionary<IList, ListSeries> ListToTabSeries { get; set; } = new Dictionary<IList, ListSeries>();
-		private Dictionary<IList, int> ListToTabIndex { get; set; } = new Dictionary<IList, int>(); // not used
+		private Dictionary<string, OxyListSeries> IdxNameToSeries { get; set; } = new();
+		private Dictionary<IList, ListSeries> ListToTabSeries { get; set; } = new();
+		private Dictionary<IList, int> ListToTabIndex { get; set; } = new(); // not used
 		public List<ListSeries> SelectedSeries
 		{
 			get

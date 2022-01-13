@@ -18,7 +18,7 @@ namespace Atlas.Extensions
 			}
 		}
 
-		public static List<TimeUnit> TimeUnits { get; set; } = new List<TimeUnit>()
+		public static List<TimeUnit> TimeUnits { get; set; } = new()
 		{
 			new TimeUnit(TimeSpan.FromDays(7), "Week"),
 			new TimeUnit(TimeSpan.FromDays(1), "Day"),
@@ -48,7 +48,7 @@ namespace Atlas.Extensions
 			return timeSpan.TotalSeconds + " Seconds";
 		}
 
-		public static List<TimeSpan> CommonTimeSpans { get; set; } = new List<TimeSpan>()
+		public static List<TimeSpan> CommonTimeSpans { get; set; } = new()
 		{
 			TimeSpan.FromSeconds(1),
 			TimeSpan.FromSeconds(5),

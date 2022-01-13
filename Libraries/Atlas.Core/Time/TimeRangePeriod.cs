@@ -27,7 +27,7 @@ namespace Atlas.Core
 
 		public int Count { get; set; }
 
-		public List<Tag> AllTags { get; set; } = new List<Tag>();
+		public List<Tag> AllTags { get; set; } = new();
 
 		public List<Tag> Tags
 		{

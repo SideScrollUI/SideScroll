@@ -23,7 +23,7 @@ namespace Atlas.Tabs.Test.Objects
 		public class ParentClass
 		{
 			//public string stringProperty { get; set; } = "test";
-			public ChildClass Child { get; set; } = new ChildClass();
+			public ChildClass Child { get; set; } = new();
 
 			public override string ToString() => Child.ToString();
 		}

@@ -58,7 +58,7 @@ namespace Atlas.Tabs
 			}
 		}
 
-		//public List<DataRepoItem> DataRepoItems { get; set; } = new List<DataRepoItem>();
+		//public List<DataRepoItem> DataRepoItems { get; set; } = new();
 		public string DataRepoGroupId { get; set; }
 
 		// Temporary, Only FindMatches() uses, refactor these out?

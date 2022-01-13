@@ -40,8 +40,8 @@ namespace Atlas.Serialize
 		public bool CanReference { get; set; } // whether the object can reference other types
 		public bool IsCollection;
 
-		public List<FieldSchema> FieldSchemas { get; set; } = new List<FieldSchema>();
-		public List<PropertySchema> PropertySchemas { get; set; } = new List<PropertySchema>();
+		public List<FieldSchema> FieldSchemas { get; set; } = new();
+		public List<PropertySchema> PropertySchemas { get; set; } = new();
 
 		// not really schema, could break out into a records class
 		public int TypeIndex; // -1 if null
