@@ -41,13 +41,13 @@ namespace Atlas.Network
 		public string BasePath { get; set; }
 		public long Size => _dataStream.Length;
 
-		private readonly Dictionary<string, Entry> _cache = new Dictionary<string, Entry>();
+		private readonly Dictionary<string, Entry> _cache = new();
 
 		private readonly string _indexPath;
 		private readonly string _dataPath;
 		private readonly Stream _indexStream;
 		private readonly Stream _dataStream;
-		private readonly object _entryLock = new object();
+		private readonly object _entryLock = new();
 
 		public override string ToString() => BasePath;
 
@@ -82,7 +82,7 @@ namespace Atlas.Network
 
 		private void SaveHeader()
 		{
-			using BinaryWriter indexWriter = new BinaryWriter(_indexStream, Encoding.Default, true);
+			using BinaryWriter indexWriter = new(_indexStream, Encoding.Default, true);
 
 			indexWriter.Write(LatestVersion);
 		}

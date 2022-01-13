@@ -18,7 +18,7 @@ namespace Atlas.Serialize
 		//public event EventHandler<EventArgs> OnDelete; // todo?
 
 		public string Path;
-		public ItemCollectionUI<TViewType> Items { get; set; } = new ItemCollectionUI<TViewType>();
+		public ItemCollectionUI<TViewType> Items { get; set; } = new();
 
 		public DataRepoView<TDataType> DataRepoView;
 		public DataRepoView<TDataType> DataRepoSecondary; // Optional: Saves and Deletes goto a 2nd copy

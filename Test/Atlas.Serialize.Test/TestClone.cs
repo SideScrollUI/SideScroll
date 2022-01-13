@@ -65,7 +65,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Clone Log Timer 2")]
 		public void CloneLogTimer2()
 		{
-			Log testLog = new Log();
+			Log testLog = new();
 			using (testLog.Timer("timing"))
 				testLog.Add("child");
 			Log output = serializer.Clone(log, testLog);
@@ -74,14 +74,14 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Clone Log")]
 		public void CloneLog()
 		{
-			Log testLog = new Log();
+			Log testLog = new();
 			Log output = serializer.Clone(log, testLog);
 		}
 
 		[Test, Description("Clone Log Child")]
 		public void CloneLogChild()
 		{
-			Log testLog = new Log();
+			Log testLog = new();
 			testLog.Call("test");
 
 			Log output = serializer.Clone(log, testLog);
@@ -131,7 +131,7 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Clone Log Timer Child")]
 		public void CloneLogTimerChild()
 		{
-			Log testLog = new Log();
+			Log testLog = new();
 			using (testLog.Timer("test")) { }
 
 			Log output = serializer.Clone(log, testLog);
@@ -322,8 +322,8 @@ namespace Atlas.Serialize.Test
 		[Test, Description("Clone Parent Child")]
 		public void CloneParentChild()
 		{
-			Parent parent = new Parent();
-			Child child = new Child();
+			Parent parent = new();
+			Child child = new();
 			parent.Child = child;
 			child.Parent = parent;
 
@@ -427,12 +427,12 @@ namespace Atlas.Serialize.Test
 
 		public class DictionaryTest
 		{
-			public Dictionary<Parent, Child> items = new Dictionary<Parent, Child>();
+			public Dictionary<Parent, Child> items = new();
 
 			public DictionaryTest()
 			{
-				Parent parent = new Parent();
-				Child child = new Child();
+				Parent parent = new();
+				Child child = new();
 				parent.Child = child;
 				child.Parent = parent;
 				items[parent] = child;
@@ -486,8 +486,8 @@ namespace Atlas.Serialize.Test
 		{
 			var input = new Dictionary<Base, Base>();
 
-			Base b = new Base();
-			SubClass s = new SubClass
+			Base b = new();
+			SubClass s = new()
 			{
 				B = 3
 			};
@@ -510,7 +510,7 @@ namespace Atlas.Serialize.Test
 
 		public class SubClassContainer
 		{
-			public SubClass SubClass = new SubClass()
+			public SubClass SubClass = new()
 			{
 				A = 3
 			};

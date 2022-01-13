@@ -69,7 +69,7 @@ namespace Atlas.Serialize.Test
 			string fullPath = Paths.Combine(basePath, @"LargeImage.data");
 
 			using Stream stream = new FileStream(fullPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
-			using BinaryWriter writer = new BinaryWriter(stream);
+			using BinaryWriter writer = new(stream);
 			for (long offset = 0; offset <= maxOffset; offset += spacing)
 			{
 				long position = stream.Seek(offset, SeekOrigin.Begin);
@@ -93,7 +93,7 @@ namespace Atlas.Serialize.Test
 			using Stream stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 			long position = stream.Seek(offset, SeekOrigin.Begin);
 			Assert.AreEqual(stream.Position, offset);
-			using BinaryReader reader = new BinaryReader(stream);
+			using BinaryReader reader = new(stream);
 			for (int i = 0; i < intCount; i++)
 				reader.ReadInt32();
 		}

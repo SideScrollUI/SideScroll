@@ -14,7 +14,7 @@ namespace Atlas.Tabs.Test
 		{
 			private const string DataKey = "Params";
 
-			private readonly ItemCollectionUI<ParamTestResult> _items = new ItemCollectionUI<ParamTestResult>();
+			private readonly ItemCollectionUI<ParamTestResult> _items = new();
 			private ParamTestItem _paramTestItem;
 
 			public override void Load(Call call, TabModel model)

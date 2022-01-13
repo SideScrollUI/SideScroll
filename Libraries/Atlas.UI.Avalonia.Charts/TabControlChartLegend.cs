@@ -18,8 +18,8 @@ namespace Atlas.UI.Avalonia.Charts
 		public PlotView PlotView => TabControlChart.PlotView;
 		public ListGroup ListGroup => TabControlChart.ListGroup;
 
-		public List<TabChartLegendItem> LegendItems = new List<TabChartLegendItem>();
-		private readonly Dictionary<string, TabChartLegendItem> _idxLegendItems = new Dictionary<string, TabChartLegendItem>();
+		public List<TabChartLegendItem> LegendItems = new();
+		private readonly Dictionary<string, TabChartLegendItem> _idxLegendItems = new();
 
 		private ScrollViewer _scrollViewer;
 		private WrapPanel _wrapPanel;

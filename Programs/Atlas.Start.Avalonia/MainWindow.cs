@@ -17,7 +17,7 @@ namespace Atlas.Start.Avalonia
 			ScreenCapture.AddControlTo(TabViewer);
 		}
 
-		public static ProjectSettings Settings => new ProjectSettings()
+		public static ProjectSettings Settings => new()
 		{
 			Name = "Atlas",
 			LinkType = "atlas",

@@ -84,7 +84,7 @@ namespace Atlas.UI.Avalonia
 		// Adds a context menu to the text block
 		/*private void AddHeaderContextMenu()
 		{
-			ContextMenu contextMenu = new ContextMenu();
+			ContextMenu contextMenu = new();
 
 			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 

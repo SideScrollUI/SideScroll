@@ -41,7 +41,7 @@ namespace Atlas.Serialize.Test
 	public class LazyClass
 	{
 		public Type NewType;
-		public Dictionary<PropertyInfo, PropertyRef> PropertyRefs = new Dictionary<PropertyInfo, PropertyRef>();
+		public Dictionary<PropertyInfo, PropertyRef> PropertyRefs = new();
 
 		public LazyClass()
 		{
@@ -62,7 +62,7 @@ namespace Atlas.Serialize.Test
 		private TypeBuilder GetTypeBuilder()
 		{
 			string typeSignature = "LoaderType";
-			AssemblyName assemblyName = new AssemblyName(typeSignature);
+			AssemblyName assemblyName = new(typeSignature);
 			AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
 			ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("Lazy");
 			TypeBuilder typeBuilder = moduleBuilder.DefineType(typeSignature,

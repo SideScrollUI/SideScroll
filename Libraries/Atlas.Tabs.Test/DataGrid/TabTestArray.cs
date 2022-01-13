@@ -18,8 +18,8 @@ namespace Atlas.Tabs.Test.DataGrid
 
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("2 Items", classes),
-					new ListItem("String Array", new string[] { "abc", "123" }),
+					new("2 Items", classes),
+					new("String Array", new string[] { "abc", "123" }),
 				};
 
 				/*tabModel.Actions = new List<TaskCreator>() {

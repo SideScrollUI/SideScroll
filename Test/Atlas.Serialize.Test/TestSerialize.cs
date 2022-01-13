@@ -127,7 +127,7 @@ namespace Atlas.Serialize.Test
 		public void SerializeDateTimeOffsetLocal()
 		{
 			DateTime dateTime = DateTime.Now;
-			DateTimeOffset input = new DateTimeOffset(dateTime);
+			DateTimeOffset input = new(dateTime);
 
 			_serializer.Save(Call, input);
 			DateTimeOffset output = _serializer.Load<DateTimeOffset>(Call);
@@ -140,7 +140,7 @@ namespace Atlas.Serialize.Test
 		public void SerializeDateTimeOffsetUtc()
 		{
 			DateTime dateTime = DateTime.UtcNow;
-			DateTimeOffset input = new DateTimeOffset(dateTime);
+			DateTimeOffset input = new(dateTime);
 
 			_serializer.Save(Call, input);
 			DateTimeOffset output = _serializer.Load<DateTimeOffset>(Call);

@@ -11,8 +11,8 @@ namespace Atlas.Tabs.Test.Chart
 
 		public class Instance : TabInstance
 		{
-			private readonly ItemCollection<ChartSample> _samples = new ItemCollection<ChartSample>();
-			private readonly Random _random = new Random();
+			private readonly ItemCollection<ChartSample> _samples = new();
+			private readonly Random _random = new();
 
 			public class TestItem
 			{
@@ -30,7 +30,7 @@ namespace Atlas.Tabs.Test.Chart
 				public int SeriesGamma { get; set; }
 				// Add [UnitType]
 				public int SeriesEpsilon { get; set; }  // High Value, small delta
-				public TestItem TestItem { get; set; } = new TestItem();
+				public TestItem TestItem { get; set; } = new();
 				public int InstanceAmount => TestItem.Amount;
 			}
 

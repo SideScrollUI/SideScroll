@@ -45,7 +45,7 @@ namespace Atlas.Serialize
 					long ticks = Reader.ReadInt64();
 					int kindValue = Reader.ReadByte();
 					//Enum.ToObject(typeof(DateTimeKind), kindValue);
-					DateTime dateTime = new DateTime(ticks, (DateTimeKind)kindValue);
+					DateTime dateTime = new(ticks, (DateTimeKind)kindValue);
 					obj = dateTime;
 				}
 				else

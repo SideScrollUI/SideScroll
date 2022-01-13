@@ -26,11 +26,11 @@ namespace Atlas.Tabs.Test
 
 		public AttributeTargets EnumAttributeTargets { get; set; } = AttributeTargets.Event;
 
-		public static List<ParamListItem> ListItems => new List<ParamListItem>()
+		public static List<ParamListItem> ListItems => new()
 		{
-			new ParamListItem("One", 1),
-			new ParamListItem("Two", 2),
-			new ParamListItem("Three", 3),
+			new("One", 1),
+			new("Two", 2),
+			new("Three", 3),
 		};
 
 		[BindList(nameof(ListItems))]

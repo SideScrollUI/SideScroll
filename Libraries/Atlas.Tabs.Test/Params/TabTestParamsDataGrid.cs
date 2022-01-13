@@ -9,7 +9,7 @@ namespace Atlas.Tabs.Test.Actions
 
 		public class Instance : TabInstance
 		{
-			private readonly LogEntry _logEntry = new LogEntry()
+			private readonly LogEntry _logEntry = new()
 			{
 				Text = "Test Entry",
 			};

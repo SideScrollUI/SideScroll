@@ -94,7 +94,7 @@ namespace Atlas.UI.Avalonia.Charts
 		public bool FillHeight { get; set; }
 
 		//private List<ListSeries> ListSeries { get; set; }
-		public List<OxyListSeries> OxyListSeriesList = new List<OxyListSeries>();
+		public List<OxyListSeries> OxyListSeriesList = new();
 		private Dictionary<string, OxyListSeries> IdxNameToSeries { get; set; } = new Dictionary<string, OxyListSeries>();
 		private Dictionary<IList, ListSeries> ListToTabSeries { get; set; } = new Dictionary<IList, ListSeries>();
 		private Dictionary<IList, int> ListToTabIndex { get; set; } = new Dictionary<IList, int>(); // not used
@@ -158,7 +158,7 @@ namespace Atlas.UI.Avalonia.Charts
 
 		public event EventHandler<SeriesSelectedEventArgs> OnSelectionChanged;
 
-		private static readonly WeakEventSource<MouseCursorMovedEventArgs> _mouseCursorChangedEventSource = new WeakEventSource<MouseCursorMovedEventArgs>();
+		private static readonly WeakEventSource<MouseCursorMovedEventArgs> _mouseCursorChangedEventSource = new();
 
 		public static event EventHandler<MouseCursorMovedEventArgs> OnMouseCursorChanged
 		{
@@ -861,7 +861,7 @@ namespace Atlas.UI.Avalonia.Charts
 			}
 		}
 
-		public List<DateTimeFormat> DateFormats = new List<DateTimeFormat>
+		public List<DateTimeFormat> DateFormats = new()
 		{
 			new DateTimeFormat(2 * 60, TimeSpan.FromSeconds(1), "H:mm:ss"),
 			new DateTimeFormat(24 * 60 * 60, TimeSpan.FromMinutes(1), "H:mm"),

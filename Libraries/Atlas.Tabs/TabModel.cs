@@ -80,7 +80,7 @@ namespace Atlas.Tabs
 		public List<IList> ItemList { get; set; } = new();
 
 		public List<TabObject> Objects { get; set; } = new();
-		//public List<ITabControl> CustomTabControls { get; set; } = new List<ITabControl>(); // should everything be a custom control? tabControls?
+		//public List<ITabControl> CustomTabControls { get; set; } = new(); // should everything be a custom control? tabControls?
 
 		public IList Items
 		{

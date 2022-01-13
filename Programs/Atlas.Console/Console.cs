@@ -27,7 +27,7 @@ namespace Atlas.Console
 			//TestLogWriter();
 		}
 
-		public static ProjectSettings Settings => new ProjectSettings()
+		public static ProjectSettings Settings => new()
 		{
 			Name = "Atlas",
 			LinkType = "atlas",

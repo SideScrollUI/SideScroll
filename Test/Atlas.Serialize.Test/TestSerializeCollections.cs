@@ -68,8 +68,8 @@ namespace Atlas.Serialize.Test
 		[Test, Description("ArrayTest")]
 		public void ArrayTest()
 		{
-			int[] array1 = { };
-			int[] array2 = { };
+			int[] array1 = Array.Empty<int>();
+			int[] array2 = Array.Empty<int>();
 
 			var idxObjectToIndex = new Dictionary<object, int>(); // for saving, not filled in for loading
 			idxObjectToIndex[array1] = idxObjectToIndex.Count;
@@ -184,7 +184,7 @@ namespace Atlas.Serialize.Test
 
 		public class TabInstanceConfiguration
 		{
-			public HashSet<SelectedItem> selected = new HashSet<SelectedItem>();
+			public HashSet<SelectedItem> selected = new();
 			public int? SplitterDistance;
 			public int NumColumns;
 		}

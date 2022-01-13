@@ -23,7 +23,7 @@ namespace Atlas.Tabs.Tools
 			public object Object;
 			public Serializer Serializer;
 
-			private readonly ListItem listData = new ListItem("Object", null);
+			private readonly ListItem _listData = new("Object", null);
 
 			public Instance(TabFileSerialized tab)
 			{
@@ -39,7 +39,7 @@ namespace Atlas.Tabs.Tools
 				Serializer = serializerFile.LoadSchema(call);
 
 				items.Add(new ListItem("Schema", Serializer));
-				items.Add(listData);
+				items.Add(_listData);
 				model.Items = items;
 
 				var actions = new List<TaskCreator>();
@@ -53,7 +53,7 @@ namespace Atlas.Tabs.Tools
 				var serializerFile = new SerializerFileAtlas(Tab.Path);
 
 				Object = serializerFile.Load(call);
-				listData.Value = Object;
+				_listData.Value = Object;
 			}
 		}
 	}

@@ -16,7 +16,7 @@ namespace Atlas.Core
 
 		public static BookmarkUri Parse(string url)
 		{
-			Regex regex = new Regex(@"(?<prefix>[a-zA-Z]+)\:\/\/(?<type>[-0-9a-zA-Z]+)\/v(?<version>[\d\.]+)\/(?<id>.+)");
+			Regex regex = new(@"(?<prefix>[a-zA-Z]+)\:\/\/(?<type>[-0-9a-zA-Z]+)\/v(?<version>[\d\.]+)\/(?<id>.+)");
 
 			Match match = regex.Match(url);
 			if (!match.Success)

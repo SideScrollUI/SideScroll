@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Tools
 			{
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("File Browser", new TabFileBrowser()),
+					new("File Browser", new TabFileBrowser()),
 				};
 			}
 		}

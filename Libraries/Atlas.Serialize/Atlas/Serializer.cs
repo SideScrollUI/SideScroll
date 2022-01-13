@@ -35,12 +35,12 @@ namespace Atlas.Serialize
 	{
 		private const uint HeaderId = 0x6F6F6F6F; // 111 x 4
 
-		public Header Header = new Header();
+		public Header Header = new();
 
-		public List<TypeSchema> TypeSchemas = new List<TypeSchema>();
+		public List<TypeSchema> TypeSchemas = new();
 
-		public List<TypeRepo> TypeRepos = new List<TypeRepo>();
-		public Dictionary<Type, TypeRepo> IdxTypeToRepo = new Dictionary<Type, TypeRepo>();
+		public List<TypeRepo> TypeRepos = new();
+		public Dictionary<Type, TypeRepo> IdxTypeToRepo = new();
 
 		public TypeRepoString TypeRepoString; // Reuse string instances to reduce memory use when deep cloning
 
@@ -50,8 +50,8 @@ namespace Atlas.Serialize
 
 		// Convert to Parser class?
 		// Use a queue so we don't exceed the stack size due to cross references (i.e. a list with values that refer back to the list)
-		public Queue<object> ParserQueue = new Queue<object>();
-		public List<object> Primitives = new List<object>(); // primitives are usually serialized inline, but that doesn't work if that's the primary type
+		public Queue<object> ParserQueue = new();
+		public List<object> Primitives = new(); // primitives are usually serialized inline, but that doesn't work if that's the primary type
 
 		public struct LoadItem
 		{
@@ -61,7 +61,7 @@ namespace Atlas.Serialize
 			public override string ToString() => TypeRepo.ToString() + " - " + Index;
 		}
 
-		private readonly Queue<LoadItem> _loadQueue = new Queue<LoadItem>();
+		private readonly Queue<LoadItem> _loadQueue = new();
 
 		public Serializer()
 		{
@@ -337,7 +337,7 @@ namespace Atlas.Serialize
 		class TypeRepoWriter
 		{
 			public TypeRepo TypeRepo;
-			public MemoryStream MemoryStream = new MemoryStream();
+			public MemoryStream MemoryStream = new();
 		}
 
 		private void SaveObjects(Log log, BinaryWriter writer)
@@ -547,8 +547,8 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public Dictionary<object, object> Clones = new Dictionary<object, object>();
-		public Queue<Action> CloneQueue = new Queue<Action>();
+		public Dictionary<object, object> Clones = new();
+		public Queue<Action> CloneQueue = new();
 		public TaskInstance TaskInstance;
 
 		public object Clone(object obj)
@@ -563,7 +563,7 @@ namespace Atlas.Serialize
 			if (Clones.TryGetValue(obj, out object clone))
 				return clone;
 
-			Log log = new Log();
+			Log log = new();
 			TypeRepo typeRepo = GetOrCreateRepo(log, type);
 
 			if (typeRepo is TypeRepoPrimitive ||

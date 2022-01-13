@@ -35,6 +35,6 @@ namespace Atlas.Tabs
 
 	public class TabToolbar
 	{
-		public List<ToolButton> Buttons { get; set; } = new List<ToolButton>();
+		public List<ToolButton> Buttons { get; set; } = new();
 	}
 }

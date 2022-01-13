@@ -10,7 +10,7 @@ namespace Atlas.Network.Test
 	public class TestHttp : TestBase
 	{
 		//private string HttpdCachePath;
-		private const int intCount = 10000;
+		//private const int intCount = 10000;
 
 		/*[OneTimeSetUp]
 		public void BaseSetup()

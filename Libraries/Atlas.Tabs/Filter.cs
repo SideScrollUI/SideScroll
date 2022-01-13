@@ -71,7 +71,7 @@ namespace Atlas.Tabs
 			FilterText = filterText ?? "";
 
 			string pattern = @"^(?<Depth>\+\d+ )?(?<Filters>.+)$";
-			Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+			Regex regex = new(pattern, RegexOptions.IgnoreCase);
 
 			Match match = regex.Match(FilterText);
 			if (!match.Success)

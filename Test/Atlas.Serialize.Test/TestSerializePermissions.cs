@@ -20,7 +20,7 @@ namespace Atlas.Serialize.Test
 			_serializer = new SerializerMemoryAtlas();
 		}
 
-		private readonly PrivateDataContainer privateDataContainer = new PrivateDataContainer()
+		private readonly PrivateDataContainer privateDataContainer = new()
 		{
 			PrivateField = new PrivateClass()
 			{
@@ -65,8 +65,8 @@ namespace Atlas.Serialize.Test
 		[PublicData]
 		public class PrivateDataContainer
 		{
-			public PrivateClass PrivateField = new PrivateClass();
-			public PrivateClass PrivateProperty { get; set; } = new PrivateClass();
+			public PrivateClass PrivateField = new();
+			public PrivateClass PrivateProperty { get; set; } = new();
 			public string PublicData;
 		}
 

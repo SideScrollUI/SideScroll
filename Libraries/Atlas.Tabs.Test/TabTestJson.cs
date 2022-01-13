@@ -27,7 +27,7 @@ namespace Atlas.Tabs.Test
 			{
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Sample Text", LazyJsonNode.Parse(Json1)),
+					new("Sample Text", LazyJsonNode.Parse(Json1)),
 				};
 			}
 		}

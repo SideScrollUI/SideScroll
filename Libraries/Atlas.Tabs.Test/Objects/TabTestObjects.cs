@@ -13,12 +13,12 @@ namespace Atlas.Tabs.Test.Objects
 			{
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Object Members", new TestObjectMembers()),
-					new ListItem("Tags", new Tag[] { new Tag("abc", 1.1) }),
-					new ListItem("Subclass Property", new TabTestSubClassProperty()),
-					new ListItem("Subclass", new ValueSub()),
-					new ListItem("Enum", new EnumTest()),
-					new ListItem("TimeSpan", new TimeSpan(1, 2, 3)),
+					new("Object Members", new TestObjectMembers()),
+					new("Tags", new Tag[] { new Tag("abc", 1.1) }),
+					new("Subclass Property", new TabTestSubClassProperty()),
+					new("Subclass", new ValueSub()),
+					new("Enum", new EnumTest()),
+					new("TimeSpan", new TimeSpan(1, 2, 3)),
 				};
 			}
 

@@ -15,8 +15,8 @@ namespace Atlas.Tabs.Tools
 			{
 				model.Items = new List<ListItem>()
 				{
-					new ListItem("Current", new TabDirectory(Directory.GetCurrentDirectory())),
-					new ListItem("Root", new TabDirectory("")),
+					new("Current", new TabDirectory(Directory.GetCurrentDirectory())),
+					new("Root", new TabDirectory("")),
 				};
 			}
 		}

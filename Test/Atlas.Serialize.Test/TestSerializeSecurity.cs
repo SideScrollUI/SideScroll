@@ -52,8 +52,8 @@ namespace Atlas.Serialize.Test
 
 		public class UnserializedPropertyClass
 		{
-			public UnserializedClass UnserializedField = new UnserializedClass();
-			public UnserializedClass UnserializedProperty { get; set; } = new UnserializedClass();
+			public UnserializedClass UnserializedField = new();
+			public UnserializedClass UnserializedProperty { get; set; } = new();
 		}
 
 		[Test, Description("Serialize Field and Property with [Unserialized] classes")]

@@ -19,7 +19,7 @@ namespace Atlas.Tabs.Test.DataGrid
 
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Bytes", bytes),
+					new("Bytes", bytes),
 				};
 			}
 		}

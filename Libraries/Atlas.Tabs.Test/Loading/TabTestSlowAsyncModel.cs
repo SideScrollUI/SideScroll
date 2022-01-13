@@ -13,7 +13,7 @@ namespace Atlas.Tabs.Test.Loading
 			{
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Test Item", new TestItem()),
+					new("Test Item", new TestItem()),
 				};
 			}
 

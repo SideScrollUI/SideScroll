@@ -10,7 +10,7 @@ namespace Atlas.Core
 	public class Log : LogEntry
 	{
 		[InnerValue]
-		public ItemCollection<LogEntry> Items { get; set; } = new ItemCollection<LogEntry>(); // change to LRU for performance? No Binding?
+		public ItemCollection<LogEntry> Items { get; set; } = new(); // change to LRU for performance? No Binding?
 
 		private readonly string SummaryText;
 
@@ -126,7 +126,7 @@ namespace Atlas.Core
 
 		private Log AddChildEntry(LogLevel logLevel, string name, params Tag[] tags)
 		{
-			Log log = new Log(name, Settings, tags)
+			Log log = new(name, Settings, tags)
 			{
 				OriginalLevel = logLevel,
 				Level = logLevel,

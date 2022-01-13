@@ -23,7 +23,7 @@ namespace Atlas.Serialize
 	public abstract class TypeRepo : IDisposable
 	{
 		// Should we switch this to List<Type> instead?
-		public static List<IRepoCreator> RepoCreators { get; set; } = new List<IRepoCreator>()
+		public static List<IRepoCreator> RepoCreators { get; set; } = new()
 		{
 			new TypeRepoUnknown.Creator(),
 			new TypeRepoPrimitive.Creator(),
@@ -49,7 +49,7 @@ namespace Atlas.Serialize
 		public Type Type; // might be null after loading
 		public Type LoadableType; // some types get overridden lazy load, or get removed [Unserialized]
 		public int TypeIndex; // -1 if null
-		public List<object> Objects = new List<object>(); // ordered by index, not filled in when loading
+		public List<object> Objects = new(); // ordered by index, not filled in when loading
 		public int[] ObjectSizes;
 		public long[] ObjectOffsets;
 		public object[] ObjectsLoaded;
@@ -58,7 +58,7 @@ namespace Atlas.Serialize
 		public BinaryReader Reader;
 
 		// Saving Only
-		public Dictionary<object, int> IdxObjectToIndex = new Dictionary<object, int>(); // for saving only, not filled in for loading
+		public Dictionary<object, int> IdxObjectToIndex = new(); // for saving only, not filled in for loading
 
 		// Loading Only
 

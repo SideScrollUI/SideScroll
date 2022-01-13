@@ -85,7 +85,7 @@ namespace Atlas.Tabs
 
 	public class TypeObjectStore
 	{
-		public Dictionary<Type, object> Items { get; set; } = new Dictionary<Type, object>();
+		public Dictionary<Type, object> Items { get; set; } = new();
 
 		public void Add(object obj)
 		{

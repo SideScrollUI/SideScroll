@@ -8,7 +8,7 @@ namespace Atlas.Tabs
 	{
 		public int CurrentIndex { get; set; } = -1;
 
-		public List<Bookmark> History { get; set; } = new List<Bookmark>();
+		public List<Bookmark> History { get; set; } = new();
 
 		public Bookmark Current
 		{

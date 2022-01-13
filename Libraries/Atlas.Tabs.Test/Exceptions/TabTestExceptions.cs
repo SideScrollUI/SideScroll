@@ -12,7 +12,7 @@ namespace Atlas.Tabs.Test.Exceptions
 			{
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Load Exception", new TabTestLoadException()),
+					new("Load Exception", new TabTestLoadException()),
 				};
 
 				call.Log.AddError("Load error");

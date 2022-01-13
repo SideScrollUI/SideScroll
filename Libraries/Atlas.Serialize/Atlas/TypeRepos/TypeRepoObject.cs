@@ -20,8 +20,8 @@ namespace Atlas.Serialize
 			}
 		}
 
-		public List<FieldRepo> FieldRepos = new List<FieldRepo>();
-		public List<PropertyRepo> PropertyRepos = new List<PropertyRepo>();
+		public List<FieldRepo> FieldRepos = new();
+		public List<PropertyRepo> PropertyRepos = new();
 
 		public LazyClass LazyClass;
 

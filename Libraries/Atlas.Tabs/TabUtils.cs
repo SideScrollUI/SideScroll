@@ -7,7 +7,7 @@ namespace Atlas.Tabs
 {
 	public class TabUtils
 	{
-		public static List<Type> IgnoreHighlightTypes { get; set; } = new List<Type>();
+		public static List<Type> IgnoreHighlightTypes { get; set; } = new();
 
 		public static bool ObjectHasLinks(object obj, bool ignoreEmpty = false)
 		{

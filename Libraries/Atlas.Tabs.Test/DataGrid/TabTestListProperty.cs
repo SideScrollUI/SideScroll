@@ -10,7 +10,7 @@ namespace Atlas.Tabs.Test.DataGrid
 
 		public class Instance : TabInstance
 		{
-			private readonly PropertyTest _propertyTest = new PropertyTest();
+			private readonly PropertyTest _propertyTest = new();
 
 			public override void Load(Call call, TabModel model)
 			{

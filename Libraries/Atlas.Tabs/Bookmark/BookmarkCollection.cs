@@ -7,11 +7,11 @@ namespace Atlas.Tabs
 {
 	public class BookmarkCollection
 	{
-		public static string DataKey = "Bookmarks";
+		public const string DataKey = "Bookmarks";
 
 		public Project Project;
 
-		public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new ItemCollectionUI<TabBookmarkItem>()
+		public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new()
 		{
 			PostOnly = true,
 		};

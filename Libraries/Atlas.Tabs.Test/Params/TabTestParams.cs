@@ -12,9 +12,9 @@ namespace Atlas.Tabs.Test
 			{
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Tasks", new TabTestParamsTasks()),
-					new ListItem("Collection", new TabTestParamsCollection()),
-					new ListItem("Data Tabs", new TabTestParamsDataTabs()),
+					new("Tasks", new TabTestParamsTasks()),
+					new("Collection", new TabTestParamsCollection()),
+					new("Data Tabs", new TabTestParamsDataTabs()),
 				};
 			}
 		}

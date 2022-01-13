@@ -40,9 +40,9 @@ namespace Atlas.Serialize.Test
 
 		public class TestBindingList
 		{
-			public ItemCollection<int> IntList = new ItemCollection<int>() { 1 };
-			public ItemCollection<string> StringList = new ItemCollection<string>() { "abc" };
-			public ItemCollection<ReferencedClass> RefList = new ItemCollection<ReferencedClass>() { new ReferencedClass() };
+			public ItemCollection<int> IntList = new() { 1 };
+			public ItemCollection<string> StringList = new() { "abc" };
+			public ItemCollection<ReferencedClass> RefList = new() { new ReferencedClass() };
 		}
 	}
 }

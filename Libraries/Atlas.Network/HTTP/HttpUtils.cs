@@ -65,8 +65,8 @@ namespace Atlas.Network
 					};
 
 					//response.Close(); // We want the Headers still (might need to copy them elsewhere if this causes problems)
-					call.Log.Add("Uri Response", 
-						new Tag("Uri", response.RequestMessage.RequestUri), 
+					call.Log.Add("Uri Response",
+						new Tag("Uri", response.RequestMessage.RequestUri),
 						new Tag("Size", bytes.Length));
 
 					return viewResponse;
@@ -109,8 +109,8 @@ namespace Atlas.Network
 					HttpResponseMessage response = await Client.SendAsync(request);
 
 					//response.Close();
-					call.Log.Add("Uri Response", 
-						new Tag("Uri", request.RequestUri), 
+					call.Log.Add("Uri Response",
+						new Tag("Uri", request.RequestUri),
 						new Tag("Response", response));
 
 					return response;

@@ -23,7 +23,7 @@ namespace Atlas.UI.Avalonia.Charts
 		public PropertyInfo XAxisPropertyInfo;
 
 		// DataPoint is sealed
-		private readonly Dictionary<DataPoint, object> _datapointLookup = new Dictionary<DataPoint, object>();
+		private readonly Dictionary<DataPoint, object> _datapointLookup = new();
 
 		public override string ToString() => ListSeries?.ToString();
 

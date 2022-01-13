@@ -35,11 +35,11 @@ namespace Atlas.Tabs
 
 		public double? SplitterDistance { get; set; }
 
-		public List<TabDataSettings> TabDataSettings { get; set; } = new List<TabDataSettings>();
+		public List<TabDataSettings> TabDataSettings { get; set; } = new();
 
-		public List<TabDataSettings> ChartDataSettings { get; set; } = new List<TabDataSettings>(); // for the Chart's internal Data List
+		public List<TabDataSettings> ChartDataSettings { get; set; } = new(); // for the Chart's internal Data List
 
-		public List<SelectedRow> SelectedRows => TabDataSettings?.SelectMany(d => d.SelectedRows).ToList() ?? new List<SelectedRow>();
+		public List<SelectedRow> SelectedRows => TabDataSettings?.SelectMany(d => d.SelectedRows).ToList() ?? new();
 
 		// Store Skipped bool instead?
 		public SelectionType SelectionType

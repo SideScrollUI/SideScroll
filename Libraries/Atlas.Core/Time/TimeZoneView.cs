@@ -62,10 +62,10 @@ namespace Atlas.Core.Time
 			return obj.ToString().CompareTo(ToString());
 		}
 
-		public static TimeZoneView Utc = new TimeZoneView("Utc", "Utc", TimeZoneInfo.Utc);
-		public static TimeZoneView Local = new TimeZoneView("Local", "Local", TimeZoneInfo.Local);
+		public static TimeZoneView Utc = new("Utc", "Utc", TimeZoneInfo.Utc);
+		public static TimeZoneView Local = new("Local", "Local", TimeZoneInfo.Local);
 
-		public static List<TimeZoneView> All = new List<TimeZoneView>()
+		public static List<TimeZoneView> All = new()
 		{
 			Utc,
 			Local,

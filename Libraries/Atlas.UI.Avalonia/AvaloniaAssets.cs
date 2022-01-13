@@ -28,11 +28,11 @@ namespace Atlas.UI.Avalonia
 
 		public class Bitmaps
 		{
-			public static Bitmap Help => new Bitmap(Icons.Streams.Forward);
-			public static Bitmap Info => new Bitmap(Icons.Streams.Info);
-			public static Bitmap Hourglass => new Bitmap(Assets.Streams.Hourglass);
-			public static Bitmap Shutter => new Bitmap(Assets.Streams.Shutter);
-			public static Bitmap Logo => new Bitmap(Icons.Streams.Logo);
+			public static Bitmap Help => new(Icons.Streams.Forward);
+			public static Bitmap Info => new(Icons.Streams.Info);
+			public static Bitmap Hourglass => new(Assets.Streams.Hourglass);
+			public static Bitmap Shutter => new(Assets.Streams.Shutter);
+			public static Bitmap Logo => new(Icons.Streams.Logo);
 		}
 
 		public class Images

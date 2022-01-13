@@ -21,7 +21,7 @@ namespace Atlas.Core
 
 			using FileStream compressedFileStream = File.Create(fileToCompress.FullName + ".gz");
 
-			using GZipStream compressionStream = new GZipStream(compressedFileStream, CompressionMode.Compress);
+			using GZipStream compressionStream = new(compressedFileStream, CompressionMode.Compress);
 
 			originalFileStream.CopyTo(compressionStream);
 
@@ -54,7 +54,7 @@ namespace Atlas.Core
 
 				using FileStream decompressedFileStream = File.Create(newFileName);
 
-				using GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress);
+				using GZipStream decompressionStream = new(originalFileStream, CompressionMode.Decompress);
 
 				decompressionStream.CopyTo(decompressedFileStream);
 

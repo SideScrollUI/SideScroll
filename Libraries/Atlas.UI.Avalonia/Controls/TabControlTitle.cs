@@ -149,7 +149,7 @@ namespace Atlas.UI.Avalonia.Controls
 		protected override Size MeasureCore(Size availableSize)
 		{
 			Size measured = base.MeasureCore(availableSize);
-			Size maxSize = new Size(Math.Min(50, measured.Width), measured.Height);
+			Size maxSize = new(Math.Min(50, measured.Width), measured.Height);
 			return maxSize;
 		}
 

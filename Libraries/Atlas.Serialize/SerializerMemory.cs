@@ -8,7 +8,7 @@ namespace Atlas.Serialize
 {
 	public abstract class SerializerMemory
 	{
-		protected MemoryStream Stream { get; set; } = new MemoryStream(); // move to atlas class?
+		protected MemoryStream Stream { get; set; } = new(); // move to atlas class?
 		public bool PublicOnly { get; set; } // Whether to save classes with the [PublicData] attribute
 
 		public SerializerMemory()

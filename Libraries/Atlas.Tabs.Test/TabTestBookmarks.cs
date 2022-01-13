@@ -22,8 +22,8 @@ namespace Atlas.Tabs.Test
 
 				model.Items = new List<ListItem>()
 				{
-					new ListItem("Navigator (snapshot)", navigator),
-					//new ListItem("Recursive Tab", new TabSample()),
+					new("Navigator (snapshot)", navigator),
+					//new("Recursive Tab", new TabSample()),
 				};
 
 				model.Notes = "The Navigator class creates a bookmark for every tab change you make, and allows you to move backwards and forwards. The Back/Forward buttons currently use this. Eventually a list/drop down could be used to select the bookmark";

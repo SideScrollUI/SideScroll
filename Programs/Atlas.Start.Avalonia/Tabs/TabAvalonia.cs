@@ -15,11 +15,10 @@ namespace Atlas.Start.Avalonia.Tabs
 			{
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Test", new TabTest()),
-					new ListItem("Custom Control", new TabCustomControl()),
-					new ListItem("Bookmarks", new TabBookmarks(Project)),
-					//new ListItem("Demo", new TabDemo()),
-					//new ListItem("SeriLog", new TabSeriLog()),
+					new("Test", new TabTest()),
+					new("Custom Control", new TabCustomControl()),
+					new("Bookmarks", new TabBookmarks(Project)),
+					//new("Demo", new TabDemo()),
 				};
 			}
 		}

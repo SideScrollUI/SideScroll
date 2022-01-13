@@ -275,7 +275,7 @@ namespace Atlas.Serialize.Test
 
 		public class SubClassContainer
 		{
-			public SubClass SubClass = new SubClass()
+			public SubClass SubClass = new()
 			{
 				A = 3
 			};
@@ -337,7 +337,7 @@ namespace Atlas.Serialize.Test
 
 		public class DictionaryTest
 		{
-			public Dictionary<Parent, Child> Items = new Dictionary<Parent, Child>();
+			public Dictionary<Parent, Child> Items = new();
 
 			public DictionaryTest()
 			{

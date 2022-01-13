@@ -12,10 +12,10 @@ namespace Atlas.Tabs.Test.Loading
 			{
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Slow Load", new TabTestSlowLoad()),
-					new ListItem("Slow Model", new TabTestSlowModel()),
-					new ListItem("Slow Async Item", new TabTestSlowAsyncItem()),
-					new ListItem("Slow Async Model", new TabTestSlowAsyncModel()),
+					new("Slow Load", new TabTestSlowLoad()),
+					new("Slow Model", new TabTestSlowModel()),
+					new("Slow Async Item", new TabTestSlowAsyncItem()),
+					new("Slow Async Model", new TabTestSlowAsyncModel()),
 				};
 			}
 		}

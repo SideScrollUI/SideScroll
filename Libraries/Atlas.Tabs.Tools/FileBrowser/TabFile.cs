@@ -7,7 +7,7 @@ namespace Atlas.Tabs.Tools
 {
 	public class TabFile : ITab
 	{
-		public static HashSet<string> TextExtensions = new HashSet<string>()
+		public static HashSet<string> TextExtensions = new()
 		{
 			".txt",
 			".md",

@@ -28,7 +28,7 @@ namespace Atlas.Core
 
 		public SynchronizationContext Context { get; set; } // TabInstance will initialize this, don't want to initialize this early due to default SynchronizationContext not posting messages in order
 
-		private readonly object _lock = new object();
+		private readonly object _lock = new();
 
 		public ItemCollectionUI()
 		{

@@ -14,10 +14,10 @@ namespace Atlas.Tabs
 		private const string DefaultGroupName = "Default";
 
 		public string Name { get; set; }
-		private ListGroup DefaultListGroup { get; set; } = new ListGroup(DefaultGroupName);
-		public Dictionary<string, ListGroup> ListGroups { get; set; } = new Dictionary<string, ListGroup>();
-		//public ItemCollection<ListGroup> ListGroups { get; set; } = new ItemCollection<ListGroup>();
-		public ItemCollection<ListSeries> ListSeries { get; set; } = new ItemCollection<ListSeries>();
+		private ListGroup DefaultListGroup { get; set; } = new(DefaultGroupName);
+		public Dictionary<string, ListGroup> ListGroups { get; set; } = new();
+		//public ItemCollection<ListGroup> ListGroups { get; set; } = new();
+		public ItemCollection<ListSeries> ListSeries { get; set; } = new();
 
 		public override string ToString() => string.Join(" ", ListSeries);
 

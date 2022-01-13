@@ -24,7 +24,7 @@ namespace Atlas.Core
 		public TaskCreator Creator { get; set; }
 
 		[HiddenColumn]
-		public Call Call { get; set; } = new Call();
+		public Call Call { get; set; } = new();
 
 		[InnerValue, HiddenColumn]
 		public Log Log => Call.Log;
@@ -35,7 +35,7 @@ namespace Atlas.Core
 		public Task Task { get; set; }
 		public TaskStatus TaskStatus => Task?.Status ?? TaskStatus.Created;
 
-		public CancellationTokenSource TokenSource = new CancellationTokenSource();
+		public CancellationTokenSource TokenSource = new();
 		public CancellationToken CancelToken => TokenSource.Token;
 
 		public string Status { get; set; } = "Running";
@@ -47,7 +47,7 @@ namespace Atlas.Core
 		public bool Finished { get; set; }
 
 		public TaskInstance ParentTask { get; set; }
-		public List<TaskInstance> SubTasks { get; set; } = new List<TaskInstance>();
+		public List<TaskInstance> SubTasks { get; set; } = new();
 
 		private int? _taskCount;
 		public int TaskCount
@@ -68,7 +68,7 @@ namespace Atlas.Core
 
 		public DateTime Started = DateTime.UtcNow;
 
-		private readonly Stopwatch _stopwatch = new Stopwatch();
+		private readonly Stopwatch _stopwatch = new();
 
 		public override string ToString() => Label;
 

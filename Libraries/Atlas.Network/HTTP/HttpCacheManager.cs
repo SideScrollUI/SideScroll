@@ -5,9 +5,9 @@ namespace Atlas.Network
 {
 	public class HttpCacheManager
 	{
-		public HttpMemoryCache MemoryCache { get; set; } = new HttpMemoryCache();
+		public HttpMemoryCache MemoryCache { get; set; } = new();
 
-		private readonly Dictionary<string, HttpCache> _httpCaches = new Dictionary<string, HttpCache>();
+		private readonly Dictionary<string, HttpCache> _httpCaches = new();
 
 		// should we keep the imports open all the time?
 		// should we be returning disposable references?

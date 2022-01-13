@@ -26,11 +26,11 @@ namespace Atlas.Core
 		public double Value { get; set; }
 
 		//[Tags]
-		public List<Tag> Tags { get; set; } = new List<Tag>();
+		public List<Tag> Tags { get; set; } = new();
 
 		public string Description => string.Join(", ", Tags);
 
-		public TimeWindow TimeWindow => new TimeWindow(StartTime, EndTime);
+		public TimeWindow TimeWindow => new(StartTime, EndTime);
 
 		public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Value;
 

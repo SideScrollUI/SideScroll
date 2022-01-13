@@ -11,7 +11,7 @@ namespace Atlas.Tabs.Test.Chart
 
 		public class Instance : TabInstance, ITabAsync
 		{
-			private readonly Random random = new Random();
+			private readonly Random random = new();
 
 			public async Task LoadAsync(Call call, TabModel model)
 			{

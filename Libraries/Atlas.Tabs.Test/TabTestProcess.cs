@@ -12,9 +12,9 @@ namespace Atlas.Tabs.Test
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				/*tabModel.Items = new ItemCollection<ListItem>()
+				/*model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Sample Text", "This is some sample text\n\n1\n2\n3"),
+					new("Sample Text", "This is some sample text\n\n1\n2\n3"),
 				};*/
 
 				model.Actions = new List<TaskCreator>

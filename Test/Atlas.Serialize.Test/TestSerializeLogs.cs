@@ -159,7 +159,7 @@ namespace Atlas.Serialize.Test
 
 		public class TabInstanceConfiguration
 		{
-			public HashSet<SelectedItem> Selected = new HashSet<SelectedItem>();
+			public HashSet<SelectedItem> Selected = new();
 			public int? SplitterDistance;
 			public int NumColumns;
 		}
@@ -171,7 +171,7 @@ namespace Atlas.Serialize.Test
 
 		public class LogUnknown : LogEntryUnknown
 		{
-			public List<LogEntryUnknown> Items = new List<LogEntryUnknown>();
+			public List<LogEntryUnknown> Items = new();
 		}
 
 		public class LogEntryTest2
@@ -190,7 +190,7 @@ namespace Atlas.Serialize.Test
 
 		public class LogTest2
 		{
-			public List<LogEntryTest2> Items = new List<LogEntryTest2>();
+			public List<LogEntryTest2> Items = new();
 
 			public LogTest2()
 			{

@@ -14,7 +14,7 @@ namespace Atlas.UI.Avalonia.Controls
 
 		public bool GridInitialized { get; private set; }
 
-		private readonly Dictionary<Button, TaskCreator> _taskCreators = new Dictionary<Button, TaskCreator>();
+		private readonly Dictionary<Button, TaskCreator> _taskCreators = new();
 
 		public TabControlActions(TabInstance tabInstance, TabModel tabModel, ItemCollection<TaskCreator> taskItems)
 		{

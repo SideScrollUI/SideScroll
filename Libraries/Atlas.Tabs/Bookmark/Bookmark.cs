@@ -23,7 +23,7 @@ namespace Atlas.Tabs
 		public string Address => TabBookmark.Address;
 		public string Path => (Name != null ? (Name + ":\n") : "") + Address;
 		public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-		public TabBookmark TabBookmark { get; set; } = new TabBookmark();
+		public TabBookmark TabBookmark { get; set; } = new();
 		public bool Imported { get; set; }
 		public BookmarkType BookmarkType { get; set; }
 

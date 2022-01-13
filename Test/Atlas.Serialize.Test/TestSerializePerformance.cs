@@ -82,7 +82,7 @@ namespace Atlas.Serialize.Test
 			return input;
 		}
 
-		private static TimeRangeValue TimeRangeSample => new TimeRangeValue()
+		private static TimeRangeValue TimeRangeSample => new()
 		{
 			StartTime = new DateTime(1980, 10, 23),
 			EndTime = new DateTime(2020, 10, 24),

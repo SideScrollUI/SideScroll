@@ -21,15 +21,15 @@ namespace Atlas.UI.Avalonia.Controls
 	// Vertical only right now
 	public class TabControlSplitContainer : Grid
 	{
-		public Dictionary<object, Control> GridControls = new Dictionary<object, Control>();
-		public List<GridSplitter> GridSplitters = new List<GridSplitter>(); // reattach each time controls change
+		public Dictionary<object, Control> GridControls = new();
+		public List<GridSplitter> GridSplitters = new(); // reattach each time controls change
 
 		public double MinDesiredWidth = 100;
 		public double MaxDesiredWidth = double.MaxValue;
 
 		public new bool IsArrangeValid;
 
-		private List<Item> _gridItems = new List<Item>();
+		private List<Item> _gridItems = new();
 
 		public class Item
 		{
@@ -54,7 +54,7 @@ namespace Atlas.UI.Avalonia.Controls
 		{
 			get
 			{
-				Size desiredSize = new Size(MinDesiredWidth, 0);
+				Size desiredSize = new(MinDesiredWidth, 0);
 				foreach (var control in Children)
 				{
 					Size childDesiredSize = control.DesiredSize;

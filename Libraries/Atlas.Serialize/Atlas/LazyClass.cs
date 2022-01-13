@@ -48,7 +48,7 @@ namespace Atlas.Serialize
 	{
 		public Type OriginalType;
 		public Type NewType;
-		public Dictionary<PropertyInfo, LazyProperty> lazyProperties = new Dictionary<PropertyInfo, LazyProperty>();
+		public Dictionary<PropertyInfo, LazyProperty> lazyProperties = new();
 
 		public LazyClass(Type type, List<TypeRepoObject.PropertyRepo> propertyRepos)
 		{
@@ -91,7 +91,7 @@ namespace Atlas.Serialize
 		private TypeBuilder GetTypeBuilder()
 		{
 			string typeSignature = "Lazy." + OriginalType.FullName;
-			AssemblyName assemblyName = new AssemblyName(typeSignature);
+			AssemblyName assemblyName = new(typeSignature);
 			AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
 			ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("Lazy");
 			TypeBuilder typeBuilder = moduleBuilder.DefineType(typeSignature,
