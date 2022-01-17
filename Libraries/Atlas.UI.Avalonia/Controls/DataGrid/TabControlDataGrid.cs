@@ -725,11 +725,14 @@ namespace Atlas.UI.Avalonia.Controls
 			if (TabDataSettings.SelectedRows.Count == 0)
 				return rowObjects;
 
-			var keys = new Dictionary<string, object>(); // todo: change to unordered?
+			var objects = new HashSet<object>();
+			var keys = new Dictionary<string, object>();
 			foreach (object listItem in CollectionView) // collectionView takes filters into account
 			{
 				if (listItem == null)
 					continue;
+
+				objects.Add(objects);
 
 				string id = DataUtils.GetItemId(listItem);
 				if (id != null)
@@ -738,19 +741,19 @@ namespace Atlas.UI.Avalonia.Controls
 
 			foreach (SelectedRow selectedRow in TabDataSettings.SelectedRows)
 			{
-				object listItem;
-				if (selectedRow.Object != null)
+				object selectedObject;
+				if (selectedRow.Object != null && objects.Contains(selectedRow.Object))
 				{
-					listItem = selectedRow.Object;
+					selectedObject = selectedRow.Object;
 				}
 				else if (selectedRow.DataKey != null)
 				{
-					if (!keys.TryGetValue(selectedRow.DataKey, out listItem))
+					if (!keys.TryGetValue(selectedRow.DataKey, out selectedObject))
 						continue;
 				}
 				else if (selectedRow.Label != null)
 				{
-					if (!keys.TryGetValue(selectedRow.Label, out listItem))
+					if (!keys.TryGetValue(selectedRow.Label, out selectedObject))
 						continue;
 				}
 				else
@@ -758,18 +761,14 @@ namespace Atlas.UI.Avalonia.Controls
 					int rowIndex = selectedRow.RowIndex;
 					if (rowIndex < 0 || rowIndex >= List.Count) // some items might be filtered or have changed
 						continue;
-					listItem = List[rowIndex];
+					selectedObject = List[rowIndex];
 				}
 
 				if (TabDataSettings.SelectionType != SelectionType.User &&
-					TabInstance.IsOwnerObject(listItem.GetInnerValue())) // stops self referencing loops
+					TabInstance.IsOwnerObject(selectedObject.GetInnerValue())) // stops self referencing loops
 					continue;
 
-				/*if (item.pinned)
-				{
-					pinnedItems.Add(rowIndex);
-				}*/
-				rowObjects.Add(listItem);
+				rowObjects.Add(selectedObject);
 			}
 
 			if (TabInstance.TabBookmark?.Bookmark?.Imported == true && rowObjects.Count != TabDataSettings.SelectedRows.Count)

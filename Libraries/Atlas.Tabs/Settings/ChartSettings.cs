@@ -62,8 +62,10 @@ namespace Atlas.Tabs
 
 			PropertyInfo xAxisPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
 
-			PropertyInfo[] properties = elementType.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
-			//ItemCollection<ListSeries> listProperties = new ItemCollection<ListSeries>();
+			PropertyInfo[] properties = elementType.GetProperties()
+				.OrderBy(x => x.MetadataToken)
+				.ToArray();
+
 			foreach (PropertyInfo propertyInfo in properties)
 			{
 				if (propertyInfo.DeclaringType.IsNotPublic)

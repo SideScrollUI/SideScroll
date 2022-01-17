@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace Atlas.Core
 {
@@ -61,6 +62,12 @@ namespace Atlas.Core
 		{
 			int result = Comparer.Compare(x, y);
 			return result;
+		}
+
+		public ItemCollection<T> FilterNull()
+		{
+			var filtered = ToList().Where(i => i != null);
+			return new ItemCollection<T>(filtered);
 		}
 
 		public List<T> ToList()

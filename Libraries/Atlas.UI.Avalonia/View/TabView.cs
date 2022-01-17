@@ -240,6 +240,7 @@ namespace Atlas.UI.Avalonia.View
 				Width = Theme.SplitterSize,
 			};
 			_containerGrid.Children.Add(_parentChildGridSplitter);
+
 			_parentChildGridSplitter.DragDelta += GridSplitter_DragDelta;
 			_parentChildGridSplitter.DragStarted += GridSplitter_DragStarted;
 			_parentChildGridSplitter.DragCompleted += GridSplitter_DragCompleted; // bug, this is firing when double clicking splitter
@@ -723,8 +724,11 @@ namespace Atlas.UI.Avalonia.View
 			UpdateSelectedTabInstances();
 
 			if (Instance.TabBookmark != null)
+			{
 				Instance.SaveTabSettings();
-			Instance.TabBookmark = null; // clear so user can navigate and save prefs
+				Instance.TabBookmarkLoaded = Instance.TabBookmark;
+				Instance.TabBookmark = null; // clear so user can navigate and save prefs
+			}
 		}
 
 		private List<Control> CreateAllChildControls(bool recreate, out Dictionary<object, Control> newChildControls)
@@ -764,10 +768,6 @@ namespace Atlas.UI.Avalonia.View
 
 		internal void CreateChildControls(IEnumerable newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector tabControl = null)
 		{
-			//var collection = newList as DataGridSelectedItemsCollection;
-			//if (collection != null && collection.)
-			//	newList.
-
 			foreach (object obj in newList)
 			{
 				if (newChildControls.Count >= Instance.Project.UserSettings.VerticalTabLimit)
@@ -779,10 +779,6 @@ namespace Atlas.UI.Avalonia.View
 
 		private void GetOrCreateChildControl(Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, object obj, string label = null, ITabSelector tabControl = null)
 		{
-			//var collection = newList as DataGridSelectedItemsCollection;
-			//if (collection != null && collection.)
-			//	newList.
-
 			// duplicate work
 			//object value = obj.GetInnerValue(); // performance issues? cache this?
 			//if (value == null)

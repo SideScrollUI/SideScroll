@@ -94,6 +94,7 @@ namespace Atlas.Tabs
 
 		public TabViewSettings TabViewSettings = new();
 		public TabBookmark TabBookmark { get; set; }
+		public TabBookmark TabBookmarkLoaded { get; set; }
 		public SelectedRow SelectedRow { get; set; } // The parent selection that points to this tab
 
 		public int Depth
@@ -343,13 +344,11 @@ namespace Atlas.Tabs
 			try
 			{
 				Type type = GetType(); // gets derived type
-				var methods = type.GetMethods().Where(m => m.Name == name).ToList();
-				foreach (var method in methods)
-				{
-					var parameters = method.GetParameters();
-					if (paramCount == parameters.Length)
-						return method;
-				}
+				return type.GetMethods()
+					.Where(m => m.Name == name)
+					.Where(m => m.DeclaringType != typeof(TabInstance))
+					.Where(m => m.GetParameters().Length == paramCount)
+					.FirstOrDefault();
 			}
 			catch (Exception)
 			{
@@ -357,24 +356,8 @@ namespace Atlas.Tabs
 			return null;
 		}
 
-		// Check if derived type implements Load()
-		public bool CanLoad
-		{
-			get
-			{
-				MethodInfo methodInfo = GetDerivedLoadMethod(nameof(Load), 2);
-				return (methodInfo?.DeclaringType != typeof(TabInstance));
-			}
-		}
-
-		public bool CanLoadUI
-		{
-			get
-			{
-				MethodInfo methodInfo = GetDerivedLoadMethod(nameof(LoadUI), 2);
-				return (methodInfo?.DeclaringType != typeof(TabInstance));
-			}
-		}
+		public bool HasLoadMethod => GetDerivedLoadMethod(nameof(Load), 2) != null;
+		public bool HasLoadUIMethod => GetDerivedLoadMethod(nameof(LoadUI), 2) != null;
 
 		public virtual void Load(Call call, TabModel model)
 		{
@@ -436,7 +419,7 @@ namespace Atlas.Tabs
 				//StartAsync(ReintializeAsync);
 			}
 
-			if (CanLoad)
+			if (HasLoadMethod)
 			{
 				try
 				{
@@ -493,7 +476,7 @@ namespace Atlas.Tabs
 			// Load() initializes the tabModel.Object & CustomSettingsPath which gets used for the settings path
 			Model = model;
 
-			if (CanLoadUI)
+			if (HasLoadUIMethod)
 			{
 				try
 				{
@@ -520,10 +503,15 @@ namespace Atlas.Tabs
 		}
 
 		// calls Load and then Refresh
-		public void Reload()
+		public void Reload(bool reloadBookmark = false)
 		{
 			IsLoaded = false;
 			LoadCalled = false;
+
+			if (reloadBookmark)
+			{
+				TabBookmark = TabBookmarkLoaded;
+			}
 
 			if (OnReload != null)
 			{
