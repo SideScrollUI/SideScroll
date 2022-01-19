@@ -29,7 +29,7 @@ namespace Atlas.UI.Avalonia
 			};
 			menuItemCopy.Click += delegate
 			{
-				Task.Run(() => ClipBoardUtils.SetTextAsync(textBlock.Text));
+				ClipBoardUtils.SetText(textBlock.Text);
 			};
 			list.Add(menuItemCopy);
 

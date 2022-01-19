@@ -6,6 +6,11 @@ namespace Atlas.UI.Avalonia
 {
 	public class ClipBoardUtils
 	{
+		public static void SetText(string text)
+		{
+			Task.Run(() => SetTextAsync(text));
+		}
+
 		public static async Task SetTextAsync(string text)
 		{
 			await ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))).SetTextAsync(text);

@@ -116,7 +116,7 @@ namespace Atlas.UI.Avalonia
 			var menuItemCopy = new TabMenuItem("_Copy - Cell Contents");
 			menuItemCopy.Click += delegate
 			{
-				Task.Run(() => ClipBoardUtils.SetTextAsync(textBlock.Text));
+				ClipBoardUtils.SetText(textBlock.Text);
 			};
 			list.Add(menuItemCopy);
 
@@ -127,7 +127,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGrid.ToStringTable();
 				if (text != null)
-					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
+					ClipBoardUtils.SetText(text);
 			};
 			list.Add(menuItemCopyDataGrid);
 
@@ -136,7 +136,7 @@ namespace Atlas.UI.Avalonia
 			{
 				string text = DataGrid.ToCsv();
 				if (text != null)
-					Task.Run(() => ClipBoardUtils.SetTextAsync(text));
+					ClipBoardUtils.SetText(text);
 			};
 			list.Add(menuItemCopyDataGridCsv);
 
