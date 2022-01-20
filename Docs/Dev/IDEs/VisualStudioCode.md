@@ -34,7 +34,7 @@
     make sure to restart after
 
 
-`dotnet restore Atlas.VsCode.sln`
+`dotnet restore Atlas.sln`
 
 - Files
   - Make sure the `launch.preLaunchTask` matches the `tasks.label`
