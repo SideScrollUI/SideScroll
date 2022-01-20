@@ -3,91 +3,90 @@ using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
 
-namespace Atlas.UI.Avalonia
+namespace Atlas.UI.Avalonia;
+
+public class FormatValueConverter : IValueConverter
 {
-	public class FormatValueConverter : IValueConverter
+	private const string StringFormat = "yyyy-M-d H:mm:ss.FFF";
+
+	public int MaxLength { get; set; } = 1000;
+
+	// add a map to store original mappings?
+	//public Dictionary<object, object> { get; set; }
+
+	public bool ConvertBackEnabled { get; set; } = true;
+	public bool IsFormatted { get; set; }
+
+	private object _originalValue;
+
+	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 	{
-		private const string StringFormat = "yyyy-M-d H:mm:ss.FFF";
+		_originalValue = value;
+		if (value == null)
+			return null;
 
-		public int MaxLength { get; set; } = 1000;
+		object result = ChangeType(value, targetType, MaxLength, IsFormatted);
+		return result;
+	}
 
-		// add a map to store original mappings?
-		//public Dictionary<object, object> { get; set; }
+	// The DataGrid triggers this even if the binding is one way
+	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+	{
+		return _originalValue;
+	}
 
-		public bool ConvertBackEnabled { get; set; } = true;
-		public bool IsFormatted { get; set; }
-
-		private object _originalValue;
-
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+	public static object ChangeType(object value, Type targetType, int maxLength, bool formatted)
+	{
+		if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
 		{
-			_originalValue = value;
 			if (value == null)
 				return null;
 
-			object result = ChangeType(value, targetType, MaxLength, IsFormatted);
-			return result;
+			targetType = Nullable.GetUnderlyingType(targetType);
 		}
 
-		// The DataGrid triggers this even if the binding is one way
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		if (value is string text)
 		{
-			return _originalValue;
-		}
-
-		public static object ChangeType(object value, Type targetType, int maxLength, bool formatted)
-		{
-			if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-			{
-				if (value == null)
-					return null;
-
-				targetType = Nullable.GetUnderlyingType(targetType);
-			}
-
-			if (value is string text)
-			{
-				if (text.Length == 0)
-					return null;
-			}
-
-			if (targetType == typeof(string))
-			{
-				return ObjectToString(value, maxLength, formatted);
-			}
-
-			try
-			{
-				return System.Convert.ChangeType(value, targetType);
-			}
-			catch
-			{
+			if (text.Length == 0)
 				return null;
-			}
 		}
 
-		public static string ObjectToString(object value, int maxLength, bool formatted)
+		if (targetType == typeof(string))
 		{
-			if (value is DateTime dateTime)
-				return dateTime.ToUniversalTime().ToString(StringFormat);
-
-			if (value is DateTimeOffset dateTimeOffset)
-				return dateTimeOffset.UtcDateTime.ToString(StringFormat);
-
-			if (value is TimeSpan timeSpan)
-			{
-				if (formatted)
-					return timeSpan.FormattedDecimal();
-				else
-					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
-			}
-
-			if (value is double d && formatted)
-				return d.FormattedDecimal();
-
-			//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above
-
-			return value.Formatted(maxLength);
+			return ObjectToString(value, maxLength, formatted);
 		}
+
+		try
+		{
+			return System.Convert.ChangeType(value, targetType);
+		}
+		catch
+		{
+			return null;
+		}
+	}
+
+	public static string ObjectToString(object value, int maxLength, bool formatted)
+	{
+		if (value is DateTime dateTime)
+			return dateTime.ToUniversalTime().ToString(StringFormat);
+
+		if (value is DateTimeOffset dateTimeOffset)
+			return dateTimeOffset.UtcDateTime.ToString(StringFormat);
+
+		if (value is TimeSpan timeSpan)
+		{
+			if (formatted)
+				return timeSpan.FormattedDecimal();
+			else
+				return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
+		}
+
+		if (value is double d && formatted)
+			return d.FormattedDecimal();
+
+		//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above
+
+		return value.Formatted(maxLength);
 	}
 }

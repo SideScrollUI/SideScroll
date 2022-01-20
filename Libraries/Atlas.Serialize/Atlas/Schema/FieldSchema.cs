@@ -5,132 +5,131 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace Atlas.Serialize
+namespace Atlas.Serialize;
+
+public class FieldSchema
 {
-	public class FieldSchema
+	public string FieldName;
+	public int TypeIndex = -1;
+
+	public TypeSchema OwnerTypeSchema;
+	public TypeSchema FieldTypeSchema;
+	public FieldInfo FieldInfo; // can be null
+
+	public Type Type; // might be null
+	public Type NonNullableType; // might be null
+
+	public bool IsSerialized;
+	public bool IsLoadable;
+	public bool IsPrivate;
+	public bool IsPublic;
+
+	public override string ToString() => FieldName;
+
+	public FieldSchema(TypeSchema typeSchema, FieldInfo fieldInfo)
 	{
-		public string FieldName;
-		public int TypeIndex = -1;
+		OwnerTypeSchema = typeSchema;
+		FieldInfo = fieldInfo;
+		FieldName = fieldInfo.Name;
 
-		public TypeSchema OwnerTypeSchema;
-		public TypeSchema FieldTypeSchema;
-		public FieldInfo FieldInfo; // can be null
+		Initialize();
+	}
 
-		public Type Type; // might be null
-		public Type NonNullableType; // might be null
+	public FieldSchema(TypeSchema typeSchema, BinaryReader reader)
+	{
+		OwnerTypeSchema = typeSchema;
 
-		public bool IsSerialized;
-		public bool IsLoadable;
-		public bool IsPrivate;
-		public bool IsPublic;
+		Load(reader);
 
-		public override string ToString() => FieldName;
+		if (typeSchema.Type != null)
+			FieldInfo = typeSchema.Type.GetField(FieldName);
 
-		public FieldSchema(TypeSchema typeSchema, FieldInfo fieldInfo)
+		Initialize();
+	}
+
+	private void Initialize()
+	{
+		if (FieldInfo != null)
 		{
-			OwnerTypeSchema = typeSchema;
-			FieldInfo = fieldInfo;
-			FieldName = fieldInfo.Name;
-
-			Initialize();
+			Type = FieldInfo.FieldType;
+			NonNullableType = Type.GetNonNullableType();
+			IsSerialized = GetIsSerialized();
+			IsLoadable = IsSerialized; // derived types won't have entries for base type
+			IsPrivate = GetIsPrivate();
+			IsPublic = GetIsPublic();
 		}
+	}
 
-		public FieldSchema(TypeSchema typeSchema, BinaryReader reader)
-		{
-			OwnerTypeSchema = typeSchema;
+	private bool GetIsPrivate()
+	{
+		if (FieldInfo.GetCustomAttribute<PrivateDataAttribute>() != null)
+			return true;
 
-			Load(reader);
+		if (Type.GetCustomAttribute<PrivateDataAttribute>() != null)
+			return true;
 
-			if (typeSchema.Type != null)
-				FieldInfo = typeSchema.Type.GetField(FieldName);
+		return false;
+	}
 
-			Initialize();
-		}
+	private bool GetIsPublic()
+	{
+		if (FieldInfo.GetCustomAttribute<PublicDataAttribute>() != null)
+			return true;
 
-		private void Initialize()
-		{
-			if (FieldInfo != null)
-			{
-				Type = FieldInfo.FieldType;
-				NonNullableType = Type.GetNonNullableType();
-				IsSerialized = GetIsSerialized();
-				IsLoadable = IsSerialized; // derived types won't have entries for base type
-				IsPrivate = GetIsPrivate();
-				IsPublic = GetIsPublic();
-			}
-		}
+		if (FieldInfo.GetCustomAttribute<ProtectedDataAttribute>() != null)
+			return true;
 
-		private bool GetIsPrivate()
-		{
-			if (FieldInfo.GetCustomAttribute<PrivateDataAttribute>() != null)
-				return true;
+		if (FieldInfo.FieldType.GetCustomAttribute<PublicDataAttribute>() != null)
+			return true;
 
-			if (Type.GetCustomAttribute<PrivateDataAttribute>() != null)
-				return true;
+		if (FieldInfo.FieldType.GetCustomAttribute<ProtectedDataAttribute>() != null)
+			return true;
 
+		if (OwnerTypeSchema.IsProtected)
 			return false;
-		}
 
-		private bool GetIsPublic()
-		{
-			if (FieldInfo.GetCustomAttribute<PublicDataAttribute>() != null)
-				return true;
+		return true;
+	}
 
-			if (FieldInfo.GetCustomAttribute<ProtectedDataAttribute>() != null)
-				return true;
+	private bool GetIsSerialized()
+	{
+		if (FieldInfo.IsLiteral == true || FieldInfo.IsStatic == true)
+			return false;
 
-			if (FieldInfo.FieldType.GetCustomAttribute<PublicDataAttribute>() != null)
-				return true;
+		Attribute attribute = Type.GetCustomAttribute<UnserializedAttribute>();
+		if (attribute != null)
+			return false;
 
-			if (FieldInfo.FieldType.GetCustomAttribute<ProtectedDataAttribute>() != null)
-				return true;
+		attribute = FieldInfo.GetCustomAttribute<NonSerializedAttribute>();
+		if (attribute != null)
+			return false;
 
-			if (OwnerTypeSchema.IsProtected)
-				return false;
+		attribute = FieldInfo.GetCustomAttribute<UnserializedAttribute>();
+		if (attribute != null)
+			return false;
 
-			return true;
-		}
+		return true;
+	}
 
-		private bool GetIsSerialized()
-		{
-			if (FieldInfo.IsLiteral == true || FieldInfo.IsStatic == true)
-				return false;
+	public void Save(BinaryWriter writer)
+	{
+		writer.Write(FieldName);
+		writer.Write((short)TypeIndex);
+	}
 
-			Attribute attribute = Type.GetCustomAttribute<UnserializedAttribute>();
-			if (attribute != null)
-				return false;
+	public void Load(BinaryReader reader)
+	{
+		FieldName = reader.ReadString();
+		TypeIndex = reader.ReadInt16();
+	}
 
-			attribute = FieldInfo.GetCustomAttribute<NonSerializedAttribute>();
-			if (attribute != null)
-				return false;
+	public void Validate(List<TypeSchema> typeSchemas)
+	{
+		if (TypeIndex < 0)
+			return;
 
-			attribute = FieldInfo.GetCustomAttribute<UnserializedAttribute>();
-			if (attribute != null)
-				return false;
-
-			return true;
-		}
-
-		public void Save(BinaryWriter writer)
-		{
-			writer.Write(FieldName);
-			writer.Write((short)TypeIndex);
-		}
-
-		public void Load(BinaryReader reader)
-		{
-			FieldName = reader.ReadString();
-			TypeIndex = reader.ReadInt16();
-		}
-
-		public void Validate(List<TypeSchema> typeSchemas)
-		{
-			if (TypeIndex < 0)
-				return;
-
-			TypeSchema typeSchema = typeSchemas[TypeIndex];
-			if (FieldInfo != null && typeSchema.Type != FieldInfo.FieldType.GetNonNullableType())
-				IsLoadable = false;
-		}
+		TypeSchema typeSchema = typeSchemas[TypeIndex];
+		if (FieldInfo != null && typeSchema.Type != FieldInfo.FieldType.GetNonNullableType())
+			IsLoadable = false;
 	}
 }

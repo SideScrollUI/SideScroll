@@ -1,240 +1,239 @@
 using Atlas.Core;
 using NUnit.Framework;
 
-namespace Atlas.Serialize.Test
+namespace Atlas.Serialize.Test;
+
+[Category("Serialize")]
+public class TestSerializePermissions : TestSerializeBase
 {
-	[Category("Serialize")]
-	public class TestSerializePermissions : TestSerializeBase
+	private SerializerMemory _serializer;
+
+	[OneTimeSetUp]
+	public void BaseSetup()
 	{
-		private SerializerMemory _serializer;
+		Initialize("Serialize");
+	}
 
-		[OneTimeSetUp]
-		public void BaseSetup()
-		{
-			Initialize("Serialize");
-		}
+	[SetUp]
+	public void Setup()
+	{
+		_serializer = new SerializerMemoryAtlas();
+	}
 
-		[SetUp]
-		public void Setup()
+	private readonly PrivateDataContainer privateDataContainer = new()
+	{
+		PrivateField = new PrivateClass()
 		{
-			_serializer = new SerializerMemoryAtlas();
-		}
+			Confidential = "secrets",
+		},
+		PrivateProperty = new PrivateClass()
+		{
+			Confidential = "more secrets",
+		},
+		PublicData = "test",
+	};
 
-		private readonly PrivateDataContainer privateDataContainer = new()
+	[Test, Description("Serialize [PrivateData]")]
+	public void SerializePrivateData()
+	{
+		var input = privateDataContainer;
+
+		_serializer.PublicOnly = true;
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<PrivateDataContainer>(Call);
+
+		Assert.IsNull(output.PrivateField.Confidential);
+		Assert.IsNull(output.PrivateProperty.Confidential);
+		Assert.AreEqual("test", output.PublicData);
+	}
+
+	// Test changing serialized field to public in internal model
+	[Test, Description("Serialize [PrivateData]")]
+	public void SerializePrivateDataPublicLoading()
+	{
+		var input = privateDataContainer;
+
+		_serializer.Save(Call, input);
+		_serializer.PublicOnly = true;
+		var output = _serializer.Load<PrivateDataContainer>(Call);
+
+		Assert.IsNull(output.PrivateField.Confidential);
+		Assert.IsNull(output.PrivateProperty.Confidential);
+		Assert.AreEqual("test", output.PublicData);
+	}
+
+	[PublicData]
+	public class PrivateDataContainer
+	{
+		public PrivateClass PrivateField = new();
+		public PrivateClass PrivateProperty { get; set; } = new();
+		public string PublicData;
+	}
+
+	[PrivateData]
+	public class PrivateClass
+	{
+		public string Confidential { get; set; }
+	}
+
+	public class DerivedPrivateClass : PrivateClass
+	{
+	}
+
+	[Test, Description("Serialize [PublicData]")]
+	public void SerializePublicData()
+	{
+		var input = new PublicContainer()
 		{
-			PrivateField = new PrivateClass()
+			PublicField = new PublicClass()
 			{
-				Confidential = "secrets",
+				PublicData = "cats",
 			},
-			PrivateProperty = new PrivateClass()
+			PublicProperty = new PublicClass()
 			{
-				Confidential = "more secrets",
+				PublicData = "more cats",
 			},
-			PublicData = "test",
+			NonSecure = "test",
 		};
 
-		[Test, Description("Serialize [PrivateData]")]
-		public void SerializePrivateData()
+		_serializer.PublicOnly = false;
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<PublicContainer>(Call);
+
+		Assert.IsNotNull(output.PublicField);
+		Assert.IsNotNull(output.PublicProperty);
+		Assert.AreEqual(output.NonSecure, "test");
+	}
+
+	public class PublicContainer
+	{
+		public PublicClass PublicField;
+		public PublicClass PublicProperty { get; set; }
+		public string NonSecure;
+	}
+
+	[PublicData]
+	public class PublicClass
+	{
+		public string PublicData { get; set; }
+		public object RestrictedData { get; set; } // Only allows [PublicData]
+	}
+
+	[Test]
+	public void SerializeDerivedNonPrivateClass()
+	{
+		var input = new DerivedPrivateClass()
 		{
-			var input = privateDataContainer;
+			Confidential = "secrets",
+		};
 
-			_serializer.PublicOnly = true;
-			_serializer.Save(Call, input);
-			var output = _serializer.Load<PrivateDataContainer>(Call);
+		_serializer.Save(Call, input);
+		_serializer.PublicOnly = true;
+		var output = _serializer.Load<PrivateClass>(Call);
 
-			Assert.IsNull(output.PrivateField.Confidential);
-			Assert.IsNull(output.PrivateProperty.Confidential);
-			Assert.AreEqual("test", output.PublicData);
-		}
+		Assert.IsNull(output);
+	}
 
-		// Test changing serialized field to public in internal model
-		[Test, Description("Serialize [PrivateData]")]
-		public void SerializePrivateDataPublicLoading()
-		{
-			var input = privateDataContainer;
-
-			_serializer.Save(Call, input);
-			_serializer.PublicOnly = true;
-			var output = _serializer.Load<PrivateDataContainer>(Call);
-
-			Assert.IsNull(output.PrivateField.Confidential);
-			Assert.IsNull(output.PrivateProperty.Confidential);
-			Assert.AreEqual("test", output.PublicData);
-		}
-
-		[PublicData]
-		public class PrivateDataContainer
-		{
-			public PrivateClass PrivateField = new();
-			public PrivateClass PrivateProperty { get; set; } = new();
-			public string PublicData;
-		}
-
+	[PublicData]
+	public class PrivatePropertyClass
+	{
 		[PrivateData]
-		public class PrivateClass
+		public string Confidential { get; set; }
+	}
+
+	[Test]
+	public void SerializePrivateProperty()
+	{
+		var input = new PrivatePropertyClass()
 		{
-			public string Confidential { get; set; }
-		}
+			Confidential = "secrets",
+		};
 
-		public class DerivedPrivateClass : PrivateClass
+		_serializer.PublicOnly = true;
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<PrivatePropertyClass>(Call);
+
+		Assert.IsNull(output.Confidential);
+	}
+
+	[PublicData]
+	public class PrivateFieldClass
+	{
+		[PrivateData]
+		public string Confidential = "default";
+	}
+
+	[Test]
+	public void SerializePrivateField()
+	{
+		var input = new PrivateFieldClass()
 		{
-		}
+			Confidential = "secrets",
+		};
 
-		[Test, Description("Serialize [PublicData]")]
-		public void SerializePublicData()
-		{
-			var input = new PublicContainer()
-			{
-				PublicField = new PublicClass()
-				{
-					PublicData = "cats",
-				},
-				PublicProperty = new PublicClass()
-				{
-					PublicData = "more cats",
-				},
-				NonSecure = "test",
-			};
+		_serializer.PublicOnly = true;
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<PrivateFieldClass>(Call);
 
-			_serializer.PublicOnly = false;
-			_serializer.Save(Call, input);
-			var output = _serializer.Load<PublicContainer>(Call);
+		Assert.AreEqual("default", output.Confidential);
+	}
 
-			Assert.IsNotNull(output.PublicField);
-			Assert.IsNotNull(output.PublicProperty);
-			Assert.AreEqual(output.NonSecure, "test");
-		}
+	public class PublicDefaultsContainer
+	{
+		public PublicClass PublicField;
+		public PublicClass PublicProperty { get; set; }
+		public string NonSecure;
+	}
 
-		public class PublicContainer
-		{
-			public PublicClass PublicField;
-			public PublicClass PublicProperty { get; set; }
-			public string NonSecure;
-		}
-
+	[ProtectedData]
+	public class ProtectedPropertiesClass
+	{
 		[PublicData]
-		public class PublicClass
+		public string PublicProperty { get; set; } // Should save
+
+		public string NormalProperty { get; set; } // Shouldn't save
+	}
+
+	[Test]
+	public void SerializeProtectedProperties()
+	{
+		var input = new ProtectedPropertiesClass()
 		{
-			public string PublicData { get; set; }
-			public object RestrictedData { get; set; } // Only allows [PublicData]
-		}
+			PublicProperty = "publicData",
+			NormalProperty = "secrets",
+		};
 
-		[Test]
-		public void SerializeDerivedNonPrivateClass()
-		{
-			var input = new DerivedPrivateClass()
-			{
-				Confidential = "secrets",
-			};
+		_serializer.PublicOnly = true;
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<ProtectedPropertiesClass>(Call);
 
-			_serializer.Save(Call, input);
-			_serializer.PublicOnly = true;
-			var output = _serializer.Load<PrivateClass>(Call);
+		Assert.AreEqual(input.PublicProperty, output.PublicProperty);
+		Assert.IsNull(output.NormalProperty);
+	}
 
-			Assert.IsNull(output);
-		}
-
+	[ProtectedData]
+	public class ProtectedFieldsClass
+	{
 		[PublicData]
-		public class PrivatePropertyClass
+		public string PublicField; // Should save
+
+		public string NormalField; // Shouldn't save
+	}
+
+	[Test]
+	public void SerializeProtectedFields()
+	{
+		var input = new ProtectedFieldsClass()
 		{
-			[PrivateData]
-			public string Confidential { get; set; }
-		}
+			PublicField = "publicData",
+			NormalField = "secrets",
+		};
 
-		[Test]
-		public void SerializePrivateProperty()
-		{
-			var input = new PrivatePropertyClass()
-			{
-				Confidential = "secrets",
-			};
+		_serializer.PublicOnly = true;
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<ProtectedFieldsClass>(Call);
 
-			_serializer.PublicOnly = true;
-			_serializer.Save(Call, input);
-			var output = _serializer.Load<PrivatePropertyClass>(Call);
-
-			Assert.IsNull(output.Confidential);
-		}
-
-		[PublicData]
-		public class PrivateFieldClass
-		{
-			[PrivateData]
-			public string Confidential = "default";
-		}
-
-		[Test]
-		public void SerializePrivateField()
-		{
-			var input = new PrivateFieldClass()
-			{
-				Confidential = "secrets",
-			};
-
-			_serializer.PublicOnly = true;
-			_serializer.Save(Call, input);
-			var output = _serializer.Load<PrivateFieldClass>(Call);
-
-			Assert.AreEqual("default", output.Confidential);
-		}
-
-		public class PublicDefaultsContainer
-		{
-			public PublicClass PublicField;
-			public PublicClass PublicProperty { get; set; }
-			public string NonSecure;
-		}
-
-		[ProtectedData]
-		public class ProtectedPropertiesClass
-		{
-			[PublicData]
-			public string PublicProperty { get; set; } // Should save
-
-			public string NormalProperty { get; set; } // Shouldn't save
-		}
-
-		[Test]
-		public void SerializeProtectedProperties()
-		{
-			var input = new ProtectedPropertiesClass()
-			{
-				PublicProperty = "publicData",
-				NormalProperty = "secrets",
-			};
-
-			_serializer.PublicOnly = true;
-			_serializer.Save(Call, input);
-			var output = _serializer.Load<ProtectedPropertiesClass>(Call);
-
-			Assert.AreEqual(input.PublicProperty, output.PublicProperty);
-			Assert.IsNull(output.NormalProperty);
-		}
-
-		[ProtectedData]
-		public class ProtectedFieldsClass
-		{
-			[PublicData]
-			public string PublicField; // Should save
-
-			public string NormalField; // Shouldn't save
-		}
-
-		[Test]
-		public void SerializeProtectedFields()
-		{
-			var input = new ProtectedFieldsClass()
-			{
-				PublicField = "publicData",
-				NormalField = "secrets",
-			};
-
-			_serializer.PublicOnly = true;
-			_serializer.Save(Call, input);
-			var output = _serializer.Load<ProtectedFieldsClass>(Call);
-
-			Assert.AreEqual(input.PublicField, output.PublicField);
-			Assert.IsNull(output.NormalField);
-		}
+		Assert.AreEqual(input.PublicField, output.PublicField);
+		Assert.IsNull(output.NormalField);
 	}
 }

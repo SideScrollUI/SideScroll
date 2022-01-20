@@ -1,18 +1,17 @@
 using Atlas.Core;
 
-namespace Atlas.Tabs
+namespace Atlas.Tabs;
+
+public class UserSettings
 {
-	public class UserSettings
-	{
-		public string ProjectPath { get; set; }
-		public string BookmarkPath { get; set; }
+	public string ProjectPath { get; set; }
+	public string BookmarkPath { get; set; }
 
-		public string SettingsPath => Paths.Combine(ProjectPath, @"Settings.atlas");
+	public string SettingsPath => Paths.Combine(ProjectPath, @"Settings.atlas");
 
-		public bool AutoLoad { get; set; } = true;
+	public bool AutoLoad { get; set; } = true;
 
-		public int VerticalTabLimit { get; set; } = 10;
+	public int VerticalTabLimit { get; set; } = 10;
 
-		//public int MaxLogItems { get; set; } = 100000;
-	}
+	//public int MaxLogItems { get; set; } = 100000;
 }

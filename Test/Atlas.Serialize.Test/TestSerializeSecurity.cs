@@ -2,75 +2,74 @@ using Atlas.Core;
 using NUnit.Framework;
 using System;
 
-namespace Atlas.Serialize.Test
+namespace Atlas.Serialize.Test;
+
+[Category("Serialize")]
+public class TestSerializeSecurity : TestSerializeBase
 {
-	[Category("Serialize")]
-	public class TestSerializeSecurity : TestSerializeBase
+	private SerializerMemory _serializer;
+
+	[OneTimeSetUp]
+	public void BaseSetup()
 	{
-		private SerializerMemory _serializer;
+		Initialize("Serialize");
+	}
 
-		[OneTimeSetUp]
-		public void BaseSetup()
+	[SetUp]
+	public void Setup()
+	{
+		_serializer = new SerializerMemoryAtlas();
+	}
+
+	public class NonSerializedTest
+	{
+		[NonSerialized]
+		public int NonSerialized = 1;
+		public int Serialized = 2;
+	}
+
+	[Test, Description("Serialize Attribute NonSerialized")]
+	public void SerializeAttributeNonSerialized()
+	{
+		var input = new NonSerializedTest()
 		{
-			Initialize("Serialize");
-		}
+			NonSerialized = 5,
+			Serialized = 10,
+		};
 
-		[SetUp]
-		public void Setup()
-		{
-			_serializer = new SerializerMemoryAtlas();
-		}
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<NonSerializedTest>(Call);
 
-		public class NonSerializedTest
-		{
-			[NonSerialized]
-			public int NonSerialized = 1;
-			public int Serialized = 2;
-		}
+		Assert.AreEqual(output.NonSerialized, 1);
+		Assert.AreEqual(output.Serialized, 10);
+	}
 
-		[Test, Description("Serialize Attribute NonSerialized")]
-		public void SerializeAttributeNonSerialized()
-		{
-			var input = new NonSerializedTest()
-			{
-				NonSerialized = 5,
-				Serialized = 10,
-			};
+	[Unserialized]
+	public class UnserializedClass
+	{
+		public int Value = 1;
+	}
 
-			_serializer.Save(Call, input);
-			var output = _serializer.Load<NonSerializedTest>(Call);
+	public class UnserializedPropertyClass
+	{
+		public UnserializedClass UnserializedField = new();
+		public UnserializedClass UnserializedProperty { get; set; } = new();
+	}
 
-			Assert.AreEqual(output.NonSerialized, 1);
-			Assert.AreEqual(output.Serialized, 10);
-		}
+	[Test, Description("Serialize Field and Property with [Unserialized] classes")]
+	public void SerializeUnserializedPropertyClass()
+	{
+		var input = new UnserializedPropertyClass();
+		input.UnserializedField.Value = 42;
+		input.UnserializedProperty.Value = 42;
 
-		[Unserialized]
-		public class UnserializedClass
-		{
-			public int Value = 1;
-		}
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<UnserializedPropertyClass>(Call);
 
-		public class UnserializedPropertyClass
-		{
-			public UnserializedClass UnserializedField = new();
-			public UnserializedClass UnserializedProperty { get; set; } = new();
-		}
+		Assert.IsNotNull(output.UnserializedField);
+		Assert.IsNotNull(output.UnserializedProperty);
 
-		[Test, Description("Serialize Field and Property with [Unserialized] classes")]
-		public void SerializeUnserializedPropertyClass()
-		{
-			var input = new UnserializedPropertyClass();
-			input.UnserializedField.Value = 42;
-			input.UnserializedProperty.Value = 42;
-
-			_serializer.Save(Call, input);
-			var output = _serializer.Load<UnserializedPropertyClass>(Call);
-
-			Assert.IsNotNull(output.UnserializedField);
-			Assert.IsNotNull(output.UnserializedProperty);
-
-			Assert.AreEqual(1, output.UnserializedField.Value);
-			Assert.AreEqual(1, output.UnserializedProperty.Value);
-		}
+		Assert.AreEqual(1, output.UnserializedField.Value);
+		Assert.AreEqual(1, output.UnserializedProperty.Value);
 	}
 }

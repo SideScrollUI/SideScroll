@@ -1,10 +1,10 @@
 using Atlas.Core;
 
-namespace Atlas.Tabs.Test
+namespace Atlas.Tabs.Test;
+
+public class TabTestJson : ITab
 {
-	public class TabTestJson : ITab
-	{
-		public readonly static string Json1 =
+	public readonly static string Json1 =
 @"{
 ""id"":""abc"",
 ""value"": 123,
@@ -19,17 +19,16 @@ namespace Atlas.Tabs.Test
     ]
   }
 }";
-		public TabInstance Create() => new Instance();
+	public TabInstance Create() => new Instance();
 
-		public class Instance : TabInstance
+	public class Instance : TabInstance
+	{
+		public override void Load(Call call, TabModel model)
 		{
-			public override void Load(Call call, TabModel model)
-			{
-				model.Items = new ItemCollection<ListItem>()
+			model.Items = new ItemCollection<ListItem>()
 				{
 					new("Sample Text", LazyJsonNode.Parse(Json1)),
 				};
-			}
 		}
 	}
 }

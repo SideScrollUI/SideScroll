@@ -10,324 +10,323 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Atlas.UI.Avalonia.Charts
+namespace Atlas.UI.Avalonia.Charts;
+
+public class TabControlChartLegend : Grid
 {
-	public class TabControlChartLegend : Grid
+	public TabControlChart TabControlChart;
+	public PlotView PlotView => TabControlChart.PlotView;
+	public ListGroup ListGroup => TabControlChart.ListGroup;
+
+	public List<TabChartLegendItem> LegendItems = new();
+	private readonly Dictionary<string, TabChartLegendItem> _idxLegendItems = new();
+
+	private ScrollViewer _scrollViewer;
+	private WrapPanel _wrapPanel;
+	private TextBlock _textBlockTotal;
+
+	public event EventHandler<EventArgs> OnSelectionChanged;
+	public event EventHandler<EventArgs> OnVisibleChanged;
+
+	public override string ToString() => ListGroup.ToString();
+
+	public TabControlChartLegend(TabControlChart tabControlChart)
 	{
-		public TabControlChart TabControlChart;
-		public PlotView PlotView => TabControlChart.PlotView;
-		public ListGroup ListGroup => TabControlChart.ListGroup;
+		TabControlChart = tabControlChart;
 
-		public List<TabChartLegendItem> LegendItems = new();
-		private readonly Dictionary<string, TabChartLegendItem> _idxLegendItems = new();
+		InitializeControls();
+	}
 
-		private ScrollViewer _scrollViewer;
-		private WrapPanel _wrapPanel;
-		private TextBlock _textBlockTotal;
+	private void InitializeControls()
+	{
+		HorizontalAlignment = HorizontalAlignment.Stretch;
+		VerticalAlignment = VerticalAlignment.Stretch;
 
-		public event EventHandler<EventArgs> OnSelectionChanged;
-		public event EventHandler<EventArgs> OnVisibleChanged;
-
-		public override string ToString() => ListGroup.ToString();
-
-		public TabControlChartLegend(TabControlChart tabControlChart)
+		_wrapPanel = new WrapPanel()
 		{
-			TabControlChart = tabControlChart;
+			Orientation = ListGroup.Horizontal ? Orientation.Horizontal : Orientation.Vertical,
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Stretch,
+			Margin = new Thickness(6),
+		};
 
-			InitializeControls();
-		}
-
-		private void InitializeControls()
+		_scrollViewer = new ScrollViewer()
 		{
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Stretch;
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Stretch,
+			HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+			VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+			Content = _wrapPanel,
+		};
 
-			_wrapPanel = new WrapPanel()
+		Children.Add(_scrollViewer);
+
+		if (ListGroup.ShowLegend && ListGroup.ShowOrder && !ListGroup.Horizontal)
+		{
+			_textBlockTotal = new TextBlock()
 			{
-				Orientation = ListGroup.Horizontal ? Orientation.Horizontal : Orientation.Vertical,
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
-				Margin = new Thickness(6),
+				Foreground = Theme.BackgroundText,
+				Margin = new Thickness(2, 2, 2, 2),
+				HorizontalAlignment = HorizontalAlignment.Right,
 			};
-
-			_scrollViewer = new ScrollViewer()
-			{
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
-				HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
-				VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-				Content = _wrapPanel,
-			};
-
-			Children.Add(_scrollViewer);
-
-			if (ListGroup.ShowLegend && ListGroup.ShowOrder && !ListGroup.Horizontal)
-			{
-				_textBlockTotal = new TextBlock()
-				{
-					Foreground = Theme.BackgroundText,
-					Margin = new Thickness(2, 2, 2, 2),
-					HorizontalAlignment = HorizontalAlignment.Right,
-				};
-				if (ListGroup.UnitName != null)
-					_textBlockTotal.Text += " - " + ListGroup.UnitName;
-			}
-
-			RefreshModel();
+			if (ListGroup.UnitName != null)
+				_textBlockTotal.Text += " - " + ListGroup.UnitName;
 		}
 
-		private string GetTotalName()
+		RefreshModel();
+	}
+
+	private string GetTotalName()
+	{
+		var seriesType = SeriesType.Other;
+
+		foreach (var series in ListGroup.Series)
 		{
-			var seriesType = SeriesType.Other;
-
-			foreach (var series in ListGroup.Series)
-			{
-				if (seriesType == SeriesType.Other)
-					seriesType = series.SeriesType;
-				else if (series.SeriesType != seriesType)
-					return "Total";
-			}
-
-			return seriesType.ToString();
+			if (seriesType == SeriesType.Other)
+				seriesType = series.SeriesType;
+			else if (series.SeriesType != seriesType)
+				return "Total";
 		}
 
-		private TabChartLegendItem AddSeries(OxyListSeries oxyListSeries)
+		return seriesType.ToString();
+	}
+
+	private TabChartLegendItem AddSeries(OxyListSeries oxyListSeries)
+	{
+		OxyPlot.Series.Series series = oxyListSeries.OxySeries;
+
+		Color color = Colors.Green;
+		if (series is OxyPlot.Series.LineSeries lineSeries)
+			color = lineSeries.Color.ToColor();
+		if (series is OxyPlot.Series.ScatterSeries scatterSeries)
+			color = scatterSeries.MarkerFill.ToColor();
+
+		var legendItem = new TabChartLegendItem(this, oxyListSeries);
+		legendItem.OnSelectionChanged += LegendItem_SelectionChanged;
+		legendItem.OnVisibleChanged += LegendItem_VisibleChanged;
+		legendItem.TextBlock.PointerPressed += (s, e) =>
 		{
-			OxyPlot.Series.Series series = oxyListSeries.OxySeries;
+			if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+				SelectLegendItem(legendItem);
+		};
+		LegendItems.Add(legendItem);
+		if (series.Title != null)
+			_idxLegendItems.Add(series.Title, legendItem);
+		return legendItem;
+	}
 
-			Color color = Colors.Green;
-			if (series is OxyPlot.Series.LineSeries lineSeries)
-				color = lineSeries.Color.ToColor();
-			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
-				color = scatterSeries.MarkerFill.ToColor();
+	// Show items in order of count, retaining original order for unused values
+	private void UpdatePositions()
+	{
+		_wrapPanel.Children.Clear();
+		if (_textBlockTotal != null)
+			_wrapPanel.Children.Add(_textBlockTotal);
 
-			var legendItem = new TabChartLegendItem(this, oxyListSeries);
-			legendItem.OnSelectionChanged += LegendItem_SelectionChanged;
-			legendItem.OnVisibleChanged += LegendItem_VisibleChanged;
-			legendItem.TextBlock.PointerPressed += (s, e) =>
-			{
-				if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-					SelectLegendItem(legendItem);
-			};
-			LegendItems.Add(legendItem);
-			if (series.Title != null)
-				_idxLegendItems.Add(series.Title, legendItem);
-			return legendItem;
+		var nonzero = new List<TabChartLegendItem>();
+		var unused = new List<TabChartLegendItem>();
+		foreach (TabChartLegendItem legendItem in _idxLegendItems.Values)
+		{
+			if (legendItem.Count > 0)
+				nonzero.Add(legendItem);
+			else
+				unused.Add(legendItem);
 		}
 
-		// Show items in order of count, retaining original order for unused values
-		private void UpdatePositions()
+		var ordered = nonzero.OrderByDescending(a => a.Total).ToList();
+		ordered.AddRange(unused);
+		if (ListGroup.ShowLegend && ListGroup.ShowOrder && !ListGroup.Horizontal)
 		{
-			_wrapPanel.Children.Clear();
-			if (_textBlockTotal != null)
-				_wrapPanel.Children.Add(_textBlockTotal);
+			for (int i = 0; i < ordered.Count; i++)
+				ordered[i].Index = i + 1;
+		}
+		_wrapPanel.Children.AddRange(ordered);
+	}
 
-			var nonzero = new List<TabChartLegendItem>();
-			var unused = new List<TabChartLegendItem>();
-			foreach (TabChartLegendItem legendItem in _idxLegendItems.Values)
-			{
-				if (legendItem.Count > 0)
-					nonzero.Add(legendItem);
-				else
-					unused.Add(legendItem);
-			}
-
-			var ordered = nonzero.OrderByDescending(a => a.Total).ToList();
-			ordered.AddRange(unused);
-			if (ListGroup.ShowLegend && ListGroup.ShowOrder && !ListGroup.Horizontal)
-			{
-				for (int i = 0; i < ordered.Count; i++)
-					ordered[i].Index = i + 1;
-			}
-			_wrapPanel.Children.AddRange(ordered);
+	private void SelectLegendItem(TabChartLegendItem legendItem)
+	{
+		int selectedCount = 0;
+		foreach (TabChartLegendItem item in LegendItems)
+		{
+			if (item.IsSelected == true)
+				selectedCount++;
 		}
 
-		private void SelectLegendItem(TabChartLegendItem legendItem)
+		if (legendItem.IsSelected == false || selectedCount > 1)
 		{
-			int selectedCount = 0;
+			SetAllVisible(false);
+			legendItem.IsSelected = true;
+			//OnSelectionChanged?.Invoke(this, legendItem.oxyListSeries);
+		}
+		else
+		{
+			SetAllVisible(true);
+		}
+
+		UpdateVisibleSeries();
+		OnSelectionChanged?.Invoke(this, null);
+		//if (legendItem.checkBox.IsChecked == true)
+		//SetSelectionAll(legendItem.checkBox.IsChecked == true);
+	}
+
+	public void SelectSeries(OxyPlot.Series.Series oxySeries)
+	{
+		if (oxySeries.Title == null)
+			return;
+
+		if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
+		{
+			SelectLegendItem(legendItem);
+		}
+	}
+
+	public void HighlightSeries(OxyPlot.Series.Series oxySeries)
+	{
+		if (oxySeries.Title == null)
+			return;
+
+		// Clear all first before setting to avoid event race conditions
+		foreach (TabChartLegendItem item in LegendItems)
+			item.Highlight = false;
+
+		if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
+		{
 			foreach (TabChartLegendItem item in LegendItems)
-			{
-				if (item.IsSelected == true)
-					selectedCount++;
-			}
+				item.Highlight = (legendItem == item);
+		}
+		UpdateVisibleSeries();
+	}
 
-			if (legendItem.IsSelected == false || selectedCount > 1)
+	public void SetAllVisible(bool selected, bool update = false)
+	{
+		bool changed = false;
+		foreach (TabChartLegendItem legendItem in LegendItems)
+		{
+			changed |= (legendItem.IsSelected != selected);
+			legendItem.IsSelected = selected;
+		}
+
+		if (update && changed)
+		{
+			UpdateVisibleSeries();
+			OnSelectionChanged?.Invoke(this, null);
+		}
+	}
+
+	public void RefreshModel()
+	{
+		if (PlotView.Model == null)
+			return;
+
+		_wrapPanel.Children.Clear();
+		foreach (var oxyListSeries in TabControlChart.OxyListSeriesList)
+		{
+			string title = oxyListSeries.OxySeries.Title;
+			if (title == null)
+				continue;
+
+			if (!_idxLegendItems.TryGetValue(title, out TabChartLegendItem legendItem))
 			{
-				SetAllVisible(false);
-				legendItem.IsSelected = true;
-				//OnSelectionChanged?.Invoke(this, legendItem.oxyListSeries);
+				legendItem = AddSeries(oxyListSeries);
 			}
 			else
 			{
-				SetAllVisible(true);
+				legendItem.UpdateTotal();
 			}
 
-			UpdateVisibleSeries();
-			OnSelectionChanged?.Invoke(this, null);
-			//if (legendItem.checkBox.IsChecked == true)
-			//SetSelectionAll(legendItem.checkBox.IsChecked == true);
+			if (!_wrapPanel.Children.Contains(legendItem))
+				_wrapPanel.Children.Add(legendItem);
 		}
+		UpdatePositions();
 
-		public void SelectSeries(OxyPlot.Series.Series oxySeries)
+		if (_textBlockTotal != null)
+			_textBlockTotal.Text = GetTotalName();
+
+		// Possibly faster? But more likely to cause problems
+		/*var prevLegends = idxLegendItems.Clone<Dictionary<string, TabChartLegendItem>>();
+		idxLegendItems = new Dictionary<string, TabChartLegendItem>();
+		int row = 0;
+		foreach (var series in plotView.Model.Series)
 		{
-			if (oxySeries.Title == null)
-				return;
-
-			if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
+			TabChartLegendItem legendItem;
+			if (!prevLegends.TryGetValue(series.Title, out legendItem))
 			{
-				SelectLegendItem(legendItem);
+				legendItem = AddSeries(series);
+				prevLegends.Remove(series.Title);
 			}
-		}
+			idxLegendItems.Add(series.Title, legendItem);
+			Grid.SetRow(legendItem, row++);
+		}*/
 
-		public void HighlightSeries(OxyPlot.Series.Series oxySeries)
+		Dispatcher.UIThread.InvokeAsync(() => PlotView.Model?.InvalidatePlot(true), DispatcherPriority.Background);
+	}
+
+	public void Unload()
+	{
+		_wrapPanel.Children.Clear();
+		_idxLegendItems.Clear();
+		LegendItems.Clear();
+	}
+
+	public void UpdateVisibleSeries()
+	{
+		if (PlotView.Model == null)
+			return;
+
+		foreach (OxyPlot.Series.Series series in PlotView.Model.Series)
 		{
-			if (oxySeries.Title == null)
-				return;
-
-			// Clear all first before setting to avoid event race conditions
-			foreach (TabChartLegendItem item in LegendItems)
-				item.Highlight = false;
-
-			if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
+			if (series is OxyPlot.Series.LineSeries lineSeries)
 			{
-				foreach (TabChartLegendItem item in LegendItems)
-					item.Highlight = (legendItem == item);
-			}
-			UpdateVisibleSeries();
-		}
-
-		public void SetAllVisible(bool selected, bool update = false)
-		{
-			bool changed = false;
-			foreach (TabChartLegendItem legendItem in LegendItems)
-			{
-				changed |= (legendItem.IsSelected != selected);
-				legendItem.IsSelected = selected;
-			}
-
-			if (update && changed)
-			{
-				UpdateVisibleSeries();
-				OnSelectionChanged?.Invoke(this, null);
-			}
-		}
-
-		public void RefreshModel()
-		{
-			if (PlotView.Model == null)
-				return;
-
-			_wrapPanel.Children.Clear();
-			foreach (var oxyListSeries in TabControlChart.OxyListSeriesList)
-			{
-				string title = oxyListSeries.OxySeries.Title;
-				if (title == null)
+				if (lineSeries.Title == null)
 					continue;
 
-				if (!_idxLegendItems.TryGetValue(title, out TabChartLegendItem legendItem))
+				if (_idxLegendItems.TryGetValue(lineSeries.Title, out TabChartLegendItem legendItem))
 				{
-					legendItem = AddSeries(oxyListSeries);
-				}
-				else
-				{
-					legendItem.UpdateTotal();
-				}
-
-				if (!_wrapPanel.Children.Contains(legendItem))
-					_wrapPanel.Children.Add(legendItem);
-			}
-			UpdatePositions();
-
-			if (_textBlockTotal != null)
-				_textBlockTotal.Text = GetTotalName();
-
-			// Possibly faster? But more likely to cause problems
-			/*var prevLegends = idxLegendItems.Clone<Dictionary<string, TabChartLegendItem>>();
-			idxLegendItems = new Dictionary<string, TabChartLegendItem>();
-			int row = 0;
-			foreach (var series in plotView.Model.Series)
-			{
-				TabChartLegendItem legendItem;
-				if (!prevLegends.TryGetValue(series.Title, out legendItem))
-				{
-					legendItem = AddSeries(series);
-					prevLegends.Remove(series.Title);
-				}
-				idxLegendItems.Add(series.Title, legendItem);
-				Grid.SetRow(legendItem, row++);
-			}*/
-
-			Dispatcher.UIThread.InvokeAsync(() => PlotView.Model?.InvalidatePlot(true), DispatcherPriority.Background);
-		}
-
-		public void Unload()
-		{
-			_wrapPanel.Children.Clear();
-			_idxLegendItems.Clear();
-			LegendItems.Clear();
-		}
-
-		public void UpdateVisibleSeries()
-		{
-			if (PlotView.Model == null)
-				return;
-
-			foreach (OxyPlot.Series.Series series in PlotView.Model.Series)
-			{
-				if (series is OxyPlot.Series.LineSeries lineSeries)
-				{
-					if (lineSeries.Title == null)
-						continue;
-
-					if (_idxLegendItems.TryGetValue(lineSeries.Title, out TabChartLegendItem legendItem))
-					{
-						legendItem.UpdateVisible(lineSeries);
-					}
-				}
-
-				if (series is OxyPlot.Series.ScatterSeries scatterSeries)
-				{
-					if (scatterSeries.Title == null)
-						continue;
-
-					if (_idxLegendItems.TryGetValue(scatterSeries.Title, out TabChartLegendItem legendItem))
-					{
-						legendItem.UpdateVisible(scatterSeries);
-					}
+					legendItem.UpdateVisible(lineSeries);
 				}
 			}
-			Dispatcher.UIThread.InvokeAsync(() => PlotView.Model?.InvalidatePlot(true), DispatcherPriority.Background);
+
+			if (series is OxyPlot.Series.ScatterSeries scatterSeries)
+			{
+				if (scatterSeries.Title == null)
+					continue;
+
+				if (_idxLegendItems.TryGetValue(scatterSeries.Title, out TabChartLegendItem legendItem))
+				{
+					legendItem.UpdateVisible(scatterSeries);
+				}
+			}
+		}
+		Dispatcher.UIThread.InvokeAsync(() => PlotView.Model?.InvalidatePlot(true), DispatcherPriority.Background);
+	}
+
+	private void LegendItem_SelectionChanged(object sender, EventArgs e)
+	{
+		UpdateVisibleSeries();
+		OnSelectionChanged?.Invoke(this, null);
+	}
+
+	private void LegendItem_VisibleChanged(object sender, EventArgs e)
+	{
+		UpdateVisibleSeries();
+		OnVisibleChanged?.Invoke(this, null);
+	}
+
+	public void UnhighlightAll(bool update = false)
+	{
+		foreach (TabChartLegendItem item in LegendItems)
+		{
+			item.Highlight = false;
 		}
 
-		private void LegendItem_SelectionChanged(object sender, EventArgs e)
-		{
+		if (update)
 			UpdateVisibleSeries();
-			OnSelectionChanged?.Invoke(this, null);
-		}
+	}
 
-		private void LegendItem_VisibleChanged(object sender, EventArgs e)
+	public void UpdateHighlight(bool showFaded)
+	{
+		foreach (TabChartLegendItem item in LegendItems)
 		{
-			UpdateVisibleSeries();
-			OnVisibleChanged?.Invoke(this, null);
-		}
-
-		public void UnhighlightAll(bool update = false)
-		{
-			foreach (TabChartLegendItem item in LegendItems)
-			{
-				item.Highlight = false;
-			}
-
-			if (update)
-				UpdateVisibleSeries();
-		}
-
-		public void UpdateHighlight(bool showFaded)
-		{
-			foreach (TabChartLegendItem item in LegendItems)
-			{
-				item.UpdateHighlight(showFaded);
-			}
+			item.UpdateHighlight(showFaded);
 		}
 	}
 }

@@ -4,34 +4,33 @@ using Atlas.UI.Avalonia.Controls;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Atlas.UI.Avalonia.ScreenCapture
+namespace Atlas.UI.Avalonia.ScreenCapture;
+
+public class ScreenCaptureToolbar : TabControlToolbar
 {
-	public class ScreenCaptureToolbar : TabControlToolbar
+	public TabViewer TabViewer;
+
+	public ToolbarButton ButtonCopyClipboard;
+	public ToolbarButton ButtonSave;
+	//public ToolbarButton ButtonLink;
+	public ToolbarButton ButtonClose;
+
+	public ScreenCaptureToolbar(TabViewer tabViewer) : base(null)
 	{
-		public TabViewer TabViewer;
+		TabViewer = tabViewer;
+		InitializeControls();
+	}
 
-		public ToolbarButton ButtonCopyClipboard;
-		public ToolbarButton ButtonSave;
-		//public ToolbarButton ButtonLink;
-		public ToolbarButton ButtonClose;
-
-		public ScreenCaptureToolbar(TabViewer tabViewer) : base(null)
+	private void InitializeControls()
+	{
+		OSPlatform platform = ProcessUtils.GetOSPlatform();
+		if (platform != OSPlatform.Linux)
 		{
-			TabViewer = tabViewer;
-			InitializeControls();
+			ButtonCopyClipboard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
 		}
+		ButtonSave = AddButton("Save", Icons.Streams.Save);
 
-		private void InitializeControls()
-		{
-			OSPlatform platform = ProcessUtils.GetOSPlatform();
-			if (platform != OSPlatform.Linux)
-			{
-				ButtonCopyClipboard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
-			}
-			ButtonSave = AddButton("Save", Icons.Streams.Save);
-
-			AddSeparator();
-			ButtonClose = AddButton("Close Snapshot", Icons.Streams.Delete);
-		}
+		AddSeparator();
+		ButtonClose = AddButton("Close Snapshot", Icons.Streams.Delete);
 	}
 }

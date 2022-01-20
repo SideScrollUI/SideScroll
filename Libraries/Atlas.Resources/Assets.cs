@@ -3,30 +3,28 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace Atlas.Resources
+namespace Atlas.Resources;
+
+public class Assets
 {
-	public class Assets
+	public const string Hourglass = "hourglass64.png";
+	public const string Shutter = "shutter64.png";
+
+	public class Streams
 	{
-		public const string Hourglass = "hourglass64.png";
-		public const string Shutter = "shutter64.png";
+		public static Stream Hourglass => Get(Assets.Hourglass);
+		public static Stream Shutter => Get(Assets.Shutter);
 
-		public class Streams
+		public static Stream Get(string resourceName)
 		{
-			public static Stream Hourglass => Get(Assets.Hourglass);
-			public static Stream Shutter => Get(Assets.Shutter);
-
-			public static Stream Get(string resourceName)
-			{
-				var assembly = Assembly.GetExecutingAssembly();
-				return assembly.GetManifestResourceStream("Atlas.Resources.Assets." + resourceName);
-			}
-
-			public static List<Stream> All { get; set; } = new()
-			{
-				Hourglass,
-				Shutter,
-			};
+			var assembly = Assembly.GetExecutingAssembly();
+			return assembly.GetManifestResourceStream("Atlas.Resources.Assets." + resourceName);
 		}
-	}
 
+		public static List<Stream> All { get; set; } = new()
+		{
+			Hourglass,
+			Shutter,
+		};
+	}
 }

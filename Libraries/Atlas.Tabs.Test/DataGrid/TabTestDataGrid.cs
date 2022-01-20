@@ -1,16 +1,16 @@
 using Atlas.Core;
 
-namespace Atlas.Tabs.Test.DataGrid
-{
-	public class TabTestDataGrid : ITab
-	{
-		public TabInstance Create() => new Instance();
+namespace Atlas.Tabs.Test.DataGrid;
 
-		public class Instance : TabInstance
+public class TabTestDataGrid : ITab
+{
+	public TabInstance Create() => new Instance();
+
+	public class Instance : TabInstance
+	{
+		public override void Load(Call call, TabModel model)
 		{
-			public override void Load(Call call, TabModel model)
-			{
-				model.Items = new ItemCollection<ListItem>()
+			model.Items = new ItemCollection<ListItem>()
 				{
 					new("Collection Size", new TabTestGridCollectionSize()),
 					new("Enumerable", new TabTestGridHashSet()),
@@ -26,7 +26,6 @@ namespace Atlas.Tabs.Test.DataGrid
 					new("Column Count", new TabTestGridColumnCount()),
 					new("Filter", new TabTestFilter()),
 				};
-			}
 		}
 	}
 }

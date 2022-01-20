@@ -3,114 +3,113 @@ using System;
 using System.Collections;
 using System.IO;
 
-namespace Atlas.Serialize
+namespace Atlas.Serialize;
+
+public class TypeRepoArray : TypeRepo
 {
-	public class TypeRepoArray : TypeRepo
+	public class Creator : IRepoCreator
 	{
-		public class Creator : IRepoCreator
+		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
-			{
-				if (CanAssign(typeSchema.Type))
-					return new TypeRepoArray(serializer, typeSchema);
-				return null;
-			}
+			if (CanAssign(typeSchema.Type))
+				return new TypeRepoArray(serializer, typeSchema);
+			return null;
 		}
+	}
 
-		private TypeRepo _listTypeRepo;
-		private int[] _sizes;
-		private readonly Type _elementType;
+	private TypeRepo _listTypeRepo;
+	private int[] _sizes;
+	private readonly Type _elementType;
 
-		public TypeRepoArray(Serializer serializer, TypeSchema typeSchema) :
-			base(serializer, typeSchema)
+	public TypeRepoArray(Serializer serializer, TypeSchema typeSchema) :
+		base(serializer, typeSchema)
+	{
+		_elementType = typeSchema.Type.GetElementType();
+	}
+
+	public static bool CanAssign(Type type)
+	{
+		return typeof(Array).IsAssignableFrom(type);
+	}
+
+	public override void InitializeLoading(Log log)
+	{
+		_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
+	}
+
+	public override void SaveCustomHeader(BinaryWriter writer)
+	{
+		foreach (IList list in Objects)
 		{
-			_elementType = typeSchema.Type.GetElementType();
+			writer.Write((int)list.Count);
 		}
+	}
 
-		public static bool CanAssign(Type type)
+	public override void LoadCustomHeader()
+	{
+		_sizes = new int[TypeSchema.NumObjects];
+		for (int i = 0; i < TypeSchema.NumObjects; i++)
 		{
-			return typeof(Array).IsAssignableFrom(type);
+			int count = Reader.ReadInt32();
+			_sizes[i] = count;
 		}
+	}
 
-		public override void InitializeLoading(Log log)
+	public override void AddChildObjects(object obj)
+	{
+		Array array = (Array)obj;
+		foreach (var item in array)
 		{
-			_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
+			Serializer.AddObjectRef(item);
 		}
+	}
 
-		public override void SaveCustomHeader(BinaryWriter writer)
+	public override void SaveObject(BinaryWriter writer, object obj)
+	{
+		Array array = (Array)obj;
+
+		//writer.Write(array.Length);
+		foreach (var item in array)
 		{
-			foreach (IList list in Objects)
-			{
-				writer.Write((int)list.Count);
-			}
+			Serializer.WriteObjectRef(_elementType, item, writer);
 		}
+	}
 
-		public override void LoadCustomHeader()
+	protected override object CreateObject(int objectIndex)
+	{
+		// Can't use Activator because Array requires parameters in it's constructor
+		//int count = reader.ReadInt32();
+		int count = _sizes[objectIndex];
+
+		Array array = Array.CreateInstance(TypeSchema.Type.GetElementType(), count);
+		ObjectsLoaded[objectIndex] = array;
+		Serializer.QueueLoading(this, objectIndex);
+
+		return array;
+	}
+
+	public override void LoadObjectData(object obj)
+	{
+		// Can't use Activator because Array requires parameters in it's constructor
+
+		IList iList = (IList)obj;
+
+		for (int j = 0; j < iList.Count; j++)
 		{
-			_sizes = new int[TypeSchema.NumObjects];
-			for (int i = 0; i < TypeSchema.NumObjects; i++)
-			{
-				int count = Reader.ReadInt32();
-				_sizes[i] = count;
-			}
+			object item = _listTypeRepo.LoadObjectRef();
+			iList[j] = item;
 		}
+	}
 
-		public override void AddChildObjects(object obj)
+	public override void Clone(object source, object dest)
+	{
+		Array iSource = (Array)source;
+		IList iDest = (IList)dest;
+		int i = 0;
+		foreach (var item in iSource)
 		{
-			Array array = (Array)obj;
-			foreach (var item in array)
-			{
-				Serializer.AddObjectRef(item);
-			}
-		}
-
-		public override void SaveObject(BinaryWriter writer, object obj)
-		{
-			Array array = (Array)obj;
-
-			//writer.Write(array.Length);
-			foreach (var item in array)
-			{
-				Serializer.WriteObjectRef(_elementType, item, writer);
-			}
-		}
-
-		protected override object CreateObject(int objectIndex)
-		{
-			// Can't use Activator because Array requires parameters in it's constructor
-			//int count = reader.ReadInt32();
-			int count = _sizes[objectIndex];
-
-			Array array = Array.CreateInstance(TypeSchema.Type.GetElementType(), count);
-			ObjectsLoaded[objectIndex] = array;
-			Serializer.QueueLoading(this, objectIndex);
-
-			return array;
-		}
-
-		public override void LoadObjectData(object obj)
-		{
-			// Can't use Activator because Array requires parameters in it's constructor
-
-			IList iList = (IList)obj;
-
-			for (int j = 0; j < iList.Count; j++)
-			{
-				object item = _listTypeRepo.LoadObjectRef();
-				iList[j] = item;
-			}
-		}
-
-		public override void Clone(object source, object dest)
-		{
-			Array iSource = (Array)source;
-			IList iDest = (IList)dest;
-			int i = 0;
-			foreach (var item in iSource)
-			{
-				object clone = Serializer.Clone(item);
-				iDest[i++] = clone;
-			}
+			object clone = Serializer.Clone(item);
+			iDest[i++] = clone;
 		}
 	}
 }

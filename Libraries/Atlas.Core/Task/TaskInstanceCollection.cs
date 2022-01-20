@@ -1,12 +1,11 @@
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public class TaskInstanceCollection : ItemCollection<TaskInstance>
 {
-	public class TaskInstanceCollection : ItemCollection<TaskInstance>
+	public new void Add(TaskInstance taskInstance)
 	{
-		public new void Add(TaskInstance taskInstance)
-		{
-			base.Add(taskInstance);
-			if (Count > 10) // fixme
-				RemoveAt(0);
-		}
+		base.Add(taskInstance);
+		if (Count > 10) // fixme
+			RemoveAt(0);
 	}
 }

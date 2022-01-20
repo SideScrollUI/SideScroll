@@ -3,97 +3,96 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Atlas.Tabs.Test.Chart
+namespace Atlas.Tabs.Test.Chart;
+
+public class TabTestChartSplit : ITab
 {
-	public class TabTestChartSplit : ITab
+	public TabInstance Create() => new Instance();
+
+	public class Instance : TabInstance
 	{
-		public TabInstance Create() => new Instance();
+		private readonly ItemCollection<ChartSample> _samples = new();
+		private readonly Random _random = new();
 
-		public class Instance : TabInstance
+		public class TestItem
 		{
-			private readonly ItemCollection<ChartSample> _samples = new();
-			private readonly Random _random = new();
+			public int Amount { get; set; }
+		}
 
-			public class TestItem
-			{
-				public int Amount { get; set; }
-			}
+		public class ChartSample
+		{
+			public string Name { get; set; }
+			// Add [UnitType]
+			public int SeriesAlpha { get; set; }
+			// Add [UnitType]
+			public int SeriesBeta { get; set; }
+			// Add [UnitType]
+			public int SeriesGamma { get; set; }
+			// Add [UnitType]
+			public int SeriesEpsilon { get; set; }  // High Value, small delta
+			public TestItem TestItem { get; set; } = new();
+			public int InstanceAmount => TestItem.Amount;
+		}
 
-			public class ChartSample
-			{
-				public string Name { get; set; }
-				// Add [UnitType]
-				public int SeriesAlpha { get; set; }
-				// Add [UnitType]
-				public int SeriesBeta { get; set; }
-				// Add [UnitType]
-				public int SeriesGamma { get; set; }
-				// Add [UnitType]
-				public int SeriesEpsilon { get; set; }  // High Value, small delta
-				public TestItem TestItem { get; set; } = new();
-				public int InstanceAmount => TestItem.Amount;
-			}
+		public override void Load(Call call, TabModel model)
+		{
+			//tabModel.Items = items;
 
-			public override void Load(Call call, TabModel model)
-			{
-				//tabModel.Items = items;
-
-				model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Add Entry", AddEntry),
 					new TaskDelegate("Start: 1 Entry / second", StartTask, true),
 				};
 
-				for (int i = 0; i < 10; i++)
-				{
-					AddSample(i);
-				}
-
-				var chartSettings = new ChartSettings(_samples);
-				model.AddObject(chartSettings);
+			for (int i = 0; i < 10; i++)
+			{
+				AddSample(i);
 			}
 
-			private void AddEntry(Call call)
+			var chartSettings = new ChartSettings(_samples);
+			model.AddObject(chartSettings);
+		}
+
+		private void AddEntry(Call call)
+		{
+			Invoke(new SendOrPostCallback(AddSampleCallback), call);
+		}
+
+		private void StartTask(Call call)
+		{
+			CancellationToken token = call.TaskInstance.TokenSource.Token;
+			for (int i = 0; !token.IsCancellationRequested; i++)
 			{
 				Invoke(new SendOrPostCallback(AddSampleCallback), call);
+				Thread.Sleep(1000);
 			}
+		}
 
-			private void StartTask(Call call)
+		private void AddSample(int i)
+		{
+			var sample = new ChartSample()
 			{
-				CancellationToken token = call.TaskInstance.TokenSource.Token;
-				for (int i = 0; !token.IsCancellationRequested; i++)
+				Name = "Name " + i.ToString(),
+				SeriesAlpha = _random.Next(0, 100),
+				SeriesBeta = _random.Next(50, 100),
+				SeriesGamma = _random.Next(0, 1000000000),
+				SeriesEpsilon = 1000000000 + _random.Next(0, 10),
+				TestItem = new TestItem()
 				{
-					Invoke(new SendOrPostCallback(AddSampleCallback), call);
-					Thread.Sleep(1000);
-				}
-			}
+					Amount = _random.Next(0, 100),
+				},
+			};
+			_samples.Add(sample);
+		}
 
-			private void AddSample(int i)
-			{
-				var sample = new ChartSample()
-				{
-					Name = "Name " + i.ToString(),
-					SeriesAlpha = _random.Next(0, 100),
-					SeriesBeta = _random.Next(50, 100),
-					SeriesGamma = _random.Next(0, 1000000000),
-					SeriesEpsilon = 1000000000 + _random.Next(0, 10),
-					TestItem = new TestItem()
-					{
-						Amount = _random.Next(0, 100),
-					},
-				};
-				_samples.Add(sample);
-			}
+		// UI context
+		private void AddSampleCallback(object state)
+		{
+			Call call = (Call)state;
 
-			// UI context
-			private void AddSampleCallback(object state)
-			{
-				Call call = (Call)state;
+			call.Log.Add("test");
 
-				call.Log.Add("test");
-
-				AddSample(_samples.Count);
-			}
+			AddSample(_samples.Count);
 		}
 	}
 }

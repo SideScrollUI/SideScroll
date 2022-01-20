@@ -4,65 +4,64 @@ using Avalonia.Data.Converters;
 using System;
 using System.Globalization;
 
-namespace Atlas.UI.Avalonia
+namespace Atlas.UI.Avalonia;
+
+public class EditValueConverter : IValueConverter
 {
-	public class EditValueConverter : IValueConverter
+	public string Append { get; set; }
+
+	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 	{
-		public string Append { get; set; }
+		if (value == null)
+			return null;
 
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		object result = ChangeType(value, targetType);
+		return result;
+	}
+
+	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+	{
+		if (value == null)
+			return null;
+
+		object result = ChangeType(value, targetType);
+		return result;
+	}
+
+	public static object ChangeType(object value, Type targetType)
+	{
+		if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
 		{
 			if (value == null)
 				return null;
 
-			object result = ChangeType(value, targetType);
-			return result;
+			targetType = Nullable.GetUnderlyingType(targetType);
 		}
 
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			if (value == null)
-				return null;
+		if (value.GetType() == targetType)
+			return value;
 
-			object result = ChangeType(value, targetType);
-			return result;
+		if (value is string text)
+		{
+			if (text.Length == 0)
+				return null;
 		}
 
-		public static object ChangeType(object value, Type targetType)
+		if (value is DateTime dateTime)
 		{
-			if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-			{
-				if (value == null)
-					return null;
+			return dateTime.ToString("yyyy-M-d H:mm:ss.ffffff");
+		}
 
-				targetType = Nullable.GetUnderlyingType(targetType);
-			}
+		if (value.GetType().IsPrimitive == false && targetType == typeof(string))
+			return value.Formatted();
 
-			if (value.GetType() == targetType)
-				return value;
-
-			if (value is string text)
-			{
-				if (text.Length == 0)
-					return null;
-			}
-
-			if (value is DateTime dateTime)
-			{
-				return dateTime.ToString("yyyy-M-d H:mm:ss.ffffff");
-			}
-
-			if (value.GetType().IsPrimitive == false && targetType == typeof(string))
-				return value.Formatted();
-
-			try
-			{
-				return System.Convert.ChangeType(value, targetType);
-			}
-			catch
-			{
-				return null;
-			}
+		try
+		{
+			return System.Convert.ChangeType(value, targetType);
+		}
+		catch
+		{
+			return null;
 		}
 	}
 }

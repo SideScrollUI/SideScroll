@@ -7,6 +7,7 @@ charset = utf-8
 indent_style = tab
 indent_size = 4
 insert_final_newline = true
+csharp_style_namespace_declarations = file_scoped:suggestion
 
 # Newline
 csharp_new_line_before_open_brace = all

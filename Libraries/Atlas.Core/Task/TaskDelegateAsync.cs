@@ -2,62 +2,61 @@ using Atlas.Extensions;
 using System;
 using System.Threading.Tasks;
 
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public class TaskDelegateAsync : TaskCreator
 {
-	public class TaskDelegateAsync : TaskCreator
+	public delegate Task CallActionAsync(Call call);
+
+	public CallActionAsync CallAction;
+
+	public override string ToString() => Label;
+
+	// Lists read easier with the label as the first param
+	public TaskDelegateAsync(string label, CallActionAsync callAction, bool showTask = false, string description = null)
 	{
-		public delegate Task CallActionAsync(Call call);
+		Label = label;
+		CallAction = callAction;
+		UseTask = true;
+		ShowTask = showTask;
+		Description = description;
+	}
 
-		public CallActionAsync CallAction;
+	public TaskDelegateAsync(CallActionAsync callAction, bool showTask = false, string description = null)
+	{
+		Label = callAction.Method.Name.TrimEnd("Async");
+		CallAction = callAction;
+		UseTask = true;
+		ShowTask = showTask;
+		Description = description;
+	}
 
-		public override string ToString() => Label;
+	protected override Action CreateAction(Call call)
+	{
+		return () => InvokeAction(call);
+	}
 
-		// Lists read easier with the label as the first param
-		public TaskDelegateAsync(string label, CallActionAsync callAction, bool showTask = false, string description = null)
+	private void InvokeAction(Call call)
+	{
+		try
 		{
-			Label = label;
-			CallAction = callAction;
-			UseTask = true;
-			ShowTask = showTask;
-			Description = description;
+			Task.Run(() => InvokeActionAsync(call)).GetAwaiter().GetResult();
 		}
-
-		public TaskDelegateAsync(CallActionAsync callAction, bool showTask = false, string description = null)
+		catch (Exception e)
 		{
-			Label = callAction.Method.Name.TrimEnd("Async");
-			CallAction = callAction;
-			UseTask = true;
-			ShowTask = showTask;
-			Description = description;
+			call.Log.Add(e);
 		}
+	}
 
-		protected override Action CreateAction(Call call)
+	private async Task InvokeActionAsync(Call call)
+	{
+		try
 		{
-			return () => InvokeAction(call);
+			await CallAction.Invoke(call);
 		}
-
-		private void InvokeAction(Call call)
+		catch (Exception e)
 		{
-			try
-			{
-				Task.Run(() => InvokeActionAsync(call)).GetAwaiter().GetResult();
-			}
-			catch (Exception e)
-			{
-				call.Log.Add(e);
-			}
-		}
-
-		private async Task InvokeActionAsync(Call call)
-		{
-			try
-			{
-				await CallAction.Invoke(call);
-			}
-			catch (Exception e)
-			{
-				call.Log.Add(e);
-			}
+			call.Log.Add(e);
 		}
 	}
 }

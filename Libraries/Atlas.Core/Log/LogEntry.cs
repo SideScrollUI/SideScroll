@@ -4,166 +4,165 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public class EventLogMessage : EventArgs
 {
-	public class EventLogMessage : EventArgs
+	public List<LogEntry> Entries = new(); // 1st is new log message, last is highest parent log message
+}
+
+public class LogSettings
+{
+	public int MaxLogItems = 10000;
+
+	public LogLevel MinLogLevel { get; set; } = LogLevel.Info; // Logs below this level won't be added
+
+	public LogLevel DebugPrintLogLevel { get; set; } = LogLevel.Warn;
+
+	internal object Lock = new(); // todo: replace this with individual ones? or a non-blocking version
+
+	[HiddenRow]
+	public SynchronizationContext Context; // inherited from creator (which can be a Parent Log)
+
+	public LogSettings Clone()
 	{
-		public List<LogEntry> Entries = new(); // 1st is new log message, last is highest parent log message
+		return new LogSettings()
+		{
+			MaxLogItems = MaxLogItems,
+			MinLogLevel = MinLogLevel,
+			DebugPrintLogLevel = DebugPrintLogLevel,
+		};
 	}
 
-	public class LogSettings
+	/*protected void InitializeContext()
 	{
-		public int MaxLogItems = 10000;
+		Context ??= SynchronizationContext.Current ?? new SynchronizationContext();
+	}*/
+}
 
-		public LogLevel MinLogLevel { get; set; } = LogLevel.Info; // Logs below this level won't be added
+public enum LogLevel
+{
+	Debug,
+	Info,
+	Warn,
+	Error,
+	Alert
+}
 
-		public LogLevel DebugPrintLogLevel { get; set; } = LogLevel.Warn;
+[Skippable(false)]
+public class LogEntry : INotifyPropertyChanged
+{
+	[Hidden]
+	public LogSettings Settings { get; set; }
 
-		internal object Lock = new(); // todo: replace this with individual ones? or a non-blocking version
+	[HiddenRow]
+	public LogEntry RootLog;
 
-		[HiddenRow]
-		public SynchronizationContext Context; // inherited from creator (which can be a Parent Log)
+	public event PropertyChangedEventHandler PropertyChanged;
 
-		public LogSettings Clone()
+	[HiddenColumn]
+	public DateTime Created { get; set; }
+
+	public TimeSpan Time => Created.Subtract(RootLog.Created);
+
+	public LogLevel OriginalLevel = LogLevel.Info;
+	public LogLevel Level { get; set; } = LogLevel.Info;
+
+	[Hidden]
+	public string Text { get; set; }
+
+	[WordWrap, MinWidth(300)]
+	public string Message
+	{
+		get
 		{
-			return new LogSettings()
-			{
-				MaxLogItems = MaxLogItems,
-				MinLogLevel = MinLogLevel,
-				DebugPrintLogLevel = DebugPrintLogLevel,
-			};
+			if (Tags == null)
+				return Text;
+
+			string tagText = TagText;
+			if (tagText == "")
+				return Text;
+
+			return Text + " " + tagText;
 		}
-
-		/*protected void InitializeContext()
-		{
-			Context ??= SynchronizationContext.Current ?? new SynchronizationContext();
-		}*/
 	}
 
-	public enum LogLevel
+	[Hidden]
+	public virtual string Summary => Text;
+
+	protected int _entries;
+	public int Entries => _entries;
+
+	private float? _duration;
+	public float? Duration
 	{
-		Debug,
-		Info,
-		Warn,
-		Error,
-		Alert
+		get
+		{
+			return _duration;
+		}
+		set
+		{
+			_duration = value;
+			CreateEventPropertyChanged();
+		}
 	}
 
-	[Skippable(false)]
-	public class LogEntry : INotifyPropertyChanged
+	private string TagText
 	{
-		[Hidden]
-		public LogSettings Settings { get; set; }
-
-		[HiddenRow]
-		public LogEntry RootLog;
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		[HiddenColumn]
-		public DateTime Created { get; set; }
-
-		public TimeSpan Time => Created.Subtract(RootLog.Created);
-
-		public LogLevel OriginalLevel = LogLevel.Info;
-		public LogLevel Level { get; set; } = LogLevel.Info;
-
-		[Hidden]
-		public string Text { get; set; }
-
-		[WordWrap, MinWidth(300)]
-		public string Message
+		get
 		{
-			get
-			{
-				if (Tags == null)
-					return Text;
-
-				string tagText = TagText;
-				if (tagText == "")
-					return Text;
-
-				return Text + " " + tagText;
-			}
-		}
-
-		[Hidden]
-		public virtual string Summary => Text;
-
-		protected int _entries;
-		public int Entries => _entries;
-
-		private float? _duration;
-		public float? Duration
-		{
-			get
-			{
-				return _duration;
-			}
-			set
-			{
-				_duration = value;
-				CreateEventPropertyChanged();
-			}
-		}
-
-		private string TagText
-		{
-			get
-			{
-				string line = "";
-				if (Tags == null)
-					return line;
-
-				foreach (Tag tag in Tags)
-				{
-					line += tag.ToString() + " ";
-				}
+			string line = "";
+			if (Tags == null)
 				return line;
+
+			foreach (Tag tag in Tags)
+			{
+				line += tag.ToString() + " ";
 			}
+			return line;
 		}
+	}
 
-		[HiddenColumn]
-		public Tag[] Tags { get; set; }
+	[HiddenColumn]
+	public Tag[] Tags { get; set; }
 
-		public override string ToString() => Message;
+	public override string ToString() => Message;
 
-		public LogEntry()
-		{
-			RootLog = this;
+	public LogEntry()
+	{
+		RootLog = this;
 
-			// Don't initialize for faster deserializing?
-		}
+		// Don't initialize for faster deserializing?
+	}
 
-		public LogEntry(LogSettings logSettings, LogLevel logLevel, string text, Tag[] tags)
-		{
-			Settings = logSettings;
-			RootLog = this;
-			OriginalLevel = logLevel;
-			Level = logLevel;
-			Text = text;
-			Tags = tags;
+	public LogEntry(LogSettings logSettings, LogLevel logLevel, string text, Tag[] tags)
+	{
+		Settings = logSettings;
+		RootLog = this;
+		OriginalLevel = logLevel;
+		Level = logLevel;
+		Text = text;
+		Tags = tags;
 
-			Initialize();
-		}
+		Initialize();
+	}
 
-		protected void Initialize()
-		{
-			Created = DateTime.Now;
-			Settings ??= new LogSettings();
-		}
+	protected void Initialize()
+	{
+		Created = DateTime.Now;
+		Settings ??= new LogSettings();
+	}
 
-		protected void CreateEventPropertyChanged([CallerMemberName] string propertyName = "")
-		{
-			Settings.Context?.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
-			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
+	protected void CreateEventPropertyChanged([CallerMemberName] string propertyName = "")
+	{
+		Settings.Context?.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
+		//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
 
-		private void NotifyPropertyChangedContext(object state)
-		{
-			string propertyName = state as string;
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-			//PropertyChanged?.BeginInvoke(this, new PropertyChangedEventArgs(propertyName), EndAsyncEvent, null);
-		}
+	private void NotifyPropertyChangedContext(object state)
+	{
+		string propertyName = state as string;
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		//PropertyChanged?.BeginInvoke(this, new PropertyChangedEventArgs(propertyName), EndAsyncEvent, null);
 	}
 }

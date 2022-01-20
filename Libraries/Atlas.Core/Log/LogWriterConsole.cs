@@ -1,36 +1,35 @@
 using System;
 using System.Threading;
 
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public class LogWriterConsole
 {
-	public class LogWriterConsole
+	public Log Log;
+
+	public SynchronizationContext Context;
+
+	public override string ToString() => "Console";
+
+	public LogWriterConsole(Log log)
 	{
-		public Log Log;
+		Log = log;
 
-		public SynchronizationContext Context;
+		Context = SynchronizationContext.Current ?? new SynchronizationContext();
 
-		public override string ToString() => "Console";
+		log.OnMessage += LogEntry_OnMessage;
+	}
 
-		public LogWriterConsole(Log log)
-		{
-			Log = log;
+	private void LogEntry_OnMessage(object sender, EventLogMessage e)
+	{
+		string Indendation = "";
+		for (int i = 1; i < e.Entries.Count; i++)
+			Indendation += '\t';
 
-			Context = SynchronizationContext.Current ?? new SynchronizationContext();
+		LogEntry newLog = e.Entries[0];
+		//string line = log.Created.ToString("yyyy-MM-dd HH:mm:ss") + Indendation + log.ToString();
 
-			log.OnMessage += LogEntry_OnMessage;
-		}
-
-		private void LogEntry_OnMessage(object sender, EventLogMessage e)
-		{
-			string Indendation = "";
-			for (int i = 1; i < e.Entries.Count; i++)
-				Indendation += '\t';
-
-			LogEntry newLog = e.Entries[0];
-			//string line = log.Created.ToString("yyyy-MM-dd HH:mm:ss") + Indendation + log.ToString();
-
-			Console.WriteLine(Indendation + newLog.Message);
-		}
+		Console.WriteLine(Indendation + newLog.Message);
 	}
 }
 

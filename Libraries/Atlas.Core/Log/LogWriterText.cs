@@ -3,50 +3,49 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public class LogWriterText : IDisposable
 {
-	public class LogWriterText : IDisposable
+	private readonly Log Log;
+	public string SaveFilePath;
+
+	private readonly StreamWriter _textStreamWriter;
+	private readonly SynchronizationContext _context;
+
+	public override string ToString() => SaveFilePath;
+
+	public LogWriterText(Log log, string saveFilePath)
 	{
-		private readonly Log Log;
-		public string SaveFilePath;
+		Log = log;
+		SaveFilePath = saveFilePath + ".log.txt";
 
-		private readonly StreamWriter _textStreamWriter;
-		private readonly SynchronizationContext _context;
+		string parentDirectory = Path.GetDirectoryName(SaveFilePath);
+		if (!Directory.Exists(parentDirectory))
+			Directory.CreateDirectory(parentDirectory);
 
-		public override string ToString() => SaveFilePath;
+		_textStreamWriter = new StreamWriter(SaveFilePath);
 
-		public LogWriterText(Log log, string saveFilePath)
-		{
-			Log = log;
-			SaveFilePath = saveFilePath + ".log.txt";
+		_context = SynchronizationContext.Current ?? new SynchronizationContext();
 
-			string parentDirectory = Path.GetDirectoryName(SaveFilePath);
-			if (!Directory.Exists(parentDirectory))
-				Directory.CreateDirectory(parentDirectory);
+		log.OnMessage += LogEntry_OnMessage;
+	}
 
-			_textStreamWriter = new StreamWriter(SaveFilePath);
+	private void LogEntry_OnMessage(object sender, EventLogMessage e)
+	{
+		string Indendation = "";
+		foreach (LogEntry logEntry in e.Entries)
+			Indendation += '\t';
 
-			_context = SynchronizationContext.Current ?? new SynchronizationContext();
+		LogEntry newLog = e.Entries[0];
+		string line = Log.Created.ToString("yyyy-M-d H:mm:ss") + Indendation + newLog.Message;
+		_textStreamWriter.WriteLine(line);
+		_textStreamWriter.Flush();
+	}
 
-			log.OnMessage += LogEntry_OnMessage;
-		}
-
-		private void LogEntry_OnMessage(object sender, EventLogMessage e)
-		{
-			string Indendation = "";
-			foreach (LogEntry logEntry in e.Entries)
-				Indendation += '\t';
-
-			LogEntry newLog = e.Entries[0];
-			string line = Log.Created.ToString("yyyy-M-d H:mm:ss") + Indendation + newLog.Message;
-			_textStreamWriter.WriteLine(line);
-			_textStreamWriter.Flush();
-		}
-
-		public virtual void Dispose()
-		{
-			_textStreamWriter.Close();
-		}
+	public virtual void Dispose()
+	{
+		_textStreamWriter.Close();
 	}
 }
 

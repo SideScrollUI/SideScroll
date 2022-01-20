@@ -4,75 +4,74 @@ using Avalonia.Interactivity;
 using System;
 using System.Threading.Tasks;
 
-namespace Atlas.Start.Avalonia.Tabs
+namespace Atlas.Start.Avalonia.Tabs;
+
+public class TabCustomControl : ITab
 {
-	public class TabCustomControl : ITab
+	public TabInstance Create() => new Instance();
+
+	public class Instance : TabInstance
 	{
-		public TabInstance Create() => new Instance();
+		private ItemCollection<MyParams> _items;
+		private MyParams _myParams;
+		private TabControlSearchToolbar _toolbar;
 
-		public class Instance : TabInstance
+		public override void LoadUI(Call call, TabModel model)
 		{
-			private ItemCollection<MyParams> _items;
-			private MyParams _myParams;
-			private TabControlSearchToolbar _toolbar;
+			_myParams = new MyParams();
+			var tabMyParams = new TabControlMyParams(this, _myParams);
+			model.AddObject(tabMyParams);
 
-			public override void LoadUI(Call call, TabModel model)
+			_toolbar = new TabControlSearchToolbar(this);
+			model.AddObject(_toolbar);
+
+			_toolbar.ButtonSearch.Click += ButtonSearch_Click;  // move logic into SearchToolbar Command
+			_toolbar.ButtonLoadNext.Click += ButtonLoadNext_Click;
+			_toolbar.ButtonCopyClipBoard.Click += ButtonCopyClipBoard_Click;
+
+			_items = new ItemCollection<MyParams>();
+			for (int i = 0; i < 10; i++)
 			{
-				_myParams = new MyParams();
-				var tabMyParams = new TabControlMyParams(this, _myParams);
-				model.AddObject(tabMyParams);
-
-				_toolbar = new TabControlSearchToolbar(this);
-				model.AddObject(_toolbar);
-
-				_toolbar.ButtonSearch.Click += ButtonSearch_Click;  // move logic into SearchToolbar Command
-				_toolbar.ButtonLoadNext.Click += ButtonLoadNext_Click;
-				_toolbar.ButtonCopyClipBoard.Click += ButtonCopyClipBoard_Click;
-
-				_items = new ItemCollection<MyParams>();
-				for (int i = 0; i < 10; i++)
+				var item = new MyParams()
 				{
-					var item = new MyParams()
-					{
-						Name = "Item " + i.ToString(),
-						Amount = i,
-					};
-					_items.Add(item);
-				}
-				model.Items = _items;
+					Name = "Item " + i.ToString(),
+					Amount = i,
+				};
+				_items.Add(item);
 			}
+			model.Items = _items;
+		}
 
-			private void ButtonSearch_Click(object sender, RoutedEventArgs e)
-			{
-				_toolbar.TextBoxStatus.Text = "Searching";
+		private void ButtonSearch_Click(object sender, RoutedEventArgs e)
+		{
+			_toolbar.TextBoxStatus.Text = "Searching";
 
-				StartTask(Search, true, true);
-			}
+			StartTask(Search, true, true);
+		}
 
-			private void Search(Call call)
-			{
-				System.Threading.Thread.Sleep(2000);
+		private void Search(Call call)
+		{
+			System.Threading.Thread.Sleep(2000);
 
-				Invoke(ShowSearchResults, 1, "abc");
-			}
+			Invoke(ShowSearchResults, 1, "abc");
+		}
 
-			private void ShowSearchResults(Call call, params object[] objects)
-			{
-				_toolbar.TextBoxStatus.Text = "Finished";
-			}
+		private void ShowSearchResults(Call call, params object[] objects)
+		{
+			_toolbar.TextBoxStatus.Text = "Finished";
+		}
 
-			private void ButtonLoadNext_Click(object sender, RoutedEventArgs e)
-			{
-				StartTask(LoadNext, true, false);
-			}
+		private void ButtonLoadNext_Click(object sender, RoutedEventArgs e)
+		{
+			StartTask(LoadNext, true, false);
+		}
 
-			private void LoadNext(Call call)
-			{
-			}
+		private void LoadNext(Call call)
+		{
+		}
 
-			private void ButtonCopyClipBoard_Click(object sender, RoutedEventArgs e)
-			{
-			}
+		private void ButtonCopyClipBoard_Click(object sender, RoutedEventArgs e)
+		{
 		}
 	}
 }

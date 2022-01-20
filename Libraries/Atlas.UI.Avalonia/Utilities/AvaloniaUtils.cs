@@ -9,118 +9,117 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Atlas.UI.Avalonia
+namespace Atlas.UI.Avalonia;
+
+public class AvaloniaUtils
 {
-	public class AvaloniaUtils
+	// TextBlock control doesn't allow selecting text, so add a Copy command to the context menu
+	public static void AddContextMenu(TextBlock textBlock)
 	{
-		// TextBlock control doesn't allow selecting text, so add a Copy command to the context menu
-		public static void AddContextMenu(TextBlock textBlock)
+		var contextMenu = new ContextMenu();
+
+		var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+
+		var list = new AvaloniaList<object>();
+
+		var menuItemCopy = new TabMenuItem()
 		{
-			var contextMenu = new ContextMenu();
+			Header = "_Copy",
+			Foreground = Brushes.Black,
+		};
+		menuItemCopy.Click += delegate
+		{
+			ClipBoardUtils.SetText(textBlock.Text);
+		};
+		list.Add(menuItemCopy);
 
-			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+		contextMenu.Items = list;
 
-			var list = new AvaloniaList<object>();
+		textBlock.ContextMenu = contextMenu;
+	}
 
-			var menuItemCopy = new TabMenuItem()
+	public static void AddContextMenu(TextBox textBox)
+	{
+		var contextMenu = new ContextMenu()
+		{
+			Foreground = Theme.Foreground,
+		};
+
+		var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+
+		var list = new AvaloniaList<object>();
+
+		if (!textBox.IsReadOnly)
+		{
+			var menuItemCut = new TabMenuItem("Cut");
+			menuItemCut.Click += delegate { SendTextBoxKey(textBox, keymap.Cut); };
+			list.Add(menuItemCut);
+		}
+
+		var menuItemCopy = new TabMenuItem("_Copy");
+		menuItemCopy.Click += delegate { SendTextBoxKey(textBox, keymap.Copy); };
+		list.Add(menuItemCopy);
+
+		if (!textBox.IsReadOnly)
+		{
+			var menuItemPaste = new TabMenuItem("Paste");
+			menuItemPaste.Click += delegate { SendTextBoxKey(textBox, keymap.Paste); };
+			list.Add(menuItemPaste);
+		}
+
+		//list.Add(new Separator());
+
+		contextMenu.Items = list;
+
+		textBox.ContextMenu = contextMenu;
+	}
+
+	private static void SendTextBoxKey(TextBox textBox, List<KeyGesture> keyGestures)
+	{
+		foreach (var key in keyGestures)
+		{
+			var args = new KeyEventArgs()
 			{
-				Header = "_Copy",
-				Foreground = Brushes.Black,
+				Key = key.Key,
+				KeyModifiers = key.KeyModifiers,
+				RoutedEvent = TextBox.KeyDownEvent,
 			};
-			menuItemCopy.Click += delegate
-			{
-				ClipBoardUtils.SetText(textBlock.Text);
-			};
-			list.Add(menuItemCopy);
 
-			contextMenu.Items = list;
-
-			textBlock.ContextMenu = contextMenu;
+			textBox.RaiseEvent(args);
+			break;
 		}
+	}
 
-		public static void AddContextMenu(TextBox textBox)
+	// Add padding to avoid poppin effect?
+	public static bool IsControlVisible(IControl control)
+	{
+		Point controlTopLeftPoint = new(0, 0);
+		Point controlBottomRight = new(control.Bounds.Width, control.Bounds.Height);
+		IControl parentControl = control?.Parent;
+		while (parentControl != null)
 		{
-			var contextMenu = new ContextMenu()
+			// sometimes controls don't update their bounds correctly, so only use the Window for now
+			//if (parentControl is Window)
 			{
-				Foreground = Theme.Foreground,
-			};
+				// Get control bounds in Parent control coordinates
+				Point? translatedTopLeft = control.TranslatePoint(controlTopLeftPoint, parentControl);
+				Point? translatedBottomRight = control.TranslatePoint(controlBottomRight, parentControl);
+				if (translatedTopLeft == null || translatedBottomRight == null)
+					return false;
 
-			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+				var parentBounds = new Rect(translatedTopLeft.Value, translatedBottomRight.Value);
+				parentBounds = parentBounds.WithX(parentBounds.X + parentControl.Bounds.X);
+				parentBounds = parentBounds.WithY(parentBounds.Y + parentControl.Bounds.Y);
 
-			var list = new AvaloniaList<object>();
-
-			if (!textBox.IsReadOnly)
-			{
-				var menuItemCut = new TabMenuItem("Cut");
-				menuItemCut.Click += delegate { SendTextBoxKey(textBox, keymap.Cut); };
-				list.Add(menuItemCut);
+				if (parentBounds.X > parentControl.Bounds.Right ||
+					parentBounds.Y > parentControl.Bounds.Bottom ||
+					parentBounds.Right < parentControl.Bounds.X ||
+					parentBounds.Bottom < parentControl.Bounds.Y)
+					return false;
 			}
 
-			var menuItemCopy = new TabMenuItem("_Copy");
-			menuItemCopy.Click += delegate { SendTextBoxKey(textBox, keymap.Copy); };
-			list.Add(menuItemCopy);
-
-			if (!textBox.IsReadOnly)
-			{
-				var menuItemPaste = new TabMenuItem("Paste");
-				menuItemPaste.Click += delegate { SendTextBoxKey(textBox, keymap.Paste); };
-				list.Add(menuItemPaste);
-			}
-
-			//list.Add(new Separator());
-
-			contextMenu.Items = list;
-
-			textBox.ContextMenu = contextMenu;
+			parentControl = parentControl.Parent;
 		}
-
-		private static void SendTextBoxKey(TextBox textBox, List<KeyGesture> keyGestures)
-		{
-			foreach (var key in keyGestures)
-			{
-				var args = new KeyEventArgs()
-				{
-					Key = key.Key,
-					KeyModifiers = key.KeyModifiers,
-					RoutedEvent = TextBox.KeyDownEvent,
-				};
-
-				textBox.RaiseEvent(args);
-				break;
-			}
-		}
-
-		// Add padding to avoid poppin effect?
-		public static bool IsControlVisible(IControl control)
-		{
-			Point controlTopLeftPoint = new(0, 0);
-			Point controlBottomRight = new(control.Bounds.Width, control.Bounds.Height);
-			IControl parentControl = control?.Parent;
-			while (parentControl != null)
-			{
-				// sometimes controls don't update their bounds correctly, so only use the Window for now
-				//if (parentControl is Window)
-				{
-					// Get control bounds in Parent control coordinates
-					Point? translatedTopLeft = control.TranslatePoint(controlTopLeftPoint, parentControl);
-					Point? translatedBottomRight = control.TranslatePoint(controlBottomRight, parentControl);
-					if (translatedTopLeft == null || translatedBottomRight == null)
-						return false;
-
-					var parentBounds = new Rect(translatedTopLeft.Value, translatedBottomRight.Value);
-					parentBounds = parentBounds.WithX(parentBounds.X + parentControl.Bounds.X);
-					parentBounds = parentBounds.WithY(parentBounds.Y + parentControl.Bounds.Y);
-
-					if (parentBounds.X > parentControl.Bounds.Right ||
-						parentBounds.Y > parentControl.Bounds.Bottom ||
-						parentBounds.Right < parentControl.Bounds.X ||
-						parentBounds.Bottom < parentControl.Bounds.Y)
-						return false;
-				}
-
-				parentControl = parentControl.Parent;
-			}
-			return true;
-		}
+		return true;
 	}
 }

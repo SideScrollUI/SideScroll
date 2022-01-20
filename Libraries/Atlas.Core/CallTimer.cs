@@ -2,54 +2,53 @@ using System;
 using System.Diagnostics;
 using System.Timers;
 
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public class CallTimer : Call, IDisposable
 {
-	public class CallTimer : Call, IDisposable
+	private readonly Stopwatch _stopwatch = new();
+	private readonly Timer _timer = new();
+
+	public long ElapsedMilliseconds => _stopwatch.ElapsedMilliseconds;
+
+	public CallTimer()
 	{
-		private readonly Stopwatch _stopwatch = new();
-		private readonly Timer _timer = new();
+		_stopwatch.Start();
 
-		public long ElapsedMilliseconds => _stopwatch.ElapsedMilliseconds;
+		_timer.Interval = 1000.0;
+		_timer.Elapsed += Timer_Elapsed;
+		_timer.Start();
+	}
 
-		public CallTimer()
-		{
-			_stopwatch.Start();
+	public void Stop()
+	{
+		_stopwatch.Stop();
 
-			_timer.Interval = 1000.0;
-			_timer.Elapsed += Timer_Elapsed;
-			_timer.Start();
-		}
+		_timer.Stop();
+		_timer.Elapsed -= Timer_Elapsed;
 
-		public void Stop()
-		{
-			_stopwatch.Stop();
+		UpdateDuration();
+	}
 
-			_timer.Stop();
-			_timer.Elapsed -= Timer_Elapsed;
+	private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+	{
+		UpdateDuration();
+	}
 
-			UpdateDuration();
-		}
+	private void UpdateDuration()
+	{
+		if (Log != null)
+			Log.Duration = ElapsedMilliseconds / 1000.0f;
+	}
 
-		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			UpdateDuration();
-		}
+	public void Dispose()
+	{
+		Stop();
 
-		private void UpdateDuration()
-		{
-			if (Log != null)
-				Log.Duration = ElapsedMilliseconds / 1000.0f;
-		}
+		_timer.Dispose();
 
-		public void Dispose()
-		{
-			Stop();
-
-			_timer.Dispose();
-
-			TaskInstance?.SetFinished();
-			if (TaskInstance == null)
-				Log.Add("Finished", new Tag("Time", ElapsedMilliseconds / 1000.0));
-		}
+		TaskInstance?.SetFinished();
+		if (TaskInstance == null)
+			Log.Add("Finished", new Tag("Time", ElapsedMilliseconds / 1000.0));
 	}
 }

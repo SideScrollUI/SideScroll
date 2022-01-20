@@ -6,88 +6,87 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Atlas.Serialize
+namespace Atlas.Serialize;
+
+public class TypeRepoEnumerable : TypeRepo
 {
-	public class TypeRepoEnumerable : TypeRepo
+	public class Creator : IRepoCreator
 	{
-		public class Creator : IRepoCreator
+		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
-			{
-				if (CanAssign(typeSchema.Type))
-					return new TypeRepoEnumerable(serializer, typeSchema);
-				return null;
-			}
+			if (CanAssign(typeSchema.Type))
+				return new TypeRepoEnumerable(serializer, typeSchema);
+			return null;
 		}
+	}
 
-		private readonly Type _elementType;
-		private TypeRepo _listTypeRepo;
-		private readonly MethodInfo _addMethod;
+	private readonly Type _elementType;
+	private TypeRepo _listTypeRepo;
+	private readonly MethodInfo _addMethod;
 
-		public TypeRepoEnumerable(Serializer serializer, TypeSchema typeSchema) :
-			base(serializer, typeSchema)
+	public TypeRepoEnumerable(Serializer serializer, TypeSchema typeSchema) :
+		base(serializer, typeSchema)
+	{
+		Type[] types = LoadableType.GetGenericArguments();
+		if (types.Length > 0)
+			_elementType = types[0];
+
+		_addMethod = LoadableType.GetMethods()
+			.Where(m => m.Name == "Add" && m.GetParameters().Count() == 1).FirstOrDefault();
+	}
+
+	public static bool CanAssign(Type type)
+	{
+		return type.IsGenericType && typeof(HashSet<>).IsAssignableFrom(type.GetGenericTypeDefinition());
+	}
+
+	public override void InitializeLoading(Log log)
+	{
+		if (_elementType != null)
+			_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
+	}
+
+	public override void AddChildObjects(object obj)
+	{
+		IEnumerable iEnumerable = (IEnumerable)obj;
+		foreach (var item in iEnumerable)
 		{
-			Type[] types = LoadableType.GetGenericArguments();
-			if (types.Length > 0)
-				_elementType = types[0];
-
-			_addMethod = LoadableType.GetMethods()
-				.Where(m => m.Name == "Add" && m.GetParameters().Count() == 1).FirstOrDefault();
+			Serializer.AddObjectRef(item);
 		}
+	}
 
-		public static bool CanAssign(Type type)
+	public override void SaveObject(BinaryWriter writer, object obj)
+	{
+		PropertyInfo countProp = LoadableType.GetProperty("Count"); // IEnumerable isn't required to implement this
+		IEnumerable iEnumerable = (IEnumerable)obj;
+
+		int count = (int)countProp.GetValue(iEnumerable, null);
+		writer.Write(count);
+		foreach (object item in iEnumerable)
 		{
-			return type.IsGenericType && typeof(HashSet<>).IsAssignableFrom(type.GetGenericTypeDefinition());
+			Serializer.WriteObjectRef(_elementType, item, writer);
 		}
+	}
 
-		public override void InitializeLoading(Log log)
+	public override void LoadObjectData(object obj)
+	{
+		//(IEnumerable<listTypeRepo.type>)objects[i];
+		int count = Reader.ReadInt32();
+
+		for (int j = 0; j < count; j++)
 		{
-			if (_elementType != null)
-				_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
+			object objectValue = _listTypeRepo.LoadObjectRef();
+			_addMethod.Invoke(obj, new object[] { objectValue });
 		}
+	}
 
-		public override void AddChildObjects(object obj)
+	public override void Clone(object source, object dest)
+	{
+		IEnumerable iSource = (IEnumerable)source;
+		foreach (var item in iSource)
 		{
-			IEnumerable iEnumerable = (IEnumerable)obj;
-			foreach (var item in iEnumerable)
-			{
-				Serializer.AddObjectRef(item);
-			}
-		}
-
-		public override void SaveObject(BinaryWriter writer, object obj)
-		{
-			PropertyInfo countProp = LoadableType.GetProperty("Count"); // IEnumerable isn't required to implement this
-			IEnumerable iEnumerable = (IEnumerable)obj;
-
-			int count = (int)countProp.GetValue(iEnumerable, null);
-			writer.Write(count);
-			foreach (object item in iEnumerable)
-			{
-				Serializer.WriteObjectRef(_elementType, item, writer);
-			}
-		}
-
-		public override void LoadObjectData(object obj)
-		{
-			//(IEnumerable<listTypeRepo.type>)objects[i];
-			int count = Reader.ReadInt32();
-
-			for (int j = 0; j < count; j++)
-			{
-				object objectValue = _listTypeRepo.LoadObjectRef();
-				_addMethod.Invoke(obj, new object[] { objectValue });
-			}
-		}
-
-		public override void Clone(object source, object dest)
-		{
-			IEnumerable iSource = (IEnumerable)source;
-			foreach (var item in iSource)
-			{
-				object clone = Serializer.Clone(item);
-				_addMethod.Invoke(dest, new object[] { clone });
-			}
+			object clone = Serializer.Clone(item);
+			_addMethod.Invoke(dest, new object[] { clone });
 		}
 	}
 }

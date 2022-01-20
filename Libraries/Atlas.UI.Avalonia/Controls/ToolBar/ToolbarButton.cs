@@ -12,222 +12,221 @@ using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.Threading;
 
-namespace Atlas.UI.Avalonia.Controls
+namespace Atlas.UI.Avalonia.Controls;
+
+public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 {
-	public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
+	Type IStyleable.StyleKey => typeof(Button);
+
+	public TabControlToolbar Toolbar;
+	public string Label { get; set; }
+	public string Tooltip { get; set; }
+
+	public TaskDelegate.CallAction CallAction;
+	public TaskDelegateAsync.CallActionAsync CallActionAsync;
+
+	public bool ShowTask;
+
+	public TimeSpan MinWaitTime = TimeSpan.FromSeconds(1); // Wait time between clicks
+
+	private DateTime _lastInvoked;
+	private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
+
+	public ToolbarButton(TabControlToolbar toolbar, ToolButton toolButton) : base()
 	{
-		Type IStyleable.StyleKey => typeof(Button);
+		Toolbar = toolbar;
+		Label = toolButton.Label;
+		Tooltip = toolButton.Tooltip;
+		ShowTask = toolButton.ShowTask;
 
-		public TabControlToolbar Toolbar;
-		public string Label { get; set; }
-		public string Tooltip { get; set; }
+		CallAction = toolButton.Action;
+		CallActionAsync = toolButton.ActionAsync;
 
-		public TaskDelegate.CallAction CallAction;
-		public TaskDelegateAsync.CallActionAsync CallActionAsync;
+		Initialize(toolButton.Icon);
 
-		public bool ShowTask;
+		if (toolButton.Default)
+			SetDefault();
+	}
 
-		public TimeSpan MinWaitTime = TimeSpan.FromSeconds(1); // Wait time between clicks
+	public ToolbarButton(TabControlToolbar toolbar, string label, string tooltip, Stream bitmapStream, ICommand command = null) : base()
+	{
+		Toolbar = toolbar;
+		Label = label;
+		Tooltip = tooltip;
 
-		private DateTime _lastInvoked;
-		private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
+		Initialize(bitmapStream, command);
+	}
 
-		public ToolbarButton(TabControlToolbar toolbar, ToolButton toolButton) : base()
+	private void Initialize(Stream bitmapStream, ICommand command = null)
+	{
+		bitmapStream.Position = 0;
+		var bitmap = new Bitmap(bitmapStream);
+
+		var grid = new Grid()
 		{
-			Toolbar = toolbar;
-			Label = toolButton.Label;
-			Tooltip = toolButton.Tooltip;
-			ShowTask = toolButton.ShowTask;
+			ColumnDefinitions = new ColumnDefinitions("Auto,Auto"),
+			RowDefinitions = new RowDefinitions("Auto"),
+		};
 
-			CallAction = toolButton.Action;
-			CallActionAsync = toolButton.ActionAsync;
+		var image = new Image()
+		{
+			Source = bitmap,
+			//MaxWidth = 24,
+			//MaxHeight = 24,
+			Stretch = Stretch.None,
+		};
+		grid.Children.Add(image);
 
-			Initialize(toolButton.Icon);
-
-			if (toolButton.Default)
-				SetDefault();
+		if (Label != null)
+		{
+			var textBlock = new TextBlock()
+			{
+				Text = Label,
+				FontSize = 15,
+				Foreground = new SolidColorBrush(Color.Parse("#759eeb")),
+				Margin = new Thickness(6),
+				[Grid.ColumnProperty] = 1,
+			};
+			grid.Children.Add(textBlock);
 		}
 
-		public ToolbarButton(TabControlToolbar toolbar, string label, string tooltip, Stream bitmapStream, ICommand command = null) : base()
+		Content = grid;
+		Command = command;
+		Background = Theme.ToolbarButtonBackground;
+		BorderBrush = Background;
+		BorderThickness = new Thickness(0);
+		Margin = new Thickness(1);
+		//BorderThickness = new Thickness(2),
+		//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
+		//BorderBrush = new SolidColorBrush(Colors.Black),
+		ToolTip.SetTip(this, Tooltip);
+
+		BorderBrush = Background;
+		Click += ToolbarButton_Click;
+	}
+
+	private void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	{
+		Invoke();
+	}
+
+	public void SetDefault()
+	{
+		Toolbar.TabInstance.DefaultAction = () => Invoke();
+	}
+
+	private void Invoke(bool canDelay = true)
+	{
+		if (!IsEnabled)
+			return;
+
+		TimeSpan timeSpan = DateTime.UtcNow.Subtract(_lastInvoked);
+		if (canDelay && timeSpan < MinWaitTime)
 		{
-			Toolbar = toolbar;
-			Label = label;
-			Tooltip = tooltip;
-
-			Initialize(bitmapStream, command);
-		}
-
-		private void Initialize(Stream bitmapStream, ICommand command = null)
-		{
-			bitmapStream.Position = 0;
-			var bitmap = new Bitmap(bitmapStream);
-
-			var grid = new Grid()
+			// Rate limiting can delay these
+			if (_dispatcherTimer == null)
 			{
-				ColumnDefinitions = new ColumnDefinitions("Auto,Auto"),
-				RowDefinitions = new RowDefinitions("Auto"),
-			};
-
-			var image = new Image()
-			{
-				Source = bitmap,
-				//MaxWidth = 24,
-				//MaxHeight = 24,
-				Stretch = Stretch.None,
-			};
-			grid.Children.Add(image);
-
-			if (Label != null)
-			{
-				var textBlock = new TextBlock()
+				_dispatcherTimer = new DispatcherTimer()
 				{
-					Text = Label,
-					FontSize = 15,
-					Foreground = new SolidColorBrush(Color.Parse("#759eeb")),
-					Margin = new Thickness(6),
-					[Grid.ColumnProperty] = 1,
+					Interval = TimeSpan.FromSeconds(1),
 				};
-				grid.Children.Add(textBlock);
+				_dispatcherTimer.Tick += DispatcherTimer_Tick;
 			}
-
-			Content = grid;
-			Command = command;
-			Background = Theme.ToolbarButtonBackground;
-			BorderBrush = Background;
-			BorderThickness = new Thickness(0);
-			Margin = new Thickness(1);
-			//BorderThickness = new Thickness(2),
-			//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
-			//BorderBrush = new SolidColorBrush(Colors.Black),
-			ToolTip.SetTip(this, Tooltip);
-
-			BorderBrush = Background;
-			Click += ToolbarButton_Click;
+			if (!_dispatcherTimer.IsEnabled)
+				_dispatcherTimer.Start();
+			return;
 		}
 
-		private void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		_lastInvoked = DateTime.UtcNow;
+
+		if (Toolbar.TabInstance == null)
 		{
-			Invoke();
+			InvokeAction(new Call());
+			return;
 		}
 
-		public void SetDefault()
+		// Only allow one since we don't block for completion of first
+		if (StartTaskAsync() == null)
+			StartTask();
+	}
+
+	private TaskInstance StartTaskAsync()
+	{
+		if (CallActionAsync == null)
+			return null;
+
+		IsEnabled = false;
+		var taskDelegate = new TaskDelegateAsync(CallActionAsync, true)
 		{
-			Toolbar.TabInstance.DefaultAction = () => Invoke();
-		}
+			OnComplete = () => IsEnabled = true,
+		};
+		return Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
+	}
 
-		private void Invoke(bool canDelay = true)
+	private TaskInstance StartTask()
+	{
+		if (CallAction == null)
+			return null;
+
+		IsEnabled = false;
+		var taskDelegate = new TaskDelegate(CallAction, ShowTask)
 		{
-			if (!IsEnabled)
-				return;
+			OnComplete = () => IsEnabled = true,
+		};
+		return Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
+	}
 
-			TimeSpan timeSpan = DateTime.UtcNow.Subtract(_lastInvoked);
-			if (canDelay && timeSpan < MinWaitTime)
-			{
-				// Rate limiting can delay these
-				if (_dispatcherTimer == null)
-				{
-					_dispatcherTimer = new DispatcherTimer()
-					{
-						Interval = TimeSpan.FromSeconds(1),
-					};
-					_dispatcherTimer.Tick += DispatcherTimer_Tick;
-				}
-				if (!_dispatcherTimer.IsEnabled)
-					_dispatcherTimer.Start();
-				return;
-			}
+	public void Add(TaskDelegate.CallAction callAction)
+	{
+		CallAction = callAction;
+	}
 
-			_lastInvoked = DateTime.UtcNow;
+	public void AddAsync(TaskDelegateAsync.CallActionAsync callActionAsync)
+	{
+		CallActionAsync = callActionAsync;
+	}
 
-			if (Toolbar.TabInstance == null)
-			{
-				InvokeAction(new Call());
-				return;
-			}
-
-			// Only allow one since we don't block for completion of first
-			if (StartTaskAsync() == null)
-				StartTask();
-		}
-
-		private TaskInstance StartTaskAsync()
+	private void InvokeAction(Call call)
+	{
+		try
 		{
-			if (CallActionAsync == null)
-				return null;
-
-			IsEnabled = false;
-			var taskDelegate = new TaskDelegateAsync(CallActionAsync, true)
-			{
-				OnComplete = () => IsEnabled = true,
-			};
-			return Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
+			CallActionAsync?.Invoke(call);
+			CallAction?.Invoke(call);
 		}
-
-		private TaskInstance StartTask()
+		catch (Exception e)
 		{
-			if (CallAction == null)
-				return null;
-
-			IsEnabled = false;
-			var taskDelegate = new TaskDelegate(CallAction, ShowTask)
-			{
-				OnComplete = () => IsEnabled = true,
-			};
-			return Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
+			call.Log.Add(e);
 		}
+	}
 
-		public void Add(TaskDelegate.CallAction callAction)
-		{
-			CallAction = callAction;
-		}
+	// DefaultTheme.xaml is overriding this currently
+	protected override void OnPointerEnter(PointerEventArgs e)
+	{
+		base.OnPointerEnter(e);
+		BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
+		Background = Theme.ToolbarButtonBackgroundHover;
+	}
 
-		public void AddAsync(TaskDelegateAsync.CallActionAsync callActionAsync)
-		{
-			CallActionAsync = callActionAsync;
-		}
+	protected override void OnPointerLeave(PointerEventArgs e)
+	{
+		base.OnPointerLeave(e);
+		Background = Theme.ToolbarButtonBackground;
+		BorderBrush = Background;
+	}
 
-		private void InvokeAction(Call call)
-		{
-			try
-			{
-				CallActionAsync?.Invoke(call);
-				CallAction?.Invoke(call);
-			}
-			catch (Exception e)
-			{
-				call.Log.Add(e);
-			}
-		}
+	private void DispatcherTimer_Tick(object sender, EventArgs e)
+	{
+		_dispatcherTimer.Stop();
+		Invoke(false);
+	}
 
-		// DefaultTheme.xaml is overriding this currently
-		protected override void OnPointerEnter(PointerEventArgs e)
-		{
-			base.OnPointerEnter(e);
-			BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-			Background = Theme.ToolbarButtonBackgroundHover;
-		}
-
-		protected override void OnPointerLeave(PointerEventArgs e)
-		{
-			base.OnPointerLeave(e);
-			Background = Theme.ToolbarButtonBackground;
-			BorderBrush = Background;
-		}
-
-		private void DispatcherTimer_Tick(object sender, EventArgs e)
+	public void Dispose()
+	{
+		if (_dispatcherTimer != null)
 		{
 			_dispatcherTimer.Stop();
-			Invoke(false);
-		}
-
-		public void Dispose()
-		{
-			if (_dispatcherTimer != null)
-			{
-				_dispatcherTimer.Stop();
-				_dispatcherTimer.Tick -= DispatcherTimer_Tick;
-				_dispatcherTimer = null;
-			}
+			_dispatcherTimer.Tick -= DispatcherTimer_Tick;
+			_dispatcherTimer = null;
 		}
 	}
 }

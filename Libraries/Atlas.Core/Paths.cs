@@ -3,67 +3,66 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public class Paths
 {
-	public class Paths
+	public static string Combine(string path, params string[] paths)
 	{
-		public static string Combine(string path, params string[] paths)
-		{
-			if (path == null)
-				return null;
+		if (path == null)
+			return null;
 
-			foreach (string part in paths)
-			{
-				string name = part ?? "(null)";
-				path = Path.Combine(path, name.TrimStart('/'));
-			}
-			return path.Replace('\\', '/');
+		foreach (string part in paths)
+		{
+			string name = part ?? "(null)";
+			path = Path.Combine(path, name.TrimStart('/'));
 		}
+		return path.Replace('\\', '/');
+	}
 
-		public static string Escape(string path)
+	public static string Escape(string path)
+	{
+		char[] invalidFileNameChars = Path.GetInvalidFileNameChars();
+		char[] invalidPathChars = Path.GetInvalidPathChars();
+
+		string encodedUri = "";
+		foreach (char c in path)
 		{
-			char[] invalidFileNameChars = Path.GetInvalidFileNameChars();
-			char[] invalidPathChars = Path.GetInvalidPathChars();
-
-			string encodedUri = "";
-			foreach (char c in path)
+			if (c != '/' && (invalidPathChars.Contains(c) == true || invalidFileNameChars.Contains(c) == true))
 			{
-				if (c != '/' && (invalidPathChars.Contains(c) == true || invalidFileNameChars.Contains(c) == true))
-				{
-					encodedUri += "_" + Convert.ToByte(c).ToString("x2") + "_";
-				}
-				else
-				{
-					encodedUri += c;
-				}
+				encodedUri += "_" + Convert.ToByte(c).ToString("x2") + "_";
 			}
-			return encodedUri;
-		}
-
-		public static string AppDataPath
-		{
-			get
+			else
 			{
-				if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-					return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library");
-				else
-					return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+				encodedUri += c;
 			}
 		}
+		return encodedUri;
+	}
 
-		public static string DownloadPath => Combine(HomePath, "Downloads");
-
-		public static string PicturesPath => Combine(HomePath, "Pictures");
-
-		public static string HomePath
+	public static string AppDataPath
+	{
+		get
 		{
-			get
-			{
-				if (Environment.OSVersion.Platform == PlatformID.Unix)
-					return Environment.GetEnvironmentVariable("HOME");
-				else
-					return Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
-			}
+			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+				return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library");
+			else
+				return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+		}
+	}
+
+	public static string DownloadPath => Combine(HomePath, "Downloads");
+
+	public static string PicturesPath => Combine(HomePath, "Pictures");
+
+	public static string HomePath
+	{
+		get
+		{
+			if (Environment.OSVersion.Platform == PlatformID.Unix)
+				return Environment.GetEnvironmentVariable("HOME");
+			else
+				return Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
 		}
 	}
 }

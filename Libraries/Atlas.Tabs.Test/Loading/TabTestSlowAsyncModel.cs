@@ -1,32 +1,31 @@
 using Atlas.Core;
 using System.Threading.Tasks;
 
-namespace Atlas.Tabs.Test.Loading
-{
-	public class TabTestSlowAsyncModel : ITab
-	{
-		public TabInstance Create() => new Instance();
+namespace Atlas.Tabs.Test.Loading;
 
-		public class Instance : TabInstance
+public class TabTestSlowAsyncModel : ITab
+{
+	public TabInstance Create() => new Instance();
+
+	public class Instance : TabInstance
+	{
+		public override void Load(Call call, TabModel model)
 		{
-			public override void Load(Call call, TabModel model)
-			{
-				model.Items = new ItemCollection<ListItem>()
+			model.Items = new ItemCollection<ListItem>()
 				{
 					new("Test Item", new TestItem()),
 				};
-			}
+		}
 
-			public class TestItem
+		public class TestItem
+		{
+			public int Integer { get; set; }
+
+			[Item]
+			public async Task<string> Text(Call call)
 			{
-				public int Integer { get; set; }
-
-				[Item]
-				public async Task<string> Text(Call call)
-				{
-					await Task.Delay(1000);
-					return "Text";
-				}
+				await Task.Delay(1000);
+				return "Text";
 			}
 		}
 	}

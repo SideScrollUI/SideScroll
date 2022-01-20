@@ -3,40 +3,39 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace Atlas.Serialize.Test
+namespace Atlas.Serialize.Test;
+
+[Category("DeepClone")]
+public class TestDeepClone : TestSerializeBase
 {
-	[Category("DeepClone")]
-	public class TestDeepClone : TestSerializeBase
+	private Log log;
+	private Serializer serializer;
+
+	[OneTimeSetUp]
+	public void BaseSetup()
 	{
-		private Log log;
-		private Serializer serializer;
+		Initialize("DeepClone");
+		log = Call.Log;
+	}
 
-		[OneTimeSetUp]
-		public void BaseSetup()
-		{
-			Initialize("DeepClone");
-			log = Call.Log;
-		}
+	[SetUp]
+	public void Setup()
+	{
+		serializer = new Serializer();
+	}
 
-		[SetUp]
-		public void Setup()
-		{
-			serializer = new Serializer();
-		}
+	class StringClass
+	{
+		public string Value = "value";
+	}
 
-		class StringClass
-		{
-			public string Value = "value";
-		}
+	[Test]
+	public void DeepCloneStringField()
+	{
+		var input = new StringClass();
 
-		[Test]
-		public void DeepCloneStringField()
-		{
-			var input = new StringClass();
+		var output = input.DeepClone();
 
-			var output = input.DeepClone();
-
-			Assert.AreSame(input.Value, output.Value);
-		}
+		Assert.AreSame(input.Value, output.Value);
 	}
 }

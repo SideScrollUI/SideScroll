@@ -2,55 +2,54 @@ using Atlas.Core;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace Atlas.Tabs.Test.DataGrid
+namespace Atlas.Tabs.Test.DataGrid;
+
+public class TabTestObjectProperties : ITab
 {
-	public class TabTestObjectProperties : ITab
+	public TabInstance Create() => new Instance();
+
+	public class Instance : TabInstance
 	{
-		public TabInstance Create() => new Instance();
+		private readonly PropertyTest _propertyTest = new();
 
-		public class Instance : TabInstance
+		public override void Load(Call call, TabModel model)
 		{
-			private readonly PropertyTest _propertyTest = new();
+			model.Items = ListProperty.Create(_propertyTest);
+			model.Editing = true;
 
-			public override void Load(Call call, TabModel model)
-			{
-				model.Items = ListProperty.Create(_propertyTest);
-				model.Editing = true;
-
-				model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>()
 				{
 					new TaskDelegate("Toggle", Toggle),
 				};
-			}
+		}
 
-			private void Toggle(Call call)
-			{
-				_propertyTest.Boolean = !_propertyTest.Boolean;
-			}
+		private void Toggle(Call call)
+		{
+			_propertyTest.Boolean = !_propertyTest.Boolean;
 		}
 	}
+}
 
-	public class PropertyTest : INotifyPropertyChanged
+public class PropertyTest : INotifyPropertyChanged
+{
+	[Editing]
+	public bool Boolean
 	{
-		[Editing]
-		public bool Boolean
+		get => _boolean;
+		set
 		{
-			get => _boolean;
-			set
-			{
-				_boolean = value;
-				NotifyPropertyChangedContext(nameof(Boolean));
-			}
+			_boolean = value;
+			NotifyPropertyChangedContext(nameof(Boolean));
 		}
-		private bool _boolean;
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		private void NotifyPropertyChangedContext(string propertyName)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
-
-		public List<int> List { get; set; } = new() { 1, 2, 3 };
 	}
+	private bool _boolean;
+
+	public event PropertyChangedEventHandler PropertyChanged;
+
+	private void NotifyPropertyChangedContext(string propertyName)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
+
+	public List<int> List { get; set; } = new() { 1, 2, 3 };
 }

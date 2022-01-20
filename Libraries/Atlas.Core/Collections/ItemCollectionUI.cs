@@ -5,180 +5,179 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public interface IContext
 {
-	public interface IContext
+	SynchronizationContext Context { get; set; }
+	void InitializeContext(bool reset = false);
+}
+
+// Allows updating UI after initialization
+public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollection, ICollection, IEnumerable, IContext //, IRaiseItemChangedEvents //
+{
+	public string ColumnName { get; set; }
+	public string Label { get; set; }
+	public string CustomSettingsPath { get; set; }
+	public bool Skippable { get; set; } = true;
+
+	// Enable for thread safety when there's multiple threads acting on this collection
+	// true:  Always post new Events to the context
+	// false: Events can shortcut and run on the current context, bypassing the event queue, which can be faster, but out of order
+	public bool PostOnly { get; set; } = false;
+
+	public SynchronizationContext Context { get; set; } // TabInstance will initialize this, don't want to initialize this early due to default SynchronizationContext not posting messages in order
+
+	private readonly object _lock = new();
+
+	public ItemCollectionUI()
 	{
-		SynchronizationContext Context { get; set; }
-		void InitializeContext(bool reset = false);
 	}
 
-	// Allows updating UI after initialization
-	public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollection, ICollection, IEnumerable, IContext //, IRaiseItemChangedEvents //
+	// Don't implement List<T>, it isn't sortable
+	public ItemCollectionUI(IEnumerable<T> iEnumerable) :
+		base(iEnumerable)
 	{
-		public string ColumnName { get; set; }
-		public string Label { get; set; }
-		public string CustomSettingsPath { get; set; }
-		public bool Skippable { get; set; } = true;
+	}
 
-		// Enable for thread safety when there's multiple threads acting on this collection
-		// true:  Always post new Events to the context
-		// false: Events can shortcut and run on the current context, bypassing the event queue, which can be faster, but out of order
-		public bool PostOnly { get; set; } = false;
-
-		public SynchronizationContext Context { get; set; } // TabInstance will initialize this, don't want to initialize this early due to default SynchronizationContext not posting messages in order
-
-		private readonly object _lock = new();
-
-		public ItemCollectionUI()
+	public void InitializeContext(bool reset = false)
+	{
+		if (Context == null || reset)
 		{
+			Context = SynchronizationContext.Current ?? new SynchronizationContext();
+		}
+	}
+
+	public new void Add(T item)
+	{
+		if (Context == null)
+		{
+			AddItemCallback(item);
+		}
+		else if (PostOnly || Context != SynchronizationContext.Current)
+		{
+			// Add later so we don't insert at the same index for multiple Adds()
+			Context.Post(new SendOrPostCallback(AddItemCallback), item);
+		}
+		else
+		{
+			AddItemCallback(item);
+		}
+	}
+
+	// Thread safe callback
+	private void AddItemCallback(object state)
+	{
+		// Debug.Print("AddItemCallback: Item = " + state.ToString());
+		T item = (T)state;
+		lock (_lock)
+		{
+			base.Add(item);
+		}
+	}
+
+	public void AddRange(IEnumerable<T> collection)
+	{
+		int index = Items.Count;
+		foreach (T item in collection)
+		{
+			InsertItem(index++, item); // item gets added in the background with Add() and doesn't increment index
 		}
 
-		// Don't implement List<T>, it isn't sortable
-		public ItemCollectionUI(IEnumerable<T> iEnumerable) :
-			base(iEnumerable)
+		//foreach (T item in collection)
+		//	Items.Add(item);
+		//OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)); // need ui thread
+	}
+
+	struct ItemLocation
+	{
+		public int Index;
+		public T Item;
+
+		public ItemLocation(int index, T item)
 		{
+			Index = index;
+			Item = item;
 		}
+	}
 
-		public void InitializeContext(bool reset = false)
+	// Overriding InsertItem() has out of order issues, so override this instead
+	public new void Insert(int index, T item)
+	{
+		var location = new ItemLocation(index, item);
+
+		if (Context == null)
 		{
-			if (Context == null || reset)
-			{
-				Context = SynchronizationContext.Current ?? new SynchronizationContext();
-			}
+			InsertItemCallback(location);
 		}
-
-		public new void Add(T item)
+		else if (PostOnly || Context != SynchronizationContext.Current)
 		{
-			if (Context == null)
-			{
-				AddItemCallback(item);
-			}
-			else if (PostOnly || Context != SynchronizationContext.Current)
-			{
-				// Add later so we don't insert at the same index for multiple Adds()
-				Context.Post(new SendOrPostCallback(AddItemCallback), item);
-			}
-			else
-			{
-				AddItemCallback(item);
-			}
+			// Debug.Print("InsertItem -> Post -> InsertItemCallback: Index = " + index + ", Item = " + item.ToString());
+			Context.Post(new SendOrPostCallback(InsertItemCallback), location); // default context inserts multiple items in wrong order, AvaloniaUI doesn't
 		}
-
-		// Thread safe callback
-		private void AddItemCallback(object state)
+		else
 		{
-			// Debug.Print("AddItemCallback: Item = " + state.ToString());
-			T item = (T)state;
-			lock (_lock)
-			{
-				base.Add(item);
-			}
+			InsertItemCallback(location);
 		}
+	}
 
-		public void AddRange(IEnumerable<T> collection)
+	// Thread safe callback, only works if the context is the same
+	private void InsertItemCallback(object state)
+	{
+		ItemLocation itemLocation = (ItemLocation)state;
+
+		lock (_lock)
 		{
-			int index = Items.Count;
-			foreach (T item in collection)
-			{
-				InsertItem(index++, item); // item gets added in the background with Add() and doesn't increment index
-			}
-
-			//foreach (T item in collection)
-			//	Items.Add(item);
-			//OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)); // need ui thread
+			// Debug.Print("InsertItemCallback: Index = " + itemLocation.Index + ", Item = " + itemLocation.Item.ToString());
+			base.InsertItem(itemLocation.Index, itemLocation.Item);
 		}
+	}
 
-		struct ItemLocation
+	public new void Clear()
+	{
+		if (Context == null || (PostOnly && Context == SynchronizationContext.Current))
 		{
-			public int Index;
-			public T Item;
-
-			public ItemLocation(int index, T item)
-			{
-				Index = index;
-				Item = item;
-			}
+			base.Clear();
 		}
-
-		// Overriding InsertItem() has out of order issues, so override this instead
-		public new void Insert(int index, T item)
+		else
 		{
-			var location = new ItemLocation(index, item);
-
-			if (Context == null)
-			{
-				InsertItemCallback(location);
-			}
-			else if (PostOnly || Context != SynchronizationContext.Current)
-			{
-				// Debug.Print("InsertItem -> Post -> InsertItemCallback: Index = " + index + ", Item = " + item.ToString());
-				Context.Post(new SendOrPostCallback(InsertItemCallback), location); // default context inserts multiple items in wrong order, AvaloniaUI doesn't
-			}
-			else
-			{
-				InsertItemCallback(location);
-			}
+			Context.Post(new SendOrPostCallback(ClearCallback), null);
 		}
+	}
 
-		// Thread safe callback, only works if the context is the same
-		private void InsertItemCallback(object state)
+	// Thread safe callback, only works if the context is the same
+	private void ClearCallback(object state)
+	{
+		lock (_lock)
 		{
-			ItemLocation itemLocation = (ItemLocation)state;
-
-			lock (_lock)
-			{
-				// Debug.Print("InsertItemCallback: Index = " + itemLocation.Index + ", Item = " + itemLocation.Item.ToString());
-				base.InsertItem(itemLocation.Index, itemLocation.Item);
-			}
+			base.Clear();
 		}
+	}
 
-		public new void Clear()
+	protected override void RemoveItem(int index)
+	{
+		if (Context == null)
 		{
-			if (Context == null || (PostOnly && Context == SynchronizationContext.Current))
-			{
-				base.Clear();
-			}
-			else
-			{
-				Context.Post(new SendOrPostCallback(ClearCallback), null);
-			}
+			RemoveItemCallback(index);
 		}
-
-		// Thread safe callback, only works if the context is the same
-		private void ClearCallback(object state)
+		else if (PostOnly || Context != SynchronizationContext.Current)
 		{
-			lock (_lock)
-			{
-				base.Clear();
-			}
+			Context.Post(new SendOrPostCallback(RemoveItemCallback), index);
 		}
-
-		protected override void RemoveItem(int index)
+		else
 		{
-			if (Context == null)
-			{
-				RemoveItemCallback(index);
-			}
-			else if (PostOnly || Context != SynchronizationContext.Current)
-			{
-				Context.Post(new SendOrPostCallback(RemoveItemCallback), index);
-			}
-			else
-			{
-				RemoveItemCallback(index);
-			}
+			RemoveItemCallback(index);
 		}
+	}
 
-		// Thread safe callback, only works if the context is the same
-		private void RemoveItemCallback(object state)
+	// Thread safe callback, only works if the context is the same
+	private void RemoveItemCallback(object state)
+	{
+		int index = (int)state;
+
+		lock (_lock)
 		{
-			int index = (int)state;
-
-			lock (_lock)
-			{
-				base.RemoveItem(index);
-			}
+			base.RemoveItem(index);
 		}
 	}
 }

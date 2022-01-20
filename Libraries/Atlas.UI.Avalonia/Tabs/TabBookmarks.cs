@@ -2,93 +2,92 @@ using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
 
-namespace Atlas.UI.Avalonia.Controls
+namespace Atlas.UI.Avalonia.Controls;
+
+public class TabBookmarks : ITab
 {
-	public class TabBookmarks : ITab
+	public static TabBookmarks Global;
+
+	public BookmarkCollection Bookmarks;
+
+	public TabBookmarks(Project project)
 	{
-		public static TabBookmarks Global;
+		Bookmarks = new BookmarkCollection(project);
+		Global ??= this;
+	}
 
-		public BookmarkCollection Bookmarks;
+	public void AddBookmark(Call call, Bookmark bookmark)
+	{
+		Bookmarks.AddNew(call, bookmark);
+	}
 
-		public TabBookmarks(Project project)
+	public TabInstance Create() => new Instance(this);
+
+	public class Toolbar : TabToolbar
+	{
+		public ToolButton ButtonRefresh { get; set; } = new ToolButton("Refresh", Icons.Streams.Refresh);
+		//public ToolButton ButtonReset { get; set; } = new ToolButton("Reset", Icons.Streams.Refresh);
+
+		[Separator]
+		public ToolButton ButtonDeleteAll { get; set; } = new ToolButton("Delete All", Icons.Streams.DeleteList);
+	}
+
+	public class Instance : TabInstance
+	{
+		public TabBookmarks Tab;
+
+		public Instance(TabBookmarks tab)
 		{
-			Bookmarks = new BookmarkCollection(project);
-			Global ??= this;
+			Tab = tab;
 		}
 
-		public void AddBookmark(Call call, Bookmark bookmark)
+		public override void Load(Call call, TabModel model)
 		{
-			Bookmarks.AddNew(call, bookmark);
+			Tab.Bookmarks.Load(call, true);
+
+			model.AddData(Tab.Bookmarks.Items);
 		}
 
-		public TabInstance Create() => new Instance(this);
-
-		public class Toolbar : TabToolbar
+		public override void LoadUI(Call call, TabModel model)
 		{
-			public ToolButton ButtonRefresh { get; set; } = new ToolButton("Refresh", Icons.Streams.Refresh);
-			//public ToolButton ButtonReset { get; set; } = new ToolButton("Reset", Icons.Streams.Refresh);
+			var toolbar = new Toolbar();
+			toolbar.ButtonRefresh.Action = Refresh;
+			//toolbar.ButtonReset.Action = Reset;
+			toolbar.ButtonDeleteAll.Action = DeleteAll;
+			model.AddObject(toolbar);
 
-			[Separator]
-			public ToolButton ButtonDeleteAll { get; set; } = new ToolButton("Delete All", Icons.Streams.DeleteList);
+			if (Tab.Bookmarks.NewBookmark != null)
+			{
+				SelectItem(Tab.Bookmarks.NewBookmark);
+				Tab.Bookmarks.NewBookmark = null;
+			}
 		}
 
-		public class Instance : TabInstance
+		public override void GetBookmark(TabBookmark tabBookmark)
 		{
-			public TabBookmarks Tab;
+			base.GetBookmark(tabBookmark);
 
-			public Instance(TabBookmarks tab)
+			foreach (var child in tabBookmark.ChildBookmarks.Values)
+				child.IsRoot = true;
+		}
+
+		private void Refresh(Call call)
+		{
+			Refresh();
+		}
+
+		/*private void Reset(Call call)
+		{
+			foreach (TabBookmarkItem item in SelectedItems)
 			{
-				Tab = tab;
+				SelectItem(item);
 			}
+		}*/
 
-			public override void Load(Call call, TabModel model)
-			{
-				Tab.Bookmarks.Load(call, true);
-
-				model.AddData(Tab.Bookmarks.Items);
-			}
-
-			public override void LoadUI(Call call, TabModel model)
-			{
-				var toolbar = new Toolbar();
-				toolbar.ButtonRefresh.Action = Refresh;
-				//toolbar.ButtonReset.Action = Reset;
-				toolbar.ButtonDeleteAll.Action = DeleteAll;
-				model.AddObject(toolbar);
-
-				if (Tab.Bookmarks.NewBookmark != null)
-				{
-					SelectItem(Tab.Bookmarks.NewBookmark);
-					Tab.Bookmarks.NewBookmark = null;
-				}
-			}
-
-			public override void GetBookmark(TabBookmark tabBookmark)
-			{
-				base.GetBookmark(tabBookmark);
-
-				foreach (var child in tabBookmark.ChildBookmarks.Values)
-					child.IsRoot = true;
-			}
-
-			private void Refresh(Call call)
-			{
-				Refresh();
-			}
-
-			/*private void Reset(Call call)
-			{
-				foreach (TabBookmarkItem item in SelectedItems)
-				{
-					SelectItem(item);
-				}
-			}*/
-
-			private void DeleteAll(Call call)
-			{
-				Tab.Bookmarks.DeleteAll();
-				Tab.Bookmarks.Load(call, true);
-			}
+		private void DeleteAll(Call call)
+		{
+			Tab.Bookmarks.DeleteAll();
+			Tab.Bookmarks.Load(call, true);
 		}
 	}
 }

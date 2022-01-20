@@ -6,142 +6,141 @@ using Avalonia.Interactivity;
 using Avalonia.Styling;
 using System;
 
-namespace Atlas.UI.Avalonia
+namespace Atlas.UI.Avalonia;
+
+public class DataGridContextMenu : ContextMenu, IStyleable, IDisposable
 {
-	public class DataGridContextMenu : ContextMenu, IStyleable, IDisposable
+	Type IStyleable.StyleKey => typeof(ContextMenu);
+
+	private const int MaxCellValueLength = 10000;
+
+	public DataGrid DataGrid;
+	public DataGridPropertyTextColumn Column;
+	public DataGridCell Cell;
+
+	public DataGridContextMenu(DataGrid dataGrid)
 	{
-		Type IStyleable.StyleKey => typeof(ContextMenu);
+		DataGrid = dataGrid;
 
-		private const int MaxCellValueLength = 10000;
+		Initialize();
+	}
 
-		public DataGrid DataGrid;
-		public DataGridPropertyTextColumn Column;
-		public DataGridCell Cell;
+	private void Initialize()
+	{
+		var list = new AvaloniaList<object>();
 
-		public DataGridContextMenu(DataGrid dataGrid)
+		var menuItemCopyCellContents = new TabMenuItem("Copy - _Cell Contents");
+		menuItemCopyCellContents.Click += MenuItemCopyCellContents_Click;
+		list.Add(menuItemCopyCellContents);
+
+		list.Add(new Separator());
+
+		var menuItemCopyColumn = new TabMenuItem("Copy - Co_lumn");
+		menuItemCopyColumn.Click += MenuItemCopyColumn_Click;
+		list.Add(menuItemCopyColumn);
+
+		var menuItemCopyRow = new TabMenuItem("Copy - _Row");
+		menuItemCopyRow.Click += MenuItemCopyRow_Click;
+		list.Add(menuItemCopyRow);
+
+		list.Add(new Separator());
+
+		var menuItemCopySelected = new TabMenuItem("Copy - _Selected");
+		menuItemCopySelected.Click += MenuItemCopySelected_Click;
+		list.Add(menuItemCopySelected);
+
+		var menuItemCopySelectedCsv = new TabMenuItem("Copy - Selected - CSV");
+		menuItemCopySelectedCsv.Click += MenuItemCopySelectedCsv_Click;
+		list.Add(menuItemCopySelectedCsv);
+
+		list.Add(new Separator());
+
+		var menuItemCopyDataGrid = new TabMenuItem("Copy - _DataGrid");
+		menuItemCopyDataGrid.Click += MenuItemCopyDataGrid_Click;
+		list.Add(menuItemCopyDataGrid);
+
+		var menuItemCopyDataGridCsv = new TabMenuItem("Copy - DataGrid - CS_V");
+		menuItemCopyDataGridCsv.Click += MenuItemCopyDataGridCsv_Click;
+		list.Add(menuItemCopyDataGridCsv);
+
+		Items = list;
+
+		DataGrid.CellPointerPressed += DataGrid_CellPointerPressed;
+	}
+
+	private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
+	{
+		Cell = e.Cell;
+		Column = e.Column as DataGridPropertyTextColumn;
+	}
+
+	private async void MenuItemCopyDataGrid_Click(object sender, RoutedEventArgs e)
+	{
+		string text = DataGrid.ToStringTable();
+		if (text != null)
+			await ClipBoardUtils.SetTextAsync(text);
+	}
+
+	private async void MenuItemCopyCellContents_Click(object sender, RoutedEventArgs e)
+	{
+		if (Column == null)
+			return;
+
+		object content = Cell.Content;
+		if (content is Border border)
+			content = border.Child;
+
+		if (content is TextBlock textBlock)
 		{
-			DataGrid = dataGrid;
-
-			Initialize();
+			string value = FormatValueConverter.ObjectToString(Column.PropertyInfo.GetValue(textBlock.DataContext), MaxCellValueLength, Column.FormatConverter.IsFormatted);
+			await ClipBoardUtils.SetTextAsync(value);
 		}
+	}
 
-		private void Initialize()
+	private async void MenuItemCopyColumn_Click(object sender, RoutedEventArgs e)
+	{
+		if (Column is DataGridPropertyTextColumn column)
 		{
-			var list = new AvaloniaList<object>();
-
-			var menuItemCopyCellContents = new TabMenuItem("Copy - _Cell Contents");
-			menuItemCopyCellContents.Click += MenuItemCopyCellContents_Click;
-			list.Add(menuItemCopyCellContents);
-
-			list.Add(new Separator());
-
-			var menuItemCopyColumn = new TabMenuItem("Copy - Co_lumn");
-			menuItemCopyColumn.Click += MenuItemCopyColumn_Click;
-			list.Add(menuItemCopyColumn);
-
-			var menuItemCopyRow = new TabMenuItem("Copy - _Row");
-			menuItemCopyRow.Click += MenuItemCopyRow_Click;
-			list.Add(menuItemCopyRow);
-
-			list.Add(new Separator());
-
-			var menuItemCopySelected = new TabMenuItem("Copy - _Selected");
-			menuItemCopySelected.Click += MenuItemCopySelected_Click;
-			list.Add(menuItemCopySelected);
-
-			var menuItemCopySelectedCsv = new TabMenuItem("Copy - Selected - CSV");
-			menuItemCopySelectedCsv.Click += MenuItemCopySelectedCsv_Click;
-			list.Add(menuItemCopySelectedCsv);
-
-			list.Add(new Separator());
-
-			var menuItemCopyDataGrid = new TabMenuItem("Copy - _DataGrid");
-			menuItemCopyDataGrid.Click += MenuItemCopyDataGrid_Click;
-			list.Add(menuItemCopyDataGrid);
-
-			var menuItemCopyDataGridCsv = new TabMenuItem("Copy - DataGrid - CS_V");
-			menuItemCopyDataGridCsv.Click += MenuItemCopyDataGridCsv_Click;
-			list.Add(menuItemCopyDataGridCsv);
-
-			Items = list;
-
-			DataGrid.CellPointerPressed += DataGrid_CellPointerPressed;
-		}
-
-		private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
-		{
-			Cell = e.Cell;
-			Column = e.Column as DataGridPropertyTextColumn;
-		}
-
-		private async void MenuItemCopyDataGrid_Click(object sender, RoutedEventArgs e)
-		{
-			string text = DataGrid.ToStringTable();
+			string text = DataGrid.ColumnToStringTable(column);
 			if (text != null)
 				await ClipBoardUtils.SetTextAsync(text);
 		}
+	}
 
-		private async void MenuItemCopyCellContents_Click(object sender, RoutedEventArgs e)
-		{
-			if (Column == null)
-				return;
+	private async void MenuItemCopyRow_Click(object sender, RoutedEventArgs e)
+	{
+		string text = DataGrid.RowToString(Cell.DataContext);
+		if (text != null)
+			await ClipBoardUtils.SetTextAsync(text);
+	}
 
-			object content = Cell.Content;
-			if (content is Border border)
-				content = border.Child;
+	private async void MenuItemCopySelected_Click(object sender, RoutedEventArgs e)
+	{
+		string text = DataGrid.SelectedToString();
+		if (text != null)
+			await ClipBoardUtils.SetTextAsync(text);
+	}
 
-			if (content is TextBlock textBlock)
-			{
-				string value = FormatValueConverter.ObjectToString(Column.PropertyInfo.GetValue(textBlock.DataContext), MaxCellValueLength, Column.FormatConverter.IsFormatted);
-				await ClipBoardUtils.SetTextAsync(value);
-			}
-		}
+	private async void MenuItemCopySelectedCsv_Click(object sender, RoutedEventArgs e)
+	{
+		string text = DataGrid.SelectedToCsv();
+		if (text != null)
+			await ClipBoardUtils.SetTextAsync(text);
+	}
 
-		private async void MenuItemCopyColumn_Click(object sender, RoutedEventArgs e)
-		{
-			if (Column is DataGridPropertyTextColumn column)
-			{
-				string text = DataGrid.ColumnToStringTable(column);
-				if (text != null)
-					await ClipBoardUtils.SetTextAsync(text);
-			}
-		}
+	private async void MenuItemCopyDataGridCsv_Click(object sender, RoutedEventArgs e)
+	{
+		string text = DataGrid.ToCsv();
+		if (text != null)
+			await ClipBoardUtils.SetTextAsync(text);
+	}
 
-		private async void MenuItemCopyRow_Click(object sender, RoutedEventArgs e)
-		{
-			string text = DataGrid.RowToString(Cell.DataContext);
-			if (text != null)
-				await ClipBoardUtils.SetTextAsync(text);
-		}
-
-		private async void MenuItemCopySelected_Click(object sender, RoutedEventArgs e)
-		{
-			string text = DataGrid.SelectedToString();
-			if (text != null)
-				await ClipBoardUtils.SetTextAsync(text);
-		}
-
-		private async void MenuItemCopySelectedCsv_Click(object sender, RoutedEventArgs e)
-		{
-			string text = DataGrid.SelectedToCsv();
-			if (text != null)
-				await ClipBoardUtils.SetTextAsync(text);
-		}
-
-		private async void MenuItemCopyDataGridCsv_Click(object sender, RoutedEventArgs e)
-		{
-			string text = DataGrid.ToCsv();
-			if (text != null)
-				await ClipBoardUtils.SetTextAsync(text);
-		}
-
-		public void Dispose()
-		{
-			DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
-			DataGrid = null;
-			Column = null;
-			Cell = null;
-			Items = null;
-		}
+	public void Dispose()
+	{
+		DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
+		DataGrid = null;
+		Column = null;
+		Cell = null;
+		Items = null;
 	}
 }

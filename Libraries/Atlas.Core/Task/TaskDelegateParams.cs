@@ -1,42 +1,41 @@
 using System;
 
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public class TaskDelegateParams : TaskCreator
 {
-	public class TaskDelegateParams : TaskCreator
+	public delegate void CallActionParams(Call call, params object[] objects);
+
+	public Call Call;
+	public CallActionParams CallAction;
+	public object[] Objects;
+
+	public override string ToString() => Label;
+
+	public TaskDelegateParams(Call call, string label, CallActionParams callAction, bool useTask, string description, object[] objects)
 	{
-		public delegate void CallActionParams(Call call, params object[] objects);
+		Call = call;
+		Label = label;
+		CallAction = callAction;
+		UseTask = useTask;
+		Description = description;
+		Objects = objects;
+	}
 
-		public Call Call;
-		public CallActionParams CallAction;
-		public object[] Objects;
+	protected override Action CreateAction(Call call)
+	{
+		return () => InvokeAction(call);
+	}
 
-		public override string ToString() => Label;
-
-		public TaskDelegateParams(Call call, string label, CallActionParams callAction, bool useTask, string description, object[] objects)
+	private void InvokeAction(Call call)
+	{
+		try
 		{
-			Call = call;
-			Label = label;
-			CallAction = callAction;
-			UseTask = useTask;
-			Description = description;
-			Objects = objects;
+			CallAction.Invoke(call, Objects);
 		}
-
-		protected override Action CreateAction(Call call)
+		catch (Exception e)
 		{
-			return () => InvokeAction(call);
-		}
-
-		private void InvokeAction(Call call)
-		{
-			try
-			{
-				CallAction.Invoke(call, Objects);
-			}
-			catch (Exception e)
-			{
-				call.Log.Add(e);
-			}
+			call.Log.Add(e);
 		}
 	}
 }

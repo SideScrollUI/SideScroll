@@ -4,115 +4,114 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace Atlas.Serialize.Test
+namespace Atlas.Serialize.Test;
+
+[Category("SerializeIL")]
+public class SerializeIL : TestSerializeBase
 {
-	[Category("SerializeIL")]
-	public class SerializeIL : TestSerializeBase
+	[Test, Description("Serialize Lazy Base")]
+	public void ILMethod()
 	{
-		[Test, Description("Serialize Lazy Base")]
-		public void ILMethod()
-		{
-			var lazyClass = new LazyClass();
+		var lazyClass = new LazyClass();
 
-			object obj = Activator.CreateInstance(lazyClass.NewType, true);
-			FieldInfo fieldInfo = lazyClass.NewType.GetField("typeRef");
-			fieldInfo.SetValue(obj, new TypeRef());
+		object obj = Activator.CreateInstance(lazyClass.NewType, true);
+		FieldInfo fieldInfo = lazyClass.NewType.GetField("typeRef");
+		fieldInfo.SetValue(obj, new TypeRef());
 
-			PropertyInfo propertyInfo = lazyClass.NewType.GetProperty("prop");
-			object result = propertyInfo.GetValue(obj);
-		}
+		PropertyInfo propertyInfo = lazyClass.NewType.GetProperty("prop");
+		object result = propertyInfo.GetValue(obj);
+	}
+}
+
+public class TypeRef
+{
+	public int Load()
+	{
+		return 2;
+	}
+}
+
+public class PropertyRef
+{
+	public TypeRepo TypeRepo;
+	public PropertyBuilder PropertyBuilder;
+	public FieldBuilder FieldBuilderTypeRef;
+}
+
+public class LazyClass
+{
+	public Type NewType;
+	public Dictionary<PropertyInfo, PropertyRef> PropertyRefs = new();
+
+	public LazyClass()
+	{
+		NewType = CompileResultType();
 	}
 
-	public class TypeRef
+	public Type CompileResultType()
 	{
-		public int Load()
-		{
-			return 2;
-		}
+		TypeBuilder typeBuilder = GetTypeBuilder();
+		ConstructorBuilder constructor = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
+
+		CreateProperty(typeBuilder);
+
+		TypeInfo objectType = typeBuilder.CreateTypeInfo();
+		return objectType;
 	}
 
-	public class PropertyRef
+	private TypeBuilder GetTypeBuilder()
 	{
-		public TypeRepo TypeRepo;
-		public PropertyBuilder PropertyBuilder;
-		public FieldBuilder FieldBuilderTypeRef;
+		string typeSignature = "LoaderType";
+		AssemblyName assemblyName = new(typeSignature);
+		AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+		ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("Lazy");
+		TypeBuilder typeBuilder = moduleBuilder.DefineType(typeSignature,
+				TypeAttributes.Public |
+				TypeAttributes.Class |
+				TypeAttributes.AutoClass |
+				TypeAttributes.AnsiClass |
+				TypeAttributes.BeforeFieldInit |
+				TypeAttributes.AutoLayout,
+				null);
+		return typeBuilder;
 	}
 
-	public class LazyClass
+	private void CreateProperty(TypeBuilder typeBuilder)
 	{
-		public Type NewType;
-		public Dictionary<PropertyInfo, PropertyRef> PropertyRefs = new();
+		string propertyName = "prop";
+		Type propertyType = typeof(int);
 
-		public LazyClass()
-		{
-			NewType = CompileResultType();
-		}
+		FieldBuilder fieldBuilderValue = typeBuilder.DefineField("_" + propertyName, propertyType, FieldAttributes.Private);
+		FieldBuilder fieldBuilderTypeRef = typeBuilder.DefineField("typeRef", typeof(TypeRef), FieldAttributes.Public);
+		MethodInfo methodInfoLoad = typeof(TypeRef).GetMethod(nameof(TypeRef.Load));
 
-		public Type CompileResultType()
-		{
-			TypeBuilder typeBuilder = GetTypeBuilder();
-			ConstructorBuilder constructor = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
+		PropertyBuilder propertyBuilder = typeBuilder.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
 
-			CreateProperty(typeBuilder);
+		// GET
 
-			TypeInfo objectType = typeBuilder.CreateTypeInfo();
-			return objectType;
-		}
+		MethodBuilder getPropertyMethodBuilder = typeBuilder.DefineMethod("get_" + propertyName, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, propertyType, Type.EmptyTypes);
+		ILGenerator getIl = getPropertyMethodBuilder.GetILGenerator();
 
-		private TypeBuilder GetTypeBuilder()
-		{
-			string typeSignature = "LoaderType";
-			AssemblyName assemblyName = new(typeSignature);
-			AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-			ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("Lazy");
-			TypeBuilder typeBuilder = moduleBuilder.DefineType(typeSignature,
-					TypeAttributes.Public |
-					TypeAttributes.Class |
-					TypeAttributes.AutoClass |
-					TypeAttributes.AnsiClass |
-					TypeAttributes.BeforeFieldInit |
-					TypeAttributes.AutoLayout,
-					null);
-			return typeBuilder;
-		}
+		// load value into field
+		//getIl.Emit(OpCodes.Ldarg_0); // load this
 
-		private void CreateProperty(TypeBuilder typeBuilder)
-		{
-			string propertyName = "prop";
-			Type propertyType = typeof(int);
+		//getIl.Emit(OpCodes.Ldnull); // load 1 (true)
 
-			FieldBuilder fieldBuilderValue = typeBuilder.DefineField("_" + propertyName, propertyType, FieldAttributes.Private);
-			FieldBuilder fieldBuilderTypeRef = typeBuilder.DefineField("typeRef", typeof(TypeRef), FieldAttributes.Public);
-			MethodInfo methodInfoLoad = typeof(TypeRef).GetMethod(nameof(TypeRef.Load));
+		getIl.Emit(OpCodes.Ldarg_0); // load this
+		getIl.Emit(OpCodes.Ldfld, fieldBuilderTypeRef);
+		//getIl.Emit(OpCodes.Ldarg_1);
+		getIl.Emit(OpCodes.Call, methodInfoLoad);
+		getIl.Emit(OpCodes.Ret);
+		//getIl.Emit(OpCodes.Pop);
 
-			PropertyBuilder propertyBuilder = typeBuilder.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
+		/*getIl.Emit(OpCodes.Stfld, fieldBuilderValue); // save value to field
 
-			// GET
+		// todo: return value from inner property
 
-			MethodBuilder getPropertyMethodBuilder = typeBuilder.DefineMethod("get_" + propertyName, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, propertyType, Type.EmptyTypes);
-			ILGenerator getIl = getPropertyMethodBuilder.GetILGenerator();
+		getIl.Emit(OpCodes.Ldarg_0); // load this
+		getIl.Emit(OpCodes.Ldfld, fieldBuilderValue);
+		getIl.Emit(OpCodes.Ret);*/
 
-			// load value into field
-			//getIl.Emit(OpCodes.Ldarg_0); // load this
-
-			//getIl.Emit(OpCodes.Ldnull); // load 1 (true)
-
-			getIl.Emit(OpCodes.Ldarg_0); // load this
-			getIl.Emit(OpCodes.Ldfld, fieldBuilderTypeRef);
-			//getIl.Emit(OpCodes.Ldarg_1);
-			getIl.Emit(OpCodes.Call, methodInfoLoad);
-			getIl.Emit(OpCodes.Ret);
-			//getIl.Emit(OpCodes.Pop);
-
-			/*getIl.Emit(OpCodes.Stfld, fieldBuilderValue); // save value to field
-
-			// todo: return value from inner property
-
-			getIl.Emit(OpCodes.Ldarg_0); // load this
-			getIl.Emit(OpCodes.Ldfld, fieldBuilderValue);
-			getIl.Emit(OpCodes.Ret);*/
-
-			propertyBuilder.SetGetMethod(getPropertyMethodBuilder);
-		}
+		propertyBuilder.SetGetMethod(getPropertyMethodBuilder);
 	}
 }

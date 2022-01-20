@@ -1,74 +1,73 @@
 using System;
 using System.IO;
 
-namespace Atlas.Serialize
+namespace Atlas.Serialize;
+
+public class TypeRepoTimeSpan : TypeRepo, IDisposable
 {
-	public class TypeRepoTimeSpan : TypeRepo, IDisposable
+	public class Creator : IRepoCreator
 	{
-		public class Creator : IRepoCreator
+		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+			if (CanAssign(typeSchema.Type))
+				return new TypeRepoTimeSpan(serializer, typeSchema);
+			return null;
+		}
+	}
+
+	public TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) :
+		base(serializer, typeSchema)
+	{
+	}
+
+	public static bool CanAssign(Type type)
+	{
+		return type == typeof(TimeSpan);
+	}
+
+	public override void SaveObject(BinaryWriter writer, object obj)
+	{
+		TimeSpan timeSpan = (TimeSpan)obj;
+		writer.Write(timeSpan.Ticks);
+	}
+
+	protected override object CreateObject(int objectIndex)
+	{
+		long position = Reader.BaseStream.Position;
+		Reader.BaseStream.Position = ObjectOffsets[objectIndex];
+
+		object obj = null;
+		try
+		{
+			if (CanAssign(LoadableType))
 			{
-				if (CanAssign(typeSchema.Type))
-					return new TypeRepoTimeSpan(serializer, typeSchema);
-				return null;
+				long ticks = Reader.ReadInt64();
+				obj = new TimeSpan(ticks);
+			}
+			else
+			{
+				throw new Exception("Unhandled primitive type");
 			}
 		}
-
-		public TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) :
-			base(serializer, typeSchema)
+		catch (Exception)
 		{
+			//log.Add(e);
 		}
+		Reader.BaseStream.Position = position;
 
-		public static bool CanAssign(Type type)
-		{
-			return type == typeof(TimeSpan);
-		}
+		ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
+		return obj;
+	}
 
-		public override void SaveObject(BinaryWriter writer, object obj)
-		{
-			TimeSpan timeSpan = (TimeSpan)obj;
-			writer.Write(timeSpan.Ticks);
-		}
+	public override object LoadObject()
+	{
+		object obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
+		return obj;
+	}
 
-		protected override object CreateObject(int objectIndex)
-		{
-			long position = Reader.BaseStream.Position;
-			Reader.BaseStream.Position = ObjectOffsets[objectIndex];
-
-			object obj = null;
-			try
-			{
-				if (CanAssign(LoadableType))
-				{
-					long ticks = Reader.ReadInt64();
-					obj = new TimeSpan(ticks);
-				}
-				else
-				{
-					throw new Exception("Unhandled primitive type");
-				}
-			}
-			catch (Exception)
-			{
-				//log.Add(e);
-			}
-			Reader.BaseStream.Position = position;
-
-			ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
-			return obj;
-		}
-
-		public override object LoadObject()
-		{
-			object obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
-			return obj;
-		}
-
-		// not called, it's a struct and a value
-		public override void Clone(object source, object dest)
-		{
-			//dest = new DateTime(((DateTime)source).Ticks, ((DateTime)source).Kind);
-		}
+	// not called, it's a struct and a value
+	public override void Clone(object source, object dest)
+	{
+		//dest = new DateTime(((DateTime)source).Ticks, ((DateTime)source).Kind);
 	}
 }

@@ -4,63 +4,62 @@ using Avalonia;
 using Avalonia.Controls;
 using System.Collections.Generic;
 
-namespace Atlas.UI.Avalonia.Controls
+namespace Atlas.UI.Avalonia.Controls;
+
+public class TabControlActions : UserControl
 {
-	public class TabControlActions : UserControl
+	public TabInstance TabInstance;
+	public TabModel TabModel;
+	public ItemCollection<TaskCreator> TaskItems;
+
+	public bool GridInitialized { get; private set; }
+
+	private readonly Dictionary<Button, TaskCreator> _taskCreators = new();
+
+	public TabControlActions(TabInstance tabInstance, TabModel tabModel, ItemCollection<TaskCreator> taskItems)
 	{
-		public TabInstance TabInstance;
-		public TabModel TabModel;
-		public ItemCollection<TaskCreator> TaskItems;
+		TabInstance = tabInstance;
+		TabModel = tabModel;
+		TaskItems = taskItems;
 
-		public bool GridInitialized { get; private set; }
+		InitializeControls();
+	}
 
-		private readonly Dictionary<Button, TaskCreator> _taskCreators = new();
-
-		public TabControlActions(TabInstance tabInstance, TabModel tabModel, ItemCollection<TaskCreator> taskItems)
+	private void InitializeControls()
+	{
+		var containerGrid = new Grid()
 		{
-			TabInstance = tabInstance;
-			TabModel = tabModel;
-			TaskItems = taskItems;
+			ColumnDefinitions = new ColumnDefinitions("Auto,*"),
+			RowDefinitions = new RowDefinitions("Auto"),
+		};
 
-			InitializeControls();
-		}
-
-		private void InitializeControls()
+		int rowIndex = 0;
+		foreach (TaskCreator taskCreator in TabModel.Actions)
 		{
-			var containerGrid = new Grid()
+			var rowDefinition = new RowDefinition()
 			{
-				ColumnDefinitions = new ColumnDefinitions("Auto,*"),
-				RowDefinitions = new RowDefinitions("Auto"),
+				Height = new GridLength(1, GridUnitType.Auto),
 			};
+			containerGrid.RowDefinitions.Add(rowDefinition);
 
-			int rowIndex = 0;
-			foreach (TaskCreator taskCreator in TabModel.Actions)
+			var button = new TabControlButton(taskCreator.Label)
 			{
-				var rowDefinition = new RowDefinition()
-				{
-					Height = new GridLength(1, GridUnitType.Auto),
-				};
-				containerGrid.RowDefinitions.Add(rowDefinition);
-
-				var button = new TabControlButton(taskCreator.Label)
-				{
-					Margin = new Thickness(4, 2),
-				};
-				button.Click += Button_Click;
-				_taskCreators[button] = taskCreator;
-				Grid.SetRow(button, rowIndex++);
-				containerGrid.Children.Add(button);
-			}
-
-			Content = containerGrid;
+				Margin = new Thickness(4, 2),
+			};
+			button.Click += Button_Click;
+			_taskCreators[button] = taskCreator;
+			Grid.SetRow(button, rowIndex++);
+			containerGrid.Children.Add(button);
 		}
 
-		private void Button_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-		{
-			Button button = (Button)sender;
-			TaskCreator taskCreator = _taskCreators[button];
-			TabInstance.StartTask(taskCreator, taskCreator.ShowTask);
-		}
+		Content = containerGrid;
+	}
+
+	private void Button_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	{
+		Button button = (Button)sender;
+		TaskCreator taskCreator = _taskCreators[button];
+		TabInstance.StartTask(taskCreator, taskCreator.ShowTask);
 	}
 }
 

@@ -9,17 +9,17 @@ using Atlas.Tabs.Test.Objects;
 using Atlas.Tabs.Tools;
 using System.Collections.Generic;
 
-namespace Atlas.Tabs.Test
-{
-	public class TabTest : ITab
-	{
-		public TabInstance Create() => new Instance();
+namespace Atlas.Tabs.Test;
 
-		public class Instance : TabInstance
+public class TabTest : ITab
+{
+	public TabInstance Create() => new Instance();
+
+	public class Instance : TabInstance
+	{
+		public override void Load(Call call, TabModel model)
 		{
-			public override void Load(Call call, TabModel model)
-			{
-				model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>()
 				{
 					new("Sample", new TabSample()),
 
@@ -44,7 +44,6 @@ namespace Atlas.Tabs.Test
 					new("Icons", new TabIcons()),
 					new("Tools", new TabTools()),
 				};
-			}
 		}
 	}
 }

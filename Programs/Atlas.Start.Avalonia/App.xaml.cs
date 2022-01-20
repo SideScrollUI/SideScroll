@@ -2,23 +2,22 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace Atlas.Start.Avalonia
+namespace Atlas.Start.Avalonia;
+
+public class App : Application
 {
-	public class App : Application
+	public override void Initialize()
 	{
-		public override void Initialize()
-		{
-			AvaloniaXamlLoader.Load(this);
-		}
+		AvaloniaXamlLoader.Load(this);
+	}
 
-		public override void OnFrameworkInitializationCompleted()
-		{
-			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
-				desktopLifetime.MainWindow = new MainWindow();
-			//else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewLifetime)
-			//	singleViewLifetime.MainView = new MainView();
+	public override void OnFrameworkInitializationCompleted()
+	{
+		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+			desktopLifetime.MainWindow = new MainWindow();
+		//else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewLifetime)
+		//	singleViewLifetime.MainView = new MainView();
 
-			base.OnFrameworkInitializationCompleted();
-		}
+		base.OnFrameworkInitializationCompleted();
 	}
 }

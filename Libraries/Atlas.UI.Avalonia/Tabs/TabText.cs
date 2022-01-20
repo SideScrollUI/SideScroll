@@ -5,45 +5,44 @@ using Avalonia.Media;
 using System;
 using System.Collections.Generic;
 
-namespace Atlas.UI.Avalonia.Tabs
-{
-	public class TabText : ITab
-	{
-		public string Text;
+namespace Atlas.UI.Avalonia.Tabs;
 
-		public TabText(string text)
+public class TabText : ITab
+{
+	public string Text;
+
+	public TabText(string text)
+	{
+		Text = text;
+	}
+
+	public TabInstance Create() => new Instance(this);
+
+	public class Instance : TabInstance
+	{
+		public TabText Tab;
+
+		public Instance(TabText tab)
 		{
-			Text = text;
+			Tab = tab;
 		}
 
-		public TabInstance Create() => new Instance(this);
-
-		public class Instance : TabInstance
+		public override void LoadUI(Call call, TabModel model)
 		{
-			public TabText Tab;
-
-			public Instance(TabText tab)
+			// No Json highlighting or search control
+			/*var textBox = new TabControlTextBox()
 			{
-				Tab = tab;
-			}
+				TextWrapping = TextWrapping.Wrap,
+				AcceptsReturn = true,
+			};
+			textBox.SetFormattedJson(Tab.Text);
+			model.AddObject(textBox, true);*/
 
-			public override void LoadUI(Call call, TabModel model)
-			{
-				// No Json highlighting or search control
-				/*var textBox = new TabControlTextBox()
-				{
-					TextWrapping = TextWrapping.Wrap,
-					AcceptsReturn = true,
-				};
-				textBox.SetFormattedJson(Tab.Text);
-				model.AddObject(textBox, true);*/
+			// wordwrap doesn't work
+			var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
+			tabAvaloniaEdit.SetFormattedJson(Tab.Text);
 
-				// wordwrap doesn't work
-				var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
-				tabAvaloniaEdit.SetFormattedJson(Tab.Text);
-
-				model.AddObject(tabAvaloniaEdit, true);
-			}
+			model.AddObject(tabAvaloniaEdit, true);
 		}
 	}
 }

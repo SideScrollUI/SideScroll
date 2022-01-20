@@ -6,60 +6,59 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using System;
 
-namespace Atlas.UI.Avalonia.Controls
+namespace Atlas.UI.Avalonia.Controls;
+
+// ReadOnly string control with wordwrap, scrolling, and clipboard copy
+public class TabControlTextBlock : Border, IStyleable, ILayoutable
 {
-	// ReadOnly string control with wordwrap, scrolling, and clipboard copy
-	public class TabControlTextBlock : Border, IStyleable, ILayoutable
+	public string Text { get; set; }
+
+	public TextBlock TextBlock { get; set; }
+
+	Type IStyleable.StyleKey => typeof(TextBlock);
+
+	public TabControlTextBlock(string text)
 	{
-		public string Text { get; set; }
+		Text = text;
 
-		public TextBlock TextBlock { get; set; }
+		InitializeComponent();
+	}
 
-		Type IStyleable.StyleKey => typeof(TextBlock);
+	private void InitializeComponent()
+	{
+		Background = Theme.TextBackgroundBrush;
+		BorderBrush = Brushes.Black;
+		BorderThickness = new Thickness(1);
+		HorizontalAlignment = HorizontalAlignment.Stretch;
+		VerticalAlignment = VerticalAlignment.Top;
+		MinWidth = 50;
+		MaxWidth = TabControlParams.ControlMaxWidth;
+		Margin = new Thickness(6);
+		Padding = new Thickness(6, 3);
 
-		public TabControlTextBlock(string text)
+		TextBlock = new TextBlock()
 		{
-			Text = text;
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Stretch,
+			Foreground = Theme.TitleForeground,
+			TextWrapping = TextWrapping.Wrap,
+			FontSize = 14,
+			Text = Text,
+		};
+		AvaloniaUtils.AddContextMenu(TextBlock);
 
-			InitializeComponent();
-		}
-
-		private void InitializeComponent()
+		var scrollViewer = new ScrollViewer()
 		{
-			Background = Theme.TextBackgroundBrush;
-			BorderBrush = Brushes.Black;
-			BorderThickness = new Thickness(1);
-			HorizontalAlignment = HorizontalAlignment.Stretch;
-			VerticalAlignment = VerticalAlignment.Top;
-			MinWidth = 50;
-			MaxWidth = TabControlParams.ControlMaxWidth;
-			Margin = new Thickness(6);
-			Padding = new Thickness(6, 3);
+			Content = TextBlock,
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Stretch,
+			HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+			VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+			BorderThickness = new Thickness(2), // doesn't work
+			BorderBrush = Brushes.Black,
+			Padding = new Thickness(10),
+		};
 
-			TextBlock = new TextBlock()
-			{
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
-				Foreground = Theme.TitleForeground,
-				TextWrapping = TextWrapping.Wrap,
-				FontSize = 14,
-				Text = Text,
-			};
-			AvaloniaUtils.AddContextMenu(TextBlock);
-
-			var scrollViewer = new ScrollViewer()
-			{
-				Content = TextBlock,
-				HorizontalAlignment = HorizontalAlignment.Stretch,
-				VerticalAlignment = VerticalAlignment.Stretch,
-				HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
-				VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-				BorderThickness = new Thickness(2), // doesn't work
-				BorderBrush = Brushes.Black,
-				Padding = new Thickness(10),
-			};
-
-			Child = scrollViewer;
-		}
+		Child = scrollViewer;
 	}
 }

@@ -2,69 +2,68 @@ using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Serialize;
 
-namespace Atlas.Tabs.Test
-{
-	public class TabTestParamsCollection : ITab
-	{
-		public TabInstance Create() => new Instance();
+namespace Atlas.Tabs.Test;
 
-		public class Toolbar : TabToolbar
+public class TabTestParamsCollection : ITab
+{
+	public TabInstance Create() => new Instance();
+
+	public class Toolbar : TabToolbar
+	{
+		public ToolButton ButtonNew { get; set; } = new ToolButton("New", Icons.Streams.BlankDocument);
+		public ToolButton ButtonSave { get; set; } = new ToolButton("Save", Icons.Streams.Save);
+	}
+
+	public class Instance : TabInstance
+	{
+		private const string DataKey = "Params";
+
+		private ItemCollection<ParamTestItem> _items;
+		private ParamTestItem _paramTestItem;
+		private DataRepoInstance<ParamTestItem> _dataRepoParams;
+
+		public override void Load(Call call, TabModel model)
 		{
-			public ToolButton ButtonNew { get; set; } = new ToolButton("New", Icons.Streams.BlankDocument);
-			public ToolButton ButtonSave { get; set; } = new ToolButton("Save", Icons.Streams.Save);
+			LoadSavedItems(call, model);
+
+			/*model.Actions = new List<TaskCreator>()
+			{
+				new TaskDelegate("Add", Add),
+			};*/
+
+			_paramTestItem = LoadData<ParamTestItem>(DataKey);
+			model.AddObject(_paramTestItem);
+
+			var toolbar = new Toolbar();
+			toolbar.ButtonNew.Action = New;
+			toolbar.ButtonSave.Action = Save;
+			model.AddObject(toolbar);
 		}
 
-		public class Instance : TabInstance
+		private void LoadSavedItems(Call call, TabModel model)
 		{
-			private const string DataKey = "Params";
+			_dataRepoParams = DataApp.Open<ParamTestItem>("CollectionTest");
+			DataRepoInstance = _dataRepoParams;
 
-			private ItemCollection<ParamTestItem> _items;
-			private ParamTestItem _paramTestItem;
-			private DataRepoInstance<ParamTestItem> _dataRepoParams;
+			var dataRefs = _dataRepoParams.LoadAllSorted(call);
+			_items = new ItemCollection<ParamTestItem>(dataRefs.Values);
+			model.Items = _items;
+		}
 
-			public override void Load(Call call, TabModel model)
+		private void New(Call call)
+		{
+		}
+
+		private void Save(Call call)
+		{
+			ParamTestItem clone = _paramTestItem.DeepClone(call);
+			_dataRepoParams.Save(call, clone.ToString(), clone);
+			//SaveData(dataKey, paramTestItem);
+			/*var result = new ParamTestResult()
 			{
-				LoadSavedItems(call, model);
-
-				/*model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegate("Add", Add),
-				};*/
-
-				_paramTestItem = LoadData<ParamTestItem>(DataKey);
-				model.AddObject(_paramTestItem);
-
-				var toolbar = new Toolbar();
-				toolbar.ButtonNew.Action = New;
-				toolbar.ButtonSave.Action = Save;
-				model.AddObject(toolbar);
-			}
-
-			private void LoadSavedItems(Call call, TabModel model)
-			{
-				_dataRepoParams = DataApp.Open<ParamTestItem>("CollectionTest");
-				DataRepoInstance = _dataRepoParams;
-
-				var dataRefs = _dataRepoParams.LoadAllSorted(call);
-				_items = new ItemCollection<ParamTestItem>(dataRefs.Values);
-				model.Items = _items;
-			}
-
-			private void New(Call call)
-			{
-			}
-
-			private void Save(Call call)
-			{
-				ParamTestItem clone = _paramTestItem.DeepClone(call);
-				_dataRepoParams.Save(call, clone.ToString(), clone);
-				//SaveData(dataKey, paramTestItem);
-				/*var result = new ParamTestResult()
-				{
-					parameters = clone,
-				};*/
-				_items.Add(clone);
-			}
+				parameters = clone,
+			};*/
+			_items.Add(clone);
 		}
 	}
 }

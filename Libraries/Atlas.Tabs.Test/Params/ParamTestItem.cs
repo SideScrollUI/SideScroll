@@ -3,68 +3,67 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace Atlas.Tabs.Test
+namespace Atlas.Tabs.Test;
+
+[Params]
+public class ParamTestItem
 {
-	[Params]
-	public class ParamTestItem
+	[DataKey]
+	public string Name { get; set; } = "Test";
+
+	[Watermark("Description")]
+	public string Description { get; set; }
+
+	public bool Boolean { get; set; } = true;
+
+	[ReadOnly(true)]
+	public string ReadOnly { get; set; } = "ReadOnly";
+
+	public int Amount { get; set; } = 123;
+	public double Double { get; set; } = 3.14;
+
+	public DateTime DateTime { get; set; } = DateTime.Now;
+
+	public AttributeTargets EnumAttributeTargets { get; set; } = AttributeTargets.Event;
+
+	public static List<ParamListItem> ListItems => new()
 	{
-		[DataKey]
-		public string Name { get; set; } = "Test";
+		new("One", 1),
+		new("Two", 2),
+		new("Three", 3),
+	};
 
-		[Watermark("Description")]
-		public string Description { get; set; }
+	[BindList(nameof(ListItems))]
+	public ParamListItem ListItem { get; set; }
 
-		public bool Boolean { get; set; } = true;
-
-		[ReadOnly(true)]
-		public string ReadOnly { get; set; } = "ReadOnly";
-
-		public int Amount { get; set; } = 123;
-		public double Double { get; set; } = 3.14;
-
-		public DateTime DateTime { get; set; } = DateTime.Now;
-
-		public AttributeTargets EnumAttributeTargets { get; set; } = AttributeTargets.Event;
-
-		public static List<ParamListItem> ListItems => new()
-		{
-			new("One", 1),
-			new("Two", 2),
-			new("Three", 3),
-		};
-
-		[BindList(nameof(ListItems))]
-		public ParamListItem ListItem { get; set; }
-
-		public ParamTestItem()
-		{
-			ListItem = ListItems[1];
-		}
-
-		public override string ToString() => Name;
-
-		/*[ButtonColumn("-")]
-		public void Delete()
-		{
-			instance.Delete(Name);
-		}*/
+	public ParamTestItem()
+	{
+		ListItem = ListItems[1];
 	}
 
-	public class ParamListItem
+	public override string ToString() => Name;
+
+	/*[ButtonColumn("-")]
+	public void Delete()
 	{
-		public string Name { get; set; }
-		public int Value { get; set; }
+		instance.Delete(Name);
+	}*/
+}
 
-		public override string ToString() => Name;
+public class ParamListItem
+{
+	public string Name { get; set; }
+	public int Value { get; set; }
 
-		public ParamListItem()
-		{
-		}
+	public override string ToString() => Name;
 
-		public ParamListItem(string name, int value)
-		{
-			Name = name;
-			Value = value;
-		}
+	public ParamListItem()
+	{
+	}
+
+	public ParamListItem(string name, int value)
+	{
+		Name = name;
+		Value = value;
 	}
 }

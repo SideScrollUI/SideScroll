@@ -1,29 +1,28 @@
 using System;
 using System.Collections.Generic;
 
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public class TaskAction : TaskCreator
 {
-	public class TaskAction : TaskCreator
+	public Action Action;
+
+	public override string ToString() => Label;
+
+	public TaskAction(string label, Action action, bool useTask = false)
 	{
-		public Action Action;
+		Label = label;
+		Action = action;
+		UseTask = useTask;
+	}
 
-		public override string ToString() => Label;
+	protected override Action CreateAction(Call call)
+	{
+		return () => InvokeAction();
+	}
 
-		public TaskAction(string label, Action action, bool useTask = false)
-		{
-			Label = label;
-			Action = action;
-			UseTask = useTask;
-		}
-
-		protected override Action CreateAction(Call call)
-		{
-			return () => InvokeAction();
-		}
-
-		private void InvokeAction()
-		{
-			Action.Invoke();
-		}
+	private void InvokeAction()
+	{
+		Action.Invoke();
 	}
 }

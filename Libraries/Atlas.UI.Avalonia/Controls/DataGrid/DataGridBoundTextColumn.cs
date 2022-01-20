@@ -11,140 +11,139 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace Atlas.UI.Avalonia
+namespace Atlas.UI.Avalonia;
+
+// Rename to DataGridBoundTextDataColumn?
+public class DataGridBoundTextColumn : DataGridTextColumn
 {
-	// Rename to DataGridBoundTextDataColumn?
-	public class DataGridBoundTextColumn : DataGridTextColumn
+	public DataGrid DataGrid;
+	public DataColumn DataColumn;
+	public int MaxDesiredWidth = 500;
+	public bool WordWrap;
+
+	public DataGridBoundTextColumn(DataGrid dataGrid, DataColumn dataColumn)
 	{
-		public DataGrid DataGrid;
-		public DataColumn DataColumn;
-		public int MaxDesiredWidth = 500;
-		public bool WordWrap;
+		DataGrid = dataGrid;
+		DataColumn = dataColumn;
+		//AddHeaderContextMenu();
+	}
 
-		public DataGridBoundTextColumn(DataGrid dataGrid, DataColumn dataColumn)
+	protected override IControl GenerateElement(DataGridCell cell, object dataItem)
+	{
+		cell.MaxHeight = 100; // don't let them have more than a few lines each
+
+		TextBlock textBlock = CreateTextBlock();
+		//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
+		textBlock.TextAlignment = DataGridUtils.GetTextAlignment(DataColumn.DataType);
+		AddTextBlockContextMenu(textBlock);
+		return textBlock;
+	}
+
+	public class TextBlockElement : TextBlock, IStyleable, ILayoutable
+	{
+		Type IStyleable.StyleKey => typeof(TextBlock);
+
+		public double MaxDesiredWidth = 500;
+
+		// can't override DesiredSize
+		protected override Size MeasureCore(Size availableSize)
 		{
-			DataGrid = dataGrid;
-			DataColumn = dataColumn;
-			//AddHeaderContextMenu();
+			double maxDesiredWidth = MaxDesiredWidth;
+			availableSize = new Size(Math.Min(maxDesiredWidth, availableSize.Width), availableSize.Height);
+			Size measured = base.MeasureCore(availableSize);
+			measured = new Size(Math.Min(maxDesiredWidth, measured.Width), measured.Height);
+			return measured;
 		}
+	}
 
-		protected override IControl GenerateElement(DataGridCell cell, object dataItem)
+	protected TextBlock CreateTextBlock()
+	{
+		var textBlockElement = new TextBlockElement()
 		{
-			cell.MaxHeight = 100; // don't let them have more than a few lines each
+			Margin = new Thickness(4),
+			VerticalAlignment = VerticalAlignment.Center,
+			MaxDesiredWidth = this.MaxDesiredWidth,
+			//FontFamily
+			//FontSize
+			//FontStyle
+			//FontWeight
+			//Foreground
+		};
 
-			TextBlock textBlock = CreateTextBlock();
-			//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
-			textBlock.TextAlignment = DataGridUtils.GetTextAlignment(DataColumn.DataType);
-			AddTextBlockContextMenu(textBlock);
-			return textBlock;
+		if (Binding != null)
+		{
+			textBlockElement.Bind(TextBlock.TextProperty, Binding);
 		}
-
-		public class TextBlockElement : TextBlock, IStyleable, ILayoutable
+		if (WordWrap)
 		{
-			Type IStyleable.StyleKey => typeof(TextBlock);
-
-			public double MaxDesiredWidth = 500;
-
-			// can't override DesiredSize
-			protected override Size MeasureCore(Size availableSize)
-			{
-				double maxDesiredWidth = MaxDesiredWidth;
-				availableSize = new Size(Math.Min(maxDesiredWidth, availableSize.Width), availableSize.Height);
-				Size measured = base.MeasureCore(availableSize);
-				measured = new Size(Math.Min(maxDesiredWidth, measured.Width), measured.Height);
-				return measured;
-			}
+			textBlockElement.TextWrapping = TextWrapping.Wrap;
 		}
+		return textBlockElement;
+	}
 
-		protected TextBlock CreateTextBlock()
+	// Adds a context menu to the text block
+	/*private void AddHeaderContextMenu()
+	{
+		ContextMenu contextMenu = new();
+
+		var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+
+		var list = new AvaloniaList<object>();
+
+		MenuItem menuItemCopy = new MenuItem() { Header = "_Copy - Column" };
+		menuItemCopy.Click += delegate
 		{
-			var textBlockElement = new TextBlockElement()
-			{
-				Margin = new Thickness(4),
-				VerticalAlignment = VerticalAlignment.Center,
-				MaxDesiredWidth = this.MaxDesiredWidth,
-				//FontFamily
-				//FontSize
-				//FontStyle
-				//FontWeight
-				//Foreground
-			};
+			ClipBoardUtils.SetTextAsync(ColumnText);
+		};
+		list.Add(menuItemCopy);
 
-			if (Binding != null)
-			{
-				textBlockElement.Bind(TextBlock.TextProperty, Binding);
-			}
-			if (WordWrap)
-			{
-				textBlockElement.TextWrapping = TextWrapping.Wrap;
-			}
-			return textBlockElement;
-		}
+		//list.Add(new Separator());
 
-		// Adds a context menu to the text block
-		/*private void AddHeaderContextMenu()
+		contextMenu.Items = list;
+
+		//this.ContextMenu = contextMenu;
+	}*/
+
+	// Adds a context menu to the text block
+	private void AddTextBlockContextMenu(TextBlock textBlock)
+	{
+		var contextMenu = new ContextMenu();
+
+		var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+
+		var list = new AvaloniaList<object>();
+
+		var menuItemCopy = new TabMenuItem("_Copy - Cell Contents");
+		menuItemCopy.Click += delegate
 		{
-			ContextMenu contextMenu = new();
+			ClipBoardUtils.SetText(textBlock.Text);
+		};
+		list.Add(menuItemCopy);
 
-			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+		list.Add(new Separator());
 
-			var list = new AvaloniaList<object>();
-
-			MenuItem menuItemCopy = new MenuItem() { Header = "_Copy - Column" };
-			menuItemCopy.Click += delegate
-			{
-				ClipBoardUtils.SetTextAsync(ColumnText);
-			};
-			list.Add(menuItemCopy);
-
-			//list.Add(new Separator());
-
-			contextMenu.Items = list;
-
-			//this.ContextMenu = contextMenu;
-		}*/
-
-		// Adds a context menu to the text block
-		private void AddTextBlockContextMenu(TextBlock textBlock)
+		var menuItemCopyDataGrid = new TabMenuItem("Copy - _DataGrid");
+		menuItemCopyDataGrid.Click += delegate
 		{
-			var contextMenu = new ContextMenu();
+			string text = DataGrid.ToStringTable();
+			if (text != null)
+				ClipBoardUtils.SetText(text);
+		};
+		list.Add(menuItemCopyDataGrid);
 
-			var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+		var menuItemCopyDataGridCsv = new TabMenuItem("Copy - DataGrid - C_SV");
+		menuItemCopyDataGridCsv.Click += delegate
+		{
+			string text = DataGrid.ToCsv();
+			if (text != null)
+				ClipBoardUtils.SetText(text);
+		};
+		list.Add(menuItemCopyDataGridCsv);
 
-			var list = new AvaloniaList<object>();
+		//list.Add(new Separator());
 
-			var menuItemCopy = new TabMenuItem("_Copy - Cell Contents");
-			menuItemCopy.Click += delegate
-			{
-				ClipBoardUtils.SetText(textBlock.Text);
-			};
-			list.Add(menuItemCopy);
+		contextMenu.Items = list;
 
-			list.Add(new Separator());
-
-			var menuItemCopyDataGrid = new TabMenuItem("Copy - _DataGrid");
-			menuItemCopyDataGrid.Click += delegate
-			{
-				string text = DataGrid.ToStringTable();
-				if (text != null)
-					ClipBoardUtils.SetText(text);
-			};
-			list.Add(menuItemCopyDataGrid);
-
-			var menuItemCopyDataGridCsv = new TabMenuItem("Copy - DataGrid - C_SV");
-			menuItemCopyDataGridCsv.Click += delegate
-			{
-				string text = DataGrid.ToCsv();
-				if (text != null)
-					ClipBoardUtils.SetText(text);
-			};
-			list.Add(menuItemCopyDataGridCsv);
-
-			//list.Add(new Separator());
-
-			contextMenu.Items = list;
-
-			textBlock.ContextMenu = contextMenu;
-		}
+		textBlock.ContextMenu = contextMenu;
 	}
 }

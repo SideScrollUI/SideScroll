@@ -5,24 +5,23 @@ using Atlas.UI.Avalonia.Charts;
 using Atlas.UI.Avalonia.ScreenCapture;
 using System;
 
-namespace Atlas.Start.Avalonia
+namespace Atlas.Start.Avalonia;
+
+public class MainWindow : BaseWindow
 {
-	public class MainWindow : BaseWindow
+	public MainWindow() : base(new Project(Settings))
 	{
-		public MainWindow() : base(new Project(Settings))
-		{
-			AddTab(new TabAvalonia());
+		AddTab(new TabAvalonia());
 
-			ChartGroupControl.Register();
-			ScreenCapture.AddControlTo(TabViewer);
-		}
-
-		public static ProjectSettings Settings => new()
-		{
-			Name = "Atlas",
-			LinkType = "atlas",
-			Version = ProjectSettings.ProgramVersion(),
-			DataVersion = new Version(1, 1),
-		};
+		ChartGroupControl.Register();
+		ScreenCapture.AddControlTo(TabViewer);
 	}
+
+	public static ProjectSettings Settings => new()
+	{
+		Name = "Atlas",
+		LinkType = "atlas",
+		Version = ProjectSettings.ProgramVersion(),
+		DataVersion = new Version(1, 1),
+	};
 }

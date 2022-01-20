@@ -5,148 +5,147 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace Atlas.Serialize
+namespace Atlas.Serialize;
+
+public class PropertySchema
 {
-	public class PropertySchema
+	public string PropertyName;
+	public int TypeIndex = -1;
+
+	public TypeSchema OwnerTypeSchema;
+	public TypeSchema PropertyTypeSchema;
+	public PropertyInfo PropertyInfo; // can be null
+
+	public Type Type; // might be null
+	public Type NonNullableType; // might be null
+
+	public bool IsSerialized;
+	public bool IsLoadable;
+	public bool IsPrivate;
+	public bool IsPublic;
+
+	public override string ToString() => PropertyName;
+
+	public PropertySchema(TypeSchema typeSchema, PropertyInfo propertyInfo)
 	{
-		public string PropertyName;
-		public int TypeIndex = -1;
+		OwnerTypeSchema = typeSchema;
+		PropertyInfo = propertyInfo;
+		PropertyName = propertyInfo.Name;
 
-		public TypeSchema OwnerTypeSchema;
-		public TypeSchema PropertyTypeSchema;
-		public PropertyInfo PropertyInfo; // can be null
+		Initialize();
+	}
 
-		public Type Type; // might be null
-		public Type NonNullableType; // might be null
+	public PropertySchema(TypeSchema typeSchema, BinaryReader reader)
+	{
+		OwnerTypeSchema = typeSchema;
 
-		public bool IsSerialized;
-		public bool IsLoadable;
-		public bool IsPrivate;
-		public bool IsPublic;
+		Load(reader);
 
-		public override string ToString() => PropertyName;
-
-		public PropertySchema(TypeSchema typeSchema, PropertyInfo propertyInfo)
+		try
 		{
-			OwnerTypeSchema = typeSchema;
-			PropertyInfo = propertyInfo;
-			PropertyName = propertyInfo.Name;
-
-			Initialize();
-		}
-
-		public PropertySchema(TypeSchema typeSchema, BinaryReader reader)
-		{
-			OwnerTypeSchema = typeSchema;
-
-			Load(reader);
-
-			try
+			if (typeSchema.Type != null)
 			{
-				if (typeSchema.Type != null)
-				{
-					PropertyInfo = typeSchema.Type.GetProperty(PropertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-				}
-			}
-			catch (Exception)
-			{
-			}
-
-			Initialize();
-		}
-
-		private void Initialize()
-		{
-			if (PropertyInfo != null)
-			{
-				Type = PropertyInfo.PropertyType;
-				NonNullableType = Type.GetNonNullableType();
-				IsSerialized = GetIsSerialized();
-				IsLoadable = IsSerialized; // typeIndex >= 0 && // derived types won't have entries for base type
-				IsPrivate = GetIsPrivate();
-				IsPublic = GetIsPublic();
+				PropertyInfo = typeSchema.Type.GetProperty(PropertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
 			}
 		}
-
-		private bool GetIsSerialized()
+		catch (Exception)
 		{
-			Attribute attribute = Type.GetCustomAttribute<UnserializedAttribute>();
-			if (attribute != null)
-				return false;
-
-			attribute = PropertyInfo.GetCustomAttribute<NonSerializedAttribute>();
-			if (attribute != null)
-				return false;
-
-			attribute = PropertyInfo.GetCustomAttribute<UnserializedAttribute>();
-			if (attribute != null)
-				return false;
-
-			if (PropertyInfo.CanRead == false || PropertyInfo.CanWrite == false)
-				return false;
-
-			if (PropertyInfo.GetIndexParameters().Length > 0)
-				return false;
-
-			return true;
 		}
 
-		private bool GetIsPrivate()
+		Initialize();
+	}
+
+	private void Initialize()
+	{
+		if (PropertyInfo != null)
 		{
-			if (PropertyInfo.GetCustomAttribute<PrivateDataAttribute>() != null)
-				return true;
+			Type = PropertyInfo.PropertyType;
+			NonNullableType = Type.GetNonNullableType();
+			IsSerialized = GetIsSerialized();
+			IsLoadable = IsSerialized; // typeIndex >= 0 && // derived types won't have entries for base type
+			IsPrivate = GetIsPrivate();
+			IsPublic = GetIsPublic();
+		}
+	}
 
-			if (Type.GetCustomAttribute<PrivateDataAttribute>() != null)
-				return true;
-
+	private bool GetIsSerialized()
+	{
+		Attribute attribute = Type.GetCustomAttribute<UnserializedAttribute>();
+		if (attribute != null)
 			return false;
-		}
 
-		private bool GetIsPublic()
-		{
-			if (PropertyInfo.GetCustomAttribute<PublicDataAttribute>() != null)
-				return true;
+		attribute = PropertyInfo.GetCustomAttribute<NonSerializedAttribute>();
+		if (attribute != null)
+			return false;
 
-			if (PropertyInfo.GetCustomAttribute<ProtectedDataAttribute>() != null)
-				return true;
+		attribute = PropertyInfo.GetCustomAttribute<UnserializedAttribute>();
+		if (attribute != null)
+			return false;
 
-			if (PropertyInfo.PropertyType.GetCustomAttribute<PublicDataAttribute>() != null)
-				return true;
+		if (PropertyInfo.CanRead == false || PropertyInfo.CanWrite == false)
+			return false;
 
-			if (PropertyInfo.PropertyType.GetCustomAttribute<ProtectedDataAttribute>() != null)
-				return true;
+		if (PropertyInfo.GetIndexParameters().Length > 0)
+			return false;
 
-			if (OwnerTypeSchema.IsProtected)
-				return false;
+		return true;
+	}
 
+	private bool GetIsPrivate()
+	{
+		if (PropertyInfo.GetCustomAttribute<PrivateDataAttribute>() != null)
 			return true;
-		}
 
-		public void Save(BinaryWriter writer)
+		if (Type.GetCustomAttribute<PrivateDataAttribute>() != null)
+			return true;
+
+		return false;
+	}
+
+	private bool GetIsPublic()
+	{
+		if (PropertyInfo.GetCustomAttribute<PublicDataAttribute>() != null)
+			return true;
+
+		if (PropertyInfo.GetCustomAttribute<ProtectedDataAttribute>() != null)
+			return true;
+
+		if (PropertyInfo.PropertyType.GetCustomAttribute<PublicDataAttribute>() != null)
+			return true;
+
+		if (PropertyInfo.PropertyType.GetCustomAttribute<ProtectedDataAttribute>() != null)
+			return true;
+
+		if (OwnerTypeSchema.IsProtected)
+			return false;
+
+		return true;
+	}
+
+	public void Save(BinaryWriter writer)
+	{
+		writer.Write(PropertyName);
+		writer.Write((short)TypeIndex);
+	}
+
+	public void Load(BinaryReader reader)
+	{
+		PropertyName = reader.ReadString();
+		TypeIndex = reader.ReadInt16();
+	}
+
+	public void Validate(List<TypeSchema> typeSchemas)
+	{
+		if (TypeIndex < 0)
+			return;
+
+		TypeSchema typeSchema = typeSchemas[TypeIndex];
+		if (PropertyInfo != null)
 		{
-			writer.Write(PropertyName);
-			writer.Write((short)TypeIndex);
-		}
-
-		public void Load(BinaryReader reader)
-		{
-			PropertyName = reader.ReadString();
-			TypeIndex = reader.ReadInt16();
-		}
-
-		public void Validate(List<TypeSchema> typeSchemas)
-		{
-			if (TypeIndex < 0)
-				return;
-
-			TypeSchema typeSchema = typeSchemas[TypeIndex];
-			if (PropertyInfo != null)
-			{
-				// check if the type has changed
-				Type currentType = PropertyInfo.PropertyType.GetNonNullableType();
-				if (typeSchema.Type != currentType)
-					IsLoadable = false;
-			}
+			// check if the type has changed
+			Type currentType = PropertyInfo.PropertyType.GetNonNullableType();
+			if (typeSchema.Type != currentType)
+				IsLoadable = false;
 		}
 	}
 }

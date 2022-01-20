@@ -1,25 +1,24 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public class JsonUtils
 {
-	public class JsonUtils
+	public static string Format(string text)
 	{
-		public static string Format(string text)
+		try
 		{
-			try
+			if (text?.StartsWith("{") == true)
 			{
-				if (text?.StartsWith("{") == true)
-				{
-					dynamic parsedJson = JsonConvert.DeserializeObject(text);
-					string formatted = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
-					return formatted;
-				}
+				dynamic parsedJson = JsonConvert.DeserializeObject(text);
+				string formatted = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+				return formatted;
 			}
-			catch (Exception)
-			{
-			}
-			return text;
 		}
+		catch (Exception)
+		{
+		}
+		return text;
 	}
 }

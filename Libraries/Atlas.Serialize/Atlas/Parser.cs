@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Atlas.Serialize
+namespace Atlas.Serialize;
+
+public class Parser
 {
-	public class Parser
-	{
-	}
 }

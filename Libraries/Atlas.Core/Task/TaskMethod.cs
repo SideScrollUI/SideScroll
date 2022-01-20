@@ -1,31 +1,30 @@
 using System;
 using System.Reflection;
 
-namespace Atlas.Core
+namespace Atlas.Core;
+
+public class TaskMethod : TaskCreator
 {
-	public class TaskMethod : TaskCreator
+	public MethodInfo MethodInfo { get; set; }
+	public object Object { get; set; } // object to invoke method for
+
+	public override string ToString() => MethodInfo.Name;
+
+	public TaskMethod(MethodInfo methodInfo, object obj)
 	{
-		public MethodInfo MethodInfo { get; set; }
-		public object Object { get; set; } // object to invoke method for
+		MethodInfo = methodInfo;
+		Object = obj;
 
-		public override string ToString() => MethodInfo.Name;
+		Label = methodInfo.Name;
+	}
 
-		public TaskMethod(MethodInfo methodInfo, object obj)
-		{
-			MethodInfo = methodInfo;
-			Object = obj;
+	protected override Action CreateAction(Call call)
+	{
+		return () => RunMethod(call);
+	}
 
-			Label = methodInfo.Name;
-		}
-
-		protected override Action CreateAction(Call call)
-		{
-			return () => RunMethod(call);
-		}
-
-		private void RunMethod(Call call)
-		{
-			MethodInfo.Invoke(Object, new object[] { call });
-		}
+	private void RunMethod(Call call)
+	{
+		MethodInfo.Invoke(Object, new object[] { call });
 	}
 }

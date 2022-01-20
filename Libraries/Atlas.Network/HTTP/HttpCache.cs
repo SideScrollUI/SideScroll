@@ -5,200 +5,192 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Atlas.Network
+namespace Atlas.Network;
+
+public class HttpCache : IDisposable
 {
-	public class HttpCache : IDisposable
+	public const uint LatestVersion = 1;
+
+	public uint CurrentVersion = 1;
+
+	public class Entry
 	{
-		public const uint LatestVersion = 1;
+		public string Uri { get; set; }
+		public long Offset { get; set; }
+		public int Size { get; set; }
+		public DateTime Downloaded { get; set; }
 
-		public uint CurrentVersion = 1;
+		public override string ToString() => Uri;
+	}
 
-		public class Entry
+	public class LoadableEntry : Entry
+	{
+		public HttpCache httpCache;
+
+		[HiddenColumn]
+		public string Text => httpCache.GetString(Uri);
+
+		/*public void Download(Call call)
 		{
-			public string Uri { get; set; }
-			public long Offset { get; set; }
-			public int Size { get; set; }
-			public DateTime Downloaded { get; set; }
+			var cachedHttp = new CachedHTTP(call, httpCache);
+			byte[] bytes = cachedHttp.GetBytes(Uri.ToString());
+			httpCache.AddEntry(Uri, bytes); // todo: fix function to allow updating
+		}*/
+	}
 
-			public override string ToString() => Uri;
-		}
+	public string BasePath { get; set; }
+	public long Size => _dataStream.Length;
 
-		public class LoadableEntry : Entry
+	private readonly Dictionary<string, Entry> _cache = new();
+
+	private readonly string _indexPath;
+	private readonly string _dataPath;
+	private readonly Stream _indexStream;
+	private readonly Stream _dataStream;
+	private readonly object _entryLock = new();
+
+	public override string ToString() => BasePath;
+
+	public HttpCache(string basePath, bool writeable)
+	{
+		BasePath = basePath;
+		Directory.CreateDirectory(basePath);
+
+		_indexPath = Paths.Combine(basePath, "http.index");
+		_dataPath = Paths.Combine(basePath, "http.data");
+
+		FileAccess fileAccess = writeable ? FileAccess.ReadWrite : FileAccess.Read;
+		_indexStream = new FileStream(_indexPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
+		_dataStream = new FileStream(_dataPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
+
+		if (_indexStream.Length == 0)
+			SaveHeader();
+
+		LoadIndex();
+	}
+
+	public void Dispose()
+	{
+		_indexStream.Dispose();
+		_dataStream.Dispose();
+	}
+
+	private void LoadHeader(BinaryReader indexReader)
+	{
+		CurrentVersion = indexReader.ReadUInt32();
+	}
+
+	private void SaveHeader()
+	{
+		using BinaryWriter indexWriter = new(_indexStream, Encoding.Default, true);
+
+		indexWriter.Write(LatestVersion);
+	}
+
+	private void LoadIndex()
+	{
+		_indexStream.Seek(0, SeekOrigin.Begin);
+		using var indexReader = new BinaryReader(_indexStream, Encoding.Default, true);
+
+		LoadHeader(indexReader);
+		while (indexReader.PeekChar() >= 0)
 		{
-			public HttpCache httpCache;
-
-			[HiddenColumn]
-			public string Text => httpCache.GetString(Uri);
-
-			/*public void Download(Call call)
+			var entry = new Entry
 			{
-				var cachedHttp = new CachedHTTP(call, httpCache);
-				byte[] bytes = cachedHttp.GetBytes(Uri.ToString());
-				httpCache.AddEntry(Uri, bytes); // todo: fix function to allow updating
-			}*/
-		}
-
-		public string BasePath { get; set; }
-		public long Size => _dataStream.Length;
-
-		private readonly Dictionary<string, Entry> _cache = new();
-
-		private readonly string _indexPath;
-		private readonly string _dataPath;
-		private readonly Stream _indexStream;
-		private readonly Stream _dataStream;
-		private readonly object _entryLock = new();
-
-		public override string ToString() => BasePath;
-
-		public HttpCache(string basePath, bool writeable)
-		{
-			BasePath = basePath;
-			Directory.CreateDirectory(basePath);
-
-			_indexPath = Paths.Combine(basePath, "http.index");
-			_dataPath = Paths.Combine(basePath, "http.data");
-
-			FileAccess fileAccess = writeable ? FileAccess.ReadWrite : FileAccess.Read;
-			_indexStream = new FileStream(_indexPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
-			_dataStream = new FileStream(_dataPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
-
-			if (_indexStream.Length == 0)
-				SaveHeader();
-
-			LoadIndex();
-		}
-
-		public void Dispose()
-		{
-			_indexStream.Dispose();
-			_dataStream.Dispose();
-		}
-
-		private void LoadHeader(BinaryReader indexReader)
-		{
-			CurrentVersion = indexReader.ReadUInt32();
-		}
-
-		private void SaveHeader()
-		{
-			using BinaryWriter indexWriter = new(_indexStream, Encoding.Default, true);
-
-			indexWriter.Write(LatestVersion);
-		}
-
-		private void LoadIndex()
-		{
-			_indexStream.Seek(0, SeekOrigin.Begin);
-			using var indexReader = new BinaryReader(_indexStream, Encoding.Default, true);
-
-			LoadHeader(indexReader);
-			while (indexReader.PeekChar() >= 0)
-			{
-				var entry = new Entry
-				{
-					Uri = indexReader.ReadString(),
-					Offset = indexReader.ReadInt64(),
-					Size = indexReader.ReadInt32()
-				};
-				long ticks = indexReader.ReadInt64();
-				entry.Downloaded = new DateTime(ticks);
-				_cache[entry.Uri] = entry;
-			}
-		}
-
-		public List<Entry> Entries => _cache.Values.ToList();
-
-		public List<LoadableEntry> LoadableEntries
-		{
-			get
-			{
-				var entries = new List<LoadableEntry>();
-				foreach (Entry entry in _cache.Values)
-				{
-					var loadableEntry = new LoadableEntry()
-					{
-						Uri = entry.Uri,
-						Size = entry.Size,
-						Offset = entry.Offset,
-						Downloaded = entry.Downloaded,
-						httpCache = this
-					};
-					entries.Add(loadableEntry);
-				}
-				return entries;
-			}
-		}
-
-		public void AddEntry(string uri, byte[] bytes)
-		{
-			lock (_entryLock)
-			{
-				// todo: add support for updating entries
-				if (_cache.TryGetValue(uri, out Entry entry))
-					return;
-
-				entry = new Entry()
-				{
-					Uri = uri,
-					Size = bytes.Length,
-					Downloaded = DateTime.Now,
-				};
-
-				// todo: seek to last entry instead since the last entry might be incomplete
-				using (var dataWriter = new BinaryWriter(_dataStream, Encoding.Default, true))
-				{
-					dataWriter.Seek(0, SeekOrigin.End);
-					entry.Offset = _dataStream.Position;
-					dataWriter.Write(bytes);
-				}
-
-				using (var indexWriter = new BinaryWriter(_indexStream, Encoding.Default, true))
-				{
-					indexWriter.Seek(0, SeekOrigin.End);
-					indexWriter.Write(entry.Uri);
-					indexWriter.Write(entry.Offset);
-					indexWriter.Write(entry.Size);
-					indexWriter.Write(entry.Downloaded.Ticks);
-				}
-				_cache[uri] = entry;
-			}
-		}
-
-		public bool Contains(string uri)
-		{
-			return _cache.ContainsKey(uri);
-		}
-
-		public byte[] GetBytes(string uri)
-		{
-			lock (_entryLock)
-			{
-				if (!_cache.TryGetValue(uri, out Entry entry))
-					return null;
-
-				_dataStream.Position = entry.Offset;
-				using var dataReader = new BinaryReader(_dataStream, Encoding.Default, true);
-
-				byte[] data = dataReader.ReadBytes(entry.Size);
-				return data;
-			}
-		}
-
-		public string GetString(string uri)
-		{
-			byte[] bytes = GetBytes(uri);
-			string text = Encoding.ASCII.GetString(bytes);
-			return text;
+				Uri = indexReader.ReadString(),
+				Offset = indexReader.ReadInt64(),
+				Size = indexReader.ReadInt32()
+			};
+			long ticks = indexReader.ReadInt64();
+			entry.Downloaded = new DateTime(ticks);
+			_cache[entry.Uri] = entry;
 		}
 	}
 
-	// will take too long to serialize each time
-	// could work if we only re-serialized dictionary
-	/*public class HttpCacheSerialized
+	public List<Entry> Entries => _cache.Values.ToList();
+
+	public List<LoadableEntry> LoadableEntries
 	{
-		private Dictionary<string, byte[]> cache;
-	}*/
+		get
+		{
+			var entries = new List<LoadableEntry>();
+			foreach (Entry entry in _cache.Values)
+			{
+				var loadableEntry = new LoadableEntry()
+				{
+					Uri = entry.Uri,
+					Size = entry.Size,
+					Offset = entry.Offset,
+					Downloaded = entry.Downloaded,
+					httpCache = this
+				};
+				entries.Add(loadableEntry);
+			}
+			return entries;
+		}
+	}
+
+	public void AddEntry(string uri, byte[] bytes)
+	{
+		lock (_entryLock)
+		{
+			// todo: add support for updating entries
+			if (_cache.TryGetValue(uri, out Entry entry))
+				return;
+
+			entry = new Entry()
+			{
+				Uri = uri,
+				Size = bytes.Length,
+				Downloaded = DateTime.Now,
+			};
+
+			// todo: seek to last entry instead since the last entry might be incomplete
+			using (var dataWriter = new BinaryWriter(_dataStream, Encoding.Default, true))
+			{
+				dataWriter.Seek(0, SeekOrigin.End);
+				entry.Offset = _dataStream.Position;
+				dataWriter.Write(bytes);
+			}
+
+			using (var indexWriter = new BinaryWriter(_indexStream, Encoding.Default, true))
+			{
+				indexWriter.Seek(0, SeekOrigin.End);
+				indexWriter.Write(entry.Uri);
+				indexWriter.Write(entry.Offset);
+				indexWriter.Write(entry.Size);
+				indexWriter.Write(entry.Downloaded.Ticks);
+			}
+			_cache[uri] = entry;
+		}
+	}
+
+	public bool Contains(string uri)
+	{
+		return _cache.ContainsKey(uri);
+	}
+
+	public byte[] GetBytes(string uri)
+	{
+		lock (_entryLock)
+		{
+			if (!_cache.TryGetValue(uri, out Entry entry))
+				return null;
+
+			_dataStream.Position = entry.Offset;
+			using var dataReader = new BinaryReader(_dataStream, Encoding.Default, true);
+
+			byte[] data = dataReader.ReadBytes(entry.Size);
+			return data;
+		}
+	}
+
+	public string GetString(string uri)
+	{
+		byte[] bytes = GetBytes(uri);
+		string text = Encoding.ASCII.GetString(bytes);
+		return text;
+	}
 }
 /*
 Serialize Cache for HTTP

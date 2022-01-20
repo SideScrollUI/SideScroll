@@ -3,58 +3,57 @@ using Atlas.Serialize;
 using System;
 using System.Collections.Generic;
 
-namespace Atlas.Tabs.Tools
-{
-	public class TabFileSerialized : ITab
-	{
-		public string Path;
+namespace Atlas.Tabs.Tools;
 
-		public TabFileSerialized(string path)
+public class TabFileSerialized : ITab
+{
+	public string Path;
+
+	public TabFileSerialized(string path)
+	{
+		Path = path;
+	}
+
+	public TabInstance Create() => new Instance(this);
+
+	public class Instance : TabInstance
+	{
+		public TabFileSerialized Tab;
+
+		public object Object;
+		public Serializer Serializer;
+
+		private readonly ListItem _listData = new("Object", null);
+
+		public Instance(TabFileSerialized tab)
 		{
-			Path = path;
+			Tab = tab;
 		}
 
-		public TabInstance Create() => new Instance(this);
-
-		public class Instance : TabInstance
+		public override void Load(Call call, TabModel model)
 		{
-			public TabFileSerialized Tab;
+			var items = new List<ListItem>();
 
-			public object Object;
-			public Serializer Serializer;
+			var serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(Tab.Path));
 
-			private readonly ListItem _listData = new("Object", null);
+			Serializer = serializerFile.LoadSchema(call);
 
-			public Instance(TabFileSerialized tab)
-			{
-				Tab = tab;
-			}
+			items.Add(new ListItem("Schema", Serializer));
+			items.Add(_listData);
+			model.Items = items;
 
-			public override void Load(Call call, TabModel model)
-			{
-				var items = new List<ListItem>();
+			var actions = new List<TaskCreator>();
+			if (Object == null)
+				actions.Add(new TaskDelegate("Load Data", LoadData));
+			model.Actions = actions;
+		}
 
-				var serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(Tab.Path));
+		private void LoadData(Call call)
+		{
+			var serializerFile = new SerializerFileAtlas(Tab.Path);
 
-				Serializer = serializerFile.LoadSchema(call);
-
-				items.Add(new ListItem("Schema", Serializer));
-				items.Add(_listData);
-				model.Items = items;
-
-				var actions = new List<TaskCreator>();
-				if (Object == null)
-					actions.Add(new TaskDelegate("Load Data", LoadData));
-				model.Actions = actions;
-			}
-
-			private void LoadData(Call call)
-			{
-				var serializerFile = new SerializerFileAtlas(Tab.Path);
-
-				Object = serializerFile.Load(call);
-				_listData.Value = Object;
-			}
+			Object = serializerFile.Load(call);
+			_listData.Value = Object;
 		}
 	}
 }

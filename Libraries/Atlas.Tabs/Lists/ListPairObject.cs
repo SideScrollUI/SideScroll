@@ -2,36 +2,35 @@ using Atlas.Core;
 using System;
 using System.ComponentModel;
 
-namespace Atlas.Tabs
+namespace Atlas.Tabs;
+
+// implement INotifyPropertyChanged to prevent memory leaks
+public class ListPair : IListPair, IListItem, INotifyPropertyChanged, IMaxDesiredWidth
 {
-	// implement INotifyPropertyChanged to prevent memory leaks
-	public class ListPair : IListPair, IListItem, INotifyPropertyChanged, IMaxDesiredWidth
-	{
-		[StyleLabel]
-		public object Key { get; set; }
+	[StyleLabel]
+	public object Key { get; set; }
 
-		[StyleValue]
-		public object Value { get; set; }
+	[StyleValue]
+	public object Value { get; set; }
 
-		[HiddenColumn, InnerValue]
-		public object Object { get; set; }
+	[HiddenColumn, InnerValue]
+	public object Object { get; set; }
 
-		public bool AutoLoad = true;
+	public bool AutoLoad = true;
 
-		[HiddenColumn]
-		public int? MaxDesiredWidth { get; set; }
+	[HiddenColumn]
+	public int? MaxDesiredWidth { get; set; }
 
 #pragma warning disable 414
-		public event PropertyChangedEventHandler PropertyChanged = null;
+	public event PropertyChangedEventHandler PropertyChanged = null;
 
-		public override string ToString() => Key?.ToString() ?? "";
+	public override string ToString() => Key?.ToString() ?? "";
 
-		public ListPair(object key, object value, object obj = null, int? maxDesiredWidth = null)
-		{
-			Key = key;
-			Value = value;
-			Object = obj ?? value;
-			MaxDesiredWidth = maxDesiredWidth;
-		}
+	public ListPair(object key, object value, object obj = null, int? maxDesiredWidth = null)
+	{
+		Key = key;
+		Value = value;
+		Object = obj ?? value;
+		MaxDesiredWidth = maxDesiredWidth;
 	}
 }
