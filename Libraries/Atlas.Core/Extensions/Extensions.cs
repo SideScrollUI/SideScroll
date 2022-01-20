@@ -6,8 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 
-namespace Atlas.Extensions // rename to Core?
-;
+namespace Atlas.Extensions; // rename to Core?
 
 public static class AtlasExtensions
 {

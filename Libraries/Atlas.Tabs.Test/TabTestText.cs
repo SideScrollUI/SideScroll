@@ -13,23 +13,23 @@ public class TabTestTextEditor : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new List<ListItem>()
-				{
-					new("Sample Text", "This is some sample text\n\n1\n2\n3"),
-					new("Json", TabTestJson.Json1),
+			{
+				new("Sample Text", "This is some sample text\n\n1\n2\n3"),
+				new("Json", TabTestJson.Json1),
 
-					GetStringItem("1k", 1000),
-					GetStringItem("10k", 10000),
-					GetStringItem("100k", 100000),
-					//GetStringItem("500k", 500000), // Too slow
-					//GetStringItem("1m", 1000000),
+				GetStringItem("1k", 1000),
+				GetStringItem("10k", 10000),
+				GetStringItem("100k", 100000),
+				//GetStringItem("500k", 500000), // Too slow
+				//GetStringItem("1m", 1000000),
 
-					GetLinesItem("100", 100),
-					GetLinesItem("1k", 1000),
-					GetLinesItem("10k", 10000),
-					GetLinesItem("100k", 100000),
-					GetLinesItem("500k", 500000),
-					GetLinesItem("1m", 1000000),
-				};
+				GetLinesItem("100", 100),
+				GetLinesItem("1k", 1000),
+				GetLinesItem("10k", 10000),
+				GetLinesItem("100k", 100000),
+				GetLinesItem("500k", 500000),
+				GetLinesItem("1m", 1000000),
+			};
 		}
 
 		private static ListItem GetLinesItem(string label, int lines)

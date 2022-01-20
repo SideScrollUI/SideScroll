@@ -12,9 +12,9 @@ public class TabTestSlowAsyncItem : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new ItemCollection<IListItem>()
-				{
-					new ListDelegate(SlowItemAsync),
-				};
+			{
+				new ListDelegate(SlowItemAsync),
+			};
 		}
 
 		// todo: fix, this is being called twice and blocking the UI the 1st time

@@ -12,14 +12,14 @@ public class TabTestObjects : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new ItemCollection<ListItem>()
-				{
-					new("Object Members", new TestObjectMembers()),
-					new("Tags", new Tag[] { new Tag("abc", 1.1) }),
-					new("Subclass Property", new TabTestSubClassProperty()),
-					new("Subclass", new ValueSub()),
-					new("Enum", new EnumTest()),
-					new("TimeSpan", new TimeSpan(1, 2, 3)),
-				};
+			{
+				new("Object Members", new TestObjectMembers()),
+				new("Tags", new Tag[] { new Tag("abc", 1.1) }),
+				new("Subclass Property", new TabTestSubClassProperty()),
+				new("Subclass", new ValueSub()),
+				new("Enum", new EnumTest()),
+				new("TimeSpan", new TimeSpan(1, 2, 3)),
+			};
 		}
 
 		public class MyClass

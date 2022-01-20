@@ -18,9 +18,9 @@ public class TabTestObjectProperties : ITab
 			model.Editing = true;
 
 			model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegate("Toggle", Toggle),
-				};
+			{
+				new TaskDelegate("Toggle", Toggle),
+			};
 		}
 
 		private void Toggle(Call call)

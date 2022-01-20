@@ -17,10 +17,10 @@ public class TabSettings : ITab
 			model.Editing = true;
 
 			model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegate("Reset", Reset),
-					new TaskDelegate("Save", Save),
-				};
+			{
+				new TaskDelegate("Reset", Reset),
+				new TaskDelegate("Save", Save),
+			};
 		}
 
 		private void Reset(Call call)

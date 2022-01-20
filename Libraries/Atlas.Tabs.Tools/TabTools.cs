@@ -11,9 +11,9 @@ public class TabTools : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new ItemCollection<ListItem>()
-				{
-					new("File Browser", new TabFileBrowser()),
-				};
+			{
+				new("File Browser", new TabFileBrowser()),
+			};
 		}
 	}
 }

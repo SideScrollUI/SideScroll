@@ -11,9 +11,9 @@ public class TabTestExceptions : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new ItemCollection<ListItem>()
-				{
-					new("Load Exception", new TabTestLoadException()),
-				};
+			{
+				new("Load Exception", new TabTestLoadException()),
+			};
 
 			call.Log.AddError("Load error");
 		}

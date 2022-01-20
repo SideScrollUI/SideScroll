@@ -18,9 +18,9 @@ public class TabTestMemory : ITab
 			Array.Clear(bytes, 0, bytes.Length); // toggle the memory so it gets used
 
 			model.Items = new ItemCollection<ListItem>()
-				{
-					new("Bytes", bytes),
-				};
+			{
+				new("Bytes", bytes),
+			};
 		}
 	}
 }

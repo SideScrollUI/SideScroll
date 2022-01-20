@@ -12,12 +12,12 @@ public class TabTestChart : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new List<ListItem>()
-				{
-					new("List", new TabTestChartList()),
-					//new("Split", new TabTestChartSplit()),
-					new("Overlay", new TabTestChartOverlay()),
-					new("Time Range", new TabTestChartTimeRangeValue()),
-				};
+			{
+				new("List", new TabTestChartList()),
+				//new("Split", new TabTestChartSplit()),
+				new("Overlay", new TabTestChartOverlay()),
+				new("Time Range", new TabTestChartTimeRangeValue()),
+			};
 		}
 	}
 }

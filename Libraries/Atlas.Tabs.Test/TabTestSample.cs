@@ -23,17 +23,17 @@ public class TabSample : ITab
 			AddItems(5);
 
 			model.Items = new ItemCollection<ListItem>("Items")
-				{
-					new("Sample Items", _sampleItems),
-					new("Collections", new TabTestGridCollectionSize()),
-					new("Recursive Copy", new TabSample()),
-				};
+			{
+				new("Sample Items", _sampleItems),
+				new("Collections", new TabTestGridCollectionSize()),
+				new("Recursive Copy", new TabSample()),
+			};
 
 			model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegate("Sleep 10s", Sleep, true),
-					new TaskAction("Add 5 Items", () => AddItems(5), false), // Foreground task so we can modify collection
-				};
+			{
+				new TaskDelegate("Sleep 10s", Sleep, true),
+				new TaskAction("Add 5 Items", () => AddItems(5), false), // Foreground task so we can modify collection
+			};
 
 			model.Notes =
 @"

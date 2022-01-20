@@ -18,9 +18,9 @@ public class TabTestProcess : ITab
 			};*/
 
 			model.Actions = new List<TaskCreator>
-				{
-					new TaskDelegate("Open Folder", OpenFolder, true),
-				};
+			{
+				new TaskDelegate("Open Folder", OpenFolder, true),
+			};
 		}
 
 		private void OpenFolder(Call call)

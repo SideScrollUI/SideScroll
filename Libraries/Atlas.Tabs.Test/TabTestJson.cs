@@ -26,9 +26,9 @@ public class TabTestJson : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new ItemCollection<ListItem>()
-				{
-					new("Sample Text", LazyJsonNode.Parse(Json1)),
-				};
+			{
+				new("Sample Text", LazyJsonNode.Parse(Json1)),
+			};
 		}
 	}
 }

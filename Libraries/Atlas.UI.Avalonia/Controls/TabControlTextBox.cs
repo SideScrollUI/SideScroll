@@ -51,18 +51,18 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 		var style = new Style(x => x.OfType<TextPresenter>())
 		{
 			Setters =
-				{
-					new Setter(TextPresenter.MarginProperty, new Thickness(6, 3)),
-				}
+			{
+				new Setter(TextPresenter.MarginProperty, new Thickness(6, 3)),
+			}
 		};
 		Styles.Add(style);
 
 		style = new Style(x => x.OfType<TextBlock>())
 		{
 			Setters =
-				{
-					new Setter(TextBlock.MarginProperty, new Thickness(6, 3)),
-				}
+			{
+				new Setter(TextBlock.MarginProperty, new Thickness(6, 3)),
+			}
 		};
 		Styles.Add(style);
 	}

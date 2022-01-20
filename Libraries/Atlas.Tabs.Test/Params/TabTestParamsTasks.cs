@@ -22,10 +22,10 @@ public class TabTestParamsTasks : ITab
 			model.Items = _items;
 
 			model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegate("Add", Add),
-					new TaskDelegateAsync("10s Task", LongTaskAsync, true),
-				};
+			{
+				new TaskDelegate("Add", Add),
+				new TaskDelegateAsync("10s Task", LongTaskAsync, true),
+			};
 
 			_paramTestItem = LoadData<ParamTestItem>(DataKey);
 			if (_paramTestItem.DateTime.Ticks == 0)

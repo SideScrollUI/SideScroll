@@ -17,21 +17,21 @@ public class TabActions : ITab
 			model.MinDesiredWidth = 250;
 
 			model.Items = new List<ListItem>()
-				{
-					new("Parameters", new TabParamsDataGrid()),
-					new("Async Load", new TabTestLoadAsync()),
-				};
+			{
+				new("Parameters", new TabParamsDataGrid()),
+				new("Async Load", new TabTestLoadAsync()),
+			};
 
 			model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegate("Add Log Entry", AddEntry),
-					new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
-					new TaskDelegate("Parallel Task Progress", ParallelTaskProgress, true),
-					new TaskDelegateAsync("Task Progress", SubTaskProgressAsync, true),
-					new TaskAction("Action", () => PassParams(1, "abc")),
-					new TaskDelegateAsync("Long load (Async)", SleepAsync, true),
-					new TaskDelegate("StartAsync error", StartAsyncError),
-				};
+			{
+				new TaskDelegate("Add Log Entry", AddEntry),
+				new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
+				new TaskDelegate("Parallel Task Progress", ParallelTaskProgress, true),
+				new TaskDelegateAsync("Task Progress", SubTaskProgressAsync, true),
+				new TaskAction("Action", () => PassParams(1, "abc")),
+				new TaskDelegateAsync("Long load (Async)", SleepAsync, true),
+				new TaskDelegate("StartAsync error", StartAsyncError),
+			};
 
 			model.Notes = @"
 Actions add Buttons to the tab. When clicked, it will:

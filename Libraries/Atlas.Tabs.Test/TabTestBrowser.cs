@@ -13,14 +13,14 @@ public class TabTestBrowser : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new List<ListItem>()
-				{
-					new("Uri", new Uri("https://wikipedia.org")),
-				};
+			{
+				new("Uri", new Uri("https://wikipedia.org")),
+			};
 
 			model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegate("Open Browser", OpenBrowser),
-				};
+			{
+				new TaskDelegate("Open Browser", OpenBrowser),
+			};
 		}
 
 		private void OpenBrowser(Call call)

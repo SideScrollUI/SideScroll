@@ -12,14 +12,14 @@ public class TabTestSkip : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			var sampleItems = new List<SampleItem>()
-				{
-					new(1, "Item 1"),
-				};
+			{
+				new(1, "Item 1"),
+			};
 
 			model.Items = new ItemCollection<ListItem>()
-				{
-					new("Sample Items", sampleItems),
-				};
+			{
+				new("Sample Items", sampleItems),
+			};
 		}
 	}
 }

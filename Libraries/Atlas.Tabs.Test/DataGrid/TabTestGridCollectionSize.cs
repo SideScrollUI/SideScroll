@@ -19,13 +19,13 @@ public class TabTestGridCollectionSize : ITab
 			model.Items = _items;
 
 			model.Actions = new List<TaskCreator>()
-				{
-					new TaskAction("Add 100 Entries", () => AddEntries(100)),
-					new TaskAction("Add 1,000 Entries", () => AddEntries(1000)),
-					new TaskAction("Add 10,000 Entries", () => AddEntries(10000)),
-					new TaskAction("Add 100,000 Entries (WPF Only)", () => AddEntries(100000)),
-					new TaskAction("Add 1,000,000 Entries (WPF Only)", () => AddEntries(1000000)),
-				};
+			{
+				new TaskAction("Add 100 Entries", () => AddEntries(100)),
+				new TaskAction("Add 1,000 Entries", () => AddEntries(1000)),
+				new TaskAction("Add 10,000 Entries", () => AddEntries(10000)),
+				new TaskAction("Add 100,000 Entries (WPF Only)", () => AddEntries(100000)),
+				new TaskAction("Add 1,000,000 Entries (WPF Only)", () => AddEntries(1000000)),
+			};
 			//actions.Add(new TaskAction("Add Entries", AddEntries));
 		}
 

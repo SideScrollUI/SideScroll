@@ -11,12 +11,12 @@ public class TabTestLoading : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new ItemCollection<ListItem>()
-				{
-					new("Slow Load", new TabTestSlowLoad()),
-					new("Slow Model", new TabTestSlowModel()),
-					new("Slow Async Item", new TabTestSlowAsyncItem()),
-					new("Slow Async Model", new TabTestSlowAsyncModel()),
-				};
+			{
+				new("Slow Load", new TabTestSlowLoad()),
+				new("Slow Model", new TabTestSlowModel()),
+				new("Slow Async Item", new TabTestSlowAsyncItem()),
+				new("Slow Async Model", new TabTestSlowAsyncModel()),
+			};
 		}
 	}
 }

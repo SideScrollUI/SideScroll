@@ -13,15 +13,15 @@ public class TabTestDataRepo : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new List<ListItem>()
-				{
-					new("Sample Data Repo", new TabTestDataRepoCollection()),
-					new("Local Directories", new TabDirectory(Project.DataApp.RepoPath)),
-				};
+			{
+				new("Sample Data Repo", new TabTestDataRepoCollection()),
+				new("Local Directories", new TabDirectory(Project.DataApp.RepoPath)),
+			};
 
 			model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegate("Delete Repos", DeleteRepos),
-				};
+			{
+				new TaskDelegate("Delete Repos", DeleteRepos),
+			};
 			model.AutoSelect = AutoSelectType.AnyNewOrSaved;
 
 			model.Notes = "Data Repos store C# objects as serialized data.";

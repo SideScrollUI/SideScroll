@@ -21,10 +21,10 @@ public class TabTestBookmarks : ITab
 			navigator.CurrentIndex = navigator.History.Count;
 
 			model.Items = new List<ListItem>()
-				{
-					new("Navigator (snapshot)", navigator),
-					//new("Recursive Tab", new TabSample()),
-				};
+			{
+				new("Navigator (snapshot)", navigator),
+				//new("Recursive Tab", new TabSample()),
+			};
 
 			model.Notes = "The Navigator class creates a bookmark for every tab change you make, and allows you to move backwards and forwards. The Back/Forward buttons currently use this. Eventually a list/drop down could be used to select the bookmark";
 		}

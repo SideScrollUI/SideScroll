@@ -11,11 +11,11 @@ public class TabTestParams : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new ItemCollection<ListItem>()
-				{
-					new("Tasks", new TabTestParamsTasks()),
-					new("Collection", new TabTestParamsCollection()),
-					new("Data Tabs", new TabTestParamsDataTabs()),
-				};
+			{
+				new("Tasks", new TabTestParamsTasks()),
+				new("Collection", new TabTestParamsCollection()),
+				new("Data Tabs", new TabTestParamsDataTabs()),
+			};
 		}
 	}
 }

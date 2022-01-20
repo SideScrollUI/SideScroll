@@ -20,10 +20,10 @@ public class TabTestChartList : ITab
 			//model.Items = items;
 
 			model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegate("Add Entry", AddEntry),
-					new TaskDelegate("Start: 1 Entry / second", StartTask, true),
-				};
+			{
+				new TaskDelegate("Add Entry", AddEntry),
+				new TaskDelegate("Start: 1 Entry / second", StartTask, true),
+			};
 
 			var chartSettings = new ChartSettings();
 			for (int i = 0; i < 2; i++)

@@ -17,10 +17,10 @@ public class TabTestArray : ITab
 			var classes = new MyClass[] { new MyClass(), new MyClass() };
 
 			model.Items = new ItemCollection<ListItem>()
-				{
-					new("2 Items", classes),
-					new("String Array", new string[] { "abc", "123" }),
-				};
+			{
+				new("2 Items", classes),
+				new("String Array", new string[] { "abc", "123" }),
+			};
 
 			/*tabModel.Actions = new List<TaskCreator>() {
 			//new TaskAction("Add Entries", AddEntries),

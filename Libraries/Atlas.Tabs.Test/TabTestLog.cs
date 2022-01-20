@@ -23,26 +23,26 @@ public class TabTestLog : ITab
 			_counter = 0;
 
 			model.Items = new List<ListItem>()
-				{
-					new("Task Instance Log", TaskInstance.Log),
-					new("Sample Call", _sampleCall),
-					new("Sample Call Log", _sampleCall.Log),
-					new("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),
-				};
+			{
+				new("Task Instance Log", TaskInstance.Log),
+				new("Sample Call", _sampleCall),
+				new("Sample Call Log", _sampleCall.Log),
+				new("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),
+			};
 
 			model.Actions = new List<TaskCreator>()
-				{
-					new TaskAction("Add 1 Entry", () => AddEntries(1)),
-					new TaskAction("Add 10 Entries",() => AddEntries(10)),
-					new TaskAction("Add 100 Entries", () => AddEntries(100)),
-					new TaskAction("Add 1,000 Entries", () => AddEntries(1000)),
-					new TaskAction("Add 10,000 Entries", () => AddEntries(10000)),
-					new TaskDelegate("Reset", Reset),
-					// Tests different threading contexts
-					new TaskAction("System.Timer: Log 1 Entry / second", () => StartSystemTimer()),
-					//new TaskAction("Threading.Timer: Log 1 Entry / second", () => StartThreadTimer()),
-					new TaskDelegate("Task Delegate Thread:  Log 1 Entry / second", SubTaskInstances, true),
-				};
+			{
+				new TaskAction("Add 1 Entry", () => AddEntries(1)),
+				new TaskAction("Add 10 Entries",() => AddEntries(10)),
+				new TaskAction("Add 100 Entries", () => AddEntries(100)),
+				new TaskAction("Add 1,000 Entries", () => AddEntries(1000)),
+				new TaskAction("Add 10,000 Entries", () => AddEntries(10000)),
+				new TaskDelegate("Reset", Reset),
+				// Tests different threading contexts
+				new TaskAction("System.Timer: Log 1 Entry / second", () => StartSystemTimer()),
+				//new TaskAction("Threading.Timer: Log 1 Entry / second", () => StartThreadTimer()),
+				new TaskDelegate("Task Delegate Thread:  Log 1 Entry / second", SubTaskInstances, true),
+			};
 			//actions.Add(new TaskAction("Add Child Entry", () => AddChildEntry()));
 		}
 

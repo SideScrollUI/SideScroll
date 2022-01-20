@@ -31,9 +31,9 @@ public class TabDirectory : ITab
 				return;
 
 			model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegate("Delete", Delete, true),
-				};
+			{
+				new TaskDelegate("Delete", Delete, true),
+			};
 
 
 			var directories = new ItemCollection<DirectoryView>();
