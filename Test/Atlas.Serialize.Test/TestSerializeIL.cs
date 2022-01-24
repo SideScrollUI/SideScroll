@@ -66,13 +66,13 @@ public class LazyClass
 		AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
 		ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("Lazy");
 		TypeBuilder typeBuilder = moduleBuilder.DefineType(typeSignature,
-				TypeAttributes.Public |
-				TypeAttributes.Class |
-				TypeAttributes.AutoClass |
-				TypeAttributes.AnsiClass |
-				TypeAttributes.BeforeFieldInit |
-				TypeAttributes.AutoLayout,
-				null);
+			TypeAttributes.Public |
+			TypeAttributes.Class |
+			TypeAttributes.AutoClass |
+			TypeAttributes.AnsiClass |
+			TypeAttributes.BeforeFieldInit |
+			TypeAttributes.AutoLayout,
+			null);
 		return typeBuilder;
 	}
 

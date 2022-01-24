@@ -209,9 +209,9 @@ public class HideAttribute : Attribute
 	{
 		// Combine both params into a single list
 		Values = new List<object>(additonalValues)
-			{
-				value
-			};
+		{
+			value
+		};
 	}
 }
 

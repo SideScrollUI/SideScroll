@@ -359,9 +359,9 @@ public class TestClone : TestSerializeBase
 	public void CloneHashSet()
 	{
 		var input = new HashSet<string>
-			{
-				"test"
-			};
+		{
+			"test"
+		};
 
 		var output = serializer.Clone(log, input);
 
@@ -472,9 +472,9 @@ public class TestClone : TestSerializeBase
 	public void CloneListContainingSubclassOfType()
 	{
 		var input = new List<Base>
-			{
-				new SubClass() { A = 5 }
-			};
+		{
+			new SubClass() { A = 5 }
+		};
 		var output = serializer.Clone(log, input);
 
 		Assert.AreEqual(output[0].A, 5);

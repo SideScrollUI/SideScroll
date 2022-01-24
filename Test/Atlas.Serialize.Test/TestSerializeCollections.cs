@@ -88,10 +88,10 @@ public class TestSerializeCollections : TestSerializeBase
 	public void SerializeStringList()
 	{
 		var input = new List<string>()
-			{
-				"abc",
-				"123"
-			};
+		{
+			"abc",
+			"123"
+		};
 
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<List<string>>(Call);
@@ -104,12 +104,12 @@ public class TestSerializeCollections : TestSerializeBase
 	public void SerializeNullableList()
 	{
 		var input = new List<int?>
-			{
-				null,
-				1,
-				null,
-				2
-			};
+		{
+			null,
+			1,
+			null,
+			2
+		};
 
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<List<int?>>(Call);
@@ -151,9 +151,9 @@ public class TestSerializeCollections : TestSerializeBase
 	public void SerializeDictionaryOfObjects()
 	{
 		var input = new Dictionary<string, object>
-			{
-				{ "default", true }
-			};
+		{
+			{ "default", true }
+		};
 
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Dictionary<string, object>>(Call);
@@ -165,9 +165,9 @@ public class TestSerializeCollections : TestSerializeBase
 	public void SerializeHashSet()
 	{
 		var input = new HashSet<string>
-			{
-				"test",
-			};
+		{
+			"test",
+		};
 
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<HashSet<string>>(Call);

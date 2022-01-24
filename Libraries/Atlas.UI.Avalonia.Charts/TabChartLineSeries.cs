@@ -61,8 +61,8 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 			//iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
 			iNotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object sender, NotifyCollectionChangedEventArgs e)
 			{
-					// can we remove this later when disposing?
-					SeriesChanged(listSeries, e.NewItems);
+				// can we remove this later when disposing?
+				SeriesChanged(listSeries, e.NewItems);
 			});
 		}
 

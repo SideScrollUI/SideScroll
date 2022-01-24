@@ -60,8 +60,8 @@ public class ToolComboBox<T> : IToolComboBox
 			return Items;
 
 		return new List<T>(Items)
-			{
-				SelectedItem
-			};
+		{
+			SelectedItem
+		};
 	}
 }

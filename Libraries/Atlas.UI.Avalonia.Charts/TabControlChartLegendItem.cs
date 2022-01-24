@@ -184,14 +184,14 @@ public class TabChartLegendItem : Grid
 	{
 		int cornerSize = 3;
 		polygon.Points = new List<Point>()
-			{
-				new Point(0, height),
-				new Point(width - cornerSize, height),
-				new Point(width, height - cornerSize),
-				new Point(width, 0),
-				new Point(cornerSize, 0),
-				new Point(0, cornerSize),
-			};
+		{
+			new Point(0, height),
+			new Point(width - cornerSize, height),
+			new Point(width, height - cornerSize),
+			new Point(width, 0),
+			new Point(cornerSize, 0),
+			new Point(0, cornerSize),
+		};
 	}
 
 	private void AddTextBlock()

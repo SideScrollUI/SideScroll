@@ -14,12 +14,12 @@ public class TabAvalonia : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Items = new ItemCollection<ListItem>()
-				{
-					new("Test", new TabTest()),
-					new("Custom Control", new TabCustomControl()),
-					new("Bookmarks", new TabBookmarks(Project)),
-					//new("Demo", new TabDemo()),
-				};
+			{
+				new("Test", new TabTest()),
+				new("Custom Control", new TabCustomControl()),
+				new("Bookmarks", new TabBookmarks(Project)),
+				//new("Demo", new TabDemo()),
+			};
 		}
 	}
 }

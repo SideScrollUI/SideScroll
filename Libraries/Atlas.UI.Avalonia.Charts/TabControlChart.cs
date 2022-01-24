@@ -132,27 +132,27 @@ public class TabControlChart : Grid, IDisposable
 	private static readonly OxyColor GridLineColor = OxyColor.Parse("#333333");
 	public static OxyColor[] Colors { get; set; } = new OxyColor[]
 	{
-			OxyColors.LawnGreen,
-			OxyColors.Fuchsia,
-			OxyColors.Cyan,
-			//OxyColors.Aquamarine, // too close to Cyan (but more matte)
-			OxyColors.Gold,
-			OxyColors.DodgerBlue,
-			OxyColors.Red,
-			OxyColors.BlueViolet,
-			//OxyColors.SlateBlue,
-			OxyColors.Orange,
-			//OxyColors.Pink,
-			//OxyColors.Coral,
-			//OxyColors.YellowGreen,
-			OxyColors.Salmon,
-			OxyColors.MediumSpringGreen,
+		OxyColors.LawnGreen,
+		OxyColors.Fuchsia,
+		OxyColors.Cyan,
+		//OxyColors.Aquamarine, // too close to Cyan (but more matte)
+		OxyColors.Gold,
+		OxyColors.DodgerBlue,
+		OxyColors.Red,
+		OxyColors.BlueViolet,
+		//OxyColors.SlateBlue,
+		OxyColors.Orange,
+		//OxyColors.Pink,
+		//OxyColors.Coral,
+		//OxyColors.YellowGreen,
+		OxyColors.Salmon,
+		OxyColors.MediumSpringGreen,
 	};
 
 	public static OxyColor GetColor(int index) => Colors[index % Colors.Length];
 
 	private bool UseDateTimeAxis => (xAxisPropertyInfo?.PropertyType == typeof(DateTime)) ||
-			(ListGroup.TimeWindow != null);
+									(ListGroup.TimeWindow != null);
 
 	public bool IsTitleSelectable { get; set; }
 
@@ -997,7 +997,7 @@ public class TabControlChart : Grid, IDisposable
 		lineSeries.MouseUp += (s, e) =>
 		{
 			e.Handled = true; // Handle so zooming doesn't use?
-			};
+		};
 
 		OxyListSeriesList.Add(oxyListSeries);
 		ListToTabSeries[listSeries.List] = listSeries;

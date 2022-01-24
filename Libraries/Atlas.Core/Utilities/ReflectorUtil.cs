@@ -36,15 +36,15 @@ public static class ReflectorUtil
 						if (iType.IsGenericType && iType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
 						{
 							obj = typeof(ReflectorUtil).GetMethod("GetDictionaryElement")
-												 .MakeGenericMethod(iType.GetGenericArguments())
-												 .Invoke(null, new object[] { obj, index });
+								.MakeGenericMethod(iType.GetGenericArguments())
+								.Invoke(null, new object[] { obj, index });
 							break;
 						}
 						if (iType.IsGenericType && iType.GetGenericTypeDefinition() == typeof(IList<>))
 						{
 							obj = typeof(ReflectorUtil).GetMethod("GetListElement")
-												 .MakeGenericMethod(iType.GetGenericArguments())
-												 .Invoke(null, new object[] { obj, index });
+								.MakeGenericMethod(iType.GetGenericArguments())
+								.Invoke(null, new object[] { obj, index });
 							break;
 						}
 					}

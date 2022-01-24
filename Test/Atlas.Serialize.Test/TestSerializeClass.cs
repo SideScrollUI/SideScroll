@@ -297,9 +297,9 @@ public class SerializeClass : TestSerializeBase
 	public void SerializeListContainingSubclassOfType()
 	{
 		var input = new List<Base>
-			{
-				new SubClass() { A = 5 }
-			};
+		{
+			new SubClass() { A = 5 }
+		};
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<List<Base>>(Call);
 

@@ -167,7 +167,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 			_disableSaving--;
 			if (_selectionModified)
 				TabInstance.SaveTabSettings(); // selection has probably changed
-			}, DispatcherPriority.Background);
+		}, DispatcherPriority.Background);
 	}
 
 	private void InitializeControls()

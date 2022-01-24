@@ -167,13 +167,13 @@ public class ScreenCapture : Grid
 			InitialFileName = TabViewer.Project.Name + '.' + FileUtils.TimestampString + ".png",
 			DefaultExtension = "png",
 			Filters = new List<FileDialogFilter>()
+			{
+				new FileDialogFilter()
 				{
-					new FileDialogFilter()
-					{
-						Name = "Portable Network Graphic file (PNG)",
-						Extensions = new List<string>() { "png" }
-					}
-				},
+					Name = "Portable Network Graphic file (PNG)",
+					Extensions = new List<string>() { "png" }
+				}
+			},
 		};
 		var window = GetWindow(this);
 		string filePath = await fileDialog.ShowAsync(window);

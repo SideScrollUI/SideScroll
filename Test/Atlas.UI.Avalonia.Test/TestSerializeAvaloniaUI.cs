@@ -32,9 +32,9 @@ public class TestSerializeAvaloniaUI : TestBase
 			TabBookmark = new TabBookmark()
 			{
 				ChildBookmarks = new Dictionary<string, TabBookmark>()
-					{
-						{ "test", new TabBookmark() }
-					}
+				{
+					{ "test", new TabBookmark() }
+				}
 			},
 		};
 		input.TabBookmark.Bookmark = input;

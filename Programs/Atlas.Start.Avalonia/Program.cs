@@ -28,8 +28,8 @@ class Program
 			.UsePlatformDetect()
 			.With(new Win32PlatformOptions
 			{
-					//UseDeferredRendering = false, // Causes DataGrid blank columns when scrolling right?
-					AllowEglInitialization = true,
+				//UseDeferredRendering = false, // Causes DataGrid blank columns when scrolling right?
+				AllowEglInitialization = true,
 			})
 			.LogToTrace();
 }

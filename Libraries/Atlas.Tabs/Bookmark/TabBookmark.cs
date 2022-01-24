@@ -190,13 +190,13 @@ public class TabBookmark
 		ViewSettings = new TabViewSettings()
 		{
 			TabDataSettings = new List<TabDataSettings>()
+			{
+				new TabDataSettings()
 				{
-					new TabDataSettings()
-					{
-						SelectionType = SelectionType.User,
-						SelectedRows = selectedRows,
-					},
+					SelectionType = SelectionType.User,
+					SelectedRows = selectedRows,
 				},
+			},
 		};
 	}
 
