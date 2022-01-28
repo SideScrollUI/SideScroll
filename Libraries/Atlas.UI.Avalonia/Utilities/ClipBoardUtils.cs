@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia;
 
-public class ClipBoardUtils
+public static class ClipBoardUtils
 {
 	public static void SetText(string text)
 	{

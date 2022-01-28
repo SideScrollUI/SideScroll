@@ -9,7 +9,7 @@ namespace Atlas.Tabs;
 
 public class ListField : ListMember, IPropertyEditable
 {
-	public FieldInfo FieldInfo;
+	public readonly FieldInfo FieldInfo;
 
 	[HiddenColumn]
 	public override bool Editable => true;

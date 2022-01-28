@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Atlas.Resources;
 
-public class Icons
+public static class Icons
 {
 	public const string Logo = "Logo3.ico";
 

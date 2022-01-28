@@ -28,7 +28,7 @@ public class TypeRepoArrayBytes : TypeRepo
 		return typeof(byte[]).IsAssignableFrom(type);
 	}
 
-	public override void SaveCustomHeader(BinaryWriter writer)
+	protected override void SaveCustomHeader(BinaryWriter writer)
 	{
 		foreach (IList list in Objects)
 		{
@@ -36,7 +36,7 @@ public class TypeRepoArrayBytes : TypeRepo
 		}
 	}
 
-	public override void LoadCustomHeader()
+	protected override void LoadCustomHeader()
 	{
 		_sizes = new int[TypeSchema.NumObjects];
 		for (int i = 0; i < TypeSchema.NumObjects; i++)

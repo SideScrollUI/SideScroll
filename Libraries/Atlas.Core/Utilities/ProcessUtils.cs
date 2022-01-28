@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace Atlas.Core;
 
-public class ProcessUtils
+public static class ProcessUtils
 {
 	public static string OSPlatformName => GetOSPlatform().ToString().CamelCased();
 

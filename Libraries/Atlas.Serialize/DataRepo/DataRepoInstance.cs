@@ -15,7 +15,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 {
 	private const string DefaultKey = ".Default"; // todo: support multiple directory levels?
 
-	public DataRepo DataRepo;
+	public readonly DataRepo DataRepo;
 	public string GroupId { get; set; }
 
 	public DataRepoInstance(DataRepo dataRepo, string groupId)

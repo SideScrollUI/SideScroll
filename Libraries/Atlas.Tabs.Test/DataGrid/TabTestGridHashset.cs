@@ -9,13 +9,13 @@ public class TabTestGridHashSet : ITab
 
 	public class Instance : TabInstance
 	{
-		private HashSet<TabTestGridCollectionSize.TestItem> items;
+		private HashSet<TabTestGridCollectionSize.TestItem> _items;
 
 		public override void Load(Call call, TabModel model)
 		{
-			items = new HashSet<TabTestGridCollectionSize.TestItem>();
+			_items = new HashSet<TabTestGridCollectionSize.TestItem>();
 			AddEntries(null);
-			model.AddData(items);
+			model.AddData(_items);
 
 			model.Actions = new List<TaskCreator>()
 			{
@@ -32,7 +32,7 @@ public class TabTestGridHashSet : ITab
 					SmallNumber = i
 				};
 				testItem.BigNumber += i;
-				items.Add(testItem);
+				_items.Add(testItem);
 			}
 		}
 	}

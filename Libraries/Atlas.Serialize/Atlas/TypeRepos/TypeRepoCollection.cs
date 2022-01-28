@@ -32,7 +32,7 @@ public class TypeRepoCollection : TypeRepo
 			_elementType = types[0];
 
 		_addMethod = LoadableType.GetMethods()
-			.Where(m => m.Name == "Add" && m.GetParameters().Count() == 1).FirstOrDefault();
+			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Count() == 1);
 	}
 
 	public override void InitializeLoading(Log log)

@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Atlas.Core;
 
-public class LogUtils
+public static class LogUtils
 {
 	public static void LogException(Exception e, string domain, string projectName)
 	{

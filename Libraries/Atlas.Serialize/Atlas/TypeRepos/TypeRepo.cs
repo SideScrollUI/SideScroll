@@ -44,9 +44,9 @@ public abstract class TypeRepo : IDisposable
 		//new TypeRepoObject.Creator(),
 	};
 
-	public Serializer Serializer;
-	public TypeSchema TypeSchema;
-	public Type Type; // might be null after loading
+	public readonly Serializer Serializer;
+	public readonly TypeSchema TypeSchema;
+	public readonly Type Type; // might be null after loading
 	public Type LoadableType; // some types get overridden lazy load, or get removed [Unserialized]
 	public int TypeIndex; // -1 if null
 	public List<object> Objects = new(); // ordered by index, not filled in when loading
@@ -70,8 +70,8 @@ public abstract class TypeRepo : IDisposable
 	public virtual void AddChildObjects(object obj) { }
 	public virtual void InitializeSaving() { }
 	public virtual void InitializeLoading(Log log) { }
-	public virtual void SaveCustomHeader(BinaryWriter writer) { }
-	public virtual void LoadCustomHeader() { }
+	protected virtual void SaveCustomHeader(BinaryWriter writer) { }
+	protected virtual void LoadCustomHeader() { }
 
 	public override string ToString() => TypeSchema.Name;
 

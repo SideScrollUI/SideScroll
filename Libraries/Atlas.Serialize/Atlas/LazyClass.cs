@@ -48,7 +48,7 @@ public class LazyClass
 {
 	public Type OriginalType;
 	public Type NewType;
-	public Dictionary<PropertyInfo, LazyProperty> lazyProperties = new();
+	public Dictionary<PropertyInfo, LazyProperty> LazyProperties = new();
 
 	public LazyClass(Type type, List<TypeRepoObject.PropertyRepo> propertyRepos)
 	{
@@ -56,7 +56,7 @@ public class LazyClass
 
 		NewType = CreateLazyType(propertyRepos);
 
-		foreach (LazyProperty lazyProperty in lazyProperties.Values)
+		foreach (LazyProperty lazyProperty in LazyProperties.Values)
 		{
 			lazyProperty.PropertyInfoOverride = NewType.GetProperty(lazyProperty.PropertyInfoOriginal.Name);
 			lazyProperty.FieldInfoLoaded = NewType.GetField(lazyProperty.FieldBuilderLoaded.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -202,7 +202,7 @@ public class LazyClass
 			FieldBuilderTypeRef = fieldBuilderTypeRef,
 			FieldBuilderLoaded = fieldBuilderLoaded,
 		};
-		lazyProperties[propertyInfo] = lazyProperty;
+		LazyProperties[propertyInfo] = lazyProperty;
 
 		return lazyProperty;
 	}

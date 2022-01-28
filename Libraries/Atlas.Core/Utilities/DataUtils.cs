@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Atlas.Core;
 
-public class DataUtils
+public static class DataUtils
 {
 	public static string GetItemId(object obj)
 	{

@@ -17,7 +17,7 @@ namespace Atlas.UI.Avalonia;
 
 public class EventTabLoaded : EventArgs
 {
-	public object Object;
+	public readonly object Object;
 
 	public EventTabLoaded(object obj)
 	{
@@ -49,7 +49,7 @@ public class TabViewer : Grid
 
 	public event EventHandler<EventTabLoaded> OnTabLoaded;
 
-	public TabViewer(Project project) : base()
+	public TabViewer(Project project)
 	{
 		BaseViewer = this;
 		LoadProject(project);

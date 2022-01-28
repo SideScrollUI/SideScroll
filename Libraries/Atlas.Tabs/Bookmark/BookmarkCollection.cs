@@ -9,7 +9,7 @@ public class BookmarkCollection
 {
 	public const string DataKey = "Bookmarks";
 
-	public Project Project;
+	public readonly Project Project;
 
 	public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new()
 	{

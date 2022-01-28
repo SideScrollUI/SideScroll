@@ -10,8 +10,8 @@ public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 {
 	public delegate Task<object> LoadObjectAsync(Call call);
 
-	public LoadObjectAsync LoadAction;
-	public MethodInfo MethodInfo;
+	public readonly LoadObjectAsync LoadAction;
+	public readonly MethodInfo MethodInfo;
 
 	public bool CacheEnabled { get; set; }
 

@@ -14,7 +14,7 @@ public class TabTestNullableArray : ITab
 
 			for (int i = 0; i < testItems.Length; i++)
 			{
-				testItems[i] = new TestItem()
+				testItems[i] = new TestItem
 				{
 					SmallNumber = i,
 					BigNumber = i * 1000,

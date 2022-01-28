@@ -14,7 +14,7 @@ public struct FilePath
 	}
 }
 
-public class FileUtils
+public static class FileUtils
 {
 	public static string TimestampString => DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 

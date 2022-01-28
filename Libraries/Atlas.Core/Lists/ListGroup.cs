@@ -71,7 +71,7 @@ public class ListGroup
 	public void SortByTotal()
 	{
 		var timeWindow = TimeWindow;
-		int averageCount = Series.Where(s => s.SeriesType == SeriesType.Average).Count();
+		int averageCount = Series.Count(s => s.SeriesType == SeriesType.Average);
 		if (averageCount == Series.Count)
 		{
 			// Use the Min/Max times from the series data points (should this be configurable?)

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Atlas.Serialize;
 
-public class TypeRepoType : TypeRepo, IDisposable
+public class TypeRepoType : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{

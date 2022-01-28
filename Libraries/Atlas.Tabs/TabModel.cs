@@ -19,7 +19,7 @@ public interface ITabSelector
 
 public class TabSelectionChangedEventArgs : EventArgs
 {
-	public bool Recreate;
+	public readonly bool Recreate;
 
 	public TabSelectionChangedEventArgs(bool recreate = false)
 	{

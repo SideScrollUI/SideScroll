@@ -16,9 +16,9 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 	private const int MaxPointsToShowMarkers = 8;
 	private const int MaxTitleLength = 200;
 
-	public TabControlChart Chart;
-	public ListSeries ListSeries;
-	private readonly bool UseDateTimeAxis;
+	public readonly TabControlChart Chart;
+	public readonly ListSeries ListSeries;
+	public readonly bool UseDateTimeAxis;
 
 	public PropertyInfo XAxisPropertyInfo;
 

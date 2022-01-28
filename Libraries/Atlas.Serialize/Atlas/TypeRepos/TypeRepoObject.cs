@@ -27,8 +27,8 @@ public class TypeRepoObject : TypeRepo
 
 	public class FieldRepo
 	{
-		public FieldSchema FieldSchema;
-		public TypeRepo TypeRepo;
+		public readonly FieldSchema FieldSchema;
+		public readonly TypeRepo TypeRepo;
 
 		public override string ToString() => "Field Repo: " + FieldSchema.FieldName;
 
@@ -58,8 +58,8 @@ public class TypeRepoObject : TypeRepo
 
 	public class PropertyRepo
 	{
-		public PropertySchema PropertySchema;
-		public TypeRepo TypeRepo;
+		public readonly PropertySchema PropertySchema;
+		public readonly TypeRepo TypeRepo;
 		public LazyProperty LazyProperty;
 
 		public override string ToString() => PropertySchema.ToString() + " (" + TypeRepo.ToString() + ")";
@@ -236,7 +236,7 @@ public class TypeRepoObject : TypeRepo
 		/*if (lazyClass != null)
 		{
 			//if (propertySchema.propertyInfo != null)
-				lazyClass.lazyProperties.TryGetValue(propertySchema.propertyInfo, out propertyRepo.lazyProperty);
+				lazyClass.LazyProperties.TryGetValue(propertySchema.propertyInfo, out propertyRepo.lazyProperty);
 		}*/
 	}
 

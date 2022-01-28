@@ -18,7 +18,7 @@ public class TaskAction : TaskCreator
 
 	protected override Action CreateAction(Call call)
 	{
-		return () => InvokeAction();
+		return InvokeAction;
 	}
 
 	private void InvokeAction()

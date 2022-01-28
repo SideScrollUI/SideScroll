@@ -3,11 +3,12 @@ using Avalonia.Media;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Atlas.UI.Avalonia;
 
-public class DataGridUtils
+public static class DataGridUtils
 {
 	private const int MaxColumnWidth = 100;
 
@@ -24,13 +25,17 @@ public class DataGridUtils
 
 	public static string TableToString(List<ColumnInfo> columns, List<List<string>> contentRows, int maxColumnWidth = MaxColumnWidth)
 	{
-		var columnWidths = new List<int>();
-		for (int column = 0; column < columns.Count; column++)
-		{
-			string header = columns[column].Name;
-			columnWidths.Add(header.Length);
-		}
+		List<int> columnNameWidths = columns
+			.Select(c => c.Name.Length)
+			.ToList();
 
+		List<List<string>> cellValues = GetCellValues(contentRows, maxColumnWidth, columnNameWidths);
+
+		return TableValuesToString(columns, columnNameWidths, cellValues);
+	}
+
+	private static List<List<string>> GetCellValues(List<List<string>> contentRows, int maxColumnWidth, List<int> columnNameWidths)
+	{
 		// Get formatted cell values and wrap text across multiple lines
 		var cellValues = new List<List<string>>();
 		foreach (List<string> row in contentRows)
@@ -66,7 +71,7 @@ public class DataGridUtils
 					rowValues[column] = remaining;
 					lineValues.Add(text);
 					overflowed |= (remaining.Length > 0);
-					columnWidths[column] = Math.Max(text.Length, columnWidths[column]);
+					columnNameWidths[column] = Math.Max(text.Length, columnNameWidths[column]);
 				}
 
 				cellValues.Add(lineValues);
@@ -75,52 +80,57 @@ public class DataGridUtils
 			}
 		}
 
+		return cellValues;
+	}
+
+	private static string TableValuesToString(List<ColumnInfo> columns, List<int> columnNameWidths, List<List<string>> cellValues)
+	{
 		string line = "-";
-		foreach (int value in columnWidths)
+		foreach (int value in columnNameWidths)
 		{
 			line += new string('-', value + 3);
 		}
 		line += '\n';
 
-		var stringBuilder = new StringBuilder(line);
+		var sb = new StringBuilder(line);
 
 		// Column Headers
-		stringBuilder.Append('|');
+		sb.Append('|');
 		int columnIndex = 0;
 		foreach (var columnInfo in columns)
 		{
-			int columnWidth = columnWidths[columnIndex++];
+			int columnWidth = columnNameWidths[columnIndex++];
 			int leftPadding = (columnWidth - columnInfo.Name.Length) / 2;
 			int rightPadding = columnWidth - columnInfo.Name.Length - leftPadding;
-			stringBuilder.Append(" " + new string(' ', leftPadding) + columnInfo.Name + new string(' ', rightPadding) + " |");
+			sb.Append(" " + new string(' ', leftPadding) + columnInfo.Name + new string(' ', rightPadding) + " |");
 		}
-		stringBuilder.Append('\n');
+		sb.Append('\n');
 
 		// Separator
-		stringBuilder.Append('|');
-		foreach (int columnWidth in columnWidths)
+		sb.Append('|');
+		foreach (int columnWidth in columnNameWidths)
 		{
-			stringBuilder.Append(new string('-', columnWidth + 2));
-			stringBuilder.Append('|');
+			sb.Append(new string('-', columnWidth + 2));
+			sb.Append('|');
 		}
-		stringBuilder.Append('\n');
+		sb.Append('\n');
 
 		// Content Cells
 		foreach (var row in cellValues)
 		{
-			stringBuilder.Append('|');
+			sb.Append('|');
 			columnIndex = 0;
 			foreach (string value in row)
 			{
 				if (columns[columnIndex].RightAlign == TextAlignment.Right)
-					stringBuilder.Append(" " + value.PadLeft(columnWidths[columnIndex++], ' ') + " |");
+					sb.Append(" " + value.PadLeft(columnNameWidths[columnIndex++], ' ') + " |");
 				else
-					stringBuilder.Append(" " + value.PadRight(columnWidths[columnIndex++], ' ') + " |");
+					sb.Append(" " + value.PadRight(columnNameWidths[columnIndex++], ' ') + " |");
 			}
-			stringBuilder.Append('\n');
+			sb.Append('\n');
 		}
-		stringBuilder.Append(line);
-		return stringBuilder.ToString();
+		sb.Append(line);
+		return sb.ToString();
 	}
 
 	public static bool IsTypeSortable(Type type)

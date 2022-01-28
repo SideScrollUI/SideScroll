@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Atlas.Network;
 
-public class HttpUtils
+public static class HttpUtils
 {
 	public static int MaxAttempts { get; set; } = 5;
 	public static int SleepMilliseconds = 500; // < ^ MaxAttempts

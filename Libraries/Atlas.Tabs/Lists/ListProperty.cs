@@ -15,7 +15,7 @@ public interface IPropertyEditable
 
 public class ListProperty : ListMember, IPropertyEditable
 {
-	public PropertyInfo PropertyInfo;
+	public readonly PropertyInfo PropertyInfo;
 	public bool Cachable;
 
 	private bool _valueCached;

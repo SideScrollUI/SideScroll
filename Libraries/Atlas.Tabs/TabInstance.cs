@@ -116,7 +116,7 @@ public class TabInstance : IDisposable
 
 	public class EventSelectItem : EventArgs
 	{
-		public object Object;
+		public readonly object Object;
 
 		public EventSelectItem(object obj)
 		{
@@ -126,7 +126,7 @@ public class TabInstance : IDisposable
 
 	public class EventSelectItems : EventArgs
 	{
-		public IList List;
+		public readonly IList List;
 
 		public EventSelectItems(IList list)
 		{
@@ -609,8 +609,8 @@ public class TabInstance : IDisposable
 		{
 			Name = Label,
 			Type = iTab?.GetType(),
+			TabBookmark = {IsRoot = true}
 		};
-		bookmark.TabBookmark.IsRoot = true;
 		GetBookmark(bookmark.TabBookmark);
 		bookmark = bookmark.DeepClone(TaskInstance.Call); // Sanitize and test bookmark
 		return bookmark;

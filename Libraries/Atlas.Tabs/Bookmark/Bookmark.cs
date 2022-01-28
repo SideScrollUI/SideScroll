@@ -66,11 +66,11 @@ public class Bookmark
 
 	public static Bookmark Create(params string[] labels)
 	{
-		var bookmark = new Bookmark()
+		var bookmark = new Bookmark
 		{
 			Imported = true,
+			TabBookmark = TabBookmark.Create(labels)
 		};
-		bookmark.TabBookmark = TabBookmark.Create(labels);
 		return bookmark;
 	}
 }

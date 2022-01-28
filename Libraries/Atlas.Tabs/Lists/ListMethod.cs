@@ -10,7 +10,7 @@ namespace Atlas.Tabs;
 
 public class ListMethod : ListMember
 {
-	public MethodInfo MethodInfo;
+	public readonly MethodInfo MethodInfo;
 	private bool CacheEnabled { get; set; }
 
 	private bool _valueCached;

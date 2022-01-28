@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace Atlas.Core;
 
-public class DateTimeUtils
+public static class DateTimeUtils
 {
 	public static DateTime EpochTime => new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 

@@ -4,7 +4,7 @@ namespace Atlas.Tabs.Test;
 
 public class TabTestJson : ITab
 {
-	public readonly static string Json1 =
+	public static readonly string Json1 =
 @"{
 ""id"":""abc"",
 ""value"": 123,

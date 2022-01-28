@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Atlas.Core;
 
-public class ThreadUtils
+public static class ThreadUtils
 {
 	public static void InvokeDelayed(int milliSecondsDelay, Action action)
 	{

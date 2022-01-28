@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia;
 
-public class AvaloniaUtils
+public static class AvaloniaUtils
 {
 	// TextBlock control doesn't allow selecting text, so add a Copy command to the context menu
 	public static void AddContextMenu(TextBlock textBlock)

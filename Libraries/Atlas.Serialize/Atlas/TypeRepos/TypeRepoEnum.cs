@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Atlas.Serialize;
 
-public class TypeRepoEnum : TypeRepo, IDisposable
+public class TypeRepoEnum : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{

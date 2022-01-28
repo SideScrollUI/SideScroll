@@ -25,14 +25,14 @@ public interface IItemCollection
 }
 
 // See ItemCollectionUI for a thread safe version
-public class ItemCollection<T> : ObservableCollection<T>, IList, IItemCollection, ICollection, IEnumerable, IComparer //, IRaiseItemChangedEvents //
+public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComparer //, IRaiseItemChangedEvents //
 {
 	public string ColumnName { get; set; }
 	public string Label { get; set; }
 	public bool Skippable { get; set; } = true;
 	public string CustomSettingsPath { get; set; }
 
-	public IComparer Comparer = new CustomComparer();
+	public IComparer Comparer { get; set; } = new CustomComparer();
 
 	public override string ToString() => Label ?? "[" + Count.ToString("N0") + "]";
 

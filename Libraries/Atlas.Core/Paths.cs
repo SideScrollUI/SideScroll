@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Atlas.Core;
 
-public class Paths
+public static class Paths
 {
 	public static string Combine(string path, params string[] paths)
 	{

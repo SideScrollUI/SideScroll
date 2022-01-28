@@ -3,7 +3,7 @@ using System;
 
 namespace Atlas.Core;
 
-public class JsonUtils
+public static class JsonUtils
 {
 	public static string Format(string text)
 	{
