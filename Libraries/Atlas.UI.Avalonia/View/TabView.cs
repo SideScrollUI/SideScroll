@@ -110,8 +110,6 @@ public class TabView : Grid, IDisposable
 		Instance.Invoke(ShowLoading);
 
 		await Instance.ReintializeAsync(call);
-
-		Instance.Invoke(ReloadControls);
 	}
 
 	protected override Size ArrangeOverride(Size finalSize)
