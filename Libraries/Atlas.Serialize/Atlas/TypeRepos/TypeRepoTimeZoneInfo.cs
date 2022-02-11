@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Atlas.Serialize;
 
@@ -28,7 +29,7 @@ public class TypeRepoTimeZoneInfo : TypeRepo
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
 		TimeZoneInfo timeZoneInfo = (TimeZoneInfo)obj;
-		writer.Write(timeZoneInfo.ToSerializedString());
+		writer.Write(timeZoneInfo.Id);
 	}
 
 	protected override object CreateObject(int objectIndex)
@@ -36,30 +37,37 @@ public class TypeRepoTimeZoneInfo : TypeRepo
 		long position = Reader.BaseStream.Position;
 		Reader.BaseStream.Position = ObjectOffsets[objectIndex];
 
-		object obj = null;
-		try
-		{
-			obj = TimeZoneInfo.FromSerializedString(Reader.ReadString());
-		}
-		catch (Exception)
-		{
-			//log.Add(e);
-		}
+		string serializedString = Reader.ReadString();
+		TimeZoneInfo timeZoneInfo = LoadTimeZoneInfo(serializedString);
 		Reader.BaseStream.Position = position;
 
-		ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
-		return obj;
+		ObjectsLoaded[objectIndex] = timeZoneInfo; // must assign before loading any more refs
+		return timeZoneInfo;
 	}
 
 	public override object LoadObject()
 	{
-		object obj = TimeZoneInfo.FromSerializedString(Reader.ReadString());
-		return obj;
+		string serializedString = Reader.ReadString();
+		TimeZoneInfo timeZoneInfo = LoadTimeZoneInfo(serializedString);
+		return timeZoneInfo;
 	}
 
 	// not called, it's a struct and a value
 	public override void Clone(object source, object dest)
 	{
 		//dest = new DateTime(((DateTime)source).Ticks, ((DateTime)source).Kind);
+	}
+
+	private static TimeZoneInfo LoadTimeZoneInfo(string serializedString)
+	{
+		string id = serializedString.Split(';', 2).First(); // deprecated format has multiple fields
+		try
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById(id);
+		}
+		catch (Exception)
+		{
+		}
+		return null;
 	}
 }

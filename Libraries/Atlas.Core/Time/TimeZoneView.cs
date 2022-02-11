@@ -22,18 +22,18 @@ public class TimeZoneView : IComparable
 		TimeZoneInfo = timeZoneInfo;
 	}
 
-	public TimeZoneView(string abbreviation, string name, TimeSpan timeSpan)
+	public TimeZoneView(string abbreviation, string name, string id, TimeSpan timeSpan)
 	{
 		Abbreviation = abbreviation;
 		Name = name;
 
 		try
 		{
-			TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(name);
+			TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(id);
 		}
 		catch (Exception)
 		{
-			TimeZoneInfo = TimeZoneInfo.CreateCustomTimeZone(name, timeSpan, name, name);
+			TimeZoneInfo = TimeZoneInfo.CreateCustomTimeZone(id, timeSpan, name, name);
 		}
 	}
 
@@ -41,7 +41,7 @@ public class TimeZoneView : IComparable
 	{
 		if (Abbreviation == Name)
 			return Abbreviation;
-		return Abbreviation + " - " + Name + ": " + TimeZoneInfo.BaseUtcOffset.Formatted();
+		return Abbreviation + " - " + Name + ": " + TimeZoneInfo.BaseUtcOffset.FormattedDecimal();
 	}
 
 	public DateTime ConvertTimeToUtc(DateTime dateTime)
@@ -69,10 +69,8 @@ public class TimeZoneView : IComparable
 	{
 		Utc,
 		Local,
-		new TimeZoneView("PDT", "Pacific Daylight Time", TimeSpan.FromHours(-7)),
-		new TimeZoneView("PST", "Pacific Standard Time", TimeSpan.FromHours(-8)),
-		new TimeZoneView("EDT", "Eastern Daylight Time", TimeSpan.FromHours(-4)),
-		new TimeZoneView("EST", "Eastern Standard Time", TimeSpan.FromHours(-5)),
-		new TimeZoneView("SGT", "Singapore Standard Time", TimeSpan.FromHours(8)),
+		new TimeZoneView("PST / PDT", "Pacific Time", "Pacific Standard Time", TimeSpan.FromHours(-8)),
+		new TimeZoneView("EST / EDT", "Eastern Time", "Eastern Standard Time", TimeSpan.FromHours(-5)),
+		new TimeZoneView("SGT", "Singapore Time", "Singapore Standard Time", TimeSpan.FromHours(8)),
 	};
 }
