@@ -219,7 +219,7 @@ public class TabControlChart : Grid, IDisposable
 
 		PlotView.ActualController.BindMouseEnter(new DelegatePlotCommand<OxyMouseEventArgs>(
 			(view, controller, args) =>
-			controller.AddHoverManipulator(view, new MouseHoverManipulator(this), args)));
+				controller.AddHoverManipulator(view, new MouseHoverManipulator(this), args)));
 
 		LoadPlotModel();
 		/*plotView.Template = new ControlTemplate() // todo: fix

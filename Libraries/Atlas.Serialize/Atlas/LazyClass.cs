@@ -170,11 +170,11 @@ public class LazyClass
 
 		MethodBuilder setPropertyMethodBuilder =
 			typeBuilder.DefineMethod("set_" + propertyName,
-			  MethodAttributes.Public |
-			  MethodAttributes.Virtual |
-			  MethodAttributes.SpecialName |
-			  MethodAttributes.HideBySig,
-			  null, new[] { propertyType });
+				MethodAttributes.Public |
+				MethodAttributes.Virtual |
+				MethodAttributes.SpecialName |
+				MethodAttributes.HideBySig,
+				null, new[] { propertyType });
 
 		ILGenerator setIl = setPropertyMethodBuilder.GetILGenerator();
 

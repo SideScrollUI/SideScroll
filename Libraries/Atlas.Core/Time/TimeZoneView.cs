@@ -65,6 +65,7 @@ public class TimeZoneView : IComparable
 	public static TimeZoneView Utc = new("Utc", "Utc", TimeZoneInfo.Utc);
 	public static TimeZoneView Local = new("Local", "Local", TimeZoneInfo.Local);
 
+	// https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
 	public static List<TimeZoneView> All = new()
 	{
 		Utc,
