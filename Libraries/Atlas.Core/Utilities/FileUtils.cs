@@ -55,6 +55,7 @@ public static class FileUtils
 		return umask(UmaskUserOnlyPermissions);
 	}
 
+	// https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
 	public static void DirectoryCopy(Call call, string sourceDirPath, string destDirPath, bool copySubDirs)
 	{
 		var directoryInfo = new DirectoryInfo(sourceDirPath);
@@ -96,8 +97,21 @@ public static class FileUtils
 			}
 		}
 	}
+
+	public static bool IsFileOpen(string fileName)
+	{
+		var fileInfo = new FileInfo(fileName);
+
+		try
+		{
+			using FileStream stream = fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+			stream.Close();
+		}
+		catch (IOException)
+		{
+			return true;
+		}
+
+		return false;
+	}
 }
-/*
-Based on:
-https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
-*/

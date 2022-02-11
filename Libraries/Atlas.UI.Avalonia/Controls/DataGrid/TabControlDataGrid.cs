@@ -727,16 +727,16 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 		var objects = new HashSet<object>();
 		var keys = new Dictionary<string, object>();
-		foreach (object listItem in CollectionView) // collectionView takes filters into account
+		foreach (object obj in CollectionView) // collectionView takes filters into account
 		{
-			if (listItem == null)
+			if (obj == null)
 				continue;
 
-			objects.Add(objects);
+			objects.Add(obj);
 
-			string id = DataUtils.GetItemId(listItem);
+			string id = DataUtils.GetObjectId(obj);
 			if (id != null)
-				keys[id] = listItem;
+				keys[id] = obj;
 		}
 
 		foreach (SelectedRow selectedRow in TabDataSettings.SelectedRows)

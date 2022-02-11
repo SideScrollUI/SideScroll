@@ -6,7 +6,7 @@ namespace Atlas.Core;
 
 public static class DataUtils
 {
-	public static string GetItemId(object obj)
+	public static string GetObjectId(object obj)
 	{
 		string id = GetDataKey(obj);
 		if (id == null)
