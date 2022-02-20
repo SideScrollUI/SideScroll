@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Atlas.Core;
 
 // Use the specified name instead of the field/property name
-[AttributeUsage(AttributeTargets.All)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
 public class NameAttribute : Attribute
 {
 	public readonly string Name;
@@ -22,7 +22,7 @@ public class DataKeyAttribute : Attribute
 }
 
 // DataGrids use this as a unique key when matching rows
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class DataValueAttribute : Attribute
 {
 }
@@ -33,7 +33,7 @@ public class VisibleAttribute : Attribute
 {
 }
 
-[AttributeUsage(AttributeTargets.All)]
+[AttributeUsage(AttributeTargets.Property)]
 public class PasswordCharAttribute : Attribute
 {
 	public readonly char Character;
@@ -45,7 +45,7 @@ public class PasswordCharAttribute : Attribute
 }
 
 // [Watermark("0123456789abcdef")]
-[AttributeUsage(AttributeTargets.All)]
+[AttributeUsage(AttributeTargets.Property)]
 public class WatermarkAttribute : Attribute
 {
 	public readonly string Text;
@@ -65,7 +65,7 @@ public class DescriptionAttribute : Attribute
 }*/
 
 // [Summary("Text to describe object")], [Description] conflicts with NUnit's, use [TabDescription]?
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class SummaryAttribute : Attribute
 {
 	public readonly string Summary;
@@ -77,13 +77,13 @@ public class SummaryAttribute : Attribute
 }
 
 // Style a Column to use the same color as the header
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Property)]
 public class StyleLabelAttribute : Attribute
 {
 }
 
 // Style value based on whether it contains links or not
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Property)]
 public class StyleValueAttribute : Attribute
 {
 }
@@ -95,20 +95,20 @@ public class FormattedAttribute : Attribute
 }
 
 // Adds spaces between words in a string
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+/*[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class WordSpacedAttribute : Attribute
 {
-}
+}*/
 
 // Wrap the text, Accepts return by default
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Property)]
 public class WordWrapAttribute : Attribute
 {
 }
 
 // Applies only to Params/TextBoxes
 // Allow return key to add a new line
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Property)]
 public class AcceptsReturnAttribute : Attribute
 {
 	public readonly bool Allow;
@@ -120,7 +120,7 @@ public class AcceptsReturnAttribute : Attribute
 }
 
 // Right align contents in parent control
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Property)]
 public class RightAlignAttribute : Attribute
 {
 }
@@ -181,7 +181,7 @@ public class HiddenAttribute : Attribute
 }
 
 // Don't show this field/property as a column
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Property)]
 public class HiddenColumnAttribute : Attribute
 {
 }
@@ -215,6 +215,18 @@ public class HideAttribute : Attribute
 	}
 }
 
+// Don't show unless #if DEBUG set
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+public class DebugOnlyAttribute : Attribute
+{
+	public readonly bool Value;
+
+	public DebugOnlyAttribute(bool value = true)
+	{
+		Value = value;
+	}
+}
+
 // Allow Tab to be collapsed
 [AttributeUsage(AttributeTargets.Class)]
 public class SkippableAttribute : Attribute
@@ -227,15 +239,14 @@ public class SkippableAttribute : Attribute
 	}
 }
 
-// Don't show unless #if DEBUG set
-[AttributeUsage(AttributeTargets.Property)]
-public class DebugOnlyAttribute : Attribute
+[AttributeUsage(AttributeTargets.Class)]
+public class ListItemAttribute : Attribute
 {
-	public readonly bool Value;
+	public readonly bool IncludeBaseTypes;
 
-	public DebugOnlyAttribute(bool value = true)
+	public ListItemAttribute(bool includeBaseTypes = false)
 	{
-		Value = value;
+		IncludeBaseTypes = includeBaseTypes;
 	}
 }
 
@@ -305,19 +316,13 @@ public class ToStringAttribute : Attribute
 {
 }
 
-// 
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class AttributeSelectable : Attribute
-{
-}
-
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class InheritAttribute : Attribute
 {
 }
 
 // Show method as an Item
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
+[AttributeUsage(AttributeTargets.Method)]
 public class ItemAttribute : Attribute
 {
 	public readonly string Name;
@@ -328,7 +333,7 @@ public class ItemAttribute : Attribute
 	}
 }
 
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+/*[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class DictionaryEntryAttribute : Attribute
 {
 	public readonly string Key;
@@ -339,7 +344,7 @@ public class DictionaryEntryAttribute : Attribute
 		Key = key;
 		Value = value;
 	}
-}
+}*/
 
 // ->Toolbar: Show a separator before this item
 [AttributeUsage(AttributeTargets.Property)]

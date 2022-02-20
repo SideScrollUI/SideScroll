@@ -74,7 +74,7 @@ public class DirectoryView
 {
 	public string Directory { get; set; }
 
-	[HiddenColumn, InnerValue]
+	[InnerValue]
 	public ITab Tab;
 
 	public string DirectoryPath;
@@ -95,7 +95,7 @@ public class FileView
 	public long Size { get; set; }
 	public DateTime Modified { get; set; }
 
-	[HiddenColumn, InnerValue]
+	[InnerValue]
 	public ITab Tab;
 
 	public string FilePath;

@@ -27,7 +27,6 @@ public abstract class TaskCreator : INotifyPropertyChanged
 
 	public int TimesRun { get; set; }
 
-	[HiddenColumn]
 	public SynchronizationContext Context;
 
 	protected abstract Action CreateAction(Call call);

@@ -2,20 +2,10 @@ using Atlas.Core;
 
 namespace Atlas.Tabs.Test;
 
-public class TabTestParams : ITab
+[ListItem]
+public class TabTestParams
 {
-	public TabInstance Create() => new Instance();
-
-	public class Instance : TabInstance
-	{
-		public override void Load(Call call, TabModel model)
-		{
-			model.Items = new ItemCollection<ListItem>()
-			{
-				new("Tasks", new TabTestParamsTasks()),
-				new("Collection", new TabTestParamsCollection()),
-				new("Data Tabs", new TabTestParamsDataTabs()),
-			};
-		}
-	}
+	public TabTestParamsTasks Tasks => new();
+	public TabTestParamsCollection Collection => new();
+	public TabTestParamsDataTabs DataTabs => new();
 }

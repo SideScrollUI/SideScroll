@@ -166,6 +166,13 @@ public class TabModel
 			CustomSettingsPath ??= itemCollection.CustomSettingsPath;
 		}
 
+		var listItemAttribute = type.GetCustomAttribute<ListItemAttribute>();
+		if (listItemAttribute != null)
+		{
+			ItemList.Add(ListItem.Create(obj, listItemAttribute.IncludeBaseTypes));
+			return;
+		}
+
 		if (obj is IList iList)
 		{
 			Type elementType = type.GetElementTypeForAll();

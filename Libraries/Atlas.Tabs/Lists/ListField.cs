@@ -70,6 +70,21 @@ public class ListField : ListMember, IPropertyEditable
 		var fieldToIndex = new Dictionary<string, int>();
 		foreach (FieldInfo fieldInfo in fieldInfos)
 		{
+			if (fieldInfo.GetCustomAttribute<HideNullAttribute>() != null)
+			{
+				object fieldValue = fieldInfo.GetValue(obj);
+				if (fieldValue == null)
+					continue;
+			}
+
+			var hideAttribute = fieldInfo.GetCustomAttribute<HideAttribute>();
+			if (hideAttribute != null && hideAttribute.Values != null)
+			{
+				object fieldValue = fieldInfo.GetValue(obj);
+				if (hideAttribute.Values.Contains(fieldValue))
+					continue;
+			}
+
 			var listField = new ListField(obj, fieldInfo);
 			if (fieldToIndex.TryGetValue(fieldInfo.Name, out int index))
 			{
