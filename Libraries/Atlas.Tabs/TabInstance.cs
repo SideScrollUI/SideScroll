@@ -201,37 +201,7 @@ public class TabInstance : IDisposable
 		//tabInstance.taskInstance.call.Log =
 		//tabInstance.taskInstance = taskInstance.AddSubTask(taskInstance.call); // too slow?
 		//tabInstance.tabBookmark = tabBookmark;
-		FillInheritables(tabInstance);
 		return tabInstance;
-	}
-
-	// Incomplete, we don't ever set the ObjectStore values, what do we set them to?
-	private void FillInheritables(TabInstance tabInstance)
-	{
-		Type type = tabInstance.GetType();
-		FieldInfo[] fieldInfos = type.GetFields().OrderBy(x => x.MetadataToken).ToArray();
-		PropertyInfo[] propertyInfos = type.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
-
-		foreach (FieldInfo fieldInfo in fieldInfos)
-		{
-			if (fieldInfo.GetCustomAttribute<InheritAttribute>() == null)
-				continue;
-
-			object obj = Project.TypeObjectStore.Get(fieldInfo.FieldType);
-			fieldInfo.SetValue(tabInstance, obj);
-		}
-
-		foreach (PropertyInfo propertyInfo in propertyInfos)
-		{
-			//if (!propertyInfo.DeclaringType.IsNotPublic)
-			{
-				if (propertyInfo.GetCustomAttribute<InheritAttribute>() == null)
-					continue;
-
-				object obj = Project.TypeObjectStore.Get(propertyInfo.PropertyType);
-				propertyInfo.SetValue(tabInstance, obj);
-			}
-		}
 	}
 
 	public virtual void Dispose()

@@ -1007,12 +1007,6 @@ public class TabControlChart : Grid, IDisposable
 		return lineSeries;
 	}
 
-	private void TabData_OnSelectionChanged(object sender, EventArgs e)
-	{
-		UnloadModel();
-		LoadPlotModel();
-	}
-
 	private void AddNowTime()
 	{
 		var now = DateTime.UtcNow;

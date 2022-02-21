@@ -8,13 +8,13 @@ public class TabTestArray : ITab
 
 	public class Instance : TabInstance
 	{
-		public Instance()
-		{
-		}
-
 		public override void Load(Call call, TabModel model)
 		{
-			var classes = new MyClass[] { new MyClass(), new MyClass() };
+			var classes = new MyClass[]
+			{
+				new(), 
+				new(),
+			};
 
 			model.Items = new ItemCollection<ListItem>()
 			{

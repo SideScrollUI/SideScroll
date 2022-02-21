@@ -19,7 +19,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	public bool Cachable;
 
 	private bool _valueCached;
-	private object _valueObject = null;
+	private object _valueObject;
 
 	[HiddenColumn]
 	public override bool Editable // rename to IsReadOnly?
@@ -70,7 +70,7 @@ public class ListProperty : ListMember, IPropertyEditable
 					type = type.GetNonNullableType();
 				}
 
-				if (!type.IsAssignableFrom(value.GetType()))
+				if (!type.IsInstanceOfType(value))
 				{
 					value = Convert.ChangeType(value, type);
 				}
@@ -167,7 +167,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	{
 		var sortedProperties = listProperties
 			.OrderByDescending(i => i.PropertyInfo.GetCustomAttribute<AutoSelectAttribute>() != null)
-			.OrderByDescending(i => TabUtils.ObjectHasLinks(i, true));
+			.ThenByDescending(i => TabUtils.ObjectHasLinks(i, true));
 
 		var linkSorted = new ItemCollection<ListProperty>(sortedProperties);
 		return linkSorted;

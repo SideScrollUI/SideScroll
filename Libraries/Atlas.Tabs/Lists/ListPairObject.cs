@@ -16,13 +16,13 @@ public class ListPair : IListPair, IListItem, INotifyPropertyChanged, IMaxDesire
 	[HiddenColumn, InnerValue]
 	public object Object { get; set; }
 
-	public bool AutoLoad = true;
+	// public bool AutoLoad = true;
 
 	[HiddenColumn]
 	public int? MaxDesiredWidth { get; set; }
 
 #pragma warning disable 414
-	public event PropertyChangedEventHandler PropertyChanged = null;
+	public event PropertyChangedEventHandler PropertyChanged;
 
 	public override string ToString() => Key?.ToString() ?? "";
 

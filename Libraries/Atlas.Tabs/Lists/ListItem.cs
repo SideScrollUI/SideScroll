@@ -33,7 +33,7 @@ public class ListItem : IListItem, INotifyPropertyChanged
 	public bool AutoLoad = true;
 
 #pragma warning disable 414
-	public event PropertyChangedEventHandler PropertyChanged = null;
+	public event PropertyChangedEventHandler PropertyChanged;
 
 	public override string ToString() => Key?.ToString() ?? "";
 

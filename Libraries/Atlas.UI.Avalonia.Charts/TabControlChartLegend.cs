@@ -147,7 +147,7 @@ public class TabControlChartLegend : Grid
 		int selectedCount = 0;
 		foreach (TabChartLegendItem item in LegendItems)
 		{
-			if (item.IsSelected == true)
+			if (item.IsSelected)
 				selectedCount++;
 		}
 

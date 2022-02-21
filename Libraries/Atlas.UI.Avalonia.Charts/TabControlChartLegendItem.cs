@@ -47,10 +47,7 @@ public class TabChartLegendItem : Grid
 	private bool _isSelected = true;
 	public bool IsSelected
 	{
-		get
-		{
-			return _isSelected;
-		}
+		get => _isSelected;
 		set
 		{
 			OxyListSeries.IsSelected = value;
@@ -183,14 +180,14 @@ public class TabChartLegendItem : Grid
 	private void UpdatePolygonPoints(int width, int height)
 	{
 		int cornerSize = 3;
-		polygon.Points = new List<Point>()
+		polygon.Points = new List<Point>
 		{
-			new Point(0, height),
-			new Point(width - cornerSize, height),
-			new Point(width, height - cornerSize),
-			new Point(width, 0),
-			new Point(cornerSize, 0),
-			new Point(0, cornerSize),
+			new(0, height),
+			new(width - cornerSize, height),
+			new(width, height - cornerSize),
+			new(width, 0),
+			new(cornerSize, 0),
+			new(0, cornerSize),
 		};
 	}
 
@@ -302,7 +299,7 @@ public class TabChartLegendItem : Grid
 	public void UpdateVisible(OxyPlot.Series.LineSeries lineSeries)
 	{
 		Series = lineSeries;
-		if (IsSelected == true || _highlight)
+		if (IsSelected || _highlight)
 		{
 			if (Points != null)
 			{
@@ -337,7 +334,7 @@ public class TabChartLegendItem : Grid
 	public void UpdateVisible(OxyPlot.Series.ScatterSeries scatterSeries)
 	{
 		Series = scatterSeries;
-		if (IsSelected == true || Highlight)
+		if (IsSelected || Highlight)
 		{
 			scatterSeries.ItemsSource ??= ItemsSource;
 			// ItemsSource = null;

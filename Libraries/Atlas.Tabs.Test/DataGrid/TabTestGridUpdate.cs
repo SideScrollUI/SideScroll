@@ -81,15 +81,12 @@ public class TabTestGridUpdate : ITab
 
 		public void Update()
 		{
-			//context.Post(new SendOrPostCallback(this.OnUpdateProgress), eventArgs);
-			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("bigNumber"));
 			NotifyPropertyChanged(nameof(BigNumber));
 		}
 
 		public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 		{
-			Context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
-			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			Context.Post(NotifyPropertyChangedContext, propertyName);
 		}
 
 		private void NotifyPropertyChangedContext(object state)

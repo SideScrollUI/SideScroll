@@ -22,14 +22,14 @@ public class LogWriterConsole
 
 	private void LogEntry_OnMessage(object sender, EventLogMessage e)
 	{
-		string Indendation = "";
+		string indentation = "";
 		for (int i = 1; i < e.Entries.Count; i++)
-			Indendation += '\t';
+			indentation += '\t';
 
 		LogEntry newLog = e.Entries[0];
-		//string line = log.Created.ToString("yyyy-MM-dd HH:mm:ss") + Indendation + log.ToString();
+		//string line = log.Created.ToString("yyyy-MM-dd HH:mm:ss") + indentation + log.ToString();
 
-		Console.WriteLine(Indendation + newLog.Message);
+		Console.WriteLine(indentation + newLog.Message);
 	}
 }
 

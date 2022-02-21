@@ -4,11 +4,6 @@ using System.IO;
 
 namespace Atlas.Serialize;
 
-public class LoadResult<T>
-{
-	public string Name { get; set; }
-}
-
 public abstract class SerializerFile
 {
 	public string HeaderPath { get; set; }

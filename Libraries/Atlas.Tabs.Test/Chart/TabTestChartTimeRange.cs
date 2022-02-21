@@ -11,7 +11,7 @@ public class TabTestChartTimeRangeValue : ITab
 
 	public class Instance : TabInstance, ITabAsync
 	{
-		private readonly Random random = new();
+		private readonly Random _random = new();
 
 		public async Task LoadAsync(Call call, TabModel model)
 		{
@@ -27,7 +27,7 @@ public class TabTestChartTimeRangeValue : ITab
 				{
 					StartTime = startTime,
 					EndTime = startTime.AddHours(1),
-					Value = (random.Next() % 5),
+					Value = (_random.Next() % 5),
 				};
 				list.Add(value);
 				startTime = startTime.AddHours(1);

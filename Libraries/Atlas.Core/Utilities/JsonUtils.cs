@@ -1,5 +1,5 @@
-using Newtonsoft.Json;
 using System;
+using System.Text.Json;
 
 namespace Atlas.Core;
 
@@ -11,9 +11,8 @@ public static class JsonUtils
 		{
 			if (text?.StartsWith("{") == true)
 			{
-				dynamic parsedJson = JsonConvert.DeserializeObject(text);
-				string formatted = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
-				return formatted;
+				using var jsonDocument = JsonDocument.Parse(text);
+				return JsonSerializer.Serialize(jsonDocument, new JsonSerializerOptions { WriteIndented = true });
 			}
 		}
 		catch (Exception)

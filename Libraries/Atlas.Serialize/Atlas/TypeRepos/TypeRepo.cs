@@ -427,21 +427,18 @@ public abstract class TypeRepo : IDisposable
 
 		int objectIndex = BitConverter.ToInt32(bytes, byteOffset);
 		byteOffset += sizeof(int);
+		
 		if (!TypeSchema.HasSubType)
-		{
 			return LoadObject(objectIndex);
-		}
-		else
-		{
-			//int typeIndex = reader.ReadInt16(); // not saved for sealed classes
-			int typeIndex = BitConverter.ToInt16(bytes, byteOffset);
-			byteOffset += sizeof(short);
-			TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
-			//if (type == null) // type might have disappeared or been renamed
-			//	return null;
+		
+		//int typeIndex = reader.ReadInt16(); // not saved for sealed classes
+		int typeIndex = BitConverter.ToInt16(bytes, byteOffset);
+		byteOffset += sizeof(short);
+		TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
+		//if (type == null) // type might have disappeared or been renamed
+		//	return null;
 
-			return typeRepo.LoadObject(objectIndex);
-		}
+		return typeRepo.LoadObject(objectIndex);
 	}
 
 	public virtual object LoadObject()

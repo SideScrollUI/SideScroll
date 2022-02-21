@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Atlas.Tabs;
 
-public class TabUtils
+public static class TabUtils
 {
 	public static List<Type> IgnoreHighlightTypes { get; set; } = new();
 

@@ -264,9 +264,3 @@ public class TaskInstance : INotifyPropertyChanged
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 }
-
-/*
-Merge this into Call?
-
-	Call already has AddSubTask
-*/

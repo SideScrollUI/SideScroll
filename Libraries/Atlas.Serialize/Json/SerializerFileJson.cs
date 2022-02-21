@@ -25,6 +25,7 @@ public class SerializerFileJson : SerializerFile
 
 	protected override object LoadInternal(Call call, bool lazy, TaskInstance taskInstance)
 	{
+		// This doesn't work for the System.Text.Json since it doesn't support dynamic types
 		string json = File.ReadAllText(DataPath);
 		object obj = JsonConvert.DeserializeObject(json);
 		return obj;

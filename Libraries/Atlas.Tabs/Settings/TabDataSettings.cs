@@ -81,7 +81,7 @@ public class TabDataSettings
 
 	public class MethodColumn
 	{
-		public MethodInfo MethodInfo;
+		public readonly MethodInfo MethodInfo;
 		public string Label { get; set; }
 
 		public MethodColumn(MethodInfo methodInfo, string label = null)
@@ -93,7 +93,7 @@ public class TabDataSettings
 
 	public class PropertyColumn
 	{
-		public PropertyInfo PropertyInfo;
+		public readonly PropertyInfo PropertyInfo;
 		public string Label { get; set; }
 
 		public PropertyColumn(PropertyInfo propertyInfo, string label)

@@ -10,8 +10,8 @@ public static class ReflectorUtil
 {
 	public static object FollowPropertyPath(object value, string path)
 	{
-		if (value == null) throw new ArgumentNullException("value");
-		if (path == null) throw new ArgumentNullException("path");
+		if (value == null) throw new ArgumentNullException(nameof(value));
+		if (path == null) throw new ArgumentNullException(nameof(path));
 
 		Type currentType = value.GetType();
 

@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace Atlas.Tabs;
 
-public class DataRepoItem
+/*public class DataRepoItem
 {
 	public string Directory { get; set; }
 	public string Key { get; set; }
 	public object Value { get; set; }
-}
+}*/
 
 // rename to TabInstanceSettings?
 [PublicData]
@@ -191,7 +191,7 @@ public class TabBookmark
 		{
 			TabDataSettings = new List<TabDataSettings>()
 			{
-				new TabDataSettings()
+				new()
 				{
 					SelectionType = SelectionType.User,
 					SelectedRows = selectedRows,

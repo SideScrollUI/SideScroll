@@ -24,6 +24,7 @@ public class SerializerMemoryJson : SerializerMemory
 
 	public override object Load(Call call = null)
 	{
+		// This doesn't work for the System.Text.Json since it doesn't support dynamic types
 		return JsonConvert.DeserializeObject(_json);
 	}
 

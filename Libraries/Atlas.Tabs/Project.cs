@@ -21,8 +21,6 @@ public class Project
 	public DataRepo DataApp => new(DataAppPath, DataRepoName);
 
 	public HttpCacheManager Http = new();
-
-	public TypeObjectStore TypeObjectStore { get; set; } = new();
 	public BookmarkNavigator Navigator { get; set; } = new();
 	public TaskInstanceCollection Tasks { get; set; } = new();
 
@@ -81,34 +79,4 @@ public class Project
 		bookmark.TabBookmark.Import(project);
 		return project;
 	}
-}
-
-public class TypeObjectStore
-{
-	public Dictionary<Type, object> Items { get; set; } = new();
-
-	public void Add(object obj)
-	{
-		Items.Add(obj.GetType(), obj);
-	}
-
-	public T Get<T>()
-	{
-		if (Items.TryGetValue(typeof(T), out object obj))
-			return (T)obj;
-
-		return default;
-	}
-
-	public object Get(Type type)
-	{
-		if (Items.TryGetValue(type, out object obj))
-			return obj;
-		return null;
-	}
-}
-
-public interface IProject
-{
-	void Restart();
 }

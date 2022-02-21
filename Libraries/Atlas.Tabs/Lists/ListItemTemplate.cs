@@ -14,7 +14,7 @@ public class ListItem<T1, T2> : INotifyPropertyChanged
 
 	public bool AutoLoad = true;
 #pragma warning disable 414
-	public event PropertyChangedEventHandler PropertyChanged = null;
+	public event PropertyChangedEventHandler PropertyChanged;
 
 	public override string ToString() => Key?.ToString() ?? "";
 

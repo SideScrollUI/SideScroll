@@ -1,7 +1,7 @@
 using Atlas.Core;
 using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json;
 using System;
+using System.Text.Json;
 
 namespace Atlas.Network;
 
@@ -64,7 +64,7 @@ public class HttpMemoryCache
 		{
 			try
 			{
-				t = JsonConvert.DeserializeObject<T>(text);
+				t = JsonSerializer.Deserialize<T>(text);
 				Add(uri, t);
 				return true;
 			}

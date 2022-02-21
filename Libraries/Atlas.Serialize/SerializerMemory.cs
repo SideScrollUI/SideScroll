@@ -24,9 +24,9 @@ public abstract class SerializerMemory
 	// Save an object to a memory stream and then load it
 	public static T DeepClone<T>(Call call, T obj, bool publicOnly = false)
 	{
-		if (!typeof(T).IsAssignableFrom(obj.GetType()))
+		if (obj is not T)
 		{
-			throw new Exception("Cloned types do not match [" + typeof(T).ToString() + "], [" + obj.GetType().ToString() + "]");
+			throw new Exception("Cloned types do not match [" + typeof(T) + "], [" + obj.GetType() + "]");
 		}
 
 		//	return default;

@@ -115,7 +115,7 @@ public class Serializer : IDisposable
 		var loaded = new List<ObjectsLoaded>();
 		foreach (TypeRepo typeRepo in TypeRepos)
 		{
-			var typeInfo = new ObjectsLoaded()
+			var typeInfo = new ObjectsLoaded
 			{
 				Name = typeRepo.ToString(),
 				Loaded = typeRepo.ObjectsLoadedCount
@@ -605,20 +605,20 @@ public class Serializer : IDisposable
 	public T Clone<T>(Log log, T obj)
 	{
 		T clone = (T)Clone(obj);
-		using (LogTimer logClone = log.Timer("Clone"))
+		using LogTimer logClone = log.Timer("Clone");
+		
+		while (CloneQueue.Count > 0)
 		{
-			while (CloneQueue.Count > 0)
-			{
-				Action action = CloneQueue.Dequeue();
-				action.Invoke();
-				//obj = parserQueue.Dequeue();
-				//Type type = obj.GetType();
-				//typeRepo = idxTypeToInstances[type]; // optimization? could save the object and TypeRepo reference in a Link class 
-			}
-
-			logClone.Add("Clone Finished", new Tag("Objects", Clones.Count));
-			LogClonedTypes(logClone);
+			Action action = CloneQueue.Dequeue();
+			action.Invoke();
+			//obj = parserQueue.Dequeue();
+			//Type type = obj.GetType();
+			//typeRepo = idxTypeToInstances[type]; // optimization? could save the object and TypeRepo reference in a Link class 
 		}
+
+		logClone.Add("Clone Finished", new Tag("Objects", Clones.Count));
+		LogClonedTypes(logClone);
+	
 		return clone;
 	}
 
@@ -627,7 +627,7 @@ public class Serializer : IDisposable
 		var loaded = new List<ObjectsLoaded>();
 		foreach (TypeRepo typeRepo in TypeRepos)
 		{
-			var typeInfo = new ObjectsLoaded()
+			var typeInfo = new ObjectsLoaded
 			{
 				Name = typeRepo.ToString(),
 				Loaded = typeRepo.Cloned

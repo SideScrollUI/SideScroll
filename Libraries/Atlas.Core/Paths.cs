@@ -28,7 +28,7 @@ public static class Paths
 		string encodedUri = "";
 		foreach (char c in path)
 		{
-			if (c != '/' && (invalidPathChars.Contains(c) == true || invalidFileNameChars.Contains(c) == true))
+			if (c != '/' && (invalidPathChars.Contains(c) || invalidFileNameChars.Contains(c)))
 			{
 				encodedUri += "_" + Convert.ToByte(c).ToString("x2") + "_";
 			}

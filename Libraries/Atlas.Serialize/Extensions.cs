@@ -29,8 +29,8 @@ public static class SerializerExtensions
 		Type inputType = source.GetType();
 		Type outputType = dest.GetType();
 
-		if (!outputType.Equals(inputType) && !outputType.IsSubclassOf(inputType))
-			throw new ArgumentException(string.Format("{0} is not a sublcass of {1}", outputType, inputType));
+		if (outputType != inputType && !outputType.IsSubclassOf(inputType))
+			throw new ArgumentException($"{outputType} is not a subclass of {inputType}");
 
 		PropertyInfo[] properties = inputType.GetProperties(CloneBindingAttr);
 

@@ -96,10 +96,7 @@ public class LogEntry : INotifyPropertyChanged
 	private float? _duration;
 	public float? Duration
 	{
-		get
-		{
-			return _duration;
-		}
+		get => _duration;
 		set
 		{
 			_duration = value;
@@ -155,14 +152,12 @@ public class LogEntry : INotifyPropertyChanged
 
 	protected void CreateEventPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		Settings.Context?.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
-		//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		Settings.Context?.Post(NotifyPropertyChangedContext, propertyName);
 	}
 
 	private void NotifyPropertyChangedContext(object state)
 	{
 		string propertyName = state as string;
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		//PropertyChanged?.BeginInvoke(this, new PropertyChangedEventArgs(propertyName), EndAsyncEvent, null);
 	}
 }

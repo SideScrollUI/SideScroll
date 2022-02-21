@@ -1,7 +1,7 @@
 
 namespace Atlas.Core;
 
-public class AtlasInit
+public static class AtlasInit
 {
 	public static void Initialize()
 	{
