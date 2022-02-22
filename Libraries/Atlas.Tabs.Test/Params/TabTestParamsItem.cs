@@ -2,7 +2,7 @@ using Atlas.Core;
 using Atlas.Serialize;
 using System;
 
-namespace Atlas.Tabs.Test;
+namespace Atlas.Tabs.Test.Params;
 
 public class TabParamItem : ITab, IDataView
 {

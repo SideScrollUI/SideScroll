@@ -9,7 +9,7 @@ namespace Atlas.Serialize.Test;
 [Category("Performance")]
 public class TestSerializePerformance : TestSerializeBase
 {
-	private SerializerMemory serializer;
+	private SerializerMemory _serializer;
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -20,7 +20,7 @@ public class TestSerializePerformance : TestSerializeBase
 	[SetUp]
 	public void SetUp()
 	{
-		serializer = new SerializerMemoryAtlas();
+		_serializer = new SerializerMemoryAtlas();
 	}
 
 	[Test, Description("DictionaryTest")]
@@ -43,8 +43,8 @@ public class TestSerializePerformance : TestSerializeBase
 	{
 		TimeRangeValue input = TimeRangeSample;
 
-		serializer.Save(Call, input);
-		var output = serializer.Load<TimeRangeValue>(Call);
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<TimeRangeValue>(Call);
 	}
 
 	[Test]
@@ -54,8 +54,8 @@ public class TestSerializePerformance : TestSerializeBase
 
 		using CallTimer callTimer = Call.Timer("Cloning");
 
-		serializer.Save(callTimer, input);
-		var output = serializer.Load<List<TimeRangeValue>>(callTimer);
+		_serializer.Save(callTimer, input);
+		var output = _serializer.Load<List<TimeRangeValue>>(callTimer);
 	}
 
 	[Test]

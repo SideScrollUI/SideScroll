@@ -11,13 +11,13 @@ public class TabTestToolbar : ITab
 
 	public class TestToolbar : TabToolbar
 	{
-		public ToolButton ButtonRefresh { get; set; } = new ToolButton("Refresh", Icons.Streams.Refresh);
+		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Streams.Refresh);
 
 		[Separator]
-		public ToolButton ButtonOpenBrowser { get; set; } = new ToolButton("Open in Browser", Icons.Streams.Browser);
+		public ToolButton ButtonOpenBrowser { get; set; } = new("Open in Browser", Icons.Streams.Browser);
 
 		[Separator]
-		public ToolComboBox<TimeSpan> Duration { get; set; } = new ToolComboBox<TimeSpan>("Duration", TimeSpanExtensions.CommonTimeSpans, TimeSpan.FromMinutes(5));
+		public ToolComboBox<TimeSpan> Duration { get; set; } = new("Duration", TimeSpanExtensions.CommonTimeSpans, TimeSpan.FromMinutes(5));
 
 		[Separator]
 		public string Label => "(Status)";

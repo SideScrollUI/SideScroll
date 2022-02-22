@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 namespace Atlas.Tabs;
 
+public interface IHasLinks
+{
+	bool HasLinks { get; }
+}
+
 public static class TabUtils
 {
 	public static List<Type> IgnoreHighlightTypes { get; set; } = new();
@@ -13,6 +18,9 @@ public static class TabUtils
 	{
 		if (obj == null)
 			return false;
+
+		if (obj is IHasLinks hasLinks)
+			return hasLinks.HasLinks;
 
 		object value = obj.GetInnerValue();
 		if (value == null)
@@ -27,10 +35,10 @@ public static class TabUtils
 		Type type = value.GetType();
 		if (type.IsPrimitive ||
 			type.IsEnum ||
-			type.Equals(typeof(string)) ||
-			type.Equals(typeof(decimal)) ||
-			type.Equals(typeof(DateTime)) ||
-			type.Equals(typeof(TimeSpan)))
+			type == typeof(string) ||
+			type == typeof(decimal) ||
+			type == typeof(DateTime) ||
+			type == typeof(TimeSpan))
 		{
 			return false;
 		}

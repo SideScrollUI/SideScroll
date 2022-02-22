@@ -127,7 +127,7 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 	{
 		var sortedMembers = items
 			.OrderByDescending(i => i.MemberInfo.GetCustomAttribute<AutoSelectAttribute>() != null)
-			.OrderByDescending(i => TabUtils.ObjectHasLinks(i, true));
+			.ThenByDescending(i => TabUtils.ObjectHasLinks(i, true));
 
 		var linkSorted = new ItemCollection<ListMember>(sortedMembers);
 		return linkSorted;

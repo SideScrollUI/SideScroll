@@ -74,7 +74,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		{
 			base.Delete(key);
 
-			var item = Items.Where(d => d.Key == key).FirstOrDefault();
+			var item = Items.FirstOrDefault(d => d.Key == key);
 			if (item != null)
 				Items.Remove(item);
 		}

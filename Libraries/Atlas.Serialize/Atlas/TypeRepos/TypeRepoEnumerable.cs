@@ -32,7 +32,7 @@ public class TypeRepoEnumerable : TypeRepo
 			_elementType = types[0];
 
 		_addMethod = LoadableType.GetMethods()
-			.Where(m => m.Name == "Add" && m.GetParameters().Count() == 1).FirstOrDefault();
+			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Count() == 1);
 	}
 
 	public static bool CanAssign(Type type)

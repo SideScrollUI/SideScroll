@@ -22,7 +22,6 @@ public class TabControlMyParams : Grid
 
 	private void InitializeControls()
 	{
-		//HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Top;
 		ColumnDefinitions = new ColumnDefinitions("Auto");
 		RowDefinitions = new RowDefinitions("Auto");

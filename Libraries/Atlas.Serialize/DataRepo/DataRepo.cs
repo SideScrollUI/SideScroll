@@ -241,7 +241,6 @@ public class DataRepo
 		if (!Directory.Exists(dataPath))
 			return;
 
-
 		try
 		{
 			Directory.Delete(dataPath, true);

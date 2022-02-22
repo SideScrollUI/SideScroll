@@ -7,7 +7,7 @@ namespace Atlas.Serialize.Test;
 [Category("Serialize")]
 public class TestSerializeChanges : TestSerializeBase
 {
-	private SerializerFile serializerFile;
+	private SerializerFile _serializerFile;
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -19,15 +19,15 @@ public class TestSerializeChanges : TestSerializeBase
 		Directory.CreateDirectory(basePath);
 
 		string filePath = Paths.Combine(basePath, "Data.atlas");
-		serializerFile = new SerializerFileAtlas(filePath);
+		_serializerFile = new SerializerFileAtlas(filePath);
 	}
 
 	/*[Test, Description("Serialize Property Type Missing")]
 	public void SerializePropertyTypeMissing()
 	{
 		var testLog = new Parent();
-		serializerFile.Save(Call, testLog);
-		Parent output = serializerFile.Load<Parent>(Call);
+		_serializerFile.Save(Call, testLog);
+		Parent output = _serializerFile.Load<Parent>(Call);
 	}*/
 
 	public class Parent

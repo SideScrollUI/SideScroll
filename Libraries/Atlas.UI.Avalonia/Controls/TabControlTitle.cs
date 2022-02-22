@@ -12,7 +12,7 @@ namespace Atlas.UI.Avalonia.Controls;
 
 public class TabControlTitle : UserControl, IDisposable
 {
-	public TabInstance TabInstance;
+	public readonly TabInstance TabInstance;
 	public string Label { get; set; }
 
 	public TextBlock TextBlock;
@@ -42,7 +42,7 @@ public class TabControlTitle : UserControl, IDisposable
 	{
 		Background = Theme.TitleBackground;
 
-		_containerGrid = new Grid()
+		_containerGrid = new Grid
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto,*"),
 			RowDefinitions = new RowDefinitions("Auto"),
@@ -52,7 +52,7 @@ public class TabControlTitle : UserControl, IDisposable
 
 		// Add a wrapper class with a border?
 		// Need to make the desired size for this a constant x
-		TextBlock = new TextBlock()
+		TextBlock = new TextBlock
 		{
 			Text = Label,
 			FontSize = 15,
@@ -63,7 +63,7 @@ public class TabControlTitle : UserControl, IDisposable
 		};
 		AvaloniaUtils.AddContextMenu(TextBlock);
 
-		var borderPaddingTitle = new Border()
+		var borderPaddingTitle = new Border
 		{
 			BorderThickness = new Thickness(5, 2, 2, 2),
 			BorderBrush = Theme.TitleBackground,
@@ -74,7 +74,7 @@ public class TabControlTitle : UserControl, IDisposable
 
 		// Notes
 		// Add checkbox here for tabModel.Notes
-		/*checkBox = new CheckBox()
+		/*checkBox = new CheckBox
 		{
 			IsChecked = (tabInstance.tabModel.Notes != null && tabInstance.tabViewSettings.NotesVisible),
 			BorderThickness = new Thickness(1),
@@ -96,12 +96,12 @@ public class TabControlTitle : UserControl, IDisposable
 
 		AddLinkButton();
 
-		var borderContent = new Border()
+		var borderContent = new Border
 		{
 			BorderThickness = new Thickness(1),
 			BorderBrush = new SolidColorBrush(Colors.Black),
+			Child = _containerGrid
 		};
-		borderContent.Child = _containerGrid;
 
 		Content = borderContent;
 	}

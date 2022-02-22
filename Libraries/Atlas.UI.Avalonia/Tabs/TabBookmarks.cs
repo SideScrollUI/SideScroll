@@ -34,7 +34,7 @@ public class TabBookmarks : ITab
 
 	public class Instance : TabInstance
 	{
-		public TabBookmarks Tab;
+		public readonly TabBookmarks Tab;
 
 		public Instance(TabBookmarks tab)
 		{

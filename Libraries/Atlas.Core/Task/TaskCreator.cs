@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,7 +7,8 @@ namespace Atlas.Core;
 
 public abstract class TaskCreator : INotifyPropertyChanged
 {
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler PropertyChanged; // Used only for INotifyPropertyChanged memory leak fix?
+
 	public Action OnComplete;
 
 	[HiddenColumn]

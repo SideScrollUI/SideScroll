@@ -3,38 +3,28 @@ using System;
 
 namespace Atlas.Tabs.Test.Objects;
 
-public class TabTestObjects : ITab
+[ListItem]
+public class TabTestObjects
 {
-	public TabInstance Create() => new Instance();
+	public TestObjectMembers ObjectMembers = new();
+	public Tag[] Tags = { new Tag("abc", 1.1) };
+	public TabTestSubClassProperty SubclassProperty = new();
+	public ValueSub Subclass = new();
+	public EnumTest Enum = new();
+	public TimeSpan TimeSpan = new(1, 2, 3);
+}
 
-	public class Instance : TabInstance
-	{
-		public override void Load(Call call, TabModel model)
-		{
-			model.Items = new ItemCollection<ListItem>()
-			{
-				new("Object Members", new TestObjectMembers()),
-				new("Tags", new Tag[] { new Tag("abc", 1.1) }),
-				new("Subclass Property", new TabTestSubClassProperty()),
-				new("Subclass", new ValueSub()),
-				new("Enum", new EnumTest()),
-				new("TimeSpan", new TimeSpan(1, 2, 3)),
-			};
-		}
+public class MyClass
+{
+	public string Name { get; set; } = "Eve";
+}
 
-		public class MyClass
-		{
-			public string Name { get; set; } = "Eve";
-		}
-
-		public enum EnumTest
-		{
-			One = 1,
-			Two = 2,
-			Four = 4,
-			Eight = 8,
-		}
-	}
+public enum EnumTest
+{
+	One = 1,
+	Two = 2,
+	Four = 4,
+	Eight = 8,
 }
 
 public class ValueBase

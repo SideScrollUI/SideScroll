@@ -331,9 +331,9 @@ public class TabControlSplitContainer : Grid
 		// objects might still be referenced and re-added again
 		if (dispose)
 		{
-			foreach (object obj in Children)
+			foreach (IControl control in Children)
 			{
-				if (obj is IDisposable disposable)
+				if (control is IDisposable disposable)
 					disposable.Dispose(); // does Children.Clear() already handle this?
 			}
 		}

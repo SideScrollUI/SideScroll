@@ -4,7 +4,7 @@ using System;
 
 namespace Atlas.UI.Avalonia;
 
-public class Theme
+public static class Theme
 {
 	public static SolidColorBrush Background => Get("ThemeBackgroundBrush");
 	public static SolidColorBrush BackgroundFocused => Get("ThemeBackgroundFocusedBrush");

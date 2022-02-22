@@ -7,36 +7,36 @@ namespace Atlas.UI.Avalonia;
 
 public class DateTimeValueConverter : IValueConverter
 {
-	public DateTime? previousDateTime;
+	public DateTime? PreviousDateTime;
 
 	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 	{
 		if (value is TimeSpan timeSpan)
 		{
-			var date = ((DateTime)previousDateTime).Date;
-			previousDateTime = date.AddSeconds(timeSpan.TotalSeconds);
-			return previousDateTime;
+			var date = ((DateTime)PreviousDateTime).Date;
+			PreviousDateTime = date.AddSeconds(timeSpan.TotalSeconds);
+			return PreviousDateTime;
 		}
 
-		previousDateTime = value as DateTime?;
+		PreviousDateTime = value as DateTime?;
 
 		if (targetType == typeof(string))
 		{
-			if (previousDateTime == null)
+			if (PreviousDateTime == null)
 				return "";
 
-			return ((DateTime)previousDateTime).ToString("H:mm:ss");
+			return ((DateTime)PreviousDateTime).ToString("H:mm:ss");
 		}
 		else
 		{
-			return previousDateTime;
+			return PreviousDateTime;
 		}
 	}
 
 	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 	{
 		if (value == null)
-			return previousDateTime;
+			return PreviousDateTime;
 
 		if (targetType != typeof(DateTime) && targetType != typeof(DateTime?))
 			throw new Exception("invalid conversion");
@@ -50,23 +50,23 @@ public class DateTimeValueConverter : IValueConverter
 			SetDate(dateTime);
 		}
 
-		return previousDateTime;
+		return PreviousDateTime;
 	}
 
 	private void SetDate(DateTime dateTime)
 	{
-		if (previousDateTime == null)
+		if (PreviousDateTime == null)
 		{
-			previousDateTime = dateTime;
+			PreviousDateTime = dateTime;
 			return;
 		}
 
 		// use the same Kind as the original
-		dateTime = DateTime.SpecifyKind(dateTime, ((DateTime)previousDateTime).Kind);
+		dateTime = DateTime.SpecifyKind(dateTime, ((DateTime)PreviousDateTime).Kind);
 
-		var timeSpan = ((DateTime)previousDateTime).TimeOfDay;
+		var timeSpan = ((DateTime)PreviousDateTime).TimeOfDay;
 		dateTime = dateTime.Date + timeSpan;
-		previousDateTime = dateTime;
+		PreviousDateTime = dateTime;
 	}
 
 	public void SetTime(string timeText)
@@ -75,15 +75,15 @@ public class DateTimeValueConverter : IValueConverter
 		TimeSpan? timeSpan = DateTimeUtils.ConvertTextToTimeSpan(timeText);
 		if (timeSpan != null)
 		{
-			if (previousDateTime != null)
+			if (PreviousDateTime != null)
 			{
-				var date = ((DateTime)previousDateTime).Date;
-				previousDateTime = date.AddSeconds(timeSpan.Value.TotalSeconds);
+				var date = ((DateTime)PreviousDateTime).Date;
+				PreviousDateTime = date.AddSeconds(timeSpan.Value.TotalSeconds);
 			}
 			else
 			{
 				var date = DateTime.UtcNow.Date;
-				previousDateTime = date.AddSeconds(timeSpan.Value.TotalSeconds);
+				PreviousDateTime = date.AddSeconds(timeSpan.Value.TotalSeconds);
 			}
 		}
 	}

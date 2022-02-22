@@ -48,7 +48,7 @@ public class TabTestLog : ITab
 
 		private void Reset(Call call)
 		{
-			Reintialize(true);
+			Reinitialize(true);
 		}
 
 		private void SubTaskInstances(Call call)

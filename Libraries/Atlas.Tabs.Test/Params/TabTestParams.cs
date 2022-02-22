@@ -1,6 +1,6 @@
 using Atlas.Core;
 
-namespace Atlas.Tabs.Test;
+namespace Atlas.Tabs.Test.Params;
 
 [ListItem]
 public class TabTestParams

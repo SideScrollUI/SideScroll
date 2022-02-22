@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia.View;
 
-public class TabCreator
+public static class TabCreator
 {
 	public static Control CreateChildControl(TabInstance parentTabInstance, object obj, string label = null, ITabSelector tabControl = null)
 	{
@@ -90,7 +90,7 @@ public class TabCreator
 				return null;
 
 			childTabInstance.TabBookmark ??= tabBookmark;
-			//childTabInstance.Reintialize(); // todo: fix, called in TabView
+			//childTabInstance.Reinitialize(); // todo: fix, called in TabView
 			childTabInstance.Model.Name = label;
 			var tabView = new TabView(childTabInstance);
 			tabView.Load();

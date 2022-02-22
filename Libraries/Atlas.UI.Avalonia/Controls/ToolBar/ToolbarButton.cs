@@ -32,7 +32,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 	private DateTime _lastInvoked;
 	private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
 
-	public ToolbarButton(TabControlToolbar toolbar, ToolButton toolButton) : base()
+	public ToolbarButton(TabControlToolbar toolbar, ToolButton toolButton)
 	{
 		Toolbar = toolbar;
 		Label = toolButton.Label;
@@ -48,7 +48,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 			SetDefault();
 	}
 
-	public ToolbarButton(TabControlToolbar toolbar, string label, string tooltip, Stream bitmapStream, ICommand command = null) : base()
+	public ToolbarButton(TabControlToolbar toolbar, string label, string tooltip, Stream bitmapStream, ICommand command = null)
 	{
 		Toolbar = toolbar;
 		Label = label;

@@ -8,7 +8,7 @@ namespace Atlas.UI.Avalonia;
 
 public class EditValueConverter : IValueConverter
 {
-	public string Append { get; set; }
+	// public string Append { get; set; }
 
 	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 	{

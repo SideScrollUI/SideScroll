@@ -8,7 +8,7 @@ namespace Atlas.Serialize.Test;
 [Category("SerializeItemCollection")]
 public class TestItemCollection : TestSerializeBase
 {
-	private SerializerMemory serializer;
+	private SerializerMemory _serializer;
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -19,7 +19,7 @@ public class TestItemCollection : TestSerializeBase
 	[SetUp]
 	public void Setup()
 	{
-		serializer = new SerializerMemoryAtlas();
+		_serializer = new SerializerMemoryAtlas();
 	}
 
 	[Test, Description("Serialize ItemCollection")]
@@ -27,8 +27,8 @@ public class TestItemCollection : TestSerializeBase
 	{
 		var input = new TestBindingList();
 
-		serializer.Save(Call, input);
-		TestBindingList output = serializer.Load<TestBindingList>(Call);
+		_serializer.Save(Call, input);
+		TestBindingList output = _serializer.Load<TestBindingList>(Call);
 
 		//Assert.AreEqual(output.uintTest, input.uintTest);
 	}

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Atlas.Tabs.Tools</AssemblyName>
-    <RootNamespace>Atlas.Tab.Tools</RootNamespace>
+    <RootNamespace>Atlas.Tabs.Tools</RootNamespace>
     <Configurations>Debug;Release;DebugX86</Configurations>
     <Version>$(AtlasVersion)</Version>
   </PropertyGroup>

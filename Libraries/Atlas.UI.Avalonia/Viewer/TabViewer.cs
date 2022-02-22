@@ -76,7 +76,7 @@ public class TabViewer : Grid
 
 		AddToolbar();
 
-		BottomGrid = new Grid()
+		BottomGrid = new Grid
 		{
 			ColumnDefinitions = new ColumnDefinitions("*,Auto"),
 			RowDefinitions = new RowDefinitions("*"),
@@ -87,7 +87,7 @@ public class TabViewer : Grid
 		Children.Add(BottomGrid);
 
 		// Placed inside scroll viewer
-		ContentGrid = new Grid()
+		ContentGrid = new Grid
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto"),
 			RowDefinitions = new RowDefinitions("*"),
@@ -97,7 +97,7 @@ public class TabViewer : Grid
 			MaxHeight = 5000,
 		};
 
-		ScrollViewer = new ScrollViewer()
+		ScrollViewer = new ScrollViewer
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
@@ -229,7 +229,7 @@ public class TabViewer : Grid
 
 	private Grid CreateScrollButtons()
 	{
-		var grid = new Grid()
+		Grid grid = new()
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto"),
 			RowDefinitions = new RowDefinitions("*,*"), // Expand, Collapse
@@ -238,7 +238,7 @@ public class TabViewer : Grid
 			[Grid.ColumnProperty] = 1,
 		};
 
-		var buttonExpand = new Button()
+		Button buttonExpand = new()
 		{
 			Content = ">",
 			Background = Theme.ToolbarButtonBackground,
@@ -254,7 +254,7 @@ public class TabViewer : Grid
 		buttonExpand.PointerLeave += Button_PointerLeave;
 		grid.Children.Add(buttonExpand);
 
-		var buttonCollapse = new Button()
+		Button buttonCollapse = new()
 		{
 			Content = "<",
 			Background = Theme.ToolbarButtonBackground,

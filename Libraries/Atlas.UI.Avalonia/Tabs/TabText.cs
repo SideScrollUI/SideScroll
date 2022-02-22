@@ -20,7 +20,7 @@ public class TabText : ITab
 
 	public class Instance : TabInstance
 	{
-		public TabText Tab;
+		public readonly TabText Tab;
 
 		public Instance(TabText tab)
 		{

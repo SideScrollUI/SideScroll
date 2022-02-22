@@ -18,11 +18,12 @@ public class TabChartLegendItem : Grid
 	public event EventHandler<EventArgs> OnSelectionChanged;
 	public event EventHandler<EventArgs> OnVisibleChanged;
 
-	public TabControlChartLegend Legend;
-	public OxyListSeries OxyListSeries;
+	public readonly TabControlChartLegend Legend;
+	public readonly OxyListSeries OxyListSeries;
+	public readonly ListGroup ListGroup;
+	
 	public OxyPlot.Series.Series Series;
-	public ListGroup ListGroup;
-	//public string Label { get; set; }
+	
 	public TextBlock TextBlock;
 	public TextBlock TextBlockTotal;
 
@@ -159,7 +160,7 @@ public class TabChartLegendItem : Grid
 		int width = 13;
 		int height = 13;
 
-		polygon = new Polygon()
+		polygon = new Polygon
 		{
 			Width = 16,
 			Height = 16,
@@ -193,7 +194,7 @@ public class TabChartLegendItem : Grid
 
 	private void AddTextBlock()
 	{
-		TextBlock = new TextBlock()
+		TextBlock = new TextBlock
 		{
 			Foreground = Brushes.LightGray,
 			Margin = new Thickness(2, 2, 6, 2),
@@ -217,7 +218,7 @@ public class TabChartLegendItem : Grid
 
 	private void AddTotalTextBlock()
 	{
-		TextBlockTotal = new TextBlock()
+		TextBlockTotal = new TextBlock
 		{
 			Text = TabControlChart.ValueFormatter(Total),
 			Foreground = Brushes.LightGray,

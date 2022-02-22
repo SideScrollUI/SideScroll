@@ -16,8 +16,9 @@ namespace Atlas.UI.Avalonia;
 // Rename to DataGridBoundTextDataColumn?
 public class DataGridBoundTextColumn : DataGridTextColumn
 {
-	public DataGrid DataGrid;
-	public DataColumn DataColumn;
+	public readonly DataGrid DataGrid;
+	public readonly DataColumn DataColumn;
+	
 	public int MaxDesiredWidth = 500;
 	public bool WordWrap;
 

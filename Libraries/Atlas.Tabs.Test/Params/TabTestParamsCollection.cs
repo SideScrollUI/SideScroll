@@ -2,7 +2,7 @@ using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Serialize;
 
-namespace Atlas.Tabs.Test;
+namespace Atlas.Tabs.Test.Params;
 
 public class TabTestParamsCollection : ITab
 {

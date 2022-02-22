@@ -150,7 +150,7 @@ public class Log : LogEntry
 		logEntry.Settings = Settings;
 
 		if (Settings.Context != null)
-			Settings.Context.Post(new SendOrPostCallback(AddEntryCallback), logEntry);
+			Settings.Context.Post(AddEntryCallback, logEntry);
 		else
 			AddEntryCallback(logEntry);
 	}

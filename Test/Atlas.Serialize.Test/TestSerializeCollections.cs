@@ -51,8 +51,8 @@ public class TestSerializeCollections : TestSerializeBase
 
 	private class MultipleArrays
 	{
-		public int[] array1 = { 1, 2 };
-		//public int[] array2 = { 3, 4 };
+		public int[] Array1 = { 1, 2 };
+		//public int[] Array2 = { 3, 4 };
 	}
 
 	[Test, Description("ArrayMultipleTest")]
@@ -87,7 +87,7 @@ public class TestSerializeCollections : TestSerializeBase
 	[Test, Description("Serialize String List")]
 	public void SerializeStringList()
 	{
-		var input = new List<string>()
+		var input = new List<string>
 		{
 			"abc",
 			"123"
@@ -184,7 +184,7 @@ public class TestSerializeCollections : TestSerializeBase
 
 	public class TabInstanceConfiguration
 	{
-		public HashSet<SelectedItem> selected = new();
+		public HashSet<SelectedItem> Selected = new();
 		public int? SplitterDistance;
 		public int NumColumns;
 	}

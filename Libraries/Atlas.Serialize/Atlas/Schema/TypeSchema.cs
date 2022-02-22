@@ -287,8 +287,7 @@ public class TypeSchema
 					(name) =>
 					{
 						return AppDomain.CurrentDomain.GetAssemblies()
-							.Where(a => a.GetType(typeName) != null)
-							.FirstOrDefault();
+							.FirstOrDefault(a => a.GetType(typeName) != null);
 					},
 					null,
 					true);

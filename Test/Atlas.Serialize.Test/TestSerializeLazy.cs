@@ -7,7 +7,7 @@ namespace Atlas.Serialize.Test;
 [Category("SerializeLazy")]
 public class TestSerializeLazy : TestSerializeBase
 {
-	private SerializerFile serializerFile;
+	private SerializerFile _serializerFile;
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -19,22 +19,22 @@ public class TestSerializeLazy : TestSerializeBase
 		Directory.CreateDirectory(basePath);
 
 		string filePath = Paths.Combine(basePath, "Data.atlas");
-		serializerFile = new SerializerFileAtlas(filePath);
+		_serializerFile = new SerializerFileAtlas(filePath);
 	}
 
 	[Test, Description("Serialize Lazy Base")]
 	public void SerializeLazyBase()
 	{
-		var input = new Parent()
+		var input = new Parent
 		{
-			Child = new Child()
+			Child = new Child
 			{
 				UintTest = 2,
 			}
 		};
 
-		serializerFile.Save(Call, input);
-		Parent output = serializerFile.Load<Parent>(Call, true);
+		_serializerFile.Save(Call, input);
+		Parent output = _serializerFile.Load<Parent>(Call, true);
 
 		Assert.AreEqual(output.Child.UintTest, input.Child.UintTest);
 	}
@@ -44,8 +44,8 @@ public class TestSerializeLazy : TestSerializeBase
 	{
 		var input = new Parent();
 
-		serializerFile.Save(Call, input);
-		Parent output = serializerFile.Load<Parent>(Call, true);
+		_serializerFile.Save(Call, input);
+		Parent output = _serializerFile.Load<Parent>(Call, true);
 
 		Assert.AreEqual(output.Child, input.Child);
 	}
@@ -55,8 +55,8 @@ public class TestSerializeLazy : TestSerializeBase
 	{
 		var input = new WriteRead();
 
-		serializerFile.Save(Call, input);
-		WriteRead output = serializerFile.Load<WriteRead>(Call, true);
+		_serializerFile.Save(Call, input);
+		WriteRead output = _serializerFile.Load<WriteRead>(Call, true);
 		output.StringTest = "abc";
 		string temp = output.StringTest;
 
@@ -69,8 +69,8 @@ public class TestSerializeLazy : TestSerializeBase
 	{
 		var input = new Container();
 
-		serializerFile.Save(Call, input);
-		Container output = serializerFile.Load<Container>(Call, true);
+		_serializerFile.Save(Call, input);
+		Container output = _serializerFile.Load<Container>(Call, true);
 
 		Assert.NotNull(output.Id);
 	}

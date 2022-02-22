@@ -5,7 +5,7 @@ using System;
 
 namespace Atlas.Start.Avalonia;
 
-class Program
+static class Program
 {
 	static int Main(string[] args)
 	{

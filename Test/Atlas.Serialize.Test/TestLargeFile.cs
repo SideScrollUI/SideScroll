@@ -9,18 +9,19 @@ namespace Atlas.Serialize.Test;
 [Category("LargeFile")]
 public class TestLargeFile : TestSerializeBase
 {
-	private string basePath;
-	private const int intCount = 10000;
+	private const int IntCount = 10000;
+	
+	private string _basePath;
 
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
 		Initialize("LargeFile");
 
-		basePath = Paths.Combine(TestPath, "LargeFile");
-		//basePath = @"S:\Atlas\Test\LargeFile";
+		_basePath = Paths.Combine(TestPath, "LargeFile");
+		//_basePath = @"S:\Atlas\Test\LargeFile";
 
-		Directory.CreateDirectory(basePath);
+		Directory.CreateDirectory(_basePath);
 	}
 
 	[Test, Description("WriteMemoryMappedFile")]
@@ -31,7 +32,7 @@ public class TestLargeFile : TestSerializeBase
 		long length = 0x20000000; // 512 MB
 
 		// Create the memory-mapped file
-		string fullPath = Paths.Combine(basePath, @"LargeImage.data");
+		string fullPath = Paths.Combine(_basePath, @"LargeImage.data");
 		using var mmf = System.IO.MemoryMappedFiles.MemoryMappedFile.CreateFromFile(fullPath, FileMode.OpenOrCreate, "ImgA", offset + length);
 		// Create a random access view, from the offset
 		// to the 768th megabyte (the offset plus length)
@@ -40,7 +41,7 @@ public class TestLargeFile : TestSerializeBase
 
 		// Make changes to the view
 		long mapOffset = 0;
-		for (int i = 0; i < intCount; i++)
+		for (int i = 0; i < IntCount; i++)
 		{
 			//accessor.Read(i, out color);
 			accessor.Write(mapOffset, ref i);
@@ -66,7 +67,7 @@ public class TestLargeFile : TestSerializeBase
 		long spacing = 0x20000000; // 512 MB
 
 		// Create the memory-mapped file
-		string fullPath = Paths.Combine(basePath, @"LargeImage.data");
+		string fullPath = Paths.Combine(_basePath, @"LargeImage.data");
 
 		using Stream stream = new FileStream(fullPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
 		using BinaryWriter writer = new(stream);
@@ -74,7 +75,7 @@ public class TestLargeFile : TestSerializeBase
 		{
 			long position = stream.Seek(offset, SeekOrigin.Begin);
 			Assert.AreEqual(stream.Position, offset);
-			for (int i = 0; i < intCount; i++)
+			for (int i = 0; i < IntCount; i++)
 				writer.Write(i);
 		}
 	}
@@ -88,13 +89,13 @@ public class TestLargeFile : TestSerializeBase
 		// long length = 0x20000000; // 512 MB
 
 		// Create the memory-mapped file
-		string fullPath = Paths.Combine(basePath, @"LargeImage.data");
+		string fullPath = Paths.Combine(_basePath, @"LargeImage.data");
 
 		using Stream stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 		long position = stream.Seek(offset, SeekOrigin.Begin);
 		Assert.AreEqual(stream.Position, offset);
 		using BinaryReader reader = new(stream);
-		for (int i = 0; i < intCount; i++)
+		for (int i = 0; i < IntCount; i++)
 			reader.ReadInt32();
 	}
 
@@ -106,7 +107,7 @@ public class TestLargeFile : TestSerializeBase
 		long length = 0x20000000; // 512 MB
 
 		// Create the memory-mapped file
-		string fullPath = Paths.Combine(basePath, @"LargeImage.data");
+		string fullPath = Paths.Combine(_basePath, @"LargeImage.data");
 		using var mmf = System.IO.MemoryMappedFiles.MemoryMappedFile.CreateFromFile(fullPath, FileMode.Open, "ImgA");
 		// Create a random access view, from the offset
 		// to the 768th megabyte (the offset plus length)
@@ -115,7 +116,7 @@ public class TestLargeFile : TestSerializeBase
 
 		// Make changes to the view
 		long mapOffset = 0;
-		for (int i = 0; i < intCount; i++)
+		for (int i = 0; i < IntCount; i++)
 		{
 			accessor.Read(i, out int temp);
 			//accessor.Write(mapOffset, ref i);

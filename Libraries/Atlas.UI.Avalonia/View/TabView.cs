@@ -72,13 +72,13 @@ public class TabView : Grid, IDisposable
 	private Panel _fillerPanel; // GridSplitter doesn't work without control on right side
 
 	private Size _arrangeOverrideFinalSize;
-	private bool _childControlsFinishedLoading = false;
-	private bool _isDragging = false;
+	private bool _childControlsFinishedLoading;
+	private bool _isDragging;
 
 	// Throttles updating selectedChildControls
 	// todo: extract
 	private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
-	private bool _updateChildControls = false;
+	private bool _updateChildControls;
 
 	public override string ToString() => Model.Name;
 
@@ -109,7 +109,7 @@ public class TabView : Grid, IDisposable
 	{
 		Instance.Invoke(ShowLoading);
 
-		await Instance.ReintializeAsync(call);
+		await Instance.ReinitializeAsync(call);
 	}
 
 	protected override Size ArrangeOverride(Size finalSize)
@@ -247,7 +247,7 @@ public class TabView : Grid, IDisposable
 
 	private void AddChildControls()
 	{
-		_tabChildControls = new TabControlSplitContainer()
+		_tabChildControls = new TabControlSplitContainer
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto"),
 		};
@@ -483,7 +483,7 @@ public class TabView : Grid, IDisposable
 
 	protected void AddControlString(string text)
 	{
-		var textBox = new TextBox()
+		var textBox = new TextBox
 		{
 			Text = text,
 			Foreground = Theme.BackgroundText,
@@ -522,7 +522,7 @@ public class TabView : Grid, IDisposable
 		ClearControls(true);
 
 		// This will get cleared when the view reloads
-		var progressBar = new ProgressBar()
+		var progressBar = new ProgressBar
 		{
 			IsIndeterminate = true,
 			MinWidth = 100,
@@ -565,7 +565,7 @@ public class TabView : Grid, IDisposable
 	{
 		if (_dispatcherTimer == null)
 		{
-			_dispatcherTimer = new DispatcherTimer()
+			_dispatcherTimer = new DispatcherTimer
 			{
 				Interval = TimeSpan.FromMilliseconds(10),
 			};
@@ -931,7 +931,7 @@ public class TabView : Grid, IDisposable
 
 	private void TabInstance_OnReload(object sender, EventArgs e)
 	{
-		//tabInstance.Reintialize(true);
+		//tabInstance.Reinitialize(true);
 		Load();
 	}
 

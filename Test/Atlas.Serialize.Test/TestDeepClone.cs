@@ -8,20 +8,20 @@ namespace Atlas.Serialize.Test;
 [Category("DeepClone")]
 public class TestDeepClone : TestSerializeBase
 {
-	private Log log;
-	private Serializer serializer;
+	private Log _log;
+	private Serializer _serializer;
 
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
 		Initialize("DeepClone");
-		log = Call.Log;
+		_log = Call.Log;
 	}
 
 	[SetUp]
 	public void Setup()
 	{
-		serializer = new Serializer();
+		_serializer = new Serializer();
 	}
 
 	class StringClass

@@ -12,7 +12,7 @@ public class TabControlActions : UserControl
 	public TabModel TabModel;
 	public ItemCollection<TaskCreator> TaskItems;
 
-	public bool GridInitialized { get; private set; }
+	// public bool GridInitialized { get; private set; }
 
 	private readonly Dictionary<Button, TaskCreator> _taskCreators = new();
 

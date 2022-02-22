@@ -55,7 +55,7 @@ public class TabTestChartSplit : ITab
 
 		private void AddEntry(Call call)
 		{
-			Invoke(new SendOrPostCallback(AddSampleCallback), call);
+			Invoke(AddSampleCallback, call);
 		}
 
 		private void StartTask(Call call)
@@ -63,7 +63,7 @@ public class TabTestChartSplit : ITab
 			CancellationToken token = call.TaskInstance.TokenSource.Token;
 			for (int i = 0; !token.IsCancellationRequested; i++)
 			{
-				Invoke(new SendOrPostCallback(AddSampleCallback), call);
+				Invoke(AddSampleCallback, call);
 				Thread.Sleep(1000);
 			}
 		}

@@ -6,6 +6,7 @@ using Atlas.Tabs.Test.DataRepo;
 using Atlas.Tabs.Test.Exceptions;
 using Atlas.Tabs.Test.Loading;
 using Atlas.Tabs.Test.Objects;
+using Atlas.Tabs.Test.Params;
 using Atlas.Tabs.Tools;
 
 namespace Atlas.Tabs.Test;

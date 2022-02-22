@@ -14,7 +14,7 @@ public class FormatValueConverter : IValueConverter
 	// add a map to store original mappings?
 	//public Dictionary<object, object> { get; set; }
 
-	public bool ConvertBackEnabled { get; set; } = true;
+	// public bool ConvertBackEnabled { get; set; } = true;
 	public bool IsFormatted { get; set; }
 
 	private object _originalValue;

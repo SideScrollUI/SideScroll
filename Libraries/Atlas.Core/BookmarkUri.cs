@@ -22,7 +22,7 @@ public class BookmarkUri
 		if (!match.Success)
 			return null;
 
-		var uri = new BookmarkUri()
+		BookmarkUri uri = new()
 		{
 			Url = url,
 			Prefix = match.Groups["prefix"].Value.ToLower(),

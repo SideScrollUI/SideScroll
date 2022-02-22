@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace Atlas.Tabs.Test;
+namespace Atlas.Tabs.Test.Params;
 
 [Params]
 public class ParamTestItem

@@ -1,4 +1,5 @@
 using Atlas.Core;
+using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +19,7 @@ public class TabDirectory : ITab
 
 	public class Instance : TabInstance
 	{
-		public TabDirectory Tab;
+		public readonly TabDirectory Tab;
 
 		public Instance(TabDirectory tab)
 		{
@@ -35,23 +36,19 @@ public class TabDirectory : ITab
 				new TaskDelegate("Delete", Delete, true),
 			};
 
-
-			var directories = new ItemCollection<DirectoryView>();
+			var items = new ItemCollection<INodeView>();
 			foreach (string directoryPath in Directory.EnumerateDirectories(Tab.Path))
 			{
-				var listDirectory = new DirectoryView(directoryPath);
-				directories.Add(listDirectory);
+				var directoryView = new DirectoryView(directoryPath);
+				items.Add(directoryView);
 			}
-			model.ItemList.Add(directories);
 
-			var files = new ItemCollection<FileView>();
 			foreach (string filePath in Directory.EnumerateFiles(Tab.Path))
 			{
-				var listFile = new FileView(filePath);
-				files.Add(listFile);
+				var fileView = new FileView(filePath);
+				items.Add(fileView);
 			}
-			if (files.Count > 0)
-				model.ItemList.Add(files);
+			model.ItemList.Add(items);
 		}
 
 		private void Delete(Call call)
@@ -70,9 +67,25 @@ public class TabDirectory : ITab
 	}
 }
 
-public class DirectoryView
+public interface INodeView : IHasLinks
+{
+	public string Name { get; }
+
+	[StyleValue]
+	public long? Size { get; }
+
+	[StyleValue]
+	public DateTime Modified { get; }
+}
+
+public class DirectoryView : INodeView
 {
 	public string Directory { get; set; }
+
+	public string Name => Directory;
+	public long? Size => null;
+	public DateTime Modified { get; set; }
+	public bool HasLinks => true;
 
 	[InnerValue]
 	public ITab Tab;
@@ -83,17 +96,22 @@ public class DirectoryView
 	{
 		DirectoryPath = directoryPath;
 		Directory = Path.GetFileName(directoryPath);
+		var info = new DirectoryInfo(directoryPath);
+		Modified = info.LastWriteTime.Trim();
 		Tab = new TabDirectory(directoryPath);
 	}
 
 	public override string ToString() => Directory;
 }
 
-public class FileView
+public class FileView : INodeView
 {
 	public string Filename { get; set; }
-	public long Size { get; set; }
+	public long? Size { get; set; }
 	public DateTime Modified { get; set; }
+	public bool HasLinks => false;
+
+	public string Name => Filename;
 
 	[InnerValue]
 	public ITab Tab;
@@ -110,7 +128,7 @@ public class FileView
 
 		Filename = Path.GetFileName(filePath);
 		Size = FileInfo.Length;
-		Modified = FileInfo.LastWriteTime;
+		Modified = FileInfo.LastWriteTime.Trim();
 
 		if (Filename.EndsWith(".atlas"))
 			Tab = new TabFileSerialized(filePath);

@@ -197,7 +197,7 @@ public class TaskInstance : INotifyPropertyChanged
 		_stopwatch.Stop(); // Both Send and Post adds some delay
 
 		if (Creator != null)
-			Creator.Context.Post(new SendOrPostCallback(OnFinished), null);
+			Creator.Context.Post(OnFinished, null);
 		else
 			OnFinished(null);
 	}
@@ -255,7 +255,7 @@ public class TaskInstance : INotifyPropertyChanged
 
 	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		Creator?.Context.Post(new SendOrPostCallback(NotifyPropertyChangedContext), propertyName);
+		Creator?.Context.Post(NotifyPropertyChangedContext, propertyName);
 	}
 
 	private void NotifyPropertyChangedContext(object state)

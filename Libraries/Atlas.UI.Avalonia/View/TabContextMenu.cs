@@ -60,11 +60,11 @@ public class TabViewContextMenu : ContextMenu, IStyleable, ILayoutable, IDisposa
 
 		list.Add(new Separator());
 
-		_checkboxAutoLoad = new CheckBox()
+		_checkboxAutoLoad = new CheckBox
 		{
 			IsChecked = TabInstance.Project.UserSettings.AutoLoad,
 		};
-		var menuItemAutoLoad = new TabMenuItem()
+		var menuItemAutoLoad = new TabMenuItem
 		{
 			Header = "_AutoLoad",
 			Icon = _checkboxAutoLoad,
@@ -97,7 +97,7 @@ public class TabViewContextMenu : ContextMenu, IStyleable, ILayoutable, IDisposa
 	{
 		TabView.TabViewSettings = new TabViewSettings();
 		TabInstance.SaveTabSettings();
-		TabInstance.Reintialize(true);
+		TabInstance.Reinitialize(true);
 		TabView.Load();
 		// Could have parent instance reload children
 	}

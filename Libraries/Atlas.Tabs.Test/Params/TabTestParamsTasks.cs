@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Atlas.Tabs.Test;
+namespace Atlas.Tabs.Test.Params;
 
 public class TabTestParamsTasks : ITab
 {

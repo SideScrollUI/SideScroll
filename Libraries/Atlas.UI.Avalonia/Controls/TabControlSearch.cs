@@ -64,7 +64,7 @@ public class TabControlSearch : Grid, IStyleable
 		var stream = Icons.Streams.Search16;
 		stream.Seek(0, SeekOrigin.Begin);
 
-		var image = new Image()
+		var image = new Image
 		{
 			Width = 16,
 			Height = 16,

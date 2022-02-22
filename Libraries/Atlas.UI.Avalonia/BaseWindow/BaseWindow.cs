@@ -23,14 +23,14 @@ public class BaseWindow : Window
 
 	private bool _loadComplete = false;
 
-	private Rect? _normalSizeBounds = null; // used for saving when maximized
+	private Rect? _normalSizeBounds; // used for saving when maximized
 
-	public BaseWindow(Project project) : base()
+	public BaseWindow(Project project)
 	{
 		Initialize(project);
 	}
 
-	public BaseWindow(ProjectSettings settings) : base()
+	public BaseWindow(ProjectSettings settings)
 	{
 		Initialize(new Project(settings));
 	}
