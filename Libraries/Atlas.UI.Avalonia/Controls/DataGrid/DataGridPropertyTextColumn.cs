@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.VisualTree;
+using System;
 using System.Collections;
 using System.Reflection;
 
@@ -49,6 +50,12 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 			FormatConverter.MaxLength = MaxDesiredHeight * 10;
 		}
 		FormatConverter.IsFormatted = (propertyInfo.GetCustomAttribute<FormattedAttribute>() != null);
+
+		var formatterAttribute = propertyInfo.GetCustomAttribute<FormatterAttribute>();
+		if (formatterAttribute != null)
+		{
+			FormatConverter.Formatter = (ICustomFormatter)Activator.CreateInstance(formatterAttribute.Type);
+		}
 
 		if (DataGridUtils.IsTypeAutoSize(propertyInfo.PropertyType))
 			AutoSize = true;

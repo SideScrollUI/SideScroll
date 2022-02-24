@@ -2,16 +2,28 @@ using Atlas.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Atlas.Tabs.Tools;
+
+public interface IFileTypeView
+{
+	string Path { get; set; }
+}
 
 public class TabFile : ITab
 {
 	public static HashSet<string> TextExtensions = new()
 	{
-		".txt",
+		".csv",
+		".html",
+		".ini",
+		".log",
 		".md",
+		".txt",
 	};
+
+	public static Dictionary<string, Type> ExtensionTypes = new();
 
 	public string Path;
 
@@ -35,12 +47,21 @@ public class TabFile : ITab
 		{
 			var items = new ItemCollection<ListItem>();
 
-			string extension = System.IO.Path.GetExtension(Tab.Path);
+			string path = Tab.Path;
+			string extension = System.IO.Path.GetExtension(path);
+
+			if (ExtensionTypes.TryGetValue(extension, out Type type))
+			{
+				var tab = (IFileTypeView)Activator.CreateInstance(type);
+				tab.Path = path;
+				items.Add(new ListItem(extension, tab));
+			}
 
 			if (extension == ".json")
 			{
-				items.Add(new ListItem("Contents", LazyJsonNode.LoadPath(Tab.Path)));
-				//items.Add(new ListItem("Contents", JsonValue.Parse(File.ReadAllText(path))));
+				string text = File.ReadAllText(path);
+				items.Add(new ListItem("Contents", text));
+				items.Add(new ListItem("Json", LazyJsonNode.Parse(text)));
 			}
 			else
 			{
@@ -49,12 +70,11 @@ public class TabFile : ITab
 				{
 					try
 					{
-						// doesn't work
-						using StreamReader streamReader = File.OpenText(Tab.Path);
+						using StreamReader streamReader = File.OpenText(path);
 
 						var buffer = new char[100];
 						streamReader.Read(buffer, 0, buffer.Length);
-						isText = true;
+						isText = !buffer.Any(ch => char.IsControl(ch) && ch != '\r' && ch != '\n');
 					}
 					catch (Exception)
 					{
@@ -63,7 +83,7 @@ public class TabFile : ITab
 
 				if (isText)
 				{
-					items.Add(new ListItem("Contents", new FilePath(Tab.Path)));
+					items.Add(new ListItem("Contents", new FilePath(path)));
 				}
 				else
 				{
@@ -71,6 +91,16 @@ public class TabFile : ITab
 				}
 			}
 			model.Items = items;
+
+			model.Actions = new List<TaskCreator>
+			{
+				new TaskDelegate("Open Folder", OpenFolder, true),
+			};
+		}
+
+		private void OpenFolder(Call call)
+		{
+			ProcessUtils.OpenFolder(Tab.Path);
 		}
 	}
 }

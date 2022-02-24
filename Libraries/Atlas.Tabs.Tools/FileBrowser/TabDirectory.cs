@@ -36,10 +36,12 @@ public class TabDirectory : ITab
 				new TaskDelegate("Delete", Delete, true),
 			};
 
-			var items = new ItemCollection<INodeView>();
+			var directories = new List<IDirectoryView>();
+			var items = new List<INodeView>();
 			foreach (string directoryPath in Directory.EnumerateDirectories(Tab.Path))
 			{
 				var directoryView = new DirectoryView(directoryPath);
+				directories.Add(directoryView);
 				items.Add(directoryView);
 			}
 
@@ -48,7 +50,11 @@ public class TabDirectory : ITab
 				var fileView = new FileView(filePath);
 				items.Add(fileView);
 			}
-			model.ItemList.Add(items);
+
+			if (directories.Count == items.Count)
+				model.Items = directories;
+			else
+				model.Items = items;
 		}
 
 		private void Delete(Call call)
@@ -67,24 +73,30 @@ public class TabDirectory : ITab
 	}
 }
 
+public interface IDirectoryView : IHasLinks
+{
+	public string Name { get; }
+}
+
 public interface INodeView : IHasLinks
 {
 	public string Name { get; }
 
-	[StyleValue]
+	[StyleValue, Formatter(typeof(ByteFormatter))]
 	public long? Size { get; }
 
-	[StyleValue]
-	public DateTime Modified { get; }
+	[StyleValue, Formatted]
+	public TimeSpan Modified { get; }
 }
 
-public class DirectoryView : INodeView
+public class DirectoryView : INodeView, IDirectoryView
 {
 	public string Directory { get; set; }
 
 	public string Name => Directory;
 	public long? Size => null;
-	public DateTime Modified { get; set; }
+	public DateTime LastWriteTime { get; set; }
+	public TimeSpan Modified => LastWriteTime.Age();
 	public bool HasLinks => true;
 
 	[InnerValue]
@@ -97,7 +109,7 @@ public class DirectoryView : INodeView
 		DirectoryPath = directoryPath;
 		Directory = Path.GetFileName(directoryPath);
 		var info = new DirectoryInfo(directoryPath);
-		Modified = info.LastWriteTime.Trim();
+		LastWriteTime = info.LastWriteTime.Trim();
 		Tab = new TabDirectory(directoryPath);
 	}
 
@@ -108,7 +120,8 @@ public class FileView : INodeView
 {
 	public string Filename { get; set; }
 	public long? Size { get; set; }
-	public DateTime Modified { get; set; }
+	public DateTime LastWriteTime { get; set; }
+	public TimeSpan Modified => LastWriteTime.Age();
 	public bool HasLinks => false;
 
 	public string Name => Filename;
@@ -128,7 +141,7 @@ public class FileView : INodeView
 
 		Filename = Path.GetFileName(filePath);
 		Size = FileInfo.Length;
-		Modified = FileInfo.LastWriteTime.Trim();
+		LastWriteTime = FileInfo.LastWriteTime.Trim();
 
 		if (Filename.EndsWith(".atlas"))
 			Tab = new TabFileSerialized(filePath);

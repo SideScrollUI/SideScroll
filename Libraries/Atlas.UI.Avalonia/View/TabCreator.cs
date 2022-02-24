@@ -81,6 +81,11 @@ public static class TabCreator
 			// todo: move elsewhere, we shouldn't be blocking during creation
 			value = Task.Run(() => creatorAsync.CreateAsync(new Call())).GetAwaiter().GetResult();
 		}
+		
+		if (value is FilePath filePath)
+		{
+			value = new TabTextFile(filePath);
+		}
 
 		if (value is ITab iTab)
 		{
@@ -108,12 +113,6 @@ public static class TabCreator
 		{
 			return control;
 		}
-		/*else if (value is FilePath filePath)
-		{
-			var tabAvalonEdit = new TabAvalonEdit(name);
-			tabAvalonEdit.Load(filePath.path);
-			return tabAvalonEdit;
-		}*/
 		else
 		{
 			if (value is Enum && parentTabInstance.Model.Object.GetType().IsEnum)

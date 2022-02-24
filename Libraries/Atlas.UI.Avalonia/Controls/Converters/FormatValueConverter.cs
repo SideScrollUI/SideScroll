@@ -17,6 +17,8 @@ public class FormatValueConverter : IValueConverter
 	// public bool ConvertBackEnabled { get; set; } = true;
 	public bool IsFormatted { get; set; }
 
+	public ICustomFormatter Formatter { get; set; }
+
 	private object _originalValue;
 
 	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -35,7 +37,7 @@ public class FormatValueConverter : IValueConverter
 		return _originalValue;
 	}
 
-	public static object ChangeType(object value, Type targetType, int maxLength, bool formatted)
+	public object ChangeType(object value, Type targetType, int maxLength, bool formatted)
 	{
 		if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
 		{
@@ -53,6 +55,9 @@ public class FormatValueConverter : IValueConverter
 
 		if (targetType == typeof(string))
 		{
+			if (Formatter != null)
+				return Formatter.Format(null, value, null);
+
 			return ObjectToString(value, maxLength, formatted);
 		}
 

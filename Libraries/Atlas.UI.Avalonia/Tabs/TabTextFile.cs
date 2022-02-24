@@ -1,43 +1,35 @@
 using Atlas.Core;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
-using System;
-using System.Collections.Generic;
 
 namespace Atlas.UI.Avalonia.Tabs;
 
-public class TabText : ITab
+public class TabTextFile : ITab
 {
-	public string Text;
+	public FilePath FilePath;
 
-	public TabText(string text)
+	public TabTextFile(FilePath filePath)
 	{
-		Text = text;
+		FilePath = filePath;
 	}
 
 	public TabInstance Create() => new Instance(this);
 
 	public class Instance : TabInstance
 	{
-		public readonly TabText Tab;
+		public readonly TabTextFile Tab;
 
-		public Instance(TabText tab)
+		public Instance(TabTextFile tab)
 		{
 			Tab = tab;
 		}
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			model.MinDesiredWidth = 100;
-
 			var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
-			tabAvaloniaEdit.SetFormattedJson(Tab.Text);
+			tabAvaloniaEdit.Load(Tab.FilePath.Path);
 
 			model.AddObject(tabAvaloniaEdit, true);
 		}
 	}
 }
-/*
-Markdown support?
-- Avalonia.Markdown slow for large text and doesn't allow text selection (yet?)
-*/

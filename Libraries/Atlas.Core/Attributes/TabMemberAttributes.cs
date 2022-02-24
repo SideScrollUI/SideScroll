@@ -104,6 +104,18 @@ public class FormattedAttribute : Attribute
 {
 }
 
+// Displayed string formatter
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+public class FormatterAttribute : Attribute
+{
+	public readonly Type Type;
+
+	public FormatterAttribute(Type type)
+	{
+		Type = type;
+	}
+}
+
 // Adds spaces between words in a string
 /*[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class WordSpacedAttribute : Attribute

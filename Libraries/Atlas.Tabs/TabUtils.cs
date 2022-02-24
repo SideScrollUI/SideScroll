@@ -26,11 +26,8 @@ public static class TabUtils
 		if (value == null)
 			return false;
 
-		if (value is ListItem listItem)
+		if (value is IListItem listItem)
 			value = listItem.Value;
-
-		if (value is ListMember listMember)
-			value = listMember.Value;
 
 		Type type = value.GetType();
 		if (type.IsPrimitive ||

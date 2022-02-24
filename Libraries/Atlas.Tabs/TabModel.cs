@@ -32,6 +32,7 @@ public interface IItemSelector
 	IList SelectedItems { get; set; }
 }
 
+// TabInstance or Controls can specify this to create child controls dynamically
 public interface ITabCreator
 {
 	object CreateControl(object value, out string label);
