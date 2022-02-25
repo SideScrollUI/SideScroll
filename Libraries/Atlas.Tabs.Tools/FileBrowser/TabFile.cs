@@ -1,8 +1,8 @@
 using Atlas.Core;
+using Atlas.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Atlas.Tabs.Tools;
 
@@ -13,16 +13,6 @@ public interface IFileTypeView
 
 public class TabFile : ITab
 {
-	public static HashSet<string> TextExtensions = new()
-	{
-		".csv",
-		".html",
-		".ini",
-		".log",
-		".md",
-		".txt",
-	};
-
 	public static Dictionary<string, Type> ExtensionTypes = new();
 
 	public string Path;
@@ -33,6 +23,14 @@ public class TabFile : ITab
 	}
 
 	public TabInstance Create() => new Instance(this);
+
+	public class Toolbar : TabToolbar
+	{
+		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Streams.OpenFolder);
+
+		[Separator]
+		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Streams.Delete);
+	}
 
 	public class Instance : TabInstance
 	{
@@ -45,9 +43,20 @@ public class TabFile : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			var items = new ItemCollection<ListItem>();
-
 			string path = Tab.Path;
+			if (!File.Exists(path))
+			{
+				model.AddObject("File doesn't exist");
+				return;
+			}
+
+			var toolbar = new Toolbar();
+			toolbar.ButtonOpenFolder.Action = OpenFolder;
+			toolbar.ButtonDelete.Action = Delete;
+			model.AddObject(toolbar);
+
+			var items = new List<ListItem>();
+
 			string extension = System.IO.Path.GetExtension(path);
 
 			if (ExtensionTypes.TryGetValue(extension, out Type type))
@@ -65,42 +74,27 @@ public class TabFile : ITab
 			}
 			else
 			{
-				bool isText = TextExtensions.Contains(extension);
-				if (!isText)
-				{
-					try
-					{
-						using StreamReader streamReader = File.OpenText(path);
-
-						var buffer = new char[100];
-						streamReader.Read(buffer, 0, buffer.Length);
-						isText = !buffer.Any(ch => char.IsControl(ch) && ch != '\r' && ch != '\n');
-					}
-					catch (Exception)
-					{
-					}
-				}
-
-				if (isText)
+				if (FileUtils.IsTextFile(path))
 				{
 					items.Add(new ListItem("Contents", new FilePath(path)));
 				}
-				else
-				{
-					items.Add(new ListItem("Contents", null));
-				}
 			}
-			model.Items = items;
+			items.Add(new ListItem("File Info", new FileInfo(path)));
 
-			model.Actions = new List<TaskCreator>
-			{
-				new TaskDelegate("Open Folder", OpenFolder, true),
-			};
+			model.Items = items;
 		}
 
 		private void OpenFolder(Call call)
 		{
 			ProcessUtils.OpenFolder(Tab.Path);
+		}
+
+		private void Delete(Call call)
+		{
+			if (File.Exists(Tab.Path))
+				File.Delete(Tab.Path);
+
+			Refresh();
 		}
 	}
 }

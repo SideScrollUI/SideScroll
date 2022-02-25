@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Atlas.Core;
@@ -110,6 +112,37 @@ public static class FileUtils
 		catch (IOException)
 		{
 			return true;
+		}
+
+		return false;
+	}
+
+	public static HashSet<string> TextExtensions = new()
+	{
+		".csv",
+		".html",
+		".ini",
+		".log",
+		".md",
+		".txt",
+	};
+
+	public static bool IsTextFile(string path)
+	{
+		string extension = Path.GetExtension(path);
+		if (TextExtensions.Contains(extension))
+			return true;
+
+		try
+		{
+			using StreamReader streamReader = File.OpenText(path);
+
+			var buffer = new char[1000]; // 100 won't detect pdf's as binary
+			streamReader.Read(buffer, 0, buffer.Length);
+			return !buffer.Any(ch => char.IsControl(ch) && ch != '\r' && ch != '\n');
+		}
+		catch (Exception)
+		{
 		}
 
 		return false;

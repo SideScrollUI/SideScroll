@@ -38,7 +38,10 @@ public class TabDirectory : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			if (!Directory.Exists(Tab.Path))
+			{
+				model.AddObject("Directory doesn't exist");
 				return;
+			}
 
 			var toolbar = new Toolbar();
 			toolbar.ButtonOpenFolder.Action = OpenFolder;
@@ -46,24 +49,24 @@ public class TabDirectory : ITab
 			model.AddObject(toolbar);
 
 			var directories = new List<IDirectoryView>();
-			var items = new List<INodeView>();
+			var nodes = new List<INodeView>();
 			foreach (string directoryPath in Directory.EnumerateDirectories(Tab.Path))
 			{
 				var directoryView = new DirectoryView(directoryPath);
 				directories.Add(directoryView);
-				items.Add(directoryView);
+				nodes.Add(directoryView);
 			}
 
 			foreach (string filePath in Directory.EnumerateFiles(Tab.Path))
 			{
 				var fileView = new FileView(filePath);
-				items.Add(fileView);
+				nodes.Add(fileView);
 			}
 
-			if (directories.Count == items.Count)
+			if (directories.Count == nodes.Count)
 				model.Items = directories;
 			else
-				model.Items = items;
+				model.Items = nodes;
 		}
 
 		private void OpenFolder(Call call)
@@ -73,13 +76,18 @@ public class TabDirectory : ITab
 
 		private void Delete(Call call)
 		{
-			// Should we delete both directories and files?
+			// todo: Confirmation prompt?
 			foreach (TabDataSettings tabDataSettings in TabViewSettings.TabDataSettings)
 			{
 				foreach (SelectedRow selectedRow in tabDataSettings.SelectedRows)
 				{
-					if (Directory.Exists(selectedRow.Label))
-						Directory.Delete(selectedRow.Label, true);
+					string path = Paths.Combine(Tab.Path, selectedRow.Label);
+
+					if (Directory.Exists(path))
+						Directory.Delete(path, true);
+
+					if (File.Exists(path))
+						File.Delete(path);
 				}
 			}
 			Reload();
