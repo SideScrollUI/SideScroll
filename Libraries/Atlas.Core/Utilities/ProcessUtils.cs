@@ -77,6 +77,8 @@ public static class ProcessUtils
 				string argument;
 				if (File.Exists(path))
 					argument = "/select,\"" + path + "\"";
+				else if (Directory.Exists(path))
+					argument = '"' + path + '"';
 				else
 					argument = '"' + Path.GetDirectoryName(path) + '"';
 

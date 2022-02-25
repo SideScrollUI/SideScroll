@@ -689,7 +689,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 	{
 		if (TabInstance.Project.UserSettings.AutoLoad)
 		{
-			SortSavedColumn();
+			// SortSavedColumn(); // Not supported yet
 			LoadSearch();
 
 			if (!SelectSavedItems()) // sorting must happen before this
@@ -1159,10 +1159,10 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 	}
 
 	// Not possible with current DataGrid yet?
-	private void SortSavedColumn()
+	/*private void SortSavedColumn()
 	{
 		//collectionView.SortDescriptions
-		/*ListCollectionView listCollectionView = collectionView as ListCollectionView;
+		ListCollectionView listCollectionView = collectionView as ListCollectionView;
 		if (listCollectionView != null && tabDataSettings.SortColumnName != null)
 		{
 			DataGridColumn matchingColumn = null;
@@ -1182,8 +1182,8 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 				Debug.Assert(propertyInfo != null);
 				listCollectionView.CustomSort = new DataGridSortComparer(propertyInfo, tabDataSettings.SortDirection);
 			}
-		}*/
-	}
+		}
+	}*/
 
 	public void Dispose()
 	{

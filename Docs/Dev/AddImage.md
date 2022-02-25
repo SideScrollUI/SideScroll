@@ -4,8 +4,11 @@
   - [Icons](../../Images/Libraries/Atlas.Resources/Icons/)
 
 * Find new icon:
-  - FlatIcon
-    - https://www.flaticon.com/
+  - [Icon Icons](https://icon-icons.com/)
+    - Select outline after searching
+    - Download svg and convert to 24x24 png (see below)
+  - [FlatIcon](https://www.flaticon.com/)
+    - (no longer offers svg downloads without premium membership)
     - Click color picker next to "Add to Collection"
     - Paste in color `#006df0`
     - Click Download
@@ -29,3 +32,10 @@
 
 ## Converting svg to png
 - [Vectr](https://vectr.com/)
+  - Make sure image fills width or height
+  - Fills
+    - Set color `#006df0`
+  - Export (top right button)
+    - Set to png
+    - Set size to 24 x 24
+    - Download

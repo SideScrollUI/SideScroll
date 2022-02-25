@@ -54,7 +54,8 @@ public class TabControlAvaloniaEdit : Grid
 	private void InitializeControls()
 	{
 		Background = Brushes.Transparent;
-		MinWidth = 50;
+
+		MinWidth = 50; // WordWrap causes freezing below certain values
 		MaxWidth = 3000;
 
 		ColumnDefinitions = new ColumnDefinitions("*");
@@ -90,6 +91,7 @@ public class TabControlAvaloniaEdit : Grid
 	public void Load(string path)
 	{
 		Path = path;
+
 		var fileInfo = new FileInfo(path);
 		if (fileInfo.Length > MaxAutoLoadSize)
 		{
@@ -125,7 +127,7 @@ public class TabControlAvaloniaEdit : Grid
 		get => TextEditor.Text;
 		set
 		{
-			if (value is string s && s.StartsWith("{") && !s.Contains("\n"))
+			if (value is string s && s.StartsWith("{") && !s.Contains('\n'))
 			{
 				TextEditor.FontFamily = new FontFamily("Courier New"); // Use monospaced font for Json
 			}

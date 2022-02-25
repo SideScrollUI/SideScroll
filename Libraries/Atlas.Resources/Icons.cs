@@ -25,6 +25,7 @@ public static class Icons
 
 	public const string BlankDocument = "blank-document.png";
 	public const string Save = "save-file-option.png";
+	public const string OpenFolder = "OpenFolder.png";
 
 	public const string Browser = "internet.png";
 
@@ -68,6 +69,7 @@ public static class Icons
 
 		public static Stream BlankDocument => Get(Icons.BlankDocument);
 		public static Stream Save => Get(Icons.Save);
+		public static Stream OpenFolder => Get(Icons.OpenFolder);
 
 		public static Stream Browser => Get(Icons.Browser);
 

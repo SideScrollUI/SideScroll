@@ -1,5 +1,6 @@
 using Atlas.Core;
 using Atlas.Extensions;
+using Atlas.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +18,14 @@ public class TabDirectory : ITab
 
 	public TabInstance Create() => new Instance(this);
 
+	public class Toolbar : TabToolbar
+	{
+		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Streams.OpenFolder);
+
+		[Separator]
+		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Streams.Delete);
+	}
+
 	public class Instance : TabInstance
 	{
 		public readonly TabDirectory Tab;
@@ -31,10 +40,10 @@ public class TabDirectory : ITab
 			if (!Directory.Exists(Tab.Path))
 				return;
 
-			model.Actions = new List<TaskCreator>()
-			{
-				new TaskDelegate("Delete", Delete, true),
-			};
+			var toolbar = new Toolbar();
+			toolbar.ButtonOpenFolder.Action = OpenFolder;
+			toolbar.ButtonDelete.Action = Delete;
+			model.AddObject(toolbar);
 
 			var directories = new List<IDirectoryView>();
 			var items = new List<INodeView>();
@@ -55,6 +64,11 @@ public class TabDirectory : ITab
 				model.Items = directories;
 			else
 				model.Items = items;
+		}
+
+		private void OpenFolder(Call call)
+		{
+			ProcessUtils.OpenFolder(Tab.Path);
 		}
 
 		private void Delete(Call call)

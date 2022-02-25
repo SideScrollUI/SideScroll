@@ -32,6 +32,7 @@
     <None Remove="Icons\png\link.png" />
     <None Remove="Icons\png\list1.png" />
     <None Remove="Icons\png\list2.png" />
+    <None Remove="Icons\png\OpenFolder.png" />
     <None Remove="Icons\png\padnote.png" />
     <None Remove="Icons\png\password.png" />
     <None Remove="Icons\png\paste.png" />
@@ -76,6 +77,7 @@
     <EmbeddedResource Include="Icons\png\link.png" />
     <EmbeddedResource Include="Icons\png\list1.png" />
     <EmbeddedResource Include="Icons\png\list2.png" />
+    <EmbeddedResource Include="Icons\png\OpenFolder.png" />
     <EmbeddedResource Include="Icons\png\padnote.png" />
     <EmbeddedResource Include="Icons\png\password.png" />
     <EmbeddedResource Include="Icons\png\paste.png" />

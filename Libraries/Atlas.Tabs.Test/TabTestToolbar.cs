@@ -9,7 +9,7 @@ public class TabTestToolbar : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class TestToolbar : TabToolbar
+	public class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Streams.Refresh);
 
@@ -27,19 +27,19 @@ public class TabTestToolbar : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			var toolbar = new TestToolbar();
-			toolbar.ButtonRefresh.Action = ButtonRefresh_Click;
-			toolbar.ButtonOpenBrowser.Action = ButtonOpenBrowser_Click;
+			var toolbar = new Toolbar();
+			toolbar.ButtonRefresh.Action = Refresh;
+			toolbar.ButtonOpenBrowser.Action = OpenBrowser;
 
 			model.AddObject(toolbar);
 		}
 
-		private void ButtonRefresh_Click(Call call)
+		private void Refresh(Call call)
 		{
 			Reload();
 		}
 
-		private void ButtonOpenBrowser_Click(Call call)
+		private void OpenBrowser(Call call)
 		{
 			string uri = "https://www.wikipedia.org/";
 			ProcessUtils.OpenBrowser(uri);
