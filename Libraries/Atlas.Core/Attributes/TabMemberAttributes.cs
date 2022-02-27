@@ -51,13 +51,19 @@ public class HiddenRowAttribute : Attribute
 {
 }
 
-// Don't show row if value is null
+// Don't show row or column if value is null
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class HideNullAttribute : Attribute
 {
 }
 
-// Don't show row if value matches
+// Don't show column if value is null
+[AttributeUsage(AttributeTargets.Property)]
+public class HideNullColumnAttribute : Attribute
+{
+}
+
+// Don't show row or column if value matches
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class HideAttribute : Attribute
 {

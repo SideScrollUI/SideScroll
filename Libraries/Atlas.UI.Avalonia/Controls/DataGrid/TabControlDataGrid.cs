@@ -573,6 +573,12 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		}
 
 		List<TabDataSettings.PropertyColumn> propertyColumns = TabDataSettings.GetPropertiesAsColumns(_elementType);
+
+		// Filter [HideNull]
+		propertyColumns = propertyColumns
+			.Where(p => p.IsVisible(List))
+			.ToList();
+
 		if (propertyColumns.Count == 0)
 			return;
 

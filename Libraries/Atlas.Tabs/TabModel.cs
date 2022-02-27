@@ -254,7 +254,7 @@ public class TabModel
 
 		if (ItemList[0].Count == 1)
 		{
-			if (ItemList[0] is IItemCollection itemCollection && itemCollection.Skippable == false)
+			if (ItemList[0] is IItemCollection itemCollection && !itemCollection.Skippable)
 				return;
 
 			var firstItem = ItemList[0][0];
