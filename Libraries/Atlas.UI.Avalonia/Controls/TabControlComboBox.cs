@@ -40,8 +40,7 @@ public class TabControlComboBox : ComboBox, IStyleable, ILayoutable
 		}
 		else
 		{
-			var values = type.GetEnumValues();
-			Items = values;
+			Items = type.GetEnumValues();
 		}
 		Bind(property.Object, property.PropertyInfo.Name);
 	}

@@ -310,7 +310,7 @@ public class TabInstance : IDisposable
 
 	protected ItemCollection<IListItem> GetListItems()
 	{
-		return ListItem.Create(this, false);
+		return IListItem.Create(this, false);
 	}
 
 	private MethodInfo GetDerivedLoadMethod(string name, int paramCount)

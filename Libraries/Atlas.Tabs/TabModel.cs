@@ -170,7 +170,7 @@ public class TabModel
 		var listItemAttribute = type.GetCustomAttribute<ListItemAttribute>();
 		if (listItemAttribute != null)
 		{
-			ItemList.Add(ListItem.Create(obj, listItemAttribute.IncludeBaseTypes));
+			ItemList.Add(IListItem.Create(obj, listItemAttribute.IncludeBaseTypes));
 			return;
 		}
 

@@ -7,6 +7,7 @@ using System.IO;
 
 namespace Atlas.Serialize;
 
+[Unserialized]
 public class DataRepo
 {
 	private const string DefaultGroupId = ".Default";

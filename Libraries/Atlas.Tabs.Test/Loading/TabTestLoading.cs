@@ -5,8 +5,8 @@ namespace Atlas.Tabs.Test.Loading;
 [ListItem]
 public class TabTestLoading
 {
-	public TabTestSlowLoad SlowLoad => new();
-	public TabTestSlowModel SlowModel => new();
-	public TabTestSlowAsyncItem SlowAsyncItem => new();
-	public TabTestSlowAsyncModel SlowAsyncModel => new();
+	public static TabTestSlowLoad SlowLoad => new();
+	public static TabTestSlowModel SlowModel => new();
+	public static TabTestSlowAsyncItem SlowAsyncItem => new();
+	public static TabTestSlowAsyncModel SlowAsyncModel => new();
 }

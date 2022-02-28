@@ -12,6 +12,28 @@ public interface IListItem
 
 	[HiddenColumn, InnerValue, StyleValue]
 	object Value { get; set; }
+
+	// Get list items for all public properties and any methods marked with [Item]
+	public static ItemCollection<IListItem> Create(object obj, bool includeBaseTypes)
+	{
+		var listItems = new SortedDictionary<int, IListItem>();
+
+		var properties = ListProperty.Create(obj, includeBaseTypes);
+		foreach (ListProperty listProperty in properties)
+		{
+			int metadataToken = listProperty.PropertyInfo.GetGetMethod(false).MetadataToken;
+
+			listItems.Add(metadataToken, listProperty);
+		}
+
+		var methods = ListMethod.Create(obj, includeBaseTypes);
+		foreach (ListMethod listMethod in methods)
+		{
+			listItems.Add(listMethod.MethodInfo.MetadataToken, listMethod);
+		}
+
+		return new ItemCollection<IListItem>(listItems.Values);
+	}
 }
 
 // implement INotifyPropertyChanged to prevent memory leaks
@@ -41,28 +63,5 @@ public class ListItem : IListItem, INotifyPropertyChanged
 	{
 		Key = key;
 		Value = value;
-	}
-
-	// todo: move into IListItem after upgrading to .Net Standard 2.1
-	// Get list items for all public properties and any methods marked with [Item]
-	public static ItemCollection<IListItem> Create(object obj, bool includeBaseTypes)
-	{
-		var listItems = new SortedDictionary<int, IListItem>();
-
-		var properties = ListProperty.Create(obj, includeBaseTypes);
-		foreach (ListProperty listProperty in properties)
-		{
-			int metadataToken = listProperty.PropertyInfo.GetGetMethod(false).MetadataToken;
-
-			listItems.Add(metadataToken, listProperty);
-		}
-
-		var methods = ListMethod.Create(obj, includeBaseTypes);
-		foreach (ListMethod listMethod in methods)
-		{
-			listItems.Add(listMethod.MethodInfo.MetadataToken, listMethod);
-		}
-
-		return new ItemCollection<IListItem>(listItems.Values);
 	}
 }

@@ -120,20 +120,8 @@ public class ListProperty : ListMember, IPropertyEditable
 		foreach (PropertyInfo propertyInfo in propertyInfos)
 		{
 			var listProperty = new ListProperty(obj, propertyInfo);
-
-			// move this to later?
-			if (propertyInfo.GetCustomAttribute<HideNullAttribute>() != null)
-			{
-				if (listProperty.Value == null)
-					continue;
-			}
-
-			var hideAttribute = propertyInfo.GetCustomAttribute<HideAttribute>();
-			if (hideAttribute != null && hideAttribute.Values != null)
-			{
-				if (hideAttribute.Values.Contains(listProperty.Value))
-					continue;
-			}
+			if (!listProperty.IsObjectVisible())
+				continue;
 
 			if (propertyToIndex.TryGetValue(propertyInfo.Name, out int index))
 			{
@@ -148,6 +136,7 @@ public class ListProperty : ListMember, IPropertyEditable
 		}
 		return listProperties;
 	}
+
 	public static bool IsVisible(PropertyInfo propertyInfo)
 	{
 		if (propertyInfo.DeclaringType.IsNotPublic)
@@ -160,6 +149,23 @@ public class ListProperty : ListMember, IPropertyEditable
 
 		return propertyInfo.GetCustomAttribute<HiddenAttribute>() == null && // [Hidden]
 			propertyInfo.GetCustomAttribute<HiddenRowAttribute>() == null; // [HiddenRow]
+	}
+
+	public bool IsObjectVisible()
+	{
+		if (PropertyInfo.GetCustomAttribute<HideNullAttribute>() != null)
+		{
+			if (Value == null)
+				return false;
+		}
+
+		var hideAttribute = PropertyInfo.GetCustomAttribute<HideAttribute>();
+		if (hideAttribute?.Values != null)
+		{
+			if (hideAttribute.Values.Contains(Value))
+				return false;
+		}
+		return true;
 	}
 
 	// This can be slow due to lazy property loading

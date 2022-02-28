@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace Atlas.Tabs;
 
+// Overrides default ObjectHasLinks()
 public interface IHasLinks
 {
 	bool HasLinks { get; }

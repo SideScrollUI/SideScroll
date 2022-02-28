@@ -14,27 +14,27 @@ namespace Atlas.Tabs.Test;
 [ListItem]
 public class TabTest
 {
-	public TabSample Sample => new();
+	public static TabSample Sample => new();
 
-	public TabTestObjects Objects => new();
-	public TabTestDataGrid DataGrid => new();
-	public TabTestParams Params => new();
-	public TabTestLog Log => new();
-	public TabActions Actions => new();
-	public TabTestJson Json => new();
-	public TabTestBookmarks Bookmarks => new();
-	public TabTestSkip Skip => new(); // move into new Lists?
-	public TabTestExceptions Exceptions => new();
+	public static TabTestObjects Objects => new();
+	public static TabTestDataGrid DataGrid => new();
+	public static TabTestParams Params => new();
+	public static TabTestLog Log => new();
+	public static TabActions Actions => new();
+	public static TabTestJson Json => new();
+	public static TabTestBookmarks Bookmarks => new();
+	public static TabTestSkip Skip => new(); // move into new Lists?
+	public static TabTestExceptions Exceptions => new();
 
-	public TabTestBrowser WebBrowser => new();
-	public TabTestTextEditor TextEditor => new();
-	public TabTestChart Chart => new();
-	public TabTestToolbar Toolbar => new();
-	public TabSerializer Serializer => new();
-	public TabTestProcess Process => new();
+	public static TabTestBrowser WebBrowser => new();
+	public static TabTestTextEditor TextEditor => new();
+	public static TabTestChart Chart => new();
+	public static TabTestToolbar Toolbar => new();
+	public static TabSerializer Serializer => new();
+	public static TabTestProcess Process => new();
 
-	public TabTestLoading Loading => new();
-	public TabTestDataRepo DataRepos => new();
-	public TabIcons Icons => new();
-	public TabTools Tools => new();
+	public static TabTestLoading Loading => new();
+	public static TabTestDataRepo DataRepos => new();
+	public static TabIcons Icons => new();
+	public static TabTools Tools => new();
 }
