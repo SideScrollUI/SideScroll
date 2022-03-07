@@ -9,6 +9,7 @@ public class ParamsAttribute : Attribute
 {
 }
 
+// Shows all property names and [Item] methods as single column ListItem's
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public class ListItemAttribute : Attribute
 {

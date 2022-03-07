@@ -6,20 +6,11 @@ namespace Atlas.Extensions;
 
 public static class TimeSpanExtensions
 {
-	public class TimeUnit
-	{
-		public TimeSpan TimeSpan { get; set; }
-		public string Name { get; set; }
-
-		public TimeUnit(TimeSpan timeSpan, string name)
-		{
-			TimeSpan = timeSpan;
-			Name = name;
-		}
-	}
+	public record class TimeUnit(TimeSpan TimeSpan, string Name);
 
 	public static List<TimeUnit> TimeUnits { get; set; } = new()
 	{
+		new(TimeSpan.FromDays(365.25), "Year"),
 		new(TimeSpan.FromDays(7), "Week"),
 		new(TimeSpan.FromDays(1), "Day"),
 		new(TimeSpan.FromHours(1), "Hour"),
