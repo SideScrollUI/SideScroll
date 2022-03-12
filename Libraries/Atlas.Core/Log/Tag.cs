@@ -13,7 +13,7 @@ public class Tag
 {
 	public string Name { get; set; }
 
-	[InnerValue]
+	[InnerValue, StyleValue]
 	public object Value { get; set; }
 
 	public TagType Type;

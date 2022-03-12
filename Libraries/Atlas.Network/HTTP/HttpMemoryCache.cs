@@ -1,5 +1,6 @@
 using Atlas.Core;
 using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using System;
 using System.Text.Json;
 
@@ -64,7 +65,10 @@ public class HttpMemoryCache
 		{
 			try
 			{
-				t = JsonSerializer.Deserialize<T>(text);
+				// doesn't handle newlines
+				//var options = new JsonSerializerOptions { IncludeFields = true };
+				//t = JsonSerializer.Deserialize<T>(text, options);
+				t = JsonConvert.DeserializeObject<T>(text);
 				Add(uri, t);
 				return true;
 			}

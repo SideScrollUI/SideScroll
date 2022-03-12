@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -74,13 +75,16 @@ public class Log : LogEntry
 		return logEntry;
 	}
 
-	public LogEntry Add(Exception e)
+	public LogEntry Add(Exception e, params Tag[] tags)
 	{
 		Debug.Print("Exception: " + e.Message);
 
+		var allTags = tags.ToList();
+		allTags.Add(new Tag("Exception", e));
+
 		if (e is TaskCanceledException)
 		{
-			return Add(e.Message, new Tag(e));
+			return Add(e.Message, allTags.ToArray());
 		}
 		else if (e is AggregateException ae)
 		{
@@ -88,15 +92,15 @@ public class Log : LogEntry
 			foreach (Exception ex in ae.InnerExceptions)
 			{
 				if (ex is TaskCanceledException)
-					logEntry = Add(ex.Message, new Tag(ex));
+					logEntry = Add(ex.Message, allTags.ToArray());
 				else
-					logEntry = AddError(ex.Message, new Tag(ex));
+					logEntry = AddError(ex.Message, allTags.ToArray());
 			}
 			return logEntry;
 		}
 		else
 		{
-			return AddError(e.Message, new Tag(e));
+			return AddError(e.Message, allTags.ToArray());
 		}
 	}
 
