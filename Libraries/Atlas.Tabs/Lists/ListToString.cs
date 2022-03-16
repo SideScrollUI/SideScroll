@@ -29,8 +29,8 @@ public class ListToString
 
 		Value = obj.ToString();
 
-		DataKey = DataUtils.GetDataKey(obj);
-		DataValue = DataUtils.GetDataValue(obj);
+		DataKey = ObjectUtils.GetDataKey(obj);
+		DataValue = ObjectUtils.GetDataValue(obj);
 	}
 
 	public static ItemCollection<ListToString> Create(IEnumerable enumerable, int limit = MaxItems)

@@ -28,12 +28,12 @@ public class SelectedRow
 		Object = obj;
 		Label = obj.ToString();
 
-		DataKey = DataUtils.GetDataKey(obj); // overrides label
-		DataValue = DataUtils.GetDataValue(obj);
+		DataKey = ObjectUtils.GetDataKey(obj); // overrides label
+		DataValue = ObjectUtils.GetDataValue(obj);
 
 		// Use the DataValue's DataKey if no DataKey found
 		if (DataKey == null && DataValue != null)
-			DataKey = DataUtils.GetDataKey(DataValue);
+			DataKey = ObjectUtils.GetDataKey(DataValue);
 
 		Type type = obj.GetType();
 		if (Label == type.FullName)

@@ -740,7 +740,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 			objects.Add(obj);
 
-			string id = DataUtils.GetObjectId(obj);
+			string id = ObjectUtils.GetObjectId(obj);
 			if (id != null)
 				keys[id] = obj;
 		}

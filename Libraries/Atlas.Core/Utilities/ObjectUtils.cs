@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Atlas.Core;
 
-public static class DataUtils
+public static class ObjectUtils
 {
 	public static string GetObjectId(object obj)
 	{
@@ -52,5 +52,15 @@ public static class DataUtils
 			return valueFields[0].GetValue(obj);
 		}
 		return null;
+	}
+
+	public static bool IsEqual(object obj1, object obj2)
+	{
+		if (obj1 == null) return obj2 == null;
+		if (obj2 == null) return false;
+
+		Type type = obj1.GetType();
+		object covertedObject = Convert.ChangeType(obj2, type);
+		return obj1.Equals(covertedObject);
 	}
 }

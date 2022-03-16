@@ -114,8 +114,7 @@ public class ListField : ListMember, IPropertyEditable
 		var hideAttribute = FieldInfo.GetCustomAttribute<HideAttribute>();
 		if (hideAttribute?.Values != null)
 		{
-			if (hideAttribute.Values.Contains(Value))
-				return false;
+			return !hideAttribute.Values.Any(v => ObjectUtils.IsEqual(Value, v));
 		}
 		return true;
 	}
