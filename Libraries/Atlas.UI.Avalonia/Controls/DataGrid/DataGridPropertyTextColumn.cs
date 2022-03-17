@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.VisualTree;
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Atlas.UI.Avalonia;
@@ -85,18 +86,25 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 				if (obj == null)
 					continue;
 
-				object value = PropertyInfo.GetValue(obj);
-				if (hideAttribute != null)
+				try
 				{
-					if (!hideAttribute.Values.Contains(value))
-						IsVisible = true;
-				}
+					object value = PropertyInfo.GetValue(obj); // Can throw exception
+					if (hideAttribute != null)
+					{
+						if (!hideAttribute.Values.Contains(value))
+							IsVisible = true;
+					}
 
-				if (checkWordWrap && value != null)
+					if (checkWordWrap && value != null)
+					{
+						string text = value.ToString();
+						if (text != null && text.Length > EnableWordWrapMinStringLength)
+							WordWrap = true;
+					}
+				}
+				catch (Exception ex)
 				{
-					string text = value.ToString();
-					if (text != null && text.Length > EnableWordWrapMinStringLength)
-						WordWrap = true;
+					Debug.WriteLine(ex.ToString());
 				}
 			}
 		}
