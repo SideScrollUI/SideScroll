@@ -4,12 +4,15 @@ using Atlas.Resources;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Atlas.Tabs.Tools;
 
 public class TabDirectory : ITab
 {
 	public string Path;
+
+	public override string ToString() => Path;
 
 	public TabDirectory(string path)
 	{
@@ -37,6 +40,7 @@ public class TabDirectory : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
+			model.ShowTasks = true;
 			if (!Directory.Exists(Tab.Path))
 			{
 				model.AddObject("Directory doesn't exist");
@@ -48,25 +52,50 @@ public class TabDirectory : ITab
 			toolbar.ButtonDelete.Action = Delete;
 			model.AddObject(toolbar);
 
-			var directories = new List<IDirectoryView>();
-			var nodes = new List<INodeView>();
-			foreach (string directoryPath in Directory.EnumerateDirectories(Tab.Path))
-			{
-				var directoryView = new DirectoryView(directoryPath);
-				directories.Add(directoryView);
-				nodes.Add(directoryView);
-			}
+			List<DirectoryView> directories = GetDirectories(call);
+			List<FileView> files = GetFiles(call);
 
-			foreach (string filePath in Directory.EnumerateFiles(Tab.Path))
-			{
-				var fileView = new FileView(filePath);
-				nodes.Add(fileView);
-			}
+			List<INodeView> nodes = new(directories);
+			nodes.AddRange(files);
 
 			if (directories.Count == nodes.Count)
-				model.Items = directories;
+				model.Items = new List<IDirectoryView>(directories);
 			else
 				model.Items = nodes;
+		}
+
+		private List<FileView> GetFiles(Call call)
+		{
+			var nodes = new List<FileView>();
+			try
+			{
+				return Directory.EnumerateFiles(Tab.Path)
+					.Select(f => new FileView(f))
+					.ToList();
+			}
+			catch (Exception ex)
+			{
+				call.Log.Add(ex);
+			}
+
+			return nodes;
+		}
+
+		private List<DirectoryView> GetDirectories(Call call)
+		{
+			var directories = new List<DirectoryView>();
+			try
+			{
+				return Directory.EnumerateDirectories(Tab.Path)
+					.Select(f => new DirectoryView(f))
+					.ToList();
+			}
+			catch (Exception ex)
+			{
+				call.Log.Add(ex);
+			}
+
+			return directories;
 		}
 
 		private void OpenFolder(Call call)
@@ -95,11 +124,13 @@ public class TabDirectory : ITab
 	}
 }
 
+// Shows if only directories present
 public interface IDirectoryView : IHasLinks
 {
 	public string Name { get; }
 }
 
+// Shows if files present
 public interface INodeView : IHasLinks
 {
 	public string Name { get; }

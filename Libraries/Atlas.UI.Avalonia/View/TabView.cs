@@ -752,7 +752,7 @@ public class TabView : Grid, IDisposable
 			//CreateChildControls(tabActions.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 		}
 
-		if (TabTasks != null && TabTasks.IsVisible)
+		if (TabTasks?.IsVisible == true)
 		{
 			CreateChildControls(TabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 		}

@@ -405,8 +405,10 @@ public class TabInstance : IDisposable
 				model.AddData(e);
 			}
 
+			// Posted Log messages won't have taken affect here yet
 			// Task.OnFinished hasn't always been called by this point
-			if (call.Log.Level >= LogLevel.Error && !Model.Tasks.Contains(call.TaskInstance))
+			if ((model.ShowTasks || call.Log.Level >= LogLevel.Error)
+				&& !Model.Tasks.Contains(call.TaskInstance))
 				Model.Tasks.Add(call.TaskInstance);
 		}
 		return model;

@@ -69,6 +69,7 @@ public class TabModel
 	public bool Editing { get; set; }
 	public bool Skippable { get; set; }
 	public bool ShowSearch { get; set; } // Show search filter above DataGrids
+	public bool ShowTasks { get; set; } // Will add the Tasks to show logs when an error occurs
 
 	public SearchFilter SearchFilter { get; set; } // DataGrid filtering will also update this filter
 
