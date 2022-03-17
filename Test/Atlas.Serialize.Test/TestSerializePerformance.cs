@@ -58,18 +58,6 @@ public class TestSerializePerformance : TestSerializeBase
 		var output = _serializer.Load<List<TimeRangeValue>>(callTimer);
 	}
 
-	[Test]
-	public void JsonTimeRangeValues()
-	{
-		List<TimeRangeValue> input = TimeRangeSamples(100000);
-
-		using CallTimer callTimer = Call.Timer("Cloning");
-
-		var jsonSerializer = new SerializerMemoryJson();
-		jsonSerializer.Save(Call, input);
-		var output = jsonSerializer.Load<List<TimeRangeValue>>(Call);
-	}
-
 	private static List<TimeRangeValue> TimeRangeSamples(int count)
 	{
 		var input = new List<TimeRangeValue>();
