@@ -742,7 +742,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 			string id = ObjectUtils.GetObjectId(obj);
 			if (id != null)
-				keys[id] = obj;
+				keys.TryAdd(id, obj); // todo: need to fallback to SelectedIndex
 		}
 
 		foreach (SelectedRow selectedRow in TabDataSettings.SelectedRows)

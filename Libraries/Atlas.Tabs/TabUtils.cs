@@ -48,9 +48,9 @@ public static class TabUtils
 				if (collection.Count == 0)
 					return false;
 
-				Type elementType = collection.GetType().GetElementTypeForAll();
-				if (elementType != null && elementType.IsPrimitive)
-					return false;
+				// Type elementType = collection.GetType().GetElementTypeForAll();
+				// if (elementType != null && elementType.IsPrimitive)
+				// 		return false;
 			}
 
 			foreach (Type ignoreType in IgnoreHighlightTypes)

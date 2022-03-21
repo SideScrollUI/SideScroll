@@ -1,5 +1,6 @@
 using Atlas.Extensions;
 using System;
+using System.Collections;
 using System.Reflection;
 
 namespace Atlas.Core;
@@ -54,13 +55,32 @@ public static class ObjectUtils
 		return null;
 	}
 
-	public static bool IsEqual(object obj1, object obj2)
+	public static bool AreEqual(object obj1, object obj2, int maxDepth = 3)
 	{
 		if (obj1 == null) return obj2 == null;
 		if (obj2 == null) return false;
 
+		if (obj1 is IList list1 && obj2 is IList list2)
+		{
+			return AreListsEqual(list1, list2, maxDepth);
+		}
+
 		Type type = obj1.GetType();
 		object covertedObject = Convert.ChangeType(obj2, type);
 		return obj1.Equals(covertedObject);
+	}
+
+	private static bool AreListsEqual(IList list1, IList list2, int maxDepth)
+	{
+		if (list1.Count != list2.Count) return false;
+
+		maxDepth--;
+		if (maxDepth < 0) throw new Exception("Max depth exceeded");
+
+		for (int i = 0; i < list1.Count; i++)
+		{
+			if (!AreEqual(list1[i], list2[i], maxDepth)) return false;
+		}
+		return true;
 	}
 }

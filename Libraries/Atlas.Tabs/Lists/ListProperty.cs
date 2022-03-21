@@ -162,7 +162,7 @@ public class ListProperty : ListMember, IPropertyEditable
 		var hideAttribute = PropertyInfo.GetCustomAttribute<HideAttribute>();
 		if (hideAttribute?.Values != null)
 		{
-			return !hideAttribute.Values.Any(v => ObjectUtils.IsEqual(Value, v));
+			return !hideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v));
 		}
 		return true;
 	}

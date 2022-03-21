@@ -11,7 +11,7 @@ public interface IListItem
 	object Key { get; }
 
 	[HiddenColumn, InnerValue, StyleValue]
-	object Value { get; set; }
+	object Value { get; }
 
 	// Get list items for all public properties and any methods marked with [Item]
 	public static ItemCollection<IListItem> Create(object obj, bool includeBaseTypes)

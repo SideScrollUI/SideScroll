@@ -745,28 +745,6 @@ public class TabInstance : IDisposable
 		return data;
 	}
 
-	/*private void LoadBookmark2()
-	{
-		LoadTabSettings();
-		int index = 0;
-		foreach (TabData tabData in tabDatas)
-		{
-			tabData.tabDataSettings = tabSettings.GetData(index++);
-			tabData.LoadSavedSettings();
-
-			//if (tabInstance.bookmarkNode != null)
-			foreach (TabInstance childTabInstance in children)
-			{
-				BookmarkNode childBookmarkNode = null;
-				if (bookmarkNode.Nodes.TryGetValue(childTabInstance.Label, out childBookmarkNode))
-				{
-					//child.bookmarkNode = bookmarkNode;
-					childTabInstance.SelectBookmark(childBookmarkNode);
-				}
-			}
-		}
-	}*/
-
 	public TabViewSettings LoadDefaultTabSettings()
 	{
 		TabViewSettings = null;

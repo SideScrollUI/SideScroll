@@ -19,7 +19,7 @@ public interface IListPair
 	object Key { get; }
 
 	[InnerValue, StyleValue]
-	object Value { get; set; }
+	object Value { get; }
 }
 
 public interface IMaxDesiredWidth
