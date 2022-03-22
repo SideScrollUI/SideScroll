@@ -8,11 +8,11 @@ namespace Atlas.Tabs;
 public class ListByte
 {
 	[StyleValue]
-	public int Index { get; set; }
+	public int Index { get; init; }
 
-	public byte Byte { get; set; }
-	public string Hex { get; set; }
-	public char Char { get; set; }
+	public byte Byte { get; init; }
+	public string Hex { get; init; }
+	public char Char { get; init; }
 
 	public override string ToString() => Index.ToString();
 

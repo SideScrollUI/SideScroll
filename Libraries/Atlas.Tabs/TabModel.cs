@@ -406,7 +406,7 @@ public class TabModel
 			{
 				if (filter.Matches(obj, visibleProperties))
 				{
-					var selectedRow = new SelectedRow()
+					SelectedRow selectedRow = new()
 					{
 						RowIndex = -1,
 						Object = obj,
@@ -423,7 +423,7 @@ public class TabModel
 						if (childNode.SelectedObjects.Count > 0)
 						{
 							childNode.TabModel = tabModel;
-							var selectedRow = new SelectedRow()
+							SelectedRow selectedRow = new()
 							{
 								RowIndex = -1,
 								Object = obj,

@@ -41,6 +41,8 @@ public class TabDirectory : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.ShowTasks = true;
+			model.CustomSettingsPath = Tab.Path;
+
 			if (!Directory.Exists(Tab.Path))
 			{
 				model.AddObject("Directory doesn't exist");
@@ -157,6 +159,8 @@ public class DirectoryView : INodeView, IDirectoryView
 
 	public string DirectoryPath;
 
+	public override string ToString() => Directory;
+
 	public DirectoryView(string directoryPath)
 	{
 		DirectoryPath = directoryPath;
@@ -165,8 +169,6 @@ public class DirectoryView : INodeView, IDirectoryView
 		LastWriteTime = info.LastWriteTime.Trim();
 		Tab = new TabDirectory(directoryPath);
 	}
-
-	public override string ToString() => Directory;
 }
 
 public class FileView : INodeView

@@ -48,6 +48,7 @@ public static class TabUtils
 				if (collection.Count == 0)
 					return false;
 
+				// Remove? This is skipping byte arrays
 				// Type elementType = collection.GetType().GetElementTypeForAll();
 				// if (elementType != null && elementType.IsPrimitive)
 				// 		return false;
