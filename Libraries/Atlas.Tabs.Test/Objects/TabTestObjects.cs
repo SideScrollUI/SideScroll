@@ -6,12 +6,12 @@ namespace Atlas.Tabs.Test.Objects;
 [ListItem]
 public class TabTestObjects
 {
-	public static TestObjectMembers ObjectMembers = new();
-	public static Tag[] Tags = { new Tag("abc", 1.1) };
-	public static TabTestSubClassProperty SubclassProperty = new();
-	public static ValueSub Subclass = new();
-	public static EnumTest Enum = new();
-	public static TimeSpan TimeSpan = new(1, 2, 3);
+	public static TestObjectMembers ObjectMembers => new();
+	public static Tag[] Tags => new Tag[] { new Tag("abc", 1.1) };
+	public static TabTestSubClassProperty SubclassProperty => new();
+	public static ValueSub Subclass => new();
+	public static EnumTest Enum => new();
+	public static TimeSpan TimeSpan => new(1, 2, 3);
 }
 
 public class MyClass

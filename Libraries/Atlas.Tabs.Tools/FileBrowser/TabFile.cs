@@ -57,7 +57,7 @@ public class TabFile : ITab
 
 			var items = new List<ListItem>();
 
-			string extension = System.IO.Path.GetExtension(path);
+			string extension = System.IO.Path.GetExtension(path).ToLower();
 
 			if (ExtensionTypes.TryGetValue(extension, out Type type))
 			{

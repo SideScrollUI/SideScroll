@@ -742,33 +742,12 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 			string id = ObjectUtils.GetObjectId(obj);
 			if (id != null)
-				keys.TryAdd(id, obj); // todo: need to fallback to SelectedIndex
+				keys.TryAdd(id, obj);
 		}
 
 		foreach (SelectedRow selectedRow in TabDataSettings.SelectedRows)
 		{
-			object selectedObject;
-			if (selectedRow.Object != null && objects.Contains(selectedRow.Object))
-			{
-				selectedObject = selectedRow.Object;
-			}
-			else if (selectedRow.DataKey != null)
-			{
-				if (!keys.TryGetValue(selectedRow.DataKey, out selectedObject))
-					continue;
-			}
-			else if (selectedRow.Label != null)
-			{
-				if (!keys.TryGetValue(selectedRow.Label, out selectedObject))
-					continue;
-			}
-			else
-			{
-				int rowIndex = selectedRow.RowIndex;
-				if (rowIndex < 0 || rowIndex >= List.Count) // some items might be filtered or have changed
-					continue;
-				selectedObject = List[rowIndex];
-			}
+			object selectedObject = GetMatchingObject(selectedRow, objects, keys);
 
 			if (TabDataSettings.SelectionType != SelectionType.User &&
 				TabInstance.IsOwnerObject(selectedObject.GetInnerValue())) // stops self referencing loops
@@ -785,6 +764,38 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		}
 
 		return rowObjects;
+	}
+
+	private object GetMatchingObject(SelectedRow selectedRow, HashSet<object> objects, Dictionary<string, object> keys)
+	{
+		if (selectedRow.Object != null && objects.Contains(selectedRow.Object))
+			return selectedRow.Object;
+
+		// Try to find a matching Row Index and Key first
+		int rowIndex = selectedRow.RowIndex;
+		object rowObject = null;
+		if (rowIndex >= 0 && rowIndex < List.Count)
+		{
+			rowObject = List[rowIndex];
+			var currentSelectedRow = new SelectedRow(rowObject);
+			if (currentSelectedRow.Equals(selectedRow))
+				return rowObject;
+		}
+
+		if (selectedRow.DataKey != null)
+		{
+			if (keys.TryGetValue(selectedRow.DataKey, out object matchingObject))
+				return matchingObject;
+		}
+
+		if (selectedRow.Label != null)
+		{
+			// These can be user generated
+			if (keys.TryGetValue(selectedRow.Label, out object matchingObject))
+				return matchingObject;
+		}
+
+		return rowObject;
 	}
 
 	public bool SelectSavedItems()
