@@ -750,6 +750,8 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		foreach (SelectedRow selectedRow in TabDataSettings.SelectedRows)
 		{
 			object selectedObject = GetMatchingObject(selectedRow, objects, keys);
+			if (selectedObject == null)
+				continue;
 
 			if (TabDataSettings.SelectionType != SelectionType.User &&
 				TabInstance.IsOwnerObject(selectedObject.GetInnerValue())) // stops self referencing loops
@@ -775,10 +777,9 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 		// Try to find a matching Row Index and Key first
 		int rowIndex = selectedRow.RowIndex;
-		object rowObject = null;
 		if (rowIndex >= 0 && rowIndex < List.Count)
 		{
-			rowObject = List[rowIndex];
+			object rowObject = List[rowIndex];
 			var currentSelectedRow = new SelectedRow(rowObject);
 			if (currentSelectedRow.Equals(selectedRow))
 				return rowObject;
@@ -797,7 +798,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 				return matchingObject;
 		}
 
-		return rowObject;
+		return null;
 	}
 
 	public bool SelectSavedItems()
