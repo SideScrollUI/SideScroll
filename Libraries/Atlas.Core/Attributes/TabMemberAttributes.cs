@@ -51,19 +51,7 @@ public class HiddenRowAttribute : Attribute
 {
 }
 
-// Don't show row or column if value is null
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class HideNullAttribute : Attribute
-{
-}
-
-// Don't show column if value is null
-[AttributeUsage(AttributeTargets.Property)]
-public class HideNullColumnAttribute : Attribute
-{
-}
-
-// Don't show row or column if value matches
+// Don't show row or column if any value matches
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class HideAttribute : Attribute
 {
@@ -71,6 +59,40 @@ public class HideAttribute : Attribute
 
 	// passing a null param passes a null array :(
 	public HideAttribute(object value, params object[] additonalValues)
+	{
+		// Combine both params into a single list
+		Values = new List<object>(additonalValues)
+		{
+			value
+		};
+	}
+}
+
+// Don't show row if any value matches
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+public class HideRowAttribute : Attribute
+{
+	public readonly List<object> Values;
+
+	// passing a null param passes a null array :(
+	public HideRowAttribute(object value, params object[] additonalValues)
+	{
+		// Combine both params into a single list
+		Values = new List<object>(additonalValues)
+		{
+			value
+		};
+	}
+}
+
+// Don't show row if any value matches
+[AttributeUsage(AttributeTargets.Property)]
+public class HideColumnAttribute : Attribute
+{
+	public readonly List<object> Values;
+
+	// passing a null param passes a null array :(
+	public HideColumnAttribute(object value, params object[] additonalValues)
 	{
 		// Combine both params into a single list
 		Values = new List<object>(additonalValues)

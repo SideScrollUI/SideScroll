@@ -110,16 +110,16 @@ public class TabDataSettings
 
 		public bool IsVisible(IList list)
 		{
-			if (PropertyInfo.GetCustomAttribute<HideNullAttribute>() == null &&
-				PropertyInfo.GetCustomAttribute<HideNullColumnAttribute>() == null)
+			if (PropertyInfo.GetCustomAttribute<HideAttribute>() == null &&
+				PropertyInfo.GetCustomAttribute<HideColumnAttribute>() == null)
 				return true;
 
 			foreach (object obj in list)
 			{
 				try
 				{
-					object value = PropertyInfo.GetValue(obj);
-					if (value != null)
+					var listProperty = new ListProperty(obj, PropertyInfo);
+					if (listProperty.IsColumnVisible())
 						return true;
 				}
 				catch (Exception)

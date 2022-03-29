@@ -555,7 +555,9 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 	private void SearchControl_KeyUp(object sender, KeyEventArgs e)
 	{
 		FilterText = SearchControl.Text;
+
 		SelectDefaultItems();
+
 		if (_disableSaving == 0)
 			TabInstance.SaveTabSettings();
 	}
@@ -574,7 +576,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 		List<TabDataSettings.PropertyColumn> propertyColumns = TabDataSettings.GetPropertiesAsColumns(_elementType);
 
-		// Filter [HideNull]
+		// Filter [Hide(null)]
 		propertyColumns = propertyColumns
 			.Where(p => p.IsVisible(List))
 			.ToList();

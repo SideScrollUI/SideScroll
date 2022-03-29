@@ -42,6 +42,9 @@ public class ListField : ListMember, IPropertyEditable
 		}
 	}
 
+	[Hidden]
+	public bool IsFieldVisible => FieldInfo.IsVisible();
+
 	public override string ToString() => Name;
 
 	public ListField(object obj, FieldInfo fieldInfo) :
@@ -61,7 +64,7 @@ public class ListField : ListMember, IPropertyEditable
 	public static new ItemCollection<ListField> Create(object obj, bool includeBaseTypes = true)
 	{
 		var fieldInfos = obj.GetType().GetFields()
-			.Where(f => IsVisible(f))
+			.Where(f => f.IsVisible())
 			.Where(f => includeBaseTypes || f.DeclaringType == obj.GetType())
 			.OrderBy(f => f.MetadataToken);
 
@@ -71,7 +74,7 @@ public class ListField : ListMember, IPropertyEditable
 		foreach (FieldInfo fieldInfo in fieldInfos)
 		{
 			var listField = new ListField(obj, fieldInfo);
-			if (!listField.IsObjectVisible())
+			if (!listField.IsRowVisible())
 				continue;
 
 			if (fieldToIndex.TryGetValue(fieldInfo.Name, out int index))
@@ -88,33 +91,20 @@ public class ListField : ListMember, IPropertyEditable
 		return listFields;
 	}
 
-
-	public static bool IsVisible(FieldInfo fieldInfo)
+	public bool IsRowVisible()
 	{
-		if (fieldInfo.IsLiteral && !fieldInfo.IsInitOnly)
-			return false;
-
-#if !DEBUG
-			if (fieldInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
-				return false;
-#endif
-
-		return fieldInfo.GetCustomAttribute<HiddenAttribute>() == null && // [Hidden]
-			fieldInfo.GetCustomAttribute<HiddenRowAttribute>() == null; // [HiddenRow]
-	}
-
-	public bool IsObjectVisible()
-	{
-		if (FieldInfo.GetCustomAttribute<HideNullAttribute>() != null)
-		{
-			if (Value == null)
-				return false;
-		}
-
 		var hideAttribute = FieldInfo.GetCustomAttribute<HideAttribute>();
 		if (hideAttribute?.Values != null)
 		{
-			return !hideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v));
+			if (hideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
+				return false;
+		}
+
+		var hideRowAttribute = FieldInfo.GetCustomAttribute<HideRowAttribute>();
+		if (hideRowAttribute?.Values != null)
+		{
+			if (hideRowAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
+				return false;
 		}
 		return true;
 	}

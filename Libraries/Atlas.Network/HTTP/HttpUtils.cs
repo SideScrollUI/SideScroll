@@ -148,7 +148,7 @@ public class ViewHttpResponse
 	public byte[] Bytes { get; set; }
 	public double Milliseconds { get; set; }
 
-	[HiddenColumn, HideNull]
+	[HiddenColumn, Hide(null)]
 	public object View { get; set; }
 
 	[HiddenColumn]

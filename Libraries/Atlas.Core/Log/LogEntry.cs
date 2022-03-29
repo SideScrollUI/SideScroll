@@ -90,10 +90,10 @@ public class LogEntry : INotifyPropertyChanged
 	[Hidden]
 	public virtual string Summary => Text;
 
-	protected int _entries;
 	public int Entries => _entries;
+	protected int _entries;
 
-	private float? _duration;
+	[HideRow(null)]
 	public float? Duration
 	{
 		get => _duration;
@@ -103,6 +103,7 @@ public class LogEntry : INotifyPropertyChanged
 			CreateEventPropertyChanged();
 		}
 	}
+	private float? _duration;
 
 	private string TagText
 	{
