@@ -5,7 +5,7 @@ namespace Atlas.Extensions;
 
 public static class MemberExtensions
 {
-	public static bool IsVisible(this FieldInfo fieldInfo)
+	public static bool IsRowVisible(this FieldInfo fieldInfo)
 	{
 		if (fieldInfo.IsLiteral && !fieldInfo.IsInitOnly)
 			return false;
@@ -19,7 +19,7 @@ public static class MemberExtensions
 			fieldInfo.GetCustomAttribute<HiddenRowAttribute>() == null; // [HiddenRow]
 	}
 
-	public static bool IsVisible(this PropertyInfo propertyInfo)
+	public static bool IsRowVisible(this PropertyInfo propertyInfo)
 	{
 		if (propertyInfo.DeclaringType.IsNotPublic)
 			return false;
@@ -31,5 +31,19 @@ public static class MemberExtensions
 
 		return propertyInfo.GetCustomAttribute<HiddenAttribute>() == null && // [Hidden]
 			propertyInfo.GetCustomAttribute<HiddenRowAttribute>() == null; // [HiddenRow]
+	}
+
+	public static bool IsColumnVisible(this PropertyInfo propertyInfo)
+	{
+		if (propertyInfo.DeclaringType.IsNotPublic)
+			return false;
+
+#if !DEBUG
+			if (propertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+				return false;
+#endif
+
+		return propertyInfo.GetCustomAttribute<HiddenAttribute>() == null && // [Hidden]
+			propertyInfo.GetCustomAttribute<HiddenColumnAttribute>() == null; // [HiddenRow]
 	}
 }

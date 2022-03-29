@@ -89,7 +89,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	public Type UnderlyingType => PropertyInfo.PropertyType.GetNonNullableType();
 
 	[Hidden]
-	public bool IsPropertyVisible => PropertyInfo.IsVisible();
+	public bool IsPropertyVisible => PropertyInfo.IsRowVisible();
 
 	public override string ToString() => Name;
 
@@ -114,7 +114,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	{
 		// this doesn't work for virtual methods (or any method modifier?)
 		var propertyInfos = obj.GetType().GetProperties()
-			.Where(p => p.IsVisible())
+			.Where(p => p.IsRowVisible())
 			.Where(p => includeBaseTypes || p.DeclaringType == obj.GetType())
 			.OrderBy(p => p.MetadataToken);
 

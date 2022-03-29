@@ -43,7 +43,7 @@ public class ListField : ListMember, IPropertyEditable
 	}
 
 	[Hidden]
-	public bool IsFieldVisible => FieldInfo.IsVisible();
+	public bool IsFieldVisible => FieldInfo.IsRowVisible();
 
 	public override string ToString() => Name;
 
@@ -64,7 +64,7 @@ public class ListField : ListMember, IPropertyEditable
 	public static new ItemCollection<ListField> Create(object obj, bool includeBaseTypes = true)
 	{
 		var fieldInfos = obj.GetType().GetFields()
-			.Where(f => f.IsVisible())
+			.Where(f => f.IsRowVisible())
 			.Where(f => includeBaseTypes || f.DeclaringType == obj.GetType())
 			.OrderBy(f => f.MetadataToken);
 

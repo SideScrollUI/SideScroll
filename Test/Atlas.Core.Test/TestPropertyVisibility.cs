@@ -23,9 +23,9 @@ public class TestPropertyVisibility : TestBase
 			.Single();
 	}
 
-	private ListProperty GetListProperty(object obj, string fieldName)
+	private ListProperty GetListProperty(object obj, string propertyName)
 	{
-		PropertyInfo propertyInfo = GetPropertyInfo(obj, fieldName);
+		PropertyInfo propertyInfo = GetPropertyInfo(obj, propertyName);
 		return new ListProperty(obj, propertyInfo);
 	}
 
@@ -34,8 +34,8 @@ public class TestPropertyVisibility : TestBase
 	[Test]
 	public void TestDefault()
 	{
-		PropertyInfo fieldInfo = GetPropertyInfo(this, nameof(Default));
-		Assert.IsTrue(fieldInfo.IsVisible());
+		PropertyInfo propertyInfo = GetPropertyInfo(this, nameof(Default));
+		Assert.IsTrue(propertyInfo.IsRowVisible());
 	}
 
 
@@ -45,8 +45,8 @@ public class TestPropertyVisibility : TestBase
 	[Test]
 	public void TestHidden()
 	{
-		PropertyInfo fieldInfo = GetPropertyInfo(this, nameof(Hidden));
-		Assert.IsFalse(fieldInfo.IsVisible());
+		PropertyInfo propertyInfo = GetPropertyInfo(this, nameof(Hidden));
+		Assert.IsFalse(propertyInfo.IsRowVisible());
 	}
 
 	[HiddenRow]
@@ -55,8 +55,18 @@ public class TestPropertyVisibility : TestBase
 	[Test]
 	public void TestHiddenRow()
 	{
-		PropertyInfo fieldInfo = GetPropertyInfo(this, nameof(HiddenRow));
-		Assert.IsFalse(fieldInfo.IsVisible());
+		PropertyInfo propertyInfo = GetPropertyInfo(this, nameof(HiddenRow));
+		Assert.IsFalse(propertyInfo.IsRowVisible());
+	}
+
+	[HiddenColumn]
+	public bool HiddenColumn { get; set; }
+
+	[Test]
+	public void TestHiddenColumn()
+	{
+		PropertyInfo propertyInfo = GetPropertyInfo(this, nameof(HiddenColumn));
+		Assert.IsFalse(propertyInfo.IsColumnVisible());
 	}
 
 	[Hide(null)]

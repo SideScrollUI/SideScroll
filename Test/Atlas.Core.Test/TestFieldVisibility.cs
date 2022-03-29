@@ -35,7 +35,7 @@ public class TestFieldVisibility : TestBase
 	public void TestDefault()
 	{
 		FieldInfo fieldInfo = GetFieldInfo(this, nameof(Default));
-		Assert.IsTrue(fieldInfo.IsVisible());
+		Assert.IsTrue(fieldInfo.IsRowVisible());
 	}
 
 	[Hidden]
@@ -45,7 +45,7 @@ public class TestFieldVisibility : TestBase
 	public void TestHidden()
 	{
 		FieldInfo fieldInfo = GetFieldInfo(this, nameof(Hidden));
-		Assert.IsFalse(fieldInfo.IsVisible());
+		Assert.IsFalse(fieldInfo.IsRowVisible());
 	}
 
 	[HiddenRow]
@@ -55,7 +55,7 @@ public class TestFieldVisibility : TestBase
 	public void TestHiddenRow()
 	{
 		FieldInfo fieldInfo = GetFieldInfo(this, nameof(HiddenRow));
-		Assert.IsFalse(fieldInfo.IsVisible());
+		Assert.IsFalse(fieldInfo.IsRowVisible());
 	}
 
 	[Hide(null)]
