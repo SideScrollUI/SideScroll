@@ -733,31 +733,17 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		if (TabDataSettings.SelectedRows.Count == 0)
 			return rowObjects;
 
-		var objects = new HashSet<object>();
-		var keys = new Dictionary<string, object>();
-		foreach (object obj in CollectionView) // collectionView takes filters into account
+		TabItemCollection tabItemCollectionView = new(List, CollectionView);
+
+		List<object> matchingObjects = tabItemCollectionView.GetSelectedObjects(TabDataSettings.SelectedRows);
+
+		foreach (object matchingObject in matchingObjects)
 		{
-			if (obj == null)
-				continue;
-
-			objects.Add(obj);
-
-			string id = ObjectUtils.GetObjectId(obj);
-			if (id != null)
-				keys.TryAdd(id, obj);
-		}
-
-		foreach (SelectedRow selectedRow in TabDataSettings.SelectedRows)
-		{
-			object selectedObject = GetMatchingObject(selectedRow, objects, keys);
-			if (selectedObject == null)
-				continue;
-
 			if (TabDataSettings.SelectionType != SelectionType.User &&
-				TabInstance.IsOwnerObject(selectedObject.GetInnerValue())) // stops self referencing loops
+				TabInstance.IsOwnerObject(matchingObject.GetInnerValue())) // stops self referencing loops
 				continue;
 
-			rowObjects.Add(selectedObject);
+			rowObjects.Add(matchingObject);
 		}
 
 		if (TabInstance.TabBookmark?.Bookmark?.Imported == true && rowObjects.Count != TabDataSettings.SelectedRows.Count)
@@ -768,37 +754,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		}
 
 		return rowObjects;
-	}
-
-	private object GetMatchingObject(SelectedRow selectedRow, HashSet<object> objects, Dictionary<string, object> keys)
-	{
-		if (selectedRow.Object != null && objects.Contains(selectedRow.Object))
-			return selectedRow.Object;
-
-		// Try to find a matching Row Index and Key first
-		int rowIndex = selectedRow.RowIndex;
-		if (rowIndex >= 0 && rowIndex < List.Count)
-		{
-			object rowObject = List[rowIndex];
-			var currentSelectedRow = new SelectedRow(rowObject);
-			if (currentSelectedRow.Equals(selectedRow))
-				return rowObject;
-		}
-
-		if (selectedRow.DataKey != null)
-		{
-			if (keys.TryGetValue(selectedRow.DataKey, out object matchingObject))
-				return matchingObject;
-		}
-
-		if (selectedRow.Label != null)
-		{
-			// These can be user generated
-			if (keys.TryGetValue(selectedRow.Label, out object matchingObject))
-				return matchingObject;
-		}
-
-		return null;
 	}
 
 	public bool SelectSavedItems()
@@ -1104,7 +1059,10 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 					if (obj == null)
 						continue;
 
-					SelectedRow selectedRow = GetSelectedRow(obj);
+					var selectedRow = new SelectedRow(obj)
+					{
+						RowIndex = List.IndexOf(obj),
+					};
 					selectedRows.Add(selectedRow);
 				}
 			}
@@ -1115,14 +1073,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 			return selectedRows;
 		}
-	}
-
-	private SelectedRow GetSelectedRow(object obj)
-	{
-		return new SelectedRow(obj)
-		{
-			RowIndex = List.IndexOf(obj),
-		};
 	}
 
 	private string FilterText

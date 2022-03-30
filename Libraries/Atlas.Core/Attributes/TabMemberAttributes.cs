@@ -21,7 +21,8 @@ public class DataKeyAttribute : Attribute
 {
 }
 
-// DataGrids use this as a unique key when matching rows
+// [DataValue] sets an inner value whose [DataKey] will be used if one is not set on the referencing class
+// If the TabInstance.DataRepoInstance is set with elements that implement [DataValue], this value can also be passed in a bookmark 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class DataValueAttribute : Attribute
 {

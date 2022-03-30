@@ -99,8 +99,9 @@ public class ListProperty : ListMember, IPropertyEditable
 		PropertyInfo = propertyInfo;
 		Cachable = cachable;
 
-		var accessors = propertyInfo.GetAccessors(true);
-		AutoLoad = !accessors[0].IsStatic;
+		// [ListItem] uses static properties, remove?
+		// var accessors = propertyInfo.GetAccessors(true);
+		// AutoLoad = !accessors[0].IsStatic;
 
 		NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 

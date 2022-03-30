@@ -19,6 +19,7 @@ public static class ObjectUtils
 		return id ?? obj.ToUniqueString();
 	}
 
+	// Returns the Value.ToUniqueString() for the first property or field that has a [DataKey]
 	public static string GetDataKey(object obj)
 	{
 		Type type = obj.GetType();
@@ -43,12 +44,13 @@ public static class ObjectUtils
 			return obj;
 
 		var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
-		var valueFields = type.GetFieldsWithAttribute<DataValueAttribute>();
 		if (valueProperties.Count > 0)
 		{
 			return valueProperties[0].GetValue(obj);
 		}
-		else if (valueFields.Count > 0)
+
+		var valueFields = type.GetFieldsWithAttribute<DataValueAttribute>();
+		if (valueFields.Count > 0)
 		{
 			return valueFields[0].GetValue(obj);
 		}

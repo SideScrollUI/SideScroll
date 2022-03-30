@@ -1,22 +1,21 @@
 using Atlas.Core;
 using System;
-using System.Collections.Generic;
 
 namespace Atlas.Tabs;
 
 [PublicData]
 public class SelectedRow : IEquatable<SelectedRow>
 {
-	public string Label; // null if ToString() returns type
-	public int RowIndex;
+	public string Label; // ToString() value, can be null
+	public int RowIndex = -1; // Index in original list without filtering, todo: change to nullable
 
 	[NonSerialized]
 	public object Object; // used for bookmark searches, dangerous to keep these references around otherwise
 
 	public string DataKey;
-	public object DataValue;
+	public object DataValue; // Imported with bookmark into it's App DataRepo
 
-	//public bool Pinned;
+	// public bool Pinned;
 	// public List<string> SelectedColumns = new(); // Not supported yet
 
 	public override string ToString() => Label;
