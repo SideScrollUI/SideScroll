@@ -1,6 +1,5 @@
 using Atlas.Core;
 using Atlas.Tabs;
-using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using System;
@@ -56,35 +55,6 @@ public class ValueToBrushConverter : IValueConverter
 		//	return EditableBrush;
 	}
 
-	// todo: set default background brush to white so context menu's work, hover breaks if it's set though
-	/*private IBrush GetCellBrush(DataGridCell dataGridCell, object dataItem)
-	{
-		object obj = dataGridCell.DataContext;
-		try
-		{
-			if (propertyInfo.IsDefined(typeof(StyleValueAttribute)))
-			//if (this.DisplayIndex == 1 && (dataItem is ListItem || dataItem is ListMember))
-			{
-				bool hasChildren = TabModel.ObjectHasLinks(dataItem, true);
-				if (hasChildren)
-					return BrushHasChildren;
-				//return Brushes.Moccasin;
-				else if (!IsReadOnly && (dataItem is ListMember) && ((ListMember)dataItem).Editable)
-					return Editable;
-				else
-					return BrushValue;
-			}
-		}
-		catch (InvalidCastException)
-		{
-		}
-
-		if (IsReadOnly)
-			return null; // checkbox column requires a valid value
-		else
-			return BrushEditable;
-	}*/
-
 	public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 	{
 		throw new NotSupportedException();
@@ -137,6 +107,7 @@ public class ValueToForegroundBrushConverter : IValueConverter
 		throw new NotSupportedException();
 	}
 }
+
 /*
 Used by DataGridPropertyTextColumn
 Need to hook this into Cell.OnPaint for hover?

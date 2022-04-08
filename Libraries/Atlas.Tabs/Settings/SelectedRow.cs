@@ -49,11 +49,15 @@ public class SelectedRow : IEquatable<SelectedRow>
 		return other != null &&
 			   Label == other.Label &&
 			   DataKey == other.DataKey &&
-			   DataValue == other.DataValue;
+			   DataValue == other.DataValue &&
+			   (RowIndex == other.RowIndex || RowIndex < 0 || other.RowIndex < 0); // todo: change RowIndex to nullable
 	}
 
 	public override int GetHashCode()
 	{
-		return (Label?.GetHashCode() ?? 0) ^ (DataKey?.GetHashCode() ?? 0) ^ (DataValue?.GetHashCode() ?? 0);
+		return (Label?.GetHashCode() ?? 0)
+			^ (DataKey?.GetHashCode() ?? 0)
+			^ (DataValue?.GetHashCode() ?? 0)
+			^ RowIndex.GetHashCode();
 	}
 }

@@ -167,6 +167,7 @@ public class TestSerializeCollections : TestSerializeBase
 		var input = new HashSet<string>
 		{
 			"test",
+			"test2",
 		};
 
 		_serializer.Save(Call, input);
@@ -174,6 +175,56 @@ public class TestSerializeCollections : TestSerializeBase
 
 		Assert.AreEqual(input.Count, output.Count);
 		Assert.True(output.Contains("test"));
+		Assert.True(output.Contains("test2"));
+	}
+
+	public class SelectedLabel : IEquatable<SelectedLabel>
+	{
+		public string Label;
+
+		public override string ToString() => Label;
+
+		public SelectedLabel() { }
+
+		public SelectedLabel(string label)
+		{
+			Label = label;
+		}
+
+		public override int GetHashCode()
+		{
+			return Label?.GetHashCode() ?? 0;
+		}
+
+		public override bool Equals(object obj)
+		{
+			return Equals(obj as SelectedLabel);
+		}
+
+		public bool Equals(SelectedLabel other)
+		{
+			return other != null && Label == other.Label;
+		}
+	}
+
+	[Test, Description("Serialize HashSet Objects")]
+	public void SerializeHashSetObjects()
+	{
+		var label1 = new SelectedLabel("1");
+		var label2 = new SelectedLabel("2");
+
+		var input = new HashSet<SelectedLabel>
+		{
+			label1,
+			label2,
+		};
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<HashSet<SelectedLabel>>(Call);
+
+		Assert.AreEqual(input.Count, output.Count);
+		Assert.True(output.Contains(label1));
+		Assert.True(output.Contains(label2));
 	}
 
 	public class SelectedItem

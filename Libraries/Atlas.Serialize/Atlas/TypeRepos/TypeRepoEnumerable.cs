@@ -10,7 +10,7 @@ namespace Atlas.Serialize;
 
 public class TypeRepoEnumerable : TypeRepo
 {
-	public class Creator : IRepoCreator
+	/*public class Creator : IRepoCreator
 	{
 		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
@@ -18,11 +18,11 @@ public class TypeRepoEnumerable : TypeRepo
 				return new TypeRepoEnumerable(serializer, typeSchema);
 			return null;
 		}
-	}
+	}*/
 
-	private readonly Type _elementType;
-	private TypeRepo _listTypeRepo;
-	private readonly MethodInfo _addMethod;
+	protected readonly Type _elementType;
+	protected TypeRepo _listTypeRepo;
+	protected readonly MethodInfo _addMethod;
 
 	public TypeRepoEnumerable(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
@@ -35,10 +35,10 @@ public class TypeRepoEnumerable : TypeRepo
 			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Count() == 1);
 	}
 
-	public static bool CanAssign(Type type)
+	/*public static bool CanAssign(Type type)
 	{
 		return type.IsGenericType && typeof(HashSet<>).IsAssignableFrom(type.GetGenericTypeDefinition());
-	}
+	}*/
 
 	public override void InitializeLoading(Log log)
 	{

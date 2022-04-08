@@ -57,6 +57,7 @@ public class Serializer : IDisposable
 	{
 		public TypeRepo TypeRepo;
 		public int Index;
+		public bool Preloaded; // set after IPreloadRepo preloads data
 
 		public override string ToString() => TypeRepo.ToString() + " - " + Index;
 	}
@@ -100,7 +101,16 @@ public class Serializer : IDisposable
 		while (_loadQueue.Count > 0)
 		{
 			LoadItem loadItem = _loadQueue.Dequeue();
-			loadItem.TypeRepo.LoadObjectData(loadItem.Index);
+			if (loadItem.TypeRepo is IPreloadRepo && !loadItem.Preloaded)
+			{
+				loadItem.TypeRepo.PreloadObjectData(loadItem.Index);
+				loadItem.Preloaded = true;
+				_loadQueue.Enqueue(loadItem);
+			}
+			else
+			{
+				loadItem.TypeRepo.LoadObjectData(loadItem.Index);
+			}
 		}
 	}
 

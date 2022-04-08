@@ -19,6 +19,12 @@ public interface IRepoCreator
 	TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema);
 }
 
+// TypeRepo's can implement to preload object data first (example: TypeRepoHashSet)
+public interface IPreloadRepo
+{
+	public void PreloadObjectData(object obj);
+}
+
 // Represents all the object references for each unique type
 public abstract class TypeRepo : IDisposable
 {
@@ -38,8 +44,9 @@ public abstract class TypeRepo : IDisposable
 		new TypeRepoArray.Creator(),
 		new TypeRepoList.Creator(),
 		new TypeRepoDictionary.Creator(),
-		new TypeRepoEnumerable.Creator(),
+		new TypeRepoHashSet.Creator(),
 		new TypeRepoVersion.Creator(),
+		//new TypeRepoEnumerable.Creator(),
 		//new TypeRepoUnknown.NoConstructorCreator(),
 		//new TypeRepoObject.Creator(),
 	};
@@ -210,7 +217,9 @@ public abstract class TypeRepo : IDisposable
 
 	public void LoadHeader(Log log)
 	{
-		using LogTimer logTimer = log.Timer("Loading Headers", new Tag("Type", TypeSchema.Name), new Tag("Count", TypeSchema.NumObjects));
+		using LogTimer logTimer = log.Timer("Loading Headers", 
+			new Tag("Type", TypeSchema.Name), 
+			new Tag("Count", TypeSchema.NumObjects));
 
 		ObjectOffsets = new long[TypeSchema.NumObjects];
 		ObjectSizes = new int[TypeSchema.NumObjects];
@@ -446,10 +455,32 @@ public abstract class TypeRepo : IDisposable
 		return null;
 	}
 
-	public void LoadObjectData(int objectIndex)
+	private object GetObjectAt(int objectIndex)
 	{
 		object obj = ObjectsLoaded[objectIndex];
 		Reader.BaseStream.Position = ObjectOffsets[objectIndex];
+		return obj;
+	}
+
+	public void PreloadObjectData(int objectIndex)
+	{
+		if (this is IPreloadRepo preload)
+		{
+			object obj = GetObjectAt(objectIndex);
+
+			try
+			{
+				preload.PreloadObjectData(obj);
+			}
+			catch (Exception)
+			{
+			}
+		}
+	}
+
+	public void LoadObjectData(int objectIndex)
+	{
+		object obj = GetObjectAt(objectIndex);
 
 		try
 		{

@@ -100,26 +100,15 @@ public class TabControlAvaloniaEdit : Grid
 
 			var buffer = new char[MaxAutoLoadSize];
 			streamReader.Read(buffer, 0, buffer.Length);
-			TextEditor.Text = new string(buffer);
+			Text = new string(buffer);
 		}
 		else
 		{
-			TextEditor.Text = File.ReadAllText(path);
+			Text = File.ReadAllText(path);
 			//TextEditor.Load(path); // Doesn't work
 		}
 
-		if (TextEditor.LineCount > 1)
-		{
-			TextEditor.ShowLineNumbers = true;
-
-			foreach (IControl control in TextEditor.TextArea.LeftMargins)
-			{
-				if (control is LineNumberMargin margin)
-				{
-					margin.Opacity = 0.5;
-				}
-			}
-		}
+		UpdateLineNumbers();
 	}
 
 	public string Text
@@ -132,12 +121,29 @@ public class TabControlAvaloniaEdit : Grid
 				TextEditor.FontFamily = new FontFamily("Courier New"); // Use monospaced font for Json
 			}
 			TextEditor.Text = value;
+			// UpdateLineNumbers(); // Enable for all?
 		}
 	}
 
 	public void SetFormattedJson(string text)
 	{
 		Text = JsonUtils.Format(text);
+	}
+
+	private void UpdateLineNumbers()
+	{
+		if (TextEditor.LineCount <= 1)
+			return;
+		
+		TextEditor.ShowLineNumbers = true;
+
+		foreach (IControl control in TextEditor.TextArea.LeftMargins)
+		{
+			if (control is LineNumberMargin margin)
+			{
+				margin.Opacity = 0.5;
+			}
+		}
 	}
 
 	public void EnableEditing(ListMember listMember)
