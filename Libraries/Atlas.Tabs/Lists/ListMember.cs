@@ -158,6 +158,29 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 		var listFields = ListField.Create(obj, includeBaseTypes);
 		listMembers.AddRange(listFields);
 
-		return new ItemCollection<ListMember>(listMembers);
+		return ExpandInlined(listMembers, includeBaseTypes);
+	}
+
+	// If a member specifies [Inline], replace this member with all it's members
+	public static ItemCollection<ListMember> ExpandInlined(List<ListMember> listMembers, bool includeBaseTypes)
+	{
+		ItemCollection<ListMember> newMembers = new();
+		foreach (ListMember listMember in listMembers)
+		{
+			if (listMember.GetCustomAttribute<InlineAttribute>() != null)
+			{
+				object value = listMember.Value;
+				if (value == null)
+					continue;
+
+				ItemCollection<ListMember> inlinedProperties = Create(value, includeBaseTypes);
+				newMembers.AddRange(inlinedProperties);
+			}
+			else
+			{
+				newMembers.Add(listMember);
+			}
+		}
+		return newMembers;
 	}
 }

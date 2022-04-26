@@ -124,7 +124,7 @@ public class LogEntry : INotifyPropertyChanged
 	[HiddenColumn]
 	public Tag[] Tags { get; set; }
 
-	public override string ToString() => Message;
+	public override string ToString() => Message ?? Level.ToString();
 
 	public LogEntry()
 	{

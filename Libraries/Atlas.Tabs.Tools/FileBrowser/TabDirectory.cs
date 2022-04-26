@@ -25,8 +25,8 @@ public class TabDirectory : ITab
 	{
 		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Streams.OpenFolder);
 
-		[Separator]
-		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Streams.Delete);
+		//[Separator]
+		//public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Streams.Delete);
 	}
 
 	public class Instance : TabInstance
@@ -51,7 +51,7 @@ public class TabDirectory : ITab
 
 			var toolbar = new Toolbar();
 			toolbar.ButtonOpenFolder.Action = OpenFolder;
-			toolbar.ButtonDelete.Action = Delete;
+			//toolbar.ButtonDelete.Action = Delete;
 			model.AddObject(toolbar);
 
 			List<DirectoryView> directories = GetDirectories(call);
@@ -102,24 +102,33 @@ public class TabDirectory : ITab
 
 		private void OpenFolder(Call call)
 		{
-			ProcessUtils.OpenFolder(Tab.Path);
+			string path = Tab.Path;
+
+			// Select file if possible
+			List<SelectedRow> selectedRows = GetSelectedRows();
+			string select = selectedRows.FirstOrDefault()?.Label;
+
+			ProcessUtils.OpenFolder(path, select);
+		}
+
+		private List<SelectedRow> GetSelectedRows()
+		{
+			return TabViewSettings.TabDataSettings.SelectMany(s => s.SelectedRows).ToList();
 		}
 
 		private void Delete(Call call)
 		{
 			// todo: Confirmation prompt?
-			foreach (TabDataSettings tabDataSettings in TabViewSettings.TabDataSettings)
+			List<SelectedRow> selectedRows = GetSelectedRows();
+			foreach (SelectedRow selectedRow in selectedRows)
 			{
-				foreach (SelectedRow selectedRow in tabDataSettings.SelectedRows)
-				{
-					string path = Paths.Combine(Tab.Path, selectedRow.Label);
+				string path = Paths.Combine(Tab.Path, selectedRow.Label);
 
-					if (Directory.Exists(path))
-						Directory.Delete(path, true);
+				if (Directory.Exists(path))
+					Directory.Delete(path, true);
 
-					if (File.Exists(path))
-						File.Delete(path);
-				}
+				if (File.Exists(path))
+					File.Delete(path);
 			}
 			Reload();
 		}

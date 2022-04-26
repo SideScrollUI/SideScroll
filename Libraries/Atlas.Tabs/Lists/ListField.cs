@@ -100,6 +100,13 @@ public class ListField : ListMember, IPropertyEditable
 				return false;
 		}
 
+		var classHideAttribute = FieldInfo.DeclaringType.GetCustomAttribute<HideAttribute>();
+		if (classHideAttribute?.Values != null)
+		{
+			if (classHideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
+				return false;
+		}
+
 		var hideRowAttribute = FieldInfo.GetCustomAttribute<HideRowAttribute>();
 		if (hideRowAttribute?.Values != null)
 		{

@@ -150,6 +150,13 @@ public class ListProperty : ListMember, IPropertyEditable
 				return false;
 		}
 
+		var classHideAttribute = PropertyInfo.DeclaringType.GetCustomAttribute<HideAttribute>();
+		if (classHideAttribute?.Values != null)
+		{
+			if (classHideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
+				return false;
+		}
+
 		var hideRowAttribute = PropertyInfo.GetCustomAttribute<HideRowAttribute>();
 		if (hideRowAttribute?.Values != null)
 		{

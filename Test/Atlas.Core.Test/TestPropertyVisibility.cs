@@ -134,4 +134,46 @@ public class TestPropertyVisibility : TestBase
 		Assert.IsTrue(listProperty.IsPropertyVisible);
 		Assert.IsTrue(listProperty.IsColumnVisible());
 	}
+
+	[Hide(null)]
+	public class HideNullClass
+	{
+		public bool? VisibleProperty { get; set; } = true;
+		public bool? HiddenProperty { get; set; }
+	}
+
+	[Test]
+	public void TestHideNullClass()
+	{
+		HideNullClass input = new();
+		ItemCollection<ListMember> listMembers = ListMember.Create(input);
+
+		Assert.AreEqual(1, listMembers.Count);
+
+		Assert.AreEqual(nameof(HideNullClass.VisibleProperty), listMembers[0].MemberInfo.Name);
+	}
+
+	public class InlineClass
+	{
+		[Inline]
+		public InlineData Data { get; set; } = new();
+	}
+
+	public class InlineData
+	{
+		public bool InlineProperty { get; set; } = true;
+		public bool InlineField = true;
+	}
+
+	[Test]
+	public void TestInlineClass()
+	{
+		InlineClass input = new();
+		ItemCollection<ListMember> listMembers = ListMember.Create(input);
+
+		Assert.AreEqual(2, listMembers.Count);
+
+		Assert.AreEqual(nameof(InlineData.InlineProperty), listMembers[0].MemberInfo.Name);
+		Assert.AreEqual(nameof(InlineData.InlineField), listMembers[1].MemberInfo.Name);
+	}
 }

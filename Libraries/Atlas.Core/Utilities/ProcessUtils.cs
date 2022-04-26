@@ -66,27 +66,25 @@ public static class ProcessUtils
 		}
 	}
 
-	public static void OpenFolder(string path)
+	public static void OpenFolder(string folder, string selection = null)
 	{
 		try
 		{
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
-				path = path.Replace('/', '\\');
+				folder = folder.Replace('/', '\\');
 
 				string argument;
-				if (File.Exists(path))
-					argument = "/select,\"" + path + "\"";
-				else if (Directory.Exists(path))
-					argument = '"' + path + '"';
+				if (selection != null)
+					argument = "/select,\"" + Path.Combine(folder, selection) + "\"";
 				else
-					argument = '"' + Path.GetDirectoryName(path) + '"';
+					argument = '"' + folder + '"';
 
 				Process.Start("explorer.exe", argument);
 			}
 			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 			{
-				Process.Start("open", path);
+				Process.Start("open", folder);
 			}
 		}
 		catch

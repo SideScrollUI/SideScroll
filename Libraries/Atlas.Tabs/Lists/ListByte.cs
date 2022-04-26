@@ -13,6 +13,7 @@ public class ListByte
 	public byte Byte { get; init; }
 	public string Hex { get; init; }
 	public char Char { get; init; }
+	public string Bits { get; init; }
 
 	public override string ToString() => Index.ToString();
 
@@ -22,6 +23,7 @@ public class ListByte
 		Byte = b;
 		Hex = BitConverter.ToString(new byte[] { b });
 		Char = Convert.ToChar(b);
+		Bits = Convert.ToString(b, 2).PadLeft(8, '0');
 	}
 
 	public static List<ListByte> Create(byte[] bytes)

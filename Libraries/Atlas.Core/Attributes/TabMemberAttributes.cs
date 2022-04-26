@@ -34,6 +34,13 @@ public class DataValueAttribute : Attribute
 public class InnerValueAttribute : Attribute
 {
 }
+
+// Show all object's members as extra rows
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+public class InlineAttribute : Attribute
+{
+}
+
 // Don't show this field/property as a column or row
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class HiddenAttribute : Attribute
@@ -53,7 +60,7 @@ public class HiddenRowAttribute : Attribute
 }
 
 // Don't show row or column if any value matches
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
 public class HideAttribute : Attribute
 {
 	public readonly List<object> Values;

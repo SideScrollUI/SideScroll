@@ -321,6 +321,7 @@ public class TabViewer : Grid
 		tabInstance.Model.Name = "Start";
 		tabInstance.iTab = tab;
 		tabInstance.Project = Project;
+
 		if (LoadBookmarkUri != null)
 		{
 			// Wait until Bookmarks tab has been created
