@@ -310,6 +310,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 			{
 				desiredWidth = Math.Max(desiredWidth, textColumn.MinDesiredWidth);
 				desiredWidth = Math.Min(desiredWidth, textColumn.MaxDesiredWidth);
+
 				if (textColumn.AutoSize)
 				{
 					column.MinWidth = Math.Max(column.MinWidth, Math.Min(MaxAutoSizeMinColumnWidth, desiredWidth));

@@ -161,7 +161,9 @@ public class TabModel
 
 		Type type = obj.GetType();
 		if (type.Assembly.ManifestModule.ScopeName == "Lazy")
+		{
 			type = type.BaseType; // Use original type for lazy loaded serializer wrapper classes, so properties appear in the same MetadataToken order
+		}
 
 		if (obj is IItemCollection itemCollection)
 		{

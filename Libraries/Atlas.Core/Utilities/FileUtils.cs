@@ -136,7 +136,33 @@ public static class FileUtils
 		try
 		{
 			using StreamReader streamReader = File.OpenText(path);
+			return IsTextStream(streamReader);
+		}
+		catch (Exception)
+		{
+		}
 
+		return false;
+	}
+
+	public static bool IsTextStream(Stream stream)
+	{
+		try
+		{
+			using StreamReader streamReader = new StreamReader(stream);
+			return IsTextStream(streamReader);
+		}
+		catch (Exception)
+		{
+		}
+
+		return false;
+	}
+
+	public static bool IsTextStream(StreamReader streamReader)
+	{
+		try
+		{
 			var buffer = new char[1000]; // 100 won't detect pdf's as binary
 			int bytesRead = streamReader.Read(buffer, 0, buffer.Length);
 			Array.Resize(ref buffer, bytesRead);

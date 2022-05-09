@@ -308,6 +308,11 @@ public class TabInstance : IDisposable
 		return ListProperty.Create(this, false);
 	}
 
+	protected ItemCollection<ListMember> GetListMembers()
+	{
+		return ListMember.Create(this, false);
+	}
+
 	protected ItemCollection<IListItem> GetListItems()
 	{
 		return IListItem.Create(this, false);

@@ -38,7 +38,6 @@ public class TestPropertyVisibility : TestBase
 		Assert.IsTrue(propertyInfo.IsRowVisible());
 	}
 
-
 	[Hidden]
 	public bool Hidden { get; set; }
 

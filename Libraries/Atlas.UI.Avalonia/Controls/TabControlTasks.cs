@@ -90,6 +90,9 @@ public class TabControlTasks : Grid, IDisposable
 
 	private void CollectionChangedUI(NotifyCollectionChangedEventArgs e)
 	{
+		if (_tabControlDataGrid == null)
+			return;
+
 		if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex >= 0)
 			SelectLastItem();
 	}
