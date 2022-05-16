@@ -25,7 +25,7 @@ public class SelectedRow : IEquatable<SelectedRow>
 	public SelectedRow(object obj)
 	{
 		Object = obj;
-		Label = obj.ToString();
+		Label = obj?.ToString();
 
 		DataKey = ObjectUtils.GetDataKey(obj); // overrides label
 		DataValue = ObjectUtils.GetDataValue(obj);

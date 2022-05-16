@@ -22,6 +22,8 @@ public static class ObjectUtils
 	// Returns the Value.ToUniqueString() for the first property or field that has a [DataKey]
 	public static string GetDataKey(object obj)
 	{
+		if (obj == null) return null;
+
 		Type type = obj.GetType();
 		var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
 		var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
@@ -39,6 +41,8 @@ public static class ObjectUtils
 	// Get's the [DataValue] member that will be imported with an Imported Bookmark
 	public static object GetDataValue(object obj)
 	{
+		if (obj == null) return null;
+
 		Type type = obj.GetType();
 		if (type.GetCustomAttribute<DataKeyAttribute>() != null)
 			return obj;

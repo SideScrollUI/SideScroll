@@ -9,9 +9,7 @@ public class LogTimer : Log, IDisposable
 	private readonly Stopwatch _stopwatch = new();
 	private readonly Timer _timer = new();
 
-	public LogTimer()
-	{
-	}
+	public LogTimer() { }
 
 	public LogTimer(string text, LogSettings logSettings, Tag[] tags) :
 		base(text, logSettings)

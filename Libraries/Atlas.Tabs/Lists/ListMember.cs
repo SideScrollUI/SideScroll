@@ -153,8 +153,10 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 
 		var listMembers = methodMembers.Values.ToList();
 
-		// field MetadataToken's don't line up with the method tokens
-		// Could provider approximate ordering using property MetadataTokens?
+		// Field MetadataToken's don't line up with the method or property tokens and are added to end
+		// Use property's backing field? (confirmed field order matches)
+		// No simple way to link property and backing fields
+		// .GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
 		var listFields = ListField.Create(obj, includeBaseTypes);
 		listMembers.AddRange(listFields);
 
