@@ -26,6 +26,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 	public TaskDelegateAsync.CallActionAsync CallActionAsync;
 
 	public bool ShowTask;
+	public bool IsActive; // Only allow one task at once (modifying IsEnabled doesn't updating elsewhere)
 
 	public TimeSpan MinWaitTime = TimeSpan.FromSeconds(1); // Wait time between clicks
 
@@ -117,7 +118,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 
 	private void Invoke(bool canDelay = true)
 	{
-		if (!IsEnabled)
+		if (!IsEnabled || IsActive)
 			return;
 
 		TimeSpan timeSpan = DateTime.UtcNow.Subtract(_lastInvoked);
@@ -155,10 +156,10 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		if (CallActionAsync == null)
 			return null;
 
-		IsEnabled = false;
+		IsActive = true;
 		var taskDelegate = new TaskDelegateAsync(CallActionAsync, true)
 		{
-			OnComplete = () => IsEnabled = true,
+			OnComplete = () => IsActive = false,
 		};
 		return Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
 	}
@@ -168,10 +169,10 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		if (CallAction == null)
 			return null;
 
-		IsEnabled = false;
+		IsActive = true;
 		var taskDelegate = new TaskDelegate(CallAction, ShowTask)
 		{
-			OnComplete = () => IsEnabled = true,
+			OnComplete = () => IsActive = false,
 		};
 		return Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
 	}

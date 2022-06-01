@@ -1,6 +1,5 @@
 using System;
-using System.Text.Encodings.Web;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace Atlas.Core;
 
@@ -13,13 +12,11 @@ public static class JsonUtils
 		
 		try
 		{
-			using var jsonDocument = JsonDocument.Parse(text);
-			JsonSerializerOptions serializerOptions = new()
-			{ 
-				WriteIndented = true,
-				Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-			};
-			return JsonSerializer.Serialize(jsonDocument, serializerOptions);
+			// System.Json has a lot of problems with newlines (not fixable?) and + (fixable)
+			// Can escape newlines inside double quotes, but escaping outside strings produces parsing errors
+			dynamic parsedJson = JsonConvert.DeserializeObject(text);
+			string formatted = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+			return formatted;
 		}
 		catch (Exception)
 		{
