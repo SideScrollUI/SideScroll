@@ -2,7 +2,6 @@ using Atlas.Core;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System;
-using System.Text.Json;
 
 namespace Atlas.Network;
 
@@ -16,7 +15,7 @@ public class HttpMemoryCache
 
 	public HttpMemoryCache()
 	{
-		var options = new MemoryCacheOptions()
+		MemoryCacheOptions options = new()
 		{
 			SizeLimit = MaxItems,
 			ExpirationScanFrequency = TimeSpan.FromSeconds(60),
@@ -29,7 +28,7 @@ public class HttpMemoryCache
 		if (obj == null)
 			return;
 
-		var options = new MemoryCacheEntryOptions()
+		MemoryCacheEntryOptions options = new()
 		{
 			Size = 1, // Assume all items are the same size for now
 		};

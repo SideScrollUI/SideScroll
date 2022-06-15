@@ -142,7 +142,10 @@ public abstract class TypeRepo : IDisposable
 		if (!typeSchema.HasConstructor && !typeSchema.IsSerialized)
 		{
 			typeRepo = new TypeRepoUnknown(serializer, typeSchema);
-			log.AddWarning("Type has no constructor", new Tag(typeSchema));
+			if (typeSchema.IsSerialized)
+			{
+				log.AddWarning("Type has no constructor", new Tag(typeSchema));
+			}
 		}
 		else
 		{

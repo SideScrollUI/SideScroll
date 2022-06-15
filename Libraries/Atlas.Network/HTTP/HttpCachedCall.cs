@@ -1,33 +1,34 @@
 using Atlas.Core;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Atlas.Network;
 
-public class CachedHttp : HTTP
+public class HttpCachedCall : HttpCall
 {
 	public HttpCache HttpCache;
 
-	public CachedHttp(Call call, HttpCache httpCache) :
+	public HttpCachedCall(Call call, HttpCache httpCache) :
 		base(call)
 	{
 		HttpCache = httpCache;
 	}
 
-	public override byte[] GetBytes(string uri)
+	public override async Task<byte[]> GetBytesAsync(string uri)
 	{
 		byte[] bytes = HttpCache.GetBytes(uri);
 		if (bytes != null)
 			return bytes;
 
-		bytes = base.GetBytes(uri);
+		bytes = await base.GetBytesAsync(uri);
 		HttpCache.AddEntry(uri, bytes);
 		return bytes;
 	}
 
-	public override string GetString(string uri, string accept = null)
+	public override async Task<string> GetStringAsync(string uri, string accept = null)
 	{
-		byte[] bytes = GetBytes(uri);
+		byte[] bytes = await GetBytesAsync(uri);
 		if (bytes != null)
 			return Encoding.ASCII.GetString(bytes);
 

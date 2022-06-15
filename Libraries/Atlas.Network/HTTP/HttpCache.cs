@@ -25,10 +25,10 @@ public class HttpCache : IDisposable
 
 	public class LoadableEntry : Entry
 	{
-		public HttpCache httpCache;
+		public HttpCache Cache;
 
 		[HiddenColumn]
-		public string Text => httpCache.GetString(Uri);
+		public string Text => Cache.GetString(Uri);
 
 		/*public void Download(Call call)
 		{
@@ -122,7 +122,7 @@ public class HttpCache : IDisposable
 					Size = entry.Size,
 					Offset = entry.Offset,
 					Downloaded = entry.Downloaded,
-					httpCache = this
+					Cache = this
 				};
 				entries.Add(loadableEntry);
 			}

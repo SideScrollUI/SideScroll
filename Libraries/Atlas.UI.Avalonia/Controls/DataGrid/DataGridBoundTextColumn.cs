@@ -9,7 +9,6 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using System;
 using System.Data;
-using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia;
 

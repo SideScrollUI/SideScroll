@@ -3,7 +3,6 @@ using Atlas.Extensions;
 using Atlas.Network;
 using Atlas.Serialize;
 using System;
-using System.Collections.Generic;
 
 namespace Atlas.Tabs;
 
@@ -40,9 +39,7 @@ public class Project
 
 	public override string ToString() => Name;
 
-	public Project()
-	{
-	}
+	public Project() { }
 
 	public Project(ProjectSettings projectSettings)
 	{

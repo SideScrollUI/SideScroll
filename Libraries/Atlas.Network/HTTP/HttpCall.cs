@@ -2,56 +2,61 @@ using Atlas.Core;
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Atlas.Network;
 
-public class HTTP
+public class HttpCall
 {
 	private const int MaxAttempts = 4;
 	private const int SleepMilliseconds = 500; // < ^ MaxAttempts
 
 	public Call Call;
 
-	public HTTP(Call call)
+	public HttpCall(Call call)
 	{
 		Call = call;
 	}
 
-	public virtual string GetString(string uri, string accept = null)
+	public async virtual Task<string> GetStringAsync(string uri, string accept = null)
 	{
-		byte[] bytes = GetResponse(uri, accept);
+		byte[] bytes = await GetResponseAsync(uri, accept);
 		if (bytes != null)
 			return Encoding.ASCII.GetString(bytes);
 		return null;
 	}
 
-	public virtual byte[] GetBytes(string uri)
+	public async virtual Task<byte[]> GetBytesAsync(string uri)
 	{
-		return GetResponse(uri);
+		return await GetResponseAsync(uri);
 	}
 
-	private byte[] GetResponse(string uri, string accept = null)
+	private async Task<byte[]> GetResponseAsync(string uri, string accept = null)
 	{
 		using CallTimer getCall = Call.Timer("Get Uri", new Tag("URI", uri));
 
+		HttpClient client = HttpClientManager.GetClient(accept);
+
 		for (int attempt = 1; ; attempt++)
 		{
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri); // requests can't be reused between attempts
-			request.Method = "GET";
-			request.Accept = accept;
+			var request = new HttpRequestMessage(HttpMethod.Get, uri);
+
 			try
 			{
-				WebResponse response = request.GetResponse();
-				Stream dataStream = response.GetResponseStream();
+				using HttpResponseMessage response = await client.SendAsync(request);
 
-				var memoryStream = new MemoryStream();
+				Stream dataStream = response.Content.ReadAsStream();
+
+				MemoryStream memoryStream = new();
 				dataStream.CopyTo(memoryStream);
 				byte[] data = memoryStream.ToArray();
-
 				dataStream.Close();
-				response.Close();
-				getCall.Log.Add("Downloaded HTTP File", new Tag("URI", request.RequestUri), new Tag("Size", memoryStream.Length));
+
+				getCall.Log.Add("Downloaded HTTP File", 
+					new Tag("URI", request.RequestUri), 
+					new Tag("Size", memoryStream.Length));
 
 				return data;
 			}
@@ -65,9 +70,11 @@ public class HTTP
 					Call.Log.AddError(response);
 				}
 			}
+
 			if (attempt >= MaxAttempts)
 				break;
-			System.Threading.Thread.Sleep(SleepMilliseconds * attempt);
+
+			await Task.Delay(SleepMilliseconds * attempt);
 		}
 		throw new Exception("HTTP request failed " + MaxAttempts + " times: " + uri);
 	}

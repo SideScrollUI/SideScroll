@@ -131,7 +131,7 @@ public class TabControlTitle : UserControl, IDisposable
 	{
 		Bookmark bookmark = TabInstance.CreateBookmark();
 		bookmark.BookmarkType = BookmarkType.Tab;
-		string uri = TabInstance.Project.Linker.GetLinkUri(new Call(), bookmark);
+		string uri = await TabInstance.Project.Linker.GetLinkUriAsync(new Call(), bookmark);
 		await ClipBoardUtils.SetTextAsync(uri);
 	}
 

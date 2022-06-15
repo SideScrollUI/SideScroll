@@ -122,7 +122,7 @@ public class TabViewer : Grid
 
 		Toolbar = new TabViewerToolbar(this);
 		Toolbar.ButtonLink.AddAsync(LinkAsync);
-		Toolbar.ButtonImport.AddAsync(ImportBookmarkAsync);
+		Toolbar.ButtonImport.AddAsync(ImportClipboardBookmarkAsync);
 		Children.Add(Toolbar);
 	}
 
@@ -146,19 +146,28 @@ public class TabViewer : Grid
 		{
 			bookmark.BookmarkType = BookmarkType.Full;
 		}
-		string uri = Project.Linker.GetLinkUri(call, bookmark);
+		string uri = await Project.Linker.GetLinkUriAsync(call, bookmark);
 		await ClipBoardUtils.SetTextAsync(uri);
 	}
 
-	private async Task ImportBookmarkAsync(Call call)
+	private async Task ImportClipboardBookmarkAsync(Call call)
 	{
 		string clipboardText = await ClipBoardUtils.GetTextAsync();
-		ImportBookmark(call, clipboardText, true);
+		await ImportBookmarkAsync(call, clipboardText, true);
+	}
+
+	private async Task<Bookmark> ImportBookmarkAsync(Call call, string linkUri, bool checkVersion)
+	{
+		Bookmark bookmark = await Project.Linker.GetBookmarkAsync(call, linkUri, checkVersion);
+		if (bookmark == null)
+			return null;
+
+		return ImportBookmark(call, bookmark);
 	}
 
 	private Bookmark ImportBookmark(Call call, string linkUri, bool checkVersion)
 	{
-		Bookmark bookmark = Project.Linker.GetBookmark(call, linkUri, checkVersion);
+		Bookmark bookmark = Task.Run(() => Project.Linker.GetBookmarkAsync(call, linkUri, checkVersion)).GetAwaiter().GetResult();
 		if (bookmark == null)
 			return null;
 
@@ -326,6 +335,7 @@ public class TabViewer : Grid
 		{
 			// Wait until Bookmarks tab has been created
 			Dispatcher.UIThread.Post(() => ImportBookmark(new Call(), LoadBookmarkUri, false), DispatcherPriority.SystemIdle);
+			//Dispatcher.UIThread.InvokeAsync(() => ImportBookmarkAsync(new Call(), LoadBookmarkUri, false), DispatcherPriority.SystemIdle).GetAwaiter().GetResult();
 		}
 		else if (LoadBookmark != null)
 		{

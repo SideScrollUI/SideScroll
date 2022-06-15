@@ -1,4 +1,5 @@
 using Atlas.Core;
+using System.Threading.Tasks;
 
 namespace Atlas.Tabs;
 
@@ -9,7 +10,9 @@ public class Linker
 	public bool PublicOnly { get; set; }
 	public long MaxLength { get; set; } = 65500; // Uri.EscapeDataString limit
 
-	public virtual string GetLinkUri(Call call, Bookmark bookmark)
+#pragma warning disable CS1998 // subclasses can by async
+	public virtual async Task<string> GetLinkUriAsync(Call call, Bookmark bookmark)
+#pragma warning restore CS1998
 	{
 #if DEBUG
 		call = call.DebugLogAll();
@@ -21,7 +24,9 @@ public class Linker
 		return AtlasPrefix + base64;
 	}
 
-	public virtual Bookmark GetBookmark(Call call, string uri, bool checkVersion)
+#pragma warning disable CS1998 // subclasses can by async
+	public virtual async Task<Bookmark> GetBookmarkAsync(Call call, string uri, bool checkVersion)
+#pragma warning restore CS1998
 	{
 		if (uri == null)
 			return null;
