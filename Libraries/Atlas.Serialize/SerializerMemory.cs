@@ -11,24 +11,19 @@ public abstract class SerializerMemory
 	protected MemoryStream Stream { get; set; } = new(); // move to atlas class?
 	public bool PublicOnly { get; set; } // Whether to save classes with the [PublicData] attribute
 
-	public SerializerMemory()
-	{
-	}
+	public SerializerMemory() { }
 
 	public abstract void Save(Call call, object obj);
 
-	public abstract T Load<T>(Call call = null);
+	public abstract bool TryLoad<T>(out T? obj, Call? call = null) where T : class;
 
-	public abstract object Load(Call call = null);
+	public abstract T Load<T>(Call? call = null);
+
+	public abstract object? Load(Call? call = null);
 
 	// Save an object to a memory stream and then load it
-	public static T DeepClone<T>(Call call, T obj, bool publicOnly = false)
+	public static T? DeepClone<T>(Call call, T obj, bool publicOnly = false) where T : class
 	{
-		if (obj is not T)
-		{
-			throw new Exception("Cloned types do not match [" + typeof(T) + "], [" + obj.GetType() + "]");
-		}
-
 		//	return default;
 		try
 		{
@@ -44,7 +39,7 @@ public abstract class SerializerMemory
 		return default;
 	}
 
-	public static object DeepClone(Call call, object obj, bool publicOnly = false)
+	public static object? DeepClone(Call call, object obj, bool publicOnly = false)
 	{
 		try
 		{
@@ -59,9 +54,9 @@ public abstract class SerializerMemory
 		return null;
 	}
 
-	protected abstract T DeepCloneInternal<T>(Call call, T obj);
+	protected abstract T? DeepCloneInternal<T>(Call call, T obj) where T : class;
 
-	protected abstract object DeepCloneInternal(Call call, object obj);
+	protected abstract object? DeepCloneInternal(Call call, object obj);
 
 	public string ToBase64String(Call call)
 	{
@@ -98,11 +93,8 @@ public abstract class SerializerMemory
 		ConvertEncodedToStream(base64, Stream);
 	}
 
-	public static string ToBase64String(Call call, object obj, bool publicOnly = false)
+	public static string? ToBase64String(Call call, object obj, bool publicOnly = false)
 	{
-		if (obj == null)
-			return null;
-
 		call ??= new Call();
 
 		var serializer = Create();

@@ -16,13 +16,13 @@ public enum ObjectType
 public interface IRepoCreator
 {
 	// needs to handle generics (lists, arrays, dictionaries)
-	TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema);
+	TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema);
 }
 
 // TypeRepo's can implement to preload object data first (example: TypeRepoHashSet)
 public interface IPreloadRepo
 {
-	public void PreloadObjectData(object obj);
+	public void PreloadObjectData(object? obj);
 }
 
 // Represents all the object references for each unique type
@@ -53,16 +53,16 @@ public abstract class TypeRepo : IDisposable
 
 	public readonly Serializer Serializer;
 	public readonly TypeSchema TypeSchema;
-	public readonly Type Type; // might be null after loading
-	public Type LoadableType; // some types get overridden lazy load, or get removed [Unserialized]
+	public readonly Type? Type; // might be null after loading
+	public Type? LoadableType; // some types get overridden lazy load, or get removed [Unserialized]
 	public int TypeIndex; // -1 if null
 	public List<object> Objects = new(); // ordered by index, not filled in when loading
-	public int[] ObjectSizes;
-	public long[] ObjectOffsets;
+	public int[]? ObjectSizes;
+	public long[]? ObjectOffsets;
 	public object[] ObjectsLoaded;
 	public int ObjectsLoadedCount = 0;
 
-	public BinaryReader Reader;
+	public BinaryReader? Reader;
 
 	// Saving Only
 	public Dictionary<object, int> IdxObjectToIndex = new(); // for saving only, not filled in for loading
@@ -80,7 +80,7 @@ public abstract class TypeRepo : IDisposable
 	protected virtual void SaveCustomHeader(BinaryWriter writer) { }
 	protected virtual void LoadCustomHeader() { }
 
-	public override string ToString() => TypeSchema.Name;
+	public override string? ToString() => TypeSchema?.Name;
 
 	public TypeRepo(Serializer serializer, TypeSchema typeSchema)
 	{
@@ -89,9 +89,7 @@ public abstract class TypeRepo : IDisposable
 		Type = typeSchema.Type;
 		if (!typeSchema.IsUnserialized && (!serializer.PublicOnly || TypeSchema.IsPublicOnly))
 			LoadableType = Type;
-		//objects.Capacity = typeSchema.numObjects;
 		ObjectsLoaded = new object[typeSchema.NumObjects];
-		//CreateObjects();
 	}
 
 	public static TypeRepo Create(Log log, Serializer serializer, TypeSchema typeSchema)
@@ -126,7 +124,7 @@ public abstract class TypeRepo : IDisposable
 			return typeRepoUnknown;
 		}
 
-		TypeRepo typeRepo;
+		TypeRepo? typeRepo;
 
 		foreach (IRepoCreator creator in RepoCreators)
 		{
@@ -229,7 +227,7 @@ public abstract class TypeRepo : IDisposable
 		long offset = TypeSchema.FileDataOffset;
 		for (int i = 0; i < TypeSchema.NumObjects; i++)
 		{
-			int size = Reader.ReadInt32();
+			int size = Reader!.ReadInt32();
 			ObjectOffsets[i] = offset;
 			ObjectSizes[i] = size;
 			offset += size;
@@ -319,9 +317,9 @@ public abstract class TypeRepo : IDisposable
 		return index;
 	}
 
-	public TypeRef LoadLazyObjectRef()
+	public TypeRef? LoadLazyObjectRef()
 	{
-		ObjectType objectType = (ObjectType)Reader.ReadByte();
+		ObjectType objectType = (ObjectType)Reader!.ReadByte();
 		if (objectType == ObjectType.Null)
 			return null;
 
@@ -355,7 +353,7 @@ public abstract class TypeRepo : IDisposable
 
 	public void SkipObjectRef()
 	{
-		ObjectType objectType = (ObjectType)Reader.ReadByte();
+		ObjectType objectType = (ObjectType)Reader!.ReadByte();
 		if (objectType == ObjectType.Null)
 			return;
 
@@ -375,7 +373,7 @@ public abstract class TypeRepo : IDisposable
 			{
 				int typeIndex = Reader.ReadInt16(); // not saved for sealed classes
 				TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
-				if (typeRepo.TypeSchema.Type.IsPrimitive)
+				if (typeRepo.TypeSchema.Type!.IsPrimitive)
 					LoadObject();
 				else
 					Reader.ReadInt32(); // objectIndex
@@ -387,9 +385,9 @@ public abstract class TypeRepo : IDisposable
 		}
 	}
 
-	public object LoadObjectRef()
+	public object? LoadObjectRef()
 	{
-		ObjectType objectType = (ObjectType)Reader.ReadByte();
+		ObjectType objectType = (ObjectType)Reader!.ReadByte();
 		if (objectType == ObjectType.Null)
 			return null;
 
@@ -428,13 +426,13 @@ public abstract class TypeRepo : IDisposable
 		}
 	}
 
-	public object LoadObjectRef(byte[] bytes, ref int byteOffset)
+	public object? LoadObjectRef(byte[] bytes, ref int byteOffset)
 	{
 		bool isNull = Convert.ToBoolean(bytes[byteOffset++]);
 		if (isNull)
 			return null;
 
-		if (LoadableType.IsPrimitive)
+		if (LoadableType!.IsPrimitive)
 			return LoadObject();
 
 		int objectIndex = BitConverter.ToInt32(bytes, byteOffset);
@@ -453,15 +451,15 @@ public abstract class TypeRepo : IDisposable
 		return typeRepo.LoadObject(objectIndex);
 	}
 
-	public virtual object LoadObject()
+	public virtual object? LoadObject()
 	{
 		return null;
 	}
 
-	private object GetObjectAt(int objectIndex)
+	private object? GetObjectAt(int objectIndex)
 	{
-		object obj = ObjectsLoaded[objectIndex];
-		Reader.BaseStream.Position = ObjectOffsets[objectIndex];
+		object? obj = ObjectsLoaded[objectIndex];
+		Reader!.BaseStream.Position = ObjectOffsets![objectIndex];
 		return obj;
 	}
 
@@ -469,7 +467,7 @@ public abstract class TypeRepo : IDisposable
 	{
 		if (this is IPreloadRepo preload)
 		{
-			object obj = GetObjectAt(objectIndex);
+			object? obj = GetObjectAt(objectIndex);
 
 			try
 			{
@@ -483,7 +481,8 @@ public abstract class TypeRepo : IDisposable
 
 	public void LoadObjectData(int objectIndex)
 	{
-		object obj = GetObjectAt(objectIndex);
+		object? obj = GetObjectAt(objectIndex);
+		if (obj == null) return;
 
 		try
 		{
@@ -494,7 +493,7 @@ public abstract class TypeRepo : IDisposable
 		}
 	}
 
-	public object LoadObject(int objectIndex)
+	public object? LoadObject(int objectIndex)
 	{
 		if (LoadableType == null) // type might have disappeared or been renamed
 			return null; // should we pass a "ref bool valid"?
@@ -507,31 +506,31 @@ public abstract class TypeRepo : IDisposable
 
 		ObjectsLoadedCount++;
 
-		object obj = CreateObject(objectIndex);
+		object? obj = CreateObject(objectIndex);
 		return obj;
 	}
 
-	public object LoadFullObject(int objectIndex)
+	public object? LoadFullObject(int objectIndex)
 	{
 		if (ObjectsLoaded[objectIndex] != null)
 			return ObjectsLoaded[objectIndex];
 
-		object obj = CreateObject(objectIndex);
+		object? obj = CreateObject(objectIndex);
 
 		Serializer.ProcessLoadQueue();
 
 		return obj;
 	}
 
-	protected virtual object CreateObject(int objectIndex)
+	protected virtual object? CreateObject(int objectIndex)
 	{
-		object obj = Activator.CreateInstance(LoadableType, true);
+		object obj = Activator.CreateInstance(LoadableType!, true)!;
 		ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
 		Serializer.QueueLoading(this, objectIndex);
 		return obj;
 	}
 
-	/*protected virtual object CreateObject(byte[] bytes, ref int byteOffset)
+	/*protected virtual object? CreateObject(byte[] bytes, ref int byteOffset)
 	{
 		return Activator.CreateInstance(type, true);
 	}*/

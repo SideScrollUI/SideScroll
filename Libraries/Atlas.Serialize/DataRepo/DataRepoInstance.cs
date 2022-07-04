@@ -34,22 +34,22 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		DataRepo.Save<T>(GroupId, key, item, call);
 	}
 
-	public virtual T Load(Call call, string key = null, bool createIfNeeded = false, bool lazy = false)
+	public virtual T? Load(Call call, string? key = null, bool createIfNeeded = false, bool lazy = false)
 	{
 		return DataRepo.Load<T>(GroupId, key ?? DefaultKey, call, createIfNeeded, lazy);
 	}
 
-	public DataItemCollection<T> LoadAll(Call call = null, bool lazy = false)
+	public DataItemCollection<T> LoadAll(Call? call = null, bool lazy = false)
 	{
 		return DataRepo.LoadAll<T>(call, GroupId, lazy);
 	}
 
-	public SortedDictionary<string, T> LoadAllSorted(Call call = null, bool lazy = false)
+	public SortedDictionary<string, T> LoadAllSorted(Call? call = null, bool lazy = false)
 	{
 		return DataRepo.LoadAllSorted<T>(call, GroupId, lazy);
 	}
 
-	public virtual void Delete(string key = null)
+	public virtual void Delete(string? key = null)
 	{
 		DataRepo.Delete<T>(GroupId, key ?? DefaultKey);
 	}

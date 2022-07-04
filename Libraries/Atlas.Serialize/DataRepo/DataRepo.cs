@@ -70,27 +70,27 @@ public class DataRepo
 	}
 
 	// Use ToString()? for key?
-	public void Save(string key, object obj, Call call = null)
+	public void Save(string key, object obj, Call? call = null)
 	{
 		Save(null, key, obj, call);
 	}
 
-	public void Save<T>(string key, T obj, Call call = null)
+	public void Save<T>(string key, T obj, Call? call = null)
 	{
 		Save<T>(null, key, obj, call);
 	}
 
-	public void Save(string groupId, string key, object obj, Call call = null)
+	public void Save(string? groupId, string key, object obj, Call? call = null)
 	{
 		Save(obj.GetType(), groupId, key, obj, call);
 	}
 
-	public void Save<T>(string groupId, string key, T obj, Call call = null)
+	public void Save<T>(string? groupId, string key, T obj, Call? call = null)
 	{
-		Save(typeof(T), groupId, key, obj, call);
+		Save(typeof(T), groupId, key, obj!, call);
 	}
 
-	public void Save(Type type, string groupId, string key, object obj, Call call = null)
+	public void Save(Type type, string? groupId, string key, object obj, Call? call = null)
 	{
 		groupId ??= DefaultGroupId;
 		call ??= new Call();
@@ -98,23 +98,23 @@ public class DataRepo
 		serializer.Save(call, obj, key);
 	}
 
-	public void Save(object obj, Call call = null)
+	public void Save(object obj, Call? call = null)
 	{
-		Save(obj.GetType().AssemblyQualifiedName, obj, call);
+		Save(obj.GetType().AssemblyQualifiedName!, obj, call);
 	}
 
-	public T Load<T>(string key, Call call = null, bool createIfNeeded = false, bool lazy = false)
+	public T? Load<T>(string key, Call? call = null, bool createIfNeeded = false, bool lazy = false)
 	{
 		return Load<T>(DefaultGroupId, key, call, createIfNeeded, lazy);
 	}
 
-	public T Load<T>(string groupId, string key, Call call, bool createIfNeeded = false, bool lazy = false)
+	public T? Load<T>(string groupId, string key, Call? call, bool createIfNeeded = false, bool lazy = false)
 	{
 		SerializerFile serializerFile = GetSerializerFile(typeof(T), groupId, key);
 
 		if (serializerFile.Exists)
 		{
-			T obj = serializerFile.Load<T>(call, lazy);
+			T? obj = serializerFile.Load<T>(call, lazy);
 			if (obj != null)
 				return obj;
 		}
@@ -128,13 +128,13 @@ public class DataRepo
 		return default;
 	}
 
-	public T Load<T>(bool createIfNeeded = false, bool lazy = false, Call call = null)
+	public T? Load<T>(bool createIfNeeded = false, bool lazy = false, Call? call = null)
 	{
 		call ??= new Call();
-		return Load<T>(typeof(T).AssemblyQualifiedName, call, createIfNeeded, lazy);
+		return Load<T>(typeof(T).AssemblyQualifiedName!, call, createIfNeeded, lazy);
 	}
 
-	public DataItemCollection<T> LoadAll<T>(Call call = null, string groupId = null, bool lazy = false)
+	public DataItemCollection<T> LoadAll<T>(Call? call = null, string? groupId = null, bool lazy = false)
 	{
 		call ??= new Call();
 		groupId ??= DefaultGroupId;
@@ -148,7 +148,7 @@ public class DataRepo
 			if (item != null)
 				list.Add(item);
 		}*/
-		var entries = new DataItemCollection<T>();
+		DataItemCollection<T> entries = new();
 
 		string groupPath = GetGroupPath(typeof(T), groupId);
 		if (Directory.Exists(groupPath))
@@ -158,7 +158,7 @@ public class DataRepo
 				var serializerFile = SerializerFile.Create(filePath);
 				if (serializerFile.Exists)
 				{
-					T obj = serializerFile.Load<T>(call, lazy);
+					T? obj = serializerFile.Load<T>(call, lazy);
 					if (obj != null)
 						entries.Add(serializerFile.LoadHeader(call).Name, obj);
 				}
@@ -167,17 +167,17 @@ public class DataRepo
 		return entries;
 	}
 
-	public SortedDictionary<string, T> LoadAllSorted<T>(Call call = null, string groupId = null, bool lazy = false)
+	public SortedDictionary<string, T> LoadAllSorted<T>(Call? call = null, string? groupId = null, bool lazy = false)
 	{
 		return LoadAll<T>(call, groupId, lazy).Lookup;
 	}
 
-	public ItemCollection<Header> LoadHeaders(Type type, string groupId = null, Call call = null)
+	public ItemCollection<Header> LoadHeaders(Type type, string? groupId = null, Call? call = null)
 	{
 		call ??= new Call();
 		groupId ??= DefaultGroupId;
 
-		var headers = new ItemCollection<Header>();
+		ItemCollection<Header> headers = new();
 
 		string groupPath = GetGroupPath(type, groupId);
 		if (Directory.Exists(groupPath))
@@ -196,12 +196,12 @@ public class DataRepo
 		return headers;
 	}
 
-	public void DeleteAll<T>(string groupId = null)
+	public void DeleteAll<T>(string? groupId = null)
 	{
 		DeleteAll(typeof(T), groupId);
 	}
 
-	public void DeleteAll(Type type, string groupId = null)
+	public void DeleteAll(Type type, string? groupId = null)
 	{
 		string groupPath = GetGroupPath(type, groupId);
 		if (!Directory.Exists(groupPath))
@@ -232,11 +232,8 @@ public class DataRepo
 		Delete(type, null, key);
 	}
 
-	public void Delete(Type type, string groupId, string key)
+	public void Delete(Type type, string? groupId, string key)
 	{
-		if (key == null)
-			throw new ArgumentNullException(key);
-
 		groupId ??= DefaultGroupId;
 		string dataPath = GetDataPath(type, groupId, key);
 		if (!Directory.Exists(dataPath))
@@ -266,7 +263,7 @@ public class DataRepo
 	}
 
 	// Don't use GetHashCode(), it returns a different value each time the process is run
-	public string GetGroupPath(Type type, string groupId = null)
+	public string GetGroupPath(Type type, string? groupId = null)
 	{
 		groupId ??= DefaultGroupId;
 		string groupHash = (type.GetNonNullableType().FullName + ';' + RepoName + ';' + groupId).HashSha256();

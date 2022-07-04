@@ -20,14 +20,14 @@ public class TypeRepoCollection : TypeRepo
 		}
 	}*/
 
-	private TypeRepo _listTypeRepo;
-	private readonly MethodInfo _addMethod;
-	private readonly Type _elementType;
+	private TypeRepo? _listTypeRepo;
+	private readonly MethodInfo? _addMethod;
+	private readonly Type? _elementType;
 
 	public TypeRepoCollection(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
-		Type[] types = LoadableType.GetGenericArguments();
+		Type[] types = LoadableType!.GetGenericArguments();
 		if (types.Length > 0)
 			_elementType = types[0];
 
@@ -57,18 +57,18 @@ public class TypeRepoCollection : TypeRepo
 		writer.Write(iCollection.Count);
 		foreach (var item in iCollection)
 		{
-			Serializer.WriteObjectRef(_elementType, item, writer);
+			Serializer.WriteObjectRef(_elementType!, item, writer);
 		}
 	}
 
 	public override void LoadObjectData(object obj)
 	{
 		//(ICollection<listTypeRepo.type>)objects[i];
-		int count = Reader.ReadInt32();
+		int count = Reader!.ReadInt32();
 		for (int j = 0; j < count; j++)
 		{
-			object objectValue = _listTypeRepo.LoadObjectRef();
-			_addMethod.Invoke(obj, new object[] { objectValue });
+			object? objectValue = _listTypeRepo!.LoadObjectRef();
+			_addMethod!.Invoke(obj, new object?[] { objectValue });
 		}
 	}
 
@@ -78,8 +78,8 @@ public class TypeRepoCollection : TypeRepo
 		ICollection iDest = (ICollection)dest;
 		foreach (var item in iSource)
 		{
-			object clone = Serializer.Clone(item);
-			_addMethod.Invoke(iDest, new object[] { clone });
+			object? clone = Serializer.Clone(item);
+			_addMethod!.Invoke(iDest, new object?[] { clone });
 		}
 	}
 }

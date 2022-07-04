@@ -14,7 +14,7 @@ public class SerializerFileAtlas : SerializerFile
 		DataPath = Paths.Combine(basePath, DataName);
 	}
 
-	public override void SaveInternal(Call call, object obj, string name = null)
+	public override void SaveInternal(Call call, object obj, string? name = null)
 	{
 		for (int attempt = 0; attempt < 10; attempt++)
 		{
@@ -23,12 +23,15 @@ public class SerializerFileAtlas : SerializerFile
 
 			try
 			{
-				using var stream = new FileStream(DataPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+				using var stream = new FileStream(DataPath!, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
 
 				using var writer = new BinaryWriter(stream);
 
 				var serializer = new Serializer();
-				serializer.Header.Name = name;
+				if (name != null)
+				{
+					serializer.Header.Name = name;
+				}
 				serializer.AddObject(call, obj);
 				serializer.Save(call, writer);
 				break;
@@ -40,7 +43,7 @@ public class SerializerFileAtlas : SerializerFile
 		}
 	}
 
-	protected override object LoadInternal(Call call, bool lazy, TaskInstance taskInstance)
+	protected override object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance)
 	{
 		var serializer = new Serializer
 		{
@@ -50,13 +53,13 @@ public class SerializerFileAtlas : SerializerFile
 		MemoryStream memoryStream;
 		using (CallTimer callReadAllBytes = call.Timer("Loading file: " + Name))
 		{
-			memoryStream = new MemoryStream(File.ReadAllBytes(DataPath));
+			memoryStream = new MemoryStream(File.ReadAllBytes(DataPath!));
 		}
 
 		var reader = new BinaryReader(memoryStream);
 
 		serializer.Load(call, reader, lazy);
-		object obj;
+		object? obj;
 		using (CallTimer callLoadBaseObject = call.Timer("Loading base object"))
 		{
 			obj = serializer.BaseObject(callLoadBaseObject);
@@ -90,7 +93,7 @@ public class SerializerFileAtlas : SerializerFile
 
 	public Serializer LoadSchema(Call call)
 	{
-		using var stream = new FileStream(HeaderPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+		using var stream = new FileStream(HeaderPath!, FileMode.Open, FileAccess.Read, FileShare.Read);
 
 		using var reader = new BinaryReader(stream);
 
@@ -99,11 +102,11 @@ public class SerializerFileAtlas : SerializerFile
 		return serializer;
 	}
 
-	public T LoadOrCreate<T>(Call call = null, bool lazy = false, TaskInstance taskInstance = null)
+	public T? LoadOrCreate<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
 	{
 		call ??= new Call();
 
-		T result = default;
+		T? result = default;
 		if (Exists)
 		{
 			result = Load<T>(call, lazy, taskInstance);

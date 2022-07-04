@@ -7,9 +7,9 @@ public class TypeRepoDateTimeOffset : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type))
+			if (CanAssign(typeSchema.Type!))
 				return new TypeRepoDateTimeOffset(serializer, typeSchema);
 			return null;
 		}
@@ -31,15 +31,15 @@ public class TypeRepoDateTimeOffset : TypeRepo
 		writer.Write(dateTime.Ticks);
 	}
 
-	protected override object CreateObject(int objectIndex)
+	protected override object? CreateObject(int objectIndex)
 	{
-		long position = Reader.BaseStream.Position;
-		Reader.BaseStream.Position = ObjectOffsets[objectIndex];
+		long position = Reader!.BaseStream.Position;
+		Reader.BaseStream.Position = ObjectOffsets![objectIndex];
 
-		object obj = null;
+		object? obj = null;
 		try
 		{
-			if (CanAssign(LoadableType))
+			if (CanAssign(LoadableType!))
 			{
 				long ticks = Reader.ReadInt64();
 				var dateTime = new DateTime(ticks, DateTimeKind.Utc);
@@ -62,7 +62,7 @@ public class TypeRepoDateTimeOffset : TypeRepo
 
 	public override object LoadObject()
 	{
-		object obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
+		object obj = Enum.ToObject(TypeSchema.Type!, Reader!.ReadInt32());
 		return obj;
 	}
 

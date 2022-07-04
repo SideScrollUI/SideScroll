@@ -10,22 +10,22 @@ public class TypeRepoList : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type))
+			if (CanAssign(typeSchema.Type!))
 				return new TypeRepoList(serializer, typeSchema);
 			return null;
 		}
 	}
 
-	private TypeRepo _listTypeRepo;
-	private PropertyInfo _propertyInfoCapacity;
-	private readonly Type _elementType;
+	private TypeRepo? _listTypeRepo;
+	private PropertyInfo? _propertyInfoCapacity;
+	private readonly Type? _elementType;
 
 	public TypeRepoList(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
-		Type[] types = Type.GetGenericArguments();
+		Type[] types = Type!.GetGenericArguments();
 		if (types.Length > 0)
 			_elementType = types[0];
 	}
@@ -40,7 +40,7 @@ public class TypeRepoList : TypeRepo
 		if (_elementType != null)
 			_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
 
-		_propertyInfoCapacity = LoadableType.GetProperty("Capacity");
+		_propertyInfoCapacity = LoadableType!.GetProperty("Capacity");
 	}
 
 	public override void AddChildObjects(object obj)
@@ -61,20 +61,20 @@ public class TypeRepoList : TypeRepo
 		writer.Write(iList.Count);
 		foreach (var item in iList)
 		{
-			Serializer.WriteObjectRef(_elementType, item, writer);
+			Serializer.WriteObjectRef(_elementType!, item, writer);
 		}
 	}
 
 	public override void LoadObjectData(object obj)
 	{
 		IList iList = (IList)obj;
-		int count = Reader.ReadInt32();
+		int count = Reader!.ReadInt32();
 		if (_propertyInfoCapacity != null)
 			_propertyInfoCapacity.SetValue(iList, count);
 
 		for (int j = 0; j < count; j++)
 		{
-			object valueObject = _listTypeRepo.LoadObjectRef();
+			object? valueObject = _listTypeRepo!.LoadObjectRef();
 			iList.Add(valueObject);
 		}
 	}
@@ -85,7 +85,7 @@ public class TypeRepoList : TypeRepo
 		IList iDest = (IList)dest;
 		foreach (var item in iSource)
 		{
-			object clone = Serializer.Clone(item);
+			object? clone = Serializer.Clone(item);
 			iDest.Add(clone);
 		}
 	}

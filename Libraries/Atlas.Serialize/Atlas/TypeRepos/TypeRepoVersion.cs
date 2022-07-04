@@ -7,9 +7,9 @@ public class TypeRepoVersion : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type))
+			if (CanAssign(typeSchema.Type!))
 				return new TypeRepoVersion(serializer, typeSchema);
 			return null;
 		}
@@ -30,10 +30,10 @@ public class TypeRepoVersion : TypeRepo
 		writer.Write(((Version)obj).ToString());
 	}
 
-	protected override object CreateObject(int objectIndex)
+	protected override object? CreateObject(int objectIndex)
 	{
-		long position = Reader.BaseStream.Position;
-		Reader.BaseStream.Position = ObjectOffsets[objectIndex];
+		long position = Reader!.BaseStream.Position;
+		Reader.BaseStream.Position = ObjectOffsets![objectIndex];
 
 		string version = Reader.ReadString();
 		object obj = new Version(version);
@@ -45,7 +45,7 @@ public class TypeRepoVersion : TypeRepo
 
 	public override object LoadObject()
 	{
-		object obj = new Version(Reader.ReadString());
+		object obj = new Version(Reader!.ReadString());
 		return obj;
 	}
 

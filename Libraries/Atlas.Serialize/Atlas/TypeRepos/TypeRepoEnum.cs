@@ -7,9 +7,9 @@ public class TypeRepoEnum : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type))
+			if (CanAssign(typeSchema.Type!))
 				return new TypeRepoEnum(serializer, typeSchema);
 			return null;
 		}
@@ -30,16 +30,16 @@ public class TypeRepoEnum : TypeRepo
 		writer.Write((int)obj);
 	}
 
-	protected override object CreateObject(int objectIndex)
+	protected override object? CreateObject(int objectIndex)
 	{
-		long position = Reader.BaseStream.Position;
-		Reader.BaseStream.Position = ObjectOffsets[objectIndex];
+		long position = Reader!.BaseStream.Position;
+		Reader.BaseStream.Position = ObjectOffsets![objectIndex];
 
-		object obj = null;
+		object? obj = null;
 		try
 		{
-			if (LoadableType.IsEnum)
-				obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
+			if (LoadableType!.IsEnum)
+				obj = Enum.ToObject(TypeSchema.Type!, Reader.ReadInt32());
 			else
 				throw new Exception("Unhandled primitive type");
 		}
@@ -55,7 +55,7 @@ public class TypeRepoEnum : TypeRepo
 
 	public override object LoadObject()
 	{
-		object obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
+		object obj = Enum.ToObject(TypeSchema.Type!, Reader!.ReadInt32());
 		return obj;
 	}
 

@@ -11,26 +11,26 @@ public class TypeRepoDictionary : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type))
+			if (CanAssign(typeSchema.Type!))
 				return new TypeRepoDictionary(serializer, typeSchema);
 			return null;
 		}
 	}
 
-	private readonly Type _typeKey;
-	private readonly Type _typeValue;
+	private readonly Type? _typeKey;
+	private readonly Type? _typeValue;
 
 	private readonly MethodInfo _addMethod;
 
-	private TypeRepo _list1TypeRepo;
-	private TypeRepo _list2TypeRepo;
+	private TypeRepo? _list1TypeRepo;
+	private TypeRepo? _list2TypeRepo;
 
 	public TypeRepoDictionary(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
-		Type[] types = LoadableType.GetGenericArguments();
+		Type[] types = LoadableType!.GetGenericArguments();
 		if (types.Length > 0)
 		{
 			_typeKey = types[0];
@@ -38,7 +38,7 @@ public class TypeRepoDictionary : TypeRepo
 		}
 
 		_addMethod = LoadableType.GetMethods()
-			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Count() == 2);
+			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Count() == 2)!;
 	}
 
 	public static bool CanAssign(Type type)
@@ -73,23 +73,25 @@ public class TypeRepoDictionary : TypeRepo
 		writer.Write(dictionary.Count);
 		foreach (DictionaryEntry item in dictionary)
 		{
-			Serializer.WriteObjectRef(_typeKey, item.Key, writer);
-			Serializer.WriteObjectRef(_typeValue, item.Value, writer);
+			Serializer.WriteObjectRef(_typeKey!, item.Key, writer);
+			Serializer.WriteObjectRef(_typeValue!, item.Value, writer);
 		}
 	}
 
 	public override void LoadObjectData(object obj)
 	{
 		IDictionary iCollection = (IDictionary)obj;
-		int count = Reader.ReadInt32();
+		int count = Reader!.ReadInt32();
 
 		for (int j = 0; j < count; j++)
 		{
-			object key = _list1TypeRepo.LoadObjectRef();
-			object value = _list2TypeRepo.LoadObjectRef();
+			object? key = _list1TypeRepo!.LoadObjectRef();
+			object? value = _list2TypeRepo!.LoadObjectRef();
 
 			if (key != null)
-				_addMethod.Invoke(iCollection, new object[] { key, value });
+			{
+				_addMethod.Invoke(iCollection, new object?[] { key, value });
+			}
 		}
 	}
 
@@ -99,9 +101,12 @@ public class TypeRepoDictionary : TypeRepo
 		IDictionary iDest = (IDictionary)dest;
 		foreach (DictionaryEntry item in iSource)
 		{
-			object key = Serializer.Clone(item.Key);
-			object value = Serializer.Clone(item.Value);
-			_addMethod.Invoke(iDest, new object[] { key, value });
+			object? key = Serializer.Clone(item.Key);
+			object? value = Serializer.Clone(item.Value);
+			if (key != null)
+			{
+				_addMethod.Invoke(iDest, new object?[] { key, value });
+			}
 		}
 	}
 }

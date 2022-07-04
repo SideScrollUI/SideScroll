@@ -6,8 +6,8 @@ namespace Atlas.Serialize;
 
 public abstract class SerializerFile
 {
-	public string HeaderPath { get; set; }
-	public string DataPath { get; set; }
+	public string? HeaderPath { get; set; }
+	public string? DataPath { get; set; }
 	public string BasePath { get; set; }
 	public string Name { get; set; }
 
@@ -24,10 +24,10 @@ public abstract class SerializerFile
 	// check for writeability and no open locks
 	public void TestWrite()
 	{
-		File.WriteAllText(DataPath, "");
+		File.WriteAllText(DataPath!, "");
 	}
 
-	public void Save(Call call, object obj, string name = null)
+	public void Save(Call call, object obj, string? name = null)
 	{
 		name ??= "<Default>";
 
@@ -39,12 +39,12 @@ public abstract class SerializerFile
 		SaveInternal(callTimer, obj, name);
 	}
 
-	public abstract void SaveInternal(Call call, object obj, string name = null);
+	public abstract void SaveInternal(Call call, object obj, string? name = null);
 
-	public T Load<T>(Call call = null, bool lazy = false, TaskInstance taskInstance = null)
+	public T? Load<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
 	{
 		call ??= new Call();
-		object obj = Load(call, lazy, taskInstance);
+		object? obj = Load(call, lazy, taskInstance);
 		if (obj == null)
 			return default;
 
@@ -59,7 +59,7 @@ public abstract class SerializerFile
 		return loaded;
 	}
 
-	public object Load(Call call, bool lazy = false, TaskInstance taskInstance = null)
+	public object? Load(Call call, bool lazy = false, TaskInstance? taskInstance = null)
 	{
 		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Loading object: " + Name);
 
@@ -80,7 +80,7 @@ public abstract class SerializerFile
 
 		using CallTimer callReadAllBytes = call.Timer(LogLevel.Debug, "Loading header: " + Name);
 
-		var memoryStream = new MemoryStream(File.ReadAllBytes(HeaderPath));
+		var memoryStream = new MemoryStream(File.ReadAllBytes(HeaderPath!));
 
 		var reader = new BinaryReader(memoryStream);
 		var header = new Header();
@@ -88,7 +88,7 @@ public abstract class SerializerFile
 		return header;
 	}
 
-	protected abstract object LoadInternal(Call call, bool lazy, TaskInstance taskInstance);
+	protected abstract object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance);
 
 	public static SerializerFile Create(string dataPath, string name = "")
 	{

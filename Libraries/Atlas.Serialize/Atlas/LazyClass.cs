@@ -9,37 +9,37 @@ namespace Atlas.Serialize;
 
 public class TypeRef
 {
-	public TypeRepo TypeRepo;
+	public TypeRepo? TypeRepo;
 	public int Index;
 
-	public object Load()
+	public object? Load()
 	{
-		return TypeRepo.LoadFullObject(Index);
+		return TypeRepo!.LoadFullObject(Index);
 	}
 }
 
 public class LazyProperty
 {
 	//public TypeRepo TypeRepo;
-	public PropertyBuilder PropertyBuilder;
-	public PropertyInfo PropertyInfoOriginal;
-	public PropertyInfo PropertyInfoOverride;
-	public FieldBuilder FieldBuilderLoaded;
-	public FieldBuilder FieldBuilderTypeRef;
-	public FieldInfo FieldInfoLoaded;
-	public FieldInfo FieldInfoTypeRef;
+	public PropertyBuilder? PropertyBuilder;
+	public PropertyInfo? PropertyInfoOriginal;
+	public PropertyInfo? PropertyInfoOverride;
+	public FieldBuilder? FieldBuilderLoaded;
+	public FieldBuilder? FieldBuilderTypeRef;
+	public FieldInfo? FieldInfoLoaded;
+	public FieldInfo? FieldInfoTypeRef;
 
-	public override string ToString() => PropertyBuilder.Name;
+	public override string? ToString() => PropertyBuilder?.Name;
 
 	public void SetTypeRef(object obj, TypeRef typeRef)
 	{
 		if (typeRef == null)
 		{
-			FieldInfoLoaded.SetValue(obj, true);
+			FieldInfoLoaded!.SetValue(obj, true);
 		}
 		else
 		{
-			FieldInfoTypeRef.SetValue(obj, typeRef);
+			FieldInfoTypeRef!.SetValue(obj, typeRef);
 		}
 	}
 }
@@ -58,9 +58,9 @@ public class LazyClass
 
 		foreach (LazyProperty lazyProperty in LazyProperties.Values)
 		{
-			lazyProperty.PropertyInfoOverride = NewType.GetProperty(lazyProperty.PropertyInfoOriginal.Name);
-			lazyProperty.FieldInfoLoaded = NewType.GetField(lazyProperty.FieldBuilderLoaded.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-			lazyProperty.FieldInfoTypeRef = NewType.GetField(lazyProperty.FieldBuilderTypeRef.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			lazyProperty.PropertyInfoOverride = NewType.GetProperty(lazyProperty.PropertyInfoOriginal!.Name);
+			lazyProperty.FieldInfoLoaded = NewType.GetField(lazyProperty.FieldBuilderLoaded!.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			lazyProperty.FieldInfoTypeRef = NewType.GetField(lazyProperty.FieldBuilderTypeRef!.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			Debug.Assert(lazyProperty.FieldInfoLoaded != null);
 			Debug.Assert(lazyProperty.FieldBuilderTypeRef != null);
 		}
@@ -75,16 +75,16 @@ public class LazyClass
 
 		foreach (TypeRepoObject.PropertyRepo propertyRepo in propertyRepos)
 		{
-			PropertyInfo propertyInfo = propertyRepo.PropertySchema.PropertyInfo;
+			PropertyInfo propertyInfo = propertyRepo.PropertySchema.PropertyInfo!;
 			if (propertyInfo.CanRead == false || propertyInfo.CanWrite == false)
 				continue;
 
-			MethodInfo getMethod = propertyInfo.GetGetMethod(false);
+			MethodInfo getMethod = propertyInfo.GetGetMethod(false)!;
 			if (getMethod.IsVirtual)
 				propertyRepo.LazyProperty = CreateLazyProperty(typeBuilder, propertyInfo);
 		}
 
-		TypeInfo objectType = typeBuilder.CreateTypeInfo();
+		TypeInfo objectType = typeBuilder.CreateTypeInfo()!;
 		return objectType;
 	}
 
@@ -110,11 +110,11 @@ public class LazyClass
 		string propertyName = propertyInfo.Name;
 		Type propertyType = propertyInfo.PropertyType;
 
-		MethodInfo setMethod = propertyInfo.GetSetMethod(true);
-		MethodInfo getMethod = propertyInfo.GetGetMethod(true);
+		MethodInfo setMethod = propertyInfo.GetSetMethod(true)!;
+		MethodInfo getMethod = propertyInfo.GetGetMethod(true)!;
 		FieldBuilder fieldBuilderLoaded = typeBuilder.DefineField("_" + propertyName + "Loaded", typeof(bool), FieldAttributes.Family);
 		FieldBuilder fieldBuilderTypeRef = typeBuilder.DefineField("_" + propertyName + "TypeRef", typeof(TypeRef), FieldAttributes.Family);
-		MethodInfo methodInfoLoad = typeof(TypeRef).GetMethod(nameof(TypeRef.Load));
+		MethodInfo methodInfoLoad = typeof(TypeRef).GetMethod(nameof(TypeRef.Load))!;
 
 		PropertyBuilder propertyBuilder = typeBuilder.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
 

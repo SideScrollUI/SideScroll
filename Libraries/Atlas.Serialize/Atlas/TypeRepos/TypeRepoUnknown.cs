@@ -7,7 +7,7 @@ public class TypeRepoUnknown : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (typeSchema.Type == null)
 				return new TypeRepoUnknown(serializer, typeSchema);
@@ -17,7 +17,7 @@ public class TypeRepoUnknown : TypeRepo
 
 	public class NoConstructorCreator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if ((!typeSchema.HasConstructor && !typeSchema.IsSerialized) ||
 				(typeSchema.IsPublicOnly && !serializer.PublicOnly))

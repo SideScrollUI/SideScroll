@@ -7,7 +7,7 @@ public class TypeRepoString : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (typeSchema.Type == typeof(string))
 				return new TypeRepoString(serializer, typeSchema);
@@ -25,10 +25,10 @@ public class TypeRepoString : TypeRepo
 		writer.Write((string)obj);
 	}
 
-	protected override object CreateObject(int objectIndex)
+	protected override object? CreateObject(int objectIndex)
 	{
-		long position = Reader.BaseStream.Position;
-		Reader.BaseStream.Position = ObjectOffsets[objectIndex];
+		long position = Reader!.BaseStream.Position;
+		Reader.BaseStream.Position = ObjectOffsets![objectIndex];
 
 		object obj = Reader.ReadString();
 		Reader.BaseStream.Position = position;
