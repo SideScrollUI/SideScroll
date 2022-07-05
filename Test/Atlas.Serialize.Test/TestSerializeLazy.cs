@@ -7,7 +7,7 @@ namespace Atlas.Serialize.Test;
 [Category("SerializeLazy")]
 public class TestSerializeLazy : TestSerializeBase
 {
-	private SerializerFile _serializerFile;
+	private SerializerFile? _serializerFile;
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -33,10 +33,10 @@ public class TestSerializeLazy : TestSerializeBase
 			}
 		};
 
-		_serializerFile.Save(Call, input);
-		Parent output = _serializerFile.Load<Parent>(Call, true);
+		_serializerFile!.Save(Call, input);
+		Parent output = _serializerFile.Load<Parent>(Call, true)!;
 
-		Assert.AreEqual(output.Child.UintTest, input.Child.UintTest);
+		Assert.AreEqual(output.Child!.UintTest, input.Child.UintTest);
 	}
 
 	[Test, Description("Serialize Lazy Null Properties")]
@@ -44,8 +44,8 @@ public class TestSerializeLazy : TestSerializeBase
 	{
 		var input = new Parent();
 
-		_serializerFile.Save(Call, input);
-		Parent output = _serializerFile.Load<Parent>(Call, true);
+		_serializerFile!.Save(Call, input);
+		Parent output = _serializerFile.Load<Parent>(Call, true)!;
 
 		Assert.AreEqual(output.Child, input.Child);
 	}
@@ -55,8 +55,8 @@ public class TestSerializeLazy : TestSerializeBase
 	{
 		var input = new WriteRead();
 
-		_serializerFile.Save(Call, input);
-		WriteRead output = _serializerFile.Load<WriteRead>(Call, true);
+		_serializerFile!.Save(Call, input);
+		WriteRead output = _serializerFile.Load<WriteRead>(Call, true)!;
 		output.StringTest = "abc";
 		string temp = output.StringTest;
 
@@ -69,8 +69,8 @@ public class TestSerializeLazy : TestSerializeBase
 	{
 		var input = new Container();
 
-		_serializerFile.Save(Call, input);
-		Container output = _serializerFile.Load<Container>(Call, true);
+		_serializerFile!.Save(Call, input);
+		Container output = _serializerFile.Load<Container>(Call, true)!;
 
 		Assert.NotNull(output.Id);
 	}
@@ -88,7 +88,7 @@ public class TestSerializeLazy : TestSerializeBase
 
 	public class Parent
 	{
-		public virtual Child Child { get; set; } //= new Child();
+		public virtual Child? Child { get; set; } //= new Child();
 	}
 
 	public class Child

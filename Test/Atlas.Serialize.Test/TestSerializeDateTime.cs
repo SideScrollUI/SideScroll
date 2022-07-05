@@ -7,7 +7,7 @@ namespace Atlas.Serialize.Test;
 [Category("SerializeDateTime")]
 public class SerializeDateTime : TestSerializeBase
 {
-	private SerializerMemory _serializer;
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()

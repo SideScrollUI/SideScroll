@@ -8,7 +8,7 @@ namespace Atlas.Serialize.Test;
 [Category("SerializeItemCollection")]
 public class TestItemCollection : TestSerializeBase
 {
-	private SerializerMemory _serializer;
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()

@@ -47,7 +47,7 @@ public class TestTabItemCollection : TestBase
 	// Swap indices 0 and 1
 	private static void TestSwapping(IList list, object[] selectedObjects, TabItemCollection collection, HashSet<SelectedRow> selectedRows)
 	{
-		object obj = list[0];
+		object obj = list[0]!;
 		list[0] = list[1];
 		list[1] = obj;
 

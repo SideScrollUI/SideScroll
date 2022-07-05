@@ -9,14 +9,13 @@ namespace Atlas.Serialize.Test;
 [Category("Clone")]
 public class TestClone : TestSerializeBase
 {
-	private Log log;
-	private Serializer _serializer;
+	private Log Log => Call.Log;
+	private Serializer _serializer = new();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
 		Initialize("Clone");
-		log = Call.Log;
 	}
 
 	[SetUp]
@@ -52,14 +51,14 @@ public class TestClone : TestSerializeBase
 		var testLog = new TestLogBig();
 		testLog.Child("test");
 
-		var output = _serializer.Clone(log, testLog);
+		var output = _serializer.Clone(Log, testLog);
 	}
 
 	[Test, Description("Clone Test Log")]
 	public void CloneTestLog()
 	{
 		var testLog = new TestLog();
-		var output = _serializer.Clone(log, testLog);
+		var output = _serializer.Clone(Log, testLog);
 	}
 
 	[Test, Description("Clone Log Timer 2")]
@@ -68,14 +67,14 @@ public class TestClone : TestSerializeBase
 		Log testLog = new();
 		using (testLog.Timer("timing"))
 			testLog.Add("child");
-		Log output = _serializer.Clone(log, testLog);
+		Log output = _serializer.Clone(Log, testLog)!;
 	}
 
 	[Test, Description("Clone Log")]
 	public void CloneLog()
 	{
 		Log testLog = new();
-		Log output = _serializer.Clone(log, testLog);
+		Log output = _serializer.Clone(Log, testLog)!;
 	}
 
 	[Test, Description("Clone Log Child")]
@@ -84,7 +83,7 @@ public class TestClone : TestSerializeBase
 		Log testLog = new();
 		testLog.Call("test");
 
-		Log output = _serializer.Clone(log, testLog);
+		Log output = _serializer.Clone(Log, testLog)!;
 	}
 
 	[Test, Description("Clone Log Timer")]
@@ -92,7 +91,7 @@ public class TestClone : TestSerializeBase
 	{
 		var testLog = new LogTimer();
 
-		var output = _serializer.Clone(log, testLog);
+		var output = _serializer.Clone(Log, testLog);
 	}
 
 	private class MultipleArrays
@@ -105,15 +104,15 @@ public class TestClone : TestSerializeBase
 	public void ArrayMultipleTest()
 	{
 		var arrays = new MultipleArrays();
-		var output = _serializer.Clone(log, arrays);
+		var output = _serializer.Clone(Log, arrays);
 	}
 
 
 	[Test, Description("ArrayTest")]
 	public void ArrayTest()
 	{
-		int[] array1 = { };
-		int[] array2 = { };
+		int[] array1 = Array.Empty<int>();
+		int[] array2 = Array.Empty<int>();
 
 		var idxObjectToIndex = new Dictionary<object, int>(); // for saving, not filled in for loading
 		idxObjectToIndex[array1] = idxObjectToIndex.Count;
@@ -134,7 +133,7 @@ public class TestClone : TestSerializeBase
 		Log testLog = new();
 		using (testLog.Timer("test")) { }
 
-		Log output = _serializer.Clone(log, testLog);
+		Log output = _serializer.Clone(Log, testLog)!;
 	}
 
 	[Test, Description("Clone Properties")]
@@ -146,7 +145,7 @@ public class TestClone : TestSerializeBase
 			DoubleTest = 2.5,
 			StringTest = "abc"
 		};
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input)!;
 
 		Assert.AreEqual(output.UintTest, input.UintTest);
 		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
@@ -162,7 +161,7 @@ public class TestClone : TestSerializeBase
 			DoubleTest = 2.5,
 			StringTest = "abc"
 		};
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input)!;
 
 		Assert.AreEqual(output.UintTest, input.UintTest);
 		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
@@ -182,7 +181,7 @@ public class TestClone : TestSerializeBase
 			value = 5
 		};
 
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input);
 
 		Assert.AreEqual(input, output);
 
@@ -197,7 +196,7 @@ public class TestClone : TestSerializeBase
 	{
 		DateTime input = DateTime.Now;
 
-		DateTime output = _serializer.Clone(log, input);
+		DateTime output = _serializer.Clone(Log, input);
 
 		Assert.AreEqual(input, output);
 	}
@@ -208,7 +207,7 @@ public class TestClone : TestSerializeBase
 	{
 		DateTime input = DateTime.UtcNow;
 
-		DateTime output = _serializer.Clone(log, input);
+		DateTime output = _serializer.Clone(Log, input);
 
 		Assert.AreEqual(input, output);
 	}
@@ -218,7 +217,7 @@ public class TestClone : TestSerializeBase
 	{
 		int? input = 1;
 
-		int? output = _serializer.Clone(log, input);
+		int? output = _serializer.Clone(Log, input);
 
 		Assert.AreEqual(output, input);
 	}
@@ -231,7 +230,7 @@ public class TestClone : TestSerializeBase
 			UintTest = 5,
 			DoubleTest = 2.5
 		};
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input)!;
 
 		Assert.AreEqual(output.UintTest, input.UintTest);
 		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
@@ -242,7 +241,7 @@ public class TestClone : TestSerializeBase
 	{
 		int? input = 5;
 
-		int? output = _serializer.Clone(log, input);
+		int? output = _serializer.Clone(Log, input);
 
 		Assert.AreEqual(output, input);
 	}
@@ -255,7 +254,7 @@ public class TestClone : TestSerializeBase
 			UintTest = 5,
 			DoubleTest = 2.5
 		};
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input)!;
 
 		Assert.AreEqual(output.UintTest, input.UintTest);
 		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
@@ -266,7 +265,7 @@ public class TestClone : TestSerializeBase
 	{
 		int input = 5;
 
-		int output = _serializer.Clone(log, input);
+		int output = _serializer.Clone(Log, input);
 
 		Assert.AreEqual(input, output);
 	}
@@ -279,7 +278,7 @@ public class TestClone : TestSerializeBase
 			TestEnum = EnumTest.MyEnum.b,
 		};
 
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input)!;
 
 		Assert.AreEqual(output.TestEnum, input.TestEnum);
 	}
@@ -289,7 +288,7 @@ public class TestClone : TestSerializeBase
 	{
 		Type type = typeof(string);
 
-		Type output = _serializer.Clone(log, type);
+		Type output = _serializer.Clone(Log, type)!;
 
 		Assert.AreEqual(type, output);
 	}
@@ -302,7 +301,7 @@ public class TestClone : TestSerializeBase
 			[typeof(int)] = "integer"
 		};
 
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input)!;
 
 		Assert.IsTrue(output.ContainsKey(typeof(int)));
 		Assert.IsTrue(output.ContainsValue("integer"));
@@ -314,7 +313,7 @@ public class TestClone : TestSerializeBase
 		var input = new Circular();
 		input.Self = input;
 
-		Circular output = _serializer.Clone(log, input);
+		Circular output = _serializer.Clone(Log, input)!;
 
 		Assert.AreEqual(output.Self, output);
 	}
@@ -327,9 +326,9 @@ public class TestClone : TestSerializeBase
 		parent.Child = child;
 		child.Parent = parent;
 
-		Parent loaded = _serializer.Clone(log, parent);
+		Parent loaded = _serializer.Clone(Log, parent)!;
 
-		Assert.AreEqual(loaded.Child.Parent, loaded);
+		Assert.AreEqual(loaded.Child!.Parent, loaded);
 	}
 
 	[Test, Description("Clone Dictionary")]
@@ -337,7 +336,7 @@ public class TestClone : TestSerializeBase
 	{
 		var input = new DictionaryTest();
 
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input);
 
 		//Assert.AreEqual(input, output);
 	}
@@ -348,7 +347,7 @@ public class TestClone : TestSerializeBase
 		int[] input = { 1, 2 };
 		input[0] = 5;
 
-		int[] output = _serializer.Clone(log, input);
+		int[] output = _serializer.Clone(Log, input)!;
 
 		Assert.AreEqual(2, output.Length);
 		Assert.AreEqual(5, output[0]);
@@ -363,9 +362,9 @@ public class TestClone : TestSerializeBase
 			"test"
 		};
 
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input);
 
-		Assert.AreEqual(input.Count, output.Count);
+		Assert.AreEqual(input.Count, output!.Count);
 		Assert.True(output.Contains("test"));
 	}
 
@@ -378,9 +377,9 @@ public class TestClone : TestSerializeBase
 			Serialized = 10,
 		};
 
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input);
 
-		Assert.AreEqual(output.NonSerialized, 1);
+		Assert.AreEqual(output!.NonSerialized, 1);
 		Assert.AreEqual(output.Serialized, 10);
 	}
 
@@ -412,17 +411,17 @@ public class TestClone : TestSerializeBase
 
 	public class Circular
 	{
-		public Circular Self;
+		public Circular? Self;
 	}
 
 	public class Parent
 	{
-		public Child Child;
+		public Child? Child;
 	}
 
 	public class Child
 	{
-		public Parent Parent;
+		public Parent? Parent;
 	}
 
 	public class DictionaryTest
@@ -463,7 +462,7 @@ public class TestClone : TestSerializeBase
 	{
 		var input = new SubClassContainer();
 
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input)!;
 
 		Assert.AreEqual(output.SubClass.A, input.SubClass.A);
 	}
@@ -475,7 +474,7 @@ public class TestClone : TestSerializeBase
 		{
 			new SubClass() { A = 5 }
 		};
-		var output = _serializer.Clone(log, input);
+		var output = _serializer.Clone(Log, input)!;
 
 		Assert.AreEqual(output[0].A, 5);
 		//Assert.AreEqual(input, output); // only works on primitives
@@ -493,7 +492,7 @@ public class TestClone : TestSerializeBase
 		};
 		input[s] = b;
 
-		var output = _serializer.Clone(log, input);
+		var output = _serializer!.Clone(Log, input);
 
 		Assert.AreEqual(s.B, 3);
 	}

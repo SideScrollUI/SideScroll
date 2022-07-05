@@ -6,7 +6,7 @@ namespace Atlas.Serialize.Test;
 [Category("Serialize")]
 public class TestSerializePermissions : TestSerializeBase
 {
-	private SerializerMemory _serializer;
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -67,13 +67,13 @@ public class TestSerializePermissions : TestSerializeBase
 	{
 		public PrivateClass PrivateField = new();
 		public PrivateClass PrivateProperty { get; set; } = new();
-		public string PublicData;
+		public string? PublicData;
 	}
 
 	[PrivateData]
 	public class PrivateClass
 	{
-		public string Confidential { get; set; }
+		public string? Confidential { get; set; }
 	}
 
 	public class DerivedPrivateClass : PrivateClass
@@ -107,16 +107,16 @@ public class TestSerializePermissions : TestSerializeBase
 
 	public class PublicContainer
 	{
-		public PublicClass PublicField;
-		public PublicClass PublicProperty { get; set; }
-		public string NonSecure;
+		public PublicClass? PublicField;
+		public PublicClass? PublicProperty { get; set; }
+		public string? NonSecure;
 	}
 
 	[PublicData]
 	public class PublicClass
 	{
-		public string PublicData { get; set; }
-		public object RestrictedData { get; set; } // Only allows [PublicData]
+		public string? PublicData { get; set; }
+		public object? RestrictedData { get; set; } // Only allows [PublicData]
 	}
 
 	[Test]
@@ -138,7 +138,7 @@ public class TestSerializePermissions : TestSerializeBase
 	public class PrivatePropertyClass
 	{
 		[PrivateData]
-		public string Confidential { get; set; }
+		public string? Confidential { get; set; }
 	}
 
 	[Test]
@@ -180,18 +180,18 @@ public class TestSerializePermissions : TestSerializeBase
 
 	public class PublicDefaultsContainer
 	{
-		public PublicClass PublicField;
-		public PublicClass PublicProperty { get; set; }
-		public string NonSecure;
+		public PublicClass? PublicField;
+		public PublicClass? PublicProperty { get; set; }
+		public string? NonSecure;
 	}
 
 	[ProtectedData]
 	public class ProtectedPropertiesClass
 	{
 		[PublicData]
-		public string PublicProperty { get; set; } // Should save
+		public string? PublicProperty { get; set; } // Should save
 
-		public string NormalProperty { get; set; } // Shouldn't save
+		public string? NormalProperty { get; set; } // Shouldn't save
 	}
 
 	[Test]
@@ -215,9 +215,9 @@ public class TestSerializePermissions : TestSerializeBase
 	public class ProtectedFieldsClass
 	{
 		[PublicData]
-		public string PublicField; // Should save
+		public string? PublicField; // Should save
 
-		public string NormalField; // Shouldn't save
+		public string? NormalField; // Shouldn't save
 	}
 
 	[Test]

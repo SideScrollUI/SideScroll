@@ -8,7 +8,7 @@ namespace Atlas.Serialize.Test;
 [Category("Serialize")]
 public class TestSerializeCollections : TestSerializeBase
 {
-	private SerializerMemory _serializer;
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -180,9 +180,9 @@ public class TestSerializeCollections : TestSerializeBase
 
 	public class SelectedLabel : IEquatable<SelectedLabel>
 	{
-		public string Label;
+		public string? Label;
 
-		public override string ToString() => Label;
+		public override string? ToString() => Label;
 
 		public SelectedLabel() { }
 
@@ -196,12 +196,12 @@ public class TestSerializeCollections : TestSerializeBase
 			return Label?.GetHashCode() ?? 0;
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return Equals(obj as SelectedLabel);
 		}
 
-		public bool Equals(SelectedLabel other)
+		public bool Equals(SelectedLabel? other)
 		{
 			return other != null && Label == other.Label;
 		}
@@ -229,7 +229,7 @@ public class TestSerializeCollections : TestSerializeBase
 
 	public class SelectedItem
 	{
-		public string Label;
+		public string? Label;
 		public bool Pinned;
 	}
 

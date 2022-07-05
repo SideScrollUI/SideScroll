@@ -9,7 +9,7 @@ namespace Atlas.Serialize.Test;
 [Category("Performance")]
 public class TestSerializePerformance : TestSerializeBase
 {
-	private SerializerMemory _serializer;
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()

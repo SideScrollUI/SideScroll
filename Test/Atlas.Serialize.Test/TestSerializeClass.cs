@@ -9,7 +9,7 @@ namespace Atlas.Serialize.Test;
 [Category("Serialize")]
 public class SerializeClass : TestSerializeBase
 {
-	private SerializerMemory _serializer;
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -53,7 +53,7 @@ public class SerializeClass : TestSerializeBase
 		public uint UintTest { get; set; } = 1;
 		public double DoubleTest { get; set; } = 2.3;
 		public string StringTest { get; set; } = "mystring";
-		public Type Type { get; set; } = null;
+		public Type? Type { get; set; } = null;
 	}
 
 	[Test, Description("Serialize Properties")]
@@ -120,7 +120,7 @@ public class SerializeClass : TestSerializeBase
 
 	public class FieldInterfaceList
 	{
-		public IList List;
+		public IList? List;
 	}
 
 	[Test, Description("Serialize Properties")]
@@ -148,7 +148,7 @@ public class SerializeClass : TestSerializeBase
 
 	public class DerivedClassReference
 	{
-		public BaseClass BaseClass;
+		public BaseClass? BaseClass;
 	}
 
 	[Test, Description("Serialize Field Subclass")]
@@ -162,7 +162,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<DerivedClassReference>(Call);
 
-		Assert.AreEqual(output.BaseClass.A, input.BaseClass.A);
+		Assert.AreEqual(output.BaseClass!.A, input.BaseClass.A);
 	}
 
 	public class NoConstructorBaseClass
@@ -192,7 +192,7 @@ public class SerializeClass : TestSerializeBase
 	public class DerivedClassWithConstructorReference
 	{
 		[Serialized]
-		public NoConstructorBaseClass BaseClass;
+		public NoConstructorBaseClass? BaseClass;
 	}
 
 	[Test, Description("Serialize No Default Constructor Base Class")]
@@ -217,12 +217,12 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<DerivedClassWithConstructorReference>(Call);
 
-		Assert.AreEqual(output.BaseClass.B, input.BaseClass.B);
+		Assert.AreEqual(output.BaseClass!.B, input.BaseClass.B);
 	}
 
 	public class Circular
 	{
-		public Circular Self;
+		public Circular? Self;
 	}
 
 	[Test, Description("Serialize Circular Dependency")]
@@ -260,7 +260,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, parent);
 		Parent loaded = _serializer.Load<Parent>(Call);
 
-		Assert.AreEqual(loaded.Child.Parent, loaded);
+		Assert.AreEqual(loaded.Child!.Parent, loaded);
 	}
 
 	public class Base
@@ -327,12 +327,12 @@ public class SerializeClass : TestSerializeBase
 
 	public class Parent
 	{
-		public Child Child;
+		public Child? Child;
 	}
 
 	public class Child
 	{
-		public Parent Parent;
+		public Parent? Parent;
 	}
 
 	public class DictionaryTest
@@ -341,8 +341,8 @@ public class SerializeClass : TestSerializeBase
 
 		public DictionaryTest()
 		{
-			var parent = new Parent();
-			var child = new Child();
+			Parent parent = new();
+			Child child = new();
 			parent.Child = child;
 			child.Parent = parent;
 			Items[parent] = child;
@@ -352,14 +352,14 @@ public class SerializeClass : TestSerializeBase
 	[Test]
 	public void ToBase64String()
 	{
-		var input = new Properties()
+		Properties input = new()
 		{
 			UintTest = 5,
 			DoubleTest = 2.5,
 			StringTest = "abc",
 		};
 
-		string base64 = SerializerMemory.ToBase64String(Call, input);
+		string base64 = SerializerMemory.ToBase64String(Call, input)!;
 		Assert.AreEqual(408, base64.Length);
 	}
 }
