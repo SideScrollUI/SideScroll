@@ -11,6 +11,7 @@ public interface IDataRepoInstance
 	//object GetObject(string key);
 }
 
+[Unserialized]
 public class DataRepoInstance<T> : IDataRepoInstance
 {
 	private const string DefaultKey = ".Default"; // todo: support multiple directory levels?

@@ -4,6 +4,7 @@ using System.Linq;
 namespace Atlas.Serialize;
 
 // Holds an in memory copy of the DataRepo
+[Unserialized]
 public class DataRepoView<T> : DataRepoInstance<T>
 {
 	//public DataRepo<T> DataRepo; // Add template version?
