@@ -133,7 +133,7 @@ public class LogEntry : INotifyPropertyChanged
 		// Don't initialize for faster deserializing?
 	}
 
-	public LogEntry(LogSettings logSettings, LogLevel logLevel, string text, Tag[] tags)
+	public LogEntry(LogSettings? logSettings, LogLevel logLevel, string text, Tag[]? tags)
 	{
 		Settings = logSettings;
 		RootLog = this;

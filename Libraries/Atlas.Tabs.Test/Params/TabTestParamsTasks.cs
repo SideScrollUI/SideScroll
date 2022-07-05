@@ -15,7 +15,7 @@ public class TabTestParamsTasks : ITab
 		private const string DataKey = "Params";
 
 		private readonly ItemCollectionUI<ParamTestResult> _items = new();
-		private ParamTestItem _paramTestItem;
+		private ParamTestItem? _paramTestItem;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -28,7 +28,7 @@ public class TabTestParamsTasks : ITab
 			};
 
 			_paramTestItem = LoadData<ParamTestItem>(DataKey);
-			if (_paramTestItem.DateTime.Ticks == 0)
+			if (_paramTestItem!.DateTime.Ticks == 0)
 				_paramTestItem.DateTime = DateTime.Now; // in case the serializer loses it
 			model.AddObject(_paramTestItem);
 
@@ -37,10 +37,10 @@ public class TabTestParamsTasks : ITab
 
 		private void Add(Call call)
 		{
-			SaveData(DataKey, _paramTestItem);
+			SaveData(DataKey, _paramTestItem!);
 
-			ParamTestItem clone = _paramTestItem.DeepClone(call);
-			var result = new ParamTestResult()
+			ParamTestItem clone = _paramTestItem!.DeepClone(call)!;
+			ParamTestResult result = new()
 			{
 				Parameters = clone,
 			};
@@ -49,7 +49,7 @@ public class TabTestParamsTasks : ITab
 
 		private async Task LongTaskAsync(Call call)
 		{
-			call.TaskInstance.ProgressMax = 10;
+			call.TaskInstance!.ProgressMax = 10;
 
 			for (int i = 0; i < 10; i++)
 			{
@@ -62,7 +62,7 @@ public class TabTestParamsTasks : ITab
 
 	public class ParamTestResult
 	{
-		public ParamTestItem Parameters;
-		public string String => Parameters.Name;
+		public ParamTestItem? Parameters;
+		public string? String => Parameters?.Name;
 	}
 }

@@ -45,11 +45,11 @@ public class TabTestFilter : ITab
 
 	public class TestFilterItem
 	{
-		public string Text { get; set; }
+		public string? Text { get; set; }
 		public int Number { get; set; }
 		//[InnerValue]
-		public TestFilterItem Child;
+		public TestFilterItem? Child;
 
-		public override string ToString() => Text;
+		public override string? ToString() => Text;
 	}
 }

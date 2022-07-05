@@ -21,7 +21,7 @@ public class TabTestChartSplit : ITab
 
 		public class ChartSample
 		{
-			public string Name { get; set; }
+			public string? Name { get; set; }
 			// Add [UnitType]
 			public int SeriesAlpha { get; set; }
 			// Add [UnitType]
@@ -60,7 +60,7 @@ public class TabTestChartSplit : ITab
 
 		private void StartTask(Call call)
 		{
-			CancellationToken token = call.TaskInstance.TokenSource.Token;
+			CancellationToken token = call.TaskInstance!.TokenSource.Token;
 			for (int i = 0; !token.IsCancellationRequested; i++)
 			{
 				Invoke(AddSampleCallback, call);
@@ -70,7 +70,7 @@ public class TabTestChartSplit : ITab
 
 		private void AddSample(int i)
 		{
-			var sample = new ChartSample()
+			ChartSample sample = new()
 			{
 				Name = "Name " + i.ToString(),
 				SeriesAlpha = _random.Next(0, 100),
@@ -86,9 +86,9 @@ public class TabTestChartSplit : ITab
 		}
 
 		// UI context
-		private void AddSampleCallback(object state)
+		private void AddSampleCallback(object? state)
 		{
-			Call call = (Call)state;
+			Call call = (Call)state!;
 
 			call.Log.Add("test");
 

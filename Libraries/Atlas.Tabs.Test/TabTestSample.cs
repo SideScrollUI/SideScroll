@@ -15,7 +15,7 @@ public class TabSample : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollection<SampleItem> _sampleItems;
+		private ItemCollection<SampleItem>? _sampleItems;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -46,7 +46,7 @@ DataGrids
 
 		private void Sleep(Call call)
 		{
-			call.TaskInstance.ProgressMax = 10;
+			call.TaskInstance!.ProgressMax = 10;
 			for (int i = 0; i < 10; i++)
 			{
 				Thread.Sleep(1000);
@@ -59,7 +59,7 @@ DataGrids
 		{
 			for (int i = 0; i < count; i++)
 			{
-				int id = _sampleItems.Count;
+				int id = _sampleItems!.Count;
 				_sampleItems.Add(new SampleItem(id, "Item " + id));
 			}
 		}

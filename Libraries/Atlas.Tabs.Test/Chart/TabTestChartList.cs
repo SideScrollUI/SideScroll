@@ -11,7 +11,7 @@ public class TabTestChartList : ITab
 
 	public class Instance : TabInstance
 	{
-		private List<ItemCollection<int>> _series;
+		private List<ItemCollection<int>>? _series;
 		private readonly Random _random = new();
 
 		public override void Load(Call call, TabModel model)
@@ -47,7 +47,7 @@ public class TabTestChartList : ITab
 
 		private void StartTask(Call call)
 		{
-			CancellationToken token = call.TaskInstance.TokenSource.Token;
+			CancellationToken token = call.TaskInstance!.TokenSource.Token;
 			for (int i = 0; !token.IsCancellationRequested; i++)
 			{
 				Invoke(AddSampleUI, call);
@@ -58,7 +58,7 @@ public class TabTestChartList : ITab
 		private void AddSample()
 		{
 			int multiplier = 1;
-			foreach (var list in _series)
+			foreach (var list in _series!)
 			{
 				int amount = (_random.Next() % 1000) * multiplier;
 				list.Add(amount);

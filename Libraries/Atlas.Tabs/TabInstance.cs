@@ -95,7 +95,7 @@ public class TabInstance : IDisposable
 		set => Model.Name = value;
 	}
 
-	public DataRepo? DataApp => Project?.DataApp;
+	public DataRepo DataApp => Project?.DataApp!;
 
 	public TabViewSettings TabViewSettings = new();
 	public TabBookmark? TabBookmark { get; set; }

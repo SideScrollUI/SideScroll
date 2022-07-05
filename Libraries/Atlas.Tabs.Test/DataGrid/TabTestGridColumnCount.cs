@@ -10,7 +10,7 @@ public class TabTestGridColumnCount : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollectionUI<TestItem> _items;
+		private ItemCollectionUI<TestItem>? _items;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -29,8 +29,8 @@ public class TabTestGridColumnCount : ITab
 		{
 			for (int i = 0; i < count; i++)
 			{
-				int number = _items.Count;
-				var testItem = new TestItem()
+				int number = _items!.Count;
+				TestItem testItem = new()
 				{
 					Index = number,
 				};

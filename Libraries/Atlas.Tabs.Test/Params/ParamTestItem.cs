@@ -12,7 +12,7 @@ public class ParamTestItem
 	public string Name { get; set; } = "Test";
 
 	[Watermark("Description")]
-	public string Description { get; set; }
+	public string? Description { get; set; }
 
 	public bool Boolean { get; set; } = true;
 
@@ -52,14 +52,12 @@ public class ParamTestItem
 
 public class ParamListItem
 {
-	public string Name { get; set; }
+	public string? Name { get; set; }
 	public int Value { get; set; }
 
-	public override string ToString() => Name;
+	public override string? ToString() => Name;
 
-	public ParamListItem()
-	{
-	}
+	public ParamListItem() { }
 
 	public ParamListItem(string name, int value)
 	{

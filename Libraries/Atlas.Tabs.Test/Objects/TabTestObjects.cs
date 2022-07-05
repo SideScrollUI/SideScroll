@@ -39,7 +39,7 @@ public class ValueSub : ValueBase
 
 public class TestObjectMembers
 {
-	public static readonly string StaticStringField;
+	public static readonly string? StaticStringField;
 
 	public bool BoolField;
 	public bool BoolProperty { get; }
@@ -47,8 +47,8 @@ public class TestObjectMembers
 	[Item]
 	public bool BoolMethod() => true;
 
-	public string StringField;
-	public string StringProperty { get; }
+	public string? StringField;
+	public string? StringProperty { get; }
 
 	[Item]
 	public string StringMethod() => "string";

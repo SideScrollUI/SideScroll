@@ -9,7 +9,7 @@ public class TabTestGridDictionary : ITab
 
 	public class Instance : TabInstance
 	{
-		private Dictionary<string, TestItem> _items;
+		private Dictionary<string, TestItem>? _items;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -23,7 +23,7 @@ public class TabTestGridDictionary : ITab
 			};
 		}
 
-		private void AddEntries(Call call)
+		private void AddEntries(Call? call)
 		{
 			for (int i = 0; i < 20; i++)
 			{
@@ -32,16 +32,16 @@ public class TabTestGridDictionary : ITab
 					Name = i.ToString(),
 					Value = i * 100,
 				};
-				_items.Add(testItem.Name, testItem);
+				_items!.Add(testItem.Name, testItem);
 			}
 		}
 	}
 
 	public class TestItem
 	{
-		public string Name { get; set; }
+		public string? Name { get; set; }
 		public int Value { get; set; }
 
-		public override string ToString() => Name;
+		public override string? ToString() => Name;
 	}
 }

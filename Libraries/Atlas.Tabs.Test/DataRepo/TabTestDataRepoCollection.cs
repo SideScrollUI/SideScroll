@@ -13,8 +13,8 @@ public class TabTestDataRepoCollection : ITab
 	{
 		private const string RepoId = "TestRepo";
 
-		private ItemCollection<SampleItem> _sampleItems;
-		private DataRepoInstance<SampleItem> _dataRepoItems;
+		private ItemCollection<SampleItem>? _sampleItems;
+		private DataRepoInstance<SampleItem>? _dataRepoItems;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -43,9 +43,9 @@ public class TabTestDataRepoCollection : ITab
 
 		private void Add(Call call)
 		{
-			var sampleItem = new SampleItem(_sampleItems.Count, "Item " + _sampleItems.Count);
-			RemoveItem(sampleItem.Name); // Remove previous result so refocus works
-			_dataRepoItems.Save(call, sampleItem.ToString(), sampleItem);
+			var sampleItem = new SampleItem(_sampleItems!.Count, "Item " + _sampleItems.Count);
+			RemoveItem(sampleItem!.Name!); // Remove previous result so refocus works
+			_dataRepoItems!.Save(call, sampleItem.ToString()!, sampleItem);
 			_sampleItems.Add(sampleItem);
 		}
 
@@ -57,39 +57,39 @@ public class TabTestDataRepoCollection : ITab
 
 		private void Replace(Call call)
 		{
-			var sampleItem = new SampleItem(_sampleItems.Count, "Item 0");
-			RemoveItem(sampleItem.Name); // Remove previous result so refocus works
-			_dataRepoItems.Save(call, sampleItem.ToString(), sampleItem);
+			var sampleItem = new SampleItem(_sampleItems!.Count, "Item 0");
+			RemoveItem(sampleItem.Name!); // Remove previous result so refocus works
+			_dataRepoItems!.Save(call, sampleItem.ToString()!, sampleItem);
 			_sampleItems.Add(sampleItem);
 		}
 
 		private void Delete(Call call)
 		{
 			// can't modify SelectedItems while iterating so create a copy, find better way
-			var selectedItems = new List<SampleItem>();
-			foreach (SampleItem item in SelectedItems)
+			List<SampleItem> selectedItems = new();
+			foreach (SampleItem item in SelectedItems!)
 			{
 				selectedItems.Add(item);
 			}
 
 			foreach (SampleItem item in selectedItems)
 			{
-				RemoveItem(item.Name);
+				RemoveItem(item.Name!);
 			}
 		}
 
 		private void DeleteAll(Call call)
 		{
-			_dataRepoItems.DeleteAll();
-			_sampleItems.Clear();
+			_dataRepoItems!.DeleteAll();
+			_sampleItems!.Clear();
 		}
 
 		public void RemoveItem(string key)
 		{
-			_dataRepoItems.Delete(key);
-			SampleItem existing = _sampleItems.SingleOrDefault(i => i.Name == key);
+			_dataRepoItems!.Delete(key);
+			SampleItem? existing = _sampleItems!.SingleOrDefault(i => i.Name == key);
 			if (existing != null)
-				_sampleItems.Remove(existing);
+				_sampleItems!.Remove(existing);
 		}
 	}
 
@@ -97,13 +97,11 @@ public class TabTestDataRepoCollection : ITab
 	{
 		[DataKey]
 		public int Id { get; set; }
-		public string Name { get; set; }
+		public string? Name { get; set; }
 
-		public override string ToString() => Name;
+		public override string? ToString() => Name;
 
-		public SampleItem()
-		{
-		}
+		public SampleItem() { }
 
 		public SampleItem(int id, string name)
 		{
