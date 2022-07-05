@@ -184,7 +184,7 @@ public class TabControlParams : Grid
 		}
 		else if (type.IsEnum || listAttribute != null)
 		{
-			control = new TabControlComboBox(property, listAttribute);
+			control = new TabControlComboBox(property, listAttribute?.PropertyName);
 		}
 		else if (typeof(DateTime).IsAssignableFrom(type))
 		{
