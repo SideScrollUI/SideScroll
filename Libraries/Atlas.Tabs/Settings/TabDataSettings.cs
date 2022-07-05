@@ -24,11 +24,11 @@ public class TabDataSettings
 	public List<string> ColumnNameOrder { get; set; } = new(); // Order to show the columns in, users can drag columns around to reorder these
 	public int TotalColumns { get; set; } // unused, use to detect changes?
 
-	public string SortColumnName { get; set; } // Currently sorted column
+	public string? SortColumnName { get; set; } // Currently sorted column
 	public ListSortDirection SortDirection { get; set; }
 
-	public string Filter { get; set; }
-	public string Address
+	public string? Filter { get; set; }
+	public string? Address
 	{
 		get
 		{
@@ -40,7 +40,7 @@ public class TabDataSettings
 		}
 	}
 
-	public override string ToString() => Address;
+	public override string? ToString() => Address;
 
 	public static List<MethodColumn> GetButtonMethods(Type type)
 	{
@@ -70,7 +70,7 @@ public class TabDataSettings
 	{
 		lock (_visiblePropertiesCache)
 		{
-			if (_visiblePropertiesCache.TryGetValue(type, out List<PropertyInfo> list))
+			if (_visiblePropertiesCache.TryGetValue(type, out List<PropertyInfo>? list))
 				return list;
 
 			list = type.GetVisibleProperties();
@@ -84,7 +84,7 @@ public class TabDataSettings
 		public readonly MethodInfo MethodInfo;
 		public string Label { get; set; }
 
-		public MethodColumn(MethodInfo methodInfo, string label = null)
+		public MethodColumn(MethodInfo methodInfo, string? label = null)
 		{
 			MethodInfo = methodInfo;
 			Label = label ?? methodInfo.GetCustomAttribute<ButtonColumnAttribute>()?.Name ?? methodInfo.Name;
@@ -144,7 +144,7 @@ public class TabDataSettings
 			var orderedPropertyInfos = new List<PropertyInfo>();
 			foreach (string columnName in ColumnNameOrder)
 			{
-				if (propertyNames.TryGetValue(columnName, out PropertyInfo propertyInfo))
+				if (propertyNames.TryGetValue(columnName, out PropertyInfo? propertyInfo))
 				{
 					orderedPropertyInfos.Add(propertyInfo);
 					propertyNames.Remove(columnName);
@@ -168,7 +168,7 @@ public class TabDataSettings
 		foreach (PropertyInfo propertyInfo in visibleProperties)
 		{
 			string label;
-			NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
+			NameAttribute? attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 			if (attribute != null)
 			{
 				label = attribute.Name;

@@ -22,11 +22,11 @@ public class ListPair : IListPair, IListItem, INotifyPropertyChanged, IMaxDesire
 	public int? MaxDesiredWidth { get; set; }
 
 #pragma warning disable 414
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public override string ToString() => Key?.ToString() ?? "";
 
-	public ListPair(object key, object value, object obj = null, int? maxDesiredWidth = null)
+	public ListPair(object key, object value, object? obj = null, int? maxDesiredWidth = null)
 	{
 		Key = key;
 		Value = value;

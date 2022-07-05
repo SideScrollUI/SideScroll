@@ -12,9 +12,9 @@ public class TaskDelegateParams : TaskCreator
 
 	public override string? ToString() => Label;
 
-	public TaskDelegateParams(Call call, string label, CallActionParams callAction, bool useTask, string description, object[] objects)
+	public TaskDelegateParams(Call? call, string label, CallActionParams callAction, bool useTask, string? description, object[] objects)
 	{
-		Call = call;
+		Call = call ?? new();
 		Label = label;
 		CallAction = callAction;
 		UseTask = useTask;

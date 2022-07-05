@@ -16,10 +16,10 @@ public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 	public bool CacheEnabled { get; set; }
 
 	private bool _valueCached;
-	private object _valueObject = null;
+	private object? _valueObject = null;
 
 	[Editing, InnerValue, WordWrap]
-	public override object Value
+	public override object? Value
 	{
 		get
 		{
@@ -48,10 +48,10 @@ public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 		}
 	}
 
-	public override string ToString() => Name;
+	public override string? ToString() => Name;
 
 	public ListDelegate(LoadObjectAsync loadAction, bool cached = true) :
-		base(loadAction.Target, loadAction.Method)
+		base(loadAction.Target!, loadAction.Method)
 	{
 		LoadAction = loadAction;
 		CacheEnabled = cached;
@@ -59,7 +59,7 @@ public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 
 		Name = MethodInfo.Name.WordSpaced();
 
-		NameAttribute attribute = MethodInfo.GetCustomAttribute<NameAttribute>();
+		NameAttribute? attribute = MethodInfo.GetCustomAttribute<NameAttribute>();
 		if (attribute != null)
 			Name = attribute.Name;
 	}

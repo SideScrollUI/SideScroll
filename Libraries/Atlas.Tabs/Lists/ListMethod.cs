@@ -14,10 +14,10 @@ public class ListMethod : ListMember
 	private bool CacheEnabled { get; set; }
 
 	private bool _valueCached;
-	private object _valueObject;
+	private object? _valueObject;
 
 	[Editing, InnerValue, WordWrap]
-	public override object Value
+	public override object? Value
 	{
 		get
 		{
@@ -46,7 +46,7 @@ public class ListMethod : ListMember
 		}
 	}
 
-	public override string ToString() => Name;
+	public override string? ToString() => Name;
 
 	public ListMethod(object obj, MethodInfo methodInfo, bool cached = true) :
 		base(obj, methodInfo)
@@ -61,11 +61,11 @@ public class ListMethod : ListMember
 	{
 		Name = MethodInfo.Name.TrimEnd("Async").WordSpaced();
 
-		NameAttribute attribute = MethodInfo.GetCustomAttribute<NameAttribute>();
+		NameAttribute? attribute = MethodInfo.GetCustomAttribute<NameAttribute>();
 		if (attribute != null)
 			Name = attribute.Name;
 
-		ItemAttribute itemAttribute = MethodInfo.GetCustomAttribute<ItemAttribute>();
+		ItemAttribute? itemAttribute = MethodInfo.GetCustomAttribute<ItemAttribute>();
 		if (itemAttribute != null && itemAttribute.Name != null)
 			Name = itemAttribute.Name;
 	}
@@ -77,7 +77,7 @@ public class ListMethod : ListMember
 		return (object)((dynamic)task).Result;
 	}*/
 
-	private object GetValue()
+	private object? GetValue()
 	{
 		var parameters = Array.Empty<object>();
 		ParameterInfo[] parameterInfos = MethodInfo.GetParameters();
@@ -125,7 +125,7 @@ public class ListMethod : ListMember
 
 	public static bool IsVisible(MethodInfo methodInfo)
 	{
-		if (methodInfo.DeclaringType.IsNotPublic ||
+		if (methodInfo.DeclaringType!.IsNotPublic ||
 			methodInfo.ReturnType == null ||
 			methodInfo.GetCustomAttribute<HiddenAttribute>() != null || // [Hidden]
 			methodInfo.GetCustomAttribute<HiddenRowAttribute>() != null || // [HiddenRow]

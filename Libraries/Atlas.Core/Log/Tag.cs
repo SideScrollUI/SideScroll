@@ -20,7 +20,7 @@ public class Tag
 
 	public override string ToString()
 	{
-		string? text = Value?.Formatted();
+		string? text = Value.Formatted();
 		if (text?.Contains(" ") == true)
 			text = '"' + text + '"';
 

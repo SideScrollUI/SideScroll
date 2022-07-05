@@ -45,7 +45,7 @@ public interface ITabCreatorAsync
 
 public class TabObject
 {
-	public object Object { get; set; }
+	public object? Object { get; set; }
 	public bool Fill { get; set; } // Stretch to Fill all vertical space
 }
 
@@ -59,10 +59,10 @@ public enum AutoSelectType
 
 public class TabModel
 {
-	public string Id { get; set; } // todo: Unique key for bookmarks?
+	public string? Id { get; set; } // todo: Unique key for bookmarks?
 	public string Name { get; set; } = "<TabModel>";
-	public string Notes { get; set; } // not used anymore
-	public object Object { get; set; } // optional
+	public string? Notes { get; set; } // not used anymore
+	public object? Object { get; set; } // optional
 
 	public AutoSelectType AutoSelect { get; set; } = AutoSelectType.FirstSavedOrNew;
 
@@ -71,12 +71,12 @@ public class TabModel
 	public bool ShowSearch { get; set; } // Show search filter above DataGrids
 	public bool ShowTasks { get; set; } // Will add the Tasks to show logs when an error occurs
 
-	public SearchFilter SearchFilter { get; set; } // DataGrid filtering will also update this filter
+	public SearchFilter? SearchFilter { get; set; } // DataGrid filtering will also update this filter
 
 	public int MinDesiredWidth { get; set; } = 0;
 	public int MaxDesiredWidth { get; set; } = 1500;
 
-	public IList Actions { get; set; }
+	public IList? Actions { get; set; }
 	public TaskInstanceCollection Tasks { get; set; } = new();
 
 	public List<IList> ItemList { get; set; } = new();
@@ -84,7 +84,7 @@ public class TabModel
 	public List<TabObject> Objects { get; set; } = new();
 	//public List<ITabControl> CustomTabControls { get; set; } = new(); // should everything be a custom control? tabControls?
 
-	public IList Items
+	public IList? Items
 	{
 		get => ItemList.FirstOrDefault();
 		set
@@ -94,10 +94,10 @@ public class TabModel
 		}
 	}
 
-	public object DefaultSelectedItem { get; set; }
+	public object? DefaultSelectedItem { get; set; }
 
 	// used for saving/loading TabViewSettings
-	public string CustomSettingsPath { get; set; } // Must be set before LoadUI()
+	public string? CustomSettingsPath { get; set; } // Must be set before LoadUI()
 	public string ObjectTypePath
 	{
 		get
@@ -106,7 +106,7 @@ public class TabModel
 				return "(null)";
 
 			Type objType = Object.GetType();
-			return objType.FullName; // need to hash this or escape it
+			return objType.FullName!; // need to hash this or escape it
 		}
 	}
 
@@ -121,7 +121,7 @@ public class TabModel
 		Name = name;
 	}
 
-	public static TabModel Create(string name, object obj)
+	public static TabModel? Create(string name, object obj)
 	{
 		if (TabUtils.ObjectHasLinks(obj) == false && obj is not Enum)
 			return null;
@@ -153,14 +153,14 @@ public class TabModel
 		return tabObject;
 	}
 
-	public void AddData(object obj)
+	public void AddData(object? obj)
 	{
 		Object = obj;
 		if (obj == null)
 			return;
 
 		Type type = obj.GetType();
-		if (type.Assembly.ManifestModule.ScopeName == "Lazy")
+		if (type.Assembly.ManifestModule.ScopeName == "Lazy" && type.BaseType != null)
 		{
 			type = type.BaseType; // Use original type for lazy loaded serializer wrapper classes, so properties appear in the same MetadataToken order
 		}
@@ -210,7 +210,7 @@ public class TabModel
 
 	private bool AddList(IList list, Type listType)
 	{
-		Type elementType = listType.GetElementTypeForAll();
+		Type? elementType = listType.GetElementTypeForAll();
 		if (elementType == null)
 			return false;
 		
@@ -242,12 +242,12 @@ public class TabModel
 		{
 			// this doesn't work if there's a null value in the array
 			// should we databind columns to Value property in Nullable?
-			Type underlyingType = Nullable.GetUnderlyingType(elementType);
+			Type? underlyingType = Nullable.GetUnderlyingType(elementType);
 			if (underlyingType != null)
 				elementType = underlyingType;
 
 			Type genericType = typeof(ItemCollection<>).MakeGenericType(elementType);
-			IList iNewList = (IList)Activator.CreateInstance(genericType);
+			IList iNewList = (IList)Activator.CreateInstance(genericType)!;
 			foreach (object child in list)
 				iNewList.Add(child);
 			ItemList.Add(iNewList);
@@ -278,7 +278,7 @@ public class TabModel
 		ItemList.Add(new ItemCollection<DictionaryEntry>(sortedList));
 	}
 
-	public static Type[] GetInterfaceGenericArguments(Type type, Type genericType)
+	public static Type[]? GetInterfaceGenericArguments(Type type, Type genericType)
 	{
 		foreach (Type iType in type.GetInterfaces())
 		{
@@ -301,7 +301,7 @@ public class TabModel
 
 		Type elementType = GetElementType(type);
 		Type genericType = typeof(ItemCollection<>).MakeGenericType(elementType);
-		IList iList = (IList)Activator.CreateInstance(genericType);
+		IList iList = (IList)Activator.CreateInstance(genericType)!;
 		foreach (var item in iEnumerable)
 		{
 			iList.Add(item);
@@ -316,7 +316,7 @@ public class TabModel
 		if (type.IsAssignableToGenericType(typeof(IEnumerable<>)))
 		{
 			// generic interface might be in interface, not primary class
-			Type[] types = GetInterfaceGenericArguments(type, typeof(IEnumerable<>));
+			Type[] types = GetInterfaceGenericArguments(type, typeof(IEnumerable<>))!;
 			elementType = types[0];
 		}
 		else
@@ -350,7 +350,7 @@ public class TabModel
 			if (ItemList[0] is IItemCollection itemCollection && !itemCollection.Skippable)
 				return;
 
-			var firstItem = ItemList[0][0];
+			var firstItem = ItemList[0][0]!;
 			var skippableAttribute = firstItem.GetType().GetCustomAttribute<SkippableAttribute>();
 			if (skippableAttribute != null)
 			{
@@ -390,7 +390,7 @@ public class TabModel
 
 	public TabBookmark FindMatches(Filter filter, int depth)
 	{
-		var tabBookmark = new TabBookmark()
+		TabBookmark tabBookmark = new()
 		{
 			Name = Name,
 			ViewSettings = new TabViewSettings(),
@@ -401,7 +401,7 @@ public class TabModel
 		{
 			List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleElementProperties(iList);
 
-			var tabDataSettings = new TabDataSettings();
+			TabDataSettings tabDataSettings = new();
 			tabBookmark.ViewSettings.TabDataSettings.Add(tabDataSettings);
 
 			foreach (object obj in iList)
@@ -418,7 +418,7 @@ public class TabModel
 				}
 				else if (depth >= 0)
 				{
-					TabModel tabModel = Create(obj.Formatted(), obj);
+					TabModel? tabModel = Create(obj.Formatted() ?? "", obj);
 					if (tabModel != null)
 					{
 						TabBookmark childNode = tabModel.FindMatches(filter, depth);
@@ -431,7 +431,7 @@ public class TabModel
 								Object = obj,
 							};
 							tabDataSettings.SelectedRows.Add(selectedRow);
-							tabBookmark.ChildBookmarks.Add(childNode.Name, childNode);
+							tabBookmark.ChildBookmarks.Add(childNode.Name!, childNode);
 							tabBookmark.SelectedObjects.Add(obj);
 						}
 					}

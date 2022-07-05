@@ -18,7 +18,7 @@ public class ListField : ListMember, IPropertyEditable
 	public bool IsFormatted => (FieldInfo.GetCustomAttribute<FormattedAttribute>() != null);
 
 	[Editing, InnerValue]
-	public override object Value
+	public override object? Value
 	{
 		get
 		{
@@ -45,7 +45,7 @@ public class ListField : ListMember, IPropertyEditable
 	[Hidden]
 	public bool IsFieldVisible => FieldInfo.IsRowVisible();
 
-	public override string ToString() => Name;
+	public override string? ToString() => Name;
 
 	public ListField(object obj, FieldInfo fieldInfo) :
 		base(obj, fieldInfo)
@@ -53,9 +53,9 @@ public class ListField : ListMember, IPropertyEditable
 		FieldInfo = fieldInfo;
 		AutoLoad = !fieldInfo.IsStatic;
 
-		NameAttribute attribute = fieldInfo.GetCustomAttribute<NameAttribute>();
+		NameAttribute? nameAttribute = fieldInfo.GetCustomAttribute<NameAttribute>();
 
-		Name = attribute?.Name ?? fieldInfo.Name.WordSpaced();
+		Name = nameAttribute?.Name ?? fieldInfo.Name.WordSpaced();
 
 		if (FieldInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
 			Name = "* " + Name;
@@ -100,7 +100,7 @@ public class ListField : ListMember, IPropertyEditable
 				return false;
 		}
 
-		var classHideAttribute = FieldInfo.DeclaringType.GetCustomAttribute<HideAttribute>();
+		var classHideAttribute = FieldInfo.DeclaringType!.GetCustomAttribute<HideAttribute>();
 		if (classHideAttribute?.Values != null)
 		{
 			if (classHideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))

@@ -7,9 +7,10 @@ namespace Atlas.Core;
 
 public static class Paths
 {
-	public static string Combine(string path, params string[] paths)
+	public static string Combine(string? path, params string?[] paths)
 	{
-		foreach (string part in paths)
+		path ??= "";
+		foreach (string? part in paths)
 		{
 			string name = part ?? "(null)";
 			path = Path.Combine(path, name.TrimStart('/'));

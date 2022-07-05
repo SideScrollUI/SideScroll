@@ -25,7 +25,7 @@ public class Linker
 	}
 
 #pragma warning disable CS1998 // subclasses can by async
-	public virtual async Task<Bookmark> GetBookmarkAsync(Call call, string uri, bool checkVersion)
+	public virtual async Task<Bookmark?> GetBookmarkAsync(Call call, string uri, bool checkVersion)
 #pragma warning restore CS1998
 	{
 		if (uri == null)

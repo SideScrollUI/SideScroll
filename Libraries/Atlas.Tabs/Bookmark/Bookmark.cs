@@ -17,9 +17,9 @@ public enum BookmarkType
 public class Bookmark
 {
 	[Name("Bookmark")]
-	public string Name { get; set; }
-	public string Changed { get; set; } // what was just selected, used for naming, find better default name
-	public Type Type { get; set; } // Must be ITab
+	public string? Name { get; set; }
+	public string? Changed { get; set; } // what was just selected, used for naming, find better default name
+	public Type? Type { get; set; } // Must be ITab
 	public string Address => TabBookmark.Address;
 	public string Path => (Name != null ? (Name + ":\n") : "") + Address;
 	public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
@@ -50,7 +50,7 @@ public class Bookmark
 
 	public string ToBase64String(Call call, bool publicOnly)
 	{
-		return SerializerMemory.ToBase64String(call, this, publicOnly);
+		return SerializerMemory.ToBase64String(call, this, publicOnly)!;
 	}
 
 	public static Bookmark Create(Call call, string encoded, bool publicOnly)
@@ -66,10 +66,10 @@ public class Bookmark
 
 	public static Bookmark Create(params string[] labels)
 	{
-		var bookmark = new Bookmark
+		Bookmark bookmark = new()
 		{
 			Imported = true,
-			TabBookmark = TabBookmark.Create(labels)
+			TabBookmark = TabBookmark.Create(labels)!
 		};
 		return bookmark;
 	}

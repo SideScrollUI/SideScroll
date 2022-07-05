@@ -4,8 +4,8 @@ namespace Atlas.Tabs;
 
 public class UserSettings
 {
-	public string ProjectPath { get; set; }
-	public string BookmarkPath { get; set; }
+	public string? ProjectPath { get; set; }
+	public string? BookmarkPath { get; set; }
 
 	public string SettingsPath => Paths.Combine(ProjectPath, @"Settings.atlas");
 

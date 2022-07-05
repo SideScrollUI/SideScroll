@@ -23,14 +23,14 @@ public static class TabUtils
 		if (obj is IHasLinks hasLinks)
 			return hasLinks.HasLinks;
 
-		object value = obj.GetInnerValue();
+		object? value = obj.GetInnerValue();
 		if (value == null)
 			return false;
 
 		if (value is IListItem listItem)
 			value = listItem.Value;
 
-		Type type = value.GetType();
+		Type type = value!.GetType();
 		if (type.IsPrimitive ||
 			type.IsEnum ||
 			type == typeof(string) ||

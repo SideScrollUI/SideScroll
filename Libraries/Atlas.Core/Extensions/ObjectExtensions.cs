@@ -9,7 +9,7 @@ namespace Atlas.Extensions;
 
 public static class ObjectExtensions
 {
-	public static string? Formatted(this object obj, int maxLength = 500)
+	public static string? Formatted(this object? obj, int maxLength = 500)
 	{
 		if (obj == null)
 			return null;
@@ -134,7 +134,7 @@ public static class ObjectExtensions
 		return EnumerableToString(collection);
 	}
 
-	public static string? ToUniqueString(this object obj)
+	public static string? ToUniqueString(this object? obj)
 	{
 		if (obj == null)
 			return null;

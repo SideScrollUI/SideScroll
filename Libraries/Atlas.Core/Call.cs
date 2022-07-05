@@ -15,7 +15,7 @@ public class Call
 
 	public string? Name { get; set; }
 
-	public Log? Log { get; set; }
+	public Log Log { get; set; }
 
 	public Call? ParentCall { get; set; }
 
@@ -24,12 +24,15 @@ public class Call
 
 	public override string? ToString() => Name;
 
-	protected Call() { }
+	protected Call()
+	{
+		Log = new();
+	}
 
-	public Call(string name = "")
+	public Call(string? name = null)
 	{
 		Name = name;
-		Log = new Log();
+		Log = new();
 	}
 
 	public Call(Log log)
@@ -39,8 +42,7 @@ public class Call
 
 	public Call Child([CallerMemberName] string name = "", params Tag[] tags)
 	{
-		Log ??= new Log();
-		var call = new Call()
+		Call call = new()
 		{
 			Name = name,
 			ParentCall = this,
@@ -66,7 +68,6 @@ public class Call
 
 	public CallTimer Timer(LogLevel logLevel, [CallerMemberName] string? name = null, params Tag[] tags)
 	{
-		Log ??= new Log();
 		var call = new CallTimer()
 		{
 			Name = name,

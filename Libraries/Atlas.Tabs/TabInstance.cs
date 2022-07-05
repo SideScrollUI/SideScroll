@@ -4,6 +4,7 @@ using Atlas.Serialize;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -26,7 +27,7 @@ public interface ITabAsync
 
 public interface IInnerTab
 {
-	ITab Tab { get; }
+	ITab? Tab { get; }
 }
 
 public class TabInstanceLoadAsync : TabInstance, ITabAsync
@@ -51,7 +52,7 @@ public class TabCreatorAsync : TabInstance, ITabAsync
 {
 	public readonly ITabCreatorAsync CreatorAsync;
 
-	private TabInstance _innerChildInstance;
+	private TabInstance? _innerChildInstance;
 
 	public TabCreatorAsync(ITabCreatorAsync creatorAsync)
 	{
@@ -68,7 +69,7 @@ public class TabCreatorAsync : TabInstance, ITabAsync
 
 	public override void LoadUI(Call call, TabModel model)
 	{
-		_innerChildInstance.LoadUI(call, model);
+		_innerChildInstance!.LoadUI(call, model);
 	}
 }
 
@@ -85,7 +86,7 @@ public class TabInstance : IDisposable
 	public const string CurrentBookmarkName = "Current";
 
 	public Project Project { get; set; }
-	public ITab iTab; // Collision with derived Tab
+	public ITab? iTab; // Collision with derived Tab
 	public TaskInstance TaskInstance { get; set; } = new();
 	public TabModel Model { get; set; } = new();
 	public string Label
@@ -94,12 +95,12 @@ public class TabInstance : IDisposable
 		set => Model.Name = value;
 	}
 
-	public DataRepo DataApp => Project.DataApp;
+	public DataRepo? DataApp => Project?.DataApp;
 
 	public TabViewSettings TabViewSettings = new();
-	public TabBookmark TabBookmark { get; set; }
-	public TabBookmark TabBookmarkLoaded { get; set; }
-	public SelectedRow SelectedRow { get; set; } // The parent selection that points to this tab
+	public TabBookmark? TabBookmark { get; set; }
+	public TabBookmark? TabBookmarkLoaded { get; set; }
+	public SelectedRow? SelectedRow { get; set; } // The parent selection that points to this tab
 
 	public int Depth
 	{
@@ -112,11 +113,11 @@ public class TabInstance : IDisposable
 		}
 	}
 
-	public TabInstance ParentTabInstance { get; set; }
+	public TabInstance? ParentTabInstance { get; set; }
 	public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = new();
 
 	public SynchronizationContext UiContext;
-	public TabBookmark FilterBookmarkNode;
+	public TabBookmark? FilterBookmarkNode;
 
 	public class EventSelectItem : EventArgs
 	{
@@ -138,21 +139,21 @@ public class TabInstance : IDisposable
 		}
 	}
 
-	public event EventHandler<EventArgs> OnRefresh;
-	public event EventHandler<EventArgs> OnReload;
-	public event EventHandler<EventArgs> OnModelChanged;
-	public event EventHandler<EventArgs> OnLoadBookmark;
-	public event EventHandler<EventArgs> OnClearSelection;
-	public event EventHandler<EventSelectItems> OnSelectItems;
-	public event EventHandler<EventSelectItem> OnSelectionChanged;
-	public event EventHandler<EventArgs> OnModified;
-	public event EventHandler<EventArgs> OnResize;
+	public event EventHandler<EventArgs>? OnRefresh;
+	public event EventHandler<EventArgs>? OnReload;
+	public event EventHandler<EventArgs>? OnModelChanged;
+	public event EventHandler<EventArgs>? OnLoadBookmark;
+	public event EventHandler<EventArgs>? OnClearSelection;
+	public event EventHandler<EventSelectItems>? OnSelectItems;
+	public event EventHandler<EventSelectItem>? OnSelectionChanged;
+	public event EventHandler<EventArgs>? OnModified;
+	public event EventHandler<EventArgs>? OnResize;
 
-	public Action DefaultAction; // Default action when Enter pressed
+	public Action? DefaultAction; // Default action when Enter pressed
 
 	// Relative paths for where all the TabSettings get stored, primarily used for loading future defaults
 	// paths get hashed later to avoid having to encode and super long names breaking path limits
-	private string CustomPath => (Model.CustomSettingsPath != null) ? "Custom/" + GetType().FullName + "/" + Model.CustomSettingsPath : null;
+	private string? CustomPath => (Model.CustomSettingsPath != null) ? "Custom/" + GetType().FullName + "/" + Model.CustomSettingsPath : null;
 	private string TabPath => "Tab/" + GetType().FullName + "/" + Model.ObjectTypePath;
 	//private string TabPath => "Tab/" + GetType().FullName + "/" + tabModel.ObjectTypePath + "/" + Label;
 	// deprecate?
@@ -168,9 +169,9 @@ public class TabInstance : IDisposable
 	public bool ShowTasks { get; set; }
 	public bool IsRoot { get; set; }
 
-	public IList SelectedItems { get; set; }
+	public IList? SelectedItems { get; set; }
 
-	protected IDataRepoInstance DataRepoInstance { get; set; } // Bookmarks use this for saving/loading DataRepo values
+	protected IDataRepoInstance? DataRepoInstance { get; set; } // Bookmarks use this for saving/loading DataRepo values
 
 	public TabInstance RootInstance => ParentTabInstance?.RootInstance ?? this;
 
@@ -180,6 +181,8 @@ public class TabInstance : IDisposable
 
 	public TabInstance()
 	{
+		Project = new();
+
 		InitializeContext();
 	}
 
@@ -193,7 +196,7 @@ public class TabInstance : IDisposable
 		SetStartLoad();
 	}
 
-	public TabInstance CreateChildTab(ITab iTab)
+	public TabInstance? CreateChildTab(ITab iTab)
 	{
 		TabInstance tabInstance = iTab.Create();
 		if (tabInstance == null)
@@ -222,21 +225,22 @@ public class TabInstance : IDisposable
 		TaskInstance.Cancel();
 	}
 
+	[MemberNotNull(nameof(UiContext))]
 	private void InitializeContext()
 	{
 		//Debug.Assert(context == null || SynchronizationContext.Current == context);
 		UiContext ??= SynchronizationContext.Current ?? new SynchronizationContext();
 	}
 
-	private void ActionCallback(object state)
+	private void ActionCallback(object? state)
 	{
-		Action action = (Action)state;
+		Action action = (Action)state!;
 		action.Invoke();
 	}
 
-	private void ActionParamsCallback(object state)
+	private void ActionParamsCallback(object? state)
 	{
-		TaskDelegateParams taskDelegate = (TaskDelegateParams)state;
+		TaskDelegateParams taskDelegate = (TaskDelegateParams)state!;
 		StartTask(taskDelegate, false);
 	}
 
@@ -245,7 +249,7 @@ public class TabInstance : IDisposable
 		UiContext.Post(ActionCallback, action);
 	}
 
-	public void Invoke(SendOrPostCallback callback, object param = null)
+	public void Invoke(SendOrPostCallback callback, object? param = null)
 	{
 		UiContext.Post(callback, param);
 	}
@@ -269,13 +273,13 @@ public class TabInstance : IDisposable
 		UiContext.Post(CallActionParamsCallback, taskDelegate);
 	}
 
-	private void CallActionParamsCallback(object state)
+	private void CallActionParamsCallback(object? state)
 	{
-		var taskDelegate = (TaskDelegateParams)state;
+		var taskDelegate = (TaskDelegateParams)state!;
 		StartTask(taskDelegate, false);
 	}
 
-	public TaskInstance StartTask(TaskCreator taskCreator, bool showTask, Call call = null)
+	public TaskInstance StartTask(TaskCreator taskCreator, bool showTask, Call? call = null)
 	{
 		call ??= new Call(taskCreator.Label);
 		TaskInstance taskInstance = taskCreator.Start(call);
@@ -291,7 +295,7 @@ public class TabInstance : IDisposable
 		return StartTask(taskDelegate, showTask);
 	}
 
-	public TaskInstance StartAsync(CallActionAsync callAction, Call call = null, bool showTask = false)
+	public TaskInstance StartAsync(CallActionAsync callAction, Call? call = null, bool showTask = false)
 	{
 		var taskDelegate = new TaskDelegateAsync(callAction, true);
 		return StartTask(taskDelegate, showTask, call);
@@ -318,7 +322,7 @@ public class TabInstance : IDisposable
 		return IListItem.Create(this, false);
 	}
 
-	private MethodInfo GetDerivedLoadMethod(string name, int paramCount)
+	private MethodInfo? GetDerivedLoadMethod(string name, int paramCount)
 	{
 		try
 		{
@@ -413,8 +417,8 @@ public class TabInstance : IDisposable
 			// Posted Log messages won't have taken affect here yet
 			// Task.OnFinished hasn't always been called by this point
 			if ((model.ShowTasks || call.Log.Level >= LogLevel.Error)
-				&& !Model.Tasks.Contains(call.TaskInstance))
-				Model.Tasks.Add(call.TaskInstance);
+				&& !Model.Tasks.Contains(call.TaskInstance!))
+				Model.Tasks.Add(call.TaskInstance!);
 		}
 		return model;
 	}
@@ -427,7 +431,7 @@ public class TabInstance : IDisposable
 		{
 			IList iList = model.ItemList[i];
 			Type listType = iList.GetType();
-			Type elementType = listType.GetElementTypeForAll();
+			Type elementType = listType.GetElementTypeForAll()!;
 
 			var tabDataSettings = TabViewSettings.GetData(i);
 			List<TabDataSettings.PropertyColumn> propertyColumns = tabDataSettings.GetPropertiesAsColumns(elementType);
@@ -541,7 +545,7 @@ public class TabInstance : IDisposable
 			if (Model.Objects.Count > 0 || Model.ItemList.Count == 0 || Model.ItemList[0].Count != 1)
 				return false;
 
-			var skippableAttribute = Model.ItemList[0][0].GetType().GetCustomAttribute<SkippableAttribute>();
+			var skippableAttribute = Model.ItemList[0][0]!.GetType().GetCustomAttribute<SkippableAttribute>();
 			if (skippableAttribute == null && Model.Actions != null && Model.Actions.Count > 0)
 				return false;
 
@@ -576,7 +580,7 @@ public class TabInstance : IDisposable
 	{
 		get
 		{
-			Type type = iTab?.GetType();
+			Type? type = iTab?.GetType();
 			if (type == null)
 				return false;
 
@@ -586,14 +590,14 @@ public class TabInstance : IDisposable
 
 	public virtual Bookmark CreateBookmark()
 	{
-		var bookmark = new Bookmark
+		Bookmark bookmark = new()
 		{
 			Name = Label,
 			Type = iTab?.GetType(),
 			TabBookmark = {IsRoot = true}
 		};
 		GetBookmark(bookmark.TabBookmark);
-		bookmark = bookmark.DeepClone(TaskInstance.Call); // Sanitize and test bookmark
+		bookmark = bookmark.DeepClone(TaskInstance.Call)!; // Sanitize and test bookmark
 		return bookmark;
 	}
 
@@ -607,7 +611,7 @@ public class TabInstance : IDisposable
 	public virtual void GetBookmark(TabBookmark tabBookmark)
 	{
 		tabBookmark.Name = Label;
-		tabBookmark.ViewSettings = TabViewSettings.DeepClone();
+		tabBookmark.ViewSettings = TabViewSettings.DeepClone() ?? new TabViewSettings();
 		tabBookmark.DataRepoGroupId = DataRepoInstance?.GroupId;
 		tabBookmark.SelectedRow = SelectedRow;
 
@@ -639,7 +643,7 @@ public class TabInstance : IDisposable
 			else if (type.GetCustomAttribute<PublicDataAttribute>() != null && (tabBookmark.IsRoot || IsRoot))
 			{
 				tabBookmark.Tab = iTab;
-				tabBookmark.Bookmark.Name = iTab.ToString();
+				tabBookmark.Bookmark!.Name = iTab.ToString();
 			}
 		}
 
@@ -692,12 +696,12 @@ public class TabInstance : IDisposable
 		if (Project.UserSettings.AutoLoad == false)
 			return;
 
-		Bookmark bookmark = Project.DataApp.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);
+		Bookmark? bookmark = Project.DataApp.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);
 		if (bookmark != null)
 			TabBookmark = bookmark.TabBookmark;
 	}
 
-	public TabViewSettings LoadSettings(bool reload)
+	public TabViewSettings? LoadSettings(bool reload)
 	{
 		if (_settingLoaded && !reload && TabViewSettings != null)
 			return TabViewSettings;
@@ -719,7 +723,7 @@ public class TabInstance : IDisposable
 		return TabBookmark?.GetSelectedData<T>() ?? new SortedDictionary<string, T>();
 	}
 
-	public T GetBookmarkData<T>(string name = TabBookmark.DefaultDataName)
+	public T? GetBookmarkData<T>(string name = TabBookmark.DefaultDataName)
 	{
 		if (TabBookmark != null)
 			return TabBookmark.GetData<T>(name);
@@ -730,58 +734,61 @@ public class TabInstance : IDisposable
 	// replace with DataShared? Split call up?
 	public void SaveData(string name, object obj)
 	{
-		Project.DataApp.Save(name, obj, TaskInstance.Call);
+		Project!.DataApp.Save(name, obj, TaskInstance.Call);
 	}
 
 	public void SaveData(string directory, string name, object obj)
 	{
-		Project.DataApp.Save(directory, name, obj, TaskInstance.Call);
+		Project!.DataApp.Save(directory, name, obj, TaskInstance.Call);
 	}
 
-	public T LoadData<T>(string name, bool createIfNeeded = true)
+	public T? LoadData<T>(string name, bool createIfNeeded = true)
 	{
-		T data = Project.DataApp.Load<T>(name, TaskInstance.Call, createIfNeeded);
+		T? data = Project!.DataApp.Load<T>(name, TaskInstance.Call, createIfNeeded);
 		return data;
 	}
 
-	public T LoadData<T>(string directory, string name, bool createIfNeeded = true)
+	public T? LoadData<T>(string directory, string name, bool createIfNeeded = true)
 	{
-		T data = Project.DataApp.Load<T>(directory, name, TaskInstance.Call, createIfNeeded);
+		T? data = Project!.DataApp.Load<T>(directory, name, TaskInstance.Call, createIfNeeded);
 		return data;
 	}
 
 	public TabViewSettings LoadDefaultTabSettings()
 	{
-		TabViewSettings = null;
+		TabViewSettings = GetTabSettings();
+		return TabViewSettings;
+	}
 
+	public TabViewSettings GetTabSettings()
+	{
 		if (CustomPath != null)
 		{
-			TabViewSettings = Project.DataApp.Load<TabViewSettings>(CustomPath, TaskInstance.Call);
-			if (TabViewSettings != null)
-				return TabViewSettings;
+			TabViewSettings? tabViewSettings = Project.DataApp.Load<TabViewSettings>(CustomPath, TaskInstance.Call);
+			if (tabViewSettings != null)
+				return tabViewSettings;
 		}
 
 		Type type = GetType();
 		if (type != typeof(TabInstance))
 		{
 			// Unique TabInstance
-			TabViewSettings = Project.DataApp.Load<TabViewSettings>(TabPath, TaskInstance.Call);
-			if (TabViewSettings != null)
-				return TabViewSettings;
+			TabViewSettings? tabViewSettings = Project.DataApp.Load<TabViewSettings>(TabPath, TaskInstance.Call);
+			if (tabViewSettings != null)
+				return tabViewSettings;
 		}
 		else
 		{
-			TabViewSettings = Project.DataApp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call);
-			if (TabViewSettings != null)
-				return TabViewSettings;
+			TabViewSettings? tabViewSettings = Project.DataApp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call);
+			if (tabViewSettings != null)
+				return tabViewSettings;
 
-			TabViewSettings = Project.DataApp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
-			if (TabViewSettings != null)
-				return TabViewSettings;
+			tabViewSettings = Project.DataApp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
+			if (tabViewSettings != null)
+				return tabViewSettings;
 		}
 
-		TabViewSettings = new TabViewSettings();
-		return TabViewSettings;
+		return new TabViewSettings();
 	}
 
 	public void SaveTabSettings()
@@ -854,7 +861,7 @@ public class TabInstance : IDisposable
 
 	public void ItemModified()
 	{
-		OnModified?.Invoke(this, null);
+		OnModified?.Invoke(this, new EventArgs());
 	}
 
 	public TabInstance CreateChild(TabModel model)
@@ -866,7 +873,7 @@ public class TabInstance : IDisposable
 
 		if (TabBookmark != null)
 		{
-			if (TabBookmark.ChildBookmarks.TryGetValue(model.Name, out TabBookmark tabChildBookmark))
+			if (TabBookmark.ChildBookmarks.TryGetValue(model.Name, out TabBookmark? tabChildBookmark))
 			{
 				childTabInstance.TabBookmark = tabChildBookmark;
 			}
@@ -874,13 +881,13 @@ public class TabInstance : IDisposable
 		return childTabInstance;
 	}
 
-	private object GetBookmarkObject(string name)
+	private object? GetBookmarkObject(string name)
 	{
 		if (TabBookmark == null)
 			return null;
 
 		// FindMatches uses bookmarks
-		if (TabBookmark.ChildBookmarks.TryGetValue(name, out TabBookmark tabChildBookmark))
+		if (TabBookmark.ChildBookmarks.TryGetValue(name, out TabBookmark? tabChildBookmark))
 		{
 			if (tabChildBookmark.TabModel != null)
 				return tabChildBookmark.TabModel;
@@ -899,7 +906,7 @@ public class TabInstance : IDisposable
 	{
 		if (SelectedItems?.Count > 0)
 		{
-			var eSelectItem = new EventSelectItem(SelectedItems[0]);
+			var eSelectItem = new EventSelectItem(SelectedItems[0]!);
 			OnSelectionChanged?.Invoke(sender, eSelectItem);
 		}
 	}

@@ -8,7 +8,7 @@ namespace Atlas.Tabs;
 public interface IToolComboBox
 {
 	string Label { get; }
-	object SelectedObject { get; }
+	object? SelectedObject { get; }
 
 	IList GetItems();
 }
@@ -17,14 +17,14 @@ public class ToolComboBox<T> : IToolComboBox
 {
 	public string Label { get; set; }
 	public List<T> Items { get; set; }
-	public T SelectedItem { get; set; }
+	public T? SelectedItem { get; set; }
 
-	public object SelectedObject
+	public object? SelectedObject
 	{
 		get => SelectedItem;
 		set
 		{
-			SelectedItem = (T)value;
+			SelectedItem = (T?)value;
 
 			var call = new Call();
 
@@ -36,10 +36,10 @@ public class ToolComboBox<T> : IToolComboBox
 		}
 	}
 
-	public TaskDelegate.CallAction Action { get; set; }
-	public TaskDelegateAsync.CallActionAsync ActionAsync { get; set; }
+	public TaskDelegate.CallAction? Action { get; set; }
+	public TaskDelegateAsync.CallActionAsync? ActionAsync { get; set; }
 
-	public ToolComboBox(string label, List<T> items, T selectedItem, TaskDelegate.CallAction action = null)
+	public ToolComboBox(string label, List<T> items, T selectedItem, TaskDelegate.CallAction? action = null)
 	{
 		Label = label;
 		Items = items;
@@ -56,12 +56,12 @@ public class ToolComboBox<T> : IToolComboBox
 
 	public IList GetItems()
 	{
-		if (Items.Contains(SelectedItem))
+		if (Items.Contains(SelectedItem!))
 			return Items;
 
 		return new List<T>(Items)
 		{
-			SelectedItem
+			SelectedItem!
 		};
 	}
 }

@@ -6,26 +6,26 @@ namespace Atlas.Tabs;
 [PublicData]
 public class SelectedRow : IEquatable<SelectedRow>
 {
-	public string Label; // ToString() value, can be null
+	public string? Label; // ToString() value, can be null
 	public int RowIndex = -1; // Index in original list without filtering, todo: change to nullable
 
 	[NonSerialized]
-	public object Object; // used for bookmark searches, dangerous to keep these references around otherwise
+	public object? Object; // used for bookmark searches, dangerous to keep these references around otherwise
 
-	public string DataKey;
-	public object DataValue; // Imported with bookmark into it's App DataRepo
+	public string? DataKey;
+	public object? DataValue; // Imported with bookmark into it's App DataRepo
 
 	// public bool Pinned;
 	// public List<string> SelectedColumns = new(); // Not supported yet
 
-	public override string ToString() => Label;
+	public override string? ToString() => Label;
 
 	public SelectedRow() { }
 
 	public SelectedRow(object obj)
 	{
 		Object = obj;
-		Label = obj?.ToString();
+		Label = obj.ToString();
 
 		DataKey = ObjectUtils.GetDataKey(obj); // overrides label
 		DataValue = ObjectUtils.GetDataValue(obj);
@@ -39,12 +39,12 @@ public class SelectedRow : IEquatable<SelectedRow>
 			Label = null;
 	}
 
-	public override bool Equals(object obj)
+	public override bool Equals(object? obj)
 	{
 		return Equals(obj as SelectedRow);
 	}
 
-	public bool Equals(SelectedRow other)
+	public bool Equals(SelectedRow? other)
 	{
 		return other != null &&
 			   Label == other.Label &&

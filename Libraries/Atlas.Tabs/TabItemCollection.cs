@@ -7,14 +7,14 @@ namespace Atlas.Tabs;
 public class TabItemCollection
 {
 	public IList List;
-	public IEnumerable Filtered; // CollectionView takes filters into account
+	public IEnumerable? Filtered; // CollectionView takes filters into account
 
 	private HashSet<object> _objects = new();
 	private Dictionary<string, object> _keys = new();
 
-	public override string ToString() => List.ToString();
+	public override string? ToString() => List.ToString();
 
-	public TabItemCollection(IList list, IEnumerable filtered = null)
+	public TabItemCollection(IList list, IEnumerable? filtered = null)
 	{
 		List = list;
 		Filtered = filtered;
@@ -33,14 +33,14 @@ public class TabItemCollection
 
 			_objects.Add(obj);
 
-			string id = ObjectUtils.GetObjectId(obj);
+			string? id = ObjectUtils.GetObjectId(obj);
 			if (id != null)
 				_keys.TryAdd(id, obj);
 		}
 
 		foreach (SelectedRow selectedRow in selectedRows)
 		{
-			object selectedObject = GetMatchingObject(selectedRow);
+			object? selectedObject = GetMatchingObject(selectedRow);
 			if (selectedObject == null)
 				continue;
 
@@ -50,7 +50,7 @@ public class TabItemCollection
 		return rowObjects;
 	}
 
-	private object GetMatchingObject(SelectedRow selectedRow)
+	private object? GetMatchingObject(SelectedRow selectedRow)
 	{
 		if (selectedRow.Object != null && _objects.Contains(selectedRow.Object))
 			return selectedRow.Object;
@@ -59,7 +59,7 @@ public class TabItemCollection
 		int rowIndex = selectedRow.RowIndex;
 		if (rowIndex >= 0 && rowIndex < List.Count)
 		{
-			object rowObject = List[rowIndex];
+			object rowObject = List[rowIndex]!;
 			var currentSelectedRow = new SelectedRow(rowObject);
 			if (currentSelectedRow.Equals(selectedRow))
 				return rowObject;
@@ -67,14 +67,14 @@ public class TabItemCollection
 
 		if (selectedRow.DataKey != null)
 		{
-			if (_keys.TryGetValue(selectedRow.DataKey, out object matchingObject))
+			if (_keys.TryGetValue(selectedRow.DataKey, out object? matchingObject))
 				return matchingObject;
 		}
 
 		if (selectedRow.Label != null)
 		{
 			// These can be user generated
-			if (_keys.TryGetValue(selectedRow.Label, out object matchingObject))
+			if (_keys.TryGetValue(selectedRow.Label, out object? matchingObject))
 				return matchingObject;
 		}
 

@@ -10,12 +10,12 @@ namespace Atlas.Tabs;
 
 public class FilterExpression
 {
-	public string TextUppercase { get; set; }
+	public string? TextUppercase { get; set; }
 	public bool MatchWord { get; set; }
 
 	public bool Matches(string valueUppercase)
 	{
-		int index = valueUppercase.IndexOf(TextUppercase);
+		int index = valueUppercase.IndexOf(TextUppercase!);
 		if (index >= 0)
 		//if (valueText != null && valueText.CaseInsensitiveContains(filter))
 		{
@@ -25,7 +25,7 @@ public class FilterExpression
 				if (index > 0 && !char.IsWhiteSpace(valueUppercase[index - 1]))
 					return false;
 
-				int nextChar = index + TextUppercase.Length;
+				int nextChar = index + TextUppercase!.Length;
 				if (nextChar < valueUppercase.Length && !char.IsWhiteSpace(valueUppercase[nextChar]))
 					return false;
 			}
@@ -37,12 +37,12 @@ public class FilterExpression
 
 public class SearchFilter
 {
-	public Filter Filter { get; set; }
+	public Filter? Filter { get; set; }
 
 	public TabBookmark FindMatches(IList list)
 	{
-		TabModel tabModel = TabModel.Create("", list);
-		TabBookmark bookmarkNode = tabModel.FindMatches(Filter, Filter.Depth);
+		TabModel tabModel = TabModel.Create("", list)!;
+		TabBookmark bookmarkNode = tabModel.FindMatches(Filter!, Filter!.Depth);
 		return bookmarkNode;
 	}
 
@@ -51,8 +51,8 @@ public class SearchFilter
 		if (Filter == null || Filter.FilterText.IsNullOrEmpty())
 			return true;
 
-		TabModel tabModel = TabModel.Create("Search", obj);
-		TabBookmark bookmarkNode = tabModel.FindMatches(Filter, Filter.Depth);
+		TabModel tabModel = TabModel.Create("Search", obj)!;
+		TabBookmark bookmarkNode = tabModel.FindMatches(Filter!, Filter.Depth);
 		return bookmarkNode.SelectedObjects.Count > 0;
 	}
 }
@@ -138,18 +138,18 @@ public class Filter
 		string allValuesUppercase = "";
 		foreach (PropertyInfo propertyInfo in columnProperties)
 		{
-			object value = propertyInfo.GetValue(obj);
+			object? value = propertyInfo.GetValue(obj);
 			if (value == null)
 				continue;
 
-			string valueText = value.ToString();
+			string? valueText = value.ToString();
 			if (valueText == null)
 				continue;
 
 			allValuesUppercase += valueText;
 		}
 
-		object innerValue = obj.GetInnerValue();
+		object? innerValue = obj.GetInnerValue();
 		if (innerValue != null && innerValue != obj)
 		{
 			Type innerType = innerValue.GetType();
