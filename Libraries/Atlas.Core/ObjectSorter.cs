@@ -6,7 +6,7 @@ namespace Atlas.Core;
 
 public class CustomComparer : IComparer
 {
-	public virtual int Compare(object x, object y)
+	public virtual int Compare(object? x, object? y)
 	{
 		if (x == null && y == null)
 			return 0;
@@ -54,14 +54,14 @@ public class CustomComparer : IComparer
 
 public class Sorter : CustomComparer
 {
-	public ListSortDescriptionCollection Sorts;
+	public ListSortDescriptionCollection? Sorts;
 	public ListSortDirection SortDirection;
 
-	public override int Compare(object x, object y)
+	public override int Compare(object? x, object? y)
 	{
-		PropertyDescriptor descriptor = Sorts[0].PropertyDescriptor;
-		object xKey = descriptor.GetValue(x);
-		object yKey = descriptor.GetValue(y);
+		PropertyDescriptor descriptor = Sorts![0]!.PropertyDescriptor!;
+		object? xKey = descriptor.GetValue(x);
+		object? yKey = descriptor.GetValue(y);
 
 		if (object.Equals(xKey, yKey))
 			return 0;

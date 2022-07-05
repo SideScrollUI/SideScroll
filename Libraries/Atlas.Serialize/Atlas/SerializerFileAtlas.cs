@@ -38,7 +38,7 @@ public class SerializerFileAtlas : SerializerFile
 			}
 			catch (Exception e)
 			{
-				call.Log.Add(e.Message);
+				call.Log!.Add(e.Message);
 			}
 		}
 	}

@@ -20,7 +20,7 @@ public class LogWriterText : IDisposable
 		Log = log;
 		SaveFilePath = saveFilePath + ".log.txt";
 
-		string parentDirectory = Path.GetDirectoryName(SaveFilePath);
+		string parentDirectory = Path.GetDirectoryName(SaveFilePath)!;
 		if (!Directory.Exists(parentDirectory))
 			Directory.CreateDirectory(parentDirectory);
 
@@ -31,7 +31,7 @@ public class LogWriterText : IDisposable
 		log.OnMessage += LogEntry_OnMessage;
 	}
 
-	private void LogEntry_OnMessage(object sender, EventLogMessage e)
+	private void LogEntry_OnMessage(object? sender, EventLogMessage e)
 	{
 		string indentation = "";
 		foreach (LogEntry logEntry in e.Entries)

@@ -80,13 +80,13 @@ public class HideAttribute : Attribute
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class HideRowAttribute : Attribute
 {
-	public readonly List<object> Values;
+	public readonly List<object?> Values;
 
 	// passing a null param passes a null array :(
-	public HideRowAttribute(object value, params object[] additonalValues)
+	public HideRowAttribute(object? value, params object?[] additonalValues)
 	{
 		// Combine both params into a single list
-		Values = new List<object>(additonalValues)
+		Values = new List<object?>(additonalValues)
 		{
 			value
 		};
@@ -222,9 +222,9 @@ public class AutoSelectAttribute : Attribute
 [AttributeUsage(AttributeTargets.Method)]
 public class ItemAttribute : Attribute
 {
-	public readonly string Name;
+	public readonly string? Name;
 
-	public ItemAttribute(string name = null)
+	public ItemAttribute(string? name = null)
 	{
 		Name = name;
 	}
@@ -234,10 +234,10 @@ public class ItemAttribute : Attribute
 [AttributeUsage(AttributeTargets.Method)]
 public class ButtonColumnAttribute : Attribute
 {
-	public readonly string Name;
-	public readonly string VisiblePropertyName;
+	public readonly string? Name;
+	public readonly string? VisiblePropertyName;
 
-	public ButtonColumnAttribute(string name = null)
+	public ButtonColumnAttribute(string? name = null)
 	{
 		Name = name;
 	}

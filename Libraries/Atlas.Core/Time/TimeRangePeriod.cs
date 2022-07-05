@@ -16,7 +16,7 @@ public class TimeRangePeriod : ITags
 
 	public TimeSpan Duration => EndTime.Subtract(StartTime);
 
-	public string Name { get; set; }
+	public string? Name { get; set; }
 
 	public double MinValue { get; set; } = double.MaxValue;
 	public double MaxValue { get; set; } = double.MinValue;
@@ -34,10 +34,10 @@ public class TimeRangePeriod : ITags
 		get
 		{
 			// Concatenate tag values with the same tag name
-			var lookup = new Dictionary<string, Tag>();
+			Dictionary<string, Tag> lookup = new();
 			foreach (Tag tag in AllTags)
 			{
-				if (lookup.TryGetValue(tag.Name, out Tag tagBin))
+				if (lookup.TryGetValue(tag.Name!, out Tag? tagBin))
 				{
 					if (tagBin.Value is string text && tag.Value is string tagText)
 					{
@@ -47,7 +47,7 @@ public class TimeRangePeriod : ITags
 				}
 				else
 				{
-					lookup.Add(tag.Name, new Tag(tag));
+					lookup.Add(tag.Name!, new Tag(tag));
 				}
 			}
 			return lookup.Values.ToList();
@@ -57,7 +57,7 @@ public class TimeRangePeriod : ITags
 	public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Count;
 
 	// Sum the provided datapoints using the specified period
-	public static List<TimeRangePeriod> Periods(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration, bool trimPeriods = true)
+	public static List<TimeRangePeriod>? Periods(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration, bool trimPeriods = true)
 	{
 		var periodTimeWindow = new TimeWindow(timeWindow.StartTime, timeWindow.EndTime.Add(periodDuration));
 
@@ -218,7 +218,7 @@ public class TimeRangePeriod : ITags
 		return max;
 	}
 
-	public static List<TimeRangeValue> PeriodAverages(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+	public static List<TimeRangeValue>? PeriodAverages(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
 		var periods = Periods(dataPoints, timeWindow, periodDuration);
 		if (periods == null)
@@ -236,7 +236,7 @@ public class TimeRangePeriod : ITags
 		return timeRangeValues;
 	}
 
-	public static List<TimeRangeValue> PeriodSums(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+	public static List<TimeRangeValue>? PeriodSums(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
 		var periods = Periods(dataPoints, timeWindow, periodDuration);
 		if (periods == null)
@@ -253,7 +253,7 @@ public class TimeRangePeriod : ITags
 		return timeRangeValues;
 	}
 
-	public static List<TimeRangeValue> PeriodMins(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+	public static List<TimeRangeValue>? PeriodMins(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
 		var periods = Periods(dataPoints, timeWindow, periodDuration);
 		if (periods == null)
@@ -270,7 +270,7 @@ public class TimeRangePeriod : ITags
 		return timeRangeValues;
 	}
 
-	public static List<TimeRangeValue> PeriodMaxes(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+	public static List<TimeRangeValue>? PeriodMaxes(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
 		var periods = Periods(dataPoints, timeWindow, periodDuration);
 		if (periods == null)
@@ -287,12 +287,12 @@ public class TimeRangePeriod : ITags
 		return timeRangeValues;
 	}
 
-	public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, int minPeriods, int maxPeriods)
+	public static List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, int minPeriods, int maxPeriods)
 	{
 		return PeriodCounts(dataPoints, new TimeWindow(startTime, endTime), minPeriods, maxPeriods);
 	}
 
-	public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, int minPeriods, int maxPeriods)
+	public static List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, int minPeriods, int maxPeriods)
 	{
 		double durationSeconds = Math.Ceiling(timeWindow.Duration.TotalSeconds);
 		int numPeriods = Math.Max(minPeriods, Math.Min(maxPeriods, (int)durationSeconds));
@@ -301,7 +301,7 @@ public class TimeRangePeriod : ITags
 		return PeriodCounts(dataPoints, timeWindow, TimeSpan.FromSeconds(periodDuration));
 	}
 
-	public static List<TimeRangeValue> PeriodCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration, bool addGaps = false)
+	public static List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration, bool addGaps = false)
 	{
 		var periods = Periods(dataPoints, timeWindow, periodDuration, false);
 		if (periods == null)

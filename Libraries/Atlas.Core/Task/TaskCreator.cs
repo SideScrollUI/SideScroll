@@ -7,17 +7,17 @@ namespace Atlas.Core;
 
 public abstract class TaskCreator : INotifyPropertyChanged
 {
-	public event PropertyChangedEventHandler PropertyChanged; // Used only for INotifyPropertyChanged memory leak fix?
+	public event PropertyChangedEventHandler? PropertyChanged; // Used only for INotifyPropertyChanged memory leak fix?
 
-	public Action OnComplete;
-
-	[HiddenColumn]
-	public string Label { get; set; } // used for Button Label
+	public Action? OnComplete;
 
 	[HiddenColumn]
-	public string Description { get; set; } // Button hint text
+	public string? Label { get; set; } // used for Button Label
 
-	public string Info => Description != null ? ">" : null; // Button hint text
+	[HiddenColumn]
+	public string? Description { get; set; } // Button hint text
+
+	public string? Info => Description != null ? ">" : null; // Button hint text
 
 	[HiddenColumn]
 	public bool ShowTask { get; set; }
@@ -27,16 +27,16 @@ public abstract class TaskCreator : INotifyPropertyChanged
 
 	public int TimesRun { get; set; }
 
-	public SynchronizationContext Context;
+	public SynchronizationContext? Context;
 
 	protected abstract Action CreateAction(Call call);
 
-	public override string ToString() => Label;
+	public override string? ToString() => Label;
 
 	public void Run(Call call)
 	{
 		TaskInstance taskInstance = Start(call);
-		taskInstance.Task.GetAwaiter().GetResult();
+		taskInstance.Task!.GetAwaiter().GetResult();
 	}
 
 	// Creates, Starts, and returns a new Task
@@ -44,7 +44,7 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	{
 		TimesRun++;
 		Context = SynchronizationContext.Current ?? new SynchronizationContext();
-		call.Log.Settings.Context = Context;
+		call.Log!.Settings!.Context = Context;
 
 		var taskInstance = new TaskInstance
 		{

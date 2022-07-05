@@ -7,13 +7,11 @@ namespace Atlas.Core.Time;
 [PublicData]
 public class TimeZoneView : IComparable
 {
-	public string Abbreviation { get; set; }
-	public string Name { get; set; }
-	public TimeZoneInfo TimeZoneInfo { get; set; }
+	public string? Abbreviation { get; set; }
+	public string? Name { get; set; }
+	public TimeZoneInfo? TimeZoneInfo { get; set; }
 
-	public TimeZoneView()
-	{
-	}
+	public TimeZoneView() { }
 
 	public TimeZoneView(string abbreviation, string name, TimeZoneInfo timeZoneInfo)
 	{
@@ -37,11 +35,11 @@ public class TimeZoneView : IComparable
 		}
 	}
 
-	public override string ToString()
+	public override string? ToString()
 	{
 		if (Abbreviation == Name)
 			return Abbreviation;
-		return Abbreviation + " - " + Name + ": " + TimeZoneInfo.BaseUtcOffset.FormattedDecimal();
+		return Abbreviation + " - " + Name + ": " + TimeZoneInfo?.BaseUtcOffset.FormattedDecimal();
 	}
 
 	public DateTime ConvertTimeToUtc(DateTime dateTime)
@@ -54,19 +52,19 @@ public class TimeZoneView : IComparable
 		else
 			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
 
-		return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo);
+		return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo!);
 	}
 
-	public int CompareTo(object obj)
+	public int CompareTo(object? obj)
 	{
-		return obj.ToString().CompareTo(ToString());
+		return obj?.ToString()?.CompareTo(ToString()) ?? 1;
 	}
 
 	public static readonly TimeZoneView Utc = new("Utc", "Utc", TimeZoneInfo.Utc);
 	public static readonly TimeZoneView Local = new("Local", "Local", TimeZoneInfo.Local);
 
 	// https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
-	public static List<TimeZoneView> All = new()
+	public static List<TimeZoneView> All { get; set; } = new()
 	{
 		Utc,
 		Local,

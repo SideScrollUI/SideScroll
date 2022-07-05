@@ -8,13 +8,13 @@ namespace Atlas.Core;
 // <prefix>://<type>/v<version>/<id>
 public class BookmarkUri
 {
-	public string Prefix { get; set; }
-	public string Type { get; set; }
-	public Version Version { get; set; }
-	public string Id { get; set; }
-	public string Url { get; set; }
+	public string? Prefix { get; set; }
+	public string? Type { get; set; }
+	public Version? Version { get; set; }
+	public string? Id { get; set; }
+	public string? Url { get; set; }
 
-	public static BookmarkUri Parse(string url)
+	public static BookmarkUri? Parse(string url)
 	{
 		Regex regex = new(@"(?<prefix>[a-zA-Z]+)\:\/\/(?<type>[-0-9a-zA-Z]+)\/v(?<version>[\d\.]+)\/(?<id>.+)");
 

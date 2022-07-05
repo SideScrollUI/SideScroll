@@ -21,7 +21,7 @@ public static class MemberExtensions
 
 	public static bool IsRowVisible(this PropertyInfo propertyInfo)
 	{
-		if (propertyInfo.DeclaringType.IsNotPublic)
+		if (propertyInfo.DeclaringType!.IsNotPublic)
 			return false;
 
 #if !DEBUG
@@ -35,7 +35,7 @@ public static class MemberExtensions
 
 	public static bool IsColumnVisible(this PropertyInfo propertyInfo)
 	{
-		if (propertyInfo.DeclaringType.IsNotPublic)
+		if (propertyInfo.DeclaringType!.IsNotPublic)
 			return false;
 
 #if !DEBUG

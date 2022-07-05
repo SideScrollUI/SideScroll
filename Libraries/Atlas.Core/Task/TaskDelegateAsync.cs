@@ -10,10 +10,10 @@ public class TaskDelegateAsync : TaskCreator
 
 	public CallActionAsync CallAction;
 
-	public override string ToString() => Label;
+	public override string? ToString() => Label;
 
 	// Lists read easier with the label as the first param
-	public TaskDelegateAsync(string label, CallActionAsync callAction, bool showTask = false, string description = null)
+	public TaskDelegateAsync(string label, CallActionAsync callAction, bool showTask = false, string? description = null)
 	{
 		Label = label;
 		CallAction = callAction;
@@ -22,7 +22,7 @@ public class TaskDelegateAsync : TaskCreator
 		Description = description;
 	}
 
-	public TaskDelegateAsync(CallActionAsync callAction, bool showTask = false, string description = null)
+	public TaskDelegateAsync(CallActionAsync callAction, bool showTask = false, string? description = null)
 	{
 		Label = callAction.Method.Name.TrimEnd("Async");
 		CallAction = callAction;
@@ -44,7 +44,7 @@ public class TaskDelegateAsync : TaskCreator
 		}
 		catch (Exception e)
 		{
-			call.Log.Add(e);
+			call.Log!.Add(e);
 		}
 	}
 
@@ -56,7 +56,7 @@ public class TaskDelegateAsync : TaskCreator
 		}
 		catch (Exception e)
 		{
-			call.Log.Add(e);
+			call.Log!.Add(e);
 		}
 	}
 }

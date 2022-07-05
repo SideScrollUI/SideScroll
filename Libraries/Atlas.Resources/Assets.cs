@@ -17,8 +17,8 @@ public static class Assets
 
 		public static Stream Get(string resourceName)
 		{
-			var assembly = Assembly.GetExecutingAssembly();
-			return assembly.GetManifestResourceStream("Atlas.Resources.Assets." + resourceName);
+			Assembly assembly = Assembly.GetExecutingAssembly();
+			return assembly.GetManifestResourceStream("Atlas.Resources.Assets." + resourceName)!;
 		}
 
 		public static List<Stream> All { get; set; } = new()

@@ -13,19 +13,19 @@ public class Log : LogEntry
 	[InnerValue]
 	public ItemCollection<LogEntry> Items { get; set; } = new(); // change to LRU for performance? No Binding?
 
-	private readonly string SummaryText;
+	//private readonly string SummaryText;
 
-	[HiddenColumn]
-	public override string Summary => SummaryText;
+	//[HiddenColumn]
+	//public override string Summary => SummaryText;
 
-	public event EventHandler<EventLogMessage> OnMessage;
+	public event EventHandler<EventLogMessage>? OnMessage;
 
 	public Log()
 	{
 		Initialize();
 	}
 
-	public Log(string text = null, LogSettings logSettings = null, Tag[] tags = null)
+	public Log(string? text = null, LogSettings? logSettings = null, Tag[]? tags = null)
 	{
 		Text = text;
 		Settings = logSettings;
@@ -40,34 +40,34 @@ public class Log : LogEntry
 		return AddChildEntry(LogLevel.Info, name, tags);
 	}
 
-	public Log Call(LogLevel logLevel, string name, params Tag[] tags)
+	public Log Call(LogLevel logLevel, string text, params Tag[] tags)
 	{
-		return AddChildEntry(logLevel, name, tags);
+		return AddChildEntry(logLevel, text, tags);
 	}
 
-	public LogEntry Add(string text, params Tag[] tags)
+	public LogEntry? Add(string text, params Tag[] tags)
 	{
 		return Add(LogLevel.Info, text, tags);
 	}
 
-	public LogEntry AddDebug(string text, params Tag[] tags)
+	public LogEntry? AddDebug(string text, params Tag[] tags)
 	{
 		return Add(LogLevel.Debug, text, tags);
 	}
 
-	public LogEntry AddWarning(string text, params Tag[] tags)
+	public LogEntry? AddWarning(string text, params Tag[] tags)
 	{
 		return Add(LogLevel.Warn, text, tags);
 	}
 
-	public LogEntry AddError(string text, params Tag[] tags)
+	public LogEntry? AddError(string text, params Tag[] tags)
 	{
 		return Add(LogLevel.Error, text, tags);
 	}
 
-	public LogEntry Add(LogLevel logLevel, string text, params Tag[] tags)
+	public LogEntry? Add(LogLevel logLevel, string text, params Tag[] tags)
 	{
-		if (logLevel < Settings.MinLogLevel)
+		if (logLevel < Settings!.MinLogLevel)
 			return null;
 
 		var logEntry = new LogEntry(Settings, logLevel, text, tags);
@@ -75,7 +75,7 @@ public class Log : LogEntry
 		return logEntry;
 	}
 
-	public LogEntry Add(Exception e, params Tag[] tags)
+	public LogEntry? Add(Exception e, params Tag[] tags)
 	{
 		Debug.Print("Exception: " + e.Message);
 
@@ -88,7 +88,7 @@ public class Log : LogEntry
 		}
 		else if (e is AggregateException ae)
 		{
-			LogEntry logEntry = null;
+			LogEntry? logEntry = null;
 			foreach (Exception ex in ae.InnerExceptions)
 			{
 				if (ex is TaskCanceledException)
@@ -96,7 +96,7 @@ public class Log : LogEntry
 				else
 					logEntry = AddError(ex.Message, allTags.ToArray());
 			}
-			return logEntry;
+			return logEntry!;
 		}
 		else
 		{
@@ -128,9 +128,9 @@ public class Log : LogEntry
 		return stringBuilder.ToString();
 	}
 
-	private Log AddChildEntry(LogLevel logLevel, string name, params Tag[] tags)
+	private Log AddChildEntry(LogLevel logLevel, string text, params Tag[] tags)
 	{
-		Log log = new(name, Settings, tags)
+		Log log = new(text, Settings, tags)
 		{
 			OriginalLevel = logLevel,
 			Level = logLevel,
@@ -143,7 +143,7 @@ public class Log : LogEntry
 	{
 		// LogTimer calls this once for a new child message, and once for adding to parent log
 		// So only add it for the initial child message
-		if (logEntry.Level >= Settings.DebugPrintLogLevel && logEntry.Entries == 0)
+		if (logEntry.Level >= Settings!.DebugPrintLogLevel && logEntry.Entries == 0)
 		{
 			Debug.Print(logEntry.Level + ": " + logEntry.ToString());
 		}
@@ -160,18 +160,18 @@ public class Log : LogEntry
 	}
 
 	// Thread safe callback, only works if the context is the same
-	private void AddEntryCallback(object state)
+	private void AddEntryCallback(object? state)
 	{
-		lock (Settings.Lock)
+		lock (Settings!.Lock)
 		{
-			AddEntry((LogEntry)state);
+			AddEntry((LogEntry)state!);
 		}
 	}
 
 	private void AddEntry(LogEntry logEntry)
 	{
 		Items.Add(logEntry);
-		if (Items.Count > Settings.MaxLogItems)
+		if (Items.Count > Settings!.MaxLogItems)
 		{
 			// subtract entries or leave them?
 			Items.RemoveAt(0);
@@ -211,7 +211,7 @@ public class Log : LogEntry
 		OnMessage?.Invoke(this, eventLogMessage);
 	}
 
-	private void ChildLog_OnMessage(object sender, EventLogMessage eventLogMessage)
+	private void ChildLog_OnMessage(object? sender, EventLogMessage eventLogMessage)
 	{
 		UpdateStats(eventLogMessage.Entries[0]);
 		eventLogMessage.Entries.Add(this);

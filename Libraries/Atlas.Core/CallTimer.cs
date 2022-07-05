@@ -30,7 +30,7 @@ public class CallTimer : Call, IDisposable
 		UpdateDuration();
 	}
 
-	private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+	private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
 	{
 		UpdateDuration();
 	}
@@ -49,6 +49,6 @@ public class CallTimer : Call, IDisposable
 
 		TaskInstance?.SetFinished();
 		if (TaskInstance == null)
-			Log.Add("Finished", new Tag("Time", ElapsedMilliseconds / 1000.0));
+			Log!.Add("Finished", new Tag("Time", ElapsedMilliseconds / 1000.0));
 	}
 }

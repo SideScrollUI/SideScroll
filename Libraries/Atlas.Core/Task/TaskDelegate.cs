@@ -9,10 +9,10 @@ public class TaskDelegate : TaskCreator
 
 	public CallAction Action;
 
-	public override string ToString() => Label;
+	public override string? ToString() => Label;
 
 	// Lists read easier with the label as the first param
-	public TaskDelegate(string label, CallAction callAction, bool useTask = false, bool showTask = false, string description = null)
+	public TaskDelegate(string label, CallAction callAction, bool useTask = false, bool showTask = false, string? description = null)
 	{
 		Label = label;
 		Action = callAction;
@@ -21,7 +21,7 @@ public class TaskDelegate : TaskCreator
 		Description = description;
 	}
 
-	public TaskDelegate(CallAction callAction, bool useTask = false, bool showTask = false, string description = null)
+	public TaskDelegate(CallAction callAction, bool useTask = false, bool showTask = false, string? description = null)
 	{
 		Label = callAction.Method.Name;
 		Action = callAction;
@@ -44,7 +44,7 @@ public class TaskDelegate : TaskCreator
 		}
 		catch (Exception e)
 		{
-			call.Log.Add(e);
+			call.Log!.Add(e);
 		}
 	}
 

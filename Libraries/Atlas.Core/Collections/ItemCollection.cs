@@ -19,18 +19,18 @@ public class ItemQueueCollection<T> : ItemCollection<T>
 
 public interface IItemCollection
 {
-	string ColumnName { get; set; }
+	string? ColumnName { get; set; }
 	bool Skippable { get; set; }
-	string CustomSettingsPath { get; set; }
+	string? CustomSettingsPath { get; set; }
 }
 
 // See ItemCollectionUI for a thread safe version
 public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComparer //, IRaiseItemChangedEvents //
 {
-	public string ColumnName { get; set; }
-	public string Label { get; set; }
+	public string? ColumnName { get; set; }
+	public string? Label { get; set; }
 	public bool Skippable { get; set; } = true;
-	public string CustomSettingsPath { get; set; }
+	public string? CustomSettingsPath { get; set; }
 
 	public IComparer Comparer { get; set; } = new CustomComparer();
 
@@ -56,7 +56,7 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 		OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 	}
 
-	public int Compare(object x, object y)
+	public int Compare(object? x, object? y)
 	{
 		int result = Comparer.Compare(x, y);
 		return result;

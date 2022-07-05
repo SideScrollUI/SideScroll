@@ -59,7 +59,7 @@ public abstract class TypeRepo : IDisposable
 	public List<object> Objects = new(); // ordered by index, not filled in when loading
 	public int[]? ObjectSizes;
 	public long[]? ObjectOffsets;
-	public object[] ObjectsLoaded;
+	public object?[] ObjectsLoaded;
 	public int ObjectsLoadedCount = 0;
 
 	public BinaryReader? Reader;
@@ -89,7 +89,7 @@ public abstract class TypeRepo : IDisposable
 		Type = typeSchema.Type;
 		if (!typeSchema.IsUnserialized && (!serializer.PublicOnly || TypeSchema.IsPublicOnly))
 			LoadableType = Type;
-		ObjectsLoaded = new object[typeSchema.NumObjects];
+		ObjectsLoaded = new object?[typeSchema.NumObjects];
 	}
 
 	public static TypeRepo Create(Log log, Serializer serializer, TypeSchema typeSchema)

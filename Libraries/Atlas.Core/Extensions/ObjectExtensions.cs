@@ -9,7 +9,7 @@ namespace Atlas.Extensions;
 
 public static class ObjectExtensions
 {
-	public static string Formatted(this object obj, int maxLength = 500)
+	public static string? Formatted(this object obj, int maxLength = 500)
 	{
 		if (obj == null)
 			return null;
@@ -21,9 +21,9 @@ public static class ObjectExtensions
 			if (obj is double d)
 				return d.ToString("#,0.###");
 
-			MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) });
+			MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) })!;
 			string format = type.IsDecimal() ? "G" : "N0";
-			object result = toStringMethod.Invoke(obj, new object[] { format });
+			object? result = toStringMethod.Invoke(obj, new object[] { format });
 			if (result == null)
 				return null;
 
@@ -44,10 +44,10 @@ public static class ObjectExtensions
 			}
 
 			// use any ToString() that overrides the base
-			MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes);
+			MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes)!;
 			if (toStringMethod.DeclaringType != typeof(object) && toStringMethod.DeclaringType != typeof(ValueType))
 			{
-				string toString = obj.ToString();
+				string? toString = obj.ToString();
 				if (toString != null && toString.Length > maxLength)
 					return toString[..maxLength];
 				return toString;
@@ -67,7 +67,7 @@ public static class ObjectExtensions
 		}
 		else if (obj is ICollection collection)
 		{
-			Type elementType = type.GetElementTypeForAll();
+			Type? elementType = type.GetElementTypeForAll();
 			if (elementType != null && elementType.GetCustomAttribute<ToStringAttribute>() != null)
 			{
 				return CollectionToString(collection);
@@ -78,10 +78,10 @@ public static class ObjectExtensions
 
 		if (typeof(IEnumerable).IsAssignableFrom(type))
 		{
-			PropertyInfo countProp = type.GetProperty("Count");
+			PropertyInfo? countProp = type.GetProperty("Count");
 			if (countProp != null)
 			{
-				int count = (int)countProp.GetValue(obj, null);
+				int count = (int)countProp.GetValue(obj, null)!;
 				return "[" + count.ToString("N0") + "]";
 			}
 		}
@@ -101,13 +101,13 @@ public static class ObjectExtensions
 		if (obj is DictionaryEntry dictionaryEntry)
 			return dictionaryEntry.Key.ToString();
 
-		string valueString = obj.ToString();
+		string? valueString = obj.ToString();
 		if (valueString == type.ToString())
 		{
 			return '(' + type.Name + ')';
 		}
 
-		if (valueString.Length > maxLength)
+		if (valueString!.Length > maxLength)
 			return valueString[..maxLength];
 
 		return valueString;
@@ -120,7 +120,7 @@ public static class ObjectExtensions
 
 	public static string EnumerableToString(this IEnumerable enumerable)
 	{
-		var strings = new List<string>();
+		var strings = new List<string?>();
 		foreach (var item in enumerable)
 			strings.Add(item.ToString());
 
@@ -134,7 +134,7 @@ public static class ObjectExtensions
 		return EnumerableToString(collection);
 	}
 
-	public static string ToUniqueString(this object obj)
+	public static string? ToUniqueString(this object obj)
 	{
 		if (obj == null)
 			return null;
@@ -150,7 +150,7 @@ public static class ObjectExtensions
 				return dateTime.ToString("yyyy-MM-dd H:mm:ss.FFFFFF");
 
 			// use any ToString() that overrides the base
-			MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes);
+			MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes)!;
 			if (toStringMethod.DeclaringType != typeof(object) && toStringMethod.DeclaringType != typeof(ValueType))
 			{
 				return obj.ToString();
@@ -159,9 +159,9 @@ public static class ObjectExtensions
 
 		if (type.IsNumeric())
 		{
-			MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) });
+			MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) })!;
 			string format = type.IsDecimal() ? "N" : "N0";
-			object result = toStringMethod.Invoke(obj, new object[] { format });
+			object? result = toStringMethod.Invoke(obj, new object[] { format });
 			if (result == null)
 				return null;
 
@@ -171,7 +171,7 @@ public static class ObjectExtensions
 		if (obj is DictionaryEntry dictionaryEntry)
 			return dictionaryEntry.Key.ToString();
 
-		string valueString = obj.ToString();
+		string? valueString = obj.ToString();
 		if (valueString != type.ToString())
 			return valueString;
 
@@ -182,10 +182,10 @@ public static class ObjectExtensions
 		PropertyInfo[] properties = type.GetProperties();
 		foreach (PropertyInfo propertyInfo in properties)
 		{
-			object propertyValue = propertyInfo.GetValue(obj);
+			object? propertyValue = propertyInfo.GetValue(obj);
 			if (propertyValue != null)
 			{
-				string toString = ToUniqueString(propertyValue);
+				string? toString = ToUniqueString(propertyValue);
 				if (toString != null)
 					return toString;
 			}
@@ -195,10 +195,10 @@ public static class ObjectExtensions
 		FieldInfo[] fields = type.GetFields();
 		foreach (FieldInfo fieldInfo in fields)
 		{
-			object fieldValue = fieldInfo.GetValue(obj);
+			object? fieldValue = fieldInfo.GetValue(obj);
 			if (fieldValue != null)
 			{
-				string toString = ToUniqueString(fieldValue);
+				string? toString = ToUniqueString(fieldValue);
 				if (toString != null)
 					return toString;
 			}

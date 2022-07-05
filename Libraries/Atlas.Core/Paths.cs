@@ -9,9 +9,6 @@ public static class Paths
 {
 	public static string Combine(string path, params string[] paths)
 	{
-		if (path == null)
-			return null;
-
 		foreach (string part in paths)
 		{
 			string name = part ?? "(null)";
@@ -60,7 +57,7 @@ public static class Paths
 		get
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Unix)
-				return Environment.GetEnvironmentVariable("HOME");
+				return Environment.GetEnvironmentVariable("HOME")!;
 			else
 				return Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
 		}

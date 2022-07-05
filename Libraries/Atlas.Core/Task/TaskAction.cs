@@ -7,7 +7,7 @@ public class TaskAction : TaskCreator
 {
 	public Action Action;
 
-	public override string ToString() => Label;
+	public override string? ToString() => Label;
 
 	public TaskAction(string label, Action action, bool useTask = false)
 	{

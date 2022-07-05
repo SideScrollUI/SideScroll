@@ -26,11 +26,11 @@ public class ByteFormatter : ICustomFormatter
 		return string.Format("{0:n" + decimalPlaces + "} {1}", dValue, SizeSuffixes[i]);
 	}
 
-	public string Format(string format, object arg, IFormatProvider formatProvider)
+	public string Format(string? format, object? arg, IFormatProvider? formatProvider)
 	{
 		if (arg is long value)
 			return Format(value, 1);
 
-		return null;
+		return arg?.ToString() ?? "(null)";
 	}
 }

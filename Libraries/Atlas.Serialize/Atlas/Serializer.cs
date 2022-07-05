@@ -132,7 +132,7 @@ public class Serializer : IDisposable
 			};
 			loaded.Add(typeInfo);
 		}
-		call.Log.Add("Objects Loaded", new Tag("Type Repos", loaded));
+		call.Log!.Add("Objects Loaded", new Tag("Type Repos", loaded));
 	}
 
 	// todo: only add types that are used
@@ -187,14 +187,14 @@ public class Serializer : IDisposable
 	{
 		using CallTimer callSaving = call.Timer("Saving object");
 
-		AddObjectMemberTypes(callSaving.Log);
+		AddObjectMemberTypes(callSaving.Log!);
 		//UpdateTypeSchemaDerived();
 		Header.Save(writer);
 		long schemaPosition = writer.BaseStream.Position;
 		writer.Write((long)0); // will write correct value at end
 		SaveSchemas(writer);
 		SavePrimitives(callSaving, writer);
-		SaveObjects(callSaving.Log, writer);
+		SaveObjects(callSaving.Log!, writer);
 
 		// write out schema again for file offsets and size
 		writer.Seek((int)schemaPosition, SeekOrigin.Begin);
@@ -207,7 +207,7 @@ public class Serializer : IDisposable
 		Reader = reader;
 		Lazy = lazy;
 
-		using LogTimer logTimer = call.Log.Timer("Loading object");
+		using LogTimer logTimer = call.Log!.Timer("Loading object");
 
 		Header.Load(reader);
 		if (Header.Version != Header.LatestVersion)

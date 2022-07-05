@@ -9,16 +9,16 @@ namespace Atlas.Core;
 
 public interface IContext
 {
-	SynchronizationContext Context { get; set; }
+	SynchronizationContext? Context { get; set; }
 	void InitializeContext(bool reset = false);
 }
 
 // Allows updating UI after initialization
 public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollection, IContext //, IRaiseItemChangedEvents //
 {
-	public string ColumnName { get; set; }
-	public string Label { get; set; }
-	public string CustomSettingsPath { get; set; }
+	public string? ColumnName { get; set; }
+	public string? Label { get; set; }
+	public string? CustomSettingsPath { get; set; }
 	public bool Skippable { get; set; } = true;
 
 	// Enable for thread safety when there's multiple threads acting on this collection
@@ -26,13 +26,11 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	// false: Events can shortcut and run on the current context, bypassing the event queue, which can be faster, but out of order
 	public bool PostOnly { get; set; } = false;
 
-	public SynchronizationContext Context { get; set; } // TabInstance will initialize this, don't want to initialize this early due to default SynchronizationContext not posting messages in order
+	public SynchronizationContext? Context { get; set; } // TabInstance will initialize this, don't want to initialize this early due to default SynchronizationContext not posting messages in order
 
 	private readonly object _lock = new();
 
-	public ItemCollectionUI()
-	{
-	}
+	public ItemCollectionUI() { }
 
 	// Don't implement List<T>, it isn't sortable
 	public ItemCollectionUI(IEnumerable<T> iEnumerable) :
@@ -66,10 +64,10 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	}
 
 	// Thread safe callback
-	private void AddItemCallback(object state)
+	private void AddItemCallback(object? state)
 	{
 		// Debug.Print("AddItemCallback: Item = " + state.ToString());
-		T item = (T)state;
+		T item = (T)state!;
 		lock (_lock)
 		{
 			base.Add(item);
@@ -116,9 +114,9 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	}
 
 	// Thread safe callback, only works if the context is the same
-	private void InsertItemCallback(object state)
+	private void InsertItemCallback(object? state)
 	{
-		ItemLocation itemLocation = (ItemLocation)state;
+		ItemLocation itemLocation = (ItemLocation)state!;
 
 		lock (_lock)
 		{
@@ -140,7 +138,7 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	}
 
 	// Thread safe callback, only works if the context is the same
-	private void ClearCallback(object state)
+	private void ClearCallback(object? state)
 	{
 		lock (_lock)
 		{
@@ -165,9 +163,9 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	}
 
 	// Thread safe callback, only works if the context is the same
-	private void RemoveItemCallback(object state)
+	private void RemoveItemCallback(object? state)
 	{
-		int index = (int)state;
+		int index = (int)state!;
 
 		lock (_lock)
 		{

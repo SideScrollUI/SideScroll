@@ -22,7 +22,7 @@ public class LogSettings
 	internal object Lock = new(); // todo: replace this with individual ones? or a non-blocking version
 
 	[HiddenRow]
-	public SynchronizationContext Context; // inherited from creator (which can be a Parent Log)
+	public SynchronizationContext? Context; // inherited from creator (which can be a Parent Log)
 
 	public LogSettings Clone()
 	{
@@ -53,12 +53,12 @@ public enum LogLevel
 public class LogEntry : INotifyPropertyChanged
 {
 	[Hidden]
-	public LogSettings Settings { get; set; }
+	public LogSettings? Settings { get; set; }
 
 	[HiddenRow]
 	public LogEntry RootLog;
 
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	[HiddenColumn]
 	public DateTime Created { get; set; }
@@ -69,10 +69,10 @@ public class LogEntry : INotifyPropertyChanged
 	public LogLevel Level { get; set; } = LogLevel.Info;
 
 	[Hidden]
-	public string Text { get; set; }
+	public string? Text { get; set; }
 
 	[WordWrap, MinWidth(300)]
-	public string Message
+	public string? Message
 	{
 		get
 		{
@@ -87,8 +87,8 @@ public class LogEntry : INotifyPropertyChanged
 		}
 	}
 
-	[Hidden]
-	public virtual string Summary => Text;
+	//[Hidden]
+	//public virtual string? Summary => Text;
 
 	public int Entries => _entries;
 	protected int _entries;
@@ -122,7 +122,7 @@ public class LogEntry : INotifyPropertyChanged
 	}
 
 	[HiddenColumn]
-	public Tag[] Tags { get; set; }
+	public Tag[]? Tags { get; set; }
 
 	public override string ToString() => Message ?? Level.ToString();
 
@@ -153,12 +153,12 @@ public class LogEntry : INotifyPropertyChanged
 
 	protected void CreateEventPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		Settings.Context?.Post(NotifyPropertyChangedContext, propertyName);
+		Settings?.Context?.Post(NotifyPropertyChangedContext, propertyName);
 	}
 
-	private void NotifyPropertyChangedContext(object state)
+	private void NotifyPropertyChangedContext(object? state)
 	{
-		string propertyName = state as string;
+		string propertyName = (string)state!;
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 }

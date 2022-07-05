@@ -10,43 +10,43 @@ namespace Atlas.Core;
 
 public class TaskInstance : INotifyPropertyChanged
 {
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 	//public event EventHandler<EventArgs> OnComplete;
 
-	public Action OnComplete;
+	public Action? OnComplete;
 
-	private string _label;
-	public string Label
+	private string? _label;
+	public string? Label
 	{
 		get => _label ?? Creator?.Label;
 		set => _label = value;
 	}
-	public TaskCreator Creator { get; set; }
+	public TaskCreator? Creator { get; set; }
 
 	[HiddenColumn]
 	public Call Call { get; set; } = new();
 
 	[InnerValue, HiddenColumn]
-	public Log Log => Call.Log;
+	public Log? Log => Call.Log;
 
 	[HiddenColumn]
 	public bool ShowTask { get; set; }
 
-	public Task Task { get; set; }
+	public Task? Task { get; set; }
 	public TaskStatus TaskStatus => Task?.Status ?? TaskStatus.Created;
 
 	public CancellationTokenSource TokenSource = new();
 	public CancellationToken CancelToken => TokenSource.Token;
 
 	public string Status { get; set; } = "Running";
-	public string Message { get; set; }
+	public string? Message { get; set; }
 
 	public long ProgressMax { get; set; } = 0;
 
 	public bool Errored { get; set; }
 	public bool Finished { get; set; }
 
-	public TaskInstance ParentTask { get; set; }
+	public TaskInstance? ParentTask { get; set; }
 	public List<TaskInstance> SubTasks { get; set; } = new();
 
 	private int? _taskCount;
@@ -70,7 +70,7 @@ public class TaskInstance : INotifyPropertyChanged
 
 	private readonly Stopwatch _stopwatch = new();
 
-	public override string ToString() => Label;
+	public override string? ToString() => Label;
 
 	public TaskInstance()
 	{
@@ -197,19 +197,19 @@ public class TaskInstance : INotifyPropertyChanged
 		_stopwatch.Stop(); // Both Send and Post adds some delay
 
 		if (Creator != null)
-			Creator.Context.Post(OnFinished, null);
+			Creator.Context!.Post(OnFinished, null);
 		else
 			OnFinished(null);
 	}
 
-	private void OnFinished(object state)
+	private void OnFinished(object? state)
 	{
 		/*var eventCompleted = new EventCompleted();
 		eventCompleted.taskCheckFileSize = this;
 		OnComplete?.Invoke(this, eventCompleted);*/
 		Finished = true;
 
-		if (Call.TaskInstance.CancelToken.IsCancellationRequested)
+		if (Call.TaskInstance!.CancelToken.IsCancellationRequested)
 		{
 			Status = "Cancelled";
 		}
@@ -217,7 +217,7 @@ public class TaskInstance : INotifyPropertyChanged
 		{
 			Progress = ProgressMax;
 
-			if (Call.Log.Level >= LogLevel.Error)
+			if (Call.Log!.Level >= LogLevel.Error)
 			{
 				Status = Call.Log.Level.ToString();
 				Errored = true;
@@ -237,7 +237,7 @@ public class TaskInstance : INotifyPropertyChanged
 			else
 			{
 				Status = TaskStatus.ToString();
-				Message = Log.Summary;
+				Message = Log!.Text; // todo: First log entry with highest log level?
 			}
 		}
 
@@ -246,7 +246,7 @@ public class TaskInstance : INotifyPropertyChanged
 		NotifyPropertyChanged(nameof(Finished));
 		NotifyPropertyChanged(nameof(CancelVisible));
 
-		Call.Log.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));
+		Call.Log!.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));
 
 		if (ParentTask == null)
 			Creator?.OnComplete?.Invoke();
@@ -255,12 +255,12 @@ public class TaskInstance : INotifyPropertyChanged
 
 	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		Creator?.Context.Post(NotifyPropertyChangedContext, propertyName);
+		Creator?.Context!.Post(NotifyPropertyChangedContext, propertyName);
 	}
 
-	private void NotifyPropertyChangedContext(object state)
+	private void NotifyPropertyChangedContext(object? state)
 	{
-		string propertyName = state as string;
+		string propertyName = (string)state!;
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 }

@@ -9,8 +9,8 @@ namespace Atlas.Core;
 
 public class ListGroup
 {
-	public string Name { get; set; }
-	public string UnitName { get; set; }
+	public string? Name { get; set; }
+	public string? UnitName { get; set; }
 
 	public bool Horizontal { get; set; }
 	public bool ShowLegend { get; set; } = true;
@@ -21,13 +21,13 @@ public class ListGroup
 	public double? MinValue { get; set; }
 	public double XBinSize { get; set; }
 
-	public TimeWindow TimeWindow { get; set; }
+	public TimeWindow? TimeWindow { get; set; }
 
 	public ItemCollection<ListSeries> Series { get; set; } = new();
 
-	public override string ToString() => Name;
+	public override string? ToString() => Name;
 
-	public ListGroup(string name = null, TimeWindow timeWindow = null)
+	public ListGroup(string? name = null, TimeWindow? timeWindow = null)
 	{
 		Name = name;
 		TimeWindow = timeWindow;
@@ -42,19 +42,19 @@ public class ListGroup
 	public void AddDimensions(IList iList, string categoryPropertyName, string xPropertyName, string yPropertyName)
 	{
 		Type listType = iList.GetType();
-		Type elementType = iList.GetType().GetElementTypeForAll();
-		PropertyInfo categoryPropertyInfo = elementType.GetProperty(categoryPropertyName);
+		Type elementType = iList.GetType().GetElementTypeForAll()!;
+		PropertyInfo categoryPropertyInfo = elementType.GetProperty(categoryPropertyName)!;
 
 		var dimensions = new Dictionary<string, IList>();
 		foreach (var obj in iList)
 		{
-			var categoryObject = categoryPropertyInfo.GetValue(obj);
+			var categoryObject = categoryPropertyInfo.GetValue(obj)!;
 
-			string category = categoryObject.ToString();
+			string category = categoryObject.ToString()!;
 
-			if (!dimensions.TryGetValue(category, out IList categoryList))
+			if (!dimensions.TryGetValue(category, out IList? categoryList))
 			{
-				categoryList = (IList)Activator.CreateInstance(listType);
+				categoryList = (IList)Activator.CreateInstance(listType)!;
 				dimensions.Add(category, categoryList);
 
 				var listSeries = new ListSeries(category, categoryList, xPropertyName, yPropertyName)

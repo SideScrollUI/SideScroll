@@ -49,7 +49,7 @@ public static class TypeExtensions
 	public static Type GetNonNullableType(this Type type)
 	{
 		if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
-			return Nullable.GetUnderlyingType(type);
+			return Nullable.GetUnderlyingType(type)!;
 		return type;
 	}
 
@@ -66,14 +66,14 @@ public static class TypeExtensions
 		if (givenType.IsGenericType && givenType.GetGenericTypeDefinition() == genericType)
 			return true;
 
-		Type baseType = givenType.BaseType;
+		Type? baseType = givenType.BaseType;
 		if (baseType == null)
 			return false;
 
 		return IsAssignableToGenericType(baseType, genericType);
 	}
 
-	public static Type GetElementTypeForAll(this Type type)
+	public static Type? GetElementTypeForAll(this Type type)
 	{
 		if (type.HasElementType)
 			return type.GetElementType();
@@ -95,7 +95,7 @@ public static class TypeExtensions
 			.ToList();
 	}
 
-	public static PropertyInfo GetPropertyWithAttribute<T>(this Type type) where T : Attribute
+	public static PropertyInfo? GetPropertyWithAttribute<T>(this Type type) where T : Attribute
 	{
 		return GetPropertiesWithAttribute<T>(type).FirstOrDefault();
 	}

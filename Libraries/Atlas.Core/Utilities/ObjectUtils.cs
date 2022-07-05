@@ -7,12 +7,12 @@ namespace Atlas.Core;
 
 public static class ObjectUtils
 {
-	public static string GetObjectId(object obj)
+	public static string? GetObjectId(object obj)
 	{
-		string id = GetDataKey(obj);
+		string? id = GetDataKey(obj);
 		if (id == null)
 		{
-			object dataValue = GetDataValue(obj);
+			object? dataValue = GetDataValue(obj);
 			if (dataValue != null)
 				id = GetDataKey(dataValue);
 		}
@@ -20,7 +20,7 @@ public static class ObjectUtils
 	}
 
 	// Returns the Value.ToUniqueString() for the first property or field that has a [DataKey]
-	public static string GetDataKey(object obj)
+	public static string? GetDataKey(object obj)
 	{
 		if (obj == null) return null;
 
@@ -39,7 +39,7 @@ public static class ObjectUtils
 	}
 
 	// Get's the [DataValue] member that will be imported with an Imported Bookmark
-	public static object GetDataValue(object obj)
+	public static object? GetDataValue(object obj)
 	{
 		if (obj == null) return null;
 
@@ -61,7 +61,7 @@ public static class ObjectUtils
 		return null;
 	}
 
-	public static bool AreEqual(object obj1, object obj2, int maxDepth = 3)
+	public static bool AreEqual(object? obj1, object? obj2, int maxDepth = 3)
 	{
 		if (obj1 == null) return obj2 == null;
 		if (obj2 == null) return false;

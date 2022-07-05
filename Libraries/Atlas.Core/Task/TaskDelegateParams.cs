@@ -10,7 +10,7 @@ public class TaskDelegateParams : TaskCreator
 	public CallActionParams CallAction;
 	public object[] Objects;
 
-	public override string ToString() => Label;
+	public override string? ToString() => Label;
 
 	public TaskDelegateParams(Call call, string label, CallActionParams callAction, bool useTask, string description, object[] objects)
 	{
@@ -35,7 +35,7 @@ public class TaskDelegateParams : TaskCreator
 		}
 		catch (Exception e)
 		{
-			call.Log.Add(e);
+			call.Log!.Add(e);
 		}
 	}
 }
