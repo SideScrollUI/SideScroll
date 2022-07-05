@@ -39,7 +39,7 @@ public class MemoryTypeCache<T1>
 		MemoryCache.Set(key, response, options);
 	}
 
-	public T1 Get(Call call, string key)
+	public T1? Get(Call call, string key)
 	{
 		if (MemoryCache.TryGetValue(key, out object result))
 		{
@@ -50,7 +50,7 @@ public class MemoryTypeCache<T1>
 		return default;
 	}
 
-	public bool TryGetValue(Call call, string key, out T1 t1)
+	public bool TryGetValue(Call call, string key, out T1? t1)
 	{
 		if (MemoryCache.TryGetValue(key, out object result))
 		{

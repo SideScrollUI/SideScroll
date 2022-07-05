@@ -43,7 +43,7 @@ public class ListItem : IListItem, INotifyPropertyChanged
 	public object Key { get; set; }
 
 	[HiddenColumn, InnerValue]
-	public object Value { get; set; }
+	public object? Value { get; set; }
 
 	// DataGrid columns bind to this
 	public string Name
@@ -59,7 +59,7 @@ public class ListItem : IListItem, INotifyPropertyChanged
 
 	public override string ToString() => Key.ToString() ?? "";
 
-	public ListItem(object key, object value)
+	public ListItem(object key, object? value)
 	{
 		Key = key;
 		Value = value;

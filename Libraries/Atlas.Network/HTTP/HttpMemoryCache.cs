@@ -23,7 +23,7 @@ public class HttpMemoryCache
 		MemoryCache = new MemoryCache(options);
 	}
 
-	public void Add(string key, object obj)
+	public void Add(string key, object? obj)
 	{
 		if (obj == null)
 			return;
@@ -36,15 +36,15 @@ public class HttpMemoryCache
 		MemoryCache.Set(key, obj, options);
 	}
 
-	public T Get<T>(Call call, string uri)
+	public T? Get<T>(Call call, string uri)
 	{
-		if (TryGetValue<T>(call, uri, out T t))
+		if (TryGetValue<T>(call, uri, out T? t))
 			return t;
 
 		return default;
 	}
 
-	public bool TryGetValue<T>(Call call, string uri, out T t)
+	public bool TryGetValue<T>(Call call, string uri, out T? t)
 	{
 		if (uri == null)
 		{
@@ -59,7 +59,7 @@ public class HttpMemoryCache
 			return true;
 		}
 
-		string text = HttpUtils.GetString(call, uri);
+		string? text = HttpUtils.GetString(call, uri);
 		if (text != null)
 		{
 			try

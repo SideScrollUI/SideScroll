@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Net.Http;
 
 namespace Atlas.Network;
@@ -16,13 +16,13 @@ public static class HttpClientManager
 
 	private static readonly Dictionary<string, HttpClient> _clients = new();
 
-	public static HttpClient GetClient(string accept = null)
+	public static HttpClient GetClient(string? accept = null)
 	{
 		if (accept == null) return _defaultClient;
 
 		lock (_clients)
 		{
-			if (_clients.TryGetValue(accept, out HttpClient client)) return client;
+			if (_clients.TryGetValue(accept, out HttpClient? client)) return client;
 
 			client = new HttpClient(_handler);
 			client.DefaultRequestHeaders.Add("Accept", accept);

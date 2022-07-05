@@ -59,9 +59,9 @@ public class TabFile : ITab
 
 			string extension = System.IO.Path.GetExtension(path).ToLower();
 
-			if (ExtensionTypes.TryGetValue(extension, out Type type))
+			if (ExtensionTypes.TryGetValue(extension, out Type? type))
 			{
-				var tab = (IFileTypeView)Activator.CreateInstance(type);
+				var tab = (IFileTypeView)Activator.CreateInstance(type)!;
 				tab.Path = path;
 				items.Add(new ListItem(extension, tab));
 			}

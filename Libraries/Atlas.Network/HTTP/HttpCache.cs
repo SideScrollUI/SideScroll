@@ -15,20 +15,20 @@ public class HttpCache : IDisposable
 
 	public class Entry
 	{
-		public string Uri { get; set; }
+		public string? Uri { get; set; }
 		public long Offset { get; set; }
 		public int Size { get; set; }
 		public DateTime Downloaded { get; set; }
 
-		public override string ToString() => Uri;
+		public override string? ToString() => Uri;
 	}
 
 	public class LoadableEntry : Entry
 	{
-		public HttpCache Cache;
+		public HttpCache? Cache;
 
 		[HiddenColumn]
-		public string Text => Cache.GetString(Uri);
+		public string? Text => Cache?.GetString(Uri!);
 
 		/*public void Download(Call call)
 		{
@@ -135,7 +135,7 @@ public class HttpCache : IDisposable
 		lock (_entryLock)
 		{
 			// todo: add support for updating entries
-			if (_cache.TryGetValue(uri, out Entry entry))
+			if (_cache.TryGetValue(uri, out Entry? entry))
 				return;
 
 			entry = new Entry()
@@ -170,11 +170,11 @@ public class HttpCache : IDisposable
 		return _cache.ContainsKey(uri);
 	}
 
-	public byte[] GetBytes(string uri)
+	public byte[]? GetBytes(string uri)
 	{
 		lock (_entryLock)
 		{
-			if (!_cache.TryGetValue(uri, out Entry entry))
+			if (!_cache.TryGetValue(uri, out Entry? entry))
 				return null;
 
 			_dataStream.Position = entry.Offset;
@@ -187,7 +187,7 @@ public class HttpCache : IDisposable
 
 	public string GetString(string uri)
 	{
-		byte[] bytes = GetBytes(uri);
+		byte[] bytes = GetBytes(uri)!;
 		string text = Encoding.ASCII.GetString(bytes);
 		return text;
 	}

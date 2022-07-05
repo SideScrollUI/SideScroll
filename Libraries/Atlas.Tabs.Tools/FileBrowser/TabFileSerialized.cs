@@ -20,8 +20,8 @@ public class TabFileSerialized : ITab
 	{
 		public TabFileSerialized Tab;
 
-		public object Object;
-		public Serializer Serializer;
+		public object? Object;
+		public Serializer? Serializer;
 
 		private readonly ListItem _listData = new("Object", null);
 
@@ -34,7 +34,7 @@ public class TabFileSerialized : ITab
 		{
 			var items = new List<ListItem>();
 
-			var serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(Tab.Path));
+			var serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(Tab.Path)!);
 
 			Serializer = serializerFile.LoadSchema(call);
 

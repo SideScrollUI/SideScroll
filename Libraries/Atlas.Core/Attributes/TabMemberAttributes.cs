@@ -63,13 +63,13 @@ public class HiddenRowAttribute : Attribute
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
 public class HideAttribute : Attribute
 {
-	public readonly List<object> Values;
+	public readonly List<object?> Values;
 
 	// passing a null param passes a null array :(
-	public HideAttribute(object value, params object[] additonalValues)
+	public HideAttribute(object? value, params object?[] additonalValues)
 	{
 		// Combine both params into a single list
-		Values = new List<object>(additonalValues)
+		Values = new List<object?>(additonalValues)
 		{
 			value
 		};
