@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace Atlas.UI.Avalonia;
@@ -35,6 +36,7 @@ public class BaseWindow : Window
 		Initialize(new Project(settings));
 	}
 
+	[MemberNotNull(nameof(Project), nameof(TabViewer))]
 	private void Initialize(Project project)
 	{
 		AtlasInit.Initialize();
@@ -45,6 +47,7 @@ public class BaseWindow : Window
 		Closed += BaseWindow_Closed;
 	}
 
+	[MemberNotNull(nameof(Project), nameof(TabViewer))]
 	public void LoadProject(Project project)
 	{
 		Project = project;
@@ -57,6 +60,7 @@ public class BaseWindow : Window
 	}
 
 	// Load here instead of in xaml for better control
+	[MemberNotNull(nameof(TabViewer))]
 	private void InitializeComponent()
 	{
 		Title = Project.ProjectSettings.Name ?? "<Name>";
@@ -164,7 +168,9 @@ public class BaseWindow : Window
 	{
 		SetMaxBounds();
 
-		WindowSettings = Project.DataApp.Load<WindowSettings>(true);
+		var settings = Project.DataApp.Load<WindowSettings>(true);
+		if (settings != null)
+			WindowSettings = settings;
 	}
 
 	// Still saving due to a HandleResized calls after IsActive (loadComplete does nothing)
@@ -182,12 +188,12 @@ public class BaseWindow : Window
 		Project.DataApp.Save(WindowSettings);
 	}
 
-	private void BaseWindow_Opened(object sender, EventArgs e)
+	private void BaseWindow_Opened(object? sender, EventArgs e)
 	{
 		TabViewer.Focus();
 	}
 
-	private void BaseWindow_Closed(object sender, EventArgs e)
+	private void BaseWindow_Closed(object? sender, EventArgs e)
 	{
 		// todo: split saving position out
 		//SaveWindowSettings();
@@ -200,7 +206,7 @@ public class BaseWindow : Window
 	}
 
 	// this fires too often, could attach a dispatch timer, or add an override method
-	private void BaseWindow_PositionChanged(object sender, PixelPointEventArgs e)
+	private void BaseWindow_PositionChanged(object? sender, PixelPointEventArgs e)
 	{
 		SaveWindowSettings();
 	}

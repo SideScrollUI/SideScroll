@@ -15,7 +15,7 @@ public class TabControlTitle : UserControl, IDisposable
 	public readonly TabInstance TabInstance;
 	public string Label { get; set; }
 
-	public TextBlock TextBlock;
+	public TextBlock? TextBlock;
 	//private CheckBox checkBox;
 	private Grid _containerGrid;
 
@@ -25,21 +25,16 @@ public class TabControlTitle : UserControl, IDisposable
 		set
 		{
 			Label = value;
-			TextBlock.Text = value;
+			TextBlock!.Text = value;
 		}
 	}
 
-	public TabControlTitle(TabInstance tabInstance, string name = null)
+	public TabControlTitle(TabInstance tabInstance, string? name = null)
 	{
 		TabInstance = tabInstance;
 		Label = name ?? tabInstance.Label;
-		Label = new StringReader(Label).ReadLine(); // Remove anything after first line
+		Label = new StringReader(Label).ReadLine()!; // Remove anything after first line
 
-		InitializeControl();
-	}
-
-	public void InitializeControl()
-	{
 		Background = Theme.TitleBackground;
 
 		_containerGrid = new Grid
@@ -127,7 +122,7 @@ public class TabControlTitle : UserControl, IDisposable
 		_containerGrid.Children.Add(linkButton);
 	}
 
-	private async void LinkButton_Click(object sender, RoutedEventArgs e)
+	private async void LinkButton_Click(object? sender, RoutedEventArgs e)
 	{
 		Bookmark bookmark = TabInstance.CreateBookmark();
 		bookmark.BookmarkType = BookmarkType.Tab;
@@ -139,7 +134,7 @@ public class TabControlTitle : UserControl, IDisposable
 	{
 		if (TextBlock != null)
 		{
-			TextBlock.ContextMenu.Items = null;
+			TextBlock.ContextMenu!.Items = null;
 			TextBlock.ContextMenu = null;
 			TextBlock = null;
 		}

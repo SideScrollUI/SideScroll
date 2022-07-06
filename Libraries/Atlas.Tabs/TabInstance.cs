@@ -823,7 +823,7 @@ public class TabInstance : IDisposable
 	}
 
 	// for detecting parent/child loops
-	public bool IsOwnerObject(object obj)
+	public bool IsOwnerObject(object? obj)
 	{
 		if (obj == null)
 			return false;
@@ -902,7 +902,7 @@ public class TabInstance : IDisposable
 		Project.Navigator.Update(bookmark);
 	}
 
-	public void SelectionChanged(object sender, EventArgs e)
+	public void SelectionChanged(object? sender, EventArgs e)
 	{
 		if (SelectedItems?.Count > 0)
 		{

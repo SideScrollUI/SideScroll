@@ -23,11 +23,7 @@ public class TabViewerToolbar : TabControlToolbar
 	public TabViewerToolbar(TabViewer tabViewer) : base(null)
 	{
 		TabViewer = tabViewer;
-		InitializeControls();
-	}
 
-	private void InitializeControls()
-	{
 		/*
 		var commandBinding = new CommandBinding(
 			ApplicationCommands.Open,
@@ -102,13 +98,13 @@ public class TabViewerToolbar : TabControlToolbar
 		TabViewer.Reload();
 	}
 
-	private bool CommandBackCanExecute(object obj)
+	private bool CommandBackCanExecute(object? obj)
 	{
 		return true;
 		//return project.Navigator.CanSeekBackward;
 	}
 
-	private bool CommandForwardCanExecute(object obj)
+	private bool CommandForwardCanExecute(object? obj)
 	{
 		return true;
 		//return project.Navigator.CanSeekForward;

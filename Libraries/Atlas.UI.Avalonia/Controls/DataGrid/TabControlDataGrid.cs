@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 	public TabModel TabModel;
 	public TabInstance TabInstance;
 	public TabDataSettings TabDataSettings;
-	public IList List;
+	public IList? List;
 	private Type _elementType;
 
 	public bool AutoSelectNew = true;
@@ -43,12 +44,12 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 	public bool AutoGenerateColumns = true;
 
 	public DataGrid DataGrid;
-	public TabControlSearch SearchControl;
+	public TabControlSearch? SearchControl;
 
 	//private HashSet<int> pinnedItems = new(); // starred items?
-	public DataGridCollectionView CollectionView;
+	public DataGridCollectionView? CollectionView;
 
-	public event EventHandler<TabSelectionChangedEventArgs> OnSelectionChanged;
+	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
 	private Dictionary<string, DataGridColumn> _columnObjects = new();
 	private Dictionary<DataGridColumn, string> _columnNames = new();
@@ -59,14 +60,14 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 	private bool _ignoreSelectionChanged = false;
 
 	private readonly Stopwatch _notifyItemChangedStopwatch = new();
-	private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
-	private object _autoSelectItem = null;
+	private DispatcherTimer? _dispatcherTimer;  // delays auto selection to throttle updates
+	private object? _autoSelectItem = null;
 
 	public AutoSelectType AutoSelect { get; set; } = AutoSelectType.FirstSavedOrNew;
 
-	private Filter _filter;
+	private Filter? _filter;
 
-	public IList Items
+	public IList? Items
 	{
 		get => List;
 		set
@@ -99,12 +100,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 	public override string ToString() => TabModel.Name;
 
-	private TabControlDataGrid()
-	{
-		Initialize();
-	}
-
-	public TabControlDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns, TabDataSettings tabDataSettings = null, TabModel model = null)
+	public TabControlDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns, TabDataSettings? tabDataSettings = null, TabModel? model = null)
 	{
 		TabInstance = tabInstance;
 		TabModel = model ?? TabInstance.Model;
@@ -151,12 +147,13 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		return total;
 	}*/
 
+	[MemberNotNull(nameof(_elementType), nameof(DataGrid))]
 	private void Initialize()
 	{
 		_disableSaving++;
 
-		Type listType = List.GetType();
-		_elementType = listType.GetElementTypeForAll();
+		Type listType = List!.GetType();
+		_elementType = listType.GetElementTypeForAll()!;
 
 		InitializeControls();
 		AddListUpdatedDispatcher();
@@ -170,6 +167,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		}, DispatcherPriority.Background);
 	}
 
+	[MemberNotNull(nameof(DataGrid))]
 	private void InitializeControls()
 	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -199,6 +197,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		Children.Add(SearchControl);
 	}
 
+	[MemberNotNull(nameof(DataGrid))]
 	private void AddDataGrid()
 	{
 		DataGrid = new DataGrid()
@@ -248,7 +247,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		Children.Add(DataGrid);
 	}
 
-	private void DataGrid_KeyDown(object sender, KeyEventArgs e)
+	private void DataGrid_KeyDown(object? sender, KeyEventArgs e)
 	{
 		// These keys are used for navigating in the TabViewer
 		if (e.Key == Key.Left || e.Key == Key.Right)
@@ -338,7 +337,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 	private bool _selectionModified = false;
 
-	private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+	private void INotifyCollectionChanged_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 	{
 		if (List == null) // reloading detaches list temporarily?
 			return;
@@ -349,10 +348,10 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 			if ((AutoSelectNew ||
 				TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved ||
 				TabModel.AutoSelect == AutoSelectType.FirstSavedOrNew)
-				&& (SearchControl.Text == null || SearchControl.Text.Length == 0))
+				&& (SearchControl!.Text == null || SearchControl.Text.Length == 0))
 			{
 				_selectItemEnabled = true;
-				object item = e.NewItems[0];
+				object? item = e.NewItems![0];
 				//object item = List[List.Count - 1];
 				// don't update the selection too often or we'll slow things down
 				if (!_notifyItemChangedStopwatch.IsRunning || _notifyItemChangedStopwatch.ElapsedMilliseconds > 1000)
@@ -377,9 +376,9 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		}
 	}
 
-	private void DispatcherTimer_Tick(object sender, EventArgs e)
+	private void DispatcherTimer_Tick(object? sender, EventArgs e)
 	{
-		object selectItem = _autoSelectItem;
+		object? selectItem = _autoSelectItem;
 		if (selectItem != null)
 		{
 			Dispatcher.UIThread.Post(() => SetSelectedItem(selectItem), DispatcherPriority.Background);
@@ -389,7 +388,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 	private bool _selectItemEnabled;
 
-	private void SetSelectedItem(object selectedItem)
+	private void SetSelectedItem(object? selectedItem)
 	{
 		if (!_selectItemEnabled)
 			return;
@@ -401,7 +400,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		_disableSaving--;
 	}
 
-	private void DataGrid_ColumnReordered(object sender, DataGridColumnEventArgs e)
+	private void DataGrid_ColumnReordered(object? sender, DataGridColumnEventArgs e)
 	{
 		var orderedColumns = new SortedDictionary<int, string>();
 		foreach (DataGridColumn column in DataGrid.Columns)
@@ -415,13 +414,13 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		TabInstance.SaveTabSettings();
 	}
 
-	private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+	private void DataGrid_SelectionChanged(object? sender, SelectionChangedEventArgs e)
 	{
 		// ignore if clearing selection before setting
 		if (_ignoreSelectionChanged)
 			return;
 
-		Bookmark bookmark = null;
+		Bookmark? bookmark = null;
 		if (_disableSaving == 0)
 		{
 			bookmark = TabInstance.CreateNavigatorBookmark();
@@ -439,7 +438,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 			bookmark.Changed = string.Join(",", TabDataSettings.SelectedRows);
 	}
 
-	private DataGridRow GetControlRow(object obj, int depth)
+	private DataGridRow? GetControlRow(object? obj, int depth)
 	{
 		if (depth == 0)
 			return null;
@@ -454,7 +453,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 	}
 
 	// Single click deselect
-	private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
+	private void DataGrid_CellPointerPressed(object? sender, DataGridCellPointerPressedEventArgs e)
 	{
 		var pointer = e.PointerPressedEventArgs.GetCurrentPoint(this);
 		if (pointer.Properties.IsLeftButtonPressed && e.Row != null && DataGrid.SelectedItems != null && DataGrid.SelectedItems.Count == 1)
@@ -469,7 +468,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		}
 	}
 
-	private static bool IsControlSelectable(IVisual visual)
+	private static bool IsControlSelectable(IVisual? visual)
 	{
 		if (visual == null)
 			return false;
@@ -482,7 +481,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 			IsControlSelectable(visual.VisualParent);
 	}
 
-	private static DataGrid GetOwningDataGrid(IControl control)
+	private static DataGrid? GetOwningDataGrid(IControl? control)
 	{
 		if (control == null)
 			return null;
@@ -501,7 +500,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		if (!point.Properties.IsLeftButtonPressed)
 			return;
 
-		DataGrid dataGrid = GetOwningDataGrid(row);
+		DataGrid? dataGrid = GetOwningDataGrid(row);
 		// Can't access row.OwningGrid, so we have to do this the hard way
 		if (dataGrid != null)
 		{
@@ -510,7 +509,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 			// Ignore if toggling CheckBox or clicking Button
 			// ReadOnly CheckBoxes will return the Cell Grid instead of a child Border control
-			IInputElement input = row.InputHitTest(point.Position);
+			IInputElement? input = row.InputHitTest(point.Position);
 			if (IsControlSelectable(input))
 				return;
 
@@ -536,16 +535,16 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 	private void ClearSearch()
 	{
 		if (!TabModel.ShowSearch)
-			SearchControl.IsVisible = false;
+			SearchControl!.IsVisible = false;
 
-		SearchControl.Text = "";
+		SearchControl!.Text = "";
 		FilterText = "";
 		Focus();
 
 		TabInstance.SaveTabSettings();
 	}
 
-	private void SearchControl_KeyDown(object sender, KeyEventArgs e)
+	private void SearchControl_KeyDown(object? sender, KeyEventArgs e)
 	{
 		if (e.Key == Key.Escape)
 		{
@@ -553,9 +552,9 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		}
 	}
 
-	private void SearchControl_KeyUp(object sender, KeyEventArgs e)
+	private void SearchControl_KeyUp(object? sender, KeyEventArgs e)
 	{
-		FilterText = SearchControl.Text;
+		FilterText = SearchControl!.Text;
 
 		SelectDefaultItems();
 
@@ -579,7 +578,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 		// Filter [Hide(null)]
 		propertyColumns = propertyColumns
-			.Where(p => p.IsVisible(List))
+			.Where(p => p.IsVisible(List!))
 			.ToList();
 
 		if (propertyColumns.Count == 0)
@@ -616,15 +615,15 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 	public void AddColumn(string label, string propertyName, bool styleCells = false)
 	{
-		PropertyInfo propertyInfo = _elementType.GetProperty(propertyName);
+		PropertyInfo propertyInfo = _elementType.GetProperty(propertyName)!;
 		AddColumn(label, propertyInfo, styleCells);
 	}
 
 	public void AddColumn(string label, PropertyInfo propertyInfo, bool styleCells = false)
 	{
-		MinWidthAttribute attributeMinWidth = propertyInfo.GetCustomAttribute<MinWidthAttribute>();
-		MaxWidthAttribute attributeMaxWidth = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
-		AutoSizeAttribute attributeAutoSize = propertyInfo.GetCustomAttribute<AutoSizeAttribute>();
+		MinWidthAttribute? attributeMinWidth = propertyInfo.GetCustomAttribute<MinWidthAttribute>();
+		MaxWidthAttribute? attributeMaxWidth = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
+		AutoSizeAttribute? attributeAutoSize = propertyInfo.GetCustomAttribute<AutoSizeAttribute>();
 
 		bool isReadOnly = true;
 
@@ -664,7 +663,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 				if (attributeAutoSize != null)
 					textColumn.AutoSize = true;
 
-				textColumn.ScanItemAttributes(List);
+				textColumn.ScanItemAttributes(List!);
 
 				column = textColumn;
 			}
@@ -683,7 +682,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 	public void AddButtonColumn(string methodName)
 	{
-		MethodInfo methodInfo = _elementType.GetMethod(methodName);
+		MethodInfo methodInfo = _elementType.GetMethod(methodName)!;
 		AddButtonColumn(new TabDataSettings.MethodColumn(methodInfo));
 	}
 
@@ -706,7 +705,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 			//UpdateSelection(); // datagrid not fully loaded yet
 		}
-		OnSelectionChanged?.Invoke(this, null);
+		OnSelectionChanged?.Invoke(this, new TabSelectionChangedEventArgs());
 	}
 
 	private void LoadSearch()
@@ -734,7 +733,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		if (TabDataSettings.SelectedRows.Count == 0)
 			return rowObjects;
 
-		TabItemCollection tabItemCollectionView = new(List, CollectionView);
+		TabItemCollection tabItemCollectionView = new(List!, CollectionView);
 
 		List<object> matchingObjects = tabItemCollectionView.GetSelectedObjects(TabDataSettings.SelectedRows);
 
@@ -768,7 +767,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		if (TabModel.AutoSelect == AutoSelectType.None)
 			return true;
 
-		if (List.Count == 0)
+		if (List!.Count == 0)
 			return false;
 
 		// Select new log items automatically
@@ -790,12 +789,12 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		return false;
 	}
 
-	private object GetDefaultSelectedItem()
+	private object? GetDefaultSelectedItem()
 	{
 		if (TabModel.DefaultSelectedItem == null)
 			return null;
 
-		foreach (object obj in CollectionView)
+		foreach (object obj in CollectionView!)
 		{
 			if (obj.ToUniqueString() == TabModel.DefaultSelectedItem.ToUniqueString())
 				return obj;
@@ -803,12 +802,12 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		return null;
 	}
 
-	private object GetAutoSelectValue()
+	private object? GetAutoSelectValue()
 	{
-		object firstValidObject = null;
-		foreach (object obj in CollectionView)
+		object? firstValidObject = null;
+		foreach (object obj in CollectionView!)
 		{
-			object value = obj;
+			object? value = obj;
 			if (value == null)
 				continue;
 
@@ -864,7 +863,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		if (AutoSelect == AutoSelectType.None)
 			return;
 
-		object firstValidObject = GetDefaultSelectedItem() ?? GetAutoSelectValue();
+		object? firstValidObject = GetDefaultSelectedItem() ?? GetAutoSelectValue();
 		if (firstValidObject != null && DataGrid.SelectedItems.Count == 0)
 			SelectedItem = firstValidObject;
 
@@ -911,7 +910,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 			foreach (object obj in value)
 			{
-				if (List.Contains(obj))
+				if (List!.Contains(obj))
 					DataGrid.SelectedItems.Add(obj);
 			}
 			DataGrid.InvalidateVisual(); // required for autoselection to work
@@ -956,7 +955,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		set => DataGrid.SelectedIndex = value;
 	}
 
-	public object SelectedItem
+	public object? SelectedItem
 	{
 		get => DataGrid.SelectedItem;
 		set
@@ -977,7 +976,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		}
 	}
 
-	private void ScrollIntoView(object value)
+	private void ScrollIntoView(object? value)
 	{
 		// DataGrid.IsInitialized is unreliable and can still be false while showing
 		if (value == null || DataGrid == null || !DataGrid.IsEffectivelyVisible)
@@ -1062,7 +1061,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 					var selectedRow = new SelectedRow(obj)
 					{
-						RowIndex = List.IndexOf(obj),
+						RowIndex = List!.IndexOf(obj),
 					};
 					selectedRows.Add(selectedRow);
 				}
@@ -1076,7 +1075,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		}
 	}
 
-	private string FilterText
+	private string? FilterText
 	{
 		set
 		{
@@ -1092,21 +1091,21 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 				if (_filter.Depth > 0)
 				{
 					// create a new collection because this one might have multiple lists
-					TabModel tabModel = TabModel.Create(this.TabModel.Name, List);
+					TabModel tabModel = TabModel.Create(this.TabModel.Name, List!)!;
 					TabBookmark bookmarkNode = tabModel.FindMatches(_filter, _filter.Depth);
 					TabInstance.FilterBookmarkNode = bookmarkNode;
-					CollectionView.Filter = FilterPredicate;
+					CollectionView!.Filter = FilterPredicate;
 					TabInstance.SelectBookmark(bookmarkNode);
 				}
 				else
 				{
-					CollectionView.Filter = FilterPredicate;
+					CollectionView!.Filter = FilterPredicate;
 					CollectionView.Refresh();
 				}
 			}
 			else
 			{
-				CollectionView.Filter = null;
+				CollectionView!.Filter = null;
 			}
 
 			if (TabModel.SearchFilter != null)
@@ -1125,7 +1124,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		}
 		else
 		{
-			return _filter.Matches(obj, _columnProperties);
+			return _filter!.Matches(obj, _columnProperties);
 		}
 	}
 
@@ -1205,7 +1204,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 		{
 			if (e.Key == Key.F)
 			{
-				SearchControl.IsVisible = !SearchControl.IsVisible;
+				SearchControl!.IsVisible = !SearchControl.IsVisible;
 				if (SearchControl.IsVisible)
 					SearchControl.Focus();
 				return;

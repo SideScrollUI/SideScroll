@@ -80,7 +80,7 @@ public class TabControlParams : Grid
 		Children.Add(textBlock);
 	}
 
-	public List<Control> AddObjectRow(object obj, List<PropertyInfo> properties = null)
+	public List<Control> AddObjectRow(object obj, List<PropertyInfo>? properties = null)
 	{
 		properties ??= obj.GetType().GetVisibleProperties();
 
@@ -91,7 +91,7 @@ public class TabControlParams : Grid
 		foreach (PropertyInfo propertyInfo in properties)
 		{
 			var property = new ListProperty(obj, propertyInfo);
-			Control control = CreatePropertyControl(property);
+			Control? control = CreatePropertyControl(property);
 			if (control == null)
 				continue;
 
@@ -120,20 +120,20 @@ public class TabControlParams : Grid
 		Children.Add(control);
 	}
 
-	public Control AddPropertyRow(string propertyName)
+	public Control? AddPropertyRow(string propertyName)
 	{
-		PropertyInfo propertyInfo = Object.GetType().GetProperty(propertyName);
+		PropertyInfo propertyInfo = Object.GetType().GetProperty(propertyName)!;
 		return AddPropertyRow(new ListProperty(Object, propertyInfo));
 	}
 
-	public Control AddPropertyRow(PropertyInfo propertyInfo)
+	public Control? AddPropertyRow(PropertyInfo propertyInfo)
 	{
 		return AddPropertyRow(new ListProperty(Object, propertyInfo));
 	}
 
-	public Control AddPropertyRow(ListProperty property)
+	public Control? AddPropertyRow(ListProperty property)
 	{
-		Control control = CreatePropertyControl(property);
+		Control? control = CreatePropertyControl(property);
 		if (control == null)
 			return null;
 
@@ -170,14 +170,14 @@ public class TabControlParams : Grid
 		return control;
 	}
 
-	private Control CreatePropertyControl(ListProperty property)
+	private Control? CreatePropertyControl(ListProperty property)
 	{
 		Type type = property.UnderlyingType;
 
-		BindListAttribute listAttribute = type.GetCustomAttribute<BindListAttribute>();
+		BindListAttribute? listAttribute = type.GetCustomAttribute<BindListAttribute>();
 		listAttribute ??= property.PropertyInfo.GetCustomAttribute<BindListAttribute>();
 
-		Control control = null;
+		Control? control = null;
 		if (type == typeof(bool))
 		{
 			control = new TabControlCheckBox(property);

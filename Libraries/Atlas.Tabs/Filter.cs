@@ -66,7 +66,7 @@ public class Filter
 
 	// "ABC" | 123
 	// +3 "ABC" | 123
-	public Filter(string filterText)
+	public Filter(string? filterText)
 	{
 		FilterText = filterText ?? "";
 

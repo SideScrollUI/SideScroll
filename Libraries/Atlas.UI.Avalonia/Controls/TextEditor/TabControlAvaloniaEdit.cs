@@ -40,19 +40,15 @@ public class TabControlAvaloniaEdit : Grid
 
 	public TabInstance TabInstance;
 
-	public string Path;
-	public ListProperty ListProperty;
+	public string? Path;
+	public ListProperty? ListProperty;
 	public AvaloniaEdit.TextEditor TextEditor;
 	public double MaxDesiredWidth = 1000;
 
 	public TabControlAvaloniaEdit(TabInstance tabInstance)
 	{
 		TabInstance = tabInstance;
-		InitializeControls();
-	}
 
-	private void InitializeControls()
-	{
 		Background = Brushes.Transparent;
 
 		MinWidth = 50; // WordWrap causes freezing below certain values
@@ -172,9 +168,9 @@ public class TabControlAvaloniaEdit : Grid
 		labelUrl.SetBinding(TextBox.TextProperty, binding);*/
 	}
 
-	private void ListProperty_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+	private void ListProperty_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
 	{
-		if (e.PropertyName == "ValueText" && TextEditor.Text != ListProperty.ValueText.ToString())
+		if (e.PropertyName == "ValueText" && TextEditor.Text != ListProperty!.ValueText!.ToString())
 			TextEditor.Text = ListProperty.ValueText.ToString();
 	}
 }

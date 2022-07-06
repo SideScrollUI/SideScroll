@@ -15,7 +15,7 @@ public static class TabUtils
 {
 	public static List<Type> IgnoreHighlightTypes { get; set; } = new();
 
-	public static bool ObjectHasLinks(object obj, bool ignoreEmpty = false)
+	public static bool ObjectHasLinks(object? obj, bool ignoreEmpty = false)
 	{
 		if (obj == null)
 			return false;

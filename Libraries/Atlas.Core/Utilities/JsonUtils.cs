@@ -5,9 +5,9 @@ namespace Atlas.Core;
 
 public static class JsonUtils
 {
-	public static string? Format(string text)
+	public static string Format(string text)
 	{
-		if (text?.StartsWith("{") != true)
+		if (text.StartsWith("{") != true)
 			return text;
 		
 		try

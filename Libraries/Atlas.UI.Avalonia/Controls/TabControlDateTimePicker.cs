@@ -10,6 +10,8 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 
 namespace Atlas.UI.Avalonia.Controls;
@@ -45,6 +47,7 @@ public class TabDateTimePicker : Grid, IStyleable
 		InitializeComponent();
 	}
 
+	[MemberNotNull(nameof(Binding), nameof(_dateTimeConverter), nameof(_datePicker), nameof(_timeTextBox))]
 	private void InitializeComponent()
 	{
 		ColumnDefinitions = new ColumnDefinitions("*,*,Auto");
@@ -68,6 +71,7 @@ public class TabDateTimePicker : Grid, IStyleable
 		Children.Add(buttonImport);
 	}
 
+	[MemberNotNull(nameof(_datePicker))]
 	private void AddDatePicker()
 	{
 		_datePicker = new TabCalendarDatePicker()
@@ -88,6 +92,7 @@ public class TabDateTimePicker : Grid, IStyleable
 		Children.Add(_datePicker);
 	}
 
+	[MemberNotNull(nameof(_timeTextBox))]
 	private void AddTimeTextBox()
 	{
 		_timeTextBox = new TabControlTextBox()
@@ -108,15 +113,15 @@ public class TabDateTimePicker : Grid, IStyleable
 		Children.Add(_timeTextBox);
 	}
 
-	private void ButtonImport_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	private void ButtonImport_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 		string clipboardText = ClipBoardUtils.GetTextAsync().Result;
 		TimeSpan? timeSpan = DateTimeUtils.ConvertTextToTimeSpan(clipboardText);
 		if (timeSpan != null)
 		{
-			DateTime? newDateTime = _dateTimeConverter.Convert(timeSpan, typeof(string), null, null) as DateTime?;
+			DateTime? newDateTime = _dateTimeConverter.Convert(timeSpan, typeof(string), null, CultureInfo.InvariantCulture) as DateTime?;
 			Property.PropertyInfo.SetValue(Property.Object, newDateTime);
-			_timeTextBox.Text = timeSpan.ToString();
+			_timeTextBox.Text = timeSpan.ToString()!;
 			e.Handled = true;
 		}
 		else
@@ -126,7 +131,7 @@ public class TabDateTimePicker : Grid, IStyleable
 			{
 				Property.PropertyInfo.SetValue(Property.Object, dateTime);
 				_datePicker.SelectedDate = dateTime;
-				_timeTextBox.Text = (string)_dateTimeConverter.Convert(dateTime, typeof(string), null, null);
+				_timeTextBox.Text = (string)_dateTimeConverter.Convert(dateTime, typeof(string), null, CultureInfo.InvariantCulture)!;
 				e.Handled = true;
 			}
 		}
@@ -177,16 +182,16 @@ public class TabDateTimePicker : Grid, IStyleable
 	}
 
 	// DefaultTheme.xaml is overriding this currently
-	private void Button_PointerEnter(object sender, PointerEventArgs e)
+	private void Button_PointerEnter(object? sender, PointerEventArgs e)
 	{
-		Button button = (Button)sender;
+		Button button = (Button)sender!;
 		button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
 		button.Background = Theme.ToolbarButtonBackgroundHover;
 	}
 
-	private void Button_PointerLeave(object sender, PointerEventArgs e)
+	private void Button_PointerLeave(object? sender, PointerEventArgs e)
 	{
-		Button button = (Button)sender;
+		Button button = (Button)sender!;
 		button.Background = Theme.TabBackground;
 		//button.Background = Brushes.Transparent;
 		button.BorderBrush = button.Background;

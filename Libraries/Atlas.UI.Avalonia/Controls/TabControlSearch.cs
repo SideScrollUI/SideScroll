@@ -6,6 +6,7 @@ using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Atlas.UI.Avalonia.Controls;
@@ -16,7 +17,7 @@ public class TabControlSearch : Grid, IStyleable
 
 	public TextBox TextBoxSearch;
 
-	public string Text
+	public string? Text
 	{
 		get => TextBoxSearch.Text;
 		set => TextBoxSearch.Text = value;
@@ -27,6 +28,7 @@ public class TabControlSearch : Grid, IStyleable
 		Initialize();
 	}
 
+	[MemberNotNull(nameof(TextBoxSearch))]
 	private void Initialize()
 	{
 		ColumnDefinitions = new ColumnDefinitions("*");
@@ -41,6 +43,7 @@ public class TabControlSearch : Grid, IStyleable
 		AddIcon();
 	}
 
+	[MemberNotNull(nameof(TextBoxSearch))]
 	private void AddTextBox()
 	{
 		TextBoxSearch = new TextBox()

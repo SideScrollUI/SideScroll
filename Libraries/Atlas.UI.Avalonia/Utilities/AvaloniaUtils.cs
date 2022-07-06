@@ -45,7 +45,7 @@ public static class AvaloniaUtils
 			Foreground = Theme.Foreground,
 		};
 
-		var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
+		var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>()!;
 
 		var list = new AvaloniaList<object>();
 
@@ -95,7 +95,7 @@ public static class AvaloniaUtils
 	{
 		Point controlTopLeftPoint = new(0, 0);
 		Point controlBottomRight = new(control.Bounds.Width, control.Bounds.Height);
-		IControl parentControl = control?.Parent;
+		IControl? parentControl = control?.Parent;
 		while (parentControl != null)
 		{
 			// sometimes controls don't update their bounds correctly, so only use the Window for now

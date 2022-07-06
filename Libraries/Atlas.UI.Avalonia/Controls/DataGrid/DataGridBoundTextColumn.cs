@@ -125,7 +125,7 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		var menuItemCopyDataGrid = new TabMenuItem("Copy - _DataGrid");
 		menuItemCopyDataGrid.Click += delegate
 		{
-			string text = DataGrid.ToStringTable();
+			string? text = DataGrid.ToStringTable();
 			if (text != null)
 				ClipBoardUtils.SetText(text);
 		};
@@ -134,7 +134,7 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		var menuItemCopyDataGridCsv = new TabMenuItem("Copy - DataGrid - C_SV");
 		menuItemCopyDataGridCsv.Click += delegate
 		{
-			string text = DataGrid.ToCsv();
+			string? text = DataGrid.ToCsv();
 			if (text != null)
 				ClipBoardUtils.SetText(text);
 		};

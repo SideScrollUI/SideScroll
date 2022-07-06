@@ -11,6 +11,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia;
@@ -32,22 +33,22 @@ public class TabViewer : Grid
 	public int DefaultScrollWidth => Math.Min(MaxScrollWidth, (int)(ScrollViewer.Viewport.Width * ScrollPercent));
 	public int KeyboardScrollWidth = 500;
 
-	public static TabViewer BaseViewer;
-	public static string LoadBookmarkUri { get; set; }
-	public static Bookmark LoadBookmark { get; set; }
+	public static TabViewer? BaseViewer;
+	public static string? LoadBookmarkUri { get; set; }
+	public static Bookmark? LoadBookmark { get; set; }
 
 	public Project Project { get; set; }
 
 	// Controls
-	public TabViewerToolbar Toolbar;
+	public TabViewerToolbar? Toolbar;
 	protected Grid BottomGrid;
 	public ScrollViewer ScrollViewer;
 	public Grid ContentGrid;
-	public TabView TabView;
+	public TabView? TabView;
 
-	public Control ContentControl;
+	public Control? ContentControl;
 
-	public event EventHandler<EventTabLoaded> OnTabLoaded;
+	public event EventHandler<EventTabLoaded>? OnTabLoaded;
 
 	public TabViewer(Project project)
 	{
@@ -55,6 +56,7 @@ public class TabViewer : Grid
 		LoadProject(project);
 	}
 
+	[MemberNotNull(nameof(Project)), MemberNotNull(nameof(BottomGrid)), MemberNotNull(nameof(ScrollViewer)), MemberNotNull(nameof(ContentGrid))]
 	public void LoadProject(Project project)
 	{
 		Project = project;
@@ -62,6 +64,7 @@ public class TabViewer : Grid
 		InitializeComponent();
 	}
 
+	[MemberNotNull(nameof(BottomGrid)), MemberNotNull(nameof(ScrollViewer)), MemberNotNull(nameof(ContentGrid))]
 	private void InitializeComponent()
 	{
 		Background = Theme.TabBackground;
@@ -129,16 +132,16 @@ public class TabViewer : Grid
 	public void Reload()
 	{
 		TabBookmarks.Global = null;
-		TabView.Instance.Reload();
+		TabView!.Instance.Reload();
 	}
 
 	private async Task LinkAsync(Call call)
 	{
-		Bookmark bookmark = TabView.Instance.CreateBookmark();
-		TabBookmark leafNode = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
+		Bookmark bookmark = TabView!.Instance.CreateBookmark();
+		TabBookmark? leafNode = bookmark!.TabBookmark.GetLeaf(); // Get the shallowest root node
 		if (leafNode != bookmark.TabBookmark)
 		{
-			bookmark.Name = leafNode.Tab?.ToString();
+			bookmark.Name = leafNode!.Tab?.ToString();
 			bookmark.TabBookmark = leafNode;
 			bookmark.BookmarkType = BookmarkType.Leaf;
 		}
@@ -156,25 +159,25 @@ public class TabViewer : Grid
 		await ImportBookmarkAsync(call, clipboardText, true);
 	}
 
-	private async Task<Bookmark> ImportBookmarkAsync(Call call, string linkUri, bool checkVersion)
+	private async Task<Bookmark?> ImportBookmarkAsync(Call call, string linkUri, bool checkVersion)
 	{
-		Bookmark bookmark = await Project.Linker.GetBookmarkAsync(call, linkUri, checkVersion);
+		Bookmark? bookmark = await Project.Linker.GetBookmarkAsync(call, linkUri, checkVersion);
 		if (bookmark == null)
 			return null;
 
 		return ImportBookmark(call, bookmark);
 	}
 
-	private Bookmark ImportBookmark(Call call, string linkUri, bool checkVersion)
+	private Bookmark? ImportBookmark(Call call, string linkUri, bool checkVersion)
 	{
-		Bookmark bookmark = Task.Run(() => Project.Linker.GetBookmarkAsync(call, linkUri, checkVersion)).GetAwaiter().GetResult();
+		Bookmark? bookmark = Task.Run(() => Project.Linker.GetBookmarkAsync(call, linkUri, checkVersion)).GetAwaiter().GetResult();
 		if (bookmark == null)
 			return null;
 
 		return ImportBookmark(call, bookmark);
 	}
 
-	private Bookmark ImportBookmark(Call call, Bookmark bookmark)
+	private Bookmark? ImportBookmark(Call call, Bookmark? bookmark)
 	{
 		if (bookmark == null)
 			return null;
@@ -182,7 +185,7 @@ public class TabViewer : Grid
 		if (TabBookmarks.Global != null)
 		{
 			// Add Bookmark to bookmark manager
-			TabView.Instance.SelectItem(TabBookmarks.Global); // select bookmarks first so the child tab autoselects the new bookmark
+			TabView!.Instance.SelectItem(TabBookmarks.Global); // select bookmarks first so the child tab autoselects the new bookmark
 			TabBookmarks.Global.AddBookmark(call, bookmark);
 			ScrollViewer.Offset = new Vector(0, 0);
 		}
@@ -209,9 +212,9 @@ public class TabViewer : Grid
 		if (reload)
 		{
 			ScrollViewer.Offset = new Vector(0, 0);
-			TabView.Focus();
+			TabView!.Focus();
 		}
-		TabView.Instance.SelectBookmark(tabBookmark, reload);
+		TabView!.Instance.SelectBookmark(tabBookmark, reload);
 	}
 
 	public void SetContent(Control control)
@@ -281,24 +284,24 @@ public class TabViewer : Grid
 		return grid;
 	}
 
-	private void Button_PointerEnter(object sender, PointerEventArgs e)
+	private void Button_PointerEnter(object? sender, PointerEventArgs e)
 	{
-		Button button = (Button)sender;
+		Button button = (Button)sender!;
 		button.Background = Theme.ToolbarButtonBackgroundHover;
 	}
 
-	private void Button_PointerLeave(object sender, PointerEventArgs e)
+	private void Button_PointerLeave(object? sender, PointerEventArgs e)
 	{
-		Button button = (Button)sender;
+		Button button = (Button)sender!;
 		button.Background = Theme.ToolbarButtonBackground;
 	}
 
-	private void ButtonExpand_Click(object sender, RoutedEventArgs e)
+	private void ButtonExpand_Click(object? sender, RoutedEventArgs e)
 	{
 		ScrollRight(DefaultScrollWidth);
 	}
 
-	private void ButtonCollapse_Click(object sender, RoutedEventArgs e)
+	private void ButtonCollapse_Click(object? sender, RoutedEventArgs e)
 	{
 		ScrollLeft(DefaultScrollWidth);
 	}
@@ -363,16 +366,16 @@ public class TabViewer : Grid
 
 	public void SeekBackward()
 	{
-		Bookmark bookmark = Project.Navigator.SeekBackward();
+		Bookmark? bookmark = Project.Navigator.SeekBackward();
 		if (bookmark != null)
-			TabView.Instance.SelectBookmark(bookmark.TabBookmark);
+			TabView!.Instance.SelectBookmark(bookmark.TabBookmark);
 	}
 
 	public void SeekForward()
 	{
-		Bookmark bookmark = Project.Navigator.SeekForward();
+		Bookmark? bookmark = Project.Navigator.SeekForward();
 		if (bookmark != null)
-			TabView.Instance.SelectBookmark(bookmark.TabBookmark);
+			TabView!.Instance.SelectBookmark(bookmark.TabBookmark);
 	}
 
 	protected override void OnKeyDown(KeyEventArgs e)

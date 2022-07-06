@@ -15,7 +15,7 @@ public static class DataGridExtensions
 {
 	private const int MaxValueLength = 2000;
 
-	public static string ColumnToStringTable(this DataGrid dataGrid, DataGridBoundColumn column)
+	public static string? ColumnToStringTable(this DataGrid? dataGrid, DataGridBoundColumn? column)
 	{
 		if (dataGrid == null || column == null)
 			return null;
@@ -26,11 +26,11 @@ public static class DataGridExtensions
 			Binding binding = (Binding)column.Binding;
 			string propertyName = binding.Path;
 			Type type = item.GetType();
-			PropertyInfo propertyInfo = type.GetProperty(propertyName);
+			PropertyInfo? propertyInfo = type.GetProperty(propertyName);
 			if (propertyInfo != null)
 			{
-				object obj = propertyInfo.GetValue(item);
-				string value = obj.Formatted(MaxValueLength);
+				object? obj = propertyInfo.GetValue(item);
+				string? value = obj.Formatted(MaxValueLength);
 				sb.AppendLine(value);
 			}
 			else
@@ -42,7 +42,7 @@ public static class DataGridExtensions
 		return sb.ToString();
 	}
 
-	public static string RowToString(this DataGrid dataGrid, object obj)
+	public static string? RowToString(this DataGrid? dataGrid, object? obj)
 	{
 		if (dataGrid == null || obj == null)
 			return null;
@@ -57,11 +57,11 @@ public static class DataGridExtensions
 
 			string propertyName = binding.Path;
 			sb.Append(propertyName + ": ");
-			PropertyInfo propertyInfo = type.GetProperty(propertyName);
+			PropertyInfo? propertyInfo = type.GetProperty(propertyName);
 			if (propertyInfo != null)
 			{
-				object value = propertyInfo.GetValue(obj);
-				string valueText = value.Formatted(MaxValueLength);
+				object? value = propertyInfo.GetValue(obj);
+				string? valueText = value.Formatted(MaxValueLength);
 				sb.AppendLine(valueText);
 			}
 			else
@@ -72,7 +72,7 @@ public static class DataGridExtensions
 		return sb.ToString();
 	}
 
-	public static string SelectedToString(this DataGrid dataGrid)
+	public static string? SelectedToString(this DataGrid dataGrid)
 	{
 		if (dataGrid == null)
 			return null;
@@ -84,7 +84,7 @@ public static class DataGridExtensions
 		return TableToString(columns, contentRows);
 	}
 
-	public static string SelectedToCsv(this DataGrid dataGrid)
+	public static string? SelectedToCsv(this DataGrid dataGrid)
 	{
 		if (dataGrid == null)
 			return null;
@@ -96,7 +96,7 @@ public static class DataGridExtensions
 		return TableToCsv(columns, contentRows);
 	}
 
-	public static string ToStringTable(this DataGrid dataGrid)
+	public static string? ToStringTable(this DataGrid dataGrid)
 	{
 		if (dataGrid == null)
 			return null;
@@ -108,7 +108,7 @@ public static class DataGridExtensions
 		return TableToString(columns, contentRows);
 	}
 
-	public static string ToCsv(this DataGrid dataGrid)
+	public static string? ToCsv(this DataGrid dataGrid)
 	{
 		if (dataGrid == null)
 			return null;
@@ -190,11 +190,11 @@ public static class DataGridExtensions
 				{
 					Binding binding = (Binding)boundColumn.Binding;
 					string propertyPath = binding.Path;
-					object obj = ReflectorUtil.FollowPropertyPath(item, propertyPath);
+					object? obj = ReflectorUtil.FollowPropertyPath(item, propertyPath);
 
-					string value = obj.Formatted(maxValueLength);
+					string? value = obj.Formatted(maxValueLength);
 					value = value?.Replace('\n', ' '); // remove newlines
-					stringCells.Add(value);
+					stringCells.Add(value ?? "");
 				}
 				//object content = dataColumn.GetCellValue(item, dataColumn.ClipboardContentBinding);
 			}

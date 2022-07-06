@@ -6,7 +6,7 @@ namespace Atlas.UI.Avalonia.Controls;
 
 public class TabBookmarks : ITab
 {
-	public static TabBookmarks Global;
+	public static TabBookmarks? Global;
 
 	public BookmarkCollection Bookmarks;
 

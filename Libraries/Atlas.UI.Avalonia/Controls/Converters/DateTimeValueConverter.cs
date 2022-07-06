@@ -9,11 +9,11 @@ public class DateTimeValueConverter : IValueConverter
 {
 	public DateTime? PreviousDateTime;
 
-	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		if (value is TimeSpan timeSpan)
 		{
-			var date = ((DateTime)PreviousDateTime).Date;
+			var date = ((DateTime)PreviousDateTime!).Date;
 			PreviousDateTime = date.AddSeconds(timeSpan.TotalSeconds);
 			return PreviousDateTime;
 		}
@@ -33,7 +33,7 @@ public class DateTimeValueConverter : IValueConverter
 		}
 	}
 
-	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		if (value == null)
 			return PreviousDateTime;

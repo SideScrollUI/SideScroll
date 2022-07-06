@@ -27,7 +27,7 @@ public class ValueToBrushConverter : IValueConverter
 
 	public bool Editable { get; set; }
 
-	public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+	public object? Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
 	{
 		try
 		{
@@ -55,7 +55,7 @@ public class ValueToBrushConverter : IValueConverter
 		//	return EditableBrush;
 	}
 
-	public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+	public object? ConvertBack(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
 	{
 		throw new NotSupportedException();
 	}
@@ -81,7 +81,7 @@ public class ValueToForegroundBrushConverter : IValueConverter
 
 	public bool Editable { get; set; }
 
-	public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+	public object? Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
 	{
 		try
 		{
@@ -102,7 +102,7 @@ public class ValueToForegroundBrushConverter : IValueConverter
 		return Brushes.Black;
 	}
 
-	public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+	public object? ConvertBack(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
 	{
 		throw new NotSupportedException();
 	}

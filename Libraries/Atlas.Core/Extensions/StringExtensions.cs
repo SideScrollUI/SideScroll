@@ -62,7 +62,7 @@ public static class StringExtensions
 
 	// Adds spaces between words
 	// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'
-	public static string WordSpaced(this string text)
+	public static string WordSpaced(this string? text)
 	{
 		if (string.IsNullOrWhiteSpace(text))
 			return "";
@@ -190,7 +190,7 @@ public static class StringExtensions
 		return builder.ToString();
 	}
 
-	public static bool IsNullOrEmpty(this string text)
+	public static bool IsNullOrEmpty(this string? text)
 	{
 		return string.IsNullOrEmpty(text);
 	}

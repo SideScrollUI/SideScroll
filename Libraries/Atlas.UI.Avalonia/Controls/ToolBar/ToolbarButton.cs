@@ -19,11 +19,11 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 	Type IStyleable.StyleKey => typeof(Button);
 
 	public TabControlToolbar Toolbar;
-	public string Label { get; set; }
-	public string Tooltip { get; set; }
+	public string? Label { get; set; }
+	public string? Tooltip { get; set; }
 
-	public TaskDelegate.CallAction CallAction;
-	public TaskDelegateAsync.CallActionAsync CallActionAsync;
+	public TaskDelegate.CallAction? CallAction;
+	public TaskDelegateAsync.CallActionAsync? CallActionAsync;
 
 	public bool ShowTask;
 	public bool IsActive; // Only allow one task at once (modifying IsEnabled doesn't updating elsewhere)
@@ -31,7 +31,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 	public TimeSpan MinWaitTime = TimeSpan.FromSeconds(1); // Wait time between clicks
 
 	private DateTime _lastInvoked;
-	private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
+	private DispatcherTimer? _dispatcherTimer;  // delays auto selection to throttle updates
 
 	public ToolbarButton(TabControlToolbar toolbar, ToolButton toolButton)
 	{
@@ -49,7 +49,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 			SetDefault();
 	}
 
-	public ToolbarButton(TabControlToolbar toolbar, string label, string tooltip, Stream bitmapStream, ICommand command = null)
+	public ToolbarButton(TabControlToolbar toolbar, string? label, string tooltip, Stream bitmapStream, ICommand? command = null)
 	{
 		Toolbar = toolbar;
 		Label = label;
@@ -58,7 +58,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		Initialize(bitmapStream, command);
 	}
 
-	private void Initialize(Stream bitmapStream, ICommand command = null)
+	private void Initialize(Stream bitmapStream, ICommand? command = null)
 	{
 		bitmapStream.Position = 0;
 		var bitmap = new Bitmap(bitmapStream);
@@ -106,14 +106,14 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		Click += ToolbarButton_Click;
 	}
 
-	private void ToolbarButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	private void ToolbarButton_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 		Invoke();
 	}
 
 	public void SetDefault()
 	{
-		Toolbar.TabInstance.DefaultAction = () => Invoke();
+		Toolbar.TabInstance!.DefaultAction = () => Invoke();
 	}
 
 	private void Invoke(bool canDelay = true)
@@ -151,7 +151,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 			StartTask();
 	}
 
-	private TaskInstance StartTaskAsync()
+	private TaskInstance? StartTaskAsync()
 	{
 		if (CallActionAsync == null)
 			return null;
@@ -161,10 +161,10 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		{
 			OnComplete = () => IsActive = false,
 		};
-		return Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
+		return Toolbar.TabInstance!.StartTask(taskDelegate, ShowTask);
 	}
 
-	private TaskInstance StartTask()
+	private TaskInstance? StartTask()
 	{
 		if (CallAction == null)
 			return null;
@@ -174,7 +174,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		{
 			OnComplete = () => IsActive = false,
 		};
-		return Toolbar.TabInstance.StartTask(taskDelegate, ShowTask);
+		return Toolbar.TabInstance!.StartTask(taskDelegate, ShowTask);
 	}
 
 	public void Add(TaskDelegate.CallAction callAction)
@@ -215,9 +215,9 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		BorderBrush = Background;
 	}
 
-	private void DispatcherTimer_Tick(object sender, EventArgs e)
+	private void DispatcherTimer_Tick(object? sender, EventArgs e)
 	{
-		_dispatcherTimer.Stop();
+		_dispatcherTimer!.Stop();
 		Invoke(false);
 	}
 
