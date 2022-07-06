@@ -1,4 +1,3 @@
-using Atlas.Core;
 using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
@@ -22,7 +21,15 @@ public class TabControlComboBox : ComboBox, IStyleable, ILayoutable
 		InitializeComponent();
 	}
 
-	public TabControlComboBox(ListProperty property, BindListAttribute propertyListAttribute)
+	public TabControlComboBox(IEnumerable items, object selectedItem = null)
+	{
+		InitializeComponent();
+
+		Items = items;
+		SelectedItem = selectedItem;
+	}
+
+	public TabControlComboBox(ListProperty property, string listPropertyName)
 	{
 		Property = property;
 
@@ -33,9 +40,9 @@ public class TabControlComboBox : ComboBox, IStyleable, ILayoutable
 
 		Type type = property.UnderlyingType;
 
-		if (propertyListAttribute != null)
+		if (listPropertyName != null)
 		{
-			PropertyInfo propertyInfo = property.Object.GetType().GetProperty(propertyListAttribute.Name);
+			PropertyInfo propertyInfo = property.Object.GetType().GetProperty(listPropertyName);
 			Items = propertyInfo.GetValue(property.Object) as IEnumerable;
 		}
 		else

@@ -10,7 +10,7 @@ public interface IDataView
 {
 	event EventHandler<EventArgs> OnDelete;
 
-	void Load(object obj, params object[] loadParams);
+	void Load(object sender, object obj, params object[] loadParams);
 }
 
 // An Item collection that shows a View around every item
@@ -84,7 +84,7 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	public TViewType Add(IDataItem dataItem)
 	{
 		var itemView = new TViewType();
-		itemView.Load(dataItem.Object!, LoadParams);
+		itemView.Load(this, dataItem.Object!, LoadParams);
 		itemView.OnDelete += Item_OnDelete;
 
 		Items.Add(itemView);
