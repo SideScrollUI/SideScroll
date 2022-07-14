@@ -28,7 +28,7 @@ public class TimeWindow
 		Name = name;
 	}
 
-	public void Select(TimeWindow timeWindow)
+	public void Select(TimeWindow? timeWindow)
 	{
 		Selection = timeWindow;
 		OnSelectionChanged?.Invoke(this, new TimeWindowEventArgs(timeWindow ?? this));

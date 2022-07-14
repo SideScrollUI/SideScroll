@@ -15,30 +15,25 @@ namespace Atlas.UI.Avalonia.Charts;
 public class TabControlChartLegend : Grid
 {
 	public TabControlChart TabControlChart;
-	public PlotView PlotView => TabControlChart.PlotView;
+	public PlotView? PlotView => TabControlChart.PlotView;
 	public ListGroup ListGroup => TabControlChart.ListGroup;
 
 	public List<TabChartLegendItem> LegendItems = new();
 	private readonly Dictionary<string, TabChartLegendItem> _idxLegendItems = new();
 
-	private ScrollViewer _scrollViewer;
-	private WrapPanel _wrapPanel;
-	private TextBlock _textBlockTotal;
+	private readonly ScrollViewer _scrollViewer;
+	private readonly WrapPanel _wrapPanel;
+	private readonly TextBlock? _textBlockTotal;
 
-	public event EventHandler<EventArgs> OnSelectionChanged;
-	public event EventHandler<EventArgs> OnVisibleChanged;
+	public event EventHandler<EventArgs>? OnSelectionChanged;
+	public event EventHandler<EventArgs>? OnVisibleChanged;
 
-	public override string ToString() => ListGroup.ToString();
+	public override string? ToString() => ListGroup.ToString();
 
 	public TabControlChartLegend(TabControlChart tabControlChart)
 	{
 		TabControlChart = tabControlChart;
 
-		InitializeControls();
-	}
-
-	private void InitializeControls()
-	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Stretch;
 
@@ -104,7 +99,7 @@ public class TabControlChartLegend : Grid
 		var legendItem = new TabChartLegendItem(this, oxyListSeries);
 		legendItem.OnSelectionChanged += LegendItem_SelectionChanged;
 		legendItem.OnVisibleChanged += LegendItem_VisibleChanged;
-		legendItem.TextBlock.PointerPressed += (s, e) =>
+		legendItem.TextBlock!.PointerPressed += (s, e) =>
 		{
 			if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
 				SelectLegendItem(legendItem);
@@ -163,7 +158,7 @@ public class TabControlChartLegend : Grid
 		}
 
 		UpdateVisibleSeries();
-		OnSelectionChanged?.Invoke(this, null);
+		OnSelectionChanged?.Invoke(this, new());
 		//if (legendItem.checkBox.IsChecked == true)
 		//SetSelectionAll(legendItem.checkBox.IsChecked == true);
 	}
@@ -173,7 +168,7 @@ public class TabControlChartLegend : Grid
 		if (oxySeries.Title == null)
 			return;
 
-		if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
+		if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem? legendItem))
 		{
 			SelectLegendItem(legendItem);
 		}
@@ -188,7 +183,7 @@ public class TabControlChartLegend : Grid
 		foreach (TabChartLegendItem item in LegendItems)
 			item.Highlight = false;
 
-		if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem legendItem))
+		if (_idxLegendItems.TryGetValue(oxySeries.Title, out TabChartLegendItem? legendItem))
 		{
 			foreach (TabChartLegendItem item in LegendItems)
 				item.Highlight = (legendItem == item);
@@ -208,13 +203,13 @@ public class TabControlChartLegend : Grid
 		if (update && changed)
 		{
 			UpdateVisibleSeries();
-			OnSelectionChanged?.Invoke(this, null);
+			OnSelectionChanged?.Invoke(this, new());
 		}
 	}
 
 	public void RefreshModel()
 	{
-		if (PlotView.Model == null)
+		if (PlotView!.Model == null)
 			return;
 
 		_wrapPanel.Children.Clear();
@@ -224,7 +219,7 @@ public class TabControlChartLegend : Grid
 			if (title == null)
 				continue;
 
-			if (!_idxLegendItems.TryGetValue(title, out TabChartLegendItem legendItem))
+			if (!_idxLegendItems.TryGetValue(title, out TabChartLegendItem? legendItem))
 			{
 				legendItem = AddSeries(oxyListSeries);
 			}
@@ -269,7 +264,7 @@ public class TabControlChartLegend : Grid
 
 	public void UpdateVisibleSeries()
 	{
-		if (PlotView.Model == null)
+		if (PlotView!.Model == null)
 			return;
 
 		foreach (OxyPlot.Series.Series series in PlotView.Model.Series)
@@ -279,7 +274,7 @@ public class TabControlChartLegend : Grid
 				if (lineSeries.Title == null)
 					continue;
 
-				if (_idxLegendItems.TryGetValue(lineSeries.Title, out TabChartLegendItem legendItem))
+				if (_idxLegendItems.TryGetValue(lineSeries.Title, out TabChartLegendItem? legendItem))
 				{
 					legendItem.UpdateVisible(lineSeries);
 				}
@@ -290,7 +285,7 @@ public class TabControlChartLegend : Grid
 				if (scatterSeries.Title == null)
 					continue;
 
-				if (_idxLegendItems.TryGetValue(scatterSeries.Title, out TabChartLegendItem legendItem))
+				if (_idxLegendItems.TryGetValue(scatterSeries.Title, out TabChartLegendItem? legendItem))
 				{
 					legendItem.UpdateVisible(scatterSeries);
 				}
@@ -299,16 +294,16 @@ public class TabControlChartLegend : Grid
 		Dispatcher.UIThread.InvokeAsync(() => PlotView.Model?.InvalidatePlot(true), DispatcherPriority.Background);
 	}
 
-	private void LegendItem_SelectionChanged(object sender, EventArgs e)
+	private void LegendItem_SelectionChanged(object? sender, EventArgs e)
 	{
 		UpdateVisibleSeries();
-		OnSelectionChanged?.Invoke(this, null);
+		OnSelectionChanged?.Invoke(this, new());
 	}
 
-	private void LegendItem_VisibleChanged(object sender, EventArgs e)
+	private void LegendItem_VisibleChanged(object? sender, EventArgs e)
 	{
 		UpdateVisibleSeries();
-		OnVisibleChanged?.Invoke(this, null);
+		OnVisibleChanged?.Invoke(this, new());
 	}
 
 	public void UnhighlightAll(bool update = false)
