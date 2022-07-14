@@ -126,7 +126,7 @@ public static class TabCreator
 			}
 			else
 			{
-				childTabModel = TabModel.Create(label!, value);
+				childTabModel = TabModel.Create(label!, value!);
 				if (childTabModel == null)
 					return null;
 			}

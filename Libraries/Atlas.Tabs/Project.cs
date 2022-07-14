@@ -11,7 +11,7 @@ public class Project
 	public string? Name => ProjectSettings.Name; // for viewing purposes
 	public string? LinkType => ProjectSettings.LinkType; // for bookmarking
 	public Version Version => ProjectSettings.Version;
-	public virtual ProjectSettings ProjectSettings { get; set; } = new();
+	public virtual ProjectSettings ProjectSettings { get; set; }
 	public virtual UserSettings UserSettings { get; set; } = new();
 
 	public Linker Linker { get; set; } = new();
@@ -39,7 +39,10 @@ public class Project
 
 	public override string? ToString() => Name;
 
-	public Project() { }
+	public Project()
+	{
+		ProjectSettings = new();
+	}
 
 	public Project(ProjectSettings projectSettings)
 	{

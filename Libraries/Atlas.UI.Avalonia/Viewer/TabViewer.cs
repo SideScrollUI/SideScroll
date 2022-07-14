@@ -149,7 +149,11 @@ public class TabViewer : Grid
 		{
 			bookmark.BookmarkType = BookmarkType.Full;
 		}
-		string uri = await Project.Linker.GetLinkUriAsync(call, bookmark);
+
+		string? uri = await Project.Linker.GetLinkUriAsync(call, bookmark);
+		if (uri == null)
+			return;
+
 		await ClipBoardUtils.SetTextAsync(uri);
 	}
 

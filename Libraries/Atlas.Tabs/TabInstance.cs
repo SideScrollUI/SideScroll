@@ -61,7 +61,10 @@ public class TabCreatorAsync : TabInstance, ITabAsync
 
 	public async Task LoadAsync(Call call, TabModel model)
 	{
-		ITab iTab = await CreatorAsync.CreateAsync(call);
+		ITab? iTab = await CreatorAsync.CreateAsync(call);
+		if (iTab == null)
+			return;
+
 		_innerChildInstance = CreateChildTab(iTab);
 		if (_innerChildInstance is ITabAsync tabAsync)
 			await tabAsync.LoadAsync(call, model);
@@ -199,10 +202,9 @@ public class TabInstance : IDisposable
 	public TabInstance? CreateChildTab(ITab iTab)
 	{
 		TabInstance tabInstance = iTab.Create();
-		if (tabInstance == null)
-			return null;
 
-		tabInstance.Project ??= Project;
+		if (tabInstance.Project.LinkType == null)
+			tabInstance.Project = Project;
 		tabInstance.iTab = iTab;
 		tabInstance.ParentTabInstance = this;
 		//tabInstance.taskInstance.call.Log =

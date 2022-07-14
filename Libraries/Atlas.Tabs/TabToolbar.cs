@@ -24,7 +24,7 @@ public class ToolButton
 		Default = isDefault;
 	}
 
-	public ToolButton(string tooltip, Stream icon, TaskDelegateAsync.CallActionAsync actionAsync, bool isDefault = false)
+	public ToolButton(string tooltip, Stream icon, TaskDelegateAsync.CallActionAsync? actionAsync, bool isDefault = false)
 	{
 		Tooltip = tooltip;
 		Icon = icon;

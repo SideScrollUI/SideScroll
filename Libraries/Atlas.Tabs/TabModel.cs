@@ -40,7 +40,7 @@ public interface ITabCreator
 
 public interface ITabCreatorAsync
 {
-	Task<ITab> CreateAsync(Call call);
+	Task<ITab?> CreateAsync(Call call);
 }
 
 public class TabObject

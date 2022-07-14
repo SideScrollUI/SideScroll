@@ -11,7 +11,7 @@ public class Linker
 	public long MaxLength { get; set; } = 65500; // Uri.EscapeDataString limit
 
 #pragma warning disable CS1998 // subclasses can by async
-	public virtual async Task<string> GetLinkUriAsync(Call call, Bookmark bookmark)
+	public virtual async Task<string?> GetLinkUriAsync(Call call, Bookmark bookmark)
 #pragma warning restore CS1998
 	{
 #if DEBUG
