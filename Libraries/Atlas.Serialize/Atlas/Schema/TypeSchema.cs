@@ -61,7 +61,9 @@ public class TypeSchema
 	public bool IsStatic;
 	public bool IsSerialized;
 	public bool IsUnserialized;
-	public bool HasConstructor;
+	public bool HasEmptyConstructor;
+	public ConstructorInfo CustomConstructor;
+	public bool HasConstructor => HasEmptyConstructor || CustomConstructor != null;
 	public bool HasSubType;
 
 	// Type lookup can take a long time, especially when there's missing types
@@ -83,6 +85,8 @@ public class TypeSchema
 		{
 			InitializeFields(serializer);
 			InitializeProperties(serializer);
+
+			CustomConstructor = GetCustomConstructor();
 		}
 	}
 
@@ -98,7 +102,7 @@ public class TypeSchema
 		CanReference = !(Type.IsPrimitive || Type.IsEnum || Type == typeof(string));
 		NonNullableType = Type.GetNonNullableType();
 		IsPrimitive = NonNullableType.IsPrimitive;
-		HasConstructor = HasEmptyConstructor(Type);
+		HasEmptyConstructor = TypeHasEmptyConstructor(Type);
 
 		IsSerialized = (Type.GetCustomAttribute<SerializedAttribute>() != null);
 		IsUnserialized = (Type.GetCustomAttribute<UnserializedAttribute>() != null);
@@ -153,12 +157,32 @@ public class TypeSchema
 		}
 	}
 
-	public static bool HasEmptyConstructor(Type type)
+	public static bool TypeHasEmptyConstructor(Type type)
 	{
-		//ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
 		ConstructorInfo constructorInfo = type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
 		var constructors = type.GetConstructors();
 		return (constructorInfo != null || constructors.Length == 0);
+	}
+
+	public ConstructorInfo GetCustomConstructor()
+	{
+		if (HasEmptyConstructor) return null;
+
+		var members = PropertySchemas.Select(p => p.PropertyName.ToLower()).ToHashSet();
+		var fieldMembers = FieldSchemas.Select(p => p.FieldName.ToLower()).ToHashSet();
+		foreach (var member in fieldMembers)
+			members.Add(member);
+
+		ConstructorInfo[] constructors = Type.GetConstructors();
+		foreach (ConstructorInfo constructor in constructors)
+		{
+			ParameterInfo[] parameters = constructor.GetParameters();
+			if (parameters.All(p => members.Contains(p.Name?.ToLower() ?? "- invalid -")))
+			{
+				return constructor;
+			}
+		}
+		return null;
 	}
 
 	private bool GetIsPrivate()
@@ -242,6 +266,8 @@ public class TypeSchema
 
 		LoadFields(reader);
 		LoadProperties(reader);
+
+		CustomConstructor = GetCustomConstructor();
 	}
 
 	private void LoadType(Log log)

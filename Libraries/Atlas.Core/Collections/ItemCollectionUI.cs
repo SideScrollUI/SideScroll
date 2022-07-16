@@ -89,11 +89,7 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 		//OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)); // need ui thread
 	}
 
-	record struct ItemLocation(int Index, T Item)
-	{
-		public readonly int Index = Index;
-		public readonly T Item = Item;
-	}
+	public readonly record struct ItemLocation(int Index, T Item);
 
 	// Overriding InsertItem() has out of order issues, so override this instead
 	public new void Insert(int index, T item)
