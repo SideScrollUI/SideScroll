@@ -40,7 +40,7 @@ public interface IListItem
 public class ListItem : IListItem, INotifyPropertyChanged
 {
 	[HiddenColumn]
-	public object Key { get; set; }
+	public object? Key { get; set; }
 
 	[HiddenColumn, InnerValue]
 	public object? Value { get; set; }
@@ -57,9 +57,9 @@ public class ListItem : IListItem, INotifyPropertyChanged
 #pragma warning disable 414
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	public override string ToString() => Key.ToString() ?? "";
+	public override string ToString() => Key?.ToString() ?? "";
 
-	public ListItem(object key, object? value)
+	public ListItem(object? key, object? value)
 	{
 		Key = key;
 		Value = value;

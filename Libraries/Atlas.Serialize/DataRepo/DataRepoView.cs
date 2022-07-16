@@ -54,12 +54,12 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		}
 	}
 
-	public override void Save(Call call, T item)
+	public override void Save(Call? call, T item)
 	{
 		Save(call, item!.ToString()!, item);
 	}
 
-	public override void Save(Call call, string key, T item)
+	public override void Save(Call? call, string key, T item)
 	{
 		lock (DataRepo)
 		{

@@ -22,8 +22,10 @@ public abstract class SerializerMemory
 	public abstract object? Load(Call? call = null);
 
 	// Save an object to a memory stream and then load it
-	public static T? DeepClone<T>(Call call, T obj, bool publicOnly = false) where T : class
+	public static T? DeepClone<T>(Call call, T? obj, bool publicOnly = false) where T : class
 	{
+		if (obj == null) return null;
+
 		//	return default;
 		try
 		{
@@ -39,8 +41,10 @@ public abstract class SerializerMemory
 		return default;
 	}
 
-	public static object? DeepClone(Call call, object obj, bool publicOnly = false)
+	public static object? DeepClone(Call call, object? obj, bool publicOnly = false)
 	{
+		if (obj == null) return null;
+
 		try
 		{
 			var memorySerializer = Create();

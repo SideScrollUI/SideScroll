@@ -33,7 +33,7 @@ public class ListGroup
 		TimeWindow = timeWindow;
 	}
 
-	public ListGroup(string name, DateTime startTime, DateTime endTime)
+	public ListGroup(string? name, DateTime startTime, DateTime endTime)
 	{
 		Name = name;
 		TimeWindow = new TimeWindow(startTime, endTime);

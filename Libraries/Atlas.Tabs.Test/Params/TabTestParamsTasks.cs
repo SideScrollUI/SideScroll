@@ -39,7 +39,7 @@ public class TabTestParamsTasks : ITab
 		{
 			SaveData(DataKey, _paramTestItem!);
 
-			ParamTestItem clone = _paramTestItem!.DeepClone(call)!;
+			ParamTestItem clone = _paramTestItem.DeepClone(call)!;
 			ParamTestResult result = new()
 			{
 				Parameters = clone,

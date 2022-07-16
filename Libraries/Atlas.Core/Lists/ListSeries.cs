@@ -45,7 +45,7 @@ public class ListSeries
 		LoadList(list);
 	}
 
-	public ListSeries(string name, IList list)
+	public ListSeries(string? name, IList list)
 	{
 		Name = name;
 		LoadList(list);
@@ -63,7 +63,7 @@ public class ListSeries
 			Name = attribute.Name;
 	}
 
-	public ListSeries(string name, IList list, string xPropertyName, string? yPropertyName = null)
+	public ListSeries(string? name, IList list, string xPropertyName, string? yPropertyName = null)
 	{
 		Name = name;
 		List = list;

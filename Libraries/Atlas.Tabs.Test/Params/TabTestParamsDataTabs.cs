@@ -54,7 +54,7 @@ public class TabTestParamsDataTabs : ITab
 
 		private void Save(Call call)
 		{
-			ParamTestItem clone = _paramTestItem!.DeepClone(call)!;
+			ParamTestItem clone = _paramTestItem.DeepClone(call)!;
 			_dataRepoParams!.Save(call, clone.ToString(), clone);
 		}
 	}

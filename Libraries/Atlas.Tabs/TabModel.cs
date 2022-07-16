@@ -12,9 +12,9 @@ namespace Atlas.Tabs;
 // Generates an event when the SelectedItems change
 public interface ITabSelector
 {
-	IList SelectedItems { get; }
+	IList? SelectedItems { get; }
 
-	event EventHandler<TabSelectionChangedEventArgs> OnSelectionChanged;
+	event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 }
 
 public class TabSelectionChangedEventArgs : EventArgs
@@ -35,7 +35,7 @@ public interface IItemSelector
 // TabInstance or Controls can specify this to create child controls dynamically
 public interface ITabCreator
 {
-	object CreateControl(object value, out string label);
+	object CreateControl(object value, out string? label);
 }
 
 public interface ITabCreatorAsync

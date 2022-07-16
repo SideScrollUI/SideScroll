@@ -10,7 +10,7 @@ namespace Atlas.UI.Avalonia.Test;
 [Category("Serialize")]
 public class TestSerializeAvaloniaUI : TestBase
 {
-	private SerializerMemory serializer;
+	private SerializerMemory? serializer;
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -38,7 +38,7 @@ public class TestSerializeAvaloniaUI : TestBase
 			},
 		};
 		input.TabBookmark.Bookmark = input;
-		serializer.Save(Call, input);
+		serializer!.Save(Call, input);
 		Bookmark output = serializer.Load<Bookmark>(Call);
 
 		Assert.NotNull(output);

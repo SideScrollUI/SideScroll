@@ -743,7 +743,10 @@ public class TabView : Grid, IDisposable
 
 		foreach (ITabSelector tabControl in CustomTabControls)
 		{
-			CreateChildControls(tabControl.SelectedItems, oldChildControls, newChildControls, orderedChildControls, tabControl);
+			if (tabControl.SelectedItems != null)
+			{
+				CreateChildControls(tabControl.SelectedItems, oldChildControls, newChildControls, orderedChildControls, tabControl);
+			}
 		}
 
 		if (TabActions != null)

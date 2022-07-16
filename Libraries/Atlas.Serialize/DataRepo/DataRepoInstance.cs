@@ -25,17 +25,17 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		GroupId = groupId;
 	}
 
-	public virtual void Save(Call call, T item)
+	public virtual void Save(Call? call, T item)
 	{
 		DataRepo.Save<T>(GroupId, DefaultKey, item, call);
 	}
 
-	public virtual void Save(Call call, string key, T item)
+	public virtual void Save(Call? call, string key, T item)
 	{
 		DataRepo.Save<T>(GroupId, key, item, call);
 	}
 
-	public virtual T? Load(Call call, string? key = null, bool createIfNeeded = false, bool lazy = false)
+	public virtual T? Load(Call? call, string? key = null, bool createIfNeeded = false, bool lazy = false)
 	{
 		return DataRepo.Load<T>(GroupId, key ?? DefaultKey, call, createIfNeeded, lazy);
 	}

@@ -555,9 +555,9 @@ public class TabInstance : IDisposable
 		}
 	}
 
-	public void SelectItem(object obj)
+	public void SelectItem(object? obj)
 	{
-		SelectItems(new List<object> { obj });
+		SelectItems(new List<object?> { obj });
 	}
 
 	public void SelectItems(IList items)

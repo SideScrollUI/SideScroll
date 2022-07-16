@@ -107,7 +107,7 @@ public class TabViewContextMenu : ContextMenu, IStyleable, ILayoutable, IDisposa
 	private void MenuItemDebug_Click(object? sender, RoutedEventArgs e)
 	{
 		var debugModel = new TabModel("Debug");
-		TabView? clone = TabView!.DeepClone();
+		TabView? clone = TabView.DeepClone();
 		debugModel.AddData(clone);
 		//Control debugControl = clone.CreateChildControl(debugModel, "Debug");
 	}

@@ -28,7 +28,7 @@ public class TabBookmark
 
 	public TabViewSettings ViewSettings = new(); // list selections, doesn't know about children
 	public Dictionary<string, TabBookmark> ChildBookmarks { get; set; } = new(); // doesn't know which tabData to use, maps id to child info
-	public Dictionary<string, object>? BookmarkData { get; set; }
+	public Dictionary<string, object?>? BookmarkData { get; set; }
 
 	public string Address
 	{
@@ -156,10 +156,10 @@ public class TabBookmark
 		SetData(DefaultDataName, obj);
 	}
 
-	public void SetData(string name, object obj)
+	public void SetData(string name, object? obj)
 	{
 		ViewSettings ??= new TabViewSettings();
-		BookmarkData ??= new Dictionary<string, object>();
+		BookmarkData ??= new Dictionary<string, object?>();
 		BookmarkData[name] = obj;
 	}
 

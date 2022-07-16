@@ -5,6 +5,8 @@
     <Configurations>Debug;Release;DebugX86</Configurations>
 
     <IsPackable>false</IsPackable>
+
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

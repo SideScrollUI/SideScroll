@@ -15,9 +15,9 @@ namespace Atlas.UI.Avalonia.Controls;
 public class TabControlParams : Grid
 {
 	public const int ControlMaxWidth = 500;
-	public object Object;
+	public object? Object;
 
-	public TabControlParams(object obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
+	public TabControlParams(object? obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
 	{
 		Object = obj;
 
@@ -44,9 +44,11 @@ public class TabControlParams : Grid
 		RowDefinitions.Clear();
 	}
 
-	public void LoadObject(object obj)
+	public void LoadObject(object? obj)
 	{
 		ClearControls();
+
+		if (obj == null) return;
 
 		AddSummary();
 
@@ -59,7 +61,7 @@ public class TabControlParams : Grid
 
 	private void AddSummary()
 	{
-		var summaryAttribute = Object.GetType().GetCustomAttribute<SummaryAttribute>();
+		var summaryAttribute = Object!.GetType().GetCustomAttribute<SummaryAttribute>();
 		if (summaryAttribute == null)
 			return;
 
@@ -122,13 +124,13 @@ public class TabControlParams : Grid
 
 	public Control? AddPropertyRow(string propertyName)
 	{
-		PropertyInfo propertyInfo = Object.GetType().GetProperty(propertyName)!;
+		PropertyInfo propertyInfo = Object!.GetType().GetProperty(propertyName)!;
 		return AddPropertyRow(new ListProperty(Object, propertyInfo));
 	}
 
 	public Control? AddPropertyRow(PropertyInfo propertyInfo)
 	{
-		return AddPropertyRow(new ListProperty(Object, propertyInfo));
+		return AddPropertyRow(new ListProperty(Object!, propertyInfo));
 	}
 
 	public Control? AddPropertyRow(ListProperty property)
