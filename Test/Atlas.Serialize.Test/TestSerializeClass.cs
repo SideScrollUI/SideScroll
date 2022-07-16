@@ -165,61 +165,6 @@ public class SerializeClass : TestSerializeBase
 		Assert.AreEqual(output.BaseClass!.A, input.BaseClass.A);
 	}
 
-	public class NoConstructorBaseClass
-	{
-		public int A = 1;
-
-		[PrivateData]
-		public int B = 0;
-
-		public NoConstructorBaseClass(int a)
-		{
-			A = a;
-		}
-	}
-
-	public class DerivedClassWithConstructor : NoConstructorBaseClass
-	{
-		public DerivedClassWithConstructor() : base(0)
-		{
-		}
-
-		public DerivedClassWithConstructor(int a) : base(a)
-		{
-		}
-	}
-
-	public class DerivedClassWithConstructorReference
-	{
-		[Serialized]
-		public NoConstructorBaseClass? BaseClass;
-	}
-
-	[Test, Description("Serialize No Default Constructor Base Class")]
-	public void SerializeNoDefaultConstructorBaseClass()
-	{
-		var input = new DerivedClassWithConstructor();
-
-		_serializer.Save(Call, input);
-		var output = _serializer.Load<NoConstructorBaseClass>(Call);
-
-		Assert.AreEqual(output.B, input.B);
-	}
-
-	[Test, Description("Serialize No Default Constructor Base Class Reference")]
-	public void SerializeNoDefaultConstructorBaseClassReference()
-	{
-		var input = new DerivedClassWithConstructorReference()
-		{
-			BaseClass = new DerivedClassWithConstructor(1),
-		};
-
-		_serializer.Save(Call, input);
-		var output = _serializer.Load<DerivedClassWithConstructorReference>(Call);
-
-		Assert.AreEqual(output.BaseClass!.B, input.BaseClass.B);
-	}
-
 	public class Circular
 	{
 		public Circular? Self;

@@ -3,6 +3,7 @@ using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Atlas.Serialize;
@@ -52,6 +53,19 @@ public class TypeRepoObject : TypeRepo
 			else
 			{
 				TypeRepo!.SkipObjectRef();
+			}
+		}
+
+		public object? Get()
+		{
+			if (FieldSchema.IsLoadable)
+			{
+				return TypeRepo!.LoadObjectRef();
+			}
+			else
+			{
+				TypeRepo!.SkipObjectRef();
+				return null;
 			}
 		}
 	}
@@ -105,6 +119,23 @@ public class TypeRepoObject : TypeRepo
 				PropertySchema.PropertyInfo!.SetValue(obj, valueObject);
 			}
 		}
+
+		public object? Get()
+		{
+			if (!PropertySchema.IsLoadable)
+			{
+				TypeRepo!.SkipObjectRef();
+				return null;
+			}
+			else if (LazyProperty != null)
+			{
+				throw new Exception("Get() doesn't support Lazy Properties: " + PropertySchema.PropertyName);
+			}
+			else
+			{
+				return TypeRepo!.LoadObjectRef();
+			}
+		}
 	}
 
 	public TypeRepoObject(Serializer serializer, TypeSchema typeSchema) :
@@ -135,6 +166,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		InitializeFields(log);
 		InitializeProperties(log);
+		InitializeConstructor(log);
 		//InitializeSaving();
 	}
 
@@ -239,6 +271,87 @@ public class TypeRepoObject : TypeRepo
 			//if (propertySchema.propertyInfo != null)
 				lazyClass.LazyProperties.TryGetValue(propertySchema.propertyInfo, out propertyRepo.lazyProperty);
 		}*/
+	}
+
+	private readonly List<object> _constructorRepos = new();
+
+	public void InitializeConstructor(Log log)
+	{
+		if (TypeSchema.CustomConstructor == null) return;
+
+		var fields = FieldRepos.ToDictionary(f => f.FieldSchema.FieldName.ToLower());
+		var properties = PropertyRepos.ToDictionary(f => f.PropertySchema.PropertyName.ToLower());
+
+		var parameters = TypeSchema.CustomConstructor.GetParameters();
+		foreach (var param in parameters)
+		{
+			string name = param.Name!.ToLower();
+			if (fields.TryGetValue(param.Name, out var field))
+			{
+				_constructorRepos.Add(field);
+			}
+			else if (properties.TryGetValue(param.Name, out var property))
+			{
+				_constructorRepos.Add(property);
+			}
+			else
+			{
+				throw new Exception($"Constructor param [ {name} ] not found");
+			}
+		}
+	}
+
+	// Reads over all the field and properties since they're ordered without offsets
+	private List<object?> GetConstructorParams()
+	{
+		if (TypeSchema.CustomConstructor == null) throw new Exception("Missing Custom Constructor");
+
+		long position = Reader!.BaseStream.Position;
+
+		Dictionary<FieldRepo, object?> fieldValues = FieldRepos.ToDictionary(f => f, f => f.Get());
+		Dictionary<PropertyRepo, object?> propertyValues = PropertyRepos.ToDictionary(p => p, p => p.Get());
+
+		List<object?> parameters = new();
+		foreach (var repo in _constructorRepos)
+		{
+			if (repo is FieldRepo fieldRepo)
+			{
+				if (fieldValues.TryGetValue(fieldRepo, out object? value))
+					parameters.Add(value);
+				else
+					throw new Exception("Missing FieldRepo: " + fieldRepo.ToString());
+			}
+			else if (repo is PropertyRepo propertyRepo)
+			{
+				if (propertyValues.TryGetValue(propertyRepo, out object? value))
+					parameters.Add(value);
+				else
+					throw new Exception("Missing PropertyRepo: " + propertyRepo.ToString());
+			}
+			else
+			{
+				throw new Exception("Unhandled repo type: " + repo.ToString());
+			}
+		}
+
+		Reader.BaseStream.Position = position;
+		return parameters;
+	}
+
+	protected override object? CreateObject(int objectIndex)
+	{
+		if (TypeSchema.HasEmptyConstructor)
+		{
+			return base.CreateObject(objectIndex);
+		}
+
+		List<object?> constructorParams = GetConstructorParams();
+
+		object obj = TypeSchema.CustomConstructor!.Invoke(constructorParams.ToArray());
+
+		ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
+		Serializer.QueueLoading(this, objectIndex);
+		return obj;
 	}
 
 	public override void AddChildObjects(object obj)
