@@ -586,7 +586,8 @@ public class TabInstance : IDisposable
 			if (type == null)
 				return false;
 
-			return TypeSchema.TypeHasEmptyConstructor(type) && type.GetCustomAttribute<PublicDataAttribute>() != null;
+			return type.GetCustomAttribute<PublicDataAttribute>() != null &&
+				TypeSchema.TypeHasConstructor(type);
 		}
 	}
 

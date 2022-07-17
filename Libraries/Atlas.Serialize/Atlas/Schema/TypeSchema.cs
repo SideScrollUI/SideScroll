@@ -158,11 +158,18 @@ public class TypeSchema
 		}
 	}
 
+	public static bool TypeHasConstructor(Type type) => TypeHasEmptyConstructor(type) || TypeGetCustomConstructor(type) != null;
+
 	public static bool TypeHasEmptyConstructor(Type type)
 	{
 		ConstructorInfo? constructorInfo = type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
 		var constructors = type.GetConstructors();
 		return (constructorInfo != null || constructors.Length == 0);
+	}
+
+	public static ConstructorInfo? TypeGetCustomConstructor(Type type)
+	{
+		return new TypeSchema(type, new Serializer()).GetCustomConstructor();
 	}
 
 	public ConstructorInfo? GetCustomConstructor()

@@ -286,11 +286,11 @@ public class TypeRepoObject : TypeRepo
 		foreach (var param in parameters)
 		{
 			string name = param.Name!.ToLower();
-			if (fields.TryGetValue(param.Name, out var field))
+			if (fields.TryGetValue(name, out var field))
 			{
 				_constructorRepos.Add(field);
 			}
-			else if (properties.TryGetValue(param.Name, out var property))
+			else if (properties.TryGetValue(name, out var property))
 			{
 				_constructorRepos.Add(property);
 			}

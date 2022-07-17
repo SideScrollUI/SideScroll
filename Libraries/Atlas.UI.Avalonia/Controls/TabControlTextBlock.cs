@@ -18,9 +18,9 @@ public class TabControlTextBlock : Border, IStyleable, ILayoutable
 
 	Type IStyleable.StyleKey => typeof(TextBlock);
 
-	public TabControlTextBlock(string text)
+	public TabControlTextBlock(string? text)
 	{
-		Text = text;
+		Text = text ?? "";
 
 		InitializeComponent();
 	}

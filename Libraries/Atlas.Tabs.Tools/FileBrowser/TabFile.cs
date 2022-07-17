@@ -8,7 +8,7 @@ namespace Atlas.Tabs.Tools;
 
 public interface IFileTypeView
 {
-	string Path { get; set; }
+	string? Path { get; set; }
 }
 
 public class TabFile : ITab
