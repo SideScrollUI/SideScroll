@@ -158,7 +158,7 @@ public class TabControlChartLegend : Grid
 		}
 
 		UpdateVisibleSeries();
-		OnSelectionChanged?.Invoke(this, new());
+		OnSelectionChanged?.Invoke(this, EventArgs.Empty);
 		//if (legendItem.checkBox.IsChecked == true)
 		//SetSelectionAll(legendItem.checkBox.IsChecked == true);
 	}
@@ -203,7 +203,7 @@ public class TabControlChartLegend : Grid
 		if (update && changed)
 		{
 			UpdateVisibleSeries();
-			OnSelectionChanged?.Invoke(this, new());
+			OnSelectionChanged?.Invoke(this, EventArgs.Empty);
 		}
 	}
 
@@ -297,13 +297,13 @@ public class TabControlChartLegend : Grid
 	private void LegendItem_SelectionChanged(object? sender, EventArgs e)
 	{
 		UpdateVisibleSeries();
-		OnSelectionChanged?.Invoke(this, new());
+		OnSelectionChanged?.Invoke(this, EventArgs.Empty);
 	}
 
 	private void LegendItem_VisibleChanged(object? sender, EventArgs e)
 	{
 		UpdateVisibleSeries();
-		OnVisibleChanged?.Invoke(this, new());
+		OnVisibleChanged?.Invoke(this, EventArgs.Empty);
 	}
 
 	public void UnhighlightAll(bool update = false)

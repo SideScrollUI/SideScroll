@@ -168,6 +168,11 @@ public class TypeRepoObject : TypeRepo
 		InitializeProperties(log);
 		InitializeConstructor(log);
 		//InitializeSaving();
+
+		if (!TypeSchema.HasConstructor)
+		{
+			log.AddWarning("No matching constructor found", new Tag("Type", TypeSchema.ToString()));
+		}
 	}
 
 	public bool HasVirtualProperty

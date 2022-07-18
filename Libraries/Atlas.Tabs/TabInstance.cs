@@ -864,7 +864,7 @@ public class TabInstance : IDisposable
 
 	public void ItemModified()
 	{
-		OnModified?.Invoke(this, new EventArgs());
+		OnModified?.Invoke(this, EventArgs.Empty);
 	}
 
 	public TabInstance CreateChild(TabModel model)

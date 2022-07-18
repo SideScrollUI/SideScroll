@@ -14,7 +14,7 @@ public class TabParamItem : ITab, IDataView
 	[ButtonColumn("-")]
 	public void Delete()
 	{
-		OnDelete?.Invoke(this, new EventArgs());
+		OnDelete?.Invoke(this, EventArgs.Empty);
 	}
 
 	[DataKey]

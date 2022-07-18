@@ -14,7 +14,7 @@ public class TabBookmarkItem : ITab, IInnerTab
 	[ButtonColumn("-")]
 	public void Delete()
 	{
-		OnDelete?.Invoke(this, new EventArgs());
+		OnDelete?.Invoke(this, EventArgs.Empty);
 	}
 
 	[DataKey, WordWrap]

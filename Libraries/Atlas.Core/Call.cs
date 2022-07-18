@@ -160,23 +160,23 @@ public class Call
 		}
 	}
 
-	public async Task<List<T2>> RunAsync<T1, T2>(Func<Call, T1, Task<T2>> func, ICollection<T1> items, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<T2>> RunAsync<T1, T2>(Func<Call, T1, Task<T2?>> func, ICollection<T1> items, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, maxRequestsPerSecond);
 	}
 
-	public async Task<List<T3>> RunAsync<T1, T2, T3>(Func<Call, T1, T2, Task<T3>> func, ICollection<T1> items, T2 param1, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<T3>> RunAsync<T1, T2, T3>(Func<Call, T1, T2, Task<T3?>> func, ICollection<T1> items, T2 param1, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1, maxRequestsPerSecond);
 	}
 
-	public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(Func<Call, T1, T2, T3, Task<T4>> func, ICollection<T1> items, T2 param1, T3 param2, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(Func<Call, T1, T2, T3, Task<T4?>> func, ICollection<T1> items, T2 param1, T3 param2, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1, param2, maxRequestsPerSecond);
 	}
 
 	// Call func for every item in the list using the specified parameters
-	public async Task<List<T2>> RunAsync<T1, T2>(string name, Func<Call, T1, Task<T2>> func, ICollection<T1> items, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<T2>> RunAsync<T1, T2>(string name, Func<Call, T1, Task<T2?>> func, ICollection<T1> items, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		using CallTimer callTimer = Timer(items.Count, name);
 
@@ -220,7 +220,7 @@ public class Call
 		return results;
 	}
 
-	public async Task<List<T3>> RunAsync<T1, T2, T3>(string name, Func<Call, T1, T2, Task<T3>> func, ICollection<T1> items, T2 param1, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<T3>> RunAsync<T1, T2, T3>(string name, Func<Call, T1, T2, Task<T3?>> func, ICollection<T1> items, T2 param1, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		using CallTimer callTimer = Timer(items.Count, name);
 
@@ -264,7 +264,7 @@ public class Call
 		return results;
 	}
 
-	public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(string name, Func<Call, T1, T2, T3, Task<T4>> func, ICollection<T1> items, T2 param1, T3 param2, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(string name, Func<Call, T1, T2, T3, Task<T4?>> func, ICollection<T1> items, T2 param1, T3 param2, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		using CallTimer callTimer = Timer(items.Count, name);
 

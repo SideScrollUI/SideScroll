@@ -235,7 +235,7 @@ public class TabChartLegendItem : Grid
 		if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
 		{
 			IsSelected = !IsSelected;
-			OnSelectionChanged?.Invoke(this, new());
+			OnSelectionChanged?.Invoke(this, EventArgs.Empty);
 		}
 	}
 
@@ -258,7 +258,7 @@ public class TabChartLegendItem : Grid
 					SetFilled(true);
 					UpdateVisible(lineSeries);
 					Legend.UpdateHighlight(true);
-					OnVisibleChanged?.Invoke(this, new());
+					OnVisibleChanged?.Invoke(this, EventArgs.Empty);
 				}
 				TextBlock!.Foreground = Theme.GridBackgroundSelected;
 				if (TextBlockTotal != null)
