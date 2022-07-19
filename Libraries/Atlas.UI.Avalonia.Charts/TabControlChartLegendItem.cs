@@ -1,5 +1,4 @@
 using Atlas.Core;
-using Atlas.Extensions;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
@@ -60,7 +59,7 @@ public class TabChartLegendItem : Grid
 
 	public IEnumerable? ItemsSource { get; internal set; }
 
-	public List<DataPoint> Points { get; internal set; } = new();
+	public List<DataPoint>? Points { get; internal set; }
 
 	public override string ToString() => Series.Title;
 
@@ -166,6 +165,7 @@ public class TabChartLegendItem : Grid
 			Height = 16,
 			Stroke = Brushes.Black,
 			StrokeThickness = 1.5,
+			Points = GetPolygonPoints(width, height),
 		};
 
 		if (Count > 0)
@@ -173,15 +173,14 @@ public class TabChartLegendItem : Grid
 		else
 			IsSelected = false;
 
-		UpdatePolygonPoints(width, height);
 		polygon.PointerPressed += Polygon_PointerPressed;
 		Children.Add(polygon);
 	}
 
-	private void UpdatePolygonPoints(int width, int height)
+	private static List<Point> GetPolygonPoints(int width, int height)
 	{
 		int cornerSize = 3;
-		polygon!.Points = new List<Point>
+		return new List<Point>
 		{
 			new(0, height),
 			new(width - cornerSize, height),
@@ -190,6 +189,11 @@ public class TabChartLegendItem : Grid
 			new(cornerSize, 0),
 			new(0, cornerSize),
 		};
+	}
+
+	private void UpdatePolygonPoints(int width, int height)
+	{
+		polygon!.Points = GetPolygonPoints(width, height);
 	}
 
 	private void AddTextBlock()
@@ -317,8 +321,7 @@ public class TabChartLegendItem : Grid
 		{
 			if (lineSeries.Points.Count > 0)
 			{
-				Points = new List<DataPoint>();
-				Points.AddRange(lineSeries.Points);
+				Points = new List<DataPoint>(lineSeries.Points);
 			}
 			lineSeries.Points.Clear();
 			//lineSeries.Points = new List<DataPoint>();

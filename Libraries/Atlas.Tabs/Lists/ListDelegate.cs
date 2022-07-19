@@ -8,7 +8,7 @@ namespace Atlas.Tabs;
 
 public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 {
-	public delegate Task<object> LoadObjectAsync(Call call);
+	public delegate Task<object?> LoadObjectAsync(Call call);
 
 	public readonly LoadObjectAsync LoadAction;
 	public readonly MethodInfo MethodInfo;
@@ -64,12 +64,12 @@ public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 			Name = attribute.Name;
 	}
 
-	public async Task<object> LoadAsync(Call call)
+	public async Task<object?> LoadAsync(Call call)
 	{
 		return await LoadAction.Invoke(call);
 	}
 
-	private object GetValue()
+	private object? GetValue()
 	{
 		return Task.Run(() => LoadAction.Invoke(new Call())).GetAwaiter().GetResult();
 	}
