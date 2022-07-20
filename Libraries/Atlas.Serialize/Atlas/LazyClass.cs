@@ -14,7 +14,7 @@ public class TypeRef
 
 	public object? Load()
 	{
-		return TypeRepo!.LoadFullObject(Index);
+		return TypeRepo?.LoadFullObject(Index);
 	}
 }
 
@@ -31,7 +31,7 @@ public class LazyProperty
 
 	public override string? ToString() => PropertyBuilder?.Name;
 
-	public void SetTypeRef(object obj, TypeRef typeRef)
+	public void SetTypeRef(object obj, TypeRef? typeRef)
 	{
 		if (typeRef == null)
 		{

@@ -99,8 +99,7 @@ public class TypeRepoObject : TypeRepo
 			else if (LazyProperty != null)
 			{
 				TypeRef? typeRef = TypeRepo!.LoadLazyObjectRef();
-				if (typeRef != null)
-					LazyProperty.SetTypeRef(obj, typeRef);
+				LazyProperty.SetTypeRef(obj, typeRef);
 			}
 			else
 			{
