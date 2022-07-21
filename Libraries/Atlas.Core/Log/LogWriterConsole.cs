@@ -20,7 +20,7 @@ public class LogWriterConsole
 		log.OnMessage += LogEntry_OnMessage;
 	}
 
-	private void LogEntry_OnMessage(object sender, EventLogMessage e)
+	private void LogEntry_OnMessage(object? sender, EventLogMessage e)
 	{
 		string indentation = "";
 		for (int i = 1; i < e.Entries.Count; i++)

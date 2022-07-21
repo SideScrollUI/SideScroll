@@ -9,12 +9,12 @@ namespace Atlas.Tabs;
 public class TabBookmarkItem : ITab, IInnerTab
 {
 	//[ButtonColumn("-")]
-	public event EventHandler<EventArgs> OnDelete;
+	public event EventHandler<EventArgs>? OnDelete;
 
 	[ButtonColumn("-")]
 	public void Delete()
 	{
-		OnDelete?.Invoke(this, null);
+		OnDelete?.Invoke(this, EventArgs.Empty);
 	}
 
 	[DataKey, WordWrap]
@@ -30,7 +30,7 @@ public class TabBookmarkItem : ITab, IInnerTab
 	public Project Project { get; set; }
 
 	[HiddenColumn]
-	public ITab Tab => Bookmark.TabBookmark.Tab;
+	public ITab? Tab => Bookmark.TabBookmark.Tab;
 
 	public override string ToString() => Bookmark.Name ?? Bookmark.Path;
 
@@ -43,17 +43,17 @@ public class TabBookmarkItem : ITab, IInnerTab
 	public TabInstance Create()
 	{
 		if (Bookmark.Type == null)
-			return null;
+			throw new ArgumentNullException("Bookmark.Type");
 
 		if (!typeof(ITab).IsAssignableFrom(Bookmark.Type))
 			throw new Exception("Bookmark.Type must implement ITab");
 
 		var call = new Call();
-		Bookmark bookmarkCopy = Bookmark.DeepClone(call, true); // This will get modified as users navigate
+		Bookmark bookmarkCopy = Bookmark.DeepClone(call, true)!; // This will get modified as users navigate
 
-		ITab tab = bookmarkCopy.TabBookmark.Tab;
+		ITab? tab = bookmarkCopy.TabBookmark.Tab;
 		if (tab == null)
-			tab = (ITab)Activator.CreateInstance(bookmarkCopy.Type);
+			tab = (ITab)Activator.CreateInstance(bookmarkCopy.Type!)!;
 
 		if (tab is IReload reloadable)
 			reloadable.Reload();

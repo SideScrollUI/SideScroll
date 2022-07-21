@@ -82,7 +82,7 @@ Actions add Buttons to the tab. When clicked, it will:
 				using CallTimer sleepCall = call.Timer(i.ToString());
 
 				sleepCall.AddSubTask();
-				sleepCall.TaskInstance.ProgressMax = i;
+				sleepCall.TaskInstance!.ProgressMax = i;
 				for (int j = 0; j < i; j++)
 				{
 					System.Threading.Thread.Sleep(1000);
@@ -104,7 +104,7 @@ Actions add Buttons to the tab. When clicked, it will:
 		{
 			using CallTimer callTimer = call.Timer("Task", new Tag(id));
 
-			for (int i = 0; i < id && !callTimer.TaskInstance.CancelToken.IsCancellationRequested; i++)
+			for (int i = 0; i < id && !callTimer.TaskInstance!.CancelToken.IsCancellationRequested; i++)
 			{
 				callTimer.Log.Add("Sleeping");
 				await Task.Delay(1000, callTimer.TaskInstance.CancelToken);

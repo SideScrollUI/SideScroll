@@ -2,6 +2,7 @@ using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 
@@ -13,11 +14,11 @@ public class PropertySchema
 	public int TypeIndex = -1;
 
 	public TypeSchema OwnerTypeSchema;
-	public TypeSchema PropertyTypeSchema;
-	public PropertyInfo PropertyInfo; // can be null
+	public TypeSchema? PropertyTypeSchema;
+	public PropertyInfo? PropertyInfo;
 
-	public Type Type; // might be null
-	public Type NonNullableType; // might be null
+	public Type? Type;
+	public Type? NonNullableType;
 
 	public bool IsSerialized;
 	public bool IsLoadable;
@@ -70,19 +71,19 @@ public class PropertySchema
 
 	private bool GetIsSerialized()
 	{
-		Attribute attribute = Type.GetCustomAttribute<UnserializedAttribute>();
+		Attribute? attribute = Type!.GetCustomAttribute<UnserializedAttribute>();
 		if (attribute != null)
 			return false;
 
-		attribute = PropertyInfo.GetCustomAttribute<NonSerializedAttribute>();
+		attribute = PropertyInfo!.GetCustomAttribute<NonSerializedAttribute>();
 		if (attribute != null)
 			return false;
 
-		attribute = PropertyInfo.GetCustomAttribute<UnserializedAttribute>();
+		attribute = PropertyInfo!.GetCustomAttribute<UnserializedAttribute>();
 		if (attribute != null)
 			return false;
 
-		if (PropertyInfo.CanRead == false || PropertyInfo.CanWrite == false)
+		if (PropertyInfo!.CanRead == false || PropertyInfo.CanWrite == false)
 			return false;
 
 		if (PropertyInfo.GetIndexParameters().Length > 0)
@@ -93,10 +94,10 @@ public class PropertySchema
 
 	private bool GetIsPrivate()
 	{
-		if (PropertyInfo.GetCustomAttribute<PrivateDataAttribute>() != null)
+		if (PropertyInfo!.GetCustomAttribute<PrivateDataAttribute>() != null)
 			return true;
 
-		if (Type.GetCustomAttribute<PrivateDataAttribute>() != null)
+		if (Type!.GetCustomAttribute<PrivateDataAttribute>() != null)
 			return true;
 
 		return false;
@@ -104,16 +105,16 @@ public class PropertySchema
 
 	private bool GetIsPublic()
 	{
-		if (PropertyInfo.GetCustomAttribute<PublicDataAttribute>() != null)
+		if (PropertyInfo!.GetCustomAttribute<PublicDataAttribute>() != null)
 			return true;
 
-		if (PropertyInfo.GetCustomAttribute<ProtectedDataAttribute>() != null)
+		if (PropertyInfo!.GetCustomAttribute<ProtectedDataAttribute>() != null)
 			return true;
 
-		if (PropertyInfo.PropertyType.GetCustomAttribute<PublicDataAttribute>() != null)
+		if (PropertyInfo!.PropertyType.GetCustomAttribute<PublicDataAttribute>() != null)
 			return true;
 
-		if (PropertyInfo.PropertyType.GetCustomAttribute<ProtectedDataAttribute>() != null)
+		if (PropertyInfo!.PropertyType.GetCustomAttribute<ProtectedDataAttribute>() != null)
 			return true;
 
 		if (OwnerTypeSchema.IsProtected)
@@ -124,10 +125,11 @@ public class PropertySchema
 
 	public void Save(BinaryWriter writer)
 	{
-		writer.Write(PropertyName);
+		writer.Write(PropertyName!);
 		writer.Write((short)TypeIndex);
 	}
 
+	[MemberNotNull(nameof(PropertyName), nameof(TypeIndex))]
 	public void Load(BinaryReader reader)
 	{
 		PropertyName = reader.ReadString();

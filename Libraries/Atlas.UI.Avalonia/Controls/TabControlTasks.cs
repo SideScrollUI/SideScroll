@@ -16,7 +16,7 @@ public class TabControlTasks : Grid, IDisposable
 
 	public TabInstance TabInstance;
 
-	public event EventHandler<TabSelectionChangedEventArgs> OnSelectionChanged;
+	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
 	public bool AutoSelectNew = true;
 
@@ -39,19 +39,10 @@ public class TabControlTasks : Grid, IDisposable
 
 	public override string ToString() => TabInstance.Model.Name;
 
-	private TabControlTasks()
-	{
-		InitializeControls();
-	}
-
 	public TabControlTasks(TabInstance tabInstance)
 	{
 		TabInstance = tabInstance;
-		InitializeControls();
-	}
 
-	private void InitializeControls()
-	{
 		ColumnDefinitions = new ColumnDefinitions("*");
 		RowDefinitions = new RowDefinitions("Auto"); // doesn't work
 
@@ -83,7 +74,7 @@ public class TabControlTasks : Grid, IDisposable
 	}
 
 	// not resizing correctly when we add a new item
-	private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+	private void INotifyCollectionChanged_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 	{
 		Dispatcher.UIThread.Post(() => CollectionChangedUI(e), DispatcherPriority.SystemIdle);
 	}
@@ -144,7 +135,7 @@ public class TabControlTasks : Grid, IDisposable
 		}
 	}
 
-	private void TabData_OnSelectionChanged(object sender, EventArgs e)
+	private void TabData_OnSelectionChanged(object? sender, EventArgs e)
 	{
 		UpdateSelection();
 	}
@@ -152,17 +143,13 @@ public class TabControlTasks : Grid, IDisposable
 	private void UpdateSelection()
 	{
 		if (IsVisible)
-			OnSelectionChanged?.Invoke(this, null);
+			OnSelectionChanged?.Invoke(this, new TabSelectionChangedEventArgs());
 	}
 
 	public void Dispose()
 	{
-		if (_tabControlDataGrid != null)
-		{
-			_tabControlDataGrid.OnSelectionChanged -= TabData_OnSelectionChanged;
-			_tabControlDataGrid.Dispose();
-			_tabControlDataGrid = null;
-		}
+		_tabControlDataGrid.OnSelectionChanged -= TabData_OnSelectionChanged;
+		_tabControlDataGrid.Dispose();
 
 		if (TabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
 			iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;

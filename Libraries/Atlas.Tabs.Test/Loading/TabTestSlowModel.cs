@@ -22,7 +22,7 @@ public class TabTestSlowModel : ITab
 	{
 		public int Integer { get; set; }
 
-		private string _text;
+		private string? _text;
 		public string Text
 		{
 			get

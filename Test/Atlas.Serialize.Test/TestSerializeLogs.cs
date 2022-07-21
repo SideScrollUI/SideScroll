@@ -8,7 +8,7 @@ namespace Atlas.Serialize.Test;
 [Category("Serialize")]
 public class TestSerializeLogs : TestSerializeBase
 {
-	private SerializerMemory _serializer;
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -153,7 +153,7 @@ public class TestSerializeLogs : TestSerializeBase
 
 	public class SelectedItem
 	{
-		public string Label;
+		public string? Label;
 		public bool Pinned;
 	}
 
@@ -166,7 +166,7 @@ public class TestSerializeLogs : TestSerializeBase
 
 	public class LogEntryUnknown
 	{
-		public string Type { get; set; }
+		public string? Type { get; set; }
 	}
 
 	public class LogUnknown : LogEntryUnknown
@@ -176,11 +176,9 @@ public class TestSerializeLogs : TestSerializeBase
 
 	public class LogEntryTest2
 	{
-		public Tag[] Tags;
+		public Tag[]? Tags;
 
-		public LogEntryTest2()
-		{
-		}
+		public LogEntryTest2() { }
 
 		public LogEntryTest2(Tag[] tags)
 		{
@@ -192,9 +190,7 @@ public class TestSerializeLogs : TestSerializeBase
 	{
 		public List<LogEntryTest2> Items = new();
 
-		public LogTest2()
-		{
-		}
+		public LogTest2() { }
 
 		public void Add(params Tag[] tags)
 		{

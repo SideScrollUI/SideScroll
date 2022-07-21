@@ -11,29 +11,27 @@ public enum TagType
 
 public class Tag
 {
-	public string Name { get; set; }
+	public string? Name { get; set; }
 
 	[InnerValue, StyleValue]
-	public object Value { get; set; }
+	public object? Value { get; set; }
 
 	public TagType Type;
 
 	public override string ToString()
 	{
-		string text = Value.Formatted();
+		string? text = Value.Formatted();
 		if (text?.Contains(" ") == true)
 			text = '"' + text + '"';
 
 		return "[ " + Name + " = " + text + " ]";
 	}
 
-	public Tag()
-	{
-	}
+	public Tag() { }
 
 	public Tag(object value)
 	{
-		Name = value.ToString();
+		Name = value?.ToString() ?? "(null)";
 		Value = value;
 	}
 
@@ -44,7 +42,7 @@ public class Tag
 		Type = tag.Type;
 	}
 
-	public Tag(string name, object value, TagType type = TagType.Default)
+	public Tag(string name, object? value, TagType type = TagType.Default)
 	{
 		Name = name;
 		Value = value;

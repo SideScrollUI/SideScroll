@@ -19,16 +19,16 @@ public class TabBookmark
 {
 	public const string DefaultDataName = "default";
 
-	public Bookmark Bookmark { get; set; }
-	public string Name { get; set; }
+	public Bookmark? Bookmark { get; set; }
+	public string? Name { get; set; }
 	public bool IsRoot { get; set; }
-	public ITab Tab { get; set; } // [TabRoot] will set this to use the serialized tab as the root tab
+	public ITab? Tab { get; set; } // [TabRoot] will set this to use the serialized tab as the root tab
 
-	public SelectedRow SelectedRow { get; set; } // The parent selection that created this bookmark
+	public SelectedRow? SelectedRow { get; set; } // The parent selection that created this bookmark
 
 	public TabViewSettings ViewSettings = new(); // list selections, doesn't know about children
 	public Dictionary<string, TabBookmark> ChildBookmarks { get; set; } = new(); // doesn't know which tabData to use, maps id to child info
-	public Dictionary<string, object> BookmarkData { get; set; }
+	public Dictionary<string, object?>? BookmarkData { get; set; }
 
 	public string Address
 	{
@@ -59,36 +59,36 @@ public class TabBookmark
 	}
 
 	//public List<DataRepoItem> DataRepoItems { get; set; } = new();
-	public string DataRepoGroupId { get; set; }
+	public string? DataRepoGroupId { get; set; }
 
 	// Temporary, Only FindMatches() uses, refactor these out?
 	[NonSerialized]
 	public HashSet<object> SelectedObjects = new(); // does this work with multiple TabDatas?
 
 	[NonSerialized]
-	public TabModel TabModel;
+	public TabModel? TabModel;
 
-	public override string ToString() => Name;
+	public override string? ToString() => Name;
 
 	public static TabBookmark Create(params object[] objs)
 	{
 		// get TabBookmark.SelectedObjects working again and replace?
 
-		string prevLabel = null;
-		TabBookmark rootBookmark = null;
-		TabBookmark tabBookmark = null;
+		string? prevLabel = null;
+		TabBookmark? rootBookmark = null;
+		TabBookmark? tabBookmark = null;
 		foreach (object obj in objs)
 		{
-			string label = obj.ToString();
+			string label = obj.ToString()!;
 			var newBookmark = new TabBookmark();
 			newBookmark.Select(label);
 			if (tabBookmark != null)
-				tabBookmark.ChildBookmarks.Add(prevLabel, newBookmark);
+				tabBookmark.ChildBookmarks.Add(prevLabel!, newBookmark);
 			tabBookmark = newBookmark;
 			rootBookmark ??= tabBookmark;
 			prevLabel = label;
 		}
-		return rootBookmark;
+		return rootBookmark!;
 	}
 
 	// Single level multi-select
@@ -120,7 +120,7 @@ public class TabBookmark
 
 	public void Add(TabBookmark tabBookmark)
 	{
-		ChildBookmarks.Add(tabBookmark.Name, tabBookmark);
+		ChildBookmarks.Add(tabBookmark.Name!, tabBookmark);
 
 		var selectedRow = tabBookmark.SelectedRow ?? new SelectedRow()
 		{
@@ -143,7 +143,7 @@ public class TabBookmark
 		{
 			foreach (SelectedRow row in ViewSettings.SelectedRows)
 			{
-				string dataKey = row.DataKey ?? row.Label;
+				string? dataKey = row.DataKey ?? row.Label;
 				if (dataKey != null && row.DataValue != null && row.DataValue.GetType() == typeof(T))
 					items[dataKey] = (T)row.DataValue;
 			}
@@ -156,16 +156,16 @@ public class TabBookmark
 		SetData(DefaultDataName, obj);
 	}
 
-	public void SetData(string name, object obj)
+	public void SetData(string name, object? obj)
 	{
 		ViewSettings ??= new TabViewSettings();
-		BookmarkData ??= new Dictionary<string, object>();
+		BookmarkData ??= new Dictionary<string, object?>();
 		BookmarkData[name] = obj;
 	}
 
-	public T GetData<T>(string name = DefaultDataName)
+	public T? GetData<T>(string name = DefaultDataName)
 	{
-		if (BookmarkData != null && BookmarkData.TryGetValue(name, out object obj) && obj is T t)
+		if (BookmarkData != null && BookmarkData.TryGetValue(name, out object? obj) && obj is T t)
 			return t;
 
 		return default;
@@ -210,12 +210,12 @@ public class TabBookmark
 		return childBookmark;
 	}
 
-	public TabBookmark GetChild(string name)
+	public TabBookmark? GetChild(string name)
 	{
 		if (ChildBookmarks == null)
 			return null;
 
-		if (ChildBookmarks.TryGetValue(name, out TabBookmark childBookmark))
+		if (ChildBookmarks.TryGetValue(name, out TabBookmark? childBookmark))
 			return childBookmark;
 
 		return null;
@@ -228,7 +228,7 @@ public class TabBookmark
 
 		foreach (SelectedRow row in ViewSettings.SelectedRows)
 		{
-			string dataKey = row.DataKey ?? row.Label;
+			string? dataKey = row.DataKey ?? row.Label;
 			if (dataKey == null || row.DataValue == null)
 				continue;
 
@@ -240,7 +240,7 @@ public class TabBookmark
 	}
 
 	// Returns the deepest TabBookmark that is rootable
-	public TabBookmark GetLeaf()
+	public TabBookmark? GetLeaf()
 	{
 		if (ChildBookmarks.Count == 1)
 		{
@@ -259,7 +259,7 @@ public class TabBookmark
 	{
 		foreach (var nodeEntry in node.ChildBookmarks)
 		{
-			if (ChildBookmarks.TryGetValue(nodeEntry.Key, out TabBookmark existingNode))
+			if (ChildBookmarks.TryGetValue(nodeEntry.Key, out TabBookmark? existingNode))
 			{
 				existingNode.MergeNode(nodeEntry.Value);
 			}

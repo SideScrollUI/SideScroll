@@ -20,7 +20,7 @@ public class HttpCall
 		Call = call;
 	}
 
-	public async virtual Task<string> GetStringAsync(string uri, string accept = null)
+	public async virtual Task<string?> GetStringAsync(string uri, string? accept = null)
 	{
 		byte[] bytes = await GetResponseAsync(uri, accept);
 		if (bytes != null)
@@ -33,7 +33,7 @@ public class HttpCall
 		return await GetResponseAsync(uri);
 	}
 
-	private async Task<byte[]> GetResponseAsync(string uri, string accept = null)
+	private async Task<byte[]> GetResponseAsync(string uri, string? accept = null)
 	{
 		using CallTimer getCall = Call.Timer("Get Uri", new Tag("URI", uri));
 

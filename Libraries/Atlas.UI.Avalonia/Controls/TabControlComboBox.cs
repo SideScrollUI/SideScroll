@@ -14,14 +14,14 @@ public class TabControlComboBox : ComboBox, IStyleable, ILayoutable
 {
 	Type IStyleable.StyleKey => typeof(ComboBox);
 
-	public ListProperty Property;
+	public ListProperty? Property;
 
 	public TabControlComboBox()
 	{
 		InitializeComponent();
 	}
 
-	public TabControlComboBox(IEnumerable items, object selectedItem = null)
+	public TabControlComboBox(IEnumerable items, object? selectedItem = null)
 	{
 		InitializeComponent();
 
@@ -29,7 +29,7 @@ public class TabControlComboBox : ComboBox, IStyleable, ILayoutable
 		SelectedItem = selectedItem;
 	}
 
-	public TabControlComboBox(ListProperty property, string listPropertyName)
+	public TabControlComboBox(ListProperty property, string? listPropertyName)
 	{
 		Property = property;
 
@@ -42,7 +42,7 @@ public class TabControlComboBox : ComboBox, IStyleable, ILayoutable
 
 		if (listPropertyName != null)
 		{
-			PropertyInfo propertyInfo = property.Object.GetType().GetProperty(listPropertyName);
+			PropertyInfo propertyInfo = property.Object.GetType().GetProperty(listPropertyName)!;
 			Items = propertyInfo.GetValue(property.Object) as IEnumerable;
 		}
 		else

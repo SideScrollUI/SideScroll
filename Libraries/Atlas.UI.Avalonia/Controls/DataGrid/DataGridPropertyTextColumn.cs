@@ -8,6 +8,7 @@ using Avalonia.VisualTree;
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Atlas.UI.Avalonia;
@@ -55,7 +56,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 		var formatterAttribute = propertyInfo.GetCustomAttribute<FormatterAttribute>();
 		if (formatterAttribute != null)
 		{
-			FormatConverter.Formatter = (ICustomFormatter)Activator.CreateInstance(formatterAttribute.Type);
+			FormatConverter.Formatter = (ICustomFormatter)Activator.CreateInstance(formatterAttribute.Type)!;
 		}
 
 		if (DataGridUtils.IsTypeAutoSize(propertyInfo.PropertyType))
@@ -82,13 +83,13 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 
 			for (int i = 0; i < MaxRowScanProperties && i < List.Count; i++)
 			{
-				object obj = List[i];
+				object? obj = List[i];
 				if (obj == null)
 					continue;
 
 				try
 				{
-					object value = PropertyInfo.GetValue(obj); // Can throw exception
+					object? value = PropertyInfo.GetValue(obj); // Can throw exception
 					if (hideAttribute != null)
 					{
 						if (!hideAttribute.Values.Contains(value))
@@ -97,7 +98,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 
 					if (checkWordWrap && value != null)
 					{
-						string text = value.ToString();
+						string? text = value.ToString();
 						if (text != null && text.Length > EnableWordWrapMinStringLength)
 							WordWrap = true;
 					}
@@ -208,6 +209,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 		return textBlockElement;
 	}
 
+	[MemberNotNull(nameof(FormattedBinding))]
 	private Binding GetFormattedTextBinding()
 	{
 		Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);

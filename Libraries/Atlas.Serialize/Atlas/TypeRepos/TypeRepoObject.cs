@@ -3,6 +3,7 @@ using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Atlas.Serialize;
@@ -11,7 +12,7 @@ public class TypeRepoObject : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			// todo: support matching constructors with name params & types to fields/properties
 			if (typeSchema.HasConstructor || typeSchema.IsSerialized)
@@ -23,16 +24,16 @@ public class TypeRepoObject : TypeRepo
 	public List<FieldRepo> FieldRepos = new();
 	public List<PropertyRepo> PropertyRepos = new();
 
-	public LazyClass LazyClass;
+	public LazyClass? LazyClass;
 
 	public class FieldRepo
 	{
 		public readonly FieldSchema FieldSchema;
-		public readonly TypeRepo TypeRepo;
+		public readonly TypeRepo? TypeRepo;
 
 		public override string ToString() => "Field Repo: " + FieldSchema.FieldName;
 
-		public FieldRepo(FieldSchema fieldSchema, TypeRepo typeRepo = null)
+		public FieldRepo(FieldSchema fieldSchema, TypeRepo? typeRepo = null)
 		{
 			FieldSchema = fieldSchema;
 			TypeRepo = typeRepo;
@@ -45,13 +46,26 @@ public class TypeRepoObject : TypeRepo
 		{
 			if (FieldSchema.IsLoadable)
 			{
-				object valueObject = TypeRepo.LoadObjectRef();
+				object? valueObject = TypeRepo!.LoadObjectRef();
 				// todo: 36% of current cpu usage, break into explicit operators? (is that even possible?)
-				FieldSchema.FieldInfo.SetValue(obj, valueObject); // else set to null?
+				FieldSchema.FieldInfo!.SetValue(obj, valueObject); // else set to null?
 			}
 			else
 			{
-				TypeRepo.SkipObjectRef();
+				TypeRepo!.SkipObjectRef();
+			}
+		}
+
+		public object? Get()
+		{
+			if (FieldSchema.IsLoadable)
+			{
+				return TypeRepo!.LoadObjectRef();
+			}
+			else
+			{
+				TypeRepo!.SkipObjectRef();
+				return null;
 			}
 		}
 	}
@@ -59,12 +73,12 @@ public class TypeRepoObject : TypeRepo
 	public class PropertyRepo
 	{
 		public readonly PropertySchema PropertySchema;
-		public readonly TypeRepo TypeRepo;
-		public LazyProperty LazyProperty;
+		public readonly TypeRepo? TypeRepo;
+		public LazyProperty? LazyProperty;
 
-		public override string ToString() => PropertySchema.ToString() + " (" + TypeRepo.ToString() + ")";
+		public override string ToString() => PropertySchema.ToString() + " (" + TypeRepo!.ToString() + ")";
 
-		public PropertyRepo(PropertySchema propertySchema, TypeRepo typeRepo = null)
+		public PropertyRepo(PropertySchema propertySchema, TypeRepo? typeRepo = null)
 		{
 			PropertySchema = propertySchema;
 			TypeRepo = typeRepo;
@@ -78,18 +92,18 @@ public class TypeRepoObject : TypeRepo
 		{
 			if (!PropertySchema.IsLoadable)
 			{
-				TypeRepo.LoadLazyObjectRef(); // skip reference
+				TypeRepo!.LoadLazyObjectRef(); // skip reference
 				if (LazyProperty != null)
-					LazyProperty.FieldInfoLoaded.SetValue(obj, true);
+					LazyProperty.FieldInfoLoaded!.SetValue(obj, true);
 			}
 			else if (LazyProperty != null)
 			{
-				TypeRef typeRef = TypeRepo.LoadLazyObjectRef();
+				TypeRef? typeRef = TypeRepo!.LoadLazyObjectRef();
 				LazyProperty.SetTypeRef(obj, typeRef);
 			}
 			else
 			{
-				object valueObject = TypeRepo.LoadObjectRef();
+				object? valueObject = TypeRepo!.LoadObjectRef();
 				// can throw System.ArgumentException, set to null if not Loadable?
 				// Should we add exception handling or detect this earlier when we load the schema?
 
@@ -97,11 +111,28 @@ public class TypeRepoObject : TypeRepo
 				if (TypeRepo.TypeSchema.IsPrimitive)
 				{
 					// todo: construct temp object and store default instead for speed?
-					dynamic currentValue = PropertySchema.PropertyInfo.GetValue(obj);
-					if ((dynamic)valueObject == currentValue)
+					dynamic? currentValue = PropertySchema.PropertyInfo!.GetValue(obj)!;
+					if ((dynamic?)valueObject == currentValue)
 						return;
 				}
-				PropertySchema.PropertyInfo.SetValue(obj, valueObject);
+				PropertySchema.PropertyInfo!.SetValue(obj, valueObject);
+			}
+		}
+
+		public object? Get()
+		{
+			if (!PropertySchema.IsLoadable)
+			{
+				TypeRepo!.SkipObjectRef();
+				return null;
+			}
+			else if (LazyProperty != null)
+			{
+				throw new Exception("Get() doesn't support Lazy Properties: " + PropertySchema.PropertyName);
+			}
+			else
+			{
+				return TypeRepo!.LoadObjectRef();
 			}
 		}
 	}
@@ -134,7 +165,13 @@ public class TypeRepoObject : TypeRepo
 	{
 		InitializeFields(log);
 		InitializeProperties(log);
+		InitializeConstructor(log);
 		//InitializeSaving();
+
+		if (!TypeSchema.HasConstructor)
+		{
+			log.AddWarning("No matching constructor found", new Tag("Type", TypeSchema.ToString()));
+		}
 	}
 
 	public bool HasVirtualProperty
@@ -147,7 +184,7 @@ public class TypeRepoObject : TypeRepo
 				if (propertySchema.IsLoadable == false)
 					continue;
 
-				MethodInfo getMethod = propertySchema.PropertyInfo.GetGetMethod(false);
+				MethodInfo getMethod = propertySchema.PropertyInfo!.GetGetMethod(false)!;
 				if (getMethod.IsVirtual)
 					return true;
 			}
@@ -175,7 +212,7 @@ public class TypeRepoObject : TypeRepo
 			}
 			else
 			{
-				Type fieldType = fieldSchema.FieldInfo.FieldType.GetNonNullableType();
+				Type fieldType = fieldSchema.FieldInfo!.FieldType.GetNonNullableType();
 				typeRepo = Serializer.GetOrCreateRepo(log, fieldType);
 			}
 			fieldSchema.FieldTypeSchema = typeRepo.TypeSchema;
@@ -221,7 +258,7 @@ public class TypeRepoObject : TypeRepo
 				var propertyRepo = new PropertyRepo(propertySchema, typeRepo);
 				PropertyRepos.Add(propertyRepo);
 
-				if (propertySchema.IsLoadable && !propertySchema.Type.IsPrimitive)
+				if (propertySchema.IsLoadable && !propertySchema.Type!.IsPrimitive)
 					lazyPropertyRepos.Add(propertyRepo);
 			}
 		}
@@ -229,7 +266,7 @@ public class TypeRepoObject : TypeRepo
 		// should we add an attribute for this instead?
 		if (Serializer.Lazy && HasVirtualProperty)
 		{
-			LazyClass = new LazyClass(LoadableType, lazyPropertyRepos);
+			LazyClass = new LazyClass(LoadableType!, lazyPropertyRepos);
 			LoadableType = LazyClass.NewType;
 		}
 
@@ -238,6 +275,87 @@ public class TypeRepoObject : TypeRepo
 			//if (propertySchema.propertyInfo != null)
 				lazyClass.LazyProperties.TryGetValue(propertySchema.propertyInfo, out propertyRepo.lazyProperty);
 		}*/
+	}
+
+	private readonly List<object> _constructorRepos = new();
+
+	public void InitializeConstructor(Log log)
+	{
+		if (TypeSchema.CustomConstructor == null) return;
+
+		var fields = FieldRepos.ToDictionary(f => f.FieldSchema.FieldName.ToLower());
+		var properties = PropertyRepos.ToDictionary(f => f.PropertySchema.PropertyName.ToLower());
+
+		var parameters = TypeSchema.CustomConstructor.GetParameters();
+		foreach (var param in parameters)
+		{
+			string name = param.Name!.ToLower();
+			if (fields.TryGetValue(name, out var field))
+			{
+				_constructorRepos.Add(field);
+			}
+			else if (properties.TryGetValue(name, out var property))
+			{
+				_constructorRepos.Add(property);
+			}
+			else
+			{
+				throw new Exception($"Constructor param [ {name} ] not found");
+			}
+		}
+	}
+
+	// Reads over all the field and properties since they're ordered without offsets
+	private List<object?> GetConstructorParams()
+	{
+		if (TypeSchema.CustomConstructor == null) throw new Exception("Missing Custom Constructor");
+
+		long position = Reader!.BaseStream.Position;
+
+		Dictionary<FieldRepo, object?> fieldValues = FieldRepos.ToDictionary(f => f, f => f.Get());
+		Dictionary<PropertyRepo, object?> propertyValues = PropertyRepos.ToDictionary(p => p, p => p.Get());
+
+		List<object?> parameters = new();
+		foreach (var repo in _constructorRepos)
+		{
+			if (repo is FieldRepo fieldRepo)
+			{
+				if (fieldValues.TryGetValue(fieldRepo, out object? value))
+					parameters.Add(value);
+				else
+					throw new Exception("Missing FieldRepo: " + fieldRepo.ToString());
+			}
+			else if (repo is PropertyRepo propertyRepo)
+			{
+				if (propertyValues.TryGetValue(propertyRepo, out object? value))
+					parameters.Add(value);
+				else
+					throw new Exception("Missing PropertyRepo: " + propertyRepo.ToString());
+			}
+			else
+			{
+				throw new Exception("Unhandled repo type: " + repo.ToString());
+			}
+		}
+
+		Reader.BaseStream.Position = position;
+		return parameters;
+	}
+
+	protected override object? CreateObject(int objectIndex)
+	{
+		if (TypeSchema.HasEmptyConstructor)
+		{
+			return base.CreateObject(objectIndex);
+		}
+
+		List<object?> constructorParams = GetConstructorParams();
+
+		object obj = TypeSchema.CustomConstructor!.Invoke(constructorParams.ToArray());
+
+		ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs
+		Serializer.QueueLoading(this, objectIndex);
+		return obj;
 	}
 
 	public override void AddChildObjects(object obj)
@@ -265,7 +383,7 @@ public class TypeRepoObject : TypeRepo
 			if (!fieldSchema.IsSerialized)
 				continue;
 
-			object fieldValue = fieldSchema.FieldInfo.GetValue(obj);
+			object? fieldValue = fieldSchema.FieldInfo!.GetValue(obj);
 			Serializer.AddObjectRef(fieldValue);
 		}
 	}
@@ -274,9 +392,9 @@ public class TypeRepoObject : TypeRepo
 	{
 		foreach (FieldRepo fieldRepo in FieldRepos)
 		{
-			FieldInfo fieldInfo = fieldRepo.FieldSchema.FieldInfo;
-			object fieldValue = fieldInfo.GetValue(obj);
-			Serializer.WriteObjectRef(fieldRepo.FieldSchema.NonNullableType, fieldValue, writer);
+			FieldInfo fieldInfo = fieldRepo.FieldSchema.FieldInfo!;
+			object? fieldValue = fieldInfo.GetValue(obj);
+			Serializer.WriteObjectRef(fieldRepo.FieldSchema.NonNullableType!, fieldValue, writer);
 		}
 	}
 
@@ -295,7 +413,7 @@ public class TypeRepoObject : TypeRepo
 			if (!propertySchema.IsSerialized)
 				continue;
 
-			object propertyValue = propertySchema.PropertyInfo.GetValue(value);
+			object? propertyValue = propertySchema.PropertyInfo!.GetValue(value)!;
 			Serializer.AddObjectRef(propertyValue);
 		}
 
@@ -321,9 +439,9 @@ public class TypeRepoObject : TypeRepo
 	{
 		foreach (PropertyRepo propertyRepo in PropertyRepos)
 		{
-			PropertyInfo propertyInfo = propertyRepo.PropertySchema.PropertyInfo;
-			object propertyValue = propertyInfo.GetValue(obj);
-			Serializer.WriteObjectRef(propertyRepo.PropertySchema.NonNullableType, propertyValue, writer);
+			PropertyInfo propertyInfo = propertyRepo.PropertySchema.PropertyInfo!;
+			object? propertyValue = propertyInfo.GetValue(obj);
+			Serializer.WriteObjectRef(propertyRepo.PropertySchema.NonNullableType!, propertyValue, writer);
 		}
 	}
 
@@ -348,9 +466,9 @@ public class TypeRepoObject : TypeRepo
 			if (!fieldSchema.IsSerialized)
 				continue;
 
-			object propertyValue = fieldSchema.FieldInfo.GetValue(source);
-			Serializer.AddObjectRef(propertyValue);
-			object clone = Serializer.Clone(propertyValue);
+			object? fieldValue = fieldSchema.FieldInfo!.GetValue(source);
+			Serializer.AddObjectRef(fieldValue);
+			object? clone = Serializer.Clone(fieldValue);
 			fieldSchema.FieldInfo.SetValue(dest, clone);
 		}
 	}
@@ -362,9 +480,9 @@ public class TypeRepoObject : TypeRepo
 			if (!propertySchema.IsSerialized)
 				continue;
 
-			object propertyValue = propertySchema.PropertyInfo.GetValue(source);
+			object? propertyValue = propertySchema.PropertyInfo!.GetValue(source);
 			Serializer.AddObjectRef(propertyValue);
-			object clone = Serializer.Clone(propertyValue);
+			object? clone = Serializer.Clone(propertyValue);
 			propertySchema.PropertyInfo.SetValue(dest, clone); // else set to null?
 		}
 	}

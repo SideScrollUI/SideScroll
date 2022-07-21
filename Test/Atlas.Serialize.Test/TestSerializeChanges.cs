@@ -7,7 +7,7 @@ namespace Atlas.Serialize.Test;
 [Category("Serialize")]
 public class TestSerializeChanges : TestSerializeBase
 {
-	private SerializerFile _serializerFile;
+	private SerializerFile? _serializerFile;
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -32,7 +32,7 @@ public class TestSerializeChanges : TestSerializeBase
 
 	public class Parent
 	{
-		public Child Child;
+		public Child? Child;
 	}
 
 	public class Child

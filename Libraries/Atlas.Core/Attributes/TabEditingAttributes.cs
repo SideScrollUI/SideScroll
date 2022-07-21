@@ -31,9 +31,9 @@ public class AcceptsReturnAttribute : Attribute
 public class WatermarkAttribute : Attribute
 {
 	public readonly string Text;
-	public readonly string MemberName; // Field or Property name, overrides Text if set
+	public readonly string? MemberName; // Field or Property name, overrides Text if set
 
-	public WatermarkAttribute(string text, string memberName = null)
+	public WatermarkAttribute(string text, string? memberName = null)
 	{
 		Text = text;
 		MemberName = memberName;

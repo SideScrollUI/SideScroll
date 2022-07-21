@@ -8,14 +8,12 @@ namespace Atlas.Serialize.Test;
 [Category("DeepClone")]
 public class TestDeepClone : TestSerializeBase
 {
-	private Log _log;
-	private Serializer _serializer;
+	private Serializer _serializer = new();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
 		Initialize("DeepClone");
-		_log = Call.Log;
 	}
 
 	[SetUp]
@@ -34,7 +32,7 @@ public class TestDeepClone : TestSerializeBase
 	{
 		var input = new StringClass();
 
-		var output = input.DeepClone();
+		var output = input.DeepClone()!;
 
 		Assert.AreSame(input.Value, output.Value);
 	}

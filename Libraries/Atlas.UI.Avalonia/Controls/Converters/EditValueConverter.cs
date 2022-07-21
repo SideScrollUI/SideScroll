@@ -10,32 +10,32 @@ public class EditValueConverter : IValueConverter
 {
 	// public string Append { get; set; }
 
-	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		if (value == null)
 			return null;
 
-		object result = ChangeType(value, targetType);
+		object? result = ChangeType(value, targetType);
 		return result;
 	}
 
-	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		if (value == null)
 			return null;
 
-		object result = ChangeType(value, targetType);
+		object? result = ChangeType(value, targetType);
 		return result;
 	}
 
-	public static object ChangeType(object value, Type targetType)
+	public static object? ChangeType(object? value, Type targetType)
 	{
+		if (value == null)
+			return null;
+
 		if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
 		{
-			if (value == null)
-				return null;
-
-			targetType = Nullable.GetUnderlyingType(targetType);
+			targetType = Nullable.GetUnderlyingType(targetType)!;
 		}
 
 		if (value.GetType() == targetType)

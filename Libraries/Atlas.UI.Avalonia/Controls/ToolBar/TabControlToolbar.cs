@@ -18,9 +18,9 @@ public class TabControlToolbar : Grid, IDisposable
 {
 	public static Thickness DefaultMargin = new(6, 3);
 
-	public TabInstance TabInstance;
+	public TabInstance? TabInstance;
 
-	public TabControlToolbar(TabInstance tabInstance, TabToolbar toolbar = null)
+	public TabControlToolbar(TabInstance? tabInstance, TabToolbar? toolbar = null)
 	{
 		TabInstance = tabInstance;
 
@@ -84,7 +84,7 @@ public class TabControlToolbar : Grid, IDisposable
 		Children.Add(control);
 	}
 
-	public ToolbarButton AddButton(string tooltip, Stream resource, ICommand command = null)
+	public ToolbarButton AddButton(string tooltip, Stream resource, ICommand? command = null)
 	{
 		var button = new ToolbarButton(this, null, tooltip, resource, command);
 		AddControl(button);
@@ -103,7 +103,7 @@ public class TabControlToolbar : Grid, IDisposable
 		var textBlock = new ToolbarTextBlock(toolComboBox.Label);
 		AddControl(textBlock);
 
-		PropertyInfo propertyInfo = toolComboBox.GetType().GetProperty(nameof(IToolComboBox.SelectedObject));
+		PropertyInfo propertyInfo = toolComboBox.GetType().GetProperty(nameof(IToolComboBox.SelectedObject))!;
 		var comboBox = new TabControlFormattedComboBox(new ListProperty(toolComboBox, propertyInfo))
 		{
 			Items = toolComboBox.GetItems(),
@@ -230,19 +230,19 @@ public class ToolbarRadioButton : RadioButton, IStyleable
 // todo: replace with version that uses IObservable
 public class RelayCommand : ICommand
 {
-	public readonly Func<object, bool> CanExecuteFunc;
-	public readonly Action<object> ExecuteAction;
+	public readonly Func<object?, bool> CanExecuteFunc;
+	public readonly Action<object?> ExecuteAction;
 
-	public RelayCommand(Func<object, bool> canExecute = null, Action<object> execute = null)
+	public RelayCommand(Func<object?, bool>? canExecute = null, Action<object?>? execute = null)
 	{
 		CanExecuteFunc = canExecute ?? (_ => true);
 		ExecuteAction = execute ?? (_ => { });
 	}
 
-	public event EventHandler CanExecuteChanged;
+	public event EventHandler? CanExecuteChanged;
 
 	private bool? _prevCanExecute = null;
-	public bool CanExecute(object parameter)
+	public bool CanExecute(object? parameter)
 	{
 		var ce = CanExecuteFunc(parameter);
 		if (CanExecuteChanged != null && (!_prevCanExecute.HasValue || ce != _prevCanExecute))
@@ -254,7 +254,7 @@ public class RelayCommand : ICommand
 		return ce;
 	}
 
-	public void Execute(object parameter)
+	public void Execute(object? parameter)
 	{
 		ExecuteAction(parameter);
 	}

@@ -95,8 +95,8 @@ public static class Icons
 
 		public static Stream Get(string resourceName, string resourceType = "png")
 		{
-			var assembly = Assembly.GetExecutingAssembly();
-			return assembly.GetManifestResourceStream("Atlas.Resources.Icons." + resourceType + "." + resourceName);
+			Assembly assembly = Assembly.GetExecutingAssembly();
+			return assembly.GetManifestResourceStream("Atlas.Resources.Icons." + resourceType + "." + resourceName)!;
 		}
 	}
 }

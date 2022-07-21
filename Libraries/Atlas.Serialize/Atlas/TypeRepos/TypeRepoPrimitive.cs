@@ -8,9 +8,9 @@ public class TypeRepoPrimitive : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type))
+			if (CanAssign(typeSchema.Type!))
 				return new TypeRepoPrimitive(serializer, typeSchema);
 			return null;
 		}
@@ -46,7 +46,7 @@ public class TypeRepoPrimitive : TypeRepo
 			Debug.Assert(true);
 	}
 
-	protected override object CreateObject(int objectIndex)
+	protected override object? CreateObject(int objectIndex)
 	{
 		return null;
 	}
@@ -55,19 +55,19 @@ public class TypeRepoPrimitive : TypeRepo
 	{
 		object obj;
 		if (Type == typeof(uint))
-			obj = Reader.ReadUInt32();
+			obj = Reader!.ReadUInt32();
 		else if (Type == typeof(int))
-			obj = Reader.ReadInt32();
+			obj = Reader!.ReadInt32();
 		else if (Type == typeof(long))
-			obj = Reader.ReadInt64();
+			obj = Reader!.ReadInt64();
 		else if (Type == typeof(double))
-			obj = Reader.ReadDouble();
+			obj = Reader!.ReadDouble();
 		else if (Type == typeof(float))
-			obj = (float)Reader.ReadDouble();
+			obj = (float)Reader!.ReadDouble();
 		else if (Type == typeof(bool))
-			obj = Reader.ReadBoolean();
+			obj = Reader!.ReadBoolean();
 		else if (Type == typeof(char))
-			obj = Reader.ReadChar();
+			obj = Reader!.ReadChar();
 		else
 			throw new Exception("Unhandled primitive type");
 

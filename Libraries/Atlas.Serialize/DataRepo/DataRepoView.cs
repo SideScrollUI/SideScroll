@@ -9,7 +9,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 {
 	//public DataRepo<T> DataRepo; // Add template version?
 
-	public DataItemCollection<T> Items { get; set; }
+	public DataItemCollection<T> Items { get; set; } = new();
 
 	public DataRepoView(DataRepo dataRepo, string groupId) : base(dataRepo, groupId)
 	{
@@ -54,12 +54,12 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		}
 	}
 
-	public override void Save(Call call, T item)
+	public override void Save(Call? call, T item)
 	{
-		Save(call, item.ToString(), item);
+		Save(call, item!.ToString()!, item);
 	}
 
-	public override void Save(Call call, string key, T item)
+	public override void Save(Call? call, string key, T item)
 	{
 		lock (DataRepo)
 		{
@@ -69,7 +69,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		}
 	}
 
-	public override void Delete(string key = null)
+	public override void Delete(string? key = null)
 	{
 		lock (DataRepo)
 		{

@@ -14,12 +14,12 @@ public class SerializeIL : TestSerializeBase
 	{
 		var lazyClass = new LazyClass();
 
-		object obj = Activator.CreateInstance(lazyClass.NewType, true);
-		FieldInfo fieldInfo = lazyClass.NewType.GetField("typeRef");
+		object obj = Activator.CreateInstance(lazyClass.NewType, true)!;
+		FieldInfo fieldInfo = lazyClass.NewType.GetField("typeRef")!;
 		fieldInfo.SetValue(obj, new TypeRef());
 
-		PropertyInfo propertyInfo = lazyClass.NewType.GetProperty("prop");
-		object result = propertyInfo.GetValue(obj);
+		PropertyInfo propertyInfo = lazyClass.NewType.GetProperty("prop")!;
+		object result = propertyInfo.GetValue(obj)!;
 	}
 }
 
@@ -33,9 +33,9 @@ public class TypeRef
 
 public class PropertyRef
 {
-	public TypeRepo TypeRepo;
-	public PropertyBuilder PropertyBuilder;
-	public FieldBuilder FieldBuilderTypeRef;
+	public TypeRepo? TypeRepo;
+	public PropertyBuilder? PropertyBuilder;
+	public FieldBuilder? FieldBuilderTypeRef;
 }
 
 public class LazyClass
@@ -55,7 +55,7 @@ public class LazyClass
 
 		CreateProperty(typeBuilder);
 
-		TypeInfo objectType = typeBuilder.CreateTypeInfo();
+		TypeInfo objectType = typeBuilder.CreateTypeInfo()!;
 		return objectType;
 	}
 
@@ -83,7 +83,7 @@ public class LazyClass
 
 		FieldBuilder fieldBuilderValue = typeBuilder.DefineField("_" + propertyName, propertyType, FieldAttributes.Private);
 		FieldBuilder fieldBuilderTypeRef = typeBuilder.DefineField("typeRef", typeof(TypeRef), FieldAttributes.Public);
-		MethodInfo methodInfoLoad = typeof(TypeRef).GetMethod(nameof(TypeRef.Load));
+		MethodInfo methodInfoLoad = typeof(TypeRef).GetMethod(nameof(TypeRef.Load))!;
 
 		PropertyBuilder propertyBuilder = typeBuilder.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
 

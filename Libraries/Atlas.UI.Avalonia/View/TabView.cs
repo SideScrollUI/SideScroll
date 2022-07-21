@@ -58,18 +58,18 @@ public class TabView : Grid, IDisposable
 	}
 
 	// Created Controls
-	public TabControlActions TabActions;
-	public TabControlTasks TabTasks;
+	public TabControlActions? TabActions;
+	public TabControlTasks? TabTasks;
 	public List<TabControlDataGrid> TabDatas = new();
 	public List<ITabSelector> CustomTabControls { get; set; } = new(); // should everything use this?
 
 	// Layout Controls
-	private Grid _containerGrid;
-	private TabControlSplitContainer _tabParentControls;
-	private TabControlTitle _tabTitle;
-	private GridSplitter _parentChildGridSplitter;
-	private TabControlSplitContainer _tabChildControls;
-	private Panel _fillerPanel; // GridSplitter doesn't work without control on right side
+	private Grid? _containerGrid;
+	private TabControlSplitContainer? _tabParentControls;
+	private TabControlTitle? _tabTitle;
+	private GridSplitter? _parentChildGridSplitter;
+	private TabControlSplitContainer? _tabChildControls;
+	private Panel? _fillerPanel; // GridSplitter doesn't work without control on right side
 
 	private Size _arrangeOverrideFinalSize;
 	private bool _childControlsFinishedLoading;
@@ -77,7 +77,7 @@ public class TabView : Grid, IDisposable
 
 	// Throttles updating selectedChildControls
 	// todo: extract
-	private DispatcherTimer _dispatcherTimer;  // delays auto selection to throttle updates
+	private DispatcherTimer? _dispatcherTimer;  // delays auto selection to throttle updates
 	private bool _updateChildControls;
 
 	public override string ToString() => Model.Name;
@@ -167,7 +167,7 @@ public class TabView : Grid, IDisposable
 			if (Instance.Skippable)
 			{
 				_containerGrid.ColumnDefinitions[0].Width = new GridLength(0);
-				_tabParentControls.Width = 0;
+				_tabParentControls!.Width = 0;
 			}
 		}
 
@@ -196,7 +196,7 @@ public class TabView : Grid, IDisposable
 			desiredWidth = (int)TabViewSettings.SplitterDistance.Value;
 		}
 
-		_containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
+		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
 		_tabParentControls.Width = desiredWidth;
 	}
 
@@ -210,7 +210,7 @@ public class TabView : Grid, IDisposable
 		};
 		//if (TabViewSettings.SplitterDistance != null)
 		//	tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
-		_containerGrid.Children.Add(_tabParentControls);
+		_containerGrid!.Children.Add(_tabParentControls);
 		UpdateSplitterDistance();
 
 		_tabTitle = new TabControlTitle(Instance, Model.Name);
@@ -219,7 +219,7 @@ public class TabView : Grid, IDisposable
 		_tabParentControls.KeyDown += ParentControls_KeyDown;
 	}
 
-	private void ParentControls_KeyDown(object sender, KeyEventArgs e)
+	private void ParentControls_KeyDown(object? sender, KeyEventArgs e)
 	{
 		if (e.Key == Key.Enter)
 		{
@@ -237,7 +237,7 @@ public class TabView : Grid, IDisposable
 			[Grid.ColumnProperty] = 1,
 			Width = Theme.SplitterSize,
 		};
-		_containerGrid.Children.Add(_parentChildGridSplitter);
+		_containerGrid!.Children.Add(_parentChildGridSplitter);
 
 		_parentChildGridSplitter.DragDelta += GridSplitter_DragDelta;
 		_parentChildGridSplitter.DragStarted += GridSplitter_DragStarted;
@@ -252,7 +252,7 @@ public class TabView : Grid, IDisposable
 			ColumnDefinitions = new ColumnDefinitions("Auto"),
 		};
 		Grid.SetColumn(_tabChildControls, 2);
-		_containerGrid.Children.Add(_tabChildControls);
+		_containerGrid!.Children.Add(_tabChildControls);
 	}
 
 	private void AddListeners()
@@ -275,36 +275,36 @@ public class TabView : Grid, IDisposable
 		Instance.OnResize -= TabInstance_OnResize;
 	}
 
-	private void TabInstance_OnModelChanged(object sender, EventArgs e)
+	private void TabInstance_OnModelChanged(object? sender, EventArgs e)
 	{
 		ReloadControls();
 	}
 
-	private void TabInstance_OnResize(object sender, EventArgs e)
+	private void TabInstance_OnResize(object? sender, EventArgs e)
 	{
-		_containerGrid.ColumnDefinitions[0].Width = GridLength.Auto;
+		_containerGrid!.ColumnDefinitions[0].Width = GridLength.Auto;
 	}
 
-	private void GridSplitter_DragDelta(object sender, VectorEventArgs e)
+	private void GridSplitter_DragDelta(object? sender, VectorEventArgs e)
 	{
 		if (TabViewSettings.SplitterDistance != null)
-			_tabParentControls.Width = _containerGrid.ColumnDefinitions[0].ActualWidth;
+			_tabParentControls!.Width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
 
 		// force the width to update (Grid Auto Size caching problem?
-		double width = _containerGrid.ColumnDefinitions[0].ActualWidth;
+		double width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
 		TabViewSettings.SplitterDistance = width;
-		_tabParentControls.Width = width;
+		_tabParentControls!.Width = width;
 
 		//if (TabViewSettings.SplitterDistance != null)
 		//	containerGrid.ColumnDefinitions[0].Width = new GridLength((double)containerGrid.ColumnDefinitions[1].);
 	}
 
-	private void GridSplitter_DragStarted(object sender, VectorEventArgs e)
+	private void GridSplitter_DragStarted(object? sender, VectorEventArgs e)
 	{
 		_isDragging = true;
 	}
 
-	private void GridSplitter_DragCompleted(object sender, VectorEventArgs e)
+	private void GridSplitter_DragCompleted(object? sender, VectorEventArgs e)
 	{
 		if (_isDragging == false)
 			return;
@@ -314,9 +314,9 @@ public class TabView : Grid, IDisposable
 		InvalidateArrange();
 
 		//TabViewSettings.SplitterDistance = (int)Math.Ceiling(e.Vector.Y); // backwards
-		double width = (int)_containerGrid.ColumnDefinitions[0].ActualWidth;
+		double width = (int)_containerGrid!.ColumnDefinitions[0].ActualWidth;
 		TabViewSettings.SplitterDistance = width;
-		_tabParentControls.Width = width;
+		_tabParentControls!.Width = width;
 		_containerGrid.ColumnDefinitions[0].Width = new GridLength(width);
 
 		//UpdateSplitterDistance();
@@ -327,14 +327,14 @@ public class TabView : Grid, IDisposable
 
 	// doesn't resize bigger well
 	// The Drag start, delta, and complete get called for this too. Which makes this really hard to do well
-	private void GridSplitter_DoubleTapped(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	private void GridSplitter_DoubleTapped(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 		_isDragging = false;
-		double desiredWidth = _tabParentControls.DesiredSize.Width;
+		double desiredWidth = _tabParentControls!.DesiredSize.Width;
 		TabViewSettings.SplitterDistance = desiredWidth;
 		_tabParentControls.Width = desiredWidth;
 		//containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
-		_containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
+		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 		//containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
 
 		_containerGrid.InvalidateArrange();
@@ -395,10 +395,10 @@ public class TabView : Grid, IDisposable
 	{
 		foreach (TabObject tabObject in Model.Objects)
 		{
-			object obj = tabObject.Object;
-			if (ControlCreators.TryGetValue(obj.GetType(), out IControlCreator controlCreator))
+			object obj = tabObject.Object!;
+			if (ControlCreators.TryGetValue(obj.GetType(), out IControlCreator? controlCreator))
 			{
-				controlCreator.AddControl(Instance, _tabParentControls, obj);
+				controlCreator.AddControl(Instance, _tabParentControls!, obj);
 			}
 			else if (obj is TabToolbar toolbar)
 			{
@@ -419,8 +419,8 @@ public class TabView : Grid, IDisposable
 			}
 			else
 			{
-				ParamsAttribute attribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
-				if (attribute != null)
+				ParamsAttribute? paramsAttribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
+				if (paramsAttribute != null)
 				{
 					AddControl(new TabControlParams(obj), tabObject.Fill);
 				}
@@ -439,9 +439,9 @@ public class TabView : Grid, IDisposable
 		if (Model.Actions == null)
 			return;
 
-		TabActions = new TabControlActions(Instance, Model, Model.Actions as ItemCollection<TaskCreator>);
+		TabActions = new TabControlActions(Instance, Model);
 
-		_tabParentControls.AddControl(TabActions, false, SeparatorType.Spacer);
+		_tabParentControls!.AddControl(TabActions, false, SeparatorType.Spacer);
 	}
 
 	protected void AddTasks()
@@ -452,7 +452,7 @@ public class TabView : Grid, IDisposable
 		TabTasks = new TabControlTasks(Instance);
 		TabTasks.OnSelectionChanged += ParentListSelectionChanged;
 
-		_tabParentControls.AddControl(TabTasks, false, SeparatorType.Spacer);
+		_tabParentControls!.AddControl(TabTasks, false, SeparatorType.Spacer);
 	}
 
 	protected void AddData()
@@ -462,7 +462,7 @@ public class TabView : Grid, IDisposable
 		{
 			var tabData = new TabControlDataGrid(Instance, iList, true, TabViewSettings.GetData(index));
 			tabData.OnSelectionChanged += ParentListSelectionChanged;
-			_tabParentControls.AddControl(tabData, true, SeparatorType.Splitter);
+			_tabParentControls!.AddControl(tabData, true, SeparatorType.Splitter);
 			TabDatas.Add(tabData);
 			index++;
 		}
@@ -471,13 +471,13 @@ public class TabView : Grid, IDisposable
 	// should we check for a Grid stretch instead of passing that parameter?
 	protected void AddControl(Control control, bool fill)
 	{
-		_tabParentControls.AddControl(control, fill, SeparatorType.Splitter);
+		_tabParentControls!.AddControl(control, fill, SeparatorType.Splitter);
 	}
 
 	protected void AddITabControl(ITabSelector control, bool fill)
 	{
 		control.OnSelectionChanged += ParentListSelectionChanged;
-		_tabParentControls.AddControl((Control)control, fill, SeparatorType.Spacer);
+		_tabParentControls!.AddControl((Control)control, fill, SeparatorType.Spacer);
 		CustomTabControls.Add(control);
 	}
 
@@ -500,7 +500,7 @@ public class TabView : Grid, IDisposable
 			AcceptsReturn = true,
 		};
 		AvaloniaUtils.AddContextMenu(textBox);
-		_tabParentControls.AddControl(textBox, false, SeparatorType.Spacer);
+		_tabParentControls!.AddControl(textBox, false, SeparatorType.Spacer);
 	}
 
 	public void Invalidate()
@@ -553,7 +553,7 @@ public class TabView : Grid, IDisposable
 		TabViewSettings = Instance.LoadDefaultTabSettings();
 	}
 
-	private void DispatcherTimer_Tick(object sender, EventArgs e)
+	private void DispatcherTimer_Tick(object? sender, EventArgs e)
 	{
 		if (_updateChildControls)
 		{
@@ -604,7 +604,7 @@ public class TabView : Grid, IDisposable
 			if (Instance.Depth > 50)
 				return false;
 
-			if (!_tabParentControls.IsArrangeValid)
+			if (!_tabParentControls!.IsArrangeValid)
 				return false;
 
 			if (_tabChildControls.Width < 30)
@@ -629,7 +629,7 @@ public class TabView : Grid, IDisposable
 			//	return false;
 
 			// don't show if the new control won't have enough room
-			IControl control = Parent;
+			IControl? control = Parent;
 			double offset = _tabChildControls.Bounds.X;
 			while (control != null)
 			{
@@ -655,8 +655,8 @@ public class TabView : Grid, IDisposable
 
 	private double GetFillerPanelWidth()
 	{
-		IControl control = Parent;
-		double offset = _tabChildControls.Bounds.X;
+		IControl? control = Parent;
+		double offset = _tabChildControls!.Bounds.X;
 		while (control != null)
 		{
 			if (control is ScrollViewer scrollViewer)
@@ -698,7 +698,7 @@ public class TabView : Grid, IDisposable
 
 		_childControlsFinishedLoading = true;
 
-		TabViewer.BaseViewer.SetMinScrollOffset();
+		TabViewer.BaseViewer!.SetMinScrollOffset();
 
 		// Create new child controls
 		//Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
@@ -718,7 +718,7 @@ public class TabView : Grid, IDisposable
 			orderedChildControls.Add(_fillerPanel);
 			newChildControls[FillerPanelId] = _fillerPanel;
 		}
-		_tabChildControls.SetControls(newChildControls, orderedChildControls);
+		_tabChildControls!.SetControls(newChildControls, orderedChildControls);
 		UpdateSelectedTabInstances();
 
 		if (Instance.TabBookmark != null)
@@ -731,7 +731,7 @@ public class TabView : Grid, IDisposable
 
 	private List<Control> CreateAllChildControls(bool recreate, out Dictionary<object, Control> newChildControls)
 	{
-		Dictionary<object, Control> oldChildControls = recreate ? new() : _tabChildControls.GridControls;
+		Dictionary<object, Control> oldChildControls = recreate ? new() : _tabChildControls!.GridControls;
 		newChildControls = new Dictionary<object, Control>();
 		var orderedChildControls = new List<Control>();
 		//AddNotes(newChildControls, oldChildControls, orderedChildControls);
@@ -743,7 +743,10 @@ public class TabView : Grid, IDisposable
 
 		foreach (ITabSelector tabControl in CustomTabControls)
 		{
-			CreateChildControls(tabControl.SelectedItems, oldChildControls, newChildControls, orderedChildControls, tabControl);
+			if (tabControl.SelectedItems != null)
+			{
+				CreateChildControls(tabControl.SelectedItems, oldChildControls, newChildControls, orderedChildControls, tabControl);
+			}
 		}
 
 		if (TabActions != null)
@@ -764,7 +767,7 @@ public class TabView : Grid, IDisposable
 		return orderedChildControls;
 	}
 
-	internal void CreateChildControls(IEnumerable newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector tabControl = null)
+	internal void CreateChildControls(IEnumerable newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector? tabControl = null)
 	{
 		foreach (object obj in newList)
 		{
@@ -775,15 +778,15 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
-	private void GetOrCreateChildControl(Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, object obj, string label = null, ITabSelector tabControl = null)
+	private void GetOrCreateChildControl(Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, object obj, string? label = null, ITabSelector? tabControl = null)
 	{
 		// duplicate work
 		//object value = obj.GetInnerValue(); // performance issues? cache this?
 		//if (value == null)
 		//	return;
-		SelectedRow selectedRow = obj as SelectedRow;
+		SelectedRow? selectedRow = obj as SelectedRow;
 		if (selectedRow != null)
-			obj = selectedRow.Object;
+			obj = selectedRow.Object!;
 
 		if (oldChildControls.ContainsKey(obj))
 		{
@@ -802,7 +805,7 @@ public class TabView : Grid, IDisposable
 		else
 		{
 			// Create a new control
-			Control control = CreateChildControl(selectedRow, obj, label, tabControl);
+			Control? control = CreateChildControl(selectedRow, obj, label, tabControl);
 			if (control != null)
 			{
 				newChildControls[obj] = control;
@@ -811,15 +814,18 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
-	internal Control CreateChildControl(SelectedRow selectedRow, object obj, string label = null, ITabSelector tabControl = null)
+	internal Control? CreateChildControl(SelectedRow? selectedRow, object obj, string? label = null, ITabSelector? tabControl = null)
 	{
 		try
 		{
-			Control control = TabCreator.CreateChildControl(Instance, obj, label, tabControl);
+			Control? control = TabCreator.CreateChildControl(Instance, obj, label, tabControl);
 			if (control is TabView tabView && selectedRow != null)
 				tabView.Instance.SelectedRow = selectedRow;
 
-			TabViewer.BaseViewer.TabLoaded(obj, control);
+			if (control != null)
+			{
+				TabViewer.BaseViewer!.TabLoaded(obj, control);
+			}
 
 			return control;
 		}
@@ -834,7 +840,7 @@ public class TabView : Grid, IDisposable
 	private void UpdateSelectedTabInstances()
 	{
 		Instance.ChildTabInstances.Clear();
-		foreach (Control control in _tabChildControls.GridControls.Values)
+		foreach (Control control in _tabChildControls!.GridControls.Values)
 		{
 			if (control is TabView tabView)
 			{
@@ -843,7 +849,7 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
-	private void ParentListSelectionChanged(object sender, TabSelectionChangedEventArgs e)
+	private void ParentListSelectionChanged(object? sender, TabSelectionChangedEventArgs e)
 	{
 		e ??= new TabSelectionChangedEventArgs();
 
@@ -924,18 +930,18 @@ public class TabView : Grid, IDisposable
 		Children.Clear();
 	}
 
-	private void TabInstance_OnRefresh(object sender, EventArgs e)
+	private void TabInstance_OnRefresh(object? sender, EventArgs e)
 	{
 		Load();
 	}
 
-	private void TabInstance_OnReload(object sender, EventArgs e)
+	private void TabInstance_OnReload(object? sender, EventArgs e)
 	{
 		//tabInstance.Reinitialize(true);
 		Load();
 	}
 
-	private void TabInstance_OnClearSelection(object sender, EventArgs e)
+	private void TabInstance_OnClearSelection(object? sender, EventArgs e)
 	{
 		foreach (var tabData in TabDatas)
 		{
@@ -943,12 +949,12 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
-	private void TabInstance_OnLoadBookmark(object sender, EventArgs e)
+	private void TabInstance_OnLoadBookmark(object? sender, EventArgs e)
 	{
 		LoadBookmark();
 	}
 
-	private void TabInstance_OnSelectItems(object sender, TabInstance.EventSelectItems e)
+	private void TabInstance_OnSelectItems(object? sender, TabInstance.EventSelectItems e)
 	{
 		if (TabDatas.Count > 0)
 		{
@@ -963,9 +969,9 @@ public class TabView : Grid, IDisposable
 					newItems.Add(obj);
 
 				var matching = new List<object>();
-				foreach (var obj in TabDatas[0].Items)
+				foreach (var obj in TabDatas[0].Items!)
 				{
-					if (newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()))
+					if (newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()!))
 						matching.Add(obj);
 				}
 				TabDatas[0].SelectedItems = matching;
@@ -991,7 +997,7 @@ public class TabView : Grid, IDisposable
 	{
 		Instance.Project.UserSettings.AutoLoad = true;
 
-		TabBookmark tabBookmark = Instance.TabBookmark;
+		TabBookmark tabBookmark = Instance.TabBookmark!;
 		TabViewSettings = tabBookmark.ViewSettings;
 
 		int index = 0;
@@ -1003,7 +1009,7 @@ public class TabView : Grid, IDisposable
 			//if (tabInstance.tabBookmark != null)
 			foreach (TabInstance childTabInstance in Instance.ChildTabInstances.Values)
 			{
-				if (tabBookmark.ChildBookmarks.TryGetValue(childTabInstance.Label, out TabBookmark childBookmarkNode))
+				if (tabBookmark.ChildBookmarks.TryGetValue(childTabInstance.Label, out TabBookmark? childBookmarkNode))
 				{
 					childTabInstance.SelectBookmark(childBookmarkNode);
 				}

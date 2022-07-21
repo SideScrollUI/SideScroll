@@ -11,10 +11,10 @@ public class ListPair : IListPair, IListItem, INotifyPropertyChanged, IMaxDesire
 	public object Key { get; set; }
 
 	[StyleValue]
-	public object Value { get; set; }
+	public object? Value { get; set; }
 
 	[HiddenColumn, InnerValue]
-	public object Object { get; set; }
+	public object? Object { get; set; }
 
 	// public bool AutoLoad = true;
 
@@ -22,11 +22,11 @@ public class ListPair : IListPair, IListItem, INotifyPropertyChanged, IMaxDesire
 	public int? MaxDesiredWidth { get; set; }
 
 #pragma warning disable 414
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public override string ToString() => Key?.ToString() ?? "";
 
-	public ListPair(object key, object value, object obj = null, int? maxDesiredWidth = null)
+	public ListPair(object key, object? value, object? obj = null, int? maxDesiredWidth = null)
 	{
 		Key = key;
 		Value = value;

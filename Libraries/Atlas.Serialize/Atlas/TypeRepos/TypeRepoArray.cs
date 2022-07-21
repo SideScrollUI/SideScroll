@@ -9,22 +9,22 @@ public class TypeRepoArray : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type))
+			if (CanAssign(typeSchema.Type!))
 				return new TypeRepoArray(serializer, typeSchema);
 			return null;
 		}
 	}
 
-	private TypeRepo _listTypeRepo;
-	private int[] _sizes;
+	private TypeRepo? _listTypeRepo;
+	private int[]? _sizes;
 	private readonly Type _elementType;
 
 	public TypeRepoArray(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
-		_elementType = typeSchema.Type.GetElementType();
+		_elementType = typeSchema.Type!.GetElementType()!;
 	}
 
 	public static bool CanAssign(Type type)
@@ -50,7 +50,7 @@ public class TypeRepoArray : TypeRepo
 		_sizes = new int[TypeSchema.NumObjects];
 		for (int i = 0; i < TypeSchema.NumObjects; i++)
 		{
-			int count = Reader.ReadInt32();
+			int count = Reader!.ReadInt32();
 			_sizes[i] = count;
 		}
 	}
@@ -75,13 +75,13 @@ public class TypeRepoArray : TypeRepo
 		}
 	}
 
-	protected override object CreateObject(int objectIndex)
+	protected override object? CreateObject(int objectIndex)
 	{
 		// Can't use Activator because Array requires parameters in it's constructor
 		//int count = reader.ReadInt32();
-		int count = _sizes[objectIndex];
+		int count = _sizes![objectIndex];
 
-		Array array = Array.CreateInstance(TypeSchema.Type.GetElementType(), count);
+		Array array = Array.CreateInstance(TypeSchema.Type!.GetElementType()!, count);
 		ObjectsLoaded[objectIndex] = array;
 		Serializer.QueueLoading(this, objectIndex);
 
@@ -96,7 +96,7 @@ public class TypeRepoArray : TypeRepo
 
 		for (int j = 0; j < iList.Count; j++)
 		{
-			object item = _listTypeRepo.LoadObjectRef();
+			object? item = _listTypeRepo?.LoadObjectRef();
 			iList[j] = item;
 		}
 	}
@@ -108,7 +108,7 @@ public class TypeRepoArray : TypeRepo
 		int i = 0;
 		foreach (var item in iSource)
 		{
-			object clone = Serializer.Clone(item);
+			object? clone = Serializer.Clone(item);
 			iDest[i++] = clone;
 		}
 	}

@@ -11,7 +11,7 @@ public class LogTimer : Log, IDisposable
 
 	public LogTimer() { }
 
-	public LogTimer(string text, LogSettings logSettings, Tag[] tags) :
+	public LogTimer(string text, LogSettings? logSettings, Tag[] tags) :
 		base(text, logSettings)
 	{
 		Tags = tags;
@@ -21,7 +21,7 @@ public class LogTimer : Log, IDisposable
 		InitializeTimer();
 	}
 
-	public LogTimer(LogLevel logLevel, string text, LogSettings logSettings, Tag[] tags) :
+	public LogTimer(LogLevel logLevel, string text, LogSettings? logSettings, Tag[] tags) :
 		base(text, logSettings)
 	{
 		Level = logLevel;
@@ -41,7 +41,7 @@ public class LogTimer : Log, IDisposable
 		_timer.Start();
 	}
 
-	private void Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+	private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
 	{
 		UpdateDuration();
 	}

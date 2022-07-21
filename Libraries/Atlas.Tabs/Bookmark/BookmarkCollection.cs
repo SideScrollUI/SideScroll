@@ -16,7 +16,7 @@ public class BookmarkCollection
 		PostOnly = true,
 	};
 
-	public TabBookmarkItem NewBookmark { get; set; }
+	public TabBookmarkItem? NewBookmark { get; set; }
 
 	private readonly DataRepoView<Bookmark> _dataRepoBookmarks;
 
@@ -38,9 +38,9 @@ public class BookmarkCollection
 
 			_dataRepoBookmarks.LoadAllOrderBy(call, nameof(Bookmark.TimeStamp));
 
-			foreach (Bookmark bookmark in _dataRepoBookmarks.Items.Values)
+			foreach (Bookmark? bookmark in _dataRepoBookmarks.Items.Values)
 			{
-				if (bookmark.Name == TabInstance.CurrentBookmarkName)
+				if (bookmark!.Name == TabInstance.CurrentBookmarkName)
 					continue;
 
 				Add(bookmark);
@@ -72,9 +72,9 @@ public class BookmarkCollection
 		}
 	}
 
-	private void Item_OnDelete(object sender, EventArgs e)
+	private void Item_OnDelete(object? sender, EventArgs e)
 	{
-		TabBookmarkItem bookmark = (TabBookmarkItem)sender;
+		TabBookmarkItem bookmark = (TabBookmarkItem)sender!;
 		lock (DataKey)
 		{
 			_dataRepoBookmarks.Delete(bookmark.Bookmark.Path);
@@ -88,7 +88,7 @@ public class BookmarkCollection
 		{
 			_dataRepoBookmarks.Delete(key);
 
-			TabBookmarkItem existing = Items.SingleOrDefault(i => i.Bookmark.Path == key);
+			TabBookmarkItem? existing = Items.SingleOrDefault(i => i.Bookmark.Path == key);
 			if (existing != null)
 				Items.Remove(existing);
 		}

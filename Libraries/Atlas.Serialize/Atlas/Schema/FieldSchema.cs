@@ -2,6 +2,7 @@ using Atlas.Core;
 using Atlas.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 
@@ -13,11 +14,11 @@ public class FieldSchema
 	public int TypeIndex = -1;
 
 	public TypeSchema OwnerTypeSchema;
-	public TypeSchema FieldTypeSchema;
-	public FieldInfo FieldInfo; // can be null
+	public TypeSchema? FieldTypeSchema;
+	public FieldInfo? FieldInfo;
 
-	public Type Type; // might be null
-	public Type NonNullableType; // might be null
+	public Type? Type;
+	public Type? NonNullableType;
 
 	public bool IsSerialized;
 	public bool IsLoadable;
@@ -62,10 +63,10 @@ public class FieldSchema
 
 	private bool GetIsPrivate()
 	{
-		if (FieldInfo.GetCustomAttribute<PrivateDataAttribute>() != null)
+		if (FieldInfo!.GetCustomAttribute<PrivateDataAttribute>() != null)
 			return true;
 
-		if (Type.GetCustomAttribute<PrivateDataAttribute>() != null)
+		if (Type!.GetCustomAttribute<PrivateDataAttribute>() != null)
 			return true;
 
 		return false;
@@ -73,16 +74,16 @@ public class FieldSchema
 
 	private bool GetIsPublic()
 	{
-		if (FieldInfo.GetCustomAttribute<PublicDataAttribute>() != null)
+		if (FieldInfo!.GetCustomAttribute<PublicDataAttribute>() != null)
 			return true;
 
-		if (FieldInfo.GetCustomAttribute<ProtectedDataAttribute>() != null)
+		if (FieldInfo!.GetCustomAttribute<ProtectedDataAttribute>() != null)
 			return true;
 
-		if (FieldInfo.FieldType.GetCustomAttribute<PublicDataAttribute>() != null)
+		if (FieldInfo!.FieldType.GetCustomAttribute<PublicDataAttribute>() != null)
 			return true;
 
-		if (FieldInfo.FieldType.GetCustomAttribute<ProtectedDataAttribute>() != null)
+		if (FieldInfo!.FieldType.GetCustomAttribute<ProtectedDataAttribute>() != null)
 			return true;
 
 		if (OwnerTypeSchema.IsProtected)
@@ -93,18 +94,18 @@ public class FieldSchema
 
 	private bool GetIsSerialized()
 	{
-		if (FieldInfo.IsLiteral == true || FieldInfo.IsStatic == true)
+		if (FieldInfo!.IsLiteral == true || FieldInfo.IsStatic == true)
 			return false;
 
-		Attribute attribute = Type.GetCustomAttribute<UnserializedAttribute>();
+		Attribute? attribute = Type!.GetCustomAttribute<UnserializedAttribute>();
 		if (attribute != null)
 			return false;
 
-		attribute = FieldInfo.GetCustomAttribute<NonSerializedAttribute>();
+		attribute = FieldInfo!.GetCustomAttribute<NonSerializedAttribute>();
 		if (attribute != null)
 			return false;
 
-		attribute = FieldInfo.GetCustomAttribute<UnserializedAttribute>();
+		attribute = FieldInfo!.GetCustomAttribute<UnserializedAttribute>();
 		if (attribute != null)
 			return false;
 
@@ -117,6 +118,7 @@ public class FieldSchema
 		writer.Write((short)TypeIndex);
 	}
 
+	[MemberNotNull(nameof(FieldName))]
 	public void Load(BinaryReader reader)
 	{
 		FieldName = reader.ReadString();

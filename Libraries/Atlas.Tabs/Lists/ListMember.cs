@@ -16,10 +16,10 @@ public interface IListAutoSelect
 public interface IListPair
 {
 	[Name("Name"), StyleLabel]
-	object Key { get; }
+	object? Key { get; }
 
 	[InnerValue, StyleValue]
-	object Value { get; }
+	object? Value { get; }
 }
 
 public interface IMaxDesiredWidth
@@ -37,17 +37,17 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 	public const int MaxStringLength = 1000;
 	private const int DefaultMaxDesiredHeight = 500;
 
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public MemberInfo MemberInfo;
 
 	public object Object;
 
 	[StyleLabel]
-	public string Name { get; set; }
+	public string? Name { get; set; }
 
 	[HiddenColumn]
-	public object Key => Name;
+	public object? Key => Name;
 
 	[Hidden]
 	public int Order { get; set; } = 0;
@@ -64,16 +64,16 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 	public int? MaxDesiredHeight => GetCustomAttribute<MaxHeightAttribute>()?.MaxHeight ?? DefaultMaxDesiredHeight;
 
 	[StyleValue, InnerValue, WordWrap]
-	public abstract object Value { get; set; }
+	public abstract object? Value { get; set; }
 
 	[HiddenColumn]
-	public object ValueText
+	public object? ValueText
 	{
 		get
 		{
 			try
 			{
-				object value = Value;
+				object? value = Value;
 				if (value == null)
 				{
 					return null;
@@ -101,7 +101,7 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 		}
 	}
 
-	public override string ToString() => Name;
+	public override string? ToString() => Name;
 
 	public ListMember(object obj, MemberInfo memberInfo)
 	{
@@ -112,13 +112,13 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 			notifyPropertyChanged.PropertyChanged += ListProperty_PropertyChanged;
 	}
 
-	private void ListProperty_PropertyChanged(object sender, PropertyChangedEventArgs e)
+	private void ListProperty_PropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
 		PropertyChanged?.Invoke(this, e);
 	}
 
 
-	public T GetCustomAttribute<T>() where T : Attribute
+	public T? GetCustomAttribute<T>() where T : Attribute
 	{
 		return MemberInfo.GetCustomAttribute<T>();
 	}
@@ -140,7 +140,7 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 		var properties = ListProperty.Create(obj, includeBaseTypes);
 		foreach (ListProperty listProperty in properties)
 		{
-			int metadataToken = listProperty.PropertyInfo.GetGetMethod(false).MetadataToken;
+			int metadataToken = listProperty.PropertyInfo.GetGetMethod(false)!.MetadataToken;
 
 			methodMembers.Add(metadataToken, listProperty);
 		}
@@ -171,7 +171,7 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 		{
 			if (listMember.GetCustomAttribute<InlineAttribute>() != null)
 			{
-				object value = listMember.Value;
+				object? value = listMember.Value;
 				if (value == null)
 					continue;
 

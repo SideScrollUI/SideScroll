@@ -10,9 +10,9 @@ namespace Atlas.UI.Avalonia.View;
 
 public static class TabCreator
 {
-	public static Control CreateChildControl(TabInstance parentTabInstance, object obj, string label = null, ITabSelector tabControl = null)
+	public static Control? CreateChildControl(TabInstance parentTabInstance, object obj, string? label = null, ITabSelector? tabControl = null)
 	{
-		object value = obj.GetInnerValue();
+		object? value = obj.GetInnerValue();
 		if (value == null || value is bool)
 			return null;
 
@@ -24,10 +24,10 @@ public static class TabCreator
 				label = "(" + obj.GetType().Name + ")";
 		}
 
-		TabBookmark tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
+		TabBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
 		if (parentTabInstance.TabBookmark != null && parentTabInstance.TabBookmark.ChildBookmarks != null)
 		{
-			if (parentTabInstance.TabBookmark.ChildBookmarks.TryGetValue(label, out tabBookmark))
+			if (parentTabInstance.TabBookmark.ChildBookmarks.TryGetValue(label!, out tabBookmark))
 			{
 				// FindMatches only
 				if (tabBookmark.TabModel != null)
@@ -35,7 +35,7 @@ public static class TabCreator
 			}
 		}
 
-		string labelOverride = null;
+		string? labelOverride = null;
 		if (value is Exception)
 		{
 		}
@@ -56,7 +56,7 @@ public static class TabCreator
 		Type type = value.GetType();
 		if (value is string || value is decimal || type.IsPrimitive)
 		{
-			value = new TabText(value.ToString()); // create an ITab
+			value = new TabText(value.ToString()!); // create an ITab
 		}
 		/*else if (value is Uri uri)
 		{
@@ -71,7 +71,7 @@ public static class TabCreator
 				Project = parentTabInstance.Project,
 				TabBookmark = tabBookmark,
 			};
-			childTabInstance.Model.Name = label;
+			childTabInstance.Model.Name = label!;
 			value = new TabView(childTabInstance);
 		}
 
@@ -90,13 +90,13 @@ public static class TabCreator
 		if (value is ITab iTab)
 		{
 			// Custom controls implement ITab
-			TabInstance childTabInstance = parentTabInstance.CreateChildTab(iTab);
+			TabInstance? childTabInstance = parentTabInstance.CreateChildTab(iTab);
 			if (childTabInstance == null)
 				return null;
 
 			childTabInstance.TabBookmark ??= tabBookmark;
 			//childTabInstance.Reinitialize(); // todo: fix, called in TabView
-			childTabInstance.Model.Name = label;
+			childTabInstance.Model.Name = label!;
 			var tabView = new TabView(childTabInstance);
 			tabView.Load();
 			return tabView;
@@ -105,7 +105,7 @@ public static class TabCreator
 		{
 			tabView.Instance.ParentTabInstance = parentTabInstance;
 			tabView.Instance.TabBookmark = tabBookmark ?? tabView.Instance.TabBookmark;
-			tabView.Label = label;
+			tabView.Label = label!;
 			tabView.Load();
 			return tabView;
 		}
@@ -115,25 +115,25 @@ public static class TabCreator
 		}
 		else
 		{
-			if (value is Enum && parentTabInstance.Model.Object.GetType().IsEnum)
+			if (value is Enum && parentTabInstance.Model.Object!.GetType().IsEnum)
 				return null;
 
-			TabModel childTabModel;
+			TabModel? childTabModel;
 			if (value is TabModel tabModel)
 			{
 				childTabModel = tabModel;
-				childTabModel.Name = label;
+				childTabModel.Name = label!;
 			}
 			else
 			{
-				childTabModel = TabModel.Create(label, value);
+				childTabModel = TabModel.Create(label!, value!);
 				if (childTabModel == null)
 					return null;
 			}
 			childTabModel.Editing = parentTabInstance.Model.Editing;
 
 			TabInstance childTabInstance = parentTabInstance.CreateChild(childTabModel);
-			childTabInstance.Label = label;
+			childTabInstance.Label = label!;
 
 			var tabModelView = new TabView(childTabInstance);
 			tabModelView.Load();

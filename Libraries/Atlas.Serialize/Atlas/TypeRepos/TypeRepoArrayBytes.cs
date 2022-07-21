@@ -6,13 +6,13 @@ namespace Atlas.Serialize;
 
 public class TypeRepoArrayBytes : TypeRepo
 {
-	private int[] _sizes;
+	private int[]? _sizes;
 
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type))
+			if (CanAssign(typeSchema.Type!))
 				return new TypeRepoArrayBytes(serializer, typeSchema);
 			return null;
 		}
@@ -41,7 +41,7 @@ public class TypeRepoArrayBytes : TypeRepo
 		_sizes = new int[TypeSchema.NumObjects];
 		for (int i = 0; i < TypeSchema.NumObjects; i++)
 		{
-			int count = Reader.ReadInt32();
+			int count = Reader!.ReadInt32();
 			_sizes[i] = count;
 		}
 	}
@@ -54,10 +54,10 @@ public class TypeRepoArrayBytes : TypeRepo
 		writer.Write(array);
 	}
 
-	protected override object CreateObject(int objectIndex)
+	protected override object? CreateObject(int objectIndex)
 	{
 		//int count = reader.ReadInt32();
-		int count = _sizes[objectIndex];
+		int count = _sizes![objectIndex];
 
 		byte[] array = new byte[count];
 		ObjectsLoaded[objectIndex] = array;
@@ -69,7 +69,7 @@ public class TypeRepoArrayBytes : TypeRepo
 	public override void LoadObjectData(object obj)
 	{
 		byte[] array = (byte[])obj;
-		Reader.Read(array, 0, array.Length);
+		Reader!.Read(array, 0, array.Length);
 	}
 
 	public override void Clone(object source, object dest)

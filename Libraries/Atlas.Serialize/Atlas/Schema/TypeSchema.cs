@@ -3,6 +3,7 @@ using Atlas.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -50,8 +51,8 @@ public class TypeSchema
 	public long DataSize { get; set; }
 
 	// not written out
-	public Type Type; // might be null
-	public Type NonNullableType; // might be null
+	public Type? Type;
+	public Type? NonNullableType;
 
 	public bool IsPrimitive;
 	public bool IsPrivate;
@@ -61,7 +62,9 @@ public class TypeSchema
 	public bool IsStatic;
 	public bool IsSerialized;
 	public bool IsUnserialized;
-	public bool HasConstructor;
+	public bool HasEmptyConstructor;
+	public ConstructorInfo? CustomConstructor;
+	public bool HasConstructor => HasEmptyConstructor || CustomConstructor != null;
 	public bool HasSubType;
 
 	// Type lookup can take a long time, especially when there's missing types
@@ -69,20 +72,22 @@ public class TypeSchema
 
 	private static readonly BindingFlags _bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
 
-	public override string ToString() => Name;
+	public override string? ToString() => Name;
 
 	public TypeSchema(Type type, Serializer serializer)
 	{
 		Type = type;
 		Name = type.ToString(); // better than FullName (don't remember why)
 
-		AssemblyQualifiedName = type.AssemblyQualifiedName; // todo: strip out unused version?
+		AssemblyQualifiedName = type.AssemblyQualifiedName!; // todo: strip out unused version?
 		InitializeType();
 
 		if (!IsCollection)
 		{
 			InitializeFields(serializer);
 			InitializeProperties(serializer);
+
+			CustomConstructor = GetCustomConstructor();
 		}
 	}
 
@@ -94,11 +99,11 @@ public class TypeSchema
 	private void InitializeType()
 	{
 		IsCollection = (typeof(ICollection).IsAssignableFrom(Type));
-		HasSubType = !Type.IsSealed; // set for all non derived classes?
+		HasSubType = !Type!.IsSealed; // set for all non derived classes?
 		CanReference = !(Type.IsPrimitive || Type.IsEnum || Type == typeof(string));
 		NonNullableType = Type.GetNonNullableType();
 		IsPrimitive = NonNullableType.IsPrimitive;
-		HasConstructor = HasEmptyConstructor(Type);
+		HasEmptyConstructor = TypeHasEmptyConstructor(Type);
 
 		IsSerialized = (Type.GetCustomAttribute<SerializedAttribute>() != null);
 		IsUnserialized = (Type.GetCustomAttribute<UnserializedAttribute>() != null);
@@ -110,7 +115,7 @@ public class TypeSchema
 
 	private void InitializeFields(Serializer serializer)
 	{
-		foreach (FieldInfo fieldInfo in Type.GetFields(_bindingFlags))
+		foreach (FieldInfo fieldInfo in Type!.GetFields(_bindingFlags))
 		{
 			var fieldSchema = new FieldSchema(this, fieldInfo);
 			if (!fieldSchema.IsSerialized)
@@ -131,7 +136,7 @@ public class TypeSchema
 
 	private void InitializeProperties(Serializer serializer)
 	{
-		foreach (PropertyInfo propertyInfo in Type.GetProperties(_bindingFlags))
+		foreach (PropertyInfo propertyInfo in Type!.GetProperties(_bindingFlags))
 		{
 			var propertySchema = new PropertySchema(this, propertyInfo);
 			if (!propertySchema.IsSerialized)
@@ -153,20 +158,47 @@ public class TypeSchema
 		}
 	}
 
-	public static bool HasEmptyConstructor(Type type)
+	public static bool TypeHasConstructor(Type type) => TypeHasEmptyConstructor(type) || TypeGetCustomConstructor(type) != null;
+
+	public static bool TypeHasEmptyConstructor(Type type)
 	{
-		//ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
-		ConstructorInfo constructorInfo = type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
+		ConstructorInfo? constructorInfo = type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
 		var constructors = type.GetConstructors();
 		return (constructorInfo != null || constructors.Length == 0);
 	}
 
+	public static ConstructorInfo? TypeGetCustomConstructor(Type type)
+	{
+		return new TypeSchema(type, new Serializer()).GetCustomConstructor();
+	}
+
+	public ConstructorInfo? GetCustomConstructor()
+	{
+		if (HasEmptyConstructor) return null;
+
+		var members = PropertySchemas.Select(p => p.PropertyName.ToLower()).ToHashSet();
+		var fieldMembers = FieldSchemas.Select(p => p.FieldName.ToLower()).ToHashSet();
+		foreach (var member in fieldMembers)
+			members.Add(member);
+
+		ConstructorInfo[] constructors = Type!.GetConstructors();
+		foreach (ConstructorInfo constructor in constructors)
+		{
+			ParameterInfo[] parameters = constructor.GetParameters();
+			if (parameters.All(p => members.Contains(p.Name?.ToLower() ?? "- invalid -")))
+			{
+				return constructor;
+			}
+		}
+		return null;
+	}
+
 	private bool GetIsPrivate()
 	{
-		if (Type.GetCustomAttribute<PrivateDataAttribute>() != null)
+		if (Type!.GetCustomAttribute<PrivateDataAttribute>() != null)
 			return true;
 
-		if (PrivateTypes.Contains(Type))
+		if (PrivateTypes.Contains(Type!))
 			return true;
 
 		return false;
@@ -178,7 +210,7 @@ public class TypeSchema
 		if (IsPrivate)
 			return false;
 
-		if (Type.IsPrimitive || Type.IsEnum || Type.IsInterface)
+		if (Type!.IsPrimitive || Type.IsEnum || Type.IsInterface)
 			return true;
 
 		// Might need to modify this later if we ever add dynamic loading
@@ -210,7 +242,7 @@ public class TypeSchema
 
 	public void Save(BinaryWriter writer)
 	{
-		writer.Write(Name);
+		writer.Write(Name!);
 		writer.Write(AssemblyQualifiedName);
 		writer.Write(HasSubType);
 		writer.Write(NumObjects);
@@ -221,6 +253,7 @@ public class TypeSchema
 		SaveProperties(writer);
 	}
 
+	[MemberNotNull(nameof(Name), nameof(AssemblyQualifiedName))]
 	public void Load(Log log, BinaryReader reader)
 	{
 		Name = reader.ReadString();
@@ -242,13 +275,15 @@ public class TypeSchema
 
 		LoadFields(reader);
 		LoadProperties(reader);
+
+		CustomConstructor = GetCustomConstructor();
 	}
 
 	private void LoadType(Log log)
 	{
 		lock (_typeCache)
 		{
-			if (_typeCache.TryGetValue(AssemblyQualifiedName, out Type type))
+			if (_typeCache.TryGetValue(AssemblyQualifiedName, out Type? type))
 			{
 				Type = type;
 				return;
@@ -301,7 +336,7 @@ public class TypeSchema
 		lock (_typeCache)
 		{
 			if (!_typeCache.ContainsKey(AssemblyQualifiedName))
-				_typeCache.Add(AssemblyQualifiedName, Type);
+				_typeCache.Add(AssemblyQualifiedName, Type!);
 		}
 	}
 

@@ -7,9 +7,9 @@ public class TypeRepoTimeSpan : TypeRepo
 {
 	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type))
+			if (CanAssign(typeSchema.Type!))
 				return new TypeRepoTimeSpan(serializer, typeSchema);
 			return null;
 		}
@@ -31,15 +31,15 @@ public class TypeRepoTimeSpan : TypeRepo
 		writer.Write(timeSpan.Ticks);
 	}
 
-	protected override object CreateObject(int objectIndex)
+	protected override object? CreateObject(int objectIndex)
 	{
-		long position = Reader.BaseStream.Position;
-		Reader.BaseStream.Position = ObjectOffsets[objectIndex];
+		long position = Reader!.BaseStream.Position;
+		Reader.BaseStream.Position = ObjectOffsets![objectIndex];
 
-		object obj = null;
+		object? obj = null;
 		try
 		{
-			if (CanAssign(LoadableType))
+			if (CanAssign(LoadableType!))
 			{
 				long ticks = Reader.ReadInt64();
 				obj = new TimeSpan(ticks);
@@ -61,7 +61,7 @@ public class TypeRepoTimeSpan : TypeRepo
 
 	public override object LoadObject()
 	{
-		object obj = Enum.ToObject(TypeSchema.Type, Reader.ReadInt32());
+		object obj = Enum.ToObject(TypeSchema.Type!, Reader!.ReadInt32());
 		return obj;
 	}
 

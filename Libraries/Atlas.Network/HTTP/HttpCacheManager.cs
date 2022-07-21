@@ -13,7 +13,7 @@ public class HttpCacheManager
 	// should we be returning disposable references?
 	public HttpCache OpenCache(string path)
 	{
-		if (_httpCaches.TryGetValue(path, out HttpCache httpCache))
+		if (_httpCaches.TryGetValue(path, out HttpCache? httpCache))
 			return httpCache;
 
 		httpCache = new HttpCache(path, true);
@@ -23,7 +23,7 @@ public class HttpCacheManager
 
 	public void DeleteHttpCache(string path)
 	{
-		if (_httpCaches.TryGetValue(path, out HttpCache httpCache))
+		if (_httpCaches.TryGetValue(path, out HttpCache? httpCache))
 		{
 			httpCache.Dispose();
 			_httpCaches.Remove(path);

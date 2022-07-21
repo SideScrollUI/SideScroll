@@ -23,7 +23,7 @@ public class TabTestChartOverlay : ITab
 
 		public class ChartSample
 		{
-			public string Name { get; set; }
+			public string? Name { get; set; }
 
 			[XAxis]
 			public DateTime TimeStamp { get; set; }
@@ -72,7 +72,7 @@ public class TabTestChartOverlay : ITab
 
 		private void StartTask(Call call)
 		{
-			CancellationToken token = call.TaskInstance.TokenSource.Token;
+			CancellationToken token = call.TaskInstance!.TokenSource.Token;
 			for (int i = 0; i < 20 && !token.IsCancellationRequested; i++)
 			{
 				Invoke(call, AddSampleUI);
@@ -82,7 +82,7 @@ public class TabTestChartOverlay : ITab
 
 		private void AddSample(int i)
 		{
-			var sample = new ChartSample()
+			ChartSample sample = new()
 			{
 				Name = "Name " + i.ToString(),
 				TimeStamp = _baseDateTime.AddMinutes(i),

@@ -18,7 +18,7 @@ public class TestCore : TestBase
 	public void DecimalToString()
 	{
 		decimal d = 123456.1234M;
-		string text = d.Formatted();
+		string text = d.Formatted()!;
 
 		Assert.AreEqual("123,456.1234", text);
 	}
@@ -26,7 +26,7 @@ public class TestCore : TestBase
 	[Test]
 	public void TestBookmarkUri()
 	{
-		BookmarkUri uri = BookmarkUri.Parse("atlas://type/v3.1/id");
+		BookmarkUri uri = BookmarkUri.Parse("atlas://type/v3.1/id")!;
 
 		Assert.AreEqual("atlas", uri.Prefix);
 		Assert.AreEqual("type", uri.Type);

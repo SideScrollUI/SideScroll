@@ -10,7 +10,7 @@ public class BookmarkNavigator
 
 	public List<Bookmark> History { get; set; } = new();
 
-	public Bookmark Current
+	public Bookmark? Current
 	{
 		get
 		{
@@ -30,7 +30,7 @@ public class BookmarkNavigator
 
 	public BookmarkNavigator()
 	{
-		var bookmark = new Bookmark()
+		Bookmark bookmark = new()
 		{
 			Name = "Start",
 		};
@@ -68,20 +68,20 @@ public class BookmarkNavigator
 		History[currentIndex] = bookmark;*/
 	}
 
-	public Bookmark SeekBackward()
+	public Bookmark? SeekBackward()
 	{
 		if (CurrentIndex > 0)
 		{
 			CurrentIndex--;
 			Bookmark oldBookmark = History[CurrentIndex];
-			Bookmark newBookmark = oldBookmark.DeepClone(); // sanitize
+			Bookmark newBookmark = oldBookmark.DeepClone()!; // sanitize
 			Append(newBookmark, false); // Fork instead?
 			return newBookmark;
 		}
 		return null; // throw exception?
 	}
 
-	public Bookmark SeekForward()
+	public Bookmark? SeekForward()
 	{
 		if (CurrentIndex < History.Count - 1)
 		{

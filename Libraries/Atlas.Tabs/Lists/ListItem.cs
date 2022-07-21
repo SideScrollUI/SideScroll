@@ -8,10 +8,10 @@ namespace Atlas.Tabs;
 public interface IListItem
 {
 	[Name("Name")]
-	object Key { get; }
+	object? Key { get; }
 
 	[HiddenColumn, InnerValue, StyleValue]
-	object Value { get; }
+	object? Value { get; }
 
 	// Get list items for all public properties and any methods marked with [Item]
 	public static ItemCollection<IListItem> Create(object obj, bool includeBaseTypes)
@@ -21,7 +21,7 @@ public interface IListItem
 		var properties = ListProperty.Create(obj, includeBaseTypes);
 		foreach (ListProperty listProperty in properties)
 		{
-			int metadataToken = listProperty.PropertyInfo.GetGetMethod(false).MetadataToken;
+			int metadataToken = listProperty.PropertyInfo.GetGetMethod(false)!.MetadataToken;
 
 			listItems.Add(metadataToken, listProperty);
 		}
@@ -40,26 +40,26 @@ public interface IListItem
 public class ListItem : IListItem, INotifyPropertyChanged
 {
 	[HiddenColumn]
-	public object Key { get; set; }
+	public object? Key { get; set; }
 
 	[HiddenColumn, InnerValue]
-	public object Value { get; set; }
+	public object? Value { get; set; }
 
 	// DataGrid columns bind to this
 	public string Name
 	{
-		get => Key?.Formatted();
+		get => Key.Formatted()!;
 		set => Key = value;
 	}
 
 	public bool AutoLoad = true;
 
 #pragma warning disable 414
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public override string ToString() => Key?.ToString() ?? "";
 
-	public ListItem(object key, object value)
+	public ListItem(object? key, object? value)
 	{
 		Key = key;
 		Value = value;

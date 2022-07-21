@@ -20,19 +20,22 @@ public class TypeRepoEnumerable : TypeRepo
 		}
 	}*/
 
-	protected readonly Type _elementType;
-	protected TypeRepo _listTypeRepo;
-	protected readonly MethodInfo _addMethod;
+	protected readonly Type? _elementType;
+	protected TypeRepo? _listTypeRepo;
+	protected readonly MethodInfo? _addMethod;
 
 	public TypeRepoEnumerable(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
-		Type[] types = LoadableType.GetGenericArguments();
-		if (types.Length > 0)
-			_elementType = types[0];
+		if (LoadableType != null)
+		{
+			Type[] types = LoadableType.GetGenericArguments();
+			if (types.Length > 0)
+				_elementType = types[0];
 
-		_addMethod = LoadableType.GetMethods()
-			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Count() == 1);
+			_addMethod = LoadableType.GetMethods()
+				.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Count() == 1);
+		}
 	}
 
 	/*public static bool CanAssign(Type type)
@@ -57,26 +60,26 @@ public class TypeRepoEnumerable : TypeRepo
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		PropertyInfo countProp = LoadableType.GetProperty("Count"); // IEnumerable isn't required to implement this
+		PropertyInfo countProp = LoadableType!.GetProperty("Count")!; // IEnumerable isn't required to implement this
 		IEnumerable iEnumerable = (IEnumerable)obj;
 
-		int count = (int)countProp.GetValue(iEnumerable, null);
+		int count = (int)countProp.GetValue(iEnumerable, null)!;
 		writer.Write(count);
 		foreach (object item in iEnumerable)
 		{
-			Serializer.WriteObjectRef(_elementType, item, writer);
+			Serializer.WriteObjectRef(_elementType!, item, writer);
 		}
 	}
 
 	public override void LoadObjectData(object obj)
 	{
 		//(IEnumerable<listTypeRepo.type>)objects[i];
-		int count = Reader.ReadInt32();
+		int count = Reader!.ReadInt32();
 
 		for (int j = 0; j < count; j++)
 		{
-			object objectValue = _listTypeRepo.LoadObjectRef();
-			_addMethod.Invoke(obj, new object[] { objectValue });
+			object objectValue = _listTypeRepo!.LoadObjectRef()!;
+			_addMethod!.Invoke(obj, new object[] { objectValue });
 		}
 	}
 
@@ -85,8 +88,8 @@ public class TypeRepoEnumerable : TypeRepo
 		IEnumerable iSource = (IEnumerable)source;
 		foreach (var item in iSource)
 		{
-			object clone = Serializer.Clone(item);
-			_addMethod.Invoke(dest, new object[] { clone });
+			object? clone = Serializer.Clone(item);
+			_addMethod!.Invoke(dest, new object?[] { clone });
 		}
 	}
 }

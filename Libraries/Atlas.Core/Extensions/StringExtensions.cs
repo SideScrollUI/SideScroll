@@ -20,7 +20,7 @@ public static class StringExtensions
 		return new string(chars);
 	}
 
-	public static string TrimStart(this string input, string prefix)
+	public static string? TrimStart(this string? input, string? prefix)
 	{
 		if (input == null || prefix == null || prefix.Length == 0)
 			return input;
@@ -62,7 +62,7 @@ public static class StringExtensions
 
 	// Adds spaces between words
 	// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'
-	public static string WordSpaced(this string text)
+	public static string WordSpaced(this string? text)
 	{
 		if (string.IsNullOrWhiteSpace(text))
 			return "";
@@ -178,9 +178,6 @@ public static class StringExtensions
 	// If length becomes an issue, can switch from base16 (hex) to base32 to save 12 characters
 	public static string HashSha256(this string rawData)
 	{
-		if (rawData == null)
-			return null;
-
 		using SHA256 sha256Hash = SHA256.Create();
 
 		byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData)); // 32 bytes
@@ -193,7 +190,7 @@ public static class StringExtensions
 		return builder.ToString();
 	}
 
-	public static bool IsNullOrEmpty(this string text)
+	public static bool IsNullOrEmpty(this string? text)
 	{
 		return string.IsNullOrEmpty(text);
 	}

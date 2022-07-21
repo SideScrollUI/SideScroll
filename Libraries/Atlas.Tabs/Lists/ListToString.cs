@@ -11,15 +11,15 @@ public class ListToString
 	[InnerValue]
 	public object Object;
 
-	public string Value { get; set; }
+	public string? Value { get; set; }
 
 	[DataKey]
-	public string DataKey;
+	public string? DataKey;
 
 	[DataValue]
-	public object DataValue;
+	public object? DataValue;
 
-	public override string ToString() => Value;
+	public override string? ToString() => Value;
 
 	public ListToString(object obj)
 	{

@@ -13,7 +13,7 @@ public class AvaloniaAssets
 		var assembly = Assembly.GetExecutingAssembly();
 		var resourceName = name;
 
-		using Stream stream = assembly.GetManifestResourceStream(resourceName);
+		using Stream stream = assembly.GetManifestResourceStream(resourceName)!;
 		return new Bitmap(stream);
 	}
 

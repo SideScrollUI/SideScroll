@@ -1,5 +1,4 @@
 using Atlas.Core;
-using Atlas.Extensions;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
@@ -15,8 +14,8 @@ namespace Atlas.UI.Avalonia.Charts;
 
 public class TabChartLegendItem : Grid
 {
-	public event EventHandler<EventArgs> OnSelectionChanged;
-	public event EventHandler<EventArgs> OnVisibleChanged;
+	public event EventHandler<EventArgs>? OnSelectionChanged;
+	public event EventHandler<EventArgs>? OnVisibleChanged;
 
 	public readonly TabControlChartLegend Legend;
 	public readonly OxyListSeries OxyListSeries;
@@ -24,10 +23,10 @@ public class TabChartLegendItem : Grid
 	
 	public OxyPlot.Series.Series Series;
 	
-	public TextBlock TextBlock;
-	public TextBlock TextBlockTotal;
+	public TextBlock? TextBlock;
+	public TextBlock? TextBlockTotal;
 
-	private Polygon polygon;
+	private Polygon? polygon;
 	private Color color = Colors.Green;
 	private OxyColor oxyColor;
 	private MarkerType markerType;
@@ -58,9 +57,9 @@ public class TabChartLegendItem : Grid
 		}
 	}
 
-	public IEnumerable ItemsSource { get; internal set; }
+	public IEnumerable? ItemsSource { get; internal set; }
 
-	public List<DataPoint> Points { get; internal set; }
+	public List<DataPoint>? Points { get; internal set; }
 
 	public override string ToString() => Series.Title;
 
@@ -95,7 +94,7 @@ public class TabChartLegendItem : Grid
 
 	private void SetFilled(bool filled)
 	{
-		polygon.Fill = new SolidColorBrush(filled && Count > 0 ? color : Colors.Transparent);
+		polygon!.Fill = new SolidColorBrush(filled && Count > 0 ? color : Colors.Transparent);
 	}
 
 	public void UpdateTotal()
@@ -166,6 +165,7 @@ public class TabChartLegendItem : Grid
 			Height = 16,
 			Stroke = Brushes.Black,
 			StrokeThickness = 1.5,
+			Points = GetPolygonPoints(width, height),
 		};
 
 		if (Count > 0)
@@ -173,15 +173,14 @@ public class TabChartLegendItem : Grid
 		else
 			IsSelected = false;
 
-		UpdatePolygonPoints(width, height);
 		polygon.PointerPressed += Polygon_PointerPressed;
 		Children.Add(polygon);
 	}
 
-	private void UpdatePolygonPoints(int width, int height)
+	private static List<Point> GetPolygonPoints(int width, int height)
 	{
 		int cornerSize = 3;
-		polygon.Points = new List<Point>
+		return new List<Point>
 		{
 			new(0, height),
 			new(width - cornerSize, height),
@@ -190,6 +189,11 @@ public class TabChartLegendItem : Grid
 			new(cornerSize, 0),
 			new(0, cornerSize),
 		};
+	}
+
+	private void UpdatePolygonPoints(int width, int height)
+	{
+		polygon!.Points = GetPolygonPoints(width, height);
 	}
 
 	private void AddTextBlock()
@@ -213,7 +217,7 @@ public class TabChartLegendItem : Grid
 		if (Index > 0 && ListGroup.Series.Count > 1)
 			prefix = Index.ToString() + ". ";
 
-		TextBlock.Text = prefix + Series.Title;
+		TextBlock!.Text = prefix + Series.Title;
 	}
 
 	private void AddTotalTextBlock()
@@ -230,12 +234,12 @@ public class TabChartLegendItem : Grid
 		Children.Add(TextBlockTotal);
 	}
 
-	private void Polygon_PointerPressed(object sender, PointerPressedEventArgs e)
+	private void Polygon_PointerPressed(object? sender, PointerPressedEventArgs e)
 	{
 		if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
 		{
 			IsSelected = !IsSelected;
-			OnSelectionChanged?.Invoke(this, null);
+			OnSelectionChanged?.Invoke(this, EventArgs.Empty);
 		}
 	}
 
@@ -258,9 +262,9 @@ public class TabChartLegendItem : Grid
 					SetFilled(true);
 					UpdateVisible(lineSeries);
 					Legend.UpdateHighlight(true);
-					OnVisibleChanged?.Invoke(this, null);
+					OnVisibleChanged?.Invoke(this, EventArgs.Empty);
 				}
-				TextBlock.Foreground = Theme.GridBackgroundSelected;
+				TextBlock!.Foreground = Theme.GridBackgroundSelected;
 				if (TextBlockTotal != null)
 					TextBlockTotal.Foreground = Theme.GridBackgroundSelected;
 			}
@@ -273,27 +277,27 @@ public class TabChartLegendItem : Grid
 					UpdateVisible(lineSeries);
 					SetFilled(IsSelected);
 					Legend.UpdateHighlight(false);
-					OnVisibleChanged?.Invoke(this, null);
+					OnVisibleChanged?.Invoke(this, new());
 				}
-				TextBlock.Foreground = Brushes.LightGray;
+				TextBlock!.Foreground = Brushes.LightGray;
 				if (TextBlockTotal != null)
 					TextBlockTotal.Foreground = Brushes.LightGray;
 			}
 		}
 	}
 
-	private void TabChartLegendItem_PointerEnter(object sender, PointerEventArgs e)
+	private void TabChartLegendItem_PointerEnter(object? sender, PointerEventArgs e)
 	{
 		Legend.UnhighlightAll(false);
 		Highlight = true;
 	}
 
-	private void TabChartLegendItem_PointerLeave(object sender, PointerEventArgs e)
+	private void TabChartLegendItem_PointerLeave(object? sender, PointerEventArgs e)
 	{
 		Highlight = false;
 	}
 
-	private void TextBox_Tapped(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	private void TextBox_Tapped(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 	}
 
@@ -317,8 +321,7 @@ public class TabChartLegendItem : Grid
 		{
 			if (lineSeries.Points.Count > 0)
 			{
-				Points = new List<DataPoint>();
-				Points.AddRange(lineSeries.Points);
+				Points = new List<DataPoint>(lineSeries.Points);
 			}
 			lineSeries.Points.Clear();
 			//lineSeries.Points = new List<DataPoint>();

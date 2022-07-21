@@ -11,13 +11,13 @@ public class TabTestLog : ITab
 
 	public class Instance : TabInstance
 	{
-		private Call _sampleCall;
+		private Call? _sampleCall;
 		private int _counter = 0;
 
 		public override void Load(Call call, TabModel model)
 		{
 			TaskInstance = new TaskInstance();
-			TaskInstance.Log.Add("Double Tag Test", new Tag("Double", 0.5));
+			TaskInstance.Log!.Add("Double Tag Test", new Tag("Double", 0.5));
 
 			_sampleCall = new Call(Label);
 			_counter = 0;
@@ -54,12 +54,12 @@ public class TabTestLog : ITab
 		private void SubTaskInstances(Call call)
 		{
 			Log logChild = call.Log.Call("child");
-			CancellationToken token = call.TaskInstance.TokenSource.Token;
+			CancellationToken token = call.TaskInstance!.TokenSource.Token;
 			for (int i = 0; !token.IsCancellationRequested; i++)
 			{
 				//log.Add("New Log Entry", new Tag("i", counter));
 				call.Log.Add("New Call Log Entry", new Tag("i", _counter));
-				_sampleCall.Log.Add("New Sample Log Entry", new Tag("counter", _counter));
+				_sampleCall!.Log.Add("New Sample Log Entry", new Tag("counter", _counter));
 				logChild.Add("New Child Log Entry", new Tag("i", i));
 				_counter++;
 				Thread.Sleep(1000);
@@ -73,7 +73,7 @@ public class TabTestLog : ITab
 				//log.Add("test " + counter.ToString());
 				_counter++;
 				//call.Log.Add("New Log entry", new Tag("name", "value"));
-				_sampleCall.Log.Add("New Log entry", new Tag("name", "value"));
+				_sampleCall!.Log.Add("New Log entry", new Tag("name", "value"));
 			}
 		}
 
@@ -103,7 +103,7 @@ public class TabTestLog : ITab
 			AddEntries(1);
 		}
 
-		private void SystemTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+		private void SystemTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
 		{
 			AddEntries(1);
 		}

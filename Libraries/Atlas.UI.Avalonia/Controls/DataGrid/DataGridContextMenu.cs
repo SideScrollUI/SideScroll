@@ -15,8 +15,8 @@ public class DataGridContextMenu : ContextMenu, IStyleable, IDisposable
 	private const int MaxCellValueLength = 10000;
 
 	public DataGrid DataGrid;
-	public DataGridPropertyTextColumn Column;
-	public DataGridCell Cell;
+	public DataGridPropertyTextColumn? Column;
+	public DataGridCell? Cell;
 
 	public DataGridContextMenu(DataGrid dataGrid)
 	{
@@ -68,69 +68,70 @@ public class DataGridContextMenu : ContextMenu, IStyleable, IDisposable
 		DataGrid.CellPointerPressed += DataGrid_CellPointerPressed;
 	}
 
-	private void DataGrid_CellPointerPressed(object sender, DataGridCellPointerPressedEventArgs e)
+	private void DataGrid_CellPointerPressed(object? sender, DataGridCellPointerPressedEventArgs e)
 	{
 		Cell = e.Cell;
 		Column = e.Column as DataGridPropertyTextColumn;
 	}
 
-	private async void MenuItemCopyDataGrid_Click(object sender, RoutedEventArgs e)
+	private async void MenuItemCopyDataGrid_Click(object? sender, RoutedEventArgs e)
 	{
-		string text = DataGrid.ToStringTable();
+		string? text = DataGrid.ToStringTable();
 		if (text != null)
 			await ClipBoardUtils.SetTextAsync(text);
 	}
 
-	private async void MenuItemCopyCellContents_Click(object sender, RoutedEventArgs e)
+	private async void MenuItemCopyCellContents_Click(object? sender, RoutedEventArgs e)
 	{
 		if (Column == null)
 			return;
 
-		object content = Cell.Content;
+		object content = Cell!.Content;
 		if (content is Border border)
 			content = border.Child;
 
 		if (content is TextBlock textBlock)
 		{
-			string value = FormatValueConverter.ObjectToString(Column.PropertyInfo.GetValue(textBlock.DataContext), MaxCellValueLength, Column.FormatConverter.IsFormatted);
+			object textBlockValue = Column.PropertyInfo.GetValue(textBlock.DataContext)!;
+			string value = FormatValueConverter.ObjectToString(textBlockValue, MaxCellValueLength, Column.FormatConverter.IsFormatted)!;
 			await ClipBoardUtils.SetTextAsync(value);
 		}
 	}
 
-	private async void MenuItemCopyColumn_Click(object sender, RoutedEventArgs e)
+	private async void MenuItemCopyColumn_Click(object? sender, RoutedEventArgs e)
 	{
 		if (Column is DataGridPropertyTextColumn column)
 		{
-			string text = DataGrid.ColumnToStringTable(column);
+			string? text = DataGrid.ColumnToStringTable(column);
 			if (text != null)
 				await ClipBoardUtils.SetTextAsync(text);
 		}
 	}
 
-	private async void MenuItemCopyRow_Click(object sender, RoutedEventArgs e)
+	private async void MenuItemCopyRow_Click(object? sender, RoutedEventArgs e)
 	{
-		string text = DataGrid.RowToString(Cell.DataContext);
+		string? text = DataGrid.RowToString(Cell!.DataContext);
 		if (text != null)
 			await ClipBoardUtils.SetTextAsync(text);
 	}
 
-	private async void MenuItemCopySelected_Click(object sender, RoutedEventArgs e)
+	private async void MenuItemCopySelected_Click(object? sender, RoutedEventArgs e)
 	{
-		string text = DataGrid.SelectedToString();
+		string? text = DataGrid.SelectedToString();
 		if (text != null)
 			await ClipBoardUtils.SetTextAsync(text);
 	}
 
-	private async void MenuItemCopySelectedCsv_Click(object sender, RoutedEventArgs e)
+	private async void MenuItemCopySelectedCsv_Click(object? sender, RoutedEventArgs e)
 	{
-		string text = DataGrid.SelectedToCsv();
+		string? text = DataGrid.SelectedToCsv();
 		if (text != null)
 			await ClipBoardUtils.SetTextAsync(text);
 	}
 
-	private async void MenuItemCopyDataGridCsv_Click(object sender, RoutedEventArgs e)
+	private async void MenuItemCopyDataGridCsv_Click(object? sender, RoutedEventArgs e)
 	{
-		string text = DataGrid.ToCsv();
+		string? text = DataGrid.ToCsv();
 		if (text != null)
 			await ClipBoardUtils.SetTextAsync(text);
 	}
@@ -138,7 +139,6 @@ public class DataGridContextMenu : ContextMenu, IStyleable, IDisposable
 	public void Dispose()
 	{
 		DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
-		DataGrid = null;
 		Column = null;
 		Cell = null;
 		Items = null;

@@ -44,7 +44,7 @@ public class PropertyTest : INotifyPropertyChanged
 	}
 	private bool _boolean;
 
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	private void NotifyPropertyChangedContext(string propertyName)
 	{

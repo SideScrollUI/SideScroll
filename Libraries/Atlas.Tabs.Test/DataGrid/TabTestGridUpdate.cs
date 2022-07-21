@@ -12,7 +12,7 @@ public class TabTestGridUpdate : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollection<TestItem> _items;
+		private ItemCollection<TestItem>? _items;
 		protected SynchronizationContext Context;
 
 		public Instance()
@@ -42,7 +42,7 @@ public class TabTestGridUpdate : ITab
 					SmallNumber = i
 				};
 				testItem.BigNumber += i;
-				_items.Add(testItem);
+				_items!.Add(testItem);
 			}
 		}
 
@@ -53,7 +53,7 @@ public class TabTestGridUpdate : ITab
 				for (int i = 0; i < 10000; i++)
 				{
 					Thread.Sleep(10);
-					foreach (TestItem testItem in _items)
+					foreach (TestItem testItem in _items!)
 					{
 						testItem.BigNumber++;
 						testItem.Update();
@@ -70,7 +70,7 @@ public class TabTestGridUpdate : ITab
 
 		protected SynchronizationContext Context;
 
-		public event PropertyChangedEventHandler PropertyChanged;
+		public event PropertyChangedEventHandler? PropertyChanged;
 
 		public override string ToString() => SmallNumber.ToString();
 
@@ -89,9 +89,9 @@ public class TabTestGridUpdate : ITab
 			Context.Post(NotifyPropertyChangedContext, propertyName);
 		}
 
-		private void NotifyPropertyChangedContext(object state)
+		private void NotifyPropertyChangedContext(object? state)
 		{
-			string propertyName = state as string;
+			string propertyName = (string)state!;
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}

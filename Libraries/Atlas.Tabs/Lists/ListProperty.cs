@@ -19,7 +19,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	public bool Cachable;
 
 	private bool _valueCached;
-	private object _valueObject;
+	private object? _valueObject;
 
 	[HiddenColumn]
 	public override bool Editable // rename to IsReadOnly?
@@ -35,7 +35,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	public bool IsFormatted => (PropertyInfo.GetCustomAttribute<FormattedAttribute>() != null);
 
 	[Editing, InnerValue, WordWrap]
-	public override object Value
+	public override object? Value
 	{
 		get
 		{
@@ -91,7 +91,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	[Hidden]
 	public bool IsPropertyVisible => PropertyInfo.IsRowVisible();
 
-	public override string ToString() => Name;
+	public override string? ToString() => Name;
 
 	public ListProperty(object obj, PropertyInfo propertyInfo, bool cachable = true) :
 		base(obj, propertyInfo)
@@ -103,9 +103,9 @@ public class ListProperty : ListMember, IPropertyEditable
 		// var accessors = propertyInfo.GetAccessors(true);
 		// AutoLoad = !accessors[0].IsStatic;
 
-		NameAttribute attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
+		NameAttribute? nameAttribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 
-		Name = attribute?.Name ?? propertyInfo.Name.WordSpaced();
+		Name = nameAttribute?.Name ?? propertyInfo.Name.WordSpaced();
 
 		if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
 			Name = "* " + Name;
@@ -150,7 +150,7 @@ public class ListProperty : ListMember, IPropertyEditable
 				return false;
 		}
 
-		var classHideAttribute = PropertyInfo.DeclaringType.GetCustomAttribute<HideAttribute>();
+		var classHideAttribute = PropertyInfo.DeclaringType!.GetCustomAttribute<HideAttribute>();
 		if (classHideAttribute?.Values != null)
 		{
 			if (classHideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))

@@ -20,12 +20,12 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 	public readonly ListSeries ListSeries;
 	public readonly bool UseDateTimeAxis;
 
-	public PropertyInfo XAxisPropertyInfo;
+	public PropertyInfo? XAxisPropertyInfo;
 
 	// DataPoint is sealed
 	private readonly Dictionary<DataPoint, object> _datapointLookup = new();
 
-	public override string ToString() => ListSeries?.ToString();
+	public override string? ToString() => ListSeries?.ToString();
 
 	public TabChartLineSeries(TabControlChart chart, ListSeries listSeries, bool useDateTimeAxis)
 	{
@@ -59,10 +59,10 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 		if (listSeries.List is INotifyCollectionChanged iNotifyCollectionChanged)
 		{
 			//iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
-			iNotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object sender, NotifyCollectionChangedEventArgs e)
+			iNotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object? sender, NotifyCollectionChangedEventArgs e)
 			{
 				// can we remove this later when disposing?
-				SeriesChanged(listSeries, e.NewItems);
+				SeriesChanged(listSeries, e.NewItems!);
 			});
 		}
 
@@ -88,7 +88,7 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 	}
 
 	// Override the default tracker text
-	public override TrackerHitResult GetNearestPoint(ScreenPoint point, bool interpolate)
+	public override TrackerHitResult? GetNearestPoint(ScreenPoint point, bool interpolate)
 	{
 		TrackerHitResult result = base.GetNearestPoint(point, interpolate);
 		if (result == null)
@@ -96,11 +96,11 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 
 		string valueLabel = ListSeries.YPropertyLabel ?? "Value";
 
-		if (_datapointLookup.TryGetValue(result.DataPoint, out object obj))
+		if (_datapointLookup.TryGetValue(result.DataPoint, out object? obj))
 		{
 			if (obj is TimeRangeValue timeRangeValue)
 			{
-				string title = ListSeries.Name;
+				string? title = ListSeries.Name;
 				if (title != null && title.Length > MaxTitleLength)
 					title = title[..MaxTitleLength] + "...";
 
@@ -139,7 +139,7 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 		TrackerFormatString = "{0}\n" + xTrackerFormat + "\nValue: {4:#,0.###}";
 	}
 
-	private List<DataPoint> GetDataPoints(ListSeries listSeries, IList iList, Dictionary<DataPoint, object> datapointLookup = null)
+	private List<DataPoint> GetDataPoints(ListSeries listSeries, IList iList, Dictionary<DataPoint, object>? datapointLookup = null)
 	{
 		UpdateXAxisProperty(listSeries);
 		double x = Points.Count;
@@ -149,10 +149,10 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 			// faster than using ItemSource?
 			foreach (object obj in iList)
 			{
-				object value = listSeries.YPropertyInfo.GetValue(obj);
+				object? value = listSeries.YPropertyInfo.GetValue(obj);
 				if (XAxisPropertyInfo != null)
 				{
-					object xObj = XAxisPropertyInfo.GetValue(obj);
+					object? xObj = XAxisPropertyInfo.GetValue(obj);
 					if (xObj is DateTime dateTime)
 					{
 						x = OxyPlot.Axes.DateTimeAxis.ToDouble(dateTime);
@@ -179,7 +179,7 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 
 			if (dataPoints.Count > 0 && listSeries.XBinSize > 0)
 			{
-				dataPoints = BinDataPoints(listSeries, dataPoints, listSeries.XBinSize);
+				dataPoints = BinDataPoints(dataPoints, listSeries.XBinSize);
 			}
 		}
 		else
@@ -202,7 +202,7 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 
 			if (XAxisPropertyInfo == null)
 			{
-				Type elementType = listSeries.List.GetType().GetElementTypeForAll();
+				Type elementType = listSeries.List.GetType().GetElementTypeForAll()!;
 				foreach (PropertyInfo propertyInfo in elementType.GetProperties())
 				{
 					if (propertyInfo.GetCustomAttribute<XAxisAttribute>() != null)
@@ -212,7 +212,7 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 		}
 	}
 
-	private static List<DataPoint> BinDataPoints(ListSeries listSeries, List<DataPoint> dataPoints, double xBinSize)
+	private static List<DataPoint> BinDataPoints(List<DataPoint> dataPoints, double xBinSize)
 	{
 		double firstX = dataPoints.First().X;
 		double firstBinX = ((int)(firstX / xBinSize)) * xBinSize; // use start of interval
@@ -250,7 +250,7 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 
 	private void SeriesChanged(ListSeries listSeries, IList iList)
 	{
-		lock (Chart.PlotModel.SyncRoot)
+		lock (Chart.PlotModel!.SyncRoot)
 		{
 			//this.Update();
 			var dataPoints = GetDataPoints(listSeries, iList);

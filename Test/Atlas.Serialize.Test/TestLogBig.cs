@@ -19,8 +19,8 @@ public class TestLogBig
 	// Change everything to tags? const for created/message/childLog? harder to use then
 	public DateTime Created;// { get; set; }
 	public LogType Type { get; set; }
-	public string Text;// { get; set; }
-	public string Message
+	public string? Text;// { get; set; }
+	public string? Message
 	{
 		get
 		{
@@ -51,14 +51,12 @@ public class TestLogBig
 			return line;
 		}
 	}
-	public Tag[] Tags;
+	public Tag[]? Tags;
 
 	[InnerValue]
-	public ItemCollection<TestLogBig> Items; // change to LRU for performance? No Binding?
+	public ItemCollection<TestLogBig>? Items; // change to LRU for performance? No Binding?
 
-	public TestLogBig()
-	{
-	}
+	public TestLogBig() { }
 
 	// Todo: use caller instead
 	public void Child(string name)

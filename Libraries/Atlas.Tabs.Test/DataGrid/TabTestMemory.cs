@@ -9,7 +9,7 @@ public class TabTestMemory : ITab
 
 	public class Instance : TabInstance
 	{
-		private byte[] _bytes;
+		private byte[]? _bytes;
 
 		public override void Load(Call call, TabModel model)
 		{

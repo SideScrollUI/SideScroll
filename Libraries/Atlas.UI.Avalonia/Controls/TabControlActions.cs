@@ -10,17 +10,15 @@ public class TabControlActions : UserControl
 {
 	public TabInstance TabInstance;
 	public TabModel TabModel;
-	public ItemCollection<TaskCreator> TaskItems;
 
 	// public bool GridInitialized { get; private set; }
 
 	private readonly Dictionary<Button, TaskCreator> _taskCreators = new();
 
-	public TabControlActions(TabInstance tabInstance, TabModel tabModel, ItemCollection<TaskCreator> taskItems)
+	public TabControlActions(TabInstance tabInstance, TabModel tabModel)
 	{
 		TabInstance = tabInstance;
 		TabModel = tabModel;
-		TaskItems = taskItems;
 
 		InitializeControls();
 	}
@@ -34,7 +32,7 @@ public class TabControlActions : UserControl
 		};
 
 		int rowIndex = 0;
-		foreach (TaskCreator taskCreator in TabModel.Actions)
+		foreach (TaskCreator taskCreator in TabModel.Actions!)
 		{
 			var rowDefinition = new RowDefinition()
 			{
@@ -55,9 +53,9 @@ public class TabControlActions : UserControl
 		Content = containerGrid;
 	}
 
-	private void Button_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	private void Button_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
-		Button button = (Button)sender;
+		Button button = (Button)sender!;
 		TaskCreator taskCreator = _taskCreators[button];
 		TabInstance.StartTask(taskCreator, taskCreator.ShowTask);
 	}

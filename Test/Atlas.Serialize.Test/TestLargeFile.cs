@@ -11,7 +11,7 @@ public class TestLargeFile : TestSerializeBase
 {
 	private const int IntCount = 10000;
 	
-	private string _basePath;
+	private string? _basePath;
 
 	[OneTimeSetUp]
 	public void BaseSetup()

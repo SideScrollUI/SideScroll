@@ -2,6 +2,7 @@ using Atlas.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -19,18 +20,18 @@ public enum SeriesType
 
 public class ListSeries
 {
-	public string Name { get; set; }
+	public string? Name { get; set; }
 	public Dictionary<string, string> Tags { get; set; } = new();
 	public IList List; // List to start with, any elements added will also trigger an event to add new points
 
-	public PropertyInfo XPropertyInfo; // optional
-	public PropertyInfo YPropertyInfo; // optional
+	public PropertyInfo? XPropertyInfo; // optional
+	public PropertyInfo? YPropertyInfo; // optional
 
-	public string XPropertyName;
-	public string YPropertyName;
-	public string YPropertyLabel;
+	public string? XPropertyName;
+	public string? YPropertyName;
+	public string? YPropertyLabel;
 	public double XBinSize;
-	public string Description { get; set; }
+	public string? Description { get; set; }
 
 	public bool IsStacked { get; set; }
 	public TimeSpan? PeriodDuration { get; set; }
@@ -44,7 +45,7 @@ public class ListSeries
 		LoadList(list);
 	}
 
-	public ListSeries(string name, IList list)
+	public ListSeries(string? name, IList list)
 	{
 		Name = name;
 		LoadList(list);
@@ -57,24 +58,25 @@ public class ListSeries
 		YPropertyInfo = yPropertyInfo;
 
 		Name = yPropertyInfo.Name.WordSpaced();
-		NameAttribute attribute = yPropertyInfo.GetCustomAttribute<NameAttribute>();
+		NameAttribute? attribute = yPropertyInfo.GetCustomAttribute<NameAttribute>();
 		if (attribute != null)
 			Name = attribute.Name;
 	}
 
-	public ListSeries(string name, IList list, string xPropertyName, string yPropertyName = null)
+	public ListSeries(string? name, IList list, string xPropertyName, string? yPropertyName = null)
 	{
 		Name = name;
 		List = list;
 		XPropertyName = xPropertyName;
 		YPropertyName = yPropertyName;
 
-		Type elementType = list.GetType().GetElementTypeForAll();
+		Type elementType = list.GetType().GetElementTypeForAll()!;
 		XPropertyInfo = elementType.GetProperty(xPropertyName);
 		if (yPropertyName != null)
 			YPropertyInfo = elementType.GetProperty(yPropertyName);
 	}
 
+	[MemberNotNull(nameof(List))]
 	private void LoadList(IList list)
 	{
 		List = list;
@@ -82,7 +84,7 @@ public class ListSeries
 		if (list == null)
 			return;
 
-		Type elementType = list.GetType().GetElementTypeForAll();
+		Type elementType = list.GetType().GetElementTypeForAll()!;
 		XPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
 		YPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();
 	}
@@ -96,7 +98,7 @@ public class ListSeries
 		return value;
 	}
 
-	public double CalculateTotal(TimeWindow timeWindow = null)
+	public double CalculateTotal(TimeWindow? timeWindow = null)
 	{
 		timeWindow = timeWindow?.Selection ?? timeWindow;
 		Total = GetTotal(timeWindow);
@@ -105,7 +107,7 @@ public class ListSeries
 		return Total;
 	}
 
-	public double GetTotal(TimeWindow timeWindow)
+	public double GetTotal(TimeWindow? timeWindow)
 	{
 		var timeRangeValues = TimeRangeValues;
 		if (timeWindow == null || PeriodDuration == null || timeRangeValues == null)
@@ -121,7 +123,7 @@ public class ListSeries
 		};
 	}
 
-	public List<TimeRangeValue> GroupByPeriod(TimeWindow timeWindow)
+	public List<TimeRangeValue>? GroupByPeriod(TimeWindow timeWindow)
 	{
 		var timeRangeValues = TimeRangeValues;
 		if (timeWindow == null || PeriodDuration == null || timeRangeValues == null)
@@ -143,7 +145,7 @@ public class ListSeries
 		{
 			foreach (object obj in List)
 			{
-				object value = YPropertyInfo.GetValue(obj);
+				object? value = YPropertyInfo.GetValue(obj);
 				if (value != null)
 					sum += GetObjectValue(value);
 			}
@@ -159,7 +161,7 @@ public class ListSeries
 		return sum;
 	}
 
-	public List<TimeRangeValue> TimeRangeValues
+	public List<TimeRangeValue>? TimeRangeValues
 	{
 		get
 		{
@@ -175,11 +177,11 @@ public class ListSeries
 					continue;
 				}
 
-				DateTime timeStamp = (DateTime)XPropertyInfo.GetValue(obj);
+				DateTime timeStamp = (DateTime)XPropertyInfo.GetValue(obj)!;
 				double value = 1;
 				if (YPropertyInfo != null)
 				{
-					object yObj = YPropertyInfo.GetValue(obj);
+					object yObj = YPropertyInfo.GetValue(obj)!;
 					value = Convert.ToDouble(yObj);
 				}
 				timeRangeValue = new TimeRangeValue(timeStamp, timeStamp, value);
@@ -194,7 +196,7 @@ public class ListSeries
 	{
 		DateTime startTime = DateTime.MaxValue;
 		DateTime endTime = DateTime.MinValue;
-		foreach (TimeRangeValue timeRangeValue in TimeRangeValues)
+		foreach (TimeRangeValue timeRangeValue in TimeRangeValues!)
 		{
 			startTime = startTime.Min(timeRangeValue.StartTime);
 			endTime = endTime.Max(timeRangeValue.EndTime);

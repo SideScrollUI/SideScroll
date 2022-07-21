@@ -83,7 +83,7 @@ public static class FileUtils
 			foreach (FileInfo fileInfo in fileInfos)
 			{
 				string destFilePath = Path.Combine(destDirPath, fileInfo.Name);
-				call.Log.Add("Copying", new Tag("File", fileInfo.Name));
+				call.Log!.Add("Copying", new Tag("File", fileInfo.Name));
 				fileInfo.CopyTo(destFilePath, true);
 			}
 

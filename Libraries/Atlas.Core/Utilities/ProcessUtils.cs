@@ -66,7 +66,7 @@ public static class ProcessUtils
 		}
 	}
 
-	public static void OpenFolder(string folder, string selection = null)
+	public static void OpenFolder(string folder, string? selection = null)
 	{
 		try
 		{
@@ -117,7 +117,7 @@ public static class ProcessUtils
 			//processStartInfo.UseShellExecute = true, // doesn't work on mac yet, last checked for dotnet 3.1
 		}
 
-		Process process = Process.Start(processStartInfo);
+		Process process = Process.Start(processStartInfo)!;
 		return process;
 	}
 }

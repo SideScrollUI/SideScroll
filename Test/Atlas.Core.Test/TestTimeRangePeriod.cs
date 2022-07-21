@@ -32,7 +32,7 @@ public class TestTimeRangePeriod : TestBase
 			timeRangeValues.Add(new TimeRangeValue(startTime, startTime, 1));
 		}
 
-		List<TimeRangeValue> periodSums = timeWindow.PeriodCounts(timeRangeValues, periodDuration, true);
+		List<TimeRangeValue> periodSums = timeWindow.PeriodCounts(timeRangeValues, periodDuration, true)!;
 
 		var listSeries = new ListSeries(periodSums)
 		{
@@ -60,7 +60,7 @@ public class TestTimeRangePeriod : TestBase
 			timeRangeValues.Add(new TimeRangeValue(startTime, startTime, 1));
 		}
 
-		List<TimeRangeValue> periodSums = timeWindow.PeriodCounts(timeRangeValues, periodDuration, true);
+		List<TimeRangeValue> periodSums = timeWindow.PeriodCounts(timeRangeValues, periodDuration, true)!;
 
 		var listSeries = new ListSeries(periodSums)
 		{

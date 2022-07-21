@@ -18,8 +18,8 @@ public class TabTestParamsDataTabs : ITab
 	{
 		private const string DataKey = "Params";
 
-		private ParamTestItem _paramTestItem;
-		private DataRepoView<ParamTestItem> _dataRepoParams;
+		private ParamTestItem? _paramTestItem;
+		private DataRepoView<ParamTestItem>? _dataRepoParams;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -31,7 +31,7 @@ public class TabTestParamsDataTabs : ITab
 			};*/
 
 			_paramTestItem = LoadData<ParamTestItem>(DataKey);
-			model.AddObject(_paramTestItem);
+			model.AddObject(_paramTestItem!);
 
 			var toolbar = new Toolbar();
 			toolbar.ButtonNew.Action = New;
@@ -54,8 +54,8 @@ public class TabTestParamsDataTabs : ITab
 
 		private void Save(Call call)
 		{
-			ParamTestItem clone = _paramTestItem.DeepClone(call);
-			_dataRepoParams.Save(call, clone.ToString(), clone);
+			ParamTestItem clone = _paramTestItem.DeepClone(call)!;
+			_dataRepoParams!.Save(call, clone.ToString(), clone);
 		}
 	}
 }

@@ -10,7 +10,7 @@ public class TabTestGridCollectionSize : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollection<TestItem> _items;
+		private ItemCollection<TestItem>? _items;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -33,7 +33,7 @@ public class TabTestGridCollectionSize : ITab
 		{
 			for (int i = 0; i < count; i++)
 			{
-				int number = _items.Count;
+				int number = _items!.Count;
 				var testItem = new TestItem
 				{
 					SmallNumber = number

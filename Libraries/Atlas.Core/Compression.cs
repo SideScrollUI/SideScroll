@@ -23,7 +23,7 @@ public class Compression
 
 		originalFileStream.CopyTo(compressionStream);
 
-		compressCall.Log.Add("Finished Compressing",
+		compressCall.Log!.Add("Finished Compressing",
 			new Tag("File", fileToCompress.Name),
 			new Tag("Original Size", fileToCompress.Length),
 			new Tag("Compressed Size", compressedFileStream.Length)
@@ -56,7 +56,7 @@ public class Compression
 
 			decompressionStream.CopyTo(decompressedFileStream);
 
-			decompressCall.Log.Add("Finished Decompressing",
+			decompressCall.Log!.Add("Finished Decompressing",
 				new Tag("File", fileToDecompress.Name),
 				new Tag("Original Size", fileToDecompress.Length),
 				new Tag("Compressed Size", decompressedFileStream.Length)

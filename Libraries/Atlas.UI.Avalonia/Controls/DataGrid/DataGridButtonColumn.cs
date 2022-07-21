@@ -9,7 +9,7 @@ public class DataGridButtonColumn : DataGridTextColumn // todo: fix type
 {
 	public MethodInfo MethodInfo;
 	public string ButtonText;
-	public string VisiblePropertyName;
+	public string? VisiblePropertyName;
 
 	public DataGridButtonColumn(MethodInfo methodInfo, string buttonText)
 	{
@@ -31,9 +31,9 @@ public class DataGridButtonColumn : DataGridTextColumn // todo: fix type
 		return button;
 	}
 
-	private void Button_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	private void Button_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
-		Button button = (Button)sender;
+		Button button = (Button)sender!;
 		MethodInfo.Invoke(button.DataContext, new object[] { });
 	}
 }

@@ -8,14 +8,14 @@ namespace Atlas.Core;
 // https://stackoverflow.com/questions/366332/best-way-to-get-sub-properties-using-getproperty
 public static class ReflectorUtil
 {
-	public static object FollowPropertyPath(object value, string path)
+	public static object? FollowPropertyPath(object value, string path)
 	{
 		if (value == null) throw new ArgumentNullException(nameof(value));
 		if (path == null) throw new ArgumentNullException(nameof(path));
 
-		Type currentType = value.GetType();
+		Type? currentType = value.GetType();
 
-		object obj = value;
+		object? obj = value;
 		foreach (string propertyName in path.Split('.'))
 		{
 			if (currentType != null)
@@ -31,18 +31,18 @@ public static class ReflectorUtil
 				if (brackStart > 0)
 				{
 					string index = propertyName.Substring(brackStart + 1, brackEnd - brackStart - 1);
-					foreach (Type iType in obj.GetType().GetInterfaces())
+					foreach (Type iType in obj!.GetType().GetInterfaces())
 					{
 						if (iType.IsGenericType && iType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
 						{
-							obj = typeof(ReflectorUtil).GetMethod("GetDictionaryElement")
+							obj = typeof(ReflectorUtil).GetMethod("GetDictionaryElement")!
 								.MakeGenericMethod(iType.GetGenericArguments())
 								.Invoke(null, new object[] { obj, index });
 							break;
 						}
 						if (iType.IsGenericType && iType.GetGenericTypeDefinition() == typeof(IList<>))
 						{
-							obj = typeof(ReflectorUtil).GetMethod("GetListElement")
+							obj = typeof(ReflectorUtil).GetMethod("GetListElement")!
 								.MakeGenericMethod(iType.GetGenericArguments())
 								.Invoke(null, new object[] { obj, index });
 							break;

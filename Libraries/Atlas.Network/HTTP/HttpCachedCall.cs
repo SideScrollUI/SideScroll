@@ -17,7 +17,7 @@ public class HttpCachedCall : HttpCall
 
 	public override async Task<byte[]> GetBytesAsync(string uri)
 	{
-		byte[] bytes = HttpCache.GetBytes(uri);
+		byte[]? bytes = HttpCache.GetBytes(uri);
 		if (bytes != null)
 			return bytes;
 
@@ -26,7 +26,7 @@ public class HttpCachedCall : HttpCall
 		return bytes;
 	}
 
-	public override async Task<string> GetStringAsync(string uri, string accept = null)
+	public override async Task<string?> GetStringAsync(string uri, string? accept = null)
 	{
 		byte[] bytes = await GetBytesAsync(uri);
 		if (bytes != null)

@@ -106,7 +106,7 @@ public class TabDirectory : ITab
 
 			// Select file if possible
 			List<SelectedRow> selectedRows = GetSelectedRows();
-			string select = selectedRows.FirstOrDefault()?.Label;
+			string? select = selectedRows.FirstOrDefault()?.Label;
 
 			ProcessUtils.OpenFolder(path, select);
 		}

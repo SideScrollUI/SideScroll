@@ -2,6 +2,7 @@ using Atlas.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Atlas.Serialize;
 
@@ -17,11 +18,11 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 {
 	//public event EventHandler<EventArgs> OnDelete; // todo?
 
-	public string Path;
+	public string? Path;
 	public ItemCollectionUI<TViewType> Items { get; set; } = new();
 
 	public DataRepoView<TDataType> DataRepoView;
-	public DataRepoView<TDataType> DataRepoSecondary; // Optional: Saves and Deletes goto a 2nd copy
+	public DataRepoView<TDataType>? DataRepoSecondary; // Optional: Saves and Deletes goto a 2nd copy
 
 	public object[] LoadParams;
 
@@ -38,20 +39,40 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		Reload();
 	}
 
-	private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+	[MemberNotNull(nameof(_dataItemLookup), nameof(_valueLookup))]
+	public void Reload()
+	{
+		Items.Clear();
+
+		_dataItemLookup = new();
+		_valueLookup = new();
+
+		foreach (DataItem<TDataType> dataItem in DataRepoView.Items)
+		{
+			Add(dataItem);
+		}
+	}
+
+	private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 	{
 		if (e.Action == NotifyCollectionChangedAction.Add)
 		{
-			foreach (IDataItem item in e.NewItems)
+			if (e.NewItems != null)
 			{
-				Add(item);
+				foreach (IDataItem item in e.NewItems)
+				{
+					Add(item);
+				}
 			}
 		}
 		else if (e.Action == NotifyCollectionChangedAction.Remove)
 		{
-			foreach (IDataItem item in e.OldItems)
+			if (e.OldItems != null)
 			{
-				Remove(item);
+				foreach (IDataItem item in e.OldItems)
+				{
+					Remove(item);
+				}
 			}
 		}
 		else if (e.Action == NotifyCollectionChangedAction.Reset)
@@ -60,23 +81,10 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		}
 	}
 
-	public void Reload()
-	{
-		Items.Clear();
-
-		_dataItemLookup = new Dictionary<TViewType, IDataItem>();
-		_valueLookup = new Dictionary<IDataItem, TViewType>();
-
-		foreach (DataItem<TDataType> dataItem in DataRepoView.Items)
-		{
-			Add(dataItem);
-		}
-	}
-
 	public TViewType Add(IDataItem dataItem)
 	{
 		var itemView = new TViewType();
-		itemView.Load(this, dataItem.Object, LoadParams);
+		itemView.Load(this, dataItem.Object!, LoadParams);
 		itemView.OnDelete += Item_OnDelete;
 
 		Items.Add(itemView);
@@ -86,10 +94,10 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		return itemView;
 	}
 
-	private void Item_OnDelete(object sender, EventArgs e)
+	private void Item_OnDelete(object? sender, EventArgs e)
 	{
-		TViewType tab = (TViewType)sender;
-		if (!_dataItemLookup.TryGetValue(tab, out IDataItem dataItem))
+		TViewType tab = (TViewType)sender!;
+		if (!_dataItemLookup.TryGetValue(tab, out IDataItem? dataItem))
 			return;
 
 		Remove(dataItem);
@@ -100,7 +108,7 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		DataRepoView.Delete(dataItem.Key);
 		DataRepoSecondary?.Delete(dataItem.Key);
 
-		if (_valueLookup.TryGetValue(dataItem, out TViewType existing))
+		if (_valueLookup.TryGetValue(dataItem, out TViewType? existing))
 		{
 			_valueLookup.Remove(dataItem);
 			_dataItemLookup.Remove(existing);

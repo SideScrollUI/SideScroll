@@ -33,8 +33,8 @@ public class TabControlSplitContainer : Grid
 
 	public class Item
 	{
-		public object Object { get; set; }
-		public Control Control { get; set; }
+		public object? Object { get; set; }
+		public Control? Control { get; set; }
 		public bool Fill { get; set; }
 	}
 
@@ -84,12 +84,12 @@ public class TabControlSplitContainer : Grid
 		return base.ArrangeOverride(finalSize);
 	}
 
-	private void TabView_GotFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	private void TabView_GotFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 		Background = Theme.BackgroundFocused;
 	}
 
-	private void TabView_LostFocus(object sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	private void TabView_LostFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 		Background = Theme.TabBackground;
 	}
@@ -339,7 +339,7 @@ public class TabControlSplitContainer : Grid
 		}
 		RowDefinitions.Clear();
 		Children.Clear();
-		GridControls = null;
-		_gridItems = null;
+		GridControls.Clear();
+		_gridItems.Clear();
 	}
 }

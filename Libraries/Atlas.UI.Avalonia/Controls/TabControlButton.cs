@@ -17,7 +17,7 @@ public class TabControlButton : Button, IStyleable
 	public Brush ForegroundBrush = Theme.ButtonForeground;
 	public Brush HoverBrush = Theme.ButtonBackgroundHover;
 
-	public TabControlButton(string label = null)
+	public TabControlButton(string? label = null)
 	{
 		Content = label;
 
@@ -34,13 +34,13 @@ public class TabControlButton : Button, IStyleable
 		PointerLeave += Button_PointerLeave;
 	}
 
-	private void Button_PointerEnter(object sender, PointerEventArgs e)
+	private void Button_PointerEnter(object? sender, PointerEventArgs e)
 	{
 		//BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
 		Background = HoverBrush;
 	}
 
-	private void Button_PointerLeave(object sender, PointerEventArgs e)
+	private void Button_PointerLeave(object? sender, PointerEventArgs e)
 	{
 		Background = BackgroundBrush;
 		//BorderBrush = button.Background;

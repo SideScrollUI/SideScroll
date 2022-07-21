@@ -17,34 +17,34 @@ public class FormatValueConverter : IValueConverter
 	// public bool ConvertBackEnabled { get; set; } = true;
 	public bool IsFormatted { get; set; }
 
-	public ICustomFormatter Formatter { get; set; }
+	public ICustomFormatter? Formatter { get; set; }
 
-	private object _originalValue;
+	private object? _originalValue;
 
-	public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		_originalValue = value;
 		if (value == null)
 			return null;
 
-		object result = ChangeType(value, targetType, MaxLength, IsFormatted);
+		object? result = ChangeType(value, targetType, MaxLength, IsFormatted);
 		return result;
 	}
 
 	// The DataGrid triggers this even if the binding is one way
-	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		return _originalValue;
 	}
 
-	public object ChangeType(object value, Type targetType, int maxLength, bool formatted)
+	public object? ChangeType(object? value, Type targetType, int maxLength, bool formatted)
 	{
+		if (value == null)
+			return null;
+
 		if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
 		{
-			if (value == null)
-				return null;
-
-			targetType = Nullable.GetUnderlyingType(targetType);
+			targetType = Nullable.GetUnderlyingType(targetType)!;
 		}
 
 		if (value is string text)
@@ -71,7 +71,7 @@ public class FormatValueConverter : IValueConverter
 		}
 	}
 
-	public static string ObjectToString(object value, int maxLength, bool formatted)
+	public static string? ObjectToString(object value, int maxLength, bool formatted)
 	{
 		if (value is DateTime dateTime)
 			return dateTime.ToUniversalTime().ToString(StringFormat);

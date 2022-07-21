@@ -8,7 +8,7 @@ public class TabTestWideColumns : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollection<TestWideItem> _items;
+		private ItemCollection<TestWideItem>? _items;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -28,7 +28,7 @@ public class TabTestWideColumns : ITab
 				testItem.BigNumber += i;
 				if (i % 3 == 0)
 					testItem.LongText1 += testItem.LongText0;
-				_items.Add(testItem);
+				_items!.Add(testItem);
 			}
 		}
 	}

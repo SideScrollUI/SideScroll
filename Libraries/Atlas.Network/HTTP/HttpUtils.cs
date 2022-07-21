@@ -17,27 +17,27 @@ public static class HttpUtils
 
 	public static readonly HttpClient Client = new();
 
-	public static string GetString(Call call, string uri)
+	public static string? GetString(Call call, string uri)
 	{
 		return Task.Run(() => GetStringAsync(call, uri)).GetAwaiter().GetResult();
 	}
 
-	public static async Task<string> GetStringAsync(Call call, string uri)
+	public static async Task<string?> GetStringAsync(Call call, string uri)
 	{
 		var response = await GetBytesAsync(call, uri);
-		byte[] bytes = response?.Bytes;
+		byte[]? bytes = response?.Bytes;
 		if (bytes != null)
 			return Encoding.ASCII.GetString(bytes);
 
 		return null;
 	}
 
-	public static ViewHttpResponse GetBytes(Call call, string uri)
+	public static ViewHttpResponse? GetBytes(Call call, string uri)
 	{
 		return Task.Run(() => GetBytesAsync(call, uri)).GetAwaiter().GetResult();
 	}
 
-	public static async Task<ViewHttpResponse> GetBytesAsync(Call call, string uri)
+	public static async Task<ViewHttpResponse?> GetBytesAsync(Call call, string uri)
 	{
 		using CallTimer getCall = call.Timer("Get Uri", new Tag("Uri", uri));
 
@@ -55,10 +55,10 @@ public static class HttpUtils
 
 				stopwatch.Stop();
 
-				var viewResponse = new ViewHttpResponse()
+				ViewHttpResponse viewResponse = new()
 				{
 					Uri = uri,
-					Filename = response.RequestMessage.RequestUri.Segments.Last(),
+					Filename = response.RequestMessage!.RequestUri!.Segments.Last(),
 					Milliseconds = stopwatch.ElapsedMilliseconds,
 					Bytes = bytes,
 					Response = response,
@@ -88,12 +88,12 @@ public static class HttpUtils
 		return null;
 	}
 
-	public static HttpResponseMessage GetHead(Call call, string uri)
+	public static HttpResponseMessage? GetHead(Call call, string uri)
 	{
 		return Task.Run(() => GetHeadAsync(call, uri)).GetAwaiter().GetResult();
 	}
 
-	public static async Task<HttpResponseMessage> GetHeadAsync(Call call, string uri)
+	public static async Task<HttpResponseMessage?> GetHeadAsync(Call call, string uri)
 	{
 		using CallTimer headCall = call.Timer("Head Uri", new Tag("Uri", uri));
 
@@ -136,25 +136,25 @@ public static class HttpUtils
 public class ViewHttpResponse
 {
 	[HiddenColumn]
-	public string Uri { get; set; }
-	public string Filename { get; set; }
+	public string? Uri { get; set; }
+	public string? Filename { get; set; }
 
 	[HiddenColumn]
-	public string Body => Encoding.ASCII.GetString(Bytes);
+	public string Body => Encoding.ASCII.GetString(Bytes!);
 
 	public HttpStatusCode? Status => Response?.StatusCode;
 
 	[HiddenRow]
-	public byte[] Bytes { get; set; }
+	public byte[]? Bytes { get; set; }
 	public double Milliseconds { get; set; }
 
 	[HiddenColumn, Hide(null)]
-	public object View { get; set; }
+	public object? View { get; set; }
 
 	[HiddenColumn]
-	public HttpResponseMessage Response { get; set; }
+	public HttpResponseMessage? Response { get; set; }
 
-	public override string ToString() => Filename;
+	public override string? ToString() => Filename;
 
 	public ViewHttpResponse() { }
 

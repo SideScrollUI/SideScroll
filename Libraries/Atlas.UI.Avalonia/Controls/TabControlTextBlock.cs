@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Atlas.UI.Avalonia.Controls;
 
@@ -17,13 +18,14 @@ public class TabControlTextBlock : Border, IStyleable, ILayoutable
 
 	Type IStyleable.StyleKey => typeof(TextBlock);
 
-	public TabControlTextBlock(string text)
+	public TabControlTextBlock(string? text)
 	{
-		Text = text;
+		Text = text ?? "";
 
 		InitializeComponent();
 	}
 
+	[MemberNotNull(nameof(TextBlock))]
 	private void InitializeComponent()
 	{
 		Background = Theme.TextBackgroundBrush;

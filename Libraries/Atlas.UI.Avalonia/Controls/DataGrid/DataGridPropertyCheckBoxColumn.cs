@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Atlas.UI.Avalonia;
@@ -50,6 +51,7 @@ public class DataGridPropertyCheckBoxColumn : DataGridCheckBoxColumn
 		};
 	}
 
+	[MemberNotNull(nameof(_formattedBinding))]
 	private Binding GetBinding()
 	{
 		Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);

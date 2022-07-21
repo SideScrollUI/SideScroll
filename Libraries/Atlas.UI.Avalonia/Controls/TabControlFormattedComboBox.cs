@@ -17,7 +17,7 @@ public class TabControlFormattedComboBox : ComboBox, IStyleable, ILayoutable
 
 	public ListProperty Property;
 
-	private List<FormattedItem> _items;
+	private List<FormattedItem>? _items;
 
 	public TabControlFormattedComboBox(ListProperty property)
 	{
@@ -44,11 +44,13 @@ public class TabControlFormattedComboBox : ComboBox, IStyleable, ILayoutable
 		this.Bind(SelectedItemProperty, binding);
 	}
 
-	private FormattedItem GetFormattedItem(object obj)
+	private FormattedItem? GetFormattedItem(object? obj)
 	{
+		if (obj == null) return null;
+
 		foreach (FormattedItem item in base.Items)
 		{
-			if (item.Object.ToString() == obj.ToString())
+			if (item.Object!.ToString() == obj.ToString())
 				return item;
 		}
 		return null;
@@ -73,17 +75,17 @@ public class TabControlFormattedComboBox : ComboBox, IStyleable, ILayoutable
 			SelectedIndex = 0;
 	}
 
-	public object SelectedFormattedItem
+	public object? SelectedFormattedItem
 	{
 		set
 		{
-			if (value is FormattedItem item && item.Object.ToString() != Property.Value.ToString())
+			if (value is FormattedItem item && item.Object!.ToString() != Property.Value!.ToString())
 				Property.Value = item.Object;
 		}
 		get => GetFormattedItem(Property.Value);
 	}
 
-	public new object SelectedItem
+	public new object? SelectedItem
 	{
 		get
 		{
@@ -93,11 +95,11 @@ public class TabControlFormattedComboBox : ComboBox, IStyleable, ILayoutable
 		}
 		set
 		{
-			FormattedItem formattedItem = GetFormattedItem(value);
+			FormattedItem? formattedItem = GetFormattedItem(value);
 			if (formattedItem == null)
 			{
 				formattedItem = new FormattedItem(value);
-				_items.Add(formattedItem);
+				_items!.Add(formattedItem);
 			}
 			base.SelectedItem = formattedItem;
 		}
@@ -106,11 +108,11 @@ public class TabControlFormattedComboBox : ComboBox, IStyleable, ILayoutable
 
 public class FormattedItem
 {
-	public object Object { get; set; }
+	public object? Object { get; set; }
 
-	public override string ToString() => Object.Formatted();
+	public override string? ToString() => Object.Formatted();
 
-	public FormattedItem(object obj)
+	public FormattedItem(object? obj)
 	{
 		Object = obj;
 	}

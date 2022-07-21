@@ -50,11 +50,11 @@ public static class AtlasExtensions
 			if (!propertyInfo.CanWrite)
 				continue;
 
-			object existingValue = propertyInfo.GetValue(obj);
+			object? existingValue = propertyInfo.GetValue(obj);
 			if (existingValue != null)
 				continue;
 
-			object newValue = propertyInfo.GetValue(newObject);
+			object? newValue = propertyInfo.GetValue(newObject);
 			propertyInfo.SetValue(obj, newValue);
 		}
 
@@ -63,7 +63,7 @@ public static class AtlasExtensions
 	}
 
 	// Returns value of first property or field that sets [InnerValue]
-	public static object GetInnerValue(this object value)
+	public static object? GetInnerValue(this object? value)
 	{
 		if (value == null)
 			return null;

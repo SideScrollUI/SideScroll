@@ -20,7 +20,7 @@ public class TimeRangeValue : ITags
 
 	public string TimeText => DateTimeUtils.FormatTimeRange(StartTime, EndTime, false);
 
-	public string Name { get; set; }
+	public string? Name { get; set; }
 
 	[YAxis]
 	public double Value { get; set; }
@@ -34,9 +34,7 @@ public class TimeRangeValue : ITags
 
 	public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Value;
 
-	public TimeRangeValue()
-	{
-	}
+	public TimeRangeValue() { }
 
 	public TimeRangeValue(DateTime startTime)
 	{
@@ -144,7 +142,7 @@ public class TimeRangeValue : ITags
 
 		// Merge continuous points with the same value together to improve storage speeds
 		var merged = new List<TimeRangeValue>();
-		TimeRangeValue prevPoint = null;
+		TimeRangeValue? prevPoint = null;
 		foreach (TimeRangeValue timeRangeValue in sorted)
 		{
 			if (prevPoint != null && prevPoint.EndTime == timeRangeValue.StartTime && prevPoint.Value == timeRangeValue.Value)
@@ -166,11 +164,11 @@ public class TimeRangeValue : ITags
 		var sorted = input.OrderBy(p => p.StartTime).ToList();
 
 		// Merge continuous points with the same value together to improve storage speeds
-		TimeRangeValue firstValue = null;
+		TimeRangeValue? firstValue = null;
 		var merged = new List<TimeRangeValue>();
 		foreach (TimeRangeValue timeRangeValue in sorted)
 		{
-			TimeRangeValue previousValue = merged.LastOrDefault();
+			TimeRangeValue? previousValue = merged.LastOrDefault();
 			if (previousValue != null)
 			{
 				// Todo: handle Tags

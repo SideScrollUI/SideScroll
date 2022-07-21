@@ -8,10 +8,10 @@ namespace Atlas.Core;
 public class NamedItemCollection<T1, T2>
 {
 	public static List<KeyValuePair<MemberInfo, T2>> Items => _items ??= GetItems();
-	private static List<KeyValuePair<MemberInfo, T2>> _items;
+	private static List<KeyValuePair<MemberInfo, T2>>? _items;
 
 	public static List<T2> Values => _values ??= Items.Select(v => v.Value).ToList();
-	private static List<T2> _values;
+	private static List<T2>? _values;
 
 	public static List<KeyValuePair<MemberInfo, T2>> GetItems()
 	{
@@ -25,7 +25,7 @@ public class NamedItemCollection<T1, T2>
 			.GetProperties(bindingFlags)
 			.Where(p => elementType.IsAssignableFrom(p.PropertyType))
 			.OrderBy(x => x.MetadataToken)
-			.Select(p => new KeyValuePair<MemberInfo, T2>(p, (T2)p.GetValue(null)))
+			.Select(p => new KeyValuePair<MemberInfo, T2>(p, (T2)p.GetValue(null)!))
 			.ToList();
 
 		// Add FieldInfo's
@@ -33,7 +33,7 @@ public class NamedItemCollection<T1, T2>
 			.GetFields(bindingFlags)
 			.Where(f => elementType.IsAssignableFrom(f.FieldType))
 			.OrderBy(x => x.MetadataToken)
-			.Select(f => new KeyValuePair<MemberInfo, T2>(f, (T2)f.GetValue(null)));
+			.Select(f => new KeyValuePair<MemberInfo, T2>(f, (T2)f.GetValue(null)!));
 
 		keyValues.AddRange(fieldValues);
 
