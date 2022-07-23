@@ -8,7 +8,7 @@ namespace Atlas.Serialize;
 
 public interface IDataView
 {
-	event EventHandler<EventArgs> OnDelete;
+	event EventHandler<EventArgs>? OnDelete;
 
 	void Load(object sender, object obj, params object[] loadParams);
 }
