@@ -60,7 +60,7 @@ public class TabView : Grid, IDisposable
 	// Created Controls
 	public TabControlActions? TabActions;
 	public TabControlTasks? TabTasks;
-	public List<TabControlDataGrid> TabDatas = new();
+	public List<ITabDataControl> TabDatas = new();
 	public List<ITabSelector> CustomTabControls { get; set; } = new(); // should everything use this?
 
 	// Layout Controls
@@ -760,7 +760,7 @@ public class TabView : Grid, IDisposable
 			CreateChildControls(TabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 		}
 
-		foreach (TabControlDataGrid tabData in TabDatas)
+		foreach (ITabDataControl tabData in TabDatas)
 		{
 			CreateChildControls(tabData.SelectedRows, oldChildControls, newChildControls, orderedChildControls);
 		}
@@ -872,7 +872,7 @@ public class TabView : Grid, IDisposable
 
 		//RequestBringIntoView -= UserControl_RequestBringIntoView;
 
-		foreach (TabControlDataGrid tabData in TabDatas)
+		foreach (ITabDataControl tabData in TabDatas)
 		{
 			tabData.OnSelectionChanged -= ParentListSelectionChanged;
 			tabData.Dispose();
@@ -943,7 +943,7 @@ public class TabView : Grid, IDisposable
 
 	private void TabInstance_OnClearSelection(object? sender, EventArgs e)
 	{
-		foreach (var tabData in TabDatas)
+		foreach (ITabDataControl tabData in TabDatas)
 		{
 			tabData.SelectedItem = null; // dataGrid.UnselectAll() doesn't work
 		}
@@ -985,7 +985,7 @@ public class TabView : Grid, IDisposable
 		{
 			foreach (ITabSelector tabSelector in CustomTabControls)
 			{
-				if (tabSelector is IItemSelector itemSelector)
+				if (tabSelector is ITabItemSelector itemSelector)
 				{
 					itemSelector.SelectedItems = e.List;
 				}
@@ -1001,7 +1001,7 @@ public class TabView : Grid, IDisposable
 		TabViewSettings = tabBookmark.ViewSettings;
 
 		int index = 0;
-		foreach (TabControlDataGrid tabData in TabDatas)
+		foreach (ITabDataControl tabData in TabDatas)
 		{
 			tabData.TabDataSettings = TabViewSettings.GetData(index++);
 			tabData.LoadSettings();

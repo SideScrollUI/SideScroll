@@ -96,6 +96,8 @@ public class TabDataSettings
 		public readonly PropertyInfo PropertyInfo;
 		public string Label { get; set; }
 
+		public override string ToString() => Label;
+
 		public PropertyColumn(PropertyInfo propertyInfo, string label)
 		{
 			PropertyInfo = propertyInfo;
