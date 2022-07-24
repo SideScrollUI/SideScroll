@@ -10,7 +10,7 @@ public class ScreenCaptureToolbar : TabControlToolbar
 {
 	public TabViewer TabViewer;
 
-	public ToolbarButton ButtonCopyClipboard;
+	public ToolbarButton? ButtonCopyClipboard;
 	public ToolbarButton ButtonSave;
 	//public ToolbarButton ButtonLink;
 	public ToolbarButton ButtonClose;
@@ -18,11 +18,7 @@ public class ScreenCaptureToolbar : TabControlToolbar
 	public ScreenCaptureToolbar(TabViewer tabViewer) : base(null)
 	{
 		TabViewer = tabViewer;
-		InitializeControls();
-	}
 
-	private void InitializeControls()
-	{
 		OSPlatform platform = ProcessUtils.GetOSPlatform();
 		if (platform != OSPlatform.Linux)
 		{

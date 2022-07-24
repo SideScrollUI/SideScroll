@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector, ILayoutable
+public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelector, ILayoutable, ITabDataControl
 {
 	private const int ColumnPercentBased = 150;
 	private const int MaxMinColumnWidth = 150;
@@ -35,7 +35,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, IItemSelector
 
 	public TabModel TabModel;
 	public TabInstance TabInstance;
-	public TabDataSettings TabDataSettings;
+	public TabDataSettings TabDataSettings { get; set; }
 	public IList? List;
 	private Type _elementType;
 

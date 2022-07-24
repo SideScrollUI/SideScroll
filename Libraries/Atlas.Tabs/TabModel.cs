@@ -9,40 +9,6 @@ using System.Threading.Tasks;
 
 namespace Atlas.Tabs;
 
-// Generates an event when the SelectedItems change
-public interface ITabSelector
-{
-	IList? SelectedItems { get; }
-
-	event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
-}
-
-public class TabSelectionChangedEventArgs : EventArgs
-{
-	public readonly bool Recreate;
-
-	public TabSelectionChangedEventArgs(bool recreate = false)
-	{
-		Recreate = recreate;
-	}
-}
-
-public interface IItemSelector
-{
-	IList SelectedItems { get; set; }
-}
-
-// TabInstance or Controls can specify this to create child controls dynamically
-public interface ITabCreator
-{
-	object CreateControl(object value, out string? label);
-}
-
-public interface ITabCreatorAsync
-{
-	Task<ITab?> CreateAsync(Call call);
-}
-
 public class TabObject
 {
 	public object? Object { get; set; }
