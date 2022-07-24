@@ -19,19 +19,18 @@ namespace Atlas.UI.Avalonia.ScreenCapture;
 
 public class ScreenCapture : Grid
 {
-	public static string OsxCopyClipboardApplication = "osascript";
-
-	public static string OsxCopyClipboardScriptPath = "Native/OSX/load-image-clipboard.scpt";
+	public const string OsxCopyClipboardApplication = "osascript";
+	public const string OsxCopyClipboardScriptPath = "Native/OSX/load-image-clipboard.scpt";
 
 	private const int MinClipboardSize = 10;
 
-	private RenderTargetBitmap _originalBitmap;
-	private RenderTargetBitmap _backgroundBitmap; // 50% faded
-	private RenderTargetBitmap _selectionBitmap;
+	private RenderTargetBitmap? _originalBitmap;
+	private RenderTargetBitmap? _backgroundBitmap; // 50% faded
+	private RenderTargetBitmap? _selectionBitmap;
 
-	private Grid _contentGrid;
-	private Image _backgroundImage;
-	private Image _selectionImage;
+	private Grid? _contentGrid;
+	private Image? _backgroundImage;
+	private Image? _selectionImage;
 
 	private Point? _startPoint;
 	private Rect _selectionRect;
@@ -40,7 +39,7 @@ public class ScreenCapture : Grid
 
 	public static ToolbarButton AddControlTo(TabViewer tabViewer)
 	{
-		tabViewer.Toolbar.AddSeparator();
+		tabViewer.Toolbar!.AddSeparator();
 
 		ToolbarButton snapshotButton = tabViewer.Toolbar.AddButton("Snapshot", Icons.Streams.Screenshot);
 		snapshotButton.Click += (s, e) =>
@@ -75,7 +74,7 @@ public class ScreenCapture : Grid
 	private void AddToolbar()
 	{
 		var toolbar = new ScreenCaptureToolbar(TabViewer);
-		toolbar.ButtonCopyClipboard.Add(CopyClipboard);
+		toolbar.ButtonCopyClipboard?.Add(CopyClipboard);
 		toolbar.ButtonSave.AddAsync(SaveAsync);
 		toolbar.ButtonClose.Add(Close);
 		Children.Add(toolbar);
@@ -107,7 +106,7 @@ public class ScreenCapture : Grid
 
 	private void CopyClipboard(Call call)
 	{
-		RenderTargetBitmap bitmap = GetSelectedBitmap();
+		RenderTargetBitmap? bitmap = GetSelectedBitmap();
 		if (bitmap == null)
 			return;
 
@@ -157,11 +156,11 @@ public class ScreenCapture : Grid
 
 	private async Task SaveAsync(Call call)
 	{
-		RenderTargetBitmap bitmap = GetSelectedBitmap();
+		RenderTargetBitmap? bitmap = GetSelectedBitmap();
 		if (bitmap == null)
 			return;
 
-		var fileDialog = new SaveFileDialog()
+		SaveFileDialog fileDialog = new()
 		{
 			Directory = Paths.PicturesPath,
 			InitialFileName = TabViewer.Project.Name + '.' + FileUtils.TimestampString + ".png",
@@ -175,13 +174,16 @@ public class ScreenCapture : Grid
 				}
 			},
 		};
-		var window = GetWindow(this);
-		string filePath = await fileDialog.ShowAsync(window);
+
+		Window? window = GetWindow(this);
+		if (window == null) return;
+
+		string? filePath = await fileDialog.ShowAsync(window);
 		if (filePath != null)
 			bitmap.Save(filePath);
 	}
 
-	private Window GetWindow(IControl control)
+	private Window? GetWindow(IControl control)
 	{
 		if (control is Window window)
 			return window;
@@ -218,10 +220,10 @@ public class ScreenCapture : Grid
 			Stretch = Stretch.None,
 			Source = _backgroundBitmap,
 		};
-		_contentGrid.Children.Add(_backgroundImage);
+		_contentGrid!.Children.Add(_backgroundImage);
 	}
 
-	private RenderTargetBitmap GetSelectedBitmap()
+	private RenderTargetBitmap? GetSelectedBitmap()
 	{
 		if (_selectionRect.Width < MinClipboardSize || _selectionRect.Height < MinClipboardSize)
 			return null;
@@ -232,17 +234,17 @@ public class ScreenCapture : Grid
 
 		using (var ctx = bitmap.CreateDrawingContext(null))
 		{
-			ctx.DrawBitmap(_originalBitmap.PlatformImpl, 1, _selectionRect, destRect);
+			ctx.DrawBitmap(_originalBitmap!.PlatformImpl, 1, _selectionRect, destRect);
 		};
 		return bitmap;
 	}
 
-	private void ScreenCapture_PointerPressed(object sender, PointerPressedEventArgs e)
+	private void ScreenCapture_PointerPressed(object? sender, PointerPressedEventArgs e)
 	{
 		_startPoint = e.GetPosition(_backgroundImage);
 	}
 
-	private void ScreenCapture_PointerReleased(object sender, PointerReleasedEventArgs e)
+	private void ScreenCapture_PointerReleased(object? sender, PointerReleasedEventArgs e)
 	{
 		if (_startPoint == null)
 			return;
@@ -252,15 +254,15 @@ public class ScreenCapture : Grid
 		_startPoint = null;
 	}
 
-	private void ScreenCapture_PointerMoved(object sender, PointerEventArgs e)
+	private void ScreenCapture_PointerMoved(object? sender, PointerEventArgs e)
 	{
 		if (_startPoint == null)
 			return;
 
 		Point mousePosition = e.GetPosition(_backgroundImage);
-		Size sourceSize = _originalBitmap.Size;
+		Size sourceSize = _originalBitmap!.Size;
 
-		double scaleX = sourceSize.Width / _backgroundImage.Bounds.Width;
+		double scaleX = sourceSize.Width / _backgroundImage!.Bounds.Width;
 		double scaleY = sourceSize.Height / _backgroundImage.Bounds.Height;
 
 		double startX = Math.Max(0, _startPoint.Value.X);
@@ -287,7 +289,7 @@ public class ScreenCapture : Grid
 
 	private void UpdateSelectionImage()
 	{
-		Size sourceSize = _originalBitmap.Size;
+		Size sourceSize = _originalBitmap!.Size;
 		_selectionBitmap = new RenderTargetBitmap(new PixelSize((int)sourceSize.Width, (int)sourceSize.Height), new Vector(96, 96));
 
 		var borderRect = new Rect(
@@ -305,6 +307,6 @@ public class ScreenCapture : Grid
 			ctx.DrawRectangle(null, outerPen, borderRect.Inflate(1));
 			ctx.DrawRectangle(null, innerPen, borderRect);
 		}
-		_selectionImage.Source = _selectionBitmap;
+		_selectionImage!.Source = _selectionBitmap;
 	}
 }

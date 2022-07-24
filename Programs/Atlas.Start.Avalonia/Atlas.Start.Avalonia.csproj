@@ -8,6 +8,7 @@
     <Version>$(AtlasVersion)</Version>
     <ApplicationIcon />
     <StartupObject />
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.1|AnyCPU'">

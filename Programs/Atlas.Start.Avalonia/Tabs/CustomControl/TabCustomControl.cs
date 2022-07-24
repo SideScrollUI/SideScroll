@@ -12,9 +12,9 @@ public class TabCustomControl : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollection<MyParams> _items;
-		private MyParams _myParams;
-		private TabControlSearchToolbar _toolbar;
+		private ItemCollection<MyParams> _items = new();
+		private MyParams? _myParams;
+		private TabControlSearchToolbar? _toolbar;
 
 		public override void LoadUI(Call call, TabModel model)
 		{
@@ -42,9 +42,9 @@ public class TabCustomControl : ITab
 			model.Items = _items;
 		}
 
-		private void ButtonSearch_Click(object sender, RoutedEventArgs e)
+		private void ButtonSearch_Click(object? sender, RoutedEventArgs e)
 		{
-			_toolbar.TextBoxStatus.Text = "Searching";
+			_toolbar!.TextBoxStatus.Text = "Searching";
 
 			StartTask(Search, true, true);
 		}
@@ -58,10 +58,10 @@ public class TabCustomControl : ITab
 
 		private void ShowSearchResults(Call call, params object[] objects)
 		{
-			_toolbar.TextBoxStatus.Text = "Finished";
+			_toolbar!.TextBoxStatus.Text = "Finished";
 		}
 
-		private void ButtonLoadNext_Click(object sender, RoutedEventArgs e)
+		private void ButtonLoadNext_Click(object? sender, RoutedEventArgs e)
 		{
 			StartTask(LoadNext, true, false);
 		}
@@ -70,7 +70,7 @@ public class TabCustomControl : ITab
 		{
 		}
 
-		private void ButtonCopyClipBoard_Click(object sender, RoutedEventArgs e)
+		private void ButtonCopyClipBoard_Click(object? sender, RoutedEventArgs e)
 		{
 		}
 	}

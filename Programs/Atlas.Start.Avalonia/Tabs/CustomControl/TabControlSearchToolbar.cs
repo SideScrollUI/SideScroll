@@ -17,11 +17,6 @@ public class TabControlSearchToolbar : TabControlToolbar
 
 	public TabControlSearchToolbar(TabInstance tabInstance) : base(tabInstance)
 	{
-		InitializeControls();
-	}
-
-	private void InitializeControls()
-	{
 		//project.navigator.CanSeekBackwardOb
 		//CommandBinder.
 		//CommandBindings.Add(commandBindingBack);
