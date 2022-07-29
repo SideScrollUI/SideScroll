@@ -306,11 +306,12 @@ public class TypeRepoObject : TypeRepo
 	}
 
 	// Reads over all the field and properties since they're ordered without offsets
-	private List<object?> GetConstructorParams()
+	private List<object?> GetConstructorParams(int objectIndex)
 	{
 		if (TypeSchema.CustomConstructor == null) throw new Exception("Missing Custom Constructor");
 
 		long position = Reader!.BaseStream.Position;
+		Reader!.BaseStream.Position = ObjectOffsets![objectIndex];
 
 		Dictionary<FieldRepo, object?> fieldValues = FieldRepos.ToDictionary(f => f, f => f.Get());
 		Dictionary<PropertyRepo, object?> propertyValues = PropertyRepos.ToDictionary(p => p, p => p.Get());
@@ -349,7 +350,7 @@ public class TypeRepoObject : TypeRepo
 			return base.CreateObject(objectIndex);
 		}
 
-		List<object?> constructorParams = GetConstructorParams();
+		List<object?> constructorParams = GetConstructorParams(objectIndex);
 
 		object obj = TypeSchema.CustomConstructor!.Invoke(constructorParams.ToArray());
 

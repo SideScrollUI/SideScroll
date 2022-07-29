@@ -62,7 +62,7 @@ public static class TimeSpanExtensions
 
 	public static TimeSpan PeriodDuration(this TimeSpan timeSpan, int numPeriods = 100)
 	{
-		TimeSpan maxPeriodDuration = TimeSpan.FromSeconds(timeSpan.TotalSeconds * 2 / numPeriods);
+		TimeSpan maxPeriodDuration = timeSpan.Multiply(2.0 / numPeriods);
 		foreach (TimeSpan periodMin in CommonTimeSpans.Reverse<TimeSpan>())
 		{
 			if (periodMin <= maxPeriodDuration)

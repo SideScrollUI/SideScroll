@@ -109,6 +109,14 @@ public static class FileUtils
 			using FileStream stream = fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.None);
 			stream.Close();
 		}
+		catch (DirectoryNotFoundException)
+		{
+			return false;
+		}
+		catch (FileNotFoundException)
+		{
+			return false;
+		}
 		catch (IOException)
 		{
 			return true;
@@ -149,7 +157,7 @@ public static class FileUtils
 	{
 		try
 		{
-			using StreamReader streamReader = new StreamReader(stream);
+			using var streamReader = new StreamReader(stream);
 			return IsTextStream(streamReader);
 		}
 		catch (Exception)

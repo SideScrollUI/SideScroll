@@ -78,45 +78,57 @@ public class SerializeClassConstructor : TestSerializeBase
 		Assert.AreEqual(output.BaseClass!.B, input.BaseClass.B);
 	}
 
-	public class NoEmptyConstructorFieldClass
+	public record CustomConstructorFieldClass
 	{
 		public int A = 1;
 
-		public NoEmptyConstructorFieldClass(int a)
+		public CustomConstructorFieldClass(int a)
 		{
 			A = a;
 		}
 	}
 
-	public class NoEmptyConstructorPropertyClass
+	public record CustomConstructorPropertyClass
 	{
 		public int A { get; set; } = 1;
 
-		public NoEmptyConstructorPropertyClass(int a)
+		public CustomConstructorPropertyClass(int a)
 		{
 			A = a;
 		}
 	}
 
-	[Test, Description("Serialize No Empty Constructor Field Class")]
-	public void SerializeNoEmptyConstructorFieldClass()
+	[Test, Description("Serialize Custom Constructor Field Class")]
+	public void SerializeCustomConstructorFieldClass()
 	{
-		var input = new NoEmptyConstructorFieldClass(5);
+		var input = new CustomConstructorFieldClass(5);
 
 		_serializer!.Save(Call, input);
-		var output = _serializer.Load<NoEmptyConstructorFieldClass>(Call);
+		var output = _serializer.Load<CustomConstructorFieldClass>(Call);
 
 		Assert.AreEqual(output.A, input.A);
 	}
 
-	[Test, Description("Serialize No Empty Constructor Property Class")]
-	public void SerializeNoEmptyConstructorPropertyClass()
+	[Test, Description("Serialize Custom Constructor Property Class")]
+	public void SerializeCustomConstructorPropertyClass()
 	{
-		var input = new NoEmptyConstructorPropertyClass(5);
+		var input = new CustomConstructorPropertyClass(5);
 
 		_serializer!.Save(Call, input);
-		var output = _serializer.Load<NoEmptyConstructorPropertyClass>(Call);
+		var output = _serializer.Load<CustomConstructorPropertyClass>(Call);
 
 		Assert.AreEqual(output.A, input.A);
+	}
+
+	[Test, Description("Serialize Custom Constructor List Field Class")]
+	public void SerializeCustomConstructorListFieldClass()
+	{
+		var item = new CustomConstructorFieldClass(5);
+		var input = new List<CustomConstructorFieldClass>() { item };
+
+		_serializer!.Save(Call, input);
+		var output = _serializer.Load<List<CustomConstructorFieldClass>>(Call);
+
+		Assert.AreEqual(output, input);
 	}
 }
