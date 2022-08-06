@@ -7,7 +7,7 @@ public class TestBase
 	public virtual void Initialize(string name)
 	{
 		Call = new Call(name);
-		Call.Log!.Settings!.DebugPrintLogLevel = LogLevel.Info;
+		Call.Log.Settings!.DebugPrintLogLevel = LogLevel.Info;
 		new LogWriterConsole(Call.Log);
 	}
 }

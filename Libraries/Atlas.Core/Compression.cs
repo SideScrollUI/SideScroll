@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.IO.Compression;
 
@@ -23,7 +24,7 @@ public class Compression
 
 		originalFileStream.CopyTo(compressionStream);
 
-		compressCall.Log!.Add("Finished Compressing",
+		compressCall.Log.Add("Finished Compressing",
 			new Tag("File", fileToCompress.Name),
 			new Tag("Original Size", fileToCompress.Length),
 			new Tag("Compressed Size", compressedFileStream.Length)
@@ -36,31 +37,41 @@ public class Compression
 
 		if (fileToDecompress.Extension == ".zip")
 		{
-			string targetPath = Path.ChangeExtension(fileToDecompress.FullName, null);
-
-			if (Directory.Exists(targetPath))
-				Directory.Delete(targetPath, true);
-
-			ZipFile.ExtractToDirectory(fileToDecompress.FullName, targetPath);
+			ExtractZip(fileToDecompress);
 		}
 		else if (fileToDecompress.Extension == ".gz")
 		{
-			using FileStream originalFileStream = fileToDecompress.OpenRead();
-
-			string currentFileName = fileToDecompress.FullName;
-			string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
-
-			using FileStream decompressedFileStream = File.Create(newFileName);
-
-			using GZipStream decompressionStream = new(originalFileStream, CompressionMode.Decompress);
-
-			decompressionStream.CopyTo(decompressedFileStream);
-
-			decompressCall.Log!.Add("Finished Decompressing",
-				new Tag("File", fileToDecompress.Name),
-				new Tag("Original Size", fileToDecompress.Length),
-				new Tag("Compressed Size", decompressedFileStream.Length)
-				);
+			ExtractGzip(decompressCall, fileToDecompress);
 		}
+	}
+
+	private static void ExtractZip(FileInfo fileToDecompress)
+	{
+		string targetPath = Path.ChangeExtension(fileToDecompress.FullName, null);
+
+		if (Directory.Exists(targetPath))
+			Directory.Delete(targetPath, true);
+
+		ZipFile.ExtractToDirectory(fileToDecompress.FullName, targetPath);
+	}
+
+	private static void ExtractGzip(CallTimer decompressCall, FileInfo fileToDecompress)
+	{
+		using FileStream originalFileStream = fileToDecompress.OpenRead();
+
+		string currentFileName = fileToDecompress.FullName;
+		string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
+
+		using FileStream decompressedFileStream = File.Create(newFileName);
+
+		using GZipStream decompressionStream = new(originalFileStream, CompressionMode.Decompress);
+
+		decompressionStream.CopyTo(decompressedFileStream);
+
+		decompressCall.Log.Add("Finished Decompressing",
+			new Tag("File", fileToDecompress.Name),
+			new Tag("Original Size", fileToDecompress.Length),
+			new Tag("Compressed Size", decompressedFileStream.Length)
+			);
 	}
 }

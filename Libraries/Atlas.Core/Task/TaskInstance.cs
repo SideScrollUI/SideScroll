@@ -217,7 +217,7 @@ public class TaskInstance : INotifyPropertyChanged
 		{
 			Progress = ProgressMax;
 
-			if (Call.Log!.Level >= LogLevel.Error)
+			if (Call.Log.Level >= LogLevel.Error)
 			{
 				Status = Call.Log.Level.ToString();
 				Errored = true;
@@ -246,7 +246,7 @@ public class TaskInstance : INotifyPropertyChanged
 		NotifyPropertyChanged(nameof(Finished));
 		NotifyPropertyChanged(nameof(CancelVisible));
 
-		Call.Log!.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));
+		Call.Log.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));
 
 		if (ParentTask == null)
 			Creator?.OnComplete?.Invoke();

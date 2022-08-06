@@ -44,7 +44,7 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	{
 		TimesRun++;
 		Context = SynchronizationContext.Current ?? new SynchronizationContext();
-		call.Log!.Settings!.Context = Context;
+		call.Log.Settings!.Context = Context;
 
 		var taskInstance = new TaskInstance
 		{

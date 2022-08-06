@@ -44,7 +44,7 @@ public class TaskDelegateAsync : TaskCreator
 		}
 		catch (Exception e)
 		{
-			call.Log!.Add(e);
+			call.Log.Add(e);
 		}
 	}
 
@@ -56,7 +56,7 @@ public class TaskDelegateAsync : TaskCreator
 		}
 		catch (Exception e)
 		{
-			call.Log!.Add(e);
+			call.Log.Add(e);
 		}
 	}
 }

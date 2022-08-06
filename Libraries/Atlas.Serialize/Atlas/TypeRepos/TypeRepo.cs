@@ -80,7 +80,7 @@ public abstract class TypeRepo : IDisposable
 	protected virtual void SaveCustomHeader(BinaryWriter writer) { }
 	protected virtual void LoadCustomHeader() { }
 
-	public override string? ToString() => TypeSchema?.Name;
+	public override string ToString() => TypeSchema.Name;
 
 	public TypeRepo(Serializer serializer, TypeSchema typeSchema)
 	{

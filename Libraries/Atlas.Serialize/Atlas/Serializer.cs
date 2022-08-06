@@ -114,25 +114,25 @@ public class Serializer : IDisposable
 		}
 	}
 
-	public class ObjectsLoaded
+	public record ObjectsLoaded
 	{
-		public string? Name { get; set; }
-		public int Loaded { get; set; }
+		public string Name { get; init; } = default!;
+		public int Loaded { get; init; }
 	}
 
 	public void LogLoadedTypes(Call call)
 	{
-		var loaded = new List<ObjectsLoaded>();
+		List<ObjectsLoaded> loaded = new();
 		foreach (TypeRepo typeRepo in TypeRepos)
 		{
-			var typeInfo = new ObjectsLoaded
+			ObjectsLoaded typeInfo = new()
 			{
 				Name = typeRepo.ToString(),
 				Loaded = typeRepo.ObjectsLoadedCount
 			};
 			loaded.Add(typeInfo);
 		}
-		call.Log!.Add("Objects Loaded", new Tag("Type Repos", loaded));
+		call.Log.Add("Objects Loaded", new Tag("Type Repos", loaded));
 	}
 
 	// todo: only add types that are used
@@ -207,7 +207,7 @@ public class Serializer : IDisposable
 		Reader = reader;
 		Lazy = lazy;
 
-		using LogTimer logTimer = call.Log!.Timer("Loading object");
+		using LogTimer logTimer = call.Log.Timer("Loading object");
 
 		Header.Load(reader);
 		if (Header.Version != Header.LatestVersion)
@@ -219,7 +219,9 @@ public class Serializer : IDisposable
 		long fileLength = reader.ReadInt64();
 		if (reader.BaseStream.Length != fileLength)
 		{
-			logTimer.AddError("File size doesn't match", new Tag("Expected", fileLength), new Tag("Actual", reader.BaseStream.Length));
+			logTimer.AddError("File size doesn't match",
+				new Tag("Expected", fileLength),
+				new Tag("Actual", reader.BaseStream.Length));
 			return;
 		}
 
@@ -318,9 +320,9 @@ public class Serializer : IDisposable
 	{
 		get
 		{
-			var primitives = new List<TypeRepo>();
-			var collections = new List<TypeRepo>();
-			var others = new List<TypeRepo>();
+			List<TypeRepo> primitives = new();
+			List<TypeRepo> collections = new();
+			List<TypeRepo> others = new();
 
 			foreach (TypeRepo typeRepo in TypeRepos)
 			{
@@ -335,7 +337,7 @@ public class Serializer : IDisposable
 					others.Add(typeRepo);
 			}
 
-			var orderedTypes = new List<TypeRepo>();
+			List<TypeRepo> orderedTypes = new();
 			orderedTypes.AddRange(primitives);
 			orderedTypes.AddRange(others);
 			orderedTypes.AddRange(collections);
@@ -344,9 +346,9 @@ public class Serializer : IDisposable
 		}
 	}
 
-	class TypeRepoWriter
+	record TypeRepoWriter
 	{
-		public TypeRepo? TypeRepo;
+		public TypeRepo TypeRepo { get; init; } = default!;
 		public MemoryStream MemoryStream = new();
 	}
 
@@ -385,7 +387,7 @@ public class Serializer : IDisposable
 			foreach (TypeRepoWriter typeRepoWriter in writers)
 			{
 				using var binaryWriter = new BinaryWriter(typeRepoWriter.MemoryStream, System.Text.Encoding.Default, true);
-				typeRepoWriter.TypeRepo!.SaveObjects(logSerialize, binaryWriter);
+				typeRepoWriter.TypeRepo.SaveObjects(logSerialize, binaryWriter);
 			}
 		}
 
@@ -395,7 +397,7 @@ public class Serializer : IDisposable
 			{
 				byte[] bytes = typeRepoWriter.MemoryStream.ToArray();
 
-				typeRepoWriter.TypeRepo!.TypeSchema.FileDataOffset = writer.BaseStream.Position;
+				typeRepoWriter.TypeRepo.TypeSchema.FileDataOffset = writer.BaseStream.Position;
 				typeRepoWriter.TypeRepo.TypeSchema.DataSize = bytes.Length;
 
 				writer.Write(bytes);
@@ -630,10 +632,10 @@ public class Serializer : IDisposable
 
 	public void LogClonedTypes(Log log)
 	{
-		var loaded = new List<ObjectsLoaded>();
+		List<ObjectsLoaded> loaded = new();
 		foreach (TypeRepo typeRepo in TypeRepos)
 		{
-			var typeInfo = new ObjectsLoaded
+			ObjectsLoaded typeInfo = new()
 			{
 				Name = typeRepo.ToString(),
 				Loaded = typeRepo.Cloned
@@ -645,7 +647,7 @@ public class Serializer : IDisposable
 
 	internal void QueueLoading(TypeRepo typeRepo, int objectIndex)
 	{
-		var loadItem = new LoadItem()
+		LoadItem loadItem = new()
 		{
 			TypeRepo = typeRepo,
 			Index = objectIndex

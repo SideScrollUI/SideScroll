@@ -44,7 +44,7 @@ public class TaskDelegate : TaskCreator
 		}
 		catch (Exception e)
 		{
-			call.Log!.Add(e);
+			call.Log.Add(e);
 		}
 	}
 

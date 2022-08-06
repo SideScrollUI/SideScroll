@@ -36,7 +36,7 @@ public abstract class SerializerMemory
 		}
 		catch (Exception e)
 		{
-			call.Log!.Add(e);
+			call.Log.Add(e);
 		}
 		return default;
 	}
@@ -53,7 +53,7 @@ public abstract class SerializerMemory
 		}
 		catch (Exception e)
 		{
-			call.Log!.Add(e);
+			call.Log.Add(e);
 		}
 		return null;
 	}
@@ -76,7 +76,7 @@ public abstract class SerializerMemory
 
 		byte[] compressed = outStream.ToArray();
 		string base64 = Convert.ToBase64String(compressed);
-		call.Log!.Add("ToBase64String",
+		call.Log.Add("ToBase64String",
 			new Tag("Original", Stream.Length),
 			new Tag("Compressed", compressed.Length),
 			new Tag("Base64", base64.Length));

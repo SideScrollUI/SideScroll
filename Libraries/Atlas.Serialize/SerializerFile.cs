@@ -69,7 +69,7 @@ public abstract class SerializerFile
 		}
 		catch (Exception e)
 		{
-			callTimer.Log!.AddError("Exception loading file", new Tag("Exception", e.ToString()));
+			callTimer.Log.AddError("Exception loading file", new Tag("Exception", e.ToString()));
 			return null; // returns null if reference type, otherwise default value (i.e. 0)
 		}
 	}

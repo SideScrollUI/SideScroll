@@ -55,7 +55,7 @@ public class Call
 	public Call DebugLogAll()
 	{
 		var child = Child("LogDebug");
-		child.Log!.Settings = child.Log!.Settings!.Clone();
+		child.Log.Settings = child.Log.Settings!.Clone();
 		child.Log.Settings.MinLogLevel = LogLevel.Debug;
 		child.Log.Settings.DebugPrintLogLevel = LogLevel.Debug;
 		return child;
@@ -114,12 +114,12 @@ public class Call
 		{
 			T2 result = await func(callTimer, item);
 			if (result == null)
-				callTimer.Log!.Add("No result");
+				callTimer.Log.Add("No result");
 			return result;
 		}
 		catch (Exception e)
 		{
-			callTimer.Log!.Add(e);
+			callTimer.Log.Add(e);
 			return default;
 		}
 	}
@@ -132,12 +132,12 @@ public class Call
 		{
 			T3 result = await func(callTimer, item, param1);
 			if (result == null)
-				callTimer.Log!.Add("No result");
+				callTimer.Log.Add("No result");
 			return result;
 		}
 		catch (Exception e)
 		{
-			callTimer.Log!.Add(e);
+			callTimer.Log.Add(e);
 			return default;
 		}
 	}
@@ -150,12 +150,12 @@ public class Call
 		{
 			T4 result = await func(callTimer, item, param1, param2);
 			if (result == null)
-				callTimer.Log!.Add("No result");
+				callTimer.Log.Add("No result");
 			return result;
 		}
 		catch (Exception e)
 		{
-			callTimer.Log!.Add(e);
+			callTimer.Log.Add(e);
 			return default;
 		}
 	}
