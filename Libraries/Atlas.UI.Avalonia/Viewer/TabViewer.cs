@@ -254,7 +254,7 @@ public class TabViewer : Grid
 			[Grid.ColumnProperty] = 1,
 		};
 
-		Button buttonExpand = new()
+		TabControlButton buttonExpand = new()
 		{
 			Content = ">",
 			Background = Theme.ToolbarButtonBackground,
@@ -266,11 +266,9 @@ public class TabViewer : Grid
 			[Grid.RowProperty] = 0,
 		};
 		buttonExpand.Click += ButtonExpand_Click;
-		buttonExpand.PointerEnter += Button_PointerEnter;
-		buttonExpand.PointerLeave += Button_PointerLeave;
 		grid.Children.Add(buttonExpand);
 
-		Button buttonCollapse = new()
+		TabControlButton buttonCollapse = new()
 		{
 			Content = "<",
 			Background = Theme.ToolbarButtonBackground,
@@ -281,23 +279,9 @@ public class TabViewer : Grid
 			[Grid.RowProperty] = 1,
 		};
 		buttonCollapse.Click += ButtonCollapse_Click;
-		buttonCollapse.PointerEnter += Button_PointerEnter;
-		buttonCollapse.PointerLeave += Button_PointerLeave;
 		grid.Children.Add(buttonCollapse);
 
 		return grid;
-	}
-
-	private void Button_PointerEnter(object? sender, PointerEventArgs e)
-	{
-		Button button = (Button)sender!;
-		button.Background = Theme.ToolbarButtonBackgroundHover;
-	}
-
-	private void Button_PointerLeave(object? sender, PointerEventArgs e)
-	{
-		Button button = (Button)sender!;
-		button.Background = Theme.ToolbarButtonBackground;
 	}
 
 	private void ButtonExpand_Click(object? sender, RoutedEventArgs e)

@@ -19,9 +19,11 @@ public static class Icons
 	public const string Search16 = "search_right_light_16.png";
 	public const string ClearSearch = "clear_search.png";
 
-	public const string Info1 = "info_24_759eeb.png"; // 759eeb
+	public const string Info1 = "info_24_759eeb.png";
+	
+	public const string Info20 = "info_20_759eeb.png";
 
-	// public const string Info2 = "info_24_c8c2f9.png"; // C8C2F9
+	// public const string Info2 = "info_24_c8c2f9.png";
 
 	public const string BlankDocument = "blank-document.png";
 	public const string Save = "save-file-option.png";
@@ -66,6 +68,7 @@ public static class Icons
 		public static Stream Search16 => Get(Icons.Search16);
 
 		public static Stream Info => Get(Icons.Info1);
+		public static Stream Info20 => Get(Icons.Info20);
 
 		public static Stream BlankDocument => Get(Icons.BlankDocument);
 		public static Stream Save => Get(Icons.Save);

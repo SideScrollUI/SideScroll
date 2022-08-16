@@ -23,6 +23,7 @@
     <None Remove="Icons\png\eraser.png" />
     <None Remove="Icons\png\if_help_62217.png" />
     <None Remove="Icons\png\import.png" />
+    <None Remove="Icons\png\info_20_759eeb.png" />
     <None Remove="Icons\png\info_24_759eeb.png" />
     <None Remove="Icons\png\info_24_c8c2f9.png" />
     <None Remove="Icons\png\internet.png" />
@@ -58,6 +59,7 @@
     <EmbeddedResource Include="Assets\shutter64.png" />
     <EmbeddedResource Include="Icons\Logo\Logo2.ico" />
     <EmbeddedResource Include="Icons\Logo\Logo3.ico" />
+    <EmbeddedResource Include="Icons\png\info_20_759eeb.png" />
     <EmbeddedResource Include="Icons\png\add.png" />
     <EmbeddedResource Include="Icons\png\blank-document.png" />
     <EmbeddedResource Include="Icons\png\bookmark.png" />

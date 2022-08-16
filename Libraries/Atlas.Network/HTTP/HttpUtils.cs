@@ -12,10 +12,20 @@ namespace Atlas.Network;
 
 public static class HttpUtils
 {
+	private const int ReadBufferSize = 100000;
+
 	public static int MaxAttempts { get; set; } = 5;
-	public static int SleepMilliseconds = 500; // < ^ MaxAttempts
+	public static TimeSpan BaseRetryDelay = TimeSpan.FromMilliseconds(500); // < ^ MaxAttempts
 
 	public static readonly HttpClient Client = new();
+
+	public class HttpGetProgress
+	{
+		public long Downloaded { get; set; }
+		public long TotalLength { get; set; }
+
+		public double Percent => 100.0 * Downloaded / TotalLength;
+	}
 
 	public static string? GetString(Call call, string uri)
 	{
@@ -32,26 +42,28 @@ public static class HttpUtils
 		return null;
 	}
 
-	public static ViewHttpResponse? GetBytes(Call call, string uri)
+	public static ViewHttpResponse? GetBytes(Call call, string uri, IProgress<HttpGetProgress>? progress = null)
 	{
-		return Task.Run(() => GetBytesAsync(call, uri)).GetAwaiter().GetResult();
+		return Task.Run(() => GetBytesAsync(call, uri, progress)).GetAwaiter().GetResult();
 	}
 
-	public static async Task<ViewHttpResponse?> GetBytesAsync(Call call, string uri)
+	public static async Task<ViewHttpResponse?> GetBytesAsync(Call call, string uri, IProgress<HttpGetProgress>? progress = null)
 	{
 		using CallTimer getCall = call.Timer("Get Uri", new Tag("Uri", uri));
 
 		for (int attempt = 1; attempt <= MaxAttempts; attempt++)
 		{
 			if (attempt > 1)
-				System.Threading.Thread.Sleep(SleepMilliseconds * (int)Math.Pow(2, attempt));
+			{
+				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt));
+			}
 
 			try
 			{
 				Stopwatch stopwatch = Stopwatch.StartNew();
 				HttpResponseMessage response = await Client.GetAsync(uri);
 
-				byte[] bytes = await response.Content.ReadAsByteArrayAsync();
+				byte[] bytes = await ReadContentAsync(response.Content, progress);
 
 				stopwatch.Stop();
 
@@ -88,6 +100,32 @@ public static class HttpUtils
 		return null;
 	}
 
+	private static async Task<byte[]> ReadContentAsync(HttpContent content, IProgress<HttpGetProgress>? progress = null)
+	{
+		if (content.Headers.ContentLength == null || progress == null)
+		{
+			return await content.ReadAsByteArrayAsync();
+		}
+
+		using var contentStream = await content.ReadAsStreamAsync();
+		using var memoryStream = new MemoryStream();
+
+		var buffer = new byte[ReadBufferSize];
+
+		int bytes;
+		while ((bytes = await contentStream.ReadAsync(buffer)) > 0)
+		{
+			memoryStream.Write(buffer, 0, bytes);
+			progress.Report(new HttpGetProgress()
+			{
+				Downloaded = memoryStream.Position,
+				TotalLength = content.Headers.ContentLength.Value,
+			});
+		}
+
+		return memoryStream.ToArray();
+	}
+
 	public static HttpResponseMessage? GetHead(Call call, string uri)
 	{
 		return Task.Run(() => GetHeadAsync(call, uri)).GetAwaiter().GetResult();
@@ -100,7 +138,9 @@ public static class HttpUtils
 		for (int attempt = 1; attempt <= MaxAttempts; attempt++)
 		{
 			if (attempt > 1)
-				System.Threading.Thread.Sleep(SleepMilliseconds * (int)Math.Pow(2, attempt));
+			{
+				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt));
+			}
 
 			HttpRequestMessage request = new(HttpMethod.Head, uri);
 

@@ -24,6 +24,9 @@ public static class Theme
 	public static SolidColorBrush HasLinksBackground => Get("ThemeHasLinksBrush");
 	public static SolidColorBrush NoLinksBackground => Get("ThemeNoLinksBrush");
 
+	// ScrollBar
+	public static SolidColorBrush ScrollBarThumb => Get("ThemeScrollBarThumbBrush");
+
 	// Button
 	public static SolidColorBrush ButtonBackground => Get("ThemeButtonBackgroundBrush");
 	public static SolidColorBrush ButtonForeground => Get("ThemeButtonForegroundBrush");

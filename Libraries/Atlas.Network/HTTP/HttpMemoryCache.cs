@@ -67,7 +67,12 @@ public class HttpMemoryCache
 				// doesn't handle newlines
 				//var options = new JsonSerializerOptions { IncludeFields = true };
 				//t = JsonSerializer.Deserialize<T>(text, options);
-				t = JsonConvert.DeserializeObject<T>(text);
+
+				JsonSerializerSettings options = new()
+				{
+					DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+				};
+				t = JsonConvert.DeserializeObject<T>(text, options);
 				Add(uri, t);
 				return true;
 			}
