@@ -3,8 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Atlas.UI.Avalonia.Controls;

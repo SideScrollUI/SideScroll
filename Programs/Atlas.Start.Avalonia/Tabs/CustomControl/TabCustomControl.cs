@@ -1,8 +1,6 @@
 using Atlas.Core;
 using Atlas.Tabs;
 using Avalonia.Interactivity;
-using System;
-using System.Threading.Tasks;
 
 namespace Atlas.Start.Avalonia.Tabs;
 

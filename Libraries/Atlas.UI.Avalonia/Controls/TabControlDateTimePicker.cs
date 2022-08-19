@@ -9,10 +9,8 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.IO;
 
 namespace Atlas.UI.Avalonia.Controls;
 

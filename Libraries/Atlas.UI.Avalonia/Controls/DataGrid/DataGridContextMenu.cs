@@ -4,7 +4,6 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
-using System;
 
 namespace Atlas.UI.Avalonia;
 

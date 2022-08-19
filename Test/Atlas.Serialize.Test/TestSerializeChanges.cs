@@ -1,6 +1,5 @@
 using Atlas.Core;
 using NUnit.Framework;
-using System.IO;
 
 namespace Atlas.Serialize.Test;
 

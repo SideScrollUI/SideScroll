@@ -8,6 +8,7 @@
     <Configurations>Debug;Release;DebugX86</Configurations>
     <Version>$(AtlasVersion)</Version>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

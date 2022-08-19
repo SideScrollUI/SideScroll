@@ -5,8 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using System;
-using System.IO;
 
 namespace Atlas.UI.Avalonia.Controls;
 

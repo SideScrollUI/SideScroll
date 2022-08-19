@@ -1,7 +1,6 @@
 using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Resources;
-using System;
 
 namespace Atlas.Tabs.Test;
 

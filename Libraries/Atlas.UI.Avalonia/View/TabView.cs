@@ -2,20 +2,15 @@ using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
-using Atlas.UI.Avalonia.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia.View;
 

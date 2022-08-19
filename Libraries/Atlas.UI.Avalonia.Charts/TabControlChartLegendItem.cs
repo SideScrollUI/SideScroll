@@ -6,9 +6,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using OxyPlot;
 using OxyPlot.Avalonia;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace Atlas.UI.Avalonia.Charts;
 

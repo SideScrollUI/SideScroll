@@ -1,6 +1,5 @@
 using Atlas.Core;
 using Microsoft.Extensions.Caching.Memory;
-using System;
 
 namespace Atlas.Network;
 

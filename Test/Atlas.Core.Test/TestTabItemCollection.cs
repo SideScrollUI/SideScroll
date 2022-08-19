@@ -1,8 +1,6 @@
 using Atlas.Tabs;
 using NUnit.Framework;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Atlas.Core.Test;
 

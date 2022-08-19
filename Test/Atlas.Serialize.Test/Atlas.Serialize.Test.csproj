@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release;DebugX86</Configurations>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,5 +1,3 @@
-using System;
-
 namespace Atlas.Core;
 
 // Allows property to be edited in UI

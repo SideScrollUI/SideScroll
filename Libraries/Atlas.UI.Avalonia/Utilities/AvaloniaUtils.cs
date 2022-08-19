@@ -5,9 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Media;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia;
 

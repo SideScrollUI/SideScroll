@@ -13,15 +13,11 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia.Controls;
 

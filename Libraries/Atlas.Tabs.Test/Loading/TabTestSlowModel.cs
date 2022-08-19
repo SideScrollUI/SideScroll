@@ -1,5 +1,4 @@
 using Atlas.Core;
-using System.Threading;
 
 namespace Atlas.Tabs.Test.Loading;
 

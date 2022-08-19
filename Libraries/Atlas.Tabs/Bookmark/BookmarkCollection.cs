@@ -1,7 +1,5 @@
 using Atlas.Core;
 using Atlas.Serialize;
-using System;
-using System.Linq;
 
 namespace Atlas.Tabs;
 

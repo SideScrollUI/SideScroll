@@ -10,9 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia;
 

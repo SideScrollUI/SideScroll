@@ -1,6 +1,5 @@
 using Atlas.Extensions;
 using NUnit.Framework;
-using System;
 
 namespace Atlas.Core.Test;
 

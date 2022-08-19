@@ -1,8 +1,4 @@
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Data;
 using NUnit.Framework;
-using System;
 using System.Globalization;
 
 namespace Atlas.UI.Avalonia.Test;

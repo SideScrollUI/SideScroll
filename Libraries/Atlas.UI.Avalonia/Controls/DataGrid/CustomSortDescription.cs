@@ -1,9 +1,3 @@
-using Avalonia.Collections;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 
 /*namespace Atlas.UI.Avalonia.Controls.DataGrid
 {

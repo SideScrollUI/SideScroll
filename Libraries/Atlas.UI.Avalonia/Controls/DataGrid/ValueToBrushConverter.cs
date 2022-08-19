@@ -2,7 +2,6 @@ using Atlas.Core;
 using Atlas.Tabs;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using System;
 using System.Collections;
 using System.Reflection;
 

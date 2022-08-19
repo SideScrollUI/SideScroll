@@ -3,10 +3,8 @@ using Atlas.Tabs;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Threading;
-using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Linq;
 
 namespace Atlas.UI.Avalonia.Controls;
 

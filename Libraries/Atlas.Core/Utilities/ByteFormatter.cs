@@ -1,5 +1,3 @@
-using System;
-
 namespace Atlas.Core;
 
 public class ByteFormatter : ICustomFormatter

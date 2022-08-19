@@ -1,5 +1,4 @@
 using Atlas.Core;
-using System;
 
 namespace Atlas.Tabs.Test.Objects;
 

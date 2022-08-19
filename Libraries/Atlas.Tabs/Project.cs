@@ -2,7 +2,6 @@ using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Network;
 using Atlas.Serialize;
-using System;
 
 namespace Atlas.Tabs;
 

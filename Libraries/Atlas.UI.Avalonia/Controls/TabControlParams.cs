@@ -5,9 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Layout;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls;

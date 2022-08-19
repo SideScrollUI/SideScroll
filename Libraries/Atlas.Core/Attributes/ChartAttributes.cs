@@ -1,5 +1,3 @@
-using System;
-
 namespace Atlas.Core;
 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]

@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using System.Windows.Input;
 using Atlas.Core;
 using Atlas.Tabs;

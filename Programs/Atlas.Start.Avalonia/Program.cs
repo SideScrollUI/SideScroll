@@ -1,7 +1,6 @@
 using Atlas.Core;
 using Avalonia;
 using OxyPlot.Avalonia;
-using System;
 
 namespace Atlas.Start.Avalonia;
 

@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using Atlas.Core;
 using Atlas.Tabs;
 

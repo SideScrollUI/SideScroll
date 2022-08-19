@@ -8,9 +8,6 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Atlas.UI.Avalonia.Controls;
 

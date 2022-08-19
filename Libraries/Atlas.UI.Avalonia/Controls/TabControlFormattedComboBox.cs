@@ -5,9 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Styling;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace Atlas.UI.Avalonia.Controls;
 

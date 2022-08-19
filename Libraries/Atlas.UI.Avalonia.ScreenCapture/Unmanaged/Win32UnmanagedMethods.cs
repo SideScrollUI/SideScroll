@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 
 namespace Atlas.UI.Avalonia.ScreenCapture;

@@ -1,7 +1,6 @@
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.UI.Avalonia.Controls;
-using System;
 using System.Runtime.InteropServices;
 
 namespace Atlas.UI.Avalonia.ScreenCapture;

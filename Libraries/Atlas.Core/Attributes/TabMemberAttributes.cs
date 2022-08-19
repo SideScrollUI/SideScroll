@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Atlas.Core;
 
 // Use the specified name instead of the field/property name

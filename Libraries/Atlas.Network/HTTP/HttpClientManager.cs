@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Net.Http;
-
 namespace Atlas.Network;
 
 // todo: Figure out a way to reuse default client and inject in request

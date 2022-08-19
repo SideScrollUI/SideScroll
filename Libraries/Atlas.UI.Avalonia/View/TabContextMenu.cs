@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Styling;
 using Avalonia.Interactivity;
-using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Atlas.UI.Avalonia.View;

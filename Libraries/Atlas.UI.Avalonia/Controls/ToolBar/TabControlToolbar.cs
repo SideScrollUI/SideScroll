@@ -1,14 +1,11 @@
 using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
-using Atlas.UI.Avalonia.Controls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
-using System;
-using System.IO;
 using System.Reflection;
 using System.Windows.Input;
 

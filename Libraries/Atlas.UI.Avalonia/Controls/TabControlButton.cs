@@ -4,8 +4,6 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Styling;
-using System;
-using System.Collections.Generic;
 
 namespace Atlas.UI.Avalonia.Controls;
 

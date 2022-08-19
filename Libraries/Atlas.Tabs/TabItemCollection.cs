@@ -1,6 +1,5 @@
 using Atlas.Core;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace Atlas.Tabs;
 

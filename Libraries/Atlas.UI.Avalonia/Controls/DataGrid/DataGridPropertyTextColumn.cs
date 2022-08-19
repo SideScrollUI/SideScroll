@@ -4,8 +4,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media;
-using Avalonia.VisualTree;
-using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;

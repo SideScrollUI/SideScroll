@@ -1,5 +1,3 @@
-using System;
-
 namespace Atlas.Extensions;
 
 public static class DateTimeExtensions

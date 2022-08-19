@@ -2,8 +2,6 @@ using Atlas.Core;
 using Atlas.Serialize;
 using Atlas.Tabs;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 
 namespace Atlas.UI.Avalonia.Test;
 

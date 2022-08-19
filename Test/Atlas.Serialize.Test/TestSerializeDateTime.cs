@@ -1,6 +1,5 @@
 using Atlas.Core.Time;
 using NUnit.Framework;
-using System;
 
 namespace Atlas.Serialize.Test;
 

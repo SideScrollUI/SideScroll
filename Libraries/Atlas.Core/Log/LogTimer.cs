@@ -1,13 +1,11 @@
-using System;
 using System.Diagnostics;
-using System.Timers;
 
 namespace Atlas.Core;
 
 public class LogTimer : Log, IDisposable
 {
 	private readonly Stopwatch _stopwatch = new();
-	private readonly Timer _timer = new();
+	private readonly System.Timers.Timer _timer = new();
 
 	public LogTimer() { }
 

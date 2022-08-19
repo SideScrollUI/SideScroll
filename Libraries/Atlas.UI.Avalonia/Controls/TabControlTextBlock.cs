@@ -4,7 +4,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
-using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Atlas.UI.Avalonia.Controls;

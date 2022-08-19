@@ -1,6 +1,4 @@
 using Atlas.Core;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Atlas.Tabs.Test;
 

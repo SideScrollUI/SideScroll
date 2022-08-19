@@ -8,12 +8,8 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.VisualTree;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 
 namespace Atlas.UI.Avalonia.ScreenCapture;
 

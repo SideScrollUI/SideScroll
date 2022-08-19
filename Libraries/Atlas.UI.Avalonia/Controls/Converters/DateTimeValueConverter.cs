@@ -1,6 +1,5 @@
 using Atlas.Core;
 using Avalonia.Data.Converters;
-using System;
 using System.Globalization;
 
 namespace Atlas.UI.Avalonia;

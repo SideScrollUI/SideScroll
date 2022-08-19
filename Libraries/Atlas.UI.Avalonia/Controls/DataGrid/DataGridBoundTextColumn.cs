@@ -7,7 +7,6 @@ using Avalonia.Input.Platform;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
-using System;
 using System.Data;
 
 namespace Atlas.UI.Avalonia;

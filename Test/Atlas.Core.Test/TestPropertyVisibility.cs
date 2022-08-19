@@ -1,7 +1,6 @@
 using Atlas.Extensions;
 using Atlas.Tabs;
 using NUnit.Framework;
-using System.Linq;
 using System.Reflection;
 
 namespace Atlas.Core.Test;

@@ -1,5 +1,4 @@
 using Atlas.Core;
-using System.IO;
 using System.Reflection;
 
 namespace Atlas.Resources;

@@ -1,9 +1,6 @@
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.UI.Avalonia.Controls;
-using Avalonia.Controls;
-using Avalonia.Input;
-using System;
 
 namespace Atlas.UI.Avalonia;
 

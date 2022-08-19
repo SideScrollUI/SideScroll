@@ -1,5 +1,3 @@
-using System;
-
 namespace Atlas.Core;
 
 // Params data
