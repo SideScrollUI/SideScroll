@@ -22,17 +22,6 @@ public static class TabCreator
 				label = "(" + obj.GetType().Name + ")";
 		}
 
-		TabBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
-		if (parentTabInstance.TabBookmark != null && parentTabInstance.TabBookmark.ChildBookmarks != null)
-		{
-			if (parentTabInstance.TabBookmark.ChildBookmarks.TryGetValue(label!, out tabBookmark))
-			{
-				// FindMatches only
-				if (tabBookmark.TabModel != null)
-					value = tabBookmark.TabModel;
-			}
-		}
-
 		string? labelOverride = null;
 		if (value is Exception)
 		{
@@ -45,11 +34,21 @@ public static class TabCreator
 		{
 			value = tabCreator.CreateControl(value, out labelOverride);
 		}
+
+		label = labelOverride ?? label; // update label before comparing bookmarks
+
+		TabBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
+		if (parentTabInstance.TabBookmark != null && parentTabInstance.TabBookmark.ChildBookmarks != null)
+		{
+			if (parentTabInstance.TabBookmark.ChildBookmarks.TryGetValue(label!, out tabBookmark))
+			{
+				// FindMatches only
+				if (tabBookmark.TabModel != null)
+					value = tabBookmark.TabModel;
+			}
+		}
 		if (value == null)
 			return null;
-
-		if (labelOverride != null)
-			label = labelOverride;
 
 		Type type = value.GetType();
 		if (value is string || value is decimal || type.IsPrimitive)

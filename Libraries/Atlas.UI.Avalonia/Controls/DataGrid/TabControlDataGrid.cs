@@ -42,7 +42,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 	public DataGrid DataGrid;
 	public TabControlSearch? SearchControl;
 
-	//private HashSet<int> pinnedItems = new(); // starred items?
 	public DataGridCollectionView? CollectionView;
 
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
@@ -729,9 +728,9 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 		if (TabDataSettings.SelectedRows.Count == 0)
 			return rowObjects;
 
-		TabItemCollection tabItemCollectionView = new(List!, CollectionView);
+		TabItemCollection tabItemCollection = new(List!, CollectionView);
 
-		List<object> matchingObjects = tabItemCollectionView.GetSelectedObjects(TabDataSettings.SelectedRows);
+		List<object> matchingObjects = tabItemCollection.GetSelectedObjects(TabDataSettings.SelectedRows);
 
 		foreach (object matchingObject in matchingObjects)
 		{
@@ -838,11 +837,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 				// make sure there's something present
 				if (value is ICollection collection && collection.Count == 0)
 					continue;
-				/*else if (typeof(IEnumerable).IsAssignableFrom(type))
-				  {
-					  if (!((IEnumerable)value).GetEnumerator().MoveNext())
-						  continue;
-				  }*/
 
 				if (TabInstance.IsOwnerObject(obj.GetInnerValue())) // stops self referencing loops
 					return null;
@@ -898,11 +892,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 			DataGrid.SelectedItem = null; // need both of these
 
 			_ignoreSelectionChanged = false;
-
-			//foreach (object obj in dataGrid.SelectedItems)
-			// remove all items so the we have to worry about this order changing?
-			//while (dataGrid.SelectedItems.Count > 0)
-			//dataGrid.SelectedItems.RemoveAt(0);
 
 			foreach (object obj in value)
 			{
@@ -993,7 +982,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 
 	private void UpdateSelection(bool recreate = false)
 	{
-		//SelectPinnedItems();
 		TabDataSettings.SelectedRows = SelectedRows;
 		TabDataSettings.SelectionType = SelectionType.User; // todo: place earlier with more accurate type
 

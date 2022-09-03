@@ -638,7 +638,8 @@ public class TabInstance : IDisposable
 				tabBookmark.IsRoot = true;
 				tabBookmark.Tab = iTab;
 			}
-			else if (type.GetCustomAttribute<PublicDataAttribute>() != null && (tabBookmark.IsRoot || IsRoot))
+			else if (type.GetCustomAttribute<PublicDataAttribute>() != null && 
+				(tabBookmark.IsRoot || IsRoot))
 			{
 				tabBookmark.Tab = iTab;
 				tabBookmark.Bookmark!.Name = iTab.ToString();

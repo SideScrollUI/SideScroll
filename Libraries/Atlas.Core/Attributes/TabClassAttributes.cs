@@ -18,7 +18,8 @@ public class ListItemAttribute : Attribute
 	}
 }
 
-// ToString() on items in an array instead of showing item properties
+// ICollection's that specify this will show individual members in Formatted()
+// Instead of calling ICollection's ToString()
 // Allow on property/field as a ToString() alternative?
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public class ToStringAttribute : Attribute

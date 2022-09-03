@@ -6,7 +6,7 @@ namespace Atlas.Tabs;
 public class SelectedRow : IEquatable<SelectedRow>
 {
 	public string? Label; // ToString() value, can be null
-	public int RowIndex = -1; // Index in original list without filtering, todo: change to nullable
+	public int RowIndex = -1; // Index in original list without filtering, todo: next schema change to nullable
 
 	[NonSerialized]
 	public object? Object; // used for bookmark searches, dangerous to keep these references around otherwise
@@ -17,7 +17,7 @@ public class SelectedRow : IEquatable<SelectedRow>
 	// public bool Pinned;
 	// public List<string> SelectedColumns = new(); // Not supported yet
 
-	public override string? ToString() => Label;
+	public override string? ToString() => Label ?? DataKey;
 
 	public SelectedRow() { }
 

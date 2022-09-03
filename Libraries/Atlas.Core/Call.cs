@@ -184,7 +184,7 @@ public class Call
 			await throttler.WaitAsync();
 			if (TaskInstance?.CancelToken.IsCancellationRequested == true)
 			{
-				Log!.Add("Cancelled");
+				Log.Add("Cancelled");
 				break;
 			}
 			tasks.Add(Task.Run(async () =>
@@ -202,7 +202,7 @@ public class Call
 				}
 				catch (Exception e)
 				{
-					Log!.Add(e);
+					Log.Add(e);
 				}
 				finally
 				{
@@ -228,7 +228,7 @@ public class Call
 			await throttler.WaitAsync();
 			if (TaskInstance?.CancelToken.IsCancellationRequested == true)
 			{
-				Log!.Add("Cancelled");
+				Log.Add("Cancelled");
 				break;
 			}
 			tasks.Add(Task.Run(async () =>
@@ -246,7 +246,7 @@ public class Call
 				}
 				catch (Exception e)
 				{
-					Log!.Add(e);
+					Log.Add(e);
 				}
 				finally
 				{
@@ -272,7 +272,7 @@ public class Call
 			await throttler.WaitAsync();
 			if (TaskInstance?.CancelToken.IsCancellationRequested == true)
 			{
-				Log!.Add("Cancelled");
+				Log.Add("Cancelled");
 				break;
 			}
 			tasks.Add(Task.Run(async () =>
@@ -290,7 +290,7 @@ public class Call
 				}
 				catch (Exception e)
 				{
-					Log!.Add(e);
+					Log.Add(e);
 				}
 				finally
 				{
