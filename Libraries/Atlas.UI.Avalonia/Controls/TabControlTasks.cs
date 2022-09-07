@@ -24,7 +24,7 @@ public class TabControlTasks : Grid, IDisposable
 		{
 			foreach (var task in TabInstance.Model.Tasks)
 			{
-				if (task.ShowTask || task.TaskStatus == System.Threading.Tasks.TaskStatus.Faulted)
+				if (task.ShowTask || task.TaskStatus == TaskStatus.Faulted)
 					return true;
 			}
 			return false;

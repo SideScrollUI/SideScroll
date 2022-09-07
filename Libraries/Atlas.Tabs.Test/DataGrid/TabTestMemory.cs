@@ -14,7 +14,8 @@ public class TabTestMemory : ITab
 		{
 			//_bytes = new byte[500000000]; // 500 MB, creates 200k strings using ListToString
 			_bytes = new byte[128];
-			Array.Clear(_bytes, 0, _bytes.Length); // toggle the memory so it gets used
+			for (int i = 0; i < _bytes.Length; i++)
+				_bytes[i] = (byte)i;
 
 			model.Items = new ItemCollection<ListItem>()
 			{

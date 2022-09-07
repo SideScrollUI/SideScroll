@@ -153,7 +153,7 @@ public class TabInstance : IDisposable
 	// paths get hashed later to avoid having to encode and super long names breaking path limits
 	private string? CustomPath => (Model.CustomSettingsPath != null) ? "Custom/" + GetType().FullName + "/" + Model.CustomSettingsPath : null;
 	private string TabPath => "Tab/" + GetType().FullName + "/" + Model.ObjectTypePath;
-	//private string TabPath => "Tab/" + GetType().FullName + "/" + tabModel.ObjectTypePath + "/" + Label;
+	//private string TabPath => "Tab/" + GetType().FullName + "/" + Model.ObjectTypePath + "/" + Label;
 	// deprecate?
 	private string TypeLabelPath => "TypePath/" + Model.ObjectTypePath + "/" + Label;
 	private string TypePath => "Type/" + Model.ObjectTypePath;
@@ -202,9 +202,7 @@ public class TabInstance : IDisposable
 			tabInstance.Project = Project;
 		tabInstance.iTab = iTab;
 		tabInstance.ParentTabInstance = this;
-		//tabInstance.taskInstance.call.Log =
 		//tabInstance.taskInstance = taskInstance.AddSubTask(taskInstance.call); // too slow?
-		//tabInstance.tabBookmark = tabBookmark;
 		return tabInstance;
 	}
 
@@ -225,7 +223,6 @@ public class TabInstance : IDisposable
 	[MemberNotNull(nameof(UiContext))]
 	private void InitializeContext()
 	{
-		//Debug.Assert(context == null || SynchronizationContext.Current == context);
 		UiContext ??= SynchronizationContext.Current ?? new SynchronizationContext();
 	}
 
@@ -535,7 +532,7 @@ public class TabInstance : IDisposable
 				return false;
 
 			//if (TabViewSettings.SelectionType == SelectionType.User && TabViewSettings.SelectedRows.Count == 0) // Need to split apart user selected rows?
-			if (TabViewSettings.SelectedRows.Count == 0)
+			if (TabViewSettings.SelectionType != SelectionType.None && TabViewSettings.SelectedRows.Count == 0)
 				return false;
 
 			// Only data is skippable?
