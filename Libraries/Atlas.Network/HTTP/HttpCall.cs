@@ -33,7 +33,11 @@ public class HttpCall
 	{
 		using CallTimer getCall = Call.Timer("Get Uri", new Tag("URI", uri));
 
-		HttpClient client = HttpClientManager.GetClient(accept);
+		HttpClientConfig clientConfig = new()
+		{
+			Accept = accept,
+		};
+		HttpClient client = HttpClientManager.GetClient(clientConfig);
 
 		for (int attempt = 1; ; attempt++)
 		{

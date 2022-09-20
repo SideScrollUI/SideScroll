@@ -9,7 +9,7 @@ public class Linker
 	public bool PublicOnly { get; set; }
 	public long MaxLength { get; set; } = 65500; // Uri.EscapeDataString limit
 
-#pragma warning disable CS1998 // subclasses can by async
+#pragma warning disable CS1998 // subclasses can be async
 	public virtual async Task<string?> GetLinkUriAsync(Call call, Bookmark bookmark)
 #pragma warning restore CS1998
 	{
@@ -23,7 +23,7 @@ public class Linker
 		return AtlasPrefix + base64;
 	}
 
-#pragma warning disable CS1998 // subclasses can by async
+#pragma warning disable CS1998 // subclasses can be async
 	public virtual async Task<Bookmark?> GetBookmarkAsync(Call call, string uri, bool checkVersion)
 #pragma warning restore CS1998
 	{

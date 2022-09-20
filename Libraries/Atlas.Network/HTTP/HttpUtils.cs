@@ -37,14 +37,20 @@ public static class HttpUtils
 		return null;
 	}
 
-	public static ViewHttpResponse? GetBytes(Call call, string uri, IProgress<HttpGetProgress>? progress = null)
+	public static ViewHttpResponse? GetBytes(Call call, string uri, TimeSpan? timeout = null, IProgress<HttpGetProgress>? progress = null)
 	{
-		return Task.Run(() => GetBytesAsync(call, uri, progress)).GetAwaiter().GetResult();
+		return Task.Run(() => GetBytesAsync(call, uri, timeout, progress)).GetAwaiter().GetResult();
 	}
 
-	public static async Task<ViewHttpResponse?> GetBytesAsync(Call call, string uri, IProgress<HttpGetProgress>? progress = null)
+	public static async Task<ViewHttpResponse?> GetBytesAsync(Call call, string uri, TimeSpan? timeout = null, IProgress<HttpGetProgress>? progress = null)
 	{
 		using CallTimer getCall = call.Timer("Get Uri", new Tag("Uri", uri));
+
+		HttpClientConfig clientConfig = new()
+		{
+			Timeout = timeout,
+		};
+		HttpClient client = HttpClientManager.GetClient(clientConfig);
 
 		for (int attempt = 1; attempt <= MaxAttempts; attempt++)
 		{
@@ -56,7 +62,7 @@ public static class HttpUtils
 			try
 			{
 				Stopwatch stopwatch = Stopwatch.StartNew();
-				HttpResponseMessage response = await Client.GetAsync(uri);
+				HttpResponseMessage response = await client.GetAsync(uri);
 
 				byte[] bytes = await ReadContentAsync(response.Content, progress);
 

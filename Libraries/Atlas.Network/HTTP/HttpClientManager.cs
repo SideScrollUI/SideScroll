@@ -1,5 +1,11 @@
 namespace Atlas.Network;
 
+
+public record HttpClientConfig(string? Accept = null, TimeSpan? Timeout = null)
+{
+	public bool IsDefault => Accept == null && Timeout == null;
+}
+
 // todo: Figure out a way to reuse default client and inject in request
 // alternative: HttpClientFactory
 public static class HttpClientManager
@@ -13,17 +19,20 @@ public static class HttpClientManager
 
 	private static readonly Dictionary<string, HttpClient> _clients = new();
 
-	public static HttpClient GetClient(string? accept = null)
+	public static HttpClient GetClient(HttpClientConfig config)
 	{
-		if (accept == null) return _defaultClient;
+		if (config.IsDefault) return _defaultClient;
 
 		lock (_clients)
 		{
-			if (_clients.TryGetValue(accept, out HttpClient? client)) return client;
+			string id = config.ToString();
+			if (_clients.TryGetValue(id, out HttpClient? client)) return client;
 
 			client = new HttpClient(_handler);
-			client.DefaultRequestHeaders.Add("Accept", accept);
-			_clients[accept] = client;
+			client.DefaultRequestHeaders.Add("Accept", config.Accept);
+			if (config.Timeout != null)
+				client.Timeout = config.Timeout.Value;
+			_clients[id] = client;
 			return client;
 		}
 	}
