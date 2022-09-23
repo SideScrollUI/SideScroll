@@ -110,7 +110,8 @@ public class TabDataSettings
 		public bool IsVisible(IList list)
 		{
 			if (PropertyInfo.GetCustomAttribute<HideAttribute>() == null &&
-				PropertyInfo.GetCustomAttribute<HideColumnAttribute>() == null)
+				PropertyInfo.GetCustomAttribute<HideColumnAttribute>() == null ||
+				list.Count == 0)
 				return true;
 
 			foreach (object obj in list)
