@@ -174,4 +174,21 @@ public class TestPropertyVisibility : TestBase
 		Assert.AreEqual(nameof(InlineData.InlineProperty), listMembers[0].MemberInfo.Name);
 		Assert.AreEqual(nameof(InlineData.InlineField), listMembers[1].MemberInfo.Name);
 	}
+
+	public class HideableClassData
+	{
+		[Hide(null)]
+		public bool? InlineProperty { get; set; }
+	}
+
+	[Test]
+	public void TestHideNullEmptyListVisible()
+	{
+		List<HideableClassData> list = new();
+		TabDataSettings tabDataSettings = new();
+		var propertyColumns = tabDataSettings.GetPropertiesAsColumns(typeof(HideableClassData));
+
+		Assert.AreEqual(1, propertyColumns.Count);
+		Assert.IsTrue(propertyColumns[0].IsVisible(list));
+	}
 }
