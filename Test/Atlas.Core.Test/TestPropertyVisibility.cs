@@ -178,7 +178,7 @@ public class TestPropertyVisibility : TestBase
 	public class HideableClassData
 	{
 		[Hide(null)]
-		public bool? InlineProperty { get; set; }
+		public bool? HideableProperty { get; set; }
 	}
 
 	[Test]
