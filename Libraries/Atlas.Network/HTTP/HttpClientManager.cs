@@ -29,9 +29,17 @@ public static class HttpClientManager
 			if (_clients.TryGetValue(id, out HttpClient? client)) return client;
 
 			client = new HttpClient(_handler);
-			client.DefaultRequestHeaders.Add("Accept", config.Accept);
+
+			if (config.Accept != null)
+			{
+				client.DefaultRequestHeaders.Add("Accept", config.Accept);
+			}
+
 			if (config.Timeout != null)
+			{
 				client.Timeout = config.Timeout.Value;
+			}
+
 			_clients[id] = client;
 			return client;
 		}
