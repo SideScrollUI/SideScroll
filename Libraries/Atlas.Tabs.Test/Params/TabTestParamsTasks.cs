@@ -21,7 +21,8 @@ public class TabTestParamsTasks : ITab
 			model.Actions = new List<TaskCreator>()
 			{
 				new TaskDelegate("Add", Add),
-				new TaskDelegateAsync("10s Task", LongTaskAsync, true),
+				new TaskDelegateAsync("Task with Progress", ShowProgressAsync, true),
+				new TaskDelegateAsync("Task with Sub Tasks", TaskCountAsync, true),
 			};
 
 			_paramTestItem = LoadData<ParamTestItem>(DataKey);
@@ -44,7 +45,7 @@ public class TabTestParamsTasks : ITab
 			_items.Add(result);
 		}
 
-		private async Task LongTaskAsync(Call call)
+		private async Task ShowProgressAsync(Call call)
 		{
 			call.TaskInstance!.ProgressMax = 10;
 
@@ -53,6 +54,18 @@ public class TabTestParamsTasks : ITab
 				await Task.Delay(1000);
 				call.Log.Add("Slept 1 second");
 				call.TaskInstance.Progress++;
+			}
+		}
+
+		private async Task TaskCountAsync(Call call)
+		{
+			call.TaskInstance!.TaskCount = 10;
+
+			for (int i = 0; i < 10; i++)
+			{
+				using var taskCall = call.StartTask("Sleeping 1 second");
+				await Task.Delay(1000);
+				taskCall.Log.Add("Slept 1 second");
 			}
 		}
 	}

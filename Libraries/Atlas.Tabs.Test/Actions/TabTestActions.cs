@@ -81,7 +81,7 @@ Actions add Buttons to the tab. When clicked, it will:
 				sleepCall.TaskInstance!.ProgressMax = i;
 				for (int j = 0; j < i; j++)
 				{
-					System.Threading.Thread.Sleep(1000);
+					Thread.Sleep(1000);
 					sleepCall.TaskInstance.Progress = j + 1;
 				}
 			});

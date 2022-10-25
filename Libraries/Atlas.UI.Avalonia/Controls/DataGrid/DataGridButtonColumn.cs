@@ -1,6 +1,8 @@
 using Atlas.Core;
 using Atlas.UI.Avalonia.Controls;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Atlas.UI.Avalonia;
@@ -31,9 +33,16 @@ public class DataGridButtonColumn : DataGridTextColumn // todo: fix type
 		return button;
 	}
 
-	private void Button_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	private void Button_Click(object? sender, RoutedEventArgs e)
 	{
-		Button button = (Button)sender!;
-		MethodInfo.Invoke(button.DataContext, new object[] { });
+		try
+		{
+			Button button = (Button)sender!;
+			MethodInfo.Invoke(button.DataContext, new object[] { });
+		}
+		catch (Exception ex)
+		{
+			Debug.WriteLine(ex.Message);
+		}
 	}
 }

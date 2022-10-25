@@ -53,6 +53,7 @@ public class TabControlTasks : Grid, IDisposable
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
+			MaxHeight = 150,
 		};
 
 		_tabControlDataGrid.AddButtonColumn(nameof(TaskInstance.Cancel));

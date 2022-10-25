@@ -68,6 +68,7 @@ public class TimeZoneView : IComparable
 		Local,
 		new TimeZoneView("PST / PDT", "Pacific Time", "Pacific Standard Time", TimeSpan.FromHours(-8)),
 		new TimeZoneView("EST / EDT", "Eastern Time", "Eastern Standard Time", TimeSpan.FromHours(-5)),
+		new TimeZoneView("CET", "Central European Time", "Central European Standard Time", TimeSpan.FromHours(1)),
 		new TimeZoneView("SGT", "Singapore Time", "Singapore Standard Time", TimeSpan.FromHours(8)),
 	};
 }

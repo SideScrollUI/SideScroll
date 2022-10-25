@@ -11,11 +11,11 @@ public class TabTestBookmarks : ITab
 
 	public class Instance : TabInstance
 	{
-		public override void Load(Call call, TabModel model)
+		public override void LoadUI(Call call, TabModel model)
 		{
 			//model.Items = Project.Navigator.History;
 
-			BookmarkNavigator navigator = Project.Navigator.DeepClone(call)!;
+			BookmarkNavigator navigator = Project.Navigator.DeepClone(call)!; // Clone from UI thread only
 			navigator.History.RemoveAt(navigator.History.Count - 1); // remove the current in progress bookmark
 			navigator.CurrentIndex = navigator.History.Count;
 

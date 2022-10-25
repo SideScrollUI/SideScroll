@@ -68,13 +68,30 @@ public class Call
 			Name = name,
 			ParentCall = this,
 		};
-		call.TaskInstance = TaskInstance?.AddSubTask(call);
 		call.Log = Log.Call(logLevel, name ?? "Timer", tags);
 
 		return call;
 	}
 
-	public CallTimer Timer(int taskCount, [CallerMemberName] string name = "", params Tag[] tags)
+	public CallTimer StartTask([CallerMemberName] string? name = null, params Tag[] tags)
+	{
+		return StartTask(LogLevel.Info, name, tags);
+	}
+
+	public CallTimer StartTask(LogLevel logLevel, [CallerMemberName] string? name = null, params Tag[] tags)
+	{
+		var call = new CallTimer()
+		{
+			Name = name,
+			ParentCall = this,
+		};
+		call.TaskInstance = TaskInstance?.AddSubTask(call);
+		call.Log = Log.Call(logLevel, name ?? "Task", tags);
+
+		return call;
+	}
+
+	public CallTimer StartTask(int taskCount, [CallerMemberName] string name = "", params Tag[] tags)
 	{
 		TaskInstance ??= new TaskInstance();
 		if (TaskInstance.TaskCount == 0)
@@ -83,7 +100,7 @@ public class Call
 		var allTags = tags.ToList();
 		allTags.Add(new Tag("Count", taskCount));
 
-		CallTimer timer = Timer(name, allTags.ToArray());
+		CallTimer timer = StartTask(name, allTags.ToArray());
 		timer.TaskInstance!.TaskCount = taskCount;
 		return timer;
 	}
@@ -103,7 +120,7 @@ public class Call
 
 	private static async Task<T2?> RunFuncAsync<T1, T2>(Call call, Func<Call, T1, Task<T2>> func, T1 item)
 	{
-		using CallTimer callTimer = call.Timer(item?.ToString());
+		using CallTimer callTimer = call.StartTask(item?.ToString());
 
 		try
 		{
@@ -121,7 +138,7 @@ public class Call
 
 	private static async Task<T3?> RunFuncAsync<T1, T2, T3>(Call call, Func<Call, T1, T2, Task<T3>> func, T1 item, T2 param1)
 	{
-		using CallTimer callTimer = call.Timer(item?.ToString());
+		using CallTimer callTimer = call.StartTask(item?.ToString());
 
 		try
 		{
@@ -139,7 +156,7 @@ public class Call
 
 	private static async Task<T4?> RunFuncAsync<T1, T2, T3, T4>(Call call, Func<Call, T1, T2, T3, Task<T4>> func, T1 item, T2 param1, T3 param2)
 	{
-		using CallTimer callTimer = call.Timer(item?.ToString());
+		using CallTimer callTimer = call.StartTask(item?.ToString());
 
 		try
 		{
@@ -173,7 +190,7 @@ public class Call
 	// Call func for every item in the list using the specified parameters
 	public async Task<List<T2>> RunAsync<T1, T2>(string name, Func<Call, T1, Task<T2?>> func, ICollection<T1> items, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
-		using CallTimer callTimer = Timer(items.Count, name);
+		using CallTimer callTimer = StartTask(items.Count, name);
 
 		using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
 
@@ -217,7 +234,7 @@ public class Call
 
 	public async Task<List<T3>> RunAsync<T1, T2, T3>(string name, Func<Call, T1, T2, Task<T3?>> func, ICollection<T1> items, T2 param1, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
-		using CallTimer callTimer = Timer(items.Count, name);
+		using CallTimer callTimer = StartTask(items.Count, name);
 
 		using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
 
@@ -261,7 +278,7 @@ public class Call
 
 	public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(string name, Func<Call, T1, T2, T3, Task<T4?>> func, ICollection<T1> items, T2 param1, T3 param2, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
-		using CallTimer callTimer = Timer(items.Count, name);
+		using CallTimer callTimer = StartTask(items.Count, name);
 
 		using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
 

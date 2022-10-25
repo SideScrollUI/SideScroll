@@ -87,8 +87,8 @@ public class TaskInstance : INotifyPropertyChanged
 		_stopwatch.Start();
 	}
 
-	private int _percent;
-	public int Percent
+	[Formatted]
+	public double Percent
 	{
 		get => _percent;
 		set
@@ -100,10 +100,11 @@ public class TaskInstance : INotifyPropertyChanged
 			NotifyPropertyChanged(nameof(Percent));
 		}
 	}
+	private double _percent;
 
-	private long _prevPercent;
-	private long _progress;
-	public long Progress
+	private double _prevPercent;
+	private double _progress;
+	public double Progress
 	{
 		get => _progress;
 		set
@@ -124,7 +125,7 @@ public class TaskInstance : INotifyPropertyChanged
 		}
 	}
 
-	private void AddProgress(long amount)
+	private void AddProgress(double amount)
 	{
 		if (amount <= 0)
 			return;
@@ -150,7 +151,7 @@ public class TaskInstance : INotifyPropertyChanged
 		else*/
 		if (ProgressMax > 0)
 		{
-			Percent = (int)(100 * _progress / ProgressMax);
+			Percent = 100 * _progress / ProgressMax;
 			NotifyPropertyChanged(nameof(Percent));
 		}
 	}
