@@ -68,6 +68,7 @@ public class Call
 			Name = name,
 			ParentCall = this,
 		};
+		call.TaskInstance = TaskInstance?.AddSubTask(call);
 		call.Log = Log.Call(logLevel, name ?? "Timer", tags);
 
 		return call;
@@ -84,6 +85,7 @@ public class Call
 		{
 			Name = name,
 			ParentCall = this,
+			IsTask = true,
 		};
 		call.TaskInstance = TaskInstance?.AddSubTask(call);
 		call.Log = Log.Call(logLevel, name ?? "Task", tags);

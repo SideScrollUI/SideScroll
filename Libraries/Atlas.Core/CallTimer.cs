@@ -8,6 +8,8 @@ public class CallTimer : Call, IDisposable
 	private readonly Stopwatch _stopwatch = new();
 	private readonly System.Timers.Timer _timer = new();
 
+	public bool IsTask;
+
 	public long ElapsedMilliseconds => _stopwatch.ElapsedMilliseconds;
 
 	public CallTimer()
@@ -46,8 +48,13 @@ public class CallTimer : Call, IDisposable
 
 		_timer.Dispose();
 
-		TaskInstance?.SetFinished();
-		if (TaskInstance == null)
+		if (TaskInstance != null && IsTask)
+		{
+			TaskInstance.SetFinished();
+		}
+		else
+		{
 			Log!.Add("Finished", new Tag("Time", ElapsedMilliseconds / 1000.0));
+		}
 	}
 }

@@ -22,7 +22,7 @@ public class TaskDelegateAsync : TaskCreator
 
 	public TaskDelegateAsync(CallActionAsync callAction, bool showTask = false, string? description = null)
 	{
-		Label = callAction.Method.Name.TrimEnd("Async");
+		Label = callAction.Method.Name.TrimEnd("Async").WordSpaced();
 		CallAction = callAction;
 		UseTask = true;
 		ShowTask = showTask;
