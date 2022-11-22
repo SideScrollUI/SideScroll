@@ -18,18 +18,11 @@ public class TabControlTasks : Grid, IDisposable
 
 	public bool AutoSelectNew = true;
 
-	private bool ShowTasks
-	{
-		get
-		{
-			foreach (var task in TabInstance.Model.Tasks)
-			{
-				if (task.ShowTask || task.TaskStatus == TaskStatus.Faulted)
-					return true;
-			}
-			return false;
-		}
-	}
+	private bool ShowTasks => TabInstance.Model.Tasks
+		.Any(task =>
+			task.ShowTask ||
+			task.TaskStatus == TaskStatus.Faulted ||
+			task.Log!.Level >= LogLevel.Error);
 
 	public IList SelectedItems => _tabControlDataGrid.SelectedItems;
 
