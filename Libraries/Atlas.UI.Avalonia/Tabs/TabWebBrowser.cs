@@ -1,6 +1,4 @@
 /*using Avalonia.Controls;
-using System;
-using System.Collections.Generic;
 using CefGlue.Avalonia;
 using Atlas.Tabs;
 using Avalonia.Layout;
