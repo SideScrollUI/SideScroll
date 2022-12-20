@@ -14,7 +14,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 	{
 	}
 
-	public DataRepoView(DataRepoInstance<T> dataRepo) : base(dataRepo.DataRepo, dataRepo.GroupId)
+	public DataRepoView(DataRepoInstance<T> dataRepoInstance) : base(dataRepoInstance.DataRepo, dataRepoInstance.GroupId)
 	{
 	}
 
@@ -26,12 +26,13 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		}
 	}
 
-	public void LoadAllOrderBy(Call call, string orderByMemberName)
+	public void LoadAllOrderBy(Call call, string orderByMemberName, bool ascending = true)
 	{
 		lock (DataRepo)
 		{
 			DataItemCollection<T> items = base.LoadAll(call);
-			Items = new DataItemCollection<T>(items.OrderBy(orderByMemberName));
+			var ordered = ascending ? items.OrderBy(orderByMemberName) : items.OrderByDescending(orderByMemberName);
+			Items = new DataItemCollection<T>(ordered);
 		}
 	}
 
@@ -62,17 +63,22 @@ public class DataRepoView<T> : DataRepoInstance<T>
 	{
 		lock (DataRepo)
 		{
-			Delete(key);
+			Delete(call, key);
 			base.Save(call, key, item);
 			Items.Add(key, item);
 		}
 	}
 
-	public override void Delete(string? key = null)
+	public override void Delete(Call? call, T item)
+	{
+		Delete(call, item!.ToString());
+	}
+
+	public override void Delete(Call? call, string? key = null)
 	{
 		lock (DataRepo)
 		{
-			base.Delete(key);
+			base.Delete(call, key);
 
 			var item = Items.FirstOrDefault(d => d.Key == key);
 			if (item != null)
@@ -80,11 +86,11 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		}
 	}
 
-	public override void DeleteAll()
+	public override void DeleteAll(Call? call)
 	{
 		lock (DataRepo)
 		{
-			base.DeleteAll();
+			base.DeleteAll(call);
 			Items.Clear();
 		}
 	}

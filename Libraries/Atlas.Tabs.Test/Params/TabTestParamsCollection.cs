@@ -45,8 +45,8 @@ public class TabTestParamsCollection : ITab
 			_dataRepoParams = DataApp.Open<ParamTestItem>("CollectionTest");
 			DataRepoInstance = _dataRepoParams;
 
-			var dataRefs = _dataRepoParams.LoadAllSorted(call);
-			_items = new ItemCollection<ParamTestItem>(dataRefs.Values);
+			var sortedValues = _dataRepoParams.LoadAll(call).SortedValues;
+			_items = new ItemCollection<ParamTestItem>(sortedValues);
 			model.Items = _items;
 		}
 

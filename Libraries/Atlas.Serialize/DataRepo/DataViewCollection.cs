@@ -27,6 +27,8 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	private Dictionary<TViewType, IDataItem> _dataItemLookup;
 	private Dictionary<IDataItem, TViewType> _valueLookup;
 
+	public override string ToString() => DataRepoView.ToString();
+
 	public DataViewCollection(DataRepoView<TDataType> dataRepoView, params object[] loadParams)
 	{
 		DataRepoView = dataRepoView;
@@ -103,8 +105,9 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 
 	public void Remove(IDataItem dataItem)
 	{
-		DataRepoView.Delete(dataItem.Key);
-		DataRepoSecondary?.Delete(dataItem.Key);
+		Call call = new();
+		DataRepoView.Delete(call, dataItem.Key);
+		DataRepoSecondary?.Delete(call, dataItem.Key);
 
 		if (_valueLookup.TryGetValue(dataItem, out TViewType? existing))
 		{

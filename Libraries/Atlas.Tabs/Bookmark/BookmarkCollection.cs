@@ -64,7 +64,7 @@ public class BookmarkCollection
 		{
 			Load(call, false);
 
-			Remove(bookmark.Path); // Remove previous bookmark
+			Remove(call, bookmark.Path); // Remove previous bookmark
 			_dataRepoBookmarks.Save(call, bookmark.Path, bookmark);
 			NewBookmark = Add(bookmark);
 		}
@@ -75,16 +75,16 @@ public class BookmarkCollection
 		TabBookmarkItem bookmark = (TabBookmarkItem)sender!;
 		lock (DataKey)
 		{
-			_dataRepoBookmarks.Delete(bookmark.Bookmark.Path);
+			_dataRepoBookmarks.Delete(null, bookmark.Bookmark.Path);
 			Items.Remove(bookmark);
 		}
 	}
 
-	public void Remove(string key)
+	public void Remove(Call call, string key)
 	{
 		lock (DataKey)
 		{
-			_dataRepoBookmarks.Delete(key);
+			_dataRepoBookmarks.Delete(call, key);
 
 			TabBookmarkItem? existing = Items.SingleOrDefault(i => i.Bookmark.Path == key);
 			if (existing != null)
@@ -92,8 +92,8 @@ public class BookmarkCollection
 		}
 	}
 
-	public void DeleteAll()
+	public void DeleteAll(Call? call)
 	{
-		_dataRepoBookmarks.DeleteAll();
+		_dataRepoBookmarks.DeleteAll(call);
 	}
 }

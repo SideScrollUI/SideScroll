@@ -17,6 +17,8 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	public readonly DataRepo DataRepo;
 	public string GroupId { get; set; }
 
+	public override string ToString() => GroupId;
+
 	public DataRepoInstance(DataRepo dataRepo, string groupId)
 	{
 		DataRepo = dataRepo;
@@ -43,18 +45,18 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		return DataRepo.LoadAll<T>(call, GroupId, lazy);
 	}
 
-	public SortedDictionary<string, T> LoadAllSorted(Call? call = null, bool lazy = false)
+	public virtual void Delete(Call? call, T item)
 	{
-		return DataRepo.LoadAllSorted<T>(call, GroupId, lazy);
+		Delete(call, item!.ToString());
 	}
 
-	public virtual void Delete(string? key = null)
+	public virtual void Delete(Call? call = null, string? key = null)
 	{
-		DataRepo.Delete<T>(GroupId, key ?? DefaultKey);
+		DataRepo.Delete<T>(call, GroupId, key ?? DefaultKey);
 	}
 
-	public virtual void DeleteAll()
+	public virtual void DeleteAll(Call? call)
 	{
-		DataRepo.DeleteAll<T>(GroupId);
+		DataRepo.DeleteAll<T>(call, GroupId);
 	}
 }

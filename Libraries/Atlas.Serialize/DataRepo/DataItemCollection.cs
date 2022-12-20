@@ -8,17 +8,18 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 {
 	public SortedDictionary<string, T> Lookup { get; set; } = new();
 
-	public List<T?> Values => this.Select(o => o.Value).ToList();
+	public IEnumerable<T?> Values => this.Select(o => o.Value);
+	public IEnumerable<T?> SortedValues => Lookup.Values.Select(o => o);
 
 	public DataItemCollection()	{ }
 
 	// Don't implement List<T>, it isn't sortable
 	public DataItemCollection(IEnumerable<DataItem<T>> iEnumerable) : base(iEnumerable)
 	{
-		Lookup = Map();
+		Lookup = CreateLookup();
 	}
 
-	private SortedDictionary<string, T> Map()
+	private SortedDictionary<string, T> CreateLookup()
 	{
 		var entries = new SortedDictionary<string, T>();
 		foreach (DataItem<T> item in ToList())

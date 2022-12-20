@@ -73,7 +73,7 @@ public class TaskInstance : INotifyPropertyChanged
 		Initialize();
 	}
 
-	public TaskInstance(string label)
+	public TaskInstance(string? label)
 	{
 		Label = label;
 

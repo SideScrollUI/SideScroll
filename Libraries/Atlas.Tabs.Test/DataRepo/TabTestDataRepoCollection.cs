@@ -35,14 +35,14 @@ public class TabTestDataRepoCollection : ITab
 		{
 			DataRepoInstance = _dataRepoItems = DataApp.Open<SampleItem>(RepoId);
 
-			var dataRefs = _dataRepoItems.LoadAllSorted(call);
-			_sampleItems = new ItemCollection<SampleItem>(dataRefs.Values);
+			var sortedValues = _dataRepoItems.LoadAll(call).SortedValues;
+			_sampleItems = new ItemCollection<SampleItem>(sortedValues);
 		}
 
 		private void Add(Call call)
 		{
 			var sampleItem = new SampleItem(_sampleItems!.Count, "Item " + _sampleItems.Count);
-			RemoveItem(sampleItem!.Name!); // Remove previous result so refocus works
+			RemoveItem(call, sampleItem!.Name!); // Remove previous result so refocus works
 			_dataRepoItems!.Save(call, sampleItem.ToString()!, sampleItem);
 			_sampleItems.Add(sampleItem);
 		}
@@ -56,7 +56,7 @@ public class TabTestDataRepoCollection : ITab
 		private void Replace(Call call)
 		{
 			var sampleItem = new SampleItem(_sampleItems!.Count, "Item 0");
-			RemoveItem(sampleItem.Name!); // Remove previous result so refocus works
+			RemoveItem(call, sampleItem.Name!); // Remove previous result so refocus works
 			_dataRepoItems!.Save(call, sampleItem.ToString()!, sampleItem);
 			_sampleItems.Add(sampleItem);
 		}
@@ -72,19 +72,19 @@ public class TabTestDataRepoCollection : ITab
 
 			foreach (SampleItem item in selectedItems)
 			{
-				RemoveItem(item.Name!);
+				RemoveItem(call, item.Name!);
 			}
 		}
 
 		private void DeleteAll(Call call)
 		{
-			_dataRepoItems!.DeleteAll();
+			_dataRepoItems!.DeleteAll(call);
 			_sampleItems!.Clear();
 		}
 
-		public void RemoveItem(string key)
+		public void RemoveItem(Call call, string key)
 		{
-			_dataRepoItems!.Delete(key);
+			_dataRepoItems!.Delete(call, key);
 			SampleItem? existing = _sampleItems!.SingleOrDefault(i => i.Name == key);
 			if (existing != null)
 				_sampleItems!.Remove(existing);

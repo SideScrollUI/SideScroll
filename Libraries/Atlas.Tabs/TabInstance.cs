@@ -815,7 +815,7 @@ public class TabInstance : IDisposable
 
 	public void SetEndLoad()
 	{
-		Project.DataApp.Delete(typeof(bool), LoadedPath);
+		Project.DataApp.Delete(null, typeof(bool), LoadedPath);
 	}
 
 	// for detecting parent/child loops

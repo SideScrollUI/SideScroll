@@ -86,7 +86,7 @@ public class TabBookmarks : ITab
 
 		private void DeleteAll(Call call)
 		{
-			Tab.Bookmarks.DeleteAll();
+			Tab.Bookmarks.DeleteAll(call);
 			Tab.Bookmarks.Load(call, true);
 		}
 	}
