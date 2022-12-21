@@ -76,6 +76,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 
 	public override void Delete(Call? call, string? key = null)
 	{
+		key ??= DefaultKey;
 		lock (DataRepo)
 		{
 			base.Delete(call, key);

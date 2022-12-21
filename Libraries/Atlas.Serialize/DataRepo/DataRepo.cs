@@ -157,7 +157,9 @@ public class DataRepo
 				{
 					T? obj = serializerFile.Load<T>(call, lazy);
 					if (obj != null)
+					{
 						entries.Add(serializerFile.LoadHeader(call).Name, obj);
+					}
 				}
 			}
 		}
