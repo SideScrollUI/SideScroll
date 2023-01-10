@@ -27,6 +27,7 @@ public class TabText : ITab
 		public override void LoadUI(Call call, TabModel model)
 		{
 			model.MinDesiredWidth = 100;
+			model.MaxDesiredWidth = 1000;
 
 			var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
 			tabAvaloniaEdit.SetFormattedJson(Tab.Text);

@@ -17,9 +17,10 @@ public class TabControlFormattedComboBox : ComboBox, IStyleable, ILayoutable
 
 	private List<FormattedItem>? _items;
 
-	public TabControlFormattedComboBox(ListProperty property)
+	public TabControlFormattedComboBox(ListProperty property, IList list)
 	{
 		Property = property;
+		Items = list;
 
 		InitializeComponent();
 	}
@@ -77,7 +78,7 @@ public class TabControlFormattedComboBox : ComboBox, IStyleable, ILayoutable
 	{
 		set
 		{
-			if (value is FormattedItem item && item.Object!.ToString() != Property.Value!.ToString())
+			if (value is FormattedItem item && item.Object?.ToString() != Property.Value!.ToString())
 				Property.Value = item.Object;
 		}
 		get => GetFormattedItem(Property.Value);

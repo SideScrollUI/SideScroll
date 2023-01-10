@@ -11,6 +11,12 @@ public class TabControlSearchToolbar : TabControlToolbar
 	public ToolbarButton ButtonLoadAdd;
 	public ToolbarButton ButtonLoadNext;
 	public ToolbarButton ButtonSleep;
+
+	public ToolbarRadioButton RadioButtonAscending;
+	public ToolbarRadioButton RadioButtonDescending;
+
+	public TextBox TextBoxLimit;
+
 	public ToolbarButton ButtonCopyClipBoard;
 
 	public TextBox TextBoxStatus;
@@ -24,14 +30,24 @@ public class TabControlSearchToolbar : TabControlToolbar
 		ButtonSearch = AddButton("Search", Icons.Streams.Search);
 		ButtonLoadNext = AddButton("Next", Icons.Streams.Forward);
 		ButtonSleep = AddButton("Sleep", Icons.Streams.Refresh);
-
 		AddSeparator();
+
+		RadioButtonAscending = AddRadioButton("Ascending");
+		RadioButtonDescending = AddRadioButton("Descending");
+		RadioButtonAscending.IsChecked = true;
+		AddSeparator();
+
+		AddLabel("Limit");
+		TextBoxLimit = AddText("10", 60);
+		ToolTip.SetTip(TextBoxLimit, "1 - 100");
+		AddSeparator();
+
 		ButtonLoadAdd = AddButton("Add", Icons.Streams.Add);
-
 		AddSeparator();
+
 		AddButton("Save", Icons.Streams.Save);
-
 		AddSeparator();
+
 		ButtonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
 		TextBoxStatus = AddLabelText("Status");
 	}

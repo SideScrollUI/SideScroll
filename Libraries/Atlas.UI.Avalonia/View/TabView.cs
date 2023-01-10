@@ -128,7 +128,7 @@ public class TabView : Grid, IDisposable
 	// Gets called multiple times when re-initializing
 	private void InitializeControls()
 	{
-		Background = Theme.TabBackground; // doesn't do anything
+		Background = Theme.TabBackground;
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Stretch;
 		//Focusable = true;
@@ -220,6 +220,7 @@ public class TabView : Grid, IDisposable
 		{
 			Instance.DefaultAction?.Invoke();
 			e.Handled = true;
+			return;
 		}
 	}
 
@@ -478,7 +479,7 @@ public class TabView : Grid, IDisposable
 
 	protected void AddControlString(string text)
 	{
-		var textBox = new TextBox
+		TextBox textBox = new()
 		{
 			Text = text,
 			Foreground = Theme.BackgroundText,

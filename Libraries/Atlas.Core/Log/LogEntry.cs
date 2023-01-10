@@ -91,7 +91,7 @@ public class LogEntry : INotifyPropertyChanged
 	protected int _entries;
 
 	[HideRow(null)]
-	public float? Duration
+	public TimeSpan? Duration
 	{
 		get => _duration;
 		set
@@ -100,7 +100,7 @@ public class LogEntry : INotifyPropertyChanged
 			CreateEventPropertyChanged();
 		}
 	}
-	private float? _duration;
+	private TimeSpan? _duration;
 
 	private string TagText
 	{

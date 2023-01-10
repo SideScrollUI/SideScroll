@@ -46,7 +46,7 @@ public class LogTimer : Log, IDisposable
 
 	private void UpdateDuration()
 	{
-		Duration = _stopwatch.ElapsedMilliseconds / 1000.0f;
+		Duration = _stopwatch.Elapsed;
 
 		CreateEventPropertyChanged(nameof(Duration));
 	}

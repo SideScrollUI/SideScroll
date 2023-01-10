@@ -12,6 +12,14 @@ public class TabFile : ITab
 {
 	public static Dictionary<string, Type> ExtensionTypes = new();
 
+	public static void RegisterType<T>(params string[] extensions)
+	{
+		foreach (string extension in extensions)
+		{
+			ExtensionTypes[extension] = typeof(T);
+		}
+	}
+
 	public string Path;
 
 	public TabFile(string path)

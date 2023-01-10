@@ -21,7 +21,7 @@ public interface IItemCollection
 	string? CustomSettingsPath { get; set; }
 }
 
-// See ItemCollectionUI for a thread safe version
+// See ItemCollectionUI for a UI thread safe version
 public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComparer //, IRaiseItemChangedEvents //
 {
 	public string? ColumnName { get; set; }

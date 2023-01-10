@@ -7,6 +7,7 @@
 *.psess
 *.suo
 *.tmp
+*.user
 *.vspx
 *.zip
 *.DS_Store

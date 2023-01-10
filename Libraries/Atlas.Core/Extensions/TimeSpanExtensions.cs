@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Atlas.Extensions;
 
 public static class TimeSpanExtensions
@@ -33,6 +35,51 @@ public static class TimeSpanExtensions
 			return value;
 		}
 		return timeSpan.TotalSeconds + " Seconds";
+	}
+
+	public static string FormattedShort(this TimeSpan timeSpan)
+	{
+		StringBuilder sb = new();
+
+		if ((int)timeSpan.TotalDays > 0)
+		{
+			sb.Append((int)timeSpan.TotalDays);
+			sb.Append(':');
+		}
+
+		if ((int)timeSpan.TotalHours > 0)
+		{
+			sb.Append((int)timeSpan.Hours);
+			sb.Append(':');
+			if (timeSpan.Minutes < 10)
+				sb.Append('0');
+		}
+
+		if ((int)timeSpan.TotalMinutes > 0)
+		{
+			sb.Append(timeSpan.Minutes.ToString());
+			sb.Append(':');
+			if (timeSpan.Seconds < 10)
+				sb.Append('0');
+		}
+
+		sb.Append(timeSpan.Seconds.ToString());
+
+		int millis = timeSpan.Milliseconds;
+		if (millis > 0)
+		{
+			sb.Append('.');
+			for (int milliPlace = 100; ; milliPlace /= 10)
+			{
+				if (millis >= milliPlace)
+				{
+					sb.Append(millis / milliPlace);
+					break;
+				}
+			}
+		}
+
+		return sb.ToString();
 	}
 
 	public static List<TimeSpan> CommonTimeSpans { get; set; } = new()

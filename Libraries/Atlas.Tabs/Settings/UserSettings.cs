@@ -7,6 +7,7 @@ public class UserSettings
 	public string? ProjectPath { get; set; }
 	public string? BookmarkPath { get; set; }
 
+	[Hidden]
 	public string SettingsPath => Paths.Combine(ProjectPath, @"Settings.atlas");
 
 	public bool AutoLoad { get; set; } = true;

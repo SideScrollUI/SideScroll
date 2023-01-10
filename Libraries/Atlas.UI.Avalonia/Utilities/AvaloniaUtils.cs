@@ -13,8 +13,6 @@ public static class AvaloniaUtils
 	// TextBlock control doesn't allow selecting text, so add a Copy command to the context menu
 	public static void AddContextMenu(TextBlock textBlock)
 	{
-		var contextMenu = new ContextMenu();
-
 		var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
 
 		var list = new AvaloniaList<object>();
@@ -22,7 +20,6 @@ public static class AvaloniaUtils
 		var menuItemCopy = new TabMenuItem()
 		{
 			Header = "_Copy",
-			Foreground = Brushes.Black,
 		};
 		menuItemCopy.Click += delegate
 		{
@@ -30,18 +27,16 @@ public static class AvaloniaUtils
 		};
 		list.Add(menuItemCopy);
 
-		contextMenu.Items = list;
+		ContextMenu contextMenu = new()
+		{
+			Items = list,
+		};
 
 		textBlock.ContextMenu = contextMenu;
 	}
 
 	public static void AddContextMenu(TextBox textBox)
 	{
-		var contextMenu = new ContextMenu()
-		{
-			Foreground = Theme.Foreground,
-		};
-
 		var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>()!;
 
 		var list = new AvaloniaList<object>();
@@ -66,7 +61,10 @@ public static class AvaloniaUtils
 
 		//list.Add(new Separator());
 
-		contextMenu.Items = list;
+		ContextMenu contextMenu = new()
+		{
+			Items = list,
+		};
 
 		textBox.ContextMenu = contextMenu;
 	}

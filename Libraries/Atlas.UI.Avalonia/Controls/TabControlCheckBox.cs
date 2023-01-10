@@ -29,7 +29,6 @@ public class TabControlCheckBox : CheckBox, IStyleable, ILayoutable
 		BorderBrush = new SolidColorBrush(Colors.Black);
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		BorderThickness = new Thickness(1);
-		//MinWidth = 50;
 		MaxWidth = TabControlParams.ControlMaxWidth;
 		Margin = new Thickness(2, 2);
 		//Padding = new Thickness(6, 3);

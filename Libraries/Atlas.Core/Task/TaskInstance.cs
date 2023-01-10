@@ -102,6 +102,9 @@ public class TaskInstance : INotifyPropertyChanged
 	}
 	private double _percent;
 
+	public TimeSpan Elapsed => (DateTime.UtcNow - Started);
+	public TimeSpan? ETA => Percent > 0.0 ? (Elapsed * 100.0 / Percent) - Elapsed : null;
+
 	private double _prevPercent;
 	private double _progress;
 	public double Progress
@@ -252,7 +255,14 @@ public class TaskInstance : INotifyPropertyChanged
 
 	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		Creator?.Context!.Post(NotifyPropertyChangedContext, propertyName);
+		if (Creator != null)
+		{
+			Creator.Context!.Post(NotifyPropertyChangedContext, propertyName);
+		}
+		else
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 
 	private void NotifyPropertyChangedContext(object? state)

@@ -64,7 +64,6 @@ public class TabDirectory : ITab
 
 		private List<FileView> GetFiles(Call call)
 		{
-			var nodes = new List<FileView>();
 			try
 			{
 				return Directory.EnumerateFiles(Tab.Path)
@@ -76,12 +75,11 @@ public class TabDirectory : ITab
 				call.Log.Add(ex);
 			}
 
-			return nodes;
+			return new List<FileView>();
 		}
 
 		private List<DirectoryView> GetDirectories(Call call)
 		{
-			var directories = new List<DirectoryView>();
 			try
 			{
 				return Directory.EnumerateDirectories(Tab.Path)
@@ -93,7 +91,7 @@ public class TabDirectory : ITab
 				call.Log.Add(ex);
 			}
 
-			return directories;
+			return new List<DirectoryView>();
 		}
 
 		private void OpenFolder(Call call)

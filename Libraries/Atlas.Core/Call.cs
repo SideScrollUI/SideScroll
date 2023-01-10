@@ -87,7 +87,10 @@ public class Call
 			ParentCall = this,
 			IsTask = true,
 		};
-		call.TaskInstance = TaskInstance?.AddSubTask(call) ?? new TaskInstance(name);
+		call.TaskInstance = TaskInstance?.AddSubTask(call) ?? new TaskInstance(name)
+		{
+			TaskCount = 1,
+		};
 		call.Log = Log.Call(logLevel, name ?? "Task", tags);
 
 		return call;
