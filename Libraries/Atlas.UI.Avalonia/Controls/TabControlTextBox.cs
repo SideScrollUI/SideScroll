@@ -71,7 +71,7 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 		if (IsReadOnly)
 			Background = Theme.TextBackgroundDisabled;
 
-		PasswordCharAttribute? passwordCharAttribute = property.PropertyInfo.GetCustomAttribute<PasswordCharAttribute>();
+		PasswordCharAttribute? passwordCharAttribute = property.GetCustomAttribute<PasswordCharAttribute>();
 		if (passwordCharAttribute != null)
 			PasswordChar = passwordCharAttribute.Character;
 
@@ -84,13 +84,21 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 			MaxHeight = 500;
 		}
 
-		AcceptsReturnAttribute? acceptsReturnAttribute = property.PropertyInfo.GetCustomAttribute<AcceptsReturnAttribute>();
+		AcceptsReturnAttribute? acceptsReturnAttribute = property.GetCustomAttribute<AcceptsReturnAttribute>();
 		if (acceptsReturnAttribute != null)
 		{
 			AcceptsReturn = acceptsReturnAttribute.Allow;
 		}
 
-		MaxWidth = TabControlParams.ControlMaxWidth;
+		MaxWidthAttribute? maxWidthAttribute = property.GetCustomAttribute<MaxWidthAttribute>();
+		if (maxWidthAttribute != null)
+		{
+			MaxWidth = maxWidthAttribute.MaxWidth;
+		}
+		else
+		{
+			MaxWidth = TabControlParams.ControlMaxWidth;
+		}
 
 		BindProperty(property);
 
@@ -99,7 +107,7 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 
 	private void SetWatermark(ListProperty property)
 	{
-		WatermarkAttribute? attribute = property.PropertyInfo.GetCustomAttribute<WatermarkAttribute>();
+		WatermarkAttribute? attribute = property.GetCustomAttribute<WatermarkAttribute>();
 		if (attribute == null)
 			return;
 

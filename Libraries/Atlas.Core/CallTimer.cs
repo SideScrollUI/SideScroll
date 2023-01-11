@@ -39,7 +39,7 @@ public class CallTimer : Call, IDisposable
 	private void UpdateDuration()
 	{
 		if (Log != null)
-			Log.Duration = ElapsedMilliseconds / 1000.0f;
+			Log.Duration = _stopwatch.Elapsed;
 	}
 
 	public void Dispose()
@@ -54,7 +54,7 @@ public class CallTimer : Call, IDisposable
 		}
 		else
 		{
-			Log!.Add("Finished", new Tag("Time", ElapsedMilliseconds / 1000.0));
+			Log!.Add("Finished", new Tag("Duration", _stopwatch.Elapsed));
 		}
 	}
 }

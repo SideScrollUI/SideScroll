@@ -101,10 +101,7 @@ public class TabControlToolbar : Grid, IDisposable
 		AddControl(textBlock);
 
 		PropertyInfo propertyInfo = toolComboBox.GetType().GetProperty(nameof(IToolComboBox.SelectedObject))!;
-		var comboBox = new TabControlFormattedComboBox(new ListProperty(toolComboBox, propertyInfo))
-		{
-			Items = toolComboBox.GetItems(),
-		};
+		var comboBox = new TabControlFormattedComboBox(new ListProperty(toolComboBox, propertyInfo), toolComboBox.GetItems());
 		AddControl(comboBox);
 		return comboBox;
 	}
@@ -115,7 +112,7 @@ public class TabControlToolbar : Grid, IDisposable
 		if (Children.Count == 0)
 			return;
 
-		var panel = new Panel()
+		Panel panel = new()
 		{
 			Background = Theme.ToolbarButtonSeparator,
 			Width = 2,
@@ -127,7 +124,7 @@ public class TabControlToolbar : Grid, IDisposable
 	// For right aligning
 	public void AddFill()
 	{
-		var panel = new Panel()
+		Panel panel = new()
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 		};

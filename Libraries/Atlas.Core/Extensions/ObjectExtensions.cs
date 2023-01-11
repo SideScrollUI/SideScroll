@@ -40,6 +40,11 @@ public static class ObjectExtensions
 					return timeSpan.FormattedDecimal();
 			}
 
+			if (type.IsEnum)
+			{
+				return obj.ToString().WordSpaced();
+			}
+
 			// use any ToString() that overrides the base
 			MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes)!;
 			if (toStringMethod.DeclaringType != typeof(object) && toStringMethod.DeclaringType != typeof(ValueType))

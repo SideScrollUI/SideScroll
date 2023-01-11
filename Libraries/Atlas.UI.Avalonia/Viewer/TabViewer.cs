@@ -122,8 +122,8 @@ public class TabViewer : Grid
 			return;
 
 		Toolbar = new TabViewerToolbar(this);
-		Toolbar.ButtonLink.AddAsync(LinkAsync);
-		Toolbar.ButtonImport.AddAsync(ImportClipboardBookmarkAsync);
+		Toolbar.ButtonLink?.AddAsync(LinkAsync);
+		Toolbar.ButtonImport?.AddAsync(ImportClipboardBookmarkAsync);
 		Children.Add(Toolbar);
 	}
 

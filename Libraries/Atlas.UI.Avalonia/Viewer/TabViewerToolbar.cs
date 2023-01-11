@@ -10,9 +10,11 @@ public class TabViewerToolbar : TabControlToolbar
 
 	public ToolbarButton ButtonBack;
 	public ToolbarButton ButtonForward;
-	public ToolbarButton ButtonLink;
-	public ToolbarButton ButtonImport;
+
 	public ToolbarButton ButtonRefresh;
+
+	public ToolbarButton? ButtonLink;
+	public ToolbarButton? ButtonImport;
 
 	public RelayCommand CommandBindingBack;
 	public RelayCommand CommandBindingForward;
@@ -45,7 +47,6 @@ public class TabViewerToolbar : TabControlToolbar
 		//CommandBinder.
 		//CommandBindings.Add(commandBindingBack);
 
-
 		//var gesture2 = new KeyGesture { Key = Key.B, Modifiers = InputModifiers.Control };
 		//HotKeyManager.SetHotKey(button, gesture1);
 
@@ -55,17 +56,18 @@ public class TabViewerToolbar : TabControlToolbar
 
 		AddSeparator();
 		ButtonRefresh = AddButton("Refresh (Ctrl+R)", Icons.Streams.Refresh);
-		//buttonRefresh.Add();
 		ButtonRefresh.Add(Refresh);
 
-		AddSeparator();
-		ButtonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
-		ButtonImport = AddButton("Import Link from Clipboard", Icons.Streams.Import);
+		if (tabViewer.Project.ProjectSettings.EnableLinking)
+		{
+			AddSeparator();
+			ButtonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
+			ButtonImport = AddButton("Import Link from Clipboard", Icons.Streams.Import);
+		}
 
 		// Handle in BaseWindow
 		//var refreshGesture = new KeyGesture { Key = Key.F5 };
 		//HotKeyManager.SetHotKey(buttonRefresh, refreshGesture);
-
 
 		/*
 		var buttonBack = new ToolbarButton2()

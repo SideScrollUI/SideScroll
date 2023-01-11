@@ -77,6 +77,7 @@ public class TabDateTimePicker : Grid, IStyleable
 			Background = Property.Editable ? Theme.Background : Brushes.LightGray,
 			BorderBrush = Brushes.Black,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalContentAlignment = VerticalAlignment.Center,
 			BorderThickness = new Thickness(1),
 			SelectedDateFormat = CalendarDatePickerFormat.Custom,
 			CustomDateFormatString = "yyyy/M/d",

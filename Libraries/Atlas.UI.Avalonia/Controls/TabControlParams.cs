@@ -65,7 +65,7 @@ public class TabControlParams : Grid
 
 		AddRowDefinition();
 
-		var textBlock = new TextBlock()
+		TextBlock textBlock = new()
 		{
 			Text = summaryAttribute.Summary,
 			FontSize = 14,
@@ -87,7 +87,7 @@ public class TabControlParams : Grid
 		int rowIndex = AddRowDefinition();
 		int columnIndex = 0;
 
-		var controls = new List<Control>();
+		List<Control> controls = new();
 		foreach (PropertyInfo propertyInfo in properties)
 		{
 			var property = new ListProperty(obj, propertyInfo);
@@ -105,7 +105,7 @@ public class TabControlParams : Grid
 	private int AddRowDefinition()
 	{
 		int rowIndex = RowDefinitions.Count;
-		var rowDefinition = new RowDefinition()
+		RowDefinition rowDefinition = new()
 		{
 			Height = new GridLength(1, GridUnitType.Auto),
 		};
@@ -158,7 +158,6 @@ public class TabControlParams : Grid
 			Margin = new Thickness(0, 3, 10, 3),
 			Foreground = Theme.BackgroundText,
 			VerticalAlignment = VerticalAlignment.Center,
-			//HorizontalAlignment = HorizontalAlignment.Stretch,
 			MaxWidth = 500,
 			[Grid.RowProperty] = rowIndex,
 			[Grid.ColumnProperty] = 0,
@@ -175,7 +174,7 @@ public class TabControlParams : Grid
 		Type type = property.UnderlyingType;
 
 		BindListAttribute? listAttribute = type.GetCustomAttribute<BindListAttribute>();
-		listAttribute ??= property.PropertyInfo.GetCustomAttribute<BindListAttribute>();
+		listAttribute ??= property.GetCustomAttribute<BindListAttribute>();
 
 		Control? control = null;
 		if (type == typeof(bool))

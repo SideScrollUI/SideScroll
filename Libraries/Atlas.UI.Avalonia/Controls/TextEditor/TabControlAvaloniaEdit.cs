@@ -71,7 +71,6 @@ public class TabControlAvaloniaEdit : Grid
 			VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
 			Padding = new Thickness(6),
 			FontSize = 14,
-			SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"), // handles JSON too
 		};
 		TextEditor.Options.AllowScrollBelowDocument = false; // Breaks top alignment
 		Children.Add(TextEditor);
@@ -109,9 +108,10 @@ public class TabControlAvaloniaEdit : Grid
 		get => TextEditor.Text;
 		set
 		{
-			if (value is string s && s.StartsWith("{") && !s.Contains('\n'))
+			if (value.StartsWith("{"))
 			{
 				TextEditor.FontFamily = new FontFamily("Courier New"); // Use monospaced font for Json
+				TextEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"); // handles JSON too
 			}
 			TextEditor.Text = value;
 			// UpdateLineNumbers(); // Enable for all?

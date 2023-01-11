@@ -73,6 +73,7 @@ public class ListProperty : ListMember, IPropertyEditable
 				}
 
 				PropertyInfo.SetValue(Object, value);
+				_valueCached = false;
 
 				/*if (Object is INotifyPropertyChanged notifyPropertyChanged)
 				{
@@ -185,7 +186,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	public static ItemCollection<ListProperty> Sort(ItemCollection<ListProperty> listProperties)
 	{
 		var sortedProperties = listProperties
-			.OrderByDescending(i => i.PropertyInfo.GetCustomAttribute<AutoSelectAttribute>() != null)
+			.OrderByDescending(i => i.GetCustomAttribute<AutoSelectAttribute>() != null)
 			.ThenByDescending(i => TabUtils.ObjectHasLinks(i, true));
 
 		var linkSorted = new ItemCollection<ListProperty>(sortedProperties);

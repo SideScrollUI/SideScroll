@@ -46,6 +46,7 @@ public class TabControlSearch : Grid, IStyleable
 	{
 		TextBoxSearch = new TextBox()
 		{
+			VerticalContentAlignment = VerticalAlignment.Center,
 			Padding = new Thickness(5, 3, 25, 3),
 			Watermark = "Search",
 			Background = Theme.ToolbarTextBackground,

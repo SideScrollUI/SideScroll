@@ -64,6 +64,7 @@
         <!-- Links -->
         <SolidColorBrush x:Key="ThemeHasLinksBrush">#303060</SolidColorBrush>
         <SolidColorBrush x:Key="ThemeNoLinksBrush">#0f1a2a</SolidColorBrush>
+        <SolidColorBrush x:Key="ThemeGridStyledLinesBrush">#1c1a34</SolidColorBrush>
 
         <!-- ScrollBar -->
         <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush">#38409a</SolidColorBrush>
@@ -95,7 +96,7 @@
         <SolidColorBrush x:Key="ToolbarButtonBackgroundHoverBrush">#2040a0</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarButtonSeparatorBrush">#004db0</SolidColorBrush>
 
-        <SolidColorBrush x:Key="ToolbarLabelForeground">#8888FF</SolidColorBrush>
+        <SolidColorBrush x:Key="ToolbarLabelForegroundBrush">#8888FF</SolidColorBrush>
 
         <SolidColorBrush x:Key="ToolbarTextBackgroundBrush">#453e77</SolidColorBrush>
         <SolidColorBrush x:Key="ToolbarTextForegroundBrush">#d0d0e8</SolidColorBrush>
@@ -131,6 +132,8 @@
         <sys:Double x:Key="ScrollBarThumbThickness">12</sys:Double>
 
         <sys:Double x:Key="LargeChange">20</sys:Double>
+
+        <sys:Double x:Key="SplitterSize">5</sys:Double>
 
     </Style.Resources>
 </Style>
