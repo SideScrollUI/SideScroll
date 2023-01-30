@@ -1,8 +1,10 @@
 using Atlas.Resources;
+using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using System.Diagnostics.CodeAnalysis;
@@ -57,6 +59,12 @@ public class TabControlSearch : Grid, IStyleable
 		TextBoxSearch.Resources.Add("ThemeBackgroundHoverBrush", TextBoxSearch.Background); // Disable for now
 		TextBoxSearch.Resources.Add("ThemeBorderMidBrush", Theme.ToolbarBorderMid);
 		TextBoxSearch.Resources.Add("ThemeBorderHighBrush", Theme.ToolbarBorderHigh);
+
+		// Fluent
+		TextBoxSearch.Resources.Add("TextControlBackgroundPointerOver", TextBoxSearch.Background);
+		TextBoxSearch.Resources.Add("TextControlBackgroundFocused", TextBoxSearch.Background);
+		TextBoxSearch.Resources.Add("TextControlPlaceholderForegroundFocused", TextBoxSearch.Foreground);
+		TextBoxSearch.Resources.Add("TextControlPlaceholderForegroundPointerOver", TextBoxSearch.Foreground);
 
 		Children.Add(TextBoxSearch);
 	}

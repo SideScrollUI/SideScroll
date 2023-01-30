@@ -2,6 +2,7 @@ using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
+using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -495,6 +496,9 @@ public class TabView : Grid, IDisposable
 			TextWrapping = TextWrapping.Wrap,
 			AcceptsReturn = true,
 		};
+		textBox.Resources.Add("TextBackgroundDisabledBrush", Brushes.Transparent);
+		//textBox.Resources.Add("TextControlBackgroundFocused", Brushes.Transparent);
+		
 		AvaloniaUtils.AddContextMenu(textBox);
 		_tabParentControls!.AddControl(textBox, false, SeparatorType.Spacer);
 	}
@@ -527,6 +531,7 @@ public class TabView : Grid, IDisposable
 			Foreground = Theme.ToolbarButtonBackground,
 			Background = Theme.TabBackground,
 			HorizontalAlignment = HorizontalAlignment.Left,
+			VerticalAlignment = VerticalAlignment.Stretch,
 		};
 
 		Children.Add(progressBar);

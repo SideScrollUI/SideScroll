@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Layout;
 using System.Collections;
 using System.Reflection;
+using Atlas.UI.Avalonia.Themes;
 
 namespace Atlas.UI.Avalonia.Controls;
 
@@ -30,7 +31,7 @@ public class TabControlParams : Grid
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		ColumnDefinitions = new ColumnDefinitions(columnDefinitions);
 
-		Margin = new Thickness(15, 6);
+		Margin = new Thickness(6);
 
 		MinWidth = 100;
 		MaxWidth = 2000;
@@ -155,7 +156,7 @@ public class TabControlParams : Grid
 		var textLabel = new TextBlock()
 		{
 			Text = property.Name,
-			Margin = new Thickness(0, 3, 10, 3),
+			Margin = new Thickness(10, 3),
 			Foreground = Theme.BackgroundText,
 			VerticalAlignment = VerticalAlignment.Center,
 			MaxWidth = 500,

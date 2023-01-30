@@ -1,3 +1,4 @@
+using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -27,7 +28,7 @@ public class TabControlTextBlock : Border, IStyleable, ILayoutable
 	[MemberNotNull(nameof(TextBlock))]
 	private void InitializeComponent()
 	{
-		Background = Theme.TextBackgroundBrush;
+		Background = Theme.TextBackground;
 		BorderBrush = Brushes.Black;
 		BorderThickness = new Thickness(1);
 		HorizontalAlignment = HorizontalAlignment.Stretch;

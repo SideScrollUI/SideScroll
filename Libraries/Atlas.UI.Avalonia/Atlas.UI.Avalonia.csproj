@@ -39,9 +39,15 @@
     <None Remove="Logo.ico" />
     <None Remove="right-chevron.png" />
     <None Remove="StyleResources.xaml" />
-    <None Remove="Theme\Accents\BaseLight.xaml" />
-    <None Remove="Theme\Accents\BaseDark.xaml" />
-    <None Remove="Theme\TabButton.xaml" />
+    <None Remove="Themes\Default\Accents\BaseLight.xaml" />
+    <None Remove="Themes\Default\Accents\BaseDark.xaml" />
+    <None Remove="Themes\Controls\TabButton.xaml" />
+    <None Remove="Themes\Controls\ToolbarButton.xaml" />
+    <None Remove="Themes\Fluent\Accents\FluentBaseDark.xaml" />
+    <None Remove="Themes\Fluent\Accents\FluentBaseLight.xaml" />
+    <None Remove="Themes\Fluent\DataGrid.xaml" />
+    <None Remove="Themes\Fluent\FluentTheme.xaml" />
+    <None Remove="Themes\Fluent\Controls\ScrollBar.xaml" />
     <None Remove="View\TabAvalonEdit.xaml" />
   </ItemGroup>
 
@@ -50,6 +56,7 @@
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEditVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Svg.Skia" Version="0.10.18" />
     <PackageReference Include="ThomasLevesque.WeakEvent" Version="4.1.0" />
   </ItemGroup>
 
@@ -61,7 +68,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Theme\DefaultTheme.xaml.cs">
+    <Compile Update="Theme\Controls\FluentTheme.xaml.cs">
+      <DependentUpon>FluentTheme.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Themes\Default\DefaultTheme.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
     <Compile Update="Tabs\TabAvalonEdit.xaml.cs">
@@ -71,13 +81,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Theme\Accents\BaseLight.xaml">
+    <EmbeddedResource Update="Themes\Default\Accents\BaseLight.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Theme\Accents\BaseDark.xaml">
+    <EmbeddedResource Update="Themes\Default\Accents\BaseDark.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Theme\TabButton.xaml">
+    <EmbeddedResource Update="Themes\Fluent\Accents\FluentBaseDark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Themes\Fluent\Accents\FluentBaseLight.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Themes\Fluent\Controls\ScrollBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Themes\Fluent\Controls\DataGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Themes\Fluent\FluentTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Themes\Controls\ToolbarButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Themes\Controls\TabButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

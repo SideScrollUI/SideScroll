@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
+using Atlas.UI.Avalonia.Themes;
 using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Controls;
@@ -104,6 +105,7 @@ public class TabViewer : Grid
 			VerticalAlignment = VerticalAlignment.Stretch,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
 			VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
+			Padding = new Thickness(0, 0, 0, 16),
 			MaxWidth = 5000,
 			MaxHeight = 4000,
 			Content = ContentGrid,
@@ -259,6 +261,8 @@ public class TabViewer : Grid
 			Foreground = Theme.ToolbarLabelForeground,
 			BorderBrush = new SolidColorBrush(Colors.Black),
 			BorderThickness = new Thickness(1),
+			VerticalAlignment = VerticalAlignment.Stretch,
+			VerticalContentAlignment = VerticalAlignment.Center,
 			[ToolTip.ShowDelayProperty] = 5,
 			[ToolTip.TipProperty] = "Scroll Right ( -> )",
 			[Grid.RowProperty] = 0,
@@ -273,6 +277,8 @@ public class TabViewer : Grid
 			Foreground = Theme.ToolbarLabelForeground,
 			BorderBrush = new SolidColorBrush(Colors.Black),
 			BorderThickness = new Thickness(1),
+			VerticalAlignment = VerticalAlignment.Stretch,
+			VerticalContentAlignment = VerticalAlignment.Center,
 			[ToolTip.TipProperty] = "Scroll Left ( <- )",
 			[Grid.RowProperty] = 1,
 		};

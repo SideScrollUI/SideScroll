@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -115,8 +116,8 @@ public class TabControlToolbar : Grid, IDisposable
 		Panel panel = new()
 		{
 			Background = Theme.ToolbarButtonSeparator,
-			Width = 2,
-			Margin = new Thickness(2),
+			Width = 1,
+			Margin = new Thickness(4),
 		};
 		AddControl(panel);
 	}
@@ -157,10 +158,14 @@ public class TabControlToolbar : Grid, IDisposable
 			Margin = DefaultMargin,
 			BorderThickness = new Thickness(0),
 			BorderBrush = Brushes.Transparent,
-			Background = Brushes.Transparent,
+			Background = Theme.ToolbarButtonBackground,
 			Foreground = Theme.TitleForeground,
 			//CaretBrush = new SolidColorBrush(Theme.GridSelectedBackgroundColor), // todo: enable with next version?
 		};
+		// Fluent
+		textBox.Resources.Add("TextControlBackgroundPointerOver", textBox.Background);
+		textBox.Resources.Add("TextControlBackgroundFocused", textBox.Background);
+		textBox.Resources.Add("TextBackgroundDisabledBrush", textBox.Background);
 
 		AddControl(textBox);
 		return textBox;
@@ -169,14 +174,10 @@ public class TabControlToolbar : Grid, IDisposable
 	// Editable
 	public TextBox AddText(string text, int minWidth)
 	{
-		var textBox = new TextBox()
+		var textBox = new ToolbarTextBox(text)
 		{
-			//Foreground = new SolidColorBrush(Colors.Black),
-			Text = text,
 			MinWidth = minWidth,
 			Margin = DefaultMargin,
-			TextWrapping = TextWrapping.NoWrap,
-			VerticalAlignment = VerticalAlignment.Center,
 		};
 
 		AddControl(textBox);
@@ -200,7 +201,7 @@ public class ToolbarTextBlock : TextBlock, IStyleable
 
 	public ToolbarTextBlock(string text = "")
 	{
-		Foreground = Theme.TitleForeground;
+		Foreground = Theme.BackgroundText;
 		Text = text;
 		Margin = TabControlToolbar.DefaultMargin;
 		TextWrapping = TextWrapping.NoWrap;

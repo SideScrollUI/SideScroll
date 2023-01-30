@@ -1,47 +1,20 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 412 412" style="enable-background:new 0 0 412 412;" xml:space="preserve">
-<g>
-	<g>
-		<g>
-			<path d="M334,140h-64c-4.4,0-8,3.6-8,8c0,4.4,3.6,8,8,8h64c13.2,0,24,10.8,24,24v192c0,13.2-10.8,24-24,24H78
-				c-13.2,0-24-10.8-24-24V180c0-13.2,10.8-24,24-24h72c4.4,0,8-3.6,8-8c0-4.4-3.6-8-8-8H78c-22,0-40,18-40,40v192c0,22,18,40,40,40
-				h256c22,0,40-18,40-40V180C374,158,356,140,334,140z"/>
-			<path d="M206,28c4.4,0,8-3.6,8-8V8c0-4.4-3.6-8-8-8c-4.4,0-8,3.6-8,8v12C198,24.4,201.6,28,206,28z"/>
-			<path d="M129.6,211.6c-3.2,3.2-3.2,8,0,11.2l70.8,70.8c1.6,1.6,3.6,2.4,5.6,2.4s4-0.8,5.6-2.4l70.8-70.8c3.2-3.2,3.2-8,0-11.2
-				s-8-3.2-11.2,0L214,268.8V56c0-4.4-3.6-8-8-8c-4.4,0-8,3.6-8,8v212.8l-57.2-57.2C137.6,208.4,132.8,208.4,129.6,211.6z"/>
-		</g>
-	</g>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 640 640" xml:space="preserve">
+<desc>Created with Fabric.js 4.6.0</desc>
+<defs>
+</defs>
+<g transform="matrix(1.55 0 0 1.46 320 320)" id="0zRmvDRJdMy4j9q9kfs_X"  >
+<g style="" vector-effect="non-scaling-stroke"   >
+		<g transform="matrix(1 0 0 1 0 70)" id="RsXIp4WGzecCgq_v58d7N"  >
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-206, -276)" d="M 334 140 L 270 140 C 265.6 140 262 143.6 262 148 C 262 152.4 265.6 156 270 156 L 334 156 C 347.2 156 358 166.8 358 180 L 358 372 C 358 385.2 347.2 396 334 396 L 78 396 C 64.8 396 54 385.2 54 372 L 54 180 C 54 166.8 64.8 156 78 156 L 150 156 C 154.4 156 158 152.4 158 148 C 158 143.6 154.4 140 150 140 L 78 140 C 56 140 38 158 38 180 L 38 372 C 38 394 56 412 78 412 L 334 412 C 356 412 374 394 374 372 L 374 180 C 374 158 356 140 334 140 z" stroke-linecap="round" />
 </g>
-<g>
+		<g transform="matrix(1 0 0 1 0 -192)" id="ZvNoiSKh0jOhKqvx79pQx"  >
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-206, -14)" d="M 206 28 C 210.4 28 214 24.4 214 20 L 214 8 C 214 3.5999999999999996 210.4 0 206 0 C 201.6 0 198 3.6 198 8 L 198 20 C 198 24.4 201.6 28 206 28 z" stroke-linecap="round" />
 </g>
-<g>
+		<g transform="matrix(1 0 0 1 0 -34)" id="f-QQdQ_d0zL0dAaU6TpqB"  >
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-206, -172)" d="M 129.6 211.6 C 126.39999999999999 214.79999999999998 126.39999999999999 219.6 129.6 222.79999999999998 L 200.39999999999998 293.59999999999997 C 201.99999999999997 295.2 203.99999999999997 295.99999999999994 205.99999999999997 295.99999999999994 C 207.99999999999997 295.99999999999994 209.99999999999997 295.19999999999993 211.59999999999997 293.59999999999997 L 282.4 222.79999999999995 C 285.59999999999997 219.59999999999997 285.59999999999997 214.79999999999995 282.4 211.59999999999997 C 279.2 208.39999999999998 274.4 208.39999999999998 271.2 211.59999999999997 L 214 268.8 L 214 56 C 214 51.6 210.4 48 206 48 C 201.6 48 198 51.6 198 56 L 198 268.8 L 140.8 211.60000000000002 C 137.6 208.4 132.8 208.4 129.6 211.6 z" stroke-linecap="round" />
 </g>
-<g>
 </g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
-</g>
-<g>
 </g>
 </svg>

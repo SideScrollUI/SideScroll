@@ -30,6 +30,8 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 	protected override IControl GenerateElement(DataGridCell cell, object dataItem)
 	{
 		cell.MaxHeight = 100; // don't let them have more than a few lines each
+		cell.BorderBrush = Brushes.Black;
+		cell.BorderThickness = new Thickness(1);
 
 		TextBlock textBlock = CreateTextBlock();
 		//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);

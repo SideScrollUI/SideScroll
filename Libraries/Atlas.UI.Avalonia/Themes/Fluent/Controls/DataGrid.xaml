@@ -1,0 +1,137 @@
+﻿<Styles 
+  xmlns="https://github.com/avaloniaui"
+  xmlns:dg="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.DataGrid"
+  xmlns:prim="clr-namespace:Avalonia.Controls.Primitives;assembly=Avalonia.Controls.DataGrid"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <Style Selector="dg|DataGridColumnHeader">
+        <Setter Property="Background" Value="{DynamicResource GridColumnHeaderBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource GridColumnHeaderForegroundBrush}" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="AreSeparatorsVisible" Value="false" />
+        <Setter Property="AreSeparatorsVisible" Value="true" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <Style Selector="dg|DataGridColumnHeader /template/ Rectangle#VerticalSeparator">
+        <Setter Property="Stroke" Value="Black"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+    </Style>
+
+    <!--Style Selector="dg|DataGridRow /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="{DynamicResource ThemeGridHighBrush}" />
+    </Style-->
+
+    <Style Selector="dg|DataGrid">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="dg|DataGridRow:selected">
+        <Setter Property="Foreground" Value="{DynamicResource ThemeGridForegroundSelectedBrush}" />
+    </Style>
+
+    <Style Selector="DataGridColumnHeader:pointerover /template/ Grid#PART_ColumnHeaderRoot">
+        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundHoverBrush}" />
+    </Style>
+    <Style Selector="DataGridColumnHeader:pressed /template/ Grid#PART_ColumnHeaderRoot">
+        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundHoverBrush}" />
+    </Style>
+
+    <!--Style Selector="DataGridRow /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="{DynamicResource DataGridRowBackgroundBrush}" />
+    </Style-->
+    <Style Selector="DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="{DynamicResource DataGridAccentBrush}" />
+    </Style>
+    <Style Selector="DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="{DynamicResource DataGridAccentBrush}" />
+        <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedUnfocusedBackgroundOpacity}" />
+    </Style>
+    <Style Selector="DataGridRow:selected:pointerover /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="{DynamicResource DataGridAccentBrush}" />
+        <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedHoveredUnfocusedBackgroundOpacity}" />
+    </Style>
+    <Style Selector="DataGridRow:selected:focus /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="{DynamicResource DataGridAccentBrush}" />
+        <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedBackgroundOpacity}" />
+    </Style>
+    <Style Selector="DataGridRow:selected:pointerover:focus /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="{DynamicResource DataGridAccentBrush}" />
+        <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedHoveredBackgroundOpacity}" />
+    </Style>
+
+    <!--Style Selector="DataGridRowGroupHeader /template/ DataGridFrozenGrid#PART_Root">
+        <Setter Property="Background" Value="{Binding $parent[DataGridRowGroupHeader].Background}" />
+    </Style-->
+    <!--Style Selector="DataGridRowGroupHeader:pointerover /template/ DataGridFrozenGrid#PART_Root">
+        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundHoverBrush}" />
+    </Style>
+    <Style Selector="DataGridRowGroupHeader:pressed /template/ DataGridFrozenGrid#PART_Root">
+        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundHoverBrush}" />
+    </Style-->
+
+    <!-- Replace default template so we can control the size of the sort icon depending on if it's showing -->
+    <Style Selector="DataGridColumnHeader">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border x:Name="HeaderBorder"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="{TemplateBinding CornerRadius}">
+                    <Grid Name="PART_ColumnHeaderRoot" ColumnDefinitions="*,Auto" >
+
+                        <Grid Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}" />
+                            <Path Name="SortIcon"
+                                  Height="12"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"
+                                  Margin="5,0,0,0"
+                                  Grid.Column="1"
+                                  Fill="{TemplateBinding Foreground}"
+                                  Stretch="Uniform" />
+                        </Grid>
+
+                        <Rectangle Name="VerticalSeparator"
+                             Grid.Column="1"
+                             Width="1"
+                             VerticalAlignment="Stretch"
+                             Fill="{TemplateBinding SeparatorBrush}"
+                             IsVisible="{TemplateBinding AreSeparatorsVisible}" />
+
+                        <Grid x:Name="FocusVisual" IsHitTestVisible="False" IsVisible="False">
+                            <Rectangle x:Name="FocusVisualPrimary"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Fill="Transparent"
+                               IsHitTestVisible="False"
+                               Stroke="{DynamicResource DataGridCellFocusVisualPrimaryBrush}"
+                               StrokeThickness="2" />
+                            <Rectangle x:Name="FocusVisualSecondary"
+                               Margin="2"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Fill="Transparent"
+                               IsHitTestVisible="False"
+                               Stroke="{DynamicResource DataGridCellFocusVisualSecondaryBrush}"
+                               StrokeThickness="1" />
+                        </Grid>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+</Styles>

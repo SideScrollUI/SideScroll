@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;

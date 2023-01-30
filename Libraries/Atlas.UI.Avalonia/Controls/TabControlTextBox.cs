@@ -1,5 +1,6 @@
 using Atlas.Core;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
@@ -32,7 +33,7 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Top;
 
-		Background = Theme.Background;
+		//Background = Theme.Background;
 
 		MinWidth = 50;
 		MaxWidth = 3000;
@@ -40,7 +41,7 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 		InitializeBorder();
 	}
 
-	// Default Padding shows a gap between ScrollBar and Border
+	// Default Padding shows a gap between ScrollBar and Border, and has too big of a left Margin
 	// Workaround: Move the Padding into the inner controls Margin
 	private void InitializeBorder()
 	{
@@ -50,7 +51,7 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 		{
 			Setters =
 			{
-				new Setter(TextPresenter.MarginProperty, new Thickness(6, 3)),
+				new Setter(TextPresenter.MarginProperty, new Thickness(6)),
 			}
 		};
 		Styles.Add(style);
@@ -59,7 +60,7 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 		{
 			Setters =
 			{
-				new Setter(TextBlock.MarginProperty, new Thickness(6, 3)),
+				new Setter(TextBlock.MarginProperty, new Thickness(6)),
 			}
 		};
 		Styles.Add(style);

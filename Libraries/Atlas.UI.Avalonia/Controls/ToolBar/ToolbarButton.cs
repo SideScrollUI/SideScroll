@@ -1,6 +1,8 @@
 using System.Windows.Input;
 using Atlas.Core;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Themes;
+using Atlas.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -14,7 +16,7 @@ namespace Atlas.UI.Avalonia.Controls;
 
 public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 {
-	Type IStyleable.StyleKey => typeof(Button);
+	Type IStyleable.StyleKey => typeof(ToolbarButton);
 
 	public TabControlToolbar Toolbar;
 	public string? Label { get; set; }
@@ -58,18 +60,28 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 
 	private void Initialize(Stream bitmapStream, ICommand? command = null)
 	{
-		bitmapStream.Position = 0;
-		var bitmap = new Bitmap(bitmapStream);
-
 		Grid grid = new()
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto,Auto"),
 			RowDefinitions = new RowDefinitions("Auto"),
 		};
 
+		IImage sourceImage;
+		try
+		{
+			bitmapStream.Position = 0;
+			sourceImage = new Bitmap(bitmapStream);
+		}
+		catch (Exception)
+		{
+			sourceImage = SvgUtils.GetSvgImage(bitmapStream);
+		}
+
 		Image image = new()
 		{
-			Source = bitmap,
+			Source = sourceImage,
+			Width = 24,
+			Height = 24,
 			//MaxWidth = 24,
 			//MaxHeight = 24,
 			Stretch = Stretch.None,
@@ -206,6 +218,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		base.OnPointerEnter(e);
 		BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
 		Background = Theme.ToolbarButtonBackgroundHover;
+		InvalidateVisual();
 	}
 
 	protected override void OnPointerLeave(PointerEventArgs e)
@@ -213,6 +226,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		base.OnPointerLeave(e);
 		Background = Theme.ToolbarButtonBackground;
 		BorderBrush = Background;
+		InvalidateVisual();
 	}
 
 	private void DispatcherTimer_Tick(object? sender, EventArgs e)

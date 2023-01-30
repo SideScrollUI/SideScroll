@@ -1,4 +1,5 @@
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -25,13 +26,13 @@ public class TabControlCheckBox : CheckBox, IStyleable, ILayoutable
 
 	private void Initialize()
 	{
-		Background = new SolidColorBrush(Colors.White);
-		BorderBrush = new SolidColorBrush(Colors.Black);
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		BorderThickness = new Thickness(1);
 		MaxWidth = TabControlParams.ControlMaxWidth;
-		Margin = new Thickness(2, 2);
+		//Margin = new Thickness(2, 2);
 		//Padding = new Thickness(6, 3);
+
+		//Resources.Add("CheckBoxCheckBackgroundFillUnchecked", Theme.Background);
 	}
 
 	private void Bind(ListProperty property)
