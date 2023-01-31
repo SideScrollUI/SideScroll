@@ -135,7 +135,7 @@
     <EmbeddedResource Include="Icons\svg\List1.svg" />
     <EmbeddedResource Include="Icons\svg\List2.svg" />
     <EmbeddedResource Include="Icons\svg\OpenFolder.svg" />
-    <EmbeddedResource Include="Icons\svg\Padnote.svg" />
+    <EmbeddedResource Include="Icons\svg\PadNote.svg" />
     <EmbeddedResource Include="Icons\svg\Placeholder.svg" />
     <EmbeddedResource Include="Icons\svg\Refresh.svg" />
     <EmbeddedResource Include="Icons\svg\RightArrow.svg" />
