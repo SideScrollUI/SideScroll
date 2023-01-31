@@ -8,16 +8,8 @@
 
         <Color x:Key="SystemBaseLowColor">#33000000</Color>
 
-        <!-- Doesn't work -->
-        <!--SolidColorBrush x:Key="DataGridColumnHeaderHoveredBackgroundBrush" Color="#2040a0" />
-        <SolidColorBrush x:Key="DataGridColumnHeaderPressedBackgroundBrush" Color="#2040a0" /-->
-
         <Color x:Key="DataGridAccentColor">#88ff88</Color>
         <SolidColorBrush x:Key="DataGridAccentBrush" Color="{DynamicResource DataGridAccentColor}" />
-        <!-- DataGridRow Selected -->
-        
-        <!--Color x:Key="SystemAccentColor">#88ff88</Color--> <!-- DataGridRow Selected -->
-        <!--Color x:Key="SystemListLowColor">#88ff88</Color--> <!-- DataGridRow Hover -->
 
         <Color x:Key="SystemAccentColorDark1">#005A9E</Color>
         <Color x:Key="SystemAccentColorDark2">#004275</Color>
@@ -32,10 +24,6 @@
         <Color x:Key="IconForegroundColor">#006df0</Color>
         <SolidColorBrush x:Key="IconForegroundBrush" Color="{DynamicResource IconForegroundColor}" />
 
-        <!--Color x:Key="SystemBaseHighColor">#FFFFFFFF</Color-->
-        
-        <!--Color x:Key="SystemAltMediumColor">#FFFFFFFF</Color-->
-
         <SolidColorBrush x:Key="SystemControlBackgroundBaseLowBrush" Color="#2a2954" />
 
         <!-- TextControl -->
@@ -45,7 +33,6 @@
         <Thickness x:Key="TextControlBorderThemeThicknessFocused">1.5</Thickness>
 
         <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FFFFFFFF" />
-        <!--SolidColorBrush x:Key="TextControlPlaceholderForegroundPointerOver" Color="#172144" /-->
         <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
         <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="{DynamicResource IconForegroundColor}" />
 
@@ -61,7 +48,6 @@
         <SolidColorBrush x:Key="ScrollBarPanningThumbBackground" Color="#ff0000" />
         <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#27204a" />
         <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#27204a" />
-        <!--SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#FF00FF00" /-->
 
         <!-- ComboBox -->
 
@@ -153,16 +139,12 @@
         <!-- Default -->
 
         <SolidColorBrush x:Key="ThemeTabBackgroundBrush" Color="#141414" />
-        <!--SolidColorBrush x:Key="ThemeBackgroundFocusedBrush" Color="#272727" /-->
         <SolidColorBrush x:Key="ThemeBackgroundFocusedBrush" Color="#1e1e1e" />
 
         <!-- Styled -->
         <SolidColorBrush x:Key="ThemeStyledLabelForegroundBrush" Color="#000000" />
         <SolidColorBrush x:Key="ThemeHasLinksBrush" Color="#58588f" />
-        <!--SolidColorBrush x:Key="ThemeNoLinksBrush" Color="#d7d9f2" /-->
         <SolidColorBrush x:Key="ThemeNoLinksBrush" Color="#3c3a54" />
-        <!--SolidColorBrush x:Key="ThemeNoLinksBrush" Color="#cccfea" /-->
-        <!--SolidColorBrush x:Key="ThemeNoLinksBrush" Color="#c8c9e5" /-->
         <SolidColorBrush x:Key="ThemeGridStyledLinesBrush" Color="#1c1a34" />
 
         <!-- ScrollBar -->
@@ -180,8 +162,6 @@
         <SolidColorBrush x:Key="ThemeGridButtonForegroundBrush" Color="#d0d0f0" />
 
         <!-- Chart -->
-        <!--SolidColorBrush x:Key="ThemeChartBackgroundSelectedBrush" Color="#326db8" /-->
-        <!--SolidColorBrush x:Key="ThemeChartBackgroundSelectedBrush" Color="#427dd8" /-->
         <SolidColorBrush x:Key="ThemeChartBackgroundSelectedBrush" Color="#448dff" />
         <sys:Double x:Key="ChartBackgroundSelectedAlpha">64</sys:Double>
 

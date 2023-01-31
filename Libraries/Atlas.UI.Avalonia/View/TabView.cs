@@ -497,7 +497,6 @@ public class TabView : Grid, IDisposable
 			AcceptsReturn = true,
 		};
 		textBox.Resources.Add("TextBackgroundDisabledBrush", Brushes.Transparent);
-		//textBox.Resources.Add("TextControlBackgroundFocused", Brushes.Transparent);
 		
 		AvaloniaUtils.AddContextMenu(textBox);
 		_tabParentControls!.AddControl(textBox, false, SeparatorType.Spacer);

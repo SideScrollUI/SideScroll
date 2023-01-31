@@ -10,15 +10,9 @@
     <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Fluent.Controls.ScrollBar.xaml?assembly=Atlas.UI.Avalonia"/>
     <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Fluent.Controls.DataGrid.xaml?assembly=Atlas.UI.Avalonia"/>
 
-    <!--StyleInclude Source="avares://Atlas.UI.Avalonia/Theme/Controls/ScrollBar.xaml" /-->
-
     <Style Selector="TextBox">
         <Setter Property="SelectionForegroundBrush" Value="{DynamicResource SelectionForegroundBrush}"/>
     </Style>
-    
-    <!--Style Selector="TextBox[IsReadOnly=false] /template/ Border#border:pointerover">
-        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>
-    </Style-->
 
     <Style Selector="TextBox[IsReadOnly=true]:pointerover /template/ Border#PART_BorderElement">
         <Setter Property="Background" Value="{DynamicResource TextBackgroundDisabledBrush}" />
@@ -28,7 +22,6 @@
     <Style Selector="TextBox[IsReadOnly=true]:focus /template/ Border#PART_BorderElement">
         <Setter Property="Background" Value="{DynamicResource TextBackgroundDisabledBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}"/>
-        <!--Setter Property="BorderThickness" Value="{DynamicResource TextControlBorderThemeThicknessFocused}" /-->
     </Style>
 
     <Style Selector="ListBoxItem /template/ ContentPresenter">

@@ -41,4 +41,21 @@ public static class SvgUtils
 
 		return sourceImage;
 	}
+
+	public static bool IsSvg(Stream stream)
+	{
+		if (stream.Length < 10) return false;
+
+		try
+		{
+			stream.Position = 0;
+			using var svgStream = new StreamReader(stream, leaveOpen: true);
+			string line = svgStream.ReadLine()!;
+			return line.StartsWith("<?xml");
+		}
+		catch (Exception)
+		{
+			return false;
+		}
+	}
 }

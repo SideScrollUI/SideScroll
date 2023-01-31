@@ -67,14 +67,14 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		};
 
 		IImage sourceImage;
-		try
+		if (SvgUtils.IsSvg(bitmapStream))
+		{
+			sourceImage = SvgUtils.GetSvgImage(bitmapStream);
+		}
+		else
 		{
 			bitmapStream.Position = 0;
 			sourceImage = new Bitmap(bitmapStream);
-		}
-		catch (Exception)
-		{
-			sourceImage = SvgUtils.GetSvgImage(bitmapStream);
 		}
 
 		Image image = new()
@@ -218,7 +218,6 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		base.OnPointerEnter(e);
 		BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
 		Background = Theme.ToolbarButtonBackgroundHover;
-		InvalidateVisual();
 	}
 
 	protected override void OnPointerLeave(PointerEventArgs e)
@@ -226,7 +225,6 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		base.OnPointerLeave(e);
 		Background = Theme.ToolbarButtonBackground;
 		BorderBrush = Background;
-		InvalidateVisual();
 	}
 
 	private void DispatcherTimer_Tick(object? sender, EventArgs e)

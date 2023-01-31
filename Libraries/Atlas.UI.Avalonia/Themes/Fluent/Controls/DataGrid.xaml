@@ -21,10 +21,6 @@
         <Setter Property="StrokeThickness" Value="1"/>
     </Style>
 
-    <!--Style Selector="dg|DataGridRow /template/ Rectangle#BackgroundRectangle">
-        <Setter Property="Fill" Value="{DynamicResource ThemeGridHighBrush}" />
-    </Style-->
-
     <Style Selector="dg|DataGrid">
         <Setter Property="Background" Value="Transparent" />
     </Style>
@@ -40,9 +36,6 @@
         <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundHoverBrush}" />
     </Style>
 
-    <!--Style Selector="DataGridRow /template/ Rectangle#BackgroundRectangle">
-        <Setter Property="Fill" Value="{DynamicResource DataGridRowBackgroundBrush}" />
-    </Style-->
     <Style Selector="DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
         <Setter Property="Fill" Value="{DynamicResource DataGridAccentBrush}" />
     </Style>
@@ -62,16 +55,6 @@
         <Setter Property="Fill" Value="{DynamicResource DataGridAccentBrush}" />
         <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedHoveredBackgroundOpacity}" />
     </Style>
-
-    <!--Style Selector="DataGridRowGroupHeader /template/ DataGridFrozenGrid#PART_Root">
-        <Setter Property="Background" Value="{Binding $parent[DataGridRowGroupHeader].Background}" />
-    </Style-->
-    <!--Style Selector="DataGridRowGroupHeader:pointerover /template/ DataGridFrozenGrid#PART_Root">
-        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundHoverBrush}" />
-    </Style>
-    <Style Selector="DataGridRowGroupHeader:pressed /template/ DataGridFrozenGrid#PART_Root">
-        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundHoverBrush}" />
-    </Style-->
 
     <!-- Replace default template so we can control the size of the sort icon depending on if it's showing -->
     <Style Selector="DataGridColumnHeader">
