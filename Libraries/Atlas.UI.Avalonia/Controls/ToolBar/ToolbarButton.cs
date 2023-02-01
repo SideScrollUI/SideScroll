@@ -106,7 +106,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		Background = Theme.ToolbarButtonBackground;
 		BorderBrush = Background;
 		BorderThickness = new Thickness(0);
-		Margin = new Thickness(1);
+		Margin = new Thickness(0, 1);
 		//BorderThickness = new Thickness(2),
 		//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
 		//BorderBrush = new SolidColorBrush(Colors.Black),
