@@ -2,6 +2,7 @@ using Atlas.Core;
 using Atlas.Tabs;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Layout;
 
 namespace Atlas.UI.Avalonia.Controls;
 
@@ -9,8 +10,6 @@ public class TabControlActions : UserControl
 {
 	public TabInstance TabInstance;
 	public TabModel TabModel;
-
-	// public bool GridInitialized { get; private set; }
 
 	private readonly Dictionary<Button, TaskCreator> _taskCreators = new();
 
@@ -24,14 +23,17 @@ public class TabControlActions : UserControl
 
 	private void InitializeControls()
 	{
+		if (TabModel.Actions!.Count == 0) return;
+
 		var containerGrid = new Grid()
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto,*"),
 			RowDefinitions = new RowDefinitions("Auto"),
+			Margin = new Thickness(8),
 		};
 
 		int rowIndex = 0;
-		foreach (TaskCreator taskCreator in TabModel.Actions!)
+		foreach (TaskCreator taskCreator in TabModel.Actions)
 		{
 			var rowDefinition = new RowDefinition()
 			{
@@ -39,9 +41,11 @@ public class TabControlActions : UserControl
 			};
 			containerGrid.RowDefinitions.Add(rowDefinition);
 
-			var button = new TabControlButton(taskCreator.Label)
+			var button = new TabControlTextButton(taskCreator.Label)
 			{
 				Margin = new Thickness(4, 2),
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				HorizontalContentAlignment = HorizontalAlignment.Center,
 			};
 			button.Click += Button_Click;
 			_taskCreators[button] = taskCreator;

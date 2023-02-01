@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -98,7 +99,7 @@ public class TabDateTimePicker : Grid, IStyleable
 		{
 			IsReadOnly = !Property.Editable,
 			Watermark = "15:30:45",
-			Margin = new Thickness(8, 0, 0, 0),
+			Margin = new Thickness(10, 0, 0, 0),
 			MinWidth = 75,
 			MaxWidth = 300,
 			Focusable = true, // already set?

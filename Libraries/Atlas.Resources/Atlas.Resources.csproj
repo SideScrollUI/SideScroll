@@ -53,6 +53,29 @@
     <None Remove="Icons\png\shutter.png" />
     <None Remove="Icons\png\stats.png" />
     <None Remove="Icons\png\unlock.png" />
+    <None Remove="Icons\svg\Add.svg" />
+    <None Remove="Icons\svg\BlankDocument.svg" />
+    <None Remove="Icons\svg\Cancel.svg" />
+    <None Remove="Icons\svg\DeleteList.svg" />
+    <None Remove="Icons\svg\Enter.svg" />
+    <None Remove="Icons\svg\Eraser.svg" />
+    <None Remove="Icons\svg\Star.svg" />
+    <None Remove="Icons\svg\StarFilled.svg" />
+    <None Remove="Icons\svg\Import.svg" />
+    <None Remove="Icons\svg\Internet.svg" />
+    <None Remove="Icons\svg\LeftArrow.svg" />
+    <None Remove="Icons\svg\Link.svg" />
+    <None Remove="Icons\svg\List1.svg" />
+    <None Remove="Icons\svg\List2.svg" />
+    <None Remove="Icons\svg\OpenFolder.svg" />
+    <None Remove="Icons\svg\PadNote.svg" />
+    <None Remove="Icons\svg\Placeholder.svg" />
+    <None Remove="Icons\svg\Refresh.svg" />
+    <None Remove="Icons\svg\RightArrow.svg" />
+    <None Remove="Icons\svg\Save.svg" />
+    <None Remove="Icons\svg\Screenshot.svg" />
+    <None Remove="Icons\svg\Search.svg" />
+    <None Remove="Icons\svg\Stats.svg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -97,6 +120,29 @@
     <EmbeddedResource Include="Icons\png\shutter.png" />
     <EmbeddedResource Include="Icons\png\stats.png" />
     <EmbeddedResource Include="Icons\png\unlock.png" />
+    <EmbeddedResource Include="Icons\svg\Add.svg" />
+    <EmbeddedResource Include="Icons\svg\BlankDocument.svg" />
+    <EmbeddedResource Include="Icons\svg\Cancel.svg" />
+    <EmbeddedResource Include="Icons\svg\DeleteList.svg" />
+    <EmbeddedResource Include="Icons\svg\Enter.svg" />
+    <EmbeddedResource Include="Icons\svg\Eraser.svg" />
+    <EmbeddedResource Include="Icons\svg\Star.svg" />
+    <EmbeddedResource Include="Icons\svg\StarFilled.svg" />
+    <EmbeddedResource Include="Icons\svg\Import.svg" />
+    <EmbeddedResource Include="Icons\svg\Internet.svg" />
+    <EmbeddedResource Include="Icons\svg\LeftArrow.svg" />
+    <EmbeddedResource Include="Icons\svg\Link.svg" />
+    <EmbeddedResource Include="Icons\svg\List1.svg" />
+    <EmbeddedResource Include="Icons\svg\List2.svg" />
+    <EmbeddedResource Include="Icons\svg\OpenFolder.svg" />
+    <EmbeddedResource Include="Icons\svg\PadNote.svg" />
+    <EmbeddedResource Include="Icons\svg\Placeholder.svg" />
+    <EmbeddedResource Include="Icons\svg\Refresh.svg" />
+    <EmbeddedResource Include="Icons\svg\RightArrow.svg" />
+    <EmbeddedResource Include="Icons\svg\Save.svg" />
+    <EmbeddedResource Include="Icons\svg\Screenshot.svg" />
+    <EmbeddedResource Include="Icons\svg\Search.svg" />
+    <EmbeddedResource Include="Icons\svg\Stats.svg" />
   </ItemGroup>
 
   <ItemGroup>

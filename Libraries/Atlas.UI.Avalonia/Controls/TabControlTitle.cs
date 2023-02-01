@@ -1,5 +1,6 @@
 using Atlas.Core;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -48,7 +49,7 @@ public class TabControlTitle : UserControl, IDisposable
 		TextBlock = new TextBlock
 		{
 			Text = Label,
-			FontSize = 15,
+			FontSize = 16,
 			//Margin = new Thickness(2), // Shows as black, Need Padding so Border not needed
 			Foreground = Theme.TitleForeground,
 			HorizontalAlignment = HorizontalAlignment.Stretch,

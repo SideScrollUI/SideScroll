@@ -39,3 +39,12 @@
     - Set to png
     - Set size to 24 x 24
     - Download
+
+## Converting original svg to compatible svg
+- Avalonia can only import svg's in a certain format
+- [Vectr](https://vectr.com/) is one of the only compatible svg editors
+- Import svg into Vectr
+  - Vect uses a default size of 640x640
+  - Increase Height of image to 600-640 and center so there's just a slim border
+  - Export, set resolution to 24x24
+    - Avalonia can't resize svg yet?

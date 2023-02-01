@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Media;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Themes;
 
 public static class Theme
 {
@@ -11,22 +11,27 @@ public static class Theme
 	public static SolidColorBrush BackgroundText => Get("ThemeBackgroundTextBrush");
 	public static SolidColorBrush TabBackground => Get("ThemeTabBackgroundBrush");
 
-	public static SolidColorBrush ThemeBorderHighBrush => GetColorBrush("ThemeBorderHighColor");
-	public static SolidColorBrush GridStyledLinesBrush => Get("ThemeGridStyledLinesBrush");
+	public static SolidColorBrush BorderHigh => GetColorBrush("ThemeBorderHighColor");
+	public static SolidColorBrush GridStyledLines => Get("ThemeGridStyledLinesBrush");
 
 	// Content
 	public static SolidColorBrush GridForeground => Get("ThemeGridForegroundBrush");
 	public static SolidColorBrush GridBackground => Get("ThemeGridBackgroundBrush");
 	public static SolidColorBrush GridBackgroundSelected => Get("ThemeGridBackgroundSelectedBrush");
+	public static SolidColorBrush GridBorder => Get("ThemeGridBorderBrush");
 
 	// Links
+	public static SolidColorBrush StyledLabelForeground => Get("ThemeStyledLabelForegroundBrush");
 	public static SolidColorBrush HasLinksBackground => Get("ThemeHasLinksBrush");
 	public static SolidColorBrush NoLinksBackground => Get("ThemeNoLinksBrush");
+	public static SolidColorBrush StyleLineBackground => Get("ThemeStyleLineBrush");
 
 	// ScrollBar
 	public static SolidColorBrush ScrollBarThumb => Get("ThemeScrollBarThumbBrush");
 
 	// Button
+	public static SolidColorBrush ActionButtonBackground => Get("ThemeActionButtonBackgroundBrush");
+	public static SolidColorBrush ActionButtonForeground => Get("ThemeActionButtonForegroundBrush");
 	public static SolidColorBrush ButtonBackground => Get("ThemeButtonBackgroundBrush");
 	public static SolidColorBrush ButtonForeground => Get("ThemeButtonForegroundBrush");
 	public static SolidColorBrush ButtonBackgroundHover => Get("ThemeButtonBackgroundHoverBrush");
@@ -35,7 +40,7 @@ public static class Theme
 	public static SolidColorBrush TitleBackground => Get("TitleBackgroundBrush");
 	public static SolidColorBrush TitleForeground => Get("TitleForegroundBrush");
 
-	public static SolidColorBrush TextBackgroundBrush => Get("ThemeTextBackgroundBrush");
+	public static SolidColorBrush TextBackground => Get("ThemeTextBackgroundBrush");
 
 	public static SolidColorBrush TextBackgroundDisabled => Get("TextBackgroundDisabledBrush");
 
@@ -56,6 +61,8 @@ public static class Theme
 	public static SolidColorBrush ToolbarBorderHigh => Get("ToolbarBorderHighBrush");
 
 	public static SolidColorBrush ControlBackgroundHover => Get("ControlBackgroundHoverBrush");
+
+	public static SolidColorBrush IconForeground => Get("IconForegroundBrush");
 
 	// Chart 
 	public static SolidColorBrush ChartBackgroundSelected => Get("ThemeChartBackgroundSelectedBrush");

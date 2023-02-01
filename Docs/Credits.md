@@ -5,7 +5,8 @@
 
 | Icon | Name |
 | - | - |
-| [Blank Document](https://www.flaticon.com/free-icon/blank-document_14922) | Freepik |
+| [Blank Document](https://www.flaticon.com/free-icon/blank-document_14922) (png) | Freepik |
+| [Blank Document](https://icon-icons.com/icon/blank-paper-sheet/85748) (svg) | Anton Saputro |
 | [Delete List](https://www.flaticon.com/free-icon/delete-list_1201) | Freepik |
 | [Eraser](https://www.flaticon.com/free-icon/eraser_1203953) | Freepik |
 | [Report](https://www.flaticon.com/free-icon/file_1508964) | Freepik |
@@ -15,7 +16,8 @@
 | [List1](https://www.flaticon.com/free-icon/list_151917) | Chanut |
 | [List2](https://www.flaticon.com/free-icon/list_159841) | Gregor Cresnar |
 | [Paste](https://www.flaticon.com/free-icon/paste_930233) | Vitaly Gorbachev |
-| [Refresh](https://www.flaticon.com/free-icon/refresh_875100) | Becris |
+| [Refresh](https://www.flaticon.com/free-icon/refresh_875100) (png) | Becris |
+| [Refresh](https://icon-icons.com/icon/sync-refresh-reload-update/176163) (svg) | Nicky Lim |
 | [Left Arrow](https://www.flaticon.com/free-icon/left-arrow_118744) | [Lucy G](https://www.flaticon.com/authors/lucy-g) |
 | [Right Arrow](https://www.flaticon.com/free-icon/right-arrow_118745) | Lucy G |
 | [Add](https://www.flaticon.com/free-icon/add_118742) | Lucy G |
@@ -31,6 +33,7 @@
 | [Enter](https://www.flaticon.com/free-icon/enter_1828391) | Pixel Perfect |
 | [Open Folder](https://icon-icons.com/icon/folder-open/172452) | [Phosphor](https://github.com/phosphor-icons)
 | [Info2](https://icon-icons.com/icon/circle-customer-help-info-information-service-support/123208) | Perpixel |
+| [Star](https://icon-icons.com/icon/bookmark-favorite-rate-rating-star/113418) | Unknown by site |
 
 * Lucy G
   - (user account no longer exists)

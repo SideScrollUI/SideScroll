@@ -2,12 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Atlas.Start.Avalonia.App">
   <Application.Styles>
-    <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
-    <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseDark.xaml"/>
-    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml"/>
+    <FluentTheme Mode="Light"/>
     <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
-    <StyleInclude Source="resm:Atlas.UI.Avalonia.Theme.DefaultTheme.xaml?assembly=Atlas.UI.Avalonia"/>
-    <StyleInclude Source="resm:Atlas.UI.Avalonia.Theme.Accents.BaseLight.xaml?assembly=Atlas.UI.Avalonia"/>
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Fluent.Accents.FluentBaseLight.xaml?assembly=Atlas.UI.Avalonia"/>
     <StyleInclude Source="resm:OxyPlot.Avalonia.Themes.Default.xaml?assembly=OxyPlot.Avalonia"/>
+    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Fluent.FluentTheme.xaml?assembly=Atlas.UI.Avalonia"/>
   </Application.Styles>
 </Application>

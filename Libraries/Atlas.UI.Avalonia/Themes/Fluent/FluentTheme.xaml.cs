@@ -3,9 +3,9 @@ using Avalonia.Styling;
 
 namespace Atlas.UI.Avalonia.Themes;
 
-public class DefaultTheme : Styles
+public class FluentTheme : Styles
 {
-	public DefaultTheme()
+	public FluentTheme()
 	{
 		InitializeComponent();
 	}

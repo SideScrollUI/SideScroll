@@ -1,0 +1,42 @@
+﻿<Styles 
+  xmlns="https://github.com/avaloniaui"
+  xmlns:dg="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.DataGrid"
+  xmlns:prim="clr-namespace:Avalonia.Controls.Primitives;assembly=Avalonia.Controls.DataGrid"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Controls.TabButton.xaml?assembly=Atlas.UI.Avalonia"/>
+    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Controls.ToolbarButton.xaml?assembly=Atlas.UI.Avalonia"/>
+    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Fluent.Controls.ScrollBar.xaml?assembly=Atlas.UI.Avalonia"/>
+    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Fluent.Controls.DataGrid.xaml?assembly=Atlas.UI.Avalonia"/>
+
+    <Style Selector="TextBox">
+        <Setter Property="SelectionForegroundBrush" Value="{DynamicResource SelectionForegroundBrush}"/>
+    </Style>
+
+    <Style Selector="TextBox[IsReadOnly=true]:pointerover /template/ Border#PART_BorderElement">
+        <Setter Property="Background" Value="{DynamicResource TextBackgroundDisabledBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}"/>
+    </Style>
+
+    <Style Selector="TextBox[IsReadOnly=true]:focus /template/ Border#PART_BorderElement">
+        <Setter Property="Background" Value="{DynamicResource TextBackgroundDisabledBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}"/>
+    </Style>
+
+    <Style Selector="ListBoxItem /template/ ContentPresenter">
+        <Setter Property="Background" Value="#FF086F9E"/>
+    </Style>
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>
+    </Style>
+  
+    <Style Selector="CalendarDatePicker /template/ Button.CalendarDropDown /template/ Border#Background">
+      <Setter Property="Background" Value="#e3e3e3"/>
+    </Style>
+
+    <Style Selector="GridSplitter">
+        <Setter Property="Focusable" Value="false" />
+    </Style>
+
+</Styles>

@@ -1,5 +1,6 @@
 using Atlas.Core;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Themes;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using System.Collections;

@@ -4,7 +4,7 @@
         <Setter Property="Background" Value="{DynamicResource ThemeControlMidBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}"/>
-        <Setter Property="Foreground" Value="#006df0"/>
+        <Setter Property="Foreground" Value="{DynamicResource ThemeGridButtonForegroundBrush}"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="4"/>

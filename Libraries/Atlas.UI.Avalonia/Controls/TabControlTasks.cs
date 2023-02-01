@@ -10,7 +10,7 @@ namespace Atlas.UI.Avalonia.Controls;
 
 public class TabControlTasks : Grid, IDisposable
 {
-	private const int LineHeight = 30;
+	private const int LineHeight = 34;
 
 	public TabInstance TabInstance;
 

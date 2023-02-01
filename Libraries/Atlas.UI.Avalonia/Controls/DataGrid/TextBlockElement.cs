@@ -27,7 +27,7 @@ public class TextBlockElement : TextBlock, IStyleable, ILayoutable
 
 	private void Initialize()
 	{
-		Margin = new Thickness(5);
+		Margin = new Thickness(5, 5, 5, 2); // Shift down since tailing is rare
 
 		if (!Column.FormatConverter.IsFormatted)
 			TextAlignment = DataGridUtils.GetTextAlignment(PropertyInfo.PropertyType);
