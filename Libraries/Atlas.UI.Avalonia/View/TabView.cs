@@ -202,7 +202,7 @@ public class TabView : Grid, IDisposable
 		{
 			ColumnDefinitions = new ColumnDefinitions("*"),
 			MinDesiredWidth = Model.MinDesiredWidth,
-			MaxDesiredWidth = Model.MaxDesiredWidth,
+			MaxDesiredWidth = Math.Max(Model.MaxDesiredWidth, TabViewSettings.SplitterDistance ?? 0),
 		};
 		//if (TabViewSettings.SplitterDistance != null)
 		//	tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
@@ -327,7 +327,7 @@ public class TabView : Grid, IDisposable
 	private void GridSplitter_DoubleTapped(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 		_isDragging = false;
-		double desiredWidth = _tabParentControls!.DesiredSize.Width;
+		double desiredWidth = Math.Min(_tabParentControls!.DesiredSize.Width, Model.MaxDesiredWidth);
 		TabViewSettings.SplitterDistance = desiredWidth;
 		_tabParentControls.Width = desiredWidth;
 		//containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);

@@ -40,10 +40,10 @@ public class MemoryTypeCache<T1>
 
 	public T1? Get(Call call, string key)
 	{
-		if (MemoryCache.TryGetValue(key, out object result))
+		if (MemoryCache.TryGetValue(key, out object? result))
 		{
 			call.Log.Add("Found cached copy", new Tag("Uri", key));
-			return (T1)result;
+			return (T1)result!;
 		}
 
 		return default;
@@ -51,10 +51,10 @@ public class MemoryTypeCache<T1>
 
 	public bool TryGetValue(Call call, string key, out T1? t1)
 	{
-		if (MemoryCache.TryGetValue(key, out object result))
+		if (MemoryCache.TryGetValue(key, out object? result))
 		{
 			call.Log.Add("Found cached copy", new Tag("Uri", key));
-			t1 = (T1)result;
+			t1 = (T1)result!;
 			return true;
 		}
 		t1 = default;

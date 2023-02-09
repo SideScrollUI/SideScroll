@@ -41,7 +41,9 @@ public class TabControlComboBox : ComboBox, IStyleable, ILayoutable
 
 		if (listPropertyName != null)
 		{
-			PropertyInfo propertyInfo = property.Object.GetType().GetProperty(listPropertyName)!;
+			PropertyInfo propertyInfo = property.Object.GetType().GetProperty(listPropertyName, 
+				BindingFlags.Public | BindingFlags.NonPublic | 
+				BindingFlags.Instance | BindingFlags.Static)!;
 			Items = propertyInfo.GetValue(property.Object) as IEnumerable;
 		}
 		else
