@@ -93,7 +93,8 @@ public class TabInstance : IDisposable
 		set => Model.Name = value;
 	}
 
-	public DataRepo DataApp => Project?.DataApp!;
+	public DataRepo DataApp => Project.DataApp;
+	public DataRepo DataTemp => Project.DataTemp;
 
 	public TabViewSettings TabViewSettings = new();
 	public TabBookmark? TabBookmark { get; set; }
@@ -761,7 +762,7 @@ public class TabInstance : IDisposable
 	{
 		if (CustomPath != null)
 		{
-			TabViewSettings? tabViewSettings = Project.DataTemp.Load<TabViewSettings>(CustomPath, TaskInstance.Call);
+			TabViewSettings? tabViewSettings = DataTemp.Load<TabViewSettings>(CustomPath, TaskInstance.Call);
 			if (tabViewSettings != null)
 				return tabViewSettings;
 		}
@@ -770,17 +771,17 @@ public class TabInstance : IDisposable
 		if (type != typeof(TabInstance))
 		{
 			// Unique TabInstance
-			TabViewSettings? tabViewSettings = Project.DataTemp.Load<TabViewSettings>(TabPath, TaskInstance.Call);
+			TabViewSettings? tabViewSettings = DataTemp.Load<TabViewSettings>(TabPath, TaskInstance.Call);
 			if (tabViewSettings != null)
 				return tabViewSettings;
 		}
 		else
 		{
-			TabViewSettings? tabViewSettings = Project.DataTemp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call);
+			TabViewSettings? tabViewSettings = DataTemp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call);
 			if (tabViewSettings != null)
 				return tabViewSettings;
 
-			tabViewSettings = Project.DataTemp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
+			tabViewSettings = DataTemp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
 			if (tabViewSettings != null)
 				return tabViewSettings;
 		}
@@ -792,31 +793,31 @@ public class TabInstance : IDisposable
 	{
 		if (CustomPath != null)
 		{
-			Project.DataTemp.Save(CustomPath, TabViewSettings, TaskInstance.Call);
+			DataTemp.Save(CustomPath, TabViewSettings, TaskInstance.Call);
 		}
 
 		Type type = GetType();
 		if (type != typeof(TabInstance))
 		{
 			// Unique TabInstance
-			Project.DataTemp.Save(TabPath, TabViewSettings, TaskInstance.Call);
+			DataTemp.Save(TabPath, TabViewSettings, TaskInstance.Call);
 		}
 		else
 		{
-			Project.DataTemp.Save(TypeLabelPath, TabViewSettings, TaskInstance.Call);
-			Project.DataTemp.Save(TypePath, TabViewSettings, TaskInstance.Call);
+			DataTemp.Save(TypeLabelPath, TabViewSettings, TaskInstance.Call);
+			DataTemp.Save(TypePath, TabViewSettings, TaskInstance.Call);
 		}
 		SaveDefaultBookmark();
 	}
 
 	protected void SetStartLoad()
 	{
-		Project.DataTemp.Save(LoadedPath, true, TaskInstance.Call);
+		DataTemp.Save(LoadedPath, true, TaskInstance.Call);
 	}
 
 	public void SetEndLoad()
 	{
-		Project.DataTemp.Delete(null, typeof(bool), LoadedPath);
+		DataTemp.Delete(null, typeof(bool), LoadedPath);
 	}
 
 	// for detecting parent/child loops
