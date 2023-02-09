@@ -65,9 +65,12 @@ public class TabDateTimePicker : Grid, IStyleable
 		AddDatePicker();
 		AddTimeTextBox();
 
-		Button buttonImport = AddButton("Import Clipboard", Icons.Streams.Paste);
-		buttonImport.Click += ButtonImport_Click;
-		Children.Add(buttonImport);
+		if (Property.Editable)
+		{
+			Button buttonImport = AddButton("Import Clipboard", Icons.Streams.Paste);
+			buttonImport.Click += ButtonImport_Click;
+			Children.Add(buttonImport);
+		}
 	}
 
 	[MemberNotNull(nameof(_datePicker))]
@@ -88,6 +91,11 @@ public class TabDateTimePicker : Grid, IStyleable
 			IsEnabled = Property.Editable,
 		};
 
+		if (!Property.Editable)
+		{
+			_datePicker.Background = Theme.TextBackgroundDisabled;
+		}
+
 		_datePicker.Bind(CalendarDatePicker.SelectedDateProperty, Binding);
 		Children.Add(_datePicker);
 	}
@@ -107,7 +115,10 @@ public class TabDateTimePicker : Grid, IStyleable
 		};
 
 		if (!Property.Editable)
+		{
 			_timeTextBox.Background = Theme.TextBackgroundDisabled;
+			_timeTextBox.Foreground = Theme.ForegroundLight;
+		}
 
 		_timeTextBox.Bind(TextBlock.TextProperty, Binding);
 		Children.Add(_timeTextBox);

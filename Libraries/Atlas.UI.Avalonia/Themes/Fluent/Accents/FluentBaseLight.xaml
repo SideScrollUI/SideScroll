@@ -125,7 +125,7 @@
 
         <!-- Foreground -->
         <SolidColorBrush x:Key="ThemeForegroundBrush" Color="#000000" />
-        <SolidColorBrush x:Key="ThemeForegroundLightBrush" Color="#808080" />
+        <SolidColorBrush x:Key="ThemeForegroundLightBrush" Color="#606060" />
         <SolidColorBrush x:Key="ThemeForegroundLowBrush" Color="#5860CA" />
 
         <!-- Border -->

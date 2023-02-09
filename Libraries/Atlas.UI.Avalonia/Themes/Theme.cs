@@ -41,6 +41,7 @@ public static class Theme
 	public static SolidColorBrush TitleForeground => Get("TitleForegroundBrush");
 
 	public static SolidColorBrush TextBackground => Get("ThemeTextBackgroundBrush");
+	public static SolidColorBrush ForegroundLight => Get("ThemeForegroundLightBrush");
 
 	public static SolidColorBrush TextBackgroundDisabled => Get("TextBackgroundDisabledBrush");
 

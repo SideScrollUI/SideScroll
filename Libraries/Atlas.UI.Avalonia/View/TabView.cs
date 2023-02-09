@@ -964,11 +964,11 @@ public class TabView : Grid, IDisposable
 			}
 			else if (e.List[0] is ITab)
 			{
-				var newItems = new HashSet<object>();
+				HashSet<object> newItems = new();
 				foreach (var obj in e.List)
 					newItems.Add(obj);
 
-				var matching = new List<object>();
+				List<object> matching = new();
 				foreach (var obj in TabDatas[0].Items!)
 				{
 					if (newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()!))
