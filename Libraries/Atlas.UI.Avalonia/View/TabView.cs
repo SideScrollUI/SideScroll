@@ -494,7 +494,6 @@ public class TabView : Grid, IDisposable
 			MinWidth = 50,
 			MaxWidth = 1000,
 			TextWrapping = TextWrapping.Wrap,
-			AcceptsReturn = true,
 		};
 		textBox.Resources.Add("TextBackgroundDisabledBrush", Brushes.Transparent);
 		

@@ -84,7 +84,6 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 		if (property.PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
 		{
 			TextWrapping = TextWrapping.Wrap;
-			AcceptsReturn = true;
 		}
 
 		AcceptsReturnAttribute? acceptsReturnAttribute = property.GetCustomAttribute<AcceptsReturnAttribute>();
