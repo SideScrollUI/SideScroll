@@ -125,7 +125,7 @@
 
         <!-- Foreground -->
         <SolidColorBrush x:Key="ThemeForegroundBrush" Color="#000000" />
-        <SolidColorBrush x:Key="ThemeForegroundLightBrush" Color="#808080" />
+        <SolidColorBrush x:Key="ThemeForegroundLightBrush" Color="#606060" />
         <SolidColorBrush x:Key="ThemeForegroundLowBrush" Color="#5860CA" />
 
         <!-- Border -->
@@ -166,12 +166,12 @@
         <sys:Double x:Key="ChartBackgroundSelectedAlpha">64</sys:Double>
 
         <!-- Buttons -->
-		<SolidColorBrush x:Key="ThemeActionButtonBackgroundBrush" Color="#27204a" />
+        <SolidColorBrush x:Key="ThemeActionButtonBackgroundBrush" Color="#292f66" />
         <SolidColorBrush x:Key="ThemeActionButtonForegroundBrush" Color="#d0d0e8" />
         <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#27204a" />
         <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#60bdff" />
         <SolidColorBrush x:Key="ThemeButtonBackgroundHoverBrush" Color="#2040a0" />
-		<SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#27204a" />
+        <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#292f66" />
 
         <!-- RadioButton -->
         <SolidColorBrush x:Key="ThemeRadioButtonBorderBrush" Color="#004dd0" />

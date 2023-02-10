@@ -202,7 +202,7 @@ public class TabView : Grid, IDisposable
 		{
 			ColumnDefinitions = new ColumnDefinitions("*"),
 			MinDesiredWidth = Model.MinDesiredWidth,
-			MaxDesiredWidth = Model.MaxDesiredWidth,
+			MaxDesiredWidth = Math.Max(Model.MaxDesiredWidth, TabViewSettings.SplitterDistance ?? 0),
 		};
 		//if (TabViewSettings.SplitterDistance != null)
 		//	tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
@@ -327,7 +327,7 @@ public class TabView : Grid, IDisposable
 	private void GridSplitter_DoubleTapped(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 		_isDragging = false;
-		double desiredWidth = _tabParentControls!.DesiredSize.Width;
+		double desiredWidth = Math.Min(_tabParentControls!.DesiredSize.Width, Model.MaxDesiredWidth);
 		TabViewSettings.SplitterDistance = desiredWidth;
 		_tabParentControls.Width = desiredWidth;
 		//containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
@@ -964,11 +964,11 @@ public class TabView : Grid, IDisposable
 			}
 			else if (e.List[0] is ITab)
 			{
-				var newItems = new HashSet<object>();
+				HashSet<object> newItems = new();
 				foreach (var obj in e.List)
 					newItems.Add(obj);
 
-				var matching = new List<object>();
+				List<object> matching = new();
 				foreach (var obj in TabDatas[0].Items!)
 				{
 					if (newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()!))

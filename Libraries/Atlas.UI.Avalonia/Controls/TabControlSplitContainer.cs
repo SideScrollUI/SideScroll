@@ -48,8 +48,9 @@ public class TabControlSplitContainer : Grid
 		LostFocus += TabView_LostFocus;
 	}
 
+	// Causes extra resizing and flashing
 	// real DesiredSize doesn't work because of HorizontalAlign = Stretch?
-	public new Size DesiredSize
+	/*public new Size DesiredSize
 	{
 		get
 		{
@@ -63,19 +64,18 @@ public class TabControlSplitContainer : Grid
 			desiredSize = new Size(desiredWidth, desiredSize.Height);
 			return desiredSize;
 		}
-	}
+	}*/
 
-	// can't override DesiredSize
-	/*protected override Size MeasureCore(Size availableSize)
+	protected override Size MeasureCore(Size availableSize)
 	{
 		if (MaxDesiredWidth != double.MaxValue)
-			availableSize = new Size(Math.Min(MaxDesiredWidth, availableSize.Width), availableSize.Height);
+			availableSize = availableSize.WithWidth(Math.Min(MaxDesiredWidth, availableSize.Width));
 		Size measured = base.MeasureCore(availableSize);
 		double desiredWidth = Math.Min(MaxDesiredWidth, measured.Width);
 		desiredWidth = Math.Max(desiredWidth, MinDesiredWidth);
-		Size maxSize = new Size(desiredWidth, measured.Height);
+		Size maxSize = measured.WithWidth(desiredWidth);
 		return maxSize;
-	}*/
+	}
 
 	protected override Size ArrangeOverride(Size finalSize)
 	{

@@ -47,7 +47,7 @@ public class EditValueConverter : IValueConverter
 
 		if (value is DateTime dateTime)
 		{
-			return dateTime.ToString("yyyy-M-d H:mm:ss.ffffff");
+			return dateTime.ToString("yyyy-M-d H:mm:ss.FFFFFF");
 		}
 
 		if (value.GetType().IsPrimitive == false && targetType == typeof(string))

@@ -96,17 +96,15 @@ public class TabControlChart : Grid, IDisposable
 	public List<OxyListSeries> OxyListSeriesList = new();
 	private Dictionary<string, OxyListSeries> IdxNameToSeries { get; set; } = new();
 	private Dictionary<IList, ListSeries> ListToTabSeries { get; set; } = new();
-	private Dictionary<IList, int> ListToTabIndex { get; set; } = new(); // not used
 	public List<ListSeries> SelectedSeries
 	{
 		get
 		{
-			var selected = new List<ListSeries>();
-			foreach (var oxyListSeries in OxyListSeriesList)
-			{
-				if (oxyListSeries.IsSelected)
-					selected.Add(oxyListSeries.ListSeries);
-			}
+			List<ListSeries> selected = OxyListSeriesList
+				.Where(s => s.IsSelected)
+				.Select(s => s.ListSeries)
+				.ToList();
+
 			if (selected.Count == OxyListSeriesList.Count && selected.Count > 1)
 				selected.Clear(); // If all are selected, none are selected?
 			return selected;
@@ -322,7 +320,7 @@ public class TabControlChart : Grid, IDisposable
 	{
 		Size size = base.MeasureOverride(availableSize);
 		if (FillHeight)
-			size = new Size(size.Width, Math.Max(size.Height, Math.Min(MaxHeight, availableSize.Height)));
+			size = size.WithHeight(Math.Max(size.Height, Math.Min(MaxHeight, availableSize.Height)));
 		return size;
 	}
 
@@ -914,7 +912,6 @@ public class TabControlChart : Grid, IDisposable
 
 		OxyListSeriesList.Clear();
 		ListToTabSeries.Clear();
-		ListToTabIndex.Clear();
 		IdxNameToSeries.Clear();
 	}
 
@@ -997,7 +994,6 @@ public class TabControlChart : Grid, IDisposable
 
 		OxyListSeriesList.Add(oxyListSeries);
 		ListToTabSeries[listSeries.List] = listSeries;
-		ListToTabIndex[listSeries.List] = ListToTabIndex.Count;
 		if (listSeries.Name != null)
 			IdxNameToSeries[listSeries.Name] = oxyListSeries;
 		return lineSeries;

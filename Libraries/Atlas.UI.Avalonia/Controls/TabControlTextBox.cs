@@ -70,7 +70,10 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 	{
 		IsReadOnly = !property.Editable;
 		if (IsReadOnly)
+		{
 			Background = Theme.TextBackgroundDisabled;
+			Foreground = Theme.ForegroundLight;
+		}
 
 		PasswordCharAttribute? passwordCharAttribute = property.GetCustomAttribute<PasswordCharAttribute>();
 		if (passwordCharAttribute != null)
@@ -82,7 +85,6 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 		{
 			TextWrapping = TextWrapping.Wrap;
 			AcceptsReturn = true;
-			MaxHeight = 500;
 		}
 
 		AcceptsReturnAttribute? acceptsReturnAttribute = property.GetCustomAttribute<AcceptsReturnAttribute>();
@@ -99,6 +101,16 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 		else
 		{
 			MaxWidth = TabControlParams.ControlMaxWidth;
+		}
+
+		MaxHeightAttribute? maxHeightAttribute = property.GetCustomAttribute<MaxHeightAttribute>();
+		if (maxHeightAttribute != null)
+		{
+			MaxHeight = maxHeightAttribute.MaxHeight;
+		}
+		else
+		{
+			MaxHeight = TabControlParams.ControlMaxHeight;
 		}
 
 		BindProperty(property);

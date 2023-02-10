@@ -17,13 +17,15 @@ public class Project
 
 	public DataRepo DataShared => new(DataSharedPath, DataRepoName);
 	public DataRepo DataApp => new(DataAppPath, DataRepoName);
+	public DataRepo DataTemp => new(DataTempPath, DataRepoName);
 
 	public HttpCacheManager Http = new();
 	public BookmarkNavigator Navigator { get; set; } = new();
 	public TaskInstanceCollection Tasks { get; set; } = new();
 
 	private string DataSharedPath => Paths.Combine(UserSettings.ProjectPath, "Shared");
-	private string DataAppPath => Paths.Combine(UserSettings.ProjectPath, "Versions", ProjectSettings.DataVersion.ToString());
+	private string DataAppPath => Paths.Combine(UserSettings.ProjectPath, "Versions", ProjectSettings.DataVersion.ToString()); // todo: Rename Version to Data next schema change
+	private string DataTempPath => Paths.Combine(UserSettings.ProjectPath, "Temp", ProjectSettings.DataVersion.ToString());
 
 	private string DataRepoName
 	{

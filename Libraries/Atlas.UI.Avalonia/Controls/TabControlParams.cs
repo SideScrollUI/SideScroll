@@ -14,6 +14,7 @@ namespace Atlas.UI.Avalonia.Controls;
 public class TabControlParams : Grid
 {
 	public const int ControlMaxWidth = 500;
+	public const int ControlMaxHeight = 400;
 	public object? Object;
 
 	public TabControlParams(object? obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
@@ -75,7 +76,7 @@ public class TabControlParams : Grid
 			VerticalAlignment = VerticalAlignment.Top,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			TextWrapping = TextWrapping.Wrap,
-			MaxWidth = 500,
+			MaxWidth = ControlMaxWidth,
 			[Grid.ColumnSpanProperty] = 2,
 		};
 		Children.Add(textBlock);
@@ -159,7 +160,7 @@ public class TabControlParams : Grid
 			Margin = new Thickness(10, 3),
 			Foreground = Theme.BackgroundText,
 			VerticalAlignment = VerticalAlignment.Center,
-			MaxWidth = 500,
+			MaxWidth = ControlMaxWidth,
 			[Grid.RowProperty] = rowIndex,
 			[Grid.ColumnProperty] = 0,
 		};
@@ -177,25 +178,24 @@ public class TabControlParams : Grid
 		BindListAttribute? listAttribute = type.GetCustomAttribute<BindListAttribute>();
 		listAttribute ??= property.GetCustomAttribute<BindListAttribute>();
 
-		Control? control = null;
 		if (type == typeof(bool))
 		{
-			control = new TabControlCheckBox(property);
+			return new TabControlCheckBox(property);
 		}
 		else if (type.IsEnum || listAttribute != null)
 		{
-			control = new TabControlComboBox(property, listAttribute?.PropertyName);
+			return new TabControlComboBox(property, listAttribute?.PropertyName);
 		}
-		else if (typeof(DateTime).IsAssignableFrom(type))
+		else if (typeof(DateTime).IsAssignableFrom(type) && property.Editable)
 		{
-			control = new TabDateTimePicker(property);
+			return new TabDateTimePicker(property);
 		}
 		else if (!typeof(IList).IsAssignableFrom(type))
 		{
-			control = new TabControlTextBox(property);
+			return new TabControlTextBox(property);
 		}
 
-		return control;
+		return null;
 	}
 
 	// Focus first input control

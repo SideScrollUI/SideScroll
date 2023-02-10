@@ -1,11 +1,9 @@
-using Atlas.UI.Avalonia.Themes;
 using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
-using Avalonia.Media;
 
 namespace Atlas.UI.Avalonia;
 

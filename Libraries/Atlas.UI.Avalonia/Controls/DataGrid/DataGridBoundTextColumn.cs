@@ -50,9 +50,9 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		protected override Size MeasureCore(Size availableSize)
 		{
 			double maxDesiredWidth = MaxDesiredWidth;
-			availableSize = new Size(Math.Min(maxDesiredWidth, availableSize.Width), availableSize.Height);
+			availableSize = availableSize.WithWidth(Math.Min(maxDesiredWidth, availableSize.Width));
 			Size measured = base.MeasureCore(availableSize);
-			measured = new Size(Math.Min(maxDesiredWidth, measured.Width), measured.Height);
+			measured = measured.WithWidth(Math.Min(maxDesiredWidth, measured.Width));
 			return measured;
 		}
 	}
