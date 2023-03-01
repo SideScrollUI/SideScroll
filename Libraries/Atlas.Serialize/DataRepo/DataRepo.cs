@@ -100,6 +100,31 @@ public class DataRepo
 		Save(obj.GetType().AssemblyQualifiedName!, obj, call);
 	}
 
+	public DataItem<T>? LoadItem<T>(string key, Call? call = null, bool createIfNeeded = false, bool lazy = false)
+	{
+		return LoadItem<T>(DefaultGroupId, key, call, createIfNeeded, lazy);
+	}
+
+	public DataItem<T>? LoadItem<T>(string groupId, string key, Call? call, bool createIfNeeded = false, bool lazy = false)
+	{
+		SerializerFile serializerFile = GetSerializerFile(typeof(T), groupId, key);
+
+		if (serializerFile.Exists)
+		{
+			T? obj = serializerFile.Load<T>(call, lazy);
+			if (obj != null)
+				return new DataItem<T>(key, obj, serializerFile.DataPath);
+		}
+
+		if (createIfNeeded)
+		{
+			T newObject = Activator.CreateInstance<T>();
+			Debug.Assert(newObject != null);
+			return new DataItem<T>(key, newObject, serializerFile.DataPath);
+		}
+		return default;
+	}
+
 	public T? Load<T>(string key, Call? call = null, bool createIfNeeded = false, bool lazy = false)
 	{
 		return Load<T>(DefaultGroupId, key, call, createIfNeeded, lazy);
@@ -207,8 +232,9 @@ public class DataRepo
 		{
 			Directory.Delete(groupPath, true);
 		}
-		catch (Exception)
+		catch (Exception e)
 		{
+			call.Log.Add(e);
 		}
 	}
 

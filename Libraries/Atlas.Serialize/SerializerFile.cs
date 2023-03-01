@@ -4,6 +4,8 @@ namespace Atlas.Serialize;
 
 public abstract class SerializerFile
 {
+	private const string DefaultName = "<Default>";
+
 	public string? HeaderPath { get; set; }
 	public string? DataPath { get; set; }
 	public string BasePath { get; set; }
@@ -27,7 +29,7 @@ public abstract class SerializerFile
 
 	public void Save(Call call, object obj, string? name = null)
 	{
-		name ??= "<Default>";
+		name ??= DefaultName;
 
 		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object: " + name, new Tag("Path", BasePath));
 

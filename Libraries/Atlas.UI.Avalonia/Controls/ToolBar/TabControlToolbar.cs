@@ -14,7 +14,7 @@ namespace Atlas.UI.Avalonia.Controls;
 
 public class TabControlToolbar : Grid, IDisposable
 {
-	public static Thickness DefaultMargin = new(6, 3);
+	public static Thickness DefaultMargin = new(6, 2);
 
 	public TabInstance? TabInstance;
 
@@ -117,7 +117,7 @@ public class TabControlToolbar : Grid, IDisposable
 		{
 			Background = Theme.ToolbarButtonSeparator,
 			Width = 1,
-			Margin = new Thickness(4),
+			Margin = new Thickness(4, 2),
 		};
 		AddControl(panel);
 	}

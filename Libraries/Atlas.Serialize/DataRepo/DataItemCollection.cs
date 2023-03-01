@@ -73,12 +73,19 @@ public class DataItem<T> : IDataItem
 	public string Key { get; set; }
 	public T Value { get; set; }
 	public object Object => Value!;
+	public string? Path { get; set; }
+
+	public FileInfo? FileInfo => _fileInfo ??= File.Exists(Path) ? new FileInfo(Path) : null;
+	private FileInfo? _fileInfo;
+
+	public DateTime? ModifiedUtc => FileInfo?.LastWriteTimeUtc;
 
 	public override string ToString() => Key;
 
-	public DataItem(string key, T value)
+	public DataItem(string key, T value, string? path = null)
 	{
 		Key = key;
 		Value = value;
+		Path = path;
 	}
 }

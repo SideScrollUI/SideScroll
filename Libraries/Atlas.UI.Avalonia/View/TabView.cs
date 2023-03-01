@@ -175,8 +175,7 @@ public class TabView : Grid, IDisposable
 			Children.Add(_containerGrid);
 
 		// Reassigning leaks memory
-		if (ContextMenu == null)
-			ContextMenu = new TabViewContextMenu(this, Instance);
+		ContextMenu ??= new TabViewContextMenu(this, Instance);
 
 		Dispatcher.UIThread.Post(AutoSizeParentControls, DispatcherPriority.Background);
 	}
