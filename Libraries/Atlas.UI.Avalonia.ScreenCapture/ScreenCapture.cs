@@ -16,9 +16,6 @@ namespace Atlas.UI.Avalonia.ScreenCapture;
 
 public class ScreenCapture : Grid
 {
-	public const string OsxCopyClipboardApplication = "osascript";
-	public const string OsxCopyClipboardScriptPath = "Native/OSX/load-image-clipboard.scpt";
-
 	private const int MinClipboardSize = 10;
 
 	private RenderTargetBitmap? _originalBitmap;
@@ -119,11 +116,6 @@ public class ScreenCapture : Grid
 				}
 				else if (platform == OSPlatform.OSX)
 				{
-					/*
-					on run argv
-						set the clipboard to (read (item 1 of argv) as TIFF picture)
-					end run
-					*/
 					CopyClipboardOsx(bitmap);
 				}
 			}
@@ -147,8 +139,17 @@ public class ScreenCapture : Grid
 		Directory.CreateDirectory(directory);
 
 		bitmap.Save(filePath);
-
-		Process.Start(OsxCopyClipboardApplication, OsxCopyClipboardScriptPath + " " + filePath);
+		
+		ProcessStartInfo processStartInfo = new()
+		{
+			FileName = "osascript",
+			ArgumentList =
+			{
+				"-e",
+				$"set the clipboard to (read \"{filePath}\" as TIFF picture)",
+			},
+		};
+		Process.Start(processStartInfo);
 	}
 
 	private async Task SaveAsync(Call call)

@@ -13,16 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Native\OSX\load-image-clipboard.scpt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Native\OSX\load-image-clipboard.scpt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Atlas.Core\Atlas.Core.csproj" />
     <ProjectReference Include="..\Atlas.UI.Avalonia\Atlas.UI.Avalonia.csproj" />
   </ItemGroup>
