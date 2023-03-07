@@ -5,8 +5,8 @@
     <FluentTheme Mode="Light"/>
     <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
-    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Fluent.Accents.FluentBaseLight.xaml?assembly=Atlas.UI.Avalonia"/>
+    <StyleInclude Source="avares://Atlas.UI.Avalonia/Themes/Fluent/Accents/FluentBaseLight.xaml"/>
     <StyleInclude Source="resm:OxyPlot.Avalonia.Themes.Default.xaml?assembly=OxyPlot.Avalonia"/>
-    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Fluent.FluentTheme.xaml?assembly=Atlas.UI.Avalonia"/>
+    <StyleInclude Source="avares://Atlas.UI.Avalonia/Themes/Fluent/FluentTheme.xaml"/>
   </Application.Styles>
 </Application>

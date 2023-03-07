@@ -5,10 +5,10 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Controls.TabButton.xaml?assembly=Atlas.UI.Avalonia"/>
-    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Controls.ToolbarButton.xaml?assembly=Atlas.UI.Avalonia"/>
-    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Fluent.Controls.ScrollBar.xaml?assembly=Atlas.UI.Avalonia"/>
-    <StyleInclude Source="resm:Atlas.UI.Avalonia.Themes.Fluent.Controls.DataGrid.xaml?assembly=Atlas.UI.Avalonia"/>
+    <StyleInclude Source="avares://Atlas.UI.Avalonia/Themes/Controls/TabButton.xaml"/>
+    <StyleInclude Source="avares://Atlas.UI.Avalonia/Themes/Controls/ToolbarButton.xaml"/>
+    <StyleInclude Source="avares://Atlas.UI.Avalonia/Themes/Fluent/Controls/ScrollBar.xaml"/>
+    <StyleInclude Source="avares://Atlas.UI.Avalonia/Themes/Fluent/Controls/DataGrid.xaml"/>
 
     <Style Selector="TextBox">
         <Setter Property="SelectionForegroundBrush" Value="{DynamicResource SelectionForegroundBrush}"/>
