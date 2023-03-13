@@ -40,7 +40,7 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 
 	public object Object;
 
-	[StyleLabel]
+	[StyleLabel, AutoSize]
 	public string? Name { get; set; }
 
 	[HiddenColumn]

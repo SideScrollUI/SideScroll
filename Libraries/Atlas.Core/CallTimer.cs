@@ -29,6 +29,15 @@ public class CallTimer : Call, IDisposable
 		_timer.Elapsed -= Timer_Elapsed;
 
 		UpdateDuration();
+
+		if (TaskInstance != null && IsTask)
+		{
+			TaskInstance.SetFinished();
+		}
+		else
+		{
+			Log?.Add("Finished", new Tag("Duration", _stopwatch.Elapsed));
+		}
 	}
 
 	private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
@@ -47,14 +56,5 @@ public class CallTimer : Call, IDisposable
 		Stop();
 
 		_timer.Dispose();
-
-		if (TaskInstance != null && IsTask)
-		{
-			TaskInstance.SetFinished();
-		}
-		else
-		{
-			Log!.Add("Finished", new Tag("Duration", _stopwatch.Elapsed));
-		}
 	}
 }

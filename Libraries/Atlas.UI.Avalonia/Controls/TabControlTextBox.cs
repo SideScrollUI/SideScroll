@@ -5,9 +5,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls;
@@ -110,6 +112,11 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 		else
 		{
 			MaxHeight = TabControlParams.ControlMaxHeight;
+		}
+
+		if (property.GetCustomAttribute<RangeAttribute>() is RangeAttribute rangeAttribute)
+		{
+			ToolTip.SetTip(this, $"{rangeAttribute.Minimum} - {rangeAttribute.Maximum}");
 		}
 
 		BindProperty(property);

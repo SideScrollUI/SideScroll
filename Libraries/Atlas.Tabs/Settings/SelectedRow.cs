@@ -24,6 +24,8 @@ public class SelectedRow : IEquatable<SelectedRow>
 	public SelectedRow(object obj)
 	{
 		Object = obj;
+		if (obj == null) return; // obj can still be null
+
 		Label = obj.ToString();
 
 		DataKey = ObjectUtils.GetDataKey(obj); // overrides label

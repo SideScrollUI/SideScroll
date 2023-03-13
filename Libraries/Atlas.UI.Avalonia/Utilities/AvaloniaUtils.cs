@@ -1,9 +1,12 @@
+using Atlas.Tabs;
 using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Input.Platform;
+using System.ComponentModel.DataAnnotations;
 
 namespace Atlas.UI.Avalonia;
 
@@ -114,6 +117,41 @@ public static class AvaloniaUtils
 
 			parentControl = parentControl.Parent;
 		}
+		return true;
+	}
+
+	public static bool ValidateControl(ListProperty listProperty, Control control)
+	{
+		dynamic? value = listProperty.Value;
+
+		if (listProperty.GetCustomAttribute<RequiredAttribute>() != null)
+		{
+			if (value == null || (value is string text && text.Length == 0))
+			{
+				DataValidationErrors.SetError(control, new DataValidationException("Required"));
+				return false;
+			}
+		}
+
+		if (value == null) return true;
+
+		if (listProperty.GetCustomAttribute<RangeAttribute>() is RangeAttribute rangeAttribute)
+		{
+			dynamic minValue = rangeAttribute.Minimum;
+			if (value < minValue)
+			{
+				DataValidationErrors.SetError(control, new DataValidationException("Min Value: " + minValue));
+				return false;
+			}
+
+			dynamic maxValue = rangeAttribute.Maximum;
+			if (value > maxValue)
+			{
+				DataValidationErrors.SetError(control, new DataValidationException("Max Value: " + maxValue));
+				return false;
+			}
+		}
+
 		return true;
 	}
 }

@@ -8,14 +8,18 @@ using Avalonia.Layout;
 using System.Collections;
 using System.Reflection;
 using Atlas.UI.Avalonia.Themes;
+using System.ComponentModel.DataAnnotations;
+using Atlas.UI.Avalonia.View;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabControlParams : Grid
+public class TabControlParams : Grid, IValidationControl
 {
 	public const int ControlMaxWidth = 500;
 	public const int ControlMaxHeight = 400;
 	public object? Object;
+
+	private Dictionary<ListProperty, Control> _propertyControls = new();
 
 	public TabControlParams(object? obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
 	{
@@ -100,6 +104,8 @@ public class TabControlParams : Grid
 			AddControl(control, columnIndex, rowIndex);
 			controls.Add(control);
 			columnIndex++;
+
+			_propertyControls[property] = control;
 		}
 		return controls;
 	}
@@ -139,6 +145,8 @@ public class TabControlParams : Grid
 		if (control == null)
 			return null;
 
+		property.Cachable = false;
+
 		int rowIndex = RowDefinitions.Count;
 		{
 			var spacerRow = new RowDefinition()
@@ -157,9 +165,9 @@ public class TabControlParams : Grid
 		var textLabel = new TextBlock()
 		{
 			Text = property.Name,
-			Margin = new Thickness(10, 3),
+			Margin = new Thickness(10, 7, 10, 3),
 			Foreground = Theme.BackgroundText,
-			VerticalAlignment = VerticalAlignment.Center,
+			VerticalAlignment = VerticalAlignment.Top,
 			MaxWidth = ControlMaxWidth,
 			[Grid.RowProperty] = rowIndex,
 			[Grid.ColumnProperty] = 0,
@@ -167,6 +175,8 @@ public class TabControlParams : Grid
 		Children.Add(textLabel);
 
 		AddControl(control, 1, rowIndex);
+
+		_propertyControls[property] = control;
 
 		return control;
 	}
@@ -211,6 +221,20 @@ public class TabControlParams : Grid
 			}
 		}
 		base.Focus();
+	}
+
+	public void Validate()
+	{
+		bool valid = true;
+		foreach (var propertyControl in _propertyControls)
+		{
+			valid = AvaloniaUtils.ValidateControl(propertyControl.Key, propertyControl.Value) && valid;
+		}
+
+		if (!valid)
+		{
+			throw new ValidationException("Invalid Parameters");
+		}
 	}
 }
 
