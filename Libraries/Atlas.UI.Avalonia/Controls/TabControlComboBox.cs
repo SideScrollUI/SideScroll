@@ -35,9 +35,6 @@ public class TabControlComboBox : ComboBox, IStyleable, ILayoutable
 		InitializeComponent();
 
 		IsEnabled = property.Editable;
-		MaxWidth = TabControlParams.ControlMaxWidth;
-
-		Type type = property.UnderlyingType;
 
 		if (listPropertyName != null)
 		{
@@ -48,9 +45,16 @@ public class TabControlComboBox : ComboBox, IStyleable, ILayoutable
 		}
 		else
 		{
-			Items = type.GetEnumValues();
+			Items = property.UnderlyingType.GetEnumValues();
 		}
 		Bind(property.Object, property.PropertyInfo.Name);
+	}
+
+	private void InitializeComponent()
+	{
+		MaxWidth = TabControlParams.ControlMaxWidth;
+
+		HorizontalAlignment = HorizontalAlignment.Stretch;
 	}
 
 	public void Bind(object obj, string path)
@@ -63,14 +67,28 @@ public class TabControlComboBox : ComboBox, IStyleable, ILayoutable
 		};
 		this.Bind(SelectedItemProperty, binding);
 
-		if ((obj == null || SelectedItem == null) && Items.GetEnumerator().MoveNext())
-			SelectedIndex = 0;
+		SelectDefaultValue();
 	}
 
-	private void InitializeComponent()
+	private void SelectDefaultValue()
 	{
-		//MaxWidth = TabControlParams.ControlMaxWidth;
+		if ((Property?.Object != null && SelectedItem != null) || Items.GetEnumerator().MoveNext() == false) return;
 
-		HorizontalAlignment = HorizontalAlignment.Stretch;
+		// Check for null value match
+		object? value = Property!.Value;
+		foreach (var item in Items)
+		{
+			if (item == value)
+			{
+				SelectedItem = item;
+				return;
+			}
+		}
+
+		var enumerator = Items.GetEnumerator();
+		if (enumerator.MoveNext())
+		{
+			SelectedItem = enumerator.Current;
+		}
 	}
 }

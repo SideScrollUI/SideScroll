@@ -118,31 +118,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 		PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => DataGridRow_PointerPressed(x, e), RoutingStrategies.Tunnel, true);
 	}
 
-	// this breaks when content is too wide for Tab
-	// real DesiredSize doesn't work because of HorizontalAlign = Stretch?
-	/*public new Size DesiredSize
-	{
-		get
-		{
-			double columnWidths = GetTotalColumnWidths();
-			Size desiredSize = new Size(columnWidths, 0);
-			foreach (var control in Children)
-			{
-				Size childDesiredSize = control.DesiredSize;
-				desiredSize = new Size(Math.Max(desiredSize.Width, childDesiredSize.Width), Math.Max(desiredSize.Height, childDesiredSize.Height));
-			}
-			return desiredSize;
-		}
-	}
-
-	public double GetTotalColumnWidths()
-	{
-		double total = 0;
-		foreach (var dataColumn in dataGrid.Columns)
-			total += dataColumn.ActualWidth;
-		return total;
-	}*/
-
 	[MemberNotNull(nameof(_elementType), nameof(DataGrid))]
 	private void Initialize()
 	{

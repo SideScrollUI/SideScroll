@@ -20,6 +20,11 @@ public interface IControlCreator
 	void AddControl(TabInstance tabInstance, TabControlSplitContainer container, object obj);
 }
 
+public interface IValidationControl
+{
+	void Validate();
+}
+
 public class TabView : Grid, IDisposable
 {
 	private const string FillerPanelId = "FillerPanelId";
@@ -99,6 +104,8 @@ public class TabView : Grid, IDisposable
 		Instance.OnModelChanged += TabInstance_OnModelChanged;
 		if (Instance is ITabSelector tabSelector)
 			tabSelector.OnSelectionChanged += ParentListSelectionChanged;
+
+		Instance.OnValidate += Instance_OnValidate;
 	}
 
 	public async Task LoadBackgroundAsync(Call call)
@@ -274,6 +281,19 @@ public class TabView : Grid, IDisposable
 	private void TabInstance_OnModelChanged(object? sender, EventArgs e)
 	{
 		ReloadControls();
+	}
+
+	private void Instance_OnValidate(object? sender, EventArgs e)
+	{
+		if (_tabParentControls == null) return;
+
+		foreach (IControl control in _tabParentControls.Children)
+		{
+			if (control is IValidationControl paramsControl)
+			{
+				paramsControl.Validate();
+			}
+		}
 	}
 
 	private void TabInstance_OnResize(object? sender, EventArgs e)
@@ -1033,6 +1053,7 @@ public class TabView : Grid, IDisposable
 			ClearControls(true);
 
 			Instance.OnModelChanged -= TabInstance_OnModelChanged;
+			Instance.OnValidate -= Instance_OnValidate;
 			if (Instance is ITabSelector tabSelector)
 				tabSelector.OnSelectionChanged -= ParentListSelectionChanged;
 

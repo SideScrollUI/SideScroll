@@ -170,7 +170,7 @@ public class TypeSchema
 
 	public ConstructorInfo? GetCustomConstructor()
 	{
-		if (HasEmptyConstructor) return null;
+		if (HasEmptyConstructor || Type == null) return null;
 
 		var members = PropertySchemas.Select(p => p.PropertyName.ToLower()).ToHashSet();
 		var fieldMembers = FieldSchemas.Select(p => p.FieldName.ToLower()).ToHashSet();
