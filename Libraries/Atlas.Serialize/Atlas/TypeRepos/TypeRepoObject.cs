@@ -86,16 +86,17 @@ public class TypeRepoObject : TypeRepo
 		// Load serialized data into object
 		public void Load(object obj)
 		{
-			if (!PropertySchema.IsLoadable)
-			{
-				TypeRepo!.LoadLazyObjectRef(); // skip reference
-				if (LazyProperty != null)
-					LazyProperty.FieldInfoLoaded!.SetValue(obj, true);
-			}
-			else if (LazyProperty != null)
+			if (LazyProperty != null)
 			{
 				TypeRef? typeRef = TypeRepo!.LoadLazyObjectRef();
+				if (!PropertySchema.IsLoadable)
+					typeRef = null;
+				
 				LazyProperty.SetTypeRef(obj, typeRef);
+			}
+			else if (!PropertySchema.IsLoadable)
+			{
+				TypeRepo!.SkipObjectRef();
 			}
 			else
 			{

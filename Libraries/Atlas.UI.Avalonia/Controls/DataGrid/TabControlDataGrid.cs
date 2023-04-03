@@ -1200,6 +1200,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 	public override void Render(DrawingContext context)
 	{
 		Dispatcher.UIThread.Post(UpdateVisible, DispatcherPriority.ContextIdle);
+
 		base.Render(context);
 	}
 

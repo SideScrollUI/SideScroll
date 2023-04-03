@@ -10,8 +10,8 @@ public class TabTestParamsDataTabs : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonNew { get; set; } = new ToolButton("New", Icons.Streams.BlankDocument);
-		public ToolButton ButtonSave { get; set; } = new ToolButton("Save", Icons.Streams.Save);
+		public ToolButton ButtonNew { get; set; } = new ToolButton("New", Icons.Svg.BlankDocument);
+		public ToolButton ButtonSave { get; set; } = new ToolButton("Save", Icons.Svg.Save);
 	}
 
 	public class Instance : TabInstance

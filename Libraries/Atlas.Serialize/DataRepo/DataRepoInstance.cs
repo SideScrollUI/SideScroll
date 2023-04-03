@@ -16,6 +16,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 
 	public readonly DataRepo DataRepo;
 	public string GroupId { get; set; }
+	public string GroupPath => DataRepo.GetGroupPath(typeof(T), GroupId);
 
 	public override string ToString() => GroupId;
 
@@ -27,11 +28,12 @@ public class DataRepoInstance<T> : IDataRepoInstance
 
 	public virtual void Save(Call? call, T item)
 	{
-		DataRepo.Save<T>(GroupId, DefaultKey, item, call);
+		Save(call, DefaultKey, item);
 	}
 
 	public virtual void Save(Call? call, string key, T item)
 	{
+		call ??= new();
 		DataRepo.Save<T>(GroupId, key, item, call);
 	}
 
@@ -45,6 +47,11 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		return DataRepo.LoadAll<T>(call, GroupId, lazy);
 	}
 
+	public ItemCollection<Header> LoadHeaders(Call? call = null)
+	{
+		return DataRepo.LoadHeaders(typeof(T), GroupId, call);
+	}
+
 	public virtual void Delete(Call? call, T item)
 	{
 		Delete(call, item!.ToString());
@@ -52,11 +59,14 @@ public class DataRepoInstance<T> : IDataRepoInstance
 
 	public virtual void Delete(Call? call = null, string? key = null)
 	{
-		DataRepo.Delete<T>(call, GroupId, key ?? DefaultKey);
+		call ??= new();
+		key ??= DefaultKey;
+		DataRepo.Delete<T>(call, GroupId, key);
 	}
 
 	public virtual void DeleteAll(Call? call)
 	{
+		call ??= new();
 		DataRepo.DeleteAll<T>(call, GroupId);
 	}
 }

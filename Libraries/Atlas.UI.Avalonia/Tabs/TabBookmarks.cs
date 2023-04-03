@@ -25,11 +25,11 @@ public class TabBookmarks : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonRefresh { get; set; } = new ToolButton("Refresh", Icons.Streams.Refresh);
+		public ToolButton ButtonRefresh { get; set; } = new ToolButton("Refresh", Icons.Svg.Refresh);
 		//public ToolButton ButtonReset { get; set; } = new ToolButton("Reset", Icons.Streams.Refresh);
 
 		[Separator]
-		public ToolButton ButtonDeleteAll { get; set; } = new ToolButton("Delete All", Icons.Streams.DeleteList);
+		public ToolButton ButtonDeleteAll { get; set; } = new ToolButton("Delete All", Icons.Svg.DeleteList);
 	}
 
 	public class Instance : TabInstance

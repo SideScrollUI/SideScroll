@@ -27,9 +27,9 @@ public class TabControlSearchToolbar : TabControlToolbar
 		//CommandBinder.
 		//CommandBindings.Add(commandBindingBack);
 
-		ButtonSearch = AddButton("Search", Icons.Streams.Search);
-		ButtonLoadNext = AddButton("Next", Icons.Streams.Forward);
-		ButtonSleep = AddButton("Sleep", Icons.Streams.Refresh);
+		ButtonSearch = AddButton("Search", Icons.Svg.Search);
+		ButtonLoadNext = AddButton("Next", Icons.Svg.RightArrow);
+		ButtonSleep = AddButton("Sleep", Icons.Svg.Refresh);
 		AddSeparator();
 
 		RadioButtonAscending = AddRadioButton("Ascending");
@@ -42,13 +42,13 @@ public class TabControlSearchToolbar : TabControlToolbar
 		ToolTip.SetTip(TextBoxLimit, "1 - 100");
 		AddSeparator();
 
-		ButtonLoadAdd = AddButton("Add", Icons.Streams.Add);
+		ButtonLoadAdd = AddButton("Add", Icons.Svg.Add);
 		AddSeparator();
 
-		AddButton("Save", Icons.Streams.Save);
+		AddButton("Save", Icons.Svg.Save);
 		AddSeparator();
 
-		ButtonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
+		ButtonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Svg.PadNote);
 		TextBoxStatus = AddLabelText("Status");
 	}
 }

@@ -10,10 +10,10 @@ public class TabTestToolbar : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Streams.Refresh);
+		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
 
 		[Separator]
-		public ToolButton ButtonOpenBrowser { get; set; } = new("Open in Browser", Icons.Streams.Browser);
+		public ToolButton ButtonOpenBrowser { get; set; } = new("Open in Browser", Icons.Svg.Browser);
 
 		[Separator]
 		public ToolComboBox<TimeSpan> Duration { get; set; } = new("Duration", TimeSpanExtensions.CommonTimeSpans, TimeSpan.FromMinutes(5));

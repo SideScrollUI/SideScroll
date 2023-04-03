@@ -42,7 +42,6 @@ public class TabDateTimePicker : Grid, IStyleable
 	public TabDateTimePicker(ListProperty property)
 	{
 		Property = property;
-
 		InitializeComponent();
 	}
 

@@ -94,7 +94,7 @@ public class TypeSchema
 
 	private void InitializeType()
 	{
-		IsCollection = (typeof(ICollection).IsAssignableFrom(Type));
+		IsCollection = typeof(ICollection).IsAssignableFrom(Type);
 		HasSubType = !Type!.IsSealed; // set for all non derived classes?
 		CanReference = !(Type.IsPrimitive || Type.IsEnum || Type == typeof(string));
 		NonNullableType = Type.GetNonNullableType();

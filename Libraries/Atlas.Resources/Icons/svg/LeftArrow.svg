@@ -4,14 +4,7 @@
 <desc>Created with Fabric.js 4.6.0</desc>
 <defs>
 </defs>
-<g transform="matrix(4.96 0 0 4.96 320 320)" id="gRvCx3DShVUIqGoQYQkQ9"  >
-<g style="" vector-effect="non-scaling-stroke"   >
-		<g transform="matrix(1 0 0 1 0.05 0.05)" id="trGGjVHxn0GpusBMccMAa"  >
-<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-64.55, -64.55)" d="M 64.5 122.6 C 96.5 122.6 122.6 96.6 122.6 64.5 C 122.6 32.400000000000006 96.6 6.5 64.5 6.5 C 32.400000000000006 6.5 6.5 32.5 6.5 64.5 C 6.5 96.5 32.5 122.6 64.5 122.6 z M 64.5 14.599999999999994 C 92 14.6 114.4 36.99999999999999 114.4 64.5 C 114.4 92 92 114.4 64.5 114.4 C 37 114.4 14.600000000000001 92 14.600000000000001 64.5 C 14.600000000000001 37 37 14.600000000000001 64.5 14.600000000000001 z" stroke-linecap="round" />
-</g>
-		<g transform="matrix(1 0 0 1 -4.8 -0.3)" id="g2sO3IwVb42iLKr6qOc-H"  >
-<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-59.7, -64.2)" d="M 70 93.5 C 70.8 94.3 71.8 94.7 72.9 94.7 C 73.9 94.7 75 94.3 75.80000000000001 93.5 C 77.4 91.9 77.4 89.3 75.80000000000001 87.7 L 52.30000000000001 64.2 L 75.80000000000001 40.7 C 77.4 39.1 77.4 36.5 75.80000000000001 34.900000000000006 C 74.20000000000002 33.30000000000001 71.60000000000001 33.300000000000004 70.00000000000001 34.900000000000006 L 43.600000000000016 61.300000000000004 C 42.80000000000002 62.1 42.40000000000001 63.1 42.40000000000001 64.2 C 42.40000000000001 65.30000000000001 42.80000000000001 66.3 43.600000000000016 67.10000000000001 L 70.00000000000001 93.5 z" stroke-linecap="round" />
-</g>
-</g>
+<g transform="matrix(10.79 0 0 10.79 320 320)" id="nVpjea5R3-OtseUP41ovv"  >
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-32.04, -32.03)" d="M 26.3 33.1 C 26 32.800000000000004 25.7 32.5 25.400000000000002 32.2 C 30.5 27.1 35.5 22.1 40.6 17.000000000000004 C 41.4 16.200000000000003 42.2 15.400000000000004 43 14.600000000000003 C 44.8 12.800000000000002 42 9.900000000000002 40.2 11.800000000000004 C 34.5 17.4 29 22.9 23.5 28.4 C 22.7 29.2 21.9 30 21.1 30.799999999999997 C 20.3 31.599999999999998 20.3 32.9 21.1 33.599999999999994 C 26.6 39.1 32 44.5 37.5 50 C 38.3 50.8 39 51.5 39.8 52.3 C 41.599999999999994 54.099999999999994 44.5 51.3 42.599999999999994 49.5 C 37.2 44.1 31.7 38.6 26.3 33.1 z" stroke-linecap="round" />
 </g>
 </svg>

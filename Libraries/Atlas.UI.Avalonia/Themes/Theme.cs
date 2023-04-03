@@ -50,6 +50,7 @@ public static class Theme
 	// Toolbar
 	public static SolidColorBrush ToolbarButtonBackground => Get("ToolbarButtonBackgroundBrush");
 	public static SolidColorBrush ToolbarButtonBackgroundHover => Get("ToolbarButtonBackgroundHoverBrush");
+	public static SolidColorBrush ToolbarButtonForegroundHover => Get("ToolbarButtonForegroundHoverBrush");
 	public static SolidColorBrush ToolbarButtonSeparator => Get("ToolbarButtonSeparatorBrush");
 
 	public static SolidColorBrush ToolbarLabelForeground => Get("ToolbarLabelForegroundBrush");

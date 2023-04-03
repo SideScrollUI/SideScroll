@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using Atlas.Core;
+using Atlas.Resources;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Themes;
 using Atlas.UI.Avalonia.Utilities;
@@ -33,6 +34,10 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 	private DateTime? _lastInvoked;
 	private DispatcherTimer? _dispatcherTimer;  // delays auto selection to throttle updates
 
+	private Image? _imageControl;
+	private IImage? _defaultImage;
+	private IImage? _highlightImage;
+
 	public ToolbarButton(TabControlToolbar toolbar, ToolButton toolButton)
 	{
 		Toolbar = toolbar;
@@ -43,22 +48,22 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		CallAction = toolButton.Action;
 		CallActionAsync = toolButton.ActionAsync;
 
-		Initialize(toolButton.Icon);
+		Initialize(toolButton.ImageResourceName);
 
 		if (toolButton.Default)
 			SetDefault();
 	}
 
-	public ToolbarButton(TabControlToolbar toolbar, string? label, string tooltip, Stream bitmapStream, ICommand? command = null)
+	public ToolbarButton(TabControlToolbar toolbar, string? label, string tooltip, string imageResourceName, ICommand? command = null)
 	{
 		Toolbar = toolbar;
 		Label = label;
 		Tooltip = tooltip;
 
-		Initialize(bitmapStream, command);
+		Initialize(imageResourceName, command);
 	}
 
-	private void Initialize(Stream bitmapStream, ICommand? command = null)
+	private void Initialize(string imageResourceName, ICommand? command = null)
 	{
 		Grid grid = new()
 		{
@@ -66,27 +71,27 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 			RowDefinitions = new RowDefinitions("Auto"),
 		};
 
-		IImage sourceImage;
-		if (SvgUtils.IsSvg(bitmapStream))
+		if (imageResourceName.EndsWith(".svg"))
 		{
-			sourceImage = SvgUtils.GetSvgImage(bitmapStream);
+			_defaultImage = SvgUtils.GetSvgImage(imageResourceName);
+			_highlightImage = SvgUtils.GetSvgImage(imageResourceName, Theme.ToolbarButtonForegroundHover.Color);
 		}
 		else
 		{
-			bitmapStream.Position = 0;
-			sourceImage = new Bitmap(bitmapStream);
+			Stream stream = Icons.Streams.Get(imageResourceName);
+			_defaultImage = new Bitmap(stream);
 		}
 
-		Image image = new()
+		_imageControl = new()
 		{
-			Source = sourceImage,
+			Source = _defaultImage,
 			Width = 24,
 			Height = 24,
 			//MaxWidth = 24,
 			//MaxHeight = 24,
 			Stretch = Stretch.None,
 		};
-		grid.Children.Add(image);
+		grid.Children.Add(_imageControl);
 
 		if (Label != null)
 		{
@@ -106,7 +111,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		Background = Theme.ToolbarButtonBackground;
 		BorderBrush = Background;
 		BorderThickness = new Thickness(0);
-		Margin = new Thickness(0, 1);
+		Margin = new Thickness(1);
 		//BorderThickness = new Thickness(2),
 		//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
 		//BorderBrush = new SolidColorBrush(Colors.Black),
@@ -212,19 +217,21 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		}
 	}
 
-	// DefaultTheme.xaml is overriding this currently
 	protected override void OnPointerEnter(PointerEventArgs e)
 	{
 		base.OnPointerEnter(e);
-		BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-		Background = Theme.ToolbarButtonBackgroundHover;
+
+		if (_highlightImage != null)
+		{
+			_imageControl!.Source = _highlightImage;
+		}
 	}
 
 	protected override void OnPointerLeave(PointerEventArgs e)
 	{
 		base.OnPointerLeave(e);
-		Background = Theme.ToolbarButtonBackground;
-		BorderBrush = Background;
+
+		_imageControl!.Source = _defaultImage;
 	}
 
 	private void DispatcherTimer_Tick(object? sender, EventArgs e)

@@ -51,18 +51,18 @@ public class TabViewerToolbar : TabControlToolbar
 		//HotKeyManager.SetHotKey(button, gesture1);
 
 		// gray color 3289C7
-		ButtonBack = AddButton("Back (Alt+Left)", Icons.Streams.Back, CommandBindingBack);
-		ButtonForward = AddButton("Forward (Alt+Right)", Icons.Streams.Forward, CommandBindingForward);
+		ButtonBack = AddButton("Back (Alt+Left)", Icons.Svg.LeftArrow, CommandBindingBack);
+		ButtonForward = AddButton("Forward (Alt+Right)", Icons.Svg.RightArrow, CommandBindingForward);
 
 		AddSeparator();
-		ButtonRefresh = AddButton("Refresh (Ctrl+R)", Icons.Streams.Refresh);
+		ButtonRefresh = AddButton("Refresh (Ctrl+R)", Icons.Svg.Refresh);
 		ButtonRefresh.Add(Refresh);
 
 		if (tabViewer.Project.ProjectSettings.EnableLinking)
 		{
 			AddSeparator();
-			ButtonLink = AddButton("Link - Copy to Clipboard", Icons.Streams.Link);
-			ButtonImport = AddButton("Import Link from Clipboard", Icons.Streams.Import);
+			ButtonLink = AddButton("Link - Copy to Clipboard", Icons.Svg.Link);
+			ButtonImport = AddButton("Import Link from Clipboard", Icons.Svg.Import);
 		}
 
 		// Handle in BaseWindow

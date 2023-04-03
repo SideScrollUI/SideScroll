@@ -9,28 +9,29 @@ public static class SvgUtils
 {
 	private static Dictionary<string, IImage> _images = new();
 
-	public static IImage GetSvgImage(string resourceName)
+	public static IImage GetSvgImage(string resourceName, Color? color = null)
 	{
 		lock (_images)
 		{
-			if (_images.TryGetValue(resourceName, out IImage? image)) return image;
+			string key = $"{resourceName}:{color}";
+			if (_images.TryGetValue(key, out IImage? image)) return image;
 
 			Stream bitmapStream = Icons.Streams.GetSvg(resourceName);
-			IImage queueImage = SvgUtils.GetSvgImage(bitmapStream);
-			_images[resourceName] = queueImage;
+			IImage queueImage = SvgUtils.GetSvgImage(bitmapStream, color);
+			_images[key] = queueImage;
 			return queueImage;
 		}
 	}
 
-	public static IImage GetSvgImage(Stream bitmapStream)
+	public static IImage GetSvgImage(Stream bitmapStream, Color? color = null)
 	{
 		IImage sourceImage;
 		bitmapStream.Position = 0;
 
 		using var reader = new StreamReader(bitmapStream);
 		string text = reader.ReadToEnd();
-		Color color = Theme.IconForeground.Color;
-		string updated = text.Replace("rgb(0,0,0)", $"rgb({color.R},{color.G},{color.B})");
+		Color newColor = color ?? Theme.IconForeground.Color;
+		string updated = text.Replace("rgb(0,0,0)", $"rgb({newColor.R},{newColor.G},{newColor.B})");
 
 		SvgSource svgSource = new();
 		svgSource.FromSvg(updated);

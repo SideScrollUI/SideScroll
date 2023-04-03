@@ -109,6 +109,10 @@
 
         <x:Double x:Key="RadioButtonBorderThemeThickness">1.5</x:Double>
 
+        <!-- ProgressBar -->
+
+        <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="#20204a" />
+
         <!-- ContextMenu -->
 
         <!--SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#58588f" />
@@ -190,7 +194,8 @@
 
         <!-- Toolbar -->
         <SolidColorBrush x:Key="ToolbarButtonBackgroundBrush" Color="#121212" />
-        <SolidColorBrush x:Key="ToolbarButtonBackgroundHoverBrush" Color="#2040a0" />
+        <SolidColorBrush x:Key="ToolbarButtonBackgroundHoverBrush" Color="#2c2c2c" />
+        <SolidColorBrush x:Key="ToolbarButtonForegroundHoverBrush" Color="#dddddd" />
         <SolidColorBrush x:Key="ToolbarButtonSeparatorBrush" Color="{DynamicResource IconForegroundColor}" />
 
         <SolidColorBrush x:Key="ToolbarLabelForegroundBrush" Color="{DynamicResource TextForegroundColor}" />
@@ -205,11 +210,12 @@
         <SolidColorBrush x:Key="ControlBackgroundHoverBrush" Color="#ddffdd" />
 
         <!-- ToolTip -->
-        <SolidColorBrush x:Key="ToolTipBackground" Color="#E8123d7f" />
+        <SolidColorBrush x:Key="ToolTipBackground" Color="#E8122d5f" />
         <SolidColorBrush x:Key="ToolTipForeground" Color="#d0d0e8" />
         <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#FF000000" />
-        
-        <Thickness x:Key="ToolTipBorderThemeThickness">1</Thickness>
+
+        <Thickness x:Key="ToolTipBorderThemePadding">8,5,8,4</Thickness>
+        <Thickness x:Key="ToolTipBorderThemeThickness">1.5</Thickness>
         
         <x:Double x:Key="ToolTipContentThemeFontSize">14</x:Double>
 
