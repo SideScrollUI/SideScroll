@@ -9,9 +9,9 @@ interface IResourceView
 	Stream Stream { get; }
 }
 
-public record ResourceView(string BasePath, string? GroupPath, string ResourceName, string ResourceType) : IResourceView
+public record ResourceView(Assembly assembly, string BasePath, string? GroupPath, string ResourceName, string ResourceType) : IResourceView
 {
 	public string Path => $"{BasePath}.{GroupPath}.{ResourceName}.{ResourceType}";
 
-	public Stream Stream => Assembly.GetExecutingAssembly().GetManifestResourceStream(Path)!;
+	public Stream Stream => assembly.GetManifestResourceStream(Path)!; 
 }

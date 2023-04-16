@@ -1,4 +1,5 @@
 using Atlas.Core;
+using System.Reflection;
 
 namespace Atlas.Resources;
 
@@ -6,7 +7,9 @@ public static class Icons
 {
 	public const string IconPath = "Atlas.Resources.Icons";
 
-	public static ResourceView Logo => new ResourceView(IconPath, "Logo", "Logo3", "ico");
+	public static Assembly Assembly => Assembly.GetExecutingAssembly();
+
+	public static ResourceView Logo => new ResourceView(Assembly, IconPath, "Logo", "Logo3", "ico");
 
 	public class Svg : NamedItemCollection<Svg, ResourceView>
 	{
@@ -23,7 +26,6 @@ public static class Icons
 		public static ResourceView DownArrow => Get("DownArrow");
 
 		public static ResourceView Search => Get("Search");
-
 
 		public static ResourceView BlankDocument => Get("BlankDocument");
 		public static ResourceView Save => Get("Save");
@@ -51,7 +53,7 @@ public static class Icons
 		public static ResourceView Import => Get("Import");
 		public static ResourceView Screenshot => Get("Screenshot");
 
-		public static ResourceView Get(string resourceName) => new ResourceView(IconPath, "svg", resourceName, "svg");
+		public static ResourceView Get(string resourceName) => new ResourceView(Assembly, IconPath, "svg", resourceName, "svg");
 	}
 
 	public class Png : NamedItemCollection<Png, ResourceView>
@@ -69,6 +71,6 @@ public static class Icons
 
 		public static ResourceView Bookmark => Get("bookmark");
 
-		public static ResourceView Get(string resourceName) => new ResourceView(IconPath, "png", resourceName, "png");
+		public static ResourceView Get(string resourceName) => new ResourceView(Assembly, IconPath, "png", resourceName, "png");
 	}
 }
