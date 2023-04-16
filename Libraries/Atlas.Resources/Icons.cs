@@ -1,136 +1,74 @@
 using Atlas.Core;
-using System.Reflection;
 
 namespace Atlas.Resources;
 
 public static class Icons
 {
-	public const string Logo = "Logo3.ico";
-	public class Png : NamedItemCollection<Png, string>
+	public const string IconPath = "Atlas.Resources.Icons";
+
+	public static ResourceView Logo => new ResourceView(IconPath, "Logo", "Logo3", "ico");
+
+	public class Svg : NamedItemCollection<Svg, ResourceView>
 	{
-		public const string Search16 = "search_right_light_16.png";
-		public const string ClearSearch = "clear_search.png";
+		public static ResourceView Pin => Get("Placeholder");
+		public static ResourceView Add => Get("Add");
+		public static ResourceView Delete => Get("Cancel");
 
-		public const string Info1 = "info_24_759eeb.png";
+		public static ResourceView Back => Get("LeftArrowCircle");
+		public static ResourceView Forward => Get("RightArrowCircle");
 
-		public const string Info20 = "info_20_759eeb.png";
+		public static ResourceView LeftArrow => Get("LeftArrow");
+		public static ResourceView RightArrow => Get("RightArrow");
+		public static ResourceView UpArrow => Get("UpArrow");
+		public static ResourceView DownArrow => Get("DownArrow");
 
-		public const string Unlock = "unlock.png";
-		public const string Password = "password.png";
+		public static ResourceView Search => Get("Search");
 
-		public const string Paste = "paste_16.png";
 
-		public const string Bookmark = "bookmark.png";
+		public static ResourceView BlankDocument => Get("BlankDocument");
+		public static ResourceView Save => Get("Save");
+		public static ResourceView OpenFolder => Get("OpenFolder");
+
+		public static ResourceView Star => Get("Star");
+		public static ResourceView StarFilled => Get("StarFilled");
+
+		public static ResourceView Browser => Get("Internet");
+
+		public static ResourceView Enter => Get("Enter");
+
+		public static ResourceView Copy => Get("Copy");
+		public static ResourceView PadNote => Get("PadNote");
+		public static ResourceView Eraser => Get("Eraser");
+
+		public static ResourceView Refresh => Get("Refresh");
+		public static ResourceView Stats => Get("Stats");
+
+		public static ResourceView List1 => Get("List1");
+		public static ResourceView List2 => Get("List2");
+		public static ResourceView DeleteList => Get("DeleteList");
+
+		public static ResourceView Link => Get("Link");
+		public static ResourceView Import => Get("Import");
+		public static ResourceView Screenshot => Get("Screenshot");
+
+		public static ResourceView Get(string resourceName) => new ResourceView(IconPath, "svg", resourceName, "svg");
 	}
 
-	public class Svg : NamedItemCollection<Svg, string>
+	public class Png : NamedItemCollection<Png, ResourceView>
 	{
-		public const string Pin = "Placeholder.svg";
+		public static ResourceView ClearSearch => Get("clear_search");
+		public static ResourceView Search16 => Get("search_right_light_16");
 
-		public const string Add = "Add.svg";
-		public const string Delete = "Cancel.svg";
+		public static ResourceView Info => Get("info_24_759eeb");
+		public static ResourceView Info20 => Get("info_20_759eeb");
 
-		public const string LeftArrow = "LeftArrow.svg";
-		public const string RightArrow = "RightArrow.svg";
-		public const string UpArrow = "UpArrow.svg";
-		public const string DownArrow = "DownArrow.svg";
+		public static ResourceView Unlock => Get("unlock");
+		public static ResourceView Password => Get("password");
 
-		public const string LeftArrowCircle = "LeftArrowCircle.svg";
-		public const string RightArrowCircle = "RightArrowCircle.svg";
+		public static ResourceView Paste => Get("paste_16");
 
-		public const string Search = "Search.svg";
+		public static ResourceView Bookmark => Get("bookmark");
 
-		public const string BlankDocument = "BlankDocument.svg";
-
-		public const string Save = "Save.svg";
-		public const string OpenFolder = "OpenFolder.svg";
-
-		public const string Star = "Star.svg";
-		public const string StarFilled = "StarFilled.svg";
-
-		public const string Browser = "Internet.svg";
-
-		public const string Enter = "Enter.svg";
-
-		public const string Copy = "Copy.svg";
-		public const string PadNote = "PadNote.svg";
-		public const string Eraser = "Eraser.svg";
-
-		public const string Refresh = "Refresh.svg";
-		public const string Stats = "Stats.svg";
-
-		public const string List1 = "List1.svg";
-		public const string List2 = "List2.svg";
-		public const string DeleteList = "DeleteList.svg";
-
-		public const string Link = "Link.svg";
-		public const string Import = "Import.svg";
-
-		public const string Screenshot = "Screenshot.svg";
-	}
-
-	public class Streams : NamedItemCollection<Streams, Stream>
-	{
-		public static Stream Logo => Get(Icons.Logo, "Logo");
-
-		public static Stream Pin => GetSvg(Svg.Pin);
-		public static Stream Add => GetSvg(Svg.Add);
-		public static Stream Delete => GetSvg(Svg.Delete);
-
-		public static Stream Back => GetSvg(Svg.LeftArrowCircle);
-		public static Stream Forward => GetSvg(Svg.RightArrowCircle);
-
-		public static Stream LeftArrow => GetSvg(Svg.LeftArrow);
-		public static Stream RightArrow => GetSvg(Svg.RightArrow);
-		public static Stream UpArrow => GetSvg(Svg.UpArrow);
-		public static Stream DownArrow => GetSvg(Svg.DownArrow);
-
-		public static Stream ClearSearch => Get(Png.ClearSearch);
-		public static Stream Search => GetSvg(Svg.Search);
-		public static Stream Search16 => Get(Png.Search16);
-
-		public static Stream Info => Get(Png.Info1);
-		public static Stream Info20 => Get(Png.Info20);
-
-		public static Stream BlankDocument => GetSvg(Svg.BlankDocument);
-		public static Stream Save => GetSvg(Svg.Save);
-		public static Stream OpenFolder => GetSvg(Svg.OpenFolder);
-
-		public static Stream Star => GetSvg(Svg.Star);
-		public static Stream StarFilled => GetSvg(Svg.StarFilled);
-
-		public static Stream Browser => GetSvg(Svg.Browser);
-
-		public static Stream Unlock => Get(Png.Unlock);
-		public static Stream Password => Get(Png.Password);
-		public static Stream Enter => GetSvg(Svg.Enter);
-
-		public static Stream Copy => GetSvg(Svg.Copy);
-		public static Stream PadNote => GetSvg(Svg.PadNote);
-		public static Stream Paste => Get(Png.Paste);
-		public static Stream Eraser => GetSvg(Svg.Eraser);
-
-		public static Stream Refresh => GetSvg(Svg.Refresh);
-		public static Stream Stats => GetSvg(Svg.Stats);
-
-		public static Stream List1 => GetSvg(Svg.List1);
-		public static Stream List2 => GetSvg(Svg.List2);
-		public static Stream DeleteList => GetSvg(Svg.DeleteList);
-
-		public static Stream Link => GetSvg(Svg.Link);
-		public static Stream Bookmark => Get(Png.Bookmark);
-		public static Stream Import => GetSvg(Svg.Import);
-		public static Stream Screenshot => GetSvg(Svg.Screenshot);
-
-		public static Stream Get(string resourceName, string resourceType = "png")
-		{
-			Assembly assembly = Assembly.GetExecutingAssembly();
-			return assembly.GetManifestResourceStream("Atlas.Resources.Icons." + resourceType + "." + resourceName)!;
-		}
-
-		public static Stream GetSvg(string resourceName)
-		{
-			return Get(resourceName, "svg");
-		}
+		public static ResourceView Get(string resourceName) => new ResourceView(IconPath, "png", resourceName, "png");
 	}
 }

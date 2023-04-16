@@ -9,15 +9,14 @@ public static class SvgUtils
 {
 	private static Dictionary<string, IImage> _images = new();
 
-	public static IImage GetSvgImage(string resourceName, Color? color = null)
+	public static IImage GetSvgImage(ResourceView imageResource, Color? color = null)
 	{
 		lock (_images)
 		{
-			string key = $"{resourceName}:{color}";
+			string key = $"{imageResource.Path}:{color}";
 			if (_images.TryGetValue(key, out IImage? image)) return image;
 
-			Stream bitmapStream = Icons.Streams.GetSvg(resourceName);
-			IImage queueImage = SvgUtils.GetSvgImage(bitmapStream, color);
+			IImage queueImage = SvgUtils.GetSvgImage(imageResource.Stream, color);
 			_images[key] = queueImage;
 			return queueImage;
 		}

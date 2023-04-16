@@ -1,27 +1,16 @@
-using System.Reflection;
+using Atlas.Core;
 
 namespace Atlas.Resources;
 
 public static class Assets
 {
-	public const string Hourglass = "hourglass64.png";
-	public const string Shutter = "shutter64.png";
-
-	public static class Streams
+	public class Png : NamedItemCollection<Png, ResourceView>
 	{
-		public static Stream Hourglass => Get(Assets.Hourglass);
-		public static Stream Shutter => Get(Assets.Shutter);
+		public static ResourceView Hourglass => Get("hourglass64");
+		public static ResourceView Shutter => Get("shutter64");
 
-		public static Stream Get(string resourceName)
-		{
-			Assembly assembly = Assembly.GetExecutingAssembly();
-			return assembly.GetManifestResourceStream("Atlas.Resources.Assets." + resourceName)!;
-		}
+		public const string AssetPath = "Atlas.Resources.Assets";
 
-		public static List<Stream> All { get; set; } = new()
-		{
-			Hourglass,
-			Shutter,
-		};
+		public static ResourceView Get(string resourceName) => new ResourceView(AssetPath, "png", resourceName, "png");
 	}
 }

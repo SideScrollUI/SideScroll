@@ -66,7 +66,7 @@ public class TabDateTimePicker : Grid, IStyleable
 
 		if (Property.Editable)
 		{
-			Button buttonImport = AddButton("Import Clipboard", Icons.Streams.Paste);
+			Button buttonImport = AddButton("Import Clipboard", Icons.Png.Paste.Stream);
 			buttonImport.Click += ButtonImport_Click;
 			Children.Add(buttonImport);
 		}

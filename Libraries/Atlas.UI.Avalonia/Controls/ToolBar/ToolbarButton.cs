@@ -48,22 +48,22 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		CallAction = toolButton.Action;
 		CallActionAsync = toolButton.ActionAsync;
 
-		Initialize(toolButton.ImageResourceName);
+		Initialize(toolButton.ImageResource);
 
 		if (toolButton.Default)
 			SetDefault();
 	}
 
-	public ToolbarButton(TabControlToolbar toolbar, string? label, string tooltip, string imageResourceName, ICommand? command = null)
+	public ToolbarButton(TabControlToolbar toolbar, string? label, string tooltip, ResourceView imageResource, ICommand? command = null)
 	{
 		Toolbar = toolbar;
 		Label = label;
 		Tooltip = tooltip;
 
-		Initialize(imageResourceName, command);
+		Initialize(imageResource, command);
 	}
 
-	private void Initialize(string imageResourceName, ICommand? command = null)
+	private void Initialize(ResourceView imageResource, ICommand? command = null)
 	{
 		Grid grid = new()
 		{
@@ -71,14 +71,14 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 			RowDefinitions = new RowDefinitions("Auto"),
 		};
 
-		if (imageResourceName.EndsWith(".svg"))
+		if (imageResource.ResourceType == "svg")
 		{
-			_defaultImage = SvgUtils.GetSvgImage(imageResourceName);
-			_highlightImage = SvgUtils.GetSvgImage(imageResourceName, Theme.ToolbarButtonForegroundHover.Color);
+			_defaultImage = SvgUtils.GetSvgImage(imageResource);
+			_highlightImage = SvgUtils.GetSvgImage(imageResource, Theme.ToolbarButtonForegroundHover.Color);
 		}
 		else
 		{
-			Stream stream = Icons.Streams.Get(imageResourceName);
+			Stream stream = imageResource.Stream;
 			_defaultImage = new Bitmap(stream);
 		}
 

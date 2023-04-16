@@ -179,7 +179,7 @@
 
         <!-- Toolbar -->
         <SolidColorBrush x:Key="ToolbarButtonBackgroundBrush" Color="#27204a" />
-        <SolidColorBrush x:Key="ToolbarButtonBackgroundHoverBrush" Color="#2040a0" />
+        <SolidColorBrush x:Key="ToolbarButtonBackgroundHoverBrush" Color="#303080" />
         <SolidColorBrush x:Key="ToolbarButtonForegroundHoverBrush" Color="#108dff" />
         <SolidColorBrush x:Key="ToolbarButtonSeparatorBrush" Color="#303d90" />
 
