@@ -17,6 +17,7 @@ public class TabControlParams : Grid, IValidationControl
 {
 	public const int ControlMaxWidth = 500;
 	public const int ControlMaxHeight = 400;
+
 	public object? Object;
 
 	private Dictionary<ListProperty, Control> _propertyControls = new();

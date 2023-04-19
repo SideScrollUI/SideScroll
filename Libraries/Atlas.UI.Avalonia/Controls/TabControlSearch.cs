@@ -70,7 +70,7 @@ public class TabControlSearch : Grid, IStyleable
 
 	private void AddIcon()
 	{
-		Stream stream = Icons.Streams.Search16;
+		Stream stream = Icons.Png.Search16.Stream;
 		stream.Seek(0, SeekOrigin.Begin);
 
 		var image = new Image

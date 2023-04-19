@@ -70,7 +70,7 @@ public class BaseWindow : Window
 		MinWidth = MinWindowSize;
 		MinHeight = MinWindowSize;
 
-		Icon = new WindowIcon(Icons.Streams.Logo);
+		Icon = new WindowIcon(Icons.Logo.Stream);
 
 		Content = TabViewer = new TabViewer(Project);
 

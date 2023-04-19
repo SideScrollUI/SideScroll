@@ -17,7 +17,9 @@ public class SerializerFileAtlas : SerializerFile
 		for (int attempt = 0; attempt < 10; attempt++)
 		{
 			if (attempt > 0)
-				System.Threading.Thread.Sleep(attempt * 10);
+			{
+				Thread.Sleep(attempt * 10);
+			}
 
 			try
 			{

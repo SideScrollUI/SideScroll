@@ -56,14 +56,19 @@
     <None Remove="Icons\svg\Add.svg" />
     <None Remove="Icons\svg\BlankDocument.svg" />
     <None Remove="Icons\svg\Cancel.svg" />
+    <None Remove="Icons\svg\Copy.svg" />
     <None Remove="Icons\svg\DeleteList.svg" />
+    <None Remove="Icons\svg\DownArrow.svg" />
     <None Remove="Icons\svg\Enter.svg" />
     <None Remove="Icons\svg\Eraser.svg" />
+    <None Remove="Icons\svg\LeftArrow.svg" />
+    <None Remove="Icons\svg\LeftArrowCircle.svg" />
+    <None Remove="Icons\svg\RightArrow.svg" />
+    <None Remove="Icons\svg\RightArrowCircle.svg" />
     <None Remove="Icons\svg\Star.svg" />
     <None Remove="Icons\svg\StarFilled.svg" />
     <None Remove="Icons\svg\Import.svg" />
     <None Remove="Icons\svg\Internet.svg" />
-    <None Remove="Icons\svg\LeftArrow.svg" />
     <None Remove="Icons\svg\Link.svg" />
     <None Remove="Icons\svg\List1.svg" />
     <None Remove="Icons\svg\List2.svg" />
@@ -71,11 +76,11 @@
     <None Remove="Icons\svg\PadNote.svg" />
     <None Remove="Icons\svg\Placeholder.svg" />
     <None Remove="Icons\svg\Refresh.svg" />
-    <None Remove="Icons\svg\RightArrow.svg" />
     <None Remove="Icons\svg\Save.svg" />
     <None Remove="Icons\svg\Screenshot.svg" />
     <None Remove="Icons\svg\Search.svg" />
     <None Remove="Icons\svg\Stats.svg" />
+    <None Remove="Icons\svg\UpArrow.svg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -123,9 +128,13 @@
     <EmbeddedResource Include="Icons\svg\Add.svg" />
     <EmbeddedResource Include="Icons\svg\BlankDocument.svg" />
     <EmbeddedResource Include="Icons\svg\Cancel.svg" />
+    <EmbeddedResource Include="Icons\svg\Copy.svg" />
     <EmbeddedResource Include="Icons\svg\DeleteList.svg" />
+    <EmbeddedResource Include="Icons\svg\DownArrow.svg" />
     <EmbeddedResource Include="Icons\svg\Enter.svg" />
     <EmbeddedResource Include="Icons\svg\Eraser.svg" />
+    <EmbeddedResource Include="Icons\svg\LeftArrowCircle.svg" />
+    <EmbeddedResource Include="Icons\svg\RightArrowCircle.svg" />
     <EmbeddedResource Include="Icons\svg\Star.svg" />
     <EmbeddedResource Include="Icons\svg\StarFilled.svg" />
     <EmbeddedResource Include="Icons\svg\Import.svg" />
@@ -143,6 +152,7 @@
     <EmbeddedResource Include="Icons\svg\Screenshot.svg" />
     <EmbeddedResource Include="Icons\svg\Search.svg" />
     <EmbeddedResource Include="Icons\svg\Stats.svg" />
+    <EmbeddedResource Include="Icons\svg\UpArrow.svg" />
   </ItemGroup>
 
   <ItemGroup>

@@ -31,10 +31,10 @@ public class TabFile : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Streams.OpenFolder);
+		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Svg.OpenFolder);
 
 		[Separator]
-		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Streams.Delete);
+		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
 	}
 
 	public class Instance : TabInstance

@@ -21,11 +21,11 @@ public class ScreenCaptureToolbar : TabControlToolbar
 		OSPlatform platform = ProcessUtils.GetOSPlatform();
 		if (platform != OSPlatform.Linux)
 		{
-			ButtonCopyClipboard = AddButton("Copy to Clipboard", Icons.Streams.PadNote);
+			ButtonCopyClipboard = AddButton("Copy to Clipboard", Icons.Svg.PadNote);
 		}
-		ButtonSave = AddButton("Save", Icons.Streams.Save);
+		ButtonSave = AddButton("Save", Icons.Svg.Save);
 
 		AddSeparator();
-		ButtonClose = AddButton("Close Snapshot", Icons.Streams.Delete);
+		ButtonClose = AddButton("Close Snapshot", Icons.Svg.Delete);
 	}
 }

@@ -25,11 +25,11 @@ public class AvaloniaAssets
 
 	public class Bitmaps
 	{
-		public static Bitmap Help => new(Icons.Streams.Forward);
-		public static Bitmap Info => new(Icons.Streams.Info);
-		public static Bitmap Hourglass => new(Assets.Streams.Hourglass);
-		public static Bitmap Shutter => new(Assets.Streams.Shutter);
-		public static Bitmap Logo => new(Icons.Streams.Logo);
+		public static Bitmap Help => new(Icons.Svg.Forward.Stream);
+		public static Bitmap Info => new(Icons.Png.Info.Stream);
+		public static Bitmap Hourglass => new(Assets.Png.Hourglass.Stream);
+		public static Bitmap Shutter => new(Assets.Png.Shutter.Stream);
+		public static Bitmap Logo => new(Icons.Logo.Stream);
 	}
 
 	public class Images

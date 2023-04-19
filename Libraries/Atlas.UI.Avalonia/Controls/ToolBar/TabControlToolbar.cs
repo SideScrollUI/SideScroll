@@ -1,5 +1,6 @@
 using Atlas.Core;
 using Atlas.Extensions;
+using Atlas.Resources;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Themes;
 using Avalonia;
@@ -82,9 +83,9 @@ public class TabControlToolbar : Grid, IDisposable
 		Children.Add(control);
 	}
 
-	public ToolbarButton AddButton(string tooltip, Stream resource, ICommand? command = null)
+	public ToolbarButton AddButton(string tooltip, ResourceView imageResource, ICommand? command = null)
 	{
-		var button = new ToolbarButton(this, null, tooltip, resource, command);
+		var button = new ToolbarButton(this, null, tooltip, imageResource, command);
 		AddControl(button);
 		return button;
 	}

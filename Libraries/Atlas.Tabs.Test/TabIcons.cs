@@ -11,14 +11,21 @@ public class TabIcons : ITab
 	{
 		public override void LoadUI(Call call, TabModel model)
 		{
-			var toolbar = new TabToolbar();
-			foreach (var memberInfo in Icons.Streams.GetItems())
+			TabToolbar toolbar = new();
+
+			foreach (var memberInfo in Icons.Svg.GetItems())
+			{
+				toolbar.Buttons.Add(new ToolButton(memberInfo.Key.Name, memberInfo.Value));
+			}
+
+			foreach (var memberInfo in Icons.Png.GetItems())
 			{
 				if (memberInfo.Key.Name == "Logo")
 					continue;
 
 				toolbar.Buttons.Add(new ToolButton(memberInfo.Key.Name, memberInfo.Value));
 			}
+
 			model.AddObject(toolbar);
 		}
 	}
