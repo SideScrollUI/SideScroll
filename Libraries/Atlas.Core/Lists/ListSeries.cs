@@ -108,7 +108,7 @@ public class ListSeries
 	{
 		var timeRangeValues = TimeRangeValues;
 		if (timeWindow == null || PeriodDuration == null || timeRangeValues == null)
-			return GetSum();
+			return GetTotal();
 
 		return SeriesType switch
 		{
@@ -118,6 +118,39 @@ public class ListSeries
 			SeriesType.Maximum => TimeRangePeriod.TotalMaximum(timeRangeValues, timeWindow),
 			_ => TimeRangePeriod.TotalAverage(timeRangeValues, timeWindow, PeriodDuration.Value),
 		};
+	}
+
+	public double GetTotal()
+	{
+		return SeriesType switch
+		{
+			SeriesType.Count => List.Count,
+			SeriesType.Average => Values().Average(),
+			SeriesType.Minimum => Values().Min(),
+			SeriesType.Maximum => Values().Max(),
+			_ => Values().Sum(),
+		};
+	}
+
+	public IEnumerable<double> Values()
+	{
+		if (YPropertyInfo != null)
+		{
+			foreach (object obj in List)
+			{
+				object? value = YPropertyInfo.GetValue(obj);
+				if (value != null)
+					yield return GetObjectValue(value);
+			}
+		}
+		else
+		{
+			foreach (object obj in List)
+			{
+				double value = GetObjectValue(obj);
+				yield return value;
+			}
+		}
 	}
 
 	public List<TimeRangeValue>? GroupByPeriod(TimeWindow timeWindow)
@@ -133,29 +166,6 @@ public class ListSeries
 			SeriesType.Maximum => TimeRangePeriod.PeriodMaxes(timeRangeValues, timeWindow, PeriodDuration.Value),
 			_ => TimeRangePeriod.PeriodAverages(timeRangeValues, timeWindow, PeriodDuration.Value),
 		};
-	}
-
-	public double GetSum()
-	{
-		double sum = 0;
-		if (YPropertyInfo != null)
-		{
-			foreach (object obj in List)
-			{
-				object? value = YPropertyInfo.GetValue(obj);
-				if (value != null)
-					sum += GetObjectValue(value);
-			}
-		}
-		else
-		{
-			foreach (object obj in List)
-			{
-				double value = GetObjectValue(obj);
-				sum += value;
-			}
-		}
-		return sum;
 	}
 
 	public List<TimeRangeValue>? TimeRangeValues

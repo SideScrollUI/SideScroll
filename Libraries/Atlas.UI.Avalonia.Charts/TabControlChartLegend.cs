@@ -62,8 +62,6 @@ public class TabControlChartLegend : Grid
 				Margin = new Thickness(2, 2, 2, 2),
 				HorizontalAlignment = HorizontalAlignment.Right,
 			};
-			if (ListGroup.UnitName != null)
-				_textBlockTotal.Text += " - " + ListGroup.UnitName;
 		}
 
 		RefreshModel();
@@ -232,7 +230,9 @@ public class TabControlChartLegend : Grid
 		UpdatePositions();
 
 		if (_textBlockTotal != null)
-			_textBlockTotal.Text = GetTotalName();
+		{
+			_textBlockTotal.Text = ListGroup.LegendTitle ?? GetTotalName();
+		}
 
 		// Possibly faster? But more likely to cause problems
 		/*var prevLegends = idxLegendItems.Clone<Dictionary<string, TabChartLegendItem>>();

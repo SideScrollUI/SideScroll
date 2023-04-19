@@ -30,11 +30,6 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 		ListSeries = listSeries;
 		UseDateTimeAxis = useDateTimeAxis;
 
-		InitializeComponent(listSeries);
-	}
-
-	private void InitializeComponent(ListSeries listSeries)
-	{
 		// Title must be unique among all series
 		Title = listSeries.Name;
 		if (Title?.Length == 0)
@@ -59,7 +54,7 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 			iNotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object? sender, NotifyCollectionChangedEventArgs e)
 			{
 				// can we remove this later when disposing?
-				SeriesChanged(listSeries, e.NewItems!);
+				SeriesChanged(listSeries, e);
 			});
 		}
 
@@ -245,13 +240,26 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 		return binDataPoints;
 	}
 
-	private void SeriesChanged(ListSeries listSeries, IList iList)
+	private void SeriesChanged(ListSeries listSeries, NotifyCollectionChangedEventArgs e)
 	{
 		lock (Chart.PlotModel!.SyncRoot)
 		{
-			//this.Update();
-			var dataPoints = GetDataPoints(listSeries, iList);
-			Points.AddRange(dataPoints);
+			if (e.Action == NotifyCollectionChangedAction.Add)
+			{
+				var dataPoints = GetDataPoints(listSeries, e.NewItems!);
+				Points.AddRange(dataPoints);
+			}
+			else if (e.Action == NotifyCollectionChangedAction.Remove)
+			{
+				var dataPoints = GetDataPoints(listSeries, e.OldItems!);
+				foreach (DataPoint datapoint in dataPoints)
+				{
+					if (Points.FirstOrDefault().X == datapoint.X)
+					{
+						Points.RemoveAt(0);
+					}
+				}
+			}
 		}
 
 		Dispatcher.UIThread.InvokeAsync(() => Chart.Refresh(), DispatcherPriority.Background);

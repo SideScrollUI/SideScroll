@@ -7,7 +7,7 @@ namespace Atlas.Core;
 public class ListGroup
 {
 	public string? Name { get; set; }
-	public string? UnitName { get; set; }
+	public string? LegendTitle { get; set; }
 
 	public bool Horizontal { get; set; }
 	public bool ShowLegend { get; set; } = true;

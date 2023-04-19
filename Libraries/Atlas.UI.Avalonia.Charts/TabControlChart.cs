@@ -434,6 +434,7 @@ public class TabControlChart : Grid, IDisposable
 		AddAxis();
 		UpdateValueAxis();
 		UpdateLinearAxis();
+		UpdateDateTimeAxisRange();
 
 		PlotView!.Model = PlotModel;
 	}
@@ -748,8 +749,9 @@ public class TabControlChart : Grid, IDisposable
 
 		ValueAxis.MinimumMajorStep = hasFraction ? 0 : 1;
 
-		if (ListGroup.MinValue is double minValue)
-			minimum = minValue;
+		double? minValue = ListGroup.MinValue;
+		if (minValue != null)
+			minimum = minValue.Value;
 
 		if (ListGroup.Logarithmic)
 		{
@@ -765,7 +767,10 @@ public class TabControlChart : Grid, IDisposable
 			if (margin == 0)
 				margin = 1;
 
-			ValueAxis.Minimum = minimum - margin;
+			if (minValue != null)
+				ValueAxis.Minimum = Math.Max(minimum - margin, minValue.Value - Math.Abs(margin) * 0.05);
+			else
+				ValueAxis.Minimum = minimum - margin;
 			ValueAxis.Maximum = maximum + margin;
 		}
 	}
@@ -809,6 +814,8 @@ public class TabControlChart : Grid, IDisposable
 			DateTime endTime = OxyPlot.Axes.DateTimeAxis.ToDateTime(DateTimeAxis.Maximum);
 
 			ListGroup.TimeWindow = new TimeWindow(startTime, endTime).Trim();
+
+			UpdateDateTimeAxis(ListGroup.TimeWindow);
 		}
 
 		//UpdateDateTimeInterval(double duration);
