@@ -434,7 +434,10 @@ public class TabControlChart : Grid, IDisposable
 		AddAxis();
 		UpdateValueAxis();
 		UpdateLinearAxis();
-		UpdateDateTimeAxisRange();
+		if (ListGroup.TimeWindow == null)
+		{
+			UpdateDateTimeAxisRange();
+		}
 
 		PlotView!.Model = PlotModel;
 	}
