@@ -24,6 +24,7 @@ public class TabActions : ITab
 				new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
 				new TaskDelegate("Parallel Task Progress", ParallelTaskProgress, true),
 				new TaskDelegateAsync("Task Progress", SubTaskProgressAsync, true),
+				new TaskDelegateAsync("Multi Level Progress", MultiLevelRunAsync, true),
 				new TaskAction("Action", () => PassParams(1, "abc")),
 				new TaskDelegateAsync("Long load (Async)", SleepAsync, true),
 				new TaskDelegate("StartAsync error", StartAsyncError),
@@ -105,6 +106,36 @@ Actions add Buttons to the tab. When clicked, it will:
 				callTimer.Log.Add("Sleeping");
 				await Task.Delay(1000, callTimer.TaskInstance.CancelToken);
 			}
+
+			return id;
+		}
+
+		private async Task MultiLevelRunAsync(Call call)
+		{
+			List<int> ids = new();
+			for (int i = 0; i < 100; i++)
+				ids.Add(i);
+
+			List<int> results = await call.RunAsync(MultiLevelRunListAsync, ids);
+		}
+
+		public static async Task<int> MultiLevelRunListAsync(Call call, int id)
+		{
+			List<int> ids = new();
+			for (int i = 0; i < 2000; i++)
+				ids.Add(i);
+
+			call.Log.Settings = call.Log.Settings!.WithMinLogLevel(LogLevel.Warn);
+
+			List<int> results = await call.RunAsync(MultiLevelRunTaskAsync, ids);
+
+			return id;
+		}
+
+		public static async Task<int> MultiLevelRunTaskAsync(Call call, int id)
+		{
+			call.Log.Add("Sleeping");
+			await Task.Delay(10, call.TaskInstance!.CancelToken);
 
 			return id;
 		}

@@ -31,6 +31,13 @@ public class LogSettings
 		};
 	}
 
+	public LogSettings WithMinLogLevel(LogLevel minLogLevel)
+	{
+		LogSettings clone = Clone();
+		clone.MinLogLevel = minLogLevel;
+		return clone;
+	}
+
 	/*protected void InitializeContext()
 	{
 		Context ??= SynchronizationContext.Current ?? new SynchronizationContext();

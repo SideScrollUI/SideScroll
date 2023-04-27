@@ -213,6 +213,11 @@ public class Log : LogEntry
 		eventLogMessage.Entries.Add(this);
 		OnMessage?.Invoke(this, eventLogMessage);
 	}
+
+	public void SetLogLevel(LogLevel logLevel)
+	{
+		Settings = Settings?.WithMinLogLevel(logLevel);
+	}
 }
 
 /*

@@ -198,6 +198,7 @@ public class Call
 		using CallTimer callTimer = StartTask(items.Count, name);
 
 		using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
+		using var resultLock = new SemaphoreSlim(1);
 
 		var tasks = new List<Task>();
 		var results = new List<T2>();
@@ -216,9 +217,14 @@ public class Call
 					T2? result = await RunFuncAsync(callTimer, func, item);
 					if (result != null)
 					{
-						lock (results)
+						await resultLock.WaitAsync();
+						try
 						{
 							results.Add(result);
+						}
+						finally
+						{
+							resultLock.Release();
 						}
 					}
 				}
@@ -242,6 +248,7 @@ public class Call
 		using CallTimer callTimer = StartTask(items.Count, name);
 
 		using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
+		using var resultLock = new SemaphoreSlim(1);
 
 		var tasks = new List<Task>();
 		var results = new List<T3>();
@@ -260,9 +267,14 @@ public class Call
 					T3? result = await RunFuncAsync(callTimer, func, item, param1);
 					if (result != null)
 					{
-						lock (results)
+						await resultLock.WaitAsync();
+						try
 						{
 							results.Add(result);
+						}
+						finally
+						{
+							resultLock.Release();
 						}
 					}
 				}
@@ -286,6 +298,7 @@ public class Call
 		using CallTimer callTimer = StartTask(items.Count, name);
 
 		using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
+		using var resultLock = new SemaphoreSlim(1);
 
 		var tasks = new List<Task>();
 		var results = new List<T4>();
@@ -304,9 +317,14 @@ public class Call
 					T4? result = await RunFuncAsync(callTimer, func, item, param1, param2);
 					if (result != null)
 					{
-						lock (results)
+						await resultLock.WaitAsync();
+						try
 						{
 							results.Add(result);
+						}
+						finally
+						{
+							resultLock.Release();
 						}
 					}
 				}

@@ -51,10 +51,10 @@ public class HttpMemoryCache
 			return false;
 		}
 
-		if (MemoryCache.TryGetValue(uri, out object result))
+		if (MemoryCache.TryGetValue(uri, out object? result))
 		{
 			call.Log.Add("Found cached copy", new Tag("Uri", uri));
-			t = (T)result;
+			t = (T?)result;
 			return true;
 		}
 

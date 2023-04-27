@@ -2,6 +2,7 @@ using Atlas.Resources;
 using Atlas.UI.Avalonia.Themes;
 using Avalonia.Media;
 using Avalonia.Svg.Skia;
+using System.Diagnostics;
 
 namespace Atlas.UI.Avalonia.Utilities;
 
@@ -9,37 +10,45 @@ public static class SvgUtils
 {
 	private static Dictionary<string, IImage> _images = new();
 
-	public static IImage GetSvgImage(ResourceView imageResource, Color? color = null)
+	public static IImage? GetSvgImage(ResourceView imageResource, Color? color = null)
 	{
-		lock (_images)
-		{
-			string key = $"{imageResource.Path}:{color}";
-			if (_images.TryGetValue(key, out IImage? image)) return image;
+		if (imageResource.ResourceType != "svg") return null;
 
-			IImage queueImage = SvgUtils.GetSvgImage(imageResource.Stream, color);
-			_images[key] = queueImage;
-			return queueImage;
+		try
+		{
+			lock (_images)
+			{
+				string key = $"{imageResource.Path}:{color}";
+				if (_images.TryGetValue(key, out IImage? image)) return image;
+
+				IImage queueImage = GetSvgImage(imageResource.Stream, color);
+				_images[key] = queueImage;
+				return queueImage;
+			}
+		}
+		catch (Exception e)
+		{
+			Debug.Fail(e.ToString());
+			return null;
 		}
 	}
 
-	public static IImage GetSvgImage(Stream bitmapStream, Color? color = null)
+	public static IImage GetSvgImage(Stream stream, Color? color = null)
 	{
-		IImage sourceImage;
-		bitmapStream.Position = 0;
+		stream.Position = 0;
 
-		using var reader = new StreamReader(bitmapStream);
+		using var reader = new StreamReader(stream);
 		string text = reader.ReadToEnd();
 		Color newColor = color ?? Theme.IconForeground.Color;
 		string updated = text.Replace("rgb(0,0,0)", $"rgb({newColor.R},{newColor.G},{newColor.B})");
 
 		SvgSource svgSource = new();
 		svgSource.FromSvg(updated);
-		sourceImage = new SvgImage()
+
+		return new SvgImage()
 		{
 			Source = svgSource,
 		};
-
-		return sourceImage;
 	}
 
 	public static bool IsSvg(Stream stream)
