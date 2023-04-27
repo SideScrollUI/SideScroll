@@ -18,7 +18,7 @@
         <Color x:Key="SystemAccentColorLight2">#76B9ED</Color>
         <Color x:Key="SystemAccentColorLight3">#A6D8FF</Color>
 
-		<Color x:Key="ThemeControlBorderHighColor">#3060c0</Color>
+        <Color x:Key="ThemeControlBorderHighColor">#3060c0</Color>
         <Color x:Key="ThemeBackgroundSelectedColor">#009dff</Color>
 
         <Color x:Key="IconForegroundColor">#006df0</Color>
@@ -30,7 +30,7 @@
         <!-- TextControl -->
         <SolidColorBrush x:Key="TextControlBackground" Color="#ffffff" />
 
-		<Thickness x:Key="TextControlBorderThemeThickness">1.5</Thickness>
+        <Thickness x:Key="TextControlBorderThemeThickness">1.5</Thickness>
         <Thickness x:Key="TextControlBorderThemeThicknessFocused">1.5</Thickness>
 
         <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FFFFFFFF" />
@@ -60,19 +60,19 @@
         <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#AA92F397" />
         <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#92F397" />
 
-		<Thickness x:Key="ComboBoxBorderThemeThickness">1.5</Thickness>
+        <Thickness x:Key="ComboBoxBorderThemeThickness">1.5</Thickness>
 
-		<!-- CheckBox -->
+        <!-- CheckBox -->
 
-		<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUnchecked" Color="#ffffff" />
-		<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#66000000" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUnchecked" Color="#ffffff" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#66000000" />
 
-		<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPointerOver" Color="#ffffff" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPointerOver" Color="#ffffff" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
 
-		<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedDisabled" Color="#88000000" />
-		<SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="#88000000" />
-		<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedDisabled" Color="#88000000" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedDisabled" Color="#88000000" />
+        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="#88000000" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedDisabled" Color="#88000000" />
         
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPressed" Color="#ffffff" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedDisabled" Color="Transparent" />
@@ -180,9 +180,9 @@
         <!-- Toolbar -->
         <SolidColorBrush x:Key="ToolbarButtonBackgroundBrush" Color="#27204a" />
         <SolidColorBrush x:Key="ToolbarButtonBackgroundHoverBrush" Color="#303080" />
-		<SolidColorBrush x:Key="ToolbarButtonForegroundHoverBrush" Color="#108dff" />
-		<SolidColorBrush x:Key="ToolbarButtonForegroundDisabledBrush" Color="#004dA0" />
-		<SolidColorBrush x:Key="ToolbarButtonSeparatorBrush" Color="#303d90" />
+        <SolidColorBrush x:Key="ToolbarButtonForegroundHoverBrush" Color="#108dff" />
+        <SolidColorBrush x:Key="ToolbarButtonForegroundDisabledBrush" Color="#004dA0" />
+        <SolidColorBrush x:Key="ToolbarButtonSeparatorBrush" Color="#303d90" />
 
         <SolidColorBrush x:Key="ToolbarLabelForegroundBrush" Color="#8888FF" />
 
@@ -196,7 +196,7 @@
         <SolidColorBrush x:Key="ControlBackgroundHoverBrush" Color="#ddffdd" />
 
         <!-- ToolTip -->
-		<SolidColorBrush x:Key="ToolTipBackground" Color="#dd333366" />
+        <SolidColorBrush x:Key="ToolTipBackground" Color="#dd333366" />
         <SolidColorBrush x:Key="ToolTipForeground" Color="#d0d0e8" />
         <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#b0000000" />
 
