@@ -767,9 +767,8 @@ public class TabInstance : IDisposable
 	{
 		if (CustomPath != null)
 		{
-			TabViewSettings? tabViewSettings = DataTemp.Load<TabViewSettings>(CustomPath, TaskInstance.Call);
-			if (tabViewSettings != null)
-				return tabViewSettings;
+			// It's better to return the default constructor so the Tab autosizes instead of using the saved defaults which might have a width specified
+			return DataTemp.Load<TabViewSettings>(CustomPath, TaskInstance.Call, true)!;
 		}
 
 		Type type = GetType();
@@ -800,17 +799,19 @@ public class TabInstance : IDisposable
 		{
 			DataTemp.Save(CustomPath, TabViewSettings, TaskInstance.Call);
 		}
-
-		Type type = GetType();
-		if (type != typeof(TabInstance))
-		{
-			// Unique TabInstance
-			DataTemp.Save(TabPath, TabViewSettings, TaskInstance.Call);
-		}
 		else
 		{
-			DataTemp.Save(TypeLabelPath, TabViewSettings, TaskInstance.Call);
-			DataTemp.Save(TypePath, TabViewSettings, TaskInstance.Call);
+			Type type = GetType();
+			if (type != typeof(TabInstance))
+			{
+				// Unique TabInstance
+				DataTemp.Save(TabPath, TabViewSettings, TaskInstance.Call);
+			}
+			else
+			{
+				DataTemp.Save(TypeLabelPath, TabViewSettings, TaskInstance.Call);
+				DataTemp.Save(TypePath, TabViewSettings, TaskInstance.Call);
+			}
 		}
 		SaveDefaultBookmark();
 	}

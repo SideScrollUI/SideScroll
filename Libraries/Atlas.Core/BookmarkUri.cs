@@ -1,3 +1,4 @@
+using Atlas.Extensions;
 using System.Text.RegularExpressions;
 
 namespace Atlas.Core;
@@ -9,7 +10,10 @@ public class BookmarkUri
 	public string? Type { get; set; }
 	public Version? Version { get; set; }
 	public string? Id { get; set; }
+
 	public string? Url { get; set; }
+
+	public override string? ToString() => Url ?? @$"{Prefix}://{Type}/v{Version?.Formatted()}/{Id}";
 
 	public static BookmarkUri? Parse(string url)
 	{
