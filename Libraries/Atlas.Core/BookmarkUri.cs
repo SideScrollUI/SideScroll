@@ -13,7 +13,7 @@ public class BookmarkUri
 
 	public string? Url { get; set; }
 
-	public override string? ToString() => Url ?? @$"{Prefix}://{Type}/v{Version?.Formatted()}/{Id}";
+	public override string ToString() => Url ?? @$"{Prefix}://{Type}/v{Version?.Formatted()}/{Id}";
 
 	public static BookmarkUri? Parse(string url)
 	{

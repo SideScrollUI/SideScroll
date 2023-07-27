@@ -15,6 +15,11 @@ public static class ClipBoardUtils
 		await ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))!).SetTextAsync(text);
 	}
 
+	public static string GetText()
+	{
+		return Task.Run(() => GetTextAsync()).GetAwaiter().GetResult();
+	}
+
 	public static async Task<string> GetTextAsync()
 	{
 		string clipboardText = await ((IClipboard)AvaloniaLocator.Current.GetService(typeof(IClipboard))!).GetTextAsync();

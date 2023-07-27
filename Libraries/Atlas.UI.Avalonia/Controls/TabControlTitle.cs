@@ -125,7 +125,7 @@ public class TabControlTitle : UserControl, IDisposable
 	{
 		Bookmark bookmark = TabInstance.CreateBookmark();
 		bookmark.BookmarkType = BookmarkType.Tab;
-		string? uri = await TabInstance.Project.Linker.GetLinkUriAsync(new Call(), bookmark);
+		string? uri = await TabInstance.Project.Linker.AddLinkAsync(new Call(), bookmark);
 		if (uri == null)
 			return;
 

@@ -30,6 +30,7 @@ public static class HttpUtils
 	public static async Task<string?> GetStringAsync(Call call, string uri)
 	{
 		var response = await GetBytesAsync(call, uri);
+		response?.Response?.EnsureSuccessStatusCode();
 		byte[]? bytes = response?.Bytes;
 		if (bytes != null)
 			return Encoding.ASCII.GetString(bytes);

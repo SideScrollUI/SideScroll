@@ -18,6 +18,7 @@
         <Color x:Key="SystemAccentColorDark1">#005A9E</Color>
         <Color x:Key="SystemAccentColorDark2">#004275</Color>
         <Color x:Key="SystemAccentColorDark3">#002642</Color>
+      
         <Color x:Key="SystemAccentColorLight1">#429CE3</Color>
         <Color x:Key="SystemAccentColorLight2">#76B9ED</Color>
         <Color x:Key="SystemAccentColorLight3">#A6D8FF</Color>
@@ -121,6 +122,12 @@
 
         <SolidColorBrush x:Key="MenuFlyoutItemForeground" Color="{DynamicResource TextForegroundColor}" />
         <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="{DynamicResource ThemeBackgroundSelectedColor}" />
+
+        <!-- Flyout -->
+
+        <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#F037375f" />
+        <SolidColorBrush x:Key="FlyoutPresenterForeground" Color="{DynamicResource TextForegroundColor}" />
+        <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#000000" />
 
         <!-- Other -->
 

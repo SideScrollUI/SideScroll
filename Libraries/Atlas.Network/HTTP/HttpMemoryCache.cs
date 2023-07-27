@@ -58,10 +58,10 @@ public class HttpMemoryCache
 			return true;
 		}
 
-		string? text = HttpUtils.GetString(call, uri);
-		if (text != null)
+		try
 		{
-			try
+			string? text = HttpUtils.GetString(call, uri);
+			if (text != null)
 			{
 				// doesn't handle newlines
 				//var options = new JsonSerializerOptions { IncludeFields = true };
@@ -75,10 +75,10 @@ public class HttpMemoryCache
 				Add(uri, t);
 				return true;
 			}
-			catch (Exception e)
-			{
-				call.Log.Add(e);
-			}
+		}
+		catch (Exception e)
+		{
+			call.Log.Add(e);
 		}
 		t = default;
 		return false;

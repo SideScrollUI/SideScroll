@@ -45,6 +45,7 @@ public class TabBookmarks : ITab
 		{
 			Tab.Bookmarks.Load(call, true);
 
+			model.MinDesiredWidth = 300;
 			model.AddData(Tab.Bookmarks.Items);
 		}
 

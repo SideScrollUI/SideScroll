@@ -39,4 +39,8 @@
         <Setter Property="Focusable" Value="false" />
     </Style>
 
+    <Style Selector="FlyoutPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource FlyoutPresenterForeground}"/>
+    </Style>
+
 </Styles>

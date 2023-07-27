@@ -135,8 +135,25 @@ public class TabViewer : Grid
 		TabView!.Instance.Reload();
 	}
 
+	private void ShowFlyout(Control control, Flyout flyout, string text)
+	{
+		flyout.Content = text;
+		flyout.ShowAt(control);
+	}
+
+	private void PostShowFlyout(Control control, Flyout flyout, string text)
+	{
+		Dispatcher.UIThread.Post(() => ShowFlyout(control, flyout, text));
+	}
+
 	private async Task LinkAsync(Call call)
 	{
+		Flyout flyout = new()
+		{
+			Placement = FlyoutPlacementMode.BottomEdgeAlignedLeft,
+		};
+		PostShowFlyout(Toolbar!.ButtonLink!, flyout, "Creating Link ...");
+
 		Bookmark bookmark = TabView!.Instance.CreateBookmark();
 		TabBookmark? leafNode = bookmark!.TabBookmark.GetLeaf(); // Get the shallowest root node
 		if (leafNode != bookmark.TabBookmark)
@@ -150,11 +167,19 @@ public class TabViewer : Grid
 			bookmark.BookmarkType = BookmarkType.Full;
 		}
 
-		string? uri = await Project.Linker.GetLinkUriAsync(call, bookmark);
-		if (uri == null)
-			return;
+		try
+		{
+			string? uri = await Project.Linker.AddLinkAsync(call, bookmark);
+			if (uri == null)
+				return;
 
-		await ClipBoardUtils.SetTextAsync(uri);
+			await ClipBoardUtils.SetTextAsync(uri);
+			PostShowFlyout(Toolbar!.ButtonLink!, flyout, "Link copied to clipboard");
+		}
+		catch (Exception ex)
+		{
+			PostShowFlyout(Toolbar!.ButtonLink!, flyout, ex.Message);
+		}
 	}
 
 	private async Task ImportClipboardBookmarkAsync(Call call)
@@ -165,26 +190,67 @@ public class TabViewer : Grid
 
 	private async Task<Bookmark?> ImportBookmarkAsync(Call call, string linkUri, bool checkVersion)
 	{
-		Bookmark? bookmark = await Project.Linker.GetBookmarkAsync(call, linkUri, checkVersion);
-		if (bookmark == null)
-			return null;
+		Flyout flyout = new()
+		{
+			Placement = FlyoutPlacementMode.BottomEdgeAlignedLeft,
+		};
+		Dispatcher.UIThread.Post(() => ShowFlyout(Toolbar!.ButtonImport!, flyout, "Importing Link ..."));
 
-		return ImportBookmark(call, bookmark);
+		try
+		{
+			Bookmark bookmark = await Project.Linker.GetLinkAsync(call, linkUri, checkVersion);
+			if (bookmark == null)
+				return null;
+
+			PostShowFlyout(Toolbar!.ButtonImport!, flyout, "Link retrieved, importing");
+
+			ImportBookmark(call, bookmark);
+
+			PostShowFlyout(Toolbar!.ButtonImport!, flyout, "Link imported");
+
+			return bookmark;
+		}
+		catch (Exception ex)
+		{
+			PostShowFlyout(Toolbar!.ButtonImport!, flyout, ex.Message);
+			return null;
+		}
 	}
 
 	private Bookmark? ImportBookmark(Call call, string linkUri, bool checkVersion)
 	{
-		Bookmark? bookmark = Task.Run(() => Project.Linker.GetBookmarkAsync(call, linkUri, checkVersion)).GetAwaiter().GetResult();
-		if (bookmark == null)
-			return null;
+		Flyout flyout = new()
+		{
+			Content = "Importing Link ...",
+			Placement = FlyoutPlacementMode.BottomEdgeAlignedLeft,
+		};
+		flyout.ShowAt(Toolbar!.ButtonImport!);
 
-		return ImportBookmark(call, bookmark);
+		try
+		{
+			Bookmark bookmark = Task.Run(() => Project.Linker.GetLinkAsync(call, linkUri, checkVersion)).GetAwaiter().GetResult();
+			if (bookmark == null)
+				return null;
+
+			flyout.Content = "Link retrieved, importing";
+
+			ImportBookmark(call, bookmark);
+
+			flyout.Content = "Link imported";
+
+			return bookmark;
+		}
+		catch (Exception ex)
+		{
+			flyout.Content = ex.Message;
+			return null;
+		}
 	}
 
-	private Bookmark? ImportBookmark(Call call, Bookmark? bookmark)
+	private void ImportBookmark(Call call, Bookmark bookmark)
 	{
 		if (bookmark == null)
-			return null;
+			return;
 
 		if (TabBookmarks.Global != null)
 		{
@@ -208,7 +274,6 @@ public class TabViewer : Grid
 				TabView.Instance.SelectBookmark(bookmark.TabBookmark);
 			}
 		}
-		return bookmark;
 	}
 
 	public void SelectBookmark(TabBookmark tabBookmark, bool reload)
