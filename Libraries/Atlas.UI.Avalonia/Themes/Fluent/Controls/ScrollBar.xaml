@@ -35,7 +35,7 @@
     </Style>
 
     <Style Selector="ScrollBar">
-        <!-- Slightly above zero to all moving mouse across without triggering -->
+        <!-- Slightly above zero to allow moving mouse across without triggering -->
         <Setter Property="ShowDelay" Value="0:0:0.1"/>
         <Setter Property="HideDelay" Value="0:0:0.5"/>
     </Style>

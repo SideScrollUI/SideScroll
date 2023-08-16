@@ -66,7 +66,7 @@ public class TabViewer : Grid
 	[MemberNotNull(nameof(BottomGrid)), MemberNotNull(nameof(ScrollViewer)), MemberNotNull(nameof(ContentGrid))]
 	private void InitializeComponent()
 	{
-		Background = Theme.TabBackground;
+		Background = AtlasTheme.TabBackground;
 
 		// Toolbar
 		// ScrollViewer | Buttons
@@ -322,8 +322,8 @@ public class TabViewer : Grid
 		TabControlButton buttonExpand = new()
 		{
 			Content = ">",
-			Background = Theme.ToolbarButtonBackground,
-			Foreground = Theme.ToolbarLabelForeground,
+			Background = AtlasTheme.ToolbarButtonBackground,
+			Foreground = AtlasTheme.ToolbarLabelForeground,
 			BorderBrush = new SolidColorBrush(Colors.Black),
 			BorderThickness = new Thickness(1),
 			VerticalAlignment = VerticalAlignment.Stretch,
@@ -338,8 +338,8 @@ public class TabViewer : Grid
 		TabControlButton buttonCollapse = new()
 		{
 			Content = "<",
-			Background = Theme.ToolbarButtonBackground,
-			Foreground = Theme.ToolbarLabelForeground,
+			Background = AtlasTheme.ToolbarButtonBackground,
+			Foreground = AtlasTheme.ToolbarLabelForeground,
 			BorderBrush = new SolidColorBrush(Colors.Black),
 			BorderThickness = new Thickness(1),
 			VerticalAlignment = VerticalAlignment.Stretch,

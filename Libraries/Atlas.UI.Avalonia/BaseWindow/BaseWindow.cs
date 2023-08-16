@@ -65,7 +65,7 @@ public class BaseWindow : Window
 	{
 		Title = Project.ProjectSettings.Name ?? "<Name>";
 
-		Background = Theme.TabBackground;
+		Background = AtlasTheme.TabBackground;
 
 		MinWidth = MinWindowSize;
 		MinHeight = MinWindowSize;

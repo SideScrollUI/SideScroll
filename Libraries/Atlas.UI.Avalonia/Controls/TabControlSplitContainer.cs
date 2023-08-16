@@ -67,24 +67,24 @@ public class TabControlSplitContainer : Grid
 
 	private void TabView_GotFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
-		Background = Theme.BackgroundFocused;
+		Background = AtlasTheme.BackgroundFocused;
 	}
 
 	private void TabView_LostFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
-		Background = Theme.TabBackground;
+		Background = AtlasTheme.TabBackground;
 	}
 
 	protected override void OnPointerEnter(PointerEventArgs e)
 	{
 		base.OnPointerEnter(e);
-		Background = Theme.BackgroundFocused;
+		Background = AtlasTheme.BackgroundFocused;
 	}
 
 	protected override void OnPointerLeave(PointerEventArgs e)
 	{
 		base.OnPointerLeave(e);
-		Background = Theme.TabBackground;
+		Background = AtlasTheme.TabBackground;
 	}
 
 	public void AddControl(Control control, bool fill, SeparatorType separatorType)
@@ -196,7 +196,7 @@ public class TabControlSplitContainer : Grid
 			Background = Brushes.Black,
 
 			//ShowsPreview = true,
-			Height = Theme.SplitterSize,
+			Height = AtlasTheme.SplitterSize,
 		};
 		GridSplitters.Add(gridSplitter);
 		SetRow(gridSplitter, rowIndex);
@@ -210,7 +210,7 @@ public class TabControlSplitContainer : Grid
 		{
 			VerticalAlignment = VerticalAlignment.Stretch,
 			Background = Brushes.Black,
-			Width = Theme.SplitterSize,
+			Width = AtlasTheme.SplitterSize,
 		};
 		//GridSplitters.Add(gridSplitter);
 		SetColumn(gridSplitter, columnIndex);

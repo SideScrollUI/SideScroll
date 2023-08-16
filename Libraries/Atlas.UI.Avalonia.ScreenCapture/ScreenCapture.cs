@@ -296,7 +296,7 @@ public class ScreenCapture : Grid
 				Math.Max(2, _selectionRect.Top)),
 			_selectionRect.BottomRight);
 
-		var brush = Theme.ToolbarLabelForeground;
+		var brush = AtlasTheme.ToolbarLabelForeground;
 		var innerPen = new Pen(Brushes.Black, 2, lineCap: PenLineCap.Square);
 		var outerPen = new Pen(brush, 4, lineCap: PenLineCap.Square);
 		using (var ctx = _selectionBitmap.CreateDrawingContext(null))

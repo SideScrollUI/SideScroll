@@ -65,8 +65,8 @@ public class TabControlAvaloniaEdit : Grid
 			VerticalAlignment = VerticalAlignment.Top,
 			MaxWidth = 3000,
 			MaxHeight = 2000,
-			Foreground = Theme.GridForeground,
-			Background = Theme.GridBackground,
+			Foreground = AtlasTheme.GridForeground,
+			Background = AtlasTheme.GridBackground,
 			WordWrap = true,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // WordWrap requires Disabled
 			VerticalScrollBarVisibility = ScrollBarVisibility.Auto,

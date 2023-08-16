@@ -15,9 +15,9 @@ public class ToolbarTextBox : TextBox, IStyleable, ILayoutable
 		Text = text;
 		TextWrapping = TextWrapping.NoWrap;
 		VerticalAlignment = VerticalAlignment.Center;
-		Background = Theme.ToolbarTextBackground;
-		Foreground = Theme.ToolbarTextForeground;
-		CaretBrush = Theme.ToolbarCaret;
+		Background = AtlasTheme.ToolbarTextBackground;
+		Foreground = AtlasTheme.ToolbarTextForeground;
+		CaretBrush = AtlasTheme.ToolbarCaret;
 
 		// Fluent
 		Resources.Add("TextControlBackgroundPointerOver", Background);

@@ -51,7 +51,7 @@ public class DataGridPropertyCheckBoxColumn : DataGridCheckBoxColumn
 		return new Border()
 		{
 			BorderThickness = new Thickness(0, 0, 0, 1), // Bottom only
-			BorderBrush = Theme.BorderHigh,
+			BorderBrush = AtlasTheme.BorderHigh,
 			Child = checkBox,
 		};
 	}

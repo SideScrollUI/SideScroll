@@ -12,9 +12,9 @@ public class TabControlButton : Button, IStyleable
 {
 	Type IStyleable.StyleKey => typeof(TabControlButton);
 
-	public Brush BackgroundBrush = Theme.ButtonBackground;
-	public Brush ForegroundBrush = Theme.ButtonForeground;
-	public Brush HoverBrush = Theme.ButtonBackgroundHover;
+	public Brush BackgroundBrush = AtlasTheme.ButtonBackground;
+	public Brush ForegroundBrush = AtlasTheme.ButtonForeground;
+	public Brush HoverBrush = AtlasTheme.ButtonBackgroundHover;
 
 	public TabControlButton(string? label = null)
 	{

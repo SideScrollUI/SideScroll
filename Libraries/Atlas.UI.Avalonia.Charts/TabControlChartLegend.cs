@@ -58,7 +58,7 @@ public class TabControlChartLegend : Grid
 		{
 			_textBlockTotal = new TextBlock()
 			{
-				Foreground = Theme.BackgroundText,
+				Foreground = AtlasTheme.BackgroundText,
 				Margin = new Thickness(2, 2, 2, 2),
 				HorizontalAlignment = HorizontalAlignment.Right,
 			};

@@ -136,7 +136,7 @@ public class TabView : Grid, IDisposable
 	// Gets called multiple times when re-initializing
 	private void InitializeControls()
 	{
-		Background = Theme.TabBackground;
+		Background = AtlasTheme.TabBackground;
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Stretch;
 		//Focusable = true;
@@ -238,7 +238,7 @@ public class TabView : Grid, IDisposable
 			Background = Brushes.Black,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			[Grid.ColumnProperty] = 1,
-			Width = Theme.SplitterSize,
+			Width = AtlasTheme.SplitterSize,
 		};
 		_containerGrid!.Children.Add(_parentChildGridSplitter);
 
@@ -502,7 +502,7 @@ public class TabView : Grid, IDisposable
 		TextBox textBox = new()
 		{
 			Text = text,
-			Foreground = Theme.BackgroundText,
+			Foreground = AtlasTheme.BackgroundText,
 			Background = Brushes.Transparent,
 			BorderThickness = new Thickness(0),
 			HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -545,8 +545,8 @@ public class TabView : Grid, IDisposable
 			MinWidth = 100,
 			MinHeight = 100,
 			MaxWidth = 200,
-			Foreground = Theme.ToolbarButtonBackground,
-			Background = Theme.TabBackground,
+			Foreground = AtlasTheme.ToolbarButtonBackground,
+			Background = AtlasTheme.TabBackground,
 			HorizontalAlignment = HorizontalAlignment.Left,
 			VerticalAlignment = VerticalAlignment.Stretch,
 		};

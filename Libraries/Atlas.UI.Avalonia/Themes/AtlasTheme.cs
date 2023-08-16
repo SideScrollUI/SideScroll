@@ -3,7 +3,7 @@ using Avalonia.Media;
 
 namespace Atlas.UI.Avalonia.Themes;
 
-public static class Theme
+public static class AtlasTheme
 {
 	public static SolidColorBrush Background => Get("ThemeBackgroundBrush");
 	public static SolidColorBrush BackgroundFocused => Get("ThemeBackgroundFocusedBrush");

@@ -28,7 +28,7 @@ public class TabControlTextBlock : Border, IStyleable, ILayoutable
 	[MemberNotNull(nameof(TextBlock))]
 	private void InitializeComponent()
 	{
-		Background = Theme.TextBackground;
+		Background = AtlasTheme.TextBackground;
 		BorderBrush = Brushes.Black;
 		BorderThickness = new Thickness(1);
 		HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -42,7 +42,7 @@ public class TabControlTextBlock : Border, IStyleable, ILayoutable
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
-			Foreground = Theme.TitleForeground,
+			Foreground = AtlasTheme.TitleForeground,
 			TextWrapping = TextWrapping.Wrap,
 			FontSize = 14,
 			Text = Text,

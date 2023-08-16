@@ -73,8 +73,8 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 		IsReadOnly = !property.Editable;
 		if (IsReadOnly)
 		{
-			Background = Theme.TextBackgroundDisabled;
-			Foreground = Theme.ForegroundLight;
+			Background = AtlasTheme.TextBackgroundDisabled;
+			Foreground = AtlasTheme.ForegroundLight;
 		}
 
 		PasswordCharAttribute? passwordCharAttribute = property.GetCustomAttribute<PasswordCharAttribute>();

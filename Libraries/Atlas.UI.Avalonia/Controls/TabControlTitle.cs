@@ -34,7 +34,7 @@ public class TabControlTitle : UserControl, IDisposable
 		Label = name ?? tabInstance.Label;
 		Label = new StringReader(Label).ReadLine()!; // Remove anything after first line
 
-		Background = Theme.TitleBackground;
+		Background = AtlasTheme.TitleBackground;
 
 		_containerGrid = new Grid
 		{
@@ -51,7 +51,7 @@ public class TabControlTitle : UserControl, IDisposable
 			Text = Label,
 			FontSize = 16,
 			//Margin = new Thickness(2), // Shows as black, Need Padding so Border not needed
-			Foreground = Theme.TitleForeground,
+			Foreground = AtlasTheme.TitleForeground,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			// [ToolTip.TipProperty] = Label, // Enable?
 		};
@@ -60,7 +60,7 @@ public class TabControlTitle : UserControl, IDisposable
 		var borderPaddingTitle = new Border
 		{
 			BorderThickness = new Thickness(5, 2, 2, 2),
-			BorderBrush = Theme.TitleBackground,
+			BorderBrush = AtlasTheme.TitleBackground,
 			Child = TextBlock,
 			[Grid.ColumnProperty] = 1,
 		};

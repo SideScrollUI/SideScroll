@@ -50,14 +50,14 @@ public class TabControlSearch : Grid, IStyleable
 			VerticalContentAlignment = VerticalAlignment.Center,
 			Padding = new Thickness(5, 3, 25, 3),
 			Watermark = "Search",
-			Background = Theme.ToolbarTextBackground,
-			Foreground = Theme.ToolbarTextForeground,
-			CaretBrush = Theme.ToolbarCaret,
+			Background = AtlasTheme.ToolbarTextBackground,
+			Foreground = AtlasTheme.ToolbarTextForeground,
+			CaretBrush = AtlasTheme.ToolbarCaret,
 		};
 
 		TextBoxSearch.Resources.Add("ThemeBackgroundHoverBrush", TextBoxSearch.Background); // Disable for now
-		TextBoxSearch.Resources.Add("ThemeBorderMidBrush", Theme.ToolbarBorderMid);
-		TextBoxSearch.Resources.Add("ThemeBorderHighBrush", Theme.ToolbarBorderHigh);
+		TextBoxSearch.Resources.Add("ThemeBorderMidBrush", AtlasTheme.ToolbarBorderMid);
+		TextBoxSearch.Resources.Add("ThemeBorderHighBrush", AtlasTheme.ToolbarBorderHigh);
 
 		// Fluent
 		TextBoxSearch.Resources.Add("TextControlBackgroundPointerOver", TextBoxSearch.Background);

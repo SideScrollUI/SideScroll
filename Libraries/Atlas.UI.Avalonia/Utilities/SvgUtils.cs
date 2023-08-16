@@ -39,7 +39,7 @@ public static class SvgUtils
 
 		using var reader = new StreamReader(stream);
 		string text = reader.ReadToEnd();
-		Color newColor = color ?? Theme.IconForeground.Color;
+		Color newColor = color ?? AtlasTheme.IconForeground.Color;
 		string updated = text.Replace("rgb(0,0,0)", $"rgb({newColor.R},{newColor.G},{newColor.B})");
 
 		SvgSource svgSource = new();

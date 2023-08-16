@@ -157,7 +157,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 	{
 		var border = new Border()
 		{
-			BorderBrush = Theme.GridBorder,
+			BorderBrush = AtlasTheme.GridBorder,
 			Child = textBlock,
 		};
 
@@ -179,12 +179,12 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 			};
 			textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
 
-			border.BorderBrush = Theme.GridStyledLines;
+			border.BorderBrush = AtlasTheme.GridStyledLines;
 		}
 
 		if (PropertyInfo.IsDefined(typeof(StyleLabelAttribute)))
 		{
-			textBlock.Foreground = Theme.StyledLabelForeground;
+			textBlock.Foreground = AtlasTheme.StyledLabelForeground;
 		}
 
 		if (DisplayIndex > 0)
@@ -205,7 +205,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 
 		cell.IsHitTestVisible = true;
 		cell.Focusable = true;
-		cell.Foreground = Theme.GridForeground;
+		cell.Foreground = AtlasTheme.GridForeground;
 		cell.BorderBrush = Brushes.Black;
 		cell.BorderThickness = new Thickness(1);
 

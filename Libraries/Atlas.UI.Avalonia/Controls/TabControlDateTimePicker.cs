@@ -77,7 +77,7 @@ public class TabDateTimePicker : Grid, IStyleable
 	{
 		_datePicker = new TabCalendarDatePicker()
 		{
-			Background = Property.Editable ? Theme.Background : Brushes.LightGray,
+			Background = Property.Editable ? AtlasTheme.Background : Brushes.LightGray,
 			BorderBrush = Brushes.Black,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalContentAlignment = VerticalAlignment.Center,
@@ -92,7 +92,7 @@ public class TabDateTimePicker : Grid, IStyleable
 
 		if (!Property.Editable)
 		{
-			_datePicker.Background = Theme.TextBackgroundDisabled;
+			_datePicker.Background = AtlasTheme.TextBackgroundDisabled;
 		}
 
 		_datePicker.Bind(CalendarDatePicker.SelectedDateProperty, Binding);
@@ -115,8 +115,8 @@ public class TabDateTimePicker : Grid, IStyleable
 
 		if (!Property.Editable)
 		{
-			_timeTextBox.Background = Theme.TextBackgroundDisabled;
-			_timeTextBox.Foreground = Theme.ForegroundLight;
+			_timeTextBox.Background = AtlasTheme.TextBackgroundDisabled;
+			_timeTextBox.Foreground = AtlasTheme.ForegroundLight;
 		}
 
 		_timeTextBox.Bind(TextBlock.TextProperty, Binding);
@@ -170,7 +170,7 @@ public class TabDateTimePicker : Grid, IStyleable
 			Content = image,
 			//Command = command,
 			//Background = Brushes.Transparent,
-			Background = Theme.TabBackground,
+			Background = AtlasTheme.TabBackground,
 			BorderBrush = Background,
 			BorderThickness = new Thickness(0),
 			//Margin = new Thickness(2),
@@ -196,13 +196,13 @@ public class TabDateTimePicker : Grid, IStyleable
 	{
 		Button button = (Button)sender!;
 		button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-		button.Background = Theme.ToolbarButtonBackgroundHover;
+		button.Background = AtlasTheme.ToolbarButtonBackgroundHover;
 	}
 
 	private void Button_PointerLeave(object? sender, PointerEventArgs e)
 	{
 		Button button = (Button)sender!;
-		button.Background = Theme.TabBackground;
+		button.Background = AtlasTheme.TabBackground;
 		//button.Background = Brushes.Transparent;
 		button.BorderBrush = button.Background;
 	}

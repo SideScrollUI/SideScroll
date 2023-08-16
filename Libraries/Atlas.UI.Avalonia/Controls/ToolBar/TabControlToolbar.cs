@@ -36,7 +36,7 @@ public class TabControlToolbar : Grid, IDisposable
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Top;
 
-		Background = Theme.ToolbarButtonBackground;
+		Background = AtlasTheme.ToolbarButtonBackground;
 	}
 
 	public void LoadToolbar(TabToolbar toolbar)
@@ -116,7 +116,7 @@ public class TabControlToolbar : Grid, IDisposable
 
 		Panel panel = new()
 		{
-			Background = Theme.ToolbarButtonSeparator,
+			Background = AtlasTheme.ToolbarButtonSeparator,
 			Width = 1,
 			Margin = new Thickness(4, 2),
 		};
@@ -159,8 +159,8 @@ public class TabControlToolbar : Grid, IDisposable
 			Margin = DefaultMargin,
 			BorderThickness = new Thickness(0),
 			BorderBrush = Brushes.Transparent,
-			Background = Theme.ToolbarButtonBackground,
-			Foreground = Theme.TitleForeground,
+			Background = AtlasTheme.ToolbarButtonBackground,
+			Foreground = AtlasTheme.TitleForeground,
 			//CaretBrush = new SolidColorBrush(Theme.GridSelectedBackgroundColor), // todo: enable with next version?
 		};
 		// Fluent
@@ -202,7 +202,7 @@ public class ToolbarTextBlock : TextBlock, IStyleable
 
 	public ToolbarTextBlock(string text = "")
 	{
-		Foreground = Theme.BackgroundText;
+		Foreground = AtlasTheme.BackgroundText;
 		Text = text;
 		Margin = TabControlToolbar.DefaultMargin;
 		TextWrapping = TextWrapping.NoWrap;
@@ -216,7 +216,7 @@ public class ToolbarRadioButton : RadioButton, IStyleable
 
 	public ToolbarRadioButton(string text = "")
 	{
-		Foreground = Theme.TitleForeground;
+		Foreground = AtlasTheme.TitleForeground;
 		Content = text;
 		Margin = TabControlToolbar.DefaultMargin;
 		VerticalAlignment = VerticalAlignment.Center;

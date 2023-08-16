@@ -228,7 +228,7 @@ public class TabControlChart : Grid, IDisposable
 			RowDefinitions = new RowDefinitions("Auto,*,Auto"),
 			HorizontalAlignment = global::Avalonia.Layout.HorizontalAlignment.Stretch,
 			VerticalAlignment = global::Avalonia.Layout.VerticalAlignment.Stretch,
-			Background = Theme.TabBackground, // grid lines look bad when hovering without this
+			Background = AtlasTheme.TabBackground, // grid lines look bad when hovering without this
 		};
 
 		string? title = ListGroup?.Name;
@@ -238,7 +238,7 @@ public class TabControlChart : Grid, IDisposable
 			{
 				Text = ListGroup?.Name,
 				FontSize = 16,
-				Foreground = Theme.BackgroundText,
+				Foreground = AtlasTheme.BackgroundText,
 				Margin = new Thickness(10, 5),
 				//FontWeight = FontWeight.Medium,
 				[Grid.ColumnSpanProperty] = 2,
@@ -291,12 +291,12 @@ public class TabControlChart : Grid, IDisposable
 	private void TitleTextBlock_PointerEnter(object? sender, PointerEventArgs e)
 	{
 		if (IsTitleSelectable)
-			TitleTextBlock!.Foreground = Theme.GridBackgroundSelected;
+			TitleTextBlock!.Foreground = AtlasTheme.GridBackgroundSelected;
 	}
 
 	private void TitleTextBlock_PointerLeave(object? sender, PointerEventArgs e)
 	{
-		TitleTextBlock!.Foreground = Theme.BackgroundText;
+		TitleTextBlock!.Foreground = AtlasTheme.BackgroundText;
 	}
 
 	private void UpdateVisible()
@@ -1033,7 +1033,7 @@ public class TabControlChart : Grid, IDisposable
 			Type = LineAnnotationType.Vertical,
 			//Color = Theme.TitleBackground.ToOxyColor(),
 			//Color = Color.Parse("#21a094").ToOxyColor(),
-			Color = Theme.GridBackgroundSelected.ToOxyColor(),
+			Color = AtlasTheme.GridBackgroundSelected.ToOxyColor(),
 			//Color = timeTrackerColor,
 			// LineStyle = LineStyle.Dot, // doesn't work for vertical?
 		};
@@ -1061,8 +1061,8 @@ public class TabControlChart : Grid, IDisposable
 		{
 			_rectangleAnnotation = new OxyPlot.Annotations.RectangleAnnotation()
 			{
-				Fill = OxyColor.FromAColor((byte)Theme.ChartBackgroundSelectedAlpha, Theme.ChartBackgroundSelected.ToOxyColor()),
-				Stroke = OxyColor.FromAColor((byte)180, Theme.ChartBackgroundSelected.ToOxyColor()),
+				Fill = OxyColor.FromAColor((byte)AtlasTheme.ChartBackgroundSelectedAlpha, AtlasTheme.ChartBackgroundSelected.ToOxyColor()),
+				Stroke = OxyColor.FromAColor((byte)180, AtlasTheme.ChartBackgroundSelected.ToOxyColor()),
 				StrokeThickness = 1,
 			};
 		}

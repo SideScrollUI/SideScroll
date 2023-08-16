@@ -77,7 +77,7 @@ public class TabChartLegendItem : Grid
 		ColumnDefinitions = new ColumnDefinitions("Auto, *, Auto");
 		RowDefinitions = new RowDefinitions("Auto");
 
-		Background = Theme.TabBackground;
+		Background = AtlasTheme.TabBackground;
 
 		UpdateTotal();
 
@@ -263,9 +263,9 @@ public class TabChartLegendItem : Grid
 					Legend.UpdateHighlight(true);
 					OnVisibleChanged?.Invoke(this, EventArgs.Empty);
 				}
-				TextBlock!.Foreground = Theme.GridBackgroundSelected;
+				TextBlock!.Foreground = AtlasTheme.GridBackgroundSelected;
 				if (TextBlockTotal != null)
-					TextBlockTotal.Foreground = Theme.GridBackgroundSelected;
+					TextBlockTotal.Foreground = AtlasTheme.GridBackgroundSelected;
 			}
 			else
 			{

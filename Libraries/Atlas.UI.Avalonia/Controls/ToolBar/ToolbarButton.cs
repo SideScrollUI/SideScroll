@@ -39,10 +39,10 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 	private Image? _imageControl;
 	private IImage? _defaultImage;
 
-	protected IImage? HighlightImage => _highlightImage ??= SvgUtils.GetSvgImage(ImageResource, Theme.ToolbarButtonForegroundHover.Color);
+	protected IImage? HighlightImage => _highlightImage ??= SvgUtils.GetSvgImage(ImageResource, AtlasTheme.ToolbarButtonForegroundHover.Color);
 	private IImage? _highlightImage;
 
-	protected IImage? DisabledImage => _disabledImage ??= SvgUtils.GetSvgImage(ImageResource, Theme.ToolbarButtonForegroundDisabled.Color);
+	protected IImage? DisabledImage => _disabledImage ??= SvgUtils.GetSvgImage(ImageResource, AtlasTheme.ToolbarButtonForegroundDisabled.Color);
 	private IImage? _disabledImage;
 
 	public new bool IsEnabled
@@ -126,7 +126,7 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 
 		Content = grid;
 		Command = command;
-		Background = Theme.ToolbarButtonBackground;
+		Background = AtlasTheme.ToolbarButtonBackground;
 		BorderBrush = Background;
 		BorderThickness = new Thickness(0);
 		Margin = new Thickness(1);

@@ -77,7 +77,7 @@ public class TabControlParams : Grid, IValidationControl
 			Text = summaryAttribute.Summary,
 			FontSize = 14,
 			Margin = new Thickness(0, 3, 10, 3),
-			Foreground = Theme.BackgroundText,
+			Foreground = AtlasTheme.BackgroundText,
 			VerticalAlignment = VerticalAlignment.Top,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			TextWrapping = TextWrapping.Wrap,
@@ -167,7 +167,7 @@ public class TabControlParams : Grid, IValidationControl
 		{
 			Text = property.Name,
 			Margin = new Thickness(10, 7, 10, 3),
-			Foreground = Theme.BackgroundText,
+			Foreground = AtlasTheme.BackgroundText,
 			VerticalAlignment = VerticalAlignment.Top,
 			MaxWidth = ControlMaxWidth,
 			[Grid.RowProperty] = rowIndex,

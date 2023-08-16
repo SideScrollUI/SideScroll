@@ -19,9 +19,9 @@ public class ValueToBrushConverter : IValueConverter
 
 	public sealed class BrushColors
 	{
-		public ISolidColorBrush HasLinks => Theme.HasLinksBackground;
-		public ISolidColorBrush NoLinks => Theme.NoLinksBackground;
-		public ISolidColorBrush Editable { get; set; } = Theme.Editable;
+		public ISolidColorBrush HasLinks => AtlasTheme.HasLinksBackground;
+		public ISolidColorBrush NoLinks => AtlasTheme.NoLinksBackground;
+		public ISolidColorBrush Editable { get; set; } = AtlasTheme.Editable;
 	}
 	internal static BrushColors StyleBrushes { get; set; } = new();
 
@@ -32,7 +32,7 @@ public class ValueToBrushConverter : IValueConverter
 		try
 		{
 			if (PropertyInfo.IsDefined(typeof(StyleLabelAttribute)))
-				return Theme.ButtonBackground;
+				return AtlasTheme.ButtonBackground;
 
 			if (value is DictionaryEntry || PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 			{
@@ -73,9 +73,9 @@ public class ValueToForegroundBrushConverter : IValueConverter
 
 	public sealed class BrushColors
 	{
-		public ISolidColorBrush HasLinks => Theme.ToolbarTextForeground; //Theme.TitleForeground;
-		public ISolidColorBrush NoLinks => Theme.ToolbarTextForeground; // Should this be different?
-		public ISolidColorBrush Editable { get; set; } = Theme.Editable;
+		public ISolidColorBrush HasLinks => AtlasTheme.ToolbarTextForeground; //Theme.TitleForeground;
+		public ISolidColorBrush NoLinks => AtlasTheme.ToolbarTextForeground; // Should this be different?
+		public ISolidColorBrush Editable { get; set; } = AtlasTheme.Editable;
 	}
 	internal static BrushColors StyleBrushes { get; set; } = new();
 

@@ -180,8 +180,8 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 			CanUserSortColumns = true,
 
 			BorderBrush = Brushes.Black,
-			RowBackground = Theme.GridBackground,
-			AlternatingRowBackground = Theme.GridBackground,
+			RowBackground = AtlasTheme.GridBackground,
+			AlternatingRowBackground = AtlasTheme.GridBackground,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
