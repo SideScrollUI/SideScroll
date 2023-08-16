@@ -481,8 +481,15 @@ public class TabInstance : IDisposable
 				context.InitializeContext(true);
 		}
 
-		LoadSettings(false);
-		OnModelChanged?.Invoke(this, EventArgs.Empty);
+		try
+		{
+			LoadSettings(false);
+			OnModelChanged?.Invoke(this, EventArgs.Empty);
+		}
+		catch (Exception e)
+		{
+			call.Log.Add(e);
+		}
 
 		IsLoaded = true;
 	}
