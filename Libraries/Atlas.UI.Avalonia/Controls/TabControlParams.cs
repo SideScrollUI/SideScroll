@@ -56,11 +56,48 @@ public class TabControlParams : Grid, IValidationControl
 		if (obj == null) return;
 
 		AddSummary();
+		AddPropertyControls(obj);
+	}
 
+	private void AddPropertyControls(object obj)
+	{
 		ItemCollection<ListProperty> properties = ListProperty.Create(obj);
+
 		foreach (ListProperty property in properties)
 		{
-			AddPropertyRow(property);
+			int columnIndex = property.GetCustomAttribute<ColumnIndexAttribute>()?.Index ?? 0;
+			AddColumnIndex(columnIndex + 1); // label + value controls
+		}
+
+		Control? lastControl = null;
+		foreach (ListProperty property in properties)
+		{
+			var newControl = AddPropertyControl(property);
+			if (newControl != null)
+			{
+				if (lastControl != null && GetRow(lastControl) != GetRow(newControl))
+				{
+					FillColumnSpan(lastControl);
+				}
+				_propertyControls[property] = newControl;
+			}
+			lastControl = newControl;
+		}
+
+		if (lastControl != null)
+		{
+			FillColumnSpan(lastControl);
+		}
+	}
+
+	// Fill entire last line if available
+	private void FillColumnSpan(Control lastControl)
+	{
+		int columnIndex = GetColumn(lastControl);
+		int columnSpan = GetColumnSpan(lastControl);
+		if (columnIndex + columnSpan < ColumnDefinitions.Count)
+		{
+			SetColumnSpan(lastControl, ColumnDefinitions.Count - columnIndex);
 		}
 	}
 
@@ -82,7 +119,7 @@ public class TabControlParams : Grid, IValidationControl
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			TextWrapping = TextWrapping.Wrap,
 			MaxWidth = ControlMaxWidth,
-			[Grid.ColumnSpanProperty] = 2,
+			[ColumnSpanProperty] = 2,
 		};
 		Children.Add(textBlock);
 	}
@@ -124,24 +161,38 @@ public class TabControlParams : Grid, IValidationControl
 
 	private void AddControl(Control control, int columnIndex, int rowIndex)
 	{
+		AddColumnIndex(columnIndex);
+
 		SetColumn(control, columnIndex);
 		SetRow(control, rowIndex);
 		Children.Add(control);
 	}
 
-	public Control? AddPropertyRow(string propertyName)
+	private void AddColumnIndex(int columnIndex)
+	{
+		while (columnIndex >= ColumnDefinitions.Count)
+		{
+			GridUnitType type = (ColumnDefinitions.Count % 2 == 0) ? GridUnitType.Auto : GridUnitType.Star;
+			var columnDefinition = new ColumnDefinition(1, type);
+			ColumnDefinitions.Add(columnDefinition);
+		}
+	}
+
+	public Control? AddPropertyControl(string propertyName)
 	{
 		PropertyInfo propertyInfo = Object!.GetType().GetProperty(propertyName)!;
-		return AddPropertyRow(new ListProperty(Object, propertyInfo));
+		return AddPropertyControl(new ListProperty(Object, propertyInfo));
 	}
 
-	public Control? AddPropertyRow(PropertyInfo propertyInfo)
+	public Control? AddPropertyControl(PropertyInfo propertyInfo)
 	{
-		return AddPropertyRow(new ListProperty(Object!, propertyInfo));
+		return AddPropertyControl(new ListProperty(Object!, propertyInfo));
 	}
 
-	public Control? AddPropertyRow(ListProperty property)
+	public Control? AddPropertyControl(ListProperty property)
 	{
+		int columnIndex = property.GetCustomAttribute<ColumnIndexAttribute>()?.Index ?? 0;
+
 		Control? control = CreatePropertyControl(property);
 		if (control == null)
 			return null;
@@ -149,21 +200,31 @@ public class TabControlParams : Grid, IValidationControl
 		property.Cachable = false;
 
 		int rowIndex = RowDefinitions.Count;
-		{
-			var spacerRow = new RowDefinition()
-			{
-				Height = new GridLength(5),
-			};
-			RowDefinitions.Add(spacerRow);
-			rowIndex++;
-		}
-		var rowDefinition = new RowDefinition()
-		{
-			Height = new GridLength(1, GridUnitType.Auto),
-		};
-		RowDefinitions.Add(rowDefinition);
 
-		var textLabel = new TextBlock()
+		if (rowIndex > 0 && columnIndex > 0)
+		{
+			rowIndex--; // Reuse previous row
+		}
+		else
+		{
+			if (columnIndex == 0)
+			{
+				RowDefinition spacerRow = new()
+				{
+					Height = new GridLength(5),
+				};
+				RowDefinitions.Add(spacerRow);
+				rowIndex++;
+			}
+
+			RowDefinition rowDefinition = new()
+			{
+				Height = new GridLength(1, GridUnitType.Auto),
+			};
+			RowDefinitions.Add(rowDefinition);
+		}
+
+		TextBlock textLabel = new()
 		{
 			Text = property.Name,
 			Margin = new Thickness(10, 7, 10, 3),
@@ -171,11 +232,11 @@ public class TabControlParams : Grid, IValidationControl
 			VerticalAlignment = VerticalAlignment.Top,
 			MaxWidth = ControlMaxWidth,
 			[Grid.RowProperty] = rowIndex,
-			[Grid.ColumnProperty] = 0,
+			[Grid.ColumnProperty] = columnIndex++,
 		};
 		Children.Add(textLabel);
 
-		AddControl(control, 1, rowIndex);
+		AddControl(control, columnIndex, rowIndex);
 
 		_propertyControls[property] = control;
 

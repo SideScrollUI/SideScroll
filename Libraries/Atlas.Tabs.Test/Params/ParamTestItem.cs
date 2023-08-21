@@ -13,16 +13,16 @@ public class ParamTestItem
 	[Watermark("Description")]
 	public string? Description { get; set; }
 
-	public bool Boolean { get; set; } = true;
-
 	[ReadOnly(true)]
 	public string ReadOnly { get; set; } = "ReadOnly";
 
+	public bool Boolean { get; set; } = true;
+
 	[Range(1, 1000)]
 	public int Amount { get; set; } = 123;
-	public double Double { get; set; } = 3.14;
 
-	public DateTime DateTime { get; set; } = DateTime.Now;
+	[ColumnIndex(2)]
+	public double Double { get; set; } = 3.14;
 
 	public AttributeTargets EnumAttributeTargets { get; set; } = AttributeTargets.Event;
 
@@ -33,8 +33,10 @@ public class ParamTestItem
 		new("Three", 3),
 	};
 
-	[BindList(nameof(ListItems))]
+	[BindList(nameof(ListItems)), ColumnIndex(2)]
 	public ParamListItem ListItem { get; set; }
+
+	public DateTime DateTime { get; set; } = DateTime.Now;
 
 	public ParamTestItem()
 	{

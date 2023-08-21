@@ -4,7 +4,7 @@ using Avalonia.Media.Imaging;
 
 namespace Atlas.UI.Avalonia.Utilities;
 
-internal class ImageUtils
+class ImageUtils
 {
 	public const int MaxImageWidth = 10000;
 	public const int MaxImageHeight = 1024;
