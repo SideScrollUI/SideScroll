@@ -1,6 +1,8 @@
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
+using Atlas.Tabs.Tools;
+using Atlas.UI.Avalonia.Tabs;
 using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
@@ -40,6 +42,8 @@ public class BaseWindow : Window
 	private void Initialize(Project project)
 	{
 		AtlasInit.Initialize();
+
+		TabFile.RegisterType<TabFileImage>(".png", ".jpg", ".jpeg", ".gif", ".bmp");
 
 		LoadProject(project);
 

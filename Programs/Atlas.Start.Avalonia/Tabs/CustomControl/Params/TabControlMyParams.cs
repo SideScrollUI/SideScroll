@@ -30,8 +30,8 @@ public class TabControlMyParams : Grid
 		{
 			[Grid.RowProperty] = 0,
 		};
-		controlParams.AddPropertyRow(nameof(MyParams.Name));
-		controlParams.AddPropertyRow(nameof(MyParams.Amount));
+		controlParams.AddPropertyControl(nameof(MyParams.Name));
+		controlParams.AddPropertyControl(nameof(MyParams.Amount));
 		Children.Add(controlParams);
 	}
 }

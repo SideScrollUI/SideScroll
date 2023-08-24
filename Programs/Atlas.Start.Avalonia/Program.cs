@@ -1,4 +1,6 @@
 using Atlas.Core;
+using Atlas.Tabs.Tools;
+using Atlas.UI.Avalonia.Tabs;
 using Avalonia;
 using OxyPlot.Avalonia;
 

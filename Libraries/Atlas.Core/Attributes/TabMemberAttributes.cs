@@ -245,3 +245,15 @@ public class ButtonColumnAttribute : Attribute
 		VisiblePropertyName = visiblePropertyName;
 	}
 }
+
+// -> Allows setting the column for param controls
+[AttributeUsage(AttributeTargets.Property)]
+public class ColumnIndexAttribute : Attribute
+{
+	public readonly int Index;
+
+	public ColumnIndexAttribute(int index)
+	{
+		Index = index;
+	}
+}

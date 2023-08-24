@@ -26,11 +26,8 @@ public class ToolComboBox<T> : IToolComboBox
 
 			var call = new Call();
 
-			if (Action != null)
-				Action.Invoke(call);
-
-			if (ActionAsync != null)
-				ActionAsync.Invoke(call);
+			Action?.Invoke(call);
+			ActionAsync?.Invoke(call);
 		}
 	}
 

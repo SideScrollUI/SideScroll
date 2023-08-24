@@ -63,9 +63,9 @@ public class DataRepoView<T> : DataRepoInstance<T>
 	{
 		lock (DataRepo)
 		{
-			Delete(call, key);
+			// Delete(call, key); // Don't trigger delete notifications
 			base.Save(call, key, item);
-			Items.Add(key, item);
+			Items.Update(key, item);
 		}
 	}
 

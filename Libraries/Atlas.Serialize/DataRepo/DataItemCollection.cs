@@ -6,10 +6,10 @@ namespace Atlas.Serialize;
 // Collection of DataRepo items with a key/value lookup
 public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 {
-	public SortedDictionary<string, T> Lookup { get; set; } = new();
+	public SortedDictionary<string, DataItem<T>> Lookup { get; set; } = new();
 
 	public IEnumerable<T> Values => this.Select(o => o.Value);
-	public IEnumerable<T> SortedValues => Lookup.Values.Select(o => o);
+	public IEnumerable<T> SortedValues => Lookup.Values.Select(o => o.Value);
 
 	public DataItemCollection()	{ }
 
@@ -19,12 +19,12 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 		Lookup = CreateLookup();
 	}
 
-	private SortedDictionary<string, T> CreateLookup()
+	private SortedDictionary<string, DataItem<T>> CreateLookup()
 	{
-		var entries = new SortedDictionary<string, T>();
+		var entries = new SortedDictionary<string, DataItem<T>>();
 		foreach (DataItem<T> item in ToList())
 		{
-			entries.Add(item.Key, item.Value);
+			entries.Add(item.Key, item);
 		}
 		return entries;
 	}
@@ -45,8 +45,34 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 
 	public void Add(string key, T value)
 	{
-		Add(new DataItem<T>(key, value));
-		Lookup.Add(key, value);
+		var dataItem = new DataItem<T>(key, value);
+		Add(dataItem);
+		Lookup.Add(key, dataItem);
+	}
+
+	public void Update(string key, T value)
+	{
+		if (Lookup.TryGetValue(key, out DataItem<T>? existingDataItem))
+		{
+			existingDataItem!.Value = value;
+		}
+		else
+		{
+			var dataItem = new DataItem<T>(key, value);
+			Add(dataItem);
+			Lookup[key] = dataItem;
+		}
+	}
+
+	public bool TryGetValue(string key, out T? value)
+	{
+		if (Lookup.TryGetValue(key, out DataItem<T>? lookupValue))
+		{
+			value = lookupValue.Value;
+			return true;
+		}
+		value = default;
+		return false;
 	}
 
 	public new void Remove(DataItem<T> item)
