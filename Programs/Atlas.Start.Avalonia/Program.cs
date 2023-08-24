@@ -10,7 +10,6 @@ static class Program
 {
 	static int Main(string[] args)
 	{
-		RegisterFileTypes();
 		OxyPlotModule.EnsureLoaded();
 		AppBuilder builder = BuildAvaloniaApp();
 
@@ -23,11 +22,6 @@ static class Program
 			LogUtils.LogException(e, "Atlas", "Atlas.Start.Avalonia");
 			return 1;
 		}
-	}
-
-	private static void RegisterFileTypes()
-	{
-		TabFile.RegisterType<TabFileImage>(".png", ".jpg", ".jpeg", ".gif", ".bmp");
 	}
 
 	public static AppBuilder BuildAvaloniaApp()
