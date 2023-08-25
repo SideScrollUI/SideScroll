@@ -57,11 +57,16 @@ public class TabFileImage : ITab, IFileTypeView
 				VerticalAlignment = VerticalAlignment.Top,
 			};
 
-			Bitmap? bitmap = ImageUtils.LoadImage(call, Image, Path)!;
-			if (bitmap != null)
+			try
 			{
+				Bitmap bitmap = ImageUtils.LoadImage(Image, Path)!;
 				model.MaxDesiredWidth = Math.Max(100, (int)bitmap.Size.Width);
 				model.AddObject(Image, true);
+			}
+			catch (Exception ex)
+			{
+				call.Log.Add(ex);
+				model.AddObject(ex);
 			}
 		}
 	}
