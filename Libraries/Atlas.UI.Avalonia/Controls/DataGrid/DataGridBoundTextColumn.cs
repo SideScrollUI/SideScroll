@@ -108,8 +108,6 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 	// Adds a context menu to the text block
 	private void AddTextBlockContextMenu(TextBlock textBlock)
 	{
-		var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
-
 		var list = new AvaloniaList<object>();
 
 		var menuItemCopy = new TabMenuItem("_Copy - Cell Contents");

@@ -15,8 +15,6 @@ public static class AvaloniaUtils
 	// TextBlock control doesn't allow selecting text, so add a Copy command to the context menu
 	public static void AddContextMenu(TextBlock textBlock)
 	{
-		var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>();
-
 		var list = new AvaloniaList<object>();
 
 		var menuItemCopy = new TabMenuItem()

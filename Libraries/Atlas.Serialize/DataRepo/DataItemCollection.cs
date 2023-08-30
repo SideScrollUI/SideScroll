@@ -1,4 +1,6 @@
 using Atlas.Core;
+using Newtonsoft.Json.Linq;
+using System.Collections.Specialized;
 using System.Reflection;
 
 namespace Atlas.Serialize;
@@ -54,7 +56,16 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	{
 		if (Lookup.TryGetValue(key, out DataItem<T>? existingDataItem))
 		{
+			if (Equals(existingDataItem.Value, value)) return;
+
+			int indexOfItem = IndexOf(existingDataItem);
 			existingDataItem!.Value = value;
+			OnCollectionChanged(
+				new NotifyCollectionChangedEventArgs(
+					NotifyCollectionChangedAction.Replace,
+					existingDataItem,
+					existingDataItem,
+					indexOfItem));
 		}
 		else
 		{

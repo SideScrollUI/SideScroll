@@ -56,7 +56,8 @@ public class DataRepoView<T> : DataRepoInstance<T>
 
 	public override void Save(Call? call, T item)
 	{
-		Save(call, item!.ToString()!, item);
+		string key = ObjectUtils.GetObjectId(item)!;
+		Save(call, key, item);
 	}
 
 	public override void Save(Call? call, string key, T item)
@@ -71,7 +72,8 @@ public class DataRepoView<T> : DataRepoInstance<T>
 
 	public override void Delete(Call? call, T item)
 	{
-		Delete(call, item!.ToString());
+		string key = ObjectUtils.GetObjectId(item)!;
+		Delete(call, key);
 	}
 
 	public override void Delete(Call? call, string? key = null)

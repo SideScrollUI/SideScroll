@@ -1,4 +1,5 @@
 using Atlas.Core;
+using Newtonsoft.Json.Linq;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 
@@ -73,6 +74,33 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 				{
 					Remove(item);
 				}
+			}
+		}
+		else if (e.Action == NotifyCollectionChangedAction.Replace)
+		{
+			if (e.OldItems == null || e.NewItems?.Count != e.OldItems.Count) return;
+
+			List<TViewType> viewItems = new();
+			int index = 0;
+			foreach (IDataItem oldItem in e.OldItems)
+			{
+				if (_valueLookup.TryGetValue(oldItem, out TViewType? itemView))
+				{
+					var newItem = (IDataItem)e.NewItems![index++]!;
+					itemView.Load(this, newItem.Object, LoadParams);
+					viewItems.Add(itemView);
+				}
+			}
+
+			if (viewItems.Count > 0)
+			{
+				int indexOfItem = Items.IndexOf(viewItems.First());
+				Items.NotifyCollectionChanged(
+					new NotifyCollectionChangedEventArgs(
+						NotifyCollectionChangedAction.Replace,
+						viewItems,
+						viewItems,
+						indexOfItem));
 			}
 		}
 		else if (e.Action == NotifyCollectionChangedAction.Reset)

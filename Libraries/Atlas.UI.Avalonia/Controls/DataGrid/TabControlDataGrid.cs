@@ -316,7 +316,8 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 		if (List == null) // reloading detaches list temporarily?
 			return;
 
-		if (e.Action == NotifyCollectionChangedAction.Add)
+		if (e.Action == NotifyCollectionChangedAction.Add ||
+			e.Action == NotifyCollectionChangedAction.Replace)
 		{
 			// Group up any new items after the 1st one
 			if ((AutoSelectNew ||

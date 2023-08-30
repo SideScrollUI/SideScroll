@@ -54,7 +54,8 @@ public class DataRepoInstance<T> : IDataRepoInstance
 
 	public virtual void Delete(Call? call, T item)
 	{
-		Delete(call, item!.ToString());
+		string key = ObjectUtils.GetObjectId(item)!;
+		Delete(call, key);
 	}
 
 	public virtual void Delete(Call? call = null, string? key = null)

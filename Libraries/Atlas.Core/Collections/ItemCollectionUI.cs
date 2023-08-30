@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace Atlas.Core;
 
@@ -163,5 +164,10 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 		{
 			base.RemoveItem(index);
 		}
+	}
+
+	public void NotifyCollectionChanged(NotifyCollectionChangedEventArgs e)
+	{
+		OnCollectionChanged(e);
 	}
 }
