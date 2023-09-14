@@ -21,6 +21,7 @@ public class TabTestFilter : ITab
 			}
 
 			model.Items = items;
+			model.ShowSearch = true;
 
 			model.Notes = @"
 * Press Ctrl-F on any Data Grid to add a filter (You can click anywhere on a tab to focus it)

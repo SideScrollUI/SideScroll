@@ -151,8 +151,8 @@ public class BaseWindow : Window
 		set
 		{
 			// These are causing the window to be shifted down
-			Width = Math.Max(MinWindowSize, value.Width);
-			Height = Math.Max(MinWindowSize, value.Height);
+			Width = Math.Min(MaxWidth, Math.Max(MinWindowSize, value.Width));
+			Height = Math.Min(MaxHeight, Math.Max(MinWindowSize, value.Height));
 
 			double minLeft = -10; // Left position for windows starts at -10
 			double left = Math.Min(Math.Max(minLeft, value.Left), MaxWidth - Width + minLeft); // values can be negative
