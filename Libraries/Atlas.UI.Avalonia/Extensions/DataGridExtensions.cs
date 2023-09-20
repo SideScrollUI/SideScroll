@@ -13,36 +13,58 @@ public static class DataGridExtensions
 {
 	private const int MaxValueLength = 2000;
 
-	public static string? ColumnToStringTable(this DataGrid? dataGrid, DataGridBoundColumn? column)
+	public static string ColumnToStringTable(this DataGrid dataGrid, DataGridBoundColumn column)
 	{
-		if (dataGrid == null || column == null)
-			return null;
+		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
+		if (column == null) throw new ArgumentNullException(nameof(column));
 
 		var sb = new StringBuilder();
 		foreach (var item in dataGrid.Items)
 		{
-			Binding binding = (Binding)column.Binding;
-			string propertyName = binding.Path;
-			Type type = item.GetType();
-			PropertyInfo? propertyInfo = type.GetProperty(propertyName);
-			if (propertyInfo != null)
-			{
-				object? obj = propertyInfo.GetValue(item);
-				string? value = obj.Formatted(MaxValueLength);
-				sb.AppendLine(value);
-			}
-			else
-			{
-				sb.AppendLine('(' + propertyName + ')');
-			}
-			//object content = column.GetCellValue(item, column.ClipboardContentBinding);
+			string? value = GetCellValue(column, item);
+			sb.AppendLine(value);
 		}
 		return sb.ToString();
 	}
 
-	public static string? RowToString(this DataGrid? dataGrid, object? obj)
+	public static string SelectedColumnToString(this DataGrid dataGrid, DataGridBoundColumn column)
 	{
-		if (dataGrid == null || obj == null)
+		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
+		if (column == null) throw new ArgumentNullException(nameof(column));
+
+		var sb = new StringBuilder();
+		foreach (var item in dataGrid.SelectedItems)
+		{
+			string? value = GetCellValue(column, item);
+			sb.AppendLine(value);
+		}
+		return sb.ToString();
+	}
+
+	private static string? GetCellValue(DataGridBoundColumn column, object item)
+	{
+		Binding binding = (Binding)column.Binding;
+		string propertyName = binding.Path;
+		Type type = item.GetType();
+		PropertyInfo? propertyInfo = type.GetProperty(propertyName);
+		if (propertyInfo != null)
+		{
+			object? obj = propertyInfo.GetValue(item);
+			string? value = obj.Formatted(MaxValueLength);
+			return value;
+		}
+		else
+		{
+			return '(' + propertyName + ')';
+		}
+		//object content = column.GetCellValue(item, column.ClipboardContentBinding);
+	}
+
+	public static string? RowToString(this DataGrid dataGrid, object? obj)
+	{
+		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
+
+		if (obj == null)
 			return null;
 
 		Type type = obj.GetType();
@@ -70,10 +92,9 @@ public static class DataGridExtensions
 		return sb.ToString();
 	}
 
-	public static string? SelectedToString(this DataGrid dataGrid)
+	public static string SelectedToString(this DataGrid dataGrid)
 	{
-		if (dataGrid == null)
-			return null;
+		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
 
 		GetDataGridContents(dataGrid, dataGrid.SelectedItems,
 			out List<ColumnInfo> columns,
@@ -82,10 +103,9 @@ public static class DataGridExtensions
 		return TableToString(columns, contentRows);
 	}
 
-	public static string? SelectedToCsv(this DataGrid dataGrid)
+	public static string SelectedToCsv(this DataGrid dataGrid)
 	{
-		if (dataGrid == null)
-			return null;
+		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
 
 		GetDataGridContents(dataGrid, dataGrid.SelectedItems,
 			out List<ColumnInfo> columns,
@@ -94,10 +114,9 @@ public static class DataGridExtensions
 		return TableToCsv(columns, contentRows);
 	}
 
-	public static string? ToStringTable(this DataGrid dataGrid)
+	public static string ToStringTable(this DataGrid dataGrid)
 	{
-		if (dataGrid == null)
-			return null;
+		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
 
 		GetDataGridContents(dataGrid, dataGrid.Items,
 			out List<ColumnInfo> columns,
@@ -106,10 +125,9 @@ public static class DataGridExtensions
 		return TableToString(columns, contentRows);
 	}
 
-	public static string? ToCsv(this DataGrid dataGrid)
+	public static string ToCsv(this DataGrid dataGrid)
 	{
-		if (dataGrid == null)
-			return null;
+		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
 
 		GetDataGridContents(dataGrid, dataGrid.Items,
 			out List<ColumnInfo> columns,
@@ -161,7 +179,9 @@ public static class DataGridExtensions
 		foreach (DataGridColumn dataColumn in dataGrid.Columns)
 		{
 			if (dataColumn.IsVisible && dataColumn is DataGridBoundColumn boundColumn && boundColumn.Binding != null)
+			{
 				visibleColumns[dataColumn.DisplayIndex] = dataColumn;
+			}
 		}
 
 		foreach (DataGridColumn dataColumn in visibleColumns.Values)

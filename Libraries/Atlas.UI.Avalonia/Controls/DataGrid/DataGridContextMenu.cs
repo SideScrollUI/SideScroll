@@ -56,6 +56,10 @@ public class DataGridContextMenu : ContextMenu, IStyleable, IDisposable
 		menuItemCopySelectedCsv.Click += MenuItemCopySelectedCsv_Click;
 		list.Add(menuItemCopySelectedCsv);
 
+		var menuItemCopySelectedColumn = new TabMenuItem("Copy - Selected - Column");
+		menuItemCopySelectedColumn.Click += MenuItemCopySelectedColumn_Click;
+		list.Add(menuItemCopySelectedColumn);
+
 		list.Add(new Separator());
 
 		var menuItemCopyDataGrid = new TabMenuItem("Copy - _DataGrid");
@@ -123,7 +127,7 @@ public class DataGridContextMenu : ContextMenu, IStyleable, IDisposable
 
 	private async void MenuItemCopyColumn_Click(object? sender, RoutedEventArgs e)
 	{
-		if (Column is DataGridPropertyTextColumn column)
+		if (Column is DataGridBoundColumn column)
 		{
 			string? text = DataGrid.ColumnToStringTable(column);
 			if (text != null)
@@ -150,6 +154,15 @@ public class DataGridContextMenu : ContextMenu, IStyleable, IDisposable
 		string? text = DataGrid.SelectedToCsv();
 		if (text != null)
 			await ClipBoardUtils.SetTextAsync(text);
+	}
+
+	private async void MenuItemCopySelectedColumn_Click(object? sender, RoutedEventArgs e)
+	{
+		if (Column is DataGridBoundColumn column)
+		{
+			string text = DataGrid.SelectedColumnToString(column);
+			await ClipBoardUtils.SetTextAsync(text);
+		}
 	}
 
 	private async void MenuItemCopyDataGridCsv_Click(object? sender, RoutedEventArgs e)
