@@ -21,7 +21,7 @@ public enum AutoSelectType
 
 public class TabModel
 {
-	public string? Id { get; set; } // todo: Unique key for bookmarks?
+	// public string? Id { get; set; } // todo: Unique key for bookmarks?
 	public string Name { get; set; } = "<TabModel>";
 	public string? Notes { get; set; } // not used anymore
 	public object? Object { get; set; } // optional
