@@ -305,7 +305,10 @@ public class TypeRepoObject : TypeRepo
 	// Reads over all the field and properties since they're ordered without offsets
 	private List<object?> GetConstructorParams(int objectIndex)
 	{
-		if (TypeSchema.CustomConstructor == null) throw new Exception("Missing Custom Constructor");
+		if (TypeSchema.CustomConstructor == null)
+		{
+			throw new Exception($"No default or matching constructor found: {TypeSchema}");
+		}
 
 		long position = Reader!.BaseStream.Position;
 		Reader!.BaseStream.Position = ObjectOffsets![objectIndex];

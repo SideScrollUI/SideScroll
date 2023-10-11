@@ -172,10 +172,12 @@ public class TypeSchema
 	{
 		if (HasEmptyConstructor || Type == null) return null;
 
-		var members = PropertySchemas.Select(p => p.PropertyName.ToLower()).ToHashSet();
-		var fieldMembers = FieldSchemas.Select(p => p.FieldName.ToLower()).ToHashSet();
+		var members = PropertySchemas.Where(p => p.IsLoadable).Select(p => p.PropertyName.ToLower()).ToHashSet();
+		var fieldMembers = FieldSchemas.Where(f => f.IsLoadable).Select(f => f.FieldName.ToLower()).ToHashSet();
 		foreach (var member in fieldMembers)
 			members.Add(member);
+
+		if (members.Count == 0) return null;
 
 		ConstructorInfo[] constructors = Type!.GetConstructors();
 		foreach (ConstructorInfo constructor in constructors)

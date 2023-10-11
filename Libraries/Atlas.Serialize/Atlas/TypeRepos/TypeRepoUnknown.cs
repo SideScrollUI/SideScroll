@@ -37,4 +37,9 @@ public class TypeRepoUnknown : TypeRepo
 		// assigning won't do anything since it's not a ref
 		throw new Exception("Not cloneable");
 	}
+
+	protected override object? CreateObject(int objectIndex)
+	{
+		return null;
+	}
 }
