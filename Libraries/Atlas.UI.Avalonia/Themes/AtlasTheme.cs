@@ -74,7 +74,7 @@ public static class AtlasTheme
 
 	public static SolidColorBrush Get(string brushName)
 	{
-		if (Application.Current!.Styles.TryGetResource(brushName, out object? obj))
+		if (Application.Current!.Styles.TryGetResource(brushName, null, out object? obj))
 			return (SolidColorBrush)obj!;
 
 		throw new Exception("Brush not found: " + brushName);
@@ -82,7 +82,7 @@ public static class AtlasTheme
 
 	public static Color GetColor(string colorName)
 	{
-		if (Application.Current!.Styles.TryGetResource(colorName, out object? obj))
+		if (Application.Current!.Styles.TryGetResource(colorName, null, out object? obj))
 			return (Color)obj!;
 
 		throw new Exception("Color not found: " + colorName);
@@ -95,7 +95,7 @@ public static class AtlasTheme
 
 	private static double GetDouble(string name)
 	{
-		if (Application.Current!.Styles.TryGetResource(name, out object? value))
+		if (Application.Current!.Styles.TryGetResource(name, null, out object? value))
 			return (double)value!;
 
 		throw new Exception("Double not found: " + name);

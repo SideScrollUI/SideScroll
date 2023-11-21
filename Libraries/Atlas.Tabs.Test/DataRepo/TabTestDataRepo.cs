@@ -11,6 +11,8 @@ public class TabTestDataRepo : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
+			model.AutoSelectSaved = AutoSelectType.NonEmpty;
+
 			model.Items = new List<ListItem>()
 			{
 				new("Sample Data Repo", new TabTestDataRepoCollection()),
@@ -21,7 +23,6 @@ public class TabTestDataRepo : ITab
 			{
 				new TaskDelegate("Delete Repos", DeleteRepos),
 			};
-			model.AutoSelect = AutoSelectType.AnyNewOrSaved;
 
 			model.Notes = "Data Repos store C# objects as serialized data.";
 		}

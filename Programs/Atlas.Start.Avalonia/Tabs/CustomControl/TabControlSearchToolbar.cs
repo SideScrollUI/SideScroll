@@ -49,6 +49,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 		AddSeparator();
 
 		ButtonCopyClipBoard = AddButton("Copy to Clipboard", Icons.Svg.PadNote);
+		AddSeparator();
 		TextBoxStatus = AddLabelText("Status");
 	}
 }

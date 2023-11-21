@@ -15,6 +15,7 @@ public class TabTestDataGrid
 	public static TabTestInstanceListItems InstanceListItems => new();
 	public static TabTestWideColumns WideColumns => new();
 	public static TabTestGridColumnTypes ColumnTypes => new();
+	public static TabTestGridColumnSizing ColumnSizing => new();
 	public static TabTestGridColumnOrdering ColumnOrdering => new();
 	public static TabTestGridColumnCount ColumnCount => new();
 	public static TabTestFilter Filter => new();

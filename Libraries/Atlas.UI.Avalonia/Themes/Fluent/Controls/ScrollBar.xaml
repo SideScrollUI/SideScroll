@@ -19,19 +19,11 @@
     </Style>
 
     <Style Selector="ScrollBar /template/ RepeatButton.line">
-        <Setter Property="Transitions">
-            <Transitions>
-                <DoubleTransition Property="Opacity" Duration="0:0:0.01" />
-            </Transitions>
-        </Setter>
-    </Style>
-
-    <Style Selector="ScrollBar /template/ Rectangle#TrackRect">
-        <Setter Property="Transitions">
-            <Transitions>
-                <DoubleTransition Property="Opacity" Duration="0:0:0.01" />
-            </Transitions>
-        </Setter>
+      <Setter Property="Transitions">
+        <Transitions>
+          <DoubleTransition Property="Opacity" Duration="0:0:0.01" />
+        </Transitions>
+      </Setter>
     </Style>
 
     <Style Selector="ScrollBar">
@@ -48,11 +40,17 @@
     <Style Selector="ScrollBar[IsExpanded=true]">
         <Setter Property="BorderBrush" Value="#FF000000"/>
     </Style>
-
-    <Style Selector="ScrollBar /template/ Thumb.thumb">
+    <Style Selector="ScrollBar[IsExpanded=true] /template/ Thumb">
+      <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>
+    </Style>
+    <Style Selector="ScrollBar[IsExpanded=true] /template/ PathIcon">
+      <Setter Property="Foreground" Value="{DynamicResource ScrollBarButtonArrowForeground}"/>
+    </Style>
+  
+    <Style Selector="Thumb">
         <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>
     </Style>
-    <Style Selector="ScrollBar /template/ Thumb.thumb /template/ Border:pointerover">
+    <Style Selector="Thumb /template/ Border:pointerover">
         <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbHoverBrush}"/>
     </Style>
 

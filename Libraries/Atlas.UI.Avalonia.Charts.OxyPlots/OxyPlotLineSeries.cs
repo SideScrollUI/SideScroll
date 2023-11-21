@@ -1,30 +1,38 @@
 using Atlas.Core;
 using Atlas.Extensions;
+using Avalonia.Media;
 using Avalonia.Threading;
 using OxyPlot;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
 
-namespace Atlas.UI.Avalonia.Charts;
+namespace Atlas.UI.Avalonia.Charts.OxyPlots;
 
-public class TabChartLineSeries : OxyPlot.Series.LineSeries
+public class OxyPlotChartSeries : ChartSeries<OxyPlotLineSeries>
+{
+	public OxyPlotChartSeries(ListSeries listSeries, OxyPlotLineSeries lineSeries, Color color) :
+		base(listSeries, lineSeries, color)
+	{ }
+}
+
+public class OxyPlotLineSeries : OxyPlot.Series.LineSeries
 {
 	private const int MaxPointsToShowMarkers = 8;
 	private const int MaxTitleLength = 200;
 
-	public readonly TabControlChart Chart;
+	public readonly TabControlOxyPlot Chart;
 	public readonly ListSeries ListSeries;
 	public readonly bool UseDateTimeAxis;
 
-	public PropertyInfo? XAxisPropertyInfo;
-
-	// DataPoint is sealed
+	// DataPoint is a struct which can't be inherited so we need a lookup
 	private readonly Dictionary<DataPoint, object> _datapointLookup = new();
 
-	public override string? ToString() => ListSeries?.ToString();
+	public PropertyInfo? XPropertyInfo => ListSeries.XPropertyInfo;
 
-	public TabChartLineSeries(TabControlChart chart, ListSeries listSeries, bool useDateTimeAxis)
+	public override string? ToString() => ListSeries?.Name;
+
+	public OxyPlotLineSeries(TabControlOxyPlot chart, ListSeries listSeries, bool useDateTimeAxis)
 	{
 		Chart = chart;
 		ListSeries = listSeries;
@@ -33,7 +41,9 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 		// Title must be unique among all series
 		Title = listSeries.Name;
 		if (Title?.Length == 0)
+		{
 			Title = "<NA>";
+		}
 
 		LineStyle = LineStyle.Solid;
 		StrokeThickness = 2;
@@ -42,9 +52,10 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 		MinimumSegmentLength = 2;
 		MarkerSize = 3;
 		MarkerType = listSeries.List.Count <= MaxPointsToShowMarkers ? MarkerType.Circle : MarkerType.None;
+
 		LoadTrackFormat();
 
-		// can't add gaps with ItemSource so convert to DataPoint ourselves
+		// Can't add gaps with ItemSource so convert to DataPoint ourselves
 		var dataPoints = GetDataPoints(listSeries, listSeries.List, _datapointLookup);
 		Points.AddRange(dataPoints);
 
@@ -58,9 +69,11 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 			});
 		}
 
-		// use circle markers if there's a single point all alone, otherwise it won't show
+		// Use circle markers if there's a single point all alone, otherwise it won't show
 		if (HasSinglePoint())
+		{
 			MarkerType = MarkerType.Circle;
+		}
 	}
 
 	private bool HasSinglePoint()
@@ -70,8 +83,7 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 		foreach (DataPoint dataPoint in Points)
 		{
 			bool nan = double.IsNaN(dataPoint.Y);
-			if (prevNan2 && !prevNan1 && nan)
-				return true;
+			if (prevNan2 && !prevNan1 && nan) return true;
 
 			prevNan2 = prevNan1;
 			prevNan1 = nan;
@@ -86,16 +98,17 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 		if (result == null)
 			return null;
 
-		string valueLabel = ListSeries.YPropertyLabel ?? "Value";
-
 		if (_datapointLookup.TryGetValue(result.DataPoint, out object? obj))
 		{
 			if (obj is TimeRangeValue timeRangeValue)
 			{
 				string? title = ListSeries.Name;
 				if (title != null && title.Length > MaxTitleLength)
+				{
 					title = title[..MaxTitleLength] + "...";
+				}
 
+				string valueLabel = ListSeries.YLabel ?? "Value";
 				result.Text = title + "\n\nTime: " + timeRangeValue.TimeText + "\nDuration: " + timeRangeValue.Duration.FormattedDecimal() + "\n" + valueLabel + ": " + timeRangeValue.Value.Formatted();
 			}
 
@@ -123,8 +136,9 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 	*/
 	private void LoadTrackFormat()
 	{
-		string xTrackerFormat = ListSeries.XPropertyName ?? "Index: {2:#,0.###}";
-		if (UseDateTimeAxis || ListSeries.XPropertyInfo?.PropertyType == typeof(DateTime))
+		string label = ListSeries.XLabel ?? XPropertyInfo?.Name ?? "Index";
+		string xTrackerFormat = $"{label}: {2:#,0.###}";
+		if (UseDateTimeAxis || XPropertyInfo?.PropertyType == typeof(DateTime))
 		{
 			xTrackerFormat = "Time: {2:yyyy-M-d H:mm:ss.FFF}";
 		}
@@ -133,18 +147,16 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 
 	private List<DataPoint> GetDataPoints(ListSeries listSeries, IList iList, Dictionary<DataPoint, object>? datapointLookup = null)
 	{
-		UpdateXAxisProperty(listSeries);
 		double x = Points.Count;
 		var dataPoints = new List<DataPoint>();
 		if (listSeries.YPropertyInfo != null)
 		{
-			// faster than using ItemSource?
+			// Faster than using ItemSource?
 			foreach (object obj in iList)
 			{
-				object? value = listSeries.YPropertyInfo.GetValue(obj);
-				if (XAxisPropertyInfo != null)
+				if (XPropertyInfo != null)
 				{
-					object? xObj = XAxisPropertyInfo.GetValue(obj);
+					object? xObj = XPropertyInfo.GetValue(obj);
 					if (xObj is DateTime dateTime)
 					{
 						x = OxyPlot.Axes.DateTimeAxis.ToDouble(dateTime);
@@ -158,21 +170,22 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 						x = Convert.ToDouble(xObj);
 					}
 				}
-				double d = double.NaN;
-				if (value != null)
-					d = Convert.ToDouble(value);
 
-				var dataPoint = new DataPoint(x++, d);
-				if (datapointLookup != null && !double.IsNaN(d) && !datapointLookup.ContainsKey(dataPoint))
+				object? value = listSeries.YPropertyInfo.GetValue(obj);
+				double y = double.NaN;
+				if (value != null)
+				{
+					y = Convert.ToDouble(value);
+				}
+
+				var dataPoint = new DataPoint(x++, y);
+				if (datapointLookup != null && !double.IsNaN(y) && !datapointLookup.ContainsKey(dataPoint))
+				{
 					datapointLookup.Add(dataPoint, obj);
+				}
 				dataPoints.Add(dataPoint);
 			}
 			dataPoints = dataPoints.OrderBy(d => d.X).ToList();
-
-			if (dataPoints.Count > 0 && listSeries.XBinSize > 0)
-			{
-				dataPoints = BinDataPoints(dataPoints, listSeries.XBinSize);
-			}
 		}
 		else
 		{
@@ -182,26 +195,13 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 				dataPoints.Add(new DataPoint(x++, value));
 			}
 		}
-		return dataPoints;
-	}
 
-	private void UpdateXAxisProperty(ListSeries listSeries)
-	{
-		if (listSeries.YPropertyInfo != null)
+		if (dataPoints.Count > 0 && listSeries.XBinSize > 0)
 		{
-			if (listSeries.XPropertyInfo != null)
-				XAxisPropertyInfo = listSeries.XPropertyInfo;
-
-			if (XAxisPropertyInfo == null)
-			{
-				Type elementType = listSeries.List.GetType().GetElementTypeForAll()!;
-				foreach (PropertyInfo propertyInfo in elementType.GetProperties())
-				{
-					if (propertyInfo.GetCustomAttribute<XAxisAttribute>() != null)
-						XAxisPropertyInfo = propertyInfo;
-				}
-			}
+			dataPoints = BinDataPoints(dataPoints, listSeries.XBinSize);
 		}
+
+		return dataPoints;
 	}
 
 	private static List<DataPoint> BinDataPoints(List<DataPoint> dataPoints, double xBinSize)
@@ -224,8 +224,7 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 			double value = bins[i];
 			if (value == 0)
 			{
-				if (prevNan)
-					continue;
+				if (prevNan) continue;
 
 				prevNan = true;
 				value = double.NaN;
@@ -254,14 +253,11 @@ public class TabChartLineSeries : OxyPlot.Series.LineSeries
 				var dataPoints = GetDataPoints(listSeries, e.OldItems!);
 				foreach (DataPoint datapoint in dataPoints)
 				{
-					if (Points.FirstOrDefault().X == datapoint.X)
-					{
-						Points.RemoveAt(0);
-					}
+					Points.RemoveAll(point => point.X == datapoint.X);
 				}
 			}
 		}
 
-		Dispatcher.UIThread.InvokeAsync(() => Chart.Refresh(), DispatcherPriority.Background);
+		Dispatcher.UIThread.InvokeAsync(Chart.Refresh, DispatcherPriority.Background);
 	}
 }

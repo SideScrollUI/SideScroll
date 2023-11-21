@@ -1,4 +1,5 @@
 using Atlas.Extensions;
+using Atlas.UI.Avalonia.Themes;
 using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Collections;
@@ -6,7 +7,6 @@ using Avalonia.Controls;
 using Avalonia.Input.Platform;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Styling;
 using System.Data;
 
 namespace Atlas.UI.Avalonia;
@@ -27,11 +27,11 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		//AddHeaderContextMenu();
 	}
 
-	protected override IControl GenerateElement(DataGridCell cell, object dataItem)
+	protected override Control GenerateElement(DataGridCell cell, object dataItem)
 	{
 		cell.MaxHeight = 100; // don't let them have more than a few lines each
-		cell.BorderBrush = Brushes.Black;
-		cell.BorderThickness = new Thickness(1);
+		cell.BorderBrush = AtlasTheme.GridBorder;
+		cell.BorderThickness = new Thickness(0, 0, 1, 1);
 
 		TextBlock textBlock = CreateTextBlock();
 		//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
@@ -40,9 +40,9 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		return textBlock;
 	}
 
-	public class TextBlockElement : TextBlock, IStyleable, ILayoutable
+	public class TextBlockElement : TextBlock
 	{
-		Type IStyleable.StyleKey => typeof(TextBlock);
+		protected override Type StyleKeyOverride => typeof(TextBlock);
 
 		public double MaxDesiredWidth = 500;
 
@@ -113,7 +113,7 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		var menuItemCopy = new TabMenuItem("_Copy - Cell Contents");
 		menuItemCopy.Click += delegate
 		{
-			ClipBoardUtils.SetText(textBlock.Text);
+			ClipboardUtils.SetText(DataGrid, textBlock.Text ?? "");
 		};
 		list.Add(menuItemCopy);
 
@@ -124,7 +124,7 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		{
 			string? text = DataGrid.ToStringTable();
 			if (text != null)
-				ClipBoardUtils.SetText(text);
+				ClipboardUtils.SetText(DataGrid, text);
 		};
 		list.Add(menuItemCopyDataGrid);
 
@@ -133,7 +133,7 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		{
 			string? text = DataGrid.ToCsv();
 			if (text != null)
-				ClipBoardUtils.SetText(text);
+				ClipboardUtils.SetText(DataGrid, text);
 		};
 		list.Add(menuItemCopyDataGridCsv);
 
@@ -141,7 +141,7 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 
 		ContextMenu contextMenu = new()
 		{
-			Items = list,
+			ItemsSource = list,
 		};
 
 		textBlock.ContextMenu = contextMenu;

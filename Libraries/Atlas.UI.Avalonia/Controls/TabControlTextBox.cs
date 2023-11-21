@@ -14,9 +14,9 @@ using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabControlTextBox : TextBox, IStyleable, ILayoutable
+public class TabControlTextBox : TextBox
 {
-	Type IStyleable.StyleKey => typeof(TextBox);
+	protected override Type StyleKeyOverride => typeof(TextBox);
 
 	public TabControlTextBox()
 	{
@@ -174,7 +174,7 @@ public class TabControlTextBox : TextBox, IStyleable, ILayoutable
 	}
 
 	// Move formatting to a FormattedText method/property?
-	public new string Text
+	public new string? Text
 	{
 		get => base.Text;
 		set

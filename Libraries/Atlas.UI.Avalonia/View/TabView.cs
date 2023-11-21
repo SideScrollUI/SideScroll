@@ -12,6 +12,7 @@ using Avalonia.Threading;
 using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Atlas.UI.Avalonia.View;
 
@@ -287,7 +288,7 @@ public class TabView : Grid, IDisposable
 	{
 		if (_tabParentControls == null) return;
 
-		foreach (IControl control in _tabParentControls.Children)
+		foreach (Control control in _tabParentControls.Children)
 		{
 			if (control is IValidationControl paramsControl)
 			{
@@ -411,35 +412,47 @@ public class TabView : Grid, IDisposable
 	{
 		foreach (TabObject tabObject in Model.Objects)
 		{
-			object obj = tabObject.Object!;
-			if (ControlCreators.TryGetValue(obj.GetType(), out IControlCreator? controlCreator))
+			try
 			{
-				controlCreator.AddControl(Instance, _tabParentControls!, obj);
+				AddObject(tabObject);
 			}
-			else if (obj is TabToolbar toolbar)
+			catch (Exception ex)
 			{
-				AddToolbar(toolbar);
-				AddTasks();
+				AddControlString(ex.ToString());
 			}
-			else if (obj is ITabSelector tabSelector)
+		}
+	}
+
+	private void AddObject(TabObject tabObject)
+	{
+		object obj = tabObject.Object!;
+		if (ControlCreators.TryGetValue(obj.GetType(), out IControlCreator? controlCreator))
+		{
+			controlCreator.AddControl(Instance, _tabParentControls!, obj);
+		}
+		else if (obj is TabToolbar toolbar)
+		{
+			AddToolbar(toolbar);
+			AddTasks();
+		}
+		else if (obj is ITabSelector tabSelector)
+		{
+			AddITabControl(tabSelector, tabObject.Fill);
+		}
+		else if (obj is Control control)
+		{
+			AddControl(control, tabObject.Fill);
+		}
+		else if (obj is string text)
+		{
+			AddControlString(text);
+		}
+		else
+		{
+			ParamsAttribute? paramsAttribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
+			if (paramsAttribute != null)
 			{
-				AddITabControl(tabSelector, tabObject.Fill);
-			}
-			else if (obj is Control control)
-			{
-				AddControl(control, tabObject.Fill);
-			}
-			else if (obj is string text)
-			{
-				AddControlString(text);
-			}
-			else
-			{
-				ParamsAttribute? paramsAttribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
-				if (paramsAttribute != null)
-				{
-					AddControl(new TabControlParams(obj), tabObject.Fill);
-				}
+				AddControl(new TabControlParams(obj), tabObject.Fill);
 			}
 		}
 	}
@@ -647,20 +660,20 @@ public class TabView : Grid, IDisposable
 			//	return false;
 
 			// don't show if the new control won't have enough room
-			IControl? control = Parent;
+			StyledElement? styledElement = Parent;
 			double offset = _tabChildControls.Bounds.X;
-			while (control != null)
+			while (styledElement != null)
 			{
-				if (control is ScrollViewer scrollViewer)
+				if (styledElement is ScrollViewer scrollViewer)
 				{
 					if (offset - scrollViewer.Offset.X > scrollViewer.Bounds.Width)
 						return false;
 					break;
 				}
-				else
+				else if (styledElement is Control control)
 				{
 					offset += control.Bounds.X;
-					control = control.Parent;
+					styledElement = control.Parent;
 				}
 			}
 			//GetControlOffset(Parent);
@@ -673,20 +686,20 @@ public class TabView : Grid, IDisposable
 
 	private double GetFillerPanelWidth()
 	{
-		IControl? control = Parent;
+		StyledElement? styledElement = Parent;
 		double offset = _tabChildControls!.Bounds.X;
-		while (control != null)
+		while (styledElement != null)
 		{
-			if (control is ScrollViewer scrollViewer)
+			if (styledElement is ScrollViewer scrollViewer)
 			{
 				double width = scrollViewer.Bounds.Width - (offset - scrollViewer.Offset.X);
 				return Math.Max(0, width - 10);
 				//return width;
 			}
-			else
+			else if (styledElement is Control control)
 			{
 				offset += control.Bounds.X;
-				control = control.Parent;
+				styledElement = control.Parent;
 			}
 		}
 		return 0;
@@ -702,7 +715,16 @@ public class TabView : Grid, IDisposable
 	{
 		// These need to be set regardless of if the children show
 		if (TabDatas.Count > 0)
+		{
 			Instance.SelectedItems = TabDatas[0].SelectedItems;
+		}
+		else
+		{
+			if (CustomTabControls.FirstOrDefault() is ITabSelector tabSelector)
+			{
+				Instance.SelectedItems = tabSelector.SelectedItems;
+			}
+		}
 
 		if (ShowChildren == false)
 		{
@@ -744,7 +766,6 @@ public class TabView : Grid, IDisposable
 		}
 		_tabChildControls!.SetControls(newChildControls, orderedChildControls);
 		UpdateSelectedTabInstances();
-
 	}
 
 	private List<Control> CreateAllChildControls(bool recreate, out Dictionary<object, Control> newChildControls)

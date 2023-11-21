@@ -5,14 +5,13 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
-using Avalonia.Styling;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabControlSearch : Grid, IStyleable
+public class TabControlSearch : Grid
 {
-	Type IStyleable.StyleKey => typeof(Grid);
+	protected override Type StyleKeyOverride => typeof(Grid);
 
 	public TextBox TextBoxSearch;
 

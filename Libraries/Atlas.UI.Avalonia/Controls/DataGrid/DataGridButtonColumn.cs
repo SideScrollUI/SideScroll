@@ -25,12 +25,12 @@ public class DataGridButtonColumn : DataGridBoundColumn
 	}
 
 	// This doesn't get called when reusing cells
-	protected override IControl GenerateElement(DataGridCell cell, object dataItem)
+	protected override Control GenerateElement(DataGridCell cell, object dataItem)
 	{
 		return GenerateEditingElementDirect(cell, dataItem);
 	}
 
-	protected override IControl GenerateEditingElementDirect(DataGridCell cell, object dataItem)
+	protected override Control GenerateEditingElementDirect(DataGridCell cell, object dataItem)
 	{
 		//cell.Background = GetCellBrush(cell, dataItem);
 		//cell.MaxHeight = 100; // don't let them have more than a few lines each
@@ -63,7 +63,7 @@ public class DataGridButtonColumn : DataGridBoundColumn
 		}
 	}
 
-	protected override object PrepareCellForEdit(IControl editingElement, RoutedEventArgs editingEventArgs)
+	protected override object PrepareCellForEdit(Control editingElement, RoutedEventArgs editingEventArgs)
 	{
 		return string.Empty;
 	}

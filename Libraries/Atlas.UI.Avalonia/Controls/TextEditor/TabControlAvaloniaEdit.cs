@@ -6,15 +6,14 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Styling;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabControlTextEditor : AvaloniaEdit.TextEditor, IStyleable
+public class TabControlTextEditor : AvaloniaEdit.TextEditor
 {
-	Type IStyleable.StyleKey => typeof(AvaloniaEdit.TextEditor);
+	protected override Type StyleKeyOverride => typeof(AvaloniaEdit.TextEditor);
 
 	protected override Size MeasureOverride(Size constraint)
 	{
@@ -131,7 +130,7 @@ public class TabControlAvaloniaEdit : Grid
 		
 		TextEditor.ShowLineNumbers = true;
 
-		foreach (IControl control in TextEditor.TextArea.LeftMargins)
+		foreach (Control control in TextEditor.TextArea.LeftMargins)
 		{
 			if (control is LineNumberMargin margin)
 			{

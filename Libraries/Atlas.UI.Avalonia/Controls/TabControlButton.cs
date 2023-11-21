@@ -4,13 +4,12 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
-using Avalonia.Styling;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabControlButton : Button, IStyleable
+public class TabControlButton : Button
 {
-	Type IStyleable.StyleKey => typeof(TabControlButton);
+	protected override Type StyleKeyOverride => typeof(TabControlButton);
 
 	public Brush BackgroundBrush = AtlasTheme.ButtonBackground;
 	public Brush ForegroundBrush = AtlasTheme.ButtonForeground;
@@ -29,8 +28,8 @@ public class TabControlButton : Button, IStyleable
 		//Foreground = ForegroundBrush;
 		BorderBrush = new SolidColorBrush(Colors.Black);
 
-		PointerEnter += Button_PointerEnter;
-		PointerLeave += Button_PointerLeave;
+		PointerEntered += Button_PointerEnter;
+		PointerExited += Button_PointerLeave;
 	}
 
 	private void Button_PointerEnter(object? sender, PointerEventArgs e)

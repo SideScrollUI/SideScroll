@@ -2,32 +2,30 @@ using Atlas.Serialize;
 using Atlas.Tabs;
 using Avalonia.Collections;
 using Avalonia.Controls;
-using Avalonia.Layout;
-using Avalonia.Styling;
 using Avalonia.Interactivity;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Atlas.UI.Avalonia.View;
 
-public class TabMenuItem : MenuItem, IStyleable
+public class TabMenuItem : MenuItem
 {
-	Type IStyleable.StyleKey => typeof(MenuItem);
+	protected override Type StyleKeyOverride => typeof(MenuItem);
 
 	public TabMenuItem(string? header = null)
 	{
 		Header = header;
-		Items = null; // Clear to avoid weak event handler leaks
+		ItemsSource = null; // Clear to avoid weak event handler leaks
 	}
 }
 
-public class TabViewContextMenu : ContextMenu, IStyleable, ILayoutable, IDisposable
+public class TabViewContextMenu : ContextMenu, IDisposable
 {
 	public TabView? TabView;
 	public TabInstance? TabInstance;
 
-	private CheckBox _checkboxAutoLoad;
+	private CheckBox? _checkboxAutoLoad;
 
-	Type IStyleable.StyleKey => typeof(ContextMenu);
+	protected override Type StyleKeyOverride => typeof(ContextMenu);
 
 	public TabViewContextMenu(TabView tabView, TabInstance tabInstance)
 	{
@@ -37,7 +35,6 @@ public class TabViewContextMenu : ContextMenu, IStyleable, ILayoutable, IDisposa
 		Initialize();
 	}
 
-	[MemberNotNull(nameof(_checkboxAutoLoad))]
 	private void Initialize()
 	{
 		var list = new AvaloniaList<object>();
@@ -74,13 +71,13 @@ public class TabViewContextMenu : ContextMenu, IStyleable, ILayoutable, IDisposa
 		list.Add(menuItemAutoLoad);
 #endif
 
-		Items = list;
+		ItemsSource = list;
 	}
 
 	private void MenuItemAutoLoad_Click(object? sender, RoutedEventArgs e)
 	{
 		TabInstance!.Project.UserSettings.AutoLoad = !TabInstance.Project.UserSettings.AutoLoad;
-		_checkboxAutoLoad.IsChecked = TabInstance.Project.UserSettings.AutoLoad;
+		_checkboxAutoLoad!.IsChecked = TabInstance.Project.UserSettings.AutoLoad;
 		TabInstance.Project.SaveSettings();
 	}
 
@@ -115,7 +112,7 @@ public class TabViewContextMenu : ContextMenu, IStyleable, ILayoutable, IDisposa
 	{
 		TabView = null;
 		TabInstance = null;
-		Items = null;
+		ItemsSource = null;
 	}
 }
 

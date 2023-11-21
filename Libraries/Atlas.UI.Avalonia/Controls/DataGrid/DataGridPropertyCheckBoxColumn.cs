@@ -27,8 +27,11 @@ public class DataGridPropertyCheckBoxColumn : DataGridCheckBoxColumn
 		CanUserSort = true;
 	}
 
-	protected override IControl GenerateElement(DataGridCell cell, object dataItem)
+	protected override Control GenerateElement(DataGridCell cell, object dataItem)
 	{
+		cell.BorderBrush = AtlasTheme.GridBorder;
+		cell.BorderThickness = new Thickness(0, 0, 1, 1); // Right and Bottom
+
 		var checkBox = (CheckBox)GenerateEditingElementDirect(cell, dataItem);
 		if (Binding != null)
 			checkBox.Bind(CheckBox.IsCheckedProperty, Binding);
@@ -45,15 +48,7 @@ public class DataGridPropertyCheckBoxColumn : DataGridCheckBoxColumn
 		if (IsReadOnly)
 			checkbox.IsHitTestVisible = false; // disable changing*/
 
-		if (!StyleCells)
-			return checkBox;
-
-		return new Border()
-		{
-			BorderThickness = new Thickness(0, 0, 0, 1), // Bottom only
-			BorderBrush = AtlasTheme.BorderHigh,
-			Child = checkBox,
-		};
+		return checkBox;
 	}
 
 	[MemberNotNull(nameof(_formattedBinding))]

@@ -9,15 +9,14 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Avalonia.Styling;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabCalendarDatePicker : CalendarDatePicker, IStyleable
+public class TabCalendarDatePicker : CalendarDatePicker
 {
-	Type IStyleable.StyleKey => typeof(CalendarDatePicker);
+	protected override Type StyleKeyOverride => typeof(CalendarDatePicker);
 
 	// Default behavior increments and decrements Date when scrolling left/right with the mousepad
 	// This is probably useful for Mobile devices, but not Desktop
@@ -27,9 +26,9 @@ public class TabCalendarDatePicker : CalendarDatePicker, IStyleable
 	}
 }
 
-public class TabDateTimePicker : Grid, IStyleable
+public class TabDateTimePicker : Grid
 {
-	Type IStyleable.StyleKey => typeof(TabDateTimePicker);
+	protected override Type StyleKeyOverride => typeof(TabDateTimePicker);
 
 	public readonly ListProperty Property;
 
@@ -125,7 +124,9 @@ public class TabDateTimePicker : Grid, IStyleable
 
 	private void ButtonImport_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
-		string clipboardText = ClipBoardUtils.GetTextAsync().Result;
+		string? clipboardText = ClipboardUtils.GetText(this);
+		if (clipboardText == null) return;
+
 		TimeSpan? timeSpan = DateTimeUtils.ConvertTextToTimeSpan(clipboardText);
 		if (timeSpan != null)
 		{
@@ -183,8 +184,8 @@ public class TabDateTimePicker : Grid, IStyleable
 			[Grid.ColumnProperty] = 2,
 		};
 		button.BorderBrush = button.Background;
-		button.PointerEnter += Button_PointerEnter;
-		button.PointerLeave += Button_PointerLeave;
+		button.PointerEntered += Button_PointerEnter;
+		button.PointerExited += Button_PointerExited;
 
 		//var button = new ToolbarButton(tooltip, command, resource);
 		//AddControl(button);
@@ -199,7 +200,7 @@ public class TabDateTimePicker : Grid, IStyleable
 		button.Background = AtlasTheme.ToolbarButtonBackgroundHover;
 	}
 
-	private void Button_PointerLeave(object? sender, PointerEventArgs e)
+	private void Button_PointerExited(object? sender, PointerEventArgs e)
 	{
 		Button button = (Button)sender!;
 		button.Background = AtlasTheme.TabBackground;
