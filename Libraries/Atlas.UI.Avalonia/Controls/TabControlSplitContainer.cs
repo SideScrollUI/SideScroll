@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using System.Diagnostics;
 
 namespace Atlas.UI.Avalonia.Controls;
@@ -75,15 +76,15 @@ public class TabControlSplitContainer : Grid
 		Background = AtlasTheme.TabBackground;
 	}
 
-	protected override void OnPointerEnter(PointerEventArgs e)
+	protected override void OnPointerEntered(PointerEventArgs e)
 	{
-		base.OnPointerEnter(e);
+		base.OnPointerEntered(e);
 		Background = AtlasTheme.BackgroundFocused;
 	}
 
-	protected override void OnPointerLeave(PointerEventArgs e)
+	protected override void OnPointerExited(PointerEventArgs e)
 	{
-		base.OnPointerLeave(e);
+		base.OnPointerExited(e);
 		Background = AtlasTheme.TabBackground;
 	}
 
@@ -181,7 +182,7 @@ public class TabControlSplitContainer : Grid
 			else
 				rowDefinition.Height = GridLength.Auto;
 
-			SetRow(gridItem.Control, index);
+			SetRow(gridItem.Control!, index);
 			index++;
 		}
 	}
@@ -254,8 +255,7 @@ public class TabControlSplitContainer : Grid
 
 			Children.Remove(oldChild.Value);
 
-			if (oldChild.Value is IDisposable disposable)
-				disposable.Dispose();
+			DisposeControl(oldChild.Value);
 		}
 	}
 
@@ -312,15 +312,36 @@ public class TabControlSplitContainer : Grid
 		// objects might still be referenced and re-added again
 		if (dispose)
 		{
-			foreach (IControl control in Children)
+			foreach (Control control in Children)
 			{
-				if (control is IDisposable disposable)
-					disposable.Dispose(); // does Children.Clear() already handle this?
+				// does Children.Clear() already handle this?
+				DisposeControl(control);
 			}
 		}
 		RowDefinitions.Clear();
 		Children.Clear();
 		GridControls.Clear();
 		_gridItems.Clear();
+	}
+
+	private void DisposeControl(Control control)
+	{
+		if (control is IDisposable disposable)
+		{
+			disposable.Dispose();
+			return;
+		}
+
+		foreach (var child in control.GetVisualChildren())
+		{
+			if (child is IDisposable childDisposable)
+			{
+				childDisposable.Dispose();
+			}
+			else if (child is Control childControl)
+			{
+				DisposeControl(childControl);
+			}
+		}
 	}
 }

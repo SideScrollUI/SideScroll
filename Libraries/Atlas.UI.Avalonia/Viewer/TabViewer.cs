@@ -105,6 +105,7 @@ public class TabViewer : Grid
 			VerticalAlignment = VerticalAlignment.Stretch,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
 			VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
+			BringIntoViewOnFocusChange = false, // Doesn't work well with Tab GridSplitters
 			Padding = new Thickness(0, 0, 0, 16),
 			MaxWidth = 5000,
 			MaxHeight = 4000,
@@ -150,7 +151,7 @@ public class TabViewer : Grid
 	{
 		Flyout flyout = new()
 		{
-			Placement = FlyoutPlacementMode.BottomEdgeAlignedLeft,
+			Placement = PlacementMode.BottomEdgeAlignedLeft,
 		};
 		PostShowFlyout(Toolbar!.ButtonLink!, flyout, "Creating Link ...");
 
@@ -173,7 +174,7 @@ public class TabViewer : Grid
 			if (uri == null)
 				return;
 
-			await ClipBoardUtils.SetTextAsync(uri);
+			await ClipboardUtils.SetTextAsync(this, uri);
 			PostShowFlyout(Toolbar!.ButtonLink!, flyout, "Link copied to clipboard");
 		}
 		catch (Exception ex)
@@ -184,7 +185,9 @@ public class TabViewer : Grid
 
 	private async Task ImportClipboardBookmarkAsync(Call call)
 	{
-		string clipboardText = await ClipBoardUtils.GetTextAsync();
+		string? clipboardText = await ClipboardUtils.GetTextAsync(this);
+		if (clipboardText == null) return;
+
 		await ImportBookmarkAsync(call, clipboardText, true);
 	}
 
@@ -192,7 +195,7 @@ public class TabViewer : Grid
 	{
 		Flyout flyout = new()
 		{
-			Placement = FlyoutPlacementMode.BottomEdgeAlignedLeft,
+			Placement = PlacementMode.BottomEdgeAlignedLeft,
 		};
 		Dispatcher.UIThread.Post(() => ShowFlyout(Toolbar!.ButtonImport!, flyout, "Importing Link ..."));
 
@@ -222,7 +225,7 @@ public class TabViewer : Grid
 		Flyout flyout = new()
 		{
 			Content = "Importing Link ...",
-			Placement = FlyoutPlacementMode.BottomEdgeAlignedLeft,
+			Placement = PlacementMode.BottomEdgeAlignedLeft,
 		};
 		flyout.ShowAt(Toolbar!.ButtonImport!);
 

@@ -3,14 +3,13 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Styling;
 using System.Reflection;
 
 namespace Atlas.UI.Avalonia;
 
-public class TextBlockElement : TextBlock, IStyleable, ILayoutable
+public class TextBlockElement : TextBlock
 {
-	Type IStyleable.StyleKey => typeof(TextBlock);
+	protected override Type StyleKeyOverride => typeof(TextBlock);
 
 	public readonly DataGridPropertyTextColumn Column;
 	public readonly PropertyInfo PropertyInfo;
@@ -65,6 +64,6 @@ public class TextBlockElement : TextBlock, IStyleable, ILayoutable
 			WithWidth(Math.Min(maxDesiredWidth, measured.Width)).
 			WithHeight(Math.Min(maxDesiredHeight, measured.Height));
 
-		return measured;
+		return DesiredSize;
 	}
 }

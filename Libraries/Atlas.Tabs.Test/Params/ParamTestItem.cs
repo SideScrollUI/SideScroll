@@ -18,7 +18,7 @@ public class ParamTestItem
 
 	public bool Boolean { get; set; } = true;
 
-	[Range(1, 1000)]
+	[Range(1, 1000), Required]
 	public int Amount { get; set; } = 123;
 
 	[ColumnIndex(2)]

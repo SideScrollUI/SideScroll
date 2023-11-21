@@ -7,6 +7,7 @@ using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Reactive;
 using Avalonia.Threading;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
@@ -20,6 +21,8 @@ public class BaseWindow : Window
 
 	private const int DefaultWindowWidth = 1280;
 	private const int DefaultWindowHeight = 800;
+
+	public static BaseWindow? Instance;
 
 	public Project Project;
 
@@ -42,6 +45,8 @@ public class BaseWindow : Window
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]
 	private void Initialize(Project project)
 	{
+		Instance = this;
+
 		AtlasInit.Initialize();
 
 		TabFile.RegisterType<TabFileImage>(TabFileImage.DefaultExtensions);
@@ -81,7 +86,7 @@ public class BaseWindow : Window
 
 		PositionChanged += BaseWindow_PositionChanged;
 
-		this.GetObservable(ClientSizeProperty).Subscribe(Resize);
+		this.GetObservable(ClientSizeProperty).Subscribe(new AnonymousObserver<Size>(Resize));
 	}
 
 	public virtual void AddTab(ITab tab)
@@ -204,11 +209,12 @@ public class BaseWindow : Window
 		//SaveWindowSettings();
 	}
 
-	protected override void HandleWindowStateChanged(WindowState state)
+	// Broken with Avalonia 11 update, unclear if this is still needed or not
+	/*protected override void HandleWindowStateChanged(WindowState state)
 	{
 		base.HandleWindowStateChanged(state);
 		SaveWindowSettings();
-	}
+	}*/
 
 	// this fires too often, could attach a dispatch timer, or add an override method
 	private void BaseWindow_PositionChanged(object? sender, PixelPointEventArgs e)

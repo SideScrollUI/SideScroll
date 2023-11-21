@@ -1,4 +1,6 @@
 using Atlas.Core;
+using Atlas.Extensions;
+using System.Drawing;
 
 namespace Atlas.Tabs.Test.Chart;
 
@@ -6,30 +8,45 @@ public class TabTestChartTimeRangeValue : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance, ITabAsync
+	public class Instance : TabInstance
 	{
-		private readonly Random _random = new();
-
-		public async Task LoadAsync(Call call, TabModel model)
+		public override void Load(Call call, TabModel model)
 		{
-			await Task.Delay(10);
+			DateTime endTime = DateTime.UtcNow.Trim(TimeSpan.TicksPerHour).AddHours(8);
 
-			var list = new List<TimeRangeValue>();
-			var chartSettings = new ChartSettings(list, "Active Connection Count");
+			AddAnimals(model, endTime);
+			AddToys(model, endTime);
+		}
 
-			DateTime startTime = DateTime.Now;
-			for (int i = 0; i < 24; i++)
+		private void AddToys(TabModel model, DateTime endTime)
+		{
+			var chartViewToys = new ChartView("Toys")
 			{
-				var value = new TimeRangeValue()
-				{
-					StartTime = startTime,
-					EndTime = startTime.AddHours(1),
-					Value = (_random.Next() % 5),
-				};
-				list.Add(value);
-				startTime = startTime.AddHours(1);
-			}
-			model.AddObject(chartSettings);
+				ShowTimeTracker = true,
+			};
+			chartViewToys.AddSeries("Toys", ChartSamples.CreateIdenticalTimeSeries(endTime), seriesType: SeriesType.Average);
+			model.AddObject(chartViewToys);
+		}
+
+		private DateTime AddAnimals(TabModel model, DateTime endTime)
+		{
+			var chartView = new ChartView("Animals")
+			{
+				ShowTimeTracker = true,
+				LogBase = 10,
+			};
+
+			chartView.AddSeries("Cats", ChartSamples.CreateTimeSeries(endTime), seriesType: SeriesType.Average);
+			chartView.AddSeries("Dogs", ChartSamples.CreateTimeSeries(endTime), seriesType: SeriesType.Average);
+
+			chartView.Annotations.Add(new ChartAnnotation()
+			{
+				Text = "Too Many",
+				Y = 2_000_000_000,
+				Color = Color.Red,
+			});
+			model.AddObject(chartView);
+			return endTime;
 		}
 	}
 }

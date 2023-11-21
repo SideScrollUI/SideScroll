@@ -4,19 +4,18 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Styling;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Atlas.UI.Avalonia.Controls;
 
 // ReadOnly string control with wordwrap, scrolling, and clipboard copy
-public class TabControlTextBlock : Border, IStyleable, ILayoutable
+public class TabControlTextBlock : Border
 {
 	public string Text { get; set; }
 
 	public TextBlock TextBlock { get; set; }
 
-	Type IStyleable.StyleKey => typeof(TextBlock);
+	protected override Type StyleKeyOverride => typeof(TextBlock);
 
 	public TabControlTextBlock(string? text)
 	{

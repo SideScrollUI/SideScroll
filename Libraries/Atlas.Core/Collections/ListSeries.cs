@@ -1,6 +1,7 @@
 using Atlas.Extensions;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Reflection;
 
 namespace Atlas.Core;
@@ -18,24 +19,29 @@ public enum SeriesType
 public class ListSeries
 {
 	public string? Name { get; set; }
+	public string? Description { get; set; }
 	public Dictionary<string, string> Tags { get; set; } = new(); // todo: next schema change, replace with TagCollection
+
 	public IList List; // List to start with, any elements added will also trigger an event to add new points
 
 	public PropertyInfo? XPropertyInfo; // optional
 	public PropertyInfo? YPropertyInfo; // optional
 
-	public string? XPropertyName;
-	public string? YPropertyName;
-	public string? YPropertyLabel;
-	public double XBinSize;
-	public string? Description { get; set; }
+	public string? XLabel;
+	public string? YLabel;
 
-	public bool IsStacked { get; set; }
+	public double XBinSize;
+
 	public TimeSpan? PeriodDuration { get; set; }
 	public SeriesType SeriesType { get; set; } = SeriesType.Sum;
-	public double Total { get; set; }
+	public double? Total { get; set; }
 
-	public override string ToString() => Name + "[" + List?.Count + "]";
+	// Visual
+	public Color? Color { get; set; }
+	public double? MarkerSize { get; set; } // LiveCharts includes diameter, OxyPlot treats as radius?
+	public double StrokeThickness { get; set; } = 2;
+
+	public override string ToString() => $"{Name}[{List?.Count}]";
 
 	public ListSeries(IList list)
 	{
@@ -60,17 +66,30 @@ public class ListSeries
 			Name = attribute.Name;
 	}
 
-	public ListSeries(string? name, IList list, string xPropertyName, string? yPropertyName = null)
+	public ListSeries(string? name, IList list, string? xPropertyName, string? yPropertyName = null, SeriesType seriesType = SeriesType.Sum)
 	{
 		Name = name;
 		List = list;
-		XPropertyName = xPropertyName;
-		YPropertyName = yPropertyName;
+		SeriesType = seriesType;
 
 		Type elementType = list.GetType().GetElementTypeForAll()!;
-		XPropertyInfo = elementType.GetProperty(xPropertyName);
+		if (xPropertyName != null)
+		{
+			XPropertyInfo = elementType.GetProperty(xPropertyName);
+		}
+		else
+		{
+			XPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
+		}
+
 		if (yPropertyName != null)
+		{
 			YPropertyInfo = elementType.GetProperty(yPropertyName);
+		}
+		else
+		{
+			YPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();
+		}
 	}
 
 	[MemberNotNull(nameof(List))]
@@ -95,16 +114,18 @@ public class ListSeries
 		return value;
 	}
 
-	public double CalculateTotal(TimeWindow? timeWindow = null)
+	public double? CalculateTotal(TimeWindow? timeWindow = null)
 	{
 		timeWindow = timeWindow?.Selection ?? timeWindow;
 		Total = GetTotal(timeWindow);
-		if (Total > 50)
-			Total = Math.Floor(Total);
+		if (Total.HasValue && Total > 50)
+		{
+			Total = Math.Floor(Total!.Value);
+		}
 		return Total;
 	}
 
-	public double GetTotal(TimeWindow? timeWindow)
+	public double? GetTotal(TimeWindow? timeWindow)
 	{
 		var timeRangeValues = TimeRangeValues;
 		if (timeWindow == null || PeriodDuration == null || timeRangeValues == null)
@@ -120,7 +141,7 @@ public class ListSeries
 		};
 	}
 
-	public double GetTotal()
+	public double? GetTotal()
 	{
 		return SeriesType switch
 		{
@@ -128,7 +149,8 @@ public class ListSeries
 			SeriesType.Average => Values().Average(),
 			SeriesType.Minimum => Values().Min(),
 			SeriesType.Maximum => Values().Max(),
-			_ => Values().Sum(),
+			SeriesType.Sum => Values().Sum(),
+			_ => null,
 		};
 	}
 

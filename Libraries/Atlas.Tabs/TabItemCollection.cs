@@ -22,10 +22,11 @@ public class TabItemCollection
 	public List<object> GetSelectedObjects(HashSet<SelectedRow> selectedRows)
 	{
 		var rowObjects = new List<object>();
-		if (selectedRows.Count == 0)
+		var items = Filtered ?? List;
+		if (selectedRows.Count == 0 || items == null)
 			return rowObjects;
 
-		foreach (object obj in Filtered ?? List)
+		foreach (object obj in items)
 		{
 			if (obj == null)
 				continue;

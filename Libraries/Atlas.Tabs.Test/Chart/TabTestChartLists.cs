@@ -2,7 +2,7 @@ using Atlas.Core;
 
 namespace Atlas.Tabs.Test.Chart;
 
-public class TabTestChartList : ITab
+public class TabTestChartLists : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -14,7 +14,6 @@ public class TabTestChartList : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			_series = new List<ItemCollection<int>>();
-			//model.Items = items;
 
 			model.Actions = new List<TaskCreator>()
 			{
@@ -22,11 +21,11 @@ public class TabTestChartList : ITab
 				new TaskDelegate("Start: 1 Entry / second", StartTask, true),
 			};
 
-			var chartSettings = new ChartSettings();
+			var chartView = new ChartView();
 			for (int i = 0; i < 2; i++)
 			{
 				var list = new ItemCollection<int>();
-				chartSettings.AddList("Series " + i, list);
+				chartView.AddSeries("Series " + i, list);
 				_series.Add(list);
 			}
 
@@ -34,7 +33,7 @@ public class TabTestChartList : ITab
 			{
 				AddSample();
 			}
-			model.AddObject(chartSettings);
+			model.AddObject(chartView);
 		}
 
 		private void AddEntry(Call call)

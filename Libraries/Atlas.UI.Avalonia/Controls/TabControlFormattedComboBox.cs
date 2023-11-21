@@ -4,14 +4,13 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
-using Avalonia.Styling;
 using System.Collections;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabControlFormattedComboBox : ComboBox, IStyleable, ILayoutable
+public class TabControlFormattedComboBox : ComboBox
 {
-	Type IStyleable.StyleKey => typeof(ComboBox);
+	protected override Type StyleKeyOverride => typeof(ComboBox);
 
 	public ListProperty Property;
 
@@ -47,9 +46,9 @@ public class TabControlFormattedComboBox : ComboBox, IStyleable, ILayoutable
 	{
 		if (obj == null) return null;
 
-		foreach (FormattedItem item in base.Items)
+		foreach (FormattedItem? item in base.Items)
 		{
-			if (item.Object!.ToString() == obj.ToString())
+			if (item?.Object!.ToString() == obj.ToString())
 				return item;
 		}
 		return null;
@@ -60,7 +59,7 @@ public class TabControlFormattedComboBox : ComboBox, IStyleable, ILayoutable
 		get => base.Items; // todo: return original?
 		set
 		{
-			base.Items = _items = FormattedItem.Create(value);
+			base.ItemsSource = _items = FormattedItem.Create(value);
 
 			SelectPropertyValue();
 		}

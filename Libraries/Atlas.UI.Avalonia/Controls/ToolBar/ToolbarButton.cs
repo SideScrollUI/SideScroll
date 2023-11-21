@@ -10,14 +10,13 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Avalonia.Styling;
 using Avalonia.Threading;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
+public class ToolbarButton : Button, IDisposable
 {
-	Type IStyleable.StyleKey => typeof(ToolbarButton);
+	protected override Type StyleKeyOverride => typeof(ToolbarButton);
 
 	public TabControlToolbar Toolbar;
 	public string? Label { get; set; }
@@ -235,9 +234,9 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		}
 	}
 
-	protected override void OnPointerEnter(PointerEventArgs e)
+	protected override void OnPointerEntered(PointerEventArgs e)
 	{
-		base.OnPointerEnter(e);
+		base.OnPointerEntered(e);
 
 		if (HighlightImage != null)
 		{
@@ -245,9 +244,9 @@ public class ToolbarButton : Button, IStyleable, ILayoutable, IDisposable
 		}
 	}
 
-	protected override void OnPointerLeave(PointerEventArgs e)
+	protected override void OnPointerExited(PointerEventArgs e)
 	{
-		base.OnPointerLeave(e);
+		base.OnPointerExited(e);
 
 		_imageControl!.Source = _defaultImage;
 	}

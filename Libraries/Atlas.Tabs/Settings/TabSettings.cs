@@ -29,7 +29,7 @@ public class TabViewSettings
 		}
 	}
 
-	public bool NotesVisible { get; set; }
+	//public bool NotesVisible { get; set; }
 
 	public double? SplitterDistance { get; set; }
 

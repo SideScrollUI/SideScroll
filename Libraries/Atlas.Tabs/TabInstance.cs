@@ -260,12 +260,11 @@ public class TabInstance : IDisposable
 	// switch to SendOrPostCallback?
 	public void Invoke(CallActionParams callAction, params object[] objects)
 	{
-		var taskDelegate = new TaskDelegateParams(null, callAction.Method.Name, callAction, false, null, objects);
-		UiContext.Post(ActionParamsCallback, taskDelegate);
+		Invoke(null, callAction, objects);
 	}
 
 	// switch to SendOrPostCallback?
-	public void Invoke(Call call, CallActionParams callAction, params object[] objects)
+	public void Invoke(Call? call, CallActionParams callAction, params object[] objects)
 	{
 		var taskDelegate = new TaskDelegateParams(call, callAction.Method.Name, callAction, false, null, objects);
 		UiContext.Post(CallActionParamsCallback, taskDelegate);

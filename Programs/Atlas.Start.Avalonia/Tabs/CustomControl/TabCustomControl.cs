@@ -32,7 +32,7 @@ public class TabCustomControl : ITab
 			{
 				var item = new MyParams()
 				{
-					Name = "Item " + i.ToString(),
+					Name = $"Item {i}",
 					Amount = i,
 				};
 				_items.Add(item);
@@ -49,7 +49,7 @@ public class TabCustomControl : ITab
 
 		private void Search(Call call)
 		{
-			System.Threading.Thread.Sleep(2000);
+			Thread.Sleep(2000);
 
 			Invoke(ShowSearchResults, 1, "abc");
 		}

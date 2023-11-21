@@ -44,13 +44,17 @@
     <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="OxyPlot.Core" Version="2.0.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="OxyPlot.Core" Version="2.1.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Imports\AvaloniaUI\OxyPlot.Avalonia\Source\OxyPlot.Avalonia\OxyPlot.Avalonia.csproj" />
-    <ProjectReference Include="..\..\Libraries\Atlas.UI.Avalonia.ScreenCapture\Atlas.UI.Avalonia.ScreenCapture.csproj" />
+    <ProjectReference Include="..\..\Libraries\Atlas.UI.Avalonia.Charts.LiveCharts\Atlas.UI.Avalonia.Charts.LiveCharts.csproj" />
+    <ProjectReference Include="..\..\Libraries\Atlas.UI.Avalonia.Charts.OxyPlots\Atlas.UI.Avalonia.Charts.OxyPlots.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.UI.Avalonia.Charts\Atlas.UI.Avalonia.Charts.csproj" />
+    <ProjectReference Include="..\..\Libraries\Atlas.UI.Avalonia.ScreenCapture\Atlas.UI.Avalonia.ScreenCapture.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.UI.Avalonia\Atlas.UI.Avalonia.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.Resources\Atlas.Resources.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.Tabs\Atlas.Tabs.csproj" />

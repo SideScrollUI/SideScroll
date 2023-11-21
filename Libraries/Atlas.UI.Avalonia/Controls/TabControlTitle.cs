@@ -129,14 +129,14 @@ public class TabControlTitle : UserControl, IDisposable
 		if (uri == null)
 			return;
 
-		await ClipBoardUtils.SetTextAsync(uri);
+		await ClipboardUtils.SetTextAsync(this, uri);
 	}
 
 	public void Dispose()
 	{
 		if (TextBlock != null)
 		{
-			TextBlock.ContextMenu!.Items = null;
+			TextBlock.ContextMenu!.ItemsSource = null;
 			TextBlock.ContextMenu = null;
 			TextBlock = null;
 		}

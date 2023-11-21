@@ -5,7 +5,6 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Input.Platform;
 using System.ComponentModel.DataAnnotations;
 
 namespace Atlas.UI.Avalonia;
@@ -23,13 +22,13 @@ public static class AvaloniaUtils
 		};
 		menuItemCopy.Click += delegate
 		{
-			ClipBoardUtils.SetText(textBlock.Text);
+			ClipboardUtils.SetText(textBlock, textBlock.Text ?? "");
 		};
 		list.Add(menuItemCopy);
 
 		ContextMenu contextMenu = new()
 		{
-			Items = list,
+			ItemsSource = list,
 		};
 
 		textBlock.ContextMenu = contextMenu;
@@ -37,7 +36,7 @@ public static class AvaloniaUtils
 
 	public static void AddContextMenu(TextBox textBox)
 	{
-		var keymap = AvaloniaLocator.Current.GetService<PlatformHotkeyConfiguration>()!;
+		var keymap = Application.Current!.PlatformSettings!.HotkeyConfiguration;
 
 		var list = new AvaloniaList<object>();
 
@@ -63,7 +62,7 @@ public static class AvaloniaUtils
 
 		ContextMenu contextMenu = new()
 		{
-			Items = list,
+			ItemsSource = list,
 		};
 
 		textBox.ContextMenu = contextMenu;
@@ -86,15 +85,15 @@ public static class AvaloniaUtils
 	}
 
 	// Add padding to avoid poppin effect?
-	public static bool IsControlVisible(IControl control)
+	public static bool IsControlVisible(Control control)
 	{
 		Point controlTopLeftPoint = new(0, 0);
 		Point controlBottomRight = new(control.Bounds.Width, control.Bounds.Height);
-		IControl? parentControl = control?.Parent;
-		while (parentControl != null)
+		StyledElement? parentElement = control.Parent;
+		while (parentElement != null)
 		{
 			// sometimes controls don't update their bounds correctly, so only use the Window for now
-			//if (parentControl is Window)
+			if (parentElement is Control parentControl)
 			{
 				// Get control bounds in Parent control coordinates
 				Point? translatedTopLeft = control.TranslatePoint(controlTopLeftPoint, parentControl);
@@ -113,7 +112,7 @@ public static class AvaloniaUtils
 					return false;
 			}
 
-			parentControl = parentControl.Parent;
+			parentElement = parentElement.Parent;
 		}
 		return true;
 	}

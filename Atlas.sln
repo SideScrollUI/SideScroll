@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29409.12
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Core", "Libraries\Atlas.Core\Atlas.Core.csproj", "{9BFC7193-DF0F-4D3F-8847-3043B2484E8E}"
 EndProject
@@ -52,7 +52,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{332EF461
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.UI.Avalonia.ScreenCapture", "Libraries\Atlas.UI.Avalonia.ScreenCapture\Atlas.UI.Avalonia.ScreenCapture.csproj", "{258F0A19-91AE-4020-9F1D-1C611CC3861A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atlas.UI.Avalonia.Charts", "Libraries\Atlas.UI.Avalonia.Charts\Atlas.UI.Avalonia.Charts.csproj", "{A5F9B6E9-EA6A-4757-A66A-776DA30EC70F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.UI.Avalonia.Charts", "Libraries\Atlas.UI.Avalonia.Charts\Atlas.UI.Avalonia.Charts.csproj", "{A5F9B6E9-EA6A-4757-A66A-776DA30EC70F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.UI.Avalonia.Charts.OxyPlots", "Libraries\Atlas.UI.Avalonia.Charts.OxyPlots\Atlas.UI.Avalonia.Charts.OxyPlots.csproj", "{F2844459-E73C-43B0-962F-C08FC0B32BB8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.UI.Avalonia.Charts.LiveCharts", "Libraries\Atlas.UI.Avalonia.Charts.LiveCharts\Atlas.UI.Avalonia.Charts.LiveCharts.csproj", "{EEB5042F-0D91-41C0-B52D-E2674CA01709}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +167,18 @@ Global
 		{A5F9B6E9-EA6A-4757-A66A-776DA30EC70F}.DebugX86|Any CPU.Build.0 = Debug|Any CPU
 		{A5F9B6E9-EA6A-4757-A66A-776DA30EC70F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5F9B6E9-EA6A-4757-A66A-776DA30EC70F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2844459-E73C-43B0-962F-C08FC0B32BB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2844459-E73C-43B0-962F-C08FC0B32BB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2844459-E73C-43B0-962F-C08FC0B32BB8}.DebugX86|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2844459-E73C-43B0-962F-C08FC0B32BB8}.DebugX86|Any CPU.Build.0 = Debug|Any CPU
+		{F2844459-E73C-43B0-962F-C08FC0B32BB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2844459-E73C-43B0-962F-C08FC0B32BB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEB5042F-0D91-41C0-B52D-E2674CA01709}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEB5042F-0D91-41C0-B52D-E2674CA01709}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEB5042F-0D91-41C0-B52D-E2674CA01709}.DebugX86|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEB5042F-0D91-41C0-B52D-E2674CA01709}.DebugX86|Any CPU.Build.0 = Debug|Any CPU
+		{EEB5042F-0D91-41C0-B52D-E2674CA01709}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEB5042F-0D91-41C0-B52D-E2674CA01709}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,6 +203,8 @@ Global
 		{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91} = {B14E9554-8531-4CE0-80BB-FD4C4A87F488}
 		{258F0A19-91AE-4020-9F1D-1C611CC3861A} = {E7D9713F-A249-443C-B300-52A335BD8891}
 		{A5F9B6E9-EA6A-4757-A66A-776DA30EC70F} = {E7D9713F-A249-443C-B300-52A335BD8891}
+		{F2844459-E73C-43B0-962F-C08FC0B32BB8} = {E7D9713F-A249-443C-B300-52A335BD8891}
+		{EEB5042F-0D91-41C0-B52D-E2674CA01709} = {E7D9713F-A249-443C-B300-52A335BD8891}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B8EE36E-D3EA-401F-A48B-6B0D45E04DCC}

@@ -19,7 +19,7 @@ public static class DataGridExtensions
 		if (column == null) throw new ArgumentNullException(nameof(column));
 
 		var sb = new StringBuilder();
-		foreach (var item in dataGrid.Items)
+		foreach (var item in dataGrid.ItemsSource)
 		{
 			string? value = GetCellValue(column, item);
 			sb.AppendLine(value);
@@ -118,7 +118,7 @@ public static class DataGridExtensions
 	{
 		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
 
-		GetDataGridContents(dataGrid, dataGrid.Items,
+		GetDataGridContents(dataGrid, dataGrid.ItemsSource,
 			out List<ColumnInfo> columns,
 			out List<List<string>> contentRows);
 
@@ -129,7 +129,7 @@ public static class DataGridExtensions
 	{
 		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
 
-		GetDataGridContents(dataGrid, dataGrid.Items,
+		GetDataGridContents(dataGrid, dataGrid.ItemsSource,
 			out List<ColumnInfo> columns,
 			out List<List<string>> contentRows);
 
@@ -174,6 +174,8 @@ public static class DataGridExtensions
 	{
 		columns = new List<ColumnInfo>();
 		contentRows = new List<List<string>>();
+		if (dataGrid == null || items == null) return;
+
 		var visibleColumns = new Dictionary<int, DataGridColumn>();
 
 		foreach (DataGridColumn dataColumn in dataGrid.Columns)

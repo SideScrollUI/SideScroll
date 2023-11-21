@@ -1,7 +1,6 @@
 using Atlas.Core;
-using Atlas.Tabs.Tools;
-using Atlas.UI.Avalonia.Tabs;
 using Avalonia;
+using Avalonia.Data.Core.Plugins;
 using OxyPlot.Avalonia;
 
 namespace Atlas.Start.Avalonia;
@@ -12,6 +11,12 @@ static class Program
 	{
 		OxyPlotModule.EnsureLoaded();
 		AppBuilder builder = BuildAvaloniaApp();
+
+		// Remove Default DataAnnotations Validators
+		// These validators show before values are entered, which ends up showing too many initial warnings
+		// https://docs.avaloniaui.net/docs/data-binding/data-validation
+		// Add custom template?
+		BindingPlugins.DataValidators.RemoveAt(0);
 
 		try
 		{
@@ -27,10 +32,6 @@ static class Program
 	public static AppBuilder BuildAvaloniaApp()
 		=> AppBuilder.Configure<App>()
 			.UsePlatformDetect()
-			.With(new Win32PlatformOptions
-			{
-				//UseDeferredRendering = false, // Causes DataGrid blank columns when scrolling right?
-				AllowEglInitialization = true,
-			})
+			.WithInterFont()
 			.LogToTrace();
 }

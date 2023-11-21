@@ -2,13 +2,12 @@ using Atlas.UI.Avalonia.Themes;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Styling;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class ToolbarTextBox : TextBox, IStyleable, ILayoutable
+public class ToolbarTextBox : TextBox
 {
-	Type IStyleable.StyleKey => typeof(TextBox);
+	protected override Type StyleKeyOverride => typeof(TextBox);
 
 	public ToolbarTextBox(string text)
 	{

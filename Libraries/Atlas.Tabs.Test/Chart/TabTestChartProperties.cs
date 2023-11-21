@@ -2,7 +2,7 @@ using Atlas.Core;
 
 namespace Atlas.Tabs.Test.Chart;
 
-public class TabTestChartSplit : ITab
+public class TabTestChartProperties : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -19,22 +19,19 @@ public class TabTestChartSplit : ITab
 		public class ChartSample
 		{
 			public string? Name { get; set; }
-			// Add [UnitType]
-			public int SeriesAlpha { get; set; }
-			// Add [UnitType]
-			public int SeriesBeta { get; set; }
-			// Add [UnitType]
-			public int SeriesGamma { get; set; }
-			// Add [UnitType]
-			public int SeriesEpsilon { get; set; }  // High Value, small delta
+
+			public int Alpha { get; set; }
+			public int Beta { get; set; }
+			public int Gamma { get; set; }
+			public int Epsilon { get; set; }  // High Value, small delta
+
 			public TestItem TestItem { get; set; } = new();
-			public int InstanceAmount => TestItem.Amount;
+
+			public int Amount => TestItem.Amount;
 		}
 
 		public override void Load(Call call, TabModel model)
 		{
-			//tabModel.Items = items;
-
 			model.Actions = new List<TaskCreator>()
 			{
 				new TaskDelegate("Add Entry", AddEntry),
@@ -46,8 +43,12 @@ public class TabTestChartSplit : ITab
 				AddSample(i);
 			}
 
-			var chartSettings = new ChartSettings(_samples);
-			model.AddObject(chartSettings);
+			var chartView = new ChartView();
+			chartView.AddSeries("Alpha", _samples, null, nameof(ChartSample.Alpha));
+			chartView.AddSeries("Beta", _samples, null, nameof(ChartSample.Beta));
+			chartView.AddSeries("Gamma", _samples, null, nameof(ChartSample.Gamma));
+			chartView.AddSeries("Epsilon", _samples, null, nameof(ChartSample.Epsilon));
+			model.AddObject(chartView);
 		}
 
 		private void AddEntry(Call call)
@@ -70,10 +71,10 @@ public class TabTestChartSplit : ITab
 			ChartSample sample = new()
 			{
 				Name = "Name " + i.ToString(),
-				SeriesAlpha = _random.Next(0, 100),
-				SeriesBeta = _random.Next(50, 100),
-				SeriesGamma = _random.Next(0, 1000000000),
-				SeriesEpsilon = 1000000000 + _random.Next(0, 10),
+				Alpha = _random.Next(0, 100000),
+				Beta = _random.Next(0, 100000000),
+				Gamma = _random.Next(0, 1000000000),
+				Epsilon = 1000000000 + _random.Next(0, 10),
 				TestItem = new TestItem()
 				{
 					Amount = _random.Next(0, 100),

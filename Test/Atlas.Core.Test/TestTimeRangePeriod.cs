@@ -37,7 +37,7 @@ public class TestTimeRangePeriod : TestBase
 			PeriodDuration = periodDuration,
 			SeriesType = SeriesType.Sum,
 		};
-		double total = listSeries.CalculateTotal(timeWindow);
+		double? total = listSeries.CalculateTotal(timeWindow);
 		Assert.AreEqual(3.0, total);
 	}
 
@@ -65,7 +65,7 @@ public class TestTimeRangePeriod : TestBase
 			PeriodDuration = periodDuration,
 			SeriesType = SeriesType.Sum,
 		};
-		double total = listSeries.CalculateTotal(timeWindow);
+		double? total = listSeries.CalculateTotal(timeWindow);
 		Assert.AreEqual(1.0, total);
 	}
 }

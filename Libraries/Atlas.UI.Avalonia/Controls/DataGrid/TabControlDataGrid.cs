@@ -6,6 +6,7 @@ using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
@@ -22,7 +23,7 @@ using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelector, ILayoutable, ITabDataControl
+public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelector, ITabDataControl
 {
 	private const int ColumnPercentBased = 150;
 	private const int MaxMinColumnWidth = 200;
@@ -35,8 +36,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 	public TabDataSettings TabDataSettings { get; set; }
 	public IList? List;
 	private Type _elementType;
-
-	public bool AutoSelectNew = true;
 
 	public bool AutoGenerateColumns = true;
 
@@ -52,14 +51,11 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 	private List<PropertyInfo> _columnProperties = new(); // makes filtering faster, could change other Dictionaries strings to PropertyInfo
 
 	private int _disableSaving = 0; // enables saving if > 0
-	private int _isAutoSelecting = 0; // enables auto selecting if > 0
 	private bool _ignoreSelectionChanged = false;
 
 	private readonly Stopwatch _notifyItemChangedStopwatch = new();
 	private DispatcherTimer? _dispatcherTimer;  // delays auto selection to throttle updates
 	private object? _autoSelectItem = null;
-
-	public AutoSelectType AutoSelect { get; set; } = AutoSelectType.FirstSavedOrNew;
 
 	private Filter? _filter;
 
@@ -82,9 +78,9 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 			{
 				CollectionView = new DataGridCollectionView(List);
 
-				DataGrid.Items = CollectionView; // DataGrid autoselects on assignment :(
+				DataGrid.ItemsSource = CollectionView; // DataGrid autoselects on assignment :(
 
-				if (AutoSelect == AutoSelectType.None)
+				if (TabModel.AutoSelectSaved == AutoSelectType.None && !TabModel.AutoSelectDefault)
 					ClearSelection();
 				else
 					LoadSettings();
@@ -100,7 +96,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 	{
 		TabInstance = tabInstance;
 		TabModel = model ?? TabInstance.Model;
-		AutoSelect = TabModel.AutoSelect;
 		List = iList;
 		AutoGenerateColumns = autoGenerateColumns;
 		TabDataSettings = tabDataSettings ?? new TabDataSettings();
@@ -181,7 +176,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 
 			BorderBrush = Brushes.Black,
 			RowBackground = AtlasTheme.GridBackground,
-			AlternatingRowBackground = AtlasTheme.GridBackground,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
@@ -190,7 +184,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 
 			BorderThickness = new Thickness(1),
 			IsReadOnly = !TabModel.Editing,
-			GridLinesVisibility = DataGridGridLinesVisibility.All,
+			GridLinesVisibility = DataGridGridLinesVisibility.None,
 			MaxWidth = 4000,
 			MaxHeight = this.MaxHeight,
 			[Grid.RowProperty] = 1,
@@ -202,13 +196,15 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 			AddColumns();
 
 		CollectionView = new DataGridCollectionView(List);
-		DataGrid.Items = CollectionView;
+		DataGrid.ItemsSource = CollectionView;
 		DataGrid.SelectedItem = null;
 
 		DataGrid.SelectionChanged += DataGrid_SelectionChanged;
 
 		DataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // Add one click deselection
 		DataGrid.ColumnReordered += DataGrid_ColumnReordered;
+
+		DataGrid.EffectiveViewportChanged += DataGrid_EffectiveViewportChanged;
 
 		DataGrid.AddHandler(KeyDownEvent, DataGrid_KeyDown, RoutingStrategies.Tunnel);
 
@@ -254,35 +250,36 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 		if (DataGrid == null || HorizontalAlignment != HorizontalAlignment.Stretch)
 			return;
 
-		var textColumns = DataGrid.Columns.Where(c => c is DataGridTextColumn || c is DataGridCheckBoxColumn);
+		var autoSizeColumns = DataGrid.Columns
+			.Where(c => c.IsVisible)
+			.Where(c => c is DataGridTextColumn || c is DataGridCheckBoxColumn);
 
 		// The star column widths will change as other column widths are changed
 		var originalWidths = new Dictionary<DataGridColumn, DataGridLength>();
-		foreach (DataGridColumn column in textColumns)
+		foreach (DataGridColumn column in autoSizeColumns)
 		{
 			originalWidths[column] = column.Width;
 			column.Width = new DataGridLength(column.ActualWidth, DataGridLengthUnitType.Auto); // remove Star sizing so columns don't interfere with each other
 		}
 
-		foreach (DataGridColumn column in textColumns)
+		foreach (DataGridColumn column in autoSizeColumns)
 		{
-			if (!column.IsVisible)
-				continue;
-
 			DataGridLength originalWidth = originalWidths[column];
+			double originalDesiredWidth = double.IsNaN(originalWidth.DesiredValue) ? 0 : originalWidth.DesiredValue;
 
 			column.MaxWidth = 2000;
 
 			if (column.MinWidth == 0)
-				column.MinWidth = Math.Min(MaxMinColumnWidth, originalWidth.DesiredValue);
+				column.MinWidth = Math.Min(MaxMinColumnWidth, originalDesiredWidth);
 			else
-				column.MinWidth = Math.Max(column.MinWidth, Math.Min(100, originalWidth.DesiredValue));
+				column.MinWidth = Math.Max(column.MinWidth, Math.Min(100, originalDesiredWidth));
 
-			double desiredWidth = Math.Max(column.MinWidth, originalWidth.DesiredValue);
+			double desiredWidth = Math.Max(column.MinWidth, originalDesiredWidth);
 			if (column is DataGridPropertyTextColumn textColumn)
 			{
 				desiredWidth = Math.Max(desiredWidth, textColumn.MinDesiredWidth);
 				desiredWidth = Math.Min(desiredWidth, textColumn.MaxDesiredWidth);
+				column.MinWidth = Math.Min(column.MinWidth, textColumn.MaxDesiredWidth);
 
 				if (textColumn.AutoSize)
 				{
@@ -290,6 +287,10 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 					//column.Width = new DataGridLength(desiredWidth, DataGridLengthUnitType.Auto);
 					column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto, desiredWidth, double.NaN);
 					continue;
+				}
+				else if (desiredWidth >= textColumn.MaxDesiredWidth)
+				{
+					column.Width = new DataGridLength(column.ActualWidth, DataGridLengthUnitType.Star, desiredWidth, double.NaN);
 				}
 			}
 
@@ -303,10 +304,13 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 		//dataGrid.MinColumnWidth = 40; // doesn't do anything
 		// If 1 or 2 columns, make the last column stretch
 		if (DataGrid.Columns.Count == 1)
+		{
 			DataGrid.Columns[0].Width = new DataGridLength(DataGrid.Columns[0].ActualWidth, DataGridLengthUnitType.Star);
-
-		if (DataGrid.Columns.Count == 2)
+		}
+		else if (DataGrid.Columns.Count == 2)
+		{
 			DataGrid.Columns[1].Width = new DataGridLength(DataGrid.Columns[1].ActualWidth, DataGridLengthUnitType.Star);
+		}
 	}
 
 	private bool _selectionModified = false;
@@ -320,10 +324,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 			e.Action == NotifyCollectionChangedAction.Replace)
 		{
 			// Group up any new items after the 1st one
-			if ((AutoSelectNew ||
-				TabModel.AutoSelect == AutoSelectType.AnyNewOrSaved ||
-				TabModel.AutoSelect == AutoSelectType.FirstSavedOrNew)
-				&& (SearchControl!.Text == null || SearchControl.Text.Length == 0))
+			if (TabModel.AutoSelectNew && SearchControl!.Text.IsNullOrEmpty())
 			{
 				_selectItemEnabled = true;
 				object? item = e.NewItems![0];
@@ -370,9 +371,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 			return;
 
 		_disableSaving++;
-		_isAutoSelecting++;
 		SelectedItem = selectedItem;
-		_isAutoSelecting--;
 		_disableSaving--;
 	}
 
@@ -406,8 +405,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 
 		if (_disableSaving == 0)
 		{
-			if (_isAutoSelecting == 0)
-				AutoSelectNew = (DataGrid.SelectedItems.Count == 0);
 			TabInstance.SaveTabSettings(); // selection has probably changed
 		}
 		if (bookmark != null)
@@ -432,9 +429,11 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 	private void DataGrid_CellPointerPressed(object? sender, DataGridCellPointerPressedEventArgs e)
 	{
 		var pointer = e.PointerPressedEventArgs.GetCurrentPoint(this);
-		if (pointer.Properties.IsLeftButtonPressed && e.Row != null && DataGrid.SelectedItems != null && DataGrid.SelectedItems.Count == 1)
+		if (pointer.Properties.IsLeftButtonPressed && e.Row != null && DataGrid.SelectedItems != null && DataGrid.SelectedItems.Count == 1 && e.Cell.Content != null)
 		{
-			if (e.Cell.Content is CheckBox)
+			Type type = e.Cell.Content!.GetType();
+			if (typeof(CheckBox).IsAssignableFrom(type) ||
+				typeof(Button).IsAssignableFrom(type))
 				return;
 
 			if (DataGrid.SelectedItems.Contains(e.Row.DataContext))
@@ -444,20 +443,20 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 		}
 	}
 
-	private static bool IsControlSelectable(IVisual? visual)
+	private static bool IsControlSelectable(IInputElement? inputElement)
 	{
-		if (visual == null)
+		if (inputElement == null)
 			return false;
 
-		Type type = visual.GetType();
+		Type type = inputElement.GetType();
 
 		return
 			typeof(CheckBox).IsAssignableFrom(type) ||
 			typeof(Button).IsAssignableFrom(type) ||
-			IsControlSelectable(visual.VisualParent);
+			(inputElement is Visual visual && IsControlSelectable(visual.GetVisualParent() as IInputElement));
 	}
 
-	private static DataGrid? GetOwningDataGrid(IControl? control)
+	private static DataGrid? GetOwningDataGrid(StyledElement? control)
 	{
 		if (control == null)
 			return null;
@@ -570,10 +569,6 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 			.Select(p => p.IsStyled())
 			.Max();
 
-		// Styling lines adds a performance hit, so only add it if necessary
-		if (styleCells)
-			DataGrid.GridLinesVisibility = DataGridGridLinesVisibility.None;
-
 		foreach (TabDataSettings.PropertyColumn propertyColumn in propertyColumns)
 		{
 			AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo, styleCells);
@@ -679,6 +674,8 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 
 	public void LoadSettings()
 	{
+		if (List == null) return;
+
 		if (TabInstance.Project.UserSettings.AutoLoad)
 		{
 			// SortSavedColumn(); // Not supported yet
@@ -688,8 +685,9 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 				SelectDefaultItems();
 
 			//UpdateSelection(); // datagrid not fully loaded yet
+
+			OnSelectionChanged?.Invoke(this, new TabSelectionChangedEventArgs());
 		}
-		OnSelectionChanged?.Invoke(this, new TabSelectionChangedEventArgs());
 	}
 
 	private void LoadSearch()
@@ -745,13 +743,10 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 		if (TabDataSettings.SelectionType == SelectionType.None)
 			return false;
 
-		if (TabModel.AutoSelect == AutoSelectType.First)
+		if (TabModel.AutoSelectSaved == AutoSelectType.None)
 			return false;
 
-		if (TabModel.AutoSelect == AutoSelectType.None)
-			return true;
-
-		if (List!.Count == 0)
+		if (List == null || List.Count == 0)
 			return false;
 
 		// Select new log items automatically
@@ -762,7 +757,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 		}
 
 		if (TabDataSettings.SelectedRows.Count == 0)
-			return (TabModel.AutoSelect != AutoSelectType.AnyNewOrSaved); // clear too?
+			return TabModel.AutoSelectSaved == AutoSelectType.Any; // clear too?
 
 		List<object> matchingItems = GetMatchingRowObjects();
 		if (matchingItems.Count > 0)
@@ -813,12 +808,10 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 
 			if (value is TabView tabView)
 			{
-				if (tabView.Model.AutoSelect == AutoSelectType.None)
-					continue;
+				if (tabView.Model.AutoSelectSaved == AutoSelectType.None && !tabView.Model.AutoSelectDefault) continue;
 			}
 
-			if (firstValidObject == null)
-				firstValidObject = obj;
+			firstValidObject ??= obj;
 
 			Type type = value.GetType();
 			if (TabUtils.ObjectHasLinks(value, true) && type.IsEnum == false)
@@ -839,7 +832,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 
 	private void SelectDefaultItems()
 	{
-		if (AutoSelect == AutoSelectType.None)
+		if (!TabModel.AutoSelectDefault)
 			return;
 
 		object? firstValidObject = GetDefaultSelectedItem() ?? GetAutoSelectValue();
@@ -1143,8 +1136,9 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 			DataGrid.SelectionChanged -= DataGrid_SelectionChanged;
 			DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
 			DataGrid.ColumnReordered -= DataGrid_ColumnReordered;
+			DataGrid.EffectiveViewportChanged -= DataGrid_EffectiveViewportChanged;
 
-			DataGrid.Items = null;
+			DataGrid.ItemsSource = null;
 
 			if (DataGrid.ContextMenu is IDisposable contextMenu)
 			{
@@ -1197,25 +1191,28 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 		}
 	}
 
-	// This sometimes runs into rare issues where this doesn't display when it should
-	public override void Render(DrawingContext context)
+	private void DataGrid_EffectiveViewportChanged(object? sender, EffectiveViewportChangedEventArgs e)
 	{
-		Dispatcher.UIThread.Post(UpdateVisible, DispatcherPriority.ContextIdle);
+		UpdateVisible();
 
-		base.Render(context);
+		//Dispatcher.UIThread.Post(UpdateVisible, DispatcherPriority.ContextIdle);
 	}
 
 	// Hide control when offscreen
 	private void UpdateVisible()
 	{
-		if (DataGrid == null)
-			return;
+		if (DataGrid == null) return;
 
 		bool visible = AvaloniaUtils.IsControlVisible(this);
 		if (visible != DataGrid.IsVisible)
 		{
+			if (!visible && DataGrid.IsFocused)
+			{
+				// Key events will be lost if DataGrid is invisible and still has focus
+				Focus();
+			}
 			DataGrid.IsVisible = visible;
-			DataGrid.InvalidateArrange();
+			//DataGrid.InvalidateArrange();
 		}
 	}
 }

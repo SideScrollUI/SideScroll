@@ -13,10 +13,9 @@ public class TabObject
 
 public enum AutoSelectType
 {
-	None,
-	FirstSavedOrNew,
-	AnyNewOrSaved, // Restores saved if multiple, otherwise first
-	First,
+	Any, // 0 to many
+	NonEmpty, // 1 - many, or default selection
+	None, // Deselect all
 }
 
 public class TabModel
@@ -26,17 +25,21 @@ public class TabModel
 	public string? Notes { get; set; } // not used anymore
 	public object? Object { get; set; } // optional
 
-	public AutoSelectType AutoSelect { get; set; } = AutoSelectType.FirstSavedOrNew;
+	// Selects Saved or Default, and then any New
+	public AutoSelectType AutoSelectSaved { get; set; } = AutoSelectType.Any;
+
+	public bool AutoSelectDefault { get; set; } = true;
+	public bool AutoSelectNew { get; set; } = true;
 
 	public bool Editing { get; set; }
 	public bool Skippable { get; set; }
-	public bool ShowSearch { get; set; } // Show search filter above DataGrids
 	public bool ShowTasks { get; set; } // Will add the Tasks to show logs when an error occurs
-
-	public SearchFilter? SearchFilter { get; set; } // DataGrid filtering will also update this filter
+	public bool ShowSearch { get; set; } // Show search filter above DataGrids
 
 	public int MinDesiredWidth { get; set; } = 0;
 	public int MaxDesiredWidth { get; set; } = 1500;
+
+	public SearchFilter? SearchFilter { get; set; } // DataGrid filtering will also update this filter
 
 	public IList? Actions { get; set; }
 	public TaskInstanceCollection Tasks { get; set; } = new();
@@ -98,10 +101,9 @@ public class TabModel
 
 	public TabObject AddObject(object obj, bool fill = false)
 	{
-		if (obj == null)
-			obj = "(null)";
+		obj ??= "(null)";
 
-		if (obj is ChartSettings)
+		if (obj is ChartView)
 			MinDesiredWidth = 800;
 
 		TabObject tabObject = new()

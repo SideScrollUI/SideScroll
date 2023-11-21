@@ -62,8 +62,13 @@ public static class DateTimeUtils
 
 	public static string FormatTimeRange(DateTime startTime, DateTime endTime, bool withDuration = true)
 	{
-		string startFormat = "yyyy-M-d H:mm:ss";
-		string endFormat = (startTime.Date == endTime.Date) ? "H:mm:ss" : startFormat;
+		string timeFormat = "H:mm:ss";
+		if (startTime.Second == 0 && endTime.Second == 0)
+		{
+			timeFormat = "H:mm";
+		}
+		string startFormat = $"yyyy-M-d {timeFormat}";
+		string endFormat = (startTime.Date == endTime.Date) ? timeFormat : startFormat;
 		TimeSpan duration = endTime.Subtract(startTime);
 		string text = startTime.ToString(startFormat) + " - " + endTime.ToString(endFormat);
 		if (withDuration)
