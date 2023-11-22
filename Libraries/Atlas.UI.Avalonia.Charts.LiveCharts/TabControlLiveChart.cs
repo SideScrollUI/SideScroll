@@ -275,9 +275,15 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 	private void AddSections()
 	{
+		Annotations.AddRange(ChartView.Annotations);
 		_sections = ChartView.Annotations
 			.Select(a => CreateAnnotation(a))
 			.ToList();
+
+		if (Annotations.Count > 0)
+		{
+			UpdateYAxis();
+		}
 
 		if (UseDateTimeAxis && ChartView.ShowTimeTracker)
 		{
@@ -317,7 +323,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		UpdateYAxis();
 	}
 
-	public static RectangularSection CreateAnnotation(ChartAnnotation chartAnnotation)
+	public RectangularSection CreateAnnotation(ChartAnnotation chartAnnotation)
 	{
 		var c = chartAnnotation.Color!.Value;
 		var color = new SKColor(c.R, c.G, c.B, c.A);
@@ -332,16 +338,20 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			Stroke = new SolidColorPaint(color.WithAlpha(200), (float)chartAnnotation.StrokeThickness),
 		};
 
-		if (chartAnnotation.X != null)
+		if (chartAnnotation.X is double x)
 		{
-			section.Xj = chartAnnotation.X;
-			section.Xi = chartAnnotation.X;
+			section.Xj = x;
+			section.Xi = x;
 		}
 
-		if (chartAnnotation.Y != null)
+		if (chartAnnotation.Y is double y)
 		{
-			section.Yj = chartAnnotation.Y;
-			section.Yi = chartAnnotation.Y;
+			if (ChartView.LogBase is double logBase)
+			{
+				y = Math.Log(y, logBase);
+			}
+			section.Yj = y;
+			section.Yi = y;
 		}
 
 		return section;
