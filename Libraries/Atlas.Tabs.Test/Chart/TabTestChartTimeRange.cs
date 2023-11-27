@@ -18,16 +18,6 @@ public class TabTestChartTimeRangeValue : ITab
 			AddToys(model, endTime);
 		}
 
-		private void AddToys(TabModel model, DateTime endTime)
-		{
-			var chartViewToys = new ChartView("Toys")
-			{
-				ShowTimeTracker = true,
-			};
-			chartViewToys.AddSeries("Toys", ChartSamples.CreateIdenticalTimeSeries(endTime), seriesType: SeriesType.Average);
-			model.AddObject(chartViewToys);
-		}
-
 		private DateTime AddAnimals(TabModel model, DateTime endTime)
 		{
 			var chartView = new ChartView("Animals")
@@ -47,6 +37,16 @@ public class TabTestChartTimeRangeValue : ITab
 			});
 			model.AddObject(chartView);
 			return endTime;
+		}
+
+		private void AddToys(TabModel model, DateTime endTime)
+		{
+			var chartViewToys = new ChartView("Toys")
+			{
+				ShowTimeTracker = true,
+			};
+			chartViewToys.AddSeries("Toys", ChartSamples.CreateIdenticalTimeSeries(endTime), seriesType: SeriesType.Average);
+			model.AddObject(chartViewToys);
 		}
 	}
 }
