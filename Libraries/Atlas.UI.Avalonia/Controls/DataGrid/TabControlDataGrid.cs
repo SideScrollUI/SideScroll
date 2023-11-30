@@ -1201,7 +1201,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 	// Hide control when offscreen
 	private void UpdateVisible()
 	{
-		if (DataGrid == null) return;
+		if (DataGrid == null || !IsLoaded) return;
 
 		bool visible = AvaloniaUtils.IsControlVisible(this);
 		if (visible != DataGrid.IsVisible)

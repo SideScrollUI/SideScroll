@@ -27,12 +27,11 @@ public class TabModel
 
 	// Selects Saved or Default, and then any New
 	public AutoSelectType AutoSelectSaved { get; set; } = AutoSelectType.Any;
-
 	public bool AutoSelectDefault { get; set; } = true;
 	public bool AutoSelectNew { get; set; } = true;
 
 	public bool Editing { get; set; }
-	public bool Skippable { get; set; }
+	public bool Skippable { get; set; } // Will collapse collections that have a single item
 	public bool ShowTasks { get; set; } // Will add the Tasks to show logs when an error occurs
 	public bool ShowSearch { get; set; } // Show search filter above DataGrids
 

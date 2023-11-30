@@ -847,7 +847,7 @@ public class TabControlOxyPlot : TabControlChart<OxyPlotLineSeries>, IDisposable
 
 	private void UpdateVisible()
 	{
-		if (PlotView == null) return;
+		if (PlotView == null || !IsLoaded) return;
 
 		bool visible = AvaloniaUtils.IsControlVisible(this);
 		if (visible != PlotView.IsVisible)

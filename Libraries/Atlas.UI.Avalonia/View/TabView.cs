@@ -12,7 +12,6 @@ using Avalonia.Threading;
 using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Atlas.UI.Avalonia.View;
 

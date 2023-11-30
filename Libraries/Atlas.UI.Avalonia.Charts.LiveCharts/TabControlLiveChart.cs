@@ -491,8 +491,9 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		if (ChartView.LogBase is double logBase)
 		{
-			YAxis.MinLimit = Math.Log(minimum, logBase) * 0.85;
-			YAxis.MaxLimit = Math.Log(maximum, logBase) * 1.15;
+			// Log 0 can return infinity, which is difficult to render
+			YAxis.MinLimit = Math.Max(double.MinValue, Math.Log(minimum, logBase) * 0.85);
+			YAxis.MaxLimit = Math.Min(double.MaxValue, Math.Log(maximum, logBase) * 1.15);
 
 			if (maximum - minimum > 10)
 			{
@@ -851,7 +852,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	// Hide slow controls when not viewable
 	private void UpdateVisible()
 	{
-		if (Chart == null) return;
+		if (Chart == null || !IsLoaded) return;
 
 		bool visible = AvaloniaUtils.IsControlVisible(this);
 		if (visible != Chart.IsVisible)
