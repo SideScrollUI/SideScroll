@@ -165,7 +165,6 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	{
 		ChartView = chartView;
 		ReloadView();
-		Legend.RefreshModel();
 	}
 
 	// Reuses previous colors and TimeWindow

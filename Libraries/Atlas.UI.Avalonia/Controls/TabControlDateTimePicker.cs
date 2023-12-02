@@ -79,6 +79,7 @@ public class TabDateTimePicker : Grid
 			Background = Property.Editable ? AtlasTheme.Background : Brushes.LightGray,
 			BorderBrush = Brushes.Black,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Top, // Validation errors appear below controls
 			VerticalContentAlignment = VerticalAlignment.Center,
 			BorderThickness = new Thickness(1),
 			SelectedDateFormat = CalendarDatePickerFormat.Custom,
@@ -176,6 +177,7 @@ public class TabDateTimePicker : Grid
 			BorderThickness = new Thickness(0),
 			//Margin = new Thickness(2),
 			HorizontalAlignment = HorizontalAlignment.Right,
+			VerticalAlignment = VerticalAlignment.Top,
 			//BorderThickness = new Thickness(2),
 			//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
 			//BorderBrush = new SolidColorBrush(Colors.Black),

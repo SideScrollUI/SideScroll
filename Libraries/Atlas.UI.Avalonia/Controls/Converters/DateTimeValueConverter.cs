@@ -1,4 +1,5 @@
 using Atlas.Core;
+using Avalonia.Data;
 using Avalonia.Data.Converters;
 using System.Globalization;
 
@@ -10,6 +11,8 @@ public class DateTimeValueConverter : IValueConverter
 
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
+		// Debug.WriteLine($"Convert {value}, Target: {targetType}");
+
 		if (value is TimeSpan timeSpan)
 		{
 			var date = ((DateTime)PreviousDateTime!).Date;
@@ -21,10 +24,12 @@ public class DateTimeValueConverter : IValueConverter
 
 		if (targetType == typeof(string))
 		{
-			if (PreviousDateTime == null)
-				return "";
+			if (PreviousDateTime is DateTime dateTime)
+			{
+				return dateTime.ToString("H:mm:ss");
+			}
 
-			return ((DateTime)PreviousDateTime).ToString("H:mm:ss");
+			return "";
 		}
 		else
 		{
@@ -34,19 +39,22 @@ public class DateTimeValueConverter : IValueConverter
 
 	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
-		if (value == null)
-			return PreviousDateTime;
+		// Debug.WriteLine($"ConvertBack {value}, Target: {targetType}");
+
+		if (value == null) return PreviousDateTime;
 
 		if (targetType != typeof(DateTime) && targetType != typeof(DateTime?))
-			throw new Exception("invalid conversion");
-
-		if (value is string text)
 		{
-			SetTime(text.Trim());
+			return new BindingNotification(new DataValidationException("TargetType must be DateTime"), BindingErrorType.DataValidationError);
 		}
-		else if (value is DateTime dateTime)
+
+		if (value is DateTime dateTime)
 		{
 			SetDate(dateTime);
+		}
+		else if (value is string text)
+		{
+			return SetTime(text);
 		}
 
 		return PreviousDateTime;
@@ -54,6 +62,8 @@ public class DateTimeValueConverter : IValueConverter
 
 	private void SetDate(DateTime dateTime)
 	{
+		// Debug.WriteLine($"SetDate {dateTime}");
+
 		if (PreviousDateTime == null)
 		{
 			PreviousDateTime = dateTime;
@@ -68,22 +78,24 @@ public class DateTimeValueConverter : IValueConverter
 		PreviousDateTime = dateTime;
 	}
 
-	public void SetTime(string timeText)
+	public object? SetTime(string timeText)
 	{
-		// use a single 'h' so a leading zero isn't required
+		// Debug.WriteLine($"SetTime {timeText}");
+
 		TimeSpan? timeSpan = DateTimeUtils.ConvertTextToTimeSpan(timeText);
-		if (timeSpan != null)
+		if (timeSpan == null)
 		{
-			if (PreviousDateTime != null)
-			{
-				var date = ((DateTime)PreviousDateTime).Date;
-				PreviousDateTime = date.AddSeconds(timeSpan.Value.TotalSeconds);
-			}
-			else
-			{
-				var date = DateTime.UtcNow.Date;
-				PreviousDateTime = date.AddSeconds(timeSpan.Value.TotalSeconds);
-			}
+			// This doesn't always clear correctly after fixing a validation if the DateTime matches the previous valid value
+			// So don't show an error message for now to make it a little less confusing
+			return new BindingNotification(new DataValidationException(""), BindingErrorType.DataValidationError);
 		}
+
+		if (PreviousDateTime is not DateTime dateTime)
+		{
+			dateTime = DateTime.UtcNow.Date;
+		}
+
+		PreviousDateTime = dateTime.Date.AddSeconds(timeSpan.Value.TotalSeconds);
+		return PreviousDateTime;
 	}
 }

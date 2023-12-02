@@ -12,6 +12,8 @@ public static class DateTimeUtils
 		if (text == null)
 			return null;
 
+		text = text.Trim();
+
 		if (TimeSpan.TryParseExact(text, @"h\:m\:s\.FFFFFFF", CultureInfo.InvariantCulture, out TimeSpan timeSpan))
 			return timeSpan;
 
@@ -30,6 +32,8 @@ public static class DateTimeUtils
 			return null;
 
 		DateTime dateTime;
+
+		text = text.Trim();
 
 		// convert epoch 1569998557298
 		var epochTime = EpochTime;
