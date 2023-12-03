@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release;DebugX86</Configurations>
     <Nullable>enable</Nullable>
@@ -15,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Atlas.Core\Atlas.Core.csproj" />
-    <ProjectReference Include="..\..\Libraries\Atlas.Serialize\Atlas.Serialize.csproj" />
   </ItemGroup>
 
   <ItemGroup>

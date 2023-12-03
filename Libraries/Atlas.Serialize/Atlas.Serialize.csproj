@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Atlas.Serialize</AssemblyName>
     <RootNamespace>Atlas.Serialize</RootNamespace>

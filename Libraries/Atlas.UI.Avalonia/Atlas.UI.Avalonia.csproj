@@ -100,7 +100,6 @@
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEditVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.4" />
-    <PackageReference Include="ThomasLevesque.WeakEvent" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -123,31 +122,4 @@
       <DependentUpon>TabAvalonEdit.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-  
-  <!--
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Public\AvaloniaUI\DataGrid\src\Avalonia.DataGrid\Avalonia.DataGrid.csproj" />
-  <ItemGroup>
-    <Reference Include="Avalonia.DataGrid">
-      <HintPath>..\..\..\..\Public\AvaloniaUI\DataGrid\src\Avalonia.DataGrid\bin\Debug\netstandard2.0\Avalonia.DataGrid.dll</HintPath>
-      <Private>true</Private>
-    </Reference>
-  </ItemGroup>
-  -->
-  <!--
-  <ItemGroup>
-    <EmbeddedResource Update="DefaultTheme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Sandbox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="StyleResources.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Tabs\TabChart2.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  -->
 </Project>
