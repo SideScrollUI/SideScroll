@@ -191,7 +191,7 @@ public class TabViewer : Grid
 		await ImportBookmarkAsync(call, clipboardText, true);
 	}
 
-	private async Task<Bookmark?> ImportBookmarkAsync(Call call, string linkUri, bool checkVersion)
+	public async Task<Bookmark?> ImportBookmarkAsync(Call call, string linkUri, bool checkVersion)
 	{
 		Flyout flyout = new()
 		{
@@ -220,7 +220,7 @@ public class TabViewer : Grid
 		}
 	}
 
-	private Bookmark? ImportBookmark(Call call, string linkUri, bool checkVersion)
+	public Bookmark? ImportBookmark(Call call, string linkUri, bool checkVersion)
 	{
 		Flyout flyout = new()
 		{
