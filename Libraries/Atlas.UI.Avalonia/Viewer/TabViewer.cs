@@ -92,7 +92,7 @@ public class TabViewer : Grid
 		ContentGrid = new Grid
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto"),
-			RowDefinitions = new RowDefinitions("*"),
+			RowDefinitions = new RowDefinitions("*,16"),
 			HorizontalAlignment = HorizontalAlignment.Left,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			MaxWidth = 10000,
@@ -106,7 +106,6 @@ public class TabViewer : Grid
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
 			VerticalScrollBarVisibility = ScrollBarVisibility.Disabled,
 			BringIntoViewOnFocusChange = false, // Doesn't work well with Tab GridSplitters
-			Padding = new Thickness(0, 0, 0, 16),
 			MaxWidth = 5000,
 			MaxHeight = 4000,
 			Content = ContentGrid,
@@ -382,7 +381,6 @@ public class TabViewer : Grid
 		// Force the ScrollViewer to update it's ViewPort so we can set an offset past the old bounds
 		Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);
 
-		ScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
 		ScrollViewer.Offset = new Vector(minXOffset, ScrollViewer.Offset.Y);
 	}
 
