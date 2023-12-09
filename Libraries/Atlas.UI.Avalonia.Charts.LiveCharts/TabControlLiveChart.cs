@@ -18,6 +18,7 @@ using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Avalonia;
+using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using System.Diagnostics;
@@ -163,6 +164,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 	public void LoadView(ChartView chartView)
 	{
+		ClearSeries();
 		ChartView = chartView;
 		ReloadView();
 	}
@@ -806,12 +808,27 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	{
 		Legend?.Unload();
 
+		if (Chart != null)
+		{
+			if (Chart.CoreChart is CartesianChart<SkiaSharpDrawingContext> coreChart)
+			{
+				// Workaround for LiveCharts not always removing series from the UI
+				foreach (var series in ChartSeries)
+				{
+					if (series.LineSeries is LiveChartLineSeries lineSeries)
+					{
+						lineSeries.RemoveFromUI(coreChart); // Not sure whether to keep this in, it works without it
+						lineSeries.RemoveOldPaints(coreChart.View); // Sometimes required
+					}
+				}
+			}
+			Chart.Series = new List<ISeries>();
+		}
+
 		ChartSeries.Clear();
 		LiveChartSeries.Clear();
 		IdxListToListSeries.Clear();
 		IdxNameToChartSeries.Clear();
-
-		//Chart?.Series.Clear();
 	}
 
 	private void ClearListeners()
