@@ -145,10 +145,10 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 		if (name == null) return;
 
 		// Clear all first before setting to avoid event race conditions
-		foreach (TabChartLegendItem<TSeries> item in LegendItems)
+		/*foreach (TabChartLegendItem<TSeries> item in LegendItems)
 		{
 			item.Highlight = false;
-		}
+		}*/
 
 		if (_idxLegendItems.TryGetValue(name, out TabChartLegendItem<TSeries>? legendItem))
 		{

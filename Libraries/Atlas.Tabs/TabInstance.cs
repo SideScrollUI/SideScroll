@@ -493,6 +493,15 @@ public class TabInstance : IDisposable
 		IsLoaded = true;
 	}
 
+	public void ReloadModel()
+	{
+		if (OnModelChanged != null)
+		{
+			var onModelChanged = OnModelChanged; // create temporary copy since this gets delayed
+			UiContext.Send(_ => onModelChanged(this, EventArgs.Empty), null);
+		}
+	}
+
 	// calls Load and then Refresh
 	public void Reload(bool reloadBookmark = false)
 	{

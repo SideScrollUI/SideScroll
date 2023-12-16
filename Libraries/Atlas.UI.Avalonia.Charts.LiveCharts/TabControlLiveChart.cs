@@ -73,7 +73,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	private LvcPointD? _startDataPoint;
 	private LvcPointD? _endDataPoint;
 
-	public int MaxFindDistance = 25;
+	public int MaxFindDistance = 20;
 
 	public TabControlLiveChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false) : 
 		base(tabInstance, chartView, fillHeight)
@@ -409,8 +409,8 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		if (ChartView.TimeWindow == null && minimum != double.MaxValue)
 		{
-			var startTime = new DateTime((long)minimum);
-			var endTime = new DateTime((long)maximum);
+			var startTime = new DateTime((long)minimum, DateTimeKind.Utc);
+			var endTime = new DateTime((long)maximum, DateTimeKind.Utc);
 
 			ChartView.TimeWindow = new TimeWindow(startTime, endTime).Trim();
 		}
@@ -439,7 +439,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		var dateFormat = DateTimeFormat.GetWindowFormat(windowDuration)!;
 		TimeSpan stepDuration = windowDuration.PeriodDuration(8).Max(dateFormat.Minimum);
 
-		XAxis.Labeler = value => new DateTime((long)value).ToString(dateFormat.TextFormat);
+		XAxis.Labeler = value => new DateTime((long)value, DateTimeKind.Utc).ToString(dateFormat.TextFormat);
 		XAxis.UnitWidth = stepDuration.Ticks; // Hover depends on this
 		XAxis.MinStep = stepDuration.Ticks;
 	}
@@ -615,8 +615,8 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		XAxis.MinLimit = Math.Max(left, XAxis.MinLimit!.Value);
 		XAxis.MaxLimit = Math.Min(right, XAxis.MaxLimit!.Value);
 
-		var startTime = new DateTime((long)XAxis.MinLimit!.Value);
-		var endTime = new DateTime((long)XAxis.MaxLimit.Value);
+		var startTime = new DateTime((long)XAxis.MinLimit!.Value, DateTimeKind.Utc);
+		var endTime = new DateTime((long)XAxis.MaxLimit.Value, DateTimeKind.Utc);
 		var timeWindow = new TimeWindow(startTime, endTime).Trim();
 
 		UpdateDateTimeAxisWindow(timeWindow);
@@ -807,23 +807,6 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	private void ClearSeries()
 	{
 		Legend?.Unload();
-
-		if (Chart != null)
-		{
-			if (Chart.CoreChart is CartesianChart<SkiaSharpDrawingContext> coreChart)
-			{
-				// Workaround for LiveCharts not always removing series from the UI
-				foreach (var series in ChartSeries)
-				{
-					if (series.LineSeries is LiveChartLineSeries lineSeries)
-					{
-						lineSeries.RemoveFromUI(coreChart); // Not sure whether to keep this in, it works without it
-						lineSeries.RemoveOldPaints(coreChart.View); // Sometimes required
-					}
-				}
-			}
-			Chart.Series = new List<ISeries>();
-		}
 
 		ChartSeries.Clear();
 		LiveChartSeries.Clear();

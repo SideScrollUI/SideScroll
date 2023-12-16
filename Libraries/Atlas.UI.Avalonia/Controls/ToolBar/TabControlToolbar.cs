@@ -147,7 +147,7 @@ public class TabControlToolbar : Grid, IDisposable
 	}
 
 	// Read Only
-	public TextBox AddLabelText(string text)
+	public TextBox AddLabelText(string text, bool fill = false)
 	{
 		var textBox = new TextBox()
 		{
@@ -167,7 +167,7 @@ public class TabControlToolbar : Grid, IDisposable
 		textBox.Resources.Add("TextControlBackgroundFocused", textBox.Background);
 		textBox.Resources.Add("TextBackgroundDisabledBrush", textBox.Background);
 
-		AddControl(textBox);
+		AddControl(textBox, fill);
 		return textBox;
 	}
 

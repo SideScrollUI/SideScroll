@@ -19,6 +19,7 @@ public class TabLiveChartLegendItem : TabChartLegendItem<ISeries>
 		if (ChartSeries.LineSeries is LiveChartLineSeries lineSeries)
 		{
 			var skColor = color.AsSkColor();
+			if (lineSeries.Stroke is SolidColorPaint paint && paint.Color == skColor) return;
 
 			lineSeries.Stroke = new SolidColorPaint(skColor) { StrokeThickness = 2 };
 			/*if (lineSeries.GeometryStroke != null)
@@ -29,6 +30,13 @@ public class TabLiveChartLegendItem : TabChartLegendItem<ISeries>
 			{
 				lineSeries.GeometryFill = new SolidColorPaint(skColor);
 			}
+
+			var chart = (CartesianChart<SkiaSharpDrawingContext>)LiveChartLegend.Chart.CoreChart;
+
+			lock (LiveChartLegend.Chart.CoreCanvas.Sync)
+			{
+				lineSeries.RemoveOldPaints(chart.View);
+			}
 		}
 	}
 
@@ -38,16 +46,6 @@ public class TabLiveChartLegendItem : TabChartLegendItem<ISeries>
 		if (isVisible != ChartSeries.LineSeries.IsVisible)
 		{
 			ChartSeries.LineSeries.IsVisible = isVisible;
-			if (!isVisible)
-			{
-				if (ChartSeries.LineSeries is LiveChartLineSeries lineSeries)
-				{
-					// Workaround for LiveCharts not always removing invisible series from the UI
-					var chart = (CartesianChart<SkiaSharpDrawingContext>)LiveChartLegend.Chart.CoreChart;
-					lineSeries.RemoveFromUI(chart); // Not sure whether to keep this in, it works without it
-					lineSeries.RemoveOldPaints(chart.View); // Sometimes required
-				}
-			}
 		}
 	}
 }

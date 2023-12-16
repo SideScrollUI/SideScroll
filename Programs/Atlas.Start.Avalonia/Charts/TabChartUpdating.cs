@@ -24,6 +24,7 @@ public class TabChartUpdating : ITab
 			model.Actions = new List<TaskCreator>()
 			{
 				new TaskDelegate("Update", Update),
+				new TaskDelegateAsync("Update every second", UpdateEverySecondAsync),
 			};
 
 			ChartView chartView = CreateView();
@@ -53,6 +54,16 @@ public class TabChartUpdating : ITab
 			}
 
 			return chartView;
+		}
+
+		private async Task UpdateEverySecondAsync(Call call)
+		{
+			CancellationToken token = call.TaskInstance!.TokenSource.Token;
+			for (int i = 0; i < 20 && !token.IsCancellationRequested; i++)
+			{
+				Invoke(call, () => Update(call));
+				await Task.Delay(1000);
+			}
 		}
 	}
 }
