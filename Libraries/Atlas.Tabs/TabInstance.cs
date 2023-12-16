@@ -749,14 +749,15 @@ public class TabInstance : IDisposable
 	}
 
 	// replace with DataShared? Split call up?
-	public void SaveData(string key, object obj)
+	// Use interface T types instead of actual object type if present
+	public void SaveData<T>(string key, T obj)
 	{
-		DataApp.Save(key, obj, TaskInstance.Call);
+		DataApp.Save<T>(key, obj, TaskInstance.Call);
 	}
 
-	public void SaveData(string groupId, string key, object obj)
+	public void SaveData<T>(string groupId, string key, T obj)
 	{
-		DataApp.Save(groupId, key, obj, TaskInstance.Call);
+		DataApp.Save<T>(groupId, key, obj, TaskInstance.Call);
 	}
 
 	// todo: Should createIfNeeded = false?
@@ -796,11 +797,9 @@ public class TabInstance : IDisposable
 		}
 		else
 		{
-			TabViewSettings? tabViewSettings = DataTemp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call);
-			if (tabViewSettings != null)
-				return tabViewSettings;
-
-			tabViewSettings = DataTemp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
+			TabViewSettings? tabViewSettings =
+				DataTemp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call) ??
+				DataTemp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
 			if (tabViewSettings != null)
 				return tabViewSettings;
 		}

@@ -1,8 +1,10 @@
 using Avalonia.Media.Imaging;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace Atlas.UI.Avalonia.ScreenCapture;
 
+[SupportedOSPlatform("windows")]
 public static class Win32ClipboardUtils
 {
 	private const int SRCCOPY = 0x00CC0020;
