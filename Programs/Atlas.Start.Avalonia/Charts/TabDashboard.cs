@@ -27,7 +27,9 @@ public class TabDashboard : ITab
 				ColumnDefinitions = new("*, *"),
 			};
 
-			DateTime dateTime = DateTime.Now;
+			DateTime endTime = DateTime.Now;
+
+			var timeWindow = new TimeWindow(endTime.AddHours(-SampleCount), endTime);
 
 			for (int row = 0; row < RowCount; row++)
 			{
@@ -37,11 +39,12 @@ public class TabDashboard : ITab
 					var chartView = new ChartView("Animals")
 					{
 						ShowTimeTracker = true,
+						TimeWindow = timeWindow,
 					};
 
 					for (int i = 0; i < _random.Next(1, 10); i++)
 					{
-						var series = ChartSamples.CreateTimeSeries(dateTime, SampleCount);
+						var series = ChartSamples.CreateTimeSeries(endTime, SampleCount);
 
 						chartView.AddSeries($"Series {i}", series, seriesType: SeriesType.Average);
 

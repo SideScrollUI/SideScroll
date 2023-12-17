@@ -8,7 +8,7 @@ Atlas is an AvaloniaUI library for exploring multiple paths of a tree at once
 * Create Bookmarks to share links between users
 * Data Repos let you specify attributes for saving & loading data and links locally
 
-![Atlas UI](/Images/Screenshots/Sample_Chart_CustomControl.png)
+![Atlas UI](/Images/Screenshots/ColumnTypes_CustomControl_Charts.png)
 
 * [Demo Project - Video Game Database](https://github.com/garyhertel/VideoGamesDB)
 * [Setup](Docs/Setup.md)

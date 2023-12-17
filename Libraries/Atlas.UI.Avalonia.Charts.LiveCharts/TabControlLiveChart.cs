@@ -286,9 +286,12 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			UpdateYAxis();
 		}
 
-		if (UseDateTimeAxis && ChartView.ShowTimeTracker)
+		if (UseDateTimeAxis)
 		{
-			_sections.Add(CreateTrackerLine());
+			if (ChartView.ShowTimeTracker)
+			{
+				_sections.Add(CreateTrackerLine());
+			}
 
 			var skColor = AtlasTheme.ChartBackgroundSelected.Color.AsSkColor();
 			_zoomSection = new RectangularSection
@@ -578,7 +581,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		return (minimum, maximum, hasFraction);
 	}
 
-	private ChartPoint? FindClosestPoint(LvcPoint pointerPosition, double maxDistance)
+	public ChartPoint? FindClosestPoint(LvcPoint pointerPosition, double maxDistance)
 	{
 		return LiveChartSeries
 			.Where(series => series.LineSeries.IsVisible)
@@ -587,6 +590,15 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			.Where(x => x.distance < maxDistance)
 			.MinBy(x => x.distance)
 			?.point;
+	}
+
+	public void SelectPoint(ChartPoint chartPoint)
+	{
+		if (IdxNameToChartSeries.TryGetValue(chartPoint.Context.Series.Name!, out var series))
+		{
+			OnSelectionChanged(new SeriesSelectedEventArgs(new List<ListSeries>() { series.ListSeries }));
+			Legend.SelectSeries(series.LineSeries, series.ListSeries);
+		}
 	}
 
 	private void UpdateZoomSection(LvcPointD endDataPoint)
@@ -723,13 +735,6 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	private void Chart_ChartPointPointerDown(IChartView chart, ChartPoint? point)
 	{
 		_pointClicked = point;
-		if (point == null) return;
-
-		if (IdxNameToChartSeries.TryGetValue(point!.Context.Series.Name!, out var series))
-		{
-			OnSelectionChanged(new SeriesSelectedEventArgs(new List<ListSeries>() { series.ListSeries }));
-			Legend.SelectSeries(series.LineSeries, series.ListSeries);
-		}
 	}
 
 	private void TabControlLiveChart_PointerPressed(object? sender, PointerPressedEventArgs e)
@@ -752,12 +757,6 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 	private void TabControlLiveChart_PointerReleased(object? sender, PointerReleasedEventArgs e)
 	{
-		if (_pointClicked != null)
-		{
-			StopSelecting();
-			return;
-		}
-
 		if (_selecting && _startDataPoint != null)
 		{
 			var point = e.GetPosition(Chart);
@@ -766,6 +765,10 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			if (width > MinSelectionWidth)
 			{
 				ZoomIn();
+			}
+			else if (_pointClicked != null)
+			{
+				SelectPoint(_pointClicked);
 			}
 			else if (ChartView.TimeWindow?.Selection != null)
 			{
