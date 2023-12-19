@@ -144,17 +144,23 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 	{
 		if (name == null) return;
 
-		// Clear all first before setting to avoid event race conditions
-		/*foreach (TabChartLegendItem<TSeries> item in LegendItems)
-		{
-			item.Highlight = false;
-		}*/
-
 		if (_idxLegendItems.TryGetValue(name, out TabChartLegendItem<TSeries>? legendItem))
 		{
+			// Clear all first before setting to avoid event race conditions
 			foreach (TabChartLegendItem<TSeries> item in LegendItems)
 			{
-				item.Highlight = legendItem == item;
+				if (legendItem != item)
+				{
+					item.Highlight = false;
+				}
+			}
+
+			foreach (TabChartLegendItem<TSeries> item in LegendItems)
+			{
+				if (legendItem == item)
+				{
+					item.Highlight = true;
+				}
 			}
 		}
 		UpdateVisibleSeries();
