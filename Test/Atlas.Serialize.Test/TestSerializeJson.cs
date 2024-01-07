@@ -13,6 +13,6 @@ public class TestSerializeJson
 		serializerFile.Save(Call, input);
 		Parent output = serializerFile.Load<Parent>(Call, true);
 
-		Assert.AreEqual(output.child.uintTest, input.child.uintTest);
+		Assert.AreEqual(input.child.uintTest, output.child.uintTest);
 	}*/
 }

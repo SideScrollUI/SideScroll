@@ -145,9 +145,9 @@ public class TestClone : TestSerializeBase
 		};
 		var output = _serializer.Clone(Log, input)!;
 
-		Assert.AreEqual(output.UintTest, input.UintTest);
-		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
-		Assert.AreEqual(output.StringTest, input.StringTest);
+		Assert.AreEqual(input.UintTest, output.UintTest);
+		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
+		Assert.AreEqual(input.StringTest, output.StringTest);
 	}
 
 	[Test, Description("Clone Primitives")]
@@ -161,9 +161,9 @@ public class TestClone : TestSerializeBase
 		};
 		var output = _serializer.Clone(Log, input)!;
 
-		Assert.AreEqual(output.UintTest, input.UintTest);
-		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
-		Assert.AreEqual(output.StringTest, input.StringTest);
+		Assert.AreEqual(input.UintTest, output.UintTest);
+		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
+		Assert.AreEqual(input.StringTest, output.StringTest);
 	}
 
 	public struct StructTest
@@ -217,7 +217,7 @@ public class TestClone : TestSerializeBase
 
 		int? output = _serializer.Clone(Log, input);
 
-		Assert.AreEqual(output, input);
+		Assert.AreEqual(input, output);
 	}
 
 	[Test, Description("Clone Nullable Primitive Properties")]
@@ -230,8 +230,8 @@ public class TestClone : TestSerializeBase
 		};
 		var output = _serializer.Clone(Log, input)!;
 
-		Assert.AreEqual(output.UintTest, input.UintTest);
-		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
+		Assert.AreEqual(input.UintTest, output.UintTest);
+		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
 	}
 
 	[Test, Description("Clone Nullable Primitive")]
@@ -241,7 +241,7 @@ public class TestClone : TestSerializeBase
 
 		int? output = _serializer.Clone(Log, input);
 
-		Assert.AreEqual(output, input);
+		Assert.AreEqual(input, output);
 	}
 
 	[Test, Description("Clone Nullable Primitives")]
@@ -254,8 +254,8 @@ public class TestClone : TestSerializeBase
 		};
 		var output = _serializer.Clone(Log, input)!;
 
-		Assert.AreEqual(output.UintTest, input.UintTest);
-		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
+		Assert.AreEqual(input.UintTest, output.UintTest);
+		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
 	}
 
 	[Test, Description("Clone int")]
@@ -278,7 +278,7 @@ public class TestClone : TestSerializeBase
 
 		var output = _serializer.Clone(Log, input)!;
 
-		Assert.AreEqual(output.TestEnum, input.TestEnum);
+		Assert.AreEqual(input.TestEnum, output.TestEnum);
 	}
 
 	[Test, Description("Clone Type")]
@@ -377,8 +377,8 @@ public class TestClone : TestSerializeBase
 
 		var output = _serializer.Clone(Log, input);
 
-		Assert.AreEqual(output!.NonSerialized, 1);
-		Assert.AreEqual(output.Serialized, 10);
+		Assert.AreEqual(1, output!.NonSerialized);
+		Assert.AreEqual(10, output.Serialized);
 	}
 
 	public class NullablePrimitiveProperties
@@ -462,7 +462,7 @@ public class TestClone : TestSerializeBase
 
 		var output = _serializer.Clone(Log, input)!;
 
-		Assert.AreEqual(output.SubClass.A, input.SubClass.A);
+		Assert.AreEqual(input.SubClass.A, output.SubClass.A);
 	}
 
 	[Test, Description("Clone List Containing Subclass of Type")]
@@ -474,7 +474,7 @@ public class TestClone : TestSerializeBase
 		};
 		var output = _serializer.Clone(Log, input)!;
 
-		Assert.AreEqual(output[0].A, 5);
+		Assert.AreEqual(5, output[0].A);
 		//Assert.AreEqual(input, output); // only works on primitives
 	}
 
@@ -492,7 +492,7 @@ public class TestClone : TestSerializeBase
 
 		var output = _serializer!.Clone(Log, input);
 
-		Assert.AreEqual(s.B, 3);
+		Assert.AreEqual(3, s.B);
 	}
 
 	public class Base

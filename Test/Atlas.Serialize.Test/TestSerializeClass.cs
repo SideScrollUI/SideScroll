@@ -40,9 +40,9 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Fields>(Call);
 
-		Assert.AreEqual(output.UintTest, input.UintTest);
-		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
-		Assert.AreEqual(output.StringTest, input.StringTest);
+		Assert.AreEqual(input.UintTest, output.UintTest);
+		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
+		Assert.AreEqual(input.StringTest, output.StringTest);
 	}
 
 	public class Properties
@@ -66,9 +66,9 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Properties>(Call);
 
-		Assert.AreEqual(output.UintTest, input.UintTest);
-		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
-		Assert.AreEqual(output.StringTest, input.StringTest);
+		Assert.AreEqual(input.UintTest, output.UintTest);
+		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
+		Assert.AreEqual(input.StringTest, output.StringTest);
 	}
 
 	public class NullablePropertyPrimitives
@@ -95,8 +95,8 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<NullableFieldPrimitives>(Call);
 
-		Assert.AreEqual(output.UintTest, input.UintTest);
-		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
+		Assert.AreEqual(input.UintTest, output.UintTest);
+		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
 	}
 
 	[Test, Description("Serialize Nullable Properties Primitive")]
@@ -111,8 +111,8 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<NullablePropertyPrimitives>(Call);
 
-		Assert.AreEqual(output.UintTest, input.UintTest);
-		Assert.AreEqual(output.DoubleTest, input.DoubleTest);
+		Assert.AreEqual(input.UintTest, output.UintTest);
+		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
 	}
 
 	public class FieldInterfaceList
@@ -131,7 +131,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<FieldInterfaceList>(Call);
 
-		Assert.AreEqual(output.List, input.List);
+		Assert.AreEqual(input.List, output.List);
 	}
 
 	public class BaseClass
@@ -159,7 +159,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<DerivedClassReference>(Call);
 
-		Assert.AreEqual(output.BaseClass!.A, input.BaseClass.A);
+		Assert.AreEqual(input.BaseClass!.A, output.BaseClass.A);
 	}
 
 	public class Circular
@@ -232,7 +232,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<SubClassContainer>(Call);
 
-		Assert.AreEqual(output.SubClass.A, input.SubClass.A);
+		Assert.AreEqual(input.SubClass.A, output.SubClass.A);
 	}
 
 	[Test, Description("Serialize List Containing Subclass of Type")]
@@ -245,7 +245,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<List<Base>>(Call);
 
-		Assert.AreEqual(output[0].A, 5);
+		Assert.AreEqual(5, output[0].A);
 		//Assert.AreEqual(input, output); // only works on primitives
 	}
 

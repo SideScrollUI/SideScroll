@@ -28,7 +28,7 @@ public class TestItemCollection : TestSerializeBase
 		_serializer.Save(Call, input);
 		TestBindingList output = _serializer.Load<TestBindingList>(Call);
 
-		//Assert.AreEqual(output.uintTest, input.uintTest);
+		//Assert.AreEqual(input.uintTest, output.uintTest);
 	}
 
 	public class ReferencedClass

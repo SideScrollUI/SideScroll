@@ -58,7 +58,7 @@ public class SerializeClassConstructor : TestSerializeBase
 		_serializer!.Save(Call, input);
 		var output = _serializer.Load<NoConstructorBaseClass>(Call);
 
-		Assert.AreEqual(output.B, input.B);
+		Assert.AreEqual(input.B, output.B);
 	}
 
 	[Test, Description("Serialize No Default Constructor Base Class Reference")]
@@ -72,7 +72,7 @@ public class SerializeClassConstructor : TestSerializeBase
 		_serializer!.Save(Call, input);
 		var output = _serializer.Load<DerivedClassWithConstructorReference>(Call);
 
-		Assert.AreEqual(output.BaseClass!.B, input.BaseClass.B);
+		Assert.AreEqual(input.BaseClass!.B, output.BaseClass.B);
 	}
 
 	public record CustomConstructorFieldClass
@@ -103,7 +103,7 @@ public class SerializeClassConstructor : TestSerializeBase
 		_serializer!.Save(Call, input);
 		var output = _serializer.Load<CustomConstructorFieldClass>(Call);
 
-		Assert.AreEqual(output.A, input.A);
+		Assert.AreEqual(input.A, output.A);
 	}
 
 	[Test, Description("Serialize Custom Constructor Property Class")]
@@ -114,7 +114,7 @@ public class SerializeClassConstructor : TestSerializeBase
 		_serializer!.Save(Call, input);
 		var output = _serializer.Load<CustomConstructorPropertyClass>(Call);
 
-		Assert.AreEqual(output.A, input.A);
+		Assert.AreEqual(input.A, output.A);
 	}
 
 	[Test, Description("Serialize Custom Constructor List Field Class")]
@@ -126,6 +126,6 @@ public class SerializeClassConstructor : TestSerializeBase
 		_serializer!.Save(Call, input);
 		var output = _serializer.Load<List<CustomConstructorFieldClass>>(Call);
 
-		Assert.AreEqual(output, input);
+		Assert.AreEqual(input, output);
 	}
 }

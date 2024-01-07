@@ -35,7 +35,7 @@ public class TestSerializeLazy : TestSerializeBase
 		_serializerFile!.Save(Call, input);
 		Parent output = _serializerFile.Load<Parent>(Call, true)!;
 
-		Assert.AreEqual(output.Child!.UintTest, input.Child.UintTest);
+		Assert.AreEqual(input.Child!.UintTest, output.Child.UintTest);
 	}
 
 	[Test, Description("Serialize Lazy Null Properties")]
@@ -46,7 +46,7 @@ public class TestSerializeLazy : TestSerializeBase
 		_serializerFile!.Save(Call, input);
 		Parent output = _serializerFile.Load<Parent>(Call, true)!;
 
-		Assert.AreEqual(output.Child, input.Child);
+		Assert.AreEqual(input.Child, output.Child);
 	}
 
 	[Test, Description("Serialize Lazy Write Then Read")]
@@ -59,7 +59,7 @@ public class TestSerializeLazy : TestSerializeBase
 		output.StringTest = "abc";
 		string temp = output.StringTest;
 
-		Assert.AreEqual(output.StringTest, "abc");
+		Assert.AreEqual("abc", output.StringTest);
 	}
 
 	[Test, Description("Serialize Lazy Constructor")]

@@ -39,8 +39,8 @@ public class TestSerializeSecurity : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<NonSerializedTest>(Call);
 
-		Assert.AreEqual(output.NonSerialized, 1);
-		Assert.AreEqual(output.Serialized, 10);
+		Assert.AreEqual(1, output.NonSerialized);
+		Assert.AreEqual(10, output.Serialized);
 	}
 
 	[Unserialized]

@@ -102,7 +102,7 @@ public class TestSerializePermissions : TestSerializeBase
 
 		Assert.IsNotNull(output.PublicField);
 		Assert.IsNotNull(output.PublicProperty);
-		Assert.AreEqual(output.NonSecure, "test");
+		Assert.AreEqual("test", output.NonSecure);
 	}
 
 	public class PublicContainer
