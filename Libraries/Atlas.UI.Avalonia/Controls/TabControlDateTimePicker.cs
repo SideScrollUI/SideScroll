@@ -128,8 +128,7 @@ public class TabDateTimePicker : Grid
 		string? clipboardText = ClipboardUtils.GetText(this);
 		if (clipboardText == null) return;
 
-		TimeSpan? timeSpan = DateTimeUtils.ConvertTextToTimeSpan(clipboardText);
-		if (timeSpan != null)
+		if (DateTimeUtils.TryParseTimeSpan(clipboardText, out TimeSpan timeSpan))
 		{
 			DateTime? newDateTime = _dateTimeConverter.Convert(timeSpan, typeof(string), null, CultureInfo.InvariantCulture) as DateTime?;
 			Property.PropertyInfo.SetValue(Property.Object, newDateTime);
@@ -138,8 +137,7 @@ public class TabDateTimePicker : Grid
 		}
 		else
 		{
-			DateTime? dateTime = DateTimeUtils.ConvertTextToDateTime(clipboardText);
-			if (dateTime != null)
+			if (DateTimeUtils.TryParseDateTime(clipboardText, out DateTime dateTime))
 			{
 				Property.PropertyInfo.SetValue(Property.Object, dateTime);
 				_datePicker.SelectedDate = dateTime;

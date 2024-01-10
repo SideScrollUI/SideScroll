@@ -82,8 +82,7 @@ public class DateTimeValueConverter : IValueConverter
 	{
 		// Debug.WriteLine($"SetTime {timeText}");
 
-		TimeSpan? timeSpan = DateTimeUtils.ConvertTextToTimeSpan(timeText);
-		if (timeSpan == null)
+		if (!DateTimeUtils.TryParseTimeSpan(timeText, out TimeSpan timeSpan))
 		{
 			// This doesn't always clear correctly after fixing a validation if the DateTime matches the previous valid value
 			// So don't show an error message for now to make it a little less confusing
@@ -95,7 +94,7 @@ public class DateTimeValueConverter : IValueConverter
 			dateTime = DateTime.UtcNow.Date;
 		}
 
-		PreviousDateTime = dateTime.Date.AddSeconds(timeSpan.Value.TotalSeconds);
+		PreviousDateTime = dateTime.Date.AddSeconds(timeSpan.TotalSeconds);
 		return PreviousDateTime;
 	}
 }
