@@ -7,7 +7,6 @@
     <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
     <StyleInclude Source="avares://Atlas.UI.Avalonia/Themes/Fluent/Accents/FluentBaseLight.xaml"/>
-    <StyleInclude Source="avares://OxyPlot.Avalonia/Themes/Default.axaml"/>
     <StyleInclude Source="avares://Atlas.UI.Avalonia/Themes/Fluent/FluentTheme.xaml"/>
   </Application.Styles>
 </Application>

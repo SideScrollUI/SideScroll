@@ -1,7 +1,6 @@
 using Atlas.Core;
 using Avalonia;
 using Avalonia.Data.Core.Plugins;
-using OxyPlot.Avalonia;
 
 namespace Atlas.Start.Avalonia;
 
@@ -9,7 +8,6 @@ static class Program
 {
 	static int Main(string[] args)
 	{
-		OxyPlotModule.EnsureLoaded();
 		AppBuilder builder = BuildAvaloniaApp();
 
 		// Remove Default DataAnnotations Validators
