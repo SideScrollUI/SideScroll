@@ -878,7 +878,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			//Update();
 			int index = ListToTabIndex[(IList)sender];
 			ListSeries listSeries = ListToTabSeries[(IList)sender];
-			AddPoints((OxyPlot.Series.LineSeries)plotModel.Series[index], listSeries, e.NewItems);
+			AddPoints((LineSeries)plotModel.Series[index], listSeries, e.NewItems);
 		}
 
 		InvalidateChart();
