@@ -33,7 +33,7 @@ public class TabViewer : Grid
 	public int KeyboardScrollWidth = 500;
 
 	public static TabViewer? BaseViewer;
-	public static string? LoadBookmarkUri { get; set; }
+	public static string? LoadLinkUri { get; set; }
 	public static Bookmark? LoadBookmark { get; set; }
 
 	public Project Project { get; set; }
@@ -392,11 +392,11 @@ public class TabViewer : Grid
 		tabInstance.iTab = tab;
 		tabInstance.Project = Project;
 
-		if (LoadBookmarkUri != null)
+		if (LoadLinkUri != null)
 		{
 			// Wait until Bookmarks tab has been created
-			Dispatcher.UIThread.Post(() => ImportBookmark(new Call(), LoadBookmarkUri, false), DispatcherPriority.SystemIdle);
-			//Dispatcher.UIThread.InvokeAsync(() => ImportBookmarkAsync(new Call(), LoadBookmarkUri, false), DispatcherPriority.SystemIdle).GetAwaiter().GetResult();
+			Dispatcher.UIThread.Post(() => ImportBookmark(new Call(), LoadLinkUri, false), DispatcherPriority.SystemIdle);
+			//Dispatcher.UIThread.InvokeAsync(() => ImportBookmarkAsync(new Call(), LoadLinkUri, false), DispatcherPriority.SystemIdle).GetAwaiter().GetResult();
 		}
 		else if (LoadBookmark != null)
 		{
