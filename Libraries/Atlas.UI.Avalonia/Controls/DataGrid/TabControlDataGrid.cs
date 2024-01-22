@@ -358,9 +358,10 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 	private void DispatcherTimer_Tick(object? sender, EventArgs e)
 	{
 		object? selectItem = _autoSelectItem;
+		NotifyCollectionChangedAction? autoSelectAction = _autoSelectAction;
 		if (selectItem == null) return;
 		
-		Dispatcher.UIThread.Post(() => SetSelectedItem(selectItem, _autoSelectAction), DispatcherPriority.Background);
+		Dispatcher.UIThread.Post(() => SetSelectedItem(selectItem, autoSelectAction), DispatcherPriority.Background);
 		_autoSelectItem = null;
 		_autoSelectAction = null;
 	}
