@@ -1,4 +1,5 @@
 using Atlas.Extensions;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace Atlas.Core;
@@ -15,6 +16,11 @@ public class LinkUri
 	public string? Url { get; set; }
 
 	public override string ToString() => Url ?? ToUri();
+
+	public virtual bool IsValid() => 
+		!Prefix.IsNullOrEmpty() &&
+		!Type.IsNullOrEmpty() &&
+		!Path.IsNullOrEmpty();
 
 	public string ToUri()
 	{
@@ -35,14 +41,24 @@ public class LinkUri
 		return uri;
 	}
 
-	public static LinkUri? Parse(string url)
+	public static LinkUri Parse(string url)
 	{
+		if (TryParse(url, out LinkUri? linkUri)) return linkUri;
+		
+		throw new ArgumentException($"Invalid LinkUri {url}");
+	}
+
+	public static bool TryParse(string? url, [NotNullWhen(true)] out LinkUri? linkUri)
+	{
+		linkUri = null;
+		if (url == null) return false;
+
 		Regex regex = new(@"(?<prefix>[a-zA-Z]+)\:\/\/(?<type>[-0-9a-zA-Z]+)\/(v(?<version>[\d\.]+)\/)?(?<path>[^\?]+)(\?(?<query>.+))?");
 
 		Match match = regex.Match(url);
-		if (!match.Success) return null;
+		if (!match.Success) return false;
 
-		LinkUri uri = new()
+		linkUri = new LinkUri()
 		{
 			Url = url,
 			Prefix = match.Groups["prefix"].Value.ToLower(),
@@ -51,7 +67,26 @@ public class LinkUri
 			Path = match.Groups["path"].Value,
 			Query = match.Groups["query"].Value,
 		};
-		return uri;
+		return true;
+	}
+
+	public static bool TryParseBase64(string? url, [NotNullWhen(true)] out LinkUri? linkUri)
+	{
+		linkUri = null;
+		if (url == null) return false;
+
+		Regex regex = new(@"(?<prefix>[a-zA-Z]+)\:\/\/(?<path>.+)");
+
+		Match match = regex.Match(url);
+		if (!match.Success) return false;
+
+		linkUri = new LinkUri()
+		{
+			Url = url,
+			Prefix = match.Groups["prefix"].Value.ToLower(),
+			Path = match.Groups["path"].Value,
+		};
+		return true;
 	}
 
 	private static Version? ParseVersion(string? version)

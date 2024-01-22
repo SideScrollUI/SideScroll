@@ -40,6 +40,8 @@ public class TypeRepoPrimitive : TypeRepo
 			writer.Write(b); // 1 byte
 		else if (obj is char c)
 			writer.Write(c); // there's no ReadFloat() routine
+		else if (obj is byte bt)
+			writer.Write(bt);
 		else
 			Debug.Assert(true);
 	}
@@ -66,8 +68,10 @@ public class TypeRepoPrimitive : TypeRepo
 			obj = Reader!.ReadBoolean();
 		else if (Type == typeof(char))
 			obj = Reader!.ReadChar();
+		else if (Type == typeof(byte))
+			obj = Reader!.ReadByte();
 		else
-			throw new Exception("Unhandled primitive type");
+			throw new Exception($"Unhandled primitive type: {Type}");
 
 		return obj;
 	}

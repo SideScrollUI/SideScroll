@@ -9,24 +9,23 @@ public class TabIcons : ITab
 
 	public class Instance : TabInstance
 	{
-		public override void LoadUI(Call call, TabModel model)
+		public override void Load(Call call, TabModel model)
 		{
-			TabToolbar toolbar = new();
-
+			TabToolbar toolbarSvg = new();
 			foreach (var memberInfo in Icons.Svg.GetItems())
 			{
-				toolbar.Buttons.Add(new ToolButton(memberInfo.Key.Name, memberInfo.Value));
+				toolbarSvg.Buttons.Add(new ToolButton(memberInfo.Key.Name, memberInfo.Value));
 			}
+			model.AddObject(toolbarSvg);
 
+			TabToolbar toolbarPng = new();
 			foreach (var memberInfo in Icons.Png.GetItems())
 			{
-				if (memberInfo.Key.Name == "Logo")
-					continue;
+				if (memberInfo.Key.Name == "Logo") continue;
 
-				toolbar.Buttons.Add(new ToolButton(memberInfo.Key.Name, memberInfo.Value));
+				toolbarPng.Buttons.Add(new ToolButton(memberInfo.Key.Name, memberInfo.Value));
 			}
-
-			model.AddObject(toolbar);
+			model.AddObject(toolbarPng);
 		}
 	}
 }

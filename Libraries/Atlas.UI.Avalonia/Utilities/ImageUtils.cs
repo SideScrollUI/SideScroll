@@ -5,7 +5,7 @@ namespace Atlas.UI.Avalonia.Utilities;
 
 class ImageUtils
 {
-	public const int MaxImageSize = 10000;
+	public const int MaxImageSize = 10_000;
 
 	public static Bitmap LoadBitmap(byte[] bytes)
 	{

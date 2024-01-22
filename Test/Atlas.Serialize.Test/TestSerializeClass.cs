@@ -159,7 +159,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<DerivedClassReference>(Call);
 
-		Assert.AreEqual(input.BaseClass!.A, output.BaseClass.A);
+		Assert.AreEqual(input.BaseClass!.A, output.BaseClass?.A);
 	}
 
 	public class Circular

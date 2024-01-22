@@ -41,6 +41,17 @@ public class SerializeTypes : TestSerializeBase
 		Assert.AreEqual(input, output);
 	}
 
+	[Test, Description("Serialize byte")]
+	public void SerializeByte()
+	{
+		byte input = 1;
+
+		_serializer.Save(Call, input);
+		byte output = _serializer.Load<byte>(Call);
+
+		Assert.AreEqual(input, output);
+	}
+
 	[Test, Description("Serialize Enum")]
 	public void SerializeEnum()
 	{

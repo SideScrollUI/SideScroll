@@ -59,7 +59,7 @@ public class TabControlFormattedComboBox : ComboBox
 		get => base.Items; // todo: return original?
 		set
 		{
-			base.ItemsSource = _items = FormattedItem.Create(value);
+			ItemsSource = _items = FormattedItem.Create(value);
 
 			SelectPropertyValue();
 		}
@@ -77,7 +77,7 @@ public class TabControlFormattedComboBox : ComboBox
 	{
 		set
 		{
-			if (value is FormattedItem item && item.Object?.ToString() != Property.Value!.ToString())
+			if (value is FormattedItem item && item.Object?.ToString() != Property.Value?.ToString())
 				Property.Value = item.Object;
 		}
 		get => GetFormattedItem(Property.Value);
@@ -117,11 +117,8 @@ public class FormattedItem
 
 	public static List<FormattedItem> Create(IEnumerable items)
 	{
-		var formattedItems = new List<FormattedItem>();
-		foreach (object obj in items)
-		{
-			formattedItems.Add(new FormattedItem(obj));
-		}
-		return formattedItems;
+		return items.Cast<object>()
+			.Select(obj => new FormattedItem(obj))
+			.ToList();
 	}
 }

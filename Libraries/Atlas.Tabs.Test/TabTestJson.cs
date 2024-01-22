@@ -12,10 +12,10 @@ public class TabTestJson : ITab
   {
     ""list"":
     [
-	  {""type"": ""Cat"", ""Age"": 3},
-	  {""type"": ""Dog"", ""Age"": 5},
-  	  {""type"": ""Frog"", ""Age"": 7},
-	  {""type"": ""Turtle"", ""Age"": 11}
+	  {""type"": ""Cat"", ""Age"": 3, ""Indoor"": true},
+	  {""type"": ""Dog"", ""Age"": 5, ""Indoor"": true},
+  	  {""type"": ""Frog"", ""Age"": 7, ""Indoor"": false},
+	  {""type"": ""Turtle"", ""Age"": null, ""Indoor"": true}
     ]
   }
 }";
