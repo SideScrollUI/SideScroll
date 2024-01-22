@@ -111,12 +111,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Theme\Controls\FluentTheme.xaml.cs">
-      <DependentUpon>FluentTheme.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Themes\Default\DefaultTheme.xaml.cs">
-      <DependentUpon>%(Filename)</DependentUpon>
-    </Compile>
     <Compile Update="Tabs\TabAvalonEdit.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>TabAvalonEdit.xaml</DependentUpon>
