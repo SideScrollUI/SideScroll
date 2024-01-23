@@ -9,11 +9,12 @@ public static class Icons
 
 	public static Assembly Assembly => Assembly.GetExecutingAssembly();
 
-	public static ResourceView Logo => new ResourceView(Assembly, IconPath, "Logo", "Logo3", "ico");
+	public static ResourceView Logo => new(Assembly, IconPath, "Logo", "Logo3", "ico");
 
 	public class Svg : NamedItemCollection<Svg, ResourceView>
 	{
-		public static ResourceView Pin => Get("Placeholder");
+		public static ResourceView Refresh => Get("Refresh");
+
 		public static ResourceView Add => Get("Add");
 		public static ResourceView Delete => Get("Cancel");
 
@@ -24,6 +25,9 @@ public static class Icons
 		public static ResourceView RightArrow => Get("RightArrow");
 		public static ResourceView UpArrow => Get("UpArrow");
 		public static ResourceView DownArrow => Get("DownArrow");
+
+		public static ResourceView Undo => Get("Undo");
+		public static ResourceView Redo => Get("Redo");
 
 		public static ResourceView Search => Get("Search");
 
@@ -42,7 +46,8 @@ public static class Icons
 		public static ResourceView PadNote => Get("PadNote");
 		public static ResourceView Eraser => Get("Eraser");
 
-		public static ResourceView Refresh => Get("Refresh");
+		public static ResourceView Pin => Get("Placeholder");
+
 		public static ResourceView Stats => Get("Stats");
 
 		public static ResourceView List1 => Get("List1");
@@ -53,7 +58,7 @@ public static class Icons
 		public static ResourceView Import => Get("Import");
 		public static ResourceView Screenshot => Get("Screenshot");
 
-		public static ResourceView Get(string resourceName) => new ResourceView(Assembly, IconPath, "svg", resourceName, "svg");
+		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "svg", resourceName, "svg");
 	}
 
 	public class Png : NamedItemCollection<Png, ResourceView>
@@ -71,6 +76,6 @@ public static class Icons
 
 		public static ResourceView Bookmark => Get("bookmark");
 
-		public static ResourceView Get(string resourceName) => new ResourceView(Assembly, IconPath, "png", resourceName, "png");
+		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "png", resourceName, "png");
 	}
 }

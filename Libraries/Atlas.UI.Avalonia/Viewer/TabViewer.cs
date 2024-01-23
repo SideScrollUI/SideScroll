@@ -125,7 +125,7 @@ public class TabViewer : Grid
 
 		Toolbar = new TabViewerToolbar(this);
 		Toolbar.ButtonLink?.AddAsync(LinkAsync);
-		Toolbar.ButtonImport?.AddAsync(ImportClipboardBookmarkAsync);
+		Toolbar.ButtonImport?.AddAsync(ImportClipboardLinkAsync);
 		Children.Add(Toolbar);
 	}
 
@@ -182,15 +182,18 @@ public class TabViewer : Grid
 		}
 	}
 
-	private async Task ImportClipboardBookmarkAsync(Call call)
+	private async Task ImportClipboardLinkAsync(Call call)
 	{
 		string? clipboardText = await ClipboardUtils.GetTextAsync(this);
 		if (clipboardText == null) return;
 
-		await ImportBookmarkAsync(call, clipboardText, true);
+		if (LinkUri.TryParse(clipboardText, out LinkUri? linkUri))
+		{
+			await ImportLinkAsync(call, linkUri, true);
+		}
 	}
 
-	public async Task<Bookmark?> ImportBookmarkAsync(Call call, string linkUri, bool checkVersion)
+	public async Task<Bookmark?> ImportLinkAsync(Call call, LinkUri linkUri, bool checkVersion)
 	{
 		Flyout flyout = new()
 		{
@@ -219,7 +222,7 @@ public class TabViewer : Grid
 		}
 	}
 
-	public Bookmark? ImportBookmark(Call call, string linkUri, bool checkVersion)
+	public Bookmark? ImportLink(Call call, LinkUri linkUri, bool checkVersion)
 	{
 		Flyout flyout = new()
 		{
@@ -254,7 +257,7 @@ public class TabViewer : Grid
 		if (bookmark == null)
 			return;
 
-		if (TabBookmarks.Global != null)
+		if (TabBookmarks.Global != null && bookmark.Imported)
 		{
 			// Add Bookmark to bookmark manager
 			TabView!.Instance.SelectItem(TabBookmarks.Global); // select bookmarks first so the child tab autoselects the new bookmark
@@ -395,8 +398,11 @@ public class TabViewer : Grid
 		if (LoadLinkUri != null)
 		{
 			// Wait until Bookmarks tab has been created
-			Dispatcher.UIThread.Post(() => ImportBookmark(new Call(), LoadLinkUri, false), DispatcherPriority.SystemIdle);
-			//Dispatcher.UIThread.InvokeAsync(() => ImportBookmarkAsync(new Call(), LoadLinkUri, false), DispatcherPriority.SystemIdle).GetAwaiter().GetResult();
+			if (LinkUri.TryParse(LoadLinkUri, out LinkUri? linkUri))
+			{
+				Dispatcher.UIThread.Post(() => ImportLink(new Call(), linkUri, false), DispatcherPriority.SystemIdle);
+				//Dispatcher.UIThread.InvokeAsync(() => ImportLinkAsync(new Call(), LoadLinkUri, false), DispatcherPriority.SystemIdle).GetAwaiter().GetResult();
+			}
 		}
 		else if (LoadBookmark != null)
 		{

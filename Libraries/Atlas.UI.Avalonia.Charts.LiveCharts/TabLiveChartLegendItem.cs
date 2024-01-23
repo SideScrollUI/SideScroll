@@ -8,6 +8,7 @@ namespace Atlas.UI.Avalonia.Charts.LiveCharts;
 public class TabLiveChartLegendItem : TabChartLegendItem<ISeries>
 {
 	public readonly TabControlLiveChartLegend LiveChartLegend;
+
 	public TabLiveChartLegendItem(TabControlLiveChartLegend legend, ChartSeries<ISeries> chartSeries) : 
 		base(legend, chartSeries)
 	{

@@ -64,6 +64,7 @@
     <None Remove="Icons\svg\Eraser.svg" />
     <None Remove="Icons\svg\LeftArrow.svg" />
     <None Remove="Icons\svg\LeftArrowCircle.svg" />
+    <None Remove="Icons\svg\Redo.svg" />
     <None Remove="Icons\svg\RightArrow.svg" />
     <None Remove="Icons\svg\RightArrowCircle.svg" />
     <None Remove="Icons\svg\Star.svg" />
@@ -81,6 +82,7 @@
     <None Remove="Icons\svg\Screenshot.svg" />
     <None Remove="Icons\svg\Search.svg" />
     <None Remove="Icons\svg\Stats.svg" />
+    <None Remove="Icons\svg\Undo.svg" />
     <None Remove="Icons\svg\UpArrow.svg" />
   </ItemGroup>
 
@@ -135,6 +137,7 @@
     <EmbeddedResource Include="Icons\svg\Enter.svg" />
     <EmbeddedResource Include="Icons\svg\Eraser.svg" />
     <EmbeddedResource Include="Icons\svg\LeftArrowCircle.svg" />
+    <EmbeddedResource Include="Icons\svg\Redo.svg" />
     <EmbeddedResource Include="Icons\svg\RightArrowCircle.svg" />
     <EmbeddedResource Include="Icons\svg\Star.svg" />
     <EmbeddedResource Include="Icons\svg\StarFilled.svg" />
@@ -153,6 +156,7 @@
     <EmbeddedResource Include="Icons\svg\Screenshot.svg" />
     <EmbeddedResource Include="Icons\svg\Search.svg" />
     <EmbeddedResource Include="Icons\svg\Stats.svg" />
+    <EmbeddedResource Include="Icons\svg\Undo.svg" />
     <EmbeddedResource Include="Icons\svg\UpArrow.svg" />
   </ItemGroup>
 

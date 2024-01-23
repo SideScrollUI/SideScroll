@@ -5,10 +5,12 @@ namespace Atlas.Tabs;
 [PublicData]
 public class TabViewSettings
 {
-	public string Address
+	public string? Address
 	{
 		get
 		{
+			if (TabDataSettings == null) return null;
+
 			string address = "";
 			string comma = "";
 			int count = 0;
@@ -57,11 +59,13 @@ public class TabViewSettings
 		}
 	}
 
-	public override string ToString() => Address;
+	public override string? ToString() => Address;
 
 	// change to string id?
 	public TabDataSettings GetData(int index)
 	{
+		TabDataSettings ??= new();
+
 		// Creates new Settings if necessary
 		while (TabDataSettings.Count <= index)
 		{

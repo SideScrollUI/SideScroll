@@ -18,6 +18,7 @@ public static class SvgUtils
 		{
 			lock (_images)
 			{
+				color ??= AtlasTheme.IconForeground.Color;
 				string key = $"{imageResource.Path}:{color}";
 				if (_images.TryGetValue(key, out IImage? image)) return image;
 

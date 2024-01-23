@@ -14,7 +14,7 @@ public class TestPropertyVisibility : TestBase
 		Initialize("Core");
 	}
 
-	private PropertyInfo GetPropertyInfo(object obj, string propertyName)
+	private static PropertyInfo GetPropertyInfo(object obj, string propertyName)
 	{
 		return obj.GetType()
 			.GetProperties()
@@ -22,7 +22,7 @@ public class TestPropertyVisibility : TestBase
 			.Single();
 	}
 
-	private ListProperty GetListProperty(object obj, string propertyName)
+	private static ListProperty GetListProperty(object obj, string propertyName)
 	{
 		PropertyInfo propertyInfo = GetPropertyInfo(obj, propertyName);
 		return new ListProperty(obj, propertyInfo);

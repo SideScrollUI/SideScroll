@@ -4,7 +4,7 @@ namespace Atlas.Tabs;
 
 public class Linker
 {
-	private const string AtlasPrefix = @"atlas://";
+	private const string AtlasPrefix = "atlas";
 
 	public bool PublicOnly { get; set; }
 	public long MaxLength { get; set; } = 65500; // Uri.EscapeDataString limit
@@ -25,33 +25,39 @@ public class Linker
 			throw new Exception($"Link size {base64.Length} > {MaxLength}");
 		}
 
-		return AtlasPrefix + base64;
+		return $"{AtlasPrefix}://{base64}";
+	}
+
+	public Task<Bookmark> GetLinkAsync(Call call, string uri, bool checkVersion)
+	{
+		return GetLinkAsync(call, LinkUri.Parse(uri), checkVersion);
 	}
 
 #pragma warning disable CS1998 // subclasses can be async
-	public virtual async Task<Bookmark> GetLinkAsync(Call call, string uri, bool checkVersion)
+	public virtual async Task<Bookmark> GetLinkAsync(Call call, LinkUri linkUri, bool checkVersion)
 #pragma warning restore CS1998
 	{
-		if (uri == null) throw new ArgumentNullException(nameof(uri));
+		if (linkUri == null) throw new ArgumentNullException(nameof(linkUri));
 
 #if DEBUG
 		call = call.DebugLogAll();
 #endif
 
-		if (!uri.StartsWith(AtlasPrefix))
+		if (linkUri.Prefix != AtlasPrefix)
 		{
-			call.Log.AddError("Invalid prefix");
-			throw new ArgumentException("Invalid uri prefix");
+			call.Log.AddError("Invalid prefix", new Tag("Prefix", linkUri.Prefix));
+			throw new ArgumentException($"Invalid uri prefix {linkUri.Prefix}");
 		}
 
-		string base64 = uri[AtlasPrefix.Length..];
+		string base64 = linkUri.Path!;
 
-		if (uri.Length > MaxLength)
+		int length = linkUri.ToUri().Length;
+		if (length > MaxLength)
 		{
 			call.Log.AddError("Link too large",
-				new Tag("Length", uri.Length),
+				new Tag("Length", length),
 				new Tag("MaxLength", MaxLength));
-			throw new ArgumentException($"Link too large: {uri.Length} / {MaxLength}");
+			throw new ArgumentException($"Link too large: {length} / {MaxLength}");
 		}
 
 		Bookmark bookmark = Bookmark.Create(call, base64, PublicOnly);
