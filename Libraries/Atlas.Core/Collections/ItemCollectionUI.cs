@@ -13,9 +13,10 @@ public interface IContext
 // Allows updating UI after initialization
 public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollection, IContext //, IRaiseItemChangedEvents //
 {
-	public string? ColumnName { get; set; }
 	public string? Label { get; set; }
+	public string? ColumnName { get; set; }
 	public string? CustomSettingsPath { get; set; }
+	public object? DefaultSelectedItem { get; set; }
 	public bool Skippable { get; set; } = true;
 
 	// Enable for thread safety when there's multiple threads acting on this collection

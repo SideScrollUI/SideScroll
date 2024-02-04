@@ -100,6 +100,12 @@ public class Log : LogEntry
 		}
 	}
 
+	public void Throw(string text, params Tag[] tags)
+	{
+		LogEntry? logEntry = AddError(text, tags);
+		throw new Exception(logEntry?.ToString() ?? text);
+	}
+
 	public LogTimer Timer(string text, params Tag[] tags)
 	{
 		var logTimer = new LogTimer(text, Settings, tags);

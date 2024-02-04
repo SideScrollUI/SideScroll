@@ -176,9 +176,7 @@ public static class StringExtensions
 	// If length becomes an issue, can switch from base16 (hex) to base32 to save 12 characters
 	public static string HashSha256(this string rawData)
 	{
-		using SHA256 sha256Hash = SHA256.Create();
-
-		byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData)); // 32 bytes
+		byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(rawData)); // 32 bytes
 
 		var builder = new StringBuilder();
 		foreach (byte b in bytes)

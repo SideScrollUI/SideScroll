@@ -9,7 +9,7 @@ public class ToolbarTextBox : TextBox
 {
 	protected override Type StyleKeyOverride => typeof(TextBox);
 
-	public ToolbarTextBox(string text)
+	public ToolbarTextBox(string text = "")
 	{
 		Text = text;
 		TextWrapping = TextWrapping.NoWrap;

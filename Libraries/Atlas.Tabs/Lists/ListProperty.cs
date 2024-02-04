@@ -65,11 +65,11 @@ public class ListProperty : ListMember, IPropertyEditable
 				if (value != null)
 				{
 					type = type.GetNonNullableType();
-				}
 
-				if (!type.IsInstanceOfType(value))
-				{
-					value = Convert.ChangeType(value, type);
+					if (!type.IsInstanceOfType(value))
+					{
+						value = Convert.ChangeType(value, type);
+					}
 				}
 
 				PropertyInfo.SetValue(Object, value);

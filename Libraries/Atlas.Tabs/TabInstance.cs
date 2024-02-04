@@ -629,6 +629,7 @@ public class TabInstance : IDisposable
 		tabBookmark.Name = Label;
 		tabBookmark.ViewSettings = TabViewSettings.DeepClone() ?? new TabViewSettings();
 		tabBookmark.DataRepoGroupId = DataRepoInstance?.GroupId;
+		tabBookmark.DataRepoType = DataRepoInstance?.DataType;
 		tabBookmark.SelectedRow = SelectedRow;
 
 		/*if (DataRepoInstance != null)

@@ -17,17 +17,19 @@ public class ItemQueueCollection<T> : ItemCollection<T>
 public interface IItemCollection
 {
 	string? ColumnName { get; set; }
-	bool Skippable { get; set; }
 	string? CustomSettingsPath { get; set; }
+	public object? DefaultSelectedItem { get; set; }
+	bool Skippable { get; set; }
 }
 
 // See ItemCollectionUI for a UI thread safe version
 public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComparer //, IRaiseItemChangedEvents //
 {
-	public string? ColumnName { get; set; }
 	public string? Label { get; set; }
-	public bool Skippable { get; set; } = true;
+	public string? ColumnName { get; set; }
 	public string? CustomSettingsPath { get; set; }
+	public object? DefaultSelectedItem { get; set; }
+	public bool Skippable { get; set; } = true;
 
 	public IComparer Comparer { get; set; } = new CustomComparer();
 

@@ -779,12 +779,23 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 
 	private object? GetDefaultSelectedItem()
 	{
-		if (TabModel.DefaultSelectedItem == null)
+		string defaultItemText;
+		if (List is IItemCollection itemCollection && itemCollection.DefaultSelectedItem is object defaultItem)
+		{
+			defaultItemText = defaultItem.ToUniqueString()!;
+		}
+		else if (TabModel.DefaultSelectedItem is object defaultModelItem)
+		{
+			defaultItemText = defaultModelItem.ToUniqueString()!;
+		}
+		else
+		{
 			return null;
+		}
 
 		foreach (object obj in CollectionView!)
 		{
-			if (obj.ToUniqueString() == TabModel.DefaultSelectedItem.ToUniqueString())
+			if (obj.ToUniqueString() == defaultItemText)
 				return obj;
 		}
 		return null;

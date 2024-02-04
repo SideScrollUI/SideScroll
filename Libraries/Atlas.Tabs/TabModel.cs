@@ -76,9 +76,7 @@ public class TabModel
 
 	public override string ToString() => Name;
 
-	public TabModel()
-	{
-	}
+	public TabModel() { }
 
 	public TabModel(string name)
 	{

@@ -6,6 +6,8 @@ public interface IDataRepoInstance
 {
 	string GroupId { get; }
 
+	Type DataType { get; }
+
 	//object GetObject(string key);
 }
 
@@ -17,6 +19,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	public readonly DataRepo DataRepo;
 	public string GroupId { get; set; }
 	public string GroupPath => DataRepo.GetGroupPath(typeof(T), GroupId);
+	public Type DataType => typeof(T);
 
 	public override string ToString() => GroupId;
 

@@ -57,6 +57,7 @@ public class TabBookmark
 
 	//public List<DataRepoItem> DataRepoItems { get; set; } = new();
 	public string? DataRepoGroupId { get; set; }
+	public Type? DataRepoType; // Interfaces need to specify this
 
 	// Temporary, Only FindMatches() uses, refactor these out?
 	[NonSerialized]
@@ -229,7 +230,14 @@ public class TabBookmark
 			if (dataKey == null || row.DataValue == null)
 				continue;
 
-			project.DataApp.Save(DataRepoGroupId, dataKey, row.DataValue);
+			if (DataRepoType is Type type)
+			{
+				project.DataApp.Save(type, DataRepoGroupId, dataKey, row.DataValue);
+			}
+			else
+			{
+				project.DataApp.Save(DataRepoGroupId, dataKey, row.DataValue);
+			}
 		}
 
 		foreach (TabBookmark tabBookmark in ChildBookmarks.Values)
