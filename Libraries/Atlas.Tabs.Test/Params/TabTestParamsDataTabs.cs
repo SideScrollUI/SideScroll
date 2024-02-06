@@ -6,6 +6,8 @@ namespace Atlas.Tabs.Test.Params;
 
 public class TabTestParamsDataTabs : ITab
 {
+	public override string ToString() => "Data Repos";
+
 	public TabInstance Create() => new Instance();
 
 	public class Toolbar : TabToolbar
@@ -50,10 +52,13 @@ public class TabTestParamsDataTabs : ITab
 
 		private void New(Call call)
 		{
+			Reload();
 		}
 
 		private void Save(Call call)
 		{
+			Validate();
+
 			ParamTestItem clone = _paramTestItem.DeepClone(call)!;
 			_dataRepoParams!.Save(call, clone.ToString(), clone);
 			SaveData(DataKey, clone);

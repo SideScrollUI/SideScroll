@@ -5,13 +5,14 @@ using Atlas.Tabs.Tools;
 using Atlas.UI.Avalonia.Utilities;
 using Avalonia.Controls;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 
 namespace Atlas.UI.Avalonia.Tabs;
 
 public class TabFileImage : ITab, IFileTypeView
 {
-	public static readonly string[] DefaultExtensions = new[] { ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp" };
+	public static readonly string[] DefaultExtensions = { ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".svg" };
 
 	public string? Path { get; set; }
 
@@ -61,8 +62,19 @@ public class TabFileImage : ITab, IFileTypeView
 
 			try
 			{
-				Bitmap bitmap = ImageUtils.LoadImage(Image, Path)!;
-				model.MaxDesiredWidth = Math.Max(100, (int)bitmap.Size.Width);
+				if (Path.ToLower().EndsWith(".svg"))
+				{
+					if (SvgUtils.TryGetSvgImage(Path, out IImage? imageSource))
+					{
+						Image.Source = imageSource;
+						model.MaxDesiredWidth = Math.Max(100, (int)imageSource.Size.Width);
+					}
+				}
+				else
+				{
+					Bitmap bitmap = ImageUtils.LoadImage(Image, Path)!;
+					model.MaxDesiredWidth = Math.Max(100, (int)bitmap.Size.Width);
+				}
 				model.AddObject(Image, true);
 			}
 			catch (Exception ex)

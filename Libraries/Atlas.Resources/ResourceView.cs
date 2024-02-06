@@ -2,8 +2,9 @@ using System.Reflection;
 
 namespace Atlas.Resources;
 
-interface IResourceView
+public interface IResourceView
 {
+	string ResourceType { get; }
 	string Path { get; }
 
 	Stream Stream { get; }

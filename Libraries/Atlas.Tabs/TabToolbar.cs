@@ -7,14 +7,14 @@ public class ToolButton
 {
 	public string Tooltip { get; set; }
 	public string? Label { get; set; }
-	public ResourceView ImageResource { get; set; }
+	public IResourceView ImageResource { get; set; }
 	public bool ShowTask { get; set; }
 	public bool Default { get; set; } // Use Enter as HotKey, add more complex keymapping later?
 
 	public TaskDelegate.CallAction? Action { get; set; }
 	public TaskDelegateAsync.CallActionAsync? ActionAsync { get; set; }
 
-	public ToolButton(string tooltip, ResourceView imageResource, TaskDelegate.CallAction? action = null, bool isDefault = false)
+	public ToolButton(string tooltip, IResourceView imageResource, TaskDelegate.CallAction? action = null, bool isDefault = false)
 	{
 		Tooltip = tooltip;
 		ImageResource = imageResource;
@@ -22,7 +22,7 @@ public class ToolButton
 		Default = isDefault;
 	}
 
-	public ToolButton(string tooltip, ResourceView imageResource, TaskDelegateAsync.CallActionAsync? actionAsync, bool isDefault = false)
+	public ToolButton(string tooltip, IResourceView imageResource, TaskDelegateAsync.CallActionAsync? actionAsync, bool isDefault = false)
 	{
 		Tooltip = tooltip;
 		ImageResource = imageResource;

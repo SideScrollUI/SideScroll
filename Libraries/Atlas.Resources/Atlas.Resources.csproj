@@ -37,6 +37,7 @@
     <None Remove="Icons\svg\LeftArrow.svg" />
     <None Remove="Icons\svg\LeftArrowCircle.svg" />
     <None Remove="Icons\svg\Redo.svg" />
+    <None Remove="Icons\svg\Reset.svg" />
     <None Remove="Icons\svg\RightArrow.svg" />
     <None Remove="Icons\svg\RightArrowCircle.svg" />
     <None Remove="Icons\svg\Star.svg" />
@@ -82,6 +83,7 @@
     <EmbeddedResource Include="Icons\svg\Eraser.svg" />
     <EmbeddedResource Include="Icons\svg\LeftArrowCircle.svg" />
     <EmbeddedResource Include="Icons\svg\Redo.svg" />
+    <EmbeddedResource Include="Icons\svg\Reset.svg" />
     <EmbeddedResource Include="Icons\svg\RightArrowCircle.svg" />
     <EmbeddedResource Include="Icons\svg\Star.svg" />
     <EmbeddedResource Include="Icons\svg\StarFilled.svg" />

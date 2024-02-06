@@ -22,7 +22,7 @@ public class ToolbarButton : Button, IDisposable
 	public string? Label { get; set; }
 	public string? Tooltip { get; set; }
 
-	public ResourceView ImageResource { get; set; }
+	public IResourceView ImageResource { get; set; }
 
 	public TaskDelegate.CallAction? CallAction;
 	public TaskDelegateAsync.CallActionAsync? CallActionAsync;
@@ -71,7 +71,7 @@ public class ToolbarButton : Button, IDisposable
 			SetDefault();
 	}
 
-	public ToolbarButton(TabControlToolbar toolbar, string? label, string tooltip, ResourceView imageResource, ICommand? command = null)
+	public ToolbarButton(TabControlToolbar toolbar, string? label, string tooltip, IResourceView imageResource, ICommand? command = null)
 	{
 		Toolbar = toolbar;
 		Label = label;

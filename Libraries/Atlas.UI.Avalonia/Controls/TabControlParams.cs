@@ -22,6 +22,8 @@ public class TabControlParams : Grid, IValidationControl
 
 	private Dictionary<ListProperty, Control> _propertyControls = new();
 
+	public override string? ToString() => Object?.ToString();
+
 	public TabControlParams(object? obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
 	{
 		Object = obj;

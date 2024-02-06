@@ -4,16 +4,6 @@ using System.Collections.Specialized;
 
 namespace Atlas.Core;
 
-public class ItemQueueCollection<T> : ItemCollection<T>
-{
-	public new void Add(T item)
-	{
-		base.Add(item);
-		if (Count > 100)
-			RemoveAt(0);
-	}
-}
-
 public interface IItemCollection
 {
 	string? ColumnName { get; set; }
@@ -92,5 +82,17 @@ public class ItemCollection<T, T2> : ObservableCollection<T>, IList, ICollection
 		base(iEnumerable)
 	{
 
+	}
+}
+
+public class ItemQueueCollection<T> : ItemCollection<T>
+{
+	public int MaxCount { get; set; } = 100;
+
+	public new void Add(T item)
+	{
+		base.Add(item);
+		if (Count > MaxCount)
+			RemoveAt(0);
 	}
 }

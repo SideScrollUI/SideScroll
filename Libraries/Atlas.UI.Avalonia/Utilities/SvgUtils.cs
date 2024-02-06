@@ -3,6 +3,7 @@ using Atlas.UI.Avalonia.Themes;
 using Avalonia.Media;
 using Avalonia.Svg.Skia;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Atlas.UI.Avalonia.Utilities;
 
@@ -10,7 +11,7 @@ public static class SvgUtils
 {
 	private static Dictionary<string, IImage> _images = new();
 
-	public static IImage? GetSvgImage(ResourceView imageResource, Color? color = null)
+	public static IImage? GetSvgImage(IResourceView imageResource, Color? color = null)
 	{
 		if (imageResource.ResourceType != "svg") return null;
 
@@ -50,6 +51,32 @@ public static class SvgUtils
 		{
 			Source = svgSource,
 		};
+	}
+
+	public static bool TryGetSvgImage(string path, [NotNullWhen(true)] out IImage? image)
+	{
+		image = default;
+
+		if (!path.ToLower().EndsWith(".svg")) return false;
+
+		try
+		{
+			string text = File.ReadAllText(path);
+
+			SvgSource svgSource = new();
+			svgSource.FromSvg(text);
+
+			image = new SvgImage()
+			{
+				Source = svgSource,
+			};
+			return true;
+		}
+		catch (Exception e)
+		{
+			Debug.Fail(e.ToString());
+			return false;
+		}
 	}
 
 	public static bool IsSvg(Stream stream)

@@ -82,7 +82,7 @@ public class TabControlToolbar : Grid, IDisposable
 		Children.Add(control);
 	}
 
-	public ToolbarButton AddButton(string tooltip, ResourceView imageResource, ICommand? command = null)
+	public ToolbarButton AddButton(string tooltip, IResourceView imageResource, ICommand? command = null)
 	{
 		var button = new ToolbarButton(this, null, tooltip, imageResource, command);
 		AddControl(button);

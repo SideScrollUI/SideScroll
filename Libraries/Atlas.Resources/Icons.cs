@@ -26,6 +26,7 @@ public static class Icons
 		public static ResourceView UpArrow => Get("UpArrow");
 		public static ResourceView DownArrow => Get("DownArrow");
 
+		public static ResourceView Reset => Get("Reset");
 		public static ResourceView Undo => Get("Undo");
 		public static ResourceView Redo => Get("Redo");
 

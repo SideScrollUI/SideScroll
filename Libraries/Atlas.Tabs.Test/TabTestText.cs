@@ -5,6 +5,8 @@ namespace Atlas.Tabs.Test;
 
 public class TabTestTextEditor : ITab
 {
+	public const string SampleText = "This is some sample text\n\n1\n2\n3\n\nhttps://www.wikipedia.org/";
+
 	public TabInstance Create() => new Instance();
 
 	public class Instance : TabInstance
@@ -13,7 +15,7 @@ public class TabTestTextEditor : ITab
 		{
 			model.Items = new List<ListItem>()
 			{
-				new("Sample Text", "This is some sample text\n\n1\n2\n3"),
+				new("Sample Text", SampleText),
 				new("Json", TabTestJson.Json1),
 
 				GetStringItem("1k", 1000),
