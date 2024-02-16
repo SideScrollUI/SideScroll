@@ -2,6 +2,8 @@ using Atlas.Resources;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
 using Avalonia.Controls;
+using Avalonia.Input;
+using System.Globalization;
 
 namespace Atlas.Start.Avalonia.Tabs;
 
@@ -27,7 +29,8 @@ public class TabControlSearchToolbar : TabControlToolbar
 		//CommandBinder.
 		//CommandBindings.Add(commandBindingBack);
 
-		ButtonSearch = AddButton("Search", Icons.Svg.Search);
+		ButtonSearch = AddButton("Search (Ctrl + S)", Icons.Svg.Search);
+		ButtonSearch.HotKey = new KeyGesture(Key.S, KeyModifiers.Control);
 		ButtonLoadNext = AddButton("Next", Icons.Svg.RightArrow);
 		ButtonSleep = AddButton("Sleep", Icons.Svg.Refresh);
 		AddSeparator();

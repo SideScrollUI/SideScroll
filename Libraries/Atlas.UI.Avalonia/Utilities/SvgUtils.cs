@@ -44,12 +44,9 @@ public static class SvgUtils
 		Color newColor = color ?? AtlasTheme.IconForeground.Color;
 		string updated = text.Replace("rgb(0,0,0)", $"rgb({newColor.R},{newColor.G},{newColor.B})");
 
-		SvgSource svgSource = new();
-		svgSource.FromSvg(updated);
-
 		return new SvgImage()
 		{
-			Source = svgSource,
+			Source = SvgSource.LoadFromSvg(updated),
 		};
 	}
 
@@ -63,12 +60,9 @@ public static class SvgUtils
 		{
 			string text = File.ReadAllText(path);
 
-			SvgSource svgSource = new();
-			svgSource.FromSvg(text);
-
 			image = new SvgImage()
 			{
-				Source = svgSource,
+				Source = SvgSource.LoadFromSvg(text),
 			};
 			return true;
 		}

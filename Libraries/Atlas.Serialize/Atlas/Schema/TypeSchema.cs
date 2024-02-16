@@ -39,6 +39,7 @@ public class TypeSchema
 
 	public List<FieldSchema> FieldSchemas { get; set; } = new();
 	public List<PropertySchema> PropertySchemas { get; set; } = new();
+	public List<PropertySchema> ReadOnlyPropertySchemas { get; set; } = new();
 
 	// not really schema, could break out into a records class
 	public int TypeIndex; // -1 if null
@@ -135,7 +136,10 @@ public class TypeSchema
 		foreach (PropertyInfo propertyInfo in Type!.GetProperties(_bindingFlags))
 		{
 			var propertySchema = new PropertySchema(this, propertyInfo);
-			if (!propertySchema.IsSerialized)
+			if (!propertySchema.IsReadable)
+				continue;
+
+			if (HasEmptyConstructor && !propertySchema.IsWriteable)
 				continue;
 
 			if (propertySchema.IsPrivate && serializer.PublicOnly)
@@ -150,7 +154,10 @@ public class TypeSchema
 					continue;
 			}
 
-			PropertySchemas.Add(propertySchema);
+			if (propertySchema.IsWriteable)
+				PropertySchemas.Add(propertySchema);
+
+			ReadOnlyPropertySchemas.Add(propertySchema);
 		}
 	}
 
@@ -172,7 +179,7 @@ public class TypeSchema
 	{
 		if (HasEmptyConstructor || Type == null) return null;
 
-		var members = PropertySchemas.Where(p => p.IsLoadable).Select(p => p.PropertyName.ToLower()).ToHashSet();
+		var members = ReadOnlyPropertySchemas.Where(p => p.IsReadable).Select(p => p.PropertyName.ToLower()).ToHashSet();
 		var fieldMembers = FieldSchemas.Where(f => f.IsLoadable).Select(f => f.FieldName.ToLower()).ToHashSet();
 		foreach (var member in fieldMembers)
 			members.Add(member);
@@ -189,6 +196,24 @@ public class TypeSchema
 			}
 		}
 		return null;
+	}
+
+	public void AddCustomConstructorProperties()
+	{
+		if (CustomConstructor == null) return;
+
+		foreach (var param in CustomConstructor.GetParameters())
+		{
+			var prop = ReadOnlyPropertySchemas.Where(p => p.PropertyName.ToLower() == param.Name!.ToLower()).FirstOrDefault();
+			if (prop != null)
+			{
+				prop.IsRequired = true;
+				if (!PropertySchemas.Contains(prop))
+				{
+					PropertySchemas.Add(prop);
+				}
+			}
+		}
 	}
 
 	private bool GetIsPrivate()
@@ -377,7 +402,9 @@ public class TypeSchema
 		int count = reader.ReadInt32();
 		for (int i = 0; i < count; i++)
 		{
-			PropertySchemas.Add(new PropertySchema(this, reader));
+			var propertySchema = new PropertySchema(this, reader);
+			PropertySchemas.Add(propertySchema);
+			ReadOnlyPropertySchemas.Add(propertySchema);
 		}
 	}
 

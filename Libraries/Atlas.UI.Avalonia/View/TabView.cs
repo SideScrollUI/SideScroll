@@ -64,6 +64,8 @@ public class TabView : Grid, IDisposable
 	public List<ITabDataControl> TabDatas = new();
 	public List<ITabSelector> CustomTabControls { get; set; } = new(); // should everything use this?
 
+	private List<ToolbarButton> _hotKeys = new();
+
 	// Layout Controls
 	private Grid? _containerGrid;
 	private TabControlSplitContainer? _tabParentControls;
@@ -106,6 +108,8 @@ public class TabView : Grid, IDisposable
 			tabSelector.OnSelectionChanged += ParentListSelectionChanged;
 
 		Instance.OnValidate += Instance_OnValidate;
+
+		KeyDown += TabView_KeyDown;
 	}
 
 	public async Task LoadBackgroundAsync(Call call)
@@ -281,6 +285,20 @@ public class TabView : Grid, IDisposable
 	private void TabInstance_OnModelChanged(object? sender, EventArgs e)
 	{
 		ReloadControls();
+	}
+
+	private void TabView_KeyDown(object? sender, KeyEventArgs e)
+	{
+		foreach (ToolbarButton toolbarButton in _hotKeys)
+		{
+			var hotKey = toolbarButton.HotKey;
+			if (hotKey?.Key == e.Key && hotKey.KeyModifiers == e.KeyModifiers)
+			{
+				toolbarButton.Invoke();
+				e.Handled = true;
+				return;
+			}
+		}
 	}
 
 	private void Instance_OnValidate(object? sender, EventArgs e)
@@ -499,6 +517,10 @@ public class TabView : Grid, IDisposable
 	// should we check for a Grid stretch instead of passing that parameter?
 	protected void AddControl(Control control, bool fill)
 	{
+		if (control is TabControlToolbar toolbar)
+		{
+			_hotKeys.AddRange(toolbar.GetHotKeyButtons());
+		}
 		_tabParentControls!.AddControl(control, fill, SeparatorType.Splitter);
 	}
 
@@ -964,7 +986,8 @@ public class TabView : Grid, IDisposable
 		}
 		CustomTabControls.Clear();
 
-		//LogicalChildren.Clear();
+		_hotKeys = new();
+
 		Children.Clear();
 	}
 
@@ -1002,9 +1025,9 @@ public class TabView : Grid, IDisposable
 			}
 			else if (e.List[0] is ITab)
 			{
-				HashSet<object> newItems = new();
-				foreach (var obj in e.List)
-					newItems.Add(obj);
+				HashSet<object> newItems = e.List
+					.Cast<object>()
+					.ToHashSet();
 
 				List<object> matching = new();
 				foreach (var obj in TabDatas[0].Items!)
@@ -1071,6 +1094,8 @@ public class TabView : Grid, IDisposable
 			// TODO: set large fields to null.
 
 			ClearControls(true);
+
+			KeyDown -= TabView_KeyDown;
 
 			Instance.OnModelChanged -= TabInstance_OnModelChanged;
 			Instance.OnValidate -= Instance_OnValidate;
