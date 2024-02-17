@@ -10,6 +10,7 @@ public class ToolButton
 	public IResourceView ImageResource { get; set; }
 	public bool ShowTask { get; set; }
 	public bool Default { get; set; } // Use Enter as HotKey, add more complex keymapping later?
+	public object? HotKey { get; set; } // Only AvaloniaUI KeyGesture currently supported
 
 	public TaskDelegate.CallAction? Action { get; set; }
 	public TaskDelegateAsync.CallActionAsync? ActionAsync { get; set; }

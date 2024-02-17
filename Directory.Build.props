@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <AtlasVersion>0.11.0.6</AtlasVersion>
-    <AvaloniaVersion>11.0.6</AvaloniaVersion>
+    <AvaloniaVersion>11.0.7</AvaloniaVersion>
     <AvaloniaEditVersion>11.0.6</AvaloniaEditVersion>
   </PropertyGroup>
 </Project>

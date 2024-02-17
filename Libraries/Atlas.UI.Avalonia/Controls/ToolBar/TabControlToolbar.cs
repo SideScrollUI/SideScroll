@@ -185,6 +185,13 @@ public class TabControlToolbar : Grid, IDisposable
 		return textBox;
 	}
 
+	public IEnumerable<ToolbarButton> GetHotKeyButtons()
+	{
+		return Children
+			.Where(c => c is ToolbarButton button && button.HotKey != null)
+			.Select(c => (ToolbarButton)c);
+	}
+
 	public void Dispose()
 	{
 		foreach (Control control in Children)

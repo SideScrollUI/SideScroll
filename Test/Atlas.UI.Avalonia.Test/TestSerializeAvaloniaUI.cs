@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Serialize;
 using Atlas.Tabs;
+using Avalonia.Media;
 using NUnit.Framework;
 
 namespace Atlas.UI.Avalonia.Test;
@@ -43,5 +44,15 @@ public class TestSerializeAvaloniaUI : TestBase
 		Assert.NotNull(output.TabBookmark);
 		Assert.NotNull(output.TabBookmark.ChildBookmarks);
 		Assert.AreEqual(1, output.TabBookmark.ChildBookmarks.Count);
+	}
+
+	[Test]
+	public void SerializeColor()
+	{
+		var input = new Color(1, 2, 3, 4);
+		serializer!.Save(Call, input);
+		Color output = serializer.Load<Color>(Call);
+
+		Assert.AreEqual(input, output);
 	}
 }

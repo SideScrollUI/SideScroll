@@ -80,7 +80,10 @@ public class TypeRepoObject : TypeRepo
 			TypeRepo = typeRepo;
 
 			if (typeRepo?.Serializer.PublicOnly == true && PropertySchema.IsPrivate)
-				PropertySchema.IsLoadable = false;
+			{
+				PropertySchema.IsWriteable = false;
+				PropertySchema.IsReadable = false;
+			}
 		}
 
 		// Load serialized data into object
@@ -89,12 +92,12 @@ public class TypeRepoObject : TypeRepo
 			if (LazyProperty != null)
 			{
 				TypeRef? typeRef = TypeRepo!.LoadLazyObjectRef();
-				if (!PropertySchema.IsLoadable)
+				if (!PropertySchema.IsWriteable)
 					typeRef = null;
 				
 				LazyProperty.SetTypeRef(obj, typeRef);
 			}
-			else if (!PropertySchema.IsLoadable)
+			else if (!PropertySchema.IsWriteable)
 			{
 				TypeRepo!.SkipObjectRef();
 			}
@@ -118,10 +121,9 @@ public class TypeRepoObject : TypeRepo
 
 		public object? Get()
 		{
-			if (!PropertySchema.IsLoadable)
+			if (!PropertySchema.IsReadable)
 			{
-				TypeRepo!.SkipObjectRef();
-				return null;
+				return TypeRepo!.SkipObjectRef(); // Custom constuctors can load non-writeable properties
 			}
 			else if (LazyProperty != null)
 			{
@@ -137,6 +139,7 @@ public class TypeRepoObject : TypeRepo
 	public TypeRepoObject(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
+		TypeSchema.AddCustomConstructorProperties();
 	}
 
 	public override void InitializeSaving()
@@ -151,7 +154,7 @@ public class TypeRepoObject : TypeRepo
 
 		foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
 		{
-			if (!propertySchema.IsSerialized)
+			if (!propertySchema.ShouldWrite)
 				continue;
 
 			PropertyRepos.Add(new PropertyRepo(propertySchema));
@@ -178,12 +181,10 @@ public class TypeRepoObject : TypeRepo
 			// todo: add nonloadable type
 			foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
 			{
-				if (propertySchema.IsLoadable == false)
-					continue;
+				if (!propertySchema.IsWriteable) continue;
 
 				MethodInfo getMethod = propertySchema.PropertyInfo!.GetGetMethod(false)!;
-				if (getMethod.IsVirtual)
-					return true;
+				if (getMethod.IsVirtual) return true;
 			}
 			return false;
 		}
@@ -237,7 +238,7 @@ public class TypeRepoObject : TypeRepo
 				{
 					// should we add type conversion here?
 					log.Add("Can't load field, type has changed", new Tag("Property", propertySchema));
-					propertySchema.IsLoadable = false;
+					propertySchema.IsWriteable = false;
 					//continue;
 				}
 			}
@@ -255,7 +256,7 @@ public class TypeRepoObject : TypeRepo
 				var propertyRepo = new PropertyRepo(propertySchema, typeRepo);
 				PropertyRepos.Add(propertyRepo);
 
-				if (propertySchema.IsLoadable && !propertySchema.Type!.IsPrimitive)
+				if (propertySchema.IsWriteable && !propertySchema.Type!.IsPrimitive)
 					lazyPropertyRepos.Add(propertyRepo);
 			}
 		}
@@ -411,8 +412,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
 		{
-			if (!propertySchema.IsSerialized)
-				continue;
+			if (!propertySchema.ShouldWrite) continue;
 
 			object? propertyValue = propertySchema.PropertyInfo!.GetValue(value)!;
 			Serializer.AddObjectRef(propertyValue);
@@ -464,8 +464,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		foreach (FieldSchema fieldSchema in TypeSchema.FieldSchemas)
 		{
-			if (!fieldSchema.IsSerialized)
-				continue;
+			if (!fieldSchema.IsSerialized) continue;
 
 			object? fieldValue = fieldSchema.FieldInfo!.GetValue(source);
 			Serializer.AddObjectRef(fieldValue);
@@ -478,8 +477,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
 		{
-			if (!propertySchema.IsSerialized)
-				continue;
+			if (!propertySchema.ShouldWrite) continue;
 
 			object? propertyValue = propertySchema.PropertyInfo!.GetValue(source);
 			Serializer.AddObjectRef(propertyValue);

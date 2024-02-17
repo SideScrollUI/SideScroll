@@ -28,7 +28,9 @@ public class ToolbarButton : Button, IDisposable
 	public TaskDelegateAsync.CallActionAsync? CallActionAsync;
 
 	public bool ShowTask;
-	public bool IsActive; // Only allow one task at once (modifying IsEnabled doesn't updating elsewhere)
+	public bool IsActive; // Only allow one task at once (modifying IsEnabled doesn't update elsewhere)
+
+	public KeyGesture? KeyGesture;
 
 	public TimeSpan MinWaitTime = TimeSpan.FromSeconds(1); // Wait time between clicks
 
@@ -69,6 +71,11 @@ public class ToolbarButton : Button, IDisposable
 
 		if (toolButton.Default)
 			SetDefault();
+
+		if (toolButton.HotKey is KeyGesture keyGesture)
+		{
+			HotKey = keyGesture;
+		}
 	}
 
 	public ToolbarButton(TabControlToolbar toolbar, string? label, string tooltip, IResourceView imageResource, ICommand? command = null)

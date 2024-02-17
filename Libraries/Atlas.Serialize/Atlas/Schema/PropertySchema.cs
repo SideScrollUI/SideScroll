@@ -17,10 +17,13 @@ public class PropertySchema
 	public Type? Type;
 	public Type? NonNullableType;
 
-	public bool IsSerialized;
-	public bool IsLoadable;
+	public bool IsReadable;
+	public bool IsWriteable;
 	public bool IsPrivate;
 	public bool IsPublic;
+	public bool IsRequired;
+
+	public bool ShouldWrite => IsReadable && (IsWriteable || IsRequired);
 
 	public override string ToString() => PropertyName;
 
@@ -59,14 +62,14 @@ public class PropertySchema
 		{
 			Type = PropertyInfo.PropertyType;
 			NonNullableType = Type.GetNonNullableType();
-			IsSerialized = GetIsSerialized();
-			IsLoadable = IsSerialized; // typeIndex >= 0 && // derived types won't have entries for base type
+			IsReadable = GetIsReadable();
+			IsWriteable = IsReadable && PropertyInfo.CanWrite; // typeIndex >= 0 && // derived types won't have entries for base type
 			IsPrivate = GetIsPrivate();
 			IsPublic = GetIsPublic();
 		}
 	}
 
-	private bool GetIsSerialized()
+	private bool GetIsReadable()
 	{
 		Attribute? attribute = Type!.GetCustomAttribute<UnserializedAttribute>();
 		if (attribute != null)
@@ -80,7 +83,7 @@ public class PropertySchema
 		if (attribute != null)
 			return false;
 
-		if (PropertyInfo!.CanRead == false || PropertyInfo.CanWrite == false)
+		if (PropertyInfo!.CanRead == false)
 			return false;
 
 		if (PropertyInfo.GetIndexParameters().Length > 0)
@@ -135,8 +138,7 @@ public class PropertySchema
 
 	public void Validate(List<TypeSchema> typeSchemas)
 	{
-		if (TypeIndex < 0)
-			return;
+		if (TypeIndex < 0) return;
 
 		TypeSchema typeSchema = typeSchemas[TypeIndex];
 		if (PropertyInfo != null)
@@ -144,7 +146,10 @@ public class PropertySchema
 			// check if the type has changed
 			Type currentType = PropertyInfo.PropertyType.GetNonNullableType();
 			if (typeSchema.Type != currentType)
-				IsLoadable = false;
+			{
+				IsReadable = false;
+				IsWriteable = false;
+			}
 		}
 	}
 }
