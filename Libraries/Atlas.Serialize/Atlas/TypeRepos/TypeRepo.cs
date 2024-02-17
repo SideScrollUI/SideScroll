@@ -350,14 +350,9 @@ public abstract class TypeRepo : IDisposable
 	public object? SkipObjectRef()
 	{
 		ObjectType objectType = (ObjectType)Reader!.ReadByte();
-		if (objectType == ObjectType.Null)
-			return null;
+		if (objectType == ObjectType.Null) return null;
 
-		if (TypeSchema.IsPrimitive)
-		{
-			LoadObject();
-			return LoadObject();
-		}
+		if (TypeSchema.IsPrimitive) return LoadObject();
 
 		if (TypeSchema.HasSubType)
 		{
