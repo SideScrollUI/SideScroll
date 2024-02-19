@@ -93,7 +93,7 @@ public class LinkUri
 	{
 		if (version.IsNullOrEmpty()) return null;
 
-		List<string> parts = version!.Split('.').ToList();
+		List<string> parts = version.Split('.').ToList();
 		while (parts.Count < 2)
 			parts.Add("0");
 

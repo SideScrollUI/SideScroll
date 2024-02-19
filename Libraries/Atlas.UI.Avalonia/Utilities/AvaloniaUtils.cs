@@ -132,6 +132,15 @@ public static class AvaloniaUtils
 
 		if (value == null) return true;
 
+		if (listProperty.GetCustomAttribute<StringLengthAttribute>() is StringLengthAttribute stringLengthAttribute)
+		{
+			if (!stringLengthAttribute.IsValid(value))
+			{
+				DataValidationErrors.SetError(control, new DataValidationException(stringLengthAttribute.FormatErrorMessage(listProperty.Name!)));
+				return false;
+			}
+		}
+
 		if (listProperty.GetCustomAttribute<RangeAttribute>() is RangeAttribute rangeAttribute)
 		{
 			dynamic minValue = rangeAttribute.Minimum;

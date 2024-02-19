@@ -66,20 +66,9 @@ public class DataRepo
 		return serializer;
 	}
 
-	// Use ToString()? for key?
-	public void Save(string key, object obj, Call? call = null)
-	{
-		Save(null, key, obj, call);
-	}
-
 	public void Save<T>(string key, T obj, Call? call = null)
 	{
 		Save<T>(null, key, obj, call);
-	}
-
-	public void Save(string? groupId, string key, object obj, Call? call = null)
-	{
-		Save(obj.GetType(), groupId, key, obj, call);
 	}
 
 	public void Save<T>(string? groupId, string key, T obj, Call? call = null)
@@ -95,9 +84,9 @@ public class DataRepo
 		serializer.Save(call, obj, key);
 	}
 
-	public void Save(object obj, Call? call = null)
+	public void Save<T>(T obj, Call? call = null)
 	{
-		Save(obj.GetType().AssemblyQualifiedName!, obj, call);
+		Save(typeof(T).AssemblyQualifiedName!, obj, call);
 	}
 
 	public DataItem<T>? LoadItem<T>(string key, Call? call = null, bool createIfNeeded = false, bool lazy = false)

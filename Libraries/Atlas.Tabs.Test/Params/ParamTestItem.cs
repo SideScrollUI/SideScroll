@@ -7,10 +7,10 @@ namespace Atlas.Tabs.Test.Params;
 [Params]
 public class ParamTestItem
 {
-	[DataKey, Required]
+	[DataKey, Required, StringLength(30)]
 	public string Name { get; set; } = "Test";
 
-	[Watermark("Description")]
+	[WordWrap, Watermark("Description")]
 	public string? Description { get; set; }
 
 	[ReadOnly(true)]

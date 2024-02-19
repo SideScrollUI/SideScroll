@@ -45,8 +45,16 @@ public abstract class SerializerFile
 	{
 		call ??= new Call();
 		object? obj = Load(call, lazy, taskInstance);
-		if (obj == null)
-			return default;
+		if (obj is T loaded) return loaded;
+
+		if (obj != null)
+		{
+			call.Log.AddError("Loaded type doesn't match type specified",
+				new Tag("Loaded Type", obj.GetType()),
+				new Tag("Expected Type", typeof(T)));
+		}
+
+		return default;
 
 		/*Type type = typeof(T);
 		//if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
@@ -55,8 +63,6 @@ public abstract class SerializerFile
 		}
 
 		return (T)Convert.ChangeType(obj, type);*/
-		T loaded = (T)obj;
-		return loaded;
 	}
 
 	public object? Load(Call call, bool lazy = false, TaskInstance? taskInstance = null)
