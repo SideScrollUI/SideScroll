@@ -71,17 +71,14 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 	}*/
 }
 
-public class ItemCollection<T, T2> : ObservableCollection<T>, IList, ICollection, IEnumerable //, IRaiseItemChangedEvents //
+public class ItemCollection<T, T2> : ObservableCollection<T>, IList, ICollection, IEnumerable
 {
-	public ItemCollection()
-	{
-	}
+	public ItemCollection() { }
 
 	// Don't implement List<T>, it isn't sortable
 	public ItemCollection(IEnumerable<T> iEnumerable) :
 		base(iEnumerable)
 	{
-
 	}
 }
 

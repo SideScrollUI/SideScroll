@@ -15,14 +15,12 @@ public class TabTestSubClassProperty : ITab
 			for (int i = 0; i < 1; i++)
 				items.Add(new ParentClass());
 
-			//items.Add(new ListItem("Long Text", reallyLongText));
 			model.Items = items;
 		}
 	}
 
 	public class ParentClass
 	{
-		//public string stringProperty { get; set; } = "test";
 		public ChildClass Child { get; set; } = new();
 
 		public override string ToString() => Child.ToString();

@@ -63,12 +63,10 @@ public class TabTestDataRepoCollection : ITab
 
 		private void Delete(Call call)
 		{
-			// can't modify SelectedItems while iterating so create a copy, find better way
-			List<SampleItem> selectedItems = new();
-			foreach (SampleItem item in SelectedItems!)
-			{
-				selectedItems.Add(item);
-			}
+			// Can't modify SelectedItems while iterating so create a copy
+			List<SampleItem> selectedItems = SelectedItems!
+				.Cast<SampleItem>()
+				.ToList();
 
 			foreach (SampleItem item in selectedItems)
 			{
