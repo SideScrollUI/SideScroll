@@ -86,7 +86,7 @@ public class DataRepo
 
 	public void Save<T>(T obj, Call? call = null)
 	{
-		Save(typeof(T).AssemblyQualifiedName!, obj, call);
+		Save(typeof(T).FullName!, obj, call);
 	}
 
 	public DataItem<T>? LoadItem<T>(string key, Call? call = null, bool createIfNeeded = false, bool lazy = false)
@@ -142,7 +142,7 @@ public class DataRepo
 	public T? Load<T>(bool createIfNeeded = false, bool lazy = false, Call? call = null)
 	{
 		call ??= new Call();
-		return Load<T>(typeof(T).AssemblyQualifiedName!, call, createIfNeeded, lazy);
+		return Load<T>(typeof(T).FullName!, call, createIfNeeded, lazy);
 	}
 
 	public DataItemCollection<T> LoadAll<T>(Call? call = null, string? groupId = null, bool lazy = false)

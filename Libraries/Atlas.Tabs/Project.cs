@@ -52,6 +52,8 @@ public class Project
 		{
 			ProjectPath = projectSettings.DefaultProjectPath,
 		};
+		// Todo: Improve this
+		UserSettings = DataApp.Load<UserSettings>() ?? UserSettings;
 	}
 
 	public Project(ProjectSettings projectSettings, UserSettings userSettings)

@@ -25,4 +25,6 @@ public class UserSettings
 
 	[BindList(nameof(Themes))]
 	public string? Theme { get; set; }
+
+	public override string ToString() => SettingsPath;
 }
