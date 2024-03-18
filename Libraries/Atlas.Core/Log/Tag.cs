@@ -11,6 +11,8 @@ public enum TagType
 
 public class Tag
 {
+	public const int MaxValueLength = 10_000;
+
 	public string? Name { get; set; }
 
 	[InnerValue, StyleValue]
@@ -20,7 +22,7 @@ public class Tag
 
 	public override string ToString()
 	{
-		string? text = Value.Formatted();
+		string? text = Value.Formatted(MaxValueLength);
 		if (text?.Contains(" ") == true)
 			text = '"' + text + '"';
 

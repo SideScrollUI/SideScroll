@@ -2,62 +2,62 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <Style Selector="ScrollBar /template/ Thumb.thumb">
-        <Setter Property="Transitions">
-            <Transitions>
-                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.01" />
-            </Transitions>
-        </Setter>
-    </Style>
+  <Style Selector="ScrollBar /template/ Thumb.thumb">
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.01" />
+      </Transitions>
+    </Setter>
+  </Style>
 
-    <Style Selector="ScrollBar /template/ Rectangle#TrackRect">
-        <Setter Property="Transitions">
-            <Transitions>
-                <DoubleTransition Property="Opacity" Duration="0:0:0.01" />
-            </Transitions>
-        </Setter>
-    </Style>
+  <Style Selector="ScrollBar /template/ Rectangle#TrackRect">
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.01" />
+      </Transitions>
+    </Setter>
+  </Style>
 
-    <Style Selector="ScrollBar /template/ RepeatButton.line">
-      <Setter Property="Transitions">
-        <Transitions>
-          <DoubleTransition Property="Opacity" Duration="0:0:0.01" />
-        </Transitions>
-      </Setter>
-    </Style>
+  <Style Selector="ScrollBar /template/ RepeatButton.line">
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.01" />
+      </Transitions>
+    </Setter>
+  </Style>
 
-    <Style Selector="ScrollBar">
-        <!-- Slightly above zero to allow moving mouse across without triggering -->
-        <Setter Property="ShowDelay" Value="0:0:0.1"/>
-        <Setter Property="HideDelay" Value="0:0:0.5"/>
-    </Style>
+  <Style Selector="ScrollBar">
+    <!-- Slightly above zero to allow moving mouse across without triggering -->
+    <Setter Property="ShowDelay" Value="0:0:0.1"/>
+    <Setter Property="HideDelay" Value="0:0:0.5"/>
+  </Style>
 
-    <Style Selector="ScrollBar /template/ Border">
-        <Setter Property="Background" Value="{DynamicResource ThemeScrollBarBackgroundBrush}"/>
-        <Setter Property="BorderBrush" Value="#FF000000"/>
-        <Setter Property="BorderThickness" Value="1"/>
-    </Style>
-    <Style Selector="ScrollBar[IsExpanded=true]">
-        <Setter Property="BorderBrush" Value="#FF000000"/>
-    </Style>
-    <Style Selector="ScrollBar[IsExpanded=true] /template/ Thumb">
-      <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>
-    </Style>
-    <Style Selector="ScrollBar[IsExpanded=true] /template/ PathIcon">
-      <Setter Property="Foreground" Value="{DynamicResource ScrollBarButtonArrowForeground}"/>
-    </Style>
+  <Style Selector="ScrollBar /template/ Border">
+    <Setter Property="Background" Value="{DynamicResource ThemeScrollBarBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="#FF000000"/>
+    <Setter Property="BorderThickness" Value="1"/>
+  </Style>
+  <Style Selector="ScrollBar[IsExpanded=true]">
+    <Setter Property="BorderBrush" Value="#FF000000"/>
+  </Style>
+  <Style Selector="ScrollBar[IsExpanded=true] /template/ Thumb">
+    <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>
+  </Style>
+  <Style Selector="ScrollBar[IsExpanded=true] /template/ PathIcon">
+    <Setter Property="Foreground" Value="{DynamicResource ScrollBarButtonArrowForeground}"/>
+  </Style>
   
-    <Style Selector="Thumb">
-        <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>
-    </Style>
-    <Style Selector="Thumb /template/ Border:pointerover">
-        <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbHoverBrush}"/>
-    </Style>
+  <Style Selector="Thumb">
+    <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>
+  </Style>
+  <Style Selector="Thumb /template/ Border:pointerover">
+    <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbPointerOverBrush}"/>
+  </Style>
 
-    <Style Selector="ScrollBar /template/ RepeatButton.repeat">
-        <Setter Property="Margin" Value="0"/>
-        <Setter Property="Padding" Value="4"/>
-        <Setter Property="BorderThickness" Value="0"/>
-    </Style>
+  <Style Selector="ScrollBar /template/ RepeatButton.repeat">
+    <Setter Property="Margin" Value="0"/>
+    <Setter Property="Padding" Value="4"/>
+    <Setter Property="BorderThickness" Value="0"/>
+  </Style>
 
 </Styles>

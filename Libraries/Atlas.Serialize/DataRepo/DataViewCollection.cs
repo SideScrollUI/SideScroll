@@ -1,5 +1,4 @@
 using Atlas.Core;
-using Newtonsoft.Json.Linq;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 
@@ -45,8 +44,8 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	{
 		Items.Clear();
 
-		_dataItemLookup = new();
-		_valueLookup = new();
+		_dataItemLookup = [];
+		_valueLookup = [];
 
 		foreach (DataItem<TDataType> dataItem in DataRepoView.Items)
 		{

@@ -5,6 +5,7 @@ namespace Atlas.Tabs.Test.Params;
 
 public class TabParamItem : ITab, IDataView
 {
+	[DataValue]
 	public ParamTestItem? TestItem;
 
 	//[ButtonColumn("-")]

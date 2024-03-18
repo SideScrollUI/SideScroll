@@ -1,7 +1,6 @@
 using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
-using Atlas.UI.Avalonia.Themes;
 using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Controls;
@@ -12,6 +11,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls;
+
+public class TabSeparator : Border { }
 
 public class TabControlParams : Grid, IValidationControl
 {
@@ -74,6 +75,11 @@ public class TabControlParams : Grid, IValidationControl
 		Control? lastControl = null;
 		foreach (ListProperty property in properties)
 		{
+			if (property.GetCustomAttribute<SeparatorAttribute>() != null)
+			{
+				AddSeparator();
+			}
+
 			var newControl = AddPropertyControl(property);
 			if (newControl != null)
 			{
@@ -111,12 +117,10 @@ public class TabControlParams : Grid, IValidationControl
 
 		AddRowDefinition();
 
-		TextBlock textBlock = new()
+		TabControlTextBlock textBlock = new()
 		{
 			Text = summaryAttribute.Summary,
-			FontSize = 14,
 			Margin = new Thickness(0, 3, 10, 3),
-			Foreground = AtlasTheme.BackgroundText,
 			VerticalAlignment = VerticalAlignment.Top,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			TextWrapping = TextWrapping.Wrap,
@@ -226,11 +230,10 @@ public class TabControlParams : Grid, IValidationControl
 			RowDefinitions.Add(rowDefinition);
 		}
 
-		TextBlock textLabel = new()
+		TabControlTextBlock textLabel = new()
 		{
 			Text = property.Name,
 			Margin = new Thickness(10, 7, 10, 3),
-			Foreground = AtlasTheme.BackgroundText,
 			VerticalAlignment = VerticalAlignment.Top,
 			MaxWidth = ControlMaxWidth,
 			[Grid.RowProperty] = rowIndex,
@@ -258,18 +261,35 @@ public class TabControlParams : Grid, IValidationControl
 		}
 		else if (type.IsEnum || listAttribute != null)
 		{
-			return new TabControlComboBox(property, listAttribute?.PropertyName);
+			return new TabControlFormattedComboBox(property, listAttribute?.PropertyName);
 		}
 		else if (typeof(DateTime).IsAssignableFrom(type) && property.Editable)
 		{
 			return new TabDateTimePicker(property);
 		}
-		else if (!typeof(IList).IsAssignableFrom(type))
+		else if (typeof(Color).IsAssignableFrom(type))
+		{
+			return new TabControlColorPicker(property);
+		}
+		else if (typeof(string).IsAssignableFrom(type) || !typeof(IEnumerable).IsAssignableFrom(type))
 		{
 			return new TabControlTextBox(property);
 		}
 
 		return null;
+	}
+
+	public void AddSeparator()
+	{
+		// Don't add for first item or optional null controls
+		if (Children.Count == 0) return;
+
+		TabSeparator separator = new()
+		{
+			[Grid.ColumnSpanProperty] = ColumnDefinitions.Count,
+		};
+		int rowIndex = RowDefinitions.Count;
+		AddControl(separator, 0, rowIndex);
 	}
 
 	// Focus first input control

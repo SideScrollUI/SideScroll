@@ -1,3 +1,4 @@
+using Atlas.Core.Collections;
 using Atlas.Resources;
 using Atlas.UI.Avalonia.Themes;
 using Avalonia.Media;
@@ -9,9 +10,9 @@ namespace Atlas.UI.Avalonia.Utilities;
 
 public static class SvgUtils
 {
-	private static Dictionary<string, IImage> _images = new();
+	private static MemoryTypeCache<IImage> _images = new();
 
-	public static IImage? GetSvgImage(IResourceView imageResource, Color? color = null)
+	public static IImage? TryGetSvgColorImage(IResourceView imageResource, Color? color = null)
 	{
 		if (imageResource.ResourceType != "svg") return null;
 
@@ -19,12 +20,13 @@ public static class SvgUtils
 		{
 			lock (_images)
 			{
+				color ??= (imageResource as ImageColorView)?.Color;
 				color ??= AtlasTheme.IconForeground.Color;
 				string key = $"{imageResource.Path}:{color}";
 				if (_images.TryGetValue(key, out IImage? image)) return image;
 
-				IImage queueImage = GetSvgImage(imageResource.Stream, color);
-				_images[key] = queueImage;
+				IImage queueImage = GetSvgColorImage(imageResource.Stream, color);
+				_images.Set(key, queueImage);
 				return queueImage;
 			}
 		}
@@ -35,7 +37,13 @@ public static class SvgUtils
 		}
 	}
 
-	public static IImage GetSvgImage(Stream stream, Color? color = null)
+	public static IImage GetSvgColorImage(IResourceView imageResource, Color? color = null)
+	{
+		color ??= (imageResource as ImageColorView)?.Color;
+		return GetSvgColorImage(imageResource.Stream, color);
+	}
+
+	public static IImage GetSvgColorImage(Stream stream, Color? color = null)
 	{
 		stream.Position = 0;
 

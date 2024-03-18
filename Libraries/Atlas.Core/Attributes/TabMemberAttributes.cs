@@ -119,12 +119,6 @@ public class DebugOnlyAttribute : Attribute
 	}
 }
 
-// Style a Column to use the same color as the header
-[AttributeUsage(AttributeTargets.Property)]
-public class StyleLabelAttribute : Attribute
-{
-}
-
 // Style value based on whether it contains links or not
 [AttributeUsage(AttributeTargets.Property)]
 public class StyleValueAttribute : Attribute

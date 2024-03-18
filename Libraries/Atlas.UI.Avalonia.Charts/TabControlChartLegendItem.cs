@@ -1,5 +1,6 @@
 using Atlas.Core;
 using Atlas.Extensions;
+using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
@@ -22,8 +23,8 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	public ChartView ChartView => Legend.ChartView;
 	public TSeries Series => ChartSeries.LineSeries;
 
-	public TextBlock? TextBlock;
-	public TextBlock? TextBlockTotal;
+	public TabControlTextBlock? TextBlock;
+	public TabControlTextBlock? TextBlockTotal;
 
 	protected Polygon? _polygon;
 
@@ -54,6 +55,8 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	public IEnumerable? ItemsSource { get; internal set; }
 
+	private SolidColorBrush _colorBrush;
+
 	public override string? ToString() => ChartSeries.ToString();
 
 	public TabChartLegendItem(TabControlChartLegend<TSeries> legend, ChartSeries<TSeries> chartSeries)
@@ -65,6 +68,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		RowDefinitions = new RowDefinitions("Auto");
 
 		Background = AtlasTheme.TabBackground;
+		_colorBrush = new SolidColorBrush(ChartSeries.Color);
 
 		UpdateTotal();
 
@@ -82,7 +86,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void SetFilled(bool filled)
 	{
-		_polygon!.Fill = new SolidColorBrush(filled && Count > 0 ? ChartSeries.Color : Colors.Transparent);
+		_polygon!.Fill = filled && Count > 0 ? _colorBrush : Brushes.Transparent;
 	}
 
 	public void UpdateTotal()
@@ -110,7 +114,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		};
 
 		if (Count > 0)
-			_polygon.Fill = new SolidColorBrush(ChartSeries.Color);
+			_polygon.Fill = _colorBrush;
 		else
 			IsSelected = false;
 
@@ -138,9 +142,8 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void AddTextBlock()
 	{
-		TextBlock = new TextBlock
+		TextBlock = new TabControlTextBlock
 		{
-			Foreground = Brushes.LightGray,
 			Margin = new Thickness(2, 2, 6, 2),
 			//VerticalAlignment = VerticalAlignment.Center,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -161,10 +164,9 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void AddTotalTextBlock()
 	{
-		TextBlockTotal = new TextBlock
+		TextBlockTotal = new TabControlTextBlock
 		{
 			Text = Total?.FormattedShortDecimal(),
-			Foreground = Brushes.LightGray,
 			Margin = new Thickness(10, 2, 6, 2),
 			HorizontalAlignment = HorizontalAlignment.Right,
 			[Grid.ColumnProperty] = 2,
@@ -187,18 +189,18 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 				UpdatePolygonPoints(15, 15);
 				SetFilled(true);
 				_highlight = true;
-				TextBlock!.Foreground = AtlasTheme.GridBackgroundSelected;
+				TextBlock!.Foreground = AtlasTheme.ChartLabelForegroundHighlight;
 				if (TextBlockTotal != null)
-					TextBlockTotal.Foreground = AtlasTheme.GridBackgroundSelected;
+					TextBlockTotal.Foreground = AtlasTheme.ChartLabelForegroundHighlight;
 			}
 			else
 			{
 				UpdatePolygonPoints(13, 13);
 				_highlight = false;
 				SetFilled(IsSelected);
-				TextBlock!.Foreground = Brushes.LightGray;
+				TextBlock!.Foreground = AtlasTheme.LabelForeground;
 				if (TextBlockTotal != null)
-					TextBlockTotal.Foreground = Brushes.LightGray;
+					TextBlockTotal.Foreground = AtlasTheme.LabelForeground;
 			}
 
 			UpdateVisible();

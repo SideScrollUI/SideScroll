@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Atlas.Tabs.Test.Params;
 
-[Params]
+[Params, PublicData]
 public class ParamTestItem
 {
 	[DataKey, Required, StringLength(30)]
@@ -52,6 +52,7 @@ public class ParamTestItem
 	}*/
 }
 
+[PublicData]
 public class ParamListItem
 {
 	public string? Name { get; set; }

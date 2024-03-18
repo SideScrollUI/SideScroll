@@ -1,4 +1,3 @@
-using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -29,7 +28,6 @@ public class DataGridPropertyCheckBoxColumn : DataGridCheckBoxColumn
 
 	protected override Control GenerateElement(DataGridCell cell, object dataItem)
 	{
-		cell.BorderBrush = AtlasTheme.GridBorder;
 		cell.BorderThickness = new Thickness(0, 0, 1, 1); // Right and Bottom
 
 		var checkBox = (CheckBox)GenerateEditingElementDirect(cell, dataItem);

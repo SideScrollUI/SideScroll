@@ -1,5 +1,5 @@
 using Atlas.Core;
-using Atlas.UI.Avalonia.Themes;
+using Atlas.UI.Avalonia.Controls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -52,9 +52,8 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 
 		if (ChartView.ShowOrder && ChartView.LegendPosition == ChartLegendPosition.Right)
 		{
-			_textBlockTotal = new TextBlock()
+			_textBlockTotal = new TabControlTextBlock()
 			{
-				Foreground = AtlasTheme.BackgroundText,
 				Margin = new Thickness(2),
 				HorizontalAlignment = HorizontalAlignment.Right,
 			};
@@ -245,6 +244,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 		}
 	}
 
+	// todo: remove 1
 	protected void LegendItem_SelectionChanged(object? sender, EventArgs e)
 	{
 		UpdateVisibleSeries();

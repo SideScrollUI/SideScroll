@@ -16,7 +16,6 @@ public class TabTestDataGrid
 	public static TabTestArray Array => new();
 	public static TabTestNullableArray NullableArray => new();
 	public static TabTestMemory Memory => new();
-	public static TabTestObjectProperties ObjectProperties => new();
 	public static TabTestInstanceListItems InstanceListItems => new();
 	public static TabTestFilter Filter => new();
 }

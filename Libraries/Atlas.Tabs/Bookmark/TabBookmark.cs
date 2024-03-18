@@ -72,19 +72,21 @@ public class TabBookmark
 	{
 		// get TabBookmark.SelectedObjects working again and replace?
 
-		string? prevLabel = null;
+		string? prevKey = null;
 		TabBookmark? rootBookmark = null;
 		TabBookmark? tabBookmark = null;
 		foreach (object obj in objs)
 		{
-			string label = obj.ToString()!;
+			string? dataKey = new SelectedRow(obj).ToString();
+			if (dataKey == null) throw new Exception("SelectedRow DataKey is null");
+
 			var newBookmark = new TabBookmark();
-			newBookmark.Select(label);
+			newBookmark.Select(dataKey);
 			if (tabBookmark != null)
-				tabBookmark.ChildBookmarks.Add(prevLabel!, newBookmark);
+				tabBookmark.ChildBookmarks.Add(prevKey!, newBookmark);
 			tabBookmark = newBookmark;
 			rootBookmark ??= tabBookmark;
-			prevLabel = label;
+			prevKey = dataKey;
 		}
 		return rootBookmark!;
 	}
@@ -198,22 +200,22 @@ public class TabBookmark
 		};
 	}
 
-	public TabBookmark AddChild(string label)
+	public TabBookmark AddChild(string dataKey)
 	{
 		var childBookmark = new TabBookmark()
 		{
 			Bookmark = Bookmark,
 		};
-		ChildBookmarks.Add(label, childBookmark);
+		ChildBookmarks.Add(dataKey, childBookmark);
 		return childBookmark;
 	}
 
-	public TabBookmark? GetChild(string name)
+	public TabBookmark? GetChild(string dataKey)
 	{
 		if (ChildBookmarks == null)
 			return null;
 
-		if (ChildBookmarks.TryGetValue(name, out TabBookmark? childBookmark))
+		if (ChildBookmarks.TryGetValue(dataKey, out TabBookmark? childBookmark))
 			return childBookmark;
 
 		return null;

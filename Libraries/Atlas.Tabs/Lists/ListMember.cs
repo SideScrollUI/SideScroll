@@ -12,7 +12,7 @@ public interface IListAutoSelect
 
 public interface IListPair
 {
-	[Name("Name"), StyleLabel]
+	[Name("Name")]
 	object? Key { get; }
 
 	[InnerValue, StyleValue]
@@ -40,7 +40,7 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 
 	public object Object;
 
-	[StyleLabel, AutoSize]
+	[AutoSize]
 	public string? Name { get; set; }
 
 	[HiddenColumn]
@@ -104,16 +104,12 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 	{
 		Object = obj;
 		MemberInfo = memberInfo;
-
-		if (obj is INotifyPropertyChanged notifyPropertyChanged)
-			notifyPropertyChanged.PropertyChanged += ListProperty_PropertyChanged;
 	}
 
-	private void ListProperty_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+	protected void ValueChanged()
 	{
-		PropertyChanged?.Invoke(this, e);
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Value)));
 	}
-
 
 	public T? GetCustomAttribute<T>() where T : Attribute
 	{
@@ -168,12 +164,11 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 		{
 			if (listMember.GetCustomAttribute<InlineAttribute>() != null)
 			{
-				object? value = listMember.Value;
-				if (value == null)
-					continue;
-
-				ItemCollection<ListMember> inlinedProperties = Create(value, includeBaseTypes);
-				newMembers.AddRange(inlinedProperties);
+				if (listMember.Value is object value)
+				{
+					ItemCollection<ListMember> inlinedProperties = Create(value, includeBaseTypes);
+					newMembers.AddRange(inlinedProperties);
+				}
 			}
 			else
 			{

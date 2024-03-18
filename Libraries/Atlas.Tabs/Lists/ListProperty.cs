@@ -74,11 +74,7 @@ public class ListProperty : ListMember, IPropertyEditable
 
 				PropertyInfo.SetValue(Object, value);
 				_valueCached = false;
-
-				/*if (Object is INotifyPropertyChanged notifyPropertyChanged)
-				{
-					//notifyPropertyChanged.PropertyChanged?.Invoke(obj, new PropertyChangedEventArgs(propertyName));
-				}*/
+				ValueChanged();
 			}
 		}
 	}
@@ -107,6 +103,19 @@ public class ListProperty : ListMember, IPropertyEditable
 
 		if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
 			Name = "* " + Name;
+
+		if (obj is INotifyPropertyChanged notifyPropertyChanged)
+		{
+			notifyPropertyChanged.PropertyChanged += ListProperty_PropertyChanged;
+		}
+	}
+
+	protected void ListProperty_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		if (e.PropertyName != MemberInfo.Name) return;
+		
+		_valueCached = false;
+		ValueChanged();
 	}
 
 	public static new ItemCollection<ListProperty> Create(object obj, bool includeBaseTypes = true)
@@ -136,7 +145,29 @@ public class ListProperty : ListMember, IPropertyEditable
 				listProperties.Add(listProperty);
 			}
 		}
-		return listProperties;
+		return ExpandInlined(listProperties, includeBaseTypes);
+	}
+
+	// If a member specifies [Inline], replace this member with all it's members
+	public static ItemCollection<ListProperty> ExpandInlined(ItemCollection<ListProperty> listProperties, bool includeBaseTypes)
+	{
+		ItemCollection<ListProperty> newProperties = new();
+		foreach (ListProperty listProperty in listProperties)
+		{
+			if (listProperty.GetCustomAttribute<InlineAttribute>() != null)
+			{
+				if (listProperty.Value is object value)
+				{
+					ItemCollection<ListProperty> inlinedProperties = Create(value, includeBaseTypes);
+					newProperties.AddRange(inlinedProperties);
+				}
+			}
+			else
+			{
+				newProperties.Add(listProperty);
+			}
+		}
+		return newProperties;
 	}
 
 	public bool IsRowVisible()

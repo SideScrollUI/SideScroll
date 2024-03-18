@@ -14,6 +14,7 @@ public class MainWindow : BaseWindow
 
 		LiveChartCreator.Register();
 		ScreenCapture.AddControlTo(TabViewer);
+		TabViewer.Toolbar?.AddVersion();
 	}
 
 	public static ProjectSettings Settings => new()

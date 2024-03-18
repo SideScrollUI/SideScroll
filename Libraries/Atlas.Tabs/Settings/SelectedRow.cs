@@ -17,7 +17,7 @@ public class SelectedRow : IEquatable<SelectedRow>
 	// public bool Pinned;
 	// public List<string> SelectedColumns = new(); // Not supported yet
 
-	public override string? ToString() => Label ?? DataKey;
+	public override string? ToString() => DataKey ?? Label;
 
 	public SelectedRow() { }
 

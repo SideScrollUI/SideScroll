@@ -5,7 +5,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -34,8 +33,6 @@ public class TabControlTextBox : TextBox
 	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Top;
-
-		//Background = Theme.Background;
 
 		MinWidth = 50;
 		MaxWidth = 3000;
@@ -73,8 +70,8 @@ public class TabControlTextBox : TextBox
 		IsReadOnly = !property.Editable;
 		if (IsReadOnly)
 		{
-			Background = AtlasTheme.TextBackgroundDisabled;
-			Foreground = AtlasTheme.ForegroundLight;
+			Background = AtlasTheme.TextReadOnlyBackground;
+			Foreground = AtlasTheme.TextReadOnlyForeground;
 		}
 
 		PasswordCharAttribute? passwordCharAttribute = property.GetCustomAttribute<PasswordCharAttribute>();
@@ -170,7 +167,7 @@ public class TabControlTextBox : TextBox
 	// Highlighting is too distracting for large controls
 	public void DisableHover()
 	{
-		Resources.Add("ThemeBackgroundHoverBrush", Background);
+		Resources.Add("TextControlBackgroundPointerOverBrush", Background);
 	}
 
 	// Move formatting to a FormattedText method/property?
@@ -181,7 +178,7 @@ public class TabControlTextBox : TextBox
 		{
 			if (value is string s && s.StartsWith("{") && s.Contains("\n"))
 			{
-				FontFamily = new FontFamily("Courier New"); // Use monospaced font for Json
+				FontFamily = AtlasTheme.MonospaceFontFamily; // Use monospaced font for Json
 			}
 
 			base.Text = value;

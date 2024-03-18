@@ -1,0 +1,25 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:atlas="clr-namespace:Atlas.UI.Avalonia.Controls;assembly=Atlas.UI.Avalonia">
+
+  <ControlTheme x:Key="{x:Type atlas:TabControlToolbar}" TargetType="atlas:TabControlToolbar">
+    <Setter Property="Background" Value="{DynamicResource ToolbarBackgroundBrush}"/>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type atlas:ToolbarSeparator}" TargetType="atlas:ToolbarSeparator">
+    <Setter Property="Background" Value="{DynamicResource ToolbarSeparatorBrush}"/>
+    <Setter Property="Margin" Value="4,2"/>
+    <Setter Property="Width" Value="1"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+  </ControlTheme>
+  
+  <ControlTheme x:Key="{x:Type atlas:ToolbarTextBlock}" TargetType="atlas:ToolbarTextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource ToolbarLabelForegroundBrush}"/>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type atlas:ToolbarHeaderTextBlock}" TargetType="atlas:ToolbarHeaderTextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource ToolbarHeaderLabelForegroundBrush}"/>
+    <Setter Property="FontSize" Value="{DynamicResource TitleFontSize}"/>
+  </ControlTheme>
+  
+</ResourceDictionary>

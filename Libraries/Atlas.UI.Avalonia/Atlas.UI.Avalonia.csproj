@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
     <Configurations>Debug;Release;DebugX86</Configurations>
@@ -33,16 +33,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="Themes\Controls\ControlThemes.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabButton.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabControlSplitContainer.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabControlTextBlock.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabControlTitle.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabControlToolbar.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabSeparator.xaml" />
     <EmbeddedResource Remove="Themes\Controls\ToolbarButton.xaml" />
-    <EmbeddedResource Remove="Themes\Default\Accents\BaseDark.xaml" />
-    <EmbeddedResource Remove="Themes\Default\Accents\BaseLight.xaml" />
-    <EmbeddedResource Remove="Themes\Default\DefaultTheme.xaml" />
-    <EmbeddedResource Remove="Themes\Fluent\Accents\FluentBaseDark.xaml" />
-    <EmbeddedResource Remove="Themes\Fluent\Accents\FluentBaseLight.xaml" />
     <EmbeddedResource Remove="Themes\Fluent\Controls\DataGrid.xaml" />
     <EmbeddedResource Remove="Themes\Fluent\Controls\ScrollBar.xaml" />
-    <EmbeddedResource Remove="Themes\Fluent\FluentTheme.xaml" />
+    <EmbeddedResource Remove="Themes\Fluent\FluentControls.xaml" />
+    <EmbeddedResource Remove="Themes\Simple\Simple.xaml" />
+    <EmbeddedResource Remove="Themes\Simple\SimpleControls.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,15 +55,18 @@
     <None Remove="Logo.ico" />
     <None Remove="right-chevron.png" />
     <None Remove="StyleResources.xaml" />
-    <None Remove="Themes\Default\Accents\BaseLight.xaml" />
-    <None Remove="Themes\Default\Accents\BaseDark.xaml" />
+    <None Remove="Themes\Controls\ControlThemes.xaml" />
+    <None Remove="Themes\Controls\TabControlTextBlock.xaml" />
+    <None Remove="Themes\Controls\TabControlTitle.xaml" />
+    <None Remove="Themes\Controls\TabControlToolbar.xaml" />
+    <None Remove="Themes\Controls\TabSeparator.xaml" />
     <None Remove="Themes\Controls\TabButton.xaml" />
+    <None Remove="Themes\Controls\TabControlSplitContainer.xaml" />
     <None Remove="Themes\Controls\ToolbarButton.xaml" />
-    <None Remove="Themes\Fluent\Accents\FluentBaseDark.xaml" />
-    <None Remove="Themes\Fluent\Accents\FluentBaseLight.xaml" />
     <None Remove="Themes\Fluent\DataGrid.xaml" />
-    <None Remove="Themes\Fluent\FluentTheme.xaml" />
+    <None Remove="Themes\Fluent\FluentControls.xaml" />
     <None Remove="Themes\Fluent\Controls\ScrollBar.xaml" />
+    <None Remove="Themes\Simple\Simple.xaml" />
     <None Remove="View\TabAvalonEdit.xaml" />
   </ItemGroup>
 
@@ -68,20 +74,32 @@
     <AvaloniaResource Include="Themes\Controls\TabButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabControlTextBlock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabControlTitle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabControlToolbar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabSeparator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabControlSplitContainer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\ControlThemes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\ToolbarButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\Accents\BaseDark.xaml">
+    <AvaloniaResource Include="Themes\Simple\Simple.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\Accents\BaseLight.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\DefaultTheme.xaml" />
-    <AvaloniaResource Include="Themes\Fluent\Accents\FluentBaseDark.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Fluent\Accents\FluentBaseLight.xaml">
+    <AvaloniaResource Include="Themes\Simple\SimpleControls.xaml" />
+    <AvaloniaResource Include="Themes\Fluent\Fluent.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Fluent\Controls\DataGrid.xaml">
@@ -90,7 +108,7 @@
     <AvaloniaResource Include="Themes\Fluent\Controls\ScrollBar.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Fluent\FluentTheme.xaml">
+    <AvaloniaResource Include="Themes\Fluent\FluentControls.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
   </ItemGroup>
@@ -98,14 +116,16 @@
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEditVersion)" />
+    <PackageReference Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.13" />
+    <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.16" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Atlas.Core\Atlas.Core.csproj" />
     <ProjectReference Include="..\Atlas.Resources\Atlas.Resources.csproj" />
     <ProjectReference Include="..\Atlas.Serialize\Atlas.Serialize.csproj" />
+    <ProjectReference Include="..\Atlas.Tabs.Test\Atlas.Tabs.Test.csproj" />
     <ProjectReference Include="..\Atlas.Tabs.Tools\Atlas.Tabs.Tools.csproj" />
     <ProjectReference Include="..\Atlas.Tabs\Atlas.Tabs.csproj" />
   </ItemGroup>

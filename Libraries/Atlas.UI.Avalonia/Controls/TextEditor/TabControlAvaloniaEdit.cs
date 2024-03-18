@@ -31,6 +31,13 @@ public class TabControlTextEditor : AvaloniaEdit.TextEditor
 	}
 }
 
+public enum TextType
+{
+	Default,
+	Json,
+	Xml,
+}
+
 public class TabControlAvaloniaEdit : Grid
 {
 	public const int MaxAutoLoadSize = 1000000;
@@ -40,13 +47,14 @@ public class TabControlAvaloniaEdit : Grid
 	public string? Path;
 	public ListProperty? ListProperty;
 	public AvaloniaEdit.TextEditor TextEditor;
-	public double MaxDesiredWidth = 1000;
+
+	public TextType TextType { get; set; }
 
 	public TabControlAvaloniaEdit(TabInstance tabInstance)
 	{
 		TabInstance = tabInstance;
 
-		Background = Brushes.Transparent;
+		Background = AtlasTheme.TextEditorBackgroundBrush;
 
 		MinWidth = 50; // WordWrap causes freezing below certain values
 		MaxWidth = 3000;
@@ -64,8 +72,8 @@ public class TabControlAvaloniaEdit : Grid
 			VerticalAlignment = VerticalAlignment.Top,
 			MaxWidth = 3000,
 			MaxHeight = 2000,
-			Foreground = AtlasTheme.GridForeground,
-			Background = AtlasTheme.GridBackground,
+			Background = Brushes.Transparent,
+			Foreground = AtlasTheme.TextEditorForegroundBrush,
 			WordWrap = true,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // WordWrap requires Disabled
 			VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
@@ -75,9 +83,16 @@ public class TabControlAvaloniaEdit : Grid
 		TextEditor.Options.AllowScrollBelowDocument = false; // Breaks top alignment
 		Children.Add(TextEditor);
 
+		ActualThemeVariantChanged += TabControlAvaloniaEdit_ActualThemeVariantChanged;
+
 		//textEditor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
 		/*ShowLineNumbers = true;
 		SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");*/
+	}
+
+	private void TabControlAvaloniaEdit_ActualThemeVariantChanged(object? sender, EventArgs e)
+	{
+		UpdateTheme();
 	}
 
 	public void Load(string path)
@@ -108,19 +123,91 @@ public class TabControlAvaloniaEdit : Grid
 		get => TextEditor.Text;
 		set
 		{
-			if (value.StartsWith("{"))
-			{
-				TextEditor.FontFamily = new FontFamily("Courier New"); // Use monospaced font for Json
-				TextEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript"); // handles JSON too
-			}
 			TextEditor.Text = value;
+			UpdateTheme();
 			// UpdateLineNumbers(); // Enable for all?
 		}
 	}
 
-	public void SetFormattedJson(string text)
+	private void UpdateTheme()
 	{
-		Text = JsonUtils.Format(text);
+		Background = AtlasTheme.TextEditorBackgroundBrush;
+		TextEditor.TextArea.Foreground = AtlasTheme.TextEditorForegroundBrush;
+		TextEditor.TextArea.TextView.LinkTextForegroundBrush = AtlasTheme.LinkTextForegroundBrush;
+
+		if (TextType == TextType.Json)
+		{
+			EnableMonospace();
+			EnableJsonSyntaxHighlighting();
+		}
+		else if (TextType == TextType.Xml)
+		{
+			EnableMonospace();
+			EnableXmlSyntaxHighlighting();
+		}
+	}
+
+	public void EnableMonospace()
+	{
+		TextEditor.FontFamily = AtlasTheme.MonospaceFontFamily;
+	}
+
+	private void EnableJsonSyntaxHighlighting()
+	{
+		TextEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("Json");
+
+		SetHighlightColor("Bool", AtlasTheme.JsonHighlightBoolBrush.Color);
+		SetHighlightColor("Number", AtlasTheme.JsonHighlightNumberBrush.Color);
+		SetHighlightColor("String", AtlasTheme.JsonHighlightStringBrush.Color);
+		SetHighlightColor("Null", AtlasTheme.JsonHighlightNullBrush.Color);
+		SetHighlightColor("FieldName", AtlasTheme.JsonHighlightFieldNameBrush.Color);
+		SetHighlightColor("Punctuation", AtlasTheme.JsonHighlightPunctuationBrush.Color);
+	}
+
+	private void EnableXmlSyntaxHighlighting()
+	{
+		TextEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("XML");
+
+		SetHighlightColor("Comment", AtlasTheme.XmlHighlightCommentBrush.Color);
+		SetHighlightColor("CData", AtlasTheme.XmlHighlightCDataBrush.Color);
+		SetHighlightColor("DocType", AtlasTheme.XmlHighlightDocTypeBrush.Color);
+		SetHighlightColor("XmlDeclaration", AtlasTheme.XmlHighlightDeclarationBrush.Color);
+		SetHighlightColor("XmlTag", AtlasTheme.XmlHighlightTagBrush.Color);
+		SetHighlightColor("AttributeName", AtlasTheme.XmlHighlightAttributeNameBrush.Color);
+		SetHighlightColor("AttributeValue", AtlasTheme.XmlHighlightAttributeValueBrush.Color);
+		SetHighlightColor("Entity", AtlasTheme.XmlHighlightEntityBrush.Color);
+		SetHighlightColor("BrokenEntity", AtlasTheme.XmlHighlightBrokenEntityBrush.Color);
+	}
+
+	private void SetHighlightColor(string name, Color color)
+	{
+		var highlightColor = TextEditor.SyntaxHighlighting.GetNamedColor(name);
+		highlightColor.Foreground = new SimpleHighlightingBrush(color);
+	}
+
+	public void SetFormatted(string text)
+	{
+		try
+		{
+			if (JsonUtils.TryFormat(text, out string? json))
+			{
+				Text = json;
+				TextType = TextType.Json;
+			}
+			else if (XmlUtils.TryFormat(text, out string? formatted) || text.StartsWith("<?xml"))
+			{
+				Text = formatted ?? text;
+				TextType = TextType.Xml;
+			}
+			else
+			{
+				Text = text;
+			}
+		}
+		catch (Exception)
+		{
+			Text = text;
+		}
 	}
 
 	private void UpdateLineNumbers()
@@ -167,7 +254,11 @@ public class TabControlAvaloniaEdit : Grid
 
 	private void ListProperty_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
 	{
-		if (e.PropertyName == "ValueText" && TextEditor.Text != ListProperty!.ValueText!.ToString())
-			TextEditor.Text = ListProperty.ValueText.ToString();
+		if (e.PropertyName == nameof(ListProperty.ValueText) &&
+			ListProperty?.ValueText?.ToString() is string value &&
+			value != TextEditor.Text)
+		{
+			TextEditor.Text = value;
+		}
 	}
 }

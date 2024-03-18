@@ -8,20 +8,20 @@ using System.Reflection;
 
 namespace Atlas.UI.Avalonia;
 
-public class ValueToBrushConverter : IValueConverter
+public class ValueToBackgroundBrushConverter : IValueConverter
 {
 	public PropertyInfo PropertyInfo;
 
-	public ValueToBrushConverter(PropertyInfo propertyInfo)
+	public ValueToBackgroundBrushConverter(PropertyInfo propertyInfo)
 	{
 		PropertyInfo = propertyInfo;
 	}
 
 	public sealed class BrushColors
 	{
-		public ISolidColorBrush HasLinks => AtlasTheme.HasLinksBackground;
-		public ISolidColorBrush NoLinks => AtlasTheme.NoLinksBackground;
-		public ISolidColorBrush Editable { get; set; } = AtlasTheme.Editable;
+		public ISolidColorBrush HasLinks => AtlasTheme.DataGridHasLinksBackground;
+		public ISolidColorBrush NoLinks => AtlasTheme.DataGridNoLinksBackground;
+		public ISolidColorBrush Editable { get; set; } = AtlasTheme.DataGridEditableBackground;
 	}
 	internal static BrushColors StyleBrushes { get; set; } = new();
 
@@ -31,9 +31,6 @@ public class ValueToBrushConverter : IValueConverter
 	{
 		try
 		{
-			if (PropertyInfo.IsDefined(typeof(StyleLabelAttribute)))
-				return AtlasTheme.ButtonBackground;
-
 			if (value is DictionaryEntry || PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 			{
 				bool hasLinks = TabUtils.ObjectHasLinks(value, true);
@@ -73,9 +70,9 @@ public class ValueToForegroundBrushConverter : IValueConverter
 
 	public sealed class BrushColors
 	{
-		public ISolidColorBrush HasLinks => AtlasTheme.ToolbarTextForeground; //Theme.TitleForeground;
+		public ISolidColorBrush HasLinks => AtlasTheme.DataGridHasLinksForeground; //Theme.TitleForeground;
 		public ISolidColorBrush NoLinks => AtlasTheme.ToolbarTextForeground; // Should this be different?
-		public ISolidColorBrush Editable { get; set; } = AtlasTheme.Editable;
+		// public ISolidColorBrush Editable { get; set; } = AtlasTheme.Editable;
 	}
 	internal static BrushColors StyleBrushes { get; set; } = new();
 

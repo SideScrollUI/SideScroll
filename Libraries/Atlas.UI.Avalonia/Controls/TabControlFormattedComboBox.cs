@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using System.Collections;
+using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls;
 
@@ -22,6 +23,27 @@ public class TabControlFormattedComboBox : ComboBox
 		Items = list;
 
 		InitializeComponent();
+	}
+
+	public TabControlFormattedComboBox(ListProperty property, string? listPropertyName)
+	{
+		Property = property;
+		IsEnabled = property.Editable;
+
+		InitializeComponent();
+
+		if (listPropertyName != null)
+		{
+			PropertyInfo propertyInfo = property.Object.GetType().GetProperty(listPropertyName,
+				BindingFlags.Public | BindingFlags.NonPublic |
+				BindingFlags.Instance | BindingFlags.Static)!;
+			Items = (IEnumerable)propertyInfo.GetValue(property.Object)!;
+		}
+		else
+		{
+			Items = property.UnderlyingType.GetEnumValues();
+		}
+		Bind();
 	}
 
 	private void InitializeComponent()

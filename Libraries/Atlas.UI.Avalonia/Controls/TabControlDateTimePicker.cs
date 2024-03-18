@@ -34,19 +34,14 @@ public class TabDateTimePicker : Grid
 
 	public Binding Binding { get; set; }
 
-	private DateTimeValueConverter _dateTimeConverter;
+	private readonly DateTimeValueConverter _dateTimeConverter;
 	private TabCalendarDatePicker _datePicker;
 	private TabControlTextBox _timeTextBox;
 
 	public TabDateTimePicker(ListProperty property)
 	{
 		Property = property;
-		InitializeComponent();
-	}
 
-	[MemberNotNull(nameof(Binding), nameof(_dateTimeConverter), nameof(_datePicker), nameof(_timeTextBox))]
-	private void InitializeComponent()
-	{
 		ColumnDefinitions = new ColumnDefinitions("*,*,Auto");
 		RowDefinitions = new RowDefinitions("Auto");
 
@@ -76,12 +71,9 @@ public class TabDateTimePicker : Grid
 	{
 		_datePicker = new TabCalendarDatePicker()
 		{
-			Background = Property.Editable ? AtlasTheme.Background : Brushes.LightGray,
-			BorderBrush = Brushes.Black,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Top, // Validation errors appear below controls
 			VerticalContentAlignment = VerticalAlignment.Center,
-			BorderThickness = new Thickness(1),
 			SelectedDateFormat = CalendarDatePickerFormat.Custom,
 			CustomDateFormatString = "yyyy/M/d",
 			Watermark = "yyyy/M/d",
@@ -92,7 +84,7 @@ public class TabDateTimePicker : Grid
 
 		if (!Property.Editable)
 		{
-			_datePicker.Background = AtlasTheme.TextBackgroundDisabled;
+			_datePicker.Background = AtlasTheme.TextReadOnlyBackground;
 		}
 
 		_datePicker.Bind(CalendarDatePicker.SelectedDateProperty, Binding);
@@ -115,8 +107,8 @@ public class TabDateTimePicker : Grid
 
 		if (!Property.Editable)
 		{
-			_timeTextBox.Background = AtlasTheme.TextBackgroundDisabled;
-			_timeTextBox.Foreground = AtlasTheme.ForegroundLight;
+			_timeTextBox.Background = AtlasTheme.TextReadOnlyBackground;
+			_timeTextBox.Foreground = AtlasTheme.TextReadOnlyForeground;
 		}
 
 		_timeTextBox.Bind(TextBlock.TextProperty, Binding);
@@ -175,7 +167,7 @@ public class TabDateTimePicker : Grid
 			BorderThickness = new Thickness(0),
 			//Margin = new Thickness(2),
 			HorizontalAlignment = HorizontalAlignment.Right,
-			VerticalAlignment = VerticalAlignment.Top,
+			VerticalAlignment = VerticalAlignment.Center,
 			//BorderThickness = new Thickness(2),
 			//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
 			//BorderBrush = new SolidColorBrush(Colors.Black),
@@ -196,8 +188,8 @@ public class TabDateTimePicker : Grid
 	private void Button_PointerEnter(object? sender, PointerEventArgs e)
 	{
 		Button button = (Button)sender!;
-		button.BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-		button.Background = AtlasTheme.ToolbarButtonBackgroundHover;
+		button.BorderBrush = Brushes.Black; // can't overwrite hover border :(
+		button.Background = AtlasTheme.ToolbarButtonBackgroundPointerOver;
 	}
 
 	private void Button_PointerExited(object? sender, PointerEventArgs e)

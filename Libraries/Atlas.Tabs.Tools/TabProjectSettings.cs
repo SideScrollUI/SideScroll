@@ -3,7 +3,7 @@ using Atlas.Serialize;
 
 namespace Atlas.Tabs.Tools;
 
-public class TabSettings : ITab
+public class TabProjectSettings : ITab
 {
 	public TabInstance Create() => new Instance();
 

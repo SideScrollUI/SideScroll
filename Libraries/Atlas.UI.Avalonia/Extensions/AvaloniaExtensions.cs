@@ -8,4 +8,9 @@ public static class AvaloniaExtensions
 	{
 		return new Color(color.A, color.R, color.G, color.B);
 	}
+
+	public static System.Drawing.Color AsSystemColor(this Color color)
+	{
+		return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+	}
 }

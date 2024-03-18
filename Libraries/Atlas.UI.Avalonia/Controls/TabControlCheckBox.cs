@@ -1,5 +1,4 @@
 using Atlas.Tabs;
-using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -25,7 +24,6 @@ public class TabControlCheckBox : CheckBox
 	private void Initialize()
 	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
-		BorderThickness = new Thickness(1);
 		MaxWidth = TabControlParams.ControlMaxWidth;
 		//Margin = new Thickness(2, 2);
 		//Padding = new Thickness(6, 3);

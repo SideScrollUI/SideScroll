@@ -1,6 +1,5 @@
 using Atlas.Core;
 using Atlas.Tabs;
-using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -9,13 +8,14 @@ using Avalonia.Media;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabControlTitle : UserControl, IDisposable
+public class TabControlTitle : Border, IDisposable
 {
+	private const int MaxDesiredWidth = 50;
+
 	public readonly TabInstance TabInstance;
 	public string Label { get; set; }
 
 	public TextBlock? TextBlock;
-	//private CheckBox checkBox;
 	private Grid _containerGrid;
 
 	public string Text
@@ -34,8 +34,6 @@ public class TabControlTitle : UserControl, IDisposable
 		Label = name ?? tabInstance.Label;
 		Label = new StringReader(Label).ReadLine()!; // Remove anything after first line
 
-		Background = AtlasTheme.TitleBackground;
-
 		_containerGrid = new Grid
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto,*"),
@@ -49,9 +47,7 @@ public class TabControlTitle : UserControl, IDisposable
 		TextBlock = new TextBlock
 		{
 			Text = Label,
-			FontSize = 16,
 			//Margin = new Thickness(2), // Shows as black, Need Padding so Border not needed
-			Foreground = AtlasTheme.TitleForeground,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			// [ToolTip.TipProperty] = Label, // Enable?
 		};
@@ -60,50 +56,20 @@ public class TabControlTitle : UserControl, IDisposable
 		var borderPaddingTitle = new Border
 		{
 			BorderThickness = new Thickness(5, 2, 2, 2),
-			BorderBrush = AtlasTheme.TitleBackground,
+			BorderBrush = Brushes.Transparent,
 			Child = TextBlock,
 			[Grid.ColumnProperty] = 1,
 		};
 		_containerGrid.Children.Add(borderPaddingTitle);
 
-		// Notes
-		// Add checkbox here for tabModel.Notes
-		/*checkBox = new CheckBox
-		{
-			IsChecked = (tabInstance.tabModel.Notes != null && tabInstance.tabViewSettings.NotesVisible),
-			BorderThickness = new Thickness(1),
-			BorderBrush = new SolidColorBrush(Colors.White),
-			Foreground = new SolidColorBrush(Theme.TitleForegroundColor),
-			[Grid.ColumnProperty] = 1,
-		};
-		checkBox.Click += CheckBox_Click;*/
-
-		/*if (TabInstance.Model.Notes != null && TabInstance.Model.Notes.Length > 0)
-		{
-			//Button button = new Button();
-			Image image = AvaloniaAssets.Images.Link;
-			image.Height = 20;
-			Grid.SetColumn(image, 1);
-			_containerGrid.Children.Add(image);
-			//containerGrid.Children.Add(checkBox);
-		}*/
-
 		AddLinkButton();
 
-		var borderContent = new Border
-		{
-			BorderThickness = new Thickness(1),
-			BorderBrush = new SolidColorBrush(Colors.Black),
-			Child = _containerGrid
-		};
-
-		Content = borderContent;
+		Child = _containerGrid;
 	}
 
 	private void AddLinkButton()
 	{
-		if (!TabInstance.IsLinkable)
-			return;
+		if (!TabInstance.IsLinkable) return;
 
 		var linkButton = new TabControlButton
 		{
@@ -132,6 +98,13 @@ public class TabControlTitle : UserControl, IDisposable
 		await ClipboardUtils.SetTextAsync(this, uri);
 	}
 
+	protected override Size MeasureCore(Size availableSize)
+	{
+		Size measured = base.MeasureCore(availableSize);
+		Size maxSize = new(Math.Min(MaxDesiredWidth, measured.Width), measured.Height);
+		return maxSize;
+	}
+
 	public void Dispose()
 	{
 		if (TextBlock != null)
@@ -140,20 +113,6 @@ public class TabControlTitle : UserControl, IDisposable
 			TextBlock.ContextMenu = null;
 			TextBlock = null;
 		}
-		Content = null;
+		Child = null;
 	}
-
-	protected override Size MeasureCore(Size availableSize)
-	{
-		Size measured = base.MeasureCore(availableSize);
-		Size maxSize = new(Math.Min(50, measured.Width), measured.Height);
-		return maxSize;
-	}
-
-	/*private void CheckBox_Click(object sender, RoutedEventArgs e)
-	{
-		tabInstance.tabViewSettings.NotesVisible = (bool)checkBox.IsChecked;
-		tabInstance.SaveTabSettings();
-		tabInstance.Reload();
-	}*/
 }

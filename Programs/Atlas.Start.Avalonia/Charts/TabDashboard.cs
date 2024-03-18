@@ -51,6 +51,7 @@ public class TabDashboard : ITab
 						var chart = new TabControlLiveChart(this, chartView)
 						{
 							MinHeight = 250,
+							IsTitleSelectable = true,
 							[Grid.ColumnProperty] = column,
 							[Grid.RowProperty] = row,
 						};
@@ -58,7 +59,7 @@ public class TabDashboard : ITab
 					}
 				}
 			}
-			model.AddObject(grid);
+			model.AddObject(grid, true, true);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using Atlas.Core;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
@@ -78,7 +79,7 @@ public interface ITabControlChart
 
 public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 {
-	public static Color TimeTrackerColor = AtlasTheme.GridBackgroundSelected.Color;
+	public static Color TimeTrackerColor = AtlasTheme.DataGridRowHighlight.Color;
 	public static Color GridLineColor = Color.Parse("#333333");
 	public static Color TextColor = Colors.LightGray;
 
@@ -180,11 +181,10 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 		string? title = ChartView.Name;
 		if (title == null) return;
 		
-		TitleTextBlock = new TextBlock()
+		TitleTextBlock = new TabControlTextBlock()
 		{
 			Text = ChartView.Name,
 			FontSize = 16,
-			Foreground = AtlasTheme.BackgroundText,
 			Margin = new Thickness(10, 5, 10, 2),
 			//FontWeight = FontWeight.Medium,
 			TextWrapping = TextWrapping.Wrap,
@@ -268,12 +268,12 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 	{
 		if (IsTitleSelectable)
 		{
-			TitleTextBlock!.Foreground = AtlasTheme.GridBackgroundSelected;
+			TitleTextBlock!.Foreground = AtlasTheme.ChartLabelForegroundHighlight;
 		}
 	}
 
 	private void TitleTextBlock_PointerExited(object? sender, PointerEventArgs e)
 	{
-		TitleTextBlock!.Foreground = AtlasTheme.BackgroundText;
+		TitleTextBlock!.Foreground = AtlasTheme.LabelForeground;
 	}
 }

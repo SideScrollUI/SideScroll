@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE SolarSystem [<!ENTITY Age "4.568 billion years">]>
+<!-- The Solar System's Star and Planets -->
+<SolarSystem>
+  <Location galaxy="Milky Way" subLocation="Orion-Cygnus Arm"/>
+  <Data><![CDATA[This text contains a CEND ]]]]><![CDATA[>]]></Data>
+  <Age>&Age;</Age>
+  <Links>
+    <Link>https://en.wikipedia.org/wiki/Solar_System</Link>
+    <Link>https://science.nasa.gov/solar-system/planets/</Link>
+  </Links>
+  <Star>The Sun is an ordinary star, one of about 100 billion in our galaxy, the Milky Way. It has extremely important influences on our planet: it drives weather, ocean currents, seasons, and climate, and makes plant life possible through photosynthesis. Without the Sun’s heat and light, life on Earth would not exist. About 4.5 billion years ago, the Sun began to take shape from a molecular cloud mainly composed of hydrogen and helium. As the molecular cloud collapsed, it heated up and eventually began nuclear fusion, becoming the center of our solar system. The Sun is approximately 150 million kilometers (93 million miles) from Earth, and its mass constitutes about 99.8 percent of all the mass in the entire solar system. It radiates energy in the form of light, ultraviolet, and infrared radiation, providing most of the energy necessary for life on our planet.</Star>
+  <Planets>
+    <Planet name="Mercury" distance="57.9 million km" diameter="4,880 km" moons="0" />
+    <Planet name="Venus" distance="108.2 million km" diameter="12,104 km" moons="0" />
+    <Planet name="Earth" distance="149.6 million km" diameter="12,742 km" moons="1" />
+    <Planet name="Mars" distance="227.9 million km" diameter="6,779 km" moons="2" />
+    <Planet name="Jupiter" distance="778.5 million km" diameter="139,822 km" moons="79" />
+    <Planet name="Saturn" distance="1.4 billion km" diameter="116,464 km" moons="83" />
+    <Planet name="Uranus" distance="2.9 billion km" diameter="50,724 km" moons="27" />
+    <Planet name="Neptune" distance="4.5 billion km" diameter="49,244 km" moons="14" />
+  </Planets>
+</SolarSystem>

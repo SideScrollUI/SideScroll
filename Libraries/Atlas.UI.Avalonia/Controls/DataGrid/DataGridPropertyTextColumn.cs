@@ -161,7 +161,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 			// Update the cell color based on the object
 			var binding = new Binding()
 			{
-				Converter = new ValueToBrushConverter(PropertyInfo),
+				Converter = new ValueToBackgroundBrushConverter(PropertyInfo),
 				Mode = BindingMode.OneWay,
 			};
 			cell.Bind(DataGridCell.BackgroundProperty, binding);
@@ -173,12 +173,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 			};
 			textBlock.Bind(TextBlock.ForegroundProperty, foregroundBinding);
 
-			cell.BorderBrush = AtlasTheme.GridStyledLines;
-		}
-
-		if (PropertyInfo.IsDefined(typeof(StyleLabelAttribute)))
-		{
-			textBlock.Foreground = AtlasTheme.StyledLabelForeground;
+			cell.BorderBrush = AtlasTheme.DataGridStyledBorder;
 		}
 
 		if (DisplayIndex > 0)
@@ -202,8 +197,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 
 		cell.IsHitTestVisible = true;
 		cell.Focusable = true;
-		cell.Foreground = AtlasTheme.GridForeground;
-		cell.BorderBrush = AtlasTheme.GridBorder;
+		cell.FontSize = AtlasTheme.DataGridFontSize;
 		cell.BorderThickness = new Thickness(0, 0, 1, 1); // Right and Bottom
 
 		if (Binding != null)

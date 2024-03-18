@@ -3,7 +3,6 @@ using Atlas.Tabs;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Atlas.UI.Avalonia.View;
 
@@ -58,6 +57,8 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 
 		list.Add(new Separator());
 
+		// Avalonia's MenuItem.xaml restricts the max Icon size to 16 pixels so this will look tiny
+		// Putting the CheckBox in the Header also works, but doesn't align the checkbox to the left of the text
 		_checkboxAutoLoad = new CheckBox
 		{
 			IsChecked = TabInstance!.Project.UserSettings.AutoLoad,

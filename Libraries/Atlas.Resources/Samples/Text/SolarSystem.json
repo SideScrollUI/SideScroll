@@ -1,0 +1,114 @@
+{
+  "Star": "The Sun is an ordinary star, one of about 100 billion in our galaxy, the Milky Way. It has extremely important influences on our planet: it drives weather, ocean currents, seasons, and climate, and makes plant life possible through photosynthesis. Without the Sun’s heat and light, life on Earth would not exist. About 4.5 billion years ago, the Sun began to take shape from a molecular cloud mainly composed of hydrogen and helium. As the molecular cloud collapsed, it heated up and eventually began nuclear fusion, becoming the center of our solar system. The Sun is approximately 150 million kilometers (93 million miles) from Earth, and its mass constitutes about 99.8 percent of all the mass in the entire solar system. It radiates energy in the form of light, ultraviolet, and infrared radiation, providing most of the energy necessary for life on our planet.",
+  "Links": [
+    "https://en.wikipedia.org/wiki/Sun",
+    "https://science.nasa.gov/solar-system/planets/"
+  ],
+  "Planets": [
+    {
+      "Name": "Mercury",
+      "Description": "The swiftest planet closest to the Sun.",
+      "DistanceKm": 57900000,
+      "RadiusKm": 2439.7,
+      "MassKg": 3.3011e23,
+      "GravityM_s2": 3.7,
+      "Moons": null,
+      "TemperatureC": {
+        "Min": -173,
+        "Max": 427
+      },
+      "OrbitalPeriodDays": 88,
+      "Inner": true
+    },
+    {
+      "Name": "Venus",
+      "Description": "Earth's superheated twin sister.",
+      "DistanceKm": 108200000,
+      "RadiusKm": 6051.8,
+      "MassKg": 4.8675e24,
+      "GravityM_s2": 8.87,
+      "Moons": null,
+      "TemperatureC": 462,
+      "OrbitalPeriodDays": 225,
+      "Inner": true
+    },
+    {
+      "Name": "Earth",
+      "Description": "Our homeworld.",
+      "DistanceKm": 149600000,
+      "RadiusKm": 6371,
+      "MassKg": 5.972e24,
+      "GravityM_s2": 9.81,
+      "Moons": 1,
+      "TemperatureC": {
+        "Min": -88,
+        "Max": 58,
+        "Inner": true
+      },
+      "OrbitalPeriodDays": 365.25
+    },
+    {
+      "Name": "Mars",
+      "Description": "The Red Planet.",
+      "DistanceKm": 227900000,
+      "RadiusKm": 3389.5,
+      "MassKg": 6.4171e23,
+      "GravityM_s2": 3.71,
+      "Moons": 2,
+      "TemperatureC": {
+        "Min": -87,
+        "Max": -5
+      },
+      "OrbitalPeriodDays": 687,
+      "Inner": true
+    },
+    {
+      "Name": "Jupiter",
+      "Description": "King of the planets, a gas giant.",
+      "DistanceKm": 778500000,
+      "RadiusKm": 69911,
+      "MassKg": 1.898e27,
+      "GravityM_s2": 24.79,
+      "Moons": 79,
+      "TemperatureC": -145,
+      "OrbitalPeriodDays": 4346.475,
+      "Inner": false
+    },
+    {
+      "Name": "Saturn",
+      "Description": "Jewel of the solar system, another gas giant.",
+      "DistanceKm": 1400000000,
+      "RadiusKm": 58232,
+      "MassKg": 5.683e26,
+      "GravityM_s2": 10.44,
+      "Moons": 83,
+      "TemperatureC": -178,
+      "OrbitalPeriodDays": 10774.875,
+      "Inner": false
+    },
+    {
+      "Name": "Uranus",
+      "Description": "The original ice giant.",
+      "DistanceKm": 2900000000,
+      "RadiusKm": 25362,
+      "MassKg": 8.681e25,
+      "GravityM_s2": 8.69,
+      "Moons": 27,
+      "TemperatureC": -224,
+      "OrbitalPeriodDays": 30681,
+      "Inner": false
+    },
+    {
+      "Name": "Neptune",
+      "Description": "The farthest planet in our solar system.",
+      "DistanceKm": 4500000000,
+      "RadiusKm": 24622,
+      "MassKg": 1.024e26,
+      "GravityM_s2": 11.15,
+      "Moons": 14,
+      "TemperatureC": -214,
+      "OrbitalPeriodDays": 60193.2,
+      "Inner": false
+    }
+  ]
+}

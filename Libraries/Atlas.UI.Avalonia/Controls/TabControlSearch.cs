@@ -1,5 +1,4 @@
 using Atlas.Resources;
-using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -11,8 +10,6 @@ namespace Atlas.UI.Avalonia.Controls;
 
 public class TabControlSearch : Grid
 {
-	protected override Type StyleKeyOverride => typeof(Grid);
-
 	public TextBox TextBoxSearch;
 
 	public string? Text
@@ -44,25 +41,12 @@ public class TabControlSearch : Grid
 	[MemberNotNull(nameof(TextBoxSearch))]
 	private void AddTextBox()
 	{
-		TextBoxSearch = new TextBox()
+		TextBoxSearch = new ToolbarTextBox()
 		{
 			VerticalContentAlignment = VerticalAlignment.Center,
 			Padding = new Thickness(5, 3, 25, 3),
 			Watermark = "Search",
-			Background = AtlasTheme.ToolbarTextBackground,
-			Foreground = AtlasTheme.ToolbarTextForeground,
-			CaretBrush = AtlasTheme.ToolbarCaret,
 		};
-
-		TextBoxSearch.Resources.Add("ThemeBackgroundHoverBrush", TextBoxSearch.Background); // Disable for now
-		TextBoxSearch.Resources.Add("ThemeBorderMidBrush", AtlasTheme.ToolbarBorderMid);
-		TextBoxSearch.Resources.Add("ThemeBorderHighBrush", AtlasTheme.ToolbarBorderHigh);
-
-		// Fluent
-		TextBoxSearch.Resources.Add("TextControlBackgroundPointerOver", TextBoxSearch.Background);
-		TextBoxSearch.Resources.Add("TextControlBackgroundFocused", TextBoxSearch.Background);
-		TextBoxSearch.Resources.Add("TextControlPlaceholderForegroundFocused", TextBoxSearch.Foreground);
-		TextBoxSearch.Resources.Add("TextControlPlaceholderForegroundPointerOver", TextBoxSearch.Foreground);
 
 		Children.Add(TextBoxSearch);
 	}

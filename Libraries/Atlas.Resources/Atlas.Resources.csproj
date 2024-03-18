@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Version>$(AtlasVersion)</Version>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -57,6 +57,9 @@
     <None Remove="Icons\svg\Stats.svg" />
     <None Remove="Icons\svg\Undo.svg" />
     <None Remove="Icons\svg\UpArrow.svg" />
+    <None Remove="Samples\Text\SolarSystem.json" />
+    <None Remove="Samples\Text\SolarSystem.txt" />
+    <None Remove="Samples\Text\SolarSystem.xml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -104,6 +107,9 @@
     <EmbeddedResource Include="Icons\svg\Stats.svg" />
     <EmbeddedResource Include="Icons\svg\Undo.svg" />
     <EmbeddedResource Include="Icons\svg\UpArrow.svg" />
+    <EmbeddedResource Include="Samples\Text\SolarSystem.json" />
+    <EmbeddedResource Include="Samples\Text\SolarSystem.txt" />
+    <EmbeddedResource Include="Samples\Text\SolarSystem.xml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,12 +1,11 @@
 using Atlas.Core;
+using Atlas.Resources;
 using System.Text;
 
 namespace Atlas.Tabs.Test;
 
 public class TabTestTextEditor : ITab
 {
-	public const string SampleText = "This is some sample text\n\n1\n2\n3\n\nhttps://www.wikipedia.org/";
-
 	public TabInstance Create() => new Instance();
 
 	public class Instance : TabInstance
@@ -15,8 +14,9 @@ public class TabTestTextEditor : ITab
 		{
 			model.Items = new List<ListItem>()
 			{
-				new("Sample Text", SampleText),
-				new("Json", TabTestJson.Json1),
+				new("Text", Samples.Text.Plain),
+				new("Json", Samples.Text.Json),
+				new("Xml", Samples.Text.Xml),
 
 				GetStringItem("1k", 1000),
 				GetStringItem("10k", 10000),

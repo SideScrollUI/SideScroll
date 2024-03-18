@@ -30,7 +30,7 @@ public class TabText : ITab
 			model.MaxDesiredWidth = 1000;
 
 			var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
-			tabAvaloniaEdit.SetFormattedJson(Tab.Text);
+			tabAvaloniaEdit.SetFormatted(Tab.Text);
 
 			model.AddObject(tabAvaloniaEdit, true);
 		}

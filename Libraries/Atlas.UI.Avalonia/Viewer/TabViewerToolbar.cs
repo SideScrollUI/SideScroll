@@ -1,4 +1,5 @@
 using Atlas.Core;
+using Atlas.Extensions;
 using Atlas.Resources;
 using Atlas.UI.Avalonia.Controls;
 
@@ -6,6 +7,8 @@ namespace Atlas.UI.Avalonia;
 
 public class TabViewerToolbar : TabControlToolbar
 {
+	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
+
 	public TabViewer TabViewer;
 
 	public ToolbarButton ButtonBack;
@@ -90,6 +93,14 @@ public class TabViewerToolbar : TabControlToolbar
 			//Command = commandBack,
 		};*/
 		//buttonForward.Click += ButtonForward_Click;
+	}
+
+	public void AddVersion()
+	{
+		AddFill();
+
+		var versionLabel = new ToolbarHeaderTextBlock('v' + TabViewer.Project.Version.Formatted());
+		AddControl(versionLabel);
 	}
 
 	private void Refresh(Call call)

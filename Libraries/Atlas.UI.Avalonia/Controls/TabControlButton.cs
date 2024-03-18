@@ -1,8 +1,6 @@
-using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Media;
 
 namespace Atlas.UI.Avalonia.Controls;
@@ -11,37 +9,11 @@ public class TabControlButton : Button
 {
 	protected override Type StyleKeyOverride => typeof(TabControlButton);
 
-	public Brush BackgroundBrush = AtlasTheme.ButtonBackground;
-	public Brush ForegroundBrush = AtlasTheme.ButtonForeground;
-	public Brush HoverBrush = AtlasTheme.ButtonBackgroundHover;
-
 	public TabControlButton(string? label = null)
 	{
 		Content = label;
 
-		InitializeControl();
-	}
-
-	public void InitializeControl()
-	{
-		Background = BackgroundBrush;
-		//Foreground = ForegroundBrush;
-		BorderBrush = new SolidColorBrush(Colors.Black);
-
-		PointerEntered += Button_PointerEnter;
-		PointerExited += Button_PointerLeave;
-	}
-
-	private void Button_PointerEnter(object? sender, PointerEventArgs e)
-	{
-		//BorderBrush = new SolidColorBrush(Colors.Black); // can't overwrite hover border :(
-		Background = HoverBrush;
-	}
-
-	private void Button_PointerLeave(object? sender, PointerEventArgs e)
-	{
-		Background = BackgroundBrush;
-		//BorderBrush = button.Background;
+		BorderBrush = Brushes.Black;
 	}
 
 	public void BindVisible(string propertyName)

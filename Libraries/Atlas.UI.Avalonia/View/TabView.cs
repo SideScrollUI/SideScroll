@@ -110,6 +110,15 @@ public class TabView : Grid, IDisposable
 		Instance.OnValidate += Instance_OnValidate;
 
 		KeyDown += TabView_KeyDown;
+		ActualThemeVariantChanged += TabView_ActualThemeVariantChanged;
+	}
+
+	private void TabView_ActualThemeVariantChanged(object? sender, EventArgs e)
+	{
+		if (IsLoaded && ActualThemeVariant != null && Model.ReloadOnThemeChange)
+		{
+			ReloadControls();
+		}
 	}
 
 	public async Task LoadBackgroundAsync(Call call)
@@ -241,8 +250,8 @@ public class TabView : Grid, IDisposable
 		{
 			Background = Brushes.Black,
 			VerticalAlignment = VerticalAlignment.Stretch,
+			Width = AtlasTheme.TabSplitterSize,
 			[Grid.ColumnProperty] = 1,
-			Width = AtlasTheme.SplitterSize,
 		};
 		_containerGrid!.Children.Add(_parentChildGridSplitter);
 
@@ -458,7 +467,7 @@ public class TabView : Grid, IDisposable
 		}
 		else if (obj is Control control)
 		{
-			AddControl(control, tabObject.Fill);
+			AddControl(control, tabObject.Fill, tabObject.EnableScrolling);
 		}
 		else if (obj is string text)
 		{
@@ -469,7 +478,7 @@ public class TabView : Grid, IDisposable
 			ParamsAttribute? paramsAttribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
 			if (paramsAttribute != null)
 			{
-				AddControl(new TabControlParams(obj), tabObject.Fill);
+				AddControl(new TabControlParams(obj), tabObject.Fill, tabObject.EnableScrolling);
 			}
 		}
 	}
@@ -515,13 +524,13 @@ public class TabView : Grid, IDisposable
 	}
 
 	// should we check for a Grid stretch instead of passing that parameter?
-	protected void AddControl(Control control, bool fill)
+	protected void AddControl(Control control, bool fill, bool scrollable = false)
 	{
 		if (control is TabControlToolbar toolbar)
 		{
 			_hotKeys.AddRange(toolbar.GetHotKeyButtons());
 		}
-		_tabParentControls!.AddControl(control, fill, SeparatorType.Splitter);
+		_tabParentControls!.AddControl(control, fill, SeparatorType.Splitter, scrollable);
 	}
 
 	protected void AddITabControl(ITabSelector control, bool fill)
@@ -536,7 +545,7 @@ public class TabView : Grid, IDisposable
 		TextBox textBox = new()
 		{
 			Text = text,
-			Foreground = AtlasTheme.BackgroundText,
+			Foreground = AtlasTheme.LabelForeground,
 			Background = Brushes.Transparent,
 			BorderThickness = new Thickness(0),
 			HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -548,7 +557,7 @@ public class TabView : Grid, IDisposable
 			MaxWidth = 1000,
 			TextWrapping = TextWrapping.Wrap,
 		};
-		textBox.Resources.Add("TextBackgroundDisabledBrush", Brushes.Transparent);
+		textBox.Resources.Add("TextReadOnlyBackgroundBrush", Brushes.Transparent);
 		
 		AvaloniaUtils.AddContextMenu(textBox);
 		_tabParentControls!.AddControl(textBox, false, SeparatorType.Spacer);
@@ -579,7 +588,7 @@ public class TabView : Grid, IDisposable
 			MinWidth = 100,
 			MinHeight = 100,
 			MaxWidth = 200,
-			Foreground = AtlasTheme.ToolbarButtonBackground,
+			Foreground = AtlasTheme.TabProgressBarForeground,
 			Background = AtlasTheme.TabBackground,
 			HorizontalAlignment = HorizontalAlignment.Left,
 			VerticalAlignment = VerticalAlignment.Stretch,
@@ -1096,6 +1105,7 @@ public class TabView : Grid, IDisposable
 			ClearControls(true);
 
 			KeyDown -= TabView_KeyDown;
+			ActualThemeVariantChanged -= TabView_ActualThemeVariantChanged;
 
 			Instance.OnModelChanged -= TabInstance_OnModelChanged;
 			Instance.OnValidate -= Instance_OnValidate;

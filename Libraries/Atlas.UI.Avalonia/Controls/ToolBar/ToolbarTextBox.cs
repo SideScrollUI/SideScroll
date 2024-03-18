@@ -14,14 +14,22 @@ public class ToolbarTextBox : TextBox
 		Text = text;
 		TextWrapping = TextWrapping.NoWrap;
 		VerticalAlignment = VerticalAlignment.Center;
+
+		LoadTheme();
+
+		ActualThemeVariantChanged += (sender, e) => LoadTheme();
+	}
+
+	private void LoadTheme()
+	{
 		Background = AtlasTheme.ToolbarTextBackground;
 		Foreground = AtlasTheme.ToolbarTextForeground;
-		CaretBrush = AtlasTheme.ToolbarCaret;
+		CaretBrush = AtlasTheme.ToolbarTextCaret;
 
 		// Fluent
-		Resources.Add("TextControlBackgroundPointerOver", Background);
-		Resources.Add("TextControlBackgroundFocused", Background);
-		Resources.Add("TextControlPlaceholderForegroundFocused", Foreground);
-		Resources.Add("TextControlPlaceholderForegroundPointerOver", Foreground);
+		Resources["TextControlBackgroundPointerOver"] = Background;
+		Resources["TextControlBackgroundFocused"] = Background;
+		Resources["TextControlPlaceholderForegroundFocused"] = AtlasTheme.ToolbarTextForeground;
+		Resources["TextControlPlaceholderForegroundPointerOver"] = AtlasTheme.ToolbarTextForeground;
 	}
 }

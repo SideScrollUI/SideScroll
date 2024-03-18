@@ -56,8 +56,8 @@ public static class StringExtensions
 		return input[start..];
 	}
 
-	private static readonly HashSet<char> _wordSpacedSymbols = new() { '|', '/', '-' };
-	private static readonly HashSet<char> _wordSpacedNumberConnectors = new() { '-', ':', '.' };
+	private static readonly HashSet<char> _wordSpacedSymbols = ['|', '/', '-'];
+	private static readonly HashSet<char> _wordSpacedNumberConnectors = ['-', ':', '.'];
 
 	// Adds spaces between words
 	// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'

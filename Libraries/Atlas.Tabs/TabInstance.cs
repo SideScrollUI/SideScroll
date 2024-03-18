@@ -93,6 +93,7 @@ public class TabInstance : IDisposable
 		set => Model.Name = value;
 	}
 
+	public DataRepo DataShared => Project.DataShared;
 	public DataRepo DataApp => Project.DataApp;
 	public DataRepo DataTemp => Project.DataTemp;
 
@@ -667,11 +668,11 @@ public class TabInstance : IDisposable
 
 		foreach (TabInstance tabInstance in ChildTabInstances.Values)
 		{
-			// Change this to a Key
-			if (tabBookmark.ChildBookmarks.ContainsKey(tabInstance.Label))
+			string dataKey = tabInstance.SelectedRow?.ToString() ?? tabInstance.Label;
+			if (tabBookmark.ChildBookmarks.ContainsKey(dataKey))
 				continue;
 
-			var childBookmark = tabBookmark.AddChild(tabInstance.Label);
+			var childBookmark = tabBookmark.AddChild(dataKey);
 			tabInstance.GetBookmark(childBookmark);
 		}
 	}
@@ -900,13 +901,13 @@ public class TabInstance : IDisposable
 		return childTabInstance;
 	}
 
-	private object? GetBookmarkObject(string name)
+	private object? GetBookmarkObject(string dataKey)
 	{
 		if (TabBookmark == null)
 			return null;
 
 		// FindMatches uses bookmarks
-		if (TabBookmark.ChildBookmarks.TryGetValue(name, out TabBookmark? tabChildBookmark))
+		if (TabBookmark.ChildBookmarks.TryGetValue(dataKey, out TabBookmark? tabChildBookmark))
 		{
 			if (tabChildBookmark.TabModel != null)
 				return tabChildBookmark.TabModel;

@@ -50,6 +50,16 @@ public class LinkUri
 
 	public static bool TryParse(string? url, [NotNullWhen(true)] out LinkUri? linkUri)
 	{
+		if (url?.StartsWith("atlas://") == true)
+		{
+			return TryParseBase64(url, out linkUri);
+		}
+
+		return TryParseTyped(url, out linkUri);
+	}
+
+	public static bool TryParseTyped(string? url, [NotNullWhen(true)] out LinkUri? linkUri)
+	{
 		linkUri = null;
 		if (url == null) return false;
 

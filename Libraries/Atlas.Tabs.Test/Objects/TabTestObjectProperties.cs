@@ -1,7 +1,7 @@
 using Atlas.Core;
 using System.ComponentModel;
 
-namespace Atlas.Tabs.Test.DataGrid;
+namespace Atlas.Tabs.Test.Objects;
 
 public class TabTestObjectProperties : ITab
 {
@@ -13,6 +13,7 @@ public class TabTestObjectProperties : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
+			model.ReloadOnThemeChange = true;
 			model.Items = ListProperty.Create(_propertyTest);
 			model.Editing = true;
 

@@ -1,103 +1,161 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Styling;
 
 namespace Atlas.UI.Avalonia.Themes;
 
 public static class AtlasTheme
 {
-	public static SolidColorBrush Background => Get("ThemeBackgroundBrush");
-	public static SolidColorBrush BackgroundFocused => Get("ThemeBackgroundFocusedBrush");
-	public static SolidColorBrush Foreground => Get("ThemeForegroundBrush");
-	public static SolidColorBrush BackgroundText => Get("ThemeBackgroundTextBrush");
-	public static SolidColorBrush TabBackground => Get("ThemeTabBackgroundBrush");
-
-	public static SolidColorBrush BorderHigh => GetColorBrush("ThemeBorderHighColor");
-	public static SolidColorBrush GridStyledLines => Get("ThemeGridStyledLinesBrush");
-
-	// Content
-	public static SolidColorBrush GridForeground => Get("ThemeGridForegroundBrush");
-	public static SolidColorBrush GridBackground => Get("ThemeGridBackgroundBrush");
-	public static SolidColorBrush GridBackgroundSelected => Get("ThemeGridBackgroundSelectedBrush");
-	public static SolidColorBrush GridBorder => Get("ThemeGridBorderBrush");
-
-	// Links
-	public static SolidColorBrush StyledLabelForeground => Get("ThemeStyledLabelForegroundBrush");
-	public static SolidColorBrush HasLinksBackground => Get("ThemeHasLinksBrush");
-	public static SolidColorBrush NoLinksBackground => Get("ThemeNoLinksBrush");
-	public static SolidColorBrush StyleLineBackground => Get("ThemeStyleLineBrush");
-
-	// ScrollBar
-	public static SolidColorBrush ScrollBarThumb => Get("ThemeScrollBarThumbBrush");
-
-	// Button
-	public static SolidColorBrush ActionButtonBackground => Get("ThemeActionButtonBackgroundBrush");
-	public static SolidColorBrush ActionButtonForeground => Get("ThemeActionButtonForegroundBrush");
-	public static SolidColorBrush ButtonBackground => Get("ThemeButtonBackgroundBrush");
-	public static SolidColorBrush ButtonForeground => Get("ThemeButtonForegroundBrush");
-	public static SolidColorBrush ButtonBackgroundHover => Get("ThemeButtonBackgroundHoverBrush");
+	public static SolidColorBrush TabBackground => GetBrush("TabBackgroundBrush");
+	public static SolidColorBrush TabBackgroundFocused => GetBrush("TabBackgroundFocusedBrush");
+	public static SolidColorBrush TabProgressBarForeground => GetBrush("TabProgressBarForegroundBrush");
 
 	// Title
-	public static SolidColorBrush TitleBackground => Get("TitleBackgroundBrush");
-	public static SolidColorBrush TitleForeground => Get("TitleForegroundBrush");
-
-	public static SolidColorBrush TextBackground => Get("ThemeTextBackgroundBrush");
-	public static SolidColorBrush ForegroundLight => Get("ThemeForegroundLightBrush");
-
-	public static SolidColorBrush TextBackgroundDisabled => Get("TextBackgroundDisabledBrush");
-
-	public static SolidColorBrush Editable => Get("EditableBrush");
+	public static SolidColorBrush TitleBackground => GetBrush("TitleBackgroundBrush");
+	public static SolidColorBrush TitleForeground => GetBrush("TitleForegroundBrush");
 
 	// Toolbar
-	public static SolidColorBrush ToolbarButtonBackground => Get("ToolbarButtonBackgroundBrush");
-	public static SolidColorBrush ToolbarButtonBackgroundHover => Get("ToolbarButtonBackgroundHoverBrush");
-	public static SolidColorBrush ToolbarButtonForegroundHover => Get("ToolbarButtonForegroundHoverBrush");
-	public static SolidColorBrush ToolbarButtonForegroundDisabled => Get("ToolbarButtonForegroundDisabledBrush");
-	public static SolidColorBrush ToolbarButtonSeparator => Get("ToolbarButtonSeparatorBrush");
+	public static SolidColorBrush ToolbarBackground => GetBrush("ToolbarBackgroundBrush");
+	public static SolidColorBrush ToolbarButtonBackgroundPointerOver => GetBrush("ToolbarButtonBackgroundPointerOverBrush");
+	public static SolidColorBrush ToolbarSeparator => GetBrush("ToolbarSeparatorBrush");
 
-	public static SolidColorBrush ToolbarLabelForeground => Get("ToolbarLabelForegroundBrush");
+	public static SolidColorBrush ToolbarLabelForeground => GetBrush("ToolbarLabelForegroundBrush");
 
-	public static SolidColorBrush ToolbarTextBackground => Get("ToolbarTextBackgroundBrush");
-	public static SolidColorBrush ToolbarTextForeground => Get("ToolbarTextForegroundBrush");
-	public static SolidColorBrush ToolbarCaret => Get("ToolbarCaretBrush");
+	public static SolidColorBrush ToolbarTextBackground => GetBrush("ToolbarTextBackgroundBrush");
+	public static SolidColorBrush ToolbarTextForeground => GetBrush("ToolbarTextForegroundBrush");
+	public static SolidColorBrush ToolbarTextCaret => GetBrush("ToolbarTextCaretBrush");
 
-	public static SolidColorBrush ToolbarBorderMid => Get("ToolbarBorderMidBrush");
-	public static SolidColorBrush ToolbarBorderHigh => Get("ToolbarBorderHighBrush");
+	// Icon
+	public static SolidColorBrush IconForeground => GetBrush("IconForegroundBrush");
+	public static SolidColorBrush IconForegroundHighlight => GetBrush("IconForegroundHighlightBrush");
+	public static SolidColorBrush IconAltForeground => GetBrush("IconAltForegroundBrush");
+	public static SolidColorBrush IconAltForegroundHighlight => GetBrush("IconAltForegroundHighlightBrush");
+	public static SolidColorBrush IconForegroundDisabled => GetBrush("IconForegroundDisabledBrush");
 
-	public static SolidColorBrush ControlBackgroundHover => Get("ControlBackgroundHoverBrush");
+	// DataGrid
+	public static SolidColorBrush DataGridRowHighlight => GetBrush("DataGridRowHighlightBrush");
 
-	public static SolidColorBrush IconForeground => Get("IconForegroundBrush");
+	// DataGrid [StyleValue]
+	public static SolidColorBrush DataGridHasLinksBackground => GetBrush("DataGridHasLinksBackgroundBrush");
+	public static SolidColorBrush DataGridHasLinksForeground => GetBrush("DataGridHasLinksForegroundBrush");
+	public static SolidColorBrush DataGridNoLinksBackground => GetBrush("DataGridNoLinksBackgroundBrush");
+	public static SolidColorBrush DataGridStyledBorder => GetBrush("DataGridStyledBorderBrush");
+
+	public static SolidColorBrush DataGridEditableBackground => GetBrush("DataGridEditableBackgroundBrush");
+
+	// Button
+	public static SolidColorBrush ButtonBackground => GetBrush("ThemeButtonBackgroundBrush");
+	public static SolidColorBrush ButtonForeground => GetBrush("ThemeButtonForegroundBrush");
+
+	public static SolidColorBrush LabelForeground => GetBrush("LabelForegroundBrush");
+	//public static SolidColorBrush LabelHighlightForeground => GetBrush("LabelHighlightForegroundBrush");
+
+	public static SolidColorBrush TextControlBackground => GetBrush("TextControlBackground");
+
+	public static SolidColorBrush TextAreaBackground => GetBrush("TextAreaBackgroundBrush");
+	public static SolidColorBrush TextReadOnlyForeground => GetBrush("TextReadOnlyForegroundBrush");
+	public static SolidColorBrush TextReadOnlyBackground => GetBrush("TextReadOnlyBackgroundBrush");
 
 	// Chart 
-	public static SolidColorBrush ChartBackgroundSelected => Get("ThemeChartBackgroundSelectedBrush");
+	public static SolidColorBrush ChartBackgroundSelected => GetBrush("ChartBackgroundSelectedBrush");
+	public static SolidColorBrush ChartLabelForegroundHighlight => GetBrush("ChartLabelForegroundHighlightBrush");
 	public static double ChartBackgroundSelectedAlpha => GetDouble("ChartBackgroundSelectedAlpha");
-	public static double SplitterSize => GetDouble("SplitterSize");
 
-	public static SolidColorBrush Get(string brushName)
-	{
-		if (Application.Current!.Styles.TryGetResource(brushName, null, out object? obj))
-			return (SolidColorBrush)obj!;
+	// Text Editor
+	public static SolidColorBrush TextEditorBackgroundBrush => GetBrush("TextEditorBackgroundBrush");
+	public static SolidColorBrush TextEditorForegroundBrush => GetBrush("TextEditorForegroundBrush");
+	public static SolidColorBrush LinkTextForegroundBrush => GetBrush("LinkTextForegroundBrush");
 
-		throw new Exception("Brush not found: " + brushName);
-	}
+	public static SolidColorBrush JsonHighlightPunctuationBrush => GetBrush("JsonHighlightPunctuationBrush");
+	public static SolidColorBrush JsonHighlightFieldNameBrush => GetBrush("JsonHighlightFieldNameBrush");
+	public static SolidColorBrush JsonHighlightStringBrush => GetBrush("JsonHighlightStringBrush");
+	public static SolidColorBrush JsonHighlightNumberBrush => GetBrush("JsonHighlightNumberBrush");
+	public static SolidColorBrush JsonHighlightBoolBrush => GetBrush("JsonHighlightBoolBrush");
+	public static SolidColorBrush JsonHighlightNullBrush => GetBrush("JsonHighlightNullBrush");
+
+	public static SolidColorBrush XmlHighlightCommentBrush => GetBrush("XmlHighlightCommentBrush");
+	public static SolidColorBrush XmlHighlightCDataBrush => GetBrush("XmlHighlightCDataBrush");
+	public static SolidColorBrush XmlHighlightDocTypeBrush => GetBrush("XmlHighlightDocTypeBrush");
+	public static SolidColorBrush XmlHighlightDeclarationBrush => GetBrush("XmlHighlightDeclarationBrush");
+	public static SolidColorBrush XmlHighlightTagBrush => GetBrush("XmlHighlightTagBrush");
+	public static SolidColorBrush XmlHighlightAttributeNameBrush => GetBrush("XmlHighlightAttributeNameBrush");
+	public static SolidColorBrush XmlHighlightAttributeValueBrush => GetBrush("XmlHighlightAttributeValueBrush");
+	public static SolidColorBrush XmlHighlightEntityBrush => GetBrush("XmlHighlightEntityBrush");
+	public static SolidColorBrush XmlHighlightBrokenEntityBrush => GetBrush("XmlHighlightBrokenEntityBrush");
+
+	// Sizes
+	public static double TabSplitterSize => GetDouble("TabSplitterSize");
+	public static double TitleFontSize => GetDouble("TitleFontSize");
+	public static double DataGridFontSize => GetDouble("DataGridFontSize");
+
+	// Fonts
+	public static FontFamily ContentControlThemeFontFamily => GetFontFamily("ContentControlThemeFontFamily");
+	public static FontFamily MonospaceFontFamily => GetFontFamily("MonospaceFontFamily");
+
+	public static ThemeVariant ThemeVariant => Application.Current!.ActualThemeVariant;
 
 	public static Color GetColor(string colorName)
 	{
-		if (Application.Current!.Styles.TryGetResource(colorName, null, out object? obj))
+		if (Application.Current!.Resources.ThemeDictionaries.TryGetValue(ThemeVariant, out IThemeVariantProvider? provider))
+		{
+			if (provider.TryGetResource(colorName, null, out object? providerObject))
+			{
+				return (Color)providerObject!;
+			}
+		}
+
+		if (Application.Current!.TryGetResource(colorName, ThemeVariant, out object? obj))
+		{
 			return (Color)obj!;
+		}
 
-		throw new Exception("Color not found: " + colorName);
+		throw new Exception($"Color not found: {colorName}");
 	}
 
-	public static SolidColorBrush GetColorBrush(string colorName)
+	public static SolidColorBrush GetBrush(string brushName)
 	{
-		return new SolidColorBrush(GetColor(colorName));
+		if (Application.Current!.Resources.ThemeDictionaries.TryGetValue(ThemeVariant, out IThemeVariantProvider? provider))
+		{
+			if (provider.TryGetResource(brushName, ThemeVariant, out object? providerObject))
+			{
+				return (SolidColorBrush)providerObject!;
+			}
+		}
+
+		if (Application.Current!.TryGetResource(brushName, ThemeVariant, out object? obj))
+		{
+			return (SolidColorBrush)obj!;
+		}
+
+		throw new Exception($"Brush not found: {brushName}");
 	}
 
-	private static double GetDouble(string name)
+	public static double GetDouble(string name)
 	{
-		if (Application.Current!.Styles.TryGetResource(name, null, out object? value))
+		if (Application.Current!.Resources.ThemeDictionaries.TryGetValue(ThemeVariant, out IThemeVariantProvider? provider))
+		{
+			if (provider.TryGetResource(name, ThemeVariant, out object? providerObject))
+			{
+				return (double)providerObject!;
+			}
+		}
+
+		if (Application.Current!.TryGetResource(name, ThemeVariant, out object? value))
+		{
 			return (double)value!;
+		}
 
-		throw new Exception("Double not found: " + name);
+		throw new Exception($"Double not found: {name}");
+	}
+
+	public static FontFamily GetFontFamily(string name)
+	{
+		if (Application.Current!.TryGetResource(name, ThemeVariant, out object? value))
+		{
+			return (FontFamily)value!;
+		}
+
+		throw new Exception($"FontFamily not found: {name}");
 	}
 }

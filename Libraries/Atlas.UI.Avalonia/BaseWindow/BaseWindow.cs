@@ -7,6 +7,7 @@ using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Reactive;
 using Avalonia.Threading;
 using System.Diagnostics.CodeAnalysis;
@@ -47,6 +48,11 @@ public class BaseWindow : Window
 	{
 		Instance = this;
 
+		// Catch Inter font here before overriding so we don't lose it
+		FontTheme.FontFamilies =
+			new List<FontFamily>() { AtlasTheme.ContentControlThemeFontFamily }
+			.Concat(FontManager.Current.SystemFonts);
+
 		AtlasInit.Initialize();
 
 		TabFile.RegisterType<TabFileImage>(TabFileImage.DefaultExtensions);
@@ -63,6 +69,8 @@ public class BaseWindow : Window
 		Project = project;
 
 		LoadWindowSettings();
+
+		ThemeManager.Initialize(project);
 
 		InitializeComponent();
 

@@ -327,10 +327,7 @@ public class TabViewer : Grid
 		TabControlButton buttonExpand = new()
 		{
 			Content = ">",
-			Background = AtlasTheme.ToolbarButtonBackground,
 			Foreground = AtlasTheme.ToolbarLabelForeground,
-			BorderBrush = new SolidColorBrush(Colors.Black),
-			BorderThickness = new Thickness(1),
 			VerticalAlignment = VerticalAlignment.Stretch,
 			VerticalContentAlignment = VerticalAlignment.Center,
 			[ToolTip.ShowDelayProperty] = 5,
@@ -343,10 +340,7 @@ public class TabViewer : Grid
 		TabControlButton buttonCollapse = new()
 		{
 			Content = "<",
-			Background = AtlasTheme.ToolbarButtonBackground,
 			Foreground = AtlasTheme.ToolbarLabelForeground,
-			BorderBrush = new SolidColorBrush(Colors.Black),
-			BorderThickness = new Thickness(1),
 			VerticalAlignment = VerticalAlignment.Stretch,
 			VerticalContentAlignment = VerticalAlignment.Center,
 			[ToolTip.TipProperty] = "Scroll Left ( <- )",

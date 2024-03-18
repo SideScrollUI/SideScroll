@@ -1,7 +1,7 @@
 using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
+using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.VisualTree;
@@ -44,15 +44,14 @@ public class TabControlSplitContainer : Grid
 		VerticalAlignment = VerticalAlignment.Stretch; // not taking up maximum
 
 		Focusable = true;
-
-		GotFocus += TabView_GotFocus;
-		LostFocus += TabView_LostFocus;
 	}
 
 	protected override Size MeasureCore(Size availableSize)
 	{
 		if (MaxDesiredWidth != double.MaxValue)
+		{
 			availableSize = availableSize.WithWidth(Math.Min(MaxDesiredWidth, availableSize.Width));
+		}
 		Size measured = base.MeasureCore(availableSize);
 		double desiredWidth = Math.Min(MaxDesiredWidth, measured.Width);
 		desiredWidth = Math.Max(desiredWidth, MinDesiredWidth);
@@ -66,30 +65,21 @@ public class TabControlSplitContainer : Grid
 		return base.ArrangeOverride(finalSize);
 	}
 
-	private void TabView_GotFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	public void AddControl(Control control, bool fill, SeparatorType separatorType = SeparatorType.Splitter, bool scrollable = false)
 	{
-		Background = AtlasTheme.BackgroundFocused;
-	}
+		if (scrollable)
+		{
+			ScrollViewer scrollViewer = new()
+			{
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				VerticalAlignment = VerticalAlignment.Stretch,
+				HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+				VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+				Content = control,
+			};
+			control = scrollViewer;
+		}
 
-	private void TabView_LostFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-	{
-		Background = AtlasTheme.TabBackground;
-	}
-
-	protected override void OnPointerEntered(PointerEventArgs e)
-	{
-		base.OnPointerEntered(e);
-		Background = AtlasTheme.BackgroundFocused;
-	}
-
-	protected override void OnPointerExited(PointerEventArgs e)
-	{
-		base.OnPointerExited(e);
-		Background = AtlasTheme.TabBackground;
-	}
-
-	public void AddControl(Control control, bool fill, SeparatorType separatorType)
-	{
 		var item = new Item()
 		{
 			Control = control,
@@ -197,7 +187,7 @@ public class TabControlSplitContainer : Grid
 			Background = Brushes.Black,
 
 			//ShowsPreview = true,
-			Height = AtlasTheme.SplitterSize,
+			Height = AtlasTheme.TabSplitterSize,
 		};
 		GridSplitters.Add(gridSplitter);
 		SetRow(gridSplitter, rowIndex);
@@ -211,7 +201,7 @@ public class TabControlSplitContainer : Grid
 		{
 			VerticalAlignment = VerticalAlignment.Stretch,
 			Background = Brushes.Black,
-			Width = AtlasTheme.SplitterSize,
+			Width = AtlasTheme.TabSplitterSize,
 		};
 		//GridSplitters.Add(gridSplitter);
 		SetColumn(gridSplitter, columnIndex);

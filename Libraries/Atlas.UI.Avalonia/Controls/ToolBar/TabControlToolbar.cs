@@ -12,8 +12,12 @@ using System.Windows.Input;
 
 namespace Atlas.UI.Avalonia.Controls;
 
+public class ToolbarSeparator : Border { }
+
 public class TabControlToolbar : Grid, IDisposable
 {
+	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
+
 	public static Thickness DefaultMargin = new(6, 2);
 
 	public TabInstance? TabInstance;
@@ -34,8 +38,6 @@ public class TabControlToolbar : Grid, IDisposable
 
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Top;
-
-		Background = AtlasTheme.ToolbarButtonBackground;
 	}
 
 	public void LoadToolbar(TabToolbar toolbar)
@@ -45,7 +47,9 @@ public class TabControlToolbar : Grid, IDisposable
 		{
 			var propertyValue = propertyInfo.GetValue(toolbar);
 			if (propertyValue != null && propertyInfo.GetCustomAttribute<SeparatorAttribute>() != null)
+			{
 				AddSeparator();
+			}
 
 			if (propertyValue is ToolButton toolButton)
 			{
@@ -58,7 +62,9 @@ public class TabControlToolbar : Grid, IDisposable
 			else if (propertyValue is string text)
 			{
 				if (propertyInfo.GetCustomAttribute<RightAlignAttribute>() != null)
+				{
 					AddFill();
+				}
 
 				AddLabel(text);
 			}
@@ -82,9 +88,9 @@ public class TabControlToolbar : Grid, IDisposable
 		Children.Add(control);
 	}
 
-	public ToolbarButton AddButton(string tooltip, IResourceView imageResource, ICommand? command = null)
+	public ToolbarButton AddButton(string tooltip, IResourceView imageResource, ICommand? command = null, string? label = null)
 	{
-		var button = new ToolbarButton(this, null, tooltip, imageResource, command);
+		var button = new ToolbarButton(this, label, tooltip, imageResource, command);
 		AddControl(button);
 		return button;
 	}
@@ -113,13 +119,7 @@ public class TabControlToolbar : Grid, IDisposable
 		if (Children.Count == 0)
 			return;
 
-		Panel panel = new()
-		{
-			Background = AtlasTheme.ToolbarButtonSeparator,
-			Width = 1,
-			Margin = new Thickness(4, 2),
-		};
-		AddControl(panel);
+		AddControl(new ToolbarSeparator());
 	}
 
 	// For right aligning
@@ -158,14 +158,14 @@ public class TabControlToolbar : Grid, IDisposable
 			Margin = DefaultMargin,
 			BorderThickness = new Thickness(0),
 			BorderBrush = Brushes.Transparent,
-			Background = AtlasTheme.ToolbarButtonBackground,
-			Foreground = AtlasTheme.TitleForeground,
+			Background = Brushes.Transparent,
+			Foreground = AtlasTheme.ToolbarLabelForeground,
 			//CaretBrush = new SolidColorBrush(Theme.GridSelectedBackgroundColor), // todo: enable with next version?
 		};
 		// Fluent
 		textBox.Resources.Add("TextControlBackgroundPointerOver", textBox.Background);
 		textBox.Resources.Add("TextControlBackgroundFocused", textBox.Background);
-		textBox.Resources.Add("TextBackgroundDisabledBrush", textBox.Background);
+		textBox.Resources.Add("TextReadOnlyBackgroundBrush", textBox.Background);
 
 		AddControl(textBox, fill);
 		return textBox;
@@ -204,15 +204,20 @@ public class TabControlToolbar : Grid, IDisposable
 
 public class ToolbarTextBlock : TextBlock
 {
-	protected override Type StyleKeyOverride => typeof(TextBlock);
-
 	public ToolbarTextBlock(string text = "")
 	{
-		Foreground = AtlasTheme.BackgroundText;
 		Text = text;
 		Margin = TabControlToolbar.DefaultMargin;
 		TextWrapping = TextWrapping.NoWrap;
 		VerticalAlignment = VerticalAlignment.Center;
+	}
+}
+
+public class ToolbarHeaderTextBlock : ToolbarTextBlock
+{
+	public ToolbarHeaderTextBlock(string text = "")
+		: base(text)
+	{
 	}
 }
 
@@ -222,7 +227,7 @@ public class ToolbarRadioButton : RadioButton
 
 	public ToolbarRadioButton(string text = "")
 	{
-		Foreground = AtlasTheme.TitleForeground;
+		Foreground = AtlasTheme.ToolbarLabelForeground;
 		Content = text;
 		Margin = TabControlToolbar.DefaultMargin;
 		VerticalAlignment = VerticalAlignment.Center;

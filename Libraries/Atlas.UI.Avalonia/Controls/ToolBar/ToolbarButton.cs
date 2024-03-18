@@ -7,7 +7,6 @@ using Atlas.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
@@ -40,10 +39,14 @@ public class ToolbarButton : Button, IDisposable
 	private Image? _imageControl;
 	private IImage? _defaultImage;
 
-	protected IImage? HighlightImage => _highlightImage ??= SvgUtils.GetSvgImage(ImageResource, AtlasTheme.ToolbarButtonForegroundHover.Color);
+	protected Color Color => (ImageResource as ImageColorView)?.Color ?? AtlasTheme.IconForeground.Color;
+
+	protected Color? HighlightColor => (ImageResource as ImageColorView)?.HighlightColor ?? AtlasTheme.IconForegroundHighlight.Color;
+
+	protected IImage? HighlightImage => _highlightImage ??= SvgUtils.TryGetSvgColorImage(ImageResource, HighlightColor);
 	private IImage? _highlightImage;
 
-	protected IImage? DisabledImage => _disabledImage ??= SvgUtils.GetSvgImage(ImageResource, AtlasTheme.ToolbarButtonForegroundDisabled.Color);
+	protected IImage? DisabledImage => _disabledImage ??= SvgUtils.TryGetSvgColorImage(ImageResource, AtlasTheme.IconForegroundDisabled.Color);
 	private IImage? _disabledImage;
 
 	public new bool IsEnabled
@@ -52,7 +55,7 @@ public class ToolbarButton : Button, IDisposable
 		set
 		{
 			base.IsEnabled = value;
-			_imageControl!.Source = value ? _defaultImage : (DisabledImage ?? _defaultImage);
+			UpdateImage();
 		}
 	}
 
@@ -98,7 +101,7 @@ public class ToolbarButton : Button, IDisposable
 
 		if (ImageResource.ResourceType == "svg")
 		{
-			_defaultImage = SvgUtils.GetSvgImage(ImageResource);
+			_defaultImage = SvgUtils.TryGetSvgColorImage(ImageResource);
 		}
 		else
 		{
@@ -123,7 +126,7 @@ public class ToolbarButton : Button, IDisposable
 			{
 				Text = Label,
 				FontSize = 15,
-				Foreground = new SolidColorBrush(Color.Parse("#759eeb")),
+				Foreground = new SolidColorBrush(Color),
 				Margin = new Thickness(6),
 				[Grid.ColumnProperty] = 1,
 			};
@@ -132,17 +135,31 @@ public class ToolbarButton : Button, IDisposable
 
 		Content = grid;
 		Command = command;
-		Background = AtlasTheme.ToolbarButtonBackground;
-		BorderBrush = Background;
-		BorderThickness = new Thickness(0);
-		Margin = new Thickness(1);
-		//BorderThickness = new Thickness(2),
-		//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
-		//BorderBrush = new SolidColorBrush(Colors.Black),
 		ToolTip.SetTip(this, Tooltip);
 
-		BorderBrush = Background;
 		Click += ToolbarButton_Click;
+		ActualThemeVariantChanged += ToolbarButton_ActualThemeVariantChanged;
+	}
+
+	private void ToolbarButton_ActualThemeVariantChanged(object? sender, EventArgs e)
+	{
+		_defaultImage = null;
+		_highlightImage = null;
+		_disabledImage = null;
+
+		UpdateImage();
+	}
+
+	private void UpdateImage()
+	{
+		if (ImageResource.ResourceType != "svg" || _imageControl == null) return;
+		
+		_defaultImage ??= SvgUtils.TryGetSvgColorImage(ImageResource);
+		var source = IsEnabled ? _defaultImage : (DisabledImage ?? _defaultImage);
+		if (source != _imageControl.Source)
+		{
+			_imageControl.Source = source;
+		}
 	}
 
 	private void ToolbarButton_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
@@ -255,7 +272,7 @@ public class ToolbarButton : Button, IDisposable
 	{
 		base.OnPointerExited(e);
 
-		_imageControl!.Source = _defaultImage;
+		UpdateImage();
 	}
 
 	private void DispatcherTimer_Tick(object? sender, EventArgs e)

@@ -9,6 +9,7 @@ public class TabObject
 {
 	public object? Object { get; set; }
 	public bool Fill { get; set; } // Stretch to Fill all vertical space
+	public bool EnableScrolling { get; set; }
 }
 
 public enum AutoSelectType
@@ -29,6 +30,7 @@ public class TabModel
 	public AutoSelectType AutoSelectSaved { get; set; } = AutoSelectType.Any;
 	public bool AutoSelectDefault { get; set; } = true;
 	public bool AutoSelectNew { get; set; } = true;
+	public bool ReloadOnThemeChange { get; set; }
 
 	public bool Editing { get; set; }
 	public bool Skippable { get; set; } // Will collapse collections that have a single item
@@ -96,7 +98,7 @@ public class TabModel
 		return tabModel;
 	}
 
-	public TabObject AddObject(object obj, bool fill = false)
+	public TabObject AddObject(object obj, bool fill = false, bool enableScrolling = false)
 	{
 		obj ??= "(null)";
 
@@ -107,6 +109,7 @@ public class TabModel
 		{
 			Object = obj,
 			Fill = fill,
+			EnableScrolling = enableScrolling,
 		};
 
 		Objects.Add(tabObject);
@@ -306,12 +309,11 @@ public class TabModel
 		{
 		}*/
 
-		if (ItemList[0].Count == 1)
+		if (ItemList[0].Count == 1 && ItemList[0][0] is object firstItem)
 		{
 			if (ItemList[0] is IItemCollection itemCollection && !itemCollection.Skippable)
 				return;
 
-			var firstItem = ItemList[0][0]!;
 			var skippableAttribute = firstItem.GetType().GetCustomAttribute<SkippableAttribute>();
 			if (skippableAttribute != null)
 			{

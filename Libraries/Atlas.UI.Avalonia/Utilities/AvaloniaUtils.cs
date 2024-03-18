@@ -1,3 +1,4 @@
+using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.View;
 using Avalonia;
@@ -5,6 +6,7 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Media;
 using System.ComponentModel.DataAnnotations;
 
 namespace Atlas.UI.Avalonia;
@@ -43,18 +45,18 @@ public static class AvaloniaUtils
 		if (!textBox.IsReadOnly)
 		{
 			var menuItemCut = new TabMenuItem("Cut");
-			menuItemCut.Click += delegate { SendTextBoxKey(textBox, keymap.Cut); };
+			menuItemCut.Click += delegate { SendKeyGesture(textBox, keymap.Cut); };
 			list.Add(menuItemCut);
 		}
 
 		var menuItemCopy = new TabMenuItem("_Copy");
-		menuItemCopy.Click += delegate { SendTextBoxKey(textBox, keymap.Copy); };
+		menuItemCopy.Click += delegate { SendKeyGesture(textBox, keymap.Copy); };
 		list.Add(menuItemCopy);
 
 		if (!textBox.IsReadOnly)
 		{
 			var menuItemPaste = new TabMenuItem("Paste");
-			menuItemPaste.Click += delegate { SendTextBoxKey(textBox, keymap.Paste); };
+			menuItemPaste.Click += delegate { SendKeyGesture(textBox, keymap.Paste); };
 			list.Add(menuItemPaste);
 		}
 
@@ -68,7 +70,40 @@ public static class AvaloniaUtils
 		textBox.ContextMenu = contextMenu;
 	}
 
-	private static void SendTextBoxKey(TextBox textBox, List<KeyGesture> keyGestures)
+	public static void AddContextMenu(ColorPicker colorPicker)
+	{
+		var list = new AvaloniaList<object>();
+
+		var menuItemCopy = new TabMenuItem()
+		{
+			Header = "_Copy",
+		};
+		menuItemCopy.Click += delegate
+		{
+			ClipboardUtils.SetText(colorPicker, colorPicker.Color.ToString() ?? "");
+		};
+		list.Add(menuItemCopy);
+
+		var menuItemPaste = new TabMenuItem("Paste");
+		menuItemPaste.Click += delegate
+		{
+			if (ClipboardUtils.GetText(colorPicker) is string clipboardText &&
+				Color.TryParse(clipboardText, out Color color))
+			{
+				colorPicker.Color = color;
+			}
+		};
+		list.Add(menuItemPaste);
+
+		ContextMenu contextMenu = new()
+		{
+			ItemsSource = list,
+		};
+
+		colorPicker.ContextMenu = contextMenu;
+	}
+
+	private static void SendKeyGesture(InputElement inputElement, List<KeyGesture> keyGestures)
 	{
 		foreach (var key in keyGestures)
 		{
@@ -76,10 +111,10 @@ public static class AvaloniaUtils
 			{
 				Key = key.Key,
 				KeyModifiers = key.KeyModifiers,
-				RoutedEvent = TextBox.KeyDownEvent,
+				RoutedEvent = InputElement.KeyDownEvent,
 			};
 
-			textBox.RaiseEvent(args);
+			inputElement.RaiseEvent(args);
 			break;
 		}
 	}

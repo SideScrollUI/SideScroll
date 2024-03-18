@@ -2,7 +2,9 @@ using Atlas.Core;
 using Atlas.Start.Avalonia.Charts;
 using Atlas.Tabs;
 using Atlas.Tabs.Test;
+using Atlas.Tabs.Tools;
 using Atlas.UI.Avalonia.Controls;
+using Atlas.UI.Avalonia.Samples.Controls;
 
 namespace Atlas.Start.Avalonia.Tabs;
 
@@ -17,10 +19,10 @@ public class TabAvalonia : ITab
 			model.Items = new ItemCollection<ListItem>()
 			{
 				new("Test", new TabTest()),
-				new("Custom Control", new TabCustomControl()),
+				new("Controls", new TabSampleControls()),
 				new("Charts", new TabCustomCharts()),
 				new("Links", new TabBookmarks(Project)),
-				//new("Demo", new TabDemo()),
+				new("Settings", new TabAvaloniaSettings()),
 			};
 		}
 	}

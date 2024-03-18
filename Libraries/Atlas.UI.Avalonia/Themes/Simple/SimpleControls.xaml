@@ -4,13 +4,10 @@
   xmlns:prim="clr-namespace:Avalonia.Controls.Primitives;assembly=Avalonia.Controls.DataGrid"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:sys="clr-namespace:System;assembly=mscorlib">
-
-    <StyleInclude Source="avares://Atlas.UI.Avalonia/Themes/Controls/TabButton.xaml"/>
-    <StyleInclude Source="avares://Atlas.UI.Avalonia/Themes/Controls/ToolbarButton.xaml"/>
     
     <Style Selector="dg|DataGridColumnHeader">
-        <Setter Property="Background" Value="{DynamicResource GridColumnHeaderBackgroundBrush}"/>
-        <Setter Property="Foreground" Value="{DynamicResource GridColumnHeaderForegroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundBrush}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="AreSeparatorsVisible" Value="true" />
@@ -31,7 +28,7 @@
     </Style>
 
     <Style Selector="dg|DataGridRow:selected">
-        <Setter Property="Foreground" Value="{DynamicResource ThemeGridForegroundSelectedBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource DataGridForegroundSelectedBrush}" />
     </Style>
 
     <Style Selector="ToolTip">
@@ -51,7 +48,7 @@
         <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>
     </Style>
     <Style Selector="ScrollBar /template/ Thumb#thumb /template/ Border:pointerover">
-        <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbHoverBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbPointerOverBrush}"/>
     </Style>
 
     <Style Selector="ScrollBar /template/ RepeatButton.repeat">
@@ -60,35 +57,32 @@
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
     
-    <!--Style Selector="TextBox">
-        <Setter Property="SelectionBrush" Value="{DynamicResource ToolbarButtonBackgroundHoverBrush}"/>
-    </Style-->
     <Style Selector="TextBox:pointerover">
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}"/>
     </Style>
     <Style Selector="TextBox[IsReadOnly=false] /template/ Border#border:pointerover">
-        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource TextControlBackgroundPointerOverBrush}"/>
     </Style>
 
     <Style Selector="CheckBox:pointerover /template/ Border#border">
-        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource TextControlBackgroundPointerOverBrush}"/>
     </Style>
 
     <Style Selector="ComboBox">
         <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
     </Style>
     <Style Selector="ComboBox /template/ Border#border:pointerover">
-        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource TextControlBackgroundPointerOverBrush}"/>
     </Style>
     <!--Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
-        <Setter Property="Foreground" Value="{DynamicResource ThemeBackgroundTextBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource LabelForegroundBrush}"/>
     </Style-->
 
     <Style Selector="ListBoxItem /template/ ContentPresenter">
         <Setter Property="Background" Value="#FF086F9E"/>
     </Style>
     <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource ThemeBackgroundHoverBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource TextControlBackgroundPointerOverBrush}"/>
     </Style>
 
     <Style Selector="RadioButton">

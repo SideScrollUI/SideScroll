@@ -43,7 +43,7 @@ public class TabTestParamsDataTabs : ITab
 
 		private void LoadSavedItems(Call call, TabModel model)
 		{
-			_dataRepoParams = DataApp.LoadView<ParamTestItem>(call, "CollectionTest", nameof(ParamTestItem.Name));
+			_dataRepoParams = DataApp.LoadView<ParamTestItem>(call, "DataRepoTest", nameof(ParamTestItem.Name));
 			DataRepoInstance = _dataRepoParams;
 
 			var dataCollection = new DataViewCollection<ParamTestItem, TabParamItem>(_dataRepoParams);

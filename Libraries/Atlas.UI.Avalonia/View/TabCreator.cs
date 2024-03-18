@@ -3,6 +3,7 @@ using Atlas.Extensions;
 using Atlas.UI.Avalonia.Tabs;
 using Atlas.Tabs;
 using Avalonia.Controls;
+using System.Diagnostics;
 
 namespace Atlas.UI.Avalonia.View;
 
@@ -38,13 +39,18 @@ public static class TabCreator
 		label = labelOverride ?? label; // update label before comparing bookmarks
 
 		TabBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
-		if (parentTabInstance.TabBookmark != null && parentTabInstance.TabBookmark.ChildBookmarks != null)
+		if (parentTabInstance.TabBookmark is TabBookmark parentTabBookmark && parentTabBookmark.ChildBookmarks != null)
 		{
-			if (parentTabInstance.TabBookmark.ChildBookmarks.TryGetValue(label!, out tabBookmark))
+			string dataKey = new SelectedRow(obj).ToString() ?? label!;
+			if (parentTabBookmark.ChildBookmarks.TryGetValue(dataKey, out tabBookmark))
 			{
 				// FindMatches only
 				if (tabBookmark.TabModel != null)
 					value = tabBookmark.TabModel;
+			}
+			else if (parentTabBookmark.Bookmark?.Imported == true && parentTabBookmark.ChildBookmarks.Count > 0)
+			{
+				Debug.WriteLine($"Failed to find imported tab bookmark for {dataKey} in [{parentTabBookmark.ChildBookmarks.Keys.CollectionToString()}]");
 			}
 		}
 		if (value == null)

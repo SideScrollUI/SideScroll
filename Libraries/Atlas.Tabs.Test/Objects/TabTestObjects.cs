@@ -5,8 +5,9 @@ namespace Atlas.Tabs.Test.Objects;
 [ListItem]
 public class TabTestObjects
 {
-	public static TestObjectMembers ObjectMembers => new();
-	public static Tag[] Tags => new Tag[] { new Tag("abc", 1.1) };
+	public static TabTestObjectMembers ObjectMembers => new();
+	public static TabTestObjectProperties ObjectProperties => new();
+	public static Tag[] Tags => [new Tag("abc", 1.1)];
 	public static TabTestSubClassProperty SubclassProperty => new();
 	public static ValueSub Subclass => new();
 	public static EnumTest Enum => new();
@@ -15,7 +16,9 @@ public class TabTestObjects
 
 public class MyClass
 {
-	public string Name { get; set; } = "Eve";
+	public string Description { get; set; } = "Really long value that keeps going on and on and on, or at least for a really long time and we see some wordwrap";
+
+	public override string ToString() => Description;
 }
 
 public enum EnumTest
@@ -34,21 +37,4 @@ public class ValueBase
 public class ValueSub : ValueBase
 {
 	public new int Value = 2;
-}
-
-public class TestObjectMembers
-{
-	public static readonly string? StaticStringField;
-
-	public bool BoolField;
-	public bool BoolProperty { get; }
-
-	[Item]
-	public bool BoolMethod() => true;
-
-	public string? StringField;
-	public string? StringProperty { get; }
-
-	[Item]
-	public string StringMethod() => "string";
 }
