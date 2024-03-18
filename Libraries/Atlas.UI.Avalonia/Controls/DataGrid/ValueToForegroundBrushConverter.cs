@@ -8,20 +8,20 @@ using System.Reflection;
 
 namespace Atlas.UI.Avalonia;
 
-public class ValueToBackgroundBrushConverter : IValueConverter
+public class ValueToForegroundBrushConverter : IValueConverter
 {
 	public PropertyInfo PropertyInfo;
 
-	public ValueToBackgroundBrushConverter(PropertyInfo propertyInfo)
+	public ValueToForegroundBrushConverter(PropertyInfo propertyInfo)
 	{
 		PropertyInfo = propertyInfo;
 	}
 
 	public sealed class BrushColors
 	{
-		public ISolidColorBrush HasLinks => AtlasTheme.DataGridHasLinksBackground;
-		public ISolidColorBrush NoLinks => AtlasTheme.DataGridNoLinksBackground;
-		public ISolidColorBrush Editable { get; set; } = AtlasTheme.DataGridEditableBackground;
+		public ISolidColorBrush HasLinks => AtlasTheme.DataGridHasLinksForeground; //Theme.TitleForeground;
+		public ISolidColorBrush NoLinks => AtlasTheme.ToolbarTextForeground; // Should this be different?
+		// public ISolidColorBrush Editable { get; set; } = AtlasTheme.Editable;
 	}
 	internal static BrushColors StyleBrushes { get; set; } = new();
 
@@ -31,13 +31,12 @@ public class ValueToBackgroundBrushConverter : IValueConverter
 	{
 		try
 		{
-			if (value is DictionaryEntry || PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
+			if (value is DictionaryEntry ||
+				PropertyInfo.IsDefined(typeof(StyleValueAttribute)))
 			{
 				bool hasLinks = TabUtils.ObjectHasLinks(value, true);
 				if (hasLinks)
-					return StyleBrushes.HasLinks; // null?
-				else if (Editable && value is ListMember listMember && listMember.Editable)
-					return StyleBrushes.Editable;
+					return StyleBrushes.HasLinks;
 				else
 					return StyleBrushes.NoLinks;
 			}
@@ -46,10 +45,7 @@ public class ValueToBackgroundBrushConverter : IValueConverter
 		{
 		}
 
-		return null;
-		//	return Brushes.White; // checkbox column requires a valid value
-		//else
-		//	return EditableBrush;
+		return Brushes.Black;
 	}
 
 	public object? ConvertBack(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
@@ -57,8 +53,3 @@ public class ValueToBackgroundBrushConverter : IValueConverter
 		throw new NotSupportedException();
 	}
 }
-
-/*
-Used by DataGridPropertyTextColumn
-Need to hook this into Cell.OnPaint for hover?
-*/
