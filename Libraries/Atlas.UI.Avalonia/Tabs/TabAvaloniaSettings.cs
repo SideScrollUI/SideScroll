@@ -1,10 +1,13 @@
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Serialize;
-using Atlas.UI.Avalonia;
+using Atlas.Tabs;
+using Atlas.UI.Avalonia.Themes;
 using Atlas.UI.Avalonia.Themes.Tabs;
+using Avalonia;
+using Avalonia.Styling;
 
-namespace Atlas.Tabs.Tools;
+namespace Atlas.UI.Avalonia.Tabs;
 
 public class TabAvaloniaSettings : ITab
 {
@@ -22,7 +25,7 @@ public class TabAvaloniaSettings : ITab
 	{
 		public UserSettings? UserSettings;
 
-		public override void Load(Call call, TabModel model)
+		public override void LoadUI(Call call, TabModel model)
 		{
 			Toolbar toolbar = new();
 			toolbar.ButtonReset.Action = Reset;
@@ -30,6 +33,15 @@ public class TabAvaloniaSettings : ITab
 			model.AddObject(toolbar);
 
 			UserSettings = Project.UserSettings.DeepClone()!;
+			if (UserSettings.Theme == null && UserSettings.Themes.Count > 0)
+			{
+				if (Application.Current?.ActualThemeVariant is ThemeVariant variant &&
+					variant.Key is string key &&
+					UserSettings.Themes.Contains(key))
+				{
+					UserSettings.Theme = key;
+				}
+			}
 			model.AddObject(UserSettings);
 
 			model.Items = new List<ListItem>()
