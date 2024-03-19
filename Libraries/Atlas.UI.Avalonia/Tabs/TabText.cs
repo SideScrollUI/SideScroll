@@ -15,15 +15,8 @@ public class TabText : ITab
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance : TabInstance
+	public class Instance(TabText Tab) : TabInstance
 	{
-		public readonly TabText Tab;
-
-		public Instance(TabText tab)
-		{
-			Tab = tab;
-		}
-
 		public override void LoadUI(Call call, TabModel model)
 		{
 			model.MinDesiredWidth = 100;

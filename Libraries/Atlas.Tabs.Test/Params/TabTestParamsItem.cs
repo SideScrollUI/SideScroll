@@ -38,15 +38,8 @@ public class TabParamItem : ITab, IDataView
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance : TabInstance
+	public class Instance(TabParamItem Tab) : TabInstance
 	{
-		public TabParamItem Tab;
-
-		public Instance(TabParamItem tab)
-		{
-			Tab = tab;
-		}
-
 		public override void Load(Call call, TabModel model)
 		{
 			model.AddData(Tab.TestItem);

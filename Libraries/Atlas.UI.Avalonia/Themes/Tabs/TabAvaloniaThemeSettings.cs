@@ -59,10 +59,9 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 		public ToolButton ButtonImport { get; set; } = new("Import from Clipboard", Icons.Svg.Import);
 	}
 
-	public class Instance(TabAvaloniaThemeSettings tab) : TabInstance
+	public class Instance(TabAvaloniaThemeSettings Tab) : TabInstance
 	{
-		public TabAvaloniaThemeSettings Tab = tab;
-		public AvaloniaThemeSettings ThemeSettings = tab.ThemeSettings.DeepClone()!;
+		public AvaloniaThemeSettings ThemeSettings = Tab.ThemeSettings.DeepClone()!;
 
 		private TabControlParams? _paramControl;
 

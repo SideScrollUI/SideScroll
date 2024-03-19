@@ -37,15 +37,8 @@ public class TabFile : ITab
 		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
 	}
 
-	public class Instance : TabInstance
+	public class Instance(TabFile Tab) : TabInstance
 	{
-		public TabFile Tab;
-
-		public Instance(TabFile tab)
-		{
-			Tab = tab;
-		}
-
 		public override void Load(Call call, TabModel model)
 		{
 			string path = Tab.Path;

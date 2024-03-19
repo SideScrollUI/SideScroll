@@ -14,19 +14,12 @@ public class TabFileSerialized : ITab
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance : TabInstance
+	public class Instance(TabFileSerialized Tab) : TabInstance
 	{
-		public TabFileSerialized Tab;
-
 		public object? Object;
 		public Serializer? Serializer;
 
 		private readonly ListItem _listData = new("Object", null);
-
-		public Instance(TabFileSerialized tab)
-		{
-			Tab = tab;
-		}
 
 		public override void Load(Call call, TabModel model)
 		{

@@ -33,17 +33,11 @@ public class TabFileImage : ITab, IFileTypeView
 		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
 	}
 
-	public class Instance : TabInstance
+	public class Instance(TabFileImage Tab) : TabInstance
 	{
-		public readonly TabFileImage Tab;
 		public string Path => Tab.Path!;
 
 		public Image? Image;
-
-		public Instance(TabFileImage tab)
-		{
-			Tab = tab;
-		}
 
 		public override void LoadUI(Call call, TabModel model)
 		{

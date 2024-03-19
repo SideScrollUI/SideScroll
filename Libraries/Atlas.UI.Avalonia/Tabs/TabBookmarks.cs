@@ -31,15 +31,8 @@ public class TabBookmarks : ITab
 		public ToolButton ButtonDeleteAll { get; set; } = new ToolButton("Delete All", Icons.Svg.DeleteList);
 	}
 
-	public class Instance : TabInstance
+	public class Instance(TabBookmarks Tab) : TabInstance
 	{
-		public readonly TabBookmarks Tab;
-
-		public Instance(TabBookmarks tab)
-		{
-			Tab = tab;
-		}
-
 		public override void Load(Call call, TabModel model)
 		{
 			Tab.Bookmarks.Load(call, true);

@@ -25,15 +25,8 @@ public class TabDirectory : ITab
 		//public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Streams.Delete);
 	}
 
-	public class Instance : TabInstance
+	public class Instance(TabDirectory Tab) : TabInstance
 	{
-		public readonly TabDirectory Tab;
-
-		public Instance(TabDirectory tab)
-		{
-			Tab = tab;
-		}
-
 		public override void Load(Call call, TabModel model)
 		{
 			model.ShowTasks = true;

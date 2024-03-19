@@ -44,9 +44,8 @@ public class TabAvaloniaThemeSection : ITab
 		};
 	}
 
-	public class Instance(TabAvaloniaThemeSection tab) : TabInstance, ITabSelector
+	public class Instance(TabAvaloniaThemeSection Tab) : TabInstance, ITabSelector
 	{
-		public TabAvaloniaThemeSection Tab = tab;
 		public new IList? SelectedItems { get; set; }
 
 		public new event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;

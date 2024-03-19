@@ -15,15 +15,8 @@ public class TabTextFile : ITab
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance : TabInstance
+	public class Instance(TabTextFile Tab) : TabInstance
 	{
-		public readonly TabTextFile Tab;
-
-		public Instance(TabTextFile tab)
-		{
-			Tab = tab;
-		}
-
 		public override void LoadUI(Call call, TabModel model)
 		{
 			var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
