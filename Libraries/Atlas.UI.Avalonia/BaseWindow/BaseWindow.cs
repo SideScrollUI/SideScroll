@@ -1,5 +1,4 @@
 using Atlas.Core;
-using Atlas.Resources;
 using Atlas.Tabs;
 using Atlas.Tabs.Tools;
 using Atlas.UI.Avalonia.Tabs;
@@ -87,8 +86,6 @@ public class BaseWindow : Window
 
 		MinWidth = MinWindowWidth;
 		MinHeight = MinWindowHeight;
-
-		Icon = new WindowIcon(Icons.Logo.Stream);
 
 		Content = TabViewer = new TabViewer(Project);
 
