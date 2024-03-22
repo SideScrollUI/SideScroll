@@ -31,14 +31,14 @@ public class TabBookmarks : ITab
 		public ToolButton ButtonDeleteAll { get; set; } = new ToolButton("Delete All", Icons.Svg.DeleteList);
 	}
 
-	public class Instance(TabBookmarks Tab) : TabInstance
+	public class Instance(TabBookmarks tab) : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			Tab.Bookmarks.Load(call, true);
+			tab.Bookmarks.Load(call, true);
 
 			model.MinDesiredWidth = 300;
-			model.AddData(Tab.Bookmarks.Items);
+			model.AddData(tab.Bookmarks.Items);
 		}
 
 		public override void LoadUI(Call call, TabModel model)
@@ -49,10 +49,10 @@ public class TabBookmarks : ITab
 			toolbar.ButtonDeleteAll.Action = DeleteAll;
 			model.AddObject(toolbar);
 
-			if (Tab.Bookmarks.NewBookmark != null)
+			if (tab.Bookmarks.NewBookmark != null)
 			{
-				SelectItem(Tab.Bookmarks.NewBookmark);
-				Tab.Bookmarks.NewBookmark = null;
+				SelectItem(tab.Bookmarks.NewBookmark);
+				tab.Bookmarks.NewBookmark = null;
 			}
 		}
 
@@ -79,8 +79,8 @@ public class TabBookmarks : ITab
 
 		private void DeleteAll(Call call)
 		{
-			Tab.Bookmarks.DeleteAll(call);
-			Tab.Bookmarks.Load(call, true);
+			tab.Bookmarks.DeleteAll(call);
+			tab.Bookmarks.Load(call, true);
 		}
 	}
 }

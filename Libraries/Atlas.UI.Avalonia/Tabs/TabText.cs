@@ -15,7 +15,7 @@ public class TabText : ITab
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance(TabText Tab) : TabInstance
+	public class Instance(TabText tab) : TabInstance
 	{
 		public override void LoadUI(Call call, TabModel model)
 		{
@@ -23,7 +23,7 @@ public class TabText : ITab
 			model.MaxDesiredWidth = 1000;
 
 			var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
-			tabAvaloniaEdit.SetFormatted(Tab.Text);
+			tabAvaloniaEdit.SetFormatted(tab.Text);
 
 			model.AddObject(tabAvaloniaEdit, true);
 		}

@@ -14,7 +14,7 @@ public class TabFileSerialized : ITab
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance(TabFileSerialized Tab) : TabInstance
+	public class Instance(TabFileSerialized tab) : TabInstance
 	{
 		public object? Object;
 		public Serializer? Serializer;
@@ -25,7 +25,7 @@ public class TabFileSerialized : ITab
 		{
 			var items = new List<ListItem>();
 
-			var serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(Tab.Path)!);
+			var serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(tab.Path)!);
 
 			Serializer = serializerFile.LoadSchema(call);
 
@@ -41,7 +41,7 @@ public class TabFileSerialized : ITab
 
 		private void LoadData(Call call)
 		{
-			var serializerFile = new SerializerFileAtlas(Tab.Path);
+			var serializerFile = new SerializerFileAtlas(tab.Path);
 
 			Object = serializerFile.Load(call);
 			_listData.Value = Object;

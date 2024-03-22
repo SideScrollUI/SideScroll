@@ -15,12 +15,12 @@ public class TabTextFile : ITab
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance(TabTextFile Tab) : TabInstance
+	public class Instance(TabTextFile tab) : TabInstance
 	{
 		public override void LoadUI(Call call, TabModel model)
 		{
 			var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
-			tabAvaloniaEdit.Load(Tab.FilePath.Path);
+			tabAvaloniaEdit.Load(tab.FilePath.Path);
 
 			model.AddObject(tabAvaloniaEdit, true);
 		}

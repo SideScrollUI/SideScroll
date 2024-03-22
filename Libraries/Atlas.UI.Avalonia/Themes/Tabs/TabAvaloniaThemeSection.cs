@@ -44,7 +44,7 @@ public class TabAvaloniaThemeSection : ITab
 		};
 	}
 
-	public class Instance(TabAvaloniaThemeSection Tab) : TabInstance, ITabSelector
+	public class Instance(TabAvaloniaThemeSection tab) : TabInstance, ITabSelector
 	{
 		public new IList? SelectedItems { get; set; }
 
@@ -54,11 +54,11 @@ public class TabAvaloniaThemeSection : ITab
 		{
 			Toolbar toolbar = new();
 			toolbar.ButtonRefresh.Action = Refresh;
-			toolbar.ButtonUndo.Action = Tab.TabInstance.Undo;
-			toolbar.ButtonRedo.Action = Tab.TabInstance.Redo;
+			toolbar.ButtonUndo.Action = tab.TabInstance.Undo;
+			toolbar.ButtonRedo.Action = tab.TabInstance.Redo;
 			model.AddObject(toolbar);
 
-			var paramControl = new TabControlParams(Tab.Object);
+			var paramControl = new TabControlParams(tab.Object);
 			model.AddObject(paramControl);
 
 			foreach (var control in paramControl.Children)
@@ -78,7 +78,7 @@ public class TabAvaloniaThemeSection : ITab
 
 		private object? GetSamples()
 		{
-			switch (Tab.Object)
+			switch (tab.Object)
 			{
 				case TabTheme:
 				{
@@ -140,12 +140,12 @@ public class TabAvaloniaThemeSection : ITab
 		// Focus is lost when opening the ColorPicker
 		private void ColorPicker_LostFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			Tab.TabInstance.ColorPicker_LostFocus(sender, e);
+			tab.TabInstance.ColorPicker_LostFocus(sender, e);
 		}
 
 		private void ColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
 		{
-			Tab.TabInstance.ColorPicker_ColorChanged(sender, e);
+			tab.TabInstance.ColorPicker_ColorChanged(sender, e);
 		}
 	}
 }

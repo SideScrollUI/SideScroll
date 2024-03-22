@@ -33,9 +33,9 @@ public class TabFileImage : ITab, IFileTypeView
 		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
 	}
 
-	public class Instance(TabFileImage Tab) : TabInstance
+	public class Instance(TabFileImage tab) : TabInstance
 	{
-		public string Path => Tab.Path!;
+		public string Path => tab.Path!;
 
 		public Image? Image;
 
