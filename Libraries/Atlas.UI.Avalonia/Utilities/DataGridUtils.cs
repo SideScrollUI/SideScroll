@@ -9,15 +9,10 @@ public static class DataGridUtils
 {
 	private const int MaxColumnWidth = 100;
 
-	public class ColumnInfo
+	public class ColumnInfo(string name)
 	{
-		public string Name { get; set; }
+		public string Name { get; set; } = name;
 		public TextAlignment RightAlign { get; set; }
-
-		public ColumnInfo(string name)
-		{
-			Name = name;
-		}
 	}
 
 	public static string TableToString(List<ColumnInfo> columns, List<List<string>> contentRows, int maxColumnWidth = MaxColumnWidth)

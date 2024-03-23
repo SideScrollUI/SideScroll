@@ -11,14 +11,9 @@ using System.Diagnostics;
 namespace Atlas.UI.Avalonia.Themes;
 
 [AttributeUsage(AttributeTargets.Property)]
-public class ResourceKeyAttribute : Attribute
+public class ResourceKeyAttribute(params string[] names) : Attribute
 {
-	public readonly string[] Names;
-
-	public ResourceKeyAttribute(params string[] names)
-	{
-		Names = names;
-	}
+	public readonly string[] Names = names;
 }
 
 [Params]

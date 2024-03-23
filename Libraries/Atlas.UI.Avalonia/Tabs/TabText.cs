@@ -4,14 +4,9 @@ using Atlas.UI.Avalonia.Controls;
 
 namespace Atlas.UI.Avalonia.Tabs;
 
-public class TabText : ITab
+public class TabText(string text) : ITab
 {
-	public string Text;
-
-	public TabText(string text)
-	{
-		Text = text;
-	}
+	public string Text = text;
 
 	public TabInstance Create() => new Instance(this);
 

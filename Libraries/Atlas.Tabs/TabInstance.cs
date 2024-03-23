@@ -119,26 +119,16 @@ public class TabInstance : IDisposable
 	public SynchronizationContext UiContext;
 	public TabBookmark? FilterBookmarkNode;
 
-	public class EventSelectItem : EventArgs
+	public class EventSelectItem(object obj) : EventArgs
 	{
-		public readonly object Object;
+		public readonly object Object = obj;
 
 		public override string? ToString() => Object?.ToString();
-
-		public EventSelectItem(object obj)
-		{
-			Object = obj;
-		}
 	}
 
-	public class EventSelectItems : EventArgs
+	public class EventSelectItems(IList list) : EventArgs
 	{
-		public readonly IList List;
-
-		public EventSelectItems(IList list)
-		{
-			List = list;
-		}
+		public readonly IList List = list;
 	}
 
 	public event EventHandler<EventArgs>? OnRefresh;

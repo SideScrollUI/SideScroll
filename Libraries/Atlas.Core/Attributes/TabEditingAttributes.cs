@@ -14,14 +14,9 @@ public class ReadOnlyAttribute : Attribute
 // Applies only to Params/TextBoxes
 // Allow return key to add a new line
 [AttributeUsage(AttributeTargets.Property)]
-public class AcceptsReturnAttribute : Attribute
+public class AcceptsReturnAttribute(bool allow = true) : Attribute
 {
-	public readonly bool Allow;
-
-	public AcceptsReturnAttribute(bool allow = true)
-	{
-		Allow = allow;
-	}
+	public readonly bool Allow = allow;
 }
 
 // [Watermark("0123456789abcdef")]
@@ -39,26 +34,16 @@ public class WatermarkAttribute : Attribute
 }
 
 [AttributeUsage(AttributeTargets.Property)]
-public class PasswordCharAttribute : Attribute
+public class PasswordCharAttribute(char c) : Attribute
 {
-	public readonly char Character;
-
-	public PasswordCharAttribute(char c)
-	{
-		Character = c;
-	}
+	public readonly char Character = c;
 }
 
 // The member name that contains a list of items to select this item's value from
 [AttributeUsage(AttributeTargets.Property)]
-public class BindListAttribute : Attribute
+public class BindListAttribute(string propertyName) : Attribute
 {
-	public readonly string PropertyName;
-
-	public BindListAttribute(string propertyName)
-	{
-		PropertyName = propertyName;
-	}
+	public readonly string PropertyName = propertyName;
 }
 
 // ->Toolbar: Show a separator before this item

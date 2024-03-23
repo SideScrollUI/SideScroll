@@ -9,20 +9,14 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.Media;
 using Avalonia.Threading;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Atlas.UI.Avalonia;
 
-public class EventTabLoaded : EventArgs
+public class EventTabLoaded(object obj) : EventArgs
 {
-	public readonly object Object;
-
-	public EventTabLoaded(object obj)
-	{
-		Object = obj;
-	}
+	public readonly object Object = obj;
 }
 
 public class TabViewer : Grid

@@ -73,12 +73,7 @@ public class TimeWindow
 	}
 }
 
-public class TimeWindowEventArgs : EventArgs
+public class TimeWindowEventArgs(TimeWindow timeWindow) : EventArgs
 {
-	public TimeWindow TimeWindow { get; set; }
-
-	public TimeWindowEventArgs(TimeWindow timeWindow)
-	{
-		TimeWindow = timeWindow;
-	}
+	public TimeWindow TimeWindow { get; set; } = timeWindow;
 }

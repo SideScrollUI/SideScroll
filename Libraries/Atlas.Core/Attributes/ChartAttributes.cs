@@ -11,12 +11,7 @@ public class YAxisAttribute : Attribute
 }
 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class UnitAttribute : Attribute
+public class UnitAttribute(string name) : Attribute
 {
-	public readonly string Name;
-
-	public UnitAttribute(string name)
-	{
-		Name = name;
-	}
+	public readonly string Name = name;
 }

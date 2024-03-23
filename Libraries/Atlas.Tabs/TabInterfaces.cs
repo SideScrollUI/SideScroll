@@ -11,14 +11,9 @@ public interface ITabSelector
 	event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 }
 
-public class TabSelectionChangedEventArgs : EventArgs
+public class TabSelectionChangedEventArgs(bool recreate = false) : EventArgs
 {
-	public readonly bool Recreate;
-
-	public TabSelectionChangedEventArgs(bool recreate = false)
-	{
-		Recreate = recreate;
-	}
+	public readonly bool Recreate = recreate;
 }
 
 // For CustomTabControls

@@ -2,14 +2,9 @@ namespace Atlas.Core;
 
 // Use the specified name instead of the field/property name
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
-public class NameAttribute : Attribute
+public class NameAttribute(string name) : Attribute
 {
-	public readonly string Name;
-
-	public NameAttribute(string name)
-	{
-		Name = name;
-	}
+	public readonly string Name = name;
 }
 
 // DataGrids use this as a unique key when matching rows
@@ -109,14 +104,9 @@ public class HideColumnAttribute : Attribute
 
 // Don't show unless #if DEBUG set
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class DebugOnlyAttribute : Attribute
+public class DebugOnlyAttribute(bool value = true) : Attribute
 {
-	public readonly bool Value;
-
-	public DebugOnlyAttribute(bool value = true)
-	{
-		Value = value;
-	}
+	public readonly bool Value = value;
 }
 
 // Style value based on whether it contains links or not
@@ -133,14 +123,9 @@ public class FormattedAttribute : Attribute
 
 // Displayed string formatter
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class FormatterAttribute : Attribute
+public class FormatterAttribute(Type type) : Attribute
 {
-	public readonly Type Type;
-
-	public FormatterAttribute(Type type)
-	{
-		Type = type;
-	}
+	public readonly Type Type = type;
 }
 
 // Adds spaces between words in a string
@@ -169,38 +154,23 @@ public class AutoSizeAttribute : Attribute
 
 // MinDesiredWidthAttribute? Actually allows user to use smaller values (a good thing)
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
-public class MinWidthAttribute : Attribute
+public class MinWidthAttribute(int minWidth) : Attribute
 {
-	public readonly int MinWidth;
-
-	public MinWidthAttribute(int minWidth)
-	{
-		MinWidth = minWidth;
-	}
+	public readonly int MinWidth = minWidth;
 }
 
 // MaxDesiredWidthAttribute?
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
-public class MaxWidthAttribute : Attribute
+public class MaxWidthAttribute(int maxWidth) : Attribute
 {
-	public readonly int MaxWidth;
-
-	public MaxWidthAttribute(int maxWidth)
-	{
-		MaxWidth = maxWidth;
-	}
+	public readonly int MaxWidth = maxWidth;
 }
 
 // MaxDesiredHeightAttribute?
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
-public class MaxHeightAttribute : Attribute
+public class MaxHeightAttribute(int maxHeight) : Attribute
 {
-	public readonly int MaxHeight;
-
-	public MaxHeightAttribute(int maxHeight)
-	{
-		MaxHeight = maxHeight;
-	}
+	public readonly int MaxHeight = maxHeight;
 }
 
 // AutoSelect the item if non-null, rename? add priority?
@@ -211,14 +181,9 @@ public class AutoSelectAttribute : Attribute
 
 // Show method as an Item
 [AttributeUsage(AttributeTargets.Method)]
-public class ItemAttribute : Attribute
+public class ItemAttribute(string? name = null) : Attribute
 {
-	public readonly string? Name;
-
-	public ItemAttribute(string? name = null)
-	{
-		Name = name;
-	}
+	public readonly string? Name = name;
 }
 
 // Don't show this field/property as a column
@@ -242,12 +207,7 @@ public class ButtonColumnAttribute : Attribute
 
 // -> Allows setting the column for param controls
 [AttributeUsage(AttributeTargets.Property)]
-public class ColumnIndexAttribute : Attribute
+public class ColumnIndexAttribute(int index) : Attribute
 {
-	public readonly int Index;
-
-	public ColumnIndexAttribute(int index)
-	{
-		Index = index;
-	}
+	public readonly int Index = index;
 }

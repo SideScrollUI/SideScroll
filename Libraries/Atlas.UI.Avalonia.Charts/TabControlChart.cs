@@ -50,24 +50,14 @@ public class SeriesInfo
 	public bool IsSelected { get; set; } = true; // Visible = Selected
 }
 
-public class SeriesSelectedEventArgs : EventArgs
+public class SeriesSelectedEventArgs(List<ListSeries> series) : EventArgs
 {
-	public List<ListSeries> Series { get; set; }
-
-	public SeriesSelectedEventArgs(List<ListSeries> series)
-	{
-		Series = series;
-	}
+	public List<ListSeries> Series { get; set; } = series;
 }
 
-public class MouseCursorMovedEventArgs : EventArgs
+public class MouseCursorMovedEventArgs(double x) : EventArgs
 {
-	public double X { get; set; }
-
-	public MouseCursorMovedEventArgs(double x)
-	{
-		X = x;
-	}
+	public double X { get; set; } = x;
 }
 
 public interface ITabControlChart

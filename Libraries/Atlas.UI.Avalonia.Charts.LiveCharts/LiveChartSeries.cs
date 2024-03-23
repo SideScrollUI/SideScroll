@@ -11,14 +11,9 @@ using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Charts.LiveCharts;
 
-public class SeriesHoverEventArgs : EventArgs
+public class SeriesHoverEventArgs(ListSeries series) : EventArgs
 {
-	public ListSeries Series { get; set; }
-
-	public SeriesHoverEventArgs(ListSeries series)
-	{
-		Series = series;
-	}
+	public ListSeries Series { get; set; } = series;
 }
 
 public class LiveChartSeries //: ChartSeries<ISeries>
