@@ -271,11 +271,7 @@ public class TabInstance : IDisposable
 	{
 		call ??= new Call(taskCreator.Label);
 		TaskInstance taskInstance = taskCreator.Start(call);
-		taskInstance.ShowTask = showTask || ShowTasks;
-		if (taskInstance.ShowTask)
-		{
-			Model.Tasks.Add(taskInstance);
-		}
+		AddTask(taskInstance, showTask);
 		return taskInstance;
 	}
 
@@ -295,6 +291,15 @@ public class TabInstance : IDisposable
 	{
 		var taskDelegate = new TaskDelegateParams(null, callAction.Method.Name.TrimEnd("Async").WordSpaced(), callAction, useTask, null, objects);
 		StartTask(taskDelegate, showTask);
+	}
+
+	public void AddTask(TaskInstance taskInstance, bool showTask)
+	{
+		taskInstance.ShowTask = showTask || ShowTasks;
+		if (taskInstance.ShowTask)
+		{
+			Model.Tasks.Add(taskInstance);
+		}
 	}
 
 	protected ItemCollection<ListProperty> GetListProperties()
