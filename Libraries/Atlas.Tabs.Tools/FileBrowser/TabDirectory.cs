@@ -1,19 +1,16 @@
 using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Resources;
+using Atlas.Serialize;
 
 namespace Atlas.Tabs.Tools;
 
-public class TabDirectory : ITab
+public class TabDirectory(string path, DataRepoView<NodeView>? dataRepoNodes = null) : ITab
 {
-	public string Path;
+	public string Path = path;
+	public DataRepoView<NodeView>? DataRepoNodes = dataRepoNodes;
 
 	public override string ToString() => Path;
-
-	public TabDirectory(string path)
-	{
-		Path = path;
-	}
 
 	public TabInstance Create() => new Instance(this);
 
@@ -31,6 +28,7 @@ public class TabDirectory : ITab
 		{
 			model.ShowTasks = true;
 			model.CustomSettingsPath = tab.Path;
+			model.Editing = true;
 
 			if (!Directory.Exists(tab.Path))
 			{
@@ -46,7 +44,7 @@ public class TabDirectory : ITab
 			List<DirectoryView> directories = GetDirectories(call);
 			List<FileView> files = GetFiles(call);
 
-			List<INodeView> nodes = new(directories);
+			List<NodeView> nodes = new(directories);
 			nodes.AddRange(files);
 
 			if (directories.Count == nodes.Count)
@@ -60,7 +58,7 @@ public class TabDirectory : ITab
 			try
 			{
 				return Directory.EnumerateFiles(tab.Path)
-					.Select(f => new FileView(f))
+					.Select(f => new FileView(f, tab.DataRepoNodes))
 					.ToList();
 			}
 			catch (Exception ex)
@@ -76,7 +74,7 @@ public class TabDirectory : ITab
 			try
 			{
 				return Directory.EnumerateDirectories(tab.Path)
-					.Select(f => new DirectoryView(f))
+					.Select(f => new DirectoryView(f, tab.DataRepoNodes))
 					.ToList();
 			}
 			catch (Exception ex)
@@ -93,9 +91,9 @@ public class TabDirectory : ITab
 
 			// Select file if possible
 			List<SelectedRow> selectedRows = GetSelectedRows();
-			string? select = selectedRows.FirstOrDefault()?.Label;
+			string? selection = selectedRows.FirstOrDefault()?.Label;
 
-			ProcessUtils.OpenFolder(path, select);
+			ProcessUtils.OpenFolder(path, selection);
 		}
 
 		private List<SelectedRow> GetSelectedRows()
@@ -129,74 +127,114 @@ public interface IDirectoryView : IHasLinks
 }
 
 // Shows if files present
-public interface INodeView : IHasLinks
+public abstract class NodeView : IHasLinks
 {
-	public string Name { get; }
+	[Unserialized]
+	public DataRepoView<NodeView>? DataRepo;
+
+	[Name("  ★"), Editing]
+	public bool Favorite
+	{
+		get => _favorite;
+		set
+		{
+			_favorite = value;
+			UpdateDataRepo();
+		}
+	}
+	private bool _favorite;
+
+	public abstract string Name { get; }
 
 	[StyleValue, Formatter(typeof(ByteFormatter))]
-	public long? Size { get; }
+	public abstract long? Size { get; set;  }
 
 	[StyleValue, Formatted]
-	public TimeSpan Modified { get; }
-}
+	public abstract TimeSpan Modified { get; }
 
-public class DirectoryView : INodeView, IDirectoryView
-{
-	public string Directory { get; set; }
+	[Hidden]
+	public abstract bool HasLinks { get; }
 
-	public string Name => Directory;
-	public long? Size => null;
-	public DateTime LastWriteTime { get; set; }
-	public TimeSpan Modified => LastWriteTime.Age();
-	public bool HasLinks => true;
+	public string Path;
 
-	[InnerValue]
-	public ITab Tab;
+	[InnerValue, Unserialized]
+	public ITab? Tab;
 
-	public string DirectoryPath;
+	public override string ToString() => Name;
 
-	public override string ToString() => Directory;
+	public NodeView(string path)
+		: this(path, null)
+	{ }
 
-	public DirectoryView(string directoryPath)
+	public NodeView(string path, DataRepoView<NodeView>? dataRepoNodes = null)
 	{
-		DirectoryPath = directoryPath;
-		Directory = Path.GetFileName(directoryPath);
-		var info = new DirectoryInfo(directoryPath);
-		LastWriteTime = info.LastWriteTime.Trim();
-		Tab = new TabDirectory(directoryPath);
+		Path = path;
+		DataRepo = dataRepoNodes;
+		_favorite = dataRepoNodes?.Items.TryGetValue(Path, out _) == true;
+	}
+
+	private void UpdateDataRepo()
+	{
+		if (DataRepo == null) return;
+
+		if (_favorite)
+			DataRepo.Save(null, Path, this);
+		else
+			DataRepo.Delete(null, Path);
 	}
 }
 
-public class FileView : INodeView
+public class DirectoryView : NodeView, IDirectoryView
+{
+	public string Directory { get; set; }
+
+	public override string Name => Directory;
+	public override long? Size { get; set; } = null;
+	public DateTime LastWriteTime { get; set; }
+	public override TimeSpan Modified => LastWriteTime.Age();
+	public override bool HasLinks => true;
+
+	public DirectoryView(string path)
+		: this(path, null)
+	{ }
+
+	public DirectoryView(string path, DataRepoView<NodeView>? dataRepoNodes = null) :
+		base(path, dataRepoNodes)
+	{
+		Directory = System.IO.Path.GetFileName(path);
+		var info = new DirectoryInfo(path);
+		LastWriteTime = info.LastWriteTime.Trim();
+		Tab = new TabDirectory(path, dataRepoNodes);
+	}
+}
+
+public class FileView : NodeView
 {
 	public string Filename { get; set; }
-	public long? Size { get; set; }
+	public override long? Size { get; set; }
 	public DateTime LastWriteTime { get; set; }
-	public TimeSpan Modified => LastWriteTime.Age();
-	public bool HasLinks => false;
+	public override TimeSpan Modified => LastWriteTime.Age();
+	public override bool HasLinks => false;
 
-	public string Name => Filename;
+	public override string Name => Filename;
 
-	[InnerValue]
-	public ITab Tab;
-
-	public string FilePath;
 	public FileInfo FileInfo;
 
-	public override string ToString() => Filename;
+	public FileView(string path)
+		: this(path, null)
+	{ }
 
-	public FileView(string filePath)
+	public FileView(string path, DataRepoView<NodeView>? dataRepoNodes = null)
+		: base(path, dataRepoNodes)
 	{
-		FilePath = filePath;
-		FileInfo = new FileInfo(filePath);
-
-		Filename = Path.GetFileName(filePath);
+		FileInfo = new FileInfo(path);
+		Filename = System.IO.Path.GetFileName(path);
 		Size = FileInfo.Length;
 		LastWriteTime = FileInfo.LastWriteTime.Trim();
 
 		if (Filename.EndsWith(".atlas"))
-			Tab = new TabFileSerialized(filePath);
+			Tab = new TabFileSerialized(path);
 		else
-			Tab = new TabFile(filePath);
+			Tab = new TabFile(path);
 	}
 }

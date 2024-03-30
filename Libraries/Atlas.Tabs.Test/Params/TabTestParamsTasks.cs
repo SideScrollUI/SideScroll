@@ -76,6 +76,7 @@ public class TabTestParamsTasks : ITab
 	{
 		public ParamTestItem? Parameters;
 		public string? Name => Parameters?.Name;
+		public DateTime? DateTime => Parameters?.DateTime;
 
 		public override string? ToString() => Name;
 	}

@@ -17,6 +17,10 @@ public class TabControlTextBox : TextBox
 {
 	protected override Type StyleKeyOverride => typeof(TextBox);
 
+	public ListProperty? Property { get; init; }
+
+	public override string? ToString() => Property?.ToString();
+
 	public TabControlTextBox()
 	{
 		InitializeComponent();
@@ -24,6 +28,8 @@ public class TabControlTextBox : TextBox
 
 	public TabControlTextBox(ListProperty property)
 	{
+		Property = property;
+
 		InitializeComponent();
 
 		InitializeProperty(property);

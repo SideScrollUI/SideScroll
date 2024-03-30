@@ -2,35 +2,33 @@ using Atlas.Core;
 
 namespace Atlas.Tabs.Test.DataGrid;
 
-public class TabTestArray : ITab
+[ListItem]
+public class TabTestArray
 {
-	public TabInstance Create() => new Instance();
+	public string[] stringArray =>
+	[
+		"Item 1",
+		"Item 2",
+		"Item 3",
+	];
 
-	public class Instance : TabInstance
+	public Pet[] classes =>
+	[
+		new("Casper"),
+		new("Panda Bear"),
+	];
+
+	// todo: this currently shows as a single column
+	public int[,] multiDimensional => new [,]
 	{
-		public override void Load(Call call, TabModel model)
-		{
-			var classes = new MyClass[]
-			{
-				new(), 
-				new(),
-			};
+		{ 1, 2 },
+		{ 3, 4 },
+	};
 
-			model.Items = new ItemCollection<ListItem>()
-			{
-				new("2 Items", classes),
-				new("String Array", new string[] { "abc", "123" }),
-			};
-
-			/*tabModel.Actions = new List<TaskCreator>() {
-			//new TaskAction("Add Entries", AddEntries),
-			};*/
-		}
-	}
-
-
-	public class MyClass
+	public class Pet(string name)
 	{
-		public string Name { get; set; } = "Eve";
+		public string Name { get; set; } = name;
+
+		public override string ToString() => Name;
 	}
 }

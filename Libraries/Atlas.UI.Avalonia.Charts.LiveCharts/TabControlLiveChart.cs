@@ -18,7 +18,6 @@ using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Avalonia;
-using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using System.Diagnostics;
@@ -78,6 +77,14 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	public TabControlLiveChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false) : 
 		base(tabInstance, chartView, fillHeight)
 	{
+		ColumnDefinitions = new ColumnDefinitions("*,Auto");
+		RowDefinitions = new RowDefinitions("Auto,*,Auto");
+
+		HorizontalAlignment = HorizontalAlignment.Stretch;
+		VerticalAlignment = VerticalAlignment.Stretch;
+
+		Background = AtlasTheme.TabBackground; // Grid lines look bad when hovering without this
+
 		XAxis = CreateXAxis();
 		YAxis = CreateYAxis();
 
@@ -107,25 +114,16 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		ReloadView();
 
-		var containerGrid = new Grid()
-		{
-			ColumnDefinitions = new ColumnDefinitions("*,Auto"),
-			RowDefinitions = new RowDefinitions("Auto,*,Auto"),
-			HorizontalAlignment = HorizontalAlignment.Stretch,
-			VerticalAlignment = VerticalAlignment.Stretch,
-			Background = AtlasTheme.TabBackground, // grid lines look bad when hovering without this
-		};
-
 		if (TitleTextBlock != null)
 		{
-			containerGrid.Children.Add(TitleTextBlock);
+			Children.Add(TitleTextBlock);
 		}
 		else
 		{
-			containerGrid.RowDefinitions[0].Height = new GridLength(0);
+			RowDefinitions[0].Height = new GridLength(0);
 		}
 
-		containerGrid.Children.Add(Chart);
+		Children.Add(Chart);
 
 		Legend = new TabControlLiveChartLegend(this);
 		if (ChartView!.LegendPosition == ChartLegendPosition.Bottom)
@@ -143,7 +141,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		{
 			Legend.IsVisible = false;
 		}
-		containerGrid.Children.Add(Legend);
+		Children.Add(Legend);
 		Legend.OnSelectionChanged += Legend_OnSelectionChanged;
 		//Legend.OnVisibleChanged += Legend_OnVisibleChanged;
 
@@ -158,8 +156,6 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			AddNowTime();
 		}
 		AddSections();
-
-		Children.Add(containerGrid);
 	}
 
 	public void LoadView(ChartView chartView)

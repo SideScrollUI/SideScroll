@@ -12,7 +12,7 @@ public class TabTestNullableArray : ITab
 		{
 			var testItems = new TestItem?[10];
 
-			for (int i = 0; i < testItems.Length; i++)
+			for (int i = 0; i < testItems.Length; i++) // Should we allow null values too? i += 2
 			{
 				testItems[i] = new TestItem
 				{

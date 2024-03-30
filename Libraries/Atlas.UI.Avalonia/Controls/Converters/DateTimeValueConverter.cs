@@ -7,39 +7,42 @@ namespace Atlas.UI.Avalonia;
 
 public class DateTimeValueConverter : IValueConverter
 {
+	public string? PreviousTimeText;
 	public DateTime? PreviousDateTime;
 
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
-		// Debug.WriteLine($"Convert {value}, Target: {targetType}");
-
-		if (value is TimeSpan timeSpan)
-		{
-			var date = ((DateTime)PreviousDateTime!).Date;
-			PreviousDateTime = date.AddSeconds(timeSpan.TotalSeconds);
-			return PreviousDateTime;
-		}
+		// Debug.WriteLine($"Convert {value} of Type {value?.GetType()}, Target: {targetType}");
 
 		PreviousDateTime = value as DateTime?;
 
 		if (targetType == typeof(string))
 		{
-			if (PreviousDateTime is DateTime dateTime)
+			if (value is DateTime dateTime)
 			{
-				return dateTime.ToString("H:mm:ss");
+				if (PreviousTimeText != null &&
+					DateTimeUtils.TryParseTimeSpan(PreviousTimeText, out TimeSpan prevTimeSpan)
+					&& dateTime.TimeOfDay == prevTimeSpan)
+				{
+					// Debug.WriteLine($"Convert returned PreviousTimeText: {PreviousTimeText}");
+					return PreviousTimeText;
+				}
 			}
-
-			return "";
+			return PreviousDateTime?.ToString("H:mm:ss") ?? "";
+		}
+		else if (targetType == typeof(DateTime) || targetType == typeof(DateTime?))
+		{
+			return PreviousDateTime;
 		}
 		else
 		{
-			return PreviousDateTime;
+			return null;
 		}
 	}
 
 	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
-		// Debug.WriteLine($"ConvertBack {value}, Target: {targetType}");
+		// Debug.WriteLine($"ConvertBack {value} of Type {value?.GetType()}, Target: {targetType}");
 
 		if (value == null) return PreviousDateTime;
 
@@ -64,23 +67,26 @@ public class DateTimeValueConverter : IValueConverter
 	{
 		// Debug.WriteLine($"SetDate {dateTime}");
 
-		if (PreviousDateTime == null)
+		if (PreviousDateTime is DateTime prevDateTime)
+		{
+			// use the same Kind as the original
+			dateTime = DateTime.SpecifyKind(dateTime, prevDateTime.Kind);
+
+			var timeSpan = prevDateTime.TimeOfDay;
+			dateTime = dateTime.Date + timeSpan;
+			PreviousDateTime = dateTime;
+		}
+		else
 		{
 			PreviousDateTime = dateTime;
-			return;
 		}
-
-		// use the same Kind as the original
-		dateTime = DateTime.SpecifyKind(dateTime, ((DateTime)PreviousDateTime).Kind);
-
-		var timeSpan = ((DateTime)PreviousDateTime).TimeOfDay;
-		dateTime = dateTime.Date + timeSpan;
-		PreviousDateTime = dateTime;
 	}
 
 	public object? SetTime(string timeText)
 	{
 		// Debug.WriteLine($"SetTime {timeText}");
+
+		PreviousTimeText = timeText;
 
 		if (!DateTimeUtils.TryParseTimeSpan(timeText, out TimeSpan timeSpan))
 		{
