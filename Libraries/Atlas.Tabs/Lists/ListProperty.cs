@@ -24,7 +24,7 @@ public class ListProperty : ListMember, IPropertyEditable
 		get
 		{
 			bool propertyReadOnly = (PropertyInfo.GetCustomAttribute<ReadOnlyAttribute>() != null);
-			return PropertyInfo.CanWrite && !propertyReadOnly;
+			return PropertyInfo.CanWrite && PropertyInfo.SetMethod?.IsPublic == true && !propertyReadOnly;
 		}
 	}
 

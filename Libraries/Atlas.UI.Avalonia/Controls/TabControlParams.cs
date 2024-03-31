@@ -259,11 +259,11 @@ public class TabControlParams : Grid, IValidationControl
 		{
 			return new TabControlCheckBox(property);
 		}
-		else if (type.IsEnum || listAttribute != null)
+		else if (property.Editable && (type.IsEnum || listAttribute != null))
 		{
 			return new TabControlFormattedComboBox(property, listAttribute?.PropertyName);
 		}
-		else if (typeof(DateTime).IsAssignableFrom(type) && property.Editable)
+		else if (property.Editable && typeof(DateTime).IsAssignableFrom(type))
 		{
 			return new TabDateTimePicker(property);
 		}

@@ -37,6 +37,7 @@ public class TabControlTextArea : Border
 			Foreground = AtlasTheme.TitleForeground,
 			TextWrapping = TextWrapping.Wrap,
 			Text = Text,
+			MinHeight = 24, // Single lines can get clipped if this is too low
 		};
 		AvaloniaUtils.AddContextMenu(TextBlock);
 

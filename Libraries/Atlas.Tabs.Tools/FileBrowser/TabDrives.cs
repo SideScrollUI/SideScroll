@@ -5,9 +5,9 @@ namespace Atlas.Tabs.Tools;
 
 public class TabDrives : ITab
 {
-	public DataRepoView<NodeView> DataRepoNodes;
+	public DataRepoView<NodeView>? DataRepoNodes;
 
-	public TabDrives(DataRepoView<NodeView> dataRepoNodes)
+	public TabDrives(DataRepoView<NodeView>? dataRepoNodes = null)
 	{
 		DataRepoNodes = dataRepoNodes;
 	}
