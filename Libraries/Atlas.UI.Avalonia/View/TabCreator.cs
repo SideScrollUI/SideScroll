@@ -12,7 +12,7 @@ public static class TabCreator
 	public static Control? CreateChildControl(TabInstance parentTabInstance, object obj, string? label = null, ITabSelector? tabControl = null)
 	{
 		object? value = obj.GetInnerValue();
-		if (value == null || value is bool)
+		if (value == null || (value is bool && !parentTabInstance.Model.Skippable))
 			return null;
 
 		if (label == null)

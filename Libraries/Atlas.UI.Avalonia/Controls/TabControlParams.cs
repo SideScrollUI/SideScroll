@@ -255,17 +255,21 @@ public class TabControlParams : Grid, IValidationControl
 		BindListAttribute? listAttribute = type.GetCustomAttribute<BindListAttribute>();
 		listAttribute ??= property.GetCustomAttribute<BindListAttribute>();
 
+		if (property.Editable)
+		{
+			if (type.IsEnum || listAttribute != null)
+			{
+				return new TabControlFormattedComboBox(property, listAttribute?.PropertyName);
+			}
+			else if (typeof(DateTime).IsAssignableFrom(type))
+			{
+				return new TabDateTimePicker(property);
+			}
+		}
+
 		if (type == typeof(bool))
 		{
 			return new TabControlCheckBox(property);
-		}
-		else if (property.Editable && (type.IsEnum || listAttribute != null))
-		{
-			return new TabControlFormattedComboBox(property, listAttribute?.PropertyName);
-		}
-		else if (property.Editable && typeof(DateTime).IsAssignableFrom(type))
-		{
-			return new TabDateTimePicker(property);
 		}
 		else if (typeof(Color).IsAssignableFrom(type))
 		{
