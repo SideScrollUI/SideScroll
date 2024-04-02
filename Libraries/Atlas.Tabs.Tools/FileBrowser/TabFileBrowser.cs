@@ -1,5 +1,4 @@
 using Atlas.Core;
-using Atlas.Serialize;
 
 namespace Atlas.Tabs.Tools;
 
@@ -7,26 +6,18 @@ public class TabFileBrowser : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance() : TabInstance
+	public class Instance() : TabInstance, ITabAsync
 	{
-		public const string GroupId = "Favorites";
-
-		public DataRepoView<NodeView>? DataRepoNodes;
-
-		public override void Load(Call call, TabModel model)
+		public async Task LoadAsync(Call call, TabModel model)
 		{
-			DataRepoNodes = Project.DataApp.LoadView<NodeView>(call, GroupId, nameof(NodeView.Name));
-			foreach (var node in DataRepoNodes.Items.Values)
-			{
-				node.DataRepo = DataRepoNodes;
-			}
+			var dataRepoView = await FileFavoritesDataRepo.GetViewAsync(call, Project);
 
 			model.Items = new List<ListItem>()
 			{
-				new("Current", new TabDirectory(Directory.GetCurrentDirectory(), DataRepoNodes)),
-				new("Downloads", new TabDirectory(Paths.DownloadPath, DataRepoNodes)),
-				new("Drives", new TabDrives(DataRepoNodes)),
-				new("Favorites", new TabFileFavorites(DataRepoNodes)),
+				new("Current", new TabDirectory(Directory.GetCurrentDirectory(), dataRepoView)),
+				new("Downloads", new TabDirectory(Paths.DownloadPath, dataRepoView)),
+				new("Drives", new TabDrives(dataRepoView)),
+				new("Favorites", new TabFileFavorites(dataRepoView)),
 			};
 		}
 	}
