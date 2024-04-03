@@ -123,6 +123,9 @@ public class TabDirectory(string path, DataRepoView<NodeView>? dataRepoNodes = n
 // Shows if only directories present
 public interface IDirectoryView : IHasLinks
 {
+	[Name("  ★"), Editing]
+	public bool Favorite { get; set; }
+
 	public string Name { get; }
 }
 
