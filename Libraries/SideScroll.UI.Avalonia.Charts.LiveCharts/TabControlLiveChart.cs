@@ -442,7 +442,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		var dateFormat = DateTimeFormat.GetWindowFormat(windowDuration)!;
 		TimeSpan stepDuration = windowDuration.PeriodDuration(8).Max(dateFormat.Minimum);
 
-		XAxis.Labeler = value => new DateTime((long)value, DateTimeKind.Utc).ToString(dateFormat.TextFormat);
+		XAxis.Labeler = value => TimeZoneView.Current.Convert(new DateTime((long)value, DateTimeKind.Utc)).ToString(dateFormat.TextFormat);
 		XAxis.UnitWidth = stepDuration.Ticks; // Hover depends on this
 		XAxis.MinStep = stepDuration.Ticks;
 	}

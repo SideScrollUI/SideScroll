@@ -75,6 +75,9 @@ public static class DateTimeUtils
 
 	public static string FormatTimeRange(DateTime startTime, DateTime endTime, bool withDuration = true)
 	{
+		startTime = TimeZoneView.Current.Convert(startTime);
+		endTime = TimeZoneView.Current.Convert(endTime);
+
 		string timeFormat = "H:mm:ss";
 		if (startTime.Second == 0 && endTime.Second == 0)
 		{

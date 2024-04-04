@@ -37,7 +37,10 @@ public static class ObjectExtensions
 		if (type.IsPrimitive == false)
 		{
 			if (obj is DateTime dateTime)
+			{
+				dateTime = TimeZoneView.Current.Convert(dateTime);
 				return dateTime.ToString("yyyy-M-d H:mm:ss.FFFFFF");
+			}
 
 			if (obj is TimeSpan timeSpan)
 			{
@@ -150,7 +153,10 @@ public static class ObjectExtensions
 		if (type.IsPrimitive == false)
 		{
 			if (obj is DateTime dateTime)
+			{
+				dateTime = TimeZoneView.Current.Convert(dateTime);
 				return dateTime.ToString("yyyy-MM-dd H:mm:ss.FFFFFF");
+			}
 
 			// use any ToString() that overrides the base
 			MethodInfo toStringMethod = type.GetMethod("ToString", Type.EmptyTypes)!;
@@ -162,9 +168,9 @@ public static class ObjectExtensions
 
 		if (type.IsNumeric())
 		{
-			MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) })!;
+			MethodInfo toStringMethod = type.GetMethod("ToString", [typeof(string)])!;
 			string format = type.IsDecimal() ? "N" : "N0";
-			object? result = toStringMethod.Invoke(obj, new object[] { format });
+			object? result = toStringMethod.Invoke(obj, [format]);
 			return (string?)result;
 		}
 

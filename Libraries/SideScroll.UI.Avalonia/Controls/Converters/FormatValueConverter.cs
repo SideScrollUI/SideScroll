@@ -74,12 +74,14 @@ public class FormatValueConverter : IValueConverter
 	{
 		if (value is DateTime dateTime)
 		{
-			return dateTime.ToUniversalTime().ToString(StringFormat);
+			dateTime = TimeZoneView.Current.Convert(dateTime);
+			return dateTime.ToString(StringFormat);
 		}
 
 		if (value is DateTimeOffset dateTimeOffset)
 		{
-			return dateTimeOffset.UtcDateTime.ToString(StringFormat);
+			dateTime = TimeZoneView.Current.Convert(dateTimeOffset.UtcDateTime);
+			return dateTime.ToString(StringFormat);
 		}
 
 		if (value is TimeSpan timeSpan)

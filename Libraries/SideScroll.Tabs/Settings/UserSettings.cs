@@ -22,7 +22,12 @@ public class UserSettings
 
 	//public int MaxLogItems { get; set; } = 100_000;
 
-	public static List<string> Themes { get; set; } = [];
+	public static List<TimeZoneView> TimeZones { get; set; } = TimeZoneView.All;
+
+	[BindList(nameof(TimeZones))]
+	public TimeZoneView TimeZone { get; set; } = TimeZoneView.Local;
+
+	public static List<string> Themes { get; set; } = new();
 
 	[BindList(nameof(Themes))]
 	public string? Theme { get; set; }

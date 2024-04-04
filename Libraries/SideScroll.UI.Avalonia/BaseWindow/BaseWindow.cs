@@ -69,6 +69,7 @@ public class BaseWindow : Window
 
 		LoadWindowSettings();
 
+		TimeZoneView.Current = project.UserSettings.TimeZone;
 		ThemeManager.Initialize(project);
 
 		InitializeComponent();
