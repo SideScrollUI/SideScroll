@@ -88,6 +88,7 @@ public static class TypeExtensions
 			.Where(p => p.GetCustomAttribute<HiddenAttribute>() == null)
 			.Where(p => p.GetCustomAttribute<HiddenColumnAttribute>() == null)
 			.Where(p => p.GetIndexParameters().Any() == false)
+			.Where(p => !p.GetAccessors(nonPublic: true)[0].IsStatic)
 			.OrderBy(x => x.MetadataToken)
 			.ToList();
 	}

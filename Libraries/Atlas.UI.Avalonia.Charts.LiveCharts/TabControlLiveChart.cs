@@ -469,7 +469,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		else
 		{
 			double difference = maximum - minimum;
-			if (difference > 10 || hasFraction)
+			if (difference > 10 || (difference != 0 && hasFraction))
 			{
 				YAxis.UnitWidth = (difference * 0.2).RoundToSignificantFigures(1);
 			}
@@ -561,17 +561,16 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 			foreach (var dataPoint in series.LineSeries.Values!)
 			{
-				double? y = dataPoint.Y;
-				if (y == null || double.IsNaN(y.Value))
-					continue;
+				if (dataPoint.Y is double y && !double.IsNaN(y))
+				{
+					if (XAxis != null && (dataPoint.X < XAxis.MinLimit || dataPoint.X > XAxis.MaxLimit))
+						continue;
 
-				if (XAxis != null && (dataPoint.X < XAxis.MinLimit || dataPoint.X > XAxis.MaxLimit))
-					continue;
+					hasFraction |= (y % 1 != 0.0);
 
-				hasFraction |= (y % 1 != 0.0);
-
-				minimum = Math.Min(minimum, y.Value);
-				maximum = Math.Max(maximum, y.Value);
+					minimum = Math.Min(minimum, y);
+					maximum = Math.Max(maximum, y);
+				}
 			}
 		}
 		return (minimum, maximum, hasFraction);
