@@ -12,22 +12,16 @@ public interface IDataRepoInstance
 }
 
 [Unserialized]
-public class DataRepoInstance<T> : IDataRepoInstance
+public class DataRepoInstance<T>(DataRepo dataRepo, string groupId) : IDataRepoInstance
 {
 	protected const string DefaultKey = ".Default"; // todo: support multiple directory levels?
 
-	public readonly DataRepo DataRepo;
-	public string GroupId { get; set; }
+	public readonly DataRepo DataRepo = dataRepo;
+	public string GroupId { get; set; } = groupId;
 	public string GroupPath => DataRepo.GetGroupPath(typeof(T), GroupId);
 	public Type DataType => typeof(T);
 
 	public override string ToString() => GroupId;
-
-	public DataRepoInstance(DataRepo dataRepo, string groupId)
-	{
-		DataRepo = dataRepo;
-		GroupId = groupId;
-	}
 
 	public virtual void Save(Call? call, T item)
 	{

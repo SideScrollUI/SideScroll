@@ -3,14 +3,9 @@ using Atlas.Serialize;
 
 namespace Atlas.Tabs.Tools;
 
-public class TabFileSerialized : ITab
+public class TabFileSerialized(string path) : ITab
 {
-	public string Path;
-
-	public TabFileSerialized(string path)
-	{
-		Path = path;
-	}
+	public string Path = path;
 
 	public TabInstance Create() => new Instance(this);
 

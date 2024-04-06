@@ -13,22 +13,15 @@ using WeakEvent;
 
 namespace Atlas.UI.Avalonia.Charts;
 
-public class ChartSeries<TSeries>
+public class ChartSeries<TSeries>(ListSeries listSeries, TSeries lineSeries, Color color)
 {
-	public ListSeries ListSeries { get; set; }
-	public TSeries LineSeries { get; set; }
-	public Color Color { get; set; }
+	public ListSeries ListSeries { get; set; } = listSeries;
+	public TSeries LineSeries { get; set; } = lineSeries;
+	public Color Color { get; set; } = color;
 
 	public bool IsSelected { get; set; } = true; // Visible = Selected
 
 	public override string? ToString() => ListSeries.Name;
-
-	public ChartSeries(ListSeries listSeries, TSeries lineSeries, Color color)
-	{
-		ListSeries = listSeries;
-		LineSeries = lineSeries;
-		Color = color;
-	}
 
 	public SeriesInfo GetInfo()
 	{

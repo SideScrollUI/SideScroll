@@ -14,18 +14,12 @@ using System.Collections;
 
 namespace Atlas.UI.Avalonia.Themes.Tabs;
 
-public class TabAvaloniaThemeSection : ITab
+public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstance, object obj) : ITab
 {
-	public TabAvaloniaThemeSettings.Instance TabInstance;
-	public object Object;
+	public TabAvaloniaThemeSettings.Instance TabInstance = tabInstance;
+	public object Object = obj;
 
 	public override string? ToString() => Object?.ToString();
-
-	public TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstance, object obj)
-	{
-		TabInstance = tabInstance;
-		Object = obj;
-	}
 
 	public TabInstance Create() => new Instance(this);
 

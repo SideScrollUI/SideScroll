@@ -59,16 +59,11 @@ public class TestTabItemCollection : TestBase
 		}
 	}
 
-	public class ToStringClass
+	public class ToStringClass(int id)
 	{
-		public int Id { get; set; }
+		public int Id { get; set; } = id;
 
 		public override string ToString() => Id.ToString();
-
-		public ToStringClass(int id)
-		{
-			Id = id;
-		}
 	}
 
 	[Test]
@@ -84,15 +79,10 @@ public class TestTabItemCollection : TestBase
 		TestSelected(Items, Items[1]);
 	}
 
-	public class DataKeyClass
+	public class DataKeyClass(int id)
 	{
 		[DataKey]
-		public int Id { get; set; }
-
-		public DataKeyClass(int id)
-		{
-			Id = id;
-		}
+		public int Id { get; set; } = id;
 	}
 
 	[Test]
@@ -108,15 +98,10 @@ public class TestTabItemCollection : TestBase
 		TestSelected(Items, Items[1]);
 	}
 
-	public class DataValueClass
+	public class DataValueClass(int id)
 	{
 		[DataValue]
-		public DataKeyClass DataKeyClass { get; set; }
-
-		public DataValueClass(int id)
-		{
-			DataKeyClass = new DataKeyClass(id);
-		}
+		public DataKeyClass DataKeyClass { get; set; } = new(id);
 	}
 
 	[Test]

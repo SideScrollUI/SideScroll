@@ -5,15 +5,10 @@ using LiveChartsCore.SkiaSharpView.Painting;
 
 namespace Atlas.UI.Avalonia.Charts.LiveCharts;
 
-public class TabLiveChartLegendItem : TabChartLegendItem<ISeries>
+public class TabLiveChartLegendItem(TabControlLiveChartLegend legend, ChartSeries<ISeries> chartSeries)
+	: TabChartLegendItem<ISeries>(legend, chartSeries)
 {
-	public readonly TabControlLiveChartLegend LiveChartLegend;
-
-	public TabLiveChartLegendItem(TabControlLiveChartLegend legend, ChartSeries<ISeries> chartSeries) : 
-		base(legend, chartSeries)
-	{
-		LiveChartLegend = legend;
-	}
+	public readonly TabControlLiveChartLegend LiveChartLegend = legend;
 
 	public override void UpdateColor(Color color)
 	{

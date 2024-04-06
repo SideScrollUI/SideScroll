@@ -11,12 +11,7 @@ public class TabTestGridUpdate : ITab
 	public class Instance : TabInstance
 	{
 		private ItemCollection<TestItem>? _items;
-		protected SynchronizationContext Context;
-
-		public Instance()
-		{
-			Context = SynchronizationContext.Current ?? new SynchronizationContext();
-		}
+		protected SynchronizationContext Context = SynchronizationContext.Current ?? new SynchronizationContext();
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -61,21 +56,16 @@ public class TabTestGridUpdate : ITab
 		}
 	}
 
-	public class TestItem : INotifyPropertyChanged
+	public class TestItem(SynchronizationContext context) : INotifyPropertyChanged
 	{
 		public int SmallNumber { get; set; } = 0;
 		public long BigNumber { get; set; } = 1234567890123456789;
 
-		protected SynchronizationContext Context;
+		protected SynchronizationContext Context = context;
 
 		public event PropertyChangedEventHandler? PropertyChanged;
 
 		public override string ToString() => SmallNumber.ToString();
-
-		public TestItem(SynchronizationContext context)
-		{
-			Context = context;
-		}
 
 		public void Update()
 		{

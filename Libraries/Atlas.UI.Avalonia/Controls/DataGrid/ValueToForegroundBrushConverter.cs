@@ -8,14 +8,9 @@ using System.Reflection;
 
 namespace Atlas.UI.Avalonia;
 
-public class ValueToForegroundBrushConverter : IValueConverter
+public class ValueToForegroundBrushConverter(PropertyInfo propertyInfo) : IValueConverter
 {
-	public PropertyInfo PropertyInfo;
-
-	public ValueToForegroundBrushConverter(PropertyInfo propertyInfo)
-	{
-		PropertyInfo = propertyInfo;
-	}
+	public PropertyInfo PropertyInfo = propertyInfo;
 
 	public sealed class BrushColors
 	{

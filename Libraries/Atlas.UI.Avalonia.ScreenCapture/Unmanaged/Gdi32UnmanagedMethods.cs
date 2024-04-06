@@ -34,14 +34,9 @@ public static class Gdi32UnmanagedMethods
 		int y1,
 		uint rop);
 
-	public class DcScope : IDisposable
+	public class DcScope(IntPtr hdc) : IDisposable
 	{
-		public IntPtr HDC;
-
-		public DcScope(IntPtr hdc)
-		{
-			HDC = CreateCompatibleDC(hdc);
-		}
+		public IntPtr HDC = CreateCompatibleDC(hdc);
 
 		public static implicit operator IntPtr(DcScope dcScope) => dcScope.HDC;
 

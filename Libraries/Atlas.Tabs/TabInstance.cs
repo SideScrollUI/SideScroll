@@ -25,14 +25,9 @@ public interface IInnerTab
 	ITab? Tab { get; }
 }
 
-public class TabInstanceLoadAsync : TabInstance, ITabAsync
+public class TabInstanceLoadAsync(ILoadAsync loadAsync) : TabInstance, ITabAsync
 {
-	public readonly ILoadAsync LoadMethod;
-
-	public TabInstanceLoadAsync(ILoadAsync loadAsync)
-	{
-		LoadMethod = loadAsync;
-	}
+	public readonly ILoadAsync LoadMethod = loadAsync;
 
 	public async Task LoadAsync(Call call, TabModel model)
 	{
@@ -43,16 +38,11 @@ public class TabInstanceLoadAsync : TabInstance, ITabAsync
 	}
 }
 
-public class TabCreatorAsync : TabInstance, ITabAsync
+public class TabCreatorAsync(ITabCreatorAsync creatorAsync) : TabInstance, ITabAsync
 {
-	public readonly ITabCreatorAsync CreatorAsync;
+	public readonly ITabCreatorAsync CreatorAsync = creatorAsync;
 
 	private TabInstance? _innerChildInstance;
-
-	public TabCreatorAsync(ITabCreatorAsync creatorAsync)
-	{
-		CreatorAsync = creatorAsync;
-	}
 
 	public async Task LoadAsync(Call call, TabModel model)
 	{

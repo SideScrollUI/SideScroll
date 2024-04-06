@@ -126,16 +126,11 @@ public class TabControlFormattedComboBox : ComboBox
 	}
 }
 
-public class FormattedItem
+public class FormattedItem(object? obj)
 {
-	public object? Object { get; set; }
+	public object? Object { get; set; } = obj;
 
 	public override string? ToString() => Object.Formatted();
-
-	public FormattedItem(object? obj)
-	{
-		Object = obj;
-	}
 
 	public static List<FormattedItem> Create(IEnumerable items)
 	{

@@ -4,14 +4,9 @@ using Atlas.UI.Avalonia.Controls;
 
 namespace Atlas.UI.Avalonia.Tabs;
 
-public class TabTextFile : ITab
+public class TabTextFile(FilePath filePath) : ITab
 {
-	public FilePath FilePath;
-
-	public TabTextFile(FilePath filePath)
-	{
-		FilePath = filePath;
-	}
+	public FilePath FilePath = filePath;
 
 	public TabInstance Create() => new Instance(this);
 

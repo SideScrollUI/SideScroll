@@ -3,14 +3,9 @@ using Atlas.Serialize;
 
 namespace Atlas.Tabs.Tools;
 
-public class TabDrives : ITab
+public class TabDrives(DataRepoView<NodeView>? dataRepoNodes = null) : ITab
 {
-	public DataRepoView<NodeView>? DataRepoNodes;
-
-	public TabDrives(DataRepoView<NodeView>? dataRepoNodes = null)
-	{
-		DataRepoNodes = dataRepoNodes;
-	}
+	public DataRepoView<NodeView>? DataRepoNodes = dataRepoNodes;
 
 	public TabInstance Create() => new Instance(this);
 

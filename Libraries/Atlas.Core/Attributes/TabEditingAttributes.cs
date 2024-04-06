@@ -21,16 +21,10 @@ public class AcceptsReturnAttribute(bool allow = true) : Attribute
 
 // [Watermark("0123456789abcdef")]
 [AttributeUsage(AttributeTargets.Property)]
-public class WatermarkAttribute : Attribute
+public class WatermarkAttribute(string text, string? memberName = null) : Attribute
 {
-	public readonly string Text;
-	public readonly string? MemberName; // Field or Property name, overrides Text if set
-
-	public WatermarkAttribute(string text, string? memberName = null)
-	{
-		Text = text;
-		MemberName = memberName;
-	}
+	public readonly string Text = text;
+	public readonly string? MemberName = memberName; // Field or Property name, overrides Text if set
 }
 
 [AttributeUsage(AttributeTargets.Property)]

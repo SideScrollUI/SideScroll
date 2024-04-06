@@ -2,24 +2,18 @@ using Atlas.Core;
 
 namespace Atlas.Serialize;
 
-public abstract class SerializerFile
+public abstract class SerializerFile(string basePath, string name = "")
 {
 	private const string DefaultName = "<Default>";
 
 	public string? HeaderPath { get; set; }
 	public string? DataPath { get; set; }
-	public string BasePath { get; set; }
-	public string Name { get; set; }
+	public string BasePath { get; set; } = basePath;
+	public string Name { get; set; } = name;
 
 	public bool Exists => File.Exists(DataPath) && new FileInfo(DataPath).Length > 0;
 
 	public override string ToString() => BasePath;
-
-	public SerializerFile(string basePath, string name = "")
-	{
-		BasePath = basePath;
-		Name = name;
-	}
 
 	// check for writeability and no open locks
 	public void TestWrite()

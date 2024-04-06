@@ -3,15 +3,9 @@ using System.Text;
 
 namespace Atlas.Network;
 
-public class HttpCachedCall : HttpCall
+public class HttpCachedCall(Call call, HttpCache httpCache) : HttpCall(call)
 {
-	public HttpCache HttpCache;
-
-	public HttpCachedCall(Call call, HttpCache httpCache) :
-		base(call)
-	{
-		HttpCache = httpCache;
-	}
+	public HttpCache HttpCache = httpCache;
 
 	public override async Task<byte[]> GetBytesAsync(string uri)
 	{

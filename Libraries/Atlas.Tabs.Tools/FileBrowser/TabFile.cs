@@ -8,7 +8,7 @@ public interface IFileTypeView
 	string? Path { get; set; }
 }
 
-public class TabFile : ITab
+public class TabFile(string path) : ITab
 {
 	public static Dictionary<string, Type> ExtensionTypes = new();
 
@@ -20,12 +20,7 @@ public class TabFile : ITab
 		}
 	}
 
-	public string Path;
-
-	public TabFile(string path)
-	{
-		Path = path;
-	}
+	public string Path = path;
 
 	public TabInstance Create() => new Instance(this);
 

@@ -76,30 +76,18 @@ public class TabDataSettings
 		}
 	}
 
-	public class MethodColumn
+	public class MethodColumn(MethodInfo methodInfo, string? label = null)
 	{
-		public readonly MethodInfo MethodInfo;
-		public string Label { get; set; }
-
-		public MethodColumn(MethodInfo methodInfo, string? label = null)
-		{
-			MethodInfo = methodInfo;
-			Label = label ?? methodInfo.GetCustomAttribute<ButtonColumnAttribute>()?.Name ?? methodInfo.Name;
-		}
+		public readonly MethodInfo MethodInfo = methodInfo;
+		public string Label { get; set; } = label ?? methodInfo.GetCustomAttribute<ButtonColumnAttribute>()?.Name ?? methodInfo.Name;
 	}
 
-	public class PropertyColumn
+	public class PropertyColumn(PropertyInfo propertyInfo, string label)
 	{
-		public readonly PropertyInfo PropertyInfo;
-		public string Label { get; set; }
+		public readonly PropertyInfo PropertyInfo = propertyInfo;
+		public string Label { get; set; } = label;
 
 		public override string ToString() => Label;
-
-		public PropertyColumn(PropertyInfo propertyInfo, string label)
-		{
-			PropertyInfo = propertyInfo;
-			Label = label;
-		}
 
 		public bool IsStyled()
 		{

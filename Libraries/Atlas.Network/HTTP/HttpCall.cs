@@ -4,17 +4,12 @@ using System.Text;
 
 namespace Atlas.Network;
 
-public class HttpCall
+public class HttpCall(Call call)
 {
 	private const int MaxAttempts = 4;
 	private const int SleepMilliseconds = 500; // < ^ MaxAttempts
 
-	public Call Call;
-
-	public HttpCall(Call call)
-	{
-		Call = call;
-	}
+	public Call Call = call;
 
 	public async virtual Task<string?> GetStringAsync(string uri, string? accept = null)
 	{

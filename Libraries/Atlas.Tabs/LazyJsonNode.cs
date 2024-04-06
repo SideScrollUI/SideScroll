@@ -36,9 +36,9 @@ public class LazyJsonNode
 	}
 }
 
-public class LazyJsonArray : LazyJsonNode
+public class LazyJsonArray(JsonArray jsonArray) : LazyJsonNode
 {
-	public JsonArray JsonArray;
+	public JsonArray JsonArray = jsonArray;
 
 	private List<object?>? _items;
 	[InnerValue, StyleValue]
@@ -58,18 +58,11 @@ public class LazyJsonArray : LazyJsonNode
 		}
 	}
 
-	public LazyJsonArray(JsonArray jsonArray)
-	{
-		JsonArray = jsonArray;
-	}
-
 	public override string? ToString() => Items.Formatted();
 }
 
-public class LazyJsonObject : LazyJsonNode
+public class LazyJsonObject(JsonObject jsonObject) : LazyJsonNode
 {
-	private readonly JsonObject JsonObject;
-
 	private List<LazyJsonProperty>? _items;
 	[InnerValue, StyleValue]
 	public List<LazyJsonProperty> Items
@@ -79,7 +72,7 @@ public class LazyJsonObject : LazyJsonNode
 			if (_items == null)
 			{
 				_items = new List<LazyJsonProperty>();
-				foreach (var pair in JsonObject)
+				foreach (var pair in jsonObject)
 				{
 					var property = new LazyJsonProperty()
 					{
@@ -91,11 +84,6 @@ public class LazyJsonObject : LazyJsonNode
 			}
 			return _items;
 		}
-	}
-
-	public LazyJsonObject(JsonObject jsonObject)
-	{
-		JsonObject = jsonObject;
 	}
 
 	public override string? ToString() => Items.Formatted();

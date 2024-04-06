@@ -3,21 +3,15 @@ using System.Collections;
 
 namespace Atlas.Tabs;
 
-public class TabItemCollection
+public class TabItemCollection(IList list, IEnumerable? filtered = null)
 {
-	public IList List;
-	public IEnumerable? Filtered; // CollectionView takes filters into account
+	public IList List = list;
+	public IEnumerable? Filtered = filtered; // CollectionView takes filters into account
 
 	private HashSet<object> _objects = new();
 	private Dictionary<string, object> _keys = new();
 
 	public override string? ToString() => List.ToString();
-
-	public TabItemCollection(IList list, IEnumerable? filtered = null)
-	{
-		List = list;
-		Filtered = filtered;
-	}
 
 	public List<object> GetSelectedObjects(HashSet<SelectedRow> selectedRows)
 	{

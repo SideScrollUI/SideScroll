@@ -2,26 +2,17 @@ using Atlas.Core;
 
 namespace Atlas.Tabs;
 
-public class ListByte
+public class ListByte(int index, byte b)
 {
 	[StyleValue]
-	public int Index { get; init; }
+	public int Index { get; init; } = index;
 
-	public byte Byte { get; init; }
-	public string Hex { get; init; }
-	public char Char { get; init; }
-	public string Bits { get; init; }
+	public byte Byte { get; init; } = b;
+	public string Hex { get; init; } = BitConverter.ToString(new byte[] { b });
+	public char Char { get; init; } = Convert.ToChar(b);
+	public string Bits { get; init; } = Convert.ToString(b, 2).PadLeft(8, '0');
 
 	public override string ToString() => Index.ToString();
-
-	public ListByte(int index, byte b)
-	{
-		Index = index;
-		Byte = b;
-		Hex = BitConverter.ToString(new byte[] { b });
-		Char = Convert.ToChar(b);
-		Bits = Convert.ToString(b, 2).PadLeft(8, '0');
-	}
 
 	public static List<ListByte> Create(byte[] bytes)
 	{

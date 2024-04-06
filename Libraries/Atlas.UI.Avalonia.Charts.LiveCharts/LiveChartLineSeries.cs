@@ -23,16 +23,11 @@ public class LiveChartPoint : ObservablePoint
 	}
 }
 
-public class LiveChartLineSeries : LineSeries<LiveChartPoint>, ISeries
+public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<LiveChartPoint>, ISeries
 {
-	public LiveChartSeries LiveChartSeries;
+	public LiveChartSeries LiveChartSeries = liveChartSeries;
 
 	public override string? ToString() => LiveChartSeries.ToString();
-
-	public LiveChartLineSeries(LiveChartSeries liveChartSeries)
-	{
-		LiveChartSeries = liveChartSeries;
-	}
 
 	public new IEnumerable<ChartPoint> Fetch(IChart chart) => base.Fetch(chart);
 

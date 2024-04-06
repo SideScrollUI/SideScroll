@@ -2,14 +2,9 @@ using System.Runtime.InteropServices;
 
 namespace Atlas.Core;
 
-public struct FilePath
+public struct FilePath(string path)
 {
-	public string Path;
-
-	public FilePath(string path)
-	{
-		Path = path;
-	}
+	public string Path = path;
 }
 
 public static class FileUtils

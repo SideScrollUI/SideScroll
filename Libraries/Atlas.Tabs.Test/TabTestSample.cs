@@ -63,16 +63,10 @@ DataGrids
 	}
 }
 
-public class SampleItem
+public class SampleItem(int id, string name)
 {
-	public int Id { get; set; }
-	public string Name { get; set; }
+	public int Id { get; set; } = id;
+	public string Name { get; set; } = name;
 
 	public override string ToString() => Name;
-
-	public SampleItem(int id, string name)
-	{
-		Id = id;
-		Name = name;
-	}
 }

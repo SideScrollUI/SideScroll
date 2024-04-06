@@ -5,7 +5,7 @@ using Atlas.Serialize;
 namespace Atlas.Tabs;
 
 // Display Class
-public class TabBookmarkItem : ITab, IInnerTab
+public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerTab
 {
 	//[ButtonColumn("-")]
 	public event EventHandler<EventArgs>? OnDelete;
@@ -23,21 +23,15 @@ public class TabBookmarkItem : ITab, IInnerTab
 	public TimeSpan Age => Bookmark.TimeStamp.Age();
 
 	[HiddenColumn]
-	public Bookmark Bookmark { get; set; }
+	public Bookmark Bookmark { get; set; } = bookmark;
 
 	[Hidden]
-	public Project Project { get; set; }
+	public Project Project { get; set; } = project;
 
 	[HiddenColumn]
 	public ITab? Tab => Bookmark.TabBookmark.Tab;
 
 	public override string ToString() => Bookmark.Name ?? Bookmark.Path;
-
-	public TabBookmarkItem(Bookmark bookmark, Project project)
-	{
-		Bookmark = bookmark;
-		Project = project;
-	}
 
 	public TabInstance Create()
 	{
