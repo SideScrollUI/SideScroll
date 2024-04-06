@@ -43,7 +43,7 @@ public class TimeZoneView : IComparable
 
 	public DateTime Convert(DateTime dateTime)
 	{
-		if (this == Utc) return ConvertTimeToUtc(dateTime);
+		if (Equals(Utc)) return ConvertTimeToUtc(dateTime);
 
 		if (dateTime.Kind == DateTimeKind.Utc)
 		{
@@ -64,14 +64,14 @@ public class TimeZoneView : IComparable
 
 	public DateTime ConvertTimeToUtc(DateTime dateTime)
 	{
-		if (this == Utc)
+		if (Equals(Utc))
 		{
 			if (dateTime.Kind == DateTimeKind.Utc)
 			{
 				return dateTime;
 			}
 		}
-		else if (this == Local)
+		else if (Equals(Local))
 		{
 			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
 		}
@@ -80,12 +80,22 @@ public class TimeZoneView : IComparable
 			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
 		}
 
-		return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo!);
+		return TimeZoneInfo.ConvertTimeToUtc(dateTime);
 	}
 
 	public int CompareTo(object? obj)
 	{
 		return obj?.ToString()?.CompareTo(ToString()) ?? 1;
+	}
+
+	public override bool Equals(object? obj)
+	{
+		if (obj is TimeZoneView timeZoneView)
+		{
+			return timeZoneView.Name == Name;
+		}
+
+		return false;
 	}
 
 	public static readonly TimeZoneView Utc = new("Utc", "Utc", TimeZoneInfo.Utc);
