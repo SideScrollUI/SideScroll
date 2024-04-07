@@ -74,11 +74,11 @@ public class TabAvaloniaThemes : ITab
 		[Required, StringLength(50)]
 		public string? Name { get; set; }
 
-		public static List<string> Variants => new()
-		{
+		public static List<string> Variants =>
+		[
 			"Light",
 			"Dark",
-		};
+		];
 
 		[BindList(nameof(Variants))]
 		public string? Variant { get; set; }

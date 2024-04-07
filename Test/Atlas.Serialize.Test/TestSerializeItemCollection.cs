@@ -38,8 +38,8 @@ public class TestItemCollection : TestSerializeBase
 
 	public class TestBindingList
 	{
-		public ItemCollection<int> IntList = new() { 1 };
-		public ItemCollection<string> StringList = new() { "abc" };
-		public ItemCollection<ReferencedClass> RefList = new() { new ReferencedClass() };
+		public ItemCollection<int> IntList = [1];
+		public ItemCollection<string> StringList = ["abc"];
+		public ItemCollection<ReferencedClass> RefList = [new ReferencedClass()];
 	}
 }

@@ -80,7 +80,7 @@ public class TabControlSplitContainer : Grid
 			control = scrollViewer;
 		}
 
-		var item = new Item()
+		var item = new Item
 		{
 			Control = control,
 			Fill = fill,
@@ -181,7 +181,7 @@ public class TabControlSplitContainer : Grid
 	{
 		//AddRowDefinition(false, rowIndex);
 
-		var gridSplitter = new GridSplitter()
+		var gridSplitter = new GridSplitter
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			Background = Brushes.Black,
@@ -197,7 +197,7 @@ public class TabControlSplitContainer : Grid
 
 	private void AddVerticalGridSplitter(int columnIndex)
 	{
-		var gridSplitter = new GridSplitter()
+		var gridSplitter = new GridSplitter
 		{
 			VerticalAlignment = VerticalAlignment.Stretch,
 			Background = Brushes.Black,
@@ -256,7 +256,7 @@ public class TabControlSplitContainer : Grid
 		int newIndex = 1;
 		foreach (Control control in orderedControls)
 		{
-			var item = new Item()
+			var item = new Item
 			{
 				Control = control,
 				Fill = true,

@@ -43,7 +43,7 @@ public class TabAvaloniaSettings : ITab
 			}
 			model.AddObject(UserSettings);
 
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new("Themes", new TabAvaloniaThemes()),
 			};

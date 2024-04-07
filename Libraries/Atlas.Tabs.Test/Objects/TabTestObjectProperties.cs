@@ -17,7 +17,7 @@ public class TabTestObjectProperties : ITab
 			model.Items = ListProperty.Create(_propertyTest);
 			model.Editing = true;
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Toggle", Toggle),
 			};
@@ -51,5 +51,5 @@ public class PropertyTest : INotifyPropertyChanged
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 
-	public List<int> List { get; set; } = new() { 1, 2, 3 };
+	public List<int> List { get; set; } = [1, 2, 3];
 }

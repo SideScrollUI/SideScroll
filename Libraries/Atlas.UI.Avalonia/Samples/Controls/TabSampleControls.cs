@@ -12,7 +12,7 @@ public class TabSampleControls : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new("Custom Control", new TabCustomControl()),
 				new("Text Area", new TabTextArea()),

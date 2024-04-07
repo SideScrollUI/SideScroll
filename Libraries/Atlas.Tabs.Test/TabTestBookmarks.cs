@@ -19,7 +19,7 @@ public class TabTestBookmarks : ITab
 			navigator.History.RemoveAt(navigator.History.Count - 1); // remove the current in progress bookmark
 			navigator.CurrentIndex = navigator.History.Count;
 
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new("Navigator (snapshot)", navigator),
 				//new("Recursive Tab", new TabSample()),

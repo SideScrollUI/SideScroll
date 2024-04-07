@@ -19,7 +19,7 @@ public class TabTestLog : ITab
 			_sampleCall = new Call(Label);
 			_counter = 0;
 
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new("Task Instance Log", TaskInstance.Log),
 				new("Sample Call", _sampleCall),
@@ -27,7 +27,7 @@ public class TabTestLog : ITab
 				new("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),
 			};
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskAction("Add 1 Entry", () => AddEntries(1)),
 				new TaskAction("Add 10 Entries",() => AddEntries(10)),
@@ -95,7 +95,7 @@ public class TabTestLog : ITab
 			_timer ??= new Timer(TimerCallback, null, 0, 1000);
 		}*/
 
-		public void TimerCallback(object state)
+		private void TimerCallback(object state)
 		{
 			AddEntries(1);
 		}

@@ -2,6 +2,7 @@ using Atlas.Core;
 using Atlas.Tabs;
 using Atlas.Tabs.Test.Models;
 using Atlas.UI.Avalonia.Controls;
+using Atlas.UI.Avalonia.Utilities;
 using System.Text.Json;
 
 namespace Atlas.UI.Avalonia.Samples.Controls.CustomControl;
@@ -18,7 +19,7 @@ public class TabCustomControl : ITab
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			_planet = new Planet()
+			_planet = new Planet
 			{
 				Name = "Planet X",
 				DistanceKm = 10_000_000_000,

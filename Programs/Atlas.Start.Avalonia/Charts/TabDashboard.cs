@@ -22,7 +22,7 @@ public class TabDashboard : ITab
 		{
 			model.MinDesiredWidth = 1400;
 
-			var grid = new Grid()
+			var grid = new Grid
 			{
 				ColumnDefinitions = new("*, *"),
 			};

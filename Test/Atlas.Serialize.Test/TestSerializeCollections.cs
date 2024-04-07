@@ -242,7 +242,7 @@ public class TestSerializeCollections : TestSerializeBase
 	public void SerializeHashSetObject()
 	{
 		var input = new HashSet<SelectedItem>();
-		var inputItem = new SelectedItem()
+		var inputItem = new SelectedItem
 		{
 			Label = "abc",
 			Pinned = true,

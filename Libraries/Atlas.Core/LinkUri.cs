@@ -68,7 +68,7 @@ public class LinkUri
 		Match match = regex.Match(url);
 		if (!match.Success) return false;
 
-		linkUri = new LinkUri()
+		linkUri = new LinkUri
 		{
 			Url = url,
 			Prefix = match.Groups["prefix"].Value.ToLower(),
@@ -90,7 +90,7 @@ public class LinkUri
 		Match match = regex.Match(url);
 		if (!match.Success) return false;
 
-		linkUri = new LinkUri()
+		linkUri = new LinkUri
 		{
 			Url = url,
 			Prefix = match.Groups["prefix"].Value.ToLower(),

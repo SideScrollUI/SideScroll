@@ -12,13 +12,13 @@ public class TabActions : ITab
 		{
 			model.MinDesiredWidth = 250;
 
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new("Parameters", new TabParamsDataGrid()),
 				new("Async Load", new TabTestLoadAsync()),
 			};
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Add Log Entry", AddEntry),
 				new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
@@ -73,8 +73,8 @@ Actions add Buttons to the tab. When clicked, it will:
 
 		private void ParallelTaskProgress(Call call)
 		{
-			var downloads = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-			Parallel.ForEach(downloads, new ParallelOptions() { MaxDegreeOfParallelism = 10 }, i =>
+			var downloads = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+			Parallel.ForEach(downloads, new ParallelOptions { MaxDegreeOfParallelism = 10 }, i =>
 			{
 				using CallTimer sleepCall = call.Timer(i.ToString());
 
@@ -97,7 +97,7 @@ Actions add Buttons to the tab. When clicked, it will:
 			List<int> results = await call.RunAsync(DoTask, ids);
 		}
 
-		public static async Task<int> DoTask(Call call, int id)
+		private static async Task<int> DoTask(Call call, int id)
 		{
 			using CallTimer callTimer = call.Timer("Task", new Tag(id));
 
@@ -119,7 +119,7 @@ Actions add Buttons to the tab. When clicked, it will:
 			List<int> results = await call.RunAsync(MultiLevelRunListAsync, ids);
 		}
 
-		public static async Task<int> MultiLevelRunListAsync(Call call, int id)
+		private static async Task<int> MultiLevelRunListAsync(Call call, int id)
 		{
 			List<int> ids = new();
 			for (int i = 0; i < 2000; i++)
@@ -132,7 +132,7 @@ Actions add Buttons to the tab. When clicked, it will:
 			return id;
 		}
 
-		public static async Task<int> MultiLevelRunTaskAsync(Call call, int id)
+		private static async Task<int> MultiLevelRunTaskAsync(Call call, int id)
 		{
 			call.Log.Add("Sleeping");
 			await Task.Delay(10, call.TaskInstance!.CancelToken);

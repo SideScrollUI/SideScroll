@@ -72,7 +72,7 @@ public class TimeRangePeriod : ITags
 
 		for (int i = 0; i <= numPeriods; i++)
 		{
-			var bin = new TimeRangePeriod()
+			var bin = new TimeRangePeriod
 			{
 				StartTime = minStartTime.AddSeconds(i * periodSeconds),
 				EndTime = minStartTime.AddSeconds((i + 1) * periodSeconds),

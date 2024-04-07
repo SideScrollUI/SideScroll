@@ -17,7 +17,7 @@ public class TabTestMemory : ITab
 			for (int i = 0; i < _bytes.Length; i++)
 				_bytes[i] = (byte)i;
 
-			model.Items = new ItemCollection<ListItem>()
+			model.Items = new ItemCollection<ListItem>
 			{
 				new("Bytes", _bytes),
 			};

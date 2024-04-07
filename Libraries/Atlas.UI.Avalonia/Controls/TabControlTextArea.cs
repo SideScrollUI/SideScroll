@@ -1,4 +1,5 @@
 using Atlas.UI.Avalonia.Themes;
+using Atlas.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -29,7 +30,7 @@ public class TabControlTextArea : Border
 		Margin = new Thickness(6);
 		Padding = new Thickness(6, 3);
 
-		TextBlock = new TextBlock()
+		TextBlock = new TextBlock
 		{
 			Background = AtlasTheme.TextAreaBackground, // Set background for ContentMenu
 			HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -41,7 +42,7 @@ public class TabControlTextArea : Border
 		};
 		AvaloniaUtils.AddContextMenu(TextBlock);
 
-		var scrollViewer = new ScrollViewer()
+		var scrollViewer = new ScrollViewer
 		{
 			Content = TextBlock,
 			HorizontalAlignment = HorizontalAlignment.Stretch,

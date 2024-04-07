@@ -66,7 +66,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 
 			if (GetSamples() is object obj)
 			{
-				SelectedItems = new List<ListItem>() { new ListItem("Samples", obj) };
+				SelectedItems = new List<ListItem> { new ListItem("Samples", obj) };
 			}
 		}
 
@@ -76,7 +76,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			{
 				case TabTheme:
 				{
-					return new List<ListItem>()
+					return new List<ListItem>
 					{
 						new ListItem("Forms", new TabTestParamsDataTabs()),
 						new ListItem("Loading", new TabTestLoadAsync()),
@@ -92,7 +92,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				}
 				case DataGridTheme:
 				{
-					return new List<ListItem>()
+					return new List<ListItem>
 					{
 						new ListItem("Collections", new TabTestDataGrid()),
 						new ListItem("Objects", new TabTestObjects()),
@@ -108,7 +108,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				}
 				case TextEditorTheme:
 				{
-					return new List<ListItem>()
+					return new List<ListItem>
 					{
 						new ListItem("Text", Resources.Samples.Text.Plain),
 						new ListItem("Json", Resources.Samples.Text.Json),

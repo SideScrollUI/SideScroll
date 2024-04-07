@@ -94,7 +94,7 @@ public class TimeRangeValue : ITags
 				DateTime expectedTime = prevTime.Value.Add(minGap);
 				if (expectedTime < startTime)
 				{
-					var insertedPoint = new TimeRangeValue()
+					var insertedPoint = new TimeRangeValue
 					{
 						StartTime = expectedTime.ToUniversalTime(),
 						Value = double.NaN,
@@ -196,7 +196,7 @@ public class TimeRangeValue : ITags
 
 	private static void AddGap(DateTime startTime, DateTime endTime, TimeSpan periodDuration, List<TimeRangeValue> output)
 	{
-		var timeRangeValue = new TimeRangeValue()
+		var timeRangeValue = new TimeRangeValue
 		{
 			StartTime = startTime,
 			EndTime = endTime,

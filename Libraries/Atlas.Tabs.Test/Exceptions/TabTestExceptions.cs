@@ -10,7 +10,7 @@ public class TabTestExceptions : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = new ItemCollection<ListItem>()
+			model.Items = new ItemCollection<ListItem>
 			{
 				new("Load Exception", new TabTestLoadException()),
 			};

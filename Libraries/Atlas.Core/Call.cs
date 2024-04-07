@@ -63,7 +63,7 @@ public class Call
 
 	public CallTimer Timer(LogLevel logLevel, [CallerMemberName] string? name = null, params Tag[] tags)
 	{
-		var call = new CallTimer()
+		var call = new CallTimer
 		{
 			Name = name,
 			ParentCall = this,
@@ -81,7 +81,7 @@ public class Call
 
 	public CallTimer StartTask(LogLevel logLevel, [CallerMemberName] string? name = null, params Tag[] tags)
 	{
-		var call = new CallTimer()
+		var call = new CallTimer
 		{
 			Name = name,
 			ParentCall = this,

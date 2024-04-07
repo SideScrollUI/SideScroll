@@ -65,7 +65,7 @@ public class TabControlAvaloniaEdit : Grid
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Stretch;
 
-		TextEditor = new TabControlTextEditor()
+		TextEditor = new TabControlTextEditor
 		{
 			IsReadOnly = true,
 			HorizontalAlignment = HorizontalAlignment.Stretch,

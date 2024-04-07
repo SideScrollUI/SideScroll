@@ -25,7 +25,7 @@ public class TabControlActions : UserControl
 	{
 		if (TabModel.Actions!.Count == 0) return;
 
-		var containerGrid = new Grid()
+		var containerGrid = new Grid
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto,*"),
 			RowDefinitions = new RowDefinitions("Auto"),
@@ -35,7 +35,7 @@ public class TabControlActions : UserControl
 		int rowIndex = 0;
 		foreach (TaskCreator taskCreator in TabModel.Actions)
 		{
-			var rowDefinition = new RowDefinition()
+			var rowDefinition = new RowDefinition
 			{
 				Height = new GridLength(1, GridUnitType.Auto),
 			};

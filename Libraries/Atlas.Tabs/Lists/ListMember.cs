@@ -29,16 +29,17 @@ public interface IMaxDesiredHeight
 	int? MaxDesiredHeight { get; }
 }
 
-public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged, IListAutoSelect, IMaxDesiredWidth, IMaxDesiredHeight
+public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair, IListItem, INotifyPropertyChanged,
+	IListAutoSelect, IMaxDesiredWidth, IMaxDesiredHeight
 {
 	public const int MaxStringLength = 1000;
 	private const int DefaultMaxDesiredHeight = 500;
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	public MemberInfo MemberInfo;
+	public readonly MemberInfo MemberInfo = memberInfo;
 
-	public object Object;
+	public readonly object Object = obj;
 
 	[AutoSize]
 	public string? Name { get; set; }
@@ -99,12 +100,6 @@ public abstract class ListMember : IListPair, IListItem, INotifyPropertyChanged,
 	}
 
 	public override string? ToString() => Name;
-
-	public ListMember(object obj, MemberInfo memberInfo)
-	{
-		Object = obj;
-		MemberInfo = memberInfo;
-	}
 
 	protected void ValueChanged()
 	{

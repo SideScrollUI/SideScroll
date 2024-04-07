@@ -3,6 +3,7 @@ using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.Themes;
+using Atlas.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -162,7 +163,7 @@ public class TabView : Grid, IDisposable
 			// Use Grid instead of StackPanel
 			// StackPanel doesn't translate layouts, and we want splitters if we want multiple children?
 			// not filling the height vertically? splitter inside isn't
-			_containerGrid = new Grid()
+			_containerGrid = new Grid
 			{
 				ColumnDefinitions = new ColumnDefinitions("Auto,Auto,Auto"), // Controls, Splitter, Child Tabs
 				RowDefinitions = new RowDefinitions("*"), // Single Row
@@ -217,7 +218,7 @@ public class TabView : Grid, IDisposable
 
 	private void AddParentControls()
 	{
-		_tabParentControls = new TabControlSplitContainer()
+		_tabParentControls = new TabControlSplitContainer
 		{
 			ColumnDefinitions = new ColumnDefinitions("*"),
 			MinDesiredWidth = Model.MinDesiredWidth,
@@ -781,7 +782,7 @@ public class TabView : Grid, IDisposable
 		// Add a filler panel so the grid splitter can drag to the right
 		if (orderedChildControls.Count == 0)
 		{
-			_fillerPanel = new Panel()
+			_fillerPanel = new Panel
 			{
 				Width = GetFillerPanelWidth(), // should update this after moving grid splitter
 			};

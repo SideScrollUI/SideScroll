@@ -17,7 +17,7 @@ public class AvaloniaAssets
 
 	public static Image GetImage(Bitmap bitmap)
 	{
-		return new Image()
+		return new Image
 		{
 			Source = bitmap,
 		};

@@ -116,15 +116,15 @@ public static class FileUtils
 		return false;
 	}
 
-	public static HashSet<string> TextExtensions = new()
-	{
+	public static HashSet<string> TextExtensions =
+	[
 		".csv",
 		".html",
 		".ini",
 		".log",
 		".md",
 		".txt",
-	};
+	];
 
 	public static bool IsTextFile(string path)
 	{

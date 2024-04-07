@@ -2,7 +2,7 @@ using Atlas.Core;
 
 namespace Atlas.Tabs.Test.Chart;
 
-public class ChartSamples
+public static class ChartSamples
 {
 	private static readonly Random _random = new();
 
@@ -15,7 +15,7 @@ public class ChartSamples
 		var list = new List<TimeRangeValue>();
 		for (int i = 0; i < sampleCount; i++)
 		{
-			var value = new TimeRangeValue()
+			var value = new TimeRangeValue
 			{
 				StartTime = startTime,
 				EndTime = startTime.AddHours(1),
@@ -34,7 +34,7 @@ public class ChartSamples
 		var list = new List<TimeRangeValue>();
 		for (int i = 0; i < sampleCount; i++)
 		{
-			var value = new TimeRangeValue()
+			var value = new TimeRangeValue
 			{
 				StartTime = startTime,
 				EndTime = startTime.AddHours(1),

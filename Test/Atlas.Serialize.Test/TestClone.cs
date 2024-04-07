@@ -137,7 +137,7 @@ public class TestClone : TestSerializeBase
 	[Test, Description("Clone Properties")]
 	public void CloneProperties()
 	{
-		var input = new Properties()
+		var input = new Properties
 		{
 			UintTest = 5,
 			DoubleTest = 2.5,
@@ -153,7 +153,7 @@ public class TestClone : TestSerializeBase
 	[Test, Description("Clone Primitives")]
 	public void ClonePrimitives()
 	{
-		var input = new Primitives()
+		var input = new Primitives
 		{
 			UintTest = 5,
 			DoubleTest = 2.5,
@@ -174,7 +174,7 @@ public class TestClone : TestSerializeBase
 	[Test, Description("Clone Struct")]
 	public void CloneStruct()
 	{
-		var input = new StructTest()
+		var input = new StructTest
 		{
 			value = 5
 		};
@@ -223,7 +223,7 @@ public class TestClone : TestSerializeBase
 	[Test, Description("Clone Nullable Primitive Properties")]
 	public void CloneNullablePrimitiveProperties()
 	{
-		var input = new NullablePrimitiveProperties()
+		var input = new NullablePrimitiveProperties
 		{
 			UintTest = 5,
 			DoubleTest = 2.5
@@ -247,7 +247,7 @@ public class TestClone : TestSerializeBase
 	[Test, Description("Clone Nullable Primitives")]
 	public void CloneNullablePrimitives()
 	{
-		var input = new NullablePrimitives()
+		var input = new NullablePrimitives
 		{
 			UintTest = 5,
 			DoubleTest = 2.5
@@ -271,7 +271,7 @@ public class TestClone : TestSerializeBase
 	[Test, Description("Clone Enum")]
 	public void CloneEnum()
 	{
-		var input = new EnumTest()
+		var input = new EnumTest
 		{
 			TestEnum = EnumTest.MyEnum.b,
 		};
@@ -369,7 +369,7 @@ public class TestClone : TestSerializeBase
 	[Test, Description("Clone Attribute NonSerialized")]
 	public void CloneAttributeNonSerialized()
 	{
-		var input = new NonSerializedTest()
+		var input = new NonSerializedTest
 		{
 			NonSerialized = 5,
 			Serialized = 10,
@@ -470,7 +470,7 @@ public class TestClone : TestSerializeBase
 	{
 		var input = new List<Base>
 		{
-			new SubClass() { A = 5 }
+			new SubClass { A = 5 }
 		};
 		var output = _serializer.Clone(Log, input)!;
 

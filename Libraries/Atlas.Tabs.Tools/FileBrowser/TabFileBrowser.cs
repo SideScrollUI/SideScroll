@@ -6,13 +6,13 @@ public class TabFileBrowser : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance() : TabInstance, ITabAsync
+	public class Instance : TabInstance, ITabAsync
 	{
 		public async Task LoadAsync(Call call, TabModel model)
 		{
 			var dataRepoView = await FileFavoritesDataRepo.GetViewAsync(call, Project);
 
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new("Current", new TabDirectory(Directory.GetCurrentDirectory(), dataRepoView)),
 				new("Downloads", new TabDirectory(Paths.DownloadPath, dataRepoView)),

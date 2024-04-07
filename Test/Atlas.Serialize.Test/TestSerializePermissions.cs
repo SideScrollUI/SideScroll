@@ -22,11 +22,11 @@ public class TestSerializePermissions : TestSerializeBase
 
 	private readonly PrivateDataContainer privateDataContainer = new()
 	{
-		PrivateField = new PrivateClass()
+		PrivateField = new PrivateClass
 		{
 			Confidential = "secrets",
 		},
-		PrivateProperty = new PrivateClass()
+		PrivateProperty = new PrivateClass
 		{
 			Confidential = "more secrets",
 		},
@@ -83,13 +83,13 @@ public class TestSerializePermissions : TestSerializeBase
 	[Test, Description("Serialize [PublicData]")]
 	public void SerializePublicData()
 	{
-		var input = new PublicContainer()
+		var input = new PublicContainer
 		{
-			PublicField = new PublicClass()
+			PublicField = new PublicClass
 			{
 				PublicData = "cats",
 			},
-			PublicProperty = new PublicClass()
+			PublicProperty = new PublicClass
 			{
 				PublicData = "more cats",
 			},
@@ -122,7 +122,7 @@ public class TestSerializePermissions : TestSerializeBase
 	[Test]
 	public void SerializeDerivedNonPrivateClass()
 	{
-		var input = new DerivedPrivateClass()
+		var input = new DerivedPrivateClass
 		{
 			Confidential = "secrets",
 		};
@@ -144,7 +144,7 @@ public class TestSerializePermissions : TestSerializeBase
 	[Test]
 	public void SerializePrivateProperty()
 	{
-		var input = new PrivatePropertyClass()
+		var input = new PrivatePropertyClass
 		{
 			Confidential = "secrets",
 		};
@@ -166,7 +166,7 @@ public class TestSerializePermissions : TestSerializeBase
 	[Test]
 	public void SerializePrivateField()
 	{
-		var input = new PrivateFieldClass()
+		var input = new PrivateFieldClass
 		{
 			Confidential = "secrets",
 		};
@@ -197,7 +197,7 @@ public class TestSerializePermissions : TestSerializeBase
 	[Test]
 	public void SerializeProtectedProperties()
 	{
-		var input = new ProtectedPropertiesClass()
+		var input = new ProtectedPropertiesClass
 		{
 			PublicProperty = "publicData",
 			NormalProperty = "secrets",
@@ -223,7 +223,7 @@ public class TestSerializePermissions : TestSerializeBase
 	[Test]
 	public void SerializeProtectedFields()
 	{
-		var input = new ProtectedFieldsClass()
+		var input = new ProtectedFieldsClass
 		{
 			PublicField = "publicData",
 			NormalField = "secrets",

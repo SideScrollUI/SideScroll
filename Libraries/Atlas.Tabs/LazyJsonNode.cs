@@ -74,7 +74,7 @@ public class LazyJsonObject(JsonObject jsonObject) : LazyJsonNode
 				_items = new List<LazyJsonProperty>();
 				foreach (var pair in jsonObject)
 				{
-					var property = new LazyJsonProperty()
+					var property = new LazyJsonProperty
 					{
 						Key = pair.Key,
 						Value = Create(pair.Value),

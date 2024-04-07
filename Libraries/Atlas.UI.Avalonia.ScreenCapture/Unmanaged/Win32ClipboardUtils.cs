@@ -2,7 +2,7 @@ using Avalonia.Media.Imaging;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
-namespace Atlas.UI.Avalonia.ScreenCapture;
+namespace Atlas.UI.Avalonia.ScreenCapture.Unmanaged;
 
 [SupportedOSPlatform("windows")]
 public static class Win32ClipboardUtils

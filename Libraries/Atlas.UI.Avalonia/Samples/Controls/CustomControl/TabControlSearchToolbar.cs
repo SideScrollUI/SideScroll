@@ -42,7 +42,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 		ButtonCopyClipBoard = AddButton("Copy to Clipboard", ImageColorView.CreateAlternate(Icons.Svg.PadNote));
 
 		AddSeparator();
-		Search = new TabControlSearch()
+		Search = new TabControlSearch
 		{
 			VerticalAlignment = VerticalAlignment.Center,
 			Margin = new Thickness(6, 0),

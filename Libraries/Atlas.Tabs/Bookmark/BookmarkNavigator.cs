@@ -24,7 +24,7 @@ public class BookmarkNavigator
 
 	//public event EventHandler<EventArgs> OnSelectionChanged;
 
-	public override string ToString() => CurrentIndex.ToString() + " / " + History.Count;
+	public override string ToString() => $"{CurrentIndex} / {History.Count}";
 
 	public BookmarkNavigator()
 	{

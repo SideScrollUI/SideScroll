@@ -32,7 +32,7 @@ public class TabTestChartProperties : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Add Entry", AddEntry),
 				new TaskDelegate("Start: 1 Entry / second", StartTask, true),
@@ -75,7 +75,7 @@ public class TabTestChartProperties : ITab
 				Beta = _random.Next(0, 100000000),
 				Gamma = _random.Next(0, 1000000000),
 				Epsilon = 1000000000 + _random.Next(0, 10),
-				TestItem = new TestItem()
+				TestItem = new TestItem
 				{
 					Amount = _random.Next(0, 100),
 				},

@@ -13,7 +13,7 @@ public class TabTestGridColumnOrdering : ITab
 			var items = new ItemCollection<TestChild>();
 			for (int i = 0; i < 2; i++)
 			{
-				var item = new TestChild()
+				var item = new TestChild
 				{
 				};
 

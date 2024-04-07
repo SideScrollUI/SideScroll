@@ -49,7 +49,7 @@ public class TabFileImage : ITab, IFileTypeView
 				return;
 			}
 
-			Image = new Image()
+			Image = new Image
 			{
 				VerticalAlignment = VerticalAlignment.Top,
 			};

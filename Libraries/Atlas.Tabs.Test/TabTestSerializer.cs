@@ -15,7 +15,7 @@ public class TabSerializer : ITab
 			_items = new ItemCollectionUI<ListItem>();
 			model.Items = _items;
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Serialize 1 object", Serialize, true, true),
 				new TaskDelegate("Deserialize 1 object", Deserialize, true, true),

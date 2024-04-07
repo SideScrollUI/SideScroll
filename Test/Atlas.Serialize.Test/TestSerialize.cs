@@ -96,7 +96,7 @@ public class SerializeTypes : TestSerializeBase
 	[Test, Description("Serialize Struct")]
 	public void SerializeStruct()
 	{
-		var input = new StructTest()
+		var input = new StructTest
 		{
 			value = 5
 		};

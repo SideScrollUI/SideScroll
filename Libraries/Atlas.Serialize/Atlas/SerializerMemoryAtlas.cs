@@ -13,7 +13,7 @@ public class SerializerMemoryAtlas : SerializerMemory
 
 	private new Serializer Create()
 	{
-		return new Serializer()
+		return new Serializer
 		{
 			PublicOnly = PublicOnly,
 		};

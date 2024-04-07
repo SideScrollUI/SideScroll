@@ -69,12 +69,12 @@ public class TestTabItemCollection : TestBase
 	[Test]
 	public void TestToString()
 	{
-		List<ToStringClass> Items = new()
-		{
+		List<ToStringClass> Items =
+		[
 			new(1),
 			new(2),
 			new(3),
-		};
+		];
 
 		TestSelected(Items, Items[1]);
 	}
@@ -88,12 +88,12 @@ public class TestTabItemCollection : TestBase
 	[Test]
 	public void TestDataKey()
 	{
-		List<DataKeyClass> Items = new()
-		{
+		List<DataKeyClass> Items =
+		[
 			new(1),
 			new(2),
 			new(3),
-		};
+		];
 
 		TestSelected(Items, Items[1]);
 	}
@@ -107,12 +107,12 @@ public class TestTabItemCollection : TestBase
 	[Test]
 	public void TestDataValue()
 	{
-		List<DataValueClass> Items = new()
-		{
+		List<DataValueClass> Items =
+		[
 			new DataValueClass(1),
 			new DataValueClass(2),
 			new DataValueClass(3),
-		};
+		];
 
 		TestSelected(Items, Items[1]);
 	}

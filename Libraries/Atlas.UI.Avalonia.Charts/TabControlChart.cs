@@ -25,7 +25,7 @@ public class ChartSeries<TSeries>(ListSeries listSeries, TSeries lineSeries, Col
 
 	public SeriesInfo GetInfo()
 	{
-		return new SeriesInfo()
+		return new SeriesInfo
 		{
 			Name = ListSeries.Name,
 			Color = Color,
@@ -164,7 +164,7 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 		string? title = ChartView.Name;
 		if (title == null) return;
 		
-		TitleTextBlock = new TabControlTextBlock()
+		TitleTextBlock = new TabControlTextBlock
 		{
 			Text = ChartView.Name,
 			FontSize = 16,

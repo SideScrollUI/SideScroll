@@ -36,7 +36,7 @@ public class TabTestChartDimensions : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Add Entry", AddEntry),
 				new TaskDelegate("Start: 1 Entry / second", StartTask, true),
@@ -91,7 +91,7 @@ public class TabTestChartDimensions : ITab
 				Animal = animal,
 				TimeStamp = _baseDateTime.AddMinutes(i),
 				Value = _random.Next(50, MaxValue),
-				TestItem = new TestItem()
+				TestItem = new TestItem
 				{
 					Amount = _random.Next(0, MaxValue),
 				},
@@ -105,7 +105,7 @@ public class TabTestChartDimensions : ITab
 			{
 				Animal = animal,
 				TimeStamp = _baseDateTime.AddMinutes(i),
-				TestItem = new TestItem()
+				TestItem = new TestItem
 				{
 					Amount = _random.Next(0, MaxValue),
 				},

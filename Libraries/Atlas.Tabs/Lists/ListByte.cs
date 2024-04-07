@@ -5,7 +5,7 @@ namespace Atlas.Tabs;
 public class ListByte(int index, byte b)
 {
 	[StyleValue]
-	public int Index { get; init; } = index;
+	public int Index => index;
 
 	public byte Byte { get; init; } = b;
 	public string Hex { get; init; } = BitConverter.ToString(new byte[] { b });

@@ -18,7 +18,7 @@ public class TabTestParamsTasks : ITab
 		{
 			model.Items = _items;
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Add", Add),
 				new TaskDelegateAsync("Task with Progress", ShowProgressAsync, true),

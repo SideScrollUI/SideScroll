@@ -23,7 +23,7 @@ public class LogSettings
 
 	public LogSettings Clone()
 	{
-		return new LogSettings()
+		return new LogSettings
 		{
 			MaxLogItems = MaxLogItems,
 			MinLogLevel = MinLogLevel,

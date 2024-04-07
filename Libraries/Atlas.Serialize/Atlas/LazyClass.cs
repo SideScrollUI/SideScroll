@@ -192,7 +192,7 @@ public class LazyClass
 		propertyBuilder.SetGetMethod(getPropertyMethodBuilder);
 		propertyBuilder.SetSetMethod(setPropertyMethodBuilder);
 
-		var lazyProperty = new LazyProperty()
+		var lazyProperty = new LazyProperty
 		{
 			PropertyInfoOriginal = propertyInfo,
 			PropertyBuilder = propertyBuilder,

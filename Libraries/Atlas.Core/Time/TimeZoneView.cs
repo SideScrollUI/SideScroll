@@ -62,8 +62,8 @@ public class TimeZoneView : IComparable
 	public static readonly TimeZoneView Local = new("Local", "Local", TimeZoneInfo.Local);
 
 	// https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
-	public static List<TimeZoneView> All { get; set; } = new()
-	{
+	public static List<TimeZoneView> All { get; set; } =
+	[
 		Utc,
 		Local,
 		new TimeZoneView("PST / PDT", "Pacific Time", "Pacific Standard Time", TimeSpan.FromHours(-8)),
@@ -71,5 +71,5 @@ public class TimeZoneView : IComparable
 		new TimeZoneView("CET", "Central European Time", "Central European Standard Time", TimeSpan.FromHours(1)),
 		new TimeZoneView("SGT", "Singapore Time", "Singapore Standard Time", TimeSpan.FromHours(8)),
 		new TimeZoneView("JST", "Japan Time", "Japan Standard Time", TimeSpan.FromHours(9)),
-	};
+	];
 }

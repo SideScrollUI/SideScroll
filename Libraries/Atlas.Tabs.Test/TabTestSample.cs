@@ -26,7 +26,7 @@ public class TabSample : ITab
 				new("Recursive Copy", new TabSample()),
 			};
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Sleep 10s", Sleep, true),
 				new TaskAction("Add 5 Items", () => AddItems(5), false), // Foreground task so we can modify collection

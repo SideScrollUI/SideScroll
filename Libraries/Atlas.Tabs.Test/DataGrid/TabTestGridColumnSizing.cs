@@ -13,7 +13,7 @@ public class TabTestGridColumnSizing : ITab
 			var items = new ItemCollection<ManyTypesItem>();
 			for (int i = 0; i < 10; i++)
 			{
-				var testItem = new ManyTypesItem()
+				var testItem = new ManyTypesItem
 				{
 					Integer = i,
 					Long = (long)i * int.MaxValue,

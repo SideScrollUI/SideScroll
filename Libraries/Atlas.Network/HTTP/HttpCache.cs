@@ -112,7 +112,7 @@ public class HttpCache : IDisposable
 			var entries = new List<LoadableEntry>();
 			foreach (Entry entry in _cache.Values)
 			{
-				var loadableEntry = new LoadableEntry()
+				var loadableEntry = new LoadableEntry
 				{
 					Uri = entry.Uri,
 					Size = entry.Size,
@@ -134,7 +134,7 @@ public class HttpCache : IDisposable
 			if (_cache.TryGetValue(uri, out Entry? entry))
 				return;
 
-			entry = new Entry()
+			entry = new Entry
 			{
 				Uri = uri,
 				Size = bytes.Length,

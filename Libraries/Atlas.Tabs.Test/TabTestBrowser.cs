@@ -10,12 +10,12 @@ public class TabTestBrowser : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new("Uri", new Uri("https://wikipedia.org")),
 			};
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Open Browser", OpenBrowser),
 			};

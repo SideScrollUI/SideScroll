@@ -13,13 +13,13 @@ public class TabTestDataRepo : ITab
 		{
 			model.AutoSelectSaved = AutoSelectType.NonEmpty;
 
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new("Sample Data Repo", new TabTestDataRepoCollection()),
 				new("Local Directories", new TabDirectory(Project.DataApp.RepoPath)),
 			};
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Delete Repos", DeleteRepos),
 			};

@@ -26,12 +26,12 @@ public class ParamTestItem
 
 	public AttributeTargets EnumAttributeTargets { get; set; } = AttributeTargets.Event;
 
-	public static List<ParamListItem> ListItems => new()
-	{
+	public static List<ParamListItem> ListItems =>
+	[
 		new("One", 1),
 		new("Two", 2),
 		new("Three", 3),
-	};
+	];
 
 	[BindList(nameof(ListItems)), ColumnIndex(2)]
 	public ParamListItem ListItem { get; set; }

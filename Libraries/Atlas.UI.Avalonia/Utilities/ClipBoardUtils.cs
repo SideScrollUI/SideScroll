@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Utilities;
 
 public static class ClipboardUtils
 {

@@ -30,7 +30,7 @@ public class TestSerializeSecurity : TestSerializeBase
 	[Test, Description("Serialize Attribute NonSerialized")]
 	public void SerializeAttributeNonSerialized()
 	{
-		var input = new NonSerializedTest()
+		var input = new NonSerializedTest
 		{
 			NonSerialized = 5,
 			Serialized = 10,

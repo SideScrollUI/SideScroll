@@ -16,7 +16,7 @@ public class TestTimeRangePeriod : TestBase
 	[Test]
 	public void PeriodCountsMergePointsTotal()
 	{
-		var timeWindow = new TimeWindow()
+		var timeWindow = new TimeWindow
 		{
 			StartTime = StartTime,
 			EndTime = StartTime.AddMinutes(1),
@@ -44,7 +44,7 @@ public class TestTimeRangePeriod : TestBase
 	[Test]
 	public void PeriodCountsBeforeTimeWindow()
 	{
-		var timeWindow = new TimeWindow()
+		var timeWindow = new TimeWindow
 		{
 			StartTime = StartTime,
 			EndTime = StartTime.AddMinutes(1),

@@ -366,7 +366,7 @@ public class Serializer : IDisposable
 			if (typeRepo.LoadableType == null)
 				continue;
 
-			var typeRepoWriter = new TypeRepoWriter()
+			var typeRepoWriter = new TypeRepoWriter
 			{
 				TypeRepo = typeRepo,
 			};

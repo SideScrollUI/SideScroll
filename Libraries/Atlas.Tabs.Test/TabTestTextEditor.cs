@@ -12,7 +12,7 @@ public class TabTestTextEditor : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new("Text", Samples.Text.Plain),
 				new("Json", Samples.Text.Json),

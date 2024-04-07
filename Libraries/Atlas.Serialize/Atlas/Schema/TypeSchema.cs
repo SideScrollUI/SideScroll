@@ -8,8 +8,8 @@ namespace Atlas.Serialize;
 
 public class TypeSchema
 {
-	public static HashSet<Type> PublicTypes = new()
-	{
+	public static HashSet<Type> PublicTypes { get; set; } =
+	[
 		typeof(string),
 		typeof(DateTime),
 		typeof(DateTimeOffset),
@@ -17,20 +17,20 @@ public class TypeSchema
 		typeof(TimeZoneInfo),
 		typeof(Type),
 		typeof(object),
-	};
+	];
 
-	public static HashSet<Type> PrivateTypes = new()
-	{
+	public static HashSet<Type> PrivateTypes { get; set; } =
+	[
 		typeof(MemoryStream),
-	};
+	];
 
-	public static HashSet<Type> PublicGenericTypes = new()
-	{
+	public static HashSet<Type> PublicGenericTypes { get; set; } =
+	[
 		typeof(List<>),
 		typeof(Dictionary<,>),
 		typeof(SortedDictionary<,>),
 		typeof(HashSet<>),
-	};
+	];
 
 	public string Name { get; set; }
 	public string AssemblyQualifiedName { get; set; }

@@ -18,12 +18,12 @@ public class TabTestLoadAsync : ITab
 
 			model.AddObject("Finished");
 
-			model.Items = new List<int>()
+			model.Items = new List<int>
 			{
 				1, 2, 3
 			};
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Reload", ReloadInstance),
 			};

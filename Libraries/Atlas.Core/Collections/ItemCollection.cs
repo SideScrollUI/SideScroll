@@ -71,7 +71,7 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 	}*/
 }
 
-public class ItemCollection<T, T2> : ObservableCollection<T>, IList, ICollection, IEnumerable
+public class ItemCollection<T, T2> : ObservableCollection<T>
 {
 	public ItemCollection() { }
 

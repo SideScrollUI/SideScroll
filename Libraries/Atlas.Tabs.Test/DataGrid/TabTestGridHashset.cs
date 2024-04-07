@@ -16,7 +16,7 @@ public class TabTestGridHashSet : ITab
 			AddEntries(null);
 			model.AddData(_items);
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Add Entries", AddEntries),
 			};

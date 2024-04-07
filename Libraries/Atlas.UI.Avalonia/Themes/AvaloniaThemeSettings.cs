@@ -22,11 +22,11 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 	[Required, StringLength(50)]
 	public string? Name { get; set; }
 
-	public static List<string> Variants => new()
-	{
+	public static List<string> Variants =>
+	[
 		"Light",
 		"Dark",
-	};
+	];
 
 	[ReadOnly(true)]
 	public string? Variant { get; set; }
@@ -54,8 +54,8 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 
 	public override string? ToString() => Name;
 
-	public List<object> GetSections() => new()
-	{
+	public List<object> GetSections() =>
+	[
 		Font,
 		Tab,
 		Toolbar,
@@ -65,7 +65,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 		TextControl,
 		TextEditor,
 		Chart,
-	};
+	];
 
 	public IEnumerable<ListProperty> GetProperties() => ListProperty.Create(this);
 

@@ -5,7 +5,7 @@ using Avalonia.Data;
 using System.Collections;
 using System.Reflection;
 using System.Text;
-using static Atlas.UI.Avalonia.DataGridUtils;
+using static Atlas.UI.Avalonia.Utilities.DataGridUtils;
 
 namespace Atlas.Extensions;
 

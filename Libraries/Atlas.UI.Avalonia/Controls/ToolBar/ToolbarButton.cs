@@ -185,7 +185,7 @@ public class ToolbarButton : Button, IDisposable
 				// Rate limiting can delay these
 				if (_dispatcherTimer == null)
 				{
-					_dispatcherTimer = new DispatcherTimer()
+					_dispatcherTimer = new DispatcherTimer
 					{
 						Interval = TimeSpan.FromSeconds(1),
 					};

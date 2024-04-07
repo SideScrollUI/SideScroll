@@ -170,7 +170,7 @@ public class TaskInstance : INotifyPropertyChanged
 	// allows having progress broken down into multiple tasks
 	public TaskInstance AddSubTask(Call call)
 	{
-		var subTask = new TaskInstance()
+		var subTask = new TaskInstance
 		{
 			Label = call.Name,
 			Creator = Creator,

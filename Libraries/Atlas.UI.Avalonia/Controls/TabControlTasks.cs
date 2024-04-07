@@ -16,7 +16,7 @@ public class TabControlTasks : Grid, IDisposable
 
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
-	public bool AutoSelectNew = true;
+	public bool AutoSelectNew { get; set; } = true;
 
 	private bool ShowTasks => TabInstance.Model.Tasks
 		.Any(task =>

@@ -14,7 +14,7 @@ public class TabProjectSettings : ITab
 			model.Items = ListProperty.Create(Project.ProjectSettings);
 			model.Editing = true;
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Reset", Reset),
 				new TaskDelegate("Save", Save),

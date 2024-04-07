@@ -111,7 +111,7 @@ public class SerializeDateTime : TestSerializeBase
 	[Test, Description("Serialize Long and DateTime")]
 	public void SerializeLongAndDateTime()
 	{
-		var input = new NullableDateTime()
+		var input = new NullableDateTime
 		{
 			TimeStamp = DateTime.UtcNow,
 		};

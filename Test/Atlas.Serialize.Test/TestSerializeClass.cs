@@ -30,7 +30,7 @@ public class SerializeClass : TestSerializeBase
 	[Test, Description("Serialize Field Primitives")]
 	public void SerializeFields()
 	{
-		var input = new Fields()
+		var input = new Fields
 		{
 			UintTest = 5,
 			DoubleTest = 2.5,
@@ -56,7 +56,7 @@ public class SerializeClass : TestSerializeBase
 	[Test, Description("Serialize Properties")]
 	public void SerializeProperties()
 	{
-		var input = new Properties()
+		var input = new Properties
 		{
 			UintTest = 5,
 			DoubleTest = 2.5,
@@ -86,7 +86,7 @@ public class SerializeClass : TestSerializeBase
 	[Test, Description("Serialize Nullable Field Primitives")]
 	public void SerializeNullableFieldPrimitives()
 	{
-		var input = new NullableFieldPrimitives()
+		var input = new NullableFieldPrimitives
 		{
 			UintTest = 5,
 			DoubleTest = 2.5,
@@ -102,7 +102,7 @@ public class SerializeClass : TestSerializeBase
 	[Test, Description("Serialize Nullable Properties Primitive")]
 	public void SerializeNullablePropertyPrimitives()
 	{
-		var input = new NullablePropertyPrimitives()
+		var input = new NullablePropertyPrimitives
 		{
 			UintTest = 5,
 			DoubleTest = 2.5,
@@ -151,7 +151,7 @@ public class SerializeClass : TestSerializeBase
 	[Test, Description("Serialize Field Subclass")]
 	public void SerializeFieldSubclass()
 	{
-		var input = new DerivedClassReference()
+		var input = new DerivedClassReference
 		{
 			BaseClass = new DerivedClass(),
 		};
@@ -240,7 +240,7 @@ public class SerializeClass : TestSerializeBase
 	{
 		var input = new List<Base>
 		{
-			new SubClass() { A = 5 }
+			new SubClass { A = 5 }
 		};
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<List<Base>>(Call);

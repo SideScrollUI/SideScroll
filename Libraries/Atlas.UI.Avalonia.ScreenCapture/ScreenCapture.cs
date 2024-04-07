@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.UI.Avalonia.Controls;
+using Atlas.UI.Avalonia.ScreenCapture.Unmanaged;
 using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
@@ -76,7 +77,7 @@ public class ScreenCapture : Grid
 
 	private void AddContent(Control control)
 	{
-		_contentGrid = new Grid()
+		_contentGrid = new Grid
 		{
 			HorizontalAlignment = HorizontalAlignment.Left,
 			VerticalAlignment = VerticalAlignment.Top,
@@ -87,7 +88,7 @@ public class ScreenCapture : Grid
 
 		AddBackgroundImage(control);
 
-		_selectionImage = new Image()
+		_selectionImage = new Image
 		{
 			Stretch = Stretch.None,
 		};
@@ -162,7 +163,7 @@ public class ScreenCapture : Grid
 
 		var folder = await window.StorageProvider.TryGetFolderFromPathAsync(Paths.PicturesPath);
 
-		var result = await window.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
+		var result = await window.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
 		{
 			SuggestedStartLocation = folder,
 			SuggestedFileName = $"{TabViewer.Project.Name}.{FileUtils.TimestampString}.png",
@@ -205,7 +206,7 @@ public class ScreenCapture : Grid
 			ctx.DrawImage(_originalBitmap, bounds);
 		}
 
-		_backgroundImage = new Image()
+		_backgroundImage = new Image
 		{
 			HorizontalAlignment = HorizontalAlignment.Left,
 			VerticalAlignment = VerticalAlignment.Top,

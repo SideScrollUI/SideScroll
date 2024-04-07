@@ -1,4 +1,5 @@
 using Atlas.Extensions;
+using Atlas.UI.Avalonia.Utilities;
 using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Collections;
@@ -56,7 +57,7 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 
 	protected TextBlock CreateTextBlock()
 	{
-		var textBlockElement = new TextBlockElement()
+		var textBlockElement = new TextBlockElement
 		{
 			Margin = new Thickness(4),
 			VerticalAlignment = VerticalAlignment.Center,

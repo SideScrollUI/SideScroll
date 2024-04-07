@@ -3,7 +3,7 @@ using Atlas.Tabs;
 using Atlas.Tabs.Test.Chart;
 using Atlas.UI.Avalonia.Charts.LiveCharts;
 
-namespace Atlas.Start.Avalonia.Tabs;
+namespace Atlas.Start.Avalonia.Charts;
 
 public class TabChartSizes : ITab
 {
@@ -20,7 +20,7 @@ public class TabChartSizes : ITab
 			DateTime dateTime = DateTime.Now;
 			var series = ChartSamples.CreateTimeSeries(dateTime, SampleCount);
 
-			var chartView = new ChartView()
+			var chartView = new ChartView
 			{
 				LegendPosition = ChartLegendPosition.Hidden,
 				ShowTimeTracker = true,

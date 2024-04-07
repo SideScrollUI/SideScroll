@@ -14,7 +14,7 @@ public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 	public bool CacheEnabled { get; set; }
 
 	private bool _valueCached;
-	private object? _valueObject = null;
+	private object? _valueObject;
 
 	[Editing, InnerValue, WordWrap]
 	public override object? Value

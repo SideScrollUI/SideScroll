@@ -49,7 +49,7 @@ public class BaseWindow : Window
 
 		// Catch Inter font here before overriding so we don't lose it
 		FontTheme.FontFamilies =
-			new List<FontFamily>() { AtlasTheme.ContentControlThemeFontFamily }
+			new List<FontFamily> { AtlasTheme.ContentControlThemeFontFamily }
 			.Concat(FontManager.Current.SystemFonts);
 
 		AtlasInit.Initialize();
@@ -142,7 +142,7 @@ public class BaseWindow : Window
 				_normalSizeBounds = bounds;
 			}
 
-			var windowSettings = new WindowSettings()
+			var windowSettings = new WindowSettings
 			{
 				Maximized = maximized,
 				Width = bounds.Width,

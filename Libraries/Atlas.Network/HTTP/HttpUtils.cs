@@ -118,7 +118,7 @@ public static class HttpUtils
 		while ((bytes = await contentStream.ReadAsync(buffer)) > 0)
 		{
 			memoryStream.Write(buffer, 0, bytes);
-			progress.Report(new HttpGetProgress()
+			progress.Report(new HttpGetProgress
 			{
 				Downloaded = memoryStream.Position,
 				TotalLength = content.Headers.ContentLength.Value,

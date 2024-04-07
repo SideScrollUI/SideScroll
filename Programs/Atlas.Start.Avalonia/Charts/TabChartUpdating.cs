@@ -3,7 +3,7 @@ using Atlas.Tabs;
 using Atlas.Tabs.Test.Chart;
 using Atlas.UI.Avalonia.Charts.LiveCharts;
 
-namespace Atlas.Start.Avalonia.Tabs;
+namespace Atlas.Start.Avalonia.Charts;
 
 public class TabChartUpdating : ITab
 {
@@ -21,7 +21,7 @@ public class TabChartUpdating : ITab
 		{
 			model.MinDesiredWidth = 1400;
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Update", Update),
 				new TaskDelegateAsync("Update every second", UpdateEverySecondAsync),
@@ -40,7 +40,7 @@ public class TabChartUpdating : ITab
 
 		private ChartView CreateView()
 		{
-			var chartView = new ChartView()
+			var chartView = new ChartView
 			{
 				LegendPosition = ChartLegendPosition.Right,
 				ShowTimeTracker = true,

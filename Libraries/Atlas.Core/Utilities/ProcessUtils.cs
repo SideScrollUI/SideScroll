@@ -102,7 +102,7 @@ public static class ProcessUtils
 
 	public static Process StartDotnetProcess(string arguments)
 	{
-		var processStartInfo = new ProcessStartInfo()
+		var processStartInfo = new ProcessStartInfo
 		{
 			Arguments = arguments,
 			WorkingDirectory = Directory.GetCurrentDirectory(),

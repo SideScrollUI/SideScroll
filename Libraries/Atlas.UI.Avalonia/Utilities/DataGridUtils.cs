@@ -3,7 +3,7 @@ using Avalonia.Media;
 using System.Collections;
 using System.Text;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Utilities;
 
 public static class DataGridUtils
 {

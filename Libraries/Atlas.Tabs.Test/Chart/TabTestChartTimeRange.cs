@@ -29,7 +29,7 @@ public class TabTestChartTimeRangeValue : ITab
 			chartView.AddSeries("Cats", ChartSamples.CreateTimeSeries(endTime), seriesType: SeriesType.Average);
 			chartView.AddSeries("Dogs", ChartSamples.CreateTimeSeries(endTime), seriesType: SeriesType.Average);
 
-			chartView.Annotations.Add(new ChartAnnotation()
+			chartView.Annotations.Add(new ChartAnnotation
 			{
 				Text = "Too Many",
 				Y = 2_000_000_000,

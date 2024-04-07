@@ -149,7 +149,7 @@ public class TabControlToolbar : Grid, IDisposable
 	// Read Only
 	public TextBox AddLabelText(string text, bool fill = false)
 	{
-		var textBox = new TextBox()
+		var textBox = new TextBox
 		{
 			Text = text,
 			TextWrapping = TextWrapping.NoWrap,

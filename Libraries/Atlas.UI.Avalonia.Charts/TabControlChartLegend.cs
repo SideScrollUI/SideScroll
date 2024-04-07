@@ -31,7 +31,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Stretch;
 
-		_wrapPanel = new WrapPanel()
+		_wrapPanel = new WrapPanel
 		{
 			Orientation = ChartView.LegendPosition == ChartLegendPosition.Right ? Orientation.Vertical : Orientation.Horizontal,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -39,7 +39,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 			Margin = new Thickness(6),
 		};
 
-		_scrollViewer = new ScrollViewer()
+		_scrollViewer = new ScrollViewer
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
@@ -52,7 +52,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 
 		if (ChartView.ShowOrder && ChartView.LegendPosition == ChartLegendPosition.Right)
 		{
-			_textBlockTotal = new TabControlTextBlock()
+			_textBlockTotal = new TabControlTextBlock
 			{
 				Margin = new Thickness(2),
 				HorizontalAlignment = HorizontalAlignment.Right,

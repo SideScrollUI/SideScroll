@@ -26,8 +26,8 @@ public interface IPreloadRepo
 public abstract class TypeRepo : IDisposable
 {
 	// Should we switch this to List<Type> instead?
-	public static List<IRepoCreator> RepoCreators { get; set; } = new()
-	{
+	public static List<IRepoCreator> RepoCreators { get; set; } =
+	[
 		new TypeRepoUnknown.Creator(),
 		new TypeRepoPrimitive.Creator(),
 		new TypeRepoEnum.Creator(),
@@ -46,7 +46,7 @@ public abstract class TypeRepo : IDisposable
 		//new TypeRepoEnumerable.Creator(),
 		//new TypeRepoUnknown.NoConstructorCreator(),
 		//new TypeRepoObject.Creator(),
-	};
+	];
 
 	public readonly Serializer Serializer;
 	public readonly TypeSchema TypeSchema;

@@ -64,7 +64,7 @@ public class ThemeManager
 	{
 		if (GetTheme(variant) != null) return;
 
-		Add(new Call(), new AvaloniaThemeSettings()
+		Add(new Call(), new AvaloniaThemeSettings
 		{
 			Name = variant,
 			Variant = variant,

@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Utilities;
 using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Collections;
@@ -151,7 +152,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 
 	private void AddSearch()
 	{
-		SearchControl = new TabControlSearch()
+		SearchControl = new TabControlSearch
 		{
 			IsVisible = false,
 		};
@@ -165,7 +166,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 	[MemberNotNull(nameof(DataGrid))]
 	private void AddDataGrid()
 	{
-		DataGrid = new DataGrid()
+		DataGrid = new DataGrid
 		{
 			SelectionMode = DataGridSelectionMode.Extended, // No MultiSelect support :( (use right click for copy/paste)
 
@@ -232,7 +233,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 			// Invoking was happening at bad times in the data binding
 			if (_dispatcherTimer == null)
 			{
-				_dispatcherTimer = new DispatcherTimer()
+				_dispatcherTimer = new DispatcherTimer
 				{
 					Interval = TimeSpan.FromSeconds(1), // Tick event doesn't fire if set to < 1 second
 				};

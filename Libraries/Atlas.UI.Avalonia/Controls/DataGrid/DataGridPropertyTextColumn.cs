@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Themes;
+using Atlas.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -159,14 +160,14 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 			(DisplayIndex == 1 && typeof(DictionaryEntry).IsAssignableFrom(PropertyInfo.DeclaringType)))
 		{
 			// Update the cell color based on the object
-			var binding = new Binding()
+			var binding = new Binding
 			{
 				Converter = new ValueToBackgroundBrushConverter(PropertyInfo),
 				Mode = BindingMode.OneWay,
 			};
 			cell.Bind(DataGridCell.BackgroundProperty, binding);
 
-			var foregroundBinding = new Binding()
+			var foregroundBinding = new Binding
 			{
 				Converter = new ValueToForegroundBrushConverter(PropertyInfo),
 				Mode = BindingMode.OneWay,

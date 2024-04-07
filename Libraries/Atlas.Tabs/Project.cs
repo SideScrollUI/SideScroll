@@ -48,7 +48,7 @@ public class Project
 	public Project(ProjectSettings projectSettings)
 	{
 		ProjectSettings = projectSettings;
-		UserSettings = new UserSettings()
+		UserSettings = new UserSettings
 		{
 			ProjectPath = projectSettings.DefaultProjectPath,
 		};

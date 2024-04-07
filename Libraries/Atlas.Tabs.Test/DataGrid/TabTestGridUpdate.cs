@@ -19,7 +19,7 @@ public class TabTestGridUpdate : ITab
 			AddEntries();
 			model.Items = _items;
 
-			model.Actions = new List<TaskCreator>()
+			model.Actions = new List<TaskCreator>
 			{
 				//new TaskAction("Add Entries", AddEntries),
 				new TaskDelegate("Start bigNumber++ Thread", UpdateCounter, true),

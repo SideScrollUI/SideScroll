@@ -3,6 +3,7 @@ using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.Themes;
+using Atlas.UI.Avalonia.Utilities;
 using Atlas.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Controls;
@@ -88,7 +89,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		XAxis = CreateXAxis();
 		YAxis = CreateYAxis();
 
-		Chart = new CartesianChart()
+		Chart = new CartesianChart
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
@@ -224,7 +225,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		}
 		else
 		{
-			axis = new Axis()
+			axis = new Axis
 			{
 				Labeler = NumberExtensions.FormattedShortDecimal,
 			};
@@ -591,7 +592,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	{
 		if (IdxNameToChartSeries.TryGetValue(chartPoint.Context.Series.Name!, out var series))
 		{
-			OnSelectionChanged(new SeriesSelectedEventArgs(new List<ListSeries>() { series.ListSeries }));
+			OnSelectionChanged(new SeriesSelectedEventArgs(new List<ListSeries> { series.ListSeries }));
 			Legend.SelectSeries(series.LineSeries, series.ListSeries);
 		}
 	}

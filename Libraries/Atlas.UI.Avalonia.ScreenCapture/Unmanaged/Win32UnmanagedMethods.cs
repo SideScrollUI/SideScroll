@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Atlas.UI.Avalonia.ScreenCapture;
+namespace Atlas.UI.Avalonia.ScreenCapture.Unmanaged;
 
 public static class Win32UnmanagedMethods
 {
