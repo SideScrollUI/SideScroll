@@ -20,17 +20,12 @@ public class SerializeClassConstructor : TestSerializeBase
 		_serializer = new SerializerMemoryAtlas();
 	}
 
-	public class NoConstructorBaseClass
+	public class NoConstructorBaseClass(int a)
 	{
-		public int A = 1;
+		public int A = a;
 
 		[PrivateData]
 		public int B = 0;
-
-		public NoConstructorBaseClass(int a)
-		{
-			A = a;
-		}
 	}
 
 	public class DerivedClassWithConstructor : NoConstructorBaseClass

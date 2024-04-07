@@ -177,7 +177,7 @@ public class ScreenCapture : Grid
 		}
 	}
 
-	private Window? GetWindow(StyledElement styledElement)
+	private static Window? GetWindow(StyledElement styledElement)
 	{
 		if (styledElement is Window window)
 			return window;

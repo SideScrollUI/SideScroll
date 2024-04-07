@@ -33,7 +33,7 @@ public class TabView : Grid, IDisposable
 	private const int MinDesiredSplitterDistance = 50;
 
 	// Model.Objects
-	public static Dictionary<Type, IControlCreator> ControlCreators { get; set; } = new();
+	public static Dictionary<Type, IControlCreator> ControlCreators { get; set; } = [];
 
 	// Maybe this control should own it's own settings?
 	//private TabViewSettings _tabViewSettings = new TabViewSettings();
@@ -63,10 +63,10 @@ public class TabView : Grid, IDisposable
 	// Created Controls
 	public TabControlActions? TabActions;
 	public TabControlTasks? TabTasks;
-	public List<ITabDataControl> TabDatas = new();
-	public List<ITabSelector> CustomTabControls { get; set; } = new(); // should everything use this?
+	public List<ITabDataControl> TabDatas = [];
+	public List<ITabSelector> CustomTabControls { get; set; } = []; // should everything use this?
 
-	private List<ToolbarButton> _hotKeys = new();
+	private List<ToolbarButton> _hotKeys = [];
 
 	// Layout Controls
 	private Grid? _containerGrid;
@@ -863,14 +863,13 @@ public class TabView : Grid, IDisposable
 		{
 			// Reuse existing control
 			Control control = oldChildControls[obj];
-			if (newChildControls.ContainsKey(obj))
+			if (newChildControls.TryAdd(obj, control))
 			{
-				Debug.WriteLine("TabView has already added child control " + obj.ToString());
+				orderedChildControls.Add(control);
 			}
 			else
 			{
-				newChildControls.Add(obj, control);
-				orderedChildControls.Add(control);
+				Debug.WriteLine("TabView has already added child control " + obj.ToString());
 			}
 		}
 		else
@@ -1040,7 +1039,7 @@ public class TabView : Grid, IDisposable
 					.Cast<object>()
 					.ToHashSet();
 
-				List<object> matching = new();
+				List<object> matching = [];
 				foreach (var obj in TabDatas[0].Items!)
 				{
 					if (newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()!))

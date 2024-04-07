@@ -6,7 +6,6 @@ using Atlas.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Media;
 using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;

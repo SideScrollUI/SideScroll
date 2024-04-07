@@ -113,8 +113,8 @@ public class TestSerializeLogs : TestSerializeBase
 
 	private class MultipleArrays
 	{
-		public int[] array1 = { 1, 2 };
-		//public int[] array2 = { 3, 4 };
+		public int[] array1 = [1, 2];
+		//public int[] array2 = [3, 4];
 	}
 
 	[Test, Description("Serialize Log Entry Tags")]
@@ -157,7 +157,7 @@ public class TestSerializeLogs : TestSerializeBase
 
 	public class TabInstanceConfiguration
 	{
-		public HashSet<SelectedItem> Selected = new();
+		public HashSet<SelectedItem> Selected = [];
 		public int? SplitterDistance;
 		public int NumColumns;
 	}
@@ -169,7 +169,7 @@ public class TestSerializeLogs : TestSerializeBase
 
 	public class LogUnknown : LogEntryUnknown
 	{
-		public List<LogEntryUnknown> Items = new();
+		public List<LogEntryUnknown> Items = [];
 	}
 
 	public class LogEntryTest2
@@ -186,7 +186,7 @@ public class TestSerializeLogs : TestSerializeBase
 
 	public class LogTest2
 	{
-		public List<LogEntryTest2> Items = new();
+		public List<LogEntryTest2> Items = [];
 
 		public LogTest2() { }
 

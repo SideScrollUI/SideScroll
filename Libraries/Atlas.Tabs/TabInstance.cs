@@ -104,7 +104,7 @@ public class TabInstance : IDisposable
 	}
 
 	public TabInstance? ParentTabInstance { get; set; }
-	public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = new();
+	public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = [];
 
 	public SynchronizationContext UiContext;
 	public TabBookmark? FilterBookmarkNode;

@@ -57,11 +57,11 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	public Axis XAxis { get; set; }
 	public Axis YAxis { get; set; } // left/right?
 
-	public List<LiveChartSeries> LiveChartSeries { get; private set; } = new();
+	public List<LiveChartSeries> LiveChartSeries { get; private set; } = [];
 
 	public ChartSeries<ISeries>? HoverSeries;
 
-	private List<RectangularSection> _sections = new();
+	private List<RectangularSection> _sections = [];
 	private RectangularSection? _trackerSection;
 	private RectangularSection? _zoomSection;
 

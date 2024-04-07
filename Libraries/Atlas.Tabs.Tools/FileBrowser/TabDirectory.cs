@@ -102,7 +102,7 @@ public class TabDirectory(string path, DataRepoView<NodeView>? dataRepoNodes = n
 			return TabViewSettings.TabDataSettings.SelectMany(s => s.SelectedRows).ToList();
 		}
 
-		private void Delete(Call call)
+		/*private void Delete(Call call)
 		{
 			// todo: Confirmation prompt?
 			List<SelectedRow> selectedRows = GetSelectedRows();
@@ -117,7 +117,7 @@ public class TabDirectory(string path, DataRepoView<NodeView>? dataRepoNodes = n
 					File.Delete(path);
 			}
 			Reload();
-		}
+		}*/
 	}
 }
 

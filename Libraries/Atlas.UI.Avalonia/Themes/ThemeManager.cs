@@ -1,7 +1,6 @@
 using Atlas.Core;
 using Atlas.Serialize;
 using Atlas.Tabs;
-using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Styling;
 

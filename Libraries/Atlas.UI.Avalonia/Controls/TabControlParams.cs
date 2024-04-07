@@ -22,7 +22,7 @@ public class TabControlParams : Grid, IValidationControl
 
 	public object? Object;
 
-	private Dictionary<ListProperty, Control> _propertyControls = new();
+	private readonly Dictionary<ListProperty, Control> _propertyControls = [];
 
 	public override string? ToString() => Object?.ToString();
 
@@ -249,7 +249,7 @@ public class TabControlParams : Grid, IValidationControl
 		return control;
 	}
 
-	private Control? CreatePropertyControl(ListProperty property)
+	private static Control? CreatePropertyControl(ListProperty property)
 	{
 		Type type = property.UnderlyingType;
 

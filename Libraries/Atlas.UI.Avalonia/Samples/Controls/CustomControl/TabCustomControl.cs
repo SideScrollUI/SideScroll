@@ -13,7 +13,7 @@ public class TabCustomControl : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollectionUI<Planet> _planets = new();
+		private ItemCollectionUI<Planet> _planets = [];
 		private Planet? _planet;
 		private TabControlSearchToolbar? _toolbar;
 

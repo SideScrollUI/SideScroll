@@ -1,4 +1,3 @@
-using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.View;
 using Avalonia;

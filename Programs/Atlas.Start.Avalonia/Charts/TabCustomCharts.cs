@@ -1,5 +1,4 @@
 using Atlas.Core;
-using Atlas.Start.Avalonia.Tabs;
 using Atlas.Tabs.Test.Chart;
 
 namespace Atlas.Start.Avalonia.Charts;

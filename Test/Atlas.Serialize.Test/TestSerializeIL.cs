@@ -39,7 +39,7 @@ public class PropertyRef
 public class LazyClass
 {
 	public Type NewType;
-	public Dictionary<PropertyInfo, PropertyRef> PropertyRefs = new();
+	public Dictionary<PropertyInfo, PropertyRef> PropertyRefs = [];
 
 	public LazyClass()
 	{
@@ -49,7 +49,7 @@ public class LazyClass
 	public Type CompileResultType()
 	{
 		TypeBuilder typeBuilder = GetTypeBuilder();
-		ConstructorBuilder constructor = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
+		// ConstructorBuilder constructor = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
 
 		CreateProperty(typeBuilder);
 
@@ -57,7 +57,7 @@ public class LazyClass
 		return objectType;
 	}
 
-	private TypeBuilder GetTypeBuilder()
+	private static TypeBuilder GetTypeBuilder()
 	{
 		string typeSignature = "LoaderType";
 		AssemblyName assemblyName = new(typeSignature);

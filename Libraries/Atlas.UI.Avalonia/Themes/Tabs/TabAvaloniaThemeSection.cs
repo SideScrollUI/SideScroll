@@ -66,7 +66,10 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 
 			if (GetSamples() is object obj)
 			{
-				SelectedItems = new List<ListItem> { new ListItem("Samples", obj) };
+				SelectedItems = new List<ListItem>
+				{
+					new ListItem("Samples", obj)
+				};
 			}
 		}
 
@@ -78,8 +81,8 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				{
 					return new List<ListItem>
 					{
-						new ListItem("Forms", new TabTestParamsDataTabs()),
-						new ListItem("Loading", new TabTestLoadAsync()),
+						new("Forms", new TabTestParamsDataTabs()),
+						new("Loading", new TabTestLoadAsync()),
 					};
 				}
 				case ToolbarTheme:
@@ -94,8 +97,8 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				{
 					return new List<ListItem>
 					{
-						new ListItem("Collections", new TabTestDataGrid()),
-						new ListItem("Objects", new TabTestObjects()),
+						new("Collections", new TabTestDataGrid()),
+						new("Objects", new TabTestObjects()),
 					};
 				}
 				case ButtonTheme:
@@ -110,9 +113,9 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				{
 					return new List<ListItem>
 					{
-						new ListItem("Text", Resources.Samples.Text.Plain),
-						new ListItem("Json", Resources.Samples.Text.Json),
-						new ListItem("Xml", Resources.Samples.Text.Xml),
+						new("Text", Resources.Samples.Text.Plain),
+						new("Json", Resources.Samples.Text.Json),
+						new("Xml", Resources.Samples.Text.Xml),
 					};
 				}
 				case ChartTheme:

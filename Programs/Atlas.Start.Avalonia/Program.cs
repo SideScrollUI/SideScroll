@@ -1,4 +1,3 @@
-using Atlas.Core;
 using Atlas.Core.Utilities;
 using Avalonia;
 using Avalonia.Data.Core.Plugins;

@@ -1,4 +1,3 @@
-using Atlas.Core;
 using Atlas.Core.Utilities;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Themes;

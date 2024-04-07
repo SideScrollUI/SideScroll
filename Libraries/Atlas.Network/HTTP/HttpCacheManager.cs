@@ -4,7 +4,7 @@ public class HttpCacheManager
 {
 	public HttpMemoryCache MemoryCache { get; set; } = new();
 
-	private readonly Dictionary<string, HttpCache> _httpCaches = new();
+	private readonly Dictionary<string, HttpCache> _httpCaches = [];
 
 	// should we keep the imports open all the time?
 	// should we be returning disposable references?

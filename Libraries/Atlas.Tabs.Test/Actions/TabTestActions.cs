@@ -91,7 +91,7 @@ Actions add Buttons to the tab. When clicked, it will:
 
 		private async Task SubTaskProgressAsync(Call call)
 		{
-			var ids = new List<int>();
+			List<int> ids = [];
 			for (int i = 0; i < 30; i++)
 				ids.Add(i);
 
@@ -113,7 +113,7 @@ Actions add Buttons to the tab. When clicked, it will:
 
 		private async Task MultiLevelRunAsync(Call call)
 		{
-			List<int> ids = new();
+			List<int> ids = [];
 			for (int i = 0; i < 100; i++)
 				ids.Add(i);
 
@@ -122,7 +122,7 @@ Actions add Buttons to the tab. When clicked, it will:
 
 		private static async Task<int> MultiLevelRunListAsync(Call call, int id)
 		{
-			List<int> ids = new();
+			List<int> ids = [];
 			for (int i = 0; i < 2000; i++)
 				ids.Add(i);
 

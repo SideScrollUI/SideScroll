@@ -62,8 +62,7 @@ public class TestLogBig
 		var logEntry = new TestLogBig();
 		//log.Type = logType;
 		//logEntry = new Log(context, contextID, settings, "replacing log with local", new Tag[] { });
-		if (Items == null)
-			Items = new ItemCollection<TestLogBig>();
+		Items ??= new ItemCollection<TestLogBig>();
 		//if (Items.Count > settings.MaxLogItems)
 		//	Items.RemoveAt(0);
 		Items.Add(logEntry);

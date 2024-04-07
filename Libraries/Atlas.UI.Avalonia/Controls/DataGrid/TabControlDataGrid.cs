@@ -45,9 +45,9 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
-	private Dictionary<string, DataGridColumn> _columnObjects = new();
-	private Dictionary<DataGridColumn, string> _columnNames = new();
-	private List<PropertyInfo> _columnProperties = new(); // makes filtering faster, could change other Dictionaries strings to PropertyInfo
+	private Dictionary<string, DataGridColumn> _columnObjects = [];
+	private Dictionary<DataGridColumn, string> _columnNames = [];
+	private List<PropertyInfo> _columnProperties = []; // makes filtering faster, could change other Dictionaries strings to PropertyInfo
 
 	private int _disableSaving = 0; // enables saving if > 0
 	private bool _ignoreSelectionChanged = false;
@@ -418,7 +418,7 @@ public class TabControlDataGrid : Grid, IDisposable, ITabSelector, ITabItemSelec
 			bookmark.Changed = string.Join(",", TabDataSettings.SelectedRows);
 	}
 
-	private DataGridRow? GetControlRow(object? obj, int depth)
+	private static DataGridRow? GetControlRow(object? obj, int depth)
 	{
 		if (depth == 0)
 			return null;
