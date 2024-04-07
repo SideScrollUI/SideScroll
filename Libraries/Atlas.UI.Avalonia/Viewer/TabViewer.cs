@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
+using Atlas.UI.Avalonia.Tabs;
 using Atlas.UI.Avalonia.Themes;
 using Atlas.UI.Avalonia.Utilities;
 using Atlas.UI.Avalonia.View;
@@ -13,7 +14,7 @@ using Avalonia.Layout;
 using Avalonia.Threading;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Viewer;
 
 public class EventTabLoaded(object obj) : EventArgs
 {

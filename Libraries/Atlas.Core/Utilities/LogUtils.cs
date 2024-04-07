@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Utilities;
 
 public static class LogUtils
 {

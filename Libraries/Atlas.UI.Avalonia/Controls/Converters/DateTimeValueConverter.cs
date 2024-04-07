@@ -1,9 +1,10 @@
 using Atlas.Core;
+using Atlas.Core.Utilities;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using System.Globalization;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Controls.Converters;
 
 public class DateTimeValueConverter : IValueConverter
 {

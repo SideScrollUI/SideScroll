@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Utilities;
 
 public static class JsonUtils
 {

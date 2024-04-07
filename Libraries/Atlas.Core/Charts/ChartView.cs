@@ -3,7 +3,7 @@ using System.Collections;
 using System.Drawing;
 using System.Reflection;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Charts;
 
 public class ChartAnnotation
 {

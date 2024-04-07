@@ -2,7 +2,7 @@ using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
 
-namespace Atlas.UI.Avalonia.Controls;
+namespace Atlas.UI.Avalonia.Tabs;
 
 public class TabBookmarks : ITab
 {

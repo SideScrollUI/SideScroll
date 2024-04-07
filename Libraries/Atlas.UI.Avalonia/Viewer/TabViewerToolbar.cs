@@ -3,7 +3,7 @@ using Atlas.Extensions;
 using Atlas.Resources;
 using Atlas.UI.Avalonia.Controls;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Viewer;
 
 public class TabViewerToolbar : TabControlToolbar
 {

@@ -5,7 +5,7 @@ using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Styling;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Themes;
 
 public class ThemeManager
 {

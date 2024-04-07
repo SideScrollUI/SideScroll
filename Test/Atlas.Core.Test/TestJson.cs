@@ -1,3 +1,4 @@
+using Atlas.Core.Utilities;
 using NUnit.Framework;
 
 namespace Atlas.Core.Test;

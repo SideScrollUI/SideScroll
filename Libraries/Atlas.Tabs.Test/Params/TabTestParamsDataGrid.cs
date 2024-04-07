@@ -1,6 +1,6 @@
 using Atlas.Core;
 
-namespace Atlas.Tabs.Test.Actions;
+namespace Atlas.Tabs.Test.Params;
 
 public class TabParamsDataGrid : ITab
 {

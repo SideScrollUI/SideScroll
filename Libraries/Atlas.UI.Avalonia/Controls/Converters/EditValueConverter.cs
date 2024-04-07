@@ -2,7 +2,7 @@ using Atlas.Extensions;
 using Avalonia.Data.Converters;
 using System.Globalization;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Controls.Converters;
 
 public class EditValueConverter : IValueConverter
 {

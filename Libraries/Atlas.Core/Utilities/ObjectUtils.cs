@@ -2,7 +2,7 @@ using Atlas.Extensions;
 using System.Collections;
 using System.Reflection;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Utilities;
 
 public static class ObjectUtils
 {

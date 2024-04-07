@@ -1,4 +1,6 @@
 
+using Atlas.Core.Utilities;
+
 namespace Atlas.Core;
 
 public static class AtlasInit

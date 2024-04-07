@@ -1,9 +1,9 @@
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Utilities;
 
 public static class XmlUtils
 {

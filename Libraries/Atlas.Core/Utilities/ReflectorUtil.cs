@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Utilities;
 
 // https://stackoverflow.com/questions/366332/best-way-to-get-sub-properties-using-getproperty
 public static class ReflectorUtil

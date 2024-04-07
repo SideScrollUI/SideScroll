@@ -2,7 +2,7 @@ using Atlas.Extensions;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Utilities;
 
 public static class ProcessUtils
 {

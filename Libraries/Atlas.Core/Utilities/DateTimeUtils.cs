@@ -1,7 +1,7 @@
 using Atlas.Extensions;
 using System.Globalization;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Utilities;
 
 public static class DateTimeUtils
 {

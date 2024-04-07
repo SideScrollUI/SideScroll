@@ -1,8 +1,10 @@
 using Atlas.Core;
+using Atlas.Core.Utilities;
 using Atlas.Resources;
 using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.ScreenCapture.Unmanaged;
 using Atlas.UI.Avalonia.Themes;
+using Atlas.UI.Avalonia.Viewer;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;

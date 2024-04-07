@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Utilities;
 
 public struct FilePath(string path)
 {

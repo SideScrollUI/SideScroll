@@ -4,6 +4,7 @@ using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.Themes;
 using Atlas.UI.Avalonia.Utilities;
+using Atlas.UI.Avalonia.Viewer;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
