@@ -10,7 +10,7 @@ public class Header
 	public string Version = LatestVersion;
 	public string Name = "<Default>";
 
-	public override string ToString() => Version.ToString();
+	public override string ToString() => Version;
 
 	public void Save(BinaryWriter writer)
 	{
@@ -32,10 +32,10 @@ public class Serializer : IDisposable
 
 	public Header Header = new();
 
-	public List<TypeSchema> TypeSchemas = new();
+	public List<TypeSchema> TypeSchemas = [];
 
-	public List<TypeRepo> TypeRepos = new();
-	public Dictionary<Type, TypeRepo> IdxTypeToRepo = new();
+	public List<TypeRepo> TypeRepos = [];
+	public Dictionary<Type, TypeRepo> IdxTypeToRepo = [];
 
 	public TypeRepoString? TypeRepoString; // Reuse string instances to reduce memory use when deep cloning
 
@@ -45,10 +45,10 @@ public class Serializer : IDisposable
 
 	// Convert to Parser class?
 	// Use a queue so we don't exceed the stack size due to cross references (i.e. a list with values that refer back to the list)
-	public Queue<object> ParserQueue = new();
-	public List<object?> Primitives = new(); // primitives are usually serialized inline, but that doesn't work if that's the primary type
+	public Queue<object> ParserQueue = [];
+	public List<object?> Primitives = []; // primitives are usually serialized inline, but that doesn't work if that's the primary type
 
-	public Dictionary<object, object> Clones = new();
+	public Dictionary<object, object> Clones = [];
 	public Queue<Action> CloneQueue = new();
 	public TaskInstance? TaskInstance;
 
@@ -58,12 +58,10 @@ public class Serializer : IDisposable
 		public int Index;
 		public bool Preloaded; // set after IPreloadRepo preloads data
 
-		public override string ToString() => TypeRepo.ToString() + " - " + Index;
+		public override string ToString() => $"{TypeRepo} - {Index}";
 	}
 
 	private readonly Queue<LoadItem> _loadQueue = new();
-
-	public Serializer() { }
 
 	public object? BaseObject(Call call)
 	{
@@ -184,14 +182,14 @@ public class Serializer : IDisposable
 	{
 		using CallTimer callSaving = call.Timer("Saving object");
 
-		AddObjectMemberTypes(callSaving.Log!);
+		AddObjectMemberTypes(callSaving.Log);
 		//UpdateTypeSchemaDerived();
 		Header.Save(writer);
 		long schemaPosition = writer.BaseStream.Position;
 		writer.Write((long)0); // will write correct value at end
 		SaveSchemas(writer);
 		SavePrimitives(callSaving, writer);
-		SaveObjects(callSaving.Log!, writer);
+		SaveObjects(callSaving.Log, writer);
 
 		// write out schema again for file offsets and size
 		writer.Seek((int)schemaPosition, SeekOrigin.Begin);

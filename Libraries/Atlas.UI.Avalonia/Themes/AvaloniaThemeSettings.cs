@@ -125,7 +125,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 	public void FillMissingValues()
 	{
 		var original = Application.Current!.RequestedThemeVariant;
-		Application.Current!.RequestedThemeVariant = GetVariant();
+		Application.Current.RequestedThemeVariant = GetVariant();
 
 		foreach (ListProperty listProperty in GetProperties())
 		{
@@ -144,7 +144,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 				listProperty.Value = value;
 			}
 		}
-		Application.Current!.RequestedThemeVariant = original;
+		Application.Current.RequestedThemeVariant = original;
 	}
 
 	public ResourceDictionary CreateDictionary()

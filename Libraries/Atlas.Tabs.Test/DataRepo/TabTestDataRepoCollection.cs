@@ -42,7 +42,7 @@ public class TabTestDataRepoCollection : ITab
 		private void Add(Call call)
 		{
 			var sampleItem = new SampleItem(_sampleItems!.Count, "Item " + _sampleItems.Count);
-			RemoveItem(call, sampleItem!.Name!); // Remove previous result so refocus works
+			RemoveItem(call, sampleItem.Name!); // Remove previous result so refocus works
 			_dataRepoItems!.Save(call, sampleItem.ToString()!, sampleItem);
 			_sampleItems.Add(sampleItem);
 		}

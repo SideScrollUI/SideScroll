@@ -2,9 +2,7 @@ namespace Atlas.Core;
 
 // Allows property to be edited in UI
 [AttributeUsage(AttributeTargets.Property)]
-public class EditingAttribute : Attribute
-{
-}
+public class EditingAttribute : Attribute;
 
 /*[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class ReadOnlyAttribute : Attribute
@@ -42,9 +40,7 @@ public class BindListAttribute(string propertyName) : Attribute
 
 // ->Toolbar: Show a separator before this item
 [AttributeUsage(AttributeTargets.Property)]
-public class SeparatorAttribute : Attribute
-{
-}
+public class SeparatorAttribute : Attribute;
 
 // If set, this method will appear as an Action (rename to [Action]?)
 /*[AttributeUsage(AttributeTargets.Method)]

@@ -35,7 +35,7 @@ public class TestSerializeLazy : TestSerializeBase
 		_serializerFile!.Save(Call, input);
 		Parent output = _serializerFile.Load<Parent>(Call, true)!;
 
-		Assert.AreEqual(input.Child!.UintTest, output.Child.UintTest);
+		Assert.AreEqual(input.Child!.UintTest, output.Child!.UintTest);
 	}
 
 	[Test, Description("Serialize Lazy Null Properties")]

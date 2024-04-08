@@ -13,7 +13,7 @@ using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabSeparator : Border { }
+public class TabSeparator : Border;
 
 public class TabControlParams : Grid, IValidationControl
 {
@@ -138,7 +138,7 @@ public class TabControlParams : Grid, IValidationControl
 		int rowIndex = AddRowDefinition();
 		int columnIndex = 0;
 
-		List<Control> controls = new();
+		List<Control> controls = [];
 		foreach (PropertyInfo propertyInfo in properties)
 		{
 			var property = new ListProperty(obj, propertyInfo);

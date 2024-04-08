@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class ToolbarSeparator : Border { }
+public class ToolbarSeparator : Border;
 
 public class TabControlToolbar : Grid, IDisposable
 {

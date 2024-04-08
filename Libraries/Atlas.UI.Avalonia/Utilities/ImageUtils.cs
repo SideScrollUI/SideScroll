@@ -3,7 +3,7 @@ using Avalonia.Media.Imaging;
 
 namespace Atlas.UI.Avalonia.Utilities;
 
-class ImageUtils
+static class ImageUtils
 {
 	public const int MaxImageSize = 10_000;
 
@@ -20,7 +20,7 @@ class ImageUtils
 		if (bitmap.Size.Width > MaxImageSize) throw new Exception($"Image width {bitmap.Size.Width} is above maximum {MaxImageSize}");
 		if (bitmap.Size.Height > MaxImageSize) throw new Exception($"Image height {bitmap.Size.Height} is above maximum {MaxImageSize}");
 
-		image!.Source = bitmap;
+		image.Source = bitmap;
 		return bitmap;
 	}
 }

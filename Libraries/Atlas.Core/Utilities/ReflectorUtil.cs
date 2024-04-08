@@ -17,8 +17,8 @@ public static class ReflectorUtil
 		{
 			if (currentType != null)
 			{
-				int brackStart = propertyName.IndexOf("[");
-				int brackEnd = propertyName.IndexOf("]");
+				int brackStart = propertyName.IndexOf('[');
+				int brackEnd = propertyName.IndexOf(']');
 				string subPropertyName = brackStart > 0 ? propertyName[..brackStart] : propertyName;
 
 				var properties = currentType.GetProperties().Where(x => x.Name == subPropertyName);

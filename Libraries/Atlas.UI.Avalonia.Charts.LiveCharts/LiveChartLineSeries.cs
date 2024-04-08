@@ -38,7 +38,7 @@ public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<L
 
 	List<ChartPoint> FindHitPoints(IChart chart, LvcPoint pointerPosition, double maxDistance)
 	{
-		if (!IsVisible) return new();
+		if (!IsVisible) return [];
 
 		return Fetch(chart)
 			.Select(x => new { distance = GetDistanceTo(x, pointerPosition), point = x })

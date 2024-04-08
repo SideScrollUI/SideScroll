@@ -1,6 +1,5 @@
 ﻿<Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:atlas="clr-namespace:Atlas.UI.Avalonia.Controls;assembly=Atlas.UI.Avalonia"
              x:Class="Atlas.Start.Avalonia.App"
              RequestedThemeVariant="Default">
   <Application.Styles>

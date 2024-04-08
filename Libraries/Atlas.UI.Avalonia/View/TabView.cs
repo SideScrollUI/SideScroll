@@ -413,7 +413,7 @@ public class TabView : Grid, IDisposable
 		{
 			_containerGrid.ColumnDefinitions[0].Width = new GridLength((int)splitterDistance);
 			if (_tabParentControls != null)
-				_tabParentControls.Width = (double)splitterDistance;
+				_tabParentControls.Width = splitterDistance;
 		}
 		else
 		{
@@ -802,7 +802,7 @@ public class TabView : Grid, IDisposable
 
 	private List<Control> CreateAllChildControls(bool recreate, out Dictionary<object, Control> newChildControls)
 	{
-		Dictionary<object, Control> oldChildControls = recreate ? new() : _tabChildControls!.GridControls;
+		Dictionary<object, Control> oldChildControls = recreate ? [] : _tabChildControls!.GridControls;
 		newChildControls = new Dictionary<object, Control>();
 		var orderedChildControls = new List<Control>();
 		//AddNotes(newChildControls, oldChildControls, orderedChildControls);
@@ -869,7 +869,7 @@ public class TabView : Grid, IDisposable
 			}
 			else
 			{
-				Debug.WriteLine("TabView has already added child control " + obj.ToString());
+				Debug.WriteLine("TabView has already added child control " + obj);
 			}
 		}
 		else
@@ -996,7 +996,7 @@ public class TabView : Grid, IDisposable
 		}
 		CustomTabControls.Clear();
 
-		_hotKeys = new();
+		_hotKeys = [];
 
 		Children.Clear();
 	}

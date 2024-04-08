@@ -12,7 +12,7 @@ public class SerializerFileAtlas : SerializerFile
 		DataPath = Paths.Combine(basePath, DataName);
 	}
 
-	public override void SaveInternal(Call call, object obj, string? name = null)
+	protected override void SaveInternal(Call call, object obj, string? name = null)
 	{
 		for (int attempt = 0; attempt < 10; attempt++)
 		{

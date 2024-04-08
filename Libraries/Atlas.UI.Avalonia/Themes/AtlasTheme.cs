@@ -105,7 +105,7 @@ public static class AtlasTheme
 			}
 		}
 
-		if (Application.Current!.TryGetResource(colorName, ThemeVariant, out object? obj))
+		if (Application.Current.TryGetResource(colorName, ThemeVariant, out object? obj))
 		{
 			return (Color)obj!;
 		}
@@ -123,7 +123,7 @@ public static class AtlasTheme
 			}
 		}
 
-		if (Application.Current!.TryGetResource(brushName, ThemeVariant, out object? obj))
+		if (Application.Current.TryGetResource(brushName, ThemeVariant, out object? obj))
 		{
 			return (SolidColorBrush)obj!;
 		}
@@ -141,7 +141,7 @@ public static class AtlasTheme
 			}
 		}
 
-		if (Application.Current!.TryGetResource(name, ThemeVariant, out object? value))
+		if (Application.Current.TryGetResource(name, ThemeVariant, out object? value))
 		{
 			return (double)value!;
 		}

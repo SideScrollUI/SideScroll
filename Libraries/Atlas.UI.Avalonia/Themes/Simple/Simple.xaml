@@ -171,7 +171,6 @@
 
           <!-- Errors -->
           <SolidColorBrush x:Key="ErrorBrushLight" Color="Red" />
-          <SolidColorBrush x:Key="ThemeBackgroundBrush" Color="#10ff0000" />
 
           <!-- Highlight -->
           <SolidColorBrush x:Key="HighlightBrush" Color="#006df0" />

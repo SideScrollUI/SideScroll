@@ -9,47 +9,33 @@ public class NameAttribute(string name) : Attribute
 
 // DataGrids use this as a unique key when matching rows
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class DataKeyAttribute : Attribute
-{
-}
+public class DataKeyAttribute : Attribute;
 
 // [DataValue] sets an inner value whose [DataKey] will be used if one is not set on the referencing class
 // If the TabInstance.DataRepoInstance is set with elements that implement [DataValue], this value can also be passed in a bookmark 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class DataValueAttribute : Attribute
-{
-}
+public class DataValueAttribute : Attribute;
 
 // Put Serialize here so others don't have to reference a serializer directly?
 // Serialize: Shows the field/property instead of the parent class as the nested tab
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class InnerValueAttribute : Attribute
-{
-}
+public class InnerValueAttribute : Attribute;
 
 // Show all object's members as extra rows
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class InlineAttribute : Attribute
-{
-}
+public class InlineAttribute : Attribute;
 
 // Don't show this field/property as a column or row
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class HiddenAttribute : Attribute
-{
-}
+public class HiddenAttribute : Attribute;
 
 // Don't show this property as a column
 [AttributeUsage(AttributeTargets.Property)]
-public class HiddenColumnAttribute : Attribute
-{
-}
+public class HiddenColumnAttribute : Attribute;
 
 // Don't show this field/property as a row
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class HiddenRowAttribute : Attribute
-{
-}
+public class HiddenRowAttribute : Attribute;
 
 // Don't show row or column if any value matches
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
@@ -111,15 +97,11 @@ public class DebugOnlyAttribute(bool value = true) : Attribute
 
 // Style value based on whether it contains links or not
 [AttributeUsage(AttributeTargets.Property)]
-public class StyleValueAttribute : Attribute
-{
-}
+public class StyleValueAttribute : Attribute;
 
 // Round value when displaying (i.e. show TimeSpan as short value like "1.6 Days")
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class FormattedAttribute : Attribute
-{
-}
+public class FormattedAttribute : Attribute;
 
 // Displayed string formatter
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
@@ -136,21 +118,15 @@ public class WordSpacedAttribute : Attribute
 
 // Wrap the text, Accepts return by default
 [AttributeUsage(AttributeTargets.Property)]
-public class WordWrapAttribute : Attribute
-{
-}
+public class WordWrapAttribute : Attribute;
 
 // Right align contents in parent control
 [AttributeUsage(AttributeTargets.Property)]
-public class RightAlignAttribute : Attribute
-{
-}
+public class RightAlignAttribute : Attribute;
 
 // Column Width should AutoSize instead of */Percent based
 [AttributeUsage(AttributeTargets.Property)]
-public class AutoSizeAttribute : Attribute
-{
-}
+public class AutoSizeAttribute : Attribute;
 
 // MinDesiredWidthAttribute? Actually allows user to use smaller values (a good thing)
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
@@ -175,9 +151,7 @@ public class MaxHeightAttribute(int maxHeight) : Attribute
 
 // AutoSelect the item if non-null, rename? add priority?
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class AutoSelectAttribute : Attribute
-{
-}
+public class AutoSelectAttribute : Attribute;
 
 // Show method as an Item
 [AttributeUsage(AttributeTargets.Method)]

@@ -42,7 +42,7 @@ public class TestSerializeSchemaChanges : TestSerializeBase
 		MissingProperty? output = _serializerFile!.Load<MissingProperty>(Call);
 		Assert.IsNotNull(output);
 		Assert.AreEqual(input.BoolProperty, output!.BoolProperty);
-		Assert.AreEqual(input.IntProperty, output!.IntProperty);
+		Assert.AreEqual(input.IntProperty, output.IntProperty);
 	}
 
 	[Test, Description("Serialize Property Type Missing Load"), Ignore("Requires Save first")]

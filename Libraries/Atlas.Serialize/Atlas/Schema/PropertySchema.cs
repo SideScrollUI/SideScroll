@@ -125,7 +125,7 @@ public class PropertySchema
 
 	public void Save(BinaryWriter writer)
 	{
-		writer.Write(PropertyName!);
+		writer.Write(PropertyName);
 		writer.Write((short)TypeIndex);
 	}
 

@@ -158,7 +158,7 @@ public class TabInstance : IDisposable
 
 	public TabInstance RootInstance => ParentTabInstance?.RootInstance ?? this;
 
-	private bool _settingLoaded = false;
+	private bool _settingLoaded;
 
 	public override string ToString() => Label;
 
@@ -724,7 +724,7 @@ public class TabInstance : IDisposable
 
 	protected SortedDictionary<string, T> GetBookmarkSelectedData<T>()
 	{
-		return TabBookmark?.GetSelectedData<T>() ?? new SortedDictionary<string, T>();
+		return TabBookmark?.GetSelectedData<T>() ?? [];
 	}
 
 	public T? GetBookmarkData<T>(string name = TabBookmark.DefaultDataName)

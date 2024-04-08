@@ -151,7 +151,7 @@ public class TabViewer : Grid
 		PostShowFlyout(Toolbar!.ButtonLink!, flyout, "Creating Link ...");
 
 		Bookmark bookmark = TabView!.Instance.CreateBookmark();
-		TabBookmark? leafNode = bookmark!.TabBookmark.GetLeaf(); // Get the shallowest root node
+		TabBookmark? leafNode = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
 		if (leafNode != bookmark.TabBookmark)
 		{
 			bookmark.Name = leafNode!.Tab?.ToString();

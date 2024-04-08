@@ -265,7 +265,7 @@ public class TypeSchema
 
 	public void Save(BinaryWriter writer)
 	{
-		writer.Write(Name!);
+		writer.Write(Name);
 		writer.Write(AssemblyQualifiedName);
 		writer.Write(HasSubType);
 		writer.Write(NumObjects);

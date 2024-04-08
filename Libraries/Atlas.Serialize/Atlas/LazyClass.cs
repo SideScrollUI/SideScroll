@@ -81,7 +81,7 @@ public class LazyClass
 				propertyRepo.LazyProperty = CreateLazyProperty(typeBuilder, propertyInfo);
 		}
 
-		TypeInfo objectType = typeBuilder.CreateTypeInfo()!;
+		TypeInfo objectType = typeBuilder.CreateTypeInfo();
 		return objectType;
 	}
 

@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Atlas.UI.Avalonia;
 
-public class AvaloniaAssets
+public static class AvaloniaAssets
 {
 	public static Bitmap GetBitmap(string name)
 	{
@@ -15,7 +15,7 @@ public class AvaloniaAssets
 		return new Bitmap(stream);
 	}
 
-	public static Image GetImage(Bitmap bitmap)
+	private static Image GetImage(Bitmap bitmap)
 	{
 		return new Image
 		{
@@ -23,7 +23,7 @@ public class AvaloniaAssets
 		};
 	}
 
-	public class Bitmaps
+	public static class Bitmaps
 	{
 		public static Bitmap Help => new(Icons.Svg.Forward.Stream);
 		public static Bitmap Info => new(Icons.Png.Info.Stream);
@@ -32,7 +32,7 @@ public class AvaloniaAssets
 		public static Bitmap Logo => new(Icons.Logo.Stream);
 	}
 
-	public class Images
+	public static class Images
 	{
 		public static Image Help => GetImage(Bitmaps.Help);
 		public static Image Info => GetImage(Bitmaps.Info);

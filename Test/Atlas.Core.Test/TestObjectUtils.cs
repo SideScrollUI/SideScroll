@@ -40,8 +40,8 @@ public class TestObjectUtils : TestBase
 	public void SubArrayAreEqual()
 	{
 		Assert.IsTrue(ObjectUtils.AreEqual(
-			new int[][] { new int[] { 0, 0 } },
-			new int[][] { new int[] { 0, 0 } }
+			new int[][] { [0, 0] },
+			new int[][] { [0, 0] }
 			));
 	}
 
@@ -49,8 +49,8 @@ public class TestObjectUtils : TestBase
 	public void SubArrayAreNotEqual()
 	{
 		Assert.IsFalse(ObjectUtils.AreEqual(
-			new int[][] { new int[] { 0, 0 } },
-			new int[][] { new int[] { 0, 1 } }
+			new int[][] { [0, 0] },
+			new int[][] { [0, 1] }
 			));
 	}
 
@@ -58,8 +58,8 @@ public class TestObjectUtils : TestBase
 	public void SubArrayAreNotEqualMaxDepth()
 	{
 		Assert.Throws<Exception>(() => ObjectUtils.AreEqual(
-			new int[][] { new int[] { 0, 0 } },
-			new int[][] { new int[] { 0, 0 } },
+			new int[][] { [0, 0] },
+			new int[][] { [0, 0] },
 			1));
 	}
 }

@@ -91,7 +91,7 @@ public class FieldSchema
 
 	private bool GetIsSerialized()
 	{
-		if (FieldInfo!.IsLiteral == true || FieldInfo.IsStatic == true)
+		if (FieldInfo!.IsLiteral || FieldInfo.IsStatic)
 			return false;
 
 		Attribute? attribute = Type!.GetCustomAttribute<UnserializedAttribute>();

@@ -4,7 +4,7 @@ namespace Atlas.Extensions;
 
 public static class TimeSpanExtensions
 {
-	public record class TimeUnit(TimeSpan TimeSpan, string Name);
+	public record TimeUnit(TimeSpan TimeSpan, string Name);
 
 	public static List<TimeUnit> TimeUnits { get; set; } =
 	[

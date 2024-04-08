@@ -76,9 +76,7 @@ public class TestSerializePermissions : TestSerializeBase
 		public string? Confidential { get; set; }
 	}
 
-	public class DerivedPrivateClass : PrivateClass
-	{
-	}
+	public class DerivedPrivateClass : PrivateClass;
 
 	[Test, Description("Serialize [PublicData]")]
 	public void SerializePublicData()

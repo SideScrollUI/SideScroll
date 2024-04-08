@@ -66,7 +66,7 @@ public class TabFileImage : ITab, IFileTypeView
 				}
 				else
 				{
-					Bitmap bitmap = ImageUtils.LoadImage(Image, Path)!;
+					Bitmap bitmap = ImageUtils.LoadImage(Image, Path);
 					model.MaxDesiredWidth = Math.Max(100, (int)bitmap.Size.Width);
 				}
 				model.AddObject(Image, true);

@@ -223,7 +223,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 
 		double firstX = dataPoints.First().X!.Value;
 		double firstBinX = ((int)(firstX / xBinSize)) * xBinSize; // use start of interval
-		double lastBinX = dataPoints.Last()!.X!.Value;
+		double lastBinX = dataPoints.Last().X!.Value;
 		int numBins = (int)Math.Ceiling((lastBinX - firstBinX) / xBinSize) + 1;
 		double[] bins = new double[numBins];
 		foreach (LiveChartPoint dataPoint in dataPoints)

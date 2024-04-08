@@ -128,12 +128,12 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		Children.Add(Chart);
 
 		Legend = new TabControlLiveChartLegend(this);
-		if (ChartView!.LegendPosition == ChartLegendPosition.Bottom)
+		if (ChartView.LegendPosition == ChartLegendPosition.Bottom)
 		{
 			SetRow(Legend, 2);
 			Legend.MaxHeight = 100;
 		}
-		else if (ChartView!.LegendPosition == ChartLegendPosition.Right)
+		else if (ChartView.LegendPosition == ChartLegendPosition.Right)
 		{
 			SetRow(Legend, 1);
 			SetColumn(Legend, 1);
@@ -361,7 +361,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 	public override void InvalidateChart()
 	{
-		Dispatcher.UIThread.Post(Chart!.InvalidateVisual, DispatcherPriority.Background);
+		Dispatcher.UIThread.Post(Chart.InvalidateVisual, DispatcherPriority.Background);
 	}
 
 	public void UpdateAxis()
@@ -716,7 +716,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 				}
 			}
 
-			LvcPointD dataPoint = Chart!.ScalePixelsToData(new LvcPointD(point.X, point.Y));
+			LvcPointD dataPoint = Chart.ScalePixelsToData(new LvcPointD(point.X, point.Y));
 
 			var moveEvent = new MouseCursorMovedEventArgs(dataPoint.X);
 			_mouseCursorChangedEventSource?.Raise(sender, moveEvent);
@@ -738,7 +738,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	{
 		var point = e.GetPosition(Chart);
 		_startScreenPoint = point;
-		_startDataPoint = Chart!.ScalePixelsToData(new LvcPointD(point.X, point.Y));
+		_startDataPoint = Chart.ScalePixelsToData(new LvcPointD(point.X, point.Y));
 
 		if (!_selecting)
 		{
@@ -757,7 +757,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		if (_selecting && _startDataPoint != null)
 		{
 			var point = e.GetPosition(Chart);
-			_endDataPoint = Chart!.ScalePixelsToData(new LvcPointD(point.X, point.Y));
+			_endDataPoint = Chart.ScalePixelsToData(new LvcPointD(point.X, point.Y));
 			double width = Math.Abs(point.X - _startScreenPoint.X);
 			if (width > MinSelectionWidth)
 			{

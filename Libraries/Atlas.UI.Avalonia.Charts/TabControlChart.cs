@@ -101,10 +101,10 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 	public bool FillHeight { get; set; }
 	public int SeriesLimit { get; set; } = 25;
 
-	public List<ChartSeries<TSeries>> ChartSeries { get; private set; } = new();
-	protected Dictionary<string, ChartSeries<TSeries>> IdxNameToChartSeries { get; set; } = new();
-	protected Dictionary<IList, ListSeries> IdxListToListSeries { get; set; } = new();
-	protected Dictionary<string, SeriesInfo> IdxSeriesInfo = new();
+	public List<ChartSeries<TSeries>> ChartSeries { get; private set; } = [];
+	protected Dictionary<string, ChartSeries<TSeries>> IdxNameToChartSeries { get; set; } = [];
+	protected Dictionary<IList, ListSeries> IdxListToListSeries { get; set; } = [];
+	protected Dictionary<string, SeriesInfo> IdxSeriesInfo = [];
 
 	public List<ListSeries> SelectedSeries
 	{

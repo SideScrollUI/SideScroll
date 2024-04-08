@@ -147,7 +147,7 @@ public class Log : LogEntry
 		// So only add it for the initial child message
 		if (logEntry.Level >= Settings!.DebugPrintLogLevel && logEntry.Entries == 0)
 		{
-			Debug.Print(logEntry.Level + ": " + logEntry.ToString());
+			Debug.Print(logEntry.Level + ": " + logEntry);
 		}
 		if (logEntry.Level < Settings.MinLogLevel)
 			return;

@@ -72,7 +72,7 @@ public class TypeRepoObject : TypeRepo
 		public readonly TypeRepo? TypeRepo;
 		public LazyProperty? LazyProperty;
 
-		public override string ToString() => PropertySchema.ToString() + " (" + TypeRepo!.ToString() + ")";
+		public override string ToString() => $"{PropertySchema} ({TypeRepo})";
 
 		public PropertyRepo(PropertySchema propertySchema, TypeRepo? typeRepo = null)
 		{
@@ -325,18 +325,18 @@ public class TypeRepoObject : TypeRepo
 				if (fieldValues.TryGetValue(fieldRepo, out object? value))
 					parameters.Add(value);
 				else
-					throw new Exception("Missing FieldRepo: " + fieldRepo.ToString());
+					throw new Exception("Missing FieldRepo: " + fieldRepo);
 			}
 			else if (repo is PropertyRepo propertyRepo)
 			{
 				if (propertyValues.TryGetValue(propertyRepo, out object? value))
 					parameters.Add(value);
 				else
-					throw new Exception("Missing PropertyRepo: " + propertyRepo.ToString());
+					throw new Exception("Missing PropertyRepo: " + propertyRepo);
 			}
 			else
 			{
-				throw new Exception("Unhandled repo type: " + repo.ToString());
+				throw new Exception("Unhandled repo type: " + repo);
 			}
 		}
 

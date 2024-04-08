@@ -75,7 +75,7 @@ public static class TabCreator
 				Project = parentTabInstance.Project,
 				TabBookmark = tabBookmark,
 			};
-			childTabInstance.Model.Name = label!;
+			childTabInstance.Model.Name = label;
 			value = new TabView(childTabInstance);
 		}
 
@@ -100,7 +100,7 @@ public static class TabCreator
 
 			childTabInstance.TabBookmark ??= tabBookmark;
 			//childTabInstance.Reinitialize(); // todo: fix, called in TabView
-			childTabInstance.Model.Name = label!;
+			childTabInstance.Model.Name = label;
 			var tabView = new TabView(childTabInstance);
 			tabView.Load();
 			return tabView;
@@ -109,7 +109,7 @@ public static class TabCreator
 		{
 			tabView.Instance.ParentTabInstance = parentTabInstance;
 			tabView.Instance.TabBookmark = tabBookmark ?? tabView.Instance.TabBookmark;
-			tabView.Label = label!;
+			tabView.Label = label;
 			tabView.Load();
 			return tabView;
 		}
@@ -126,18 +126,18 @@ public static class TabCreator
 			if (value is TabModel tabModel)
 			{
 				childTabModel = tabModel;
-				childTabModel.Name = label!;
+				childTabModel.Name = label;
 			}
 			else
 			{
-				childTabModel = TabModel.Create(label!, value!);
+				childTabModel = TabModel.Create(label, value!);
 				if (childTabModel == null)
 					return null;
 			}
 			childTabModel.Editing = parentTabInstance.Model.Editing;
 
 			TabInstance childTabInstance = parentTabInstance.CreateChild(childTabModel);
-			childTabInstance.Label = label!;
+			childTabInstance.Label = label;
 
 			var tabModelView = new TabView(childTabInstance);
 			tabModelView.Load();

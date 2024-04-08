@@ -122,7 +122,7 @@ public class TestSerializeLogs : TestSerializeBase
 	{
 		var input = new LogEntryTest2
 		{
-			Tags = new Tag[] { new Tag("abc", 123) }
+			Tags = [new Tag("abc", 123)]
 		};
 
 		_serializer.Save(Call, input);

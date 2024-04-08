@@ -73,11 +73,11 @@ public class ThemeManager
 	public void Add(Call call, AvaloniaThemeSettings themeSettings)
 	{
 		var original = Application.Current!.RequestedThemeVariant;
-		Application.Current!.RequestedThemeVariant = themeSettings.GetVariant();
+		Application.Current.RequestedThemeVariant = themeSettings.GetVariant();
 		themeSettings.LoadFromCurrent();
-		Application.Current!.RequestedThemeVariant = original;
+		Application.Current.RequestedThemeVariant = original;
 
-		DataRepoThemes!.Save(call, themeSettings);
+		DataRepoThemes.Save(call, themeSettings);
 		UserSettings.Themes = Names;
 	}
 

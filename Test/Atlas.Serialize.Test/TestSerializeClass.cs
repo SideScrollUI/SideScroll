@@ -139,9 +139,7 @@ public class SerializeClass : TestSerializeBase
 		public int A = 1;
 	}
 
-	public class DerivedClass : BaseClass
-	{
-	}
+	public class DerivedClass : BaseClass;
 
 	public class DerivedClassReference
 	{

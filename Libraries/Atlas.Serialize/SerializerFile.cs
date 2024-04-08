@@ -33,7 +33,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 		SaveInternal(callTimer, obj, name);
 	}
 
-	public abstract void SaveInternal(Call call, object obj, string? name = null);
+	protected abstract void SaveInternal(Call call, object obj, string? name = null);
 
 	public T? Load<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
 	{

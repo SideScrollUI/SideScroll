@@ -111,7 +111,7 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	public TViewType Add(IDataItem dataItem)
 	{
 		var itemView = new TViewType();
-		itemView.Load(this, dataItem.Object!, LoadParams);
+		itemView.Load(this, dataItem.Object, LoadParams);
 		itemView.OnDelete += Item_OnDelete;
 
 		Items.Add(itemView);

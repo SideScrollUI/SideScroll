@@ -57,7 +57,7 @@ public class SearchFilter
 public class Filter
 {
 	public string FilterText { get; set; }
-	public int Depth { get; set; } = 0;
+	public int Depth { get; set; }
 	public List<FilterExpression> FilterExpressions { get; set; } = new();
 	public bool IsAnd { get; set; }
 

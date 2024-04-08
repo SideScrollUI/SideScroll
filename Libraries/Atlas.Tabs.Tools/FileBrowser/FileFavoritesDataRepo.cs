@@ -3,7 +3,7 @@ using Atlas.Serialize;
 
 namespace Atlas.Tabs.Tools;
 
-public class FileFavoritesDataRepo
+public static class FileFavoritesDataRepo
 {
 	public const string GroupId = "Favorites";
 

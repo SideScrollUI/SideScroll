@@ -53,7 +53,7 @@ public class LazyClass
 
 		CreateProperty(typeBuilder);
 
-		TypeInfo objectType = typeBuilder.CreateTypeInfo()!;
+		TypeInfo objectType = typeBuilder.CreateTypeInfo();
 		return objectType;
 	}
 

@@ -126,7 +126,7 @@ public class TabDateTimePicker : Grid
 		{
 			DateTime? newDateTime = _dateTimeConverter.Convert(timeSpan, typeof(string), null, CultureInfo.InvariantCulture) as DateTime?;
 			Property.PropertyInfo.SetValue(Property.Object, newDateTime);
-			_timeTextBox.Text = timeSpan.ToString()!;
+			_timeTextBox.Text = timeSpan.ToString();
 			e.Handled = true;
 		}
 		else

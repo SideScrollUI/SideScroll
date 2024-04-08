@@ -94,8 +94,8 @@ public class TestClone : TestSerializeBase
 
 	private class MultipleArrays
 	{
-		public int[] Array1 = { 1, 2 };
-		//public int[] Array2 = { 3, 4 };
+		public int[] Array1 = [1, 2];
+		//public int[] Array2 = [3, 4];
 	}
 
 	[Test, Description("ArrayMultipleTest")]
@@ -490,7 +490,7 @@ public class TestClone : TestSerializeBase
 		};
 		input[s] = b;
 
-		var output = _serializer!.Clone(Log, input);
+		var output = _serializer.Clone(Log, input);
 
 		Assert.AreEqual(3, s.B);
 	}

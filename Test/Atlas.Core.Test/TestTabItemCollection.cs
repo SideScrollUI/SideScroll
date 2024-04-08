@@ -88,14 +88,14 @@ public class TestTabItemCollection : TestBase
 	[Test]
 	public void TestDataKey()
 	{
-		List<DataKeyClass> Items =
+		List<DataKeyClass> items =
 		[
 			new(1),
 			new(2),
 			new(3),
 		];
 
-		TestSelected(Items, Items[1]);
+		TestSelected(items, items[1]);
 	}
 
 	public class DataValueClass(int id)

@@ -58,7 +58,7 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 			if (Equals(existingDataItem.Value, value)) return;
 
 			int indexOfItem = IndexOf(existingDataItem);
-			existingDataItem!.Value = value;
+			existingDataItem.Value = value;
 			OnCollectionChanged(
 				new NotifyCollectionChangedEventArgs(
 					NotifyCollectionChangedAction.Replace,
