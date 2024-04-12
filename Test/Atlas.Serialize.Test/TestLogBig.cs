@@ -44,7 +44,7 @@ public class TestLogBig
 
 			foreach (Tag tag in Tags)
 			{
-				line += tag.ToString() + " ";
+				line += tag + " ";
 			}
 			return line;
 		}
@@ -53,8 +53,6 @@ public class TestLogBig
 
 	[InnerValue]
 	public ItemCollection<TestLogBig>? Items; // change to LRU for performance? No Binding?
-
-	public TestLogBig() { }
 
 	// Todo: use caller instead
 	public void Child(string name)

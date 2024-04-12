@@ -859,13 +859,12 @@ public class TabView : Grid, IDisposable
 		if (selectedRow != null)
 			obj = selectedRow.Object!;
 
-		if (oldChildControls.ContainsKey(obj))
+		if (oldChildControls.TryGetValue(obj, out var oldControl))
 		{
 			// Reuse existing control
-			Control control = oldChildControls[obj];
-			if (newChildControls.TryAdd(obj, control))
+			if (newChildControls.TryAdd(obj, oldControl))
 			{
-				orderedChildControls.Add(control);
+				orderedChildControls.Add(oldControl);
 			}
 			else
 			{
@@ -1089,7 +1088,7 @@ public class TabView : Grid, IDisposable
 	}
 
 	#region IDisposable Support
-	private bool _disposedValue = false; // To detect redundant calls
+	private bool _disposedValue; // To detect redundant calls
 
 	protected virtual void Dispose(bool disposing)
 	{

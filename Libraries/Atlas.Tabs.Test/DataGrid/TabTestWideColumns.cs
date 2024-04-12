@@ -35,7 +35,7 @@ public class TabTestWideColumns : ITab
 
 	public class TestWideItem
 	{
-		public int SmallNumber { get; set; } = 0;
+		public int SmallNumber { get; set; } = 123;
 		public long BigNumber { get; set; } = 1234567890123456789;
 
 		public string LongText0 { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";

@@ -84,7 +84,7 @@ public class ListMethod : ListMember
 
 		var result = Task.Run(() => MethodInfo.Invoke(Object, parameters)).GetAwaiter().GetResult();
 
-		if (result is Task task)
+		if (result is Task)
 			return (object)((dynamic)result).Result;
 
 		return result;

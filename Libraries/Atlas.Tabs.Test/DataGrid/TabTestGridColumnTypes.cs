@@ -37,7 +37,7 @@ public class TabTestGridColumnTypes : ITab
 
 	public class ManyTypesItem
 	{
-		public int Integer { get; set; } = 0;
+		public int Integer { get; set; } = 123;
 		public long Long { get; set; } = 1234567890123456789;
 		public decimal Decimal { get; set; } = 123456789.0123456789M;
 		public bool Bool { get; set; }

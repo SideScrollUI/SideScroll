@@ -314,12 +314,12 @@ public class TimeRangePeriod : ITags
 			timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.Count, period.Tags));
 		}
 
-		double total = 0;
+		/*double total = 0;
 		foreach (var value in timeRangeValues)
 		{
 			if (!double.IsNaN(value.Value))
 				total += value.Value;
-		}
+		}*/
 
 		if (addGaps)
 			return TimeRangeValue.AddGaps(timeRangeValues, timeWindow.StartTime, timeWindow.EndTime, periodDuration);

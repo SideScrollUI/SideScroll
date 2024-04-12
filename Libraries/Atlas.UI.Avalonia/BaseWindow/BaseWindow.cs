@@ -28,7 +28,7 @@ public class BaseWindow : Window
 
 	public TabViewer TabViewer;
 
-	private bool _loadComplete = false;
+	private bool _loadComplete;
 
 	private Rect? _normalSizeBounds; // used for saving when maximized
 

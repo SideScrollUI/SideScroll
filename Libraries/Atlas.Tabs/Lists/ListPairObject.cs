@@ -4,31 +4,24 @@ using System.ComponentModel;
 namespace Atlas.Tabs;
 
 // implement INotifyPropertyChanged to prevent memory leaks
-public class ListPair : IListPair, IListItem, INotifyPropertyChanged, IMaxDesiredWidth
+public class ListPair(object key, object? value, object? obj = null, int? maxDesiredWidth = null)
+	: IListPair, IListItem, INotifyPropertyChanged, IMaxDesiredWidth
 {
-	public object Key { get; set; }
+	public object Key { get; set; } = key;
 
 	[StyleValue]
-	public object? Value { get; set; }
+	public object? Value { get; set; } = value;
 
 	[HiddenColumn, InnerValue]
-	public object? Object { get; set; }
+	public object? Object { get; set; } = obj ?? value;
 
 	// public bool AutoLoad = true;
 
 	[HiddenColumn]
-	public int? MaxDesiredWidth { get; set; }
+	public int? MaxDesiredWidth { get; set; } = maxDesiredWidth;
 
 #pragma warning disable 414
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public override string ToString() => Key?.ToString() ?? "";
-
-	public ListPair(object key, object? value, object? obj = null, int? maxDesiredWidth = null)
-	{
-		Key = key;
-		Value = value;
-		Object = obj ?? value;
-		MaxDesiredWidth = maxDesiredWidth;
-	}
 }

@@ -59,7 +59,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	public override string? ToString() => ChartSeries.ToString();
 
-	public TabChartLegendItem(TabControlChartLegend<TSeries> legend, ChartSeries<TSeries> chartSeries)
+	protected TabChartLegendItem(TabControlChartLegend<TSeries> legend, ChartSeries<TSeries> chartSeries)
 	{
 		Legend = legend;
 		ChartSeries = chartSeries;

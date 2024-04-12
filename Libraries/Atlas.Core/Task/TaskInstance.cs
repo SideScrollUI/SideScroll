@@ -37,7 +37,7 @@ public class TaskInstance : INotifyPropertyChanged
 	public string Status { get; set; } = "Running";
 	public string? Message { get; set; }
 
-	public long ProgressMax { get; set; } = 0;
+	public long ProgressMax { get; set; }
 
 	public bool Errored { get; set; }
 	public bool Finished { get; set; }
@@ -97,7 +97,7 @@ public class TaskInstance : INotifyPropertyChanged
 				return;
 
 			_percent = value;
-			NotifyPropertyChanged(nameof(Percent));
+			NotifyPropertyChanged();
 		}
 	}
 	private double _percent;
@@ -116,7 +116,7 @@ public class TaskInstance : INotifyPropertyChanged
 				return;
 
 			_progress = Math.Min(value, ProgressMax);
-			NotifyPropertyChanged(nameof(Progress));
+			NotifyPropertyChanged();
 
 			UpdatePercent();
 

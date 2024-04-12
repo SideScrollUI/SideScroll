@@ -215,10 +215,7 @@ public class TabBookmark
 		if (ChildBookmarks == null)
 			return null;
 
-		if (ChildBookmarks.TryGetValue(dataKey, out TabBookmark? childBookmark))
-			return childBookmark;
-
-		return null;
+		return ChildBookmarks.GetValueOrDefault(dataKey);
 	}
 
 	public void Import(Project project)

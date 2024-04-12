@@ -38,7 +38,7 @@ public class TabModel
 	public bool ShowTasks { get; set; } // Will add the Tasks to show logs when an error occurs
 	public bool ShowSearch { get; set; } // Show search filter above DataGrids
 
-	public int MinDesiredWidth { get; set; } = 0;
+	public int MinDesiredWidth { get; set; }
 	public int MaxDesiredWidth { get; set; } = 1500;
 
 	public SearchFilter? SearchFilter { get; set; } // DataGrid filtering will also update this filter

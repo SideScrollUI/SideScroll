@@ -119,7 +119,7 @@ public class LogEntry : INotifyPropertyChanged
 
 			foreach (Tag tag in Tags)
 			{
-				line += tag.ToString() + " ";
+				line += tag + " ";
 			}
 			return line;
 		}

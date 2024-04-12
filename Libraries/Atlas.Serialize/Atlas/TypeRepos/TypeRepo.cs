@@ -57,7 +57,7 @@ public abstract class TypeRepo : IDisposable
 	public int[]? ObjectSizes;
 	public long[]? ObjectOffsets;
 	public object?[] ObjectsLoaded;
-	public int ObjectsLoadedCount = 0;
+	public int ObjectsLoadedCount;
 
 	public BinaryReader? Reader;
 
@@ -79,7 +79,7 @@ public abstract class TypeRepo : IDisposable
 
 	public override string ToString() => TypeSchema.Name;
 
-	public TypeRepo(Serializer serializer, TypeSchema typeSchema)
+	protected TypeRepo(Serializer serializer, TypeSchema typeSchema)
 	{
 		Serializer = serializer;
 		TypeSchema = typeSchema;

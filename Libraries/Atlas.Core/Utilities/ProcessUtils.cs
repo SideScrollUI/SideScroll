@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 
 namespace Atlas.Core.Utilities;
 
+public record DotnetRuntimeInfo(string Name, Version Version, string Path);
+
 public static class ProcessUtils
 {
 	public static string OSPlatformName => GetOSPlatform().ToString().CamelCased();
@@ -100,32 +102,65 @@ public static class ProcessUtils
 		}
 	}
 
+	public static string GetDotnetFileName()
+	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+		{
+			return "/usr/local/share/dotnet/dotnet";
+		}
+		else if (Environment.OSVersion.Platform == PlatformID.Unix)
+		{
+			return "dotnet";
+		}
+		else
+		{
+			return "dotnet.exe";
+		}
+	}
+
 	public static Process StartDotnetProcess(string arguments)
 	{
 		var processStartInfo = new ProcessStartInfo
 		{
+			FileName = GetDotnetFileName(),
 			Arguments = arguments,
 			WorkingDirectory = Directory.GetCurrentDirectory(),
 		};
 
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+		// Windows options
+		if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX) &&
+			Environment.OSVersion.Platform != PlatformID.Unix)
 		{
-			processStartInfo.FileName = "/usr/local/share/dotnet/dotnet";
-			// Required for Mac .apps (doesn't work)
-			// processStartInfo.Environment.Add("PATH", Environment.GetEnvironmentVariable("PATH"));
-		}
-		else if (Environment.OSVersion.Platform == PlatformID.Unix)
-		{
-			processStartInfo.FileName = "dotnet";
-		}
-		else
-		{
-			processStartInfo.FileName = "dotnet.exe";
 			processStartInfo.CreateNoWindow = true;
 			//processStartInfo.UseShellExecute = true, // doesn't work on mac yet, last checked for dotnet 3.1
 		}
 
 		Process process = Process.Start(processStartInfo)!;
 		return process;
+	}
+
+	public static List<DotnetRuntimeInfo> GetDotnetRuntimes()
+	{
+		var processStartInfo = new ProcessStartInfo
+		{
+			FileName = GetDotnetFileName(),
+			Arguments = "--list-runtimes",
+			UseShellExecute = false,
+			RedirectStandardOutput = true,
+			CreateNoWindow = true,
+		};
+
+		List<DotnetRuntimeInfo> runtimes = new();
+		Process process = Process.Start(processStartInfo)!;
+		while (!process.StandardOutput.EndOfStream)
+		{
+			string? line = process.StandardOutput.ReadLine();
+			if (line == null) continue;
+
+			string[] parts = line.Split(' ', 3);
+			var runtime = new DotnetRuntimeInfo(parts[0], Version.Parse(parts[1]), parts[2]);
+			runtimes.Add(runtime);
+		}
+		return runtimes;
 	}
 }

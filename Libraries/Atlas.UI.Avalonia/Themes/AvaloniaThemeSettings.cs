@@ -71,7 +71,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 
 	public void Update(AvaloniaThemeSettings newSettings)
 	{
-		var newProperties = newSettings.GetProperties().GetEnumerator();
+		using var newProperties = newSettings.GetProperties().GetEnumerator();
 		foreach (ListProperty listProperty in GetProperties())
 		{
 			object? existingValue = listProperty.Value;
@@ -116,8 +116,6 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 
 	public bool HasNullValue()
 	{
-		Application.Current!.RequestedThemeVariant = GetVariant();
-
 		return GetProperties()
 			.Any(property => property.GetCustomAttribute<ResourceKeyAttribute>() != null && property.Value == null);
 	}

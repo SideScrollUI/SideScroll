@@ -25,7 +25,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 
 	public override string? ToString() => ChartView.ToString();
 
-	public TabControlChartLegend(TabControlChart<TSeries> tabControlChart)
+	protected TabControlChartLegend(TabControlChart<TSeries> tabControlChart)
 	{
 		TabControlChart = tabControlChart;
 
@@ -78,7 +78,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 		return seriesType.ToString();
 	}
 
-	abstract public TabChartLegendItem<TSeries> AddSeries(ChartSeries<TSeries> chartSeries);
+	protected abstract TabChartLegendItem<TSeries> AddSeries(ChartSeries<TSeries> chartSeries);
 
 	// Show items in order of count, retaining original order for unused values
 	private void UpdatePositions()

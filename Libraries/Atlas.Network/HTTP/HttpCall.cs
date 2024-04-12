@@ -11,7 +11,7 @@ public class HttpCall(Call call)
 
 	public Call Call = call;
 
-	public async virtual Task<string?> GetStringAsync(string uri, string? accept = null)
+	public virtual async Task<string?> GetStringAsync(string uri, string? accept = null)
 	{
 		byte[] bytes = await GetResponseAsync(uri, accept);
 		if (bytes != null)
@@ -19,7 +19,7 @@ public class HttpCall(Call call)
 		return null;
 	}
 
-	public async virtual Task<byte[]> GetBytesAsync(string uri)
+	public virtual async Task<byte[]> GetBytesAsync(string uri)
 	{
 		return await GetResponseAsync(uri);
 	}
@@ -42,10 +42,10 @@ public class HttpCall(Call call)
 			{
 				using HttpResponseMessage response = await client.SendAsync(request);
 
-				Stream dataStream = response.Content.ReadAsStream();
+				Stream dataStream = await response.Content.ReadAsStreamAsync();
 
 				MemoryStream memoryStream = new();
-				dataStream.CopyTo(memoryStream);
+				await dataStream.CopyToAsync(memoryStream);
 				byte[] data = memoryStream.ToArray();
 				dataStream.Close();
 
@@ -61,7 +61,7 @@ public class HttpCall(Call call)
 
 				if (exception.Response != null)
 				{
-					string response = new StreamReader(exception.Response.GetResponseStream()).ReadToEnd();
+					string response = await new StreamReader(exception.Response.GetResponseStream()).ReadToEndAsync();
 					Call.Log.AddError(response);
 				}
 			}

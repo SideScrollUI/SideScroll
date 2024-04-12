@@ -9,8 +9,6 @@ public class SerializerMemoryAtlas : SerializerMemory
 
 	private TypeRepoString? _typeRepoString; // Reuse string instances to reduce memory use when deep cloning
 
-	public SerializerMemoryAtlas() { }
-
 	private new Serializer Create()
 	{
 		return new Serializer
@@ -59,10 +57,10 @@ public class SerializerMemoryAtlas : SerializerMemory
 	}
 
 	//public static T Clone<T>(Call call, T obj)
-	protected override T? DeepCloneInternal<T>(Call call, T obj) where T : class
+	protected override T DeepCloneInternal<T>(Call call, T obj) where T : class
 	{
 		Save(call, obj);
-		T? copy = Load<T>(call);
+		T copy = Load<T>(call);
 		return copy;
 	}
 

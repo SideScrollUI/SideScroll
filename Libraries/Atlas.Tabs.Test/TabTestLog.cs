@@ -9,7 +9,7 @@ public class TabTestLog : ITab
 	public class Instance : TabInstance
 	{
 		private Call? _sampleCall;
-		private int _counter = 0;
+		private int _counter;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -36,7 +36,7 @@ public class TabTestLog : ITab
 				new TaskAction("Add 10,000 Entries", () => AddEntries(10000)),
 				new TaskDelegate("Reset", Reset),
 				// Tests different threading contexts
-				new TaskAction("System.Timer: Log 1 Entry / second", () => StartSystemTimer()),
+				new TaskAction("System.Timer: Log 1 Entry / second", StartSystemTimer),
 				//new TaskAction("Threading.Timer: Log 1 Entry / second", () => StartThreadTimer()),
 				new TaskDelegate("Task Delegate Thread:  Log 1 Entry / second", SubTaskInstances, true),
 			};

@@ -55,7 +55,7 @@ public abstract class TaskCreator : INotifyPropertyChanged
 		{
 			taskInstance.Task = new Task(action);
 			//currentTask.CreationOptions = TaskCreationOptions.
-			taskInstance.Task.ContinueWith(task => taskInstance.SetFinished());
+			taskInstance.Task.ContinueWith(_ => taskInstance.SetFinished());
 			taskInstance.Task.Start();
 		}
 		else

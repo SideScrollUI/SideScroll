@@ -58,7 +58,7 @@ public class TabTestGridUpdate : ITab
 
 	public class TestItem(SynchronizationContext context) : INotifyPropertyChanged
 	{
-		public int SmallNumber { get; set; } = 0;
+		public int SmallNumber { get; set; } = 123;
 		public long BigNumber { get; set; } = 1234567890123456789;
 
 		protected SynchronizationContext Context = context;

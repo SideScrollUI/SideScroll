@@ -104,12 +104,12 @@ public interface IDataItem
 	object Object { get; }
 }
 
-public class DataItem<T> : IDataItem
+public class DataItem<T>(string key, T value, string? path = null) : IDataItem
 {
-	public string Key { get; set; }
-	public T Value { get; set; }
+	public string Key { get; set; } = key;
+	public T Value { get; set; } = value;
 	public object Object => Value!;
-	public string? Path { get; set; }
+	public string? Path { get; set; } = path;
 
 	public FileInfo? FileInfo => _fileInfo ??= File.Exists(Path) ? new FileInfo(Path) : null;
 	private FileInfo? _fileInfo;
@@ -117,11 +117,4 @@ public class DataItem<T> : IDataItem
 	public DateTime? ModifiedUtc => FileInfo?.LastWriteTimeUtc;
 
 	public override string ToString() => Key;
-
-	public DataItem(string key, T value, string? path = null)
-	{
-		Key = key;
-		Value = value;
-		Path = path;
-	}
 }

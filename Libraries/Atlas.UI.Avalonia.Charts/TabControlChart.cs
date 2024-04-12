@@ -16,9 +16,9 @@ namespace Atlas.UI.Avalonia.Charts;
 
 public class ChartSeries<TSeries>(ListSeries listSeries, TSeries lineSeries, Color color)
 {
-	public ListSeries ListSeries { get; set; } = listSeries;
-	public TSeries LineSeries { get; set; } = lineSeries;
-	public Color Color { get; set; } = color;
+	public ListSeries ListSeries => listSeries;
+	public TSeries LineSeries => lineSeries;
+	public Color Color => color;
 
 	public bool IsSelected { get; set; } = true; // Visible = Selected
 
@@ -68,8 +68,8 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 	public static Color TextColor = Colors.LightGray;
 
 	private static readonly System.Drawing.Color NowColor = System.Drawing.Color.Green;
-	public static Color[] DefaultColors { get; set; } = new Color[]
-	{
+	public static Color[] DefaultColors { get; set; } =
+	[
 		Colors.LawnGreen,
 		Colors.Fuchsia,
 		Colors.DodgerBlue,
@@ -80,7 +80,7 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 		Colors.Orange,
 		Colors.Salmon,
 		Colors.MediumSpringGreen,
-	};
+	];
 	public static Color GetColor(int index) => DefaultColors[index % DefaultColors.Length];
 
 	protected static readonly WeakEventSource<MouseCursorMovedEventArgs> _mouseCursorChangedEventSource = new();
@@ -128,11 +128,11 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 	public bool UseDateTimeAxis => (XAxisPropertyInfo?.PropertyType == typeof(DateTime)) ||
 									(ChartView.TimeWindow != null);
 
-	public List<ChartAnnotation> Annotations { get; set; } = new();
+	public List<ChartAnnotation> Annotations { get; set; } = [];
 
 	public override string? ToString() => ChartView.ToString();
 
-	public TabControlChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false)
+	protected TabControlChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false)
 	{
 		TabInstance = tabInstance;
 		ChartView = chartView;

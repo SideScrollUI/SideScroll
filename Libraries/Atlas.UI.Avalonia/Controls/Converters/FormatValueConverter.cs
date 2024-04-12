@@ -38,7 +38,7 @@ public class FormatValueConverter : IValueConverter
 
 	public object? ChangeType(object? value, Type targetType, int maxLength, bool formatted)
 	{
-		if (value == null)
+		if (value == null || value is DBNull)
 			return null;
 
 		if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
@@ -73,21 +73,31 @@ public class FormatValueConverter : IValueConverter
 	public static string? ObjectToString(object value, int maxLength, bool formatted)
 	{
 		if (value is DateTime dateTime)
+		{
 			return dateTime.ToUniversalTime().ToString(StringFormat);
+		}
 
 		if (value is DateTimeOffset dateTimeOffset)
+		{
 			return dateTimeOffset.UtcDateTime.ToString(StringFormat);
+		}
 
 		if (value is TimeSpan timeSpan)
 		{
 			if (formatted)
+			{
 				return timeSpan.FormattedDecimal();
+			}
 			else
+			{
 				return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).FormattedShort();
+			}
 		}
 
 		if (value is double d && formatted)
+		{
 			return d.FormattedDecimal();
+		}
 
 		//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above
 

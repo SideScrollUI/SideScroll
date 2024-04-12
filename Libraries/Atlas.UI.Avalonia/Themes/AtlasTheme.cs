@@ -26,6 +26,8 @@ public static class AtlasTheme
 	public static SolidColorBrush ToolbarTextForeground => GetBrush("ToolbarTextForegroundBrush");
 	public static SolidColorBrush ToolbarTextCaret => GetBrush("ToolbarTextCaretBrush");
 
+	public static SolidColorBrush ToolTipForeground => GetBrush("ToolTipForeground");
+
 	// Icon
 	public static SolidColorBrush IconForeground => GetBrush("IconForegroundBrush");
 	public static SolidColorBrush IconForegroundHighlight => GetBrush("IconForegroundHighlightBrush");

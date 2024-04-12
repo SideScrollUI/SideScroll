@@ -39,7 +39,7 @@ public class TabTestGridColumnCount : ITab
 
 	public class TestItem
 	{
-		public int Index { get; set; } = 0;
+		public int Index { get; set; }
 
 		public int Num0 { get; set; } = 0;
 		public int Num1 { get; set; } = 1;

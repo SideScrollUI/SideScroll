@@ -60,7 +60,7 @@ public class TabTestChartProperties : ITab
 		private void StartTask(Call call)
 		{
 			CancellationToken token = call.TaskInstance!.TokenSource.Token;
-			for (int i = 0; !token.IsCancellationRequested; i++)
+			for (int i = 0; i < 1000 && !token.IsCancellationRequested; i++)
 			{
 				Invoke(AddSampleCallback, call);
 				Thread.Sleep(1000);

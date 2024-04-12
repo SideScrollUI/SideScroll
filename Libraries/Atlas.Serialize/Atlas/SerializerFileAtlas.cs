@@ -102,7 +102,7 @@ public class SerializerFileAtlas : SerializerFile
 		return serializer;
 	}
 
-	public T? LoadOrCreate<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
+	public T LoadOrCreate<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
 	{
 		call ??= new Call();
 

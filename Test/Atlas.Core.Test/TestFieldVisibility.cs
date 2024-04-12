@@ -16,10 +16,10 @@ public class TestFieldVisibility : TestBase
 
 	private FieldInfo GetFieldInfo(object obj, string fieldName)
 	{
-		return obj.GetType()
+		return obj
+			.GetType()
 			.GetFields()
-			.Where(p => p.Name == fieldName)
-			.Single();
+			.Single(p => p.Name == fieldName);
 	}
 
 	private ListField GetListField(object obj, string fieldName)

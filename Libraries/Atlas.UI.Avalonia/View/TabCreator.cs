@@ -42,7 +42,7 @@ public static class TabCreator
 		TabBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
 		if (parentTabInstance.TabBookmark is TabBookmark parentTabBookmark && parentTabBookmark.ChildBookmarks != null)
 		{
-			string dataKey = new SelectedRow(obj).ToString() ?? label!;
+			string dataKey = new SelectedRow(obj).ToString() ?? label;
 			if (parentTabBookmark.ChildBookmarks.TryGetValue(dataKey, out tabBookmark))
 			{
 				// FindMatches only

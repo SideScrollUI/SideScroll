@@ -251,14 +251,11 @@ public class TypeRepoObject : TypeRepo
 
 			propertySchema.PropertyTypeSchema = typeRepo.TypeSchema;
 
-			if (typeRepo != null)
-			{
-				var propertyRepo = new PropertyRepo(propertySchema, typeRepo);
-				PropertyRepos.Add(propertyRepo);
+			var propertyRepo = new PropertyRepo(propertySchema, typeRepo);
+			PropertyRepos.Add(propertyRepo);
 
-				if (propertySchema.IsWriteable && !propertySchema.Type!.IsPrimitive)
-					lazyPropertyRepos.Add(propertyRepo);
-			}
+			if (propertySchema.IsWriteable && !propertySchema.Type!.IsPrimitive)
+				lazyPropertyRepos.Add(propertyRepo);
 		}
 
 		// should we add an attribute for this instead?
@@ -414,7 +411,7 @@ public class TypeRepoObject : TypeRepo
 		{
 			if (!propertySchema.ShouldWrite) continue;
 
-			object? propertyValue = propertySchema.PropertyInfo!.GetValue(value)!;
+			object? propertyValue = propertySchema.PropertyInfo!.GetValue(value);
 			Serializer.AddObjectRef(propertyValue);
 		}
 

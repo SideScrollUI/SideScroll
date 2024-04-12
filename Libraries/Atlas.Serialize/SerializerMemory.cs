@@ -93,7 +93,7 @@ public abstract class SerializerMemory
 		ConvertEncodedToStream(base64, Stream);
 	}
 
-	public static string? ToBase64String(Call call, object obj, bool publicOnly = false)
+	public static string ToBase64String(Call call, object obj, bool publicOnly = false)
 	{
 		call ??= new Call();
 

@@ -179,7 +179,7 @@ public class TabInstance : IDisposable
 		SetStartLoad();
 	}
 
-	public TabInstance? CreateChildTab(ITab iTab)
+	public TabInstance CreateChildTab(ITab iTab)
 	{
 		TabInstance tabInstance = iTab.Create();
 
@@ -502,7 +502,7 @@ public class TabInstance : IDisposable
 		if (OnReload != null)
 		{
 			if (this is ITabAsync tabAsync)
-				OnReload.Invoke(this, EventArgs.Empty);
+				OnReload.Invoke(tabAsync, EventArgs.Empty);
 			else
 				UiContext.Send(_ => OnReload(this, EventArgs.Empty), null);
 		}

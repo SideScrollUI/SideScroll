@@ -97,7 +97,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			XAxes = new List<Axis> { XAxis },
 			YAxes = new List<Axis> { YAxis },
 			TooltipBackgroundPaint = new SolidColorPaint(TooltipBackgroundColor),
-			TooltipTextPaint = new SolidColorPaint(AtlasTheme.TitleForeground.Color.AsSkColor()),
+			TooltipTextPaint = new SolidColorPaint(AtlasTheme.ToolTipForeground.Color.AsSkColor()),
 			TooltipFindingStrategy = TooltipFindingStrategy.CompareAllTakeClosest,
 			Tooltip = new LiveChartTooltip(this),
 			LegendPosition = LegendPosition.Hidden,

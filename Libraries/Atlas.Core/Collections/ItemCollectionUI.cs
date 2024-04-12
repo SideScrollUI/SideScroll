@@ -22,7 +22,7 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	// Enable for thread safety when there's multiple threads acting on this collection
 	// true:  Always post new Events to the context
 	// false: Events can shortcut and run on the current context, bypassing the event queue, which can be faster, but out of order
-	public bool PostOnly { get; set; } = false;
+	public bool PostOnly { get; set; }
 
 	public SynchronizationContext? Context { get; set; } // TabInstance will initialize this, don't want to initialize this early due to default SynchronizationContext not posting messages in order
 

@@ -117,7 +117,7 @@ public class Serializer : IDisposable
 
 	public void LogLoadedTypes(Call call)
 	{
-		List<ObjectsLoaded> loaded = new();
+		List<ObjectsLoaded> loaded = [];
 		foreach (TypeRepo typeRepo in TypeRepos)
 		{
 			ObjectsLoaded typeInfo = new()
@@ -133,6 +133,7 @@ public class Serializer : IDisposable
 	// todo: only add types that are used
 	private void AddObjectMemberTypes(Log log)
 	{
+		// TypeSchemas can grow as members are added, don't use enumerable
 		for (int i = 0; i < TypeSchemas.Count; i++)
 		{
 			TypeSchema typeSchema = TypeSchemas[i];
@@ -143,14 +144,15 @@ public class Serializer : IDisposable
 			{
 				Type type = fieldSchema.NonNullableType!;
 				TypeRepo typeRepo = GetOrCreateRepo(log, type);
-				fieldSchema.FieldTypeSchema = GetOrCreateRepo(log, type).TypeSchema;
+				fieldSchema.FieldTypeSchema = typeRepo.TypeSchema;
 				fieldSchema.TypeIndex = fieldSchema.FieldTypeSchema.TypeIndex;
 			}
 
 			foreach (PropertySchema propertySchema in typeSchema.PropertySchemas)
 			{
 				Type type = propertySchema.NonNullableType!;
-				propertySchema.PropertyTypeSchema = GetOrCreateRepo(log, type).TypeSchema;
+				TypeRepo typeRepo = GetOrCreateRepo(log, type);
+				propertySchema.PropertyTypeSchema = typeRepo.TypeSchema;
 				propertySchema.TypeIndex = propertySchema.PropertyTypeSchema.TypeIndex;
 			}
 		}
@@ -315,9 +317,9 @@ public class Serializer : IDisposable
 	{
 		get
 		{
-			List<TypeRepo> primitives = new();
-			List<TypeRepo> collections = new();
-			List<TypeRepo> others = new();
+			List<TypeRepo> primitives = [];
+			List<TypeRepo> collections = [];
+			List<TypeRepo> others = [];
 
 			foreach (TypeRepo typeRepo in TypeRepos)
 			{
@@ -627,7 +629,7 @@ public class Serializer : IDisposable
 
 	public void LogClonedTypes(Log log)
 	{
-		List<ObjectsLoaded> loaded = new();
+		List<ObjectsLoaded> loaded = [];
 		foreach (TypeRepo typeRepo in TypeRepos)
 		{
 			ObjectsLoaded typeInfo = new()
@@ -656,7 +658,6 @@ public class Serializer : IDisposable
 		foreach (TypeRepo typeRepo in TypeRepos)
 			typeRepo.Dispose();
 
-		if (Reader != null)
-			Reader.Dispose();
+		Reader?.Dispose();
 	}
 }

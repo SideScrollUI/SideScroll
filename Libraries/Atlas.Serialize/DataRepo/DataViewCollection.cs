@@ -136,9 +136,8 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		DataRepoView.Delete(call, dataItem.Key);
 		DataRepoSecondary?.Delete(call, dataItem.Key);
 
-		if (_valueLookup.TryGetValue(dataItem, out TViewType? existing))
+		if (_valueLookup.Remove(dataItem, out TViewType? existing))
 		{
-			_valueLookup.Remove(dataItem);
 			_dataItemLookup.Remove(existing);
 			Items.Remove(existing);
 		}

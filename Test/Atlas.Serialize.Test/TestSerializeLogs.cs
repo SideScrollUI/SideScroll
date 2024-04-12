@@ -188,8 +188,6 @@ public class TestSerializeLogs : TestSerializeBase
 	{
 		public List<LogEntryTest2> Items = [];
 
-		public LogTest2() { }
-
 		public void Add(params Tag[] tags)
 		{
 			var logEntry = new LogEntryTest2(tags);

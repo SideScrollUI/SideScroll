@@ -166,11 +166,11 @@ public abstract class NodeView : IHasLinks
 
 	public override string ToString() => Name;
 
-	public NodeView(string path)
+	protected NodeView(string path)
 		: this(path, null)
 	{ }
 
-	public NodeView(string path, DataRepoView<NodeView>? dataRepoNodes = null)
+	protected NodeView(string path, DataRepoView<NodeView>? dataRepoNodes = null)
 	{
 		Path = path;
 		DataRepo = dataRepoNodes;

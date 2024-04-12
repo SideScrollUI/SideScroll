@@ -213,13 +213,7 @@ public class ToolbarTextBlock : TextBlock
 	}
 }
 
-public class ToolbarHeaderTextBlock : ToolbarTextBlock
-{
-	public ToolbarHeaderTextBlock(string text = "")
-		: base(text)
-	{
-	}
-}
+public class ToolbarHeaderTextBlock(string text = "") : ToolbarTextBlock(text);
 
 public class ToolbarRadioButton : RadioButton
 {
@@ -248,7 +242,7 @@ public class RelayCommand : ICommand
 
 	public event EventHandler? CanExecuteChanged;
 
-	private bool? _prevCanExecute = null;
+	private bool? _prevCanExecute;
 	public bool CanExecute(object? parameter)
 	{
 		var ce = CanExecuteFunc(parameter);
