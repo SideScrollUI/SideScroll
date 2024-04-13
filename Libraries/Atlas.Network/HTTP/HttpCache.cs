@@ -37,7 +37,7 @@ public class HttpCache : IDisposable
 	public string BasePath { get; set; }
 	public long Size => _dataStream.Length;
 
-	private readonly Dictionary<string, Entry> _cache = new();
+	private readonly Dictionary<string, Entry> _cache = [];
 
 	private readonly string _indexPath;
 	private readonly string _dataPath;
@@ -105,26 +105,16 @@ public class HttpCache : IDisposable
 
 	public List<Entry> Entries => _cache.Values.ToList();
 
-	public List<LoadableEntry> LoadableEntries
-	{
-		get
-		{
-			var entries = new List<LoadableEntry>();
-			foreach (Entry entry in _cache.Values)
+	public List<LoadableEntry> LoadableEntries =>
+		_cache.Values.Select(entry => new LoadableEntry
 			{
-				var loadableEntry = new LoadableEntry
-				{
-					Uri = entry.Uri,
-					Size = entry.Size,
-					Offset = entry.Offset,
-					Downloaded = entry.Downloaded,
-					Cache = this
-				};
-				entries.Add(loadableEntry);
-			}
-			return entries;
-		}
-	}
+				Uri = entry.Uri,
+				Size = entry.Size,
+				Offset = entry.Offset,
+				Downloaded = entry.Downloaded,
+				Cache = this
+			})
+			.ToList();
 
 	public void AddEntry(string uri, byte[] bytes)
 	{

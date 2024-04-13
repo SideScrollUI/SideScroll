@@ -149,7 +149,10 @@ public class TabControlAvaloniaEdit : Grid
 
 	public void EnableMonospace()
 	{
-		TextEditor.FontFamily = AtlasTheme.MonospaceFontFamily;
+		if (AtlasTheme.MonospaceFontFamily is FontFamily fontFamily)
+		{
+			TextEditor.FontFamily = fontFamily;
+		}
 	}
 
 	private void EnableJsonSyntaxHighlighting()

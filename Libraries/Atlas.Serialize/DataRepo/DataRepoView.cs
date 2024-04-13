@@ -9,7 +9,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 {
 	//public DataRepo<T> DataRepo; // Add template version?
 
-	public DataItemCollection<T> Items { get; set; } = new();
+	public DataItemCollection<T> Items { get; set; } = [];
 
 	public DataRepoView(DataRepo dataRepo, string groupId) : base(dataRepo, groupId)
 	{

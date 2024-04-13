@@ -172,8 +172,8 @@ public static class DataGridExtensions
 
 	private static void GetDataGridContents(DataGrid dataGrid, IEnumerable items, out List<ColumnInfo> columns, out List<List<string>> contentRows, int maxValueLength = MaxValueLength)
 	{
-		columns = new List<ColumnInfo>();
-		contentRows = new List<List<string>>();
+		columns = [];
+		contentRows = [];
 		if (dataGrid == null || items == null) return;
 
 		var visibleColumns = new Dictionary<int, DataGridColumn>();

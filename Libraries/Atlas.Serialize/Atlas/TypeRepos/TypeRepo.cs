@@ -53,7 +53,7 @@ public abstract class TypeRepo : IDisposable
 	public readonly Type? Type; // might be null after loading
 	public Type? LoadableType; // some types get overridden lazy load, or get removed [Unserialized]
 	public int TypeIndex; // -1 if null
-	public List<object> Objects = new(); // ordered by index, not filled in when loading
+	public List<object> Objects = []; // ordered by index, not filled in when loading
 	public int[]? ObjectSizes;
 	public long[]? ObjectOffsets;
 	public object?[] ObjectsLoaded;
@@ -62,7 +62,7 @@ public abstract class TypeRepo : IDisposable
 	public BinaryReader? Reader;
 
 	// Saving Only
-	public Dictionary<object, int> IdxObjectToIndex = new(); // for saving only, not filled in for loading
+	public Dictionary<object, int> IdxObjectToIndex = []; // for saving only, not filled in for loading
 
 	// Loading Only
 

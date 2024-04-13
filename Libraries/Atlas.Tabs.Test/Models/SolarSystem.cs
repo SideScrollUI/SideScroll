@@ -8,8 +8,8 @@ namespace Atlas.Tabs.Test.Models;
 public class SolarSystem
 {
 	public string? Star { get; set; }
-	public List<string> Links { get; set; } = new();
-	public List<Planet> Planets { get; set; } = new();
+	public List<string> Links { get; set; } = [];
+	public List<Planet> Planets { get; set; } = [];
 
 	public static SolarSystem Sample => JsonSerializer.Deserialize<SolarSystem>(Samples.Text.Json)!;
 }

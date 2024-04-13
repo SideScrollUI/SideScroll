@@ -6,7 +6,7 @@ public class BookmarkNavigator
 {
 	public int CurrentIndex { get; set; } = -1;
 
-	public List<Bookmark> History { get; set; } = new();
+	public List<Bookmark> History { get; set; } = [];
 
 	public Bookmark? Current
 	{

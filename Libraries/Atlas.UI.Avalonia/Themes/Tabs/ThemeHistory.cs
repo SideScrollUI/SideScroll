@@ -5,7 +5,7 @@ namespace Atlas.UI.Avalonia.Themes.Tabs;
 
 public class ThemeHistory
 {
-	private List<AvaloniaThemeSettings> _items = new();
+	private List<AvaloniaThemeSettings> _items = [];
 	private int _index = -1;
 
 	public bool HasPrevious => _index > 0 && _index <= _items.Count;

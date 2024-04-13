@@ -102,7 +102,6 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 			if (_history.TryGetPrevious(out var previous))
 			{
 				LoadTheme(previous);
-				UpdateTheme();
 			}
 		}
 
@@ -111,15 +110,17 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 			if (_history.TryGetNext(out var next))
 			{
 				LoadTheme(next);
-				UpdateTheme();
 			}
 		}
 
 		private void LoadTheme(AvaloniaThemeSettings newSettings)
 		{
+			// Wait until finished to update
 			_ignoreColorChange = true;
 			ThemeSettings.Update(newSettings);
 			_ignoreColorChange = false;
+
+			UpdateTheme();
 		}
 
 		// Focus is lost when opening the ColorPicker

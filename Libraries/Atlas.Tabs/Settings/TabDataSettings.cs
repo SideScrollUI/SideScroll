@@ -16,9 +16,9 @@ public enum SelectionType
 [PublicData]
 public class TabDataSettings
 {
-	public HashSet<SelectedRow> SelectedRows { get; set; } = new(); // needs to be nullable or we need another initialized value
+	public HashSet<SelectedRow> SelectedRows { get; set; } = []; // needs to be nullable or we need another initialized value
 	public SelectionType SelectionType { get; set; } = SelectionType.None;
-	public List<string> ColumnNameOrder { get; set; } = new(); // Order to show the columns in, users can drag columns around to reorder these
+	public List<string> ColumnNameOrder { get; set; } = []; // Order to show the columns in, users can drag columns around to reorder these
 	public int TotalColumns { get; set; } // unused, use to detect changes?
 
 	public string? SortColumnName { get; set; } // Currently sorted column
@@ -61,7 +61,7 @@ public class TabDataSettings
 		return GetVisibleProperties(elementType);
 	}
 
-	private static readonly Dictionary<Type, List<PropertyInfo>> _visiblePropertiesCache = new();
+	private static readonly Dictionary<Type, List<PropertyInfo>> _visiblePropertiesCache = [];
 
 	public static List<PropertyInfo> GetVisibleProperties(Type type)
 	{

@@ -5,7 +5,7 @@ namespace Atlas.Core;
 
 public class EventLogMessage : EventArgs
 {
-	public List<LogEntry> Entries = new(); // 1st is new log message, last is highest parent log message
+	public List<LogEntry> Entries = []; // 1st is new log message, last is highest parent log message
 }
 
 public class LogSettings

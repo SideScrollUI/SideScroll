@@ -13,8 +13,8 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 	public TabControlChart<TSeries> TabControlChart;
 	public ChartView ChartView => TabControlChart.ChartView;
 
-	public List<TabChartLegendItem<TSeries>> LegendItems = new();
-	protected readonly Dictionary<string, TabChartLegendItem<TSeries>> _idxLegendItems = new();
+	public List<TabChartLegendItem<TSeries>> LegendItems = [];
+	protected readonly Dictionary<string, TabChartLegendItem<TSeries>> _idxLegendItems = [];
 
 	protected readonly ScrollViewer _scrollViewer;
 	protected readonly WrapPanel _wrapPanel;

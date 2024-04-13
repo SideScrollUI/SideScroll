@@ -11,7 +11,7 @@ public class TabControlActions : UserControl
 	public TabInstance TabInstance;
 	public TabModel TabModel;
 
-	private readonly Dictionary<Button, TaskCreator> _taskCreators = new();
+	private readonly Dictionary<Button, TaskCreator> _taskCreators = [];
 
 	public TabControlActions(TabInstance tabInstance, TabModel tabModel)
 	{

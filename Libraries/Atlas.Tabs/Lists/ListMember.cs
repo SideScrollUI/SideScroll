@@ -154,7 +154,7 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 	// If a member specifies [Inline], replace this member with all it's members
 	public static ItemCollection<ListMember> ExpandInlined(List<ListMember> listMembers, bool includeBaseTypes)
 	{
-		ItemCollection<ListMember> newMembers = new();
+		ItemCollection<ListMember> newMembers = [];
 		foreach (ListMember listMember in listMembers)
 		{
 			if (listMember.GetCustomAttribute<InlineAttribute>() != null)

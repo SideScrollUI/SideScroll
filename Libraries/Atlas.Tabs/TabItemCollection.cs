@@ -8,8 +8,8 @@ public class TabItemCollection(IList list, IEnumerable? filtered = null)
 	public IList List = list;
 	public IEnumerable? Filtered = filtered; // CollectionView takes filters into account
 
-	private HashSet<object> _objects = new();
-	private Dictionary<string, object> _keys = new();
+	private HashSet<object> _objects = [];
+	private Dictionary<string, object> _keys = [];
 
 	public override string? ToString() => List.ToString();
 

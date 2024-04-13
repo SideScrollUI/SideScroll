@@ -43,7 +43,7 @@ public class TaskInstance : INotifyPropertyChanged
 	public bool Finished { get; set; }
 
 	public TaskInstance? ParentTask { get; set; }
-	public List<TaskInstance> SubTasks { get; set; } = new();
+	public List<TaskInstance> SubTasks { get; set; } = [];
 
 	private int? _taskCount;
 	public int TaskCount

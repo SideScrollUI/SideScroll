@@ -7,7 +7,7 @@ namespace Atlas.Core;
 public class Log : LogEntry
 {
 	[InnerValue]
-	public ItemCollection<LogEntry> Items { get; set; } = new(); // change to LRU for performance? No Binding?
+	public ItemCollection<LogEntry> Items { get; set; } = []; // change to LRU for performance? No Binding?
 
 	//private readonly string SummaryText;
 

@@ -277,7 +277,7 @@ public class SerializeClass : TestSerializeBase
 
 	public class DictionaryTest
 	{
-		public Dictionary<Parent, Child> Items = new();
+		public Dictionary<Parent, Child> Items = [];
 
 		public DictionaryTest()
 		{

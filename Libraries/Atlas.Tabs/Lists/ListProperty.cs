@@ -152,7 +152,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	// If a member specifies [Inline], replace this member with all it's members
 	public static ItemCollection<ListProperty> ExpandInlined(ItemCollection<ListProperty> listProperties, bool includeBaseTypes)
 	{
-		ItemCollection<ListProperty> newProperties = new();
+		ItemCollection<ListProperty> newProperties = [];
 		foreach (ListProperty listProperty in listProperties)
 		{
 			if (listProperty.GetCustomAttribute<InlineAttribute>() != null)

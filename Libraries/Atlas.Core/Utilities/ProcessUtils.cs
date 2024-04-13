@@ -150,7 +150,7 @@ public static class ProcessUtils
 			CreateNoWindow = true,
 		};
 
-		List<DotnetRuntimeInfo> runtimes = new();
+		List<DotnetRuntimeInfo> runtimes = [];
 		Process process = Process.Start(processStartInfo)!;
 		while (!process.StandardOutput.EndOfStream)
 		{

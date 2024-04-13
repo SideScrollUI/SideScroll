@@ -24,7 +24,7 @@ public class TimeRangeValue : ITags
 	public double Value { get; set; }
 
 	//[Tags]
-	public List<Tag> Tags { get; set; } = new();
+	public List<Tag> Tags { get; set; } = [];
 
 	public string Description => string.Join(", ", Tags);
 

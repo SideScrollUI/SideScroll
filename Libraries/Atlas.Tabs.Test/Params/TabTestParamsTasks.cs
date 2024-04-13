@@ -11,7 +11,7 @@ public class TabTestParamsTasks : ITab
 	{
 		private const string DataKey = "Params";
 
-		private readonly ItemCollectionUI<ParamTestResult> _items = new();
+		private readonly ItemCollectionUI<ParamTestResult> _items = [];
 		private ParamTestItem? _paramTestItem;
 
 		public override void Load(Call call, TabModel model)

@@ -34,5 +34,5 @@ public class ToolButton
 
 public class TabToolbar
 {
-	public List<ToolButton> Buttons { get; set; } = new();
+	public List<ToolButton> Buttons { get; set; } = [];
 }

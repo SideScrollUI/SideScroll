@@ -44,11 +44,11 @@ public class TabModel
 	public SearchFilter? SearchFilter { get; set; } // DataGrid filtering will also update this filter
 
 	public IList? Actions { get; set; }
-	public TaskInstanceCollection Tasks { get; set; } = new();
+	public TaskInstanceCollection Tasks { get; set; } = [];
 
-	public List<IList> ItemList { get; set; } = new();
+	public List<IList> ItemList { get; set; } = [];
 
-	public List<TabObject> Objects { get; set; } = new();
+	public List<TabObject> Objects { get; set; } = [];
 	//public List<ITabControl> CustomTabControls { get; set; } = new(); // should everything be a custom control? tabControls?
 
 	public IList? Items

@@ -233,7 +233,7 @@ public class TestSerializeCollections : TestSerializeBase
 
 	public class TabInstanceConfiguration
 	{
-		public HashSet<SelectedItem> Selected = new();
+		public HashSet<SelectedItem> Selected = [];
 		public int? SplitterDistance;
 		public int NumColumns;
 	}

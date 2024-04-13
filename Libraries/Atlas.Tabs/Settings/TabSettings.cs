@@ -35,11 +35,11 @@ public class TabViewSettings
 
 	public double? SplitterDistance { get; set; }
 
-	public List<TabDataSettings> TabDataSettings { get; set; } = new();
+	public List<TabDataSettings> TabDataSettings { get; set; } = [];
 
-	public List<TabDataSettings> ChartDataSettings { get; set; } = new(); // for the Chart's internal Data List
+	public List<TabDataSettings> ChartDataSettings { get; set; } = []; // for the Chart's internal Data List
 
-	public List<SelectedRow> SelectedRows => TabDataSettings?.SelectMany(d => d.SelectedRows).ToList() ?? new();
+	public List<SelectedRow> SelectedRows => TabDataSettings?.SelectMany(d => d.SelectedRows).ToList() ?? [];
 
 	// Store Skipped bool instead?
 	public SelectionType SelectionType
@@ -64,7 +64,7 @@ public class TabViewSettings
 	// change to string id?
 	public TabDataSettings GetData(int index)
 	{
-		TabDataSettings ??= new();
+		TabDataSettings ??= [];
 
 		// Creates new Settings if necessary
 		while (TabDataSettings.Count <= index)

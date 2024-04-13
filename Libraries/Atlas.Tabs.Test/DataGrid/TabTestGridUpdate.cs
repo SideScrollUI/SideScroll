@@ -41,16 +41,13 @@ public class TabTestGridUpdate : ITab
 
 		private void UpdateCounter(Call call)
 		{
-			while (true)
+			for (int i = 0; i < 10000; i++)
 			{
-				for (int i = 0; i < 10000; i++)
+				Thread.Sleep(10);
+				foreach (TestItem testItem in _items!)
 				{
-					Thread.Sleep(10);
-					foreach (TestItem testItem in _items!)
-					{
-						testItem.BigNumber++;
-						testItem.Update();
-					}
+					testItem.BigNumber++;
+					testItem.Update();
 				}
 			}
 		}

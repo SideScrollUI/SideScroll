@@ -28,7 +28,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 	public readonly bool UseDateTimeAxis;
 
 	public LiveChartLineSeries LineSeries;
-	public List<LiveChartPoint> DataPoints = new();
+	public List<LiveChartPoint> DataPoints = [];
 
 	public override string? ToString() => ListSeries?.ToString();
 
@@ -102,7 +102,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 
 	public string[] GetTooltipLines(ChartPoint point)
 	{
-		List<string> lines = new();
+		List<string> lines = [];
 
 		if (point.Context.DataSource is LiveChartPoint liveChartPoint)
 		{

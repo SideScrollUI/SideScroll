@@ -17,7 +17,7 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	//public event EventHandler<EventArgs> OnDelete; // todo?
 
 	public string? Path;
-	public ItemCollectionUI<TViewType> Items { get; set; } = new();
+	public ItemCollectionUI<TViewType> Items { get; set; } = [];
 
 	public DataRepoView<TDataType> DataRepoView;
 	public DataRepoView<TDataType>? DataRepoSecondary; // Optional: Saves and Deletes goto a 2nd copy
@@ -79,7 +79,7 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		{
 			if (e.OldItems == null || e.NewItems?.Count != e.OldItems.Count) return;
 
-			List<TViewType> viewItems = new();
+			List<TViewType> viewItems = [];
 			int index = 0;
 			foreach (IDataItem oldItem in e.OldItems)
 			{

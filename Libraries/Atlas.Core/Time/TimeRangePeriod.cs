@@ -25,14 +25,14 @@ public class TimeRangePeriod : ITags
 
 	public int Count { get; set; }
 
-	public List<Tag> AllTags { get; set; } = new();
+	public List<Tag> AllTags { get; set; } = [];
 
 	public List<Tag> Tags
 	{
 		get
 		{
 			// Concatenate tag values with the same tag name
-			Dictionary<string, Tag> lookup = new();
+			Dictionary<string, Tag> lookup = [];
 			foreach (Tag tag in AllTags)
 			{
 				if (lookup.TryGetValue(tag.Name!, out Tag? tagBin))

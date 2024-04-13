@@ -159,7 +159,7 @@ public class DataRepo
 			if (item != null)
 				list.Add(item);
 		}*/
-		DataItemCollection<T> entries = new();
+		DataItemCollection<T> entries = [];
 
 		string groupPath = GetGroupPath(typeof(T), groupId);
 		if (Directory.Exists(groupPath))
@@ -185,7 +185,7 @@ public class DataRepo
 		call ??= new Call();
 		groupId ??= DefaultGroupId;
 
-		ItemCollection<Header> headers = new();
+		ItemCollection<Header> headers = [];
 
 		string groupPath = GetGroupPath(type, groupId);
 		if (Directory.Exists(groupPath))

@@ -31,7 +31,7 @@ public class TabTestChartDimensions : ITab
 	{
 		private const int MaxValue = 100;
 
-		private readonly ItemCollection<ChartSample> _samples = new();
+		private readonly ItemCollection<ChartSample> _samples = [];
 		private readonly Random _random = new();
 		private readonly DateTime _baseDateTime = DateTime.Now.Trim(TimeSpan.FromMinutes(1));
 

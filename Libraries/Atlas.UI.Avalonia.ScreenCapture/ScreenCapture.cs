@@ -227,10 +227,8 @@ public class ScreenCapture : Grid
 
 		var bitmap = new RenderTargetBitmap(new PixelSize((int)destRect.Width, (int)destRect.Height), new Vector(96, 96));
 
-		using (var ctx = bitmap.CreateDrawingContext())
-		{
-			ctx.DrawImage(_originalBitmap!, _selectionRect, destRect);
-		};
+		using var ctx = bitmap.CreateDrawingContext();
+		ctx.DrawImage(_originalBitmap!, _selectionRect, destRect);
 		return bitmap;
 	}
 

@@ -21,7 +21,7 @@ public class UserSettings
 
 	//public int MaxLogItems { get; set; } = 100000;
 
-	public static List<string> Themes { get; set; } = new();
+	public static List<string> Themes { get; set; } = [];
 
 	[BindList(nameof(Themes))]
 	public string? Theme { get; set; }

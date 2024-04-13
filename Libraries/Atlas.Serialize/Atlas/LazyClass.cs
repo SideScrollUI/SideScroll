@@ -45,7 +45,7 @@ public class LazyClass
 {
 	public Type OriginalType;
 	public Type NewType;
-	public Dictionary<PropertyInfo, LazyProperty> LazyProperties = new();
+	public Dictionary<PropertyInfo, LazyProperty> LazyProperties = [];
 
 	public LazyClass(Type type, List<TypeRepoObject.PropertyRepo> propertyRepos)
 	{

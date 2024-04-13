@@ -9,7 +9,7 @@ public class TabTestChartProperties : ITab
 
 	public class Instance : TabInstance
 	{
-		private readonly ItemCollection<ChartSample> _samples = new();
+		private readonly ItemCollection<ChartSample> _samples = [];
 		private readonly Random _random = new();
 
 		public class TestItem
@@ -71,7 +71,7 @@ public class TabTestChartProperties : ITab
 		{
 			ChartSample sample = new()
 			{
-				Name = "Name " + i.ToString(),
+				Name = "Name " + i,
 				Alpha = _random.Next(0, 100000),
 				Beta = _random.Next(0, 100000000),
 				Gamma = _random.Next(0, 1000000000),

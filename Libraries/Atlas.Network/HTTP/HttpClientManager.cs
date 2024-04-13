@@ -17,7 +17,7 @@ public static class HttpClientManager
 
 	private static readonly HttpClient _defaultClient = new(_handler);
 
-	private static readonly Dictionary<string, HttpClient> _clients = new();
+	private static readonly Dictionary<string, HttpClient> _clients = [];
 
 	public static HttpClient GetClient(HttpClientConfig config)
 	{

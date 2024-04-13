@@ -11,7 +11,7 @@ public interface IHasLinks
 
 public static class TabUtils
 {
-	public static List<Type> IgnoreHighlightTypes { get; set; } = new();
+	public static List<Type> IgnoreHighlightTypes { get; set; } = [];
 
 	public static bool ObjectHasLinks(object? obj, bool ignoreEmpty = false)
 	{

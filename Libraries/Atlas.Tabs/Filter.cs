@@ -58,7 +58,7 @@ public class Filter
 {
 	public string FilterText { get; set; }
 	public int Depth { get; set; }
-	public List<FilterExpression> FilterExpressions { get; set; } = new();
+	public List<FilterExpression> FilterExpressions { get; set; } = [];
 	public bool IsAnd { get; set; }
 
 	// "ABC" | 123

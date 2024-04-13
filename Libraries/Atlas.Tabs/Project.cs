@@ -21,7 +21,7 @@ public class Project
 
 	public HttpCacheManager Http = new();
 	public BookmarkNavigator Navigator { get; set; } = new();
-	public TaskInstanceCollection Tasks { get; set; } = new();
+	public TaskInstanceCollection Tasks { get; set; } = [];
 
 	private string DataSharedPath => Paths.Combine(UserSettings.ProjectPath, "Shared");
 	private string DataAppPath => Paths.Combine(UserSettings.ProjectPath, "Versions", ProjectSettings.DataVersion.ToString()); // todo: Rename Version to Data next schema change

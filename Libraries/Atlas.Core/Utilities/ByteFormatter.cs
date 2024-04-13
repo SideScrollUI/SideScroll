@@ -3,7 +3,7 @@ namespace Atlas.Core.Utilities;
 public class ByteFormatter : ICustomFormatter
 {
 	static readonly string[] SizeSuffixes =
-		{ "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+		["bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
 	public static string Format(long value, int decimalPlaces = 1)
 	{

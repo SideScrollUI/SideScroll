@@ -184,7 +184,7 @@ public class TestPropertyVisibility : TestBase
 	[Test]
 	public void TestHideNullEmptyListVisible()
 	{
-		List<HideableClassData> list = new();
+		List<HideableClassData> list = [];
 		TabDataSettings tabDataSettings = new();
 		var propertyColumns = tabDataSettings.GetPropertiesAsColumns(typeof(HideableClassData));
 

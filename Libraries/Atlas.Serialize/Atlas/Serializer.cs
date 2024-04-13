@@ -334,10 +334,7 @@ public class Serializer : IDisposable
 					others.Add(typeRepo);
 			}
 
-			List<TypeRepo> orderedTypes = new();
-			orderedTypes.AddRange(primitives);
-			orderedTypes.AddRange(others);
-			orderedTypes.AddRange(collections);
+			List<TypeRepo> orderedTypes = [.. primitives, .. others, .. collections];
 
 			return orderedTypes;
 		}

@@ -11,7 +11,7 @@ public interface IFileTypeView
 
 public class TabFile(string path) : ITab
 {
-	public static Dictionary<string, Type> ExtensionTypes = new();
+	public static Dictionary<string, Type> ExtensionTypes = [];
 
 	public static void RegisterType<T>(params string[] extensions)
 	{

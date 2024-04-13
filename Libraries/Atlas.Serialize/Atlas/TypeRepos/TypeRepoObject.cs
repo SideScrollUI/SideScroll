@@ -17,8 +17,8 @@ public class TypeRepoObject : TypeRepo
 		}
 	}
 
-	public List<FieldRepo> FieldRepos = new();
-	public List<PropertyRepo> PropertyRepos = new();
+	public List<FieldRepo> FieldRepos = [];
+	public List<PropertyRepo> PropertyRepos = [];
 
 	public LazyClass? LazyClass;
 
@@ -272,7 +272,7 @@ public class TypeRepoObject : TypeRepo
 		}*/
 	}
 
-	private readonly List<object> _constructorRepos = new();
+	private readonly List<object> _constructorRepos = [];
 
 	public void InitializeConstructor(Log log)
 	{
@@ -314,7 +314,7 @@ public class TypeRepoObject : TypeRepo
 		Dictionary<FieldRepo, object?> fieldValues = FieldRepos.ToDictionary(f => f, f => f.Get());
 		Dictionary<PropertyRepo, object?> propertyValues = PropertyRepos.ToDictionary(p => p, p => p.Get());
 
-		List<object?> parameters = new();
+		List<object?> parameters = [];
 		foreach (var repo in _constructorRepos)
 		{
 			if (repo is FieldRepo fieldRepo)

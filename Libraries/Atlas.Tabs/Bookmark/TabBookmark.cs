@@ -24,7 +24,7 @@ public class TabBookmark
 	public SelectedRow? SelectedRow { get; set; } // The parent selection that created this bookmark
 
 	public TabViewSettings ViewSettings = new(); // list selections, doesn't know about children
-	public Dictionary<string, TabBookmark> ChildBookmarks { get; set; } = new(); // doesn't know which tabData to use, maps id to child info
+	public Dictionary<string, TabBookmark> ChildBookmarks { get; set; } = []; // doesn't know which tabData to use, maps id to child info
 	public Dictionary<string, object?>? BookmarkData { get; set; }
 
 	public string Address
@@ -61,7 +61,7 @@ public class TabBookmark
 
 	// Temporary, Only FindMatches() uses, refactor these out?
 	[NonSerialized]
-	public HashSet<object> SelectedObjects = new(); // does this work with multiple TabDatas?
+	public HashSet<object> SelectedObjects = []; // does this work with multiple TabDatas?
 
 	[NonSerialized]
 	public TabModel? TabModel;
