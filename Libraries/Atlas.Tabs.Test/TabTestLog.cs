@@ -14,7 +14,7 @@ public class TabTestLog : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			TaskInstance = new TaskInstance();
-			TaskInstance.Log!.Add("Double Tag Test", new Tag("Double", 0.5));
+			TaskInstance.Log.Add("Double Tag Test", new Tag("Double", 0.5));
 
 			_sampleCall = new Call(Label);
 			_counter = 0;

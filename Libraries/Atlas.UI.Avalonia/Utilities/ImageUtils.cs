@@ -3,7 +3,7 @@ using Avalonia.Media.Imaging;
 
 namespace Atlas.UI.Avalonia.Utilities;
 
-static class ImageUtils
+public static class ImageUtils
 {
 	public const int MaxImageSize = 10_000;
 

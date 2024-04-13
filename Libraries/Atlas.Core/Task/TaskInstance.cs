@@ -23,7 +23,7 @@ public class TaskInstance : INotifyPropertyChanged
 	public Call Call { get; set; } = new();
 
 	[InnerValue, HiddenColumn]
-	public Log? Log => Call.Log;
+	public Log Log => Call.Log;
 
 	[HiddenColumn]
 	public bool ShowTask { get; set; }
@@ -237,7 +237,7 @@ public class TaskInstance : INotifyPropertyChanged
 			else
 			{
 				Status = TaskStatus.ToString();
-				Message = Log!.Text; // todo: First log entry with highest log level?
+				Message = Log.Text; // todo: First log entry with highest log level?
 			}
 		}
 

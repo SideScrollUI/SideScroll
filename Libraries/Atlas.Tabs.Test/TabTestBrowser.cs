@@ -24,7 +24,7 @@ public class TabTestBrowser : ITab
 
 		private void OpenBrowser(Call call)
 		{
-			ProcessUtils.OpenBrowser("http://wikipedia.org");
+			ProcessUtils.OpenBrowser("https://wikipedia.org");
 		}
 	}
 }

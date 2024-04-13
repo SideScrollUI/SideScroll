@@ -105,7 +105,7 @@ public class ListSeries
 		YPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();
 	}
 
-	private double GetObjectValue(object obj)
+	private static double GetObjectValue(object obj)
 	{
 		double value = Convert.ToDouble(obj);
 		if (double.IsNaN(value))

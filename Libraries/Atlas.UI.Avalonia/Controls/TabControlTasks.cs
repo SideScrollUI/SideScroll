@@ -22,7 +22,7 @@ public class TabControlTasks : Grid, IDisposable
 		.Any(task =>
 			task.ShowTask ||
 			task.TaskStatus == TaskStatus.Faulted ||
-			task.Log!.Level >= LogLevel.Error);
+			task.Log.Level >= LogLevel.Error);
 
 	public IList SelectedItems => _tabControlDataGrid.SelectedItems;
 

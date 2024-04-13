@@ -82,8 +82,7 @@ public class TabBookmark
 
 			var newBookmark = new TabBookmark();
 			newBookmark.Select(dataKey);
-			if (tabBookmark != null)
-				tabBookmark.ChildBookmarks.Add(prevKey!, newBookmark);
+			tabBookmark?.ChildBookmarks.Add(prevKey!, newBookmark);
 			tabBookmark = newBookmark;
 			rootBookmark ??= tabBookmark;
 			prevKey = dataKey;

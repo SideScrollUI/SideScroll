@@ -38,7 +38,7 @@ public class TabTestGridColumnOrdering : ITab
 	public class TestChild : TestParent
 	{
 		public override string Overriden { get; set; } = "5";
-		public override string Abstract { get; } = "6";
+		public override string Abstract => "6";
 
 		public override string ToString() => Original;
 	}
