@@ -217,7 +217,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 	private void DataGrid_KeyDown(object? sender, KeyEventArgs e)
 	{
 		// These keys are used for navigating in the TabViewer
-		if (e.Key == Key.Left || e.Key == Key.Right)
+		if (e.Key is Key.Left or Key.Right)
 		{
 			RaiseEvent(e);
 		}
@@ -251,7 +251,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 		var autoSizeColumns = DataGrid.Columns
 			.Where(c => c.IsVisible)
-			.Where(c => c is DataGridTextColumn || c is DataGridCheckBoxColumn)
+			.Where(c => c is DataGridTextColumn or DataGridCheckBoxColumn)
 			.ToList();
 
 		// The star column widths will change as other column widths are changed
@@ -320,8 +320,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		if (List == null) // reloading detaches list temporarily?
 			return;
 
-		if (e.Action == NotifyCollectionChangedAction.Add ||
-			e.Action == NotifyCollectionChangedAction.Replace)
+		if (e.Action is NotifyCollectionChangedAction.Add or NotifyCollectionChangedAction.Replace)
 		{
 			// Group up any new items after the 1st one
 			if (TabModel.AutoSelectNew && SearchControl!.Text.IsNullOrEmpty())
@@ -424,13 +423,12 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		if (depth == 0)
 			return null;
 
-		if (obj is DataGridRow row)
-			return row;
-
-		if (obj is Control control)
-			return GetControlRow(control.Parent, depth - 1);
-
-		return null;
+		return obj switch
+		{
+			DataGridRow row => row,
+			Control control => GetControlRow(control.Parent, depth - 1),
+			_ => null
+		};
 	}
 
 	// Single click deselect
@@ -466,13 +464,12 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 	private static DataGrid? GetOwningDataGrid(StyledElement? control)
 	{
-		if (control == null)
-			return null;
-
-		if (control is DataGrid dataGrid)
-			return dataGrid;
-
-		return GetOwningDataGrid(control.Parent);
+		return control switch
+		{
+			null => null,
+			DataGrid dataGrid => dataGrid,
+			_ => GetOwningDataGrid(control.Parent)
+		};
 	}
 
 	// Single click deselect (cells don't always occupy their entire contents)

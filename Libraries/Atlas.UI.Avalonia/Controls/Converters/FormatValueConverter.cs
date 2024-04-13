@@ -38,7 +38,7 @@ public class FormatValueConverter : IValueConverter
 
 	public object? ChangeType(object? value, Type targetType, int maxLength, bool formatted)
 	{
-		if (value == null || value is DBNull)
+		if (value is null or DBNull)
 			return null;
 
 		if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(Nullable<>))

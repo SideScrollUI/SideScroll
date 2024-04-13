@@ -75,58 +75,31 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 
 		private object? GetSamples()
 		{
-			switch (tab.Object)
+			return tab.Object switch
 			{
-				case TabTheme:
+				TabTheme => new List<ListItem>
 				{
-					return new List<ListItem>
-					{
-						new("Forms", new TabTestParamsDataTabs()),
-						new("Loading", new TabTestLoadAsync()),
-					};
-				}
-				case ToolbarTheme:
+					new("Forms", new TabTestParamsDataTabs()),
+					new("Loading", new TabTestLoadAsync()),
+				},
+				ToolbarTheme => new TabCustomControl(),
+				ToolTipTheme => new TabAvaloniaToolTipSample(),
+				DataGridTheme => new List<ListItem>
 				{
-					return new TabCustomControl();
-				}
-				case ToolTipTheme:
+					new("Collections", new TabTestDataGrid()),
+					new("Objects", new TabTestObjects()),
+				},
+				ButtonTheme => new TabActions(),
+				TextControlTheme => new TabTestParamsDataTabs(),
+				TextEditorTheme => new List<ListItem>
 				{
-					return new TabAvaloniaToolTipSample();
-				}
-				case DataGridTheme:
-				{
-					return new List<ListItem>
-					{
-						new("Collections", new TabTestDataGrid()),
-						new("Objects", new TabTestObjects()),
-					};
-				}
-				case ButtonTheme:
-				{
-					return new TabActions();
-				}
-				case TextControlTheme:
-				{
-					return new TabTestParamsDataTabs();
-				}
-				case TextEditorTheme:
-				{
-					return new List<ListItem>
-					{
-						new("Text", Resources.Samples.Text.Plain),
-						new("Json", Resources.Samples.Text.Json),
-						new("Xml", Resources.Samples.Text.Xml),
-					};
-				}
-				case ChartTheme:
-				{
-					return new TabTestChart();
-				}
-				default:
-				{
-					return null;
-				}
-			}
+					new("Text", Resources.Samples.Text.Plain),
+					new("Json", Resources.Samples.Text.Json),
+					new("Xml", Resources.Samples.Text.Xml),
+				},
+				ChartTheme => new TabTestChart(),
+				_ => null
+			};
 		}
 
 		private void Refresh(Call call)

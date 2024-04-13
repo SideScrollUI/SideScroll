@@ -568,10 +568,11 @@ public class Serializer : IDisposable
 		Log log = new();
 		TypeRepo typeRepo = GetOrCreateRepo(log, type);
 
-		if (typeRepo is TypeRepoPrimitive ||
-			typeRepo is TypeRepoString ||
-			typeRepo is TypeRepoEnum ||
-			typeRepo is TypeRepoType)
+		if (typeRepo is
+		    TypeRepoPrimitive or
+		    Serialize.TypeRepoString or
+		    TypeRepoEnum or
+		    TypeRepoType)
 		{
 			Clones[obj] = obj; // optional
 			return obj;
@@ -583,7 +584,7 @@ public class Serializer : IDisposable
 			return obj;
 		}
 
-		if (typeRepo is TypeRepoArray || typeRepo is TypeRepoArrayBytes)
+		if (typeRepo is TypeRepoArray or TypeRepoArrayBytes)
 		{
 			clone = Array.CreateInstance(type.GetElementType()!, ((Array)obj).Length);
 		}

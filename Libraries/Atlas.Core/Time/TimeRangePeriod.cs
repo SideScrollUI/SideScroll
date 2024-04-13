@@ -147,9 +147,9 @@ public class TimeRangePeriod : ITags
 		return timeRangePeriods;
 	}
 
-	public static double TotalAverage(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+	public static double TotalAverage(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
-		var periods = Periods(dataPoints, timeWindow, periodDuration);
+		var periods = Periods(timeRangeValues, timeWindow, periodDuration);
 		if (periods == null)
 			return 0;
 
@@ -168,9 +168,9 @@ public class TimeRangePeriod : ITags
 		return totalSum / totalDuration.TotalSeconds;
 	}
 
-	public static double TotalSum(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+	public static double TotalSum(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
-		var periods = Periods(dataPoints, timeWindow, periodDuration);
+		var periods = Periods(timeRangeValues, timeWindow, periodDuration);
 		if (periods == null)
 			return 0;
 
@@ -178,9 +178,9 @@ public class TimeRangePeriod : ITags
 		return total;
 	}
 
-	public static int TotalCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+	public static int TotalCounts(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
-		var periods = Periods(dataPoints, timeWindow, periodDuration);
+		var periods = Periods(timeRangeValues, timeWindow, periodDuration);
 		if (periods == null)
 			return 0;
 
@@ -188,151 +188,98 @@ public class TimeRangePeriod : ITags
 		return total;
 	}
 
-	public static double TotalMinimum(List<TimeRangeValue> dataPoints, TimeWindow timeWindow)
+	public static double TotalMinimum(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow)
 	{
-		double min = 0;
-		foreach (var period in dataPoints)
-		{
-			if (double.IsNaN(period.Value))
-				continue;
-
-			if (period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
-				min = Math.Min(min, period.Value);
-		}
+		double min = timeRangeValues
+			.Where(point => !double.IsNaN(point.Value))
+			.Where(point => point.EndTime > timeWindow.StartTime && point.StartTime < timeWindow.EndTime)
+			.Min(point => point.Value);
 		return min;
 	}
 
-	public static double TotalMaximum(List<TimeRangeValue> dataPoints, TimeWindow timeWindow)
+	public static double TotalMaximum(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow)
 	{
-		double max = 0;
-		foreach (var period in dataPoints)
-		{
-			if (double.IsNaN(period.Value))
-				continue;
-
-			if (period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
-				max = Math.Max(max, period.Value);
-		}
+		double max = timeRangeValues
+			.Where(point => !double.IsNaN(point.Value))
+			.Where(point => point.EndTime > timeWindow.StartTime && point.StartTime < timeWindow.EndTime)
+			.Max(point => point.Value);
 		return max;
 	}
 
-	public static List<TimeRangeValue>? PeriodAverages(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+	public static List<TimeRangeValue>? PeriodAverages(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
-		var periods = Periods(dataPoints, timeWindow, periodDuration);
-		if (periods == null)
-			return null;
-
-		var timeRangeValues = new List<TimeRangeValue>();
-		foreach (var period in periods)
-		{
-			if (period.SummedDurations.TotalSeconds == 0.0)
-				continue;
-
-			double average = period.SummedSecondValues / period.SummedDurations.Min(period.Duration).TotalSeconds;
-			timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, average, period.Tags));
-		}
-		return timeRangeValues;
+		var periods = Periods(timeRangeValues, timeWindow, periodDuration);
+		
+		return periods?
+			.Where(period => period.SummedDurations.TotalSeconds > 0.0)
+			.Select(period =>
+			{
+				double average = period.SummedSecondValues / period.SummedDurations.Min(period.Duration).TotalSeconds;
+				return new TimeRangeValue(period.StartTime, period.EndTime, average, period.Tags);
+			})
+			.ToList();
 	}
 
-	public static List<TimeRangeValue>? PeriodSums(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+	public static List<TimeRangeValue>? PeriodSums(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
-		var periods = Periods(dataPoints, timeWindow, periodDuration);
-		if (periods == null)
-			return null;
-
-		var timeRangeValues = new List<TimeRangeValue>();
-		foreach (var period in periods)
-		{
-			if (period.SummedDurations.TotalSeconds == 0.0)
-				continue;
-
-			timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.Sum, period.Tags));
-		}
-		return timeRangeValues;
+		var periods = Periods(timeRangeValues, timeWindow, periodDuration);
+		
+		return periods?
+			.Where(period => period.SummedDurations.TotalSeconds > 0.0)
+			.Select(period => new TimeRangeValue(period.StartTime, period.EndTime, period.Sum, period.Tags))
+			.ToList();
 	}
 
-	public static List<TimeRangeValue>? PeriodMins(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+	public static List<TimeRangeValue>? PeriodMins(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
-		var periods = Periods(dataPoints, timeWindow, periodDuration);
-		if (periods == null)
-			return null;
+		var periods = Periods(timeRangeValues, timeWindow, periodDuration);
 
-		var timeRangeValues = new List<TimeRangeValue>();
-		foreach (var period in periods)
-		{
-			if (period.SummedDurations.TotalSeconds == 0.0)
-				continue;
-
-			timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.MinValue, period.Tags));
-		}
-		return timeRangeValues;
+		return periods?
+			.Where(period => period.SummedDurations.TotalSeconds > 0.0)
+			.Select(period => new TimeRangeValue(period.StartTime, period.EndTime, period.MinValue, period.Tags))
+			.ToList();
 	}
 
-	public static List<TimeRangeValue>? PeriodMaxes(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration)
+	public static List<TimeRangeValue>? PeriodMaxes(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
-		var periods = Periods(dataPoints, timeWindow, periodDuration);
-		if (periods == null)
-			return null;
+		var periods = Periods(timeRangeValues, timeWindow, periodDuration);
 
-		var timeRangeValues = new List<TimeRangeValue>();
-		foreach (var period in periods)
-		{
-			if (period.SummedDurations.TotalSeconds == 0.0)
-				continue;
-
-			timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.MaxValue, period.Tags));
-		}
-		return timeRangeValues;
+		return periods?
+			.Where(period => period.SummedDurations.TotalSeconds > 0.0)
+			.Select(period => new TimeRangeValue(period.StartTime, period.EndTime, period.MaxValue, period.Tags))
+			.ToList();
 	}
 
-	public static List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> dataPoints, DateTime startTime, DateTime endTime, int minPeriods, int maxPeriods)
+	public static List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> timeRangeValues, DateTime startTime, DateTime endTime, int minPeriods, int maxPeriods)
 	{
-		return PeriodCounts(dataPoints, new TimeWindow(startTime, endTime), minPeriods, maxPeriods);
+		return PeriodCounts(timeRangeValues, new TimeWindow(startTime, endTime), minPeriods, maxPeriods);
 	}
 
-	public static List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, int minPeriods, int maxPeriods)
+	public static List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, int minPeriods, int maxPeriods)
 	{
 		double durationSeconds = Math.Ceiling(timeWindow.Duration.TotalSeconds);
 		int numPeriods = Math.Max(minPeriods, Math.Min(maxPeriods, (int)durationSeconds));
 		double periodDuration = Math.Ceiling(durationSeconds / numPeriods);
 
-		return PeriodCounts(dataPoints, timeWindow, TimeSpan.FromSeconds(periodDuration));
+		return PeriodCounts(timeRangeValues, timeWindow, TimeSpan.FromSeconds(periodDuration));
 	}
 
-	public static List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> dataPoints, TimeWindow timeWindow, TimeSpan periodDuration, bool addGaps = false)
+	public static List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration, bool addGaps = false)
 	{
-		var periods = Periods(dataPoints, timeWindow, periodDuration, false);
+		var periods = Periods(timeRangeValues, timeWindow, periodDuration, false);
 		if (periods == null)
 			return null;
 
-		var timeRangeValues = new List<TimeRangeValue>();
-		foreach (var period in periods)
-		{
-			if (addGaps && period.Count == 0)
-				continue;
-
-			timeRangeValues.Add(new TimeRangeValue(period.StartTime, period.EndTime, period.Count, period.Tags));
-		}
-
-		/*double total = 0;
-		foreach (var value in timeRangeValues)
-		{
-			if (!double.IsNaN(value.Value))
-				total += value.Value;
-		}*/
+		// Exclude double.IsNaN?
+		// double.IsNaN(period.Value))
+		List<TimeRangeValue> periodCounts = periods
+			.Where(period => period.SummedDurations.TotalSeconds > 0.0)
+			.Select(period => new TimeRangeValue(period.StartTime, period.EndTime, period.Count, period.Tags))
+			.ToList();
 
 		if (addGaps)
-			return TimeRangeValue.AddGaps(timeRangeValues, timeWindow.StartTime, timeWindow.EndTime, periodDuration);
+			return TimeRangeValue.AddGaps(periodCounts, timeWindow.StartTime, timeWindow.EndTime, periodDuration);
 
-		return timeRangeValues;
+		return periodCounts;
 	}
-
-	/*public List<TimeRangeValue> SumPeriods(List<TimeRangeValue> dataPoints)
-	{
-		double duration = Math.Ceiling(EndTime.Subtract(StartTime).TotalSeconds);
-		int numPeriods = Math.Max(5, Math.Min(200, (int)duration));
-		double periodDuration = Math.Ceiling(duration / numPeriods);
-
-		return SumPeriods(dataPoints, periodDuration);
-	}*/
 }

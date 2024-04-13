@@ -57,7 +57,7 @@ public class TabTestChartDimensions : ITab
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				if (i == 4 || i == 6)
+				if (i is 4 or 6)
 				{
 					AddNullSample(dimension, i);
 				}

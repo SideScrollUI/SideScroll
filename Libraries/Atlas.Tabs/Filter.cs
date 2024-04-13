@@ -136,10 +136,8 @@ public class Filter
 		foreach (PropertyInfo propertyInfo in columnProperties)
 		{
 			object? value = propertyInfo.GetValue(obj);
-			if (value == null)
-				continue;
 
-			string? valueText = value.ToString();
+			string? valueText = value?.ToString();
 			if (valueText == null)
 				continue;
 
