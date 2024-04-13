@@ -111,12 +111,6 @@ public class TestSerializeLogs : TestSerializeBase
 		LogTimer output = _serializer.Load<LogTimer>(Call);
 	}
 
-	private class MultipleArrays
-	{
-		public int[] array1 = [1, 2];
-		//public int[] array2 = [3, 4];
-	}
-
 	[Test, Description("Serialize Log Entry Tags")]
 	public void SerializeLogEntryTags()
 	{
@@ -147,19 +141,6 @@ public class TestSerializeLogs : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		Log output = _serializer.Load<Log>(Call);
-	}
-
-	public class SelectedItem
-	{
-		public string? Label;
-		public bool Pinned;
-	}
-
-	public class TabInstanceConfiguration
-	{
-		public HashSet<SelectedItem> Selected = [];
-		public int? SplitterDistance;
-		public int NumColumns;
 	}
 
 	public class LogEntryUnknown

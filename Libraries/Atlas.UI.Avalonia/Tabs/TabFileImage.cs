@@ -12,7 +12,8 @@ namespace Atlas.UI.Avalonia.Tabs;
 
 public class TabFileImage : ITab, IFileTypeView
 {
-	public static readonly string[] DefaultExtensions = { ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".svg", ".ico" };
+	public static readonly string[] DefaultExtensions = 
+		[".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".svg", ".ico"];
 
 	public string? Path { get; set; }
 

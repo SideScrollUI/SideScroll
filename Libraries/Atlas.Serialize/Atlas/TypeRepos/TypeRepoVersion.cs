@@ -1,6 +1,6 @@
 namespace Atlas.Serialize;
 
-public class TypeRepoVersion : TypeRepo
+public class TypeRepoVersion(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {
 	public class Creator : IRepoCreator
 	{
@@ -10,11 +10,6 @@ public class TypeRepoVersion : TypeRepo
 				return new TypeRepoVersion(serializer, typeSchema);
 			return null;
 		}
-	}
-
-	public TypeRepoVersion(Serializer serializer, TypeSchema typeSchema) :
-		base(serializer, typeSchema)
-	{
 	}
 
 	public static bool CanAssign(Type type)

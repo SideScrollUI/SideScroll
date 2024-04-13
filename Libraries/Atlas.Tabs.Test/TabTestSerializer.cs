@@ -43,7 +43,7 @@ public class TabSerializer : ITab
 			var sampleItems = new List<SampleItem>();
 			for (int i = 0; i < 1000000; i++)
 			{
-				sampleItems.Add(new SampleItem(i, "Item " + i.ToString()));
+				sampleItems.Add(new SampleItem(i, "Item " + i));
 			}
 			Project.DataApp.Save(sampleItems, call);
 			_items!.Add(new ListItem("SerializeOneMillionObjects", sampleItems));

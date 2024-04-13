@@ -87,8 +87,8 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 
 	public static event EventHandler<MouseCursorMovedEventArgs> OnMouseCursorChanged
 	{
-		add { _mouseCursorChangedEventSource.Subscribe(value); }
-		remove { _mouseCursorChangedEventSource.Unsubscribe(value); }
+		add => _mouseCursorChangedEventSource.Subscribe(value);
+		remove => _mouseCursorChangedEventSource.Unsubscribe(value);
 	}
 
 	public event EventHandler<SeriesSelectedEventArgs>? SelectionChanged;

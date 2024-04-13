@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Atlas.Serialize;
 
-public class TypeRepoArray : TypeRepo
+public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {
 	public class Creator : IRepoCreator
 	{
@@ -17,13 +17,7 @@ public class TypeRepoArray : TypeRepo
 
 	private TypeRepo? _listTypeRepo;
 	private int[]? _sizes;
-	private readonly Type _elementType;
-
-	public TypeRepoArray(Serializer serializer, TypeSchema typeSchema) :
-		base(serializer, typeSchema)
-	{
-		_elementType = typeSchema.Type!.GetElementType()!;
-	}
+	private readonly Type _elementType = typeSchema.Type!.GetElementType()!;
 
 	public static bool CanAssign(Type type)
 	{

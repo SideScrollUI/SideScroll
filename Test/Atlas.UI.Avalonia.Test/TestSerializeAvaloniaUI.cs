@@ -26,11 +26,11 @@ public class TestSerializeAvaloniaUI : TestBase
 	[Test]
 	public void SerializeBookmark()
 	{
-		var input = new Bookmark()
+		var input = new Bookmark
 		{
-			TabBookmark = new TabBookmark()
+			TabBookmark = new TabBookmark
 			{
-				ChildBookmarks = new Dictionary<string, TabBookmark>()
+				ChildBookmarks = new Dictionary<string, TabBookmark>
 				{
 					{ "test", new TabBookmark() }
 				}

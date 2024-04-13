@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace Atlas.Serialize;
 
-public class TypeRepoPrimitive : TypeRepo
+public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {
 	public class Creator : IRepoCreator
 	{
@@ -12,11 +12,6 @@ public class TypeRepoPrimitive : TypeRepo
 				return new TypeRepoPrimitive(serializer, typeSchema);
 			return null;
 		}
-	}
-
-	public TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) :
-		base(serializer, typeSchema)
-	{
 	}
 
 	public static bool CanAssign(Type type)

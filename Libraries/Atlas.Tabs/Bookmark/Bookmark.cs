@@ -9,7 +9,7 @@ public enum BookmarkType
 	Full = 1, // Full path from Start
 	Leaf = 2, // Can replace Full if a single leaf is found
 	Tab = 3, // Clicking the Tab Link
-};
+}
 
 [PublicData]
 public class Bookmark
@@ -48,7 +48,7 @@ public class Bookmark
 
 	public string ToBase64String(Call call, bool publicOnly)
 	{
-		return SerializerMemory.ToBase64String(call, this, publicOnly)!;
+		return SerializerMemory.ToBase64String(call, this, publicOnly);
 	}
 
 	public static Bookmark Create(Call call, string encoded, bool publicOnly)

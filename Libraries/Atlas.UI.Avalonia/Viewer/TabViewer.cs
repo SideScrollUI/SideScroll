@@ -131,13 +131,13 @@ public class TabViewer : Grid
 		TabView!.Instance.Reload();
 	}
 
-	private void ShowFlyout(Control control, Flyout flyout, string text)
+	private static void ShowFlyout(Control control, Flyout flyout, string text)
 	{
 		flyout.Content = text;
 		flyout.ShowAt(control);
 	}
 
-	private void PostShowFlyout(Control control, Flyout flyout, string text)
+	private static void PostShowFlyout(Control control, Flyout flyout, string text)
 	{
 		Dispatcher.UIThread.Post(() => ShowFlyout(control, flyout, text));
 	}

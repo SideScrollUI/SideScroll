@@ -111,7 +111,7 @@ public class TypeRepoObject : TypeRepo
 				if (TypeRepo.TypeSchema.IsPrimitive)
 				{
 					// todo: construct temp object and store default instead for speed?
-					dynamic? currentValue = PropertySchema.PropertyInfo!.GetValue(obj)!;
+					dynamic? currentValue = PropertySchema.PropertyInfo!.GetValue(obj);
 					if ((dynamic?)valueObject == currentValue)
 						return;
 				}

@@ -19,8 +19,7 @@ public static class Win32ClipboardUtils
 
 	public static async Task SetBitmapAsync(Bitmap bitmap)
 	{
-		if (bitmap == null)
-			throw new ArgumentNullException(nameof(bitmap));
+		ArgumentNullException.ThrowIfNull(bitmap);
 
 		// Convert from Avalonia Bitmap to System Bitmap
 		using var memoryStream = new MemoryStream(1000000);

@@ -109,8 +109,8 @@ public class TestClone : TestSerializeBase
 	[Test, Description("ArrayTest")]
 	public void ArrayTest()
 	{
-		int[] array1 = Array.Empty<int>();
-		int[] array2 = Array.Empty<int>();
+		int[] array1 = [];
+		int[] array2 = [];
 
 		var idxObjectToIndex = new Dictionary<object, int>(); // for saving, not filled in for loading
 		idxObjectToIndex[array1] = idxObjectToIndex.Count;
@@ -342,7 +342,7 @@ public class TestClone : TestSerializeBase
 	[Test, Description("Clone Array")]
 	public void CloneArray()
 	{
-		int[] input = { 1, 2 };
+		int[] input = [1, 2];
 		input[0] = 5;
 
 		int[] output = _serializer.Clone(Log, input)!;

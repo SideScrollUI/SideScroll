@@ -17,7 +17,7 @@ public class TabTestSlowAsyncItem : ITab
 		}
 
 		// todo: fix, this is being called twice and blocking the UI the 1st time
-		private async Task<object?> SlowItemAsync(Call call)
+		private static async Task<object?> SlowItemAsync(Call call)
 		{
 			await Task.Delay(1000);
 			return "finished";

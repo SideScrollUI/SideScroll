@@ -74,7 +74,7 @@ public class LazyClass
 		return typeBuilder;
 	}
 
-	private void CreateProperty(TypeBuilder typeBuilder)
+	private static void CreateProperty(TypeBuilder typeBuilder)
 	{
 		string propertyName = "prop";
 		Type propertyType = typeof(int);

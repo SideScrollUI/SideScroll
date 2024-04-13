@@ -13,7 +13,7 @@ public class TestTabItemCollection : TestBase
 		Initialize("TabItemCollection");
 	}
 
-	public void TestSelected(IList list, params object[] selectedObjects)
+	private static void TestSelected(IList list, params object[] selectedObjects)
 	{
 		TabItemCollection collection = new(list);
 
@@ -107,13 +107,13 @@ public class TestTabItemCollection : TestBase
 	[Test]
 	public void TestDataValue()
 	{
-		List<DataValueClass> Items =
+		List<DataValueClass> items =
 		[
 			new DataValueClass(1),
 			new DataValueClass(2),
 			new DataValueClass(3),
 		];
 
-		TestSelected(Items, Items[1]);
+		TestSelected(items, items[1]);
 	}
 }

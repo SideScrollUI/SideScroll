@@ -58,13 +58,13 @@ public static class TimeSpanExtensions
 
 		if ((int)timeSpan.TotalMinutes > 0)
 		{
-			sb.Append(timeSpan.Minutes.ToString());
+			sb.Append(timeSpan.Minutes);
 			sb.Append(':');
 			if (timeSpan.Seconds < 10)
 				sb.Append('0');
 		}
 
-		sb.Append(timeSpan.Seconds.ToString());
+		sb.Append(timeSpan.Seconds);
 
 		int millis = timeSpan.Milliseconds;
 		if (millis > 0)

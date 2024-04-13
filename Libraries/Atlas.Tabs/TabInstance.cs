@@ -211,7 +211,7 @@ public class TabInstance : IDisposable
 		UiContext ??= SynchronizationContext.Current ?? new SynchronizationContext();
 	}
 
-	private void ActionCallback(object? state)
+	private static void ActionCallback(object? state)
 	{
 		Action action = (Action)state!;
 		action.Invoke();

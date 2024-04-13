@@ -54,14 +54,11 @@ public class DataGridPropertyCheckBoxColumn : DataGridCheckBoxColumn
 	{
 		Binding binding = Binding as Binding ?? new Binding(PropertyInfo.Name);
 
-		if (_formattedBinding == null)
+		_formattedBinding ??= new Binding
 		{
-			_formattedBinding = new Binding
-			{
-				Path = binding.Path,
-				Mode = BindingMode.TwoWay, // copying a value to the clipboard triggers an infinite loop without this?
-			};
-		}
+			Path = binding.Path,
+			Mode = BindingMode.TwoWay, // copying a value to the clipboard triggers an infinite loop without this?
+		};
 
 		return _formattedBinding;
 	}

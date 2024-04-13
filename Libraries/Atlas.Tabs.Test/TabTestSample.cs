@@ -31,17 +31,9 @@ public class TabSample : ITab
 				new TaskDelegate("Sleep 10s", Sleep, true),
 				new TaskAction("Add 5 Items", () => AddItems(5), false), // Foreground task so we can modify collection
 			};
-
-			model.Notes =
-@"
-This is a sample tab that shows some of the different tab features
-
-Actions
-DataGrids
-";
 		}
 
-		private void Sleep(Call call)
+		private static void Sleep(Call call)
 		{
 			call.TaskInstance!.ProgressMax = 10;
 			for (int i = 0; i < 10; i++)

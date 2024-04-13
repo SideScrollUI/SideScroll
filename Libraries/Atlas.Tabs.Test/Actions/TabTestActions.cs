@@ -46,7 +46,7 @@ Actions add Buttons to the tab. When clicked, it will:
 			StartAsync(StartAsyncLogErrorAsync, call);
 		}
 
-		private async Task StartAsyncLogErrorAsync(Call call)
+		private static async Task StartAsyncLogErrorAsync(Call call)
 		{
 			await Task.Delay(1);
 
@@ -72,7 +72,7 @@ Actions add Buttons to the tab. When clicked, it will:
 			throw new NotImplementedException();
 		}
 
-		private void ParallelTaskProgress(Call call)
+		private static void ParallelTaskProgress(Call call)
 		{
 			var downloads = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 			Parallel.ForEach(downloads, new ParallelOptions { MaxDegreeOfParallelism = 10 }, i =>
@@ -89,7 +89,7 @@ Actions add Buttons to the tab. When clicked, it will:
 			});
 		}
 
-		private async Task SubTaskProgressAsync(Call call)
+		private static async Task SubTaskProgressAsync(Call call)
 		{
 			List<int> ids = [];
 			for (int i = 0; i < 30; i++)
@@ -111,7 +111,7 @@ Actions add Buttons to the tab. When clicked, it will:
 			return id;
 		}
 
-		private async Task MultiLevelRunAsync(Call call)
+		private static async Task MultiLevelRunAsync(Call call)
 		{
 			List<int> ids = [];
 			for (int i = 0; i < 100; i++)
@@ -141,7 +141,7 @@ Actions add Buttons to the tab. When clicked, it will:
 			return id;
 		}
 
-		private async Task SleepAsync(Call call)
+		private static async Task SleepAsync(Call call)
 		{
 			using CallTimer callTimer = call.Timer("long op");
 

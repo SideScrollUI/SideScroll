@@ -31,7 +31,7 @@ public class EditValueConverter : IValueConverter
 		if (value == null)
 			return null;
 
-		if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+		if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(Nullable<>))
 		{
 			targetType = Nullable.GetUnderlyingType(targetType)!;
 		}

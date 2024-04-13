@@ -15,8 +15,8 @@ public static class DataGridExtensions
 
 	public static string ColumnToStringTable(this DataGrid dataGrid, DataGridBoundColumn column)
 	{
-		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
-		if (column == null) throw new ArgumentNullException(nameof(column));
+		ArgumentNullException.ThrowIfNull(dataGrid);
+		ArgumentNullException.ThrowIfNull(column);
 
 		var sb = new StringBuilder();
 		foreach (var item in dataGrid.ItemsSource)
@@ -29,8 +29,8 @@ public static class DataGridExtensions
 
 	public static string SelectedColumnToString(this DataGrid dataGrid, DataGridBoundColumn column)
 	{
-		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
-		if (column == null) throw new ArgumentNullException(nameof(column));
+		ArgumentNullException.ThrowIfNull(dataGrid);
+		ArgumentNullException.ThrowIfNull(column);
 
 		var sb = new StringBuilder();
 		foreach (var item in dataGrid.SelectedItems)
@@ -62,7 +62,7 @@ public static class DataGridExtensions
 
 	public static string? RowToString(this DataGrid dataGrid, object? obj)
 	{
-		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
+		ArgumentNullException.ThrowIfNull(dataGrid);
 
 		if (obj == null)
 			return null;
@@ -94,7 +94,7 @@ public static class DataGridExtensions
 
 	public static string SelectedToString(this DataGrid dataGrid)
 	{
-		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
+		ArgumentNullException.ThrowIfNull(dataGrid);
 
 		GetDataGridContents(dataGrid, dataGrid.SelectedItems,
 			out List<ColumnInfo> columns,
@@ -105,7 +105,7 @@ public static class DataGridExtensions
 
 	public static string SelectedToCsv(this DataGrid dataGrid)
 	{
-		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
+		ArgumentNullException.ThrowIfNull(dataGrid);
 
 		GetDataGridContents(dataGrid, dataGrid.SelectedItems,
 			out List<ColumnInfo> columns,
@@ -116,7 +116,7 @@ public static class DataGridExtensions
 
 	public static string ToStringTable(this DataGrid dataGrid)
 	{
-		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
+		ArgumentNullException.ThrowIfNull(dataGrid);
 
 		GetDataGridContents(dataGrid, dataGrid.ItemsSource,
 			out List<ColumnInfo> columns,
@@ -127,7 +127,7 @@ public static class DataGridExtensions
 
 	public static string ToCsv(this DataGrid dataGrid)
 	{
-		if (dataGrid == null) throw new ArgumentNullException(nameof(dataGrid));
+		ArgumentNullException.ThrowIfNull(dataGrid);
 
 		GetDataGridContents(dataGrid, dataGrid.ItemsSource,
 			out List<ColumnInfo> columns,

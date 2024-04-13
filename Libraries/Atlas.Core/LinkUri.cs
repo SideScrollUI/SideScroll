@@ -24,7 +24,7 @@ public class LinkUri
 
 	public string ToUri()
 	{
-		string uri = @$"{Prefix}://{Type}/";
+		string uri = $"{Prefix}://{Type}/";
 
 		if (Version != null)
 		{

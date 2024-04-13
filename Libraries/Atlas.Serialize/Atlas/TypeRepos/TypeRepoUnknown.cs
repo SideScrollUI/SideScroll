@@ -1,6 +1,6 @@
 namespace Atlas.Serialize;
 
-public class TypeRepoUnknown : TypeRepo
+public class TypeRepoUnknown(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {
 	public class Creator : IRepoCreator
 	{
@@ -21,11 +21,6 @@ public class TypeRepoUnknown : TypeRepo
 				return new TypeRepoUnknown(serializer, typeSchema);
 			return null;
 		}
-	}
-
-	public TypeRepoUnknown(Serializer serializer, TypeSchema typeSchema) :
-		base(serializer, typeSchema)
-	{
 	}
 
 	public override void SaveObject(BinaryWriter writer, object obj)

@@ -14,7 +14,7 @@ public class ListByte(int index, byte b)
 
 	public override string ToString() => Index.ToString();
 
-	public static List<ListByte> Create(byte[] bytes)
+	public static List<ListByte> Create(IEnumerable<byte> bytes)
 	{
 		int i = 0;
 		return bytes

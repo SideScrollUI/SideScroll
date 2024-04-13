@@ -314,7 +314,7 @@ public class TabControlSplitContainer : Grid
 		_gridItems.Clear();
 	}
 
-	private void DisposeControl(Control control)
+	private static void DisposeControl(Control control)
 	{
 		if (control is IDisposable disposable)
 		{

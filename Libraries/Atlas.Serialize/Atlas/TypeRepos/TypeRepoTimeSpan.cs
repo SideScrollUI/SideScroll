@@ -1,6 +1,6 @@
 namespace Atlas.Serialize;
 
-public class TypeRepoTimeSpan : TypeRepo
+public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {
 	public class Creator : IRepoCreator
 	{
@@ -10,11 +10,6 @@ public class TypeRepoTimeSpan : TypeRepo
 				return new TypeRepoTimeSpan(serializer, typeSchema);
 			return null;
 		}
-	}
-
-	public TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) :
-		base(serializer, typeSchema)
-	{
 	}
 
 	public static bool CanAssign(Type type)

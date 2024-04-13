@@ -8,7 +8,7 @@ public enum ObjectType
 	Null,
 	BaseType,
 	DerivedType,
-};
+}
 
 public interface IRepoCreator
 {

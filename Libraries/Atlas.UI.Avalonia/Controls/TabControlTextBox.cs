@@ -185,7 +185,7 @@ public class TabControlTextBox : TextBox
 		get => base.Text;
 		set
 		{
-			if (value is string s && s.StartsWith("{") && s.Contains("\n"))
+			if (value is string s && s.StartsWith('{') && s.Contains('\n'))
 			{
 				FontFamily = AtlasTheme.MonospaceFontFamily; // Use monospaced font for Json
 			}

@@ -154,7 +154,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 
 	// Styled columns have a different line color, so we have to draw them manually
 	// They also use different background colors, with different shades for links vs non-links
-	private Control AddStyling(DataGridCell cell, TextBlock textBlock)
+	private TextBlock AddStyling(DataGridCell cell, TextBlock textBlock)
 	{
 		if (PropertyInfo.IsDefined(typeof(StyleValueAttribute)) || 
 			(DisplayIndex == 1 && typeof(DictionaryEntry).IsAssignableFrom(PropertyInfo.DeclaringType)))

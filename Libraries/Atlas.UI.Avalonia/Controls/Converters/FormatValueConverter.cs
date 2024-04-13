@@ -41,7 +41,7 @@ public class FormatValueConverter : IValueConverter
 		if (value == null || value is DBNull)
 			return null;
 
-		if (targetType.IsGenericType && targetType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+		if (targetType.IsGenericType && targetType.GetGenericTypeDefinition() == typeof(Nullable<>))
 		{
 			targetType = Nullable.GetUnderlyingType(targetType)!;
 		}

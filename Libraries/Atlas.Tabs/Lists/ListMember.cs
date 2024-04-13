@@ -111,7 +111,7 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 		return MemberInfo.GetCustomAttribute<T>();
 	}
 
-	public static ItemCollection<ListMember> Sort(ItemCollection<ListMember> items)
+	public static ItemCollection<ListMember> Sort(IEnumerable<ListMember> items)
 	{
 		var sortedMembers = items
 			.OrderByDescending(i => i.MemberInfo.GetCustomAttribute<AutoSelectAttribute>() != null)

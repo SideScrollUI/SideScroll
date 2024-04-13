@@ -215,7 +215,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	}
 
 	// This can be slow due to lazy property loading
-	public static ItemCollection<ListProperty> Sort(ItemCollection<ListProperty> listProperties)
+	public static ItemCollection<ListProperty> Sort(IEnumerable<ListProperty> listProperties)
 	{
 		var sortedProperties = listProperties
 			.OrderByDescending(i => i.GetCustomAttribute<AutoSelectAttribute>() != null)

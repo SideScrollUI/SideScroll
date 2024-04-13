@@ -29,7 +29,7 @@ public class TestLargeFile : TestSerializeBase
 		long length = 0x20000000; // 512 MB
 
 		// Create the memory-mapped file
-		string fullPath = Paths.Combine(_basePath, @"LargeImage.data");
+		string fullPath = Paths.Combine(_basePath, "LargeImage.data");
 		using var mmf = System.IO.MemoryMappedFiles.MemoryMappedFile.CreateFromFile(fullPath, FileMode.OpenOrCreate, "ImgA", offset + length);
 		// Create a random access view, from the offset
 		// to the 768th megabyte (the offset plus length)
@@ -64,7 +64,7 @@ public class TestLargeFile : TestSerializeBase
 		long spacing = 0x20000000; // 512 MB
 
 		// Create the memory-mapped file
-		string fullPath = Paths.Combine(_basePath, @"LargeImage.data");
+		string fullPath = Paths.Combine(_basePath, "LargeImage.data");
 
 		using Stream stream = new FileStream(fullPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
 		using BinaryWriter writer = new(stream);
@@ -86,7 +86,7 @@ public class TestLargeFile : TestSerializeBase
 		// long length = 0x20000000; // 512 MB
 
 		// Create the memory-mapped file
-		string fullPath = Paths.Combine(_basePath, @"LargeImage.data");
+		string fullPath = Paths.Combine(_basePath, "LargeImage.data");
 
 		using Stream stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 		long position = stream.Seek(offset, SeekOrigin.Begin);
@@ -104,7 +104,7 @@ public class TestLargeFile : TestSerializeBase
 		long length = 0x20000000; // 512 MB
 
 		// Create the memory-mapped file
-		string fullPath = Paths.Combine(_basePath, @"LargeImage.data");
+		string fullPath = Paths.Combine(_basePath, "LargeImage.data");
 		using var mmf = System.IO.MemoryMappedFiles.MemoryMappedFile.CreateFromFile(fullPath, FileMode.Open, "ImgA");
 		// Create a random access view, from the offset
 		// to the 768th megabyte (the offset plus length)

@@ -47,7 +47,7 @@ public class TestAvaloniaDataBinding
 		TestBind(10000);
 	}
 
-	public void TestBind(int count)
+	private static void TestBind(int count)
 	{
 		var binding = new Binding
 		{

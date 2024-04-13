@@ -27,7 +27,7 @@ public class TabTestInstanceListItems : ITab
 			model.Items = GetListItems();
 		}
 
-		private async Task<string> MethodAsync()
+		private static async Task<string> MethodAsync()
 		{
 			await Task.Delay(10);
 			return "Result";

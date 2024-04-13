@@ -37,7 +37,7 @@ public class Linker
 	public virtual async Task<Bookmark> GetLinkAsync(Call call, LinkUri linkUri, bool checkVersion)
 #pragma warning restore CS1998
 	{
-		if (linkUri == null) throw new ArgumentNullException(nameof(linkUri));
+		ArgumentNullException.ThrowIfNull(linkUri);
 
 #if DEBUG
 		call = call.DebugLogAll();

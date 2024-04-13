@@ -39,53 +39,38 @@ public class HiddenRowAttribute : Attribute;
 
 // Don't show row or column if any value matches
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
-public class HideAttribute : Attribute
+public class HideAttribute(object? value, params object?[] additonalValues) : Attribute
 {
-	public readonly List<object?> Values;
-
 	// passing a null param passes a null array :(
-	public HideAttribute(object? value, params object?[] additonalValues)
+	// Combine both params into a single list
+	public readonly List<object?> Values = new(additonalValues)
 	{
-		// Combine both params into a single list
-		Values = new List<object?>(additonalValues)
-		{
-			value
-		};
-	}
+		value
+	};
 }
 
 // Don't show row if any value matches
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class HideRowAttribute : Attribute
+public class HideRowAttribute(object? value, params object?[] additonalValues) : Attribute
 {
-	public readonly List<object?> Values;
-
 	// passing a null param passes a null array :(
-	public HideRowAttribute(object? value, params object?[] additonalValues)
+	// Combine both params into a single list
+	public readonly List<object?> Values = new(additonalValues)
 	{
-		// Combine both params into a single list
-		Values = new List<object?>(additonalValues)
-		{
-			value
-		};
-	}
+		value
+	};
 }
 
 // Don't show row if any value matches
 [AttributeUsage(AttributeTargets.Property)]
-public class HideColumnAttribute : Attribute
+public class HideColumnAttribute(object? value, params object?[] additonalValues) : Attribute
 {
-	public readonly List<object?> Values;
-
 	// passing a null param passes a null array :(
-	public HideColumnAttribute(object? value, params object?[] additonalValues)
+	// Combine both params into a single list
+	public readonly List<object?> Values = new(additonalValues)
 	{
-		// Combine both params into a single list
-		Values = new List<object?>(additonalValues)
-		{
-			value
-		};
-	}
+		value
+	};
 }
 
 // Don't show unless #if DEBUG set

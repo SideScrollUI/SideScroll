@@ -21,10 +21,7 @@ public static class ObjectExtensions
 			MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) })!;
 			string format = type.IsDecimal() ? "G" : "N0";
 			object? result = toStringMethod.Invoke(obj, new object[] { format });
-			if (result == null)
-				return null;
-
-			return (string)result;
+			return (string?)result;
 		}
 
 		if (type.IsPrimitive == false)
@@ -159,10 +156,7 @@ public static class ObjectExtensions
 			MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) })!;
 			string format = type.IsDecimal() ? "N" : "N0";
 			object? result = toStringMethod.Invoke(obj, new object[] { format });
-			if (result == null)
-				return null;
-
-			return (string)result;
+			return (string?)result;
 		}
 
 		if (obj is DictionaryEntry dictionaryEntry)

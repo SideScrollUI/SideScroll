@@ -36,7 +36,7 @@ public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<L
 		return FindHitPoints(chart, pointerPosition, LiveChartSeries.Chart.MaxFindDistance);
 	}
 
-	List<ChartPoint> FindHitPoints(IChart chart, LvcPoint pointerPosition, double maxDistance)
+	IEnumerable<ChartPoint> FindHitPoints(IChart chart, LvcPoint pointerPosition, double maxDistance)
 	{
 		if (!IsVisible) return [];
 
@@ -44,8 +44,7 @@ public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<L
 			.Select(x => new { distance = GetDistanceTo(x, pointerPosition), point = x })
 			.Where(x => x.distance < maxDistance)
 			.OrderBy(x => x.distance)
-			.SelectFirst(x => x.point)
-			.ToList();
+			.SelectFirst(x => x.point);
 	}
 
 	public static double GetDistanceTo(ChartPoint target, LvcPoint location)

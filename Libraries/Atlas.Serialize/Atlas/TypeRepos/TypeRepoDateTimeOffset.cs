@@ -1,6 +1,6 @@
 namespace Atlas.Serialize;
 
-public class TypeRepoDateTimeOffset : TypeRepo
+public class TypeRepoDateTimeOffset(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {
 	public class Creator : IRepoCreator
 	{
@@ -10,11 +10,6 @@ public class TypeRepoDateTimeOffset : TypeRepo
 				return new TypeRepoDateTimeOffset(serializer, typeSchema);
 			return null;
 		}
-	}
-
-	public TypeRepoDateTimeOffset(Serializer serializer, TypeSchema typeSchema) :
-		base(serializer, typeSchema)
-	{
 	}
 
 	public static bool CanAssign(Type type)

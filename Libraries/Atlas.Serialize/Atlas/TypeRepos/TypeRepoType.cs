@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace Atlas.Serialize;
 
-public class TypeRepoType : TypeRepo
+public class TypeRepoType(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {
 	public class Creator : IRepoCreator
 	{
@@ -12,11 +12,6 @@ public class TypeRepoType : TypeRepo
 				return new TypeRepoType(serializer, typeSchema);
 			return null;
 		}
-	}
-
-	public TypeRepoType(Serializer serializer, TypeSchema typeSchema) :
-		base(serializer, typeSchema)
-	{
 	}
 
 	public override void SaveObject(BinaryWriter writer, object obj)

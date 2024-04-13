@@ -19,7 +19,7 @@ public class TabTestChartTimeRangeValue : ITab
 			AddToys(model, endTime);
 		}
 
-		private DateTime AddAnimals(TabModel model, DateTime endTime)
+		private static DateTime AddAnimals(TabModel model, DateTime endTime)
 		{
 			var chartView = new ChartView("Animals")
 			{
@@ -40,7 +40,7 @@ public class TabTestChartTimeRangeValue : ITab
 			return endTime;
 		}
 
-		private void AddToys(TabModel model, DateTime endTime)
+		private static void AddToys(TabModel model, DateTime endTime)
 		{
 			var chartViewToys = new ChartView("Toys")
 			{

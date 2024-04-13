@@ -66,8 +66,8 @@ public class TestSerializeCollections : TestSerializeBase
 	[Test, Description("ArrayTest")]
 	public void ArrayTest()
 	{
-		int[] array1 = Array.Empty<int>();
-		int[] array2 = Array.Empty<int>();
+		int[] array1 = [];
+		int[] array2 = [];
 
 		var idxObjectToIndex = new Dictionary<object, int>(); // for saving, not filled in for loading
 		idxObjectToIndex[array1] = idxObjectToIndex.Count;
@@ -229,13 +229,6 @@ public class TestSerializeCollections : TestSerializeBase
 	{
 		public string? Label;
 		public bool Pinned;
-	}
-
-	public class TabInstanceConfiguration
-	{
-		public HashSet<SelectedItem> Selected = [];
-		public int? SplitterDistance;
-		public int NumColumns;
 	}
 
 	[Test, Description("Serialize HashSet")]

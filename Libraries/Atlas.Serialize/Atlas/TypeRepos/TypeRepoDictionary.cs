@@ -35,7 +35,7 @@ public class TypeRepoDictionary : TypeRepo
 		}
 
 		_addMethod = LoadableType.GetMethods()
-			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Count() == 2)!;
+			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 2)!;
 	}
 
 	public static bool CanAssign(Type type)

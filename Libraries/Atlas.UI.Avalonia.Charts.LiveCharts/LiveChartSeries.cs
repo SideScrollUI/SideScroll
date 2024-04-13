@@ -74,7 +74,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		}
 	}
 
-	private bool HasSinglePoint(List<LiveChartPoint> dataPoints)
+	private static bool HasSinglePoint(List<LiveChartPoint> dataPoints)
 	{
 		bool prevNan1 = false;
 		bool prevNan2 = false;

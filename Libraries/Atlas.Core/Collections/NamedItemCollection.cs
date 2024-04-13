@@ -15,7 +15,7 @@ public class NamedItemCollection<T1, T2>
 		Type collectionType = typeof(T1);
 		Type elementType = typeof(T2);
 
-		BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Static;
+		const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Static;
 
 		// Add PropertyInfo's
 		List<KeyValuePair<MemberInfo, T2>> keyValues = collectionType

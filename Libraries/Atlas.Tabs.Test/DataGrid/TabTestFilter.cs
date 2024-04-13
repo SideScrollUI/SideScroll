@@ -14,8 +14,10 @@ public class TabTestFilter : ITab
 			var items = new List<TestFilterItem>();
 			for (int i = 0; i < 10; i++)
 			{
-				var item = new TestFilterItem("Item " + i, i);
-				item.Child = new TestFilterItem(characters[i].ToString(), i);
+				var item = new TestFilterItem("Item " + i, i)
+				{
+					Child = new TestFilterItem(characters[i].ToString(), i)
+				};
 
 				items.Add(item);
 			}

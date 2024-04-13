@@ -7,7 +7,7 @@ public enum TagType
 	Default,
 	Unique, // Only show for original set of Tags
 	Required, // Show in all Tag combinations
-};
+}
 
 public class Tag
 {
@@ -23,7 +23,7 @@ public class Tag
 	public override string ToString()
 	{
 		string? text = Value.Formatted(MaxValueLength);
-		if (text?.Contains(" ") == true)
+		if (text?.Contains(' ') == true)
 			text = '"' + text + '"';
 
 		return "[ " + Name + " = " + text + " ]";

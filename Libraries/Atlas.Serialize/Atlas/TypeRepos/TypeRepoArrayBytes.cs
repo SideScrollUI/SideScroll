@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Atlas.Serialize;
 
-public class TypeRepoArrayBytes : TypeRepo
+public class TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {
 	private int[]? _sizes;
 
@@ -14,11 +14,6 @@ public class TypeRepoArrayBytes : TypeRepo
 				return new TypeRepoArrayBytes(serializer, typeSchema);
 			return null;
 		}
-	}
-
-	public TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) :
-		base(serializer, typeSchema)
-	{
 	}
 
 	public static bool CanAssign(Type type)

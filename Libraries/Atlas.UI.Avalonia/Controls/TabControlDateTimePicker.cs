@@ -187,14 +187,14 @@ public class TabDateTimePicker : Grid
 	}
 
 	// DefaultTheme.xaml is overriding this currently
-	private void Button_PointerEnter(object? sender, PointerEventArgs e)
+	private static void Button_PointerEnter(object? sender, PointerEventArgs e)
 	{
 		Button button = (Button)sender!;
 		button.BorderBrush = Brushes.Black; // can't overwrite hover border :(
 		button.Background = AtlasTheme.ToolbarButtonBackgroundPointerOver;
 	}
 
-	private void Button_PointerExited(object? sender, PointerEventArgs e)
+	private static void Button_PointerExited(object? sender, PointerEventArgs e)
 	{
 		Button button = (Button)sender!;
 		button.Background = AtlasTheme.TabBackground;

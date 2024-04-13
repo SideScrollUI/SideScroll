@@ -1,6 +1,6 @@
 namespace Atlas.Serialize;
 
-public class TypeRepoEnum : TypeRepo
+public class TypeRepoEnum(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {
 	public class Creator : IRepoCreator
 	{
@@ -10,11 +10,6 @@ public class TypeRepoEnum : TypeRepo
 				return new TypeRepoEnum(serializer, typeSchema);
 			return null;
 		}
-	}
-
-	public TypeRepoEnum(Serializer serializer, TypeSchema typeSchema) :
-		base(serializer, typeSchema)
-	{
 	}
 
 	public static bool CanAssign(Type type)

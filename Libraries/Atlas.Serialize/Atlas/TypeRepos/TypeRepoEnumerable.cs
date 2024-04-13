@@ -30,7 +30,7 @@ public class TypeRepoEnumerable : TypeRepo
 				_elementType = types[0];
 
 			_addMethod = LoadableType.GetMethods()
-				.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Count() == 1);
+				.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 1);
 		}
 	}
 

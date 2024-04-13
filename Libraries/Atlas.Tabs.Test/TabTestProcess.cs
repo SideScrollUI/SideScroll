@@ -17,7 +17,7 @@ public class TabTestProcess : ITab
 			};
 		}
 
-		private void OpenFolder(Call call)
+		private static void OpenFolder(Call call)
 		{
 			ProcessUtils.OpenFolder(Directory.GetCurrentDirectory());
 		}

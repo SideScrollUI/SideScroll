@@ -1,6 +1,6 @@
 namespace Atlas.Serialize;
 
-public class TypeRepoTimeZoneInfo : TypeRepo
+public class TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {
 	public class Creator : IRepoCreator
 	{
@@ -10,11 +10,6 @@ public class TypeRepoTimeZoneInfo : TypeRepo
 				return new TypeRepoTimeZoneInfo(serializer, typeSchema);
 			return null;
 		}
-	}
-
-	public TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) :
-		base(serializer, typeSchema)
-	{
 	}
 
 	public static bool CanAssign(Type type)

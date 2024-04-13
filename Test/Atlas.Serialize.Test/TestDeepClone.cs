@@ -5,8 +5,6 @@ namespace Atlas.Serialize.Test;
 [Category("DeepClone")]
 public class TestDeepClone : TestSerializeBase
 {
-	private Serializer _serializer = new();
-
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
@@ -16,7 +14,6 @@ public class TestDeepClone : TestSerializeBase
 	[SetUp]
 	public void Setup()
 	{
-		_serializer = new Serializer();
 	}
 
 	class StringClass
