@@ -53,8 +53,6 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		}
 	}
 
-	public IEnumerable? ItemsSource { get; internal set; }
-
 	private SolidColorBrush _colorBrush;
 
 	public override string? ToString() => ChartSeries.ToString();

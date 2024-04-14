@@ -6,9 +6,8 @@ namespace Atlas.Network;
 
 public class HttpMemoryCache
 {
-	public static int MaxAttempts { get; set; } = 5;
 	public int MaxItems { get; set; } = 100;
-	public TimeSpan CacheDuration { get; set; } = TimeSpan.FromHours(1);
+	// public TimeSpan CacheDuration { get; set; } = TimeSpan.FromHours(1);
 
 	public MemoryCache MemoryCache;
 

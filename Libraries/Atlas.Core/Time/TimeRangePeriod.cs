@@ -191,18 +191,18 @@ public class TimeRangePeriod : ITags
 	public static double TotalMinimum(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow)
 	{
 		double min = timeRangeValues
-			.Where(point => !double.IsNaN(point.Value))
-			.Where(point => point.EndTime > timeWindow.StartTime && point.StartTime < timeWindow.EndTime)
-			.Min(point => point.Value);
+			.Where(period => !double.IsNaN(period.Value))
+			.Where(period => period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
+			.Min(period => period.Value);
 		return min;
 	}
 
 	public static double TotalMaximum(List<TimeRangeValue> timeRangeValues, TimeWindow timeWindow)
 	{
 		double max = timeRangeValues
-			.Where(point => !double.IsNaN(point.Value))
-			.Where(point => point.EndTime > timeWindow.StartTime && point.StartTime < timeWindow.EndTime)
-			.Max(point => point.Value);
+			.Where(period => !double.IsNaN(period.Value))
+			.Where(period => period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
+			.Max(period => period.Value);
 		return max;
 	}
 

@@ -66,9 +66,9 @@ public class LazyClass
 	public TypeInfo CreateLazyType(List<TypeRepoObject.PropertyRepo> propertyRepos)
 	{
 		TypeBuilder typeBuilder = GetTypeBuilder();
-		ConstructorBuilder constructor = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
+		// ConstructorBuilder constructor = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
 
-		PropertyInfo[] propertyInfos = OriginalType.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
+		// PropertyInfo[] propertyInfos = OriginalType.GetProperties().OrderBy(x => x.MetadataToken).ToArray();
 
 		foreach (TypeRepoObject.PropertyRepo propertyRepo in propertyRepos)
 		{

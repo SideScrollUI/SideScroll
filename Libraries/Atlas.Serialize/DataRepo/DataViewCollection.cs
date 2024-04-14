@@ -15,8 +15,7 @@ public interface IDataView
 public class DataViewCollection<TDataType, TViewType> where TViewType : IDataView, new()
 {
 	//public event EventHandler<EventArgs> OnDelete; // todo?
-
-	public string? Path;
+	
 	public ItemCollectionUI<TViewType> Items { get; set; } = [];
 
 	public DataRepoView<TDataType> DataRepoView;
