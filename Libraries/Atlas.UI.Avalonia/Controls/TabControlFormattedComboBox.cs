@@ -91,7 +91,7 @@ public class TabControlFormattedComboBox : ComboBox
 	{
 		base.SelectedItem = GetFormattedItem(Property.Value);
 
-		if ((SelectedItem == null) && Items.GetEnumerator().MoveNext())
+		if (SelectedItem == null && Items.GetEnumerator().MoveNext())
 			SelectedIndex = 0;
 	}
 

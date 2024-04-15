@@ -22,7 +22,7 @@ public class BaseWindow : Window
 	private const int DefaultWindowWidth = 1280;
 	private const int DefaultWindowHeight = 800;
 
-	public static BaseWindow? Instance;
+	public static BaseWindow? Instance { get; set; }
 
 	public Project Project;
 

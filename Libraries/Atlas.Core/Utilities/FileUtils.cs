@@ -116,7 +116,7 @@ public static class FileUtils
 		return false;
 	}
 
-	public static HashSet<string> TextExtensions =
+	public static HashSet<string> TextExtensions { get; set; } =
 	[
 		".csv",
 		".html",

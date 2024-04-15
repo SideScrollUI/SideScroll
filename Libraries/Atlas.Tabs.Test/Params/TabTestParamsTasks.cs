@@ -47,7 +47,7 @@ public class TabTestParamsTasks : ITab
 			_items.Add(result);
 		}
 
-		private async Task ShowProgressAsync(Call call)
+		private static async Task ShowProgressAsync(Call call)
 		{
 			call.TaskInstance!.ProgressMax = 10;
 
@@ -59,7 +59,7 @@ public class TabTestParamsTasks : ITab
 			}
 		}
 
-		private async Task TaskCountAsync(Call call)
+		private static async Task TaskCountAsync(Call call)
 		{
 			call.TaskInstance!.TaskCount = 10;
 

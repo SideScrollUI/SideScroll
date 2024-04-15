@@ -28,7 +28,7 @@ public class TabViewer : Grid
 	public int DefaultScrollWidth => Math.Min(MaxScrollWidth, (int)(ScrollViewer.Viewport.Width * ScrollPercent));
 	public int KeyboardScrollWidth = 500;
 
-	public static TabViewer? BaseViewer;
+	public static TabViewer? BaseViewer { get; set; }
 	public static string? LoadLinkUri { get; set; }
 	public static Bookmark? LoadBookmark { get; set; }
 

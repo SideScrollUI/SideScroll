@@ -20,7 +20,7 @@ public class TabControlToolbar : Grid, IDisposable
 
 	public static Thickness DefaultMargin = new(6, 2);
 
-	public TabInstance? TabInstance;
+	public readonly TabInstance? TabInstance;
 
 	public TabControlToolbar(TabInstance? tabInstance, TabToolbar? toolbar = null)
 	{

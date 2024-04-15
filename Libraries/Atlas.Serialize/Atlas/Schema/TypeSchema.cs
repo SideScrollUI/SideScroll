@@ -204,7 +204,7 @@ public class TypeSchema
 
 		foreach (var param in CustomConstructor.GetParameters())
 		{
-			var prop = ReadOnlyPropertySchemas.FirstOrDefault(p => p.PropertyName.ToLower() == param.Name!.ToLower());
+			var prop = ReadOnlyPropertySchemas.FirstOrDefault(p => p.PropertyName.Equals(param.Name, StringComparison.CurrentCultureIgnoreCase));
 			if (prop != null)
 			{
 				prop.IsRequired = true;
@@ -221,10 +221,7 @@ public class TypeSchema
 		if (Type!.GetCustomAttribute<PrivateDataAttribute>() != null)
 			return true;
 
-		if (PrivateTypes.Contains(Type!))
-			return true;
-
-		return false;
+		return PrivateTypes.Contains(Type!);
 	}
 
 	// BinaryFormatter uses [Serializable], should we allow that?

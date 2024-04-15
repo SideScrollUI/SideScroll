@@ -46,7 +46,7 @@ public class LazyClass
 		NewType = CompileResultType();
 	}
 
-	public Type CompileResultType()
+	public static Type CompileResultType()
 	{
 		TypeBuilder typeBuilder = GetTypeBuilder();
 		// ConstructorBuilder constructor = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
