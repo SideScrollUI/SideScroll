@@ -1,7 +1,7 @@
 using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Resources;
-using Atlas.UI.Avalonia.Controls;
+using Atlas.UI.Avalonia.Controls.Toolbar;
 
 namespace Atlas.UI.Avalonia.Viewer;
 

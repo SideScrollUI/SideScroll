@@ -10,7 +10,7 @@ using Avalonia.Media;
 using System.Reflection;
 using System.Windows.Input;
 
-namespace Atlas.UI.Avalonia.Controls;
+namespace Atlas.UI.Avalonia.Controls.Toolbar;
 
 public class ToolbarSeparator : Border;
 

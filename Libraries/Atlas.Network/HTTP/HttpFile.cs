@@ -1,6 +1,6 @@
 using Atlas.Core;
 
-namespace Atlas.Network;
+namespace Atlas.Network.Http;
 
 public class HttpFile
 {

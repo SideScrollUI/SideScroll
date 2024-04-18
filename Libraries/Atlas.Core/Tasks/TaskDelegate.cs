@@ -1,9 +1,9 @@
-namespace Atlas.Core;
+namespace Atlas.Core.Tasks;
+
+public delegate void CallAction(Call call);
 
 public class TaskDelegate : TaskCreator
 {
-	public delegate void CallAction(Call call);
-
 	public CallAction Action;
 
 	public override string? ToString() => Label;

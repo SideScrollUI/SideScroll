@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Tasks;
 
 public abstract class TaskCreator : INotifyPropertyChanged
 {

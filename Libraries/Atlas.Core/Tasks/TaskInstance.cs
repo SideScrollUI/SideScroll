@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Tasks;
 
 public class TaskInstance : INotifyPropertyChanged
 {

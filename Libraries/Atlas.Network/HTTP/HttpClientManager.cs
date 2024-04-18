@@ -1,5 +1,4 @@
-namespace Atlas.Network;
-
+namespace Atlas.Network.Http;
 
 public record HttpClientConfig(string? Accept = null, TimeSpan? Timeout = null)
 {

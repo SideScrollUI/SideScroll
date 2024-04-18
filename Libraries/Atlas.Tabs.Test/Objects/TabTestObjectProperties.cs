@@ -1,4 +1,5 @@
 using Atlas.Core;
+using Atlas.Core.Tasks;
 using System.ComponentModel;
 
 namespace Atlas.Tabs.Test.Objects;

@@ -1,4 +1,4 @@
-namespace Atlas.Network;
+namespace Atlas.Network.Http;
 
 public class HttpCacheManager
 {

@@ -1,7 +1,7 @@
 using Atlas.Core;
 using System.Text;
 
-namespace Atlas.Network;
+namespace Atlas.Network.Http;
 
 public class HttpCachedCall(Call call, HttpCache httpCache) : HttpCall(call)
 {

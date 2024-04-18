@@ -1,9 +1,9 @@
-namespace Atlas.Core;
+namespace Atlas.Core.Tasks;
+
+public delegate void CallActionParams(Call call, params object[] objects);
 
 public class TaskDelegateParams : TaskCreator
 {
-	public delegate void CallActionParams(Call call, params object[] objects);
-
 	public Call Call;
 	public CallActionParams CallAction;
 	public object[] Objects;
