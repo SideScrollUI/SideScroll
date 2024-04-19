@@ -1,4 +1,5 @@
 using Atlas.Core;
+using Atlas.Core.Tasks;
 using Atlas.Tabs;
 using Avalonia.Controls;
 using Avalonia.Layout;

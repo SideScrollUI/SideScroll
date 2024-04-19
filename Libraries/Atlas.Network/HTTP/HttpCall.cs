@@ -2,7 +2,7 @@ using Atlas.Core;
 using System.Net;
 using System.Text;
 
-namespace Atlas.Network;
+namespace Atlas.Network.Http;
 
 public class HttpCall(Call call)
 {
@@ -49,8 +49,8 @@ public class HttpCall(Call call)
 				byte[] data = memoryStream.ToArray();
 				dataStream.Close();
 
-				getCall.Log.Add("Downloaded HTTP File", 
-					new Tag("URI", request.RequestUri), 
+				getCall.Log.Add("Downloaded HTTP File",
+					new Tag("URI", request.RequestUri),
 					new Tag("Size", memoryStream.Length));
 
 				return data;

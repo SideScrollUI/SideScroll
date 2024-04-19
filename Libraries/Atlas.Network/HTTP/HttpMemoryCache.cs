@@ -2,7 +2,7 @@ using Atlas.Core;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 
-namespace Atlas.Network;
+namespace Atlas.Network.Http;
 
 public class HttpMemoryCache
 {

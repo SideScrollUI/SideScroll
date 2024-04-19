@@ -1,4 +1,5 @@
 using Atlas.Core;
+using Atlas.Core.Tasks;
 using System.Collections;
 
 namespace Atlas.Tabs;
@@ -31,10 +32,10 @@ public class ToolComboBox<T> : IToolComboBox
 		}
 	}
 
-	public TaskDelegate.CallAction? Action { get; set; }
-	public TaskDelegateAsync.CallActionAsync? ActionAsync { get; set; }
+	public CallAction? Action { get; set; }
+	public CallActionAsync? ActionAsync { get; set; }
 
-	public ToolComboBox(string label, List<T> items, T selectedItem, TaskDelegate.CallAction? action = null)
+	public ToolComboBox(string label, List<T> items, T selectedItem, CallAction? action = null)
 	{
 		Label = label;
 		Items = items;
@@ -42,7 +43,7 @@ public class ToolComboBox<T> : IToolComboBox
 		Action = action;
 	}
 
-	public ToolComboBox(string label, List<T> items, TaskDelegateAsync.CallActionAsync actionAsync)
+	public ToolComboBox(string label, List<T> items, CallActionAsync actionAsync)
 	{
 		Label = label;
 		Items = items;

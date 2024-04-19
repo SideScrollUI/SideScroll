@@ -1,11 +1,11 @@
 using Atlas.Extensions;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Tasks;
+
+public delegate Task CallActionAsync(Call call);
 
 public class TaskDelegateAsync : TaskCreator
 {
-	public delegate Task CallActionAsync(Call call);
-
 	public CallActionAsync CallAction;
 
 	public override string? ToString() => Label;

@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Atlas.Core;
+namespace Atlas.Core.Tasks;
 
 public class TaskMethod : TaskCreator
 {

@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using Atlas.Core;
+using Atlas.Core.Tasks;
 using Atlas.Resources;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Themes;
@@ -11,7 +12,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 
-namespace Atlas.UI.Avalonia.Controls;
+namespace Atlas.UI.Avalonia.Controls.Toolbar;
 
 public class ToolbarButton : Button, IDisposable
 {
@@ -23,8 +24,8 @@ public class ToolbarButton : Button, IDisposable
 
 	public IResourceView ImageResource { get; set; }
 
-	public TaskDelegate.CallAction? CallAction;
-	public TaskDelegateAsync.CallActionAsync? CallActionAsync;
+	public CallAction? CallAction;
+	public CallActionAsync? CallActionAsync;
 
 	public bool ShowTask;
 	public bool IsActive; // Only allow one task at once (modifying IsEnabled doesn't update elsewhere)
@@ -153,7 +154,7 @@ public class ToolbarButton : Button, IDisposable
 	private void UpdateImage()
 	{
 		if (ImageResource.ResourceType != "svg" || _imageControl == null) return;
-		
+
 		_defaultImage ??= SvgUtils.TryGetSvgColorImage(ImageResource);
 		var source = IsEnabled ? _defaultImage : (DisabledImage ?? _defaultImage);
 		if (source != _imageControl.Source)
@@ -235,12 +236,12 @@ public class ToolbarButton : Button, IDisposable
 		return Toolbar.TabInstance!.StartTask(taskDelegate, ShowTask);
 	}
 
-	public void Add(TaskDelegate.CallAction callAction)
+	public void Add(CallAction callAction)
 	{
 		CallAction = callAction;
 	}
 
-	public void AddAsync(TaskDelegateAsync.CallActionAsync callActionAsync)
+	public void AddAsync(CallActionAsync callActionAsync)
 	{
 		CallActionAsync = callActionAsync;
 	}

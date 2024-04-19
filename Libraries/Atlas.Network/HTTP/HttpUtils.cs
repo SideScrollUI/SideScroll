@@ -3,14 +3,14 @@ using System.Diagnostics;
 using System.Net;
 using System.Text;
 
-namespace Atlas.Network;
+namespace Atlas.Network.Http;
 
 public static class HttpUtils
 {
 	private const int ReadBufferSize = 100000;
 
 	public static int MaxAttempts { get; set; } = 5;
-	public static TimeSpan BaseRetryDelay  { get; set; } = TimeSpan.FromMilliseconds(500); // < ^ MaxAttempts
+	public static TimeSpan BaseRetryDelay { get; set; } = TimeSpan.FromMilliseconds(500); // < ^ MaxAttempts
 
 	public static readonly HttpClient Client = new();
 

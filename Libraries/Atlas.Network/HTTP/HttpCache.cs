@@ -1,7 +1,7 @@
 using Atlas.Core;
 using System.Text;
 
-namespace Atlas.Network;
+namespace Atlas.Network.Http;
 
 public class HttpCache : IDisposable
 {
@@ -107,13 +107,13 @@ public class HttpCache : IDisposable
 
 	public List<LoadableEntry> LoadableEntries =>
 		_cache.Values.Select(entry => new LoadableEntry
-			{
-				Uri = entry.Uri,
-				Size = entry.Size,
-				Offset = entry.Offset,
-				Downloaded = entry.Downloaded,
-				Cache = this
-			})
+		{
+			Uri = entry.Uri,
+			Size = entry.Size,
+			Offset = entry.Offset,
+			Downloaded = entry.Downloaded,
+			Cache = this
+		})
 			.ToList();
 
 	public void AddEntry(string uri, byte[] bytes)

@@ -1,11 +1,12 @@
 using Atlas.Resources;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
+using Atlas.UI.Avalonia.Controls.Toolbar;
 using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Layout;
 using Avalonia.Input;
+using Avalonia.Layout;
 
 namespace Atlas.UI.Avalonia.Samples.Controls.CustomControl;
 

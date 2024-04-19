@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 
-namespace Atlas.UI.Avalonia.Controls;
+namespace Atlas.UI.Avalonia.Controls.Toolbar;
 
 public class ToolbarTextBox : TextBox
 {

@@ -1,4 +1,4 @@
-namespace Atlas.Core;
+namespace Atlas.Core.Tasks;
 
 public class TaskInstanceCollection : ItemCollection<TaskInstance>
 {
