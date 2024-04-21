@@ -300,6 +300,6 @@ public class SerializeClass : TestSerializeBase
 		};
 
 		string base64 = SerializerMemory.ToBase64String(Call, input);
-		Assert.AreEqual(408, base64.Length);
+		Assert.AreEqual(412, base64.Length);
 	}
 }

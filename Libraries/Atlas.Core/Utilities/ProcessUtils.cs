@@ -84,11 +84,16 @@ public static class ProcessUtils
 			{
 				folder = folder.Replace('/', '\\');
 
-				string argument;
+				string argument = '"' + folder + '"';
 				if (selection != null)
-					argument = "/select,\"" + Path.Combine(folder, selection) + "\"";
-				else
-					argument = '"' + folder + '"';
+				{
+					// Ignore bad selections
+					string fullPath = Path.Combine(folder, selection);
+					if (File.Exists(fullPath))
+					{
+						argument = "/select,\"" + fullPath + "\"";
+					}
+				}
 
 				Process.Start("explorer.exe", argument);
 			}
