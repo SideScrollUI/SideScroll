@@ -1,7 +1,7 @@
 using Atlas.Core;
 using Atlas.Resources;
 
-namespace Atlas.Tabs.Test;
+namespace Atlas.Tabs.Test.Objects;
 
 public class TabTestJson : ITab
 {
@@ -11,7 +11,7 @@ public class TabTestJson : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = new ItemCollection<ListItem>
+			model.Items = new List<ListItem>
 			{
 				new("Sample Text", LazyJsonNode.Parse(Samples.Text.Json)),
 			};

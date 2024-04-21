@@ -12,6 +12,7 @@ public class TabTestObjects
 	public static ValueSub Subclass => new();
 	public static EnumTest Enum => new();
 	public static TimeSpan TimeSpan => new(1, 2, 3);
+	public static TabTestJson Json => new();
 }
 
 public class MyClass

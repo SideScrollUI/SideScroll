@@ -15,12 +15,18 @@ public class TabTestProcess : ITab
 			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Open Folder", OpenFolder, true),
+				new TaskDelegate("Open Browser", OpenBrowser, true),
 			};
 		}
 
 		private static void OpenFolder(Call call)
 		{
 			ProcessUtils.OpenFolder(Directory.GetCurrentDirectory());
+		}
+
+		private static void OpenBrowser(Call call)
+		{
+			ProcessUtils.OpenBrowser("https://wikipedia.org");
 		}
 	}
 }

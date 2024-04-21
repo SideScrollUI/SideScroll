@@ -29,8 +29,8 @@ public class TabSample : ITab
 
 			model.Actions = new List<TaskCreator>
 			{
-				new TaskDelegate("Sleep 10s", Sleep, true),
-				new TaskAction("Add 5 Items", () => AddItems(5), false), // Foreground task so we can modify collection
+				new TaskDelegate("Sleep 10s", Sleep, true, true),
+				new TaskAction("Add 5 Items", () => AddItems(5)), // Foreground task so we can modify collection
 			};
 		}
 

@@ -1,6 +1,6 @@
 using Atlas.Core;
 
-namespace Atlas.Tabs.Test;
+namespace Atlas.Tabs.Test.Loading;
 
 public class TabTestSkip : ITab
 {
@@ -15,7 +15,7 @@ public class TabTestSkip : ITab
 				new(1, "Item 1"),
 			};
 
-			model.Items = new ItemCollection<ListItem>
+			model.Items = new List<ListItem>
 			{
 				new("Sample Items", sampleItems),
 			};
