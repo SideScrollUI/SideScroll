@@ -13,6 +13,7 @@ public class TabTestObjects
 	public static EnumTest Enum => new();
 	public static TimeSpan TimeSpan => new(1, 2, 3);
 	public static TabTestJson Json => new();
+	public static Uri Uri => new("https://wikipedia.org");
 }
 
 public class MyClass

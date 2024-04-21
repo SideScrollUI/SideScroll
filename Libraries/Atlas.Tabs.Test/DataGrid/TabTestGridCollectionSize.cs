@@ -24,7 +24,6 @@ public class TabTestGridCollectionSize : ITab
 				new TaskAction("Add 10,000 Entries", () => AddEntries(10000)),
 				new TaskAction("Add 100,000 Entries (Very Slow)", () => AddEntries(100000)),
 			};
-			//actions.Add(new TaskAction("Add Entries", AddEntries));
 		}
 
 		private void AddEntries(int count)

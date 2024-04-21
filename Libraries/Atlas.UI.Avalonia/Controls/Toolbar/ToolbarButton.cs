@@ -82,7 +82,7 @@ public class ToolbarButton : Button, IDisposable
 		}
 	}
 
-	public ToolbarButton(TabControlToolbar toolbar, string? label, string tooltip, IResourceView imageResource, ICommand? command = null)
+	public ToolbarButton(TabControlToolbar toolbar, string tooltip, IResourceView imageResource, string? label = null, ICommand? command = null)
 	{
 		Toolbar = toolbar;
 		Label = label;

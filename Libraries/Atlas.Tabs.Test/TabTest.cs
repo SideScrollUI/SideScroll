@@ -21,14 +21,13 @@ public class TabTest
 	public static TabTestToolbar Toolbar => new();
 	public static TabActions Actions => new();
 	public static TabTestLoading Loading => new();
-
-	public static TabTestDataRepo DataRepos => new();
-	public static TabSerializer Serializer => new();
 	public static TabTestLog Log => new();
 
 	public static TabTestTextEditor TextEditor => new();
 	public static TabTestChart Chart => new();
 
+	public static TabSerializer Serializer => new();
+	public static TabTestDataRepo DataRepos => new();
 	public static TabTestProcess Process => new();
 	public static TabTestBookmarks Bookmarks => new();
 	public static TabIcons Icons => new();

@@ -30,7 +30,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 
 	public TabControlSearchToolbar(TabInstance tabInstance) : base(tabInstance)
 	{
-		ButtonAdd = AddButton("Add", Icons.Svg.Add, null, "Add");
+		ButtonAdd = AddButton("Add", Icons.Svg.Add, "Add");
 		AddButton("Save", Icons.Svg.Save);
 
 		AddSeparator();

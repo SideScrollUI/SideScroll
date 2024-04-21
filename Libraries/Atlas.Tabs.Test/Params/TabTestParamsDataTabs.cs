@@ -27,11 +27,6 @@ public class TabTestParamsDataTabs : ITab
 		{
 			LoadSavedItems(call, model);
 
-			/*model.Actions = new List<TaskCreator>()
-			{
-				new TaskDelegate("Add", Add),
-			};*/
-
 			_paramTestItem = LoadData<ParamTestItem>(DataKey);
 			model.AddObject(_paramTestItem!);
 
