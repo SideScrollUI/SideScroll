@@ -19,8 +19,8 @@ public class SeriesHoverEventArgs(ListSeries series) : EventArgs
 
 public class LiveChartSeries //: ChartSeries<ISeries>
 {
-	private const int MaxPointsToShowMarkers = 8;
 	private const int MaxTitleLength = 200;
+	private const int MaxPointsToShowMarkers = 8;
 	private const double DefaultGeometrySize = 5;
 
 	public readonly TabControlLiveChart Chart;

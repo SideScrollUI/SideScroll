@@ -193,6 +193,7 @@ public class TimeRangePeriod : ITags
 		double min = timeRangeValues
 			.Where(period => !double.IsNaN(period.Value))
 			.Where(period => period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
+			.DefaultIfEmpty(new TimeRangeValue())
 			.Min(period => period.Value);
 		return min;
 	}
@@ -202,6 +203,7 @@ public class TimeRangePeriod : ITags
 		double max = timeRangeValues
 			.Where(period => !double.IsNaN(period.Value))
 			.Where(period => period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
+			.DefaultIfEmpty(new TimeRangeValue())
 			.Max(period => period.Value);
 		return max;
 	}
