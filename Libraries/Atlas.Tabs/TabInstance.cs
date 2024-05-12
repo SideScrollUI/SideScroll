@@ -90,16 +90,7 @@ public class TabInstance : IDisposable
 	public TabBookmark? TabBookmarkLoaded { get; set; }
 	public SelectedRow? SelectedRow { get; set; } // The parent selection that points to this tab
 
-	public int Depth
-	{
-		get
-		{
-			int count = 1;
-			if (ParentTabInstance != null)
-				count += ParentTabInstance.Depth;
-			return count;
-		}
-	}
+	public int Depth => 1 + (ParentTabInstance?.Depth ?? 0);
 
 	public TabInstance? ParentTabInstance { get; set; }
 	public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = [];

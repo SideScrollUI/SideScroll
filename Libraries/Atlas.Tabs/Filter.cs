@@ -61,6 +61,8 @@ public class Filter
 	public List<FilterExpression> FilterExpressions { get; set; } = [];
 	public bool IsAnd { get; set; }
 
+	public override string ToString() => FilterText;
+
 	// "ABC" | 123
 	// +3 "ABC" | 123
 	public Filter(string? filterText)
@@ -109,39 +111,29 @@ public class Filter
 
 	public bool Matches(object obj, List<PropertyInfo> columnProperties)
 	{
-		string allValuesUppercase = GetItemSearchText(obj, columnProperties);
+		List<string> uppercaseValues = new();
+		GetItemSearchText(obj, columnProperties, uppercaseValues);
 		if (IsAnd)
 		{
-			foreach (FilterExpression filterExpression in FilterExpressions)
-			{
-				if (!filterExpression.Matches(allValuesUppercase))
-					return false;
-			}
-			return true;
+			return FilterExpressions.All(f => uppercaseValues.Any(v => f.Matches(v)));
 		}
 		else
 		{
-			foreach (FilterExpression filterExpression in FilterExpressions)
-			{
-				if (filterExpression.Matches(allValuesUppercase))
-					return true;
-			}
-			return false;
+			return FilterExpressions.Any(f => uppercaseValues.Any(v => f.Matches(v)));
 		}
 	}
 
-	private static string GetItemSearchText(object obj, List<PropertyInfo> columnProperties)
+	private static void GetItemSearchText(object obj, List<PropertyInfo> columnProperties, List<string> uppercaseValues)
 	{
-		string allValuesUppercase = "";
 		foreach (PropertyInfo propertyInfo in columnProperties)
 		{
 			object? value = propertyInfo.GetValue(obj);
 
 			string? valueText = value?.ToString();
-			if (valueText == null)
+			if (valueText.IsNullOrEmpty())
 				continue;
 
-			allValuesUppercase += valueText;
+			uppercaseValues.Add(valueText.ToUpper());
 		}
 
 		object? innerValue = obj.GetInnerValue();
@@ -152,16 +144,14 @@ public class Filter
 			{
 				List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleElementProperties(list); // cache me
 				foreach (var item in list)
-					allValuesUppercase += GetItemSearchText(item, visibleProperties);
+					GetItemSearchText(item, visibleProperties, uppercaseValues);
 			}
 			else
 			{
 				List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleProperties(innerType); // cache me
 				if (visibleProperties != null)
-					allValuesUppercase += GetItemSearchText(innerValue, visibleProperties);
+					GetItemSearchText(innerValue, visibleProperties, uppercaseValues);
 			}
 		}
-
-		return allValuesUppercase.ToUpper();
 	}
 }

@@ -17,6 +17,7 @@ public class TabTestDataRepo : ITab
 			model.Items = new List<ListItem>
 			{
 				new("Sample Data Repo", new TabTestDataRepoCollection()),
+				new("Paging", new TabTestDataRepoPaging()),
 				new("Local Directories", new TabDirectory(Project.DataApp.RepoPath)),
 			};
 

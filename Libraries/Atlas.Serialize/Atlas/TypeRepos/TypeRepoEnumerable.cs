@@ -42,7 +42,9 @@ public class TypeRepoEnumerable : TypeRepo
 	public override void InitializeLoading(Log log)
 	{
 		if (_elementType != null)
+		{
 			_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
+		}
 	}
 
 	public override void AddChildObjects(object obj)
@@ -56,10 +58,10 @@ public class TypeRepoEnumerable : TypeRepo
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		PropertyInfo countProp = LoadableType!.GetProperty("Count")!; // IEnumerable isn't required to implement this
+		PropertyInfo propertyInfo = LoadableType!.GetProperty("Count")!; // IEnumerable isn't required to implement this
 		IEnumerable iEnumerable = (IEnumerable)obj;
 
-		int count = (int)countProp.GetValue(iEnumerable, null)!;
+		int count = (int)propertyInfo.GetValue(iEnumerable, null)!;
 		writer.Write(count);
 		foreach (object item in iEnumerable)
 		{
@@ -75,7 +77,7 @@ public class TypeRepoEnumerable : TypeRepo
 		for (int j = 0; j < count; j++)
 		{
 			object objectValue = _listTypeRepo!.LoadObjectRef()!;
-			_addMethod!.Invoke(obj, new object[] { objectValue });
+			_addMethod!.Invoke(obj, [objectValue]);
 		}
 	}
 
@@ -85,7 +87,7 @@ public class TypeRepoEnumerable : TypeRepo
 		foreach (var item in iSource)
 		{
 			object? clone = Serializer.Clone(item);
-			_addMethod!.Invoke(dest, new object?[] { clone });
+			_addMethod!.Invoke(dest, [clone]);
 		}
 	}
 }

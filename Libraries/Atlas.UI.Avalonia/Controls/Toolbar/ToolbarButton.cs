@@ -2,7 +2,7 @@ using System.Windows.Input;
 using Atlas.Core;
 using Atlas.Core.Tasks;
 using Atlas.Resources;
-using Atlas.Tabs;
+using Atlas.Tabs.Toolbar;
 using Atlas.UI.Avalonia.Themes;
 using Atlas.UI.Avalonia.Utilities;
 using Avalonia;
@@ -115,8 +115,6 @@ public class ToolbarButton : Button, IDisposable
 			Source = _defaultImage,
 			Width = 24,
 			Height = 24,
-			//MaxWidth = 24,
-			//MaxHeight = 24,
 			Stretch = Stretch.None,
 		};
 		grid.Children.Add(_imageControl);
@@ -144,6 +142,13 @@ public class ToolbarButton : Button, IDisposable
 
 	private void ToolbarButton_ActualThemeVariantChanged(object? sender, EventArgs e)
 	{
+		SetImage(ImageResource);
+	}
+
+	public void SetImage(IResourceView imageResource)
+	{
+		ImageResource = imageResource;
+
 		_defaultImage = null;
 		_highlightImage = null;
 		_disabledImage = null;
@@ -151,7 +156,7 @@ public class ToolbarButton : Button, IDisposable
 		UpdateImage();
 	}
 
-	private void UpdateImage()
+	protected void UpdateImage()
 	{
 		if (ImageResource.ResourceType != "svg" || _imageControl == null) return;
 
@@ -173,7 +178,7 @@ public class ToolbarButton : Button, IDisposable
 		Toolbar.TabInstance!.DefaultAction = () => Invoke();
 	}
 
-	public void Invoke(bool canDelay = true)
+	public virtual void Invoke(bool canDelay = true)
 	{
 		if (!IsEnabled || IsActive)
 			return;

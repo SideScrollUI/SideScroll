@@ -6,6 +6,7 @@ using Atlas.Tabs.Test.Chart;
 using Atlas.Tabs.Test.DataGrid;
 using Atlas.Tabs.Test.Objects;
 using Atlas.Tabs.Test.Params;
+using Atlas.Tabs.Toolbar;
 using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.Samples.Controls.CustomControl;
 using Avalonia.Controls;

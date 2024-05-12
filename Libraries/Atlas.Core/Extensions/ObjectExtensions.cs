@@ -16,7 +16,17 @@ public static class ObjectExtensions
 		if (type.IsNumeric())
 		{
 			if (obj is double d)
-				return d.ToString("#,0.###");
+			{
+				// todo: Make more generic
+				if (Math.Abs(d) < 0.001)
+				{
+					return d.ToString("#,0.######");
+				}
+				else
+				{
+					return d.ToString("#,0.###");
+				}
+			}
 
 			MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) })!;
 			string format = type.IsDecimal() ? "G" : "N0";

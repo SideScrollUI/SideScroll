@@ -53,6 +53,7 @@ public abstract class TypeRepo : IDisposable
 	public readonly Type? Type; // might be null after loading
 	public Type? LoadableType; // some types get overridden lazy load, or get removed [Unserialized]
 	public int TypeIndex; // -1 if null
+
 	public List<object> Objects = []; // ordered by index, not filled in when loading
 	public int[]? ObjectSizes;
 	public long[]? ObjectOffsets;
@@ -493,8 +494,8 @@ public abstract class TypeRepo : IDisposable
 		if (objectIndex >= ObjectsLoaded.Length)
 			return null;
 
-		if (ObjectsLoaded[objectIndex] != null)
-			return ObjectsLoaded[objectIndex];
+		if (ObjectsLoaded[objectIndex] is object existingObject)
+			return existingObject;
 
 		ObjectsLoadedCount++;
 
@@ -504,8 +505,8 @@ public abstract class TypeRepo : IDisposable
 
 	public object? LoadFullObject(int objectIndex)
 	{
-		if (ObjectsLoaded[objectIndex] != null)
-			return ObjectsLoaded[objectIndex];
+		if (ObjectsLoaded[objectIndex] is object existingObject)
+			return existingObject;
 
 		object? obj = CreateObject(objectIndex);
 

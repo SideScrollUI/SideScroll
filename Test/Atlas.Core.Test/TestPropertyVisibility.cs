@@ -166,7 +166,7 @@ public class TestPropertyVisibility : TestBase
 	[Test]
 	public void TestInlineClass()
 	{
-		InlineClass input = new();
+		InlineData input = new();
 		ItemCollection<ListMember> listMembers = ListMember.Create(input);
 
 		Assert.AreEqual(2, listMembers.Count);

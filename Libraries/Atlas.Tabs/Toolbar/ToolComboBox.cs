@@ -2,7 +2,7 @@ using Atlas.Core;
 using Atlas.Core.Tasks;
 using System.Collections;
 
-namespace Atlas.Tabs;
+namespace Atlas.Tabs.Toolbar;
 
 public interface IToolComboBox
 {

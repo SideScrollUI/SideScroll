@@ -25,9 +25,9 @@ public static class SvgUtils
 				string key = $"{imageResource.Path}:{color}";
 				if (_images.TryGetValue(key, out IImage? image)) return image;
 
-				IImage queueImage = GetSvgColorImage(imageResource.Stream, color);
-				_images.Set(key, queueImage);
-				return queueImage;
+				IImage colorImage = GetSvgColorImage(imageResource.Stream, color);
+				_images.Set(key, colorImage);
+				return colorImage;
 			}
 		}
 		catch (Exception e)

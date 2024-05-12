@@ -5,6 +5,14 @@ namespace Atlas.Core.Utilities;
 
 public static class JsonUtils
 {
+	public static bool IsJson(string? text)
+	{
+		if (text == null) return false;
+
+		text = text.Trim();
+		return text.StartsWith('{') && text.EndsWith('}');
+	}
+
 	public static string Format(string text)
 	{
 		if (TryFormat(text, out string? json)) return json;
@@ -15,7 +23,7 @@ public static class JsonUtils
 	public static bool TryFormat(string text, [NotNullWhen(true)] out string? json)
 	{
 		json = default;
-		if (!text.StartsWith('{')) return false;
+		if (!IsJson(text)) return false;
 
 		try
 		{

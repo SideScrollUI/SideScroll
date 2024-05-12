@@ -74,8 +74,8 @@ public static class AtlasExtensions
 		{
 			if (propertyInfo.GetCustomAttribute<InnerValueAttribute>() != null)
 			{
-				value = propertyInfo.GetValue(value);
-				return GetInnerValue(value);
+				object? propertyValue = propertyInfo.GetValue(value);
+				return GetInnerValue(propertyValue);
 			}
 		}
 
@@ -83,8 +83,8 @@ public static class AtlasExtensions
 		{
 			if (fieldInfo.GetCustomAttribute<InnerValueAttribute>() != null)
 			{
-				value = fieldInfo.GetValue(value);
-				return GetInnerValue(value);
+				object? fieldValue = fieldInfo.GetValue(value);
+				return GetInnerValue(fieldValue);
 			}
 		}
 

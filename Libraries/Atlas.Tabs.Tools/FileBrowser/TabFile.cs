@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Core.Utilities;
 using Atlas.Resources;
+using Atlas.Tabs.Toolbar;
 
 namespace Atlas.Tabs.Tools;
 
@@ -9,8 +10,14 @@ public interface IFileTypeView
 	string? Path { get; set; }
 }
 
-public class TabFile(string path) : ITab
+public class TabFile(FileView fileView) : ITab
 {
+	public TabFile(string filePath) : this(new FileView(filePath)) { }
+
+	public FileView FileView = fileView;
+
+	public string Path = fileView.Path;
+
 	public static Dictionary<string, Type> ExtensionTypes { get; set; } = [];
 
 	public static void RegisterType<T>(params string[] extensions)
@@ -21,12 +28,13 @@ public class TabFile(string path) : ITab
 		}
 	}
 
-	public string Path = path;
-
 	public TabInstance Create() => new Instance(this);
 
 	public class Toolbar : TabToolbar
 	{
+		public ToolToggleButton? ButtonStar { get; set; }
+
+		[Separator]
 		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Svg.OpenFolder);
 
 		[Separator]
@@ -35,6 +43,8 @@ public class TabFile(string path) : ITab
 
 	public class Instance(TabFile tab) : TabInstance
 	{
+		public FileView FileView => tab.FileView;
+
 		public override void Load(Call call, TabModel model)
 		{
 			string path = tab.Path;
@@ -45,6 +55,7 @@ public class TabFile(string path) : ITab
 			}
 
 			var toolbar = new Toolbar();
+			toolbar.ButtonStar = new("Favorite", Icons.Svg.StarFilled, Icons.Svg.Star, new ListProperty(FileView, nameof(FileView.Favorite)));
 			toolbar.ButtonOpenFolder.Action = OpenFolder;
 			toolbar.ButtonDelete.Action = Delete;
 			model.AddObject(toolbar);

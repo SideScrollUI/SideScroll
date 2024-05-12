@@ -26,6 +26,8 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 
 	public SynchronizationContext? Context { get; set; } // TabInstance will initialize this, don't want to initialize this early due to default SynchronizationContext not posting messages in order
 
+	public bool UsePost => Context != null && (PostOnly || Context != SynchronizationContext.Current);
+
 	private readonly object _lock = new();
 
 	public ItemCollectionUI() { }
@@ -46,14 +48,10 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 
 	public new void Add(T item)
 	{
-		if (Context == null)
-		{
-			AddItemCallback(item);
-		}
-		else if (PostOnly || Context != SynchronizationContext.Current)
+		if (UsePost)
 		{
 			// Add later so we don't insert at the same index for multiple Adds()
-			Context.Post(AddItemCallback, item);
+			Context!.Post(AddItemCallback, item);
 		}
 		else
 		{
@@ -74,15 +72,60 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 
 	public void AddRange(IEnumerable<T> collection)
 	{
-		int index = Items.Count;
-		foreach (T item in collection)
+		if (UsePost)
 		{
-			InsertItem(index++, item); // item gets added in the background with Add() and doesn't increment index
+			Context!.Post(AddRangeCallback, collection);
 		}
+		else
+		{
+			AddRangeCallback(collection);
+		}
+	}
 
-		//foreach (T item in collection)
-		//	Items.Add(item);
-		//OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)); // need ui thread
+	// Thread safe callback, only works if the context is the same
+	// Todo: Improve efficiency, single item Add is slow
+	private void AddRangeCallback(object? state)
+	{
+		if (state is IEnumerable<T> collection)
+		{
+			lock (_lock)
+			{
+				foreach (T item in collection)
+				{
+					base.Add(item);
+				}
+			}
+		}
+	}
+
+
+	public void Replace(IEnumerable<T> collection)
+	{
+		if (UsePost)
+		{
+			Context!.Post(ReplaceCallback, collection);
+		}
+		else
+		{
+			ReplaceCallback(collection);
+		}
+	}
+
+	// Thread safe callback, only works if the context is the same
+	// Todo: Improve efficiency, single item Add is slow and triggers new item selections
+	private void ReplaceCallback(object? state)
+	{
+		if (state is IEnumerable<T> collection)
+		{
+			lock (_lock)
+			{
+				base.Clear();
+				foreach (T item in collection)
+				{
+					base.Add(item);
+				}
+			}
+		}
 	}
 
 	public readonly record struct ItemLocation(int Index, T Item);
@@ -92,14 +135,10 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	{
 		var location = new ItemLocation(index, item);
 
-		if (Context == null)
-		{
-			InsertItemCallback(location);
-		}
-		else if (PostOnly || Context != SynchronizationContext.Current)
+		if (UsePost)
 		{
 			// Debug.Print("InsertItem -> Post -> InsertItemCallback: Index = " + index + ", Item = " + item.ToString());
-			Context.Post(InsertItemCallback, location); // default context inserts multiple items in wrong order, AvaloniaUI doesn't
+			Context!.Post(InsertItemCallback, location); // default context inserts multiple items in wrong order, AvaloniaUI doesn't
 		}
 		else
 		{
@@ -121,13 +160,13 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 
 	public new void Clear()
 	{
-		if (Context == null || (PostOnly && Context == SynchronizationContext.Current))
+		if (UsePost)
 		{
-			base.Clear();
+			Context!.Post(ClearCallback, null);
 		}
 		else
 		{
-			Context.Post(ClearCallback, null);
+			base.Clear();
 		}
 	}
 
@@ -142,13 +181,9 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 
 	protected override void RemoveItem(int index)
 	{
-		if (Context == null)
+		if (UsePost)
 		{
-			RemoveItemCallback(index);
-		}
-		else if (PostOnly || Context != SynchronizationContext.Current)
-		{
-			Context.Post(RemoveItemCallback, index);
+			Context!.Post(RemoveItemCallback, index);
 		}
 		else
 		{

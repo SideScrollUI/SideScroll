@@ -14,7 +14,7 @@ public class TestLinkUri : TestBase
 	[Test]
 	public void TestParseLinkId()
 	{
-		Assert.IsTrue(LinkUri.TryParse("atlas://type/v3.1/id", out LinkUri? uri));
+		Assert.IsTrue(LinkUri.TryParseTyped("atlas://type/v3.1/id", out LinkUri? uri));
 
 		Assert.AreEqual("atlas", uri!.Prefix);
 		Assert.AreEqual("type", uri.Type);
@@ -25,7 +25,7 @@ public class TestLinkUri : TestBase
 	[Test]
 	public void TestParseQuery()
 	{
-		Assert.IsTrue(LinkUri.TryParse("atlas://type/path?query", out LinkUri? uri));
+		Assert.IsTrue(LinkUri.TryParseTyped("atlas://type/path?query", out LinkUri? uri));
 
 		Assert.AreEqual("atlas", uri!.Prefix);
 		Assert.AreEqual("type", uri.Type);
@@ -36,7 +36,7 @@ public class TestLinkUri : TestBase
 	[Test]
 	public void TestParseVersionedPath()
 	{
-		Assert.IsTrue(LinkUri.TryParse("atlas://type/v3.1/path?query", out LinkUri? uri));
+		Assert.IsTrue(LinkUri.TryParseTyped("atlas://type/v3.1/path?query", out LinkUri? uri));
 
 		Assert.AreEqual("atlas", uri!.Prefix);
 		Assert.AreEqual("type", uri.Type);

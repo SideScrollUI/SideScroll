@@ -62,5 +62,8 @@ public class TabControlSearchToolbar : TabControlToolbar
 
 		AddSeparator();
 		TextBoxStatus = AddLabelText("Status");
+
+		AddSeparator();
+		AddToggleButton("Favorite", Icons.Svg.StarFilled, Icons.Svg.Star, false);
 	}
 }

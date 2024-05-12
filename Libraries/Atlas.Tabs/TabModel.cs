@@ -43,6 +43,7 @@ public class TabModel
 	public int MaxDesiredWidth { get; set; } = 1500;
 
 	public SearchFilter? SearchFilter { get; set; } // DataGrid filtering will also update this filter
+	public int MaxSearchDepth { get; set; } = 0;
 
 	public IList? Actions { get; set; }
 	public TaskInstanceCollection Tasks { get; set; } = [];
@@ -50,7 +51,7 @@ public class TabModel
 	public List<IList> ItemList { get; set; } = [];
 
 	public List<TabObject> Objects { get; set; } = [];
-	//public List<ITabControl> CustomTabControls { get; set; } = new(); // should everything be a custom control? tabControls?
+	//public List<ITabControl> CustomTabControls { get; set; } = []; // should everything be a custom control? tabControls?
 
 	public IList? Items
 	{
@@ -361,6 +362,7 @@ public class TabModel
 			ViewSettings = new TabViewSettings(),
 		};
 
+		depth = Math.Min(depth, MaxSearchDepth);
 		depth--;
 		foreach (IList iList in ItemList)
 		{

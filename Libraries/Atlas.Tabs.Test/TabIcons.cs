@@ -1,5 +1,6 @@
 using Atlas.Core;
 using Atlas.Resources;
+using Atlas.Tabs.Toolbar;
 
 namespace Atlas.Tabs.Test;
 

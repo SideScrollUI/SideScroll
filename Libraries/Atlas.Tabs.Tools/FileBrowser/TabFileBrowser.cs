@@ -10,14 +10,14 @@ public class TabFileBrowser : ITab
 	{
 		public async Task LoadAsync(Call call, TabModel model)
 		{
-			var dataRepoView = await FileFavoritesDataRepo.GetViewAsync(call, Project);
+			var dataRepoView = await FileDataRepos.Favorites.LoadViewAsync(call, Project);
 
 			model.Items = new List<ListItem>
 			{
 				new("Current", new TabDirectory(Directory.GetCurrentDirectory(), dataRepoView)),
 				new("Downloads", new TabDirectory(Paths.DownloadPath, dataRepoView)),
 				new("Drives", new TabDrives(dataRepoView)),
-				new("Favorites", new TabFileFavorites(dataRepoView)),
+				new("Favorites", new TabFileDataRepo(dataRepoView)),
 			};
 		}
 	}
