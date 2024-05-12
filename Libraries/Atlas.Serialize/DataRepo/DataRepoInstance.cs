@@ -13,16 +13,33 @@ public interface IDataRepoInstance
 }
 
 [Unserialized]
-public class DataRepoInstance<T>(DataRepo dataRepo, string groupId) : IDataRepoInstance
+public class DataRepoInstance<T> : IDataRepoInstance
 {
 	protected const string DefaultKey = ".Default"; // todo: support multiple directory levels?
 
-	public readonly DataRepo DataRepo = dataRepo;
-	public string GroupId { get; set; } = groupId;
+	public readonly DataRepo DataRepo;
+	public string GroupId { get; set; }
 	public string GroupPath => DataRepo.GetGroupPath(typeof(T), GroupId);
 	public Type DataType => typeof(T);
 
+	public DataRepoIndexInstance<T>? Index { get; set; }
+
 	public override string ToString() => GroupId;
+
+	public DataRepoInstance(DataRepo dataRepo, string groupId, bool indexed = false, int? maxItems = null)
+	{
+		DataRepo = dataRepo;
+		GroupId = groupId;
+		if (indexed)
+		{
+			AddIndex(maxItems);
+		}
+	}
+
+	public void AddIndex(int? maxItems = null)
+	{
+		Index ??= new(this, maxItems);
+	}
 
 	public virtual void Save(Call? call, T item)
 	{
@@ -32,6 +49,7 @@ public class DataRepoInstance<T>(DataRepo dataRepo, string groupId) : IDataRepoI
 	public virtual void Save(Call? call, string key, T item)
 	{
 		call ??= new();
+		Index?.Add(call, key);
 		DataRepo.Save<T>(GroupId, key, item, call);
 	}
 
@@ -40,9 +58,15 @@ public class DataRepoInstance<T>(DataRepo dataRepo, string groupId) : IDataRepoI
 		return DataRepo.Load<T>(GroupId, key ?? DefaultKey, call, createIfNeeded, lazy);
 	}
 
-	public DataItemCollection<T> LoadAll(Call? call = null, bool lazy = false)
+	public virtual DataPageView<T>? LoadPageView(Call? call, bool ascending = true)
 	{
-		return DataRepo.LoadAll<T>(call, GroupId, lazy);
+		return new DataPageView<T>(this, ascending);
+	}
+
+	public DataItemCollection<T> LoadAll(Call? call = null, bool ascending = true)
+	{
+		call ??= new();
+		return new DataItemCollection<T>(LoadAllDataItems(call, ascending));
 	}
 
 	public ItemCollection<Header> LoadHeaders(Call? call = null)
@@ -60,12 +84,52 @@ public class DataRepoInstance<T>(DataRepo dataRepo, string groupId) : IDataRepoI
 	{
 		call ??= new();
 		key ??= DefaultKey;
+		Index?.Remove(call, key);
 		DataRepo.Delete<T>(call, GroupId, key);
 	}
 
 	public virtual void DeleteAll(Call? call)
 	{
 		call ??= new();
+		Index?.RemoveAll(call);
 		DataRepo.DeleteAll<T>(call, GroupId);
+	}
+
+	public IEnumerable<string>? GetPathEnumerable(bool ascending)
+	{
+		if (!Directory.Exists(GroupPath)) return null;
+
+		IEnumerable<string> enumerable;
+		if (Index != null)
+		{
+			var indices = Index.Load(new());
+			enumerable = indices.Items
+				.Select(i => DataRepo.GetDataPath(DataType, GroupId, i.Key));
+		}
+		else
+		{
+			enumerable = Directory.EnumerateDirectories(GroupPath)
+				.Select(path => path);
+		}
+
+		if (ascending)
+		{
+			return enumerable;
+		}
+		else
+		{
+			return enumerable.Reverse();
+		}
+	}
+
+	public IEnumerable<DataItem<T>> LoadAllDataItems(Call call, bool ascending = false)
+	{
+		var pathIterator = GetPathEnumerable(ascending);
+		if (pathIterator == null) return [];
+
+		return pathIterator
+			.Select(path => DataRepo.LoadPath<T>(call, path))
+			.OfType<DataItem<T>>()
+			.Select(dataItem => new DataItem<T>(dataItem.Key, dataItem.Value));
 	}
 }

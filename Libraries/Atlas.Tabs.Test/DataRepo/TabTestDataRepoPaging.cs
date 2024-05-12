@@ -1,23 +1,37 @@
 using Atlas.Core;
 using Atlas.Core.Tasks;
+using Atlas.Resources;
 using Atlas.Serialize;
+using Atlas.Tabs.Toolbar;
 
 namespace Atlas.Tabs.Test.DataRepo;
 
-public class TabTestDataRepoCollection : ITab
+public class TabTestDataRepoPaging : ITab
 {
 	public TabInstance Create() => new Instance();
 
+	public class Toolbar : TabToolbar
+	{
+		public ToolButton ButtonPrevious { get; set; } = new("Previous", Icons.Svg.LeftArrow);
+		public ToolButton ButtonNext { get; set; } = new("Next", Icons.Svg.RightArrow);
+	}
+
 	public class Instance : TabInstance
 	{
-		private const string RepoId = "TestRepo";
+		private const string RepoId = "PagingRepo";
 
-		private ItemCollection<SampleItem>? _sampleItems;
+		private ItemCollectionUI<SampleItem>? _sampleItems;
 		private DataRepoInstance<SampleItem>? _dataRepoItems;
+		private DataPageView<SampleItem>? _pageView;
 
 		public override void Load(Call call, TabModel model)
 		{
-			LoadSavedItems(call);
+			Toolbar toolbar = new();
+			toolbar.ButtonPrevious.Action = LoadPrevious;
+			toolbar.ButtonNext.Action = LoadNext;
+			model.AddObject(toolbar);
+
+			LoadPageView(call);
 			model.Items = _sampleItems;
 
 			model.Actions = new List<TaskCreator>
@@ -27,17 +41,29 @@ public class TabTestDataRepoCollection : ITab
 				new TaskDelegate("Replace", Replace),
 				new TaskDelegate("Delete", Delete),
 				new TaskDelegate("Delete All", DeleteAll),
+				new TaskDelegate("Load All", LoadAll),
 			};
-
-			//tabModel.Notes = "Data Repos store C# objects as serialized data.";
 		}
 
-		private void LoadSavedItems(Call call)
+		private void LoadPageView(Call call)
 		{
 			DataRepoInstance = _dataRepoItems = DataApp.Open<SampleItem>(RepoId, true);
 
-			var dataItemCollection = _dataRepoItems.LoadAll(call);
-			_sampleItems = new ItemCollection<SampleItem>(dataItemCollection.Values);
+			_pageView = _dataRepoItems.LoadPageView(call);
+			_pageView!.PageSize = 10;
+			_sampleItems = new ItemCollectionUI<SampleItem>(_pageView?.Next(call).Select(d => d.Value) ?? []);
+		}
+
+		private void LoadPrevious(Call call)
+		{
+			var items = new ItemCollectionUI<SampleItem>(_pageView?.Previous(call).Select(d => d.Value) ?? []);
+			_sampleItems!.Replace(items);
+		}
+
+		private void LoadNext(Call call)
+		{
+			var items = new ItemCollectionUI<SampleItem>(_pageView?.Next(call).Select(d => d.Value) ?? []);
+			_sampleItems!.Replace(items);
 		}
 
 		private void Add(Call call)
@@ -81,6 +107,13 @@ public class TabTestDataRepoCollection : ITab
 		{
 			_dataRepoItems!.DeleteAll(call);
 			_sampleItems!.Clear();
+		}
+
+		private void LoadAll(Call call)
+		{
+			_dataRepoItems!.LoadAllDataItems(call);
+			var dataItemCollection = _dataRepoItems.LoadAll(call);
+			_sampleItems!.Replace(dataItemCollection.Values);
 		}
 
 		private void RemoveItem(Call call, string key)

@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Serialize;
+using Atlas.Tabs.Toolbar;
 
 namespace Atlas.Tabs.Test.Params;
 

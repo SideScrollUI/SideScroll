@@ -123,20 +123,22 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 
 	public static ItemCollection<ListMember> Create(object obj, bool includeBaseTypes = true)
 	{
-		var methodMembers = new SortedDictionary<int, ListMember>();
+		var methodMembers = new SortedDictionary<string, ListMember>();
 
 		var properties = ListProperty.Create(obj, includeBaseTypes);
 		foreach (ListProperty listProperty in properties)
 		{
-			int metadataToken = listProperty.PropertyInfo.GetGetMethod(false)!.MetadataToken;
-
-			methodMembers.Add(metadataToken, listProperty);
+			// MetadataTokens are only unique across modules
+			MethodInfo getMethod = listProperty.PropertyInfo.GetGetMethod(false)!;
+			string id = $"{getMethod.Module.Name}.{getMethod.MetadataToken:D10}";
+			methodMembers.Add(id, listProperty);
 		}
 
 		var methods = ListMethod.Create(obj, includeBaseTypes);
 		foreach (ListMethod listMethod in methods)
 		{
-			methodMembers.Add(listMethod.MethodInfo.MetadataToken, listMethod);
+			string id = $"{listMethod.MethodInfo.Module.Name}.{listMethod.MethodInfo.MetadataToken:D10}";
+			methodMembers.Add(id, listMethod);
 		}
 
 		var listMembers = methodMembers.Values.ToList();

@@ -2,6 +2,7 @@ using Atlas.Core;
 using Atlas.Extensions;
 using Atlas.Resources;
 using Atlas.Tabs;
+using Atlas.Tabs.Toolbar;
 using Atlas.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
@@ -51,7 +52,11 @@ public class TabControlToolbar : Grid, IDisposable
 				AddSeparator();
 			}
 
-			if (propertyValue is ToolButton toolButton)
+			if (propertyValue is ToolToggleButton toolToggleButton)
+			{
+				AddToggleButton(toolToggleButton);
+			}
+			else if (propertyValue is ToolButton toolButton)
 			{
 				AddButton(toolButton);
 			}
@@ -74,7 +79,16 @@ public class TabControlToolbar : Grid, IDisposable
 		{
 			AddSeparator();
 			foreach (var toolButton in toolbar.Buttons)
-				AddButton(toolButton);
+			{
+				if (toolButton is ToolToggleButton toolToggleButton)
+				{
+					AddToggleButton(toolToggleButton);
+				}
+				else
+				{
+					AddButton(toolButton);
+				}
+			}
 		}
 	}
 
@@ -100,6 +114,27 @@ public class TabControlToolbar : Grid, IDisposable
 		var button = new ToolbarButton(this, toolButton);
 		AddControl(button);
 		return button;
+	}
+
+	public ToolbarToggleButton AddToggleButton(string tooltip, IResourceView onImageResource, IResourceView offImageResource, bool isChecked, string? label = null, ICommand? command = null)
+	{
+		var button = new ToolbarToggleButton(this, tooltip, onImageResource, offImageResource, isChecked, label, command);
+		AddControl(button);
+		return button;
+	}
+
+	public ToolbarToggleButton AddToggleButton(ToolToggleButton toolButton)
+	{
+		var button = new ToolbarToggleButton(this, toolButton);
+		AddControl(button);
+		return button;
+	}
+
+	public ToolbarRadioButton AddRadioButton(string text)
+	{
+		var radioButton = new ToolbarRadioButton(text);
+		AddControl(radioButton);
+		return radioButton;
 	}
 
 	public TabControlFormattedComboBox AddComboBox(IToolComboBox toolComboBox)
@@ -137,13 +172,6 @@ public class TabControlToolbar : Grid, IDisposable
 		var textBlock = new ToolbarTextBlock(text);
 		AddControl(textBlock, fill);
 		return textBlock;
-	}
-
-	public ToolbarRadioButton AddRadioButton(string text)
-	{
-		var radioButton = new ToolbarRadioButton(text);
-		AddControl(radioButton);
-		return radioButton;
 	}
 
 	// Read Only

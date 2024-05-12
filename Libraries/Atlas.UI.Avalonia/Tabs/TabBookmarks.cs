@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
+using Atlas.Tabs.Toolbar;
 
 namespace Atlas.UI.Avalonia.Tabs;
 

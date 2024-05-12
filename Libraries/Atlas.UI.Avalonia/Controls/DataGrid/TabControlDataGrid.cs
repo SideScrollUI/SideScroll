@@ -188,8 +188,6 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			MaxHeight = this.MaxHeight,
 			[Grid.RowProperty] = 1,
 		};
-		// Add a style for selected & focused here?
-		//var styles = dataGrid.Styles;
 
 		if (AutoGenerateColumns)
 			AddColumns();

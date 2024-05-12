@@ -3,9 +3,9 @@ using Atlas.Serialize;
 
 namespace Atlas.Tabs.Tools;
 
-public class TabDrives(DataRepoView<NodeView>? dataRepoNodes = null) : ITab
+public class TabDrives(DataRepoView<NodeView>? dataRepoFavorites = null) : ITab
 {
-	public DataRepoView<NodeView>? DataRepoNodes = dataRepoNodes;
+	public DataRepoView<NodeView>? DataRepoFavorites = dataRepoFavorites;
 
 	public TabInstance Create() => new Instance(this);
 
@@ -16,7 +16,7 @@ public class TabDrives(DataRepoView<NodeView>? dataRepoNodes = null) : ITab
 			DriveInfo[] drives = DriveInfo.GetDrives();
 
 			model.Items = drives
-				.Select(d => new TabDirectory(d.Name, tab.DataRepoNodes))
+				.Select(d => new TabDirectory(d.Name, tab.DataRepoFavorites))
 				.ToList();
 		}
 	}

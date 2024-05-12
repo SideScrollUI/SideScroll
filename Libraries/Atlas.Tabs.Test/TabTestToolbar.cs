@@ -2,6 +2,7 @@ using Atlas.Core;
 using Atlas.Core.Utilities;
 using Atlas.Extensions;
 using Atlas.Resources;
+using Atlas.Tabs.Toolbar;
 
 namespace Atlas.Tabs.Test;
 

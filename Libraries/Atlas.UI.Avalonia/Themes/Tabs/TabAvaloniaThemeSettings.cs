@@ -2,6 +2,7 @@ using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Serialize;
 using Atlas.Tabs;
+using Atlas.Tabs.Toolbar;
 using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.Utilities;
 using Avalonia;

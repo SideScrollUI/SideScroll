@@ -1,7 +1,7 @@
-using Atlas.Core.Tasks;
+﻿using Atlas.Core.Tasks;
 using Atlas.Resources;
 
-namespace Atlas.Tabs;
+namespace Atlas.Tabs.Toolbar;
 
 public class ToolButton
 {
@@ -30,9 +30,4 @@ public class ToolButton
 		ActionAsync = actionAsync;
 		Default = isDefault;
 	}
-}
-
-public class TabToolbar
-{
-	public List<ToolButton> Buttons { get; set; } = [];
 }

@@ -111,6 +111,11 @@ public class ListProperty : ListMember, IPropertyEditable
 		}
 	}
 
+	public ListProperty(object obj, string propertyName, bool cachable = true) :
+		this(obj, obj.GetType().GetProperty(propertyName)!, cachable)
+	{
+	}
+
 	protected void ListProperty_PropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
 		if (e.PropertyName != MemberInfo.Name) return;
