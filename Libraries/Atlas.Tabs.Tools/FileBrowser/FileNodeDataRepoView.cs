@@ -5,7 +5,9 @@ namespace Atlas.Tabs.Tools;
 
 public class FileNodeDataRepoView(string groupId, bool indexed = false, int? maxItems = null)
 {
-	public string GroupId = groupId;
+	public string GroupId => groupId;
+	public bool Indexed => indexed;
+	public int? MaxItems => maxItems;
 
 	private DataRepoView<NodeView>? _dataRepoNodes;
 
@@ -17,7 +19,7 @@ public class FileNodeDataRepoView(string groupId, bool indexed = false, int? max
 
 		try
 		{
-			return _dataRepoNodes ??= project.DataApp.OpenView<NodeView>(GroupId, indexed);
+			return _dataRepoNodes ??= project.DataApp.OpenView<NodeView>(GroupId, Indexed, MaxItems);
 		}
 		finally
 		{
@@ -36,7 +38,7 @@ public class FileNodeDataRepoView(string groupId, bool indexed = false, int? max
 			if (_dataRepoNodes?.Loaded == true) return _dataRepoNodes;
 
 			// DataRepo might only have been opened and not loaded before
-			_dataRepoNodes ??= project.DataApp.OpenView<NodeView>(GroupId, indexed, maxItems);
+			_dataRepoNodes ??= project.DataApp.OpenView<NodeView>(GroupId, Indexed, MaxItems);
 			_dataRepoNodes.LoadAllIndexed(call);
 			foreach (NodeView nodeView in _dataRepoNodes.Items.Values)
 			{
@@ -52,7 +54,7 @@ public class FileNodeDataRepoView(string groupId, bool indexed = false, int? max
 
 	public async Task SaveAsync(Call call, Project project, NodeView nodeView)
 	{
-		DataRepoView<NodeView> dataRepoView = await FileDataRepos.Recent.OpenViewAsync(project);
+		DataRepoView<NodeView> dataRepoView = await OpenViewAsync(project);
 		dataRepoView.Save(call, nodeView);
 	}
 }
