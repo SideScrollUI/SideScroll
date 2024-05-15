@@ -70,7 +70,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 			try
 			{
 				return Directory.EnumerateFiles(tab.Path)
-					.Select(f => new FileView(f, tab.DataRepoFavorites))
+					.Select(name => new FileView(name, tab.DataRepoFavorites))
 					.ToList();
 			}
 			catch (Exception ex)
@@ -78,7 +78,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 				call.Log.Add(ex);
 			}
 
-			return new List<FileView>();
+			return [];
 		}
 
 		private List<DirectoryView> GetDirectories(Call call)
@@ -86,7 +86,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 			try
 			{
 				return Directory.EnumerateDirectories(tab.Path)
-					.Select(f => new DirectoryView(f, tab.DataRepoFavorites))
+					.Select(name => new DirectoryView(name, tab.DataRepoFavorites))
 					.ToList();
 			}
 			catch (Exception ex)
@@ -94,7 +94,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 				call.Log.Add(ex);
 			}
 
-			return new List<DirectoryView>();
+			return [];
 		}
 
 		private void OpenFolder(Call call)

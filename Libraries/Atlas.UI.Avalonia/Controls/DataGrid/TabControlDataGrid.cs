@@ -413,7 +413,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			TabInstance.SaveTabSettings(); // selection has probably changed
 		}
 		if (bookmark != null)
+		{
 			bookmark.Changed = string.Join(",", TabDataSettings.SelectedRows);
+		}
 	}
 
 	private static DataGridRow? GetControlRow(object? obj, int depth)
@@ -513,7 +515,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 	private void ClearSearch()
 	{
 		if (!TabModel.ShowSearch)
+		{
 			SearchControl!.IsVisible = false;
+		}
 
 		SearchControl!.Text = "";
 		FilterText = "";
@@ -537,7 +541,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		SelectDefaultItems();
 
 		if (_disableSaving == 0)
+		{
 			TabInstance.SaveTabSettings();
+		}
 	}
 
 	private void AddColumns()
@@ -646,7 +652,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		column.IsReadOnly = isReadOnly;
 		column.MaxWidth = attributeMaxWidth?.MaxWidth ?? MaxColumnWidth;
 		if (attributeMinWidth != null)
+		{
 			column.Width = new DataGridLength(1, DataGridLengthUnitType.Auto, attributeMinWidth.MinWidth, double.NaN);
+		}
 
 		DataGrid.Columns.Add(column);
 		_columnObjects[propertyInfo.Name] = column;

@@ -31,7 +31,6 @@ public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes) : ITab
 			if (nodeViews.Count > 0)
 			{
 				DataRepoView<NodeView> fileFavorites = await FileDataRepos.Favorites.OpenViewAsync(Project);
-
 				foreach (var node in nodeViews)
 				{
 					node.DataRepoFavorites = fileFavorites;
@@ -44,6 +43,7 @@ public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes) : ITab
 		private void ClearAll(Call call)
 		{
 			tab.DataRepoNodes.DeleteAll(call);
+			Reload();
 		}
 	}
 }
