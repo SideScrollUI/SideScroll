@@ -65,7 +65,7 @@ public class TabView : Grid, IDisposable
 	// Created Controls
 	public TabControlActions? TabActions;
 	public TabControlTasks? TabTasks;
-	public List<ITabDataControl> TabDatas = [];
+	public List<ITabDataSelector> TabDatas = [];
 	public List<ITabSelector> CustomTabControls { get; set; } = []; // should everything use this?
 
 	private List<ToolbarButton> _hotKeys = [];
@@ -586,7 +586,7 @@ public class TabView : Grid, IDisposable
 		ClearControls(true);
 
 		// This will get cleared when the view reloads
-		var progressBar = new ProgressBar
+		ProgressBar progressBar = new()
 		{
 			IsIndeterminate = true,
 			MinWidth = 100,
@@ -833,7 +833,7 @@ public class TabView : Grid, IDisposable
 			CreateChildControls(TabTasks.SelectedItems, oldChildControls, newChildControls, orderedChildControls);
 		}
 
-		foreach (ITabDataControl tabData in TabDatas)
+		foreach (ITabDataSelector tabData in TabDatas)
 		{
 			CreateChildControls(tabData.SelectedRows, oldChildControls, newChildControls, orderedChildControls);
 		}
@@ -943,7 +943,7 @@ public class TabView : Grid, IDisposable
 
 		//RequestBringIntoView -= UserControl_RequestBringIntoView;
 
-		foreach (ITabDataControl tabData in TabDatas)
+		foreach (ITabDataSelector tabData in TabDatas)
 		{
 			tabData.OnSelectionChanged -= ParentListSelectionChanged;
 			tabData.Dispose();
@@ -1015,7 +1015,7 @@ public class TabView : Grid, IDisposable
 
 	private void TabInstance_OnClearSelection(object? sender, EventArgs e)
 	{
-		foreach (ITabDataControl tabData in TabDatas)
+		foreach (ITabDataSelector tabData in TabDatas)
 		{
 			tabData.SelectedItem = null; // dataGrid.UnselectAll() doesn't work
 		}
@@ -1073,18 +1073,30 @@ public class TabView : Grid, IDisposable
 		TabViewSettings = tabBookmark.ViewSettings;
 
 		int index = 0;
-		foreach (ITabDataControl tabData in TabDatas)
+		foreach (ITabDataSelector tabData in TabDatas)
 		{
-			tabData.TabDataSettings = TabViewSettings.GetData(index++);
-			tabData.LoadSettings();
+			LoadBookmarkData(tabData, tabBookmark, index++);
+		}
 
-			//if (tabInstance.tabBookmark != null)
-			foreach (TabInstance childTabInstance in Instance.ChildTabInstances.Values)
+		foreach (ITabSelector tabControl in CustomTabControls)
+		{
+			if (tabControl is ITabDataControl dataControl)
 			{
-				if (tabBookmark.ChildBookmarks.TryGetValue(childTabInstance.Label, out TabBookmark? childBookmarkNode))
-				{
-					childTabInstance.SelectBookmark(childBookmarkNode);
-				}
+				LoadBookmarkData(dataControl, tabBookmark, index++);
+			}
+		}
+	}
+
+	private void LoadBookmarkData(ITabDataControl dataControl, TabBookmark tabBookmark, int index)
+	{
+		dataControl.TabDataSettings = TabViewSettings.GetData(index++);
+		dataControl.LoadSettings();
+
+		foreach (TabInstance childTabInstance in Instance.ChildTabInstances.Values)
+		{
+			if (tabBookmark.ChildBookmarks.TryGetValue(childTabInstance.Label, out TabBookmark? childBookmarkNode))
+			{
+				childTabInstance.SelectBookmark(childBookmarkNode);
 			}
 		}
 	}

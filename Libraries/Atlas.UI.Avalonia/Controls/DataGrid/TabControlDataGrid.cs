@@ -22,7 +22,7 @@ using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls;
 
-public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataControl
+public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelector
 {
 	private const int ColumnPercentBased = 150;
 	private const int MaxMinColumnWidth = 200;
@@ -110,7 +110,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 	static TabControlDataGrid()
 	{
 		// DataGridRow event triggers before DataGridCell :(
-		PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => DataGridRow_PointerPressed(x, e), RoutingStrategies.Tunnel, true);
+		PointerPressedEvent.AddClassHandler<DataGridRow>(DataGridRow_PointerPressed, RoutingStrategies.Tunnel, true);
 	}
 
 	[MemberNotNull(nameof(_elementType), nameof(DataGrid))]

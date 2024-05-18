@@ -15,6 +15,12 @@ public class TabTestToolbar : ITab
 		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
 
 		[Separator]
+		public ToolButton ButtonSearch { get; set; } = new("Search", Icons.Svg.Search)
+		{
+			ShowTask = true,
+		};
+
+		[Separator]
 		public ToolButton ButtonOpenBrowser { get; set; } = new("Open in Browser", Icons.Svg.Browser);
 
 		[Separator]
@@ -30,14 +36,19 @@ public class TabTestToolbar : ITab
 		{
 			var toolbar = new Toolbar();
 			toolbar.ButtonRefresh.Action = Refresh;
+			toolbar.ButtonSearch.ActionAsync = SearchAsync;
 			toolbar.ButtonOpenBrowser.Action = OpenBrowser;
-
 			model.AddObject(toolbar);
 		}
 
 		private void Refresh(Call call)
 		{
 			Reload();
+		}
+
+		private async Task SearchAsync(Call call)
+		{
+			await Task.Delay(3000);
 		}
 
 		private static void OpenBrowser(Call call)

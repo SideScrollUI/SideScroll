@@ -120,12 +120,9 @@ public class TabDataSettings
 	private List<PropertyInfo> GetPropertyColumns(Type elementType)
 	{
 		List<PropertyInfo> visibleProperties = GetVisibleProperties(elementType);
-
 		if (ColumnNameOrder?.Count > 0)
 		{
-			var propertyNames = new Dictionary<string, PropertyInfo>();
-			foreach (PropertyInfo propertyInfo in visibleProperties)
-				propertyNames[propertyInfo.Name] = propertyInfo;
+			var propertyNames = visibleProperties.ToDictionary(propertyInfo => propertyInfo.Name);
 
 			// Add all previously seen property infos
 			var orderedPropertyInfos = new List<PropertyInfo>();
