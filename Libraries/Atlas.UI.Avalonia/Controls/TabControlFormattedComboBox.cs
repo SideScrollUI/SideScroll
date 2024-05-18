@@ -36,7 +36,8 @@ public class TabControlFormattedComboBox : ComboBox
 		{
 			PropertyInfo propertyInfo = property.Object.GetType().GetProperty(listPropertyName,
 				BindingFlags.Public | BindingFlags.NonPublic |
-				BindingFlags.Instance | BindingFlags.Static)!;
+				BindingFlags.Instance | BindingFlags.Static |
+				BindingFlags.FlattenHierarchy)!;
 			Items = (IEnumerable)propertyInfo.GetValue(property.Object)!;
 		}
 		else

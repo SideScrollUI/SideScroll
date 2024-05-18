@@ -308,6 +308,7 @@ public class TabControlSplitContainer : Grid
 				DisposeControl(control);
 			}
 		}
+
 		RowDefinitions.Clear();
 		Children.Clear();
 		GridControls.Clear();

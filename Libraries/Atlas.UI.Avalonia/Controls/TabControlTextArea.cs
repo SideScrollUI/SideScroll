@@ -33,9 +33,9 @@ public class TabControlTextArea : Border
 		TextBlock = new TextBlock
 		{
 			Background = AtlasTheme.TextAreaBackground, // Set background for ContentMenu
+			Foreground = AtlasTheme.TitleForeground,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
-			Foreground = AtlasTheme.TitleForeground,
 			TextWrapping = TextWrapping.Wrap,
 			Text = Text,
 			MinHeight = 24, // Single lines can get clipped if this is too low

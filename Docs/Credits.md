@@ -8,6 +8,7 @@
 | [Blank Document](https://www.flaticon.com/free-icon/blank-document_14922) (png) | Freepik | Flaticon license |
 | [Blank Document](https://icon-icons.com/icon/blank-paper-sheet/85748) (svg) | Anton Saputro | CC Atribution |
 | [Delete List](https://www.flaticon.com/free-icon/delete-list_1201) | Freepik | Flaticon license |
+| [Duplicate](https://icon-icons.com/icon/duplicate/246421) | System UIcons | Free for commercial use |
 | [Eraser](https://www.flaticon.com/free-icon/eraser_1203953) | Freepik | Flaticon license |
 | [Report](https://www.flaticon.com/free-icon/file_1508964) | Freepik | Flaticon license |
 | [Screenshot](https://www.flaticon.com/free-icon/screenshot_748046) | Freepik | Flaticon license |

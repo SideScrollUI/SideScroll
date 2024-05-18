@@ -21,7 +21,9 @@ public static class TabCreator
 			// use object? or inner value?
 			label = obj.Formatted();
 			if (label.IsNullOrEmpty())
+			{
 				label = "(" + obj.GetType().Name + ")";
+			}
 		}
 
 		string? labelOverride = null;

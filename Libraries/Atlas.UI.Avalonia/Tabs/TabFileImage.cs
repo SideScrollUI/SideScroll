@@ -18,8 +18,6 @@ public class TabFileImage : ITab, IFileTypeView
 
 	public string? Path { get; set; }
 
-	public TabFileImage() { }
-
 	public TabFileImage(string path)
 	{
 		Path = path;

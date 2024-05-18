@@ -85,7 +85,9 @@ public class TabControlTextBox : TextBox
 
 		PasswordCharAttribute? passwordCharAttribute = property.GetCustomAttribute<PasswordCharAttribute>();
 		if (passwordCharAttribute != null)
+		{
 			PasswordChar = passwordCharAttribute.Character;
+		}
 
 		SetWatermark(property);
 
@@ -141,7 +143,7 @@ public class TabControlTextBox : TextBox
 			MemberInfo[] memberInfos = property.Object.GetType().GetMember(attribute.MemberName);
 			if (memberInfos.Length != 1)
 			{
-				throw new Exception("Found " + memberInfos.Length + " members with name " + attribute.MemberName);
+				throw new Exception($"Found {memberInfos.Length} members with name {attribute.MemberName}");
 			}
 
 			MemberInfo memberInfo = memberInfos.First();

@@ -47,6 +47,8 @@ public static class Icons
 		public static ResourceView PadNote => Get("PadNote");
 		public static ResourceView Eraser => Get("Eraser");
 
+		public static ResourceView Duplicate => Get("Duplicate");
+
 		public static ResourceView Pin => Get("Placeholder");
 
 		public static ResourceView Stats => Get("Stats");

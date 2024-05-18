@@ -60,10 +60,14 @@ public class TabControlTasks : Grid, IDisposable
 		Children.Add(_tabControlDataGrid);
 
 		if (TabInstance.Model.Tasks.Count > 0)
+		{
 			SelectLastItem();
+		}
 
 		if (TabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
+		{
 			iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
+		}
 	}
 
 	// not resizing correctly when we add a new item
@@ -120,7 +124,9 @@ public class TabControlTasks : Grid, IDisposable
 		{
 			IList selectedItems = _tabControlDataGrid.SelectedItems;
 			if (selectedItems.Count == 1 && selectedItems[0] == taskInstance)
+			{
 				_tabControlDataGrid.SelectedItem = null;
+			}
 		}
 		else if (IsVisible != wasVisible)
 		{
@@ -136,7 +142,9 @@ public class TabControlTasks : Grid, IDisposable
 	private void UpdateSelection()
 	{
 		if (IsVisible)
+		{
 			OnSelectionChanged?.Invoke(this, new TabSelectionChangedEventArgs());
+		}
 	}
 
 	public void Dispose()
@@ -145,6 +153,8 @@ public class TabControlTasks : Grid, IDisposable
 		_tabControlDataGrid.Dispose();
 
 		if (TabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
+		{
 			iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
+		}
 	}
 }
