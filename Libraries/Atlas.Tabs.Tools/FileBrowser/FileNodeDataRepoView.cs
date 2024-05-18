@@ -30,6 +30,10 @@ public class FileNodeDataRepoView(string groupId, bool indexed = false, int? max
 	public async Task<DataRepoView<NodeView>> LoadViewAsync(Call call, Project project)
 	{
 		DataRepoView<NodeView> fileFavorites = await FileDataRepos.Favorites.OpenViewAsync(project);
+		FileSelectorOptions fileSelectorOptions = new()
+		{
+			DataRepoFavorites = fileFavorites,
+		};
 
 		await _semaphore.WaitAsync();
 
@@ -42,7 +46,7 @@ public class FileNodeDataRepoView(string groupId, bool indexed = false, int? max
 			_dataRepoNodes.LoadAllIndexed(call);
 			foreach (NodeView nodeView in _dataRepoNodes.Items.Values)
 			{
-				nodeView.DataRepoFavorites = fileFavorites;
+				nodeView.FileSelectorOptions = fileSelectorOptions;
 			}
 			return _dataRepoNodes;
 		}

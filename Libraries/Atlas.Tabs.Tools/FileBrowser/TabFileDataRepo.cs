@@ -5,9 +5,10 @@ using Atlas.Tabs.Toolbar;
 
 namespace Atlas.Tabs.Tools;
 
-public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes) : ITab
+public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes, FileSelectorOptions? fileSelectorOptions = null) : ITab
 {
 	public DataRepoView<NodeView> DataRepoNodes = dataRepoNodes;
+	public FileSelectorOptions? FileSelectorOptions = fileSelectorOptions;
 
 	public TabInstance Create() => new Instance(this);
 
@@ -16,9 +17,9 @@ public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes) : ITab
 		public ToolButton ButtonClearAll { get; set; } = new("Clear All", Icons.Svg.DeleteList);
 	}
 
-	public class Instance(TabFileDataRepo tab) : TabInstance, ITabAsync
+	public class Instance(TabFileDataRepo tab) : TabInstance
 	{
-		public async Task LoadAsync(Call call, TabModel model)
+		public override void Load(Call call, TabModel model)
 		{
 			model.Editing = true;
 
@@ -30,10 +31,9 @@ public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes) : ITab
 			List<NodeView> nodeViews = tab.DataRepoNodes.Items.Values.ToList();
 			if (nodeViews.Count > 0)
 			{
-				DataRepoView<NodeView> fileFavorites = await FileDataRepos.Favorites.OpenViewAsync(Project);
 				foreach (var node in nodeViews)
 				{
-					node.DataRepoFavorites = fileFavorites;
+					node.FileSelectorOptions = tab.FileSelectorOptions;
 				}
 			}
 

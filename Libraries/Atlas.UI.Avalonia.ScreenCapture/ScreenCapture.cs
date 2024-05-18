@@ -169,7 +169,7 @@ public class ScreenCapture : Grid
 		{
 			SuggestedStartLocation = folder,
 			SuggestedFileName = $"{TabViewer.Project.Name}.{FileUtils.TimestampString}.png",
-			FileTypeChoices = new[] { FilePickerFileTypes.ImagePng },
+			FileTypeChoices = [FilePickerFileTypes.ImagePng],
 		});
 		if (result?.TryGetLocalPath() is string path)
 		{

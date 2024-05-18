@@ -7,11 +7,22 @@ using System.Runtime.CompilerServices;
 
 namespace Atlas.Tabs.Tools;
 
+
+public delegate void SelectFileDelegate(Call call, string path);
+
+[Unserialized]
+public class FileSelectorOptions
+{
+	public DataRepoView<NodeView>? DataRepoFavorites { get; set; }
+
+	public SelectFileDelegate? SelectFileDelegate { get; set; }
+}
+
 // Shows if files present
 public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 {
 	[Unserialized]
-	public DataRepoView<NodeView>? DataRepoFavorites;
+	public FileSelectorOptions? FileSelectorOptions;
 
 	[Name("  ★"), Editing]
 	public bool Favorite
@@ -51,21 +62,22 @@ public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 		: this(path, null)
 	{ }
 
-	protected NodeView(string path, DataRepoView<NodeView>? dataRepoFavorites = null)
+	protected NodeView(string path, FileSelectorOptions? fileSelectorOptions = null)
 	{
 		Path = path;
-		DataRepoFavorites = dataRepoFavorites;
-		_favorite = dataRepoFavorites?.Items.TryGetValue(Path, out _) == true;
+		FileSelectorOptions = fileSelectorOptions;
+		_favorite = fileSelectorOptions?.DataRepoFavorites?.Items.TryGetValue(Path, out _) == true;
 	}
 
 	private void UpdateDataRepo()
 	{
-		if (DataRepoFavorites == null) return;
-
-		if (_favorite)
-			DataRepoFavorites.Save(null, Path, this);
-		else
-			DataRepoFavorites.Delete(null, Path);
+		if (FileSelectorOptions?.DataRepoFavorites is DataRepoView<NodeView> dataRepoFavorites)
+		{
+			if (_favorite)
+				dataRepoFavorites.Save(null, Path, this);
+			else
+				dataRepoFavorites.Delete(null, Path);
+		}
 	}
 
 	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -97,8 +109,8 @@ public class DirectoryView : NodeView, IDirectoryView
 		: this(path, null)
 	{ }
 
-	public DirectoryView(string path, DataRepoView<NodeView>? dataRepoFavorites = null) :
-		base(path, dataRepoFavorites)
+	public DirectoryView(string path, FileSelectorOptions? fileSelectorOptions = null) :
+		base(path, fileSelectorOptions)
 	{
 		Directory = System.IO.Path.GetFileName(path);
 		var info = new DirectoryInfo(path);
@@ -123,8 +135,8 @@ public class FileView : NodeView
 		: this(path, null)
 	{ }
 
-	public FileView(string path, DataRepoView<NodeView>? dataRepoFavorites = null)
-		: base(path, dataRepoFavorites)
+	public FileView(string path, FileSelectorOptions? fileSelectorOptions = null)
+		: base(path, fileSelectorOptions)
 	{
 		FileInfo = new FileInfo(path);
 		Filename = System.IO.Path.GetFileName(path);

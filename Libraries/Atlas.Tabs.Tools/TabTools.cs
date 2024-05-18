@@ -2,8 +2,27 @@ using Atlas.Core;
 
 namespace Atlas.Tabs.Tools;
 
-[ListItem]
-public class TabTools
+public class TabTools : ITab
 {
-	public static TabFileBrowser FileBrowser => new();
+	public TabInstance Create() => new Instance();
+
+	public class Instance : TabInstance
+	{
+		private ItemCollectionUI<ListItem> _items = [];
+
+		public override void Load(Call call, TabModel model)
+		{
+			model.Items = _items = new ItemCollectionUI<ListItem>
+			{
+				new("File Browser", new TabFileBrowser()),
+				new("File Selector", new TabFileBrowser(SelectFile)),
+			};
+		}
+
+		public void SelectFile(Call call, string path)
+		{
+			string filename = Path.GetFileName(path);
+			_items.Add(new ListItem(filename, new FileView(path)));
+		}
+	}
 }

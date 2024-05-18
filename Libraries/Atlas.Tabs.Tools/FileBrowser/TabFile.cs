@@ -39,11 +39,15 @@ public class TabFile(FileView fileView) : ITab
 
 		[Separator]
 		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
+
+		[Separator]
+		public ToolButton? ButtonSelect { get; set; }
 	}
 
 	public class Instance(TabFile tab) : TabInstance
 	{
 		public FileView FileView => tab.FileView;
+		public SelectFileDelegate? SelectFileDelegate => tab.FileView.FileSelectorOptions?.SelectFileDelegate;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -60,6 +64,13 @@ public class TabFile(FileView fileView) : ITab
 			};
 			toolbar.ButtonOpenFolder.Action = OpenFolder;
 			toolbar.ButtonDelete.Action = Delete;
+
+			if (SelectFileDelegate != null)
+			{
+				toolbar.ButtonSelect = new("Select", Icons.Svg.Enter);
+				toolbar.ButtonSelect.Action = SelectFile;
+			}
+
 			model.AddObject(toolbar);
 
 			List<ListItem> items = [];
@@ -102,6 +113,11 @@ public class TabFile(FileView fileView) : ITab
 				File.Delete(tab.Path);
 
 			Refresh();
+		}
+
+		private void SelectFile(Call call)
+		{
+			SelectFileDelegate!(call, tab.Path);
 		}
 	}
 }

@@ -10,12 +10,12 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 {
 	public DirectoryView DirectoryView = directoryView;
 	public string Path => DirectoryView.Path;
-	public DataRepoView<NodeView>? DataRepoFavorites => DirectoryView.DataRepoFavorites;
+	public FileSelectorOptions? FileSelectorOptions => DirectoryView.FileSelectorOptions;
 
 	public override string ToString() => Path;
 
-	public TabDirectory(string path, DataRepoView<NodeView>? dataRepoFavorites = null) :
-		this(new DirectoryView(path, dataRepoFavorites))
+	public TabDirectory(string path, FileSelectorOptions? fileSelectorOptions = null) :
+		this(new DirectoryView(path, fileSelectorOptions))
 	{ }
 
 	public TabInstance Create() => new Instance(this);
@@ -70,7 +70,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 			try
 			{
 				return Directory.EnumerateFiles(tab.Path)
-					.Select(name => new FileView(name, tab.DataRepoFavorites))
+					.Select(name => new FileView(name, tab.FileSelectorOptions))
 					.ToList();
 			}
 			catch (Exception ex)
@@ -86,7 +86,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 			try
 			{
 				return Directory.EnumerateDirectories(tab.Path)
-					.Select(name => new DirectoryView(name, tab.DataRepoFavorites))
+					.Select(name => new DirectoryView(name, tab.FileSelectorOptions))
 					.ToList();
 			}
 			catch (Exception ex)
