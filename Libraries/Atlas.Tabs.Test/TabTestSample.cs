@@ -13,11 +13,11 @@ public class TabSample : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollection<SampleItem>? _sampleItems;
+		private ItemCollection<SampleItem> _sampleItems = [];
 
 		public override void Load(Call call, TabModel model)
 		{
-			_sampleItems = new ItemCollection<SampleItem>();
+			_sampleItems = [];
 			AddItems(5);
 
 			model.Items = new ItemCollection<ListItem>("Items")
@@ -49,7 +49,7 @@ public class TabSample : ITab
 		{
 			for (int i = 0; i < count; i++)
 			{
-				int id = _sampleItems!.Count;
+				int id = _sampleItems.Count;
 				_sampleItems.Add(new SampleItem(id, "Item " + id));
 			}
 		}

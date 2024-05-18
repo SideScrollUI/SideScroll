@@ -13,7 +13,7 @@ public class ListField : ListMember, IPropertyEditable
 	public override bool Editable => true;
 
 	[Hidden]
-	public bool IsFormatted => (FieldInfo.GetCustomAttribute<FormattedAttribute>() != null);
+	public bool IsFormatted => FieldInfo.GetCustomAttribute<FormattedAttribute>() != null;
 
 	[Editing, InnerValue]
 	public override object? Value
@@ -25,7 +25,9 @@ public class ListField : ListMember, IPropertyEditable
 				var value = FieldInfo.GetValue(Object);
 
 				if (IsFormatted)
+				{
 					value = value.Formatted();
+				}
 
 				return value;
 			}
@@ -56,7 +58,9 @@ public class ListField : ListMember, IPropertyEditable
 		Name = nameAttribute?.Name ?? fieldInfo.Name.WordSpaced();
 
 		if (FieldInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+		{
 			Name = "* " + Name;
+		}
 	}
 
 	public static new ItemCollection<ListField> Create(object obj, bool includeBaseTypes = true)
@@ -92,25 +96,17 @@ public class ListField : ListMember, IPropertyEditable
 	public bool IsRowVisible()
 	{
 		var hideAttribute = FieldInfo.GetCustomAttribute<HideAttribute>();
-		if (hideAttribute?.Values != null)
-		{
-			if (hideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
-				return false;
-		}
+		if (hideAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
+			return false;
 
 		var classHideAttribute = FieldInfo.DeclaringType!.GetCustomAttribute<HideAttribute>();
-		if (classHideAttribute?.Values != null)
-		{
-			if (classHideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
-				return false;
-		}
+		if (classHideAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
+			return false;
 
 		var hideRowAttribute = FieldInfo.GetCustomAttribute<HideRowAttribute>();
-		if (hideRowAttribute?.Values != null)
-		{
-			if (hideRowAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
-				return false;
-		}
+		if (hideRowAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
+			return false;
+
 		return true;
 	}
 }

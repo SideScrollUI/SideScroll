@@ -24,7 +24,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	{
 		get
 		{
-			bool propertyReadOnly = (PropertyInfo.GetCustomAttribute<ReadOnlyAttribute>() != null);
+			bool propertyReadOnly = PropertyInfo.GetCustomAttribute<ReadOnlyAttribute>() != null;
 			return PropertyInfo.CanWrite && PropertyInfo.SetMethod?.IsPublic == true && !propertyReadOnly;
 		}
 	}
@@ -47,7 +47,9 @@ public class ListProperty : ListMember, IPropertyEditable
 						_valueObject = PropertyInfo.GetValue(Object);
 
 						if (IsFormatted)
+						{
 							_valueObject = _valueObject.Formatted();
+						}
 					}
 					return _valueObject;
 				}
@@ -103,7 +105,9 @@ public class ListProperty : ListMember, IPropertyEditable
 		Name = nameAttribute?.Name ?? propertyInfo.Name.WordSpaced();
 
 		if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+		{
 			Name = "* " + Name;
+		}
 
 		if (obj is INotifyPropertyChanged notifyPropertyChanged)
 		{
@@ -179,43 +183,30 @@ public class ListProperty : ListMember, IPropertyEditable
 	public bool IsRowVisible()
 	{
 		var hideAttribute = PropertyInfo.GetCustomAttribute<HideAttribute>();
-		if (hideAttribute?.Values != null)
-		{
-			if (hideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
-				return false;
-		}
+		if (hideAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
+			return false;
 
 		var classHideAttribute = PropertyInfo.DeclaringType!.GetCustomAttribute<HideAttribute>();
-		if (classHideAttribute?.Values != null)
-		{
-			if (classHideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
-				return false;
-		}
+		if (classHideAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
+			return false;
 
 		var hideRowAttribute = PropertyInfo.GetCustomAttribute<HideRowAttribute>();
-		if (hideRowAttribute?.Values != null)
-		{
-			if (hideRowAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
-				return false;
-		}
+		if (hideRowAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
+			return false;
+
 		return true;
 	}
 
 	public bool IsColumnVisible()
 	{
 		var hideAttribute = PropertyInfo.GetCustomAttribute<HideAttribute>();
-		if (hideAttribute?.Values != null)
-		{
-			if (hideAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
-				return false;
-		}
+		if (hideAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
+			return false;
 
 		var hideColumnAttribute = PropertyInfo.GetCustomAttribute<HideColumnAttribute>();
-		if (hideColumnAttribute?.Values != null)
-		{
-			if (hideColumnAttribute.Values.Any(v => ObjectUtils.AreEqual(Value, v)))
-				return false;
-		}
+		if (hideColumnAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
+			return false;
+
 		return true;
 	}
 

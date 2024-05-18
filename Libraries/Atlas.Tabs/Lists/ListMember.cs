@@ -79,7 +79,9 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 				else if (value is string text)
 				{
 					if (text.Length > MaxStringLength)
+					{
 						return text[..MaxStringLength];
+					}
 				}
 				else if (!value.GetType().IsPrimitive)
 				{
