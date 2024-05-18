@@ -101,7 +101,9 @@ public class TabControlFormattedComboBox : ComboBox
 		set
 		{
 			if (value is FormattedItem item && item.Object?.ToString() != Property.Value?.ToString())
+			{
 				Property.Value = item.Object;
+			}
 		}
 		get => GetFormattedItem(Property.Value);
 	}

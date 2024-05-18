@@ -70,9 +70,13 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 		foreach (var series in ChartView.Series)
 		{
 			if (seriesType == SeriesType.Other)
+			{
 				seriesType = series.SeriesType;
+			}
 			else if (series.SeriesType != seriesType)
+			{
 				return "Total";
+			}
 		}
 
 		return seriesType.ToString();

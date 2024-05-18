@@ -63,7 +63,9 @@ public class TestSerializeLogs : TestSerializeBase
 	{
 		var input = new Log();
 		using (input.Timer("timing"))
+		{
 			input.Add("child");
+		}
 		_serializer.Save(Call, input);
 		Log output = _serializer.Load<Log>(Call);
 	}

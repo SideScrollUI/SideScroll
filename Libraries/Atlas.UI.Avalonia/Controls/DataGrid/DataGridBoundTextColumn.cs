@@ -122,7 +122,9 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		{
 			string? text = DataGrid.ToStringTable();
 			if (text != null)
+			{
 				ClipboardUtils.SetText(DataGrid, text);
+			}
 		};
 		list.Add(menuItemCopyDataGrid);
 
@@ -131,7 +133,9 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		{
 			string? text = DataGrid.ToCsv();
 			if (text != null)
+			{
 				ClipboardUtils.SetText(DataGrid, text);
+			}
 		};
 		list.Add(menuItemCopyDataGridCsv);
 

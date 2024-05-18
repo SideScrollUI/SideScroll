@@ -13,7 +13,9 @@ public static class ObjectUtils
 		{
 			object? dataValue = GetDataValue(obj);
 			if (dataValue != null)
+			{
 				id = GetDataKey(dataValue);
+			}
 		}
 		return id ?? obj.ToUniqueString();
 	}

@@ -20,7 +20,7 @@ public class TabFile(FileView fileView) : ITab
 
 	public static Dictionary<string, Type> ExtensionTypes { get; set; } = [];
 
-	public static void RegisterType<T>(params string[] extensions)
+	public static void RegisterType<T>(params string[] extensions) where T : new()
 	{
 		foreach (string extension in extensions)
 		{
@@ -54,13 +54,15 @@ public class TabFile(FileView fileView) : ITab
 				return;
 			}
 
-			var toolbar = new Toolbar();
-			toolbar.ButtonStar = new("Favorite", Icons.Svg.StarFilled, Icons.Svg.Star, new ListProperty(FileView, nameof(FileView.Favorite)));
+			Toolbar toolbar = new()
+			{
+				ButtonStar = new("Favorite", Icons.Svg.StarFilled, Icons.Svg.Star, new ListProperty(FileView, nameof(FileView.Favorite)))
+			};
 			toolbar.ButtonOpenFolder.Action = OpenFolder;
 			toolbar.ButtonDelete.Action = Delete;
 			model.AddObject(toolbar);
 
-			var items = new List<ListItem>();
+			List<ListItem> items = [];
 
 			string extension = System.IO.Path.GetExtension(path).ToLower();
 

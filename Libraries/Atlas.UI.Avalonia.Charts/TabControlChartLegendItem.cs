@@ -8,7 +8,6 @@ using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
-using System.Collections;
 
 namespace Atlas.UI.Avalonia.Charts;
 

@@ -244,7 +244,9 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 	{
 		Size size = base.MeasureOverride(availableSize);
 		if (FillHeight)
+		{
 			size = size.WithHeight(Math.Max(size.Height, Math.Min(MaxHeight, availableSize.Height)));
+		}
 		return size;
 	}
 
