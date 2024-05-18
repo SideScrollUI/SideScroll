@@ -92,7 +92,7 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		MenuItem menuItemCopy = new MenuItem() { Header = "_Copy - Column" };
 		menuItemCopy.Click += delegate
 		{
-			ClipBoardUtils.SetTextAsync(ColumnText);
+			ClipboardUtils.SetTextAsync(ColumnText);
 		};
 		list.Add(menuItemCopy);
 

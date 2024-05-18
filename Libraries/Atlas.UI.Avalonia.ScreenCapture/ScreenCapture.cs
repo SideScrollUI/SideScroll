@@ -107,7 +107,7 @@ public class ScreenCapture : Grid
 		if (bitmap == null)
 			return;
 
-		//ClipBoardUtils.SetTextAsync(bitmap); // AvaloniaUI will probably eventually support this
+		//ClipboardUtils.SetTextAsync(bitmap); // AvaloniaUI will probably eventually support this
 		try
 		{
 			using (bitmap)
