@@ -1,7 +1,6 @@
 using Atlas.Core;
 using Atlas.Core.Utilities;
 using Atlas.Resources;
-using Atlas.Serialize;
 using Atlas.Tabs.Toolbar;
 
 namespace Atlas.Tabs.Tools;
@@ -10,6 +9,8 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 {
 	public DirectoryView DirectoryView = directoryView;
 	public string Path => DirectoryView.Path;
+
+	[HiddenColumn]
 	public FileSelectorOptions? FileSelectorOptions => DirectoryView.FileSelectorOptions;
 
 	public override string ToString() => Path;
@@ -85,7 +86,11 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 		{
 			try
 			{
+				List<string>? fileExtensions = DirectoryView.FileSelectorOptions?.FileExtensions;
 				return Directory.EnumerateDirectories(tab.Path)
+					.Where(name =>
+						fileExtensions == null ||
+						fileExtensions.Any(ext => ext == System.IO.Path.GetExtension(name).ToLower()))
 					.Select(name => new DirectoryView(name, tab.FileSelectorOptions))
 					.ToList();
 			}

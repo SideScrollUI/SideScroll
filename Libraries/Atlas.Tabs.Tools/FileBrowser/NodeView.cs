@@ -16,6 +16,8 @@ public class FileSelectorOptions
 	public DataRepoView<NodeView>? DataRepoFavorites { get; set; }
 
 	public SelectFileDelegate? SelectFileDelegate { get; set; }
+
+	public List<string>? FileExtensions { get; set; }
 }
 
 // Shows if files present
