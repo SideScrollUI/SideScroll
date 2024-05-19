@@ -60,7 +60,7 @@ public class TabFileImage : ITab, IFileTypeView
 			{
 				if (Path.ToLower().EndsWith(".svg"))
 				{
-					if (SvgUtils.TryGetSvgImage(Path, out IImage? imageSource))
+					if (SvgUtils.TryGetSvgImage(call, Path, out IImage? imageSource))
 					{
 						Image.Source = imageSource;
 						model.MaxDesiredWidth = Math.Max(100, (int)imageSource.Size.Width);

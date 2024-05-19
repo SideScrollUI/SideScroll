@@ -1,3 +1,4 @@
+using Atlas.Core;
 using Atlas.Core.Collections;
 using Atlas.Resources;
 using Atlas.UI.Avalonia.Themes;
@@ -10,7 +11,23 @@ namespace Atlas.UI.Avalonia.Utilities;
 
 public static class SvgUtils
 {
-	private static MemoryTypeCache<IImage> _images = new();
+	private static readonly MemoryTypeCache<IImage> _imageCache = new();
+
+	public static IImage GetSvgColorImage(IResourceView imageResource, Color? color = null)
+	{
+		color ??= (imageResource as ImageColorView)?.Color;
+		color ??= AtlasTheme.IconForeground.Color;
+		string key = $"{imageResource.Path}:{color}";
+
+		lock (_imageCache)
+		{
+			if (_imageCache.TryGetValue(key, out IImage? image)) return image!;
+
+			IImage colorImage = GetSvgColorImage(imageResource.Stream, color);
+			_imageCache.Set(key, colorImage);
+			return colorImage;
+		}
+	}
 
 	public static IImage? TryGetSvgColorImage(IResourceView imageResource, Color? color = null)
 	{
@@ -18,29 +35,13 @@ public static class SvgUtils
 
 		try
 		{
-			lock (_images)
-			{
-				color ??= (imageResource as ImageColorView)?.Color;
-				color ??= AtlasTheme.IconForeground.Color;
-				string key = $"{imageResource.Path}:{color}";
-				if (_images.TryGetValue(key, out IImage? image)) return image;
-
-				IImage colorImage = GetSvgColorImage(imageResource.Stream, color);
-				_images.Set(key, colorImage);
-				return colorImage;
-			}
+			return GetSvgColorImage(imageResource, color);
 		}
 		catch (Exception e)
 		{
 			Debug.Fail(e.ToString());
 			return null;
 		}
-	}
-
-	public static IImage GetSvgColorImage(IResourceView imageResource, Color? color = null)
-	{
-		color ??= (imageResource as ImageColorView)?.Color;
-		return GetSvgColorImage(imageResource.Stream, color);
 	}
 
 	public static IImage GetSvgColorImage(Stream stream, Color? color = null)
@@ -58,7 +59,7 @@ public static class SvgUtils
 		};
 	}
 
-	public static bool TryGetSvgImage(string path, [NotNullWhen(true)] out IImage? image)
+	public static bool TryGetSvgImage(Call call, string path, [NotNullWhen(true)] out IImage? image)
 	{
 		image = default;
 
@@ -76,7 +77,7 @@ public static class SvgUtils
 		}
 		catch (Exception e)
 		{
-			Debug.Fail(e.ToString());
+			call.Log.Add(e);
 			return false;
 		}
 	}

@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 
 namespace Atlas.Tabs.Tools;
 
-
 public delegate void SelectFileDelegate(Call call, string path);
 
 [Unserialized]

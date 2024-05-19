@@ -50,7 +50,9 @@ public class TabCreatorAsync(ITabCreatorAsync creatorAsync) : TabInstance, ITabA
 
 		_innerChildInstance = CreateChildTab(iTab);
 		if (_innerChildInstance is ITabAsync tabAsync)
+		{
 			await tabAsync.LoadAsync(call, model);
+		}
 	}
 
 	public override void LoadUI(Call call, TabModel model)
