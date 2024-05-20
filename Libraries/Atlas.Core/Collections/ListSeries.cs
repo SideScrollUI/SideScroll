@@ -213,7 +213,9 @@ public class ListSeries
 					object yObj = YPropertyInfo.GetValue(obj)!;
 					value = Convert.ToDouble(yObj);
 				}
-				timeRangeValue = new TimeRangeValue(timeStamp, timeStamp, value);
+				DateTime startTime = timeStamp;
+				DateTime endTime = startTime.Add(PeriodDuration ?? TimeSpan.Zero);
+				timeRangeValue = new TimeRangeValue(startTime, endTime, value);
 				timeRangeValues.Add(timeRangeValue);
 			}
 			var ordered = timeRangeValues.OrderBy(t => t.StartTime).ToList();

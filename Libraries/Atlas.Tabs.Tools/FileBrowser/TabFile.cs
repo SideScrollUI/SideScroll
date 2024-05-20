@@ -44,10 +44,21 @@ public class TabFile(FileView fileView) : ITab
 		public ToolButton? ButtonSelect { get; set; }
 	}
 
-	public class Instance(TabFile tab) : TabInstance
+	public class Instance(TabFile tab) : TabInstance, ITabAsync
 	{
 		public FileView FileView => tab.FileView;
 		public SelectFileDelegate? SelectFileDelegate => tab.FileView.FileSelectorOptions?.SelectFileDelegate;
+
+		public async Task LoadAsync(Call call, TabModel model)
+		{
+			if (FileView.FileSelectorOptions == null)
+			{
+				FileView.FileSelectorOptions = new()
+				{
+					DataRepoFavorites = await FileDataRepos.Favorites.LoadViewAsync(call, Project),
+				};
+			}
+		}
 
 		public override void Load(Call call, TabModel model)
 		{

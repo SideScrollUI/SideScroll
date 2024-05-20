@@ -32,9 +32,20 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 		//public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
 	}
 
-	public class Instance(TabDirectory tab) : TabInstance
+	public class Instance(TabDirectory tab) : TabInstance, ITabAsync
 	{
 		public DirectoryView DirectoryView => tab.DirectoryView;
+
+		public async Task LoadAsync(Call call, TabModel model)
+		{
+			if (DirectoryView.FileSelectorOptions == null)
+			{
+				DirectoryView.FileSelectorOptions = new()
+				{
+					DataRepoFavorites = await FileDataRepos.Favorites.LoadViewAsync(call, Project),
+				};
+			}
+		}
 
 		public override void Load(Call call, TabModel model)
 		{
