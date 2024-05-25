@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ThomasLevesque.WeakEvent" Version="4.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Atlas.Core\Atlas.Core.csproj" />
     <ProjectReference Include="..\Atlas.Tabs\Atlas.Tabs.csproj" />
     <ProjectReference Include="..\Atlas.UI.Avalonia\Atlas.UI.Avalonia.csproj" />
