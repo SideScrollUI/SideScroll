@@ -3,6 +3,7 @@ using Atlas.Core.Charts;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.Themes;
+using Atlas.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -10,7 +11,6 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using System.Collections;
 using System.Reflection;
-using WeakEvent;
 
 namespace Atlas.UI.Avalonia.Charts;
 
@@ -49,7 +49,7 @@ public class SeriesSelectedEventArgs(List<ListSeries> series) : EventArgs
 	public List<ListSeries> Series { get; set; } = series;
 }
 
-public class MouseCursorMovedEventArgs(double x) : EventArgs
+public class PointerMovedEventArgs(double x) : EventArgs
 {
 	public double X { get; set; } = x;
 }
@@ -83,13 +83,9 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 	];
 	public static Color GetColor(int index) => DefaultColors[index % DefaultColors.Length];
 
-	protected static readonly WeakEventSource<MouseCursorMovedEventArgs> _mouseCursorChangedEventSource = new();
+	protected static readonly WeakEventSource<PointerMovedEventArgs> _pointerMovedEventSource = new();
 
-	public static event EventHandler<MouseCursorMovedEventArgs> OnMouseCursorChanged
-	{
-		add => _mouseCursorChangedEventSource.Subscribe(value);
-		remove => _mouseCursorChangedEventSource.Unsubscribe(value);
-	}
+	protected WeakSubscriber<PointerMovedEventArgs>? _pointerMovedSubscriber;
 
 	public event EventHandler<SeriesSelectedEventArgs>? SelectionChanged;
 

@@ -43,10 +43,10 @@ public static class ProcessUtils
 		}
 		catch
 		{
-			// hack because of this: https://github.com/dotnet/corefx/issues/10361
-			// Can fix after updating to .Net Standard 2.1
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
+				// Workaround because of this: https://github.com/dotnet/corefx/issues/10361
+				// Can fix after updating to .Net Standard 2.1?
 				url = url.Replace("&", "^&");
 				Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
 			}
@@ -69,8 +69,7 @@ public static class ProcessUtils
 	{
 		// Select file instead if in folder path
 		// Trying to open a file will use the default app to open it
-		if (selection == null && 
-			Path.GetDirectoryName(folder) is string directoryName &&
+		if (Path.GetDirectoryName(folder) is string directoryName &&
 			Path.GetFileName(folder) is string fileName &&
 			!File.GetAttributes(folder).HasFlag(FileAttributes.Directory))
 		{

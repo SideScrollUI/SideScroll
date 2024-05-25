@@ -147,7 +147,8 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		Legend.OnSelectionChanged += Legend_OnSelectionChanged;
 		//Legend.OnVisibleChanged += Legend_OnVisibleChanged;
 
-		OnMouseCursorChanged += TabControlChart_OnMouseCursorChanged;
+		_pointerMovedSubscriber = new(TabControlChart_OnPointerChanged);
+		_pointerMovedEventSource.WeakEvent.Subscribe(_pointerMovedEventSource, _pointerMovedSubscriber);
 		if (ChartView.TimeWindow != null)
 		{
 			ChartView.TimeWindow.OnSelectionChanged += TimeWindow_OnSelectionChanged;
@@ -677,7 +678,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	}
 
 	// Update mouse tracker
-	private void TabControlChart_OnMouseCursorChanged(object? sender, MouseCursorMovedEventArgs e)
+	private void TabControlChart_OnPointerChanged(object? sender, PointerMovedEventArgs e)
 	{
 		if (_trackerSection == null) return;
 
@@ -718,8 +719,8 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 			LvcPointD dataPoint = Chart.ScalePixelsToData(new LvcPointD(point.X, point.Y));
 
-			var moveEvent = new MouseCursorMovedEventArgs(dataPoint.X);
-			_mouseCursorChangedEventSource?.Raise(sender, moveEvent);
+			var moveEvent = new PointerMovedEventArgs(dataPoint.X);
+			_pointerMovedEventSource?.Raise(sender, moveEvent);
 
 			UpdateZoomSection(dataPoint);
 		}
@@ -794,8 +795,8 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		}
 
 		// Hide cursor when out of scope
-		var moveEvent = new MouseCursorMovedEventArgs(0);
-		_mouseCursorChangedEventSource?.Raise(sender, moveEvent);
+		var moveEvent = new PointerMovedEventArgs(0);
+		_pointerMovedEventSource?.Raise(sender, moveEvent);
 	}
 
 	public override void Unload()
@@ -827,7 +828,10 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		Chart.PointerMoved -= TabControlLiveChart_PointerMoved;
 		Chart.ChartPointPointerDown -= Chart_ChartPointPointerDown;
 		Chart.PointerExited -= Chart_PointerExited;
-		OnMouseCursorChanged -= TabControlChart_OnMouseCursorChanged;
+		if (_pointerMovedSubscriber != null)
+		{
+			_pointerMovedEventSource.WeakEvent.Unsubscribe(_pointerMovedEventSource, _pointerMovedSubscriber);
+		}
 		Chart.EffectiveViewportChanged -= Chart_EffectiveViewportChanged;
 
 		if (ChartView.TimeWindow != null)
