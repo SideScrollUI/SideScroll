@@ -2,10 +2,10 @@ namespace Atlas.UI.Avalonia.Charts;
 
 public class DateTimeFormat(string textFormat, TimeSpan minimum, TimeSpan maximum)
 {
-	public string TextFormat { get; set; } = textFormat;
+	public string TextFormat => textFormat;
 
-	public TimeSpan Minimum { get; set; } = minimum;
-	public TimeSpan Maximum { get; set; } = maximum;
+	public TimeSpan Minimum => minimum;
+	public TimeSpan Maximum => maximum;
 
 	public override string ToString() => $"{TextFormat}: {Minimum} - {Maximum}";
 

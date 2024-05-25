@@ -51,13 +51,10 @@ public class TabFile(FileView fileView) : ITab
 
 		public async Task LoadAsync(Call call, TabModel model)
 		{
-			if (FileView.FileSelectorOptions == null)
+			FileView.FileSelectorOptions ??= new()
 			{
-				FileView.FileSelectorOptions = new()
-				{
-					DataRepoFavorites = await FileDataRepos.Favorites.LoadViewAsync(call, Project),
-				};
-			}
+				DataRepoFavorites = await FileDataRepos.Favorites.LoadViewAsync(call, Project),
+			};
 		}
 
 		public override void Load(Call call, TabModel model)

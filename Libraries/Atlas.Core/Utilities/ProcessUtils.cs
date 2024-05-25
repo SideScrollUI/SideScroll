@@ -72,7 +72,7 @@ public static class ProcessUtils
 		if (selection == null && 
 			Path.GetDirectoryName(folder) is string directoryName &&
 			Path.GetFileName(folder) is string fileName &&
-			File.GetAttributes(folder).HasFlag(FileAttributes.Normal))
+			!File.GetAttributes(folder).HasFlag(FileAttributes.Directory))
 		{
 			folder = directoryName;
 			selection = fileName;

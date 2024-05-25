@@ -38,13 +38,10 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 
 		public async Task LoadAsync(Call call, TabModel model)
 		{
-			if (DirectoryView.FileSelectorOptions == null)
+			DirectoryView.FileSelectorOptions ??= new()
 			{
-				DirectoryView.FileSelectorOptions = new()
-				{
-					DataRepoFavorites = await FileDataRepos.Favorites.LoadViewAsync(call, Project),
-				};
-			}
+				DataRepoFavorites = await FileDataRepos.Favorites.LoadViewAsync(call, Project),
+			};
 		}
 
 		public override void Load(Call call, TabModel model)
