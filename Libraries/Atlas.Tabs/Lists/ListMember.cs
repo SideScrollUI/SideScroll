@@ -132,14 +132,14 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 		{
 			// MetadataTokens are only unique across modules
 			MethodInfo getMethod = listProperty.PropertyInfo.GetGetMethod(false)!;
-			string id = $"{getMethod.Module.Name}.{getMethod.MetadataToken:D10}";
+			string id = $"{getMethod.Module.Name}:{getMethod.MetadataToken:D10}";
 			methodMembers.Add(id, listProperty);
 		}
 
 		var methods = ListMethod.Create(obj, includeBaseTypes);
 		foreach (ListMethod listMethod in methods)
 		{
-			string id = $"{listMethod.MethodInfo.Module.Name}.{listMethod.MethodInfo.MetadataToken:D10}";
+			string id = $"{listMethod.MethodInfo.Module.Name}:{listMethod.MethodInfo.MetadataToken:D10}";
 			methodMembers.Add(id, listMethod);
 		}
 

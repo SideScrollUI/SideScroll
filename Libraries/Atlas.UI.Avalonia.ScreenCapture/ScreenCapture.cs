@@ -14,6 +14,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace Atlas.UI.Avalonia.ScreenCapture;
 
@@ -112,12 +113,11 @@ public class ScreenCapture : Grid
 		{
 			using (bitmap)
 			{
-				OSPlatform platform = ProcessUtils.GetOSPlatform();
-				if (platform == OSPlatform.Windows)
+				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 				{
 					CopyClipboardWindows(bitmap);
 				}
-				else if (platform == OSPlatform.OSX)
+				else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 				{
 					CopyClipboardOsx(bitmap);
 				}
@@ -129,6 +129,7 @@ public class ScreenCapture : Grid
 		}
 	}
 
+	[SupportedOSPlatform("windows")]
 	private static void CopyClipboardWindows(RenderTargetBitmap bitmap)
 	{
 		Task.Run(() => Win32ClipboardUtils.SetBitmapAsync(bitmap)).GetAwaiter().GetResult();

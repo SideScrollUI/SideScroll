@@ -96,6 +96,7 @@ public class ListMethod : ListMember
 		var methodInfos = obj.GetType().GetMethods()
 			.Where(m => IsVisible(m))
 			.Where(m => includeBaseTypes || m.DeclaringType == obj.GetType())
+			.OrderBy(m => m.Module.Name)
 			.OrderBy(m => m.MetadataToken);
 
 		var listMethods = new ItemCollection<ListMethod>();

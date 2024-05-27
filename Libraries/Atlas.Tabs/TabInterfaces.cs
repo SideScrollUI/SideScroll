@@ -33,6 +33,13 @@ public interface ITabCreatorAsync
 	Task<ITab?> CreateAsync(Call call);
 }
 
+public interface ITabDataControl : IDisposable
+{
+	public TabDataSettings TabDataSettings { get; set; }
+
+	public void LoadSettings();
+}
+
 public interface ITabDataSelector : ITabDataControl
 {
 	public IList? Items { get; set; }
@@ -42,11 +49,4 @@ public interface ITabDataSelector : ITabDataControl
 	public HashSet<SelectedRow> SelectedRows { get; }
 
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
-}
-
-public interface ITabDataControl : IDisposable
-{
-	public TabDataSettings TabDataSettings { get; set; }
-
-	public void LoadSettings();
 }

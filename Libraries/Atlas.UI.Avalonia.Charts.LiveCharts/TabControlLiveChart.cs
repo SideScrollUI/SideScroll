@@ -22,6 +22,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Avalonia;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using System.Data.Common;
 using System.Diagnostics;
 
 namespace Atlas.UI.Avalonia.Charts.LiveCharts;
@@ -842,6 +843,14 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 	public void Dispose()
 	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	protected virtual void Dispose(bool disposing)
+	{
+		if (!disposing) return;
+		
 		Children.Clear();
 		ClearListeners();
 		ClearSeries();

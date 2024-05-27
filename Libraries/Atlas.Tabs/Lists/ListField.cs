@@ -68,6 +68,7 @@ public class ListField : ListMember, IPropertyEditable
 		var fieldInfos = obj.GetType().GetFields()
 			.Where(f => f.IsRowVisible())
 			.Where(f => includeBaseTypes || f.DeclaringType == obj.GetType())
+			.OrderBy(f => f.Module.Name)
 			.OrderBy(f => f.MetadataToken);
 
 		var listFields = new ItemCollection<ListField>();

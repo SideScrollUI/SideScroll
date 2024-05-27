@@ -40,8 +40,11 @@ public class TabDataSettings
 
 	public static List<MethodColumn> GetButtonMethods(Type type)
 	{
+		var methodInfos = type.GetMethods()
+			.OrderBy(m => m.Module.Name)
+			.OrderBy(m => m.MetadataToken);
+
 		var callableMethods = new List<MethodColumn>();
-		MethodInfo[] methodInfos = type.GetMethods().OrderBy(x => x.MetadataToken).ToArray();
 		foreach (MethodInfo methodInfo in methodInfos)
 		{
 			var attribute = methodInfo.GetCustomAttribute<ButtonColumnAttribute>();

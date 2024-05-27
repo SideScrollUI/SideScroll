@@ -63,9 +63,9 @@ public interface ITabControlChart
 
 public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 {
-	public static Color TimeTrackerColor = AtlasTheme.DataGridRowHighlight.Color;
-	public static Color GridLineColor = Color.Parse("#333333");
-	public static Color TextColor = Colors.LightGray;
+	public static Color TimeTrackerColor { get; set; } = AtlasTheme.DataGridRowHighlight.Color;
+	public static Color GridLineColor { get; set; } = Color.Parse("#333333");
+	public static Color TextColor { get; set; } = Colors.LightGray;
 
 	private static readonly System.Drawing.Color NowColor = System.Drawing.Color.Green;
 	public static Color[] DefaultColors { get; set; } =

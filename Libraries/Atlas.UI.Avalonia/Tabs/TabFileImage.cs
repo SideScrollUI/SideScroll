@@ -37,6 +37,8 @@ public class TabFileImage : ITab, IFileTypeView
 
 	public class Instance(TabFileImage tab) : TabInstance
 	{
+		private const int MinDesiredWidth = 100;
+
 		public string Path => tab.Path!;
 
 		public Image? Image;
@@ -63,13 +65,13 @@ public class TabFileImage : ITab, IFileTypeView
 					if (SvgUtils.TryGetSvgImage(call, Path, out IImage? imageSource))
 					{
 						Image.Source = imageSource;
-						model.MaxDesiredWidth = Math.Max(100, (int)imageSource.Size.Width);
+						model.MaxDesiredWidth = Math.Max(MinDesiredWidth, (int)imageSource.Size.Width);
 					}
 				}
 				else
 				{
 					Bitmap bitmap = ImageUtils.LoadImage(Image, Path);
-					model.MaxDesiredWidth = Math.Max(100, (int)bitmap.Size.Width);
+					model.MaxDesiredWidth = Math.Max(MinDesiredWidth, (int)bitmap.Size.Width);
 				}
 				model.AddObject(Image, true);
 			}

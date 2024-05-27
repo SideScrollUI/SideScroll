@@ -89,7 +89,8 @@ public static class TypeExtensions
 			.Where(p => p.GetCustomAttribute<HiddenColumnAttribute>() == null)
 			.Where(p => p.GetIndexParameters().Length == 0)
 			.Where(p => !p.GetAccessors(nonPublic: true)[0].IsStatic)
-			.OrderBy(x => x.MetadataToken)
+			.OrderBy(p => p.Module.Name)
+			.OrderBy(p => p.MetadataToken)
 			.ToList();
 	}
 
@@ -103,6 +104,7 @@ public static class TypeExtensions
 		// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
 		return type.GetProperties()
 			.Where(p => p.GetCustomAttribute<T>() != null)
+			.OrderBy(p => p.Module.Name)
 			.OrderBy(p => p.MetadataToken)
 			.ToList();
 	}
@@ -112,6 +114,7 @@ public static class TypeExtensions
 		// Fields are returned in a random order, so sort them by the MetadataToken to get the original order
 		return type.GetFields()
 			.Where(f => f.GetCustomAttribute<T>() != null)
+			.OrderBy(f => f.Module.Name)
 			.OrderBy(f => f.MetadataToken)
 			.ToList();
 	}

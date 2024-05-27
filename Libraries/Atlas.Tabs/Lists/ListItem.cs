@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Extensions;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace Atlas.Tabs;
 
@@ -15,20 +16,21 @@ public interface IListItem
 	// Get list items for all public properties and any methods marked with [Item]
 	public static ItemCollection<IListItem> Create(object obj, bool includeBaseTypes)
 	{
-		var listItems = new SortedDictionary<int, IListItem>();
+		var listItems = new SortedDictionary<string, IListItem>();
 
 		var properties = ListProperty.Create(obj, includeBaseTypes);
 		foreach (ListProperty listProperty in properties)
 		{
-			int metadataToken = listProperty.PropertyInfo.GetGetMethod(false)!.MetadataToken;
-
-			listItems.Add(metadataToken, listProperty);
+			MethodInfo getMethod = listProperty.PropertyInfo.GetGetMethod(false)!;
+			string id = $"{getMethod.Module.Name}:{getMethod.MetadataToken:D10}";
+			listItems.Add(id, listProperty);
 		}
 
 		var methods = ListMethod.Create(obj, includeBaseTypes);
 		foreach (ListMethod listMethod in methods)
 		{
-			listItems.Add(listMethod.MethodInfo.MetadataToken, listMethod);
+			string id = $"{listMethod.MethodInfo.Module.Name}:{listMethod.MethodInfo.MetadataToken:D10}";
+			listItems.Add(id, listMethod);
 		}
 
 		return new ItemCollection<IListItem>(listItems.Values);
