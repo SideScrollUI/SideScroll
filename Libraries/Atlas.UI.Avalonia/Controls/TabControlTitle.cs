@@ -29,10 +29,10 @@ public class TabControlTitle : Border, IDisposable
 		}
 	}
 
-	public TabControlTitle(TabInstance tabInstance, string? name = null)
+	public TabControlTitle(TabInstance tabInstance, string? label = null)
 	{
 		TabInstance = tabInstance;
-		Label = name ?? tabInstance.Label;
+		Label = label ?? tabInstance.Label;
 		Label = new StringReader(Label).ReadLine()!; // Remove anything after first line
 
 		_containerGrid = new Grid

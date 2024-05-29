@@ -17,8 +17,8 @@ public class TabSeparator : Border;
 
 public class TabControlParams : Grid, IValidationControl
 {
-	public const int ControlMaxWidth = 500;
-	public const int ControlMaxHeight = 400;
+	public static int ControlMaxWidth { get; set; } = 2000;
+	public static int ControlMaxHeight { get; set; } = 400;
 
 	public object? Object;
 

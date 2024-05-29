@@ -320,9 +320,9 @@ public class TabView : Grid, IDisposable
 
 		foreach (Control control in _tabParentControls.Children)
 		{
-			if (control is IValidationControl paramsControl)
+			if (control is IValidationControl validationControl)
 			{
-				paramsControl.Validate();
+				validationControl.Validate();
 			}
 		}
 	}

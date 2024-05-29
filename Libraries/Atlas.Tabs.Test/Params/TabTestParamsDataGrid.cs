@@ -32,6 +32,5 @@ public class TabParamsDataGrid : ITab
 		{
 			call.Log.AddLogEntry(_logEntry);
 		}
-
 	}
 }
