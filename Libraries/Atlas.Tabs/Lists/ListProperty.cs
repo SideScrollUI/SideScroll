@@ -135,7 +135,7 @@ public class ListProperty : ListMember, IPropertyEditable
 			.Where(p => p.IsRowVisible())
 			.Where(p => includeBaseTypes || p.DeclaringType == obj.GetType())
 			.OrderBy(p => p.Module.Name)
-			.OrderBy(p => p.MetadataToken);
+			.ThenBy(p => p.MetadataToken);
 
 		var listProperties = new ItemCollection<ListProperty>();
 		var propertyToIndex = new Dictionary<string, int>();
