@@ -22,7 +22,7 @@ public class NamedItemCollection<T1, T2>
 			.GetProperties(bindingFlags)
 			.Where(p => elementType.IsAssignableFrom(p.PropertyType))
 			.OrderBy(p => p.Module.Name)
-			.OrderBy(p => p.MetadataToken)
+			.ThenBy(p => p.MetadataToken)
 			.Select(p => new KeyValuePair<MemberInfo, T2>(p, (T2)p.GetValue(null)!))
 			.ToList();
 
@@ -31,7 +31,7 @@ public class NamedItemCollection<T1, T2>
 			.GetFields(bindingFlags)
 			.Where(f => elementType.IsAssignableFrom(f.FieldType))
 			.OrderBy(f => f.Module.Name)
-			.OrderBy(f => f.MetadataToken)
+			.ThenBy(f => f.MetadataToken)
 			.Select(f => new KeyValuePair<MemberInfo, T2>(f, (T2)f.GetValue(null)!));
 
 		keyValues.AddRange(fieldValues);

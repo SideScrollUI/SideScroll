@@ -18,18 +18,18 @@ public class TabTestTextEditor : ITab
 				new("Json", Samples.Text.Json),
 				new("Xml", Samples.Text.Xml),
 
-				GetStringItem("1k", 1000),
-				GetStringItem("10k", 10000),
-				GetStringItem("100k", 100000),
-				//GetStringItem("500k", 500000), // Too slow
-				//GetStringItem("1m", 1000000),
+				GetStringItem("1k", 1_000),
+				GetStringItem("10k", 10_000),
+				GetStringItem("100k", 100_000),
+				//GetStringItem("500k", 500_000), // Too slow
+				//GetStringItem("1m", 1_000_000),
 
 				GetLinesItem("100", 100),
-				GetLinesItem("1k", 1000),
-				GetLinesItem("10k", 10000),
-				GetLinesItem("100k", 100000),
-				GetLinesItem("500k", 500000),
-				GetLinesItem("1m", 1000000),
+				GetLinesItem("1k", 1_000),
+				GetLinesItem("10k", 10_000),
+				GetLinesItem("100k", 100_000),
+				GetLinesItem("500k", 500_000),
+				GetLinesItem("1m", 1_000_000),
 			};
 		}
 

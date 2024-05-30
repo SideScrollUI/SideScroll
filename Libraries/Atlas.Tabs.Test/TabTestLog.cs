@@ -33,8 +33,8 @@ public class TabTestLog : ITab
 				new TaskAction("Add 1 Entry", () => AddEntries(1)),
 				new TaskAction("Add 10 Entries",() => AddEntries(10)),
 				new TaskAction("Add 100 Entries", () => AddEntries(100)),
-				new TaskAction("Add 1,000 Entries", () => AddEntries(1000)),
-				new TaskAction("Add 10,000 Entries", () => AddEntries(10000)),
+				new TaskAction("Add 1,000 Entries", () => AddEntries(1_000)),
+				new TaskAction("Add 10,000 Entries", () => AddEntries(10_000)),
 				new TaskDelegate("Reset", Reset),
 				// Tests different threading contexts
 				new TaskAction("System.Timer: Log 1 Entry / second", StartSystemTimer),

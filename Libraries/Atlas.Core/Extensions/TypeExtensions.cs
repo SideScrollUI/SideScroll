@@ -90,7 +90,7 @@ public static class TypeExtensions
 			.Where(p => p.GetIndexParameters().Length == 0)
 			.Where(p => !p.GetAccessors(nonPublic: true)[0].IsStatic)
 			.OrderBy(p => p.Module.Name)
-			.OrderBy(p => p.MetadataToken)
+			.ThenBy(p => p.MetadataToken)
 			.ToList();
 	}
 
@@ -105,7 +105,7 @@ public static class TypeExtensions
 		return type.GetProperties()
 			.Where(p => p.GetCustomAttribute<T>() != null)
 			.OrderBy(p => p.Module.Name)
-			.OrderBy(p => p.MetadataToken)
+			.ThenBy(p => p.MetadataToken)
 			.ToList();
 	}
 
@@ -115,7 +115,7 @@ public static class TypeExtensions
 		return type.GetFields()
 			.Where(f => f.GetCustomAttribute<T>() != null)
 			.OrderBy(f => f.Module.Name)
-			.OrderBy(f => f.MetadataToken)
+			.ThenBy(f => f.MetadataToken)
 			.ToList();
 	}
 }

@@ -69,7 +69,7 @@ public class ListField : ListMember, IPropertyEditable
 			.Where(f => f.IsRowVisible())
 			.Where(f => includeBaseTypes || f.DeclaringType == obj.GetType())
 			.OrderBy(f => f.Module.Name)
-			.OrderBy(f => f.MetadataToken);
+			.ThenBy(f => f.MetadataToken);
 
 		var listFields = new ItemCollection<ListField>();
 		// replace any overriden/new field & properties

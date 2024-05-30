@@ -97,7 +97,7 @@ public class ListMethod : ListMember
 			.Where(m => IsVisible(m))
 			.Where(m => includeBaseTypes || m.DeclaringType == obj.GetType())
 			.OrderBy(m => m.Module.Name)
-			.OrderBy(m => m.MetadataToken);
+			.ThenBy(m => m.MetadataToken);
 
 		var listMethods = new ItemCollection<ListMethod>();
 		var propertyToIndex = new Dictionary<string, int>();

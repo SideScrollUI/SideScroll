@@ -22,7 +22,7 @@ public static class Win32ClipboardUtils
 		ArgumentNullException.ThrowIfNull(bitmap);
 
 		// Convert from Avalonia Bitmap to System Bitmap
-		using var memoryStream = new MemoryStream(1000000);
+		using var memoryStream = new MemoryStream(1_000_000);
 
 		bitmap.Save(memoryStream); // this returns a png from Skia
 

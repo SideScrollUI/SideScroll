@@ -40,7 +40,7 @@ public enum TextType
 
 public class TabControlAvaloniaEdit : Grid
 {
-	public const int MaxAutoLoadSize = 1000000;
+	public const int MaxAutoLoadSize = 1_000_000;
 
 	public TabInstance TabInstance;
 

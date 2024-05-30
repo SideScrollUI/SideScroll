@@ -13,8 +13,7 @@ public class TabSerializer : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			_items = new ItemCollectionUI<ListItem>();
-			model.Items = _items;
+			model.Items = _items = [];
 
 			model.Actions = new List<TaskCreator>
 			{
@@ -42,7 +41,7 @@ public class TabSerializer : ITab
 		private void SerializeOneMillionObjects(Call call)
 		{
 			var sampleItems = new List<SampleItem>();
-			for (int i = 0; i < 1000000; i++)
+			for (int i = 0; i < 1_000_000; i++)
 			{
 				sampleItems.Add(new SampleItem(i, "Item " + i));
 			}

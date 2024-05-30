@@ -42,7 +42,7 @@ public class TabDataSettings
 	{
 		var methodInfos = type.GetMethods()
 			.OrderBy(m => m.Module.Name)
-			.OrderBy(m => m.MetadataToken);
+			.ThenBy(m => m.MetadataToken);
 
 		var callableMethods = new List<MethodColumn>();
 		foreach (MethodInfo methodInfo in methodInfos)
