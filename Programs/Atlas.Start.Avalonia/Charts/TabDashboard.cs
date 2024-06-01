@@ -1,7 +1,7 @@
 using Atlas.Core;
 using Atlas.Core.Charts;
 using Atlas.Tabs;
-using Atlas.Tabs.Test.Chart;
+using Atlas.Tabs.Samples.Chart;
 using Atlas.UI.Avalonia.Charts.LiveCharts;
 using Avalonia.Controls;
 

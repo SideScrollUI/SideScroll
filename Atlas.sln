@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tabs", "Tabs", "{BE789B8C-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Tabs", "Libraries\Atlas.Tabs\Atlas.Tabs.csproj", "{043632CA-DCEC-423C-854F-5448749BB402}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Tabs.Test", "Libraries\Atlas.Tabs.Test\Atlas.Tabs.Test.csproj", "{1347EFE2-C9E3-4A6D-918B-C8B15D301E7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Tabs.Samples", "Libraries\Atlas.Tabs.Samples\Atlas.Tabs.Samples.csproj", "{1347EFE2-C9E3-4A6D-918B-C8B15D301E7E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlas.Tabs.Tools", "Libraries\Atlas.Tabs.Tools\Atlas.Tabs.Tools.csproj", "{98030CF3-FD36-4632-A93A-0095321275CA}"
 EndProject

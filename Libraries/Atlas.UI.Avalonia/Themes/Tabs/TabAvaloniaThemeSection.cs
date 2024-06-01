@@ -1,11 +1,11 @@
 using Atlas.Core;
 using Atlas.Resources;
 using Atlas.Tabs;
-using Atlas.Tabs.Test.Actions;
-using Atlas.Tabs.Test.Chart;
-using Atlas.Tabs.Test.DataGrid;
-using Atlas.Tabs.Test.Objects;
-using Atlas.Tabs.Test.Params;
+using Atlas.Tabs.Samples.Actions;
+using Atlas.Tabs.Samples.Chart;
+using Atlas.Tabs.Samples.DataGrid;
+using Atlas.Tabs.Samples.Objects;
+using Atlas.Tabs.Samples.Params;
 using Atlas.Tabs.Toolbar;
 using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.Samples.Controls.CustomControl;
@@ -80,25 +80,25 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			{
 				TabTheme => new List<ListItem>
 				{
-					new("Forms", new TabTestParamsDataTabs()),
-					new("Loading", new TabTestLoadAsync()),
+					new("Forms", new TabSampleParamsDataTabs()),
+					new("Loading", new TabSampleLoadAsync()),
 				},
 				ToolbarTheme => new TabCustomControl(),
 				ToolTipTheme => new TabAvaloniaToolTipSample(),
 				DataGridTheme => new List<ListItem>
 				{
-					new("Collections", new TabTestDataGrid()),
-					new("Objects", new TabTestObjects()),
+					new("Collections", new TabSampleDataGrid()),
+					new("Objects", new TabSampleObjects()),
 				},
-				ButtonTheme => new TabActions(),
-				TextControlTheme => new TabTestParamsDataTabs(),
+				ButtonTheme => new TabSampleActions(),
+				TextControlTheme => new TabSampleParamsDataTabs(),
 				TextEditorTheme => new List<ListItem>
 				{
-					new("Text", Resources.Samples.Text.Plain),
-					new("Json", Resources.Samples.Text.Json),
-					new("Xml", Resources.Samples.Text.Xml),
+					new("Text", TextSamples.Plain),
+					new("Json", TextSamples.Json),
+					new("Xml", TextSamples.Xml),
 				},
-				ChartTheme => new TabTestChart(),
+				ChartTheme => new TabSampleCharts(),
 				_ => null
 			};
 		}

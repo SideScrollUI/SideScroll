@@ -1,6 +1,6 @@
 using Atlas.Core;
 using Atlas.Tabs;
-using Atlas.Tabs.Test.Models;
+using Atlas.Tabs.Samples.Models;
 using Atlas.UI.Avalonia.Controls;
 using Atlas.UI.Avalonia.Utilities;
 using System.Text.Json;

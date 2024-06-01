@@ -1,4 +1,5 @@
 using Atlas.Core;
+using Atlas.Resources;
 using Atlas.Tabs;
 using Atlas.UI.Avalonia.Controls;
 
@@ -12,7 +13,7 @@ public class TabTextArea : ITab
 	{
 		public override void LoadUI(Call call, TabModel model)
 		{
-			var textArea = new TabControlTextArea(Resources.Samples.Text.Plain);
+			var textArea = new TabControlTextArea(TextSamples.Plain);
 			model.AddObject(textArea, true);
 		}
 	}

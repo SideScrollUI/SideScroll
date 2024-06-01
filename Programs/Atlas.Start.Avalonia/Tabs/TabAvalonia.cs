@@ -1,7 +1,7 @@
 using Atlas.Core;
 using Atlas.Start.Avalonia.Charts;
 using Atlas.Tabs;
-using Atlas.Tabs.Test;
+using Atlas.Tabs.Samples;
 using Atlas.UI.Avalonia.Samples.Controls;
 using Atlas.UI.Avalonia.Tabs;
 
@@ -17,7 +17,7 @@ public class TabAvalonia : ITab
 		{
 			model.Items = new ItemCollection<ListItem>
 			{
-				new("Test", new TabTest()),
+				new("Samples", new TabSamples()),
 				new("Controls", new TabSampleControls()),
 				new("Charts", new TabCustomCharts()),
 				new("Links", new TabBookmarks(Project)),

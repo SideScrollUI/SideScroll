@@ -125,7 +125,7 @@
     <ProjectReference Include="..\Atlas.Core\Atlas.Core.csproj" />
     <ProjectReference Include="..\Atlas.Resources\Atlas.Resources.csproj" />
     <ProjectReference Include="..\Atlas.Serialize\Atlas.Serialize.csproj" />
-    <ProjectReference Include="..\Atlas.Tabs.Test\Atlas.Tabs.Test.csproj" />
+    <ProjectReference Include="..\Atlas.Tabs.Samples\Atlas.Tabs.Samples.csproj" />
     <ProjectReference Include="..\Atlas.Tabs.Tools\Atlas.Tabs.Tools.csproj" />
     <ProjectReference Include="..\Atlas.Tabs\Atlas.Tabs.csproj" />
   </ItemGroup>

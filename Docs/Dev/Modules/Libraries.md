@@ -30,8 +30,8 @@
 * Atlas.Tabs.Tools
   - File Browser
   
-* Atlas.Tabs.Test
-  - `* Test` tabs that show up in debug mode
+* Atlas.Tabs.Samples
+  - `* Samples` tabs that show up in debug mode
   - Used for testing UI features
 
 ## User Interface Libraries

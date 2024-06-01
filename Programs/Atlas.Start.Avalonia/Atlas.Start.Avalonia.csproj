@@ -56,7 +56,7 @@
     <ProjectReference Include="..\..\Libraries\Atlas.UI.Avalonia\Atlas.UI.Avalonia.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.Resources\Atlas.Resources.csproj" />
     <ProjectReference Include="..\..\Libraries\Atlas.Tabs\Atlas.Tabs.csproj" />
-    <ProjectReference Include="..\..\Libraries\Atlas.Tabs.Test\Atlas.Tabs.Test.csproj" />
+    <ProjectReference Include="..\..\Libraries\Atlas.Tabs.Samples\Atlas.Tabs.Samples.csproj" />
   </ItemGroup>
 
 </Project>
