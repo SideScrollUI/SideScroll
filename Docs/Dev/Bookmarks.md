@@ -61,7 +61,7 @@ public class Instance : TabInstance
   private void LoadSavedItems(Call call, TabModel model)
   {
     _dataRepoParams = DataApp.LoadView<ParamTestItem>(call, "CollectionTest");
-    DataRepoInstance = _dataRepoParams;
+    DataRepoInstance = _dataRepoParams; // Enable links to pass selected DataItem
 
     var dataCollection = new DataCollection<ParamTestItem, TabParamItem>(_dataRepoParams);
     model.Items = dataCollection.Items;

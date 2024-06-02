@@ -23,7 +23,7 @@ namespace Atlas.Tabs.Samples
 		{
 			public override void Load(Call call, TabModel model)
 			{
-				model.Items = new ItemCollection<ListItem>()
+				model.Items = new List<ListItem>()
 				{
 					new("Tab 1", new Tab1()),
 					new("Tab 2", new Tab2()),
@@ -96,7 +96,7 @@ namespace Atlas.Tabs.Samples
 				_sampleItems = new ItemCollectionUI<SampleItem>();
 				AddItems(tab.Count);
 
-				model.Items = new ItemCollection<ListItem>("Items")
+				model.Items = new List<ListItem>()
 				{
 					new("Sample Items", _sampleItems),
 					new("Collections", new TabTestGridCollectionSize()),

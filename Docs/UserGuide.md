@@ -2,11 +2,11 @@
 
 ## Selecting Items
 * Use Ctrl or Shift to select multiple items
-* Any time you select an item, Atlas will remember it and will select that exact same item the next time that list is shown.
+* Previous selections are remembered, and used to select future options when loading the same or similar tabs
 
 ## Filtering
 
-* Press Ctrl-F on any Data Grid to add a filter (You can click anywhere on a tab to focus it)
+* Press Ctrl-F on any Data Grid to show the filter (You can click anywhere on a tab to focus it)
 * You can use | or & to restrict searches
 * Examples:
   - Search for the exact string "ABC" or anything containing 123

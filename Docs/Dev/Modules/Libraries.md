@@ -5,7 +5,7 @@
 ## Core Libraries
 
 * Atlas.Core
-  - UI Tab Interface
+  - Tab Interfaces
   -	Logging
   - Utilities - (Extensions, Attributes, etc)
 
@@ -20,7 +20,7 @@
 ## Tab Libraries
 
 * Atlas.Tabs
-  - Defines the UI menus
+  - Defines the UI models
   - Contains all the Tab interface logic for everything
   - Shared across UI frameworks
     - Currently only AvaloniaUI
@@ -29,8 +29,8 @@
   - File Browser
   
 * Atlas.Tabs.Samples
-  - `* Samples` tabs that show up in debug mode
   - Used for testing UI features
+  - `* Samples` tabs that show up in debug mode
 
 ## User Interface Libraries
 

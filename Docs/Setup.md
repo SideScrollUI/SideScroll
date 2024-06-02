@@ -6,16 +6,16 @@
 
 ## Console
 - Build
-  - `dotnet build Atlas.Avalonia.sln`
+  - `dotnet build Atlas.sln`
 - Run
   - `dotnet run --project Programs/Atlas.Start.Avalonia/Atlas.Start.Avalonia.csproj`
 
 ## IDE
-- Open `Atlas.sln`
 - IDE's
   - Visual Studio 2022 (Windows Only)
   - JetBrains Rider
   - Visual Studio Code
+- Open `Atlas.sln`
 - Start Atlas in Debug Mode
   - `Programs / Atlas.Start.Avalonia`
     

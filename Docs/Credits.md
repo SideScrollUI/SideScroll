@@ -1,7 +1,6 @@
 # Credits
 
-## Flaticon 
-   - http://www.flaticon.com is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/)
+## Icons
 
 | Icon | Name | License |
 | - | - | - |
@@ -42,6 +41,9 @@
 | [Star](https://icon-icons.com/icon/bookmark-favorite-rate-rating-star/113418) | Unknown by site | CC Atribution |
 | [Undo/Redo](https://icon-icons.com/icon/undo/232333) | zahroe zahro | CC Atribution |
 | [Reset](https://icon-icons.com/icon/arrow-reset-regular/204640) | Microsoft | MIT license |
+
+* Flaticon 
+   - http://www.flaticon.com is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/)
 
 * Lucy G
   - (user account no longer exists)
