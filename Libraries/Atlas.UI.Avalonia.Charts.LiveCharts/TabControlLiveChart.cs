@@ -22,7 +22,6 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Avalonia;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
-using System.Data.Common;
 using System.Diagnostics;
 
 namespace Atlas.UI.Avalonia.Charts.LiveCharts;

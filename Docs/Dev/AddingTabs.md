@@ -25,8 +25,8 @@ namespace Atlas.Tabs.Samples
 			{
 				model.Items = new ItemCollection<ListItem>()
 				{
-					new ListItem("Tab 1", new Tab1()),
-					new ListItem("Tab 2", new Tab2()),
+					new("Tab 1", new Tab1()),
+					new("Tab 2", new Tab2()),
 				};
 
 				model.Actions = new List<TaskCreator>()
@@ -81,14 +81,9 @@ public void UpdateStatus(Call call, string text)
 ```csharp
 namespace Atlas.Tabs.Samples
 {
-	public class TabSample : ITab
+	public class TabSample(int count) : ITab
 	{
-		private int Count;
-
-		public TabSample(int count)
-		{
-			Count = count;
-		}
+		private int Count = count;
 
 		public TabInstance Create() => new Instance();
 
@@ -103,9 +98,9 @@ namespace Atlas.Tabs.Samples
 
 				model.Items = new ItemCollection<ListItem>("Items")
 				{
-					new ListItem("Sample Items", _sampleItems),
-					new ListItem("Collections", new TabTestGridCollectionSize()),
-					new ListItem("Recursive Tab", new TabSample()), // recursive
+					new("Sample Items", _sampleItems),
+					new("Collections", new TabTestGridCollectionSize()),
+					new("Copy", new TabSample()), // Recursive
 				};
 
 				model.Actions = new List<TaskCreator>()

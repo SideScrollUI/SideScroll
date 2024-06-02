@@ -5,15 +5,15 @@
 ## Core Libraries
 
 * Atlas.Core
-
   - UI Tab Interface
   -	Logging
   - Utilities - (Extensions, Attributes, etc)
 
 * Atlas.Serialize
-  - Serializes all objects into a customer data store
+  - Serializes objects to and from a local DataRepo
   - Supports lazy loading and circular references
   - [Serializer.md]
+
 * Atlas.Network
   - HTTP - (downloading files)
   
@@ -33,7 +33,16 @@
   - Used for testing UI features
 
 ## User Interface Libraries
-  
+
 * Atlas.UI.Avalonia
   - Cross Platform UI Controls
-  - Works on Windows, Linux, and Mac
+  - Works on Windows, MacOS, and Linux
+
+* Atlas.UI.Avalonia.Charts
+  - Base chart interface
+
+* Atlas.UI.Avalonia.LiveCharts
+  - LiveCharts version of the Charts package
+
+* Atlas.UI.Avalonia.ScreenCapture
+  - Screenshot control for Windows and MacOS

@@ -17,8 +17,5 @@
   - JetBrains Rider
   - Visual Studio Code
 - Start Atlas in Debug Mode
-  - Set the start project to one of the programs
   - `Programs / Atlas.Start.Avalonia`
-    - .NET Core
-      - Cross platform (Windows, Linux, Mac)
     

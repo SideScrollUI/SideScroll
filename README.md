@@ -2,11 +2,11 @@
 Atlas is an AvaloniaUI library for exploring multiple paths of a tree at once
 
 # Features
-* Cross Platform UI Framework written in C#
-* Follow multiple tabs 20 or more levels deep. New tabs will load as you scroll
-* Navigator remembers all previous selections
-* Create Bookmarks to share links between users
-* Data Repos let you specify attributes for saving & loading data and links locally
+* .NET Cross Platform UI Framework that can run on any Windows, MacOS, or Linux system
+* Follow multiple tabs 20 or more levels deep. New tabs will load as you scroll to the right
+* The navigator uses your previous selections to automatically select the most likely options
+* Create Links to share views with others
+* DataRepos manage your local saving & loading
 
 ![Atlas UI](/Images/Screenshots/ColumnTypes_CustomControl_Charts.png)
 

@@ -3,7 +3,7 @@
   * [Visual Studio](IDEs/VisualStudio.md)
     - Recommended for Windows
   * [JetBrains Rider](https://www.jetbrains.com/rider/)
-    - Recommended for Macs
+    - Recommended for all platforms
   * [Visual Studio Code](IDEs/VisualStudioCode.md)
     - Recommended for editing docs, although this can be used for coding too
 * Modules

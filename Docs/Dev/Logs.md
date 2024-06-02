@@ -1,7 +1,7 @@
 # Logs
 
 ```csharp
-Log log = new Log();
+Log log = new();
 log.Add("New Log entry", new Tag("Name", "value"), new Tag("Count", 123));
 ```
 * Logs have a tree structure and can be nested as deep as necessary.

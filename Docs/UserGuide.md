@@ -15,11 +15,11 @@
 
 ## Hints
 * To copy the cell data to the clipboard, you can right click and select `Copy`
-* You can clear the local disk cache & settings by going to `Test` -> `Data Repos` and clicking `Delete`
+* You can clear the local disk cache & settings by going to `Samples` -> `Data Repos` and clicking `Delete`
 
-## Bookmarks
+## Links
 
-You can save a bookmark for any location in the GUI. Multiple bookmarks can be selected at once and the merged results will be shown.
+You can save a link for any location in the UI. Override the `Linker` class to add new methods that add and retrieve links.
 
 ![Bookmarks](/../Images/Screenshots/bookmarks.png)
 
