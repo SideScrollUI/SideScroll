@@ -1,7 +1,9 @@
 using Atlas.Core;
 using Atlas.Core.Tasks;
+using Atlas.Resources;
 using Atlas.Tabs.Samples.Chart;
 using Atlas.Tabs.Samples.DataGrid;
+using Atlas.Tabs.Samples.Objects;
 using Atlas.Tabs.Samples.Params;
 
 namespace Atlas.Tabs.Samples;
@@ -26,9 +28,11 @@ public class TabSampleDemo : ITab
 			{
 				new("Sample Items", _sampleItems),
 				new("Collections", new TabSampleGridCollectionSize()),
-				new("Recursive Copy", new TabSampleDemo()),
 				new("Chart", new TabSampleChartTimeSeries()),
 				new("Params", new TabSampleParamsDataTabs()),
+				new("Json", TextSamples.Json),
+				new("Objects", new TabSampleObjectMembers()),
+				new("Copy", new TabSampleDemo()),
 			};
 
 			model.Actions = new List<TaskCreator>

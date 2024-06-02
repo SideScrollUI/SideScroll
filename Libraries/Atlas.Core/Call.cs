@@ -124,13 +124,13 @@ public class Call
 		return AddSubTask(name).Call;
 	}
 
-	private static async Task<T2?> RunFuncAsync<T1, T2>(Call call, Func<Call, T1, Task<T2>> func, T1 item)
+	private static async Task<TResult?> RunFuncAsync<TItem, TResult>(Call call, Func<Call, TItem, Task<TResult>> func, TItem item)
 	{
 		using CallTimer callTimer = call.StartTask(item?.ToString());
 
 		try
 		{
-			T2 result = await func(callTimer, item);
+			TResult result = await func(callTimer, item);
 			if (result == null)
 				callTimer.Log.Add("No result");
 			return result;
@@ -142,13 +142,13 @@ public class Call
 		}
 	}
 
-	private static async Task<T3?> RunFuncAsync<T1, T2, T3>(Call call, Func<Call, T1, T2, Task<T3>> func, T1 item, T2 param1)
+	private static async Task<TResult?> RunFuncAsync<TItem, TParam1, TResult>(Call call, Func<Call, TItem, TParam1, Task<TResult>> func, TItem item, TParam1 param1)
 	{
 		using CallTimer callTimer = call.StartTask(item?.ToString());
 
 		try
 		{
-			T3 result = await func(callTimer, item, param1);
+			TResult result = await func(callTimer, item, param1);
 			if (result == null)
 				callTimer.Log.Add("No result");
 			return result;
@@ -160,13 +160,13 @@ public class Call
 		}
 	}
 
-	private static async Task<T4?> RunFuncAsync<T1, T2, T3, T4>(Call call, Func<Call, T1, T2, T3, Task<T4>> func, T1 item, T2 param1, T3 param2)
+	private static async Task<TResult?> RunFuncAsync<TItem, TParam1, TParam2, TResult>(Call call, Func<Call, TItem, TParam1, TParam2, Task<TResult>> func, TItem item, TParam1 param1, TParam2 param2)
 	{
 		using CallTimer callTimer = call.StartTask(item?.ToString());
 
 		try
 		{
-			T4 result = await func(callTimer, item, param1, param2);
+			TResult result = await func(callTimer, item, param1, param2);
 			if (result == null)
 				callTimer.Log.Add("No result");
 			return result;
@@ -178,31 +178,31 @@ public class Call
 		}
 	}
 
-	public async Task<List<T2>> RunAsync<T1, T2>(Func<Call, T1, Task<T2?>> func, ICollection<T1> items, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<TResult>> RunAsync<TItem, TResult>(Func<Call, TItem, Task<TResult?>> func, ICollection<TItem> items, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, maxRequestsPerSecond);
 	}
 
-	public async Task<List<T3>> RunAsync<T1, T2, T3>(Func<Call, T1, T2, Task<T3?>> func, ICollection<T1> items, T2 param1, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<TResult>> RunAsync<TItem, TParam1, TResult>(Func<Call, TItem, TParam1, Task<TResult?>> func, ICollection<TItem> items, TParam1 param1, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1, maxRequestsPerSecond);
 	}
 
-	public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(Func<Call, T1, T2, T3, Task<T4?>> func, ICollection<T1> items, T2 param1, T3 param2, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<TResult>> RunAsync<TItem, TParam1, TParam2, TResult>(Func<Call, TItem, TParam1, TParam2, Task<TResult?>> func, ICollection<TItem> items, TParam1 param1, TParam2 param2, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1, param2, maxRequestsPerSecond);
 	}
 
 	// Call func for every item in the list using the specified parameters
-	public async Task<List<T2>> RunAsync<T1, T2>(string name, Func<Call, T1, Task<T2?>> func, ICollection<T1> items, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<TResult>> RunAsync<TItem, TResult>(string name, Func<Call, TItem, Task<TResult?>> func, ICollection<TItem> items, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		using CallTimer callTimer = StartTask(items.Count, name);
 
 		using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
 
 		var tasks = new List<Task>();
-		var results = new List<T2>();
-		foreach (T1 item in items)
+		var results = new List<TResult>();
+		foreach (TItem item in items)
 		{
 			await throttler.WaitAsync();
 			if (TaskInstance?.CancelToken.IsCancellationRequested == true)
@@ -214,7 +214,7 @@ public class Call
 			{
 				try
 				{
-					T2? result = await RunFuncAsync(callTimer, func, item);
+					TResult? result = await RunFuncAsync(callTimer, func, item);
 					if (result != null)
 					{
 						lock (results)
@@ -238,15 +238,15 @@ public class Call
 		return results;
 	}
 
-	public async Task<List<T3>> RunAsync<T1, T2, T3>(string name, Func<Call, T1, T2, Task<T3?>> func, ICollection<T1> items, T2 param1, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<TResult>> RunAsync<TItem, TParam1, TResult>(string name, Func<Call, TItem, TParam1, Task<TResult?>> func, ICollection<TItem> items, TParam1 param1, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		using CallTimer callTimer = StartTask(items.Count, name);
 
 		using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
 
 		var tasks = new List<Task>();
-		var results = new List<T3>();
-		foreach (T1 item in items)
+		var results = new List<TResult>();
+		foreach (TItem item in items)
 		{
 			await throttler.WaitAsync();
 			if (TaskInstance?.CancelToken.IsCancellationRequested == true)
@@ -258,7 +258,7 @@ public class Call
 			{
 				try
 				{
-					T3? result = await RunFuncAsync(callTimer, func, item, param1);
+					TResult? result = await RunFuncAsync(callTimer, func, item, param1);
 					if (result != null)
 					{
 						lock (results)
@@ -282,15 +282,15 @@ public class Call
 		return results;
 	}
 
-	public async Task<List<T4>> RunAsync<T1, T2, T3, T4>(string name, Func<Call, T1, T2, T3, Task<T4?>> func, ICollection<T1> items, T2 param1, T3 param2, int maxRequestsPerSecond = MaxRequestsPerSecond)
+	public async Task<List<TResult>> RunAsync<TItem, TParam1, TParam2, TResult>(string name, Func<Call, TItem, TParam1, TParam2, Task<TResult?>> func, ICollection<TItem> items, TParam1 param1, TParam2 param2, int maxRequestsPerSecond = MaxRequestsPerSecond)
 	{
 		using CallTimer callTimer = StartTask(items.Count, name);
 
 		using var throttler = new SemaphoreSlim(maxRequestsPerSecond);
 
 		var tasks = new List<Task>();
-		var results = new List<T4>();
-		foreach (T1 item in items)
+		var results = new List<TResult>();
+		foreach (TItem item in items)
 		{
 			await throttler.WaitAsync();
 			if (TaskInstance?.CancelToken.IsCancellationRequested == true)
@@ -302,7 +302,7 @@ public class Call
 			{
 				try
 				{
-					T4? result = await RunFuncAsync(callTimer, func, item, param1, param2);
+					TResult? result = await RunFuncAsync(callTimer, func, item, param1, param2);
 					if (result != null)
 					{
 						lock (results)

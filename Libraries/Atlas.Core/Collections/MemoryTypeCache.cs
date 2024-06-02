@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 namespace Atlas.Core.Collections;
 
 [Unserialized]
-public class MemoryTypeCache<T1>
+public class MemoryTypeCache<T>
 {
 	public int MaxItems { get; set; }
 	public TimeSpan? CacheDuration { get; set; }
@@ -23,7 +23,7 @@ public class MemoryTypeCache<T1>
 		MemoryCache = new MemoryCache(options);
 	}
 
-	public void Set(string key, T1 value)
+	public void Set(string key, T value)
 	{
 		if (value == null) return;
 
@@ -35,34 +35,34 @@ public class MemoryTypeCache<T1>
 		MemoryCache.Set(key, value, options);
 	}
 
-	public T1? Get(Call call, string key)
+	public T? Get(Call call, string key)
 	{
 		if (MemoryCache.TryGetValue(key, out object? obj))
 		{
 			call.Log.Add("Found cached copy", new Tag("Uri", key));
-			return (T1)obj!;
+			return (T)obj!;
 		}
 
 		return default;
 	}
 
-	public bool TryGetValue(string key, out T1? value)
+	public bool TryGetValue(string key, out T? value)
 	{
 		if (MemoryCache.TryGetValue(key, out object? obj))
 		{
-			value = (T1)obj!;
+			value = (T)obj!;
 			return true;
 		}
 		value = default;
 		return false;
 	}
 
-	public bool TryGetValue(Call call, string key, out T1? value)
+	public bool TryGetValue(Call call, string key, out T? value)
 	{
 		if (MemoryCache.TryGetValue(key, out object? obj))
 		{
 			call.Log.Add("Found cached copy", new Tag("Uri", key));
-			value = (T1)obj!;
+			value = (T)obj!;
 			return true;
 		}
 		value = default;

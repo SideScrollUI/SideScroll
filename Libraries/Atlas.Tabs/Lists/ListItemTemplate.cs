@@ -4,10 +4,10 @@ using System.ComponentModel;
 namespace Atlas.Tabs;
 
 // implement INotifyPropertyChanged to prevent memory leaks
-public class ListItem<T1, T2>(T1 key, T2 value, object obj) : INotifyPropertyChanged
+public class ListItem<TKey, TValue>(TKey key, TValue value, object obj) : INotifyPropertyChanged
 {
-	public T1 Key { get; set; } = key;
-	public T2 Value { get; set; } = value;
+	public TKey Key { get; set; } = key;
+	public TValue Value { get; set; } = value;
 
 	[HiddenColumn, InnerValue]
 	public object Object { get; set; } = obj;
