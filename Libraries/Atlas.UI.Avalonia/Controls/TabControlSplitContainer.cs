@@ -109,7 +109,9 @@ public class TabControlSplitContainer : Grid
 		Children.Add(control);
 
 		if (addSplitter)
+		{
 			AddHorizontalGridSplitter(splitterIndex);
+		}
 
 		//gridControls[oldChild.Key] = control;
 		InvalidateMeasure();
@@ -119,14 +121,22 @@ public class TabControlSplitContainer : Grid
 	{
 		var rowDefinition = new RowDefinition();
 		if (fill)
+		{
 			rowDefinition.Height = new GridLength(1, GridUnitType.Star);
+		}
 		else
+		{
 			rowDefinition.Height = GridLength.Auto;
+		}
 
 		if (index is int i)
+		{
 			RowDefinitions.Insert(i, rowDefinition);
+		}
 		else
+		{
 			RowDefinitions.Add(rowDefinition);
+		}
 
 		return rowDefinition;
 	}
@@ -161,16 +171,22 @@ public class TabControlSplitContainer : Grid
 		foreach (var gridItem in _gridItems)
 		{
 			if (index > 0)
+			{
 				AddHorizontalGridSplitter(index);
+			}
 
 			// separator
 			index++;
 
 			RowDefinition rowDefinition = RowDefinitions[index];
 			if (gridItem.Fill)
+			{
 				rowDefinition.Height = new GridLength(1, GridUnitType.Star);
+			}
 			else
+			{
 				rowDefinition.Height = GridLength.Auto;
+			}
 
 			SetRow(gridItem.Control!, index);
 			index++;

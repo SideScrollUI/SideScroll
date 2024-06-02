@@ -92,21 +92,14 @@ namespace Atlas.Tabs.Samples
 
 		public TabInstance Create() => new Instance();
 
-		public class Instance : TabInstance
+		public class Instance(TabSample tab) : TabInstance
 		{
-			private TabSample Tab;
-
 			private ItemCollectionUI<SampleItem> _sampleItems;
-
-			public Instance(TabSample tab)
-			{
-				Tab = tab;
-			}
 
 			public override void Load(Call call, TabModel model)
 			{
 				_sampleItems = new ItemCollectionUI<SampleItem>();
-				AddItems(Tab.Count);
+				AddItems(tab.Count);
 
 				model.Items = new ItemCollection<ListItem>("Items")
 				{
@@ -143,18 +136,12 @@ namespace Atlas.Tabs.Samples
 		}
 	}
 
-	public class SampleItem
+	public class SampleItem(int id, string name)
 	{
-		public int Id { get; set; }
-		public string Name { get; set; }
+		public int Id { get; set; } = id;
+		public string Name { get; set; } = name;
 
 		public override string ToString() => Name;
-
-		public SampleItem(int id, string name)
-		{
-			Id = id;
-			Name = name;
-		}
 	}
 }
 ```
@@ -171,7 +158,7 @@ namespace Atlas.Tabs.Samples
 ```csharp
 namespace Atlas.Tabs.Samples.Actions
 {
-	public class TabTestAsync : ITab
+	public class TabSampleAsync : ITab
 	{
 		public TabInstance Create() { return new Instance(); }
 

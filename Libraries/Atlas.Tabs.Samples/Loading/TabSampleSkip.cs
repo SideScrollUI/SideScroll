@@ -22,3 +22,11 @@ public class TabSampleSkip : ITab
 		}
 	}
 }
+
+public class SampleItem(int id, string name)
+{
+	public int Id { get; set; } = id;
+	public string Name { get; set; } = name;
+
+	public override string ToString() => Name;
+}

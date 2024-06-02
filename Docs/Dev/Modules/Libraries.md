@@ -1,6 +1,6 @@
 # Libraries
 
-- All libraries use .NET Standard 2.0
+- All libraries use .NET 8.0
 
 ## Core Libraries
 
@@ -13,11 +13,9 @@
 * Atlas.Serialize
   - Serializes all objects into a customer data store
   - Supports lazy loading and circular references
-  - This is growing so big it should probably be it's own library)
   - [Serializer.md]
 * Atlas.Network
   - HTTP - (downloading files)
-  - FTP - (downloading files)
   
 ## Tab Libraries
 

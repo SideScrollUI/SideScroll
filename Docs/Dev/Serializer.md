@@ -24,7 +24,7 @@ public class MyClass
 
 ## Object Cloning
 
-You can call the Serializer.Clone<Type> to do a deep clone of any object that can be serialized. Additionally, any class with a [Static] will not be cloned to speed things up (useful for objects that won't change). This can be useful for simulating things where 90% of the data doesn't change and you want to take snapshots at intervals.
+You can call the Serializer.DeepClone<Type> to do a deep clone of any object that can be serialized. Additionally, any class with a [Static] will not be cloned to speed things up (useful for objects that won't change). This can be useful for simulating things where 90% of the data doesn't change and you want to take snapshots at intervals.
 
 ## Restricting Types
 - When importing or exporting data like bookmarks, you might want to restrict which data can be exported

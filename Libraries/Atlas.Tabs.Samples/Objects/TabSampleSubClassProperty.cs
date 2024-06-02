@@ -13,7 +13,9 @@ public class TabSampleSubClassProperty : ITab
 			var items = new ItemCollection<ParentClass>();
 
 			for (int i = 0; i < 1; i++)
+			{
 				items.Add(new ParentClass());
+			}
 
 			model.Items = items;
 		}

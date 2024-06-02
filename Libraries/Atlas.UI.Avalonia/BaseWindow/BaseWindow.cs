@@ -117,7 +117,9 @@ public class BaseWindow : Window
 				// OSX doesn't resize to smaller correctly if maximized at start
 				workingHeight -= 20;
 				if (WindowState == WindowState.Maximized)
+				{
 					maxHeight -= 12; // On windows, the menu header takes up an extra 12 pixels when not maximized
+				}
 			}
 			maxHeight = Math.Max(maxHeight, workingHeight);
 		}
@@ -152,10 +154,14 @@ public class BaseWindow : Window
 			};
 
 			if (windowSettings.Width <= 0)
+			{
 				windowSettings.Width = DefaultWindowWidth;
+			}
 
 			if (windowSettings.Height <= 0)
+			{
 				windowSettings.Height = DefaultWindowHeight;
+			}
 
 			return windowSettings;
 		}
@@ -175,7 +181,9 @@ public class BaseWindow : Window
 
 			// Avalonia bug? WindowState doesn't update correctly for MacOS
 			if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+			{
 				WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
+			}
 		}
 	}
 
@@ -185,7 +193,9 @@ public class BaseWindow : Window
 
 		var settings = Project.DataApp.Load<WindowSettings>(true);
 		if (settings != null)
+		{
 			WindowSettings = settings;
+		}
 	}
 
 	// Still saving due to a HandleResized calls after IsActive (loadComplete does nothing)
@@ -195,7 +205,9 @@ public class BaseWindow : Window
 		SetMaxBounds();
 
 		if (_loadComplete)// && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
+		{
 			Dispatcher.UIThread.Post(SaveWindowSettingsInternal, DispatcherPriority.SystemIdle);
+		}
 	}
 
 	private void SaveWindowSettingsInternal()

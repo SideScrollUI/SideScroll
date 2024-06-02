@@ -30,12 +30,18 @@ public class TextBlockElement : TextBlock
 		Margin = new Thickness(5, 5, 5, 2); // Shift down since tailing is rare
 
 		if (!Column.FormatConverter.IsFormatted)
+		{
 			TextAlignment = DataGridUtils.GetTextAlignment(PropertyInfo.PropertyType);
+		}
 
 		if (Column.WordWrap)
+		{
 			TextWrapping = TextWrapping.Wrap;
+		}
 		else
+		{
 			VerticalAlignment = VerticalAlignment.Center;
+		}
 	}
 
 	protected override Size MeasureCore(Size availableSize)

@@ -45,7 +45,9 @@ public class DataGridButtonColumn : DataGridBoundColumn
 		};
 		button.Resources.Add("ButtonPadding", new Thickness(2, 5));
 		if (VisiblePropertyName != null)
+		{
 			button.BindVisible(VisiblePropertyName);
+		}
 		button.Click += Button_Click;
 		return button;
 	}
