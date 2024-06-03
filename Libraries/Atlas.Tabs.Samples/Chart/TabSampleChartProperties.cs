@@ -73,10 +73,10 @@ public class TabSampleChartProperties : ITab
 			ChartSample sample = new()
 			{
 				Name = "Name " + i,
-				Alpha = _random.Next(0, 100000),
-				Beta = _random.Next(0, 100000000),
-				Gamma = _random.Next(0, 1000000000),
-				Epsilon = 1000000000 + _random.Next(0, 10),
+				Alpha = _random.Next(0, 100_000),
+				Beta = _random.Next(0, 100_000_000),
+				Gamma = _random.Next(0, 1_000_000_000),
+				Epsilon = 1_000_000_000 + _random.Next(0, 10),
 				TestItem = new TestItem
 				{
 					Amount = _random.Next(0, 100),

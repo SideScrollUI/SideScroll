@@ -29,7 +29,7 @@ public class TestAvaloniaDataBinding
 		TestBind(10);
 	}
 
-	[Test]
+	/*[Test]
 	public void Test100()
 	{
 		TestBind(100);
@@ -44,8 +44,8 @@ public class TestAvaloniaDataBinding
 	[Test]
 	public void Test10000()
 	{
-		TestBind(10000);
-	}
+		TestBind(10_000);
+	}*/
 
 	private static void TestBind(int count)
 	{

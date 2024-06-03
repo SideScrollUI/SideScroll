@@ -36,7 +36,9 @@ public class TabBookmark
 				string comma = "";
 				string address = "";
 				if (ChildBookmarks.Count > 1)
+				{
 					address += "[";
+				}
 				//address += Name + "::";
 				foreach (var bookmark in ChildBookmarks)
 				{
@@ -45,7 +47,9 @@ public class TabBookmark
 					comma = ", ";
 				}
 				if (ChildBookmarks.Count > 1)
+				{
 					address += "]";
+				}
 				return address;
 			}
 			else
@@ -93,11 +97,10 @@ public class TabBookmark
 	// Single level multi-select
 	public static TabBookmark CreateList(IList list)
 	{
-		var selectedRows = new HashSet<SelectedRow>();
-		foreach (object obj in list)
-		{
-			selectedRows.Add(new SelectedRow(obj));
-		}
+		var selectedRows = list
+			.Cast<object>()
+			.Select(obj => new SelectedRow(obj))
+			.ToHashSet();
 
 		var tabBookmark = new TabBookmark();
 		tabBookmark.SelectRows(selectedRows);
@@ -128,7 +131,9 @@ public class TabBookmark
 		ViewSettings ??= new TabViewSettings();
 		ViewSettings.TabDataSettings ??= new List<TabDataSettings>();
 		if (ViewSettings.TabDataSettings.Count == 0)
+		{
 			ViewSettings.TabDataSettings.Add(new TabDataSettings());
+		}
 		ViewSettings.TabDataSettings[0].SelectionType = SelectionType.User;
 		ViewSettings.TabDataSettings[0].SelectedRows ??= new HashSet<SelectedRow>();
 		ViewSettings.TabDataSettings[0].SelectedRows.Add(selectedRow);
@@ -144,7 +149,9 @@ public class TabBookmark
 			{
 				string? dataKey = row.DataKey ?? row.Label;
 				if (dataKey != null && row.DataValue != null && row.DataValue.GetType() == typeof(T))
+				{
 					items[dataKey] = (T)row.DataValue;
+				}
 			}
 		}
 		return items;

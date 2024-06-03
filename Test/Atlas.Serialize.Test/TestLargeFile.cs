@@ -6,7 +6,7 @@ namespace Atlas.Serialize.Test;
 [Category("LargeFile")]
 public class TestLargeFile : TestSerializeBase
 {
-	private const int IntCount = 10000;
+	private const int IntCount = 10_000;
 	
 	private string? _basePath;
 

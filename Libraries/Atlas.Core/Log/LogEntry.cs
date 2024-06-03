@@ -10,7 +10,7 @@ public class EventLogMessage : EventArgs
 
 public class LogSettings
 {
-	public int MaxLogItems = 10000;
+	public int MaxLogItems = 10_000;
 
 	public LogLevel MinLogLevel { get; set; } = LogLevel.Info; // Logs below this level won't be added
 

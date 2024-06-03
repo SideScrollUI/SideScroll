@@ -20,9 +20,9 @@ public class TabSampleGridCollectionSize : ITab
 			model.Actions = new List<TaskCreator>
 			{
 				new TaskAction("Add 100 Entries", () => AddEntries(100)),
-				new TaskAction("Add 1,000 Entries", () => AddEntries(1000)),
-				new TaskAction("Add 10,000 Entries", () => AddEntries(10000)),
-				new TaskAction("Add 100,000 Entries (Very Slow)", () => AddEntries(100000)),
+				new TaskAction("Add 1,000 Entries", () => AddEntries(1_000)),
+				new TaskAction("Add 10,000 Entries", () => AddEntries(10_000)),
+				new TaskAction("Add 100,000 Entries (Very Slow)", () => AddEntries(100_000)),
 			};
 		}
 
@@ -37,7 +37,9 @@ public class TabSampleGridCollectionSize : ITab
 				};
 				testItem.BigNumber += number;
 				if (number > 0)
+				{
 					testItem.Size = number * 100;
+				}
 				_items.Add(testItem);
 			}
 		}

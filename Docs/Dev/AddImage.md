@@ -26,3 +26,5 @@
   - Increase Height of image to 600-640 and center so there's just a slim border
   - Export, set resolution to 24x24
     - Avalonia can't resize svg yet?
+- Make sure the color in the `.svg` is also set to solid black so it gets updated with the theme
+  - `rgb(0,0,0)`

@@ -12,7 +12,7 @@
 ## Lazy Deserialization
 - If you declare a property as virtual, you can load that property value in a lazy manner. 
 - Set `lazy` = `true` when loading with the deserializer, and it will create a wrapper class that will only load the virtual properties when referenced (subsequent references won't reload the data)
-  - `public virtual string ReallyLongString { get; set; } = "...";`
+- `public virtual string ReallyLongString { get; set; } = "...";`
   
 ## Constructors
 - Every object must either have a default constructor, or use a class with public properties/fields that matches a constructor
@@ -36,7 +36,8 @@ public class MyClass(int param)
 
 ## Object Cloning
 
-You can call the `Serializer.DeepClone<Type>()` to do a deep clone of any object that can be serialized. Additionally, any class with a [Static] will not be cloned to speed things up (useful for objects that won't change). This can be useful for copying objects where most of the data doesn't change and you want to take snapshots at intervals.
+- You can call the `Serializer.DeepClone<Type>()` to do a deep clone of any object that can be serialized.
+- Any class with a [Static] will not be cloned to speed things up (useful for objects that won't change). This can be useful for copying objects where most of the data doesn't change and you want to take snapshots at intervals.
 
 ## Restricting Types & Members
 - When importing or exporting data like bookmarks, you might want to restrict which data can be exported

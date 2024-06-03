@@ -25,7 +25,7 @@ public class TestSerializePerformance : TestSerializeBase
 	{
 		var items = new Dictionary<int, int>();
 
-		for (int i = 0; i < 100000; i++)
+		for (int i = 0; i < 100_000; i++)
 		{
 			items[i] = i;
 		}
@@ -47,7 +47,7 @@ public class TestSerializePerformance : TestSerializeBase
 	[Test]
 	public void TimeRangeValues()
 	{
-		List<TimeRangeValue> input = TimeRangeSamples(100000); // doesn't work for 1,000,000
+		List<TimeRangeValue> input = TimeRangeSamples(100_000); // doesn't work for 1,000,000
 
 		using CallTimer callTimer = Call.Timer("Cloning");
 
