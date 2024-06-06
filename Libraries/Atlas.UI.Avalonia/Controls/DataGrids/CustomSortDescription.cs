@@ -1,5 +1,5 @@
 
-/*namespace Atlas.UI.Avalonia.Controls.DataGrid
+/*namespace Atlas.UI.Avalonia.Controls.DataGrids
 {
 	public class CustomSortDescription : AvaloniaSortDescription
 	{

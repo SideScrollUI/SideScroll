@@ -3,6 +3,7 @@ using Atlas.Extensions;
 using Atlas.Tabs;
 using Atlas.Tabs.Toolbar;
 using Atlas.UI.Avalonia.Controls;
+using Atlas.UI.Avalonia.Controls.DataGrids;
 using Atlas.UI.Avalonia.Controls.Toolbar;
 using Atlas.UI.Avalonia.Themes;
 using Atlas.UI.Avalonia.Utilities;

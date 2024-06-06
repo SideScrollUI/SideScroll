@@ -1,6 +1,6 @@
 using Atlas.Core;
 using Atlas.Core.Tasks;
-using Atlas.Serialize;
+using Atlas.Serialize.DataRepos;
 
 namespace Atlas.Tabs.Samples.DataRepo;
 

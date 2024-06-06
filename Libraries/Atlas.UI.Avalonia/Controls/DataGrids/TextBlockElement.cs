@@ -6,7 +6,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using System.Reflection;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Controls.DataGrids;
 
 public class TextBlockElement : TextBlock
 {

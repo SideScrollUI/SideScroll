@@ -1,6 +1,6 @@
 using Atlas.Core;
 
-namespace Atlas.Serialize;
+namespace Atlas.Serialize.DataRepos;
 
 public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascending, int pageSize = 100) : object()
 {

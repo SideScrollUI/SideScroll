@@ -6,7 +6,7 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Controls.DataGrids;
 
 public class DataGridContextMenu : ContextMenu, IDisposable
 {

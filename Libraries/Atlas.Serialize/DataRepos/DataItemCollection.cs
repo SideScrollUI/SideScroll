@@ -2,7 +2,7 @@ using Atlas.Core;
 using System.Collections.Specialized;
 using System.Reflection;
 
-namespace Atlas.Serialize;
+namespace Atlas.Serialize.DataRepos;
 
 // Collection of DataRepo items with a key/value lookup
 public class DataItemCollection<T> : ItemCollection<DataItem<T>>
@@ -12,7 +12,7 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	public IEnumerable<T> Values => this.Select(o => o.Value);
 	public IEnumerable<T> SortedValues => Lookup.Values.Select(o => o.Value);
 
-	public DataItemCollection()	{ }
+	public DataItemCollection() { }
 
 	// Don't implement List<T>, it isn't sortable
 	public DataItemCollection(IEnumerable<DataItem<T>> iEnumerable) : base(iEnumerable)

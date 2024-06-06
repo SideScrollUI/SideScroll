@@ -1,6 +1,7 @@
 using Atlas.Core;
 using Atlas.Core.Tasks;
 using Atlas.Tabs;
+using Atlas.UI.Avalonia.Controls.DataGrids;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Threading;

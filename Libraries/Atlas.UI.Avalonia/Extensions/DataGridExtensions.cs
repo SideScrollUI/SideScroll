@@ -1,5 +1,5 @@
 using Atlas.Core.Utilities;
-using Atlas.UI.Avalonia;
+using Atlas.UI.Avalonia.Controls.DataGrids;
 using Avalonia.Controls;
 using Avalonia.Data;
 using System.Collections;

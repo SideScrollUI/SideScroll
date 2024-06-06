@@ -20,7 +20,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace Atlas.UI.Avalonia.Controls;
+namespace Atlas.UI.Avalonia.Controls.DataGrids;
 
 public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelector
 {
@@ -356,7 +356,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		object? selectItem = _autoSelectItem;
 		NotifyCollectionChangedAction? autoSelectAction = _autoSelectAction;
 		if (selectItem == null) return;
-		
+
 		Dispatcher.UIThread.Post(() => SetSelectedItem(selectItem, autoSelectAction), DispatcherPriority.Background);
 		_autoSelectItem = null;
 		_autoSelectAction = null;

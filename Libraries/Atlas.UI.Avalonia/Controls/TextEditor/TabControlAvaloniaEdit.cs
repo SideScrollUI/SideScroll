@@ -9,7 +9,7 @@ using Avalonia.Media;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 
-namespace Atlas.UI.Avalonia.Controls;
+namespace Atlas.UI.Avalonia.Controls.TextEditor;
 
 public class TabControlTextEditor : AvaloniaEdit.TextEditor
 {
@@ -217,7 +217,7 @@ public class TabControlAvaloniaEdit : Grid
 	{
 		if (TextEditor.LineCount <= 1)
 			return;
-		
+
 		TextEditor.ShowLineNumbers = true;
 
 		foreach (Control control in TextEditor.TextArea.LeftMargins)

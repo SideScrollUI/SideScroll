@@ -6,7 +6,7 @@ using Avalonia.Media;
 using System.Collections;
 using System.Reflection;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Controls.DataGrids;
 
 public class ValueToBackgroundBrushConverter(PropertyInfo propertyInfo) : IValueConverter
 {

@@ -1,7 +1,7 @@
 using Atlas.Core;
 using Atlas.Core.Tasks;
 
-namespace Atlas.Serialize;
+namespace Atlas.Serialize.DataRepos;
 
 public class DataRepoIndex
 {
@@ -203,8 +203,8 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 			string key = reader.ReadString();
 			if (index > nextIndex)
 			{
-				call.Log.AddWarning("Index > NextIndex", 
-					new Tag("Index", index), 
+				call.Log.AddWarning("Index > NextIndex",
+					new Tag("Index", index),
 					new Tag("Key", key));
 				nextIndex = index + 1;
 			}

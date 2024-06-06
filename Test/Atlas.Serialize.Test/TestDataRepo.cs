@@ -1,3 +1,4 @@
+using Atlas.Serialize.DataRepos;
 using NUnit.Framework;
 
 namespace Atlas.Serialize.Test;

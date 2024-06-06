@@ -1,5 +1,4 @@
 using Atlas.Core;
-using Atlas.UI.Avalonia.Controls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -7,7 +6,7 @@ using Avalonia.Media;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Controls.DataGrids;
 
 public class DataGridButtonColumn : DataGridBoundColumn
 {

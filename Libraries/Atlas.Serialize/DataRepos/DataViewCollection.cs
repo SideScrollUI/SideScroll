@@ -2,7 +2,7 @@ using Atlas.Core;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Atlas.Serialize;
+namespace Atlas.Serialize.DataRepos;
 
 public interface IDataView
 {
@@ -15,7 +15,7 @@ public interface IDataView
 public class DataViewCollection<TDataType, TViewType> where TViewType : IDataView, new()
 {
 	//public event EventHandler<EventArgs> OnDelete; // todo?
-	
+
 	public ItemCollectionUI<TViewType> Items { get; set; } = [];
 
 	public DataRepoView<TDataType> DataRepoView;

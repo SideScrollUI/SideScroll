@@ -1,7 +1,7 @@
 using Atlas.Core;
 using Atlas.Core.Utilities;
 
-namespace Atlas.Serialize;
+namespace Atlas.Serialize.DataRepos;
 
 // Holds an in memory copy of the DataRepoInstance
 [Unserialized]

@@ -1,7 +1,7 @@
 using Atlas.Core;
 using Atlas.Core.Tasks;
 using Atlas.Resources;
-using Atlas.Serialize;
+using Atlas.Serialize.DataRepos;
 using Atlas.Tabs.Toolbar;
 
 namespace Atlas.Tabs.Samples.DataRepo;

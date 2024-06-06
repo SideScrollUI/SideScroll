@@ -8,14 +8,14 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using System.Data;
 
-namespace Atlas.UI.Avalonia;
+namespace Atlas.UI.Avalonia.Controls.DataGrids;
 
 // Rename to DataGridBoundTextDataColumn?
 public class DataGridBoundTextColumn : DataGridTextColumn
 {
 	public readonly DataGrid DataGrid;
 	public readonly DataColumn DataColumn;
-	
+
 	public int MaxDesiredWidth = 500;
 	public bool WordWrap;
 

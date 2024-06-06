@@ -2,7 +2,7 @@ using Atlas.Core;
 using Atlas.Extensions;
 using System.Diagnostics;
 
-namespace Atlas.Serialize;
+namespace Atlas.Serialize.DataRepos;
 
 [Unserialized]
 public class DataRepo
