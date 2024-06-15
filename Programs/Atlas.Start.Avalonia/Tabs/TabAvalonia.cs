@@ -21,7 +21,7 @@ public class TabAvalonia : ITab
 				new("Controls", new TabSampleControls()),
 				new("Charts", new TabCustomCharts()),
 				new("Links", new TabBookmarks(Project)),
-				new("Settings", new TabAvaloniaSettings()),
+				new("Settings", new TabAvaloniaSettings<CustomUserSettings>()),
 			};
 		}
 	}

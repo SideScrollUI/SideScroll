@@ -84,4 +84,14 @@ public class Project
 		bookmark.TabBookmark.Import(project);
 		return project;
 	}
+
+	public static Project Load<T>(ProjectSettings projectSettings) where T: UserSettings, new()
+	{
+		var project = new Project(projectSettings, new());
+		var userSettings = project.DataApp.Load<T>() ?? new()
+		{
+			ProjectPath = projectSettings.DefaultProjectPath,
+		};
+		return new Project(projectSettings, userSettings);
+	}
 }

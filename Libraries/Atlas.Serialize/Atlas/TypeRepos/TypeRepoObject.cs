@@ -12,7 +12,9 @@ public class TypeRepoObject : TypeRepo
 		{
 			// todo: support matching constructors with name params & types to fields/properties
 			if (typeSchema.HasConstructor || typeSchema.IsSerialized)
+			{
 				return new TypeRepoObject(serializer, typeSchema);
+			}
 			return null;
 		}
 	}
@@ -35,7 +37,9 @@ public class TypeRepoObject : TypeRepo
 			TypeRepo = typeRepo;
 
 			if (typeRepo?.Serializer.PublicOnly == true && FieldSchema.IsPrivate)
+			{
 				FieldSchema.IsLoadable = false;
+			}
 		}
 
 		public void Load(object obj)
@@ -93,7 +97,9 @@ public class TypeRepoObject : TypeRepo
 			{
 				TypeRef? typeRef = TypeRepo!.LoadLazyObjectRef();
 				if (!PropertySchema.IsWriteable)
+				{
 					typeRef = null;
+				}
 				
 				LazyProperty.SetTypeRef(obj, typeRef);
 			}
@@ -320,16 +326,24 @@ public class TypeRepoObject : TypeRepo
 			if (repo is FieldRepo fieldRepo)
 			{
 				if (fieldValues.TryGetValue(fieldRepo, out object? value))
+				{
 					parameters.Add(value);
+				}
 				else
+				{
 					throw new Exception("Missing FieldRepo: " + fieldRepo);
+				}
 			}
 			else if (repo is PropertyRepo propertyRepo)
 			{
 				if (propertyValues.TryGetValue(propertyRepo, out object? value))
+				{
 					parameters.Add(value);
+				}
 				else
+				{
 					throw new Exception("Missing PropertyRepo: " + propertyRepo);
+				}
 			}
 			else
 			{

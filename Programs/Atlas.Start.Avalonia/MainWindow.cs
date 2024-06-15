@@ -10,7 +10,7 @@ namespace Atlas.Start.Avalonia;
 
 public class MainWindow : BaseWindow
 {
-	public MainWindow() : base(new Project(Settings))
+	public MainWindow() : base(Project.Load<CustomUserSettings>(Settings))
 	{
 		AddTab(new TabAvalonia());
 

@@ -192,6 +192,8 @@
 
           <SolidColorBrush x:Key="TabBackgroundBrush" Color="#141414" />
           <SolidColorBrush x:Key="TabBackgroundFocusedBrush" Color="#1e1e1e" />
+
+          <SolidColorBrush x:Key="TabHeaderForegroundBrush" Color="#9c9c9c" />
           
           <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
 
@@ -271,6 +273,7 @@
           <!-- Fonts -->
 
           <sys:Double x:Key="TitleFontSize">16</sys:Double>
+          <sys:Double x:Key="HeaderFontSize">17</sys:Double>
           <sys:Double x:Key="DataGridFontSize">15</sys:Double>
 
           <!-- Chart -->
@@ -502,6 +505,8 @@
 
           <SolidColorBrush x:Key="TabBackgroundBrush" Color="#121212" />
           <SolidColorBrush x:Key="TabBackgroundFocusedBrush" Color="#1a1a1a" />
+
+          <SolidColorBrush x:Key="TabHeaderForegroundBrush" Color="#7c7c7c" />
 
           <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
 

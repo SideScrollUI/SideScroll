@@ -38,6 +38,13 @@ public class BindListAttribute(string propertyName) : Attribute
 	public readonly string PropertyName = propertyName;
 }
 
+// ->Toolbar: Show a title and separator before this item
+[AttributeUsage(AttributeTargets.Property)]
+public class HeaderAttribute(string text) : Attribute
+{
+	public readonly string Text = text;
+}
+
 // ->Toolbar: Show a separator before this item
 [AttributeUsage(AttributeTargets.Property)]
 public class SeparatorAttribute : Attribute;

@@ -1,0 +1,17 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:atlas="clr-namespace:Atlas.UI.Avalonia.Controls;assembly=Atlas.UI.Avalonia">
+
+  <ControlTheme x:Key="{x:Type atlas:TabHeader}" TargetType="atlas:TabHeader">
+    
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="Margin" Value="0, 0, 0, 5"/>
+    <Setter Property="Padding" Value="3"/>
+    <Setter Property="BorderThickness" Value="0, 0, 0, 1"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource TabSeparatorForegroundBrush}"/>
+    
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource TabHeaderForegroundBrush}"/>
+    <Setter Property="TextElement.FontSize" Value="{DynamicResource HeaderFontSize}"/>
+    
+  </ControlTheme>
+</ResourceDictionary>

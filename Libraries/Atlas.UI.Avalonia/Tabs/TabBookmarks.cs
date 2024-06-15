@@ -61,8 +61,10 @@ public class TabBookmarks : ITab
 		{
 			base.GetBookmark(tabBookmark);
 
-			foreach (var child in tabBookmark.ChildBookmarks.Values)
-				child.IsRoot = true;
+			foreach (TabBookmark childBookmark in tabBookmark.ChildBookmarks.Values)
+			{
+				childBookmark.IsRoot = true;
+			}
 		}
 
 		private void Refresh(Call call)

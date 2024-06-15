@@ -39,6 +39,7 @@
     <EmbeddedResource Remove="Themes\Controls\TabControlTextBlock.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlTitle.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlToolbar.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabHeader.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabSeparator.xaml" />
     <EmbeddedResource Remove="Themes\Controls\ToolbarButton.xaml" />
     <EmbeddedResource Remove="Themes\Fluent\Controls\DataGrid.xaml" />
@@ -59,6 +60,7 @@
     <None Remove="Themes\Controls\TabControlTextBlock.xaml" />
     <None Remove="Themes\Controls\TabControlTitle.xaml" />
     <None Remove="Themes\Controls\TabControlToolbar.xaml" />
+    <None Remove="Themes\Controls\TabHeader.xaml" />
     <None Remove="Themes\Controls\TabSeparator.xaml" />
     <None Remove="Themes\Controls\TabButton.xaml" />
     <None Remove="Themes\Controls\TabControlSplitContainer.xaml" />
@@ -81,6 +83,9 @@
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabControlToolbar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabHeader.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabSeparator.xaml">

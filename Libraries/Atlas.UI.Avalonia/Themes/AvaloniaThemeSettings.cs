@@ -207,17 +207,20 @@ public class TabTheme : ThemeSection
 {
 	public override string ToString() => "Tab";
 
-	[ResourceKey("TabBackgroundBrush")]
+	[Header("Background"), ResourceKey("TabBackgroundBrush")]
 	public Color? Background { get; set; }
 
 	[ResourceKey("TabBackgroundFocusedBrush")]
 	public Color? BackgroundFocused { get; set; }
 
-	[Separator, ResourceKey("TitleBackgroundBrush")]
+	[Header("Title"), Separator, ResourceKey("TitleBackgroundBrush")]
 	public Color? TitleBackground { get; set; }
 
 	[ResourceKey("TitleForegroundBrush")]
 	public Color? TitleForeground { get; set; }
+
+	[Separator, ResourceKey("TabHeaderForegroundBrush")]
+	public Color? HeaderForeground { get; set; }
 
 	[Separator, ResourceKey("TabSeparatorForegroundBrush")]
 	public Color? SeparatorForeground { get; set; }
@@ -237,14 +240,17 @@ public class FontTheme : ThemeSection
 	public static IEnumerable<FontFamily>? FontFamilies { get; set; }
 	public static IEnumerable<string>? FontFamilyNames => FontFamilies?.Select(f => f.Name);
 
-	[BindList(nameof(FontFamilyNames))]
+	[Header("Font Family"), BindList(nameof(FontFamilyNames))]
 	public string? FontFamily { get; set; }
 
 	[BindList(nameof(FontFamilyNames))]
 	public string? MonospaceFontFamily { get; set; } = "Courier New";
 
-	[Separator, Range(10, 32), ResourceKey("TitleFontSize")]
+	[Header("Font Size"), Range(10, 32), ResourceKey("TitleFontSize")]
 	public double TitleFontSize { get; set; } = 16;
+
+	[Range(10, 32), ResourceKey("HeaderFontSize")]
+	public double HeaderFontSize { get; set; } = 18;
 
 	[Range(10, 32), ResourceKey("DataGridFontSize")]
 	public double DataGridFontSize { get; set; } = 15;
@@ -258,28 +264,28 @@ public class ToolbarTheme : ThemeSection
 {
 	public override string ToString() => "Toolbar";
 
-	[ResourceKey("ToolbarBackgroundBrush")]
+	[Header("General"), ResourceKey("ToolbarBackgroundBrush")]
 	public Color? Background { get; set; }
 
 	[ResourceKey("ToolbarSeparatorBrush")]
 	public Color? Separator { get; set; }
 
-	[Separator, ResourceKey("ToolbarLabelForegroundBrush")]
+	[Header("Labels"), ResourceKey("ToolbarLabelForegroundBrush")]
 	public Color? LabelForeground { get; set; }
 
 	[ResourceKey("ToolbarHeaderLabelForegroundBrush")]
 	public Color? HeaderLabelForeground { get; set; }
 
-	[Separator, ResourceKey("ToolbarTextBackgroundBrush")]
+	[Header("Text"), ResourceKey("ToolbarTextBackgroundBrush")]
 	public Color? TextBackground { get; set; }
 
 	[ResourceKey("ToolbarTextForegroundBrush")]
 	public Color? TextForeground { get; set; }
 
-	[Separator, ResourceKey("ToolbarButtonBackgroundPointerOverBrush")]
+	[Header("Button"), ResourceKey("ToolbarButtonBackgroundPointerOverBrush")]
 	public Color? ButtonBackgroundPointerOver { get; set; }
 
-	[Separator, ResourceKey("IconForegroundBrush")]
+	[Header("Icons"), ResourceKey("IconForegroundBrush")]
 	public Color? IconForeground { get; set; }
 
 	[ResourceKey("IconForegroundHighlightBrush")]
@@ -294,7 +300,7 @@ public class ToolbarTheme : ThemeSection
 	[Separator, ResourceKey("IconForegroundDisabledBrush")]
 	public Color? IconForegroundDisabled { get; set; }
 
-	[Separator, ResourceKey("RadioButtonForegroundPointerOver")]
+	[Header("Radio Button"), ResourceKey("RadioButtonForegroundPointerOver")]
 	public Color? RadioButtonForegroundPointerOver { get; set; }
 }
 
@@ -321,7 +327,7 @@ public class DataGridTheme : ThemeSection
 {
 	public override string ToString() => "Data Grid";
 
-	[Separator, ResourceKey("DataGridColumnHeaderBackgroundBrush")]
+	[Header("Column"), ResourceKey("DataGridColumnHeaderBackgroundBrush")]
 	public Color? ColumnHeaderBackground { get; set; }
 
 	[ResourceKey("ThemeButtonBackgroundBrushPointerOver")]
@@ -333,13 +339,13 @@ public class DataGridTheme : ThemeSection
 	[ResourceKey("DataGridColumnHeaderForegroundBrushPointerOver")]
 	public Color? ColumnHeaderForegroundPointerOver { get; set; }
 
-	[Separator, ResourceKey("DataGridRowBackgroundBrush")]
+	[Header("Row"), ResourceKey("DataGridRowBackgroundBrush")]
 	public Color? RowBackground { get; set; }
 
 	[ResourceKey("DataGridRowHighlightBrush")]
 	public Color? RowBackgroundHighlight { get; set; }
 
-	[ResourceKey("DataGridCellForegroundBrush")]
+	[Header("Cell"), ResourceKey("DataGridCellForegroundBrush")]
 	public Color? CellForeground { get; set; }
 
 	[ResourceKey("DataGridCellForegroundBrushPointerOver")]
@@ -353,7 +359,7 @@ public class DataGridTheme : ThemeSection
 
 	// [StyleValue] attribute
 
-	[Separator, ResourceKey("DataGridHasLinksBackgroundBrush")]
+	[Header("Styled"), ResourceKey("DataGridHasLinksBackgroundBrush")]
 	public Color? StyledHasLinksBackground { get; set; }
 
 	[ResourceKey("DataGridHasLinksForegroundBrush")]
@@ -390,10 +396,10 @@ public class TextControlTheme : ThemeSection
 {
 	public override string ToString() => "Text Control";
 
-	[ResourceKey("LabelForegroundBrush")]
+	[Header("Labels"), ResourceKey("LabelForegroundBrush")]
 	public Color? LabelForeground { get; set; }
 
-	[Separator, ResourceKey(
+	[Header("Text Control"), ResourceKey(
 		"TextControlBackground",
 		"ComboBoxBackground",
 		"CalendarDatePickerBackground"
@@ -437,13 +443,13 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? TextControlBorderPointerOver { get; set; }
 
-	[Separator, ResourceKey("TextControlSelectionForegroundBrush")]
+	[Header("Text Control - Selected"), ResourceKey("TextControlSelectionForegroundBrush")]
 	public Color? TextControlSelectionForeground { get; set; }
 
 	[ResourceKey("TextControlSelectionHighlightColor")]
 	public Color? TextControlSelectionHighlight { get; set; }
 
-	[Separator, ResourceKey("SystemControlErrorTextForegroundBrush")]
+	[Header("Errors"), ResourceKey("SystemControlErrorTextForegroundBrush")]
 	public Color? ErrorTextForeground { get; set; }
 }
 
@@ -452,7 +458,7 @@ public class TextEditorTheme : ThemeSection
 {
 	public override string ToString() => "Text Editor";
 
-	[ResourceKey("TextEditorBackgroundBrush")]
+	[Header("Text"), ResourceKey("TextEditorBackgroundBrush")]
 	public Color? Background { get; set; }
 
 	[ResourceKey("TextEditorForegroundBrush")]
@@ -466,7 +472,7 @@ public class TextEditorTheme : ThemeSection
 
 	// Json
 
-	[Separator, ResourceKey("JsonHighlightPunctuationBrush")]
+	[Header("Json"), ResourceKey("JsonHighlightPunctuationBrush")]
 	public Color? JsonPunctuation { get; set; }
 
 	[ResourceKey("JsonHighlightFieldNameBrush")]
@@ -486,7 +492,7 @@ public class TextEditorTheme : ThemeSection
 
 	// Xml
 
-	[Separator, ResourceKey("XmlHighlightCommentBrush")]
+	[Header("Xml"), ResourceKey("XmlHighlightCommentBrush")]
 	public Color? XmlComment { get; set; }
 
 	[ResourceKey("XmlHighlightCDataBrush")]

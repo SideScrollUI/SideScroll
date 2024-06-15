@@ -7,6 +7,7 @@
     <ResourceInclude Source="avares://Atlas.UI.Avalonia/Themes/Controls/TabControlTitle.xaml" />
     <ResourceInclude Source="avares://Atlas.UI.Avalonia/Themes/Controls/ToolbarButton.xaml"/>
     <ResourceInclude Source="avares://Atlas.UI.Avalonia/Themes/Controls/TabButton.xaml"/>
+    <ResourceInclude Source="avares://Atlas.UI.Avalonia/Themes/Controls/TabHeader.xaml"/>
     <ResourceInclude Source="avares://Atlas.UI.Avalonia/Themes/Controls/TabSeparator.xaml"/>
   </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

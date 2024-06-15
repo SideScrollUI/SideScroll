@@ -238,7 +238,9 @@ public class TabControlAvaloniaEdit : Grid
 		TextEditor.IsReadOnly = false;
 
 		if (ListProperty != null)
+		{
 			ListProperty.PropertyChanged += ListProperty_PropertyChanged;
+		}
 
 		/*var binding = new Binding
 		{

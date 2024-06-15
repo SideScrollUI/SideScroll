@@ -12,35 +12,29 @@ public class TabFileSerialized(string path) : ITab
 
 	public class Instance(TabFileSerialized tab) : TabInstance
 	{
-		public object? Object;
-		public Serializer? Serializer;
-
-		private readonly ListItem _listData = new("Object", null);
+		private SerializerFileAtlas? _serializerFile;
+		private ItemCollectionUI<ListItem> _items = [];
 
 		public override void Load(Call call, TabModel model)
 		{
-			var items = new List<ListItem>();
+			_serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(tab.Path)!);
 
-			var serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(tab.Path)!);
+			var serializer = _serializerFile.LoadSchema(call);
 
-			Serializer = serializerFile.LoadSchema(call);
+			_items = [];
+			_items.Add(new ListItem("Schema", serializer.TypeSchemas));
+			model.Items = _items;
 
-			items.Add(new ListItem("Schema", Serializer));
-			items.Add(_listData);
-			model.Items = items;
-
-			var actions = new List<TaskCreator>();
-			if (Object == null)
-				actions.Add(new TaskDelegate("Load Data", LoadData));
-			model.Actions = actions;
+			model.Actions = new List<TaskCreator>
+			{
+				new TaskDelegate("Load Data", LoadData)
+			};
 		}
 
 		private void LoadData(Call call)
 		{
-			var serializerFile = new SerializerFileAtlas(tab.Path);
-
-			Object = serializerFile.Load(call);
-			_listData.Value = Object;
+			var obj = _serializerFile!.Load(call);
+			_items.Add(new ListItem("Loaded", obj));
 		}
 	}
 }

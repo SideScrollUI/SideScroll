@@ -13,6 +13,17 @@ using System.Reflection;
 
 namespace Atlas.UI.Avalonia.Controls;
 
+public class TabHeader : Border
+{
+	public TabHeader(string text)
+	{
+		Child = new TextBlock()
+		{
+			Text = text,
+		};
+	}
+}
+
 public class TabSeparator : Border;
 
 public class TabControlParams : Grid, IValidationControl
@@ -76,7 +87,11 @@ public class TabControlParams : Grid, IValidationControl
 		Control? lastControl = null;
 		foreach (ListProperty property in properties)
 		{
-			if (property.GetCustomAttribute<SeparatorAttribute>() != null)
+			if (property.GetCustomAttribute<HeaderAttribute>() is HeaderAttribute headerAttribute)
+			{
+				AddHeader(headerAttribute.Text);
+			}
+			else if (property.GetCustomAttribute<SeparatorAttribute>() != null)
 			{
 				AddSeparator();
 			}
@@ -216,11 +231,7 @@ public class TabControlParams : Grid, IValidationControl
 		{
 			if (columnIndex == 0)
 			{
-				RowDefinition spacerRow = new()
-				{
-					Height = new GridLength(5),
-				};
-				RowDefinitions.Add(spacerRow);
+				AddSpacer();
 				rowIndex++;
 			}
 
@@ -247,6 +258,15 @@ public class TabControlParams : Grid, IValidationControl
 		_propertyControls[property] = control;
 
 		return control;
+	}
+
+	private void AddSpacer(int height = 5)
+	{
+		RowDefinition spacerRow = new()
+		{
+			Height = new GridLength(height),
+		};
+		RowDefinitions.Add(spacerRow);
 	}
 
 	private static Control? CreatePropertyControl(ListProperty property)
@@ -284,6 +304,23 @@ public class TabControlParams : Grid, IValidationControl
 		return null;
 	}
 
+	public void AddHeader(string text)
+	{
+		if (Children.Count > 0)
+		{
+			AddSpacer(10);
+		}
+
+		TabHeader header = new(text)
+		{
+			[Grid.ColumnSpanProperty] = ColumnDefinitions.Count,
+		};
+
+		int rowIndex = RowDefinitions.Count;
+		AddRowDefinition();
+		AddControl(header, 0, rowIndex);
+	}
+
 	public void AddSeparator()
 	{
 		// Don't add for first item or optional null controls
@@ -293,7 +330,9 @@ public class TabControlParams : Grid, IValidationControl
 		{
 			[Grid.ColumnSpanProperty] = ColumnDefinitions.Count,
 		};
+
 		int rowIndex = RowDefinitions.Count;
+		AddRowDefinition();
 		AddControl(separator, 0, rowIndex);
 	}
 

@@ -14,6 +14,7 @@ public class UserSettings
 	[Hidden]
 	public string SettingsPath => Paths.Combine(ProjectPath, "Settings.atlas");
 
+	[Separator]
 	public bool AutoLoad { get; set; } = true;
 
 	[Range(1, 20)]

@@ -56,7 +56,9 @@ public static class DataGridUtils
 						text = text[..maxColumnWidth];
 						int position = text.LastIndexOf(' ');
 						if (position > 0)
+						{
 							text = text[..position];
+						}
 					}
 
 					string remaining = value[text.Length..];
@@ -115,9 +117,13 @@ public static class DataGridUtils
 			foreach (string value in row)
 			{
 				if (columns[columnIndex].RightAlign == TextAlignment.Right)
+				{
 					sb.Append(" " + value.PadLeft(columnNameWidths[columnIndex++], ' ') + " |");
+				}
 				else
+				{
 					sb.Append(" " + value.PadRight(columnNameWidths[columnIndex++], ' ') + " |");
+				}
 			}
 			sb.Append('\n');
 		}
