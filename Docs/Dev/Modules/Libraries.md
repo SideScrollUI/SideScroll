@@ -4,45 +4,45 @@
 
 ## Core Libraries
 
-* Atlas.Core
+* SideScroll.Core
   - Tab Interfaces
   -	Logging
   - Utilities - (Extensions, Attributes, etc)
 
-* Atlas.Serialize
+* SideScroll.Serialize
   - Serializes objects to and from a local DataRepo
   - Supports lazy loading and circular references
   - [Serializer.md]
 
-* Atlas.Network
+* SideScroll.Network
   - HTTP - (downloading files)
   
 ## Tab Libraries
 
-* Atlas.Tabs
+* SideScroll.Tabs
   - Defines the UI models
   - Contains all the Tab interface logic for everything
   - Shared across UI frameworks
     - Currently only AvaloniaUI
   
-* Atlas.Tabs.Tools
+* SideScroll.Tabs.Tools
   - File Browser
   
-* Atlas.Tabs.Samples
+* SideScroll.Tabs.Samples
   - Used for testing UI features
   - `* Samples` tabs that show up in debug mode
 
 ## User Interface Libraries
 
-* Atlas.UI.Avalonia
+* SideScroll.UI.Avalonia
   - Cross Platform UI Controls
   - Works on Windows, MacOS, and Linux
 
-* Atlas.UI.Avalonia.Charts
+* SideScroll.UI.Avalonia.Charts
   - Base chart interface
 
-* Atlas.UI.Avalonia.LiveCharts
+* SideScroll.UI.Avalonia.LiveCharts
   - LiveCharts version of the Charts package
 
-* Atlas.UI.Avalonia.ScreenCapture
+* SideScroll.UI.Avalonia.ScreenCapture
   - Screenshot control for Windows and MacOS

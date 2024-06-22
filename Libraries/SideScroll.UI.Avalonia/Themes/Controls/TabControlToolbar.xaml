@@ -1,0 +1,25 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:toolbar="clr-namespace:SideScroll.UI.Avalonia.Controls.Toolbar;assembly=SideScroll.UI.Avalonia">
+
+  <ControlTheme x:Key="{x:Type toolbar:TabControlToolbar}" TargetType="toolbar:TabControlToolbar">
+    <Setter Property="Background" Value="{DynamicResource ToolbarBackgroundBrush}"/>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type toolbar:ToolbarSeparator}" TargetType="toolbar:ToolbarSeparator">
+    <Setter Property="Background" Value="{DynamicResource ToolbarSeparatorBrush}"/>
+    <Setter Property="Margin" Value="4,2"/>
+    <Setter Property="Width" Value="1"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+  </ControlTheme>
+  
+  <ControlTheme x:Key="{x:Type toolbar:ToolbarTextBlock}" TargetType="toolbar:ToolbarTextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource ToolbarLabelForegroundBrush}"/>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type toolbar:ToolbarHeaderTextBlock}" TargetType="toolbar:ToolbarHeaderTextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource ToolbarHeaderLabelForegroundBrush}"/>
+    <Setter Property="FontSize" Value="{DynamicResource TitleFontSize}"/>
+  </ControlTheme>
+  
+</ResourceDictionary>

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>SideScroll.Console</AssemblyName>
+    <RootNamespace>SideScroll.Console</RootNamespace>
+    <Configurations>Debug;Release;DebugX86</Configurations>
+    <Version>$(SideScrollVersion)</Version>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugX86|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\SideScroll.Core\SideScroll.Core.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Network\SideScroll.Network.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Serialize\SideScroll.Serialize.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Tabs\SideScroll.Tabs.csproj" />
+  </ItemGroup>
+
+</Project>

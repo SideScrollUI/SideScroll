@@ -13,7 +13,7 @@
   - `public override void LoadUI(Call call, TabModel model)`
     - Use when you need to create an Avalonia control, since those can only be created on the UI thread.
 ```csharp
-namespace Atlas.Tabs.Samples
+namespace SideScroll.Tabs.Samples
 {
 	public class TabSample : ITab
 	{
@@ -79,7 +79,7 @@ public void UpdateStatus(Call call, string text)
 * ItemCollectionUI
   - This is a User Interface version of the ItemCollection, which allows you to add items to a collection that appears in the user interface from a background thread. Adding an item to a List or ItemCollection from a background thread normally isn't safe and can cause an exception.
 ```csharp
-namespace Atlas.Tabs.Samples
+namespace SideScroll.Tabs.Samples
 {
 	public class TabSample(int count) : ITab
 	{
@@ -151,7 +151,7 @@ namespace Atlas.Tabs.Samples
   - You can also make calls async by using `TaskDelegateAsync`
     - These are useful when you need to make lots of parallel async calls
 ```csharp
-namespace Atlas.Tabs.Samples.Actions
+namespace SideScroll.Tabs.Samples.Actions
 {
 	public class TabSampleAsync : ITab
 	{

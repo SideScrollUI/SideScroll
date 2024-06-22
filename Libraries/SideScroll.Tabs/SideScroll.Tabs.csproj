@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>SideScroll.Tabs</AssemblyName>
+    <RootNamespace>SideScroll.Tabs</RootNamespace>
+    <Configurations>Debug;Release;DebugX86</Configurations>
+    <Version>$(SideScrollVersion)</Version>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugX86|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Json" Version="4.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SideScroll.Core\SideScroll.Core.csproj" />
+    <ProjectReference Include="..\SideScroll.Network\SideScroll.Network.csproj" />
+    <ProjectReference Include="..\SideScroll.Resources\SideScroll.Resources.csproj" />
+    <ProjectReference Include="..\SideScroll.Serialize\SideScroll.Serialize.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+</Project>

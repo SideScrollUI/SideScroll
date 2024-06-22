@@ -1,5 +1,5 @@
 # Bookmarks
-- Bookmarks allow exporting and importing the current path and settings in a `atlas://<base64>` link
+- Bookmarks allow exporting and importing the current path and settings in a `sidescroll://<base64>` link
   - You can override the Linker to wrap these links in another format
   - You can use a TinyURL like service to create shorter links
 - Each Tab in a bookmark exports these settings

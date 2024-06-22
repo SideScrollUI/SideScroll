@@ -34,7 +34,7 @@
     make sure to restart after
 
 
-`dotnet restore Atlas.sln`
+`dotnet restore SideScroll.sln`
 
 - Files
   - Make sure the `launch.preLaunchTask` matches the `tasks.label`

@@ -5,8 +5,8 @@
     "tasks": [
         // Includes Avalonia, Web Servers, and Core Libraries
         {
-            "label": "build Atlas",
-            "command": "dotnet build Atlas.sln",
+            "label": "build SideScroll",
+            "command": "dotnet build SideScroll.sln",
             "type": "shell",
             "group": "build",
             "presentation": {
@@ -16,11 +16,11 @@
         },
         //  (Windows Only)
         /*{
-            "label": "build Atlas.Start.Wpf",
+            "label": "build SideScroll.Start.Wpf",
             "type": "process",
             "command": "MSBuild.exe",
             "args": [
-                "${workspaceRoot}/Programs/Atlas.Start.Wpf/Atlas.Start.Wpf.csproj"
+                "${workspaceRoot}/Programs/SideScroll.Start.Wpf/SideScroll.Start.Wpf.csproj"
             ],
             "group": {
                 "kind": "build",

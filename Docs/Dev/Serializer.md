@@ -1,6 +1,6 @@
 # Serialization
 
-- Atlas includes it's own serializer, which allows it to load gigabytes of data in a few seconds.
+- SideScroll includes it's own serializer, which allows it to load gigabytes of data in a few seconds.
 
 ## Features
 - Automatically serializes most objects with no additional logic

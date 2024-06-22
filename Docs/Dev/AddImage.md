@@ -1,7 +1,7 @@
 # Adding new Image Resources
 
 - Location
-  - [Icons](../../Images/Libraries/Atlas.Resources/Icons/)
+  - [Icons](../../Images/Libraries/SideScroll.Resources/Icons/)
 
 * Find new icon:
   - [Icon Icons](https://icon-icons.com/)

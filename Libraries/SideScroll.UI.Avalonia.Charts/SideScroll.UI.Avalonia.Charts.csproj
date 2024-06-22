@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>$(SideScrollVersion)</Version>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SideScroll.Core\SideScroll.Core.csproj" />
+    <ProjectReference Include="..\SideScroll.Tabs\SideScroll.Tabs.csproj" />
+    <ProjectReference Include="..\SideScroll.UI.Avalonia\SideScroll.UI.Avalonia.csproj" />
+  </ItemGroup>
+
+</Project>

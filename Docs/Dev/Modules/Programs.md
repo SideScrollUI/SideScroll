@@ -1,10 +1,10 @@
 # Programs
 
-* Atlas.Start.Avalonia
+* SideScroll.Start.Avalonia
   - The primary application that loads all the other modules
-  - Uses the `Atlas.UI.Avalonia` controls with the `Atlas.Tabs.Samples`
+  - Uses the `SideScroll.UI.Avalonia` controls with the `SideScroll.Tabs.Samples`
   - Cross Platform (Windows, Mac, Linux)
   
-* Atlas.Console
+* SideScroll.Console
   - Future shell or command line program?
   - Could potentially use Tab modules

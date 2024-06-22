@@ -1,0 +1,37 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:sidescroll="clr-namespace:SideScroll.UI.Avalonia.Controls;assembly=SideScroll.UI.Avalonia">
+  
+  <ControlTheme x:Key="{x:Type sidescroll:TabControlButton}" TargetType="sidescroll:TabControlButton">
+    <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}"/>
+    <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}"/>
+    <Setter Property="Foreground" Value="{DynamicResource DataGridButtonForegroundBrush}"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <Setter Property="Padding" Value="4"/>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ContentPresenter Name="PART_ContentPresenter"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        Content="{TemplateBinding Content}"
+                        Padding="{TemplateBinding Padding}"
+                        TextBlock.Foreground="{TemplateBinding Foreground}"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+      </ControlTemplate>
+    </Setter>
+    <Style Selector="^:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundBrushPointerOver}"/>
+    </Style>
+    <Style Selector="^:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundPressedBrush}"/>
+    </Style>
+    <Style Selector="^:disabled">
+        <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}"/>
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

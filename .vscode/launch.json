@@ -3,14 +3,14 @@
     "configurations": [
                
         {
-            "name": "Atlas.Start.Avalonia",
+            "name": "SideScroll.Start.Avalonia",
             "console": "integratedTerminal",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build Atlas",
-            "program": "${workspaceFolder}/Programs/Atlas.Start.Avalonia/bin/Debug/netcoreapp3.1/Atlas.Start.Avalonia.dll",
+            "preLaunchTask": "build SideScroll",
+            "program": "${workspaceFolder}/Programs/SideScroll.Start.Avalonia/bin/Debug/netcoreapp3.1/SideScroll.Start.Avalonia.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Programs/Atlas.Start.Avalonia",
+            "cwd": "${workspaceFolder}/Programs/SideScroll.Start.Avalonia",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart"
         },

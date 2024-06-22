@@ -1,5 +1,5 @@
-# Atlas
-Atlas is an AvaloniaUI library for exploring multiple paths of a tree at once
+# SideScroll
+SideScroll is an AvaloniaUI library for exploring multiple paths of a tree at once
 
 # Features
 * .NET Cross Platform UI Framework that can run on any Windows, MacOS, or Linux system
@@ -8,7 +8,7 @@ Atlas is an AvaloniaUI library for exploring multiple paths of a tree at once
 * Create Links to share views with others
 * DataRepos manage your local saving & loading
 
-![Atlas UI](/Images/Screenshots/ColumnTypes_CustomControl_Charts.png)
+![SideScroll UI](/Images/Screenshots/ColumnTypes_CustomControl_Charts.png)
 
 * [Demo Project - Video Game Database](https://github.com/garyhertel/VideoGamesDB)
 * [Setup](Docs/Setup.md)
