@@ -24,7 +24,9 @@ public class Tag
 	{
 		string? text = Value.Formatted(MaxValueLength);
 		if (text?.Contains(' ') == true)
+		{
 			text = '"' + text + '"';
+		}
 
 		return "[ " + Name + " = " + text + " ]";
 	}

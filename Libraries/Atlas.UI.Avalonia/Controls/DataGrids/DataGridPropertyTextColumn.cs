@@ -60,7 +60,9 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 		}
 
 		if (DataGridUtils.IsTypeAutoSize(propertyInfo.PropertyType))
+		{
 			AutoSize = true;
+		}
 
 		CanUserSort = DataGridUtils.IsTypeSortable(propertyInfo.PropertyType);
 
@@ -79,7 +81,9 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 		if (checkWordWrap || hideAttribute != null)
 		{
 			if (hideAttribute != null && List.Count > 0)
+			{
 				IsVisible = false;
+			}
 
 			for (int i = 0; i < MaxRowScanProperties && i < List.Count; i++)
 			{
@@ -93,14 +97,18 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 					if (hideAttribute != null)
 					{
 						if (!hideAttribute.Values.Contains(value))
+						{
 							IsVisible = true;
+						}
 					}
 
 					if (checkWordWrap && value != null)
 					{
 						string? text = value.ToString();
 						if (text != null && text.Length > EnableWordWrapMinStringLength)
+						{
 							WordWrap = true;
+						}
 					}
 				}
 				catch (Exception ex)
@@ -146,7 +154,9 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 			TextBlock textBlock = CreateTextBlock(cell);
 
 			if (StyleCells)
+			{
 				return AddStyling(cell, textBlock);
+			}
 
 			return textBlock;
 		}
@@ -221,7 +231,9 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 				Mode = BindingMode.Default,
 			};
 			if (IsReadOnly)
+			{
 				FormattedBinding.Converter = FormatConverter;
+			}
 		}
 
 		return FormattedBinding;

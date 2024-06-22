@@ -169,9 +169,13 @@ public class TabControlTextBox : TextBox
 		};
 		Type type = property.UnderlyingType;
 		if (type == typeof(string) || type.IsPrimitive)
+		{
 			binding.Mode = BindingMode.TwoWay;
+		}
 		else
+		{
 			binding.Mode = BindingMode.OneWay;
+		}
 		this.Bind(TextBlock.TextProperty, binding);
 	}
 

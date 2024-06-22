@@ -88,9 +88,13 @@ public class Log : LogEntry
 			foreach (Exception ex in ae.InnerExceptions)
 			{
 				if (ex is TaskCanceledException)
+				{
 					logEntry = Add(ex.Message, allTags.ToArray());
+				}
 				else
+				{
 					logEntry = AddError(ex.Message, allTags.ToArray());
+				}
 			}
 			return logEntry!;
 		}
@@ -156,9 +160,13 @@ public class Log : LogEntry
 		logEntry.Settings = Settings;
 
 		if (Settings.Context != null)
+		{
 			Settings.Context.Post(AddEntryCallback, logEntry);
+		}
 		else
+		{
 			AddEntryCallback(logEntry);
+		}
 	}
 
 	// Thread safe callback, only works if the context is the same
@@ -188,7 +196,9 @@ public class Log : LogEntry
 
 		// Update if there can be child entries
 		if (logEntry is Log log)
+		{
 			log.OnMessage += ChildLog_OnMessage;
+		}
 	}
 
 	// Update stats when a new child log entry gets added at any level below

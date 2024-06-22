@@ -420,16 +420,18 @@ public class TabViewer : Grid
 
 	public void SeekBackward()
 	{
-		Bookmark? bookmark = Project.Navigator.SeekBackward();
-		if (bookmark != null)
+		if (Project.Navigator.SeekBackward() is Bookmark bookmark)
+		{
 			TabView!.Instance.SelectBookmark(bookmark.TabBookmark);
+		}
 	}
 
 	public void SeekForward()
 	{
-		Bookmark? bookmark = Project.Navigator.SeekForward();
-		if (bookmark != null)
+		if (Project.Navigator.SeekForward() is Bookmark bookmark)
+		{
 			TabView!.Instance.SelectBookmark(bookmark.TabBookmark);
+		}
 	}
 
 	protected override void OnKeyDown(KeyEventArgs e)
@@ -439,9 +441,13 @@ public class TabViewer : Grid
 		if (e.Key == Key.Left)
 		{
 			if (e.KeyModifiers.HasFlag(KeyModifiers.Alt))
+			{
 				SeekBackward();
+			}
 			else
+			{
 				ScrollLeft(KeyboardScrollWidth);
+			}
 			e.Handled = true;
 			return;
 		}
@@ -449,9 +455,13 @@ public class TabViewer : Grid
 		if (e.Key == Key.Right)
 		{
 			if (e.KeyModifiers.HasFlag(KeyModifiers.Alt))
+			{
 				SeekForward();
+			}
 			else
+			{
 				ScrollRight(KeyboardScrollWidth);
+			}
 			e.Handled = true;
 			return;
 		}

@@ -83,7 +83,9 @@ public class TabControlTasks : Grid, IDisposable
 			return;
 
 		if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex >= 0)
+		{
 			SelectLastItem();
+		}
 	}
 
 	private void SelectLastItem()
@@ -97,9 +99,13 @@ public class TabControlTasks : Grid, IDisposable
 		{
 			TaskInstance taskInstance = TabInstance.Model.Tasks.Last();
 			if (_tabControlDataGrid.SelectedItem == taskInstance)
+			{
 				UpdateSelection();
+			}
 			else
+			{
 				_tabControlDataGrid.SelectedItem = taskInstance;
+			}
 
 			// use lock internally?
 			if (taskInstance.Finished)
