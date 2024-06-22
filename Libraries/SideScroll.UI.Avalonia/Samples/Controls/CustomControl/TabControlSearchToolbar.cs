@@ -36,6 +36,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 		AddSeparator();
 		ButtonSearch = AddButton("Search (Ctrl + S)", Icons.Svg.Search);
 		ButtonSearch.HotKey = new KeyGesture(Key.S, KeyModifiers.Control);
+
 		ButtonLoadNext = AddButton("Next", Icons.Svg.RightArrow);
 		ButtonLoadNext.IsEnabled = false;
 

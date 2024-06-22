@@ -1,14 +1,26 @@
 # Development
-* IDEs
-  * [Visual Studio](IDEs/VisualStudio.md)
-    - Recommended for Windows
-  * [JetBrains Rider](https://www.jetbrains.com/rider/)
-    - Recommended for all platforms
-  * [Visual Studio Code](IDEs/VisualStudioCode.md)
-    - Recommended for editing docs, although this can be used for coding too
-* Modules
-  * [Libraries](Modules/Libraries.md)
-  * [Programs](Modules/Programs.md)
+
+## Clone SideScroll
+- `git clone https://github.com/garyhertel/SideScroll.git`
+- `cd SideScroll`
+
+## Console
+- Build
+  - `dotnet build SideScroll.sln`
+- Run
+  - `dotnet run --project Programs/SideScroll.Start.Avalonia/SideScroll.Start.Avalonia.csproj`
+
+## IDE
+- IDE's
+  - [Visual Studio](IDEs/VisualStudio.md) (Windows Only)
+  - [JetBrains Rider](https://www.jetbrains.com/rider/)
+  - [Visual Studio Code](IDEs/VisualStudioCode.md)
+- Open `SideScroll.sln`
+- Start SideScroll
+  - `Programs / SideScroll.Start.Avalonia`
+
+## Modules
+* [Projects](Projects/Projects.md)
 * [AddingTabs](AddingTabs.md)
 * [Logs](Logs.md)
 * [Serializer](Serializer.md)

@@ -13,35 +13,35 @@
   - `public override void LoadUI(Call call, TabModel model)`
     - Use when you need to create an Avalonia control, since those can only be created on the UI thread.
 ```csharp
-namespace SideScroll.Tabs.Samples
+namespace SideScroll.Tabs.Samples;
+
+public class TabSample : ITab
 {
-	public class TabSample : ITab
+	public TabInstance Create() => new Instance();
+
+	public class Instance : TabInstance
 	{
-		public TabInstance Create() => new Instance();
-
-		public class Instance : TabInstance
+		public override void Load(Call call, TabModel model)
 		{
-			public override void Load(Call call, TabModel model)
+			model.Items = new List<ListItem>()
 			{
-				model.Items = new List<ListItem>()
-				{
-					new("Tab 1", new Tab1()),
-					new("Tab 2", new Tab2()),
-				};
+				new("Tab 1", new Tab1()),
+				new("Tab 2", new Tab2()),
+			};
 
-				model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegate("Log this", LogThis),
-				};
-			}
-
-			private void LogThis(Call call)
+			model.Actions = new List<TaskCreator>()
 			{
-				call.Log.Add("I've been logged");
-			}
+				new TaskDelegate("Log this", LogThis),
+			};
+		}
+
+		private void LogThis(Call call)
+		{
+			call.Log.Add("I've been logged");
 		}
 	}
 }
+
 ```
 
 ## Items
@@ -79,66 +79,66 @@ public void UpdateStatus(Call call, string text)
 * ItemCollectionUI
   - This is a User Interface version of the ItemCollection, which allows you to add items to a collection that appears in the user interface from a background thread. Adding an item to a List or ItemCollection from a background thread normally isn't safe and can cause an exception.
 ```csharp
-namespace SideScroll.Tabs.Samples
+namespace SideScroll.Tabs.Samples;
+
+public class TabSample(int count) : ITab
 {
-	public class TabSample(int count) : ITab
+	private int Count = count;
+
+	public TabInstance Create() => new Instance();
+
+	public class Instance(TabSample tab) : TabInstance
 	{
-		private int Count = count;
+		private ItemCollectionUI<SampleItem> _sampleItems;
 
-		public TabInstance Create() => new Instance();
-
-		public class Instance(TabSample tab) : TabInstance
+		public override void Load(Call call, TabModel model)
 		{
-			private ItemCollectionUI<SampleItem> _sampleItems;
+			_sampleItems = new ItemCollectionUI<SampleItem>();
+			AddItems(tab.Count);
 
-			public override void Load(Call call, TabModel model)
+			model.Items = new List<ListItem>()
 			{
-				_sampleItems = new ItemCollectionUI<SampleItem>();
-				AddItems(tab.Count);
+				new("Sample Items", _sampleItems),
+				new("Collections", new TabTestGridCollectionSize()),
+				new("Copy", new TabSample()), // Recursive
+			};
 
-				model.Items = new List<ListItem>()
-				{
-					new("Sample Items", _sampleItems),
-					new("Collections", new TabTestGridCollectionSize()),
-					new("Copy", new TabSample()), // Recursive
-				};
+			model.Actions = new List<TaskCreator>()
+			{
+				new TaskDelegateAsync("Sleep 10s", SleepAsync),
+				new TaskDelegate("Add Items", AddItems),
+			};
+		}
 
-				model.Actions = new List<TaskCreator>()
-				{
-					new TaskDelegateAsync("Sleep 10s", SleepAsync),
-					new TaskDelegate("Add Items", AddItems),
-				};
+		private async Task SleepAsync(Call call)
+		{
+			call.TaskInstance.ProgressMax = 10;
+			for (int i = 0; i < 10; i++)
+			{
+				await Task.Delay(1000);
+				call.Log.Add("Slept 1 second");
+				call.TaskInstance.Progress++;
 			}
+		}
 
-			private async Task SleepAsync(Call call)
+		private void AddItems(int count)
+		{
+			for (int i = 0; i < count; i++)
 			{
-				call.TaskInstance.ProgressMax = 10;
-				for (int i = 0; i < 10; i++)
-				{
-					await Task.Delay(1000);
-					call.Log.Add("Slept 1 second");
-					call.TaskInstance.Progress++;
-				}
-			}
-
-			private void AddItems(int count)
-			{
-				for (int i = 0; i < count; i++)
-				{
-					_sampleItems.Add(new SampleItem(_sampleItems.Count, "Item " + _sampleItems.Count));
-				}
+				_sampleItems.Add(new SampleItem(_sampleItems.Count, "Item " + _sampleItems.Count));
 			}
 		}
 	}
-
-	public class SampleItem(int id, string name)
-	{
-		public int Id { get; set; } = id;
-		public string Name { get; set; } = name;
-
-		public override string ToString() => Name;
-	}
 }
+
+public class SampleItem(int id, string name)
+{
+	public int Id { get; set; } = id;
+	public string Name { get; set; } = name;
+
+	public override string ToString() => Name;
+}
+
 ```
 * Here's the resulting tab
   - Note how all the properties in the SampleItem automatically appear as columns
@@ -151,45 +151,109 @@ namespace SideScroll.Tabs.Samples
   - You can also make calls async by using `TaskDelegateAsync`
     - These are useful when you need to make lots of parallel async calls
 ```csharp
-namespace SideScroll.Tabs.Samples.Actions
+namespace SideScroll.Tabs.Samples.Actions;
+
+public class TabSampleAsync : ITab
 {
-	public class TabSampleAsync : ITab
+	public TabInstance Create() { return new Instance(); }
+
+	public class Instance : TabInstance, ITabAsync
 	{
-		public TabInstance Create() { return new Instance(); }
+		//private ItemCollection<ListItem> items;
 
-		public class Instance : TabInstance, ITabAsync
+		public async Task LoadAsync(Call call, TabModel model)
 		{
-			//private ItemCollection<ListItem> items;
+			await Task.Delay(2000);
+			model.AddObject("Finished");
 
-			public async Task LoadAsync(Call call, TabModel model)
+			model.Actions = new ItemCollection<TaskCreator>()
 			{
-				await Task.Delay(2000);
-				model.AddObject("Finished");
+				new TaskDelegate("Add Log Entry", AddEntry),
+				new TaskDelegateAsync("Sleep (Async)", SleepAsync, true, true),
+			};
+		}
 
-				model.Actions = new ItemCollection<TaskCreator>()
-				{
-					new TaskDelegate("Add Log Entry", AddEntry),
-					new TaskDelegateAsync("Sleep (Async)", SleepAsync, true, true),
-				};
-			}
+		private int _counter = 1;
+		private void AddEntry(Call call)
+		{
+			call.Log.Add("New Log entry", new Tag("counter", _counter++));
+		}
 
-			private int _counter = 1;
-			private void AddEntry(Call call)
-			{
-				call.Log.Add("New Log entry", new Tag("counter", _counter++));
-			}
+		private async Task SleepAsync(Call call)
+		{
+			call.Log.Add("Sleeping for 3 seconds");
+			await Task.Delay(3000);
+			call.Log.Add("Waking Up");
+		}
+	}
+}
 
-			private async Task SleepAsync(Call call)
-			{
-				call.Log.Add("Sleeping for 3 seconds");
-				await Task.Delay(3000);
-				call.Log.Add("Waking Up");
-			}
+```
+
+## Toolbars
+
+- Toolbars can be added to Tabs by adding a `Toolbar` to the model
+- The following property types are supported
+  - `ToolButton` to add buttons
+  - `ToolToggleButton` to add a button that can be toggled on and off
+  - `ToolComboBox` to add a drop down that is bound to the passed list, with an optional default
+  - `string` to show text
+- If a more custom Toolbar is required, you can also derive a class from the `TabControlToolbar`
+  - See  [TabControlSearchToolbar](../../Libraries/SideScroll.Tabs.Samples/TabControlSearchToolbar.cs) for example
+
+```csharp
+public class TabSampleToolbar : ITab
+{
+	public TabInstance Create() => new Instance();
+
+	public class Toolbar : TabToolbar
+	{
+		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
+
+		[Separator]
+		public ToolButton ButtonSearch { get; set; } = new("Search", Icons.Svg.Search)
+		{
+			ShowTask = true,
+		};
+
+		[Separator]
+		public ToolButton ButtonOpenBrowser { get; set; } = new("Open in Browser", Icons.Svg.Browser);
+
+		[Separator]
+		public ToolComboBox<TimeSpan> Duration { get; set; } = new("Duration", TimeSpanExtensions.CommonTimeSpans, TimeSpan.FromMinutes(5));
+
+		[Separator]
+		public string Label => "(Status)";
+	}
+
+	public class Instance : TabInstance
+	{
+		public override void Load(Call call, TabModel model)
+		{
+			var toolbar = new Toolbar();
+			toolbar.ButtonRefresh.Action = Refresh;
+			toolbar.ButtonSearch.ActionAsync = SearchAsync;
+			toolbar.ButtonOpenBrowser.Action = OpenBrowser;
+			model.AddObject(toolbar);
+		}
+
+		private void Refresh(Call call)
+		{
+			Reload();
+		}
+
+		private async Task SearchAsync(Call call)
+		{
+			await Task.Delay(3000);
+		}
+
+		private static void OpenBrowser(Call call)
+		{
+			string uri = "https://www.wikipedia.org/";
+			ProcessUtils.OpenBrowser(uri);
 		}
 	}
 }
 ```
-
-## Toolbars
 
 ## Custom Controls
