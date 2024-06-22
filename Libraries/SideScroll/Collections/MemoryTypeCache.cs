@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Caching.Memory;
-using SideScroll.Logs;
 
 namespace SideScroll.Collections;
 

@@ -1,6 +1,5 @@
 using SideScroll.Utilities;
 using SideScroll.Extensions;
-using SideScroll.Logs;
 
 namespace SideScroll.Time;
 

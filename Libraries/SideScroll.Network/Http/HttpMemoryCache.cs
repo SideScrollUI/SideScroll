@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
-using SideScroll.Logs;
 
 namespace SideScroll.Network.Http;
 

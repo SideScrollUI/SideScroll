@@ -1,4 +1,3 @@
-using SideScroll.Logs;
 using System.Runtime.InteropServices;
 
 namespace SideScroll.Utilities;

@@ -1,5 +1,3 @@
-using SideScroll.Logs;
-
 namespace SideScroll.Tabs.Samples.Objects;
 
 [ListItem]

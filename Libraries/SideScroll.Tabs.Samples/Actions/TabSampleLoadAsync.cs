@@ -1,4 +1,3 @@
-using SideScroll.Logs;
 using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Samples.Actions;
