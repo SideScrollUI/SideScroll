@@ -27,7 +27,9 @@ public class SerializerMemorySideScroll : SerializerMemory
 		serializer.Save(callTimer, writer);
 
 		if (serializer.IdxTypeToRepo.TryGetValue(typeof(string), out TypeRepo? typeRepo))
+		{
 			_typeRepoString = (TypeRepoString)typeRepo;
+		}
 	}
 
 	public override T Load<T>(Call? call = null)

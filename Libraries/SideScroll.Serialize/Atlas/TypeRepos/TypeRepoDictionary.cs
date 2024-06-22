@@ -11,7 +11,9 @@ public class TypeRepoDictionary : TypeRepo
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (CanAssign(typeSchema.Type!))
+			{
 				return new TypeRepoDictionary(serializer, typeSchema);
+			}
 			return null;
 		}
 	}
@@ -47,10 +49,14 @@ public class TypeRepoDictionary : TypeRepo
 	{
 		// these base types might not be serialized
 		if (_typeKey != null)
+		{
 			_list1TypeRepo = Serializer.GetOrCreateRepo(log, _typeKey);
+		}
 
 		if (_typeValue != null)
+		{
 			_list2TypeRepo = Serializer.GetOrCreateRepo(log, _typeValue);
+		}
 	}
 
 	public override void AddChildObjects(object obj)

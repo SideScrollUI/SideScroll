@@ -7,19 +7,16 @@ public class LazyJsonNode
 {
 	public static object? Create(JsonValue? jsonValue)
 	{
-		if (jsonValue == null)
-			return null;
-
-		switch (jsonValue.JsonType)
+		return jsonValue?.JsonType switch
 		{
-			case JsonType.String: return (string)jsonValue;
-			case JsonType.Number:// break;
-			case JsonType.Boolean: return jsonValue.ToString();
-			case JsonType.Object: return new LazyJsonObject((JsonObject)jsonValue);
-			case JsonType.Array: return new LazyJsonArray((JsonArray)jsonValue);
-			default: break;
-		}
-		throw new Exception("Invalid JSON Node Type");
+			JsonType.String => (string)jsonValue,
+			JsonType.Number => jsonValue.ToString(),
+			JsonType.Boolean => jsonValue.ToString(),
+			JsonType.Object => new LazyJsonObject((JsonObject)jsonValue),
+			JsonType.Array => new LazyJsonArray((JsonArray)jsonValue),
+			null => null,
+			_ => throw new Exception("Invalid JSON Node Type")
+		};
 	}
 
 	public static object? Parse(string json)
@@ -101,11 +98,8 @@ public class LazyJsonProperty : LazyJsonNode
 		{
 			switch (jsonValue.JsonType)
 			{
-				case JsonType.String: return (string)jsonValue;
-				case JsonType.Number:// break;
-				case JsonType.Boolean: return jsonValue.ToString();
-				case JsonType.Object: return new LazyJsonObject((JsonObject)jsonValue);
-				case JsonType.Array: return new LazyJsonArray((JsonArray)jsonValue);
+				case JsonType.Object: return true;
+				case JsonType.Array: return true;
 			}
 		}
 	}*/

@@ -86,7 +86,7 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 		Save(indices);
 	}
 
-	public T? LockedGetCall<T>(Call call, Func<T> func)
+	public TResult? LockedGetCall<TResult>(Call call, Func<TResult> func)
 	{
 		using var mutex = new Mutex(false, DataRepoInstance.GroupId);
 
@@ -111,7 +111,7 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 		try
 		{
 			// Do operation
-			T result = func();
+			TResult result = func();
 			return result;
 		}
 		catch (ApplicationException e)
