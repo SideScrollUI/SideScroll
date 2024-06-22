@@ -2,7 +2,7 @@ using SideScroll.Tabs;
 using NUnit.Framework;
 using System.Collections;
 
-namespace SideScroll.Core.Test;
+namespace SideScroll.Test;
 
 [Category("Core")]
 public class TestTabItemCollection : TestBase

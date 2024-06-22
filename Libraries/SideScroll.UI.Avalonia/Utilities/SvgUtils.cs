@@ -1,5 +1,5 @@
-using SideScroll.Core;
-using SideScroll.Core.Collections;
+using SideScroll;
+using SideScroll.Collections;
 using SideScroll.Resources;
 using SideScroll.UI.Avalonia.Themes;
 using Avalonia.Media;

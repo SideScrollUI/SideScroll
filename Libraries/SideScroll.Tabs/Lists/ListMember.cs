@@ -1,4 +1,4 @@
-using SideScroll.Core;
+using SideScroll;
 using SideScroll.Extensions;
 using System.ComponentModel;
 using System.Reflection;

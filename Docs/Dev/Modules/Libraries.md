@@ -4,7 +4,7 @@
 
 ## Core Libraries
 
-* SideScroll.Core
+* SideScroll
   - Tab Interfaces
   -	Logging
   - Utilities - (Extensions, Attributes, etc)

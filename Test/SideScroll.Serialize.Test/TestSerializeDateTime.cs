@@ -1,4 +1,4 @@
-using SideScroll.Core.Time;
+using SideScroll.Time;
 using NUnit.Framework;
 
 namespace SideScroll.Serialize.Test;

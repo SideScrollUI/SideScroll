@@ -1,5 +1,5 @@
-using SideScroll.Core;
-using SideScroll.Core.Utilities;
+using SideScroll;
+using SideScroll.Utilities;
 using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;

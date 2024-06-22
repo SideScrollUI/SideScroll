@@ -1,4 +1,4 @@
-using SideScroll.Core;
+using SideScroll;
 
 namespace SideScroll.Network.Http;
 

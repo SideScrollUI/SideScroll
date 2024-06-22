@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace SideScroll.Core.Test;
+namespace SideScroll.Test;
 
 [Category("Core")]
 public class TestTimeRangePeriod : TestBase

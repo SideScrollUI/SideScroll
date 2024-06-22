@@ -1,5 +1,5 @@
-using SideScroll.Core;
-using SideScroll.Core.Tasks;
+using SideScroll;
+using SideScroll.Tasks;
 using SideScroll.Resources;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Toolbar;

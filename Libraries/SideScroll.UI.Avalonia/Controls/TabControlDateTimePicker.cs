@@ -1,4 +1,4 @@
-using SideScroll.Core.Utilities;
+using SideScroll.Utilities;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Controls.Converters;

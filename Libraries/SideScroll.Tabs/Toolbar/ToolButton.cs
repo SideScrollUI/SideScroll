@@ -1,4 +1,4 @@
-﻿using SideScroll.Core.Tasks;
+﻿using SideScroll.Tasks;
 using SideScroll.Resources;
 
 namespace SideScroll.Tabs.Toolbar;

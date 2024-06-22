@@ -1,6 +1,6 @@
 using System.Windows.Input;
-using SideScroll.Core;
-using SideScroll.Core.Tasks;
+using SideScroll;
+using SideScroll.Tasks;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Themes;

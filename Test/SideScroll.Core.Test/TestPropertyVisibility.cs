@@ -3,7 +3,7 @@ using SideScroll.Tabs;
 using NUnit.Framework;
 using System.Reflection;
 
-namespace SideScroll.Core.Test;
+namespace SideScroll.Test;
 
 [Category("Core")]
 public class TestPropertyVisibility : TestBase

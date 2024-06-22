@@ -1,4 +1,4 @@
-using SideScroll.Core;
+using SideScroll;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 

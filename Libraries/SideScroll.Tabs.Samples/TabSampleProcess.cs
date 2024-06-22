@@ -1,6 +1,6 @@
-using SideScroll.Core;
-using SideScroll.Core.Tasks;
-using SideScroll.Core.Utilities;
+using SideScroll;
+using SideScroll.Tasks;
+using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Samples;
 

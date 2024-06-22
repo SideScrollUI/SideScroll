@@ -1,4 +1,4 @@
-using SideScroll.Core;
+using SideScroll;
 using SideScroll.Resources;
 
 namespace SideScroll.Tabs.Samples.Objects;

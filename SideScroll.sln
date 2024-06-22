@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Core", "Libraries\SideScroll.Core\SideScroll.Core.csproj", "{9BFC7193-DF0F-4D3F-8847-3043B2484E8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll", "Libraries\SideScroll\SideScroll.csproj", "{9BFC7193-DF0F-4D3F-8847-3043B2484E8E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Network", "Libraries\SideScroll.Network\SideScroll.Network.csproj", "{40EB70B2-F23A-4F9F-83F0-DD6C833713D5}"
 EndProject
@@ -39,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Resources", "Lib
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.UI.Avalonia.Test", "Test\SideScroll.UI.Avalonia.Test\SideScroll.UI.Avalonia.Test.csproj", "{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Core.Test", "Test\SideScroll.Core.Test\SideScroll.Core.Test.csproj", "{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Test", "Test\SideScroll.Test\SideScroll.Test.csproj", "{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{332EF461-464E-4A75-A15D-647E3FED6C18}"
 	ProjectSection(SolutionItems) = preProject

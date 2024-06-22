@@ -1,5 +1,5 @@
-using SideScroll.Core;
-using SideScroll.Core.Tasks;
+using SideScroll;
+using SideScroll.Tasks;
 using SideScroll.Extensions;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;

@@ -1,4 +1,4 @@
-using SideScroll.Core;
+using SideScroll;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Toolbar;

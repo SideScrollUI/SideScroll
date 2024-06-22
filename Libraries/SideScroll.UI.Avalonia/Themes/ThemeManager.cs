@@ -1,4 +1,4 @@
-using SideScroll.Core;
+using SideScroll;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs;
 using Avalonia;

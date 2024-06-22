@@ -1,5 +1,5 @@
-using SideScroll.Core;
-using SideScroll.Core.Charts;
+using SideScroll;
+using SideScroll.Charts;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Controls;
 using SideScroll.UI.Avalonia.Themes;

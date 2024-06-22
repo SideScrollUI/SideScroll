@@ -1,4 +1,4 @@
-using SideScroll.Core;
+using SideScroll;
 using SideScroll.Start.Avalonia.Charts;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Samples;

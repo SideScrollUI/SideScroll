@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SideScroll.Core\SideScroll.Core.csproj" />
+    <ProjectReference Include="..\SideScroll\SideScroll.csproj" />
   </ItemGroup>
 
 </Project>

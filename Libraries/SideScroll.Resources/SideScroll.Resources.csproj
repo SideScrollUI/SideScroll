@@ -11,7 +11,6 @@
   <ItemGroup>
     <None Remove="Assets\hourglass64.png" />
     <None Remove="Assets\shutter64.png" />
-    <None Remove="Icons\Logo\Logo2.ico" />
     <None Remove="Icons\Logo\Logo3.ico" />
     <None Remove="Icons\Logo\SideScroll.ico" />
     <None Remove="Icons\png\bookmark.png" />
@@ -71,7 +70,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\hourglass64.png" />
     <EmbeddedResource Include="Assets\shutter64.png" />
-    <EmbeddedResource Include="Icons\Logo\Logo2.ico" />
     <EmbeddedResource Include="Icons\Logo\Logo3.ico" />
     <EmbeddedResource Include="Icons\png\info_20_759eeb.png" />
     <EmbeddedResource Include="Icons\png\bookmark.png" />
@@ -120,7 +118,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SideScroll.Core\SideScroll.Core.csproj" />
+    <ProjectReference Include="..\SideScroll\SideScroll.csproj" />
   </ItemGroup>
 
 </Project>

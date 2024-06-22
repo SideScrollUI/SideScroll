@@ -1,4 +1,4 @@
-using SideScroll.Core;
+using SideScroll;
 using System.Diagnostics;
 
 namespace SideScroll.Serialize;

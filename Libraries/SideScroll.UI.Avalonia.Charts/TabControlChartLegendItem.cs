@@ -1,4 +1,4 @@
-using SideScroll.Core.Charts;
+using SideScroll.Charts;
 using SideScroll.Extensions;
 using SideScroll.UI.Avalonia.Controls;
 using SideScroll.UI.Avalonia.Themes;

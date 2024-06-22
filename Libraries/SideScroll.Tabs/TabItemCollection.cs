@@ -1,4 +1,4 @@
-using SideScroll.Core.Utilities;
+using SideScroll.Utilities;
 using System.Collections;
 
 namespace SideScroll.Tabs;

@@ -1,4 +1,4 @@
-using SideScroll.Core;
+using SideScroll;
 using SideScroll.Tabs.Samples.Actions;
 using SideScroll.Tabs.Samples.Chart;
 using SideScroll.Tabs.Samples.DataGrid;

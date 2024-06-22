@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SideScroll.Core\SideScroll.Core.csproj" />
+    <ProjectReference Include="..\SideScroll\SideScroll.csproj" />
     <ProjectReference Include="..\SideScroll.Tabs\SideScroll.Tabs.csproj" />
     <ProjectReference Include="..\SideScroll.UI.Avalonia\SideScroll.UI.Avalonia.csproj" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-using SideScroll.Core;
+using SideScroll;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 

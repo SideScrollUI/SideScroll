@@ -1,4 +1,4 @@
-using SideScroll.Core.Utilities;
+using SideScroll.Utilities;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using System.Globalization;
