@@ -1,3 +1,4 @@
+using SideScroll.Logs;
 using System.Collections;
 using System.Reflection;
 
@@ -10,7 +11,9 @@ public class TypeRepoList : TypeRepo
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (CanAssign(typeSchema.Type!))
+			{
 				return new TypeRepoList(serializer, typeSchema);
+			}
 			return null;
 		}
 	}
@@ -24,7 +27,9 @@ public class TypeRepoList : TypeRepo
 	{
 		Type[] types = Type!.GetGenericArguments();
 		if (types.Length > 0)
+		{
 			_elementType = types[0];
+		}
 	}
 
 	public static bool CanAssign(Type type)
@@ -35,7 +40,9 @@ public class TypeRepoList : TypeRepo
 	public override void InitializeLoading(Log log)
 	{
 		if (_elementType != null)
+		{
 			_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
+		}
 
 		_propertyInfoCapacity = LoadableType!.GetProperty("Capacity");
 	}

@@ -65,7 +65,6 @@ public class Bookmark
 	{
 		Bookmark bookmark = new()
 		{
-			//Imported = true,
 			TabBookmark = TabBookmark.Create(labels)
 		};
 		return bookmark;

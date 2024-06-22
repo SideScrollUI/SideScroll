@@ -1,4 +1,5 @@
 using SideScroll.Collections;
+using SideScroll.Logs;
 
 namespace SideScroll.Serialize.Test;
 

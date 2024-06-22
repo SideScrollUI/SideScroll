@@ -1,4 +1,5 @@
 using SideScroll.Extensions;
+using SideScroll.Logs;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;

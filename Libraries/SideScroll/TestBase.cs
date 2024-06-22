@@ -1,3 +1,5 @@
+using SideScroll.Logs;
+
 namespace SideScroll;
 
 public class TestBase

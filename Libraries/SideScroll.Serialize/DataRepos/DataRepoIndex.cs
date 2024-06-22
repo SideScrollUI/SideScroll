@@ -1,17 +1,13 @@
+using SideScroll.Logs;
 using SideScroll.Tasks;
 
 namespace SideScroll.Serialize.DataRepos;
 
-public class DataRepoIndex
+public class DataRepoIndex(DataRepo dataRepo)
 {
-	public DataRepo DataRepo { get; set; }
+	public DataRepo DataRepo { get; set; } = dataRepo;
 
 	public record Item(long Index, string Key);
-
-	public DataRepoIndex(DataRepo dataRepo)
-	{
-		DataRepo = dataRepo;
-	}
 }
 
 public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int? maxItems = null)

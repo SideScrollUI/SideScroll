@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace SideScroll;
+namespace SideScroll.Logs;
 
 public class LogTimer : Log, IDisposable
 {

@@ -2,7 +2,7 @@ using SideScroll.Collections;
 using System.Diagnostics;
 using System.Text;
 
-namespace SideScroll;
+namespace SideScroll.Logs;
 
 [Skippable(false)]
 public class Log : LogEntry

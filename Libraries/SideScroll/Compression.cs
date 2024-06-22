@@ -1,3 +1,4 @@
+using SideScroll.Logs;
 using System.IO.Compression;
 
 namespace SideScroll;

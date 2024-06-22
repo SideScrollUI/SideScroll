@@ -1,9 +1,10 @@
-using SideScroll.Tasks;
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Controls.DataGrids;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Threading;
+using SideScroll.Logs;
+using SideScroll.Tabs;
+using SideScroll.Tasks;
+using SideScroll.UI.Avalonia.Controls.DataGrids;
 using System.Collections;
 using System.Collections.Specialized;
 

@@ -1,3 +1,4 @@
+using SideScroll.Logs;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;

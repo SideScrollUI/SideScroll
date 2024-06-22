@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.Reflection;
 using SideScroll.Collections;
 using SideScroll.Time;
+using SideScroll.Logs;
 
 namespace SideScroll.UI.Avalonia.Charts.LiveCharts;
 

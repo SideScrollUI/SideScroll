@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace SideScroll;
+namespace SideScroll.Logs;
 
 public class EventLogMessage : EventArgs
 {

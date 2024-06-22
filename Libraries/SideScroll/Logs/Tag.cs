@@ -1,6 +1,6 @@
 using SideScroll.Extensions;
 
-namespace SideScroll;
+namespace SideScroll.Logs;
 
 public enum TagType
 {

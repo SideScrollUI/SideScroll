@@ -1,4 +1,4 @@
-namespace SideScroll;
+namespace SideScroll.Logs;
 
 public class LogWriterText : IDisposable
 {

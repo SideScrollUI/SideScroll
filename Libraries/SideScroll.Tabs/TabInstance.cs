@@ -6,6 +6,7 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using SideScroll.Collections;
+using SideScroll.Logs;
 
 namespace SideScroll.Tabs;
 

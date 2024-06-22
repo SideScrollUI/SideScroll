@@ -68,10 +68,14 @@ public class SerializerFileSideScroll : SerializerFile
 		//logTimer.Add("Type Repos", new Tag("Repos", serializer.typeRepos)); // fields don't appear in columns
 
 		if (taskInstance != null)
+		{
 			taskInstance.Percent = 100;
+		}
 
 		if (!lazy)
+		{
 			serializer.Dispose();
+		}
 
 		return obj;
 	}

@@ -4,7 +4,7 @@ namespace SideScroll.Serialize;
 
 public class SerializerMemorySideScroll : SerializerMemory
 {
-	//private MemoryStream stream = new MemoryStream();
+	//private MemoryStream stream = new();
 
 	private TypeRepoString? _typeRepoString; // Reuse string instances to reduce memory use when deep cloning
 
