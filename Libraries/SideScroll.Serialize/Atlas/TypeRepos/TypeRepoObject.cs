@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Extensions;
 using System.Reflection;
 

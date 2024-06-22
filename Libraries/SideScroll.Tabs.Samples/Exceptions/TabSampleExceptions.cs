@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Samples.Exceptions;
 
 public class TabSampleExceptions : ITab
@@ -10,7 +8,7 @@ public class TabSampleExceptions : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = new ItemCollection<ListItem>
+			model.Items = new List<ListItem>
 			{
 				new("Load Exception", new TabSampleLoadException()),
 			};

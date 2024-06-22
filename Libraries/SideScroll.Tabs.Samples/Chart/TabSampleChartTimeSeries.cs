@@ -1,5 +1,5 @@
-using SideScroll;
 using SideScroll.Charts;
+using SideScroll.Collections;
 using SideScroll.Extensions;
 using System.Drawing;
 

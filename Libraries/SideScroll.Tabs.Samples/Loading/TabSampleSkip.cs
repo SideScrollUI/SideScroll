@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Samples.Loading;
 
 public class TabSampleSkip : ITab

@@ -1,5 +1,5 @@
-using SideScroll;
 using SideScroll.Charts;
+using SideScroll.Time;
 
 namespace SideScroll.Tabs.Samples.Chart;
 

@@ -1,4 +1,6 @@
+using SideScroll.Collections;
 using SideScroll.Extensions;
+using SideScroll.Time;
 using System.Collections;
 using System.Drawing;
 using System.Reflection;
@@ -43,7 +45,7 @@ public class ChartView
 
 	public TimeWindow? TimeWindow { get; set; }
 
-	public ItemCollection<ListSeries> Series { get; set; } = [];
+	public List<ListSeries> Series { get; set; } = [];
 
 	public List<ChartAnnotation> Annotations { get; set; } = [];
 
@@ -127,7 +129,7 @@ public class ChartView
 
 		var orderedSeries = Series.OrderByDescending(series => series.CalculateTotal(timeWindow));
 
-		Series = new ItemCollection<ListSeries>(orderedSeries);
+		Series = new List<ListSeries>(orderedSeries);
 	}
 
 	public TimeWindow GetSeriesTimeWindow()

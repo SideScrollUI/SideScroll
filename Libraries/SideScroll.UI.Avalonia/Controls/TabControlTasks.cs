@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Tasks;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Controls.DataGrids;

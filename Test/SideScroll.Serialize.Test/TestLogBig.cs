@@ -1,4 +1,4 @@
-using SideScroll;
+using SideScroll.Collections;
 
 namespace SideScroll.Serialize.Test;
 
@@ -52,7 +52,7 @@ public class TestLogBig
 	public Tag[]? Tags;
 
 	[InnerValue]
-	public ItemCollection<TestLogBig>? Items; // change to LRU for performance? No Binding?
+	public ItemCollection<TestLogBig> Items = []; // change to LRU for performance? No Binding?
 
 	// Todo: use caller instead
 	public void Child(string name)
@@ -60,7 +60,6 @@ public class TestLogBig
 		var logEntry = new TestLogBig();
 		//log.Type = logType;
 		//logEntry = new Log(context, contextID, settings, "replacing log with local", new Tag[] { });
-		Items ??= new ItemCollection<TestLogBig>();
 		//if (Items.Count > settings.MaxLogItems)
 		//	Items.RemoveAt(0);
 		Items.Add(logEntry);

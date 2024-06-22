@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Samples.DataGrid;
 
 public class TabSampleGridColumnTypes : ITab
@@ -10,7 +8,7 @@ public class TabSampleGridColumnTypes : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			var items = new ItemCollection<ManyTypesItem>();
+			var items = new List<ManyTypesItem>();
 			for (int i = 0; i < 10; i++)
 			{
 				var testItem = new ManyTypesItem
@@ -23,10 +21,14 @@ public class TabSampleGridColumnTypes : ITab
 				};
 
 				if (i % 2 == 0)
+				{
 					testItem.Object = (i % 4 == 0);
+				}
 
 				for (int j = 0; j < i; j++)
+				{
 					testItem.IntegerList.Add(j);
+				}
 
 				testItem.LongString += i; // make as a unique string
 				items.Add(testItem);

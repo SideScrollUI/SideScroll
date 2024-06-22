@@ -1,4 +1,4 @@
-using SideScroll;
+using SideScroll.Collections;
 using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Samples.DataGrid;
@@ -9,11 +9,11 @@ public class TabSampleGridCollectionSize : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollection<TestItem>? _items;
+		private ItemCollection<TestItem> _items = [];
 
 		public override void Load(Call call, TabModel model)
 		{
-			_items = new ItemCollection<TestItem>();
+			_items = [];
 			AddEntries(20);
 			model.Items = _items;
 
@@ -30,7 +30,7 @@ public class TabSampleGridCollectionSize : ITab
 		{
 			for (int i = 0; i < count; i++)
 			{
-				int number = _items!.Count;
+				int number = _items.Count;
 				var testItem = new TestItem
 				{
 					SmallNumber = number

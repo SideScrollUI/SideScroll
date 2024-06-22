@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Samples.DataGrid;
 
 public class TabSampleMemory : ITab
@@ -17,7 +15,7 @@ public class TabSampleMemory : ITab
 			for (int i = 0; i < _bytes.Length; i++)
 				_bytes[i] = (byte)i;
 
-			model.Items = new ItemCollection<ListItem>
+			model.Items = new List<ListItem>
 			{
 				new("Bytes", _bytes),
 			};

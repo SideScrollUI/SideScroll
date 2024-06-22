@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Utilities;
 
 namespace SideScroll.Serialize.DataRepos;
@@ -69,7 +68,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		return new DataItemCollection<T>(LoadAllDataItems(call, ascending));
 	}
 
-	public ItemCollection<Header> LoadHeaders(Call? call = null)
+	public List<Header> LoadHeaders(Call? call = null)
 	{
 		return DataRepo.LoadHeaders(typeof(T), GroupId, call);
 	}

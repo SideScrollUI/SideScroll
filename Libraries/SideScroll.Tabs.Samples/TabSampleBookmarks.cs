@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Serialize;
 
 namespace SideScroll.Tabs.Samples;

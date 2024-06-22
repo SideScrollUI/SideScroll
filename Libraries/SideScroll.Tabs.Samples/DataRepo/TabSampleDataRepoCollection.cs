@@ -1,6 +1,6 @@
-using SideScroll;
 using SideScroll.Tasks;
 using SideScroll.Serialize.DataRepos;
+using SideScroll.Collections;
 
 namespace SideScroll.Tabs.Samples.DataRepo;
 
@@ -12,7 +12,7 @@ public class TabSampleDataRepoCollection : ITab
 	{
 		private const string RepoId = "TestRepo";
 
-		private ItemCollection<SampleItem>? _sampleItems;
+		private ItemCollection<SampleItem> _sampleItems = [];
 		private DataRepoInstance<SampleItem>? _dataRepoItems;
 
 		public override void Load(Call call, TabModel model)
@@ -42,7 +42,7 @@ public class TabSampleDataRepoCollection : ITab
 
 		private void Add(Call call)
 		{
-			var sampleItem = new SampleItem(_sampleItems!.Count, "Item " + _sampleItems.Count);
+			var sampleItem = new SampleItem(_sampleItems.Count, "Item " + _sampleItems.Count);
 			RemoveItem(call, sampleItem.Name!); // Remove previous result so refocus works
 			_dataRepoItems!.Save(call, sampleItem.ToString()!, sampleItem);
 			_sampleItems.Add(sampleItem);
@@ -58,7 +58,7 @@ public class TabSampleDataRepoCollection : ITab
 
 		private void Replace(Call call)
 		{
-			var sampleItem = new SampleItem(_sampleItems!.Count, "Item 0");
+			var sampleItem = new SampleItem(_sampleItems.Count, "Item 0");
 			RemoveItem(call, sampleItem.Name!); // Remove previous result so refocus works
 			_dataRepoItems!.Save(call, sampleItem.ToString()!, sampleItem);
 			_sampleItems.Add(sampleItem);
@@ -80,16 +80,16 @@ public class TabSampleDataRepoCollection : ITab
 		private void DeleteAll(Call call)
 		{
 			_dataRepoItems!.DeleteAll(call);
-			_sampleItems!.Clear();
+			_sampleItems.Clear();
 		}
 
 		private void RemoveItem(Call call, string key)
 		{
 			_dataRepoItems!.Delete(call, key);
-			SampleItem? existing = _sampleItems!.SingleOrDefault(i => i.Name == key);
+			SampleItem? existing = _sampleItems.SingleOrDefault(i => i.Name == key);
 			if (existing != null)
 			{
-				_sampleItems!.Remove(existing);
+				_sampleItems.Remove(existing);
 			}
 		}
 	}

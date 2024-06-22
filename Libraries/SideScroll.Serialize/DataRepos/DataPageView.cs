@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Serialize.DataRepos;
 
 public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascending, int pageSize = 100) : object()

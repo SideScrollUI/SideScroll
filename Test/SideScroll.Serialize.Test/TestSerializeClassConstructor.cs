@@ -1,4 +1,3 @@
-using SideScroll;
 using NUnit.Framework;
 
 namespace SideScroll.Serialize.Test;

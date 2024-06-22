@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Samples.DataGrid;

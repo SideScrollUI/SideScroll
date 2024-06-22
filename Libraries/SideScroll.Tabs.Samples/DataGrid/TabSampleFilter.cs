@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Samples.DataGrid;
 
 public class TabSampleFilter : ITab

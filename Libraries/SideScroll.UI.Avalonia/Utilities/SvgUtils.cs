@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Collections;
 using SideScroll.Resources;
 using SideScroll.UI.Avalonia.Themes;

@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Resources;
 using SideScroll.Tabs.Samples.Chart;
 using SideScroll.Tabs.Samples.DataGrid;

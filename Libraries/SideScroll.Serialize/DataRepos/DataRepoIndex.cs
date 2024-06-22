@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Tasks;
 
 namespace SideScroll.Serialize.DataRepos;
@@ -219,7 +218,7 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 
 	private Indices BuildIndices(Call call)
 	{
-		ItemCollection<Header> headers = DataRepoInstance.LoadHeaders(call);
+		List<Header> headers = DataRepoInstance.LoadHeaders(call);
 
 		int index = 0;
 		List<Item> items = headers

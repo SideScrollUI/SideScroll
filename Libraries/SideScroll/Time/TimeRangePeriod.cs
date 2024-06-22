@@ -2,7 +2,7 @@ using SideScroll.Utilities;
 using SideScroll.Extensions;
 using System.Diagnostics;
 
-namespace SideScroll;
+namespace SideScroll.Time;
 
 public class TimeRangePeriod : ITags
 {

@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Charts;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
@@ -23,6 +22,8 @@ using LiveChartsCore.SkiaSharpView.Avalonia;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using System.Diagnostics;
+using SideScroll.Time;
+using SideScroll.Collections;
 
 namespace SideScroll.UI.Avalonia.Charts.LiveCharts;
 

@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace SideScroll;
+namespace SideScroll.Collections;
 
 public class NamedItemCollection<TCollection, TValue>
 {

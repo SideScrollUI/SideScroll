@@ -1,4 +1,4 @@
-using SideScroll;
+using SideScroll.Collections;
 using SideScroll.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -11,12 +11,12 @@ public class TabSampleGridUpdate : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollection<TestItem>? _items;
+		private ItemCollection<TestItem> _items = [];
 		protected SynchronizationContext Context = SynchronizationContext.Current ?? new SynchronizationContext();
 
 		public override void Load(Call call, TabModel model)
 		{
-			_items = new ItemCollection<TestItem>();
+			_items = [];
 			AddEntries();
 			model.Items = _items;
 
@@ -36,7 +36,7 @@ public class TabSampleGridUpdate : ITab
 					SmallNumber = i
 				};
 				testItem.BigNumber += i;
-				_items!.Add(testItem);
+				_items.Add(testItem);
 			}
 		}
 
@@ -45,7 +45,7 @@ public class TabSampleGridUpdate : ITab
 			for (int i = 0; i < 10_000; i++)
 			{
 				Thread.Sleep(10);
-				foreach (TestItem testItem in _items!)
+				foreach (TestItem testItem in _items)
 				{
 					testItem.BigNumber++;
 					testItem.Update();

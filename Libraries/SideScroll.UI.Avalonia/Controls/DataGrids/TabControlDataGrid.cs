@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Utilities;
@@ -19,6 +18,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using SideScroll.Collections;
 
 namespace SideScroll.UI.Avalonia.Controls.DataGrids;
 

@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Themes;
 using Avalonia.Data.Converters;

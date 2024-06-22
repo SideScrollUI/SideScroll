@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
 

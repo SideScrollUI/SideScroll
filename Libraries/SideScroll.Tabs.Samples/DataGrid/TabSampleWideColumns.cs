@@ -1,4 +1,4 @@
-using SideScroll;
+using SideScroll.Collections;
 
 namespace SideScroll.Tabs.Samples.DataGrid;
 
@@ -8,11 +8,11 @@ public class TabSampleWideColumns : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollection<TestWideItem>? _items;
+		private ItemCollection<TestWideItem> _items = [];
 
 		public override void Load(Call call, TabModel model)
 		{
-			_items = new ItemCollection<TestWideItem>();
+			_items = [];
 			AddEntries();
 			model.Items = _items;
 		}
@@ -27,8 +27,10 @@ public class TabSampleWideColumns : ITab
 				};
 				testItem.BigNumber += i;
 				if (i % 3 == 0)
+				{
 					testItem.LongText1 += testItem.LongText0;
-				_items!.Add(testItem);
+				}
+				_items.Add(testItem);
 			}
 		}
 	}

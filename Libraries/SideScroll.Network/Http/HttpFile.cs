@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Network.Http;
 
 public class HttpFile

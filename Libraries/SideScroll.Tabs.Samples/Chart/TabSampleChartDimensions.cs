@@ -1,7 +1,7 @@
-using SideScroll;
 using SideScroll.Charts;
 using SideScroll.Tasks;
 using SideScroll.Extensions;
+using SideScroll.Collections;
 
 namespace SideScroll.Tabs.Samples.Chart;
 

@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Samples.DataGrid;
 
 public class TabSampleGridColumnSizing : ITab
@@ -10,7 +8,7 @@ public class TabSampleGridColumnSizing : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			var items = new ItemCollection<ManyTypesItem>();
+			var items = new List<ManyTypesItem>();
 			for (int i = 0; i < 10; i++)
 			{
 				var testItem = new ManyTypesItem

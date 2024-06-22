@@ -1,4 +1,3 @@
-using SideScroll;
 using NUnit.Framework;
 using System.Diagnostics;
 

@@ -1,7 +1,7 @@
 using SideScroll.Utilities;
 using SideScroll.Extensions;
 
-namespace SideScroll;
+namespace SideScroll.Time;
 
 public interface ITags
 {

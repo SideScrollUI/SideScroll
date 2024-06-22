@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Toolbar;

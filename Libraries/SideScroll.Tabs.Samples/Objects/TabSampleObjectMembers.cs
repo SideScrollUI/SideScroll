@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Samples.Objects;
 
 public class TabSampleObjectMembers : ITab

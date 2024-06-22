@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Extensions;
 using System.Diagnostics;
 
@@ -203,12 +202,12 @@ public class DataRepo
 		return entries;
 	}
 
-	public ItemCollection<Header> LoadHeaders(Type type, string? groupId = null, Call? call = null)
+	public List<Header> LoadHeaders(Type type, string? groupId = null, Call? call = null)
 	{
 		call ??= new Call();
 		groupId ??= DefaultGroupId;
 
-		ItemCollection<Header> headers = [];
+		List<Header> headers = [];
 
 		string groupPath = GetGroupPath(type, groupId);
 		if (Directory.Exists(groupPath))

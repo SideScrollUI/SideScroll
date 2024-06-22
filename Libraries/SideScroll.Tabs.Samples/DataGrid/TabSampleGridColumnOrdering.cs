@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Samples.DataGrid;
 
 public class TabSampleGridColumnOrdering : ITab
@@ -10,7 +8,7 @@ public class TabSampleGridColumnOrdering : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			var items = new ItemCollection<TestChild>();
+			var items = new List<TestChild>();
 			for (int i = 0; i < 2; i++)
 			{
 				var item = new TestChild

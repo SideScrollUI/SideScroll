@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Start.Avalonia.Charts;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Samples;
@@ -15,7 +14,7 @@ public class TabAvalonia : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = new ItemCollection<ListItem>
+			model.Items = new List<ListItem>
 			{
 				new("Samples", new TabSamples()),
 				new("Controls", new TabSampleControls()),

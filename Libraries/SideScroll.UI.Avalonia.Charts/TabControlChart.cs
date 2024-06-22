@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Charts;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Controls;
@@ -11,6 +10,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using System.Collections;
 using System.Reflection;
+using SideScroll.Collections;
 
 namespace SideScroll.UI.Avalonia.Charts;
 

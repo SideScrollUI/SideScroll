@@ -1,9 +1,9 @@
-using SideScroll;
 using SideScroll.Charts;
 using SideScroll.Tasks;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Samples.Chart;
 using SideScroll.UI.Avalonia.Charts.LiveCharts;
+using SideScroll.Collections;
 
 namespace SideScroll.Start.Avalonia.Charts;
 

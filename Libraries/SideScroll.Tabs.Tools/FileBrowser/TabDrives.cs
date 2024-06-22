@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Tools;
 
 public class TabDrives(FileSelectorOptions? fileSelectorOptions = null) : ITab

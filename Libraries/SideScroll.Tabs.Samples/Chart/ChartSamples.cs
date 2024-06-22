@@ -1,4 +1,4 @@
-using SideScroll;
+using SideScroll.Time;
 
 namespace SideScroll.Tabs.Samples.Chart;
 

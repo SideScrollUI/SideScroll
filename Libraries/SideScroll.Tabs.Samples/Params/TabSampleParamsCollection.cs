@@ -1,4 +1,4 @@
-using SideScroll;
+using SideScroll.Collections;
 using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
@@ -20,7 +20,7 @@ public class TabSampleParamsCollection : ITab
 	{
 		private const string DataKey = "Params";
 
-		private ItemCollection<SampleParamItem>? _items;
+		private ItemCollection<SampleParamItem> _items = [];
 		private SampleParamItem? _paramTestItem;
 		private DataRepoInstance<SampleParamItem>? _dataRepoParams;
 
@@ -62,7 +62,7 @@ public class TabSampleParamsCollection : ITab
 			{
 				parameters = clone,
 			};*/
-			_items!.Add(clone);
+			_items.Add(clone);
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Utilities;
 using SideScroll.Extensions;
 using Avalonia.Media;
@@ -9,6 +8,8 @@ using SkiaSharp;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
+using SideScroll.Collections;
+using SideScroll.Time;
 
 namespace SideScroll.UI.Avalonia.Charts.LiveCharts;
 

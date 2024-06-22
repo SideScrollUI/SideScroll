@@ -1,4 +1,3 @@
-using SideScroll;
 using System.ComponentModel.DataAnnotations;
 
 namespace SideScroll.Tabs;

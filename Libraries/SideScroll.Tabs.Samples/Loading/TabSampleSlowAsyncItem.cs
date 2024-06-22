@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Samples.Loading;
 
 public class TabSampleSlowAsyncItem : ITab
@@ -10,7 +8,7 @@ public class TabSampleSlowAsyncItem : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = new ItemCollection<IListItem>
+			model.Items = new List<IListItem>
 			{
 				new ListDelegate(SlowItemAsync),
 			};

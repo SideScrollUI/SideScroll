@@ -1,4 +1,3 @@
-using SideScroll;
 using System.Collections;
 
 namespace SideScroll.Serialize;

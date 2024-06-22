@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Utilities;
@@ -10,6 +9,7 @@ using Avalonia.Media;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using SideScroll.Collections;
 
 namespace SideScroll.UI.Avalonia.Controls;
 

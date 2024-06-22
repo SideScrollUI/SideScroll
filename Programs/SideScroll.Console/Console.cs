@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Tabs;
 
 namespace SideScroll.Console;

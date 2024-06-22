@@ -1,4 +1,3 @@
-using SideScroll;
 using SideScroll.Tasks;
 using SideScroll.Extensions;
 using SideScroll.Network.Http;

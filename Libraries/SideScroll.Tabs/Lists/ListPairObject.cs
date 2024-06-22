@@ -1,4 +1,3 @@
-using SideScroll;
 using System.ComponentModel;
 
 namespace SideScroll.Tabs;

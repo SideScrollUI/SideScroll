@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs;
 
 public class Linker

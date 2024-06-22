@@ -1,10 +1,11 @@
 using SideScroll.Extensions;
+using SideScroll.Time;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Reflection;
 
-namespace SideScroll;
+namespace SideScroll.Collections;
 
 public enum SeriesType
 {

@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Samples.Exceptions;
 
 public class TabSampleLoadException : ITab

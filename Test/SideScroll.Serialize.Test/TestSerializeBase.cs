@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Serialize.Test;
 
 public class TestSerializeBase : TestBase

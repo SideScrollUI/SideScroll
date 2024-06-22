@@ -1,5 +1,3 @@
-using SideScroll;
-
 namespace SideScroll.Tabs.Samples.Objects;
 
 public class TabSampleSubClassProperty : ITab
@@ -10,7 +8,7 @@ public class TabSampleSubClassProperty : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			var items = new ItemCollection<ParentClass>();
+			var items = new List<ParentClass>();
 
 			for (int i = 0; i < 1; i++)
 			{
