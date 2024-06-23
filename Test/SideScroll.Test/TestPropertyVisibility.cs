@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Collections;
 using SideScroll.Extensions;
-using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using System.Reflection;
 

@@ -14,6 +14,7 @@ using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Lists;
+using SideScroll.Tabs.Settings;
 using SideScroll.UI.Avalonia.Utilities;
 using SideScroll.UI.Avalonia.View;
 using System.Collections;

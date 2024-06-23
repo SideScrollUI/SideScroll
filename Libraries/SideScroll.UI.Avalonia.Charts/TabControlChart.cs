@@ -6,6 +6,7 @@ using Avalonia.Media;
 using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Tabs;
+using SideScroll.Tabs.Settings;
 using SideScroll.UI.Avalonia.Controls;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Utilities;

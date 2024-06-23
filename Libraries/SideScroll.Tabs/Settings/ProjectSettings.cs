@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Settings;
 
 public class ProjectSettings
 {

@@ -7,6 +7,7 @@ using Avalonia.Threading;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Controls;
 using SideScroll.UI.Avalonia.Controls.DataGrids;

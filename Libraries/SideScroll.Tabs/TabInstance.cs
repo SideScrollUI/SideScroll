@@ -6,6 +6,7 @@ using SideScroll.Serialize.Atlas.Schema;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Lists;
+using SideScroll.Tabs.Settings;
 using SideScroll.Tasks;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
@@ -666,7 +667,9 @@ public class TabInstance : IDisposable
 	{
 		TabBookmark = null;
 		if (bookmark != null)
+		{
 			SelectBookmark(bookmark.TabBookmark);
+		}
 
 		return TabViewSettings; // remove?
 	}
@@ -674,13 +677,17 @@ public class TabInstance : IDisposable
 	public virtual void SelectBookmark(TabBookmark tabBookmark, bool reload = false)
 	{
 		if (reload)
+		{
 			ClearSelection();
+		}
 
 		TabBookmark = tabBookmark;
 		TabViewSettings = tabBookmark.ViewSettings;
 
 		if (OnLoadBookmark != null)
+		{
 			UiContext.Send(_ => OnLoadBookmark(this, EventArgs.Empty), null);
+		}
 
 		SaveTabSettings();
 	}
@@ -702,7 +709,9 @@ public class TabInstance : IDisposable
 
 		Bookmark? bookmark = DataApp.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);
 		if (bookmark != null)
+		{
 			TabBookmark = bookmark.TabBookmark;
+		}
 	}
 
 	public TabViewSettings? LoadSettings(bool reload)

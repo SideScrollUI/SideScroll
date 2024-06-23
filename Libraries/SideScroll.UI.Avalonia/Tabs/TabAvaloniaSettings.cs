@@ -4,6 +4,7 @@ using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
+using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Themes.Tabs;

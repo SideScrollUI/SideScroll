@@ -1,6 +1,6 @@
 using SideScroll.Utilities;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Settings;
 
 [PublicData]
 public class SelectedRow : IEquatable<SelectedRow>

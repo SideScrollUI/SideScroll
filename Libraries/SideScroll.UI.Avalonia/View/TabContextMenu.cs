@@ -3,6 +3,7 @@ using SideScroll.Tabs;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using SideScroll.Tabs.Settings;
 
 namespace SideScroll.UI.Avalonia.View;
 

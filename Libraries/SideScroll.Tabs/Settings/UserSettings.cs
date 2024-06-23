@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Settings;
 
 [Params]
 public class UserSettings

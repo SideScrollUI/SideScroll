@@ -3,6 +3,7 @@ using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Lists;
+using SideScroll.Tabs.Settings;
 using SideScroll.Tasks;
 using System.Collections;
 using System.Reflection;

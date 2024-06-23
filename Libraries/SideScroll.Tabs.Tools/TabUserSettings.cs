@@ -1,5 +1,6 @@
 using SideScroll.Resources;
 using SideScroll.Serialize;
+using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Tools;

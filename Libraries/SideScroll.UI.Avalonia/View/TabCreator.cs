@@ -1,10 +1,11 @@
 using Avalonia.Controls;
 using SideScroll.Extensions;
-using SideScroll.Utilities;
 using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Tabs;
-using System.Diagnostics;
 using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Settings;
+using SideScroll.UI.Avalonia.Tabs;
+using SideScroll.Utilities;
+using System.Diagnostics;
 
 namespace SideScroll.UI.Avalonia.View;
 

@@ -4,7 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Settings;
 
 public enum SelectionType
 {

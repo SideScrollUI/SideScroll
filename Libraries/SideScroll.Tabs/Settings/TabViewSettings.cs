@@ -1,4 +1,4 @@
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Settings;
 
 [PublicData]
 public class TabViewSettings
