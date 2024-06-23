@@ -5,7 +5,7 @@ using Avalonia.Media.Imaging;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Toolbar;
-using SideScroll.Tabs.Tools;
+using SideScroll.Tabs.Tools.FileViewer;
 using SideScroll.UI.Avalonia.Utilities;
 
 namespace SideScroll.UI.Avalonia.Tabs;

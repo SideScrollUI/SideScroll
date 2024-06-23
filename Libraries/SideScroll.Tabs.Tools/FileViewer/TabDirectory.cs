@@ -2,7 +2,7 @@ using SideScroll.Utilities;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
 
-namespace SideScroll.Tabs.Tools;
+namespace SideScroll.Tabs.Tools.FileViewer;
 
 public class TabDirectory(DirectoryView directoryView) : ITab
 {

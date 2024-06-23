@@ -1,12 +1,12 @@
-namespace SideScroll.Tabs.Tools;
+namespace SideScroll.Tabs.Tools.FileViewer;
 
-public class TabFileBrowser(SelectFileDelegate? selectFileDelegate = null) : ITab
+public class TabFileViewer(SelectFileDelegate? selectFileDelegate = null) : ITab
 {
 	public SelectFileDelegate? SelectFileDelegate => selectFileDelegate;
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance(TabFileBrowser tab) : TabInstance, ITabAsync
+	public class Instance(TabFileViewer tab) : TabInstance, ITabAsync
 	{
 		public async Task LoadAsync(Call call, TabModel model)
 		{

@@ -2,7 +2,7 @@ using SideScroll.Collections;
 using SideScroll.Serialize;
 using SideScroll.Tasks;
 
-namespace SideScroll.Tabs.Tools;
+namespace SideScroll.Tabs.Tools.FileViewer;
 
 public class TabFileSerialized(string path) : ITab
 {

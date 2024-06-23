@@ -1,6 +1,6 @@
 using SideScroll.Serialize.DataRepos;
 
-namespace SideScroll.Tabs.Tools;
+namespace SideScroll.Tabs.Tools.FileViewer;
 
 public class FileNodeDataRepoView(string groupId, bool indexed = false, int? maxItems = null)
 {

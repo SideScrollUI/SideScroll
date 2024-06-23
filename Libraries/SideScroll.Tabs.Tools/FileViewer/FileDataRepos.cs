@@ -1,4 +1,4 @@
-namespace SideScroll.Tabs.Tools;
+namespace SideScroll.Tabs.Tools.FileViewer;
 
 public static class FileDataRepos
 {

@@ -1,4 +1,5 @@
 using SideScroll.Collections;
+using SideScroll.Tabs.Tools.FileViewer;
 
 namespace SideScroll.Tabs.Tools;
 
@@ -14,8 +15,8 @@ public class TabTools : ITab
 		{
 			model.Items = _items = new ItemCollectionUI<ListItem>
 			{
-				new("File Browser", new TabFileBrowser()),
-				new("File Selector", new TabFileBrowser(SelectFile)),
+				new("File Viewer", new TabFileViewer()),
+				new("File Selector", new TabFileViewer(SelectFile)),
 			};
 		}
 

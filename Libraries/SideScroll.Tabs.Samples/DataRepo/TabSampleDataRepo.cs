@@ -1,4 +1,4 @@
-using SideScroll.Tabs.Tools;
+using SideScroll.Tabs.Tools.FileViewer;
 using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Samples.DataRepo;

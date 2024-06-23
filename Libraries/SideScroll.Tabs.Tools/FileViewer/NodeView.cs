@@ -3,6 +3,7 @@ using SideScroll.Extensions;
 using SideScroll.Serialize.DataRepos;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using SideScroll.Tabs.Tools.FileViewer;
 
 namespace SideScroll.Tabs.Tools;
 
