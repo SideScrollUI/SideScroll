@@ -8,7 +8,10 @@ SideScroll is an AvaloniaUI library for exploring multiple paths of a tree at on
 * Create Links to share views with others
 * DataRepos manage your local saving & loading
 
-![SideScroll UI](/Images/Screenshots/ColumnTypes_CustomControl_Charts.png)
+#### Light Theme
+![Light Theme](/Images/Screenshots/ColumnTypes_CustomControl_Charts_Light.png)
+#### Dark Theme
+![Dark Theme](/Images/Screenshots/ColumnTypes_CustomControl_Charts_Dark.png)
 
 * [Development](Docs/Dev/Development.md)
 * [User Guide](Docs/UserGuide.md)

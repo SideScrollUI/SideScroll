@@ -50,8 +50,9 @@ public class TabSample : ITab
   - The most common `Items` are a collection of `ListItem`, which lets you set a label and object to display
   - When a row is selected, a child tab will be shown to the right based on the following criteria
     - If the object is an `ITab`, a `TabInstance` will be created
+	- If the object is a collection, a DataGrid will be shown for it
 	- If the object is a primitive type, a text editor will be shown
-	- Otherwise, all the fields and properties of an object will be displayed
+	- Otherwise, all the properties, fields, and `[Item]` methods of an object will be displayed
 
 ## Actions
 * You can declare actions for Tabs, which will show up as buttons
@@ -257,3 +258,5 @@ public class TabSampleToolbar : ITab
 ```
 
 ## Custom Controls
+- For more custom logic, you can add any Avalonia Control to the model by calling `model.AddObject(control)`
+- Any control created should be done so in the `LoadUI(Call call, TabModel model)` method since controls can only be created on the UI thread

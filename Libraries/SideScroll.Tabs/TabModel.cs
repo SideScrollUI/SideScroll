@@ -107,7 +107,9 @@ public class TabModel
 		obj ??= "(null)";
 
 		if (obj is ChartView)
+		{
 			MinDesiredWidth = 800;
+		}
 
 		TabObject tabObject = new()
 		{

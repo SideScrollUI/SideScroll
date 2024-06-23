@@ -21,8 +21,6 @@
     <None Remove="Icons\png\password.png" />
     <None Remove="Icons\png\paste.png" />
     <None Remove="Icons\png\paste_16.png" />
-    <None Remove="Icons\png\right-chevron.png" />
-    <None Remove="Icons\png\screenshot2.png" />
     <None Remove="Icons\png\search_right_light_16.png" />
     <None Remove="Icons\png\unlock.png" />
     <None Remove="Icons\svg\Add.svg" />
@@ -63,15 +61,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Icons\Logo\SideScroll.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Assets\hourglass64.png" />
     <EmbeddedResource Include="Assets\shutter64.png" />
-    <EmbeddedResource Include="Icons\png\info_20_759eeb.png" />
+    <EmbeddedResource Include="Icons\Logo\SideScroll.ico" />
     <EmbeddedResource Include="Icons\png\bookmark.png" />
     <EmbeddedResource Include="Icons\png\clear_search.png" />
+    <EmbeddedResource Include="Icons\png\info_20_759eeb.png" />
     <EmbeddedResource Include="Icons\png\info_24_759eeb.png" />
     <EmbeddedResource Include="Icons\png\password.png" />
     <EmbeddedResource Include="Icons\png\paste.png" />

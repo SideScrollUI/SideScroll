@@ -33,11 +33,15 @@ public class SelectedRow : IEquatable<SelectedRow>
 
 		// Use the DataValue's DataKey if no DataKey found
 		if (DataKey == null && DataValue != null)
+		{
 			DataKey = ObjectUtils.GetDataKey(DataValue);
+		}
 
 		Type type = obj.GetType();
 		if (Label == type.FullName)
+		{
 			Label = null;
+		}
 	}
 
 	public override bool Equals(object? obj)

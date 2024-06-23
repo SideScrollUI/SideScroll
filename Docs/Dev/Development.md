@@ -20,7 +20,7 @@
   - `Programs / SideScroll.Start.Avalonia`
 
 ## Modules
-* [Projects](Projects/Projects.md)
+* [Projects](Projects.md)
 * [AddingTabs](AddingTabs.md)
 * [Logs](Logs.md)
 * [Serializer](Serializer.md)
