@@ -1,5 +1,6 @@
 using SideScroll.Extensions;
 using SideScroll.Logs;
+using SideScroll.Serialize.Atlas;
 using System.IO.Compression;
 
 namespace SideScroll.Serialize;

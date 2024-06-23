@@ -2,7 +2,7 @@ using SideScroll.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace SideScroll.Serialize;
+namespace SideScroll.Serialize.Atlas.Schema;
 
 public class FieldSchema
 {

@@ -1,4 +1,6 @@
-namespace SideScroll.Serialize;
+using SideScroll.Serialize.Atlas.Schema;
+
+namespace SideScroll.Serialize.Atlas.TypeRepos;
 
 public class TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {

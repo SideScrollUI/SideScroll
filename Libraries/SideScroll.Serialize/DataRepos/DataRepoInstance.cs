@@ -1,3 +1,4 @@
+using SideScroll.Serialize.Atlas;
 using SideScroll.Utilities;
 
 namespace SideScroll.Serialize.DataRepos;

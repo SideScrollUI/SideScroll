@@ -1,6 +1,7 @@
+using SideScroll.Serialize.Atlas.Schema;
 using System.Diagnostics;
 
-namespace SideScroll.Serialize;
+namespace SideScroll.Serialize.Atlas.TypeRepos;
 
 public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {

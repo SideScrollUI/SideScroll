@@ -1,5 +1,5 @@
 using SideScroll.Collections;
-using SideScroll.Serialize;
+using SideScroll.Serialize.Atlas;
 using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Tools.FileViewer;

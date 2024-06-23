@@ -1,8 +1,9 @@
 using SideScroll.Logs;
+using SideScroll.Serialize.Atlas.Schema;
 using System.Collections;
 using System.Reflection;
 
-namespace SideScroll.Serialize;
+namespace SideScroll.Serialize.Atlas.TypeRepos;
 
 public class TypeRepoDictionary : TypeRepo
 {

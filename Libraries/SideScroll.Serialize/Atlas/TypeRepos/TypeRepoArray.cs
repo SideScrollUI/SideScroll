@@ -1,7 +1,8 @@
 using SideScroll.Logs;
+using SideScroll.Serialize.Atlas.Schema;
 using System.Collections;
 
-namespace SideScroll.Serialize;
+namespace SideScroll.Serialize.Atlas.TypeRepos;
 
 public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {

@@ -1,4 +1,5 @@
 using SideScroll.Extensions;
+using SideScroll.Serialize.Atlas;
 using System.Diagnostics;
 
 namespace SideScroll.Serialize.DataRepos;

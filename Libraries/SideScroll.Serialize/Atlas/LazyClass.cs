@@ -1,8 +1,9 @@
+using SideScroll.Serialize.Atlas.TypeRepos;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace SideScroll.Serialize;
+namespace SideScroll.Serialize.Atlas;
 
 public class TypeRef
 {

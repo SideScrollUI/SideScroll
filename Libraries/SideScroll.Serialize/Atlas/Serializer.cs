@@ -1,8 +1,10 @@
 using SideScroll.Logs;
+using SideScroll.Serialize.Atlas.Schema;
+using SideScroll.Serialize.Atlas.TypeRepos;
 using SideScroll.Tasks;
 using System.Diagnostics;
 
-namespace SideScroll.Serialize;
+namespace SideScroll.Serialize.Atlas;
 
 public class Header
 {
@@ -570,8 +572,8 @@ public class Serializer : IDisposable
 		TypeRepo typeRepo = GetOrCreateRepo(log, type);
 
 		if (typeRepo is
-		    TypeRepoPrimitive or
-		    Serialize.TypeRepoString or
+			TypeRepoPrimitive or
+			Atlas.TypeRepos.TypeRepoString or
 		    TypeRepoEnum or
 		    TypeRepoType)
 		{

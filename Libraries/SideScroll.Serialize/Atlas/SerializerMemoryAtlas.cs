@@ -1,6 +1,7 @@
+using SideScroll.Serialize.Atlas.TypeRepos;
 using System.Text;
 
-namespace SideScroll.Serialize;
+namespace SideScroll.Serialize.Atlas;
 
 public class SerializerMemorySideScroll : SerializerMemory
 {

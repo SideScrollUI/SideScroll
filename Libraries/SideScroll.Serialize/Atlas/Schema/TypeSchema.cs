@@ -4,7 +4,7 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace SideScroll.Serialize;
+namespace SideScroll.Serialize.Atlas.Schema;
 
 public class TypeSchema
 {

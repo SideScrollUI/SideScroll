@@ -1,4 +1,5 @@
 using SideScroll.Logs;
+using SideScroll.Serialize.Atlas;
 using SideScroll.Tasks;
 
 namespace SideScroll.Serialize;

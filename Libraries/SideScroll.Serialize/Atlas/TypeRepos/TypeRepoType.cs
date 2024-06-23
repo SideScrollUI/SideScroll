@@ -1,6 +1,7 @@
+using SideScroll.Serialize.Atlas.Schema;
 using System.Reflection;
 
-namespace SideScroll.Serialize;
+namespace SideScroll.Serialize.Atlas.TypeRepos;
 
 public class TypeRepoType(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {

@@ -1,6 +1,6 @@
 using SideScroll.Tasks;
 
-namespace SideScroll.Serialize;
+namespace SideScroll.Serialize.Atlas;
 
 public class SerializerFileSideScroll : SerializerFile
 {

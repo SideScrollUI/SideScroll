@@ -1,7 +1,8 @@
 using SideScroll.Logs;
+using SideScroll.Serialize.Atlas.Schema;
 using System.Diagnostics;
 
-namespace SideScroll.Serialize;
+namespace SideScroll.Serialize.Atlas.TypeRepos;
 
 public enum ObjectType
 {
