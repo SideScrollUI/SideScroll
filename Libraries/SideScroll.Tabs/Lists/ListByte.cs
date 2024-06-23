@@ -6,7 +6,7 @@ public class ListByte(int index, byte b)
 	public int Index => index;
 
 	public byte Byte { get; init; } = b;
-	public string Hex { get; init; } = BitConverter.ToString(new byte[] { b });
+	public string Hex { get; init; } = BitConverter.ToString([b]);
 	public char Char { get; init; } = Convert.ToChar(b);
 	public string Bits { get; init; } = Convert.ToString(b, 2).PadLeft(8, '0');
 

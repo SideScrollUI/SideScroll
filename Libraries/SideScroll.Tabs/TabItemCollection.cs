@@ -29,7 +29,9 @@ public class TabItemCollection(IList list, IEnumerable? filtered = null)
 
 			string? id = ObjectUtils.GetObjectId(obj);
 			if (id != null)
+			{
 				_keys.TryAdd(id, obj);
+			}
 		}
 
 		foreach (SelectedRow selectedRow in selectedRows)

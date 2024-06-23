@@ -30,7 +30,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	}
 
 	[Hidden]
-	public bool IsFormatted => (PropertyInfo.GetCustomAttribute<FormattedAttribute>() != null);
+	public bool IsFormatted => PropertyInfo.GetCustomAttribute<FormattedAttribute>() != null;
 
 	[Editing, InnerValue, WordWrap]
 	public override object? Value

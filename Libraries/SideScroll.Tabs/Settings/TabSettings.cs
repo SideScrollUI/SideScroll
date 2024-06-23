@@ -23,7 +23,9 @@ public class TabViewSettings
 				}
 			}
 			if (count > 1)
+			{
 				address += "[" + address + "] ";
+			}
 
 			return address;
 		}

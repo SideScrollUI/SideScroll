@@ -21,8 +21,8 @@ public class Bookmark
 	public string Path => (Name != null ? (Name + ":\n") : "") + Address;
 	public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
 	public TabBookmark TabBookmark { get; set; } = new();
-	public bool Imported { get; set; }
 	public BookmarkType BookmarkType { get; set; }
+	public bool Imported { get; set; }
 
 	public override string ToString() => Path;
 

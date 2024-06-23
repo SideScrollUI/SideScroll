@@ -1,8 +1,8 @@
-using SideScroll.Tasks;
 using SideScroll.Extensions;
 using SideScroll.Network.Http;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
+using SideScroll.Tasks;
 
 namespace SideScroll.Tabs;
 
@@ -33,9 +33,13 @@ public class Project
 		get
 		{
 			if (UserSettings.BookmarkPath != null)
+			{
 				return Paths.Combine("Bookmarks", UserSettings.BookmarkPath.HashSha256());
+			}
 			else
+			{
 				return Paths.Combine("Current");
+			}
 		}
 	}
 

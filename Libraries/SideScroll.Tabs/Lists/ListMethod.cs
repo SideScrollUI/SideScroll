@@ -59,11 +59,15 @@ public class ListMethod : ListMember
 
 		NameAttribute? attribute = MethodInfo.GetCustomAttribute<NameAttribute>();
 		if (attribute != null)
+		{
 			Name = attribute.Name;
+		}
 
 		ItemAttribute? itemAttribute = MethodInfo.GetCustomAttribute<ItemAttribute>();
 		if (itemAttribute != null && itemAttribute.Name != null)
+		{
 			Name = itemAttribute.Name;
+		}
 	}
 
 	/*public async Task<object> LoadAsync(Call call)
@@ -85,7 +89,9 @@ public class ListMethod : ListMember
 		var result = Task.Run(() => MethodInfo.Invoke(Object, parameters)).GetAwaiter().GetResult();
 
 		if (result is Task)
+		{
 			return (object)((dynamic)result).Result;
+		}
 
 		return result;
 	}

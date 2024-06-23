@@ -1,13 +1,13 @@
-using SideScroll.Tasks;
+using SideScroll.Collections;
 using SideScroll.Extensions;
+using SideScroll.Logs;
 using SideScroll.Serialize;
+using SideScroll.Serialize.Atlas.Schema;
 using SideScroll.Serialize.DataRepos;
+using SideScroll.Tasks;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using SideScroll.Collections;
-using SideScroll.Logs;
-using SideScroll.Serialize.Atlas.Schema;
 
 namespace SideScroll.Tabs;
 
@@ -178,7 +178,9 @@ public class TabInstance : IDisposable
 		TabInstance tabInstance = iTab.Create();
 
 		if (tabInstance.Project.LinkType == null)
+		{
 			tabInstance.Project = Project;
+		}
 		tabInstance.iTab = iTab;
 		tabInstance.ParentTabInstance = this;
 		//tabInstance.taskInstance = taskInstance.AddSubTask(taskInstance.call); // too slow?
@@ -190,7 +192,9 @@ public class TabInstance : IDisposable
 		ChildTabInstances.Clear();
 
 		if (!StaticModel)
+		{
 			Model.Clear();
+		}
 
 		foreach (TaskInstance taskInstance in Model.Tasks)
 		{

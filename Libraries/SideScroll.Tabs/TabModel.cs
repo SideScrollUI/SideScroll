@@ -1,9 +1,9 @@
 using SideScroll.Charts;
-using SideScroll.Tasks;
+using SideScroll.Collections;
 using SideScroll.Extensions;
+using SideScroll.Tasks;
 using System.Collections;
 using System.Reflection;
-using SideScroll.Collections;
 
 namespace SideScroll.Tabs;
 
@@ -211,12 +211,16 @@ public class TabModel
 			// should we databind columns to Value property in Nullable?
 			Type? underlyingType = Nullable.GetUnderlyingType(elementType);
 			if (underlyingType != null)
+			{
 				elementType = underlyingType;
+			}
 
 			Type genericType = typeof(ItemCollection<>).MakeGenericType(elementType);
 			IList iNewList = (IList)Activator.CreateInstance(genericType)!;
 			foreach (object child in list)
+			{
 				iNewList.Add(child);
+			}
 			ItemList.Add(iNewList);
 		}
 
@@ -240,7 +244,9 @@ public class TabModel
 		}
 
 		if (Object is IComparable)
+		{
 			sortedList = sortedList.OrderBy(x => x.Key).ToList();
+		}
 
 		ItemList.Add(new ItemCollection<DictionaryEntry>(sortedList));
 	}
