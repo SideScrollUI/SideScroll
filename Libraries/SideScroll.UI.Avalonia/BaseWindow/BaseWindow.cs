@@ -4,6 +4,7 @@ using Avalonia.Media;
 using Avalonia.Reactive;
 using Avalonia.Threading;
 using SideScroll.Tabs;
+using SideScroll.Tabs.Tools.FileViewer;
 using SideScroll.UI.Avalonia.Tabs;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Viewer;
