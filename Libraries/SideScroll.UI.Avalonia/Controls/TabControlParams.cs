@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using SideScroll.Attributes;
 using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;

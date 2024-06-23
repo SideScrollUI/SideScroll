@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using SideScroll.Attributes;
 using System.Diagnostics;
 using System.Reflection;
 

@@ -1,5 +1,6 @@
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using SideScroll.Attributes;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Themes;
 using System.Collections;

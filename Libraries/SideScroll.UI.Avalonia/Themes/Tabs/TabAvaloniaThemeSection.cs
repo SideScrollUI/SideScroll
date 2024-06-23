@@ -1,5 +1,9 @@
+using Avalonia.Controls;
+using Avalonia.Input;
+using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Tabs;
+using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Samples.Actions;
 using SideScroll.Tabs.Samples.Chart;
 using SideScroll.Tabs.Samples.DataGrid;
@@ -8,10 +12,7 @@ using SideScroll.Tabs.Samples.Params;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Controls;
 using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
-using Avalonia.Controls;
-using Avalonia.Input;
 using System.Collections;
-using SideScroll.Tabs.Lists;
 
 namespace SideScroll.UI.Avalonia.Themes.Tabs;
 

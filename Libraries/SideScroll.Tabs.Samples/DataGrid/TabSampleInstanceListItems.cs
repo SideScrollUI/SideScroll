@@ -1,3 +1,5 @@
+using SideScroll.Attributes;
+
 namespace SideScroll.Tabs.Samples.DataGrid;
 
 public class TabSampleInstanceListItems : ITab

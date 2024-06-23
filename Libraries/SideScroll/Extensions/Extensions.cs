@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using System.Collections;
 using System.Reflection;
 using System.Xml;

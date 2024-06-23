@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
+using SideScroll.Attributes;
 using SideScroll.Tabs.Lists;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;

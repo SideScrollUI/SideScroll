@@ -4,6 +4,7 @@ using SideScroll.Serialize.DataRepos;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using SideScroll.Tabs.Tools.FileViewer;
+using SideScroll.Attributes;
 
 namespace SideScroll.Tabs.Tools;
 

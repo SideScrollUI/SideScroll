@@ -1,4 +1,4 @@
-namespace SideScroll;
+namespace SideScroll.Attributes;
 
 // Params data
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]

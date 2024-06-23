@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Time;
 using System.Collections;

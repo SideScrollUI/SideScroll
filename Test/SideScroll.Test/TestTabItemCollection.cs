@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Attributes;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
 using System.Collections;

@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using SideScroll.Attributes;
 using SideScroll.Tabs.Lists;
 using SideScroll.UI.Avalonia.Controls.Converters;
 using SideScroll.UI.Avalonia.Themes;

@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Styling;
+using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Tabs;

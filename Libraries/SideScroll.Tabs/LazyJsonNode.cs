@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Extensions;
 using System.Json;
 

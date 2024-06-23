@@ -3,6 +3,7 @@ using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
+using SideScroll.Attributes;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
 

@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Logs;
 using System.ComponentModel;
 using System.Diagnostics;

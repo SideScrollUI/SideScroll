@@ -1,4 +1,4 @@
-namespace SideScroll;
+namespace SideScroll.Attributes;
 
 // Use the specified name instead of the field/property name
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]

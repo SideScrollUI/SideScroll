@@ -12,6 +12,7 @@ using SideScroll.UI.Avalonia.Utilities;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using SideScroll.Tabs.Lists;
+using SideScroll.Attributes;
 
 namespace SideScroll.UI.Avalonia.Controls;
 

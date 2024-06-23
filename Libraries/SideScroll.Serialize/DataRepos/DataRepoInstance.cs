@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Serialize.Atlas;
 using SideScroll.Utilities;
 

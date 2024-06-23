@@ -1,5 +1,4 @@
-//.Attributes ?
-namespace SideScroll;
+namespace SideScroll.Attributes;
 
 // When Cloning an object, anything marked with [Static] won't be deep copied
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]

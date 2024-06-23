@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Resources;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;

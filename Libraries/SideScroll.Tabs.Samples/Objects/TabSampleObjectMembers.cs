@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Tabs.Samples.Objects;

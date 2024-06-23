@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Toolbar;

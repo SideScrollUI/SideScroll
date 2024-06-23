@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
+using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;

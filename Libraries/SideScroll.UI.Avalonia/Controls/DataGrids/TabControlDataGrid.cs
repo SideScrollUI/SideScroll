@@ -9,6 +9,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using SideScroll.Attributes;
 using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Tabs;

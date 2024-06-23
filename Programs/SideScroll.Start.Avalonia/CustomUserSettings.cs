@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
 
 namespace SideScroll.Start.Avalonia;

@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Serialize;
 
 namespace SideScroll.Tabs.Bookmarks;

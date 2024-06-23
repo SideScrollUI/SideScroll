@@ -1,7 +1,9 @@
 using NUnit.Framework;
+using SideScroll.Attributes;
 using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
+using SideScroll.Tabs.Settings;
 using System.Reflection;
 
 namespace SideScroll.Test;

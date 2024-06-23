@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Tabs.Samples.Exceptions;
 
 namespace SideScroll.Tabs.Samples.Loading;

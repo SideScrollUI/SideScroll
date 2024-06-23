@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs;

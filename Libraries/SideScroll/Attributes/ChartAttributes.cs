@@ -1,4 +1,4 @@
-namespace SideScroll;
+namespace SideScroll.Attributes;
 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class XAxisAttribute : Attribute;

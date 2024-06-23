@@ -1,4 +1,4 @@
-namespace SideScroll;
+namespace SideScroll.Attributes;
 
 // Allows property to be edited in UI
 [AttributeUsage(AttributeTargets.Property)]

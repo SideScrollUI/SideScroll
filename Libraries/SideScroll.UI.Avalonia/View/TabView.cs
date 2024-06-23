@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
