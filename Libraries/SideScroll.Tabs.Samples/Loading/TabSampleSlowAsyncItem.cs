@@ -1,3 +1,5 @@
+using SideScroll.Tabs.Lists;
+
 namespace SideScroll.Tabs.Samples.Loading;
 
 public class TabSampleSlowAsyncItem : ITab

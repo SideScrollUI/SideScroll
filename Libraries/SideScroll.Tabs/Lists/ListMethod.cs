@@ -2,7 +2,7 @@ using SideScroll.Collections;
 using SideScroll.Extensions;
 using System.Reflection;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Lists;
 
 public class ListMethod : ListMember
 {

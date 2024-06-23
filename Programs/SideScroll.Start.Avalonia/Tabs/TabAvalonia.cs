@@ -1,5 +1,6 @@
 using SideScroll.Start.Avalonia.Charts;
 using SideScroll.Tabs;
+using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Samples;
 using SideScroll.UI.Avalonia.Samples.Controls;
 using SideScroll.UI.Avalonia.Tabs;

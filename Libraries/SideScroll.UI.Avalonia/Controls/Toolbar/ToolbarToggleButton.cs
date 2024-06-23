@@ -1,5 +1,5 @@
 using SideScroll.Resources;
-using SideScroll.Tabs;
+using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
 using System.ComponentModel;
 using System.Windows.Input;

@@ -1,4 +1,5 @@
 using SideScroll.Tabs;
+using SideScroll.Tabs.Lists;
 using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
 
 namespace SideScroll.UI.Avalonia.Samples.Controls;

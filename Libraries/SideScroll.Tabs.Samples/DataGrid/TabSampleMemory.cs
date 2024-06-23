@@ -1,3 +1,5 @@
+using SideScroll.Tabs.Lists;
+
 namespace SideScroll.Tabs.Samples.DataGrid;
 
 public class TabSampleMemory : ITab
@@ -13,7 +15,9 @@ public class TabSampleMemory : ITab
 			//_bytes = new byte[500000000]; // 500 MB, creates 200k strings using ListToString
 			_bytes = new byte[128];
 			for (int i = 0; i < _bytes.Length; i++)
+			{
 				_bytes[i] = (byte)i;
+			}
 
 			model.Items = new List<ListItem>
 			{

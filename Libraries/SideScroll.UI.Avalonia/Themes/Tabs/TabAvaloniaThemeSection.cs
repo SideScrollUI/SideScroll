@@ -11,6 +11,7 @@ using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
 using Avalonia.Controls;
 using Avalonia.Input;
 using System.Collections;
+using SideScroll.Tabs.Lists;
 
 namespace SideScroll.UI.Avalonia.Themes.Tabs;
 

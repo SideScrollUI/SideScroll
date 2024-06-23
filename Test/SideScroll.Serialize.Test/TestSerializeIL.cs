@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Serialize.Atlas.TypeRepos;
 using System.Reflection;
 using System.Reflection.Emit;
 

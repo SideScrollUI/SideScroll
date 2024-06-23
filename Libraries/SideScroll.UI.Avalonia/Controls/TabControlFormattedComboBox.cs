@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using SideScroll.Extensions;
-using SideScroll.Tabs;
+using SideScroll.Tabs.Lists;
 using System.Collections;
 using System.Reflection;
 

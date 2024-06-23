@@ -1,7 +1,7 @@
 using SideScroll.Extensions;
 using System.Reflection;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Lists;
 
 public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 {

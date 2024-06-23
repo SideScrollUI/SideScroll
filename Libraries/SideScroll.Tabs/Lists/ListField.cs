@@ -3,7 +3,7 @@ using SideScroll.Extensions;
 using SideScroll.Utilities;
 using System.Reflection;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Lists;
 
 public class ListField : ListMember, IPropertyEditable
 {

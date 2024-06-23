@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Logs;
+using SideScroll.Serialize.Atlas;
 
 namespace SideScroll.Serialize.Test;
 

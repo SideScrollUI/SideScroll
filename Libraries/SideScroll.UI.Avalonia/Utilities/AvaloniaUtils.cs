@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
-using SideScroll.Tabs;
+using SideScroll.Tabs.Lists;
 using SideScroll.UI.Avalonia.View;
 using System.ComponentModel.DataAnnotations;
 

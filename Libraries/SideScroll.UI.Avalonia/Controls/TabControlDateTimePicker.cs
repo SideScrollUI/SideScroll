@@ -7,12 +7,12 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using SideScroll.Utilities;
 using SideScroll.Resources;
-using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Controls.Converters;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Utilities;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using SideScroll.Tabs.Lists;
 
 namespace SideScroll.UI.Avalonia.Controls;
 

@@ -8,6 +8,7 @@ using AvaloniaEdit.Highlighting;
 using SideScroll.Utilities;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Themes;
+using SideScroll.Tabs.Lists;
 
 namespace SideScroll.UI.Avalonia.Controls.TextEditor;
 

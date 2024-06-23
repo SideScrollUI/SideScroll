@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Serialize.Atlas;
 using SideScroll.Time;
 
 namespace SideScroll.Serialize.Test;

@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Lists;
 
 // implement INotifyPropertyChanged to prevent memory leaks
 public class ListPair(object key, object? value, object? obj = null, int? maxDesiredWidth = null)

@@ -5,6 +5,7 @@ using Avalonia.Media;
 using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Tabs;
+using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Themes;
 using System.Reflection;

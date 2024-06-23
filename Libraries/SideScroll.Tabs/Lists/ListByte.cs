@@ -1,4 +1,4 @@
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Lists;
 
 public class ListByte(int index, byte b)
 {

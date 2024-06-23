@@ -2,7 +2,7 @@ using SideScroll.Collections;
 using SideScroll.Utilities;
 using System.Collections;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Lists;
 
 [Skippable]
 public class ListToString

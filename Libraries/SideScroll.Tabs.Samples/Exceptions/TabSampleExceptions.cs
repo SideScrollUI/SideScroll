@@ -1,3 +1,5 @@
+using SideScroll.Tabs.Lists;
+
 namespace SideScroll.Tabs.Samples.Exceptions;
 
 public class TabSampleExceptions : ITab

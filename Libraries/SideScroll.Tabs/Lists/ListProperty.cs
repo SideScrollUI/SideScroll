@@ -4,7 +4,7 @@ using SideScroll.Utilities;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Lists;
 
 public interface IPropertyEditable
 {

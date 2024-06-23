@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Lists;
 
 // implement INotifyPropertyChanged to prevent memory leaks
 public class ListItem<TKey, TValue>(TKey key, TValue value, object obj) : INotifyPropertyChanged

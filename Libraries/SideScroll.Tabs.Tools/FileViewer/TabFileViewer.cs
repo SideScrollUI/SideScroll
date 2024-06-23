@@ -1,3 +1,5 @@
+using SideScroll.Tabs.Lists;
+
 namespace SideScroll.Tabs.Tools.FileViewer;
 
 public class TabFileViewer(SelectFileDelegate? selectFileDelegate = null) : ITab
