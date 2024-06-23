@@ -1,4 +1,3 @@
-using SideScroll.Extensions;
 using LiveChartsCore;
 using LiveChartsCore.Drawing;
 using LiveChartsCore.Kernel;
@@ -9,6 +8,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.Painting.ImageFilters;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using LiveChartsCore.VisualElements;
+using SideScroll.Extensions;
 using SkiaSharp;
 
 namespace SideScroll.UI.Avalonia.Charts.LiveCharts;

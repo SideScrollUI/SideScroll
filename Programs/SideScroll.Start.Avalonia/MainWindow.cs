@@ -1,10 +1,10 @@
+using Avalonia.Controls;
 using SideScroll.Resources;
 using SideScroll.Start.Avalonia.Tabs;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia;
 using SideScroll.UI.Avalonia.Charts.LiveCharts;
 using SideScroll.UI.Avalonia.ScreenCapture;
-using Avalonia.Controls;
 
 namespace SideScroll.Start.Avalonia;
 

@@ -1,7 +1,3 @@
-using SideScroll.Extensions;
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Utilities;
-using SideScroll.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -13,12 +9,16 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using SideScroll.Collections;
+using SideScroll.Extensions;
+using SideScroll.Tabs;
+using SideScroll.UI.Avalonia.Utilities;
+using SideScroll.UI.Avalonia.View;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using SideScroll.Collections;
 
 namespace SideScroll.UI.Avalonia.Controls.DataGrids;
 

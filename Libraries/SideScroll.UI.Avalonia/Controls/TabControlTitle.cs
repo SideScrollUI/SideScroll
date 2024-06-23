@@ -1,10 +1,10 @@
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using SideScroll.Tabs;
+using SideScroll.UI.Avalonia.Utilities;
 
 namespace SideScroll.UI.Avalonia.Controls;
 

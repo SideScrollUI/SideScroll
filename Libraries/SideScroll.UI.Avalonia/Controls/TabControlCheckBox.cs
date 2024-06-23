@@ -1,8 +1,8 @@
-using SideScroll.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
+using SideScroll.Tabs;
 
 namespace SideScroll.UI.Avalonia.Controls;
 

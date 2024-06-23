@@ -1,3 +1,7 @@
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Threading;
 using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
@@ -5,10 +9,6 @@ using SideScroll.Tabs;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Controls;
 using SideScroll.UI.Avalonia.Utilities;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Media;
-using Avalonia.Threading;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 

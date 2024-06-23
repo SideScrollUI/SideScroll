@@ -1,9 +1,3 @@
-using SideScroll.Utilities;
-using SideScroll.Resources;
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Controls.Converters;
-using SideScroll.UI.Avalonia.Themes;
-using SideScroll.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -11,6 +5,12 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using SideScroll.Utilities;
+using SideScroll.Resources;
+using SideScroll.Tabs;
+using SideScroll.UI.Avalonia.Controls.Converters;
+using SideScroll.UI.Avalonia.Themes;
+using SideScroll.UI.Avalonia.Utilities;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 

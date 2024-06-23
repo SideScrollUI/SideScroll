@@ -1,5 +1,5 @@
-using SideScroll.Tabs;
 using NUnit.Framework;
+using SideScroll.Tabs;
 using System.Collections;
 
 namespace SideScroll.Test;

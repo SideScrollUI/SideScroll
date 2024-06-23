@@ -1,7 +1,7 @@
-using SideScroll.UI.Avalonia.Themes;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using SideScroll.UI.Avalonia.Themes;
 
 namespace SideScroll.UI.Avalonia.Controls.Toolbar;
 

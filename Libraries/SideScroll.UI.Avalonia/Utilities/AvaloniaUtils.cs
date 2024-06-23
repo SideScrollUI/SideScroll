@@ -1,11 +1,11 @@
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
+using SideScroll.Tabs;
+using SideScroll.UI.Avalonia.View;
 using System.ComponentModel.DataAnnotations;
 
 namespace SideScroll.UI.Avalonia.Utilities;

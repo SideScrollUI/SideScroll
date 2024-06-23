@@ -1,15 +1,15 @@
-using SideScroll.Extensions;
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Utilities;
-using SideScroll.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using SideScroll.Collections;
+using SideScroll.Extensions;
+using SideScroll.Tabs;
+using SideScroll.UI.Avalonia.Utilities;
+using SideScroll.UI.Avalonia.View;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using SideScroll.Collections;
 
 namespace SideScroll.UI.Avalonia.Controls;
 

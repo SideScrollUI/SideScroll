@@ -1,10 +1,3 @@
-using SideScroll.Charts;
-using SideScroll.Extensions;
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Controls;
-using SideScroll.UI.Avalonia.Themes;
-using SideScroll.UI.Avalonia.Utilities;
-using SideScroll.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -20,10 +13,17 @@ using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Avalonia;
 using LiveChartsCore.SkiaSharpView.Painting;
+using SideScroll.Charts;
+using SideScroll.Collections;
+using SideScroll.Extensions;
+using SideScroll.Tabs;
+using SideScroll.Time;
+using SideScroll.UI.Avalonia.Controls;
+using SideScroll.UI.Avalonia.Themes;
+using SideScroll.UI.Avalonia.Utilities;
+using SideScroll.UI.Avalonia.View;
 using SkiaSharp;
 using System.Diagnostics;
-using SideScroll.Time;
-using SideScroll.Collections;
 
 namespace SideScroll.UI.Avalonia.Charts.LiveCharts;
 

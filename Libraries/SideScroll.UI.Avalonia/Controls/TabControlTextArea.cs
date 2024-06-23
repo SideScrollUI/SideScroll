@@ -1,10 +1,10 @@
-using SideScroll.UI.Avalonia.Themes;
-using SideScroll.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
+using SideScroll.UI.Avalonia.Themes;
+using SideScroll.UI.Avalonia.Utilities;
 
 namespace SideScroll.UI.Avalonia.Controls;
 

@@ -1,10 +1,10 @@
+using Avalonia.Controls;
 using SideScroll.Charts;
+using SideScroll.Collections;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Samples.Chart;
-using SideScroll.UI.Avalonia.Charts.LiveCharts;
-using Avalonia.Controls;
 using SideScroll.Time;
-using SideScroll.Collections;
+using SideScroll.UI.Avalonia.Charts.LiveCharts;
 
 namespace SideScroll.Start.Avalonia.Charts;
 

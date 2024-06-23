@@ -1,5 +1,5 @@
-using SideScroll.Resources;
 using Avalonia.Media;
+using SideScroll.Resources;
 
 namespace SideScroll.UI.Avalonia.Themes;
 

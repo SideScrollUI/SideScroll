@@ -1,10 +1,10 @@
-using SideScroll.Resources;
-using SideScroll.UI.Avalonia.Controls.Toolbar;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
+using SideScroll.Resources;
+using SideScroll.UI.Avalonia.Controls.Toolbar;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SideScroll.UI.Avalonia.Controls;

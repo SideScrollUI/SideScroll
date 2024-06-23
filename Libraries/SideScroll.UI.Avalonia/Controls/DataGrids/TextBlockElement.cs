@@ -1,9 +1,9 @@
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using SideScroll.Tabs;
+using SideScroll.UI.Avalonia.Utilities;
 using System.Reflection;
 
 namespace SideScroll.UI.Avalonia.Controls.DataGrids;

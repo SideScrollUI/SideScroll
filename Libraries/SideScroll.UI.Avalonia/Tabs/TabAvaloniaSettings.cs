@@ -1,11 +1,11 @@
+using Avalonia;
+using Avalonia.Styling;
 using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Themes.Tabs;
-using Avalonia;
-using Avalonia.Styling;
 
 namespace SideScroll.UI.Avalonia.Tabs;
 

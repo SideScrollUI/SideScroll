@@ -1,9 +1,3 @@
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Controls;
-using SideScroll.UI.Avalonia.Tabs;
-using SideScroll.UI.Avalonia.Themes;
-using SideScroll.UI.Avalonia.Utilities;
-using SideScroll.UI.Avalonia.View;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -11,6 +5,12 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Threading;
+using SideScroll.Tabs;
+using SideScroll.UI.Avalonia.Controls;
+using SideScroll.UI.Avalonia.Tabs;
+using SideScroll.UI.Avalonia.Themes;
+using SideScroll.UI.Avalonia.Utilities;
+using SideScroll.UI.Avalonia.View;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SideScroll.UI.Avalonia.Viewer;

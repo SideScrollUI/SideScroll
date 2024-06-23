@@ -1,15 +1,15 @@
-using SideScroll.Utilities;
-using SideScroll.Extensions;
 using Avalonia.Media;
 using Avalonia.Threading;
 using LiveChartsCore.Kernel;
 using LiveChartsCore.SkiaSharpView.Painting;
+using SideScroll.Collections;
+using SideScroll.Extensions;
+using SideScroll.Time;
+using SideScroll.Utilities;
 using SkiaSharp;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
-using SideScroll.Collections;
-using SideScroll.Time;
 
 namespace SideScroll.UI.Avalonia.Charts.LiveCharts;
 

@@ -1,12 +1,12 @@
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Layout;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Controls;
 using SideScroll.UI.Avalonia.Controls.Toolbar;
 using SideScroll.UI.Avalonia.Themes;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Layout;
 
 namespace SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
 

@@ -1,15 +1,15 @@
-using System.Windows.Input;
-using SideScroll.Tasks;
-using SideScroll.Resources;
-using SideScroll.Tabs.Toolbar;
-using SideScroll.UI.Avalonia.Themes;
-using SideScroll.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
+using SideScroll.Resources;
+using SideScroll.Tasks;
+using SideScroll.Tabs.Toolbar;
+using SideScroll.UI.Avalonia.Themes;
+using SideScroll.UI.Avalonia.Utilities;
+using System.Windows.Input;
 
 namespace SideScroll.UI.Avalonia.Controls.Toolbar;
 

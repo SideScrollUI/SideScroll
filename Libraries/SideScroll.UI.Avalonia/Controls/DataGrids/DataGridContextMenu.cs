@@ -1,10 +1,10 @@
+using Avalonia.Collections;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 using SideScroll.Extensions;
 using SideScroll.UI.Avalonia.Controls.Converters;
 using SideScroll.UI.Avalonia.Utilities;
 using SideScroll.UI.Avalonia.View;
-using Avalonia.Collections;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
 
 namespace SideScroll.UI.Avalonia.Controls.DataGrids;
 

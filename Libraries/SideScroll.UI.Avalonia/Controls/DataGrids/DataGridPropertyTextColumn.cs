@@ -1,10 +1,10 @@
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Controls.Converters;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Utilities;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Data;
 using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;

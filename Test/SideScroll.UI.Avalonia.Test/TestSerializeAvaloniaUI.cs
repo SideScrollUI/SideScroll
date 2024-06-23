@@ -1,7 +1,7 @@
-using SideScroll.Serialize;
-using SideScroll.Tabs;
 using Avalonia.Media;
 using NUnit.Framework;
+using SideScroll.Serialize;
+using SideScroll.Tabs;
 
 namespace SideScroll.UI.Avalonia.Test;
 

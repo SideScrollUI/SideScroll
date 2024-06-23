@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using SideScroll.Collections;
+using SideScroll.Time;
 
 namespace SideScroll.Test;
 

@@ -1,6 +1,6 @@
-using SideScroll.Resources;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
+using SideScroll.Resources;
 using System.Reflection;
 
 namespace SideScroll.UI.Avalonia;

@@ -1,8 +1,8 @@
+using Avalonia.Media;
+using Avalonia.Svg.Skia;
 using SideScroll.Collections;
 using SideScroll.Resources;
 using SideScroll.UI.Avalonia.Themes;
-using Avalonia.Media;
-using Avalonia.Svg.Skia;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 

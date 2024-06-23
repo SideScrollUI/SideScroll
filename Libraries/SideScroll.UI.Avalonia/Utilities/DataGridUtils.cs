@@ -1,5 +1,5 @@
-using SideScroll.Extensions;
 using Avalonia.Media;
+using SideScroll.Extensions;
 using System.Collections;
 using System.Text;
 

@@ -1,6 +1,6 @@
-using SideScroll.Utilities;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Tools;
 

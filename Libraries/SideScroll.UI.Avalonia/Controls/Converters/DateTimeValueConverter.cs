@@ -1,6 +1,6 @@
-using SideScroll.Utilities;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
+using SideScroll.Utilities;
 using System.Globalization;
 
 namespace SideScroll.UI.Avalonia.Controls.Converters;

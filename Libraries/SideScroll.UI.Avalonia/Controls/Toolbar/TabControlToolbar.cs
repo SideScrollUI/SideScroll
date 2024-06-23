@@ -1,12 +1,12 @@
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Layout;
+using Avalonia.Media;
 using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Themes;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Layout;
-using Avalonia.Media;
 using System.Reflection;
 using System.Windows.Input;
 

@@ -1,6 +1,3 @@
-using SideScroll.Utilities;
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Themes;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -8,6 +5,9 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
+using SideScroll.Utilities;
+using SideScroll.Tabs;
+using SideScroll.UI.Avalonia.Themes;
 
 namespace SideScroll.UI.Avalonia.Controls.TextEditor;
 

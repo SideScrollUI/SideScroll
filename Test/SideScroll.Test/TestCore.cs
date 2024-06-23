@@ -1,5 +1,5 @@
-using SideScroll.Extensions;
 using NUnit.Framework;
+using SideScroll.Extensions;
 
 namespace SideScroll.Test;
 

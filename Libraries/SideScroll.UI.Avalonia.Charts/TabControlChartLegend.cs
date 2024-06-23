@@ -1,10 +1,10 @@
-using SideScroll.Charts;
-using SideScroll.UI.Avalonia.Controls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
+using SideScroll.Charts;
 using SideScroll.Collections;
+using SideScroll.UI.Avalonia.Controls;
 
 namespace SideScroll.UI.Avalonia.Charts;
 

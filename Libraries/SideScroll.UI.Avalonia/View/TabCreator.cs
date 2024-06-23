@@ -1,8 +1,8 @@
-using SideScroll.Utilities;
-using SideScroll.Extensions;
-using SideScroll.UI.Avalonia.Tabs;
-using SideScroll.Tabs;
 using Avalonia.Controls;
+using SideScroll.Extensions;
+using SideScroll.Utilities;
+using SideScroll.Tabs;
+using SideScroll.UI.Avalonia.Tabs;
 using System.Diagnostics;
 
 namespace SideScroll.UI.Avalonia.View;

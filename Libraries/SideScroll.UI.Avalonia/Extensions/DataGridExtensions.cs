@@ -1,7 +1,7 @@
-using SideScroll.Utilities;
-using SideScroll.UI.Avalonia.Controls.DataGrids;
 using Avalonia.Controls;
 using Avalonia.Data;
+using SideScroll.Utilities;
+using SideScroll.UI.Avalonia.Controls.DataGrids;
 using System.Collections;
 using System.Reflection;
 using System.Text;

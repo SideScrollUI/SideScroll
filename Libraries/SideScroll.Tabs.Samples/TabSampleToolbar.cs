@@ -1,7 +1,7 @@
-using SideScroll.Utilities;
 using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Samples;
 

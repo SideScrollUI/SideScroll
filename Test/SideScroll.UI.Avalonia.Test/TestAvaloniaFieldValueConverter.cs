@@ -1,5 +1,5 @@
-using SideScroll.UI.Avalonia.Controls.Converters;
 using NUnit.Framework;
+using SideScroll.UI.Avalonia.Controls.Converters;
 using System.Globalization;
 
 namespace SideScroll.UI.Avalonia.Test;

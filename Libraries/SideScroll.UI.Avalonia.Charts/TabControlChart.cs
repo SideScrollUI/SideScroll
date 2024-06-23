@@ -1,16 +1,16 @@
-using SideScroll.Charts;
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Controls;
-using SideScroll.UI.Avalonia.Themes;
-using SideScroll.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
+using SideScroll.Charts;
+using SideScroll.Collections;
+using SideScroll.Tabs;
+using SideScroll.UI.Avalonia.Controls;
+using SideScroll.UI.Avalonia.Themes;
+using SideScroll.UI.Avalonia.Utilities;
 using System.Collections;
 using System.Reflection;
-using SideScroll.Collections;
 
 namespace SideScroll.UI.Avalonia.Charts;
 

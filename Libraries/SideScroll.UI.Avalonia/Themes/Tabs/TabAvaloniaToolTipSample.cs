@@ -1,9 +1,9 @@
+using Avalonia.Controls;
+using Avalonia.Threading;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Controls;
-using Avalonia.Controls;
-using Avalonia.Threading;
 
 namespace SideScroll.UI.Avalonia.Themes.Tabs;
 

@@ -1,13 +1,13 @@
-using SideScroll.Tabs;
-using SideScroll.Tabs.Tools;
-using SideScroll.UI.Avalonia.Tabs;
-using SideScroll.UI.Avalonia.Themes;
-using SideScroll.UI.Avalonia.Viewer;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Reactive;
 using Avalonia.Threading;
+using SideScroll.Tabs;
+using SideScroll.Tabs.Tools;
+using SideScroll.UI.Avalonia.Tabs;
+using SideScroll.UI.Avalonia.Themes;
+using SideScroll.UI.Avalonia.Viewer;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 

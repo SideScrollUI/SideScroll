@@ -1,5 +1,5 @@
-using SideScroll.Extensions;
 using Avalonia.Data.Converters;
+using SideScroll.Extensions;
 using System.Globalization;
 
 namespace SideScroll.UI.Avalonia.Controls.Converters;

@@ -1,9 +1,9 @@
-using SideScroll.Extensions;
-using SideScroll.Tabs;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
+using SideScroll.Extensions;
+using SideScroll.Tabs;
 using System.Collections;
 using System.Reflection;
 

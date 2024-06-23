@@ -1,8 +1,3 @@
-using SideScroll.Utilities;
-using SideScroll.Tabs;
-using SideScroll.UI.Avalonia.Controls.Converters;
-using SideScroll.UI.Avalonia.Themes;
-using SideScroll.UI.Avalonia.Utilities;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
@@ -10,6 +5,11 @@ using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
+using SideScroll.Utilities;
+using SideScroll.Tabs;
+using SideScroll.UI.Avalonia.Controls.Converters;
+using SideScroll.UI.Avalonia.Themes;
+using SideScroll.UI.Avalonia.Utilities;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 

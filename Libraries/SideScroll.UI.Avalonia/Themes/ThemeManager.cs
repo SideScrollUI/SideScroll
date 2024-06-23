@@ -1,7 +1,7 @@
-using SideScroll.Serialize.DataRepos;
-using SideScroll.Tabs;
 using Avalonia;
 using Avalonia.Styling;
+using SideScroll.Serialize.DataRepos;
+using SideScroll.Tabs;
 
 namespace SideScroll.UI.Avalonia.Themes;
 
