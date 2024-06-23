@@ -1,4 +1,5 @@
 using SideScroll.Extensions;
+using SideScroll.Tabs.Bookmarks;
 using System.Collections;
 using System.Reflection;
 using System.Text.RegularExpressions;

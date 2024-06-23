@@ -1,7 +1,7 @@
 using SideScroll.Extensions;
 using SideScroll.Serialize;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Bookmarks;
 
 // Display Class
 public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerTab

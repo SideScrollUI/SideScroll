@@ -1,6 +1,6 @@
 using SideScroll.Serialize;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Bookmarks;
 
 public class BookmarkNavigator
 {

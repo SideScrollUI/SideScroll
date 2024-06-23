@@ -1,4 +1,4 @@
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Bookmarks;
 
 public class Linker
 {

@@ -4,6 +4,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using SideScroll.Tabs;
+using SideScroll.Tabs.Bookmarks;
 using SideScroll.UI.Avalonia.Utilities;
 
 namespace SideScroll.UI.Avalonia.Controls;

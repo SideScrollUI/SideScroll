@@ -2,6 +2,7 @@ using SideScroll.Extensions;
 using SideScroll.Network.Http;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
+using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tasks;
 
 namespace SideScroll.Tabs;

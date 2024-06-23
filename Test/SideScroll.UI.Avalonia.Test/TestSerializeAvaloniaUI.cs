@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SideScroll.Serialize;
 using SideScroll.Serialize.Atlas;
 using SideScroll.Tabs;
+using SideScroll.Tabs.Bookmarks;
 
 namespace SideScroll.UI.Avalonia.Test;
 

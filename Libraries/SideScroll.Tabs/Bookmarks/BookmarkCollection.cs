@@ -1,7 +1,7 @@
 using SideScroll.Collections;
 using SideScroll.Serialize.DataRepos;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Bookmarks;
 
 public class BookmarkCollection
 {

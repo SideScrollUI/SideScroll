@@ -1,5 +1,6 @@
 using SideScroll.Resources;
 using SideScroll.Tabs;
+using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.UI.Avalonia.Tabs;

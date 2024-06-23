@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace SideScroll.Tabs;
+namespace SideScroll.Tabs.Bookmarks;
 
 /*public class DataRepoItem
 {

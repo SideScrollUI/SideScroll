@@ -1,4 +1,5 @@
 using SideScroll.Serialize;
+using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Tabs.Samples;

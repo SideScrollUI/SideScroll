@@ -4,6 +4,7 @@ using SideScroll.Utilities;
 using SideScroll.Tabs;
 using SideScroll.UI.Avalonia.Tabs;
 using System.Diagnostics;
+using SideScroll.Tabs.Bookmarks;
 
 namespace SideScroll.UI.Avalonia.View;
 
