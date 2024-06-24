@@ -21,14 +21,12 @@
 
 You can save a link for any location in the UI. Override the `Linker` class to add new methods that add and retrieve links.
 
-![Bookmarks](/../Images/Screenshots/bookmarks.png)
+![Links](../Images/Screenshots/Links.png)
 
 ## Widescreen monitor recommended
 
 SideScroll automatically displays all entries in a recursive Parent->Child->Sub-Child...and will keep going until it hits the edge of your screen or an object that can't be expanded. Because of this, entries can easily get to be 10-20 levels deep. SideScroll does include some autoscrolling capability, but it really shines with a widescreen monitor. It's much easier to use when everything is visible at once.
 
-![Widescreen](/../Images/Screenshots/widescreen.png)
-
 ## Theming
-- You can switch between Light & Dark mode in the Settings, as well as define your own custom theem
+- You can switch between Light & Dark mode in the Settings, as well as define your own custom theme
 - Themes can be shared as json by clicking the export & import buttons

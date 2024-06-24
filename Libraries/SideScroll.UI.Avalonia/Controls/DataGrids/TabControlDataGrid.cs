@@ -642,10 +642,14 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 				};
 
 				if (attributeMinWidth != null)
+				{
 					textColumn.MinDesiredWidth = attributeMinWidth.MinWidth;
+				}
 
 				if (attributeAutoSize != null)
+				{
 					textColumn.AutoSize = true;
+				}
 
 				textColumn.ScanItemAttributes(List!);
 

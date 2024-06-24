@@ -6,6 +6,10 @@
     <Configurations>Debug;Release;DebugX86</Configurations>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Description>$(SideScrollDescription)</Description>
+    <PackageProjectUrl>$(SideScrollPackageProjectUrl)</PackageProjectUrl>
+    <PackageTags>$(SideScrollPackageTags)</PackageTags>
+    <PackageIcon>$(SideScrollPackageIcon)</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>

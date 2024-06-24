@@ -5,7 +5,26 @@
     <Version>$(SideScrollVersion)</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Description>$(SideScrollDescription)</Description>
+    <RepositoryUrl>$(SideScrollRepositoryUrl)</RepositoryUrl>
+    <Authors>$(SideScrollAuthors)</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>$(SideScrollPackageProjectUrl)</PackageProjectUrl>
+    <PackageTags>$(SideScrollPackageTags)</PackageTags>
+    <PackageIcon>$(SideScrollPackageIcon)</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Images\Logo\png\SideScroll_128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc2" />

@@ -808,9 +808,8 @@ public class TabView : Grid, IDisposable
 	private List<Control> CreateAllChildControls(bool recreate, out Dictionary<object, Control> newChildControls)
 	{
 		Dictionary<object, Control> oldChildControls = recreate ? [] : _tabChildControls!.GridControls;
-		newChildControls = new Dictionary<object, Control>();
-		var orderedChildControls = new List<Control>();
-		//AddNotes(newChildControls, oldChildControls, orderedChildControls);
+		newChildControls = [];
+		List<Control> orderedChildControls = [];
 
 		if (Instance is ITabSelector tabSelector && tabSelector.SelectedItems != null)
 		{
