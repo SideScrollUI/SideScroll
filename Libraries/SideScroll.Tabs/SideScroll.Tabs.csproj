@@ -16,6 +16,8 @@
     <PackageTags>$(SideScrollPackageTags)</PackageTags>
     <PackageIcon>$(SideScrollPackageIcon)</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

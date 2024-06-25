@@ -1,8 +1,9 @@
 <Project>
   <PropertyGroup>
+    <SideScrollVersion>0.1</SideScrollVersion>
     <AvaloniaVersion>11.0.11</AvaloniaVersion>
     <AvaloniaEditVersion>11.0.6</AvaloniaEditVersion>
-    <SideScrollVersion>0.11.0.11</SideScrollVersion>
+
     <SideScrollDescription>SideScroll is a cross platform AvaloniaUI library for navigating through tabs sideways.</SideScrollDescription>
     <SideScrollPackageIcon>SideScroll_128.png</SideScrollPackageIcon>
     <SideScrollRepositoryUrl>https://github.com/garyhertel/SideScroll</SideScrollRepositoryUrl>
