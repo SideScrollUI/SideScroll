@@ -8,4 +8,5 @@ public class TabSampleParams
 	public static TabSampleParamsDataTabs DataTabs => new();
 	public static TabSampleParamsCollection Collection => new();
 	public static TabSampleParamsTasks Tasks => new();
+	public static TabSampleParamUpdating Updating => new();
 }

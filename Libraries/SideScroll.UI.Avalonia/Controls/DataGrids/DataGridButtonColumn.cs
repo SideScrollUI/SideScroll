@@ -56,7 +56,7 @@ public class DataGridButtonColumn : DataGridBoundColumn
 		try
 		{
 			Button button = (Button)sender!;
-			MethodInfo.Invoke(button.DataContext, new object[] { });
+			MethodInfo.Invoke(button.DataContext, []);
 		}
 		catch (Exception ex)
 		{

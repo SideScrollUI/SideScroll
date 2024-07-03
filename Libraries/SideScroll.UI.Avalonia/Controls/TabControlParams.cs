@@ -45,7 +45,9 @@ public class TabControlParams : Grid, IValidationControl
 		InitializeControls(columnDefinitions);
 
 		if (autoGenerateRows)
+		{
 			LoadObject(obj);
+		}
 	}
 
 	private void InitializeControls(string columnDefinitions)

@@ -1,7 +1,7 @@
 # Visual Studio
 
 1. Download SideScroll
-    - `git clone https://github.com/garyhertel/sidescroll.git`
+    - `git clone https://github.com/SideScrollUI/sidescroll.git`
 2. Install a C# IDE
    - Visual Studio 2022 recommended (community edition is fine)
 3. Open `SideScroll.sln` in IDE

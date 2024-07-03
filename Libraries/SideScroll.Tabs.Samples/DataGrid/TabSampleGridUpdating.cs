@@ -5,14 +5,16 @@ using System.Runtime.CompilerServices;
 
 namespace SideScroll.Tabs.Samples.DataGrid;
 
-public class TabSampleGridUpdate : ITab
+public class TabSampleGridUpdating : ITab
 {
 	public TabInstance Create() => new Instance();
 
 	public class Instance : TabInstance
 	{
-		private ItemCollection<TestItem> _items = [];
 		protected SynchronizationContext Context = SynchronizationContext.Current ?? new SynchronizationContext();
+
+		private ItemCollection<TestItem> _items = [];
+		private Call? _counterCall;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -22,8 +24,8 @@ public class TabSampleGridUpdate : ITab
 
 			model.Actions = new List<TaskCreator>
 			{
-				//new TaskAction("Add Entries", AddEntries),
-				new TaskDelegate("Start bigNumber++ Thread", UpdateCounter, true),
+				new TaskDelegate("Start Counter Thread", StartCounter, true),
+				new TaskDelegate("Stop Counter Thread", StopCounter, true),
 			};
 		}
 
@@ -40,17 +42,24 @@ public class TabSampleGridUpdate : ITab
 			}
 		}
 
-		private void UpdateCounter(Call call)
+		private void StartCounter(Call call)
 		{
-			for (int i = 0; i < 10_000; i++)
+			_counterCall = call;
+			for (int i = 0; i < 1000 && !call.TaskInstance!.CancelToken.IsCancellationRequested; i++)
 			{
-				Thread.Sleep(10);
 				foreach (TestItem testItem in _items)
 				{
 					testItem.BigNumber++;
 					testItem.Update();
 				}
+				Thread.Sleep(500);
 			}
+		}
+
+		private void StopCounter(Call call)
+		{
+			_counterCall?.TaskInstance?.Cancel();
+			_counterCall = null;
 		}
 	}
 

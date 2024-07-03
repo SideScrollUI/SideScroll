@@ -1,7 +1,7 @@
 # Development
 
 ## Clone SideScroll
-- `git clone https://github.com/garyhertel/SideScroll.git`
+- `git clone https://github.com/SideScrollUI/SideScroll.git`
 - `cd SideScroll`
 
 ## Console

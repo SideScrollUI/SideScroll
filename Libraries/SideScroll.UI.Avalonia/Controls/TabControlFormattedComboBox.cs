@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
 using System.Collections;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace SideScroll.UI.Avalonia.Controls;
@@ -63,6 +64,19 @@ public class TabControlFormattedComboBox : ComboBox
 			Source = this,
 		};
 		this.Bind(SelectedItemProperty, binding);
+
+		if (Property.Object is INotifyPropertyChanged notifyPropertyChanged)
+		{
+			notifyPropertyChanged.PropertyChanged += OnPropertyChanged;
+		}
+	}
+
+	private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		if (e.PropertyName == Property?.PropertyInfo.Name)
+		{
+			SelectedItem = Property!.Value;
+		}
 	}
 
 	private FormattedItem? GetFormattedItem(object? obj)
@@ -93,7 +107,9 @@ public class TabControlFormattedComboBox : ComboBox
 		base.SelectedItem = GetFormattedItem(Property.Value);
 
 		if (SelectedItem == null && Items.GetEnumerator().MoveNext())
+		{
 			SelectedIndex = 0;
+		}
 	}
 
 	public object? SelectedFormattedItem

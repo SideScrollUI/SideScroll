@@ -6,8 +6,8 @@
 
     <SideScrollDescription>SideScroll is a cross platform AvaloniaUI library for navigating through tabs sideways.</SideScrollDescription>
     <SideScrollPackageIcon>SideScroll_128.png</SideScrollPackageIcon>
-    <SideScrollRepositoryUrl>https://github.com/garyhertel/SideScroll</SideScrollRepositoryUrl>
-    <SideScrollPackageProjectUrl>https://github.com/garyhertel/SideScroll</SideScrollPackageProjectUrl>
+    <SideScrollRepositoryUrl>https://github.com/SideScrollUI/SideScroll</SideScrollRepositoryUrl>
+    <SideScrollPackageProjectUrl>https://github.com/SideScrollUI/SideScroll</SideScrollPackageProjectUrl>
     <SideScrollPackageTags>sidescroll;avalonia;avaloniaui</SideScrollPackageTags>
     <SideScrollAuthors>Gary Hertel</SideScrollAuthors>
   </PropertyGroup>

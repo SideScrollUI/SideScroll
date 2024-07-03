@@ -18,4 +18,5 @@ public class TabSampleDataGrid
 	public static TabSampleMemory Memory => new();
 	public static TabSampleInstanceListItems InstanceListItems => new();
 	public static TabSampleFilter Filter => new();
+	public static TabSampleGridUpdating Updating => new();
 }

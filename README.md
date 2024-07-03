@@ -16,7 +16,7 @@ SideScroll is an AvaloniaUI library for exploring multiple paths of a tree at on
 * [Development](Docs/Dev/Development.md)
 * [User Guide](Docs/UserGuide.md)
 * [Credits](Docs/Credits.md)
-* [Demo Project - Video Game Database](https://github.com/garyhertel/VideoGamesDB)
+* [Demo Project - Video Game Database](https://github.com/SideScrollUI/VideoGamesDB)
 
 ## License
 * [MIT](LICENSE)

@@ -28,7 +28,9 @@ public class TabSampleParamsTasks : ITab
 
 			_paramTestItem = LoadData<SampleParamItem>(DataKey);
 			if (_paramTestItem!.DateTime.Ticks == 0)
+			{
 				_paramTestItem.DateTime = DateTime.Now; // in case the serializer loses it
+			}
 			model.AddObject(_paramTestItem);
 
 			model.Notes = "Adding a class of type [Params] to a tabModel creates a TabControlParam\nParameter values can be saved between Tasks";
