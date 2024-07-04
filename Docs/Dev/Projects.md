@@ -1,8 +1,10 @@
-# Libraries
+# Projects
+
+## Libraries
 
 - All libraries use .NET 8.0
 
-## Core Libraries
+### Core Libraries
 
 * SideScroll
   - Tab Interfaces
@@ -17,7 +19,7 @@
 * SideScroll.Network
   - HTTP - (downloading files)
   
-## Tab Libraries
+### Tab Libraries
 
 * SideScroll.Tabs
   - Defines the UI models
@@ -32,7 +34,7 @@
   - Used for testing UI features
   - `* Samples` tabs that show up in debug mode
 
-## User Interface Libraries
+### User Interface Libraries
 
 * SideScroll.UI.Avalonia
   - Cross Platform UI Controls
@@ -47,7 +49,7 @@
 * SideScroll.UI.Avalonia.ScreenCapture
   - Screenshot control for Windows and MacOS
 
-# Programs
+## Programs
 
 * SideScroll.Start.Avalonia
   - The primary application that loads all the other modules

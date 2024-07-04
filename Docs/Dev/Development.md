@@ -1,6 +1,6 @@
 # Development
 
-## Clone SideScroll
+## Clone
 - `git clone https://github.com/SideScrollUI/SideScroll.git`
 - `cd SideScroll`
 
@@ -10,10 +10,14 @@
 - Run
   - `dotnet run --project Programs/SideScroll.Start.Avalonia/SideScroll.Start.Avalonia.csproj`
 
+### Publishing
+- Pack
+  - `dotnet pack -o Packages`
+
 ## IDE
 - IDE's
-  - [Visual Studio](IDEs/VisualStudio.md) (Windows Only)
   - [JetBrains Rider](https://www.jetbrains.com/rider/)
+  - [Visual Studio](IDEs/VisualStudio.md) (Windows Only)
   - [Visual Studio Code](IDEs/VisualStudioCode.md)
 - Open `SideScroll.sln`
 - Start SideScroll

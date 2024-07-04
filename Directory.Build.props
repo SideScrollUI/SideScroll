@@ -9,6 +9,6 @@
     <SideScrollRepositoryUrl>https://github.com/SideScrollUI/SideScroll</SideScrollRepositoryUrl>
     <SideScrollPackageProjectUrl>https://github.com/SideScrollUI/SideScroll</SideScrollPackageProjectUrl>
     <SideScrollPackageTags>sidescroll;avalonia;avaloniaui</SideScrollPackageTags>
-    <SideScrollAuthors>Gary Hertel</SideScrollAuthors>
+    <SideScrollAuthors>SideScroll UI</SideScrollAuthors>
   </PropertyGroup>
 </Project>

@@ -1,6 +1,6 @@
 # Serialization
 
-- SideScroll includes it's own serializer, which allows it to load gigabytes of data in a few seconds.
+- SideScroll includes it's own serializer to handle object identification, grouping, permissions, and lazy deserialization.
 
 ## Features
 - Automatically serializes most objects with no additional logic
@@ -8,11 +8,6 @@
 - All public Properties and Fields are automatically serialized
 - Binary Serialization is used for improved speed
 - Circular references are supported
-
-## Lazy Deserialization
-- If you declare a property as virtual, you can load that property value in a lazy manner. 
-- Set `lazy` = `true` when loading with the deserializer, and it will create a wrapper class that will only load the virtual properties when referenced (subsequent references won't reload the data)
-- `public virtual string ReallyLongString { get; set; } = "...";`
   
 ## Constructors
 - Every object must either have a default constructor, or use a class with public properties/fields that matches a constructor
@@ -37,25 +32,32 @@ public class MyClass(int param)
 ## Object Cloning
 
 - You can call the `Serializer.DeepClone<Type>()` to do a deep clone of any object that can be serialized.
-- Any class with a [Static] will not be cloned to speed things up (useful for objects that won't change). This can be useful for copying objects where most of the data doesn't change and you want to take snapshots at intervals.
+- Any class with a `[Static]` will not be cloned to speed things up (useful for objects that won't change). This can be useful for copying objects where most of the data doesn't change and you want to take snapshots at intervals.
 
 ## Restricting Types & Members
-- When importing or exporting data like bookmarks, you might want to restrict which data can be exported
+- When importing or exporting data or links, you might want to restrict which data can be exported
 - When calling any SerializerMemory method, you can set `publicOnly = true` to disable exporting any data without the `[PublicData]` / `[ProtectedData]` attribute
-- Currently, when serializing or deserializing, the debug output will print a warning whenever it encounters a type without a `[PublicData]`, `[ProtectedData]`, or `[PrivateData]` attribute. A warning log entry will also be added.
+- When serializing or deserializing, the debug output will print a warning whenever it encounters a type without a `[PublicData]`, `[ProtectedData]`, or `[PrivateData]` attribute. A warning log entry will also be added.
 - `[PublicData]`
   - Any type or class members that specify this attribute will be included
 - `[ProtectedData]`
-  - All class members will default to [PrivateData], but can be overridden with a [PublicData]
+  - All class members will default to `[PrivateData]`, but can be overridden with a `[PublicData]`
 - `[PrivateData]`
   - Any types or class members that specify this attribute will be ignored, and the debug output will not output a warning for them
 - The following types are also allowed by default
   - `string`
   - `DateTime`
+  - `DateTimeOffset`
   - `TimeSpan`
   - `Type`
   - `object` (exact type or any allowed type only)
+  - `Array`
   - `List`
   - `Dictionary`
   - `HashSet`
 - Any other types will be ignored
+
+## Lazy Deserialization
+- If you declare a property as virtual, you can load that property value in a lazy manner. 
+- Set `lazy` = `true` when loading with the deserializer, and it will create a wrapper class that will only load the virtual properties when referenced (subsequent references won't reload the data)
+- `public virtual string ReallyLongString { get; set; } = "...";`
