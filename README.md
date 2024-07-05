@@ -1,5 +1,5 @@
 # SideScroll
-SideScroll is an AvaloniaUI library for navigating sideways through a tree of Tabs. Multiple paths can viewed at once, and new tabs will load as you scroll to the right.
+SideScroll is a cross platform AvaloniaUI library for navigating sideways through a tree of Tabs. Multiple paths can viewed at once, and new tabs will load as you scroll to the right.
 
 ## Features
 * .NET Cross Platform UI Framework that can run on any Windows, MacOS, or Linux system
@@ -15,7 +15,7 @@ SideScroll is an AvaloniaUI library for navigating sideways through a tree of Ta
 #### Custom Theming
 ![Custom Theme](Images/Screenshots/CustomTheme.png)
 #### Share Links
-![Custom Theme](Images/Screenshots/Links.png)
+![Links](Images/Screenshots/Links.png)
 
 ![Logo](Images/Logo/png/SideScroll_40.png)
 

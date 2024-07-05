@@ -4,11 +4,13 @@
     <AvaloniaVersion>11.0.11</AvaloniaVersion>
     <AvaloniaEditVersion>11.0.6</AvaloniaEditVersion>
 
-    <SideScrollDescription>SideScroll is a cross platform AvaloniaUI library for navigating through tabs sideways.</SideScrollDescription>
+    <SideScrollDescription>SideScroll is a cross platform AvaloniaUI library for navigating sideways through a tree of Tabs. Multiple paths can viewed at once, and new tabs will load as you scroll to the right.</SideScrollDescription>
+    <SideScrollAuthors>SideScroll UI</SideScrollAuthors>
+    <SideScrollCopyright>SideScroll UI</SideScrollCopyright>
     <SideScrollPackageIcon>SideScroll_128.png</SideScrollPackageIcon>
     <SideScrollRepositoryUrl>https://github.com/SideScrollUI/SideScroll</SideScrollRepositoryUrl>
     <SideScrollPackageProjectUrl>https://github.com/SideScrollUI/SideScroll</SideScrollPackageProjectUrl>
-    <SideScrollPackageTags>sidescroll;avalonia;avaloniaui</SideScrollPackageTags>
-    <SideScrollAuthors>SideScroll UI</SideScrollAuthors>
+    <SideScrollPackageTags>sidescroll;sidescrollui;avalonia;avaloniaui</SideScrollPackageTags>
+    <SideScrollPackageReleaseNotes>Initial SideScroll Release</SideScrollPackageReleaseNotes>
   </PropertyGroup>
 </Project>
