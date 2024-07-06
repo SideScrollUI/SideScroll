@@ -29,8 +29,6 @@ public class TabSampleDataRepoCollection : ITab
 				new TaskDelegate("Delete", Delete),
 				new TaskDelegate("Delete All", DeleteAll),
 			};
-
-			//tabModel.Notes = "Data Repos store C# objects as serialized data.";
 		}
 
 		private void LoadSavedItems(Call call)

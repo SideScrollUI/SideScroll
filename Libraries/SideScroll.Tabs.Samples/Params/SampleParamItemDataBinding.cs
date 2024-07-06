@@ -9,7 +9,7 @@ namespace SideScroll.Tabs.Samples.Params;
 public class SampleParamItemDataBinding(SynchronizationContext context) : INotifyPropertyChanged
 {
 	[DataKey, Required, StringLength(30)]
-	public string Value 
+	public string? Value 
 	{
 		get => _value;
 		set
@@ -42,7 +42,7 @@ public class SampleParamItemDataBinding(SynchronizationContext context) : INotif
 			}
 		}
 	}
-	private string _value;
+	private string? _value;
 
 	[ReadOnly(true)]
 	public string? String { get; set; }
@@ -75,7 +75,7 @@ public class SampleParamItemDataBinding(SynchronizationContext context) : INotif
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	public override string ToString() => Value;
+	public override string? ToString() => Value;
 
 	public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{

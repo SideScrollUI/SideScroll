@@ -164,7 +164,7 @@ public class ButtonColumnAttribute : Attribute
 	}
 }
 
-// -> Allows setting the column for param controls
+// -> Allows setting the column for param controls. This should usually be in multiples of 2 since a label & control use two columns
 [AttributeUsage(AttributeTargets.Property)]
 public class ColumnIndexAttribute(int index) : Attribute
 {

@@ -44,12 +44,6 @@ public class SampleParamItem
 	}
 
 	public override string ToString() => Name;
-
-	/*[ButtonColumn("-")]
-	public void Delete()
-	{
-		instance.Delete(Name);
-	}*/
 }
 
 [PublicData]

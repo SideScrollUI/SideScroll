@@ -24,8 +24,6 @@ public class TabSampleParamsDataGrid : ITab
 			{
 				new TaskDelegate("Add Log Entry", AddEntry),
 			};
-
-			model.Notes = "You can specify parameters for an action.\n\nSpecify the values for a new Log Entry and click the Add button to add it";
 		}
 
 		private void AddEntry(Call call)

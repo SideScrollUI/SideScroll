@@ -22,15 +22,6 @@ public class TabSampleFilter : ITab
 
 			model.Items = items;
 			model.ShowSearch = true;
-
-			model.Notes = @"
-* Press Ctrl-F on any Data Grid to add a filter (You can click anywhere on a tab to focus it)
-* You can use | or & to restrict searches
-* Examples:
-  - Search for the exact string ""ABC"" or anything containing 123
-	- ""ABC"" | 123
-* Recursive searches will eventually be supported
-";
 		}
 	}
 

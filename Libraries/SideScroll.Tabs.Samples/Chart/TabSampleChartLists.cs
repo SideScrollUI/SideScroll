@@ -10,12 +10,12 @@ public class TabSampleChartLists : ITab
 
 	public class Instance : TabInstance
 	{
-		private List<ItemCollection<int>>? _series;
+		private List<ItemCollection<int>> _series = [];
 		private readonly Random _random = new();
 
 		public override void Load(Call call, TabModel model)
 		{
-			_series = new List<ItemCollection<int>>();
+			_series = [];
 
 			model.Actions = new List<TaskCreator>
 			{
@@ -23,11 +23,11 @@ public class TabSampleChartLists : ITab
 				new TaskDelegate("Start: 1 Entry / second", StartTask, true),
 			};
 
-			var chartView = new ChartView();
+			ChartView chartView = new();
 			for (int i = 0; i < 2; i++)
 			{
-				var list = new ItemCollection<int>();
-				chartView.AddSeries("Series " + i, list);
+				ItemCollection<int> list = new();
+				chartView.AddSeries($"Series {i}", list);
 				_series.Add(list);
 			}
 
@@ -56,7 +56,7 @@ public class TabSampleChartLists : ITab
 		private void AddSample()
 		{
 			int multiplier = 1;
-			foreach (var list in _series!)
+			foreach (var list in _series)
 			{
 				int amount = (_random.Next() % 1000) * multiplier;
 				list.Add(amount);

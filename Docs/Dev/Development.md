@@ -12,6 +12,7 @@
 
 ### Publishing
 - Pack
+  - Update `<SideScrollPackageReleaseNotes>` in [Directory.Build.props](../../Directory.Build.props)
   - `dotnet pack -o Packages`
 
 ## IDE
@@ -23,12 +24,12 @@
 - Start SideScroll
   - `Programs / SideScroll.Start.Avalonia`
 
-## Modules
-* [Projects](Projects.md)
-* [AddingTabs](AddingTabs.md)
-* [Logs](Logs.md)
+## Getting Started
+* [Adding Tabs](AddingTabs.md)
+* [Param Controls](ParamControls.md)
+* [DataRepos](DataRepos.md)
 * [Serializer](Serializer.md)
+* [Logs](Logs.md)
 * [Bookmarks](Bookmarks.md)
-
-## Links
-- [Color Legend](https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.colors?view=netframework-4.8)
+* [Charts](Charts.md)
+* [Projects](Projects.md)

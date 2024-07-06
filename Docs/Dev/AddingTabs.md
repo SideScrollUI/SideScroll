@@ -1,10 +1,13 @@
-# Adding new Tabs
+# Adding Tabs
 
+### ITab - Outer Interface Class
 * Every tab is composed of an outer class that implements the `ITab` interface. The `ITab` interface allows you to:
   - Set parameters that can be reused each time a `TabInstance` is created
   - Defines a `Create()` method that creates a `TabInstance` that you can pass those parameters to
   - You can also declare properties for a Tab, which when passed in a IList will be displayed as columns for the DataGrid
-* A new `TabInstance` will be created each time that Tab becomes visible, meaning the `TabInstance.Load()` is not called until the Tab is shown.
+
+### TabInstance - Inner Derived Class
+* A new `TabInstance` will be created each time that ITab becomes visible, meaning the `TabInstance.Load()` is not called until the Tab is shown.
 * There are 3 different Load methods that can be used for a `TabInstance`. You can use any combination of these. They are called in the order below:
   - `public async Task LoadAsync(Call call, TabModel model)`
     - Use when you need to call async methods
@@ -12,6 +15,8 @@
     - The default Load method if you don't need to call an async method
   - `public override void LoadUI(Call call, TabModel model)`
     - Use when you need to create an Avalonia control, since those can only be created on the UI thread.
+
+#### Sample Tab
 ```csharp
 namespace SideScroll.Tabs.Samples;
 
@@ -79,6 +84,8 @@ public void UpdateStatus(Call call, string text)
     - Useful when you need to pass custom parameters
 * ItemCollectionUI
   - This is a User Interface version of the ItemCollection, which allows you to add items to a collection that appears in the user interface from a background thread. Adding an item to a List or ItemCollection from a background thread normally isn't safe and can cause an exception.
+
+#### Sample Tab using Actions
 ```csharp
 namespace SideScroll.Tabs.Samples;
 
@@ -143,8 +150,8 @@ public class SampleItem(int id, string name)
 ```
 * Here's the resulting tab
   - Note how all the properties in the SampleItem automatically appear as columns
-  - The `Recursive Tab` will show a new instance of the tab nested until it runs out of room on the screen
-![New Tab](../Images/Screenshots/SampleTab.png)
+  - The `Copy Tab` will show a new instance of the tab nested until it runs out of room on the screen
+![New Tab](../../Images/Screenshots/SampleTab.png)
 
 ## Async calls
   - Tabs can load as Async by implementing the `ITabAsync` interface for a `TabInstance`

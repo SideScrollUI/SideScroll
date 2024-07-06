@@ -22,8 +22,6 @@ public class TabSampleBookmarks : ITab
 			{
 				new("Navigator (snapshot)", navigator),
 			};
-
-			model.Notes = "The Navigator class creates a bookmark for every tab change you make, and allows you to move backwards and forwards. The Back/Forward buttons currently use this. Eventually a list/drop down could be used to select the bookmark";
 		}
 	}
 }

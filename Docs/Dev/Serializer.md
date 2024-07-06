@@ -5,12 +5,12 @@
 ## Features
 - Automatically serializes most objects with no additional logic
 - For classes that don't support serialization, custom TypeRepo wrappers can be registered in the Serializer
-- All public Properties and Fields are automatically serialized
+- All public Properties and Fields are automatically serialized except for those with special attributes set
 - Binary Serialization is used for improved speed
 - Circular references are supported
   
 ## Constructors
-- Every object must either have a default constructor, or use a class with public properties/fields that matches a constructor
+- Every object must either have a default constructor, or use a class with public properties/field names that match a constructor
 ```csharp
 public class MyClass
 {
@@ -35,6 +35,10 @@ public class MyClass(int param)
 - Any class with a `[Static]` will not be cloned to speed things up (useful for objects that won't change). This can be useful for copying objects where most of the data doesn't change and you want to take snapshots at intervals.
 
 ## Restricting Types & Members
+- To prevent serialization, set `[Unserialized]` or `[NonSerialized]` on the type or member
+- Only public properties and fields are serialized, and `static` members are not serialized
+
+### Export Permissions
 - When importing or exporting data or links, you might want to restrict which data can be exported
 - When calling any SerializerMemory method, you can set `publicOnly = true` to disable exporting any data without the `[PublicData]` / `[ProtectedData]` attribute
 - When serializing or deserializing, the debug output will print a warning whenever it encounters a type without a `[PublicData]`, `[ProtectedData]`, or `[PrivateData]` attribute. A warning log entry will also be added.

@@ -32,15 +32,6 @@ public class TabSampleActions : ITab
 				new TaskDelegateAsync("Long load (Async)", SleepAsync, true),
 				new TaskDelegate("StartAsync error", StartAsyncError),
 			};
-
-			model.Notes = @"
-Actions add Buttons to the tab. When clicked, it will:
-* Start a task that calls this action
-* Add a Tasks grid to the tab
-  - Add a new Task to that grid
-
-* Tasks
-";
 		}
 
 		private void StartAsyncError(Call call)
@@ -50,7 +41,7 @@ Actions add Buttons to the tab. When clicked, it will:
 
 		private static async Task StartAsyncLogErrorAsync(Call call)
 		{
-			await Task.Delay(1);
+			await Task.Delay(10);
 
 			call.Log.AddError("This should show the task");
 		}
@@ -93,9 +84,7 @@ Actions add Buttons to the tab. When clicked, it will:
 
 		private static async Task SubTaskProgressAsync(Call call)
 		{
-			List<int> ids = [];
-			for (int i = 0; i < 30; i++)
-				ids.Add(i);
+			List<int> ids = Enumerable.Range(0, 30).ToList();
 
 			List<int> results = await call.RunAsync(DoTask, ids);
 		}
@@ -115,18 +104,14 @@ Actions add Buttons to the tab. When clicked, it will:
 
 		private static async Task MultiLevelRunAsync(Call call)
 		{
-			List<int> ids = [];
-			for (int i = 0; i < 100; i++)
-				ids.Add(i);
+			List<int> ids = Enumerable.Range(0, 100).ToList();
 
 			List<int> results = await call.RunAsync(MultiLevelRunListAsync, ids);
 		}
 
 		private static async Task<int> MultiLevelRunListAsync(Call call, int id)
 		{
-			List<int> ids = [];
-			for (int i = 0; i < 2000; i++)
-				ids.Add(i);
+			List<int> ids = Enumerable.Range(0, 2000).ToList();
 
 			call.Log.Settings = call.Log.Settings!.WithMinLogLevel(LogLevel.Warn);
 
