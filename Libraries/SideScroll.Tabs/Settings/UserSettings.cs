@@ -28,9 +28,9 @@ public class UserSettings
 	[BindList(nameof(TimeZones))]
 	public TimeZoneView TimeZone { get; set; } = TimeZoneView.Local;
 
-	public static List<string> Themes { get; set; } = new();
+	public static List<string> Themes { get; set; } = [];
 
-	[BindList(nameof(Themes))]
+	[Separator, BindList(nameof(Themes))]
 	public string? Theme { get; set; }
 
 	public override string ToString() => SettingsPath;

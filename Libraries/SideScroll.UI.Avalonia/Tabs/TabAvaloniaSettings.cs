@@ -7,6 +7,7 @@ using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Time;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Themes.Tabs;
 
@@ -82,6 +83,7 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 			DataApp.Save(CustomUserSettings!);
 			Project.UserSettings = CustomUserSettings.DeepClone()!;
 
+			TimeZoneView.Current = Project.UserSettings.TimeZone;
 			ThemeManager.Current?.LoadCurrentTheme();
 		}
 	}
