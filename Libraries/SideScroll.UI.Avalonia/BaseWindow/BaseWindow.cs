@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Tools.FileViewer;
+using SideScroll.Time;
 using SideScroll.UI.Avalonia.Tabs;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Viewer;

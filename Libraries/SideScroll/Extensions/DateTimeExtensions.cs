@@ -1,3 +1,5 @@
+using SideScroll.Time;
+
 namespace SideScroll.Extensions;
 
 public static class DateTimeExtensions
