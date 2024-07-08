@@ -1,6 +1,6 @@
 # Setup
 
-- It's recommended to start with a default [Avalonia](https://avaloniaui.net/gettingstarted#installation) Desktop app
+- It's recommended to start with a default [Avalonia .NET App](https://avaloniaui.net/gettingstarted#installation)
 - Make sure to update the Avalonia version to match SideScroll
 
 ## Add Nuget Packages
@@ -91,7 +91,7 @@ public class TabSample : ITab
 
 			model.Actions = new List<TaskCreator>()
 			{
-				new TaskDelegate("Log this", LogThis),
+				new TaskDelegate("Log this", LogThis, true, true),
 			};
 		}
 

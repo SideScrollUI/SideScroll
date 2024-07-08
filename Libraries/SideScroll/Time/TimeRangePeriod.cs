@@ -40,7 +40,9 @@ public class TimeRangePeriod : ITags
 					if (tagBin.Value is string text && tag.Value is string tagText)
 					{
 						if (!text.Contains(tagText))
+						{
 							tagBin.Value += ", " + tagText;
+						}
 					}
 				}
 				else
