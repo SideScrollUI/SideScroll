@@ -46,18 +46,17 @@ public class TabSample : ITab
 		}
 	}
 }
-
 ```
 
 ## Items
 * Most `TabInstance` will contain `Items`. These can be any `IList` and will be displayed in a DataGrid
-  - Any object properties will automatically be show as columns. If no properties are found, the object's `ToString()` will be used for the item
-  - The most common `Items` are a collection of `ListItem`, which lets you set a label and object to display
-  - When a row is selected, a child tab will be shown to the right based on the following criteria
-    - If the object is an `ITab`, a `TabInstance` will be created
-	- If the object is a collection, a DataGrid will be shown for it
-	- If the object is a primitive type, a text editor will be shown
-	- Otherwise, all the properties, fields, and `[Item]` methods of an object will be displayed
+* Any object properties will automatically be show as columns. If no properties are found, the object's `ToString()` will be used for the item
+* The most common `Items` are a collection of `ListItem`, which lets you set a label and object to display
+* When a row is selected, a child tab will be shown to the right based on the following criteria
+  - If the object is an `ITab`, a `TabInstance` will be created
+  - If the object is a collection, a DataGrid will be shown for it
+  - If the object is a primitive type, a text editor will be shown
+  - Otherwise, all the properties, fields, and `[Item]` methods of an object will be displayed
 
 ## Actions
 * You can declare actions for Tabs, which will show up as buttons
@@ -195,7 +194,6 @@ public class TabSampleAsync : ITab
 		}
 	}
 }
-
 ```
 
 ## Toolbars

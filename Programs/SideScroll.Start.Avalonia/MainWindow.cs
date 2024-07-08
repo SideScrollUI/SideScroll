@@ -27,6 +27,6 @@ public class MainWindow : BaseWindow
 		Name = "SideScroll",
 		LinkType = "sidescroll",
 		Version = ProjectSettings.ProgramVersion(),
-		DataVersion = new Version(1, 1),
+		DataVersion = new Version(0, 1),
 	};
 }
