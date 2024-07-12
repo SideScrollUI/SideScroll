@@ -1,28 +1,36 @@
 using SideScroll.Attributes;
 using SideScroll.Extensions;
-using System.Json;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace SideScroll.Tabs;
 
 public class LazyJsonNode
 {
-	public static object? Create(JsonValue? jsonValue)
+	public static object? Create(JsonNode? jsonNode)
 	{
-		return jsonValue?.JsonType switch
+		if (jsonNode == null)
 		{
-			JsonType.String => (string)jsonValue,
-			JsonType.Number => jsonValue.ToString(),
-			JsonType.Boolean => jsonValue.ToString(),
-			JsonType.Object => new LazyJsonObject((JsonObject)jsonValue),
-			JsonType.Array => new LazyJsonArray((JsonArray)jsonValue),
-			null => null,
-			_ => throw new Exception("Invalid JSON Node Type")
-		};
+			return null;
+		}
+		else if (jsonNode is JsonArray array)
+		{
+			return new LazyJsonArray(array);
+		}
+		else if (jsonNode is JsonObject obj)
+		{
+			return new LazyJsonObject(obj);
+		}
+		else if (jsonNode?.GetValue<JsonElement>() is JsonElement jsonElement)
+		{
+			return jsonElement.ToString();
+		}
+		throw new Exception("Invalid JSON Node Type");
 	}
 
 	public static object? Parse(string json)
 	{
-		JsonValue jsonValue = JsonValue.Parse(json);
+		JsonNode? jsonValue = JsonNode.Parse(json);
 		return Create(jsonValue);
 	}
 
@@ -46,9 +54,9 @@ public class LazyJsonArray(JsonArray jsonArray) : LazyJsonNode
 			if (_items == null)
 			{
 				_items = new List<object?>();
-				foreach (JsonValue jsonValue in JsonArray)
+				foreach (JsonNode? jsonNode in JsonArray)
 				{
-					_items.Add(Create(jsonValue));
+					_items.Add(Create(jsonNode));
 				}
 			}
 			return _items;
@@ -68,7 +76,7 @@ public class LazyJsonObject(JsonObject jsonObject) : LazyJsonNode
 		{
 			if (_items == null)
 			{
-				_items = new List<LazyJsonProperty>();
+				_items = [];
 				foreach (var pair in jsonObject)
 				{
 					var property = new LazyJsonProperty

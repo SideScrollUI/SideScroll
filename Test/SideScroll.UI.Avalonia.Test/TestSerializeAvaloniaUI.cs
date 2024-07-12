@@ -20,7 +20,7 @@ public class TestSerializeAvaloniaUI : TestBase
 	[SetUp]
 	public void Setup()
 	{
-		serializer = new SerializerMemorySideScroll();
+		serializer = new SerializerMemoryAtlas();
 	}
 
 	[Test]

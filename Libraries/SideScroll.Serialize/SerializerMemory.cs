@@ -107,7 +107,7 @@ public abstract class SerializerMemory
 
 	public static SerializerMemory Create()
 	{
-		return new SerializerMemorySideScroll();
+		return new SerializerMemoryAtlas();
 		// todo: Add SerializerMemoryJson
 	}
 }

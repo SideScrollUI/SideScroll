@@ -7,7 +7,7 @@ namespace SideScroll.Serialize.Test;
 [Category("Serialize")]
 public class TestSerializeSecurity : TestSerializeBase
 {
-	private SerializerMemory _serializer = new SerializerMemorySideScroll();
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -18,7 +18,7 @@ public class TestSerializeSecurity : TestSerializeBase
 	[SetUp]
 	public void Setup()
 	{
-		_serializer = new SerializerMemorySideScroll();
+		_serializer = new SerializerMemoryAtlas();
 	}
 
 	public class NonSerializedTest

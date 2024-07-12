@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <SideScrollVersion>0.1</SideScrollVersion>
+    <SideScrollVersion>0.2</SideScrollVersion>
     <AvaloniaVersion>11.0.11</AvaloniaVersion>
     <AvaloniaEditVersion>11.0.6</AvaloniaEditVersion>
 
@@ -11,6 +11,6 @@
     <SideScrollRepositoryUrl>https://github.com/SideScrollUI/SideScroll</SideScrollRepositoryUrl>
     <SideScrollPackageProjectUrl>https://github.com/SideScrollUI/SideScroll</SideScrollPackageProjectUrl>
     <SideScrollPackageTags>sidescroll;sidescrollui;avalonia;avaloniaui</SideScrollPackageTags>
-    <SideScrollPackageReleaseNotes>Initial SideScroll Release</SideScrollPackageReleaseNotes>
+    <SideScrollPackageReleaseNotes>Switched System.Json to newer System.Text.Json</SideScrollPackageReleaseNotes>
   </PropertyGroup>
 </Project>

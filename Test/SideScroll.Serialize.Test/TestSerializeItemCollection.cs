@@ -7,7 +7,7 @@ namespace SideScroll.Serialize.Test;
 [Category("SerializeItemCollection")]
 public class TestItemCollection : TestSerializeBase
 {
-	private SerializerMemory _serializer = new SerializerMemorySideScroll();
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -18,7 +18,7 @@ public class TestItemCollection : TestSerializeBase
 	[SetUp]
 	public void Setup()
 	{
-		_serializer = new SerializerMemorySideScroll();
+		_serializer = new SerializerMemoryAtlas();
 	}
 
 	[Test, Description("Serialize ItemCollection")]

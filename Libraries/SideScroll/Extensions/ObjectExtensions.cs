@@ -28,9 +28,9 @@ public static class ObjectExtensions
 				}
 			}
 
-			MethodInfo toStringMethod = type.GetMethod("ToString", new Type[] { typeof(string) })!;
+			MethodInfo toStringMethod = type.GetMethod("ToString", [typeof(string)])!;
 			string format = type.IsDecimal() ? "G" : "N0";
-			object? result = toStringMethod.Invoke(obj, new object[] { format });
+			object? result = toStringMethod.Invoke(obj, [format]);
 			return (string?)result;
 		}
 

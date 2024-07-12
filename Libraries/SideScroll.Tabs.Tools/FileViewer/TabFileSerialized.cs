@@ -13,12 +13,12 @@ public class TabFileSerialized(string path) : ITab
 
 	public class Instance(TabFileSerialized tab) : TabInstance
 	{
-		private SerializerFileSideScroll? _serializerFile;
+		private SerializerFileAtlas? _serializerFile;
 		private ItemCollectionUI<ListItem> _items = [];
 
 		public override void Load(Call call, TabModel model)
 		{
-			_serializerFile = new SerializerFileSideScroll(System.IO.Path.GetDirectoryName(tab.Path)!);
+			_serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(tab.Path)!);
 
 			var serializer = _serializerFile.LoadSchema(call);
 

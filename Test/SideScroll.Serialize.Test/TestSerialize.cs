@@ -6,7 +6,7 @@ namespace SideScroll.Serialize.Test;
 [Category("Serialize")]
 public class SerializeTypes : TestSerializeBase
 {
-	private SerializerMemory _serializer = new SerializerMemorySideScroll();
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -17,7 +17,7 @@ public class SerializeTypes : TestSerializeBase
 	[SetUp]
 	public void Setup()
 	{
-		_serializer = new SerializerMemorySideScroll();
+		_serializer = new SerializerMemoryAtlas();
 	}
 
 	[Test, Description("Serialize int")]

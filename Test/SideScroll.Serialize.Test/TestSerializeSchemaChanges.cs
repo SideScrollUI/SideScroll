@@ -18,7 +18,7 @@ public class TestSerializeSchemaChanges : TestSerializeBase
 		Directory.CreateDirectory(basePath);
 
 		string filePath = Paths.Combine(basePath, "Data.atlas");
-		_serializerFile = new SerializerFileSideScroll(filePath);
+		_serializerFile = new SerializerFileAtlas(filePath);
 	}
 
 	// Todo: Add option to manually construct serializer parts to simplify this

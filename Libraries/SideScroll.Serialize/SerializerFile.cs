@@ -94,7 +94,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 
 	public static SerializerFile Create(string dataPath, string name = "")
 	{
-		return new SerializerFileSideScroll(dataPath, name);
+		return new SerializerFileAtlas(dataPath, name);
 		// todo: Add SerializerFileJson
 	}
 }

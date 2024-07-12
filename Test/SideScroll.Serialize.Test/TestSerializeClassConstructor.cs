@@ -18,7 +18,7 @@ public class SerializeClassConstructor : TestSerializeBase
 	[SetUp]
 	public void Setup()
 	{
-		_serializer = new SerializerMemorySideScroll();
+		_serializer = new SerializerMemoryAtlas();
 	}
 
 	public class NoConstructorBaseClass(int a)

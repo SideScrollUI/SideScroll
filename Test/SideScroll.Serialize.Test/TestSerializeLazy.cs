@@ -18,7 +18,7 @@ public class TestSerializeLazy : TestSerializeBase
 		Directory.CreateDirectory(basePath);
 
 		string filePath = Paths.Combine(basePath, "Data.atlas");
-		_serializerFile = new SerializerFileSideScroll(filePath);
+		_serializerFile = new SerializerFileAtlas(filePath);
 	}
 
 	[Test, Description("Serialize Lazy Base")]

@@ -2,11 +2,11 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Serialize.Atlas;
 
-public class SerializerFileSideScroll : SerializerFile
+public class SerializerFileAtlas : SerializerFile
 {
 	private const string DataName = "Data.atlas";
 
-	public SerializerFileSideScroll(string basePath, string name = "") : base(basePath, name)
+	public SerializerFileAtlas(string basePath, string name = "") : base(basePath, name)
 	{
 		HeaderPath = Paths.Combine(basePath, DataName);
 		DataPath = Paths.Combine(basePath, DataName);

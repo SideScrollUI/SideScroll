@@ -7,7 +7,7 @@ namespace SideScroll.Serialize.Test;
 [Category("SerializeDateTime")]
 public class SerializeDateTime : TestSerializeBase
 {
-	private SerializerMemory _serializer = new SerializerMemorySideScroll();
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -18,7 +18,7 @@ public class SerializeDateTime : TestSerializeBase
 	[SetUp]
 	public void Setup()
 	{
-		_serializer = new SerializerMemorySideScroll();
+		_serializer = new SerializerMemoryAtlas();
 	}
 
 	// DateTime has no set operators and relies on constructor

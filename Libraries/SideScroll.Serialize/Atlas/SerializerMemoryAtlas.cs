@@ -3,7 +3,7 @@ using System.Text;
 
 namespace SideScroll.Serialize.Atlas;
 
-public class SerializerMemorySideScroll : SerializerMemory
+public class SerializerMemoryAtlas : SerializerMemory
 {
 	//private MemoryStream stream = new();
 

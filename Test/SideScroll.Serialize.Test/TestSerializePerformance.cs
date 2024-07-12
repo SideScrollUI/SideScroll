@@ -7,7 +7,7 @@ namespace SideScroll.Serialize.Test;
 [Category("Performance")]
 public class TestSerializePerformance : TestSerializeBase
 {
-	private SerializerMemory _serializer = new SerializerMemorySideScroll();
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -18,7 +18,7 @@ public class TestSerializePerformance : TestSerializeBase
 	[SetUp]
 	public void SetUp()
 	{
-		_serializer = new SerializerMemorySideScroll();
+		_serializer = new SerializerMemoryAtlas();
 	}
 
 	[Test, Description("DictionaryTest")]
