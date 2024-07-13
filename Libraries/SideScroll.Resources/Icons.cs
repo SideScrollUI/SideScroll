@@ -9,8 +9,6 @@ public static class Icons
 
 	public static Assembly Assembly => Assembly.GetExecutingAssembly();
 
-	public static ResourceView Logo => new(Assembly, IconPath, "Logo", "SideScroll", "ico");
-
 	public class Svg : NamedItemCollection<Svg, ResourceView>
 	{
 		public static ResourceView Refresh => Get("Refresh");

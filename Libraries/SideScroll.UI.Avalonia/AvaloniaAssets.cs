@@ -29,7 +29,6 @@ public static class AvaloniaAssets
 		public static Bitmap Info => new(Icons.Png.Info.Stream);
 		public static Bitmap Hourglass => new(Assets.Png.Hourglass.Stream);
 		public static Bitmap Shutter => new(Assets.Png.Shutter.Stream);
-		public static Bitmap Logo => new(Icons.Logo.Stream);
 	}
 
 	public static class Images

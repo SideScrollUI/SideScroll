@@ -2,25 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>SideScroll.Serialize</AssemblyName>
     <RootNamespace>SideScroll.Serialize</RootNamespace>
-    <Configurations>Debug;Release;DebugX86</Configurations>
-    <Version>$(SideScrollVersion)</Version>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Description>$(SideScrollDescription)</Description>
-    <RepositoryUrl>$(SideScrollRepositoryUrl)</RepositoryUrl>
-    <Authors>$(SideScrollAuthors)</Authors>
-    <Copyright>$(SideScrollCopyright)</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>$(SideScrollPackageProjectUrl)</PackageProjectUrl>
-    <PackageTags>$(SideScrollPackageTags)</PackageTags>
-    <PackageIcon>$(SideScrollPackageIcon)</PackageIcon>
-    <PackageReadmeFile>README.NuGet.md</PackageReadmeFile>
-    <PackageReleaseNotes>$(SideScrollPackageReleaseNotes)</PackageReleaseNotes>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

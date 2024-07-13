@@ -2,23 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <Version>$(SideScrollVersion)</Version>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Description>$(SideScrollDescription)</Description>
-    <RepositoryUrl>$(SideScrollRepositoryUrl)</RepositoryUrl>
-    <Authors>$(SideScrollAuthors)</Authors>
-    <Copyright>$(SideScrollCopyright)</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>$(SideScrollPackageProjectUrl)</PackageProjectUrl>
-    <PackageTags>$(SideScrollPackageTags)</PackageTags>
-    <PackageIcon>$(SideScrollPackageIcon)</PackageIcon>
-    <PackageReadmeFile>README.NuGet.md</PackageReadmeFile>
-    <PackageReleaseNotes>$(SideScrollPackageReleaseNotes)</PackageReleaseNotes>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Icons\Logo\**" />
+    <EmbeddedResource Remove="Icons\Logo\**" />
+    <None Remove="Icons\Logo\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\Images\Logo\png\SideScroll_128.png">
@@ -34,7 +24,6 @@
   <ItemGroup>
     <None Remove="Assets\hourglass64.png" />
     <None Remove="Assets\shutter64.png" />
-    <None Remove="Icons\Logo\SideScroll.ico" />
     <None Remove="Icons\png\bookmark.png" />
     <None Remove="Icons\png\clear_search.png" />
     <None Remove="Icons\png\if_help_62217.png" />
@@ -86,7 +75,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\hourglass64.png" />
     <EmbeddedResource Include="Assets\shutter64.png" />
-    <EmbeddedResource Include="Icons\Logo\SideScroll.ico" />
     <EmbeddedResource Include="Icons\png\bookmark.png" />
     <EmbeddedResource Include="Icons\png\clear_search.png" />
     <EmbeddedResource Include="Icons\png\info_20_759eeb.png" />

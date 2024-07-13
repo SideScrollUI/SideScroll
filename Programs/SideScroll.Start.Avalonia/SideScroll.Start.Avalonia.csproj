@@ -2,14 +2,9 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
-    <Configurations>Debug;Release;DebugX86</Configurations>
-    <Version>$(SideScrollVersion)</Version>
     <ApplicationIcon />
     <StartupObject />
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   
@@ -38,7 +33,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Logo\SideScroll.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AvaloniaResource Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Logo\SideScroll.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -12,7 +12,7 @@ public class SerializeClass : TestSerializeBase
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
-		Initialize("SerializeClass");
+		Initialize("SerializeClass", Logs.LogLevel.Debug);
 	}
 
 	[SetUp]
@@ -301,6 +301,12 @@ public class SerializeClass : TestSerializeBase
 		};
 
 		string base64 = SerializerMemory.ToBase64String(Call, input);
-		Assert.AreEqual(420, base64.Length);
+
+		// Todo: Fix, compression size isn't predictable :(
+		// Use specific compression level instead for small?
+		// Uncompressed: 912 -> Compressed: 313 -> Base64: 420
+		// Uncompressed: 912 -> Compressed: 316 -> Base64: 424
+		Assert.GreaterOrEqual(base64.Length, 400);
+		Assert.LessOrEqual(base64.Length, 440);
 	}
 }

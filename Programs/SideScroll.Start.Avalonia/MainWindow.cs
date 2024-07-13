@@ -19,7 +19,7 @@ public class MainWindow : BaseWindow
 		ScreenCapture.AddControlTo(TabViewer);
 		TabViewer.Toolbar?.AddVersion();
 
-		Icon = new WindowIcon(Icons.Logo.Stream);
+		Icon = new WindowIcon(Assets.Icons.Logo.Stream);
 	}
 
 	public static ProjectSettings Settings => new()
