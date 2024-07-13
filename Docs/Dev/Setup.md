@@ -5,7 +5,6 @@
 
 ## Add Nuget Packages
 - Add the Avalonia NuGet packages
-  - `Avalonia`
   - `Avalonia.Desktop`
   - `Avalonia.Fonts.Inter`
   - `Avalonia.Themes.Fluent`
@@ -41,6 +40,7 @@
 ## Create a new MainWindow
 - Replace the `MainWindow.cs` with a non-`.xaml` version
 - Alternatively, a TabViewer can also be added to an Avalonia Control (see `BaseWindow.cs` for an example)
+
 ```csharp
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
@@ -102,4 +102,5 @@ public class TabSample : ITab
 	}
 }
 ```
+
 See [Adding Tabs](AddingTabs.md) for more

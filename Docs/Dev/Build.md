@@ -6,7 +6,7 @@
 
 ## Console
 - Build
-  - `dotnet build SideScroll.sln`
+  - `dotnet build`
 - Run
   - `dotnet run --project Programs/SideScroll.Start.Avalonia/SideScroll.Start.Avalonia.csproj`
 

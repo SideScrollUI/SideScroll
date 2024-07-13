@@ -124,7 +124,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEditVersion)" />
     <PackageReference Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
@@ -132,12 +131,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SideScroll\SideScroll.csproj" />
-    <ProjectReference Include="..\SideScroll.Resources\SideScroll.Resources.csproj" />
-    <ProjectReference Include="..\SideScroll.Serialize\SideScroll.Serialize.csproj" />
     <ProjectReference Include="..\SideScroll.Tabs.Samples\SideScroll.Tabs.Samples.csproj" />
-    <ProjectReference Include="..\SideScroll.Tabs.Tools\SideScroll.Tabs.Tools.csproj" />
-    <ProjectReference Include="..\SideScroll.Tabs\SideScroll.Tabs.csproj" />
   </ItemGroup>
 
   <ItemGroup>

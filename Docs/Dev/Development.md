@@ -5,12 +5,12 @@ Before getting started, it might help to see some of the different things you ca
 ```
 git clone https://github.com/SideScrollUI/SideScroll.git
 cd SideScroll
-dotnet build SideScroll.sln
+dotnet build
 dotnet run --project Programs/SideScroll.Start.Avalonia/SideScroll.Start.Avalonia.csproj
 ```
 
-## AvaloniaUI
-* SideScroll is based on the [AvaloniaUI](https://github.com/AvaloniaUI/Avalonia) library, so be sure to also check out that library for custom controls and more advanced behaviors.
+## Avalonia UI
+* SideScroll is based on the [Avalonia UI](https://github.com/AvaloniaUI/Avalonia) library, so be sure to also check out that library for custom controls and more advanced behaviors.
 
 ## Links
 * [Setup](Setup.md)
