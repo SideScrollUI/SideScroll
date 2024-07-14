@@ -57,6 +57,7 @@ public static class Icons
 
 		public static ResourceView Link => Get("Link");
 		public static ResourceView Import => Get("Import");
+		public static ResourceView Download => Get("Download");
 		public static ResourceView Screenshot => Get("Screenshot");
 
 		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "svg", resourceName, "svg");

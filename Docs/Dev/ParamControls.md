@@ -149,13 +149,15 @@ model.AddObject(planetParams);
 [Source](../../Libraries/SideScroll.UI.Avalonia/Samples/Controls/CustomControl/TabCustomControl.cs)
 
 ## Attributes
-- `[AcceptsReturn]` - Allow return key to add a new line
-- `[Watermark(string text)]` - Show the specified watermark text when no value is specified
-- `[PasswordChar(char c)]` - Sets the password character to show instead of the actual text
-- `[BindList(string propertyName)]` - The member name that contains a list of items to select this item's value from
-- `[Header(string text)]` - Show a title and separator before this item
-- `[Separator]` - Show a separator before this item
-- `[ColumnIndex(int index)]` - Sets the column to use. This should usually be in multiples of 2 since a label & control use two columns
+| Attribute | Description |
+| - | - |
+| `[AcceptsReturn]` | Allow return key to add a new line |
+| `[Watermark(string text)]` | Show the specified watermark text when no value is specified |
+| `[PasswordChar(char c)]` | Sets the password character to show instead of the actual text |
+| `[BindList(string propertyName)]` | The member name that contains a list of items to select this item's value from |
+| `[Header(string text)]` | Show a title and separator before this item |
+| `[Separator]` | Show a separator before this item |
+| `[ColumnIndex(int index)]` | Sets the column to use. This should usually be in multiples of 2 since a label & control use two columns |
 
 ### Links
 - [Sample Tabs](../../Libraries/SideScroll.Tabs.Samples/Params/TabSampleParams.cs)

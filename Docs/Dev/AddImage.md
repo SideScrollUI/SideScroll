@@ -1,30 +1,48 @@
 # Adding new Image Resources
 
-- Location
-  - [Icons](../../Images/Libraries/SideScroll.Resources/Icons/)
+## Current Icons
+  - [Icons](../../Libraries/SideScroll.Resources/Icons.cs)
 
-* Find new icon:
-  - [Icon Icons](https://icon-icons.com/)
-    - Select outline after searching
-    - Download svg and convert to compatible svg (see below)
+## Finding new icon
+- [Icon Icons](https://icon-icons.com/) has lots of icons available for personal and commercial use
+  - Select outline after searching
+  - Download svg and convert to compatible svg (see below)
 
-## Adding a new file:
-- Add in the Assets folder
-- Add a copy of a svg if possible so it can be updated in the future
+## Adding a new file
+- Add in the Assets or Icons folder
+- Use svg files whenever possible so the image can be dynamically sized and the colors themed 
+- Add a copy of the original svg to the `originals` folder
 - Embed the image in the project (Alt-Enter on file, select Embedded)
   - Properties
-  - Build Action
-	  - Embedded
-- Add with git
-- Add an entry in the [Credits](../Credits.md)
+    - Build Action
+	    - Embedded
+- Add the new image in the `Assets.cs` or `Icons.cs`
+- Test out the new icons, and verify that the colors update when changing the theme
+- Add a new entry in the [Credits](../Credits.md)
+- Add files with git
 
-## Converting original svg to compatible svg
-- Avalonia can only import svg's in a certain format
-- [Vectr](https://vectr.com/) is one of the only compatible svg editors
-- Import svg into Vectr
-  - Vect uses a default size of 640x640
-  - Increase Height of image to 600-640 and center so there's just a slim border
-  - Export, set resolution to 24x24
-    - Avalonia can't resize svg yet?
-- Make sure the color in the `.svg` is also set to solid black so it gets updated with the theme
+## Editing svg files
+- If you have to edit an svg file, [Inkscape](https://inkscape.org/) is an easy and free to use editor
+- If needed, try to center the image and make sure there's a slim border
+- When exporting, set the resolution to 24x24 (might not be required anymore)
+
+### Color Theming
+- To allow updating the theme colors for an `svg` file, set all colors used to one of the following so they can be updated. Note that this might require manually editing the svg
   - `rgb(0,0,0)`
+    ```
+    <path fill: rgb(0,0,0); ... />
+    ```
+  - `currentColor`
+    ```
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+    ```

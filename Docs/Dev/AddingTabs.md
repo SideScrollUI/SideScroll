@@ -205,7 +205,7 @@ public class TabSampleAsync : ITab
   - `ToolComboBox` to add a drop down that is bound to the passed list, with an optional default
   - `string` to show text
 - If a more custom Toolbar is required, you can also derive a class from the `TabControlToolbar`
-  - See [TabControlSearchToolbar](../../Libraries/SideScroll.Tabs.Samples/TabControlSearchToolbar.cs) for example
+  - See [TabControlSearchToolbar](../../Libraries/SideScroll.UI.Avalonia/Samples/Controls/CustomControl/TabControlSearchToolbar.cs) for example
 
 ```csharp
 public class TabSampleToolbar : ITab

@@ -50,11 +50,15 @@ public static class SvgUtils
 		using var reader = new StreamReader(stream);
 		string text = reader.ReadToEnd();
 		Color newColor = color ?? SideScrollTheme.IconForeground.Color;
-		string updated = text.Replace("rgb(0,0,0)", $"rgb({newColor.R},{newColor.G},{newColor.B})");
+		string newColorText = $"rgb({newColor.R},{newColor.G},{newColor.B})";
+		string updated = text
+			.Replace("rgb(0,0,0)", newColorText)
+			.Replace("currentColor", newColorText);
 
 		return new SvgImage
 		{
 			Source = SvgSource.LoadFromSvg(updated),
+			//Css = "path { fill:#ff0000; }", // throws Exception
 		};
 	}
 

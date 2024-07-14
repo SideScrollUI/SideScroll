@@ -41,6 +41,7 @@
 | [Star](https://icon-icons.com/icon/bookmark-favorite-rate-rating-star/113418) | Unknown by site | CC Atribution |
 | [Undo/Redo](https://icon-icons.com/icon/undo/232333) | zahroe zahro | CC Atribution |
 | [Reset](https://icon-icons.com/icon/arrow-reset-regular/204640) | Microsoft | MIT license |
+| [Download](https://icon-icons.com/icon/download/128877) | Feather Icons | Free for commercial use |
 
 * Flaticon 
    - http://www.flaticon.com is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/)
