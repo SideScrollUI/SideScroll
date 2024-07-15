@@ -25,7 +25,7 @@ SideScroll is a cross platform AvaloniaUI library for navigating sideways throug
 * [Credits](Docs/Credits.md)
 
 ### Samples
-Try one of these out to see SideScroll in action
+Try one of the samples out to see SideScroll in action
 * [Tab Samples](/Programs/SideScroll.Start.Avalonia/MainWindow.cs) - Inside this repo
 * [Video Game Database](https://github.com/SideScrollUI/VideoGamesDB) - Sample external project
 

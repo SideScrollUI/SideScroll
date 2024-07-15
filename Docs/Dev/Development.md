@@ -13,7 +13,7 @@ dotnet run --project Programs/SideScroll.Start.Avalonia/SideScroll.Start.Avaloni
 * SideScroll is based on the [Avalonia UI](https://github.com/AvaloniaUI/Avalonia) library, so be sure to also check out that library for custom controls and more advanced behaviors.
 
 ## Links
-* [Setup](Setup.md)
+* [Project Setup](ProjectSetup.md)
 * [Adding Tabs](AddingTabs.md)
 * [Param Controls](ParamControls.md)
 * [DataRepos](DataRepos.md)
@@ -22,4 +22,4 @@ dotnet run --project Programs/SideScroll.Start.Avalonia/SideScroll.Start.Avaloni
 * [Bookmarks](Bookmarks.md)
 * [Charts](Charts.md)
 * [Projects](Projects.md)
-* [Build](Build.md)
+* [Building](Building.md)
