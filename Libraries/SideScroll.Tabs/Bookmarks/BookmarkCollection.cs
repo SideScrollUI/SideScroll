@@ -88,7 +88,9 @@ public class BookmarkCollection
 
 			TabBookmarkItem? existing = Items.SingleOrDefault(i => i.Bookmark.Path == key);
 			if (existing != null)
+			{
 				Items.Remove(existing);
+			}
 		}
 	}
 

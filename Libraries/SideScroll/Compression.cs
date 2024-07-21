@@ -48,7 +48,9 @@ public class Compression
 		string targetPath = Path.ChangeExtension(fileToDecompress.FullName, null);
 
 		if (Directory.Exists(targetPath))
+		{
 			Directory.Delete(targetPath, true);
+		}
 
 		ZipFile.ExtractToDirectory(fileToDecompress.FullName, targetPath);
 	}

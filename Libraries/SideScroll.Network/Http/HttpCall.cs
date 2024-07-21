@@ -14,7 +14,9 @@ public class HttpCall(Call call)
 	{
 		byte[] bytes = await GetResponseAsync(uri, accept);
 		if (bytes != null)
+		{
 			return Encoding.ASCII.GetString(bytes);
+		}
 		return null;
 	}
 

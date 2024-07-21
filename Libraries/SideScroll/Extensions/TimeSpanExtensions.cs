@@ -30,7 +30,9 @@ public static class TimeSpanExtensions
 			string value = units.ToString(format) + " " + timeUnit.Name;
 
 			if (absTimeSpan.TotalSeconds > timeUnit.TimeSpan.TotalSeconds)
+			{
 				value += "s";
+			}
 
 			return value;
 		}
@@ -53,7 +55,9 @@ public static class TimeSpanExtensions
 			sb.Append(timeSpan.Hours);
 			sb.Append(':');
 			if (timeSpan.Minutes < 10)
+			{
 				sb.Append('0');
+			}
 		}
 
 		if ((int)timeSpan.TotalMinutes > 0)
@@ -61,7 +65,9 @@ public static class TimeSpanExtensions
 			sb.Append(timeSpan.Minutes);
 			sb.Append(':');
 			if (timeSpan.Seconds < 10)
+			{
 				sb.Append('0');
+			}
 		}
 
 		sb.Append(timeSpan.Seconds);

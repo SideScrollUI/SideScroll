@@ -205,7 +205,9 @@ public class TimeRangeValue : ITags
 			Value = double.NaN,
 		};
 		if (timeRangeValue.Duration >= periodDuration)
+		{
 			output.Add(timeRangeValue);
+		}
 	}
 
 	// Add NaN points for each period duration between the start/end times

@@ -9,7 +9,9 @@ public class TypeRepoHashSet : TypeRepoEnumerable, IPreloadRepo
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (CanAssign(typeSchema.Type!))
+			{
 				return new TypeRepoHashSet(serializer, typeSchema);
+			}
 			return null;
 		}
 	}

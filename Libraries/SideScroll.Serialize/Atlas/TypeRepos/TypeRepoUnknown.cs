@@ -9,7 +9,9 @@ public class TypeRepoUnknown(Serializer serializer, TypeSchema typeSchema) : Typ
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (typeSchema.Type == null)
+			{
 				return new TypeRepoUnknown(serializer, typeSchema);
+			}
 			return null;
 		}
 	}
@@ -20,7 +22,9 @@ public class TypeRepoUnknown(Serializer serializer, TypeSchema typeSchema) : Typ
 		{
 			if ((!typeSchema.HasConstructor && !typeSchema.IsSerialized) ||
 				(typeSchema.IsPublicOnly && !serializer.PublicOnly))
+			{
 				return new TypeRepoUnknown(serializer, typeSchema);
+			}
 			return null;
 		}
 	}

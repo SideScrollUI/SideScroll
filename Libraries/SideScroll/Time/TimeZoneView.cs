@@ -47,9 +47,13 @@ public class TimeZoneView : IComparable
 			return dateTime;
 
 		if (this == Local)
+		{
 			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
+		}
 		else
+		{
 			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+		}
 
 		return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo!);
 	}

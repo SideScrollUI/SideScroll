@@ -146,13 +146,17 @@ public class Filter
 			{
 				List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleElementProperties(list); // cache me
 				foreach (var item in list)
+				{
 					GetItemSearchText(item, visibleProperties, uppercaseValues);
+				}
 			}
 			else
 			{
 				List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleProperties(innerType); // cache me
 				if (visibleProperties != null)
+				{
 					GetItemSearchText(innerValue, visibleProperties, uppercaseValues);
+				}
 			}
 		}
 	}

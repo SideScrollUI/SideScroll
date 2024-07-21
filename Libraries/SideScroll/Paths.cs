@@ -40,9 +40,13 @@ public static class Paths
 		get
 		{
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+			{
 				return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library");
+			}
 			else
+			{
 				return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+			}
 		}
 	}
 
@@ -55,9 +59,13 @@ public static class Paths
 		get
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Unix)
+			{
 				return Environment.GetEnvironmentVariable("HOME")!;
+			}
 			else
+			{
 				return Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+			}
 		}
 	}
 }

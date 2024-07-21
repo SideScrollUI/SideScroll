@@ -32,10 +32,9 @@ public static class HttpUtils
 		var response = await GetBytesAsync(call, uri);
 		response?.Response?.EnsureSuccessStatusCode();
 		byte[]? bytes = response?.Bytes;
-		if (bytes != null)
-			return Encoding.ASCII.GetString(bytes);
-
-		return null;
+		if (bytes == null) return null;
+		
+		return Encoding.ASCII.GetString(bytes);
 	}
 
 	public static ViewHttpResponse? GetBytes(Call call, string uri, TimeSpan? timeout = null, IProgress<HttpGetProgress>? progress = null)

@@ -21,7 +21,9 @@ public class LogWriterConsole
 	{
 		string indentation = "";
 		for (int i = 1; i < e.Entries.Count; i++)
+		{
 			indentation += '\t';
+		}
 
 		LogEntry newLog = e.Entries[0];
 		//string line = log.Created.ToString("yyyy-MM-dd HH:mm:ss") + indentation + log.ToString();

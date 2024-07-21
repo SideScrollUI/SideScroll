@@ -9,7 +9,9 @@ public class TypeRepoString(Serializer serializer, TypeSchema typeSchema) : Type
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (typeSchema.Type == typeof(string))
+			{
 				return new TypeRepoString(serializer, typeSchema);
+			}
 			return null;
 		}
 	}

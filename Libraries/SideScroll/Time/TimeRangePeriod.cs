@@ -282,7 +282,9 @@ public class TimeRangePeriod : ITags
 			.ToList();
 
 		if (addGaps)
+		{
 			return TimeRangeValue.AddGaps(periodCounts, timeWindow.StartTime, timeWindow.EndTime, periodDuration);
+		}
 
 		return periodCounts;
 	}

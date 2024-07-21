@@ -9,7 +9,9 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (CanAssign(typeSchema.Type!))
+			{
 				return new TypeRepoTimeSpan(serializer, typeSchema);
+			}
 			return null;
 		}
 	}

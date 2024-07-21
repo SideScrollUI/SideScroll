@@ -60,7 +60,9 @@ public class HttpCache : IDisposable
 		_dataStream = new FileStream(_dataPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
 
 		if (_indexStream.Length == 0)
+		{
 			SaveHeader();
+		}
 
 		LoadIndex();
 	}

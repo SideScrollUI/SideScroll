@@ -17,7 +17,9 @@ public class LogWriterText : IDisposable
 
 		string parentDirectory = Path.GetDirectoryName(SaveFilePath)!;
 		if (!Directory.Exists(parentDirectory))
+		{
 			Directory.CreateDirectory(parentDirectory);
+		}
 
 		_textStreamWriter = new StreamWriter(SaveFilePath);
 
@@ -30,7 +32,9 @@ public class LogWriterText : IDisposable
 	{
 		string indentation = "";
 		foreach (LogEntry logEntry in e.Entries)
+		{
 			indentation += '\t';
+		}
 
 		LogEntry newLog = e.Entries[0];
 		string line = Log.Created.ToString("yyyy-M-d H:mm:ss") + indentation + newLog.Message;

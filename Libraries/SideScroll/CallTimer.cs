@@ -49,7 +49,9 @@ public class CallTimer : Call, IDisposable
 	private void UpdateDuration()
 	{
 		if (Log != null)
+		{
 			Log.Duration = _stopwatch.Elapsed;
+		}
 	}
 
 	public void Dispose()

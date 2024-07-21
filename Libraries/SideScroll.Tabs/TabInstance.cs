@@ -405,7 +405,9 @@ public class TabInstance : IDisposable
 			// Task.OnFinished hasn't always been called by this point
 			if ((model.ShowTasks || call.Log.Level >= LogLevel.Error)
 				&& !Model.Tasks.Contains(call.TaskInstance!))
+			{
 				Model.Tasks.Add(call.TaskInstance!);
+			}
 		}
 		return model;
 	}
@@ -504,9 +506,13 @@ public class TabInstance : IDisposable
 		if (OnReload != null)
 		{
 			if (this is ITabAsync tabAsync)
+			{
 				OnReload.Invoke(tabAsync, EventArgs.Empty);
+			}
 			else
+			{
 				UiContext.Send(_ => OnReload(this, EventArgs.Empty), null);
+			}
 		}
 		// todo: this needs to actually wait for reload
 	}
@@ -576,7 +582,9 @@ public class TabInstance : IDisposable
 	public void ClearSelection()
 	{
 		if (OnClearSelection != null)
+		{
 			UiContext.Send(_ => OnClearSelection(this, EventArgs.Empty), null);
+		}
 	}
 
 	public bool IsLinkable
@@ -635,7 +643,9 @@ public class TabInstance : IDisposable
 		}*/
 
 		if (iTab is IInnerTab innerTab)
+		{
 			iTab = innerTab.Tab;
+		}
 
 		if (iTab != null)
 		{
@@ -905,7 +915,9 @@ public class TabInstance : IDisposable
 		if (TabBookmark.ChildBookmarks.TryGetValue(dataKey, out TabBookmark? tabChildBookmark))
 		{
 			if (tabChildBookmark.TabModel != null)
+			{
 				return tabChildBookmark.TabModel;
+			}
 		}
 
 		return tabChildBookmark;

@@ -111,9 +111,13 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		};
 
 		if (Count > 0)
+		{
 			_polygon.Fill = _colorBrush;
+		}
 		else
+		{
 			IsSelected = false;
+		}
 
 		_polygon.PointerPressed += Polygon_PointerPressed;
 		Children.Add(_polygon);
@@ -154,7 +158,9 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	{
 		string prefix = "";
 		if (Index > 0 && ChartView.Series.Count > 1)
+		{
 			prefix = $"{Index}. ";
+		}
 
 		TextBlock!.Text = prefix + ToString();
 	}
@@ -188,7 +194,9 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 				_highlight = true;
 				TextBlock!.Foreground = SideScrollTheme.ChartLabelForegroundHighlight;
 				if (TextBlockTotal != null)
+				{
 					TextBlockTotal.Foreground = SideScrollTheme.ChartLabelForegroundHighlight;
+				}
 			}
 			else
 			{
@@ -197,7 +205,9 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 				SetFilled(IsSelected);
 				TextBlock!.Foreground = SideScrollTheme.LabelForeground;
 				if (TextBlockTotal != null)
+				{
 					TextBlockTotal.Foreground = SideScrollTheme.LabelForeground;
+				}
 			}
 
 			UpdateVisible();
@@ -210,9 +220,13 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	{
 		Color newColor;
 		if (Highlight || !showFaded)
+		{
 			newColor = ChartSeries.Color;
+		}
 		else
+		{
 			newColor = Color.FromArgb(32, ChartSeries.Color.R, ChartSeries.Color.G, ChartSeries.Color.B); // Show Faded
+		}
 
 		UpdateColor(newColor);
 	}

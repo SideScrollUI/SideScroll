@@ -68,7 +68,9 @@ public class Sorter : CustomComparer
 		int comparison = base.Compare(xKey, yKey);
 
 		if (SortDirection == ListSortDirection.Descending)
+		{
 			comparison = -comparison;
+		}
 
 		return comparison;
 	}

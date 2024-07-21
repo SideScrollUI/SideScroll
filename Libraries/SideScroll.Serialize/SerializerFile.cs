@@ -30,7 +30,9 @@ public abstract class SerializerFile(string basePath, string name = "")
 		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object: " + name, new Tag("Path", BasePath));
 
 		if (!Directory.Exists(BasePath))
+		{
 			Directory.CreateDirectory(BasePath);
+		}
 
 		SaveInternal(callTimer, obj, name);
 	}

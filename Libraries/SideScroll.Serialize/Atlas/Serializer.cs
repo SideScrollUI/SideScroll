@@ -545,7 +545,9 @@ public class Serializer : IDisposable
 		int objectIndex = typeRepo.GetOrAddObjectRef(obj);
 		//ParserQueue.Enqueue(obj);
 		if (objectIndex < 0)
+		{
 			Primitives.Add(obj);
+		}
 
 		while (ParserQueue.Count > 0)
 		{

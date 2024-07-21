@@ -181,7 +181,9 @@ public class TaskInstance : INotifyPropertyChanged
 			ParentTask = this,
 		};
 		if (ProgressMax > 0)
+		{
 			subTask.ProgressMax = 100;
+		}
 
 		lock (SubTasks)
 		{
@@ -199,9 +201,13 @@ public class TaskInstance : INotifyPropertyChanged
 		_stopwatch.Stop(); // Both Send and Post adds some delay
 
 		if (Creator != null)
+		{
 			Creator.Context!.Post(OnFinished, null);
+		}
 		else
+		{
 			OnFinished(null);
+		}
 	}
 
 	private void OnFinished(object? state)
@@ -228,7 +234,9 @@ public class TaskInstance : INotifyPropertyChanged
 			else if (Call.Log.Level == LogLevel.Warn)
 			{
 				if (!Errored)
+				{
 					Status = Call.Log.Level.ToString();
+				}
 				ShowTask = true;
 			}
 			else if (Task == null || TaskStatus == TaskStatus.RanToCompletion)
@@ -251,7 +259,9 @@ public class TaskInstance : INotifyPropertyChanged
 		Call.Log.Add("Finished", new Tag("Time", _stopwatch.ElapsedMilliseconds / 1000.0));
 
 		if (ParentTask == null)
+		{
 			Creator?.OnComplete?.Invoke();
+		}
 		OnComplete?.Invoke();
 	}
 

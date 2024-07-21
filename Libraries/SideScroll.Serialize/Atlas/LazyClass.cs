@@ -79,7 +79,9 @@ public class LazyClass
 
 			MethodInfo getMethod = propertyInfo.GetGetMethod(false)!;
 			if (getMethod.IsVirtual)
+			{
 				propertyRepo.LazyProperty = CreateLazyProperty(typeBuilder, propertyInfo);
+			}
 		}
 
 		TypeInfo objectType = typeBuilder.CreateTypeInfo();

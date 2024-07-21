@@ -76,9 +76,13 @@ public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 		if (FileSelectorOptions?.DataRepoFavorites is DataRepoView<NodeView> dataRepoFavorites)
 		{
 			if (_favorite)
+			{
 				dataRepoFavorites.Save(null, Path, this);
+			}
 			else
+			{
 				dataRepoFavorites.Delete(null, Path);
+			}
 		}
 	}
 
@@ -146,8 +150,12 @@ public class FileView : NodeView
 		LastWriteTime = FileInfo.LastWriteTime.Trim();
 
 		if (Filename.EndsWith(".atlas"))
+		{
 			Tab = new TabFileSerialized(path);
+		}
 		else
+		{
 			Tab = new TabFile(this);
+		}
 	}
 }

@@ -20,9 +20,13 @@ public class ProjectSettings
 		get
 		{
 			if (Domain != null)
+			{
 				return Paths.Combine(Paths.AppDataPath, Domain, Name);
+			}
 			else
+			{
 				return Paths.Combine(Paths.AppDataPath, Name);
+			}
 		}
 	}
 

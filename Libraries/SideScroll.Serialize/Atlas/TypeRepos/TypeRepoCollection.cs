@@ -27,7 +27,9 @@ public class TypeRepoCollection : TypeRepo
 	{
 		Type[] types = LoadableType!.GetGenericArguments();
 		if (types.Length > 0)
+		{
 			_elementType = types[0];
+		}
 
 		_addMethod = LoadableType.GetMethods()
 			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 1);
@@ -36,7 +38,9 @@ public class TypeRepoCollection : TypeRepo
 	public override void InitializeLoading(Log log)
 	{
 		if (_elementType != null)
+		{
 			_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
+		}
 	}
 
 	public override void AddChildObjects(object obj)

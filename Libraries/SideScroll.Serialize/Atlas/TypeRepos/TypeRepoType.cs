@@ -10,7 +10,9 @@ public class TypeRepoType(Serializer serializer, TypeSchema typeSchema) : TypeRe
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (typeof(Type).IsAssignableFrom(typeSchema.Type))
+			{
 				return new TypeRepoType(serializer, typeSchema);
+			}
 			return null;
 		}
 	}

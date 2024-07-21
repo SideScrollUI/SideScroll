@@ -113,7 +113,9 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 				.ToList();
 
 			if (selected.Count == ChartSeries.Count && selected.Count > 1)
+			{
 				selected.Clear(); // If all are selected, none are selected?
+			}
 			return selected;
 		}
 	}
@@ -137,9 +139,13 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		if (FillHeight)
+		{
 			VerticalAlignment = VerticalAlignment.Top;
+		}
 		else
+		{
 			VerticalAlignment = VerticalAlignment.Stretch;
+		}
 
 		ColumnDefinitions = new ColumnDefinitions("*");
 		RowDefinitions = new RowDefinitions("*");

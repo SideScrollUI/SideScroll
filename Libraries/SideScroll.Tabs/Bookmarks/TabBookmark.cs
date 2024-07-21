@@ -298,9 +298,13 @@ public class TabBookmark
 			foreach (SelectedRow row in currentSelection)
 			{
 				if (row.Label != null)
+				{
 					labelsUsed.Add(row.Label);
+				}
 				else
+				{
 					indicesUsed.Add(row.RowIndex);
+				}
 			}
 
 			foreach (SelectedRow row in otherSelection)

@@ -129,6 +129,8 @@ public class FieldSchema
 
 		TypeSchema typeSchema = typeSchemas[TypeIndex];
 		if (FieldInfo != null && typeSchema.Type != FieldInfo.FieldType.GetNonNullableType())
+		{
 			IsLoadable = false;
+		}
 	}
 }

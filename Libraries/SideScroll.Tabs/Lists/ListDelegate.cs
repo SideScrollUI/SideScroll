@@ -59,7 +59,9 @@ public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 
 		NameAttribute? attribute = MethodInfo.GetCustomAttribute<NameAttribute>();
 		if (attribute != null)
+		{
 			Name = attribute.Name;
+		}
 	}
 
 	public async Task<object?> LoadAsync(Call call)

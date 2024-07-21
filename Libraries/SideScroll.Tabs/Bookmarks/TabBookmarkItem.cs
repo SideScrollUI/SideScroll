@@ -36,10 +36,14 @@ public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerT
 	public TabInstance Create()
 	{
 		if (Bookmark.Type == null)
+		{
 			throw new ArgumentNullException("Bookmark.Type");
+		}
 
 		if (!typeof(ITab).IsAssignableFrom(Bookmark.Type))
+		{
 			throw new Exception("Bookmark.Type must implement ITab");
+		}
 
 		var call = new Call();
 		Bookmark bookmarkCopy = Bookmark.DeepClone(call, true)!; // This will get modified as users navigate
@@ -47,7 +51,9 @@ public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerT
 		ITab tab = bookmarkCopy.TabBookmark.Tab ?? (ITab)Activator.CreateInstance(bookmarkCopy.Type!)!;
 
 		if (tab is IReload reloadable)
+		{
 			reloadable.Reload();
+		}
 
 		TabInstance tabInstance = tab.Create();
 		tabInstance.Project = Project.Open(bookmarkCopy);

@@ -9,7 +9,9 @@ public class TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) 
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (CanAssign(typeSchema.Type!))
+			{
 				return new TypeRepoTimeZoneInfo(serializer, typeSchema);
+			}
 			return null;
 		}
 	}

@@ -9,7 +9,9 @@ public class TypeRepoEnum(Serializer serializer, TypeSchema typeSchema) : TypeRe
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (CanAssign(typeSchema.Type!))
+			{
 				return new TypeRepoEnum(serializer, typeSchema);
+			}
 			return null;
 		}
 	}
@@ -33,9 +35,13 @@ public class TypeRepoEnum(Serializer serializer, TypeSchema typeSchema) : TypeRe
 		try
 		{
 			if (LoadableType!.IsEnum)
+			{
 				obj = Enum.ToObject(TypeSchema.Type!, Reader.ReadInt32());
+			}
 			else
+			{
 				throw new Exception("Unhandled primitive type");
+			}
 		}
 		catch (Exception)
 		{

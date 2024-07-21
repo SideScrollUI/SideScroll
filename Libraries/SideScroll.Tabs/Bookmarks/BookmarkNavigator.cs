@@ -46,7 +46,9 @@ public class BookmarkNavigator
 		//if (trimAt < History.Count)
 		//	History.RemoveRange(trimAt, History.Count - trimAt);
 		if (makeCurrent)
+		{
 			CurrentIndex = History.Count;
+		}
 		bookmark.Name = CurrentIndex.ToString();// + " - " + bookmark.Address;
 		History.Add(bookmark);
 	}

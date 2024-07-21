@@ -110,7 +110,9 @@ public class DataRepo
 		{
 			T? obj = serializerFile.Load<T>(call, lazy);
 			if (obj != null)
+			{
 				return new DataItem<T>(key, obj, serializerFile.DataPath);
+			}
 		}
 
 		if (createIfNeeded)
@@ -221,7 +223,9 @@ public class DataRepo
 				{
 					Header header = serializerFile.LoadHeader(call);
 					if (header != null)
+					{
 						headers.Add(header);
+					}
 				}
 			}
 		}

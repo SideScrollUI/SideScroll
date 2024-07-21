@@ -9,7 +9,9 @@ public class TypeRepoVersion(Serializer serializer, TypeSchema typeSchema) : Typ
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (CanAssign(typeSchema.Type!))
+			{
 				return new TypeRepoVersion(serializer, typeSchema);
+			}
 			return null;
 		}
 	}

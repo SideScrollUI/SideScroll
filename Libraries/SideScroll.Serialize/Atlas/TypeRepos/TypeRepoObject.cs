@@ -262,7 +262,9 @@ public class TypeRepoObject : TypeRepo
 			PropertyRepos.Add(propertyRepo);
 
 			if (propertySchema.IsWriteable && !propertySchema.Type!.IsPrimitive)
+			{
 				lazyPropertyRepos.Add(propertyRepo);
+			}
 		}
 
 		// should we add an attribute for this instead?

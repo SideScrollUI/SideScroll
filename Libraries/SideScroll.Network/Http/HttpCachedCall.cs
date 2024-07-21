@@ -21,7 +21,9 @@ public class HttpCachedCall(Call call, HttpCache httpCache) : HttpCall(call)
 	{
 		byte[] bytes = await GetBytesAsync(uri);
 		if (bytes != null)
+		{
 			return Encoding.ASCII.GetString(bytes);
+		}
 
 		return null;
 	}

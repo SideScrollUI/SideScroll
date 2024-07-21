@@ -71,9 +71,13 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 			nodes.AddRange(files);
 
 			if (directories.Count == nodes.Count)
+			{
 				model.Items = new List<IDirectoryView>(directories);
+			}
 			else
+			{
 				model.Items = nodes;
+			}
 		}
 
 		private List<FileView> GetFiles(Call call)

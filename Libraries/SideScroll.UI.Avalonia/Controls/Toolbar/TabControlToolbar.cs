@@ -31,7 +31,9 @@ public class TabControlToolbar : Grid, IDisposable
 		InitializeControls();
 
 		if (toolbar != null)
+		{
 			LoadToolbar(toolbar);
+		}
 	}
 
 	private void InitializeControls()
@@ -97,9 +99,13 @@ public class TabControlToolbar : Grid, IDisposable
 	{
 		Grid.SetColumn(control, ColumnDefinitions.Count);
 		if (fill)
+		{
 			ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
+		}
 		else
+		{
 			ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+		}
 		Children.Add(control);
 	}
 
@@ -226,7 +232,9 @@ public class TabControlToolbar : Grid, IDisposable
 		foreach (Control control in Children)
 		{
 			if (control is IDisposable disposable)
+			{
 				disposable.Dispose();
+			}
 		}
 	}
 }

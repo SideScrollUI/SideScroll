@@ -54,7 +54,9 @@ public class TabViewSettings
 			foreach (TabDataSettings dataSettings in TabDataSettings)
 			{
 				if (dataSettings.SelectionType != SelectionType.None)
+				{
 					return dataSettings.SelectionType;
+				}
 			}
 
 			return SelectionType.None;
