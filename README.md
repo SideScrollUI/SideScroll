@@ -13,6 +13,10 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 * Chart line series using the [LiveCharts 2](https://github.com/beto-rodriguez/LiveCharts2) controls
 * RichText document support using the [AvaloniaEdit](https://github.com/AvaloniaUI/AvaloniaEdit) controls
 
+## Examples
+#### VideoGamesDB
+![VideoGamesDB](Images/Animations/SideScroll-VideoGamesDB.gif)
+
 ## Screenshots
 #### Light Theme
 ![Light Theme](Images/Screenshots/ColumnTypes_CustomControl_Charts_Light.png)
