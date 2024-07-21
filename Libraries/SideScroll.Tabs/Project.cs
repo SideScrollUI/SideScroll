@@ -92,11 +92,12 @@ public class Project
 
 	public static Project Load<T>(ProjectSettings projectSettings) where T: UserSettings, new()
 	{
-		var project = new Project(projectSettings, new());
-		var userSettings = project.DataApp.Load<T>() ?? new()
+		T defaultUserSettings = new()
 		{
 			ProjectPath = projectSettings.DefaultProjectPath,
 		};
+		var project = new Project(projectSettings, defaultUserSettings);
+		var userSettings = project.DataApp.Load<T>() ?? defaultUserSettings;
 		return new Project(projectSettings, userSettings);
 	}
 }
