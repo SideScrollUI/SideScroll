@@ -12,4 +12,5 @@
 
 ### Pack
 - Update `<Version>` and `<PackageReleaseNotes>` in [Directory.Build.props](../../Directory.Build.props)
+- `git tag v0.3.0`
 - `dotnet pack -o Packages`

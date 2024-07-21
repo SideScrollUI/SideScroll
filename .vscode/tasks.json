@@ -14,19 +14,5 @@
             },
             "problemMatcher": "$msCompile"
         },
-        //  (Windows Only)
-        /*{
-            "label": "build SideScroll.Start.Wpf",
-            "type": "process",
-            "command": "MSBuild.exe",
-            "args": [
-                "${workspaceRoot}/Programs/SideScroll.Start.Wpf/SideScroll.Start.Wpf.csproj"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": "$msCompile"
-        }*/
     ]
 }

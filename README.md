@@ -1,11 +1,17 @@
 # SideScroll
-SideScroll is a cross platform AvaloniaUI library for navigating sideways through a tree of Tabs. Multiple paths can viewed at once, and new tabs will load as you scroll to the right.
+SideScroll is a cross platform Avalonia UI framework for quickly navigating through trees of tabs. Every tab that shows will automatically select the next most likely tabs, and the next, until you need to start scrolling. Navigate 20 or even 50 tabs deep, and create links to save or share with others.
+
+SideScroll is designed with speed in mind, for both development and usage. Most tabs are created in code which makes them easier to link together and refactor later. Any object can be viewed or edited by adding it to a tab, with all the controls being automatically created for you, and customized via attributes. DataRepos can be used to save and load these objects, and the selected items can be passed in links automatically.
 
 ## Features
 * .NET Cross Platform UI Framework that can run on any Windows, MacOS, or Linux system
-* Previous selections are used to automatically select the most likely options
+* Previous selections are used to automatically select the most likely new items
+* Open multiple paths at once to easily compare or update items
 * Create Links to share views with others
-* DataRepos manage your local saving & loading
+* Use DataRepos to manage your local saving & loading
+* Load any object in a Param Control to create a form with matching Avalonia controls
+* Chart line series using the [LiveCharts 2](https://github.com/beto-rodriguez/LiveCharts2) controls
+* RichText document support using the [AvaloniaEdit](https://github.com/AvaloniaUI/AvaloniaEdit) controls
 
 ## Screenshots
 #### Light Theme
@@ -14,6 +20,8 @@ SideScroll is a cross platform AvaloniaUI library for navigating sideways throug
 ![Dark Theme](Images/Screenshots/ColumnTypes_CustomControl_Charts_Dark.png)
 #### Custom Theming
 ![Custom Theme](Images/Screenshots/CustomTheme.png)
+#### Rich Text Editing with AvaloniaEdit
+![Rich Text Editing](Images/Screenshots/TextEditorJsonAndXml.png)
 #### Share Links
 ![Links](Images/Screenshots/Links.png)
 

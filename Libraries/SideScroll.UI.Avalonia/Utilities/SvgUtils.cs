@@ -52,6 +52,7 @@ public static class SvgUtils
 		Color newColor = color ?? SideScrollTheme.IconForeground.Color;
 		string newColorText = $"rgb({newColor.R},{newColor.G},{newColor.B})";
 		string updated = text
+			.Replace("#000000", newColorText)
 			.Replace("rgb(0,0,0)", newColorText)
 			.Replace("currentColor", newColorText);
 

@@ -1,14 +1,13 @@
 {
     "version": "0.2.0",
     "configurations": [
-               
         {
             "name": "SideScroll.Start.Avalonia",
             "console": "integratedTerminal",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build SideScroll",
-            "program": "${workspaceFolder}/Programs/SideScroll.Start.Avalonia/bin/Debug/netcoreapp3.1/SideScroll.Start.Avalonia.dll",
+            "program": "${workspaceFolder}/Programs/SideScroll.Start.Avalonia/bin/Debug/net8.0/SideScroll.Start.Avalonia.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Programs/SideScroll.Start.Avalonia",
             "stopAtEntry": false,

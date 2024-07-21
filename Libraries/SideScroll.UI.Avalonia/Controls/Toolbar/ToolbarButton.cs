@@ -114,7 +114,7 @@ public class ToolbarButton : Button, IDisposable
 			Source = _defaultImage,
 			Width = 24,
 			Height = 24,
-			Stretch = Stretch.None,
+			Stretch = ImageResource.ResourceType == "svg" ? Stretch.Uniform : Stretch.None,
 		};
 		grid.Children.Add(_imageControl);
 

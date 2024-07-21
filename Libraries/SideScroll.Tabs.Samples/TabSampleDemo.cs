@@ -4,6 +4,7 @@ using SideScroll.Tabs.Samples.Chart;
 using SideScroll.Tabs.Samples.DataGrid;
 using SideScroll.Tabs.Samples.Objects;
 using SideScroll.Tabs.Samples.Params;
+using SideScroll.Tabs.Tools.FileViewer;
 
 namespace SideScroll.Tabs.Samples;
 
@@ -17,5 +18,6 @@ public class TabSampleDemo
 	public static TabSampleParamsDataTabs Params => new();
 	public static string Json => TextSamples.Json;
 	public static TabSampleChartTimeSeries Chart => new();
+	public static TabFileViewer FileViewer => new();
 	public static TabSampleDemo Copy => new();
 }

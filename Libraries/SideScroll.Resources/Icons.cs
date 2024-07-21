@@ -19,6 +19,9 @@ public static class Icons
 		public static ResourceView Back => Get("LeftArrowCircle");
 		public static ResourceView Forward => Get("RightArrowCircle");
 
+		public static ResourceView Play => Get("PlayCircle");
+		public static ResourceView Stop => Get("StopCircle");
+
 		public static ResourceView LeftArrow => Get("LeftArrow");
 		public static ResourceView RightArrow => Get("RightArrow");
 		public static ResourceView UpArrow => Get("UpArrow");

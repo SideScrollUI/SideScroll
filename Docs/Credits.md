@@ -42,6 +42,8 @@
 | [Undo/Redo](https://icon-icons.com/icon/undo/232333) | zahroe zahro | CC Atribution |
 | [Reset](https://icon-icons.com/icon/arrow-reset-regular/204640) | Microsoft | MIT license |
 | [Download](https://icon-icons.com/icon/download/128877) | Feather Icons | Free for commercial use |
+| [Play Circle](https://icon-icons.com/icon/play-button/121290) | Lucy G |  CC Atribution |
+| [Stop Circle](https://icon-icons.com/icon/stop-circle/176721) | Afdolash Kaffah |  CC Atribution |
 
 * Flaticon 
    - http://www.flaticon.com is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/)

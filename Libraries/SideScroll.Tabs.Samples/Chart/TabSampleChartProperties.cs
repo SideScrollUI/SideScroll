@@ -1,12 +1,23 @@
+using SideScroll.Attributes;
 using SideScroll.Charts;
 using SideScroll.Collections;
-using SideScroll.Tasks;
+using SideScroll.Resources;
+using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Samples.Chart;
 
 public class TabSampleChartProperties : ITab
 {
 	public TabInstance Create() => new Instance();
+
+	public class Toolbar : TabToolbar
+	{
+		public ToolButton ButtonAdd { get; set; } = new("Add", Icons.Svg.Add);
+
+		[Separator]
+		public ToolButton ButtonStart { get; set; } = new("Start", Icons.Svg.Play);
+		public ToolButton ButtonStop { get; set; } = new("Stop", Icons.Svg.Stop);
+	}
 
 	public class Instance : TabInstance
 	{
@@ -34,11 +45,11 @@ public class TabSampleChartProperties : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			model.Actions = new List<TaskCreator>
-			{
-				new TaskDelegate("Add Entry", AddEntry),
-				new TaskDelegate("Start: 1 Entry / second", StartTask, true),
-			};
+			Toolbar toolbar = new();
+			toolbar.ButtonAdd.Action = AddEntry;
+			toolbar.ButtonStart.ActionAsync = StartTaskAsync;
+			toolbar.ButtonStop.Action = StopTask;
+			model.AddObject(toolbar);
 
 			for (int i = 0; i < 10; i++)
 			{
@@ -58,14 +69,23 @@ public class TabSampleChartProperties : ITab
 			Invoke(AddSampleCallback, call);
 		}
 
-		private void StartTask(Call call)
+		private Call? _addCall;
+		private async Task StartTaskAsync(Call call)
 		{
+			_addCall = call;
+
 			CancellationToken token = call.TaskInstance!.TokenSource.Token;
 			for (int i = 0; i < 1000 && !token.IsCancellationRequested; i++)
 			{
 				Invoke(AddSampleCallback, call);
-				Thread.Sleep(1000);
+				await Task.Delay(1000);
 			}
+		}
+
+		private void StopTask(Call call)
+		{
+			_addCall?.TaskInstance?.Cancel();
+			_addCall = null;
 		}
 
 		private void AddSample(int i)
