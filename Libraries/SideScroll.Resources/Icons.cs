@@ -66,6 +66,7 @@ public static class Icons
 		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "svg", resourceName, "svg");
 	}
 
+	// todo: Deprecate
 	public class Png : NamedItemCollection<Png, ResourceView>
 	{
 		public static ResourceView ClearSearch => Get("clear_search");

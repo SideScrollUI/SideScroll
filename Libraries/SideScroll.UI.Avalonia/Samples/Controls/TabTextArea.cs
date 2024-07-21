@@ -12,6 +12,8 @@ public class TabTextArea : ITab
 	{
 		public override void LoadUI(Call call, TabModel model)
 		{
+			model.MaxDesiredWidth = 800;
+
 			var textArea = new TabControlTextArea(TextSamples.Plain);
 			model.AddObject(textArea, true);
 		}

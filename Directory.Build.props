@@ -11,7 +11,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <Description>SideScroll is a cross platform AvaloniaUI library for navigating sideways through a tree of Tabs. Multiple paths can viewed at once, and new tabs will load as you scroll to the right.</Description>
+    <Description>SideScroll is a cross platform Avalonia UI framework designed for quickly navigating through trees of tabs. Every tab that shows will automatically select the next most likely tabs, and the next, until you need to start scrolling. Navigate 20 or even 50 tabs deep, and create links to save or share with others.</Description>
     <RepositoryUrl>https://github.com/SideScrollUI/SideScroll</RepositoryUrl>
     <Authors>SideScroll UI</Authors>
     <Copyright>SideScroll UI</Copyright>
