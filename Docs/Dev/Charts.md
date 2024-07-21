@@ -11,15 +11,26 @@
 
 #### Sample Chart Tab
 ```csharp
+using SideScroll.Attributes;
 using SideScroll.Charts;
 using SideScroll.Collections;
-using SideScroll.Tasks;
+using SideScroll.Resources;
+using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Samples.Chart;
 
 public class TabSampleChartLists : ITab
 {
 	public TabInstance Create() => new Instance();
+
+	public class Toolbar : TabToolbar
+	{
+		public ToolButton ButtonAdd { get; set; } = new("Add", Icons.Svg.Add);
+
+		[Separator]
+		public ToolButton ButtonStart { get; set; } = new("Start", Icons.Svg.Play);
+		public ToolButton ButtonStop { get; set; } = new("Stop", Icons.Svg.Stop);
+	}
 
 	public class Instance : TabInstance
 	{
@@ -30,16 +41,16 @@ public class TabSampleChartLists : ITab
 		{
 			_series = [];
 
-			model.Actions = new List<TaskCreator>
-			{
-				new TaskDelegate("Add Entry", AddEntry),
-				new TaskDelegate("Start: 1 Entry / second", StartTask, true),
-			};
+			Toolbar toolbar = new();
+			toolbar.ButtonAdd.Action = AddEntry;
+			toolbar.ButtonStart.ActionAsync = StartTaskAsync;
+			toolbar.ButtonStop.Action = StopTask;
+			model.AddObject(toolbar);
 
 			ChartView chartView = new();
 			for (int i = 0; i < 2; i++)
 			{
-				ItemCollection<int> list = new();
+				ItemCollection<int> list = [];
 				chartView.AddSeries($"Series {i}", list);
 				_series.Add(list);
 			}
@@ -56,14 +67,23 @@ public class TabSampleChartLists : ITab
 			Invoke(call, AddSampleUI);
 		}
 
-		private void StartTask(Call call)
+		private Call? _addCall;
+		private async Task StartTaskAsync(Call call)
 		{
+			_addCall = call;
+
 			CancellationToken token = call.TaskInstance!.TokenSource.Token;
 			for (int i = 0; i < 1000 && !token.IsCancellationRequested; i++)
 			{
 				Invoke(AddSampleUI, call);
-				Thread.Sleep(1000);
+				await Task.Delay(1000);
 			}
+		}
+
+		private void StopTask(Call call)
+		{
+			_addCall?.TaskInstance?.Cancel();
+			_addCall = null;
 		}
 
 		private void AddSample()
