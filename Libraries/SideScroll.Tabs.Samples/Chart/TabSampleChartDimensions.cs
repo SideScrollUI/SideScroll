@@ -3,6 +3,7 @@ using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Resources;
+using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Samples.Chart;
@@ -23,6 +24,8 @@ public class TabSampleChartDimensions : ITab
 		public TestItem TestItem { get; set; } = new();
 
 		public int Amount => TestItem.Amount;
+
+		public override string ToString() => $"{Animal}: {Value}";
 	}
 
 	public class TestItem
@@ -39,13 +42,15 @@ public class TabSampleChartDimensions : ITab
 		public ToolButton ButtonStop { get; set; } = new("Stop", Icons.Svg.Stop);
 	}
 
-	public class Instance : TabInstance
+	public class Instance : TabInstance, ITabSelector
 	{
 		private const int MaxValue = 100;
 
 		private readonly ItemCollection<ChartSample> _samples = [];
 		private readonly Random _random = new();
 		private readonly DateTime _baseDateTime = DateTime.Now.Trim(TimeSpan.FromMinutes(1));
+
+		public new event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -63,7 +68,16 @@ public class TabSampleChartDimensions : ITab
 				nameof(ChartSample.TimeStamp),
 				nameof(ChartSample.Value),
 				nameof(ChartSample.Animal));
+			chartView.SelectionChanged += ChartView_SelectionChanged;
 			model.AddObject(chartView, true);
+		}
+
+		private void ChartView_SelectionChanged(object? sender, SeriesSelectedEventArgs e)
+		{
+			SelectedItems = e.Series
+				.Select(s => new ListItem(s.Name!, s.TimeRangeValues))
+				.ToList();
+			OnSelectionChanged?.Invoke(sender, new TabSelectionChangedEventArgs());
 		}
 
 		private void AddSeries(string dimension)

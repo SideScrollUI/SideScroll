@@ -14,7 +14,7 @@ public class ByteFormatter : ICustomFormatter
 
 		int i = 0;
 		decimal dValue = value;
-		while (Math.Round(dValue, decimalPlaces) >= 1000)
+		while (Math.Round(dValue, decimalPlaces) >= 1024)
 		{
 			dValue /= 1024;
 			i++;

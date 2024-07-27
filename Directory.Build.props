@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.4</Version>
-    <PackageReleaseNotes>Added Play and Stop icons. Fixed Custom User Settings not loading correctly.</PackageReleaseNotes>
+    <Version>0.5</Version>
+    <PackageReleaseNotes>Added Title to loading tabs. Fixed Tabs not allowing resizing smaller than MinDesiredWidth. Fixed TimeRangeValue.AddGaps() end times. Fixed ByteFormatter rounding interval</PackageReleaseNotes>
 
     <AvaloniaVersion>11.0.11</AvaloniaVersion>
     <AvaloniaEditVersion>11.0.6</AvaloniaEditVersion>
@@ -11,7 +11,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <Description>SideScroll is a cross platform Avalonia UI framework designed for quickly navigating through trees of tabs. Every tab that shows will automatically select the next most likely tabs, and the next, until you need to start scrolling. Navigate 20 or even 50 tabs deep, and create links to save or share with others.</Description>
+    <Description>SideScroll is a cross platform Avalonia UI framework designed for quickly navigating through a tree of tabs. Every tab that shows will automatically select the next most likely tabs, and the next, until you need to start scrolling. Navigate 20 or even 50 tabs deep, and create links to save or share with others.</Description>
     <RepositoryUrl>https://github.com/SideScrollUI/SideScroll</RepositoryUrl>
     <Authors>SideScroll UI</Authors>
     <Copyright>SideScroll UI</Copyright>

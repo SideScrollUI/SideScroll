@@ -45,11 +45,6 @@ public class SeriesInfo
 	public bool IsSelected { get; set; } = true; // Visible = Selected
 }
 
-public class SeriesSelectedEventArgs(List<ListSeries> series) : EventArgs
-{
-	public List<ListSeries> Series { get; set; } = series;
-}
-
 public class PointerMovedEventArgs(double x) : EventArgs
 {
 	public double X { get; set; } = x;
@@ -240,6 +235,7 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 	{
 		// Safely raise the event for all subscribers
 		SelectionChanged?.Invoke(this, e);
+		ChartView.OnSelectionChanged(e);
 	}
 
 	// Anchor the chart to the top and stretch to max height, available size gets set to max :(

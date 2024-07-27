@@ -99,6 +99,7 @@ public class TimeRangeValue : ITags
 					var insertedPoint = new TimeRangeValue
 					{
 						StartTime = expectedTime.ToUniversalTime(),
+						EndTime = startTime.ToUniversalTime(),
 						Value = double.NaN,
 					};
 					output.Add(insertedPoint);

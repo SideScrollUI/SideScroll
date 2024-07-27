@@ -11,10 +11,10 @@ namespace SideScroll.UI.Avalonia.Controls;
 
 public class TabControlTitle : Border, IDisposable
 {
-	private const int MaxDesiredWidth = 50;
-
 	public readonly TabInstance TabInstance;
 	public string Label { get; set; }
+
+	public int MaxDesiredWidth { get; set; } = 50;
 
 	public TextBlock? TextBlock;
 	private readonly Grid _containerGrid;

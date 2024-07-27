@@ -16,7 +16,7 @@ public class TabChartSizes : ITab
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			model.MinDesiredWidth = 1400;
+			model.MinDesiredWidth = 1000;
 
 			DateTime dateTime = DateTime.Now;
 			var series = ChartSamples.CreateTimeSeries(dateTime, SampleCount);

@@ -46,13 +46,13 @@ public class TabControlSplitContainer : Grid
 		Focusable = true;
 	}
 
-	protected override Size MeasureCore(Size availableSize)
+	protected override Size MeasureOverride(Size availableSize)
 	{
 		if (MaxDesiredWidth != double.MaxValue)
 		{
 			availableSize = availableSize.WithWidth(Math.Min(MaxDesiredWidth, availableSize.Width));
 		}
-		Size measured = base.MeasureCore(availableSize);
+		Size measured = base.MeasureOverride(availableSize);
 		double desiredWidth = Math.Min(MaxDesiredWidth, measured.Width);
 		desiredWidth = Math.Max(desiredWidth, MinDesiredWidth);
 		Size maxSize = measured.WithWidth(desiredWidth);

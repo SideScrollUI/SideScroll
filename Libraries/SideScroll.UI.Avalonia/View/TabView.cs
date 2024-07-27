@@ -593,15 +593,21 @@ public class TabView : Grid, IDisposable
 		{
 			IsIndeterminate = true,
 			MinWidth = 100,
-			MinHeight = 100,
+			MinHeight = 130,
 			MaxWidth = 200,
 			Foreground = SideScrollTheme.TabProgressBarForeground,
 			Background = SideScrollTheme.TabBackground,
 			HorizontalAlignment = HorizontalAlignment.Left,
 			VerticalAlignment = VerticalAlignment.Stretch,
 		};
-
 		Children.Add(progressBar);
+
+		TabControlTitle title = new(Instance, Model.Name)
+		{
+			VerticalAlignment = VerticalAlignment.Top,
+			MaxWidth = progressBar.MinWidth,
+		};
+		Children.Add(title);
 	}
 
 	public void LoadSettings()

@@ -28,6 +28,11 @@ public enum ChartLegendPosition
 	Bottom,
 }
 
+public class SeriesSelectedEventArgs(List<ListSeries> series) : EventArgs
+{
+	public List<ListSeries> Series { get; set; } = series;
+}
+
 public class ChartView
 {
 	public string? Name { get; set; }
@@ -56,6 +61,8 @@ public class ChartView
 
 	private string? _xPropertyName;
 	private string? _yPropertyName;
+
+	public event EventHandler<SeriesSelectedEventArgs>? SelectionChanged;
 
 	public override string? ToString() => Name;
 
@@ -143,5 +150,10 @@ public class ChartView
 			endTime = endTime.Max(seriesWindow.EndTime);
 		}
 		return new TimeWindow(startTime, endTime);
+	}
+
+	public void OnSelectionChanged(SeriesSelectedEventArgs e)
+	{
+		SelectionChanged?.Invoke(this, e);
 	}
 }
