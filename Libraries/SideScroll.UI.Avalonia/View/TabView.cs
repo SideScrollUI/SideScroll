@@ -627,6 +627,15 @@ public class TabView : Grid, IDisposable
 		TabViewSettings = Instance.LoadDefaultTabSettings();
 	}
 
+	public void Reinitialize()
+	{
+		// Could have parent instance reload children
+		TabViewSettings = new TabViewSettings();
+		Instance!.SaveTabSettings();
+		Instance.Invoke(ShowLoading);
+		Instance.Reinitialize(true);
+	}
+
 	private void DispatcherTimer_Tick(object? sender, EventArgs e)
 	{
 		if (_updateChildControls)

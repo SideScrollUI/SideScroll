@@ -353,7 +353,9 @@ public class TabInstance : IDisposable
 		_settingLoaded = false;
 		TabModel model = Model;
 		if (!StaticModel)
+		{
 			model = await LoadModelAsync(call);
+		}
 
 		try
 		{

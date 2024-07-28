@@ -46,9 +46,10 @@ public class TabSampleChartDimensions : ITab
 	{
 		private const int MaxValue = 100;
 
-		private readonly ItemCollection<ChartSample> _samples = [];
 		private readonly Random _random = new();
 		private readonly DateTime _baseDateTime = DateTime.Now.Trim(TimeSpan.FromMinutes(1));
+
+		private ItemCollection<ChartSample> _samples = [];
 
 		public new event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
@@ -60,6 +61,7 @@ public class TabSampleChartDimensions : ITab
 			toolbar.ButtonStop.Action = StopTask;
 			model.AddObject(toolbar);
 
+			_samples = [];
 			AddSeries("Cats");
 			AddSeries("Dogs");
 

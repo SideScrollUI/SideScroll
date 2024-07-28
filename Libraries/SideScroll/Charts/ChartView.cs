@@ -108,6 +108,8 @@ public class ChartView
 	public void AddDimensionValue(object? obj)
 	{
 		var values = _dimensionPropertyInfos.Select(propertyInfo => propertyInfo.GetValue(obj)!);
+		if (!values.Any()) return;
+
 		string name = string.Join(" - ", values);
 
 		if (!_dimensions.TryGetValue(name, out IList? dimensionList))

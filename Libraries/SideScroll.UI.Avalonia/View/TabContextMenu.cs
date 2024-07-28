@@ -3,7 +3,6 @@ using SideScroll.Tabs;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using SideScroll.Tabs.Settings;
 
 namespace SideScroll.UI.Avalonia.View;
 
@@ -85,21 +84,17 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 
 	private void MenuItemRefresh_Click(object? sender, RoutedEventArgs e)
 	{
-		TabInstance!.Refresh();
+		TabInstance?.Refresh();
 	}
 
 	private void MenuItemReload_Click(object? sender, RoutedEventArgs e)
 	{
-		TabInstance!.LoadSettings(true); // reloads tab settings, recreates all controls
+		TabInstance?.LoadSettings(true); // reloads tab settings, recreates all controls
 	}
 
 	private void MenuItemReset_Click(object? sender, RoutedEventArgs e)
 	{
-		TabView!.TabViewSettings = new TabViewSettings();
-		TabInstance!.SaveTabSettings();
-		TabInstance.Reinitialize(true);
-		TabView.Load();
-		// Could have parent instance reload children
+		TabView?.Reinitialize();
 	}
 
 	private void MenuItemDebug_Click(object? sender, RoutedEventArgs e)
