@@ -56,7 +56,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="App.xaml" />
     <None Remove="DefaultTheme.xaml" />
     <None Remove="if_help_62217.png" />
     <None Remove="left-chevron.png" />
@@ -79,7 +78,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Samples\App.xaml" />
     <AvaloniaResource Include="Themes\Controls\TabButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>

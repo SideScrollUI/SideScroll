@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\SideScroll.UI.Avalonia.Samples\SideScroll.UI.Avalonia.Samples.csproj" />
     <ProjectReference Include="..\..\Libraries\SideScroll.UI.Avalonia\SideScroll.UI.Avalonia.csproj" />
     <ProjectReference Include="..\..\Libraries\SideScroll.Resources\SideScroll.Resources.csproj" />
     <ProjectReference Include="..\..\Libraries\SideScroll.Tabs\SideScroll.Tabs.csproj" />

@@ -29,14 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Logo\SideScroll.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\Logo\SideScroll.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
@@ -47,6 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\SideScroll.UI.Avalonia.Charts.LiveCharts\SideScroll.UI.Avalonia.Charts.LiveCharts.csproj" />
     <ProjectReference Include="..\..\Libraries\SideScroll.UI.Avalonia.Charts\SideScroll.UI.Avalonia.Charts.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.UI.Avalonia.Samples\SideScroll.UI.Avalonia.Samples.csproj" />
     <ProjectReference Include="..\..\Libraries\SideScroll.UI.Avalonia.ScreenCapture\SideScroll.UI.Avalonia.ScreenCapture.csproj" />
     <ProjectReference Include="..\..\Libraries\SideScroll.UI.Avalonia\SideScroll.UI.Avalonia.csproj" />
     <ProjectReference Include="..\..\Libraries\SideScroll.Resources\SideScroll.Resources.csproj" />
