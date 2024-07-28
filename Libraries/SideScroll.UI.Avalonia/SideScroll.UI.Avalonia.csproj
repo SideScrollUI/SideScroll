@@ -56,6 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="App.xaml" />
     <None Remove="DefaultTheme.xaml" />
     <None Remove="if_help_62217.png" />
     <None Remove="left-chevron.png" />
@@ -78,6 +79,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Include="Samples\App.xaml" />
     <AvaloniaResource Include="Themes\Controls\TabButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
@@ -124,9 +126,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Tabs\TabAvalonEdit.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>TabAvalonEdit.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEditVersion)" />
     <PackageReference Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Svg.Skia" Version="11.1.0" />
   </ItemGroup>
 
@@ -134,10 +150,4 @@
     <ProjectReference Include="..\SideScroll.Tabs.Samples\SideScroll.Tabs.Samples.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Tabs\TabAvalonEdit.xaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>TabAvalonEdit.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
 </Project>

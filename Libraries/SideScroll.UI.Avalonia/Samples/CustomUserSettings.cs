@@ -1,7 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
 
-namespace SideScroll.Start.Avalonia;
+namespace SideScroll.UI.Avalonia.Samples;
 
 [Params]
 public class CustomUserSettings : UserSettings

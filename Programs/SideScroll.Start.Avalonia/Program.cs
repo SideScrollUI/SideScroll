@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Data.Core.Plugins;
+using SideScroll.UI.Avalonia.Samples;
 using SideScroll.Utilities;
 
 namespace SideScroll.Start.Avalonia;

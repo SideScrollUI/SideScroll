@@ -1,11 +1,11 @@
-using SideScroll.Start.Avalonia.Charts;
+//using SideScroll.Start.Avalonia.Charts;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Samples;
 using SideScroll.UI.Avalonia.Samples.Controls;
 using SideScroll.UI.Avalonia.Tabs;
 
-namespace SideScroll.Start.Avalonia.Tabs;
+namespace SideScroll.UI.Avalonia.Samples.Tabs;
 
 public class TabAvalonia : ITab
 {
@@ -19,7 +19,7 @@ public class TabAvalonia : ITab
 			{
 				new("Samples", new TabSamples()),
 				new("Controls", new TabSampleControls()),
-				new("Charts", new TabCustomCharts()),
+				//new("Charts", new TabCustomCharts()),
 				new("Links", new TabBookmarks(Project)),
 				new("Settings", new TabAvaloniaSettings<CustomUserSettings>()),
 			};

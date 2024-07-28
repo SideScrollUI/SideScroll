@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-browser</TargetFramework>
+    <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
+    <WasmMainJSPath>wwwroot\main.js</WasmMainJSPath>
+    <OutputType>Exe</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <WasmExtraFilesToDeploy Include="wwwroot\**" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="**\*.cs" Exclude="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Browser" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\SideScroll.UI.Avalonia\SideScroll.UI.Avalonia.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Resources\SideScroll.Resources.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Tabs\SideScroll.Tabs.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Tabs.Samples\SideScroll.Tabs.Samples.csproj" />
+  </ItemGroup>
+</Project>
