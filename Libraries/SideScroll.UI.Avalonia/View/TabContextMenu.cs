@@ -1,8 +1,8 @@
-using SideScroll.Serialize;
-using SideScroll.Tabs;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using SideScroll.Serialize;
+using SideScroll.Tabs;
 
 namespace SideScroll.UI.Avalonia.View;
 

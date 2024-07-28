@@ -1,9 +1,9 @@
 <Project>
   <PropertyGroup>
     <Version>0.5</Version>
-    <PackageReleaseNotes>Added Title to loading tabs. Fixed Tabs not allowing resizing smaller than MinDesiredWidth. Fixed TimeRangeValue.AddGaps() end times. Fixed ByteFormatter rounding interval. Fixed Tab Reset reinitializing tab twice</PackageReleaseNotes>
+    <PackageReleaseNotes>Added Title to loading tabs. Fixed Tabs not allowing resizing smaller than MinDesiredWidth. Fixed TimeRangeValue.AddGaps() end times. Fixed ByteFormatter rounding interval. Fixed Tab Reset reinitializing tab twice. Updated to Avalonia 11.1.1</PackageReleaseNotes>
 
-    <AvaloniaVersion>11.0.11</AvaloniaVersion>
+    <AvaloniaVersion>11.1.1</AvaloniaVersion>
     <AvaloniaEditVersion>11.0.6</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>

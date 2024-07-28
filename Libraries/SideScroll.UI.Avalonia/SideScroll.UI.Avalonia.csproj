@@ -127,7 +127,7 @@
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEditVersion)" />
     <PackageReference Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.18" />
+    <PackageReference Include="Avalonia.Svg.Skia" Version="11.1.0" />
   </ItemGroup>
 
   <ItemGroup>
