@@ -5,7 +5,7 @@ using SideScroll.Tabs.Samples.Chart;
 using SideScroll.Tasks;
 using SideScroll.UI.Avalonia.Charts.LiveCharts;
 
-namespace SideScroll.Start.Avalonia.Charts;
+namespace SideScroll.UI.Avalonia.Samples.Charts;
 
 public class TabChartUpdating : ITab
 {

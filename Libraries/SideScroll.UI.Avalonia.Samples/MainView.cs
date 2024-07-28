@@ -1,7 +1,7 @@
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
 using SideScroll.UI.Avalonia.Samples.Tabs;
-//using SideScroll.UI.Avalonia.Charts.LiveCharts;
+using SideScroll.UI.Avalonia.Charts.LiveCharts;
 //using SideScroll.UI.Avalonia.ScreenCapture;
 
 namespace SideScroll.UI.Avalonia.Samples;
@@ -12,7 +12,7 @@ public class MainView : BaseView
 	{
 		AddTab(new TabAvalonia());
 
-		//LiveChartCreator.Register();
+		LiveChartCreator.Register();
 		//ScreenCapture.AddControlTo(TabViewer);
 	}
 
@@ -21,6 +21,6 @@ public class MainView : BaseView
 		Name = "SideScroll",
 		LinkType = "sidescroll",
 		Version = ProjectSettings.ProgramVersion(),
-		DataVersion = new Version(1, 1),
+		DataVersion = new Version(0, 1),
 	};
 }
