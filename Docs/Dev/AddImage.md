@@ -46,3 +46,6 @@
       stroke-linejoin="round"
     >
     ```
+
+## Animated Gif Images
+- For creating animated gif images, [ScreenToGif](https://www.screentogif.com/) is a good free option
