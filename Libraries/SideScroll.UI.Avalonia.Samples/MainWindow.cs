@@ -3,7 +3,6 @@ using SideScroll.UI.Avalonia.Samples.Tabs;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
 using SideScroll.UI.Avalonia.Charts.LiveCharts;
-//using SideScroll.UI.Avalonia.ScreenCapture;
 
 namespace SideScroll.UI.Avalonia.Samples;
 
@@ -14,7 +13,6 @@ public class MainWindow : BaseWindow
 		AddTab(new TabAvalonia());
 
 		LiveChartCreator.Register();
-		//ScreenCapture.AddControlTo(TabViewer);
 		TabViewer.Toolbar?.AddVersion();
 
 		Icon = new WindowIcon(Assets.Icons.SideScroll.Stream);

@@ -34,6 +34,14 @@ public class ScreenCapture : Grid
 
 	public TabViewer TabViewer;
 
+	public class TabViewerPlugin : ITabViewerPlugin
+	{
+		public void Initialize(TabViewer tabViewer)
+		{
+			AddControlTo(tabViewer);
+		}
+	}
+
 	public static ToolbarButton AddControlTo(TabViewer tabViewer)
 	{
 		tabViewer.Toolbar!.AddSeparator();
