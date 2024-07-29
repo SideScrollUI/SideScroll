@@ -12,6 +12,8 @@ using SideScroll.Tabs.Samples.Objects;
 using SideScroll.Tabs.Samples.Params;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Controls;
+using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
+
 //using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
 using System.Collections;
 
@@ -85,8 +87,8 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 					new("Forms", new TabSampleParamsDataTabs()),
 					new("Loading", new TabSampleLoadAsync()),
 				},
-				ToolbarTheme => new TabSampleToolbar(),
-				//ToolbarTheme => new TabCustomControl(),
+				//ToolbarTheme => new TabSampleToolbar(),
+				ToolbarTheme => new TabCustomControl(),
 				ToolTipTheme => new TabAvaloniaToolTipSample(),
 				DataGridTheme => new List<ListItem>
 				{
