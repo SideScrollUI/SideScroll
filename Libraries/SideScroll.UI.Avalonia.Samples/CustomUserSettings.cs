@@ -6,7 +6,7 @@ namespace SideScroll.UI.Avalonia.Samples;
 [Params]
 public class CustomUserSettings : UserSettings
 {
-	[WordWrap]
+	[Separator, WordWrap]
 	public string ApiUri { get; set; } = @"http://localhost:80/";
 
 	[Separator, WordWrap]
