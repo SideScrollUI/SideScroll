@@ -3,7 +3,6 @@
                     xmlns:sidescroll="clr-namespace:SideScroll.UI.Avalonia.View;assembly=SideScroll.UI.Avalonia">
 
   <ControlTheme x:Key="{x:Type sidescroll:TabSplitter}" TargetType="sidescroll:TabSplitter">
-    <Setter Property="Focusable" Value="True" />
     <Setter Property="MinWidth" Value="6" />
     <Setter Property="MinHeight" Value="6" />
     <Setter Property="Width" Value="{DynamicResource TabSplitterSize}"/>

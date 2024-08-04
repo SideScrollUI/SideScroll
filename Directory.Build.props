@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.5</Version>
-    <PackageReleaseNotes>Added Title to loading tabs. Fixed Tabs not allowing resizing smaller than MinDesiredWidth. Fixed TimeRangeValue.AddGaps() end times. Fixed ByteFormatter rounding interval. Fixed Tab Reset reinitializing tab twice. Updated to Avalonia 11.1.1</PackageReleaseNotes>
+    <Version>0.6</Version>
+    <PackageReleaseNotes>Added user theming for TabSplitter, TabViewer, and TabButton. Updated Save Icon</PackageReleaseNotes>
 
     <AvaloniaVersion>11.1.1</AvaloniaVersion>
     <AvaloniaEditVersion>11.0.6</AvaloniaEditVersion>
