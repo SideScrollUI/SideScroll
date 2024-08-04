@@ -13,7 +13,7 @@
     <Setter Property="FontSize" Value="{DynamicResource DataGridFontSize}" />
   </Style>
   <Style Selector="dg|DataGridColumnHeader:pointerover">
-    <Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundBrushPointerOver}" />
+    <Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundPointerOverBrush}" />
   </Style>
 
   <Style Selector="dg|DataGridColumnHeader /template/ Rectangle#VerticalSeparator">
@@ -22,10 +22,10 @@
   </Style>
 
   <Style Selector="dg|DataGridColumnHeader:pointerover /template/ Grid#PART_ColumnHeaderRoot">
-    <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundBrushPointerOver}" />
+    <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundPointerOverBrush}" />
   </Style>
   <Style Selector="dg|DataGridColumnHeader:pressed /template/ Grid#PART_ColumnHeaderRoot">
-    <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundBrushPointerOver}" />
+    <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundPointerOverBrush}" />
   </Style>
 
   <Style Selector="dg|DataGrid">
@@ -39,7 +39,7 @@
   </Style>
 
   <Style Selector="dg|DataGridCell:pointerover">
-    <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundBrushPointerOver}" />
+    <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundPointerOverBrush}" />
   </Style>
 
   <!--Style Selector="dg|DataGridRow:selected">

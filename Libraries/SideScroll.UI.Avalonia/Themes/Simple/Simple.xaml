@@ -58,7 +58,7 @@
           <!-- Buttons -->
           <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#27204a" />
           <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#60bdff" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundBrushPointerOver" Color="#2040a0" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#3060d0" />
 
           <!-- RadioButton -->
@@ -181,7 +181,7 @@
           <!-- Buttons -->
           <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#1a1940" />
           <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#60bdff" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundBrushPointerOver" Color="#2040a0" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#3060d0" />
 
           <!-- RadioButton -->

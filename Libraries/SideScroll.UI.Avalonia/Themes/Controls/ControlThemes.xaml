@@ -9,5 +9,7 @@
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabButton.xaml"/>
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabHeader.xaml"/>
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabSeparator.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabSplitter.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabViewer.xaml"/>
   </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

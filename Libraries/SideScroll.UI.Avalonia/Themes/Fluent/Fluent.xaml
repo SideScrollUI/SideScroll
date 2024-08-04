@@ -167,14 +167,15 @@
           <!-- DataGrid -->
           
           <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#27204a" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#d0d0f0" />
-          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrushPointerOver" Color="#d8d8f8" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#d8d8f8" />
 
           <SolidColorBrush x:Key="DataGridRowBackgroundBrush" Color="#FFFFFF" />
           <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="#88ff88" />
           
           <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="Black" />
-          <SolidColorBrush x:Key="DataGridCellForegroundBrushPointerOver" Color="Black" />
+          <SolidColorBrush x:Key="DataGridCellForegroundPointerOverBrush" Color="Black" />
           <SolidColorBrush x:Key="DataGridForegroundSelectedBrush" Color="Black" />
           <SolidColorBrush x:Key="DataGridCellBorderBrush" Color="LightGray" />
           
@@ -199,7 +200,8 @@
 
           <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#27204a" />
 
-          <sys:Double x:Key="TabSplitterSize">5</sys:Double>
+          <SolidColorBrush x:Key="TabSplitterBackgroundBrush" Color="#000000" />
+          <sys:Double x:Key="TabSplitterSize">6</sys:Double>
 
           <!-- Title -->
           
@@ -252,8 +254,8 @@
           <!-- DatGrid & Title Buttons -->
           
           <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#27204a" />
-          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#8888FF" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundBrushPointerOver" Color="#2040a0" />
+          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#d0d0f0" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#292f66" />
 
           <!-- Text -->
@@ -482,7 +484,7 @@
           <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="{DynamicResource DataGridAccentColor}" />
           
           <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="{DynamicResource TextForegroundColor}" />
-          <SolidColorBrush x:Key="DataGridCellForegroundBrushPointerOver" Color="#cccccc" />
+          <SolidColorBrush x:Key="DataGridCellForegroundPointerOverBrush" Color="#cccccc" />
           <SolidColorBrush x:Key="DataGridCellBorderBrush" Color="Black" />
           <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="Transparent" />
           <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush" Color="#006dbb" />
@@ -491,8 +493,9 @@
           <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#dddddd" />
 
           <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#121212" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#b5b5b5" />
-          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrushPointerOver" Color="#cccccc" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#cccccc" />
 
           <SolidColorBrush x:Key="DataGridGridLinesBrush" Color="Black" />
           
@@ -564,8 +567,8 @@
           <!-- DatGrid & Title Buttons -->
           
           <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#121212" />
-          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#60bdff" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundBrushPointerOver" Color="#2040a0" />
+          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#dddddd" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#3060d0" />
          
           <!-- Text -->

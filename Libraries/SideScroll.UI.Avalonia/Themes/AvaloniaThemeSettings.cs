@@ -219,6 +219,12 @@ public class TabTheme : ThemeSection
 	[ResourceKey("TitleForegroundBrush")]
 	public Color? TitleForeground { get; set; }
 
+	[Header("Splitter"), Separator, ResourceKey("TabSplitterBackgroundBrush")]
+	public Color? SplitterBackground { get; set; }
+
+	[ResourceKey("TabSplitterSize"), Range(6, 100)]
+	public double? SplitterSize { get; set; }
+
 	[Separator, ResourceKey("TabHeaderForegroundBrush")]
 	public Color? HeaderForeground { get; set; }
 
@@ -230,6 +236,18 @@ public class TabTheme : ThemeSection
 
 	[Separator, ResourceKey("TabProgressBarForegroundBrush")]
 	public Color? ProgressBarForeground { get; set; }
+
+	[Header("Button"), ResourceKey("ThemeButtonBackgroundBrush")]
+	public Color? ButtonBackground { get; set; }
+
+	[ResourceKey("ThemeButtonForegroundBrush")]
+	public Color? ButtonForeground { get; set; }
+
+	[ResourceKey("ThemeButtonBackgroundPointerOverBrush")]
+	public Color? ButtonBackgroundPointerOver { get; set; }
+
+	[ResourceKey("ThemeButtonBackgroundPressedBrush")]
+	public Color? ButtonBackgroundPressed { get; set; }
 }
 
 [Params]
@@ -330,13 +348,13 @@ public class DataGridTheme : ThemeSection
 	[Header("Column"), ResourceKey("DataGridColumnHeaderBackgroundBrush")]
 	public Color? ColumnHeaderBackground { get; set; }
 
-	[ResourceKey("ThemeButtonBackgroundBrushPointerOver")]
+	[ResourceKey("DataGridColumnHeaderBackgroundPointerOverBrush")]
 	public Color? ColumnHeaderBackgroundPointerOver { get; set; }
 
 	[ResourceKey("DataGridColumnHeaderForegroundBrush")]
 	public Color? ColumnHeaderForeground { get; set; }
 
-	[ResourceKey("DataGridColumnHeaderForegroundBrushPointerOver")]
+	[ResourceKey("DataGridColumnHeaderForegroundPointerOverBrush")]
 	public Color? ColumnHeaderForegroundPointerOver { get; set; }
 
 	[Header("Row"), ResourceKey("DataGridRowBackgroundBrush")]
@@ -348,7 +366,7 @@ public class DataGridTheme : ThemeSection
 	[Header("Cell"), ResourceKey("DataGridCellForegroundBrush")]
 	public Color? CellForeground { get; set; }
 
-	[ResourceKey("DataGridCellForegroundBrushPointerOver")]
+	[ResourceKey("DataGridCellForegroundPointerOverBrush")]
 	public Color? CellForegroundPointerOver { get; set; }
 
 	//[ResourceKey("DataGridForegroundSelectedBrush")]

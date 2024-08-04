@@ -32,6 +32,8 @@ public interface IValidationControl
 	void Validate();
 }
 
+public class TabSplitter : GridSplitter;
+
 public class TabView : Grid, IDisposable
 {
 	private const string FillerPanelId = "FillerPanelId";
@@ -253,11 +255,8 @@ public class TabView : Grid, IDisposable
 
 	private void AddGridColumnSplitter()
 	{
-		_parentChildGridSplitter = new GridSplitter
+		_parentChildGridSplitter = new TabSplitter
 		{
-			Background = Brushes.Black,
-			VerticalAlignment = VerticalAlignment.Stretch,
-			Width = SideScrollTheme.TabSplitterSize,
 			[Grid.ColumnProperty] = 1,
 		};
 		_containerGrid!.Children.Add(_parentChildGridSplitter);

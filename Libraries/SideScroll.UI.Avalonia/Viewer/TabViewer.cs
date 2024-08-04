@@ -62,15 +62,10 @@ public class TabViewer : Grid
 	[MemberNotNull(nameof(BottomGrid)), MemberNotNull(nameof(ScrollViewer)), MemberNotNull(nameof(ContentGrid))]
 	private void InitializeComponent()
 	{
-		Background = SideScrollTheme.TabBackground;
-
 		// Toolbar
 		// ScrollViewer | Buttons
 		ColumnDefinitions = new ColumnDefinitions("*");
 		RowDefinitions = new RowDefinitions("Auto,*");
-
-		HorizontalAlignment = HorizontalAlignment.Stretch;
-		VerticalAlignment = VerticalAlignment.Stretch;
 
 		AddToolbar();
 
@@ -323,7 +318,6 @@ public class TabViewer : Grid
 		TabControlButton buttonExpand = new()
 		{
 			Content = ">",
-			Foreground = SideScrollTheme.ToolbarLabelForeground,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			VerticalContentAlignment = VerticalAlignment.Center,
 			[ToolTip.ShowDelayProperty] = 5,
@@ -336,7 +330,6 @@ public class TabViewer : Grid
 		TabControlButton buttonCollapse = new()
 		{
 			Content = "<",
-			Foreground = SideScrollTheme.ToolbarLabelForeground,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			VerticalContentAlignment = VerticalAlignment.Center,
 			[ToolTip.TipProperty] = "Scroll Left ( <- )",

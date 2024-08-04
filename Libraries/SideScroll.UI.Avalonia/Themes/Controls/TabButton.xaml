@@ -1,12 +1,12 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:sidescroll="clr-namespace:SideScroll.UI.Avalonia.Controls;assembly=SideScroll.UI.Avalonia">
+                    xmlns:sidescroll="clr-namespace:SideScroll.UI.Avalonia.Controls;assembly=SideScroll.UI.Avalonia">
   
   <ControlTheme x:Key="{x:Type sidescroll:TabControlButton}" TargetType="sidescroll:TabControlButton">
     <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundBrush}"/>
     <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderLowBrush}"/>
     <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}"/>
-    <Setter Property="Foreground" Value="{DynamicResource DataGridButtonForegroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource ThemeButtonForegroundBrush}"/>
     <Setter Property="HorizontalContentAlignment" Value="Center"/>
     <Setter Property="VerticalContentAlignment" Value="Center"/>
     <Setter Property="Padding" Value="4"/>
@@ -25,7 +25,7 @@
       </ControlTemplate>
     </Setter>
     <Style Selector="^:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundBrushPointerOver}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundPointerOverBrush}"/>
     </Style>
     <Style Selector="^:pressed /template/ ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundPressedBrush}"/>
