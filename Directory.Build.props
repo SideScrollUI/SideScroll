@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Version>0.6</Version>
-    <PackageReleaseNotes>Added user theming for TabSplitter, TabViewer, and TabButton. Updated Save Icon</PackageReleaseNotes>
+    <PackageReleaseNotes>Added user theming for TabSplitter, TabViewer, and TabButton. Updated Save and Import Icons</PackageReleaseNotes>
 
     <AvaloniaVersion>11.1.1</AvaloniaVersion>
     <AvaloniaEditVersion>11.0.6</AvaloniaEditVersion>

@@ -158,11 +158,6 @@ public class TabView : Grid, IDisposable
 	// Gets called multiple times when re-initializing
 	private void InitializeControls()
 	{
-		Background = SideScrollTheme.TabBackground;
-		HorizontalAlignment = HorizontalAlignment.Stretch;
-		VerticalAlignment = VerticalAlignment.Stretch;
-		//Focusable = true;
-
 		AddListeners();
 
 		// don't recreate to allow reloading (sizing doesn't work otherwise)

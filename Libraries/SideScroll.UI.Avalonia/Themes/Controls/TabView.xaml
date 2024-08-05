@@ -1,0 +1,10 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sidescroll="clr-namespace:SideScroll.UI.Avalonia.View;assembly=SideScroll.UI.Avalonia">
+
+  <ControlTheme x:Key="{x:Type sidescroll:TabView}" TargetType="sidescroll:TabView">
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+    <Setter Property="Background" Value="{DynamicResource TabBackgroundBrush}" />
+  </ControlTheme>
+</ResourceDictionary>
