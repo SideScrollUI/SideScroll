@@ -13,6 +13,7 @@ using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Avalonia;
 using LiveChartsCore.SkiaSharpView.Painting;
+using LiveChartsCore.SkiaSharpView.Painting.ImageFilters;
 using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Extensions;
@@ -46,10 +47,9 @@ public class LiveChartCreator : IControlCreator
 
 public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 {
-	public static SKColor TimeTrackerSkColor { get; set; } = TimeTrackerColor.ToSKColor();
-	public static SKColor GridLineSkColor { get; set; } = GridLineColor.ToSKColor();
-	public static SKColor TextSkColor { get; set; } = TextColor.ToSKColor();
-	public static SKColor TooltipBackgroundColor { get; set; } = SKColor.Parse("#102670").WithAlpha(225);
+	public SKColor TimeTrackerSkColor { get; set; }
+	public SKColor GridLineSkColor { get; set; }
+	public SKColor TextSkColor { get; set; }
 
 	public CartesianChart Chart;
 
@@ -80,13 +80,12 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	public TabControlLiveChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false) : 
 		base(tabInstance, chartView, fillHeight)
 	{
+		TimeTrackerSkColor = TimeTrackerColor.ToSKColor();
+		GridLineSkColor = GridLineColor.ToSKColor();
+		TextSkColor = TextColor.ToSKColor();
+
 		ColumnDefinitions = new ColumnDefinitions("*,Auto");
 		RowDefinitions = new RowDefinitions("Auto,*,Auto");
-
-		HorizontalAlignment = HorizontalAlignment.Stretch;
-		VerticalAlignment = VerticalAlignment.Stretch;
-
-		Background = SideScrollTheme.TabBackground; // Grid lines look bad when hovering without this
 
 		XAxis = CreateXAxis();
 		YAxis = CreateYAxis();
@@ -97,8 +96,11 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			VerticalAlignment = VerticalAlignment.Stretch,
 			XAxes = new List<Axis> { XAxis },
 			YAxes = new List<Axis> { YAxis },
-			TooltipBackgroundPaint = new SolidColorPaint(TooltipBackgroundColor),
-			TooltipTextPaint = new SolidColorPaint(SideScrollTheme.ToolTipForeground.Color.AsSkColor()),
+			TooltipBackgroundPaint = new SolidColorPaint(SideScrollTheme.ChartToolTipBackground.Color.AsSkColor())
+			{
+				ImageFilter = new DropShadow(2, 2, 6, 6, new SKColor(50, 0, 0, 100))
+			},
+			TooltipTextPaint = new SolidColorPaint(SideScrollTheme.ChartToolTipForeground.Color.AsSkColor()),
 			TooltipFindingStrategy = TooltipFindingStrategy.CompareAllTakeClosest,
 			Tooltip = new LiveChartTooltip(this),
 			LegendPosition = LegendPosition.Hidden,
@@ -205,7 +207,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		//InvalidateChart();
 	}
 
-	private static Axis CreateXAxis()
+	private Axis CreateXAxis()
 	{
 		return new Axis
 		{

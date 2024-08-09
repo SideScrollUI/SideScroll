@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using SideScroll.Charts;
 using SideScroll.Collections;
+using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
 using SideScroll.UI.Avalonia.Controls;
@@ -59,25 +60,13 @@ public interface ITabControlChart
 
 public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 {
-	public static Color TimeTrackerColor { get; set; } = SideScrollTheme.DataGridRowHighlight.Color;
-	public static Color GridLineColor { get; set; } = Color.Parse("#333333");
-	public static Color TextColor { get; set; } = Colors.LightGray;
+	public Color TimeTrackerColor { get; set; } = SideScrollTheme.DataGridRowHighlight.Color;
+	public Color GridLineColor { get; set; } = SideScrollTheme.ChartGridLines.Color;
+	public Color NowColor { get; set; } = SideScrollTheme.ChartNowLine.Color;
+	public Color TextColor { get; set; } = SideScrollTheme.ChartLabelForeground.Color;
 
-	private static readonly System.Drawing.Color NowColor = System.Drawing.Color.Green;
-	public static Color[] DefaultColors { get; set; } =
-	[
-		Colors.LawnGreen,
-		Colors.Fuchsia,
-		Colors.DodgerBlue,
-		Colors.Gold,
-		Colors.Red,
-		Colors.Cyan,
-		Colors.BlueViolet,
-		Colors.Orange,
-		Colors.Salmon,
-		Colors.MediumSpringGreen,
-	];
-	public static Color GetColor(int index) => DefaultColors[index % DefaultColors.Length];
+	public const int DefaultColorCount = 10;
+	public static Color GetColor(int index) => SideScrollTheme.ChartSeries(1 + index % DefaultColorCount).Color;
 
 	protected static readonly WeakEventSource<PointerMovedEventArgs> _pointerMovedEventSource = new();
 
@@ -170,6 +159,7 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 			Margin = new Thickness(10, 5, 10, 2),
 			//FontWeight = FontWeight.Medium,
 			TextWrapping = TextWrapping.Wrap,
+			Foreground = SideScrollTheme.ChartLabelForeground,
 			[ColumnSpanProperty] = 2,
 		};
 		if (ChartView.LegendPosition == ChartLegendPosition.Bottom)
@@ -201,7 +191,7 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 			Text = "Now",
 			Horizontal = false,
 			X = now.Ticks,
-			Color = NowColor,
+			Color = NowColor.AsSystemColor(),
 			// LineStyle = LineStyle.Dot,
 		};
 

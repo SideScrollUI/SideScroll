@@ -280,9 +280,29 @@
 
           <!-- Chart -->
 
-          <SolidColorBrush x:Key="ChartLabelForegroundHighlightBrush" Color="#21d064" />
+          <SolidColorBrush x:Key="ChartBackgroundBrush" Color="#141414" />
           <SolidColorBrush x:Key="ChartBackgroundSelectedBrush" Color="#448dff" />
           <sys:Double x:Key="ChartBackgroundSelectedAlpha">64</sys:Double>
+          
+          <SolidColorBrush x:Key="ChartLabelForegroundBrush" Color="#d6d6d6" />
+          <SolidColorBrush x:Key="ChartLabelForegroundHighlightBrush" Color="#21d064" />
+          
+          <SolidColorBrush x:Key="ChartGridLinesBrush" Color="#333333" />
+          <SolidColorBrush x:Key="ChartNowLineBrush" Color="Green" />
+
+          <SolidColorBrush x:Key="ChartToolTipBackgroundBrush" Color="#E1102670" />
+          <SolidColorBrush x:Key="ChartToolTipForegroundBrush" Color="#D0D0E8" />
+          
+          <SolidColorBrush x:Key="ChartSeries1Brush" Color="LawnGreen" />
+          <SolidColorBrush x:Key="ChartSeries2Brush" Color="Fuchsia" />
+          <SolidColorBrush x:Key="ChartSeries3Brush" Color="DodgerBlue" />
+          <SolidColorBrush x:Key="ChartSeries4Brush" Color="Gold" />
+          <SolidColorBrush x:Key="ChartSeries5Brush" Color="Red" />
+          <SolidColorBrush x:Key="ChartSeries6Brush" Color="Cyan" />
+          <SolidColorBrush x:Key="ChartSeries7Brush" Color="BlueViolet" />
+          <SolidColorBrush x:Key="ChartSeries8Brush" Color="Orange" />
+          <SolidColorBrush x:Key="ChartSeries9Brush" Color="Salmon" />
+          <SolidColorBrush x:Key="ChartSeries10Brush" Color="MediumSpringGreen" />
       
           <!-- ColorPicker -->
           
@@ -584,9 +604,15 @@
 
           <!-- Chart -->
 
-          <SolidColorBrush x:Key="ChartLabelForegroundHighlightBrush" Color="#21d064" />
+          <SolidColorBrush x:Key="ChartBackgroundBrush" Color="#121212" />
           <SolidColorBrush x:Key="ChartBackgroundSelectedBrush" Color="#21D064" />
           <sys:Double x:Key="ChartBackgroundSelectedAlpha">64</sys:Double>
+          
+          <SolidColorBrush x:Key="ChartLabelForegroundBrush" Color="#b5b5b5" />
+          <SolidColorBrush x:Key="ChartLabelForegroundHighlightBrush" Color="#21d064" />
+          
+          <SolidColorBrush x:Key="ChartToolTipBackgroundBrush" Color="#E1102670" />
+          <SolidColorBrush x:Key="ChartToolTipForegroundBrush" Color="#D0D0E8" />
 
           <!-- AvaloniaEdit.TextEditor -->
           

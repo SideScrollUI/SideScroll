@@ -26,6 +26,7 @@ public static class SideScrollTheme
 	public static SolidColorBrush ToolbarTextForeground => GetBrush("ToolbarTextForegroundBrush");
 	public static SolidColorBrush ToolbarTextCaret => GetBrush("ToolbarTextCaretBrush");
 
+	public static SolidColorBrush ToolTipBackground => GetBrush("ToolTipBackground");
 	public static SolidColorBrush ToolTipForeground => GetBrush("ToolTipForeground");
 
 	// Icon
@@ -61,8 +62,18 @@ public static class SideScrollTheme
 
 	// Chart 
 	public static SolidColorBrush ChartBackgroundSelected => GetBrush("ChartBackgroundSelectedBrush");
-	public static SolidColorBrush ChartLabelForegroundHighlight => GetBrush("ChartLabelForegroundHighlightBrush");
 	public static double ChartBackgroundSelectedAlpha => GetDouble("ChartBackgroundSelectedAlpha");
+
+	public static SolidColorBrush ChartLabelForeground => GetBrush("ChartLabelForegroundBrush");
+	public static SolidColorBrush ChartLabelForegroundHighlight => GetBrush("ChartLabelForegroundHighlightBrush");
+
+	public static SolidColorBrush ChartGridLines => GetBrush("ChartGridLinesBrush");
+	public static SolidColorBrush ChartNowLine => GetBrush("ChartNowLineBrush");
+
+	public static SolidColorBrush ChartToolTipBackground => GetBrush("ChartToolTipBackgroundBrush");
+	public static SolidColorBrush ChartToolTipForeground => GetBrush("ChartToolTipForegroundBrush");
+
+	public static SolidColorBrush ChartSeries(int index) => GetBrush($"ChartSeries{index}Brush");
 
 	// Text Editor
 	public static SolidColorBrush TextEditorBackgroundBrush => GetBrush("TextEditorBackgroundBrush");

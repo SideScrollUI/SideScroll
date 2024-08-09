@@ -4,6 +4,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TabControlLiveChart.xaml" />
+    <None Remove="Themes\ControlThemes.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Themes\ControlThemes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\TabControlLiveChart.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\Images\Logo\png\SideScroll_128.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

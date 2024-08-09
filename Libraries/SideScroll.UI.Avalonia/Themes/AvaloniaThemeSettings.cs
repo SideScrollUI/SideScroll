@@ -407,6 +407,9 @@ public class ButtonTheme : ThemeSection
 
 	[ResourceKey("ButtonForeground", "ButtonForegroundPointerOver", "ButtonForegroundPressed")]
 	public Color? Foreground { get; set; }
+
+	[ResourceKey("ButtonBorderBrush")]
+	public Color? Border { get; set; }
 }
 
 [Params]
@@ -544,6 +547,60 @@ public class ChartTheme : ThemeSection
 {
 	public override string ToString() => "Chart";
 
+	[Header("Chart"), ResourceKey("ChartBackgroundBrush")]
+	public Color? Background { get; set; }
+
+	[ResourceKey("ChartLabelForegroundBrush")]
+	public Color? LabelForeground { get; set; }
+
 	[ResourceKey("ChartLabelForegroundHighlightBrush")]
 	public Color? LabelForegroundHighlight { get; set; }
+
+	[ResourceKey("ChartGridLinesBrush")]
+	public Color? GridLines { get; set; }
+
+	[ResourceKey("ChartNowLineBrush")]
+	public Color? NowLine { get; set; }
+
+	[Header("Tool Tip"), ResourceKey("ChartToolTipBackgroundBrush")]
+	public Color? ToolTipBackground { get; set; }
+
+	[ResourceKey("ChartToolTipForegroundBrush")]
+	public Color? ToolTipForeground { get; set; }
+
+	[Inline]
+	public ChartColorsTheme Colors { get; set; } = new();
+}
+
+public class ChartColorsTheme : ThemeSection
+{
+	[Header("Series Colors"), ResourceKey("ChartSeries1Brush")]
+	public Color? Series1 { get; set; }
+
+	[ResourceKey("ChartSeries2Brush")]
+	public Color? Series2 { get; set; }
+
+	[ResourceKey("ChartSeries3Brush")]
+	public Color? Series3 { get; set; }
+
+	[ResourceKey("ChartSeries4Brush")]
+	public Color? Series4 { get; set; }
+
+	[ResourceKey("ChartSeries5Brush")]
+	public Color? Series5 { get; set; }
+
+	[ResourceKey("ChartSeries6Brush")]
+	public Color? Series6 { get; set; }
+
+	[ResourceKey("ChartSeries7Brush")]
+	public Color? Series7 { get; set; }
+
+	[ResourceKey("ChartSeries8Brush")]
+	public Color? Series8 { get; set; }
+
+	[ResourceKey("ChartSeries9Brush")]
+	public Color? Series9 { get; set; }
+
+	[ResourceKey("ChartSeries10Brush")]
+	public Color? Series10 { get; set; }
 }
