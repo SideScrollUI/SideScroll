@@ -200,7 +200,7 @@ public class TabControlToolbar : Grid, IDisposable
 		// Fluent
 		textBox.Resources.Add("TextControlBackgroundPointerOver", textBox.Background);
 		textBox.Resources.Add("TextControlBackgroundFocused", textBox.Background);
-		textBox.Resources.Add("TextReadOnlyBackgroundBrush", textBox.Background);
+		textBox.Resources.Add("TextControlBackgroundReadOnlyBrush", textBox.Background);
 
 		AddControl(textBox, fill);
 		return textBox;

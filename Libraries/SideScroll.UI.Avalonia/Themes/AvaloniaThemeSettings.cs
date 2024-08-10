@@ -213,6 +213,7 @@ public class TabTheme : ThemeSection
 	[ResourceKey("TabBackgroundFocusedBrush")]
 	public Color? BackgroundFocused { get; set; }
 
+
 	[Header("Title"), Separator, ResourceKey("TitleBackgroundBrush")]
 	public Color? TitleBackground { get; set; }
 
@@ -225,17 +226,24 @@ public class TabTheme : ThemeSection
 	[ResourceKey("TabSplitterSize"), Range(6, 100)]
 	public double? SplitterSize { get; set; }
 
+
 	[Separator, ResourceKey("TabHeaderForegroundBrush")]
 	public Color? HeaderForeground { get; set; }
 
 	[Separator, ResourceKey("TabSeparatorForegroundBrush")]
 	public Color? SeparatorForeground { get; set; }
 
+	
 	[Separator, ResourceKey("MenuFlyoutPresenterBackground")]
 	public Color? ContextMenuBackground { get; set; }
 
+	[ResourceKey("MenuFlyoutItemForeground")]
+	public Color? ContextMenuForeground { get; set; }
+
+
 	[Separator, ResourceKey("TabProgressBarForegroundBrush")]
 	public Color? ProgressBarForeground { get; set; }
+
 
 	[Header("Button"), ResourceKey("ThemeButtonBackgroundBrush")]
 	public Color? ButtonBackground { get; set; }
@@ -396,7 +404,7 @@ public class ButtonTheme : ThemeSection
 {
 	public override string ToString() => "Button";
 
-	[ResourceKey("ButtonBackground")]
+	[Header("Background"), ResourceKey("ButtonBackground")]
 	public Color? Background { get; set; }
 
 	[ResourceKey("ButtonBackgroundPointerOver")]
@@ -405,11 +413,14 @@ public class ButtonTheme : ThemeSection
 	[ResourceKey("ButtonBackgroundPressed")]
 	public Color? BackgroundPressed { get; set; }
 
-	[ResourceKey("ButtonForeground", "ButtonForegroundPointerOver", "ButtonForegroundPressed")]
+	[Header("Foreground"), ResourceKey("ButtonForeground", "ButtonForegroundPointerOver", "ButtonForegroundPressed")]
 	public Color? Foreground { get; set; }
 
-	[ResourceKey("ButtonBorderBrush")]
+	[Header("Border"), ResourceKey("ButtonBorderBrush")]
 	public Color? Border { get; set; }
+
+	[ResourceKey("ButtonBorderBrushPointerOver")]
+	public Color? BorderPointerOver { get; set; }
 }
 
 [Params]
@@ -420,14 +431,17 @@ public class TextControlTheme : ThemeSection
 	[Header("Labels"), ResourceKey("LabelForegroundBrush")]
 	public Color? LabelForeground { get; set; }
 
-	[Header("Text Control"), ResourceKey(
+	[Header("Text Control - Background"), ResourceKey(
 		"TextControlBackground",
 		"ComboBoxBackground",
 		"CalendarDatePickerBackground"
 		)]
 	public Color? TextControlBackground { get; set; }
 
-	[ResourceKey(
+	[ResourceKey("TextControlBackgroundReadOnlyBrush")]
+	public Color? TextControlBackgroundReadOnly { get; set; }
+
+	[Header("Text Control - Foreground"), ResourceKey(
 		"TextControlForeground",
 		"ComboBoxForeground",
 		"CalendarDatePickerForeground",
@@ -447,7 +461,7 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? TextControlForegroundHigh { get; set; }
 
-	[ResourceKey(
+	[Header("Text Control - Border"), ResourceKey(
 		"TextControlBorderBrush",
 		"ComboBoxBorderBrush",
 		"CalendarDatePickerBorderBrush"
@@ -464,7 +478,7 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? TextControlBorderPointerOver { get; set; }
 
-	[Header("Text Control - Selected"), ResourceKey("TextControlSelectionForegroundBrush")]
+	[Header("Text Control - Selection"), ResourceKey("TextControlSelectionForegroundBrush")]
 	public Color? TextControlSelectionForeground { get; set; }
 
 	[ResourceKey("TextControlSelectionHighlightColor")]

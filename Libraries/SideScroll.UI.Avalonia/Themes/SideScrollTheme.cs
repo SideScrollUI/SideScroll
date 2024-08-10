@@ -58,7 +58,7 @@ public static class SideScrollTheme
 
 	public static SolidColorBrush TextAreaBackground => GetBrush("TextAreaBackgroundBrush");
 	public static SolidColorBrush TextReadOnlyForeground => GetBrush("TextReadOnlyForegroundBrush");
-	public static SolidColorBrush TextReadOnlyBackground => GetBrush("TextReadOnlyBackgroundBrush");
+	public static SolidColorBrush TextReadOnlyBackground => GetBrush("TextControlBackgroundReadOnlyBrush");
 
 	// Chart 
 	public static SolidColorBrush ChartBackgroundSelected => GetBrush("ChartBackgroundSelectedBrush");

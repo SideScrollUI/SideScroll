@@ -10,12 +10,12 @@
   </Style>
 
   <Style Selector="TextBox[IsReadOnly=true]:pointerover /template/ Border#PART_BorderElement">
-    <Setter Property="Background" Value="{DynamicResource TextReadOnlyBackgroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource TextControlBackgroundReadOnlyBrush}" />
     <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}"/>
   </Style>
 
   <Style Selector="TextBox[IsReadOnly=true]:focus /template/ Border#PART_BorderElement">
-    <Setter Property="Background" Value="{DynamicResource TextReadOnlyBackgroundBrush}"/>
+    <Setter Property="Background" Value="{DynamicResource TextControlBackgroundReadOnlyBrush}"/>
     <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}"/>
   </Style>
 
