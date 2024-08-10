@@ -261,8 +261,6 @@
           <!-- Text -->
 
           <SolidColorBrush x:Key="LabelForegroundBrush" Color="#e3e3e3" />
-          
-          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#172144" />
 
           <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#c5c6c6" />
           <SolidColorBrush x:Key="TextReadOnlyForegroundBrush" Color="#606060" />
@@ -271,6 +269,11 @@
 
           <Thickness x:Key="ThemeBorderThickness">1</Thickness>
           <sys:Double x:Key="ThemeDisabledOpacity">0.75</sys:Double>
+
+          <!-- TextArea -->
+
+          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#172144" />
+          <SolidColorBrush x:Key="TextAreaForegroundBrush" Color="#d0d0e8" />
 
           <!-- Fonts -->
 
@@ -594,13 +597,16 @@
           <!-- Text -->
           
           <SolidColorBrush x:Key="LabelForegroundBrush" Color="#b5b5b5" />
-          
-          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#172144" />
 
           <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#1a1a1a" />
           <SolidColorBrush x:Key="TextReadOnlyForegroundBrush" Color="#808080" />
           
           <SolidColorBrush x:Key="TextControlBackgroundPointerOverBrush" Color="#ddffdd" />
+
+          <!-- TextArea -->
+
+          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#172144" />
+          <SolidColorBrush x:Key="TextAreaForegroundBrush" Color="#B4B8CF" />
 
           <!-- Chart -->
 

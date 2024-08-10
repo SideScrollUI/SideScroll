@@ -11,6 +11,7 @@ using SideScroll.Tabs.Samples.Objects;
 using SideScroll.Tabs.Samples.Params;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Controls;
+using SideScroll.UI.Avalonia.Samples.Controls;
 using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
 using System.Collections;
 
@@ -93,6 +94,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				},
 				ButtonTheme => new TabSampleActions(),
 				TextControlTheme => new TabSampleParamsDataTabs(),
+				TextAreaTheme => new TabTextArea(),
 				TextEditorTheme => new List<ListItem>
 				{
 					new("Text", TextSamples.Plain),

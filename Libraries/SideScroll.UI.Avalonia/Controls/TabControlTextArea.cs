@@ -20,20 +20,12 @@ public class TabControlTextArea : Border
 	{
 		Text = text ?? "";
 
-		Background = SideScrollTheme.TextAreaBackground;
-		BorderBrush = Brushes.Black;
-		BorderThickness = new Thickness(1);
-		HorizontalAlignment = HorizontalAlignment.Stretch;
-		VerticalAlignment = VerticalAlignment.Top;
-		MinWidth = 50;
 		MaxWidth = TabControlParams.ControlMaxWidth;
-		Margin = new Thickness(6);
-		Padding = new Thickness(6, 3);
 
 		TextBlock = new TextBlock
 		{
 			Background = SideScrollTheme.TextAreaBackground, // Set background for ContentMenu
-			Foreground = SideScrollTheme.TitleForeground,
+			Foreground = SideScrollTheme.TextAreaForeground,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			TextWrapping = TextWrapping.Wrap,

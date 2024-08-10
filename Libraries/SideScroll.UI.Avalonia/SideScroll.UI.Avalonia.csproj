@@ -42,6 +42,7 @@
     <EmbeddedResource Remove="Themes\Controls\ControlThemes.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabButton.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlSplitContainer.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabControlTextArea.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlTextBlock.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlTitle.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlToolbar.xaml" />
@@ -65,6 +66,7 @@
     <None Remove="right-chevron.png" />
     <None Remove="StyleResources.xaml" />
     <None Remove="Themes\Controls\ControlThemes.xaml" />
+    <None Remove="Themes\Controls\TabControlTextArea.xaml" />
     <None Remove="Themes\Controls\TabControlTextBlock.xaml" />
     <None Remove="Themes\Controls\TabControlTitle.xaml" />
     <None Remove="Themes\Controls\TabControlToolbar.xaml" />
@@ -85,6 +87,9 @@
 
   <ItemGroup>
     <AvaloniaResource Include="Themes\Controls\TabButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabControlTextArea.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabControlTextBlock.xaml">

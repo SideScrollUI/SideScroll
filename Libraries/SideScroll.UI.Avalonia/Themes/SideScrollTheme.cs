@@ -55,12 +55,14 @@ public static class SideScrollTheme
 	//public static SolidColorBrush LabelHighlightForeground => GetBrush("LabelHighlightForegroundBrush");
 
 	public static SolidColorBrush TextControlBackground => GetBrush("TextControlBackground");
-
-	public static SolidColorBrush TextAreaBackground => GetBrush("TextAreaBackgroundBrush");
 	public static SolidColorBrush TextReadOnlyForeground => GetBrush("TextReadOnlyForegroundBrush");
 	public static SolidColorBrush TextReadOnlyBackground => GetBrush("TextControlBackgroundReadOnlyBrush");
 
-	// Chart 
+	// TextArea 
+	public static SolidColorBrush TextAreaBackground => GetBrush("TextAreaBackgroundBrush");
+	public static SolidColorBrush TextAreaForeground => GetBrush("TextAreaForegroundBrush");
+
+	// Chart
 	public static SolidColorBrush ChartBackgroundSelected => GetBrush("ChartBackgroundSelectedBrush");
 	public static double ChartBackgroundSelectedAlpha => GetDouble("ChartBackgroundSelectedAlpha");
 

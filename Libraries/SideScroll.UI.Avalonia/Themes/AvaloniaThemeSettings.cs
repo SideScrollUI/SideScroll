@@ -46,6 +46,8 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 	[Inline]
 	public TextControlTheme TextControl { get; set; } = new();
 	[Inline]
+	public TextAreaTheme TextArea { get; set; } = new();
+	[Inline]
 	public TextEditorTheme TextEditor { get; set; } = new();
 	[Inline]
 	public ChartTheme Chart { get; set; } = new();
@@ -63,6 +65,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 		DataGrid,
 		Button,
 		TextControl,
+		TextArea,
 		TextEditor,
 		Chart,
 	];
@@ -486,6 +489,18 @@ public class TextControlTheme : ThemeSection
 
 	[Header("Errors"), ResourceKey("SystemControlErrorTextForegroundBrush")]
 	public Color? ErrorTextForeground { get; set; }
+}
+
+[Params]
+public class TextAreaTheme : ThemeSection
+{
+	public override string ToString() => "Text Area";
+
+	[ResourceKey("TextAreaBackgroundBrush")]
+	public Color? TextControlBackground { get; set; }
+
+	[ResourceKey("TextAreaForegroundBrush")]
+	public Color? TextAreaForeground { get; set; }
 }
 
 [Params]
