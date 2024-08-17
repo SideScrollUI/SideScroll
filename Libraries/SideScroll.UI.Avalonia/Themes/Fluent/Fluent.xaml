@@ -176,7 +176,7 @@
           
           <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="Black" />
           <SolidColorBrush x:Key="DataGridCellForegroundPointerOverBrush" Color="Black" />
-          <SolidColorBrush x:Key="DataGridForegroundSelectedBrush" Color="Black" />
+          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="Black" />
           <SolidColorBrush x:Key="DataGridCellBorderBrush" Color="LightGray" />
           
           <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#d0d0f0" />
@@ -239,7 +239,6 @@
 
           <!-- ScrollBar -->
 
-          <SolidColorBrush x:Key="ThemeScrollBarBackground" Color="#38409a" />
           <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#38409a" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#38409a" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="#477ed7" />
@@ -512,7 +511,7 @@
           <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="Transparent" />
           <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush" Color="#006dbb" />
 
-          <SolidColorBrush x:Key="DataGridForegroundSelectedBrush" Color="#cccccc" />
+          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="#cccccc" />
           <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#dddddd" />
 
           <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#121212" />

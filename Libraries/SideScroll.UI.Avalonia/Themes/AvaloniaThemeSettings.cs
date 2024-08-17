@@ -40,6 +40,8 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 	[Inline]
 	public ToolTipTheme ToolTip { get; set; } = new();
 	[Inline]
+	public ScrollBarTheme ScrollBar { get; set; } = new();
+	[Inline]
 	public DataGridTheme DataGrid { get; set; } = new();
 	[Inline]
 	public ButtonTheme Button { get; set; } = new();
@@ -62,6 +64,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 		Tab,
 		Toolbar,
 		ToolTip,
+		ScrollBar,
 		DataGrid,
 		Button,
 		TextControl,
@@ -216,13 +219,14 @@ public class TabTheme : ThemeSection
 	[ResourceKey("TabBackgroundFocusedBrush")]
 	public Color? BackgroundFocused { get; set; }
 
-
+	// Title
 	[Header("Title"), Separator, ResourceKey("TitleBackgroundBrush")]
 	public Color? TitleBackground { get; set; }
 
 	[ResourceKey("TitleForegroundBrush")]
 	public Color? TitleForeground { get; set; }
 
+	// Splitter
 	[Header("Splitter"), Separator, ResourceKey("TabSplitterBackgroundBrush")]
 	public Color? SplitterBackground { get; set; }
 
@@ -247,7 +251,7 @@ public class TabTheme : ThemeSection
 	[Separator, ResourceKey("TabProgressBarForegroundBrush")]
 	public Color? ProgressBarForeground { get; set; }
 
-
+	// Button
 	[Header("Button"), ResourceKey("ThemeButtonBackgroundBrush")]
 	public Color? ButtonBackground { get; set; }
 
@@ -352,6 +356,39 @@ public class ToolTipTheme : ThemeSection
 }
 
 [Params]
+public class ScrollBarTheme : ThemeSection
+{
+	public override string ToString() => "Scroll Bar";
+
+	[Header("ScrollBar"), ResourceKey("ThemeScrollBarBackgroundBrush")]
+	public Color? Background { get; set; }
+
+	[Header("Thumb"), ResourceKey("ThemeScrollBarThumbBrush", "ScrollBarThumbBackgroundColor")]
+	public Color? Thumb { get; set; }
+
+	[ResourceKey("ThemeScrollBarThumbPointerOverBrush")]
+	public Color? ThumbPointerOver { get; set; }
+
+
+	[Header("Buttons"), ResourceKey("ScrollBarButtonBackground")]
+	public Color? ButtonBackground { get; set; }
+
+	[ResourceKey("ScrollBarButtonBackgroundPointerOver")]
+	public Color? ButtonBackgroundPointerOver { get; set; }
+
+	[ResourceKey("ScrollBarButtonBackgroundPressed")]
+	public Color? ButtonBackgroundPressed { get; set; }
+
+
+	[Separator, ResourceKey("ScrollBarButtonArrowForeground")]
+	public Color? ButtonArrowForeground { get; set; }
+
+	// Doesn't work
+	/*[ResourceKey("ScrollBarButtonArrowForegroundPointerOver")]
+	public Color? ButtonArrowForegroundPointerOver { get; set; }*/
+}
+
+[Params]
 public class DataGridTheme : ThemeSection
 {
 	public override string ToString() => "Data Grid";
@@ -380,8 +417,8 @@ public class DataGridTheme : ThemeSection
 	[ResourceKey("DataGridCellForegroundPointerOverBrush")]
 	public Color? CellForegroundPointerOver { get; set; }
 
-	//[ResourceKey("DataGridForegroundSelectedBrush")]
-	//public Color? ForegroundSelected { get; set; }
+	[ResourceKey("DataGridCellForegroundSelectedBrush")]
+	public Color? CellForegroundSelected { get; set; }
 
 	[ResourceKey("DataGridCellBorderBrush")]
 	public Color? CellBorder { get; set; }
@@ -585,7 +622,7 @@ public class ChartTheme : ThemeSection
 	[ResourceKey("ChartLabelForegroundHighlightBrush")]
 	public Color? LabelForegroundHighlight { get; set; }
 
-	[ResourceKey("ChartGridLinesBrush")]
+	[Header("Lines"), ResourceKey("ChartGridLinesBrush")]
 	public Color? GridLines { get; set; }
 
 	[ResourceKey("ChartNowLineBrush")]
@@ -603,6 +640,8 @@ public class ChartTheme : ThemeSection
 
 public class ChartColorsTheme : ThemeSection
 {
+	public override string ToString() => "Chart Colors";
+
 	[Header("Series Colors"), ResourceKey("ChartSeries1Brush")]
 	public Color? Series1 { get; set; }
 

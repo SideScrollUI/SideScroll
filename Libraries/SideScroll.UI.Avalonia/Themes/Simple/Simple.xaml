@@ -89,7 +89,7 @@
           <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="#21d064" />
           
           <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="Black" />
-          <SolidColorBrush x:Key="DataGridForegroundSelectedBrush" Color="Black" />
+          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="Black" />
           <SolidColorBrush x:Key="ThemeGridHighBrush" Color="#92F397" />
 
           <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#c8c2f9" />
@@ -204,7 +204,7 @@
           <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="#50c474" />
           
           <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="#b3b3b3" />
-          <SolidColorBrush x:Key="DataGridForegroundSelectedBrush" Color="#f0f0f0" />
+          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="#f0f0f0" />
           <SolidColorBrush x:Key="ThemeGridHighBrush" Color="#3060c0" />
 
           <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#686289" />

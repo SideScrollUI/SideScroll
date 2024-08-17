@@ -5,6 +5,8 @@ Before getting started, it might help to see some of the different things you ca
 ```
 git clone https://github.com/SideScrollUI/SideScroll.git
 cd SideScroll
+```
+```
 dotnet build
 dotnet run --project Programs/SideScroll.Start.Avalonia/SideScroll.Start.Avalonia.csproj
 ```

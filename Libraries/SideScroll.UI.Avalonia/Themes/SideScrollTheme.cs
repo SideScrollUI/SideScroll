@@ -26,6 +26,7 @@ public static class SideScrollTheme
 	public static SolidColorBrush ToolbarTextForeground => GetBrush("ToolbarTextForegroundBrush");
 	public static SolidColorBrush ToolbarTextCaret => GetBrush("ToolbarTextCaretBrush");
 
+	// ToolTip
 	public static SolidColorBrush ToolTipBackground => GetBrush("ToolTipBackground");
 	public static SolidColorBrush ToolTipForeground => GetBrush("ToolTipForeground");
 

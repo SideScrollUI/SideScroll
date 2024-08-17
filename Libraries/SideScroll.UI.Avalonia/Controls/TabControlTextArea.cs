@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
-using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Utilities;
 
 namespace SideScroll.UI.Avalonia.Controls;
@@ -24,8 +23,6 @@ public class TabControlTextArea : Border
 
 		TextBlock = new TextBlock
 		{
-			Background = SideScrollTheme.TextAreaBackground, // Set background for ContentMenu
-			Foreground = SideScrollTheme.TextAreaForeground,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			TextWrapping = TextWrapping.Wrap,

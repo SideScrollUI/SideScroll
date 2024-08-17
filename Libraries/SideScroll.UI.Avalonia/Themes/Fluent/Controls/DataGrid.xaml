@@ -42,8 +42,13 @@
     <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundPointerOverBrush}" />
   </Style>
 
-  <!--Style Selector="dg|DataGridRow:selected">
-    <Setter Property="Foreground" Value="{DynamicResource DataGridForegroundSelectedBrush}" />
+  <Style Selector="dg|DataGridCell:selected">
+    <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundSelectedBrush}" />
+  </Style>
+
+  <!-- Doesn't work -->
+  <!--Style Selector="dg|DataGridRow:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundPointerOverBrush}" />
   </Style-->
 
   <Style Selector="dg|DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">

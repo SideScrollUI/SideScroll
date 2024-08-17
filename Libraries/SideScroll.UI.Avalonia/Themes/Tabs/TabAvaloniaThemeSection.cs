@@ -56,7 +56,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			model.AddObject(toolbar);
 
 			var paramControl = new TabControlParams(tab.Object);
-			model.AddObject(paramControl);
+			model.AddObject(paramControl, true, true);
 
 			foreach (var control in paramControl.Children)
 			{
@@ -71,7 +71,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			{
 				SelectedItems = new List<ListItem>
 				{
-					new ListItem("Samples", obj)
+					new("Samples", obj)
 				};
 			}
 		}
@@ -87,6 +87,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				},
 				ToolbarTheme => new TabCustomControl(),
 				ToolTipTheme => new TabAvaloniaToolTipSample(),
+				ScrollBarTheme => new TabSampleGridCollectionSize(),
 				DataGridTheme => new List<ListItem>
 				{
 					new("Collections", new TabSampleDataGrid()),

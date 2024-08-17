@@ -16,7 +16,7 @@ public class SelectedRow : IEquatable<SelectedRow>
 	public object? DataValue; // Imported with bookmark into it's App DataRepo
 
 	// public bool Pinned;
-	// public List<string> SelectedColumns = new(); // Not supported yet
+	// public List<string> SelectedColumns = []; // Not supported yet
 
 	public override string? ToString() => DataKey ?? Label;
 
