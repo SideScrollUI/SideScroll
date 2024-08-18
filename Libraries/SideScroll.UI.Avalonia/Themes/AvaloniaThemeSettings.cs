@@ -423,6 +423,13 @@ public class DataGridTheme : ThemeSection
 	[ResourceKey("DataGridCellBorderBrush")]
 	public Color? CellBorder { get; set; }
 
+	// Cell - Focus
+	[Header("Cell - Focus"), ResourceKey("DataGridCellFocusVisualPrimaryBrush")]
+	public Color? CellFocusVisualPrimary { get; set; }
+
+	[ResourceKey("DataGridCellFocusVisualSecondaryBrush")]
+	public Color? CellFocusVisualSecondary { get; set; }
+
 	// [StyleValue] attribute
 
 	[Header("Styled"), ResourceKey("DataGridHasLinksBackgroundBrush")]
