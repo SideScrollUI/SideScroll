@@ -178,7 +178,6 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			CanUserReorderColumns = true,
 			CanUserSortColumns = true,
 
-			BorderBrush = Brushes.Black,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,

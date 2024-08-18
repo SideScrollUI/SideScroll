@@ -183,6 +183,8 @@
 
           <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#c8c2f9" />
 
+          <SolidColorBrush x:Key="DataGridBorderBrush" Color="Black" />
+
           <!--- End Fluent Defaults -->
 
           <!-- Custom Resources -->
@@ -273,6 +275,7 @@
 
           <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#172144" />
           <SolidColorBrush x:Key="TextAreaForegroundBrush" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="TextAreaBorderBrush" Color="Black" />
 
           <!-- Fonts -->
 

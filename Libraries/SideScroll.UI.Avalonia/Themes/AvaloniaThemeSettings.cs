@@ -174,7 +174,15 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 				}
 				else if (value is double d)
 				{
-					dictionary[name] = d;
+					// Todo: Improve, Add generic attribute support to ListProperty.GetCustomAttribute()
+					if (name.Contains("Thickness"))
+					{
+						dictionary[name] = new Thickness(d);
+					}
+					else
+					{
+						dictionary[name] = d;
+					}
 				}
 				else if (value is null)
 				{
@@ -443,6 +451,9 @@ public class DataGridTheme : ThemeSection
 
 	[ResourceKey("DataGridStyledBorderBrush")]
 	public Color? StyledBorder { get; set; }
+
+	[Header("Border"), ResourceKey("DataGridBorderBrush")]
+	public Color? Border { get; set; }
 }
 
 // Button, including TabControlTextButton
@@ -468,6 +479,9 @@ public class ButtonTheme : ThemeSection
 
 	[ResourceKey("ButtonBorderBrushPointerOver")]
 	public Color? BorderPointerOver { get; set; }
+
+	[Range(0, 10), ResourceKey("ButtonBorderThemeThickness")]
+	public double? BorderThickness { get; set; }
 }
 
 [Params]
@@ -478,6 +492,7 @@ public class TextControlTheme : ThemeSection
 	[Header("Labels"), ResourceKey("LabelForegroundBrush")]
 	public Color? LabelForeground { get; set; }
 
+	// Background
 	[Header("Text Control - Background"), ResourceKey(
 		"TextControlBackground",
 		"ComboBoxBackground",
@@ -488,6 +503,7 @@ public class TextControlTheme : ThemeSection
 	[ResourceKey("TextControlBackgroundReadOnlyBrush")]
 	public Color? TextControlBackgroundReadOnly { get; set; }
 
+	// Foreground
 	[Header("Text Control - Foreground"), ResourceKey(
 		"TextControlForeground",
 		"ComboBoxForeground",
@@ -508,6 +524,7 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? TextControlForegroundHigh { get; set; }
 
+	// Border
 	[Header("Text Control - Border"), ResourceKey(
 		"TextControlBorderBrush",
 		"ComboBoxBorderBrush",
@@ -525,12 +542,21 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? TextControlBorderPointerOver { get; set; }
 
+	// Text Control - Selection
 	[Header("Text Control - Selection"), ResourceKey("TextControlSelectionForegroundBrush")]
 	public Color? TextControlSelectionForeground { get; set; }
 
 	[ResourceKey("TextControlSelectionHighlightColor")]
 	public Color? TextControlSelectionHighlight { get; set; }
 
+	// ComboBox
+	[Header("ComboBox"), ResourceKey("ComboBoxItemBackgroundSelected")]
+	public Color? ComboBoxItemBackgroundSelected { get; set; }
+
+	[ResourceKey("ComboBoxItemBackgroundPointerOver", "ComboBoxItemBackgroundSelectedPointerOver")]
+	public Color? ComboBoxItemBackgroundPointerOver { get; set; }
+
+	// Errors
 	[Header("Errors"), ResourceKey("SystemControlErrorTextForegroundBrush")]
 	public Color? ErrorTextForeground { get; set; }
 }
@@ -545,6 +571,9 @@ public class TextAreaTheme : ThemeSection
 
 	[ResourceKey("TextAreaForegroundBrush")]
 	public Color? Foreground { get; set; }
+
+	[ResourceKey("TextAreaBorderBrush")]
+	public Color? Border { get; set; }
 }
 
 [Params]

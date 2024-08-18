@@ -111,58 +111,45 @@ public static class SideScrollTheme
 
 	public static ThemeVariant ThemeVariant => Application.Current!.ActualThemeVariant;
 
-	public static Color GetColor(string colorName)
+	public static object GetResource(string name)
 	{
 		if (Application.Current!.Resources.ThemeDictionaries.TryGetValue(ThemeVariant, out IThemeVariantProvider? provider))
 		{
-			if (provider.TryGetResource(colorName, null, out object? providerObject))
+			if (provider.TryGetResource(name, null, out object? providerObject))
 			{
-				return (Color)providerObject!;
+				return providerObject!;
 			}
 		}
 
-		if (Application.Current.TryGetResource(colorName, ThemeVariant, out object? obj))
+		if (Application.Current.TryGetResource(name, ThemeVariant, out object? obj))
 		{
-			return (Color)obj!;
+			return obj!;
 		}
 
-		throw new Exception($"Color not found: {colorName}");
+		throw new Exception($"Resource not found: {name}");
+	}
+
+	public static Color GetColor(string colorName)
+	{
+		return (Color)GetResource(colorName);
 	}
 
 	public static SolidColorBrush GetBrush(string brushName)
 	{
-		if (Application.Current!.Resources.ThemeDictionaries.TryGetValue(ThemeVariant, out IThemeVariantProvider? provider))
-		{
-			if (provider.TryGetResource(brushName, ThemeVariant, out object? providerObject))
-			{
-				return (SolidColorBrush)providerObject!;
-			}
-		}
-
-		if (Application.Current.TryGetResource(brushName, ThemeVariant, out object? obj))
-		{
-			return (SolidColorBrush)obj!;
-		}
-
-		throw new Exception($"Brush not found: {brushName}");
+		return (SolidColorBrush)GetResource(brushName);
 	}
 
 	public static double GetDouble(string name)
 	{
-		if (Application.Current!.Resources.ThemeDictionaries.TryGetValue(ThemeVariant, out IThemeVariantProvider? provider))
+		object obj = GetResource(name);
+		if (obj is Thickness thickness)
 		{
-			if (provider.TryGetResource(name, ThemeVariant, out object? providerObject))
-			{
-				return (double)providerObject!;
-			}
+			return thickness.Left;
 		}
-
-		if (Application.Current.TryGetResource(name, ThemeVariant, out object? value))
+		else
 		{
-			return (double)value!;
+			return (double)GetResource(name);
 		}
-
-		throw new Exception($"Double not found: {name}");
 	}
 
 	public static FontFamily GetFontFamily(string name)
@@ -173,5 +160,15 @@ public static class SideScrollTheme
 		}
 
 		throw new Exception($"FontFamily not found: {name}");
+	}
+
+	public static Thickness GetThickness(string name)
+	{
+		if (Application.Current!.TryGetResource(name, ThemeVariant, out object? value))
+		{
+			return (Thickness)value!;
+		}
+
+		throw new Exception($"Thickness not found: {name}");
 	}
 }

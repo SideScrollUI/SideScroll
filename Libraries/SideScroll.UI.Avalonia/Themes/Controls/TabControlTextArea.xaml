@@ -5,7 +5,7 @@
   <ControlTheme x:Key="{x:Type sidescroll:TabControlTextArea}" TargetType="sidescroll:TabControlTextArea">
     <Setter Property="Background" Value="{DynamicResource TextAreaBackgroundBrush}"/>
     <Setter Property="TextElement.Foreground" Value="{DynamicResource TextAreaForegroundBrush}"/>
-    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource TextAreaBorderBrush}"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="HorizontalAlignment" Value="Stretch"/>
     <Setter Property="VerticalAlignment" Value="Top"/>

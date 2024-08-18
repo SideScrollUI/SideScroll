@@ -31,6 +31,7 @@
   <Style Selector="dg|DataGrid">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="RowBackground" Value="{DynamicResource DataGridRowBackgroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource DataGridBorderBrush}" />
   </Style>
   
   <Style Selector="dg|DataGridCell">
