@@ -12,7 +12,7 @@ public class TabSampleGridHashSet : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			_items = new HashSet<TabSampleGridCollectionSize.TestItem>();
+			_items = [];
 			AddEntries(null);
 			model.AddData(_items);
 

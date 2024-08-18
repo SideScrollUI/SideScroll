@@ -534,10 +534,10 @@ public class TextAreaTheme : ThemeSection
 	public override string ToString() => "Text Area";
 
 	[ResourceKey("TextAreaBackgroundBrush")]
-	public Color? TextControlBackground { get; set; }
+	public Color? Background { get; set; }
 
 	[ResourceKey("TextAreaForegroundBrush")]
-	public Color? TextAreaForeground { get; set; }
+	public Color? Foreground { get; set; }
 }
 
 [Params]

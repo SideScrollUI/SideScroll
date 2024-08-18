@@ -12,7 +12,7 @@ public class TabSampleGridDictionary : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			_items = new Dictionary<string, TestItem>();
+			_items = [];
 			AddEntries(null);
 			model.AddData(_items);
 

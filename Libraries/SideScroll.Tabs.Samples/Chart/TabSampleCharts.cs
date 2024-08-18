@@ -9,5 +9,6 @@ public class TabSampleCharts
 	public static TabSampleChartProperties Properties => new();
 	public static TabSampleChartDimensions Dimensions => new();
 	public static TabSampleChartTimeSeries TimeSeries => new();
+	public static TabSampleChartSeriesCount SeriesCount => new();
 	public static TabSampleChartNoData NoData => new();
 }

@@ -1,4 +1,5 @@
-using SideScroll.Tasks;
+using SideScroll.Resources;
+using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Samples.Actions;
 
@@ -6,12 +7,21 @@ public class TabSampleLoadAsync : ITab
 {
 	public TabInstance Create() => new Instance();
 
+	public class Toolbar : TabToolbar
+	{
+		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
+	}
+
 	public class Instance : TabInstance, ITabAsync
 	{
 		private const int DelayMs = 2000;
 
 		public async Task LoadAsync(Call call, TabModel model)
 		{
+			Toolbar toolbar = new();
+			toolbar.ButtonRefresh.Action = ReloadInstance;
+			model.AddObject(toolbar);
+
 			call.Log.Add("Sleeping", new Tag("Milliseconds", DelayMs));
 
 			await Task.Delay(DelayMs);
@@ -21,11 +31,6 @@ public class TabSampleLoadAsync : ITab
 			model.Items = new List<int>
 			{
 				1, 2, 3
-			};
-
-			model.Actions = new List<TaskCreator>
-			{
-				new TaskDelegate("Reload", ReloadInstance),
 			};
 		}
 
