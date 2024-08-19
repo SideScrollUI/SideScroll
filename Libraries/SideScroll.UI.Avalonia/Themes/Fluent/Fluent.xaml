@@ -264,7 +264,7 @@
           <SolidColorBrush x:Key="LabelForegroundBrush" Color="#e3e3e3" />
 
           <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#c5c6c6" />
-          <SolidColorBrush x:Key="TextReadOnlyForegroundBrush" Color="#606060" />
+          <SolidColorBrush x:Key="TextControlForegroundReadOnlyBrush" Color="#606060" />
           
           <SolidColorBrush x:Key="TextControlBackgroundPointerOverBrush" Color="#ddffdd" />
 
@@ -604,7 +604,7 @@
           <SolidColorBrush x:Key="LabelForegroundBrush" Color="#b5b5b5" />
 
           <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#1a1a1a" />
-          <SolidColorBrush x:Key="TextReadOnlyForegroundBrush" Color="#808080" />
+          <SolidColorBrush x:Key="TextControlForegroundReadOnlyBrush" Color="#808080" />
           
           <SolidColorBrush x:Key="TextControlBackgroundPointerOverBrush" Color="#ddffdd" />
 

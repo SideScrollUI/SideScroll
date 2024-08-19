@@ -5,14 +5,14 @@ using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
+using SideScroll.Attributes;
+using SideScroll.Tabs.Lists;
 using SideScroll.Utilities;
 using SideScroll.UI.Avalonia.Controls.Converters;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Utilities;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using SideScroll.Tabs.Lists;
-using SideScroll.Attributes;
 
 namespace SideScroll.UI.Avalonia.Controls;
 
@@ -77,11 +77,6 @@ public class TabControlTextBox : TextBox
 	private void InitializeProperty(ListProperty property)
 	{
 		IsReadOnly = !property.Editable;
-		if (IsReadOnly)
-		{
-			Background = SideScrollTheme.TextReadOnlyBackground;
-			Foreground = SideScrollTheme.TextReadOnlyForeground;
-		}
 
 		PasswordCharAttribute? passwordCharAttribute = property.GetCustomAttribute<PasswordCharAttribute>();
 		if (passwordCharAttribute != null)

@@ -114,7 +114,9 @@ public class TabView : Grid, IDisposable
 
 		Instance.OnModelChanged += TabInstance_OnModelChanged;
 		if (Instance is ITabSelector tabSelector)
+		{
 			tabSelector.OnSelectionChanged += ParentListSelectionChanged;
+		}
 
 		Instance.OnValidate += Instance_OnValidate;
 
@@ -414,7 +416,9 @@ public class TabView : Grid, IDisposable
 		{
 			_containerGrid.ColumnDefinitions[0].Width = new GridLength((int)splitterDistance);
 			if (_tabParentControls != null)
+			{
 				_tabParentControls.Width = splitterDistance;
+			}
 		}
 		else
 		{
@@ -756,7 +760,9 @@ public class TabView : Grid, IDisposable
 	public void UpdateSplitterFiller()
 	{
 		if (_fillerPanel != null)
+		{
 			_fillerPanel.Width = GetFillerPanelWidth();
+		}
 	}
 
 	private void UpdateChildControls(bool recreate = false)
@@ -872,7 +878,9 @@ public class TabView : Grid, IDisposable
 		//	return;
 		SelectedRow? selectedRow = obj as SelectedRow;
 		if (selectedRow != null)
+		{
 			obj = selectedRow.Object!;
+		}
 
 		if (oldChildControls.TryGetValue(obj, out var oldControl))
 		{
@@ -904,7 +912,9 @@ public class TabView : Grid, IDisposable
 		{
 			Control? control = TabCreator.CreateChildControl(Instance, obj, label, tabControl);
 			if (control is TabView tabView && selectedRow != null)
+			{
 				tabView.Instance.SelectedRow = selectedRow;
+			}
 
 			if (control != null)
 			{
@@ -1057,7 +1067,9 @@ public class TabView : Grid, IDisposable
 				foreach (var obj in TabDatas[0].Items!)
 				{
 					if (newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()!))
+					{
 						matching.Add(obj);
+					}
 				}
 				TabDatas[0].SelectedItems = matching;
 			}

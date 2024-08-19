@@ -533,6 +533,9 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? TextControlForegroundHigh { get; set; }
 
+	[ResourceKey("TextControlForegroundReadOnlyBrush")]
+	public Color? TextControlForegroundReadOnly { get; set; }
+
 	// Border
 	[Header("Text Control - Border"), ResourceKey(
 		"TextControlBorderBrush",

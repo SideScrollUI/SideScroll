@@ -8,6 +8,11 @@
   <Style Selector="TextBox">
     <Setter Property="SelectionForegroundBrush" Value="{DynamicResource TextControlSelectionForegroundBrush}"/>
   </Style>
+  
+  <Style Selector="TextBox[IsReadOnly=true]">
+    <Setter Property="Background" Value="{DynamicResource TextControlBackgroundReadOnlyBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundReadOnlyBrush}"/>
+  </Style>
 
   <Style Selector="TextBox[IsReadOnly=true]:pointerover /template/ Border#PART_BorderElement">
     <Setter Property="Background" Value="{DynamicResource TextControlBackgroundReadOnlyBrush}" />
