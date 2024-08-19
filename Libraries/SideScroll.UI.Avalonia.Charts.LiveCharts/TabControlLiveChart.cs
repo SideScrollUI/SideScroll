@@ -84,9 +84,6 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		GridLineSkColor = GridLineColor.ToSKColor();
 		TextSkColor = TextColor.ToSKColor();
 
-		ColumnDefinitions = new ColumnDefinitions("*,Auto");
-		RowDefinitions = new RowDefinitions("Auto,*,Auto");
-
 		XAxis = CreateXAxis();
 		YAxis = CreateYAxis();
 
@@ -121,32 +118,32 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		if (TitleTextBlock != null)
 		{
-			Children.Add(TitleTextBlock);
+			ContainerGrid.Children.Add(TitleTextBlock);
 		}
 		else
 		{
-			RowDefinitions[0].Height = new GridLength(0);
+			ContainerGrid.RowDefinitions[0].Height = new GridLength(0);
 		}
 
-		Children.Add(Chart);
+		ContainerGrid.Children.Add(Chart);
 
 		Legend = new TabControlLiveChartLegend(this);
 		if (ChartView.LegendPosition == ChartLegendPosition.Bottom)
 		{
-			SetRow(Legend, 2);
+			Grid.SetRow(Legend, 2);
 			Legend.MaxHeight = 100;
 		}
 		else if (ChartView.LegendPosition == ChartLegendPosition.Right)
 		{
-			SetRow(Legend, 1);
-			SetColumn(Legend, 1);
+			Grid.SetRow(Legend, 1);
+			Grid.SetColumn(Legend, 1);
 			Legend.MaxWidth = 300;
 		}
 		else
 		{
 			Legend.IsVisible = false;
 		}
-		Children.Add(Legend);
+		ContainerGrid.Children.Add(Legend);
 		Legend.OnSelectionChanged += Legend_OnSelectionChanged;
 		//Legend.OnVisibleChanged += Legend_OnVisibleChanged;
 
@@ -852,8 +849,8 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	protected virtual void Dispose(bool disposing)
 	{
 		if (!disposing) return;
-		
-		Children.Clear();
+
+		ContainerGrid.Children.Clear();
 		ClearListeners();
 		ClearSeries();
 	}
@@ -869,8 +866,9 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		if (Chart == null || !IsLoaded) return;
 
 		bool visible = AvaloniaUtils.IsControlVisible(this);
-		if (visible != Chart.IsVisible)
+		if (visible != ContainerGrid.IsVisible)
 		{
+			ContainerGrid.IsVisible = visible;
 			Chart.IsVisible = visible;
 			Legend.IsVisible = visible;
 			Legend.InvalidateArrange();

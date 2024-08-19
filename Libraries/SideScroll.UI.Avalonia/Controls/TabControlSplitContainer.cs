@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 using SideScroll.UI.Avalonia.Themes;
+using SideScroll.UI.Avalonia.View;
 using System.Diagnostics;
 
 namespace SideScroll.UI.Avalonia.Controls;
@@ -197,13 +198,11 @@ public class TabControlSplitContainer : Grid
 	{
 		//AddRowDefinition(false, rowIndex);
 
-		var gridSplitter = new GridSplitter
+		var gridSplitter = new TabSplitter
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
-			Background = Brushes.Black,
-
+			ResizeDirection = GridResizeDirection.Rows,
 			//ShowsPreview = true,
-			Height = SideScrollTheme.TabSplitterSize,
 		};
 		GridSplitters.Add(gridSplitter);
 		SetRow(gridSplitter, rowIndex);
@@ -213,11 +212,10 @@ public class TabControlSplitContainer : Grid
 
 	private void AddVerticalGridSplitter(int columnIndex)
 	{
-		var gridSplitter = new GridSplitter
+		var gridSplitter = new TabSplitter
 		{
 			VerticalAlignment = VerticalAlignment.Stretch,
-			Background = Brushes.Black,
-			Width = SideScrollTheme.TabSplitterSize,
+			ResizeDirection = GridResizeDirection.Columns,
 		};
 		//GridSplitters.Add(gridSplitter);
 		SetColumn(gridSplitter, columnIndex);

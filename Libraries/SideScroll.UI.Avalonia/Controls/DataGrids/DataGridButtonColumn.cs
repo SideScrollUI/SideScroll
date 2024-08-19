@@ -40,7 +40,6 @@ public class DataGridButtonColumn : DataGridBoundColumn
 			Margin = new Thickness(0),
 			MinWidth = 15,
 			BorderThickness = new Thickness(1),
-			BorderBrush = Brushes.Black,
 		};
 		button.Resources.Add("ButtonPadding", new Thickness(2, 5));
 		if (VisiblePropertyName != null)

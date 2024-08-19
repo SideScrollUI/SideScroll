@@ -252,6 +252,8 @@ public class TabView : Grid, IDisposable
 	{
 		_parentChildGridSplitter = new TabSplitter
 		{
+			VerticalAlignment = VerticalAlignment.Stretch,
+			ResizeDirection = GridResizeDirection.Columns,
 			[Grid.ColumnProperty] = 1,
 		};
 		_containerGrid!.Children.Add(_parentChildGridSplitter);

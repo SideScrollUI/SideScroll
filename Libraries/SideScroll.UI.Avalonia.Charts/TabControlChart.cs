@@ -58,7 +58,7 @@ public interface ITabControlChart
 	public List<ChartAnnotation> Annotations { get; }
 }
 
-public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
+public abstract class TabControlChart<TSeries> : Border, ITabControlChart
 {
 	public Color TimeTrackerColor { get; set; } = SideScrollTheme.DataGridRowHighlight.Color;
 	public Color GridLineColor { get; set; } = SideScrollTheme.ChartGridLines.Color;
@@ -113,6 +113,8 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 
 	public List<ChartAnnotation> Annotations { get; set; } = [];
 
+	public Grid ContainerGrid { get; protected set; }
+
 	public override string? ToString() => ChartView.ToString();
 
 	protected TabControlChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false)
@@ -131,8 +133,13 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
-		ColumnDefinitions = new ColumnDefinitions("*");
-		RowDefinitions = new RowDefinitions("*");
+		Child = ContainerGrid = new Grid
+		{
+			ColumnDefinitions = new ColumnDefinitions("*,Auto"),
+			RowDefinitions = new RowDefinitions("Auto,*,Auto"),
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Stretch,
+		};
 
 		MaxWidth = 1500;
 		MaxHeight = 645; // 25 Items
@@ -160,7 +167,7 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 			//FontWeight = FontWeight.Medium,
 			TextWrapping = TextWrapping.Wrap,
 			Foreground = SideScrollTheme.ChartLabelForeground,
-			[ColumnSpanProperty] = 2,
+			[Grid.ColumnSpanProperty] = 2,
 		};
 		if (ChartView.LegendPosition == ChartLegendPosition.Bottom)
 		{

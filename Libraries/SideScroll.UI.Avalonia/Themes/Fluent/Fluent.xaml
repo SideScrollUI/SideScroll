@@ -297,7 +297,10 @@
 
           <SolidColorBrush x:Key="ChartToolTipBackgroundBrush" Color="#E1102670" />
           <SolidColorBrush x:Key="ChartToolTipForegroundBrush" Color="#D0D0E8" />
-          
+
+          <SolidColorBrush x:Key="ChartBorderBrush" Color="Black" />
+          <Thickness x:Key="ChartBorderThickness">0</Thickness>
+
           <SolidColorBrush x:Key="ChartSeries1Brush" Color="LawnGreen" />
           <SolidColorBrush x:Key="ChartSeries2Brush" Color="Fuchsia" />
           <SolidColorBrush x:Key="ChartSeries3Brush" Color="DodgerBlue" />

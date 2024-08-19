@@ -401,7 +401,7 @@ public class DataGridTheme : ThemeSection
 {
 	public override string ToString() => "Data Grid";
 
-	[Header("Column"), ResourceKey("DataGridColumnHeaderBackgroundBrush")]
+	[Header("Column Header"), ResourceKey("DataGridColumnHeaderBackgroundBrush")]
 	public Color? ColumnHeaderBackground { get; set; }
 
 	[ResourceKey("DataGridColumnHeaderBackgroundPointerOverBrush")]
@@ -462,6 +462,7 @@ public class ButtonTheme : ThemeSection
 {
 	public override string ToString() => "Button";
 
+	// Background
 	[Header("Background"), ResourceKey("ButtonBackground")]
 	public Color? Background { get; set; }
 
@@ -471,12 +472,20 @@ public class ButtonTheme : ThemeSection
 	[ResourceKey("ButtonBackgroundPressed")]
 	public Color? BackgroundPressed { get; set; }
 
-	[Header("Foreground"), ResourceKey("ButtonForeground", "ButtonForegroundPointerOver", "ButtonForegroundPressed")]
+	// Foreground
+	[Header("Foreground"), ResourceKey("ButtonForeground")]
 	public Color? Foreground { get; set; }
+
+	[ResourceKey("ButtonForegroundPointerOver")]
+	public Color? ForegroundPointerOver { get; set; }
+
+	[ResourceKey("ButtonForegroundPressed")]
+	public Color? ForegroundPressed { get; set; }
 
 	[Header("Border"), ResourceKey("ButtonBorderBrush")]
 	public Color? Border { get; set; }
 
+	// Border
 	[ResourceKey("ButtonBorderBrushPointerOver")]
 	public Color? BorderPointerOver { get; set; }
 
@@ -669,6 +678,12 @@ public class ChartTheme : ThemeSection
 
 	[ResourceKey("ChartToolTipForegroundBrush")]
 	public Color? ToolTipForeground { get; set; }
+
+	[Header("Border"), ResourceKey("ChartBorderBrush")]
+	public Color? Border { get; set; }
+
+	[ResourceKey("ChartBorderThickness")]
+	public double? BorderThickness { get; set; }
 
 	[Inline]
 	public ChartColorsTheme Colors { get; set; } = new();
