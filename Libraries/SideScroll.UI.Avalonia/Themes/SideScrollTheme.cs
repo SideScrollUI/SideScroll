@@ -73,6 +73,8 @@ public static class SideScrollTheme
 	public static SolidColorBrush ChartGridLines => GetBrush("ChartGridLinesBrush");
 	public static SolidColorBrush ChartNowLine => GetBrush("ChartNowLineBrush");
 
+	public static SolidColorBrush ChartLegendIconBorder => GetBrush("ChartLegendIconBorderBrush");
+
 	public static SolidColorBrush ChartToolTipBackground => GetBrush("ChartToolTipBackgroundBrush");
 	public static SolidColorBrush ChartToolTipForeground => GetBrush("ChartToolTipForegroundBrush");
 

@@ -404,6 +404,7 @@ public class DataGridTheme : ThemeSection
 {
 	public override string ToString() => "Data Grid";
 
+	// Column Header
 	[Header("Column Header"), ResourceKey("DataGridColumnHeaderBackgroundBrush")]
 	public Color? ColumnHeaderBackground { get; set; }
 
@@ -419,12 +420,20 @@ public class DataGridTheme : ThemeSection
 	[ResourceKey("DataGridHeaderSeparatorBrush")]
 	public Color? ColumnHeaderSeparator { get; set; }
 
+	// Row
 	[Header("Row"), ResourceKey("DataGridRowBackgroundBrush")]
 	public Color? RowBackground { get; set; }
 
 	[ResourceKey("DataGridRowHighlightBrush")]
 	public Color? RowBackgroundHighlight { get; set; }
 
+	[ResourceKey("DataGridRowSelectedBackgroundOpacity", "DataGridRowSelectedUnfocusedBackgroundOpacity")]
+	public double? RowBackgroundLowOpacity { get; set; }
+
+	[ResourceKey("DataGridRowSelectedHoveredBackgroundOpacity", "DataGridRowSelectedHoveredUnfocusedBackgroundOpacity")]
+	public double? RowBackgroundMediumOpacity { get; set; }
+
+	// Cell
 	[Header("Cell"), ResourceKey("DataGridCellForegroundBrush")]
 	public Color? CellForeground { get; set; }
 
@@ -693,6 +702,9 @@ public class ChartTheme : ThemeSection
 
 	[ResourceKey("ChartBorderThickness")]
 	public double? BorderThickness { get; set; }
+
+	[ResourceKey("ChartLegendIconBorderBrush")]
+	public Color? LegendIconBorder { get; set; }
 
 	[Inline]
 	public ChartColorsTheme Colors { get; set; } = new();

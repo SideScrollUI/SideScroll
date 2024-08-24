@@ -113,6 +113,8 @@ public abstract class TabControlChart<TSeries> : Border, ITabControlChart
 
 	public List<ChartAnnotation> Annotations { get; set; } = [];
 
+	private ChartAnnotation? _nowTimeAnnotation;
+
 	public Grid ContainerGrid { get; protected set; }
 
 	public override string? ToString() => ChartView.ToString();
@@ -187,22 +189,25 @@ public abstract class TabControlChart<TSeries> : Border, ITabControlChart
 		Annotations.Add(chartAnnotation);
 	}
 
-	public void AddNowTime()
+	public void UpdateNowTime()
 	{
 		var now = DateTime.UtcNow;
-		if (ChartView.TimeWindow != null && ChartView.TimeWindow.EndTime < now.AddMinutes(1))
-			return;
-
-		var annotation = new ChartAnnotation
+		if (_nowTimeAnnotation == null)
 		{
-			Text = "Now",
-			Horizontal = false,
-			X = now.Ticks,
-			Color = NowColor.AsSystemColor(),
-			// LineStyle = LineStyle.Dot,
-		};
+			if (ChartView.TimeWindow != null && ChartView.TimeWindow.EndTime < now.AddMinutes(1))
+				return;
 
-		ChartView.Annotations.Add(annotation);
+			_nowTimeAnnotation = new ChartAnnotation
+			{
+				Text = "Now",
+				Horizontal = false,
+				Color = NowColor.AsSystemColor(),
+				// LineStyle = LineStyle.Dot,
+			};
+
+			ChartView.Annotations.Add(_nowTimeAnnotation);
+		}
+		_nowTimeAnnotation.X = now.Ticks;
 	}
 
 	public abstract void InvalidateChart();

@@ -80,6 +80,8 @@ public class TabControlAvaloniaEdit : Grid
 			VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
 			Padding = new Thickness(6),
 			FontSize = 14,
+			//BorderThickness = new Thickness(1),
+			//BorderBrush = Brushes.Black,
 		};
 		TextEditor.Options.AllowScrollBelowDocument = false; // Breaks top alignment
 		Children.Add(TextEditor);

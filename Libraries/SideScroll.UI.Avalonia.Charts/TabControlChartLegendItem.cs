@@ -104,7 +104,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		{
 			Width = 16,
 			Height = 16,
-			Stroke = Brushes.Black,
+			Stroke = SideScrollTheme.ChartLegendIconBorder,
 			StrokeThickness = 1.5,
 			Points = GetPolygonPoints(width, height),
 		};

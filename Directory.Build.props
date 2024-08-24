@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Version>0.6</Version>
-    <PackageReleaseNotes>Added more user theming colors for DataGrids, Charts, Buttons, and Borders. Added user theming for TabSplitter, TabViewer, TextArea, TabButton, and ScrollBar. Updated Save and Import Icons.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added more user theming colors for DataGrids, Charts, Buttons, and Borders. Added user theming for TabSplitter, TabViewer, TextArea, TabButton, and ScrollBar. Updated Save and Import Icons. Fixed refreshing chart creating multiple now time annotations.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.1.3</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

@@ -54,6 +54,7 @@
 
   <Style Selector="dg|DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
     <Setter Property="Fill" Value="{DynamicResource DataGridRowHighlightBrush}" />
+    <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedHoveredUnfocusedBackgroundOpacity}" />
   </Style>
   <Style Selector="dg|DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
     <Setter Property="Fill" Value="{DynamicResource DataGridRowHighlightBrush}" />

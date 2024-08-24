@@ -156,7 +156,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		if (UseDateTimeAxis)
 		{
-			AddNowTime();
+			UpdateNowTime();
 		}
 		AddSections();
 	}
@@ -277,7 +277,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	{
 		Annotations.AddRange(ChartView.Annotations);
 		_sections = ChartView.Annotations
-			.Select(a => CreateAnnotation(a))
+			.Select(CreateAnnotation)
 			.ToList();
 
 		if (Annotations.Count > 0)

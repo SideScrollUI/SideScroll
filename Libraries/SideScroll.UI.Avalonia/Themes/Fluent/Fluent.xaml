@@ -305,6 +305,7 @@
 
           <SolidColorBrush x:Key="ChartBorderBrush" Color="Black" />
           <Thickness x:Key="ChartBorderThickness">0</Thickness>
+          <SolidColorBrush x:Key="ChartLegendIconBorderBrush" Color="Black" />
 
           <SolidColorBrush x:Key="ChartSeries1Brush" Color="LawnGreen" />
           <SolidColorBrush x:Key="ChartSeries2Brush" Color="Fuchsia" />
