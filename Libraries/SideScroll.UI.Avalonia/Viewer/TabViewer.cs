@@ -9,7 +9,6 @@ using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.UI.Avalonia.Controls;
 using SideScroll.UI.Avalonia.Tabs;
-using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Utilities;
 using SideScroll.UI.Avalonia.View;
 using System.Diagnostics.CodeAnalysis;
@@ -301,7 +300,9 @@ public class TabViewer : Grid
 
 		Children.Remove(ContentControl);
 		if (BottomGrid.Parent == null)
+		{
 			Children.Add(BottomGrid);
+		}
 	}
 
 	private Grid CreateScrollButtons()

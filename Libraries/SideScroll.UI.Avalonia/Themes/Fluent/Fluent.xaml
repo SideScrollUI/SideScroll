@@ -185,6 +185,10 @@
 
           <SolidColorBrush x:Key="DataGridBorderBrush" Color="Black" />
 
+          <SolidColorBrush x:Key="DataGridHeaderSeparatorBrush" Color="Black" />
+          
+          <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
+
           <!--- End Fluent Defaults -->
 
           <!-- Custom Resources -->
@@ -209,6 +213,7 @@
           
           <SolidColorBrush x:Key="TitleBackgroundBrush" Color="#4f52bb" />
           <SolidColorBrush x:Key="TitleForegroundBrush" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="TitleBorderBrush" Color="Black" />
 
           <!-- Toolbar -->
           

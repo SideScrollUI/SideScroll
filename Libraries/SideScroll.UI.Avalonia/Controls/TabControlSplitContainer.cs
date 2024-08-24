@@ -2,9 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
-using Avalonia.Media;
 using Avalonia.VisualTree;
-using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.View;
 using System.Diagnostics;
 

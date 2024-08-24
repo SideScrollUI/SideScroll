@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
@@ -63,7 +62,7 @@ public class TabControlFormattedComboBox : ComboBox
 			Mode = BindingMode.TwoWay,
 			Source = this,
 		};
-		this.Bind(SelectedItemProperty, binding);
+		Bind(SelectedItemProperty, binding);
 
 		if (Property.Object is INotifyPropertyChanged notifyPropertyChanged)
 		{

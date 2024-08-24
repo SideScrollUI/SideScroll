@@ -43,7 +43,7 @@ public class TabView : Grid, IDisposable
 	public static Dictionary<Type, IControlCreator> ControlCreators { get; set; } = [];
 
 	// Maybe this control should own it's own settings?
-	//private TabViewSettings _tabViewSettings = new TabViewSettings();
+	//private TabViewSettings _tabViewSettings = new();
 	internal TabViewSettings TabViewSettings
 	{
 		get
@@ -198,7 +198,9 @@ public class TabView : Grid, IDisposable
 
 		// don't re-add containerGrid (sizing doesn't work otherwise?)
 		if (Children.Count == 0)
+		{
 			Children.Add(_containerGrid);
+		}
 
 		// Reassigning leaks memory
 		ContextMenu ??= new TabViewContextMenu(this, Instance);

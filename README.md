@@ -10,8 +10,8 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 * Create Links to share views with others
 * Use DataRepos to manage your local saving & loading
 * Load any object in a Param Control to create a form with matching Avalonia controls
-* Chart line series using the [LiveCharts 2](https://github.com/beto-rodriguez/LiveCharts2) controls
 * RichText document support using the [AvaloniaEdit](https://github.com/AvaloniaUI/AvaloniaEdit) controls
+* Chart line series using the [LiveCharts 2](https://github.com/beto-rodriguez/LiveCharts2) controls
 
 ## Examples
 #### VideoGamesDB

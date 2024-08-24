@@ -5,7 +5,7 @@
   <ControlTheme x:Key="{x:Type sidescroll:TabControlTitle}" TargetType="sidescroll:TabControlTitle">
     <Setter Property="Background" Value="{DynamicResource TitleBackgroundBrush}"/>
     <Setter Property="BorderThickness" Value="1"/>
-    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource TitleBorderBrush}"/>
     <Setter Property="TextElement.Foreground" Value="{DynamicResource TitleForegroundBrush}"/>
     <Setter Property="TextElement.FontSize" Value="{DynamicResource TitleFontSize}"/>
   </ControlTheme>

@@ -17,7 +17,7 @@
   </Style>
 
   <Style Selector="dg|DataGridColumnHeader /template/ Rectangle#VerticalSeparator">
-    <Setter Property="Stroke" Value="Black"/>
+    <Setter Property="Stroke" Value="{DynamicResource DataGridHeaderSeparatorBrush}"/>
     <Setter Property="StrokeThickness" Value="1"/>
   </Style>
 
@@ -70,67 +70,6 @@
   <Style Selector="dg|DataGridRow:selected:pointerover:focus /template/ Rectangle#BackgroundRectangle">
     <Setter Property="Fill" Value="{DynamicResource DataGridRowHighlightBrush}" />
     <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedHoveredBackgroundOpacity}" />
-  </Style>
-
-  <!-- Replace default template so we can control the size of the sort icon depending on if it's showing -->
-  <Style Selector="dg|DataGridColumnHeader">
-    <Setter Property="Template">
-      <ControlTemplate>
-        <Border x:Name="HeaderBorder"
-              Background="{TemplateBinding Background}"
-              BorderBrush="{TemplateBinding BorderBrush}"
-              BorderThickness="{TemplateBinding BorderThickness}"
-              CornerRadius="{TemplateBinding CornerRadius}">
-          <Grid Name="PART_ColumnHeaderRoot" ColumnDefinitions="*,Auto" >
-
-            <Grid Margin="{TemplateBinding Padding}"
-                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-              <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*" />
-                  <ColumnDefinition Width="Auto" />
-              </Grid.ColumnDefinitions>
-
-              <ContentPresenter Content="{TemplateBinding Content}"
-                    ContentTemplate="{TemplateBinding ContentTemplate}" />
-              <Path Name="SortIcon"
-                    Height="12"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Margin="5,0,0,0"
-                    Grid.Column="1"
-                    Fill="{TemplateBinding Foreground}"
-                    Stretch="Uniform" />
-            </Grid>
-
-            <Rectangle Name="VerticalSeparator"
-                  Grid.Column="1"
-                  Width="1"
-                  VerticalAlignment="Stretch"
-                  Fill="{TemplateBinding SeparatorBrush}"
-                  IsVisible="{TemplateBinding AreSeparatorsVisible}" />
-
-            <Grid x:Name="FocusVisual" IsHitTestVisible="False" IsVisible="False">
-              <Rectangle x:Name="FocusVisualPrimary"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  Fill="Transparent"
-                  IsHitTestVisible="False"
-                  Stroke="{DynamicResource DataGridCellFocusVisualPrimaryBrush}"
-                  StrokeThickness="2" />
-              <Rectangle x:Name="FocusVisualSecondary"
-                  Margin="2"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  Fill="Transparent"
-                  IsHitTestVisible="False"
-                  Stroke="{DynamicResource DataGridCellFocusVisualSecondaryBrush}"
-                  StrokeThickness="1" />
-            </Grid>
-          </Grid>
-        </Border>
-      </ControlTemplate>
-    </Setter>
   </Style>
 
 </Styles>

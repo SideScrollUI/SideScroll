@@ -19,6 +19,6 @@ public class TabControlTextButton : Button
 			Path = propertyName,
 			Mode = BindingMode.OneWay,
 		};
-		this.Bind(IsVisibleProperty, binding);
+		Bind(IsVisibleProperty, binding);
 	}
 }

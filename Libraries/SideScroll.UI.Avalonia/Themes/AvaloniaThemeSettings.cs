@@ -234,6 +234,9 @@ public class TabTheme : ThemeSection
 	[ResourceKey("TitleForegroundBrush")]
 	public Color? TitleForeground { get; set; }
 
+	[ResourceKey("TitleBorderBrush")]
+	public Color? TitleBorder { get; set; }
+
 	// Splitter
 	[Header("Splitter"), Separator, ResourceKey("TabSplitterBackgroundBrush")]
 	public Color? SplitterBackground { get; set; }
@@ -242,21 +245,21 @@ public class TabTheme : ThemeSection
 	public double? SplitterSize { get; set; }
 
 
-	[Separator, ResourceKey("TabHeaderForegroundBrush")]
+	[Header("Header"), ResourceKey("TabHeaderForegroundBrush")]
 	public Color? HeaderForeground { get; set; }
 
-	[Separator, ResourceKey("TabSeparatorForegroundBrush")]
+	[Header("Separator"), ResourceKey("TabSeparatorForegroundBrush")]
 	public Color? SeparatorForeground { get; set; }
 
 	
-	[Separator, ResourceKey("MenuFlyoutPresenterBackground")]
+	[Header("Context Menu"), ResourceKey("MenuFlyoutPresenterBackground")]
 	public Color? ContextMenuBackground { get; set; }
 
 	[ResourceKey("MenuFlyoutItemForeground")]
 	public Color? ContextMenuForeground { get; set; }
 
 
-	[Separator, ResourceKey("TabProgressBarForegroundBrush")]
+	[Header("Progress Bar"), ResourceKey("TabProgressBarForegroundBrush")]
 	public Color? ProgressBarForeground { get; set; }
 
 	// Button
@@ -332,14 +335,14 @@ public class ToolbarTheme : ThemeSection
 	[ResourceKey("IconForegroundHighlightBrush")]
 	public Color? IconForegroundHighlight { get; set; }
 
-	[Separator, ResourceKey("IconAltForegroundBrush")]
+	[ResourceKey("IconForegroundDisabledBrush")]
+	public Color? IconForegroundDisabled { get; set; }
+
+	[Header("Icons - Alt"), ResourceKey("IconAltForegroundBrush")]
 	public Color? IconAltForeground { get; set; }
 
 	[ResourceKey("IconAltForegroundHighlightBrush")]
 	public Color? IconAltForegroundHighlight { get; set; }
-
-	[Separator, ResourceKey("IconForegroundDisabledBrush")]
-	public Color? IconForegroundDisabled { get; set; }
 
 	[Header("Radio Button"), ResourceKey("RadioButtonForegroundPointerOver")]
 	public Color? RadioButtonForegroundPointerOver { get; set; }
@@ -413,6 +416,9 @@ public class DataGridTheme : ThemeSection
 	[ResourceKey("DataGridColumnHeaderForegroundPointerOverBrush")]
 	public Color? ColumnHeaderForegroundPointerOver { get; set; }
 
+	[ResourceKey("DataGridHeaderSeparatorBrush")]
+	public Color? ColumnHeaderSeparator { get; set; }
+
 	[Header("Row"), ResourceKey("DataGridRowBackgroundBrush")]
 	public Color? RowBackground { get; set; }
 
@@ -482,10 +488,10 @@ public class ButtonTheme : ThemeSection
 	[ResourceKey("ButtonForegroundPressed")]
 	public Color? ForegroundPressed { get; set; }
 
+	// Border
 	[Header("Border"), ResourceKey("ButtonBorderBrush")]
 	public Color? Border { get; set; }
 
-	// Border
 	[ResourceKey("ButtonBorderBrushPointerOver")]
 	public Color? BorderPointerOver { get; set; }
 
