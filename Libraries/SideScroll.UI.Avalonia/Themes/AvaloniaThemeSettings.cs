@@ -427,10 +427,10 @@ public class DataGridTheme : ThemeSection
 	[ResourceKey("DataGridRowHighlightBrush")]
 	public Color? RowBackgroundHighlight { get; set; }
 
-	[ResourceKey("DataGridRowSelectedBackgroundOpacity", "DataGridRowSelectedUnfocusedBackgroundOpacity")]
+	[ResourceKey("DataGridRowSelectedBackgroundOpacity", "DataGridRowSelectedUnfocusedBackgroundOpacity"), Range(0.0, 1.0)]
 	public double? RowBackgroundLowOpacity { get; set; }
 
-	[ResourceKey("DataGridRowSelectedHoveredBackgroundOpacity", "DataGridRowSelectedHoveredUnfocusedBackgroundOpacity")]
+	[ResourceKey("DataGridRowSelectedHoveredBackgroundOpacity", "DataGridRowSelectedHoveredUnfocusedBackgroundOpacity"), Range(0.0, 1.0)]
 	public double? RowBackgroundMediumOpacity { get; set; }
 
 	// Cell

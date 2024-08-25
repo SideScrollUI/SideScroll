@@ -37,6 +37,6 @@ public class TabControlCheckBox : CheckBox
 			Mode = BindingMode.TwoWay,
 			Source = property.Object,
 		};
-		this.Bind(IsCheckedProperty, binding);
+		Bind(IsCheckedProperty, binding);
 	}
 }

@@ -171,7 +171,7 @@ public class TabControlTextBox : TextBox
 		{
 			binding.Mode = BindingMode.OneWay;
 		}
-		this.Bind(TextBlock.TextProperty, binding);
+		Bind(TextBlock.TextProperty, binding);
 	}
 
 	// Highlighting is too distracting for large controls

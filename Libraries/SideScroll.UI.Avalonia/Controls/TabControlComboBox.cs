@@ -63,7 +63,7 @@ public class TabControlComboBox : ComboBox
 			Mode = BindingMode.TwoWay,
 			Source = obj,
 		};
-		this.Bind(SelectedItemProperty, binding);
+		Bind(SelectedItemProperty, binding);
 
 		SelectDefaultValue();
 	}
