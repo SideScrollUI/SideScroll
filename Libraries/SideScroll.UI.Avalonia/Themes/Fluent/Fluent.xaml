@@ -333,6 +333,8 @@
           <!-- SelectionForeground can't be set to a light color yet so use a light selection color instead -->
           <SolidColorBrush x:Key="TextEditorBackgroundBrush" Color="#FFFFFF" />
           <SolidColorBrush x:Key="TextEditorForegroundBrush" Color="Black" />
+          <SolidColorBrush x:Key="TextEditorBorderBrush" Color="Black" />
+          
           <SolidColorBrush x:Key="TextAreaSelectionBrush" Color="#b8d6ff" />
           <SolidColorBrush x:Key="LinkTextForegroundBrush" Color="Blue" />
 

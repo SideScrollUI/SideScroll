@@ -13,6 +13,8 @@ public class TabSampleChartTimeSeries : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
+			model.ReloadOnThemeChange = true;
+
 			DateTime endTime = DateTime.UtcNow.Trim(TimeSpan.TicksPerHour).AddHours(8);
 
 			AddAnimals(model, endTime);

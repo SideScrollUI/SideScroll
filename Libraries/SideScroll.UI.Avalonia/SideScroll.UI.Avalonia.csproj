@@ -66,6 +66,7 @@
     <None Remove="right-chevron.png" />
     <None Remove="StyleResources.xaml" />
     <None Remove="Themes\Controls\ControlThemes.xaml" />
+    <None Remove="Themes\Controls\TabControlAvaloniaEdit.xaml" />
     <None Remove="Themes\Controls\TabControlTextArea.xaml" />
     <None Remove="Themes\Controls\TabControlTextBlock.xaml" />
     <None Remove="Themes\Controls\TabControlTitle.xaml" />
@@ -87,6 +88,9 @@
 
   <ItemGroup>
     <AvaloniaResource Include="Themes\Controls\TabButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabControlAvaloniaEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabControlTextArea.xaml">
@@ -159,5 +163,11 @@
       <SubType>Code</SubType>
       <DependentUpon>TabAvalonEdit.xaml</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Themes\Controls\TabControlAvaloniaEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

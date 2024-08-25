@@ -95,7 +95,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			YAxes = new List<Axis> { YAxis },
 			TooltipBackgroundPaint = new SolidColorPaint(SideScrollTheme.ChartToolTipBackground.Color.AsSkColor())
 			{
-				ImageFilter = new DropShadow(2, 2, 6, 6, new SKColor(50, 0, 0, 100))
+				ImageFilter = new DropShadow(2, 2, 2, 2, new SKColor(50, 0, 0, 100))
 			},
 			TooltipTextPaint = new SolidColorPaint(SideScrollTheme.ChartToolTipForeground.Color.AsSkColor()),
 			TooltipFindingStrategy = TooltipFindingStrategy.CompareAllTakeClosest,

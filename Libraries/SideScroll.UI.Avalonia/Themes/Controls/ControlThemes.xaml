@@ -1,11 +1,12 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <ResourceDictionary.MergedDictionaries>
+    <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabControlAvaloniaEdit.xaml"/>
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabControlSplitContainer.xaml" />
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabControlTextArea.xaml"/>
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabControlTextBlock.xaml"/>
-    <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabControlToolbar.xaml" />
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabControlTitle.xaml" />
+    <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabControlToolbar.xaml" />
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/ToolbarButton.xaml"/>
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabButton.xaml"/>
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabHeader.xaml"/>

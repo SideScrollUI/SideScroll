@@ -228,7 +228,7 @@ public class TabTheme : ThemeSection
 	public Color? BackgroundFocused { get; set; }
 
 	// Title
-	[Header("Title"), Separator, ResourceKey("TitleBackgroundBrush")]
+	[Header("Title"), Separator, ResourceKey("TitleBackgroundBrush", "SystemControlBackgroundBaseLowBrush")]
 	public Color? TitleBackground { get; set; }
 
 	[ResourceKey("TitleForegroundBrush")]
@@ -251,8 +251,8 @@ public class TabTheme : ThemeSection
 	[Header("Separator"), ResourceKey("TabSeparatorForegroundBrush")]
 	public Color? SeparatorForeground { get; set; }
 
-	
-	[Header("Context Menu"), ResourceKey("MenuFlyoutPresenterBackground")]
+	// Context Menu
+	[Header("Context Menu"), ResourceKey("MenuFlyoutPresenterBackground", "ColorViewContentBackgroundBrush")]
 	public Color? ContextMenuBackground { get; set; }
 
 	[ResourceKey("MenuFlyoutItemForeground")]
@@ -266,14 +266,14 @@ public class TabTheme : ThemeSection
 	[Header("Button"), ResourceKey("ThemeButtonBackgroundBrush")]
 	public Color? ButtonBackground { get; set; }
 
-	[ResourceKey("ThemeButtonForegroundBrush")]
-	public Color? ButtonForeground { get; set; }
-
 	[ResourceKey("ThemeButtonBackgroundPointerOverBrush")]
 	public Color? ButtonBackgroundPointerOver { get; set; }
 
 	[ResourceKey("ThemeButtonBackgroundPressedBrush")]
 	public Color? ButtonBackgroundPressed { get; set; }
+
+	[ResourceKey("ThemeButtonForegroundBrush")]
+	public Color? ButtonForeground { get; set; }
 }
 
 [Params]
@@ -458,11 +458,11 @@ public class DataGridTheme : ThemeSection
 	[Header("Styled"), ResourceKey("DataGridHasLinksBackgroundBrush")]
 	public Color? StyledHasLinksBackground { get; set; }
 
-	[ResourceKey("DataGridHasLinksForegroundBrush")]
-	public Color? StyledHasLinksForeground { get; set; }
-
 	[ResourceKey("DataGridNoLinksBackgroundBrush")]
 	public Color? StyledNoLinksBackground { get; set; }
+
+	[ResourceKey("DataGridHasLinksForegroundBrush")]
+	public Color? StyledHasLinksForeground { get; set; }
 
 	[ResourceKey("DataGridStyledBorderBrush")]
 	public Color? StyledBorder { get; set; }
@@ -669,6 +669,9 @@ public class TextEditorTheme : ThemeSection
 	// Color and formatting doesn't work
 	//[ResourceKey("XmlHighlightBrokenEntityBrush")]
 	//public Color? XmlBrokenEntity { get; set; }
+
+	[Header("Border"), ResourceKey("TextEditorBorderBrush")]
+	public Color? Border { get; set; }
 }
 
 [Params]

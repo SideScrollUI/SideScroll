@@ -1,0 +1,12 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sidescroll="clr-namespace:SideScroll.UI.Avalonia.Controls.TextEditor;assembly=SideScroll.UI.Avalonia">
+
+  <ControlTheme x:Key="{x:Type sidescroll:TabControlAvaloniaEdit}" TargetType="sidescroll:TabControlAvaloniaEdit">
+    <Setter Property="Background" Value="{DynamicResource TextEditorBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource TextEditorBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+  </ControlTheme>
+</ResourceDictionary>

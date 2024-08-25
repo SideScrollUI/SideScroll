@@ -208,10 +208,9 @@ public abstract class TabControlChart<TSeries> : Border, ITabControlChart
 
 		NowTimeAnnotation.X = now.Ticks;
 
-		if (!ChartView.Annotations.Contains(NowTimeAnnotation))
-		{
-			ChartView.Annotations.Add(NowTimeAnnotation);
-		}
+		// ChartView's can be reused across different Charts, so we can't just remove the current occurence of Now
+		ChartView.Annotations.RemoveAll(a => a.Text == "Now");
+		ChartView.Annotations.Add(NowTimeAnnotation);
 	}
 
 	public abstract void InvalidateChart();

@@ -39,7 +39,7 @@ public enum TextType
 	Xml,
 }
 
-public class TabControlAvaloniaEdit : Grid
+public class TabControlAvaloniaEdit : Border
 {
 	public const int MaxAutoLoadSize = 1_000_000;
 
@@ -55,16 +55,14 @@ public class TabControlAvaloniaEdit : Grid
 	{
 		TabInstance = tabInstance;
 
-		Background = SideScrollTheme.TextEditorBackgroundBrush;
-
 		MinWidth = 50; // WordWrap causes freezing below certain values
 		MaxWidth = 3000;
 
-		ColumnDefinitions = new ColumnDefinitions("*");
-		RowDefinitions = new RowDefinitions("*");
-
-		HorizontalAlignment = HorizontalAlignment.Stretch;
-		VerticalAlignment = VerticalAlignment.Stretch;
+		Grid containerGrid = new()
+		{
+			ColumnDefinitions = new ColumnDefinitions("*"),
+			RowDefinitions = new RowDefinitions("*"),
+		};
 
 		TextEditor = new TabControlTextEditor
 		{
@@ -84,7 +82,9 @@ public class TabControlAvaloniaEdit : Grid
 			//BorderBrush = Brushes.Black,
 		};
 		TextEditor.Options.AllowScrollBelowDocument = false; // Breaks top alignment
-		Children.Add(TextEditor);
+		containerGrid.Children.Add(TextEditor);
+
+		Child = containerGrid;
 
 		ActualThemeVariantChanged += TabControlAvaloniaEdit_ActualThemeVariantChanged;
 
