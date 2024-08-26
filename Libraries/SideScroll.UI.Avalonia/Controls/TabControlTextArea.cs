@@ -27,7 +27,7 @@ public class TabControlTextArea : Border
 			VerticalAlignment = VerticalAlignment.Stretch,
 			TextWrapping = TextWrapping.Wrap,
 			Text = Text,
-			MinHeight = 24, // Single lines can get clipped if this is too low
+			Margin = new Thickness(10),
 		};
 		AvaloniaUtils.AddContextMenu(TextBlock);
 
@@ -40,7 +40,6 @@ public class TabControlTextArea : Border
 			VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
 			BorderThickness = new Thickness(2), // doesn't work
 			BorderBrush = Brushes.Black,
-			Padding = new Thickness(10),
 		};
 
 		Child = scrollViewer;

@@ -95,7 +95,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				},
 				ButtonTheme => new TabSampleActions(),
 				TextControlTheme => new TabSampleParamsDataTabs(),
-				TextAreaTheme => new TabTextArea(),
+				TextAreaTheme => new TabSampleTextArea(),
 				TextEditorTheme => new List<ListItem>
 				{
 					new("Text", TextSamples.Plain),
