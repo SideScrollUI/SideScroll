@@ -18,8 +18,6 @@ public class ToolbarSeparator : Border;
 
 public class TabControlToolbar : Grid, IDisposable
 {
-	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
-
 	public static Thickness DefaultMargin = new(6, 2);
 
 	public readonly TabInstance? TabInstance;

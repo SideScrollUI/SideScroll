@@ -38,8 +38,6 @@ public class TabControlTextArea : Border
 			VerticalAlignment = VerticalAlignment.Stretch,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
 			VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-			BorderThickness = new Thickness(2), // doesn't work
-			BorderBrush = Brushes.Black,
 		};
 
 		Child = scrollViewer;

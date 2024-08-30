@@ -32,11 +32,11 @@
   </Style>
 
   <Style Selector="ScrollBar /template/ Border">
-    <Setter Property="BorderBrush" Value="#FF000000"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ScrollBarShowingBorderBrush}"/>
     <Setter Property="BorderThickness" Value="1"/>
   </Style>
   <Style Selector="ScrollBar[IsExpanded=true]">
-    <Setter Property="BorderBrush" Value="#FF000000"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ScrollBarShowingBorderBrush}"/>
   </Style>
   <Style Selector="ScrollBar[IsExpanded=true] /template/ PathIcon">
     <Setter Property="Foreground" Value="{DynamicResource ScrollBarButtonArrowForeground}"/>

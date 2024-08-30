@@ -374,13 +374,17 @@ public class ScrollBarTheme : ThemeSection
 	[Header("ScrollBar"), ResourceKey("ThemeScrollBarBackgroundBrush")]
 	public Color? Background { get; set; }
 
+	[ResourceKey("ScrollBarShowingBorderBrush")]
+	public Color? BorderBrush { get; set; }
+
+	// Thumb
 	[Header("Thumb"), ResourceKey("ThemeScrollBarThumbBrush", "ScrollBarThumbBackgroundColor")]
 	public Color? Thumb { get; set; }
 
 	[ResourceKey("ThemeScrollBarThumbPointerOverBrush")]
 	public Color? ThumbPointerOver { get; set; }
 
-
+	// Buttons
 	[Header("Buttons"), ResourceKey("ScrollBarButtonBackground")]
 	public Color? ButtonBackground { get; set; }
 
@@ -569,6 +573,13 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? TextControlBorderPointerOver { get; set; }
 
+	[Range(0, 10), ResourceKey("TextControlBorderThemeThickness",
+		"TextControlBorderThemeThicknessFocused",
+		"CalendarDatePickerBorderThemeThickness",
+		"ComboBoxBorderThemeThickness"
+		)]
+	public double? BorderThickness { get; set; }
+
 	// Text Control - Selection
 	[Header("Text Control - Selection"), ResourceKey("TextControlSelectionForegroundBrush")]
 	public Color? TextControlSelectionForeground { get; set; }
@@ -577,11 +588,27 @@ public class TextControlTheme : ThemeSection
 	public Color? TextControlSelectionHighlight { get; set; }
 
 	// ComboBox
-	[Header("ComboBox"), ResourceKey("ComboBoxItemBackgroundSelected")]
+	[Header("ComboBox"), ResourceKey("ComboBoxDropDownBackground")]
+	public Color? ComboBoxDropDownBackground { get; set; }
+
+	[ResourceKey("ComboBoxItemBackgroundSelected")]
 	public Color? ComboBoxItemBackgroundSelected { get; set; }
 
 	[ResourceKey("ComboBoxItemBackgroundPointerOver", "ComboBoxItemBackgroundSelectedPointerOver")]
 	public Color? ComboBoxItemBackgroundPointerOver { get; set; }
+
+	[ResourceKey("ComboBoxItemForegroundSelected")]
+	public Color? ComboBoxItemForegroundSelected { get; set; }
+
+	// Calendar View / Date Time Picker
+	[Header("Calendar View"), ResourceKey("CalendarViewBackground")]
+	public Color? CalendarViewBackground { get; set; }
+
+	[ResourceKey("CalendarViewBorderBrush")]
+	public Color? CalendarViewBorderBrush { get; set; }
+
+	[ResourceKey("CalendarViewOutOfScopeBackground")]
+	public Color? CalendarViewOutOfScopeBackground { get; set; }
 
 	// Errors
 	[Header("Errors"), ResourceKey("SystemControlErrorTextForegroundBrush")]
@@ -703,7 +730,7 @@ public class ChartTheme : ThemeSection
 	[Header("Border"), ResourceKey("ChartBorderBrush")]
 	public Color? Border { get; set; }
 
-	[ResourceKey("ChartBorderThickness")]
+	[Range(0, 10), ResourceKey("ChartBorderThickness")]
 	public double? BorderThickness { get; set; }
 
 	[ResourceKey("ChartLegendIconBorderBrush")]

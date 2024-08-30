@@ -30,8 +30,6 @@ public class TabCalendarDatePicker : CalendarDatePicker
 
 public class TabDateTimePicker : Grid
 {
-	protected override Type StyleKeyOverride => typeof(TabDateTimePicker);
-
 	public readonly ListProperty Property;
 
 	public Binding Binding { get; set; }
@@ -170,9 +168,6 @@ public class TabDateTimePicker : Grid
 			//Margin = new Thickness(2),
 			HorizontalAlignment = HorizontalAlignment.Right,
 			VerticalAlignment = VerticalAlignment.Center,
-			//BorderThickness = new Thickness(2),
-			//Foreground = new SolidColorBrush(Theme.ButtonForegroundColor),
-			//BorderBrush = new SolidColorBrush(Colors.Black),
 
 			[ToolTip.TipProperty] = tooltip,
 			[Grid.ColumnProperty] = 2,

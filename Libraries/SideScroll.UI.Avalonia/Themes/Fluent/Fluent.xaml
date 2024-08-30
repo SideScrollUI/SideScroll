@@ -164,6 +164,8 @@
           <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#27204a" />
           <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#27204a" />
 
+          <SolidColorBrush x:Key="ScrollBarShowingBorderBrush" Color="#FF000000" />
+
           <!-- DataGrid -->
           
           <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#27204a" />
