@@ -8,6 +8,8 @@ namespace SideScroll.UI.Avalonia.ScreenCapture;
 
 public class ScreenCaptureToolbar : TabControlToolbar
 {
+	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
+
 	public TabViewer TabViewer;
 
 	public ToolbarButton? ButtonCopyClipboard;
