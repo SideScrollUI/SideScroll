@@ -201,6 +201,7 @@
 
           <SolidColorBrush x:Key="TabBackgroundBrush" Color="#141414" />
           <SolidColorBrush x:Key="TabBackgroundFocusedBrush" Color="#1e1e1e" />
+          <SolidColorBrush x:Key="TabBackgroundBorderBrush" Color="Black" />
 
           <SolidColorBrush x:Key="TabHeaderForegroundBrush" Color="#9c9c9c" />
           

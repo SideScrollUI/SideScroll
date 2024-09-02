@@ -221,11 +221,14 @@ public class TabTheme : ThemeSection
 {
 	public override string ToString() => "Tab";
 
-	[Header("Background"), ResourceKey("TabBackgroundBrush")]
+	[Header("Tab"), ResourceKey("TabBackgroundBrush")]
 	public Color? Background { get; set; }
 
 	[ResourceKey("TabBackgroundFocusedBrush")]
 	public Color? BackgroundFocused { get; set; }
+
+	[ResourceKey("TabBackgroundBorderBrush")]
+	public Color? Border { get; set; }
 
 	// Title
 	[Header("Title"), Separator, ResourceKey("TitleBackgroundBrush", "SystemControlBackgroundBaseLowBrush")]

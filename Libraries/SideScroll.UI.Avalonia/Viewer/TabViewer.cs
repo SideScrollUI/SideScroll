@@ -319,8 +319,6 @@ public class TabViewer : Grid
 		TabControlButton buttonExpand = new()
 		{
 			Content = ">",
-			VerticalAlignment = VerticalAlignment.Stretch,
-			VerticalContentAlignment = VerticalAlignment.Center,
 			[ToolTip.ShowDelayProperty] = 5,
 			[ToolTip.TipProperty] = "Scroll Right ( -> )",
 			[Grid.RowProperty] = 0,
@@ -331,8 +329,6 @@ public class TabViewer : Grid
 		TabControlButton buttonCollapse = new()
 		{
 			Content = "<",
-			VerticalAlignment = VerticalAlignment.Stretch,
-			VerticalContentAlignment = VerticalAlignment.Center,
 			[ToolTip.TipProperty] = "Scroll Left ( <- )",
 			[Grid.RowProperty] = 1,
 		};

@@ -58,7 +58,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			var paramControl = new TabControlParams(tab.Object);
 			model.AddObject(paramControl, true, true);
 
-			foreach (var control in paramControl.Children)
+			foreach (var control in paramControl.ContainerGrid.Children)
 			{
 				if (control is ColorPicker colorPicker)
 				{
