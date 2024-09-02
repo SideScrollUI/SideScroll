@@ -26,8 +26,6 @@ public class TabSampleChartLists : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			model.ReloadOnThemeChange = true;
-
 			_series = [];
 
 			Toolbar toolbar = new();

@@ -11,8 +11,6 @@ public class TabSampleChartNoData : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.ReloadOnThemeChange = true;
-
 			var chartView = new ChartView("Animals");
 			chartView.AddSeries("Cats", new List<TimeRangeValue>());
 			chartView.AddSeries("Dogs", new List<TimeRangeValue>());

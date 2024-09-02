@@ -98,7 +98,7 @@ public class TabModel
 
 		var tabModel = new TabModel(name);
 		tabModel.AddData(obj);
-		if (tabModel.ItemList.Count == 0)
+		if (tabModel.ItemList.Count == 0 && tabModel.Objects.Count == 0)
 			return null;
 
 		return tabModel;
@@ -110,6 +110,7 @@ public class TabModel
 
 		if (obj is ChartView)
 		{
+			ReloadOnThemeChange = true;
 			MinDesiredWidth = 800;
 		}
 
@@ -168,6 +169,10 @@ public class TabModel
 			//AddObject(type);
 			AddEnumerable(enumerable);
 		}
+		else if (obj is ChartView)
+		{
+			AddObject(obj);
+		}
 		else if (type.IsEnum)
 		{
 			var values = Enum.GetValues(type);
@@ -176,7 +181,7 @@ public class TabModel
 		else if (TabUtils.ObjectHasLinks(obj))
 		{
 			// show as Name/Value columns for fields and properties
-			AddObject(obj);
+			AddObjectMembers(obj);
 		}
 	}
 
@@ -306,7 +311,7 @@ public class TabModel
 	}
 
 	// Adds the fields and properties as one list, and methods as another list (disabled right now)
-	private void AddObject(object obj)
+	private void AddObjectMembers(object obj)
 	{
 		var itemCollection = ListMember.Create(obj);
 		ItemList.Add(itemCollection);

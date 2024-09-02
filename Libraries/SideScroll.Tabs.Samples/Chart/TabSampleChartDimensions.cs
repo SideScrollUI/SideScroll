@@ -55,8 +55,6 @@ public class TabSampleChartDimensions : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			model.ReloadOnThemeChange = true;
-
 			Toolbar toolbar = new();
 			toolbar.ButtonAdd.Action = AddEntry;
 			toolbar.ButtonStart.ActionAsync = StartTaskAsync;
