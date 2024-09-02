@@ -8,6 +8,7 @@ namespace SideScroll.UI.Avalonia.Themes;
 public static class SideScrollTheme
 {
 	public static SolidColorBrush TabBackground => GetBrush("TabBackgroundBrush");
+	public static SolidColorBrush TabBackgroundBorder => GetBrush("TabBackgroundBorderBrush");
 	public static SolidColorBrush TabBackgroundFocused => GetBrush("TabBackgroundFocusedBrush");
 	public static SolidColorBrush TabProgressBarForeground => GetBrush("TabProgressBarForegroundBrush");
 

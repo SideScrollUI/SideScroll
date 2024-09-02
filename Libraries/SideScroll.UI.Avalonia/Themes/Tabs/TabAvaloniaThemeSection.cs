@@ -47,6 +47,11 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 
 		public new event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
+		public override void Load(Call call, TabModel model)
+		{
+			model.CustomSettingsPath = tab.ToString();
+		}
+
 		public override void LoadUI(Call call, TabModel model)
 		{
 			Toolbar toolbar = new();

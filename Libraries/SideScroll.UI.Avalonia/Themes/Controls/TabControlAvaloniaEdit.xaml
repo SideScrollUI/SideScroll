@@ -5,7 +5,7 @@
   <ControlTheme x:Key="{x:Type sidescroll:TabControlAvaloniaEdit}" TargetType="sidescroll:TabControlAvaloniaEdit">
     <Setter Property="Background" Value="{DynamicResource TextEditorBackgroundBrush}"/>
     <Setter Property="BorderBrush" Value="{DynamicResource TextEditorBorderBrush}"/>
-    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderThickness" Value="0"/>
     <Setter Property="HorizontalAlignment" Value="Stretch"/>
     <Setter Property="VerticalAlignment" Value="Stretch"/>
   </ControlTheme>

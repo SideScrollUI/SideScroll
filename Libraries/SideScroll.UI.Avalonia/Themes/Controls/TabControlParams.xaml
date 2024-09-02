@@ -3,7 +3,7 @@
                     xmlns:sidescroll="clr-namespace:SideScroll.UI.Avalonia.Controls;assembly=SideScroll.UI.Avalonia">
 
   <ControlTheme x:Key="{x:Type sidescroll:TabControlParams}" TargetType="sidescroll:TabControlParams">
-    <Setter Property="BorderThickness" Value="1"/>
-    <Setter Property="BorderBrush" Value="{DynamicResource TabBackgroundBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="0,1,0,1"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource TabSectionSeparatorBrush}"/>
   </ControlTheme>
 </ResourceDictionary>
