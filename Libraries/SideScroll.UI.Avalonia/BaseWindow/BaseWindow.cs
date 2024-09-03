@@ -5,7 +5,6 @@ using Avalonia.Reactive;
 using Avalonia.Threading;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
-using SideScroll.Tabs.Tools.FileViewer;
 using SideScroll.UI.Avalonia.Tabs;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Viewer;
@@ -54,7 +53,7 @@ public class BaseWindow : Window
 
 		SideScrollInit.Initialize();
 
-		TabFile.RegisterType<TabFileImage>(TabFileImage.DefaultExtensions);
+		TabFileImage.Register();
 
 		LoadProject(project);
 

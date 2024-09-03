@@ -1,6 +1,7 @@
 using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Extensions;
+using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Tabs.Samples.Chart;
 
@@ -12,20 +13,27 @@ public class TabSampleChartSeriesCount : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.ReloadOnThemeChange = true;
+			model.Items = new List<ListItem>()
+			{
+				new(10, TabModel.Create("10", CreateChartView(10))),
+				new(25, TabModel.Create("25", CreateChartView(25))),
+			};
+		}
 
+		private static ChartView CreateChartView(int seriesCount)
+		{
 			DateTime endTime = DateTime.UtcNow.Trim(TimeSpan.TicksPerHour).AddHours(8);
 
-			var chartView = new ChartView("Lots of Series")
+			var chartView = new ChartView($"{seriesCount} Chart Series")
 			{
 				ShowTimeTracker = true,
 			};
 
-			for (int i = 0; i < 25; i++)
+			for (int i = 0; i < seriesCount; i++)
 			{
 				chartView.AddSeries($"Series {i}", ChartSamples.CreateTimeSeries(endTime, 12), seriesType: SeriesType.Average);
 			};
-			model.AddObject(chartView);
+			return chartView;
 		}
 	}
 }

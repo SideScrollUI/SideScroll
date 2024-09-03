@@ -201,10 +201,12 @@
 
           <SolidColorBrush x:Key="TabBackgroundBrush" Color="#141414" />
           <SolidColorBrush x:Key="TabBackgroundFocusedBrush" Color="#1e1e1e" />
+          <SolidColorBrush x:Key="TabBackgroundBorderBrush" Color="Black" />
 
           <SolidColorBrush x:Key="TabHeaderForegroundBrush" Color="#9c9c9c" />
           
           <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
+          <SolidColorBrush x:Key="TabSectionSeparatorBrush" Color="#ff050524" />
 
           <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#27204a" />
 
@@ -550,6 +552,7 @@
           <SolidColorBrush x:Key="TabHeaderForegroundBrush" Color="#7c7c7c" />
 
           <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
+          <SolidColorBrush x:Key="TabSectionSeparatorBrush" Color="#ff050524" />
 
           <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#191633" />
 

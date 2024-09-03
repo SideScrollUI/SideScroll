@@ -183,7 +183,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			//BorderThickness = new Thickness(0), // DataGrid bug, fixes the extra border below the scrollbar, but then there's no border
 			//Padding = new Thickness(0),
 
-			BorderThickness = new Thickness(1),
+			BorderThickness = new Thickness(0, 1),
 			IsReadOnly = !TabModel.Editing,
 			GridLinesVisibility = DataGridGridLinesVisibility.None,
 			MaxWidth = 4000,

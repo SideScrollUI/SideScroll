@@ -47,6 +47,11 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 
 		public new event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
+		public override void Load(Call call, TabModel model)
+		{
+			model.CustomSettingsPath = tab.ToString();
+		}
+
 		public override void LoadUI(Call call, TabModel model)
 		{
 			Toolbar toolbar = new();
@@ -58,7 +63,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			var paramControl = new TabControlParams(tab.Object);
 			model.AddObject(paramControl, true, true);
 
-			foreach (var control in paramControl.Children)
+			foreach (var control in paramControl.ContainerGrid.Children)
 			{
 				if (control is ColorPicker colorPicker)
 				{

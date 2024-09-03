@@ -221,11 +221,14 @@ public class TabTheme : ThemeSection
 {
 	public override string ToString() => "Tab";
 
-	[Header("Background"), ResourceKey("TabBackgroundBrush")]
+	[Header("Tab"), ResourceKey("TabBackgroundBrush")]
 	public Color? Background { get; set; }
 
 	[ResourceKey("TabBackgroundFocusedBrush")]
 	public Color? BackgroundFocused { get; set; }
+
+	[ResourceKey("TabBackgroundBorderBrush")]
+	public Color? Border { get; set; }
 
 	// Title
 	[Header("Title"), Separator, ResourceKey("TitleBackgroundBrush", "SystemControlBackgroundBaseLowBrush")]
@@ -248,8 +251,11 @@ public class TabTheme : ThemeSection
 	[Header("Header"), ResourceKey("TabHeaderForegroundBrush")]
 	public Color? HeaderForeground { get; set; }
 
-	[Header("Separator"), ResourceKey("TabSeparatorForegroundBrush")]
+	[Header("Separators"), ResourceKey("TabSeparatorForegroundBrush")]
 	public Color? SeparatorForeground { get; set; }
+
+	[ResourceKey("TabSectionSeparatorBrush")]
+	public Color? SectionSeparator { get; set; }
 
 	// Context Menu
 	[Header("Context Menu"), ResourceKey("MenuFlyoutPresenterBackground", "ColorViewContentBackgroundBrush")]
@@ -508,6 +514,9 @@ public class ButtonTheme : ThemeSection
 	[ResourceKey("ButtonBorderBrushPointerOver")]
 	public Color? BorderPointerOver { get; set; }
 
+	[ResourceKey("ButtonBorderBrushPressed")]
+	public Color? BorderPressed { get; set; }
+
 	[Range(0, 10), ResourceKey("ButtonBorderThemeThickness")]
 	public double? BorderThickness { get; set; }
 }
@@ -697,8 +706,8 @@ public class TextEditorTheme : ThemeSection
 	//[ResourceKey("XmlHighlightBrokenEntityBrush")]
 	//public Color? XmlBrokenEntity { get; set; }
 
-	[Header("Border"), ResourceKey("TextEditorBorderBrush")]
-	public Color? Border { get; set; }
+	//[Header("Border"), ResourceKey("TextEditorBorderBrush")]
+	//public Color? Border { get; set; }
 }
 
 [Params]

@@ -103,10 +103,11 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		_polygon = new Polygon
 		{
 			Width = 16,
-			Height = 16,
+			Height = height,
 			Stroke = SideScrollTheme.ChartLegendIconBorder,
 			StrokeThickness = 1.5,
 			Points = GetPolygonPoints(width, height),
+			VerticalAlignment = VerticalAlignment.Center,
 		};
 
 		if (Count > 0)

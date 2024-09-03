@@ -5,11 +5,13 @@ using Avalonia.Media;
 using SideScroll.Attributes;
 using SideScroll.Collections;
 using SideScroll.Extensions;
+using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.UI.Avalonia.Utilities;
 using SideScroll.UI.Avalonia.View;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace SideScroll.UI.Avalonia.Controls;
@@ -27,7 +29,7 @@ public class TabHeader : Border
 
 public class TabSeparator : Border;
 
-public class TabControlParams : Grid, IValidationControl
+public class TabControlParams : Border, IValidationControl
 {
 	public static int ControlMaxWidth { get; set; } = 2000;
 	public static int ControlMaxHeight { get; set; } = 400;
@@ -35,6 +37,8 @@ public class TabControlParams : Grid, IValidationControl
 	public object? Object;
 
 	private readonly Dictionary<ListProperty, Control> _propertyControls = [];
+
+	public Grid ContainerGrid;
 
 	public override string? ToString() => Object?.ToString();
 
@@ -50,12 +54,18 @@ public class TabControlParams : Grid, IValidationControl
 		}
 	}
 
+	[MemberNotNull(nameof(ContainerGrid))]
 	private void InitializeControls(string columnDefinitions)
 	{
-		HorizontalAlignment = HorizontalAlignment.Stretch;
-		ColumnDefinitions = new ColumnDefinitions(columnDefinitions);
+		ContainerGrid = new()
+		{
+			ColumnDefinitions = new ColumnDefinitions(columnDefinitions),
+			RowDefinitions = new RowDefinitions("*"),
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			Margin = new Thickness(6),
+		};
 
-		Margin = new Thickness(6);
+		Child = ContainerGrid;
 
 		MinWidth = 100;
 		MaxWidth = 2000;
@@ -63,8 +73,8 @@ public class TabControlParams : Grid, IValidationControl
 
 	private void ClearControls()
 	{
-		Children.Clear();
-		RowDefinitions.Clear();
+		ContainerGrid!.Children.Clear();
+		ContainerGrid.RowDefinitions.Clear();
 	}
 
 	public void LoadObject(object? obj)
@@ -102,7 +112,7 @@ public class TabControlParams : Grid, IValidationControl
 			var newControl = AddPropertyControl(property);
 			if (newControl != null)
 			{
-				if (lastControl != null && GetRow(lastControl) != GetRow(newControl))
+				if (lastControl != null && Grid.GetRow(lastControl) != Grid.GetRow(newControl))
 				{
 					FillColumnSpan(lastControl);
 				}
@@ -120,11 +130,11 @@ public class TabControlParams : Grid, IValidationControl
 	// Fill entire last line if available
 	private void FillColumnSpan(Control lastControl)
 	{
-		int columnIndex = GetColumn(lastControl);
-		int columnSpan = GetColumnSpan(lastControl);
-		if (columnIndex + columnSpan < ColumnDefinitions.Count)
+		int columnIndex = Grid.GetColumn(lastControl);
+		int columnSpan = Grid.GetColumnSpan(lastControl);
+		if (columnIndex + columnSpan < ContainerGrid!.ColumnDefinitions.Count)
 		{
-			SetColumnSpan(lastControl, ColumnDefinitions.Count - columnIndex);
+			Grid.SetColumnSpan(lastControl, ContainerGrid.ColumnDefinitions.Count - columnIndex);
 		}
 	}
 
@@ -144,9 +154,9 @@ public class TabControlParams : Grid, IValidationControl
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			TextWrapping = TextWrapping.Wrap,
 			MaxWidth = ControlMaxWidth,
-			[ColumnSpanProperty] = 2,
+			[Grid.ColumnSpanProperty] = 2,
 		};
-		Children.Add(textBlock);
+		ContainerGrid!.Children.Add(textBlock);
 	}
 
 	public List<Control> AddObjectRow(object obj, List<PropertyInfo>? properties = null)
@@ -175,12 +185,12 @@ public class TabControlParams : Grid, IValidationControl
 
 	private int AddRowDefinition()
 	{
-		int rowIndex = RowDefinitions.Count;
+		int rowIndex = ContainerGrid.RowDefinitions.Count;
 		RowDefinition rowDefinition = new()
 		{
 			Height = new GridLength(1, GridUnitType.Auto),
 		};
-		RowDefinitions.Add(rowDefinition);
+		ContainerGrid.RowDefinitions.Add(rowDefinition);
 		return rowIndex;
 	}
 
@@ -188,18 +198,18 @@ public class TabControlParams : Grid, IValidationControl
 	{
 		AddColumnIndex(columnIndex);
 
-		SetColumn(control, columnIndex);
-		SetRow(control, rowIndex);
-		Children.Add(control);
+		Grid.SetColumn(control, columnIndex);
+		Grid.SetRow(control, rowIndex);
+		ContainerGrid.Children.Add(control);
 	}
 
 	private void AddColumnIndex(int columnIndex)
 	{
-		while (columnIndex >= ColumnDefinitions.Count)
+		while (columnIndex >= ContainerGrid.ColumnDefinitions.Count)
 		{
-			GridUnitType type = (ColumnDefinitions.Count % 2 == 0) ? GridUnitType.Auto : GridUnitType.Star;
+			GridUnitType type = (ContainerGrid.ColumnDefinitions.Count % 2 == 0) ? GridUnitType.Auto : GridUnitType.Star;
 			var columnDefinition = new ColumnDefinition(1, type);
-			ColumnDefinitions.Add(columnDefinition);
+			ContainerGrid.ColumnDefinitions.Add(columnDefinition);
 		}
 	}
 
@@ -224,7 +234,7 @@ public class TabControlParams : Grid, IValidationControl
 
 		property.Cachable = false;
 
-		int rowIndex = RowDefinitions.Count;
+		int rowIndex = ContainerGrid.RowDefinitions.Count;
 
 		if (rowIndex > 0 && columnIndex > 0)
 		{
@@ -242,7 +252,7 @@ public class TabControlParams : Grid, IValidationControl
 			{
 				Height = new GridLength(1, GridUnitType.Auto),
 			};
-			RowDefinitions.Add(rowDefinition);
+			ContainerGrid.RowDefinitions.Add(rowDefinition);
 		}
 
 		TabControlTextBlock textLabel = new()
@@ -254,7 +264,7 @@ public class TabControlParams : Grid, IValidationControl
 			[Grid.RowProperty] = rowIndex,
 			[Grid.ColumnProperty] = columnIndex++,
 		};
-		Children.Add(textLabel);
+		ContainerGrid.Children.Add(textLabel);
 
 		AddControl(control, columnIndex, rowIndex);
 
@@ -269,7 +279,7 @@ public class TabControlParams : Grid, IValidationControl
 		{
 			Height = new GridLength(height),
 		};
-		RowDefinitions.Add(spacerRow);
+		ContainerGrid.RowDefinitions.Add(spacerRow);
 	}
 
 	private static Control? CreatePropertyControl(ListProperty property)
@@ -309,17 +319,17 @@ public class TabControlParams : Grid, IValidationControl
 
 	public void AddHeader(string text)
 	{
-		if (Children.Count > 0)
+		if (ContainerGrid.Children.Count > 0)
 		{
 			AddSpacer(10);
 		}
 
 		TabHeader header = new(text)
 		{
-			[Grid.ColumnSpanProperty] = ColumnDefinitions.Count,
+			[Grid.ColumnSpanProperty] = ContainerGrid.ColumnDefinitions.Count,
 		};
 
-		int rowIndex = RowDefinitions.Count;
+		int rowIndex = ContainerGrid.RowDefinitions.Count;
 		AddRowDefinition();
 		AddControl(header, 0, rowIndex);
 	}
@@ -327,14 +337,14 @@ public class TabControlParams : Grid, IValidationControl
 	public void AddSeparator()
 	{
 		// Don't add for first item or optional null controls
-		if (Children.Count == 0) return;
+		if (ContainerGrid.Children.Count == 0) return;
 
 		TabSeparator separator = new()
 		{
-			[Grid.ColumnSpanProperty] = ColumnDefinitions.Count,
+			[Grid.ColumnSpanProperty] = ContainerGrid.ColumnDefinitions.Count,
 		};
 
-		int rowIndex = RowDefinitions.Count;
+		int rowIndex = ContainerGrid.RowDefinitions.Count;
 		AddRowDefinition();
 		AddControl(separator, 0, rowIndex);
 	}
@@ -343,7 +353,7 @@ public class TabControlParams : Grid, IValidationControl
 	// Add [Focus] attribute if more control needed?
 	public void Focus()
 	{
-		foreach (Control control in Children)
+		foreach (Control control in ContainerGrid.Children)
 		{
 			if (control is TextBox textBox)
 			{

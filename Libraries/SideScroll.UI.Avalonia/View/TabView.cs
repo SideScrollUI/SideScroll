@@ -77,6 +77,7 @@ public class TabView : Grid, IDisposable
 
 	// Layout Controls
 	private Grid? _containerGrid;
+	private Border? _parentContainerBorder;
 	private TabControlSplitContainer? _tabParentControls;
 	private TabControlTitle? _tabTitle;
 	private GridSplitter? _parentChildGridSplitter;
@@ -126,9 +127,16 @@ public class TabView : Grid, IDisposable
 
 	private void TabView_ActualThemeVariantChanged(object? sender, EventArgs e)
 	{
-		if (IsLoaded && ActualThemeVariant != null && Model.ReloadOnThemeChange)
+		if (IsLoaded && ActualThemeVariant != null)
 		{
-			ReloadControls();
+			if (Model.ReloadOnThemeChange)
+			{
+				ReloadControls();
+			}
+			if (_parentContainerBorder != null)
+			{
+				_parentContainerBorder.BorderBrush = SideScrollTheme.TabBackgroundBorder;
+			}
 		}
 	}
 
@@ -210,17 +218,17 @@ public class TabView : Grid, IDisposable
 
 	private void AutoSizeParentControls()
 	{
-		if (_tabParentControls == null)
+		if (_parentContainerBorder == null)
 			return;
 
-		int desiredWidth = (int)_tabParentControls.DesiredSize.Width;
+		int desiredWidth = (int)_parentContainerBorder.DesiredSize.Width;
 		if (Model.CustomSettingsPath != null && TabViewSettings.SplitterDistance != null)
 		{
 			desiredWidth = (int)TabViewSettings.SplitterDistance.Value;
 		}
 
 		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
-		_tabParentControls.Width = desiredWidth;
+		_parentContainerBorder.Width = desiredWidth;
 	}
 
 	private void AddParentControls()
@@ -231,9 +239,16 @@ public class TabView : Grid, IDisposable
 			MinDesiredWidth = Model.MinDesiredWidth,
 			MaxDesiredWidth = Math.Max(Model.MaxDesiredWidth, TabViewSettings.SplitterDistance ?? 0),
 		};
+
+		_parentContainerBorder = new Border()
+		{
+			BorderThickness = new Thickness(1),
+			BorderBrush = SideScrollTheme.TabBackgroundBorder,
+			Child = _tabParentControls,
+		};
 		//if (TabViewSettings.SplitterDistance != null)
 		//	tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
-		_containerGrid!.Children.Add(_tabParentControls);
+		_containerGrid!.Children.Add(_parentContainerBorder);
 		UpdateSplitterDistance();
 
 		_tabTitle = new TabControlTitle(Instance, Model.Name);
@@ -338,12 +353,14 @@ public class TabView : Grid, IDisposable
 	private void GridSplitter_DragDelta(object? sender, VectorEventArgs e)
 	{
 		if (TabViewSettings.SplitterDistance != null)
-			_tabParentControls!.Width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
+		{
+			_parentContainerBorder!.Width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
+		}
 
 		// force the width to update (Grid Auto Size caching problem?
 		double width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
 		TabViewSettings.SplitterDistance = width;
-		_tabParentControls!.Width = width;
+		_parentContainerBorder!.Width = width;
 
 		//if (TabViewSettings.SplitterDistance != null)
 		//	containerGrid.ColumnDefinitions[0].Width = new GridLength((double)containerGrid.ColumnDefinitions[1].);
@@ -366,13 +383,13 @@ public class TabView : Grid, IDisposable
 		//TabViewSettings.SplitterDistance = (int)Math.Ceiling(e.Vector.Y); // backwards
 		double width = (int)_containerGrid!.ColumnDefinitions[0].ActualWidth;
 		TabViewSettings.SplitterDistance = width;
-		_tabParentControls!.Width = width;
+		_parentContainerBorder!.Width = width;
 		_containerGrid.ColumnDefinitions[0].Width = new GridLength(width);
 
 		//UpdateSplitterDistance();
 		Instance.SaveTabSettings();
 		UpdateSplitterFiller();
-		_tabParentControls.InvalidateMeasure();
+		_parentContainerBorder.InvalidateMeasure();
 	}
 
 	// doesn't resize bigger well
@@ -380,9 +397,9 @@ public class TabView : Grid, IDisposable
 	private void GridSplitter_DoubleTapped(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 		_isDragging = false;
-		double desiredWidth = Math.Min(_tabParentControls!.DesiredSize.Width, Model.MaxDesiredWidth);
+		double desiredWidth = Math.Min(_parentContainerBorder!.DesiredSize.Width, Model.MaxDesiredWidth);
 		TabViewSettings.SplitterDistance = desiredWidth;
-		_tabParentControls.Width = desiredWidth;
+		_parentContainerBorder.Width = desiredWidth;
 		//containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
 		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 		//containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
@@ -417,9 +434,9 @@ public class TabView : Grid, IDisposable
 		if (TabViewSettings.SplitterDistance is double splitterDistance && splitterDistance > MinDesiredSplitterDistance)
 		{
 			_containerGrid.ColumnDefinitions[0].Width = new GridLength((int)splitterDistance);
-			if (_tabParentControls != null)
+			if (_parentContainerBorder != null)
 			{
-				_tabParentControls.Width = splitterDistance;
+				_parentContainerBorder.Width = splitterDistance;
 			}
 		}
 		else
