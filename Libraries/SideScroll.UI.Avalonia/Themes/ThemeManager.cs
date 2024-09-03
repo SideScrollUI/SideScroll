@@ -3,6 +3,8 @@ using Avalonia.Styling;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
+using SideScroll.UI.Avalonia.Themes.Tabs;
+using System.Text.Json;
 
 namespace SideScroll.UI.Avalonia.Themes;
 
@@ -59,7 +61,7 @@ public class ThemeManager
 		LoadTheme(theme);
 	}
 
-	public void AddDefaultThemes(string variant)
+	public void AddDefaultTheme(string variant)
 	{
 		if (GetTheme(variant) != null) return;
 
@@ -68,6 +70,16 @@ public class ThemeManager
 			Name = variant,
 			Variant = variant,
 		});
+	}
+
+	public void Add(Call call, string json)
+	{
+		var options = new JsonSerializerOptions();
+		options.Converters.Add(new JsonColorConverter());
+		var themeSettings = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, options)!;
+		UpdateTheme(themeSettings);
+		DataRepoThemes.Save(call, themeSettings);
+		UserSettings.Themes = Names;
 	}
 
 	public void Add(Call call, AvaloniaThemeSettings themeSettings)
@@ -85,8 +97,11 @@ public class ThemeManager
 	{
 		Current = new ThemeManager(project);
 
-		Current.AddDefaultThemes("Light");
-		Current.AddDefaultThemes("Dark");
+		Current.AddDefaultTheme("Light");
+		Current.AddDefaultTheme("Dark");
+
+		Current.Add(new(), AvaloniaAssets.Themes.LightBlue);
+
 		Current.LoadCurrentTheme();
 	}
 

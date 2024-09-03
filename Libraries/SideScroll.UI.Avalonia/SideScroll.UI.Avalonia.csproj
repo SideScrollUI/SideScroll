@@ -33,12 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Assets\**" />
-    <EmbeddedResource Remove="Assets\**" />
-    <None Remove="Assets\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Remove="Themes\Controls\ControlThemes.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabButton.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlParams.xaml" />
@@ -61,6 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Themes\LightBlue.json" />
     <None Remove="DefaultTheme.xaml" />
     <None Remove="if_help_62217.png" />
     <None Remove="left-chevron.png" />
@@ -150,6 +145,10 @@
     <AvaloniaResource Include="Themes\Fluent\FluentControls.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Themes\LightBlue.json" />
   </ItemGroup>
 
   <ItemGroup>
