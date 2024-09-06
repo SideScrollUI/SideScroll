@@ -16,7 +16,7 @@ public class Project
 	public virtual ProjectSettings ProjectSettings { get; set; }
 	public virtual UserSettings UserSettings { get; set; } = new();
 
-	public Linker Linker { get; set; } = new();
+	public Linker Linker { get; set; }
 
 	public DataRepo DataShared => new(DataSharedPath, DataRepoName);
 	public DataRepo DataApp => new(DataAppPath, DataRepoName);
@@ -50,6 +50,7 @@ public class Project
 	public Project()
 	{
 		ProjectSettings = new();
+		Linker = new(this);
 	}
 
 	public Project(ProjectSettings projectSettings)
@@ -61,12 +62,14 @@ public class Project
 		};
 		// Todo: Improve this
 		UserSettings = DataApp.Load<UserSettings>() ?? UserSettings;
+		Linker = new(this);
 	}
 
 	public Project(ProjectSettings projectSettings, UserSettings userSettings)
 	{
 		ProjectSettings = projectSettings;
 		UserSettings = userSettings;
+		Linker = new(this);
 	}
 
 	public void SaveSettings()
