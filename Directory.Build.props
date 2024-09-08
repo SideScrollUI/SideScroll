@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Version>0.6</Version>
-    <PackageReleaseNotes>Added WIP Light Blue Theme. Added more user theming colors for DataGrids, Charts, Buttons, ComboBoxes, and Borders. Added user theming for TabSplitter, TabViewer, TextArea, TabButton, Calendar Views, and ScrollBar. Updated Save and Import Icons. Fixed refreshing chart creating multiple now time annotations. Fixed TextArea sometimes clipping text. Simplified LinkUri format.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added WIP Light Blue Theme. Added more user theming colors for DataGrids, Charts, Buttons, ComboBoxes, and Borders. Added user theming for TabSplitter, TabViewer, TextArea, TabButton, Calendar Views, and ScrollBar. All TabControlColorPicker now share the same SelectedIndex and ColorMode. Updated Save and Import Icons. Fixed refreshing chart creating multiple now time annotations. Fixed TextArea sometimes clipping text. Simplified LinkUri format.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.1.3</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

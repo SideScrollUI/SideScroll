@@ -280,6 +280,9 @@ public class TabTheme : ThemeSection
 
 	[ResourceKey("ThemeButtonForegroundBrush")]
 	public Color? ButtonForeground { get; set; }
+
+	[ResourceKey("ThemeButtonBorderBrush")]
+	public Color? ButtonBorder { get; set; }
 }
 
 [Params]

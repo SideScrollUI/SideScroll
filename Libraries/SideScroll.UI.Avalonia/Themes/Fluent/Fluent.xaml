@@ -267,6 +267,7 @@
           <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#d0d0f0" />
           <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#292f66" />
+          <SolidColorBrush x:Key="ThemeButtonBorderBrush" Color="Black" />
 
           <!-- Text -->
 

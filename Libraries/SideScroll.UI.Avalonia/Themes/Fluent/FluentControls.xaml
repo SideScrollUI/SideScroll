@@ -36,4 +36,12 @@
     <Setter Property="CornerRadius" Value="{DynamicResource ButtonCornerRadius}" />
   </Style>
 
+  <Style Selector="ComboBox:pointerover /template/ PathIcon#DropDownGlyph">
+    <Setter Property="Foreground" Value="{DynamicResource ComboBoxBorderBrushPointerOver}"/>
+  </Style>
+
+  <Style Selector="ColorPicker TabControl#PART_TabControl TabItem PathIcon">
+    <Setter Property="Foreground" Value="{DynamicResource TitleForegroundBrush}"/>
+  </Style>
+
 </Styles>
