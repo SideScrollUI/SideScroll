@@ -194,6 +194,10 @@
           <!--- End Fluent Defaults -->
 
           <!-- Custom Resources -->
+          
+          <!-- Fonts -->
+          
+          <FontFamily x:Key="SourceCodeProFont">avares://SideScroll.UI.Avalonia/Assets/Fonts#Source Code Pro</FontFamily>
 
           <!--FontWeight x:Key="ControlContentThemeFontWeight">Normal</FontWeight-->
           <FontFamily x:Key="MonospaceFontFamily">Source Code Pro</FontFamily>
