@@ -52,3 +52,12 @@
   - (user account no longer exists)
   - https://www.flaticon.com/packs/free-basic-ui-elements
   - See https://icon-icons.com/pack/Basic-Ui-Elements/1904 for alternative link
+
+## Fonts
+
+| Font | Name | License |
+| - | - | - |
+| [Source Code Pro](https://github.com/adobe-fonts/source-code-pro) | Paul D. Hunt | Open Font License |
+
+- Licences
+  - [Open Font License](https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)

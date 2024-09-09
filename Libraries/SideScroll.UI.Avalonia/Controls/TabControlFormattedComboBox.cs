@@ -153,6 +153,7 @@ public class FormattedItem(object? obj)
 	public static List<FormattedItem> Create(IEnumerable items)
 	{
 		return items.Cast<object>()
+			.DistinctBy(obj => obj.ToString())
 			.Select(obj => new FormattedItem(obj))
 			.ToList();
 	}

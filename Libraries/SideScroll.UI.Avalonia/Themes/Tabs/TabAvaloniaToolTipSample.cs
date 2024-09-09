@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using SideScroll.Resources;
@@ -43,6 +44,7 @@ public class TabAvaloniaToolTipSample : ITab
 			{
 				[ToolTip.TipProperty] = "When does a ToolTip get too long and when should\nit wrap lines?",
 				[ToolTip.PlacementProperty] = PlacementMode.Right,
+				Margin = new Thickness(150, 6),
 			};
 			_grid!.Children.Clear();
 			_grid.Children.Add(textBox);

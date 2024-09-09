@@ -195,7 +195,9 @@
 
           <!-- Custom Resources -->
 
-          <FontFamily x:Key="MonospaceFontFamily">Courier New</FontFamily>
+          <!--FontWeight x:Key="ControlContentThemeFontWeight">Normal</FontWeight-->
+          <FontFamily x:Key="MonospaceFontFamily">Source Code Pro</FontFamily>
+          <FontWeight x:Key="MonospaceFontWeight">Normal</FontWeight>
 
           <!-- Tab -->
 

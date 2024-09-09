@@ -55,6 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Fonts\SourceCodePro-Regular.ttf" />
     <None Remove="Assets\Themes\LightBlue.json" />
     <None Remove="DefaultTheme.xaml" />
     <None Remove="if_help_62217.png" />
@@ -84,6 +85,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Include="Assets\Fonts\SourceCodePro-Regular.ttf" />
     <AvaloniaResource Include="Themes\Controls\TabButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>

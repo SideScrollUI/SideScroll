@@ -44,4 +44,8 @@
     <Setter Property="Foreground" Value="{DynamicResource TitleForegroundBrush}"/>
   </Style>
 
+  <Style Selector="CheckBox">
+    <Setter Property="BorderBrush" Value="{DynamicResource CheckBoxBorderBrushUnchecked}" />
+  </Style>
+
 </Styles>

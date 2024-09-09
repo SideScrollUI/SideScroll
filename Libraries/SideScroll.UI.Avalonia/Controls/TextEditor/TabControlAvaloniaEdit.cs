@@ -155,6 +155,7 @@ public class TabControlAvaloniaEdit : Border
 		if (SideScrollTheme.MonospaceFontFamily is FontFamily fontFamily)
 		{
 			TextEditor.FontFamily = fontFamily;
+			TextEditor.FontWeight = SideScrollTheme.MonospaceFontWeight;
 		}
 	}
 

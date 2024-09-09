@@ -16,8 +16,8 @@ public class TabControlColorPicker : ColorPicker
 
 	public ListProperty? Property;
 
-	private static int? _prevSelectedIndex;
-	private static ColorModel? _prevColorModel;
+	private static int? _prevSelectedIndex = 2;
+	private static ColorModel? _prevColorModel = ColorModel.Hsva;
 
 	public TabControlColorPicker()
 	{

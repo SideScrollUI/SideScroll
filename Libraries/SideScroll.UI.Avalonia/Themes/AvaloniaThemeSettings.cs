@@ -117,6 +117,11 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 				double value = SideScrollTheme.GetDouble(attribute.Names.First());
 				listProperty.Value = value;
 			}
+			else if (listProperty.UnderlyingType == typeof(FontWeight))
+			{
+				FontWeight value = SideScrollTheme.GetFontWeight(attribute.Names.First());
+				listProperty.Value = value;
+			}
 		}
 	}
 
@@ -171,6 +176,10 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 				if (value is Color color)
 				{
 					dictionary[name] = new SolidColorBrush(color);
+				}
+				else if (value is FontWeight fontWeight)
+				{
+					dictionary[name] = fontWeight;
 				}
 				else if (value is double d)
 				{
@@ -293,11 +302,18 @@ public class FontTheme : ThemeSection
 	public static IEnumerable<FontFamily>? FontFamilies { get; set; }
 	public static IEnumerable<string>? FontFamilyNames => FontFamilies?.Select(f => f.Name);
 
+
 	[Header("Font Family"), BindList(nameof(FontFamilyNames))]
 	public string? FontFamily { get; set; }
 
+	//[ResourceKey("ContentControlThemeFontFamily")]
+	//public FontWeight? ContentFontWeight { get; set; } = FontWeight.Normal;
+
 	[BindList(nameof(FontFamilyNames))]
 	public string? MonospaceFontFamily { get; set; } = "Courier New";
+
+	[ResourceKey("MonospaceFontWeight")]
+	public FontWeight? MonospaceFontWeight { get; set; } = FontWeight.Normal;
 
 	[Header("Font Size"), Range(10, 32), ResourceKey("TitleFontSize")]
 	public double TitleFontSize { get; set; } = 16;
@@ -380,7 +396,11 @@ public class ScrollBarTheme : ThemeSection
 {
 	public override string ToString() => "Scroll Bar";
 
-	[Header("ScrollBar"), ResourceKey("ThemeScrollBarBackgroundBrush")]
+	[Header("ScrollBar"), ResourceKey(
+		"ThemeScrollBarBackgroundBrush",
+		"ScrollBarTrackFill",
+		"ScrollBarTrackFillPointerOver"
+		)]
 	public Color? Background { get; set; }
 
 	[ResourceKey("ScrollBarShowingBorderBrush")]
@@ -571,7 +591,8 @@ public class TextControlTheme : ThemeSection
 	[Header("Text Control - Border"), ResourceKey(
 		"TextControlBorderBrush",
 		"ComboBoxBorderBrush",
-		"CalendarDatePickerBorderBrush"
+		"CalendarDatePickerBorderBrush",
+		"CheckBoxCheckBackgroundStrokeUnchecked"
 		)]
 	public Color? TextControlBorder { get; set; }
 
@@ -588,7 +609,8 @@ public class TextControlTheme : ThemeSection
 	[Range(0, 10), ResourceKey("TextControlBorderThemeThickness",
 		"TextControlBorderThemeThicknessFocused",
 		"CalendarDatePickerBorderThemeThickness",
-		"ComboBoxBorderThemeThickness"
+		"ComboBoxBorderThemeThickness",
+		"CheckBoxBorderThemeThickness"
 		)]
 	public double? BorderThickness { get; set; }
 
@@ -693,7 +715,7 @@ public class TextEditorTheme : ThemeSection
 	[ResourceKey("XmlHighlightDeclarationBrush")]
 	public Color? XmlDeclaration { get; set; }
 
-	[ResourceKey("XmlHighlightTagBrush")]
+	[Separator, ResourceKey("XmlHighlightTagBrush")]
 	public Color? XmlTag { get; set; }
 
 	[ResourceKey("XmlHighlightAttributeNameBrush")]

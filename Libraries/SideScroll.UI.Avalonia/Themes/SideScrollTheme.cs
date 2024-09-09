@@ -111,8 +111,11 @@ public static class SideScrollTheme
 	// Fonts
 	public static FontFamily ContentControlThemeFontFamily => GetFontFamily("ContentControlThemeFontFamily");
 	public static FontFamily MonospaceFontFamily => GetFontFamily("MonospaceFontFamily");
+	public static FontWeight MonospaceFontWeight => GetFontWeight("MonospaceFontWeight");
 
 	public static ThemeVariant ThemeVariant => Application.Current!.ActualThemeVariant;
+
+	public static FontFamily SourceCodeProFont => GetFontFamily("SourceCodeProFont");
 
 	public static object GetResource(string name)
 	{
@@ -163,6 +166,16 @@ public static class SideScrollTheme
 		}
 
 		throw new Exception($"FontFamily not found: {name}");
+	}
+
+	public static FontWeight GetFontWeight(string name)
+	{
+		if (Application.Current!.TryGetResource(name, ThemeVariant, out object? value))
+		{
+			return (FontWeight)value!;
+		}
+
+		throw new Exception($"FontWeight not found: {name}");
 	}
 
 	public static Thickness GetThickness(string name)
