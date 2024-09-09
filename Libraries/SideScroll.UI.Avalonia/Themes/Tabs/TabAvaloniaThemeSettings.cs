@@ -126,6 +126,12 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 			UpdateTheme();
 		}
 
+		// Focus is lost when opening the ColorPicker
+		public void ColorPicker_LostFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		{
+			_lastHistoryUpdatable = false;
+		}
+
 		public void ColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
 		{
 			if (_ignoreColorChange) return;

@@ -16,7 +16,6 @@
         <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/ControlThemes.xaml"/>
         <ResourceInclude Source="avares://SideScroll.UI.Avalonia.Charts.LiveCharts/Themes/ControlThemes.xaml"/>
       </ResourceDictionary.MergedDictionaries>
-      <FontFamily x:Key="SourceCodeProFont">avares://SideScroll.UI.Avalonia/Assets/Fonts#Source Code Pro</FontFamily>
     </ResourceDictionary>
   </Application.Resources>
 </Application>

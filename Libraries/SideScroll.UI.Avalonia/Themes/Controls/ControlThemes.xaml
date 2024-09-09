@@ -16,4 +16,5 @@
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabView.xaml"/>
     <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/TabViewer.xaml"/>
   </ResourceDictionary.MergedDictionaries>
+  <FontFamily x:Key="SourceCodeProFont">avares://SideScroll.UI.Avalonia/Assets/Fonts#Source Code Pro</FontFamily>
 </ResourceDictionary>

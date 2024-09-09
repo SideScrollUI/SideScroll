@@ -68,6 +68,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				if (control is ColorPicker colorPicker)
 				{
 					colorPicker.ColorChanged += ColorPicker_ColorChanged;
+					colorPicker.LostFocus += ColorPicker_LostFocus;
 				}
 			}
 
@@ -125,6 +126,12 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 		private void ColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
 		{
 			tab.TabInstance.ColorPicker_ColorChanged(sender, e);
+		}
+
+		// Focus is lost when opening the ColorPicker
+		private void ColorPicker_LostFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+		{
+			tab.TabInstance.ColorPicker_LostFocus(sender, e);
 		}
 	}
 }
