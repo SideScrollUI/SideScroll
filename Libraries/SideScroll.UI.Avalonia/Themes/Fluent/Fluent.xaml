@@ -112,7 +112,7 @@
 
           <SolidColorBrush x:Key="ButtonBorderBrush" Color="#000000" />
 
-          <CornerRadius x:Key="ButtonCornerRadius">5</CornerRadius>
+          <CornerRadius x:Key="ButtonCornerRadius">7</CornerRadius>
           <Thickness x:Key="ButtonBorderThemeThickness">1.5</Thickness>
 
           <!-- Simple and Fluent Tab/Toolbar Button -->

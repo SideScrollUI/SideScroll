@@ -151,9 +151,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 		private void Reset(Call call)
 		{
-			Application.Current!.RequestedThemeVariant = ThemeSettings.GetVariant();
-			ThemeSettings.LoadFromCurrent();
-			ThemeManager.LoadTheme(ThemeSettings);
+			ThemeSettings = ThemeManager.Reset(ThemeSettings);
 			Reload();
 		}
 

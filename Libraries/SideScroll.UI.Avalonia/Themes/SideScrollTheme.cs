@@ -152,6 +152,10 @@ public static class SideScrollTheme
 		{
 			return thickness.Left;
 		}
+		else if (obj is CornerRadius cornerRadius)
+		{
+			return cornerRadius.BottomLeft;
+		}
 		else
 		{
 			return (double)GetResource(name);

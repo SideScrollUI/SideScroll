@@ -1,5 +1,6 @@
 using SideScroll.Collections;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace SideScroll.Serialize.DataRepos;
@@ -74,7 +75,7 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 		}
 	}
 
-	public bool TryGetValue(string key, out T? value)
+	public bool TryGetValue(string key, [MaybeNullWhen(false)] out T value)
 	{
 		if (Lookup.TryGetValue(key, out DataItem<T>? lookupValue))
 		{

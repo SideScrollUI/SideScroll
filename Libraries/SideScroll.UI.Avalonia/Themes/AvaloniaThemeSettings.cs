@@ -188,6 +188,10 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 					{
 						dictionary[name] = new Thickness(d);
 					}
+					else if (name.Contains("CornerRadius"))
+					{
+						dictionary[name] = new CornerRadius(d);
+					}
 					else
 					{
 						dictionary[name] = d;
@@ -542,6 +546,9 @@ public class ButtonTheme : ThemeSection
 
 	[Range(0, 10), ResourceKey("ButtonBorderThemeThickness")]
 	public double? BorderThickness { get; set; }
+
+	[Range(0, 20), ResourceKey("ButtonCornerRadius")]
+	public double? CornerRadius { get; set; }
 }
 
 [Params]
@@ -613,6 +620,9 @@ public class TextControlTheme : ThemeSection
 		"CheckBoxBorderThemeThickness"
 		)]
 	public double? BorderThickness { get; set; }
+
+	[Range(0, 20), ResourceKey("ControlCornerRadius")]
+	public double? CornerRadius { get; set; }
 
 	// Text Control - Selection
 	[Header("Text Control - Selection"), ResourceKey("TextControlSelectionForegroundBrush")]

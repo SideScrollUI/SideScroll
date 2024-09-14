@@ -10,6 +10,7 @@ namespace SideScroll.UI.Avalonia.Themes;
 
 public class ThemeManager
 {
+	public const string DefaultGroupId = "DefaultThemes";
 	public const string GroupId = "Themes";
 
 	public static ThemeManager? Current { get; set; }
@@ -21,11 +22,15 @@ public class ThemeManager
 		.Select(i => i.Value.Name!)
 		.ToList();
 
+	public readonly DataRepoView<AvaloniaThemeSettings> DataRepoDefaultThemes;
+
 	public readonly DataRepoView<AvaloniaThemeSettings> DataRepoThemes;
 
 	public ThemeManager(Project project)
 	{
 		Project = project;
+
+		DataRepoDefaultThemes = Project.DataApp.LoadView<AvaloniaThemeSettings>(new(), DefaultGroupId, nameof(AvaloniaThemeSettings.Name));
 
 		DataRepoThemes = Project.DataApp.LoadView<AvaloniaThemeSettings>(new(), GroupId, nameof(AvaloniaThemeSettings.Name));
 		foreach (AvaloniaThemeSettings theme in DataRepoThemes.Items.Values)
@@ -72,7 +77,7 @@ public class ThemeManager
 		});
 	}
 
-	public void Add(Call call, string json)
+	public void Add(Call call, string json, bool isDefault = false)
 	{
 		var options = new JsonSerializerOptions();
 		options.Converters.Add(new JsonColorConverter());
@@ -80,10 +85,16 @@ public class ThemeManager
 		UpdateTheme(themeSettings);
 		DataRepoThemes.Save(call, themeSettings);
 		UserSettings.Themes = Names;
+
+		if (isDefault)
+		{
+			DataRepoDefaultThemes.Save(call, themeSettings);
+		}
 	}
 
 	public void Add(Call call, AvaloniaThemeSettings themeSettings)
 	{
+		// Fill in new colors before saving
 		var original = Application.Current!.RequestedThemeVariant;
 		Application.Current.RequestedThemeVariant = themeSettings.GetVariant();
 		themeSettings.LoadFromCurrent();
@@ -100,7 +111,7 @@ public class ThemeManager
 		Current.AddDefaultTheme("Light");
 		Current.AddDefaultTheme("Dark");
 
-		Current.Add(new(), AvaloniaAssets.Themes.LightBlue);
+		Current.Add(new(), AvaloniaAssets.Themes.LightBlue, true);
 
 		Current.LoadCurrentTheme();
 	}
@@ -114,5 +125,22 @@ public class ThemeManager
 
 		Application.Current.RequestedThemeVariant = null;
 		Application.Current.RequestedThemeVariant = themeVariant;
+	}
+
+	public static AvaloniaThemeSettings Reset(AvaloniaThemeSettings themeSettings)
+	{
+		if (Current!.DataRepoDefaultThemes.Items.TryGetValue(themeSettings.Name!, out AvaloniaThemeSettings? defaultSettings))
+		{
+			themeSettings = defaultSettings;
+		}
+		else
+		{
+			// Resets to Light / Dark variant
+			Application.Current!.RequestedThemeVariant = themeSettings.GetVariant();
+			themeSettings.LoadFromCurrent();
+		}
+		LoadTheme(themeSettings);
+
+		return themeSettings;
 	}
 }
