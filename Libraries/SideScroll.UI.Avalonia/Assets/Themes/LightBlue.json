@@ -14,7 +14,7 @@
     "Background": "#fffafafa",
     "BackgroundFocused": "#fffafbff",
     "Border": "#ffb8c5db",
-    "TitleBackground": "#ff525096",
+    "TitleBackground": "#ff605ead",
     "TitleForeground": "#ffdfdfed",
     "TitleBorder": "#ff5e70cc",
     "SplitterBackground": "#ffedf2f7",
@@ -42,8 +42,8 @@
     "IconForeground": "#ff5f8cf5",
     "IconForegroundHighlight": "#ff3e75f7",
     "IconForegroundDisabled": "#ff999999",
-    "IconAltForeground": "#ffa1358f",
-    "IconAltForegroundHighlight": "#ffba3da5",
+    "IconAltForeground": "#ff9a1da1",
+    "IconAltForegroundHighlight": "#ffb332ba",
     "RadioButtonForegroundPointerOver": "Black"
   },
   "ToolTip": {
@@ -54,7 +54,7 @@
   },
   "ScrollBar": {
     "Background": "#ffd7ddf7",
-    "BorderBrush": "#ff859fc9",
+    "BorderBrush": "#ff97aac9",
     "Thumb": "#ff96a8ff",
     "ThumbPointerOver": "#ff80acf2",
     "ButtonBackground": "#ffd5d8f7",
@@ -76,7 +76,7 @@
     "CellForegroundPointerOver": "Black",
     "CellForegroundSelected": "Black",
     "CellBorder": "#ffd8daf2",
-    "CellFocusVisualPrimary": "#ff5e70cc",
+    "CellFocusVisualPrimary": "#ff7c8acc",
     "CellFocusVisualSecondary": "#99ffffff",
     "StyledHasLinksBackground": "#ffe6e8ff",
     "StyledNoLinksBackground": "#fff0f1fc",
