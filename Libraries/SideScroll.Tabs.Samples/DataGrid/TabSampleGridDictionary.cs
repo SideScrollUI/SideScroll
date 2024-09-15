@@ -1,5 +1,3 @@
-using SideScroll.Tasks;
-
 namespace SideScroll.Tabs.Samples.DataGrid;
 
 public class TabSampleGridDictionary : ITab
@@ -8,30 +6,32 @@ public class TabSampleGridDictionary : ITab
 
 	public class Instance : TabInstance
 	{
-		private Dictionary<string, TestItem>? _items;
+		private Dictionary<string, TestItem> _items = [];
 
 		public override void Load(Call call, TabModel model)
 		{
 			_items = [];
-			AddEntries(null);
+			AddEntries(call);
 			model.AddData(_items);
 
-			model.Actions = new List<TaskCreator>
+			// Dictionary not observable
+			/*model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Add Entries", AddEntries),
-			};
+			};*/
 		}
 
-		private void AddEntries(Call? call)
+		private void AddEntries(Call call)
 		{
 			for (int i = 0; i < 20; i++)
 			{
+				int index = _items.Count;
 				var testItem = new TestItem
 				{
-					Name = i.ToString(),
-					Value = i * 100,
+					Name = index.ToString(),
+					Value = index * 100,
 				};
-				_items!.Add(testItem.Name, testItem);
+				_items.Add(testItem.Name, testItem);
 			}
 		}
 	}

@@ -78,9 +78,9 @@
     "CellBorder": "#ffd8daf2",
     "CellFocusVisualPrimary": "#ff7c8acc",
     "CellFocusVisualSecondary": "#99ffffff",
-    "StyledHasLinksBackground": "#ffe6e8ff",
+    "StyledHasLinksBackground": "#ffe0e3ff",
     "StyledNoLinksBackground": "#fff0f1fc",
-    "StyledHasLinksForeground": "#ff0d0c21",
+    "StyledHasLinksForeground": "#ff190587",
     "StyledBorder": "#ffbcbde6",
     "Border": "#ff9aa4d9"
   },

@@ -67,6 +67,9 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			{
 				if (control is ColorPicker colorPicker)
 				{
+					// Avalonia could probably use Diagonal Corner Placements?
+					// colorPicker.Resources.Add("ColorPickerFlyoutPlacement", PlacementMode.LeftEdgeAlignedBottom);
+
 					colorPicker.ColorChanged += ColorPicker_ColorChanged;
 					colorPicker.LostFocus += ColorPicker_LostFocus;
 				}
@@ -83,6 +86,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 
 		private object? GetSamples()
 		{
+			// Using Lists provides useful spacing so drop down's don't appear on top of sample
 			return tab.Object switch
 			{
 				FontTheme => new List<ListItem>
@@ -94,6 +98,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				TabTheme => new List<ListItem>
 				{
 					new("Forms", new TabSampleParamsDataTabs()),
+					new("Buttons", new TabSampleGridHashSet()),
 					new("Loading", new TabSampleLoadAsync()),
 				},
 				ToolbarTheme => new TabCustomControl(),
@@ -104,7 +109,11 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 					new("Collections", new TabSampleDataGrid()),
 					new("Objects", new TabSampleObjects()),
 				},
-				ButtonTheme => new TabSampleActions(),
+				ButtonTheme => new List<ListItem>
+				{
+					new("Collections", new TabSampleGridCollectionSize()),
+					new("Actions", new TabSampleActions()),
+				},
 				TextControlTheme => new TabSampleParamsDataTabs(),
 				TextAreaTheme => new TabSampleTextArea(),
 				TextEditorTheme => new List<ListItem>

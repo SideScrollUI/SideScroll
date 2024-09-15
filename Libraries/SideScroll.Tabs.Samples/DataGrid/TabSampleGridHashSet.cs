@@ -1,5 +1,3 @@
-using SideScroll.Tasks;
-
 namespace SideScroll.Tabs.Samples.DataGrid;
 
 public class TabSampleGridHashSet : ITab
@@ -8,30 +6,32 @@ public class TabSampleGridHashSet : ITab
 
 	public class Instance : TabInstance
 	{
-		private HashSet<TabSampleGridCollectionSize.TestItem>? _items;
+		private HashSet<TabSampleGridCollectionSize.TestItem> _items = [];
 
 		public override void Load(Call call, TabModel model)
 		{
 			_items = [];
-			AddEntries(null);
+			AddEntries(call);
 			model.AddData(_items);
 
-			model.Actions = new List<TaskCreator>
+			// HashSet not observable
+			/*model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Add Entries", AddEntries),
-			};
+			};*/
 		}
 
-		private void AddEntries(Call? call)
+		private void AddEntries(Call call)
 		{
 			for (int i = 0; i < 20; i++)
 			{
+				int index = _items.Count;
 				var testItem = new TabSampleGridCollectionSize.TestItem
 				{
-					SmallNumber = i
+					SmallNumber = index,
 				};
-				testItem.BigNumber += i;
-				_items!.Add(testItem);
+				testItem.BigNumber += index;
+				_items.Add(testItem);
 			}
 		}
 	}

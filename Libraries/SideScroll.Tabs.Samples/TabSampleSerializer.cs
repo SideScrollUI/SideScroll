@@ -10,7 +10,7 @@ public class TabSampleSerializer : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollectionUI<ListItem>? _items;
+		private ItemCollectionUI<ListItem> _items = [];
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -30,13 +30,13 @@ public class TabSampleSerializer : ITab
 			var sampleItem = new SampleItem(1, "Sample Item");
 
 			Project.DataApp.Save(sampleItem, call);
-			_items!.Add(new ListItem("Sample Item", sampleItem));
+			_items.Add(new ListItem("Sample Item", sampleItem));
 		}
 
 		private void Deserialize(Call call)
 		{
 			SampleItem sampleItem = Project.DataApp.Load<SampleItem>(false, false, call)!;
-			_items!.Add(new ListItem("Deserialized Sample Item", sampleItem));
+			_items.Add(new ListItem("Deserialized Sample Item", sampleItem));
 		}
 
 		private void SerializeOneMillionObjects(Call call)
@@ -47,13 +47,13 @@ public class TabSampleSerializer : ITab
 				sampleItems.Add(new SampleItem(i, "Item " + i));
 			}
 			Project.DataApp.Save(sampleItems, call);
-			_items!.Add(new ListItem("SerializeOneMillionObjects", sampleItems));
+			_items.Add(new ListItem("SerializeOneMillionObjects", sampleItems));
 		}
 
 		private void DeserializeOneMillionObjects(Call call)
 		{
 			List<SampleItem> sampleItems = Project.DataApp.Load<List<SampleItem>>(false, false, call)!;
-			_items!.Add(new ListItem("DeserializeOneMillionObjects", sampleItems));
+			_items.Add(new ListItem("DeserializeOneMillionObjects", sampleItems));
 		}
 	}
 
