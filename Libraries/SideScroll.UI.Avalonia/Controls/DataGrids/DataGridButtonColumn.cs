@@ -37,8 +37,8 @@ public class DataGridButtonColumn : DataGridBoundColumn
 		{
 			Padding = new Thickness(0),
 			Margin = new Thickness(0),
-			MinWidth = 15,
-			BorderThickness = new Thickness(1),
+			MinWidth = 12,
+			BorderThickness = new Thickness(0, 0, 0, 1),
 		};
 		button.Resources.Add("ButtonPadding", new Thickness(2, 5));
 		if (VisiblePropertyName != null)

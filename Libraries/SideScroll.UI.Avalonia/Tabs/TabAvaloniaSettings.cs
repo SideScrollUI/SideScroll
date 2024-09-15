@@ -1,5 +1,3 @@
-using Avalonia;
-using Avalonia.Styling;
 using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Serialize;
@@ -57,15 +55,7 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 				CustomUserSettings = new();
 			}
 
-			if (CustomUserSettings.Theme == null && UserSettings.Themes.Count > 0)
-			{
-				if (Application.Current?.ActualThemeVariant is ThemeVariant variant &&
-					variant.Key is string key &&
-					UserSettings.Themes.Contains(key))
-				{
-					CustomUserSettings.Theme = key;
-				}
-			}
+			CustomUserSettings.Theme ??= SideScrollTheme.ThemeVariant.ToString();
 		}
 
 		private void Reset(Call call)

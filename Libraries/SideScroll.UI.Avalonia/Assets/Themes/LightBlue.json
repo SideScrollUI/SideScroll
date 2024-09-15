@@ -25,11 +25,11 @@
     "ContextMenuBackground": "#ffe6e8ff",
     "ContextMenuForeground": "#ff2d3196",
     "ProgressBarForeground": "#ffe3e7fc",
-    "ButtonBackground": "#ffe4e6f7",
+    "ButtonBackground": "#ffebecfa",
     "ButtonBackgroundPointerOver": "#ffbac6ff",
     "ButtonBackgroundPressed": "#ffe6e8ff",
     "ButtonForeground": "#ff4a4141",
-    "ButtonBorder": "#ffb3abe3"
+    "ButtonBorder": "#ffcac5e6"
   },
   "Toolbar": {
     "Background": "#ffe8eeff",
@@ -47,7 +47,7 @@
     "RadioButtonForegroundPointerOver": "Black"
   },
   "ToolTip": {
-    "Background": "#ff63579e",
+    "Background": "#ff695f9e",
     "Foreground": "#ffe1e3f2",
     "Border": "#a8000000",
     "FontSize": 14
@@ -150,11 +150,11 @@
     "LabelForegroundHighlight": "#ff0057fa",
     "GridLines": "#ffe0e8ff",
     "NowLine": "#ff519e4c",
-    "ToolTipBackground": "#cc575d9e",
+    "ToolTipBackground": "#d9575d9e",
     "ToolTipForeground": "#ffe6e8f7",
     "Border": "#ffcfcae6",
     "BorderThickness": 1,
-    "LegendIconBorder": "#ff27326b",
+    "LegendIconBorder": "#ff32418c",
     "Colors": {
       "Series1": "DodgerBlue",
       "Series2": "#fffca000",

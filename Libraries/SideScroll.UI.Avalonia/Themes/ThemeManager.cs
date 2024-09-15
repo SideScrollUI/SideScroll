@@ -37,7 +37,7 @@ public class ThemeManager
 		{
 			UpdateTheme(theme);
 		}
-		UserSettings.Themes = Names;
+		UserSettings.Themes = DataRepoThemes.Items;
 	}
 
 	public AvaloniaThemeSettings? GetTheme(string? themeName)
@@ -84,7 +84,6 @@ public class ThemeManager
 		var themeSettings = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, options)!;
 		UpdateTheme(themeSettings);
 		DataRepoThemes.Save(call, themeSettings);
-		UserSettings.Themes = Names;
 
 		if (isDefault)
 		{
@@ -101,7 +100,6 @@ public class ThemeManager
 		Application.Current.RequestedThemeVariant = original;
 
 		DataRepoThemes.Save(call, themeSettings);
-		UserSettings.Themes = Names;
 	}
 
 	public static void Initialize(Project project)
