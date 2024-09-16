@@ -15,6 +15,7 @@
     "BackgroundFocused": "#fffafbff",
     "Border": "#ffb8c5db",
     "TitleBackground": "#ff605ead",
+    "TitleBackgroundPointerOver": "#ff5651f5",
     "TitleForeground": "#ffdfdfed",
     "TitleBorder": "#ff5e70cc",
     "SplitterBackground": "#ffedf2f7",

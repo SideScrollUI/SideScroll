@@ -1,9 +1,11 @@
+using SideScroll.Attributes;
 using SideScroll.Serialize;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Tabs.Samples;
 
+[TabRoot, PublicData]
 public class TabSampleBookmarks : ITab
 {
 	public override string ToString() => "Bookmarks";

@@ -222,6 +222,7 @@
           <!-- Title -->
           
           <SolidColorBrush x:Key="TitleBackgroundBrush" Color="#4f52bb" />
+          <SolidColorBrush x:Key="TitleBackgroundPointerOverBrush" Color="#292dab" />
           <SolidColorBrush x:Key="TitleForegroundBrush" Color="#d0d0e8" />
           <SolidColorBrush x:Key="TitleBorderBrush" Color="Black" />
 
@@ -566,6 +567,7 @@
           <!-- Title -->
 
           <SolidColorBrush x:Key="TitleBackgroundBrush" Color="#313159" />
+          <SolidColorBrush x:Key="TitleBackgroundPointerOverBrush" Color="#1e1e4c" />
           <SolidColorBrush x:Key="TitleForegroundBrush" Color="#B4B8CF" />
 
           <!-- Toolbar -->

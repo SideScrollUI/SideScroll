@@ -14,6 +14,7 @@ public static class SideScrollTheme
 
 	// Title
 	public static SolidColorBrush TitleBackground => GetBrush("TitleBackgroundBrush");
+	public static SolidColorBrush TitleBackgroundPointerOver => GetBrush("TitleBackgroundPointerOverBrush");
 	public static SolidColorBrush TitleForeground => GetBrush("TitleForegroundBrush");
 
 	// Toolbar

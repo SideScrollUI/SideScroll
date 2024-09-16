@@ -72,7 +72,18 @@ public class ListProperty : ListMember, IPropertyEditable
 
 					if (!type.IsInstanceOfType(value))
 					{
-						value = Convert.ChangeType(value, type);
+						if (value is IConvertible)
+						{
+							value = Convert.ChangeType(value, type);
+						}
+						else if (type == typeof(string))
+						{
+							value = value.ToString();
+						}
+						else
+						{
+							throw new InvalidCastException($"Cannot convert {value} to type {type}");
+						}
 					}
 				}
 

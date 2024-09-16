@@ -244,8 +244,11 @@ public class TabTheme : ThemeSection
 	public Color? Border { get; set; }
 
 	// Title
-	[Header("Title"), Separator, ResourceKey("TitleBackgroundBrush", "SystemControlBackgroundBaseLowBrush")]
+	[Header("Title"), ResourceKey("TitleBackgroundBrush", "SystemControlBackgroundBaseLowBrush")]
 	public Color? TitleBackground { get; set; }
+
+	[ResourceKey("TitleBackgroundPointerOverBrush")]
+	public Color? TitleBackgroundPointerOver { get; set; }
 
 	[ResourceKey("TitleForegroundBrush")]
 	public Color? TitleForeground { get; set; }
@@ -254,7 +257,7 @@ public class TabTheme : ThemeSection
 	public Color? TitleBorder { get; set; }
 
 	// Splitter
-	[Header("Splitter"), Separator, ResourceKey("TabSplitterBackgroundBrush")]
+	[Header("Splitter"), ResourceKey("TabSplitterBackgroundBrush")]
 	public Color? SplitterBackground { get; set; }
 
 	[ResourceKey("TabSplitterSize"), Range(6, 100)]

@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
+using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Utilities;
 
 namespace SideScroll.UI.Avalonia.Controls;
@@ -77,13 +78,17 @@ public class TabControlTitle : Border, IDisposable
 			VerticalAlignment = VerticalAlignment.Stretch,
 			HorizontalAlignment = HorizontalAlignment.Left,
 			Content = "~",
-			ClipToBounds = false,
-			Margin = new Thickness(-7, 0, 0, 0),
-			Padding = new Thickness(0),
+			Margin = new Thickness(0, 0, 0, 0),
+			Padding = new Thickness(2, 0),
+			Background = Brushes.Transparent,
+			Foreground = SideScrollTheme.TitleForeground,
+			BorderBrush = SideScrollTheme.TabBackgroundBorder,
+			BorderThickness = new Thickness(0, 0, 1, 0),
 			[Grid.ColumnProperty] = 0,
 			[ToolTip.TipProperty] = "Copy Tab Link",
 		};
-		ClipToBounds = false;
+		linkButton.Resources.Add("ThemeButtonBackgroundPointerOverBrush", SideScrollTheme.TitleBackgroundPointerOver);
+		linkButton.Resources.Add("ThemeButtonBackgroundPressedBrush", SideScrollTheme.TitleBackgroundPointerOver);
 		linkButton.Click += LinkButton_Click;
 		_containerGrid.Children.Add(linkButton);
 	}
