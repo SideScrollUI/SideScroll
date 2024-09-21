@@ -13,7 +13,7 @@
   "Tab": {
     "Background": "#fffafafa",
     "BackgroundFocused": "#fffafbff",
-    "Border": "#ffb8c5db",
+    "Border": "#ffa5b4cf",
     "TitleBackground": "#ff605ead",
     "TitleBackgroundPointerOver": "#ff5651f5",
     "TitleForeground": "#ffdfdfed",
@@ -43,8 +43,8 @@
     "IconForeground": "#ff5f8cf5",
     "IconForegroundHighlight": "#ff3e75f7",
     "IconForegroundDisabled": "#ff999999",
-    "IconAltForeground": "#ff9a1da1",
-    "IconAltForegroundHighlight": "#ffb332ba",
+    "IconAltForeground": "#fffa9b28",
+    "IconAltForegroundHighlight": "#ffeb9800",
     "RadioButtonForegroundPointerOver": "Black"
   },
   "ToolTip": {

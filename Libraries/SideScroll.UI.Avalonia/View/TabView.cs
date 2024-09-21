@@ -197,7 +197,7 @@ public class TabView : Grid, IDisposable
 			if (Instance.Skippable)
 			{
 				_containerGrid.ColumnDefinitions[0].Width = new GridLength(0);
-				_tabParentControls!.Width = 0;
+				_parentContainerBorder!.Width = 0;
 			}
 		}
 
