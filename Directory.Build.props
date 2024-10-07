@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.6</Version>
-    <PackageReleaseNotes>Added Light Blue Theme. Added more user theming colors for DataGrids, Charts, Buttons, ComboBoxes, and Borders. Added user theming for TabSplitter, TabViewer, TextArea, TabButton, Calendar Views, and ScrollBar. All TabControlColorPicker now share the same SelectedIndex and ColorMode.  Fixed Color Picker History not updating correctly. Updated Save and Import Icons. Fixed refreshing chart creating multiple now time annotations. Fixed TextArea sometimes clipping text. Simplified LinkUri format. Added Source Code Pro as the default Monospace font.</PackageReleaseNotes>
+    <Version>0.6.1</Version>
+    <PackageReleaseNotes>Updated Light and Dark themes</PackageReleaseNotes>
 
     <AvaloniaVersion>11.1.3</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

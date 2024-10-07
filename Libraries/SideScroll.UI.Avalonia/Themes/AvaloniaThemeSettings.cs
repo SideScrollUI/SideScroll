@@ -247,8 +247,8 @@ public class TabTheme : ThemeSection
 	[Header("Title"), ResourceKey("TitleBackgroundBrush", "SystemControlBackgroundBaseLowBrush")]
 	public Color? TitleBackground { get; set; }
 
-	[ResourceKey("TitleBackgroundPointerOverBrush")]
-	public Color? TitleBackgroundPointerOver { get; set; }
+	[ResourceKey("TitleButtonBackgroundPointerOverBrush")]
+	public Color? TitleButtonBackgroundPointerOver { get; set; }
 
 	[ResourceKey("TitleForegroundBrush")]
 	public Color? TitleForeground { get; set; }
@@ -360,6 +360,9 @@ public class ToolbarTheme : ThemeSection
 
 	[Header("Button"), ResourceKey("ToolbarButtonBackgroundPointerOverBrush")]
 	public Color? ButtonBackgroundPointerOver { get; set; }
+
+	[Range(0, 20), ResourceKey("ToolbarButtonCornerRadius")]
+	public double? ButtonCornerRadius { get; set; }
 
 	[Header("Icons"), ResourceKey("IconForegroundBrush")]
 	public Color? IconForeground { get; set; }

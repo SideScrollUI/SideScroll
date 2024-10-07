@@ -226,14 +226,13 @@ public class TabControlParams : Border, IValidationControl
 
 	public Control? AddPropertyControl(ListProperty property)
 	{
-		int columnIndex = property.GetCustomAttribute<ColumnIndexAttribute>()?.Index ?? 0;
-
 		Control? control = CreatePropertyControl(property);
 		if (control == null)
 			return null;
 
 		property.Cachable = false;
 
+		int columnIndex = property.GetCustomAttribute<ColumnIndexAttribute>()?.Index ?? 0;
 		int rowIndex = ContainerGrid.RowDefinitions.Count;
 
 		if (rowIndex > 0 && columnIndex > 0)

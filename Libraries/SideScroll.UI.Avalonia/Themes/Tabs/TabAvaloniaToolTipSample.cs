@@ -14,8 +14,7 @@ public class TabAvaloniaToolTipSample : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonNew { get; set; } = new("New", Icons.Svg.BlankDocument);
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save);
+		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
 	}
 
 	public class Instance : TabInstance
@@ -24,7 +23,9 @@ public class TabAvaloniaToolTipSample : ITab
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			model.AddObject(new Toolbar());
+			var toolbar = new Toolbar();
+			toolbar.ButtonRefresh.Action = Refresh;
+			model.AddObject(toolbar);
 
 			_grid = new Grid
 			{
@@ -36,6 +37,11 @@ public class TabAvaloniaToolTipSample : ITab
 			model.AddObject(_grid);
 
 			UpdateTheme();
+		}
+
+		private void Refresh(Call call)
+		{
+			Reload();
 		}
 
 		private void UpdateTheme()
@@ -51,7 +57,7 @@ public class TabAvaloniaToolTipSample : ITab
 
 			Dispatcher.UIThread.Post(() =>
 			{
-				if (textBox?.IsLoaded == true)
+				if (textBox.IsLoaded == true)
 				{
 					ToolTip.SetIsOpen(textBox, true);
 				}

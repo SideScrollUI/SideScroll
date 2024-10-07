@@ -1,8 +1,10 @@
+using SideScroll.Attributes;
 using SideScroll.Charts;
 using SideScroll.Collections;
+using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Samples.Chart;
-using SideScroll.Tasks;
+using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Charts.LiveCharts;
 
 namespace SideScroll.Start.Avalonia.Charts;
@@ -10,6 +12,15 @@ namespace SideScroll.Start.Avalonia.Charts;
 public class TabChartUpdating : ITab
 {
 	public TabInstance Create() => new Instance();
+
+	public class Toolbar : TabToolbar
+	{
+		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
+
+		[Separator]
+		public ToolButton ButtonStart { get; set; } = new("Start", Icons.Svg.Play);
+		public ToolButton ButtonStop { get; set; } = new("Stop", Icons.Svg.Stop);
+	}
 
 	public class Instance : TabInstance
 	{
@@ -21,23 +32,17 @@ public class TabChartUpdating : ITab
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			model.MinDesiredWidth = 1400;
+			model.MinDesiredWidth = 1000;
 
-			model.Actions = new List<TaskCreator>
-			{
-				new TaskDelegate("Update", Update),
-				new TaskDelegateAsync("Update every second", UpdateEverySecondAsync),
-			};
+			Toolbar toolbar = new();
+			toolbar.ButtonRefresh.Action = Update;
+			toolbar.ButtonStart.ActionAsync = StartTaskAsync;
+			toolbar.ButtonStop.Action = StopTask;
+			model.AddObject(toolbar);
 
 			ChartView chartView = CreateView();
 			_chart = new TabControlLiveChart(this, chartView);
 			model.AddObject(_chart, true);
-		}
-
-		private void Update(Call call)
-		{
-			ChartView chartView = CreateView();
-			_chart!.UpdateView(chartView);
 		}
 
 		private ChartView CreateView()
@@ -58,14 +63,29 @@ public class TabChartUpdating : ITab
 			return chartView;
 		}
 
-		private async Task UpdateEverySecondAsync(Call call)
+		private void Update(Call call)
 		{
+			ChartView chartView = CreateView();
+			_chart!.UpdateView(chartView);
+		}
+
+		private Call? _addCall;
+		private async Task StartTaskAsync(Call call)
+		{
+			_addCall = call;
+
 			CancellationToken token = call.TaskInstance!.TokenSource.Token;
-			for (int i = 0; i < 20 && !token.IsCancellationRequested; i++)
+			for (int i = 0; i < 60 && !token.IsCancellationRequested; i++)
 			{
 				Invoke(call, () => Update(call));
 				await Task.Delay(1000);
 			}
+		}
+
+		private void StopTask(Call call)
+		{
+			_addCall?.TaskInstance?.Cancel();
+			_addCall = null;
 		}
 	}
 }

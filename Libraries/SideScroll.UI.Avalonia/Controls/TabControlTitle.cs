@@ -87,8 +87,8 @@ public class TabControlTitle : Border, IDisposable
 			[Grid.ColumnProperty] = 0,
 			[ToolTip.TipProperty] = "Copy Tab Link",
 		};
-		linkButton.Resources.Add("ThemeButtonBackgroundPointerOverBrush", SideScrollTheme.TitleBackgroundPointerOver);
-		linkButton.Resources.Add("ThemeButtonBackgroundPressedBrush", SideScrollTheme.TitleBackgroundPointerOver);
+		linkButton.Resources.Add("ThemeButtonBackgroundPointerOverBrush", SideScrollTheme.TitleButtonBackgroundPointerOver);
+		linkButton.Resources.Add("ThemeButtonBackgroundPressedBrush", SideScrollTheme.TitleButtonBackgroundPointerOver);
 		linkButton.Click += LinkButton_Click;
 		_containerGrid.Children.Add(linkButton);
 	}
