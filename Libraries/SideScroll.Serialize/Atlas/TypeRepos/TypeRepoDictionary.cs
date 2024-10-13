@@ -1,6 +1,7 @@
 using SideScroll.Logs;
 using SideScroll.Serialize.Atlas.Schema;
 using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace SideScroll.Serialize.Atlas.TypeRepos;
@@ -30,11 +31,19 @@ public class TypeRepoDictionary : TypeRepo
 	public TypeRepoDictionary(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
-		Type[] types = LoadableType!.GetGenericArguments();
-		if (types.Length > 0)
+		Type[] types = LoadableType!
+			.GetInterfaces()
+			.FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDictionary<,>))?
+			.GetGenericArguments() ?? LoadableType.GetGenericArguments();
+
+		if (types.Length > 1)
 		{
 			_typeKey = types[0];
 			_typeValue = types[1];
+		}
+		else
+		{
+			Debug.WriteLine($"Failed to find generic arguments for {LoadableType}");
 		}
 
 		_addMethod = LoadableType.GetMethods()
@@ -94,7 +103,7 @@ public class TypeRepoDictionary : TypeRepo
 
 			if (key != null)
 			{
-				_addMethod.Invoke(iCollection, new object?[] { key, value });
+				_addMethod.Invoke(iCollection, [key, value]);
 			}
 		}
 	}
@@ -109,7 +118,7 @@ public class TypeRepoDictionary : TypeRepo
 			object? value = Serializer.Clone(item.Value);
 			if (key != null)
 			{
-				_addMethod.Invoke(iDest, new object?[] { key, value });
+				_addMethod.Invoke(iDest, [key, value]);
 			}
 		}
 	}

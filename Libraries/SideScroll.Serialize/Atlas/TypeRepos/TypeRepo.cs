@@ -87,7 +87,9 @@ public abstract class TypeRepo : IDisposable
 		TypeSchema = typeSchema;
 		Type = typeSchema.Type;
 		if (!typeSchema.IsUnserialized && (!serializer.PublicOnly || TypeSchema.IsPublicOnly))
+		{
 			LoadableType = Type;
+		}
 		ObjectsLoaded = new object?[typeSchema.NumObjects];
 	}
 

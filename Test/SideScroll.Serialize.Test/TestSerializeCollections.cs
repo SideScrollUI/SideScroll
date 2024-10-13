@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Serialize.Atlas;
+using System.Collections;
 using System.Diagnostics;
 
 namespace SideScroll.Serialize.Test;
@@ -51,10 +52,10 @@ public class TestSerializeCollections : TestSerializeBase
 	private class MultipleArrays
 	{
 		public int[] Array1 = [1, 2];
-		//public int[] Array2 = [3, 4];
+		public int[] Array2 = [3, 4];
 	}
 
-	[Test, Description("ArrayMultipleTest")]
+	[Test, Description("Multiple Arrays")]
 	public void ArrayMultipleTest()
 	{
 		var arrays = new MultipleArrays();
@@ -63,8 +64,7 @@ public class TestSerializeCollections : TestSerializeBase
 		Assert.NotNull(output);
 	}
 
-
-	[Test, Description("ArrayTest")]
+	[Test, Description("Dictionary Integer Array Object Key")]
 	public void ArrayTest()
 	{
 		int[] array1 = [];
@@ -94,6 +94,41 @@ public class TestSerializeCollections : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<List<string>>(Call);
+
+		Assert.AreEqual(input[0], output[0]);
+		Assert.AreEqual(input[1], output[1]);
+	}
+
+	public class StringList : List<string>;
+
+	[Test, Description("Serialize String List Type")]
+	public void SerializeStringListType()
+	{
+		var input = new StringList
+		{
+			"abc",
+			"123"
+		};
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<StringList>(Call);
+
+		Assert.AreEqual(input[0], output[0]);
+		Assert.AreEqual(input[1], output[1]);
+	}
+
+	[Test, Description("Serialize IList Type")]
+	public void SerializeIListType()
+	{
+		var input = new StringList
+		{
+			"abc",
+			"123"
+		};
+
+		_serializer.Save(Call, input);
+
+		var output = (StringList)_serializer.Load<IList>(Call);
 
 		Assert.AreEqual(input[0], output[0]);
 		Assert.AreEqual(input[1], output[1]);
@@ -141,6 +176,24 @@ public class TestSerializeCollections : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Dictionary<string, string>>(Call);
+
+		Assert.AreEqual(input["a"], output["a"]);
+		Assert.AreEqual(input["b"], output["b"]);
+	}
+
+	public class StringDictionary : Dictionary<string, string>;
+
+	[Test, Description("Serialize String Dictionary Type")]
+	public void SerializeStringDictionaryType()
+	{
+		var input = new StringDictionary
+		{
+			["a"] = "1",
+			["b"] = "2"
+		};
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<StringDictionary>(Call);
 
 		Assert.AreEqual(input["a"], output["a"]);
 		Assert.AreEqual(input["b"], output["b"]);
