@@ -35,10 +35,13 @@ public class TabControlComboBox : ComboBox
 
 		if (listPropertyName != null)
 		{
-			PropertyInfo propertyInfo = property.Object.GetType().GetProperty(listPropertyName, 
+			PropertyInfo? propertyInfo = property.Object.GetType().GetProperty(listPropertyName, 
 				BindingFlags.Public | BindingFlags.NonPublic | 
 				BindingFlags.Instance | BindingFlags.Static |
-				BindingFlags.FlattenHierarchy)!;
+				BindingFlags.FlattenHierarchy);
+
+			ArgumentNullException.ThrowIfNull(propertyInfo);
+
 			ItemsSource = propertyInfo.GetValue(property.Object) as IEnumerable;
 		}
 		else

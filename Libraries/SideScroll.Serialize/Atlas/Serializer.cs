@@ -539,9 +539,9 @@ public class Serializer : IDisposable
 	// speed issue, we don't know what objects index will be when enqueued, so we have to lookup again later
 	public void AddObject(Call call, object obj)
 	{
-		using CallTimer callTimer = call.Timer("Parsing object", new Tag("Object", obj.ToString()));
+		using CallTimer callTimer = call.Timer("Parsing object", new Tag("Object", obj?.ToString()));
 
-		TypeRepo typeRepo = GetOrCreateRepo(callTimer.Log, obj.GetType());
+		TypeRepo typeRepo = GetOrCreateRepo(callTimer.Log, obj!.GetType());
 		int objectIndex = typeRepo.GetOrAddObjectRef(obj);
 		//ParserQueue.Enqueue(obj);
 		if (objectIndex < 0)

@@ -25,6 +25,8 @@ public abstract class SerializerFile(string basePath, string name = "")
 
 	public void Save(Call call, object obj, string? name = null)
 	{
+		ArgumentNullException.ThrowIfNull(obj, nameof(obj));
+
 		name ??= DefaultName;
 
 		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object: " + name, new Tag("Path", BasePath));

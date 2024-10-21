@@ -316,24 +316,24 @@ public class TabViewer : Grid
 			[Grid.ColumnProperty] = 1,
 		};
 
-		TabControlButton buttonExpand = new()
+		TabControlButton buttonScrollRight = new()
 		{
 			Content = ">",
 			[ToolTip.ShowDelayProperty] = 5,
 			[ToolTip.TipProperty] = "Scroll Right ( -> )",
 			[Grid.RowProperty] = 0,
 		};
-		buttonExpand.Click += ButtonExpand_Click;
-		grid.Children.Add(buttonExpand);
+		buttonScrollRight.Click += ButtonExpand_Click;
+		grid.Children.Add(buttonScrollRight);
 
-		TabControlButton buttonCollapse = new()
+		TabControlButton buttonScrollLeft = new()
 		{
 			Content = "<",
 			[ToolTip.TipProperty] = "Scroll Left ( <- )",
 			[Grid.RowProperty] = 1,
 		};
-		buttonCollapse.Click += ButtonCollapse_Click;
-		grid.Children.Add(buttonCollapse);
+		buttonScrollLeft.Click += ButtonCollapse_Click;
+		grid.Children.Add(buttonScrollLeft);
 
 		return grid;
 	}
