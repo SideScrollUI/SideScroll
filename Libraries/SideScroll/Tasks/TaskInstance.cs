@@ -39,8 +39,6 @@ public class TaskInstance : INotifyPropertyChanged
 	public string Status { get; set; } = "Running";
 	public string? Message { get; set; }
 
-	public long ProgressMax { get; set; }
-
 	public bool Errored { get; set; }
 	public bool Finished { get; set; }
 
@@ -104,11 +102,9 @@ public class TaskInstance : INotifyPropertyChanged
 	}
 	private double _percent;
 
-	public TimeSpan Elapsed => (DateTime.UtcNow - Started);
+	public TimeSpan Elapsed => DateTime.UtcNow - Started;
 	public TimeSpan? ETA => Percent > 0.0 ? (Elapsed * 100.0 / Percent) - Elapsed : null;
 
-	private double _prevPercent;
-	private double _progress;
 	public double Progress
 	{
 		get => _progress;
@@ -129,6 +125,25 @@ public class TaskInstance : INotifyPropertyChanged
 			}
 		}
 	}
+	private double _progress;
+	private double _prevPercent;
+
+	[Formatted]
+	public double ProgressMax
+	{
+		get => _progressMax;
+		set
+		{
+			if (_progressMax == value)
+				return;
+
+			_progressMax = value;
+			NotifyPropertyChanged();
+
+			UpdatePercent();
+		}
+	}
+	private double _progressMax;
 
 	private void AddProgress(double amount)
 	{

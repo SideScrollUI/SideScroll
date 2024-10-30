@@ -368,8 +368,8 @@
           <SolidColorBrush x:Key="XmlHighlightDocTypeBrush" Color="Blue" />
           <SolidColorBrush x:Key="XmlHighlightDeclarationBrush" Color="Blue" />
           <SolidColorBrush x:Key="XmlHighlightTagBrush" Color="DarkMagenta" />
-          <SolidColorBrush x:Key="XmlHighlightAttributeNameBrush" Color="Red" />
-          <SolidColorBrush x:Key="XmlHighlightAttributeValueBrush" Color="Blue" />
+          <SolidColorBrush x:Key="XmlHighlightAttributeNameBrush" Color="#fff77800" />
+          <SolidColorBrush x:Key="XmlHighlightAttributeValueBrush" Color="#ff2600e6" />
           <SolidColorBrush x:Key="XmlHighlightEntityBrush" Color="Teal" />
           <SolidColorBrush x:Key="XmlHighlightBrokenEntityBrush" Color="Olive" />
 

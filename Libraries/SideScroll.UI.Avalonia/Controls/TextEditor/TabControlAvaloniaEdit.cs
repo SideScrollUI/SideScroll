@@ -159,7 +159,7 @@ public class TabControlAvaloniaEdit : Border
 		}
 	}
 
-	private void EnableJsonSyntaxHighlighting()
+	public void EnableJsonSyntaxHighlighting()
 	{
 		TextEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("Json");
 
@@ -171,7 +171,7 @@ public class TabControlAvaloniaEdit : Border
 		SetHighlightColor("Punctuation", SideScrollTheme.JsonHighlightPunctuationBrush.Color);
 	}
 
-	private void EnableXmlSyntaxHighlighting()
+	public void EnableXmlSyntaxHighlighting()
 	{
 		TextEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("XML");
 
@@ -186,7 +186,7 @@ public class TabControlAvaloniaEdit : Border
 		SetHighlightColor("BrokenEntity", SideScrollTheme.XmlHighlightBrokenEntityBrush.Color);
 	}
 
-	private void SetHighlightColor(string name, Color color)
+	public void SetHighlightColor(string name, Color color)
 	{
 		var highlightColor = TextEditor.SyntaxHighlighting.GetNamedColor(name);
 		highlightColor.Foreground = new SimpleHighlightingBrush(color);

@@ -37,7 +37,7 @@ public class TabSplitter : GridSplitter;
 public class TabView : Grid, IDisposable
 {
 	private const string FillerPanelId = "FillerPanelId";
-	private const int MinDesiredSplitterDistance = 50;
+	private const int MinDesiredSplitterDistance = 10;
 
 	// Model.Objects
 	public static Dictionary<Type, IControlCreator> ControlCreators { get; set; } = [];
