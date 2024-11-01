@@ -263,7 +263,7 @@
 
           <!-- ScrollBar -->
 
-          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#38409a" />
+          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#202559" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#38409a" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="#477ed7" />
 
@@ -619,7 +619,7 @@
 
           <!-- ScrollBar -->
           
-          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#444444" />
+          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#292929" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#444444" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
 

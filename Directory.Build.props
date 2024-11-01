@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.6.4</Version>
-    <PackageReleaseNotes>Updated Light and Dark themes. Fixed serializing custom List and Dictionary classes</PackageReleaseNotes>
+    <Version>0.6.5</Version>
+    <PackageReleaseNotes>Updated Themes. Fixed main ScrollViewer scrollbar not updating correctly after using the scroll buttons. Fixed serializing custom List and Dictionary classes</PackageReleaseNotes>
 
     <AvaloniaVersion>11.1.4</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

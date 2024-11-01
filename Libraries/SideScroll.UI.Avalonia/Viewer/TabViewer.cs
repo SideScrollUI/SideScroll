@@ -359,7 +359,6 @@ public class TabViewer : Grid
 		double minXOffset = ScrollViewer.Offset.X + amount;
 		double widthRequired = minXOffset + ScrollViewer.Viewport.Width;
 		ContentGrid.MinWidth = widthRequired;
-		ContentGrid.Width = widthRequired;
 
 		// Force the ScrollViewer to update it's ViewPort so we can set an offset past the old bounds
 		Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);

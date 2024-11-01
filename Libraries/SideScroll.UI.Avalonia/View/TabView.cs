@@ -378,7 +378,6 @@ public class TabView : Grid, IDisposable
 		_isDragging = false;
 
 		InvalidateMeasure();
-		InvalidateArrange();
 
 		//TabViewSettings.SplitterDistance = (int)Math.Ceiling(e.Vector.Y); // backwards
 		double width = (int)_containerGrid!.ColumnDefinitions[0].ActualWidth;
@@ -404,7 +403,6 @@ public class TabView : Grid, IDisposable
 		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 		//containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
 
-		_containerGrid.InvalidateArrange();
 		_containerGrid.InvalidateMeasure();
 
 		//tabParentControls.grid.Width = new GridLength(1, GridUnitType.Auto);

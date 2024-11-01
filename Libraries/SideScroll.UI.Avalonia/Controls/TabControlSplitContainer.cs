@@ -305,7 +305,6 @@ public class TabControlSplitContainer : Grid
 
 		// Add all child controls to the view
 		InvalidateMeasure();
-		InvalidateArrange();
 		//UpdateSelectedTabInstances();
 	}
 
