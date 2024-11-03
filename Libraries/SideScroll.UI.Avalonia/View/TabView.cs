@@ -476,6 +476,8 @@ public class TabView : Grid, IDisposable
 	private void AddObject(TabObject tabObject)
 	{
 		object obj = tabObject.Object!;
+
+		var gridLength = tabObject.Fill ? GridLength.Star : GridLength.Auto;
 		if (ControlCreators.TryGetValue(obj.GetType(), out IControlCreator? controlCreator))
 		{
 			controlCreator.AddControl(Instance, _tabParentControls!, obj);
@@ -487,11 +489,11 @@ public class TabView : Grid, IDisposable
 		}
 		else if (obj is ITabSelector tabSelector)
 		{
-			AddITabControl(tabSelector, tabObject.Fill);
+			AddITabControl(tabSelector, gridLength);
 		}
 		else if (obj is Control control)
 		{
-			AddControl(control, tabObject.Fill, tabObject.EnableScrolling);
+			AddControl(control, gridLength, tabObject.EnableScrolling);
 		}
 		else if (obj is string text)
 		{
@@ -502,7 +504,7 @@ public class TabView : Grid, IDisposable
 			ParamsAttribute? paramsAttribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
 			if (paramsAttribute != null)
 			{
-				AddControl(new TabControlParams(obj), tabObject.Fill, tabObject.EnableScrolling);
+				AddControl(new TabControlParams(obj), gridLength, tabObject.EnableScrolling);
 			}
 		}
 	}
@@ -510,7 +512,7 @@ public class TabView : Grid, IDisposable
 	private void AddToolbar(TabToolbar toolbar)
 	{
 		var toolbarControl = new TabControlToolbar(Instance, toolbar);
-		AddControl(toolbarControl, false);
+		AddControl(toolbarControl, GridLength.Auto);
 	}
 
 	protected void AddActions()
@@ -548,19 +550,19 @@ public class TabView : Grid, IDisposable
 	}
 
 	// should we check for a Grid stretch instead of passing that parameter?
-	protected void AddControl(Control control, bool fill, bool scrollable = false)
+	protected void AddControl(Control control, GridLength gridLength, bool scrollable = false)
 	{
 		if (control is TabControlToolbar toolbar)
 		{
 			_hotKeys.AddRange(toolbar.GetHotKeyButtons());
 		}
-		_tabParentControls!.AddControl(control, fill, SeparatorType.Splitter, scrollable);
+		_tabParentControls!.AddControl(control, gridLength, SeparatorType.Splitter, scrollable);
 	}
 
-	protected void AddITabControl(ITabSelector control, bool fill)
+	protected void AddITabControl(ITabSelector control, GridLength gridLength)
 	{
 		control.OnSelectionChanged += ParentListSelectionChanged;
-		_tabParentControls!.AddControl((Control)control, fill, SeparatorType.Spacer);
+		_tabParentControls!.AddControl((Control)control, gridLength, SeparatorType.Spacer);
 		CustomTabControls.Add(control);
 	}
 

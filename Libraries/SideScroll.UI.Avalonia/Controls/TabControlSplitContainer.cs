@@ -34,7 +34,7 @@ public class TabControlSplitContainer : Grid
 	{
 		public object? Object { get; set; }
 		public Control? Control { get; set; }
-		public bool Fill { get; set; }
+		public GridLength GridLength { get; set; }
 	}
 
 	public TabControlSplitContainer()
@@ -66,6 +66,12 @@ public class TabControlSplitContainer : Grid
 
 	public void AddControl(Control control, bool fill, SeparatorType separatorType = SeparatorType.Splitter, bool scrollable = false)
 	{
+		var gridLength = fill ? GridLength.Star : GridLength.Auto;
+		AddControl(control, gridLength, separatorType, scrollable);
+	}
+
+	public void AddControl(Control control, GridLength gridLength, SeparatorType separatorType = SeparatorType.Splitter, bool scrollable = false)
+	{
 		if (scrollable)
 		{
 			ScrollViewer scrollViewer = new()
@@ -79,15 +85,15 @@ public class TabControlSplitContainer : Grid
 			control = scrollViewer;
 		}
 
-		var item = new Item
+		Item item = new()
 		{
 			Control = control,
-			Fill = fill,
+			GridLength = gridLength,
 		};
 		_gridItems.Add(item);
 
 		int splitterIndex = RowDefinitions.Count;
-		AddRowDefinition(false, splitterIndex);
+		InsertRowDefinition(GridLength.Auto, splitterIndex);
 		bool addSplitter = false;
 
 		/*if (separatorType == SeparatorType.Splitter && fill)
@@ -101,7 +107,7 @@ public class TabControlSplitContainer : Grid
 		}*/
 
 		int controlIndex = splitterIndex + 1;
-		RowDefinition rowDefinition = AddRowDefinition(fill, controlIndex);
+		RowDefinition rowDefinition = InsertRowDefinition(gridLength, controlIndex);
 		rowDefinition.MaxHeight = control.MaxHeight;
 
 		SetRow(control, controlIndex);
@@ -116,38 +122,21 @@ public class TabControlSplitContainer : Grid
 		InvalidateMeasure();
 	}
 
-	private RowDefinition AddRowDefinition(bool fill, int? index = null)
+	private RowDefinition InsertRowDefinition(GridLength gridLength, int index)
 	{
-		var rowDefinition = new RowDefinition();
-		if (fill)
-		{
-			rowDefinition.Height = new GridLength(1, GridUnitType.Star);
-		}
-		else
-		{
-			rowDefinition.Height = GridLength.Auto;
-		}
-
-		if (index is int i)
-		{
-			RowDefinitions.Insert(i, rowDefinition);
-		}
-		else
-		{
-			RowDefinitions.Add(rowDefinition);
-		}
-
+		var rowDefinition = new RowDefinition(gridLength);
+		RowDefinitions.Insert(index, rowDefinition);
 		return rowDefinition;
 	}
 
 	// always show splitters if their is a fill before or after?
 	// Do we allow changing an auto to a fill?
 	// always add a RowDefinition before and after
-	public void InsertControl(Control control, bool fill, int rowIndex)
+	public void InsertControl(Control control, GridLength gridLength, int rowIndex)
 	{
-		AddRowDefinition(false, rowIndex - 1);
+		InsertRowDefinition(GridLength.Auto, rowIndex - 1); // Splitter or Spacer
 
-		AddRowDefinition(fill, rowIndex);
+		InsertRowDefinition(gridLength, rowIndex);
 
 		SetRow(control, rowIndex);
 		//Children.Insert(index, control);
@@ -178,14 +167,7 @@ public class TabControlSplitContainer : Grid
 			index++;
 
 			RowDefinition rowDefinition = RowDefinitions[index];
-			if (gridItem.Fill)
-			{
-				rowDefinition.Height = new GridLength(1, GridUnitType.Star);
-			}
-			else
-			{
-				rowDefinition.Height = GridLength.Auto;
-			}
+			rowDefinition.Height = gridItem.GridLength;
 
 			SetRow(gridItem.Control!, index);
 			index++;
@@ -271,15 +253,14 @@ public class TabControlSplitContainer : Grid
 			var item = new Item
 			{
 				Control = control,
-				Fill = true,
+				GridLength = GridLength.Star,
 			};
 			_gridItems.Add(item);
 
-			bool fill = true;// !(control is TabNotes); // don't show for notes, needs to be configurable
 			if (!Children.Contains(control))
 			{
 				// Add a new control
-				InsertControl(control, fill, newIndex);
+				InsertControl(control, item.GridLength, newIndex);
 			}
 			newIndex += 2; // leave spot for splitters
 		}

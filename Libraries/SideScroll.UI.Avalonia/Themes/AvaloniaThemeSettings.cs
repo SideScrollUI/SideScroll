@@ -595,7 +595,7 @@ public class TextControlTheme : ThemeSection
 		"CalendarDatePickerBorderBrushPointerOver",
 		"RadioButtonOuterEllipseStrokePressed"
 		)]
-	public Color? TextControlForegroundHigh { get; set; }
+	public Color? TextControlForegroundHighlight { get; set; }
 
 	[ResourceKey("TextControlForegroundReadOnlyBrush")]
 	public Color? TextControlForegroundReadOnly { get; set; }
@@ -612,6 +612,7 @@ public class TextControlTheme : ThemeSection
 	[ResourceKey(
 		"TextControlBorderBrushPointerOver",
 		"ComboBoxBorderBrushPointerOver",
+		"ComboBoxBorderBrushPressed",
 		"CheckBoxCheckBackgroundStrokeUncheckedPointerOver",
 		"CalendarDatePickerBorderBrushPointerOver",
 		"RadioButtonOuterEllipseStrokePointerOver",
@@ -644,7 +645,10 @@ public class TextControlTheme : ThemeSection
 	[ResourceKey("ComboBoxItemBackgroundSelected")]
 	public Color? ComboBoxItemBackgroundSelected { get; set; }
 
-	[ResourceKey("ComboBoxItemBackgroundPointerOver", "ComboBoxItemBackgroundSelectedPointerOver")]
+	[ResourceKey("ComboBoxItemBackgroundPointerOver", 
+		"ComboBoxItemBackgroundSelectedPointerOver", 
+		"ComboBoxBackgroundPressed"
+		)]
 	public Color? ComboBoxItemBackgroundPointerOver { get; set; }
 
 	[ResourceKey("ComboBoxItemForegroundSelected")]

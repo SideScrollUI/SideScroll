@@ -1,9 +1,9 @@
 <Project>
   <PropertyGroup>
-    <Version>0.6.5</Version>
+    <Version>0.6.6</Version>
     <PackageReleaseNotes>Updated Themes. Fixed main ScrollViewer scrollbar not updating correctly after using the scroll buttons. Fixed serializing custom List and Dictionary classes</PackageReleaseNotes>
 
-    <AvaloniaVersion>11.1.4</AvaloniaVersion>
+    <AvaloniaVersion>11.2.0</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>

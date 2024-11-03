@@ -37,7 +37,15 @@
   </Style>
 
   <Style Selector="ComboBox:pointerover /template/ PathIcon#DropDownGlyph">
-    <Setter Property="Foreground" Value="{DynamicResource ComboBoxBorderBrushPointerOver}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundPointerOver}"/>
+  </Style>
+
+  <Style Selector="ComboBox:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundPointerOver}"/>
+  </Style>
+
+  <Style Selector="ComboBox:pressed">
+    <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundPointerOver}"/>
   </Style>
 
   <Style Selector="ColorPicker TabControl#PART_TabControl TabItem PathIcon">

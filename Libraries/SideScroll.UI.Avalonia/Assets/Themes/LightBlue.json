@@ -104,7 +104,7 @@
     "TextControlBackground": "White",
     "TextControlBackgroundReadOnly": "#ffebebf7",
     "TextControlForeground": "Black",
-    "TextControlForegroundHigh": "Black",
+    "TextControlForegroundHighlight": "Black",
     "TextControlForegroundReadOnly": "#ff616161",
     "TextControlBorder": "#ff9f9fd3",
     "TextControlBorderPointerOver": "#ff0195ff",
