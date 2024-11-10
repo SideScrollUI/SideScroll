@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.6.6</Version>
-    <PackageReleaseNotes>Updated Themes. Fixed main ScrollViewer scrollbar not updating correctly after using the scroll buttons. Fixed serializing custom List and Dictionary classes</PackageReleaseNotes>
+    <Version>0.6.7</Version>
+    <PackageReleaseNotes>Updated Themes. Fixed main ScrollViewer scrollbar not updating correctly after using the scroll buttons. Fixed serializing custom List and Dictionary classes. Added IItemCollection.ShowHeader to override default header visibility. Added Toolbar with Copy button to Text Tab.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.0</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

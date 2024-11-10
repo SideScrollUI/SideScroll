@@ -75,6 +75,8 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 		}
 	}
 
+	public bool ContainsKey(string key) => Lookup.ContainsKey(key);
+
 	public bool TryGetValue(string key, [MaybeNullWhen(false)] out T value)
 	{
 		if (Lookup.TryGetValue(key, out DataItem<T>? lookupValue))
