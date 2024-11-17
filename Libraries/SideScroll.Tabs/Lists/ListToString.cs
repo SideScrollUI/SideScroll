@@ -8,7 +8,7 @@ namespace SideScroll.Tabs.Lists;
 [Skippable]
 public class ListToString
 {
-	private const int MaxItems = 200000;
+	private const int MaxItems = 200_000;
 
 	[InnerValue]
 	public object Object;

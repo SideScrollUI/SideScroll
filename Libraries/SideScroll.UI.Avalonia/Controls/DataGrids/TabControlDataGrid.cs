@@ -1109,7 +1109,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 				CollectionView!.Filter = null;
 			}
 
-			if (TabModel.SearchFilter != null)
+			if (TabModel.SearchFilter != null && TabInstance.IsLoaded)
 			{
 				// Update Child Controls in case children use same search filter
 				UpdateSelection(true);

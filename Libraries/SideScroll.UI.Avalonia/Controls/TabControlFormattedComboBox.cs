@@ -153,9 +153,9 @@ public class FormattedItem(object? obj)
 
 	public override string? ToString() => Object.Formatted();
 
-	public static List<FormattedItem> Create(IEnumerable items)
+	public static List<FormattedItem>? Create(IEnumerable? items)
 	{
-		return items.Cast<object>()
+		return items?.Cast<object>()
 			.DistinctBy(obj => obj.ToString())
 			.Select(obj => new FormattedItem(obj))
 			.ToList();

@@ -66,15 +66,19 @@ public class TimeZoneView : IComparable
 	public static readonly TimeZoneView Utc = new("Utc", "Utc", TimeZoneInfo.Utc);
 	public static readonly TimeZoneView Local = new("Local", "Local", TimeZoneInfo.Local);
 
+	// Time Zones can have different names across Operating Systems, and this provides a compatible view
+	// Some abbreviations are reused across different countries and are ambiguous to use
 	// https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
 	public static List<TimeZoneView> All { get; set; } =
 	[
 		Utc,
 		Local,
-		new TimeZoneView("PST / PDT", "Pacific Time", "Pacific Standard Time", TimeSpan.FromHours(-8)),
-		new TimeZoneView("EST / EDT", "Eastern Time", "Eastern Standard Time", TimeSpan.FromHours(-5)),
-		new TimeZoneView("CET", "Central European Time", "Central European Standard Time", TimeSpan.FromHours(1)),
-		new TimeZoneView("SGT", "Singapore Time", "Singapore Standard Time", TimeSpan.FromHours(8)),
-		new TimeZoneView("JST", "Japan Time", "Japan Standard Time", TimeSpan.FromHours(9)),
+		new("PST / PDT", "Pacific Time", "Pacific Standard Time", TimeSpan.FromHours(-8)),
+		new("MT", "Mountain Time (North America)", "Mountain Standard Time", TimeSpan.FromHours(-7)), // MDT: UTC−06
+		new("CST", "Central Standard Time", "Central Standard Time", TimeSpan.FromHours(-6)),
+		new("EST / EDT", "Eastern Time", "Eastern Standard Time", TimeSpan.FromHours(-5)),
+		new("CET", "Central European Time", "Central European Standard Time", TimeSpan.FromHours(1)),
+		new("SGT", "Singapore Time", "Singapore Standard Time", TimeSpan.FromHours(8)),
+		new("JST", "Japan Time", "Japan Standard Time", TimeSpan.FromHours(9)), // Windows 10: uses old id/name: Tokyo Standard Time
 	];
 }

@@ -1,4 +1,5 @@
 using SideScroll.Attributes;
+using SideScroll.Time;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -37,6 +38,11 @@ public class SampleParamItem
 	public ParamListItem ListItem { get; set; }
 
 	public DateTime DateTime { get; set; } = DateTime.Now;
+
+	public static List<TimeZoneView> TimeZones => TimeZoneView.All;
+
+	[BindList(nameof(TimeZones))]
+	public TimeZoneView TimeZone { get; set; } = TimeZoneView.Utc;
 
 	public SampleParamItem()
 	{

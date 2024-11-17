@@ -1,9 +1,9 @@
 <Project>
   <PropertyGroup>
-    <Version>0.6.7</Version>
-    <PackageReleaseNotes>Updated Themes. Fixed main ScrollViewer scrollbar not updating correctly after using the scroll buttons. Fixed serializing custom List and Dictionary classes. Added IItemCollection.ShowHeader to override default header visibility. Added Toolbar with Copy button to Text Tab.</PackageReleaseNotes>
+    <Version>0.6.8</Version>
+    <PackageReleaseNotes>Updated Themes. Fixed main ScrollViewer scrollbar not updating correctly after using the scroll buttons. Fixed serializing custom List and Dictionary classes. Added IItemCollection.ShowHeader to override default header visibility. Added Toolbar with Copy button to Text Tab. Fixed Default Search Filters breaking Bookmark loading.</PackageReleaseNotes>
 
-    <AvaloniaVersion>11.2.0</AvaloniaVersion>
+    <AvaloniaVersion>11.2.1</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>

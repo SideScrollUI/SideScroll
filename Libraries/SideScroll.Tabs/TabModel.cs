@@ -375,7 +375,6 @@ public class TabModel
 		TabBookmark tabBookmark = new()
 		{
 			Name = Name,
-			ViewSettings = new TabViewSettings(),
 		};
 
 		depth = Math.Min(depth, MaxSearchDepth);
