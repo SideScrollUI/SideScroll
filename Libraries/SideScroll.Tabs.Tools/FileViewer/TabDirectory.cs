@@ -28,6 +28,9 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 		public ToolToggleButton? ButtonStar { get; set; }
 
 		[Separator]
+		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
+
+		[Separator]
 		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Svg.OpenFolder);
 
 		//[Separator]
@@ -60,6 +63,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 
 			var toolbar = new Toolbar();
 			toolbar.ButtonStar = new("Favorite", Icons.Svg.StarFilled, Icons.Svg.Star, new ListProperty(DirectoryView, nameof(DirectoryView.Favorite)));
+			toolbar.ButtonRefresh.Action = Refresh;
 			toolbar.ButtonOpenFolder.Action = OpenFolder;
 			//toolbar.ButtonDelete.Action = Delete;
 			model.AddObject(toolbar);
@@ -114,6 +118,11 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 			}
 
 			return [];
+		}
+
+		private void Refresh(Call call)
+		{
+			Reload();
 		}
 
 		private void OpenFolder(Call call)
