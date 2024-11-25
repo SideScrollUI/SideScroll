@@ -88,7 +88,11 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 		{
 			try
 			{
+				List<string>? fileExtensions = DirectoryView.FileSelectorOptions?.FileExtensions;
 				return Directory.EnumerateFiles(tab.Path)
+					.Where(name =>
+						fileExtensions == null ||
+						fileExtensions.Any(ext => ext == System.IO.Path.GetExtension(name).ToLower()))
 					.Select(name => new FileView(name, tab.FileSelectorOptions))
 					.ToList();
 			}
@@ -104,11 +108,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 		{
 			try
 			{
-				List<string>? fileExtensions = DirectoryView.FileSelectorOptions?.FileExtensions;
 				return Directory.EnumerateDirectories(tab.Path)
-					.Where(name =>
-						fileExtensions == null ||
-						fileExtensions.Any(ext => ext == System.IO.Path.GetExtension(name).ToLower()))
 					.Select(name => new DirectoryView(name, tab.FileSelectorOptions))
 					.ToList();
 			}

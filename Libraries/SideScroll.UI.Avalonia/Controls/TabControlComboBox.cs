@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using SideScroll.Tabs.Lists;
+using SideScroll.UI.Avalonia.Utilities;
 using System.Collections;
 using System.Reflection;
 
@@ -12,6 +13,8 @@ public class TabControlComboBox : ComboBox
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
 	public ListProperty? Property;
+
+	public override string? ToString() => SelectedItem?.ToString();
 
 	public TabControlComboBox()
 	{
@@ -56,6 +59,8 @@ public class TabControlComboBox : ComboBox
 		MaxWidth = TabControlParams.ControlMaxWidth;
 
 		HorizontalAlignment = HorizontalAlignment.Stretch;
+
+		AvaloniaUtils.AddContextMenu(this);
 	}
 
 	public void Bind(object obj, string path)

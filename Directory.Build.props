@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.7.0</Version>
-    <PackageReleaseNotes>Updated Themes. Fixed main ScrollViewer scrollbar not updating correctly after using the scroll buttons. Fixed serializing custom List and Dictionary classes. Added IItemCollection.ShowHeader to override default header visibility. Added Toolbar with Copy button to Text Tab. Fixed Default Search Filters breaking Bookmark loading. Fixed TabInstance.Reload() when Tasks are showing. Added Directory Refreshing.</PackageReleaseNotes>
+    <Version>0.7.1</Version>
+    <PackageReleaseNotes>Fixed TabDirectory file extension filtering. Added a Copy/Paste Context Menu to ComboBoxes.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.1</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

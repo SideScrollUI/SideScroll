@@ -3,6 +3,7 @@ using Avalonia.Data;
 using Avalonia.Layout;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
+using SideScroll.UI.Avalonia.Utilities;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
@@ -13,9 +14,11 @@ public class TabControlFormattedComboBox : ComboBox
 {
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
-	public ListProperty Property;
+	public ListProperty Property { get; init; }
 
 	private List<FormattedItem>? _items;
+
+	public override string? ToString() => SelectedItem?.ToString();
 
 	public TabControlFormattedComboBox(ListProperty property, IList list)
 	{
@@ -47,7 +50,6 @@ public class TabControlFormattedComboBox : ComboBox
 		{
 			Items = property.UnderlyingType.GetEnumValues();
 		}
-		Bind();
 	}
 
 	private void InitializeComponent()
@@ -56,9 +58,11 @@ public class TabControlFormattedComboBox : ComboBox
 		VerticalAlignment = VerticalAlignment.Center;
 
 		Bind();
+
+		AvaloniaUtils.AddContextMenu(this);
 	}
 
-	public void Bind()
+	protected void Bind()
 	{
 		var binding = new Binding(nameof(SelectedFormattedItem))
 		{

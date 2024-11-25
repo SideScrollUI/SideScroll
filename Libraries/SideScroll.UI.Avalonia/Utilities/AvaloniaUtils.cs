@@ -69,6 +69,41 @@ public static class AvaloniaUtils
 		textBox.ContextMenu = contextMenu;
 	}
 
+	public static void AddContextMenu(ComboBox comboBox)
+	{
+		var list = new AvaloniaList<object>();
+
+		var menuItemCopy = new TabMenuItem
+		{
+			Header = "_Copy",
+		};
+		menuItemCopy.Click += delegate
+		{
+			ClipboardUtils.SetText(comboBox, comboBox.SelectedItem?.ToString() ?? "");
+		};
+		list.Add(menuItemCopy);
+
+		var menuItemPaste = new TabMenuItem("Paste");
+		menuItemPaste.Click += delegate
+		{
+			if (ClipboardUtils.GetText(comboBox) is string clipboardText)
+			{
+				if (comboBox.Items.FirstOrDefault(i => i?.ToString() == clipboardText) is object matchingItem)
+				{
+					comboBox.SelectedItem = matchingItem;
+				}
+			}
+		};
+		list.Add(menuItemPaste);
+
+		ContextMenu contextMenu = new()
+		{
+			ItemsSource = list,
+		};
+
+		comboBox.ContextMenu = contextMenu;
+	}
+
 	public static void AddContextMenu(ColorPicker colorPicker)
 	{
 		var list = new AvaloniaList<object>();
