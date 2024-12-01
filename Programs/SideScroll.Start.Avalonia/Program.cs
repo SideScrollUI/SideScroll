@@ -1,5 +1,8 @@
 using Avalonia;
 using Avalonia.Data.Core.Plugins;
+using SideScroll.UI.Avalonia.Samples;
+using SideScroll.UI.Avalonia.ScreenCapture;
+using SideScroll.UI.Avalonia.Viewer;
 using SideScroll.Utilities;
 
 namespace SideScroll.Start.Avalonia;
@@ -15,6 +18,8 @@ static class Program
 		// https://docs.avaloniaui.net/docs/data-binding/data-validation
 		// Add custom template?
 		BindingPlugins.DataValidators.RemoveAt(0);
+
+		TabViewer.Plugins.Add(new ScreenCapture.TabViewerPlugin());
 
 		try
 		{

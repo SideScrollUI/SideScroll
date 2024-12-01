@@ -1,7 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Tabs.Samples.Chart;
 
-namespace SideScroll.Start.Avalonia.Charts;
+namespace SideScroll.UI.Avalonia.Samples.Charts;
 
 [ListItem]
 public class TabCustomCharts

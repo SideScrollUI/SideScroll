@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace SideScroll.Start.Avalonia;
+namespace SideScroll.UI.Avalonia.Samples;
 
 public class App : Application
 {
@@ -14,9 +14,13 @@ public class App : Application
 	public override void OnFrameworkInitializationCompleted()
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+		{
 			desktopLifetime.MainWindow = new MainWindow();
-		//else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewLifetime)
-		//	singleViewLifetime.MainView = new MainView();
+		}
+		else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewLifetime)
+		{
+			singleViewLifetime.MainView = new MainView();
+		}
 
 		base.OnFrameworkInitializationCompleted();
 	}

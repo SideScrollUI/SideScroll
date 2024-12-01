@@ -20,6 +20,11 @@ public class EventTabLoaded(object obj) : EventArgs
 	public readonly object Object = obj;
 }
 
+public interface ITabViewerPlugin
+{
+	public void Initialize(TabViewer tabViewer);
+}
+
 public class TabViewer : Grid
 {
 	public int MaxScrollWidth = 1000; // should we also use a max percent?
@@ -30,6 +35,7 @@ public class TabViewer : Grid
 	public static TabViewer? BaseViewer { get; set; }
 	public static string? LoadLinkUri { get; set; }
 	public static Bookmark? LoadBookmark { get; set; }
+	public static List<ITabViewerPlugin> Plugins { get; set; } = [];
 
 	public Project Project { get; set; }
 
@@ -106,6 +112,8 @@ public class TabViewer : Grid
 		Grid scrollButtons = CreateScrollButtons();
 
 		BottomGrid.Children.Add(scrollButtons);
+
+		Plugins.ForEach(plugin => plugin.Initialize(this));
 	}
 
 	private void AddToolbar()
