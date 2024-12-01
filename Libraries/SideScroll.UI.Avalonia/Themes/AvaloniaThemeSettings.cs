@@ -16,7 +16,8 @@ public class ResourceKeyAttribute(params string[] names) : Attribute
 	public readonly string[] Names = names;
 }
 
-[Params]
+// Todo: Add TypeRepo for Avalonia Color serialization
+[Params, PrivateData]
 public class AvaloniaThemeSettings : INotifyPropertyChanged
 {
 	[Required, StringLength(50)]

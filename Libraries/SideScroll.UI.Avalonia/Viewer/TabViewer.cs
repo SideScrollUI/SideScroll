@@ -182,11 +182,13 @@ public class TabViewer : Grid
 
 	public async Task<Bookmark?> ImportLinkAsync(Call call, LinkUri linkUri, bool checkVersion)
 	{
+		var buttonImport = Toolbar!.ButtonImport!;
+
 		Flyout flyout = new()
 		{
 			Placement = PlacementMode.BottomEdgeAlignedLeft,
 		};
-		AvaloniaUtils.ShowFlyout(Toolbar!.ButtonImport!, flyout, "Importing Link ...");
+		AvaloniaUtils.ShowFlyout(buttonImport, flyout, "Importing Link ...");
 
 		try
 		{
@@ -194,17 +196,17 @@ public class TabViewer : Grid
 			if (bookmark == null)
 				return null;
 
-			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonImport!, flyout, "Link retrieved, importing");
+			AvaloniaUtils.ShowFlyout(buttonImport, flyout, "Link retrieved, importing");
 
 			ImportBookmark(call, bookmark);
 
-			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonImport!, flyout, "Link imported");
+			AvaloniaUtils.ShowFlyout(buttonImport, flyout, "Link imported");
 
 			return bookmark;
 		}
 		catch (Exception ex)
 		{
-			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonImport!, flyout, ex.Message);
+			AvaloniaUtils.ShowFlyout(buttonImport, flyout, ex.Message);
 			return null;
 		}
 	}

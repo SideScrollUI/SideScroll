@@ -51,22 +51,26 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	public SKColor GridLineSkColor { get; set; }
 	public SKColor TextSkColor { get; set; }
 
-	public CartesianChart Chart;
+	public int MaxSeparators { get; set; } = 5;
+	public int MinSeparatorDistance { get; set; } = 50;
+	public int MaxFindDistance { get; set; } = 20;
 
-	public TabControlChartLegend<ISeries> Legend;
+	public CartesianChart Chart { get; private set; }
+
+	public TabControlChartLegend<ISeries> Legend { get; private set; }
 
 	public Axis XAxis { get; set; }
 	public Axis YAxis { get; set; } // left/right?
 
 	public List<LiveChartSeries> LiveChartSeries { get; private set; } = [];
 
-	public ChartSeries<ISeries>? HoverSeries;
+	public ChartSeries<ISeries>? HoverSeries { get; private set; }
 
 	private List<RectangularSection> _sections = [];
 	private RectangularSection? _trackerSection;
 	private RectangularSection? _zoomSection;
 
-	public Point? CursorPosition;
+	public Point? CursorPosition { get; private set; }
 
 	private ChartPoint? _pointClicked;
 
@@ -74,8 +78,6 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	private Point _startScreenPoint;
 	private LvcPointD? _startDataPoint;
 	private LvcPointD? _endDataPoint;
-
-	public int MaxFindDistance = 20;
 
 	public TabControlLiveChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false) : 
 		base(tabInstance, chartView, fillHeight)
@@ -113,6 +115,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		Chart.PointerReleased += TabControlLiveChart_PointerReleased;
 		Chart.PointerMoved += TabControlLiveChart_PointerMoved;
 		Chart.EffectiveViewportChanged += Chart_EffectiveViewportChanged;
+		Chart.SizeChanged += Chart_SizeChanged;
 
 		ReloadView();
 
@@ -517,7 +520,12 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			double difference = YAxis.MaxLimit.Value - YAxis.MinLimit.Value;
 			if (difference >= 10)
 			{
-				YAxis.UnitWidth = (difference * 0.2).RoundToSignificantFigures(1);
+				double separators = MaxSeparators;
+				if (Chart.Bounds.Height is double height && height > 0)
+				{
+					separators = Math.Max(1, Math.Min(MaxSeparators, height / MinSeparatorDistance));
+				}
+				YAxis.UnitWidth = (difference / separators).RoundToSignificantFigures(1);
 			}
 			else
 			{
@@ -809,6 +817,11 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		_pointerMovedEventSource?.Raise(sender, moveEvent);
 	}
 
+	private void Chart_SizeChanged(object? sender, SizeChangedEventArgs e)
+	{
+		UpdateAxis();
+	}
+
 	public override void Unload()
 	{
 		IsVisible = false;
@@ -843,6 +856,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			_pointerMovedEventSource.WeakEvent.Unsubscribe(_pointerMovedEventSource, _pointerMovedSubscriber);
 		}
 		Chart.EffectiveViewportChanged -= Chart_EffectiveViewportChanged;
+		Chart.SizeChanged -= Chart_SizeChanged;
 
 		if (ChartView.TimeWindow != null)
 		{
