@@ -9,11 +9,11 @@ public class TabSampleGridColumnCount : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollectionUI<TestItem>? _items;
+		private ItemCollectionUI<TestItem> _items = [];
 
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = _items = new ItemCollectionUI<TestItem>();
+			model.Items = _items = [];
 			AddEntries(50);
 
 			model.Actions = new List<TaskCreator>
@@ -28,7 +28,7 @@ public class TabSampleGridColumnCount : ITab
 		{
 			for (int i = 0; i < count; i++)
 			{
-				int number = _items!.Count;
+				int number = _items.Count;
 				TestItem testItem = new()
 				{
 					Index = number,

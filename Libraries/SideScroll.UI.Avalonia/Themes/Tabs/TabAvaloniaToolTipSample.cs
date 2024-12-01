@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using SideScroll.Resources;
@@ -13,8 +14,7 @@ public class TabAvaloniaToolTipSample : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonNew { get; set; } = new("New", Icons.Svg.BlankDocument);
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save);
+		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
 	}
 
 	public class Instance : TabInstance
@@ -23,7 +23,9 @@ public class TabAvaloniaToolTipSample : ITab
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			model.AddObject(new Toolbar());
+			var toolbar = new Toolbar();
+			toolbar.ButtonRefresh.Action = Refresh;
+			model.AddObject(toolbar);
 
 			_grid = new Grid
 			{
@@ -37,19 +39,25 @@ public class TabAvaloniaToolTipSample : ITab
 			UpdateTheme();
 		}
 
+		private void Refresh(Call call)
+		{
+			Reload();
+		}
+
 		private void UpdateTheme()
 		{
 			var textBox = new TabControlTextBox
 			{
 				[ToolTip.TipProperty] = "When does a ToolTip get too long and when should\nit wrap lines?",
 				[ToolTip.PlacementProperty] = PlacementMode.Right,
+				Margin = new Thickness(150, 6),
 			};
 			_grid!.Children.Clear();
 			_grid.Children.Add(textBox);
 
 			Dispatcher.UIThread.Post(() =>
 			{
-				if (textBox?.IsLoaded == true)
+				if (textBox.IsLoaded == true)
 				{
 					ToolTip.SetIsOpen(textBox, true);
 				}

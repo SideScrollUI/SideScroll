@@ -1,10 +1,10 @@
 <Project>
   <PropertyGroup>
-    <Version>0.5</Version>
-    <PackageReleaseNotes>Added Title to loading tabs. Fixed Tabs not allowing resizing smaller than MinDesiredWidth. Fixed TimeRangeValue.AddGaps() end times. Fixed ByteFormatter rounding interval. Fixed Tab Reset reinitializing tab twice. Updated to Avalonia 11.1.1</PackageReleaseNotes>
+    <Version>0.7.2</Version>
+    <PackageReleaseNotes>Fixed TabDirectory file extension filtering. Added a Copy/Paste Context Menu to ComboBoxes. Added Flyout for Tab Links. Fixed Live Charts showing decimal value axis labels for whole numbers. Added more actions to the Tab Title Context Menu. Fixed DateTime parsing for seconds and milliseconds that have commas in them. [DebugOnly] now works for classes and structs too.</PackageReleaseNotes>
 
-    <AvaloniaVersion>11.1.1</AvaloniaVersion>
-    <AvaloniaEditVersion>11.0.6</AvaloniaEditVersion>
+    <AvaloniaVersion>11.2.1</AvaloniaVersion>
+    <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
     <Configurations>Debug;Release;DebugX86</Configurations>

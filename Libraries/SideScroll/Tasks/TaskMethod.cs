@@ -24,6 +24,6 @@ public class TaskMethod : TaskCreator
 
 	private void RunMethod(Call call)
 	{
-		MethodInfo.Invoke(Object, new object[] { call });
+		MethodInfo.Invoke(Object, [call]);
 	}
 }

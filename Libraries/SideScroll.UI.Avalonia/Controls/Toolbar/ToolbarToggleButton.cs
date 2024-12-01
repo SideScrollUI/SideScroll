@@ -8,6 +8,8 @@ namespace SideScroll.UI.Avalonia.Controls.Toolbar;
 
 public class ToolbarToggleButton : ToolbarButton, IDisposable
 {
+	protected override Type StyleKeyOverride => typeof(ToolbarButton);
+
 	public IResourceView OnImageResource { get; set; }
 	public IResourceView OffImageResource { get; set; }
 

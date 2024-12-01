@@ -4,12 +4,9 @@ using LiveChartsCore.Kernel;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
-using LiveChartsCore.SkiaSharpView.Painting;
-using LiveChartsCore.SkiaSharpView.Painting.ImageFilters;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using LiveChartsCore.VisualElements;
 using SideScroll.Extensions;
-using SkiaSharp;
 
 namespace SideScroll.UI.Avalonia.Charts.LiveCharts;
 
@@ -28,11 +25,6 @@ public class LiveChartTooltip : IChartTooltip<SkiaSharpDrawingContext>
 	public LiveChartTooltip(TabControlLiveChart liveChart)
 	{
 		LiveChart = liveChart;
-		FontPaint = new SolidColorPaint(new SKColor(28, 49, 58));
-		BackgroundPaint = new SolidColorPaint(new SKColor(235, 235, 235, 230))
-		{
-			ImageFilter = new DropShadow(2, 2, 6, 6, new SKColor(50, 0, 0, 100))
-		};
 	}
 
 	public IPaint<SkiaSharpDrawingContext>? FontPaint { get; set; }

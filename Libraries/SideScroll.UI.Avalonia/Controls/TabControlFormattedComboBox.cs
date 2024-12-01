@@ -1,9 +1,9 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
+using SideScroll.UI.Avalonia.Utilities;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
@@ -14,9 +14,11 @@ public class TabControlFormattedComboBox : ComboBox
 {
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
-	public ListProperty Property;
+	public ListProperty Property { get; init; }
 
 	private List<FormattedItem>? _items;
+
+	public override string? ToString() => SelectedItem?.ToString();
 
 	public TabControlFormattedComboBox(ListProperty property, IList list)
 	{
@@ -35,17 +37,19 @@ public class TabControlFormattedComboBox : ComboBox
 
 		if (listPropertyName != null)
 		{
-			PropertyInfo propertyInfo = property.Object.GetType().GetProperty(listPropertyName,
+			PropertyInfo? propertyInfo = property.Object.GetType().GetProperty(listPropertyName,
 				BindingFlags.Public | BindingFlags.NonPublic |
 				BindingFlags.Instance | BindingFlags.Static |
-				BindingFlags.FlattenHierarchy)!;
+				BindingFlags.FlattenHierarchy);
+
+			ArgumentNullException.ThrowIfNull(propertyInfo);
+
 			Items = (IEnumerable)propertyInfo.GetValue(property.Object)!;
 		}
 		else
 		{
 			Items = property.UnderlyingType.GetEnumValues();
 		}
-		Bind();
 	}
 
 	private void InitializeComponent()
@@ -54,16 +58,18 @@ public class TabControlFormattedComboBox : ComboBox
 		VerticalAlignment = VerticalAlignment.Center;
 
 		Bind();
+
+		AvaloniaUtils.AddContextMenu(this);
 	}
 
-	public void Bind()
+	protected void Bind()
 	{
 		var binding = new Binding(nameof(SelectedFormattedItem))
 		{
 			Mode = BindingMode.TwoWay,
 			Source = this,
 		};
-		this.Bind(SelectedItemProperty, binding);
+		Bind(SelectedItemProperty, binding);
 
 		if (Property.Object is INotifyPropertyChanged notifyPropertyChanged)
 		{
@@ -151,9 +157,10 @@ public class FormattedItem(object? obj)
 
 	public override string? ToString() => Object.Formatted();
 
-	public static List<FormattedItem> Create(IEnumerable items)
+	public static List<FormattedItem>? Create(IEnumerable? items)
 	{
-		return items.Cast<object>()
+		return items?.Cast<object>()
+			.DistinctBy(obj => obj.ToString())
 			.Select(obj => new FormattedItem(obj))
 			.ToList();
 	}

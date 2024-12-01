@@ -35,3 +35,5 @@ SideScroll automatically displays all entries in a recursive Parent->Child->Sub-
 ## Theming
 - You can switch between Light & Dark mode in the Settings, as well as define your own custom theme
 - Themes can be shared as json by clicking the export & import buttons
+- Right click on any Color Picker to Copy & Paste colors
+- When selecting colors, you can use the up and down arrow keys to increment and decrement the values by 1

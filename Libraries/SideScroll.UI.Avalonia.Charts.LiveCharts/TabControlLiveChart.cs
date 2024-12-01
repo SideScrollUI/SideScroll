@@ -13,6 +13,7 @@ using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Avalonia;
 using LiveChartsCore.SkiaSharpView.Painting;
+using LiveChartsCore.SkiaSharpView.Painting.ImageFilters;
 using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Extensions;
@@ -46,10 +47,9 @@ public class LiveChartCreator : IControlCreator
 
 public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 {
-	public static SKColor TimeTrackerSkColor { get; set; } = TimeTrackerColor.ToSKColor();
-	public static SKColor GridLineSkColor { get; set; } = GridLineColor.ToSKColor();
-	public static SKColor TextSkColor { get; set; } = TextColor.ToSKColor();
-	public static SKColor TooltipBackgroundColor { get; set; } = SKColor.Parse("#102670").WithAlpha(225);
+	public SKColor TimeTrackerSkColor { get; set; }
+	public SKColor GridLineSkColor { get; set; }
+	public SKColor TextSkColor { get; set; }
 
 	public CartesianChart Chart;
 
@@ -80,13 +80,9 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	public TabControlLiveChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false) : 
 		base(tabInstance, chartView, fillHeight)
 	{
-		ColumnDefinitions = new ColumnDefinitions("*,Auto");
-		RowDefinitions = new RowDefinitions("Auto,*,Auto");
-
-		HorizontalAlignment = HorizontalAlignment.Stretch;
-		VerticalAlignment = VerticalAlignment.Stretch;
-
-		Background = SideScrollTheme.TabBackground; // Grid lines look bad when hovering without this
+		TimeTrackerSkColor = TimeTrackerColor.ToSKColor();
+		GridLineSkColor = GridLineColor.ToSKColor();
+		TextSkColor = TextColor.ToSKColor();
 
 		XAxis = CreateXAxis();
 		YAxis = CreateYAxis();
@@ -97,8 +93,11 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			VerticalAlignment = VerticalAlignment.Stretch,
 			XAxes = new List<Axis> { XAxis },
 			YAxes = new List<Axis> { YAxis },
-			TooltipBackgroundPaint = new SolidColorPaint(TooltipBackgroundColor),
-			TooltipTextPaint = new SolidColorPaint(SideScrollTheme.ToolTipForeground.Color.AsSkColor()),
+			TooltipBackgroundPaint = new SolidColorPaint(SideScrollTheme.ChartToolTipBackground.Color.AsSkColor())
+			{
+				ImageFilter = new DropShadow(2, 2, 2, 2, new SKColor(50, 0, 0, 100))
+			},
+			TooltipTextPaint = new SolidColorPaint(SideScrollTheme.ChartToolTipForeground.Color.AsSkColor()),
 			TooltipFindingStrategy = TooltipFindingStrategy.CompareAllTakeClosest,
 			Tooltip = new LiveChartTooltip(this),
 			LegendPosition = LegendPosition.Hidden,
@@ -119,32 +118,32 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		if (TitleTextBlock != null)
 		{
-			Children.Add(TitleTextBlock);
+			ContainerGrid.Children.Add(TitleTextBlock);
 		}
 		else
 		{
-			RowDefinitions[0].Height = new GridLength(0);
+			ContainerGrid.RowDefinitions[0].Height = new GridLength(0);
 		}
 
-		Children.Add(Chart);
+		ContainerGrid.Children.Add(Chart);
 
 		Legend = new TabControlLiveChartLegend(this);
 		if (ChartView.LegendPosition == ChartLegendPosition.Bottom)
 		{
-			SetRow(Legend, 2);
+			Grid.SetRow(Legend, 2);
 			Legend.MaxHeight = 100;
 		}
 		else if (ChartView.LegendPosition == ChartLegendPosition.Right)
 		{
-			SetRow(Legend, 1);
-			SetColumn(Legend, 1);
+			Grid.SetRow(Legend, 1);
+			Grid.SetColumn(Legend, 1);
 			Legend.MaxWidth = 300;
 		}
 		else
 		{
 			Legend.IsVisible = false;
 		}
-		Children.Add(Legend);
+		ContainerGrid.Children.Add(Legend);
 		Legend.OnSelectionChanged += Legend_OnSelectionChanged;
 		//Legend.OnVisibleChanged += Legend_OnVisibleChanged;
 
@@ -157,7 +156,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		if (UseDateTimeAxis)
 		{
-			AddNowTime();
+			UpdateNowTime();
 		}
 		AddSections();
 	}
@@ -205,7 +204,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		//InvalidateChart();
 	}
 
-	private static Axis CreateXAxis()
+	private Axis CreateXAxis()
 	{
 		return new Axis
 		{
@@ -278,7 +277,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	{
 		Annotations.AddRange(ChartView.Annotations);
 		_sections = ChartView.Annotations
-			.Select(a => CreateAnnotation(a))
+			.Select(CreateAnnotation)
 			.ToList();
 
 		if (Annotations.Count > 0)
@@ -470,14 +469,6 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			minimum = 0;
 			maximum = 1;
 		}
-		else
-		{
-			double difference = maximum - minimum;
-			if (difference > 10 || (difference != 0 && hasFraction))
-			{
-				YAxis.UnitWidth = (difference * 0.2).RoundToSignificantFigures(1);
-			}
-		}
 
 		foreach (var annotation in Annotations)
 		{
@@ -522,6 +513,24 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 				YAxis.MinLimit = minimum - margin;
 			}
 			YAxis.MaxLimit = maximum + margin;
+
+			double difference = YAxis.MaxLimit.Value - YAxis.MinLimit.Value;
+			if (difference >= 10)
+			{
+				YAxis.UnitWidth = (difference * 0.2).RoundToSignificantFigures(1);
+			}
+			else
+			{
+				YAxis.UnitWidth = 1; // Reset to default
+			}
+
+			if (YAxis.MinStep > 0)
+			{
+				// Force step to be a multiple of the min step
+				// Live Charts will use decimals even if a min step of 1 is set
+				YAxis.MinStep = Math.Max(YAxis.MinStep, YAxis.UnitWidth);
+				YAxis.ForceStepToMin = true;
+			}
 		}
 	}
 
@@ -850,8 +859,8 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	protected virtual void Dispose(bool disposing)
 	{
 		if (!disposing) return;
-		
-		Children.Clear();
+
+		ContainerGrid.Children.Clear();
 		ClearListeners();
 		ClearSeries();
 	}
@@ -867,8 +876,9 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		if (Chart == null || !IsLoaded) return;
 
 		bool visible = AvaloniaUtils.IsControlVisible(this);
-		if (visible != Chart.IsVisible)
+		if (visible != ContainerGrid.IsVisible)
 		{
+			ContainerGrid.IsVisible = visible;
 			Chart.IsVisible = visible;
 			Legend.IsVisible = visible;
 			Legend.InvalidateArrange();

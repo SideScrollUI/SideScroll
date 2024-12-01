@@ -12,6 +12,7 @@ using SideScroll.Tabs.Samples.Objects;
 using SideScroll.Tabs.Samples.Params;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Controls;
+using SideScroll.UI.Avalonia.Samples.Controls;
 using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
 
 //using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
@@ -49,6 +50,11 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 
 		public new event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
+		public override void Load(Call call, TabModel model)
+		{
+			model.CustomSettingsPath = tab.ToString();
+		}
+
 		public override void LoadUI(Call call, TabModel model)
 		{
 			Toolbar toolbar = new();
@@ -58,12 +64,15 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			model.AddObject(toolbar);
 
 			var paramControl = new TabControlParams(tab.Object);
-			model.AddObject(paramControl);
+			model.AddObject(paramControl, true, true);
 
-			foreach (var control in paramControl.Children)
+			foreach (var control in paramControl.ContainerGrid.Children)
 			{
 				if (control is ColorPicker colorPicker)
 				{
+					// Avalonia could probably use Diagonal Corner Placements?
+					// colorPicker.Resources.Add("ColorPickerFlyoutPlacement", PlacementMode.LeftEdgeAlignedBottom);
+
 					colorPicker.ColorChanged += ColorPicker_ColorChanged;
 					colorPicker.LostFocus += ColorPicker_LostFocus;
 				}
@@ -73,30 +82,44 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			{
 				SelectedItems = new List<ListItem>
 				{
-					new ListItem("Samples", obj)
+					new("Samples", obj)
 				};
 			}
 		}
 
 		private object? GetSamples()
 		{
+			// Using Lists provides useful spacing so drop down's don't appear on top of sample
 			return tab.Object switch
 			{
+				FontTheme => new List<ListItem>
+				{
+					new("Text", TextSamples.Plain),
+					new("Json", TextSamples.Json),
+					new("Xml", TextSamples.Xml),
+				},
 				TabTheme => new List<ListItem>
 				{
 					new("Forms", new TabSampleParamsDataTabs()),
+					new("Buttons", new TabSampleGridHashSet()),
 					new("Loading", new TabSampleLoadAsync()),
 				},
 				//ToolbarTheme => new TabSampleToolbar(),
 				ToolbarTheme => new TabCustomControl(),
 				ToolTipTheme => new TabAvaloniaToolTipSample(),
+				ScrollBarTheme => new TabSampleGridCollectionSize(),
 				DataGridTheme => new List<ListItem>
 				{
 					new("Collections", new TabSampleDataGrid()),
 					new("Objects", new TabSampleObjects()),
 				},
-				ButtonTheme => new TabSampleActions(),
+				ButtonTheme => new List<ListItem>
+				{
+					new("Collections", new TabSampleGridCollectionSize()),
+					new("Actions", new TabSampleActions()),
+				},
 				TextControlTheme => new TabSampleParamsDataTabs(),
+				TextAreaTheme => new TabSampleTextArea(),
 				TextEditorTheme => new List<ListItem>
 				{
 					new("Text", TextSamples.Plain),
@@ -113,15 +136,15 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			Reload();
 		}
 
+		private void ColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
+		{
+			tab.TabInstance.ColorPicker_ColorChanged(sender, e);
+		}
+
 		// Focus is lost when opening the ColorPicker
 		private void ColorPicker_LostFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
 			tab.TabInstance.ColorPicker_LostFocus(sender, e);
-		}
-
-		private void ColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
-		{
-			tab.TabInstance.ColorPicker_ColorChanged(sender, e);
 		}
 	}
 }

@@ -34,14 +34,14 @@ public static class ReflectorUtil
 						{
 							obj = typeof(ReflectorUtil).GetMethod("GetDictionaryElement")!
 								.MakeGenericMethod(iType.GetGenericArguments())
-								.Invoke(null, new object[] { obj, index });
+								.Invoke(null, [obj, index]);
 							break;
 						}
 						if (iType.IsGenericType && iType.GetGenericTypeDefinition() == typeof(IList<>))
 						{
 							obj = typeof(ReflectorUtil).GetMethod("GetListElement")!
 								.MakeGenericMethod(iType.GetGenericArguments())
-								.Invoke(null, new object[] { obj, index });
+								.Invoke(null, [obj, index]);
 							break;
 						}
 					}

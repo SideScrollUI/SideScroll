@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
@@ -38,6 +37,6 @@ public class TabControlCheckBox : CheckBox
 			Mode = BindingMode.TwoWay,
 			Source = property.Object,
 		};
-		this.Bind(IsCheckedProperty, binding);
+		Bind(IsCheckedProperty, binding);
 	}
 }

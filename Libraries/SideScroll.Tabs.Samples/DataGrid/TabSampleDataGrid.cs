@@ -15,8 +15,9 @@ public class TabSampleDataGrid
 	public static TabSampleGridDictionary Dictionary => new();
 	public static TabSampleArray Array => new();
 	public static TabSampleNullableArray NullableArray => new();
-	public static TabSampleMemory Memory => new();
+	public static TabSampleBytes Bytes => new();
 	public static TabSampleInstanceListItems InstanceListItems => new();
 	public static TabSampleFilter Filter => new();
 	public static TabSampleGridUpdating Updating => new();
+	public static TabSampleHeaders Headers => new();
 }

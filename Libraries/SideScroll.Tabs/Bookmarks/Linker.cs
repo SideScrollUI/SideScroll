@@ -1,11 +1,13 @@
+using SideScroll.Extensions;
+
 namespace SideScroll.Tabs.Bookmarks;
 
-public class Linker
+public class Linker(Project project)
 {
 	private const string SideScrollPrefix = "sidescroll";
 
 	public bool PublicOnly { get; set; }
-	public long MaxLength { get; set; } = 65500; // Uri.EscapeDataString limit
+	public long MaxLength { get; set; } = 65_500; // Uri.EscapeDataString limit
 
 #pragma warning disable CS1998 // subclasses can be async
 	public virtual async Task<string> AddLinkAsync(Call call, Bookmark bookmark)
@@ -23,7 +25,7 @@ public class Linker
 			throw new Exception($"Link size {base64.Length} > {MaxLength}");
 		}
 
-		return $"{SideScrollPrefix}://{base64}";
+		return $"{SideScrollPrefix}://link/v{project.Version.Formatted()}/{base64}";
 	}
 
 	public Task<Bookmark> GetLinkAsync(Call call, string uri, bool checkVersion)

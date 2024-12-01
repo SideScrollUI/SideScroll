@@ -33,20 +33,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Assets\**" />
-    <EmbeddedResource Remove="Assets\**" />
-    <None Remove="Assets\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Remove="Themes\Controls\ControlThemes.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabButton.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabControlParams.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlSplitContainer.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabControlTextArea.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlTextBlock.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlTitle.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlToolbar.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabHeader.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabSeparator.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabSplitter.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabView.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabViewer.xaml" />
     <EmbeddedResource Remove="Themes\Controls\ToolbarButton.xaml" />
     <EmbeddedResource Remove="Themes\Fluent\Controls\DataGrid.xaml" />
     <EmbeddedResource Remove="Themes\Fluent\Controls\ScrollBar.xaml" />
@@ -56,12 +55,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Fonts\SourceCodePro-Regular.ttf" />
+    <None Remove="Assets\Themes\LightBlue.json" />
     <None Remove="DefaultTheme.xaml" />
     <None Remove="if_help_62217.png" />
     <None Remove="left-chevron.png" />
     <None Remove="right-chevron.png" />
     <None Remove="StyleResources.xaml" />
     <None Remove="Themes\Controls\ControlThemes.xaml" />
+    <None Remove="Themes\Controls\TabControlAvaloniaEdit.xaml" />
+    <None Remove="Themes\Controls\TabControlParams.xaml" />
+    <None Remove="Themes\Controls\TabControlTextArea.xaml" />
     <None Remove="Themes\Controls\TabControlTextBlock.xaml" />
     <None Remove="Themes\Controls\TabControlTitle.xaml" />
     <None Remove="Themes\Controls\TabControlToolbar.xaml" />
@@ -69,6 +73,9 @@
     <None Remove="Themes\Controls\TabSeparator.xaml" />
     <None Remove="Themes\Controls\TabButton.xaml" />
     <None Remove="Themes\Controls\TabControlSplitContainer.xaml" />
+    <None Remove="Themes\Controls\TabSplitter.xaml" />
+    <None Remove="Themes\Controls\TabView.xaml" />
+    <None Remove="Themes\Controls\TabViewer.xaml" />
     <None Remove="Themes\Controls\ToolbarButton.xaml" />
     <None Remove="Themes\Fluent\DataGrid.xaml" />
     <None Remove="Themes\Fluent\FluentControls.xaml" />
@@ -78,10 +85,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Include="Assets\Fonts\SourceCodePro-Regular.ttf" />
     <AvaloniaResource Include="Themes\Controls\TabButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabControlAvaloniaEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabControlTextArea.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabControlTextBlock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabControlParams.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabControlTitle.xaml">
@@ -90,7 +107,16 @@
     <AvaloniaResource Include="Themes\Controls\TabControlToolbar.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabHeader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabSplitter.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabSeparator.xaml">
@@ -124,6 +150,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Assets\Themes\LightBlue.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEditVersion)" />
+    <PackageReference Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Avalonia.Svg.Skia" Version="11.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SideScroll.Tabs.Samples\SideScroll.Tabs.Samples.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Tabs\TabAvalonEdit.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>TabAvalonEdit.xaml</DependentUpon>
@@ -131,14 +172,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEditVersion)" />
-    <PackageReference Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Svg.Skia" Version="11.1.0" />
+    <EmbeddedResource Update="Themes\Controls\TabControlAvaloniaEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SideScroll.Tabs.Samples\SideScroll.Tabs.Samples.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -8,14 +8,19 @@
   <Style Selector="TextBox">
     <Setter Property="SelectionForegroundBrush" Value="{DynamicResource TextControlSelectionForegroundBrush}"/>
   </Style>
+  
+  <Style Selector="TextBox[IsReadOnly=true]">
+    <Setter Property="Background" Value="{DynamicResource TextControlBackgroundReadOnlyBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundReadOnlyBrush}"/>
+  </Style>
 
   <Style Selector="TextBox[IsReadOnly=true]:pointerover /template/ Border#PART_BorderElement">
-    <Setter Property="Background" Value="{DynamicResource TextReadOnlyBackgroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource TextControlBackgroundReadOnlyBrush}" />
     <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}"/>
   </Style>
 
   <Style Selector="TextBox[IsReadOnly=true]:focus /template/ Border#PART_BorderElement">
-    <Setter Property="Background" Value="{DynamicResource TextReadOnlyBackgroundBrush}"/>
+    <Setter Property="Background" Value="{DynamicResource TextControlBackgroundReadOnlyBrush}"/>
     <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}"/>
   </Style>
 
@@ -29,6 +34,26 @@
 
   <Style Selector="Button">
     <Setter Property="CornerRadius" Value="{DynamicResource ButtonCornerRadius}" />
+  </Style>
+
+  <Style Selector="ComboBox:pointerover /template/ PathIcon#DropDownGlyph">
+    <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundPointerOver}"/>
+  </Style>
+
+  <Style Selector="ComboBox:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundPointerOver}"/>
+  </Style>
+
+  <Style Selector="ComboBox:pressed">
+    <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundPointerOver}"/>
+  </Style>
+
+  <Style Selector="ColorPicker TabControl#PART_TabControl TabItem PathIcon">
+    <Setter Property="Foreground" Value="{DynamicResource TitleForegroundBrush}"/>
+  </Style>
+
+  <Style Selector="CheckBox">
+    <Setter Property="BorderBrush" Value="{DynamicResource CheckBoxBorderBrushUnchecked}" />
   </Style>
 
 </Styles>

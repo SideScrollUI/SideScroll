@@ -18,6 +18,7 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	public string? CustomSettingsPath { get; set; }
 	public object? DefaultSelectedItem { get; set; }
 	public bool Skippable { get; set; } = true;
+	public bool? ShowHeader { get; set; }
 
 	// Enable for thread safety when there's multiple threads acting on this collection
 	// true:  Always post new Events to the context

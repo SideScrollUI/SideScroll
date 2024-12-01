@@ -15,7 +15,7 @@ public class TabSampleControls : ITab
 			model.Items = new List<ListItem>
 			{
 				new("Custom Control", new TabCustomControl()),
-				new("Text Area", new TabTextArea()),
+				new("Text Area", new TabSampleTextArea()),
 			};
 		}
 	}

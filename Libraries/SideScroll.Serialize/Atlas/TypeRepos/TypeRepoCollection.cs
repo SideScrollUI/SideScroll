@@ -70,7 +70,7 @@ public class TypeRepoCollection : TypeRepo
 		for (int j = 0; j < count; j++)
 		{
 			object? objectValue = _listTypeRepo!.LoadObjectRef();
-			_addMethod!.Invoke(obj, new object?[] { objectValue });
+			_addMethod!.Invoke(obj, [objectValue]);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class TypeRepoCollection : TypeRepo
 		foreach (var item in iSource)
 		{
 			object? clone = Serializer.Clone(item);
-			_addMethod!.Invoke(iDest, new object?[] { clone });
+			_addMethod!.Invoke(iDest, [clone]);
 		}
 	}
 }

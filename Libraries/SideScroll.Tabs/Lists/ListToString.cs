@@ -8,7 +8,7 @@ namespace SideScroll.Tabs.Lists;
 [Skippable]
 public class ListToString
 {
-	private const int MaxItems = 200000;
+	private const int MaxItems = 200_000;
 
 	[InnerValue]
 	public object Object;
@@ -38,6 +38,10 @@ public class ListToString
 	public static ItemCollection<ListToString> Create(IEnumerable enumerable, int limit = MaxItems)
 	{
 		var list = new ItemCollection<ListToString>();
+		if (enumerable is IItemCollection sourceCollection)
+		{
+			(list as IItemCollection).LoadSettings(sourceCollection);
+		}
 		foreach (object obj in enumerable)
 		{
 			list.Add(new ListToString(obj));

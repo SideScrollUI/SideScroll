@@ -45,7 +45,7 @@ public class TypeRepoHashSet : TypeRepoEnumerable, IPreloadRepo
 		for (int j = 0; j < count; j++)
 		{
 			object? objectValue = _listTypeRepo!.LoadObjectRef();
-			_addMethod!.Invoke(obj, new object?[] { objectValue });
+			_addMethod!.Invoke(obj, [objectValue]);
 		}
 	}
 }

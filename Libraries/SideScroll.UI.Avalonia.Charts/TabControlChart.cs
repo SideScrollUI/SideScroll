@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using SideScroll.Charts;
 using SideScroll.Collections;
+using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
 using SideScroll.UI.Avalonia.Controls;
@@ -57,27 +58,15 @@ public interface ITabControlChart
 	public List<ChartAnnotation> Annotations { get; }
 }
 
-public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
+public abstract class TabControlChart<TSeries> : Border, ITabControlChart
 {
-	public static Color TimeTrackerColor { get; set; } = SideScrollTheme.DataGridRowHighlight.Color;
-	public static Color GridLineColor { get; set; } = Color.Parse("#333333");
-	public static Color TextColor { get; set; } = Colors.LightGray;
+	public Color TimeTrackerColor { get; set; } = SideScrollTheme.DataGridRowHighlight.Color;
+	public Color GridLineColor { get; set; } = SideScrollTheme.ChartGridLines.Color;
+	public Color NowColor { get; set; } = SideScrollTheme.ChartNowLine.Color;
+	public Color TextColor { get; set; } = SideScrollTheme.ChartLabelForeground.Color;
 
-	private static readonly System.Drawing.Color NowColor = System.Drawing.Color.Green;
-	public static Color[] DefaultColors { get; set; } =
-	[
-		Colors.LawnGreen,
-		Colors.Fuchsia,
-		Colors.DodgerBlue,
-		Colors.Gold,
-		Colors.Red,
-		Colors.Cyan,
-		Colors.BlueViolet,
-		Colors.Orange,
-		Colors.Salmon,
-		Colors.MediumSpringGreen,
-	];
-	public static Color GetColor(int index) => DefaultColors[index % DefaultColors.Length];
+	public const int DefaultColorCount = 10;
+	public static Color GetColor(int index) => SideScrollTheme.ChartSeries(1 + index % DefaultColorCount).Color;
 
 	protected static readonly WeakEventSource<PointerMovedEventArgs> _pointerMovedEventSource = new();
 
@@ -124,6 +113,10 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 
 	public List<ChartAnnotation> Annotations { get; set; } = [];
 
+	public ChartAnnotation? NowTimeAnnotation { get; set; }
+
+	public Grid ContainerGrid { get; protected set; }
+
 	public override string? ToString() => ChartView.ToString();
 
 	protected TabControlChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false)
@@ -142,8 +135,13 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 			VerticalAlignment = VerticalAlignment.Stretch;
 		}
 
-		ColumnDefinitions = new ColumnDefinitions("*");
-		RowDefinitions = new RowDefinitions("*");
+		Child = ContainerGrid = new Grid
+		{
+			ColumnDefinitions = new ColumnDefinitions("*,Auto"),
+			RowDefinitions = new RowDefinitions("Auto,*,Auto"),
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Stretch,
+		};
 
 		MaxWidth = 1500;
 		MaxHeight = 645; // 25 Items
@@ -170,7 +168,8 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 			Margin = new Thickness(10, 5, 10, 2),
 			//FontWeight = FontWeight.Medium,
 			TextWrapping = TextWrapping.Wrap,
-			[ColumnSpanProperty] = 2,
+			Foreground = SideScrollTheme.ChartLabelForeground,
+			[Grid.ColumnSpanProperty] = 2,
 		};
 		if (ChartView.LegendPosition == ChartLegendPosition.Bottom)
 		{
@@ -190,22 +189,28 @@ public abstract class TabControlChart<TSeries> : Grid, ITabControlChart
 		Annotations.Add(chartAnnotation);
 	}
 
-	public void AddNowTime()
+	public void UpdateNowTime()
 	{
 		var now = DateTime.UtcNow;
-		if (ChartView.TimeWindow != null && ChartView.TimeWindow.EndTime < now.AddMinutes(1))
-			return;
-
-		var annotation = new ChartAnnotation
+		if (NowTimeAnnotation == null)
 		{
-			Text = "Now",
-			Horizontal = false,
-			X = now.Ticks,
-			Color = NowColor,
-			// LineStyle = LineStyle.Dot,
-		};
+			if (ChartView.TimeWindow != null && ChartView.TimeWindow.EndTime < now.AddMinutes(1))
+				return;
 
-		ChartView.Annotations.Add(annotation);
+			NowTimeAnnotation = new ChartAnnotation
+			{
+				Text = "Now",
+				Horizontal = false,
+				Color = NowColor.AsSystemColor(),
+				// LineStyle = LineStyle.Dot,
+			};
+		}
+
+		NowTimeAnnotation.X = now.Ticks;
+
+		// ChartView's can be reused across different Charts, so we can't just remove the current occurence of Now
+		ChartView.Annotations.RemoveAll(a => a.Text == "Now");
+		ChartView.Annotations.Add(NowTimeAnnotation);
 	}
 
 	public abstract void InvalidateChart();

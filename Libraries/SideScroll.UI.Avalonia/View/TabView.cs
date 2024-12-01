@@ -32,16 +32,18 @@ public interface IValidationControl
 	void Validate();
 }
 
+public class TabSplitter : GridSplitter;
+
 public class TabView : Grid, IDisposable
 {
 	private const string FillerPanelId = "FillerPanelId";
-	private const int MinDesiredSplitterDistance = 50;
+	private const int MinDesiredSplitterDistance = 10;
 
 	// Model.Objects
 	public static Dictionary<Type, IControlCreator> ControlCreators { get; set; } = [];
 
 	// Maybe this control should own it's own settings?
-	//private TabViewSettings _tabViewSettings = new TabViewSettings();
+	//private TabViewSettings _tabViewSettings = new();
 	internal TabViewSettings TabViewSettings
 	{
 		get
@@ -75,6 +77,7 @@ public class TabView : Grid, IDisposable
 
 	// Layout Controls
 	private Grid? _containerGrid;
+	private Border? _parentContainerBorder;
 	private TabControlSplitContainer? _tabParentControls;
 	private TabControlTitle? _tabTitle;
 	private GridSplitter? _parentChildGridSplitter;
@@ -112,7 +115,9 @@ public class TabView : Grid, IDisposable
 
 		Instance.OnModelChanged += TabInstance_OnModelChanged;
 		if (Instance is ITabSelector tabSelector)
+		{
 			tabSelector.OnSelectionChanged += ParentListSelectionChanged;
+		}
 
 		Instance.OnValidate += Instance_OnValidate;
 
@@ -122,9 +127,16 @@ public class TabView : Grid, IDisposable
 
 	private void TabView_ActualThemeVariantChanged(object? sender, EventArgs e)
 	{
-		if (IsLoaded && ActualThemeVariant != null && Model.ReloadOnThemeChange)
+		if (IsLoaded && ActualThemeVariant != null)
 		{
-			ReloadControls();
+			if (Model.ReloadOnThemeChange)
+			{
+				ReloadControls();
+			}
+			if (_parentContainerBorder != null)
+			{
+				_parentContainerBorder.BorderBrush = SideScrollTheme.TabBackgroundBorder;
+			}
 		}
 	}
 
@@ -156,11 +168,6 @@ public class TabView : Grid, IDisposable
 	// Gets called multiple times when re-initializing
 	private void InitializeControls()
 	{
-		Background = SideScrollTheme.TabBackground;
-		HorizontalAlignment = HorizontalAlignment.Stretch;
-		VerticalAlignment = VerticalAlignment.Stretch;
-		//Focusable = true;
-
 		AddListeners();
 
 		// don't recreate to allow reloading (sizing doesn't work otherwise)
@@ -190,7 +197,7 @@ public class TabView : Grid, IDisposable
 			if (Instance.Skippable)
 			{
 				_containerGrid.ColumnDefinitions[0].Width = new GridLength(0);
-				_tabParentControls!.Width = 0;
+				_parentContainerBorder!.Width = 0;
 			}
 		}
 
@@ -199,7 +206,9 @@ public class TabView : Grid, IDisposable
 
 		// don't re-add containerGrid (sizing doesn't work otherwise?)
 		if (Children.Count == 0)
+		{
 			Children.Add(_containerGrid);
+		}
 
 		// Reassigning leaks memory
 		ContextMenu ??= new TabViewContextMenu(this, Instance);
@@ -209,17 +218,17 @@ public class TabView : Grid, IDisposable
 
 	private void AutoSizeParentControls()
 	{
-		if (_tabParentControls == null)
+		if (_parentContainerBorder == null)
 			return;
 
-		int desiredWidth = (int)_tabParentControls.DesiredSize.Width;
+		int desiredWidth = (int)_parentContainerBorder.DesiredSize.Width;
 		if (Model.CustomSettingsPath != null && TabViewSettings.SplitterDistance != null)
 		{
 			desiredWidth = (int)TabViewSettings.SplitterDistance.Value;
 		}
 
 		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
-		_tabParentControls.Width = desiredWidth;
+		_parentContainerBorder.Width = desiredWidth;
 	}
 
 	private void AddParentControls()
@@ -230,12 +239,19 @@ public class TabView : Grid, IDisposable
 			MinDesiredWidth = Model.MinDesiredWidth,
 			MaxDesiredWidth = Math.Max(Model.MaxDesiredWidth, TabViewSettings.SplitterDistance ?? 0),
 		};
+
+		_parentContainerBorder = new Border()
+		{
+			BorderThickness = new Thickness(1),
+			BorderBrush = SideScrollTheme.TabBackgroundBorder,
+			Child = _tabParentControls,
+		};
 		//if (TabViewSettings.SplitterDistance != null)
 		//	tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
-		_containerGrid!.Children.Add(_tabParentControls);
+		_containerGrid!.Children.Add(_parentContainerBorder);
 		UpdateSplitterDistance();
 
-		_tabTitle = new TabControlTitle(Instance, Model.Name);
+		_tabTitle = new TabControlTitle(this, Model.Name);
 		_tabParentControls.AddControl(_tabTitle, false, SeparatorType.None);
 
 		_tabParentControls.KeyDown += ParentControls_KeyDown;
@@ -253,11 +269,10 @@ public class TabView : Grid, IDisposable
 
 	private void AddGridColumnSplitter()
 	{
-		_parentChildGridSplitter = new GridSplitter
+		_parentChildGridSplitter = new TabSplitter
 		{
-			Background = Brushes.Black,
 			VerticalAlignment = VerticalAlignment.Stretch,
-			Width = SideScrollTheme.TabSplitterSize,
+			ResizeDirection = GridResizeDirection.Columns,
 			[Grid.ColumnProperty] = 1,
 		};
 		_containerGrid!.Children.Add(_parentChildGridSplitter);
@@ -338,12 +353,14 @@ public class TabView : Grid, IDisposable
 	private void GridSplitter_DragDelta(object? sender, VectorEventArgs e)
 	{
 		if (TabViewSettings.SplitterDistance != null)
-			_tabParentControls!.Width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
+		{
+			_parentContainerBorder!.Width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
+		}
 
 		// force the width to update (Grid Auto Size caching problem?
 		double width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
 		TabViewSettings.SplitterDistance = width;
-		_tabParentControls!.Width = width;
+		_parentContainerBorder!.Width = width;
 
 		//if (TabViewSettings.SplitterDistance != null)
 		//	containerGrid.ColumnDefinitions[0].Width = new GridLength((double)containerGrid.ColumnDefinitions[1].);
@@ -361,18 +378,17 @@ public class TabView : Grid, IDisposable
 		_isDragging = false;
 
 		InvalidateMeasure();
-		InvalidateArrange();
 
 		//TabViewSettings.SplitterDistance = (int)Math.Ceiling(e.Vector.Y); // backwards
 		double width = (int)_containerGrid!.ColumnDefinitions[0].ActualWidth;
 		TabViewSettings.SplitterDistance = width;
-		_tabParentControls!.Width = width;
+		_parentContainerBorder!.Width = width;
 		_containerGrid.ColumnDefinitions[0].Width = new GridLength(width);
 
 		//UpdateSplitterDistance();
 		Instance.SaveTabSettings();
 		UpdateSplitterFiller();
-		_tabParentControls.InvalidateMeasure();
+		_parentContainerBorder.InvalidateMeasure();
 	}
 
 	// doesn't resize bigger well
@@ -380,14 +396,13 @@ public class TabView : Grid, IDisposable
 	private void GridSplitter_DoubleTapped(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 		_isDragging = false;
-		double desiredWidth = Math.Min(_tabParentControls!.DesiredSize.Width, Model.MaxDesiredWidth);
+		double desiredWidth = Math.Min(_parentContainerBorder!.DesiredSize.Width, Model.MaxDesiredWidth);
 		TabViewSettings.SplitterDistance = desiredWidth;
-		_tabParentControls.Width = desiredWidth;
+		_parentContainerBorder.Width = desiredWidth;
 		//containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
 		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 		//containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
 
-		_containerGrid.InvalidateArrange();
 		_containerGrid.InvalidateMeasure();
 
 		//tabParentControls.grid.Width = new GridLength(1, GridUnitType.Auto);
@@ -417,8 +432,10 @@ public class TabView : Grid, IDisposable
 		if (TabViewSettings.SplitterDistance is double splitterDistance && splitterDistance > MinDesiredSplitterDistance)
 		{
 			_containerGrid.ColumnDefinitions[0].Width = new GridLength((int)splitterDistance);
-			if (_tabParentControls != null)
-				_tabParentControls.Width = splitterDistance;
+			if (_parentContainerBorder != null)
+			{
+				_parentContainerBorder.Width = splitterDistance;
+			}
 		}
 		else
 		{
@@ -459,6 +476,8 @@ public class TabView : Grid, IDisposable
 	private void AddObject(TabObject tabObject)
 	{
 		object obj = tabObject.Object!;
+
+		var gridLength = tabObject.Fill ? GridLength.Star : GridLength.Auto;
 		if (ControlCreators.TryGetValue(obj.GetType(), out IControlCreator? controlCreator))
 		{
 			controlCreator.AddControl(Instance, _tabParentControls!, obj);
@@ -470,11 +489,11 @@ public class TabView : Grid, IDisposable
 		}
 		else if (obj is ITabSelector tabSelector)
 		{
-			AddITabControl(tabSelector, tabObject.Fill);
+			AddITabControl(tabSelector, gridLength);
 		}
 		else if (obj is Control control)
 		{
-			AddControl(control, tabObject.Fill, tabObject.EnableScrolling);
+			AddControl(control, gridLength, tabObject.EnableScrolling);
 		}
 		else if (obj is string text)
 		{
@@ -485,7 +504,7 @@ public class TabView : Grid, IDisposable
 			ParamsAttribute? paramsAttribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
 			if (paramsAttribute != null)
 			{
-				AddControl(new TabControlParams(obj), tabObject.Fill, tabObject.EnableScrolling);
+				AddControl(new TabControlParams(obj), gridLength, tabObject.EnableScrolling);
 			}
 		}
 	}
@@ -493,7 +512,7 @@ public class TabView : Grid, IDisposable
 	private void AddToolbar(TabToolbar toolbar)
 	{
 		var toolbarControl = new TabControlToolbar(Instance, toolbar);
-		AddControl(toolbarControl, false);
+		AddControl(toolbarControl, GridLength.Auto);
 	}
 
 	protected void AddActions()
@@ -531,19 +550,19 @@ public class TabView : Grid, IDisposable
 	}
 
 	// should we check for a Grid stretch instead of passing that parameter?
-	protected void AddControl(Control control, bool fill, bool scrollable = false)
+	protected void AddControl(Control control, GridLength gridLength, bool scrollable = false)
 	{
 		if (control is TabControlToolbar toolbar)
 		{
 			_hotKeys.AddRange(toolbar.GetHotKeyButtons());
 		}
-		_tabParentControls!.AddControl(control, fill, SeparatorType.Splitter, scrollable);
+		_tabParentControls!.AddControl(control, gridLength, SeparatorType.Splitter, scrollable);
 	}
 
-	protected void AddITabControl(ITabSelector control, bool fill)
+	protected void AddITabControl(ITabSelector control, GridLength gridLength)
 	{
 		control.OnSelectionChanged += ParentListSelectionChanged;
-		_tabParentControls!.AddControl((Control)control, fill, SeparatorType.Spacer);
+		_tabParentControls!.AddControl((Control)control, gridLength, SeparatorType.Spacer);
 		CustomTabControls.Add(control);
 	}
 
@@ -564,7 +583,7 @@ public class TabView : Grid, IDisposable
 			MaxWidth = 1000,
 			TextWrapping = TextWrapping.Wrap,
 		};
-		textBox.Resources.Add("TextReadOnlyBackgroundBrush", Brushes.Transparent);
+		textBox.Resources.Add("TextControlBackgroundReadOnlyBrush", Brushes.Transparent);
 		
 		AvaloniaUtils.AddContextMenu(textBox);
 		_tabParentControls!.AddControl(textBox, false, SeparatorType.Spacer);
@@ -602,7 +621,7 @@ public class TabView : Grid, IDisposable
 		};
 		Children.Add(progressBar);
 
-		TabControlTitle title = new(Instance, Model.Name)
+		TabControlTitle title = new(this, Model.Name)
 		{
 			VerticalAlignment = VerticalAlignment.Top,
 			MaxWidth = progressBar.MinWidth,
@@ -760,7 +779,9 @@ public class TabView : Grid, IDisposable
 	public void UpdateSplitterFiller()
 	{
 		if (_fillerPanel != null)
+		{
 			_fillerPanel.Width = GetFillerPanelWidth();
+		}
 	}
 
 	private void UpdateChildControls(bool recreate = false)
@@ -876,7 +897,9 @@ public class TabView : Grid, IDisposable
 		//	return;
 		SelectedRow? selectedRow = obj as SelectedRow;
 		if (selectedRow != null)
+		{
 			obj = selectedRow.Object!;
+		}
 
 		if (oldChildControls.TryGetValue(obj, out var oldControl))
 		{
@@ -908,7 +931,9 @@ public class TabView : Grid, IDisposable
 		{
 			Control? control = TabCreator.CreateChildControl(Instance, obj, label, tabControl);
 			if (control is TabView tabView && selectedRow != null)
+			{
 				tabView.Instance.SelectedRow = selectedRow;
+			}
 
 			if (control != null)
 			{
@@ -1061,7 +1086,9 @@ public class TabView : Grid, IDisposable
 				foreach (var obj in TabDatas[0].Items!)
 				{
 					if (newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()!))
+					{
 						matching.Add(obj);
+					}
 				}
 				TabDatas[0].SelectedItems = matching;
 			}

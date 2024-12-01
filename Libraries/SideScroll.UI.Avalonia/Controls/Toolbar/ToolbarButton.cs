@@ -15,8 +15,6 @@ namespace SideScroll.UI.Avalonia.Controls.Toolbar;
 
 public class ToolbarButton : Button, IDisposable
 {
-	protected override Type StyleKeyOverride => typeof(ToolbarButton);
-
 	public TabControlToolbar Toolbar;
 	public string? Label { get; set; }
 	public string? Tooltip { get; set; }

@@ -8,11 +8,13 @@ namespace SideScroll.UI.Avalonia.Themes;
 public static class SideScrollTheme
 {
 	public static SolidColorBrush TabBackground => GetBrush("TabBackgroundBrush");
+	public static SolidColorBrush TabBackgroundBorder => GetBrush("TabBackgroundBorderBrush");
 	public static SolidColorBrush TabBackgroundFocused => GetBrush("TabBackgroundFocusedBrush");
 	public static SolidColorBrush TabProgressBarForeground => GetBrush("TabProgressBarForegroundBrush");
 
 	// Title
 	public static SolidColorBrush TitleBackground => GetBrush("TitleBackgroundBrush");
+	public static SolidColorBrush TitleButtonBackgroundPointerOver => GetBrush("TitleButtonBackgroundPointerOverBrush");
 	public static SolidColorBrush TitleForeground => GetBrush("TitleForegroundBrush");
 
 	// Toolbar
@@ -26,6 +28,8 @@ public static class SideScrollTheme
 	public static SolidColorBrush ToolbarTextForeground => GetBrush("ToolbarTextForegroundBrush");
 	public static SolidColorBrush ToolbarTextCaret => GetBrush("ToolbarTextCaretBrush");
 
+	// ToolTip
+	public static SolidColorBrush ToolTipBackground => GetBrush("ToolTipBackground");
 	public static SolidColorBrush ToolTipForeground => GetBrush("ToolTipForeground");
 
 	// Icon
@@ -54,15 +58,29 @@ public static class SideScrollTheme
 	//public static SolidColorBrush LabelHighlightForeground => GetBrush("LabelHighlightForegroundBrush");
 
 	public static SolidColorBrush TextControlBackground => GetBrush("TextControlBackground");
+	public static SolidColorBrush TextReadOnlyForeground => GetBrush("TextControlForegroundReadOnlyBrush");
+	public static SolidColorBrush TextReadOnlyBackground => GetBrush("TextControlBackgroundReadOnlyBrush");
 
+	// TextArea 
 	public static SolidColorBrush TextAreaBackground => GetBrush("TextAreaBackgroundBrush");
-	public static SolidColorBrush TextReadOnlyForeground => GetBrush("TextReadOnlyForegroundBrush");
-	public static SolidColorBrush TextReadOnlyBackground => GetBrush("TextReadOnlyBackgroundBrush");
+	public static SolidColorBrush TextAreaForeground => GetBrush("TextAreaForegroundBrush");
 
-	// Chart 
+	// Chart
 	public static SolidColorBrush ChartBackgroundSelected => GetBrush("ChartBackgroundSelectedBrush");
-	public static SolidColorBrush ChartLabelForegroundHighlight => GetBrush("ChartLabelForegroundHighlightBrush");
 	public static double ChartBackgroundSelectedAlpha => GetDouble("ChartBackgroundSelectedAlpha");
+
+	public static SolidColorBrush ChartLabelForeground => GetBrush("ChartLabelForegroundBrush");
+	public static SolidColorBrush ChartLabelForegroundHighlight => GetBrush("ChartLabelForegroundHighlightBrush");
+
+	public static SolidColorBrush ChartGridLines => GetBrush("ChartGridLinesBrush");
+	public static SolidColorBrush ChartNowLine => GetBrush("ChartNowLineBrush");
+
+	public static SolidColorBrush ChartLegendIconBorder => GetBrush("ChartLegendIconBorderBrush");
+
+	public static SolidColorBrush ChartToolTipBackground => GetBrush("ChartToolTipBackgroundBrush");
+	public static SolidColorBrush ChartToolTipForeground => GetBrush("ChartToolTipForegroundBrush");
+
+	public static SolidColorBrush ChartSeries(int index) => GetBrush($"ChartSeries{index}Brush");
 
 	// Text Editor
 	public static SolidColorBrush TextEditorBackgroundBrush => GetBrush("TextEditorBackgroundBrush");
@@ -94,61 +112,55 @@ public static class SideScrollTheme
 	// Fonts
 	public static FontFamily ContentControlThemeFontFamily => GetFontFamily("ContentControlThemeFontFamily");
 	public static FontFamily MonospaceFontFamily => GetFontFamily("MonospaceFontFamily");
+	public static FontWeight MonospaceFontWeight => GetFontWeight("MonospaceFontWeight");
 
 	public static ThemeVariant ThemeVariant => Application.Current!.ActualThemeVariant;
 
-	public static Color GetColor(string colorName)
+	public static FontFamily SourceCodeProFont => GetFontFamily("SourceCodeProFont");
+
+	public static object GetResource(string name)
 	{
 		if (Application.Current!.Resources.ThemeDictionaries.TryGetValue(ThemeVariant, out IThemeVariantProvider? provider))
 		{
-			if (provider.TryGetResource(colorName, null, out object? providerObject))
+			if (provider.TryGetResource(name, null, out object? providerObject))
 			{
-				return (Color)providerObject!;
+				return providerObject!;
 			}
 		}
 
-		if (Application.Current.TryGetResource(colorName, ThemeVariant, out object? obj))
+		if (Application.Current.TryGetResource(name, ThemeVariant, out object? obj))
 		{
-			return (Color)obj!;
+			return obj!;
 		}
 
-		throw new Exception($"Color not found: {colorName}");
+		throw new Exception($"Resource not found: {name}");
+	}
+
+	public static Color GetColor(string colorName)
+	{
+		return (Color)GetResource(colorName);
 	}
 
 	public static SolidColorBrush GetBrush(string brushName)
 	{
-		if (Application.Current!.Resources.ThemeDictionaries.TryGetValue(ThemeVariant, out IThemeVariantProvider? provider))
-		{
-			if (provider.TryGetResource(brushName, ThemeVariant, out object? providerObject))
-			{
-				return (SolidColorBrush)providerObject!;
-			}
-		}
-
-		if (Application.Current.TryGetResource(brushName, ThemeVariant, out object? obj))
-		{
-			return (SolidColorBrush)obj!;
-		}
-
-		throw new Exception($"Brush not found: {brushName}");
+		return (SolidColorBrush)GetResource(brushName);
 	}
 
 	public static double GetDouble(string name)
 	{
-		if (Application.Current!.Resources.ThemeDictionaries.TryGetValue(ThemeVariant, out IThemeVariantProvider? provider))
+		object obj = GetResource(name);
+		if (obj is Thickness thickness)
 		{
-			if (provider.TryGetResource(name, ThemeVariant, out object? providerObject))
-			{
-				return (double)providerObject!;
-			}
+			return thickness.Left;
 		}
-
-		if (Application.Current.TryGetResource(name, ThemeVariant, out object? value))
+		else if (obj is CornerRadius cornerRadius)
 		{
-			return (double)value!;
+			return cornerRadius.BottomLeft;
 		}
-
-		throw new Exception($"Double not found: {name}");
+		else
+		{
+			return (double)GetResource(name);
+		}
 	}
 
 	public static FontFamily GetFontFamily(string name)
@@ -159,5 +171,25 @@ public static class SideScrollTheme
 		}
 
 		throw new Exception($"FontFamily not found: {name}");
+	}
+
+	public static FontWeight GetFontWeight(string name)
+	{
+		if (Application.Current!.TryGetResource(name, ThemeVariant, out object? value))
+		{
+			return (FontWeight)value!;
+		}
+
+		throw new Exception($"FontWeight not found: {name}");
+	}
+
+	public static Thickness GetThickness(string name)
+	{
+		if (Application.Current!.TryGetResource(name, ThemeVariant, out object? value))
+		{
+			return (Thickness)value!;
+		}
+
+		throw new Exception($"Thickness not found: {name}");
 	}
 }

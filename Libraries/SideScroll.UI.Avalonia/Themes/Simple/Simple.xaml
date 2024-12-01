@@ -58,7 +58,7 @@
           <!-- Buttons -->
           <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#27204a" />
           <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#60bdff" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundBrushPointerOver" Color="#2040a0" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#3060d0" />
 
           <!-- RadioButton -->
@@ -89,7 +89,7 @@
           <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="#21d064" />
           
           <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="Black" />
-          <SolidColorBrush x:Key="DataGridForegroundSelectedBrush" Color="Black" />
+          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="Black" />
           <SolidColorBrush x:Key="ThemeGridHighBrush" Color="#92F397" />
 
           <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#c8c2f9" />
@@ -128,8 +128,8 @@
           <!-- Text -->
           <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#172144" />
 
-          <SolidColorBrush x:Key="TextReadOnlyBackgroundBrush" Color="#c5c6c6" />
-          <SolidColorBrush x:Key="TextReadOnlyForegroundBrush" Color="#808080" />
+          <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#c5c6c6" />
+          <SolidColorBrush x:Key="TextControlForegroundReadOnlyBrush" Color="#808080" />
           
           <SolidColorBrush x:Key="TextControlBackgroundPointerOverBrush" Color="#ddffdd" />
 
@@ -181,7 +181,7 @@
           <!-- Buttons -->
           <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#1a1940" />
           <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#60bdff" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundBrushPointerOver" Color="#2040a0" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#3060d0" />
 
           <!-- RadioButton -->
@@ -204,7 +204,7 @@
           <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="#50c474" />
           
           <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="#b3b3b3" />
-          <SolidColorBrush x:Key="DataGridForegroundSelectedBrush" Color="#f0f0f0" />
+          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="#f0f0f0" />
           <SolidColorBrush x:Key="ThemeGridHighBrush" Color="#3060c0" />
 
           <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#686289" />
@@ -237,8 +237,8 @@
           <SolidColorBrush x:Key="ToolTipForegroundBrush" Color="#d0d0e8" />
 
           <!-- Text Control -->
-          <SolidColorBrush x:Key="TextReadOnlyBackgroundBrush" Color="#2e2e2e" />
-          <SolidColorBrush x:Key="TextReadOnlyForegroundBrush" Color="#808080" />
+          <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#2e2e2e" />
+          <SolidColorBrush x:Key="TextControlForegroundReadOnlyBrush" Color="#808080" />
           
           <SolidColorBrush x:Key="TextControlBackgroundPointerOverBrush" Color="#404040" />
 

@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using SideScroll.Attributes;
 using System.Diagnostics;
 using System.Reflection;
@@ -38,9 +37,8 @@ public class DataGridButtonColumn : DataGridBoundColumn
 		{
 			Padding = new Thickness(0),
 			Margin = new Thickness(0),
-			MinWidth = 15,
-			BorderThickness = new Thickness(1),
-			BorderBrush = Brushes.Black,
+			MinWidth = 12,
+			BorderThickness = new Thickness(0, 0, 0, 1),
 		};
 		button.Resources.Add("ButtonPadding", new Thickness(2, 5));
 		if (VisiblePropertyName != null)

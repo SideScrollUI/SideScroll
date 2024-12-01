@@ -4,14 +4,14 @@ SideScroll is a cross platform Avalonia UI framework designed for quickly naviga
 SideScroll is designed with speed in mind, for both development and usage. Most tabs are created in code which makes them easier to link together and refactor later. Any object can be viewed or edited by adding it to a tab, with all the controls being automatically created for you, and customized via attributes. DataRepos can be used to save and load these objects, and the selected items can be passed in links automatically.
 
 ## Features
-* .NET Cross Platform UI Framework that can run on any Windows, MacOS, or Linux system
+* .NET Cross Platform [Avalonia UI](https://github.com/AvaloniaUI/Avalonia) Framework that can run on any Windows, MacOS, or Linux system
 * Previous selections are used to automatically select the most likely new items
 * Open multiple paths at once to easily compare or update items
 * Create Links to share views with others
 * Use DataRepos to manage your local saving & loading
 * Load any object in a Param Control to create a form with matching Avalonia controls
-* Chart line series using the [LiveCharts 2](https://github.com/beto-rodriguez/LiveCharts2) controls
 * RichText document support using the [AvaloniaEdit](https://github.com/AvaloniaUI/AvaloniaEdit) controls
+* Chart line series using the [LiveCharts 2](https://github.com/beto-rodriguez/LiveCharts2) controls
 
 ## Examples
 #### VideoGamesDB

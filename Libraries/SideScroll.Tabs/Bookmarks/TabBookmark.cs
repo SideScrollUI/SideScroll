@@ -130,13 +130,13 @@ public class TabBookmark
 			Label = tabBookmark.Name,
 		};
 		ViewSettings ??= new TabViewSettings();
-		ViewSettings.TabDataSettings ??= new List<TabDataSettings>();
+		ViewSettings.TabDataSettings ??= [];
 		if (ViewSettings.TabDataSettings.Count == 0)
 		{
 			ViewSettings.TabDataSettings.Add(new TabDataSettings());
 		}
 		ViewSettings.TabDataSettings[0].SelectionType = SelectionType.User;
-		ViewSettings.TabDataSettings[0].SelectedRows ??= new HashSet<SelectedRow>();
+		ViewSettings.TabDataSettings[0].SelectedRows ??= [];
 		ViewSettings.TabDataSettings[0].SelectedRows.Add(selectedRow);
 		//Select(ChildBookmarks.Keys);
 	}

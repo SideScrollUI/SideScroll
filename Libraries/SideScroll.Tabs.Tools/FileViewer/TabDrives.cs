@@ -1,3 +1,5 @@
+using SideScroll.Tabs.Lists;
+
 namespace SideScroll.Tabs.Tools.FileViewer;
 
 public class TabDrives(FileSelectorOptions? fileSelectorOptions = null) : ITab
@@ -13,7 +15,7 @@ public class TabDrives(FileSelectorOptions? fileSelectorOptions = null) : ITab
 			DriveInfo[] drives = DriveInfo.GetDrives();
 
 			model.Items = drives
-				.Select(d => new TabDirectory(d.Name, tab.FileSelectorOptions))
+				.Select(drive => new ListPair(drive.Name, drive.VolumeLabel, new TabDirectory(drive.Name, tab.FileSelectorOptions)))
 				.ToList();
 		}
 	}

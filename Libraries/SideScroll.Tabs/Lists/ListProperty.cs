@@ -72,7 +72,18 @@ public class ListProperty : ListMember, IPropertyEditable
 
 					if (!type.IsInstanceOfType(value))
 					{
-						value = Convert.ChangeType(value, type);
+						if (value is IConvertible)
+						{
+							value = Convert.ChangeType(value, type);
+						}
+						else if (type == typeof(string))
+						{
+							value = value.ToString();
+						}
+						else
+						{
+							throw new InvalidCastException($"Cannot convert {value} to type {type}");
+						}
 					}
 				}
 
@@ -105,7 +116,8 @@ public class ListProperty : ListMember, IPropertyEditable
 
 		Name = nameAttribute?.Name ?? propertyInfo.Name.WordSpaced();
 
-		if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+		if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null ||
+			PropertyInfo.PropertyType.GetCustomAttribute<DebugOnlyAttribute>() != null)
 		{
 			Name = "* " + Name;
 		}

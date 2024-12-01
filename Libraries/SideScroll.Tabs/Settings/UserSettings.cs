@@ -1,4 +1,5 @@
 using SideScroll.Attributes;
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
 namespace SideScroll.Tabs.Settings;
@@ -22,7 +23,7 @@ public class UserSettings
 
 	//public int MaxLogItems { get; set; } = 100_000;
 
-	public static List<string> Themes { get; set; } = [];
+	public static IList? Themes { get; set; }
 
 	[BindList(nameof(Themes))]
 	public string? Theme { get; set; }

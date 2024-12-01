@@ -3,7 +3,7 @@ using System.Collections;
 using System.Reflection;
 using System.Xml;
 
-namespace SideScroll.Extensions; // rename to Core?
+namespace SideScroll.Extensions;
 
 public static class SideScrollExtensions
 {

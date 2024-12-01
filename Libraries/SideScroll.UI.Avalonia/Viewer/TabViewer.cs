@@ -9,7 +9,6 @@ using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.UI.Avalonia.Controls;
 using SideScroll.UI.Avalonia.Tabs;
-using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Utilities;
 using SideScroll.UI.Avalonia.View;
 using System.Diagnostics.CodeAnalysis;
@@ -68,15 +67,10 @@ public class TabViewer : Grid
 	[MemberNotNull(nameof(BottomGrid)), MemberNotNull(nameof(ScrollViewer)), MemberNotNull(nameof(ContentGrid))]
 	private void InitializeComponent()
 	{
-		Background = SideScrollTheme.TabBackground;
-
 		// Toolbar
 		// ScrollViewer | Buttons
 		ColumnDefinitions = new ColumnDefinitions("*");
 		RowDefinitions = new RowDefinitions("Auto,*");
-
-		HorizontalAlignment = HorizontalAlignment.Stretch;
-		VerticalAlignment = VerticalAlignment.Stretch;
 
 		AddToolbar();
 
@@ -139,24 +133,13 @@ public class TabViewer : Grid
 		TabView!.Instance.Reload();
 	}
 
-	private static void ShowFlyout(Control control, Flyout flyout, string text)
-	{
-		flyout.Content = text;
-		flyout.ShowAt(control);
-	}
-
-	private static void PostShowFlyout(Control control, Flyout flyout, string text)
-	{
-		Dispatcher.UIThread.Post(() => ShowFlyout(control, flyout, text));
-	}
-
 	private async Task LinkAsync(Call call)
 	{
 		Flyout flyout = new()
 		{
 			Placement = PlacementMode.BottomEdgeAlignedLeft,
 		};
-		PostShowFlyout(Toolbar!.ButtonLink!, flyout, "Creating Link ...");
+		AvaloniaUtils.ShowFlyout(Toolbar!.ButtonLink!, flyout, "Creating Link ...");
 
 		Bookmark bookmark = TabView!.Instance.CreateBookmark();
 		TabBookmark? leafNode = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
@@ -178,11 +161,11 @@ public class TabViewer : Grid
 				return;
 
 			await ClipboardUtils.SetTextAsync(this, uri);
-			PostShowFlyout(Toolbar!.ButtonLink!, flyout, "Link copied to clipboard");
+			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonLink!, flyout, "Link copied to clipboard");
 		}
 		catch (Exception ex)
 		{
-			PostShowFlyout(Toolbar!.ButtonLink!, flyout, ex.Message);
+			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonLink!, flyout, ex.Message);
 		}
 	}
 
@@ -203,7 +186,7 @@ public class TabViewer : Grid
 		{
 			Placement = PlacementMode.BottomEdgeAlignedLeft,
 		};
-		Dispatcher.UIThread.Post(() => ShowFlyout(Toolbar!.ButtonImport!, flyout, "Importing Link ..."));
+		AvaloniaUtils.ShowFlyout(Toolbar!.ButtonImport!, flyout, "Importing Link ...");
 
 		try
 		{
@@ -211,17 +194,17 @@ public class TabViewer : Grid
 			if (bookmark == null)
 				return null;
 
-			PostShowFlyout(Toolbar!.ButtonImport!, flyout, "Link retrieved, importing");
+			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonImport!, flyout, "Link retrieved, importing");
 
 			ImportBookmark(call, bookmark);
 
-			PostShowFlyout(Toolbar!.ButtonImport!, flyout, "Link imported");
+			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonImport!, flyout, "Link imported");
 
 			return bookmark;
 		}
 		catch (Exception ex)
 		{
-			PostShowFlyout(Toolbar!.ButtonImport!, flyout, ex.Message);
+			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonImport!, flyout, ex.Message);
 			return null;
 		}
 	}
@@ -314,7 +297,9 @@ public class TabViewer : Grid
 
 		Children.Remove(ContentControl);
 		if (BottomGrid.Parent == null)
+		{
 			Children.Add(BottomGrid);
+		}
 	}
 
 	private Grid CreateScrollButtons()
@@ -328,30 +313,24 @@ public class TabViewer : Grid
 			[Grid.ColumnProperty] = 1,
 		};
 
-		TabControlButton buttonExpand = new()
+		TabControlButton buttonScrollRight = new()
 		{
 			Content = ">",
-			Foreground = SideScrollTheme.ToolbarLabelForeground,
-			VerticalAlignment = VerticalAlignment.Stretch,
-			VerticalContentAlignment = VerticalAlignment.Center,
 			[ToolTip.ShowDelayProperty] = 5,
 			[ToolTip.TipProperty] = "Scroll Right ( -> )",
 			[Grid.RowProperty] = 0,
 		};
-		buttonExpand.Click += ButtonExpand_Click;
-		grid.Children.Add(buttonExpand);
+		buttonScrollRight.Click += ButtonExpand_Click;
+		grid.Children.Add(buttonScrollRight);
 
-		TabControlButton buttonCollapse = new()
+		TabControlButton buttonScrollLeft = new()
 		{
 			Content = "<",
-			Foreground = SideScrollTheme.ToolbarLabelForeground,
-			VerticalAlignment = VerticalAlignment.Stretch,
-			VerticalContentAlignment = VerticalAlignment.Center,
 			[ToolTip.TipProperty] = "Scroll Left ( <- )",
 			[Grid.RowProperty] = 1,
 		};
-		buttonCollapse.Click += ButtonCollapse_Click;
-		grid.Children.Add(buttonCollapse);
+		buttonScrollLeft.Click += ButtonCollapse_Click;
+		grid.Children.Add(buttonScrollLeft);
 
 		return grid;
 	}
@@ -377,7 +356,6 @@ public class TabViewer : Grid
 		double minXOffset = ScrollViewer.Offset.X + amount;
 		double widthRequired = minXOffset + ScrollViewer.Viewport.Width;
 		ContentGrid.MinWidth = widthRequired;
-		ContentGrid.Width = widthRequired;
 
 		// Force the ScrollViewer to update it's ViewPort so we can set an offset past the old bounds
 		Dispatcher.UIThread.RunJobs(DispatcherPriority.Render);

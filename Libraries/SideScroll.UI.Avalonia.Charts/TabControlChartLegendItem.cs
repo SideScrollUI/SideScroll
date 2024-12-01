@@ -64,7 +64,6 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		ColumnDefinitions = new ColumnDefinitions("Auto, *, Auto");
 		RowDefinitions = new RowDefinitions("Auto");
 
-		Background = SideScrollTheme.TabBackground;
 		_colorBrush = new SolidColorBrush(ChartSeries.Color);
 
 		UpdateTotal();
@@ -104,10 +103,11 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		_polygon = new Polygon
 		{
 			Width = 16,
-			Height = 16,
-			Stroke = Brushes.Black,
+			Height = height,
+			Stroke = SideScrollTheme.ChartLegendIconBorder,
 			StrokeThickness = 1.5,
 			Points = GetPolygonPoints(width, height),
+			VerticalAlignment = VerticalAlignment.Center,
 		};
 
 		if (Count > 0)
@@ -148,6 +148,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			Margin = new Thickness(2, 2, 6, 2),
 			//VerticalAlignment = VerticalAlignment.Center,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
+			Foreground = SideScrollTheme.ChartLabelForeground,
 			[Grid.ColumnProperty] = 1,
 		};
 		UpdateTitleText();
@@ -172,6 +173,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			Text = Total?.FormattedShortDecimal(),
 			Margin = new Thickness(10, 2, 6, 2),
 			HorizontalAlignment = HorizontalAlignment.Right,
+			Foreground = SideScrollTheme.ChartLabelForeground,
 			[Grid.ColumnProperty] = 2,
 		};
 		Children.Add(TextBlockTotal);
@@ -203,10 +205,10 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 				UpdatePolygonPoints(13, 13);
 				_highlight = false;
 				SetFilled(IsSelected);
-				TextBlock!.Foreground = SideScrollTheme.LabelForeground;
+				TextBlock!.Foreground = SideScrollTheme.ChartLabelForeground;
 				if (TextBlockTotal != null)
 				{
-					TextBlockTotal.Foreground = SideScrollTheme.LabelForeground;
+					TextBlockTotal.Foreground = SideScrollTheme.ChartLabelForeground;
 				}
 			}
 

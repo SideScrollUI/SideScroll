@@ -1,7 +1,7 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Serialize;
@@ -69,7 +69,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 		private TabControlParams? _paramControl;
 
 		private ThemeHistory _history = new();
-		private bool _replaceLastHistory;
+		private bool _lastHistoryUpdatable;
 
 		private bool _ignoreColorChange;
 
@@ -100,7 +100,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 		public void Undo(Call call)
 		{
-			_replaceLastHistory = false;
+			_lastHistoryUpdatable = false;
 			if (_history.TryGetPrevious(out var previous))
 			{
 				LoadTheme(previous);
@@ -128,27 +128,29 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 		// Focus is lost when opening the ColorPicker
 		public void ColorPicker_LostFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 		{
-			_replaceLastHistory = false;
+			_lastHistoryUpdatable = false;
 		}
 
 		public void ColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
 		{
 			if (_ignoreColorChange) return;
 
-			Dispatcher.UIThread.Post(AddColorChange);
+			bool isColorPickerOpen = sender is ColorPicker colorPicker &&
+				colorPicker.GetVisualChildren().FirstOrDefault() is DropDownButton button &&
+				button.Flyout?.IsOpen == true;
+
+			Dispatcher.UIThread.Post(() => AddColorChange(isColorPickerOpen));
 		}
 
-		private void AddColorChange()
+		private void AddColorChange(bool isColorPickerOpen)
 		{
 			UpdateTheme();
-			AddHistory();
+			AddHistory(isColorPickerOpen);
 		}
 
 		private void Reset(Call call)
 		{
-			Application.Current!.RequestedThemeVariant = ThemeSettings.GetVariant();
-			ThemeSettings.LoadFromCurrent();
-			ThemeManager.LoadTheme(ThemeSettings);
+			ThemeSettings = ThemeManager.Reset(ThemeSettings);
 			Reload();
 		}
 
@@ -163,19 +165,19 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 			ThemeManager.LoadTheme(ThemeSettings);
 		}
 
-		private void AddHistory()
+		private void AddHistory(bool isUpdatable)
 		{
 			if (_ignoreColorChange) return;
 
-			if (_replaceLastHistory)
+			if (_lastHistoryUpdatable && isUpdatable)
 			{
 				_history.Replace(ThemeSettings);
 			}
 			else
 			{
 				_history.Add(ThemeSettings);
-				_replaceLastHistory = true;
 			}
+			_lastHistoryUpdatable = isUpdatable;
 		}
 
 		private void CopyToClipboard(Call call)

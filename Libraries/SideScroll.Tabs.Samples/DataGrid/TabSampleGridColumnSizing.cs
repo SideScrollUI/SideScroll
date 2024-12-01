@@ -19,7 +19,7 @@ public class TabSampleGridColumnSizing : ITab
 					Long = (long)i * int.MaxValue,
 					DateTime = new DateTime(DateTime.Now.Ticks + i),
 					TimeSpan = TimeSpan.FromHours(i),
-					Bool = (i % 2 == 1),
+					Bool = i % 2 == 1,
 				};
 
 				testItem.LongString += i; // make as a unique string

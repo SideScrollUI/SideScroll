@@ -42,10 +42,10 @@
       "Moons": 1,
       "TemperatureC": {
         "Min": -88,
-        "Max": 58,
-        "Inner": true
+        "Max": 58
       },
-      "OrbitalPeriodDays": 365.25
+      "OrbitalPeriodDays": 365.25,
+      "Inner": true
     },
     {
       "Name": "Mars",

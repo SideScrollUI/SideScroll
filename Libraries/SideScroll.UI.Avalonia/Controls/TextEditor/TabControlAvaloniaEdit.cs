@@ -39,7 +39,7 @@ public enum TextType
 	Xml,
 }
 
-public class TabControlAvaloniaEdit : Grid
+public class TabControlAvaloniaEdit : Border
 {
 	public const int MaxAutoLoadSize = 1_000_000;
 
@@ -55,16 +55,14 @@ public class TabControlAvaloniaEdit : Grid
 	{
 		TabInstance = tabInstance;
 
-		Background = SideScrollTheme.TextEditorBackgroundBrush;
-
 		MinWidth = 50; // WordWrap causes freezing below certain values
 		MaxWidth = 3000;
 
-		ColumnDefinitions = new ColumnDefinitions("*");
-		RowDefinitions = new RowDefinitions("*");
-
-		HorizontalAlignment = HorizontalAlignment.Stretch;
-		VerticalAlignment = VerticalAlignment.Stretch;
+		Grid containerGrid = new()
+		{
+			ColumnDefinitions = new ColumnDefinitions("*"),
+			RowDefinitions = new RowDefinitions("*"),
+		};
 
 		TextEditor = new TabControlTextEditor
 		{
@@ -80,9 +78,13 @@ public class TabControlAvaloniaEdit : Grid
 			VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
 			Padding = new Thickness(6),
 			FontSize = 14,
+			//BorderThickness = new Thickness(1),
+			//BorderBrush = Brushes.Black,
 		};
 		TextEditor.Options.AllowScrollBelowDocument = false; // Breaks top alignment
-		Children.Add(TextEditor);
+		containerGrid.Children.Add(TextEditor);
+
+		Child = containerGrid;
 
 		ActualThemeVariantChanged += TabControlAvaloniaEdit_ActualThemeVariantChanged;
 
@@ -153,10 +155,11 @@ public class TabControlAvaloniaEdit : Grid
 		if (SideScrollTheme.MonospaceFontFamily is FontFamily fontFamily)
 		{
 			TextEditor.FontFamily = fontFamily;
+			TextEditor.FontWeight = SideScrollTheme.MonospaceFontWeight;
 		}
 	}
 
-	private void EnableJsonSyntaxHighlighting()
+	public void EnableJsonSyntaxHighlighting()
 	{
 		TextEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("Json");
 
@@ -168,7 +171,7 @@ public class TabControlAvaloniaEdit : Grid
 		SetHighlightColor("Punctuation", SideScrollTheme.JsonHighlightPunctuationBrush.Color);
 	}
 
-	private void EnableXmlSyntaxHighlighting()
+	public void EnableXmlSyntaxHighlighting()
 	{
 		TextEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("XML");
 
@@ -183,7 +186,7 @@ public class TabControlAvaloniaEdit : Grid
 		SetHighlightColor("BrokenEntity", SideScrollTheme.XmlHighlightBrokenEntityBrush.Color);
 	}
 
-	private void SetHighlightColor(string name, Color color)
+	public void SetHighlightColor(string name, Color color)
 	{
 		var highlightColor = TextEditor.SyntaxHighlighting.GetNamedColor(name);
 		highlightColor.Foreground = new SimpleHighlightingBrush(color);

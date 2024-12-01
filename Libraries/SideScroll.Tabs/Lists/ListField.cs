@@ -58,7 +58,8 @@ public class ListField : ListMember, IPropertyEditable
 
 		Name = nameAttribute?.Name ?? fieldInfo.Name.WordSpaced();
 
-		if (FieldInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+		if (FieldInfo.GetCustomAttribute<DebugOnlyAttribute>() != null &&
+			FieldInfo.FieldType.GetCustomAttribute<DebugOnlyAttribute>() != null)
 		{
 			Name = "* " + Name;
 		}

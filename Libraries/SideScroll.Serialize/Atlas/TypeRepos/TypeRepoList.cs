@@ -1,6 +1,7 @@
 using SideScroll.Logs;
 using SideScroll.Serialize.Atlas.Schema;
 using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace SideScroll.Serialize.Atlas.TypeRepos;
@@ -26,10 +27,18 @@ public class TypeRepoList : TypeRepo
 	public TypeRepoList(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
-		Type[] types = Type!.GetGenericArguments();
+		Type[] types = LoadableType!
+			.GetInterfaces()
+			.FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IList<>))?
+			.GetGenericArguments() ?? LoadableType.GetGenericArguments();
+
 		if (types.Length > 0)
 		{
 			_elementType = types[0];
+		}
+		else
+		{
+			Debug.WriteLine($"Failed to find generic argument for {LoadableType}");
 		}
 	}
 

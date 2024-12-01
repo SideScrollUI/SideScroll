@@ -6,7 +6,6 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using SideScroll.Attributes;
@@ -178,14 +177,13 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			CanUserReorderColumns = true,
 			CanUserSortColumns = true,
 
-			BorderBrush = Brushes.Black,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
 			//BorderThickness = new Thickness(0), // DataGrid bug, fixes the extra border below the scrollbar, but then there's no border
 			//Padding = new Thickness(0),
 
-			BorderThickness = new Thickness(1),
+			BorderThickness = new Thickness(0, 1),
 			IsReadOnly = !TabModel.Editing,
 			GridLinesVisibility = DataGridGridLinesVisibility.None,
 			MaxWidth = 4000,
@@ -572,9 +570,21 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		if (propertyColumns.Count == 0)
 			return;
 
-		if (List is IItemCollection itemCollection && itemCollection.ColumnName != null)
+		// 2 columns need headers for resizing first column?
+		// For visual color separation due to HasLinks background color being too close to title
+		bool showHeader = propertyColumns.Count != 1 && !typeof(IListPair).IsAssignableFrom(_elementType);
+		if (List is IItemCollection itemCollection)
 		{
-			propertyColumns[0].Label = itemCollection.ColumnName;
+			if (itemCollection.ColumnName is string columnName)
+			{
+				propertyColumns[0].Label = columnName;
+			}
+			showHeader = itemCollection.ShowHeader ?? showHeader;
+		}
+
+		if (!showHeader)
+		{
+			DataGrid.HeadersVisibility = DataGridHeadersVisibility.None;
 		}
 
 		bool styleCells = methodColumns.Count > 0 ||
@@ -590,11 +600,6 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		// 1 column should take up entire grid
 		//if (dataGrid.Columns.Count == 1)
 		//	dataGrid.Columns[0].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-
-		// 2 columns need headers for resizing first column?
-		// For visual color separation due to HasLinks background color being too close to title
-		if (propertyColumns.Count == 1 || typeof(IListPair).IsAssignableFrom(_elementType))
-			DataGrid.HeadersVisibility = DataGridHeadersVisibility.None;
 	}
 
 	public void AddColumn(string label, string propertyName, bool styleCells = false)
@@ -1104,7 +1109,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 				CollectionView!.Filter = null;
 			}
 
-			if (TabModel.SearchFilter != null)
+			if (TabModel.SearchFilter != null && TabInstance.IsLoaded)
 			{
 				// Update Child Controls in case children use same search filter
 				UpdateSelection(true);

@@ -37,6 +37,7 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/ControlThemes.xaml"/>
+        <!--ResourceInclude Source="avares://SideScroll.UI.Avalonia.Charts.LiveCharts/Themes/ControlThemes.xaml"/-->
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

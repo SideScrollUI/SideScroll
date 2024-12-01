@@ -14,7 +14,7 @@
 * SideScroll.Serialize
   - Serializes objects to and from a local DataRepo
   - Supports lazy loading and circular references
-  - [Serializer.md]
+  - [Serializer](Serializer.md)
 
 * SideScroll.Network
   - HTTP - (downloading files)

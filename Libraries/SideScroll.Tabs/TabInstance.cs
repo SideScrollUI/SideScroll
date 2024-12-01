@@ -374,7 +374,7 @@ public class TabInstance : IDisposable
 	{
 		var model = new TabModel(Model.Name)
 		{
-			Tasks = Model.Tasks,
+			Tasks = new(Model.Tasks),
 		};
 
 		if (this is ITabAsync tabAsync)
@@ -386,9 +386,8 @@ public class TabInstance : IDisposable
 			catch (Exception e)
 			{
 				model.AddData(e);
-				//tabModel.Tasks.Add(call.taskInstance);
+				//model.Tasks.Add(call.TaskInstance);
 			}
-			//StartAsync(ReinitializeAsync);
 		}
 
 		if (HasLoadMethod)
@@ -406,9 +405,9 @@ public class TabInstance : IDisposable
 			// Posted Log messages won't have taken affect here yet
 			// Task.OnFinished hasn't always been called by this point
 			if ((model.ShowTasks || call.Log.Level >= LogLevel.Error)
-				&& !Model.Tasks.Contains(call.TaskInstance!))
+				&& !model.Tasks.Contains(call.TaskInstance!))
 			{
-				Model.Tasks.Add(call.TaskInstance!);
+				model.Tasks.Add(call.TaskInstance!);
 			}
 		}
 		return model;

@@ -1,8 +1,8 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using SideScroll.Tabs.Lists;
+using SideScroll.UI.Avalonia.Utilities;
 using System.Collections;
 using System.Reflection;
 
@@ -13,6 +13,8 @@ public class TabControlComboBox : ComboBox
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
 	public ListProperty? Property;
+
+	public override string? ToString() => SelectedItem?.ToString();
 
 	public TabControlComboBox()
 	{
@@ -36,10 +38,13 @@ public class TabControlComboBox : ComboBox
 
 		if (listPropertyName != null)
 		{
-			PropertyInfo propertyInfo = property.Object.GetType().GetProperty(listPropertyName, 
+			PropertyInfo? propertyInfo = property.Object.GetType().GetProperty(listPropertyName, 
 				BindingFlags.Public | BindingFlags.NonPublic | 
 				BindingFlags.Instance | BindingFlags.Static |
-				BindingFlags.FlattenHierarchy)!;
+				BindingFlags.FlattenHierarchy);
+
+			ArgumentNullException.ThrowIfNull(propertyInfo);
+
 			ItemsSource = propertyInfo.GetValue(property.Object) as IEnumerable;
 		}
 		else
@@ -54,6 +59,8 @@ public class TabControlComboBox : ComboBox
 		MaxWidth = TabControlParams.ControlMaxWidth;
 
 		HorizontalAlignment = HorizontalAlignment.Stretch;
+
+		AvaloniaUtils.AddContextMenu(this);
 	}
 
 	public void Bind(object obj, string path)
@@ -64,7 +71,7 @@ public class TabControlComboBox : ComboBox
 			Mode = BindingMode.TwoWay,
 			Source = obj,
 		};
-		this.Bind(SelectedItemProperty, binding);
+		Bind(SelectedItemProperty, binding);
 
 		SelectDefaultValue();
 	}

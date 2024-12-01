@@ -9,7 +9,7 @@
         
           <!-- Fluent Defaults -->
 
-          <CornerRadius x:Key="ControlCornerRadius">3</CornerRadius>
+          <CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
 
           <Color x:Key="SystemBaseLowColor">#33000000</Color>
           <Color x:Key="SystemBaseMediumColor">#33FF0000</Color>
@@ -27,7 +27,7 @@
           <Color x:Key="ThemeControlBorderHighColor">#3060c0</Color>
           <Color x:Key="ThemeControlBackgroundSelectedColor">#009dff</Color>
 
-          <Color x:Key="IconForegroundColor">#006df0</Color>
+          <Color x:Key="IconForegroundColor">#ff0063ed</Color>
 
           <SolidColorBrush x:Key="SystemControlBackgroundBaseLowBrush" Color="#2a2954" />
           <SolidColorBrush x:Key="SystemControlErrorTextForegroundBrush" Color="#ffbb12"/>
@@ -37,8 +37,9 @@
           <SolidColorBrush x:Key="TextControlBackground" Color="#ffffff" />
 
           <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="TextControlBorderBrush" Color="#b508061c" />
           <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
-          <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="{DynamicResource IconForegroundColor}" />
+          <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#ff006df0" />
 
           <SolidColorBrush x:Key="TextControlSelectionForegroundBrush" Color="#FFFFFFFF" />
 
@@ -104,15 +105,16 @@
           
           <SolidColorBrush x:Key="ButtonBackground" Color="#292f66" />
           <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#2040a0" />
-          <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#2A63B8" />
+          <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#ff2d53c4" />
 
           <SolidColorBrush x:Key="ButtonForeground" Color="#d0d0e8" />
-          <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#d0d0e8" />
-          <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#ffe6e6f2" />
+          <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#fff0f0f7" />
 
-          <SolidColorBrush x:Key="ButtonBorderBrush" Color="#000000" />
+          <SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff02031c" />
+          <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#ff09035c" />
 
-          <CornerRadius x:Key="ButtonCornerRadius">5</CornerRadius>
+          <CornerRadius x:Key="ButtonCornerRadius">7</CornerRadius>
           <Thickness x:Key="ButtonBorderThemeThickness">1.5</Thickness>
 
           <!-- Simple and Fluent Tab/Toolbar Button -->
@@ -164,52 +166,76 @@
           <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#27204a" />
           <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#27204a" />
 
+          <SolidColorBrush x:Key="ScrollBarShowingBorderBrush" Color="#FF000000" />
+
           <!-- DataGrid -->
           
           <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#27204a" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#d0d0f0" />
-          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrushPointerOver" Color="#d8d8f8" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#d8d8f8" />
 
           <SolidColorBrush x:Key="DataGridRowBackgroundBrush" Color="#FFFFFF" />
           <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="#88ff88" />
           
           <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="Black" />
-          <SolidColorBrush x:Key="DataGridCellForegroundBrushPointerOver" Color="Black" />
-          <SolidColorBrush x:Key="DataGridForegroundSelectedBrush" Color="Black" />
+          <SolidColorBrush x:Key="DataGridCellForegroundPointerOverBrush" Color="Black" />
+          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="Black" />
           <SolidColorBrush x:Key="DataGridCellBorderBrush" Color="LightGray" />
+          <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="#ff006600" />
           
           <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#d0d0f0" />
 
           <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#c8c2f9" />
 
+          <SolidColorBrush x:Key="DataGridBorderBrush" Color="Black" />
+
+          <SolidColorBrush x:Key="DataGridHeaderSeparatorBrush" Color="Black" />
+          
+          <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
+
           <!--- End Fluent Defaults -->
 
           <!-- Custom Resources -->
+          
+          <!-- Fonts -->
+          
+          <FontFamily x:Key="SourceCodeProFont">avares://SideScroll.UI.Avalonia/Assets/Fonts#Source Code Pro</FontFamily>
 
-          <FontFamily x:Key="MonospaceFontFamily">Courier New</FontFamily>
+          <!--FontWeight x:Key="ControlContentThemeFontWeight">Normal</FontWeight-->
+          <FontFamily x:Key="MonospaceFontFamily">Source Code Pro</FontFamily>
+          <FontWeight x:Key="MonospaceFontWeight">Normal</FontWeight>
 
           <!-- Tab -->
 
           <SolidColorBrush x:Key="TabBackgroundBrush" Color="#141414" />
           <SolidColorBrush x:Key="TabBackgroundFocusedBrush" Color="#1e1e1e" />
+          <SolidColorBrush x:Key="TabBackgroundBorderBrush" Color="Black" />
 
           <SolidColorBrush x:Key="TabHeaderForegroundBrush" Color="#9c9c9c" />
           
           <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
+          <SolidColorBrush x:Key="TabSectionSeparatorBrush" Color="#ff050524" />
 
           <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#27204a" />
 
-          <sys:Double x:Key="TabSplitterSize">5</sys:Double>
+          <SolidColorBrush x:Key="TabSplitterBackgroundBrush" Color="#000000" />
+          <sys:Double x:Key="TabSplitterSize">6</sys:Double>
 
           <!-- Title -->
           
           <SolidColorBrush x:Key="TitleBackgroundBrush" Color="#4f52bb" />
+          <SolidColorBrush x:Key="TitleButtonBackgroundPointerOverBrush" Color="#292dab" />
           <SolidColorBrush x:Key="TitleForegroundBrush" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="TitleBorderBrush" Color="Black" />
 
           <!-- Toolbar -->
           
-          <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#27204a" />
+          <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#ff20204a" />
+          
           <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#303080" />
+          <CornerRadius x:Key="ToolbarButtonCornerRadius">6</CornerRadius>
+          
           <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#393940" />
 
           <SolidColorBrush x:Key="ToolbarLabelForegroundBrush" Color="#D0D0E8" />
@@ -237,8 +263,7 @@
 
           <!-- ScrollBar -->
 
-          <SolidColorBrush x:Key="ThemeScrollBarBackground" Color="#38409a" />
-          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#38409a" />
+          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#202559" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#38409a" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="#477ed7" />
 
@@ -252,23 +277,28 @@
           <!-- DatGrid & Title Buttons -->
           
           <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#27204a" />
-          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#8888FF" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundBrushPointerOver" Color="#2040a0" />
+          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#d0d0f0" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#292f66" />
+          <SolidColorBrush x:Key="ThemeButtonBorderBrush" Color="#ff01020d" />
 
           <!-- Text -->
 
           <SolidColorBrush x:Key="LabelForegroundBrush" Color="#e3e3e3" />
-          
-          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#172144" />
 
-          <SolidColorBrush x:Key="TextReadOnlyBackgroundBrush" Color="#c5c6c6" />
-          <SolidColorBrush x:Key="TextReadOnlyForegroundBrush" Color="#606060" />
+          <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#c5c6c6" />
+          <SolidColorBrush x:Key="TextControlForegroundReadOnlyBrush" Color="#606060" />
           
           <SolidColorBrush x:Key="TextControlBackgroundPointerOverBrush" Color="#ddffdd" />
 
           <Thickness x:Key="ThemeBorderThickness">1</Thickness>
           <sys:Double x:Key="ThemeDisabledOpacity">0.75</sys:Double>
+
+          <!-- TextArea -->
+
+          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#172144" />
+          <SolidColorBrush x:Key="TextAreaForegroundBrush" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="TextAreaBorderBrush" Color="Black" />
 
           <!-- Fonts -->
 
@@ -278,9 +308,33 @@
 
           <!-- Chart -->
 
-          <SolidColorBrush x:Key="ChartLabelForegroundHighlightBrush" Color="#21d064" />
+          <SolidColorBrush x:Key="ChartBackgroundBrush" Color="#141414" />
           <SolidColorBrush x:Key="ChartBackgroundSelectedBrush" Color="#448dff" />
           <sys:Double x:Key="ChartBackgroundSelectedAlpha">64</sys:Double>
+          
+          <SolidColorBrush x:Key="ChartLabelForegroundBrush" Color="#d6d6d6" />
+          <SolidColorBrush x:Key="ChartLabelForegroundHighlightBrush" Color="#21d064" />
+          
+          <SolidColorBrush x:Key="ChartGridLinesBrush" Color="#333333" />
+          <SolidColorBrush x:Key="ChartNowLineBrush" Color="Green" />
+
+          <SolidColorBrush x:Key="ChartToolTipBackgroundBrush" Color="#E1102670" />
+          <SolidColorBrush x:Key="ChartToolTipForegroundBrush" Color="#D0D0E8" />
+
+          <SolidColorBrush x:Key="ChartBorderBrush" Color="Black" />
+          <Thickness x:Key="ChartBorderThickness">0</Thickness>
+          <SolidColorBrush x:Key="ChartLegendIconBorderBrush" Color="Black" />
+
+          <SolidColorBrush x:Key="ChartSeries1Brush" Color="LawnGreen" />
+          <SolidColorBrush x:Key="ChartSeries2Brush" Color="Fuchsia" />
+          <SolidColorBrush x:Key="ChartSeries3Brush" Color="DodgerBlue" />
+          <SolidColorBrush x:Key="ChartSeries4Brush" Color="Gold" />
+          <SolidColorBrush x:Key="ChartSeries5Brush" Color="Red" />
+          <SolidColorBrush x:Key="ChartSeries6Brush" Color="Cyan" />
+          <SolidColorBrush x:Key="ChartSeries7Brush" Color="BlueViolet" />
+          <SolidColorBrush x:Key="ChartSeries8Brush" Color="Orange" />
+          <SolidColorBrush x:Key="ChartSeries9Brush" Color="Salmon" />
+          <SolidColorBrush x:Key="ChartSeries10Brush" Color="MediumSpringGreen" />
       
           <!-- ColorPicker -->
           
@@ -297,6 +351,8 @@
           <!-- SelectionForeground can't be set to a light color yet so use a light selection color instead -->
           <SolidColorBrush x:Key="TextEditorBackgroundBrush" Color="#FFFFFF" />
           <SolidColorBrush x:Key="TextEditorForegroundBrush" Color="Black" />
+          <SolidColorBrush x:Key="TextEditorBorderBrush" Color="Black" />
+          
           <SolidColorBrush x:Key="TextAreaSelectionBrush" Color="#b8d6ff" />
           <SolidColorBrush x:Key="LinkTextForegroundBrush" Color="Blue" />
 
@@ -312,8 +368,8 @@
           <SolidColorBrush x:Key="XmlHighlightDocTypeBrush" Color="Blue" />
           <SolidColorBrush x:Key="XmlHighlightDeclarationBrush" Color="Blue" />
           <SolidColorBrush x:Key="XmlHighlightTagBrush" Color="DarkMagenta" />
-          <SolidColorBrush x:Key="XmlHighlightAttributeNameBrush" Color="Red" />
-          <SolidColorBrush x:Key="XmlHighlightAttributeValueBrush" Color="Blue" />
+          <SolidColorBrush x:Key="XmlHighlightAttributeNameBrush" Color="#fff77800" />
+          <SolidColorBrush x:Key="XmlHighlightAttributeValueBrush" Color="#ff2600e6" />
           <SolidColorBrush x:Key="XmlHighlightEntityBrush" Color="Teal" />
           <SolidColorBrush x:Key="XmlHighlightBrokenEntityBrush" Color="Olive" />
 
@@ -367,7 +423,7 @@
 
           <SolidColorBrush x:Key="ComboBoxBackground" Color="{DynamicResource SystemAltMediumLowColor}" />
           <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="{StaticResource SystemAltMediumColor}" />
-          <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#33FFFFFF" />
+          <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#ff3060c0" />
           <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
 
           <SolidColorBrush x:Key="ComboBoxForeground" Color="{DynamicResource TextForegroundColor}" />
@@ -425,13 +481,16 @@
 
           <!-- Buttons -->
           
-          <SolidColorBrush x:Key="ButtonBackground" Color="#191F45" />
+          <SolidColorBrush x:Key="ButtonBackground" Color="#ff1a1d47" />
           <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#2040a0" />
           <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#363f80" />
 
-          <SolidColorBrush x:Key="ButtonForeground" Color="#ADADC9" />
-          <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#ADADC9" />
-          <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#ADADC9" />
+          <SolidColorBrush x:Key="ButtonForeground" Color="#ffadafc9" />
+          <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#ffc1c2c9" />
+          <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#ffd0d1d9" />
+
+          <SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff01020d" />
+          <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#ff000033" />
 
           <!-- Simple and Fluent Tab/Toolbar Button -->
           
@@ -459,8 +518,8 @@
 
           <!-- ToolTip -->
           
-          <SolidColorBrush x:Key="ToolTipBackground" Color="#E8122D5F" />
-          <SolidColorBrush x:Key="ToolTipForeground" Color="#D0D0E8" />
+          <SolidColorBrush x:Key="ToolTipBackground" Color="#e8131b45" />
+          <SolidColorBrush x:Key="ToolTipForeground" Color="#ffbdbdde" />
           <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#FF000000" />
 
           <!-- ScrollBar -->
@@ -482,17 +541,18 @@
           <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="{DynamicResource DataGridAccentColor}" />
           
           <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="{DynamicResource TextForegroundColor}" />
-          <SolidColorBrush x:Key="DataGridCellForegroundBrushPointerOver" Color="#cccccc" />
+          <SolidColorBrush x:Key="DataGridCellForegroundPointerOverBrush" Color="#cccccc" />
           <SolidColorBrush x:Key="DataGridCellBorderBrush" Color="Black" />
           <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="Transparent" />
           <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush" Color="#006dbb" />
 
-          <SolidColorBrush x:Key="DataGridForegroundSelectedBrush" Color="#cccccc" />
+          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="#cccccc" />
           <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#dddddd" />
 
           <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#121212" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#b5b5b5" />
-          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrushPointerOver" Color="#cccccc" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#cccccc" />
 
           <SolidColorBrush x:Key="DataGridGridLinesBrush" Color="Black" />
           
@@ -509,12 +569,14 @@
           <SolidColorBrush x:Key="TabHeaderForegroundBrush" Color="#7c7c7c" />
 
           <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
+          <SolidColorBrush x:Key="TabSectionSeparatorBrush" Color="#ff050524" />
 
           <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#191633" />
 
           <!-- Title -->
 
-          <SolidColorBrush x:Key="TitleBackgroundBrush" Color="#313159" />
+          <SolidColorBrush x:Key="TitleBackgroundBrush" Color="#ff2a2a59" />
+          <SolidColorBrush x:Key="TitleButtonBackgroundPointerOverBrush" Color="#ff313159" />
           <SolidColorBrush x:Key="TitleForegroundBrush" Color="#B4B8CF" />
 
           <!-- Toolbar -->
@@ -557,33 +619,43 @@
 
           <!-- ScrollBar -->
           
-          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#444444" />
+          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#292929" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#444444" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
 
           <!-- DatGrid & Title Buttons -->
           
           <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#121212" />
-          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#60bdff" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundBrushPointerOver" Color="#2040a0" />
+          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#dddddd" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
           <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#3060d0" />
+          <SolidColorBrush x:Key="ThemeButtonBorderBrush" Color="Black" />
          
           <!-- Text -->
           
           <SolidColorBrush x:Key="LabelForegroundBrush" Color="#b5b5b5" />
-          
-          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#172144" />
 
-          <SolidColorBrush x:Key="TextReadOnlyBackgroundBrush" Color="#1a1a1a" />
-          <SolidColorBrush x:Key="TextReadOnlyForegroundBrush" Color="#808080" />
+          <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#1a1a1a" />
+          <SolidColorBrush x:Key="TextControlForegroundReadOnlyBrush" Color="#808080" />
           
           <SolidColorBrush x:Key="TextControlBackgroundPointerOverBrush" Color="#ddffdd" />
 
+          <!-- TextArea -->
+
+          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#ff131b38" />
+          <SolidColorBrush x:Key="TextAreaForegroundBrush" Color="#ffb9bbc9" />
+
           <!-- Chart -->
 
-          <SolidColorBrush x:Key="ChartLabelForegroundHighlightBrush" Color="#21d064" />
+          <SolidColorBrush x:Key="ChartBackgroundBrush" Color="#121212" />
           <SolidColorBrush x:Key="ChartBackgroundSelectedBrush" Color="#21D064" />
           <sys:Double x:Key="ChartBackgroundSelectedAlpha">64</sys:Double>
+          
+          <SolidColorBrush x:Key="ChartLabelForegroundBrush" Color="#b5b5b5" />
+          <SolidColorBrush x:Key="ChartLabelForegroundHighlightBrush" Color="#21d064" />
+          
+          <SolidColorBrush x:Key="ChartToolTipBackgroundBrush" Color="#E1102670" />
+          <SolidColorBrush x:Key="ChartToolTipForegroundBrush" Color="#D0D0E8" />
 
           <!-- AvaloniaEdit.TextEditor -->
           

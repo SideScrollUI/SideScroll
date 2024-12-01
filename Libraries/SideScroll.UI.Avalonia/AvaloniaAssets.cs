@@ -7,6 +7,10 @@ namespace SideScroll.UI.Avalonia;
 
 public static class AvaloniaAssets
 {
+	public const string AssetPath = "SideScroll.UI.Avalonia.Assets";
+
+	public static Assembly Assembly => Assembly.GetExecutingAssembly();
+
 	public static Bitmap GetBitmap(string name)
 	{
 		Assembly assembly = Assembly.GetExecutingAssembly();
@@ -35,5 +39,13 @@ public static class AvaloniaAssets
 	{
 		public static Image Help => GetImage(Bitmaps.Help);
 		public static Image Info => GetImage(Bitmaps.Info);
+	}
+
+	public static ResourceView Get(string resourceName, string resourceType) => new(Assembly, AssetPath, "Themes", resourceName, resourceType);
+	public static string GetText(string resourceName, string resourceType) => Get(resourceName, resourceType).ReadText();
+
+	public static class Themes
+	{
+		public static string LightBlue => GetText("LightBlue", "json");
 	}
 }

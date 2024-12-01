@@ -16,6 +16,11 @@ public class TabFileImage : ITab, IFileTypeView
 	public static readonly string[] DefaultExtensions = 
 		[".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".svg", ".ico"];
 
+	public static void Register()
+	{
+		TabFile.RegisterType<TabFileImage>(DefaultExtensions);
+	}
+
 	public string? Path { get; set; }
 
 	public TabFileImage() { }

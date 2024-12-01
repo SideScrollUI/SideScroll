@@ -40,11 +40,15 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 	[Inline]
 	public ToolTipTheme ToolTip { get; set; } = new();
 	[Inline]
+	public ScrollBarTheme ScrollBar { get; set; } = new();
+	[Inline]
 	public DataGridTheme DataGrid { get; set; } = new();
 	[Inline]
 	public ButtonTheme Button { get; set; } = new();
 	[Inline]
 	public TextControlTheme TextControl { get; set; } = new();
+	[Inline]
+	public TextAreaTheme TextArea { get; set; } = new();
 	[Inline]
 	public TextEditorTheme TextEditor { get; set; } = new();
 	[Inline]
@@ -60,9 +64,11 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 		Tab,
 		Toolbar,
 		ToolTip,
+		ScrollBar,
 		DataGrid,
 		Button,
 		TextControl,
+		TextArea,
 		TextEditor,
 		Chart,
 	];
@@ -109,6 +115,11 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 			else if (listProperty.UnderlyingType == typeof(double))
 			{
 				double value = SideScrollTheme.GetDouble(attribute.Names.First());
+				listProperty.Value = value;
+			}
+			else if (listProperty.UnderlyingType == typeof(FontWeight))
+			{
+				FontWeight value = SideScrollTheme.GetFontWeight(attribute.Names.First());
 				listProperty.Value = value;
 			}
 		}
@@ -166,9 +177,25 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 				{
 					dictionary[name] = new SolidColorBrush(color);
 				}
+				else if (value is FontWeight fontWeight)
+				{
+					dictionary[name] = fontWeight;
+				}
 				else if (value is double d)
 				{
-					dictionary[name] = d;
+					// Todo: Improve, Add generic attribute support to ListProperty.GetCustomAttribute()
+					if (name.Contains("Thickness"))
+					{
+						dictionary[name] = new Thickness(d);
+					}
+					else if (name.Contains("CornerRadius"))
+					{
+						dictionary[name] = new CornerRadius(d);
+					}
+					else
+					{
+						dictionary[name] = d;
+					}
 				}
 				else if (value is null)
 				{
@@ -207,29 +234,71 @@ public class TabTheme : ThemeSection
 {
 	public override string ToString() => "Tab";
 
-	[Header("Background"), ResourceKey("TabBackgroundBrush")]
+	[Header("Tab"), ResourceKey("TabBackgroundBrush")]
 	public Color? Background { get; set; }
 
 	[ResourceKey("TabBackgroundFocusedBrush")]
 	public Color? BackgroundFocused { get; set; }
 
-	[Header("Title"), Separator, ResourceKey("TitleBackgroundBrush")]
+	[ResourceKey("TabBackgroundBorderBrush")]
+	public Color? Border { get; set; }
+
+	// Title
+	[Header("Title"), ResourceKey("TitleBackgroundBrush", "SystemControlBackgroundBaseLowBrush")]
 	public Color? TitleBackground { get; set; }
+
+	[ResourceKey("TitleButtonBackgroundPointerOverBrush")]
+	public Color? TitleButtonBackgroundPointerOver { get; set; }
 
 	[ResourceKey("TitleForegroundBrush")]
 	public Color? TitleForeground { get; set; }
 
-	[Separator, ResourceKey("TabHeaderForegroundBrush")]
+	[ResourceKey("TitleBorderBrush")]
+	public Color? TitleBorder { get; set; }
+
+	// Splitter
+	[Header("Splitter"), ResourceKey("TabSplitterBackgroundBrush")]
+	public Color? SplitterBackground { get; set; }
+
+	[ResourceKey("TabSplitterSize"), Range(6, 100)]
+	public double? SplitterSize { get; set; }
+
+
+	[Header("Header"), ResourceKey("TabHeaderForegroundBrush")]
 	public Color? HeaderForeground { get; set; }
 
-	[Separator, ResourceKey("TabSeparatorForegroundBrush")]
+	[Header("Separators"), ResourceKey("TabSeparatorForegroundBrush")]
 	public Color? SeparatorForeground { get; set; }
 
-	[Separator, ResourceKey("MenuFlyoutPresenterBackground")]
+	[ResourceKey("TabSectionSeparatorBrush")]
+	public Color? SectionSeparator { get; set; }
+
+	// Context Menu
+	[Header("Context Menu"), ResourceKey("MenuFlyoutPresenterBackground", "ColorViewContentBackgroundBrush")]
 	public Color? ContextMenuBackground { get; set; }
 
-	[Separator, ResourceKey("TabProgressBarForegroundBrush")]
+	[ResourceKey("MenuFlyoutItemForeground")]
+	public Color? ContextMenuForeground { get; set; }
+
+
+	[Header("Progress Bar"), ResourceKey("TabProgressBarForegroundBrush")]
 	public Color? ProgressBarForeground { get; set; }
+
+	// Button
+	[Header("Button"), ResourceKey("ThemeButtonBackgroundBrush")]
+	public Color? ButtonBackground { get; set; }
+
+	[ResourceKey("ThemeButtonBackgroundPointerOverBrush")]
+	public Color? ButtonBackgroundPointerOver { get; set; }
+
+	[ResourceKey("ThemeButtonBackgroundPressedBrush")]
+	public Color? ButtonBackgroundPressed { get; set; }
+
+	[ResourceKey("ThemeButtonForegroundBrush")]
+	public Color? ButtonForeground { get; set; }
+
+	[ResourceKey("ThemeButtonBorderBrush")]
+	public Color? ButtonBorder { get; set; }
 }
 
 [Params]
@@ -240,11 +309,18 @@ public class FontTheme : ThemeSection
 	public static IEnumerable<FontFamily>? FontFamilies { get; set; }
 	public static IEnumerable<string>? FontFamilyNames => FontFamilies?.Select(f => f.Name);
 
+
 	[Header("Font Family"), BindList(nameof(FontFamilyNames))]
 	public string? FontFamily { get; set; }
 
+	//[ResourceKey("ContentControlThemeFontFamily")]
+	//public FontWeight? ContentFontWeight { get; set; } = FontWeight.Normal;
+
 	[BindList(nameof(FontFamilyNames))]
 	public string? MonospaceFontFamily { get; set; } = "Courier New";
+
+	[ResourceKey("MonospaceFontWeight")]
+	public FontWeight? MonospaceFontWeight { get; set; } = FontWeight.Normal;
 
 	[Header("Font Size"), Range(10, 32), ResourceKey("TitleFontSize")]
 	public double TitleFontSize { get; set; } = 16;
@@ -285,20 +361,23 @@ public class ToolbarTheme : ThemeSection
 	[Header("Button"), ResourceKey("ToolbarButtonBackgroundPointerOverBrush")]
 	public Color? ButtonBackgroundPointerOver { get; set; }
 
+	[Range(0, 20), ResourceKey("ToolbarButtonCornerRadius")]
+	public double? ButtonCornerRadius { get; set; }
+
 	[Header("Icons"), ResourceKey("IconForegroundBrush")]
 	public Color? IconForeground { get; set; }
 
 	[ResourceKey("IconForegroundHighlightBrush")]
 	public Color? IconForegroundHighlight { get; set; }
 
-	[Separator, ResourceKey("IconAltForegroundBrush")]
+	[ResourceKey("IconForegroundDisabledBrush")]
+	public Color? IconForegroundDisabled { get; set; }
+
+	[Header("Icons - Alt"), ResourceKey("IconAltForegroundBrush")]
 	public Color? IconAltForeground { get; set; }
 
 	[ResourceKey("IconAltForegroundHighlightBrush")]
 	public Color? IconAltForegroundHighlight { get; set; }
-
-	[Separator, ResourceKey("IconForegroundDisabledBrush")]
-	public Color? IconForegroundDisabled { get; set; }
 
 	[Header("Radio Button"), ResourceKey("RadioButtonForegroundPointerOver")]
 	public Color? RadioButtonForegroundPointerOver { get; set; }
@@ -323,53 +402,116 @@ public class ToolTipTheme : ThemeSection
 }
 
 [Params]
+public class ScrollBarTheme : ThemeSection
+{
+	public override string ToString() => "Scroll Bar";
+
+	[Header("ScrollBar"), ResourceKey(
+		"ThemeScrollBarBackgroundBrush",
+		"ScrollBarTrackFill",
+		"ScrollBarTrackFillPointerOver"
+		)]
+	public Color? Background { get; set; }
+
+	[ResourceKey("ScrollBarShowingBorderBrush")]
+	public Color? BorderBrush { get; set; }
+
+	// Thumb
+	[Header("Thumb"), ResourceKey("ThemeScrollBarThumbBrush", "ScrollBarThumbBackgroundColor")]
+	public Color? Thumb { get; set; }
+
+	[ResourceKey("ThemeScrollBarThumbPointerOverBrush")]
+	public Color? ThumbPointerOver { get; set; }
+
+	// Buttons
+	[Header("Buttons"), ResourceKey("ScrollBarButtonBackground")]
+	public Color? ButtonBackground { get; set; }
+
+	[ResourceKey("ScrollBarButtonBackgroundPointerOver")]
+	public Color? ButtonBackgroundPointerOver { get; set; }
+
+	[ResourceKey("ScrollBarButtonBackgroundPressed")]
+	public Color? ButtonBackgroundPressed { get; set; }
+
+
+	[Separator, ResourceKey("ScrollBarButtonArrowForeground")]
+	public Color? ButtonArrowForeground { get; set; }
+
+	// Doesn't work
+	/*[ResourceKey("ScrollBarButtonArrowForegroundPointerOver")]
+	public Color? ButtonArrowForegroundPointerOver { get; set; }*/
+}
+
+[Params]
 public class DataGridTheme : ThemeSection
 {
 	public override string ToString() => "Data Grid";
 
-	[Header("Column"), ResourceKey("DataGridColumnHeaderBackgroundBrush")]
+	// Column Header
+	[Header("Column Header"), ResourceKey("DataGridColumnHeaderBackgroundBrush")]
 	public Color? ColumnHeaderBackground { get; set; }
 
-	[ResourceKey("ThemeButtonBackgroundBrushPointerOver")]
+	[ResourceKey("DataGridColumnHeaderBackgroundPointerOverBrush")]
 	public Color? ColumnHeaderBackgroundPointerOver { get; set; }
 
 	[ResourceKey("DataGridColumnHeaderForegroundBrush")]
 	public Color? ColumnHeaderForeground { get; set; }
 
-	[ResourceKey("DataGridColumnHeaderForegroundBrushPointerOver")]
+	[ResourceKey("DataGridColumnHeaderForegroundPointerOverBrush")]
 	public Color? ColumnHeaderForegroundPointerOver { get; set; }
 
+	[ResourceKey("DataGridHeaderSeparatorBrush")]
+	public Color? ColumnHeaderSeparator { get; set; }
+
+	// Row
 	[Header("Row"), ResourceKey("DataGridRowBackgroundBrush")]
 	public Color? RowBackground { get; set; }
 
 	[ResourceKey("DataGridRowHighlightBrush")]
 	public Color? RowBackgroundHighlight { get; set; }
 
+	[ResourceKey("DataGridRowSelectedBackgroundOpacity", "DataGridRowSelectedUnfocusedBackgroundOpacity"), Range(0.0, 1.0)]
+	public double? RowBackgroundLowOpacity { get; set; }
+
+	[ResourceKey("DataGridRowSelectedHoveredBackgroundOpacity", "DataGridRowSelectedHoveredUnfocusedBackgroundOpacity"), Range(0.0, 1.0)]
+	public double? RowBackgroundMediumOpacity { get; set; }
+
+	// Cell
 	[Header("Cell"), ResourceKey("DataGridCellForegroundBrush")]
 	public Color? CellForeground { get; set; }
 
-	[ResourceKey("DataGridCellForegroundBrushPointerOver")]
+	[ResourceKey("DataGridCellForegroundPointerOverBrush")]
 	public Color? CellForegroundPointerOver { get; set; }
 
-	//[ResourceKey("DataGridForegroundSelectedBrush")]
-	//public Color? ForegroundSelected { get; set; }
+	[ResourceKey("DataGridCellForegroundSelectedBrush")]
+	public Color? CellForegroundSelected { get; set; }
 
 	[ResourceKey("DataGridCellBorderBrush")]
 	public Color? CellBorder { get; set; }
+
+	// Cell - Focus
+	[Header("Cell - Focus"), ResourceKey("DataGridCellFocusVisualPrimaryBrush")]
+	public Color? CellFocusVisualPrimary { get; set; }
+
+	[ResourceKey("DataGridCellFocusVisualSecondaryBrush")]
+	public Color? CellFocusVisualSecondary { get; set; }
 
 	// [StyleValue] attribute
 
 	[Header("Styled"), ResourceKey("DataGridHasLinksBackgroundBrush")]
 	public Color? StyledHasLinksBackground { get; set; }
 
-	[ResourceKey("DataGridHasLinksForegroundBrush")]
-	public Color? StyledHasLinksForeground { get; set; }
-
 	[ResourceKey("DataGridNoLinksBackgroundBrush")]
 	public Color? StyledNoLinksBackground { get; set; }
 
+	[ResourceKey("DataGridHasLinksForegroundBrush")]
+	public Color? StyledHasLinksForeground { get; set; }
+
 	[ResourceKey("DataGridStyledBorderBrush")]
 	public Color? StyledBorder { get; set; }
+
+	[Header("Border"), ResourceKey("DataGridBorderBrush")]
+	public Color? Border { get; set; }
 }
 
 // Button, including TabControlTextButton
@@ -378,7 +520,8 @@ public class ButtonTheme : ThemeSection
 {
 	public override string ToString() => "Button";
 
-	[ResourceKey("ButtonBackground")]
+	// Background
+	[Header("Background"), ResourceKey("ButtonBackground")]
 	public Color? Background { get; set; }
 
 	[ResourceKey("ButtonBackgroundPointerOver")]
@@ -387,8 +530,31 @@ public class ButtonTheme : ThemeSection
 	[ResourceKey("ButtonBackgroundPressed")]
 	public Color? BackgroundPressed { get; set; }
 
-	[ResourceKey("ButtonForeground", "ButtonForegroundPointerOver", "ButtonForegroundPressed")]
+	// Foreground
+	[Header("Foreground"), ResourceKey("ButtonForeground")]
 	public Color? Foreground { get; set; }
+
+	[ResourceKey("ButtonForegroundPointerOver")]
+	public Color? ForegroundPointerOver { get; set; }
+
+	[ResourceKey("ButtonForegroundPressed")]
+	public Color? ForegroundPressed { get; set; }
+
+	// Border
+	[Header("Border"), ResourceKey("ButtonBorderBrush")]
+	public Color? Border { get; set; }
+
+	[ResourceKey("ButtonBorderBrushPointerOver")]
+	public Color? BorderPointerOver { get; set; }
+
+	[ResourceKey("ButtonBorderBrushPressed")]
+	public Color? BorderPressed { get; set; }
+
+	[Range(0, 10), ResourceKey("ButtonBorderThemeThickness")]
+	public double? BorderThickness { get; set; }
+
+	[Range(0, 20), ResourceKey("ButtonCornerRadius")]
+	public double? CornerRadius { get; set; }
 }
 
 [Params]
@@ -399,14 +565,19 @@ public class TextControlTheme : ThemeSection
 	[Header("Labels"), ResourceKey("LabelForegroundBrush")]
 	public Color? LabelForeground { get; set; }
 
-	[Header("Text Control"), ResourceKey(
+	// Background
+	[Header("Text Control - Background"), ResourceKey(
 		"TextControlBackground",
 		"ComboBoxBackground",
 		"CalendarDatePickerBackground"
 		)]
 	public Color? TextControlBackground { get; set; }
 
-	[ResourceKey(
+	[ResourceKey("TextControlBackgroundReadOnlyBrush")]
+	public Color? TextControlBackgroundReadOnly { get; set; }
+
+	// Foreground
+	[Header("Text Control - Foreground"), ResourceKey(
 		"TextControlForeground",
 		"ComboBoxForeground",
 		"CalendarDatePickerForeground",
@@ -424,18 +595,24 @@ public class TextControlTheme : ThemeSection
 		"CalendarDatePickerBorderBrushPointerOver",
 		"RadioButtonOuterEllipseStrokePressed"
 		)]
-	public Color? TextControlForegroundHigh { get; set; }
+	public Color? TextControlForegroundHighlight { get; set; }
 
-	[ResourceKey(
+	[ResourceKey("TextControlForegroundReadOnlyBrush")]
+	public Color? TextControlForegroundReadOnly { get; set; }
+
+	// Border
+	[Header("Text Control - Border"), ResourceKey(
 		"TextControlBorderBrush",
 		"ComboBoxBorderBrush",
-		"CalendarDatePickerBorderBrush"
+		"CalendarDatePickerBorderBrush",
+		"CheckBoxCheckBackgroundStrokeUnchecked"
 		)]
 	public Color? TextControlBorder { get; set; }
 
 	[ResourceKey(
 		"TextControlBorderBrushPointerOver",
 		"ComboBoxBorderBrushPointerOver",
+		"ComboBoxBorderBrushPressed",
 		"CheckBoxCheckBackgroundStrokeUncheckedPointerOver",
 		"CalendarDatePickerBorderBrushPointerOver",
 		"RadioButtonOuterEllipseStrokePointerOver",
@@ -443,14 +620,68 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? TextControlBorderPointerOver { get; set; }
 
-	[Header("Text Control - Selected"), ResourceKey("TextControlSelectionForegroundBrush")]
+	[Range(0, 10), ResourceKey("TextControlBorderThemeThickness",
+		"TextControlBorderThemeThicknessFocused",
+		"CalendarDatePickerBorderThemeThickness",
+		"ComboBoxBorderThemeThickness",
+		"CheckBoxBorderThemeThickness"
+		)]
+	public double? BorderThickness { get; set; }
+
+	[Range(0, 20), ResourceKey("ControlCornerRadius")]
+	public double? CornerRadius { get; set; }
+
+	// Text Control - Selection
+	[Header("Text Control - Selection"), ResourceKey("TextControlSelectionForegroundBrush")]
 	public Color? TextControlSelectionForeground { get; set; }
 
 	[ResourceKey("TextControlSelectionHighlightColor")]
 	public Color? TextControlSelectionHighlight { get; set; }
 
+	// ComboBox
+	[Header("ComboBox"), ResourceKey("ComboBoxDropDownBackground")]
+	public Color? ComboBoxDropDownBackground { get; set; }
+
+	[ResourceKey("ComboBoxItemBackgroundSelected")]
+	public Color? ComboBoxItemBackgroundSelected { get; set; }
+
+	[ResourceKey("ComboBoxItemBackgroundPointerOver", 
+		"ComboBoxItemBackgroundSelectedPointerOver", 
+		"ComboBoxBackgroundPressed"
+		)]
+	public Color? ComboBoxItemBackgroundPointerOver { get; set; }
+
+	[ResourceKey("ComboBoxItemForegroundSelected")]
+	public Color? ComboBoxItemForegroundSelected { get; set; }
+
+	// Calendar View / Date Time Picker
+	[Header("Calendar View"), ResourceKey("CalendarViewBackground")]
+	public Color? CalendarViewBackground { get; set; }
+
+	[ResourceKey("CalendarViewBorderBrush")]
+	public Color? CalendarViewBorderBrush { get; set; }
+
+	[ResourceKey("CalendarViewOutOfScopeBackground")]
+	public Color? CalendarViewOutOfScopeBackground { get; set; }
+
+	// Errors
 	[Header("Errors"), ResourceKey("SystemControlErrorTextForegroundBrush")]
 	public Color? ErrorTextForeground { get; set; }
+}
+
+[Params]
+public class TextAreaTheme : ThemeSection
+{
+	public override string ToString() => "Text Area";
+
+	[ResourceKey("TextAreaBackgroundBrush")]
+	public Color? Background { get; set; }
+
+	[ResourceKey("TextAreaForegroundBrush")]
+	public Color? Foreground { get; set; }
+
+	[ResourceKey("TextAreaBorderBrush")]
+	public Color? Border { get; set; }
 }
 
 [Params]
@@ -504,7 +735,7 @@ public class TextEditorTheme : ThemeSection
 	[ResourceKey("XmlHighlightDeclarationBrush")]
 	public Color? XmlDeclaration { get; set; }
 
-	[ResourceKey("XmlHighlightTagBrush")]
+	[Separator, ResourceKey("XmlHighlightTagBrush")]
 	public Color? XmlTag { get; set; }
 
 	[ResourceKey("XmlHighlightAttributeNameBrush")]
@@ -519,6 +750,9 @@ public class TextEditorTheme : ThemeSection
 	// Color and formatting doesn't work
 	//[ResourceKey("XmlHighlightBrokenEntityBrush")]
 	//public Color? XmlBrokenEntity { get; set; }
+
+	//[Header("Border"), ResourceKey("TextEditorBorderBrush")]
+	//public Color? Border { get; set; }
 }
 
 [Params]
@@ -526,6 +760,71 @@ public class ChartTheme : ThemeSection
 {
 	public override string ToString() => "Chart";
 
+	[Header("Chart"), ResourceKey("ChartBackgroundBrush")]
+	public Color? Background { get; set; }
+
+	[ResourceKey("ChartLabelForegroundBrush")]
+	public Color? LabelForeground { get; set; }
+
 	[ResourceKey("ChartLabelForegroundHighlightBrush")]
 	public Color? LabelForegroundHighlight { get; set; }
+
+	[Header("Lines"), ResourceKey("ChartGridLinesBrush")]
+	public Color? GridLines { get; set; }
+
+	[ResourceKey("ChartNowLineBrush")]
+	public Color? NowLine { get; set; }
+
+	[Header("Tool Tip"), ResourceKey("ChartToolTipBackgroundBrush")]
+	public Color? ToolTipBackground { get; set; }
+
+	[ResourceKey("ChartToolTipForegroundBrush")]
+	public Color? ToolTipForeground { get; set; }
+
+	[Header("Border"), ResourceKey("ChartBorderBrush")]
+	public Color? Border { get; set; }
+
+	[Range(0, 10), ResourceKey("ChartBorderThickness")]
+	public double? BorderThickness { get; set; }
+
+	[ResourceKey("ChartLegendIconBorderBrush")]
+	public Color? LegendIconBorder { get; set; }
+
+	[Inline]
+	public ChartColorsTheme Colors { get; set; } = new();
+}
+
+public class ChartColorsTheme : ThemeSection
+{
+	public override string ToString() => "Chart Colors";
+
+	[Header("Series Colors"), ResourceKey("ChartSeries1Brush")]
+	public Color? Series1 { get; set; }
+
+	[ResourceKey("ChartSeries2Brush")]
+	public Color? Series2 { get; set; }
+
+	[ResourceKey("ChartSeries3Brush")]
+	public Color? Series3 { get; set; }
+
+	[ResourceKey("ChartSeries4Brush")]
+	public Color? Series4 { get; set; }
+
+	[ResourceKey("ChartSeries5Brush")]
+	public Color? Series5 { get; set; }
+
+	[ResourceKey("ChartSeries6Brush")]
+	public Color? Series6 { get; set; }
+
+	[ResourceKey("ChartSeries7Brush")]
+	public Color? Series7 { get; set; }
+
+	[ResourceKey("ChartSeries8Brush")]
+	public Color? Series8 { get; set; }
+
+	[ResourceKey("ChartSeries9Brush")]
+	public Color? Series9 { get; set; }
+
+	[ResourceKey("ChartSeries10Brush")]
+	public Color? Series10 { get; set; }
 }

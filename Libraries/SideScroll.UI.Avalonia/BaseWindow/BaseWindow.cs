@@ -5,7 +5,6 @@ using Avalonia.Reactive;
 using Avalonia.Threading;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
-using SideScroll.Tabs.Tools.FileViewer;
 using SideScroll.UI.Avalonia.Tabs;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Viewer;
@@ -43,18 +42,21 @@ public class BaseWindow : Window
 	}
 
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]
-	private void Initialize(Project project)
+	protected void Initialize(Project project)
 	{
 		Instance = this;
 
-		// Catch Inter font here before overriding so we don't lose it
 		FontTheme.FontFamilies =
-			new List<FontFamily> { SideScrollTheme.ContentControlThemeFontFamily }
+			new List<FontFamily>
+			{ 
+				SideScrollTheme.ContentControlThemeFontFamily, // Inter Font
+				SideScrollTheme.SourceCodeProFont,
+			}
 			.Concat(FontManager.Current.SystemFonts);
 
 		SideScrollInit.Initialize();
 
-		TabFile.RegisterType<TabFileImage>(TabFileImage.DefaultExtensions);
+		TabFileImage.Register();
 
 		LoadProject(project);
 

@@ -33,8 +33,6 @@ public class TabViewSettings
 		}
 	}
 
-	//public bool NotesVisible { get; set; }
-
 	public double? SplitterDistance { get; set; }
 
 	public List<TabDataSettings> TabDataSettings { get; set; } = [];

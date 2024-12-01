@@ -50,20 +50,10 @@ public class LinkUri
 
 	public static bool TryParse(string? url, [NotNullWhen(true)] out LinkUri? linkUri)
 	{
-		if (url?.StartsWith("sidescroll://") == true)
-		{
-			return TryParseBase64(url, out linkUri);
-		}
-
-		return TryParseTyped(url, out linkUri);
-	}
-
-	public static bool TryParseTyped(string? url, [NotNullWhen(true)] out LinkUri? linkUri)
-	{
 		linkUri = null;
 		if (url == null) return false;
 
-		Regex regex = new(@"(?<prefix>[a-zA-Z]+)\:\/\/(?<type>[-0-9a-zA-Z]+)\/(v(?<version>[\d\.]+)\/)?(?<path>[^\?]+)(\?(?<query>.+))?");
+		Regex regex = new(@"(?<prefix>[a-zA-Z]+)\:\/\/(?<type>[-0-9a-zA-Z\.]+)\/(v(?<version>[\d\.]+)\/)?(?<path>[^\?]+)(\?(?<query>.+))?");
 
 		Match match = regex.Match(url);
 		if (!match.Success) return false;
@@ -76,25 +66,6 @@ public class LinkUri
 			Version = ParseVersion(match.Groups["version"].Value),
 			Path = match.Groups["path"].Value,
 			Query = match.Groups["query"].Value,
-		};
-		return true;
-	}
-
-	public static bool TryParseBase64(string? url, [NotNullWhen(true)] out LinkUri? linkUri)
-	{
-		linkUri = null;
-		if (url == null) return false;
-
-		Regex regex = new(@"(?<prefix>[a-zA-Z]+)\:\/\/(?<path>.+)");
-
-		Match match = regex.Match(url);
-		if (!match.Success) return false;
-
-		linkUri = new LinkUri
-		{
-			Url = url,
-			Prefix = match.Groups["prefix"].Value.ToLower(),
-			Path = match.Groups["path"].Value,
 		};
 		return true;
 	}

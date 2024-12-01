@@ -10,6 +10,16 @@ public interface IItemCollection
 	string? CustomSettingsPath { get; set; }
 	public object? DefaultSelectedItem { get; set; }
 	bool Skippable { get; set; }
+	bool? ShowHeader { get; set; } // Override default visibility and always show
+
+	void LoadSettings(IItemCollection itemCollection)
+	{
+		ColumnName = itemCollection.ColumnName;
+		CustomSettingsPath = itemCollection.CustomSettingsPath;
+		DefaultSelectedItem = itemCollection.DefaultSelectedItem;
+		Skippable = itemCollection.Skippable;
+		ShowHeader = itemCollection.ShowHeader;
+	}
 }
 
 // See ItemCollectionUI for a UI thread safe version
@@ -20,6 +30,7 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 	public string? CustomSettingsPath { get; set; }
 	public object? DefaultSelectedItem { get; set; }
 	public bool Skippable { get; set; } = true;
+	public bool? ShowHeader { get; set; }
 
 	public IComparer Comparer { get; set; } = new CustomComparer();
 

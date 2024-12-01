@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Threading;
 using SideScroll.Tabs.Lists;
 using SideScroll.UI.Avalonia.View;
 using System.ComponentModel.DataAnnotations;
@@ -67,6 +68,41 @@ public static class AvaloniaUtils
 		};
 
 		textBox.ContextMenu = contextMenu;
+	}
+
+	public static void AddContextMenu(ComboBox comboBox)
+	{
+		var list = new AvaloniaList<object>();
+
+		var menuItemCopy = new TabMenuItem
+		{
+			Header = "_Copy",
+		};
+		menuItemCopy.Click += delegate
+		{
+			ClipboardUtils.SetText(comboBox, comboBox.SelectedItem?.ToString() ?? "");
+		};
+		list.Add(menuItemCopy);
+
+		var menuItemPaste = new TabMenuItem("Paste");
+		menuItemPaste.Click += delegate
+		{
+			if (ClipboardUtils.GetText(comboBox) is string clipboardText)
+			{
+				if (comboBox.Items.FirstOrDefault(i => i?.ToString() == clipboardText) is object matchingItem)
+				{
+					comboBox.SelectedItem = matchingItem;
+				}
+			}
+		};
+		list.Add(menuItemPaste);
+
+		ContextMenu contextMenu = new()
+		{
+			ItemsSource = list,
+		};
+
+		comboBox.ContextMenu = contextMenu;
 	}
 
 	public static void AddContextMenu(ColorPicker colorPicker)
@@ -193,5 +229,16 @@ public static class AvaloniaUtils
 		}
 
 		return true;
+	}
+
+	public static void ShowFlyout(Control control, Flyout flyout, string text)
+	{
+		Dispatcher.UIThread.Post(() => ShowFlyoutUI(control, flyout, text));
+	}
+
+	private static void ShowFlyoutUI(Control control, Flyout flyout, string text)
+	{
+		flyout.Content = text;
+		flyout.ShowAt(control);
 	}
 }
