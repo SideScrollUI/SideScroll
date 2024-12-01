@@ -251,7 +251,7 @@ public class TabView : Grid, IDisposable
 		_containerGrid!.Children.Add(_parentContainerBorder);
 		UpdateSplitterDistance();
 
-		_tabTitle = new TabControlTitle(Instance, Model.Name);
+		_tabTitle = new TabControlTitle(this, Model.Name);
 		_tabParentControls.AddControl(_tabTitle, false, SeparatorType.None);
 
 		_tabParentControls.KeyDown += ParentControls_KeyDown;
@@ -621,7 +621,7 @@ public class TabView : Grid, IDisposable
 		};
 		Children.Add(progressBar);
 
-		TabControlTitle title = new(Instance, Model.Name)
+		TabControlTitle title = new(this, Model.Name)
 		{
 			VerticalAlignment = VerticalAlignment.Top,
 			MaxWidth = progressBar.MinWidth,

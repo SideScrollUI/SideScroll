@@ -74,7 +74,7 @@ public class HideColumnAttribute(object? value, params object?[] additonalValues
 }
 
 // Don't show unless #if DEBUG set
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
 public class DebugOnlyAttribute(bool value = true) : Attribute
 {
 	public readonly bool Value = value;

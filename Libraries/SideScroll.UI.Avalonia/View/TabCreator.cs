@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
@@ -6,6 +7,7 @@ using SideScroll.Tabs.Settings;
 using SideScroll.UI.Avalonia.Tabs;
 using SideScroll.Utilities;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace SideScroll.UI.Avalonia.View;
 
@@ -61,6 +63,13 @@ public static class TabCreator
 			return null;
 
 		Type type = value.GetType();
+		if (type.GetCustomAttribute<DebugOnlyAttribute>() != null)
+		{
+#if !DEBUG
+			value = $"Type {type} is only enabled for Debug builds";
+#endif
+		}
+
 		if (value is string || value is decimal || type.IsPrimitive)
 		{
 			value = new TabText(value.ToString()!); // create an ITab

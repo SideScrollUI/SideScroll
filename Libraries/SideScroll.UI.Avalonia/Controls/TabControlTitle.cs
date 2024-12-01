@@ -7,17 +7,19 @@ using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.UI.Avalonia.Themes;
 using SideScroll.UI.Avalonia.Utilities;
+using SideScroll.UI.Avalonia.View;
 
 namespace SideScroll.UI.Avalonia.Controls;
 
 public class TabControlTitle : Border, IDisposable
 {
-	public readonly TabInstance TabInstance;
+	public readonly TabView TabView;
+	public TabInstance TabInstance => TabView.Instance;
 	public string Label { get; set; }
 
 	public int MaxDesiredWidth { get; set; } = 50;
 
-	public TextBlock? TextBlock;
+	public TextBlock TextBlock;
 	private readonly Grid _containerGrid;
 
 	public string Text
@@ -26,15 +28,15 @@ public class TabControlTitle : Border, IDisposable
 		set
 		{
 			Label = value;
-			TextBlock!.Text = value;
+			TextBlock.Text = value;
 		}
 	}
 
-	public TabControlTitle(TabInstance tabInstance, string? label = null)
+	public TabControlTitle(TabView tabView, string? label = null)
 	{
-		TabInstance = tabInstance;
-		Label = label ?? tabInstance.Label;
-		Label = new StringReader(Label).ReadLine()!; // Remove anything after first line
+		TabView = tabView;
+		label ??= TabInstance.Label;
+		Label = new StringReader(label).ReadLine()!; // Remove anything after first line
 
 		_containerGrid = new Grid
 		{
@@ -53,7 +55,7 @@ public class TabControlTitle : Border, IDisposable
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			// [ToolTip.TipProperty] = Label, // Enable?
 		};
-		AvaloniaUtils.AddContextMenu(TextBlock);
+		AddContextMenu();
 
 		var borderPaddingTitle = new Border
 		{
@@ -67,6 +69,24 @@ public class TabControlTitle : Border, IDisposable
 		AddLinkButton();
 
 		Child = _containerGrid;
+	}
+
+	private void AddContextMenu()
+	{
+		var contextMenu = new TabViewContextMenu(TabView, TabInstance);
+
+		// Copy Title Text to ClipBoard
+		var menuItemCopy = new TabMenuItem
+		{
+			Header = "_Copy",
+		};
+		menuItemCopy.Click += delegate
+		{
+			ClipboardUtils.SetText(this, Label);
+		};
+		contextMenu.ItemList.Insert(0, menuItemCopy);
+
+		ContextMenu = contextMenu;
 	}
 
 	private void AddLinkButton()
@@ -95,13 +115,27 @@ public class TabControlTitle : Border, IDisposable
 
 	private async void LinkButton_Click(object? sender, RoutedEventArgs e)
 	{
-		Bookmark bookmark = TabInstance.CreateBookmark();
-		bookmark.BookmarkType = BookmarkType.Tab;
-		string? uri = await TabInstance.Project.Linker.AddLinkAsync(new Call(), bookmark);
-		if (uri == null)
-			return;
+		Flyout flyout = new()
+		{
+			Placement = PlacementMode.BottomEdgeAlignedLeft,
+		};
+		AvaloniaUtils.ShowFlyout(this, flyout, "Creating Link ...");
 
-		await ClipboardUtils.SetTextAsync(this, uri);
+		try
+		{
+			Bookmark bookmark = TabInstance.CreateBookmark();
+			bookmark.BookmarkType = BookmarkType.Tab;
+			string? uri = await TabInstance.Project.Linker.AddLinkAsync(new Call(), bookmark);
+			if (uri == null)
+				return;
+
+			await ClipboardUtils.SetTextAsync(this, uri);
+			AvaloniaUtils.ShowFlyout(this, flyout, "Link copied to clipboard");
+		}
+		catch (Exception ex)
+		{
+			AvaloniaUtils.ShowFlyout(this, flyout, ex.Message);
+		}
 	}
 
 	protected override Size MeasureCore(Size availableSize)
@@ -113,11 +147,10 @@ public class TabControlTitle : Border, IDisposable
 
 	public void Dispose()
 	{
-		if (TextBlock != null)
+		if (ContextMenu != null)
 		{
-			TextBlock.ContextMenu!.ItemsSource = null;
-			TextBlock.ContextMenu = null;
-			TextBlock = null;
+			ContextMenu.ItemsSource = null;
+			ContextMenu = null;
 		}
 		Child = null;
 	}

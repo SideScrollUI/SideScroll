@@ -14,6 +14,7 @@ public class TabSampleObjects
 	public static TimeSpan TimeSpan => new(1, 2, 3);
 	public static TabSampleJson Json => new();
 	public static Uri Uri => new("https://wikipedia.org");
+	public static TabSampleDebug Debug => new();
 }
 
 public class MyClass

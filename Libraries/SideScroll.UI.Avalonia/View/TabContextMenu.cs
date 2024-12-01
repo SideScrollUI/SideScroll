@@ -22,6 +22,8 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 	public TabView? TabView;
 	public TabInstance? TabInstance;
 
+	public AvaloniaList<object> ItemList { get; set; } = [];
+
 	private CheckBox? _checkboxAutoLoad;
 
 	protected override Type StyleKeyOverride => typeof(ContextMenu);
@@ -31,31 +33,24 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 		TabView = tabView;
 		TabInstance = tabInstance;
 
-		Initialize();
-	}
-
-	private void Initialize()
-	{
-		var list = new AvaloniaList<object>();
-
 		var menuItemRefresh = new TabMenuItem("_Refresh");
 		menuItemRefresh.Click += MenuItemRefresh_Click;
-		list.Add(menuItemRefresh);
+		ItemList.Add(menuItemRefresh);
 
 		var menuItemReload = new TabMenuItem("_Reload");
 		menuItemReload.Click += MenuItemReload_Click;
-		list.Add(menuItemReload);
+		ItemList.Add(menuItemReload);
 
 		var menuItemReset = new TabMenuItem("Re_set");
 		menuItemReset.Click += MenuItemReset_Click;
-		list.Add(menuItemReset);
+		ItemList.Add(menuItemReset);
 
 #if DEBUG
 		var menuItemDebug = new TabMenuItem("_Debug");
 		menuItemDebug.Click += MenuItemDebug_Click;
-		list.Add(menuItemDebug);
+		ItemList.Add(menuItemDebug);
 
-		list.Add(new Separator());
+		ItemList.Add(new Separator());
 
 		// Avalonia's MenuItem.xaml restricts the max Icon size to 16 pixels so this will look tiny
 		// Putting the CheckBox in the Header also works, but doesn't align the checkbox to the left of the text
@@ -69,10 +64,10 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 			Icon = _checkboxAutoLoad,
 		};
 		menuItemAutoLoad.Click += MenuItemAutoLoad_Click;
-		list.Add(menuItemAutoLoad);
+		ItemList.Add(menuItemAutoLoad);
 #endif
 
-		ItemsSource = list;
+		ItemsSource = ItemList;
 	}
 
 	private void MenuItemAutoLoad_Click(object? sender, RoutedEventArgs e)

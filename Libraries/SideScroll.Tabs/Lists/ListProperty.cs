@@ -116,7 +116,8 @@ public class ListProperty : ListMember, IPropertyEditable
 
 		Name = nameAttribute?.Name ?? propertyInfo.Name.WordSpaced();
 
-		if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null)
+		if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null ||
+			PropertyInfo.PropertyType.GetCustomAttribute<DebugOnlyAttribute>() != null)
 		{
 			Name = "* " + Name;
 		}

@@ -469,14 +469,6 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			minimum = 0;
 			maximum = 1;
 		}
-		else
-		{
-			double difference = maximum - minimum;
-			if (difference > 10 || (difference != 0 && hasFraction))
-			{
-				YAxis.UnitWidth = (difference * 0.2).RoundToSignificantFigures(1);
-			}
-		}
 
 		foreach (var annotation in Annotations)
 		{
@@ -521,6 +513,24 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 				YAxis.MinLimit = minimum - margin;
 			}
 			YAxis.MaxLimit = maximum + margin;
+
+			double difference = YAxis.MaxLimit.Value - YAxis.MinLimit.Value;
+			if (difference >= 10)
+			{
+				YAxis.UnitWidth = (difference * 0.2).RoundToSignificantFigures(1);
+			}
+			else
+			{
+				YAxis.UnitWidth = 1; // Reset to default
+			}
+
+			if (YAxis.MinStep > 0)
+			{
+				// Force step to be a multiple of the min step
+				// Live Charts will use decimals even if a min step of 1 is set
+				YAxis.MinStep = Math.Max(YAxis.MinStep, YAxis.UnitWidth);
+				YAxis.ForceStepToMin = true;
+			}
 		}
 	}
 

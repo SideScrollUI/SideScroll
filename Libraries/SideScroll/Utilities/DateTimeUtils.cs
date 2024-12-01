@@ -42,13 +42,14 @@ public static class DateTimeUtils
 		text = text.Trim();
 
 		// Convert epoch 1569998557298
-		if (text.Length == 10 && uint.TryParse(text, out uint epochValue))
+		string numString = text.Replace(",", "");
+		if (numString.Length == 10 && uint.TryParse(numString, out uint epochValue))
 		{
 			dateTime = EpochTime.AddSeconds(epochValue);
 			return true;
 		}
 
-		if (text.Length == 13 && long.TryParse(text, out long epochValueMilliseconds))
+		if (numString.Length == 13 && long.TryParse(numString, out long epochValueMilliseconds))
 		{
 			dateTime = EpochTime.AddMilliseconds(epochValueMilliseconds);
 			return true;
