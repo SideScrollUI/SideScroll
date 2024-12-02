@@ -1,14 +1,13 @@
 using Avalonia.Controls;
-using SideScroll.UI.Avalonia.Samples.Tabs;
 using SideScroll.Tabs;
-using SideScroll.Tabs.Settings;
 using SideScroll.UI.Avalonia.Charts.LiveCharts;
+using SideScroll.UI.Avalonia.Samples.Tabs;
 
 namespace SideScroll.UI.Avalonia.Samples;
 
 public class MainWindow : BaseWindow
 {
-	public MainWindow() : base(Project.Load<CustomUserSettings>(Settings))
+	public MainWindow() : base(Project.Load<CustomUserSettings>(SampleProjectSettings.Settings))
 	{
 		AddTab(new TabAvalonia());
 
@@ -17,12 +16,4 @@ public class MainWindow : BaseWindow
 
 		Icon = new WindowIcon(Assets.Icons.SideScroll.Stream);
 	}
-
-	public static ProjectSettings Settings => new()
-	{
-		Name = "SideScroll",
-		LinkType = "sidescroll",
-		Version = ProjectSettings.ProgramVersion(),
-		DataVersion = new Version(0, 1),
-	};
 }

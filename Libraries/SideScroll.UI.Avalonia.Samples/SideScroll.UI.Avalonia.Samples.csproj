@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
@@ -27,9 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SideScroll.Tabs.Samples\SideScroll.Tabs.Samples.csproj" />
     <ProjectReference Include="..\SideScroll.UI.Avalonia.Charts.LiveCharts\SideScroll.UI.Avalonia.Charts.LiveCharts.csproj" />
-    <ProjectReference Include="..\SideScroll.UI.Avalonia\SideScroll.UI.Avalonia.csproj" />
   </ItemGroup>
 
 </Project>

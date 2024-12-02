@@ -170,10 +170,4 @@
       <DependentUpon>TabAvalonEdit.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Themes\Controls\TabControlAvaloniaEdit.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
 </Project>
