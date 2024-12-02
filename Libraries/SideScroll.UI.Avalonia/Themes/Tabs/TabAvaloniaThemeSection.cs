@@ -4,7 +4,6 @@ using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
-using SideScroll.Tabs.Samples;
 using SideScroll.Tabs.Samples.Actions;
 using SideScroll.Tabs.Samples.Chart;
 using SideScroll.Tabs.Samples.DataGrid;
@@ -15,7 +14,6 @@ using SideScroll.UI.Avalonia.Controls;
 using SideScroll.UI.Avalonia.Samples.Controls;
 using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
 
-//using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
 using System.Collections;
 
 namespace SideScroll.UI.Avalonia.Themes.Tabs;
@@ -104,7 +102,6 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 					new("Buttons", new TabSampleGridHashSet()),
 					new("Loading", new TabSampleLoadAsync()),
 				},
-				//ToolbarTheme => new TabSampleToolbar(),
 				ToolbarTheme => new TabCustomControl(),
 				ToolTipTheme => new TabAvaloniaToolTipSample(),
 				ScrollBarTheme => new TabSampleGridCollectionSize(),
