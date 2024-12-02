@@ -13,7 +13,6 @@ using SideScroll.Tabs.Toolbar;
 using SideScroll.UI.Avalonia.Controls;
 using SideScroll.UI.Avalonia.Samples.Controls;
 using SideScroll.UI.Avalonia.Samples.Controls.CustomControl;
-
 using System.Collections;
 
 namespace SideScroll.UI.Avalonia.Themes.Tabs;
