@@ -12,11 +12,11 @@
   - `Avalonia.Desktop`
   - `Avalonia.Fonts.Inter`
   - `Avalonia.Themes.Fluent`
-- Add the NuGet package `SideScroll.UI.Avalonia`
+- Add the NuGet package `SideScroll.Avalonia`
   - Make sure to update the Avalonia version to be >= than the version used by SideScroll
 - Add any optional SideScroll packages
-  - `SideScroll.UI.Avalonia.Charts.LiveCharts`
-  - `SideScroll.UI.Avalonia.ScreenCapture`
+  - `SideScroll.Avalonia.Charts.LiveCharts`
+  - `SideScroll.Avalonia.ScreenCapture`
 
 ## App.xaml
 - Add all the `<Application.Styles>` and `<Application.Resources>` to your `App.xaml`
@@ -30,14 +30,14 @@
     <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml"/>
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
     <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml"/>
-    <StyleInclude Source="avares://SideScroll.UI.Avalonia/Themes/Fluent/Fluent.xaml"/>
+    <StyleInclude Source="avares://SideScroll.Avalonia/Themes/Fluent/Fluent.xaml"/>
   </Application.Styles>
 
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceInclude Source="avares://SideScroll.UI.Avalonia/Themes/Controls/ControlThemes.xaml"/>
-        <!--ResourceInclude Source="avares://SideScroll.UI.Avalonia.Charts.LiveCharts/Themes/ControlThemes.xaml"/-->
+        <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/ControlThemes.xaml"/>
+        <!--ResourceInclude Source="avares://SideScroll.Avalonia.Charts.LiveCharts/Themes/ControlThemes.xaml"/-->
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>
@@ -51,9 +51,9 @@
 ```csharp
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
-using SideScroll.UI.Avalonia;
-// using SideScroll.UI.Avalonia.Charts.LiveCharts;
-// using SideScroll.UI.Avalonia.ScreenCapture;
+using SideScroll.Avalonia;
+// using SideScroll.Avalonia.Charts.LiveCharts;
+// using SideScroll.Avalonia.ScreenCapture;
 
 namespace MyApp.Start;
 

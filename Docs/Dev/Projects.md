@@ -36,24 +36,24 @@
 
 ### User Interface Libraries
 
-* SideScroll.UI.Avalonia
+* SideScroll.Avalonia
   - Cross Platform UI Controls
   - Works on Windows, MacOS, and Linux
 
-* SideScroll.UI.Avalonia.Charts
+* SideScroll.Avalonia.Charts
   - Base chart interface
 
-* SideScroll.UI.Avalonia.LiveCharts
+* SideScroll.Avalonia.LiveCharts
   - LiveCharts version of the Charts package
 
-* SideScroll.UI.Avalonia.ScreenCapture
+* SideScroll.Avalonia.ScreenCapture
   - Screenshot control for Windows and MacOS
 
 ## Programs
 
 * SideScroll.Start.Avalonia
   - The primary application that loads all the other modules
-  - Uses the `SideScroll.UI.Avalonia` controls with the `SideScroll.Tabs.Samples`
+  - Uses the `SideScroll.Avalonia` controls with the `SideScroll.Tabs.Samples`
   - Cross Platform (Windows, Mac, Linux)
   
 * SideScroll.Console

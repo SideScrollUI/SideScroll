@@ -1,0 +1,691 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+  <Styles.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+        
+          <!-- Fluent Defaults -->
+
+          <CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
+
+          <Color x:Key="SystemBaseLowColor">#33000000</Color>
+          <Color x:Key="SystemBaseMediumColor">#33FF0000</Color>
+
+          <Color x:Key="SystemAccentColorDark1">#005A9E</Color>
+          <Color x:Key="SystemAccentColorDark2">#004275</Color>
+          <Color x:Key="SystemAccentColorDark3">#002642</Color>
+      
+          <Color x:Key="SystemAccentColorLight1">#429CE3</Color>
+          <Color x:Key="SystemAccentColorLight2">#76B9ED</Color>
+          <Color x:Key="SystemAccentColorLight3">#A6D8FF</Color>
+
+          <Color x:Key="DataGridAccentColor">#88ff88</Color>
+
+          <Color x:Key="ThemeControlBorderHighColor">#3060c0</Color>
+          <Color x:Key="ThemeControlBackgroundSelectedColor">#009dff</Color>
+
+          <Color x:Key="IconForegroundColor">#ff0063ed</Color>
+
+          <SolidColorBrush x:Key="SystemControlBackgroundBaseLowBrush" Color="#2a2954" />
+          <SolidColorBrush x:Key="SystemControlErrorTextForegroundBrush" Color="#ffbb12"/>
+
+          <!-- TextControl -->
+          
+          <SolidColorBrush x:Key="TextControlBackground" Color="#ffffff" />
+
+          <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="TextControlBorderBrush" Color="#b508061c" />
+          <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
+          <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#ff006df0" />
+
+          <SolidColorBrush x:Key="TextControlSelectionForegroundBrush" Color="#FFFFFFFF" />
+
+          <Thickness x:Key="TextControlBorderThemeThickness">1.5</Thickness>
+          <Thickness x:Key="TextControlBorderThemeThicknessFocused">1.5</Thickness>
+
+          <!-- ComboBox -->
+
+          <SolidColorBrush x:Key="ComboBoxBackground" Color="#ffffff" />
+          <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="#ffffff" />
+          <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#ffffff" />
+          <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
+
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#92F397" />
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#AA92F397" />
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#92F397" />
+
+          <Thickness x:Key="ComboBoxBorderThemeThickness">1.5</Thickness>
+          
+          <!-- CalendarDatePicker -->
+
+          <SolidColorBrush x:Key="CalendarDatePickerBackground" Color="#ffffff" />
+          <SolidColorBrush x:Key="CalendarDatePickerBorderBrush" Color="{DynamicResource ThemeControlBorderMidColor}" />
+          <SolidColorBrush x:Key="CalendarDatePickerBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
+
+          <!-- CheckBox -->
+
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUnchecked" Color="#ffffff" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#66000000" />
+
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPointerOver" Color="#ffffff" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
+
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedDisabled" Color="#88000000" />
+          <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="#88000000" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedDisabled" Color="#88000000" />
+        
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPressed" Color="#ffffff" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedDisabled" Color="Transparent" />
+
+          <!-- RadioButton -->
+
+          <SolidColorBrush x:Key="RadioButtonForeground" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="RadioButtonForegroundPointerOver" Color="#ffffff" />
+          <SolidColorBrush x:Key="RadioButtonForegroundPressed" Color="#ffffff" />
+        
+          <!--SolidColorBrush x:Key="RadioButtonOuterEllipseFill" Color="#453e77" /-->
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseStroke" Color="{DynamicResource IconForegroundColor}" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseStrokePointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseStrokePressed" Color="{DynamicResource ThemeControlBorderHighColor}" />
+
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="Transparent" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="Transparent" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="Transparent" />
+
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFill" Color="{DynamicResource IconForegroundColor}" />
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFillPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFillPressed" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
+
+          <x:Double x:Key="RadioButtonBorderThemeThickness">1.5</x:Double>
+
+          <!-- Buttons -->
+          
+          <SolidColorBrush x:Key="ButtonBackground" Color="#292f66" />
+          <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#2040a0" />
+          <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#ff2d53c4" />
+
+          <SolidColorBrush x:Key="ButtonForeground" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#ffe6e6f2" />
+          <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#fff0f0f7" />
+
+          <SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff02031c" />
+          <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#ff09035c" />
+
+          <CornerRadius x:Key="ButtonCornerRadius">7</CornerRadius>
+          <Thickness x:Key="ButtonBorderThemeThickness">1.5</Thickness>
+
+          <!-- Simple and Fluent Tab/Toolbar Button -->
+          
+          <SolidColorBrush x:Key="ThemeBorderLowBrush" Color="#000000" />
+          <SolidColorBrush x:Key="ThemeBorderMidBrush" Color="#000000" />
+
+          <!-- ContextMenu -->
+
+          <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#58588f" />
+          <SolidColorBrush x:Key="MenuFlyoutItemForeground" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="MenuFlyoutItemForegroundPressed" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver" Color="#e0e0f8" />
+
+          <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="#7878bf" />
+
+          <!-- Flyout -->
+
+          <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#F037375f" />
+          <SolidColorBrush x:Key="FlyoutPresenterForeground" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#000000" />
+
+          <!-- ToolTip -->
+          
+          <SolidColorBrush x:Key="ToolTipBackground" Color="#dd333366" />
+          <SolidColorBrush x:Key="ToolTipForeground" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#b0000000" />
+
+          <Thickness x:Key="ToolTipBorderThemePadding">8,5,8,4</Thickness>
+          <Thickness x:Key="ToolTipBorderThemeThickness">1.5</Thickness>
+
+          <x:Double x:Key="ToolTipContentThemeFontSize">14</x:Double>
+
+          <!-- ScrollBar -->
+
+          <sys:Double x:Key="ScrollBarThickness">20</sys:Double>
+          <sys:Double x:Key="ScrollBarThumbThickness">12</sys:Double>
+
+          <sys:Double x:Key="LargeChange">20</sys:Double>
+
+          <SolidColorBrush x:Key="ScrollBarButtonArrowForeground" Color="#eeeeee" />
+          <SolidColorBrush x:Key="ScrollBarButtonArrowForegroundPointerOver" Color="#eeeeee" />
+
+          <SolidColorBrush x:Key="ScrollBarButtonBackground" Color="#27204a"/>
+          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPointerOver" Color="#477ed7"/>
+          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="#477ed7"/>
+
+          <SolidColorBrush x:Key="ScrollBarPanningThumbBackground" Color="#ff0000" />
+          <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#27204a" />
+          <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#27204a" />
+
+          <SolidColorBrush x:Key="ScrollBarShowingBorderBrush" Color="#FF000000" />
+
+          <!-- DataGrid -->
+          
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#27204a" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#2040a0" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#d0d0f0" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#d8d8f8" />
+
+          <SolidColorBrush x:Key="DataGridRowBackgroundBrush" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="#88ff88" />
+          
+          <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="Black" />
+          <SolidColorBrush x:Key="DataGridCellForegroundPointerOverBrush" Color="Black" />
+          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="Black" />
+          <SolidColorBrush x:Key="DataGridCellBorderBrush" Color="LightGray" />
+          <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="#ff006600" />
+          
+          <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#d0d0f0" />
+
+          <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#c8c2f9" />
+
+          <SolidColorBrush x:Key="DataGridBorderBrush" Color="Black" />
+
+          <SolidColorBrush x:Key="DataGridHeaderSeparatorBrush" Color="Black" />
+          
+          <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
+
+          <!--- End Fluent Defaults -->
+
+          <!-- Custom Resources -->
+          
+          <!-- Fonts -->
+          
+          <FontFamily x:Key="SourceCodeProFont">avares://SideScroll.Avalonia/Assets/Fonts#Source Code Pro</FontFamily>
+
+          <!--FontWeight x:Key="ControlContentThemeFontWeight">Normal</FontWeight-->
+          <FontFamily x:Key="MonospaceFontFamily">Source Code Pro</FontFamily>
+          <FontWeight x:Key="MonospaceFontWeight">Normal</FontWeight>
+
+          <!-- Tab -->
+
+          <SolidColorBrush x:Key="TabBackgroundBrush" Color="#141414" />
+          <SolidColorBrush x:Key="TabBackgroundFocusedBrush" Color="#1e1e1e" />
+          <SolidColorBrush x:Key="TabBackgroundBorderBrush" Color="Black" />
+
+          <SolidColorBrush x:Key="TabHeaderForegroundBrush" Color="#9c9c9c" />
+          
+          <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
+          <SolidColorBrush x:Key="TabSectionSeparatorBrush" Color="#ff050524" />
+
+          <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#27204a" />
+
+          <SolidColorBrush x:Key="TabSplitterBackgroundBrush" Color="#000000" />
+          <sys:Double x:Key="TabSplitterSize">6</sys:Double>
+
+          <!-- Title -->
+          
+          <SolidColorBrush x:Key="TitleBackgroundBrush" Color="#4f52bb" />
+          <SolidColorBrush x:Key="TitleButtonBackgroundPointerOverBrush" Color="#292dab" />
+          <SolidColorBrush x:Key="TitleForegroundBrush" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="TitleBorderBrush" Color="Black" />
+
+          <!-- Toolbar -->
+          
+          <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#ff20204a" />
+          
+          <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#303080" />
+          <CornerRadius x:Key="ToolbarButtonCornerRadius">6</CornerRadius>
+          
+          <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#393940" />
+
+          <SolidColorBrush x:Key="ToolbarLabelForegroundBrush" Color="#D0D0E8" />
+          <SolidColorBrush x:Key="ToolbarHeaderLabelForegroundBrush" Color="#8888FF" />
+
+          <SolidColorBrush x:Key="ToolbarTextBackgroundBrush" Color="#453e77" />
+          <SolidColorBrush x:Key="ToolbarTextForegroundBrush" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="ToolbarTextCaretBrush" Color="#b0b0d8" />
+
+          <SolidColorBrush x:Key="ToolbarBorderMidBrush" Color="#1e1e1e" />
+          <SolidColorBrush x:Key="ToolbarBorderHighBrush" Color="#655ea7" />
+
+          <!-- Icon -->
+
+          <Color x:Key="IconAltForegroundColor">#2DAF13</Color>
+          <Color x:Key="IconAltForegroundHighlightColor">#2DC210</Color>
+
+          <SolidColorBrush x:Key="IconForegroundBrush" Color="{DynamicResource IconForegroundColor}" />
+          <SolidColorBrush x:Key="IconForegroundHighlightBrush" Color="#108dff" />
+          
+          <SolidColorBrush x:Key="IconAltForegroundBrush" Color="{DynamicResource IconAltForegroundColor}" />
+          <SolidColorBrush x:Key="IconAltForegroundHighlightBrush" Color="{DynamicResource IconAltForegroundHighlightColor}" />
+          
+          <SolidColorBrush x:Key="IconForegroundDisabledBrush" Color="#004dA0" />
+
+          <!-- ScrollBar -->
+
+          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#202559" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#38409a" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="#477ed7" />
+
+          <!-- DataGrid Styled -->
+
+          <SolidColorBrush x:Key="DataGridHasLinksBackgroundBrush" Color="#58588f" />
+          <SolidColorBrush x:Key="DataGridHasLinksForegroundBrush" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="DataGridNoLinksBackgroundBrush" Color="#3c3a54" />
+          <SolidColorBrush x:Key="DataGridStyledBorderBrush" Color="#1c1a34" />
+
+          <!-- DatGrid & Title Buttons -->
+          
+          <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#27204a" />
+          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#d0d0f0" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#292f66" />
+          <SolidColorBrush x:Key="ThemeButtonBorderBrush" Color="#ff01020d" />
+
+          <!-- Text -->
+
+          <SolidColorBrush x:Key="LabelForegroundBrush" Color="#e3e3e3" />
+
+          <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#c5c6c6" />
+          <SolidColorBrush x:Key="TextControlForegroundReadOnlyBrush" Color="#606060" />
+          
+          <SolidColorBrush x:Key="TextControlBackgroundPointerOverBrush" Color="#ddffdd" />
+
+          <Thickness x:Key="ThemeBorderThickness">1</Thickness>
+          <sys:Double x:Key="ThemeDisabledOpacity">0.75</sys:Double>
+
+          <!-- TextArea -->
+
+          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#172144" />
+          <SolidColorBrush x:Key="TextAreaForegroundBrush" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="TextAreaBorderBrush" Color="Black" />
+
+          <!-- Fonts -->
+
+          <sys:Double x:Key="TitleFontSize">16</sys:Double>
+          <sys:Double x:Key="HeaderFontSize">17</sys:Double>
+          <sys:Double x:Key="DataGridFontSize">15</sys:Double>
+
+          <!-- Chart -->
+
+          <SolidColorBrush x:Key="ChartBackgroundBrush" Color="#141414" />
+          <SolidColorBrush x:Key="ChartBackgroundSelectedBrush" Color="#448dff" />
+          <sys:Double x:Key="ChartBackgroundSelectedAlpha">64</sys:Double>
+          
+          <SolidColorBrush x:Key="ChartLabelForegroundBrush" Color="#d6d6d6" />
+          <SolidColorBrush x:Key="ChartLabelForegroundHighlightBrush" Color="#21d064" />
+          
+          <SolidColorBrush x:Key="ChartGridLinesBrush" Color="#333333" />
+          <SolidColorBrush x:Key="ChartNowLineBrush" Color="Green" />
+
+          <SolidColorBrush x:Key="ChartToolTipBackgroundBrush" Color="#E1102670" />
+          <SolidColorBrush x:Key="ChartToolTipForegroundBrush" Color="#D0D0E8" />
+
+          <SolidColorBrush x:Key="ChartBorderBrush" Color="Black" />
+          <Thickness x:Key="ChartBorderThickness">0</Thickness>
+          <SolidColorBrush x:Key="ChartLegendIconBorderBrush" Color="Black" />
+
+          <SolidColorBrush x:Key="ChartSeries1Brush" Color="LawnGreen" />
+          <SolidColorBrush x:Key="ChartSeries2Brush" Color="Fuchsia" />
+          <SolidColorBrush x:Key="ChartSeries3Brush" Color="DodgerBlue" />
+          <SolidColorBrush x:Key="ChartSeries4Brush" Color="Gold" />
+          <SolidColorBrush x:Key="ChartSeries5Brush" Color="Red" />
+          <SolidColorBrush x:Key="ChartSeries6Brush" Color="Cyan" />
+          <SolidColorBrush x:Key="ChartSeries7Brush" Color="BlueViolet" />
+          <SolidColorBrush x:Key="ChartSeries8Brush" Color="Orange" />
+          <SolidColorBrush x:Key="ChartSeries9Brush" Color="Salmon" />
+          <SolidColorBrush x:Key="ChartSeries10Brush" Color="MediumSpringGreen" />
+      
+          <!-- ColorPicker -->
+          
+          <Color x:Key="SystemChromeDisabledLowColor">#FFFFFF</Color>
+          <SolidColorBrush x:Key="TextControlForegroundDisabled" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="SystemControlDisabledChromeDisabledLowBrush"
+                           Color="{StaticResource SystemChromeDisabledLowColor}" />
+
+          <!--SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground" Color="#FFFFFF" /-->
+
+          <!-- AvaloniaEdit.TextEditor -->
+          
+          <!-- Default is too dark when the foreground is black -->
+          <!-- SelectionForeground can't be set to a light color yet so use a light selection color instead -->
+          <SolidColorBrush x:Key="TextEditorBackgroundBrush" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="TextEditorForegroundBrush" Color="Black" />
+          <SolidColorBrush x:Key="TextEditorBorderBrush" Color="Black" />
+          
+          <SolidColorBrush x:Key="TextAreaSelectionBrush" Color="#b8d6ff" />
+          <SolidColorBrush x:Key="LinkTextForegroundBrush" Color="Blue" />
+
+          <SolidColorBrush x:Key="JsonHighlightPunctuationBrush" Color="Black" />
+          <SolidColorBrush x:Key="JsonHighlightFieldNameBrush" Color="DarkMagenta" />
+          <SolidColorBrush x:Key="JsonHighlightStringBrush" Color="Green" />
+          <SolidColorBrush x:Key="JsonHighlightNumberBrush" Color="MediumVioletRed" />
+          <SolidColorBrush x:Key="JsonHighlightBoolBrush" Color="Blue" />
+          <SolidColorBrush x:Key="JsonHighlightNullBrush" Color="Sienna" />
+
+          <SolidColorBrush x:Key="XmlHighlightCommentBrush" Color="Green" />
+          <SolidColorBrush x:Key="XmlHighlightCDataBrush" Color="Blue" />
+          <SolidColorBrush x:Key="XmlHighlightDocTypeBrush" Color="Blue" />
+          <SolidColorBrush x:Key="XmlHighlightDeclarationBrush" Color="Blue" />
+          <SolidColorBrush x:Key="XmlHighlightTagBrush" Color="DarkMagenta" />
+          <SolidColorBrush x:Key="XmlHighlightAttributeNameBrush" Color="#fff77800" />
+          <SolidColorBrush x:Key="XmlHighlightAttributeValueBrush" Color="#ff2600e6" />
+          <SolidColorBrush x:Key="XmlHighlightEntityBrush" Color="Teal" />
+          <SolidColorBrush x:Key="XmlHighlightBrokenEntityBrush" Color="Olive" />
+
+        </ResourceDictionary>
+    
+        <ResourceDictionary x:Key="Dark">
+
+          <!-- Fluent Defaults -->
+
+          <Color x:Key="SystemBaseLowColor">#33000000</Color>
+
+          <Color x:Key="SystemAccentColorDark1">#005A9E</Color>
+          <Color x:Key="SystemAccentColorDark2">#004275</Color>
+          <Color x:Key="SystemAccentColorDark3">#002642</Color>
+
+          <Color x:Key="SystemAccentColorLight1">#429CE3</Color>
+          <Color x:Key="SystemAccentColorLight2">#76B9ED</Color>
+          <Color x:Key="SystemAccentColorLight3">#A6D8FF</Color>
+
+          <Color x:Key="DataGridAccentColor">#2040a0</Color>
+
+          <Color x:Key="TextForegroundColor">#B5B5B5</Color>
+          <Color x:Key="TextForegroundHighColor">#d0d0d0</Color>
+          
+          <Color x:Key="ThemeControlBorderHighColor">#3060c0</Color>
+          <Color x:Key="ThemeControlBackgroundSelectedColor">#3060c0</Color>
+          
+          <Color x:Key="IconForegroundColor">#999999</Color>
+
+          <SolidColorBrush x:Key="SystemControlErrorTextForegroundBrush" Color="#ffbb12"/>
+
+          <!-- TextControl -->
+
+          <SolidColorBrush x:Key="TextControlForeground" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="{DynamicResource TextForegroundHighColor}" />
+          <SolidColorBrush x:Key="TextControlForegroundFocused" Color="{DynamicResource TextForegroundHighColor}" />
+          <SolidColorBrush x:Key="TextControlBorderBrush" Color="#22FFFFFF" />
+          <SolidColorBrush x:Key="TextControlBackground" Color="{DynamicResource SystemAltMediumLowColor}" />
+
+          <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="{StaticResource SystemAltMediumColor}" />
+          <!--SolidColorBrush x:Key="TextControlPlaceholderForegroundPointerOver" Color="#172144" /-->
+          <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
+          <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
+
+          <SolidColorBrush x:Key="TextControlSelectionForegroundBrush" Color="#e6e6e6" />
+
+          <Thickness x:Key="TextControlBorderThemeThickness">1</Thickness>
+          <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
+
+          <!-- ComboBox -->
+
+          <SolidColorBrush x:Key="ComboBoxBackground" Color="{DynamicResource SystemAltMediumLowColor}" />
+          <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="{StaticResource SystemAltMediumColor}" />
+          <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#ff3060c0" />
+          <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
+
+          <SolidColorBrush x:Key="ComboBoxForeground" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="ComboBoxForegroundFocused" Color="{DynamicResource TextForegroundHighColor}" />
+          <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="#22FFFFFF" />
+          <SolidColorBrush x:Key="ComboBoxItemForeground" Color="{DynamicResource TextForegroundColor}" />
+
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#AA3060c0" />
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
+
+          <Thickness x:Key="ComboBoxBorderThemeThickness">1</Thickness>
+
+          <!-- CalendarDatePicker -->
+
+          <SolidColorBrush x:Key="CalendarDatePickerForeground" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="CalendarDatePickerBackground" Color="{DynamicResource SystemAltMediumLowColor}" />
+          
+          <SolidColorBrush x:Key="CalendarDatePickerBorderBrush" Color="#22FFFFFF" />
+          <SolidColorBrush x:Key="CalendarDatePickerBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
+
+          <!-- CheckBox -->
+
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUnchecked" Color="{DynamicResource SystemAltMediumLowColor}" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#33FFFFFF" />
+
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPointerOver" Color="{DynamicResource SystemAltMediumLowColor}" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
+
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedDisabled" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedDisabled" Color="{DynamicResource TextForegroundColor}" />
+
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPressed" Color="{DynamicResource SystemAltMediumLowColor}" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedDisabled" Color="Transparent" />
+
+          <!-- RadioButton -->
+          
+          <SolidColorBrush x:Key="RadioButtonForeground" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="RadioButtonForegroundPointerOver" Color="#dddddd" />
+          <SolidColorBrush x:Key="RadioButtonForegroundPressed" Color="#ffffff" />
+
+          <!--SolidColorBrush x:Key="RadioButtonOuterEllipseFill" Color="#453e77" /-->
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseStroke" Color="{DynamicResource IconForegroundColor}" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseStrokePointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseStrokePressed" Color="{DynamicResource ThemeControlBorderHighColor}" />
+
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="Transparent" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="Transparent" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="Transparent" />
+
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFill" Color="{DynamicResource IconForegroundColor}" />
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFillPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFillPressed" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
+
+          <!-- Buttons -->
+          
+          <SolidColorBrush x:Key="ButtonBackground" Color="#ff1a1d47" />
+          <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#2040a0" />
+          <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#363f80" />
+
+          <SolidColorBrush x:Key="ButtonForeground" Color="#ffadafc9" />
+          <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#ffc1c2c9" />
+          <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#ffd0d1d9" />
+
+          <SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff01020d" />
+          <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#ff000033" />
+
+          <!-- Simple and Fluent Tab/Toolbar Button -->
+          
+          <SolidColorBrush x:Key="ThemeBorderLowBrush" Color="#000000" />
+          <SolidColorBrush x:Key="ThemeBorderMidBrush" Color="#000000" />
+
+          <!-- ProgressBar -->
+
+          <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="#20204a" />
+
+          <!-- ContextMenu -->
+
+          <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#F2333366" />
+          <!--SolidColorBrush x:Key="MenuFlyoutItemForegroundPressed" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver" Color="#e0e0f8" /-->
+
+          <SolidColorBrush x:Key="MenuFlyoutItemForeground" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
+
+          <!-- Flyout -->
+
+          <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#F037375f" />
+          <SolidColorBrush x:Key="FlyoutPresenterForeground" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#000000" />
+
+          <!-- ToolTip -->
+          
+          <SolidColorBrush x:Key="ToolTipBackground" Color="#e8131b45" />
+          <SolidColorBrush x:Key="ToolTipForeground" Color="#ffbdbdde" />
+          <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#FF000000" />
+
+          <!-- ScrollBar -->
+
+          <SolidColorBrush x:Key="ScrollBarButtonArrowForeground" Color="#eeeeee" />
+          <SolidColorBrush x:Key="ScrollBarButtonArrowForegroundPointerOver" Color="#eeeeee" />
+
+          <SolidColorBrush x:Key="ScrollBarButtonBackground" Color="#242424"/>
+          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}"/>
+          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="{DynamicResource ThemeControlBackgroundSelectedColor}"/>
+
+          <SolidColorBrush x:Key="ScrollBarPanningThumbBackground" Color="#ff0000" />
+          <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#242424" />
+          <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#242424" />
+
+          <!-- DataGrid -->
+          
+          <SolidColorBrush x:Key="DataGridRowBackgroundBrush" Color="#1c1c1c" />
+          <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="{DynamicResource DataGridAccentColor}" />
+          
+          <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="DataGridCellForegroundPointerOverBrush" Color="#cccccc" />
+          <SolidColorBrush x:Key="DataGridCellBorderBrush" Color="Black" />
+          <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="Transparent" />
+          <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush" Color="#006dbb" />
+
+          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="#cccccc" />
+          <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#dddddd" />
+
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#121212" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#2040a0" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#b5b5b5" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#cccccc" />
+
+          <SolidColorBrush x:Key="DataGridGridLinesBrush" Color="Black" />
+          
+          <!--- End Fluent Defaults -->
+
+          
+          <!-- Custom Resources -->
+
+          <!-- Tab -->
+
+          <SolidColorBrush x:Key="TabBackgroundBrush" Color="#121212" />
+          <SolidColorBrush x:Key="TabBackgroundFocusedBrush" Color="#1a1a1a" />
+
+          <SolidColorBrush x:Key="TabHeaderForegroundBrush" Color="#7c7c7c" />
+
+          <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
+          <SolidColorBrush x:Key="TabSectionSeparatorBrush" Color="#ff050524" />
+
+          <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#191633" />
+
+          <!-- Title -->
+
+          <SolidColorBrush x:Key="TitleBackgroundBrush" Color="#ff2a2a59" />
+          <SolidColorBrush x:Key="TitleButtonBackgroundPointerOverBrush" Color="#ff313159" />
+          <SolidColorBrush x:Key="TitleForegroundBrush" Color="#B4B8CF" />
+
+          <!-- Toolbar -->
+          
+          <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#0d0d0d" />
+          <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#2c2c2c" />
+          <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#363636" />
+
+          <SolidColorBrush x:Key="ToolbarLabelForegroundBrush" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="ToolbarHeaderLabelForegroundBrush" Color="{DynamicResource TextForegroundColor}" />
+
+          <SolidColorBrush x:Key="ToolbarTextBackgroundBrush" Color="#222222" />
+          <SolidColorBrush x:Key="ToolbarTextForegroundBrush" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="ToolbarTextCaretBrush" Color="#b0b0d8" />
+
+          <SolidColorBrush x:Key="ToolbarBorderMidBrush" Color="#1e1e1e" />
+          <SolidColorBrush x:Key="ToolbarBorderHighBrush" Color="#655ea7" />
+
+          <!-- Icon -->
+
+          <Color x:Key="IconAltForegroundColor">#429E42</Color>
+          <Color x:Key="IconAltForegroundHighlightColor">#2DC210</Color>
+
+          <SolidColorBrush x:Key="IconForegroundBrush" Color="{DynamicResource IconForegroundColor}" />
+          <SolidColorBrush x:Key="IconForegroundHighlightBrush" Color="#bbbbbb" />
+          
+          <SolidColorBrush x:Key="IconAltForegroundBrush" Color="{DynamicResource IconAltForegroundColor}" />
+          <SolidColorBrush x:Key="IconAltForegroundHighlightBrush" Color="{DynamicResource IconAltForegroundHighlightColor}" />
+          
+          <SolidColorBrush x:Key="IconForegroundDisabledBrush" Color="#333333" />
+
+          <!-- DataGrid Styled -->
+          
+          <SolidColorBrush x:Key="DataGridHasLinksBackgroundBrush" Color="#313145" />
+          <SolidColorBrush x:Key="DataGridHasLinksForegroundBrush" Color="#b9b9cf" />
+          <SolidColorBrush x:Key="DataGridNoLinksBackgroundBrush" Color="#2c2c2c" />
+          <SolidColorBrush x:Key="DataGridStyledBorderBrush" Color="#1c1c1c" />
+
+          <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#c8c2f9" />
+
+          <!-- ScrollBar -->
+          
+          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#292929" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#444444" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
+
+          <!-- DatGrid & Title Buttons -->
+          
+          <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#121212" />
+          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#dddddd" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
+          <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#3060d0" />
+          <SolidColorBrush x:Key="ThemeButtonBorderBrush" Color="Black" />
+         
+          <!-- Text -->
+          
+          <SolidColorBrush x:Key="LabelForegroundBrush" Color="#b5b5b5" />
+
+          <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#1a1a1a" />
+          <SolidColorBrush x:Key="TextControlForegroundReadOnlyBrush" Color="#808080" />
+          
+          <SolidColorBrush x:Key="TextControlBackgroundPointerOverBrush" Color="#ddffdd" />
+
+          <!-- TextArea -->
+
+          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#ff131b38" />
+          <SolidColorBrush x:Key="TextAreaForegroundBrush" Color="#ffb9bbc9" />
+
+          <!-- Chart -->
+
+          <SolidColorBrush x:Key="ChartBackgroundBrush" Color="#121212" />
+          <SolidColorBrush x:Key="ChartBackgroundSelectedBrush" Color="#21D064" />
+          <sys:Double x:Key="ChartBackgroundSelectedAlpha">64</sys:Double>
+          
+          <SolidColorBrush x:Key="ChartLabelForegroundBrush" Color="#b5b5b5" />
+          <SolidColorBrush x:Key="ChartLabelForegroundHighlightBrush" Color="#21d064" />
+          
+          <SolidColorBrush x:Key="ChartToolTipBackgroundBrush" Color="#E1102670" />
+          <SolidColorBrush x:Key="ChartToolTipForegroundBrush" Color="#D0D0E8" />
+
+          <!-- AvaloniaEdit.TextEditor -->
+          
+          <SolidColorBrush x:Key="TextEditorBackgroundBrush" Color="#1c1c1c" />
+          <SolidColorBrush x:Key="TextEditorForegroundBrush" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="TextAreaSelectionBrush" Color="#db182c7a" />
+          <SolidColorBrush x:Key="LinkTextForegroundBrush" Color="#3178D9" />
+
+          <SolidColorBrush x:Key="JsonHighlightPunctuationBrush" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="JsonHighlightFieldNameBrush" Color="#8E8CD8" />
+          <SolidColorBrush x:Key="JsonHighlightStringBrush" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="JsonHighlightNumberBrush" Color="#327fc7" />
+          <SolidColorBrush x:Key="JsonHighlightBoolBrush" Color="#8946B2" />
+          <SolidColorBrush x:Key="JsonHighlightNullBrush" Color="#CA5010" />
+
+          <SolidColorBrush x:Key="XmlHighlightCommentBrush" Color="Green" />
+          <SolidColorBrush x:Key="XmlHighlightCDataBrush" Color="#B2B1A5" />
+          <SolidColorBrush x:Key="XmlHighlightDocTypeBrush" Color="#767676" />
+          <SolidColorBrush x:Key="XmlHighlightDeclarationBrush" Color="#767676" />
+          <SolidColorBrush x:Key="XmlHighlightTagBrush" Color="#8764B8" />
+          <SolidColorBrush x:Key="XmlHighlightAttributeNameBrush" Color="#8E8CD8" />
+          <SolidColorBrush x:Key="XmlHighlightAttributeValueBrush" Color="#0583E3" />
+          <SolidColorBrush x:Key="XmlHighlightEntityBrush" Color="Teal" />
+          <SolidColorBrush x:Key="XmlHighlightBrokenEntityBrush" Color="#CA5010" />
+
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Styles.Resources>
+  
+  <StyleInclude Source="avares://SideScroll.Avalonia/Themes/Fluent/FluentControls.xaml"/>
+  
+</Styles>
