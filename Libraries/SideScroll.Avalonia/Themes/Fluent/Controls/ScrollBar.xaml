@@ -41,6 +41,10 @@
   <Style Selector="ScrollBar[IsExpanded=true] /template/ PathIcon">
     <Setter Property="Foreground" Value="{DynamicResource ScrollBarButtonArrowForeground}"/>
   </Style>
+  <!-- Original ScrollBarThumbBackgroundColor Brush is a StaticResource so override with a DynamicResource -->
+  <Style Selector="ScrollBar[IsExpanded=true] /template/ Thumb">
+    <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>
+  </Style>
 
   <Style Selector="Thumb">
     <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>

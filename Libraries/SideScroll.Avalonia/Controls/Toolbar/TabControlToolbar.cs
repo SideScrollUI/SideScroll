@@ -20,7 +20,7 @@ public class TabControlToolbar : Grid, IDisposable
 {
 	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
 
-	public static Thickness DefaultMargin = new(6, 2);
+	public static Thickness DefaultMargin { get; set; } = new(6, 2);
 
 	public readonly TabInstance? TabInstance;
 
@@ -137,9 +137,12 @@ public class TabControlToolbar : Grid, IDisposable
 		return button;
 	}
 
-	public ToolbarRadioButton AddRadioButton(string text)
+	public ToolbarRadioButton AddRadioButton(string text, bool isChecked = false)
 	{
-		var radioButton = new ToolbarRadioButton(text);
+		var radioButton = new ToolbarRadioButton(text)
+		{
+			IsChecked = isChecked,
+		};
 		AddControl(radioButton);
 		return radioButton;
 	}

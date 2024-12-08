@@ -28,12 +28,9 @@ public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes, FileSelectorO
 
 			tab.DataRepoNodes.LoadAllIndexed(call);
 			List<NodeView> nodeViews = tab.DataRepoNodes.Items.Values.ToList();
-			if (nodeViews.Count > 0)
+			foreach (var node in nodeViews)
 			{
-				foreach (var node in nodeViews)
-				{
-					node.FileSelectorOptions = tab.FileSelectorOptions;
-				}
+				node.FileSelectorOptions = tab.FileSelectorOptions;
 			}
 
 			model.AddData(nodeViews);

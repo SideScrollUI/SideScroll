@@ -163,10 +163,14 @@
           <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="#477ed7"/>
 
           <SolidColorBrush x:Key="ScrollBarPanningThumbBackground" Color="#ff0000" />
-          <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#27204a" />
-          <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#27204a" />
+          <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#202559" />
+          <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#202559" />
 
           <SolidColorBrush x:Key="ScrollBarShowingBorderBrush" Color="#FF000000" />
+
+          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#202559" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#38409a" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="#477ed7" />
 
           <!-- DataGrid -->
           
@@ -260,12 +264,6 @@
           <SolidColorBrush x:Key="IconAltForegroundHighlightBrush" Color="{DynamicResource IconAltForegroundHighlightColor}" />
           
           <SolidColorBrush x:Key="IconForegroundDisabledBrush" Color="#004dA0" />
-
-          <!-- ScrollBar -->
-
-          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#202559" />
-          <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#38409a" />
-          <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="#477ed7" />
 
           <!-- DataGrid Styled -->
 
@@ -532,8 +530,12 @@
           <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="{DynamicResource ThemeControlBackgroundSelectedColor}"/>
 
           <SolidColorBrush x:Key="ScrollBarPanningThumbBackground" Color="#ff0000" />
-          <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#242424" />
-          <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#242424" />
+          <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#292929" />
+          <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#292929" />
+
+          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#292929" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#444444" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
 
           <!-- DataGrid -->
           
@@ -576,7 +578,7 @@
           <!-- Title -->
 
           <SolidColorBrush x:Key="TitleBackgroundBrush" Color="#ff2a2a59" />
-          <SolidColorBrush x:Key="TitleButtonBackgroundPointerOverBrush" Color="#ff313159" />
+          <SolidColorBrush x:Key="TitleButtonBackgroundPointerOverBrush" Color="#ff3737b0" />
           <SolidColorBrush x:Key="TitleForegroundBrush" Color="#B4B8CF" />
 
           <!-- Toolbar -->
@@ -616,12 +618,6 @@
           <SolidColorBrush x:Key="DataGridStyledBorderBrush" Color="#1c1c1c" />
 
           <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#c8c2f9" />
-
-          <!-- ScrollBar -->
-          
-          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#292929" />
-          <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#444444" />
-          <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
 
           <!-- DatGrid & Title Buttons -->
           

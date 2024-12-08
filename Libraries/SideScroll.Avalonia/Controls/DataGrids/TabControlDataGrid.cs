@@ -550,9 +550,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 	private void AddColumns()
 	{
-		_columnObjects = new Dictionary<string, DataGridColumn>();
-		_columnNames = new Dictionary<DataGridColumn, string>();
-		_columnProperties = new List<PropertyInfo>();
+		_columnObjects = [];
+		_columnNames = [];
+		_columnProperties = [];
 
 		List<TabDataSettings.MethodColumn> methodColumns = TabDataSettings.GetButtonMethods(_elementType);
 		foreach (TabDataSettings.MethodColumn methodColumn in methodColumns)

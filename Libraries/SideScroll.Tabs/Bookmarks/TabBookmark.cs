@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
 using System.Collections;
+using System.Diagnostics;
 
 namespace SideScroll.Tabs.Bookmarks;
 
@@ -28,35 +29,35 @@ public class TabBookmark
 	public Dictionary<string, TabBookmark> ChildBookmarks { get; set; } = []; // doesn't know which tabData to use, maps id to child info
 	public Dictionary<string, object?>? BookmarkData { get; set; }
 
-	public string Address
+	public string GetAddress(int maxDepth = 100, HashSet<TabBookmark>? visited = null)
 	{
-		get
+		visited ??= [];
+		if (maxDepth <= 0 || !visited.Add(this)) return "";
+
+		if (ChildBookmarks?.Count > 0)
 		{
-			if (ChildBookmarks?.Count > 0)
+			string comma = "";
+			string address = "";
+			if (ChildBookmarks.Count > 1)
 			{
-				string comma = "";
-				string address = "";
-				if (ChildBookmarks.Count > 1)
-				{
-					address += "[";
-				}
-				//address += Name + "::";
-				foreach (var bookmark in ChildBookmarks)
-				{
-					address += comma;
-					address += bookmark.Key + " / " + bookmark.Value.Address;
-					comma = ", ";
-				}
-				if (ChildBookmarks.Count > 1)
-				{
-					address += "]";
-				}
-				return address;
+				address += "[";
 			}
-			else
+			//address += Name + "::";
+			foreach (var bookmark in ChildBookmarks)
 			{
-				return ViewSettings?.Address ?? "";
+				address += comma;
+				address += bookmark.Key + " / " + bookmark.Value.GetAddress(maxDepth - 1, visited);
+				comma = ", ";
 			}
+			if (ChildBookmarks.Count > 1)
+			{
+				address += "]";
+			}
+			return address;
+		}
+		else
+		{
+			return ViewSettings?.Address ?? "";
 		}
 	}
 
