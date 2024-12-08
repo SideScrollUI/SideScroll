@@ -18,7 +18,7 @@ public class Bookmark
 	public string? Name { get; set; }
 	public string? Changed { get; set; } // what was just selected, used for naming, find better default name
 	public Type? Type { get; set; } // Must be ITab
-	public string Address => TabBookmark?.Address ?? "";
+	public string Address => TabBookmark?.GetAddress() ?? "";
 	public string Path => (Name != null ? (Name + ":\n") : "") + Address;
 	public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
 	public TabBookmark TabBookmark { get; set; } = new();

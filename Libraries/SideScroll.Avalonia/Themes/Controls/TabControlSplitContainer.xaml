@@ -1,0 +1,14 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sidescroll="clr-namespace:SideScroll.Avalonia.Controls;assembly=SideScroll.Avalonia">
+
+  <ControlTheme x:Key="{x:Type sidescroll:TabControlSplitContainer}" TargetType="sidescroll:TabControlSplitContainer">
+    <Setter Property="Background" Value="{DynamicResource TabBackgroundBrush}"/>
+    <Style Selector="^:pointerover">
+      <Setter Property="Background" Value="{DynamicResource TabBackgroundFocusedBrush}" />
+    </Style>
+    <Style Selector="^:focused">
+      <Setter Property="Background" Value="{DynamicResource TabBackgroundFocusedBrush}" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>

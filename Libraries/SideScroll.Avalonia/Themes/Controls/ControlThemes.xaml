@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlAvaloniaEdit.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlParams.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlSplitContainer.xaml" />
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlTextArea.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlTextBlock.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlTitle.xaml" />
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlToolbar.xaml" />
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/ToolbarButton.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabButton.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabHeader.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabSeparator.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabSplitter.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabView.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabViewer.xaml"/>
+  </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

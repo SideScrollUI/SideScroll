@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
@@ -5,6 +6,7 @@ using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Samples.Params;
 
+[TabRoot, PublicData]
 public class TabSampleParamsDataTabs : ITab
 {
 	public override string ToString() => "Data Repos";

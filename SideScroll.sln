@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Tabs.Tools", "Li
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{05F04605-3FC3-4A78-8C52-CFAF0AE94A5F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{E7D9713F-A249-443C-B300-52A335BD8891}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Avalonia", "Avalonia", "{E7D9713F-A249-443C-B300-52A335BD8891}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.UI.Avalonia", "Libraries\SideScroll.UI.Avalonia\SideScroll.UI.Avalonia.csproj", "{8FE32C9A-1196-4BE0-B66B-C8ADAD9C621D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Avalonia", "Libraries\SideScroll.Avalonia\SideScroll.Avalonia.csproj", "{8FE32C9A-1196-4BE0-B66B-C8ADAD9C621D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Programs", "Programs", "{E4AFA68B-CE75-4BFE-9329-85FECDB49D3D}"
 EndProject
@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Network.Test", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Resources", "Libraries\SideScroll.Resources\SideScroll.Resources.csproj", "{77D36F2E-2D9A-4FF3-B92D-2BEFFF03CC8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.UI.Avalonia.Test", "Test\SideScroll.UI.Avalonia.Test\SideScroll.UI.Avalonia.Test.csproj", "{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Avalonia.Test", "Test\SideScroll.Avalonia.Test\SideScroll.Avalonia.Test.csproj", "{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Test", "Test\SideScroll.Test\SideScroll.Test.csproj", "{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}"
 EndProject
@@ -46,13 +46,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{332EF461
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.UI.Avalonia.ScreenCapture", "Libraries\SideScroll.UI.Avalonia.ScreenCapture\SideScroll.UI.Avalonia.ScreenCapture.csproj", "{258F0A19-91AE-4020-9F1D-1C611CC3861A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Avalonia.ScreenCapture", "Libraries\SideScroll.Avalonia.ScreenCapture\SideScroll.Avalonia.ScreenCapture.csproj", "{258F0A19-91AE-4020-9F1D-1C611CC3861A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.UI.Avalonia.Charts", "Libraries\SideScroll.UI.Avalonia.Charts\SideScroll.UI.Avalonia.Charts.csproj", "{A5F9B6E9-EA6A-4757-A66A-776DA30EC70F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Avalonia.Charts", "Libraries\SideScroll.Avalonia.Charts\SideScroll.Avalonia.Charts.csproj", "{A5F9B6E9-EA6A-4757-A66A-776DA30EC70F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.UI.Avalonia.Charts.LiveCharts", "Libraries\SideScroll.UI.Avalonia.Charts.LiveCharts\SideScroll.UI.Avalonia.Charts.LiveCharts.csproj", "{EEB5042F-0D91-41C0-B52D-E2674CA01709}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Avalonia.Charts.LiveCharts", "Libraries\SideScroll.Avalonia.Charts.LiveCharts\SideScroll.Avalonia.Charts.LiveCharts.csproj", "{EEB5042F-0D91-41C0-B52D-E2674CA01709}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.UI.Avalonia.Samples", "Libraries\SideScroll.UI.Avalonia.Samples\SideScroll.UI.Avalonia.Samples.csproj", "{2609CBA4-D4BE-463E-A5C1-2723AD7E139E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Avalonia.Samples", "Libraries\SideScroll.Avalonia.Samples\SideScroll.Avalonia.Samples.csproj", "{2609CBA4-D4BE-463E-A5C1-2723AD7E139E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

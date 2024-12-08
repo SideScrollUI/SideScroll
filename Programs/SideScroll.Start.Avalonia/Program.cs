@@ -1,8 +1,8 @@
 using Avalonia;
 using Avalonia.Data.Core.Plugins;
-using SideScroll.UI.Avalonia.Samples;
-using SideScroll.UI.Avalonia.ScreenCapture;
-using SideScroll.UI.Avalonia.Viewer;
+using SideScroll.Avalonia.Samples;
+using SideScroll.Avalonia.ScreenCapture;
+using SideScroll.Avalonia.Viewer;
 using SideScroll.Utilities;
 
 namespace SideScroll.Start.Avalonia;
