@@ -30,7 +30,7 @@ public class TabSampleParamsDataTabs : ITab
 		{
 			LoadSavedItems(call, model);
 
-			_sampleParamItem = LoadData<SampleParamItem>(DataKey);
+			_sampleParamItem ??= LoadData<SampleParamItem>(DataKey);
 			model.AddObject(_sampleParamItem!);
 
 			Toolbar toolbar = new();
@@ -50,6 +50,7 @@ public class TabSampleParamsDataTabs : ITab
 
 		private void New(Call call)
 		{
+			_sampleParamItem = new();
 			Reload();
 		}
 

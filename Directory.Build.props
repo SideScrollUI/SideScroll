@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.8</Version>
-    <PackageReleaseNotes>Fixed TabDirectory file extension filtering. Added a Copy/Paste Context Menu to ComboBoxes. Added Flyout for Tab Links. Fixed Live Charts showing decimal value axis labels for whole numbers. Added more actions to the Tab Title Context Menu. Fixed DateTime parsing for seconds and milliseconds that have commas in them. [DebugOnly] now works for classes and structs too. Added plugin system for ScreenCapture so it can be loaded only for Desktop apps. Added SideScroll.Avalonia.Samples to allow sharing samples between platforms. Renamed Namespace for SideScroll.UI.Avalonia to SideScroll.Avalonia. Fixed bookmark handling for circular references. Fixed ScrollBar background colors. Added ToggleButton theming.</PackageReleaseNotes>
+    <Version>0.8.1</Version>
+    <PackageReleaseNotes>Added TimeZone and TimeFormat to UserSettings. Fixed Light Theme CalendarDatePickerBackgroundPointerOver.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.1</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

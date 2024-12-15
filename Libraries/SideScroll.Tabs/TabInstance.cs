@@ -438,10 +438,14 @@ public class TabInstance : IDisposable
 			}
 
 			if (iList is ItemCollection<ListProperty> propertyList)
+			{
 				model.ItemList[i] = ListProperty.Sort(propertyList);
+			}
 
 			if (iList is ItemCollection<ListMember> memberList)
+			{
 				model.ItemList[i] = ListMember.Sort(memberList);
+			}
 		}
 	}
 
@@ -468,7 +472,9 @@ public class TabInstance : IDisposable
 		foreach (IList iList in model.ItemList)
 		{
 			if (iList is IContext context)
+			{
 				context.InitializeContext(true);
+			}
 		}
 
 		try

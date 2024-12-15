@@ -1,5 +1,6 @@
 using Avalonia.Data;
 using Avalonia.Data.Converters;
+using SideScroll.Time;
 using SideScroll.Utilities;
 using System.Globalization;
 
@@ -97,7 +98,7 @@ public class DateTimeValueConverter : IValueConverter
 
 		if (PreviousDateTime is not DateTime dateTime)
 		{
-			dateTime = DateTime.UtcNow.Date;
+			dateTime = TimeZoneView.Now.Date;
 		}
 
 		PreviousDateTime = dateTime.Date.AddSeconds(timeSpan.TotalSeconds);

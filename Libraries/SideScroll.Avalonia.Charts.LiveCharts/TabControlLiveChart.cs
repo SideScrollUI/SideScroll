@@ -433,8 +433,8 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		}
 		else
 		{
-			XAxis.MinLimit = timeWindow.StartTime.Ticks;
-			XAxis.MaxLimit = timeWindow.EndTime.Ticks;
+			XAxis.MinLimit = timeWindow.StartTime.ToUniversalTime().Ticks;
+			XAxis.MaxLimit = timeWindow.EndTime.ToUniversalTime().Ticks;
 			UpdateDateTimeInterval(timeWindow.Duration);
 		}
 	}
@@ -442,9 +442,13 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	private void UpdateDateTimeInterval(TimeSpan windowDuration)
 	{
 		var dateFormat = DateTimeFormat.GetWindowFormat(windowDuration)!;
-		TimeSpan stepDuration = windowDuration.PeriodDuration(8).Max(dateFormat.Minimum);
+		TimeSpan stepDuration = windowDuration.PeriodDuration(7).Max(dateFormat.Minimum);
 
-		XAxis.Labeler = value => new DateTime((long)value, DateTimeKind.Utc).ToString(dateFormat.TextFormat);
+		XAxis.Labeler = value =>
+		{
+			DateTime timestamp = TimeZoneView.Current.Convert(new DateTime((long)value, DateTimeKind.Utc));
+			return dateFormat.Format(timestamp);
+		};
 		XAxis.UnitWidth = stepDuration.Ticks; // Hover depends on this
 		XAxis.MinStep = stepDuration.Ticks;
 	}
@@ -612,7 +616,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	{
 		if (IdxNameToChartSeries.TryGetValue(chartPoint.Context.Series.Name!, out var series))
 		{
-			OnSelectionChanged(new SeriesSelectedEventArgs(new List<ListSeries> { series.ListSeries }));
+			OnSelectionChanged(new SeriesSelectedEventArgs([series.ListSeries]));
 			Legend.SelectSeries(series.LineSeries, series.ListSeries);
 		}
 	}

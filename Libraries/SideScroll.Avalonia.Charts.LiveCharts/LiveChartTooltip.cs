@@ -14,7 +14,7 @@ namespace SideScroll.Avalonia.Charts.LiveCharts;
 public class LiveChartTooltip : IChartTooltip<SkiaSharpDrawingContext>
 {
 	public double TextSize { get; set; } = 15;
-	public double LabelMaxWidth { get; set; } = 300;
+	public double LabelMaxWidth { get; set; } = 310;
 	 
 	private static readonly int s_zIndex = 10100;
 

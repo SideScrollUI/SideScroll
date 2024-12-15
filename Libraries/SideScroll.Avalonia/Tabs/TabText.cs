@@ -30,7 +30,6 @@ public class TabText(string text) : ITab
 
 			var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
 			tabAvaloniaEdit.SetFormatted(tab.Text);
-
 			model.AddObject(tabAvaloniaEdit, true);
 		}
 

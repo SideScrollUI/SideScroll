@@ -47,7 +47,7 @@ public class EditValueConverter : IValueConverter
 
 		if (value is DateTime dateTime)
 		{
-			return dateTime.ToString("yyyy-M-d H:mm:ss.FFFFFF");
+			return dateTime.Format(TimeFormatType.Microsecond);
 		}
 
 		if (value.GetType().IsPrimitive == false && targetType == typeof(string))
