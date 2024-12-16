@@ -10,36 +10,45 @@ public enum TimeFormatType
 	Microsecond,
 }
 
+public class TimeFormats
+{
+	public const string DefaultMinute = "t";
+	public const string DefaultSecond = "T";
+	public const string DefaultMillisecond = "h:mm:ss.FFF tt"; // todo: 'T' doesn't include milliseconds which we want
+	public const string DefaultMicrosecond = "h:mm:ss.FFFFFF tt";
+
+	public const string DefaultUtcMinute = "H:mm";
+	public const string DefaultUtcSecond = "H:mm:ss";
+	public const string DefaultUtcMillisecond = "H:mm:ss.FFF";
+	public const string DefaultUtcMicrosecond = "H:mm:ss.FFFFFF";
+
+	public string Minute { get; set; } = DefaultMinute;
+	public string Second { get; set; } = DefaultSecond;
+	public string Millisecond { get; set; } = DefaultMillisecond;
+	public string Microsecond { get; set; } = DefaultMicrosecond;
+
+	public static TimeFormats DefaultUtc => new()
+	{
+		Minute = DefaultUtcMinute,
+		Second = DefaultUtcSecond,
+		Millisecond = DefaultUtcMillisecond,
+		Microsecond = DefaultUtcMicrosecond,
+	};
+}
+
 public static class DateTimeFormats
 {
 	public const string DateFormat = "yyyy-M-d";
 
-	public const string TimeMinute = "t";
-	public const string TimeSecond = "T"; // todo: 'T' doesn't include milliseconds which we want
-	public const string TimeMillisecond = "h:mm:ss.FFF tt"; // todo: 'T' doesn't include milliseconds which we want
-	public const string TimeMicrosecond = "h:mm:ss.FFFFFF tt";
-
-	public const string TimeUtcMinute = "H:mm";
-	public const string TimeUtcSecond = "H:mm:ss";
-	public const string TimeUtcMillisecond = "H:mm:ss.FFF";
-	public const string TimeUtcMicrosecond = "H:mm:ss.FFFFFF";
-
-	public const string Id = "yyyy-MM-dd H:mm:ss.FFFFFFF";
+	public const string Id = "yyyy-MM-dd H:mm:ss.FFFFFFFF";
 }
 
 public static class DateTimeExtensions
 {
 	public static string DateFormat { get; set; } = DateTimeFormats.DateFormat;
 
-	public static string TimeFormatMinute { get; set; } = DateTimeFormats.TimeMinute;
-	public static string TimeFormatSecond { get; set; } = DateTimeFormats.TimeSecond;
-	public static string TimeFormatMillisecond { get; set; } = DateTimeFormats.TimeMillisecond;
-	public static string TimeFormatMicrosecond { get; set; } = DateTimeFormats.TimeMicrosecond;
-
-	public static string TimeFormatUtcMinute { get; set; } = DateTimeFormats.TimeUtcMinute;
-	public static string TimeFormatUtcSecond { get; set; } = DateTimeFormats.TimeUtcSecond;
-	public static string TimeFormatUtcMillisecond { get; set; } = DateTimeFormats.TimeUtcMillisecond;
-	public static string TimeFormatUtcMicrosecond { get; set; } = DateTimeFormats.TimeUtcMicrosecond;
+	public static TimeFormats TimeFormats { get; set; } = new();
+	public static TimeFormats TimeFormatsUtc { get; set; } = TimeFormats.DefaultUtc;
 
 	public static string DateTimeFormatId { get; set; } = DateTimeFormats.Id;
 
@@ -50,12 +59,14 @@ public static class DateTimeExtensions
 		dateTime = TimeZoneView.Current.Convert(dateTime);
 		formatType ??= DefaultFormatType;
 
+		var timeFormats = dateTime.Kind == DateTimeKind.Utc ? TimeFormatsUtc : TimeFormats;
+
 		string? timeFormat = formatType switch
 		{
-			TimeFormatType.Minute => dateTime.Kind == DateTimeKind.Utc ? TimeFormatUtcMinute : TimeFormatMinute,
-			TimeFormatType.Second => dateTime.Kind == DateTimeKind.Utc ? TimeFormatUtcSecond : TimeFormatSecond,
-			TimeFormatType.Millisecond => dateTime.Kind == DateTimeKind.Utc ? TimeFormatUtcMillisecond : TimeFormatMillisecond,
-			TimeFormatType.Microsecond => dateTime.Kind == DateTimeKind.Utc ? TimeFormatUtcMicrosecond : TimeFormatMicrosecond,
+			TimeFormatType.Minute => timeFormats.Minute,
+			TimeFormatType.Second => timeFormats.Second,
+			TimeFormatType.Millisecond => timeFormats.Millisecond,
+			TimeFormatType.Microsecond => timeFormats.Microsecond,
 			_ => null,
 		};
 
