@@ -87,10 +87,10 @@ public static class DateTimeUtils
 			timeFormat = "t";
 		}
 
-		string text = startTime.ToString(dateFormat) + ' ' + startTime.ToString(timeFormat) + " - ";
+		string text = startTime.ToString(dateFormat) + ' ' + startTime.ToString(timeFormat) + " -";
 		if (startTime.Date != endTime.Date)
 		{
-			text += endTime.ToString(dateFormat);
+			text += ' ' + endTime.ToString(dateFormat);
 		}
 		text += ' ' + endTime.ToString(timeFormat);
 
