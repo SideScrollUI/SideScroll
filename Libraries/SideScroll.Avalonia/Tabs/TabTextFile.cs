@@ -16,7 +16,6 @@ public class TabTextFile(FilePath filePath) : ITab
 		{
 			var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
 			tabAvaloniaEdit.Load(tab.FilePath.Path);
-
 			model.AddObject(tabAvaloniaEdit, true);
 		}
 	}

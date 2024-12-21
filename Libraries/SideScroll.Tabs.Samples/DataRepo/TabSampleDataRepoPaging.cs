@@ -69,10 +69,11 @@ public class TabSampleDataRepoPaging : ITab
 
 		private void Add(Call call)
 		{
-			var sampleItem = new SampleItem(_sampleItems!.Count, "Item " + _sampleItems.Count);
+			int index = _sampleItems?.LastOrDefault()?.Id + 1 ?? 1;
+			var sampleItem = new SampleItem(index, "Item " + index);
 			RemoveItem(call, sampleItem.Name!); // Remove previous result so refocus works
 			_dataRepoItems!.Save(call, sampleItem.ToString()!, sampleItem);
-			_sampleItems.Add(sampleItem);
+			_sampleItems!.Add(sampleItem);
 		}
 
 		private void Add10(Call call)

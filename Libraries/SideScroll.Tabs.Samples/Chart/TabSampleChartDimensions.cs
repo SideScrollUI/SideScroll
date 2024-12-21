@@ -5,6 +5,7 @@ using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Time;
 
 namespace SideScroll.Tabs.Samples.Chart;
 
@@ -45,9 +46,13 @@ public class TabSampleChartDimensions : ITab
 	public class Instance : TabInstance, ITabSelector
 	{
 		private const int MaxValue = 100;
+		private const int SampleCount = 10;
 
 		private readonly Random _random = new();
-		private readonly DateTime _baseDateTime = DateTime.Now.Trim(TimeSpan.FromMinutes(1));
+
+		private readonly DateTime _baseDateTime = TimeZoneView.Now
+			.Trim(TimeSpan.TicksPerMinute)
+			.AddMinutes(-SampleCount);
 
 		private ItemCollection<ChartSample> _samples = [];
 
@@ -84,7 +89,7 @@ public class TabSampleChartDimensions : ITab
 
 		private void AddSeries(string dimension)
 		{
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < SampleCount; i++)
 			{
 				if (i is 4 or 6)
 				{

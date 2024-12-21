@@ -6,8 +6,6 @@ namespace SideScroll.Avalonia.Controls.Converters;
 
 public class FormatValueConverter : IValueConverter
 {
-	private const string StringFormat = "yyyy-M-d H:mm:ss.FFF";
-
 	public int MaxLength { get; set; } = 1000;
 
 	// add a map to store original mappings?
@@ -74,12 +72,12 @@ public class FormatValueConverter : IValueConverter
 	{
 		if (value is DateTime dateTime)
 		{
-			return dateTime.ToUniversalTime().ToString(StringFormat);
+			return dateTime.Format();
 		}
 
 		if (value is DateTimeOffset dateTimeOffset)
 		{
-			return dateTimeOffset.UtcDateTime.ToString(StringFormat);
+			return dateTimeOffset.UtcDateTime.Format();
 		}
 
 		if (value is TimeSpan timeSpan)

@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace SideScroll.Tabs.Samples.Chart;
 
-public class TabSampleChartTimeSeries : ITab
+public class TabSampleChartTimeSeriesFractional : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -25,16 +25,15 @@ public class TabSampleChartTimeSeries : ITab
 			var chartView = new ChartView("Animals")
 			{
 				ShowTimeTracker = true,
-				LogBase = 10,
 			};
 
-			chartView.AddSeries("Cats", ChartSamples.CreateTimeSeries(endTime), seriesType: SeriesType.Average);
-			chartView.AddSeries("Dogs", ChartSamples.CreateTimeSeries(endTime), seriesType: SeriesType.Average);
+			chartView.AddSeries("Cats", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.5), seriesType: SeriesType.Average);
+			chartView.AddSeries("Dogs", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.25), seriesType: SeriesType.Average);
 
 			chartView.Annotations.Add(new ChartAnnotation
 			{
 				Text = "Too Many",
-				Y = 2_000_000_000,
+				Y = 0.5,
 				Color = Color.Red,
 			});
 			model.AddObject(chartView);
@@ -47,7 +46,7 @@ public class TabSampleChartTimeSeries : ITab
 			{
 				ShowTimeTracker = true,
 			};
-			chartViewToys.AddSeries("Toys", ChartSamples.CreateIdenticalTimeSeries(endTime), seriesType: SeriesType.Average);
+			chartViewToys.AddSeries("Toys", ChartSamples.CreateIdenticalTimeSeries(endTime, value: 0.42), seriesType: SeriesType.Average);
 			model.AddObject(chartViewToys);
 		}
 	}

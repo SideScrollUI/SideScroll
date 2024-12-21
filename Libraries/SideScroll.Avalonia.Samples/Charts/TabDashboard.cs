@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using SideScroll.Avalonia.Charts.LiveCharts;
 using SideScroll.Charts;
 using SideScroll.Collections;
+using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Samples.Chart;
 using SideScroll.Time;
@@ -29,7 +30,7 @@ public class TabDashboard : ITab
 				ColumnDefinitions = new("*, *"),
 			};
 
-			DateTime endTime = DateTime.Now;
+			DateTime endTime = TimeZoneView.Now.Trim(TimeSpan.TicksPerHour);
 
 			var timeWindow = new TimeWindow(endTime.AddHours(-SampleCount), endTime);
 

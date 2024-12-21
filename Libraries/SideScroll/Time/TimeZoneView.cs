@@ -41,12 +41,16 @@ public class TimeZoneView : IComparable
 		return Abbreviation + " - " + Name + ": " + TimeZoneInfo?.BaseUtcOffset.FormattedDecimal();
 	}
 
-	public DateTime ConvertTimeToUtc(DateTime dateTime)
+	public DateTime Convert(DateTime dateTime)
 	{
-		if (this == Utc)
-			return dateTime;
+		if (Equals(Utc)) return ConvertTimeToUtc(dateTime);
 
-		if (this == Local)
+		if (dateTime.Kind == DateTimeKind.Utc)
+		{
+			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, TimeZoneInfo!);
+		}
+
+		if (Equals(Local))
 		{
 			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
 		}
@@ -55,7 +59,28 @@ public class TimeZoneView : IComparable
 			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
 		}
 
-		return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo!);
+		return dateTime;
+	}
+
+	public DateTime ConvertTimeToUtc(DateTime dateTime)
+	{
+		if (Equals(Utc))
+		{
+			if (dateTime.Kind == DateTimeKind.Utc)
+			{
+				return dateTime;
+			}
+		}
+		else if (Equals(Local))
+		{
+			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
+		}
+		else
+		{
+			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+		}
+
+		return TimeZoneInfo.ConvertTimeToUtc(dateTime);
 	}
 
 	public int CompareTo(object? obj)
@@ -63,8 +88,28 @@ public class TimeZoneView : IComparable
 		return obj?.ToString()?.CompareTo(ToString()) ?? 1;
 	}
 
+	public override bool Equals(object? obj)
+	{
+		if (obj is TimeZoneView timeZoneView)
+		{
+			return timeZoneView.Name == Name;
+		}
+
+		return false;
+	}
+
+	// Override to make compiler happy
+	public override int GetHashCode()
+	{
+		return base.GetHashCode();
+	}
+
 	public static readonly TimeZoneView Utc = new("Utc", "Utc", TimeZoneInfo.Utc);
 	public static readonly TimeZoneView Local = new("Local", "Local", TimeZoneInfo.Local);
+
+	public static TimeZoneView Current { get; set; } = Local;
+
+	public static DateTime Now => Current.Convert(DateTime.Now);
 
 	// Time Zones can have different names across Operating Systems, and this provides a compatible view
 	// Some abbreviations are reused across different countries and are ambiguous to use

@@ -118,7 +118,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 			{
 				if (ListSeries.XPropertyInfo?.PropertyType == typeof(DateTime))
 				{
-					var startTime = new DateTime((long)liveChartPoint.X!);
+					var startTime = new DateTime((long)liveChartPoint.X!, DateTimeKind.Utc);
 					if (ListSeries.PeriodDuration is TimeSpan timeSpan)
 					{
 						string timeText = DateTimeUtils.FormatTimeRange(startTime, startTime.Add(timeSpan), false);
@@ -166,7 +166,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 				object? xObj = xPropertyInfo.GetValue(obj);
 				if (xObj is DateTime dateTime)
 				{
-					x = dateTime.Ticks;
+					x = dateTime.ToUniversalTime().Ticks;
 				}
 				else if (xObj == null)
 				{

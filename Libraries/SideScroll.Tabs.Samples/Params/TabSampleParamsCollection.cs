@@ -49,6 +49,8 @@ public class TabSampleParamsCollection : ITab
 
 		private void New(Call call)
 		{
+			_paramTestItem = new();
+			Reload();
 		}
 
 		private void Save(Call call)
@@ -57,11 +59,7 @@ public class TabSampleParamsCollection : ITab
 
 			SampleParamItem clone = _paramTestItem.DeepClone(call)!;
 			_dataRepoParams!.Save(call, clone.ToString(), clone);
-			//SaveData(dataKey, paramTestItem);
-			/*var result = new ParamTestResult()
-			{
-				parameters = clone,
-			};*/
+			//SaveData(DataKey, clone);
 			_items.Add(clone);
 		}
 	}

@@ -1,12 +1,14 @@
 using SideScroll.Attributes;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Themes.Tabs;
+using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Time;
 
 namespace SideScroll.Avalonia.Tabs;
 
@@ -72,6 +74,8 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 			DataApp.Save(CustomUserSettings!);
 			Project.UserSettings = CustomUserSettings.DeepClone()!;
 
+			TimeZoneView.Current = Project.UserSettings.TimeZone;
+			DateTimeExtensions.DefaultFormatType = Project.UserSettings.TimeFormat;
 			ThemeManager.Current?.LoadCurrentTheme();
 		}
 	}

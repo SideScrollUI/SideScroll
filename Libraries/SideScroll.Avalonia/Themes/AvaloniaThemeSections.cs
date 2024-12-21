@@ -356,7 +356,8 @@ public class TextControlTheme : ThemeSection
 	[Header("Text Control - Background"), ResourceKey(
 		"TextControlBackground",
 		"ComboBoxBackground",
-		"CalendarDatePickerBackground"
+		"CalendarDatePickerBackground",
+		"CalendarDatePickerBackgroundPointerOver"
 		)]
 	public Color? TextControlBackground { get; set; }
 
