@@ -1,7 +1,6 @@
 using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
 using System.Collections;
-using System.Diagnostics;
 
 namespace SideScroll.Tabs.Bookmarks;
 

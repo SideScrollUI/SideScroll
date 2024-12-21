@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Version>0.8.1</Version>
-    <PackageReleaseNotes>Added TimeZone and TimeFormat to UserSettings. Fixed Light Theme CalendarDatePickerBackgroundPointerOver.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added TimeZone and TimeFormat to UserSettings. Fixed Light Theme CalendarDatePickerBackgroundPointerOver. Fixed chart regression when updating the value axis.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.1</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

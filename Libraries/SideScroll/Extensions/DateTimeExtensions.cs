@@ -93,7 +93,7 @@ public static class DateTimeExtensions
 
 	public static DateTimeOffset Trim(this DateTimeOffset dateTimeOffset, long ticks)
 	{
-		DateTime dateTime = dateTimeOffset.DateTime;
+		DateTime dateTime = dateTimeOffset.UtcDateTime; // DateTime defaults to Unspecified
 		return new DateTimeOffset(dateTime.Trim(ticks));
 	}
 

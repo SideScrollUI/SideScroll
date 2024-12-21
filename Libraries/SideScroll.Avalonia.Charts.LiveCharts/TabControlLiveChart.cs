@@ -543,6 +543,10 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 				YAxis.MinStep = Math.Max(YAxis.MinStep, YAxis.UnitWidth);
 				YAxis.ForceStepToMin = true;
 			}
+			else
+			{
+				YAxis.ForceStepToMin = false;
+			}
 		}
 	}
 

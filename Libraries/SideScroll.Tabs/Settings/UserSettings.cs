@@ -2,7 +2,6 @@ using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Time;
 using System.Collections;
-using SideScroll.Time;
 using System.ComponentModel.DataAnnotations;
 
 namespace SideScroll.Tabs.Settings;

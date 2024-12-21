@@ -9,7 +9,6 @@ using SideScroll.Avalonia.Viewer;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
-using SideScroll.Tabs.Tools.FileViewer;
 using SideScroll.Time;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
