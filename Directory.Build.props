@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.8.1</Version>
-    <PackageReleaseNotes>Added TimeZone and TimeFormat to UserSettings. Fixed Light Theme CalendarDatePickerBackgroundPointerOver. Fixed chart regression when updating the value axis.</PackageReleaseNotes>
+    <Version>0.8.2</Version>
+    <PackageReleaseNotes>Added TimeZone and TimeFormat to UserSettings. Fixed Light Theme CalendarDatePickerBackgroundPointerOver. Fixed chart regression when updating the value axis. Fixed Double Clicking on Tab Splitters not automatically resizing. Fixed TabControlParams column index spacing. TabControlParams no longer shows static properties. Changed double columns to use the same amount of decimal places for all values.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.1</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

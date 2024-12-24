@@ -18,6 +18,8 @@ public class FormatValueConverter : IValueConverter
 
 	private object? _originalValue;
 
+	private int _minDecimals;
+
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		_originalValue = value;
@@ -68,7 +70,7 @@ public class FormatValueConverter : IValueConverter
 		}
 	}
 
-	public static string? ObjectToString(object value, int maxLength, bool formatted)
+	public string? ObjectToString(object value, int maxLength, bool formatted)
 	{
 		if (value is DateTime dateTime)
 		{
@@ -92,12 +94,26 @@ public class FormatValueConverter : IValueConverter
 			}
 		}
 
-		if (value is double d && formatted)
+		if (value is double d)
 		{
-			return d.FormattedDecimal();
-		}
+			if (formatted)
+			{
+				return d.FormattedDecimal();
+			}
+			else
+			{
+				// Show the maximum decimal places found
+				int optional = Math.Max(0, (Math.Abs(d) < 0.001 ? 6 : 3) - _minDecimals);
 
-		//return timeSpan.ToString(@"s\.fff"); // doesn't display minutes or above
+				var text = d.ToString("#,0." + new string('0', _minDecimals) + new string('#', optional));
+				int periodIndex = text.IndexOf('.');
+				if (periodIndex >= 0)
+				{
+					_minDecimals = Math.Max(_minDecimals, text.Length - periodIndex - 1);
+				}
+				return text;
+			}
+		}
 
 		return value.Formatted(maxLength);
 	}

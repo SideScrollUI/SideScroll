@@ -15,6 +15,7 @@ public class TabSampleGridColumnTypes : ITab
 				{
 					Integer = i,
 					Long = (long)i * int.MaxValue,
+					Double = i / 3.0,
 					DateTime = new DateTime(DateTime.Now.Ticks + i),
 					TimeSpan = TimeSpan.FromHours(i),
 					Bool = (i % 2 == 1),
@@ -41,6 +42,7 @@ public class TabSampleGridColumnTypes : ITab
 	{
 		public int Integer { get; set; } = 123;
 		public long Long { get; set; } = 1234567890123456789;
+		public double Double { get; set; } = 123.456;
 		public decimal Decimal { get; set; } = 123456789.0123456789M;
 		public bool Bool { get; set; }
 		public byte[] ByteArray { get; set; } = new byte[256];

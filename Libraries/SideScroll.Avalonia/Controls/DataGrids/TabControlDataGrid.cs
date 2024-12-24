@@ -243,6 +243,8 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 	}
 
+	private double? _maxDesiredWidth = null;
+
 	private void AutoSizeColumns()
 	{
 		// Only works with Stretch right now
@@ -300,6 +302,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 				column.Width = new DataGridLength(desiredWidth, DataGridLengthUnitType.Star);
 			}
 		}
+		_maxDesiredWidth = autoSizeColumns.Sum(c => c.ActualWidth);
 
 		//dataGrid.MinColumnWidth = 40; // doesn't do anything
 		// If 1 or 2 columns, make the last column stretch
@@ -311,6 +314,16 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		{
 			DataGrid.Columns[1].Width = new DataGridLength(DataGrid.Columns[1].ActualWidth, DataGridLengthUnitType.Star);
 		}
+	}
+
+	protected override Size MeasureOverride(Size constraint)
+	{
+		Size size = base.MeasureOverride(constraint);
+		if (_maxDesiredWidth != null && size.Width > _maxDesiredWidth)
+		{
+			size = size.WithWidth(_maxDesiredWidth.Value);
+		}
+		return size;
 	}
 
 	private bool _selectionModified;
@@ -437,7 +450,11 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 	private void DataGrid_CellPointerPressed(object? sender, DataGridCellPointerPressedEventArgs e)
 	{
 		var pointer = e.PointerPressedEventArgs.GetCurrentPoint(this);
-		if (pointer.Properties.IsLeftButtonPressed && e.Row != null && DataGrid.SelectedItems != null && DataGrid.SelectedItems.Count == 1 && e.Cell.Content != null)
+		if (pointer.Properties.IsLeftButtonPressed &&
+			e.Row != null &&
+			DataGrid.SelectedItems != null &&
+			DataGrid.SelectedItems.Count == 1 &&
+			e.Cell.Content != null)
 		{
 			Type type = e.Cell.Content!.GetType();
 			if (typeof(CheckBox).IsAssignableFrom(type) ||
@@ -596,10 +613,6 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		{
 			AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo, styleCells);
 		}
-
-		// 1 column should take up entire grid
-		//if (dataGrid.Columns.Count == 1)
-		//	dataGrid.Columns[0].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
 	}
 
 	public void AddColumn(string label, string propertyName, bool styleCells = false)

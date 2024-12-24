@@ -246,8 +246,6 @@ public class TabView : Grid, IDisposable
 			BorderBrush = SideScrollTheme.TabBackgroundBorder,
 			Child = _tabParentControls,
 		};
-		//if (TabViewSettings.SplitterDistance != null)
-		//	tabParentControls.Width = (double)TabViewSettings.SplitterDistance;
 		_containerGrid!.Children.Add(_parentContainerBorder);
 		UpdateSplitterDistance();
 
@@ -391,35 +389,21 @@ public class TabView : Grid, IDisposable
 		_parentContainerBorder.InvalidateMeasure();
 	}
 
-	// doesn't resize bigger well
 	// The Drag start, delta, and complete get called for this too. Which makes this really hard to do well
 	private void GridSplitter_DoubleTapped(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 		_isDragging = false;
+		_parentContainerBorder!.Width = double.NaN;
+		// DesiredSize gets updated by Measure()
+		_parentContainerBorder.Measure(_parentContainerBorder.Bounds.Size.WithWidth(Model.MaxDesiredWidth));
 		double desiredWidth = Math.Min(_parentContainerBorder!.DesiredSize.Width, Model.MaxDesiredWidth);
 		TabViewSettings.SplitterDistance = desiredWidth;
 		_parentContainerBorder.Width = desiredWidth;
 		//containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
 		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
-		//containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
 
 		_containerGrid.InvalidateMeasure();
 
-		//tabParentControls.grid.Width = new GridLength(1, GridUnitType.Auto);
-		//tabParentControls.grid.Width = tabParentControls.grid.DesiredSize.Width;
-		//tabParentControls.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
-		//tabParentControls.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
-		/*tabParentControls.InvalidateArrange();
-		tabParentControls.InvalidateMeasure();
-		tabParentControls.Arrange(this.Bounds);
-		tabParentControls.Measure(this.Bounds.Size);
-		//containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
-		containerGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
-		containerGrid.InvalidateArrange();
-		containerGrid.InvalidateMeasure();
-		containerGrid.Measure(this.Bounds.Size);*/
-
-		//containerGrid.ColumnDefinitions[0].Width = new GridLength(tabParentControls.DesiredSize.Width); // DesiredSize too large, can we try not setting grid width?
 		Instance.SaveTabSettings();
 		UpdateSplitterFiller();
 	}

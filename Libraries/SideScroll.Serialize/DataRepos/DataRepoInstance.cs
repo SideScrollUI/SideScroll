@@ -47,6 +47,14 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		Save(call, DefaultKey, item);
 	}
 
+	public virtual void Save(Call? call, IEnumerable<T> items)
+	{
+		foreach (var item in items)
+		{
+			Save(call, item);
+		}
+	}
+
 	public virtual void Save(Call? call, string key, T item)
 	{
 		call ??= new();

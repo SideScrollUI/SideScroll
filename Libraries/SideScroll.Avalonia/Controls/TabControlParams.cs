@@ -88,7 +88,7 @@ public class TabControlParams : Border, IValidationControl
 
 	private void AddPropertyControls(object obj)
 	{
-		ItemCollection<ListProperty> properties = ListProperty.Create(obj);
+		ItemCollection<ListProperty> properties = ListProperty.Create(obj, includeStatic: false);
 
 		foreach (ListProperty property in properties)
 		{
@@ -116,8 +116,8 @@ public class TabControlParams : Border, IValidationControl
 					FillColumnSpan(lastControl);
 				}
 				_propertyControls[property] = newControl;
+				lastControl = newControl;
 			}
-			lastControl = newControl;
 		}
 
 		if (lastControl != null)
@@ -234,17 +234,15 @@ public class TabControlParams : Border, IValidationControl
 		int columnIndex = property.GetCustomAttribute<ColumnIndexAttribute>()?.Index ?? 0;
 		int rowIndex = ContainerGrid.RowDefinitions.Count;
 
-		if (rowIndex > 0 && columnIndex > 0)
+		if (rowIndex > 0 && columnIndex > 0 &&
+			ContainerGrid.Children.LastOrDefault() is Control lastControl && Grid.GetColumn(lastControl) < columnIndex)
 		{
 			rowIndex--; // Reuse previous row
 		}
 		else
 		{
-			if (columnIndex == 0)
-			{
-				AddSpacer();
-				rowIndex++;
-			}
+			AddSpacer();
+			rowIndex++;
 
 			RowDefinition rowDefinition = new()
 			{
