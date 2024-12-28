@@ -42,7 +42,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 		ThemeSettings = themeSettings;
 	}
 
-	public void Load(object sender, object obj, object[] tabParams)
+	public void Load(object sender, object obj, object?[] tabParams)
 	{
 		DataViewCollection = (DataViewCollection<AvaloniaThemeSettings, TabAvaloniaThemeSettings>)sender;
 		ThemeSettings = (AvaloniaThemeSettings)obj;

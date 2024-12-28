@@ -29,7 +29,7 @@ public class TabSampleParamItem : ITab, IDataView
 		TestItem = testItem;
 	}
 
-	public void Load(object sender, object obj, object[] tabParams)
+	public void Load(object sender, object obj, object?[] tabParams)
 	{
 		TestItem = (SampleParamItem)obj;
 	}

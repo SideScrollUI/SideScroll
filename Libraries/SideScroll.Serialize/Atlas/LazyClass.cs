@@ -18,12 +18,14 @@ public class TypeRef
 
 public class LazyProperty
 {
-	//public TypeRepo TypeRepo;
 	public PropertyBuilder? PropertyBuilder;
+
 	public PropertyInfo? PropertyInfoOriginal;
 	public PropertyInfo? PropertyInfoOverride;
+
 	public FieldBuilder? FieldBuilderLoaded;
 	public FieldBuilder? FieldBuilderTypeRef;
+
 	public FieldInfo? FieldInfoLoaded;
 	public FieldInfo? FieldInfoTypeRef;
 

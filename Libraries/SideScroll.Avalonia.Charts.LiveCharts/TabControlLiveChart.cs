@@ -536,7 +536,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 				YAxis.UnitWidth = 1; // Reset to default
 			}
 
-			if (YAxis.MinStep > 0)
+			if (YAxis.MinStep > 0 || YAxis.UnitWidth > 1)
 			{
 				// Force step to be a multiple of the min step
 				// Live Charts will use decimals even if a min step of 1 is set

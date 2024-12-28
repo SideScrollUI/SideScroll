@@ -8,7 +8,7 @@ public interface IDataView
 {
 	event EventHandler<EventArgs>? OnDelete;
 
-	void Load(object sender, object obj, params object[] loadParams);
+	void Load(object sender, object obj, params object?[] loadParams);
 }
 
 // An Item collection that shows a View around every item
@@ -21,14 +21,14 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	public DataRepoView<TDataType> DataRepoView;
 	public DataRepoView<TDataType>? DataRepoSecondary; // Optional: Saves and Deletes goto a 2nd copy
 
-	public object[] LoadParams;
+	public object?[] LoadParams;
 
 	private Dictionary<TViewType, IDataItem> _dataItemLookup;
 	private Dictionary<IDataItem, TViewType> _valueLookup;
 
 	public override string ToString() => DataRepoView.ToString();
 
-	public DataViewCollection(DataRepoView<TDataType> dataRepoView, params object[] loadParams)
+	public DataViewCollection(DataRepoView<TDataType> dataRepoView, params object?[] loadParams)
 	{
 		DataRepoView = dataRepoView;
 		LoadParams = loadParams;
