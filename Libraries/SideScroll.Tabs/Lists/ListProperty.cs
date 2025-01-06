@@ -44,13 +44,13 @@ public class ListProperty : ListMember, IPropertyEditable
 				{
 					if (!_valueCached)
 					{
-						_valueCached = true;
 						_valueObject = PropertyInfo.GetValue(Object);
 
 						if (IsFormatted)
 						{
 							_valueObject = _valueObject.Formatted();
 						}
+						_valueCached = true;
 					}
 					return _valueObject;
 				}

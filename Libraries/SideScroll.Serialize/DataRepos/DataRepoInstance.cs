@@ -72,7 +72,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		return new DataPageView<T>(this, ascending);
 	}
 
-	public DataItemCollection<T> LoadAll(Call? call = null, bool ascending = true)
+	public virtual DataItemCollection<T> LoadAll(Call? call = null, bool ascending = true)
 	{
 		call ??= new();
 		return new DataItemCollection<T>(LoadAllDataItems(call, ascending));

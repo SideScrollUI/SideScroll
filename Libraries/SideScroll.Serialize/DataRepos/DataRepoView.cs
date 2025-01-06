@@ -20,12 +20,13 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		: base(dataRepoInstance.DataRepo, dataRepoInstance.GroupId)
 	{ }
 
-	public void LoadAll(Call call)
+	public override DataItemCollection<T> LoadAll(Call? call = null, bool ascending = true)
 	{
 		lock (DataRepo)
 		{
-			Items = base.LoadAll(call);
+			Items = base.LoadAll(call, ascending);
 			Loaded = true;
+			return Items;
 		}
 	}
 
@@ -122,6 +123,25 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		{
 			base.DeleteAll(call);
 			Items.Clear();
+		}
+	}
+}
+
+public class DataRepoViewCollection<T>(DataRepo dataRepo, string defaultGroupId, string? orderByMemberName = null)
+{
+	private Dictionary<string, DataRepoView<T>> _dataRepoViews = [];
+
+	public DataRepoView<T> Load(Call call, string? groupId = null)
+	{
+		groupId ??= defaultGroupId;
+		lock (_dataRepoViews)
+		{
+			if (_dataRepoViews.TryGetValue(groupId, out DataRepoView<T>? existingDataRepo)) return existingDataRepo;
+
+			var dataRepoView = dataRepo.LoadView<T>(call, groupId, orderByMemberName);
+
+			_dataRepoViews.Add(groupId, dataRepoView);
+			return dataRepoView;
 		}
 	}
 }

@@ -24,8 +24,8 @@ public class ListMethod : ListMember
 				{
 					if (!_valueCached)
 					{
-						_valueCached = true;
 						_valueObject = GetValue();
+						_valueCached = true;
 					}
 					return _valueObject;
 				}
@@ -84,7 +84,7 @@ public class ListMethod : ListMember
 		ParameterInfo[] parameterInfos = MethodInfo.GetParameters();
 		if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType == typeof(Call))
 		{
-			parameters = new object[] { new Call() };
+			parameters = [new Call()];
 		}
 
 		var result = Task.Run(() => MethodInfo.Invoke(Object, parameters)).GetAwaiter().GetResult();
@@ -97,12 +97,13 @@ public class ListMethod : ListMember
 		return result;
 	}
 
-	public static new ItemCollection<ListMethod> Create(object obj, bool includeBaseTypes)
+	public static new ItemCollection<ListMethod> Create(object obj, bool includeBaseTypes, bool includeStatic = true)
 	{
 		// this doesn't work for virtual methods (or any method modifier?)
 		var methodInfos = obj.GetType().GetMethods()
 			.Where(m => IsVisible(m))
 			.Where(m => includeBaseTypes || m.DeclaringType == obj.GetType())
+			.Where(m => includeStatic || !m.IsStatic)
 			.OrderBy(m => m.Module.Name)
 			.ThenBy(m => m.MetadataToken);
 
