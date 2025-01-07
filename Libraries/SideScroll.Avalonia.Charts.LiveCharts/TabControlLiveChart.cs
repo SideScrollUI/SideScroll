@@ -522,7 +522,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			YAxis.MaxLimit = maximum + margin;
 
 			double difference = YAxis.MaxLimit.Value - YAxis.MinLimit.Value;
-			if (difference >= 10)
+			if (difference >= 5)
 			{
 				double separators = MaxSeparators;
 				if (Chart.Bounds.Height is double height && height > 0)

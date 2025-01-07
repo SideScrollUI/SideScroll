@@ -93,9 +93,9 @@ public class Project
 		return project;
 	}
 
-	public static Project Load<T>(ProjectSettings projectSettings) where T: UserSettings, new()
+	public static Project Load<T>(ProjectSettings projectSettings, T? defaultUserSettings = null) where T: UserSettings, new()
 	{
-		T defaultUserSettings = new()
+		defaultUserSettings ??= new()
 		{
 			ProjectPath = projectSettings.DefaultProjectPath,
 		};

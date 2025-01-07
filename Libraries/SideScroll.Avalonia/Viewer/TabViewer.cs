@@ -17,7 +17,7 @@ namespace SideScroll.Avalonia.Viewer;
 
 public class EventTabLoaded(object obj) : EventArgs
 {
-	public readonly object Object = obj;
+	public object Object => obj;
 }
 
 public interface ITabViewerPlugin

@@ -15,7 +15,7 @@ namespace SideScroll.Avalonia.Charts.LiveCharts;
 
 public class SeriesHoverEventArgs(ListSeries series) : EventArgs
 {
-	public ListSeries Series { get; set; } = series;
+	public ListSeries Series => series;
 }
 
 public class LiveChartSeries //: ChartSeries<ISeries>

@@ -40,7 +40,7 @@ public static class DateTimeFormats
 {
 	public const string DateFormat = "yyyy-M-d";
 
-	public const string Id = "yyyy-MM-dd H:mm:ss.FFFFFFFF";
+	public const string Id = "yyyy-MM-dd H:mm:ss.FFFFFFF";
 }
 
 public static class DateTimeExtensions

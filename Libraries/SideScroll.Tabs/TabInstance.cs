@@ -109,14 +109,14 @@ public class TabInstance : IDisposable
 
 	public class EventSelectItem(object obj) : EventArgs
 	{
-		public readonly object Object = obj;
+		public object Object => obj;
 
 		public override string? ToString() => Object?.ToString();
 	}
 
 	public class EventSelectItems(IList list) : EventArgs
 	{
-		public readonly IList List = list;
+		public IList List => list;
 	}
 
 	public event EventHandler<EventArgs>? OnRefresh;

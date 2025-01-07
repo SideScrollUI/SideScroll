@@ -48,7 +48,7 @@ public class SeriesInfo
 
 public class PointerMovedEventArgs(double x) : EventArgs
 {
-	public double X { get; set; } = x;
+	public double X => x;
 }
 
 public interface ITabControlChart

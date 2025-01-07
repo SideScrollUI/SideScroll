@@ -30,7 +30,7 @@ public enum ChartLegendPosition
 
 public class SeriesSelectedEventArgs(List<ListSeries> series) : EventArgs
 {
-	public List<ListSeries> Series { get; set; } = series;
+	public List<ListSeries> Series => series;
 }
 
 public class ChartView
