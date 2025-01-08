@@ -4,8 +4,8 @@ using System.ComponentModel;
 namespace SideScroll.Tabs.Lists;
 
 // implement INotifyPropertyChanged to prevent memory leaks
-public class ListPair(object key, object? value, object? obj = null, int? maxDesiredWidth = null)
-	: IListPair, IListItem, INotifyPropertyChanged, IMaxDesiredWidth
+public class ListPair(object key, object? value, object? obj = null, int? maxDesiredWidth = null, int? maxDesiredHeight = null)
+	: IListPair, IListItem, INotifyPropertyChanged, IMaxDesiredWidth, IMaxDesiredHeight
 {
 	public object Key { get; set; } = key;
 
@@ -19,6 +19,9 @@ public class ListPair(object key, object? value, object? obj = null, int? maxDes
 
 	[HiddenColumn]
 	public int? MaxDesiredWidth { get; set; } = maxDesiredWidth;
+
+	[HiddenColumn]
+	public int? MaxDesiredHeight { get; set; } = maxDesiredHeight;
 
 #pragma warning disable 414
 	public event PropertyChangedEventHandler? PropertyChanged;

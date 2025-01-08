@@ -53,18 +53,6 @@ public class Project
 		Linker = new(this);
 	}
 
-	public Project(ProjectSettings projectSettings)
-	{
-		ProjectSettings = projectSettings;
-		UserSettings = new UserSettings
-		{
-			ProjectPath = projectSettings.DefaultProjectPath,
-		};
-		// Todo: Improve this
-		UserSettings = DataApp.Load<UserSettings>() ?? UserSettings;
-		Linker = new(this);
-	}
-
 	public Project(ProjectSettings projectSettings, UserSettings userSettings)
 	{
 		ProjectSettings = projectSettings;
@@ -91,6 +79,11 @@ public class Project
 		//project.Import(bookmark);
 		bookmark.TabBookmark.Import(project);
 		return project;
+	}
+
+	public static Project Load(ProjectSettings projectSettings, UserSettings? defaultUserSettings = null)
+	{
+		return Load<UserSettings>(projectSettings, defaultUserSettings);
 	}
 
 	public static Project Load<T>(ProjectSettings projectSettings, T? defaultUserSettings = null) where T: UserSettings, new()

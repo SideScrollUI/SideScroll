@@ -40,7 +40,7 @@ public class BaseWindow : Window
 
 	public BaseWindow(ProjectSettings settings)
 	{
-		Initialize(new Project(settings));
+		Initialize(Project.Load(settings));
 	}
 
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]

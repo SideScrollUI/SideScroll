@@ -6,7 +6,7 @@ namespace SideScroll.Avalonia.Samples;
 
 public class MainView : BaseView
 {
-	public MainView() : base(new Project(SampleProjectSettings.Settings))
+	public MainView() : base(Project.Load(SampleProjectSettings.Settings))
 	{
 		AddTab(new TabAvalonia());
 

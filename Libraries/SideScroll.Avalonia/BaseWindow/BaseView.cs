@@ -32,7 +32,7 @@ public class BaseView : UserControl
 
 	public BaseView(ProjectSettings settings)
 	{
-		Initialize(new Project(settings));
+		Initialize(Project.Load(settings));
 	}
 
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]
