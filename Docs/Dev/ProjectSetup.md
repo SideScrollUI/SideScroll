@@ -59,7 +59,7 @@ namespace MyApp.Start;
 
 public class SideScrollWindow : BaseWindow
 {
-	public SideScrollWindow() : base(new Project(Settings))
+	public SideScrollWindow() : base(Project.Load(Settings))
 	{
 		AddTab(new TabSample());
 
