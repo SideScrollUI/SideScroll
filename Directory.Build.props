@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.9.0</Version>
-    <PackageReleaseNotes>Added TimeZone and TimeFormat to UserSettings. Fixed Light Theme CalendarDatePickerBackgroundPointerOver. Fixed chart regression when updating the value axis. Fixed Double Clicking on Tab Splitters not automatically resizing. Fixed TabControlParams column index spacing. TabControlParams no longer shows static properties. Changed double columns to use the same amount of decimal places for all values. Moved Project loading to Project.Load() and added support for custom UserSettings.</PackageReleaseNotes>
+    <Version>0.9.1</Version>
+    <PackageReleaseNotes>Moved DefaultUserSettings into ProjectSettings. Fixed Custom TimeZoneView formatting.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.3</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

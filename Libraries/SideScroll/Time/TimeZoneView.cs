@@ -52,11 +52,13 @@ public class TimeZoneView : IComparable
 
 		if (Equals(Local))
 		{
-			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
+			return DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
 		}
-		else
+		else if (dateTime.Kind != DateTimeKind.Unspecified)
 		{
-			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+			TimeSpan utcOffset = TimeZoneInfo!.GetUtcOffset(dateTime);
+			DateTime utcDateTime = ConvertTimeToUtc(dateTime).Add(utcOffset);
+			return DateTime.SpecifyKind(utcDateTime, DateTimeKind.Unspecified);
 		}
 
 		return dateTime;

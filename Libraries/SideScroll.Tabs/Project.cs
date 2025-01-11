@@ -88,7 +88,7 @@ public class Project
 
 	public static Project Load<T>(ProjectSettings projectSettings, T? defaultUserSettings = null) where T: UserSettings, new()
 	{
-		defaultUserSettings ??= new()
+		defaultUserSettings ??= projectSettings.DefaultUserSettings as T ?? new()
 		{
 			ProjectPath = projectSettings.DefaultProjectPath,
 		};

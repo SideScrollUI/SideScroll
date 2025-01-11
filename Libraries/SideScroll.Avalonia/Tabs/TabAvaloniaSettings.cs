@@ -62,10 +62,7 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 
 		private void Reset(Call call)
 		{
-			Project.UserSettings = new()
-			{
-				ProjectPath = CustomUserSettings!.ProjectPath,
-			};
+			Project.UserSettings = Project.ProjectSettings.DefaultUserSettings;
 			Reload();
 		}
 
