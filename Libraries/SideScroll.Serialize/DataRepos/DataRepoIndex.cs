@@ -5,7 +5,7 @@ namespace SideScroll.Serialize.DataRepos;
 
 public class DataRepoIndex(DataRepo dataRepo)
 {
-	public DataRepo DataRepo { get; set; } = dataRepo;
+	public DataRepo DataRepo => dataRepo;
 
 	public record Item(long Index, string Key);
 }
@@ -35,7 +35,7 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 		return LockedGetCall(call, () => AddInternal(call, key));
 	}
 
-	private Item? AddInternal(Call call, string key)
+	private Item AddInternal(Call call, string key)
 	{
 		Indices indices = Load(call);
 		long index = indices.NextIndex++;
@@ -169,7 +169,7 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 		{
 			Directory.CreateDirectory(GroupPath);
 		}
-		using var stream = new FileStream(IndexPath!, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+		using var stream = new FileStream(IndexPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
 		using var writer = new BinaryWriter(stream);
 
 		writer.Write(indices.Items.Count);
@@ -184,9 +184,9 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 
 	public Indices Load(Call call)
 	{
-		if (!File.Exists(IndexPath!)) return BuildIndices(call);
+		if (!File.Exists(IndexPath)) return BuildIndices(call);
 
-		using var stream = new FileStream(IndexPath!, FileMode.Open, FileAccess.Read, FileShare.Read);
+		using var stream = new FileStream(IndexPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 		using var reader = new BinaryReader(stream);
 
 		List<Item> items = [];

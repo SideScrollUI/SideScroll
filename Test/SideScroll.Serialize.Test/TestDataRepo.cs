@@ -119,7 +119,7 @@ public class TestDataRepo : TestSerializeBase
 			instance.Save(Call, i.ToString(), i);
 		}
 
-		DataItemCollection<int> allItems = instance.LoadAll(Call)!;
+		DataItemCollection<int> allItems = instance.LoadAll(Call);
 
 		Assert.AreEqual(2, allItems.Count);
 		Assert.AreEqual(1, allItems[0].Value);

@@ -8,7 +8,7 @@ namespace SideScroll.Avalonia.Charts.LiveCharts;
 public class TabLiveChartLegendItem(TabControlLiveChartLegend legend, ChartSeries<ISeries> chartSeries)
 	: TabChartLegendItem<ISeries>(legend, chartSeries)
 {
-	public readonly TabControlLiveChartLegend LiveChartLegend = legend;
+	public TabControlLiveChartLegend LiveChartLegend => legend;
 
 	public override void UpdateColor(Color color)
 	{

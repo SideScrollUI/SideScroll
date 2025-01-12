@@ -16,7 +16,7 @@ public class LiveChartTooltip(TabControlLiveChart liveChart) : IChartTooltip<Ski
 	public TabControlLiveChart LiveChart => liveChart;
 
 	public double TextSize { get; set; } = 15;
-	public double LabelMaxWidth { get; set; } = 310;
+	public float LabelMaxWidth { get; set; } = 310;
 	 
 	private static readonly int s_zIndex = 10100;
 
@@ -78,8 +78,6 @@ public class LiveChartTooltip(TabControlLiveChart liveChart) : IChartTooltip<Ski
 			VerticalAlignment = Align.Middle
 		};
 
-		var lw = (float)LabelMaxWidth;
-
 		if (LiveChart.CursorPosition == null || !foundPoints.Any()) return;
 		var cursorPosition = LiveChart.CursorPosition.Value;
 		var cursorPoint = new LvcPoint(cursorPosition.X, cursorPosition.Y);
@@ -104,7 +102,7 @@ public class LiveChartTooltip(TabControlLiveChart liveChart) : IChartTooltip<Ski
 						Paint = FontPaint,
 						TextSize = TextSize,
 						Padding = new Padding(0, 0, 0, 4),
-						MaxWidth = (float)LabelMaxWidth,
+						MaxWidth = LabelMaxWidth,
 						VerticalAlignment = Align.Start,
 						HorizontalAlignment = Align.Start,
 						ClippingMode = LiveChartsCore.Measure.ClipMode.XY
@@ -124,7 +122,7 @@ public class LiveChartTooltip(TabControlLiveChart liveChart) : IChartTooltip<Ski
 							Paint = FontPaint,
 							TextSize = TextSize,
 							Padding = new Padding(0, 3, 0, 0),
-							MaxWidth = (float)LabelMaxWidth,
+							MaxWidth = LabelMaxWidth,
 							VerticalAlignment = Align.Start,
 							HorizontalAlignment = Align.Start,
 							ClippingMode = LiveChartsCore.Measure.ClipMode.None

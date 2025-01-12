@@ -69,10 +69,11 @@ public static class DataGridExtensions
 
 		Type type = obj.GetType();
 		var sb = new StringBuilder();
-		foreach (DataGridBoundColumn column in dataGrid.Columns)
+		foreach (DataGridColumn column in dataGrid.Columns)
 		{
-			Binding binding = (Binding)column.Binding;
-			if (binding == null) // Buttons don't have a binding
+			// Buttons don't have a binding
+			if (column is not DataGridBoundColumn boundColumn || 
+			    boundColumn.Binding is not Binding binding)
 				continue;
 
 			string propertyName = binding.Path;

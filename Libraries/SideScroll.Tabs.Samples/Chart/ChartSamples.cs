@@ -1,3 +1,4 @@
+using SideScroll.Extensions;
 using SideScroll.Time;
 
 namespace SideScroll.Tabs.Samples.Chart;
@@ -6,9 +7,11 @@ public static class ChartSamples
 {
 	private static readonly Random _random = new();
 
-	public static List<TimeRangeValue> CreateTimeSeries(DateTime endTime, int sampleCount = 24, double maxValue = int.MaxValue)
+	public static List<TimeRangeValue> CreateTimeSeries(DateTime endTime, TimeSpan? sampleDuration = null, int sampleCount = 24, double maxValue = int.MaxValue)
 	{
-		DateTime startTime = endTime.Subtract(TimeSpan.FromHours(sampleCount));
+		sampleDuration ??= TimeSpan.FromHours(1);
+		TimeSpan totalDuration = TimeSpan.FromTicks(sampleCount * sampleDuration.Value.Ticks);
+		DateTime startTime = endTime.Subtract(totalDuration);
 		maxValue = Math.Min(maxValue, Math.Max(1, _random.Next()));
 		double delta = maxValue / 4;
 		double prevValue = _random.Next() % maxValue;
@@ -18,12 +21,12 @@ public static class ChartSamples
 			var value = new TimeRangeValue
 			{
 				StartTime = startTime,
-				EndTime = startTime.AddHours(1),
+				EndTime = startTime.Add(sampleDuration.Value),
 				Value = prevValue,
 			};
 			prevValue = Math.Abs(prevValue + (_random.Next() % delta - delta / 2));
 			list.Add(value);
-			startTime = startTime.AddHours(1);
+			startTime = startTime.Add(sampleDuration.Value);
 		}
 		return list;
 	}

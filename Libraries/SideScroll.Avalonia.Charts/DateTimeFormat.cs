@@ -17,7 +17,7 @@ public class DateTimeFormat(string? dateFormat, string? timeFormat, string? time
 
 		if (DateFormat != null)
 		{
-			dateTime.ToString(DateFormat);
+			label += dateTime.ToString(DateFormat);
 		}
 
 		if (dateTime.Kind == DateTimeKind.Utc && TimeFormatUtc != null)

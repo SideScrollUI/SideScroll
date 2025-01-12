@@ -90,7 +90,6 @@ public class TimeRangeValue : ITags
 		foreach (TimeRangeValue point in sorted)
 		{
 			DateTime startTime = point.StartTime;
-			double value = point.Value;
 			if (prevTime != null)
 			{
 				DateTime expectedTime = prevTime.Value.Add(minGap);

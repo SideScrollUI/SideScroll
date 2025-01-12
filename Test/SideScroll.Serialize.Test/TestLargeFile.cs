@@ -70,7 +70,7 @@ public class TestLargeFile : TestSerializeBase
 		for (long offset = 0; offset <= maxOffset; offset += spacing)
 		{
 			long position = stream.Seek(offset, SeekOrigin.Begin);
-			Assert.AreEqual(stream.Position, offset);
+			Assert.AreEqual(position, offset);
 			for (int i = 0; i < IntCount; i++)
 				writer.Write(i);
 		}
@@ -89,7 +89,7 @@ public class TestLargeFile : TestSerializeBase
 
 		using Stream stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 		long position = stream.Seek(offset, SeekOrigin.Begin);
-		Assert.AreEqual(stream.Position, offset);
+		Assert.AreEqual(position, offset);
 		using BinaryReader reader = new(stream);
 		for (int i = 0; i < IntCount; i++)
 			reader.ReadInt32();

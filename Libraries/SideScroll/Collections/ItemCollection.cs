@@ -82,17 +82,6 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 	}*/
 }
 
-public class ItemCollection<T, T2> : ObservableCollection<T>
-{
-	public ItemCollection() { }
-
-	// Don't implement List<T>, it isn't sortable
-	public ItemCollection(IEnumerable<T> iEnumerable) :
-		base(iEnumerable)
-	{
-	}
-}
-
 public class ItemQueueCollection<T> : ItemCollection<T>
 {
 	public int MaxCount { get; set; } = 100;

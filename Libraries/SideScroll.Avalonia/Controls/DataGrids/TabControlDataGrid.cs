@@ -243,7 +243,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 	}
 
-	private double? _maxDesiredWidth = null;
+	private double? _maxDesiredWidth;
 
 	private void AutoSizeColumns()
 	{

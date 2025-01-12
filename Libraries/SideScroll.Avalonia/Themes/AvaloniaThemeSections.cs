@@ -1,4 +1,3 @@
-using Avalonia.Controls;
 using Avalonia.Media;
 using SideScroll.Attributes;
 using System.ComponentModel;

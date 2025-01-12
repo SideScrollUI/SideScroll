@@ -51,6 +51,7 @@ public class TestClone : TestSerializeBase
 		testLog.Child("test");
 
 		var output = _serializer.Clone(Log, testLog);
+		Assert.NotNull(output);
 	}
 
 	[Test, Description("Clone Test Log")]
@@ -58,6 +59,7 @@ public class TestClone : TestSerializeBase
 	{
 		var testLog = new TestLog();
 		var output = _serializer.Clone(Log, testLog);
+		Assert.NotNull(output);
 	}
 
 	[Test, Description("Clone Log Timer 2")]
@@ -67,6 +69,7 @@ public class TestClone : TestSerializeBase
 		using (testLog.Timer("timing"))
 			testLog.Add("child");
 		Log output = _serializer.Clone(Log, testLog)!;
+		Assert.NotNull(output);
 	}
 
 	[Test, Description("Clone Log")]
@@ -74,6 +77,7 @@ public class TestClone : TestSerializeBase
 	{
 		Log testLog = new();
 		Log output = _serializer.Clone(Log, testLog)!;
+		Assert.NotNull(output);
 	}
 
 	[Test, Description("Clone Log Child")]
@@ -83,6 +87,7 @@ public class TestClone : TestSerializeBase
 		testLog.Call("test");
 
 		Log output = _serializer.Clone(Log, testLog)!;
+		Assert.NotNull(output);
 	}
 
 	[Test, Description("Clone Log Timer")]
@@ -91,6 +96,7 @@ public class TestClone : TestSerializeBase
 		var testLog = new LogTimer();
 
 		var output = _serializer.Clone(Log, testLog);
+		Assert.NotNull(output);
 	}
 
 	private class MultipleArrays
@@ -104,6 +110,7 @@ public class TestClone : TestSerializeBase
 	{
 		var arrays = new MultipleArrays();
 		var output = _serializer.Clone(Log, arrays);
+		Assert.NotNull(output);
 	}
 
 
@@ -492,6 +499,7 @@ public class TestClone : TestSerializeBase
 		input[s] = b;
 
 		var output = _serializer.Clone(Log, input);
+		Assert.NotNull(output);
 
 		Assert.AreEqual(3, s.B);
 	}

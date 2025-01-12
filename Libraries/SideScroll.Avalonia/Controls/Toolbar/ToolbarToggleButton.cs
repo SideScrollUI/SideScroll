@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
 
-public class ToolbarToggleButton : ToolbarButton, IDisposable
+public class ToolbarToggleButton : ToolbarButton
 {
 	protected override Type StyleKeyOverride => typeof(ToolbarButton);
 

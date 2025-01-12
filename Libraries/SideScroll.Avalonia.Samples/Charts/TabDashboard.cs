@@ -32,7 +32,7 @@ public class TabDashboard : ITab
 
 			DateTime endTime = TimeZoneView.Now.Trim(TimeSpan.TicksPerHour);
 
-			var timeWindow = new TimeWindow(endTime.AddHours(-SampleCount), endTime);
+			var timeWindow = new TimeWindow(endTime.AddDays(-SampleCount), endTime);
 
 			for (int row = 0; row < RowCount; row++)
 			{
@@ -47,7 +47,7 @@ public class TabDashboard : ITab
 
 					for (int i = 0; i < _random.Next(1, 10); i++)
 					{
-						var series = ChartSamples.CreateTimeSeries(endTime, SampleCount);
+						var series = ChartSamples.CreateTimeSeries(endTime, TimeSpan.FromDays(1), SampleCount);
 
 						chartView.AddSeries($"Series {i}", series, seriesType: SeriesType.Average);
 

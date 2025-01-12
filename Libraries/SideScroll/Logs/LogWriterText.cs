@@ -30,11 +30,7 @@ public class LogWriterText : IDisposable
 
 	private void LogEntry_OnMessage(object? sender, EventLogMessage e)
 	{
-		string indentation = "";
-		foreach (LogEntry logEntry in e.Entries)
-		{
-			indentation += '\t';
-		}
+		string indentation = new('\t', e.Entries.Count);
 
 		LogEntry newLog = e.Entries[0];
 		string line = Log.Created.ToString("yyyy-M-d H:mm:ss") + indentation + newLog.Message;

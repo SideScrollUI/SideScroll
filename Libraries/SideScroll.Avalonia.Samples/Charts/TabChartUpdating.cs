@@ -56,7 +56,7 @@ public class TabChartUpdating : ITab
 			DateTime dateTime = DateTime.Now;
 			for (int i = 0; i < 2; i++)
 			{
-				var series = ChartSamples.CreateTimeSeries(dateTime, SampleCount);
+				var series = ChartSamples.CreateTimeSeries(dateTime, TimeSpan.FromHours(1), SampleCount);
 				chartView.AddSeries($"Series {2 * i + _random.Next() % 2}", series, seriesType: SeriesType.Average);
 			}
 

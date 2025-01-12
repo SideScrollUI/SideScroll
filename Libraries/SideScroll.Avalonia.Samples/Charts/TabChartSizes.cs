@@ -19,7 +19,7 @@ public class TabChartSizes : ITab
 			model.MinDesiredWidth = 1000;
 
 			DateTime dateTime = DateTime.Now;
-			var series = ChartSamples.CreateTimeSeries(dateTime, SampleCount);
+			var series = ChartSamples.CreateTimeSeries(dateTime, TimeSpan.FromHours(6), SampleCount);
 
 			var chartView = new ChartView
 			{

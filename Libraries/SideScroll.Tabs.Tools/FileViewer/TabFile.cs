@@ -88,9 +88,9 @@ public class TabFile(FileView fileView) : ITab
 
 			if (ExtensionTypes.TryGetValue(extension, out Type? type))
 			{
-				var tab = (IFileTypeView)Activator.CreateInstance(type)!;
-				tab.Path = path;
-				items.Add(new ListItem(extension, tab));
+				var viewTab = (IFileTypeView)Activator.CreateInstance(type)!;
+				viewTab.Path = path;
+				items.Add(new ListItem(extension, viewTab));
 			}
 
 			if (extension == ".json")

@@ -634,7 +634,7 @@ public class TabView : Grid, IDisposable
 	{
 		// Could have parent instance reload children
 		TabViewSettings = new TabViewSettings();
-		Instance!.SaveTabSettings();
+		Instance.SaveTabSettings();
 		Instance.Invoke(ShowLoading);
 		Instance.Reinitialize(true);
 	}

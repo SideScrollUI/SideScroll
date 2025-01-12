@@ -35,7 +35,7 @@ public class HttpMemoryCache
 
 	public T? Get<T>(Call call, string uri)
 	{
-		if (TryGetValue<T>(call, uri, out T? t))
+		if (TryGetValue(call, uri, out T? t))
 			return t;
 
 		return default;

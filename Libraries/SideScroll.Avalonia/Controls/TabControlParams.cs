@@ -72,7 +72,7 @@ public class TabControlParams : Border, IValidationControl
 
 	private void ClearControls()
 	{
-		ContainerGrid!.Children.Clear();
+		ContainerGrid.Children.Clear();
 		ContainerGrid.RowDefinitions.Clear();
 	}
 
@@ -131,7 +131,7 @@ public class TabControlParams : Border, IValidationControl
 	{
 		int columnIndex = Grid.GetColumn(lastControl);
 		int columnSpan = Grid.GetColumnSpan(lastControl);
-		if (columnIndex + columnSpan < ContainerGrid!.ColumnDefinitions.Count)
+		if (columnIndex + columnSpan < ContainerGrid.ColumnDefinitions.Count)
 		{
 			Grid.SetColumnSpan(lastControl, ContainerGrid.ColumnDefinitions.Count - columnIndex);
 		}
@@ -155,7 +155,7 @@ public class TabControlParams : Border, IValidationControl
 			MaxWidth = ControlMaxWidth,
 			[Grid.ColumnSpanProperty] = 2,
 		};
-		ContainerGrid!.Children.Add(textBlock);
+		ContainerGrid.Children.Add(textBlock);
 	}
 
 	public List<Control> AddObjectRow(object obj, List<PropertyInfo>? properties = null)

@@ -75,7 +75,7 @@ public static class DateTimeExtensions
 		return dateTime.ToString(DateFormat) + ' ' + dateTime.ToString(timeFormat);
 	}
 
-	public static string? FormatId(this DateTime dateTime)
+	public static string FormatId(this DateTime dateTime)
 	{
 		dateTime = TimeZoneView.Utc.ConvertTimeToUtc(dateTime);
 		return dateTime.ToString(DateTimeFormatId);

@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Avalonia.Controls.Converters;
+using SideScroll.Time;
 using System.Globalization;
 
 namespace SideScroll.Avalonia.Test;
@@ -14,6 +15,7 @@ public class TestAvaloniaFieldValueConverter
 	[Test]
 	public void ConvertDateTime()
 	{
+		TimeZoneView.Current = TimeZoneView.Utc;
 		DateTime dateTime = new(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc);
 		var converter = new FormatValueConverter();
 		string converted = (string)converter.Convert(dateTime, typeof(string), null, CultureInfo.CurrentCulture)!;

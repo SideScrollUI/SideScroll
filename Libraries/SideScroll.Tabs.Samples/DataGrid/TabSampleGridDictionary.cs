@@ -11,7 +11,7 @@ public class TabSampleGridDictionary : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			_items = [];
-			AddEntries(call);
+			AddEntries();
 			model.AddData(_items);
 
 			// Dictionary not observable
@@ -21,7 +21,7 @@ public class TabSampleGridDictionary : ITab
 			};*/
 		}
 
-		private void AddEntries(Call call)
+		private void AddEntries()
 		{
 			for (int i = 0; i < 20; i++)
 			{

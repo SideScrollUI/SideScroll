@@ -1,12 +1,11 @@
-using SideScroll.Utilities;
+using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Serialize.DataRepos;
+using SideScroll.Utilities;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using SideScroll.Tabs.Tools.FileViewer;
-using SideScroll.Attributes;
 
-namespace SideScroll.Tabs.Tools;
+namespace SideScroll.Tabs.Tools.FileViewer;
 
 public delegate void SelectFileDelegate(Call call, string path);
 

@@ -32,8 +32,8 @@ public class TabSampleChartSeriesCount : ITab
 
 			for (int i = 0; i < seriesCount; i++)
 			{
-				chartView.AddSeries($"Series {i}", ChartSamples.CreateTimeSeries(endTime, 12), seriesType: SeriesType.Average);
-			};
+				chartView.AddSeries($"Series {i}", ChartSamples.CreateTimeSeries(endTime, TimeSpan.FromDays(1), 12), seriesType: SeriesType.Average);
+			}
 			return chartView;
 		}
 	}

@@ -67,7 +67,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		return DataRepo.Load<T>(GroupId, key ?? DefaultKey, call, createIfNeeded, lazy);
 	}
 
-	public virtual DataPageView<T>? LoadPageView(Call? call, bool ascending = true)
+	public virtual DataPageView<T> LoadPageView(Call? call, bool ascending = true)
 	{
 		return new DataPageView<T>(this, ascending);
 	}
