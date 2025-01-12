@@ -222,11 +222,7 @@ public class TabControlSplitContainer : Grid
 
 	private void RemoveControls(Dictionary<object, Control> controls)
 	{
-		var hashedControls = new HashSet<Control>(); // one line linq?
-		foreach (var pair in GridControls)
-		{
-			hashedControls.Add(pair.Value);
-		}
+		var hashedControls = GridControls.Values.ToHashSet();
 
 		// Remove any children not in use anymore
 		foreach (var oldChild in controls)

@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
 using System.Collections;
+using System.Reflection.Emit;
 
 namespace SideScroll.Tabs.Bookmarks;
 
@@ -180,15 +181,13 @@ public class TabBookmark
 
 	public void Select(params string[] labels)
 	{
-		var selectedRows = new HashSet<SelectedRow>();
-		foreach (string label in labels)
-		{
-			var selectedRow = new SelectedRow
+		var selectedRows = labels.Select(label => 
+			new SelectedRow
 			{
 				Label = label,
-			};
-			selectedRows.Add(selectedRow);
-		}
+			}
+		).ToHashSet();
+
 		SelectRows(selectedRows);
 	}
 
