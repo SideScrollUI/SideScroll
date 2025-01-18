@@ -6,7 +6,7 @@ namespace SideScroll.Serialize.Test;
 public class TestLargeFile : TestSerializeBase
 {
 	private const int IntCount = 10_000;
-	
+
 	private string? _basePath;
 
 	[OneTimeSetUp]
@@ -147,9 +147,8 @@ public struct MyColor
 		Alpha = (short)Math.Min(short.MaxValue, (int)Alpha + value);
 	}
 }
-/*
-	
 
+/*
 Accessing more than 2 GB
 
 	Memory Mapped Files
@@ -166,5 +165,4 @@ Accessing more than 2 GB
 		Length can be used later
 
 	https://docs.microsoft.com/en-us/dotnet/standard/io/memory-mapped-files
-	
 */

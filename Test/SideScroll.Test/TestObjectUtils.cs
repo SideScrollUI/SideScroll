@@ -22,7 +22,7 @@ public class TestObjectUtils : TestBase
 	public void ArrayAreEqual()
 	{
 		Assert.IsTrue(ObjectUtils.AreEqual(
-			new int[] { 0 }, 
+			new int[] { 0 },
 			new int[] { 0 }
 			));
 	}
@@ -31,7 +31,7 @@ public class TestObjectUtils : TestBase
 	public void ArrayAreNotEqual()
 	{
 		Assert.IsFalse(ObjectUtils.AreEqual(
-			new int[] { 0 }, 
+			new int[] { 0 },
 			new int[] { 1 }
 			));
 	}

@@ -85,7 +85,7 @@ public class TabInstance : IDisposable
 	public TaskInstance TaskInstance { get; set; } = new();
 	public TabModel Model { get; set; } = new();
 	public string Label
-	{ 
+	{
 		get => Model.Name;
 		set => Model.Name = value;
 	}
@@ -315,7 +315,7 @@ public class TabInstance : IDisposable
 		{
 			Type type = GetType(); // gets derived type
 			return type.GetMethods()
-				.FirstOrDefault(m => 
+				.FirstOrDefault(m =>
 					m.Name == name &&
 					m.DeclaringType != typeof(TabInstance) &&
 					m.GetParameters().Length == paramCount);
@@ -613,7 +613,7 @@ public class TabInstance : IDisposable
 		{
 			Name = Label,
 			Type = iTab?.GetType(),
-			TabBookmark = {IsRoot = true}
+			TabBookmark = { IsRoot = true }
 		};
 		GetBookmark(bookmark.TabBookmark);
 		bookmark = bookmark.DeepClone(TaskInstance.Call)!; // Sanitize and test bookmark
@@ -662,7 +662,7 @@ public class TabInstance : IDisposable
 				tabBookmark.IsRoot = true;
 				tabBookmark.Tab = iTab;
 			}
-			else if (type.GetCustomAttribute<PublicDataAttribute>() != null && 
+			else if (type.GetCustomAttribute<PublicDataAttribute>() != null &&
 				(tabBookmark.IsRoot || IsRoot))
 			{
 				tabBookmark.Tab = iTab;

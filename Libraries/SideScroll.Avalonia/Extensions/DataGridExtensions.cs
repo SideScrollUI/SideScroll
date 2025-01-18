@@ -72,8 +72,8 @@ public static class DataGridExtensions
 		foreach (DataGridColumn column in dataGrid.Columns)
 		{
 			// Buttons don't have a binding
-			if (column is not DataGridBoundColumn boundColumn || 
-			    boundColumn.Binding is not Binding binding)
+			if (column is not DataGridBoundColumn boundColumn ||
+				boundColumn.Binding is not Binding binding)
 				continue;
 
 			string propertyName = binding.Path;

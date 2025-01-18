@@ -64,10 +64,9 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 			LineSeries.GeometryFill = new SolidColorPaint(skColor);
 		}
 
-		if (listSeries.List is INotifyCollectionChanged iNotifyCollectionChanged)
+		if (listSeries.List is INotifyCollectionChanged notifyCollectionChanged)
 		{
-			//iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
-			iNotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object? sender, NotifyCollectionChangedEventArgs e)
+			notifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object? sender, NotifyCollectionChangedEventArgs e)
 			{
 				// Can we remove this later when disposing?
 				SeriesChanged(listSeries, e);

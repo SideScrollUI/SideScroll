@@ -219,8 +219,8 @@ public abstract class TypeRepo : IDisposable
 
 	public void LoadHeader(Log log)
 	{
-		using LogTimer logTimer = log.Timer("Loading Headers", 
-			new Tag("Type", TypeSchema.Name), 
+		using LogTimer logTimer = log.Timer("Loading Headers",
+			new Tag("Type", TypeSchema.Name),
 			new Tag("Count", TypeSchema.NumObjects));
 
 		ObjectOffsets = new long[TypeSchema.NumObjects];
@@ -433,10 +433,10 @@ public abstract class TypeRepo : IDisposable
 
 		int objectIndex = BitConverter.ToInt32(bytes, byteOffset);
 		byteOffset += sizeof(int);
-		
+
 		if (!TypeSchema.HasSubType)
 			return LoadObject(objectIndex);
-		
+
 		//int typeIndex = reader.ReadInt16(); // not saved for sealed classes
 		int typeIndex = BitConverter.ToInt16(bytes, byteOffset);
 		byteOffset += sizeof(short);

@@ -576,8 +576,8 @@ public class Serializer : IDisposable
 		if (typeRepo is
 			TypeRepoPrimitive or
 			Atlas.TypeRepos.TypeRepoString or
-		    TypeRepoEnum or
-		    TypeRepoType)
+			TypeRepoEnum or
+			TypeRepoType)
 		{
 			Clones[obj] = obj; // optional
 			return obj;
@@ -614,7 +614,7 @@ public class Serializer : IDisposable
 	{
 		T? clone = (T?)Clone(obj);
 		using LogTimer logClone = log.Timer("Clone");
-		
+
 		while (CloneQueue.Count > 0)
 		{
 			Action action = CloneQueue.Dequeue();
@@ -626,7 +626,7 @@ public class Serializer : IDisposable
 
 		logClone.Add("Clone Finished", new Tag("Objects", Clones.Count));
 		LogClonedTypes(logClone);
-	
+
 		return clone;
 	}
 

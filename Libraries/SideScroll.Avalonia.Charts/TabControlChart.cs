@@ -160,7 +160,7 @@ public abstract class TabControlChart<TSeries> : Border, ITabControlChart
 	{
 		string? title = ChartView.Name;
 		if (title == null) return;
-		
+
 		TitleTextBlock = new TabControlTextBlock
 		{
 			Text = ChartView.Name,

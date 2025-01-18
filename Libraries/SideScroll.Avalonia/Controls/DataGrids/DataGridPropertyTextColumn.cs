@@ -166,7 +166,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 	// They also use different background colors, with different shades for links vs non-links
 	private TextBlock AddStyling(DataGridCell cell, TextBlock textBlock)
 	{
-		if (PropertyInfo.IsDefined(typeof(StyleValueAttribute)) || 
+		if (PropertyInfo.IsDefined(typeof(StyleValueAttribute)) ||
 			(DisplayIndex == 1 && typeof(DictionaryEntry).IsAssignableFrom(PropertyInfo.DeclaringType)))
 		{
 			// Update the cell color based on the object

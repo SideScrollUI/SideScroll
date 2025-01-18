@@ -53,5 +53,5 @@ public class TestLinkUri : TestBase
 		Assert.AreEqual("type", uri.Type);
 		Assert.AreEqual("path", uri.Path);
 		Assert.AreEqual("query", uri.Query);
- 	}
+	}
 }

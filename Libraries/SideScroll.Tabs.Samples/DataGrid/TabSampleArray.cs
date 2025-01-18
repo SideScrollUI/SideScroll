@@ -19,13 +19,13 @@ public class TabSampleArray
 	];
 
 	// todo: this currently shows as a single column
-	public int[,] MultiDimensional => new [,]
+	public int[,] MultiDimensional => new[,]
 	{
 		{ 1, 2 },
 		{ 3, 4 },
 	};
 
-	public bool[,] SingleItem => new bool[1,1];
+	public bool[,] SingleItem => new bool[1, 1];
 
 	public class Pet(string name)
 	{

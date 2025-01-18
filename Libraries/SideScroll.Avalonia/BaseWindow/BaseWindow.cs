@@ -50,7 +50,7 @@ public class BaseWindow : Window
 
 		FontTheme.FontFamilies =
 			new List<FontFamily>
-			{ 
+			{
 				SideScrollTheme.ContentControlThemeFontFamily, // Inter Font
 				SideScrollTheme.SourceCodeProFont,
 			}

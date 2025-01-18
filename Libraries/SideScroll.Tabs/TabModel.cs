@@ -190,7 +190,7 @@ public class TabModel
 		Type? elementType = listType.GetElementTypeForAll();
 		if (elementType == null)
 			return false;
-		
+
 		List<PropertyInfo> visibleProperties = elementType.GetVisibleProperties();
 		if (elementType == typeof(string))
 		{

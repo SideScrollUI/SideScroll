@@ -150,7 +150,7 @@ public class ScreenCapture : Grid
 		Directory.CreateDirectory(directory);
 
 		bitmap.Save(filePath);
-		
+
 		ProcessStartInfo processStartInfo = new()
 		{
 			FileName = "osascript",
@@ -166,7 +166,7 @@ public class ScreenCapture : Grid
 	private async Task SaveAsync(Call call)
 	{
 		RenderTargetBitmap? bitmap = GetSelectedBitmap();
-		if (bitmap == null)	return;
+		if (bitmap == null) return;
 
 		Window? window = GetWindow(this);
 		if (window == null) return;

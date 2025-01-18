@@ -213,7 +213,7 @@ public class TimeRangePeriod : ITags
 	public static List<TimeRangeValue>? PeriodAverages(IEnumerable<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
 		var periods = Periods(timeRangeValues, timeWindow, periodDuration);
-		
+
 		return periods?
 			.Where(period => period.SummedDurations.TotalSeconds > 0.0)
 			.Select(period =>
@@ -227,7 +227,7 @@ public class TimeRangePeriod : ITags
 	public static List<TimeRangeValue>? PeriodSums(IEnumerable<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
 	{
 		var periods = Periods(timeRangeValues, timeWindow, periodDuration);
-		
+
 		return periods?
 			.Where(period => period.SummedDurations.TotalSeconds > 0.0)
 			.Select(period => new TimeRangeValue(period.StartTime, period.EndTime, period.Sum, period.Tags))

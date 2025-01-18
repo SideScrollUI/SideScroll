@@ -79,7 +79,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	private LvcPointD? _startDataPoint;
 	private LvcPointD? _endDataPoint;
 
-	public TabControlLiveChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false) : 
+	public TabControlLiveChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false) :
 		base(tabInstance, chartView, fillHeight)
 	{
 		TimeTrackerSkColor = TimeTrackerColor.ToSKColor();
@@ -256,7 +256,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 	public ISeries AddListSeries(ListSeries listSeries)
 	{
-		Color color = 
+		Color color =
 			listSeries.Color?.AsAvaloniaColor() ??
 			GetSeriesInfo(listSeries)?.Color ??
 			GetColor(IdxSeriesInfo.Count);
@@ -575,7 +575,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 				}
 			}
 		}
-		return (minimum, maximum, hasFraction); 
+		return (minimum, maximum, hasFraction);
 	}
 
 	private (double minimum, double maximum, bool hasFraction) GetYValueRange()

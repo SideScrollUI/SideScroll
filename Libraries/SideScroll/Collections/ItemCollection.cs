@@ -36,7 +36,7 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 
 	public override string ToString() => Label ?? "[" + Count.ToString("N0") + "]";
 
-	public ItemCollection()	{ }
+	public ItemCollection() { }
 
 	public ItemCollection(string columnName)
 	{

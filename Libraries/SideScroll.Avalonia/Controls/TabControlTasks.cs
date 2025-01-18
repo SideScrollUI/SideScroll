@@ -65,14 +65,14 @@ public class TabControlTasks : Grid, IDisposable
 			SelectLastItem();
 		}
 
-		if (TabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
+		if (TabInstance.Model.Tasks is INotifyCollectionChanged notifyCollectionChanged)
 		{
-			iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
+			notifyCollectionChanged.CollectionChanged += NotifyCollectionChanged_CollectionChanged;
 		}
 	}
 
 	// not resizing correctly when we add a new item
-	private void INotifyCollectionChanged_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	private void NotifyCollectionChanged_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 	{
 		Dispatcher.UIThread.Post(() => CollectionChangedUI(e), DispatcherPriority.SystemIdle);
 	}
@@ -159,9 +159,9 @@ public class TabControlTasks : Grid, IDisposable
 		_tabControlDataGrid.OnSelectionChanged -= TabData_OnSelectionChanged;
 		_tabControlDataGrid.Dispose();
 
-		if (TabInstance.Model.Tasks is INotifyCollectionChanged iNotifyCollectionChanged)
+		if (TabInstance.Model.Tasks is INotifyCollectionChanged notifyCollectionChanged)
 		{
-			iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
+			notifyCollectionChanged.CollectionChanged -= NotifyCollectionChanged_CollectionChanged;
 		}
 	}
 }

@@ -77,8 +77,8 @@ public class TabControlColorPicker : ColorPicker
 		if (e.Property.Name == nameof(IsKeyboardFocusWithin))
 		{
 			// Update when focus lost
-			if (e.NewValue is false && 
-				_prevSelectedIndex is int selectedIndex && 
+			if (e.NewValue is false &&
+				_prevSelectedIndex is int selectedIndex &&
 				_prevColorModel is ColorModel colorModel)
 			{
 				Dispatcher.UIThread.Post(() =>

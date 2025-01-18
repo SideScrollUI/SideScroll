@@ -136,7 +136,7 @@ public class ListProperty : ListMember, IPropertyEditable
 	protected void ListProperty_PropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
 		if (e.PropertyName != MemberInfo.Name) return;
-		
+
 		_valueCached = false;
 		ValueChanged();
 	}

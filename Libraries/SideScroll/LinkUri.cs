@@ -17,7 +17,7 @@ public class LinkUri
 
 	public override string ToString() => Url ?? ToUri();
 
-	public virtual bool IsValid() => 
+	public virtual bool IsValid() =>
 		!Prefix.IsNullOrEmpty() &&
 		!Type.IsNullOrEmpty() &&
 		!Path.IsNullOrEmpty();
@@ -44,7 +44,7 @@ public class LinkUri
 	public static LinkUri Parse(string url)
 	{
 		if (TryParse(url, out LinkUri? linkUri)) return linkUri;
-		
+
 		throw new ArgumentException($"Invalid LinkUri {url}");
 	}
 

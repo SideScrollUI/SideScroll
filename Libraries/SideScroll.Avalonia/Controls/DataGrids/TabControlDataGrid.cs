@@ -225,10 +225,10 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 	private void AddListUpdatedDispatcher()
 	{
-		if (List is INotifyCollectionChanged iNotifyCollectionChanged) // AutoLoad
+		if (List is INotifyCollectionChanged notifyCollectionChanged) // AutoLoad
 		{
 			// DataGrid must exist before adding this
-			iNotifyCollectionChanged.CollectionChanged += INotifyCollectionChanged_CollectionChanged;
+			notifyCollectionChanged.CollectionChanged += NotifyCollectionChanged_CollectionChanged;
 
 			// Invoking was happening at bad times in the data binding
 			if (_dispatcherTimer == null)
@@ -328,7 +328,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 	private bool _selectionModified;
 
-	private void INotifyCollectionChanged_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	private void NotifyCollectionChanged_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 	{
 		if (List == null) // reloading detaches list temporarily?
 			return;
@@ -1203,7 +1203,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 
 		if (List is INotifyCollectionChanged iNotifyCollectionChanged) // as AutoLoad
-			iNotifyCollectionChanged.CollectionChanged -= INotifyCollectionChanged_CollectionChanged;
+			iNotifyCollectionChanged.CollectionChanged -= NotifyCollectionChanged_CollectionChanged;
 
 		List = null;
 		CollectionView = null;

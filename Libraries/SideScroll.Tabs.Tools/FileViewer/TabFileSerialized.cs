@@ -21,7 +21,7 @@ public class TabFileSerialized(string path) : ITab
 			_serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(tab.Path)!);
 
 			var serializer = _serializerFile.LoadSchema(call);
-			
+
 			model.Items = _items = [new ListItem("Schema", serializer.TypeSchemas)];
 
 			model.Actions = new List<TaskCreator>

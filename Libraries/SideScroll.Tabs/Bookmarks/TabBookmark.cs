@@ -181,7 +181,7 @@ public class TabBookmark
 
 	public void Select(params string[] labels)
 	{
-		var selectedRows = labels.Select(label => 
+		var selectedRows = labels.Select(label =>
 			new SelectedRow
 			{
 				Label = label,

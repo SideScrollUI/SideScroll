@@ -17,7 +17,7 @@ public class LiveChartTooltip(TabControlLiveChart liveChart) : IChartTooltip<Ski
 
 	public double TextSize { get; set; } = 15;
 	public float LabelMaxWidth { get; set; } = 310;
-	 
+
 	private static readonly int s_zIndex = 10100;
 
 	internal StackPanel<PopUpGeometry, SkiaSharpDrawingContext>? _panel;

@@ -97,7 +97,7 @@ public static class TabCreator
 			// todo: move elsewhere, we shouldn't be blocking during creation
 			value = Task.Run(() => creatorAsync.CreateAsync(new Call())).GetAwaiter().GetResult();
 		}
-		
+
 		if (value is FilePath filePath)
 		{
 			value = new TabTextFile(filePath);

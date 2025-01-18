@@ -33,7 +33,7 @@ public static class HttpUtils
 		response?.Response?.EnsureSuccessStatusCode();
 		byte[]? bytes = response?.Bytes;
 		if (bytes == null) return null;
-		
+
 		return Encoding.ASCII.GetString(bytes);
 	}
 

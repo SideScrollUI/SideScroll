@@ -86,7 +86,7 @@ public class Project
 		return Load<UserSettings>(projectSettings, defaultUserSettings);
 	}
 
-	public static Project Load<T>(ProjectSettings projectSettings, T? defaultUserSettings = null) where T: UserSettings, new()
+	public static Project Load<T>(ProjectSettings projectSettings, T? defaultUserSettings = null) where T : UserSettings, new()
 	{
 		defaultUserSettings ??= projectSettings.DefaultUserSettings as T ?? new()
 		{

@@ -568,7 +568,7 @@ public class TabView : Grid, IDisposable
 			TextWrapping = TextWrapping.Wrap,
 		};
 		textBox.Resources.Add("TextControlBackgroundReadOnlyBrush", Brushes.Transparent);
-		
+
 		AvaloniaUtils.AddContextMenu(textBox);
 		_tabParentControls!.AddControl(textBox, false, SeparatorType.Spacer);
 	}
