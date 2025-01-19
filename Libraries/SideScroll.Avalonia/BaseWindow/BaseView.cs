@@ -19,9 +19,9 @@ public class BaseView : UserControl
 
 	public static BaseView? Instance { get; set; }
 
-	public Project Project;
+	public Project Project { get; protected set; }
 
-	public TabViewer TabViewer;
+	public TabViewer TabViewer { get; protected set; }
 
 	private bool _loadComplete;
 

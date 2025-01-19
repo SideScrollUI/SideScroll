@@ -4,7 +4,7 @@ namespace SideScroll.Attributes;
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
 public class NameAttribute(string name) : Attribute
 {
-	public readonly string Name = name;
+	public string Name => name;
 }
 
 // DataGrids use this as a unique key when matching rows
@@ -43,7 +43,7 @@ public class HideAttribute(object? value, params object?[] additonalValues) : At
 {
 	// passing a null param passes a null array :(
 	// Combine both params into a single list
-	public readonly List<object?> Values = new(additonalValues)
+	public List<object?> Values { get; init; } = new(additonalValues)
 	{
 		value
 	};
@@ -55,7 +55,7 @@ public class HideRowAttribute(object? value, params object?[] additonalValues) :
 {
 	// passing a null param passes a null array :(
 	// Combine both params into a single list
-	public readonly List<object?> Values = new(additonalValues)
+	public List<object?> Values { get; init; } = new(additonalValues)
 	{
 		value
 	};
@@ -67,7 +67,7 @@ public class HideColumnAttribute(object? value, params object?[] additonalValues
 {
 	// passing a null param passes a null array :(
 	// Combine both params into a single list
-	public readonly List<object?> Values = new(additonalValues)
+	public List<object?> Values { get; init; } = new(additonalValues)
 	{
 		value
 	};
@@ -77,7 +77,7 @@ public class HideColumnAttribute(object? value, params object?[] additonalValues
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
 public class DebugOnlyAttribute(bool value = true) : Attribute
 {
-	public readonly bool Value = value;
+	public bool Value => value;
 }
 
 // Style value based on whether it contains links or not
@@ -92,7 +92,7 @@ public class FormattedAttribute : Attribute;
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class FormatterAttribute(Type type) : Attribute
 {
-	public readonly Type Type = type;
+	public Type Type => type;
 }
 
 // Adds spaces between words in a string
@@ -117,21 +117,21 @@ public class AutoSizeAttribute : Attribute;
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
 public class MinWidthAttribute(int minWidth) : Attribute
 {
-	public readonly int MinWidth = minWidth;
+	public int MinWidth => minWidth;
 }
 
 // MaxDesiredWidthAttribute?
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
 public class MaxWidthAttribute(int maxWidth) : Attribute
 {
-	public readonly int MaxWidth = maxWidth;
+	public int MaxWidth => maxWidth;
 }
 
 // MaxDesiredHeightAttribute?
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
 public class MaxHeightAttribute(int maxHeight) : Attribute
 {
-	public readonly int MaxHeight = maxHeight;
+	public int MaxHeight => maxHeight;
 }
 
 // AutoSelect the item if non-null, rename? add priority?
@@ -142,15 +142,15 @@ public class AutoSelectAttribute : Attribute;
 [AttributeUsage(AttributeTargets.Method)]
 public class ItemAttribute(string? name = null) : Attribute
 {
-	public readonly string? Name = name;
+	public string? Name => name;
 }
 
 // Don't show this field/property as a column
 [AttributeUsage(AttributeTargets.Method)]
 public class ButtonColumnAttribute : Attribute
 {
-	public readonly string? Name;
-	public readonly string? VisiblePropertyName;
+	public string? Name { get; init; }
+	public string? VisiblePropertyName { get; init; }
 
 	public ButtonColumnAttribute(string? name = null)
 	{
@@ -168,5 +168,5 @@ public class ButtonColumnAttribute : Attribute
 [AttributeUsage(AttributeTargets.Property)]
 public class ColumnIndexAttribute(int index) : Attribute
 {
-	public readonly int Index = index;
+	public int Index => index;
 }

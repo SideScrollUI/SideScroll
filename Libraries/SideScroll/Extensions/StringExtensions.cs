@@ -29,7 +29,9 @@ public static class StringExtensions
 			return input;
 
 		while (input.StartsWith(prefix))
+		{
 			input = input[prefix.Length..];
+		}
 
 		return input;
 	}
@@ -37,7 +39,9 @@ public static class StringExtensions
 	public static string TrimEnd(this string input, string postfix)
 	{
 		if (input.EndsWith(postfix))
+		{
 			return input[..^postfix.Length];
+		}
 
 		return input;
 	}
@@ -146,7 +150,9 @@ public static class StringExtensions
 	public static List<int> AllIndexesOf(this string str, string value)
 	{
 		if (string.IsNullOrEmpty(value))
+		{
 			throw new ArgumentException("the string to find may not be empty", nameof(value));
+		}
 
 		var indexes = new List<int>();
 		for (int index = 0; ; index += value.Length)
@@ -162,7 +168,9 @@ public static class StringExtensions
 	public static IEnumerable<int> AllIndexesOfYield(this string str, string value)
 	{
 		if (string.IsNullOrEmpty(value))
+		{
 			throw new ArgumentException("the string to find may not be empty", nameof(value));
+		}
 
 		for (int index = 0; ; index += value.Length)
 		{

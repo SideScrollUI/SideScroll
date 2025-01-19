@@ -11,7 +11,7 @@ namespace SideScroll.Extensions;
 
 public static class DataGridExtensions
 {
-	private const int MaxValueLength = 2000;
+	public static int MaxValueLength { get; set; } = 2000;
 
 	public static string ColumnToStringTable(this DataGrid dataGrid, DataGridBoundColumn column)
 	{
@@ -171,7 +171,7 @@ public static class DataGridExtensions
 		return stringBuilder.ToString();
 	}
 
-	private static void GetDataGridContents(DataGrid dataGrid, IEnumerable items, out List<ColumnInfo> columns, out List<List<string>> contentRows, int maxValueLength = MaxValueLength)
+	private static void GetDataGridContents(DataGrid dataGrid, IEnumerable items, out List<ColumnInfo> columns, out List<List<string>> contentRows, int? maxValueLength = null)
 	{
 		columns = [];
 		contentRows = [];
@@ -213,7 +213,7 @@ public static class DataGridExtensions
 					string propertyPath = binding.Path;
 					object? obj = ReflectorUtil.FollowPropertyPath(item, propertyPath);
 
-					string? value = obj.Formatted(maxValueLength);
+					string? value = obj.Formatted(maxValueLength ?? MaxValueLength);
 					value = value?.Replace('\n', ' '); // remove newlines
 					stringCells.Add(value ?? "");
 				}

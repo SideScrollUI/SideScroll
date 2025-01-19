@@ -6,8 +6,8 @@ namespace SideScroll.Tabs.Tools.FileViewer;
 
 public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes, FileSelectorOptions? fileSelectorOptions = null) : ITab
 {
-	public DataRepoView<NodeView> DataRepoNodes = dataRepoNodes;
-	public FileSelectorOptions? FileSelectorOptions = fileSelectorOptions;
+	public DataRepoView<NodeView> DataRepoNodes => dataRepoNodes;
+	public FileSelectorOptions? FileSelectorOptions { get; set; } = fileSelectorOptions;
 
 	public TabInstance Create() => new Instance(this);
 

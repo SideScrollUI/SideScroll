@@ -76,12 +76,12 @@ public abstract class TabInstanceAsync : TabInstance, ITabAsync
 //	An Instance of a TabModel, created by TabView
 public class TabInstance : IDisposable
 {
-	private const int MaxPreloadItems = 50; // preload all rows that might be visible to avoid freezing UI
+	public static int MaxPreloadItems { get; set; } = 50; // preload all rows that might be visible to avoid freezing UI
 
 	public const string CurrentBookmarkName = "Current";
 
 	public Project Project { get; set; }
-	public ITab? iTab; // Collision with derived Tab
+	public ITab? iTab { get; set; } // Collision with derived Tab
 	public TaskInstance TaskInstance { get; set; } = new();
 	public TabModel Model { get; set; } = new();
 	public string Label
@@ -104,8 +104,8 @@ public class TabInstance : IDisposable
 	public TabInstance? ParentTabInstance { get; set; }
 	public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = [];
 
-	public SynchronizationContext UiContext;
-	public TabBookmark? FilterBookmarkNode;
+	public SynchronizationContext UiContext { get; set; }
+	public TabBookmark? FilterBookmarkNode { get; set; }
 
 	public class EventSelectItem(object obj) : EventArgs
 	{
@@ -130,7 +130,7 @@ public class TabInstance : IDisposable
 	public event EventHandler<EventArgs>? OnResize;
 	public event EventHandler<EventArgs>? OnValidate;
 
-	public Action? DefaultAction; // Default action when Enter pressed
+	public Action? DefaultAction { get; set; } // Default action when Enter pressed
 
 	// Relative paths for where all the TabSettings get stored, primarily used for loading future defaults
 	// paths get hashed later to avoid having to encode and super long names breaking path limits

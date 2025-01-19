@@ -15,7 +15,7 @@ public class TabFile(FileView fileView) : ITab
 {
 	public TabFile(string filePath) : this(new FileView(filePath)) { }
 
-	public FileView FileView = fileView;
+	public FileView FileView => fileView;
 
 	public string Path = fileView.Path;
 

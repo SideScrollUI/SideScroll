@@ -9,7 +9,7 @@ namespace SideScroll.Tabs.Tools.FileViewer;
 
 public class TabDirectory(DirectoryView directoryView) : ITab
 {
-	public DirectoryView DirectoryView = directoryView;
+	public DirectoryView DirectoryView => directoryView;
 	public string Path => DirectoryView.Path;
 
 	[HiddenColumn]

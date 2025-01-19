@@ -7,7 +7,7 @@ namespace SideScroll.Avalonia.Utilities;
 
 public static class DataGridUtils
 {
-	private const int MaxColumnWidth = 100;
+	public static int MaxColumnWidth { get; set; } = 100;
 
 	public class ColumnInfo(string name)
 	{
@@ -15,13 +15,13 @@ public static class DataGridUtils
 		public TextAlignment RightAlign { get; set; }
 	}
 
-	public static string TableToString(List<ColumnInfo> columns, List<List<string>> contentRows, int maxColumnWidth = MaxColumnWidth)
+	public static string TableToString(List<ColumnInfo> columns, List<List<string>> contentRows, int? maxColumnWidth = null)
 	{
 		List<int> columnNameWidths = columns
 			.Select(c => c.Name.Length)
 			.ToList();
 
-		List<List<string>> cellValues = GetCellValues(contentRows, maxColumnWidth, columnNameWidths);
+		List<List<string>> cellValues = GetCellValues(contentRows, maxColumnWidth ?? MaxColumnWidth, columnNameWidths);
 
 		return TableValuesToString(columns, columnNameWidths, cellValues);
 	}

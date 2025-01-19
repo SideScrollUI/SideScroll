@@ -21,7 +21,7 @@ public class HttpCache : IDisposable
 
 	public class LoadableEntry : Entry
 	{
-		public HttpCache? Cache;
+		public HttpCache? Cache { get; set; }
 
 		[HiddenColumn]
 		public string? Text => Cache?.GetString(Uri!);

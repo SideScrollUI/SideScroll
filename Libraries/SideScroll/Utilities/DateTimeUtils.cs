@@ -6,7 +6,7 @@ namespace SideScroll.Utilities;
 
 public static class DateTimeUtils
 {
-	public static DateTime EpochTime => new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+	public static DateTime EpochTime { get; private set; } = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 	public static bool TryParseTimeSpan(string text, out TimeSpan timeSpan)
 	{

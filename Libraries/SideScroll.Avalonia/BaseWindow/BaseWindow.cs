@@ -17,17 +17,17 @@ namespace SideScroll.Avalonia;
 
 public class BaseWindow : Window
 {
-	private const int MinWindowWidth = 700;
-	private const int MinWindowHeight = 500;
+	public static int MinWindowWidth { get; set; } = 700;
+	public static int MinWindowHeight { get; set; } = 500;
 
-	private const int DefaultWindowWidth = 1280;
-	private const int DefaultWindowHeight = 800;
+	public static int DefaultWindowWidth { get; set; } = 1280;
+	public static int DefaultWindowHeight { get; set; } = 800;
 
 	public static BaseWindow? Instance { get; set; }
 
-	public Project Project;
+	public Project Project { get; protected set; }
 
-	public TabViewer TabViewer;
+	public TabViewer TabViewer { get; protected set; }
 
 	private bool _loadComplete;
 

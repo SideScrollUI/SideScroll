@@ -20,15 +20,15 @@ public class SeriesHoverEventArgs(ListSeries series) : EventArgs
 
 public class LiveChartSeries //: ChartSeries<ISeries>
 {
-	private const int MaxTitleLength = 200;
-	private const int MaxPointsToShowMarkers = 8;
-	private const double DefaultGeometrySize = 5;
+	public static int MaxTitleLength { get; set; } = 200;
+	public static int MaxPointsToShowMarkers { get; set; } = 8;
+	public static double DefaultGeometrySize { get; set; } = 5;
 
-	public TabControlLiveChart Chart { get; set; }
-	public ListSeries ListSeries { get; set; }
+	public TabControlLiveChart Chart { get; init; }
+	public ListSeries ListSeries { get; init; }
 	public bool UseDateTimeAxis { get; set; }
 
-	public LiveChartLineSeries LineSeries;
+	public LiveChartLineSeries LineSeries { get; set; }
 	public List<LiveChartPoint> DataPoints = [];
 
 	public override string? ToString() => ListSeries?.ToString();

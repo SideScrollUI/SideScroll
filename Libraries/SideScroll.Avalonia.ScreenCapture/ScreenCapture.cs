@@ -19,7 +19,7 @@ namespace SideScroll.Avalonia.ScreenCapture;
 
 public class ScreenCapture : Grid
 {
-	private const int MinClipboardSize = 10;
+	public static int MinClipboardSize { get; set; } = 10;
 
 	private RenderTargetBitmap? _originalBitmap;
 	private RenderTargetBitmap? _backgroundBitmap; // 50% faded

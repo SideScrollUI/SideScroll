@@ -54,18 +54,10 @@ public class SampleParamItem
 }
 
 [PublicData]
-public class ParamListItem
+public class ParamListItem(string name, int value)
 {
-	public string? Name { get; set; }
-	public int Value { get; set; }
+	public string? Name { get; set; } = name;
+	public int Value { get; set; } = value;
 
 	public override string? ToString() => Name;
-
-	public ParamListItem() { }
-
-	public ParamListItem(string name, int value)
-	{
-		Name = name;
-		Value = value;
-	}
 }

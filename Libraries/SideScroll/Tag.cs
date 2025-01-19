@@ -12,14 +12,15 @@ public enum TagType
 
 public class Tag
 {
-	public const int MaxValueLength = 10_000;
+	public static int MaxValueLength { get; set; } = 10_000;
 
 	public string? Name { get; set; }
 
 	[InnerValue, StyleValue]
 	public object? Value { get; set; }
 
-	public TagType Type;
+	[HiddenColumn]
+	public TagType Type { get; set; }
 
 	public override string ToString()
 	{

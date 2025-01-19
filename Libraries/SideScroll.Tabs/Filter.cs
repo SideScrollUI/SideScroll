@@ -63,6 +63,8 @@ public class Filter
 	public List<FilterExpression> FilterExpressions { get; set; } = [];
 	public bool IsAnd { get; set; }
 
+	private static Regex _regex = new(@"^(?<Depth>\+\d+ )?(?<Filters>.+)$", RegexOptions.IgnoreCase);
+
 	public override string ToString() => FilterText;
 
 	// "ABC" | 123
@@ -71,16 +73,15 @@ public class Filter
 	{
 		FilterText = filterText ?? "";
 
-		string pattern = @"^(?<Depth>\+\d+ )?(?<Filters>.+)$";
-		Regex regex = new(pattern, RegexOptions.IgnoreCase);
-
-		Match match = regex.Match(FilterText);
+		Match match = _regex.Match(FilterText);
 		if (!match.Success)
 			return;
 
 		string depthText = match.Groups["Depth"].Value;
 		if (depthText.Length > 0)
+		{
 			Depth = int.Parse(depthText[1..]);
+		}
 
 		string filters = match.Groups["Filters"].Value;
 		filters = filters.ToUpper();

@@ -7,7 +7,7 @@ namespace SideScroll.Tabs.Tools.FileViewer;
 
 public class TabFileSerialized(string path) : ITab
 {
-	public string Path = path;
+	public string Path => path;
 
 	public TabInstance Create() => new Instance(this);
 

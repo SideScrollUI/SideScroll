@@ -9,5 +9,5 @@ public class YAxisAttribute : Attribute;
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class UnitAttribute(string name) : Attribute
 {
-	public readonly string Name = name;
+	public string Name => name;
 }

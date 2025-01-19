@@ -42,7 +42,7 @@ public class TabFileImage : ITab, IFileTypeView
 
 	public class Instance(TabFileImage tab) : TabInstance
 	{
-		private const int MinDesiredWidth = 100;
+		public static int MinDesiredWidth { get; set; } = 100;
 
 		public string Path => tab.Path!;
 

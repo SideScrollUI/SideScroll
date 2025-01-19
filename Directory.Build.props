@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.9.1</Version>
-    <PackageReleaseNotes>Moved DefaultUserSettings into ProjectSettings. Fixed Custom TimeZoneView formatting. Fixed regression for Chart Time Axis not showing dates.</PackageReleaseNotes>
+    <Version>0.9.2</Version>
+    <PackageReleaseNotes>Changed public fields to properties. Improved LiveChart Fractional Y Axis labeling so that it rounds to fractional significant figures. Added logging for TabFileSerialized loading.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.3</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

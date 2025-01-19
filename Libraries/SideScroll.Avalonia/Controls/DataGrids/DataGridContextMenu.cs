@@ -11,7 +11,7 @@ public class DataGridContextMenu : ContextMenu, IDisposable
 {
 	protected override Type StyleKeyOverride => typeof(ContextMenu);
 
-	private const int MaxCellValueLength = 10_000;
+	public static int MaxCellValueLength { get; set; } = 10_000;
 
 	public DataGrid DataGrid { get; init; }
 	public DataGridPropertyTextColumn? Column { get; set; }
