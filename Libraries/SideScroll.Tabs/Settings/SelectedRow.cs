@@ -6,14 +6,14 @@ namespace SideScroll.Tabs.Settings;
 [PublicData]
 public class SelectedRow : IEquatable<SelectedRow>
 {
-	public string? Label; // ToString() value, can be null
-	public int RowIndex = -1; // Index in original list without filtering, todo: next schema change to nullable
+	public string? Label { get; set; } // ToString() value, can be null
+	public int? RowIndex { get; set; } // Index in original list without filtering
 
-	[NonSerialized]
-	public object? Object; // used for bookmark searches, dangerous to keep these references around otherwise
+	[Unserialized]
+	public object? Object { get; set; } // used for bookmark searches, dangerous to keep these references around otherwise
 
-	public string? DataKey;
-	public object? DataValue; // Imported with bookmark into it's App DataRepo
+	public string? DataKey { get; set; }
+	public object? DataValue { get; set; } // Imported with bookmark into it's App DataRepo
 
 	// public bool Pinned;
 	// public List<string> SelectedColumns = []; // Not supported yet
@@ -56,7 +56,7 @@ public class SelectedRow : IEquatable<SelectedRow>
 			   Label == other.Label &&
 			   DataKey == other.DataKey &&
 			   DataValue == other.DataValue &&
-			   (RowIndex == other.RowIndex || RowIndex < 0 || other.RowIndex < 0); // todo: change RowIndex to nullable
+			   (RowIndex == other.RowIndex || RowIndex == null || other.RowIndex == null || RowIndex < 0 || other.RowIndex < 0); // Allow matching on missing rows
 	}
 
 	public override int GetHashCode()
@@ -64,6 +64,6 @@ public class SelectedRow : IEquatable<SelectedRow>
 		return (Label?.GetHashCode() ?? 0)
 			^ (DataKey?.GetHashCode() ?? 0)
 			^ (DataValue?.GetHashCode() ?? 0)
-			^ RowIndex.GetHashCode();
+			^ (RowIndex?.GetHashCode() ?? 0);
 	}
 }

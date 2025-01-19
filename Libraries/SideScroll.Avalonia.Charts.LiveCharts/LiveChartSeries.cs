@@ -29,7 +29,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 	public bool UseDateTimeAxis { get; set; }
 
 	public LiveChartLineSeries LineSeries { get; set; }
-	public List<LiveChartPoint> DataPoints = [];
+	public List<LiveChartPoint> DataPoints { get; set; } = [];
 
 	public override string? ToString() => ListSeries?.ToString();
 

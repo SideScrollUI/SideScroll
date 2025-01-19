@@ -1073,9 +1073,11 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 					if (obj == null)
 						continue;
 
+					int rowIndex = List!.IndexOf(obj);
+
 					var selectedRow = new SelectedRow(obj)
 					{
-						RowIndex = List!.IndexOf(obj),
+						RowIndex = rowIndex >= 0 ? rowIndex : null,
 					};
 					selectedRows.Add(selectedRow);
 				}

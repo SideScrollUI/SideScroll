@@ -10,15 +10,15 @@ namespace SideScroll.Avalonia.Charts;
 
 public abstract class TabControlChartLegend<TSeries> : Grid
 {
-	public TabControlChart<TSeries> TabControlChart;
+	public TabControlChart<TSeries> TabControlChart { get; init; }
 	public ChartView ChartView => TabControlChart.ChartView;
 
-	public List<TabChartLegendItem<TSeries>> LegendItems = [];
-	protected readonly Dictionary<string, TabChartLegendItem<TSeries>> _idxLegendItems = [];
+	public List<TabChartLegendItem<TSeries>> LegendItems { get; protected set; } = [];
+	public Dictionary<string, TabChartLegendItem<TSeries>> IdxLegendItems { get; protected set; } = [];
 
-	protected readonly ScrollViewer _scrollViewer;
-	protected readonly WrapPanel _wrapPanel;
-	protected readonly TextBlock? _textBlockTotal;
+	protected ScrollViewer ScrollViewer { get; set; }
+	protected WrapPanel WrapPanel { get; set; }
+	protected TextBlock? TextBlockTotal { get; set; }
 
 	public event EventHandler<EventArgs>? OnSelectionChanged;
 	public event EventHandler<EventArgs>? OnVisibleChanged;
@@ -32,7 +32,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Stretch;
 
-		_wrapPanel = new WrapPanel
+		WrapPanel = new WrapPanel
 		{
 			Orientation = ChartView.LegendPosition == ChartLegendPosition.Right ? Orientation.Vertical : Orientation.Horizontal,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -40,20 +40,20 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 			Margin = new Thickness(6),
 		};
 
-		_scrollViewer = new ScrollViewer
+		ScrollViewer = new ScrollViewer
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
 			VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-			Content = _wrapPanel,
+			Content = WrapPanel,
 		};
 
-		Children.Add(_scrollViewer);
+		Children.Add(ScrollViewer);
 
 		if (ChartView.ShowOrder && ChartView.LegendPosition == ChartLegendPosition.Right)
 		{
-			_textBlockTotal = new TabControlTextBlock
+			TextBlockTotal = new TabControlTextBlock
 			{
 				Margin = new Thickness(2),
 				HorizontalAlignment = HorizontalAlignment.Right,
@@ -87,15 +87,15 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 	// Show items in order of count, retaining original order for unused values
 	private void UpdatePositions()
 	{
-		_wrapPanel.Children.Clear();
-		if (_textBlockTotal != null)
+		WrapPanel.Children.Clear();
+		if (TextBlockTotal != null)
 		{
-			_wrapPanel.Children.Add(_textBlockTotal);
+			WrapPanel.Children.Add(TextBlockTotal);
 		}
 
 		var nonzero = new List<TabChartLegendItem<TSeries>>();
 		var unused = new List<TabChartLegendItem<TSeries>>();
-		foreach (TabChartLegendItem<TSeries> legendItem in _idxLegendItems.Values)
+		foreach (TabChartLegendItem<TSeries> legendItem in IdxLegendItems.Values)
 		{
 			if (legendItem.Count > 0)
 				nonzero.Add(legendItem);
@@ -112,7 +112,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 				ordered[i].Index = i + 1;
 			}
 		}
-		_wrapPanel.Children.AddRange(ordered);
+		WrapPanel.Children.AddRange(ordered);
 	}
 
 	protected void SelectLegendItem(TabChartLegendItem<TSeries> legendItem)
@@ -138,7 +138,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 	{
 		if (listSeries.Name == null) return;
 
-		if (_idxLegendItems.TryGetValue(listSeries.Name, out TabChartLegendItem<TSeries>? legendItem))
+		if (IdxLegendItems.TryGetValue(listSeries.Name, out TabChartLegendItem<TSeries>? legendItem))
 		{
 			SelectLegendItem(legendItem);
 		}
@@ -148,7 +148,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 	{
 		if (name == null) return;
 
-		if (_idxLegendItems.TryGetValue(name, out TabChartLegendItem<TSeries>? legendItem))
+		if (IdxLegendItems.TryGetValue(name, out TabChartLegendItem<TSeries>? legendItem))
 		{
 			// Clear all first before setting to avoid event race conditions
 			foreach (TabChartLegendItem<TSeries> item in LegendItems)
@@ -188,13 +188,13 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 
 	public void RefreshModel()
 	{
-		_wrapPanel.Children.Clear();
+		WrapPanel.Children.Clear();
 		foreach (ChartSeries<TSeries> chartSeries in TabControlChart.ChartSeries)
 		{
 			string? title = chartSeries.ToString();
 			if (title == null) continue;
 
-			if (!_idxLegendItems.TryGetValue(title, out TabChartLegendItem<TSeries>? legendItem))
+			if (!IdxLegendItems.TryGetValue(title, out TabChartLegendItem<TSeries>? legendItem))
 			{
 				legendItem = AddSeries(chartSeries);
 			}
@@ -203,16 +203,16 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 				legendItem.UpdateTotal();
 			}
 
-			if (!_wrapPanel.Children.Contains(legendItem))
+			if (!WrapPanel.Children.Contains(legendItem))
 			{
-				_wrapPanel.Children.Add(legendItem);
+				WrapPanel.Children.Add(legendItem);
 			}
 		}
 		UpdatePositions();
 
-		if (_textBlockTotal != null)
+		if (TextBlockTotal != null)
 		{
-			_textBlockTotal.Text = ChartView.LegendTitle ?? GetTotalName();
+			TextBlockTotal.Text = ChartView.LegendTitle ?? GetTotalName();
 		}
 
 		// Possibly faster? But more likely to cause problems
@@ -234,8 +234,8 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 
 	public void Unload()
 	{
-		_wrapPanel.Children.Clear();
-		_idxLegendItems.Clear();
+		WrapPanel.Children.Clear();
+		IdxLegendItems.Clear();
 		LegendItems.Clear();
 	}
 

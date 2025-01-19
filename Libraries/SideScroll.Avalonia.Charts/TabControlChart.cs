@@ -39,9 +39,9 @@ public class ChartSeries<TSeries>(ListSeries listSeries, TSeries lineSeries, Col
 
 public class SeriesInfo
 {
-	public string? Name;
+	public string? Name { get; set; }
 
-	public Color Color;
+	public Color Color { get; set; }
 
 	public bool IsSelected { get; set; } = true; // Visible = Selected
 }
@@ -85,7 +85,7 @@ public abstract class TabControlChart<TSeries> : Border, ITabControlChart
 	public List<ChartSeries<TSeries>> ChartSeries { get; private set; } = [];
 	protected Dictionary<string, ChartSeries<TSeries>> IdxNameToChartSeries { get; set; } = [];
 	protected Dictionary<IList, ListSeries> IdxListToListSeries { get; set; } = [];
-	protected Dictionary<string, SeriesInfo> IdxSeriesInfo = [];
+	protected Dictionary<string, SeriesInfo> IdxSeriesInfo { get; set; } = [];
 
 	public List<ListSeries> SelectedSeries
 	{
@@ -107,7 +107,7 @@ public abstract class TabControlChart<TSeries> : Border, ITabControlChart
 	public TextBlock? TitleTextBlock { get; protected set; }
 	public bool IsTitleSelectable { get; set; }
 
-	protected PropertyInfo? XAxisPropertyInfo;
+	protected PropertyInfo? XAxisPropertyInfo { get; set; }
 	public bool UseDateTimeAxis => (XAxisPropertyInfo?.PropertyType == typeof(DateTime)) ||
 									(ChartView.TimeWindow != null);
 

@@ -25,7 +25,7 @@ public class LiveChartPoint : ObservablePoint
 
 public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<LiveChartPoint>, ISeries
 {
-	public LiveChartSeries LiveChartSeries = liveChartSeries;
+	public LiveChartSeries LiveChartSeries => liveChartSeries;
 
 	public override string? ToString() => LiveChartSeries.ToString();
 

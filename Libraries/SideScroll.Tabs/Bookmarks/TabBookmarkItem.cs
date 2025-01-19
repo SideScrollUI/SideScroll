@@ -23,10 +23,10 @@ public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerT
 	public TimeSpan Age => Bookmark.TimeStamp.Age();
 
 	[HiddenColumn]
-	public Bookmark Bookmark { get; set; } = bookmark;
+	public Bookmark Bookmark => bookmark;
 
 	[Hidden]
-	public Project Project { get; set; } = project;
+	public Project Project => project;
 
 	[HiddenColumn]
 	public ITab? Tab => Bookmark.TabBookmark.Tab;

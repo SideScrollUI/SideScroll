@@ -6,7 +6,7 @@ namespace SideScroll.Avalonia.Tabs;
 
 public class TabTextFile(FilePath filePath) : ITab
 {
-	public FilePath FilePath = filePath;
+	public FilePath FilePath { get; set; } = filePath;
 
 	public TabInstance Create() => new Instance(this);
 

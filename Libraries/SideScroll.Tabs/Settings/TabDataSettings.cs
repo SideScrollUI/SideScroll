@@ -159,16 +159,8 @@ public class TabDataSettings
 		//Debug.Assert(visibleProperties.Count > 0); // built in types don't always have properties
 		foreach (PropertyInfo propertyInfo in visibleProperties)
 		{
-			string label;
 			NameAttribute? attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
-			if (attribute != null)
-			{
-				label = attribute.Name;
-			}
-			else
-			{
-				label = propertyInfo.Name.WordSpaced();
-			}
+			string label = attribute?.Name ?? propertyInfo.Name.WordSpaced();
 			propertyColumns.Add(new PropertyColumn(propertyInfo, label));
 		}
 		return propertyColumns;

@@ -13,7 +13,7 @@ namespace SideScroll.Avalonia.Themes;
 [AttributeUsage(AttributeTargets.Property)]
 public class ResourceKeyAttribute(params string[] names) : Attribute
 {
-	public readonly string[] Names = names;
+	public string[] Names => names;
 }
 
 // Todo: Add TypeRepo for Avalonia Color serialization

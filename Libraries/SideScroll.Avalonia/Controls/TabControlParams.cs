@@ -33,11 +33,11 @@ public class TabControlParams : Border, IValidationControl
 	public static int ControlMaxWidth { get; set; } = 2000;
 	public static int ControlMaxHeight { get; set; } = 400;
 
-	public object? Object;
+	public object? Object { get; set; }
+
+	public Grid ContainerGrid { get; protected set; }
 
 	private readonly Dictionary<ListProperty, Control> _propertyControls = [];
-
-	public Grid ContainerGrid;
 
 	public override string? ToString() => Object?.ToString();
 

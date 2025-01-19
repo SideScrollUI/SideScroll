@@ -392,7 +392,6 @@ public class TabModel
 				{
 					SelectedRow selectedRow = new()
 					{
-						RowIndex = -1,
 						Object = obj,
 					};
 					tabDataSettings.SelectedRows.Add(selectedRow);
@@ -409,7 +408,6 @@ public class TabModel
 							childNode.TabModel = tabModel;
 							SelectedRow selectedRow = new()
 							{
-								RowIndex = -1,
 								Object = obj,
 							};
 							tabDataSettings.SelectedRows.Add(selectedRow);

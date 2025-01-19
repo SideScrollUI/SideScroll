@@ -76,9 +76,9 @@ public abstract class TabInstanceAsync : TabInstance, ITabAsync
 //	An Instance of a TabModel, created by TabView
 public class TabInstance : IDisposable
 {
-	public static int MaxPreloadItems { get; set; } = 50; // preload all rows that might be visible to avoid freezing UI
-
 	public const string CurrentBookmarkName = "Current";
+
+	public static int MaxPreloadItems { get; set; } = 50; // preload all rows that might be visible to avoid freezing UI
 
 	public Project Project { get; set; }
 	public ITab? iTab { get; set; } // Collision with derived Tab

@@ -25,7 +25,7 @@ public class TabControlLiveChartLegend(TabControlLiveChart liveChart)
 
 		if (chartSeries.LineSeries.Name is string name)
 		{
-			_idxLegendItems.Add(name, legendItem);
+			IdxLegendItems.Add(name, legendItem);
 		}
 		return legendItem;
 	}

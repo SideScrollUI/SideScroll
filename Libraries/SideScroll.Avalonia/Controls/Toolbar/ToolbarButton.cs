@@ -15,21 +15,21 @@ namespace SideScroll.Avalonia.Controls.Toolbar;
 
 public class ToolbarButton : Button, IDisposable
 {
-	public TabControlToolbar Toolbar;
+	public TabControlToolbar Toolbar { get; init; }
 	public string? Label { get; set; }
 	public string? Tooltip { get; set; }
 
 	public IResourceView ImageResource { get; set; }
 
-	public CallAction? CallAction;
-	public CallActionAsync? CallActionAsync;
+	public CallAction? CallAction { get; set; }
+	public CallActionAsync? CallActionAsync { get; set; }
 
-	public bool ShowTask;
-	public bool IsActive; // Only allow one task at once (modifying IsEnabled doesn't update elsewhere)
+	public bool ShowTask { get; set; }
+	public bool IsActive { get; set; } // Only allow one task at once (modifying IsEnabled doesn't update elsewhere)
 
-	public KeyGesture? KeyGesture;
+	public KeyGesture? KeyGesture { get; set; }
 
-	public TimeSpan MinWaitTime = TimeSpan.FromSeconds(1); // Wait time between clicks
+	public TimeSpan MinWaitTime { get; set; } = TimeSpan.FromSeconds(1); // Wait time between clicks
 
 	private DateTime? _lastInvoked;
 	private DispatcherTimer? _dispatcherTimer;  // delays auto selection to throttle updates

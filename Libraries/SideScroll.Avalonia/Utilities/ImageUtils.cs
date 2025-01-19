@@ -5,7 +5,7 @@ namespace SideScroll.Avalonia.Utilities;
 
 public static class ImageUtils
 {
-	public const int MaxImageSize = 10_000;
+	public static int MaxImageSize { get; set; } = 10_000;
 
 	public static Bitmap LoadBitmap(byte[] bytes)
 	{

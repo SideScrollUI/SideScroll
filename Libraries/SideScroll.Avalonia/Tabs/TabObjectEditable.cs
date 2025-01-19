@@ -4,7 +4,7 @@ namespace SideScroll.Avalonia.Tabs;
 
 public class TabObjectEditable(object obj) : ITab
 {
-	public object Object = obj;
+	public object Object { get; set; } = obj;
 
 	public TabInstance Create() => new Instance(this);
 

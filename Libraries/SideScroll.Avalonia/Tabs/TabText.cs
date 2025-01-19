@@ -8,7 +8,7 @@ namespace SideScroll.Avalonia.Tabs;
 
 public class TabText(string text) : ITab
 {
-	public string Text = text;
+	public string Text { get; set; } = text;
 
 	public TabInstance Create() => new Instance(this);
 

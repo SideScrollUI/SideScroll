@@ -1,7 +1,6 @@
 using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
 using System.Collections;
-using System.Reflection.Emit;
 
 namespace SideScroll.Tabs.Bookmarks;
 
@@ -25,52 +24,20 @@ public class TabBookmark
 
 	public SelectedRow? SelectedRow { get; set; } // The parent selection that created this bookmark
 
-	public TabViewSettings ViewSettings = new(); // list selections, doesn't know about children
+	public TabViewSettings ViewSettings { get; set; } = new(); // list selections, doesn't know about children
 	public Dictionary<string, TabBookmark> ChildBookmarks { get; set; } = []; // doesn't know which tabData to use, maps id to child info
 	public Dictionary<string, object?>? BookmarkData { get; set; }
 
-	public string GetAddress(int maxDepth = 100, HashSet<TabBookmark>? visited = null)
-	{
-		visited ??= [];
-		if (maxDepth <= 0 || !visited.Add(this)) return "";
-
-		if (ChildBookmarks?.Count > 0)
-		{
-			string comma = "";
-			string address = "";
-			if (ChildBookmarks.Count > 1)
-			{
-				address += "[";
-			}
-			//address += Name + "::";
-			foreach (var bookmark in ChildBookmarks)
-			{
-				address += comma;
-				address += bookmark.Key + " / " + bookmark.Value.GetAddress(maxDepth - 1, visited);
-				comma = ", ";
-			}
-			if (ChildBookmarks.Count > 1)
-			{
-				address += "]";
-			}
-			return address;
-		}
-		else
-		{
-			return ViewSettings?.Address ?? "";
-		}
-	}
-
 	//public List<DataRepoItem> DataRepoItems { get; set; } = new();
 	public string? DataRepoGroupId { get; set; }
-	public Type? DataRepoType; // Interfaces need to specify this
+	public Type? DataRepoType { get; set; } // Interfaces need to specify this
 
 	// Temporary, Only FindMatches() uses, refactor these out?
-	[NonSerialized]
-	public HashSet<object> SelectedObjects = []; // does this work with multiple TabDatas?
+	[Unserialized]
+	public HashSet<object> SelectedObjects { get; set; } = []; // does this work with multiple TabDatas?
 
-	[NonSerialized]
-	public TabModel? TabModel;
+	[Unserialized]
+	public TabModel? TabModel { get; set; }
 
 	public override string? ToString() => Name;
 
@@ -177,6 +144,38 @@ public class TabBookmark
 			return t;
 
 		return default;
+	}
+
+	public string GetAddress(int maxDepth = 100, HashSet<TabBookmark>? visited = null)
+	{
+		visited ??= [];
+		if (maxDepth <= 0 || !visited.Add(this)) return "";
+
+		if (ChildBookmarks?.Count > 0)
+		{
+			string comma = "";
+			string address = "";
+			if (ChildBookmarks.Count > 1)
+			{
+				address += "[";
+			}
+			//address += Name + "::";
+			foreach (var bookmark in ChildBookmarks)
+			{
+				address += comma;
+				address += bookmark.Key + " / " + bookmark.Value.GetAddress(maxDepth - 1, visited);
+				comma = ", ";
+			}
+			if (ChildBookmarks.Count > 1)
+			{
+				address += "]";
+			}
+			return address;
+		}
+		else
+		{
+			return ViewSettings?.Address ?? "";
+		}
 	}
 
 	public void Select(params string[] labels)
@@ -300,9 +299,9 @@ public class TabBookmark
 				{
 					labelsUsed.Add(row.Label);
 				}
-				else
+				else if (row.RowIndex is int rowIndex && rowIndex >= 0)
 				{
-					indicesUsed.Add(row.RowIndex);
+					indicesUsed.Add(rowIndex);
 				}
 			}
 
@@ -315,9 +314,9 @@ public class TabBookmark
 						currentSelection.Add(row);
 					}
 				}
-				else
+				else if (row.RowIndex is int rowIndex && rowIndex >= 0)
 				{
-					if (!indicesUsed.Contains(row.RowIndex))
+					if (!indicesUsed.Contains(rowIndex))
 					{
 						currentSelection.Add(row);
 					}
