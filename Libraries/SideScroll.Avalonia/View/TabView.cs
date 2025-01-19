@@ -95,12 +95,6 @@ public class TabView : Grid, IDisposable
 
 	public override string ToString() => Model.Name;
 
-	private TabView()
-	{
-		Instance = new TabInstance();
-		Initialize();
-	}
-
 	public TabView(TabInstance tabInstance)
 	{
 		Instance = tabInstance;
@@ -962,12 +956,6 @@ public class TabView : Grid, IDisposable
 		RemoveListeners();
 
 		ClearDispatchLoader();
-
-		//gridParentControls.MouseDown -= gridParentControls_MouseDown;
-		//horizontalSplitter.DragCompleted -= horizontalSplitter_DragCompleted;
-		//horizontalSplitter.MouseDoubleClick -= horizontalSplitter_MouseDoubleClick;
-
-		//RequestBringIntoView -= UserControl_RequestBringIntoView;
 
 		foreach (ITabDataSelector tabData in TabDatas)
 		{

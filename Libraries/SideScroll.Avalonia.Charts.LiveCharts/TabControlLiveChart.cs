@@ -497,7 +497,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			YAxis.MinLimit = Math.Max(double.MinValue, Math.Log(minimum, logBase) * 0.85);
 			YAxis.MaxLimit = Math.Min(double.MaxValue, Math.Log(maximum, logBase) * 1.15);
 
-			if (maximum - minimum > 10)
+			if (maximum - minimum > 5)
 			{
 				YAxis.MinStep = 1;
 			}
@@ -522,29 +522,21 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			YAxis.MaxLimit = maximum + margin;
 
 			double difference = YAxis.MaxLimit.Value - YAxis.MinLimit.Value;
-			if (difference >= 5)
+			if (difference > 0)
 			{
 				double separators = MaxSeparators;
 				if (Chart.Bounds.Height is double height && height > 0)
 				{
 					separators = Math.Max(1, Math.Min(MaxSeparators, height / MinSeparatorDistance));
 				}
-				YAxis.UnitWidth = (difference / separators).RoundToSignificantFigures(1);
-			}
-			else
-			{
-				YAxis.UnitWidth = 1; // Reset to default
-			}
 
-			if (YAxis.MinStep > 0 || YAxis.UnitWidth > 1)
-			{
-				// Force step to be a multiple of the min step
-				// Live Charts will use decimals even if a min step of 1 is set
+				YAxis.UnitWidth = (difference / separators).RoundToSignificantFigures(1);
 				YAxis.MinStep = Math.Max(YAxis.MinStep, YAxis.UnitWidth);
 				YAxis.ForceStepToMin = true;
 			}
 			else
 			{
+				YAxis.UnitWidth = 1; // Reset to default
 				YAxis.ForceStepToMin = false;
 			}
 		}

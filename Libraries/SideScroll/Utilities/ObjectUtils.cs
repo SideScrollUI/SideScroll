@@ -28,14 +28,15 @@ public static class ObjectUtils
 
 		Type type = obj.GetType();
 		var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
-		var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
-		if (keyProperties.Count > 0)
+		if (keyProperties.FirstOrDefault() is PropertyInfo propertyInfo)
 		{
-			return keyProperties[0].GetValue(obj)?.ToUniqueString();
+			return propertyInfo.GetValue(obj)?.ToUniqueString();
 		}
-		else if (keyFields.Count > 0)
+
+		var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
+		if (keyFields.FirstOrDefault() is FieldInfo fieldInfo)
 		{
-			return keyFields[0].GetValue(obj)?.ToUniqueString();
+			return fieldInfo.GetValue(obj)?.ToUniqueString();
 		}
 		return null;
 	}
@@ -50,15 +51,15 @@ public static class ObjectUtils
 			return obj;
 
 		var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
-		if (valueProperties.Count > 0)
+		if (valueProperties.FirstOrDefault() is PropertyInfo propertyInfo)
 		{
-			return valueProperties[0].GetValue(obj);
+			return propertyInfo.GetValue(obj);
 		}
 
 		var valueFields = type.GetFieldsWithAttribute<DataValueAttribute>();
-		if (valueFields.Count > 0)
+		if (valueFields.FirstOrDefault() is FieldInfo fieldInfo)
 		{
-			return valueFields[0].GetValue(obj);
+			return fieldInfo.GetValue(obj);
 		}
 		return null;
 	}

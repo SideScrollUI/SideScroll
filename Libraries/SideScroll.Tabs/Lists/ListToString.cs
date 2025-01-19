@@ -8,18 +8,18 @@ namespace SideScroll.Tabs.Lists;
 [Skippable]
 public class ListToString
 {
-	private const int MaxItems = 200_000;
+	public static int MaxItems { get; set; } = 200_000;
 
-	[InnerValue]
-	public object Object;
+	[InnerValue, HiddenColumn]
+	public object Object { get; set; }
 
 	public string? Value { get; set; }
 
-	[DataKey]
-	public string? DataKey;
+	[DataKey, HiddenColumn]
+	public string? DataKey { get; set; }
 
-	[DataValue]
-	public object? DataValue;
+	[DataValue, HiddenColumn]
+	public object? DataValue { get; set; }
 
 	public override string? ToString() => Value;
 
@@ -35,8 +35,10 @@ public class ListToString
 		DataValue = ObjectUtils.GetDataValue(obj);
 	}
 
-	public static ItemCollection<ListToString> Create(IEnumerable enumerable, int limit = MaxItems)
+	public static ItemCollection<ListToString> Create(IEnumerable enumerable, int? limit = null)
 	{
+		limit ??= MaxItems;
+
 		var list = new ItemCollection<ListToString>();
 		if (enumerable is IItemCollection sourceCollection)
 		{

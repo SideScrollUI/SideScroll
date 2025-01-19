@@ -430,6 +430,9 @@ public class TabInstance : IDisposable
 			{
 				foreach (var propertyColumn in propertyColumns)
 				{
+					if (propertyColumn.PropertyInfo.DeclaringType?.IsAbstract == true)
+						continue;
+
 					propertyColumn.PropertyInfo.GetValue(obj);
 				}
 				itemCount++;

@@ -74,7 +74,7 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 	{
 		TabInstance!.Project.UserSettings.AutoLoad = !TabInstance.Project.UserSettings.AutoLoad;
 		_checkboxAutoLoad!.IsChecked = TabInstance.Project.UserSettings.AutoLoad;
-		TabInstance.Project.SaveSettings();
+		TabInstance.Project.SaveUserSettings();
 	}
 
 	private void MenuItemRefresh_Click(object? sender, RoutedEventArgs e)

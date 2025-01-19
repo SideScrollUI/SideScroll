@@ -54,7 +54,8 @@ public class ListItem(object? key, object? value) : IListItem, INotifyPropertyCh
 		set => Key = value;
 	}
 
-	public bool AutoLoad = true;
+	[HiddenColumn]
+	public bool AutoLoad { get; set; } = true;
 
 #pragma warning disable 414
 	public event PropertyChangedEventHandler? PropertyChanged;
