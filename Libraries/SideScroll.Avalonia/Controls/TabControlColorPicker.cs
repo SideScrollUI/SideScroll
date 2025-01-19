@@ -14,7 +14,7 @@ public class TabControlColorPicker : ColorPicker
 {
 	protected override Type StyleKeyOverride => typeof(ColorPicker);
 
-	public ListProperty? Property;
+	public ListProperty? Property { get; set; }
 
 	private static int? _prevSelectedIndex = 2;
 	private static ColorModel? _prevColorModel = ColorModel.Hsva;

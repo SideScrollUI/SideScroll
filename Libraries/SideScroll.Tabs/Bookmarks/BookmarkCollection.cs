@@ -7,7 +7,7 @@ public class BookmarkCollection
 {
 	public const string DataKey = "Bookmarks";
 
-	public readonly Project Project;
+	public Project Project { get; init; }
 
 	public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new()
 	{

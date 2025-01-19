@@ -6,7 +6,7 @@ public delegate Task CallActionAsync(Call call);
 
 public class TaskDelegateAsync : TaskCreator
 {
-	public CallActionAsync CallAction;
+	public CallActionAsync CallAction { get; set; }
 
 	public override string? ToString() => Label;
 

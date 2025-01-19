@@ -8,8 +8,8 @@ namespace SideScroll.Avalonia.Controls.Converters;
 
 public class DateTimeValueConverter : IValueConverter
 {
-	public string? PreviousTimeText;
-	public DateTime? PreviousDateTime;
+	protected string? PreviousTimeText { get; set; }
+	protected DateTime? PreviousDateTime { get; set; }
 
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{

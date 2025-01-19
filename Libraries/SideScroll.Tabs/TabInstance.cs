@@ -32,7 +32,7 @@ public interface IInnerTab
 
 public class TabInstanceLoadAsync(ILoadAsync loadAsync) : TabInstance, ITabAsync
 {
-	public readonly ILoadAsync LoadMethod = loadAsync;
+	public ILoadAsync LoadMethod => loadAsync;
 
 	public async Task LoadAsync(Call call, TabModel model)
 	{
@@ -45,7 +45,7 @@ public class TabInstanceLoadAsync(ILoadAsync loadAsync) : TabInstance, ITabAsync
 
 public class TabCreatorAsync(ITabCreatorAsync creatorAsync) : TabInstance, ITabAsync
 {
-	public readonly ITabCreatorAsync CreatorAsync = creatorAsync;
+	public ITabCreatorAsync CreatorAsync => creatorAsync;
 
 	private TabInstance? _innerChildInstance;
 

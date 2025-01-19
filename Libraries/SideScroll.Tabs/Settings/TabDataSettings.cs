@@ -81,13 +81,17 @@ public class TabDataSettings
 
 	public class MethodColumn(MethodInfo methodInfo, string? label = null)
 	{
-		public readonly MethodInfo MethodInfo = methodInfo;
+		[HiddenColumn]
+		public MethodInfo MethodInfo => methodInfo;
+
 		public string Label { get; set; } = label ?? methodInfo.GetCustomAttribute<ButtonColumnAttribute>()?.Name ?? methodInfo.Name;
 	}
 
 	public class PropertyColumn(PropertyInfo propertyInfo, string label)
 	{
-		public readonly PropertyInfo PropertyInfo = propertyInfo;
+		[HiddenColumn]
+		public PropertyInfo PropertyInfo => propertyInfo;
+
 		public string Label { get; set; } = label;
 
 		public override string ToString() => Label;

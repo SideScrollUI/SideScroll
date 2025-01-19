@@ -2,8 +2,8 @@ namespace SideScroll.Logs;
 
 public class LogWriterText : IDisposable
 {
-	private readonly Log Log;
-	public string SaveFilePath;
+	public Log Log { get; init; }
+	public string SaveFilePath { get; init; }
 
 	private readonly StreamWriter _textStreamWriter;
 	private readonly SynchronizationContext _context;

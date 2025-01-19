@@ -4,7 +4,7 @@ namespace SideScroll.Network.Http;
 
 public class HttpCachedCall(Call call, HttpCache httpCache) : HttpCall(call)
 {
-	public HttpCache HttpCache = httpCache;
+	public HttpCache HttpCache => httpCache;
 
 	public override async Task<byte[]> GetBytesAsync(string uri)
 	{

@@ -15,11 +15,11 @@ namespace SideScroll.Avalonia.Controls.DataGrids;
 
 public class DataGridPropertyTextColumn : DataGridTextColumn
 {
-	private const int EnableWordWrapMinStringLength = 64; // Don't enable wordwrap unless we have to (expensive and not always wanted)
-	private const int MaxRowScanProperties = 30;
+	public static int EnableWordWrapMinStringLength { get; set; } = 64; // Don't enable wordwrap unless we have to (expensive and not always wanted)
+	public static int MaxRowScanProperties { get; set; } = 30;
 
-	public DataGrid DataGrid;
-	public PropertyInfo PropertyInfo;
+	public DataGrid DataGrid { get; init; }
+	public PropertyInfo PropertyInfo { get; set; }
 
 	public int MinDesiredWidth { get; set; } = 25;
 	public int MaxDesiredWidth { get; set; } = 500;
@@ -30,9 +30,9 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 	//public bool Editable { get; set; } = false;
 	public bool StyleCells { get; set; } // True if any column has a Style applied, so we can manually draw the horizontal lines
 
-	public Binding FormattedBinding;
+	public Binding FormattedBinding { get; set; }
 	//private Binding unformattedBinding;
-	public readonly FormatValueConverter FormatConverter = new();
+	public FormatValueConverter FormatConverter { get; set; } = new();
 
 	public override string ToString() => PropertyInfo.Name;
 

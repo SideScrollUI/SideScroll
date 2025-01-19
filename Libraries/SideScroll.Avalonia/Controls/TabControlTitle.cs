@@ -13,14 +13,14 @@ namespace SideScroll.Avalonia.Controls;
 
 public class TabControlTitle : Border, IDisposable
 {
-	public readonly TabView TabView;
+	public TabView TabView { get; init; }
 	public TabInstance TabInstance => TabView.Instance;
 	public string Label { get; set; }
 
 	public int MaxDesiredWidth { get; set; } = 50;
 
-	public TextBlock TextBlock;
-	private readonly Grid _containerGrid;
+	public TextBlock TextBlock { get; protected set; }
+	public Grid ContainerGrid { get; protected set; }
 
 	public string Text
 	{
@@ -38,7 +38,7 @@ public class TabControlTitle : Border, IDisposable
 		label ??= TabInstance.Label;
 		Label = new StringReader(label).ReadLine()!; // Remove anything after first line
 
-		_containerGrid = new Grid
+		ContainerGrid = new Grid
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto,*"),
 			RowDefinitions = new RowDefinitions("Auto"),
@@ -64,11 +64,11 @@ public class TabControlTitle : Border, IDisposable
 			Child = TextBlock,
 			[Grid.ColumnProperty] = 1,
 		};
-		_containerGrid.Children.Add(borderPaddingTitle);
+		ContainerGrid.Children.Add(borderPaddingTitle);
 
 		AddLinkButton();
 
-		Child = _containerGrid;
+		Child = ContainerGrid;
 	}
 
 	private void AddContextMenu()
@@ -110,7 +110,7 @@ public class TabControlTitle : Border, IDisposable
 		linkButton.Resources.Add("ThemeButtonBackgroundPointerOverBrush", SideScrollTheme.TitleButtonBackgroundPointerOver);
 		linkButton.Resources.Add("ThemeButtonBackgroundPressedBrush", SideScrollTheme.TitleButtonBackgroundPointerOver);
 		linkButton.Click += LinkButton_Click;
-		_containerGrid.Children.Add(linkButton);
+		ContainerGrid.Children.Add(linkButton);
 	}
 
 	private async void LinkButton_Click(object? sender, RoutedEventArgs e)

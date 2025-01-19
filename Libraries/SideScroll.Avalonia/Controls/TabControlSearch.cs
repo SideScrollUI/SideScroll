@@ -11,7 +11,7 @@ namespace SideScroll.Avalonia.Controls;
 
 public class TabControlSearch : Grid
 {
-	public TextBox TextBoxSearch;
+	public TextBox TextBoxSearch { get; set; }
 
 	public string? Text
 	{

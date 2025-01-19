@@ -14,17 +14,17 @@ public class ThemeManager
 	public const string GroupId = "Themes";
 
 	public static ThemeManager? Current { get; set; }
-	public static AvaloniaThemeSettings? CurrentTheme { get; private set; }
+	public static AvaloniaThemeSettings? CurrentTheme { get; protected set; }
 
-	public readonly Project Project;
+	public Project Project { get; init; }
 
 	public List<string> Names => DataRepoThemes.Items
 		.Select(i => i.Value.Name!)
 		.ToList();
 
-	public readonly DataRepoView<AvaloniaThemeSettings> DataRepoDefaultThemes;
+	public DataRepoView<AvaloniaThemeSettings> DataRepoDefaultThemes { get; protected set; }
 
-	public readonly DataRepoView<AvaloniaThemeSettings> DataRepoThemes;
+	public DataRepoView<AvaloniaThemeSettings> DataRepoThemes { get; protected set; }
 
 	public ThemeManager(Project project)
 	{

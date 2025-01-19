@@ -12,7 +12,7 @@ public class TabControlComboBox : ComboBox
 {
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
-	public ListProperty? Property;
+	public ListProperty? Property { get; set; }
 
 	public override string? ToString() => SelectedItem?.ToString();
 

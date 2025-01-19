@@ -43,11 +43,11 @@ public class TabControlAvaloniaEdit : Border
 {
 	public const int MaxAutoLoadSize = 1_000_000;
 
-	public TabInstance TabInstance;
+	public TabInstance TabInstance { get; set; }
 
-	public string? Path;
-	public ListProperty? ListProperty;
-	public AvaloniaEdit.TextEditor TextEditor;
+	public string? Path { get; set; }
+	public ListProperty? ListProperty { get; set; }
+	public AvaloniaEdit.TextEditor TextEditor { get; protected set; }
 
 	public TextType TextType { get; set; }
 

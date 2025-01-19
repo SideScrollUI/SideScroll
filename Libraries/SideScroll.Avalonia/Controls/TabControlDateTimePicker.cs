@@ -30,7 +30,7 @@ public class TabCalendarDatePicker : CalendarDatePicker
 
 public class TabDateTimePicker : Grid
 {
-	public readonly ListProperty Property;
+	public ListProperty Property { get; set; }
 
 	public Binding Binding { get; set; }
 

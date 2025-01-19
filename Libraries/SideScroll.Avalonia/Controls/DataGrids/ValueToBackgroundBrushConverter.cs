@@ -11,7 +11,7 @@ namespace SideScroll.Avalonia.Controls.DataGrids;
 
 public class ValueToBackgroundBrushConverter(PropertyInfo propertyInfo) : IValueConverter
 {
-	public PropertyInfo PropertyInfo = propertyInfo;
+	public PropertyInfo PropertyInfo => propertyInfo;
 
 	public sealed class BrushColors
 	{

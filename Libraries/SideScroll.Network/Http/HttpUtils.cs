@@ -7,12 +7,11 @@ namespace SideScroll.Network.Http;
 
 public static class HttpUtils
 {
-	private const int ReadBufferSize = 100_000;
-
+	public static int ReadBufferSize { get; set; } = 100_000;
 	public static int MaxAttempts { get; set; } = 5;
 	public static TimeSpan BaseRetryDelay { get; set; } = TimeSpan.FromMilliseconds(500); // < ^ MaxAttempts
 
-	public static readonly HttpClient Client = new();
+	public static HttpClient Client { get; set; } = new();
 
 	public class HttpGetProgress
 	{

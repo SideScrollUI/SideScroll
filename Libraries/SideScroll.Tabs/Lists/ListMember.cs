@@ -33,14 +33,16 @@ public interface IMaxDesiredHeight
 public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair, IListItem, INotifyPropertyChanged,
 	IListAutoSelect, IMaxDesiredWidth, IMaxDesiredHeight
 {
-	public const int MaxStringLength = 1000;
-	private const int DefaultMaxDesiredHeight = 500;
+	public static int MaxStringLength { get; set; } = 1000;
+	public static int DefaultMaxDesiredHeight { get; set; } = 500;
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	public readonly MemberInfo MemberInfo = memberInfo;
+	[HiddenColumn]
+	public MemberInfo MemberInfo => memberInfo;
 
-	public readonly object Object = obj;
+	[HiddenColumn]
+	public object Object => obj;
 
 	[AutoSize]
 	public string? Name { get; set; }

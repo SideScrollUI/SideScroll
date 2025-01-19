@@ -27,24 +27,24 @@ namespace SideScroll.Avalonia.Controls.DataGrids;
 
 public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelector
 {
-	private const int ColumnPercentBased = 150;
-	private const int MaxMinColumnWidth = 200;
-	private const int MaxAutoSizeMinColumnWidth = 250;
+	public static int ColumnPercentBased { get; set; } = 150;
+	public static int MaxMinColumnWidth { get; set; } = 200;
+	public static int MaxAutoSizeMinColumnWidth { get; set; } = 250;
 
-	public int MaxColumnWidth = 600;
+	public int MaxColumnWidth { get; set; } = 600;
 
-	public TabModel TabModel;
-	public TabInstance TabInstance;
+	public TabModel TabModel { get; set; }
+	public TabInstance TabInstance { get; set; }
 	public TabDataSettings TabDataSettings { get; set; }
-	public IList? List;
-	private Type _elementType;
+	public IList? List { get; set; }
+	public Type ElementType { get; protected set; }
 
-	public bool AutoGenerateColumns = true;
+	public bool AutoGenerateColumns { get; set; } = true;
 
-	public DataGrid DataGrid;
-	public TabControlSearch? SearchControl;
+	public DataGrid DataGrid { get; set; }
+	public TabControlSearch? SearchControl { get; set; }
 
-	public DataGridCollectionView? CollectionView;
+	public DataGridCollectionView? CollectionView { get; set; }
 
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
@@ -116,13 +116,13 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		PointerPressedEvent.AddClassHandler<DataGridRow>(DataGridRow_PointerPressed, RoutingStrategies.Tunnel, true);
 	}
 
-	[MemberNotNull(nameof(_elementType), nameof(DataGrid))]
-	private void Initialize()
+	[MemberNotNull(nameof(ElementType), nameof(DataGrid))]
+	protected void Initialize()
 	{
 		_disableSaving++;
 
 		Type listType = List!.GetType();
-		_elementType = listType.GetElementTypeForAll()!;
+		ElementType = listType.GetElementTypeForAll()!;
 
 		InitializeControls();
 		AddListUpdatedDispatcher();
@@ -245,7 +245,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 	private double? _maxDesiredWidth;
 
-	private void AutoSizeColumns()
+	protected void AutoSizeColumns()
 	{
 		// Only works with Stretch right now
 		if (DataGrid == null || HorizontalAlignment != HorizontalAlignment.Stretch)
@@ -377,7 +377,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		_autoSelectAction = null;
 	}
 
-	private bool _selectItemEnabled;
+	protected bool _selectItemEnabled;
 
 	private void SetSelectedItem(object? selectedItem, NotifyCollectionChangedAction? action)
 	{
@@ -433,7 +433,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 	}
 
-	private static DataGridRow? GetControlRow(object? obj, int depth)
+	protected static DataGridRow? GetControlRow(object? obj, int depth)
 	{
 		if (depth == 0)
 			return null;
@@ -468,7 +468,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 	}
 
-	private static bool IsControlSelectable(IInputElement? inputElement)
+	protected static bool IsControlSelectable(IInputElement? inputElement)
 	{
 		if (inputElement == null)
 			return false;
@@ -481,7 +481,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			(inputElement is Visual visual && IsControlSelectable(visual.GetVisualParent() as IInputElement));
 	}
 
-	private static DataGrid? GetOwningDataGrid(StyledElement? control)
+	protected static DataGrid? GetOwningDataGrid(StyledElement? control)
 	{
 		return control switch
 		{
@@ -520,18 +520,18 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 	}
 
-	private void ClearSelection()
+	protected void ClearSelection()
 	{
 		ClearSelection(DataGrid);
 	}
 
-	private static void ClearSelection(DataGrid dataGrid)
+	protected static void ClearSelection(DataGrid dataGrid)
 	{
 		dataGrid.SelectedItems.Clear();
 		dataGrid.SelectedItem = null;
 	}
 
-	private void ClearSearch()
+	protected void ClearSearch()
 	{
 		if (!TabModel.ShowSearch)
 		{
@@ -571,13 +571,13 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		_columnNames = [];
 		_columnProperties = [];
 
-		List<TabDataSettings.MethodColumn> methodColumns = TabDataSettings.GetButtonMethods(_elementType);
+		List<TabDataSettings.MethodColumn> methodColumns = TabDataSettings.GetButtonMethods(ElementType);
 		foreach (TabDataSettings.MethodColumn methodColumn in methodColumns)
 		{
 			AddButtonColumn(methodColumn);
 		}
 
-		List<TabDataSettings.PropertyColumn> propertyColumns = TabDataSettings.GetPropertiesAsColumns(_elementType);
+		List<TabDataSettings.PropertyColumn> propertyColumns = TabDataSettings.GetPropertiesAsColumns(ElementType);
 
 		// Filter [Hide(null)]
 		propertyColumns = propertyColumns
@@ -589,7 +589,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 		// 2 columns need headers for resizing first column?
 		// For visual color separation due to HasLinks background color being too close to title
-		bool showHeader = propertyColumns.Count != 1 && !typeof(IListPair).IsAssignableFrom(_elementType);
+		bool showHeader = propertyColumns.Count != 1 && !typeof(IListPair).IsAssignableFrom(ElementType);
 		if (List is IItemCollection itemCollection)
 		{
 			if (itemCollection.ColumnName is string columnName)
@@ -617,7 +617,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 	public void AddColumn(string label, string propertyName, bool styleCells = false)
 	{
-		PropertyInfo propertyInfo = _elementType.GetProperty(propertyName)!;
+		PropertyInfo propertyInfo = ElementType.GetProperty(propertyName)!;
 		AddColumn(label, propertyInfo, styleCells);
 	}
 
@@ -697,7 +697,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 	public void AddButtonColumn(string methodName)
 	{
-		MethodInfo methodInfo = _elementType.GetMethod(methodName)!;
+		MethodInfo methodInfo = ElementType.GetMethod(methodName)!;
 		AddButtonColumn(new TabDataSettings.MethodColumn(methodInfo));
 	}
 
@@ -727,7 +727,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 	}
 
-	private void LoadSearch()
+	protected void LoadSearch()
 	{
 		if (SearchControl == null)
 			return;
@@ -805,7 +805,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		return false;
 	}
 
-	private object? GetDefaultSelectedItem()
+	protected object? GetDefaultSelectedItem()
 	{
 		string defaultItemText;
 		if (List is IItemCollection itemCollection && itemCollection.DefaultSelectedItem is object defaultItem)
@@ -829,7 +829,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		return null;
 	}
 
-	private object? GetAutoSelectValue()
+	protected object? GetAutoSelectValue()
 	{
 		object? firstValidObject = null;
 		foreach (object obj in CollectionView!)
@@ -878,7 +878,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		return firstValidObject;
 	}
 
-	private void SelectDefaultItems()
+	protected void SelectDefaultItems()
 	{
 		if (!TabModel.AutoSelectDefault)
 			return;
@@ -991,7 +991,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 	}
 
-	private void ScrollIntoView(object? value)
+	protected void ScrollIntoView(object? value)
 	{
 		// DataGrid.IsInitialized is unreliable and can still be false while showing
 		if (value == null || DataGrid == null || !DataGrid.IsEffectivelyVisible)
@@ -1010,7 +1010,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 	}
 
-	private void UpdateSelection(bool recreate = false)
+	protected void UpdateSelection(bool recreate = false)
 	{
 		TabDataSettings.SelectedRows = SelectedRows;
 		TabDataSettings.SelectionType = SelectionType.User; // todo: place earlier with more accurate type
@@ -1089,7 +1089,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 	}
 
-	private string? FilterText
+	protected string? FilterText
 	{
 		set
 		{
@@ -1130,7 +1130,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 	}
 
-	private bool FilterPredicate(object obj)
+	protected bool FilterPredicate(object obj)
 	{
 		if (TabInstance.FilterBookmarkNode != null)
 		{

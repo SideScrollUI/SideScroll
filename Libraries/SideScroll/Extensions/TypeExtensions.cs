@@ -5,7 +5,7 @@ namespace SideScroll.Extensions;
 
 public static class TypeExtensions
 {
-	private static readonly HashSet<Type> NumericTypes =
+	public static HashSet<Type> NumericTypes { get; set; } =
 	[
 		typeof(byte),
 		typeof(sbyte),
@@ -24,7 +24,7 @@ public static class TypeExtensions
 		typeof(decimal),
 	];
 
-	private static readonly HashSet<Type> DecimalTypes =
+	public static HashSet<Type> DecimalTypes { get; set; } =
 	[
 		typeof(float),
 		typeof(double),

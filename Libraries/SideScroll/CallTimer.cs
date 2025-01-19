@@ -8,7 +8,7 @@ public class CallTimer : Call, IDisposable
 	private readonly Stopwatch _stopwatch = new();
 	private readonly System.Timers.Timer _timer = new();
 
-	public bool IsTask;
+	public bool IsTask { get; set; }
 
 	public long ElapsedMilliseconds => _stopwatch.ElapsedMilliseconds;
 

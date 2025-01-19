@@ -8,8 +8,8 @@ public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 {
 	public delegate Task<object?> LoadObjectAsync(Call call);
 
-	public readonly LoadObjectAsync LoadAction;
-	public readonly MethodInfo MethodInfo;
+	public LoadObjectAsync LoadAction { get; init; }
+	public MethodInfo MethodInfo => LoadAction.Method;
 
 	public bool CacheEnabled { get; set; }
 
@@ -53,7 +53,6 @@ public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 	{
 		LoadAction = loadAction;
 		CacheEnabled = cached;
-		MethodInfo = loadAction.Method;
 
 		Name = MethodInfo.Name.WordSpaced();
 

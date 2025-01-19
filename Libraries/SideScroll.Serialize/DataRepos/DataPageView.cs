@@ -2,7 +2,7 @@ namespace SideScroll.Serialize.DataRepos;
 
 public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascending, int pageSize = 100)
 {
-	public DataRepoInstance<T> DataRepoInstance = dataRepoInstance;
+	public DataRepoInstance<T> DataRepoInstance => dataRepoInstance;
 	public bool Ascending { get; set; } = ascending;
 	public int PageSize { get; set; } = pageSize;
 	public int PageIndex { get; set; }

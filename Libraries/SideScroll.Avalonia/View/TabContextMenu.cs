@@ -19,8 +19,8 @@ public class TabMenuItem : MenuItem
 
 public class TabViewContextMenu : ContextMenu, IDisposable
 {
-	public TabView? TabView;
-	public TabInstance? TabInstance;
+	public TabView? TabView { get; set; }
+	public TabInstance? TabInstance { get; set; }
 
 	public AvaloniaList<object> ItemList { get; set; } = [];
 

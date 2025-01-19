@@ -2,7 +2,7 @@ namespace SideScroll.Tasks;
 
 public class TaskAction : TaskCreator
 {
-	public Action Action;
+	public Action Action { get; set; }
 
 	public override string? ToString() => Label;
 

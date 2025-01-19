@@ -22,8 +22,8 @@ public class FileSelectorOptions
 // Shows if files present
 public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 {
-	[Unserialized]
-	public FileSelectorOptions? FileSelectorOptions;
+	[Unserialized, HiddenColumn]
+	public FileSelectorOptions? FileSelectorOptions { get; set; }
 
 	[Name("  ★"), Editing]
 	public bool Favorite
@@ -49,11 +49,11 @@ public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 	[Hidden]
 	public abstract bool HasLinks { get; }
 
-	[DataKey]
-	public string Path;
+	[DataKey, HiddenColumn]
+	public string Path { get; init; }
 
-	[InnerValue, Unserialized]
-	public ITab? Tab;
+	[InnerValue, Unserialized, HiddenColumn]
+	public ITab? Tab { get; set; }
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -134,7 +134,8 @@ public class FileView : NodeView
 
 	public override string Name => Filename;
 
-	public FileInfo FileInfo;
+	[HiddenColumn]
+	public FileInfo FileInfo { get; set; }
 
 	public FileView(string path)
 		: this(path, null)

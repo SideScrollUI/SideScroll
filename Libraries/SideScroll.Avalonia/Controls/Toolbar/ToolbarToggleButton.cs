@@ -13,7 +13,7 @@ public class ToolbarToggleButton : ToolbarButton
 	public IResourceView OnImageResource { get; set; }
 	public IResourceView OffImageResource { get; set; }
 
-	public ListProperty? ListProperty;
+	public ListProperty? ListProperty { get; set; }
 	public bool IsChecked { get; set; }
 
 	public ToolbarToggleButton(TabControlToolbar toolbar, ToolToggleButton toolButton) :

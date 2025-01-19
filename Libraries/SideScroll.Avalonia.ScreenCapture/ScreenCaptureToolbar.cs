@@ -10,12 +10,12 @@ public class ScreenCaptureToolbar : TabControlToolbar
 {
 	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
 
-	public TabViewer TabViewer;
+	public TabViewer TabViewer { get; init; }
 
-	public ToolbarButton? ButtonCopyClipboard;
-	public ToolbarButton ButtonSave;
-	//public ToolbarButton ButtonLink;
-	public ToolbarButton ButtonClose;
+	public ToolbarButton? ButtonCopyClipboard { get; set; }
+	public ToolbarButton ButtonSave { get; set; }
+	//public ToolbarButton ButtonLink { get; set; }
+	public ToolbarButton ButtonClose { get; set; }
 
 	public ScreenCaptureToolbar(TabViewer tabViewer) : base(null)
 	{

@@ -12,9 +12,9 @@ namespace SideScroll.Avalonia.Controls;
 
 public class TabControlTasks : Grid, IDisposable
 {
-	private const int LineHeight = 34;
+	public static int LineHeight { get; set; } = 34;
 
-	public TabInstance TabInstance;
+	public TabInstance TabInstance { get; set; }
 
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 

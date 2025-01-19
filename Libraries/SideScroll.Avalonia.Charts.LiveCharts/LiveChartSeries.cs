@@ -24,9 +24,9 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 	private const int MaxPointsToShowMarkers = 8;
 	private const double DefaultGeometrySize = 5;
 
-	public readonly TabControlLiveChart Chart;
-	public readonly ListSeries ListSeries;
-	public readonly bool UseDateTimeAxis;
+	public TabControlLiveChart Chart { get; set; }
+	public ListSeries ListSeries { get; set; }
+	public bool UseDateTimeAxis { get; set; }
 
 	public LiveChartLineSeries LineSeries;
 	public List<LiveChartPoint> DataPoints = [];

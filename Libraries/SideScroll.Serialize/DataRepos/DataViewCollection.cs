@@ -18,10 +18,10 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 
 	public ItemCollectionUI<TViewType> Items { get; set; } = [];
 
-	public DataRepoView<TDataType> DataRepoView;
-	public DataRepoView<TDataType>? DataRepoSecondary; // Optional: Saves and Deletes goto a 2nd copy
+	public DataRepoView<TDataType> DataRepoView { get; init; }
+	public DataRepoView<TDataType>? DataRepoSecondary { get; set; } // Optional: Saves and Deletes goto a 2nd copy
 
-	public object?[] LoadParams;
+	public object?[] LoadParams { get; set; }
 
 	private Dictionary<TViewType, IDataItem> _dataItemLookup;
 	private Dictionary<IDataItem, TViewType> _valueLookup;

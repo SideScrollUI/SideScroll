@@ -8,8 +8,8 @@ namespace SideScroll.Avalonia.Controls;
 
 public class TabControlActions : UserControl
 {
-	public TabInstance TabInstance;
-	public TabModel TabModel;
+	public TabInstance TabInstance { get; set; }
+	public TabModel TabModel { get; set; }
 
 	private readonly Dictionary<Button, TaskCreator> _taskCreators = [];
 

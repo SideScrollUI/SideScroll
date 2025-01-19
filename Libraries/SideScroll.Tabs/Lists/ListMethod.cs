@@ -7,7 +7,7 @@ namespace SideScroll.Tabs.Lists;
 
 public class ListMethod : ListMember
 {
-	public readonly MethodInfo MethodInfo;
+	public MethodInfo MethodInfo { get; init; }
 	private bool CacheEnabled { get; set; }
 
 	private bool _valueCached;

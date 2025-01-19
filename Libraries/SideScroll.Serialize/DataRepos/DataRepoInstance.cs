@@ -18,8 +18,8 @@ public class DataRepoInstance<T> : IDataRepoInstance
 {
 	protected const string DefaultKey = ".Default"; // todo: support multiple directory levels?
 
-	public readonly DataRepo DataRepo;
-	public string GroupId { get; set; }
+	public DataRepo DataRepo { get; init; }
+	public string GroupId { get; init; }
 	public string GroupPath => DataRepo.GetGroupPath(typeof(T), GroupId);
 	public Type DataType => typeof(T);
 

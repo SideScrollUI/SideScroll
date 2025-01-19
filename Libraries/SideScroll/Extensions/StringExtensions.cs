@@ -7,6 +7,10 @@ namespace SideScroll.Extensions;
 
 public static class StringExtensions
 {
+
+	public static HashSet<char> WordSpacedSymbols { get; set; } = ['|', '/', '-'];
+	public static HashSet<char> WordSpacedNumberConnectors { get; set; } = ['-', ':', '.'];
+
 	public static bool CaseInsensitiveContains(this string text, string value, StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase)
 	{
 		return text.Contains(value, stringComparison);
@@ -56,9 +60,6 @@ public static class StringExtensions
 		return input[start..];
 	}
 
-	private static readonly HashSet<char> _wordSpacedSymbols = ['|', '/', '-'];
-	private static readonly HashSet<char> _wordSpacedNumberConnectors = ['-', ':', '.'];
-
 	// Adds spaces between words
 	// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'
 	public static string WordSpaced(this string? text)
@@ -84,7 +85,7 @@ public static class StringExtensions
 			{
 				c = ' ';
 			}
-			else if (_wordSpacedSymbols.Contains(c) && (!numberMode || !_wordSpacedNumberConnectors.Contains(c)))
+			else if (WordSpacedSymbols.Contains(c) && (!numberMode || !WordSpacedNumberConnectors.Contains(c)))
 			{
 				numberMode = false;
 				newText.Append(' ');

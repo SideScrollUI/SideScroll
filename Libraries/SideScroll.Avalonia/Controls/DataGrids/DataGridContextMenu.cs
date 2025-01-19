@@ -13,9 +13,9 @@ public class DataGridContextMenu : ContextMenu, IDisposable
 
 	private const int MaxCellValueLength = 10_000;
 
-	public DataGrid DataGrid;
-	public DataGridPropertyTextColumn? Column;
-	public DataGridCell? Cell;
+	public DataGrid DataGrid { get; init; }
+	public DataGridPropertyTextColumn? Column { get; set; }
+	public DataGridCell? Cell { get; set; }
 
 	public DataGridContextMenu(DataGrid dataGrid)
 	{

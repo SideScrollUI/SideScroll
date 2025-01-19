@@ -20,13 +20,13 @@ public enum SeparatorType
 // Vertical only right now
 public class TabControlSplitContainer : Grid
 {
-	public Dictionary<object, Control> GridControls = [];
-	public List<GridSplitter> GridSplitters = []; // reattach each time controls change
+	public double MinDesiredWidth { get; set; } = 100;
+	public double MaxDesiredWidth { get; set; } = double.MaxValue;
 
-	public double MinDesiredWidth = 100;
-	public double MaxDesiredWidth = double.MaxValue;
+	public Dictionary<object, Control> GridControls { get; protected set; } = [];
+	public List<GridSplitter> GridSplitters { get; protected set; } = []; // reattach each time controls change
 
-	public new bool IsArrangeValid;
+	public new bool IsArrangeValid { get; protected set; }
 
 	private List<Item> _gridItems = [];
 

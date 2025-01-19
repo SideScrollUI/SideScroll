@@ -5,10 +5,10 @@ namespace SideScroll.Network.Http;
 
 public class HttpCall(Call call)
 {
-	private const int MaxAttempts = 4;
-	private const int SleepMilliseconds = 500; // < ^ MaxAttempts
+	public static int MaxAttempts { get; set; } = 4;
+	public static int SleepMilliseconds { get; set; } = 500; // < ^ MaxAttempts
 
-	public Call Call = call;
+	public Call Call => call;
 
 	public virtual async Task<string?> GetStringAsync(string uri, string? accept = null)
 	{

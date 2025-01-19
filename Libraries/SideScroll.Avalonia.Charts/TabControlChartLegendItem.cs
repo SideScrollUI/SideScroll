@@ -16,14 +16,14 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	public event EventHandler<EventArgs>? OnSelectionChanged;
 	public event EventHandler<EventArgs>? OnVisibleChanged;
 
-	public readonly TabControlChartLegend<TSeries> Legend;
-	public readonly ChartSeries<TSeries> ChartSeries;
+	public TabControlChartLegend<TSeries> Legend { get; init; }
+	public ChartSeries<TSeries> ChartSeries { get; init; }
 
 	public ChartView ChartView => Legend.ChartView;
 	public TSeries Series => ChartSeries.LineSeries;
 
-	public TabControlTextBlock? TextBlock;
-	public TabControlTextBlock? TextBlockTotal;
+	public TabControlTextBlock? TextBlock { get; protected set; }
+	public TabControlTextBlock? TextBlockTotal { get; protected set; }
 
 	protected Polygon? _polygon;
 

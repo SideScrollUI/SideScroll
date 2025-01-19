@@ -27,10 +27,10 @@ public interface ITabViewerPlugin
 
 public class TabViewer : Grid
 {
-	public int MaxScrollWidth = 1000; // should we also use a max percent?
-	public double ScrollPercent = 0.5;
+	public int MaxScrollWidth { get; set; } = 1000; // should we also use a max percent?
+	public double ScrollPercent { get; set; } = 0.5;
 	public int DefaultScrollWidth => Math.Min(MaxScrollWidth, (int)(ScrollViewer.Viewport.Width * ScrollPercent));
-	public int KeyboardScrollWidth = 500;
+	public int KeyboardScrollWidth { get; set; } = 500;
 
 	public static TabViewer? BaseViewer { get; set; }
 	public static string? LoadLinkUri { get; set; }
@@ -40,13 +40,13 @@ public class TabViewer : Grid
 	public Project Project { get; set; }
 
 	// Controls
-	public TabViewerToolbar? Toolbar;
-	protected Grid BottomGrid;
-	public ScrollViewer ScrollViewer;
-	public Grid ContentGrid;
-	public TabView? TabView;
+	public TabViewerToolbar? Toolbar { get; protected set; }
+	protected Grid BottomGrid { get; set; }
+	public ScrollViewer ScrollViewer { get; protected set; }
+	public Grid ContentGrid { get; protected set; }
+	public TabView? TabView { get; protected set; }
 
-	public Control? ContentControl;
+	public Control? ContentControl { get; protected set; }
 
 	public event EventHandler<EventTabLoaded>? OnTabLoaded;
 

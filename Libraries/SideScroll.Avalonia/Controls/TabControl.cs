@@ -7,7 +7,7 @@ namespace SideScroll.Avalonia.Controls;
 
 public class TabControl : Grid
 {
-	public TabInstance TabInstance;
+	public TabInstance TabInstance { get; set; }
 
 	public TabControl(TabInstance tabInstance)
 	{

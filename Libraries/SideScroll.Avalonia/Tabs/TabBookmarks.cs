@@ -10,7 +10,7 @@ public class TabBookmarks : ITab
 {
 	public static TabBookmarks? Global { get; set; }
 
-	public readonly BookmarkCollection Bookmarks;
+	public BookmarkCollection Bookmarks { get; set; }
 
 	public TabBookmarks(Project project)
 	{

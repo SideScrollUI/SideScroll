@@ -58,7 +58,7 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
-	public TabInstance Instance;
+	public TabInstance Instance { get; set; }
 	public TabModel Model => Instance.Model;
 
 	public string Label
@@ -68,9 +68,9 @@ public class TabView : Grid, IDisposable
 	}
 
 	// Created Controls
-	public TabControlActions? TabActions;
-	public TabControlTasks? TabTasks;
-	public List<ITabDataSelector> TabDatas = [];
+	public TabControlActions? TabActions { get; set; }
+	public TabControlTasks? TabTasks { get; set; }
+	public List<ITabDataSelector> TabDatas { get; set; } = [];
 	public List<ITabSelector> CustomTabControls { get; set; } = []; // should everything use this?
 
 	private List<ToolbarButton> _hotKeys = [];

@@ -22,7 +22,7 @@ public class TabControlToolbar : Grid, IDisposable
 
 	public static Thickness DefaultMargin { get; set; } = new(6, 2);
 
-	public readonly TabInstance? TabInstance;
+	public TabInstance? TabInstance { get; set; }
 
 	public TabControlToolbar(TabInstance? tabInstance, TabToolbar? toolbar = null)
 	{
@@ -271,8 +271,8 @@ public class ToolbarRadioButton : RadioButton
 // todo: replace with version that uses IObservable
 public class RelayCommand : ICommand
 {
-	public readonly Func<object?, bool> CanExecuteFunc;
-	public readonly Action<object?> ExecuteAction;
+	public Func<object?, bool> CanExecuteFunc { get; init; }
+	public Action<object?> ExecuteAction { get; set; }
 
 	public RelayCommand(Func<object?, bool>? canExecute = null, Action<object?>? execute = null)
 	{

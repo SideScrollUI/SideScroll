@@ -13,7 +13,7 @@ namespace SideScroll.Avalonia.Tabs;
 
 public class TabFileImage : ITab, IFileTypeView
 {
-	public static readonly string[] DefaultExtensions =
+	public static string[] DefaultExtensions { get; set; } =
 		[".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".svg", ".ico"];
 
 	public static void Register()
