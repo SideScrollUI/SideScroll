@@ -18,8 +18,8 @@ public class DataRepoInstance<T> : IDataRepoInstance
 {
 	protected const string DefaultKey = ".Default"; // todo: support multiple directory levels?
 
-	public readonly DataRepo DataRepo;
-	public string GroupId { get; set; }
+	public DataRepo DataRepo { get; init; }
+	public string GroupId { get; init; }
 	public string GroupPath => DataRepo.GetGroupPath(typeof(T), GroupId);
 	public Type DataType => typeof(T);
 
@@ -47,6 +47,14 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		Save(call, DefaultKey, item);
 	}
 
+	public virtual void Save(Call? call, IEnumerable<T> items)
+	{
+		foreach (var item in items)
+		{
+			Save(call, item);
+		}
+	}
+
 	public virtual void Save(Call? call, string key, T item)
 	{
 		call ??= new();
@@ -59,12 +67,12 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		return DataRepo.Load<T>(GroupId, key ?? DefaultKey, call, createIfNeeded, lazy);
 	}
 
-	public virtual DataPageView<T>? LoadPageView(Call? call, bool ascending = true)
+	public virtual DataPageView<T> LoadPageView(Call? call, bool ascending = true)
 	{
 		return new DataPageView<T>(this, ascending);
 	}
 
-	public DataItemCollection<T> LoadAll(Call? call = null, bool ascending = true)
+	public virtual DataItemCollection<T> LoadAll(Call? call = null, bool ascending = true)
 	{
 		call ??= new();
 		return new DataItemCollection<T>(LoadAllDataItems(call, ascending));

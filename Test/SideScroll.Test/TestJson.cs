@@ -16,8 +16,8 @@ public class TestJson : TestBase
 	public void UnencodedPlus()
 	{
 		string input = "{\"name\": \"+\"}";
-		Assert.True(JsonUtils.TryFormat(input, out string? formatted));
+		Assert.That(JsonUtils.TryFormat(input, out string? formatted));
 
-		Assert.False(formatted!.Contains("u002B"));
+		Assert.That(formatted!.Contains("u002B"), Is.False);
 	}
 }

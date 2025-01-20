@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\SideScroll.UI.Avalonia.Samples\SideScroll.UI.Avalonia.Samples.csproj" />
-    <ProjectReference Include="..\..\Libraries\SideScroll.UI.Avalonia.ScreenCapture\SideScroll.UI.Avalonia.ScreenCapture.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Avalonia.Samples\SideScroll.Avalonia.Samples.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Avalonia.ScreenCapture\SideScroll.Avalonia.ScreenCapture.csproj" />
   </ItemGroup>
 
 </Project>

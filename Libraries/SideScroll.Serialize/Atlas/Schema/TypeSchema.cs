@@ -66,7 +66,7 @@ public class TypeSchema
 	public bool HasSubType;
 
 	// Type lookup can take a long time, especially when there's missing types
-	private static readonly Dictionary<string, Type> _typeCache = [];
+	private static readonly Dictionary<string, Type?> _typeCache = [];
 
 	private static readonly BindingFlags _bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
 
@@ -318,7 +318,9 @@ public class TypeSchema
 		}
 		catch (Exception e)
 		{
-			log.AddWarning("Missing Versioned Type", new Tag("TypeSchema", this), new Tag("Message", e.Message));
+			log.AddWarning("Missing Versioned Type",
+				new Tag("TypeSchema", this),
+				new Tag("Message", e.Message));
 		}
 
 		// Get Type without version
@@ -328,7 +330,9 @@ public class TypeSchema
 		}
 		catch (Exception e)
 		{
-			log.AddWarning("Missing Unversioned Type", new Tag("TypeSchema", this), new Tag("Message", e.Message));
+			log.AddWarning("Missing Unversioned Type",
+				new Tag("TypeSchema", this),
+				new Tag("Message", e.Message));
 		}
 
 		// Get Type with just Namespace, but without assembly
@@ -349,13 +353,15 @@ public class TypeSchema
 			}
 			catch (Exception e)
 			{
-				log.AddWarning("Missing Namespaced Type", new Tag("TypeSchema", this), new Tag("Message", e.Message));
+				log.AddWarning("Missing Namespaced Type",
+					new Tag("TypeSchema", this),
+					new Tag("Message", e.Message));
 			}
 		}
 
 		lock (_typeCache)
 		{
-			_typeCache.TryAdd(AssemblyQualifiedName, Type!);
+			_typeCache.TryAdd(AssemblyQualifiedName, Type);
 		}
 	}
 

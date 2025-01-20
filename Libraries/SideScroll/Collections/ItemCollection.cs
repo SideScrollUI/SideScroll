@@ -36,7 +36,7 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 
 	public override string ToString() => Label ?? "[" + Count.ToString("N0") + "]";
 
-	public ItemCollection()	{ }
+	public ItemCollection() { }
 
 	public ItemCollection(string columnName)
 	{
@@ -80,17 +80,6 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 		base.Add(item);
 		OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
 	}*/
-}
-
-public class ItemCollection<T, T2> : ObservableCollection<T>
-{
-	public ItemCollection() { }
-
-	// Don't implement List<T>, it isn't sortable
-	public ItemCollection(IEnumerable<T> iEnumerable) :
-		base(iEnumerable)
-	{
-	}
 }
 
 public class ItemQueueCollection<T> : ItemCollection<T>

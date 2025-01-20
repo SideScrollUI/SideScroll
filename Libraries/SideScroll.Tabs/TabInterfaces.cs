@@ -13,7 +13,7 @@ public interface ITabSelector
 
 public class TabSelectionChangedEventArgs(bool recreate = false) : EventArgs
 {
-	public readonly bool Recreate = recreate;
+	public bool Recreate => recreate;
 }
 
 // For CustomTabControls

@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Network.Http;
 using SideScroll.Serialize;
@@ -8,9 +9,10 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Tabs;
 
+[Unserialized]
 public class Project
 {
-	public string? Name => ProjectSettings.Name; // for viewing purposes
+	public string? Name => ProjectSettings.Name;
 	public string? LinkType => ProjectSettings.LinkType;
 	public Version Version => ProjectSettings.Version;
 	public virtual ProjectSettings ProjectSettings { get; set; }
@@ -22,7 +24,7 @@ public class Project
 	public DataRepo DataApp => new(DataAppPath, DataRepoName);
 	public DataRepo DataTemp => new(DataTempPath, DataRepoName);
 
-	public HttpCacheManager Http = new();
+	public HttpCacheManager Http { get; set; } = new();
 	public BookmarkNavigator Navigator { get; set; } = new();
 	public TaskInstanceCollection Tasks { get; set; } = [];
 
@@ -53,18 +55,6 @@ public class Project
 		Linker = new(this);
 	}
 
-	public Project(ProjectSettings projectSettings)
-	{
-		ProjectSettings = projectSettings;
-		UserSettings = new UserSettings
-		{
-			ProjectPath = projectSettings.DefaultProjectPath,
-		};
-		// Todo: Improve this
-		UserSettings = DataApp.Load<UserSettings>() ?? UserSettings;
-		Linker = new(this);
-	}
-
 	public Project(ProjectSettings projectSettings, UserSettings userSettings)
 	{
 		ProjectSettings = projectSettings;
@@ -72,12 +62,12 @@ public class Project
 		Linker = new(this);
 	}
 
-	public void SaveSettings()
+	public void SaveUserSettings()
 	{
-		//DataApp.Save(projectSettings, new Call());
+		//DataApp.Save(UserSettings, new Call());
 
-		var serializer = SerializerFile.Create(UserSettings.SettingsPath, "");
-		serializer.Save(new Call(), ProjectSettings);
+		var serializer = SerializerFile.Create(ProjectSettings.DefaultProjectPath);
+		serializer.Save(new Call(), UserSettings);
 	}
 
 	public Project Open(Bookmark bookmark)
@@ -93,9 +83,14 @@ public class Project
 		return project;
 	}
 
-	public static Project Load<T>(ProjectSettings projectSettings) where T: UserSettings, new()
+	public static Project Load(ProjectSettings projectSettings, UserSettings? defaultUserSettings = null)
 	{
-		T defaultUserSettings = new()
+		return Load<UserSettings>(projectSettings, defaultUserSettings);
+	}
+
+	public static Project Load<T>(ProjectSettings projectSettings, T? defaultUserSettings = null) where T : UserSettings, new()
+	{
+		defaultUserSettings ??= projectSettings.DefaultUserSettings as T ?? new()
 		{
 			ProjectPath = projectSettings.DefaultProjectPath,
 		};

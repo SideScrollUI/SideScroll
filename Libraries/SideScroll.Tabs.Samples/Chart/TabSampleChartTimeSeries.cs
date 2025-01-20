@@ -1,6 +1,7 @@
 using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Extensions;
+using SideScroll.Time;
 using System.Drawing;
 
 namespace SideScroll.Tabs.Samples.Chart;
@@ -13,7 +14,7 @@ public class TabSampleChartTimeSeries : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			DateTime endTime = DateTime.UtcNow.Trim(TimeSpan.TicksPerHour).AddHours(8);
+			DateTime endTime = TimeZoneView.Now.Trim(TimeSpan.TicksPerHour).AddHours(12);
 
 			AddAnimals(model, endTime);
 			AddToys(model, endTime);

@@ -35,17 +35,17 @@ public class DataRepo
 		return new DataRepoView<T>(this, groupId, indexed, maxItems);
 	}
 
-	public DataRepoView<T> LoadView<T>(Call call, string groupId)
+	public DataRepoView<T> LoadView<T>(Call call, string groupId, string? orderByMemberName = null, bool ascending = true)
 	{
 		var view = new DataRepoView<T>(this, groupId);
-		view.LoadAll(call);
-		return view;
-	}
-
-	public DataRepoView<T> LoadView<T>(Call call, string groupId, string orderByMemberName, bool ascending = true)
-	{
-		var view = new DataRepoView<T>(this, groupId);
-		view.LoadAllOrderBy(call, orderByMemberName, ascending);
+		if (orderByMemberName != null)
+		{
+			view.LoadAllOrderBy(call, orderByMemberName, ascending);
+		}
+		else
+		{
+			view.LoadAll(call, ascending);
+		}
 		return view;
 	}
 

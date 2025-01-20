@@ -24,15 +24,15 @@ public class ListSeries
 	public string? Description { get; set; }
 	public Dictionary<string, string> Tags { get; set; } = []; // todo: next schema change, replace with TagCollection
 
-	public IList List; // List to start with, any elements added will also trigger an event to add new points
+	public IList List { get; set; } // List to start with, any elements added will also trigger an event to add new points
 
-	public PropertyInfo? XPropertyInfo; // optional
-	public PropertyInfo? YPropertyInfo; // optional
+	public PropertyInfo? XPropertyInfo { get; set; } // optional
+	public PropertyInfo? YPropertyInfo { get; set; } // optional
 
-	public string? XLabel;
-	public string? YLabel;
+	public string? XLabel { get; set; }
+	public string? YLabel { get; set; }
 
-	public double XBinSize;
+	public double XBinSize { get; set; }
 
 	public TimeSpan? PeriodDuration { get; set; }
 	public SeriesType SeriesType { get; set; } = SeriesType.Sum;

@@ -33,14 +33,16 @@ public interface IMaxDesiredHeight
 public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair, IListItem, INotifyPropertyChanged,
 	IListAutoSelect, IMaxDesiredWidth, IMaxDesiredHeight
 {
-	public const int MaxStringLength = 1000;
-	private const int DefaultMaxDesiredHeight = 500;
+	public static int MaxStringLength { get; set; } = 1000;
+	public static int DefaultMaxDesiredHeight { get; set; } = 500;
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	public readonly MemberInfo MemberInfo = memberInfo;
+	[HiddenColumn]
+	public MemberInfo MemberInfo => memberInfo;
 
-	public readonly object Object = obj;
+	[HiddenColumn]
+	public object Object => obj;
 
 	[AutoSize]
 	public string? Name { get; set; }
@@ -54,7 +56,8 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 	[HiddenColumn]
 	public virtual bool Editable => true;
 
-	public bool AutoLoad = true;
+	[HiddenColumn]
+	public bool AutoLoad { get; set; } = true;
 
 	[HiddenColumn]
 	public int? MaxDesiredWidth => GetCustomAttribute<MaxWidthAttribute>()?.MaxWidth;
@@ -124,11 +127,11 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 		return linkSorted;
 	}
 
-	public static ItemCollection<ListMember> Create(object obj, bool includeBaseTypes = true)
+	public static ItemCollection<ListMember> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
 	{
 		var methodMembers = new SortedDictionary<string, ListMember>();
 
-		var properties = ListProperty.Create(obj, includeBaseTypes);
+		var properties = ListProperty.Create(obj, includeBaseTypes, includeStatic);
 		foreach (ListProperty listProperty in properties)
 		{
 			// MetadataTokens are only unique across modules
@@ -137,7 +140,7 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 			methodMembers.Add(id, listProperty);
 		}
 
-		var methods = ListMethod.Create(obj, includeBaseTypes);
+		var methods = ListMethod.Create(obj, includeBaseTypes, includeStatic);
 		foreach (ListMethod listMethod in methods)
 		{
 			string id = $"{listMethod.MethodInfo.Module.Name}:{listMethod.MethodInfo.MetadataToken:D10}";
@@ -150,14 +153,14 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 		// Use property's backing field? (confirmed field order matches)
 		// No simple way to link property and backing fields
 		// .GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-		var listFields = ListField.Create(obj, includeBaseTypes);
+		var listFields = ListField.Create(obj, includeBaseTypes, includeStatic);
 		listMembers.AddRange(listFields);
 
 		return ExpandInlined(listMembers, includeBaseTypes);
 	}
 
 	// If a member specifies [Inline], replace this member with all it's members
-	public static ItemCollection<ListMember> ExpandInlined(List<ListMember> listMembers, bool includeBaseTypes)
+	public static ItemCollection<ListMember> ExpandInlined(List<ListMember> listMembers, bool includeBaseTypes, bool includeStatic = true)
 	{
 		ItemCollection<ListMember> newMembers = [];
 		foreach (ListMember listMember in listMembers)
@@ -166,7 +169,7 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 			{
 				if (listMember.Value is object value)
 				{
-					ItemCollection<ListMember> inlinedProperties = Create(value, includeBaseTypes);
+					ItemCollection<ListMember> inlinedProperties = Create(value, includeBaseTypes, includeStatic);
 					newMembers.AddRange(inlinedProperties);
 				}
 			}

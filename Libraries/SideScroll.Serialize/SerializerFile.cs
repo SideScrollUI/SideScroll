@@ -65,9 +65,9 @@ public abstract class SerializerFile(string basePath, string name = "")
 		return (T)Convert.ChangeType(obj, type);*/
 	}
 
-	public object? Load(Call call, bool lazy = false, TaskInstance? taskInstance = null)
+	public object? Load(Call call, bool lazy = false, TaskInstance? taskInstance = null, LogLevel logLevel = LogLevel.Debug)
 	{
-		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Loading object: " + Name);
+		using CallTimer callTimer = call.Timer(logLevel, "Loading object: " + Name);
 
 		try
 		{

@@ -7,7 +7,7 @@ public class BookmarkCollection
 {
 	public const string DataKey = "Bookmarks";
 
-	public readonly Project Project;
+	public Project Project { get; init; }
 
 	public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new()
 	{
@@ -36,9 +36,9 @@ public class BookmarkCollection
 
 			_dataRepoBookmarks.LoadAllOrderBy(call, nameof(Bookmark.TimeStamp));
 
-			foreach (Bookmark? bookmark in _dataRepoBookmarks.Items.Values)
+			foreach (Bookmark bookmark in _dataRepoBookmarks.Items.Values)
 			{
-				if (bookmark!.Name == TabInstance.CurrentBookmarkName)
+				if (bookmark.Name == TabInstance.CurrentBookmarkName)
 					continue;
 
 				Add(bookmark);

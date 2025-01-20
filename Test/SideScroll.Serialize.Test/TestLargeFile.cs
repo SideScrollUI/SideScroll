@@ -6,7 +6,7 @@ namespace SideScroll.Serialize.Test;
 public class TestLargeFile : TestSerializeBase
 {
 	private const int IntCount = 10_000;
-	
+
 	private string? _basePath;
 
 	[OneTimeSetUp]
@@ -70,7 +70,7 @@ public class TestLargeFile : TestSerializeBase
 		for (long offset = 0; offset <= maxOffset; offset += spacing)
 		{
 			long position = stream.Seek(offset, SeekOrigin.Begin);
-			Assert.AreEqual(stream.Position, offset);
+			Assert.That(offset, Is.EqualTo(position));
 			for (int i = 0; i < IntCount; i++)
 				writer.Write(i);
 		}
@@ -89,7 +89,7 @@ public class TestLargeFile : TestSerializeBase
 
 		using Stream stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 		long position = stream.Seek(offset, SeekOrigin.Begin);
-		Assert.AreEqual(stream.Position, offset);
+		Assert.That(offset, Is.EqualTo(position));
 		using BinaryReader reader = new(stream);
 		for (int i = 0; i < IntCount; i++)
 			reader.ReadInt32();
@@ -147,9 +147,8 @@ public struct MyColor
 		Alpha = (short)Math.Min(short.MaxValue, (int)Alpha + value);
 	}
 }
-/*
-	
 
+/*
 Accessing more than 2 GB
 
 	Memory Mapped Files
@@ -166,5 +165,4 @@ Accessing more than 2 GB
 		Length can be used later
 
 	https://docs.microsoft.com/en-us/dotnet/standard/io/memory-mapped-files
-	
 */

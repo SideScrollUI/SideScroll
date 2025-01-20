@@ -35,7 +35,7 @@ public class TestSerializeLazy : TestSerializeBase
 		_serializerFile!.Save(Call, input);
 		Parent output = _serializerFile.Load<Parent>(Call, true)!;
 
-		Assert.AreEqual(input.Child!.UintTest, output.Child!.UintTest);
+		Assert.That(output.Child!.UintTest, Is.EqualTo(input.Child!.UintTest));
 	}
 
 	[Test, Description("Serialize Lazy Null Properties")]
@@ -46,7 +46,7 @@ public class TestSerializeLazy : TestSerializeBase
 		_serializerFile!.Save(Call, input);
 		Parent output = _serializerFile.Load<Parent>(Call, true)!;
 
-		Assert.AreEqual(input.Child, output.Child);
+		Assert.That(output.Child, Is.EqualTo(input.Child));
 	}
 
 	[Test, Description("Serialize Lazy Write Then Read")]
@@ -59,7 +59,7 @@ public class TestSerializeLazy : TestSerializeBase
 		output.StringTest = "abc";
 		string temp = output.StringTest;
 
-		Assert.AreEqual("abc", output.StringTest);
+		Assert.That(output.StringTest, Is.EqualTo("abc"));
 	}
 
 	[Test, Description("Serialize Lazy Constructor")]
@@ -71,7 +71,7 @@ public class TestSerializeLazy : TestSerializeBase
 		_serializerFile!.Save(Call, input);
 		Container output = _serializerFile.Load<Container>(Call, true)!;
 
-		Assert.NotNull(output.Id);
+		Assert.That(output.Id, Is.Not.Null);
 	}
 
 	public class Container

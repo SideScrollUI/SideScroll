@@ -1,4 +1,5 @@
 using SideScroll.Attributes;
+using SideScroll.Extensions;
 using SideScroll.Time;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -37,12 +38,12 @@ public class SampleParamItem
 	[BindList(nameof(ListItems)), ColumnIndex(2)]
 	public ParamListItem ListItem { get; set; }
 
-	public DateTime DateTime { get; set; } = DateTime.Now;
+	public DateTime DateTime { get; set; } = TimeZoneView.Now.Trim();
 
 	public static List<TimeZoneView> TimeZones => TimeZoneView.All;
 
 	[BindList(nameof(TimeZones))]
-	public TimeZoneView TimeZone { get; set; } = TimeZoneView.Utc;
+	public TimeZoneView TimeZone { get; set; } = TimeZoneView.Current;
 
 	public SampleParamItem()
 	{
@@ -53,18 +54,10 @@ public class SampleParamItem
 }
 
 [PublicData]
-public class ParamListItem
+public class ParamListItem(string name, int value)
 {
-	public string? Name { get; set; }
-	public int Value { get; set; }
+	public string? Name { get; set; } = name;
+	public int Value { get; set; } = value;
 
 	public override string? ToString() => Name;
-
-	public ParamListItem() { }
-
-	public ParamListItem(string name, int value)
-	{
-		Name = name;
-		Value = value;
-	}
 }

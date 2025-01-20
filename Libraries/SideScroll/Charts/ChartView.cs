@@ -30,7 +30,7 @@ public enum ChartLegendPosition
 
 public class SeriesSelectedEventArgs(List<ListSeries> series) : EventArgs
 {
-	public List<ListSeries> Series { get; set; } = series;
+	public List<ListSeries> Series => series;
 }
 
 public class ChartView
@@ -107,8 +107,8 @@ public class ChartView
 
 	public void AddDimensionValue(object? obj)
 	{
-		var values = _dimensionPropertyInfos.Select(propertyInfo => propertyInfo.GetValue(obj)!);
-		if (!values.Any()) return;
+		var values = _dimensionPropertyInfos.Select(propertyInfo => propertyInfo.GetValue(obj)!).ToList();
+		if (values.Count == 0) return;
 
 		string name = string.Join(" - ", values);
 

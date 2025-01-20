@@ -6,12 +6,12 @@ namespace SideScroll.Logs;
 
 public class EventLogMessage : EventArgs
 {
-	public List<LogEntry> Entries = []; // First is new log message, last is highest parent log message
+	public List<LogEntry> Entries { get; set; } = []; // First is new log message, last is highest parent log message
 }
 
 public class LogSettings
 {
-	public int MaxLogItems = 10_000;
+	public int MaxLogItems { get; set; } = 10_000;
 
 	public LogLevel MinLogLevel { get; set; } = LogLevel.Info; // Logs below this level won't be added
 
@@ -19,8 +19,8 @@ public class LogSettings
 
 	internal object Lock = new(); // todo: replace this with individual ones? or a non-blocking version
 
-	[HiddenRow]
-	public SynchronizationContext? Context; // inherited from creator (which can be a Parent Log)
+	[Hidden]
+	public SynchronizationContext? Context { get; set; } // inherited from creator (which can be a Parent Log)
 
 	public LogSettings Clone()
 	{
@@ -60,8 +60,8 @@ public class LogEntry : INotifyPropertyChanged
 	[Hidden]
 	public LogSettings? Settings { get; set; }
 
-	[HiddenRow]
-	public LogEntry RootLog;
+	[Hidden]
+	public LogEntry RootLog { get; set; }
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -70,7 +70,8 @@ public class LogEntry : INotifyPropertyChanged
 
 	public TimeSpan Time => Created.Subtract(RootLog.Created);
 
-	public LogLevel OriginalLevel = LogLevel.Info;
+	[HiddenColumn]
+	public LogLevel OriginalLevel { get; set; } = LogLevel.Info;
 	public LogLevel Level { get; set; } = LogLevel.Info;
 
 	[Hidden]

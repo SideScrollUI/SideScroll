@@ -4,11 +4,11 @@ public delegate void CallAction(Call call);
 
 public class TaskDelegate : TaskCreator
 {
-	public CallAction Action;
+	public CallAction Action { get; init; }
 
 	public override string? ToString() => Label;
 
-	// Lists read easier with the label as the first param
+	// Lists read easier with a label as the first param
 	public TaskDelegate(string label, CallAction callAction, bool useTask = false, bool showTask = false, string? description = null)
 	{
 		Label = label;

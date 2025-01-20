@@ -40,8 +40,8 @@ public class TestSerializeSecurity : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<NonSerializedTest>(Call);
 
-		Assert.AreEqual(1, output.NonSerialized);
-		Assert.AreEqual(10, output.Serialized);
+		Assert.That(output.NonSerialized, Is.EqualTo(1));
+		Assert.That(output.Serialized, Is.EqualTo(10));
 	}
 
 	[Unserialized]
@@ -66,10 +66,10 @@ public class TestSerializeSecurity : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<UnserializedPropertyClass>(Call);
 
-		Assert.IsNotNull(output.UnserializedField);
-		Assert.IsNotNull(output.UnserializedProperty);
+		Assert.That(output.UnserializedField, Is.Not.Null);
+		Assert.That(output.UnserializedProperty, Is.Not.Null);
 
-		Assert.AreEqual(1, output.UnserializedField.Value);
-		Assert.AreEqual(1, output.UnserializedProperty.Value);
+		Assert.That(output.UnserializedField.Value, Is.EqualTo(1));
+		Assert.That(output.UnserializedProperty.Value, Is.EqualTo(1));
 	}
 }

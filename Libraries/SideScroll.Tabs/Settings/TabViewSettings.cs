@@ -42,24 +42,9 @@ public class TabViewSettings
 	public List<SelectedRow> SelectedRows => TabDataSettings?.SelectMany(d => d.SelectedRows).ToList() ?? [];
 
 	// Store Skipped bool instead?
-	public SelectionType SelectionType
-	{
-		get
-		{
-			if (TabDataSettings == null)
-				return SelectionType.None;
-
-			foreach (TabDataSettings dataSettings in TabDataSettings)
-			{
-				if (dataSettings.SelectionType != SelectionType.None)
-				{
-					return dataSettings.SelectionType;
-				}
-			}
-
-			return SelectionType.None;
-		}
-	}
+	public SelectionType SelectionType => TabDataSettings?
+				.FirstOrDefault(dataSettings => dataSettings.SelectionType != SelectionType.None)
+				?.SelectionType ?? SelectionType.None;
 
 	public override string? ToString() => Address;
 

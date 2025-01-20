@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
@@ -5,6 +6,7 @@ using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Samples.Params;
 
+[TabRoot, PublicData]
 public class TabSampleParamsDataTabs : ITab
 {
 	public override string ToString() => "Data Repos";
@@ -28,7 +30,7 @@ public class TabSampleParamsDataTabs : ITab
 		{
 			LoadSavedItems(call, model);
 
-			_sampleParamItem = LoadData<SampleParamItem>(DataKey);
+			_sampleParamItem ??= LoadData<SampleParamItem>(DataKey);
 			model.AddObject(_sampleParamItem!);
 
 			Toolbar toolbar = new();
@@ -48,6 +50,7 @@ public class TabSampleParamsDataTabs : ITab
 
 		private void New(Call call)
 		{
+			_sampleParamItem = new();
 			Reload();
 		}
 

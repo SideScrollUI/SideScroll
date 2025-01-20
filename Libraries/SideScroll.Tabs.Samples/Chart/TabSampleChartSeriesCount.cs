@@ -2,6 +2,7 @@ using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
+using SideScroll.Time;
 
 namespace SideScroll.Tabs.Samples.Chart;
 
@@ -22,7 +23,7 @@ public class TabSampleChartSeriesCount : ITab
 
 		private static ChartView CreateChartView(int seriesCount)
 		{
-			DateTime endTime = DateTime.UtcNow.Trim(TimeSpan.TicksPerHour).AddHours(8);
+			DateTime endTime = TimeZoneView.Now.Trim(TimeSpan.TicksPerHour).AddHours(-12);
 
 			var chartView = new ChartView($"{seriesCount} Chart Series")
 			{
@@ -31,8 +32,8 @@ public class TabSampleChartSeriesCount : ITab
 
 			for (int i = 0; i < seriesCount; i++)
 			{
-				chartView.AddSeries($"Series {i}", ChartSamples.CreateTimeSeries(endTime, 12), seriesType: SeriesType.Average);
-			};
+				chartView.AddSeries($"Series {i}", ChartSamples.CreateTimeSeries(endTime, TimeSpan.FromDays(1), 12), seriesType: SeriesType.Average);
+			}
 			return chartView;
 		}
 	}

@@ -4,22 +4,32 @@ using System.Collections;
 
 namespace SideScroll.Tabs;
 
-public class TabItemCollection(IList list, IEnumerable? filtered = null)
+public class TabItemCollection
 {
-	public IList List = list;
-	public IEnumerable? Filtered = filtered; // CollectionView takes filters into account
+	public IList Items { get; set; }
+	public IEnumerable? Filtered { get; set; } // CollectionView takes filters into account
 
 	private HashSet<object> _objects = [];
 	private Dictionary<string, object> _keys = [];
 
-	public override string? ToString() => List.ToString();
+	public override string? ToString() => Items.ToString();
 
-	public List<object> GetSelectedObjects(HashSet<SelectedRow> selectedRows)
+	public TabItemCollection(IList items, IEnumerable? filtered = null)
 	{
-		var rowObjects = new List<object>();
-		var items = Filtered ?? List;
-		if (selectedRows.Count == 0 || items == null)
-			return rowObjects;
+		Items = items;
+		Filtered = filtered;
+
+		UpdateIndices();
+	}
+
+	public void UpdateIndices()
+	{
+		_objects = [];
+		_keys = [];
+
+		var items = Filtered ?? Items;
+		if (items == null)
+			return;
 
 		foreach (object obj in items)
 		{
@@ -34,29 +44,28 @@ public class TabItemCollection(IList list, IEnumerable? filtered = null)
 				_keys.TryAdd(id, obj);
 			}
 		}
-
-		foreach (SelectedRow selectedRow in selectedRows)
-		{
-			object? selectedObject = GetMatchingObject(selectedRow);
-			if (selectedObject == null)
-				continue;
-
-			rowObjects.Add(selectedObject);
-		}
-
-		return rowObjects;
 	}
 
-	private object? GetMatchingObject(SelectedRow selectedRow)
+	public List<object> GetSelectedObjects(HashSet<SelectedRow> selectedRows)
+	{
+		if (selectedRows.Count == 0 || _objects.Count == 0)
+			return [];
+
+		return selectedRows
+			.Select(GetMatchingObject)
+			.OfType<object>()
+			.ToList();
+	}
+
+	public object? GetMatchingObject(SelectedRow selectedRow)
 	{
 		if (selectedRow.Object != null && _objects.Contains(selectedRow.Object))
 			return selectedRow.Object;
 
 		// Try to find a matching Row Index and Key first
-		int rowIndex = selectedRow.RowIndex;
-		if (rowIndex >= 0 && rowIndex < List.Count)
+		if (selectedRow.RowIndex is int rowIndex && rowIndex >= 0 && rowIndex < Items.Count)
 		{
-			object rowObject = List[rowIndex]!;
+			object rowObject = Items[rowIndex]!;
 			var currentSelectedRow = new SelectedRow(rowObject);
 			if (currentSelectedRow.Equals(selectedRow))
 				return rowObject;

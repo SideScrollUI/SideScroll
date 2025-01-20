@@ -81,13 +81,17 @@ public class TabDataSettings
 
 	public class MethodColumn(MethodInfo methodInfo, string? label = null)
 	{
-		public readonly MethodInfo MethodInfo = methodInfo;
+		[HiddenColumn]
+		public MethodInfo MethodInfo => methodInfo;
+
 		public string Label { get; set; } = label ?? methodInfo.GetCustomAttribute<ButtonColumnAttribute>()?.Name ?? methodInfo.Name;
 	}
 
 	public class PropertyColumn(PropertyInfo propertyInfo, string label)
 	{
-		public readonly PropertyInfo PropertyInfo = propertyInfo;
+		[HiddenColumn]
+		public PropertyInfo PropertyInfo => propertyInfo;
+
 		public string Label { get; set; } = label;
 
 		public override string ToString() => Label;
@@ -155,16 +159,8 @@ public class TabDataSettings
 		//Debug.Assert(visibleProperties.Count > 0); // built in types don't always have properties
 		foreach (PropertyInfo propertyInfo in visibleProperties)
 		{
-			string label;
 			NameAttribute? attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
-			if (attribute != null)
-			{
-				label = attribute.Name;
-			}
-			else
-			{
-				label = propertyInfo.Name.WordSpaced();
-			}
+			string label = attribute?.Name ?? propertyInfo.Name.WordSpaced();
 			propertyColumns.Add(new PropertyColumn(propertyInfo, label));
 		}
 		return propertyColumns;

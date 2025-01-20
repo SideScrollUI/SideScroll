@@ -6,8 +6,8 @@ namespace SideScroll.Tabs.Tools.FileViewer;
 
 public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes, FileSelectorOptions? fileSelectorOptions = null) : ITab
 {
-	public DataRepoView<NodeView> DataRepoNodes = dataRepoNodes;
-	public FileSelectorOptions? FileSelectorOptions = fileSelectorOptions;
+	public DataRepoView<NodeView> DataRepoNodes => dataRepoNodes;
+	public FileSelectorOptions? FileSelectorOptions { get; set; } = fileSelectorOptions;
 
 	public TabInstance Create() => new Instance(this);
 
@@ -28,12 +28,9 @@ public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes, FileSelectorO
 
 			tab.DataRepoNodes.LoadAllIndexed(call);
 			List<NodeView> nodeViews = tab.DataRepoNodes.Items.Values.ToList();
-			if (nodeViews.Count > 0)
+			foreach (var node in nodeViews)
 			{
-				foreach (var node in nodeViews)
-				{
-					node.FileSelectorOptions = tab.FileSelectorOptions;
-				}
+				node.FileSelectorOptions = tab.FileSelectorOptions;
 			}
 
 			model.AddData(nodeViews);

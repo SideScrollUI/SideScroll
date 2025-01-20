@@ -101,7 +101,7 @@ public class TypeRepoObject : TypeRepo
 				{
 					typeRef = null;
 				}
-				
+
 				LazyProperty.SetTypeRef(obj, typeRef);
 			}
 			else if (!PropertySchema.IsWriteable)

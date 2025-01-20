@@ -8,7 +8,7 @@ public class ParamsAttribute : Attribute;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public class ListItemAttribute(bool includeBaseTypes = false) : Attribute
 {
-	public readonly bool IncludeBaseTypes = includeBaseTypes;
+	public bool IncludeBaseTypes => includeBaseTypes;
 }
 
 // ICollection's that specify this will show individual members in Formatted()
@@ -25,12 +25,12 @@ public class TabRootAttribute : Attribute;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public class SkippableAttribute(bool value = true) : Attribute
 {
-	public readonly bool Value = value;
+	public bool Value => value;
 }
 
 // [Summary("Text to describe object")], [Description] conflicts with NUnit's, use [TabDescription]?
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public class SummaryAttribute(string summary) : Attribute
 {
-	public readonly string Summary = summary;
+	public string Summary => summary;
 }

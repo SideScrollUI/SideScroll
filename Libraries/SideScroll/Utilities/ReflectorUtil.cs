@@ -21,7 +21,9 @@ public static class ReflectorUtil
 				int brackEnd = propertyName.IndexOf(']');
 				string subPropertyName = brackStart > 0 ? propertyName[..brackStart] : propertyName;
 
-				var properties = currentType.GetProperties().Where(x => x.Name == subPropertyName);
+				var properties = currentType.GetProperties()
+					.Where(x => x.Name == subPropertyName)
+					.ToList();
 				PropertyInfo property = properties.FirstOrDefault(x => x.DeclaringType == currentType) ?? properties.First();
 				obj = property.GetValue(obj, null);
 

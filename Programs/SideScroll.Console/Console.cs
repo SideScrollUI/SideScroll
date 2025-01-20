@@ -18,7 +18,7 @@ public class Console
 	public Console()
 	{
 		// setup
-		var project = new Project(Settings);
+		var project = Project.Load(Settings);
 		_call = new Call(GetType().Name);
 		_logWriterConsole = new LogWriterConsole(_call.Log);
 		_logWriterText = new LogWriterText(_call.Log, project.DataApp.GetGroupPath(typeof(Console)) + "/Logs/Main");

@@ -4,19 +4,11 @@ namespace SideScroll.Utilities;
 
 public struct FilePath(string path)
 {
-	public string Path = path;
+	public readonly string Path => path;
 }
 
 public static class FileUtils
 {
-	public static string TimestampString => DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-
-	[DllImport("libc", SetLastError = true, CharSet = CharSet.Unicode)]
-	internal static extern int chmod(string path, int mode);
-
-	[DllImport("libc", SetLastError = true)]
-	internal static extern int umask(uint mask);
-
 	// User
 	public const int S_IRUSR = 0x100;
 	public const int S_IWUSR = 0x80;
@@ -33,7 +25,24 @@ public static class FileUtils
 	public const int S_IXOTH = 0x1;
 
 	// Disallow setting group and other permissions, only allow user
-	private const int UmaskUserOnlyPermissions = S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH;
+	public const int UmaskUserOnlyPermissions = S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH;
+	public static string TimestampString => DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+
+	public static HashSet<string> TextExtensions { get; set; } =
+	[
+		".csv",
+		".html",
+		".ini",
+		".log",
+		".md",
+		".txt",
+	];
+
+	[DllImport("libc", SetLastError = true, CharSet = CharSet.Unicode)]
+	internal static extern int chmod(string path, int mode);
+
+	[DllImport("libc", SetLastError = true)]
+	internal static extern int umask(uint mask);
 
 	private static bool CanSetPermissions()
 	{
@@ -115,16 +124,6 @@ public static class FileUtils
 
 		return false;
 	}
-
-	public static HashSet<string> TextExtensions { get; set; } =
-	[
-		".csv",
-		".html",
-		".ini",
-		".log",
-		".md",
-		".txt",
-	];
 
 	public static bool IsTextFile(string path)
 	{

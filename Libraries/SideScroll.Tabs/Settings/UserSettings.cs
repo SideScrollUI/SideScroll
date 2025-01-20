@@ -1,4 +1,6 @@
 using SideScroll.Attributes;
+using SideScroll.Extensions;
+using SideScroll.Time;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,9 +25,16 @@ public class UserSettings
 
 	//public int MaxLogItems { get; set; } = 100_000;
 
+	public static List<TimeZoneView> TimeZones { get; set; } = TimeZoneView.All;
+
+	[Separator, BindList(nameof(TimeZones))]
+	public TimeZoneView TimeZone { get; set; } = TimeZoneView.Local;
+
+	public TimeFormatType TimeFormat { get; set; } = TimeFormatType.Minute;
+
 	public static IList? Themes { get; set; }
 
-	[BindList(nameof(Themes))]
+	[Separator, BindList(nameof(Themes))]
 	public string? Theme { get; set; }
 
 	public override string ToString() => SettingsPath;

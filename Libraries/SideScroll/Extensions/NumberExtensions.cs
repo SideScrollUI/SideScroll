@@ -42,8 +42,8 @@ public static class NumberExtensions
 	{
 		if (num == 0) return 0;
 
-		int d = (int)Math.Ceiling(Math.Log10((double)Math.Abs(num)));
-		int power = significantFigures - d;
+		int d = (int)Math.Floor(Math.Log10((double)Math.Abs(num)));
+		int power = significantFigures - d - 1;
 
 		decimal magnitude = (decimal)Math.Pow(10, power);
 

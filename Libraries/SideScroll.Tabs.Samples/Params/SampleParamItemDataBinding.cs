@@ -9,7 +9,7 @@ namespace SideScroll.Tabs.Samples.Params;
 public class SampleParamItemDataBinding(SynchronizationContext context) : INotifyPropertyChanged
 {
 	[DataKey, Required, StringLength(30)]
-	public string? Value 
+	public string? Value
 	{
 		get => _value;
 		set

@@ -190,7 +190,7 @@ public class TabModel
 		Type? elementType = listType.GetElementTypeForAll();
 		if (elementType == null)
 			return false;
-		
+
 		List<PropertyInfo> visibleProperties = elementType.GetVisibleProperties();
 		if (elementType == typeof(string))
 		{
@@ -392,7 +392,6 @@ public class TabModel
 				{
 					SelectedRow selectedRow = new()
 					{
-						RowIndex = -1,
 						Object = obj,
 					};
 					tabDataSettings.SelectedRows.Add(selectedRow);
@@ -409,7 +408,6 @@ public class TabModel
 							childNode.TabModel = tabModel;
 							SelectedRow selectedRow = new()
 							{
-								RowIndex = -1,
 								Object = obj,
 							};
 							tabDataSettings.SelectedRows.Add(selectedRow);

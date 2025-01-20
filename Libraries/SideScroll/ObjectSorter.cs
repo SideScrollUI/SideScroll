@@ -53,8 +53,8 @@ public class CustomComparer : IComparer
 
 public class Sorter : CustomComparer
 {
-	public ListSortDescriptionCollection? Sorts;
-	public ListSortDirection SortDirection;
+	public ListSortDescriptionCollection? Sorts { get; set; }
+	public ListSortDirection SortDirection { get; set; }
 
 	public override int Compare(object? x, object? y)
 	{

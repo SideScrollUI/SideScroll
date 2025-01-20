@@ -146,7 +146,7 @@ public class ParamListItem
 var planetParams = new TabControlParams(_planet);
 model.AddObject(planetParams);
 ```
-[Source](../../Libraries/SideScroll.UI.Avalonia/Samples/Controls/CustomControl/TabCustomControl.cs)
+[Source](../../Libraries/SideScroll.Avalonia/Samples/Controls/CustomControl/TabCustomControl.cs)
 
 ## Attributes
 | Attribute | Description |

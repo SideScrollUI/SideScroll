@@ -36,7 +36,7 @@ public class TestFieldVisibility : TestBase
 	public void TestDefault()
 	{
 		FieldInfo fieldInfo = GetFieldInfo(this, nameof(Default));
-		Assert.IsTrue(fieldInfo.IsRowVisible());
+		Assert.That(fieldInfo.IsRowVisible());
 	}
 
 	[Hidden]
@@ -46,7 +46,7 @@ public class TestFieldVisibility : TestBase
 	public void TestHidden()
 	{
 		FieldInfo fieldInfo = GetFieldInfo(this, nameof(Hidden));
-		Assert.IsFalse(fieldInfo.IsRowVisible());
+		Assert.That(fieldInfo.IsRowVisible(), Is.False);
 	}
 
 	[HiddenRow]
@@ -56,7 +56,7 @@ public class TestFieldVisibility : TestBase
 	public void TestHiddenRow()
 	{
 		FieldInfo fieldInfo = GetFieldInfo(this, nameof(HiddenRow));
-		Assert.IsFalse(fieldInfo.IsRowVisible());
+		Assert.That(fieldInfo.IsRowVisible(), Is.False);
 	}
 
 	[Hide(null)]
@@ -66,8 +66,8 @@ public class TestFieldVisibility : TestBase
 	public void TestHideNull()
 	{
 		ListField listField = GetListField(this, nameof(HideNull));
-		Assert.IsTrue(listField.IsFieldVisible);
-		Assert.IsFalse(listField.IsRowVisible());
+		Assert.That(listField.IsFieldVisible);
+		Assert.That(listField.IsRowVisible(), Is.False);
 	}
 
 	[Hide(null)]
@@ -77,8 +77,8 @@ public class TestFieldVisibility : TestBase
 	public void TestHideNullShow()
 	{
 		ListField listField = GetListField(this, nameof(HideNullShow));
-		Assert.IsTrue(listField.IsFieldVisible);
-		Assert.IsTrue(listField.IsRowVisible());
+		Assert.That(listField.IsFieldVisible);
+		Assert.That(listField.IsRowVisible());
 	}
 
 	[HideRow(null)]
@@ -88,8 +88,8 @@ public class TestFieldVisibility : TestBase
 	public void TestHideRowNull()
 	{
 		ListField listField = GetListField(this, nameof(HideRowNull));
-		Assert.IsTrue(listField.IsFieldVisible);
-		Assert.IsFalse(listField.IsRowVisible());
+		Assert.That(listField.IsFieldVisible);
+		Assert.That(listField.IsRowVisible(), Is.False);
 	}
 
 	[HideRow(null)]
@@ -99,8 +99,8 @@ public class TestFieldVisibility : TestBase
 	public void TestHideRowNullShow()
 	{
 		ListField listField = GetListField(this, nameof(HideRowNullShow));
-		Assert.IsTrue(listField.IsFieldVisible);
-		Assert.IsTrue(listField.IsRowVisible());
+		Assert.That(listField.IsFieldVisible);
+		Assert.That(listField.IsRowVisible());
 	}
 
 	[Hide(null)]
@@ -115,10 +115,10 @@ public class TestFieldVisibility : TestBase
 	{
 		HideNullClass input = new();
 		ItemCollection<ListMember> listMembers = ListMember.Create(input);
+			
+		Assert.That(listMembers, Has.Exactly(1).Items);
 
-		Assert.AreEqual(1, listMembers.Count);
-
-		Assert.AreEqual(nameof(HideNullClass.VisibleField), listMembers[0].MemberInfo.Name);
+		Assert.That(listMembers[0].MemberInfo.Name, Is.EqualTo(nameof(HideNullClass.VisibleField)));
 	}
 
 	public class InlineClass
@@ -139,9 +139,9 @@ public class TestFieldVisibility : TestBase
 		InlineClass input = new();
 		ItemCollection<ListMember> listMembers = ListMember.Create(input);
 
-		Assert.AreEqual(2, listMembers.Count);
+		Assert.That(listMembers, Has.Exactly(2).Items);
 
-		Assert.AreEqual(nameof(InlineData.InlineProperty), listMembers[0].MemberInfo.Name);
-		Assert.AreEqual(nameof(InlineData.InlineField), listMembers[1].MemberInfo.Name);
+		Assert.That(listMembers[0].MemberInfo.Name, Is.EqualTo(nameof(InlineData.InlineProperty)));
+		Assert.That(listMembers[1].MemberInfo.Name, Is.EqualTo(nameof(InlineData.InlineField)));
 	}
 }

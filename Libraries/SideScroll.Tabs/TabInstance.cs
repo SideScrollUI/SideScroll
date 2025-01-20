@@ -32,7 +32,7 @@ public interface IInnerTab
 
 public class TabInstanceLoadAsync(ILoadAsync loadAsync) : TabInstance, ITabAsync
 {
-	public readonly ILoadAsync LoadMethod = loadAsync;
+	public ILoadAsync LoadMethod => loadAsync;
 
 	public async Task LoadAsync(Call call, TabModel model)
 	{
@@ -45,7 +45,7 @@ public class TabInstanceLoadAsync(ILoadAsync loadAsync) : TabInstance, ITabAsync
 
 public class TabCreatorAsync(ITabCreatorAsync creatorAsync) : TabInstance, ITabAsync
 {
-	public readonly ITabCreatorAsync CreatorAsync = creatorAsync;
+	public ITabCreatorAsync CreatorAsync => creatorAsync;
 
 	private TabInstance? _innerChildInstance;
 
@@ -76,16 +76,16 @@ public abstract class TabInstanceAsync : TabInstance, ITabAsync
 //	An Instance of a TabModel, created by TabView
 public class TabInstance : IDisposable
 {
-	private const int MaxPreloadItems = 50; // preload all rows that might be visible to avoid freezing UI
-
 	public const string CurrentBookmarkName = "Current";
 
+	public static int MaxPreloadItems { get; set; } = 50; // preload all rows that might be visible to avoid freezing UI
+
 	public Project Project { get; set; }
-	public ITab? iTab; // Collision with derived Tab
+	public ITab? iTab { get; set; } // Collision with derived Tab
 	public TaskInstance TaskInstance { get; set; } = new();
 	public TabModel Model { get; set; } = new();
 	public string Label
-	{ 
+	{
 		get => Model.Name;
 		set => Model.Name = value;
 	}
@@ -104,19 +104,19 @@ public class TabInstance : IDisposable
 	public TabInstance? ParentTabInstance { get; set; }
 	public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = [];
 
-	public SynchronizationContext UiContext;
-	public TabBookmark? FilterBookmarkNode;
+	public SynchronizationContext UiContext { get; set; }
+	public TabBookmark? FilterBookmarkNode { get; set; }
 
 	public class EventSelectItem(object obj) : EventArgs
 	{
-		public readonly object Object = obj;
+		public object Object => obj;
 
 		public override string? ToString() => Object?.ToString();
 	}
 
 	public class EventSelectItems(IList list) : EventArgs
 	{
-		public readonly IList List = list;
+		public IList List => list;
 	}
 
 	public event EventHandler<EventArgs>? OnRefresh;
@@ -130,7 +130,7 @@ public class TabInstance : IDisposable
 	public event EventHandler<EventArgs>? OnResize;
 	public event EventHandler<EventArgs>? OnValidate;
 
-	public Action? DefaultAction; // Default action when Enter pressed
+	public Action? DefaultAction { get; set; } // Default action when Enter pressed
 
 	// Relative paths for where all the TabSettings get stored, primarily used for loading future defaults
 	// paths get hashed later to avoid having to encode and super long names breaking path limits
@@ -315,7 +315,7 @@ public class TabInstance : IDisposable
 		{
 			Type type = GetType(); // gets derived type
 			return type.GetMethods()
-				.FirstOrDefault(m => 
+				.FirstOrDefault(m =>
 					m.Name == name &&
 					m.DeclaringType != typeof(TabInstance) &&
 					m.GetParameters().Length == paramCount);
@@ -430,6 +430,9 @@ public class TabInstance : IDisposable
 			{
 				foreach (var propertyColumn in propertyColumns)
 				{
+					if (propertyColumn.PropertyInfo.DeclaringType?.IsAbstract == true)
+						continue;
+
 					propertyColumn.PropertyInfo.GetValue(obj);
 				}
 				itemCount++;
@@ -438,10 +441,14 @@ public class TabInstance : IDisposable
 			}
 
 			if (iList is ItemCollection<ListProperty> propertyList)
+			{
 				model.ItemList[i] = ListProperty.Sort(propertyList);
+			}
 
 			if (iList is ItemCollection<ListMember> memberList)
+			{
 				model.ItemList[i] = ListMember.Sort(memberList);
+			}
 		}
 	}
 
@@ -468,7 +475,9 @@ public class TabInstance : IDisposable
 		foreach (IList iList in model.ItemList)
 		{
 			if (iList is IContext context)
+			{
 				context.InitializeContext(true);
+			}
 		}
 
 		try
@@ -607,7 +616,7 @@ public class TabInstance : IDisposable
 		{
 			Name = Label,
 			Type = iTab?.GetType(),
-			TabBookmark = {IsRoot = true}
+			TabBookmark = { IsRoot = true }
 		};
 		GetBookmark(bookmark.TabBookmark);
 		bookmark = bookmark.DeepClone(TaskInstance.Call)!; // Sanitize and test bookmark
@@ -656,7 +665,7 @@ public class TabInstance : IDisposable
 				tabBookmark.IsRoot = true;
 				tabBookmark.Tab = iTab;
 			}
-			else if (type.GetCustomAttribute<PublicDataAttribute>() != null && 
+			else if (type.GetCustomAttribute<PublicDataAttribute>() != null &&
 				(tabBookmark.IsRoot || IsRoot))
 			{
 				tabBookmark.Tab = iTab;

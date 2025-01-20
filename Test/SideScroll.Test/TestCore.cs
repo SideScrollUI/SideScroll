@@ -19,6 +19,6 @@ public class TestCore : TestBase
 		decimal d = 123456.1234M;
 		string text = d.Formatted()!;
 
-		Assert.AreEqual("123,456.1234", text);
+		Assert.That(text, Is.EqualTo("123,456.1234"));
 	}
 }

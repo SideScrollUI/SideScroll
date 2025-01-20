@@ -76,5 +76,5 @@ public class TimeWindow
 
 public class TimeWindowEventArgs(TimeWindow timeWindow) : EventArgs
 {
-	public TimeWindow TimeWindow { get; set; } = timeWindow;
+	public TimeWindow TimeWindow => timeWindow;
 }

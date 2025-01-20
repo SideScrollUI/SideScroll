@@ -8,7 +8,8 @@ namespace SideScroll.Tabs.Lists;
 
 public class ListField : ListMember, IPropertyEditable
 {
-	public readonly FieldInfo FieldInfo;
+	[HiddenColumn]
+	public FieldInfo FieldInfo { get; init; }
 
 	[HiddenColumn]
 	public override bool Editable => true;
@@ -65,11 +66,12 @@ public class ListField : ListMember, IPropertyEditable
 		}
 	}
 
-	public static new ItemCollection<ListField> Create(object obj, bool includeBaseTypes = true)
+	public static new ItemCollection<ListField> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
 	{
 		var fieldInfos = obj.GetType().GetFields()
 			.Where(f => f.IsRowVisible())
 			.Where(f => includeBaseTypes || f.DeclaringType == obj.GetType())
+			.Where(f => includeStatic || !f.IsStatic)
 			.OrderBy(f => f.Module.Name)
 			.ThenBy(f => f.MetadataToken);
 

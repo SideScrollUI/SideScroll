@@ -69,11 +69,17 @@ public class Serializer : IDisposable
 	public object? BaseObject(Call call)
 	{
 		if (TypeRepos.Count == 0)// || typeRepos[0].objects.Count == 0)
+		{
+			call.Log.AddError("No TypeRepos found");
 			return null;
+		}
 
 		TypeRepo typeRepo = TypeRepos[0];
 		if (typeRepo.LoadableType == null)
+		{
+			call.Log.AddError("BaseObject type isn't loadable", new Tag("Type", typeRepo.TypeSchema.Name));
 			return null;
+		}
 
 		if (typeRepo.Type!.IsPrimitive)
 		{
@@ -576,8 +582,8 @@ public class Serializer : IDisposable
 		if (typeRepo is
 			TypeRepoPrimitive or
 			Atlas.TypeRepos.TypeRepoString or
-		    TypeRepoEnum or
-		    TypeRepoType)
+			TypeRepoEnum or
+			TypeRepoType)
 		{
 			Clones[obj] = obj; // optional
 			return obj;
@@ -614,7 +620,7 @@ public class Serializer : IDisposable
 	{
 		T? clone = (T?)Clone(obj);
 		using LogTimer logClone = log.Timer("Clone");
-		
+
 		while (CloneQueue.Count > 0)
 		{
 			Action action = CloneQueue.Dequeue();
@@ -626,7 +632,7 @@ public class Serializer : IDisposable
 
 		logClone.Add("Clone Finished", new Tag("Objects", Clones.Count));
 		LogClonedTypes(logClone);
-	
+
 		return clone;
 	}
 

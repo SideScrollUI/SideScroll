@@ -15,6 +15,6 @@ public class TestFileUtils : TestBase
 	[Test]
 	public void TestIsFileNotFound()
 	{
-		Assert.IsFalse(FileUtils.IsFileOpen("not_a_file"));
+		Assert.That(FileUtils.IsFileOpen("not_a_file"), Is.False);
 	}
 }

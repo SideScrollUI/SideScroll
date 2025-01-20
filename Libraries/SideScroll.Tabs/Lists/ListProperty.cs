@@ -14,8 +14,11 @@ public interface IPropertyEditable
 
 public class ListProperty : ListMember, IPropertyEditable
 {
-	public readonly PropertyInfo PropertyInfo;
-	public bool Cachable;
+	[HiddenColumn]
+	public PropertyInfo PropertyInfo { get; init; }
+
+	[HiddenColumn]
+	public bool Cachable { get; set; }
 
 	private bool _valueCached;
 	private object? _valueObject;
@@ -44,13 +47,13 @@ public class ListProperty : ListMember, IPropertyEditable
 				{
 					if (!_valueCached)
 					{
-						_valueCached = true;
 						_valueObject = PropertyInfo.GetValue(Object);
 
 						if (IsFormatted)
 						{
 							_valueObject = _valueObject.Formatted();
 						}
+						_valueCached = true;
 					}
 					return _valueObject;
 				}
@@ -136,17 +139,18 @@ public class ListProperty : ListMember, IPropertyEditable
 	protected void ListProperty_PropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
 		if (e.PropertyName != MemberInfo.Name) return;
-		
+
 		_valueCached = false;
 		ValueChanged();
 	}
 
-	public static new ItemCollection<ListProperty> Create(object obj, bool includeBaseTypes = true)
+	public static new ItemCollection<ListProperty> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
 	{
 		// this doesn't work for virtual methods (or any method modifier?)
 		var propertyInfos = obj.GetType().GetProperties()
 			.Where(p => p.IsRowVisible())
 			.Where(p => includeBaseTypes || p.DeclaringType == obj.GetType())
+			.Where(p => includeStatic || !p.GetAccessors(nonPublic: true)[0].IsStatic)
 			.OrderBy(p => p.Module.Name)
 			.ThenBy(p => p.MetadataToken);
 

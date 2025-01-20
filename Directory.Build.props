@@ -1,9 +1,9 @@
 <Project>
   <PropertyGroup>
-    <Version>0.7.3</Version>
-    <PackageReleaseNotes>Fixed TabDirectory file extension filtering. Added a Copy/Paste Context Menu to ComboBoxes. Added Flyout for Tab Links. Fixed Live Charts showing decimal value axis labels for whole numbers. Added more actions to the Tab Title Context Menu. Fixed DateTime parsing for seconds and milliseconds that have commas in them. [DebugOnly] now works for classes and structs too. Added plugin system for ScreenCapture so it can be loaded only for Desktop apps. Added SideScroll.UI.Avalonia.Samples to allow sharing samples between platforms.</PackageReleaseNotes>
+    <Version>0.9.2</Version>
+    <PackageReleaseNotes>Changed public fields to properties. Improved LiveChart Fractional Y Axis labeling so that it rounds to fractional significant figures. Added logging for TabFileSerialized loading.</PackageReleaseNotes>
 
-    <AvaloniaVersion>11.2.1</AvaloniaVersion>
+    <AvaloniaVersion>11.2.3</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>

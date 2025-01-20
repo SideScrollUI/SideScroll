@@ -1,11 +1,12 @@
 using SideScroll.Extensions;
+using SideScroll.Time;
 using System.Globalization;
 
 namespace SideScroll.Utilities;
 
 public static class DateTimeUtils
 {
-	public static DateTime EpochTime => new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+	public static DateTime EpochTime { get; private set; } = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 	public static bool TryParseTimeSpan(string text, out TimeSpan timeSpan)
 	{
@@ -76,19 +77,26 @@ public static class DateTimeUtils
 
 	public static string FormatTimeRange(DateTime startTime, DateTime endTime, bool withDuration = true)
 	{
-		string timeFormat = "H:mm:ss";
+		startTime = TimeZoneView.Current.Convert(startTime);
+		endTime = TimeZoneView.Current.Convert(endTime);
+
+		string dateFormat = "yyyy-M-d";
+		string timeFormat = "T";
 		if (startTime.Second == 0 && endTime.Second == 0)
 		{
-			timeFormat = "H:mm";
+			timeFormat = "t";
 		}
-		string startFormat = $"yyyy-M-d {timeFormat}";
-		string endFormat = (startTime.Date == endTime.Date) ? timeFormat : startFormat;
 
-		TimeSpan duration = endTime.Subtract(startTime);
+		string text = startTime.ToString(dateFormat) + ' ' + startTime.ToString(timeFormat) + " -";
+		if (startTime.Date != endTime.Date)
+		{
+			text += ' ' + endTime.ToString(dateFormat);
+		}
+		text += ' ' + endTime.ToString(timeFormat);
 
-		string text = startTime.ToString(startFormat) + " - " + endTime.ToString(endFormat);
 		if (withDuration)
 		{
+			TimeSpan duration = endTime.Subtract(startTime);
 			text += " - " + duration.FormattedDecimal();
 		}
 		return text;

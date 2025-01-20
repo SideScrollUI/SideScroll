@@ -7,6 +7,10 @@ namespace SideScroll.Extensions;
 
 public static class StringExtensions
 {
+
+	public static HashSet<char> WordSpacedSymbols { get; set; } = ['|', '/', '-'];
+	public static HashSet<char> WordSpacedNumberConnectors { get; set; } = ['-', ':', '.'];
+
 	public static bool CaseInsensitiveContains(this string text, string value, StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase)
 	{
 		return text.Contains(value, stringComparison);
@@ -25,7 +29,9 @@ public static class StringExtensions
 			return input;
 
 		while (input.StartsWith(prefix))
+		{
 			input = input[prefix.Length..];
+		}
 
 		return input;
 	}
@@ -33,7 +39,9 @@ public static class StringExtensions
 	public static string TrimEnd(this string input, string postfix)
 	{
 		if (input.EndsWith(postfix))
+		{
 			return input[..^postfix.Length];
+		}
 
 		return input;
 	}
@@ -55,9 +63,6 @@ public static class StringExtensions
 
 		return input[start..];
 	}
-
-	private static readonly HashSet<char> _wordSpacedSymbols = ['|', '/', '-'];
-	private static readonly HashSet<char> _wordSpacedNumberConnectors = ['-', ':', '.'];
 
 	// Adds spaces between words
 	// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'
@@ -84,7 +89,7 @@ public static class StringExtensions
 			{
 				c = ' ';
 			}
-			else if (_wordSpacedSymbols.Contains(c) && (!numberMode || !_wordSpacedNumberConnectors.Contains(c)))
+			else if (WordSpacedSymbols.Contains(c) && (!numberMode || !WordSpacedNumberConnectors.Contains(c)))
 			{
 				numberMode = false;
 				newText.Append(' ');
@@ -145,7 +150,9 @@ public static class StringExtensions
 	public static List<int> AllIndexesOf(this string str, string value)
 	{
 		if (string.IsNullOrEmpty(value))
+		{
 			throw new ArgumentException("the string to find may not be empty", nameof(value));
+		}
 
 		var indexes = new List<int>();
 		for (int index = 0; ; index += value.Length)
@@ -161,7 +168,9 @@ public static class StringExtensions
 	public static IEnumerable<int> AllIndexesOfYield(this string str, string value)
 	{
 		if (string.IsNullOrEmpty(value))
+		{
 			throw new ArgumentException("the string to find may not be empty", nameof(value));
+		}
 
 		for (int index = 0; ; index += value.Length)
 		{

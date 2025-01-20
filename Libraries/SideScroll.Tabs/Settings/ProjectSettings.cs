@@ -30,5 +30,10 @@ public class ProjectSettings
 		}
 	}
 
+	public virtual UserSettings DefaultUserSettings => new()
+	{
+		ProjectPath = DefaultProjectPath,
+	};
+
 	public static Version ProgramVersion() => Assembly.GetEntryAssembly()!.GetName().Version!;
 }
