@@ -30,7 +30,7 @@ public class SerializeDateTime : TestSerializeBase
 		_serializer.Save(Call, input);
 		DateTime output = _serializer.Load<DateTime>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize DateTime UTC")]
@@ -41,7 +41,7 @@ public class SerializeDateTime : TestSerializeBase
 		_serializer.Save(Call, input);
 		DateTime output = _serializer.Load<DateTime>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize DateTimeOffset Local")]
@@ -53,7 +53,7 @@ public class SerializeDateTime : TestSerializeBase
 		_serializer.Save(Call, input);
 		DateTimeOffset output = _serializer.Load<DateTimeOffset>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize DateTimeOffset UTC")]
@@ -65,7 +65,7 @@ public class SerializeDateTime : TestSerializeBase
 		_serializer.Save(Call, input);
 		DateTimeOffset output = _serializer.Load<DateTimeOffset>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize TimeZoneInfo")]
@@ -76,7 +76,7 @@ public class SerializeDateTime : TestSerializeBase
 		_serializer.Save(Call, input);
 		TimeZoneInfo output = _serializer.Load<TimeZoneInfo>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize TimeZoneInfo Pacific Standard Time")]
@@ -87,7 +87,7 @@ public class SerializeDateTime : TestSerializeBase
 		_serializer.Save(Call, input);
 		TimeZoneInfo output = _serializer.Load<TimeZoneInfo>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize TimeZoneView")]
@@ -98,9 +98,9 @@ public class SerializeDateTime : TestSerializeBase
 		_serializer.Save(Call, input);
 		TimeZoneView output = _serializer.Load<TimeZoneView>(Call);
 
-		Assert.AreEqual(input.Abbreviation, output.Abbreviation);
-		Assert.AreEqual(input.Name, output.Name);
-		Assert.AreEqual(input.TimeZoneInfo, output.TimeZoneInfo);
+		Assert.That(output.Abbreviation, Is.EqualTo(input.Abbreviation));
+		Assert.That(output.Name, Is.EqualTo(input.Name));
+		Assert.That(output.TimeZoneInfo, Is.EqualTo(input.TimeZoneInfo));
 	}
 
 	public class NullableDateTime
@@ -120,6 +120,6 @@ public class SerializeDateTime : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<NullableDateTime>(Call);
 
-		Assert.AreEqual(input.TimeStamp, output.TimeStamp);
+		Assert.That(output.TimeStamp, Is.EqualTo(input.TimeStamp));
 	}
 }

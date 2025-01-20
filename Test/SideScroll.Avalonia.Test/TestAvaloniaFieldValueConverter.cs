@@ -20,6 +20,6 @@ public class TestAvaloniaFieldValueConverter
 		var converter = new FormatValueConverter();
 		string converted = (string)converter.Convert(dateTime, typeof(string), null, CultureInfo.CurrentCulture)!;
 		DateTime processedDateTime = (DateTime)converter.Convert(converted, typeof(DateTime), null, CultureInfo.CurrentCulture)!;
-		Assert.AreEqual(dateTime, processedDateTime);
+		Assert.That(processedDateTime, Is.EqualTo(dateTime));
 	}
 }

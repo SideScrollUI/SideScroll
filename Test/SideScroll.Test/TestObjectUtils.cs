@@ -15,13 +15,13 @@ public class TestObjectUtils : TestBase
 	[Test]
 	public void AreEqual()
 	{
-		Assert.IsTrue(ObjectUtils.AreEqual(1, 1u));
+		Assert.That(ObjectUtils.AreEqual(1, 1u));
 	}
 
 	[Test]
 	public void ArrayAreEqual()
 	{
-		Assert.IsTrue(ObjectUtils.AreEqual(
+		Assert.That(ObjectUtils.AreEqual(
 			new int[] { 0 },
 			new int[] { 0 }
 			));
@@ -30,16 +30,16 @@ public class TestObjectUtils : TestBase
 	[Test]
 	public void ArrayAreNotEqual()
 	{
-		Assert.IsFalse(ObjectUtils.AreEqual(
+		Assert.That(ObjectUtils.AreEqual(
 			new int[] { 0 },
 			new int[] { 1 }
-			));
+			), Is.False);
 	}
 
 	[Test]
 	public void SubArrayAreEqual()
 	{
-		Assert.IsTrue(ObjectUtils.AreEqual(
+		Assert.That(ObjectUtils.AreEqual(
 			new int[][] { [0, 0] },
 			new int[][] { [0, 0] }
 			));
@@ -48,10 +48,10 @@ public class TestObjectUtils : TestBase
 	[Test]
 	public void SubArrayAreNotEqual()
 	{
-		Assert.IsFalse(ObjectUtils.AreEqual(
+		Assert.That(ObjectUtils.AreEqual(
 			new int[][] { [0, 0] },
 			new int[][] { [0, 1] }
-			));
+			), Is.False);
 	}
 
 	[Test]

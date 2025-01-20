@@ -14,44 +14,44 @@ public class TestLinkUri : TestBase
 	[Test]
 	public void TestParseLinkId()
 	{
-		Assert.IsTrue(LinkUri.TryParse("sidescroll://type/v3.1/id", out LinkUri? uri));
+		Assert.That(LinkUri.TryParse("sidescroll://type/v3.1/id", out LinkUri? uri));
 
-		Assert.AreEqual("sidescroll", uri!.Prefix);
-		Assert.AreEqual("type", uri.Type);
-		Assert.AreEqual(new Version(3, 1), uri.Version);
-		Assert.AreEqual("id", uri.Path);
+		Assert.That(uri!.Prefix, Is.EqualTo("sidescroll"));
+		Assert.That(uri.Type, Is.EqualTo("type"));
+		Assert.That(uri.Version, Is.EqualTo(new Version(3, 1)));
+		Assert.That(uri.Path, Is.EqualTo("id"));
 	}
 
 	[Test]
 	public void TestParseLinkSubTypeId()
 	{
-		Assert.IsTrue(LinkUri.TryParse("sidescroll://type.subtype/v3.1/id", out LinkUri? uri));
+		Assert.That(LinkUri.TryParse("sidescroll://type.subtype/v3.1/id", out LinkUri? uri));
 
-		Assert.AreEqual("sidescroll", uri!.Prefix);
-		Assert.AreEqual("type.subtype", uri.Type);
-		Assert.AreEqual(new Version(3, 1), uri.Version);
-		Assert.AreEqual("id", uri.Path);
+		Assert.That(uri!.Prefix, Is.EqualTo("sidescroll"));
+		Assert.That(uri.Type, Is.EqualTo("type.subtype"));
+		Assert.That(uri.Version, Is.EqualTo(new Version(3, 1)));
+		Assert.That(uri.Path, Is.EqualTo("id"));
 	}
 
 	[Test]
 	public void TestParseQuery()
 	{
-		Assert.IsTrue(LinkUri.TryParse("sidescroll://type/path?query", out LinkUri? uri));
+		Assert.That(LinkUri.TryParse("sidescroll://type/path?query", out LinkUri? uri));
 
-		Assert.AreEqual("sidescroll", uri!.Prefix);
-		Assert.AreEqual("type", uri.Type);
-		Assert.AreEqual("path", uri.Path);
-		Assert.AreEqual("query", uri.Query);
+		Assert.That(uri!.Prefix, Is.EqualTo("sidescroll"));
+		Assert.That(uri.Type, Is.EqualTo("type"));
+		Assert.That(uri.Path, Is.EqualTo("path"));
+		Assert.That(uri.Query, Is.EqualTo("query"));
 	}
 
 	[Test]
 	public void TestParseVersionedPath()
 	{
-		Assert.IsTrue(LinkUri.TryParse("sidescroll://type/v3.1/path?query", out LinkUri? uri));
+		Assert.That(LinkUri.TryParse("sidescroll://type/v3.1/path?query", out LinkUri? uri));
 
-		Assert.AreEqual("sidescroll", uri!.Prefix);
-		Assert.AreEqual("type", uri.Type);
-		Assert.AreEqual("path", uri.Path);
-		Assert.AreEqual("query", uri.Query);
+		Assert.That(uri!.Prefix, Is.EqualTo("sidescroll"));
+		Assert.That(uri.Type, Is.EqualTo("type"));
+		Assert.That(uri.Path, Is.EqualTo("path"));
+		Assert.That(uri.Query, Is.EqualTo("query"));
 	}
 }

@@ -35,7 +35,7 @@ public class TestDataRepo : TestSerializeBase
 		_dataRepo.Save(keyId, input, Call);
 		int output = _dataRepo.Load<int>(keyId, Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("DataInstance int Save Load")]
@@ -47,7 +47,7 @@ public class TestDataRepo : TestSerializeBase
 		instance.Save(Call, keyId, input);
 
 		int output = instance.Load(Call, keyId);
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("DataInstance Paging")]
@@ -65,10 +65,10 @@ public class TestDataRepo : TestSerializeBase
 
 		// Order is unknown without indexing
 		var page1 = pageView.Next(Call).ToList();
-		Assert.AreEqual(pageSize, page1.Count);
+		Assert.That(page1, Has.Exactly(pageSize).Items);
 
 		var page2 = pageView.Next(Call).ToList();
-		Assert.AreEqual(pageSize, page2.Count);
+		Assert.That(page2, Has.Exactly(pageSize).Items);
 	}
 
 	[Test, Description("DataInstance Index Paging")]
@@ -85,14 +85,14 @@ public class TestDataRepo : TestSerializeBase
 		pageView.PageSize = pageSize;
 
 		var page1 = pageView.Next(Call).ToList();
-		Assert.AreEqual(pageSize, page1.Count);
-		Assert.AreEqual(0, page1[0].Value);
-		Assert.AreEqual(1, page1[1].Value);
+		Assert.That(page1, Has.Exactly(pageSize).Items);
+		Assert.That(page1[0].Value, Is.EqualTo(0));
+		Assert.That(page1[1].Value, Is.EqualTo(1));
 
 		var page2 = pageView.Next(Call).ToList();
-		Assert.AreEqual(pageSize, page2.Count);
-		Assert.AreEqual(2, page2[0].Value);
-		Assert.AreEqual(3, page2[1].Value);
+		Assert.That(page2, Has.Exactly(pageSize).Items);
+		Assert.That(page2[0].Value, Is.EqualTo(2));
+		Assert.That(page2[1].Value, Is.EqualTo(3));
 	}
 
 	[Test, Description("DataInstance Index Replace")]
@@ -105,8 +105,8 @@ public class TestDataRepo : TestSerializeBase
 		instance.Save(Call, input.ToString(), input);
 
 		DataItemCollection<int> loaded = instance.LoadAll(Call);
-		Assert.AreEqual(1, loaded.Count);
-		Assert.AreEqual(1, loaded[0].Value);
+		Assert.That(loaded, Has.Exactly(1).Items);
+		Assert.That(loaded[0].Value, Is.EqualTo(1));
 	}
 
 	[Test, Description("DataInstance Index MaxItems")]
@@ -121,8 +121,8 @@ public class TestDataRepo : TestSerializeBase
 
 		DataItemCollection<int> allItems = instance.LoadAll(Call);
 
-		Assert.AreEqual(2, allItems.Count);
-		Assert.AreEqual(1, allItems[0].Value);
-		Assert.AreEqual(2, allItems[1].Value);
+		Assert.That(allItems, Has.Exactly(2).Items);
+		Assert.That(allItems[0].Value, Is.EqualTo(1));
+		Assert.That(allItems[1].Value, Is.EqualTo(2));
 	}
 }

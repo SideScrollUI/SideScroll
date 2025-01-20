@@ -17,7 +17,7 @@ public class TestWordSpaced : TestBase
 	{
 		string text = "CPUUtilization".WordSpaced();
 
-		Assert.AreEqual("CPU Utilization", text);
+		Assert.That(text, Is.EqualTo("CPU Utilization"));
 	}
 
 	[Test, Description("WordSpaced 5XX")]
@@ -25,7 +25,7 @@ public class TestWordSpaced : TestBase
 	{
 		string text = "Http5XXErrors".WordSpaced();
 
-		Assert.AreEqual("Http 5XX Errors", text); // 5xx would be better though?
+		Assert.That(text, Is.EqualTo("Http 5XX Errors")); // 5xx would be better though?
 	}
 
 	[Test, Description("WordSpaced 5XXs")]
@@ -33,7 +33,7 @@ public class TestWordSpaced : TestBase
 	{
 		string text = "Http5XXsErrors".WordSpaced();
 
-		Assert.AreEqual("Http 5XXs Errors", text);
+		Assert.That(text, Is.EqualTo("Http 5XXs Errors"));
 	}
 
 	[Test, Description("WordSpaced 2APIs")]
@@ -41,7 +41,7 @@ public class TestWordSpaced : TestBase
 	{
 		string text = "2APIs".WordSpaced();
 
-		Assert.AreEqual("2 APIs", text);
+		Assert.That(text, Is.EqualTo("2 APIs"));
 	}
 
 	[Test, Description("WordSpaced P99.9")]
@@ -50,7 +50,7 @@ public class TestWordSpaced : TestBase
 		string input = "P99.9";
 		string text = input.WordSpaced();
 
-		Assert.AreEqual(input, text);
+		Assert.That(text, Is.EqualTo(input));
 	}
 
 	[Test, Description("WordSpaced Timestamp")]
@@ -59,6 +59,6 @@ public class TestWordSpaced : TestBase
 		string input = "2021-11-10T18:02:23.225Z";
 		string text = input.WordSpaced();
 
-		Assert.AreEqual("2021-11-10 T 18:02:23.225 Z", text);
+		Assert.That(text, Is.EqualTo("2021-11-10 T 18:02:23.225 Z"));
 	}
 }

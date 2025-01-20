@@ -34,11 +34,11 @@ public class TestTabItemCollection : TestBase
 	{
 		List<object> foundObjects = collection.GetSelectedObjects(selectedRows);
 
-		Assert.AreEqual(selectedObjects.Length, foundObjects.Count);
+		Assert.That(foundObjects, Has.Exactly(selectedObjects.Length).Items);
 
 		for (int i = 0; i < selectedObjects.Length; i++)
 		{
-			Assert.AreEqual(selectedObjects[i], foundObjects[i]);
+			Assert.That(foundObjects[i], Is.EqualTo(selectedObjects[i]));
 		}
 
 		TestSwapping(list, selectedObjects, collection, selectedRows);
@@ -53,11 +53,11 @@ public class TestTabItemCollection : TestBase
 
 		List<object> offsetObjects = collection.GetSelectedObjects(selectedRows);
 
-		Assert.AreEqual(selectedObjects.Length, offsetObjects.Count);
+		Assert.That(offsetObjects, Has.Exactly(selectedObjects.Length).Items);
 
 		for (int i = 0; i < selectedObjects.Length; i++)
 		{
-			Assert.AreEqual(selectedObjects[i], offsetObjects[i]);
+			Assert.That(offsetObjects[i], Is.EqualTo(selectedObjects[i]));
 		}
 	}
 

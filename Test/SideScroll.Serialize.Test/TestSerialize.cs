@@ -28,7 +28,7 @@ public class SerializeTypes : TestSerializeBase
 		_serializer.Save(Call, input);
 		int output = _serializer.Load<int>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize Nullable int")]
@@ -39,7 +39,7 @@ public class SerializeTypes : TestSerializeBase
 		_serializer.Save(Call, input);
 		int? output = _serializer.Load<int?>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize byte")]
@@ -50,7 +50,7 @@ public class SerializeTypes : TestSerializeBase
 		_serializer.Save(Call, input);
 		byte output = _serializer.Load<byte>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize Enum")]
@@ -64,7 +64,7 @@ public class SerializeTypes : TestSerializeBase
 		_serializer.Save(Call, input);
 		EnumTest output = _serializer.Load<EnumTest>(Call);
 
-		Assert.AreEqual(input.TestEnum, output.TestEnum);
+		Assert.That(output.TestEnum, Is.EqualTo(input.TestEnum));
 	}
 
 	[Test, Description("Serialize Nullable Enum")]
@@ -75,7 +75,7 @@ public class SerializeTypes : TestSerializeBase
 		_serializer.Save(Call, input);
 		MyEnum? output = _serializer.Load<MyEnum?>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize Type")]
@@ -86,7 +86,7 @@ public class SerializeTypes : TestSerializeBase
 		_serializer.Save(Call, type);
 		Type output = _serializer.Load<Type>(Call);
 
-		Assert.AreEqual(type, output);
+		Assert.That(output, Is.EqualTo(type));
 	}
 
 	public struct StructTest
@@ -105,7 +105,7 @@ public class SerializeTypes : TestSerializeBase
 		_serializer.Save(Call, input);
 		StructTest output = _serializer.Load<StructTest>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize Objects")]
@@ -115,7 +115,7 @@ public class SerializeTypes : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Objects>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	public class Objects
@@ -142,6 +142,6 @@ public class SerializeTypes : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Version>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 }

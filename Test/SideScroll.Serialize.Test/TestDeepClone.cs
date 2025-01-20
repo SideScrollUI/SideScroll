@@ -28,6 +28,6 @@ public class TestDeepClone : TestSerializeBase
 
 		var output = input.DeepClone()!;
 
-		Assert.AreSame(input.Value, output.Value);
+		Assert.That(output.Value, Is.SameAs(input.Value));
 	}
 }

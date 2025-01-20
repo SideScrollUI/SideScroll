@@ -49,7 +49,7 @@ public class TestSerializeLogs : TestSerializeBase
 		input.Child("test");
 		_serializer.Save(Call, input);
 		TestLogBig output = _serializer.Load<TestLogBig>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Serialize Test Log")]
@@ -58,7 +58,7 @@ public class TestSerializeLogs : TestSerializeBase
 		var input = new TestLog();
 		_serializer.Save(Call, input);
 		TestLog output = _serializer.Load<TestLog>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Serialize Log Timer 2")]
@@ -71,7 +71,7 @@ public class TestSerializeLogs : TestSerializeBase
 		}
 		_serializer.Save(Call, input);
 		Log output = _serializer.Load<Log>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Serialize Log Entry")]
@@ -80,7 +80,7 @@ public class TestSerializeLogs : TestSerializeBase
 		var input = new LogEntry();
 		_serializer.Save(Call, input);
 		LogEntry output = _serializer.Load<LogEntry>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Serialize Log")]
@@ -89,7 +89,7 @@ public class TestSerializeLogs : TestSerializeBase
 		var input = new Log();
 		_serializer.Save(Call, input);
 		Log output = _serializer.Load<Log>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Serialize Log Unknown")]
@@ -98,7 +98,7 @@ public class TestSerializeLogs : TestSerializeBase
 		var input = new LogUnknown();
 		_serializer.Save(Call, input);
 		LogUnknown output = _serializer.Load<LogUnknown>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Serialize Log Child")]
@@ -109,7 +109,7 @@ public class TestSerializeLogs : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		Log output = _serializer.Load<Log>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Serialize Log Timer")]
@@ -119,7 +119,7 @@ public class TestSerializeLogs : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		LogTimer output = _serializer.Load<LogTimer>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Serialize Log Entry Tags")]
@@ -132,7 +132,7 @@ public class TestSerializeLogs : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		LogEntryTest2 output = _serializer.Load<LogEntryTest2>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Serialize Log Timer Child Unknown")]
@@ -143,7 +143,7 @@ public class TestSerializeLogs : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		LogTest2 output = _serializer.Load<LogTest2>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Serialize Log Timer Child")]
@@ -154,7 +154,7 @@ public class TestSerializeLogs : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		Log output = _serializer.Load<Log>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	public class LogEntryUnknown

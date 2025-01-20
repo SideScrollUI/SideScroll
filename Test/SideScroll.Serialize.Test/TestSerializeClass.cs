@@ -41,9 +41,9 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Fields>(Call);
 
-		Assert.AreEqual(input.UintTest, output.UintTest);
-		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
-		Assert.AreEqual(input.StringTest, output.StringTest);
+		Assert.That(output.UintTest, Is.EqualTo(input.UintTest));
+		Assert.That(output.DoubleTest, Is.EqualTo(input.DoubleTest));
+		Assert.That(output.StringTest, Is.EqualTo(input.StringTest));
 	}
 
 	public class Properties
@@ -67,9 +67,9 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Properties>(Call);
 
-		Assert.AreEqual(input.UintTest, output.UintTest);
-		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
-		Assert.AreEqual(input.StringTest, output.StringTest);
+		Assert.That(output.UintTest, Is.EqualTo(input.UintTest));
+		Assert.That(output.DoubleTest, Is.EqualTo(input.DoubleTest));
+		Assert.That(output.StringTest, Is.EqualTo(input.StringTest));
 	}
 
 	public class NullablePropertyPrimitives
@@ -96,8 +96,8 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<NullableFieldPrimitives>(Call);
 
-		Assert.AreEqual(input.UintTest, output.UintTest);
-		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
+		Assert.That(output.UintTest, Is.EqualTo(input.UintTest));
+		Assert.That(output.DoubleTest, Is.EqualTo(input.DoubleTest));
 	}
 
 	[Test, Description("Serialize Nullable Properties Primitive")]
@@ -112,8 +112,8 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<NullablePropertyPrimitives>(Call);
 
-		Assert.AreEqual(input.UintTest, output.UintTest);
-		Assert.AreEqual(input.DoubleTest, output.DoubleTest);
+		Assert.That(output.UintTest, Is.EqualTo(input.UintTest));
+		Assert.That(output.DoubleTest, Is.EqualTo(input.DoubleTest));
 	}
 
 	public class FieldInterfaceList
@@ -132,7 +132,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<FieldInterfaceList>(Call);
 
-		Assert.AreEqual(input.List, output.List);
+		Assert.That(output.List, Is.EqualTo(input.List));
 	}
 
 	public class BaseClass
@@ -158,7 +158,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<DerivedClassReference>(Call);
 
-		Assert.AreEqual(input.BaseClass!.A, output.BaseClass?.A);
+		Assert.That(output.BaseClass?.A, Is.EqualTo(input.BaseClass!.A));
 	}
 
 	public class Circular
@@ -175,7 +175,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Circular>(Call);
 
-		Assert.AreEqual(output.Self, output);
+		Assert.That(output, Is.EqualTo(output.Self));
 	}
 
 	[Test, Description("Serialize Dictionary Circular References")]
@@ -185,9 +185,9 @@ public class SerializeClass : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<DictionaryTest>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 
-		//Assert.AreEqual(input, output);
+		//Assert.That(output, Is.EqualTo(input));
 	}
 
 	[Test, Description("Serialize Parent Child")]
@@ -201,7 +201,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, parent);
 		Parent loaded = _serializer.Load<Parent>(Call);
 
-		Assert.AreEqual(loaded.Child!.Parent, loaded);
+		Assert.That(loaded, Is.EqualTo(loaded.Child!.Parent));
 	}
 
 	public class Base
@@ -231,7 +231,7 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<SubClassContainer>(Call);
 
-		Assert.AreEqual(input.SubClass.A, output.SubClass.A);
+		Assert.That(output.SubClass.A, Is.EqualTo(input.SubClass.A));
 	}
 
 	[Test, Description("Serialize List Containing Subclass of Type")]
@@ -244,8 +244,8 @@ public class SerializeClass : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<List<Base>>(Call);
 
-		Assert.AreEqual(5, output[0].A);
-		//Assert.AreEqual(input, output); // only works on primitives
+		Assert.That(output[0].A, Is.EqualTo(5));
+		//Assert.That(output, Is.EqualTo(input)); // only works on primitives
 	}
 
 	[Test, Description("Serialize Dictionary Containing Subclass of Type")]
@@ -261,9 +261,9 @@ public class SerializeClass : TestSerializeBase
 		input[s] = b;
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Dictionary<Base, Base>>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 
-		Assert.AreEqual(s.B, 3);
+		Assert.That(s.B, Is.EqualTo(3));
 	}
 
 	public class Parent
@@ -306,7 +306,7 @@ public class SerializeClass : TestSerializeBase
 		// Use specific compression level instead for small?
 		// Uncompressed: 912 -> Compressed: 313 -> Base64: 420
 		// Uncompressed: 912 -> Compressed: 316 -> Base64: 424
-		Assert.GreaterOrEqual(base64.Length, 400);
-		Assert.LessOrEqual(base64.Length, 440);
+		Assert.That(base64.Length, Is.GreaterThanOrEqualTo(400));
+		Assert.That(base64.Length, Is.LessThanOrEqualTo(440));
 	}
 }

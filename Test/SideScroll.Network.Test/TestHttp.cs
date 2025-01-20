@@ -28,7 +28,7 @@ public class TestHttp : TestBase
 		httpCache.AddEntry(uri, input);
 		byte[] output = httpCache.GetBytes(uri);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}*/
 
 	/*[Test, Description("ReadWrite")]
@@ -41,7 +41,7 @@ public class TestHttp : TestBase
 			httpCache.AddEntry(uri, input);
 			byte[] output = httpCache.GetBytes(uri);
 
-			Assert.AreEqual(input, output);
+			Assert.That(output, Is.EqualTo(input));
 		}
 	}
 
@@ -59,7 +59,7 @@ public class TestHttp : TestBase
 		{
 			byte[] output = httpCache.GetBytes(uri);
 
-			Assert.AreEqual(input, output);
+			Assert.That(output, Is.EqualTo(input));
 		}
 	}*/
 }

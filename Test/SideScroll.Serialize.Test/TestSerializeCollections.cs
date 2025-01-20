@@ -31,9 +31,9 @@ public class TestSerializeCollections : TestSerializeBase
 		_serializer.Save(Call, input);
 		int[] output = _serializer.Load<int[]>(Call);
 
-		Assert.AreEqual(2, output.Length);
-		Assert.AreEqual(5, output[0]);
-		Assert.AreEqual(2, output[1]);
+		Assert.That(output, Has.Exactly(2).Items);
+		Assert.That(output[0], Is.EqualTo(5));
+		Assert.That(output[1], Is.EqualTo(2));
 	}
 
 	[Test, Description("Serialize Byte Array")]
@@ -46,7 +46,7 @@ public class TestSerializeCollections : TestSerializeBase
 		}
 		_serializer.Save(Call, input);
 		byte[] output = _serializer.Load<byte[]>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	private class MultipleArrays
@@ -61,7 +61,7 @@ public class TestSerializeCollections : TestSerializeBase
 		var arrays = new MultipleArrays();
 		_serializer.Save(Call, arrays);
 		var output = _serializer.Load<MultipleArrays>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Dictionary Integer Array Object Key")]
@@ -95,8 +95,8 @@ public class TestSerializeCollections : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<List<string>>(Call);
 
-		Assert.AreEqual(input[0], output[0]);
-		Assert.AreEqual(input[1], output[1]);
+		Assert.That(output[0], Is.EqualTo(input[0]));
+		Assert.That(output[1], Is.EqualTo(input[1]));
 	}
 
 	public class StringList : List<string>;
@@ -113,8 +113,8 @@ public class TestSerializeCollections : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<StringList>(Call);
 
-		Assert.AreEqual(input[0], output[0]);
-		Assert.AreEqual(input[1], output[1]);
+		Assert.That(output[0], Is.EqualTo(input[0]));
+		Assert.That(output[1], Is.EqualTo(input[1]));
 	}
 
 	[Test, Description("Serialize IList Type")]
@@ -130,8 +130,8 @@ public class TestSerializeCollections : TestSerializeBase
 
 		var output = (StringList)_serializer.Load<IList>(Call);
 
-		Assert.AreEqual(input[0], output[0]);
-		Assert.AreEqual(input[1], output[1]);
+		Assert.That(output[0], Is.EqualTo(input[0]));
+		Assert.That(output[1], Is.EqualTo(input[1]));
 	}
 
 	[Test, Description("Serialize Nullable List")]
@@ -147,7 +147,7 @@ public class TestSerializeCollections : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<List<int?>>(Call);
-		Assert.NotNull(output);
+		Assert.That(output, Is.Not.Null);
 	}
 
 	[Test, Description("Serialize Type Dictionary")]
@@ -161,8 +161,8 @@ public class TestSerializeCollections : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Dictionary<Type, string>>(Call);
 
-		Assert.IsTrue(output.ContainsKey(typeof(int)));
-		Assert.IsTrue(output.ContainsValue("integer"));
+		Assert.That(output, Does.ContainKey(typeof(int)));
+		Assert.That(output, Does.ContainValue("integer"));
 	}
 
 	[Test, Description("Serialize String Dictionary")]
@@ -177,8 +177,8 @@ public class TestSerializeCollections : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Dictionary<string, string>>(Call);
 
-		Assert.AreEqual(input["a"], output["a"]);
-		Assert.AreEqual(input["b"], output["b"]);
+		Assert.That(output["a"], Is.EqualTo(input["a"]));
+		Assert.That(output["b"], Is.EqualTo(input["b"]));
 	}
 
 	public class StringDictionary : Dictionary<string, string>;
@@ -195,8 +195,8 @@ public class TestSerializeCollections : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<StringDictionary>(Call);
 
-		Assert.AreEqual(input["a"], output["a"]);
-		Assert.AreEqual(input["b"], output["b"]);
+		Assert.That(output["a"], Is.EqualTo(input["a"]));
+		Assert.That(output["b"], Is.EqualTo(input["b"]));
 	}
 
 	[Test, Description("Serialize Dictionary Containing Subclass of Type")]
@@ -210,7 +210,7 @@ public class TestSerializeCollections : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Dictionary<string, object>>(Call);
 
-		Assert.AreEqual(true, output["default"]);
+		Assert.That(output["default"], Is.True);
 	}
 
 	[Test, Description("Serialize HashSet")]
@@ -225,9 +225,9 @@ public class TestSerializeCollections : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<HashSet<string>>(Call);
 
-		Assert.AreEqual(input.Count, output.Count);
-		Assert.True(output.Contains("test"));
-		Assert.True(output.Contains("test2"));
+		Assert.That(output, Has.Exactly(input.Count).Items);
+		Assert.That(output, Does.Contain("test"));
+		Assert.That(output, Does.Contain("test2"));
 	}
 
 	public class SelectedLabel : IEquatable<SelectedLabel>
@@ -274,9 +274,9 @@ public class TestSerializeCollections : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<HashSet<SelectedLabel>>(Call);
 
-		Assert.AreEqual(input.Count, output.Count);
-		Assert.True(output.Contains(label1));
-		Assert.True(output.Contains(label2));
+		Assert.That(output, Has.Exactly(input.Count).Items);
+		Assert.That(output, Does.Contain(label1));
+		Assert.That(output, Does.Contain(label2));
 	}
 
 	public class SelectedItem
@@ -299,7 +299,7 @@ public class TestSerializeCollections : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<HashSet<SelectedItem>>(Call);
 
-		Assert.AreEqual(input.Count, output.Count);
-		//Assert.True(output.Contains("test"));
+		Assert.That(output, Has.Exactly(input.Count).Items);
+		//Assert.That(output, Does.Contain("test"));
 	}
 }

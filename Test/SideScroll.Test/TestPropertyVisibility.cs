@@ -37,7 +37,7 @@ public class TestPropertyVisibility : TestBase
 	public void TestDefault()
 	{
 		PropertyInfo propertyInfo = GetPropertyInfo(this, nameof(Default));
-		Assert.IsTrue(propertyInfo.IsRowVisible());
+		Assert.That(propertyInfo.IsRowVisible());
 	}
 
 	[Hidden]
@@ -47,7 +47,7 @@ public class TestPropertyVisibility : TestBase
 	public void TestHidden()
 	{
 		PropertyInfo propertyInfo = GetPropertyInfo(this, nameof(Hidden));
-		Assert.IsFalse(propertyInfo.IsRowVisible());
+		Assert.That(propertyInfo.IsRowVisible(), Is.False);
 	}
 
 	[HiddenRow]
@@ -57,7 +57,7 @@ public class TestPropertyVisibility : TestBase
 	public void TestHiddenRow()
 	{
 		PropertyInfo propertyInfo = GetPropertyInfo(this, nameof(HiddenRow));
-		Assert.IsFalse(propertyInfo.IsRowVisible());
+		Assert.That(propertyInfo.IsRowVisible(), Is.False);
 	}
 
 	[HiddenColumn]
@@ -67,7 +67,7 @@ public class TestPropertyVisibility : TestBase
 	public void TestHiddenColumn()
 	{
 		PropertyInfo propertyInfo = GetPropertyInfo(this, nameof(HiddenColumn));
-		Assert.IsFalse(propertyInfo.IsColumnVisible());
+		Assert.That(propertyInfo.IsColumnVisible(), Is.False);
 	}
 
 	[Hide(null)]
@@ -77,8 +77,8 @@ public class TestPropertyVisibility : TestBase
 	public void TestHideNull()
 	{
 		ListProperty listProperty = GetListProperty(this, nameof(HideNull));
-		Assert.IsTrue(listProperty.IsPropertyVisible);
-		Assert.IsFalse(listProperty.IsRowVisible());
+		Assert.That(listProperty.IsPropertyVisible);
+		Assert.That(listProperty.IsRowVisible(), Is.False);
 	}
 
 	[Hide(null)]
@@ -88,8 +88,8 @@ public class TestPropertyVisibility : TestBase
 	public void TestHideNullShow()
 	{
 		ListProperty listProperty = GetListProperty(this, nameof(HideNullShow));
-		Assert.IsTrue(listProperty.IsPropertyVisible);
-		Assert.IsTrue(listProperty.IsRowVisible());
+		Assert.That(listProperty.IsPropertyVisible);
+		Assert.That(listProperty.IsRowVisible());
 	}
 
 	[HideRow(null)]
@@ -99,8 +99,8 @@ public class TestPropertyVisibility : TestBase
 	public void TestHideRowNull()
 	{
 		ListProperty listProperty = GetListProperty(this, nameof(HideRowNull));
-		Assert.IsTrue(listProperty.IsPropertyVisible);
-		Assert.IsFalse(listProperty.IsRowVisible());
+		Assert.That(listProperty.IsPropertyVisible);
+		Assert.That(listProperty.IsRowVisible(), Is.False);
 	}
 
 	[HideRow(null)]
@@ -110,8 +110,8 @@ public class TestPropertyVisibility : TestBase
 	public void TestHideRowNullShow()
 	{
 		ListProperty listProperty = GetListProperty(this, nameof(HideRowNullShow));
-		Assert.IsTrue(listProperty.IsPropertyVisible);
-		Assert.IsTrue(listProperty.IsRowVisible());
+		Assert.That(listProperty.IsPropertyVisible);
+		Assert.That(listProperty.IsRowVisible());
 	}
 
 	[HideColumn(null)]
@@ -121,8 +121,8 @@ public class TestPropertyVisibility : TestBase
 	public void TestHideColumnNull()
 	{
 		ListProperty listProperty = GetListProperty(this, nameof(HideColumnNull));
-		Assert.IsTrue(listProperty.IsPropertyVisible);
-		Assert.IsFalse(listProperty.IsColumnVisible());
+		Assert.That(listProperty.IsPropertyVisible);
+		Assert.That(listProperty.IsColumnVisible(), Is.False);
 	}
 
 	[HideColumn(null)]
@@ -132,8 +132,8 @@ public class TestPropertyVisibility : TestBase
 	public void TestHideColumnNullShow()
 	{
 		ListProperty listProperty = GetListProperty(this, nameof(HideColumnNullShow));
-		Assert.IsTrue(listProperty.IsPropertyVisible);
-		Assert.IsTrue(listProperty.IsColumnVisible());
+		Assert.That(listProperty.IsPropertyVisible);
+		Assert.That(listProperty.IsColumnVisible());
 	}
 
 	[Hide(null)]
@@ -149,9 +149,9 @@ public class TestPropertyVisibility : TestBase
 		HideNullClass input = new();
 		ItemCollection<ListMember> listMembers = ListMember.Create(input);
 
-		Assert.AreEqual(1, listMembers.Count);
+		Assert.That(listMembers, Has.Exactly(1).Items);
 
-		Assert.AreEqual(nameof(HideNullClass.VisibleProperty), listMembers[0].MemberInfo.Name);
+		Assert.That(listMembers[0].MemberInfo.Name, Is.EqualTo(nameof(HideNullClass.VisibleProperty)));
 	}
 
 	public class InlineClass
@@ -172,10 +172,10 @@ public class TestPropertyVisibility : TestBase
 		InlineData input = new();
 		ItemCollection<ListMember> listMembers = ListMember.Create(input);
 
-		Assert.AreEqual(2, listMembers.Count);
+		Assert.That(listMembers, Has.Exactly(2).Items);
 
-		Assert.AreEqual(nameof(InlineData.InlineProperty), listMembers[0].MemberInfo.Name);
-		Assert.AreEqual(nameof(InlineData.InlineField), listMembers[1].MemberInfo.Name);
+		Assert.That(listMembers[0].MemberInfo.Name, Is.EqualTo(nameof(InlineData.InlineProperty)));
+		Assert.That(listMembers[1].MemberInfo.Name, Is.EqualTo(nameof(InlineData.InlineField)));
 	}
 
 	public class HideableClassData
@@ -191,7 +191,7 @@ public class TestPropertyVisibility : TestBase
 		TabDataSettings tabDataSettings = new();
 		var propertyColumns = tabDataSettings.GetPropertiesAsColumns(typeof(HideableClassData));
 
-		Assert.AreEqual(1, propertyColumns.Count);
-		Assert.IsTrue(propertyColumns[0].IsVisible(list));
+		Assert.That(propertyColumns, Has.Exactly(1).Items);
+		Assert.That(propertyColumns[0].IsVisible(list));
 	}
 }

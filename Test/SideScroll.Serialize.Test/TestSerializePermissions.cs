@@ -43,9 +43,9 @@ public class TestSerializePermissions : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<PrivateDataContainer>(Call);
 
-		Assert.IsNull(output.PrivateField.Confidential);
-		Assert.IsNull(output.PrivateProperty.Confidential);
-		Assert.AreEqual("test", output.PublicData);
+		Assert.That(output.PrivateField.Confidential, Is.Null);
+		Assert.That(output.PrivateProperty.Confidential, Is.Null);
+		Assert.That(output.PublicData, Is.EqualTo("test"));
 	}
 
 	// Test changing serialized field to public in internal model
@@ -58,9 +58,9 @@ public class TestSerializePermissions : TestSerializeBase
 		_serializer.PublicOnly = true;
 		var output = _serializer.Load<PrivateDataContainer>(Call);
 
-		Assert.IsNull(output.PrivateField.Confidential);
-		Assert.IsNull(output.PrivateProperty.Confidential);
-		Assert.AreEqual("test", output.PublicData);
+		Assert.That(output.PrivateField.Confidential, Is.Null);
+		Assert.That(output.PrivateProperty.Confidential, Is.Null);
+		Assert.That(output.PublicData, Is.EqualTo("test"));
 	}
 
 	[PublicData]
@@ -99,9 +99,9 @@ public class TestSerializePermissions : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<PublicContainer>(Call);
 
-		Assert.IsNotNull(output.PublicField);
-		Assert.IsNotNull(output.PublicProperty);
-		Assert.AreEqual("test", output.NonSecure);
+		Assert.That(output.PublicField, Is.Not.Null);
+		Assert.That(output.PublicProperty, Is.Not.Null);
+		Assert.That(output.NonSecure, Is.EqualTo("test"));
 	}
 
 	public class PublicContainer
@@ -130,7 +130,7 @@ public class TestSerializePermissions : TestSerializeBase
 		_serializer.PublicOnly = true;
 		var output = _serializer.Load<PrivateClass>(Call);
 
-		Assert.IsNull(output);
+		Assert.That(output, Is.Null);
 	}
 
 	[PublicData]
@@ -152,7 +152,7 @@ public class TestSerializePermissions : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<PrivatePropertyClass>(Call);
 
-		Assert.IsNull(output.Confidential);
+		Assert.That(output.Confidential, Is.Null);
 	}
 
 	[PublicData]
@@ -174,7 +174,7 @@ public class TestSerializePermissions : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<PrivateFieldClass>(Call);
 
-		Assert.AreEqual("default", output.Confidential);
+		Assert.That(output.Confidential, Is.EqualTo("default"));
 	}
 
 	public class PublicDefaultsContainer
@@ -206,8 +206,8 @@ public class TestSerializePermissions : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<ProtectedPropertiesClass>(Call);
 
-		Assert.AreEqual(input.PublicProperty, output.PublicProperty);
-		Assert.IsNull(output.NormalProperty);
+		Assert.That(output.PublicProperty, Is.EqualTo(input.PublicProperty));
+		Assert.That(output.NormalProperty, Is.Null);
 	}
 
 	[ProtectedData]
@@ -232,7 +232,7 @@ public class TestSerializePermissions : TestSerializeBase
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<ProtectedFieldsClass>(Call);
 
-		Assert.AreEqual(input.PublicField, output.PublicField);
-		Assert.IsNull(output.NormalField);
+		Assert.That(output.PublicField, Is.EqualTo(input.PublicField));
+		Assert.That(output.NormalField, Is.Null);
 	}
 }

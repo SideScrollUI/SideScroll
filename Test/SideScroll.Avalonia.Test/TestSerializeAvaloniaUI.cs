@@ -40,10 +40,10 @@ public class TestSerializeAvaloniaUI : TestBase
 		serializer!.Save(Call, input);
 		Bookmark output = serializer.Load<Bookmark>(Call);
 
-		Assert.NotNull(output);
-		Assert.NotNull(output.TabBookmark);
-		Assert.NotNull(output.TabBookmark.ChildBookmarks);
-		Assert.AreEqual(1, output.TabBookmark.ChildBookmarks.Count);
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output.TabBookmark, Is.Not.Null);
+		Assert.That(output.TabBookmark.ChildBookmarks, Is.Not.Null);
+		Assert.That(output.TabBookmark.ChildBookmarks, Has.Exactly(1).Items);
 	}
 
 	[Test]
@@ -53,6 +53,6 @@ public class TestSerializeAvaloniaUI : TestBase
 		serializer!.Save(Call, input);
 		Color output = serializer.Load<Color>(Call);
 
-		Assert.AreEqual(input, output);
+		Assert.That(output, Is.EqualTo(input));
 	}
 }
