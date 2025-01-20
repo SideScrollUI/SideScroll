@@ -47,20 +47,21 @@ public class LazyProperty
 public class LazyClass
 {
 	public Type OriginalType;
-	public Type NewType;
+	public Type LazyType;
+
 	public Dictionary<PropertyInfo, LazyProperty> LazyProperties = [];
 
 	public LazyClass(Type type, List<TypeRepoObject.PropertyRepo> propertyRepos)
 	{
 		OriginalType = type;
 
-		NewType = CreateLazyType(propertyRepos);
+		LazyType = CreateLazyType(propertyRepos);
 
 		foreach (LazyProperty lazyProperty in LazyProperties.Values)
 		{
-			lazyProperty.PropertyInfoOverride = NewType.GetProperty(lazyProperty.PropertyInfoOriginal!.Name);
-			lazyProperty.FieldInfoLoaded = NewType.GetField(lazyProperty.FieldBuilderLoaded!.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-			lazyProperty.FieldInfoTypeRef = NewType.GetField(lazyProperty.FieldBuilderTypeRef!.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			lazyProperty.PropertyInfoOverride = LazyType.GetProperty(lazyProperty.PropertyInfoOriginal!.Name);
+			lazyProperty.FieldInfoLoaded = LazyType.GetField(lazyProperty.FieldBuilderLoaded!.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			lazyProperty.FieldInfoTypeRef = LazyType.GetField(lazyProperty.FieldBuilderTypeRef!.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			Debug.Assert(lazyProperty.FieldInfoLoaded != null);
 			Debug.Assert(lazyProperty.FieldBuilderTypeRef != null);
 		}

@@ -4,7 +4,7 @@ namespace SideScroll.Tabs.Tools.FileViewer;
 
 public class TabDrives(FileSelectorOptions? fileSelectorOptions = null) : ITab
 {
-	public FileSelectorOptions? FileSelectorOptions = fileSelectorOptions;
+	public FileSelectorOptions? FileSelectorOptions { get; set; } = fileSelectorOptions;
 
 	public TabInstance Create() => new Instance(this);
 

@@ -15,6 +15,7 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 	public static TimeSpan MutexTimeout { get; set; } = TimeSpan.FromSeconds(5);
 
 	public DataRepoInstance<T> DataRepoInstance { get; set; } = dataRepoInstance;
+
 	public int? MaxItems { get; set; } = maxItems;
 
 	public string GroupId => DataRepoInstance.GroupId;

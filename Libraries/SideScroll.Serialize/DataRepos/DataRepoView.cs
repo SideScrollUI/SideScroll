@@ -10,7 +10,8 @@ public class DataRepoView<T> : DataRepoInstance<T>
 	//public DataRepo<T> DataRepo; // Add template version?
 
 	public DataItemCollection<T> Items { get; set; } = [];
-	public bool Loaded { get; set; }
+
+	public bool Loaded { get; protected set; }
 
 	public DataRepoView(DataRepo dataRepo, string groupId, bool indexed = false, int? maxItems = null)
 		: base(dataRepo, groupId, indexed, maxItems)

@@ -17,7 +17,7 @@ public class TabFile(FileView fileView) : ITab
 
 	public FileView FileView => fileView;
 
-	public string Path = fileView.Path;
+	public string Path => fileView.Path;
 
 	public static Dictionary<string, Type> ExtensionTypes { get; set; } = [];
 

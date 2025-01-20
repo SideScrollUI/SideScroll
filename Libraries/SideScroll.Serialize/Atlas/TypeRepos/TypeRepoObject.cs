@@ -271,7 +271,7 @@ public class TypeRepoObject : TypeRepo
 		if (Serializer.Lazy && HasVirtualProperty)
 		{
 			LazyClass = new LazyClass(LoadableType!, lazyPropertyRepos);
-			LoadableType = LazyClass.NewType;
+			LoadableType = LazyClass.LazyType;
 		}
 
 		/*if (lazyClass != null)

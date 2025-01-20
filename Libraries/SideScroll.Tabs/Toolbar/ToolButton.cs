@@ -7,9 +7,12 @@ public class ToolButton
 {
 	public string Tooltip { get; set; }
 	public string? Label { get; set; }
+
 	public IResourceView ImageResource { get; set; }
+
 	public bool ShowTask { get; set; }
 	public bool Default { get; set; } // Use Enter as HotKey, add more complex keymapping later?
+
 	public object? HotKey { get; set; } // Only AvaloniaUI KeyGesture currently supported
 
 	public CallAction? Action { get; set; }

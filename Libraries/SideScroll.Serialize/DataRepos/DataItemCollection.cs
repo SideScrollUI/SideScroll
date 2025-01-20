@@ -8,7 +8,7 @@ namespace SideScroll.Serialize.DataRepos;
 // Collection of DataRepo items with a key/value lookup
 public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 {
-	public SortedDictionary<string, DataItem<T>> Lookup { get; set; } = [];
+	public SortedDictionary<string, DataItem<T>> Lookup { get; protected set; } = [];
 
 	public IEnumerable<T> Values => this.Select(o => o.Value);
 	public IEnumerable<T> SortedValues => Lookup.Values.Select(o => o.Value);

@@ -1054,15 +1054,10 @@ public class TabView : Grid, IDisposable
 					.Cast<object>()
 					.ToHashSet();
 
-				List<object> matching = [];
-				foreach (var obj in TabDatas[0].Items!)
-				{
-					if (newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()!))
-					{
-						matching.Add(obj);
-					}
-				}
-				TabDatas[0].SelectedItems = matching;
+				TabDatas[0].SelectedItems = TabDatas[0].Items!
+					.Cast<object>()
+					.Where(obj => newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()!))
+					.ToList();
 			}
 			else
 			{

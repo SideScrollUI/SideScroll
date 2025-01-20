@@ -14,7 +14,7 @@ public class TabControlTasks : Grid, IDisposable
 {
 	public static int LineHeight { get; set; } = 34;
 
-	public TabInstance TabInstance { get; set; }
+	public TabInstance TabInstance { get; init; }
 
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 

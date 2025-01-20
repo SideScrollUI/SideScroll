@@ -8,6 +8,7 @@ namespace SideScroll.Serialize;
 public abstract class SerializerMemory
 {
 	protected MemoryStream Stream { get; set; } = new(); // move to atlas class?
+
 	public bool PublicOnly { get; set; } // Whether to save classes with the [PublicData] attribute
 
 	public abstract void Save(Call call, object obj);

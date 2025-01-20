@@ -12,8 +12,10 @@ public class HttpCache : IDisposable
 	public class Entry
 	{
 		public string? Uri { get; set; }
+
 		public long Offset { get; set; }
 		public int Size { get; set; }
+
 		public DateTime Downloaded { get; set; }
 
 		public override string? ToString() => Uri;
@@ -41,8 +43,10 @@ public class HttpCache : IDisposable
 
 	private readonly string _indexPath;
 	private readonly string _dataPath;
+
 	private readonly Stream _indexStream;
 	private readonly Stream _dataStream;
+
 	private readonly object _entryLock = new();
 
 	public override string ToString() => BasePath;
