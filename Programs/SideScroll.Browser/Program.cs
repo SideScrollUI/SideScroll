@@ -1,6 +1,6 @@
 using Avalonia;
 using Avalonia.Browser;
-using SideScroll.UI.Avalonia.Samples;
+using SideScroll.Avalonia.Samples;
 using System.Runtime.Versioning;
 
 [assembly: SupportedOSPlatform("browser")]
