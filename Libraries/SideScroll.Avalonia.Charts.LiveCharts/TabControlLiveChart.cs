@@ -100,6 +100,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 				ImageFilter = new DropShadow(2, 2, 2, 2, new SKColor(50, 0, 0, 100)),
 			},
 			TooltipTextPaint = new SolidColorPaint(SideScrollTheme.ChartToolTipForeground.Color.AsSkColor()),
+			TooltipTextSize = 15,
 			FindingStrategy = FindingStrategy.CompareAllTakeClosest,
 			Tooltip = new LiveChartTooltip(this),
 			LegendPosition = LegendPosition.Hidden,

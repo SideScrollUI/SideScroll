@@ -38,7 +38,9 @@ public class LiveChartTooltip(TabControlLiveChart liveChart) : IChartTooltip
 			}
 		}
 	}
+
 	public Func<float, float> Easing { get; set; } = EasingFunctions.EaseOut;
+
 	public TimeSpan AnimationsSpeed { get; set; } = TimeSpan.FromMilliseconds(150);
 
 	public void Show(IEnumerable<ChartPoint> foundPoints, Chart chart)
@@ -72,6 +74,7 @@ public class LiveChartTooltip(TabControlLiveChart liveChart) : IChartTooltip
 			drawTask.ZIndex = 10100;
 		}
 
+		bool wasHidden = _container.Opacity < 1;
 		_container.Opacity = 1;
 		_container.ScaleTransform = new LvcPoint(1, 1);
 
@@ -206,9 +209,16 @@ public class LiveChartTooltip(TabControlLiveChart liveChart) : IChartTooltip
 		_container.X = location.X;
 		_container.Y = location.Y;
 
+		if (wasHidden)
+		{
+			// Jump to a new location if visibility changes
+			_container.CompleteTransition();
+		}
+
 		// Wait to add the animation so the ToolTip doesn't start animating from the top left
 		if (addAnimation)
 		{
+			// Follow mouse until hidden
 			_container
 				.Animate(
 					new Animation(Easing, AnimationsSpeed),
