@@ -97,10 +97,10 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			YAxes = new List<Axis> { YAxis },
 			TooltipBackgroundPaint = new SolidColorPaint(SideScrollTheme.ChartToolTipBackground.Color.AsSkColor())
 			{
-				ImageFilter = new DropShadow(2, 2, 2, 2, new SKColor(50, 0, 0, 100))
+				ImageFilter = new DropShadow(2, 2, 2, 2, new SKColor(50, 0, 0, 100)),
 			},
 			TooltipTextPaint = new SolidColorPaint(SideScrollTheme.ChartToolTipForeground.Color.AsSkColor()),
-			TooltipFindingStrategy = TooltipFindingStrategy.CompareAllTakeClosest,
+			FindingStrategy = FindingStrategy.CompareAllTakeClosest,
 			Tooltip = new LiveChartTooltip(this),
 			LegendPosition = LegendPosition.Hidden,
 			AnimationsSpeed = TimeSpan.Zero,
@@ -109,7 +109,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			[Grid.RowProperty] = 1,
 		};
 
-		Chart.ChartPointPointerDown += Chart_ChartPointPointerDown;
+		Chart.DataPointerDown += Chart_DataPointerDown;
 		Chart.PointerExited += Chart_PointerExited;
 		Chart.PointerPressed += TabControlLiveChart_PointerPressed;
 		Chart.PointerReleased += TabControlLiveChart_PointerReleased;
@@ -223,7 +223,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		Axis axis;
 		if (ChartView.LogBase is double logBase)
 		{
-			axis = new LogaritmicAxis(logBase)
+			axis = new LogarithmicAxis(logBase)
 			{
 				Labeler = (v) => Math.Pow(logBase, v).FormattedShortDecimal(),
 			};
@@ -748,9 +748,9 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		}
 	}
 
-	private void Chart_ChartPointPointerDown(IChartView chart, ChartPoint? point)
+	private void Chart_DataPointerDown(IChartView chart, IEnumerable<ChartPoint> points)
 	{
-		_pointClicked = point;
+		_pointClicked = points.FirstOrDefault();
 	}
 
 	private void TabControlLiveChart_PointerPressed(object? sender, PointerPressedEventArgs e)
@@ -849,7 +849,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		Chart.PointerPressed -= TabControlLiveChart_PointerPressed;
 		Chart.PointerReleased -= TabControlLiveChart_PointerReleased;
 		Chart.PointerMoved -= TabControlLiveChart_PointerMoved;
-		Chart.ChartPointPointerDown -= Chart_ChartPointPointerDown;
+		Chart.DataPointerDown -= Chart_DataPointerDown;
 		Chart.PointerExited -= Chart_PointerExited;
 		if (_pointerMovedSubscriber != null)
 		{
