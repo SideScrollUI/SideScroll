@@ -589,6 +589,13 @@ public class TabInstance : IDisposable
 		}
 	}
 
+	public void SelectPath(params string[] labels)
+	{
+		TabBookmark tabBookmark = new();
+		tabBookmark.SelectPath(labels);
+		SelectBookmark(tabBookmark);
+	}
+
 	public void ClearSelection()
 	{
 		if (OnClearSelection != null)

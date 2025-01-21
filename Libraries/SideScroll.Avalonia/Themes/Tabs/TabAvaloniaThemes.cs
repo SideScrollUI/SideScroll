@@ -45,7 +45,7 @@ public class TabAvaloniaThemes : ITab
 
 		private void LoadSavedItems(Call call, TabModel model)
 		{
-			_dataRepoThemes = ThemeManager.Current!.DataRepoThemes;
+			_dataRepoThemes = ThemeManager.Instance!.DataRepoThemes;
 			DataRepoInstance = _dataRepoThemes;
 
 			var dataCollection = new DataViewCollection<AvaloniaThemeSettings, TabAvaloniaThemeSettings>(_dataRepoThemes);
@@ -62,7 +62,7 @@ public class TabAvaloniaThemes : ITab
 				Name = _themeId.Name,
 				Variant = _themeId.Variant,
 			};
-			ThemeManager.Current!.Add(call, themeSettings);
+			ThemeManager.Instance!.Add(call, themeSettings);
 
 			_themeId = new();
 			_themeParams!.LoadObject(_themeId);

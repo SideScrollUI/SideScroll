@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
 using System.Collections;
+using System.Data;
 
 namespace SideScroll.Tabs.Bookmarks;
 
@@ -54,7 +55,7 @@ public class TabBookmark
 			if (dataKey == null) throw new Exception("SelectedRow DataKey is null");
 
 			var newBookmark = new TabBookmark();
-			newBookmark.Select(dataKey);
+			newBookmark.SelectRows(dataKey);
 			tabBookmark?.ChildBookmarks.Add(prevKey!, newBookmark);
 			tabBookmark = newBookmark;
 			rootBookmark ??= tabBookmark;
@@ -178,7 +179,17 @@ public class TabBookmark
 		}
 	}
 
-	public void Select(params string[] labels)
+	public void SelectPath(params string[] labels)
+	{
+		TabBookmark tabBookmark = this;
+		foreach (string label in labels)
+		{
+			tabBookmark.SelectRows(label);
+			tabBookmark = AddChild(label);
+		}
+	}
+
+	public void SelectRows(params string[] labels)
 	{
 		var selectedRows = labels.Select(label =>
 			new SelectedRow

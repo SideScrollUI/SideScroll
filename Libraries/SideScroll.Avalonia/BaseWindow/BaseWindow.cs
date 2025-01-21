@@ -6,10 +6,8 @@ using Avalonia.Threading;
 using SideScroll.Avalonia.Tabs;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Viewer;
-using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
-using SideScroll.Time;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
@@ -69,12 +67,11 @@ public class BaseWindow : Window
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]
 	public void LoadProject(Project project)
 	{
+		project.Initialize();
 		Project = project;
 
 		LoadWindowSettings();
 
-		TimeZoneView.Current = project.UserSettings.TimeZone;
-		DateTimeExtensions.DefaultFormatType = project.UserSettings.TimeFormat;
 		ThemeManager.Initialize(project);
 
 		InitializeComponent();

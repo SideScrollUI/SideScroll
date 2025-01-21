@@ -6,6 +6,7 @@ using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tasks;
+using SideScroll.Time;
 
 namespace SideScroll.Tabs;
 
@@ -99,5 +100,12 @@ public class Project
 		var project = new Project(projectSettings, defaultUserSettings);
 		var userSettings = project.DataApp.Load<T>() ?? defaultUserSettings;
 		return new Project(projectSettings, userSettings);
+	}
+
+	public void Initialize()
+	{
+		TimeZoneView.Current = UserSettings.TimeZone;
+		DateTimeExtensions.DefaultFormatType = UserSettings.TimeFormat;
+		BookmarkManager.Instance = new(this);
 	}
 }

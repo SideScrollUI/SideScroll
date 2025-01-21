@@ -6,22 +6,9 @@ using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Avalonia.Tabs;
 
-public class TabBookmarks : ITab
+public class TabBookmarks(BookmarkCollection bookmarks) : ITab
 {
-	public static TabBookmarks? Global { get; set; }
-
-	public BookmarkCollection Bookmarks { get; set; }
-
-	public TabBookmarks(Project project)
-	{
-		Bookmarks = new BookmarkCollection(project);
-		Global ??= this;
-	}
-
-	public void AddBookmark(Call call, Bookmark bookmark)
-	{
-		Bookmarks.AddNew(call, bookmark);
-	}
+	public BookmarkCollection Bookmarks { get; set; } = bookmarks;
 
 	public TabInstance Create() => new Instance(this);
 
@@ -37,9 +24,11 @@ public class TabBookmarks : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
+			model.CustomSettingsPath = tab.Bookmarks.GroupId;
+			model.MinDesiredWidth = 300;
+
 			tab.Bookmarks.Load(call, true);
 
-			model.MinDesiredWidth = 300;
 			model.AddData(tab.Bookmarks.Items);
 		}
 

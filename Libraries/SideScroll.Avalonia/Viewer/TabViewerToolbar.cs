@@ -104,7 +104,7 @@ public class TabViewerToolbar : TabControlToolbar
 
 	private void Refresh(Call call)
 	{
-		TabViewer.Reload();
+		TabViewer.Reload(call);
 	}
 
 	private bool CommandBackCanExecute(object? obj)

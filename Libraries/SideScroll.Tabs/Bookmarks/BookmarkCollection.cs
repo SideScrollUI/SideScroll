@@ -5,9 +5,9 @@ namespace SideScroll.Tabs.Bookmarks;
 
 public class BookmarkCollection
 {
-	public const string DataKey = "Bookmarks";
-
 	public Project Project { get; init; }
+
+	public string GroupId { get; init; }
 
 	public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new()
 	{
@@ -18,16 +18,19 @@ public class BookmarkCollection
 
 	private readonly DataRepoView<Bookmark> _dataRepoBookmarks;
 
-	public BookmarkCollection(Project project)
+	private readonly object _lock = new();
+
+	public BookmarkCollection(Project project, string groupId = "Bookmarks")
 	{
 		Project = project;
+		GroupId = groupId;
 
-		_dataRepoBookmarks = Project.DataApp.OpenView<Bookmark>(DataKey);
+		_dataRepoBookmarks = Project.DataApp.OpenView<Bookmark>(GroupId);
 	}
 
 	public void Load(Call call, bool reload)
 	{
-		lock (DataKey)
+		lock (_lock)
 		{
 			if (!reload && Items.Count > 0)
 				return;
@@ -51,7 +54,7 @@ public class BookmarkCollection
 		var tabItem = new TabBookmarkItem(bookmark, Project);
 		tabItem.OnDelete += Item_OnDelete;
 
-		lock (DataKey)
+		lock (_lock)
 		{
 			Items.Add(tabItem);
 		}
@@ -60,7 +63,7 @@ public class BookmarkCollection
 
 	public void AddNew(Call call, Bookmark bookmark)
 	{
-		lock (DataKey)
+		lock (_lock)
 		{
 			Load(call, false);
 
@@ -73,7 +76,7 @@ public class BookmarkCollection
 	private void Item_OnDelete(object? sender, EventArgs e)
 	{
 		TabBookmarkItem bookmark = (TabBookmarkItem)sender!;
-		lock (DataKey)
+		lock (_lock)
 		{
 			_dataRepoBookmarks.Delete(null, bookmark.Bookmark.Path);
 			Items.Remove(bookmark);
@@ -82,7 +85,7 @@ public class BookmarkCollection
 
 	public void Remove(Call call, string key)
 	{
-		lock (DataKey)
+		lock (_lock)
 		{
 			_dataRepoBookmarks.Delete(call, key);
 
