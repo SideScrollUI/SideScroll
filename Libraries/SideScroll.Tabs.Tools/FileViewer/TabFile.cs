@@ -119,7 +119,9 @@ public class TabFile(FileView fileView) : ITab
 		private void Delete(Call call)
 		{
 			if (File.Exists(tab.Path))
+			{
 				File.Delete(tab.Path);
+			}
 
 			Refresh();
 		}

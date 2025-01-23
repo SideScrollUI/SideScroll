@@ -233,10 +233,12 @@ public class Serializer : IDisposable
 		}
 
 		LoadSchemas(logTimer, reader);
-		LoadPrimitives(logTimer, reader);
 
 		if (loadData)
+		{
+			LoadPrimitives(logTimer, reader);
 			LoadTypeRepos(logTimer);
+		}
 	}
 
 	private void SavePrimitives(Call call, BinaryWriter writer)
