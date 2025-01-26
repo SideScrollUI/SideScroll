@@ -45,8 +45,8 @@ public class TypeRepoCollection : TypeRepo
 
 	public override void AddChildObjects(object obj)
 	{
-		ICollection iCollection = (ICollection)obj;
-		foreach (var item in iCollection)
+		var collection = (ICollection)obj;
+		foreach (object? item in collection)
 		{
 			Serializer.AddObjectRef(item);
 		}
@@ -54,10 +54,10 @@ public class TypeRepoCollection : TypeRepo
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		ICollection iCollection = (ICollection)obj;
+		var collection = (ICollection)obj;
 
-		writer.Write(iCollection.Count);
-		foreach (var item in iCollection)
+		writer.Write(collection.Count);
+		foreach (object? item in collection)
 		{
 			Serializer.WriteObjectRef(_elementType!, item, writer);
 		}
@@ -76,9 +76,9 @@ public class TypeRepoCollection : TypeRepo
 
 	public override void Clone(object source, object dest)
 	{
-		ICollection iSource = (ICollection)source;
-		ICollection iDest = (ICollection)dest;
-		foreach (var item in iSource)
+		var iSource = (ICollection)source;
+		var iDest = (ICollection)dest;
+		foreach (object? item in iSource)
 		{
 			object? clone = Serializer.Clone(item);
 			_addMethod!.Invoke(iDest, [clone]);

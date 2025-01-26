@@ -4,20 +4,17 @@
 
 | Icon | Name | License |
 | - | - | - |
-| [Blank Document](https://www.flaticon.com/free-icon/blank-document_14922) (png) | Freepik | Flaticon license |
 | [Blank Document](https://icon-icons.com/icon/blank-paper-sheet/85748) (svg) | Anton Saputro | CC Atribution |
 | [Delete List](https://www.flaticon.com/free-icon/delete-list_1201) | Freepik | Flaticon license |
 | [Duplicate](https://icon-icons.com/icon/duplicate/246421) | System UIcons | Free for commercial use |
 | [Eraser](https://www.flaticon.com/free-icon/eraser_1203953) | Freepik | Flaticon license |
 | [Report](https://www.flaticon.com/free-icon/file_1508964) | Freepik | Flaticon license |
 | [Screenshot](https://www.flaticon.com/free-icon/screenshot_748046) | Freepik | Flaticon license |
-| [Shutter](https://www.flaticon.com/premium-icon/shutter_2441508) | Freepik | Flaticon license |
 | [Import](https://www.flaticon.com/free-icon/import_223438) | Kirill Kazachek | Flaticon license |
 | [List1](https://www.flaticon.com/free-icon/list_151917) | Chanut | Flaticon license |
 | [List2](https://www.flaticon.com/free-icon/list_159841) | Gregor Cresnar | Flaticon license |
 | [Copy](https://icon-icons.com/icon/copy/153460) | Kryston Schwarze | CC Atribution |
 | [Paste](https://www.flaticon.com/free-icon/paste_930233) | Vitaly Gorbachev | Flaticon license |
-| [Refresh](https://www.flaticon.com/free-icon/refresh_875100) (png) | Becris | Flaticon license |
 | [Refresh](https://icon-icons.com/icon/sync-refresh-reload-update/176163) (svg) | Nicky Lim | CC Atribution |
 | [Left Arrow Circle](https://www.flaticon.com/free-icon/left-arrow_118744) | [Lucy G](https://www.flaticon.com/authors/lucy-g) | Flaticon license |
 | [Right Arrow Circle](https://www.flaticon.com/free-icon/right-arrow_118745) | Lucy G | Flaticon license |
@@ -28,7 +25,6 @@
 | [Add](https://www.flaticon.com/free-icon/add_118742) | Lucy G | Flaticon license |
 | [Cancel](https://icon-icons.com/icon/cancel/121292) | Lucy G | CC Atribution |
 | [Unlock](https://www.flaticon.com/free-icon/unlock_118737) | Lucy G | Flaticon license |
-| [Password](https://www.flaticon.com/free-icon/password_1330268) | Lucy G | Flaticon license |
 | [Padnote](https://www.flaticon.com/free-icon/padnote_118751) | Lucy G | Flaticon license |
 | [Link](https://www.flaticon.com/free-icon/link_118780) | Lucy G | Flaticon license |
 | [Bookmark](https://www.flaticon.com/free-icon/bookmark_118732) | Lucy G | Flaticon license |

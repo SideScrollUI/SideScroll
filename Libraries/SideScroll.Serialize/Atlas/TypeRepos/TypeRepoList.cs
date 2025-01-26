@@ -59,8 +59,8 @@ public class TypeRepoList : TypeRepo
 
 	public override void AddChildObjects(object obj)
 	{
-		IList iList = (IList)obj;
-		foreach (var item in iList)
+		var list = (IList)obj;
+		foreach (var item in list)
 		{
 			//if (item.GetType() != elementType)
 			//	typeSchema.hasSubType = true;
@@ -70,10 +70,10 @@ public class TypeRepoList : TypeRepo
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		IList iList = (IList)obj;
+		var list = (IList)obj;
 
-		writer.Write(iList.Count);
-		foreach (var item in iList)
+		writer.Write(list.Count);
+		foreach (var item in list)
 		{
 			Serializer.WriteObjectRef(_elementType!, item, writer);
 		}
@@ -81,24 +81,24 @@ public class TypeRepoList : TypeRepo
 
 	public override void LoadObjectData(object obj)
 	{
-		IList iList = (IList)obj;
+		var list = (IList)obj;
 		int count = Reader!.ReadInt32();
 		if (_propertyInfoCapacity != null)
 		{
-			_propertyInfoCapacity.SetValue(iList, count);
+			_propertyInfoCapacity.SetValue(list, count);
 		}
 
 		for (int j = 0; j < count; j++)
 		{
 			object? valueObject = _listTypeRepo!.LoadObjectRef();
-			iList.Add(valueObject);
+			list.Add(valueObject);
 		}
 	}
 
 	public override void Clone(object source, object dest)
 	{
-		IList iSource = (IList)source;
-		IList iDest = (IList)dest;
+		var iSource = (IList)source;
+		var iDest = (IList)dest;
 		foreach (var item in iSource)
 		{
 			object? clone = Serializer.Clone(item);

@@ -3,14 +3,14 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using SideScroll.Utilities;
 using SideScroll.Avalonia.Controls.Converters;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
+using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Tabs.Lists;
+using SideScroll.Tasks;
+using SideScroll.Utilities;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
@@ -42,7 +42,7 @@ public class TabDateTimePicker : Grid
 	{
 		Property = property;
 
-		ColumnDefinitions = new ColumnDefinitions("*,*,Auto");
+		ColumnDefinitions = new ColumnDefinitions("*,*,Auto,Auto");
 		RowDefinitions = new RowDefinitions("Auto");
 
 		_dateTimeConverter = new DateTimeValueConverter();
@@ -58,11 +58,11 @@ public class TabDateTimePicker : Grid
 		AddDatePicker();
 		AddTimeTextBox();
 
+		AddButton("Copy to Clipboard", Icons.Svg.Copy, 2, CopyToClipboard);
+
 		if (Property.Editable)
 		{
-			Button buttonImport = AddButton("Import Clipboard", Icons.Png.Paste.Stream);
-			buttonImport.Click += ButtonImport_Click;
-			Children.Add(buttonImport);
+			AddButton("Import from Clipboard", Icons.Svg.Import, 3, ImportFromClipboard);
 		}
 	}
 
@@ -115,7 +115,23 @@ public class TabDateTimePicker : Grid
 		Children.Add(_timeTextBox);
 	}
 
-	private void ButtonImport_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	protected TabControlImageButton AddButton(string tooltip, IResourceView resourcView, int column, CallAction callAction)
+	{
+		var button = new TabControlImageButton(tooltip, resourcView, null, 20)
+		{
+			Padding = new(5),
+			HorizontalAlignment = HorizontalAlignment.Right,
+			VerticalAlignment = VerticalAlignment.Center,
+			CallAction = callAction,
+
+			[ToolTip.TipProperty] = tooltip,
+			[Grid.ColumnProperty] = column,
+		};
+		Children.Add(button);
+		return button;
+	}
+
+	private void ImportFromClipboard(Call call)
 	{
 		string? clipboardText = ClipboardUtils.GetText(this);
 		if (clipboardText == null) return;
@@ -125,7 +141,6 @@ public class TabDateTimePicker : Grid
 			DateTime? newDateTime = _dateTimeConverter.Convert(timeSpan, typeof(string), null, CultureInfo.InvariantCulture) as DateTime?;
 			Property.PropertyInfo.SetValue(Property.Object, newDateTime);
 			_timeTextBox.Text = timeSpan.ToString();
-			e.Handled = true;
 		}
 		else
 		{
@@ -134,66 +149,15 @@ public class TabDateTimePicker : Grid
 				Property.PropertyInfo.SetValue(Property.Object, dateTime);
 				_datePicker.SelectedDate = dateTime;
 				_timeTextBox.Text = (string)_dateTimeConverter.Convert(dateTime, typeof(string), null, CultureInfo.InvariantCulture)!;
-				e.Handled = true;
 			}
 		}
 	}
 
-	public Button AddButton(string tooltip, Stream resource)
+	private void CopyToClipboard(Call call)
 	{
-		//command ??= new RelayCommand(
-		//	(obj) => CommandDefaultCanExecute(obj),
-		//	(obj) => CommandDefaultExecute(obj));
-		Bitmap bitmap;
-		using (resource)
+		if (Property.Value is DateTime dateTime)
 		{
-			bitmap = new Bitmap(resource);
+			ClipboardUtils.SetText(this, dateTime.Format(TimeFormatType.Second)!);
 		}
-
-		var image = new Image
-		{
-			Source = bitmap,
-			Width = 16,
-			Height = 16,
-		};
-
-		var button = new Button
-		{
-			Content = image,
-			//Command = command,
-			//Background = Brushes.Transparent,
-			Background = SideScrollTheme.TabBackground,
-			BorderBrush = Background,
-			BorderThickness = new Thickness(0),
-			//Margin = new Thickness(2),
-			HorizontalAlignment = HorizontalAlignment.Right,
-			VerticalAlignment = VerticalAlignment.Center,
-
-			[ToolTip.TipProperty] = tooltip,
-			[Grid.ColumnProperty] = 2,
-		};
-		button.BorderBrush = button.Background;
-		button.PointerEntered += Button_PointerEnter;
-		button.PointerExited += Button_PointerExited;
-
-		//var button = new ToolbarButton(tooltip, command, resource);
-		//AddControl(button);
-		return button;
-	}
-
-	// DefaultTheme.xaml is overriding this currently
-	private static void Button_PointerEnter(object? sender, PointerEventArgs e)
-	{
-		Button button = (Button)sender!;
-		button.BorderBrush = Brushes.Black; // can't overwrite hover border :(
-		button.Background = SideScrollTheme.ToolbarButtonBackgroundPointerOver;
-	}
-
-	private static void Button_PointerExited(object? sender, PointerEventArgs e)
-	{
-		Button button = (Button)sender!;
-		button.Background = SideScrollTheme.TabBackground;
-		//button.Background = Brushes.Transparent;
-		button.BorderBrush = button.Background;
 	}
 }

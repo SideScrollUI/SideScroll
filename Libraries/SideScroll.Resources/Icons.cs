@@ -76,9 +76,6 @@ public static class Icons
 		public static ResourceView Info20 => Get("info_20_759eeb");
 
 		public static ResourceView Unlock => Get("unlock");
-		public static ResourceView Password => Get("password");
-
-		public static ResourceView Paste => Get("paste_16");
 
 		public static ResourceView Bookmark => Get("bookmark");
 

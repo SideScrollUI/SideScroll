@@ -52,8 +52,8 @@ public class TypeRepoEnumerable : TypeRepo
 
 	public override void AddChildObjects(object obj)
 	{
-		IEnumerable iEnumerable = (IEnumerable)obj;
-		foreach (var item in iEnumerable)
+		var enumerable = (IEnumerable)obj;
+		foreach (object? item in enumerable)
 		{
 			Serializer.AddObjectRef(item);
 		}
@@ -66,7 +66,7 @@ public class TypeRepoEnumerable : TypeRepo
 
 		int count = (int)propertyInfo.GetValue(iEnumerable, null)!;
 		writer.Write(count);
-		foreach (object item in iEnumerable)
+		foreach (object? item in iEnumerable)
 		{
 			Serializer.WriteObjectRef(_elementType!, item, writer);
 		}
@@ -86,8 +86,8 @@ public class TypeRepoEnumerable : TypeRepo
 
 	public override void Clone(object source, object dest)
 	{
-		IEnumerable iSource = (IEnumerable)source;
-		foreach (var item in iSource)
+		var enumerable = (IEnumerable)source;
+		foreach (object? item in enumerable)
 		{
 			object? clone = Serializer.Clone(item);
 			_addMethod!.Invoke(dest, [clone]);

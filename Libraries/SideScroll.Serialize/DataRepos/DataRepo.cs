@@ -290,17 +290,23 @@ public class DataRepo
 		}
 	}
 
-	public void DeleteRepo()
+	public void DeleteRepo(Call? call = null)
 	{
+		call ??= new();
+
 		if (!Directory.Exists(RepoPath))
+		{
+			call.Log.AddDebug("DataRepo has no directory to delete", new Tag("Path", RepoPath));
 			return;
+		}
 
 		try
 		{
 			Directory.Delete(RepoPath, true);
 		}
-		catch (Exception)
+		catch (Exception e)
 		{
+			call.Log.Add(e);
 		}
 	}
 

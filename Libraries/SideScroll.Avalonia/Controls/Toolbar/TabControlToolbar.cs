@@ -111,7 +111,7 @@ public class TabControlToolbar : Grid, IDisposable
 
 	public ToolbarButton AddButton(string tooltip, IResourceView imageResource, string? label = null, ICommand? command = null)
 	{
-		var button = new ToolbarButton(this, tooltip, imageResource, label, command);
+		var button = new ToolbarButton(this, tooltip, imageResource, null, label, command);
 		AddControl(button);
 		return button;
 	}

@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.9.2</Version>
-    <PackageReleaseNotes>Split Links tab into Created and Imported bookmarks. Changed public fields to properties. Improved LiveChart Fractional Y Axis labeling so that it rounds to fractional significant figures. Added logging for TabFileSerialized loading.</PackageReleaseNotes>
+    <Version>0.9.3</Version>
+    <PackageReleaseNotes>Switched TabControlDateTimePicker buttons to use svg images, and added a 'Copy to Clipboard' button to go with the import button. Refactored a generic TabControlImageButton out of the ToolbarButton. Removed some unused png assets.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.3</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>
