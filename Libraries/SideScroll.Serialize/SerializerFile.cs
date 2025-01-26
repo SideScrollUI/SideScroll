@@ -49,7 +49,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 
 		if (obj != null)
 		{
-			call.Log.AddError("Loaded type doesn't match type specified",
+			call.Log.Throw("Loaded type doesn't match type specified",
 				new Tag("Loaded Type", obj.GetType()),
 				new Tag("Expected Type", typeof(T)));
 		}

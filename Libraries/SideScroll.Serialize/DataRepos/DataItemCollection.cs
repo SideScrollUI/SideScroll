@@ -16,7 +16,7 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	public DataItemCollection() { }
 
 	// Don't implement List<T>, it isn't sortable
-	public DataItemCollection(IEnumerable<DataItem<T>> iEnumerable) : base(iEnumerable)
+	public DataItemCollection(IEnumerable<DataItem<T>> enumerable) : base(enumerable)
 	{
 		Lookup = CreateLookup();
 	}

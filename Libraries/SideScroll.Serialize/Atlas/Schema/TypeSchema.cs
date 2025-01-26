@@ -180,10 +180,20 @@ public class TypeSchema
 	{
 		if (HasEmptyConstructor || Type == null) return null;
 
-		var members = ReadOnlyPropertySchemas.Where(p => p.IsReadable).Select(p => p.PropertyName.ToLower()).ToHashSet();
-		var fieldMembers = FieldSchemas.Where(f => f.IsLoadable).Select(f => f.FieldName.ToLower()).ToHashSet();
+		var members = ReadOnlyPropertySchemas
+			.Where(p => p.IsReadable)
+			.Select(p => p.PropertyName.ToLower())
+			.ToHashSet();
+
+		var fieldMembers = FieldSchemas
+			.Where(f => f.IsLoadable)
+			.Select(f => f.FieldName.ToLower())
+			.ToHashSet();
+
 		foreach (var member in fieldMembers)
+		{
 			members.Add(member);
+		}
 
 		if (members.Count == 0) return null;
 

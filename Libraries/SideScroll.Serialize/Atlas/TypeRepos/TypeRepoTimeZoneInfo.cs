@@ -23,7 +23,7 @@ public class TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) 
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		TimeZoneInfo timeZoneInfo = (TimeZoneInfo)obj;
+		var timeZoneInfo = (TimeZoneInfo)obj;
 		writer.Write(timeZoneInfo.Id);
 	}
 
@@ -47,7 +47,7 @@ public class TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) 
 		return timeZoneInfo;
 	}
 
-	// not called, it's a struct and a value
+	// Not called?
 	public override void Clone(object source, object dest)
 	{
 		//dest = new DateTime(((DateTime)source).Ticks, ((DateTime)source).Kind);

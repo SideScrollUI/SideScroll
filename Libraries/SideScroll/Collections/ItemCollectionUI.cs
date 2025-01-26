@@ -34,8 +34,8 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	public ItemCollectionUI() { }
 
 	// Don't implement List<T>, it isn't sortable
-	public ItemCollectionUI(IEnumerable<T> iEnumerable) :
-		base(iEnumerable)
+	public ItemCollectionUI(IEnumerable<T> enumerable) :
+		base(enumerable)
 	{
 	}
 

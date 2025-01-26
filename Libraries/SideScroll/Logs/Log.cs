@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Collections;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 
 namespace SideScroll.Logs;
@@ -109,6 +110,24 @@ public class Log : LogEntry
 	public void Throw(string text, params Tag[] tags)
 	{
 		LogEntry? logEntry = AddError(text, tags);
+		throw new Exception(logEntry?.ToString() ?? text);
+	}
+
+	public void Throw<T>(string text, params Tag[] tags) where T : Exception
+	{
+		LogEntry? logEntry = AddError(text, tags);
+
+		ConstructorInfo[] constructors = typeof(T).GetConstructors();
+		foreach (ConstructorInfo constructor in constructors)
+		{
+			ParameterInfo[] parameters = constructor.GetParameters();
+			if (parameters.Length == 1 && parameters[0].ParameterType == typeof(string))
+			{
+				T exception = (T)constructor.Invoke([logEntry?.ToString() ?? text]);
+				throw exception;
+			}
+		}
+
 		throw new Exception(logEntry?.ToString() ?? text);
 	}
 

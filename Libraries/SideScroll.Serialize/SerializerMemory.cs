@@ -1,7 +1,9 @@
 using SideScroll.Extensions;
 using SideScroll.Logs;
 using SideScroll.Serialize.Atlas;
+using System.IO;
 using System.IO.Compression;
+using System.Text;
 
 namespace SideScroll.Serialize;
 
@@ -18,6 +20,8 @@ public abstract class SerializerMemory
 	public abstract T Load<T>(Call? call = null);
 
 	public abstract object? Load(Call? call = null);
+
+	public abstract void Validate(Call? call = null);
 
 	// Save an object to a memory stream and then load it
 	public static T? DeepClone<T>(Call call, T? obj, bool publicOnly = false) where T : class
@@ -56,6 +60,16 @@ public abstract class SerializerMemory
 		return null;
 	}
 
+	public static void ValidateBase64(Call call, string base64, bool publicOnly = false)
+	{
+		ArgumentNullException.ThrowIfNull(nameof(base64));
+
+		var memorySerializer = Create();
+		memorySerializer.PublicOnly = publicOnly;
+		memorySerializer.LoadBase64String(base64);
+		memorySerializer.Validate(call);
+	}
+
 	protected abstract T? DeepCloneInternal<T>(Call call, T obj) where T : class;
 
 	protected abstract object? DeepCloneInternal(Call call, object obj);
@@ -64,18 +78,25 @@ public abstract class SerializerMemory
 	{
 		Stream.Seek(0, SeekOrigin.Begin);
 
+		return ConvertStreamToBase64String(call, Stream);
+	}
+
+	public static string ConvertStreamToBase64String(Call call, MemoryStream stream)
+	{
+		stream.Seek(0, SeekOrigin.Begin);
+
 		using var outStream = new MemoryStream();
 
 		// The GZip stream must be disposed before calling outStream
 		using (var tinyStream = new GZipStream(outStream, CompressionMode.Compress))
 		{
-			Stream.CopyTo(tinyStream);
+			stream.CopyTo(tinyStream);
 		}
 
 		byte[] compressed = outStream.ToArray();
 		string base64 = Convert.ToBase64String(compressed);
 		call.Log.Add("ToBase64String",
-			new Tag("Original", Stream.Length),
+			new Tag("Original", stream.Length),
 			new Tag("Compressed", compressed.Length),
 			new Tag("Base64", base64.Length));
 		return base64;

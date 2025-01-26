@@ -19,10 +19,9 @@ public class Linker(Project project)
 		string base64 = bookmark.ToBase64String(call, PublicOnly);
 		if (base64.Length > MaxLength)
 		{
-			call.Log.AddError("Link too large",
+			call.Log.Throw("Link too large",
 				new Tag("Length", base64.Length),
 				new Tag("MaxLength", MaxLength));
-			throw new Exception($"Link size {base64.Length} > {MaxLength}");
 		}
 
 		return $"{SideScrollPrefix}://link/v{project.Version.Formatted()}/{base64}";
@@ -45,8 +44,7 @@ public class Linker(Project project)
 
 		if (linkUri.Prefix != SideScrollPrefix)
 		{
-			call.Log.AddError("Invalid prefix", new Tag("Prefix", linkUri.Prefix));
-			throw new ArgumentException($"Invalid uri prefix {linkUri.Prefix}");
+			call.Log.Throw<ArgumentException>("Invalid prefix", new Tag("Prefix", linkUri.Prefix));
 		}
 
 		string base64 = linkUri.Path!;
@@ -54,10 +52,9 @@ public class Linker(Project project)
 		int length = linkUri.ToUri().Length;
 		if (length > MaxLength)
 		{
-			call.Log.AddError("Link too large",
+			call.Log.Throw<ArgumentException>("Link too large",
 				new Tag("Length", length),
 				new Tag("MaxLength", MaxLength));
-			throw new ArgumentException($"Link too large: {length} / {MaxLength}");
 		}
 
 		Bookmark bookmark = Bookmark.Create(call, base64, PublicOnly);

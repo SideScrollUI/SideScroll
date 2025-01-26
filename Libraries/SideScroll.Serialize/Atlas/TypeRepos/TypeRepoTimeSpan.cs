@@ -23,7 +23,7 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		TimeSpan timeSpan = (TimeSpan)obj;
+		var timeSpan = (TimeSpan)obj;
 		writer.Write(timeSpan.Ticks);
 	}
 
@@ -64,6 +64,5 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 	// not called, it's a struct and a value
 	public override void Clone(object source, object dest)
 	{
-		//dest = new DateTime(((DateTime)source).Ticks, ((DateTime)source).Kind);
 	}
 }

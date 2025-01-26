@@ -21,7 +21,7 @@ public class TestSerializePermissions : TestSerializeBase
 		_serializer = new SerializerMemoryAtlas();
 	}
 
-	private readonly PrivateDataContainer privateDataContainer = new()
+	private readonly PrivateDataContainer _privateDataContainer = new()
 	{
 		PrivateField = new PrivateClass
 		{
@@ -37,7 +37,7 @@ public class TestSerializePermissions : TestSerializeBase
 	[Test, Description("Serialize [PrivateData]")]
 	public void SerializePrivateData()
 	{
-		var input = privateDataContainer;
+		var input = _privateDataContainer;
 
 		_serializer.PublicOnly = true;
 		_serializer.Save(Call, input);
@@ -52,7 +52,7 @@ public class TestSerializePermissions : TestSerializeBase
 	[Test, Description("Serialize [PrivateData]")]
 	public void SerializePrivateDataPublicLoading()
 	{
-		var input = privateDataContainer;
+		var input = _privateDataContainer;
 
 		_serializer.Save(Call, input);
 		_serializer.PublicOnly = true;
@@ -128,9 +128,8 @@ public class TestSerializePermissions : TestSerializeBase
 
 		_serializer.Save(Call, input);
 		_serializer.PublicOnly = true;
-		var output = _serializer.Load<PrivateClass>(Call);
 
-		Assert.That(output, Is.Null);
+		Assert.That(() => _serializer.Load<PrivateClass>(Call), Throws.Exception.TypeOf<Exception>());
 	}
 
 	[PublicData]

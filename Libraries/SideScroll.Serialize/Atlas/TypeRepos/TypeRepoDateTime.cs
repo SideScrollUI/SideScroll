@@ -9,7 +9,9 @@ public class TypeRepoDateTime(Serializer serializer, TypeSchema typeSchema) : Ty
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (CanAssign(typeSchema.Type!))
+			{
 				return new TypeRepoDateTime(serializer, typeSchema);
+			}
 			return null;
 		}
 	}
@@ -66,6 +68,5 @@ public class TypeRepoDateTime(Serializer serializer, TypeSchema typeSchema) : Ty
 	// not called, it's a struct and a value
 	public override void Clone(object source, object dest)
 	{
-		//dest = new DateTime(((DateTime)source).Ticks, ((DateTime)source).Kind);
 	}
 }

@@ -273,19 +273,19 @@ public class TabModel
 		return null;
 	}
 
-	private void AddEnumerable(IEnumerable iEnumerable)
+	private void AddEnumerable(IEnumerable enumerable)
 	{
-		Type type = iEnumerable.GetType();
+		Type type = enumerable.GetType();
 		if (type.GenericTypeArguments.Length == 0 || type.GenericTypeArguments[0] == typeof(string))
 		{
-			ItemList.Add(ListToString.Create(iEnumerable));
+			ItemList.Add(ListToString.Create(enumerable));
 			return;
 		}
 
 		Type elementType = GetElementType(type);
 		Type genericType = typeof(ItemCollection<>).MakeGenericType(elementType);
 		IList iList = (IList)Activator.CreateInstance(genericType)!;
-		foreach (var item in iEnumerable)
+		foreach (var item in enumerable)
 		{
 			iList.Add(item);
 		}

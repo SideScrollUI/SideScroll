@@ -58,6 +58,18 @@ public class SerializerMemoryAtlas : SerializerMemory
 		return serializer.BaseObject(call);
 	}
 
+	public override void Validate(Call? call = null)
+	{
+		call ??= new Call();
+		using CallTimer callTimer = call.Timer("Validate");
+
+		Stream.Seek(0, SeekOrigin.Begin);
+		using var reader = new BinaryReader(Stream);
+
+		var serializer = Create();
+		serializer.Load(callTimer, reader, loadData: false);
+	}
+
 	//public static T Clone<T>(Call call, T obj)
 	protected override T DeepCloneInternal<T>(Call call, T obj) where T : class
 	{

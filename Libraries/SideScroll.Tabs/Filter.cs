@@ -63,7 +63,7 @@ public class Filter
 	public List<FilterExpression> FilterExpressions { get; set; } = [];
 	public bool IsAnd { get; set; }
 
-	private static Regex _regex = new(@"^(?<Depth>\+\d+ )?(?<Filters>.+)$", RegexOptions.IgnoreCase);
+	private static readonly Regex _regex = new(@"^(?<Depth>\+\d+ )?(?<Filters>.+)$", RegexOptions.IgnoreCase);
 
 	public override string ToString() => FilterText;
 

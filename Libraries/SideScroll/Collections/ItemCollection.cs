@@ -44,8 +44,8 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 	}
 
 	// Don't implement List<T>, it isn't sortable
-	public ItemCollection(IEnumerable<T> iEnumerable) :
-		base(iEnumerable)
+	public ItemCollection(IEnumerable<T> enumerable) :
+		base(enumerable)
 	{
 	}
 

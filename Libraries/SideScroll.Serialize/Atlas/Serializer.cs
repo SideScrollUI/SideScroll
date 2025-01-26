@@ -2,7 +2,6 @@ using SideScroll.Logs;
 using SideScroll.Serialize.Atlas.Schema;
 using SideScroll.Serialize.Atlas.TypeRepos;
 using SideScroll.Tasks;
-using System.Diagnostics;
 
 namespace SideScroll.Serialize.Atlas;
 
@@ -10,8 +9,8 @@ public class Header
 {
 	public const string LatestVersion = "1";
 
-	public string Version = LatestVersion;
-	public string Name = "<Default>";
+	public string Version { get; set; } = LatestVersion;
+	public string Name { get; set; } = "<Default>";
 
 	public override string ToString() => Version;
 
@@ -71,15 +70,13 @@ public class Serializer : IDisposable
 	{
 		if (TypeRepos.Count == 0)// || typeRepos[0].objects.Count == 0)
 		{
-			call.Log.AddError("No TypeRepos found");
-			return null;
+			call.Log.Throw("No TypeRepos found");
 		}
 
 		TypeRepo typeRepo = TypeRepos[0];
 		if (typeRepo.LoadableType == null)
 		{
-			call.Log.AddError("BaseObject type isn't loadable", new Tag("Type", typeRepo.TypeSchema.Name));
-			return null;
+			call.Log.Throw("BaseObject type isn't loadable", new Tag("Type", typeRepo.TypeSchema.Name));
 		}
 
 		if (typeRepo.Type!.IsPrimitive)
@@ -127,16 +124,14 @@ public class Serializer : IDisposable
 
 	public void LogLoadedTypes(Call call)
 	{
-		List<ObjectsLoaded> loaded = [];
-		foreach (TypeRepo typeRepo in TypeRepos)
-		{
-			ObjectsLoaded typeInfo = new()
+		List<ObjectsLoaded> loaded = TypeRepos
+			.Select(typeRepo => new ObjectsLoaded
 			{
 				Name = typeRepo.ToString(),
 				Loaded = typeRepo.ObjectsLoadedCount
-			};
-			loaded.Add(typeInfo);
-		}
+			})
+			.ToList();
+
 		call.Log.Add("Objects Loaded", new Tag("Type Repos", loaded));
 	}
 
@@ -219,17 +214,15 @@ public class Serializer : IDisposable
 		Header.Load(reader);
 		if (Header.Version != Header.LatestVersion)
 		{
-			logTimer.AddError("Header version doesn't match", new Tag("Header", Header));
-			return;
+			logTimer.Throw("Header version doesn't match", new Tag("Header", Header));
 		}
 
 		long fileLength = reader.ReadInt64();
 		if (reader.BaseStream.Length != fileLength)
 		{
-			logTimer.AddError("File size doesn't match",
+			logTimer.Throw("File size doesn't match",
 				new Tag("Expected", fileLength),
 				new Tag("Actual", reader.BaseStream.Length));
-			return;
 		}
 
 		LoadSchemas(logTimer, reader);
@@ -320,7 +313,9 @@ public class Serializer : IDisposable
 			}
 
 			if (typeRepo != null)
+			{
 				AddTypeRepo(typeRepo);
+			}
 		}
 	}
 
@@ -339,11 +334,17 @@ public class Serializer : IDisposable
 					continue;
 
 				if (!typeRepo.TypeSchema.CanReference)
+				{
 					primitives.Add(typeRepo);
+				}
 				else if (typeRepo.TypeSchema.IsCollection)
+				{
 					collections.Add(typeRepo);
+				}
 				else
+				{
 					others.Add(typeRepo);
+				}
 			}
 
 			List<TypeRepo> orderedTypes = [.. primitives, .. others, .. collections];
@@ -421,7 +422,12 @@ public class Serializer : IDisposable
 	private void LoadTypeRepos(Log log)
 	{
 		uint id = Reader!.ReadUInt32();
-		Debug.Assert(id == HeaderId);
+		if (id != HeaderId)
+		{
+			log.Throw("Header id doesn't match",
+				new Tag("Expected", HeaderId),
+				new Tag("Found", id));
+		}
 
 		using (LogTimer logTimer = log.Timer("Loading Type Repo headers"))
 		{
@@ -467,7 +473,9 @@ public class Serializer : IDisposable
 	{
 		typeRepo.TypeIndex = TypeRepos.Count;
 		if (typeRepo.Type != null) // Type might have been removed
+		{
 			IdxTypeToRepo[typeRepo.Type] = typeRepo;
+		}
 		TypeRepos.Add(typeRepo);
 	}
 
@@ -516,9 +524,13 @@ public class Serializer : IDisposable
 			}
 
 			if (type == baseType)
+			{
 				writer.Write((byte)ObjectType.BaseType);
+			}
 			else
+			{
 				writer.Write((byte)ObjectType.DerivedType);
+			}
 
 			if (baseType != null && baseType.IsPrimitive)
 			{
@@ -641,16 +653,14 @@ public class Serializer : IDisposable
 
 	public void LogClonedTypes(Log log)
 	{
-		List<ObjectsLoaded> loaded = [];
-		foreach (TypeRepo typeRepo in TypeRepos)
-		{
-			ObjectsLoaded typeInfo = new()
+		List<ObjectsLoaded> loaded = TypeRepos
+			.Select(typeRepo => new ObjectsLoaded
 			{
 				Name = typeRepo.ToString(),
-				Loaded = typeRepo.Cloned
-			};
-			loaded.Add(typeInfo);
-		}
+				Loaded = typeRepo.Cloned,
+			})
+			.ToList();
+
 		log.Add("Objects Loaded", new Tag("Type Repos", loaded));
 	}
 
@@ -668,7 +678,9 @@ public class Serializer : IDisposable
 	public void Dispose()
 	{
 		foreach (TypeRepo typeRepo in TypeRepos)
+		{
 			typeRepo.Dispose();
+		}
 
 		Reader?.Dispose();
 	}

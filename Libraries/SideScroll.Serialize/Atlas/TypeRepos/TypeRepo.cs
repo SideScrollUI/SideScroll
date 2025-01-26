@@ -113,10 +113,14 @@ public abstract class TypeRepo : IDisposable
 			{
 				string message = "Type " + typeSchema.Name + " does not specify [PublicData], [ProtectedData], or [PrivateData], ignoring";
 				if (Debugger.IsAttached)
+				{
 					Debug.Fail(message);
+				}
 				else
+				{
 					Debug.Print(message); // For unit tests
-				log.Add(message);
+				}
+				log.AddWarning(message);
 			}
 			var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema)
 			{

@@ -11,7 +11,9 @@ public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeR
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			if (CanAssign(typeSchema.Type!))
+			{
 				return new TypeRepoArray(serializer, typeSchema);
+			}
 			return null;
 		}
 	}

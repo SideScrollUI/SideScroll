@@ -8,8 +8,8 @@ public class TaskInstanceCollection : ItemCollection<TaskInstance>
 
 	public TaskInstanceCollection() { }
 
-	public TaskInstanceCollection(IEnumerable<TaskInstance> iEnumerable) :
-		base(iEnumerable)
+	public TaskInstanceCollection(IEnumerable<TaskInstance> enumerable) :
+		base(enumerable)
 	{
 	}
 

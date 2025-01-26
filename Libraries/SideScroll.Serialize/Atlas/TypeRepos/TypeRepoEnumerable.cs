@@ -62,11 +62,11 @@ public class TypeRepoEnumerable : TypeRepo
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
 		PropertyInfo propertyInfo = LoadableType!.GetProperty("Count")!; // IEnumerable isn't required to implement this
-		IEnumerable iEnumerable = (IEnumerable)obj;
+		var enumerable = (IEnumerable)obj;
 
-		int count = (int)propertyInfo.GetValue(iEnumerable, null)!;
+		int count = (int)propertyInfo.GetValue(enumerable, null)!;
 		writer.Write(count);
-		foreach (object? item in iEnumerable)
+		foreach (object? item in enumerable)
 		{
 			Serializer.WriteObjectRef(_elementType!, item, writer);
 		}
