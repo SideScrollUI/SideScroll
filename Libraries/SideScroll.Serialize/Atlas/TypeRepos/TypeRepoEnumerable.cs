@@ -21,6 +21,8 @@ public class TypeRepoEnumerable : TypeRepo
 	protected TypeRepo? _listTypeRepo;
 	protected readonly MethodInfo? _addMethod;
 
+	private PropertyInfo? _countPropertyInfo; // IEnumerable isn't required to implement this
+
 	public TypeRepoEnumerable(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
@@ -34,6 +36,8 @@ public class TypeRepoEnumerable : TypeRepo
 
 			_addMethod = LoadableType.GetMethods()
 				.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 1);
+
+			_countPropertyInfo = LoadableType.GetProperty("Count");
 		}
 	}
 
@@ -61,12 +65,11 @@ public class TypeRepoEnumerable : TypeRepo
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		PropertyInfo propertyInfo = LoadableType!.GetProperty("Count")!; // IEnumerable isn't required to implement this
 		var enumerable = (IEnumerable)obj;
 
-		int count = (int)propertyInfo.GetValue(enumerable, null)!;
+		int count = (int)_countPropertyInfo!.GetValue(enumerable, null)!;
 		writer.Write(count);
-		foreach (object? item in enumerable)
+		foreach (object item in enumerable)
 		{
 			Serializer.WriteObjectRef(_elementType!, item, writer);
 		}

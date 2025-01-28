@@ -40,7 +40,9 @@ public class FieldSchema
 		Load(reader);
 
 		if (typeSchema.Type != null)
+		{
 			FieldInfo = typeSchema.Type.GetField(FieldName);
+		}
 
 		Initialize();
 	}
@@ -94,16 +96,13 @@ public class FieldSchema
 		if (FieldInfo!.IsLiteral || FieldInfo.IsStatic)
 			return false;
 
-		Attribute? attribute = Type!.GetCustomAttribute<UnserializedAttribute>();
-		if (attribute != null)
+		if (Type!.GetCustomAttribute<UnserializedAttribute>() != null)
 			return false;
 
-		attribute = FieldInfo!.GetCustomAttribute<NonSerializedAttribute>();
-		if (attribute != null)
+		if (FieldInfo!.GetCustomAttribute<NonSerializedAttribute>() != null)
 			return false;
 
-		attribute = FieldInfo!.GetCustomAttribute<UnserializedAttribute>();
-		if (attribute != null)
+		if (FieldInfo!.GetCustomAttribute<UnserializedAttribute>() != null)
 			return false;
 
 		return true;

@@ -71,16 +71,13 @@ public class PropertySchema
 
 	private bool GetIsReadable()
 	{
-		Attribute? attribute = Type!.GetCustomAttribute<UnserializedAttribute>();
-		if (attribute != null)
+		if (Type!.GetCustomAttribute<UnserializedAttribute>() != null)
 			return false;
 
-		attribute = PropertyInfo!.GetCustomAttribute<NonSerializedAttribute>();
-		if (attribute != null)
+		if (PropertyInfo!.GetCustomAttribute<NonSerializedAttribute>() != null)
 			return false;
 
-		attribute = PropertyInfo!.GetCustomAttribute<UnserializedAttribute>();
-		if (attribute != null)
+		if (PropertyInfo!.GetCustomAttribute<UnserializedAttribute>() != null)
 			return false;
 
 		if (PropertyInfo!.CanRead == false)
