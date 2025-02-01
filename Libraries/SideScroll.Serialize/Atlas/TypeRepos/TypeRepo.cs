@@ -195,7 +195,7 @@ public abstract class TypeRepo : IDisposable
 		SaveCustomHeader(writer);
 	}
 
-	public void SaveHeader(BinaryWriter writer)
+	public void SaveHeader(Log log, BinaryWriter writer)
 	{
 		// todo: optimize this
 		//writer.Write(objectOffsets.Count);
@@ -216,8 +216,9 @@ public abstract class TypeRepo : IDisposable
 			}
 			SaveCustomHeader(writer);
 		}
-		catch (Exception)
+		catch (Exception e)
 		{
+			log.Throw(e);
 		}
 	}
 

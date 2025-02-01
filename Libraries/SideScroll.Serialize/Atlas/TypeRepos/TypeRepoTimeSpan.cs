@@ -42,7 +42,7 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 			}
 			else
 			{
-				throw new Exception("Unhandled primitive type");
+				throw new SerializerException("Unhandled primitive type");
 			}
 		}
 		catch (Exception)

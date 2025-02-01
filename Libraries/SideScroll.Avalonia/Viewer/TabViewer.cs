@@ -6,7 +6,6 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using SideScroll.Avalonia.Controls;
-using SideScroll.Avalonia.Tabs;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Avalonia.View;
 using SideScroll.Tabs;

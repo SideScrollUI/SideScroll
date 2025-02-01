@@ -134,7 +134,7 @@ public class TypeRepoObject : TypeRepo
 			}
 			else if (LazyProperty != null)
 			{
-				throw new Exception("Get() doesn't support Lazy Properties: " + PropertySchema.PropertyName);
+				throw new SerializerException("Get() doesn't support Lazy Properties: " + PropertySchema.PropertyName);
 			}
 			else
 			{
@@ -304,7 +304,7 @@ public class TypeRepoObject : TypeRepo
 			}
 			else
 			{
-				throw new Exception($"Constructor param [ {name} ] not found");
+				throw new SerializerException($"Constructor param [ {name} ] not found");
 			}
 		}
 	}
@@ -314,7 +314,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		if (TypeSchema.CustomConstructor == null)
 		{
-			throw new Exception($"No default or matching constructor found: {TypeSchema}");
+			throw new SerializerException($"No default or matching constructor found: {TypeSchema}");
 		}
 
 		long position = Reader!.BaseStream.Position;
@@ -334,7 +334,7 @@ public class TypeRepoObject : TypeRepo
 				}
 				else
 				{
-					throw new Exception("Missing FieldRepo: " + fieldRepo);
+					throw new SerializerException("Missing FieldRepo: " + fieldRepo);
 				}
 			}
 			else if (repo is PropertyRepo propertyRepo)
@@ -345,12 +345,12 @@ public class TypeRepoObject : TypeRepo
 				}
 				else
 				{
-					throw new Exception("Missing PropertyRepo: " + propertyRepo);
+					throw new SerializerException("Missing PropertyRepo: " + propertyRepo);
 				}
 			}
 			else
 			{
-				throw new Exception("Unhandled repo type: " + repo);
+				throw new SerializerException("Unhandled repo type: " + repo);
 			}
 		}
 

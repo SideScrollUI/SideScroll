@@ -255,7 +255,9 @@ public class TabModel
 
 		if (Object is IComparable)
 		{
-			sortedList = sortedList.OrderBy(x => x.Key).ToList();
+			sortedList = sortedList
+				.OrderBy(x => x.Key)
+				.ToList();
 		}
 
 		ItemList.Add(new ItemCollection<DictionaryEntry>(sortedList));

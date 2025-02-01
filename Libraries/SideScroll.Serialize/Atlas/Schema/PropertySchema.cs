@@ -46,7 +46,12 @@ public class PropertySchema
 		{
 			if (typeSchema.Type != null)
 			{
-				PropertyInfo = typeSchema.Type.GetProperty(PropertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+				PropertyInfo = typeSchema.Type.GetProperty(PropertyName,
+					BindingFlags.Public |
+					BindingFlags.NonPublic |
+					BindingFlags.Instance |
+					BindingFlags.FlattenHierarchy
+					);
 			}
 		}
 		catch (Exception)

@@ -84,7 +84,7 @@ public static class ObjectUtils
 		if (list1.Count != list2.Count) return false;
 
 		maxDepth--;
-		if (maxDepth < 0) throw new Exception("Max depth exceeded");
+		if (maxDepth < 0) throw new TaggedException("Max depth exceeded");
 
 		for (int i = 0; i < list1.Count; i++)
 		{

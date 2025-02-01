@@ -111,21 +111,7 @@ public class LogEntry : INotifyPropertyChanged
 	}
 	private TimeSpan? _duration;
 
-	private string TagText
-	{
-		get
-		{
-			string line = "";
-			if (Tags == null)
-				return line;
-
-			foreach (Tag tag in Tags)
-			{
-				line += tag + " ";
-			}
-			return line;
-		}
-	}
+	private string TagText => Tags == null ? "" : string.Join<Tag>(' ', Tags);
 
 	[HiddenColumn]
 	public Tag[]? Tags { get; set; }

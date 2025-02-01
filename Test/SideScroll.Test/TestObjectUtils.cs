@@ -57,7 +57,7 @@ public class TestObjectUtils : TestBase
 	[Test]
 	public void SubArrayAreNotEqualMaxDepth()
 	{
-		Assert.Throws<Exception>(() => ObjectUtils.AreEqual(
+		Assert.Throws<TaggedException>(() => ObjectUtils.AreEqual(
 			new int[][] { [0, 0] },
 			new int[][] { [0, 0] },
 			1));

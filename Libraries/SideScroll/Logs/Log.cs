@@ -79,6 +79,10 @@ public class Log : LogEntry
 		Debug.Print("Exception: " + e.Message);
 
 		var allTags = tags.ToList();
+		if (e is TaggedException taggedException)
+		{
+			allTags.AddRange(taggedException.Tags);
+		}
 		allTags.Add(new Tag("Exception", e));
 
 		if (e is TaskCanceledException)
@@ -107,28 +111,32 @@ public class Log : LogEntry
 		}
 	}
 
+	public void Throw(Exception e)
+	{
+		Add(e);
+		throw e;
+	}
+
 	public void Throw(string text, params Tag[] tags)
 	{
-		LogEntry? logEntry = AddError(text, tags);
-		throw new Exception(logEntry?.ToString() ?? text);
+		Throw(new TaggedException(text, tags));
 	}
 
 	public void Throw<T>(string text, params Tag[] tags) where T : Exception
 	{
-		LogEntry? logEntry = AddError(text, tags);
-
 		ConstructorInfo[] constructors = typeof(T).GetConstructors();
 		foreach (ConstructorInfo constructor in constructors)
 		{
 			ParameterInfo[] parameters = constructor.GetParameters();
 			if (parameters.Length == 1 && parameters[0].ParameterType == typeof(string))
 			{
-				T exception = (T)constructor.Invoke([logEntry?.ToString() ?? text]);
-				throw exception;
+				var logEntry = new LogEntry(Settings, LogLevel.Error, text, tags);
+				T exception = (T)constructor.Invoke([logEntry.ToString() ?? text]);
+				Throw(exception);
 			}
 		}
 
-		throw new Exception(logEntry?.ToString() ?? text);
+		Throw(text, tags);
 	}
 
 	public LogTimer Timer(string text, params Tag[] tags)

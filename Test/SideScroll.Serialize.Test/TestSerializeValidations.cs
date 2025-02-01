@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Serialize.Atlas;
 
 namespace SideScroll.Serialize.Test;
 
@@ -35,6 +36,6 @@ public class TestSerializeValidations : TestSerializeBase
 		byte[] bytes = [0, 1, 2, 3];
 		string base64 = SerializerMemory.ConvertStreamToBase64String(Call, new MemoryStream(bytes));
 
-		Assert.That(() => SerializerMemory.ValidateBase64(Call, base64), Throws.Exception.TypeOf<Exception>());
+		Assert.That(() => SerializerMemory.ValidateBase64(Call, base64), Throws.Exception.TypeOf<SerializerException>());
 	}
 }

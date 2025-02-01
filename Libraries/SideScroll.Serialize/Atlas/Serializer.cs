@@ -5,32 +5,42 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Serialize.Atlas;
 
+public class SerializerException(string text, params Tag[] tags) : 
+	TaggedException(text, tags);
+
 public class Header
 {
+	public const uint SideId = 0x53494445; // SIDE: 83, 73, 68, 69, Start of file
+
 	public const string LatestVersion = "1";
 
-	public string Version { get; set; } = LatestVersion;
-	public string Name { get; set; } = "<Default>";
+	public string? Version { get; set; }
+	public string? Name { get; set; }
 
-	public override string ToString() => Version;
+	public override string ToString() => $"v{Version}: {Name}";
 
 	public void Save(BinaryWriter writer)
 	{
-		writer.Write(Version);
-		writer.Write(Name);
+		writer.Write(SideId);
+		writer.Write(Version ?? LatestVersion);
+		writer.Write(Name ?? "");
 	}
 
 	public void Load(BinaryReader reader)
 	{
+		uint sideId = reader.ReadUInt32();
+		if (sideId != SideId)
+		{
+			throw new SerializerException("Invalid header Id");
+		}
 		Version = reader.ReadString();
 		Name = reader.ReadString();
-		//Debug.Assert(version == latestVersion);
 	}
 }
 
 public class Serializer : IDisposable
 {
-	private const uint HeaderId = 0x6F6F6F6F; // 111 x 4
+	public const uint ScrollId = 0x5343524C; // SCRL: 83, 67, 82, 76, Start of object data
 
 	public Header Header = new();
 
@@ -70,13 +80,13 @@ public class Serializer : IDisposable
 	{
 		if (TypeRepos.Count == 0)// || typeRepos[0].objects.Count == 0)
 		{
-			call.Log.Throw("No TypeRepos found");
+			call.Log.Throw(new SerializerException("No TypeRepos found"));
 		}
 
 		TypeRepo typeRepo = TypeRepos[0];
 		if (typeRepo.LoadableType == null)
 		{
-			call.Log.Throw("BaseObject type isn't loadable", new Tag("Type", typeRepo.TypeSchema.Name));
+			call.Log.Throw(new SerializerException("BaseObject type isn't loadable", new Tag("Type", typeRepo.TypeSchema.Name)));
 		}
 
 		if (typeRepo.Type!.IsPrimitive)
@@ -214,15 +224,15 @@ public class Serializer : IDisposable
 		Header.Load(reader);
 		if (Header.Version != Header.LatestVersion)
 		{
-			logTimer.Throw("Header version doesn't match", new Tag("Header", Header));
+			logTimer.Throw(new SerializerException("Header version doesn't match", new Tag("Header", Header)));
 		}
 
 		long fileLength = reader.ReadInt64();
 		if (reader.BaseStream.Length != fileLength)
 		{
-			logTimer.Throw("File size doesn't match",
+			logTimer.Throw(new SerializerException("File size doesn't match",
 				new Tag("Expected", fileLength),
-				new Tag("Actual", reader.BaseStream.Length));
+				new Tag("Actual", reader.BaseStream.Length)));
 		}
 
 		LoadSchemas(logTimer, reader);
@@ -361,7 +371,7 @@ public class Serializer : IDisposable
 
 	private void SaveObjects(Log log, BinaryWriter writer)
 	{
-		writer.Write(HeaderId);
+		writer.Write(ScrollId);
 		// todo: Add Checksum?
 
 		long headerPosition = writer.BaseStream.Position;
@@ -415,18 +425,18 @@ public class Serializer : IDisposable
 		writer.Seek((int)headerPosition, SeekOrigin.Begin);
 		foreach (TypeRepo typeRepo in OrderedTypes)
 		{
-			typeRepo.SaveHeader(writer);
+			typeRepo.SaveHeader(logTimer, writer);
 		}
 	}
 
 	private void LoadTypeRepos(Log log)
 	{
-		uint id = Reader!.ReadUInt32();
-		if (id != HeaderId)
+		uint scrollId = Reader!.ReadUInt32();
+		if (scrollId != ScrollId)
 		{
-			log.Throw("Header id doesn't match",
-				new Tag("Expected", HeaderId),
-				new Tag("Found", id));
+			log.Throw(new SerializerException("Header id doesn't match",
+				new Tag("Expected", ScrollId),
+				new Tag("Found", scrollId)));
 		}
 
 		using (LogTimer logTimer = log.Timer("Loading Type Repo headers"))

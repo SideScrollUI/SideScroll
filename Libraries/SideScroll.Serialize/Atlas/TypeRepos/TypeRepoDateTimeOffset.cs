@@ -43,7 +43,7 @@ public class TypeRepoDateTimeOffset(Serializer serializer, TypeSchema typeSchema
 			}
 			else
 			{
-				throw new Exception("Unhandled primitive type");
+				throw new SerializerException("Unhandled primitive type");
 			}
 		}
 		catch (Exception)

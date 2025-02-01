@@ -40,7 +40,7 @@ public class TypeRepoEnum(Serializer serializer, TypeSchema typeSchema) : TypeRe
 			}
 			else
 			{
-				throw new Exception("Unhandled primitive type");
+				throw new SerializerException("Unhandled primitive type");
 			}
 		}
 		catch (Exception)
@@ -62,6 +62,6 @@ public class TypeRepoEnum(Serializer serializer, TypeSchema typeSchema) : TypeRe
 	public override void Clone(object source, object dest)
 	{
 		// assigning won't do anything since it's not a ref
-		throw new Exception("Not cloneable");
+		throw new SerializerException("Not cloneable");
 	}
 }

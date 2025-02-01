@@ -129,7 +129,7 @@ public class TestSerializePermissions : TestSerializeBase
 		_serializer.Save(Call, input);
 		_serializer.PublicOnly = true;
 
-		Assert.That(() => _serializer.Load<PrivateClass>(Call), Throws.Exception.TypeOf<Exception>());
+		Assert.That(() => _serializer.Load<PrivateClass>(Call), Throws.Exception.TypeOf<SerializerException>());
 	}
 
 	[PublicData]

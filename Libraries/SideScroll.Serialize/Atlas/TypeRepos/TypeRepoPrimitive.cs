@@ -104,7 +104,7 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		}
 		else
 		{
-			throw new Exception($"Unhandled primitive type: {Type}");
+			throw new SerializerException($"Unhandled primitive type: {Type}");
 		}
 
 		return obj;
@@ -113,6 +113,6 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 	public override void Clone(object source, object dest)
 	{
 		// assigning won't do anything since it's not a ref
-		throw new Exception("Not cloneable");
+		throw new SerializerException("Not cloneable");
 	}
 }
