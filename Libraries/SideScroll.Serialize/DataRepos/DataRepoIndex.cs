@@ -96,7 +96,9 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 		{
 			if (!mutex.WaitOne(MutexTimeout))
 			{
-				throw new TaggedException($"Index timed out waiting for mutex after [{MutexTimeout}] for {func}");
+				throw new TaggedException("Index timed out waiting for mutex",
+					new Tag("Timeout", MutexTimeout),
+					new Tag("Function", func));
 			}
 		}
 		catch (AbandonedMutexException e)
@@ -134,7 +136,9 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 		{
 			if (!mutex.WaitOne(MutexTimeout))
 			{
-				throw new TaggedException($"Index timed out waiting for mutex after [{MutexTimeout}] for {callAction}");
+				throw new TaggedException("Index timed out waiting for mutex",
+					new Tag("Timeout", MutexTimeout),
+					new Tag("Action", callAction));
 			}
 		}
 		catch (AbandonedMutexException e)
