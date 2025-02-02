@@ -20,15 +20,15 @@ public class TypeRepoObject : TypeRepo
 		}
 	}
 
-	public List<FieldRepo> FieldRepos = [];
-	public List<PropertyRepo> PropertyRepos = [];
+	public List<FieldRepo> FieldRepos { get; protected set; } = [];
+	public List<PropertyRepo> PropertyRepos { get; protected set; } = [];
 
-	public LazyClass? LazyClass;
+	public LazyClass? LazyClass { get; protected set; }
 
 	public class FieldRepo
 	{
-		public readonly FieldSchema FieldSchema;
-		public readonly TypeRepo? TypeRepo;
+		public FieldSchema FieldSchema { get; init; }
+		public TypeRepo? TypeRepo { get; init; }
 
 		public override string ToString() => "Field Repo: " + FieldSchema.FieldName;
 

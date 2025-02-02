@@ -42,28 +42,29 @@ public class Serializer : IDisposable
 {
 	public const uint ScrollId = 0x5343524C; // SCRL: 83, 67, 82, 76, Start of object data
 
-	public Header Header = new();
+	public Header Header { get; set; } = new();
 
-	public List<TypeSchema> TypeSchemas = [];
+	public List<TypeSchema> TypeSchemas { get; protected set; } = [];
 
-	public List<TypeRepo> TypeRepos = [];
-	public Dictionary<Type, TypeRepo> IdxTypeToRepo = [];
+	public List<TypeRepo> TypeRepos { get; protected set; } = [];
+	public Dictionary<Type, TypeRepo> IdxTypeToRepo { get; protected set; } = [];
 
-	public TypeRepoString? TypeRepoString; // Reuse string instances to reduce memory use when deep cloning
+	public TypeRepoString? TypeRepoString { get; set; } // Reuse string instances to reduce memory use when deep cloning
 
-	public BinaryReader? Reader;
+	public BinaryReader? Reader { get; set; }
 
-	public bool Lazy;
-	public bool PublicOnly = false;
+	public bool Lazy { get; set; }
+	public bool PublicOnly { get; set; }
 
 	// Convert to Parser class?
 	// Use a queue so we don't exceed the stack size due to cross references (i.e. a list with values that refer back to the list)
-	public Queue<object> ParserQueue = [];
-	public List<object?> Primitives = []; // primitives are usually serialized inline, but that doesn't work if that's the primary type
+	public Queue<object> ParserQueue { get; protected set; } = [];
+	public List<object?> Primitives { get; protected set; } = []; // primitives are usually serialized inline, but that doesn't work if that's the primary type
 
-	public Dictionary<object, object> Clones = [];
-	public Queue<Action> CloneQueue = new();
-	public TaskInstance? TaskInstance;
+	protected Dictionary<object, object> Clones { get; set; } = [];
+	protected Queue<Action> CloneQueue { get; set; } = new();
+
+	public TaskInstance? TaskInstance { get; set; }
 
 	public struct LoadItem
 	{
@@ -269,12 +270,13 @@ public class Serializer : IDisposable
 
 			int typeIndex = reader.ReadInt16();
 			TypeRepo typeRepo = TypeRepos[typeIndex];
-			if (typeRepo.TypeSchema.IsPrimitive) // object ref can point to primitives
+			if (typeRepo.TypeSchema.IsPrimitive)
 			{
 				Primitives.Add(typeRepo.LoadObject());
 			}
 			else
 			{
+				// Object ref can point to primitives
 				int objectIndex = reader.ReadInt32();
 				Primitives.Add(typeRepo.LoadObject(objectIndex));
 			}
@@ -308,6 +310,11 @@ public class Serializer : IDisposable
 		catch (Exception e)
 		{
 			log.Add(e);
+		}
+
+		if (TypeSchemas.Count == 0)
+		{
+			log.Throw(new SerializerException("No TypeSchemas found", new Tag("Name", Header.Name)));
 		}
 
 		foreach (TypeSchema typeSchema in TypeSchemas)
@@ -363,9 +370,9 @@ public class Serializer : IDisposable
 		}
 	}
 
-	record TypeRepoWriter
+	record TypeRepoWriter(TypeRepo typeRepo)
 	{
-		public TypeRepo TypeRepo { get; init; } = default!;
+		public TypeRepo TypeRepo => typeRepo;
 		public MemoryStream MemoryStream = new();
 	}
 
@@ -386,10 +393,7 @@ public class Serializer : IDisposable
 			if (typeRepo.LoadableType == null)
 				continue;
 
-			var typeRepoWriter = new TypeRepoWriter
-			{
-				TypeRepo = typeRepo,
-			};
+			var typeRepoWriter = new TypeRepoWriter(typeRepo);
 			writers.Add(typeRepoWriter);
 		}
 

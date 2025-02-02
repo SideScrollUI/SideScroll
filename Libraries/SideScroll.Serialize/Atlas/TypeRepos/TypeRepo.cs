@@ -49,26 +49,26 @@ public abstract class TypeRepo : IDisposable
 		//new TypeRepoObject.Creator(),
 	];
 
-	public readonly Serializer Serializer;
-	public readonly TypeSchema TypeSchema;
-	public readonly Type? Type; // might be null after loading
-	public Type? LoadableType; // some types get overridden lazy load, or get removed [Unserialized]
-	public int TypeIndex; // -1 if null
+	public Serializer Serializer { get; init; }
+	public TypeSchema TypeSchema { get; init; }
+	public Type? Type { get; init; } // might be null after loading
+	public Type? LoadableType { get; protected set; } // some types get overridden lazy load, or get removed [Unserialized]
+	public int TypeIndex { get; set; } // -1 if null
 
-	public List<object> Objects = []; // ordered by index, not filled in when loading
-	public int[]? ObjectSizes;
-	public long[]? ObjectOffsets;
-	public object?[] ObjectsLoaded;
-	public int ObjectsLoadedCount;
+	public List<object> Objects { get; protected set; } = []; // ordered by index, not filled in when loading
+	public int[]? ObjectSizes { get; protected set; }
+	public long[]? ObjectOffsets { get; protected set; }
+	public object?[] ObjectsLoaded { get; set; }
+	public int ObjectsLoadedCount { get; protected set; }
 
-	public BinaryReader? Reader;
+	public BinaryReader? Reader { get; set; }
 
 	// Saving Only
-	public Dictionary<object, int> IdxObjectToIndex = []; // for saving only, not filled in for loading
+	public Dictionary<object, int> IdxObjectToIndex { get; protected set; } = []; // for saving only, not filled in for loading
 
 	// Loading Only
 
-	public int Cloned = 0; // for stats
+	public int Cloned { get; set; } = 0; // for stats
 
 	public abstract void SaveObject(BinaryWriter writer, object obj);
 	public virtual void LoadObjectData(object obj) { }
