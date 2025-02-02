@@ -54,7 +54,7 @@ public class SerializerMemoryAtlas : SerializerMemory
 
 		var serializer = Create();
 		serializer.TypeRepoString = _typeRepoString;
-		serializer.Load(call, reader);
+		serializer.Load(callTimer, reader);
 		return serializer.BaseObject(call);
 	}
 

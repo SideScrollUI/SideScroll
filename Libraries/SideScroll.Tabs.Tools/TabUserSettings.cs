@@ -29,7 +29,7 @@ public class TabUserSettings : ITab
 			toolbar.ButtonSave.Action = Save;
 			model.AddObject(toolbar);
 
-			UserSettings = Project.UserSettings.DeepClone()!;
+			UserSettings = Project.UserSettings.DeepClone(call)!;
 			model.AddObject(UserSettings);
 		}
 
@@ -41,8 +41,8 @@ public class TabUserSettings : ITab
 
 		private void Save(Call call)
 		{
-			DataApp.Save(UserSettings!);
-			Project.UserSettings = UserSettings.DeepClone()!;
+			DataApp.Save(UserSettings!, call);
+			Project.UserSettings = UserSettings.DeepClone(call)!;
 		}
 	}
 }

@@ -31,7 +31,9 @@ public class Header
 		uint sideId = reader.ReadUInt32();
 		if (sideId != SideId)
 		{
-			log.Throw(new SerializerException("Invalid header Id"));
+			log.Throw(new SerializerException("Invalid header Id",
+				new Tag("Expected", SideId),
+				new Tag("Found", sideId)));
 		}
 		Version = reader.ReadString();
 		Name = reader.ReadString();
@@ -79,7 +81,7 @@ public class Serializer : IDisposable
 
 	public object? BaseObject(Call call)
 	{
-		if (TypeRepos.Count == 0)// || typeRepos[0].objects.Count == 0)
+		if (TypeRepos.Count == 0)
 		{
 			call.Log.Throw(new SerializerException("No TypeRepos found"));
 		}
@@ -93,7 +95,6 @@ public class Serializer : IDisposable
 		if (typeRepo.Type!.IsPrimitive)
 		{
 			return Primitives[0];
-			//return typeRepo.LoadObject();
 		}
 
 		using CallTimer callSaving = call.Timer("Load BaseObject");

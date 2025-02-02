@@ -4,21 +4,24 @@ namespace SideScroll.Serialize.Atlas;
 
 public class SerializerFileAtlas : SerializerFile
 {
-	private const string DataName = "Data.atlas";
+	public const string DataFileName = "Data.atlas";
+
+	public static int SaveAttemptsMax = 10;
+	public static TimeSpan SaveAttemptsBackoff = TimeSpan.FromMilliseconds(10); // Backoff * attempt #
 
 	public SerializerFileAtlas(string basePath, string name = "") : base(basePath, name)
 	{
-		HeaderPath = Paths.Combine(basePath, DataName);
-		DataPath = Paths.Combine(basePath, DataName);
+		HeaderPath = Paths.Combine(basePath, DataFileName);
+		DataPath = Paths.Combine(basePath, DataFileName);
 	}
 
 	protected override void SaveInternal(Call call, object obj, string? name = null)
 	{
-		for (int attempt = 0; attempt < 10; attempt++)
+		for (int attempt = 0; attempt < SaveAttemptsMax; attempt++)
 		{
 			if (attempt > 0)
 			{
-				Thread.Sleep(attempt * 10);
+				Thread.Sleep(attempt * (int)SaveAttemptsBackoff.TotalMilliseconds);
 			}
 
 			try
@@ -65,7 +68,6 @@ public class SerializerFileAtlas : SerializerFile
 			obj = serializer.BaseObject(callLoadBaseObject);
 		}
 		serializer.LogLoadedTypes(call);
-		//logTimer.Add("Type Repos", new Tag("Repos", serializer.typeRepos)); // fields don't appear in columns
 
 		if (taskInstance != null)
 		{
@@ -97,12 +99,12 @@ public class SerializerFileAtlas : SerializerFile
 
 	public Serializer LoadSchema(Call call)
 	{
-		using var stream = new FileStream(HeaderPath!, FileMode.Open, FileAccess.Read, FileShare.Read);
+		using var fileStream = new FileStream(HeaderPath!, FileMode.Open, FileAccess.Read, FileShare.Read);
 
-		using var reader = new BinaryReader(stream);
+		using var reader = new BinaryReader(fileStream);
 
 		var serializer = new Serializer();
-		serializer.Load(call, reader, false);
+		serializer.Load(call, reader, false, false);
 		return serializer;
 	}
 

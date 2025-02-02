@@ -35,14 +35,14 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 		object? obj = null;
 		try
 		{
-			if (CanAssign(LoadableType!))
+			if (CanAssign(LoadableType))
 			{
 				long ticks = Reader.ReadInt64();
 				obj = new TimeSpan(ticks);
 			}
 			else
 			{
-				throw new SerializerException("Unhandled primitive type");
+				throw new SerializerException("Unhandled primitive type", new Tag("Type", LoadableType));
 			}
 		}
 		catch (Exception)

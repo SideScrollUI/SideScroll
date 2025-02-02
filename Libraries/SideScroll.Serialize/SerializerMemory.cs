@@ -26,7 +26,6 @@ public abstract class SerializerMemory
 	{
 		if (obj == null) return null;
 
-		//	return default;
 		try
 		{
 			var memorySerializer = Create();
