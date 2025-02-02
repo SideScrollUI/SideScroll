@@ -70,8 +70,10 @@ public class FormatValueConverter : IValueConverter
 		}
 	}
 
-	public string? ObjectToString(object value, int maxLength, bool formatted)
+	public string? ObjectToString(object? value, int maxLength, bool? formatted = null)
 	{
+		if (value is null) return null;
+
 		if (value is DateTime dateTime)
 		{
 			return dateTime.Format();
@@ -82,9 +84,11 @@ public class FormatValueConverter : IValueConverter
 			return dateTimeOffset.UtcDateTime.Format();
 		}
 
+		formatted ??= IsFormatted;
+
 		if (value is TimeSpan timeSpan)
 		{
-			if (formatted)
+			if (formatted == true)
 			{
 				return timeSpan.FormattedDecimal();
 			}
@@ -96,7 +100,7 @@ public class FormatValueConverter : IValueConverter
 
 		if (value is double d)
 		{
-			if (formatted)
+			if (formatted == true)
 			{
 				return d.FormattedDecimal();
 			}

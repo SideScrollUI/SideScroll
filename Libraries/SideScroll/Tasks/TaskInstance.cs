@@ -62,7 +62,11 @@ public class TaskInstance : INotifyPropertyChanged
 		}
 	}
 
-	public DateTime Started = DateTime.UtcNow;
+	public DateTime StartTime { get; set; } = DateTime.UtcNow;
+
+	public DateTime? EndTime { get; set; }
+
+	public TimeSpan Duration => (EndTime ?? DateTime.UtcNow) - StartTime;
 
 	private readonly Stopwatch _stopwatch = new();
 
@@ -101,8 +105,7 @@ public class TaskInstance : INotifyPropertyChanged
 		}
 	}
 	private double _percent;
-
-	public TimeSpan Elapsed => DateTime.UtcNow - Started;
+	public TimeSpan Elapsed => DateTime.UtcNow - StartTime;
 	public TimeSpan? ETA => Percent > 0.0 ? (Elapsed * 100.0 / Percent) - Elapsed : null;
 
 	public double Progress
@@ -173,6 +176,7 @@ public class TaskInstance : INotifyPropertyChanged
 		{
 			Percent = 100 * _progress / ProgressMax;
 			NotifyPropertyChanged(nameof(Percent));
+			NotifyPropertyChanged(nameof(Duration));
 		}
 	}
 
@@ -231,6 +235,9 @@ public class TaskInstance : INotifyPropertyChanged
 		eventCompleted.taskCheckFileSize = this;
 		OnComplete?.Invoke(this, eventCompleted);*/
 		Finished = true;
+		EndTime = DateTime.UtcNow;
+		NotifyPropertyChanged(nameof(Finished));
+		NotifyPropertyChanged(nameof(Duration));
 
 		if (Call.TaskInstance!.CancelToken.IsCancellationRequested)
 		{

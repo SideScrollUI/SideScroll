@@ -202,6 +202,7 @@ public static class DataGridExtensions
 		}
 
 		//var collection = (ICollectionView)dataGrid.Items;
+		maxValueLength ??= MaxValueLength;
 		foreach (var item in items)
 		{
 			var stringCells = new List<string>();
@@ -213,7 +214,15 @@ public static class DataGridExtensions
 					string propertyPath = binding.Path;
 					object? obj = ReflectorUtil.FollowPropertyPath(item, propertyPath);
 
-					string? value = obj.Formatted(maxValueLength ?? MaxValueLength);
+					string? value;
+					if (boundColumn is DataGridPropertyTextColumn textColumn)
+					{
+						value = textColumn.FormatConverter.ObjectToString(obj, maxValueLength.Value);
+					}
+					else
+					{
+						value = obj.Formatted(maxValueLength.Value);
+					}
 					value = value?.Replace('\n', ' '); // remove newlines
 					stringCells.Add(value ?? "");
 				}
