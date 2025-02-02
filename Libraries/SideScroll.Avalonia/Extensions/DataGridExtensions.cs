@@ -50,7 +50,7 @@ public static class DataGridExtensions
 		if (propertyInfo != null)
 		{
 			object? obj = propertyInfo.GetValue(item);
-			string? value = obj.Formatted(MaxValueLength);
+			string? value = GetFormattedCellText(column, obj);
 			return value;
 		}
 		else
@@ -82,7 +82,7 @@ public static class DataGridExtensions
 			if (propertyInfo != null)
 			{
 				object? value = propertyInfo.GetValue(obj);
-				string? valueText = value.Formatted(MaxValueLength);
+				string? valueText = GetFormattedCellText(boundColumn, value);
 				sb.AppendLine(valueText);
 			}
 			else
@@ -202,7 +202,7 @@ public static class DataGridExtensions
 		}
 
 		//var collection = (ICollectionView)dataGrid.Items;
-		maxValueLength ??= MaxValueLength;
+		int maxLength = maxValueLength ?? MaxValueLength;
 		foreach (var item in items)
 		{
 			var stringCells = new List<string>();
@@ -213,16 +213,7 @@ public static class DataGridExtensions
 					Binding binding = (Binding)boundColumn.Binding;
 					string propertyPath = binding.Path;
 					object? obj = ReflectorUtil.FollowPropertyPath(item, propertyPath);
-
-					string? value;
-					if (boundColumn is DataGridPropertyTextColumn textColumn)
-					{
-						value = textColumn.FormatConverter.ObjectToString(obj, maxValueLength.Value);
-					}
-					else
-					{
-						value = obj.Formatted(maxValueLength.Value);
-					}
+					string? value = GetFormattedCellText(boundColumn, obj, maxLength);
 					value = value?.Replace('\n', ' '); // remove newlines
 					stringCells.Add(value ?? "");
 				}
@@ -230,6 +221,19 @@ public static class DataGridExtensions
 			}
 
 			contentRows.Add(stringCells);
+		}
+	}
+
+	private static string? GetFormattedCellText(DataGridBoundColumn boundColumn, object? obj, int? maxLength = null)
+	{
+		int maxValueLength = maxLength ?? MaxValueLength;
+		if (boundColumn is DataGridPropertyTextColumn textColumn)
+		{
+			return textColumn.FormatConverter.ObjectToString(obj, maxValueLength);
+		}
+		else
+		{
+			return obj.Formatted(maxValueLength);
 		}
 	}
 }
