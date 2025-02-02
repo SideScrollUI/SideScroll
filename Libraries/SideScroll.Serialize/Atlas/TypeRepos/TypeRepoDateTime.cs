@@ -8,7 +8,7 @@ public class TypeRepoDateTime(Serializer serializer, TypeSchema typeSchema) : Ty
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoDateTime(serializer, typeSchema);
 			}
@@ -16,7 +16,7 @@ public class TypeRepoDateTime(Serializer serializer, TypeSchema typeSchema) : Ty
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return type == typeof(DateTime);
 	}
@@ -39,8 +39,7 @@ public class TypeRepoDateTime(Serializer serializer, TypeSchema typeSchema) : Ty
 			if (CanAssign(LoadableType!))
 			{
 				long ticks = Reader.ReadInt64();
-				int kindValue = Reader.ReadByte();
-				//Enum.ToObject(typeof(DateTimeKind), kindValue);
+				byte kindValue = Reader.ReadByte();
 				DateTime dateTime = new(ticks, (DateTimeKind)kindValue);
 				obj = dateTime;
 			}

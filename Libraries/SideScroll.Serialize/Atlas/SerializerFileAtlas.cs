@@ -82,7 +82,7 @@ public class SerializerFileAtlas : SerializerFile
 
 	/*public Header LoadHeader(Call call)
 	{
-		call ??= new Call();
+		call ??= new();
 
 		using (CallTimer callReadAllBytes = call.Timer("Loading header: " + Name))
 		{
@@ -108,7 +108,7 @@ public class SerializerFileAtlas : SerializerFile
 
 	public T LoadOrCreate<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
 	{
-		call ??= new Call();
+		call ??= new();
 
 		T? result = default;
 		if (Exists)

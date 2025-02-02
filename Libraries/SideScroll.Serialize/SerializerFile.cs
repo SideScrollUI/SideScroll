@@ -29,7 +29,9 @@ public abstract class SerializerFile(string basePath, string name = "")
 
 		name ??= DefaultName;
 
-		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object: " + name, new Tag("Path", BasePath));
+		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object", 
+			new Tag("Name", name), 
+			new Tag("Path", BasePath));
 
 		if (!Directory.Exists(BasePath))
 		{
@@ -43,7 +45,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 
 	public T? Load<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
 	{
-		call ??= new Call();
+		call ??= new();
 		object? obj = Load(call, lazy, taskInstance);
 		if (obj is T loaded) return loaded;
 
@@ -67,7 +69,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 
 	public object? Load(Call call, bool lazy = false, TaskInstance? taskInstance = null, LogLevel logLevel = LogLevel.Debug)
 	{
-		using CallTimer callTimer = call.Timer(logLevel, "Loading object: " + Name);
+		using CallTimer callTimer = call.Timer(logLevel, "Loading object", new Tag("Name", Name));
 
 		try
 		{
@@ -82,15 +84,15 @@ public abstract class SerializerFile(string basePath, string name = "")
 
 	public Header LoadHeader(Call call)
 	{
-		call ??= new Call();
+		call ??= new();
 
-		using CallTimer callReadAllBytes = call.Timer(LogLevel.Debug, "Loading header: " + Name);
+		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Loading header", new Tag("Name", Name));
 
 		var memoryStream = new MemoryStream(File.ReadAllBytes(HeaderPath!));
 
 		var reader = new BinaryReader(memoryStream);
 		var header = new Header();
-		header.Load(reader);
+		header.Load(callTimer.Log, reader);
 		return header;
 	}
 

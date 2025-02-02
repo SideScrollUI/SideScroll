@@ -46,7 +46,7 @@ public class SerializerMemoryAtlas : SerializerMemory
 
 	public override object? Load(Call? call = null)
 	{
-		call ??= new Call();
+		call ??= new();
 		using CallTimer callTimer = call.Timer("Load");
 
 		Stream.Seek(0, SeekOrigin.Begin);
@@ -60,7 +60,7 @@ public class SerializerMemoryAtlas : SerializerMemory
 
 	public override void Validate(Call? call = null)
 	{
-		call ??= new Call();
+		call ??= new();
 		using CallTimer callTimer = call.Timer("Validate");
 
 		Stream.Seek(0, SeekOrigin.Begin);

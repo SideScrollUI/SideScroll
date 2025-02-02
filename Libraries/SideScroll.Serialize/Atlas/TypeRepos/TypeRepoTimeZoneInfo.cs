@@ -8,7 +8,7 @@ public class TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) 
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoTimeZoneInfo(serializer, typeSchema);
 			}
@@ -16,7 +16,7 @@ public class TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) 
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return type == typeof(TimeZoneInfo);
 	}

@@ -77,7 +77,6 @@ public class TypeRepoEnumerable : TypeRepo
 
 	public override void LoadObjectData(object obj)
 	{
-		//(IEnumerable<listTypeRepo.type>)objects[i];
 		int count = Reader!.ReadInt32();
 
 		for (int j = 0; j < count; j++)

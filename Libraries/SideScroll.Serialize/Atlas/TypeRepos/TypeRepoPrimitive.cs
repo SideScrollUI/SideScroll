@@ -9,7 +9,7 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoPrimitive(serializer, typeSchema);
 			}
@@ -17,9 +17,9 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
-		return type.IsPrimitive;
+		return type?.IsPrimitive == true;
 	}
 
 	public override void SaveObject(BinaryWriter writer, object obj)

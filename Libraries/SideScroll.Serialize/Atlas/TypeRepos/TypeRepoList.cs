@@ -12,7 +12,7 @@ public class TypeRepoList : TypeRepo
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoList(serializer, typeSchema);
 			}
@@ -42,7 +42,7 @@ public class TypeRepoList : TypeRepo
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return typeof(IList).IsAssignableFrom(type);
 	}
@@ -94,12 +94,12 @@ public class TypeRepoList : TypeRepo
 
 	public override void Clone(object source, object dest)
 	{
-		var iSource = (IList)source;
-		var iDest = (IList)dest;
-		foreach (var item in iSource)
+		var sourceList = (IList)source;
+		var destList = (IList)dest;
+		foreach (var item in sourceList)
 		{
 			object? clone = Serializer.Clone(item);
-			iDest.Add(clone);
+			destList.Add(clone);
 		}
 	}
 }

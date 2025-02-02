@@ -116,13 +116,13 @@ public abstract class SerializerMemory
 
 	public static string ToBase64String(Call call, object obj, bool publicOnly = false)
 	{
-		call ??= new Call();
+		call ??= new();
 
 		var serializer = Create();
 		serializer.PublicOnly = publicOnly;
 		serializer.Save(call, obj);
-		string data = serializer.ToBase64String(call);
-		return data;
+		string base64 = serializer.ToBase64String(call);
+		return base64;
 	}
 
 	public static SerializerMemory Create()

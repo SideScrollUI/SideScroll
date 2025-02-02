@@ -26,12 +26,12 @@ public class Header
 		writer.Write(Name ?? "");
 	}
 
-	public void Load(BinaryReader reader)
+	public void Load(Log log, BinaryReader reader)
 	{
 		uint sideId = reader.ReadUInt32();
 		if (sideId != SideId)
 		{
-			throw new SerializerException("Invalid header Id");
+			log.Throw(new SerializerException("Invalid header Id"));
 		}
 		Version = reader.ReadString();
 		Name = reader.ReadString();
@@ -222,7 +222,7 @@ public class Serializer : IDisposable
 
 		using LogTimer logTimer = call.Log.Timer("Loading object");
 
-		Header.Load(reader);
+		Header.Load(logTimer, reader);
 		if (Header.Version != Header.LatestVersion)
 		{
 			logTimer.Throw(new SerializerException("Header version doesn't match", new Tag("Header", Header)));

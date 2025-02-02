@@ -8,7 +8,7 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoTimeSpan(serializer, typeSchema);
 			}
@@ -16,7 +16,7 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return type == typeof(TimeSpan);
 	}

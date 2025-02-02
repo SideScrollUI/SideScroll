@@ -10,7 +10,7 @@ public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeR
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoArray(serializer, typeSchema);
 			}
@@ -22,7 +22,7 @@ public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeR
 	private int[]? _sizes;
 	private readonly Type _elementType = typeSchema.Type!.GetElementType()!;
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return typeof(Array).IsAssignableFrom(type);
 	}
@@ -52,7 +52,7 @@ public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeR
 
 	public override void AddChildObjects(object obj)
 	{
-		Array array = (Array)obj;
+		var array = (Array)obj;
 		foreach (var item in array)
 		{
 			Serializer.AddObjectRef(item);
@@ -61,7 +61,7 @@ public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeR
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		Array array = (Array)obj;
+		var array = (Array)obj;
 
 		//writer.Write(array.Length);
 		foreach (var item in array)
@@ -87,24 +87,24 @@ public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeR
 	{
 		// Can't use Activator because Array requires parameters in it's constructor
 
-		IList iList = (IList)obj;
+		var list = (IList)obj;
 
-		for (int j = 0; j < iList.Count; j++)
+		for (int j = 0; j < list.Count; j++)
 		{
 			object? item = _listTypeRepo?.LoadObjectRef();
-			iList[j] = item;
+			list[j] = item;
 		}
 	}
 
 	public override void Clone(object source, object dest)
 	{
-		Array iSource = (Array)source;
-		IList iDest = (IList)dest;
+		Array sourceArray = (Array)source;
+		IList destList = (IList)dest;
 		int i = 0;
-		foreach (var item in iSource)
+		foreach (var item in sourceArray)
 		{
 			object? clone = Serializer.Clone(item);
-			iDest[i++] = clone;
+			destList[i++] = clone;
 		}
 	}
 }

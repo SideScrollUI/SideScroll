@@ -87,7 +87,7 @@ public class DataRepo
 	public void Save(Type type, string? groupId, string key, object obj, Call? call = null)
 	{
 		groupId ??= DefaultGroupId;
-		call ??= new Call();
+		call ??= new();
 		SerializerFile serializer = GetSerializerFile(type, groupId, key); // use hash since filesystems can't handle long names
 		serializer.Save(call, obj, key);
 	}
@@ -151,13 +151,13 @@ public class DataRepo
 
 	public T? Load<T>(bool createIfNeeded = false, bool lazy = false, Call? call = null)
 	{
-		call ??= new Call();
+		call ??= new();
 		return Load<T>(typeof(T).FullName!, call, createIfNeeded, lazy);
 	}
 
 	public DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false)
 	{
-		call ??= new Call();
+		call ??= new();
 
 		var serializerFile = SerializerFile.Create(path);
 		if (serializerFile.Exists)
@@ -173,7 +173,7 @@ public class DataRepo
 
 	public DataItemCollection<T> LoadAll<T>(Call? call = null, string? groupId = null, bool lazy = false)
 	{
-		call ??= new Call();
+		call ??= new();
 		groupId ??= DefaultGroupId;
 
 		/*ItemCollection<string> objectIds = GetObjectIds(typeof(T));
@@ -208,7 +208,7 @@ public class DataRepo
 
 	public List<Header> LoadHeaders(Type type, string? groupId = null, Call? call = null)
 	{
-		call ??= new Call();
+		call ??= new();
 		groupId ??= DefaultGroupId;
 
 		List<Header> headers = [];

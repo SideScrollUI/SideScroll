@@ -12,7 +12,7 @@ public class TypeRepoDictionary : TypeRepo
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoDictionary(serializer, typeSchema);
 			}
@@ -50,7 +50,7 @@ public class TypeRepoDictionary : TypeRepo
 			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 2)!;
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return typeof(IDictionary).IsAssignableFrom(type);
 	}

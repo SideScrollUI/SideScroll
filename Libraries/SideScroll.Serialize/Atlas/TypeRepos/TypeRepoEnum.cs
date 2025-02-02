@@ -8,7 +8,7 @@ public class TypeRepoEnum(Serializer serializer, TypeSchema typeSchema) : TypeRe
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoEnum(serializer, typeSchema);
 			}
@@ -16,9 +16,9 @@ public class TypeRepoEnum(Serializer serializer, TypeSchema typeSchema) : TypeRe
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
-		return type.IsEnum;
+		return type?.IsEnum == true;
 	}
 
 	public override void SaveObject(BinaryWriter writer, object obj)
