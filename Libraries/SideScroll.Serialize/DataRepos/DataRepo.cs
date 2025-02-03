@@ -94,7 +94,7 @@ public class DataRepo
 
 	public void Save<T>(T obj, Call? call = null)
 	{
-		Save(typeof(T).FullName!, obj, call);
+		Save(typeof(T).GetAssemblyQualifiedShortName(), obj, call);
 	}
 
 	public DataItem<T>? LoadItem<T>(string key, Call? call = null, bool createIfNeeded = false, bool lazy = false)
@@ -152,7 +152,7 @@ public class DataRepo
 	public T? Load<T>(bool createIfNeeded = false, bool lazy = false, Call? call = null)
 	{
 		call ??= new();
-		return Load<T>(typeof(T).FullName!, call, createIfNeeded, lazy);
+		return Load<T>(typeof(T).GetAssemblyQualifiedShortName(), call, createIfNeeded, lazy);
 	}
 
 	public DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false)
@@ -165,7 +165,7 @@ public class DataRepo
 			T? obj = serializerFile.Load<T>(call, lazy);
 			if (obj != null)
 			{
-				return new DataItem<T>(serializerFile.LoadHeader(call).Name, obj);
+				return new DataItem<T>(serializerFile.LoadHeader(call).Name ?? "", obj);
 			}
 		}
 		return null;
@@ -198,7 +198,7 @@ public class DataRepo
 					T? obj = serializerFile.Load<T>(call, lazy);
 					if (obj != null)
 					{
-						entries.Add(serializerFile.LoadHeader(call).Name, obj);
+						entries.Add(serializerFile.LoadHeader(call).Name ?? "", obj);
 					}
 				}
 			}
@@ -314,7 +314,7 @@ public class DataRepo
 	public string GetGroupPath(Type type, string? groupId = null)
 	{
 		groupId ??= DefaultGroupId;
-		string groupHash = (type.GetNonNullableType().FullName + ';' + RepoName + ';' + groupId).HashSha256();
+		string groupHash = (type.GetNonNullableType().GetAssemblyQualifiedShortName() + ';' + RepoName + ';' + groupId).HashSha256();
 		return Paths.Combine(RepoPath, groupHash);
 	}
 

@@ -78,7 +78,7 @@ public class TabModel
 				return "(null)";
 
 			Type objType = Object.GetType();
-			return objType.FullName!; // need to hash this or escape it
+			return objType.GetAssemblyQualifiedShortName();
 		}
 	}
 

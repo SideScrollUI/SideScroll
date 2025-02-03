@@ -134,9 +134,9 @@ public class TabInstance : IDisposable
 
 	// Relative paths for where all the TabSettings get stored, primarily used for loading future defaults
 	// paths get hashed later to avoid having to encode and super long names breaking path limits
-	private string? CustomPath => (Model.CustomSettingsPath != null) ? "Custom/" + GetType().FullName + "/" + Model.CustomSettingsPath : null;
-	private string TabPath => "Tab/" + GetType().FullName + "/" + Model.ObjectTypePath;
-	//private string TabPath => "Tab/" + GetType().FullName + "/" + Model.ObjectTypePath + "/" + Label;
+	private string? CustomPath => (Model.CustomSettingsPath != null) ? "Custom/" + GetType().GetAssemblyQualifiedShortName() + "/" + Model.CustomSettingsPath : null;
+	private string TabPath => "Tab/" + GetType().GetAssemblyQualifiedShortName() + "/" + Model.ObjectTypePath;
+	//private string TabPath => "Tab/" + GetType().GetAssemblyQualifiedShortName() + "/" + Model.ObjectTypePath + "/" + Label;
 	// deprecate?
 	private string TypeLabelPath => "TypePath/" + Model.ObjectTypePath + "/" + Label;
 	private string TypePath => "Type/" + Model.ObjectTypePath;

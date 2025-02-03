@@ -61,7 +61,7 @@ public class SerializerFileAtlas : SerializerFile
 
 		var reader = new BinaryReader(memoryStream);
 
-		serializer.Load(call, reader, lazy);
+		serializer.Load(call, reader, Name, true, lazy);
 		object? obj;
 		using (CallTimer callLoadBaseObject = call.Timer("Loading base object"))
 		{
@@ -104,7 +104,7 @@ public class SerializerFileAtlas : SerializerFile
 		using var reader = new BinaryReader(fileStream);
 
 		var serializer = new Serializer();
-		serializer.Load(call, reader, false, false);
+		serializer.Load(call, reader, Name, false);
 		return serializer;
 	}
 

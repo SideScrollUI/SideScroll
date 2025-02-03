@@ -1,4 +1,3 @@
-using SideScroll.Logs;
 using SideScroll.Serialize.Atlas.Schema;
 using System.Collections;
 

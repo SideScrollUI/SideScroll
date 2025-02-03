@@ -221,7 +221,7 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 
 		int index = 0;
 		List<Item> items = headers
-			.Select(h => new Item(index++, h.Name))
+			.Select(header => new Item(index++, header.Name ?? ""))
 			.ToList();
 
 		return new Indices()

@@ -1,3 +1,4 @@
+using SideScroll.Extensions;
 using SideScroll.Logs;
 using SideScroll.Serialize.Atlas.Schema;
 using SideScroll.Serialize.Atlas.TypeRepos;
@@ -26,7 +27,7 @@ public class Header
 		writer.Write(Name ?? "");
 	}
 
-	public void Load(Log log, BinaryReader reader)
+	public void Load(Log log, BinaryReader reader, string? requiredName = null)
 	{
 		uint sideId = reader.ReadUInt32();
 		if (sideId != SideId)
@@ -37,6 +38,13 @@ public class Header
 		}
 		Version = reader.ReadString();
 		Name = reader.ReadString();
+
+		if (!requiredName.IsNullOrEmpty() && Name != requiredName)
+		{
+			log.Throw(new SerializerException("Loaded name doesn't match required",
+				new Tag("Required", requiredName),
+				new Tag("Loaded", Name)));
+		}
 	}
 }
 
@@ -216,14 +224,14 @@ public class Serializer : IDisposable
 		SaveSchemas(writer);
 	}
 
-	public void Load(Call call, BinaryReader reader, bool lazy = false, bool loadData = true)
+	public void Load(Call call, BinaryReader reader, string? name = null, bool loadData = true, bool lazy = false)
 	{
 		Reader = reader;
 		Lazy = lazy;
 
 		using LogTimer logTimer = call.Log.Timer("Loading object");
 
-		Header.Load(logTimer, reader);
+		Header.Load(logTimer, reader, name);
 		if (Header.Version != Header.LatestVersion)
 		{
 			logTimer.Throw(new SerializerException("Header version doesn't match", new Tag("Header", Header)));
