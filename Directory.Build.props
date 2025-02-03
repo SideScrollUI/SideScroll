@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Version>0.9.3</Version>
-    <PackageReleaseNotes>Switched TabControlDateTimePicker buttons to use svg images, and added a 'Copy to Clipboard' button to go with the import button. Refactored a generic TabControlImageButton out of the ToolbarButton. Removed some unused png assets. Added a new serializer file header id of `SIDE` and replaced the previous object header id with `SCRL`. This is schema breaking and the `ProjectSettings.DataVersion` should be bumped. Added TaggedException and SerializerException to simplify exception handling.</PackageReleaseNotes>
+    <PackageReleaseNotes>Switched TabControlDateTimePicker buttons to use svg images, and added a 'Copy to Clipboard' button to go with the import button. Refactored a generic TabControlImageButton out of the ToolbarButton. Removed some unused png assets. Added a new serializer file header id of `SIDE` and replaced the previous object header id with `SCRL`. This is schema breaking and the `ProjectSettings.DataVersion` should be bumped. Fixed DataRepo paths so they no longer change if a generic type element's version changes. Added TaggedException and SerializerException to simplify exception handling. Fixed more DataGrid copying to clipboard not using the same formatting.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.3</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

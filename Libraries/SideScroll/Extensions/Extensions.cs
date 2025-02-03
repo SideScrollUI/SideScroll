@@ -13,7 +13,9 @@ public static class SideScrollExtensions
 		foreach (XmlNode xmlNode in xmlDoc.ChildNodes)
 		{
 			if (xmlNode.Name == name)
+			{
 				list.Add(xmlNode);
+			}
 		}
 		return list.ToArray();
 	}
@@ -24,7 +26,9 @@ public static class SideScrollExtensions
 		foreach (XmlNode childNode in xmlNode.ChildNodes)
 		{
 			if (childNode.Name == name)
+			{
 				list.Add(childNode);
+			}
 		}
 		return list.ToArray();
 	}
@@ -34,7 +38,9 @@ public static class SideScrollExtensions
 		foreach (object item in newList)
 		{
 			if (!iList.Contains(item))
+			{
 				iList.Add(item);
+			}
 		}
 	}
 
@@ -106,7 +112,7 @@ public static class SideScrollExtensions
 
 	public static T[] SubArray<T>(this T[] array, int offset, int length)
 	{
-		T[] result = new T[length];
+		var result = new T[length];
 		Array.Copy(array, offset, result, 0, length);
 		return result;
 	}

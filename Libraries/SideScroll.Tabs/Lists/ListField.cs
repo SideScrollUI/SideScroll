@@ -66,7 +66,7 @@ public class ListField : ListMember, IPropertyEditable
 		}
 	}
 
-	public static new ItemCollection<ListField> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
+	public new static ItemCollection<ListField> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
 	{
 		var fieldInfos = obj.GetType().GetFields()
 			.Where(f => f.IsRowVisible())

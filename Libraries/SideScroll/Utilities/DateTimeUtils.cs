@@ -8,7 +8,7 @@ public static class DateTimeUtils
 {
 	public static DateTime EpochTime { get; private set; } = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
-	public static bool TryParseTimeSpan(string text, out TimeSpan timeSpan)
+	public static bool TryParseTimeSpan(string? text, out TimeSpan timeSpan)
 	{
 		timeSpan = default;
 
@@ -34,7 +34,7 @@ public static class DateTimeUtils
 		return false;
 	}
 
-	public static bool TryParseDateTime(string text, out DateTime dateTime)
+	public static bool TryParseDateTime(string? text, out DateTime dateTime)
 	{
 		dateTime = default;
 

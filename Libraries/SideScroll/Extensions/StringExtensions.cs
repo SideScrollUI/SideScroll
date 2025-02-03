@@ -126,7 +126,9 @@ public static class StringExtensions
 			newText.Append(c);
 			prevChar = c;
 			if (char.IsDigit(c))
+			{
 				numberMode = true;
+			}
 		}
 		return newText.ToString();
 	}

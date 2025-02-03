@@ -1,13 +1,14 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using SideScroll.Avalonia.Controls.DataGrids;
+using SideScroll.Extensions;
 using SideScroll.Utilities;
 using System.Collections;
 using System.Reflection;
 using System.Text;
 using static SideScroll.Avalonia.Utilities.DataGridUtils;
 
-namespace SideScroll.Extensions;
+namespace SideScroll.Avalonia.Extensions;
 
 public static class DataGridExtensions
 {

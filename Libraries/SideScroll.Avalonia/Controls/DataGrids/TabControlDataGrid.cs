@@ -272,9 +272,13 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			column.MaxWidth = 2000;
 
 			if (column.MinWidth == 0)
+			{
 				column.MinWidth = Math.Min(MaxMinColumnWidth, originalDesiredWidth);
+			}
 			else
+			{
 				column.MinWidth = Math.Max(column.MinWidth, Math.Min(100, originalDesiredWidth));
+			}
 
 			double desiredWidth = Math.Max(column.MinWidth, originalDesiredWidth);
 			if (column is DataGridPropertyTextColumn textColumn)
@@ -719,7 +723,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			LoadSearch();
 
 			if (!SelectSavedItems()) // sorting must happen before this
+			{
 				SelectDefaultItems();
+			}
 
 			//UpdateSelection(); // datagrid not fully loaded yet
 
@@ -794,7 +800,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 
 		if (TabDataSettings.SelectedRows.Count == 0)
+		{
 			return TabModel.AutoSelectSaved == AutoSelectType.Any; // clear too?
+		}
 
 		List<object> matchingItems = GetMatchingRowObjects();
 		if (matchingItems.Count > 0)
@@ -885,12 +893,16 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 		object? firstValidObject = GetDefaultSelectedItem() ?? GetAutoSelectValue();
 		if (firstValidObject != null && DataGrid.SelectedItems.Count == 0)
+		{
 			SelectedItem = firstValidObject;
+		}
 
 		//SaveSelectedItems();
 
 		if (firstValidObject != null)
+		{
 			UpdateSelection();
+		}
 	}
 
 	public IList SelectedItems
@@ -905,7 +917,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 				for (int i = 0; i < value.Count; i++)
 				{
 					if (value[i] != dataGridSelectedItems[i])
+					{
 						match = false;
+					}
 				}
 				if (match)
 					return;
@@ -916,7 +930,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			// datagrid has a bug and doesn't reselect cleared records correctly
 			// Could try only removing removed items, and adding new items, need to check SelectedItems order is correct after
 			if (value.Count > 0)
+			{
 				_ignoreSelectionChanged = true;
+			}
 
 			DataGrid.SelectedItems.Clear();
 			DataGrid.SelectedItem = null; // need both of these
@@ -926,7 +942,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			foreach (object obj in value)
 			{
 				if (List!.Contains(obj))
+				{
 					DataGrid.SelectedItems.Add(obj);
+				}
 			}
 			DataGrid.InvalidateVisual(); // required for autoselection to work
 			if (value.Count > 0)
@@ -977,7 +995,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		{
 			//autoSelectItem = null;
 			if (value == null)
+			{
 				_selectItemEnabled = false;
+			}
 
 			// don't reselect if already selected				
 			if (DataGrid.SelectedItems.Count != 1 || DataGrid.SelectedItems[0] != value)
@@ -985,7 +1005,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 				DataGrid.SelectedItems.Clear();
 				DataGrid.SelectedItem = null; // need both of these
 				if (value != null)
+				{
 					DataGrid.SelectedItem = value;
+				}
 			}
 			ScrollIntoView(value);
 		}
@@ -1205,7 +1227,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 
 		if (List is INotifyCollectionChanged iNotifyCollectionChanged) // as AutoLoad
+		{
 			iNotifyCollectionChanged.CollectionChanged -= NotifyCollectionChanged_CollectionChanged;
+		}
 
 		List = null;
 		CollectionView = null;

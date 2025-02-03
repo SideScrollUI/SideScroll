@@ -256,7 +256,9 @@ public class TabBookmark
 		}
 
 		foreach (TabBookmark tabBookmark in ChildBookmarks.Values)
+		{
 			tabBookmark.Import(project);
+		}
 	}
 
 	// Returns the deepest TabBookmark that is rootable

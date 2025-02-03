@@ -326,10 +326,6 @@ public class TabModel
 		// skip over single items that will take up lots of room (always show ListItems though)
 		Skippable = false;
 
-		/*if (ItemList is ItemCollection<> itemCollection)
-		{
-		}*/
-
 		if (ItemList[0].Count == 1 && ItemList[0][0] is object firstItem)
 		{
 			if (ItemList[0] is IItemCollection itemCollection && !itemCollection.Skippable)

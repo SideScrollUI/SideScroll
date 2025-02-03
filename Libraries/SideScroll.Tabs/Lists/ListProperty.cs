@@ -144,7 +144,7 @@ public class ListProperty : ListMember, IPropertyEditable
 		ValueChanged();
 	}
 
-	public static new ItemCollection<ListProperty> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
+	public new static ItemCollection<ListProperty> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
 	{
 		// this doesn't work for virtual methods (or any method modifier?)
 		var propertyInfos = obj.GetType().GetProperties()

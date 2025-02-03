@@ -1,6 +1,6 @@
 using Avalonia.Media;
 
-namespace SideScroll.Extensions;
+namespace SideScroll.Avalonia.Extensions;
 
 public static class AvaloniaExtensions
 {

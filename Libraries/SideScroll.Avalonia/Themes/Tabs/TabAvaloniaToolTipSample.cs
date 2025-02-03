@@ -57,7 +57,7 @@ public class TabAvaloniaToolTipSample : ITab
 
 			Dispatcher.UIThread.Post(() =>
 			{
-				if (textBox.IsLoaded == true)
+				if (textBox.IsLoaded)
 				{
 					ToolTip.SetIsOpen(textBox, true);
 				}
