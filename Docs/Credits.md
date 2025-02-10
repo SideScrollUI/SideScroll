@@ -24,7 +24,6 @@
 | [Down Arrow](https://icon-icons.com/icon/down-arrow-direction/193338) | moro icon | Flaticon license |
 | [Add](https://www.flaticon.com/free-icon/add_118742) | Lucy G | Flaticon license |
 | [Cancel](https://icon-icons.com/icon/cancel/121292) | Lucy G | CC Atribution |
-| [Unlock](https://www.flaticon.com/free-icon/unlock_118737) | Lucy G | Flaticon license |
 | [Padnote](https://www.flaticon.com/free-icon/padnote_118751) | Lucy G | Flaticon license |
 | [Link](https://www.flaticon.com/free-icon/link_118780) | Lucy G | Flaticon license |
 | [Bookmark](https://www.flaticon.com/free-icon/bookmark_118732) | Lucy G | Flaticon license |
@@ -36,10 +35,11 @@
 | [Info2](https://icon-icons.com/icon/circle-customer-help-info-information-service-support/123208) | Perpixel | CC Atribution |
 | [Star](https://icon-icons.com/icon/bookmark-favorite-rate-rating-star/113418) | Unknown by site | CC Atribution |
 | [Undo/Redo](https://icon-icons.com/icon/undo/232333) | zahroe zahro | CC Atribution |
+| [Panel Left Contract](https://icon-icons.com/icon/panel-right-expand-regular/203418) | Microsoft | MIT license |
+| [Panel Left Expand](https://icon-icons.com/icon/panel-right-contract-regular/205098) | Microsoft | MIT license |
 | [Reset](https://icon-icons.com/icon/arrow-reset-regular/204640) | Microsoft | MIT license |
 | [Download](https://icon-icons.com/icon/download/128877) | Feather Icons | Free for commercial use |
 | [Play Circle](https://icon-icons.com/icon/play-button/121290) | Lucy G |  CC Atribution |
-| [Stop Circle](https://icon-icons.com/icon/stop-circle/176721) | Afdolash Kaffah |  CC Atribution |
 
 * Flaticon 
    - http://www.flaticon.com is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/)

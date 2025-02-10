@@ -2,6 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Avalonia.Tabs;
@@ -14,10 +15,13 @@ public class TabBookmarks(BookmarkCollection bookmarks) : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonRefresh { get; set; } = new ToolButton("Refresh", Icons.Svg.Refresh);
+		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
 
 		[Separator]
-		public ToolButton ButtonDeleteAll { get; set; } = new ToolButton("Delete All", Icons.Svg.DeleteList);
+		public ToolButton ButtonDeleteAll { get; set; } = new("Delete All", Icons.Svg.DeleteList);
+
+		[Separator]
+		public ToolToggleButton? ToggleButtonShowLinkInfoTab { get; set; }
 	}
 
 	public class Instance(TabBookmarks tab) : TabInstance
@@ -34,10 +38,11 @@ public class TabBookmarks(BookmarkCollection bookmarks) : ITab
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			var toolbar = new Toolbar();
+			Toolbar toolbar = new();
 			toolbar.ButtonRefresh.Action = Refresh;
-			//toolbar.ButtonReset.Action = Reset;
 			toolbar.ButtonDeleteAll.Action = DeleteAll;
+			ListProperty listProperty = new(tab.Bookmarks, nameof(BookmarkCollection.ShowLinkInfoTab));
+			toolbar.ToggleButtonShowLinkInfoTab = new("Show Link Info Tab", Icons.Svg.PanelLeftContract, Icons.Svg.PanelLeftExpand, listProperty, ShowLinkTab);
 			model.AddObject(toolbar);
 
 			if (tab.Bookmarks.NewBookmark != null)
@@ -47,10 +52,16 @@ public class TabBookmarks(BookmarkCollection bookmarks) : ITab
 			}
 		}
 
+		private void ShowLinkTab(Call call)
+		{
+			Reload();
+		}
+
 		public override void GetBookmark(TabBookmark tabBookmark)
 		{
 			base.GetBookmark(tabBookmark);
 
+			// Set links created from this link to always start from the child Link Tab
 			foreach (TabBookmark childBookmark in tabBookmark.ChildBookmarks.Values)
 			{
 				childBookmark.IsRoot = true;
@@ -61,14 +72,6 @@ public class TabBookmarks(BookmarkCollection bookmarks) : ITab
 		{
 			Refresh();
 		}
-
-		/*private void Reset(Call call)
-		{
-			foreach (TabBookmarkItem item in SelectedItems)
-			{
-				SelectItem(item);
-			}
-		}*/
 
 		private void DeleteAll(Call call)
 		{

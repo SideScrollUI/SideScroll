@@ -114,9 +114,15 @@ public class TabView : Grid, IDisposable
 		}
 
 		Instance.OnValidate += Instance_OnValidate;
+		Instance.OnCopyToClipboard += Instance_OnCopyToClipboard;
 
 		KeyDown += TabView_KeyDown;
 		ActualThemeVariantChanged += TabView_ActualThemeVariantChanged;
+	}
+
+	private void Instance_OnCopyToClipboard(object? sender, TabInstance.EventCopyToClipboard e)
+	{
+		ClipboardUtils.SetText(this, e.Text);
 	}
 
 	private void TabView_ActualThemeVariantChanged(object? sender, EventArgs e)
@@ -1134,8 +1140,11 @@ public class TabView : Grid, IDisposable
 
 			Instance.OnModelChanged -= TabInstance_OnModelChanged;
 			Instance.OnValidate -= Instance_OnValidate;
+			Instance.OnCopyToClipboard -= Instance_OnCopyToClipboard;
 			if (Instance is ITabSelector tabSelector)
+			{
 				tabSelector.OnSelectionChanged -= ParentListSelectionChanged;
+			}
 
 			Instance.Dispose();
 

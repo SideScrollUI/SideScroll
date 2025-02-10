@@ -11,7 +11,7 @@ public class SerializerException(string text, params Tag[] tags) :
 
 public class Header
 {
-	public const uint SideId = 0x53494445; // SIDE: 83, 73, 68, 69, Start of file
+	public const uint SideId = 0x45444953; // SIDE -> EDIS: 69, 68, 73, 83, Start of file (little endian format)
 
 	public const string LatestVersion = "1";
 
@@ -50,7 +50,7 @@ public class Header
 
 public class Serializer : IDisposable
 {
-	public const uint ScrollId = 0x5343524C; // SCRL: 83, 67, 82, 76, Start of object data
+	public const uint ScrollId = 0x4C524353; // SCRL -> LRCS: 76, 82, 67, 83, Start of object data (little endian format)
 
 	public Header Header { get; set; } = new();
 

@@ -119,6 +119,11 @@ public class TabInstance : IDisposable
 		public IList List => list;
 	}
 
+	public class EventCopyToClipboard(string text) : EventArgs
+	{
+		public string Text => text;
+	}
+
 	public event EventHandler<EventArgs>? OnRefresh;
 	public event EventHandler<EventArgs>? OnReload;
 	public event EventHandler<EventArgs>? OnModelChanged;
@@ -129,6 +134,7 @@ public class TabInstance : IDisposable
 	public event EventHandler<EventArgs>? OnModified;
 	public event EventHandler<EventArgs>? OnResize;
 	public event EventHandler<EventArgs>? OnValidate;
+	public event EventHandler<EventCopyToClipboard>? OnCopyToClipboard;
 
 	public Action? DefaultAction { get; set; } // Default action when Enter pressed
 
@@ -667,6 +673,11 @@ public class TabInstance : IDisposable
 		if (iTab != null)
 		{
 			Type type = iTab.GetType();
+			if (type.GetCustomAttribute<PrivateDataAttribute>() != null)
+			{
+				return;
+			}
+
 			if (type.GetCustomAttribute<TabRootAttribute>() != null)
 			{
 				tabBookmark.IsRoot = true;
@@ -696,6 +707,14 @@ public class TabInstance : IDisposable
 		TabBookmark = null;
 		if (bookmark != null)
 		{
+			if (iTab != null)
+			{
+				Type type = iTab.GetType();
+				if (type.GetCustomAttribute<PrivateDataAttribute>() != null)
+				{
+					return TabViewSettings;
+				}
+			}
 			SelectBookmark(bookmark.TabBookmark);
 		}
 
@@ -958,5 +977,10 @@ public class TabInstance : IDisposable
 	public void Validate()
 	{
 		OnValidate?.Invoke(this, EventArgs.Empty);
+	}
+
+	public void CopyToClipboard(string text)
+	{
+		OnCopyToClipboard?.Invoke(this, new EventCopyToClipboard(text));
 	}
 }

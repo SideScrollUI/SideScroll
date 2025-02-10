@@ -20,7 +20,7 @@ public class TabBookmark
 
 	public Bookmark? Bookmark { get; set; }
 	public string? Name { get; set; }
-	public bool IsRoot { get; set; }
+	public bool IsRoot { get; set; } // [TabRoot] set or first in a Bookmark
 	public ITab? Tab { get; set; } // [TabRoot] will set this to use the serialized tab as the root tab
 
 	public SelectedRow? SelectedRow { get; set; } // The parent selection that created this bookmark

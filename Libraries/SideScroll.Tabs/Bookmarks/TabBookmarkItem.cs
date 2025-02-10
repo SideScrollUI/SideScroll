@@ -35,18 +35,23 @@ public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerT
 
 	public TabInstance Create()
 	{
-		if (Bookmark.Type == null)
+		return Create(Bookmark, Project, this);
+	}
+
+	public static TabInstance Create(Bookmark bookmark, Project project, ITab iTab)
+	{
+		if (bookmark.Type == null)
 		{
 			throw new ArgumentNullException("Bookmark.Type");
 		}
 
-		if (!typeof(ITab).IsAssignableFrom(Bookmark.Type))
+		if (!typeof(ITab).IsAssignableFrom(bookmark.Type))
 		{
 			throw new Exception("Bookmark.Type must implement ITab");
 		}
 
 		var call = new Call();
-		Bookmark bookmarkCopy = Bookmark.DeepClone(call, true)!; // This will get modified as users navigate
+		Bookmark bookmarkCopy = bookmark.DeepClone(call, true)!; // This will get modified as users navigate
 
 		ITab tab = bookmarkCopy.TabBookmark.Tab ?? (ITab)Activator.CreateInstance(bookmarkCopy.Type!)!;
 
@@ -56,8 +61,8 @@ public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerT
 		}
 
 		TabInstance tabInstance = tab.Create();
-		tabInstance.Project = Project.Open(bookmarkCopy);
-		tabInstance.iTab = this;
+		tabInstance.Project = project.Open(bookmarkCopy);
+		tabInstance.iTab = iTab;
 		tabInstance.IsRoot = true;
 		tabInstance.SelectBookmark(bookmarkCopy.TabBookmark);
 		return tabInstance;

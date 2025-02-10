@@ -31,7 +31,6 @@
     <None Remove="Icons\png\paste.png" />
     <None Remove="Icons\png\paste_16.png" />
     <None Remove="Icons\png\search_right_light_16.png" />
-    <None Remove="Icons\png\unlock.png" />
     <None Remove="Icons\svg\Add.svg" />
     <None Remove="Icons\svg\BlankDocument.svg" />
     <None Remove="Icons\svg\Cancel.svg" />
@@ -44,6 +43,10 @@
     <None Remove="Icons\svg\Eraser.svg" />
     <None Remove="Icons\svg\LeftArrow.svg" />
     <None Remove="Icons\svg\LeftArrowCircle.svg" />
+    <None Remove="Icons\svg\PanelLeftContract.svg" />
+    <None Remove="Icons\svg\PanelLeftExpand.svg" />
+    <None Remove="Icons\svg\PanelRightContract.svg" />
+    <None Remove="Icons\svg\PanelRightExpand.svg" />
     <None Remove="Icons\svg\PlayCircle.svg" />
     <None Remove="Icons\svg\Redo.svg" />
     <None Remove="Icons\svg\Reset.svg" />
@@ -78,7 +81,6 @@
     <EmbeddedResource Include="Icons\png\info_20_759eeb.png" />
     <EmbeddedResource Include="Icons\png\info_24_759eeb.png" />
     <EmbeddedResource Include="Icons\png\search_right_light_16.png" />
-    <EmbeddedResource Include="Icons\png\unlock.png" />
     <EmbeddedResource Include="Icons\svg\Add.svg" />
     <EmbeddedResource Include="Icons\svg\BlankDocument.svg" />
     <EmbeddedResource Include="Icons\svg\Cancel.svg" />
@@ -90,6 +92,8 @@
     <EmbeddedResource Include="Icons\svg\Enter.svg" />
     <EmbeddedResource Include="Icons\svg\Eraser.svg" />
     <EmbeddedResource Include="Icons\svg\LeftArrowCircle.svg" />
+    <EmbeddedResource Include="Icons\svg\PanelLeftContract.svg" />
+    <EmbeddedResource Include="Icons\svg\PanelLeftExpand.svg" />
     <EmbeddedResource Include="Icons\svg\PlayCircle.svg" />
     <EmbeddedResource Include="Icons\svg\Redo.svg" />
     <EmbeddedResource Include="Icons\svg\Reset.svg" />

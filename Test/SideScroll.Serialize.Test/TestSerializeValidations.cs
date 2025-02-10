@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Serialize.Atlas;
+using System.Text;
 
 namespace SideScroll.Serialize.Test;
 
@@ -37,5 +38,17 @@ public class TestSerializeValidations : TestSerializeBase
 		string base64 = SerializerMemory.ConvertStreamToBase64String(Call, new MemoryStream(bytes));
 
 		Assert.That(() => SerializerMemory.ValidateBase64(Call, base64), Throws.Exception.TypeOf<SerializerException>());
+	}
+
+	[Test, Description("Validate atlas data")]
+	public void ValidateAtlasData()
+	{
+		byte[] sideId = Encoding.ASCII.GetBytes("SIDE");
+
+		SerializerMemoryAtlas serializer = new();
+		serializer.Save(Call, "input");
+		byte[] bytes = serializer.Stream.ToArray();
+
+		Assert.That(bytes.Take(4), Is.EqualTo(sideId));
 	}
 }

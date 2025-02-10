@@ -63,6 +63,9 @@ public static class Icons
 		public static ResourceView Download => Get("Download");
 		public static ResourceView Screenshot => Get("Screenshot");
 
+		public static ResourceView PanelLeftExpand => Get("PanelLeftExpand");
+		public static ResourceView PanelLeftContract => Get("PanelLeftContract");
+
 		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "svg", resourceName, "svg");
 	}
 
@@ -74,8 +77,6 @@ public static class Icons
 
 		public static ResourceView Info => Get("info_24_759eeb");
 		public static ResourceView Info20 => Get("info_20_759eeb");
-
-		public static ResourceView Unlock => Get("unlock");
 
 		public static ResourceView Bookmark => Get("bookmark");
 

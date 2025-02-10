@@ -1,7 +1,9 @@
+using SideScroll.Attributes;
 using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
 
+[PrivateData]
 public class TabFileViewer(SelectFileDelegate? selectFileDelegate = null) : ITab
 {
 	public SelectFileDelegate? SelectFileDelegate => selectFileDelegate;
@@ -25,6 +27,7 @@ public class TabFileViewer(SelectFileDelegate? selectFileDelegate = null) : ITab
 				new("Downloads", new TabDirectory(Paths.DownloadPath, fileSelectorOptions)),
 				new("Drives", new TabDrives(fileSelectorOptions)),
 				new("Favorites", new TabFileDataRepo(dataRepoFavorites, fileSelectorOptions)),
+				new("AppData", new TabDirectory(Project.UserSettings.ProjectPath!, fileSelectorOptions)),
 			};
 		}
 	}

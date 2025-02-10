@@ -156,12 +156,12 @@ public class TabViewer : Grid
 
 		try
 		{
-			string? uri = await Project.Linker.AddLinkAsync(call, bookmark);
-			if (uri == null)
+			LinkUri? linkUri = await Project.Linker.AddLinkAsync(call, bookmark);
+			if (linkUri == null)
 				return;
 
-			BookmarkManager.Instance?.Created.AddNew(call, bookmark);
-			await ClipboardUtils.SetTextAsync(this, uri);
+			BookmarkManager.Instance?.Created.AddNew(call, linkUri, bookmark);
+			await ClipboardUtils.SetTextAsync(this, linkUri.ToString());
 			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonLink!, flyout, "Link copied to clipboard");
 		}
 		catch (Exception ex)
@@ -199,7 +199,7 @@ public class TabViewer : Grid
 
 			AvaloniaUtils.ShowFlyout(buttonImport, flyout, "Link retrieved, importing");
 
-			ImportBookmark(call, bookmark);
+			ImportBookmark(call, linkUri, bookmark);
 
 			AvaloniaUtils.ShowFlyout(buttonImport, flyout, "Link imported");
 
@@ -229,7 +229,7 @@ public class TabViewer : Grid
 
 			flyout.Content = "Link retrieved, importing";
 
-			ImportBookmark(call, bookmark);
+			ImportBookmark(call, linkUri, bookmark);
 
 			flyout.Content = "Link imported";
 
@@ -242,7 +242,7 @@ public class TabViewer : Grid
 		}
 	}
 
-	private void ImportBookmark(Call call, Bookmark bookmark)
+	private void ImportBookmark(Call call, LinkUri linkUri, Bookmark bookmark)
 	{
 		if (bookmark == null)
 			return;
@@ -251,7 +251,7 @@ public class TabViewer : Grid
 		{
 			// Add Bookmark to bookmark manager
 			TabView!.Instance.SelectPath("Links", "Imported"); // Select path first so the child tab autoselects the new bookmark
-			BookmarkManager.Instance.Imported.AddNew(call, bookmark);
+			BookmarkManager.Instance.Imported.AddNew(call, linkUri, bookmark);
 			ScrollViewer.Offset = new Vector(0, 0);
 		}
 		else if (TabView != null)

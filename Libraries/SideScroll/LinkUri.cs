@@ -17,6 +17,19 @@ public class LinkUri
 
 	private static readonly Regex _regex = new(@"^(?<prefix>[a-zA-Z]+)\:\/\/(?<type>[-0-9a-zA-Z\.]+)\/(v(?<version>[\d\.]+)\/)?(?<path>[^\?]+)(\?(?<query>.+))?$");
 
+	public LinkUri() { }
+
+	public LinkUri(string prefix, string type, Version version, string path, string? query = null)
+	{
+		Prefix = prefix;
+		Type = type;
+		Version = version;
+		Path = path;
+		Query = query;
+
+		Url = ToUri();
+	}
+
 	public override string ToString() => Url ?? ToUri();
 
 	public virtual bool IsValid() =>

@@ -1,7 +1,18 @@
+using SideScroll.Attributes;
 using SideScroll.Collections;
 using SideScroll.Serialize.DataRepos;
 
 namespace SideScroll.Tabs.Bookmarks;
+
+public class LinkedBookmark(LinkUri linkUri, Bookmark bookmark)
+{
+	[MaxHeight(150)]
+	public LinkUri LinkUri => linkUri;
+	public Bookmark Bookmark => bookmark;
+	public DateTime TimeStamp => Bookmark.TimeStamp;
+
+	public override string ToString() => Bookmark.ToString();
+}
 
 public class BookmarkCollection
 {
@@ -9,14 +20,16 @@ public class BookmarkCollection
 
 	public string GroupId { get; init; }
 
-	public ItemCollectionUI<TabBookmarkItem> Items { get; set; } = new()
+	public ItemCollectionUI<TabLinkedBookmark> Items { get; set; } = new()
 	{
 		PostOnly = true,
 	};
 
-	public TabBookmarkItem? NewBookmark { get; set; }
+	public TabLinkedBookmark? NewBookmark { get; set; }
 
-	private readonly DataRepoView<Bookmark> _dataRepoBookmarks;
+	public bool ShowLinkInfoTab { get; set; }
+
+	private readonly DataRepoView<LinkedBookmark> _dataRepoBookmarks;
 
 	private readonly object _lock = new();
 
@@ -25,7 +38,7 @@ public class BookmarkCollection
 		Project = project;
 		GroupId = groupId;
 
-		_dataRepoBookmarks = Project.DataApp.OpenView<Bookmark>(GroupId);
+		_dataRepoBookmarks = Project.DataApp.OpenView<LinkedBookmark>(GroupId);
 	}
 
 	public void Load(Call call, bool reload)
@@ -37,21 +50,21 @@ public class BookmarkCollection
 
 			Items.Clear();
 
-			_dataRepoBookmarks.LoadAllOrderBy(call, nameof(Bookmark.TimeStamp));
+			_dataRepoBookmarks.LoadAllOrderBy(call, nameof(LinkedBookmark.TimeStamp));
 
-			foreach (Bookmark bookmark in _dataRepoBookmarks.Items.Values)
+			foreach (LinkedBookmark linkedBookmark in _dataRepoBookmarks.Items.Values)
 			{
-				if (bookmark.Name == TabInstance.CurrentBookmarkName)
+				if (linkedBookmark.Bookmark.Name == TabInstance.CurrentBookmarkName)
 					continue;
 
-				Add(bookmark);
+				Add(linkedBookmark);
 			}
 		}
 	}
 
-	private TabBookmarkItem Add(Bookmark bookmark)
+	private TabLinkedBookmark Add(LinkedBookmark linkedBookmark)
 	{
-		var tabItem = new TabBookmarkItem(bookmark, Project);
+		var tabItem = new TabLinkedBookmark(linkedBookmark, this);
 		tabItem.OnDelete += Item_OnDelete;
 
 		lock (_lock)
@@ -61,25 +74,26 @@ public class BookmarkCollection
 		return tabItem;
 	}
 
-	public void AddNew(Call call, Bookmark bookmark)
+	public void AddNew(Call call, LinkUri linkUri, Bookmark bookmark)
 	{
+		LinkedBookmark linkedBookmark = new(linkUri, bookmark);
 		lock (_lock)
 		{
 			Load(call, false);
 
-			Remove(call, bookmark.Path); // Remove previous bookmark
-			_dataRepoBookmarks.Save(call, bookmark.Path, bookmark);
-			NewBookmark = Add(bookmark);
+			Remove(call, linkedBookmark.Bookmark.Path); // Remove previous bookmark
+			_dataRepoBookmarks.Save(call, linkedBookmark.Bookmark.Path, linkedBookmark);
+			NewBookmark = Add(linkedBookmark);
 		}
 	}
 
 	private void Item_OnDelete(object? sender, EventArgs e)
 	{
-		TabBookmarkItem bookmark = (TabBookmarkItem)sender!;
+		var tabLink = (TabLinkedBookmark)sender!;
 		lock (_lock)
 		{
-			_dataRepoBookmarks.Delete(null, bookmark.Bookmark.Path);
-			Items.Remove(bookmark);
+			_dataRepoBookmarks.Delete(null, tabLink.LinkedBookmark.Bookmark.Path);
+			Items.Remove(tabLink);
 		}
 	}
 
@@ -89,7 +103,7 @@ public class BookmarkCollection
 		{
 			_dataRepoBookmarks.Delete(call, key);
 
-			TabBookmarkItem? existing = Items.SingleOrDefault(i => i.Bookmark.Path == key);
+			TabLinkedBookmark? existing = Items.SingleOrDefault(i => i.LinkedBookmark.Bookmark.Path == key);
 			if (existing != null)
 			{
 				Items.Remove(existing);
