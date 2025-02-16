@@ -2,6 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
 using System.Collections;
 using System.Data;
+using System.Text.Json.Serialization;
 
 namespace SideScroll.Tabs.Bookmarks;
 
@@ -34,7 +35,7 @@ public class TabBookmark
 	public Type? DataRepoType { get; set; } // Interfaces need to specify this
 
 	// Temporary, Only FindMatches() uses, refactor these out?
-	[Unserialized]
+	[Unserialized, JsonIgnore]
 	public HashSet<object> SelectedObjects { get; set; } = []; // does this work with multiple TabDatas?
 
 	[Unserialized]

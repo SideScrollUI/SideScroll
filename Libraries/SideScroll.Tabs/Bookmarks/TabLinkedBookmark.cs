@@ -51,7 +51,7 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, BookmarkCollection
 			toolbar.ButtonCopyLinkToClipboard.Action = CopyLinkToClipboard;
 			model.AddObject(toolbar);
 
-			string json = JsonSerializer.Serialize(tab.Bookmark, JsonConverters.JsonSerializerOptions);
+			string json = JsonSerializer.Serialize(tab.Bookmark, JsonConverters.PublicJsonSerializerOptions);
 
 			model.Items = new List<ListItem>()
 			{

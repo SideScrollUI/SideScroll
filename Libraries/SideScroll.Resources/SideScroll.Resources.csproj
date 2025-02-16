@@ -45,8 +45,6 @@
     <None Remove="Icons\svg\LeftArrowCircle.svg" />
     <None Remove="Icons\svg\PanelLeftContract.svg" />
     <None Remove="Icons\svg\PanelLeftExpand.svg" />
-    <None Remove="Icons\svg\PanelRightContract.svg" />
-    <None Remove="Icons\svg\PanelRightExpand.svg" />
     <None Remove="Icons\svg\PlayCircle.svg" />
     <None Remove="Icons\svg\Redo.svg" />
     <None Remove="Icons\svg\Reset.svg" />
