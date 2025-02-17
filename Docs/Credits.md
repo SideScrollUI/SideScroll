@@ -32,7 +32,7 @@
 | [Internet](https://www.flaticon.com/free-icon/internet_149229) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) | Flaticon license |
 | [Enter](https://www.flaticon.com/free-icon/enter_1828391) | Pixel Perfect | Flaticon license |
 | [Open Folder](https://icon-icons.com/icon/folder-open/172452) | [Phosphor](https://github.com/phosphor-icons) | MIT license |
-| [Info2](https://icon-icons.com/icon/circle-customer-help-info-information-service-support/123208) | Perpixel | CC Atribution |
+| [Info](https://icon-icons.com/icon/circle-customer-help-info-information-service-support/123208) | Perpixel | CC Atribution |
 | [Star](https://icon-icons.com/icon/bookmark-favorite-rate-rating-star/113418) | Unknown by site | CC Atribution |
 | [Undo/Redo](https://icon-icons.com/icon/undo/232333) | zahroe zahro | CC Atribution |
 | [Panel Left Contract](https://icon-icons.com/icon/panel-right-expand-regular/203418) | Microsoft | MIT license |

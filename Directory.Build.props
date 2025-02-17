@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Version>0.9.4</Version>
-    <PackageReleaseNotes>Fixed serializer ids to be little endian. Tabs that specify [PrivateData] will no longer show any child tabs in bookmarks. Added a new Link Tab layer to allow viewing the link information. Added svg Icons for Panel Left Contract and Expand. Removed unused Unlock png icon.</PackageReleaseNotes>
+    <Version>0.9.5</Version>
+    <PackageReleaseNotes>Switched Info icon from png to svg.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.3</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>

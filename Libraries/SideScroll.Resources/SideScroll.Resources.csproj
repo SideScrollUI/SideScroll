@@ -25,8 +25,6 @@
     <None Remove="Icons\png\bookmark.png" />
     <None Remove="Icons\png\clear_search.png" />
     <None Remove="Icons\png\if_help_62217.png" />
-    <None Remove="Icons\png\info_20_759eeb.png" />
-    <None Remove="Icons\png\info_24_759eeb.png" />
     <None Remove="Icons\png\left-chevron.png" />
     <None Remove="Icons\png\paste.png" />
     <None Remove="Icons\png\paste_16.png" />
@@ -41,12 +39,11 @@
     <None Remove="Icons\svg\Duplicate.svg" />
     <None Remove="Icons\svg\Enter.svg" />
     <None Remove="Icons\svg\Eraser.svg" />
+    <None Remove="Icons\svg\Info.svg" />
     <None Remove="Icons\svg\LeftArrow.svg" />
     <None Remove="Icons\svg\LeftArrowCircle.svg" />
     <None Remove="Icons\svg\PanelLeftContract.svg" />
     <None Remove="Icons\svg\PanelLeftExpand.svg" />
-    <None Remove="Icons\svg\PanelRightContract.svg" />
-    <None Remove="Icons\svg\PanelRightExpand.svg" />
     <None Remove="Icons\svg\PlayCircle.svg" />
     <None Remove="Icons\svg\Redo.svg" />
     <None Remove="Icons\svg\Reset.svg" />
@@ -78,8 +75,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Icons\png\bookmark.png" />
     <EmbeddedResource Include="Icons\png\clear_search.png" />
-    <EmbeddedResource Include="Icons\png\info_20_759eeb.png" />
-    <EmbeddedResource Include="Icons\png\info_24_759eeb.png" />
     <EmbeddedResource Include="Icons\png\search_right_light_16.png" />
     <EmbeddedResource Include="Icons\svg\Add.svg" />
     <EmbeddedResource Include="Icons\svg\BlankDocument.svg" />
@@ -91,6 +86,7 @@
     <EmbeddedResource Include="Icons\svg\Duplicate.svg" />
     <EmbeddedResource Include="Icons\svg\Enter.svg" />
     <EmbeddedResource Include="Icons\svg\Eraser.svg" />
+    <EmbeddedResource Include="Icons\svg\Info.svg" />
     <EmbeddedResource Include="Icons\svg\LeftArrowCircle.svg" />
     <EmbeddedResource Include="Icons\svg\PanelLeftContract.svg" />
     <EmbeddedResource Include="Icons\svg\PanelLeftExpand.svg" />

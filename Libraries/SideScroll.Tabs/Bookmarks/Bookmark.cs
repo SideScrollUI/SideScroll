@@ -70,4 +70,9 @@ public class Bookmark
 		};
 		return bookmark;
 	}
+
+	public void Reinitialize()
+	{
+		TabBookmark.Reinitialize(this);
+	}
 }

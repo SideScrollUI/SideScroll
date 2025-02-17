@@ -27,7 +27,7 @@
 - When exporting, set the resolution to 24x24 (might not be required anymore)
 
 ### Color Theming
-- To allow updating the theme colors for an `svg` file, set all colors used to one of the following so they can be updated. Note that this might require manually editing the svg
+- To allow updating the theme colors for an `svg` file, set all colors used to one of the following so they can be updated. Note that this might require manually editing the svg. Saving a file in Inkscape can also be used to convert a svg to a more compatible format.
   - `rgb(0,0,0)`
     ```
     <path fill: rgb(0,0,0); ... />

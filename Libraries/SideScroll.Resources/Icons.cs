@@ -52,6 +52,8 @@ public static class Icons
 
 		public static ResourceView Pin => Get("Placeholder");
 
+		public static ResourceView Info => Get("Info");
+
 		public static ResourceView Stats => Get("Stats");
 
 		public static ResourceView List1 => Get("List1");
@@ -74,9 +76,6 @@ public static class Icons
 	{
 		public static ResourceView ClearSearch => Get("clear_search");
 		public static ResourceView Search16 => Get("search_right_light_16");
-
-		public static ResourceView Info => Get("info_24_759eeb");
-		public static ResourceView Info20 => Get("info_20_759eeb");
 
 		public static ResourceView Bookmark => Get("bookmark");
 

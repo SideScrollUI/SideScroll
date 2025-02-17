@@ -27,18 +27,6 @@ public static class AvaloniaAssets
 		};
 	}
 
-	public static class Bitmaps
-	{
-		public static Bitmap Help => new(Icons.Svg.Forward.Stream);
-		public static Bitmap Info => new(Icons.Png.Info.Stream);
-	}
-
-	public static class Images
-	{
-		public static Image Help => GetImage(Bitmaps.Help);
-		public static Image Info => GetImage(Bitmaps.Info);
-	}
-
 	public static ResourceView Get(string resourceName, string resourceType) => new(Assembly, AssetPath, "Themes", resourceName, resourceType);
 	public static string GetText(string resourceName, string resourceType) => Get(resourceName, resourceType).ReadText();
 

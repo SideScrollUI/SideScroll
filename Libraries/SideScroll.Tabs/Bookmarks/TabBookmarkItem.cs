@@ -52,6 +52,7 @@ public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerT
 
 		var call = new Call();
 		Bookmark bookmarkCopy = bookmark.DeepClone(call, true)!; // This will get modified as users navigate
+		bookmarkCopy.Reinitialize();
 
 		ITab tab = bookmarkCopy.TabBookmark.Tab ?? (ITab)Activator.CreateInstance(bookmarkCopy.Type!)!;
 

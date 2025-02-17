@@ -1,4 +1,5 @@
 using SideScroll.Attributes;
+using System.Text.Json.Serialization;
 
 namespace SideScroll.Tabs.Settings;
 
@@ -39,6 +40,7 @@ public class TabViewSettings
 
 	public List<TabDataSettings> ChartDataSettings { get; set; } = []; // for the Chart's internal Data List
 
+	[JsonIgnore]
 	public List<SelectedRow> SelectedRows => TabDataSettings?.SelectMany(d => d.SelectedRows).ToList() ?? [];
 
 	// Store Skipped bool instead?

@@ -6,8 +6,8 @@ public class SerializerFileAtlas : SerializerFile
 {
 	public const string DataFileName = "Data.atlas";
 
-	public static int SaveAttemptsMax = 10;
-	public static TimeSpan SaveAttemptsBackoff = TimeSpan.FromMilliseconds(10); // Backoff * attempt #
+	public static int SaveAttemptsMax { get; set; } = 10;
+	public static TimeSpan SaveAttemptsBackoff { get; set; } = TimeSpan.FromMilliseconds(10); // Backoff * attempt #
 
 	public SerializerFileAtlas(string basePath, string name = "") : base(basePath, name)
 	{

@@ -18,6 +18,7 @@ public class TabBookmark
 {
 	public const string DefaultDataName = "default";
 
+	[PrivateData]
 	public Bookmark? Bookmark { get; set; }
 	public string? Name { get; set; }
 	public bool IsRoot { get; set; } // [TabRoot] set or first in a Bookmark
@@ -335,6 +336,16 @@ public class TabBookmark
 					}
 				}
 			}
+		}
+	}
+
+	public void Reinitialize(Bookmark bookmark)
+	{
+		Bookmark = bookmark;
+
+		foreach (var tabBookmark in ChildBookmarks.Values)
+		{
+			tabBookmark.Reinitialize(bookmark);
 		}
 	}
 }
