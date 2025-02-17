@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Icons\png\bookmark.png" />
     <None Remove="Icons\png\clear_search.png" />
     <None Remove="Icons\png\if_help_62217.png" />
     <None Remove="Icons\png\left-chevron.png" />
@@ -31,6 +30,7 @@
     <None Remove="Icons\png\search_right_light_16.png" />
     <None Remove="Icons\svg\Add.svg" />
     <None Remove="Icons\svg\BlankDocument.svg" />
+    <None Remove="Icons\svg\Bookmark.svg" />
     <None Remove="Icons\svg\Cancel.svg" />
     <None Remove="Icons\svg\Copy.svg" />
     <None Remove="Icons\svg\DeleteList.svg" />
@@ -73,11 +73,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Icons\png\bookmark.png" />
     <EmbeddedResource Include="Icons\png\clear_search.png" />
     <EmbeddedResource Include="Icons\png\search_right_light_16.png" />
     <EmbeddedResource Include="Icons\svg\Add.svg" />
     <EmbeddedResource Include="Icons\svg\BlankDocument.svg" />
+    <EmbeddedResource Include="Icons\svg\Bookmark.svg" />
     <EmbeddedResource Include="Icons\svg\Cancel.svg" />
     <EmbeddedResource Include="Icons\svg\Copy.svg" />
     <EmbeddedResource Include="Icons\svg\DeleteList.svg" />

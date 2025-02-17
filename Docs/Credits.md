@@ -26,7 +26,7 @@
 | [Cancel](https://icon-icons.com/icon/cancel/121292) | Lucy G | CC Atribution |
 | [Padnote](https://www.flaticon.com/free-icon/padnote_118751) | Lucy G | Flaticon license |
 | [Link](https://www.flaticon.com/free-icon/link_118780) | Lucy G | Flaticon license |
-| [Bookmark](https://www.flaticon.com/free-icon/bookmark_118732) | Lucy G | Flaticon license |
+| [Bookmark](https://icon-icons.com/icon/bookmark/121282) | Lucy G | Flaticon license |
 | [Search](https://www.flaticon.com/free-icon/search_118718) | Lucy G | Flaticon license |
 | [Save File](https://www.flaticon.com/free-icon/save-file-option_25398) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) | Flaticon license |
 | [Internet](https://www.flaticon.com/free-icon/internet_149229) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) | Flaticon license |
