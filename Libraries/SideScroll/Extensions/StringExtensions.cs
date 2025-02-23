@@ -7,10 +7,6 @@ namespace SideScroll.Extensions;
 
 public static class StringExtensions
 {
-
-	public static HashSet<char> WordSpacedSymbols { get; set; } = ['|', '/', '-'];
-	public static HashSet<char> WordSpacedNumberConnectors { get; set; } = ['-', ':', '.'];
-
 	public static bool CaseInsensitiveContains(this string text, string value, StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase)
 	{
 		return text.Contains(value, stringComparison);
@@ -68,69 +64,7 @@ public static class StringExtensions
 	// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'
 	public static string WordSpaced(this string? text)
 	{
-		if (string.IsNullOrWhiteSpace(text))
-			return "";
-
-		var newText = new StringBuilder(text.Length * 2);
-		bool upperCaseNext = true;
-		bool numberMode = false; // don't split apart decimals or dates
-		char prevChar = ' ';
-		for (int i = 0; i < text.Length; i++)
-		{
-			char c = text[i];
-			char nextChar = (i + 1) < text.Length ? text[i + 1] : ' ';
-			if (upperCaseNext)
-			{
-				upperCaseNext = false;
-				c = char.ToUpper(c);
-			}
-
-			if (c == '_')
-			{
-				c = ' ';
-			}
-			else if (WordSpacedSymbols.Contains(c) && (!numberMode || !WordSpacedNumberConnectors.Contains(c)))
-			{
-				numberMode = false;
-				newText.Append(' ');
-				newText.Append(c);
-				c = ' ';
-				upperCaseNext = true;
-			}
-			else if (prevChar != ' ')
-			{
-				if (char.IsUpper(c) && char.IsDigit(prevChar) && nextChar == c) // Don't split 5XX apart
-				{
-				}
-				else if (char.IsUpper(c) && !char.IsUpper(prevChar)) // Add space between CamelCase
-				{
-					//if (nextChar
-					newText.Append(' ');
-					numberMode = false;
-				}
-				// Add space before 1st Number, Number10
-				else if (!numberMode && newText.Length > 1 && char.IsNumber(c))
-				{
-					newText.Append(' ');
-					numberMode = false;
-				}
-				else if (char.IsUpper(prevChar) && char.IsUpper(c) && char.IsLower(nextChar))
-				{
-					if (nextChar != 's')
-					{
-						newText.Append(' '); // Add a space before first capital after caps string, assume CamelCase, CAPSName
-						numberMode = false;
-					}
-				}
-			}
-			newText.Append(c);
-			prevChar = c;
-			if (char.IsDigit(c))
-			{
-				numberMode = true;
-			}
-		}
-		return newText.ToString();
+		return WordSpacer.Format(text);
 	}
 
 	public static string CamelCased(this string text)

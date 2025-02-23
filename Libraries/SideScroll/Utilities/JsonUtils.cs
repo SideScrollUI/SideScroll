@@ -10,7 +10,9 @@ public static class JsonUtils
 		if (text == null) return false;
 
 		text = text.Trim();
-		return text.StartsWith('{') && text.EndsWith('}');
+		return 
+			(text.StartsWith('{') && text.EndsWith('}')) || 
+			(text.StartsWith('[') && text.EndsWith(']'));
 	}
 
 	public static string Format(string text)
