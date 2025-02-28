@@ -44,9 +44,13 @@ public static class ObjectExtensions
 			if (obj is TimeSpan timeSpan)
 			{
 				if (timeSpan.TotalSeconds < 1)
+				{
 					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
+				}
 				else
+				{
 					return timeSpan.FormattedDecimal();
+				}
 			}
 
 			if (type.IsEnum)
@@ -60,7 +64,9 @@ public static class ObjectExtensions
 			{
 				string? toString = obj.ToString();
 				if (toString != null && toString.Length > maxLength)
+				{
 					return toString[..maxLength];
+				}
 				return toString;
 			}
 		}
@@ -68,7 +74,9 @@ public static class ObjectExtensions
 		if (obj is string text)
 		{
 			if (text.Length > maxLength)
+			{
 				return text[..maxLength];
+			}
 
 			return text;
 		}
@@ -109,7 +117,9 @@ public static class ObjectExtensions
 		}
 
 		if (obj is DictionaryEntry dictionaryEntry)
+		{
 			return dictionaryEntry.Key.ToString();
+		}
 
 		string? valueString = obj.ToString();
 		if (valueString == type.ToString())
@@ -118,7 +128,9 @@ public static class ObjectExtensions
 		}
 
 		if (valueString!.Length > maxLength)
+		{
 			return valueString[..maxLength];
+		}
 
 		return valueString;
 	}
@@ -127,7 +139,9 @@ public static class ObjectExtensions
 	{
 		var strings = new List<string?>();
 		foreach (var item in enumerable)
+		{
 			strings.Add(item.ToString());
+		}
 
 		string joined = string.Join(", ", strings);
 		return joined;
@@ -138,6 +152,10 @@ public static class ObjectExtensions
 	{
 		return EnumerableToString(collection);
 	}
+
+	// .Net 9 adds .Index() support to replace this
+	public static IEnumerable<(int index, T item)> WithIndex<T>(this IEnumerable<T> self)
+		=> self.Select((item, index) => (index, item));
 
 	public static string? ToUniqueString(this object? obj)
 	{

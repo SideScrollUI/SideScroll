@@ -86,7 +86,7 @@ public class TabSampleActions : ITab
 		{
 			List<int> ids = Enumerable.Range(0, 30).ToList();
 
-			List<int> results = await call.RunAsync(DoTask, ids);
+			var results = await call.RunAsync(DoTask, ids);
 		}
 
 		private static async Task<int> DoTask(Call call, int id)
@@ -106,7 +106,7 @@ public class TabSampleActions : ITab
 		{
 			List<int> ids = Enumerable.Range(0, 100).ToList();
 
-			List<int> results = await call.RunAsync(MultiLevelRunListAsync, ids);
+			var results = await call.RunAsync(MultiLevelRunListAsync, ids);
 		}
 
 		private static async Task<int> MultiLevelRunListAsync(Call call, int id)
@@ -115,7 +115,7 @@ public class TabSampleActions : ITab
 
 			call.Log.Settings = call.Log.Settings!.WithMinLogLevel(LogLevel.Warn);
 
-			List<int> results = await call.RunAsync(MultiLevelRunTaskAsync, ids);
+			var results = await call.RunAsync(MultiLevelRunTaskAsync, ids);
 
 			return id;
 		}
