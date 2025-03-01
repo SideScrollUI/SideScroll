@@ -127,7 +127,10 @@ public class Call
 		return AddSubTask(name).Call;
 	}
 
-	private static async Task<TResult?> RunFuncAsync<TItem, TResult>(Call call, Func<Call, TItem, Task<TResult>> func, TItem item)
+	private static async Task<TResult?> RunFuncAsync<TItem, TResult>(
+		Call call,
+		Func<Call, TItem, Task<TResult>> func,
+		TItem item)
 	{
 		using CallTimer callTimer = call.StartTask(item?.ToString());
 
@@ -147,7 +150,11 @@ public class Call
 		}
 	}
 
-	private static async Task<TResult?> RunFuncAsync<TItem, TParam1, TResult>(Call call, Func<Call, TItem, TParam1, Task<TResult>> func, TItem item, TParam1 param1)
+	private static async Task<TResult?> RunFuncAsync<TItem, TParam1, TResult>(
+		Call call,
+		Func<Call, TItem, TParam1, Task<TResult>> func,
+		TItem item,
+		TParam1 param1)
 	{
 		using CallTimer callTimer = call.StartTask(item?.ToString());
 
@@ -167,7 +174,12 @@ public class Call
 		}
 	}
 
-	private static async Task<TResult?> RunFuncAsync<TItem, TParam1, TParam2, TResult>(Call call, Func<Call, TItem, TParam1, TParam2, Task<TResult>> func, TItem item, TParam1 param1, TParam2 param2)
+	private static async Task<TResult?> RunFuncAsync<TItem, TParam1, TParam2, TResult>(
+		Call call,
+		Func<Call, TItem, TParam1, TParam2, Task<TResult>> func,
+		TItem item,
+		TParam1 param1,
+		TParam2 param2)
 	{
 		using CallTimer callTimer = call.StartTask(item?.ToString());
 
@@ -187,26 +199,202 @@ public class Call
 		}
 	}
 
-	public async Task<ItemResultCollection<TItem, TResult>> RunAsync<TItem, TResult>(Func<Call, TItem, Task<TResult?>> func, ICollection<TItem> items, int? maxRequestsPerSecond = null)
+	public async Task<TResult?> FirstOrDefaultAsync<TItem, TResult>(
+		Func<Call, TItem, Task<TResult?>> func,
+		ICollection<TItem> items,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
 	{
-		return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, maxRequestsPerSecond);
+		// todo: Migrate FirstOrDefault() deeper
+		return (await SelectAsync(
+			func,
+			items,
+			maxRequestsPerSecond,
+			maxConcurrentRequests)).FirstOrDefault();
 	}
 
-	public async Task<ItemResultCollection<TItem, TResult>> RunAsync<TItem, TParam1, TResult>(Func<Call, TItem, TParam1, Task<TResult?>> func, ICollection<TItem> items, TParam1 param1, int? maxRequestsPerSecond = null)
+	public async Task<TResult?> FirstOrDefaultAsync<TItem, TParam1, TResult>(
+		Func<Call, TItem, TParam1, Task<TResult?>> func,
+		ICollection<TItem> items,
+		TParam1 param1,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
 	{
-		return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1, maxRequestsPerSecond);
+		return (await SelectAsync(
+			func,
+			items,
+			param1,
+			maxRequestsPerSecond,
+			maxConcurrentRequests)).FirstOrDefault();
 	}
 
-	public async Task<ItemResultCollection<TItem, TResult>> RunAsync<TItem, TParam1, TParam2, TResult>(Func<Call, TItem, TParam1, TParam2, Task<TResult?>> func, ICollection<TItem> items, TParam1 param1, TParam2 param2, int? maxRequestsPerSecond = null)
+	public async Task<TResult?> FirstOrDefaultAsync<TItem, TParam1, TParam2, TResult>(
+		Func<Call, TItem, TParam1, TParam2, Task<TResult?>> func,
+		ICollection<TItem> items,
+		TParam1 param1,
+		TParam2 param2,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
 	{
-		return await RunAsync(func.Method.Name.TrimEnd("Async").WordSpaced(), func, items, param1, param2, maxRequestsPerSecond);
+		return (await SelectAsync(
+			func,
+			items,
+			param1,
+			param2,
+			maxRequestsPerSecond,
+			maxConcurrentRequests)).FirstOrDefault();
+	}
+
+	public async Task<IEnumerable<TResult>> SelectAsync<TItem, TResult>(
+		Func<Call, TItem, Task<TResult?>> func,
+		ICollection<TItem> items,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
+	{
+		return (await RunAsync(
+			func,
+			items,
+			maxRequestsPerSecond,
+			maxConcurrentRequests)).Values;
+	}
+
+	public async Task<IEnumerable<TResult>> SelectAsync<TItem, TParam1, TResult>(
+		Func<Call, TItem, TParam1, Task<TResult?>> func,
+		ICollection<TItem> items,
+		TParam1 param1,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
+	{
+		return (await RunAsync(
+			func,
+			items,
+			param1,
+			maxRequestsPerSecond,
+			maxConcurrentRequests)).Values;
+	}
+
+	public async Task<IEnumerable<TResult>> SelectAsync<TItem, TParam1, TParam2, TResult>(
+		Func<Call, TItem, TParam1, TParam2, Task<TResult?>> func,
+		ICollection<TItem> items,
+		TParam1 param1,
+		TParam2 param2,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
+	{
+		return (await RunAsync(
+			func,
+			items,
+			param1,
+			param2,
+			maxRequestsPerSecond,
+			maxConcurrentRequests)).Values;
+	}
+
+	// Call func for every item in the list using the specified parameters
+	public async Task<IEnumerable<TResult>> SelectAsync<TItem, TResult>(
+		string name,
+		Func<Call, TItem, Task<TResult?>> func,
+		ICollection<TItem> items,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
+	{
+		return (await RunAsync(
+			name,
+			func,
+			items,
+			maxRequestsPerSecond,
+			maxConcurrentRequests)).Values;
+	}
+
+	public async Task<IEnumerable<TResult>> SelectAsync<TItem, TParam1, TResult>(
+		string name,
+		Func<Call, TItem, TParam1, Task<TResult?>> func,
+		ICollection<TItem> items,
+		TParam1 param1,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
+	{
+		return (await RunAsync(
+			name,
+			func,
+			items,
+			param1,
+			maxRequestsPerSecond,
+			maxConcurrentRequests)).Values;
+	}
+
+	public async Task<IEnumerable<TResult>> SelectAsync<TItem, TParam1, TParam2, TResult>(
+		string name,
+		Func<Call, TItem, TParam1, TParam2, Task<TResult?>> func,
+		ICollection<TItem> items,
+		TParam1 param1,
+		TParam2 param2,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
+	{
+		return (await RunAsync(
+			name,
+			func,
+			items,
+			param1,
+			param2,
+			maxRequestsPerSecond,
+			maxConcurrentRequests)).Values;
+	}
+
+	public async Task<ItemResultCollection<TItem, TResult>> RunAsync<TItem, TResult>(
+		Func<Call, TItem, Task<TResult?>> func,
+		ICollection<TItem> items,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
+	{
+		return await RunAsync(
+			func.Method.Name.TrimEnd("Async").WordSpaced(),
+			func,
+			items,
+			maxRequestsPerSecond,
+			maxConcurrentRequests);
+	}
+
+	public async Task<ItemResultCollection<TItem, TResult>> RunAsync<TItem, TParam1, TResult>(
+		Func<Call, TItem, TParam1, Task<TResult?>> func,
+		ICollection<TItem> items,
+		TParam1 param1,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
+	{
+		return await RunAsync(
+			func.Method.Name.TrimEnd("Async").WordSpaced(), 
+			func, 
+			items, 
+			param1, 
+			maxRequestsPerSecond, 
+			maxConcurrentRequests);
+	}
+
+	public async Task<ItemResultCollection<TItem, TResult>> RunAsync<TItem, TParam1, TParam2, TResult>(
+		Func<Call, TItem, TParam1, TParam2, Task<TResult?>> func,
+		ICollection<TItem> items,
+		TParam1 param1,
+		TParam2 param2,
+		int? maxRequestsPerSecond = null,
+		int? maxConcurrentRequests = null)
+	{
+		return await RunAsync(
+			func.Method.Name.TrimEnd("Async").WordSpaced(),
+			func,
+			items,
+			param1,
+			param2,
+			maxRequestsPerSecond,
+			maxConcurrentRequests);
 	}
 
 	// Call func for every item in the list using the specified parameters
 	public async Task<ItemResultCollection<TItem, TResult>> RunAsync<TItem, TResult>(
 		string name,
-		Func<Call, TItem, Task<TResult?>> func, 
-		ICollection<TItem> items, 
+		Func<Call, TItem, Task<TResult?>> func,
+		ICollection<TItem> items,
 		int? maxRequestsPerSecond = null,
 		int? maxConcurrentRequests = null)
 	{
@@ -252,10 +440,10 @@ public class Call
 	}
 
 	public async Task<ItemResultCollection<TItem, TResult>> RunAsync<TItem, TParam1, TResult>(
-		string name, 
-		Func<Call, TItem, TParam1, Task<TResult?>> func, 
-		ICollection<TItem> items, 
-		TParam1 param1, 
+		string name,
+		Func<Call, TItem, TParam1, Task<TResult?>> func,
+		ICollection<TItem> items,
+		TParam1 param1,
 		int? maxRequestsPerSecond = null,
 		int? maxConcurrentRequests = null)
 	{
@@ -300,11 +488,11 @@ public class Call
 	}
 
 	public async Task<ItemResultCollection<TItem, TResult>> RunAsync<TItem, TParam1, TParam2, TResult>(
-		string name, 
-		Func<Call, TItem, TParam1, TParam2, Task<TResult?>> func, 
-		ICollection<TItem> items, 
-		TParam1 param1, 
-		TParam2 param2, 
+		string name,
+		Func<Call, TItem, TParam1, TParam2, Task<TResult?>> func,
+		ICollection<TItem> items,
+		TParam1 param1,
+		TParam2 param2,
 		int? maxRequestsPerSecond = null,
 		int? maxConcurrentRequests = null)
 	{
@@ -349,11 +537,8 @@ public class Call
 	}
 }
 
-public class ItemResultCollection<TItem, TResult> : List<KeyValuePair<TItem, TResult?>>
+public class ItemResultCollection<TItem, TResult>(IEnumerable<KeyValuePair<TItem, TResult?>> enumerable) :
+	List<KeyValuePair<TItem, TResult?>>(enumerable)
 {
-	public ItemResultCollection(IEnumerable<KeyValuePair<TItem, TResult?>> enumerable) :
-		base(enumerable)
-	{ }
-
 	public IEnumerable<TResult> Values => this.Select(p => p.Value).OfType<TResult>();
 }

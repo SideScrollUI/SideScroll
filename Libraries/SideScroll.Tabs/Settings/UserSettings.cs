@@ -12,7 +12,7 @@ public class UserSettings
 	[Hidden]
 	public string? ProjectPath { get; set; }
 	[Hidden]
-	public string? BookmarkPath { get; set; }
+	public string? LinkId { get; set; }
 
 	[Hidden]
 	public string SettingsPath => Paths.Combine(ProjectPath, "Settings.atlas");

@@ -6,7 +6,9 @@ namespace SideScroll.Extensions;
 
 public static class ObjectExtensions
 {
-	public static string? Formatted(this object? obj, int maxLength = 500)
+	public static int DefaultMaxLength { get; set; } = 500;
+
+	public static string? Formatted(this object? obj, int? maxLength = null)
 	{
 		if (obj == null)
 			return null;
@@ -33,6 +35,8 @@ public static class ObjectExtensions
 			object? result = toStringMethod.Invoke(obj, [format]);
 			return (string?)result;
 		}
+
+		int maxFormatLength = maxLength ?? DefaultMaxLength;
 
 		if (type.IsPrimitive == false)
 		{
@@ -63,9 +67,9 @@ public static class ObjectExtensions
 			if (toStringMethod.DeclaringType != typeof(object) && toStringMethod.DeclaringType != typeof(ValueType))
 			{
 				string? toString = obj.ToString();
-				if (toString != null && toString.Length > maxLength)
+				if (toString != null && toString.Length > maxFormatLength)
 				{
-					return toString[..maxLength];
+					return toString[..maxFormatLength];
 				}
 				return toString;
 			}
@@ -73,9 +77,9 @@ public static class ObjectExtensions
 
 		if (obj is string text)
 		{
-			if (text.Length > maxLength)
+			if (text.Length > maxFormatLength)
 			{
-				return text[..maxLength];
+				return text[..maxFormatLength];
 			}
 
 			return text;
@@ -127,9 +131,9 @@ public static class ObjectExtensions
 			return '(' + type.Name + ')';
 		}
 
-		if (valueString!.Length > maxLength)
+		if (valueString!.Length > maxFormatLength)
 		{
-			return valueString[..maxLength];
+			return valueString[..maxFormatLength];
 		}
 
 		return valueString;

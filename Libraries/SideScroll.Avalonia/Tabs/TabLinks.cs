@@ -12,7 +12,7 @@ public class TabLinks : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			var bookmarkManager = BookmarkManager.Instance!;
+			var bookmarkManager = LinkManager.Instance!;
 
 			model.Items = new List<ListItem>()
 			{
