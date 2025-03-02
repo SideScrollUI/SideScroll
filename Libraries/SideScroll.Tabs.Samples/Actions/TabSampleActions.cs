@@ -104,26 +104,27 @@ public class TabSampleActions : ITab
 
 		private static async Task MultiLevelRunAsync(Call call)
 		{
-			List<int> ids = Enumerable.Range(0, 100).ToList();
+			List<int> ids = Enumerable.Range(0, 20).ToList();
 
-			var results = await call.RunAsync(MultiLevelRunListAsync, ids);
+			var results = await call.RunAsync(MultiLevelRunIdAsync, ids, maxConcurrentRequests: 5);
 		}
 
-		private static async Task<int> MultiLevelRunListAsync(Call call, int id)
+		private static async Task<int> MultiLevelRunIdAsync(Call call, int id)
 		{
-			List<int> ids = Enumerable.Range(0, 2000).ToList();
+			List<int> ids = Enumerable.Range(0, 200).ToList();
 
-			call.Log.Settings = call.Log.Settings!.WithMinLogLevel(LogLevel.Warn);
+			// Disable logging for high rates
+			//call.Log.Settings = call.Log.Settings!.WithMinLogLevel(LogLevel.Warn);
 
-			var results = await call.RunAsync(MultiLevelRunTaskAsync, ids);
+			var results = await call.RunAsync(MultiLevelRunTaskAsync, ids, maxConcurrentRequests: 2);
 
 			return id;
 		}
 
 		private static async Task<int> MultiLevelRunTaskAsync(Call call, int id)
 		{
-			call.Log.Add("Sleeping");
-			await Task.Delay(10, call.TaskInstance!.CancelToken);
+			call.Log.Add("Sleeping: " + id);
+			await Task.Delay(100, call.TaskInstance!.CancelToken);
 
 			return id;
 		}

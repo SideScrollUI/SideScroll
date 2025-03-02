@@ -74,20 +74,32 @@ public class TaskInstance : INotifyPropertyChanged
 
 	public TaskInstance()
 	{
-		Initialize();
+		Call.TaskInstance = this;
+
+		_stopwatch.Start();
 	}
 
 	public TaskInstance(string? label)
 	{
 		Label = label;
 
-		Initialize();
-	}
-
-	private void Initialize()
-	{
 		Call.TaskInstance = this;
 
+		_stopwatch.Start();
+	}
+
+	public TaskInstance(Call call, TaskInstance parentTask)
+	{
+		Label = call.Name;
+		Call = call;
+		Creator = parentTask.Creator;
+		TokenSource = parentTask.TokenSource;
+		ParentTask = parentTask;
+		
+		if (parentTask.ProgressMax > 0)
+		{
+			_progressMax = 100;
+		}
 		_stopwatch.Start();
 	}
 
@@ -117,7 +129,11 @@ public class TaskInstance : INotifyPropertyChanged
 				return;
 
 			_progress = Math.Min(value, ProgressMax);
-			NotifyPropertyChanged();
+			if (Math.Abs(_lastNotifiedProgress - _progress) > 0.1)
+			{
+				_lastNotifiedProgress = _progress;
+				NotifyPropertyChanged();
+			}
 
 			UpdatePercent();
 
@@ -130,6 +146,7 @@ public class TaskInstance : INotifyPropertyChanged
 	}
 	private double _progress;
 	private double _prevPercent;
+	private double _lastNotifiedProgress;
 
 	[Formatted]
 	public double ProgressMax
@@ -175,10 +192,14 @@ public class TaskInstance : INotifyPropertyChanged
 		if (ProgressMax > 0)
 		{
 			Percent = 100 * _progress / ProgressMax;
-			NotifyPropertyChanged(nameof(Percent));
-			NotifyPropertyChanged(nameof(Duration));
+			if (Duration - _lastNotifiedDuration >= TimeSpan.FromSeconds(1))
+			{
+				_lastNotifiedDuration = Duration;
+				NotifyPropertyChanged(nameof(Duration));
+			}
 		}
 	}
+	private TimeSpan _lastNotifiedDuration;
 
 	public bool CancelVisible => !Finished;
 
@@ -191,18 +212,7 @@ public class TaskInstance : INotifyPropertyChanged
 	// allows having progress broken down into multiple tasks
 	public TaskInstance AddSubTask(Call call)
 	{
-		var subTask = new TaskInstance
-		{
-			Label = call.Name,
-			Creator = Creator,
-			Call = call,
-			TokenSource = TokenSource,
-			ParentTask = this,
-		};
-		if (ProgressMax > 0)
-		{
-			subTask.ProgressMax = 100;
-		}
+		var subTask = new TaskInstance(call, this);
 
 		lock (SubTasks)
 		{
@@ -289,6 +299,7 @@ public class TaskInstance : INotifyPropertyChanged
 
 	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
+		//Debug.WriteLine(propertyName);
 		if (Creator != null)
 		{
 			Creator.Context!.Post(NotifyPropertyChangedContext, propertyName);

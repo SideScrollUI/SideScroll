@@ -26,7 +26,7 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection lin
 	[Formatted]
 	public TimeSpan Age => Bookmark.TimeStamp.Age();
 
-	public override string ToString() => linkedBookmark.ToString();
+	public override string ToString() => Bookmark.ToString();
 
 	public TabInstance Create()
 	{
