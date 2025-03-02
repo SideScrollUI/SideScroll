@@ -5,11 +5,10 @@ namespace SideScroll.Utilities;
 
 public class RateLimiter1 : IDisposable
 {
-	public static int MaxConcurrentRequests { get; set; } = 10;
-	public static int MaxRequestsPerSecond { get; set; } = 10;
+	public static int DefaultMaxConcurrentRequests { get; set; } = 10;
 
-	private readonly int _maxConcurrentRequests;
-	private readonly int? _maxRequestsPerSecond;
+	public int MaxConcurrentRequests { get; init; }
+	public int? MaxRequestsPerSecond { get; init; }
 
 	private readonly SemaphoreSlim _concurrencySemaphore;
 	private readonly SemaphoreSlim? _rateSemaphore;
@@ -17,18 +16,18 @@ public class RateLimiter1 : IDisposable
 	private readonly ConcurrentQueue<Stopwatch> _requestTimestamps = new();
 	private readonly Timer? _timer;
 
-	public RateLimiter1(int? maxRequestsPerSecond = null, int? maxConcurrentRequests = null)
+	public RateLimiter1(int? maxConcurrentRequests = null, int? maxRequestsPerSecond = null)
 	{
-		_maxConcurrentRequests = maxConcurrentRequests ?? MaxConcurrentRequests;
-		_maxRequestsPerSecond = maxRequestsPerSecond;
+		MaxConcurrentRequests = maxConcurrentRequests ?? DefaultMaxConcurrentRequests;
+		MaxRequestsPerSecond = maxRequestsPerSecond;
 
-		_concurrencySemaphore = new SemaphoreSlim(_maxConcurrentRequests, _maxConcurrentRequests);
-		if (_maxRequestsPerSecond is int rps && rps > 0)
+		_concurrencySemaphore = new SemaphoreSlim(MaxConcurrentRequests, MaxConcurrentRequests);
+		if (MaxRequestsPerSecond is int rps && rps > 0)
 		{
 			_rateSemaphore = new SemaphoreSlim(rps, rps);
 
 			// Timer to release tokens periodically
-			_timer = new Timer(ReleaseRateTokens, null, 0, 1000 / rps);
+			_timer = new Timer(ReleaseRateTokens, null, 0, Math.Max(10, 1000 / rps));
 		}
 	}
 
@@ -37,13 +36,18 @@ public class RateLimiter1 : IDisposable
 		if (_rateSemaphore != null)
 		{
 			await _rateSemaphore.WaitAsync(cancellationToken);
-		}
-		await _concurrencySemaphore.WaitAsync(cancellationToken);
+			await _concurrencySemaphore.WaitAsync(cancellationToken);
 
-		lock (_requestTimestamps)
+			lock (_requestTimestamps)
+			{
+				var timestamp = Stopwatch.StartNew();
+				_requestTimestamps.Enqueue(timestamp);
+			}
+		}
+		else
 		{
-			var timestamp = Stopwatch.StartNew();
-			_requestTimestamps.Enqueue(timestamp);
+
+			await _concurrencySemaphore.WaitAsync(cancellationToken);
 		}
 
 		return new ConcurrencyRelease(_concurrencySemaphore);

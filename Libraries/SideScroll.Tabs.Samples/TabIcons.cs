@@ -17,15 +17,6 @@ public class TabIcons : ITab
 				toolbarSvg.Buttons.Add(new ToolButton(memberInfo.Key.Name, memberInfo.Value));
 			}
 			model.AddObject(toolbarSvg);
-
-			TabToolbar toolbarPng = new();
-			foreach (var memberInfo in Icons.Png.GetItems())
-			{
-				if (memberInfo.Key.Name == "Logo") continue;
-
-				toolbarPng.Buttons.Add(new ToolButton(memberInfo.Key.Name, memberInfo.Value));
-			}
-			model.AddObject(toolbarPng);
 		}
 	}
 }

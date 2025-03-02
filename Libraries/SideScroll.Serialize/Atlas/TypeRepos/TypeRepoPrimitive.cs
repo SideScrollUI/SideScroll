@@ -104,7 +104,7 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		}
 		else
 		{
-			throw new SerializerException($"Unhandled primitive type: {Type}");
+			throw new SerializerException("Unhandled primitive type", new Tag("Type", Type));
 		}
 
 		return obj;

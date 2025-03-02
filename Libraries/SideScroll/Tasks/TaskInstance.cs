@@ -33,7 +33,7 @@ public class TaskInstance : INotifyPropertyChanged
 	public Task? Task { get; set; }
 	public TaskStatus TaskStatus => Task?.Status ?? TaskStatus.Created;
 
-	public CancellationTokenSource TokenSource = new();
+	public CancellationTokenSource TokenSource { get; set; } = new();
 	public CancellationToken CancelToken => TokenSource.Token;
 
 	public string Status { get; set; } = "Running";
@@ -129,7 +129,7 @@ public class TaskInstance : INotifyPropertyChanged
 				return;
 
 			_progress = Math.Min(value, ProgressMax);
-			if (Math.Abs(_lastNotifiedProgress - _progress) > 0.1)
+			if (Math.Abs(_lastNotifiedProgress - _progress) > 0.1 || _progress == ProgressMax)
 			{
 				_lastNotifiedProgress = _progress;
 				NotifyPropertyChanged();
@@ -299,7 +299,6 @@ public class TaskInstance : INotifyPropertyChanged
 
 	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		//Debug.WriteLine(propertyName);
 		if (Creator != null)
 		{
 			Creator.Context!.Post(NotifyPropertyChangedContext, propertyName);

@@ -32,6 +32,8 @@ public static class Icons
 		public static ResourceView Redo => Get("Redo");
 
 		public static ResourceView Search => Get("Search");
+		public static ResourceView SearchRight => Get("SearchRight");
+		public static ResourceView ClearSearch => Get("ClearSearch");
 
 		public static ResourceView BlankDocument => Get("BlankDocument");
 		public static ResourceView Save => Get("Save");
@@ -70,14 +72,5 @@ public static class Icons
 		public static ResourceView PanelLeftContract => Get("PanelLeftContract");
 
 		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "svg", resourceName, "svg");
-	}
-
-	// todo: Deprecate
-	public class Png : NamedItemCollection<Png, ResourceView>
-	{
-		public static ResourceView ClearSearch => Get("clear_search");
-		public static ResourceView Search16 => Get("search_right_light_16");
-
-		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "png", resourceName, "png");
 	}
 }

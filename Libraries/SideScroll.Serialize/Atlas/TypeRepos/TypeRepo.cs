@@ -188,7 +188,7 @@ public abstract class TypeRepo : IDisposable
 		{
 			writer.Write((long)0);
 		}*/
-		foreach (var item in Objects)
+		for (int i = 0; i < Objects.Count; i++)
 		{
 			writer.Write((int)0); // object size
 		}

@@ -111,7 +111,7 @@ public class TabSampleActions : ITab
 
 		private static async Task<int> MultiLevelRunIdAsync(Call call, int id)
 		{
-			List<int> ids = Enumerable.Range(0, 200).ToList();
+			List<int> ids = Enumerable.Range(0, 100).ToList();
 
 			// Disable logging for high rates
 			//call.Log.Settings = call.Log.Settings!.WithMinLogLevel(LogLevel.Warn);

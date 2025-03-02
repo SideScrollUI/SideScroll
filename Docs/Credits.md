@@ -27,14 +27,14 @@
 | [Padnote](https://www.flaticon.com/free-icon/padnote_118751) | Lucy G | Flaticon license |
 | [Link](https://www.flaticon.com/free-icon/link_118780) | Lucy G | Flaticon license |
 | [Bookmark](https://icon-icons.com/icon/bookmark/121282) | Lucy G | Flaticon license |
-| [Search](https://www.flaticon.com/free-icon/search_118718) | Lucy G | Flaticon license |
+| [Search / Search Right / Clear Search](https://www.flaticon.com/free-icon/search_118718) | Lucy G | Flaticon license |
 | [Save File](https://www.flaticon.com/free-icon/save-file-option_25398) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) | Flaticon license |
 | [Internet](https://www.flaticon.com/free-icon/internet_149229) | [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) | Flaticon license |
 | [Enter](https://www.flaticon.com/free-icon/enter_1828391) | Pixel Perfect | Flaticon license |
 | [Open Folder](https://icon-icons.com/icon/folder-open/172452) | [Phosphor](https://github.com/phosphor-icons) | MIT license |
 | [Info](https://icon-icons.com/icon/circle-customer-help-info-information-service-support/123208) | Perpixel | CC Atribution |
 | [Star](https://icon-icons.com/icon/bookmark-favorite-rate-rating-star/113418) | Unknown by site | CC Atribution |
-| [Undo/Redo](https://icon-icons.com/icon/undo/232333) | zahroe zahro | CC Atribution |
+| [Undo / Redo](https://icon-icons.com/icon/undo/232333) | zahroe zahro | CC Atribution |
 | [Panel Left Contract](https://icon-icons.com/icon/panel-right-expand-regular/203418) | Microsoft | MIT license |
 | [Panel Left Expand](https://icon-icons.com/icon/panel-right-contract-regular/205098) | Microsoft | MIT license |
 | [Reset](https://icon-icons.com/icon/arrow-reset-regular/204640) | Microsoft | MIT license |
