@@ -3,7 +3,7 @@
     <Version>0.9.5</Version>
     <PackageReleaseNotes>Switched Info and Bookmark icon from png to svg. Improved word spacing to handle random ids, dates, and mixed case better. Added more concurrency and rate limiting options for calls. Improved link handling for duplicate paths. Replaced Search Right and Clear Search png icons with svg icons.</PackageReleaseNotes>
 
-    <AvaloniaVersion>11.2.3</AvaloniaVersion>
+    <AvaloniaVersion>11.2.5</AvaloniaVersion>
     <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>

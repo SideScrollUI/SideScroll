@@ -6,11 +6,8 @@
 
   <ItemGroup>
     <Compile Remove="Icons\Logo\**" />
-    <Compile Remove="Icons\png\**" />
     <EmbeddedResource Remove="Icons\Logo\**" />
-    <EmbeddedResource Remove="Icons\png\**" />
     <None Remove="Icons\Logo\**" />
-    <None Remove="Icons\png\**" />
   </ItemGroup>
 
   <ItemGroup>

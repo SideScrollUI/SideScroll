@@ -72,9 +72,18 @@ public class RateLimiter1 : IDisposable
 
 	public void Dispose()
 	{
-		_timer?.Dispose();
-		_rateSemaphore?.Dispose();
-		_concurrencySemaphore.Dispose();
+		Dispose(true);
+		GC.SuppressFinalize(this);
+	}
+
+	protected virtual void Dispose(bool disposing)
+	{
+		if (disposing)
+		{
+			_timer?.Dispose();
+			_rateSemaphore?.Dispose();
+			_concurrencySemaphore.Dispose();
+		}
 	}
 
 	private class ConcurrencyRelease(SemaphoreSlim semaphore) : IDisposable

@@ -97,9 +97,6 @@ public abstract class TypeRepo : IDisposable
 	{
 		if (typeSchema.IsUnserialized)
 		{
-			//string message = "Type " + typeSchema.Name + " is not serializable";
-			//Debug.Print(message);
-			//log.Add(message);
 			var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema)
 			{
 				Reader = serializer.Reader,
@@ -374,9 +371,13 @@ public abstract class TypeRepo : IDisposable
 				int typeIndex = Reader.ReadInt16(); // not saved for sealed classes
 				TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
 				if (typeRepo.TypeSchema.Type!.IsPrimitive)
+				{
 					LoadObject();
+				}
 				else
+				{
 					Reader.ReadInt32(); // objectIndex
+				}
 			}
 		}
 		else
