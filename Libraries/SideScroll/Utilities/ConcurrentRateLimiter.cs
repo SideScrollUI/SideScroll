@@ -5,6 +5,7 @@ namespace SideScroll.Utilities;
 public class ConcurrentRateLimiter : IDisposable
 {
 	public static int DefaultMaxConcurrentRequests { get; set; } = 10;
+	public static TimeSpan DefaultReplenishmentPeriod { get; set; } = TimeSpan.FromMilliseconds(10);
 
 	public int MaxConcurrentRequests { get; init; }
 	public int? MaxRequestsPerSecond { get; init; }
@@ -19,13 +20,13 @@ public class ConcurrentRateLimiter : IDisposable
 
 		_concurrencyLimiter = new SemaphoreSlim(MaxConcurrentRequests);
 
-		if (maxRequestsPerSecond is int rps && rps > 0)
+		if (maxRequestsPerSecond is int maxRps && maxRps > 0)
 		{
 			_rateLimiter = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
 			{
-				TokenLimit = rps,
-				TokensPerPeriod = rps,
-				ReplenishmentPeriod = TimeSpan.FromMilliseconds(10),
+				TokenLimit = maxRps,
+				TokensPerPeriod = maxRps,
+				ReplenishmentPeriod = DefaultReplenishmentPeriod,
 				QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
 				QueueLimit = int.MaxValue
 			});

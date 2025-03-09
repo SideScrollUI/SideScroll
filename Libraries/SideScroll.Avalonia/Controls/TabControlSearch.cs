@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
-using Avalonia.Media.Imaging;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
