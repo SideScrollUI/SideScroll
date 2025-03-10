@@ -5,7 +5,7 @@ using SideScroll.Serialize;
 namespace SideScroll.Tabs.Bookmarks;
 
 // Display Class
-public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerTab
+public class TabBookmarkItem(LinkedBookmark linkedBookmark, Project project) : ITab, IInnerTab
 {
 	//[ButtonColumn("-")]
 	public event EventHandler<EventArgs>? OnDelete;
@@ -17,13 +17,16 @@ public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerT
 	}
 
 	[DataKey, WordWrap]
-	public string Path => Bookmark.Path;
+	public string LinkId => linkedBookmark.LinkId;
 
 	[Formatted]
 	public TimeSpan Age => Bookmark.TimeStamp.Age();
 
 	[HiddenColumn]
-	public Bookmark Bookmark => bookmark;
+	public LinkedBookmark LinkedBookmark => linkedBookmark;
+
+	[HiddenColumn]
+	public Bookmark Bookmark => linkedBookmark.Bookmark;
 
 	[Hidden]
 	public Project Project => project;
@@ -35,26 +38,28 @@ public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerT
 
 	public TabInstance Create()
 	{
-		return Create(Bookmark, Project, this);
+		return Create(LinkedBookmark, Project, this);
 	}
 
-	public static TabInstance Create(Bookmark bookmark, Project project, ITab iTab)
+	public static TabInstance Create(LinkedBookmark linkedBookmark, Project project, ITab iTab)
 	{
-		if (bookmark.Type == null)
+		Type? tabType = linkedBookmark.Bookmark.Type;
+		if (tabType == null)
 		{
 			throw new ArgumentNullException("Bookmark.Type");
 		}
 
-		if (!typeof(ITab).IsAssignableFrom(bookmark.Type))
+		if (!typeof(ITab).IsAssignableFrom(tabType))
 		{
 			throw new Exception("Bookmark.Type must implement ITab");
 		}
 
 		var call = new Call();
-		Bookmark bookmarkCopy = bookmark.DeepClone(call, true)!; // This will get modified as users navigate
-		bookmarkCopy.Reinitialize();
+		LinkedBookmark linkedBookmarkCopy = linkedBookmark.DeepClone(call, true)!; // This will get modified as users navigate
+		Bookmark bookmark = linkedBookmarkCopy.Bookmark;
+		bookmark.Reinitialize();
 
-		ITab tab = bookmarkCopy.TabBookmark.Tab ?? (ITab)Activator.CreateInstance(bookmarkCopy.Type!)!;
+		ITab tab = bookmark.TabBookmark.Tab ?? (ITab)Activator.CreateInstance(bookmark.Type!)!;
 
 		if (tab is IReload reloadable)
 		{
@@ -62,10 +67,10 @@ public class TabBookmarkItem(Bookmark bookmark, Project project) : ITab, IInnerT
 		}
 
 		TabInstance tabInstance = tab.Create();
-		tabInstance.Project = project.Open(bookmarkCopy);
+		tabInstance.Project = project.Open(linkedBookmarkCopy);
 		tabInstance.iTab = iTab;
 		tabInstance.IsRoot = true;
-		tabInstance.SelectBookmark(bookmarkCopy.TabBookmark);
+		tabInstance.SelectBookmark(bookmark.TabBookmark);
 		return tabInstance;
 	}
 

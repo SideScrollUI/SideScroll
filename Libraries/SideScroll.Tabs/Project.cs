@@ -39,9 +39,9 @@ public class Project
 	{
 		get
 		{
-			if (UserSettings.BookmarkPath != null)
+			if (UserSettings.LinkId != null)
 			{
-				return Paths.Combine("Bookmarks", UserSettings.BookmarkPath.HashSha256());
+				return Paths.Combine("Links", UserSettings.LinkId.HashSha256());
 			}
 			else
 			{
@@ -73,16 +73,16 @@ public class Project
 		serializer.Save(new Call(), UserSettings);
 	}
 
-	public Project Open(Bookmark bookmark)
+	public Project Open(LinkedBookmark linkedBookmark)
 	{
 		UserSettings userSettings = UserSettings.DeepClone()!;
-		userSettings.BookmarkPath = bookmark.Path;
+		userSettings.LinkId = linkedBookmark.LinkId;
 		var project = new Project(ProjectSettings, userSettings)
 		{
 			Linker = Linker,
 		};
 		//project.Import(bookmark);
-		bookmark.TabBookmark.Import(project);
+		linkedBookmark.Bookmark.TabBookmark.Import(project);
 		return project;
 	}
 
@@ -106,6 +106,6 @@ public class Project
 	{
 		TimeZoneView.Current = UserSettings.TimeZone;
 		DateTimeExtensions.DefaultFormatType = UserSettings.TimeFormat;
-		BookmarkManager.Instance = new(this);
+		LinkManager.Instance = new(this);
 	}
 }

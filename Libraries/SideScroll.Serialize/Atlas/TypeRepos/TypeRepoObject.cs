@@ -134,7 +134,8 @@ public class TypeRepoObject : TypeRepo
 			}
 			else if (LazyProperty != null)
 			{
-				throw new SerializerException("Get() doesn't support Lazy Properties: " + PropertySchema.PropertyName);
+				throw new SerializerException("Get() doesn't support Lazy Properties",
+					new Tag("Property", PropertySchema.PropertyName));
 			}
 			else
 			{
@@ -304,7 +305,7 @@ public class TypeRepoObject : TypeRepo
 			}
 			else
 			{
-				throw new SerializerException($"Constructor param [ {name} ] not found");
+				log.Throw(new SerializerException("Constructor param not found", new Tag("Param", name)));
 			}
 		}
 	}
@@ -314,7 +315,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		if (TypeSchema.CustomConstructor == null)
 		{
-			throw new SerializerException($"No default or matching constructor found: {TypeSchema}");
+			throw new SerializerException("No default or matching constructor found", new Tag("TypeSchema", TypeSchema.ToString()));
 		}
 
 		long position = Reader!.BaseStream.Position;

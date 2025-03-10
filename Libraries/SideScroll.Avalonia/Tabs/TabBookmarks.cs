@@ -7,9 +7,9 @@ using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Avalonia.Tabs;
 
-public class TabBookmarks(BookmarkCollection bookmarks) : ITab
+public class TabBookmarks(LinkCollection bookmarks) : ITab
 {
-	public BookmarkCollection Bookmarks { get; set; } = bookmarks;
+	public LinkCollection Bookmarks { get; set; } = bookmarks;
 
 	public TabInstance Create() => new Instance(this);
 
@@ -41,7 +41,7 @@ public class TabBookmarks(BookmarkCollection bookmarks) : ITab
 			Toolbar toolbar = new();
 			toolbar.ButtonRefresh.Action = Refresh;
 			toolbar.ButtonDeleteAll.Action = DeleteAll;
-			ListProperty listProperty = new(tab.Bookmarks, nameof(BookmarkCollection.ShowLinkInfoTab));
+			ListProperty listProperty = new(tab.Bookmarks, nameof(LinkCollection.ShowLinkInfoTab));
 			toolbar.ToggleButtonShowLinkInfoTab = new("Show Link Info Tab", Icons.Svg.PanelLeftContract, Icons.Svg.PanelLeftExpand, listProperty, ShowLinkTab);
 			model.AddObject(toolbar);
 

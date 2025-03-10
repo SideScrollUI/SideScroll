@@ -225,11 +225,11 @@ public class TabInstance : IDisposable
 		action.Invoke();
 	}
 
-	private void ActionParamsCallback(object? state)
+	/*private void ActionParamsCallback(object? state)
 	{
 		TaskDelegateParams taskDelegate = (TaskDelegateParams)state!;
 		StartTask(taskDelegate, false);
-	}
+	}*/
 
 	public void Invoke(Action action)
 	{
@@ -942,7 +942,7 @@ public class TabInstance : IDisposable
 		return childTabInstance;
 	}
 
-	private object? GetBookmarkObject(string dataKey)
+	/*private object? GetBookmarkObject(string dataKey)
 	{
 		if (TabBookmark == null)
 			return null;
@@ -957,7 +957,7 @@ public class TabInstance : IDisposable
 		}
 
 		return tabChildBookmark;
-	}
+	}*/
 
 	public void UpdateNavigator()
 	{

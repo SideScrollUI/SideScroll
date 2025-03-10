@@ -11,6 +11,8 @@ public class TabSampleActions : ITab
 
 	public class Instance : TabInstance
 	{
+		private readonly Random _random = new();
+
 		public override void Load(Call call, TabModel model)
 		{
 			model.MinDesiredWidth = 250;
@@ -86,7 +88,7 @@ public class TabSampleActions : ITab
 		{
 			List<int> ids = Enumerable.Range(0, 30).ToList();
 
-			List<int> results = await call.RunAsync(DoTask, ids);
+			var results = await call.RunAsync(DoTask, ids);
 		}
 
 		private static async Task<int> DoTask(Call call, int id)
@@ -102,28 +104,30 @@ public class TabSampleActions : ITab
 			return id;
 		}
 
-		private static async Task MultiLevelRunAsync(Call call)
+		private async Task MultiLevelRunAsync(Call call)
 		{
-			List<int> ids = Enumerable.Range(0, 100).ToList();
+			List<int> ids = Enumerable.Range(0, 20).ToList();
 
-			List<int> results = await call.RunAsync(MultiLevelRunListAsync, ids);
+			var results = await call.RunAsync(MultiLevelRunIdAsync, ids, maxConcurrentRequests: 5, maxRequestsPerSecond: 3);
 		}
 
-		private static async Task<int> MultiLevelRunListAsync(Call call, int id)
+		private async Task<int> MultiLevelRunIdAsync(Call call, int id)
 		{
-			List<int> ids = Enumerable.Range(0, 2000).ToList();
+			List<int> ids = Enumerable.Range(0, 10).ToList();
 
-			call.Log.Settings = call.Log.Settings!.WithMinLogLevel(LogLevel.Warn);
+			// Disable logging for high rates
+			//call.Log.Settings = call.Log.Settings!.WithMinLogLevel(LogLevel.Warn);
 
-			List<int> results = await call.RunAsync(MultiLevelRunTaskAsync, ids);
+			var results = await call.RunAsync(MultiLevelRunTaskAsync, ids, maxConcurrentRequests: 3, maxRequestsPerSecond: 2);
 
 			return id;
 		}
 
-		private static async Task<int> MultiLevelRunTaskAsync(Call call, int id)
+		private async Task<int> MultiLevelRunTaskAsync(Call call, int id)
 		{
-			call.Log.Add("Sleeping");
-			await Task.Delay(10, call.TaskInstance!.CancelToken);
+			call.Log.Add("Sleeping: " + id);
+
+			await Task.Delay(_random.Next(0, 1000), call.TaskInstance!.CancelToken);
 
 			return id;
 		}

@@ -129,7 +129,7 @@ public class TabViewer : Grid
 	public void Reload(Call? call = null)
 	{
 		call ??= new();
-		BookmarkManager.Instance?.Reload(call);
+		LinkManager.Instance?.Reload(call);
 		TabView!.Instance.Reload();
 	}
 
@@ -160,7 +160,7 @@ public class TabViewer : Grid
 			if (linkUri == null)
 				return;
 
-			BookmarkManager.Instance?.Created.AddNew(call, linkUri, bookmark);
+			LinkManager.Instance?.Created.AddNew(call, linkUri, bookmark);
 			await ClipboardUtils.SetTextAsync(this, linkUri.ToString());
 			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonLink!, flyout, "Link copied to clipboard");
 		}
@@ -247,11 +247,11 @@ public class TabViewer : Grid
 		if (bookmark == null)
 			return;
 
-		if (BookmarkManager.Instance != null && bookmark.Imported)
+		if (LinkManager.Instance != null && bookmark.Imported)
 		{
 			// Add Bookmark to bookmark manager
 			TabView!.Instance.SelectPath("Links", "Imported"); // Select path first so the child tab autoselects the new bookmark
-			BookmarkManager.Instance.Imported.AddNew(call, linkUri, bookmark);
+			LinkManager.Instance.Imported.AddNew(call, linkUri, bookmark);
 			ScrollViewer.Offset = new Vector(0, 0);
 		}
 		else if (TabView != null)

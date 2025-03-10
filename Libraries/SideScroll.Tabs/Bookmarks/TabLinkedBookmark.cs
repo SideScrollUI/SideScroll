@@ -8,7 +8,7 @@ using System.Text.Json;
 
 namespace SideScroll.Tabs.Bookmarks;
 
-public class TabLinkedBookmark(LinkedBookmark linkedBookmark, BookmarkCollection bookmarkCollection) : ITab
+public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection linkCollection) : ITab
 {
 	public event EventHandler<EventArgs>? OnDelete;
 
@@ -30,12 +30,12 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, BookmarkCollection
 
 	public TabInstance Create()
 	{
-		if (bookmarkCollection.ShowLinkInfoTab)
+		if (linkCollection.ShowLinkInfoTab)
 		{
 			return new Instance(this);
 		}
 
-		return TabBookmarkItem.Create(Bookmark, bookmarkCollection.Project, this);
+		return TabBookmarkItem.Create(LinkedBookmark, linkCollection.Project, this);
 	}
 
 	public class Toolbar : TabToolbar
@@ -55,7 +55,7 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, BookmarkCollection
 
 			model.Items = new List<ListItem>()
 			{
-				new("Link", new TabBookmarkItem(tab.Bookmark, Project)),
+				new("Link", new TabBookmarkItem(tab.LinkedBookmark, Project)),
 				new("Data", tab.LinkedBookmark),
 				new("Json", json),
 			};
@@ -64,7 +64,7 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, BookmarkCollection
 		private void CopyLinkToClipboard(Call call)
 		{
 			Refresh();
-			CopyToClipboard(tab.LinkedBookmark.LinkUri.ToString());
+			CopyToClipboard(tab.LinkedBookmark.LinkId);
 		}
 	}
 }

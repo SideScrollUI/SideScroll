@@ -2,8 +2,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
-using Avalonia.Media.Imaging;
 using SideScroll.Avalonia.Controls.Toolbar;
+using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
 using System.Diagnostics.CodeAnalysis;
 
@@ -54,14 +54,13 @@ public class TabControlSearch : Grid
 
 	private void AddIcon()
 	{
-		Stream stream = Icons.Png.Search16.Stream;
-		stream.Seek(0, SeekOrigin.Begin);
+		var coloredImage = SvgUtils.TryGetSvgColorImage(Icons.Svg.SearchRight);
 
 		var image = new Image
 		{
 			Width = 16,
 			Height = 16,
-			Source = new Bitmap(stream),
+			Source = coloredImage,
 			Margin = new Thickness(7, 4),
 			HorizontalAlignment = HorizontalAlignment.Right,
 		};

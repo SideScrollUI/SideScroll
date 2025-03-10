@@ -19,6 +19,7 @@ public class TypeSchema
 		typeof(TimeSpan),
 		typeof(TimeZoneInfo),
 		typeof(Type),
+		typeof(Version),
 		typeof(object),
 	];
 

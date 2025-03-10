@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
@@ -5,6 +6,7 @@ using System.Text.RegularExpressions;
 namespace SideScroll;
 
 // <prefix>://<type>/[v<version>/]<path>[?<query>]
+[PublicData]
 public class LinkUri
 {
 	public string? Prefix { get; set; }

@@ -22,16 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Icons\png\clear_search.png" />
-    <None Remove="Icons\png\if_help_62217.png" />
-    <None Remove="Icons\png\left-chevron.png" />
-    <None Remove="Icons\png\paste.png" />
-    <None Remove="Icons\png\paste_16.png" />
-    <None Remove="Icons\png\search_right_light_16.png" />
     <None Remove="Icons\svg\Add.svg" />
     <None Remove="Icons\svg\BlankDocument.svg" />
     <None Remove="Icons\svg\Bookmark.svg" />
     <None Remove="Icons\svg\Cancel.svg" />
+    <None Remove="Icons\svg\ClearSearch.svg" />
     <None Remove="Icons\svg\Copy.svg" />
     <None Remove="Icons\svg\DeleteList.svg" />
     <None Remove="Icons\svg\DownArrow.svg" />
@@ -49,6 +44,7 @@
     <None Remove="Icons\svg\Reset.svg" />
     <None Remove="Icons\svg\RightArrow.svg" />
     <None Remove="Icons\svg\RightArrowCircle.svg" />
+    <None Remove="Icons\svg\SearchRight.svg" />
     <None Remove="Icons\svg\Star.svg" />
     <None Remove="Icons\svg\StarFilled.svg" />
     <None Remove="Icons\svg\Import.svg" />
@@ -73,12 +69,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Icons\png\clear_search.png" />
-    <EmbeddedResource Include="Icons\png\search_right_light_16.png" />
     <EmbeddedResource Include="Icons\svg\Add.svg" />
     <EmbeddedResource Include="Icons\svg\BlankDocument.svg" />
     <EmbeddedResource Include="Icons\svg\Bookmark.svg" />
     <EmbeddedResource Include="Icons\svg\Cancel.svg" />
+    <EmbeddedResource Include="Icons\svg\ClearSearch.svg" />
     <EmbeddedResource Include="Icons\svg\Copy.svg" />
     <EmbeddedResource Include="Icons\svg\DeleteList.svg" />
     <EmbeddedResource Include="Icons\svg\DownArrow.svg" />
@@ -94,6 +89,7 @@
     <EmbeddedResource Include="Icons\svg\Redo.svg" />
     <EmbeddedResource Include="Icons\svg\Reset.svg" />
     <EmbeddedResource Include="Icons\svg\RightArrowCircle.svg" />
+    <EmbeddedResource Include="Icons\svg\SearchRight.svg" />
     <EmbeddedResource Include="Icons\svg\Star.svg" />
     <EmbeddedResource Include="Icons\svg\StarFilled.svg" />
     <EmbeddedResource Include="Icons\svg\Import.svg" />
