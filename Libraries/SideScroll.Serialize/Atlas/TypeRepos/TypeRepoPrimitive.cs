@@ -50,7 +50,7 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		}
 		else if (obj is char c)
 		{
-			writer.Write(c); // there's no ReadFloat() routine
+			writer.Write(c);
 		}
 		else if (obj is byte bt)
 		{

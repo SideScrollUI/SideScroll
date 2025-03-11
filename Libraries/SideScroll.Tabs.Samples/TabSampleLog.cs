@@ -15,15 +15,11 @@ public class TabSampleLog : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			TaskInstance = new();
-			TaskInstance.Log.Add("Double Tag Test", new Tag("Double", 0.5));
-
 			_sampleCall = call.AddSubCall(Label);
 			_counter = 0;
 
 			model.Items = new List<ListItem>
 			{
-				new("Task Instance Log", TaskInstance.Log),
 				new("Sample Call", _sampleCall),
 				new("Sample Call Log", _sampleCall.Log),
 				new("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),

@@ -11,11 +11,12 @@ public class TabIcons : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			TabToolbar toolbarSvg = new();
-			foreach (var memberInfo in Icons.Svg.GetItems())
+			TabToolbar toolbarSvg = new()
 			{
-				toolbarSvg.Buttons.Add(new ToolButton(memberInfo.Key.Name, memberInfo.Value));
-			}
+				Buttons = Icons.Svg.Items
+					.Select(memberInfo => new ToolButton(memberInfo.Key.Name, memberInfo.Value))
+					.ToList()
+			};
 			model.AddObject(toolbarSvg);
 		}
 	}
