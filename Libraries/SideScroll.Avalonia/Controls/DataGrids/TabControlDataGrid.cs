@@ -132,7 +132,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			TabInstance.SetEndLoad();
 			_disableSaving--;
 			if (_selectionModified)
+			{
 				TabInstance.SaveTabSettings(); // selection has probably changed
+			}
 		}, DispatcherPriority.Background);
 	}
 
