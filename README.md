@@ -12,9 +12,10 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 - **DataRepos** — Manage local data storage and display data bound views
 - **Dynamic Form Generation** — Load any object into a **Param Control** for auto-generated Avalonia controls.
 - **Rich Text Support** — Integrated [AvaloniaEdit](https://github.com/AvaloniaUI/AvaloniaEdit) support for rich text viewing and editing
-- **Interactive Charting** — Integrated [LiveCharts 2](https://github.com/beto-rodriguez/LiveCharts2) support for smooth, animated charts. Use the mouse to zoom in or select individual series to show additional tabs.
+- **Interactive Charting** — Integrated [LiveCharts 2](https://github.com/beto-rodriguez/LiveCharts2) support for smooth, animated charts. Use the mouse to zoom in or select a series to show additional tabs.
 
 ## Examples
+
 #### VideoGamesDB
 ![VideoGamesDB](Images/Animations/SideScroll-VideoGamesDB.gif)
 
@@ -32,12 +33,12 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 
 ![Logo](Images/Logo/png/SideScroll_40.png)
 
-### Documentation
+## Documentation
 * [Development](Docs/Dev/Development.md)
 * [User Guide](Docs/UserGuide.md)
 * [Credits](Docs/Credits.md)
 
-### Samples
+## Samples
 Try one of the samples out to see SideScroll in action
 * [Tab Samples](/Programs/SideScroll.Start.Avalonia/MainWindow.cs) - Inside this repo
 * [Video Game Database](https://github.com/SideScrollUI/VideoGamesDB) - Sample external project
