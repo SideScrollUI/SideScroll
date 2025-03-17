@@ -4,7 +4,7 @@
     <PackageReleaseNotes>Switched Info, Bookmark, Search Right, and Clear Search icons from png to svg. Improved word spacing to handle random ids, dates, and mixed case better. Added more concurrency and rate limiting options for calls. Improved link handling for duplicate paths. Added CalendarView Foreground theming.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.5</AvaloniaVersion>
-    <AvaloniaEditVersion>11.1.0</AvaloniaEditVersion>
+    <AvaloniaEditVersion>11.2.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
     <Configurations>Debug;Release;DebugX86</Configurations>
