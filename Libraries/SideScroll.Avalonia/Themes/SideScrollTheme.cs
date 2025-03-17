@@ -41,6 +41,7 @@ public static class SideScrollTheme
 
 	// DataGrid
 	public static SolidColorBrush DataGridRowHighlight => GetBrush("DataGridRowHighlightBrush");
+	public static SolidColorBrush DataGridRowBackground => GetBrush("DataGridRowBackgroundBrush");
 
 	// DataGrid [StyleValue]
 	public static SolidColorBrush DataGridHasLinksBackground => GetBrush("DataGridHasLinksBackgroundBrush");
