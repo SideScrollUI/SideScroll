@@ -12,6 +12,7 @@ using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Avalonia;
+using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.Painting.ImageFilters;
 using SideScroll.Avalonia.Controls;
@@ -710,11 +711,17 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 	private void TabControlLiveChart_PointerMoved(object? sender, PointerEventArgs e)
 	{
-		// Store the mouse down point, check it when mouse button is released to determine if the context menu should be shown
-		var point = e.GetPosition(Chart);
-		CursorPosition = point;
 		try
 		{
+			// Can be empty when loading
+			var chart = (CartesianChart<SkiaSharpDrawingContext>)Chart.CoreChart;
+			if (chart.XAxes.Length == 0 || chart.YAxes.Length == 0)
+				return;
+
+			// Store the mouse down point, check it when mouse button is released to determine if the context menu should be shown
+			var point = e.GetPosition(Chart);
+			CursorPosition = point;
+
 			ChartPoint? hitPoint = FindClosestPoint(new LvcPoint(point.X, point.Y), MaxFindDistance);
 			if (hitPoint != null)
 			{
@@ -735,7 +742,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 					Legend.UnhighlightAll(true);
 				}
 			}
-
+			
 			LvcPointD dataPoint = Chart.ScalePixelsToData(new LvcPointD(point.X, point.Y));
 
 			var moveEvent = new PointerMovedEventArgs(dataPoint.X);

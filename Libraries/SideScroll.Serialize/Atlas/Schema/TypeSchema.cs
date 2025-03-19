@@ -36,6 +36,7 @@ public class TypeSchema
 		typeof(HashSet<>),
 	];
 
+	[WordWrap]
 	public string Name { get; set; }
 	public string AssemblyQualifiedName { get; set; }
 	public bool CanReference { get; set; } // whether the object can reference other types
@@ -52,7 +53,9 @@ public class TypeSchema
 	public long DataSize { get; set; }
 
 	// not written out
+	[WordWrap]
 	public Type? Type { get; protected set; }
+	[WordWrap]
 	public Type? NonNullableType { get; protected set; }
 
 	public bool IsPrimitive { get; protected set; }
