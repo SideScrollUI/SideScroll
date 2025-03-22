@@ -1,8 +1,51 @@
 using Avalonia.Data.Converters;
+using SideScroll.Attributes;
 using SideScroll.Extensions;
+using SideScroll.Tabs.Lists;
 using System.Globalization;
+using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.Converters;
+
+
+public class PropertyTextConverter<T> : FormatValueConverter
+{
+	public PropertyInfo PropertyInfo { get; init; }
+
+	public FormatValueConverter FormatConverter { get; set; } = new();
+
+	public PropertyTextConverter(PropertyInfo propertyInfo)
+	{
+		PropertyInfo = propertyInfo;
+
+		var maxHeightAttribute = propertyInfo.GetCustomAttribute<MaxHeightAttribute>();
+		if (maxHeightAttribute != null && typeof(IListItem).IsAssignableFrom(PropertyInfo.PropertyType))
+		{
+			int MaxDesiredHeight = maxHeightAttribute.MaxHeight;
+			FormatConverter.MaxLength = MaxDesiredHeight * 10;
+		}
+		FormatConverter.IsFormatted = (propertyInfo.GetCustomAttribute<FormattedAttribute>() != null);
+
+		var formatterAttribute = propertyInfo.GetCustomAttribute<FormatterAttribute>();
+		if (formatterAttribute != null)
+		{
+			FormatConverter.Formatter = (ICustomFormatter)Activator.CreateInstance(formatterAttribute.Type)!;
+		}
+	}
+
+	public string? GetText<TModel>(TModel model) where TModel : class
+	{
+		object? value = PropertyInfo.GetValue(model);
+		return (string)Convert(value, typeof(string), null, CultureInfo.CurrentCulture)!;
+	}
+
+	public T? GetValue<TModel>(TModel model) where TModel : class
+	{
+		object? value = PropertyInfo.GetValue(model);
+		return (T)Convert(value, typeof(T), null, CultureInfo.CurrentCulture)!;
+	}
+}
+
 
 public class FormatValueConverter : IValueConverter
 {

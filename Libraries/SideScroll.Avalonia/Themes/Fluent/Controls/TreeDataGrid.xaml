@@ -1,0 +1,90 @@
+﻿<Styles 
+  xmlns="https://github.com/avaloniaui"
+  xmlns:dg="clr-namespace:Avalonia.Controls.Primitives;assembly=Avalonia.Controls.TreeDataGrid"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Style Selector="dg|TreeDataGridRow:pointerover /template/ TreeDataGridCellsPresenter#PART_CellsPresenter">
+    <Setter Property="Background" Value="{DynamicResource DataGridRowHighlightBrush}" />
+  </Style>
+  
+  <Style Selector="dg|TreeDataGridRow">
+    <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundBrush}" />
+    <Setter Property="FontSize" Value="{DynamicResource DataGridFontSize}" />
+  </Style>
+
+  <Style Selector="dg|TreeDataGridColumnHeader">
+    <Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundBrush}" />
+    <Setter Property="FontSize" Value="{DynamicResource DataGridFontSize}" />
+  </Style>
+  
+  <!--Style Selector="dg|DataGridColumnHeader">
+    <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundBrush}" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="AreSeparatorsVisible" Value="true" />
+    <Setter Property="Padding" Value="4" />
+    <Setter Property="FontSize" Value="{DynamicResource DataGridFontSize}" />
+  </Style>
+  <Style Selector="dg|DataGridColumnHeader:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundPointerOverBrush}" />
+  </Style>
+
+  <Style Selector="dg|DataGridColumnHeader /template/ Rectangle#VerticalSeparator">
+    <Setter Property="Stroke" Value="{DynamicResource DataGridHeaderSeparatorBrush}"/>
+    <Setter Property="StrokeThickness" Value="1"/>
+  </Style>
+
+  <Style Selector="dg|DataGridColumnHeader:pointerover /template/ Grid#PART_ColumnHeaderRoot">
+    <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundPointerOverBrush}" />
+  </Style>
+  <Style Selector="dg|DataGridColumnHeader:pressed /template/ Grid#PART_ColumnHeaderRoot">
+    <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundPointerOverBrush}" />
+  </Style>
+
+  <Style Selector="dg|DataGrid">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="RowBackground" Value="{DynamicResource DataGridRowBackgroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource DataGridBorderBrush}" />
+  </Style>
+  
+  <Style Selector="dg|DataGridCell">
+    <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource DataGridCellBorderBrush}" />
+  </Style>
+
+  <Style Selector="dg|DataGridCell:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundPointerOverBrush}" />
+  </Style>
+
+  <Style Selector="dg|DataGridCell:selected">
+    <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundSelectedBrush}" />
+  </Style-->
+
+  <!-- Doesn't work -->
+  <!--Style Selector="dg|DataGridRow:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundPointerOverBrush}" />
+  </Style-->
+
+  <!--Style Selector="dg|DataGridRow:pointerover /template/ Rectangle#BackgroundRectangle">
+    <Setter Property="Fill" Value="{DynamicResource DataGridRowHighlightBrush}" />
+    <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedHoveredUnfocusedBackgroundOpacity}" />
+  </Style>
+  <Style Selector="dg|DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
+    <Setter Property="Fill" Value="{DynamicResource DataGridRowHighlightBrush}" />
+    <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedUnfocusedBackgroundOpacity}" />
+  </Style>
+  <Style Selector="dg|DataGridRow:selected:pointerover /template/ Rectangle#BackgroundRectangle">
+    <Setter Property="Fill" Value="{DynamicResource DataGridRowHighlightBrush}" />
+    <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedHoveredUnfocusedBackgroundOpacity}" />
+  </Style>
+  <Style Selector="dg|DataGridRow:selected:focus /template/ Rectangle#BackgroundRectangle">
+    <Setter Property="Fill" Value="{DynamicResource DataGridRowHighlightBrush}" />
+    <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedBackgroundOpacity}" />
+  </Style>
+  <Style Selector="dg|DataGridRow:selected:pointerover:focus /template/ Rectangle#BackgroundRectangle">
+    <Setter Property="Fill" Value="{DynamicResource DataGridRowHighlightBrush}" />
+    <Setter Property="Opacity" Value="{DynamicResource DataGridRowSelectedHoveredBackgroundOpacity}" />
+  </Style-->
+
+</Styles>

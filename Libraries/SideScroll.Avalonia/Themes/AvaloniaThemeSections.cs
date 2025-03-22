@@ -237,13 +237,13 @@ public class DataGridTheme : ThemeSection
 	[Header("Column Header"), ResourceKey("DataGridColumnHeaderBackgroundBrush")]
 	public Color? ColumnHeaderBackground { get; set; }
 
-	[ResourceKey("DataGridColumnHeaderBackgroundPointerOverBrush")]
+	[ResourceKey("DataGridColumnHeaderBackgroundPointerOverBrush", "TreeDataGridHeaderBackgroundPointerOverBrush")]
 	public Color? ColumnHeaderBackgroundPointerOver { get; set; }
 
 	[ResourceKey("DataGridColumnHeaderForegroundBrush")]
 	public Color? ColumnHeaderForeground { get; set; }
 
-	[ResourceKey("DataGridColumnHeaderForegroundPointerOverBrush")]
+	[ResourceKey("DataGridColumnHeaderForegroundPointerOverBrush", "TreeDataGridHeaderForegroundPointerOverBrush")]
 	public Color? ColumnHeaderForegroundPointerOver { get; set; }
 
 	[ResourceKey("DataGridHeaderSeparatorBrush")]
@@ -296,7 +296,7 @@ public class DataGridTheme : ThemeSection
 	[ResourceKey("DataGridStyledBorderBrush")]
 	public Color? StyledBorder { get; set; }
 
-	[Header("Border"), ResourceKey("DataGridBorderBrush")]
+	[Header("Border"), ResourceKey("DataGridBorderBrush", "TreeDataGridGridLinesBrush")]
 	public Color? Border { get; set; }
 }
 

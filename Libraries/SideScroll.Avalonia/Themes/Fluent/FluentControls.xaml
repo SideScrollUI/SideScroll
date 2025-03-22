@@ -4,6 +4,7 @@
 
   <StyleInclude Source="avares://SideScroll.Avalonia/Themes/Fluent/Controls/ScrollBar.xaml"/>
   <StyleInclude Source="avares://SideScroll.Avalonia/Themes/Fluent/Controls/DataGrid.xaml"/>
+  <StyleInclude Source="avares://SideScroll.Avalonia/Themes/Fluent/Controls/TreeDataGrid.xaml"/>
 
   <Style Selector="TextBox">
     <Setter Property="SelectionForegroundBrush" Value="{DynamicResource TextControlSelectionForegroundBrush}"/>

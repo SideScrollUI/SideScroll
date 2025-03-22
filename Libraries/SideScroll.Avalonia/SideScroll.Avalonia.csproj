@@ -50,6 +50,7 @@
     <EmbeddedResource Remove="Themes\Controls\ToolbarButton.xaml" />
     <EmbeddedResource Remove="Themes\Fluent\Controls\DataGrid.xaml" />
     <EmbeddedResource Remove="Themes\Fluent\Controls\ScrollBar.xaml" />
+    <EmbeddedResource Remove="Themes\Fluent\Controls\TreeDataGrid.xaml" />
     <EmbeddedResource Remove="Themes\Fluent\FluentControls.xaml" />
     <EmbeddedResource Remove="Themes\Simple\Simple.xaml" />
     <EmbeddedResource Remove="Themes\Simple\SimpleControls.xaml" />
@@ -134,6 +135,9 @@
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\ToolbarButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Fluent\Controls\TreeDataGrid.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Simple\Simple.xaml">

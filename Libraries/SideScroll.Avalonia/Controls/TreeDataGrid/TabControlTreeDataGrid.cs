@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -122,7 +123,7 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 	static TabControlTreeDataGrid()
 	{
 		// DataGridRow event triggers before DataGridCell :(
-		PointerPressedEvent.AddClassHandler<DataGridRow>((x, e) => DataGridRow_PointerPressed(x, e), RoutingStrategies.Tunnel, true);
+		PointerPressedEvent.AddClassHandler<TreeDataGridRow>((x, e) => DataGridRow_PointerPressed(x, e), RoutingStrategies.Tunnel, true);
 	}
 
 	[MemberNotNull(nameof(_elementType), nameof(DataGrid))]
@@ -464,30 +465,30 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 			(inputElement is Visual visual && IsControlSelectable(visual.GetVisualParent() as IInputElement));
 	}
 
-	private static DataGrid? GetOwningDataGrid(StyledElement? control)
+	private static TreeDataGrid? GetOwningDataGrid(StyledElement? control)
 	{
 		if (control == null)
 			return null;
 
-		if (control is DataGrid dataGrid)
+		if (control is TreeDataGrid dataGrid)
 			return dataGrid;
 
 		return GetOwningDataGrid(control.Parent);
 	}
 
 	// Single click deselect (cells don't always occupy their entire contents)
-	private static void DataGridRow_PointerPressed(DataGridRow row, PointerPressedEventArgs e)
+	private static void DataGridRow_PointerPressed(TreeDataGridRow row, PointerPressedEventArgs e)
 	{
 		PointerPoint point = e.GetCurrentPoint(row);
 
 		if (!point.Properties.IsLeftButtonPressed)
 			return;
 
-		DataGrid? dataGrid = GetOwningDataGrid(row);
+		TreeDataGrid? dataGrid = GetOwningDataGrid(row);
 		// Can't access row.OwningGrid, so we have to do this the hard way
 		if (dataGrid != null)
 		{
-			if (dataGrid.SelectedItems == null || dataGrid.SelectedItems.Count != 1)
+			if (dataGrid.RowSelection == null || dataGrid.RowSelection.Count != 1)
 				return;
 
 			// Ignore if toggling CheckBox or clicking Button
@@ -496,7 +497,7 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 			if (IsControlSelectable(input))
 				return;
 
-			if (dataGrid.SelectedItems.Contains(row.DataContext))
+			if (dataGrid.RowSelection.SelectedItems.Contains(row.DataContext))
 			{
 				Dispatcher.UIThread.Post(() => ClearSelection(dataGrid), DispatcherPriority.Background);
 				e.Handled = true;
@@ -506,13 +507,13 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 
 	private void ClearSelection()
 	{
-		//ClearSelection(DataGrid);
+		ClearSelection(DataGrid);
 	}
 
-	private static void ClearSelection(DataGrid dataGrid)
+	private static void ClearSelection(TreeDataGrid dataGrid)
 	{
-		dataGrid.SelectedItems.Clear();
-		dataGrid.SelectedItem = null;
+		dataGrid.RowSelection?.Clear();
+		//dataGrid.SelectedItem = null;
 	}
 
 	private void ClearSearch()
@@ -547,9 +548,9 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 
 	private void AddColumns()
 	{
-		_columnObjects = new();
-		_columnNames = new();
-		_columnProperties = new();
+		_columnObjects = [];
+		_columnNames = [];
+		_columnProperties = [];
 
 		List<TabDataSettings.MethodColumn> methodColumns = TabDataSettings.GetButtonMethods(_elementType);
 		foreach (TabDataSettings.MethodColumn methodColumn in methodColumns)
@@ -589,7 +590,9 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 		// 2 columns need headers for resizing first column?
 		// For visual color separation due to HasLinks background color being too close to title
 		if (propertyColumns.Count == 1 || typeof(IListPair).IsAssignableFrom(_elementType))
+		{
 			DataGrid.ShowColumnHeaders = false;
+		}
 	}
 
 	public void AddColumn(string label, string propertyName, bool styleCells = false)
@@ -608,10 +611,16 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 
 		int maxDesiredWidth = attributeMaxWidth != null ? attributeMaxWidth.MaxWidth : MaxColumnWidth;
 
-		//Type genericType = typeof(TextColumn<,>).MakeGenericType(_elementType, typeof(string));
-		//ITreeDataGridSource source = (ITreeDataGridSource)Activator.CreateInstance(genericType)!;
+		Type columnValueType = DataGridUtils.IsTypeSortable(propertyInfo.PropertyType) ? propertyInfo.PropertyType : typeof(string);
+		Type propertyConverterType = typeof(Converters.PropertyTextConverter<>).MakeGenericType(columnValueType);
+		var propertyConverter = Activator.CreateInstance(propertyConverterType, [propertyInfo])!;
 
-		var column = new TextColumn<TModel, string?>(label, x => (propertyInfo.GetValue(x) ?? "").ToString());
+		Type genericType = typeof(TreeDataGridPropertyTextColumn<,>).MakeGenericType(_elementType, columnValueType);
+		var column = (IColumn<TModel>)Activator.CreateInstance(genericType, [DataGrid, label, propertyInfo, isReadOnly, maxDesiredWidth, propertyConverter])!;
+
+		//var column = new TreeDataGridPropertyTextColumn<TModel>(DataGrid, label, propertyInfo, isReadOnly, maxDesiredWidth, new Converters.PropertyTextConverter(propertyInfo));
+		//var column = new TextColumn<TModel, string?>(label, x => (propertyInfo.GetValue(x) ?? "").ToString());
+		//column.ScanItemAttributes(List!);
 
 		//DataGridBoundColumn column;
 		/*if (tabModel.Editing == false)
@@ -886,14 +895,19 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 
 			DataGrid.RowSelection.Clear();
 			//DataGrid.SelectedItem = null; // need both of these
+			//DataGrid.RowSelection.Select(new IndexPath(
 
 			_ignoreSelectionChanged = false;
 
+			List<int> selections = [];
 			foreach (object obj in value)
 			{
-				//if (List!.Contains(obj))
-				//	DataGrid.RowSelection.Select(new IndexPath(obj));
+				if (List!.IndexOf(obj) is int i)
+				{
+					selections.Add(i);
+				}
 			}
+			DataGrid.RowSelection.Select(new IndexPath(selections));
 			DataGrid.InvalidateVisual(); // required for autoselection to work
 			if (value.Count > 0)
 			{
