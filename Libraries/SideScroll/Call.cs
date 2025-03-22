@@ -206,11 +206,11 @@ public class Call
 		int? maxRequestsPerSecond = null)
 	{
 		// todo: Migrate FirstOrDefault() deeper
-		return (await RunAsync(
+		return (await SelectAsync(
 			func,
 			items,
 			maxConcurrentRequests,
-			maxRequestsPerSecond)).FirstOrDefault().Value;
+			maxRequestsPerSecond)).FirstOrDefault();
 	}
 
 	public async Task<TResult?> FirstOrDefaultAsync<TItem, TParam1, TResult>(
@@ -220,12 +220,12 @@ public class Call
 		int? maxConcurrentRequests = null,
 		int? maxRequestsPerSecond = null)
 	{
-		return (await RunAsync(
+		return (await SelectAsync(
 			func,
 			items,
 			param1,
 			maxConcurrentRequests,
-			maxRequestsPerSecond)).FirstOrDefault().Value;
+			maxRequestsPerSecond)).FirstOrDefault();
 	}
 
 	public async Task<TResult?> FirstOrDefaultAsync<TItem, TParam1, TParam2, TResult>(
@@ -236,13 +236,13 @@ public class Call
 		int? maxConcurrentRequests = null,
 		int? maxRequestsPerSecond = null)
 	{
-		return (await RunAsync(
+		return (await SelectAsync(
 			func,
 			items,
 			param1,
 			param2,
 			maxConcurrentRequests,
-			maxRequestsPerSecond)).FirstOrDefault().Value;
+			maxRequestsPerSecond)).FirstOrDefault();
 	}
 
 	public async Task<List<TResult>> SelectAsync<TItem, TResult>(
@@ -540,5 +540,7 @@ public class Call
 public class ItemResultCollection<TItem, TResult>(IEnumerable<KeyValuePair<TItem, TResult?>> enumerable) :
 	List<KeyValuePair<TItem, TResult?>>(enumerable)
 {
+	public IEnumerable<TItem> Keys => this.Select(p => p.Key);
+
 	public IEnumerable<TResult> Values => this.Select(p => p.Value).OfType<TResult>();
 }

@@ -42,6 +42,7 @@ public class ConcurrentRateLimiter : IDisposable
 
 		return new ConcurrencyRelease(_concurrencySemaphore);
 	}
+
 	private async Task RefillTokensAsync(CancellationToken cancellationToken)
 	{
 		if (MaxRequestsPerSecond is not int rps || rps <= 0)

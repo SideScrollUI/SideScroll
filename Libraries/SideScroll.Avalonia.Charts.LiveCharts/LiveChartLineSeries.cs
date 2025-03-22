@@ -16,11 +16,19 @@ public class LiveChartPoint : ObservablePoint
 	public LiveChartPoint(object? obj, double? x, double? y, double? yCoordinate) : base(x, y)
 	{
 		Object = obj;
-		if (x != null && yCoordinate != null)
+		if (x == null) return;
+		
+		if (yCoordinate != null)
 		{
-			Coordinate = y is null ? Coordinate.Empty : new(x.Value, yCoordinate.Value);
+			Coordinate = new(x.Value, yCoordinate.Value);
+		}
+		else if (y != null)
+		{
+			Coordinate = new(x.Value, y.Value);
 		}
 	}
+
+	public override string ToString() => $"{X}: {Y}";
 }
 
 public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<LiveChartPoint>, ISeries
