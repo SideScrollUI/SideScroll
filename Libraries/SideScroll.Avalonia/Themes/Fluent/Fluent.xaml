@@ -198,6 +198,10 @@
           
           <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
 
+          <!-- TreeDataGrid -->
+
+          <SolidColorBrush x:Key="TreeDataGridSelectedCellBackgroundBrush" Color="#ffb5ffb5" />
+
           <!--- End Fluent Defaults -->
 
           <!-- Custom Resources -->
@@ -542,6 +546,7 @@
           <!-- DataGrid -->
           
           <SolidColorBrush x:Key="DataGridRowBackgroundBrush" Color="#1c1c1c" />
+          
           <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="{DynamicResource DataGridAccentColor}" />
           
           <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="{DynamicResource TextForegroundColor}" />

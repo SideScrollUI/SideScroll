@@ -256,6 +256,9 @@ public class DataGridTheme : ThemeSection
 	[ResourceKey("DataGridRowHighlightBrush")]
 	public Color? RowBackgroundHighlight { get; set; }
 
+	[ResourceKey("TreeDataGridSelectedCellBackgroundBrush")]
+	public Color? RowBackgroundSelected { get; set; }
+
 	[ResourceKey("DataGridRowSelectedBackgroundOpacity", "DataGridRowSelectedUnfocusedBackgroundOpacity"), Range(0.0, 1.0)]
 	public double? RowBackgroundLowOpacity { get; set; }
 

@@ -186,7 +186,6 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 			CanUserSortColumns = true,
 
 			BorderBrush = Brushes.Black,
-			Background = SideScrollTheme.DataGridRowBackground,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			//HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
@@ -253,12 +252,10 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 
 	private void AutoSizeColumns()
 	{
-		return;
-
 		// Only works with Stretch right now
 		if (DataGrid == null || HorizontalAlignment != HorizontalAlignment.Stretch)
 			return;
-
+		/*
 		var autoSizeColumns = DataGrid.Columns
 			//.Where(c => c.IsVisible)
 			.Where(c => c is DataGridTextColumn || c is DataGridCheckBoxColumn);
@@ -312,7 +309,7 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 
 		//dataGrid.MinColumnWidth = 40; // doesn't do anything
 		// If 1 or 2 columns, make the last column stretch
-		/*if (DataGrid.Columns.Count == 1)
+		if (DataGrid.Columns.Count == 1)
 		{
 			DataGrid.Columns[0].Width = new DataGridLength(DataGrid.Columns[0].ActualWidth, DataGridLengthUnitType.Star);
 		}
@@ -578,9 +575,11 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 			.Select(p => p.IsStyled())
 			.Max();
 
+		int index = 0;
 		foreach (TabDataSettings.PropertyColumn propertyColumn in propertyColumns)
 		{
-			AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo, styleCells);
+			index++;
+			AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo, styleCells, index == propertyColumns.Count);
 		}
 
 		// 1 column should take up entire grid
@@ -601,7 +600,7 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 		AddColumn(label, propertyInfo, styleCells);
 	}
 
-	public void AddColumn(string label, PropertyInfo propertyInfo, bool styleCells = false)
+	public void AddColumn(string label, PropertyInfo propertyInfo, bool styleCells = false, bool isLast = false)
 	{
 		MinWidthAttribute? attributeMinWidth = propertyInfo.GetCustomAttribute<MinWidthAttribute>();
 		MaxWidthAttribute? attributeMaxWidth = propertyInfo.GetCustomAttribute<MaxWidthAttribute>();
@@ -611,12 +610,15 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 
 		int maxDesiredWidth = attributeMaxWidth != null ? attributeMaxWidth.MaxWidth : MaxColumnWidth;
 
+		// Make the last column stretch
+		GridLength? gridLength = isLast ? new GridLength(1, GridUnitType.Star) : null;
+
 		Type columnValueType = DataGridUtils.IsTypeSortable(propertyInfo.PropertyType) ? propertyInfo.PropertyType : typeof(string);
 		Type propertyConverterType = typeof(Converters.PropertyTextConverter<>).MakeGenericType(columnValueType);
 		var propertyConverter = Activator.CreateInstance(propertyConverterType, [propertyInfo])!;
 
 		Type genericType = typeof(TreeDataGridPropertyTextColumn<,>).MakeGenericType(_elementType, columnValueType);
-		var column = (IColumn<TModel>)Activator.CreateInstance(genericType, [DataGrid, label, propertyInfo, isReadOnly, maxDesiredWidth, propertyConverter])!;
+		var column = (IColumn<TModel>)Activator.CreateInstance(genericType, [DataGrid, label, propertyInfo, isReadOnly, maxDesiredWidth, propertyConverter, gridLength])!;
 
 		//var column = new TreeDataGridPropertyTextColumn<TModel>(DataGrid, label, propertyInfo, isReadOnly, maxDesiredWidth, new Converters.PropertyTextConverter(propertyInfo));
 		//var column = new TextColumn<TModel, string?>(label, x => (propertyInfo.GetValue(x) ?? "").ToString());

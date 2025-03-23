@@ -1,20 +1,35 @@
 ﻿<Styles 
   xmlns="https://github.com/avaloniaui"
   xmlns:dg="clr-namespace:Avalonia.Controls.Primitives;assembly=Avalonia.Controls.TreeDataGrid"
+  xmlns:av="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.TreeDataGrid"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!--Style Selector="av|TreeDataGrid">
+    <Setter Property="Background" Value="Transparent" />
+  </Style-->
 
   <Style Selector="dg|TreeDataGridRow:pointerover /template/ TreeDataGridCellsPresenter#PART_CellsPresenter">
     <Setter Property="Background" Value="{DynamicResource DataGridRowHighlightBrush}" />
   </Style>
-  
+
   <Style Selector="dg|TreeDataGridRow">
     <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundBrush}" />
+    <Setter Property="Background" Value="{DynamicResource DataGridRowBackgroundBrush}" />
     <Setter Property="FontSize" Value="{DynamicResource DataGridFontSize}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource DataGridCellBorderBrush}" />
+    <!--Setter Property="BorderThickness" Value="0, 0, 0, 1" /-->
   </Style>
 
   <Style Selector="dg|TreeDataGridColumnHeader">
+    <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}" />
     <Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundBrush}" />
     <Setter Property="FontSize" Value="{DynamicResource DataGridFontSize}" />
+  </Style>
+
+  <Style Selector="dg|TreeDataGridTextCell">
+    <Setter Property="BorderBrush" Value="{DynamicResource DataGridCellBorderBrush}" />
+    <Setter Property="BorderThickness" Value="0, 0, 1, 1" />
+    <Setter Property="Padding" Value="7" />
   </Style>
   
   <!--Style Selector="dg|DataGridColumnHeader">

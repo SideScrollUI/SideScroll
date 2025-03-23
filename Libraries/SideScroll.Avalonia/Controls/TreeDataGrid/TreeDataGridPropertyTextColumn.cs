@@ -36,10 +36,15 @@ public class TreeDataGridPropertyTextColumn<TModel, TProperty> : TextColumn<TMod
 
 	public override string ToString() => PropertyInfo.Name;
 
-	public TreeDataGridPropertyTextColumn(TreeDataGrid dataGrid, string label, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth, PropertyTextConverter<TProperty> textConverter)
-		: base(
-			label, 
-			x => textConverter.GetValue(x)) 
+	public TreeDataGridPropertyTextColumn(
+		TreeDataGrid dataGrid, 
+		string label, 
+		PropertyInfo propertyInfo,
+		bool isReadOnly, 
+		int maxDesiredWidth, 
+		PropertyTextConverter<TProperty> textConverter,
+		GridLength? gridLength = null)
+		: base(label, x => textConverter.GetValue(x), gridLength) 
 	{
 		DataGrid = dataGrid;
 		PropertyInfo = propertyInfo;
