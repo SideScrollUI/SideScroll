@@ -25,7 +25,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace SideScroll.Avalonia.Controls;
+namespace SideScroll.Avalonia.Controls.TreeDataGrids;
 
 public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, ITabItemSelector, ITabDataControl, ITabDataSelector
 	where TModel : class
@@ -582,10 +582,6 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 			AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo, styleCells, index == propertyColumns.Count);
 		}
 
-		// 1 column should take up entire grid
-		//if (dataGrid.Columns.Count == 1)
-		//	dataGrid.Columns[0].Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-
 		// 2 columns need headers for resizing first column?
 		// For visual color separation due to HasLinks background color being too close to title
 		if (propertyColumns.Count == 1 || typeof(IListPair).IsAssignableFrom(_elementType))
@@ -617,8 +613,17 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 		Type propertyConverterType = typeof(Converters.PropertyTextConverter<>).MakeGenericType(columnValueType);
 		var propertyConverter = Activator.CreateInstance(propertyConverterType, [propertyInfo])!;
 
-		Type genericType = typeof(TreeDataGridPropertyTextColumn<,>).MakeGenericType(_elementType, columnValueType);
-		var column = (IColumn<TModel>)Activator.CreateInstance(genericType, [DataGrid, label, propertyInfo, isReadOnly, maxDesiredWidth, propertyConverter, gridLength])!;
+		IColumn<TModel> column;
+		if (propertyInfo.PropertyType == typeof(bool))
+		{
+			Type genericType = typeof(TreeDataGridPropertyCheckBoxColumn<>).MakeGenericType(_elementType);
+			column = (IColumn<TModel>)Activator.CreateInstance(genericType, [DataGrid, label, propertyInfo, isReadOnly, maxDesiredWidth, gridLength])!;
+		}
+		else
+		{
+			Type genericType = typeof(TreeDataGridPropertyTextColumn<,>).MakeGenericType(_elementType, columnValueType);
+			column = (IColumn<TModel>)Activator.CreateInstance(genericType, [DataGrid, label, propertyInfo, isReadOnly, maxDesiredWidth, propertyConverter, gridLength])!;
+		}
 
 		//var column = new TreeDataGridPropertyTextColumn<TModel>(DataGrid, label, propertyInfo, isReadOnly, maxDesiredWidth, new Converters.PropertyTextConverter(propertyInfo));
 		//var column = new TextColumn<TModel, string?>(label, x => (propertyInfo.GetValue(x) ?? "").ToString());

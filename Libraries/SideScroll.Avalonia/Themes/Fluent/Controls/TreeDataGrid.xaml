@@ -33,8 +33,18 @@
   <Style Selector="dg|TreeDataGridTextCell">
     <Setter Property="BorderBrush" Value="{DynamicResource DataGridCellBorderBrush}" />
     <Setter Property="BorderThickness" Value="0, 0, 1, 1" />
-    <Setter Property="Padding" Value="7" />
+    <Setter Property="Padding" Value="5, 6, 5, 4" />
     <Setter Property="MaxHeight" Value="500" />
+  </Style>
+
+  <Style Selector="dg|TreeDataGridCheckBoxCell">
+    <Setter Property="BorderBrush" Value="{DynamicResource DataGridCellBorderBrush}" />
+    <Setter Property="BorderThickness" Value="0, 0, 1, 1" />
+    <Setter Property="Padding" Value="5, 6, 5, 4" />
+  </Style>
+
+  <Style Selector="dg|TreeDataGridCheckBoxCell /template/ CheckBox">
+    <Setter Property="HorizontalAlignment" Value="Center" />
   </Style>
   
   <!--Style Selector="dg|DataGridColumnHeader">

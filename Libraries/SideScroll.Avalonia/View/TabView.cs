@@ -8,6 +8,7 @@ using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls;
 using SideScroll.Avalonia.Controls.DataGrids;
 using SideScroll.Avalonia.Controls.Toolbar;
+using SideScroll.Avalonia.Controls.TreeDataGrids;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Avalonia.Viewer;

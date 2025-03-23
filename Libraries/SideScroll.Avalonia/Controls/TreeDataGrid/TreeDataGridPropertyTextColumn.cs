@@ -10,7 +10,8 @@ using SideScroll.Tabs.Lists;
 using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
-namespace SideScroll.Avalonia.Controls.DataGrids;
+
+namespace SideScroll.Avalonia.Controls.TreeDataGrids;
 
 public class TreeDataGridPropertyTextColumn<TModel, TProperty> : TextColumn<TModel, TProperty?>
 	where TModel : class
