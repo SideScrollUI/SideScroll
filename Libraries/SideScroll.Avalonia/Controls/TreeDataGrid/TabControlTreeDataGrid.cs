@@ -611,7 +611,7 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 		int maxDesiredWidth = attributeMaxWidth != null ? attributeMaxWidth.MaxWidth : MaxColumnWidth;
 
 		// Make the last column stretch
-		GridLength? gridLength = isLast ? new GridLength(1, GridUnitType.Star) : null;
+		GridLength? gridLength = isLast ? new GridLength(100, GridUnitType.Star) : null;
 
 		Type columnValueType = DataGridUtils.IsTypeSortable(propertyInfo.PropertyType) ? propertyInfo.PropertyType : typeof(string);
 		Type propertyConverterType = typeof(Converters.PropertyTextConverter<>).MakeGenericType(columnValueType);
@@ -965,9 +965,17 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 			if (DataGrid.RowSelection.SelectedItems.Count != 1 || DataGrid.RowSelection.SelectedItems[0] != value)
 			{
 				//DataGrid.RowSelection.SelectedItems.Clear();
+
+				List<int> selections = [];
+				if (List!.IndexOf(value) is int i)
+				{
+					selections.Add(i);
+				}
+				DataGrid.RowSelection.Select(new IndexPath(selections));
+
 				//DataGrid.RowSelection.SelectedItem = null; // need both of these
 				//if (value != null)
-					//DataGrid.RowSelection.Sel = value;
+				//DataGrid.RowSelection.Sel = value;
 			}
 			ScrollIntoView(value);
 		}

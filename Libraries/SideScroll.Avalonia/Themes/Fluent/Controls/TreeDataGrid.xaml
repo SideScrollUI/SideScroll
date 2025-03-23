@@ -20,6 +20,10 @@
     <!--Setter Property="BorderThickness" Value="0, 0, 0, 1" /-->
   </Style>
 
+  <Style Selector="dg|TreeDataGridRow:selected:not(:pointerover) /template/ TreeDataGridCellsPresenter#PART_CellsPresenter">
+    <Setter Property="Background" Value="{DynamicResource TreeDataGridSelectedCellBackgroundBrush}" />
+  </Style>
+
   <Style Selector="dg|TreeDataGridColumnHeader">
     <Setter Property="Background" Value="{DynamicResource DataGridColumnHeaderBackgroundBrush}" />
     <Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundBrush}" />
@@ -30,6 +34,7 @@
     <Setter Property="BorderBrush" Value="{DynamicResource DataGridCellBorderBrush}" />
     <Setter Property="BorderThickness" Value="0, 0, 1, 1" />
     <Setter Property="Padding" Value="7" />
+    <Setter Property="MaxHeight" Value="500" />
   </Style>
   
   <!--Style Selector="dg|DataGridColumnHeader">

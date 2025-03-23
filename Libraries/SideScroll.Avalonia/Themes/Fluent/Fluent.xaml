@@ -564,6 +564,10 @@
           <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#cccccc" />
 
           <SolidColorBrush x:Key="DataGridGridLinesBrush" Color="Black" />
+
+          <!-- TreeDataGrid -->
+
+          <SolidColorBrush x:Key="TreeDataGridSelectedCellBackgroundBrush" Color="#ff162c6e" />
           
           <!--- End Fluent Defaults -->
 

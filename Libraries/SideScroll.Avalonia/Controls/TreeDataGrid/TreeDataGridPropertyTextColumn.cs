@@ -5,10 +5,10 @@ using Avalonia.Media;
 using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls.Converters;
 using SideScroll.Avalonia.Utilities;
+using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
 using System.Collections;
 using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
 namespace SideScroll.Avalonia.Controls.DataGrids;
 
@@ -51,6 +51,11 @@ public class TreeDataGridPropertyTextColumn<TModel, TProperty> : TextColumn<TMod
 		//IsReadOnly = isReadOnly;
 		MaxDesiredWidth = maxDesiredWidth;
 		Options.MaxWidth = new(MaxDesiredWidth);
+
+		if (typeof(TProperty).IsNumeric())
+		{
+			Options.TextAlignment = TextAlignment.Right;
+		}
 
 		//Binding = GetFormattedTextBinding();
 
