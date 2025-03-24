@@ -3,7 +3,7 @@ using NUnit.Framework;
 namespace SideScroll.Test;
 
 [Category("Call")]
-public class TestCall : TestBase
+public class CallTests : TestBase
 {
 	private List<int?> _input = [null, 0, 1];
 
@@ -20,17 +20,17 @@ public class TestCall : TestBase
 	}
 
 	[Test]
-	public async Task FirstOrDefaultAsync()
+	public async Task FirstNonNullAsync()
 	{
-		var result = await Call.FirstOrDefaultAsync(EchoAsync, _input);
+		var result = await Call.FirstNonNullAsync(EchoAsync, _input);
 
 		Assert.That(result, Is.EqualTo(0));
 	}
 
 	[Test]
-	public async Task SelectAsync()
+	public async Task SelectNonNullAsync()
 	{
-		var result = await Call.SelectAsync(EchoAsync, _input);
+		var result = await Call.SelectNonNullAsync(EchoAsync, _input);
 
 		Assert.That(result, Has.Exactly(2).Items);
 		Assert.That(result, Is.EquivalentTo([0, 1]));
@@ -43,5 +43,7 @@ public class TestCall : TestBase
 
 		Assert.That(result, Has.Exactly(3).Items);
 		Assert.That(result.Keys, Is.EquivalentTo(_input));
+		Assert.That(result.Values, Is.EquivalentTo(_input));
+		Assert.That(result.NonNullValues, Is.EquivalentTo([0, 1]));
 	}
 }
