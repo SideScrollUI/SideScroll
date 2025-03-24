@@ -148,4 +148,4 @@ public class TabChartSizes : ITab
 
 ### Links
 - [Sample Tabs](../../Libraries/SideScroll.Tabs.Samples/Chart/TabSampleCharts.cs)
-- [LiveCharts 2](https://livecharts.dev/) - Internal Avalonia Chart Library used by SideScroll
+- [LiveCharts 2](https://livecharts.dev/) - Integrated Avalonia Chart Library used by SideScroll

@@ -53,8 +53,10 @@ public class MyClass(int param)
   - `DateTime`
   - `DateTimeOffset`
   - `TimeSpan`
+  - `TimeZoneInfo`
   - `Type`
-  - `object` (exact type or any allowed type only)
+  - `Version`
+  - `object` (exact type or an allowed type only)
   - `Array`
   - `List`
   - `Dictionary`
@@ -62,6 +64,7 @@ public class MyClass(int param)
 - Any other types will be ignored
 
 ## Lazy Deserialization
-- If you declare a property as virtual, you can load that property value in a lazy manner. 
+- If you declare a property as virtual, you can load that property value in a lazy manner.
+- Lazy deserialization isn't currently thread safe, and loaded results can only be used in a single thread. This feature isn't recommended for most usage.
 - Set `lazy` = `true` when loading with the deserializer, and it will create a wrapper class that will only load the virtual properties when referenced (subsequent references won't reload the data)
 - `public virtual string ReallyLongString { get; set; } = "...";`
