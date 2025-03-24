@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
-using Avalonia.Data;
 using Avalonia.Media;
 using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls.Converters;
@@ -31,9 +30,7 @@ public class TreeDataGridPropertyTextColumn<TModel, TProperty> : TextColumn<TMod
 	//public bool Editable { get; set; } = false;
 	public bool StyleCells { get; set; } // True if any column has a Style applied, so we can manually draw the horizontal lines
 
-	public Binding FormattedBinding { get; set; }
-	//private Binding unformattedBinding;
-	//public FormatValueConverter FormatConverter { get; set; } = new();
+	//public Binding FormattedBinding { get; set; }
 
 	public override string ToString() => PropertyInfo.Name;
 
@@ -81,18 +78,13 @@ public class TreeDataGridPropertyTextColumn<TModel, TProperty> : TextColumn<TMod
 
 		Options.CanUserSortColumn = DataGridUtils.IsTypeSortable(propertyInfo.PropertyType);
 
-		//if (PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
+		if (PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
 		{
 			Options.TextWrapping = TextWrapping.Wrap;
 		}
 
 		//CellStyleClasses = new Classes()
 	}
-
-	/*private static string? GetValue(TreeDataGridPropertyTextColumn<TModel> column, TModel model)
-	{
-		return (string)column.FormatConverter.Convert(model, typeof(string), null, CultureInfo.CurrentCulture)!;
-	}*/
 
 	// Check first x rows for [Hide()] and apply WordWrap to strings/objects automatically
 	public void ScanItemAttributes(IList List)
@@ -141,14 +133,6 @@ public class TreeDataGridPropertyTextColumn<TModel, TProperty> : TextColumn<TMod
 			}
 		}
 	}
-
-	// never gets triggered, can't override since it's internal?
-	// Owning Grid also internal so can't add our own handler
-	// _owningGrid.LoadingRow += OwningGrid_LoadingRow;
-	/*protected override void RefreshCellContent(IControl element, string propertyName)
-	{
-		base.RefreshCellContent(element, propertyName);
-	}*/
 
 	//protected override Control GenerateElement(DataGridCell cell, object dataItem)
 	//{

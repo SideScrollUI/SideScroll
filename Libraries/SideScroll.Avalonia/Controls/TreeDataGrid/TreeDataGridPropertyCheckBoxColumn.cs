@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
-using Microsoft.Extensions.Options;
 using SideScroll.Avalonia.Utilities;
 using System.Reflection;
 
@@ -27,7 +26,7 @@ public class TreeDataGridPropertyCheckBoxColumn<TModel> : CheckBoxColumn<TModel>
 		bool isReadOnly, 
 		int maxDesiredWidth, 
 		GridLength? gridLength = null)
-		: base(label, x => (bool)propertyInfo.GetValue(x), null, gridLength) 
+		: base(label, x => (bool?)propertyInfo.GetValue(x), null, gridLength) 
 	{
 		DataGrid = dataGrid;
 		PropertyInfo = propertyInfo;

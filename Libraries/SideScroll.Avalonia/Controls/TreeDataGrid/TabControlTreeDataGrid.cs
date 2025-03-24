@@ -10,7 +10,6 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls.DataGrids;
-using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Avalonia.View;
 using SideScroll.Collections;
@@ -86,9 +85,13 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 				DataGrid.Source = CreateDataSource(); // DataGrid autoselects on assignment :(
 
 				if (TabModel.AutoSelectSaved == AutoSelectType.None && !TabModel.AutoSelectDefault)
+				{
 					ClearSelection();
+				}
 				else
+				{
 					LoadSettings();
+				}
 
 				Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 			}
@@ -112,11 +115,18 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 		Initialize();
 	}
 
+	/*public static ITabDataSelector Create(Type elementType, TabInstance tabInstance, IList iList, bool autoGenerateColumns, TabDataSettings? tabDataSettings = null, TabModel? model = null)
+	{
+		Type genericType = typeof(TabControlTreeDataGrid<>).MakeGenericType(elementType);
+		return (ITabDataSelector)Activator.CreateInstance(genericType, tabInstance, iList, true, tabDataSettings, null)!;
+	}*/
+
 	private FlatTreeDataGridSource<TModel> CreateDataSource()
 	{
-		var source = new FlatTreeDataGridSource<TModel>((IEnumerable<TModel>)List);
-		source.RowSelection.SingleSelect = false;
+		var source = new FlatTreeDataGridSource<TModel>((IEnumerable<TModel>)List!);
+		source.RowSelection!.SingleSelect = false;
 		source.RowSelection.SelectionChanged += RowSelection_SelectionChanged;
+		//source.Sorted
 		return source;
 	}
 
@@ -142,7 +152,9 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 			TabInstance.SetEndLoad();
 			_disableSaving--;
 			if (_selectionModified)
+			{
 				TabInstance.SaveTabSettings(); // selection has probably changed
+			}
 		}, DispatcherPriority.Background);
 	}
 
@@ -202,12 +214,13 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 
 		Source = CreateDataSource();
 
-		//if (AutoGenerateColumns)
-		AddColumns();
+		if (AutoGenerateColumns)
+		{
+			AddColumns();
+		}
 		DataGrid.Source = Source;
 		//DataGrid.SelectedItem = null;
 
-		//DataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // Add one click deselection
 		//DataGrid.ColumnReordered += DataGrid_ColumnReordered;
 
 		DataGrid.EffectiveViewportChanged += DataGrid_EffectiveViewportChanged;
@@ -430,24 +443,6 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 
 		return null;
 	}
-
-	// Single click deselect
-	/*private void DataGrid_CellPointerPressed(object? sender, DataGridCellPointerPressedEventArgs e)
-	{
-		var pointer = e.PointerPressedEventArgs.GetCurrentPoint(this);
-		if (pointer.Properties.IsLeftButtonPressed && e.Row != null && DataGrid.SelectedItems != null && DataGrid.SelectedItems.Count == 1 && e.Cell.Content != null)
-		{
-			Type type = e.Cell.Content!.GetType();
-			if (typeof(CheckBox).IsAssignableFrom(type) ||
-				typeof(Button).IsAssignableFrom(type))
-				return;
-
-			if (DataGrid.SelectedItems.Contains(e.Row.DataContext))
-			{
-				Dispatcher.UIThread.Post(ClearSelection, DispatcherPriority.Background);
-			}
-		}
-	}*/
 
 	private static bool IsControlSelectable(IInputElement? inputElement)
 	{
@@ -1180,7 +1175,6 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 			{
 				DataGrid.RowSelection.SelectionChanged -= RowSelection_SelectionChanged;
 			}
-			//DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
 			//DataGrid.ColumnReordered -= DataGrid_ColumnReordered;
 			DataGrid.EffectiveViewportChanged -= DataGrid_EffectiveViewportChanged;
 
@@ -1262,179 +1256,3 @@ public class TabControlTreeDataGrid<TModel> : Grid, IDisposable, ITabSelector, I
 		}
 	}
 }
-
-/* From Atlas.UI.Wpf
-
-public List<DataGridCellInfo> GetMatchingCellInfos()
-{
-	var cellInfos = new List<DataGridCellInfo>();
-	var keys = new Dictionary<string, object>(); // todo: change to unordered?
-	foreach (object listItem in iList)
-	{
-		if (listItem == null)
-			continue;
-
-		string id = listItem.ObjectToUniqueString();
-		if (id != null)
-			keys[id] = listItem;
-	}
-	foreach (SelectedRow selectedRow in tabDataConfiguration.selected)
-	{
-		object listItem;
-		if (selectedRow.obj != null)
-		{
-			listItem = selectedRow.obj;
-		}
-		else if (selectedRow.label != null)
-		{
-			if (!keys.TryGetValue(selectedRow.label, out listItem))
-				continue;
-		}
-		else
-		{
-			if (selectedRow.index < 0 || selectedRow.index >= dataGrid.Items.Count) // some items might be filtered or have changed
-				continue;
-			listItem = dataGrid.Items[selectedRow.index];
-		}
-		if (tabInstance.IsOwnerObject(listItem.GetInnerValue())) // stops self referencing loops
-			continue;
-
-
-		if (selectedRow.columns.Count == 0)
-		{
-			// select all columns
-			foreach (DataGridColumn dataGridColumn in columnObjects.Values)
-			{
-				DataGridCellInfo cellInfo = new DataGridCellInfo(listItem, dataGridColumn);
-				cellInfos.Add(cellInfo);
-				break;// break for bug
-			}
-		}
-		else
-		{
-			foreach (var columnName in selectedRow.columns)
-			{
-				DataGridColumn dataGridColumn;
-				if (columnObjects.TryGetValue(columnName, out dataGridColumn)) // column might have been renamed/removed
-				{
-					DataGridCellInfo cellInfo = new DataGridCellInfo(listItem, dataGridColumn);
-					cellInfos.Add(cellInfo);
-					break; // avoid DataGrid bug when selecting 2 cells in the same row
-				}
-			}
-		}
-	}
-
-	return cellInfos;
-}
-
-// don't clear cells and then reselect if you can help it (although we could disable updates while updating these)
-public void SelectSavedItems()
-{
-	List<DataGridCellInfo> cellInfos = GetMatchingCellInfos();
-
-	//SuspendLayout();
-	//ClearSelection();
-	var matchingCellInfos = new List<DataGridCellInfo>();
-	var removedCellInfos = new List<DataGridCellInfo>();
-	foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
-	{
-		if (cellInfo.Column == null)
-		{
-			dataGrid.SelectedCells.Clear();
-			break;
-			//continue;
-		}
-		DataGridCellInfo? matchingCellInfo = null;
-		foreach (DataGridCellInfo newCellInfo in cellInfos)
-		{
-			if (cellInfo.Item == newCellInfo.Item && cellInfo.Column == newCellInfo.Column)
-			{
-				matchingCellInfo = newCellInfo;
-				//cellInfos.Remove(cellInfo);
-				matchingCellInfos.Add(newCellInfo);
-				break;
-			}
-		}
-		if (matchingCellInfo == null)
-		{
-			removedCellInfos.Add(cellInfo);
-		}
-	}
-
-	foreach (DataGridCellInfo cellInfo in matchingCellInfos)
-	{
-		cellInfos.Remove(cellInfo);
-	}
-
-	foreach (DataGridCellInfo cellInfo in removedCellInfos)
-	{
-		dataGrid.SelectedCells.Remove(cellInfo);
-	}
-
-	foreach (DataGridCellInfo newCellInfo in cellInfos)
-	{
-		dataGrid.SelectedCells.Add(newCellInfo);
-	}
-
-	if (dataGrid.SelectedCells.Count > 0)
-	{
-		DataGridCellInfo cellInfo = dataGrid.SelectedCells[0];
-		dataGrid.CurrentCell = cellInfo;
-		dataGrid.ScrollIntoView(cellInfo);
-	}
-
-	/*dataGrid.SelectedCells.Clear();
-
-if (cellInfos.Count > 0)
-{
-  foreach (DataGridCellInfo cellInfo in cellInfos)
-  {
-	  dataGrid.SelectedCells.Add(cellInfo);
-  }
-
-  dataGrid.CurrentCell = cellInfos[0];
-  dataGrid.ScrollIntoView(cellInfos[0].Item);
-  }
-
-	//ResumeLayout();
-}
-
-private void dataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-{
-	// could possibly use "DataGridSort.Comparer.Set(Column, comparer)" instead
-	ListCollectionView listCollectionView = collectionView as ListCollectionView;
-	if (e.Column != null && e.Column.CanUserSort == true && listCollectionView != null)
-	{
-		if (e.Column.SortDirection == ListSortDirection.Ascending)
-		{
-			e.Column.SortDirection = ListSortDirection.Descending;
-		}
-		else
-		{
-			e.Column.SortDirection = ListSortDirection.Ascending;
-		}
-		tabDataConfiguration.SortColumn = columnNames[e.Column];
-		tabDataConfiguration.SortDirection = (ListSortDirection)e.Column.SortDirection;
-		dataGrid.SelectedCellsChanged -= DataGrid_SelectedCellsChanged;
-		SortSavedColumn();
-		dataGrid.SelectedCellsChanged += DataGrid_SelectedCellsChanged;
-		//SelectSavedLabels(); // sorting selects different item
-		tabInstance.SaveConfiguration();
-		//Dispatcher.Invoke(SelectSavedLabels);
-		//CancellationTokenSource tokenSource = new CancellationTokenSource();
-		//this.Dispatcher.Invoke(() => SelectSavedLabels(), DispatcherPriority.SystemIdle, tokenSource.Token, TimeSpan.FromSeconds(1));
-		e.Handled = true;
-	}
-}
-
-private void dataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-{
-	object obj = e.Row.DataContext;
-	if ((obj is ListProperty) && !e.Column.IsReadOnly)
-	{
-		if (!((ListProperty)obj).Editable)
-			e.Cancel = true;
-	}
-}
-*/

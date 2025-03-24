@@ -526,15 +526,12 @@ public class TabView : Grid, IDisposable
 		int index = 0;
 		foreach (IList iList in Model.ItemList)
 		{
-			//var tabData = new TabControlDataGrid(Instance, iList, true, TabViewSettings.GetData(index));
-			
-
 			Type listType = iList.GetType();
 			Type elementType = listType.GetElementTypeForAll()!;
 			Type genericType = typeof(TabControlTreeDataGrid<>).MakeGenericType(elementType);
-			ITabDataSelector tabData = (ITabDataSelector)Activator.CreateInstance(genericType, Instance, iList, true, TabViewSettings.GetData(index), null)!; 
+			ITabDataSelector tabData = (ITabDataSelector)Activator.CreateInstance(genericType, Instance, iList, true, TabViewSettings.GetData(index), null)!;
 
-			//var tabData = new TabControlTreeDataGrid(Instance, iList, true, TabViewSettings.GetData(index));
+			// ITabDataSelector tabData = TabControlTreeDataGrid.Create(elementType, Instance, iList, true, TabViewSettings.GetData(index));
 
 			tabData.OnSelectionChanged += ParentListSelectionChanged;
 			//_tabParentControls!.AddControl(tabData, true, SeparatorType.Splitter);
