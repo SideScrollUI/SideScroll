@@ -15,7 +15,7 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	[HiddenColumn]
 	public string? Description { get; set; } // Button hint text
 
-	public string? Info => Description != null ? ">" : null; // Button hint text
+	// public string? Info => Description != null ? ">" : null; // Button hint text
 
 	[HiddenColumn]
 	public bool ShowTask { get; set; }

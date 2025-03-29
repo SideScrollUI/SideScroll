@@ -8,7 +8,7 @@ public class TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) 
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoTimeZoneInfo(serializer, typeSchema);
 			}
@@ -16,14 +16,14 @@ public class TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) 
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return type == typeof(TimeZoneInfo);
 	}
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		TimeZoneInfo timeZoneInfo = (TimeZoneInfo)obj;
+		var timeZoneInfo = (TimeZoneInfo)obj;
 		writer.Write(timeZoneInfo.Id);
 	}
 
@@ -47,7 +47,7 @@ public class TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) 
 		return timeZoneInfo;
 	}
 
-	// not called, it's a struct and a value
+	// Not called?
 	public override void Clone(object source, object dest)
 	{
 		//dest = new DateTime(((DateTime)source).Ticks, ((DateTime)source).Kind);

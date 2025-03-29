@@ -16,11 +16,19 @@ public class LiveChartPoint : ObservablePoint
 	public LiveChartPoint(object? obj, double? x, double? y, double? yCoordinate) : base(x, y)
 	{
 		Object = obj;
-		if (x != null && yCoordinate != null)
+		if (x == null) return;
+		
+		if (yCoordinate != null)
 		{
-			Coordinate = y is null ? Coordinate.Empty : new(x.Value, yCoordinate.Value);
+			Coordinate = new(x.Value, yCoordinate.Value);
+		}
+		else if (y != null)
+		{
+			Coordinate = new(x.Value, y.Value);
 		}
 	}
+
+	public override string ToString() => $"{X}: {Y}";
 }
 
 public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<LiveChartPoint>, ISeries
@@ -56,8 +64,17 @@ public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<L
 
 		var cartesianSeries = (ICartesianSeries<SkiaSharpDrawingContext>)target.Context.Series;
 
-		var primaryAxis = cartesianChart.Core.YAxes[cartesianSeries.ScalesYAt];
-		var secondaryAxis = cartesianChart.Core.XAxes[cartesianSeries.ScalesXAt];
+		// Can be empty when loading
+		var yAxes = cartesianChart.Core.YAxes;
+		if (yAxes.Length <= cartesianSeries.ScalesYAt)
+			return double.NaN;
+
+		var xAxes = cartesianChart.Core.XAxes;
+		if (xAxes.Length <= cartesianSeries.ScalesXAt)
+			return double.NaN;
+
+		var primaryAxis = yAxes[cartesianSeries.ScalesYAt];
+		var secondaryAxis = xAxes[cartesianSeries.ScalesXAt];
 
 		var drawLocation = cartesianChart.Core.DrawMarginLocation;
 		var drawMarginSize = cartesianChart.Core.DrawMarginSize;

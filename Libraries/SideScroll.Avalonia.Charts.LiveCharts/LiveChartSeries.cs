@@ -13,10 +13,10 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Charts.LiveCharts;
 
-public class SeriesHoverEventArgs(ListSeries series) : EventArgs
+/*public class SeriesHoverEventArgs(ListSeries series) : EventArgs
 {
 	public ListSeries Series => series;
-}
+}*/
 
 public class LiveChartSeries //: ChartSeries<ISeries>
 {

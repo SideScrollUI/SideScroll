@@ -8,7 +8,7 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoTimeSpan(serializer, typeSchema);
 			}
@@ -16,14 +16,14 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return type == typeof(TimeSpan);
 	}
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		TimeSpan timeSpan = (TimeSpan)obj;
+		var timeSpan = (TimeSpan)obj;
 		writer.Write(timeSpan.Ticks);
 	}
 
@@ -35,14 +35,14 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 		object? obj = null;
 		try
 		{
-			if (CanAssign(LoadableType!))
+			if (CanAssign(LoadableType))
 			{
 				long ticks = Reader.ReadInt64();
 				obj = new TimeSpan(ticks);
 			}
 			else
 			{
-				throw new Exception("Unhandled primitive type");
+				throw new SerializerException("Unhandled primitive type", new Tag("Type", LoadableType));
 			}
 		}
 		catch (Exception)
@@ -64,6 +64,5 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 	// not called, it's a struct and a value
 	public override void Clone(object source, object dest)
 	{
-		//dest = new DateTime(((DateTime)source).Ticks, ((DateTime)source).Kind);
 	}
 }

@@ -1,4 +1,5 @@
 using SideScroll.Attributes;
+using SideScroll.Extensions;
 using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Settings;
@@ -39,7 +40,7 @@ public class SelectedRow : IEquatable<SelectedRow>
 		}
 
 		Type type = obj.GetType();
-		if (Label == type.FullName)
+		if (Label == type.GetAssemblyQualifiedShortName())
 		{
 			Label = null;
 		}

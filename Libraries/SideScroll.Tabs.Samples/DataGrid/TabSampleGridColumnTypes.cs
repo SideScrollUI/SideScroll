@@ -16,7 +16,7 @@ public class TabSampleGridColumnTypes : ITab
 					Integer = i,
 					Long = (long)i * int.MaxValue,
 					Double = i / 3.0,
-					DateTime = new DateTime(DateTime.Now.Ticks + i),
+					DateTime = DateTime.Now.AddHours(i),
 					TimeSpan = TimeSpan.FromHours(i),
 					Bool = (i % 2 == 1),
 				};

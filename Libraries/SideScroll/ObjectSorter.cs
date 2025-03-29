@@ -9,9 +9,9 @@ public class CustomComparer : IComparer
 	{
 		if (x == null && y == null)
 			return 0;
-		else if (x == null)
+		if (x == null)
 			return -1;
-		else if (y == null)
+		if (y == null)
 			return 1;
 
 		Type xType = x.GetType();
@@ -28,10 +28,9 @@ public class CustomComparer : IComparer
 		{
 			if (xCollection.Count == yCollection.Count)
 				return 0;
-			else if (xCollection.Count < yCollection.Count)
+			if (xCollection.Count < yCollection.Count)
 				return -1;
-			else
-				return 1;
+			return 1;
 		}
 
 		if (x is IComparable xComparable)
@@ -41,10 +40,9 @@ public class CustomComparer : IComparer
 		{
 			if ((dynamic)x == (dynamic)y)
 				return 0;
-			else if ((dynamic)x < (dynamic)y)
+			if ((dynamic)x < (dynamic)y)
 				return -1;
-			else
-				return 1;
+			return 1;
 		}
 
 		return string.Compare(x.ToString(), y.ToString());
@@ -62,7 +60,7 @@ public class Sorter : CustomComparer
 		object? xKey = descriptor.GetValue(x);
 		object? yKey = descriptor.GetValue(y);
 
-		if (object.Equals(xKey, yKey))
+		if (Equals(xKey, yKey))
 			return 0;
 
 		int comparison = base.Compare(xKey, yKey);

@@ -20,15 +20,15 @@ public class TypeRepoObject : TypeRepo
 		}
 	}
 
-	public List<FieldRepo> FieldRepos = [];
-	public List<PropertyRepo> PropertyRepos = [];
+	public List<FieldRepo> FieldRepos { get; protected set; } = [];
+	public List<PropertyRepo> PropertyRepos { get; protected set; } = [];
 
-	public LazyClass? LazyClass;
+	public LazyClass? LazyClass { get; protected set; }
 
 	public class FieldRepo
 	{
-		public readonly FieldSchema FieldSchema;
-		public readonly TypeRepo? TypeRepo;
+		public FieldSchema FieldSchema { get; init; }
+		public TypeRepo? TypeRepo { get; init; }
 
 		public override string ToString() => "Field Repo: " + FieldSchema.FieldName;
 
@@ -134,7 +134,8 @@ public class TypeRepoObject : TypeRepo
 			}
 			else if (LazyProperty != null)
 			{
-				throw new Exception("Get() doesn't support Lazy Properties: " + PropertySchema.PropertyName);
+				throw new SerializerException("Get() doesn't support Lazy Properties",
+					new Tag("Property", PropertySchema.PropertyName));
 			}
 			else
 			{
@@ -271,7 +272,7 @@ public class TypeRepoObject : TypeRepo
 		if (Serializer.Lazy && HasVirtualProperty)
 		{
 			LazyClass = new LazyClass(LoadableType!, lazyPropertyRepos);
-			LoadableType = LazyClass.NewType;
+			LoadableType = LazyClass.LazyType;
 		}
 
 		/*if (lazyClass != null)
@@ -304,7 +305,7 @@ public class TypeRepoObject : TypeRepo
 			}
 			else
 			{
-				throw new Exception($"Constructor param [ {name} ] not found");
+				log.Throw(new SerializerException("Constructor param not found", new Tag("Param", name)));
 			}
 		}
 	}
@@ -314,7 +315,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		if (TypeSchema.CustomConstructor == null)
 		{
-			throw new Exception($"No default or matching constructor found: {TypeSchema}");
+			throw new SerializerException("No default or matching constructor found", new Tag("TypeSchema", TypeSchema.ToString()));
 		}
 
 		long position = Reader!.BaseStream.Position;
@@ -334,7 +335,7 @@ public class TypeRepoObject : TypeRepo
 				}
 				else
 				{
-					throw new Exception("Missing FieldRepo: " + fieldRepo);
+					throw new SerializerException("Missing FieldRepo: " + fieldRepo);
 				}
 			}
 			else if (repo is PropertyRepo propertyRepo)
@@ -345,12 +346,12 @@ public class TypeRepoObject : TypeRepo
 				}
 				else
 				{
-					throw new Exception("Missing PropertyRepo: " + propertyRepo);
+					throw new SerializerException("Missing PropertyRepo: " + propertyRepo);
 				}
 			}
 			else
 			{
-				throw new Exception("Unhandled repo type: " + repo);
+				throw new SerializerException("Unhandled repo type: " + repo);
 			}
 		}
 

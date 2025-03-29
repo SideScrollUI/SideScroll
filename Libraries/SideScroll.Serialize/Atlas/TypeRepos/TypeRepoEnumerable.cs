@@ -21,6 +21,8 @@ public class TypeRepoEnumerable : TypeRepo
 	protected TypeRepo? _listTypeRepo;
 	protected readonly MethodInfo? _addMethod;
 
+	private PropertyInfo? _countPropertyInfo; // IEnumerable isn't required to implement this
+
 	public TypeRepoEnumerable(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
@@ -34,6 +36,8 @@ public class TypeRepoEnumerable : TypeRepo
 
 			_addMethod = LoadableType.GetMethods()
 				.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 1);
+
+			_countPropertyInfo = LoadableType.GetProperty("Count");
 		}
 	}
 
@@ -52,8 +56,8 @@ public class TypeRepoEnumerable : TypeRepo
 
 	public override void AddChildObjects(object obj)
 	{
-		IEnumerable iEnumerable = (IEnumerable)obj;
-		foreach (var item in iEnumerable)
+		var enumerable = (IEnumerable)obj;
+		foreach (object? item in enumerable)
 		{
 			Serializer.AddObjectRef(item);
 		}
@@ -61,12 +65,11 @@ public class TypeRepoEnumerable : TypeRepo
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		PropertyInfo propertyInfo = LoadableType!.GetProperty("Count")!; // IEnumerable isn't required to implement this
-		IEnumerable iEnumerable = (IEnumerable)obj;
+		var enumerable = (IEnumerable)obj;
 
-		int count = (int)propertyInfo.GetValue(iEnumerable, null)!;
+		int count = (int)_countPropertyInfo!.GetValue(enumerable, null)!;
 		writer.Write(count);
-		foreach (object item in iEnumerable)
+		foreach (object item in enumerable)
 		{
 			Serializer.WriteObjectRef(_elementType!, item, writer);
 		}
@@ -74,7 +77,6 @@ public class TypeRepoEnumerable : TypeRepo
 
 	public override void LoadObjectData(object obj)
 	{
-		//(IEnumerable<listTypeRepo.type>)objects[i];
 		int count = Reader!.ReadInt32();
 
 		for (int j = 0; j < count; j++)
@@ -86,8 +88,8 @@ public class TypeRepoEnumerable : TypeRepo
 
 	public override void Clone(object source, object dest)
 	{
-		IEnumerable iSource = (IEnumerable)source;
-		foreach (var item in iSource)
+		var enumerable = (IEnumerable)source;
+		foreach (object? item in enumerable)
 		{
 			object? clone = Serializer.Clone(item);
 			_addMethod!.Invoke(dest, [clone]);

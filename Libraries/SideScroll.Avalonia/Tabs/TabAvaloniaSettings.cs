@@ -69,11 +69,11 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 		private void Save(Call call)
 		{
 			DataApp.Save(CustomUserSettings!);
-			Project.UserSettings = CustomUserSettings.DeepClone()!;
+			Project.UserSettings = CustomUserSettings.DeepClone(call)!;
 
 			TimeZoneView.Current = Project.UserSettings.TimeZone;
 			DateTimeExtensions.DefaultFormatType = Project.UserSettings.TimeFormat;
-			ThemeManager.Current?.LoadCurrentTheme();
+			ThemeManager.Instance?.LoadCurrentTheme();
 		}
 	}
 }

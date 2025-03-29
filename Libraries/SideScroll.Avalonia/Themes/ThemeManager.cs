@@ -13,7 +13,7 @@ public class ThemeManager
 	public const string DefaultGroupId = "DefaultThemes";
 	public const string GroupId = "Themes";
 
-	public static ThemeManager? Current { get; set; }
+	public static ThemeManager? Instance { get; set; }
 	public static AvaloniaThemeSettings? CurrentTheme { get; protected set; }
 
 	public Project Project { get; init; }
@@ -104,14 +104,14 @@ public class ThemeManager
 
 	public static void Initialize(Project project)
 	{
-		Current = new ThemeManager(project);
+		Instance = new ThemeManager(project);
 
-		Current.AddDefaultTheme("Light");
-		Current.AddDefaultTheme("Dark");
+		Instance.AddDefaultTheme("Light");
+		Instance.AddDefaultTheme("Dark");
 
-		Current.Add(new(), AvaloniaAssets.Themes.LightBlue, true);
+		Instance.Add(new(), AvaloniaAssets.Themes.LightBlue, true);
 
-		Current.LoadCurrentTheme();
+		Instance.LoadCurrentTheme();
 	}
 
 	public static void LoadTheme(AvaloniaThemeSettings themeSettings)
@@ -127,7 +127,7 @@ public class ThemeManager
 
 	public static AvaloniaThemeSettings Reset(AvaloniaThemeSettings themeSettings)
 	{
-		if (Current!.DataRepoDefaultThemes.Items.TryGetValue(themeSettings.Name!, out AvaloniaThemeSettings? defaultSettings))
+		if (Instance!.DataRepoDefaultThemes.Items.TryGetValue(themeSettings.Name!, out AvaloniaThemeSettings? defaultSettings))
 		{
 			themeSettings = defaultSettings;
 		}

@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
 using System.Collections;
+using System.Data;
 
 namespace SideScroll.Tabs.Bookmarks;
 
@@ -17,9 +18,10 @@ public class TabBookmark
 {
 	public const string DefaultDataName = "default";
 
+	[PrivateData]
 	public Bookmark? Bookmark { get; set; }
 	public string? Name { get; set; }
-	public bool IsRoot { get; set; }
+	public bool IsRoot { get; set; } // [TabRoot] set or first in a Bookmark
 	public ITab? Tab { get; set; } // [TabRoot] will set this to use the serialized tab as the root tab
 
 	public SelectedRow? SelectedRow { get; set; } // The parent selection that created this bookmark
@@ -54,7 +56,7 @@ public class TabBookmark
 			if (dataKey == null) throw new Exception("SelectedRow DataKey is null");
 
 			var newBookmark = new TabBookmark();
-			newBookmark.Select(dataKey);
+			newBookmark.SelectRows(dataKey);
 			tabBookmark?.ChildBookmarks.Add(prevKey!, newBookmark);
 			tabBookmark = newBookmark;
 			rootBookmark ??= tabBookmark;
@@ -178,7 +180,17 @@ public class TabBookmark
 		}
 	}
 
-	public void Select(params string[] labels)
+	public void SelectPath(params string[] labels)
+	{
+		TabBookmark tabBookmark = this;
+		foreach (string label in labels)
+		{
+			tabBookmark.SelectRows(label);
+			tabBookmark = AddChild(label);
+		}
+	}
+
+	public void SelectRows(params string[] labels)
 	{
 		var selectedRows = labels.Select(label =>
 			new SelectedRow
@@ -245,7 +257,9 @@ public class TabBookmark
 		}
 
 		foreach (TabBookmark tabBookmark in ChildBookmarks.Values)
+		{
 			tabBookmark.Import(project);
+		}
 	}
 
 	// Returns the deepest TabBookmark that is rootable
@@ -322,6 +336,16 @@ public class TabBookmark
 					}
 				}
 			}
+		}
+	}
+
+	public void Reinitialize(Bookmark bookmark)
+	{
+		Bookmark = bookmark;
+
+		foreach (var tabBookmark in ChildBookmarks.Values)
+		{
+			tabBookmark.Reinitialize(bookmark);
 		}
 	}
 }

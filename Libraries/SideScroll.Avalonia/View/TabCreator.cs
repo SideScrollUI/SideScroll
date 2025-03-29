@@ -52,7 +52,9 @@ public static class TabCreator
 			{
 				// FindMatches only
 				if (tabBookmark.TabModel != null)
+				{
 					value = tabBookmark.TabModel;
+				}
 			}
 			else if (parentTabBookmark.Bookmark?.Imported == true && parentTabBookmark.ChildBookmarks.Count > 0)
 			{
@@ -68,6 +70,11 @@ public static class TabCreator
 #if !DEBUG
 			value = $"Type {type} is only enabled for Debug builds";
 #endif
+		}
+
+		if (type.GetCustomAttribute<PrivateDataAttribute>() != null)
+		{
+			tabBookmark = null;
 		}
 
 		if (value is string || value is decimal || type.IsPrimitive)

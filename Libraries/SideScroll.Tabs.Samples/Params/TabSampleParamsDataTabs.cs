@@ -21,6 +21,7 @@ public class TabSampleParamsDataTabs : ITab
 
 	public class Instance : TabInstance
 	{
+		private const string GroupId = "SampleParams";
 		private const string DataKey = "Params";
 
 		private SampleParamItem? _sampleParamItem;
@@ -41,7 +42,7 @@ public class TabSampleParamsDataTabs : ITab
 
 		private void LoadSavedItems(Call call, TabModel model)
 		{
-			_dataRepoView = DataApp.LoadView<SampleParamItem>(call, "SampleParams", nameof(SampleParamItem.Name));
+			_dataRepoView = DataApp.LoadView<SampleParamItem>(call, GroupId, nameof(SampleParamItem.Name));
 			DataRepoInstance = _dataRepoView; // Allow links to pass the selected items
 
 			var dataCollection = new DataViewCollection<SampleParamItem, TabSampleParamItem>(_dataRepoView);

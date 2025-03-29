@@ -443,6 +443,8 @@
           <SolidColorBrush x:Key="CalendarDatePickerBorderBrush" Color="#22FFFFFF" />
           <SolidColorBrush x:Key="CalendarDatePickerBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
 
+          <SolidColorBrush x:Key="CalendarViewCalendarItemForeground" Color="#ffd0d0d0" />
+
           <!-- CheckBox -->
 
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUnchecked" Color="{DynamicResource SystemAltMediumLowColor}" />

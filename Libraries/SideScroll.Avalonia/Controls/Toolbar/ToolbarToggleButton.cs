@@ -42,7 +42,7 @@ public class ToolbarToggleButton : ToolbarButton
 	}
 
 	public ToolbarToggleButton(TabControlToolbar toolbar, string tooltip, IResourceView onImageResource, IResourceView offImageResource, bool isChecked, string? label = null, ICommand? command = null) :
-		base(toolbar, tooltip, isChecked ? onImageResource : offImageResource, label, command)
+		base(toolbar, tooltip, isChecked ? onImageResource : offImageResource, null, label, command)
 	{
 		OnImageResource = onImageResource;
 		OffImageResource = offImageResource;

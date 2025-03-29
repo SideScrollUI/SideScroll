@@ -36,7 +36,7 @@ public class TypeRepoString(Serializer serializer, TypeSchema typeSchema) : Type
 	public override void Clone(object source, object dest)
 	{
 		// assigning won't do anything since it's not a ref
-		throw new Exception("Not cloneable");
+		throw new SerializerException("Not cloneable");
 	}
 
 	// for REALLY long strings?

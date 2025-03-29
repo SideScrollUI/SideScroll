@@ -7,7 +7,7 @@ namespace SideScroll.Serialize.Test;
 [Category("Serialize")]
 public class SerializeClassConstructor : TestSerializeBase
 {
-	private SerializerMemory? _serializer;
+	private SerializerMemory _serializer = new SerializerMemoryAtlas();
 
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -51,7 +51,7 @@ public class SerializeClassConstructor : TestSerializeBase
 	{
 		var input = new DerivedClassWithConstructor();
 
-		_serializer!.Save(Call, input);
+		_serializer.Save(Call, input);
 		var output = _serializer.Load<NoConstructorBaseClass>(Call);
 
 		Assert.That(output.B, Is.EqualTo(input.B));
@@ -65,7 +65,7 @@ public class SerializeClassConstructor : TestSerializeBase
 			BaseClass = new DerivedClassWithConstructor(1),
 		};
 
-		_serializer!.Save(Call, input);
+		_serializer.Save(Call, input);
 		var output = _serializer.Load<DerivedClassWithConstructorReference>(Call);
 
 		Assert.That(output.BaseClass!.B, Is.EqualTo(input.BaseClass.B));
@@ -96,7 +96,7 @@ public class SerializeClassConstructor : TestSerializeBase
 	{
 		var input = new CustomConstructorFieldClass(5);
 
-		_serializer!.Save(Call, input);
+		_serializer.Save(Call, input);
 		var output = _serializer.Load<CustomConstructorFieldClass>(Call);
 
 		Assert.That(output.A, Is.EqualTo(input.A));
@@ -107,7 +107,7 @@ public class SerializeClassConstructor : TestSerializeBase
 	{
 		var input = new CustomConstructorPropertyClass(5);
 
-		_serializer!.Save(Call, input);
+		_serializer.Save(Call, input);
 		var output = _serializer.Load<CustomConstructorPropertyClass>(Call);
 
 		Assert.That(output.A, Is.EqualTo(input.A));
@@ -119,7 +119,7 @@ public class SerializeClassConstructor : TestSerializeBase
 		var item = new CustomConstructorFieldClass(5);
 		var input = new List<CustomConstructorFieldClass> { item };
 
-		_serializer!.Save(Call, input);
+		_serializer.Save(Call, input);
 		var output = _serializer.Load<List<CustomConstructorFieldClass>>(Call);
 
 		Assert.That(output, Is.EqualTo(input));
@@ -140,7 +140,7 @@ public class SerializeClassConstructor : TestSerializeBase
 	{
 		var input = new CustomConstructorReadOnlyPropertyClass(5);
 
-		_serializer!.Save(Call, input);
+		_serializer.Save(Call, input);
 		var output = _serializer.Load<CustomConstructorReadOnlyPropertyClass>(Call);
 
 		Assert.That(output.A, Is.EqualTo(input.A));
@@ -161,7 +161,7 @@ public class SerializeClassConstructor : TestSerializeBase
 	{
 		var input = new CustomConstructorReadOnlyStringPropertyClass("123");
 
-		_serializer!.Save(Call, input);
+		_serializer.Save(Call, input);
 		var output = _serializer.Load<CustomConstructorReadOnlyStringPropertyClass>(Call);
 
 		Assert.That(output.A, Is.EqualTo(input.A));

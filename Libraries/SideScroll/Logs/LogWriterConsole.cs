@@ -2,9 +2,9 @@ namespace SideScroll.Logs;
 
 public class LogWriterConsole
 {
-	public Log Log;
+	public Log Log { get; init; }
 
-	public SynchronizationContext Context;
+	public SynchronizationContext Context { get; set; }
 
 	public override string ToString() => "Console";
 

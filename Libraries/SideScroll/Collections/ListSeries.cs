@@ -22,6 +22,7 @@ public class ListSeries
 {
 	public string? Name { get; set; }
 	public string? Description { get; set; }
+	
 	public Dictionary<string, string> Tags { get; set; } = []; // todo: next schema change, replace with TagCollection
 
 	public IList List { get; set; } // List to start with, any elements added will also trigger an event to add new points
@@ -65,7 +66,9 @@ public class ListSeries
 		Name = yPropertyInfo.Name.WordSpaced();
 		NameAttribute? attribute = yPropertyInfo.GetCustomAttribute<NameAttribute>();
 		if (attribute != null)
+		{
 			Name = attribute.Name;
+		}
 	}
 
 	public ListSeries(string? name, IList list, string? xPropertyName, string? yPropertyName = null, SeriesType seriesType = SeriesType.Sum)

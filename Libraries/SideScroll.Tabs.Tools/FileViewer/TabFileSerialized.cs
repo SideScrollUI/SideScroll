@@ -20,17 +20,24 @@ public class TabFileSerialized(string path) : ITab
 		{
 			_serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(tab.Path)!);
 
-			var serializer = _serializerFile.LoadSchema(call);
-
-			model.Items = _items = [
-				new ListItem("Schema", serializer.TypeSchemas),
-				new ListItem("Bytes", ListByte.Load(_serializerFile.DataPath!)),
-				];
-
-			model.Actions = new List<TaskCreator>
+			model.Items = _items = [];
+			try
 			{
-				new TaskDelegate("Load Data", LoadData, true, true)
-			};
+				var serializer = _serializerFile.LoadSchema(call);
+
+				_items.Add(new ListItem("Schema", serializer.TypeSchemas));
+
+				model.Actions = new List<TaskCreator>
+				{
+					new TaskDelegate("Load Data", LoadData, true, true)
+				};
+			}
+			catch (Exception ex)
+			{
+				call.Log.Add(ex);
+			}
+
+			_items.Add(new ListItem("Bytes", ListByte.Load(_serializerFile.DataPath!)));
 		}
 
 		private void LoadData(Call call)

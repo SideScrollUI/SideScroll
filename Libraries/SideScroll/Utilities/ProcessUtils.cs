@@ -33,35 +33,24 @@ public static class ProcessUtils
 		if (url == null)
 			return;
 
-		// not working
-		//if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
-		//	throw new Exception("Invalid url: " + url);
-
-		try
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 		{
-			Process.Start(url);
+			// Workaround because of this: https://github.com/dotnet/corefx/issues/10361
+			// Can fix after updating to .Net Standard 2.1? Unclear
+			url = url.Replace("&", "^&");
+			Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
 		}
-		catch
+		else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 		{
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-			{
-				// Workaround because of this: https://github.com/dotnet/corefx/issues/10361
-				// Can fix after updating to .Net Standard 2.1?
-				url = url.Replace("&", "^&");
-				Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-			}
-			else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-			{
-				Process.Start("xdg-open", url);
-			}
-			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-			{
-				Process.Start("open", url);
-			}
-			else
-			{
-				throw;
-			}
+			Process.Start("xdg-open", url);
+		}
+		else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+		{
+			Process.Start("open", url);
+		}
+		else
+		{
+			throw new Exception("Unknown platform");
 		}
 	}
 

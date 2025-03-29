@@ -7,7 +7,7 @@ public class SerializerMemoryAtlas : SerializerMemory
 {
 	//private MemoryStream stream = new();
 
-	private TypeRepoString? _typeRepoString; // Reuse string instances to reduce memory use when deep cloning
+	protected TypeRepoString? TypeRepoString { get; set; } // Reuse string instances to reduce memory use when deep cloning
 
 	private new Serializer Create()
 	{
@@ -29,7 +29,7 @@ public class SerializerMemoryAtlas : SerializerMemory
 
 		if (serializer.IdxTypeToRepo.TryGetValue(typeof(string), out TypeRepo? typeRepo))
 		{
-			_typeRepoString = (TypeRepoString)typeRepo;
+			TypeRepoString = (TypeRepoString)typeRepo;
 		}
 	}
 
@@ -46,16 +46,28 @@ public class SerializerMemoryAtlas : SerializerMemory
 
 	public override object? Load(Call? call = null)
 	{
-		call ??= new Call();
+		call ??= new();
 		using CallTimer callTimer = call.Timer("Load");
 
 		Stream.Seek(0, SeekOrigin.Begin);
 		using var reader = new BinaryReader(Stream);
 
 		var serializer = Create();
-		serializer.TypeRepoString = _typeRepoString;
-		serializer.Load(call, reader);
+		serializer.TypeRepoString = TypeRepoString;
+		serializer.Load(callTimer, reader);
 		return serializer.BaseObject(call);
+	}
+
+	public override void Validate(Call? call = null)
+	{
+		call ??= new();
+		using CallTimer callTimer = call.Timer("Validate");
+
+		Stream.Seek(0, SeekOrigin.Begin);
+		using var reader = new BinaryReader(Stream);
+
+		var serializer = Create();
+		serializer.Load(callTimer, reader, loadData: false);
 	}
 
 	//public static T Clone<T>(Call call, T obj)

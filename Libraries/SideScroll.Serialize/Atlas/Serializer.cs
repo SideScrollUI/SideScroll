@@ -1,59 +1,80 @@
+using SideScroll.Extensions;
 using SideScroll.Logs;
 using SideScroll.Serialize.Atlas.Schema;
 using SideScroll.Serialize.Atlas.TypeRepos;
 using SideScroll.Tasks;
-using System.Diagnostics;
 
 namespace SideScroll.Serialize.Atlas;
 
+public class SerializerException(string text, params Tag[] tags) : 
+	TaggedException(text, tags);
+
 public class Header
 {
+	public const uint SideId = 0x45444953; // SIDE -> EDIS: 69, 68, 73, 83, Start of file (little endian format)
+
 	public const string LatestVersion = "1";
 
-	public string Version = LatestVersion;
-	public string Name = "<Default>";
+	public string? Version { get; set; }
+	public string? Name { get; set; }
 
-	public override string ToString() => Version;
+	public override string ToString() => $"v{Version}: {Name}";
 
 	public void Save(BinaryWriter writer)
 	{
-		writer.Write(Version);
-		writer.Write(Name);
+		writer.Write(SideId);
+		writer.Write(Version ?? LatestVersion);
+		writer.Write(Name ?? "");
 	}
 
-	public void Load(BinaryReader reader)
+	public void Load(Log log, BinaryReader reader, string? requiredName = null)
 	{
+		uint sideId = reader.ReadUInt32();
+		if (sideId != SideId)
+		{
+			log.Throw(new SerializerException("Invalid header Id",
+				new Tag("Expected", SideId),
+				new Tag("Found", sideId)));
+		}
 		Version = reader.ReadString();
 		Name = reader.ReadString();
-		//Debug.Assert(version == latestVersion);
+
+		if (!requiredName.IsNullOrEmpty() && Name != requiredName)
+		{
+			log.Throw(new SerializerException("Loaded name doesn't match required",
+				new Tag("Required", requiredName),
+				new Tag("Loaded", Name)));
+		}
 	}
 }
 
 public class Serializer : IDisposable
 {
-	private const uint HeaderId = 0x6F6F6F6F; // 111 x 4
+	public const uint ScrollId = 0x4C524353; // SCRL -> LRCS: 76, 82, 67, 83, Start of object data (little endian format)
 
-	public Header Header = new();
+	public Header Header { get; set; } = new();
 
-	public List<TypeSchema> TypeSchemas = [];
+	public List<TypeSchema> TypeSchemas { get; protected set; } = [];
 
-	public List<TypeRepo> TypeRepos = [];
-	public Dictionary<Type, TypeRepo> IdxTypeToRepo = [];
+	public List<TypeRepo> TypeRepos { get; protected set; } = [];
+	public Dictionary<Type, TypeRepo> IdxTypeToRepo { get; protected set; } = [];
 
-	public TypeRepoString? TypeRepoString; // Reuse string instances to reduce memory use when deep cloning
+	public TypeRepoString? TypeRepoString { get; set; } // Reuse string instances to reduce memory use when deep cloning
 
-	public BinaryReader? Reader;
-	public bool Lazy;
-	public bool PublicOnly = false;
+	public BinaryReader? Reader { get; set; }
+
+	public bool Lazy { get; set; }
+	public bool PublicOnly { get; set; }
 
 	// Convert to Parser class?
 	// Use a queue so we don't exceed the stack size due to cross references (i.e. a list with values that refer back to the list)
-	public Queue<object> ParserQueue = [];
-	public List<object?> Primitives = []; // primitives are usually serialized inline, but that doesn't work if that's the primary type
+	public Queue<object> ParserQueue { get; protected set; } = [];
+	public List<object?> Primitives { get; protected set; } = []; // primitives are usually serialized inline, but that doesn't work if that's the primary type
 
-	public Dictionary<object, object> Clones = [];
-	public Queue<Action> CloneQueue = new();
-	public TaskInstance? TaskInstance;
+	protected Dictionary<object, object> Clones { get; set; } = [];
+	protected Queue<Action> CloneQueue { get; set; } = new();
+
+	public TaskInstance? TaskInstance { get; set; }
 
 	public struct LoadItem
 	{
@@ -68,23 +89,20 @@ public class Serializer : IDisposable
 
 	public object? BaseObject(Call call)
 	{
-		if (TypeRepos.Count == 0)// || typeRepos[0].objects.Count == 0)
+		if (TypeRepos.Count == 0)
 		{
-			call.Log.AddError("No TypeRepos found");
-			return null;
+			call.Log.Throw(new SerializerException("No TypeRepos found"));
 		}
 
 		TypeRepo typeRepo = TypeRepos[0];
 		if (typeRepo.LoadableType == null)
 		{
-			call.Log.AddError("BaseObject type isn't loadable", new Tag("Type", typeRepo.TypeSchema.Name));
-			return null;
+			call.Log.Throw(new SerializerException("BaseObject type isn't loadable", new Tag("Type", typeRepo.TypeSchema.Name)));
 		}
 
 		if (typeRepo.Type!.IsPrimitive)
 		{
 			return Primitives[0];
-			//return typeRepo.LoadObject();
 		}
 
 		using CallTimer callSaving = call.Timer("Load BaseObject");
@@ -126,16 +144,14 @@ public class Serializer : IDisposable
 
 	public void LogLoadedTypes(Call call)
 	{
-		List<ObjectsLoaded> loaded = [];
-		foreach (TypeRepo typeRepo in TypeRepos)
-		{
-			ObjectsLoaded typeInfo = new()
+		List<ObjectsLoaded> loaded = TypeRepos
+			.Select(typeRepo => new ObjectsLoaded
 			{
 				Name = typeRepo.ToString(),
 				Loaded = typeRepo.ObjectsLoadedCount
-			};
-			loaded.Add(typeInfo);
-		}
+			})
+			.ToList();
+
 		call.Log.Add("Objects Loaded", new Tag("Type Repos", loaded));
 	}
 
@@ -208,34 +224,34 @@ public class Serializer : IDisposable
 		SaveSchemas(writer);
 	}
 
-	public void Load(Call call, BinaryReader reader, bool lazy = false, bool loadData = true)
+	public void Load(Call call, BinaryReader reader, string? name = null, bool loadData = true, bool lazy = false)
 	{
 		Reader = reader;
 		Lazy = lazy;
 
 		using LogTimer logTimer = call.Log.Timer("Loading object");
 
-		Header.Load(reader);
+		Header.Load(logTimer, reader, name);
 		if (Header.Version != Header.LatestVersion)
 		{
-			logTimer.AddError("Header version doesn't match", new Tag("Header", Header));
-			return;
+			logTimer.Throw(new SerializerException("Header version doesn't match", new Tag("Header", Header)));
 		}
 
 		long fileLength = reader.ReadInt64();
 		if (reader.BaseStream.Length != fileLength)
 		{
-			logTimer.AddError("File size doesn't match",
+			logTimer.Throw(new SerializerException("File size doesn't match",
 				new Tag("Expected", fileLength),
-				new Tag("Actual", reader.BaseStream.Length));
-			return;
+				new Tag("Actual", reader.BaseStream.Length)));
 		}
 
 		LoadSchemas(logTimer, reader);
-		LoadPrimitives(logTimer, reader);
 
 		if (loadData)
+		{
+			LoadPrimitives(logTimer, reader);
 			LoadTypeRepos(logTimer);
+		}
 	}
 
 	private void SavePrimitives(Call call, BinaryWriter writer)
@@ -263,12 +279,13 @@ public class Serializer : IDisposable
 
 			int typeIndex = reader.ReadInt16();
 			TypeRepo typeRepo = TypeRepos[typeIndex];
-			if (typeRepo.TypeSchema.IsPrimitive) // object ref can point to primitives
+			if (typeRepo.TypeSchema.IsPrimitive)
 			{
 				Primitives.Add(typeRepo.LoadObject());
 			}
 			else
 			{
+				// Object ref can point to primitives
 				int objectIndex = reader.ReadInt32();
 				Primitives.Add(typeRepo.LoadObject(objectIndex));
 			}
@@ -304,6 +321,11 @@ public class Serializer : IDisposable
 			log.Add(e);
 		}
 
+		if (TypeSchemas.Count == 0)
+		{
+			log.Throw(new SerializerException("No TypeSchemas found", new Tag("Name", Header.Name)));
+		}
+
 		foreach (TypeSchema typeSchema in TypeSchemas)
 		{
 			typeSchema.Validate(TypeSchemas);
@@ -317,7 +339,9 @@ public class Serializer : IDisposable
 			}
 
 			if (typeRepo != null)
+			{
 				AddTypeRepo(typeRepo);
+			}
 		}
 	}
 
@@ -336,11 +360,17 @@ public class Serializer : IDisposable
 					continue;
 
 				if (!typeRepo.TypeSchema.CanReference)
+				{
 					primitives.Add(typeRepo);
+				}
 				else if (typeRepo.TypeSchema.IsCollection)
+				{
 					collections.Add(typeRepo);
+				}
 				else
+				{
 					others.Add(typeRepo);
+				}
 			}
 
 			List<TypeRepo> orderedTypes = [.. primitives, .. others, .. collections];
@@ -349,15 +379,15 @@ public class Serializer : IDisposable
 		}
 	}
 
-	record TypeRepoWriter
+	record TypeRepoWriter(TypeRepo typeRepo)
 	{
-		public TypeRepo TypeRepo { get; init; } = default!;
+		public TypeRepo TypeRepo => typeRepo;
 		public MemoryStream MemoryStream = new();
 	}
 
 	private void SaveObjects(Log log, BinaryWriter writer)
 	{
-		writer.Write(HeaderId);
+		writer.Write(ScrollId);
 		// todo: Add Checksum?
 
 		long headerPosition = writer.BaseStream.Position;
@@ -372,10 +402,7 @@ public class Serializer : IDisposable
 			if (typeRepo.LoadableType == null)
 				continue;
 
-			var typeRepoWriter = new TypeRepoWriter
-			{
-				TypeRepo = typeRepo,
-			};
+			var typeRepoWriter = new TypeRepoWriter(typeRepo);
 			writers.Add(typeRepoWriter);
 		}
 
@@ -411,14 +438,19 @@ public class Serializer : IDisposable
 		writer.Seek((int)headerPosition, SeekOrigin.Begin);
 		foreach (TypeRepo typeRepo in OrderedTypes)
 		{
-			typeRepo.SaveHeader(writer);
+			typeRepo.SaveHeader(logTimer, writer);
 		}
 	}
 
 	private void LoadTypeRepos(Log log)
 	{
-		uint id = Reader!.ReadUInt32();
-		Debug.Assert(id == HeaderId);
+		uint scrollId = Reader!.ReadUInt32();
+		if (scrollId != ScrollId)
+		{
+			log.Throw(new SerializerException("Header id doesn't match",
+				new Tag("Expected", ScrollId),
+				new Tag("Found", scrollId)));
+		}
 
 		using (LogTimer logTimer = log.Timer("Loading Type Repo headers"))
 		{
@@ -464,7 +496,9 @@ public class Serializer : IDisposable
 	{
 		typeRepo.TypeIndex = TypeRepos.Count;
 		if (typeRepo.Type != null) // Type might have been removed
+		{
 			IdxTypeToRepo[typeRepo.Type] = typeRepo;
+		}
 		TypeRepos.Add(typeRepo);
 	}
 
@@ -513,9 +547,13 @@ public class Serializer : IDisposable
 			}
 
 			if (type == baseType)
+			{
 				writer.Write((byte)ObjectType.BaseType);
+			}
 			else
+			{
 				writer.Write((byte)ObjectType.DerivedType);
+			}
 
 			if (baseType != null && baseType.IsPrimitive)
 			{
@@ -638,16 +676,14 @@ public class Serializer : IDisposable
 
 	public void LogClonedTypes(Log log)
 	{
-		List<ObjectsLoaded> loaded = [];
-		foreach (TypeRepo typeRepo in TypeRepos)
-		{
-			ObjectsLoaded typeInfo = new()
+		List<ObjectsLoaded> loaded = TypeRepos
+			.Select(typeRepo => new ObjectsLoaded
 			{
 				Name = typeRepo.ToString(),
-				Loaded = typeRepo.Cloned
-			};
-			loaded.Add(typeInfo);
-		}
+				Loaded = typeRepo.Cloned,
+			})
+			.ToList();
+
 		log.Add("Objects Loaded", new Tag("Type Repos", loaded));
 	}
 
@@ -665,7 +701,9 @@ public class Serializer : IDisposable
 	public void Dispose()
 	{
 		foreach (TypeRepo typeRepo in TypeRepos)
+		{
 			typeRepo.Dispose();
+		}
 
 		Reader?.Dispose();
 	}

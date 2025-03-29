@@ -46,7 +46,12 @@ public class PropertySchema
 		{
 			if (typeSchema.Type != null)
 			{
-				PropertyInfo = typeSchema.Type.GetProperty(PropertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+				PropertyInfo = typeSchema.Type.GetProperty(PropertyName,
+					BindingFlags.Public |
+					BindingFlags.NonPublic |
+					BindingFlags.Instance |
+					BindingFlags.FlattenHierarchy
+					);
 			}
 		}
 		catch (Exception)
@@ -71,16 +76,13 @@ public class PropertySchema
 
 	private bool GetIsReadable()
 	{
-		Attribute? attribute = Type!.GetCustomAttribute<UnserializedAttribute>();
-		if (attribute != null)
+		if (Type!.GetCustomAttribute<UnserializedAttribute>() != null)
 			return false;
 
-		attribute = PropertyInfo!.GetCustomAttribute<NonSerializedAttribute>();
-		if (attribute != null)
+		if (PropertyInfo!.GetCustomAttribute<NonSerializedAttribute>() != null)
 			return false;
 
-		attribute = PropertyInfo!.GetCustomAttribute<UnserializedAttribute>();
-		if (attribute != null)
+		if (PropertyInfo!.GetCustomAttribute<UnserializedAttribute>() != null)
 			return false;
 
 		if (PropertyInfo!.CanRead == false)

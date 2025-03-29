@@ -87,14 +87,14 @@ public class DataRepo
 	public void Save(Type type, string? groupId, string key, object obj, Call? call = null)
 	{
 		groupId ??= DefaultGroupId;
-		call ??= new Call();
+		call ??= new();
 		SerializerFile serializer = GetSerializerFile(type, groupId, key); // use hash since filesystems can't handle long names
 		serializer.Save(call, obj, key);
 	}
 
 	public void Save<T>(T obj, Call? call = null)
 	{
-		Save(typeof(T).FullName!, obj, call);
+		Save(typeof(T).GetAssemblyQualifiedShortName(), obj, call);
 	}
 
 	public DataItem<T>? LoadItem<T>(string key, Call? call = null, bool createIfNeeded = false, bool lazy = false)
@@ -151,13 +151,13 @@ public class DataRepo
 
 	public T? Load<T>(bool createIfNeeded = false, bool lazy = false, Call? call = null)
 	{
-		call ??= new Call();
-		return Load<T>(typeof(T).FullName!, call, createIfNeeded, lazy);
+		call ??= new();
+		return Load<T>(typeof(T).GetAssemblyQualifiedShortName(), call, createIfNeeded, lazy);
 	}
 
 	public DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false)
 	{
-		call ??= new Call();
+		call ??= new();
 
 		var serializerFile = SerializerFile.Create(path);
 		if (serializerFile.Exists)
@@ -165,7 +165,7 @@ public class DataRepo
 			T? obj = serializerFile.Load<T>(call, lazy);
 			if (obj != null)
 			{
-				return new DataItem<T>(serializerFile.LoadHeader(call).Name, obj);
+				return new DataItem<T>(serializerFile.LoadHeader(call).Name ?? "", obj);
 			}
 		}
 		return null;
@@ -173,7 +173,7 @@ public class DataRepo
 
 	public DataItemCollection<T> LoadAll<T>(Call? call = null, string? groupId = null, bool lazy = false)
 	{
-		call ??= new Call();
+		call ??= new();
 		groupId ??= DefaultGroupId;
 
 		/*ItemCollection<string> objectIds = GetObjectIds(typeof(T));
@@ -198,7 +198,7 @@ public class DataRepo
 					T? obj = serializerFile.Load<T>(call, lazy);
 					if (obj != null)
 					{
-						entries.Add(serializerFile.LoadHeader(call).Name, obj);
+						entries.Add(serializerFile.LoadHeader(call).Name ?? "", obj);
 					}
 				}
 			}
@@ -208,7 +208,7 @@ public class DataRepo
 
 	public List<Header> LoadHeaders(Type type, string? groupId = null, Call? call = null)
 	{
-		call ??= new Call();
+		call ??= new();
 		groupId ??= DefaultGroupId;
 
 		List<Header> headers = [];
@@ -290,17 +290,23 @@ public class DataRepo
 		}
 	}
 
-	public void DeleteRepo()
+	public void DeleteRepo(Call? call = null)
 	{
+		call ??= new();
+
 		if (!Directory.Exists(RepoPath))
+		{
+			call.Log.AddDebug("DataRepo has no directory to delete", new Tag("Path", RepoPath));
 			return;
+		}
 
 		try
 		{
 			Directory.Delete(RepoPath, true);
 		}
-		catch (Exception)
+		catch (Exception e)
 		{
+			call.Log.Add(e);
 		}
 	}
 
@@ -308,7 +314,7 @@ public class DataRepo
 	public string GetGroupPath(Type type, string? groupId = null)
 	{
 		groupId ??= DefaultGroupId;
-		string groupHash = (type.GetNonNullableType().FullName + ';' + RepoName + ';' + groupId).HashSha256();
+		string groupHash = (type.GetNonNullableType().GetAssemblyQualifiedShortName() + ';' + RepoName + ';' + groupId).HashSha256();
 		return Paths.Combine(RepoPath, groupHash);
 	}
 

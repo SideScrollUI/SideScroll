@@ -73,11 +73,17 @@ public static class TypeExtensions
 	public static Type? GetElementTypeForAll(this Type type)
 	{
 		if (type.HasElementType)
+		{
 			return type.GetElementType();
+		}
 		else if (type.GenericTypeArguments.Length > 0)
+		{
 			return type.GenericTypeArguments[0];
+		}
 		else if (type.BaseType != null)
+		{
 			return GetElementTypeForAll(type.BaseType);
+		}
 
 		return null;
 	}
@@ -117,5 +123,26 @@ public static class TypeExtensions
 			.OrderBy(f => f.Module.Name)
 			.ThenBy(f => f.MetadataToken)
 			.ToList();
+	}
+
+	// AssemblyQualifiedName with only the Namespace, Type, and Assembly Name for consistency across versions
+	public static string GetAssemblyQualifiedShortName(this Type type)
+	{
+		string name;
+		if (type.IsGenericType)
+		{
+			var args = type.GetGenericArguments().Select(a => '[' + GetAssemblyQualifiedShortName(a) + ']');
+			name = $"{type.GetGenericTypeDefinition().FullName}[{string.Join(", ", args)}]";
+		}
+		else
+		{
+			name = type.FullName!;
+		}
+
+		if (type.Assembly.GetName().Name is string assemblyName)
+		{
+			name += ", " + assemblyName;
+		}
+		return name;
 	}
 }

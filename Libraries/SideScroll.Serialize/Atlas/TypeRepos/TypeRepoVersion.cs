@@ -8,7 +8,7 @@ public class TypeRepoVersion(Serializer serializer, TypeSchema typeSchema) : Typ
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoVersion(serializer, typeSchema);
 			}
@@ -16,7 +16,7 @@ public class TypeRepoVersion(Serializer serializer, TypeSchema typeSchema) : Typ
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return type == typeof(Version);
 	}
@@ -31,8 +31,8 @@ public class TypeRepoVersion(Serializer serializer, TypeSchema typeSchema) : Typ
 		long position = Reader!.BaseStream.Position;
 		Reader.BaseStream.Position = ObjectOffsets![objectIndex];
 
-		string version = Reader.ReadString();
-		object obj = new Version(version);
+		string versionText = Reader.ReadString();
+		object obj = new Version(versionText);
 		Reader.BaseStream.Position = position;
 
 		ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs

@@ -17,7 +17,7 @@ public class TabFile(FileView fileView) : ITab
 
 	public FileView FileView => fileView;
 
-	public string Path = fileView.Path;
+	public string Path => fileView.Path;
 
 	public static Dictionary<string, Type> ExtensionTypes { get; set; } = [];
 
@@ -119,7 +119,9 @@ public class TabFile(FileView fileView) : ITab
 		private void Delete(Call call)
 		{
 			if (File.Exists(tab.Path))
+			{
 				File.Delete(tab.Path);
+			}
 
 			Refresh();
 		}

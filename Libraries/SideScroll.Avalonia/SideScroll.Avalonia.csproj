@@ -35,6 +35,7 @@
   <ItemGroup>
     <EmbeddedResource Remove="Themes\Controls\ControlThemes.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabButton.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabControlImageButton.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlParams.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlSplitContainer.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlTextArea.xaml" />
@@ -64,6 +65,7 @@
     <None Remove="StyleResources.xaml" />
     <None Remove="Themes\Controls\ControlThemes.xaml" />
     <None Remove="Themes\Controls\TabControlAvaloniaEdit.xaml" />
+    <None Remove="Themes\Controls\TabControlImageButton.xaml" />
     <None Remove="Themes\Controls\TabControlParams.xaml" />
     <None Remove="Themes\Controls\TabControlTextArea.xaml" />
     <None Remove="Themes\Controls\TabControlTextBlock.xaml" />
@@ -128,6 +130,9 @@
     <AvaloniaResource Include="Themes\Controls\ControlThemes.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\TabControlImageButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\ToolbarButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
@@ -157,7 +162,7 @@
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEditVersion)" />
     <PackageReference Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Avalonia.Svg.Skia" Version="11.2.0" />
+    <PackageReference Include="Avalonia.Svg.Skia" Version="11.2.0.2" />
   </ItemGroup>
 
   <ItemGroup>

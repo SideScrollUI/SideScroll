@@ -12,7 +12,7 @@ public class TypeRepoDictionary : TypeRepo
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoDictionary(serializer, typeSchema);
 			}
@@ -50,7 +50,7 @@ public class TypeRepoDictionary : TypeRepo
 			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 2)!;
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return typeof(IDictionary).IsAssignableFrom(type);
 	}
@@ -71,7 +71,7 @@ public class TypeRepoDictionary : TypeRepo
 
 	public override void AddChildObjects(object obj)
 	{
-		IDictionary dictionary = (IDictionary)obj;
+		var dictionary = (IDictionary)obj;
 		foreach (DictionaryEntry item in dictionary)
 		{
 			Serializer.AddObjectRef(item.Key);
@@ -81,7 +81,7 @@ public class TypeRepoDictionary : TypeRepo
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		IDictionary dictionary = (IDictionary)obj;
+		var dictionary = (IDictionary)obj;
 
 		writer.Write(dictionary.Count);
 		foreach (DictionaryEntry item in dictionary)
@@ -93,7 +93,7 @@ public class TypeRepoDictionary : TypeRepo
 
 	public override void LoadObjectData(object obj)
 	{
-		IDictionary iCollection = (IDictionary)obj;
+		var dictionary = (IDictionary)obj;
 		int count = Reader!.ReadInt32();
 
 		for (int j = 0; j < count; j++)
@@ -103,15 +103,15 @@ public class TypeRepoDictionary : TypeRepo
 
 			if (key != null)
 			{
-				_addMethod.Invoke(iCollection, [key, value]);
+				_addMethod.Invoke(dictionary, [key, value]);
 			}
 		}
 	}
 
 	public override void Clone(object source, object dest)
 	{
-		IDictionary iSource = (IDictionary)source;
-		IDictionary iDest = (IDictionary)dest;
+		var iSource = (IDictionary)source;
+		var iDest = (IDictionary)dest;
 		foreach (DictionaryEntry item in iSource)
 		{
 			object? key = Serializer.Clone(item.Key);

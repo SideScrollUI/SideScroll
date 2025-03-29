@@ -15,7 +15,7 @@ public class TabDashboard : ITab
 
 	public class Instance : TabInstance
 	{
-		public const int RowCount = 5;
+		public const int RowCount = 10;
 		public const int ColumnCount = 2;
 		public const int SampleCount = 24;
 

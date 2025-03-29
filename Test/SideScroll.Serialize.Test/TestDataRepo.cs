@@ -1,5 +1,5 @@
-using SideScroll.Serialize.DataRepos;
 using NUnit.Framework;
+using SideScroll.Serialize.DataRepos;
 
 namespace SideScroll.Serialize.Test;
 

@@ -27,6 +27,8 @@ public class HttpCacheManager
 		}
 
 		if (Directory.Exists(path))
+		{
 			Directory.Delete(path, true);
+		}
 	}
 }

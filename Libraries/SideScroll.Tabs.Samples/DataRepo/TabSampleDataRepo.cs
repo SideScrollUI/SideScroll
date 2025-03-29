@@ -31,8 +31,8 @@ public class TabSampleDataRepo : ITab
 
 		private void DeleteRepos(Call call)
 		{
-			Project.DataShared.DeleteRepo();
-			Project.DataApp.DeleteRepo();
+			Project.DataShared.DeleteRepo(call);
+			Project.DataApp.DeleteRepo(call);
 			Reload();
 		}
 	}

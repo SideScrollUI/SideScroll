@@ -12,12 +12,64 @@ public class TestWordSpaced : TestBase
 		Initialize("WordSpaced");
 	}
 
-	[Test, Description("WordSpaced")]
-	public void WordSpaced()
+	[Test, Description("WordSpaced Upper And Lower")]
+	public void WordSpacedUpperAndLower()
 	{
-		string text = "CPUUtilization".WordSpaced();
+		string text = "CPUUsage".WordSpaced();
 
-		Assert.That(text, Is.EqualTo("CPU Utilization"));
+		Assert.That(text, Is.EqualTo("CPU Usage"));
+	}
+
+	[Test, Description("WordSpaced Underscores")]
+	public void WordSpacedUnderscores()
+	{
+		string text = "Under_Scores".WordSpaced();
+
+		Assert.That(text, Is.EqualTo("Under Scores"));
+	}
+
+	[Test, Description("WordSpaced Spaces")]
+	public void WordSpacedSpaces()
+	{
+		string text = "Already Spaced".WordSpaced();
+
+		Assert.That(text, Is.EqualTo("Already Spaced"));
+	}
+
+	[Test, Description("WordSpaced 1,234.56")]
+	public void WordSpacedDecimals()
+	{
+		string input = "1,234.56";
+		string text = input.WordSpaced();
+
+		Assert.That(text, Is.EqualTo(input));
+	}
+
+	[Test, Description("WordSpaced Date Slashes")]
+	public void WordSpacedDateSlashes()
+	{
+		string input = "1/2/2020";
+		string text = input.WordSpaced();
+
+		Assert.That(text, Is.EqualTo(input));
+	}
+
+	[Test, Description("WordSpaced Time Colons")]
+	public void WordSpacedTimeColons()
+	{
+		string input = "01:02:03";
+		string text = input.WordSpaced();
+
+		Assert.That(text, Is.EqualTo(input));
+	}
+
+	[Test, Description("Fraction 1/2")]
+	public void WordSpacedFractions()
+	{
+		string input = "1/2";
+		string text = input.WordSpaced();
+
+		Assert.That(text, Is.EqualTo("1 / 2"));
 	}
 
 	[Test, Description("WordSpaced 5XX")]
@@ -60,5 +112,14 @@ public class TestWordSpaced : TestBase
 		string text = input.WordSpaced();
 
 		Assert.That(text, Is.EqualTo("2021-11-10 T 18:02:23.225 Z"));
+	}
+
+	[Test, Description("WordSpaced Random AlphaNumeric Id")]
+	public void WordSpacedRandomAlphaNumericId()
+	{
+		string input = "1ABC2DEFGHIJ";
+		string text = input.WordSpaced();
+
+		Assert.That(text, Is.EqualTo(input));
 	}
 }

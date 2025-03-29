@@ -50,7 +50,10 @@ public class BaseView : UserControl
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]
 	public void LoadProject(Project project)
 	{
+		project.Initialize();
 		Project = project;
+
+		ThemeManager.Initialize(project);
 
 		InitializeComponent();
 

@@ -97,7 +97,7 @@ public class ListMethod : ListMember
 		return result;
 	}
 
-	public static new ItemCollection<ListMethod> Create(object obj, bool includeBaseTypes, bool includeStatic = true)
+	public new static ItemCollection<ListMethod> Create(object obj, bool includeBaseTypes, bool includeStatic = true)
 	{
 		// this doesn't work for virtual methods (or any method modifier?)
 		var methodInfos = obj.GetType().GetMethods()

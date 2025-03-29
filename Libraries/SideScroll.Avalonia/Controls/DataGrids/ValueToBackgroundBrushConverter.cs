@@ -31,11 +31,17 @@ public class ValueToBackgroundBrushConverter(PropertyInfo propertyInfo) : IValue
 			{
 				bool hasLinks = TabUtils.ObjectHasLinks(value, true);
 				if (hasLinks)
+				{
 					return StyleBrushes.HasLinks; // null?
+				}
 				else if (Editable && value is ListMember listMember && listMember.Editable)
+				{
 					return StyleBrushes.Editable;
+				}
 				else
+				{
 					return StyleBrushes.NoLinks;
+				}
 			}
 		}
 		catch (InvalidCastException)

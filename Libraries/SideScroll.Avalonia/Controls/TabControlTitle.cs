@@ -125,11 +125,11 @@ public class TabControlTitle : Border, IDisposable
 		{
 			Bookmark bookmark = TabInstance.CreateBookmark();
 			bookmark.BookmarkType = BookmarkType.Tab;
-			string? uri = await TabInstance.Project.Linker.AddLinkAsync(new Call(), bookmark);
-			if (uri == null)
+			LinkUri? linkUri = await TabInstance.Project.Linker.AddLinkAsync(new Call(), bookmark);
+			if (linkUri == null)
 				return;
 
-			await ClipboardUtils.SetTextAsync(this, uri);
+			await ClipboardUtils.SetTextAsync(this, linkUri.ToString());
 			AvaloniaUtils.ShowFlyout(this, flyout, "Link copied to clipboard");
 		}
 		catch (Exception ex)

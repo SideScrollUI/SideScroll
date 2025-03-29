@@ -8,7 +8,7 @@ public class TypeRepoHashSet : TypeRepoEnumerable, IPreloadRepo
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoHashSet(serializer, typeSchema);
 			}
@@ -21,9 +21,11 @@ public class TypeRepoHashSet : TypeRepoEnumerable, IPreloadRepo
 	{
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
-		return type.IsGenericType && typeof(HashSet<>).IsAssignableFrom(type.GetGenericTypeDefinition());
+		return type != null && 
+			type.IsGenericType && 
+			typeof(HashSet<>).IsAssignableFrom(type.GetGenericTypeDefinition());
 	}
 
 	// Preload the items first so they get unique hash codes before adding to the HashSet

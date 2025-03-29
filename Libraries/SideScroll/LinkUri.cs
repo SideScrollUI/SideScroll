@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
@@ -5,6 +6,7 @@ using System.Text.RegularExpressions;
 namespace SideScroll;
 
 // <prefix>://<type>/[v<version>/]<path>[?<query>]
+[PublicData]
 public class LinkUri
 {
 	public string? Prefix { get; set; }
@@ -15,7 +17,20 @@ public class LinkUri
 
 	public string? Url { get; set; }
 
-	private static Regex _regex = new(@"^(?<prefix>[a-zA-Z]+)\:\/\/(?<type>[-0-9a-zA-Z\.]+)\/(v(?<version>[\d\.]+)\/)?(?<path>[^\?]+)(\?(?<query>.+))?$");
+	private static readonly Regex _regex = new(@"^(?<prefix>[a-zA-Z]+)\:\/\/(?<type>[-0-9a-zA-Z\.]+)\/(v(?<version>[\d\.]+)\/)?(?<path>[^\?]+)(\?(?<query>.+))?$");
+
+	public LinkUri() { }
+
+	public LinkUri(string prefix, string type, Version version, string path, string? query = null)
+	{
+		Prefix = prefix;
+		Type = type;
+		Version = version;
+		Path = path;
+		Query = query;
+
+		Url = ToUri();
+	}
 
 	public override string ToString() => Url ?? ToUri();
 

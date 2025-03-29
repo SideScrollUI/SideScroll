@@ -33,7 +33,7 @@ public class TaskInstance : INotifyPropertyChanged
 	public Task? Task { get; set; }
 	public TaskStatus TaskStatus => Task?.Status ?? TaskStatus.Created;
 
-	public CancellationTokenSource TokenSource = new();
+	public CancellationTokenSource TokenSource { get; set; } = new();
 	public CancellationToken CancelToken => TokenSource.Token;
 
 	public string Status { get; set; } = "Running";
@@ -62,7 +62,11 @@ public class TaskInstance : INotifyPropertyChanged
 		}
 	}
 
-	public DateTime Started = DateTime.UtcNow;
+	public DateTime StartTime { get; set; } = DateTime.UtcNow;
+
+	public DateTime? EndTime { get; set; }
+
+	public TimeSpan Duration => (EndTime ?? DateTime.UtcNow) - StartTime;
 
 	private readonly Stopwatch _stopwatch = new();
 
@@ -70,20 +74,32 @@ public class TaskInstance : INotifyPropertyChanged
 
 	public TaskInstance()
 	{
-		Initialize();
+		Call.TaskInstance = this;
+
+		_stopwatch.Start();
 	}
 
 	public TaskInstance(string? label)
 	{
 		Label = label;
 
-		Initialize();
-	}
-
-	private void Initialize()
-	{
 		Call.TaskInstance = this;
 
+		_stopwatch.Start();
+	}
+
+	public TaskInstance(Call call, TaskInstance parentTask)
+	{
+		Label = call.Name;
+		Call = call;
+		Creator = parentTask.Creator;
+		TokenSource = parentTask.TokenSource;
+		ParentTask = parentTask;
+		
+		if (parentTask.ProgressMax > 0)
+		{
+			_progressMax = 100;
+		}
 		_stopwatch.Start();
 	}
 
@@ -101,8 +117,7 @@ public class TaskInstance : INotifyPropertyChanged
 		}
 	}
 	private double _percent;
-
-	public TimeSpan Elapsed => DateTime.UtcNow - Started;
+	public TimeSpan Elapsed => DateTime.UtcNow - StartTime;
 	public TimeSpan? ETA => Percent > 0.0 ? (Elapsed * 100.0 / Percent) - Elapsed : null;
 
 	public double Progress
@@ -114,7 +129,11 @@ public class TaskInstance : INotifyPropertyChanged
 				return;
 
 			_progress = Math.Min(value, ProgressMax);
-			NotifyPropertyChanged();
+			if (Math.Abs(_lastNotifiedProgress - _progress) > 0.1 || _progress == ProgressMax)
+			{
+				_lastNotifiedProgress = _progress;
+				NotifyPropertyChanged();
+			}
 
 			UpdatePercent();
 
@@ -127,6 +146,7 @@ public class TaskInstance : INotifyPropertyChanged
 	}
 	private double _progress;
 	private double _prevPercent;
+	private double _lastNotifiedProgress;
 
 	[Formatted]
 	public double ProgressMax
@@ -172,9 +192,14 @@ public class TaskInstance : INotifyPropertyChanged
 		if (ProgressMax > 0)
 		{
 			Percent = 100 * _progress / ProgressMax;
-			NotifyPropertyChanged(nameof(Percent));
+			if (Duration - _lastNotifiedDuration >= TimeSpan.FromSeconds(1))
+			{
+				_lastNotifiedDuration = Duration;
+				NotifyPropertyChanged(nameof(Duration));
+			}
 		}
 	}
+	private TimeSpan _lastNotifiedDuration;
 
 	public bool CancelVisible => !Finished;
 
@@ -187,18 +212,7 @@ public class TaskInstance : INotifyPropertyChanged
 	// allows having progress broken down into multiple tasks
 	public TaskInstance AddSubTask(Call call)
 	{
-		var subTask = new TaskInstance
-		{
-			Label = call.Name,
-			Creator = Creator,
-			Call = call,
-			TokenSource = TokenSource,
-			ParentTask = this,
-		};
-		if (ProgressMax > 0)
-		{
-			subTask.ProgressMax = 100;
-		}
+		var subTask = new TaskInstance(call, this);
 
 		lock (SubTasks)
 		{
@@ -231,6 +245,9 @@ public class TaskInstance : INotifyPropertyChanged
 		eventCompleted.taskCheckFileSize = this;
 		OnComplete?.Invoke(this, eventCompleted);*/
 		Finished = true;
+		EndTime = DateTime.UtcNow;
+		NotifyPropertyChanged(nameof(Finished));
+		NotifyPropertyChanged(nameof(Duration));
 
 		if (Call.TaskInstance!.CancelToken.IsCancellationRequested)
 		{

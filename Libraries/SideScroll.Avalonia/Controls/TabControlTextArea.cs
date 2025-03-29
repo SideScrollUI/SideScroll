@@ -13,7 +13,7 @@ public class TabControlTextArea : Border
 {
 	public string Text { get; set; }
 
-	public TextBlock TextBlock { get; set; }
+	public TextBlock TextBlock { get; protected set; }
 
 	public TabControlTextArea(string? text = null)
 	{

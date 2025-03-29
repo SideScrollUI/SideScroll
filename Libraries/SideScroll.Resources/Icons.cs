@@ -32,6 +32,8 @@ public static class Icons
 		public static ResourceView Redo => Get("Redo");
 
 		public static ResourceView Search => Get("Search");
+		public static ResourceView SearchRight => Get("SearchRight");
+		public static ResourceView ClearSearch => Get("ClearSearch");
 
 		public static ResourceView BlankDocument => Get("BlankDocument");
 		public static ResourceView Save => Get("Save");
@@ -51,6 +53,9 @@ public static class Icons
 		public static ResourceView Duplicate => Get("Duplicate");
 
 		public static ResourceView Pin => Get("Placeholder");
+		public static ResourceView Bookmark => Get("Bookmark");
+
+		public static ResourceView Info => Get("Info");
 
 		public static ResourceView Stats => Get("Stats");
 
@@ -63,25 +68,9 @@ public static class Icons
 		public static ResourceView Download => Get("Download");
 		public static ResourceView Screenshot => Get("Screenshot");
 
+		public static ResourceView PanelLeftExpand => Get("PanelLeftExpand");
+		public static ResourceView PanelLeftContract => Get("PanelLeftContract");
+
 		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "svg", resourceName, "svg");
-	}
-
-	// todo: Deprecate
-	public class Png : NamedItemCollection<Png, ResourceView>
-	{
-		public static ResourceView ClearSearch => Get("clear_search");
-		public static ResourceView Search16 => Get("search_right_light_16");
-
-		public static ResourceView Info => Get("info_24_759eeb");
-		public static ResourceView Info20 => Get("info_20_759eeb");
-
-		public static ResourceView Unlock => Get("unlock");
-		public static ResourceView Password => Get("password");
-
-		public static ResourceView Paste => Get("paste_16");
-
-		public static ResourceView Bookmark => Get("bookmark");
-
-		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "png", resourceName, "png");
 	}
 }

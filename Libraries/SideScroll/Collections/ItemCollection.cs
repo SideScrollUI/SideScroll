@@ -44,15 +44,17 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 	}
 
 	// Don't implement List<T>, it isn't sortable
-	public ItemCollection(IEnumerable<T> iEnumerable) :
-		base(iEnumerable)
+	public ItemCollection(IEnumerable<T> enumerable) :
+		base(enumerable)
 	{
 	}
 
 	public void AddRange(IEnumerable<T> collection)
 	{
 		foreach (T item in collection)
+		{
 			Items.Add(item);
+		}
 
 		// DataGrid takes too long to load these using Add
 		OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
@@ -90,6 +92,8 @@ public class ItemQueueCollection<T> : ItemCollection<T>
 	{
 		base.Add(item);
 		if (Count > MaxCount)
+		{
 			RemoveAt(0);
+		}
 	}
 }

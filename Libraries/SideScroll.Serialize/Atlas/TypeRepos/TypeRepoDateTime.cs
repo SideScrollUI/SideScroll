@@ -8,13 +8,15 @@ public class TypeRepoDateTime(Serializer serializer, TypeSchema typeSchema) : Ty
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
+			{
 				return new TypeRepoDateTime(serializer, typeSchema);
+			}
 			return null;
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return type == typeof(DateTime);
 	}
@@ -37,14 +39,13 @@ public class TypeRepoDateTime(Serializer serializer, TypeSchema typeSchema) : Ty
 			if (CanAssign(LoadableType!))
 			{
 				long ticks = Reader.ReadInt64();
-				int kindValue = Reader.ReadByte();
-				//Enum.ToObject(typeof(DateTimeKind), kindValue);
+				byte kindValue = Reader.ReadByte();
 				DateTime dateTime = new(ticks, (DateTimeKind)kindValue);
 				obj = dateTime;
 			}
 			else
 			{
-				throw new Exception("Unhandled primitive type");
+				throw new SerializerException("Unhandled primitive type");
 			}
 		}
 		catch (Exception)
@@ -66,6 +67,5 @@ public class TypeRepoDateTime(Serializer serializer, TypeSchema typeSchema) : Ty
 	// not called, it's a struct and a value
 	public override void Clone(object source, object dest)
 	{
-		//dest = new DateTime(((DateTime)source).Ticks, ((DateTime)source).Kind);
 	}
 }

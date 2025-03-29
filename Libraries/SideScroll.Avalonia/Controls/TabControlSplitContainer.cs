@@ -122,7 +122,7 @@ public class TabControlSplitContainer : Grid
 		InvalidateMeasure();
 	}
 
-	private RowDefinition InsertRowDefinition(GridLength gridLength, int index)
+	protected RowDefinition InsertRowDefinition(GridLength gridLength, int index)
 	{
 		var rowDefinition = new RowDefinition(gridLength);
 		RowDefinitions.Insert(index, rowDefinition);
@@ -145,7 +145,7 @@ public class TabControlSplitContainer : Grid
 
 	// Avalonia GridSplitter hardcodes neighbors in it's OnAttachedToVisualTree
 	// Reattach them whenever we change neighbors
-	private void ReattachSplitters()
+	protected void ReattachSplitters()
 	{
 		foreach (var gridSplitter in GridSplitters)
 		{
@@ -174,7 +174,7 @@ public class TabControlSplitContainer : Grid
 		}
 	}
 
-	private void AddHorizontalGridSplitter(int rowIndex)
+	protected void AddHorizontalGridSplitter(int rowIndex)
 	{
 		//AddRowDefinition(false, rowIndex);
 
@@ -190,7 +190,7 @@ public class TabControlSplitContainer : Grid
 		Children.Add(gridSplitter);
 	}
 
-	private void AddVerticalGridSplitter(int columnIndex)
+	protected void AddVerticalGridSplitter(int columnIndex)
 	{
 		var gridSplitter = new TabSplitter
 		{
@@ -203,7 +203,7 @@ public class TabControlSplitContainer : Grid
 		Children.Add(gridSplitter);
 	}
 
-	private void AddRowSpacer(int rowIndex)
+	protected void AddRowSpacer(int rowIndex)
 	{
 		//if (Children.Count <= 1)
 		//	return;
@@ -220,7 +220,7 @@ public class TabControlSplitContainer : Grid
 		Children.Add(border);
 	}
 
-	private void RemoveControls(Dictionary<object, Control> controls)
+	protected void RemoveControls(Dictionary<object, Control> controls)
 	{
 		var hashedControls = GridControls.Values.ToHashSet();
 
@@ -239,7 +239,7 @@ public class TabControlSplitContainer : Grid
 		}
 	}
 
-	private void AddControls(List<Control> orderedControls)
+	protected void AddControls(List<Control> orderedControls)
 	{
 		//RowDefinitions.Clear();
 		_gridItems.Clear();

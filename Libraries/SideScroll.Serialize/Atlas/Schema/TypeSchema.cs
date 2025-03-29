@@ -9,6 +9,8 @@ namespace SideScroll.Serialize.Atlas.Schema;
 
 public class TypeSchema
 {
+	public static int PublicMaxObjects { get; set; } = 100_000;
+
 	public static HashSet<Type> PublicTypes { get; set; } =
 	[
 		typeof(string),
@@ -17,6 +19,7 @@ public class TypeSchema
 		typeof(TimeSpan),
 		typeof(TimeZoneInfo),
 		typeof(Type),
+		typeof(Version),
 		typeof(object),
 	];
 
@@ -33,37 +36,40 @@ public class TypeSchema
 		typeof(HashSet<>),
 	];
 
+	[WordWrap]
 	public string Name { get; set; }
 	public string AssemblyQualifiedName { get; set; }
 	public bool CanReference { get; set; } // whether the object can reference other types
-	public bool IsCollection;
+	public bool IsCollection { get; protected set; }
 
 	public List<FieldSchema> FieldSchemas { get; set; } = [];
 	public List<PropertySchema> PropertySchemas { get; set; } = [];
 	public List<PropertySchema> ReadOnlyPropertySchemas { get; set; } = [];
 
 	// not really schema, could break out into a records class
-	public int TypeIndex; // -1 if null
+	public int TypeIndex { get; set; } // -1 if null
 	public int NumObjects { get; set; }
 	public long FileDataOffset { get; set; }
 	public long DataSize { get; set; }
 
 	// not written out
-	public Type? Type;
-	public Type? NonNullableType;
+	[WordWrap]
+	public Type? Type { get; protected set; }
+	[WordWrap]
+	public Type? NonNullableType { get; protected set; }
 
-	public bool IsPrimitive;
-	public bool IsPrivate;
-	public bool IsProtected;
-	public bool IsPublic; // [PublicData], will get exported if PublicOnly set
+	public bool IsPrimitive { get; protected set; }
+	public bool IsPrivate { get; protected set; }
+	public bool IsProtected { get; protected set; }
+	public bool IsPublic { get; protected set; } // [PublicData], will get exported if PublicOnly set
 	public bool IsPublicOnly => IsPublic || IsProtected;
-	public bool IsStatic;
-	public bool IsSerialized;
-	public bool IsUnserialized;
-	public bool HasEmptyConstructor;
-	public ConstructorInfo? CustomConstructor;
+	public bool IsStatic { get; protected set; }
+	public bool IsSerialized { get; protected set; }
+	public bool IsUnserialized { get; protected set; }
+	public bool HasEmptyConstructor { get; protected set; }
+	public ConstructorInfo? CustomConstructor { get; protected set; }
 	public bool HasConstructor => HasEmptyConstructor || CustomConstructor != null;
-	public bool HasSubType;
+	public bool HasSubType { get; protected set; }
 
 	// Type lookup can take a long time, especially when there's missing types
 	private static readonly Dictionary<string, Type?> _typeCache = [];
@@ -180,10 +186,20 @@ public class TypeSchema
 	{
 		if (HasEmptyConstructor || Type == null) return null;
 
-		var members = ReadOnlyPropertySchemas.Where(p => p.IsReadable).Select(p => p.PropertyName.ToLower()).ToHashSet();
-		var fieldMembers = FieldSchemas.Where(f => f.IsLoadable).Select(f => f.FieldName.ToLower()).ToHashSet();
+		var members = ReadOnlyPropertySchemas
+			.Where(p => p.IsReadable)
+			.Select(p => p.PropertyName.ToLower())
+			.ToHashSet();
+
+		var fieldMembers = FieldSchemas
+			.Where(f => f.IsLoadable)
+			.Select(f => f.FieldName.ToLower())
+			.ToHashSet();
+
 		foreach (var member in fieldMembers)
+		{
 			members.Add(member);
+		}
 
 		if (members.Count == 0) return null;
 
@@ -255,10 +271,6 @@ public class TypeSchema
 		}
 
 		return false;
-		/*if (Type == null)
-			return false;
-		if (Type.IsArray)
-			return IsAllowed(type.GetElementType());*/
 	}
 
 	public void Save(BinaryWriter writer)
@@ -413,6 +425,14 @@ public class TypeSchema
 	// todo: this isn't getting called for types not serialized
 	public void Validate(List<TypeSchema> typeSchemas)
 	{
+		if (IsPublic && NumObjects > PublicMaxObjects)
+		{
+			throw new SerializerException("Too many objects",
+				new Tag("Type", Type),
+				new Tag("Objects", NumObjects),
+				new Tag("Max", PublicMaxObjects));
+		}
+
 		foreach (FieldSchema fieldSchema in FieldSchemas)
 		{
 			fieldSchema.Validate(typeSchemas);

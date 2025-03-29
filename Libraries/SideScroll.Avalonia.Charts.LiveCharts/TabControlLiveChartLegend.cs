@@ -6,7 +6,7 @@ namespace SideScroll.Avalonia.Charts.LiveCharts;
 public class TabControlLiveChartLegend(TabControlLiveChart liveChart)
 	: TabControlChartLegend<ISeries>(liveChart)
 {
-	public TabControlLiveChart LiveChart = liveChart;
+	public TabControlLiveChart LiveChart => liveChart;
 	public CartesianChart Chart => LiveChart.Chart;
 
 	protected override TabChartLegendItem<ISeries> AddSeries(ChartSeries<ISeries> chartSeries)

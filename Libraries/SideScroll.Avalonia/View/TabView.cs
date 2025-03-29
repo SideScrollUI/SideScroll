@@ -114,9 +114,15 @@ public class TabView : Grid, IDisposable
 		}
 
 		Instance.OnValidate += Instance_OnValidate;
+		Instance.OnCopyToClipboard += Instance_OnCopyToClipboard;
 
 		KeyDown += TabView_KeyDown;
 		ActualThemeVariantChanged += TabView_ActualThemeVariantChanged;
+	}
+
+	private void Instance_OnCopyToClipboard(object? sender, TabInstance.EventCopyToClipboard e)
+	{
+		ClipboardUtils.SetText(this, e.Text);
 	}
 
 	private void TabView_ActualThemeVariantChanged(object? sender, EventArgs e)
@@ -1054,15 +1060,10 @@ public class TabView : Grid, IDisposable
 					.Cast<object>()
 					.ToHashSet();
 
-				List<object> matching = [];
-				foreach (var obj in TabDatas[0].Items!)
-				{
-					if (newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()!))
-					{
-						matching.Add(obj);
-					}
-				}
-				TabDatas[0].SelectedItems = matching;
+				TabDatas[0].SelectedItems = TabDatas[0].Items!
+					.Cast<object>()
+					.Where(obj => newItems.Contains(obj) || newItems.Contains(obj.GetInnerValue()!))
+					.ToList();
 			}
 			else
 			{
@@ -1139,8 +1140,11 @@ public class TabView : Grid, IDisposable
 
 			Instance.OnModelChanged -= TabInstance_OnModelChanged;
 			Instance.OnValidate -= Instance_OnValidate;
+			Instance.OnCopyToClipboard -= Instance_OnCopyToClipboard;
 			if (Instance is ITabSelector tabSelector)
+			{
 				tabSelector.OnSelectionChanged -= ParentListSelectionChanged;
+			}
 
 			Instance.Dispose();
 

@@ -119,6 +119,11 @@ public class TabInstance : IDisposable
 		public IList List => list;
 	}
 
+	public class EventCopyToClipboard(string text) : EventArgs
+	{
+		public string Text => text;
+	}
+
 	public event EventHandler<EventArgs>? OnRefresh;
 	public event EventHandler<EventArgs>? OnReload;
 	public event EventHandler<EventArgs>? OnModelChanged;
@@ -129,14 +134,15 @@ public class TabInstance : IDisposable
 	public event EventHandler<EventArgs>? OnModified;
 	public event EventHandler<EventArgs>? OnResize;
 	public event EventHandler<EventArgs>? OnValidate;
+	public event EventHandler<EventCopyToClipboard>? OnCopyToClipboard;
 
 	public Action? DefaultAction { get; set; } // Default action when Enter pressed
 
 	// Relative paths for where all the TabSettings get stored, primarily used for loading future defaults
 	// paths get hashed later to avoid having to encode and super long names breaking path limits
-	private string? CustomPath => (Model.CustomSettingsPath != null) ? "Custom/" + GetType().FullName + "/" + Model.CustomSettingsPath : null;
-	private string TabPath => "Tab/" + GetType().FullName + "/" + Model.ObjectTypePath;
-	//private string TabPath => "Tab/" + GetType().FullName + "/" + Model.ObjectTypePath + "/" + Label;
+	private string? CustomPath => (Model.CustomSettingsPath != null) ? "Custom/" + GetType().GetAssemblyQualifiedShortName() + "/" + Model.CustomSettingsPath : null;
+	private string TabPath => "Tab/" + GetType().GetAssemblyQualifiedShortName() + "/" + Model.ObjectTypePath;
+	//private string TabPath => "Tab/" + GetType().GetAssemblyQualifiedShortName() + "/" + Model.ObjectTypePath + "/" + Label;
 	// deprecate?
 	private string TypeLabelPath => "TypePath/" + Model.ObjectTypePath + "/" + Label;
 	private string TypePath => "Type/" + Model.ObjectTypePath;
@@ -219,11 +225,11 @@ public class TabInstance : IDisposable
 		action.Invoke();
 	}
 
-	private void ActionParamsCallback(object? state)
+	/*private void ActionParamsCallback(object? state)
 	{
 		TaskDelegateParams taskDelegate = (TaskDelegateParams)state!;
 		StartTask(taskDelegate, false);
-	}
+	}*/
 
 	public void Invoke(Action action)
 	{
@@ -589,6 +595,13 @@ public class TabInstance : IDisposable
 		}
 	}
 
+	public void SelectPath(params string[] labels)
+	{
+		TabBookmark tabBookmark = new();
+		tabBookmark.SelectPath(labels);
+		SelectBookmark(tabBookmark);
+	}
+
 	public void ClearSelection()
 	{
 		if (OnClearSelection != null)
@@ -660,6 +673,11 @@ public class TabInstance : IDisposable
 		if (iTab != null)
 		{
 			Type type = iTab.GetType();
+			if (type.GetCustomAttribute<PrivateDataAttribute>() != null)
+			{
+				return;
+			}
+
 			if (type.GetCustomAttribute<TabRootAttribute>() != null)
 			{
 				tabBookmark.IsRoot = true;
@@ -689,6 +707,14 @@ public class TabInstance : IDisposable
 		TabBookmark = null;
 		if (bookmark != null)
 		{
+			if (iTab != null)
+			{
+				Type type = iTab.GetType();
+				if (type.GetCustomAttribute<PrivateDataAttribute>() != null)
+				{
+					return TabViewSettings;
+				}
+			}
 			SelectBookmark(bookmark.TabBookmark);
 		}
 
@@ -916,7 +942,7 @@ public class TabInstance : IDisposable
 		return childTabInstance;
 	}
 
-	private object? GetBookmarkObject(string dataKey)
+	/*private object? GetBookmarkObject(string dataKey)
 	{
 		if (TabBookmark == null)
 			return null;
@@ -931,7 +957,7 @@ public class TabInstance : IDisposable
 		}
 
 		return tabChildBookmark;
-	}
+	}*/
 
 	public void UpdateNavigator()
 	{
@@ -951,5 +977,10 @@ public class TabInstance : IDisposable
 	public void Validate()
 	{
 		OnValidate?.Invoke(this, EventArgs.Empty);
+	}
+
+	public void CopyToClipboard(string text)
+	{
+		OnCopyToClipboard?.Invoke(this, new EventCopyToClipboard(text));
 	}
 }

@@ -14,7 +14,7 @@ public class TabControlTasks : Grid, IDisposable
 {
 	public static int LineHeight { get; set; } = 34;
 
-	public TabInstance TabInstance { get; set; }
+	public TabInstance TabInstance { get; init; }
 
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
@@ -55,6 +55,7 @@ public class TabControlTasks : Grid, IDisposable
 		_tabControlDataGrid.AddColumn("Task", nameof(TaskInstance.Label));
 		_tabControlDataGrid.AddColumn("   %   ", nameof(TaskInstance.Percent));
 		_tabControlDataGrid.AddColumn("Status", nameof(TaskInstance.Status));
+		_tabControlDataGrid.AddColumn("Duration", nameof(TaskInstance.Duration));
 		//tabControlDataGrid.AddColumn("Message", nameof(TaskInstance.Message));
 
 		_tabControlDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;

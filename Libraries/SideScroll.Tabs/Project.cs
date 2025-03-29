@@ -6,6 +6,7 @@ using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tasks;
+using SideScroll.Time;
 
 namespace SideScroll.Tabs;
 
@@ -14,7 +15,9 @@ public class Project
 {
 	public string? Name => ProjectSettings.Name;
 	public string? LinkType => ProjectSettings.LinkType;
+
 	public Version Version => ProjectSettings.Version;
+
 	public virtual ProjectSettings ProjectSettings { get; set; }
 	public virtual UserSettings UserSettings { get; set; } = new();
 
@@ -36,9 +39,9 @@ public class Project
 	{
 		get
 		{
-			if (UserSettings.BookmarkPath != null)
+			if (UserSettings.LinkId != null)
 			{
-				return Paths.Combine("Bookmarks", UserSettings.BookmarkPath.HashSha256());
+				return Paths.Combine("Links", UserSettings.LinkId.HashSha256());
 			}
 			else
 			{
@@ -70,16 +73,16 @@ public class Project
 		serializer.Save(new Call(), UserSettings);
 	}
 
-	public Project Open(Bookmark bookmark)
+	public Project Open(LinkedBookmark linkedBookmark)
 	{
 		UserSettings userSettings = UserSettings.DeepClone()!;
-		userSettings.BookmarkPath = bookmark.Path;
+		userSettings.LinkId = linkedBookmark.LinkId;
 		var project = new Project(ProjectSettings, userSettings)
 		{
 			Linker = Linker,
 		};
 		//project.Import(bookmark);
-		bookmark.TabBookmark.Import(project);
+		linkedBookmark.Bookmark.TabBookmark.Import(project);
 		return project;
 	}
 
@@ -97,5 +100,12 @@ public class Project
 		var project = new Project(projectSettings, defaultUserSettings);
 		var userSettings = project.DataApp.Load<T>() ?? defaultUserSettings;
 		return new Project(projectSettings, userSettings);
+	}
+
+	public void Initialize()
+	{
+		TimeZoneView.Current = UserSettings.TimeZone;
+		DateTimeExtensions.DefaultFormatType = UserSettings.TimeFormat;
+		LinkManager.Instance = new(this);
 	}
 }

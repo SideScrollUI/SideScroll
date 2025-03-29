@@ -9,7 +9,7 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
 			{
 				return new TypeRepoPrimitive(serializer, typeSchema);
 			}
@@ -17,9 +17,9 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
-		return type.IsPrimitive;
+		return type?.IsPrimitive == true;
 	}
 
 	public override void SaveObject(BinaryWriter writer, object obj)
@@ -50,7 +50,7 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		}
 		else if (obj is char c)
 		{
-			writer.Write(c); // there's no ReadFloat() routine
+			writer.Write(c);
 		}
 		else if (obj is byte bt)
 		{
@@ -104,7 +104,7 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		}
 		else
 		{
-			throw new Exception($"Unhandled primitive type: {Type}");
+			throw new SerializerException("Unhandled primitive type", new Tag("Type", Type));
 		}
 
 		return obj;
@@ -113,6 +113,6 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 	public override void Clone(object source, object dest)
 	{
 		// assigning won't do anything since it's not a ref
-		throw new Exception("Not cloneable");
+		throw new SerializerException("Not cloneable");
 	}
 }

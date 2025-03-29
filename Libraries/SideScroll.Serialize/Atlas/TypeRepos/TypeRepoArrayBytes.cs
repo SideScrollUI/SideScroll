@@ -11,13 +11,15 @@ public class TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) : 
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.Type!))
+			if (CanAssign(typeSchema.Type))
+			{
 				return new TypeRepoArrayBytes(serializer, typeSchema);
+			}
 			return null;
 		}
 	}
 
-	public static bool CanAssign(Type type)
+	public static bool CanAssign(Type? type)
 	{
 		return typeof(byte[]).IsAssignableFrom(type);
 	}
@@ -42,7 +44,7 @@ public class TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) : 
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		byte[] array = (byte[])obj;
+		var array = (byte[])obj;
 
 		//writer.Write(array.Length);
 		writer.Write(array);
@@ -53,7 +55,7 @@ public class TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) : 
 		//int count = reader.ReadInt32();
 		int count = _sizes![objectIndex];
 
-		byte[] array = new byte[count];
+		var array = new byte[count];
 		ObjectsLoaded[objectIndex] = array;
 
 		Serializer.QueueLoading(this, objectIndex);
@@ -62,14 +64,14 @@ public class TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) : 
 
 	public override void LoadObjectData(object obj)
 	{
-		byte[] array = (byte[])obj;
+		var array = (byte[])obj;
 		Reader!.Read(array, 0, array.Length);
 	}
 
 	public override void Clone(object source, object dest)
 	{
-		byte[] iSource = (byte[])source;
-		byte[] iDest = (byte[])dest;
-		Array.Copy(iSource, iDest, iSource.Length); // could use Buffer.BlockCopy but the performance is supposedly nearly identical
+		var sourceBytes = (byte[])source;
+		var destBytes = (byte[])dest;
+		Array.Copy(sourceBytes, destBytes, sourceBytes.Length); // could use Buffer.BlockCopy but the performance is supposedly nearly identical
 	}
 }

@@ -78,7 +78,7 @@ public class TabModel
 				return "(null)";
 
 			Type objType = Object.GetType();
-			return objType.FullName!; // need to hash this or escape it
+			return objType.GetAssemblyQualifiedShortName();
 		}
 	}
 
@@ -255,7 +255,9 @@ public class TabModel
 
 		if (Object is IComparable)
 		{
-			sortedList = sortedList.OrderBy(x => x.Key).ToList();
+			sortedList = sortedList
+				.OrderBy(x => x.Key)
+				.ToList();
 		}
 
 		ItemList.Add(new ItemCollection<DictionaryEntry>(sortedList));
@@ -273,19 +275,19 @@ public class TabModel
 		return null;
 	}
 
-	private void AddEnumerable(IEnumerable iEnumerable)
+	private void AddEnumerable(IEnumerable enumerable)
 	{
-		Type type = iEnumerable.GetType();
+		Type type = enumerable.GetType();
 		if (type.GenericTypeArguments.Length == 0 || type.GenericTypeArguments[0] == typeof(string))
 		{
-			ItemList.Add(ListToString.Create(iEnumerable));
+			ItemList.Add(ListToString.Create(enumerable));
 			return;
 		}
 
 		Type elementType = GetElementType(type);
 		Type genericType = typeof(ItemCollection<>).MakeGenericType(elementType);
 		IList iList = (IList)Activator.CreateInstance(genericType)!;
-		foreach (var item in iEnumerable)
+		foreach (var item in enumerable)
 		{
 			iList.Add(item);
 		}
@@ -323,10 +325,6 @@ public class TabModel
 	{
 		// skip over single items that will take up lots of room (always show ListItems though)
 		Skippable = false;
-
-		/*if (ItemList is ItemCollection<> itemCollection)
-		{
-		}*/
 
 		if (ItemList[0].Count == 1 && ItemList[0][0] is object firstItem)
 		{
