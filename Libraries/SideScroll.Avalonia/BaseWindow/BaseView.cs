@@ -53,7 +53,7 @@ public class BaseView : UserControl
 		project.Initialize();
 		Project = project;
 
-		ThemeManager.Initialize(project);
+		//ThemeManager.Initialize(project);
 
 		InitializeComponent();
 
