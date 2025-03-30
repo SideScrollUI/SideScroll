@@ -35,8 +35,8 @@ public class TypeRepoObject : TypeRepo
 
 	public class FieldRepo : IMemberRepo
 	{
-		public FieldSchema FieldSchema { get; init; }
-		public TypeRepo? TypeRepo { get; init; }
+		public FieldSchema FieldSchema { get; }
+		public TypeRepo? TypeRepo { get; }
 
 		public override string ToString() => "Field Repo: " + FieldSchema.Name;
 
@@ -81,9 +81,9 @@ public class TypeRepoObject : TypeRepo
 
 	public class PropertyRepo : IMemberRepo
 	{
-		public readonly PropertySchema PropertySchema;
-		public readonly TypeRepo? TypeRepo;
-		public LazyProperty? LazyProperty;
+		public PropertySchema PropertySchema { get; }
+		public TypeRepo? TypeRepo { get; }
+		public LazyProperty? LazyProperty { get; set; }
 
 		public override string ToString() => $"{PropertySchema} ({TypeRepo})";
 
@@ -210,7 +210,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		foreach (FieldSchema fieldSchema in TypeSchema.FieldSchemas)
 		{
-			//if (fieldSchema.Loadable == false)
+			//if (fieldSchema.IsReadable == false)
 			//	continue;
 
 			TypeRepo typeRepo;

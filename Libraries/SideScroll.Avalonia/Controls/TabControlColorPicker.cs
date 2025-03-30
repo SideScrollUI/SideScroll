@@ -107,9 +107,9 @@ public class TabControlColorPicker : ColorPicker
 	// Force control to update
 	private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
-		if (e.PropertyName == Property?.Name)
+		if (e.PropertyName == Property?.Name && Property?.Value is object obj)
 		{
-			SetCurrentValue(ColorProperty, Property!.Value);
+			SetCurrentValue(ColorProperty, obj);
 		}
 	}
 }

@@ -6,7 +6,7 @@ namespace SideScroll.Serialize.Atlas.Schema;
 
 public class PropertySchema : MemberSchema
 {
-	public PropertyInfo PropertyInfo { get; init; }
+	public PropertyInfo PropertyInfo { get; }
 
 	public TypeSchema? PropertyTypeSchema { get; set; }
 

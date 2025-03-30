@@ -5,9 +5,9 @@ namespace SideScroll.Serialize.Atlas.Schema;
 
 public class MemberSchema
 {
-	public TypeSchema OwnerTypeSchema { get; init; }
+	public TypeSchema OwnerTypeSchema { get; }
 
-	public string Name { get; init; }
+	public string Name { get; }
 
 	public int TypeIndex { get; set; } = -1;
 

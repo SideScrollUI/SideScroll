@@ -6,7 +6,7 @@ namespace SideScroll.Serialize.Atlas.Schema;
 
 public class FieldSchema : MemberSchema
 {
-	public FieldInfo FieldInfo { get; init; }
+	public FieldInfo FieldInfo { get; }
 
 	public TypeSchema? FieldTypeSchema { get; set; }
 
