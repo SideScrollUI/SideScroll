@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Media;
 using SideScroll.Avalonia.Tabs;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Viewer;
@@ -40,6 +41,14 @@ public class BaseView : UserControl
 	{
 		Instance = this;
 
+		FontTheme.FontFamilies =
+			new List<FontFamily>
+			{
+				SideScrollTheme.ContentControlThemeFontFamily, // Inter Font
+				SideScrollTheme.SourceCodeProFont,
+			}
+			.Concat(FontManager.Current.SystemFonts);
+
 		SideScrollInit.Initialize();
 
 		TabFile.RegisterType<TabFileImage>(TabFileImage.DefaultExtensions);
@@ -53,7 +62,7 @@ public class BaseView : UserControl
 		project.Initialize();
 		Project = project;
 
-		//ThemeManager.Initialize(project);
+		ThemeManager.Initialize(project);
 
 		InitializeComponent();
 
