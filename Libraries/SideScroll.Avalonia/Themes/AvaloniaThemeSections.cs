@@ -445,11 +445,14 @@ public class TextControlTheme : ThemeSection
 	[Header("Calendar View"), ResourceKey("CalendarViewBackground")]
 	public Color? CalendarViewBackground { get; set; }
 
+	[ResourceKey("CalendarViewBorderBrush")]
+	public Color? CalendarViewItemBackground { get; set; }
+
 	[ResourceKey("CalendarViewOutOfScopeBackground")]
 	public Color? CalendarViewOutOfScopeBackground { get; set; }
 
-	[ResourceKey("CalendarViewBorderBrush")]
-	public Color? CalendarViewBorderBrush { get; set; }
+	[ResourceKey("CalendarViewHoverBorderBrush")]
+	public Color? CalendarViewHoverBorder { get; set; }
 
 	[ResourceKey("CalendarViewCalendarItemForeground",
 		"CalendarViewTodayForeground",

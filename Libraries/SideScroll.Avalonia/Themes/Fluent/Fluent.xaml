@@ -65,6 +65,8 @@
           <SolidColorBrush x:Key="CalendarDatePickerBorderBrush" Color="{DynamicResource ThemeControlBorderMidColor}" />
           <SolidColorBrush x:Key="CalendarDatePickerBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
 
+          <SolidColorBrush x:Key="CalendarViewHoverBorderBrush" Color="#ff6791e6" />
+
           <!-- CheckBox -->
 
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUnchecked" Color="#ffffff" />
@@ -444,6 +446,8 @@
           <SolidColorBrush x:Key="CalendarDatePickerBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
 
           <SolidColorBrush x:Key="CalendarViewCalendarItemForeground" Color="#ffd0d0d0" />
+
+          <SolidColorBrush x:Key="CalendarViewHoverBorderBrush" Color="#ff5175bd" />
 
           <!-- CheckBox -->
 

@@ -18,6 +18,8 @@ public class ThemeManager
 
 	public Project Project { get; init; }
 
+	public static Application Application => Application.Current!;
+
 	public List<string> Names => DataRepoThemes.Items
 		.Select(i => i.Value.Name!)
 		.ToList();
@@ -40,7 +42,7 @@ public class ThemeManager
 		UserSettings.Themes = DataRepoThemes.Items;
 	}
 
-	public AvaloniaThemeSettings? GetTheme(string? themeName)
+	public AvaloniaThemeSettings? GetUpdatedTheme(string? themeName)
 	{
 		if (themeName == null) return null;
 
@@ -54,35 +56,80 @@ public class ThemeManager
 		if (themeSettings?.HasNullValue() == true)
 		{
 			themeSettings.FillMissingValues();
+			themeSettings.Version = Project.Version;
 			DataRepoThemes.Save(null, themeSettings);
 		}
 	}
 
 	public void LoadCurrentTheme()
 	{
-		var theme = GetTheme(Project.UserSettings.Theme);
+		var theme = GetUpdatedTheme(Project.UserSettings.Theme);
 		if (theme == null) return;
 
 		LoadTheme(theme);
 	}
 
-	public void AddDefaultTheme(string variant)
+	public void AddThemeVariant(Call call, string variant)
 	{
-		if (GetTheme(variant) != null) return;
-
-		Add(new Call(), new AvaloniaThemeSettings
+		// Always overwrite default themes when the version changes
+		var defaultTheme = DataRepoDefaultThemes.Items.Values.FirstOrDefault(theme => theme.Name == variant);
+		if (defaultTheme == null || defaultTheme.Version != Project.Version || defaultTheme.HasNullValue())
 		{
-			Name = variant,
-			Variant = variant,
-		});
+			defaultTheme = Create(variant, variant);
+			DataRepoDefaultThemes.Save(call, defaultTheme);
+		}
+
+		// Don't replace user modified themes, but update them to add new resources
+		if (GetUpdatedTheme(variant) is not AvaloniaThemeSettings existingThemeSettings ||
+			(existingThemeSettings.ModifiedAt == null && existingThemeSettings.Version != Project.Version))
+		{
+			DataRepoThemes.Save(call, defaultTheme);
+		}
 	}
 
-	public void Add(Call call, string json, bool isDefault = false)
+	public void AddJson(Call call, string json, bool isDefault = false)
 	{
 		var options = new JsonSerializerOptions();
 		options.Converters.Add(new JsonColorConverter());
 		var themeSettings = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, options)!;
-		UpdateTheme(themeSettings);
+		themeSettings.Version = Project.Version;
+
+		if (isDefault)
+		{
+			var defaultTheme = DataRepoDefaultThemes.Items.Values.FirstOrDefault(theme => theme.Name == themeSettings.Name);
+			if (defaultTheme == null || defaultTheme.Version != Project.Version)
+			{
+				themeSettings.FillMissingValues();
+				DataRepoDefaultThemes.Save(call, themeSettings);
+			}
+		}
+
+		if (GetUpdatedTheme(themeSettings.Name) is not AvaloniaThemeSettings existingThemeSettings ||
+			(existingThemeSettings.ModifiedAt == null && existingThemeSettings.Version != Project.Version))
+		{
+			DataRepoThemes.Save(call, themeSettings);
+		}
+	}
+
+	public AvaloniaThemeSettings Create(string name, string variant)
+	{
+		AvaloniaThemeSettings themeSettings = new()
+		{
+			Name = name,
+			Variant = variant,
+			Version = Project.Version,
+		};
+
+		var original = Application.RequestedThemeVariant;
+		Application.RequestedThemeVariant = themeSettings.GetVariant();
+		themeSettings.LoadFromCurrent();
+		Application.RequestedThemeVariant = original;
+
+		return themeSettings;
+	}
+
+	public void Add(Call call, AvaloniaThemeSettings themeSettings, bool isDefault = false)
+	{
 		DataRepoThemes.Save(call, themeSettings);
 
 		if (isDefault)
@@ -91,25 +138,15 @@ public class ThemeManager
 		}
 	}
 
-	public void Add(Call call, AvaloniaThemeSettings themeSettings)
-	{
-		// Fill in new colors before saving
-		var original = Application.Current!.RequestedThemeVariant;
-		Application.Current.RequestedThemeVariant = themeSettings.GetVariant();
-		themeSettings.LoadFromCurrent();
-		Application.Current.RequestedThemeVariant = original;
-
-		DataRepoThemes.Save(call, themeSettings);
-	}
-
 	public static void Initialize(Project project)
 	{
 		Instance = new ThemeManager(project);
 
-		Instance.AddDefaultTheme("Light");
-		Instance.AddDefaultTheme("Dark");
+		Call call = new();
+		Instance.AddThemeVariant(call, "Light");
+		Instance.AddThemeVariant(call, "Dark");
 
-		Instance.Add(new(), AvaloniaAssets.Themes.LightBlue, true);
+		Instance.AddJson(call, AvaloniaAssets.Themes.LightBlue, true);
 
 		Instance.LoadCurrentTheme();
 	}
@@ -119,22 +156,22 @@ public class ThemeManager
 		CurrentTheme = themeSettings;
 		var themeVariant = new ThemeVariant(themeSettings.Name!, themeSettings.GetVariant());
 
-		Application.Current!.Resources.ThemeDictionaries[themeVariant] = themeSettings.CreateDictionary();
+		Application.Resources.ThemeDictionaries[themeVariant] = themeSettings.CreateDictionary();
 
-		Application.Current.RequestedThemeVariant = null;
-		Application.Current.RequestedThemeVariant = themeVariant;
+		Application.RequestedThemeVariant = null;
+		Application.RequestedThemeVariant = themeVariant;
 	}
 
 	public static AvaloniaThemeSettings Reset(AvaloniaThemeSettings themeSettings)
 	{
 		if (Instance!.DataRepoDefaultThemes.Items.TryGetValue(themeSettings.Name!, out AvaloniaThemeSettings? defaultSettings))
 		{
-			themeSettings = defaultSettings;
+			themeSettings.Update(defaultSettings);
 		}
 		else
 		{
 			// Resets to Light / Dark variant
-			Application.Current!.RequestedThemeVariant = themeSettings.GetVariant();
+			Application.RequestedThemeVariant = themeSettings.GetVariant();
 			themeSettings.LoadFromCurrent();
 		}
 		LoadTheme(themeSettings);

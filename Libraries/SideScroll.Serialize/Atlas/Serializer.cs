@@ -65,6 +65,7 @@ public class Serializer : IDisposable
 
 	public bool Lazy { get; set; }
 	public bool PublicOnly { get; set; }
+	public bool EnableFieldToPropertyMapping { get; set; } = true;
 
 	// Convert to Parser class?
 	// Use a queue so we don't exceed the stack size due to cross references (i.e. a list with values that refer back to the list)
@@ -213,7 +214,7 @@ public class Serializer : IDisposable
 		//UpdateTypeSchemaDerived();
 		Header.Save(writer);
 		long schemaPosition = writer.BaseStream.Position;
-		writer.Write((long)0); // will write correct value at end
+		writer.Write((long)0); // File Size, will write correct value at end
 		SaveSchemas(writer);
 		SavePrimitives(callSaving, writer);
 		SaveObjects(callSaving.Log, writer);
@@ -309,7 +310,7 @@ public class Serializer : IDisposable
 		{
 			for (int i = 0; i < count; i++)
 			{
-				var typeSchema = new TypeSchema(log, reader)
+				var typeSchema = new TypeSchema(log, this, reader)
 				{
 					TypeIndex = i,
 				};

@@ -106,8 +106,8 @@ public class TimeZoneView : IComparable
 		return base.GetHashCode();
 	}
 
-	public static TimeZoneView Utc { get; set; } = new("Utc", "Utc", TimeZoneInfo.Utc);
-	public static TimeZoneView Local { get; set; } = new("Local", "Local", TimeZoneInfo.Local);
+	public static TimeZoneView Utc { get; private set; } = new("Utc", "Utc", TimeZoneInfo.Utc);
+	public static TimeZoneView Local { get; private set; } = new("Local", "Local", TimeZoneInfo.Local);
 
 	public static TimeZoneView Current { get; set; } = Local;
 

@@ -42,6 +42,7 @@ public class TypeSchema
 	public bool CanReference { get; set; } // whether the object can reference other types
 	public bool IsCollection { get; protected set; }
 
+	public List<MemberSchema> MemberSchemas { get; set; } = [];
 	public List<FieldSchema> FieldSchemas { get; set; } = [];
 	public List<PropertySchema> PropertySchemas { get; set; } = [];
 	public List<PropertySchema> ReadOnlyPropertySchemas { get; set; } = [];
@@ -74,7 +75,7 @@ public class TypeSchema
 	// Type lookup can take a long time, especially when there's missing types
 	private static readonly Dictionary<string, Type?> _typeCache = [];
 
-	private static readonly BindingFlags _bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
+	public const BindingFlags BindingAttributes = BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
 
 	public override string ToString() => Name;
 
@@ -95,9 +96,9 @@ public class TypeSchema
 		}
 	}
 
-	public TypeSchema(Log log, BinaryReader reader)
+	public TypeSchema(Log log, Serializer serializer, BinaryReader reader)
 	{
-		Load(log, reader);
+		Load(log, serializer, reader);
 	}
 
 	private void InitializeType()
@@ -119,10 +120,10 @@ public class TypeSchema
 
 	private void InitializeFields(Serializer serializer)
 	{
-		foreach (FieldInfo fieldInfo in Type!.GetFields(_bindingFlags))
+		foreach (FieldInfo fieldInfo in Type!.GetFields(BindingAttributes))
 		{
 			var fieldSchema = new FieldSchema(this, fieldInfo);
-			if (!fieldSchema.IsSerialized)
+			if (!fieldSchema.IsReadable)
 				continue;
 
 			if (serializer.PublicOnly)
@@ -140,7 +141,7 @@ public class TypeSchema
 
 	private void InitializeProperties(Serializer serializer)
 	{
-		foreach (PropertyInfo propertyInfo in Type!.GetProperties(_bindingFlags))
+		foreach (PropertyInfo propertyInfo in Type!.GetProperties(BindingAttributes))
 		{
 			var propertySchema = new PropertySchema(this, propertyInfo);
 			if (!propertySchema.IsReadable)
@@ -162,7 +163,9 @@ public class TypeSchema
 			}
 
 			if (propertySchema.IsWriteable)
+			{
 				PropertySchemas.Add(propertySchema);
+			}
 
 			ReadOnlyPropertySchemas.Add(propertySchema);
 		}
@@ -188,12 +191,12 @@ public class TypeSchema
 
 		var members = ReadOnlyPropertySchemas
 			.Where(p => p.IsReadable)
-			.Select(p => p.PropertyName.ToLower())
+			.Select(p => p.Name.ToLower())
 			.ToHashSet();
 
 		var fieldMembers = FieldSchemas
-			.Where(f => f.IsLoadable)
-			.Select(f => f.FieldName.ToLower())
+			.Where(f => f.IsReadable)
+			.Select(f => f.Name.ToLower())
 			.ToHashSet();
 
 		foreach (var member in fieldMembers)
@@ -221,7 +224,7 @@ public class TypeSchema
 
 		foreach (var param in CustomConstructor.GetParameters())
 		{
-			var prop = ReadOnlyPropertySchemas.FirstOrDefault(p => p.PropertyName.Equals(param.Name, StringComparison.CurrentCultureIgnoreCase));
+			var prop = ReadOnlyPropertySchemas.FirstOrDefault(p => p.Name.Equals(param.Name, StringComparison.CurrentCultureIgnoreCase));
 			if (prop != null)
 			{
 				prop.IsRequired = true;
@@ -287,7 +290,7 @@ public class TypeSchema
 	}
 
 	[MemberNotNull(nameof(Name), nameof(AssemblyQualifiedName))]
-	public void Load(Log log, BinaryReader reader)
+	public void Load(Log log, Serializer serializer, BinaryReader reader)
 	{
 		Name = reader.ReadString();
 		AssemblyQualifiedName = reader.ReadString();
@@ -306,8 +309,8 @@ public class TypeSchema
 			InitializeType();
 		}
 
-		LoadFields(reader);
-		LoadProperties(reader);
+		LoadMembers<FieldInfo>(serializer, reader);
+		LoadMembers<PropertyInfo>(serializer, reader);
 
 		CustomConstructor = GetCustomConstructor();
 	}
@@ -393,15 +396,6 @@ public class TypeSchema
 		}
 	}
 
-	public void LoadFields(BinaryReader reader)
-	{
-		int count = reader.ReadInt32();
-		for (int i = 0; i < count; i++)
-		{
-			FieldSchemas.Add(new FieldSchema(this, reader));
-		}
-	}
-
 	public void SaveProperties(BinaryWriter writer)
 	{
 		writer.Write(PropertySchemas.Count);
@@ -411,14 +405,23 @@ public class TypeSchema
 		}
 	}
 
-	public void LoadProperties(BinaryReader reader)
+	public void LoadMembers<T>(Serializer serializer, BinaryReader reader) where T : MemberInfo
 	{
 		int count = reader.ReadInt32();
 		for (int i = 0; i < count; i++)
 		{
-			var propertySchema = new PropertySchema(this, reader);
-			PropertySchemas.Add(propertySchema);
-			ReadOnlyPropertySchemas.Add(propertySchema);
+			var memberSchema = MemberSchema.Load<T>(this, serializer, reader);
+			MemberSchemas.Add(memberSchema);
+
+			if (memberSchema is FieldSchema fieldSchema)
+			{
+				FieldSchemas.Add(fieldSchema);
+			}
+			else if (memberSchema is PropertySchema propertySchema)
+			{
+				PropertySchemas.Add(propertySchema);
+				ReadOnlyPropertySchemas.Add(propertySchema);
+			}
 		}
 	}
 

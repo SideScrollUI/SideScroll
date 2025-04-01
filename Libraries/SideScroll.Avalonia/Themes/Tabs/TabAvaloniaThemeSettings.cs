@@ -156,6 +156,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 		private void Save(Call call)
 		{
+			ThemeSettings.ModifiedAt = DateTime.Now;
 			tab.DataViewCollection!.DataRepoView.Save(call, ThemeSettings);
 			UpdateTheme();
 		}

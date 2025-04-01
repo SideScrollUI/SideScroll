@@ -57,11 +57,8 @@ public class TabAvaloniaThemes : ITab
 		{
 			Validate();
 
-			AvaloniaThemeSettings themeSettings = new()
-			{
-				Name = _themeId.Name,
-				Variant = _themeId.Variant,
-			};
+			AvaloniaThemeSettings themeSettings = ThemeManager.Instance!.Create(_themeId.Name!, _themeId.Variant!);
+
 			ThemeManager.Instance!.Add(call, themeSettings);
 
 			_themeId = new();
