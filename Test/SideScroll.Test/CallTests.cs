@@ -3,7 +3,7 @@ using NUnit.Framework;
 namespace SideScroll.Test;
 
 [Category("Call")]
-public class CallTests : TestBase
+public class CallTests : BaseTest
 {
 	private List<int?> _input = [null, 0, 1];
 

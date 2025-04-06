@@ -33,7 +33,7 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 
 	public List<DataItem<T>> Next(Call? call = null)
 	{
-		PageIndex = Math.Clamp(PageIndex + 1, 0, Pages - 1);
+		PageIndex = Math.Min(Math.Max(0, Pages - 1), PageIndex + 1);
 		return GetPage(PageIndex, call);
 	}
 

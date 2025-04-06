@@ -4,7 +4,7 @@ using SideScroll.Extensions;
 namespace SideScroll.Test;
 
 [Category("Formatting")]
-public class FormatTests : TestBase
+public class FormatTests : BaseTest
 {
 	[OneTimeSetUp]
 	public void BaseSetup()
