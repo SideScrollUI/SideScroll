@@ -4,7 +4,7 @@ using SideScroll.Extensions;
 namespace SideScroll.Test;
 
 [Category("Formatting")]
-public class TestFormat : TestBase
+public class FormatTests : TestBase
 {
 	[OneTimeSetUp]
 	public void BaseSetup()
@@ -21,5 +21,14 @@ public class TestFormat : TestBase
 		Assert.That(new TimeSpan(1, 2, 3, 4).FormattedShort(), Is.EqualTo("1:2:03:04"));
 		Assert.That(new TimeSpan(1, 2, 3, 4, 125).FormattedShort(), Is.EqualTo("1:2:03:04.125"));
 		Assert.That(new TimeSpan(1, 2, 3, 4, 5).FormattedShort(), Is.EqualTo("1:2:03:04.005"));
+	}
+
+	[Test]
+	public void DoubleFormattedShortDecimal()
+	{
+		Assert.That(1.123.FormattedShortDecimal(), Is.EqualTo("1.123"));
+		Assert.That(0.999_998.FormattedShortDecimal(6), Is.EqualTo("0.999998"));
+		Assert.That(0.000_002.FormattedShortDecimal(6), Is.EqualTo("0.000002"));
+		Assert.That(9_999.998.FormattedShortDecimal(6), Is.EqualTo("9.999998 K"));
 	}
 }

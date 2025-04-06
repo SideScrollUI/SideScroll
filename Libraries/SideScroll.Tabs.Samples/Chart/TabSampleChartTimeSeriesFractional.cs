@@ -18,6 +18,7 @@ public class TabSampleChartTimeSeriesFractional : ITab
 
 			AddAnimals(model, endTime);
 			AddToys(model, endTime);
+			AddDecimalPrecision(model, endTime);
 		}
 
 		private static DateTime AddAnimals(TabModel model, DateTime endTime)
@@ -48,6 +49,19 @@ public class TabSampleChartTimeSeriesFractional : ITab
 			};
 			chartViewToys.AddSeries("Toys", ChartSamples.CreateIdenticalTimeSeries(endTime, value: 0.42), seriesType: SeriesType.Average);
 			model.AddObject(chartViewToys);
+		}
+
+		private static DateTime AddDecimalPrecision(TabModel model, DateTime endTime)
+		{
+			var chartView = new ChartView("Decimal Precision")
+			{
+				ShowTimeTracker = true,
+			};
+
+			chartView.AddSeries("Percent", ChartSamples.CreateTimeSeries(endTime, minValue: 99.9999, maxValue: 100), seriesType: SeriesType.Average);
+
+			model.AddObject(chartView);
+			return endTime;
 		}
 	}
 }

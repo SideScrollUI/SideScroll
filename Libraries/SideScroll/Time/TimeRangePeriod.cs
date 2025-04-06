@@ -262,7 +262,7 @@ public class TimeRangePeriod : ITags
 	public static List<TimeRangeValue>? PeriodCounts(IEnumerable<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, int minPeriods, int maxPeriods)
 	{
 		double durationSeconds = Math.Ceiling(timeWindow.Duration.TotalSeconds);
-		int numPeriods = Math.Max(minPeriods, Math.Min(maxPeriods, (int)durationSeconds));
+		int numPeriods = Math.Clamp((int)durationSeconds, minPeriods, maxPeriods);
 		double periodDuration = Math.Ceiling(durationSeconds / numPeriods);
 
 		return PeriodCounts(timeRangeValues, timeWindow, TimeSpan.FromSeconds(periodDuration));

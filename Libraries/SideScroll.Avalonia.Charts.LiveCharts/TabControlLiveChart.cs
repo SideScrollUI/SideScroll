@@ -190,7 +190,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		Chart.Series = ChartView.Series
 			.Take(SeriesLimit)
-			.Select(s => AddListSeries(s))
+			.Select(AddListSeries)
 			.ToList();
 
 		UpdateAxis();
@@ -220,6 +220,43 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		};
 	}
 
+	public class ValueLabeler
+	{
+		public int MinimumPrecision { get; set; }
+
+		public void UpdatePrecision(double minValue, double maxValue)
+		{
+			double range = Math.Abs(maxValue - minValue);
+
+			if (range == 0 || double.IsNaN(range))
+			{
+				MinimumPrecision = 0;
+				return;
+			}
+
+			// Compute relative precision needed to show the range at the scale of the values
+			double relativeRange = range / Math.Max(Math.Abs(minValue), Math.Abs(maxValue));
+
+			int precision = 0;
+			double scaled = relativeRange;
+
+			while (scaled < 0.1 && precision < 10)
+			{
+				scaled *= 10;
+				precision++;
+			}
+
+			MinimumPrecision = precision;
+		}
+
+		public string Format(double d)
+		{
+			return d.FormattedShortDecimal(MinimumPrecision);
+		}
+	}
+
+	private ValueLabeler _valueLabeler = new();
+
 	public Axis CreateYAxis() // AxisPosition axisPosition = AxisPosition.Left)
 	{
 		Axis axis;
@@ -234,7 +271,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		{
 			axis = new Axis
 			{
-				Labeler = NumberExtensions.FormattedShortDecimal,
+				Labeler = _valueLabeler.Format,
 			};
 		}
 
@@ -496,8 +533,11 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		if (ChartView.LogBase is double logBase)
 		{
 			// Log 0 can return infinity, which is difficult to render
-			YAxis.MinLimit = Math.Max(double.MinValue, Math.Log(minimum, logBase) * 0.85);
-			YAxis.MaxLimit = Math.Min(double.MaxValue, Math.Log(maximum, logBase) * 1.15);
+			double safeMinimum = minimum > 0 ? minimum : 1;
+			double safeMaximum = Math.Max(safeMinimum * 1.01, maximum); // Ensure max > min
+
+			YAxis.MinLimit = Math.Max(0, Math.Log(safeMinimum, logBase) * 0.85);
+			YAxis.MaxLimit = Math.Log(safeMaximum, logBase) * 1.15;
 
 			if (maximum - minimum > 5)
 			{
@@ -529,7 +569,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 				double separators = MaxSeparators;
 				if (Chart.Bounds.Height is double height && height > 0)
 				{
-					separators = Math.Max(1, Math.Min(MaxSeparators, height / MinSeparatorDistance));
+					separators = Math.Clamp(height / MinSeparatorDistance, 1, MaxSeparators);
 				}
 
 				YAxis.UnitWidth = (difference / separators).RoundToSignificantFigures(1);
@@ -541,6 +581,8 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 				YAxis.UnitWidth = 1; // Reset to default
 				YAxis.ForceStepToMin = false;
 			}
+
+			_valueLabeler.UpdatePrecision(YAxis.MinLimit.Value, YAxis.MaxLimit.Value);
 		}
 	}
 

@@ -199,7 +199,14 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 			double? yCoordinate = null;
 			if (y != null && Chart.ChartView.LogBase is double logBase)
 			{
-				yCoordinate = Math.Log(y.Value, logBase);
+				if (y.Value == 0)
+				{
+					yCoordinate = 0;
+				}
+				else
+				{
+					yCoordinate = Math.Log(y.Value, logBase);
+				}
 			}
 
 			var chartPoint = new LiveChartPoint(obj, x++, y, yCoordinate);

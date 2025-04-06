@@ -171,13 +171,14 @@ public class BaseWindow : Window
 		set
 		{
 			// These are causing the window to be shifted down
-			Width = Math.Min(MaxWidth, Math.Max(MinWindowWidth, value.Width));
-			Height = Math.Min(MaxHeight, Math.Max(MinWindowHeight, value.Height));
+			Width = Math.Clamp(value.Width, MinWindowWidth, MaxWidth);
+			Height = Math.Clamp(value.Height, MinWindowHeight, MaxHeight);
 
 			double minLeft = -10; // Left position for windows starts at -10
-			double left = Math.Min(Math.Max(minLeft, value.Left), MaxWidth - Width + minLeft); // values can be negative
+			double left = Math.Clamp(value.Left, minLeft, MaxWidth - Width + minLeft); // values can be negative
+
 			double maxHeight = MaxHeight;
-			double top = Math.Min(Math.Max(0, value.Top), maxHeight - Height);
+			double top = Math.Clamp(value.Top, 0, maxHeight - Height);
 			Position = new PixelPoint((int)left, (int)top);
 			//Height = Math.Max(MinWindowSize, value.Height + 500); // reproduces black bar problem, not subtracting bottom toolbar for Height
 			//Measure(Bounds.Size);
