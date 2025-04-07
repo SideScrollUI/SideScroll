@@ -1,4 +1,3 @@
-using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using SideScroll.Resources;
 using System.Reflection;
@@ -17,14 +16,6 @@ public static class AvaloniaAssets
 
 		using Stream stream = assembly.GetManifestResourceStream(name)!;
 		return new Bitmap(stream);
-	}
-
-	private static Image GetImage(Bitmap bitmap)
-	{
-		return new Image
-		{
-			Source = bitmap,
-		};
 	}
 
 	public static ResourceView Get(string resourceName, string resourceType) => new(Assembly, AssetPath, "Themes", resourceName, resourceType);

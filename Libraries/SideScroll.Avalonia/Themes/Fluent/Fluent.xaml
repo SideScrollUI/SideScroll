@@ -116,7 +116,7 @@
           <SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff02031c" />
           <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#ff09035c" />
 
-          <CornerRadius x:Key="ButtonCornerRadius">7</CornerRadius>
+          <CornerRadius x:Key="ButtonCornerRadius">12</CornerRadius>
           <Thickness x:Key="ButtonBorderThemeThickness">1.5</Thickness>
 
           <!-- Simple and Fluent Tab/Toolbar Button -->
@@ -493,7 +493,7 @@
           <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#ffc1c2c9" />
           <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#ffd0d1d9" />
 
-          <SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff01020d" />
+          <SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff06071c" />
           <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#ff000033" />
 
           <!-- Simple and Fluent Tab/Toolbar Button -->

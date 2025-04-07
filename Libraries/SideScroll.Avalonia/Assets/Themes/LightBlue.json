@@ -97,7 +97,7 @@
     "BorderPointerOver": "#ff8289d9",
     "BorderPressed": "#ff8289d9",
     "BorderThickness": 1.5,
-    "CornerRadius": 7
+    "CornerRadius": 12
   },
   "TextControl": {
     "LabelForeground": "Black",

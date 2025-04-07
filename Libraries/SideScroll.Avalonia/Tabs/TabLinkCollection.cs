@@ -7,9 +7,9 @@ using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Avalonia.Tabs;
 
-public class TabBookmarks(LinkCollection bookmarks) : ITab
+public class TabLinkCollection(LinkCollection links) : ITab
 {
-	public LinkCollection Bookmarks { get; set; } = bookmarks;
+	public LinkCollection Links { get; set; } = links;
 
 	public TabInstance Create() => new Instance(this);
 
@@ -24,16 +24,16 @@ public class TabBookmarks(LinkCollection bookmarks) : ITab
 		public ToolToggleButton? ToggleButtonShowLinkInfoTab { get; set; }
 	}
 
-	public class Instance(TabBookmarks tab) : TabInstance
+	public class Instance(TabLinkCollection tab) : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.CustomSettingsPath = tab.Bookmarks.GroupId;
+			model.CustomSettingsPath = tab.Links.GroupId;
 			model.MinDesiredWidth = 300;
 
-			tab.Bookmarks.Load(call, true);
+			tab.Links.Load(call, true);
 
-			model.AddData(tab.Bookmarks.Items);
+			model.AddData(tab.Links.Items);
 		}
 
 		public override void LoadUI(Call call, TabModel model)
@@ -41,14 +41,14 @@ public class TabBookmarks(LinkCollection bookmarks) : ITab
 			Toolbar toolbar = new();
 			toolbar.ButtonRefresh.Action = Refresh;
 			toolbar.ButtonDeleteAll.Action = DeleteAll;
-			ListProperty listProperty = new(tab.Bookmarks, nameof(LinkCollection.ShowLinkInfoTab));
+			ListProperty listProperty = new(tab.Links, nameof(LinkCollection.ShowLinkInfoTab));
 			toolbar.ToggleButtonShowLinkInfoTab = new("Show Link Info Tab", Icons.Svg.PanelLeftContract, Icons.Svg.PanelLeftExpand, listProperty, ShowLinkTab);
 			model.AddObject(toolbar);
 
-			if (tab.Bookmarks.NewBookmark != null)
+			if (tab.Links.NewBookmark != null)
 			{
-				SelectItem(tab.Bookmarks.NewBookmark);
-				tab.Bookmarks.NewBookmark = null;
+				SelectItem(tab.Links.NewBookmark);
+				tab.Links.NewBookmark = null;
 			}
 		}
 
@@ -75,8 +75,8 @@ public class TabBookmarks(LinkCollection bookmarks) : ITab
 
 		private void DeleteAll(Call call)
 		{
-			tab.Bookmarks.DeleteAll(call);
-			tab.Bookmarks.Load(call, true);
+			tab.Links.DeleteAll(call);
+			tab.Links.Load(call, true);
 		}
 	}
 }

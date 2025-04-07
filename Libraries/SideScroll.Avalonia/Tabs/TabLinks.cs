@@ -12,12 +12,12 @@ public class TabLinks : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			var bookmarkManager = LinkManager.Instance!;
+			var linkManager = LinkManager.Instance!;
 
 			model.Items = new List<ListItem>()
 			{
-				new("Imported", new TabBookmarks(bookmarkManager.Imported)),
-				new("Created", new TabBookmarks(bookmarkManager.Created)),
+				new("Imported", new TabLinkCollection(linkManager.Imported)),
+				new("Created", new TabLinkCollection(linkManager.Created)),
 			};
 		}
 	}
