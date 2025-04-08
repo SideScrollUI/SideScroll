@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Version>0.9.6</Version>
     <PackageReleaseNotes>Added Serializer support for mapping fields to properties and vice versa. Renamed FirstOrDefaultAsync() to FirstNonNullAsync().
-Renamed SelectAsync() to SelectNonNullAsync(). Fixed LiveChartLineSeries Coordinates not being set for some points. Improved Chart Y Axis Precision for narrow ranges.</PackageReleaseNotes>
+Renamed SelectAsync() to SelectNonNullAsync(). Fixed LiveChartLineSeries Coordinates not being set for some points. Improved Chart Y Axis Precision for narrow ranges. Added theming improvements for CalendarView. Fixed ThemeManager theme resetting and updates that add new colors.</PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.5</AvaloniaVersion>
     <AvaloniaEditVersion>11.2.0</AvaloniaEditVersion>
