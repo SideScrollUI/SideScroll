@@ -285,14 +285,14 @@ public class RelayCommand : ICommand
 	private bool? _prevCanExecute;
 	public bool CanExecute(object? parameter)
 	{
-		var ce = CanExecuteFunc(parameter);
-		if (CanExecuteChanged != null && (!_prevCanExecute.HasValue || ce != _prevCanExecute))
+		bool canExecute = CanExecuteFunc(parameter);
+		if (CanExecuteChanged != null && (!_prevCanExecute.HasValue || canExecute != _prevCanExecute))
 		{
-			_prevCanExecute = ce;
+			_prevCanExecute = canExecute;
 			CanExecuteChanged(this, EventArgs.Empty);
 		}
 
-		return ce;
+		return canExecute;
 	}
 
 	public void Execute(object? parameter)

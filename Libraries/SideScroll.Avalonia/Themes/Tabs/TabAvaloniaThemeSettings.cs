@@ -68,7 +68,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 		private TabControlParams? _paramControl;
 
-		private ThemeHistory _history = new();
+		public ThemeHistory History { get; protected set; } = new();
 		private bool _lastHistoryUpdatable;
 
 		private bool _ignoreColorChange;
@@ -95,13 +95,13 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 				.ToList();
 			model.AddData(sectionTabs);
 
-			_history.Add(ThemeSettings);
+			History.Add(ThemeSettings);
 		}
 
 		public void Undo(Call call)
 		{
 			_lastHistoryUpdatable = false;
-			if (_history.TryGetPrevious(out var previous))
+			if (History.TryGetPrevious(out var previous))
 			{
 				LoadTheme(previous);
 			}
@@ -109,7 +109,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 		public void Redo(Call call)
 		{
-			if (_history.TryGetNext(out var next))
+			if (History.TryGetNext(out var next))
 			{
 				LoadTheme(next);
 			}
@@ -172,11 +172,11 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 			if (_lastHistoryUpdatable && isUpdatable)
 			{
-				_history.Replace(ThemeSettings);
+				History.Replace(ThemeSettings);
 			}
 			else
 			{
-				_history.Add(ThemeSettings);
+				History.Add(ThemeSettings);
 			}
 			_lastHistoryUpdatable = isUpdatable;
 		}

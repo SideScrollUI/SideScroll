@@ -26,23 +26,32 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Toolbar : TabToolbar
+	public class Toolbar(Instance tabInstance) : TabToolbar
 	{
-		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
+		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh)
+		{
+			Action = (_) => tabInstance.Reload()
+		};
 
 		[Separator]
 		public ToolButton ButtonUndo { get; set; } = new("Undo (Ctrl + Z)", Icons.Svg.Undo)
 		{
+			Action = tabInstance.Tab.TabInstance.Undo,
 			HotKey = new KeyGesture(Key.Z, KeyModifiers.Control),
+			IsEnabledBinding = new PropertyBinding(nameof(ThemeHistory.HasPrevious), tabInstance.Tab.TabInstance.History),
 		};
+
 		public ToolButton ButtonRedo { get; set; } = new("Redo (Ctrl + Y)", Icons.Svg.Redo)
 		{
+			Action = tabInstance.Tab.TabInstance.Redo,
 			HotKey = new KeyGesture(Key.Y, KeyModifiers.Control),
+			IsEnabledBinding = new PropertyBinding(nameof(ThemeHistory.HasNext), tabInstance.Tab.TabInstance.History),
 		};
 	}
 
 	public class Instance(TabAvaloniaThemeSection tab) : TabInstance, ITabSelector
 	{
+		public TabAvaloniaThemeSection Tab => tab;
 		public new IList? SelectedItems { get; set; }
 
 		public new event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
@@ -54,10 +63,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			Toolbar toolbar = new();
-			toolbar.ButtonRefresh.Action = Refresh;
-			toolbar.ButtonUndo.Action = tab.TabInstance.Undo;
-			toolbar.ButtonRedo.Action = tab.TabInstance.Redo;
+			Toolbar toolbar = new(this);
 			model.AddObject(toolbar);
 
 			var paramControl = new TabControlParams(tab.Object);
@@ -125,11 +131,6 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				ChartTheme => new TabSampleCharts(),
 				_ => null
 			};
-		}
-
-		private void Refresh(Call call)
-		{
-			Reload();
 		}
 
 		private void ColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
