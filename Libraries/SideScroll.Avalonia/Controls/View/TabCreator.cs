@@ -9,14 +9,14 @@ using SideScroll.Utilities;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace SideScroll.Avalonia.View;
+namespace SideScroll.Avalonia.Controls.View;
 
 public static class TabCreator
 {
 	public static Control? CreateChildControl(TabInstance parentTabInstance, object obj, string? label = null, ITabSelector? tabControl = null)
 	{
 		object? value = obj.GetInnerValue();
-		if (value == null || (value is bool && !parentTabInstance.Model.Skippable))
+		if (value == null || value is bool && !parentTabInstance.Model.Skippable)
 			return null;
 
 		if (label == null)

@@ -5,13 +5,12 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
-using SideScroll.Avalonia.View;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
 
-namespace SideScroll.Avalonia.Controls;
+namespace SideScroll.Avalonia.Controls.View;
 
-public class TabControlTitle : Border, IDisposable
+public class TabViewTitle : Border, IDisposable
 {
 	public TabView TabView { get; init; }
 	public TabInstance TabInstance => TabView.Instance;
@@ -32,7 +31,7 @@ public class TabControlTitle : Border, IDisposable
 		}
 	}
 
-	public TabControlTitle(TabView tabView, string? label = null)
+	public TabViewTitle(TabView tabView, string? label = null)
 	{
 		TabView = tabView;
 		label ??= TabInstance.Label;
@@ -76,10 +75,7 @@ public class TabControlTitle : Border, IDisposable
 		var contextMenu = new TabViewContextMenu(TabView, TabInstance);
 
 		// Copy Title Text to ClipBoard
-		var menuItemCopy = new TabMenuItem
-		{
-			Header = "_Copy",
-		};
+		var menuItemCopy = new TabMenuItem("_Copy");
 		menuItemCopy.Click += delegate
 		{
 			ClipboardUtils.SetText(this, Label);

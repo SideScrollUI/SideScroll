@@ -4,19 +4,18 @@ using Avalonia.Layout;
 using SideScroll.Tasks;
 using SideScroll.Tabs;
 
-namespace SideScroll.Avalonia.Controls;
+namespace SideScroll.Avalonia.Controls.View;
 
-public class TabControlActions : UserControl
+public class TabViewActions : UserControl
 {
 	public TabInstance TabInstance { get; set; }
-	public TabModel TabModel { get; set; }
+	public TabModel TabModel => TabInstance.Model;
 
 	private readonly Dictionary<Button, TaskCreator> _taskCreators = [];
 
-	public TabControlActions(TabInstance tabInstance, TabModel tabModel)
+	public TabViewActions(TabInstance tabInstance)
 	{
 		TabInstance = tabInstance;
-		TabModel = tabModel;
 
 		InitializeControls();
 	}

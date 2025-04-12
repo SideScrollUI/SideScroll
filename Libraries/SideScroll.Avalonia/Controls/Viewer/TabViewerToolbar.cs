@@ -3,7 +3,7 @@ using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Tabs.Bookmarks;
 
-namespace SideScroll.Avalonia.Viewer;
+namespace SideScroll.Avalonia.Controls.Viewer;
 
 public class TabViewerToolbar : TabControlToolbar
 {

@@ -1,17 +1,16 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Media;
 using Avalonia.Reactive;
 using Avalonia.Threading;
+using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Tabs;
 using SideScroll.Avalonia.Themes;
-using SideScroll.Avalonia.Viewer;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
-namespace SideScroll.Avalonia;
+namespace SideScroll.Avalonia.Controls;
 
 public class BaseWindow : Window
 {
@@ -46,22 +45,14 @@ public class BaseWindow : Window
 	{
 		Instance = this;
 
-		FontTheme.FontFamilies =
-			new List<FontFamily>
-			{
-				SideScrollTheme.ContentControlThemeFontFamily, // Inter Font
-				SideScrollTheme.SourceCodeProFont,
-			}
-			.Concat(FontManager.Current.SystemFonts);
-
 		SideScrollInit.Initialize();
+		SideScrollTheme.InitializeFonts();
 
 		TabFileImage.Register();
 
 		LoadProject(project);
 
 		Opened += BaseWindow_Opened;
-		Closed += BaseWindow_Closed;
 	}
 
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]
@@ -79,7 +70,6 @@ public class BaseWindow : Window
 		_loadComplete = true;
 	}
 
-	// Load here instead of in xaml for better control
 	[MemberNotNull(nameof(TabViewer))]
 	private void InitializeComponent()
 	{
@@ -134,7 +124,7 @@ public class BaseWindow : Window
 	{
 		get
 		{
-			bool maximized = (WindowState == WindowState.Maximized);
+			bool maximized = WindowState == WindowState.Maximized;
 			Rect bounds = Bounds;
 			if (maximized || bounds.Width > 0.8 * MaxWidth)
 			{
@@ -180,8 +170,6 @@ public class BaseWindow : Window
 			double maxHeight = MaxHeight;
 			double top = Math.Clamp(value.Top, 0, maxHeight - Height);
 			Position = new PixelPoint((int)left, (int)top);
-			//Height = Math.Max(MinWindowSize, value.Height + 500); // reproduces black bar problem, not subtracting bottom toolbar for Height
-			//Measure(Bounds.Size);
 
 			// Avalonia bug? WindowState doesn't update correctly for MacOS
 			if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -224,20 +212,7 @@ public class BaseWindow : Window
 		TabViewer.Focus();
 	}
 
-	private void BaseWindow_Closed(object? sender, EventArgs e)
-	{
-		// todo: split saving position out
-		//SaveWindowSettings();
-	}
-
-	// Broken with Avalonia 11 update, unclear if this is still needed or not
-	/*protected override void HandleWindowStateChanged(WindowState state)
-	{
-		base.HandleWindowStateChanged(state);
-		SaveWindowSettings();
-	}*/
-
-	// this fires too often, could attach a dispatch timer, or add an override method
+	// If we want to throttle this, we could attach a dispatch timer, or add an override method
 	private void BaseWindow_PositionChanged(object? sender, PixelPointEventArgs e)
 	{
 		SaveWindowSettings();

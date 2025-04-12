@@ -8,9 +8,9 @@ using SideScroll.Tasks;
 using System.Collections;
 using System.Collections.Specialized;
 
-namespace SideScroll.Avalonia.Controls;
+namespace SideScroll.Avalonia.Controls.View;
 
-public class TabControlTasks : Grid, IDisposable
+public class TabViewTasks : Grid, IDisposable
 {
 	public static int LineHeight { get; set; } = 34;
 
@@ -32,7 +32,7 @@ public class TabControlTasks : Grid, IDisposable
 
 	public override string ToString() => TabInstance.Model.Name;
 
-	public TabControlTasks(TabInstance tabInstance)
+	public TabViewTasks(TabInstance tabInstance)
 	{
 		TabInstance = tabInstance;
 

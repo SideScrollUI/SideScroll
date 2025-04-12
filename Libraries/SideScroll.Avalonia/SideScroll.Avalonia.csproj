@@ -40,7 +40,6 @@
     <EmbeddedResource Remove="Themes\Controls\TabControlSplitContainer.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlTextArea.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlTextBlock.xaml" />
-    <EmbeddedResource Remove="Themes\Controls\TabControlTitle.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlToolbar.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabHeader.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabSeparator.xaml" />
@@ -69,7 +68,6 @@
     <None Remove="Themes\Controls\TabControlParams.xaml" />
     <None Remove="Themes\Controls\TabControlTextArea.xaml" />
     <None Remove="Themes\Controls\TabControlTextBlock.xaml" />
-    <None Remove="Themes\Controls\TabControlTitle.xaml" />
     <None Remove="Themes\Controls\TabControlToolbar.xaml" />
     <None Remove="Themes\Controls\TabHeader.xaml" />
     <None Remove="Themes\Controls\TabSeparator.xaml" />
@@ -83,7 +81,6 @@
     <None Remove="Themes\Fluent\FluentControls.xaml" />
     <None Remove="Themes\Fluent\Controls\ScrollBar.xaml" />
     <None Remove="Themes\Simple\Simple.xaml" />
-    <None Remove="View\TabAvalonEdit.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -101,9 +98,6 @@
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabControlParams.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Controls\TabControlTitle.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabControlToolbar.xaml">
@@ -167,12 +161,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SideScroll.Tabs.Samples\SideScroll.Tabs.Samples.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Tabs\TabAvalonEdit.xaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>TabAvalonEdit.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 </Project>

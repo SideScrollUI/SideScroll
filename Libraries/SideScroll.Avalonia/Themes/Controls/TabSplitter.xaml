@@ -1,6 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sidescroll="clr-namespace:SideScroll.Avalonia.View;assembly=SideScroll.Avalonia">
+                    xmlns:sidescroll="clr-namespace:SideScroll.Avalonia.Controls.View;assembly=SideScroll.Avalonia">
 
   <ControlTheme x:Key="{x:Type sidescroll:TabSplitter}" TargetType="sidescroll:TabSplitter">
     <Setter Property="MinWidth" Value="6" />

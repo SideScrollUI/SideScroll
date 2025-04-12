@@ -3,6 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
 using SideScroll.Avalonia.Controls.Toolbar;
+using SideScroll.Avalonia.Extensions;
+using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
 using System.Diagnostics.CodeAnalysis;
@@ -20,12 +22,6 @@ public class TabControlSearch : Grid
 	}
 
 	public TabControlSearch()
-	{
-		Initialize();
-	}
-
-	[MemberNotNull(nameof(TextBoxSearch))]
-	private void Initialize()
 	{
 		ColumnDefinitions = new ColumnDefinitions("*");
 		RowDefinitions = new RowDefinitions("Auto");
@@ -54,7 +50,7 @@ public class TabControlSearch : Grid
 
 	private void AddIcon()
 	{
-		var coloredImage = SvgUtils.TryGetSvgColorImage(Icons.Svg.SearchRight);
+		var coloredImage = SvgUtils.TryGetSvgColorImage(Icons.Svg.SearchRight, SideScrollTheme.ToolbarTextForeground.Color.WithAlpha(128));
 
 		var image = new Image
 		{

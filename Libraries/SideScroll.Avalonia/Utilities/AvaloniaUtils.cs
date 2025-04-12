@@ -5,7 +5,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
-using SideScroll.Avalonia.View;
+using SideScroll.Avalonia.Controls;
 using SideScroll.Tabs.Lists;
 using System.ComponentModel.DataAnnotations;
 
@@ -18,10 +18,7 @@ public static class AvaloniaUtils
 	{
 		var list = new AvaloniaList<object>();
 
-		var menuItemCopy = new TabMenuItem
-		{
-			Header = "_Copy",
-		};
+		var menuItemCopy = new TabMenuItem("_Copy");
 		menuItemCopy.Click += delegate
 		{
 			ClipboardUtils.SetText(textBlock, textBlock.Text ?? "");
@@ -74,10 +71,7 @@ public static class AvaloniaUtils
 	{
 		var list = new AvaloniaList<object>();
 
-		var menuItemCopy = new TabMenuItem
-		{
-			Header = "_Copy",
-		};
+		var menuItemCopy = new TabMenuItem("_Copy");
 		menuItemCopy.Click += delegate
 		{
 			ClipboardUtils.SetText(comboBox, comboBox.SelectedItem?.ToString() ?? "");
@@ -109,10 +103,7 @@ public static class AvaloniaUtils
 	{
 		var list = new AvaloniaList<object>();
 
-		var menuItemCopy = new TabMenuItem
-		{
-			Header = "_Copy",
-		};
+		var menuItemCopy = new TabMenuItem("_Copy");
 		menuItemCopy.Click += delegate
 		{
 			ClipboardUtils.SetText(colorPicker, colorPicker.Color.ToString() ?? "");

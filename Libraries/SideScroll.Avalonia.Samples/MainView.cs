@@ -1,4 +1,5 @@
 using SideScroll.Avalonia.Charts.LiveCharts;
+using SideScroll.Avalonia.Controls;
 using SideScroll.Avalonia.Samples.Tabs;
 using SideScroll.Tabs;
 
@@ -11,5 +12,6 @@ public class MainView : BaseView
 		AddTab(new TabAvalonia());
 
 		LiveChartCreator.Register();
+		TabViewer.Toolbar?.AddVersion();
 	}
 }

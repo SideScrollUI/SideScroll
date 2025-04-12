@@ -5,12 +5,11 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using SideScroll.Attributes;
-using SideScroll.Avalonia.Controls;
 using SideScroll.Avalonia.Controls.DataGrids;
 using SideScroll.Avalonia.Controls.Toolbar;
+using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
-using SideScroll.Avalonia.Viewer;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
@@ -20,7 +19,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace SideScroll.Avalonia.View;
+namespace SideScroll.Avalonia.Controls.View;
 
 public interface IControlCreator
 {
@@ -68,8 +67,8 @@ public class TabView : Grid, IDisposable
 	}
 
 	// Created Controls
-	public TabControlActions? TabActions { get; set; }
-	public TabControlTasks? TabTasks { get; set; }
+	public TabViewActions? TabActions { get; set; }
+	public TabViewTasks? TabTasks { get; set; }
 	public List<ITabDataSelector> TabDatas { get; set; } = [];
 	public List<ITabSelector> CustomTabControls { get; set; } = []; // should everything use this?
 
@@ -79,7 +78,7 @@ public class TabView : Grid, IDisposable
 	private Grid? _containerGrid;
 	private Border? _parentContainerBorder;
 	private TabControlSplitContainer? _tabParentControls;
-	private TabControlTitle? _tabTitle;
+	private TabViewTitle? _tabTitle;
 	private GridSplitter? _parentChildGridSplitter;
 	private TabControlSplitContainer? _tabChildControls;
 	private Panel? _fillerPanel; // GridSplitter doesn't work without control on right side
@@ -249,7 +248,7 @@ public class TabView : Grid, IDisposable
 		_containerGrid!.Children.Add(_parentContainerBorder);
 		UpdateSplitterDistance();
 
-		_tabTitle = new TabControlTitle(this, Model.Name);
+		_tabTitle = new TabViewTitle(this, Model.Name);
 		_tabParentControls.AddControl(_tabTitle, false, SeparatorType.None);
 
 		_tabParentControls.KeyDown += ParentControls_KeyDown;
@@ -271,7 +270,7 @@ public class TabView : Grid, IDisposable
 		{
 			VerticalAlignment = VerticalAlignment.Stretch,
 			ResizeDirection = GridResizeDirection.Columns,
-			[Grid.ColumnProperty] = 1,
+			[ColumnProperty] = 1,
 		};
 		_containerGrid!.Children.Add(_parentChildGridSplitter);
 
@@ -287,7 +286,7 @@ public class TabView : Grid, IDisposable
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto"),
 		};
-		Grid.SetColumn(_tabChildControls, 2);
+		SetColumn(_tabChildControls, 2);
 		_containerGrid!.Children.Add(_tabChildControls);
 	}
 
@@ -504,7 +503,7 @@ public class TabView : Grid, IDisposable
 		if (Model.Actions == null)
 			return;
 
-		TabActions = new TabControlActions(Instance, Model);
+		TabActions = new TabViewActions(Instance);
 
 		_tabParentControls!.AddControl(TabActions, false, SeparatorType.Spacer);
 	}
@@ -514,7 +513,7 @@ public class TabView : Grid, IDisposable
 		if (Model.Actions == null && Model.Objects == null)
 			return;
 
-		TabTasks = new TabControlTasks(Instance);
+		TabTasks = new TabViewTasks(Instance);
 		TabTasks.OnSelectionChanged += ParentListSelectionChanged;
 
 		_tabParentControls!.AddControl(TabTasks, false, SeparatorType.Spacer);
@@ -605,7 +604,7 @@ public class TabView : Grid, IDisposable
 		};
 		Children.Add(progressBar);
 
-		TabControlTitle title = new(this, Model.Name)
+		TabViewTitle title = new(this, Model.Name)
 		{
 			VerticalAlignment = VerticalAlignment.Top,
 			MaxWidth = progressBar.MinWidth,

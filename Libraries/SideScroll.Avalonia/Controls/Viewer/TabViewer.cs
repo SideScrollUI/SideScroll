@@ -5,14 +5,13 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Threading;
-using SideScroll.Avalonia.Controls;
+using SideScroll.Avalonia.Controls.View;
 using SideScroll.Avalonia.Utilities;
-using SideScroll.Avalonia.View;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SideScroll.Avalonia.Viewer;
+namespace SideScroll.Avalonia.Controls.Viewer;
 
 public class EventTabLoaded(object obj) : EventArgs
 {
@@ -79,7 +78,7 @@ public class TabViewer : Grid
 			RowDefinitions = new RowDefinitions("*"),
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
-			[Grid.RowProperty] = 1,
+			[RowProperty] = 1,
 		};
 		Children.Add(BottomGrid);
 
@@ -287,7 +286,7 @@ public class TabViewer : Grid
 
 		ContentControl = control;
 
-		Grid.SetRowSpan(control, 2);
+		SetRowSpan(control, 2);
 
 		Children.Remove(BottomGrid);
 		Children.Add(control);
@@ -313,7 +312,7 @@ public class TabViewer : Grid
 			RowDefinitions = new RowDefinitions("*,*"), // Expand, Collapse
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
-			[Grid.ColumnProperty] = 1,
+			[ColumnProperty] = 1,
 		};
 
 		TabControlButton buttonScrollRight = new()
@@ -321,7 +320,7 @@ public class TabViewer : Grid
 			Content = ">",
 			[ToolTip.ShowDelayProperty] = 5,
 			[ToolTip.TipProperty] = "Scroll Right ( -> )",
-			[Grid.RowProperty] = 0,
+			[RowProperty] = 0,
 		};
 		buttonScrollRight.Click += ButtonExpand_Click;
 		grid.Children.Add(buttonScrollRight);
@@ -330,7 +329,7 @@ public class TabViewer : Grid
 		{
 			Content = "<",
 			[ToolTip.TipProperty] = "Scroll Left ( <- )",
-			[Grid.RowProperty] = 1,
+			[RowProperty] = 1,
 		};
 		buttonScrollLeft.Click += ButtonCollapse_Click;
 		grid.Children.Add(buttonScrollLeft);

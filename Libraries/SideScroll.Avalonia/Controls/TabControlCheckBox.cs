@@ -26,8 +26,6 @@ public class TabControlCheckBox : CheckBox
 		MaxWidth = TabControlParams.ControlMaxWidth;
 		//Margin = new Thickness(2, 2);
 		//Padding = new Thickness(6, 3);
-
-		//Resources.Add("CheckBoxCheckBackgroundFillUnchecked", Theme.Background);
 	}
 
 	private void Bind(ListProperty property)

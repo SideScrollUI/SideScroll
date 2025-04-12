@@ -1,5 +1,5 @@
 using SideScroll.Avalonia.Controls.Toolbar;
-using SideScroll.Avalonia.Viewer;
+using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Resources;
 using SideScroll.Utilities;
 using System.Runtime.InteropServices;
@@ -14,7 +14,6 @@ public class ScreenCaptureToolbar : TabControlToolbar
 
 	public ToolbarButton? ButtonCopyClipboard { get; set; }
 	public ToolbarButton ButtonSave { get; set; }
-	//public ToolbarButton ButtonLink { get; set; }
 	public ToolbarButton ButtonClose { get; set; }
 
 	public ScreenCaptureToolbar(TabViewer tabViewer) : base(null)

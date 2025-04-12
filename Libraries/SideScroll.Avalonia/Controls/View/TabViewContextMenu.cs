@@ -4,18 +4,7 @@ using Avalonia.Interactivity;
 using SideScroll.Serialize;
 using SideScroll.Tabs;
 
-namespace SideScroll.Avalonia.View;
-
-public class TabMenuItem : MenuItem
-{
-	protected override Type StyleKeyOverride => typeof(MenuItem);
-
-	public TabMenuItem(string? header = null)
-	{
-		Header = header;
-		ItemsSource = null; // Clear to avoid weak event handler leaks
-	}
-}
+namespace SideScroll.Avalonia.Controls.View;
 
 public class TabViewContextMenu : ContextMenu, IDisposable
 {

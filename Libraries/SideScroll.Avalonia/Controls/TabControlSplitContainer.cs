@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.VisualTree;
-using SideScroll.Avalonia.View;
+using SideScroll.Avalonia.Controls.View;
 using System.Diagnostics;
 
 namespace SideScroll.Avalonia.Controls;

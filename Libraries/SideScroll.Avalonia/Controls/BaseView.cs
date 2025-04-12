@@ -1,29 +1,21 @@
 using Avalonia.Controls;
+using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Tabs;
 using SideScroll.Avalonia.Themes;
-using SideScroll.Avalonia.Viewer;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Tools.FileViewer;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SideScroll.Avalonia;
+namespace SideScroll.Avalonia.Controls;
 
 public class BaseView : UserControl
 {
-	private const int MinWindowWidth = 700;
-	private const int MinWindowHeight = 500;
-
-	private const int DefaultWindowWidth = 1280;
-	private const int DefaultWindowHeight = 800;
-
 	public static BaseView? Instance { get; set; }
 
 	public Project Project { get; protected set; }
 
 	public TabViewer TabViewer { get; protected set; }
-
-	private bool _loadComplete;
 
 	public BaseView(Project project)
 	{
@@ -41,6 +33,7 @@ public class BaseView : UserControl
 		Instance = this;
 
 		SideScrollInit.Initialize();
+		SideScrollTheme.InitializeFonts();
 
 		TabFile.RegisterType<TabFileImage>(TabFileImage.DefaultExtensions);
 
@@ -55,19 +48,7 @@ public class BaseView : UserControl
 
 		ThemeManager.Initialize(project);
 
-		InitializeComponent();
-
-		_loadComplete = true;
-	}
-
-	// Load here instead of in xaml for better control
-	[MemberNotNull(nameof(TabViewer))]
-	private void InitializeComponent()
-	{
 		Background = SideScrollTheme.TabBackground;
-
-		MinWidth = MinWindowWidth;
-		MinHeight = MinWindowHeight;
 
 		Content = TabViewer = new TabViewer(Project);
 	}
