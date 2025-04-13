@@ -1,7 +1,6 @@
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using SideScroll.Avalonia.Controls.View;
 using SideScroll.Avalonia.Extensions;
 using SideScroll.Avalonia.Utilities;
 

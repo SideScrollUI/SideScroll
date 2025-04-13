@@ -17,11 +17,6 @@ public class TabViewActions : UserControl
 	{
 		TabInstance = tabInstance;
 
-		InitializeControls();
-	}
-
-	private void InitializeControls()
-	{
 		if (TabModel.Actions!.Count == 0) return;
 
 		var containerGrid = new Grid

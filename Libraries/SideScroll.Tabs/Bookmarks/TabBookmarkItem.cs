@@ -73,22 +73,4 @@ public class TabBookmarkItem(LinkedBookmark linkedBookmark, Project project) : I
 		tabInstance.SelectBookmark(bookmark.TabBookmark);
 		return tabInstance;
 	}
-
-	/*public class Instance : TabInstance
-	{
-		private TabBookmarkItem tab;
-
-		public Instance(TabBookmarkItem tab)
-		{
-			this.tab = tab;
-		}
-
-		public override void Load(Call call, TabModel model)
-		{
-			ITab bookmarkTab = ((ITab)Activator.CreateInstance(tab.Bookmark.Type)).Create();
-			bookmarkTab.Create();
-			SelectBookmark(tab.Bookmark.tabBookmark);
-			//model.Items = items;
-		}
-	}*/
 }

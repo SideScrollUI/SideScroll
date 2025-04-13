@@ -14,6 +14,9 @@ public interface IListItem
 	[HiddenColumn, InnerValue, StyleValue]
 	object? Value { get; }
 
+	[HiddenColumn]
+	bool IsAutoSelectable { get; }
+
 	// Get list items for all public properties and any methods marked with [Item]
 	public static ItemCollection<IListItem> Create(object obj, bool includeBaseTypes)
 	{
@@ -55,7 +58,7 @@ public class ListItem(object? key, object? value) : IListItem, INotifyPropertyCh
 	}
 
 	[HiddenColumn]
-	public bool AutoLoad { get; set; } = true;
+	public bool IsAutoSelectable { get; set; } = true;
 
 #pragma warning disable 414
 	public event PropertyChangedEventHandler? PropertyChanged;

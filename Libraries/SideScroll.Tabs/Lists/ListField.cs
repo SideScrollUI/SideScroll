@@ -53,7 +53,7 @@ public class ListField : ListMember, IPropertyEditable
 		base(obj, fieldInfo)
 	{
 		FieldInfo = fieldInfo;
-		AutoLoad = !fieldInfo.IsStatic;
+		IsAutoSelectable = !fieldInfo.IsStatic;
 
 		NameAttribute? nameAttribute = fieldInfo.GetCustomAttribute<NameAttribute>();
 

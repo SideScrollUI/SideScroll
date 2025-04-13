@@ -15,7 +15,8 @@ public class ListPair(object key, object? value, object? obj = null, int? maxDes
 	[HiddenColumn, InnerValue]
 	public object? Object { get; set; } = obj ?? value;
 
-	// public bool AutoLoad { get; set; } = true;
+	[HiddenColumn]
+	public bool IsAutoSelectable { get; set; } = true;
 
 	[HiddenColumn]
 	public int? MaxDesiredWidth { get; set; } = maxDesiredWidth;

@@ -3,7 +3,6 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
-using SideScroll.Avalonia.Controls.View;
 using SideScroll.Avalonia.Extensions;
 using SideScroll.Avalonia.Utilities;
 using System.Data;

@@ -852,16 +852,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			if (value == null)
 				continue;
 
-			if (obj is ListItem listItem)
+			if (obj is IListItem listItem && !listItem.IsAutoSelectable)
 			{
-				if (listItem.AutoLoad == false)
-					continue;
-			}
-
-			if (obj is ListMember listMember)
-			{
-				if (listMember.AutoLoad == false)
-					continue;
+				continue;
 			}
 
 			if (value is TabView tabView)

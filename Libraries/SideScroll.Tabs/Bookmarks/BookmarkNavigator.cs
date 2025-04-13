@@ -10,7 +10,8 @@ public class BookmarkNavigator : INotifyPropertyChanged
 
 	//public event EventHandler<EventArgs> OnSelectionChanged;
 
-	public int CurrentIndex {
+	public int CurrentIndex
+	{
 		get => _currentIndex;
 		set
 		{
