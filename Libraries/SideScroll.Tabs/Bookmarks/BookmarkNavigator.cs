@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Serialize;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -9,6 +10,8 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	//public event EventHandler<EventArgs> OnSelectionChanged;
+
+	public int MaxHistorySize { get; set; } = 20;
 
 	public int CurrentIndex
 	{
@@ -22,6 +25,8 @@ public class BookmarkNavigator : INotifyPropertyChanged
 		}
 	}
 	private int _currentIndex = -1;
+
+	public int NextId { get; set; }
 
 	public List<Bookmark> History { get; set; } = [];
 
@@ -38,6 +43,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	public bool CanSeekBackward => CurrentIndex > 0;
 	public bool CanSeekForward => CurrentIndex + 1 < History.Count;
 
+	[Hidden]
 	public SynchronizationContext? Context { get; set; }
 
 	public override string ToString() => $"{CurrentIndex} / {History.Count}";
@@ -58,16 +64,32 @@ public class BookmarkNavigator : INotifyPropertyChanged
 		if (bookmark == null)
 			return;
 
-		// trim Past?
-		//int trimAt = currentIndex + 1;
-		//if (trimAt < History.Count)
-		//	History.RemoveRange(trimAt, History.Count - trimAt);
+		// Current isn't visible, so doing this here gets the right count
+		TrimHistory();
+
 		if (makeCurrent)
 		{
 			CurrentIndex = History.Count;
 		}
-		bookmark.Name = CurrentIndex.ToString();// + " - " + bookmark.Address;
+		bookmark.Name = NextId++.ToString();// + " - " + bookmark.Address;
 		History.Add(bookmark);
+	}
+
+	private void TrimHistory()
+	{
+		if (History.Count < MaxHistorySize) return;
+		
+		int removeCount = History.Count - MaxHistorySize;
+		History.RemoveRange(0, removeCount);
+
+		if (CurrentIndex < removeCount)
+		{
+			CurrentIndex = 0;
+		}
+		else
+		{
+			CurrentIndex -= removeCount;
+		}
 	}
 
 	public void Update(Bookmark bookmark)
@@ -121,8 +143,3 @@ public class BookmarkNavigator : INotifyPropertyChanged
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 }
-
-/*
-Use this?
-https://stackoverflow.com/questions/6816436/efficient-way-to-implement-an-indexed-queue-where-elements-can-be-retrieved-by
-*/

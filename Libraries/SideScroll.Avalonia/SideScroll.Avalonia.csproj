@@ -58,9 +58,6 @@
     <None Remove="Assets\Fonts\SourceCodePro-Regular.ttf" />
     <None Remove="Assets\Themes\LightBlue.json" />
     <None Remove="DefaultTheme.xaml" />
-    <None Remove="if_help_62217.png" />
-    <None Remove="left-chevron.png" />
-    <None Remove="right-chevron.png" />
     <None Remove="StyleResources.xaml" />
     <None Remove="Themes\Controls\ControlThemes.xaml" />
     <None Remove="Themes\Controls\TabControlAvaloniaEdit.xaml" />

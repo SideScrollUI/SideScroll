@@ -11,6 +11,7 @@ public class UserSettings
 {
 	[Hidden]
 	public string? ProjectPath { get; set; }
+
 	[Hidden]
 	public string? LinkId { get; set; }
 
@@ -19,6 +20,9 @@ public class UserSettings
 
 	[Separator]
 	public bool AutoLoad { get; set; } = true;
+
+	[Range(1, 100)]
+	public int MaxHistory { get; set; } = 20;
 
 	[Range(1, 20)]
 	public int VerticalTabLimit { get; set; } = 10;

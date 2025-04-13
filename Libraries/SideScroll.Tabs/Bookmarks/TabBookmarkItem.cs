@@ -43,11 +43,7 @@ public class TabBookmarkItem(LinkedBookmark linkedBookmark, Project project) : I
 
 	public static TabInstance Create(LinkedBookmark linkedBookmark, Project project, ITab iTab)
 	{
-		Type? tabType = linkedBookmark.Bookmark.Type;
-		if (tabType == null)
-		{
-			throw new ArgumentNullException("Bookmark.Type");
-		}
+		Type tabType = linkedBookmark.Bookmark.Type ?? throw new ArgumentNullException("Bookmark.Type");
 
 		if (!typeof(ITab).IsAssignableFrom(tabType))
 		{

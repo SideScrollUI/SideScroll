@@ -1,11 +1,9 @@
 using SideScroll.Attributes;
 using SideScroll.Extensions;
-using SideScroll.Network.Http;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Settings;
-using SideScroll.Tasks;
 using SideScroll.Time;
 
 namespace SideScroll.Tabs;
@@ -19,17 +17,24 @@ public class Project
 	public Version Version => ProjectSettings.Version;
 
 	public virtual ProjectSettings ProjectSettings { get; set; }
-	public virtual UserSettings UserSettings { get; set; } = new();
+	public virtual UserSettings UserSettings
+	{
+		get => _userSettings;
+		set
+		{
+			_userSettings = value;
+			Navigator.MaxHistorySize = _userSettings.MaxHistory;
+		}
+	}
+	private UserSettings _userSettings;
 
 	public Linker Linker { get; set; }
+
+	public BookmarkNavigator Navigator { get; protected init; } = new();
 
 	public DataRepo DataShared => new(DataSharedPath, DataRepoName);
 	public DataRepo DataApp => new(DataAppPath, DataRepoName);
 	public DataRepo DataTemp => new(DataTempPath, DataRepoName);
-
-	public HttpCacheManager Http { get; set; } = new();
-	public BookmarkNavigator Navigator { get; set; } = new();
-	public TaskInstanceCollection Tasks { get; set; } = [];
 
 	private string DataSharedPath => Paths.Combine(UserSettings.ProjectPath, "Shared");
 	private string DataAppPath => Paths.Combine(UserSettings.ProjectPath, "Versions", ProjectSettings.DataVersion.ToString()); // todo: Rename Version to Data next schema change
@@ -52,16 +57,13 @@ public class Project
 
 	public override string? ToString() => Name;
 
-	public Project()
-	{
-		ProjectSettings = new();
-		Linker = new(this);
-	}
+	public Project() : this(new ProjectSettings(), new UserSettings()) { }
 
 	public Project(ProjectSettings projectSettings, UserSettings userSettings)
 	{
 		ProjectSettings = projectSettings;
 		UserSettings = userSettings;
+		_userSettings = userSettings; // Make the compiler happy
 		Linker = new(this);
 	}
 

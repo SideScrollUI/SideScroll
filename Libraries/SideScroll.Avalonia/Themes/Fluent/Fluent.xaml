@@ -242,7 +242,7 @@
           <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#303080" />
           <CornerRadius x:Key="ToolbarButtonCornerRadius">6</CornerRadius>
           
-          <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#393940" />
+          <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#ff3232a8" />
 
           <SolidColorBrush x:Key="ToolbarLabelForegroundBrush" Color="#D0D0E8" />
           <SolidColorBrush x:Key="ToolbarHeaderLabelForegroundBrush" Color="#8888FF" />
