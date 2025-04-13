@@ -60,6 +60,8 @@ public class TabControlImageButton : Button, IDisposable
 		}
 	}
 
+	public override string? ToString() => Tooltip;
+
 	public TabControlImageButton(string tooltip, IResourceView imageResource, string? label = null, double? iconSize = null, ICommand? command = null)
 	{
 		Tooltip = tooltip;

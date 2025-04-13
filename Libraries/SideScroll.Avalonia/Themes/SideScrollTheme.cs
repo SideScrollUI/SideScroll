@@ -192,4 +192,15 @@ public static class SideScrollTheme
 
 		throw new Exception($"Thickness not found: {name}");
 	}
+
+	public static void InitializeFonts()
+	{
+		FontTheme.FontFamilies =
+			new List<FontFamily>
+			{
+				ContentControlThemeFontFamily, // Inter Font
+				SourceCodeProFont,
+			}
+			.Concat(FontManager.Current.SystemFonts);
+	}
 }

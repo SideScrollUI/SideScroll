@@ -1,10 +1,26 @@
 using SideScroll.Serialize;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace SideScroll.Tabs.Bookmarks;
 
-public class BookmarkNavigator
+public class BookmarkNavigator : INotifyPropertyChanged
 {
-	public int CurrentIndex { get; set; } = -1;
+	public event PropertyChangedEventHandler? PropertyChanged;
+
+	//public event EventHandler<EventArgs> OnSelectionChanged;
+
+	public int CurrentIndex {
+		get => _currentIndex;
+		set
+		{
+			_currentIndex = value;
+			NotifyPropertyChanged();
+			NotifyPropertyChanged(nameof(CanSeekBackward));
+			NotifyPropertyChanged(nameof(CanSeekForward));
+		}
+	}
+	private int _currentIndex = -1;
 
 	public List<Bookmark> History { get; set; } = [];
 
@@ -18,16 +34,17 @@ public class BookmarkNavigator
 		}
 	}
 
-	//public IObservable<bool> CanSeekBackwardObservable => (CurrentIndex > 0);
-	public bool CanSeekBackward => (CurrentIndex > 0);
-	public bool CanSeekForward => (CurrentIndex + 1 < History.Count);
+	public bool CanSeekBackward => CurrentIndex > 0;
+	public bool CanSeekForward => CurrentIndex + 1 < History.Count;
 
-	//public event EventHandler<EventArgs> OnSelectionChanged;
+	public SynchronizationContext? Context { get; set; }
 
 	public override string ToString() => $"{CurrentIndex} / {History.Count}";
 
 	public BookmarkNavigator()
 	{
+		Context = SynchronizationContext.Current ?? new();
+
 		Bookmark bookmark = new()
 		{
 			Name = "Start",
@@ -41,7 +58,6 @@ public class BookmarkNavigator
 			return;
 
 		// trim Past?
-		//bookmark = Serialize.SerializerMemory.Clone<Bookmark>(new Core.Log(), bookmark); // sanitize
 		//int trimAt = currentIndex + 1;
 		//if (trimAt < History.Count)
 		//	History.RemoveRange(trimAt, History.Count - trimAt);
@@ -61,11 +77,6 @@ public class BookmarkNavigator
 		Bookmark currentBookmark = History[CurrentIndex];
 		//bookmark = Serialize.SerializerMemory.Clone<Bookmark>(new Core.Log(), bookmark); // sanitize
 		currentBookmark.TabBookmark = bookmark.TabBookmark;
-		//bookmark.tabBookmark = 
-		//bookmark = bookmark.Clone();
-		/*bookmark.Name = prevBookmark.Name;
-		bookmark.Changed = prevBookmark.Changed;
-		History[currentIndex] = bookmark;*/
 	}
 
 	public Bookmark? SeekBackward()
@@ -89,6 +100,24 @@ public class BookmarkNavigator
 			return History[CurrentIndex];
 		}
 		return null; // throw exception?
+	}
+
+	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+	{
+		if (Context != null)
+		{
+			Context!.Post(NotifyPropertyChangedContext, propertyName);
+		}
+		else
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+
+	private void NotifyPropertyChangedContext(object? state)
+	{
+		string propertyName = (string)state!;
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 }
 

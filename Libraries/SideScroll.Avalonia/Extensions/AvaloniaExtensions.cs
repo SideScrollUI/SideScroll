@@ -13,4 +13,9 @@ public static class AvaloniaExtensions
 	{
 		return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
 	}
+
+	public static Color WithAlpha(this Color color, byte alpha)
+	{
+		return new Color(alpha, color.R, color.G, color.B);
+	}
 }

@@ -20,17 +20,25 @@ public class TypeRepoObject : TypeRepo
 		}
 	}
 
+	public interface IMemberRepo
+	{
+		public void Load(object obj);
+		public object? Get();
+	}
+
+	public List<IMemberRepo> MemberRepos { get; protected set; } = [];
+
 	public List<FieldRepo> FieldRepos { get; protected set; } = [];
 	public List<PropertyRepo> PropertyRepos { get; protected set; } = [];
 
 	public LazyClass? LazyClass { get; protected set; }
 
-	public class FieldRepo
+	public class FieldRepo : IMemberRepo
 	{
-		public FieldSchema FieldSchema { get; init; }
-		public TypeRepo? TypeRepo { get; init; }
+		public FieldSchema FieldSchema { get; }
+		public TypeRepo? TypeRepo { get; }
 
-		public override string ToString() => "Field Repo: " + FieldSchema.FieldName;
+		public override string ToString() => "Field Repo: " + FieldSchema.Name;
 
 		public FieldRepo(FieldSchema fieldSchema, TypeRepo? typeRepo = null)
 		{
@@ -39,13 +47,13 @@ public class TypeRepoObject : TypeRepo
 
 			if (typeRepo?.Serializer.PublicOnly == true && FieldSchema.IsPrivate)
 			{
-				FieldSchema.IsLoadable = false;
+				FieldSchema.IsReadable = false;
 			}
 		}
 
 		public void Load(object obj)
 		{
-			if (FieldSchema.IsLoadable)
+			if (FieldSchema.IsReadable)
 			{
 				object? valueObject = TypeRepo!.LoadObjectRef();
 				// todo: 36% of current cpu usage, break into explicit operators? (is that even possible?)
@@ -59,7 +67,7 @@ public class TypeRepoObject : TypeRepo
 
 		public object? Get()
 		{
-			if (FieldSchema.IsLoadable)
+			if (FieldSchema.IsReadable)
 			{
 				return TypeRepo!.LoadObjectRef();
 			}
@@ -71,11 +79,11 @@ public class TypeRepoObject : TypeRepo
 		}
 	}
 
-	public class PropertyRepo
+	public class PropertyRepo : IMemberRepo
 	{
-		public readonly PropertySchema PropertySchema;
-		public readonly TypeRepo? TypeRepo;
-		public LazyProperty? LazyProperty;
+		public PropertySchema PropertySchema { get; }
+		public TypeRepo? TypeRepo { get; }
+		public LazyProperty? LazyProperty { get; set; }
 
 		public override string ToString() => $"{PropertySchema} ({TypeRepo})";
 
@@ -135,7 +143,7 @@ public class TypeRepoObject : TypeRepo
 			else if (LazyProperty != null)
 			{
 				throw new SerializerException("Get() doesn't support Lazy Properties",
-					new Tag("Property", PropertySchema.PropertyName));
+					new Tag("Property", PropertySchema.Name));
 			}
 			else
 			{
@@ -154,7 +162,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		foreach (FieldSchema fieldSchema in TypeSchema.FieldSchemas)
 		{
-			if (!fieldSchema.IsSerialized)
+			if (!fieldSchema.IsReadable)
 				continue;
 
 			FieldRepos.Add(new FieldRepo(fieldSchema));
@@ -202,7 +210,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		foreach (FieldSchema fieldSchema in TypeSchema.FieldSchemas)
 		{
-			//if (fieldSchema.Loadable == false)
+			//if (fieldSchema.IsReadable == false)
 			//	continue;
 
 			TypeRepo typeRepo;
@@ -212,7 +220,7 @@ public class TypeRepoObject : TypeRepo
 				if (typeRepo.Type != fieldSchema.NonNullableType)
 				{
 					log.Add("Can't load field, type has changed", new Tag("Field", fieldSchema));
-					fieldSchema.IsLoadable = false;
+					fieldSchema.IsReadable = false;
 					//continue;
 				}
 			}
@@ -226,7 +234,9 @@ public class TypeRepoObject : TypeRepo
 			//if (typeRepo == null)
 			//	continue;
 
-			FieldRepos.Add(new FieldRepo(fieldSchema, typeRepo));
+			var fieldRepo = new FieldRepo(fieldSchema, typeRepo);
+			FieldRepos.Add(fieldRepo);
+			MemberRepos.Add(fieldRepo);
 		}
 	}
 
@@ -261,6 +271,7 @@ public class TypeRepoObject : TypeRepo
 
 			var propertyRepo = new PropertyRepo(propertySchema, typeRepo);
 			PropertyRepos.Add(propertyRepo);
+			MemberRepos.Add(propertyRepo);
 
 			if (propertySchema.IsWriteable && !propertySchema.Type!.IsPrimitive)
 			{
@@ -288,8 +299,8 @@ public class TypeRepoObject : TypeRepo
 	{
 		if (TypeSchema.CustomConstructor == null) return;
 
-		var fields = FieldRepos.ToDictionary(f => f.FieldSchema.FieldName.ToLower());
-		var properties = PropertyRepos.ToDictionary(f => f.PropertySchema.PropertyName.ToLower());
+		var fields = FieldRepos.ToDictionary(f => f.FieldSchema.Name.ToLower());
+		var properties = PropertyRepos.ToDictionary(f => f.PropertySchema.Name.ToLower());
 
 		var parameters = TypeSchema.CustomConstructor.GetParameters();
 		foreach (var param in parameters)
@@ -389,15 +400,17 @@ public class TypeRepoObject : TypeRepo
 
 	public override void LoadObjectData(object obj)
 	{
-		LoadFields(obj);
-		LoadProperties(obj);
+		foreach (IMemberRepo memberRepo in MemberRepos)
+		{
+			memberRepo.Load(obj);
+		}
 	}
 
 	private void AddFields(object obj)
 	{
 		foreach (FieldSchema fieldSchema in TypeSchema.FieldSchemas)
 		{
-			if (!fieldSchema.IsSerialized)
+			if (!fieldSchema.IsReadable)
 				continue;
 
 			object? fieldValue = fieldSchema.FieldInfo!.GetValue(obj);
@@ -415,21 +428,13 @@ public class TypeRepoObject : TypeRepo
 		}
 	}
 
-	private void LoadFields(object obj)
-	{
-		foreach (FieldRepo fieldRepo in FieldRepos)
-		{
-			fieldRepo.Load(obj);
-		}
-	}
-
-	private void AddProperties(object value)
+	private void AddProperties(object obj)
 	{
 		foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
 		{
 			if (!propertySchema.ShouldWrite) continue;
 
-			object? propertyValue = propertySchema.PropertyInfo!.GetValue(value);
+			object? propertyValue = propertySchema.PropertyInfo!.GetValue(obj);
 			Serializer.AddObjectRef(propertyValue);
 		}
 
@@ -461,14 +466,6 @@ public class TypeRepoObject : TypeRepo
 		}
 	}
 
-	private void LoadProperties(object obj)
-	{
-		foreach (PropertyRepo propertyRepo in PropertyRepos)
-		{
-			propertyRepo.Load(obj);
-		}
-	}
-
 	public override void Clone(object source, object dest)
 	{
 		CloneFields(source, dest);
@@ -479,7 +476,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		foreach (FieldSchema fieldSchema in TypeSchema.FieldSchemas)
 		{
-			if (!fieldSchema.IsSerialized) continue;
+			if (!fieldSchema.IsReadable) continue;
 
 			object? fieldValue = fieldSchema.FieldInfo!.GetValue(source);
 			Serializer.AddObjectRef(fieldValue);

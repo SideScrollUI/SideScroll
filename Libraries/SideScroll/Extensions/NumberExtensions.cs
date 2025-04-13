@@ -7,30 +7,54 @@ public static class NumberExtensions
 		return d.ToString("#,0.#");
 	}
 
-	public static string FormattedShortDecimal(this double d)
+	public static string FormattedShortDecimal(this double d, int minimumPrecision = 0)
 	{
-		double ad = Math.Abs(d);
-		string prefix = "{0:#,0.#} ";
-		if (ad >= 1E12)
+		double absValue = Math.Abs(d);
+		string suffix;
+		double scaled;
+
+		if (absValue >= 1e12)
 		{
-			return string.Format(prefix + "T", d / 1E12);
+			scaled = d / 1e12;
+			suffix = " T";
 		}
-		else if (ad >= 1E9)
+		else if (absValue >= 1e9)
 		{
-			return string.Format(prefix + "G", d / 1E9);
+			scaled = d / 1e9;
+			suffix = " G";
 		}
-		else if (ad >= 1E6)
+		else if (absValue >= 1e6)
 		{
-			return string.Format(prefix + "M", d / 1E6);
+			scaled = d / 1e6;
+			suffix = " M";
 		}
-		else if (ad >= 1E3)
+		else if (absValue >= 1e3)
 		{
-			return string.Format(prefix + "K", d / 1E3);
+			scaled = d / 1e3;
+			suffix = " K";
 		}
-		else
+		else if (minimumPrecision == 0)
 		{
 			return d.Formatted()!;
 		}
+		else
+		{
+			scaled = d;
+			suffix = string.Empty;
+		}
+
+		string format;
+		if (minimumPrecision > 0)
+		{
+			format = "{0:N" + minimumPrecision + "}{1}";
+		}
+		else
+		{
+			// Show no decimals unless needed
+			format = scaled % 1 == 0 ? "{0:0}{1}" : "{0:0.#}{1}";
+		}
+
+		return string.Format(format, scaled, suffix);
 	}
 
 	public static double RoundToSignificantFigures(this double num, int significantFigures)

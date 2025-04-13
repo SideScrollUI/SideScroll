@@ -6,7 +6,6 @@ public static class SerializerExtensions
 {
 	private const BindingFlags CloneBindingAttr =
 		BindingFlags.Public |
-		BindingFlags.NonPublic |
 		BindingFlags.Instance |
 		BindingFlags.FlattenHierarchy;
 

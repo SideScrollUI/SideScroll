@@ -3,9 +3,9 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using SideScroll.Avalonia.Controls.View;
 using SideScroll.Avalonia.Extensions;
 using SideScroll.Avalonia.Utilities;
-using SideScroll.Avalonia.View;
 using System.Data;
 
 namespace SideScroll.Avalonia.Controls.DataGrids;

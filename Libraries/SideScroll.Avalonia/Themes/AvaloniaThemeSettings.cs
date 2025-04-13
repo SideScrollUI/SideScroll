@@ -7,6 +7,7 @@ using SideScroll.Tabs.Lists;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace SideScroll.Avalonia.Themes;
 
@@ -31,6 +32,12 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 
 	[ReadOnly(true)]
 	public string? Variant { get; set; }
+
+	[JsonIgnore, Hidden]
+	public Version? Version { get; set; }
+
+	[JsonIgnore, Hidden]
+	public DateTime? ModifiedAt { get; set; }
 
 	[Inline]
 	public FontTheme Font { get; set; } = new();

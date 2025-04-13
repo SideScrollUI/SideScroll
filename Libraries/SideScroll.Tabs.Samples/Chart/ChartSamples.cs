@@ -6,45 +6,51 @@ public static class ChartSamples
 {
 	private static readonly Random _random = new();
 
-	public static List<TimeRangeValue> CreateTimeSeries(DateTime endTime, TimeSpan? sampleDuration = null, int sampleCount = 24, double maxValue = int.MaxValue)
+	public static List<TimeRangeValue> CreateTimeSeries(
+		DateTime endTime,
+		TimeSpan? sampleDuration = null,
+		int sampleCount = 24,
+		double minValue = 0,
+		double maxValue = int.MaxValue)
 	{
 		sampleDuration ??= TimeSpan.FromHours(1);
-		TimeSpan totalDuration = TimeSpan.FromTicks(sampleCount * sampleDuration.Value.Ticks);
-		DateTime startTime = endTime.Subtract(totalDuration);
-		maxValue = Math.Min(maxValue, Math.Max(1, _random.Next()));
-		double delta = maxValue / 4;
-		double prevValue = _random.Next() % maxValue;
-		var list = new List<TimeRangeValue>();
+
+		TimeSpan totalDuration = sampleCount * sampleDuration.Value;
+		DateTime startTime = endTime - totalDuration;
+
+		double range = maxValue - minValue;
+		double currentValue = minValue + _random.NextDouble() * range;
+		double stepRange = currentValue / 4.0;
+
+		var timeSeries = new List<TimeRangeValue>(sampleCount);
+		DateTime currentTime = startTime;
+
 		for (int i = 0; i < sampleCount; i++)
 		{
 			var value = new TimeRangeValue
 			{
-				StartTime = startTime,
-				EndTime = startTime.Add(sampleDuration.Value),
-				Value = prevValue,
+				StartTime = currentTime,
+				EndTime = currentTime + sampleDuration.Value,
+				Value = currentValue
 			};
-			prevValue = Math.Abs(prevValue + (_random.Next() % delta - delta / 2));
-			list.Add(value);
-			startTime = startTime.Add(sampleDuration.Value);
+
+			timeSeries.Add(value);
+
+			// Apply a random fluctuation
+			double fluctuation = (_random.NextDouble() - 0.5) * 2 * stepRange;
+			currentValue = Math.Clamp(currentValue + fluctuation, minValue, maxValue);
+			currentTime += sampleDuration.Value;
 		}
-		return list;
+
+		return timeSeries;
 	}
 
-	public static List<TimeRangeValue> CreateIdenticalTimeSeries(DateTime endTime, int sampleCount = 24, double value = 1000)
+	public static List<TimeRangeValue> CreateIdenticalTimeSeries(
+		DateTime endTime,
+		TimeSpan? sampleDuration = null,
+		int sampleCount = 24,
+		double value = 1000)
 	{
-		DateTime startTime = endTime.Subtract(TimeSpan.FromHours(sampleCount));
-		var list = new List<TimeRangeValue>();
-		for (int i = 0; i < sampleCount; i++)
-		{
-			var timeRangeValue = new TimeRangeValue
-			{
-				StartTime = startTime,
-				EndTime = startTime.AddHours(1),
-				Value = value,
-			};
-			list.Add(timeRangeValue);
-			startTime = startTime.AddHours(1);
-		}
-		return list;
+		return CreateTimeSeries(endTime, sampleDuration, sampleCount, value, value);
 	}
 }

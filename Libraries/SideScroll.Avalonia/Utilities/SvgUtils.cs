@@ -50,7 +50,7 @@ public static class SvgUtils
 		using var reader = new StreamReader(stream);
 		string text = reader.ReadToEnd();
 		Color newColor = color ?? SideScrollTheme.IconForeground.Color;
-		string newColorText = $"rgb({newColor.R},{newColor.G},{newColor.B})";
+		string newColorText = $"rgba({newColor.R},{newColor.G},{newColor.B},{newColor.A})";
 		string updated = text
 			.Replace("#000000", newColorText)
 			.Replace("rgb(0,0,0)", newColorText)

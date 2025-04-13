@@ -1,3 +1,5 @@
+using Avalonia;
+using Avalonia.Data;
 using Avalonia.Input;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
@@ -28,6 +30,11 @@ public class ToolbarButton : TabControlImageButton
 		{
 			HotKey = keyGesture;
 		}
+
+		if (toolButton.IsEnabledBinding is PropertyBinding propertyBinding)
+		{
+			BindIsEnabled(propertyBinding.Path, propertyBinding.Object);
+		}
 	}
 
 	public ToolbarButton(TabControlToolbar toolbar, string tooltip, IResourceView imageResource, double? iconSize = null, string? label = null, ICommand? command = null) :
@@ -35,5 +42,24 @@ public class ToolbarButton : TabControlImageButton
 	{
 		TabInstance = toolbar.TabInstance;
 		Toolbar = toolbar;
+	}
+
+	public void BindIsEnabled(string path, object? source)
+	{
+		Bind(IsEnabledProperty, new Binding
+		{
+			Path = path,
+			Source = source,
+			Mode = BindingMode.OneWay,
+		});
+	}
+
+	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+	{
+		base.OnPropertyChanged(change);
+		if (change.Property.Name == nameof(IsEnabled))
+		{
+			UpdateImage();
+		}
 	}
 }

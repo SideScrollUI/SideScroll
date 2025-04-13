@@ -7,7 +7,6 @@
     <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlSplitContainer.xaml" />
     <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlTextArea.xaml"/>
     <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlTextBlock.xaml"/>
-    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlTitle.xaml" />
     <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabControlToolbar.xaml" />
     <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/ToolbarButton.xaml"/>
     <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabButton.xaml"/>

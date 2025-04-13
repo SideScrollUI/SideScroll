@@ -104,6 +104,7 @@ public class Project
 
 	public void Initialize()
 	{
+		UserSettings.TimeZone ??= TimeZoneView.Local;
 		TimeZoneView.Current = UserSettings.TimeZone;
 		DateTimeExtensions.DefaultFormatType = UserSettings.TimeFormat;
 		LinkManager.Instance = new(this);
