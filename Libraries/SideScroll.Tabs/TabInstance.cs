@@ -90,9 +90,14 @@ public class TabInstance : IDisposable
 		set => Model.Name = value;
 	}
 
-	public DataRepo DataShared => Project.DataShared;
-	public DataRepo DataApp => Project.DataApp;
-	public DataRepo DataTemp => Project.DataTemp;
+	public ProjectDataRepos Data => Project.Data;
+
+	[Obsolete("Use Data instead")]
+	public DataRepo DataShared => Project.Data.Shared;
+	[Obsolete("Use Data instead")]
+	public DataRepo DataApp => Project.Data.App;
+	[Obsolete("Use Data instead")]
+	public DataRepo DataTemp => Project.Data.Temp;
 
 	public TabViewSettings TabViewSettings = new();
 	public TabBookmark? TabBookmark { get; set; }
@@ -746,7 +751,7 @@ public class TabInstance : IDisposable
 			return;
 
 		bookmark.Name = CurrentBookmarkName;
-		DataApp.Save(bookmark.Name, bookmark, TaskInstance.Call);
+		Data.App.Save(bookmark.Name, bookmark, TaskInstance.Call);
 	}
 
 	public void LoadDefaultBookmark()
@@ -754,7 +759,7 @@ public class TabInstance : IDisposable
 		if (Project.UserSettings.AutoLoad == false)
 			return;
 
-		Bookmark? bookmark = DataApp.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);
+		Bookmark? bookmark = Data.App.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);
 		if (bookmark != null)
 		{
 			TabBookmark = bookmark.TabBookmark;
@@ -795,24 +800,24 @@ public class TabInstance : IDisposable
 	// Use interface T types instead of actual object type if present
 	public void SaveData<T>(string key, T obj)
 	{
-		DataApp.Save<T>(key, obj, TaskInstance.Call);
+		Data.App.Save<T>(key, obj, TaskInstance.Call);
 	}
 
 	public void SaveData<T>(string groupId, string key, T obj)
 	{
-		DataApp.Save<T>(groupId, key, obj, TaskInstance.Call);
+		Data.App.Save<T>(groupId, key, obj, TaskInstance.Call);
 	}
 
 	// todo: Should createIfNeeded = false?
 	public T? LoadData<T>(string key, bool createIfNeeded = true)
 	{
-		T? data = DataApp.Load<T>(key, TaskInstance.Call, createIfNeeded);
+		T? data = Data.App.Load<T>(key, TaskInstance.Call, createIfNeeded);
 		return data;
 	}
 
 	public T? LoadData<T>(string groupId, string key, bool createIfNeeded = true)
 	{
-		T? data = DataApp.Load<T>(groupId, key, TaskInstance.Call, createIfNeeded);
+		T? data = Data.App.Load<T>(groupId, key, TaskInstance.Call, createIfNeeded);
 		return data;
 	}
 
@@ -827,22 +832,22 @@ public class TabInstance : IDisposable
 		if (CustomPath != null)
 		{
 			// It's better to return the default constructor so the Tab autosizes instead of using the saved defaults which might have a width specified
-			return DataTemp.Load<TabViewSettings>(CustomPath, TaskInstance.Call, true)!;
+			return Data.Temp.Load<TabViewSettings>(CustomPath, TaskInstance.Call, true)!;
 		}
 
 		Type type = GetType();
 		if (type != typeof(TabInstance))
 		{
 			// Unique TabInstance
-			TabViewSettings? tabViewSettings = DataTemp.Load<TabViewSettings>(TabPath, TaskInstance.Call);
+			TabViewSettings? tabViewSettings = Data.Temp.Load<TabViewSettings>(TabPath, TaskInstance.Call);
 			if (tabViewSettings != null)
 				return tabViewSettings;
 		}
 		else
 		{
 			TabViewSettings? tabViewSettings =
-				DataTemp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call) ??
-				DataTemp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
+				Data.Temp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call) ??
+				Data.Temp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
 			if (tabViewSettings != null)
 				return tabViewSettings;
 		}
@@ -854,7 +859,7 @@ public class TabInstance : IDisposable
 	{
 		if (CustomPath != null)
 		{
-			DataTemp.Save(CustomPath, TabViewSettings, TaskInstance.Call);
+			Data.Temp.Save(CustomPath, TabViewSettings, TaskInstance.Call);
 		}
 		else
 		{
@@ -862,12 +867,12 @@ public class TabInstance : IDisposable
 			if (type != typeof(TabInstance))
 			{
 				// Unique TabInstance
-				DataTemp.Save(TabPath, TabViewSettings, TaskInstance.Call);
+				Data.Temp.Save(TabPath, TabViewSettings, TaskInstance.Call);
 			}
 			else
 			{
-				DataTemp.Save(TypeLabelPath, TabViewSettings, TaskInstance.Call);
-				DataTemp.Save(TypePath, TabViewSettings, TaskInstance.Call);
+				Data.Temp.Save(TypeLabelPath, TabViewSettings, TaskInstance.Call);
+				Data.Temp.Save(TypePath, TabViewSettings, TaskInstance.Call);
 			}
 		}
 		SaveDefaultBookmark();
@@ -875,12 +880,12 @@ public class TabInstance : IDisposable
 
 	protected void SetStartLoad()
 	{
-		DataTemp.Save(LoadedPath, true, TaskInstance.Call);
+		Data.Temp.Save(LoadedPath, true, TaskInstance.Call);
 	}
 
 	public void SetEndLoad()
 	{
-		DataTemp.Delete(null, typeof(bool), LoadedPath);
+		Data.Temp.Delete(null, typeof(bool), LoadedPath);
 	}
 
 	// for detecting parent/child loops

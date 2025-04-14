@@ -41,7 +41,7 @@ public class LinkCollection
 		Project = project;
 		GroupId = groupId;
 
-		_dataRepoView = Project.DataApp.OpenView<LinkedBookmark>(GroupId);
+		_dataRepoView = Project.Data.App.OpenView<LinkedBookmark>(GroupId);
 	}
 
 	public void Load(Call call, bool reload)

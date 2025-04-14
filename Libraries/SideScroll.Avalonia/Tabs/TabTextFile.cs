@@ -1,6 +1,6 @@
 using SideScroll.Avalonia.Controls.TextEditor;
-using SideScroll.Utilities;
 using SideScroll.Tabs;
+using SideScroll.Utilities;
 
 namespace SideScroll.Avalonia.Tabs;
 

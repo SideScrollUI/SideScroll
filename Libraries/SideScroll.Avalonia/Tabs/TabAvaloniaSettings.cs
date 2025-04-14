@@ -68,7 +68,7 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 
 		private void Save(Call call)
 		{
-			DataApp.Save(CustomUserSettings!);
+			Data.App.Save(CustomUserSettings!);
 			Project.UserSettings = CustomUserSettings.DeepClone(call)!;
 
 			TimeZoneView.Current = Project.UserSettings.TimeZone;

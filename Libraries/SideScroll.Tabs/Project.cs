@@ -32,28 +32,14 @@ public class Project
 
 	public BookmarkNavigator Navigator { get; protected init; } = new();
 
-	public DataRepo DataShared => new(DataSharedPath, DataRepoName);
-	public DataRepo DataApp => new(DataAppPath, DataRepoName);
-	public DataRepo DataTemp => new(DataTempPath, DataRepoName);
+	public ProjectDataRepos Data => new(ProjectSettings, UserSettings);
 
-	private string DataSharedPath => Paths.Combine(UserSettings.ProjectPath, "Shared");
-	private string DataAppPath => Paths.Combine(UserSettings.ProjectPath, "Versions", ProjectSettings.DataVersion.ToString()); // todo: Rename Version to Data next schema change
-	private string DataTempPath => Paths.Combine(UserSettings.ProjectPath, "Temp", ProjectSettings.DataVersion.ToString());
-
-	private string DataRepoName
-	{
-		get
-		{
-			if (UserSettings.LinkId != null)
-			{
-				return Paths.Combine("Links", UserSettings.LinkId.HashSha256());
-			}
-			else
-			{
-				return Paths.Combine("Current");
-			}
-		}
-	}
+	[Obsolete("Use Data instead")]
+	public DataRepo DataShared => Data.Shared;
+	[Obsolete("Use Data instead")]
+	public DataRepo DataApp => Data.App;
+	[Obsolete("Use Data instead")]
+	public DataRepo DataTemp => Data.Temp;
 
 	public override string? ToString() => Name;
 
@@ -100,7 +86,7 @@ public class Project
 			ProjectPath = projectSettings.DefaultProjectPath,
 		};
 		var project = new Project(projectSettings, defaultUserSettings);
-		var userSettings = project.DataApp.Load<T>() ?? defaultUserSettings;
+		var userSettings = project.Data.App.Load<T>() ?? defaultUserSettings;
 		return new Project(projectSettings, userSettings);
 	}
 
@@ -110,5 +96,31 @@ public class Project
 		TimeZoneView.Current = UserSettings.TimeZone;
 		DateTimeExtensions.DefaultFormatType = UserSettings.TimeFormat;
 		LinkManager.Instance = new(this);
+	}
+}
+
+public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings userSettings)
+{
+	public DataRepo App => new(AppPath, DataRepoName);
+	public DataRepo Temp => new(TempPath, DataRepoName);
+	public DataRepo Shared => new(SharedPath, DataRepoName); // Shared across versions
+
+	private string AppPath => Paths.Combine(userSettings.ProjectPath, "Data", projectSettings.DataVersion.ToString());
+	private string TempPath => Paths.Combine(userSettings.ProjectPath, "Temp", projectSettings.DataVersion.ToString());
+	private string SharedPath => Paths.Combine(userSettings.ProjectPath, "Shared");
+
+	private string DataRepoName
+	{
+		get
+		{
+			if (userSettings.LinkId != null)
+			{
+				return Paths.Combine("Links", userSettings.LinkId.HashSha256());
+			}
+			else
+			{
+				return Paths.Combine("Current");
+			}
+		}
 	}
 }

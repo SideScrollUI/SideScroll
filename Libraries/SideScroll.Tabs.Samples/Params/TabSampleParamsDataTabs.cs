@@ -42,7 +42,7 @@ public class TabSampleParamsDataTabs : ITab
 
 		private void LoadSavedItems(Call call, TabModel model)
 		{
-			_dataRepoView = DataApp.LoadView<SampleParamItem>(call, GroupId, nameof(SampleParamItem.Name));
+			_dataRepoView = Data.App.LoadView<SampleParamItem>(call, GroupId, nameof(SampleParamItem.Name));
 			DataRepoInstance = _dataRepoView; // Allow links to pass the selected items
 
 			var dataCollection = new DataViewCollection<SampleParamItem, TabSampleParamItem>(_dataRepoView);

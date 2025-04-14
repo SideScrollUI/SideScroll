@@ -183,7 +183,7 @@ public class BaseWindow : Window
 	{
 		SetMaxBounds();
 
-		var settings = Project.DataApp.Load<WindowSettings>(true);
+		var settings = Project.Data.App.Load<WindowSettings>(true);
 		if (settings != null)
 		{
 			WindowSettings = settings;
@@ -204,7 +204,7 @@ public class BaseWindow : Window
 
 	private void SaveWindowSettingsInternal()
 	{
-		Project.DataApp.Save(WindowSettings);
+		Project.Data.App.Save(WindowSettings);
 	}
 
 	private void BaseWindow_Opened(object? sender, EventArgs e)

@@ -18,7 +18,7 @@ public class FileNodeDataRepoView(string groupId, bool indexed = false, int? max
 
 		try
 		{
-			return _dataRepoNodes ??= project.DataApp.OpenView<NodeView>(GroupId, Indexed, MaxItems);
+			return _dataRepoNodes ??= project.Data.App.OpenView<NodeView>(GroupId, Indexed, MaxItems);
 		}
 		finally
 		{
@@ -41,7 +41,7 @@ public class FileNodeDataRepoView(string groupId, bool indexed = false, int? max
 			if (_dataRepoNodes?.Loaded == true) return _dataRepoNodes;
 
 			// DataRepo might only have been opened and not loaded before
-			_dataRepoNodes ??= project.DataApp.OpenView<NodeView>(GroupId, Indexed, MaxItems);
+			_dataRepoNodes ??= project.Data.App.OpenView<NodeView>(GroupId, Indexed, MaxItems);
 			_dataRepoNodes.LoadAllIndexed(call);
 			foreach (NodeView nodeView in _dataRepoNodes.Items.Values)
 			{

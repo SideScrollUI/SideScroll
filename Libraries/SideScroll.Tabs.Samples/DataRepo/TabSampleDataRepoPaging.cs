@@ -48,7 +48,7 @@ public class TabSampleDataRepoPaging : ITab
 
 		private void LoadPageView(Call call)
 		{
-			DataRepoInstance = _dataRepoItems = DataApp.Open<SampleItem>(RepoId, true);
+			DataRepoInstance = _dataRepoItems = Data.App.Open<SampleItem>(RepoId, true);
 
 			_pageView = _dataRepoItems.LoadPageView(call);
 			_pageView!.PageSize = 10;

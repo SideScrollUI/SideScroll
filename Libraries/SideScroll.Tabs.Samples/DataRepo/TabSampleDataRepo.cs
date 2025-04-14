@@ -20,7 +20,7 @@ public class TabSampleDataRepo : ITab
 				new("Sample Data Repo", new TabSampleDataRepoCollection()),
 				new("Param Data Repo", new TabSampleParamsDataTabs()),
 				new("Paging", new TabSampleDataRepoPaging()),
-				new("Local Directories", new TabDirectory(Project.DataApp.RepoPath)),
+				new("Local Directories", new TabDirectory(Project.Data.App.RepoPath)),
 			};
 
 			model.Actions = new List<TaskCreator>
@@ -31,8 +31,8 @@ public class TabSampleDataRepo : ITab
 
 		private void DeleteRepos(Call call)
 		{
-			Project.DataShared.DeleteRepo(call);
-			Project.DataApp.DeleteRepo(call);
+			Project.Data.Shared.DeleteRepo(call);
+			Project.Data.App.DeleteRepo(call);
 			Reload();
 		}
 	}
