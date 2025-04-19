@@ -1,7 +1,16 @@
 <Project>
   <PropertyGroup>
     <Version>0.9.7</Version>
-    <PackageReleaseNotes>Toolbar Buttons can now specify an IsEnabled Property Binding. Added Toolbar IsEnabled support for the Global Forward/Backwards buttons and the Theme Undo/Redo buttons. Updated TabControlSearch icon color to use the Text Foreground Color with half transparency. Moved SideScroll.Avalonia BaseWindow, View, and Viewer to underneath the Controls Namespace to better match their functionality. Added User Setting for Navigator MaxHistory. Removed HttpCacheManager and Tasks from Project since they're not currently used. Moved all the Project Data Repos into ProjectDataRepos so they can be passed around easier, and simplify access. Moved App DataRepo location from 'Versions' to 'Data'.</PackageReleaseNotes>
+    <PackageReleaseNotes>
+    - Toolbar Buttons can now specify an IsEnabled Property Binding
+    - Added Toolbar IsEnabled support for the Global Forward/Backwards buttons and the Theme Undo/Redo buttons
+    - Updated TabControlSearch icon color to use the Text Foreground Color with half transparency
+    - Moved SideScroll.Avalonia BaseWindow, View, and Viewer to underneath the Controls Namespace to better match their functionality
+    - Added User Setting for Navigator MaxHistory
+    - Removed HttpCacheManager and Tasks from Project since they're not currently used
+    - Moved all the Project Data Repos into ProjectDataRepos so they can be passed around easier, and simplify access
+    - Moved App DataRepo location from 'Versions' to 'Data'
+    </PackageReleaseNotes>
 
     <AvaloniaVersion>11.2.5</AvaloniaVersion>
     <AvaloniaEditVersion>11.2.0</AvaloniaEditVersion>

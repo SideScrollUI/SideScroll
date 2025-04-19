@@ -71,8 +71,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 			List<DirectoryView> directories = GetDirectories(call);
 			List<FileView> files = GetFiles(call);
 
-			List<NodeView> nodes = new(directories);
-			nodes.AddRange(files);
+			List<NodeView> nodes = [.. directories, .. files];
 
 			if (directories.Count == nodes.Count)
 			{

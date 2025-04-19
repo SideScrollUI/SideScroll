@@ -43,15 +43,15 @@
     "ButtonCornerRadius": 6,
     "IconForeground": "#ff6b8ff2",
     "IconForegroundHighlight": "#ff3e6ff7",
-    "IconForegroundDisabled": "#ff999999",
-    "IconAltForeground": "#fffa9b28",
+    "IconForegroundDisabled": "#ffa4b7ed",
+    "IconAltForeground": "#ff282ffa",
     "IconAltForegroundHighlight": "#ffeb9800",
     "RadioButtonForegroundPointerOver": "Black"
   },
   "ToolTip": {
     "Background": "#ff695f9e",
     "Foreground": "#ffe1e3f2",
-    "Border": "#a8000000",
+    "Border": "#a840318c",
     "FontSize": 14
   },
   "ScrollBar": {
@@ -62,7 +62,7 @@
     "ButtonBackground": "#ffd5d8f7",
     "ButtonBackgroundPointerOver": "#ffc6c8f7",
     "ButtonBackgroundPressed": "#ff96a8ff",
-    "ButtonArrowForeground": "Black"
+    "ButtonArrowForeground": "#ff001061"
   },
   "DataGrid": {
     "ColumnHeaderBackground": "#ffd7d7fa",
@@ -73,10 +73,10 @@
     "RowBackground": "#fff5f6fc",
     "RowBackgroundHighlight": "#ffd4d9ff",
     "RowBackgroundLowOpacity": 0.5,
-    "RowBackgroundMediumOpacity": 0.75,
+    "RowBackgroundMediumOpacity": 0.8,
     "CellForeground": "#ff2f3866",
-    "CellForegroundPointerOver": "Black",
-    "CellForegroundSelected": "Black",
+    "CellForegroundPointerOver": "#ff001061",
+    "CellForegroundSelected": "#ff001061",
     "CellBorder": "#ffd8daf2",
     "CellFocusVisualPrimary": "#ff7c8acc",
     "CellFocusVisualSecondary": "#99ffffff",
@@ -87,7 +87,7 @@
     "Border": "#ff9aa4d9"
   },
   "Button": {
-    "Background": "#ffe9eaf7",
+    "Background": "#ffe6e7fa",
     "BackgroundPointerOver": "#ffe0e3ff",
     "BackgroundPressed": "#ffd9dcff",
     "Foreground": "#ff280b9c",
@@ -100,11 +100,11 @@
     "CornerRadius": 12
   },
   "TextControl": {
-    "LabelForeground": "Black",
+    "LabelForeground": "#ff001061",
     "TextControlBackground": "White",
     "TextControlBackgroundReadOnly": "#ffebebf7",
-    "TextControlForeground": "Black",
-    "TextControlForegroundHighlight": "Black",
+    "TextControlForeground": "#ff001061",
+    "TextControlForegroundHighlight": "#ff001061",
     "TextControlForegroundReadOnly": "#ff616161",
     "TextControlBorder": "#ffd3d3f5",
     "TextControlBorderPointerOver": "#ff8fa1f7",
@@ -115,11 +115,12 @@
     "ComboBoxDropDownBackground": "#fff0f1ff",
     "ComboBoxItemBackgroundSelected": "#ffb2bfff",
     "ComboBoxItemBackgroundPointerOver": "#ffccd4ff",
-    "ComboBoxItemForegroundSelected": "Black",
+    "ComboBoxItemForegroundSelected": "#ff001061",
     "CalendarViewBackground": "#ffbac6ff",
+    "CalendarViewItemBackground": "#ffe6e6e6",
     "CalendarViewOutOfScopeBackground": "#ffd1d1f0",
-    "CalendarViewBorderBrush": "#ffe6e8ff",
-    "CalendarViewForeground": "Black",
+    "CalendarViewHoverBorder": "#ff6791e6",
+    "CalendarViewForeground": "#ff001061",
     "ErrorTextForeground": "#ffc4230a"
   },
   "TextArea": {
@@ -129,10 +130,10 @@
   },
   "TextEditor": {
     "Background": "White",
-    "Foreground": "Black",
+    "Foreground": "#ff001061",
     "SelectedBackground": "#ffdbe5ff",
     "LinkForeground": "#ff0000f7",
-    "JsonPunctuation": "Black",
+    "JsonPunctuation": "#ff001061",
     "JsonFieldName": "#ffc208c2",
     "JsonString": "#ff008c00",
     "JsonNumber": "#ff2600e6",

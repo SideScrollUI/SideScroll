@@ -524,7 +524,7 @@
           
           <SolidColorBrush x:Key="ToolTipBackground" Color="#e8131b45" />
           <SolidColorBrush x:Key="ToolTipForeground" Color="#ffbdbdde" />
-          <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#FF000000" />
+          <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#ff050505" />
 
           <!-- ScrollBar -->
 
@@ -614,7 +614,7 @@
           <SolidColorBrush x:Key="IconAltForegroundBrush" Color="{DynamicResource IconAltForegroundColor}" />
           <SolidColorBrush x:Key="IconAltForegroundHighlightBrush" Color="{DynamicResource IconAltForegroundHighlightColor}" />
           
-          <SolidColorBrush x:Key="IconForegroundDisabledBrush" Color="#333333" />
+          <SolidColorBrush x:Key="IconForegroundDisabledBrush" Color="#ff383838" />
 
           <!-- DataGrid Styled -->
           
