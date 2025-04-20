@@ -230,6 +230,7 @@ public class TabControlParams : Border, IValidationControl
 			return null;
 
 		property.Cachable = false;
+		control.Margin = new Thickness(1);
 
 		int columnIndex = property.GetCustomAttribute<ColumnIndexAttribute>()?.Index ?? 0;
 		int rowIndex = ContainerGrid.RowDefinitions.Count;

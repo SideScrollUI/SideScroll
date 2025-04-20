@@ -284,7 +284,7 @@
 
           <!-- Text -->
 
-          <SolidColorBrush x:Key="LabelForegroundBrush" Color="#e3e3e3" />
+          <SolidColorBrush x:Key="LabelForegroundBrush" Color="#ffdedede" />
 
           <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#c5c6c6" />
           <SolidColorBrush x:Key="TextControlForegroundReadOnlyBrush" Color="#606060" />
