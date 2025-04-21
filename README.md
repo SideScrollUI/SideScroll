@@ -27,7 +27,7 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 #### Dark Theme
 ![Dark Theme](Images/Screenshots/ColumnTypes_CustomControl_Charts_Dark.png)
 #### Custom Theming - Light Blue Theme
-![Custom Theme](Images/Screenshots/LightBlueTheme.png)
+![Light Blue Theme](Images/Screenshots/LightBlueTheme.png)
 #### Rich Text Editing with AvaloniaEdit
 ![Rich Text Editing](Images/Screenshots/TextEditorJsonAndXml.png)
 #### Share Links
