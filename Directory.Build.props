@@ -9,10 +9,11 @@
     - Added User Setting for Navigator MaxHistory
     - Removed HttpCacheManager and Tasks from Project since they're not currently used
     - Moved all the Project Data Repos into ProjectDataRepos so they can be passed around easier, and simplify access
-    - Moved App DataRepo location from 'Versions' to 'Data'
+    - Moved User App DataRepo location from 'Versions' to 'Data' (you can rename the old Versions directory to Data if you would like to transfer any data)
+    - Changed Exception log path so the Exceptions folder is before the project name
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.2.5</AvaloniaVersion>
+    <AvaloniaVersion>11.2.8</AvaloniaVersion>
     <AvaloniaEditVersion>11.2.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
