@@ -15,7 +15,7 @@ public interface IPropertyEditable
 public class ListProperty : ListMember, IPropertyEditable
 {
 	[HiddenColumn]
-	public PropertyInfo PropertyInfo { get; init; }
+	public PropertyInfo PropertyInfo { get; }
 
 	[HiddenColumn]
 	public bool Cachable { get; set; }

@@ -102,7 +102,7 @@
   "TextControl": {
     "LabelForeground": "#ff001061",
     "TextControlBackground": "White",
-    "TextControlBackgroundReadOnly": "#ffebebf7",
+    "TextControlBackgroundReadOnly": "#ffededfa",
     "TextControlForeground": "#ff001061",
     "TextControlForegroundHighlight": "#ff001061",
     "TextControlForegroundReadOnly": "#ff616161",

@@ -356,7 +356,8 @@ public class TextControlTheme : ThemeSection
 		"TextControlBackground",
 		"ComboBoxBackground",
 		"CalendarDatePickerBackground",
-		"CalendarDatePickerBackgroundPointerOver"
+		"CalendarDatePickerBackgroundPointerOver",
+		"CheckBoxCheckGlyphForegroundIndeterminate"
 		)]
 	public Color? TextControlBackground { get; set; }
 
@@ -368,8 +369,7 @@ public class TextControlTheme : ThemeSection
 		"TextControlForeground",
 		"ComboBoxForeground",
 		"CalendarDatePickerForeground",
-		"RadioButtonForeground",
-		"CheckBoxCheckGlyphForegroundIndeterminate"
+		"RadioButtonForeground"
 		)]
 	public Color? TextControlForeground { get; set; }
 

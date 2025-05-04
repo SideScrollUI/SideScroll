@@ -1221,9 +1221,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			SearchControl = null;
 		}
 
-		if (List is INotifyCollectionChanged iNotifyCollectionChanged) // as AutoLoad
+		if (List is INotifyCollectionChanged notifyCollectionChanged) // as AutoLoad
 		{
-			iNotifyCollectionChanged.CollectionChanged -= NotifyCollectionChanged_CollectionChanged;
+			notifyCollectionChanged.CollectionChanged -= NotifyCollectionChanged_CollectionChanged;
 		}
 
 		List = null;

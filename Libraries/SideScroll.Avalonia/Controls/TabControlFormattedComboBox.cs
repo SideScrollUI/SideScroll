@@ -1,10 +1,12 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
+using Avalonia.Threading;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
 using System.Collections;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -44,7 +46,12 @@ public class TabControlFormattedComboBox : ComboBox
 
 			ArgumentNullException.ThrowIfNull(propertyInfo);
 
-			Items = (IEnumerable)propertyInfo.GetValue(property.Object)!;
+			var collection = (IEnumerable)propertyInfo.GetValue(property.Object)!;
+			Items = collection;
+			if (collection is INotifyCollectionChanged notifyCollectionChanged)
+			{
+				notifyCollectionChanged.CollectionChanged += CollectionChanged_CollectionChanged;
+			}
 		}
 		else
 		{
@@ -82,6 +89,18 @@ public class TabControlFormattedComboBox : ComboBox
 		if (e.PropertyName == Property?.PropertyInfo.Name)
 		{
 			SelectedItem = Property!.Value;
+		}
+	}
+
+	private void CollectionChanged_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	{
+		if (sender is IEnumerable enumerable)
+		{
+			// This will usually be called for a clear and then multiple adds after replacing
+			ItemsSource = _items = FormattedItem.Create(enumerable);
+
+			// Delay to allow remaining items to repopulate first so the existing value is present
+			Dispatcher.UIThread.Post(SelectPropertyValue, DispatcherPriority.Background);
 		}
 	}
 

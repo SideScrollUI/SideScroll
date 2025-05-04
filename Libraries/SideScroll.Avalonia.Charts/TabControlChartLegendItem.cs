@@ -16,8 +16,8 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	public event EventHandler<EventArgs>? OnSelectionChanged;
 	public event EventHandler<EventArgs>? OnVisibleChanged;
 
-	public TabControlChartLegend<TSeries> Legend { get; init; }
-	public ChartSeries<TSeries> ChartSeries { get; init; }
+	public TabControlChartLegend<TSeries> Legend { get; }
+	public ChartSeries<TSeries> ChartSeries { get; }
 
 	public ChartView ChartView => Legend.ChartView;
 	public TSeries Series => ChartSeries.LineSeries;

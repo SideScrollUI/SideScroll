@@ -61,7 +61,7 @@ public class TabControlParams : Border, IValidationControl
 			ColumnDefinitions = new ColumnDefinitions(columnDefinitions),
 			RowDefinitions = new RowDefinitions("*"),
 			HorizontalAlignment = HorizontalAlignment.Stretch,
-			Margin = new Thickness(6),
+			Margin = new Thickness(6, 6, 10, 6), // Extra for ScrollBar on right side
 		};
 
 		Child = ContainerGrid;
