@@ -5,8 +5,8 @@
     - Tab Formatted ComboBox now updates the BindingList when the list changes
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.2.8</AvaloniaVersion>
-    <AvaloniaEditVersion>11.2.0</AvaloniaEditVersion>
+    <AvaloniaVersion>11.3.0</AvaloniaVersion>
+    <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
     <Configurations>Debug;Release;DebugX86</Configurations>

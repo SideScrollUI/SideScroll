@@ -65,7 +65,7 @@
     "ButtonArrowForeground": "#ff001061"
   },
   "DataGrid": {
-    "ColumnHeaderBackground": "#ffd7d7fa",
+    "ColumnHeaderBackground": "#ffedf0fc",
     "ColumnHeaderBackgroundPointerOver": "#ffbfc1ff",
     "ColumnHeaderForeground": "#ff140066",
     "ColumnHeaderForegroundPointerOver": "#ff1c008c",
