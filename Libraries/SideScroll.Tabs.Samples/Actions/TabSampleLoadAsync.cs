@@ -14,7 +14,12 @@ public class TabSampleLoadAsync : ITab
 
 	public class Instance : TabInstance, ITabAsync
 	{
-		private const int DelayMs = 2000;
+		private const int DelayMs = 5000;
+
+		public Instance()
+		{
+			LoadingMessage = "Loading ALL the things!";
+		}
 
 		public async Task LoadAsync(Call call, TabModel model)
 		{

@@ -348,7 +348,10 @@ public class TextControlTheme : ThemeSection
 {
 	public override string ToString() => "Text Control";
 
-	[Header("Labels"), ResourceKey("LabelForegroundBrush")]
+	[Header("Labels"), ResourceKey(
+		"LabelForegroundBrush", 
+		"SystemControlForegroundBaseHighBrush" // ProgressBar
+		)]
 	public Color? LabelForeground { get; set; }
 
 	// Background

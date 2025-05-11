@@ -6,6 +6,11 @@ public class TabSampleSlowLoad : ITab
 
 	public class Instance : TabInstance
 	{
+		public Instance()
+		{
+			LoadingMessage = "Loading ALL the things!";
+		}
+
 		public override void Load(Call call, TabModel model)
 		{
 			Thread.Sleep(5000);

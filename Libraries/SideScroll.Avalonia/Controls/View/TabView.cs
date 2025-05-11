@@ -1,10 +1,12 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using SideScroll.Attributes;
+using SideScroll.Avalonia.Controls.Converters;
 using SideScroll.Avalonia.Controls.DataGrids;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Avalonia.Controls.Viewer;
@@ -591,25 +593,49 @@ public class TabView : Grid, IDisposable
 		ClearControls(true);
 
 		// This will get cleared when the view reloads
-		ProgressBar progressBar = new()
+		Grid containerGrid = new()
 		{
-			IsIndeterminate = true,
+			ColumnDefinitions = new ColumnDefinitions("*"), // Controls, Splitter, Child Tabs
+			RowDefinitions = new RowDefinitions("Auto,Auto,Auto"),
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Top,
 			MinWidth = 100,
-			MinHeight = 130,
-			MaxWidth = 200,
-			Foreground = SideScrollTheme.TabProgressBarForeground,
-			Background = SideScrollTheme.TabBackground,
-			HorizontalAlignment = HorizontalAlignment.Left,
-			VerticalAlignment = VerticalAlignment.Stretch,
+			MaxWidth = 350,
 		};
-		Children.Add(progressBar);
 
 		TabViewTitle title = new(this, Model.Name)
 		{
 			VerticalAlignment = VerticalAlignment.Top,
-			MaxWidth = progressBar.MinWidth,
 		};
-		Children.Add(title);
+		containerGrid.Children.Add(title);
+
+		ProgressBar progressBar = new()
+		{
+			IsIndeterminate = true,
+			Height = 3,
+			Foreground = SideScrollTheme.TabProgressBarForeground,
+			Background = SideScrollTheme.TabBackground,
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Top,
+			Margin = new Thickness(8, 16),
+			[Grid.RowProperty] = 1,
+		};
+		containerGrid.Children.Add(progressBar);
+
+		if (!Instance.LoadingMessage.IsNullOrEmpty())
+		{
+			TabControlTextBlock textBlock = new()
+			{
+				Text = Instance.LoadingMessage,
+				TextWrapping = TextWrapping.Wrap,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				Margin = new Thickness(8, 0),
+				[Grid.RowProperty] = 2,
+			};
+			containerGrid.Children.Add(textBlock);
+		}
+
+		Children.Add(containerGrid);
 	}
 
 	public void LoadSettings()

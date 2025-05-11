@@ -90,6 +90,8 @@ public class TabInstance : IDisposable
 		set => Model.Name = value;
 	}
 
+	public string? LoadingMessage { get; init; }
+
 	public ProjectDataRepos Data => Project.Data;
 
 	[Obsolete("Use Data instead")]

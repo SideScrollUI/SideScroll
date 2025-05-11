@@ -82,7 +82,6 @@ public class TabControlParams : Border, IValidationControl
 
 		if (obj == null) return;
 
-		AddSummary();
 		AddPropertyControls(obj);
 	}
 
@@ -135,27 +134,6 @@ public class TabControlParams : Border, IValidationControl
 		{
 			Grid.SetColumnSpan(lastControl, ContainerGrid.ColumnDefinitions.Count - columnIndex);
 		}
-	}
-
-	private void AddSummary()
-	{
-		var summaryAttribute = Object!.GetType().GetCustomAttribute<SummaryAttribute>();
-		if (summaryAttribute == null)
-			return;
-
-		AddRowDefinition();
-
-		TabControlTextBlock textBlock = new()
-		{
-			Text = summaryAttribute.Summary,
-			Margin = new Thickness(0, 3, 10, 3),
-			VerticalAlignment = VerticalAlignment.Top,
-			HorizontalAlignment = HorizontalAlignment.Stretch,
-			TextWrapping = TextWrapping.Wrap,
-			MaxWidth = ControlMaxWidth,
-			[Grid.ColumnSpanProperty] = 2,
-		};
-		ContainerGrid.Children.Add(textBlock);
 	}
 
 	public List<Control> AddObjectRow(object obj, List<PropertyInfo>? properties = null)
@@ -374,4 +352,3 @@ public class TabControlParams : Border, IValidationControl
 		}
 	}
 }
-
