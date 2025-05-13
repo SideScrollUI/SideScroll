@@ -5,6 +5,7 @@
     - Added TabInstance.LoadingMessage to show an optional tab loading message
     - Tab Formatted ComboBox now updates the BindingList when the list changes
     - Removed unused SummaryAttribute
+    - Avalonia theme tweaks for ScrollBar, Flyouts, and ComboBox
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.0</AvaloniaVersion>

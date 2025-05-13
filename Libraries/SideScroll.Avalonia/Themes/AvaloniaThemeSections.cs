@@ -174,13 +174,13 @@ public class ToolTipTheme : ThemeSection
 {
 	public override string ToString() => "Tool Tip";
 
-	[ResourceKey("ToolTipBackground")]
+	[ResourceKey("ToolTipBackground", "FlyoutPresenterBackground")]
 	public Color? Background { get; set; }
 
-	[ResourceKey("ToolTipForeground")]
+	[ResourceKey("ToolTipForeground", "FlyoutPresenterForeground")]
 	public Color? Foreground { get; set; }
 
-	[ResourceKey("ToolTipBorderBrush")]
+	[ResourceKey("ToolTipBorderBrush", "FlyoutBorderThemeBrush")]
 	public Color? Border { get; set; }
 
 	[Range(10, 32), ResourceKey("ToolTipContentThemeFontSize")]
@@ -432,7 +432,9 @@ public class TextControlTheme : ThemeSection
 	[Header("ComboBox"), ResourceKey("ComboBoxDropDownBackground")]
 	public Color? ComboBoxDropDownBackground { get; set; }
 
-	[ResourceKey("ComboBoxItemBackgroundSelected")]
+	[ResourceKey("ComboBoxItemBackgroundSelected",
+		"ComboBoxItemBackgroundPressed"
+		)]
 	public Color? ComboBoxItemBackgroundSelected { get; set; }
 
 	[ResourceKey("ComboBoxItemBackgroundPointerOver",

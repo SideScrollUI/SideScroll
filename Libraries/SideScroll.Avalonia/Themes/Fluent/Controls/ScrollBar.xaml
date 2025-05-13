@@ -49,6 +49,9 @@
   <Style Selector="Thumb">
     <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>
   </Style>
+  <Style Selector="Thumb:pressed /template/ Border">
+    <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbBrush}"/>
+  </Style>
   <Style Selector="Thumb /template/ Border:pointerover">
     <Setter Property="Background" Value="{DynamicResource ThemeScrollBarThumbPointerOverBrush}"/>
   </Style>

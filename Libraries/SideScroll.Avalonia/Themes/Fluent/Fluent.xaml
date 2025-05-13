@@ -135,9 +135,9 @@
 
           <!-- Flyout -->
 
-          <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#F037375f" />
+          <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#dd333366" />
           <SolidColorBrush x:Key="FlyoutPresenterForeground" Color="#d0d0e8" />
-          <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#000000" />
+          <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#b0000000" />
 
           <!-- ToolTip -->
           
@@ -516,9 +516,9 @@
 
           <!-- Flyout -->
 
-          <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#F037375f" />
-          <SolidColorBrush x:Key="FlyoutPresenterForeground" Color="{DynamicResource TextForegroundColor}" />
-          <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#000000" />
+          <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#e8131b45" />
+          <SolidColorBrush x:Key="FlyoutPresenterForeground" Color="#ffbdbdde" />
+          <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#ff050505" />
 
           <!-- ToolTip -->
           
