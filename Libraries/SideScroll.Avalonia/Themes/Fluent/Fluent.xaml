@@ -223,7 +223,7 @@
           <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
           <SolidColorBrush x:Key="TabSectionSeparatorBrush" Color="#ff050524" />
 
-          <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#ff2d31ba" />
+          <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#ff292dab" />
 
           <SolidColorBrush x:Key="TabSplitterBackgroundBrush" Color="#000000" />
           <sys:Double x:Key="TabSplitterSize">6</sys:Double>
@@ -579,7 +579,7 @@
           <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
           <SolidColorBrush x:Key="TabSectionSeparatorBrush" Color="#ff050524" />
 
-          <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#ff2244ab" />
+          <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#ff1e3c96" />
 
           <!-- Title -->
 

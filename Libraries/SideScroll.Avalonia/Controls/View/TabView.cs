@@ -617,7 +617,7 @@ public class TabView : Grid, IDisposable
 			Background = SideScrollTheme.TabBackground,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Top,
-			Margin = new Thickness(8, 16),
+			Margin = new Thickness(12, 16),
 			[Grid.RowProperty] = 1,
 		};
 		containerGrid.Children.Add(progressBar);
@@ -629,7 +629,7 @@ public class TabView : Grid, IDisposable
 				Text = Instance.LoadingMessage,
 				TextWrapping = TextWrapping.Wrap,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
-				Margin = new Thickness(8, 0),
+				Margin = new Thickness(10, 0),
 				[Grid.RowProperty] = 2,
 			};
 			containerGrid.Children.Add(textBlock);

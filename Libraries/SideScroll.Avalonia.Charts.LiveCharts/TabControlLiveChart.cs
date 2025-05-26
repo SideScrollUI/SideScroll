@@ -654,10 +654,13 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 	public void SelectPoint(ChartPoint chartPoint)
 	{
-		if (IdxNameToChartSeries.TryGetValue(chartPoint.Context.Series.Name!, out var series))
+		if (chartPoint.Context.Series.Name is string name)
 		{
-			OnSelectionChanged(new SeriesSelectedEventArgs([series.ListSeries]));
-			Legend.SelectSeries(series.LineSeries, series.ListSeries);
+			if (IdxNameToChartSeries.TryGetValue(name, out var series))
+			{
+				OnSelectionChanged(new SeriesSelectedEventArgs([series.ListSeries]));
+				Legend.SelectSeries(series.LineSeries, series.ListSeries);
+			}
 		}
 	}
 
