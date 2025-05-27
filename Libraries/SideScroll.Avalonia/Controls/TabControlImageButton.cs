@@ -10,7 +10,6 @@ using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tasks;
-using System.Windows.Input;
 
 namespace SideScroll.Avalonia.Controls;
 
@@ -63,7 +62,7 @@ public class TabControlImageButton : Button, IDisposable
 
 	public override string? ToString() => Tooltip;
 
-	public TabControlImageButton(string tooltip, IResourceView imageResource, string? label = null, double? iconSize = null, ICommand? command = null)
+	public TabControlImageButton(string tooltip, IResourceView imageResource, string? label = null, double? iconSize = null)
 	{
 		Tooltip = tooltip;
 		ImageResource = imageResource;
@@ -109,7 +108,6 @@ public class TabControlImageButton : Button, IDisposable
 		}
 
 		Content = grid;
-		Command = command;
 		ToolTip.SetTip(this, Tooltip);
 
 		Click += ToolbarButton_Click;

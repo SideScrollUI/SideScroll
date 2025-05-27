@@ -18,4 +18,10 @@ public static class AvaloniaExtensions
 	{
 		return new Color(alpha, color.R, color.G, color.B);
 	}
+
+	public static T Also<T>(this T obj, Action<T> configure)
+	{
+		configure(obj);
+		return obj;
+	}
 }

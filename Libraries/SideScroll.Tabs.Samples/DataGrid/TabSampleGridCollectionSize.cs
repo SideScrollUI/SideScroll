@@ -17,13 +17,17 @@ public class TabSampleGridCollectionSize : ITab
 			_items = [];
 			AddEntries(20);
 			model.Items = _items;
+			model.ReloadOnThemeChange = true;
 
 			model.Actions = new List<TaskCreator>
 			{
 				new TaskAction("Add 100 Entries", () => AddEntries(100)),
 				new TaskAction("Add 1,000 Entries", () => AddEntries(1_000)),
 				new TaskAction("Add 10,000 Entries", () => AddEntries(10_000)),
-				new TaskAction("Add 100,000 Entries (Very Slow)", () => AddEntries(100_000)),
+				new TaskAction("Add 100,000 Entries (Very Slow)", () => AddEntries(100_000))
+				{
+					AcentType = AccentType.Warning,
+				},
 			};
 		}
 

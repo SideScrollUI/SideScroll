@@ -70,8 +70,3 @@ public class TabViewSettings
 		return string.Join(",", strings);
 	}*/
 }
-/*
-Type of control
-Name of control
-	Usually a reference
-*/

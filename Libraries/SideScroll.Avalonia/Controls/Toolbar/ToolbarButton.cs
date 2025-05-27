@@ -1,7 +1,6 @@
 using Avalonia.Input;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
-using System.Windows.Input;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
 
@@ -33,10 +32,15 @@ public class ToolbarButton : TabControlImageButton
 		{
 			BindIsEnabled(propertyBinding.Path, propertyBinding.Object);
 		}
+
+		if (toolButton.Flyout is ConfirmationFlyoutConfig config)
+		{
+			Flyout = new ConfirmationFlyout(InvokeAction, config.Text, config.ConfirmText, config.CancelText);
+		}
 	}
 
-	public ToolbarButton(TabControlToolbar toolbar, string tooltip, IResourceView imageResource, double? iconSize = null, string? label = null, ICommand? command = null) :
-		base(tooltip, imageResource, label, iconSize, command)
+	public ToolbarButton(TabControlToolbar toolbar, string tooltip, IResourceView imageResource, double? iconSize = null, string? label = null) :
+		base(tooltip, imageResource, label, iconSize)
 	{
 		TabInstance = toolbar.TabInstance;
 		Toolbar = toolbar;

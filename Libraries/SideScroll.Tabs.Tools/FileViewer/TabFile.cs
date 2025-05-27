@@ -73,6 +73,7 @@ public class TabFile(FileView fileView) : ITab
 			};
 			toolbar.ButtonOpenFolder.Action = OpenFolder;
 			toolbar.ButtonDelete.Action = Delete;
+			toolbar.ButtonDelete.Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete this file?", "Delete");
 
 			if (SelectFileDelegate != null)
 			{

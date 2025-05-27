@@ -17,6 +17,8 @@ public class ToolButton
 
 	public PropertyBinding? IsEnabledBinding { get; set; }
 
+	public IFlyoutConfig? Flyout { get; set; }
+
 	public CallAction? Action { get; set; }
 	public CallActionAsync? ActionAsync { get; set; }
 
@@ -43,4 +45,15 @@ public class PropertyBinding(string path, object? obj)
 {
 	public string Path => path;
 	public object? Object => obj;
+}
+
+public interface IFlyoutConfig
+{
+}
+
+public class ConfirmationFlyoutConfig(string text, string confirmText, string cancelText = "Cancel") : IFlyoutConfig
+{
+	public string Text => text;
+	public string ConfirmText => confirmText;
+	public string? CancelText => cancelText;
 }

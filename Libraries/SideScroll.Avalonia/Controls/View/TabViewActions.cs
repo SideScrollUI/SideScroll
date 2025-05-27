@@ -35,7 +35,7 @@ public class TabViewActions : UserControl
 			};
 			containerGrid.RowDefinitions.Add(rowDefinition);
 
-			var button = new TabControlTextButton(taskCreator.Label)
+			var button = new TabControlTextButton(taskCreator.Label, taskCreator.AcentType)
 			{
 				Margin = new Thickness(4, 2),
 				HorizontalAlignment = HorizontalAlignment.Stretch,

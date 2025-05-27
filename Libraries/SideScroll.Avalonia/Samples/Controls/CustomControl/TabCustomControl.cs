@@ -38,7 +38,7 @@ public class TabCustomControl : ITab
 			_toolbar.ButtonSearch.Add(SearchUI);
 			_toolbar.ButtonCopyClipBoard.Add(CopyClipBoardUI);
 
-			_planets = new ItemCollectionUI<Planet>(SolarSystem.Sample.Planets);
+			_planets = [.. SolarSystem.Sample.Planets];
 			model.Items = _planets;
 		}
 

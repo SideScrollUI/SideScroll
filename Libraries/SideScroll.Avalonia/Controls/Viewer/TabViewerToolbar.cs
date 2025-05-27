@@ -46,8 +46,12 @@ public class TabViewerToolbar : TabControlToolbar
 	{
 		AddFill();
 
-		var versionLabel = new ToolbarHeaderTextBlock('v' + TabViewer.Project.Version.Formatted());
-		AddControl(versionLabel);
+		string versionLabel = 'v' + TabViewer.Project.Version.Formatted();
+#if DEBUG
+		versionLabel += " *";
+#endif
+		var textBlock = new ToolbarHeaderTextBlock(versionLabel);
+		AddControl(textBlock);
 	}
 
 	private void Refresh(Call call)

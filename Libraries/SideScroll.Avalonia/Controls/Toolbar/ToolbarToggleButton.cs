@@ -2,7 +2,6 @@ using SideScroll.Resources;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
 using System.ComponentModel;
-using System.Windows.Input;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
 
@@ -41,8 +40,8 @@ public class ToolbarToggleButton : ToolbarButton
 		}
 	}
 
-	public ToolbarToggleButton(TabControlToolbar toolbar, string tooltip, IResourceView onImageResource, IResourceView offImageResource, bool isChecked, string? label = null, ICommand? command = null) :
-		base(toolbar, tooltip, isChecked ? onImageResource : offImageResource, null, label, command)
+	public ToolbarToggleButton(TabControlToolbar toolbar, string tooltip, IResourceView onImageResource, IResourceView offImageResource, bool isChecked, string? label = null) :
+		base(toolbar, tooltip, isChecked ? onImageResource : offImageResource, null, label)
 	{
 		OnImageResource = onImageResource;
 		OffImageResource = offImageResource;

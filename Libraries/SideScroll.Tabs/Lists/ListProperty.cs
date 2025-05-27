@@ -149,6 +149,7 @@ public class ListProperty : ListMember, IPropertyEditable
 		// this doesn't work for virtual methods (or any method modifier?)
 		var propertyInfos = obj.GetType().GetProperties()
 			.Where(p => p.IsRowVisible())
+			.Where(p => p.GetGetMethod(false)?.GetParameters().Length == 0)
 			.Where(p => includeBaseTypes || p.DeclaringType == obj.GetType())
 			.Where(p => includeStatic || !p.GetAccessors(nonPublic: true)[0].IsStatic)
 			.OrderBy(p => p.Module.Name)
@@ -239,13 +240,3 @@ public class ListProperty : ListMember, IPropertyEditable
 		return linkSorted;
 	}
 }
-
-/*
-What do we do about child objects?
-	can't edit child objects
-
-	DataBinding
-
-This class only works alone, no fields
-Just expand these properties only
-*/

@@ -6,7 +6,6 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using SideScroll.Attributes;
-using SideScroll.Avalonia.Controls.Converters;
 using SideScroll.Avalonia.Controls.DataGrids;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Avalonia.Controls.Viewer;
@@ -99,12 +98,7 @@ public class TabView : Grid, IDisposable
 	public TabView(TabInstance tabInstance)
 	{
 		Instance = tabInstance;
-		Initialize();
-	}
 
-	public void Initialize()
-	{
-		// Can only be initialized once
 		ColumnDefinitions = new ColumnDefinitions("Auto");
 		RowDefinitions = new RowDefinitions("*");
 
@@ -953,8 +947,6 @@ public class TabView : Grid, IDisposable
 		}
 		catch (Exception e)
 		{
-			// Add instructions for enabling debugger to catch these
-			//call.Log.Add(e);
 			return TabCreator.CreateChildControl(Instance, e, "Caught Exception", tabControl);
 		}
 	}

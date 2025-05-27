@@ -341,6 +341,25 @@ public class ButtonTheme : ThemeSection
 
 	[Range(0, 20), ResourceKey("ButtonCornerRadius")]
 	public double? CornerRadius { get; set; }
+
+	// Warning
+	[Header("Warning Accent"), Name("Background"), ResourceKey("ButtonWarningBackground")]
+	public Color? WarningBackground { get; set; }
+
+	[Name("Background Pointer Over"), ResourceKey("ButtonWarningBackgroundPointerOver")]
+	public Color? WarningBackgroundPointerOver { get; set; }
+
+	[Separator, ResourceKey("ButtonWarningForeground"), Name("Foreground")]
+	public Color? WarningForeground { get; set; }
+
+	[Name("Foreground Pointer Over"), ResourceKey("ButtonWarningForegroundPointerOver")]
+	public Color? WarningForegroundPointerOver { get; set; }
+
+	[Separator, ResourceKey("ButtonWarningBorderBrush")]
+	public Color? WarningBorder { get; set; }
+
+	[ResourceKey("ButtonWarningBorderBrushPointerOver")]
+	public Color? WarningBorderPointerOver { get; set; }
 }
 
 [Params]
