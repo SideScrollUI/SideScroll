@@ -246,9 +246,10 @@ public class Log : LogEntry
 
 	private void CreateEventLogMessage(LogEntry logEntry)
 	{
-		var eventLogMessage = new EventLogMessage();
-		eventLogMessage.Entries.Add(logEntry);
-		eventLogMessage.Entries.Add(this);
+		EventLogMessage eventLogMessage = new()
+		{
+			Entries = [logEntry, this],
+		};
 		OnMessage?.Invoke(this, eventLogMessage);
 	}
 

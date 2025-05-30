@@ -9,7 +9,7 @@ namespace SideScroll.Avalonia.Controls;
 
 public class ConfirmationFlyout : Flyout
 {
-	public ConfirmationFlyout(CallAction callAction, string text, string confirmText, string? cancelText = null)
+	public ConfirmationFlyout(Action action, string text, string confirmText, string? cancelText = null)
 	{
 		Placement = PlacementMode.Bottom;
 		Content = new StackPanel
@@ -42,7 +42,7 @@ public class ConfirmationFlyout : Flyout
 							{
 								button.Click += (_, _) =>
 								{
-									callAction(new Call());
+									action();
 									Hide();
 								};
 							})

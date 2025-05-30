@@ -35,7 +35,7 @@ public class ToolbarButton : TabControlImageButton
 
 		if (toolButton.Flyout is ConfirmationFlyoutConfig config)
 		{
-			Flyout = new ConfirmationFlyout(InvokeAction, config.Text, config.ConfirmText, config.CancelText);
+			Flyout = new ConfirmationFlyout(InvokeTask, config.Text, config.ConfirmText, config.CancelText);
 		}
 	}
 

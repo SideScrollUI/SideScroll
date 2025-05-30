@@ -119,8 +119,8 @@
           <SolidColorBrush x:Key="ButtonWarningBackground" Color="#ffa83622" />
           <SolidColorBrush x:Key="ButtonWarningBackgroundPointerOver" Color="#ffc23e27" />
 
-          <SolidColorBrush x:Key="ButtonWarningForeground" Color="#ffe6dad8" />
-          <SolidColorBrush x:Key="ButtonWarningForegroundPointerOver" Color="#fff0e6e4" />
+          <SolidColorBrush x:Key="ButtonWarningForeground" Color="#ffebe1df" />
+          <SolidColorBrush x:Key="ButtonWarningForegroundPointerOver" Color="#fff2e8e6" />
 
           <SolidColorBrush x:Key="ButtonWarningBorderBrush" Color="#ff2e1414" />
           <SolidColorBrush x:Key="ButtonWarningBorderBrushPointerOver" Color="#ff542424" />
@@ -505,14 +505,14 @@
           <SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff06071c" />
           <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#ff000033" />
 
-          <SolidColorBrush x:Key="ButtonWarningBackground" Color="#ff9e2c18" />
-          <SolidColorBrush x:Key="ButtonWarningBackgroundPointerOver" Color="#ffc23e27" />
+          <SolidColorBrush x:Key="ButtonWarningBackground" Color="#ff8a2917" />
+          <SolidColorBrush x:Key="ButtonWarningBackgroundPointerOver" Color="#ffa83622" />
 
-          <SolidColorBrush x:Key="ButtonWarningForeground" Color="#ffe6ceca" />
-          <SolidColorBrush x:Key="ButtonWarningForegroundPointerOver" Color="#ffedd5d1" />
+          <SolidColorBrush x:Key="ButtonWarningForeground" Color="#ffd9c3bf" />
+          <SolidColorBrush x:Key="ButtonWarningForegroundPointerOver" Color="#ffe8d0cc" />
 
-          <SolidColorBrush x:Key="ButtonWarningBorderBrush" Color="#ff2e1414" />
-          <SolidColorBrush x:Key="ButtonWarningBorderBrushPointerOver" Color="#ff612a2a" />
+          <SolidColorBrush x:Key="ButtonWarningBorderBrush" Color="#ff140909" />
+          <SolidColorBrush x:Key="ButtonWarningBorderBrushPointerOver" Color="#ff2e1414" />
 
           <!-- Simple and Fluent Tab/Toolbar Button -->
           

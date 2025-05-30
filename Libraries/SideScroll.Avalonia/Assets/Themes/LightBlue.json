@@ -88,10 +88,10 @@
   },
   "Button": {
     "Background": "#ffe6e7fa",
-    "BackgroundPointerOver": "#ffe0e3ff",
+    "BackgroundPointerOver": "#ffd4d7ff",
     "BackgroundPressed": "#ffd9dcff",
     "Foreground": "#ff280b9c",
-    "ForegroundPointerOver": "#ff2400b5",
+    "ForegroundPointerOver": "#ff5400fc",
     "ForegroundPressed": "#ff0017eb",
     "Border": "#ffb3b9f2",
     "BorderPointerOver": "#ff8289d9",
@@ -99,10 +99,10 @@
     "BorderThickness": 1.5,
     "CornerRadius": 12,
     "WarningBackground": "#ffe07751",
-    "WarningBackgroundPointerOver": "#ffed7e55",
-    "WarningForeground": "#fff7edeb",
-    "WarningForegroundPointerOver": "#fff7edeb",
-    "WarningBorder": "#ff8c3b1d",
+    "WarningBackgroundPointerOver": "#ffeb6838",
+    "WarningForeground": "#fffcf2f0",
+    "WarningForegroundPointerOver": "#fffcf2f0",
+    "WarningBorder": "#ff8c4329",
     "WarningBorderPointerOver": "#ffa1553a"
   },
   "TextControl": {

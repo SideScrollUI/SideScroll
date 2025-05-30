@@ -32,7 +32,7 @@ public class TabSampleFlyout : ITab
 
 		private static Control? CreateFlyout()
 		{
-			var flyout = new ConfirmationFlyout((_) => { }, "Confirm all the things?", "Confirm")
+			var flyout = new ConfirmationFlyout(() => { }, "Confirm all the things?", "Confirm")
 			{
 				Placement = PlacementMode.BottomEdgeAlignedLeft,
 				ShowMode = FlyoutShowMode.Transient,

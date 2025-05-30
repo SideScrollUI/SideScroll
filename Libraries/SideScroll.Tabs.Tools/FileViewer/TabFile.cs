@@ -39,7 +39,7 @@ public class TabFile(FileView fileView) : ITab
 		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Svg.OpenFolder);
 
 		[Separator]
-		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
+		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete, showTask: true);
 
 		[Separator]
 		public ToolButton? ButtonSelect { get; set; }

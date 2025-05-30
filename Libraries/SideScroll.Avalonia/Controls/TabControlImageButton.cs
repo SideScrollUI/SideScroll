@@ -203,9 +203,15 @@ public class TabControlImageButton : Button, IDisposable
 		if (Flyout != null)
 		{
 			Flyout.ShowAt(this);
-			return;
 		}
+		else
+		{
+			InvokeTask();
+		}
+	}
 
+	public void InvokeTask()
+	{
 		if (TabInstance == null)
 		{
 			InvokeAction(new Call());
