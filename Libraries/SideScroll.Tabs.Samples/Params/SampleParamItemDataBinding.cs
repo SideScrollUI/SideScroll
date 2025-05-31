@@ -58,7 +58,7 @@ public class SampleParamItemDataBinding(SynchronizationContext context) : INotif
 
 	public AttributeTargets? EnumAttributeTargets { get; set; }
 
-	public static List<ParamListItem> ListItems =>
+	public static List<ParamListItem> ListItems { get; } =
 	[
 		new("One", 1),
 		new("Two", 2),

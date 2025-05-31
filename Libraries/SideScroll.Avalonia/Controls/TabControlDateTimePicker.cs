@@ -50,8 +50,7 @@ public class TabDateTimePicker : Grid
 		Binding = new Binding(Property.PropertyInfo.Name)
 		{
 			Converter = _dateTimeConverter,
-			//StringFormat = "Hello {0}",
-			Mode = BindingMode.TwoWay,
+			Mode = property.Editable ? BindingMode.TwoWay : BindingMode.OneWay,
 			Source = Property.Object,
 		};
 

@@ -159,11 +159,10 @@ public class TabControlTextBox : TextBox
 		var binding = new Binding(property.PropertyInfo.Name)
 		{
 			Converter = new EditValueConverter(),
-			//StringFormat = "Hello {0}",
 			Source = property.Object,
 		};
 		Type type = property.UnderlyingType;
-		if (type == typeof(string) || type.IsPrimitive)
+		if (property.Editable && (type == typeof(string) || type.IsPrimitive))
 		{
 			binding.Mode = BindingMode.TwoWay;
 		}

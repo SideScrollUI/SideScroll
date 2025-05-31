@@ -95,7 +95,6 @@ public class FontTheme : ThemeSection
 	public static IEnumerable<FontFamily>? FontFamilies { get; set; }
 	public static IEnumerable<string>? FontFamilyNames => FontFamilies?.Select(f => f.Name);
 
-
 	[Header("Font Family"), BindList(nameof(FontFamilyNames))]
 	public string? FontFamily { get; set; }
 

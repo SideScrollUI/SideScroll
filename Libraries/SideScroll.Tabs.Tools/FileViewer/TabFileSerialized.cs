@@ -29,7 +29,11 @@ public class TabFileSerialized(string path) : ITab
 
 				model.Actions = new List<TaskCreator>
 				{
-					new TaskDelegate("Load Data", LoadData, true, true)
+					new TaskDelegate("Load Public Data", LoadPublicData, true, true),
+					new TaskDelegate("Load All Data", LoadAllData, true, true)
+					{
+						AcentType = AccentType.Warning,
+					},
 				};
 			}
 			catch (Exception ex)
@@ -40,10 +44,16 @@ public class TabFileSerialized(string path) : ITab
 			_items.Add(new ListItem("Bytes", ListByte.Load(_serializerFile.DataPath!)));
 		}
 
-		private void LoadData(Call call)
+		private void LoadPublicData(Call call)
+		{
+			var obj = _serializerFile!.Load(call, logLevel: Logs.LogLevel.Info, publicOnly: true);
+			_items.Add(new ListItem("Public Data", obj));
+		}
+
+		private void LoadAllData(Call call)
 		{
 			var obj = _serializerFile!.Load(call, logLevel: Logs.LogLevel.Info);
-			_items.Add(new ListItem("Loaded", obj));
+			_items.Add(new ListItem("All Data", obj));
 		}
 	}
 }

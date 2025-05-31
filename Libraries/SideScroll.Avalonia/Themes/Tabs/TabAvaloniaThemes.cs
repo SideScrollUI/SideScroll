@@ -1,5 +1,7 @@
+using Avalonia;
 using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls;
+using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs;
@@ -12,15 +14,18 @@ public class TabAvaloniaThemes : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	public class Toolbar(Instance instance) : TabToolbar
 	{
 		public ToolButton ButtonNew { get; set; } = new("New", Icons.Svg.BlankDocument);
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save);
+		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save)
+		{
+			IsEnabledBinding = new PropertyBinding(nameof(ThemeId.HasName), instance.ThemeId),
+		};
 	}
 
 	public class Instance : TabInstance
 	{
-		private ThemeId _themeId = new();
+		public ThemeId ThemeId { get; protected set; } = new();
 		private DataRepoView<AvaloniaThemeSettings>? _dataRepoThemes;
 		private TabControlParams? _themeParams;
 
@@ -34,11 +39,11 @@ public class TabAvaloniaThemes : ITab
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			_themeId = new();
-			_themeParams = new TabControlParams(_themeId);
+			ThemeId.Reset();
+			_themeParams = new TabControlParams(ThemeId);
 			model.AddObject(_themeParams);
 
-			var toolbar = new Toolbar();
+			var toolbar = new Toolbar(this);
 			toolbar.ButtonSave.Action = Save;
 			model.AddObject(toolbar);
 		}
@@ -57,22 +62,31 @@ public class TabAvaloniaThemes : ITab
 		{
 			Validate();
 
-			AvaloniaThemeSettings themeSettings = ThemeManager.Instance!.Create(_themeId.Name!, _themeId.Variant!);
+			AvaloniaThemeSettings themeSettings = ThemeManager.Instance!.Create(ThemeId.Name!, ThemeId.Variant!);
 
 			ThemeManager.Instance!.Add(call, themeSettings);
 
-			_themeId = new();
-			_themeParams!.LoadObject(_themeId);
+			ThemeId.Reset();
+			_themeParams!.LoadObject(ThemeId);
 		}
 	}
 
 	[Params]
-	public class ThemeId
+	public class ThemeId : AvaloniaObject
 	{
 		[Required, StringLength(50)]
-		public string? Name { get; set; }
+		public string? Name
+		{
+			get => _name;
+			set
+			{
+				_name = value;
+				HasName = !_name.IsNullOrEmpty();
+			}
+		}
+		public string? _name;
 
-		public static List<string> Variants =>
+		public static List<string> Variants { get; } =
 		[
 			"Light",
 			"Dark",
@@ -80,5 +94,21 @@ public class TabAvaloniaThemes : ITab
 
 		[BindList(nameof(Variants))]
 		public string? Variant { get; set; }
+
+		[Hidden]
+		public bool HasName
+		{
+			get => GetValue(HasNameProperty);
+			private set => SetValue(HasNameProperty, value);
+		}
+
+		public static readonly StyledProperty<bool> HasNameProperty =
+			AvaloniaProperty.Register<ThemeHistory, bool>(nameof(HasName));
+
+		public void Reset()
+		{
+			Name = null;
+			Variant = Variants.First();
+		}
 	}
 }

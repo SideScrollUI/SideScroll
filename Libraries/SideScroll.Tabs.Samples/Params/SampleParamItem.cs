@@ -28,7 +28,7 @@ public class SampleParamItem
 
 	public AttributeTargets EnumAttributeTargets { get; set; } = AttributeTargets.Event;
 
-	public static List<ParamListItem> ListItems =>
+	public static List<ParamListItem> ListItems { get; } =
 	[
 		new("One", 1),
 		new("Two", 2),

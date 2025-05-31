@@ -39,7 +39,7 @@ public class SerializeSchemaChangeTests : SerializeBaseTest
 			IntProperty = 1,
 		};
 		_serializerFile!.Save(Call, input);
-		MissingProperty? output = _serializerFile!.Load<MissingProperty>(Call);
+		MissingProperty? output = _serializerFile.Load<MissingProperty>(Call);
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.BoolProperty, Is.EqualTo(input.BoolProperty));
 		Assert.That(output.IntProperty, Is.EqualTo(input.IntProperty));

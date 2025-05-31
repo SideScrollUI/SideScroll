@@ -23,7 +23,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 		File.WriteAllText(DataPath!, "");
 	}
 
-	public void Save(Call call, object obj, string? name = null)
+	public void Save(Call call, object obj, string? name = null, bool publicOnly = false)
 	{
 		ArgumentNullException.ThrowIfNull(obj, nameof(obj));
 
@@ -38,10 +38,10 @@ public abstract class SerializerFile(string basePath, string name = "")
 			Directory.CreateDirectory(BasePath);
 		}
 
-		SaveInternal(callTimer, obj, name);
+		SaveInternal(callTimer, obj, name, publicOnly);
 	}
 
-	protected abstract void SaveInternal(Call call, object obj, string? name = null);
+	protected abstract void SaveInternal(Call call, object obj, string? name = null, bool publicOnly = false);
 
 	public T? Load<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
 	{
@@ -67,13 +67,13 @@ public abstract class SerializerFile(string basePath, string name = "")
 		return (T)Convert.ChangeType(obj, type);*/
 	}
 
-	public object? Load(Call call, bool lazy = false, TaskInstance? taskInstance = null, LogLevel logLevel = LogLevel.Debug)
+	public object? Load(Call call, bool lazy = false, TaskInstance? taskInstance = null, LogLevel logLevel = LogLevel.Debug, bool publicOnly = false)
 	{
 		using CallTimer callTimer = call.Timer(logLevel, "Loading object", new Tag("Name", Name));
 
 		try
 		{
-			return LoadInternal(callTimer, lazy, taskInstance);
+			return LoadInternal(callTimer, lazy, taskInstance, publicOnly);
 		}
 		catch (Exception e)
 		{
@@ -96,7 +96,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 		return header;
 	}
 
-	protected abstract object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance);
+	protected abstract object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false);
 
 	public static SerializerFile Create(string dataPath, string name = "")
 	{
