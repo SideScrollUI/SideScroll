@@ -1,5 +1,6 @@
 using SideScroll.Collections;
-using SideScroll.Tasks;
+using SideScroll.Resources;
+using SideScroll.Tabs.Toolbar;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -9,24 +10,29 @@ public class TabSampleGridUpdating : ITab
 {
 	public TabInstance Create() => new Instance();
 
+	public class Toolbar : TabToolbar
+	{
+		public ToolButton ButtonStart { get; set; } = new("Start", Icons.Svg.Play);
+		public ToolButton ButtonStop { get; set; } = new("Stop", Icons.Svg.Stop);
+	}
+
 	public class Instance : TabInstance
 	{
-		protected SynchronizationContext Context = SynchronizationContext.Current ?? new SynchronizationContext();
+		protected SynchronizationContext Context = SynchronizationContext.Current ?? new();
 
 		private ItemCollection<TestItem> _items = [];
 		private Call? _counterCall;
 
 		public override void Load(Call call, TabModel model)
 		{
+			Toolbar toolbar = new();
+			toolbar.ButtonStart.ActionAsync = StartCounterAsync;
+			toolbar.ButtonStop.Action = StopCounter;
+			model.AddObject(toolbar);
+
 			_items = [];
 			AddEntries();
 			model.Items = _items;
-
-			model.Actions = new List<TaskCreator>
-			{
-				new TaskDelegate("Start Counter Thread", StartCounter, true),
-				new TaskDelegate("Stop Counter Thread", StopCounter, true),
-			};
 		}
 
 		private void AddEntries()
@@ -42,8 +48,10 @@ public class TabSampleGridUpdating : ITab
 			}
 		}
 
-		private void StartCounter(Call call)
+		private async Task StartCounterAsync(Call call)
 		{
+			StopCounter(call);
+
 			_counterCall = call;
 			for (int i = 0; i < 1000 && !call.TaskInstance!.CancelToken.IsCancellationRequested; i++)
 			{
@@ -52,7 +60,7 @@ public class TabSampleGridUpdating : ITab
 					testItem.BigNumber++;
 					testItem.Update();
 				}
-				Thread.Sleep(500);
+				await Task.Delay(500);
 			}
 		}
 

@@ -98,12 +98,12 @@
     "BorderPressed": "#ff8289d9",
     "BorderThickness": 1.5,
     "CornerRadius": 12,
-    "WarningBackground": "#ffe07751",
-    "WarningBackgroundPointerOver": "#ffeb6838",
+    "WarningBackground": "#ffd97c4e",
+    "WarningBackgroundPointerOver": "#ffe67137",
     "WarningForeground": "#fffcf2f0",
     "WarningForegroundPointerOver": "#fffcf2f0",
-    "WarningBorder": "#ff8c4329",
-    "WarningBorderPointerOver": "#ffa1553a"
+    "WarningBorder": "#ff99512c",
+    "WarningBorderPointerOver": "#ffa15c3a"
   },
   "TextControl": {
     "LabelForeground": "#ff001061",

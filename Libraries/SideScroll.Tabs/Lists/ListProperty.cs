@@ -111,10 +111,6 @@ public class ListProperty : ListMember, IPropertyEditable
 		PropertyInfo = propertyInfo;
 		Cachable = cachable;
 
-		// [ListItem] uses static properties, remove?
-		// var accessors = propertyInfo.GetAccessors(true);
-		// AutoLoad = !accessors[0].IsStatic;
-
 		NameAttribute? nameAttribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 
 		Name = nameAttribute?.Name ?? propertyInfo.Name.WordSpaced();
