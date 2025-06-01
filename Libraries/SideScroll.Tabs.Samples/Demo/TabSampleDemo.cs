@@ -6,13 +6,14 @@ using SideScroll.Tabs.Samples.Objects;
 using SideScroll.Tabs.Samples.Params;
 using SideScroll.Tabs.Tools.FileViewer;
 
-namespace SideScroll.Tabs.Samples;
+namespace SideScroll.Tabs.Samples.Demo;
 
 [ListItem, PublicData]
 public class TabSampleDemo
 {
 	public override string ToString() => "Demo";
 
+	public static TabDemoPlanets Planets => new();
 	public static TabSampleGridCollectionSize Collections => new();
 	public static TabSampleObjectMembers Objects => new();
 	public static TabSampleParamsDataTabs Params => new();

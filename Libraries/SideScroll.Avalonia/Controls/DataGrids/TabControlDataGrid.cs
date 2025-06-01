@@ -648,7 +648,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 		else*/
 		{
-			if (propertyInfo.PropertyType == typeof(bool))
+			if (propertyInfo.PropertyType.GetNonNullableType() == typeof(bool))
 			{
 				isReadOnly = (propertyInfo.GetCustomAttribute<EditingAttribute>() == null);
 				var checkBoxColumn = new DataGridPropertyCheckBoxColumn(propertyInfo, isReadOnly)

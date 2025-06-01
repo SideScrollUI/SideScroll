@@ -15,6 +15,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
 
 	public ToolbarButton ButtonAdd { get; protected set; }
+	public ToolbarButton ButtonSave { get; protected set; }
 
 	public ToolbarButton ButtonSearch { get; protected set; }
 	public ToolbarButton ButtonLoadNext { get; protected set; }
@@ -33,7 +34,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 	public TabControlSearchToolbar(TabInstance tabInstance) : base(tabInstance)
 	{
 		ButtonAdd = AddButton("Add", Icons.Svg.Add, "Add");
-		AddButton("Save", Icons.Svg.Save);
+		ButtonSave = AddButton("Save", Icons.Svg.Save);
 
 		AddSeparator();
 		ButtonSearch = AddButton("Search (Ctrl + S)", Icons.Svg.Search);
@@ -43,7 +44,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 		ButtonLoadNext.IsEnabled = false;
 
 		AddSeparator();
-		ButtonCopyClipBoard = AddButton("Copy to Clipboard", ImageColorView.CreateAlternate(Icons.Svg.PadNote));
+		ButtonCopyClipBoard = AddButton("Copy to Clipboard", ImageColorView.CreateAlternate(Icons.Svg.Copy));
 
 		AddSeparator();
 		Search = new TabControlSearch

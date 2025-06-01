@@ -3,6 +3,7 @@ using SideScroll.Tabs.Samples.Actions;
 using SideScroll.Tabs.Samples.Chart;
 using SideScroll.Tabs.Samples.DataGrid;
 using SideScroll.Tabs.Samples.DataRepo;
+using SideScroll.Tabs.Samples.Demo;
 using SideScroll.Tabs.Samples.Loading;
 using SideScroll.Tabs.Samples.Objects;
 using SideScroll.Tabs.Samples.Params;

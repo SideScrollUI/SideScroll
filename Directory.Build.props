@@ -7,7 +7,10 @@
     - Removed unused SummaryAttribute
     - Avalonia theme tweaks for ScrollBar, Flyouts, and ComboBox
     - Adding Confirmation Dialogs to buttons when doing potentially dangerous operations like deleting files
+    - Added PublicData support for local file serializer (only used in File Viewer)
+    - Added data binding to Themes Tab to enable the save button based on the name being specified
     - Fixed ListProperty attempting to show properties that require parameters
+    - Fixed nullable booleans showing as Text instead of CheckBox Columns in the DataGrid
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.0</AvaloniaVersion>

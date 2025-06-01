@@ -14,6 +14,7 @@ public class SolarSystem
 	public static SolarSystem Sample => JsonSerializer.Deserialize<SolarSystem>(TextSamples.Json)!;
 }
 
+[Params]
 public class Planet
 {
 	[Required]
@@ -37,4 +38,29 @@ public class Planet
 	public bool? Inner { get; set; }
 
 	public override string? ToString() => Name;
+
+	public void Clear()
+	{
+		Name = null;
+		Description = null;
+		DistanceKm = null;
+		RadiusKm = null;
+		MassKg = null;
+		GravityM_s2 = null;
+		Moons = null;
+		OrbitalPeriodDays = null;
+		Inner = null;
+	}
+
+	public static Planet CreateSample() => new()
+	{
+		Name = "Planet X",
+		Description = "A rogue planet whispered about in deep space legends",
+		DistanceKm = 10_000_000_000,
+		RadiusKm = 5_000,
+		MassKg = 2,
+		GravityM_s2 = 0.101,
+		OrbitalPeriodDays = 60_000,
+		Inner = false,
+	};
 }
