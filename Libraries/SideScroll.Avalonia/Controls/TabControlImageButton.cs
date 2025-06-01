@@ -100,7 +100,7 @@ public class TabControlImageButton : Button, IDisposable
 			{
 				Text = Label,
 				FontSize = 15,
-				Foreground = new SolidColorBrush(Color),
+				Foreground = SideScrollTheme.ToolbarLabelForeground,
 				Margin = new Thickness(6),
 				[Grid.ColumnProperty] = 1,
 			};

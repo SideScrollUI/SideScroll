@@ -1041,7 +1041,7 @@ public class TabView : Grid, IDisposable
 
 	private void TabInstance_OnRefresh(object? sender, EventArgs e)
 	{
-		Load();
+		ReloadControls();
 	}
 
 	private void TabInstance_OnReload(object? sender, EventArgs e)

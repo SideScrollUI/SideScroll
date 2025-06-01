@@ -80,6 +80,7 @@ public class TabControlParams : Border, IValidationControl
 	{
 		ClearControls();
 
+		Object = obj;
 		if (obj == null) return;
 
 		AddPropertyControls(obj);

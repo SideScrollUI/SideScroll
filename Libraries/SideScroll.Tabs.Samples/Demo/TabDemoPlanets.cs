@@ -26,12 +26,12 @@ public class TabDemoPlanets : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollectionUI<Planet> _planets = [];
+		private ItemCollectionUI<Planet>? _planets;
 		private Planet? _planet;
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			_planet ??= Planet.CreateSample();
+			_planet = Planet.CreateSample();
 			model.AddObject(_planet);
 
 			Toolbar toolbar = new();
@@ -41,7 +41,7 @@ public class TabDemoPlanets : ITab
 			toolbar.ButtonCopyToClipboard.Action = CopyClipBoardUI;
 			model.AddObject(toolbar);
 
-			_planets = [.. SolarSystem.Sample.Planets];
+			_planets ??= [.. SolarSystem.Sample.Planets];
 			model.Items = _planets;
 		}
 
@@ -53,13 +53,13 @@ public class TabDemoPlanets : ITab
 		private void Clear(Call call)
 		{
 			_planet!.Clear();
-			Reload();
+			Refresh();
 		}
 
 		private void Save(Call call)
 		{
 			Validate();
-			_planets.Add(_planet.DeepClone()!);
+			_planets!.Add(_planet.DeepClone()!);
 		}
 
 		private void CopyClipBoardUI(Call call)

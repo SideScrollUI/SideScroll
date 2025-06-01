@@ -124,7 +124,7 @@ public class TabFile(FileView fileView) : ITab
 				File.Delete(tab.Path);
 			}
 
-			Refresh();
+			Reload();
 		}
 
 		private void SelectFile(Call call)

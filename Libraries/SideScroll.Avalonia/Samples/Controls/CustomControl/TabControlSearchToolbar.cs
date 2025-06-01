@@ -14,7 +14,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 {
 	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
 
-	public ToolbarButton ButtonAdd { get; protected set; }
+	public ToolbarButton ButtonNew { get; protected set; }
 	public ToolbarButton ButtonSave { get; protected set; }
 
 	public ToolbarButton ButtonSearch { get; protected set; }
@@ -33,7 +33,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 
 	public TabControlSearchToolbar(TabInstance tabInstance) : base(tabInstance)
 	{
-		ButtonAdd = AddButton("Add", Icons.Svg.Add, "Add");
+		ButtonNew = AddButton("New", Icons.Svg.BlankDocument, "New");
 		ButtonSave = AddButton("Save", Icons.Svg.Save);
 
 		AddSeparator();
