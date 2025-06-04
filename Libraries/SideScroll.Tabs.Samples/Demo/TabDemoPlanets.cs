@@ -36,7 +36,7 @@ public class TabDemoPlanets : ITab
 
 			Toolbar toolbar = new();
 			toolbar.ButtonRefresh.Action = Refresh;
-			toolbar.ButtonNew.Action = Clear;
+			toolbar.ButtonNew.Action = New;
 			toolbar.ButtonSave.Action = Save;
 			toolbar.ButtonCopyToClipboard.Action = CopyClipBoardUI;
 			model.AddObject(toolbar);
@@ -50,7 +50,7 @@ public class TabDemoPlanets : ITab
 			Reload();
 		}
 
-		private void Clear(Call call)
+		private void New(Call call)
 		{
 			_planet!.Clear();
 			Refresh();
@@ -60,6 +60,7 @@ public class TabDemoPlanets : ITab
 		{
 			Validate();
 			_planets!.Add(_planet.DeepClone()!);
+			New(call);
 		}
 
 		private void CopyClipBoardUI(Call call)
