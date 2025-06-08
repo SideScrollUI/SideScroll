@@ -1,16 +1,9 @@
 <Project>
   <PropertyGroup>
-    <Version>0.9.8</Version>
+    <Version>0.9.9</Version>
     <PackageReleaseNotes>
-    - Added TabInstance.LoadingMessage to show an optional tab loading message
-    - Adding Confirmation Dialogs to buttons when doing potentially dangerous operations like deleting files
-    - Added Avalonia theme tweaks for ScrollBar, Flyouts, and ComboBox
-    - Added data binding to Themes Tab to enable and disable the save button based on the name being specified
-    - Added PublicData support for local file serializer so the File Viewer can restrict permissions when loading serialized files
-    - The Tab Formatted ComboBox now updates the BindingList when the list changes
-    - Fixed ListProperty attempting to show properties that require parameters
-    - Fixed nullable booleans showing as Text instead of CheckBox Columns in the DataGrid
-    - Removed unused SummaryAttribute
+    - Added DataViewCollection for displaying items without a view
+    - Improved WordSpacing for lowercase hex strings so it doesn't split them
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.0</AvaloniaVersion>

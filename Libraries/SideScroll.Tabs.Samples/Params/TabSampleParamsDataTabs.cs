@@ -60,7 +60,7 @@ public class TabSampleParamsDataTabs : ITab
 			Validate();
 
 			SampleParamItem clone = _sampleParamItem.DeepClone(call)!;
-			_dataRepoView!.Save(call, clone.ToString(), clone);
+			_dataRepoView!.Save(call, clone);
 			SaveData(DataKey, clone);
 		}
 	}

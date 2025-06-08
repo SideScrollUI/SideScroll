@@ -25,7 +25,10 @@ public class TabSampleDataRepo : ITab
 
 			model.Actions = new List<TaskCreator>
 			{
-				new TaskDelegate("Delete Repos", DeleteRepos),
+				new TaskDelegate("Delete Repos", DeleteRepos)
+				{
+					AcentType = AccentType.Warning,
+				}
 			};
 		}
 

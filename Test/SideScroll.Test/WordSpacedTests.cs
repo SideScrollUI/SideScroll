@@ -12,6 +12,15 @@ public class WordSpacedTests : BaseTest
 		Initialize("WordSpaced");
 	}
 
+	[Test, Description("CamelCase")]
+	public void CamelCase()
+	{
+		string input = "CamelCase";
+		string text = input.WordSpaced();
+
+		Assert.That(text, Is.EqualTo("Camel Case"));
+	}
+
 	[Test, Description("WordSpaced Upper And Lower")]
 	public void WordSpacedUpperAndLower()
 	{
@@ -121,5 +130,24 @@ public class WordSpacedTests : BaseTest
 		string text = input.WordSpaced();
 
 		Assert.That(text, Is.EqualTo(input));
+	}
+
+	[Test, Description("Lowercase Hex")]
+	public void WordSpacedLowercaseHex()
+	{
+		string input = "01a3a14c26e93d56e7c75";
+		string text = input.WordSpaced();
+
+		Assert.That(text, Is.EqualTo(input));
+	}
+
+	[Test, Description("Lowercase Hex In Id")]
+	public void WordSpacedLowercaseHexInId()
+	{
+		string input = "Abc-123-01a3a14c26e93d56e7c75";
+		string text = input.WordSpaced();
+
+		// todo: First hyphen could still be improved
+		Assert.That(text, Is.EqualTo("Abc -123 - 01a3a14c26e93d56e7c75"));
 	}
 }
