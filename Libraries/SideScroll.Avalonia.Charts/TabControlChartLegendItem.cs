@@ -13,8 +13,7 @@ namespace SideScroll.Avalonia.Charts;
 
 public abstract class TabChartLegendItem<TSeries> : Grid
 {
-	public event EventHandler<EventArgs>? OnSelectionChanged;
-	public event EventHandler<EventArgs>? OnVisibleChanged;
+	public event EventHandler<EventArgs>? OnVisibilityChanged;
 
 	public TabControlChartLegend<TSeries> Legend { get; }
 	public ChartSeries<TSeries> ChartSeries { get; }
@@ -242,7 +241,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
 		{
 			IsSelected = !IsSelected;
-			OnSelectionChanged?.Invoke(this, EventArgs.Empty);
+			OnVisibilityChanged?.Invoke(this, EventArgs.Empty);
 			e.Handled = true;
 		}
 	}

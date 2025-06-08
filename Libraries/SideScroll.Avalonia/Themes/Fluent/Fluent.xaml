@@ -109,7 +109,7 @@
           <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#2040a0" />
           <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#ff2d53c4" />
 
-          <SolidColorBrush x:Key="ButtonForeground" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="ButtonForeground" Color="#ffcccce8" />
           <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#ffe6e6f2" />
           <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#fff0f0f7" />
 
@@ -119,8 +119,8 @@
           <SolidColorBrush x:Key="ButtonWarningBackground" Color="#ff804020" />
           <SolidColorBrush x:Key="ButtonWarningBackgroundPointerOver" Color="#ff99471f" />
 
-          <SolidColorBrush x:Key="ButtonWarningForeground" Color="#ffe8e0dc" />
-          <SolidColorBrush x:Key="ButtonWarningForegroundPointerOver" Color="#fff2e8e6" />
+          <SolidColorBrush x:Key="ButtonWarningForeground" Color="#ffe3d2c8" />
+          <SolidColorBrush x:Key="ButtonWarningForegroundPointerOver" Color="#fff0ddd3" />
 
           <SolidColorBrush x:Key="ButtonWarningBorderBrush" Color="#ff2e1c14" />
           <SolidColorBrush x:Key="ButtonWarningBorderBrushPointerOver" Color="#ff543424" />

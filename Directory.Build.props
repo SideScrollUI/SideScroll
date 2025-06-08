@@ -4,6 +4,7 @@
     <PackageReleaseNotes>
     - Added DataViewCollection for displaying items without a view
     - Improved WordSpacing for lowercase hex strings so it doesn't split them
+    - Added Chart DateTimeFormat for showing only years
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.0</AvaloniaVersion>

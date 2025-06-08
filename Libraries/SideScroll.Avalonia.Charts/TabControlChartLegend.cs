@@ -20,8 +20,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 	protected WrapPanel WrapPanel { get; set; }
 	protected TextBlock? TextBlockTotal { get; set; }
 
-	public event EventHandler<EventArgs>? OnSelectionChanged;
-	public event EventHandler<EventArgs>? OnVisibleChanged;
+	public event EventHandler<EventArgs>? OnVisibleSeriesChanged;
 
 	public override string? ToString() => ChartView.ToString();
 
@@ -123,7 +122,6 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 		{
 			SetAllVisible(false);
 			legendItem.IsSelected = true;
-			//OnSelectionChanged?.Invoke(this, legendItem.oxyListSeries);
 		}
 		else
 		{
@@ -131,7 +129,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 		}
 
 		UpdateVisibleSeries();
-		OnSelectionChanged?.Invoke(this, EventArgs.Empty);
+		OnVisibleSeriesChanged?.Invoke(this, EventArgs.Empty);
 	}
 
 	public void SelectSeries(TSeries series, ListSeries listSeries)
@@ -182,7 +180,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 		if (update && changed)
 		{
 			UpdateVisibleSeries();
-			OnSelectionChanged?.Invoke(this, EventArgs.Empty);
+			OnVisibleSeriesChanged?.Invoke(this, EventArgs.Empty);
 		}
 	}
 
@@ -249,17 +247,10 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 		}
 	}
 
-	// todo: remove 1
-	protected void LegendItem_SelectionChanged(object? sender, EventArgs e)
+	protected void LegendItem_VisibilityChanged(object? sender, EventArgs e)
 	{
 		UpdateVisibleSeries();
-		OnSelectionChanged?.Invoke(this, EventArgs.Empty);
-	}
-
-	protected void LegendItem_VisibleChanged(object? sender, EventArgs e)
-	{
-		UpdateVisibleSeries();
-		OnVisibleChanged?.Invoke(this, EventArgs.Empty);
+		OnVisibleSeriesChanged?.Invoke(this, EventArgs.Empty);
 	}
 
 	public virtual void UpdateHighlight(bool showFaded)

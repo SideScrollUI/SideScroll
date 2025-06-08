@@ -82,10 +82,10 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 		return false;
 	}
 
-	public new void Remove(DataItem<T> item)
+	public new void Remove(DataItem<T> dataItem)
 	{
-		base.Remove(item);
-		Lookup.Remove(item.Key);
+		base.Remove(dataItem);
+		Lookup.Remove(dataItem.Key);
 	}
 
 	public new void Clear()

@@ -149,8 +149,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			Legend.IsVisible = false;
 		}
 		ContainerGrid.Children.Add(Legend);
-		Legend.OnSelectionChanged += Legend_OnSelectionChanged;
-		//Legend.OnVisibleChanged += Legend_OnVisibleChanged;
+		Legend.OnVisibleSeriesChanged += Legend_OnVisibleSeriesChanged;
 
 		_pointerMovedSubscriber = new(TabControlChart_OnPointerChanged);
 		_pointerMovedEventSource.WeakEvent.Subscribe(_pointerMovedEventSource, _pointerMovedSubscriber);
@@ -735,7 +734,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		UpdateTimeWindow(e.TimeWindow);
 	}
 
-	private void Legend_OnSelectionChanged(object? sender, EventArgs e)
+	private void Legend_OnVisibleSeriesChanged(object? sender, EventArgs e)
 	{
 		StopSelecting();
 		UpdateYAxis();
@@ -895,8 +894,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	{
 		if (Legend != null)
 		{
-			Legend.OnSelectionChanged -= Legend_OnSelectionChanged;
-			//Legend.OnVisibleChanged -= Legend_OnVisibleChanged;
+			Legend.OnVisibleSeriesChanged -= Legend_OnVisibleSeriesChanged;
 		}
 
 		Chart.PointerPressed -= TabControlLiveChart_PointerPressed;

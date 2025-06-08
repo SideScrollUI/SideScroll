@@ -2,6 +2,8 @@ namespace SideScroll.Avalonia.Charts;
 
 public class DateTimeFormat(string? dateFormat, string? timeFormat, string? timeFormatUtc, TimeSpan minimum, TimeSpan maximum)
 {
+	public const double DaysInAYear = 365.25;
+
 	public string? DateFormat => dateFormat;
 	public string? TimeFormat => timeFormat;
 	public string? TimeFormatUtc => timeFormatUtc;
@@ -38,7 +40,8 @@ public class DateTimeFormat(string? dateFormat, string? timeFormat, string? time
 		new(null, "t", "H:mm", TimeSpan.FromMinutes(1), TimeSpan.FromDays(1)),
 		new("M/d", "t", "H:mm", TimeSpan.FromMinutes(1), TimeSpan.FromDays(3)),
 		new("M/d", null, null, TimeSpan.FromDays(1), TimeSpan.FromDays(6 * 30)),
-		new("yyyy-M-d", null, null, TimeSpan.FromDays(1), TimeSpan.FromDays(1000.0 * 12 * 30)),
+		new("yyyy-M-d", null, null, TimeSpan.FromDays(1), TimeSpan.FromDays(6 * DaysInAYear)),
+		new("yyyy", null, null, TimeSpan.FromDays(DaysInAYear), TimeSpan.FromDays(1000.0 * DaysInAYear)),
 	];
 
 	public static DateTimeFormat? GetWindowFormat(TimeSpan duration)

@@ -12,8 +12,7 @@ public class TabControlLiveChartLegend(TabControlLiveChart liveChart)
 	protected override TabChartLegendItem<ISeries> AddSeries(ChartSeries<ISeries> chartSeries)
 	{
 		var legendItem = new TabLiveChartLegendItem(this, chartSeries);
-		legendItem.OnSelectionChanged += LegendItem_SelectionChanged;
-		legendItem.OnVisibleChanged += LegendItem_VisibleChanged;
+		legendItem.OnVisibilityChanged += LegendItem_VisibilityChanged;
 		legendItem.PointerPressed += (s, e) =>
 		{
 			if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
