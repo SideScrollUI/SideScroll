@@ -18,17 +18,6 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	// Don't implement List<T>, it isn't sortable
 	public DataItemCollection(IEnumerable<DataItem<T>> enumerable) : base(enumerable)
 	{
-		Lookup = CreateLookup();
-	}
-
-	private SortedDictionary<string, DataItem<T>> CreateLookup()
-	{
-		var entries = new SortedDictionary<string, DataItem<T>>();
-		foreach (DataItem<T> item in ToList())
-		{
-			entries.Add(item.Key, item);
-		}
-		return entries;
 	}
 
 	public IEnumerable<DataItem<T>> OrderBy(string propertyName)
@@ -49,7 +38,12 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	{
 		var dataItem = new DataItem<T>(key, value);
 		Add(dataItem);
-		Lookup.Add(key, dataItem);
+	}
+
+	public new void Add(DataItem<T> dataItem)
+	{
+		base.Add(dataItem);
+		Lookup.Add(dataItem.Key, dataItem);
 	}
 
 	public void Update(string key, T value)
