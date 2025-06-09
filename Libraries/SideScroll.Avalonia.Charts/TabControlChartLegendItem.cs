@@ -53,6 +53,9 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private readonly SolidColorBrush _colorBrush;
 
+	private static readonly List<Point> PolygonPointsSmall = GetPolygonPoints(13, 13);
+	private static readonly List<Point> PolygonPointsLarge = GetPolygonPoints(15, 15);
+
 	public override string? ToString() => ChartSeries.ToString();
 
 	protected TabChartLegendItem(TabControlChartLegend<TSeries> legend, ChartSeries<TSeries> chartSeries)
@@ -96,16 +99,13 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void AddCheckBox()
 	{
-		int width = 13;
-		int height = 13;
-
 		_polygon = new Polygon
 		{
 			Width = 16,
-			Height = height,
+			Height = 13,
 			Stroke = SideScrollTheme.ChartLegendIconBorder,
 			StrokeThickness = 1.5,
-			Points = GetPolygonPoints(width, height),
+			Points = PolygonPointsSmall,
 			VerticalAlignment = VerticalAlignment.Center,
 		};
 
@@ -133,11 +133,6 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			new(cornerSize, 0),
 			new(0, cornerSize),
 		};
-	}
-
-	private void UpdatePolygonPoints(int width, int height)
-	{
-		_polygon!.Points = GetPolygonPoints(width, height);
 	}
 
 	private void AddTextBlock()
@@ -190,7 +185,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			_highlight = value;
 			if (_highlight)
 			{
-				UpdatePolygonPoints(15, 15);
+				_polygon!.Points = PolygonPointsLarge;
 				SetFilled(true);
 				_highlight = true;
 				TextBlock!.Foreground = SideScrollTheme.ChartLabelForegroundHighlight;
@@ -201,7 +196,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			}
 			else
 			{
-				UpdatePolygonPoints(13, 13);
+				_polygon!.Points = PolygonPointsSmall;
 				_highlight = false;
 				SetFilled(IsSelected);
 				TextBlock!.Foreground = SideScrollTheme.ChartLabelForeground;

@@ -97,9 +97,13 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 		foreach (TabChartLegendItem<TSeries> legendItem in IdxLegendItems.Values)
 		{
 			if (legendItem.Count > 0)
+			{
 				nonzero.Add(legendItem);
+			}
 			else
+			{
 				unused.Add(legendItem);
+			}
 		}
 
 		var ordered = nonzero.OrderByDescending(a => a.Total).ToList();

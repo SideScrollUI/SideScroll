@@ -21,6 +21,7 @@ public class TabSampleDataRepo : ITab
 				new("Param Data Repo", new TabSampleParamsDataTabs()),
 				new("Paging", new TabSampleDataRepoPaging()),
 				new("Local Directories", new TabDirectory(Project.Data.App.RepoPath)),
+				new("Temp", new TabDirectory(Project.Data.Temp.RepoPath)),
 			};
 
 			model.Actions = new List<TaskCreator>

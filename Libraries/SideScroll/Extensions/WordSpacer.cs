@@ -96,15 +96,16 @@ public class WordSpacer
 		for (int i = 0; i < tokens.Count; i++)
 		{
 			Token token = tokens[i];
-			if (token.TokenType == TokenType.Number || token.TokenType == TokenType.LowerString)
+			if (token.IsNumberLowerCompatible)
 			{
 				for (; i + 1 < tokens.Count; i++)
 				{
 					Token nextToken = tokens[i + 1];
-					if (nextToken.TokenType != TokenType.Number && nextToken.TokenType != TokenType.LowerString)
+					if (!nextToken.IsNumberLowerCompatible)
 						break;
 
 					token.Value += nextToken.Value;
+					token.TokenType = TokenType.NumberLower;
 				}
 			}
 
@@ -189,6 +190,7 @@ public class WordSpacer
 		public override string ToString() => Value;
 
 		public bool IsNumeric => TokenType == TokenType.Decimal || TokenType == TokenType.Number;
+		public bool IsNumberLowerCompatible => TokenType == TokenType.NumberLower || TokenType == TokenType.Number || TokenType == TokenType.LowerString;
 
 		public static TokenType GetType(char c) => c switch
 		{
@@ -221,8 +223,14 @@ public class WordSpacer
 			{
 				if (IsNumeric || TokenType == TokenType.NumberLower) return true;
 
+				if (TokenType == TokenType.LowerString)
+				{
+					TokenType = TokenType.NumberLower;
+					return true;
+				}
+
 				if (TokenType != TokenType.UpperString) return false;
-				
+
 				if (Value.Length >= 2 && Value[0] == Value[1])
 				{
 					// Allow 4XX and 4XXs
@@ -254,15 +262,7 @@ public class WordSpacer
 			{
 				if (TokenType != TokenType.LowerString)
 				{
-					if (TokenType == TokenType.NumberLower) return true;
-
-					if (TokenType == TokenType.Number)
-					{
-						TokenType = TokenType.NumberLower;
-						return true;
-					}
-
-					return false;
+					return TokenType == TokenType.NumberLower;
 				}
 
 				// Only allow one lowercase if word starts with a capital letter

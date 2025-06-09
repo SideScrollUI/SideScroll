@@ -21,6 +21,15 @@ public class WordSpacedTests : BaseTest
 		Assert.That(text, Is.EqualTo("Camel Case"));
 	}
 
+	[Test, Description("CapitalizedNumber")]
+	public void CapitolNumber()
+	{
+		string input = "Name2";
+		string text = input.WordSpaced();
+
+		Assert.That(text, Is.EqualTo("Name 2"));
+	}
+
 	[Test, Description("WordSpaced Upper And Lower")]
 	public void WordSpacedUpperAndLower()
 	{

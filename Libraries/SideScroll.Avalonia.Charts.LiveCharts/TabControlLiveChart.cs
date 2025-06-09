@@ -527,7 +527,9 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		double? minValue = ChartView.MinValue;
 		if (minValue != null)
+		{
 			minimum = minValue.Value;
+		}
 
 		if (ChartView.LogBase is double logBase)
 		{
@@ -547,10 +549,14 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		{
 			var margin = (maximum - minimum) * MarginPercent;
 			if (minimum == maximum)
+			{
 				margin = Math.Abs(minimum);
+			}
 
 			if (margin == 0)
+			{
 				margin = 1;
+			}
 
 			if (minValue != null)
 			{
@@ -723,7 +729,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	{
 		if (_zoomSection != null)
 		{
-			_zoomSection!.IsVisible = false;
+			_zoomSection.IsVisible = false;
 		}
 		_startDataPoint = null;
 		_selecting = false;
@@ -950,22 +956,4 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			//InvalidateChart();
 		}
 	}
-
-	/*private void Legend_OnVisibleChanged(object? sender, EventArgs e)
-	{
-		UpdateYAxis();
-	}
-
-	private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-	{
-		lock (Chart.SyncContext)
-		{
-			//Update();
-			int index = ListToTabIndex[(IList)sender];
-			ListSeries listSeries = ListToTabSeries[(IList)sender];
-			AddPoints((LineSeries)plotModel.Series[index], listSeries, e.NewItems);
-		}
-
-		InvalidateChart();
-	}*/
 }
