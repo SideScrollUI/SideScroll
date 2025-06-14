@@ -27,7 +27,8 @@ public class TabFileViewer(SelectFileDelegate? selectFileDelegate = null) : ITab
 				new("Downloads", new TabDirectory(Paths.DownloadPath, fileSelectorOptions)),
 				new("Drives", new TabDrives(fileSelectorOptions)),
 				new("Favorites", new TabFileDataRepo(dataRepoFavorites, fileSelectorOptions)),
-				new("AppData", new TabDirectory(Project.UserSettings.ProjectPath!, fileSelectorOptions)),
+				new("App Data", new TabDirectory(Project.UserSettings.AppDataPath!, fileSelectorOptions)),
+				new("Local Data", new TabDirectory(Project.UserSettings.LocalDataPath!, fileSelectorOptions)),
 			};
 		}
 	}

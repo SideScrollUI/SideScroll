@@ -144,7 +144,7 @@ public class ScreenCapture : Grid
 
 	private void CopyClipboardOsx(RenderTargetBitmap bitmap)
 	{
-		string directory = TabViewer.Project.ProjectSettings.DefaultProjectPath;
+		string directory = TabViewer.Project.ProjectSettings.DefaultLocalDataPath;
 		string filePath = Paths.Combine(directory, "clipboard.png");
 
 		Directory.CreateDirectory(directory);

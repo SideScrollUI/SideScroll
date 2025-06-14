@@ -1,9 +1,8 @@
-using System.Runtime.InteropServices;
-
 namespace SideScroll;
 
 public static class Paths
 {
+	// Windows can't combine Linux paths correctly, which are needed for FTP (still true?)
 	public static string Combine(string? path, params string?[] paths)
 	{
 		path ??= "";
@@ -35,20 +34,13 @@ public static class Paths
 		return encodedUri;
 	}
 
-	public static string AppDataPath
-	{
-		get
-		{
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-			{
-				return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library");
-			}
-			else
-			{
-				return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			}
-		}
-	}
+	// Windows: ApplicationData -> Users/<User>/AppData/Roaming
+	// macOS: /home/<user>/Library/Application Support/ (same as Local, no official support for Remote?)
+	public static string AppDataPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+	// Windows: Users/<User>/AppData/Local
+	// macOS: /home/<user>/Library/Application Support/
+	public static string LocalDataPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
 	public static string DownloadPath => Combine(HomePath, "Downloads");
 
@@ -69,6 +61,3 @@ public static class Paths
 		}
 	}
 }
-/*
-Windows can't combine linux paths correctly, which are needed for FTP
-*/

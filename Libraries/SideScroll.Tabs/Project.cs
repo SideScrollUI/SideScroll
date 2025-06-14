@@ -57,7 +57,7 @@ public class Project
 	{
 		//DataApp.Save(UserSettings, new Call());
 
-		var serializer = SerializerFile.Create(ProjectSettings.DefaultProjectPath);
+		var serializer = SerializerFile.Create(ProjectSettings.DefaultAppDataPath);
 		serializer.Save(new Call(), UserSettings);
 	}
 
@@ -83,7 +83,8 @@ public class Project
 	{
 		defaultUserSettings ??= projectSettings.DefaultUserSettings as T ?? new()
 		{
-			ProjectPath = projectSettings.DefaultProjectPath,
+			AppDataPath = projectSettings.DefaultAppDataPath,
+			LocalDataPath = projectSettings.DefaultLocalDataPath,
 		};
 		var project = new Project(projectSettings, defaultUserSettings);
 		var userSettings = project.Data.App.Load<T>() ?? defaultUserSettings;
@@ -105,9 +106,9 @@ public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings user
 	public DataRepo Temp => new(TempPath, DataRepoName);
 	public DataRepo Shared => new(SharedPath, DataRepoName); // Shared across versions
 
-	private string AppPath => Paths.Combine(userSettings.ProjectPath, "Data", projectSettings.DataVersion.ToString());
-	private string TempPath => Paths.Combine(userSettings.ProjectPath, "Temp", projectSettings.DataVersion.ToString());
-	private string SharedPath => Paths.Combine(userSettings.ProjectPath, "Shared");
+	private string AppPath => Paths.Combine(userSettings.AppDataPath, "Data", projectSettings.DataVersion.ToString());
+	private string TempPath => Paths.Combine(userSettings.LocalDataPath, "Temp", projectSettings.DataVersion.ToString());
+	private string SharedPath => Paths.Combine(userSettings.AppDataPath, "Shared");
 
 	private string DataRepoName
 	{

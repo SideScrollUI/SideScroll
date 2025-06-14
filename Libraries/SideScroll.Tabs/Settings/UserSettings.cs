@@ -10,13 +10,16 @@ namespace SideScroll.Tabs.Settings;
 public class UserSettings
 {
 	[Hidden]
-	public string? ProjectPath { get; set; }
+	public string? AppDataPath { get; set; }
+
+	[Hidden]
+	public string? LocalDataPath { get; set; }
 
 	[Hidden]
 	public string? LinkId { get; set; }
 
 	[Hidden]
-	public string SettingsPath => Paths.Combine(ProjectPath, "Settings.atlas");
+	public string SettingsPath => Paths.Combine(AppDataPath, "Settings.atlas");
 
 	[Separator]
 	public bool AutoLoad { get; set; } = true;

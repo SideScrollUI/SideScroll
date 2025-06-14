@@ -15,24 +15,19 @@ public class ProjectSettings
 
 	public bool ShowToolbar { get; set; } = true;
 
-	public string DefaultProjectPath
-	{
-		get
-		{
-			if (Domain != null)
-			{
-				return Paths.Combine(Paths.AppDataPath, Domain, Name);
-			}
-			else
-			{
-				return Paths.Combine(Paths.AppDataPath, Name);
-			}
-		}
-	}
+	public string DefaultAppDataPath => Paths.Combine(Paths.AppDataPath, RelativePath);
+
+	public string DefaultLocalDataPath => Paths.Combine(Paths.LocalDataPath, RelativePath);
+
+	public string RelativePath =>
+		Domain != null
+			? Paths.Combine(Domain, Name)
+			: Name!;
 
 	public virtual UserSettings DefaultUserSettings => new()
 	{
-		ProjectPath = DefaultProjectPath,
+		AppDataPath = DefaultAppDataPath,
+		LocalDataPath = DefaultLocalDataPath,
 	};
 
 	public static Version ProgramVersion() => Assembly.GetEntryAssembly()!.GetName().Version!;
