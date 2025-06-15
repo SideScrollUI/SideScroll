@@ -34,30 +34,21 @@ public static class Paths
 		return encodedUri;
 	}
 
-	// Windows: ApplicationData -> Users/<User>/AppData/Roaming
-	// macOS: /home/<user>/Library/Application Support/ (same as Local, no official support for Remote?)
+	// Windows: C:\Users\<User>
+	// macOS: /Users/<user>
+	public static string HomePath => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+	// Windows: ApplicationData -> C:\Users\<User>\AppData\Roaming
+	// macOS: /Users/<user>/Library/Application Support/ (same as Local, no official support for Remote?)
 	public static string AppDataPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-	// Windows: Users/<User>/AppData/Local
-	// macOS: /home/<user>/Library/Application Support/
+	// Windows: C:\Users\<User>\AppData\Local
+	// macOS: /Users/<user>/Library/Application Support/
 	public static string LocalDataPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
+	// Windows: C:\Users\<User>\Pictures
+	// macOS: /Users/<user>/Pictures
+	public static string PicturesPath => Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+
 	public static string DownloadPath => Combine(HomePath, "Downloads");
-
-	public static string PicturesPath => Combine(HomePath, "Pictures");
-
-	public static string HomePath
-	{
-		get
-		{
-			if (Environment.OSVersion.Platform == PlatformID.Unix)
-			{
-				return Environment.GetEnvironmentVariable("HOME")!;
-			}
-			else
-			{
-				return Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
-			}
-		}
-	}
 }

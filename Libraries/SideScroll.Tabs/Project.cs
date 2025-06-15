@@ -34,13 +34,6 @@ public class Project
 
 	public ProjectDataRepos Data => new(ProjectSettings, UserSettings);
 
-	[Obsolete("Use Data instead")]
-	public DataRepo DataShared => Data.Shared;
-	[Obsolete("Use Data instead")]
-	public DataRepo DataApp => Data.App;
-	[Obsolete("Use Data instead")]
-	public DataRepo DataTemp => Data.Temp;
-
 	public override string? ToString() => Name;
 
 	public Project() : this(new ProjectSettings(), new UserSettings()) { }
@@ -106,11 +99,11 @@ public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings user
 	public DataRepo Temp => new(TempPath, DataRepoName);
 	public DataRepo Shared => new(SharedPath, DataRepoName); // Shared across versions
 
-	private string AppPath => Paths.Combine(userSettings.AppDataPath, "Data", projectSettings.DataVersion.ToString());
-	private string TempPath => Paths.Combine(userSettings.LocalDataPath, "Temp", projectSettings.DataVersion.ToString());
-	private string SharedPath => Paths.Combine(userSettings.AppDataPath, "Shared");
+	protected string AppPath => Paths.Combine(userSettings.AppDataPath, "Data", projectSettings.DataVersion.ToString());
+	protected string TempPath => Paths.Combine(userSettings.LocalDataPath, "Temp", projectSettings.DataVersion.ToString());
+	protected string SharedPath => Paths.Combine(userSettings.AppDataPath, "Shared");
 
-	private string DataRepoName
+	protected string DataRepoName
 	{
 		get
 		{
@@ -120,7 +113,7 @@ public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings user
 			}
 			else
 			{
-				return Paths.Combine("Current");
+				return "Current";
 			}
 		}
 	}

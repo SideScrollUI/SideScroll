@@ -94,13 +94,6 @@ public class TabInstance : IDisposable
 
 	public ProjectDataRepos Data => Project.Data;
 
-	[Obsolete("Use Data instead")]
-	public DataRepo DataShared => Project.Data.Shared;
-	[Obsolete("Use Data instead")]
-	public DataRepo DataApp => Project.Data.App;
-	[Obsolete("Use Data instead")]
-	public DataRepo DataTemp => Project.Data.Temp;
-
 	public TabViewSettings TabViewSettings = new();
 	public TabBookmark? TabBookmark { get; set; }
 	public TabBookmark? TabBookmarkLoaded { get; set; }
