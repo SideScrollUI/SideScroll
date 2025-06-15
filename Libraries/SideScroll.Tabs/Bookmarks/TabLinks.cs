@@ -1,8 +1,6 @@
-using SideScroll.Tabs;
-using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Lists;
 
-namespace SideScroll.Avalonia.Tabs;
+namespace SideScroll.Tabs.Bookmarks;
 
 public class TabLinks : ITab
 {

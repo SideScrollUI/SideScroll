@@ -7,6 +7,8 @@
     - Added Chart DateTimeFormat for showing only years
     - Split ProjectPath into an AppDataPath and LocalDataPath, using the DotNet SpecialFolder values
     - Tab View Buttons can now specify a Flyout to show when clicking a button
+    - Added Data Tab to Settings to show data and allow deleting local data
+    - Enabled File Viewer to delete directories with a confirmation
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.0</AvaloniaVersion>

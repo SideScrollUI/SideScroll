@@ -1,11 +1,9 @@
 using SideScroll.Attributes;
 using SideScroll.Resources;
-using SideScroll.Tabs;
-using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
 
-namespace SideScroll.Avalonia.Tabs;
+namespace SideScroll.Tabs.Bookmarks;
 
 public class TabLinkCollection(LinkCollection links) : ITab
 {
