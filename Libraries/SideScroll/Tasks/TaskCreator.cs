@@ -9,6 +9,18 @@ public enum AccentType
 	Warning
 }
 
+public interface IFlyoutConfig
+{
+}
+
+public class ConfirmationFlyoutConfig(string text, string confirmText, string cancelText = "Cancel") : IFlyoutConfig
+{
+	public string Text => text;
+	public string ConfirmText => confirmText;
+	public string? CancelText => cancelText;
+}
+
+
 public abstract class TaskCreator : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged; // Used only for INotifyPropertyChanged memory leak fix?
@@ -28,7 +40,10 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	public bool UseTask { get; set; } // Blocks, Action uses UI thread if false
 
 	[HiddenColumn]
-	public AccentType AcentType { get; set; }
+	public AccentType AccentType { get; set; }
+
+	[HiddenColumn]
+	public IFlyoutConfig? Flyout { get; set; }
 
 	[HiddenColumn]
 	public SynchronizationContext? Context { get; set; }

@@ -1,6 +1,7 @@
 using Avalonia.Input;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Tasks;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
 

@@ -32,7 +32,7 @@ public class TabFileSerialized(string path) : ITab
 					new TaskDelegate("Load Public Data", LoadPublicData, true, true),
 					new TaskDelegate("Load All Data", LoadAllData, true, true)
 					{
-						AcentType = AccentType.Warning,
+						AccentType = AccentType.Warning,
 					},
 				};
 			}

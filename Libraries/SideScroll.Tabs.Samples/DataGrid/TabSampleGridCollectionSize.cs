@@ -26,7 +26,7 @@ public class TabSampleGridCollectionSize : ITab
 				new TaskAction("Add 10,000 Entries", () => AddEntries(10_000)),
 				new TaskAction("Add 100,000 Entries (Very Slow)", () => AddEntries(100_000))
 				{
-					AcentType = AccentType.Warning,
+					AccentType = AccentType.Warning,
 				},
 			};
 		}

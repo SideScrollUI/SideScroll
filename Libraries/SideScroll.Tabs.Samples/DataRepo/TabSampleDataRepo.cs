@@ -28,7 +28,8 @@ public class TabSampleDataRepo : ITab
 			{
 				new TaskDelegate("Delete Repos", DeleteRepos)
 				{
-					AcentType = AccentType.Warning,
+					Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete all DataRepos?", "Delete"),
+					AccentType = AccentType.Warning,
 				}
 			};
 		}

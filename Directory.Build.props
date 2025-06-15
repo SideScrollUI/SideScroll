@@ -6,6 +6,7 @@
     - Improved WordSpacing for lowercase hex strings so it doesn't split them
     - Added Chart DateTimeFormat for showing only years
     - Split ProjectPath into an AppDataPath and LocalDataPath, using the DotNet SpecialFolder values
+    - Tab View Buttons can now specify a Flyout to show when clicking a button
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.0</AvaloniaVersion>

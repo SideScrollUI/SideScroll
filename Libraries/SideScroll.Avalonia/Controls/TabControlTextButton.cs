@@ -9,10 +9,10 @@ public class TabControlTextButton : Button
 {
 	protected override Type StyleKeyOverride => typeof(Button);
 
-	public TabControlTextButton(string? label = null, AccentType acentType = default)
+	public TabControlTextButton(string? label = null, AccentType accentType = default)
 	{
 		Content = label;
-		if (acentType == AccentType.Warning)
+		if (accentType == AccentType.Warning)
 		{
 			UseWarningAccent();
 		}

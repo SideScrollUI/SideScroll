@@ -115,6 +115,7 @@
     "TextControlBorder": "#ffd3d3f5",
     "TextControlBorderPointerOver": "#ff8fa1f7",
     "BorderThickness": 1.5,
+    "CheckBoxBorderThickness": 1,
     "CornerRadius": 4,
     "TextControlSelectionForeground": "White",
     "TextControlSelectionHighlight": "#ff26a5ff",

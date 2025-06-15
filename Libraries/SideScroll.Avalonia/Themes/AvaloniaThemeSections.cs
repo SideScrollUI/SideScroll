@@ -335,7 +335,7 @@ public class ButtonTheme : ThemeSection
 	[ResourceKey("ButtonBorderBrushPressed", "ToggleButtonBorderBrushPressed")]
 	public Color? BorderPressed { get; set; }
 
-	[Range(0, 10), ResourceKey("ButtonBorderThemeThickness")]
+	[Range(0, 5), ResourceKey("ButtonBorderThemeThickness")]
 	public double? BorderThickness { get; set; }
 
 	[Range(0, 20), ResourceKey("ButtonCornerRadius")]
@@ -428,13 +428,15 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? TextControlBorderPointerOver { get; set; }
 
-	[Range(0, 10), ResourceKey("TextControlBorderThemeThickness",
+	[Range(0, 5), ResourceKey("TextControlBorderThemeThickness",
 		"TextControlBorderThemeThicknessFocused",
 		"CalendarDatePickerBorderThemeThickness",
-		"ComboBoxBorderThemeThickness",
-		"CheckBoxBorderThemeThickness"
+		"ComboBoxBorderThemeThickness"
 		)]
 	public double? BorderThickness { get; set; }
+
+	[Range(0, 5), ResourceKey("CheckBoxBorderThemeThickness")]
+	public double? CheckBoxBorderThickness { get; set; }
 
 	[Range(0, 20), ResourceKey("ControlCornerRadius")]
 	public double? CornerRadius { get; set; }
@@ -604,7 +606,7 @@ public class ChartTheme : ThemeSection
 	[Header("Border"), ResourceKey("ChartBorderBrush")]
 	public Color? Border { get; set; }
 
-	[Range(0, 10), ResourceKey("ChartBorderThickness")]
+	[Range(0, 5), ResourceKey("ChartBorderThickness")]
 	public double? BorderThickness { get; set; }
 
 	[ResourceKey("ChartLegendIconBorderBrush")]

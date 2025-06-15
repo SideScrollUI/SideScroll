@@ -35,7 +35,7 @@ public class TabViewActions : UserControl
 			};
 			containerGrid.RowDefinitions.Add(rowDefinition);
 
-			var button = new TabControlTextButton(taskCreator.Label, taskCreator.AcentType)
+			var button = new TabControlTextButton(taskCreator.Label, taskCreator.AccentType)
 			{
 				Margin = new Thickness(4, 2),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -54,10 +54,19 @@ public class TabViewActions : UserControl
 	{
 		Button button = (Button)sender!;
 		TaskCreator taskCreator = _taskCreators[button];
+		if (taskCreator.Flyout is ConfirmationFlyoutConfig config)
+		{
+			var flyout = new ConfirmationFlyout(() => InvokeTask(taskCreator), config.Text, config.ConfirmText, config.CancelText);
+			flyout.ShowAt(this); // Using button will inherit button theme accent overrides
+		}
+		else
+		{
+			TabInstance.StartTask(taskCreator, taskCreator.ShowTask);
+		}
+	}
+
+	public void InvokeTask(TaskCreator taskCreator)
+	{
 		TabInstance.StartTask(taskCreator, taskCreator.ShowTask);
 	}
 }
-
-/*
-This could be converted to a DataGrid now that there's a button column
-*/
