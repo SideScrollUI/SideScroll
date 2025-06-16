@@ -41,6 +41,8 @@ public class Project
 	public Project(ProjectSettings projectSettings, UserSettings userSettings)
 	{
 		ProjectSettings = projectSettings;
+		userSettings.AppDataPath ??= projectSettings.DefaultAppDataPath;
+		userSettings.LocalDataPath ??= projectSettings.DefaultLocalDataPath;
 		UserSettings = userSettings;
 		_userSettings = userSettings; // Make the compiler happy
 		Linker = new(this);
@@ -74,11 +76,7 @@ public class Project
 
 	public static Project Load<T>(ProjectSettings projectSettings, T? defaultUserSettings = null) where T : UserSettings, new()
 	{
-		defaultUserSettings ??= projectSettings.DefaultUserSettings as T ?? new()
-		{
-			AppDataPath = projectSettings.DefaultAppDataPath,
-			LocalDataPath = projectSettings.DefaultLocalDataPath,
-		};
+		defaultUserSettings ??= projectSettings.DefaultUserSettings as T ?? new();
 		var project = new Project(projectSettings, defaultUserSettings);
 		var userSettings = project.Data.App.Load<T>() ?? defaultUserSettings;
 		return new Project(projectSettings, userSettings);

@@ -94,7 +94,7 @@ public class TabInstance : IDisposable
 
 	public ProjectDataRepos Data => Project.Data;
 
-	public TabViewSettings TabViewSettings = new();
+	public TabViewSettings TabViewSettings { get; set; } = new();
 	public TabBookmark? TabBookmark { get; set; }
 	public TabBookmark? TabBookmarkLoaded { get; set; }
 	public SelectedRow? SelectedRow { get; set; } // The parent selection that points to this tab
