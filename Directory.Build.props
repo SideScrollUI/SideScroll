@@ -9,6 +9,7 @@
     - Tab View Buttons can now specify a Flyout to show when clicking a button
     - Added Data Tab to Settings to show data and allow deleting local data
     - Enabled File Viewer to delete directories with a confirmation
+    - Updated serializer sharing permissions to block simultaneous writes
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.0</AvaloniaVersion>

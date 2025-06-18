@@ -26,7 +26,9 @@ public class SerializerFileAtlas : SerializerFile
 
 			try
 			{
-				using var stream = new FileStream(DataPath!, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+				// Don't allow reading until finished since we seek backwards at the end to set the file size
+				// FileShare.None also avoids simultaneous writes
+				using var stream = new FileStream(DataPath!, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
 
 				using var writer = new BinaryWriter(stream);
 

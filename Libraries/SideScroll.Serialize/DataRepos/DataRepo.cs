@@ -10,8 +10,8 @@ public class DataRepo
 {
 	private const string DefaultGroupId = ".Default";
 
-	public string RepoPath { get; set; }
-	public string RepoName { get; set; }
+	public string RepoPath { get; }
+	public string RepoName { get; }
 
 	//public RepoSettings Settings;
 
