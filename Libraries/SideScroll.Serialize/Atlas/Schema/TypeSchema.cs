@@ -45,29 +45,37 @@ public class TypeSchema
 	public List<MemberSchema> MemberSchemas { get; set; } = [];
 	public List<FieldSchema> FieldSchemas { get; set; } = [];
 	public List<PropertySchema> PropertySchemas { get; set; } = [];
+	[HiddenColumn]
 	public List<PropertySchema> ReadOnlyPropertySchemas { get; set; } = [];
 
 	// not really schema, could break out into a records class
 	public int TypeIndex { get; set; } // -1 if null
 	public int NumObjects { get; set; }
-	public long FileDataOffset { get; set; }
 	public long DataSize { get; set; }
+	public long StartDataOffset { get; set; }
+	public long EndDataOffset => StartDataOffset + DataSize;
 
 	// not written out
 	[WordWrap]
 	public Type? Type { get; protected set; }
-	[WordWrap]
+	[WordWrap, HiddenColumn]
 	public Type? NonNullableType { get; protected set; }
 
 	public bool IsPrimitive { get; protected set; }
+	
+	// Permissions
 	public bool IsPrivate { get; protected set; }
 	public bool IsProtected { get; protected set; }
 	public bool IsPublic { get; protected set; } // [PublicData], will get exported if PublicOnly set
 	public bool IsPublicOnly => IsPublic || IsProtected;
+	
 	public bool IsStatic { get; protected set; }
+	
 	public bool IsSerialized { get; protected set; }
 	public bool IsUnserialized { get; protected set; }
+	
 	public bool HasEmptyConstructor { get; protected set; }
+	[HiddenColumn]
 	public ConstructorInfo? CustomConstructor { get; protected set; }
 	public bool HasConstructor => HasEmptyConstructor || CustomConstructor != null;
 	public bool HasSubType { get; protected set; }
@@ -282,7 +290,7 @@ public class TypeSchema
 		writer.Write(AssemblyQualifiedName);
 		writer.Write(HasSubType);
 		writer.Write(NumObjects);
-		writer.Write(FileDataOffset);
+		writer.Write(StartDataOffset);
 		writer.Write(DataSize);
 
 		SaveFields(writer);
@@ -296,7 +304,7 @@ public class TypeSchema
 		AssemblyQualifiedName = reader.ReadString();
 		HasSubType = reader.ReadBoolean();
 		NumObjects = reader.ReadInt32();
-		FileDataOffset = reader.ReadInt64();
+		StartDataOffset = reader.ReadInt64();
 		DataSize = reader.ReadInt64();
 
 		LoadType(log);
@@ -426,11 +434,21 @@ public class TypeSchema
 	}
 
 	// todo: this isn't getting called for types not serialized
-	public void Validate(List<TypeSchema> typeSchemas)
+	public void Validate(Serializer serializer, List<TypeSchema> typeSchemas)
 	{
+		long totalBytes = serializer.Reader!.BaseStream.Length;
+		if (NumObjects > totalBytes || DataSize > totalBytes)
+		{
+			throw new SerializerException("Invalid object count or data size",
+				new Tag("Type", Type),
+				new Tag("Num Objects", NumObjects),
+				new Tag("Data Size", DataSize),
+				new Tag("Total Bytes", totalBytes));
+		}
+
 		if (IsPublic && NumObjects > PublicMaxObjects)
 		{
-			throw new SerializerException("Too many objects",
+			throw new SerializerException("Too many objects for public import",
 				new Tag("Type", Type),
 				new Tag("Objects", NumObjects),
 				new Tag("Max", PublicMaxObjects));

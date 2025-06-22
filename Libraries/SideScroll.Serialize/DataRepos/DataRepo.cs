@@ -206,12 +206,12 @@ public class DataRepo
 		return entries;
 	}
 
-	public List<Header> LoadHeaders(Type type, string? groupId = null, Call? call = null)
+	public List<SerializerHeader> LoadHeaders(Type type, string? groupId = null, Call? call = null)
 	{
 		call ??= new();
 		groupId ??= DefaultGroupId;
 
-		List<Header> headers = [];
+		List<SerializerHeader> headers = [];
 
 		string groupPath = GetGroupPath(type, groupId);
 		if (Directory.Exists(groupPath))
@@ -221,7 +221,7 @@ public class DataRepo
 				var serializerFile = SerializerFile.Create(filePath);
 				if (serializerFile.Exists)
 				{
-					Header header = serializerFile.LoadHeader(call);
+					SerializerHeader header = serializerFile.LoadHeader(call);
 					if (header != null)
 					{
 						headers.Add(header);

@@ -65,7 +65,7 @@ public class LargeFileTests : SerializeBaseTest
 		// Create the memory-mapped file
 		string fullPath = Paths.Combine(_basePath, "LargeImage.data");
 
-		using Stream stream = new FileStream(fullPath, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+		using Stream stream = new FileStream(fullPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
 		using BinaryWriter writer = new(stream);
 		for (long offset = 0; offset <= maxOffset; offset += spacing)
 		{

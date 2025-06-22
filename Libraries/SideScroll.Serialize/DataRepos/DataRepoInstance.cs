@@ -80,7 +80,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		return [.. LoadAllDataItems(call, ascending)];
 	}
 
-	public List<Header> LoadHeaders(Call? call = null)
+	public List<SerializerHeader> LoadHeaders(Call? call = null)
 	{
 		return DataRepo.LoadHeaders(typeof(T), GroupId, call);
 	}

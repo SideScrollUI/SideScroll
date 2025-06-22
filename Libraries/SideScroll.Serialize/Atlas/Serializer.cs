@@ -1,4 +1,3 @@
-using SideScroll.Extensions;
 using SideScroll.Logs;
 using SideScroll.Serialize.Atlas.Schema;
 using SideScroll.Serialize.Atlas.TypeRepos;
@@ -9,50 +8,11 @@ namespace SideScroll.Serialize.Atlas;
 public class SerializerException(string text, params Tag[] tags) : 
 	TaggedException(text, tags);
 
-public class Header
-{
-	public const uint SideId = 0x45444953; // SIDE -> EDIS: 69, 68, 73, 83, Start of file (little endian format)
-
-	public const string LatestVersion = "1";
-
-	public string? Version { get; set; }
-	public string? Name { get; set; }
-
-	public override string ToString() => $"v{Version}: {Name}";
-
-	public void Save(BinaryWriter writer)
-	{
-		writer.Write(SideId);
-		writer.Write(Version ?? LatestVersion);
-		writer.Write(Name ?? "");
-	}
-
-	public void Load(Log log, BinaryReader reader, string? requiredName = null)
-	{
-		uint sideId = reader.ReadUInt32();
-		if (sideId != SideId)
-		{
-			log.Throw(new SerializerException("Invalid header Id",
-				new Tag("Expected", SideId),
-				new Tag("Found", sideId)));
-		}
-		Version = reader.ReadString();
-		Name = reader.ReadString();
-
-		if (!requiredName.IsNullOrEmpty() && Name != requiredName)
-		{
-			log.Throw(new SerializerException("Loaded name doesn't match required",
-				new Tag("Required", requiredName),
-				new Tag("Loaded", Name)));
-		}
-	}
-}
-
 public class Serializer : IDisposable
 {
 	public const uint ScrollId = 0x4C524353; // SCRL -> LRCS: 76, 82, 67, 83, Start of object data (little endian format)
 
-	public Header Header { get; set; } = new();
+	public SerializerHeader Header { get; set; } = new();
 
 	public List<TypeSchema> TypeSchemas { get; protected set; } = [];
 
@@ -213,15 +173,11 @@ public class Serializer : IDisposable
 		AddObjectMemberTypes(callSaving.Log);
 		//UpdateTypeSchemaDerived();
 		Header.Save(writer);
-		long schemaPosition = writer.BaseStream.Position;
-		writer.Write((long)0); // File Size, will write correct value at end
 		SaveSchemas(writer);
 		SavePrimitives(callSaving, writer);
 		SaveObjects(callSaving.Log, writer);
 
-		// write out schema again for file offsets and size
-		writer.Seek((int)schemaPosition, SeekOrigin.Begin);
-		writer.Write(writer.BaseStream.Length);
+		Header.SaveFileSize(writer);
 		SaveSchemas(writer);
 	}
 
@@ -233,18 +189,6 @@ public class Serializer : IDisposable
 		using LogTimer logTimer = call.Log.Timer("Loading object");
 
 		Header.Load(logTimer, reader, name);
-		if (Header.Version != Header.LatestVersion)
-		{
-			logTimer.Throw(new SerializerException("Header version doesn't match", new Tag("Header", Header)));
-		}
-
-		long fileLength = reader.ReadInt64();
-		if (reader.BaseStream.Length != fileLength)
-		{
-			logTimer.Throw(new SerializerException("File size doesn't match",
-				new Tag("Expected", fileLength),
-				new Tag("Actual", reader.BaseStream.Length)));
-		}
 
 		LoadSchemas(logTimer, reader);
 
@@ -329,7 +273,7 @@ public class Serializer : IDisposable
 
 		foreach (TypeSchema typeSchema in TypeSchemas)
 		{
-			typeSchema.Validate(TypeSchemas);
+			typeSchema.Validate(this, TypeSchemas);
 
 			TypeRepo typeRepo = TypeRepo.Create(log, this, typeSchema);
 
@@ -428,7 +372,7 @@ public class Serializer : IDisposable
 			{
 				byte[] bytes = typeRepoWriter.MemoryStream.ToArray();
 
-				typeRepoWriter.TypeRepo.TypeSchema.FileDataOffset = writer.BaseStream.Position;
+				typeRepoWriter.TypeRepo.TypeSchema.StartDataOffset = writer.BaseStream.Position;
 				typeRepoWriter.TypeRepo.TypeSchema.DataSize = bytes.Length;
 
 				writer.Write(bytes);

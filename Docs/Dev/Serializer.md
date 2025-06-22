@@ -68,3 +68,36 @@ public class MyClass(int param)
 - Lazy deserialization isn't currently thread safe, and loaded results can only be used in a single thread. This feature isn't recommended for most usage.
 - Set `lazy` = `true` when loading with the deserializer, and it will create a wrapper class that will only load the virtual properties when referenced (subsequent references won't reload the data)
 - `public virtual string ReallyLongString { get; set; } = "...";`
+
+## File Format
+
+```
+Header
+├─ uint SideId = 0x45444953         // 'SIDE' → EDIS (69, 68, 73, 83) — Start of file, little-endian
+├─ string Version
+├─ string Name
+├─ long FileSize
+
+TypeSchema[]                       // Array of type definitions
+├─ int Count
+├─ For each Type:
+│  ├─ string Name
+│  ├─ string AssemblyQualifiedName
+│  ├─ bool HasSubType
+│  ├─ int NumObjects
+│  ├─ long StartDataOffset         // Points to data after header
+│  └─ long DataSize
+
+Primitives                         // Serialized primitive values
+├─ int Count
+└─ <Object Data>[]                 // Sequence of values
+
+Object Data
+├─ uint ScrollId = 0x4C524353      // 'SCRL' → LRCS (76, 82, 67, 83) — Start of object data
+├─ TypeRepoHeader[]
+│  ├─ int[] ObjectSize
+│  └─ <CustomHeader>               // For arrays, byte arrays, etc.
+│     └─ int[] ObjectCount
+└─ TypeRepoData[]
+   └─ byte[]                       // Serialized object content
+```

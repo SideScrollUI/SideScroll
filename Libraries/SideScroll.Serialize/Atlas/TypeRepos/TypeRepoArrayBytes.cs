@@ -54,6 +54,7 @@ public class TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) : 
 	{
 		//int count = reader.ReadInt32();
 		int count = _sizes![objectIndex];
+		ValidateBytesAvailable(count);
 
 		var array = new byte[count];
 		ObjectsLoaded[objectIndex] = array;

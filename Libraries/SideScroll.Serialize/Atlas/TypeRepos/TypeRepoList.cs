@@ -83,6 +83,7 @@ public class TypeRepoList : TypeRepo
 	{
 		var list = (IList)obj;
 		int count = Reader!.ReadInt32();
+		ValidateBytesAvailable(count);
 		_propertyInfoCapacity?.SetValue(list, count);
 
 		for (int j = 0; j < count; j++)

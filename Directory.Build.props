@@ -10,6 +10,8 @@
     - Added Data Tab to Settings to show data and allow deleting local data
     - Enabled File Viewer to delete directories with a confirmation
     - Updated serializer sharing permissions to block simultaneous writes
+    - Added more serializer size validation checks for type repo object counts and the lists within
+    - Added serializer support for ulong, sbyte, short, ushort, and decimal
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.0</AvaloniaVersion>

@@ -82,7 +82,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 		}
 	}
 
-	public Header LoadHeader(Call call)
+	public SerializerHeader LoadHeader(Call call)
 	{
 		call ??= new();
 
@@ -91,7 +91,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 		var memoryStream = new MemoryStream(File.ReadAllBytes(HeaderPath!));
 
 		var reader = new BinaryReader(memoryStream);
-		var header = new Header();
+		var header = new SerializerHeader();
 		header.Load(callTimer.Log, reader);
 		return header;
 	}

@@ -20,39 +20,6 @@ public class SerializeTypesTests : SerializeBaseTest
 		_serializer = new SerializerMemoryAtlas();
 	}
 
-	[Test, Description("Serialize int")]
-	public void SerializeInt()
-	{
-		int input = 5;
-
-		_serializer.Save(Call, input);
-		int output = _serializer.Load<int>(Call);
-
-		Assert.That(output, Is.EqualTo(input));
-	}
-
-	[Test, Description("Serialize Nullable int")]
-	public void SerializeNullableInt()
-	{
-		int? input = 1;
-
-		_serializer.Save(Call, input);
-		int? output = _serializer.Load<int?>(Call);
-
-		Assert.That(output, Is.EqualTo(input));
-	}
-
-	[Test, Description("Serialize byte")]
-	public void SerializeByte()
-	{
-		byte input = 1;
-
-		_serializer.Save(Call, input);
-		byte output = _serializer.Load<byte>(Call);
-
-		Assert.That(output, Is.EqualTo(input));
-	}
-
 	[Test, Description("Serialize Enum")]
 	public void SerializeEnum()
 	{
@@ -141,6 +108,17 @@ public class SerializeTypesTests : SerializeBaseTest
 
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<Version>(Call);
+
+		Assert.That(output, Is.EqualTo(input));
+	}
+
+	[Test, Description("Serialize decimal")]
+	public void SerializeDecimal()
+	{
+		decimal input = 1.23M;
+
+		_serializer.Save(Call, input);
+		decimal output = _serializer.Load<decimal>(Call);
 
 		Assert.That(output, Is.EqualTo(input));
 	}

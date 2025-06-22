@@ -219,7 +219,7 @@ public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int?
 
 	private Indices BuildIndices(Call call)
 	{
-		List<Header> headers = DataRepoInstance.LoadHeaders(call);
+		List<SerializerHeader> headers = DataRepoInstance.LoadHeaders(call);
 
 		int index = 0;
 		List<Item> items = headers

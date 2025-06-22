@@ -75,6 +75,7 @@ public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeR
 		// Can't use Activator because Array requires parameters in it's constructor
 		//int count = reader.ReadInt32();
 		int count = _sizes![objectIndex];
+		ValidateBytesAvailable(count);
 
 		Array array = Array.CreateInstance(TypeSchema.Type!.GetElementType()!, count);
 		ObjectsLoaded[objectIndex] = array;
@@ -85,8 +86,6 @@ public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeR
 
 	public override void LoadObjectData(object obj)
 	{
-		// Can't use Activator because Array requires parameters in it's constructor
-
 		var list = (IList)obj;
 
 		for (int j = 0; j < list.Count; j++)
