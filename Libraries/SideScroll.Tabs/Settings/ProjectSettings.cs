@@ -8,9 +8,6 @@ public class ProjectSettings
 	public string? Domain { get; set; }
 	public string? Name { get; set; }
 
-	[Hidden]
-	public string DomainOrName => Domain ?? Name!;
-
 	public string? LinkType { get; set; } // for bookmarking
 	public bool EnableLinking { get; set; } = true;
 
@@ -27,6 +24,8 @@ public class ProjectSettings
 		Domain != null
 			? Paths.Combine(Domain, Name)
 			: Name!;
+
+	public string ExceptionsPath => Paths.Combine(Paths.AppDataPath, Domain ?? Name!, "Exceptions", Name);
 
 	public virtual UserSettings DefaultUserSettings => new()
 	{

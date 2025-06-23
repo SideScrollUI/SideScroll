@@ -28,7 +28,7 @@ static class Program
 		catch (Exception e)
 		{
 			var settings = SampleProjectSettings.Settings;
-			LogUtils.LogException(e, settings.Domain, settings.Name!);
+			LogUtils.Save(e, settings.ExceptionsPath, settings.Name!);
 			return 1;
 		}
 	}

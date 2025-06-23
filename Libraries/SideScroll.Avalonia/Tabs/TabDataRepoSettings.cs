@@ -20,7 +20,7 @@ public class TabDataRepoSettings : ITab
 				new("App Directory", new TabDirectory(Project.Data.App.RepoPath)),
 				new("Shared Directory", new TabDirectory(Project.Data.Shared.RepoPath)),
 				new("Cache Directory", new TabDirectory(Project.Data.Cache.RepoPath)),
-				new("Exceptions", new TabDirectory(Project.Data.ExceptionsPath)),
+				new("Exceptions", new TabDirectory(Project.ProjectSettings.ExceptionsPath)),
 			};
 
 			model.Actions = new List<TaskCreator>

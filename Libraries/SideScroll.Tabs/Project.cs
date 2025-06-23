@@ -101,8 +101,6 @@ public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings user
 	protected string CachePath => Paths.Combine(userSettings.LocalDataPath, "Cache", projectSettings.DataVersion.ToString());
 	protected string SharedPath => Paths.Combine(userSettings.AppDataPath, "Shared");
 
-	public string ExceptionsPath => Paths.Combine(Paths.AppDataPath, projectSettings.DomainOrName, "Exceptions", projectSettings.Name);
-
 	protected string DataRepoName
 	{
 		get
