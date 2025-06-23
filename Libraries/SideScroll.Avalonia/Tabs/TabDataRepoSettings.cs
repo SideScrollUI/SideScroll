@@ -19,7 +19,8 @@ public class TabDataRepoSettings : ITab
 			{
 				new("App Directory", new TabDirectory(Project.Data.App.RepoPath)),
 				new("Shared Directory", new TabDirectory(Project.Data.Shared.RepoPath)),
-				new("Temp Directory", new TabDirectory(Project.Data.Temp.RepoPath)),
+				new("Cache Directory", new TabDirectory(Project.Data.Cache.RepoPath)),
+				new("Exceptions", new TabDirectory(Project.Data.ExceptionsPath)),
 			};
 
 			model.Actions = new List<TaskCreator>
@@ -34,7 +35,7 @@ public class TabDataRepoSettings : ITab
 
 		private void DeleteRepos(Call call)
 		{
-			Project.Data.Temp.DeleteRepo(call);
+			Project.Data.Cache.DeleteRepo(call);
 			Project.Data.App.DeleteRepo(call);
 			Project.Data.Shared.DeleteRepo(call);
 			Reload();

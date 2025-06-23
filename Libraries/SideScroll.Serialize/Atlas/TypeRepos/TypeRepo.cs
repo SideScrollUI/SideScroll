@@ -110,6 +110,7 @@ public abstract class TypeRepo : IDisposable
 			if (!typeSchema.IsPrivate)
 			{
 				string message = "Type " + typeSchema.Name + " does not specify [PublicData], [ProtectedData], or [PrivateData], ignoring";
+				log.AddWarning(message);
 				if (Debugger.IsAttached)
 				{
 					Debug.Fail(message);
@@ -118,7 +119,6 @@ public abstract class TypeRepo : IDisposable
 				{
 					Debug.Print(message); // For unit tests
 				}
-				log.AddWarning(message);
 			}
 			var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema)
 			{
@@ -180,16 +180,9 @@ public abstract class TypeRepo : IDisposable
 
 	public void SkipHeader(BinaryWriter writer)
 	{
-		// todo: optimize this
-		//writer.Write((int)0);
-		/*foreach (var item in objects)
-		{
-			writer.Write((long)0);
-		}*/
-		for (int i = 0; i < Objects.Count; i++)
-		{
-			writer.Write((int)0); // object size
-		}
+		byte[] buffer = new byte[Objects.Count * sizeof(int)];
+		writer.Write(buffer, 0, buffer.Length);
+
 		SaveCustomHeader(writer);
 	}
 
@@ -236,9 +229,6 @@ public abstract class TypeRepo : IDisposable
 			ObjectSizes[i] = size;
 			offset += size;
 		}
-		//objects.AddRange(Enumerable.Repeat(null, count));
-		//for (int i = 0; i < count; i++)
-		//	objects.Add(null);
 
 		LoadCustomHeader();
 	}
@@ -256,17 +246,11 @@ public abstract class TypeRepo : IDisposable
 			long objectStart = writer.BaseStream.Position;
 			SaveObject(writer, obj);
 			long objectEnd = writer.BaseStream.Position;
-			//objectOffsets.Add(objectStart);
-			//objectSizes.Add((int)(objectEnd - objectStart));
+			//ObjectOffsets.Add(objectStart);
 			ObjectSizes[index++] = (int)(objectEnd - objectStart);
 
 			logTimer.AddDebug("Saved Object", new Tag(TypeSchema.Name, obj));
 		}
-
-		//long end = writer.BaseStream.Position;
-
-		//typeSchema.fileDataOffset = start;
-		//typeSchema.dataSize = end - start;
 
 		logTimer.Add("Saved Type Objects",
 			new Tag("Type", Type),

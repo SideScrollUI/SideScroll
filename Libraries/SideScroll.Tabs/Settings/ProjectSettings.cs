@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using System.Reflection;
 
 namespace SideScroll.Tabs.Settings;
@@ -6,6 +7,9 @@ public class ProjectSettings
 {
 	public string? Domain { get; set; }
 	public string? Name { get; set; }
+
+	[Hidden]
+	public string DomainOrName => Domain ?? Name!;
 
 	public string? LinkType { get; set; } // for bookmarking
 	public bool EnableLinking { get; set; } = true;

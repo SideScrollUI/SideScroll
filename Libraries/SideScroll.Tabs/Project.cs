@@ -94,12 +94,14 @@ public class Project
 public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings userSettings)
 {
 	public DataRepo App => new(AppPath, DataRepoName);
-	public DataRepo Temp => new(TempPath, DataRepoName);
-	public DataRepo Shared => new(SharedPath, DataRepoName); // Shared across versions
+	public DataRepo Cache => new(CachePath, DataRepoName);
+	public DataRepo Shared => new(SharedPath, DataRepoName); // Shared across versions, can run into problems if schema changes
 
 	protected string AppPath => Paths.Combine(userSettings.AppDataPath, "Data", projectSettings.DataVersion.ToString());
-	protected string TempPath => Paths.Combine(userSettings.LocalDataPath, "Temp", projectSettings.DataVersion.ToString());
+	protected string CachePath => Paths.Combine(userSettings.LocalDataPath, "Cache", projectSettings.DataVersion.ToString());
 	protected string SharedPath => Paths.Combine(userSettings.AppDataPath, "Shared");
+
+	public string ExceptionsPath => Paths.Combine(Paths.AppDataPath, projectSettings.DomainOrName, "Exceptions", projectSettings.Name);
 
 	protected string DataRepoName
 	{

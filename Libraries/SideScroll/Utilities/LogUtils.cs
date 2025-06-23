@@ -4,10 +4,10 @@ namespace SideScroll.Utilities;
 
 public static class LogUtils
 {
-	public static void LogException(Exception e, string domain, string projectName)
+	public static void LogException(Exception e, string? domain, string projectName)
 	{
+		string directory = Paths.Combine(Paths.AppDataPath, domain ?? projectName, "Exceptions", projectName);
 		string filename = projectName + ".Exception." + FileUtils.TimestampString + ".log";
-		string directory = Paths.Combine(Paths.AppDataPath, domain, "Exceptions", projectName);
 		string filePath = Paths.Combine(directory, filename);
 		string message = e.ToString();
 

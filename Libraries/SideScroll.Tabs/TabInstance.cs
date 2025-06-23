@@ -827,22 +827,22 @@ public class TabInstance : IDisposable
 		if (CustomPath != null)
 		{
 			// It's better to return the default constructor so the Tab autosizes instead of using the saved defaults which might have a width specified
-			return Data.Temp.Load<TabViewSettings>(CustomPath, TaskInstance.Call, true)!;
+			return Data.Cache.Load<TabViewSettings>(CustomPath, TaskInstance.Call, true)!;
 		}
 
 		Type type = GetType();
 		if (type != typeof(TabInstance))
 		{
 			// Unique TabInstance
-			TabViewSettings? tabViewSettings = Data.Temp.Load<TabViewSettings>(TabPath, TaskInstance.Call);
+			TabViewSettings? tabViewSettings = Data.Cache.Load<TabViewSettings>(TabPath, TaskInstance.Call);
 			if (tabViewSettings != null)
 				return tabViewSettings;
 		}
 		else
 		{
 			TabViewSettings? tabViewSettings =
-				Data.Temp.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call) ??
-				Data.Temp.Load<TabViewSettings>(TypePath, TaskInstance.Call);
+				Data.Cache.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call) ??
+				Data.Cache.Load<TabViewSettings>(TypePath, TaskInstance.Call);
 			if (tabViewSettings != null)
 				return tabViewSettings;
 		}
@@ -854,7 +854,7 @@ public class TabInstance : IDisposable
 	{
 		if (CustomPath != null)
 		{
-			Data.Temp.Save(CustomPath, TabViewSettings, TaskInstance.Call);
+			Data.Cache.Save(CustomPath, TabViewSettings, TaskInstance.Call);
 		}
 		else
 		{
@@ -862,12 +862,12 @@ public class TabInstance : IDisposable
 			if (type != typeof(TabInstance))
 			{
 				// Unique TabInstance
-				Data.Temp.Save(TabPath, TabViewSettings, TaskInstance.Call);
+				Data.Cache.Save(TabPath, TabViewSettings, TaskInstance.Call);
 			}
 			else
 			{
-				Data.Temp.Save(TypeLabelPath, TabViewSettings, TaskInstance.Call);
-				Data.Temp.Save(TypePath, TabViewSettings, TaskInstance.Call);
+				Data.Cache.Save(TypeLabelPath, TabViewSettings, TaskInstance.Call);
+				Data.Cache.Save(TypePath, TabViewSettings, TaskInstance.Call);
 			}
 		}
 		SaveDefaultBookmark();
@@ -875,12 +875,12 @@ public class TabInstance : IDisposable
 
 	protected void SetStartLoad()
 	{
-		Data.Temp.Save(LoadedPath, true, TaskInstance.Call);
+		Data.Cache.Save(LoadedPath, true, TaskInstance.Call);
 	}
 
 	public void SetEndLoad()
 	{
-		Data.Temp.Delete(null, typeof(bool), LoadedPath);
+		Data.Cache.Delete(null, typeof(bool), LoadedPath);
 	}
 
 	// for detecting parent/child loops

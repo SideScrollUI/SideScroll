@@ -60,7 +60,9 @@ public class SerializerFileAtlas : SerializerFile
 		};
 
 		MemoryStream memoryStream;
-		using (CallTimer callReadAllBytes = call.Timer("Loading file", new Tag("Name", Name), new Tag("Path", DataPath)))
+		using (CallTimer callReadAllBytes = call.Timer("Loading file",
+			new Tag("Name", Name),
+			new Tag("Path", DataPath)))
 		{
 			memoryStream = new MemoryStream(File.ReadAllBytes(DataPath!));
 		}

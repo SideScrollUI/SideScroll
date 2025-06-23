@@ -12,6 +12,7 @@
     - Updated serializer sharing permissions to block simultaneous writes
     - Added more serializer size validation checks for type repo object counts and the lists within
     - Added serializer support for ulong, sbyte, short, ushort, and decimal
+    - Switched Project Temp DataRepo to a Cache DataRepo to better align with it's usage
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.0</AvaloniaVersion>

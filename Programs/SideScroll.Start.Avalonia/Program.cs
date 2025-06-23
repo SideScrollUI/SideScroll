@@ -27,7 +27,8 @@ static class Program
 		}
 		catch (Exception e)
 		{
-			LogUtils.LogException(e, "SideScroll", "SideScroll.Start.Avalonia");
+			var settings = SampleProjectSettings.Settings;
+			LogUtils.LogException(e, settings.Domain, settings.Name!);
 			return 1;
 		}
 	}
