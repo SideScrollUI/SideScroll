@@ -29,19 +29,9 @@ public class BaseWindow : Window
 	private bool _loadComplete;
 
 	private Rect? _normalSizeBounds; // used for saving when maximized
+	private DispatcherTimer _dispatcherTimer;
 
 	public BaseWindow(Project project)
-	{
-		Initialize(project);
-	}
-
-	public BaseWindow(ProjectSettings settings)
-	{
-		Initialize(Project.Load(settings));
-	}
-
-	[MemberNotNull(nameof(Project), nameof(TabViewer))]
-	protected void Initialize(Project project)
 	{
 		Instance = this;
 
@@ -53,6 +43,23 @@ public class BaseWindow : Window
 		LoadProject(project);
 
 		Opened += BaseWindow_Opened;
+
+		_dispatcherTimer = new DispatcherTimer
+		{
+			Interval = TimeSpan.FromMinutes(10), // Won't trigger initially
+		};
+		_dispatcherTimer.Tick += DispatcherTimer_Tick;
+		_dispatcherTimer.Start();
+	}
+
+	private void DispatcherTimer_Tick(object? sender, EventArgs e)
+	{
+		Project.Data.Cache.CleanupCache(new(), TimeSpan.FromDays(Project.UserSettings.CacheDurationDays));
+	}
+
+	public BaseWindow(ProjectSettings settings) : 
+		this(Project.Load(settings))
+	{
 	}
 
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]

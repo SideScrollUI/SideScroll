@@ -93,26 +93,16 @@ public class Project
 
 public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings userSettings)
 {
-	public DataRepo App => new(AppPath, DataRepoName);
-	public DataRepo Cache => new(CachePath, DataRepoName);
-	public DataRepo Shared => new(SharedPath, DataRepoName); // Shared across versions, can run into problems if schema changes
+	public DataRepo App => new(AppPath);
+	public DataRepo Cache => new(CachePath);
+	public DataRepo Shared => new(SharedPath); // Shared across versions, can run into problems if schema changes
 
-	protected string AppPath => Paths.Combine(userSettings.AppDataPath, "Data", projectSettings.DataVersion.ToString());
-	protected string CachePath => Paths.Combine(userSettings.LocalDataPath, "Cache", projectSettings.DataVersion.ToString());
-	protected string SharedPath => Paths.Combine(userSettings.AppDataPath, "Shared");
+	public string AppPath => Paths.Combine(userSettings.AppDataPath, "Data", projectSettings.DataVersion.ToString(), LinkPath);
+	public string CachePath => Paths.Combine(userSettings.LocalDataPath, "Cache", projectSettings.DataVersion.ToString(), LinkPath);
+	public string SharedPath => Paths.Combine(userSettings.AppDataPath, "Shared");
 
-	protected string DataRepoName
-	{
-		get
-		{
-			if (userSettings.LinkId != null)
-			{
-				return Paths.Combine("Links", userSettings.LinkId.HashSha256());
-			}
-			else
-			{
-				return "Current";
-			}
-		}
-	}
+	protected string LinkPath =>
+		userSettings.LinkId is string linkId ?
+			Paths.Combine("Links", linkId.HashSha256ToBase32()) :
+			"Default";
 }

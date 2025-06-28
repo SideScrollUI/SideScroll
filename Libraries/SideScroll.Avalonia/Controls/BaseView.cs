@@ -19,17 +19,6 @@ public class BaseView : UserControl
 
 	public BaseView(Project project)
 	{
-		Initialize(project);
-	}
-
-	public BaseView(ProjectSettings settings)
-	{
-		Initialize(Project.Load(settings));
-	}
-
-	[MemberNotNull(nameof(Project), nameof(TabViewer))]
-	private void Initialize(Project project)
-	{
 		Instance = this;
 
 		SideScrollInit.Initialize();
@@ -38,6 +27,11 @@ public class BaseView : UserControl
 		TabFile.RegisterType<TabFileImage>(TabFileImage.DefaultExtensions);
 
 		LoadProject(project);
+	}
+
+	public BaseView(ProjectSettings settings) :
+		this(Project.Load(settings))
+	{
 	}
 
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]

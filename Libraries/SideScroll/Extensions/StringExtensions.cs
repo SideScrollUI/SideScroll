@@ -119,17 +119,67 @@ public static class StringExtensions
 	}
 
 	// Returns a 64 character hash of the string
-	// If length becomes an issue, can switch from base16 (hex) to base32 to save 12 characters
-	public static string HashSha256(this string rawData)
+	public static string HashSha256ToHex(this string rawData)
 	{
-		byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(rawData)); // 32 bytes
+		byte[] hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(rawData));
 
-		var builder = new StringBuilder();
-		foreach (byte b in bytes)
+		// Preallocate for 64 hex characters (32 bytes * 2)
+		char[] hex = new char[64];
+
+		int i = 0;
+		foreach (byte b in hashBytes)
 		{
-			builder.Append(b.ToString("x2"));
+			hex[i++] = GetHexChar(b >> 4);
+			hex[i++] = GetHexChar(b & 0xF);
 		}
-		return builder.ToString();
+
+		return new string(hex);
+	}
+
+	private static char GetHexChar(int val)
+	{
+		return (char)(val < 10 ? '0' + val : 'a' + (val - 10));
+	}
+
+	// Returns a 52-character Base32 SHA256 hash (lossless)
+	public static string HashSha256ToBase32(this string rawData)
+	{
+		byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(rawData));
+		return EncodeToBase32(bytes);
+	}
+
+	private static string EncodeToBase32(byte[] data)
+	{
+		const string base32Alphabet = "abcdefghijklmnopqrstuvwxyz234567";
+		StringBuilder result = new(52);
+
+		int buffer = data[0];
+		int bitsLeft = 8;
+		int index = 1;
+
+		while (result.Length < 52)
+		{
+			if (bitsLeft < 5)
+			{
+				if (index < data.Length)
+				{
+					buffer <<= 8;
+					buffer |= data[index++] & 0xFF;
+					bitsLeft += 8;
+				}
+				else
+				{
+					buffer <<= 5 - bitsLeft;
+					bitsLeft = 5;
+				}
+			}
+
+			int val = (buffer >> (bitsLeft - 5)) & 0b11111;
+			bitsLeft -= 5;
+			result.Append(base32Alphabet[val]);
+		}
+
+		return result.ToString();
 	}
 
 	public static bool IsNullOrEmpty([NotNullWhen(false)] this string? text)

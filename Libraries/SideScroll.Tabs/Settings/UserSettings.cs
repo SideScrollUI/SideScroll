@@ -27,6 +27,9 @@ public class UserSettings
 	[Range(1, 100)]
 	public int MaxHistory { get; set; } = 20;
 
+	[Range(1, 1000)]
+	public int CacheDurationDays { get; set; } = 30;
+
 	[Range(1, 20)]
 	public int VerticalTabLimit { get; set; } = 10;
 

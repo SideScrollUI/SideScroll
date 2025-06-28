@@ -1,5 +1,6 @@
 using SideScroll.Attributes;
 using SideScroll.Collections;
+using SideScroll.Extensions;
 using SideScroll.Serialize.DataRepos;
 
 namespace SideScroll.Tabs.Bookmarks;
@@ -96,6 +97,14 @@ public class LinkCollection
 		var tabLink = (TabLinkedBookmark)sender!;
 		lock (_lock)
 		{
+			var linkProject = Project.Open(tabLink.LinkedBookmark);
+
+			if (!linkProject.UserSettings.LinkId.IsNullOrEmpty())
+			{
+				Directory.Delete(linkProject.Data.AppPath, true);
+				Directory.Delete(linkProject.Data.CachePath, true);
+			}
+
 			_dataRepoView.Delete(null, tabLink.LinkedBookmark.LinkId);
 			Items.Remove(tabLink);
 		}
