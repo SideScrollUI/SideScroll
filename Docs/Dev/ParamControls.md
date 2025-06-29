@@ -3,7 +3,8 @@
 * Param controls allow editing objects by automatically mapping visible properties to a matching UI control
 * Adding a class of type `[Params]` to a `TabModel` creates a `TabControlParams`
 
-#### Sample Param Tab
+### Sample Param Tab
+
 ```csharp
 using SideScroll.Resources;
 using SideScroll.Serialize;
@@ -71,7 +72,8 @@ public class TabSampleParamsDataTabs : ITab
 ```
 [Source](../../Libraries/SideScroll.Tabs.Samples/Params/TabSampleParamsDataTabs.cs)
 
-#### Sample Param Item
+### Sample Param Item
+
 ```csharp
 using SideScroll.Attributes;
 using System.ComponentModel;
@@ -141,6 +143,7 @@ public class ParamListItem
 [Source](../../Libraries/SideScroll.Tabs.Samples/Params/SampleParamItem.cs)
 
 ## Custom Controls
+
 - Pass any `object` to a `TabControlParams` to allow updating that control directly
 ```csharp
 var planetParams = new TabControlParams(_planet);
@@ -149,6 +152,7 @@ model.AddObject(planetParams);
 [Source](../../Libraries/SideScroll.Avalonia/Samples/Controls/CustomControl/TabCustomControl.cs)
 
 ## Attributes
+
 | Attribute | Description |
 | - | - |
 | `[AcceptsReturn]` | Allow return key to add a new line |
@@ -159,5 +163,6 @@ model.AddObject(planetParams);
 | `[Separator]` | Show a separator before this item |
 | `[ColumnIndex(int index)]` | Sets the column to use. This should usually be in multiples of 2 since a label & control use two columns |
 
-### Links
+## Links
+
 - [Sample Tabs](../../Libraries/SideScroll.Tabs.Samples/Params/TabSampleParams.cs)

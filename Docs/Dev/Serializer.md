@@ -3,6 +3,7 @@
 - SideScroll includes it's own serializer to handle object identification, grouping, permissions, and lazy deserialization.
 
 ## Features
+
 - Automatically serializes most objects with no additional logic
 - For classes that don't support serialization, custom TypeRepo wrappers can be registered in the Serializer
 - All public Properties and Fields are automatically serialized except for those with special attributes set
@@ -10,6 +11,7 @@
 - Circular references are supported
   
 ## Constructors
+
 - Every object must either have a default constructor, or use a class with public properties/field names that match a constructor
 ```csharp
 public class MyClass
@@ -25,6 +27,7 @@ public class MyClass(int param)
 ```
 
 ## Limitations
+
 - Renaming fields or changing the object type will cause the default value to be loaded instead
   - Todo: Add an attribute for renaming fields & properties
 - There is probably a 2 GB file limit due to array limits in .Net. This hasn't been hit yet, but will probably require some slight refactoring in the serializer to handle it as the database size grows.
@@ -35,10 +38,12 @@ public class MyClass(int param)
 - Any class with a `[Static]` will not be cloned to speed things up (useful for objects that won't change). This can be useful for copying objects where most of the data doesn't change and you want to take snapshots at intervals.
 
 ## Restricting Types & Members
+
 - To prevent serialization, set `[Unserialized]` or `[NonSerialized]` on the type or member
 - Only public properties and fields are serialized, and `static` members are not serialized
 
 ### Export Permissions
+
 - When importing or exporting data or links, you might want to restrict which data can be exported
 - When calling any SerializerMemory method, you can set `publicOnly = true` to disable exporting any data without the `[PublicData]` / `[ProtectedData]` attribute
 - When serializing or deserializing, the debug output will print a warning whenever it encounters a type without a `[PublicData]`, `[ProtectedData]`, or `[PrivateData]` attribute. A warning log entry will also be added.
@@ -64,6 +69,7 @@ public class MyClass(int param)
 - Any other types will be ignored
 
 ## Lazy Deserialization
+
 - If you declare a property as virtual, you can load that property value in a lazy manner.
 - Lazy deserialization isn't currently thread safe, and loaded results can only be used in a single thread. This feature isn't recommended for most usage.
 - Set `lazy` = `true` when loading with the deserializer, and it will create a wrapper class that will only load the virtual properties when referenced (subsequent references won't reload the data)
@@ -74,9 +80,9 @@ public class MyClass(int param)
 ```
 Header
 ├─ uint SideId = 0x45444953         // 'SIDE' → EDIS (69, 68, 73, 83) — Start of file, little-endian
-├─ string Version
-├─ string Name
+├─ ushort Version
 ├─ long FileSize
+├─ string Name
 
 TypeSchema[]                       // Array of type definitions
 ├─ int Count

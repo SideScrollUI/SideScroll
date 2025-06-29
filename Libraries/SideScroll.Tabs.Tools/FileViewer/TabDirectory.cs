@@ -35,10 +35,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Svg.OpenFolder);
 
 		[Separator]
-		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete, showTask: true)
-		{
-			Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete this directory?", "Delete"),
-		};
+		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete, showTask: true);
 	}
 
 	public class Instance(TabDirectory tab) : TabInstance, ITabAsync
@@ -70,6 +67,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 			toolbar.ButtonRefresh.Action = Refresh;
 			toolbar.ButtonOpenFolder.Action = OpenFolder;
 			toolbar.ButtonDelete.Action = Delete;
+			toolbar.ButtonDelete.Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete this directory?\n\n" + DirectoryView.Name, "Delete");
 			model.AddObject(toolbar);
 
 			List<DirectoryView> directories = GetDirectories(call);

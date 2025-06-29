@@ -30,6 +30,7 @@
   - Previewer and templates for Avalonia applications and libraries
 
 ## NUnit 3 Test Adapter
+
 * GUI for running unit tests in Visual Studio
 * Install
   - Tools -> Extensions and Updates -> Online
@@ -44,6 +45,7 @@
 # Suggested Visual Studio Addons
 
 ## dotMem
+
 * For tracking down memory leaks
 * Commercial with 5 day eval trial
   - Better than Visual Studio at tracking down memory leaks

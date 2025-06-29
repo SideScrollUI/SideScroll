@@ -1,4 +1,5 @@
 # Bookmarks
+
 - Bookmarks allow exporting and importing the current path and settings in a `sidescroll://link/<v0.1.2.3>/<base64>` link
   - You can override the Linker to wrap these links in another format
   - You can use a TinyURL like service to create shorter links
@@ -8,6 +9,7 @@
 - Bookmarks will only export classes and members that set `[PublicData]` or `[ProtectedData]`
 
 ## Bookmark Types
+
 - Full Path
   - (Link button in top Toolbar)
   - Restores the full path
@@ -23,6 +25,7 @@
   - Default constructor required
 
 ## Saving and Restoring Bookmark Data
+
 ```csharp
 public class Instance : TabInstance, ITabAsync
 {
@@ -52,6 +55,7 @@ public class Instance : TabInstance, ITabAsync
 ```
 
 ## Saving and Restoring Selected Items
+
 - If a List is showing a DataRepo, you can set the `TabInstance.DataRepoInstance` to that DataRepo to automatically export selected items in the bookmark
 ```csharp
 public class Instance : TabInstance

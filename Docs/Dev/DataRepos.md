@@ -6,12 +6,14 @@
 * The `DataRepoView` can also be loaded into a `DataViewCollection<TDataType, TViewType>` to display a list of `TViewType` that implement `IDataView`, and optionally an `ITab` to show a tab as well
 * To enable linking DataRepo items, set the `TabInstance.DataRepoInstance` to a `DataRepoView`
 
-### Default Storage Locations
+## Default Storage Locations
+
 - Windows - `C:\Users\<Username>\AppData\Roaming\<ProjectName>`
 - MacOS - `~/Library/<ProjectName>`
 - Linux
 
-#### Sample Param DataRepo Tab
+### Sample Param DataRepo Tab
+
 ```csharp
 using SideScroll.Resources;
 using SideScroll.Serialize;
@@ -80,10 +82,12 @@ public class TabSampleParamsDataTabs : ITab
 [Source](../../Libraries/SideScroll.Tabs.Samples/Params/TabSampleParamsDataTabs.cs)
 
 ## Attributes
+
 - `[DataKey]` - The first member that specifies this will be used as the object's Id
 - `[DataValue]` - This member will be imported with links into the tab's `DataRepoInstance` if both are set
 
 ## DataRepo Index
+
 - For large data repos with more than a hundred records, adding a `DataRepoIndex` can be used to load a page at a time. This can be enabled by opening a `DataRepo` with `indexed = true`, or calling `DataRepoInstance.AddIndex()`
 - Objects are currently sorted in the order they were added. More complex index types will eventually be supported
 - [Sample](../../Libraries/SideScroll.Tabs.Samples/DataRepo/TabSampleDataRepoPaging.cs)

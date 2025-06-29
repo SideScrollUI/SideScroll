@@ -38,10 +38,10 @@ public class UserSettings
 
 public class DataSettings
 {
-	[ReadOnly(true)]
+	[ReadOnly(true), WordWrap]
 	public string? AppDataPath { get; set; }
 
-	[ReadOnly(true)]
+	[ReadOnly(true), WordWrap]
 	public string? LocalDataPath { get; set; }
 
 	[Hidden]
