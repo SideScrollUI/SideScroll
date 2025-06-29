@@ -43,17 +43,3 @@ public class LogWriterText : IDisposable
 		_textStreamWriter.Close();
 	}
 }
-
-/*
-Requirements
-
-	1 per line?
-
-	Parent/Child relationship
-
-	Separate files?
-	
-	Tags?
-
-	Human readable?
-*/

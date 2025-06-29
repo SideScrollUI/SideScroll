@@ -93,9 +93,6 @@ public class LogEntry : INotifyPropertyChanged
 		}
 	}
 
-	//[Hidden]
-	//public virtual string? Summary => Text;
-
 	public int Entries => _entries;
 	protected int _entries;
 

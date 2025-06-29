@@ -8,11 +8,16 @@
 
 ## Default Storage Locations
 
-- Windows - `C:\Users\<Username>\AppData\Roaming\<ProjectName>`
-- MacOS - `~/Library/<ProjectName>`
+- Windows
+  - Save Data: `C:\Users\<Username>\AppData\Roaming\[<Domain>\]<ProjectName>`
+  - Local & Cache: `C:\Users\<Username>\AppData\Local\[<Domain>\]<ProjectName>`
+- MacOS
+  - All Data: `/Users/<user>/Library/Application Support/[<Domain>/]<ProjectName>`
 - Linux
+  - Save Data: `/home/<user>/.config/[<Domain>/]<ProjectName>`
+  - Local & Cache: `/home/<user>/.local/share/[<Domain>/]<ProjectName>`
 
-### Sample Param DataRepo Tab
+## Sample Param DataRepo Tab
 
 ```csharp
 using SideScroll.Resources;

@@ -18,19 +18,29 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 ## Examples
 
 #### VideoGamesDB
+
 ![VideoGamesDB](Images/Animations/SideScroll-VideoGamesDB.gif)
 
 ## Screenshots
 
 #### Light Theme
+
 ![Light Theme](Images/Screenshots/ColumnTypes_CustomControl_Charts_Light.png)
+
 #### Dark Theme
+
 ![Dark Theme](Images/Screenshots/ColumnTypes_CustomControl_Charts_Dark.png)
+
 #### Custom Theming - Light Blue Theme
+
 ![Light Blue Theme](Images/Screenshots/LightBlueTheme.png)
+
 #### Rich Text Editing with AvaloniaEdit
+
 ![Rich Text Editing](Images/Screenshots/TextEditorJsonAndXml.png)
+
 #### Share Links
+
 ![Links](Images/Screenshots/Links.png)
 
 ![Logo](Images/Logo/png/SideScroll_40.png)

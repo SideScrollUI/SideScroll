@@ -18,19 +18,29 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 ## Examples
 
 #### VideoGamesDB
+
 ![VideoGamesDB](https://raw.githubusercontent.com/SideScrollUI/SideScroll/6b611a162f3ee741b767457f21ef08b2569fc11f/Images/Animations/SideScroll-VideoGamesDB.gif)
 
 ## Screenshots
 
 #### Light Theme
+
 ![Light Theme](https://raw.githubusercontent.com/SideScrollUI/SideScroll/a8f4cb937e8d49db55fca4123aa92afa25e28dda/Images/Screenshots/ColumnTypes_CustomControl_Charts_Light.png)
+
 #### Dark Theme
+
 ![Dark Theme](https://raw.githubusercontent.com/SideScrollUI/SideScroll/a8f4cb937e8d49db55fca4123aa92afa25e28dda/Images/Screenshots/ColumnTypes_CustomControl_Charts_Dark.png)
+
 #### Custom Theming - Light Blue Theme
+
 ![Light Blue Theme](https://raw.githubusercontent.com/SideScrollUI/SideScroll/f0bc632c1aef62f3893711ff8f723c4571c5f068/Images/Screenshots/LightBlueTheme.png)
+
 #### Rich Text Editing with AvaloniaEdit
+
 ![Rich Text Editing](https://raw.githubusercontent.com/SideScrollUI/SideScroll/9ab33ab14ebe7cfa4c8e9e8027bb1b5da96008a7/Images/Screenshots/TextEditorJsonAndXml.png)
+
 #### Share Links
+
 ![Links](https://raw.githubusercontent.com/SideScrollUI/SideScroll/a8f4cb937e8d49db55fca4123aa92afa25e28dda/Images/Screenshots/Links.png)
 
 ![Logo](https://raw.githubusercontent.com/SideScrollUI/SideScroll/a8f4cb937e8d49db55fca4123aa92afa25e28dda/Images/Logo/png/SideScroll_40.png)

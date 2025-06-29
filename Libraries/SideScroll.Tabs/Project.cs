@@ -17,6 +17,7 @@ public class Project
 	public Version Version => ProjectSettings.Version;
 
 	public virtual ProjectSettings ProjectSettings { get; set; }
+
 	public virtual UserSettings UserSettings
 	{
 		get => _userSettings;
