@@ -5,6 +5,7 @@ using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Tools.FileViewer;
 using SideScroll.Tasks;
+using SideScroll.Utilities;
 
 namespace SideScroll.Avalonia.Tabs;
 
@@ -76,34 +77,12 @@ public class TabDataRepoSettings(UserSettings userSettings) : ITab
 
 		private void DeleteAllRepos(Call call)
 		{
-			DeleteDirectory(call, DataSettings.LocalDataPath);
-			DeleteDirectory(call, DataSettings.AppDataPath);
-			DeleteDirectory(call, Project.Data.Shared.RepoPath);
-			DeleteDirectory(call, Project.ProjectSettings.ExceptionsPath);
+			FileUtils.DeleteDirectory(call, DataSettings.LocalDataPath);
+			FileUtils.DeleteDirectory(call, DataSettings.AppDataPath);
+			FileUtils.DeleteDirectory(call, Project.Data.Shared.RepoPath);
+			FileUtils.DeleteDirectory(call, Project.ProjectSettings.ExceptionsPath);
 
 			Reload();
-		}
-
-		private static void DeleteDirectory(Call call, string? path)
-		{
-			if (path == null) return;
-
-			call ??= new();
-
-			if (!Directory.Exists(path))
-			{
-				call.Log.Add("No directory found to delete", new Tag("Path", path));
-				return;
-			}
-
-			try
-			{
-				Directory.Delete(path, true);
-			}
-			catch (Exception e)
-			{
-				call.Log.Add(e);
-			}
 		}
 	}
 }

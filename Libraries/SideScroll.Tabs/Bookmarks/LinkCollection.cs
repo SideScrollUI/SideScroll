@@ -2,6 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Serialize.DataRepos;
+using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Bookmarks;
 
@@ -99,13 +100,14 @@ public class LinkCollection
 		{
 			var linkProject = Project.Open(tabLink.LinkedBookmark);
 
+			Call call = new();
 			if (!linkProject.DataSettings.LinkId.IsNullOrEmpty())
 			{
-				Directory.Delete(linkProject.Data.AppPath, true);
-				Directory.Delete(linkProject.Data.CachePath, true);
+				FileUtils.DeleteDirectory(call, linkProject.Data.AppPath);
+				FileUtils.DeleteDirectory(call, linkProject.Data.CachePath);
 			}
 
-			_dataRepoView.Delete(null, tabLink.LinkedBookmark.LinkId);
+			_dataRepoView.Delete(call, tabLink.LinkedBookmark.LinkId);
 			Items.Remove(tabLink);
 		}
 	}
