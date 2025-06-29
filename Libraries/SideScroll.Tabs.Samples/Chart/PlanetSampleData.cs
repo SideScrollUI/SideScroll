@@ -36,7 +36,9 @@ public static class PlanetSampleData
 		int sampleCount = 120)
 	{
 		if (!PlanetOrbitData.TryGetValue(planetName, out var data))
+		{
 			throw new ArgumentException($"Unknown planet '{planetName}'", nameof(planetName));
+		}
 
 		sampleDuration ??= TimeSpan.FromDays(30); // monthly samples by default
 

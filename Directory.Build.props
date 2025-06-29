@@ -16,6 +16,7 @@
     - Changed Data Repo hash paths to use Base32 encoding to shorten paths
     - Added an extra link hash layer directory to even better isolate links (was previously removed due to legacy Windows path limits)
     - Added Cache cleanup background thread and user setting for cache duration (defaults to 30 days)
+    - Added viewing and deleting of all data repo versions in the settings
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.0</AvaloniaVersion>

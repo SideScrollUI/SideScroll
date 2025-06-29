@@ -52,11 +52,6 @@ public class BaseWindow : Window
 		_dispatcherTimer.Start();
 	}
 
-	private void DispatcherTimer_Tick(object? sender, EventArgs e)
-	{
-		Project.Data.Cache.CleanupCache(new(), TimeSpan.FromDays(Project.UserSettings.CacheDurationDays));
-	}
-
 	public BaseWindow(ProjectSettings settings) : 
 		this(Project.Load(settings))
 	{
@@ -223,5 +218,10 @@ public class BaseWindow : Window
 	private void BaseWindow_PositionChanged(object? sender, PixelPointEventArgs e)
 	{
 		SaveWindowSettings();
+	}
+
+	private void DispatcherTimer_Tick(object? sender, EventArgs e)
+	{
+		Project.Data.Cache.CleanupCache(new(), TimeSpan.FromDays(Project.UserSettings.CacheDurationDays));
 	}
 }
