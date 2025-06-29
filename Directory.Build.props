@@ -18,6 +18,7 @@
     - Added Cache cleanup background thread and user setting for cache duration (defaults to 30 days)
     - Added viewing and deleting of all data repo versions in the settings
     - Refactored a DataSettings class out of the UserSettings class for data storage settings
+    - Updated serializer format to version 2, switching the version to a ushort and moving the file size to before the name
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.0</AvaloniaVersion>

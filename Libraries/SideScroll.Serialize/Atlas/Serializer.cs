@@ -173,12 +173,15 @@ public class Serializer : IDisposable
 		AddObjectMemberTypes(callSaving.Log);
 		//UpdateTypeSchemaDerived();
 		Header.Save(writer);
+		long schemaPosition = writer.BaseStream.Position;
 		SaveSchemas(writer);
 		SavePrimitives(callSaving, writer);
 		SaveObjects(callSaving.Log, writer);
 
-		Header.SaveFileSize(writer);
+		writer.BaseStream.Position = schemaPosition;
 		SaveSchemas(writer);
+
+		Header.SaveFileSize(writer);
 	}
 
 	public void Load(Call call, BinaryReader reader, string? name = null, bool loadData = true, bool lazy = false)

@@ -7,13 +7,11 @@ public class SerializerHeader
 {
 	public const uint SideId = 0x45444953; // SIDE -> EDIS: 69, 68, 73, 83, Start of file (little endian format)
 
-	public const string LatestVersion = "1";
+	public const ushort LatestVersion = 2;
 
-	public string? Version { get; set; }
-	public string? Name { get; set; }
+	public ushort? Version { get; set; }
 	public long FileSize { get; set; }
-
-	private long _schemaPosition;
+	public string? Name { get; set; }
 
 	public override string ToString() => $"v{Version}: {Name}";
 
@@ -21,15 +19,14 @@ public class SerializerHeader
 	{
 		writer.Write(SideId);
 		writer.Write(Version ?? LatestVersion);
-		writer.Write(Name ?? "");
-		_schemaPosition = writer.BaseStream.Position;
 		writer.Write(FileSize);
+		writer.Write(Name ?? "");
 	}
 
 	public void SaveFileSize(BinaryWriter writer)
 	{
 		FileSize = writer.BaseStream.Length;
-		writer.Seek((int)_schemaPosition, SeekOrigin.Begin);
+		writer.Seek(6, SeekOrigin.Begin);
 		writer.Write(FileSize);
 	}
 
@@ -43,9 +40,29 @@ public class SerializerHeader
 				new Tag("Found", sideId)));
 		}
 
-		Version = reader.ReadString();
-		Name = reader.ReadString();
-		FileSize = reader.ReadInt64();
+		// Peek next byte to determine if it's a string length (v1) or binary version (v2+)
+		int peekByte = reader.PeekChar();
+		if (peekByte == 1)
+		{
+			// Likely v1: version as string
+			string versionStr = reader.ReadString();
+			Version = versionStr switch
+			{
+				"1" => 1,
+				_ => throw new SerializerException("Unsupported string version",
+							new Tag("Version", versionStr))
+			};
+
+			Name = reader.ReadString();
+			FileSize = reader.ReadInt64();
+		}
+		else
+		{
+			// v2+: version is ushort
+			Version = reader.ReadUInt16();
+			FileSize = reader.ReadInt64();
+			Name = reader.ReadString();
+		}
 
 		if (!requiredName.IsNullOrEmpty() && Name != requiredName)
 		{

@@ -9,6 +9,6 @@ public static class SampleProjectSettings
 		Name = "SideScroll",
 		LinkType = "sidescroll",
 		Version = ProjectSettings.ProgramVersion(),
-		DataVersion = new Version(0, 9, 8, 2),
+		DataVersion = new Version(0, 9, 8, 4),
 	};
 }

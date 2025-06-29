@@ -25,7 +25,10 @@ public static class PlanetSampleData
 		int sampleCount = 120)
 	{
 		return PlanetOrbitData
-			.Select(p => new ListSeries(p.Key, CreateEarthPlanetDistanceTimeSeries(p.Key, endTime, sampleDuration, sampleCount)))
+			.Select(p => new ListSeries(p.Key, CreateEarthPlanetDistanceTimeSeries(p.Key, endTime, sampleDuration, sampleCount))
+			{
+				SeriesType = SeriesType.Average,
+			})
 			.ToList();
 	}
 
