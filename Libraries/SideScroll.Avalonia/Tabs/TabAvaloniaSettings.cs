@@ -43,7 +43,7 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 			model.Items = new List<ListItem>
 			{
 				new("Themes", new TabAvaloniaThemes()),
-				new("Data", new TabDataRepoSettings()),
+				new("Data", new TabDataRepoSettings(CustomUserSettings!)),
 			};
 		}
 

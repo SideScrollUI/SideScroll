@@ -29,7 +29,8 @@ public class BaseWindow : Window
 	private bool _loadComplete;
 
 	private Rect? _normalSizeBounds; // used for saving when maximized
-	private DispatcherTimer _dispatcherTimer;
+
+	private readonly DispatcherTimer _dispatcherTimer;
 
 	public BaseWindow(Project project)
 	{
@@ -222,6 +223,6 @@ public class BaseWindow : Window
 
 	private void DispatcherTimer_Tick(object? sender, EventArgs e)
 	{
-		Project.Data.Cache.CleanupCache(new(), TimeSpan.FromDays(Project.UserSettings.CacheDurationDays));
+		Project.Data.Cache.CleanupCache(new(), TimeSpan.FromDays(Project.DataSettings.CacheDurationDays));
 	}
 }

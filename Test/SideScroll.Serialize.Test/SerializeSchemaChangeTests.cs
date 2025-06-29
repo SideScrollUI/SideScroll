@@ -17,7 +17,7 @@ public class SerializeSchemaChangeTests : SerializeBaseTest
 
 		Directory.CreateDirectory(basePath);
 
-		string filePath = Paths.Combine(basePath, "Data.atlas");
+		string filePath = Paths.Combine(basePath, SerializerFileAtlas.DataFileName);
 		_serializerFile = new SerializerFileAtlas(filePath);
 	}
 

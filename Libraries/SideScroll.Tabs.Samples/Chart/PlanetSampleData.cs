@@ -44,7 +44,6 @@ public static class PlanetSampleData
 
 		TimeSpan totalDuration = sampleCount * sampleDuration.Value;
 		DateTime startTime = endTime - totalDuration;
-		double yearsPerTick = sampleDuration.Value.TotalDays / DaysInAYear;
 
 		var series = new List<TimeRangeValue>(sampleCount);
 		DateTime currentTime = startTime;

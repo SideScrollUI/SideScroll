@@ -1,21 +1,30 @@
 using SideScroll.Attributes;
+using SideScroll.Avalonia.Controls;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
+using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Tools.FileViewer;
 using SideScroll.Tasks;
 
 namespace SideScroll.Avalonia.Tabs;
 
 [PrivateData]
-public class TabDataRepoSettings : ITab
+public class TabDataRepoSettings(UserSettings userSettings) : ITab
 {
-	public TabInstance Create() => new Instance();
+	public UserSettings UserSettings => userSettings;
 
-	public class Instance : TabInstance
+	public TabInstance Create() => new Instance(this);
+
+	public class Instance(TabDataRepoSettings tab) : TabInstance
 	{
-		public override void Load(Call call, TabModel model)
+		protected DataSettings DataSettings => tab.UserSettings.DataSettings;
+
+		public override void LoadUI(Call call, TabModel model)
 		{
 			model.AutoSelectSaved = AutoSelectType.NonEmpty;
+
+			var paramControl = new TabControlParams(DataSettings);
+			model.AddObject(paramControl);
 
 			List<ListItem> currentVersion =
 			[
@@ -25,8 +34,8 @@ public class TabDataRepoSettings : ITab
 
 			List<ListItem> allVersions =
 			[
-				new("App Directory", new TabDirectory(Project.UserSettings.AppDataPath!)),
-				new("Cache Directory", new TabDirectory(Project.UserSettings.LocalDataPath!)),
+				new("App Directory", new TabDirectory(DataSettings.AppDataPath!)),
+				new("Cache Directory", new TabDirectory(DataSettings.LocalDataPath!)),
 				new("Shared Directory", new TabDirectory(Project.Data.Shared.RepoPath)),
 				new("Exceptions", new TabDirectory(Project.ProjectSettings.ExceptionsPath)),
 			];
@@ -67,12 +76,34 @@ public class TabDataRepoSettings : ITab
 
 		private void DeleteAllRepos(Call call)
 		{
-			Directory.Delete(Project.UserSettings.LocalDataPath!, true);
-			Directory.Delete(Project.UserSettings.AppDataPath!, true);
-			Directory.Delete(Project.Data.Shared.RepoPath, true);
-			Directory.Delete(Project.ProjectSettings.ExceptionsPath, true);
+			DeleteDirectory(call, DataSettings.LocalDataPath);
+			DeleteDirectory(call, DataSettings.AppDataPath);
+			DeleteDirectory(call, Project.Data.Shared.RepoPath);
+			DeleteDirectory(call, Project.ProjectSettings.ExceptionsPath);
 
 			Reload();
+		}
+
+		private static void DeleteDirectory(Call call, string? path)
+		{
+			if (path == null) return;
+
+			call ??= new();
+
+			if (!Directory.Exists(path))
+			{
+				call.Log.Add("No directory found to delete", new Tag("Path", path));
+				return;
+			}
+
+			try
+			{
+				Directory.Delete(path, true);
+			}
+			catch (Exception e)
+			{
+				call.Log.Add(e);
+			}
 		}
 	}
 }

@@ -2,6 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Time;
 using System.Collections;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace SideScroll.Tabs.Settings;
@@ -9,26 +10,8 @@ namespace SideScroll.Tabs.Settings;
 [Params]
 public class UserSettings
 {
-	[Hidden]
-	public string? AppDataPath { get; set; }
-
-	[Hidden]
-	public string? LocalDataPath { get; set; }
-
-	[Hidden]
-	public string? LinkId { get; set; }
-
-	[Hidden]
-	public string SettingsPath => Paths.Combine(AppDataPath, "Settings.atlas");
-
 	[Header("Base")]
 	public bool AutoLoad { get; set; } = true;
-
-	[Range(1, 100)]
-	public int MaxHistory { get; set; } = 20;
-
-	[Range(1, 1000)]
-	public int CacheDurationDays { get; set; } = 30;
 
 	[Range(1, 20)]
 	public int VerticalTabLimit { get; set; } = 10;
@@ -46,6 +29,32 @@ public class UserSettings
 
 	[Separator, BindList(nameof(Themes))]
 	public string? Theme { get; set; }
+
+	[Hidden]
+	public DataSettings DataSettings { get; set; } = new();
+
+	public override string ToString() => DataSettings.ToString();
+}
+
+public class DataSettings
+{
+	[ReadOnly(true)]
+	public string? AppDataPath { get; set; }
+
+	[ReadOnly(true)]
+	public string? LocalDataPath { get; set; }
+
+	[Hidden]
+	public string? LinkId { get; set; }
+
+	[Hidden]
+	public string SettingsPath => Paths.Combine(AppDataPath, "Settings.atlas");
+
+	[Range(1, 1000)]
+	public int CacheDurationDays { get; set; } = 30;
+
+	[Range(1, 100)]
+	public int MaxHistory { get; set; } = 20;
 
 	public override string ToString() => SettingsPath;
 }

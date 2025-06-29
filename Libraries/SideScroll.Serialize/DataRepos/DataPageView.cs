@@ -25,7 +25,7 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 		return _allPaths
 			.Skip(PageSize * page)
 			.Take(PageSize)
-			.Select(path => DataRepoInstance.DataRepo.LoadPath<T>(call, path))
+			.Select(path => DataRepo.LoadPath<T>(call, path))
 			.OfType<DataItem<T>>()
 			.Select(dataItem => new DataItem<T>(dataItem.Key, dataItem.Value))
 			.ToList();

@@ -99,7 +99,7 @@ public class LinkCollection
 		{
 			var linkProject = Project.Open(tabLink.LinkedBookmark);
 
-			if (!linkProject.UserSettings.LinkId.IsNullOrEmpty())
+			if (!linkProject.DataSettings.LinkId.IsNullOrEmpty())
 			{
 				Directory.Delete(linkProject.Data.AppPath, true);
 				Directory.Delete(linkProject.Data.CachePath, true);

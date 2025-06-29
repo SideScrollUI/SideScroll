@@ -24,12 +24,15 @@ public class ProjectSettings
 			? Paths.Combine(Domain, Name)
 			: Name!;
 
-	public string ExceptionsPath => Paths.Combine(Paths.AppDataPath, Domain ?? Name!, "Exceptions", Name);
+	public string ExceptionsPath => Paths.Combine(Paths.AppDataPath, RelativePath, "Exceptions");
 
 	public virtual UserSettings DefaultUserSettings => new()
 	{
-		AppDataPath = DefaultAppDataPath,
-		LocalDataPath = DefaultLocalDataPath,
+		DataSettings = new()
+		{
+			AppDataPath = DefaultAppDataPath,
+			LocalDataPath = DefaultLocalDataPath,
+		},
 	};
 
 	public static Version ProgramVersion() => Assembly.GetEntryAssembly()!.GetName().Version!;

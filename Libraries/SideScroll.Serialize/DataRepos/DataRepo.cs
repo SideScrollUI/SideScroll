@@ -155,7 +155,7 @@ public class DataRepo
 		return Load<T>(typeof(T).GetAssemblyQualifiedShortName(), call, createIfNeeded, lazy);
 	}
 
-	public DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false)
+	public static DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false)
 	{
 		call ??= new();
 
