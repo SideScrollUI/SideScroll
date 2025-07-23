@@ -1,14 +1,17 @@
 # Adding new Image Resources
 
 ## Current Icons
+
   - [Icons](../../Libraries/SideScroll.Resources/Icons.cs)
 
 ## Finding new icon
+
 - [Icon Icons](https://icon-icons.com/) has lots of icons available for personal and commercial use
   - Select outline after searching
   - Download svg and convert to compatible svg (see below)
 
 ## Adding a new file
+
 - Add in the Assets or Icons folder
 - Use svg files whenever possible so the image can be dynamically sized and the colors themed 
 - Add a copy of the original svg to the `originals` folder
@@ -22,11 +25,13 @@
 - Add files with git
 
 ## Editing svg files
+
 - If you have to edit an svg file, [Inkscape](https://inkscape.org/) is an easy and free to use editor
 - If needed, try to center the image and make sure there's a slim border
 - When exporting, set the resolution to 24x24 (might not be required anymore)
 
 ### Color Theming
+
 - To allow updating the theme colors for an `svg` file, set all colors used to one of the following so they can be updated. Note that this might require manually editing the svg. Saving a file in Inkscape can also be used to convert a svg to a more compatible format.
   - `rgb(0,0,0)`
     ```
@@ -48,4 +53,5 @@
     ```
 
 ## Animated Gif Images
+
 - For creating animated gif images, [ScreenToGif](https://www.screentogif.com/) is a good free option

@@ -63,7 +63,6 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection lin
 
 		private void CopyLinkToClipboard(Call call)
 		{
-			Refresh();
 			CopyToClipboard(tab.LinkedBookmark.LinkId);
 		}
 	}

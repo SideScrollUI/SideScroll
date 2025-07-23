@@ -39,7 +39,7 @@ public class TabSampleParamsCollection : ITab
 
 		private void LoadSavedItems(Call call, TabModel model)
 		{
-			_dataRepoParams = DataApp.Open<SampleParamItem>("CollectionTest");
+			_dataRepoParams = Data.App.Open<SampleParamItem>("CollectionTest");
 			DataRepoInstance = _dataRepoParams;
 
 			var sortedValues = _dataRepoParams.LoadAll(call).SortedValues;

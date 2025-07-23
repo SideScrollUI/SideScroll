@@ -44,6 +44,7 @@ public abstract class TypeRepo : IDisposable
 		new TypeRepoDictionary.Creator(),
 		new TypeRepoHashSet.Creator(),
 		new TypeRepoVersion.Creator(),
+		new TypeRepoDecimal.Creator(),
 		//new TypeRepoEnumerable.Creator(),
 		//new TypeRepoUnknown.NoConstructorCreator(),
 		//new TypeRepoObject.Creator(),
@@ -109,6 +110,7 @@ public abstract class TypeRepo : IDisposable
 			if (!typeSchema.IsPrivate)
 			{
 				string message = "Type " + typeSchema.Name + " does not specify [PublicData], [ProtectedData], or [PrivateData], ignoring";
+				log.AddWarning(message);
 				if (Debugger.IsAttached)
 				{
 					Debug.Fail(message);
@@ -117,7 +119,6 @@ public abstract class TypeRepo : IDisposable
 				{
 					Debug.Print(message); // For unit tests
 				}
-				log.AddWarning(message);
 			}
 			var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema)
 			{
@@ -179,16 +180,9 @@ public abstract class TypeRepo : IDisposable
 
 	public void SkipHeader(BinaryWriter writer)
 	{
-		// todo: optimize this
-		//writer.Write((int)0);
-		/*foreach (var item in objects)
-		{
-			writer.Write((long)0);
-		}*/
-		for (int i = 0; i < Objects.Count; i++)
-		{
-			writer.Write((int)0); // object size
-		}
+		byte[] buffer = new byte[Objects.Count * sizeof(int)];
+		writer.Write(buffer, 0, buffer.Length);
+
 		SaveCustomHeader(writer);
 	}
 
@@ -227,7 +221,7 @@ public abstract class TypeRepo : IDisposable
 
 		ObjectOffsets = new long[TypeSchema.NumObjects];
 		ObjectSizes = new int[TypeSchema.NumObjects];
-		long offset = TypeSchema.FileDataOffset;
+		long offset = TypeSchema.StartDataOffset;
 		for (int i = 0; i < TypeSchema.NumObjects; i++)
 		{
 			int size = Reader!.ReadInt32();
@@ -235,9 +229,6 @@ public abstract class TypeRepo : IDisposable
 			ObjectSizes[i] = size;
 			offset += size;
 		}
-		//objects.AddRange(Enumerable.Repeat(null, count));
-		//for (int i = 0; i < count; i++)
-		//	objects.Add(null);
 
 		LoadCustomHeader();
 	}
@@ -255,17 +246,11 @@ public abstract class TypeRepo : IDisposable
 			long objectStart = writer.BaseStream.Position;
 			SaveObject(writer, obj);
 			long objectEnd = writer.BaseStream.Position;
-			//objectOffsets.Add(objectStart);
-			//objectSizes.Add((int)(objectEnd - objectStart));
+			//ObjectOffsets.Add(objectStart);
 			ObjectSizes[index++] = (int)(objectEnd - objectStart);
 
 			logTimer.AddDebug("Saved Object", new Tag(TypeSchema.Name, obj));
 		}
-
-		//long end = writer.BaseStream.Position;
-
-		//typeSchema.fileDataOffset = start;
-		//typeSchema.dataSize = end - start;
 
 		logTimer.Add("Saved Type Objects",
 			new Tag("Type", Type),
@@ -532,13 +517,21 @@ public abstract class TypeRepo : IDisposable
 		return obj;
 	}
 
-	/*protected virtual object? CreateObject(byte[] bytes, ref int byteOffset)
-	{
-		return Activator.CreateInstance(type, true);
-	}*/
-
 	public virtual void Dispose()
 	{
 
+	}
+
+	public void ValidateBytesAvailable(int requested)
+	{
+		long available = TypeSchema.EndDataOffset - Reader!.BaseStream.Position;
+
+		if (requested > TypeSchema.DataSize || requested > available)
+		{
+			throw new SerializerException("Requested byte count is larger than available size",
+				new Tag("Requested", requested),
+				new Tag("DataSize", TypeSchema.DataSize),
+				new Tag("Available", available));
+		}
 	}
 }

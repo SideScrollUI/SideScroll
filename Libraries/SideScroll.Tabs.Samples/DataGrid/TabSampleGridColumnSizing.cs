@@ -41,7 +41,7 @@ public class TabSampleGridColumnSizing : ITab
 		public TimeSpan TimeSpan { get; set; }
 
 		[MaxWidth(200)]
-		public string SmallString { get; set; } = "Text";
+		public string ShortString { get; set; } = "Text";
 
 		[MaxWidth(200)]
 		public string ShowPrefix { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";

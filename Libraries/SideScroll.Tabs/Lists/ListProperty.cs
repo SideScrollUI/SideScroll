@@ -15,7 +15,7 @@ public interface IPropertyEditable
 public class ListProperty : ListMember, IPropertyEditable
 {
 	[HiddenColumn]
-	public PropertyInfo PropertyInfo { get; init; }
+	public PropertyInfo PropertyInfo { get; }
 
 	[HiddenColumn]
 	public bool Cachable { get; set; }
@@ -111,10 +111,6 @@ public class ListProperty : ListMember, IPropertyEditable
 		PropertyInfo = propertyInfo;
 		Cachable = cachable;
 
-		// [ListItem] uses static properties, remove?
-		// var accessors = propertyInfo.GetAccessors(true);
-		// AutoLoad = !accessors[0].IsStatic;
-
 		NameAttribute? nameAttribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 
 		Name = nameAttribute?.Name ?? propertyInfo.Name.WordSpaced();
@@ -149,6 +145,7 @@ public class ListProperty : ListMember, IPropertyEditable
 		// this doesn't work for virtual methods (or any method modifier?)
 		var propertyInfos = obj.GetType().GetProperties()
 			.Where(p => p.IsRowVisible())
+			.Where(p => p.GetGetMethod(false)?.GetParameters().Length == 0)
 			.Where(p => includeBaseTypes || p.DeclaringType == obj.GetType())
 			.Where(p => includeStatic || !p.GetAccessors(nonPublic: true)[0].IsStatic)
 			.OrderBy(p => p.Module.Name)
@@ -239,13 +236,3 @@ public class ListProperty : ListMember, IPropertyEditable
 		return linkSorted;
 	}
 }
-
-/*
-What do we do about child objects?
-	can't edit child objects
-
-	DataBinding
-
-This class only works alone, no fields
-Just expand these properties only
-*/

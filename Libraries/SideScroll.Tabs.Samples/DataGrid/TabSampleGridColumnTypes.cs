@@ -50,7 +50,7 @@ public class TabSampleGridColumnTypes : ITab
 		public DateTime DateTime { get; set; }
 		public TimeSpan TimeSpan { get; set; }
 		public object? Object { get; set; }
-		public string SmallString { get; set; } = "Text";
+		public string ShortString { get; set; } = "Text";
 		public string LongString { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 
 		public override string ToString() => Integer.ToString();

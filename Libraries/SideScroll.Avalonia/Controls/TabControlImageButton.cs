@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -9,7 +10,6 @@ using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tasks;
-using System.Windows.Input;
 
 namespace SideScroll.Avalonia.Controls;
 
@@ -36,7 +36,7 @@ public class TabControlImageButton : Button, IDisposable
 	private DateTime? _lastInvoked;
 	private DispatcherTimer? _dispatcherTimer;  // delays auto selection to throttle updates
 
-	private Image? _imageControl;
+	private Image _imageControl;
 	private IImage? _defaultImage;
 
 	protected virtual Color Color => (ImageResource as ImageColorView)?.Color ?? SideScrollTheme.IconForeground.Color;
@@ -62,18 +62,13 @@ public class TabControlImageButton : Button, IDisposable
 
 	public override string? ToString() => Tooltip;
 
-	public TabControlImageButton(string tooltip, IResourceView imageResource, string? label = null, double? iconSize = null, ICommand? command = null)
+	public TabControlImageButton(string tooltip, IResourceView imageResource, string? label = null, double? iconSize = null)
 	{
 		Tooltip = tooltip;
 		ImageResource = imageResource;
 		Label = label;
 		IconSize = iconSize ?? IconSize;
 
-		Initialize(command);
-	}
-
-	private void Initialize(ICommand? command = null)
-	{
 		Grid grid = new()
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto,Auto"),
@@ -105,7 +100,7 @@ public class TabControlImageButton : Button, IDisposable
 			{
 				Text = Label,
 				FontSize = 15,
-				Foreground = new SolidColorBrush(Color),
+				Foreground = SideScrollTheme.ToolbarLabelForeground,
 				Margin = new Thickness(6),
 				[Grid.ColumnProperty] = 1,
 			};
@@ -113,7 +108,6 @@ public class TabControlImageButton : Button, IDisposable
 		}
 
 		Content = grid;
-		Command = command;
 		ToolTip.SetTip(this, Tooltip);
 
 		Click += ToolbarButton_Click;
@@ -138,7 +132,7 @@ public class TabControlImageButton : Button, IDisposable
 
 	protected void UpdateImage()
 	{
-		if (ImageResource.ResourceType != "svg" || _imageControl == null) return;
+		if (ImageResource.ResourceType != "svg") return;
 
 		_defaultImage ??= SvgUtils.TryGetSvgColorImage(ImageResource);
 		var source = IsEnabled ? _defaultImage : (DisabledImage ?? _defaultImage);
@@ -148,9 +142,28 @@ public class TabControlImageButton : Button, IDisposable
 		}
 	}
 
+	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+	{
+		base.OnPropertyChanged(change);
+		if (change.Property.Name == nameof(IsEnabled))
+		{
+			UpdateImage();
+		}
+	}
+
 	private void ToolbarButton_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
 		Invoke();
+	}
+
+	public void BindIsEnabled(string path, object? source)
+	{
+		Bind(IsEnabledProperty, new Binding
+		{
+			Path = path,
+			Source = source,
+			Mode = BindingMode.OneWay,
+		});
 	}
 
 	public void SetDefault()
@@ -187,6 +200,18 @@ public class TabControlImageButton : Button, IDisposable
 		}
 		_lastInvoked = DateTime.UtcNow;
 
+		if (Flyout != null)
+		{
+			Flyout.ShowAt(this);
+		}
+		else
+		{
+			InvokeTask();
+		}
+	}
+
+	public void InvokeTask()
+	{
 		if (TabInstance == null)
 		{
 			InvokeAction(new Call());
@@ -256,7 +281,7 @@ public class TabControlImageButton : Button, IDisposable
 		CallActionAsync = callActionAsync;
 	}
 
-	private void InvokeAction(Call call)
+	protected void InvokeAction(Call call)
 	{
 		try
 		{
@@ -275,7 +300,7 @@ public class TabControlImageButton : Button, IDisposable
 
 		if (HighlightImage != null)
 		{
-			_imageControl!.Source = HighlightImage;
+			_imageControl.Source = HighlightImage;
 		}
 	}
 

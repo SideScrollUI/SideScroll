@@ -54,6 +54,13 @@ public static class SideScrollTheme
 	public static SolidColorBrush ButtonBackground => GetBrush("ThemeButtonBackgroundBrush");
 	public static SolidColorBrush ButtonForeground => GetBrush("ThemeButtonForegroundBrush");
 
+	public static SolidColorBrush ButtonWarningBackground => GetBrush("ButtonWarningBackground");
+	public static SolidColorBrush ButtonWarningBackgroundPointerOver => GetBrush("ButtonWarningBackgroundPointerOver");
+	public static SolidColorBrush ButtonWarningForeground => GetBrush("ButtonWarningForeground");
+	public static SolidColorBrush ButtonWarningForegroundPointerOver => GetBrush("ButtonWarningForegroundPointerOver");
+	public static SolidColorBrush ButtonWarningBorder => GetBrush("ButtonWarningBorderBrush");
+	public static SolidColorBrush ButtonWarningBorderPointerOver => GetBrush("ButtonWarningBorderBrushPointerOver");
+
 	public static SolidColorBrush LabelForeground => GetBrush("LabelForegroundBrush");
 	//public static SolidColorBrush LabelHighlightForeground => GetBrush("LabelHighlightForegroundBrush");
 

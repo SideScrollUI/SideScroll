@@ -27,10 +27,3 @@ public class SkippableAttribute(bool value = true) : Attribute
 {
 	public bool Value => value;
 }
-
-// [Summary("Text to describe object")], [Description] conflicts with NUnit's, use [TabDescription]?
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-public class SummaryAttribute(string summary) : Attribute
-{
-	public string Summary => summary;
-}

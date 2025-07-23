@@ -38,19 +38,4 @@ public class TypeRepoString(Serializer serializer, TypeSchema typeSchema) : Type
 		// assigning won't do anything since it's not a ref
 		throw new SerializerException("Not cloneable");
 	}
-
-	// for REALLY long strings?
-	/*
-	public byte[] byteSequence
-	{
-		get
-		{
-			return Encoding.ASCII.GetBytes(letters);
-		}
-		set
-		{
-			letters = System.Text.Encoding.UTF8.GetString(byteSequence);
-		}
-	}
-	*/
 }

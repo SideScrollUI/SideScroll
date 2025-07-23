@@ -1,5 +1,4 @@
 using SideScroll.Serialize.Atlas.Schema;
-using System.Diagnostics;
 
 namespace SideScroll.Serialize.Atlas.TypeRepos;
 
@@ -36,13 +35,17 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		{
 			writer.Write(l);
 		}
+		else if (obj is ulong ul)
+		{
+			writer.Write(ul);
+		}
 		else if (obj is double d)
 		{
 			writer.Write(d);
 		}
 		else if (obj is float f)
 		{
-			writer.Write((double)f); // there's no ReadFloat() routine
+			writer.Write((double)f); // There's no ReadFloat() method
 		}
 		else if (obj is bool b)
 		{
@@ -56,9 +59,21 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		{
 			writer.Write(bt);
 		}
+		else if (obj is sbyte sb)
+		{
+			writer.Write(sb);
+		}
+		else if (obj is short s)
+		{
+			writer.Write(s);
+		}
+		else if (obj is ushort us)
+		{
+			writer.Write(us);
+		}
 		else
 		{
-			Debug.Assert(true);
+			throw new SerializerException("Unhandled primitive type", new Tag("Type", Type));
 		}
 	}
 
@@ -82,6 +97,26 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		{
 			obj = Reader!.ReadInt64();
 		}
+		else if (Type == typeof(ulong))
+		{
+			obj = Reader!.ReadUInt64();
+		}
+		else if (Type == typeof(short))
+		{
+			obj = Reader!.ReadInt16();
+		}
+		else if (Type == typeof(ushort))
+		{
+			obj = Reader!.ReadUInt16();
+		}
+		else if (Type == typeof(sbyte))
+		{
+			obj = Reader!.ReadSByte();
+		}
+		else if (Type == typeof(byte))
+		{
+			obj = Reader!.ReadByte();
+		}
 		else if (Type == typeof(double))
 		{
 			obj = Reader!.ReadDouble();
@@ -97,10 +132,6 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		else if (Type == typeof(char))
 		{
 			obj = Reader!.ReadChar();
-		}
-		else if (Type == typeof(byte))
-		{
-			obj = Reader!.ReadByte();
 		}
 		else
 		{

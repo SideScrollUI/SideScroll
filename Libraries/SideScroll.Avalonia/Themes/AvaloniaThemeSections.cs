@@ -95,7 +95,6 @@ public class FontTheme : ThemeSection
 	public static IEnumerable<FontFamily>? FontFamilies { get; set; }
 	public static IEnumerable<string>? FontFamilyNames => FontFamilies?.Select(f => f.Name);
 
-
 	[Header("Font Family"), BindList(nameof(FontFamilyNames))]
 	public string? FontFamily { get; set; }
 
@@ -174,13 +173,13 @@ public class ToolTipTheme : ThemeSection
 {
 	public override string ToString() => "Tool Tip";
 
-	[ResourceKey("ToolTipBackground")]
+	[ResourceKey("ToolTipBackground", "FlyoutPresenterBackground")]
 	public Color? Background { get; set; }
 
-	[ResourceKey("ToolTipForeground")]
+	[ResourceKey("ToolTipForeground", "FlyoutPresenterForeground")]
 	public Color? Foreground { get; set; }
 
-	[ResourceKey("ToolTipBorderBrush")]
+	[ResourceKey("ToolTipBorderBrush", "FlyoutBorderThemeBrush")]
 	public Color? Border { get; set; }
 
 	[Range(10, 32), ResourceKey("ToolTipContentThemeFontSize")]
@@ -336,11 +335,30 @@ public class ButtonTheme : ThemeSection
 	[ResourceKey("ButtonBorderBrushPressed", "ToggleButtonBorderBrushPressed")]
 	public Color? BorderPressed { get; set; }
 
-	[Range(0, 10), ResourceKey("ButtonBorderThemeThickness")]
+	[Range(0, 5), ResourceKey("ButtonBorderThemeThickness")]
 	public double? BorderThickness { get; set; }
 
 	[Range(0, 20), ResourceKey("ButtonCornerRadius")]
 	public double? CornerRadius { get; set; }
+
+	// Warning
+	[Header("Warning Accent"), Name("Background"), ResourceKey("ButtonWarningBackground")]
+	public Color? WarningBackground { get; set; }
+
+	[Name("Background Pointer Over"), ResourceKey("ButtonWarningBackgroundPointerOver")]
+	public Color? WarningBackgroundPointerOver { get; set; }
+
+	[Separator, ResourceKey("ButtonWarningForeground"), Name("Foreground")]
+	public Color? WarningForeground { get; set; }
+
+	[Name("Foreground Pointer Over"), ResourceKey("ButtonWarningForegroundPointerOver")]
+	public Color? WarningForegroundPointerOver { get; set; }
+
+	[Separator, ResourceKey("ButtonWarningBorderBrush")]
+	public Color? WarningBorder { get; set; }
+
+	[ResourceKey("ButtonWarningBorderBrushPointerOver")]
+	public Color? WarningBorderPointerOver { get; set; }
 }
 
 [Params]
@@ -348,7 +366,10 @@ public class TextControlTheme : ThemeSection
 {
 	public override string ToString() => "Text Control";
 
-	[Header("Labels"), ResourceKey("LabelForegroundBrush")]
+	[Header("Labels"), ResourceKey(
+		"LabelForegroundBrush", 
+		"SystemControlForegroundBaseHighBrush" // ProgressBar
+		)]
 	public Color? LabelForeground { get; set; }
 
 	// Background
@@ -356,7 +377,8 @@ public class TextControlTheme : ThemeSection
 		"TextControlBackground",
 		"ComboBoxBackground",
 		"CalendarDatePickerBackground",
-		"CalendarDatePickerBackgroundPointerOver"
+		"CalendarDatePickerBackgroundPointerOver",
+		"CheckBoxCheckGlyphForegroundIndeterminate"
 		)]
 	public Color? TextControlBackground { get; set; }
 
@@ -368,8 +390,7 @@ public class TextControlTheme : ThemeSection
 		"TextControlForeground",
 		"ComboBoxForeground",
 		"CalendarDatePickerForeground",
-		"RadioButtonForeground",
-		"CheckBoxCheckGlyphForegroundIndeterminate"
+		"RadioButtonForeground"
 		)]
 	public Color? TextControlForeground { get; set; }
 
@@ -407,13 +428,15 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? TextControlBorderPointerOver { get; set; }
 
-	[Range(0, 10), ResourceKey("TextControlBorderThemeThickness",
+	[Range(0, 5), ResourceKey("TextControlBorderThemeThickness",
 		"TextControlBorderThemeThicknessFocused",
 		"CalendarDatePickerBorderThemeThickness",
-		"ComboBoxBorderThemeThickness",
-		"CheckBoxBorderThemeThickness"
+		"ComboBoxBorderThemeThickness"
 		)]
 	public double? BorderThickness { get; set; }
+
+	[Range(0, 5), ResourceKey("CheckBoxBorderThemeThickness")]
+	public double? CheckBoxBorderThickness { get; set; }
 
 	[Range(0, 20), ResourceKey("ControlCornerRadius")]
 	public double? CornerRadius { get; set; }
@@ -429,7 +452,9 @@ public class TextControlTheme : ThemeSection
 	[Header("ComboBox"), ResourceKey("ComboBoxDropDownBackground")]
 	public Color? ComboBoxDropDownBackground { get; set; }
 
-	[ResourceKey("ComboBoxItemBackgroundSelected")]
+	[ResourceKey("ComboBoxItemBackgroundSelected",
+		"ComboBoxItemBackgroundPressed"
+		)]
 	public Color? ComboBoxItemBackgroundSelected { get; set; }
 
 	[ResourceKey("ComboBoxItemBackgroundPointerOver",
@@ -581,7 +606,7 @@ public class ChartTheme : ThemeSection
 	[Header("Border"), ResourceKey("ChartBorderBrush")]
 	public Color? Border { get; set; }
 
-	[Range(0, 10), ResourceKey("ChartBorderThickness")]
+	[Range(0, 5), ResourceKey("ChartBorderThickness")]
 	public double? BorderThickness { get; set; }
 
 	[ResourceKey("ChartLegendIconBorderBrush")]

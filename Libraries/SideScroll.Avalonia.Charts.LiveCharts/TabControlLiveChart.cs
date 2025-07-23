@@ -149,8 +149,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			Legend.IsVisible = false;
 		}
 		ContainerGrid.Children.Add(Legend);
-		Legend.OnSelectionChanged += Legend_OnSelectionChanged;
-		//Legend.OnVisibleChanged += Legend_OnVisibleChanged;
+		Legend.OnVisibleSeriesChanged += Legend_OnVisibleSeriesChanged;
 
 		_pointerMovedSubscriber = new(TabControlChart_OnPointerChanged);
 		_pointerMovedEventSource.WeakEvent.Subscribe(_pointerMovedEventSource, _pointerMovedSubscriber);
@@ -528,7 +527,9 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		double? minValue = ChartView.MinValue;
 		if (minValue != null)
+		{
 			minimum = minValue.Value;
+		}
 
 		if (ChartView.LogBase is double logBase)
 		{
@@ -548,10 +549,14 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		{
 			var margin = (maximum - minimum) * MarginPercent;
 			if (minimum == maximum)
+			{
 				margin = Math.Abs(minimum);
+			}
 
 			if (margin == 0)
+			{
 				margin = 1;
+			}
 
 			if (minValue != null)
 			{
@@ -654,10 +659,13 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 	public void SelectPoint(ChartPoint chartPoint)
 	{
-		if (IdxNameToChartSeries.TryGetValue(chartPoint.Context.Series.Name!, out var series))
+		if (chartPoint.Context.Series.Name is string name)
 		{
-			OnSelectionChanged(new SeriesSelectedEventArgs([series.ListSeries]));
-			Legend.SelectSeries(series.LineSeries, series.ListSeries);
+			if (IdxNameToChartSeries.TryGetValue(name, out var series))
+			{
+				OnSelectionChanged(new SeriesSelectedEventArgs([series.ListSeries]));
+				Legend.SelectSeries(series.LineSeries, series.ListSeries);
+			}
 		}
 	}
 
@@ -721,7 +729,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	{
 		if (_zoomSection != null)
 		{
-			_zoomSection!.IsVisible = false;
+			_zoomSection.IsVisible = false;
 		}
 		_startDataPoint = null;
 		_selecting = false;
@@ -732,7 +740,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		UpdateTimeWindow(e.TimeWindow);
 	}
 
-	private void Legend_OnSelectionChanged(object? sender, EventArgs e)
+	private void Legend_OnVisibleSeriesChanged(object? sender, EventArgs e)
 	{
 		StopSelecting();
 		UpdateYAxis();
@@ -892,8 +900,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	{
 		if (Legend != null)
 		{
-			Legend.OnSelectionChanged -= Legend_OnSelectionChanged;
-			//Legend.OnVisibleChanged -= Legend_OnVisibleChanged;
+			Legend.OnVisibleSeriesChanged -= Legend_OnVisibleSeriesChanged;
 		}
 
 		Chart.PointerPressed -= TabControlLiveChart_PointerPressed;
@@ -949,22 +956,4 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			//InvalidateChart();
 		}
 	}
-
-	/*private void Legend_OnVisibleChanged(object? sender, EventArgs e)
-	{
-		UpdateYAxis();
-	}
-
-	private void INotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-	{
-		lock (Chart.SyncContext)
-		{
-			//Update();
-			int index = ListToTabIndex[(IList)sender];
-			ListSeries listSeries = ListToTabSeries[(IList)sender];
-			AddPoints((LineSeries)plotModel.Series[index], listSeries, e.NewItems);
-		}
-
-		InvalidateChart();
-	}*/
 }

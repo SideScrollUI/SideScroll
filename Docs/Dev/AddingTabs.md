@@ -1,12 +1,14 @@
 # Adding Tabs
 
-### ITab - Outer Interface Class
+## ITab - Outer Interface Class
+
 * Every tab is composed of an outer class that implements the `ITab` interface. The `ITab` interface allows you to:
   - Set parameters that can be reused each time a `TabInstance` is created
   - Defines a `Create()` method that creates a `TabInstance` that you can pass those parameters to
   - You can also declare properties for a Tab, which when passed in a IList will be displayed as columns for the DataGrid
 
-### TabInstance - Inner Derived Class
+## TabInstance - Inner Derived Class
+
 * A new `TabInstance` will be created each time that ITab becomes visible, meaning the `TabInstance.Load()` is not called until the Tab is shown.
 * There are 3 different Load methods that can be used for a `TabInstance`. You can use any combination of these. They are called in the order below:
   - `public async Task LoadAsync(Call call, TabModel model)`
@@ -16,7 +18,8 @@
   - `public override void LoadUI(Call call, TabModel model)`
     - Use when you need to create an Avalonia control, since those can only be created on the UI thread.
 
-#### Sample Tab
+### Sample Tab
+
 ```csharp
 namespace SideScroll.Tabs.Samples;
 
@@ -49,6 +52,7 @@ public class TabSample : ITab
 ```
 
 ## Items
+
 * Most `TabInstance` will contain `Items`. These can be any `IList` and will be displayed in a DataGrid
 * Any object properties will automatically be show as columns. If no properties are found, the object's `ToString()` will be used for the item
 * The most common `Items` are a collection of `ListItem`, which lets you set a label and object to display
@@ -59,6 +63,7 @@ public class TabSample : ITab
   - Otherwise, all the properties, fields, and `[Item]` methods of an object will be displayed
 
 ## Actions
+
 * You can declare actions for Tabs, which will show up as buttons
 * Actions that set `useTask` to `true` will run in the background and won't block the UI from updating. However, you can't modify the UI or modify the `tabModel` while running in the background. If you want to update the UI after finishing a task you can `Invoke` a different function that does so.
   - `Dispatcher.UIThread.Post(() => SetStatusUI(call, "Finished"));`
@@ -84,7 +89,8 @@ public void UpdateStatus(Call call, string text)
 * ItemCollectionUI
   - This is a User Interface version of the ItemCollection, which allows you to add items to a collection that appears in the user interface from a background thread. Adding an item to a List or ItemCollection from a background thread normally isn't safe and can cause an exception.
 
-#### Sample Tab using Actions
+### Sample Tab using Actions
+
 ```csharp
 namespace SideScroll.Tabs.Samples;
 
@@ -153,6 +159,7 @@ public class SampleItem(int id, string name)
 ![New Tab](../../Images/Screenshots/SampleTab.png)
 
 ## Async calls
+
   - Tabs can load as Async by implementing the `ITabAsync` interface for a `TabInstance`
   - This allows calling async methods
   - You can also make calls async by using `TaskDelegateAsync`
@@ -263,5 +270,6 @@ public class TabSampleToolbar : ITab
 ```
 
 ## Custom Controls
+
 - For more custom logic, you can add any Avalonia Control to the model by calling `model.AddObject(control)`
 - Any control created should be done so in the `LoadUI(Call call, TabModel model)` method since controls can only be created on the UI thread

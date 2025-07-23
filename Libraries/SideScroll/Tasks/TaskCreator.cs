@@ -3,6 +3,24 @@ using System.ComponentModel;
 
 namespace SideScroll.Tasks;
 
+public enum AccentType
+{
+	Default,
+	Warning
+}
+
+public interface IFlyoutConfig
+{
+}
+
+public class ConfirmationFlyoutConfig(string text, string confirmText, string cancelText = "Cancel") : IFlyoutConfig
+{
+	public string Text => text;
+	public string ConfirmText => confirmText;
+	public string? CancelText => cancelText;
+}
+
+
 public abstract class TaskCreator : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged; // Used only for INotifyPropertyChanged memory leak fix?
@@ -15,17 +33,20 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	[HiddenColumn]
 	public string? Description { get; set; } // Button hint text
 
-	// public string? Info => Description != null ? ">" : null; // Button hint text
-
 	[HiddenColumn]
 	public bool ShowTask { get; set; }
 
 	[HiddenColumn]
 	public bool UseTask { get; set; } // Blocks, Action uses UI thread if false
 
-	public int TimesRun { get; set; }
+	[HiddenColumn]
+	public AccentType AccentType { get; set; }
 
-	public SynchronizationContext? Context;
+	[HiddenColumn]
+	public IFlyoutConfig? Flyout { get; set; }
+
+	[HiddenColumn]
+	public SynchronizationContext? Context { get; set; }
 
 	protected abstract Action CreateAction(Call call);
 
@@ -40,11 +61,10 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	// Creates, Starts, and returns a new Task
 	public TaskInstance Start(Call call)
 	{
-		TimesRun++;
-		Context = SynchronizationContext.Current ?? new SynchronizationContext();
+		Context ??= SynchronizationContext.Current ?? new();
 		call.Log.Settings!.Context = Context;
 
-		var taskInstance = new TaskInstance
+		TaskInstance taskInstance = new()
 		{
 			Call = call,
 			Creator = this,
@@ -55,7 +75,6 @@ public abstract class TaskCreator : INotifyPropertyChanged
 		if (UseTask)
 		{
 			taskInstance.Task = new Task(action);
-			//currentTask.CreationOptions = TaskCreationOptions.
 			taskInstance.Task.ContinueWith(_ => taskInstance.SetFinished());
 			taskInstance.Task.Start();
 		}
@@ -68,34 +87,3 @@ public abstract class TaskCreator : INotifyPropertyChanged
 		return taskInstance;
 	}
 }
-
-/*
-Recreate task?
-Cancellation class
-Special Task Class
-Add Cancel() to call class
-
-class CancelTask
-{
-
-}
-
-Fix current databinding?
-
-	do we need to copy values over?
-
-	Synchronization context
-
-New Databinding?
-	
-	BindingSource.ResetBindings()
-
-	Still need to be on UI thread
-
-	bindingSource.SuspendBinding()
-	bindingSource.ResumeBinding()
-
-Task Factory
-	Requires a new Action each time?
-	Can run different types of Actions (bad?)
-*/

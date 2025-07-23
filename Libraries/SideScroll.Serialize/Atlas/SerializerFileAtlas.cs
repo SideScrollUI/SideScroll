@@ -15,7 +15,7 @@ public class SerializerFileAtlas : SerializerFile
 		DataPath = Paths.Combine(basePath, DataFileName);
 	}
 
-	protected override void SaveInternal(Call call, object obj, string? name = null)
+	protected override void SaveInternal(Call call, object obj, string? name = null, bool publicOnly = false)
 	{
 		for (int attempt = 0; attempt < SaveAttemptsMax; attempt++)
 		{
@@ -26,11 +26,16 @@ public class SerializerFileAtlas : SerializerFile
 
 			try
 			{
-				using var stream = new FileStream(DataPath!, FileMode.Create, FileAccess.ReadWrite, FileShare.Read);
+				// Don't allow reading until finished since we seek backwards at the end to set the file size
+				// FileShare.None also avoids simultaneous writes
+				using var stream = new FileStream(DataPath!, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
 
 				using var writer = new BinaryWriter(stream);
 
-				var serializer = new Serializer();
+				var serializer = new Serializer()
+				{
+					PublicOnly = publicOnly,
+				};
 				if (name != null)
 				{
 					serializer.Header.Name = name;
@@ -46,15 +51,18 @@ public class SerializerFileAtlas : SerializerFile
 		}
 	}
 
-	protected override object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance)
+	protected override object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false)
 	{
 		var serializer = new Serializer
 		{
-			TaskInstance = taskInstance
+			TaskInstance = taskInstance,
+			PublicOnly = publicOnly,
 		};
 
 		MemoryStream memoryStream;
-		using (CallTimer callReadAllBytes = call.Timer("Loading file: " + Name))
+		using (CallTimer callReadAllBytes = call.Timer("Loading file",
+			new Tag("Name", Name),
+			new Tag("Path", DataPath)))
 		{
 			memoryStream = new MemoryStream(File.ReadAllBytes(DataPath!));
 		}

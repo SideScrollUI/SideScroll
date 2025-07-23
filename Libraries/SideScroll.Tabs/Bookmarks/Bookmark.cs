@@ -16,13 +16,26 @@ public class Bookmark
 {
 	[Name("Bookmark")]
 	public string? Name { get; set; }
+
 	public string? Changed { get; set; } // what was just selected, used for naming, find better default name
+
+	[HiddenColumn]
 	public Type? Type { get; set; } // Must be ITab
+
 	public string Address => TabBookmark?.GetAddress() ?? "";
+
+	[HiddenColumn]
 	public string Path => (Name != null ? (Name + ":\n") : "") + Address;
+
 	public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
+
+	[HiddenColumn]
 	public TabBookmark TabBookmark { get; set; } = new();
+
+	[HiddenColumn]
 	public BookmarkType BookmarkType { get; set; }
+
+	[HiddenColumn]
 	public bool Imported { get; set; }
 
 	public override string ToString() => Path;

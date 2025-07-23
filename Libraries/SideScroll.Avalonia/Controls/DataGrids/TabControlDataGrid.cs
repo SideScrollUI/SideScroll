@@ -648,7 +648,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		}
 		else*/
 		{
-			if (propertyInfo.PropertyType == typeof(bool))
+			if (propertyInfo.PropertyType.GetNonNullableType() == typeof(bool))
 			{
 				isReadOnly = (propertyInfo.GetCustomAttribute<EditingAttribute>() == null);
 				var checkBoxColumn = new DataGridPropertyCheckBoxColumn(propertyInfo, isReadOnly)
@@ -852,16 +852,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			if (value == null)
 				continue;
 
-			if (obj is ListItem listItem)
+			if (obj is IListItem listItem && !listItem.IsAutoSelectable)
 			{
-				if (listItem.AutoLoad == false)
-					continue;
-			}
-
-			if (obj is ListMember listMember)
-			{
-				if (listMember.AutoLoad == false)
-					continue;
+				continue;
 			}
 
 			if (value is TabView tabView)
@@ -1228,9 +1221,9 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 			SearchControl = null;
 		}
 
-		if (List is INotifyCollectionChanged iNotifyCollectionChanged) // as AutoLoad
+		if (List is INotifyCollectionChanged notifyCollectionChanged) // as AutoLoad
 		{
-			iNotifyCollectionChanged.CollectionChanged -= NotifyCollectionChanged_CollectionChanged;
+			notifyCollectionChanged.CollectionChanged -= NotifyCollectionChanged_CollectionChanged;
 		}
 
 		List = null;

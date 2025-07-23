@@ -1,6 +1,8 @@
 using SideScroll.Attributes;
 using SideScroll.Collections;
+using SideScroll.Extensions;
 using SideScroll.Serialize.DataRepos;
+using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Bookmarks;
 
@@ -41,7 +43,7 @@ public class LinkCollection
 		Project = project;
 		GroupId = groupId;
 
-		_dataRepoView = Project.DataApp.OpenView<LinkedBookmark>(GroupId);
+		_dataRepoView = Project.Data.App.OpenView<LinkedBookmark>(GroupId);
 	}
 
 	public void Load(Call call, bool reload)
@@ -96,7 +98,16 @@ public class LinkCollection
 		var tabLink = (TabLinkedBookmark)sender!;
 		lock (_lock)
 		{
-			_dataRepoView.Delete(null, tabLink.LinkedBookmark.LinkId);
+			var linkProject = Project.Open(tabLink.LinkedBookmark);
+
+			Call call = new();
+			if (!linkProject.DataSettings.LinkId.IsNullOrEmpty())
+			{
+				FileUtils.DeleteDirectory(call, linkProject.Data.AppPath);
+				FileUtils.DeleteDirectory(call, linkProject.Data.CachePath);
+			}
+
+			_dataRepoView.Delete(call, tabLink.LinkedBookmark.LinkId);
 			Items.Remove(tabLink);
 		}
 	}

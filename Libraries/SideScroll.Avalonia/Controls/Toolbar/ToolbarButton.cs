@@ -1,9 +1,7 @@
-using Avalonia;
-using Avalonia.Data;
 using Avalonia.Input;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
-using System.Windows.Input;
+using SideScroll.Tasks;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
 
@@ -35,31 +33,17 @@ public class ToolbarButton : TabControlImageButton
 		{
 			BindIsEnabled(propertyBinding.Path, propertyBinding.Object);
 		}
+
+		if (toolButton.Flyout is ConfirmationFlyoutConfig config)
+		{
+			Flyout = new ConfirmationFlyout(InvokeTask, config.Text, config.ConfirmText, config.CancelText);
+		}
 	}
 
-	public ToolbarButton(TabControlToolbar toolbar, string tooltip, IResourceView imageResource, double? iconSize = null, string? label = null, ICommand? command = null) :
-		base(tooltip, imageResource, label, iconSize, command)
+	public ToolbarButton(TabControlToolbar toolbar, string tooltip, IResourceView imageResource, double? iconSize = null, string? label = null) :
+		base(tooltip, imageResource, label, iconSize)
 	{
 		TabInstance = toolbar.TabInstance;
 		Toolbar = toolbar;
-	}
-
-	public void BindIsEnabled(string path, object? source)
-	{
-		Bind(IsEnabledProperty, new Binding
-		{
-			Path = path,
-			Source = source,
-			Mode = BindingMode.OneWay,
-		});
-	}
-
-	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-	{
-		base.OnPropertyChanged(change);
-		if (change.Property.Name == nameof(IsEnabled))
-		{
-			UpdateImage();
-		}
 	}
 }

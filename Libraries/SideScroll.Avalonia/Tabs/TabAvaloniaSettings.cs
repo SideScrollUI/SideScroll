@@ -43,6 +43,7 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 			model.Items = new List<ListItem>
 			{
 				new("Themes", new TabAvaloniaThemes()),
+				new("Data", new TabDataRepoSettings(CustomUserSettings!)),
 			};
 		}
 
@@ -68,7 +69,7 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 
 		private void Save(Call call)
 		{
-			DataApp.Save(CustomUserSettings!);
+			Data.App.Save(CustomUserSettings!);
 			Project.UserSettings = CustomUserSettings.DeepClone(call)!;
 
 			TimeZoneView.Current = Project.UserSettings.TimeZone;

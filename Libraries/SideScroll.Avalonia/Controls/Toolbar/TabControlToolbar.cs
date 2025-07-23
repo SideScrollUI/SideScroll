@@ -10,7 +10,6 @@ using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
 using System.Reflection;
-using System.Windows.Input;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
 
@@ -109,9 +108,9 @@ public class TabControlToolbar : Grid, IDisposable
 		Children.Add(control);
 	}
 
-	public ToolbarButton AddButton(string tooltip, IResourceView imageResource, string? label = null, ICommand? command = null)
+	public ToolbarButton AddButton(string tooltip, IResourceView imageResource, string? label = null)
 	{
-		var button = new ToolbarButton(this, tooltip, imageResource, null, label, command);
+		var button = new ToolbarButton(this, tooltip, imageResource, null, label);
 		AddControl(button);
 		return button;
 	}
@@ -123,9 +122,9 @@ public class TabControlToolbar : Grid, IDisposable
 		return button;
 	}
 
-	public ToolbarToggleButton AddToggleButton(string tooltip, IResourceView onImageResource, IResourceView offImageResource, bool isChecked, string? label = null, ICommand? command = null)
+	public ToolbarToggleButton AddToggleButton(string tooltip, IResourceView onImageResource, IResourceView offImageResource, bool isChecked, string? label = null)
 	{
-		var button = new ToolbarToggleButton(this, tooltip, onImageResource, offImageResource, isChecked, label, command);
+		var button = new ToolbarToggleButton(this, tooltip, onImageResource, offImageResource, isChecked, label);
 		AddControl(button);
 		return button;
 	}
@@ -265,38 +264,5 @@ public class ToolbarRadioButton : RadioButton
 		Content = text;
 		Margin = TabControlToolbar.DefaultMargin;
 		VerticalAlignment = VerticalAlignment.Center;
-	}
-}
-
-// todo: replace with version that uses IObservable
-public class RelayCommand : ICommand
-{
-	public Func<object?, bool> CanExecuteFunc { get; init; }
-	public Action<object?> ExecuteAction { get; set; }
-
-	public RelayCommand(Func<object?, bool>? canExecute = null, Action<object?>? execute = null)
-	{
-		CanExecuteFunc = canExecute ?? (_ => true);
-		ExecuteAction = execute ?? (_ => { });
-	}
-
-	public event EventHandler? CanExecuteChanged;
-
-	private bool? _prevCanExecute;
-	public bool CanExecute(object? parameter)
-	{
-		bool canExecute = CanExecuteFunc(parameter);
-		if (CanExecuteChanged != null && (!_prevCanExecute.HasValue || canExecute != _prevCanExecute))
-		{
-			_prevCanExecute = canExecute;
-			CanExecuteChanged(this, EventArgs.Empty);
-		}
-
-		return canExecute;
-	}
-
-	public void Execute(object? parameter)
-	{
-		ExecuteAction(parameter);
 	}
 }

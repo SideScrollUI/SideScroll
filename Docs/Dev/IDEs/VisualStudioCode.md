@@ -1,6 +1,5 @@
 # Visual Studio Code
 
-
 ## Installing
 
 * https://code.visualstudio.com/download
@@ -16,7 +15,7 @@
     - Access Terminal
       - `Ctrl + ~`
 
-# Update Settings
+## Update Settings
 
 * Settings
   - Enable Soft Wrap
@@ -36,6 +35,7 @@
   - Make sure the `launch.preLaunchTask` matches the `tasks.label`
 
 ## launch.json
+
 ```json
 {
     "version": "0.2.0",
@@ -47,6 +47,7 @@
 }
 ```
 ## tasks.json
+
 ```json
 {
     "version": "2.0.0",

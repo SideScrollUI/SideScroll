@@ -1,9 +1,8 @@
-using System.Runtime.InteropServices;
-
 namespace SideScroll;
 
 public static class Paths
 {
+	// Windows can't combine Linux paths correctly, which are needed for FTP (still true?)
 	public static string Combine(string? path, params string?[] paths)
 	{
 		path ??= "";
@@ -35,40 +34,21 @@ public static class Paths
 		return encodedUri;
 	}
 
-	public static string AppDataPath
-	{
-		get
-		{
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-			{
-				return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library");
-			}
-			else
-			{
-				return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			}
-		}
-	}
+	// Windows: C:\Users\<User>
+	// macOS: /Users/<user>
+	public static string HomePath => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+	// Windows: ApplicationData -> C:\Users\<User>\AppData\Roaming
+	// macOS: /Users/<user>/Library/Application Support/ (same as Local, no official support for Remote?)
+	public static string AppDataPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+	// Windows: C:\Users\<User>\AppData\Local
+	// macOS: /Users/<user>/Library/Application Support/
+	public static string LocalDataPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+	// Windows: C:\Users\<User>\Pictures
+	// macOS: /Users/<user>/Pictures
+	public static string PicturesPath => Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
 	public static string DownloadPath => Combine(HomePath, "Downloads");
-
-	public static string PicturesPath => Combine(HomePath, "Pictures");
-
-	public static string HomePath
-	{
-		get
-		{
-			if (Environment.OSVersion.Platform == PlatformID.Unix)
-			{
-				return Environment.GetEnvironmentVariable("HOME")!;
-			}
-			else
-			{
-				return Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
-			}
-		}
-	}
 }
-/*
-Windows can't combine linux paths correctly, which are needed for FTP
-*/

@@ -1,6 +1,7 @@
 # Charts
 
 ## Adding Charts
+
 * Create a `ChartView` object for each Chart you want to display
 * Add the `Series` using one of the following methods:
   - `AddSeries(string name, IList list, string? xPropertyName = null, string? yPropertyName = null, SeriesType seriesType = SeriesType.Sum)`
@@ -9,7 +10,8 @@
 * Add the `ChartView` to the `TabModel` by calling `model.AddObject(chartView)`
 * Series like `ItemCollection` that implement the `INotifyCollectionChanged` interface can also add new points after loading
 
-#### Sample Chart Tab
+### Sample Chart Tab
+
 ```csharp
 using SideScroll.Attributes;
 using SideScroll.Charts;
@@ -108,9 +110,11 @@ public class TabSampleChartLists : ITab
 [Source](../../Libraries/SideScroll.Tabs.Samples/Chart/TabSampleChartLists.cs)
 
 ## Custom Controls
+
 - Pass any `ChartView` to a `TabControlLiveChart` to allow updating that control directly
 
-#### Sample Custom Chart
+### Sample Custom Chart
+
 ```csharp
 public class TabChartSizes : ITab
 {
@@ -146,6 +150,7 @@ public class TabChartSizes : ITab
 ```
 [Source](../../Programs/SideScroll.Start.Avalonia/Charts/TabChartSizes.cs)
 
-### Links
+## Links
+
 - [Sample Tabs](../../Libraries/SideScroll.Tabs.Samples/Chart/TabSampleCharts.cs)
 - [LiveCharts 2](https://livecharts.dev/) - Integrated Avalonia Chart Library used by SideScroll

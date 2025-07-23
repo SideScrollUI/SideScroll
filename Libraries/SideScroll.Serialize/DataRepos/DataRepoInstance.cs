@@ -18,9 +18,9 @@ public class DataRepoInstance<T> : IDataRepoInstance
 {
 	protected const string DefaultKey = ".Default"; // todo: support multiple directory levels?
 
-	public DataRepo DataRepo { get; init; }
+	public DataRepo DataRepo { get; }
 
-	public string GroupId { get; init; }
+	public string GroupId { get; }
 	public string GroupPath => DataRepo.GetGroupPath(typeof(T), GroupId);
 
 	public Type DataType => typeof(T);
@@ -77,10 +77,10 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	public virtual DataItemCollection<T> LoadAll(Call? call = null, bool ascending = true)
 	{
 		call ??= new();
-		return new DataItemCollection<T>(LoadAllDataItems(call, ascending));
+		return [.. LoadAllDataItems(call, ascending)];
 	}
 
-	public List<Header> LoadHeaders(Call? call = null)
+	public List<SerializerHeader> LoadHeaders(Call? call = null)
 	{
 		return DataRepo.LoadHeaders(typeof(T), GroupId, call);
 	}
@@ -89,6 +89,14 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	{
 		string key = ObjectUtils.GetObjectId(item)!;
 		Delete(call, key);
+	}
+
+	public virtual void Delete(Call? call, IEnumerable<T> items)
+	{
+		foreach (T item in items)
+		{
+			Delete(call, item);
+		}
 	}
 
 	public virtual void Delete(Call? call = null, string? key = null)

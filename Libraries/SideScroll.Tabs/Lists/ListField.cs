@@ -9,7 +9,7 @@ namespace SideScroll.Tabs.Lists;
 public class ListField : ListMember, IPropertyEditable
 {
 	[HiddenColumn]
-	public FieldInfo FieldInfo { get; init; }
+	public FieldInfo FieldInfo { get; }
 
 	[HiddenColumn]
 	public override bool Editable => true;
@@ -53,7 +53,7 @@ public class ListField : ListMember, IPropertyEditable
 		base(obj, fieldInfo)
 	{
 		FieldInfo = fieldInfo;
-		AutoLoad = !fieldInfo.IsStatic;
+		IsAutoSelectable = !fieldInfo.IsStatic;
 
 		NameAttribute? nameAttribute = fieldInfo.GetCustomAttribute<NameAttribute>();
 

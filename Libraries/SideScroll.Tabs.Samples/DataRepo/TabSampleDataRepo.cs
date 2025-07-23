@@ -20,19 +20,25 @@ public class TabSampleDataRepo : ITab
 				new("Sample Data Repo", new TabSampleDataRepoCollection()),
 				new("Param Data Repo", new TabSampleParamsDataTabs()),
 				new("Paging", new TabSampleDataRepoPaging()),
-				new("Local Directories", new TabDirectory(Project.DataApp.RepoPath)),
+				new("App Directory", new TabDirectory(Project.Data.App.RepoPath)),
+				new("Cache Directory", new TabDirectory(Project.Data.Cache.RepoPath)),
 			};
 
 			model.Actions = new List<TaskCreator>
 			{
-				new TaskDelegate("Delete Repos", DeleteRepos),
+				new TaskDelegate("Delete Repos", DeleteRepos)
+				{
+					Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete all DataRepos?", "Delete"),
+					AccentType = AccentType.Warning,
+				}
 			};
 		}
 
 		private void DeleteRepos(Call call)
 		{
-			Project.DataShared.DeleteRepo(call);
-			Project.DataApp.DeleteRepo(call);
+			Project.Data.Cache.DeleteRepo(call);
+			Project.Data.App.DeleteRepo(call);
+			Project.Data.Shared.DeleteRepo(call);
 			Reload();
 		}
 	}

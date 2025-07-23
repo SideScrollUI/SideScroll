@@ -1,11 +1,9 @@
 using SideScroll.Attributes;
 using SideScroll.Extensions;
-using SideScroll.Network.Http;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Settings;
-using SideScroll.Tasks;
 using SideScroll.Time;
 
 namespace SideScroll.Tabs;
@@ -19,49 +17,37 @@ public class Project
 	public Version Version => ProjectSettings.Version;
 
 	public virtual ProjectSettings ProjectSettings { get; set; }
-	public virtual UserSettings UserSettings { get; set; } = new();
+
+	public virtual UserSettings UserSettings
+	{
+		get => _userSettings;
+		set
+		{
+			_userSettings = value;
+			Navigator.MaxHistorySize = _userSettings.DataSettings.MaxHistory;
+		}
+	}
+	private UserSettings _userSettings;
+
+	public virtual DataSettings DataSettings => UserSettings.DataSettings;
 
 	public Linker Linker { get; set; }
 
-	public DataRepo DataShared => new(DataSharedPath, DataRepoName);
-	public DataRepo DataApp => new(DataAppPath, DataRepoName);
-	public DataRepo DataTemp => new(DataTempPath, DataRepoName);
+	public BookmarkNavigator Navigator { get; protected init; } = new();
 
-	public HttpCacheManager Http { get; set; } = new();
-	public BookmarkNavigator Navigator { get; set; } = new();
-	public TaskInstanceCollection Tasks { get; set; } = [];
-
-	private string DataSharedPath => Paths.Combine(UserSettings.ProjectPath, "Shared");
-	private string DataAppPath => Paths.Combine(UserSettings.ProjectPath, "Versions", ProjectSettings.DataVersion.ToString()); // todo: Rename Version to Data next schema change
-	private string DataTempPath => Paths.Combine(UserSettings.ProjectPath, "Temp", ProjectSettings.DataVersion.ToString());
-
-	private string DataRepoName
-	{
-		get
-		{
-			if (UserSettings.LinkId != null)
-			{
-				return Paths.Combine("Links", UserSettings.LinkId.HashSha256());
-			}
-			else
-			{
-				return Paths.Combine("Current");
-			}
-		}
-	}
+	public ProjectDataRepos Data => new(ProjectSettings, UserSettings);
 
 	public override string? ToString() => Name;
 
-	public Project()
-	{
-		ProjectSettings = new();
-		Linker = new(this);
-	}
+	public Project() : this(new ProjectSettings(), new UserSettings()) { }
 
 	public Project(ProjectSettings projectSettings, UserSettings userSettings)
 	{
 		ProjectSettings = projectSettings;
+		userSettings.DataSettings.AppDataPath ??= projectSettings.DefaultAppDataPath;
+		userSettings.DataSettings.LocalDataPath ??= projectSettings.DefaultLocalDataPath;
 		UserSettings = userSettings;
+		_userSettings = userSettings; // Make the compiler happy
 		Linker = new(this);
 	}
 
@@ -69,14 +55,14 @@ public class Project
 	{
 		//DataApp.Save(UserSettings, new Call());
 
-		var serializer = SerializerFile.Create(ProjectSettings.DefaultProjectPath);
+		var serializer = SerializerFile.Create(ProjectSettings.DefaultAppDataPath);
 		serializer.Save(new Call(), UserSettings);
 	}
 
 	public Project Open(LinkedBookmark linkedBookmark)
 	{
 		UserSettings userSettings = UserSettings.DeepClone()!;
-		userSettings.LinkId = linkedBookmark.LinkId;
+		userSettings.DataSettings.LinkId = linkedBookmark.LinkId;
 		var project = new Project(ProjectSettings, userSettings)
 		{
 			Linker = Linker,
@@ -93,12 +79,9 @@ public class Project
 
 	public static Project Load<T>(ProjectSettings projectSettings, T? defaultUserSettings = null) where T : UserSettings, new()
 	{
-		defaultUserSettings ??= projectSettings.DefaultUserSettings as T ?? new()
-		{
-			ProjectPath = projectSettings.DefaultProjectPath,
-		};
+		defaultUserSettings ??= projectSettings.DefaultUserSettings as T ?? new();
 		var project = new Project(projectSettings, defaultUserSettings);
-		var userSettings = project.DataApp.Load<T>() ?? defaultUserSettings;
+		var userSettings = project.Data.App.Load<T>() ?? defaultUserSettings;
 		return new Project(projectSettings, userSettings);
 	}
 
@@ -109,4 +92,22 @@ public class Project
 		DateTimeExtensions.DefaultFormatType = UserSettings.TimeFormat;
 		LinkManager.Instance = new(this);
 	}
+}
+
+public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings userSettings)
+{
+	protected DataSettings DataSettings => userSettings.DataSettings;
+
+	public DataRepo App => new(AppPath);
+	public DataRepo Cache => new(CachePath);
+	public DataRepo Shared => new(SharedPath); // Shared across versions, can run into problems if schema changes
+
+	public string AppPath => Paths.Combine(DataSettings.AppDataPath, "Data", projectSettings.DataVersion.ToString(), LinkPath);
+	public string CachePath => Paths.Combine(DataSettings.LocalDataPath, "Cache", projectSettings.DataVersion.ToString(), LinkPath);
+	public string SharedPath => Paths.Combine(DataSettings.AppDataPath, "Shared");
+
+	protected string LinkPath =>
+		DataSettings.LinkId is string linkId ?
+			Paths.Combine("Links", linkId.HashSha256ToBase32()) :
+			"Default";
 }

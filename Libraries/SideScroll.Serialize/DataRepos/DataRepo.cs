@@ -10,14 +10,14 @@ public class DataRepo
 {
 	private const string DefaultGroupId = ".Default";
 
-	public string RepoPath { get; set; }
-	public string RepoName { get; set; }
+	public string RepoPath { get; }
+	public string? RepoName { get; } // Can be used as an additional seed in the group hash
 
 	//public RepoSettings Settings;
 
 	public override string ToString() => RepoPath;
 
-	public DataRepo(string repoPath, string repoName)
+	public DataRepo(string repoPath, string? repoName = null)
 	{
 		RepoPath = repoPath;
 		RepoName = repoName;
@@ -155,7 +155,7 @@ public class DataRepo
 		return Load<T>(typeof(T).GetAssemblyQualifiedShortName(), call, createIfNeeded, lazy);
 	}
 
-	public DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false)
+	public static DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false)
 	{
 		call ??= new();
 
@@ -206,12 +206,12 @@ public class DataRepo
 		return entries;
 	}
 
-	public List<Header> LoadHeaders(Type type, string? groupId = null, Call? call = null)
+	public List<SerializerHeader> LoadHeaders(Type type, string? groupId = null, Call? call = null)
 	{
 		call ??= new();
 		groupId ??= DefaultGroupId;
 
-		List<Header> headers = [];
+		List<SerializerHeader> headers = [];
 
 		string groupPath = GetGroupPath(type, groupId);
 		if (Directory.Exists(groupPath))
@@ -221,7 +221,7 @@ public class DataRepo
 				var serializerFile = SerializerFile.Create(filePath);
 				if (serializerFile.Exists)
 				{
-					Header header = serializerFile.LoadHeader(call);
+					SerializerHeader header = serializerFile.LoadHeader(call);
 					if (header != null)
 					{
 						headers.Add(header);
@@ -290,6 +290,37 @@ public class DataRepo
 		}
 	}
 
+	public void CleanupCache(Call call, TimeSpan maxAge)
+	{
+		if (!Directory.Exists(RepoPath))
+			return;
+
+		DateTime threshold = DateTime.UtcNow - maxAge;
+
+		foreach (string groupDirectory in Directory.EnumerateDirectories(RepoPath))
+		{
+			foreach (string dataDirectory in Directory.EnumerateDirectories(groupDirectory))
+			{
+				string filePath = Path.Combine(dataDirectory, SerializerFileAtlas.DataFileName);
+
+				try
+				{
+					DateTime time = File.GetLastWriteTimeUtc(filePath); // or LastAccessTimeUtc
+					if (time < threshold)
+					{
+						Directory.Delete(dataDirectory, true);
+					}
+				}
+				catch (IOException) { /* Skip file if in use */ }
+				catch (UnauthorizedAccessException) { /* Skip if no permission */ }
+				catch (Exception ex)
+				{
+					call.Log.Add(ex, new Tag("Path", filePath));
+				}
+			}
+		}
+	}
+
 	public void DeleteRepo(Call? call = null)
 	{
 		call ??= new();
@@ -314,14 +345,14 @@ public class DataRepo
 	public string GetGroupPath(Type type, string? groupId = null)
 	{
 		groupId ??= DefaultGroupId;
-		string groupHash = (type.GetNonNullableType().GetAssemblyQualifiedShortName() + ';' + RepoName + ';' + groupId).HashSha256();
+		string groupHash = (type.GetNonNullableType().GetAssemblyQualifiedShortName() + ';' + RepoName + ';' + groupId).HashSha256ToBase32();
 		return Paths.Combine(RepoPath, groupHash);
 	}
 
 	public string GetDataPath(Type type, string groupId, string key)
 	{
 		string groupPath = GetGroupPath(type, groupId);
-		string nameHash = key.HashSha256();
+		string nameHash = key.HashSha256ToBase32();
 		return Paths.Combine(groupPath, nameHash);
 	}
 

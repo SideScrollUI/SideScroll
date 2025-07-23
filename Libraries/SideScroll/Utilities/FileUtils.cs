@@ -172,4 +172,30 @@ public static class FileUtils
 
 		return false;
 	}
+
+	public static void DeleteDirectory(Call? call, string? path)
+	{
+		call ??= new();
+
+		if (path == null)
+		{
+			call.Log.Add("Path is blank, no directory to delete");
+			return;
+		}
+
+		if (!Directory.Exists(path))
+		{
+			call.Log.Add("No directory found to delete", new Tag("Path", path));
+			return;
+		}
+
+		try
+		{
+			Directory.Delete(path, true);
+		}
+		catch (Exception e)
+		{
+			call.Log.Add(e);
+		}
+	}
 }

@@ -1,7 +1,6 @@
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using SideScroll.Avalonia.Controls.View;
 using SideScroll.Avalonia.Extensions;
 using SideScroll.Avalonia.Utilities;
 
@@ -117,7 +116,7 @@ public class DataGridContextMenu : ContextMenu, IDisposable
 			Type valueType = propertyValue.GetType();
 			if (formatted || (valueType != typeof(string) && !valueType.IsPrimitive))
 			{
-				value = Column.FormatConverter.ObjectToString(propertyValue, MaxCellValueLength, Column.FormatConverter.IsFormatted)!;
+				value = Column.FormatConverter.ObjectToString(propertyValue, MaxCellValueLength)!;
 			}
 			else
 			{

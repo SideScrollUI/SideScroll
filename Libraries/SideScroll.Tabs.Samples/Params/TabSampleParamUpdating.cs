@@ -14,7 +14,7 @@ public class TabSampleParamUpdating : ITab
 
 	public class Instance : TabInstance
 	{
-		protected SynchronizationContext Context = SynchronizationContext.Current ?? new SynchronizationContext();
+		protected SynchronizationContext Context = SynchronizationContext.Current ?? new();
 
 		private SampleParamItemDataBinding? _paramTestItem;
 		private readonly Random _random = new();

@@ -248,11 +248,11 @@ public class TabBookmark
 
 			if (DataRepoType is Type type)
 			{
-				project.DataApp.Save(type, DataRepoGroupId, dataKey, row.DataValue);
+				project.Data.App.Save(type, DataRepoGroupId, dataKey, row.DataValue);
 			}
 			else
 			{
-				project.DataApp.Save(DataRepoGroupId, dataKey, row.DataValue);
+				project.Data.App.Save(DataRepoGroupId, dataKey, row.DataValue);
 			}
 		}
 

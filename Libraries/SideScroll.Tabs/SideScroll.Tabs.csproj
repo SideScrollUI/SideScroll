@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SideScroll.Network\SideScroll.Network.csproj" />
     <ProjectReference Include="..\SideScroll.Resources\SideScroll.Resources.csproj" />
     <ProjectReference Include="..\SideScroll.Serialize\SideScroll.Serialize.csproj" />
   </ItemGroup>

@@ -11,14 +11,14 @@ public interface IDataView
 	void Load(object sender, object obj, params object?[] loadParams);
 }
 
-// An Item collection that shows a View around every item
+// A UI Item Collection that shows a View around every item
 public class DataViewCollection<TDataType, TViewType> where TViewType : IDataView, new()
 {
 	//public event EventHandler<EventArgs> OnDelete; // todo?
 
 	public ItemCollectionUI<TViewType> Items { get; set; } = [];
 
-	public DataRepoView<TDataType> DataRepoView { get; init; }
+	public DataRepoView<TDataType> DataRepoView { get; }
 	public DataRepoView<TDataType>? DataRepoSecondary { get; set; } // Optional: Saves and Deletes goto a 2nd copy
 
 	public object?[] LoadParams { get; set; }
@@ -84,10 +84,11 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 			{
 				if (_valueLookup.TryGetValue(oldItem, out TViewType? itemView))
 				{
-					var newItem = (IDataItem)e.NewItems![index++]!;
+					var newItem = (IDataItem)e.NewItems![index]!;
 					itemView.Load(this, newItem.Object, LoadParams);
 					viewItems.Add(itemView);
 				}
+				index++;
 			}
 
 			if (viewItems.Count > 0)
@@ -145,5 +146,107 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	public void AddDataRepo(DataRepoView<TDataType> dataRepoView)
 	{
 		DataRepoSecondary = dataRepoView;
+	}
+}
+
+// Provides a UI thread safe ItemCollectionUI around a DataRepoView
+public class DataViewCollection<T>
+{
+	//public event EventHandler<EventArgs> OnDelete; // todo?
+
+	public ItemCollectionUI<T> Items { get; set; } = [];
+
+	public DataRepoView<T> DataRepoView { get; }
+
+	public override string ToString() => DataRepoView.ToString();
+
+	public DataViewCollection(DataRepoView<T> dataRepoView)
+	{
+		DataRepoView = dataRepoView;
+
+		DataRepoView.Items.CollectionChanged += Items_CollectionChanged;
+
+		Reload();
+	}
+
+	public void Reload()
+	{
+		Items.Clear();
+
+		foreach (DataItem<T> dataItem in DataRepoView.Items)
+		{
+			Add(dataItem);
+		}
+	}
+
+	private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	{
+		if (e.Action == NotifyCollectionChangedAction.Add)
+		{
+			if (e.NewItems != null)
+			{
+				foreach (IDataItem item in e.NewItems)
+				{
+					Add(item);
+				}
+			}
+		}
+		else if (e.Action == NotifyCollectionChangedAction.Remove)
+		{
+			if (e.OldItems != null)
+			{
+				foreach (IDataItem item in e.OldItems)
+				{
+					Remove(item);
+				}
+			}
+		}
+		else if (e.Action == NotifyCollectionChangedAction.Replace)
+		{
+			if (e.OldItems == null || e.NewItems?.Count != e.OldItems.Count) return;
+
+			List<T> newItems = [];
+			int index = 0;
+			foreach (IDataItem oldItem in e.OldItems)
+			{
+				if (Items.Contains((T)oldItem.Object))
+				{
+					var newItem = (IDataItem)e.NewItems![index]!;
+					newItems.Add((T)newItem.Object);
+				}
+				index++;
+			}
+
+			if (newItems.Count > 0)
+			{
+				int indexOfItem = Items.IndexOf(newItems.First());
+				Items.NotifyCollectionChanged(
+					new NotifyCollectionChangedEventArgs(
+						NotifyCollectionChangedAction.Replace,
+						newItems,
+						newItems,
+						indexOfItem));
+			}
+		}
+		else if (e.Action == NotifyCollectionChangedAction.Reset)
+		{
+			Items.Clear();
+		}
+	}
+
+	public T Add(IDataItem dataItem)
+	{
+		var item = (T)dataItem.Object;
+		Items.Add(item);
+
+		return item;
+	}
+
+	public void Remove(IDataItem dataItem)
+	{
+		Call call = new();
+		DataRepoView.Delete(call, dataItem.Key);
+
+		Items.Remove((T)dataItem.Object);
 	}
 }

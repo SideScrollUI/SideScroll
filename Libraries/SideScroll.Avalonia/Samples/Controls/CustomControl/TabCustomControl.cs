@@ -1,6 +1,7 @@
 using SideScroll.Avalonia.Controls;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Collections;
+using SideScroll.Serialize;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Samples.Models;
 using System.Text.Json;
@@ -13,33 +14,39 @@ public class TabCustomControl : ITab
 
 	public class Instance : TabInstance
 	{
-		private ItemCollectionUI<Planet> _planets = [];
+		private ItemCollectionUI<Planet>? _planets;
 		private Planet? _planet;
 		private TabControlSearchToolbar? _toolbar;
+		private TabControlParams? planetParams;
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			_planet = new Planet
-			{
-				Name = "Planet X",
-				DistanceKm = 10_000_000_000,
-				RadiusKm = 5_000,
-				MassKg = 2,
-				OrbitalPeriodDays = 60_000,
-				Inner = false,
-			};
+			_planet = Planet.CreateSample();
 
-			var planetParams = new TabControlParams(_planet);
+			planetParams = new TabControlParams(_planet);
 			model.AddObject(planetParams);
 
 			_toolbar = new TabControlSearchToolbar(this);
 			model.AddObject(_toolbar);
-
+			_toolbar.ButtonNew.Add(New);
+			_toolbar.ButtonSave.Add(Save);
 			_toolbar.ButtonSearch.Add(SearchUI);
 			_toolbar.ButtonCopyClipBoard.Add(CopyClipBoardUI);
 
-			_planets = new ItemCollectionUI<Planet>(SolarSystem.Sample.Planets);
+			_planets ??= [.. SolarSystem.Sample.Planets];
 			model.Items = _planets;
+		}
+
+		private void New(Call call)
+		{
+			_planet = new();
+			planetParams!.LoadObject(_planet);
+		}
+
+		private void Save(Call call)
+		{
+			_planets!.Add(_planet.DeepClone()!);
+			New(call);
 		}
 
 		private void SearchUI(Call call)

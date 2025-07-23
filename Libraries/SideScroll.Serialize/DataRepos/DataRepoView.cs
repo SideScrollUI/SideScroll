@@ -44,7 +44,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 			}
 
 			var dataItems = LoadAllDataItems(call, ascending);
-			Items = new DataItemCollection<T>(dataItems);
+			Items = [.. dataItems];
 			Loaded = true;
 		}
 	}
@@ -55,7 +55,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		{
 			DataItemCollection<T> items = base.LoadAll(call);
 			var ordered = ascending ? items.OrderBy(orderByMemberName) : items.OrderByDescending(orderByMemberName);
-			Items = new DataItemCollection<T>(ordered);
+			Items = [.. ordered];
 			Loaded = true;
 		}
 	}
@@ -65,7 +65,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		lock (DataRepo)
 		{
 			var ordered = Items.OrderBy(memberName);
-			Items = new DataItemCollection<T>(ordered);
+			Items = [.. ordered];
 		}
 	}
 
@@ -74,7 +74,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		lock (DataRepo)
 		{
 			var ordered = Items.OrderByDescending(memberName);
-			Items = new DataItemCollection<T>(ordered);
+			Items = [.. ordered];
 		}
 	}
 

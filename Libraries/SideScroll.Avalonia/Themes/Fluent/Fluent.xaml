@@ -109,12 +109,21 @@
           <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#2040a0" />
           <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#ff2d53c4" />
 
-          <SolidColorBrush x:Key="ButtonForeground" Color="#d0d0e8" />
+          <SolidColorBrush x:Key="ButtonForeground" Color="#ffcccce8" />
           <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#ffe6e6f2" />
           <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#fff0f0f7" />
 
-          <SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff02031c" />
+          <SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff04042e" />
           <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#ff09035c" />
+
+          <SolidColorBrush x:Key="ButtonWarningBackground" Color="#ff804020" />
+          <SolidColorBrush x:Key="ButtonWarningBackgroundPointerOver" Color="#ff99471f" />
+
+          <SolidColorBrush x:Key="ButtonWarningForeground" Color="#ffe3d2c8" />
+          <SolidColorBrush x:Key="ButtonWarningForegroundPointerOver" Color="#fff0ddd3" />
+
+          <SolidColorBrush x:Key="ButtonWarningBorderBrush" Color="#ff2e1c14" />
+          <SolidColorBrush x:Key="ButtonWarningBorderBrushPointerOver" Color="#ff543424" />
 
           <CornerRadius x:Key="ButtonCornerRadius">12</CornerRadius>
           <Thickness x:Key="ButtonBorderThemeThickness">1.5</Thickness>
@@ -135,9 +144,9 @@
 
           <!-- Flyout -->
 
-          <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#F037375f" />
+          <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#dd333366" />
           <SolidColorBrush x:Key="FlyoutPresenterForeground" Color="#d0d0e8" />
-          <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#000000" />
+          <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#b0000000" />
 
           <!-- ToolTip -->
           
@@ -223,7 +232,7 @@
           <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
           <SolidColorBrush x:Key="TabSectionSeparatorBrush" Color="#ff050524" />
 
-          <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#27204a" />
+          <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#ff292dab" />
 
           <SolidColorBrush x:Key="TabSplitterBackgroundBrush" Color="#000000" />
           <sys:Double x:Key="TabSplitterSize">6</sys:Double>
@@ -242,7 +251,7 @@
           <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#303080" />
           <CornerRadius x:Key="ToolbarButtonCornerRadius">6</CornerRadius>
           
-          <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#393940" />
+          <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#ff3232a8" />
 
           <SolidColorBrush x:Key="ToolbarLabelForegroundBrush" Color="#D0D0E8" />
           <SolidColorBrush x:Key="ToolbarHeaderLabelForegroundBrush" Color="#8888FF" />
@@ -284,7 +293,7 @@
 
           <!-- Text -->
 
-          <SolidColorBrush x:Key="LabelForegroundBrush" Color="#e3e3e3" />
+          <SolidColorBrush x:Key="LabelForegroundBrush" Color="#ffdedede" />
 
           <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#c5c6c6" />
           <SolidColorBrush x:Key="TextControlForegroundReadOnlyBrush" Color="#606060" />
@@ -490,11 +499,20 @@
           <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#363f80" />
 
           <SolidColorBrush x:Key="ButtonForeground" Color="#ffadafc9" />
-          <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#ffc1c2c9" />
-          <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#ffd0d1d9" />
+          <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#ffd0d1d9" />
+          <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#ffdcdde6" />
 
           <SolidColorBrush x:Key="ButtonBorderBrush" Color="#ff06071c" />
           <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#ff000033" />
+
+          <SolidColorBrush x:Key="ButtonWarningBackground" Color="#ff733314" />
+          <SolidColorBrush x:Key="ButtonWarningBackgroundPointerOver" Color="#ff96461e" />
+
+          <SolidColorBrush x:Key="ButtonWarningForeground" Color="#ffd1c0b8" />
+          <SolidColorBrush x:Key="ButtonWarningForegroundPointerOver" Color="#ffe0cec5" />
+
+          <SolidColorBrush x:Key="ButtonWarningBorderBrush" Color="#ff140d09" />
+          <SolidColorBrush x:Key="ButtonWarningBorderBrushPointerOver" Color="#ff2e1c14" />
 
           <!-- Simple and Fluent Tab/Toolbar Button -->
           
@@ -516,15 +534,15 @@
 
           <!-- Flyout -->
 
-          <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#F037375f" />
-          <SolidColorBrush x:Key="FlyoutPresenterForeground" Color="{DynamicResource TextForegroundColor}" />
-          <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#000000" />
+          <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#e8131b45" />
+          <SolidColorBrush x:Key="FlyoutPresenterForeground" Color="#ffbdbdde" />
+          <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#ff050505" />
 
           <!-- ToolTip -->
           
           <SolidColorBrush x:Key="ToolTipBackground" Color="#e8131b45" />
           <SolidColorBrush x:Key="ToolTipForeground" Color="#ffbdbdde" />
-          <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#FF000000" />
+          <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#ff050505" />
 
           <!-- ScrollBar -->
 
@@ -579,7 +597,7 @@
           <SolidColorBrush x:Key="TabSeparatorForegroundBrush" Color="#303036" />
           <SolidColorBrush x:Key="TabSectionSeparatorBrush" Color="#ff050524" />
 
-          <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#191633" />
+          <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#ff1e3c96" />
 
           <!-- Title -->
 
@@ -614,7 +632,7 @@
           <SolidColorBrush x:Key="IconAltForegroundBrush" Color="{DynamicResource IconAltForegroundColor}" />
           <SolidColorBrush x:Key="IconAltForegroundHighlightBrush" Color="{DynamicResource IconAltForegroundHighlightColor}" />
           
-          <SolidColorBrush x:Key="IconForegroundDisabledBrush" Color="#333333" />
+          <SolidColorBrush x:Key="IconForegroundDisabledBrush" Color="#ff383838" />
 
           <!-- DataGrid Styled -->
           

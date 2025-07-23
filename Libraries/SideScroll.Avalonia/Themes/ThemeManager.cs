@@ -32,9 +32,9 @@ public class ThemeManager
 	{
 		Project = project;
 
-		DataRepoDefaultThemes = Project.DataApp.LoadView<AvaloniaThemeSettings>(new(), DefaultGroupId, nameof(AvaloniaThemeSettings.Name));
+		DataRepoDefaultThemes = Project.Data.App.LoadView<AvaloniaThemeSettings>(new(), DefaultGroupId, nameof(AvaloniaThemeSettings.Name));
 
-		DataRepoThemes = Project.DataApp.LoadView<AvaloniaThemeSettings>(new(), GroupId, nameof(AvaloniaThemeSettings.Name));
+		DataRepoThemes = Project.Data.App.LoadView<AvaloniaThemeSettings>(new(), GroupId, nameof(AvaloniaThemeSettings.Name));
 		foreach (AvaloniaThemeSettings theme in DataRepoThemes.Items.Values)
 		{
 			UpdateTheme(theme);

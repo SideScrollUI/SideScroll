@@ -2,6 +2,7 @@ using SideScroll.Avalonia.Samples.Charts;
 using SideScroll.Avalonia.Samples.Controls;
 using SideScroll.Avalonia.Tabs;
 using SideScroll.Tabs;
+using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Samples;
 

@@ -30,18 +30,9 @@ public class BaseWindow : Window
 
 	private Rect? _normalSizeBounds; // used for saving when maximized
 
+	private readonly DispatcherTimer _dispatcherTimer;
+
 	public BaseWindow(Project project)
-	{
-		Initialize(project);
-	}
-
-	public BaseWindow(ProjectSettings settings)
-	{
-		Initialize(Project.Load(settings));
-	}
-
-	[MemberNotNull(nameof(Project), nameof(TabViewer))]
-	protected void Initialize(Project project)
 	{
 		Instance = this;
 
@@ -53,6 +44,18 @@ public class BaseWindow : Window
 		LoadProject(project);
 
 		Opened += BaseWindow_Opened;
+
+		_dispatcherTimer = new DispatcherTimer
+		{
+			Interval = TimeSpan.FromMinutes(10), // Won't trigger initially
+		};
+		_dispatcherTimer.Tick += DispatcherTimer_Tick;
+		_dispatcherTimer.Start();
+	}
+
+	public BaseWindow(ProjectSettings settings) : 
+		this(Project.Load(settings))
+	{
 	}
 
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]
@@ -183,7 +186,7 @@ public class BaseWindow : Window
 	{
 		SetMaxBounds();
 
-		var settings = Project.DataApp.Load<WindowSettings>(true);
+		var settings = Project.Data.App.Load<WindowSettings>(true);
 		if (settings != null)
 		{
 			WindowSettings = settings;
@@ -204,7 +207,7 @@ public class BaseWindow : Window
 
 	private void SaveWindowSettingsInternal()
 	{
-		Project.DataApp.Save(WindowSettings);
+		Project.Data.App.Save(WindowSettings);
 	}
 
 	private void BaseWindow_Opened(object? sender, EventArgs e)
@@ -216,5 +219,10 @@ public class BaseWindow : Window
 	private void BaseWindow_PositionChanged(object? sender, PixelPointEventArgs e)
 	{
 		SaveWindowSettings();
+	}
+
+	private void DispatcherTimer_Tick(object? sender, EventArgs e)
+	{
+		Project.Data.Cache.CleanupCache(new(), TimeSpan.FromDays(Project.DataSettings.CacheDurationDays));
 	}
 }

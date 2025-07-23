@@ -5,16 +5,17 @@ namespace SideScroll.Network.Http;
 
 public class HttpMemoryCache
 {
-	public int MaxItems { get; set; } = 100;
+	public static int DefaultMaxItems { get; set; } = 100;
+
 	// public TimeSpan CacheDuration { get; set; } = TimeSpan.FromHours(1);
 
 	public MemoryCache MemoryCache { get; protected set; }
 
-	public HttpMemoryCache()
+	public HttpMemoryCache(int? maxItems = null)
 	{
 		MemoryCacheOptions options = new()
 		{
-			SizeLimit = MaxItems,
+			SizeLimit = maxItems ?? DefaultMaxItems,
 			ExpirationScanFrequency = TimeSpan.FromSeconds(60),
 		};
 		MemoryCache = new MemoryCache(options);

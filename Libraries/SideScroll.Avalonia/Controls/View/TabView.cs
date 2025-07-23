@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -97,12 +98,7 @@ public class TabView : Grid, IDisposable
 	public TabView(TabInstance tabInstance)
 	{
 		Instance = tabInstance;
-		Initialize();
-	}
 
-	public void Initialize()
-	{
-		// Can only be initialized once
 		ColumnDefinitions = new ColumnDefinitions("Auto");
 		RowDefinitions = new RowDefinitions("*");
 
@@ -591,25 +587,49 @@ public class TabView : Grid, IDisposable
 		ClearControls(true);
 
 		// This will get cleared when the view reloads
-		ProgressBar progressBar = new()
+		Grid containerGrid = new()
 		{
-			IsIndeterminate = true,
+			ColumnDefinitions = new ColumnDefinitions("*"), // Controls, Splitter, Child Tabs
+			RowDefinitions = new RowDefinitions("Auto,Auto,Auto"),
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Top,
 			MinWidth = 100,
-			MinHeight = 130,
-			MaxWidth = 200,
-			Foreground = SideScrollTheme.TabProgressBarForeground,
-			Background = SideScrollTheme.TabBackground,
-			HorizontalAlignment = HorizontalAlignment.Left,
-			VerticalAlignment = VerticalAlignment.Stretch,
+			MaxWidth = 350,
 		};
-		Children.Add(progressBar);
 
 		TabViewTitle title = new(this, Model.Name)
 		{
 			VerticalAlignment = VerticalAlignment.Top,
-			MaxWidth = progressBar.MinWidth,
 		};
-		Children.Add(title);
+		containerGrid.Children.Add(title);
+
+		ProgressBar progressBar = new()
+		{
+			IsIndeterminate = true,
+			Height = 3,
+			Foreground = SideScrollTheme.TabProgressBarForeground,
+			Background = SideScrollTheme.TabBackground,
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Top,
+			Margin = new Thickness(12, 16),
+			[Grid.RowProperty] = 1,
+		};
+		containerGrid.Children.Add(progressBar);
+
+		if (!Instance.LoadingMessage.IsNullOrEmpty())
+		{
+			TabControlTextBlock textBlock = new()
+			{
+				Text = Instance.LoadingMessage,
+				TextWrapping = TextWrapping.Wrap,
+				HorizontalAlignment = HorizontalAlignment.Stretch,
+				Margin = new Thickness(10, 0),
+				[Grid.RowProperty] = 2,
+			};
+			containerGrid.Children.Add(textBlock);
+		}
+
+		Children.Add(containerGrid);
 	}
 
 	public void LoadSettings()
@@ -927,8 +947,6 @@ public class TabView : Grid, IDisposable
 		}
 		catch (Exception e)
 		{
-			// Add instructions for enabling debugger to catch these
-			//call.Log.Add(e);
 			return TabCreator.CreateChildControl(Instance, e, "Caught Exception", tabControl);
 		}
 	}
@@ -1023,7 +1041,7 @@ public class TabView : Grid, IDisposable
 
 	private void TabInstance_OnRefresh(object? sender, EventArgs e)
 	{
-		Load();
+		ReloadControls();
 	}
 
 	private void TabInstance_OnReload(object? sender, EventArgs e)

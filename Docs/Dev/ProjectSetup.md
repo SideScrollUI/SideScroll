@@ -1,13 +1,16 @@
 # Project Setup
 
 ## Sample Projects
+
 - [Tab Samples](/Programs/SideScroll.Start.Avalonia/MainWindow.cs) - Inside this repo
 - [Video Game Database](https://github.com/SideScrollUI/VideoGamesDB) - Sample external project
 
 ## Create a new Avalonia Project
+
 - It's recommended to start with a default [Avalonia .NET App](https://avaloniaui.net/gettingstarted#installation), and modify it to work with the SideScroll library
 
 ## Add Nuget Packages
+
 - Add the Avalonia NuGet packages if needed (these are already included with the default app)
   - `Avalonia.Desktop`
   - `Avalonia.Fonts.Inter`
@@ -19,6 +22,7 @@
   - `SideScroll.Avalonia.ScreenCapture`
 
 ## App.xaml
+
 - Add all the `<Application.Styles>` and `<Application.Resources>` to your `App.xaml`
 ```xml
 <Application xmlns="https://github.com/avaloniaui"
@@ -45,6 +49,7 @@
 ```
 
 ## Create a new MainWindow
+
 - Replace the `MainWindow.cs` with a non-`.xaml` version
 - Alternatively, a TabViewer can also be added to an Avalonia Control (see `BaseWindow.cs` for an example)
 
@@ -78,7 +83,8 @@ public class SideScrollWindow : BaseWindow
 }
 ```
 
-#### Add Sample Tab
+### Add Sample Tab
+
 ```csharp
 namespace SideScroll.Tabs.Samples;
 

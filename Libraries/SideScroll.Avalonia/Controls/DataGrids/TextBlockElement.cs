@@ -12,8 +12,8 @@ public class TextBlockElement : TextBlock
 {
 	protected override Type StyleKeyOverride => typeof(TextBlock);
 
-	public DataGridPropertyTextColumn Column { get; init; }
-	public PropertyInfo PropertyInfo { get; init; }
+	public DataGridPropertyTextColumn Column { get; }
+	public PropertyInfo PropertyInfo { get; }
 
 	public new Size DesiredSize { get; set; }
 

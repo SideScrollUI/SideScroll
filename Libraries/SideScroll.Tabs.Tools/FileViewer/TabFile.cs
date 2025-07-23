@@ -2,6 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Tasks;
 using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
@@ -39,7 +40,10 @@ public class TabFile(FileView fileView) : ITab
 		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Svg.OpenFolder);
 
 		[Separator]
-		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
+		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete, showTask: true)
+		{
+			Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete this file?", "Delete"),
+		};
 
 		[Separator]
 		public ToolButton? ButtonSelect { get; set; }
@@ -123,7 +127,7 @@ public class TabFile(FileView fileView) : ITab
 				File.Delete(tab.Path);
 			}
 
-			Refresh();
+			Reload();
 		}
 
 		private void SelectFile(Call call)

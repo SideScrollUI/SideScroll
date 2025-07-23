@@ -17,6 +17,8 @@ public class ToolButton
 
 	public PropertyBinding? IsEnabledBinding { get; set; }
 
+	public IFlyoutConfig? Flyout { get; set; }
+
 	public CallAction? Action { get; set; }
 	public CallActionAsync? ActionAsync { get; set; }
 

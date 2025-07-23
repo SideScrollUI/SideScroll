@@ -49,7 +49,7 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 	{
 	}
 
-	public void AddRange(IEnumerable<T> collection)
+	public virtual void AddRange(IEnumerable<T> collection)
 	{
 		foreach (T item in collection)
 		{

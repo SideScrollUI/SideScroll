@@ -26,8 +26,9 @@ public class WordSpacer
 	{
 		List<Token> combined1 = MergeTimestamps(Tokens);
 		List<Token> combined2 = MergeSingleUpperWithDecimal(combined1);
+		List<Token> combined3 = MergeNumberAndLower(combined2);
 
-		Formatted = string.Join(' ', combined2.Where(t => t.TokenType != TokenType.Space));
+		Formatted = string.Join(' ', combined3.Where(t => t.TokenType != TokenType.Space));
 	}
 
 	private static List<Token> MergeTimestamps(List<Token> tokens)
@@ -45,17 +46,17 @@ public class WordSpacer
 			}
 
 			// Manually merge: Look for 3 pair sets with a separator between each
-			if (token.TokenType == TokenType.Decimal && i + 4 < tokens.Count &&
+			if (token.TokenType == TokenType.Number && i + 4 < tokens.Count &&
 				tokens[i + 1].TokenType == TokenType.Separator &&
-				tokens[i + 2].TokenType == TokenType.Decimal &&
+				tokens[i + 2].TokenType == TokenType.Number &&
 				tokens[i + 3].TokenType == TokenType.Separator &&
-				tokens[i + 4].TokenType == TokenType.Decimal)
+				tokens[i + 4].IsNumeric)
 			{
 				for (; i + 1 < tokens.Count; i++)
 				{
 					var nextToken = tokens[i + 1];
 
-					if (nextToken.TokenType != TokenType.Decimal &&
+					if (!nextToken.IsNumeric &&
 						nextToken.TokenType != TokenType.Separator)
 						break;
 
@@ -77,10 +78,35 @@ public class WordSpacer
 		{
 			Token token = tokens[i];
 			if (token.TokenType == TokenType.UpperString && token.Value.Length == 1 &&
-				i + 1 < tokens.Count && tokens[i + 1].TokenType == TokenType.Decimal)
+				i + 1 < tokens.Count && tokens[i + 1].IsNumeric)
 			{
 				token.Value += tokens[i + 1].Value;
 				i++;
+			}
+
+			combined.Add(token);
+		}
+
+		return combined;
+	}
+
+	private static List<Token> MergeNumberAndLower(List<Token> tokens)
+	{
+		List<Token> combined = [];
+		for (int i = 0; i < tokens.Count; i++)
+		{
+			Token token = tokens[i];
+			if (token.IsNumberLowerCompatible)
+			{
+				for (; i + 1 < tokens.Count; i++)
+				{
+					Token nextToken = tokens[i + 1];
+					if (!nextToken.IsNumberLowerCompatible)
+						break;
+
+					token.Value += nextToken.Value;
+					token.TokenType = TokenType.NumberLower;
+				}
 			}
 
 			combined.Add(token);
@@ -134,7 +160,10 @@ public class WordSpacer
 	{
 		Default,
 		LowerString,
-		UpperString,
+		UpperString, // Plurals also count if string ends with 's'
+		Capitalized, // First letter is uppercase and the rest are lowercase
+		Number,
+		NumberLower,
 		Decimal,
 		DateTime,
 		Separator,
@@ -160,9 +189,12 @@ public class WordSpacer
 
 		public override string ToString() => Value;
 
+		public bool IsNumeric => TokenType == TokenType.Decimal || TokenType == TokenType.Number;
+		public bool IsNumberLowerCompatible => TokenType == TokenType.NumberLower || TokenType == TokenType.Number || TokenType == TokenType.LowerString;
+
 		public static TokenType GetType(char c) => c switch
 		{
-			_ when char.IsDigit(c) => TokenType.Decimal,
+			_ when char.IsDigit(c) => TokenType.Number,
 			_ when char.IsUpper(c) => TokenType.UpperString,
 			_ when char.IsLower(c) => TokenType.LowerString,
 			' ' => TokenType.Space,
@@ -189,10 +221,16 @@ public class WordSpacer
 			char firstChar = Value.First();
 			if (char.IsDigit(c))
 			{
-				if (TokenType == TokenType.Decimal) return true;
+				if (IsNumeric || TokenType == TokenType.NumberLower) return true;
+
+				if (TokenType == TokenType.LowerString)
+				{
+					TokenType = TokenType.NumberLower;
+					return true;
+				}
 
 				if (TokenType != TokenType.UpperString) return false;
-				
+
 				if (Value.Length >= 2 && Value[0] == Value[1])
 				{
 					// Allow 4XX and 4XXs
@@ -212,6 +250,8 @@ public class WordSpacer
 				
 				if (!char.IsLower(firstChar)) return false;
 
+				TokenType = TokenType.Capitalized;
+
 				// Plural
 				if (firstChar == 's' && Value.Length == 1)
 				{
@@ -220,14 +260,24 @@ public class WordSpacer
 			}
 			else if (char.IsLower(c))
 			{
-				if (TokenType != TokenType.LowerString) return false;
+				if (TokenType != TokenType.LowerString)
+				{
+					return TokenType == TokenType.NumberLower;
+				}
 
-				// Only allow one starting capital letter
+				// Only allow one lowercase if word starts with a capital letter
 				if (!char.IsLower(firstChar)) return false;
 			}
 			else if (NumberConnectors.Contains(c))
 			{
-				if (TokenType != TokenType.Decimal) return false;
+				if (TokenType == TokenType.Decimal) return true;
+
+				if (TokenType == TokenType.Number)
+				{
+					TokenType = TokenType.Decimal;
+					return true;
+				}
+				return false;
 			}
 			else
 			{

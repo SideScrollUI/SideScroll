@@ -54,7 +54,7 @@ public class TabControlColorPicker : ColorPicker
 	{
 		var binding = new Binding(property.PropertyInfo.Name)
 		{
-			Mode = BindingMode.TwoWay,
+			Mode = property.Editable ? BindingMode.TwoWay : BindingMode.OneWay,
 			Source = property.Object,
 		};
 		Bind(ColorProperty, binding);

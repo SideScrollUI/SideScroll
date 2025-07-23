@@ -41,7 +41,7 @@ public class TabUserSettings : ITab
 
 		private void Save(Call call)
 		{
-			DataApp.Save(UserSettings!, call);
+			Data.App.Save(UserSettings!, call);
 			Project.UserSettings = UserSettings.DeepClone(call)!;
 		}
 	}

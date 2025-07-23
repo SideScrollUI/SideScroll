@@ -33,7 +33,7 @@ public class TabSampleDataRepoCollection : ITab
 
 		private void LoadSavedItems(Call call)
 		{
-			DataRepoInstance = _dataRepoItems = DataApp.Open<SampleItem>(RepoId, true);
+			DataRepoInstance = _dataRepoItems = Data.App.Open<SampleItem>(RepoId, true);
 
 			var dataItemCollection = _dataRepoItems.LoadAll(call);
 			_sampleItems = new ItemCollection<SampleItem>(dataItemCollection.Values);

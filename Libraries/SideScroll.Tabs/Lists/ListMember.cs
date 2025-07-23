@@ -57,7 +57,7 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 	public virtual bool Editable => true;
 
 	[HiddenColumn]
-	public bool AutoLoad { get; set; } = true;
+	public bool IsAutoSelectable { get; set; } = true;
 
 	[HiddenColumn]
 	public int? MaxDesiredWidth => GetCustomAttribute<MaxWidthAttribute>()?.MaxWidth;

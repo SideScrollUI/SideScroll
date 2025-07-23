@@ -119,6 +119,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				{
 					new("Collections", new TabSampleGridCollectionSize()),
 					new("Actions", new TabSampleActions()),
+					new("Popups", new TabSampleFlyout()),
 				},
 				TextControlTheme => new TabSampleParamsDataTabs(),
 				TextAreaTheme => new TabSampleTextArea(),

@@ -1,9 +1,10 @@
-using SideScroll.Utilities;
+using SideScroll.Attributes;
 using SideScroll.Resources;
-using SideScroll.Tabs.Toolbar;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
-using SideScroll.Attributes;
+using SideScroll.Tabs.Toolbar;
+using SideScroll.Tasks;
+using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
 
@@ -33,8 +34,8 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 		[Separator]
 		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Svg.OpenFolder);
 
-		//[Separator]
-		//public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
+		[Separator]
+		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete, showTask: true);
 	}
 
 	public class Instance(TabDirectory tab) : TabInstance, ITabAsync
@@ -65,14 +66,14 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 			toolbar.ButtonStar = new("Favorite", Icons.Svg.StarFilled, Icons.Svg.Star, new ListProperty(DirectoryView, nameof(DirectoryView.Favorite)));
 			toolbar.ButtonRefresh.Action = Refresh;
 			toolbar.ButtonOpenFolder.Action = OpenFolder;
-			//toolbar.ButtonDelete.Action = Delete;
+			toolbar.ButtonDelete.Action = Delete;
+			toolbar.ButtonDelete.Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete this directory?\n\n" + DirectoryView.Name, "Delete");
 			model.AddObject(toolbar);
 
 			List<DirectoryView> directories = GetDirectories(call);
 			List<FileView> files = GetFiles(call);
 
-			List<NodeView> nodes = new(directories);
-			nodes.AddRange(files);
+			List<NodeView> nodes = [.. directories, .. files];
 
 			if (directories.Count == nodes.Count)
 			{
@@ -143,21 +144,24 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 				.ToList();
 		}
 
-		/*private void Delete(Call call)
+		private void Delete(Call call)
 		{
-			// todo: Confirmation prompt?
 			List<SelectedRow> selectedRows = GetSelectedRows();
 			foreach (SelectedRow selectedRow in selectedRows)
 			{
 				string path = Paths.Combine(tab.Path, selectedRow.Label);
 
 				if (Directory.Exists(path))
+				{
 					Directory.Delete(path, true);
+				}
 
 				if (File.Exists(path))
+				{
 					File.Delete(path);
+				}
 			}
 			Reload();
-		}*/
+		}
 	}
 }

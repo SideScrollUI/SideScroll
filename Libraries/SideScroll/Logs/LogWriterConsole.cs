@@ -31,17 +31,3 @@ public class LogWriterConsole
 		Console.WriteLine(indentation + newLog.Message);
 	}
 }
-
-/*
-Requirements
-
-	1 per line?
-
-	Parent/Child relationship
-
-	Separate files?
-	
-	Tags?
-
-	Human readable?
-*/
