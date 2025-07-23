@@ -11,7 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SideScroll.Avalonia.Controls;
 
-public class TabControlSearch : Grid
+public class TabSearch : Grid
 {
 	public TextBox TextBoxSearch { get; set; }
 
@@ -21,7 +21,7 @@ public class TabControlSearch : Grid
 		set => TextBoxSearch.Text = value;
 	}
 
-	public TabControlSearch()
+	public TabSearch()
 	{
 		ColumnDefinitions = new ColumnDefinitions("*");
 		RowDefinitions = new RowDefinitions("Auto");

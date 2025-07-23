@@ -21,7 +21,7 @@
     - Updated serializer format to version 2, switching the version to a ushort and moving the file size to before the name
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.0</AvaloniaVersion>
+    <AvaloniaVersion>11.3.2</AvaloniaVersion>
     <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>

@@ -28,7 +28,7 @@ public class TabHeader : Border
 
 public class TabSeparator : Border;
 
-public class TabControlParams : Border, IValidationControl
+public class TabObjectEditor : Border, IValidationControl
 {
 	public static int ControlMaxWidth { get; set; } = 2000;
 	public static int ControlMaxHeight { get; set; } = 400;
@@ -41,7 +41,7 @@ public class TabControlParams : Border, IValidationControl
 
 	public override string? ToString() => Object?.ToString();
 
-	public TabControlParams(object? obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
+	public TabObjectEditor(object? obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
 	{
 		Object = obj;
 
@@ -230,7 +230,7 @@ public class TabControlParams : Border, IValidationControl
 			ContainerGrid.RowDefinitions.Add(rowDefinition);
 		}
 
-		TabControlTextBlock textLabel = new()
+		TabTextBlock textLabel = new()
 		{
 			Text = property.Name,
 			Margin = new Thickness(10, 7, 10, 3),
@@ -268,7 +268,7 @@ public class TabControlParams : Border, IValidationControl
 		{
 			if (type.IsEnum || listAttribute != null)
 			{
-				return new TabControlFormattedComboBox(property, listAttribute?.PropertyName);
+				return new TabFormattedComboBox(property, listAttribute?.PropertyName);
 			}
 			else if (typeof(DateTime).IsAssignableFrom(type))
 			{
@@ -278,15 +278,15 @@ public class TabControlParams : Border, IValidationControl
 
 		if (type == typeof(bool))
 		{
-			return new TabControlCheckBox(property);
+			return new TabCheckBox(property);
 		}
 		else if (typeof(Color).IsAssignableFrom(type))
 		{
-			return new TabControlColorPicker(property);
+			return new TabColorPicker(property);
 		}
 		else if (typeof(string).IsAssignableFrom(type) || !typeof(IEnumerable).IsAssignableFrom(type))
 		{
-			return new TabControlTextBox(property);
+			return new TabTextBox(property);
 		}
 
 		return null;

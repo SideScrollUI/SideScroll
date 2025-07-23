@@ -3,9 +3,9 @@ using Avalonia.Data;
 
 namespace SideScroll.Avalonia.Controls;
 
-public class TabControlButton : Button
+public class TabButton : Button
 {
-	public TabControlButton(string? label = null)
+	public TabButton(string? label = null)
 	{
 		Content = label;
 	}

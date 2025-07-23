@@ -25,7 +25,7 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.DataGrids;
 
-public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelector
+public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelector
 {
 	public static int ColumnPercentBased { get; set; } = 150;
 	public static int MaxMinColumnWidth { get; set; } = 200;
@@ -42,7 +42,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 	public bool AutoGenerateColumns { get; set; } = true;
 
 	public DataGrid DataGrid { get; set; }
-	public TabControlSearch? SearchControl { get; set; }
+	public TabSearch? SearchControl { get; set; }
 
 	public DataGridCollectionView? CollectionView { get; set; }
 
@@ -95,7 +95,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 	public override string ToString() => TabModel.Name;
 
-	public TabControlDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns, TabDataSettings? tabDataSettings = null, TabModel? model = null)
+	public TabDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns, TabDataSettings? tabDataSettings = null, TabModel? model = null)
 	{
 		TabInstance = tabInstance;
 		TabModel = model ?? TabInstance.Model;
@@ -110,7 +110,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 		Initialize();
 	}
 
-	static TabControlDataGrid()
+	static TabDataGrid()
 	{
 		// DataGridRow event triggers before DataGridCell :(
 		PointerPressedEvent.AddClassHandler<DataGridRow>(DataGridRow_PointerPressed, RoutingStrategies.Tunnel, true);
@@ -157,7 +157,7 @@ public class TabControlDataGrid : Grid, ITabSelector, ITabItemSelector, ITabData
 
 	private void AddSearch()
 	{
-		SearchControl = new TabControlSearch
+		SearchControl = new TabSearch
 		{
 			IsVisible = false,
 		};

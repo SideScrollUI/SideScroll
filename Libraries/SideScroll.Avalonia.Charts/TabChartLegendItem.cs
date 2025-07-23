@@ -15,14 +15,14 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 {
 	public event EventHandler<EventArgs>? OnVisibilityChanged;
 
-	public TabControlChartLegend<TSeries> Legend { get; }
+	public TabChartLegend<TSeries> Legend { get; }
 	public ChartSeries<TSeries> ChartSeries { get; }
 
 	public ChartView ChartView => Legend.ChartView;
 	public TSeries Series => ChartSeries.LineSeries;
 
-	public TabControlTextBlock? TextBlock { get; protected set; }
-	public TabControlTextBlock? TextBlockTotal { get; protected set; }
+	public TabTextBlock? TextBlock { get; protected set; }
+	public TabTextBlock? TextBlockTotal { get; protected set; }
 
 	protected Polygon? _polygon;
 
@@ -58,7 +58,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	public override string? ToString() => ChartSeries.ToString();
 
-	protected TabChartLegendItem(TabControlChartLegend<TSeries> legend, ChartSeries<TSeries> chartSeries)
+	protected TabChartLegendItem(TabChartLegend<TSeries> legend, ChartSeries<TSeries> chartSeries)
 	{
 		Legend = legend;
 		ChartSeries = chartSeries;
@@ -137,7 +137,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void AddTextBlock()
 	{
-		TextBlock = new TabControlTextBlock
+		TextBlock = new TabTextBlock
 		{
 			Margin = new Thickness(2, 2, 6, 2),
 			//VerticalAlignment = VerticalAlignment.Center,
@@ -162,7 +162,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void AddTotalTextBlock()
 	{
-		TextBlockTotal = new TabControlTextBlock
+		TextBlockTotal = new TabTextBlock
 		{
 			Text = Total?.FormattedShortDecimal(),
 			Margin = new Thickness(10, 2, 6, 2),

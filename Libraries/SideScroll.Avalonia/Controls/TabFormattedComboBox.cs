@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls;
 
-public class TabControlFormattedComboBox : ComboBox
+public class TabFormattedComboBox : ComboBox
 {
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
@@ -22,7 +22,7 @@ public class TabControlFormattedComboBox : ComboBox
 
 	public override string? ToString() => SelectedItem?.ToString();
 
-	public TabControlFormattedComboBox(ListProperty property, IList list)
+	public TabFormattedComboBox(ListProperty property, IList list)
 	{
 		Property = property;
 		Items = list;
@@ -30,7 +30,7 @@ public class TabControlFormattedComboBox : ComboBox
 		InitializeComponent();
 	}
 
-	public TabControlFormattedComboBox(ListProperty property, string? listPropertyName)
+	public TabFormattedComboBox(ListProperty property, string? listPropertyName)
 	{
 		Property = property;
 		IsEnabled = property.Editable;

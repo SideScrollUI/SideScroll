@@ -2,8 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sidescroll="clr-namespace:SideScroll.Avalonia.Controls;assembly=SideScroll.Avalonia">
 
-  <ControlTheme x:Key="{x:Type sidescroll:TabControlParams}" TargetType="sidescroll:TabControlParams">
-    <Setter Property="BorderThickness" Value="0,1,0,1"/>
-    <Setter Property="BorderBrush" Value="{DynamicResource TabSectionSeparatorBrush}"/>
+  <ControlTheme x:Key="{x:Type sidescroll:TabTextBlock}" TargetType="sidescroll:TabTextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource LabelForegroundBrush}"/>
   </ControlTheme>
 </ResourceDictionary>

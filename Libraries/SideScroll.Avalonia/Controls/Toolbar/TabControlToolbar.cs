@@ -27,20 +27,12 @@ public class TabControlToolbar : Grid, IDisposable
 	{
 		TabInstance = tabInstance;
 
-		InitializeControls();
+		RowDefinitions = new RowDefinitions("Auto");
 
 		if (toolbar != null)
 		{
 			LoadToolbar(toolbar);
 		}
-	}
-
-	private void InitializeControls()
-	{
-		RowDefinitions = new RowDefinitions("Auto");
-
-		HorizontalAlignment = HorizontalAlignment.Stretch;
-		VerticalAlignment = VerticalAlignment.Top;
 	}
 
 	public void LoadToolbar(TabToolbar toolbar)
@@ -146,13 +138,13 @@ public class TabControlToolbar : Grid, IDisposable
 		return radioButton;
 	}
 
-	public TabControlFormattedComboBox AddComboBox(IToolComboBox toolComboBox)
+	public TabFormattedComboBox AddComboBox(IToolComboBox toolComboBox)
 	{
 		var textBlock = new ToolbarTextBlock(toolComboBox.Label);
 		AddControl(textBlock);
 
 		PropertyInfo propertyInfo = toolComboBox.GetType().GetProperty(nameof(IToolComboBox.SelectedObject))!;
-		var comboBox = new TabControlFormattedComboBox(new ListProperty(toolComboBox, propertyInfo), toolComboBox.GetItems());
+		var comboBox = new TabFormattedComboBox(new ListProperty(toolComboBox, propertyInfo), toolComboBox.GetItems());
 		AddControl(comboBox);
 		return comboBox;
 	}

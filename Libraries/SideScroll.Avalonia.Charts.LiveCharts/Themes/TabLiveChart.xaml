@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sidescroll="clr-namespace:SideScroll.Avalonia.Charts.LiveCharts;assembly=SideScroll.Avalonia.Charts.LiveCharts">
 
-  <ControlTheme x:Key="{x:Type sidescroll:TabControlLiveChart}" TargetType="sidescroll:TabControlLiveChart">
+  <ControlTheme x:Key="{x:Type sidescroll:TabLiveChart}" TargetType="sidescroll:TabLiveChart">
     <Setter Property="HorizontalAlignment" Value="Stretch"/>
     <Setter Property="VerticalAlignment" Value="Stretch"/>
     <Setter Property="Background" Value="{DynamicResource ChartBackgroundBrush}" />

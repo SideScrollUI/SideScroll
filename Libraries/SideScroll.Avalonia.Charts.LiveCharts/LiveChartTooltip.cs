@@ -11,9 +11,9 @@ using SideScroll.Extensions;
 namespace SideScroll.Avalonia.Charts.LiveCharts;
 
 // Based on LiveCharts Tooltip
-public class LiveChartTooltip(TabControlLiveChart liveChart) : IChartTooltip<SkiaSharpDrawingContext>
+public class LiveChartTooltip(TabLiveChart liveChart) : IChartTooltip<SkiaSharpDrawingContext>
 {
-	public TabControlLiveChart LiveChart => liveChart;
+	public TabLiveChart LiveChart => liveChart;
 
 	public double TextSize { get; set; } = 15;
 	public float LabelMaxWidth { get; set; } = 310;

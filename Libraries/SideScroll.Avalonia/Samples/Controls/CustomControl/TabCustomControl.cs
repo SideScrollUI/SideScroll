@@ -17,14 +17,14 @@ public class TabCustomControl : ITab
 		private ItemCollectionUI<Planet>? _planets;
 		private Planet? _planet;
 		private TabControlSearchToolbar? _toolbar;
-		private TabControlParams? planetParams;
+		private TabObjectEditor? planetEditor;
 
 		public override void LoadUI(Call call, TabModel model)
 		{
 			_planet = Planet.CreateSample();
 
-			planetParams = new TabControlParams(_planet);
-			model.AddObject(planetParams);
+			planetEditor = new TabObjectEditor(_planet);
+			model.AddObject(planetEditor);
 
 			_toolbar = new TabControlSearchToolbar(this);
 			model.AddObject(_toolbar);
@@ -40,7 +40,7 @@ public class TabCustomControl : ITab
 		private void New(Call call)
 		{
 			_planet = new();
-			planetParams!.LoadObject(_planet);
+			planetEditor!.LoadObject(_planet);
 		}
 
 		private void Save(Call call)

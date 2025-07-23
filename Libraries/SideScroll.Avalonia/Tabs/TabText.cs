@@ -29,7 +29,7 @@ public class TabText(string text) : ITab
 			toolbar.ButtonCopy.ActionAsync = CopyAsync;
 			model.AddObject(toolbar);
 
-			var tabAvaloniaEdit = new TabControlAvaloniaEdit(this);
+			var tabAvaloniaEdit = new TabAvaloniaEdit(this);
 			tabAvaloniaEdit.SetFormatted(tab.Text);
 			model.AddObject(tabAvaloniaEdit, true);
 		}

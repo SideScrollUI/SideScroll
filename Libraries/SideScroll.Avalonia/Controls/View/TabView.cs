@@ -24,7 +24,7 @@ namespace SideScroll.Avalonia.Controls.View;
 
 public interface IControlCreator
 {
-	void AddControl(TabInstance tabInstance, TabControlSplitContainer container, object obj);
+	void AddControl(TabInstance tabInstance, TabSplitGrid container, object obj);
 }
 
 public interface IValidationControl
@@ -78,10 +78,10 @@ public class TabView : Grid, IDisposable
 	// Layout Controls
 	private Grid? _containerGrid;
 	private Border? _parentContainerBorder;
-	private TabControlSplitContainer? _tabParentControls;
+	private TabSplitGrid? _tabParentControls;
 	private TabViewTitle? _tabTitle;
 	private GridSplitter? _parentChildGridSplitter;
-	private TabControlSplitContainer? _tabChildControls;
+	private TabSplitGrid? _tabChildControls;
 	private Panel? _fillerPanel; // GridSplitter doesn't work without control on right side
 
 	private Size _arrangeOverrideFinalSize;
@@ -228,7 +228,7 @@ public class TabView : Grid, IDisposable
 
 	private void AddParentControls()
 	{
-		_tabParentControls = new TabControlSplitContainer
+		_tabParentControls = new TabSplitGrid
 		{
 			ColumnDefinitions = new ColumnDefinitions("*"),
 			MinDesiredWidth = Model.MinDesiredWidth,
@@ -278,7 +278,7 @@ public class TabView : Grid, IDisposable
 
 	private void AddChildControls()
 	{
-		_tabChildControls = new TabControlSplitContainer
+		_tabChildControls = new TabSplitGrid
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto"),
 		};
@@ -483,7 +483,7 @@ public class TabView : Grid, IDisposable
 			ParamsAttribute? paramsAttribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
 			if (paramsAttribute != null)
 			{
-				AddControl(new TabControlParams(obj), gridLength, tabObject.EnableScrolling);
+				AddControl(new TabObjectEditor(obj), gridLength, tabObject.EnableScrolling);
 			}
 		}
 	}
@@ -520,7 +520,7 @@ public class TabView : Grid, IDisposable
 		int index = 0;
 		foreach (IList iList in Model.ItemList)
 		{
-			var tabData = new TabControlDataGrid(Instance, iList, true, TabViewSettings.GetData(index));
+			var tabData = new TabDataGrid(Instance, iList, true, TabViewSettings.GetData(index));
 			tabData.OnSelectionChanged += ParentListSelectionChanged;
 			_tabParentControls!.AddControl(tabData, true, SeparatorType.Splitter);
 			TabDatas.Add(tabData);
@@ -618,7 +618,7 @@ public class TabView : Grid, IDisposable
 
 		if (!Instance.LoadingMessage.IsNullOrEmpty())
 		{
-			TabControlTextBlock textBlock = new()
+			TabTextBlock textBlock = new()
 			{
 				Text = Instance.LoadingMessage,
 				TextWrapping = TextWrapping.Wrap,

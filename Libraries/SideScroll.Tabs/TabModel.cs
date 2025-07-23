@@ -14,6 +14,7 @@ namespace SideScroll.Tabs;
 public class TabObject
 {
 	public object? Object { get; set; }
+
 	public bool Fill { get; set; } // Stretch to Fill all vertical space
 	public bool EnableScrolling { get; set; }
 }

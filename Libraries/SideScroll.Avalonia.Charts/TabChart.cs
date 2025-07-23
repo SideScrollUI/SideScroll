@@ -51,14 +51,14 @@ public class PointerMovedEventArgs(double x) : EventArgs
 	public double X => x;
 }
 
-public interface ITabControlChart
+public interface ITabChart
 {
 	public void AddAnnotation(ChartAnnotation chartAnnotation);
 
 	public List<ChartAnnotation> Annotations { get; }
 }
 
-public abstract class TabControlChart<TSeries> : Border, ITabControlChart
+public abstract class TabChart<TSeries> : Border, ITabChart
 {
 	public Color TimeTrackerColor { get; set; } = SideScrollTheme.DataGridRowHighlight.Color;
 	public Color GridLineColor { get; set; } = SideScrollTheme.ChartGridLines.Color;
@@ -119,7 +119,7 @@ public abstract class TabControlChart<TSeries> : Border, ITabControlChart
 
 	public override string? ToString() => ChartView.ToString();
 
-	protected TabControlChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false)
+	protected TabChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false)
 	{
 		TabInstance = tabInstance;
 		ChartView = chartView;
@@ -161,7 +161,7 @@ public abstract class TabControlChart<TSeries> : Border, ITabControlChart
 		string? title = ChartView.Name;
 		if (title == null) return;
 
-		TitleTextBlock = new TabControlTextBlock
+		TitleTextBlock = new TabTextBlock
 		{
 			Text = ChartView.Name,
 			FontSize = 16,

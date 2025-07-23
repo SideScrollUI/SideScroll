@@ -4,7 +4,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TabControlLiveChart.xaml" />
+    <None Remove="TabLiveChart.xaml" />
     <None Remove="Themes\ControlThemes.xaml" />
   </ItemGroup>
 
@@ -12,7 +12,7 @@
     <AvaloniaResource Include="Themes\ControlThemes.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\TabControlLiveChart.xaml">
+    <AvaloniaResource Include="Themes\TabLiveChart.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
   </ItemGroup>

@@ -37,17 +37,17 @@ public class LiveChartCreator : IControlCreator
 		TabView.ControlCreators[typeof(ChartView)] = new LiveChartCreator();
 	}
 
-	public void AddControl(TabInstance tabInstance, TabControlSplitContainer container, object obj)
+	public void AddControl(TabInstance tabInstance, TabSplitGrid container, object obj)
 	{
 		var chartView = (ChartView)obj;
 
-		var tabChart = new TabControlLiveChart(tabInstance, chartView, true);
+		var tabChart = new TabLiveChart(tabInstance, chartView, true);
 
 		container.AddControl(tabChart, true, SeparatorType.Spacer);
 	}
 }
 
-public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
+public class TabLiveChart : TabChart<ISeries>, IDisposable
 {
 	public SKColor TimeTrackerSkColor { get; set; }
 	public SKColor GridLineSkColor { get; set; }
@@ -59,7 +59,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 	public CartesianChart Chart { get; private set; }
 
-	public TabControlChartLegend<ISeries> Legend { get; private set; }
+	public TabChartLegend<ISeries> Legend { get; private set; }
 
 	public Axis XAxis { get; set; }
 	public Axis YAxis { get; set; } // left/right?
@@ -81,7 +81,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	private LvcPointD? _startDataPoint;
 	private LvcPointD? _endDataPoint;
 
-	public TabControlLiveChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false) :
+	public TabLiveChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false) :
 		base(tabInstance, chartView, fillHeight)
 	{
 		TimeTrackerSkColor = TimeTrackerColor.ToSKColor();
@@ -113,9 +113,9 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		Chart.ChartPointPointerDown += Chart_ChartPointPointerDown;
 		Chart.PointerExited += Chart_PointerExited;
-		Chart.PointerPressed += TabControlLiveChart_PointerPressed;
-		Chart.PointerReleased += TabControlLiveChart_PointerReleased;
-		Chart.PointerMoved += TabControlLiveChart_PointerMoved;
+		Chart.PointerPressed += TabLiveChart_PointerPressed;
+		Chart.PointerReleased += TabLiveChart_PointerReleased;
+		Chart.PointerMoved += TabLiveChart_PointerMoved;
 		Chart.EffectiveViewportChanged += Chart_EffectiveViewportChanged;
 		Chart.SizeChanged += Chart_SizeChanged;
 
@@ -132,7 +132,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 
 		ContainerGrid.Children.Add(Chart);
 
-		Legend = new TabControlLiveChartLegend(this);
+		Legend = new TabLiveChartLegend(this);
 		if (ChartView.LegendPosition == ChartLegendPosition.Bottom)
 		{
 			Grid.SetRow(Legend, 2);
@@ -151,7 +151,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		ContainerGrid.Children.Add(Legend);
 		Legend.OnVisibleSeriesChanged += Legend_OnVisibleSeriesChanged;
 
-		_pointerMovedSubscriber = new(TabControlChart_OnPointerChanged);
+		_pointerMovedSubscriber = new(TabLiveChart_OnPointerChanged);
 		_pointerMovedEventSource.WeakEvent.Subscribe(_pointerMovedEventSource, _pointerMovedSubscriber);
 		if (ChartView.TimeWindow != null)
 		{
@@ -748,7 +748,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 	}
 
 	// Update mouse tracker
-	private void TabControlChart_OnPointerChanged(object? sender, PointerMovedEventArgs e)
+	private void TabLiveChart_OnPointerChanged(object? sender, PointerMovedEventArgs e)
 	{
 		if (_trackerSection == null) return;
 
@@ -759,7 +759,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		InvalidateChart();
 	}
 
-	private void TabControlLiveChart_PointerMoved(object? sender, PointerEventArgs e)
+	private void TabLiveChart_PointerMoved(object? sender, PointerEventArgs e)
 	{
 		try
 		{
@@ -811,7 +811,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		_pointClicked = point;
 	}
 
-	private void TabControlLiveChart_PointerPressed(object? sender, PointerPressedEventArgs e)
+	private void TabLiveChart_PointerPressed(object? sender, PointerPressedEventArgs e)
 	{
 		var point = e.GetPosition(Chart);
 		_startScreenPoint = point;
@@ -829,7 +829,7 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 		}
 	}
 
-	private void TabControlLiveChart_PointerReleased(object? sender, PointerReleasedEventArgs e)
+	private void TabLiveChart_PointerReleased(object? sender, PointerReleasedEventArgs e)
 	{
 		if (_selecting && _startDataPoint != null)
 		{
@@ -903,9 +903,9 @@ public class TabControlLiveChart : TabControlChart<ISeries>, IDisposable
 			Legend.OnVisibleSeriesChanged -= Legend_OnVisibleSeriesChanged;
 		}
 
-		Chart.PointerPressed -= TabControlLiveChart_PointerPressed;
-		Chart.PointerReleased -= TabControlLiveChart_PointerReleased;
-		Chart.PointerMoved -= TabControlLiveChart_PointerMoved;
+		Chart.PointerPressed -= TabLiveChart_PointerPressed;
+		Chart.PointerReleased -= TabLiveChart_PointerReleased;
+		Chart.PointerMoved -= TabLiveChart_PointerMoved;
 		Chart.ChartPointPointerDown -= Chart_ChartPointPointerDown;
 		Chart.PointerExited -= Chart_PointerExited;
 		if (_pointerMovedSubscriber != null)

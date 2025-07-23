@@ -12,7 +12,7 @@ using SideScroll.Utilities;
 
 namespace SideScroll.Avalonia.Controls.TextEditor;
 
-public class TabControlTextEditor : AvaloniaEdit.TextEditor
+public class TabTextEditor : AvaloniaEdit.TextEditor
 {
 	protected override Type StyleKeyOverride => typeof(AvaloniaEdit.TextEditor);
 
@@ -39,7 +39,7 @@ public enum TextType
 	Xml,
 }
 
-public class TabControlAvaloniaEdit : Border
+public class TabAvaloniaEdit : Border
 {
 	public const int MaxAutoLoadSize = 1_000_000;
 
@@ -51,7 +51,7 @@ public class TabControlAvaloniaEdit : Border
 
 	public TextType TextType { get; set; }
 
-	public TabControlAvaloniaEdit(TabInstance tabInstance)
+	public TabAvaloniaEdit(TabInstance tabInstance)
 	{
 		TabInstance = tabInstance;
 
@@ -64,7 +64,7 @@ public class TabControlAvaloniaEdit : Border
 			RowDefinitions = new RowDefinitions("*"),
 		};
 
-		TextEditor = new TabControlTextEditor
+		TextEditor = new TabTextEditor
 		{
 			IsReadOnly = true,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -86,14 +86,14 @@ public class TabControlAvaloniaEdit : Border
 
 		Child = containerGrid;
 
-		ActualThemeVariantChanged += TabControlAvaloniaEdit_ActualThemeVariantChanged;
+		ActualThemeVariantChanged += TabAvaloniaEdit_ActualThemeVariantChanged;
 
 		//textEditor.TextArea.IndentationStrategy = new AvaloniaEdit.Indentation.CSharp.CSharpIndentationStrategy();
 		/*ShowLineNumbers = true;
 		SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");*/
 	}
 
-	private void TabControlAvaloniaEdit_ActualThemeVariantChanged(object? sender, EventArgs e)
+	private void TabAvaloniaEdit_ActualThemeVariantChanged(object? sender, EventArgs e)
 	{
 		UpdateTheme();
 	}

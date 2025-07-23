@@ -16,7 +16,7 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls;
 
-public class TabControlTextBox : TextBox
+public class TabTextBox : TextBox
 {
 	protected override Type StyleKeyOverride => typeof(TextBox);
 
@@ -24,12 +24,12 @@ public class TabControlTextBox : TextBox
 
 	public override string? ToString() => Property?.ToString();
 
-	public TabControlTextBox()
+	public TabTextBox()
 	{
 		InitializeComponent();
 	}
 
-	public TabControlTextBox(ListProperty property)
+	public TabTextBox(ListProperty property)
 	{
 		Property = property;
 
@@ -104,7 +104,7 @@ public class TabControlTextBox : TextBox
 		}
 		else
 		{
-			MaxWidth = TabControlParams.ControlMaxWidth;
+			MaxWidth = TabObjectEditor.ControlMaxWidth;
 		}
 
 		MaxHeightAttribute? maxHeightAttribute = property.GetCustomAttribute<MaxHeightAttribute>();
@@ -114,7 +114,7 @@ public class TabControlTextBox : TextBox
 		}
 		else
 		{
-			MaxHeight = TabControlParams.ControlMaxHeight;
+			MaxHeight = TabObjectEditor.ControlMaxHeight;
 		}
 
 		if (property.GetCustomAttribute<RangeAttribute>() is RangeAttribute rangeAttribute)

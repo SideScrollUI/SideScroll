@@ -66,10 +66,10 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			Toolbar toolbar = new(this);
 			model.AddObject(toolbar);
 
-			var paramControl = new TabControlParams(tab.Object);
-			model.AddObject(paramControl, true, true);
+			var objectEditor = new TabObjectEditor(tab.Object);
+			model.AddObject(objectEditor, true, true);
 
-			foreach (var control in paramControl.ContainerGrid.Children)
+			foreach (var control in objectEditor.ContainerGrid.Children)
 			{
 				if (control is ColorPicker colorPicker)
 				{

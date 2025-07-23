@@ -28,7 +28,7 @@ public class TabChartUpdating : ITab
 
 		private readonly Random _random = new();
 
-		private TabControlLiveChart? _chart;
+		private TabLiveChart? _chart;
 
 		public override void LoadUI(Call call, TabModel model)
 		{
@@ -41,7 +41,7 @@ public class TabChartUpdating : ITab
 			model.AddObject(toolbar);
 
 			ChartView chartView = CreateView();
-			_chart = new TabControlLiveChart(this, chartView);
+			_chart = new TabLiveChart(this, chartView);
 			model.AddObject(_chart, true);
 		}
 

@@ -66,7 +66,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 	{
 		public AvaloniaThemeSettings ThemeSettings = tab.ThemeSettings.DeepClone()!;
 
-		private TabControlParams? _paramControl;
+		private TabObjectEditor? _themeEditor;
 
 		public ThemeHistory History { get; protected set; } = new();
 		private bool _lastHistoryUpdatable;
@@ -85,10 +85,10 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			_paramControl = new TabControlParams(ThemeSettings, false);
-			_paramControl.AddPropertyControl(nameof(ThemeSettings.Name));
-			_paramControl.AddPropertyControl(nameof(ThemeSettings.Variant));
-			model.AddObject(_paramControl);
+			_themeEditor = new TabObjectEditor(ThemeSettings, false);
+			_themeEditor.AddPropertyControl(nameof(ThemeSettings.Name));
+			_themeEditor.AddPropertyControl(nameof(ThemeSettings.Variant));
+			model.AddObject(_themeEditor);
 
 			var sectionTabs = ThemeSettings.GetSections()
 				.Select(obj => new TabAvaloniaThemeSection(this, obj))
@@ -186,12 +186,12 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 			var options = new JsonSerializerOptions { WriteIndented = true };
 			options.Converters.Add(new JsonColorConverter());
 			string json = JsonSerializer.Serialize(ThemeSettings, options);
-			ClipboardUtils.SetText(_paramControl, json);
+			ClipboardUtils.SetText(_themeEditor, json);
 		}
 
 		private void ImportFromClipboard(Call call)
 		{
-			string json = ClipboardUtils.GetText(_paramControl)!;
+			string json = ClipboardUtils.GetText(_themeEditor)!;
 
 			var options = new JsonSerializerOptions();
 			options.Converters.Add(new JsonColorConverter());

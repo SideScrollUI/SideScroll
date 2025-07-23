@@ -36,7 +36,7 @@ public class TabDateTimePicker : Grid
 
 	private readonly DateTimeValueConverter _dateTimeConverter;
 	private TabCalendarDatePicker _datePicker;
-	private TabControlTextBox _timeTextBox;
+	private TabTextBox _timeTextBox;
 
 	public TabDateTimePicker(ListProperty property)
 	{
@@ -77,7 +77,7 @@ public class TabDateTimePicker : Grid
 			CustomDateFormatString = "yyyy/M/d",
 			Watermark = "yyyy/M/d",
 			MinWidth = 105,
-			MaxWidth = TabControlParams.ControlMaxWidth,
+			MaxWidth = TabObjectEditor.ControlMaxWidth,
 			IsEnabled = Property.Editable,
 		};
 
@@ -93,13 +93,13 @@ public class TabDateTimePicker : Grid
 	[MemberNotNull(nameof(_timeTextBox))]
 	private void AddTimeTextBox()
 	{
-		_timeTextBox = new TabControlTextBox
+		_timeTextBox = new TabTextBox
 		{
 			IsReadOnly = !Property.Editable,
 			Watermark = "15:30:45",
 			Margin = new Thickness(10, 0, 0, 0),
 			MinWidth = 75,
-			MaxWidth = TabControlParams.ControlMaxWidth,
+			MaxWidth = TabObjectEditor.ControlMaxWidth,
 			Focusable = true, // already set?
 			[Grid.ColumnProperty] = 1,
 		};
@@ -114,9 +114,9 @@ public class TabDateTimePicker : Grid
 		Children.Add(_timeTextBox);
 	}
 
-	protected TabControlImageButton AddButton(string tooltip, IResourceView resourcView, int column, CallAction callAction)
+	protected TabImageButton AddButton(string tooltip, IResourceView resourcView, int column, CallAction callAction)
 	{
-		var button = new TabControlImageButton(tooltip, resourcView, null, 20)
+		var button = new TabImageButton(tooltip, resourcView, null, 20)
 		{
 			Padding = new(5),
 			HorizontalAlignment = HorizontalAlignment.Right,

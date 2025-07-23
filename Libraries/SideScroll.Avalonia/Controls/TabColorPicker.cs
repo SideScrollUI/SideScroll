@@ -10,7 +10,7 @@ using System.ComponentModel;
 
 namespace SideScroll.Avalonia.Controls;
 
-public class TabControlColorPicker : ColorPicker
+public class TabColorPicker : ColorPicker
 {
 	protected override Type StyleKeyOverride => typeof(ColorPicker);
 
@@ -19,12 +19,12 @@ public class TabControlColorPicker : ColorPicker
 	private static int? _prevSelectedIndex = 2;
 	private static ColorModel? _prevColorModel = ColorModel.Hsva;
 
-	public TabControlColorPicker()
+	public TabColorPicker()
 	{
 		Initialize();
 	}
 
-	public TabControlColorPicker(ListProperty property)
+	public TabColorPicker(ListProperty property)
 	{
 		Property = property;
 
@@ -37,7 +37,7 @@ public class TabControlColorPicker : ColorPicker
 		HexInputAlphaPosition = AlphaComponentPosition.Leading;
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		BorderThickness = new Thickness(1);
-		MaxWidth = TabControlParams.ControlMaxWidth;
+		MaxWidth = TabObjectEditor.ControlMaxWidth;
 
 		ToolTip.SetTip(this, Property?.Value?.ToString());
 
@@ -46,8 +46,8 @@ public class TabControlColorPicker : ColorPicker
 
 		AvaloniaUtils.AddContextMenu(this);
 
-		ColorChanged += TabControlColorPicker_ColorChanged;
-		PropertyChanged += TabControlColorPicker_PropertyChanged;
+		ColorChanged += TabColorPicker_ColorChanged;
+		PropertyChanged += TabColorPicker_PropertyChanged;
 	}
 
 	private void Bind(ListProperty property)
@@ -65,14 +65,14 @@ public class TabControlColorPicker : ColorPicker
 		}
 	}
 
-	private void TabControlColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
+	private void TabColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)
 	{
 		ToolTip.SetTip(this, e.NewColor.ToString());
 	}
 
 	// Use defaults from previous selections whenever opened
 	// This causes all ColorPickers to use the same selections instead of individual ones
-	private void TabControlColorPicker_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+	private void TabColorPicker_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
 	{
 		if (e.Property.Name == nameof(IsKeyboardFocusWithin))
 		{

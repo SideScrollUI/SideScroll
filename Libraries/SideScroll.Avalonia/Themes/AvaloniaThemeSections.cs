@@ -299,7 +299,7 @@ public class DataGridTheme : ThemeSection
 	public Color? Border { get; set; }
 }
 
-// Button, including TabControlTextButton
+// Button, including TabTextButton
 [Params]
 public class ButtonTheme : ThemeSection
 {

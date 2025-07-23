@@ -5,16 +5,16 @@ using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Avalonia.Controls;
 
-public class TabControlCheckBox : CheckBox
+public class TabCheckBox : CheckBox
 {
 	protected override Type StyleKeyOverride => typeof(CheckBox);
 
-	public TabControlCheckBox()
+	public TabCheckBox()
 	{
 		Initialize();
 	}
 
-	public TabControlCheckBox(ListProperty property)
+	public TabCheckBox(ListProperty property)
 	{
 		Initialize();
 		IsEnabled = property.Editable;
@@ -24,7 +24,7 @@ public class TabControlCheckBox : CheckBox
 	private void Initialize()
 	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
-		MaxWidth = TabControlParams.ControlMaxWidth;
+		MaxWidth = TabObjectEditor.ControlMaxWidth;
 		//Margin = new Thickness(2, 2);
 		//Padding = new Thickness(6, 3);
 	}

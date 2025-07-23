@@ -8,18 +8,18 @@ using SideScroll.Avalonia.Utilities;
 namespace SideScroll.Avalonia.Controls;
 
 // ReadOnly string control with wordwrap, scrolling, and clipboard copy
-// See TabControlAvaloniaEdit for an editable version
-public class TabControlTextArea : Border
+// See TabAvaloniaEdit for an editable version
+public class TabTextArea : Border
 {
 	public string Text { get; set; }
 
 	public TextBlock TextBlock { get; protected set; }
 
-	public TabControlTextArea(string? text = null)
+	public TabTextArea(string? text = null)
 	{
 		Text = text ?? "";
 
-		MaxWidth = TabControlParams.ControlMaxWidth;
+		MaxWidth = TabObjectEditor.ControlMaxWidth;
 
 		TextBlock = new TextBlock
 		{

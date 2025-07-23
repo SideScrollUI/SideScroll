@@ -18,7 +18,7 @@ public enum SeparatorType
 // Grid wrapper that allows multiple children and optional splitters in between each
 // Only updates controls that change
 // Vertical only right now
-public class TabControlSplitContainer : Grid
+public class TabSplitGrid : Grid
 {
 	public double MinDesiredWidth { get; set; } = 100;
 	public double MaxDesiredWidth { get; set; } = double.MaxValue;
@@ -37,7 +37,7 @@ public class TabControlSplitContainer : Grid
 		public GridLength GridLength { get; set; }
 	}
 
-	public TabControlSplitContainer()
+	public TabSplitGrid()
 	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Stretch; // not taking up maximum

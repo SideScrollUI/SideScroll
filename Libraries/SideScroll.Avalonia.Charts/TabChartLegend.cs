@@ -8,10 +8,10 @@ using SideScroll.Collections;
 
 namespace SideScroll.Avalonia.Charts;
 
-public abstract class TabControlChartLegend<TSeries> : Grid
+public abstract class TabChartLegend<TSeries> : Grid
 {
-	public TabControlChart<TSeries> TabControlChart { get; init; }
-	public ChartView ChartView => TabControlChart.ChartView;
+	public TabChart<TSeries> TabChart { get; init; }
+	public ChartView ChartView => TabChart.ChartView;
 
 	public List<TabChartLegendItem<TSeries>> LegendItems { get; protected set; } = [];
 	public Dictionary<string, TabChartLegendItem<TSeries>> IdxLegendItems { get; protected set; } = [];
@@ -24,9 +24,9 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 
 	public override string? ToString() => ChartView.ToString();
 
-	protected TabControlChartLegend(TabControlChart<TSeries> tabControlChart)
+	protected TabChartLegend(TabChart<TSeries> tabChart)
 	{
-		TabControlChart = tabControlChart;
+		TabChart = tabChart;
 
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Stretch;
@@ -52,7 +52,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 
 		if (ChartView.ShowOrder && ChartView.LegendPosition == ChartLegendPosition.Right)
 		{
-			TextBlockTotal = new TabControlTextBlock
+			TextBlockTotal = new TabTextBlock
 			{
 				Margin = new Thickness(2),
 				HorizontalAlignment = HorizontalAlignment.Right,
@@ -191,7 +191,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 	public void RefreshModel()
 	{
 		WrapPanel.Children.Clear();
-		foreach (ChartSeries<TSeries> chartSeries in TabControlChart.ChartSeries)
+		foreach (ChartSeries<TSeries> chartSeries in TabChart.ChartSeries)
 		{
 			string? title = chartSeries.ToString();
 			if (title == null) continue;
@@ -243,7 +243,7 @@ public abstract class TabControlChartLegend<TSeries> : Grid
 
 	public virtual void UpdateVisibleSeries()
 	{
-		if (TabControlChart == null) return;
+		if (TabChart == null) return;
 
 		foreach (TabChartLegendItem<TSeries> legendItem in LegendItems)
 		{

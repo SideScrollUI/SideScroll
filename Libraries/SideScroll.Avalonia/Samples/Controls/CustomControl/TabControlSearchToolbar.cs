@@ -22,7 +22,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 
 	public ToolbarButton ButtonCopyClipBoard { get; protected set; }
 
-	public TabControlSearch Search { get; protected set; }
+	public TabSearch Search { get; protected set; }
 
 	public TextBox TextBoxLimit { get; protected set; }
 
@@ -47,7 +47,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 		ButtonCopyClipBoard = AddButton("Copy to Clipboard", ImageColorView.CreateAlternate(Icons.Svg.Copy));
 
 		AddSeparator();
-		Search = new TabControlSearch
+		Search = new TabSearch
 		{
 			VerticalAlignment = VerticalAlignment.Center,
 			Margin = new Thickness(6, 0),

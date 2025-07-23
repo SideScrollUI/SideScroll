@@ -5,11 +5,11 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Avalonia.Controls;
 
-public class TabControlTextButton : Button
+public class TabTextButton : Button
 {
 	protected override Type StyleKeyOverride => typeof(Button);
 
-	public TabControlTextButton(string? label = null, AccentType accentType = default)
+	public TabTextButton(string? label = null, AccentType accentType = default)
 	{
 		Content = label;
 		if (accentType == AccentType.Warning)

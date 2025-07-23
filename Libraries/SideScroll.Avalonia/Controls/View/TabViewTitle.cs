@@ -89,7 +89,7 @@ public class TabViewTitle : Border, IDisposable
 	{
 		if (!TabInstance.IsLinkable) return;
 
-		var linkButton = new TabControlButton
+		var linkButton = new TabButton
 		{
 			VerticalAlignment = VerticalAlignment.Stretch,
 			HorizontalAlignment = HorizontalAlignment.Left,

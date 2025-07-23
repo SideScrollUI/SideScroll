@@ -13,7 +13,7 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Avalonia.Controls;
 
-public class TabControlImageButton : Button, IDisposable
+public class TabImageButton : Button, IDisposable
 {
 	public string? Label { get; set; }
 	public string? Tooltip { get; set; }
@@ -62,7 +62,7 @@ public class TabControlImageButton : Button, IDisposable
 
 	public override string? ToString() => Tooltip;
 
-	public TabControlImageButton(string tooltip, IResourceView imageResource, string? label = null, double? iconSize = null)
+	public TabImageButton(string tooltip, IResourceView imageResource, string? label = null, double? iconSize = null)
 	{
 		Tooltip = tooltip;
 		ImageResource = imageResource;

@@ -5,10 +5,10 @@ using LiveChartsCore.SkiaSharpView.Painting;
 
 namespace SideScroll.Avalonia.Charts.LiveCharts;
 
-public class TabLiveChartLegendItem(TabControlLiveChartLegend legend, ChartSeries<ISeries> chartSeries)
+public class TabLiveChartLegendItem(TabLiveChartLegend legend, ChartSeries<ISeries> chartSeries)
 	: TabChartLegendItem<ISeries>(legend, chartSeries)
 {
-	public TabControlLiveChartLegend LiveChartLegend => legend;
+	public TabLiveChartLegend LiveChartLegend => legend;
 
 	public override void UpdateColor(Color color)
 	{

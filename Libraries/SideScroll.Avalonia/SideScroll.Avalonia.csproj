@@ -35,15 +35,15 @@
   <ItemGroup>
     <EmbeddedResource Remove="Themes\Controls\ControlThemes.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabButton.xaml" />
-    <EmbeddedResource Remove="Themes\Controls\TabControlImageButton.xaml" />
-    <EmbeddedResource Remove="Themes\Controls\TabControlParams.xaml" />
-    <EmbeddedResource Remove="Themes\Controls\TabControlSplitContainer.xaml" />
-    <EmbeddedResource Remove="Themes\Controls\TabControlTextArea.xaml" />
-    <EmbeddedResource Remove="Themes\Controls\TabControlTextBlock.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlToolbar.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabHeader.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabImageButton.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabObjectEditor.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabSeparator.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabSplitGrid.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabSplitter.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabTextArea.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\TabTextBlock.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabView.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabViewer.xaml" />
     <EmbeddedResource Remove="Themes\Controls\ToolbarButton.xaml" />
@@ -60,16 +60,10 @@
     <None Remove="DefaultTheme.xaml" />
     <None Remove="StyleResources.xaml" />
     <None Remove="Themes\Controls\ControlThemes.xaml" />
-    <None Remove="Themes\Controls\TabControlAvaloniaEdit.xaml" />
-    <None Remove="Themes\Controls\TabControlImageButton.xaml" />
-    <None Remove="Themes\Controls\TabControlParams.xaml" />
-    <None Remove="Themes\Controls\TabControlTextArea.xaml" />
-    <None Remove="Themes\Controls\TabControlTextBlock.xaml" />
     <None Remove="Themes\Controls\TabControlToolbar.xaml" />
     <None Remove="Themes\Controls\TabHeader.xaml" />
     <None Remove="Themes\Controls\TabSeparator.xaml" />
     <None Remove="Themes\Controls\TabButton.xaml" />
-    <None Remove="Themes\Controls\TabControlSplitContainer.xaml" />
     <None Remove="Themes\Controls\TabSplitter.xaml" />
     <None Remove="Themes\Controls\TabView.xaml" />
     <None Remove="Themes\Controls\TabViewer.xaml" />
@@ -85,16 +79,16 @@
     <AvaloniaResource Include="Themes\Controls\TabButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Controls\TabControlAvaloniaEdit.xaml">
+    <AvaloniaResource Include="Themes\Controls\TabAvaloniaEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Controls\TabControlTextArea.xaml">
+    <AvaloniaResource Include="Themes\Controls\TabTextArea.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Controls\TabControlTextBlock.xaml">
+    <AvaloniaResource Include="Themes\Controls\TabTextBlock.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Controls\TabControlParams.xaml">
+    <AvaloniaResource Include="Themes\Controls\TabObjectEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabControlToolbar.xaml">
@@ -115,13 +109,13 @@
     <AvaloniaResource Include="Themes\Controls\TabSeparator.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Controls\TabControlSplitContainer.xaml">
+    <AvaloniaResource Include="Themes\Controls\TabSplitGrid.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\ControlThemes.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Controls\TabControlImageButton.xaml">
+    <AvaloniaResource Include="Themes\Controls\TabImageButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\ToolbarButton.xaml">
@@ -153,7 +147,7 @@
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEditVersion)" />
     <PackageReference Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
-    <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="11.3.0.1" />
+    <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="11.3.0.2" />
   </ItemGroup>
 
   <ItemGroup>

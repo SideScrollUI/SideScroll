@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls;
 
-public class TabControlComboBox : ComboBox
+public class TabComboBox : ComboBox
 {
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
@@ -16,12 +16,12 @@ public class TabControlComboBox : ComboBox
 
 	public override string? ToString() => SelectedItem?.ToString();
 
-	public TabControlComboBox()
+	public TabComboBox()
 	{
 		InitializeComponent();
 	}
 
-	public TabControlComboBox(IEnumerable items, object? selectedItem = null)
+	public TabComboBox(IEnumerable items, object? selectedItem = null)
 	{
 		InitializeComponent();
 
@@ -29,7 +29,7 @@ public class TabControlComboBox : ComboBox
 		SelectedItem = selectedItem;
 	}
 
-	public TabControlComboBox(ListProperty property, string? listPropertyName)
+	public TabComboBox(ListProperty property, string? listPropertyName)
 	{
 		Property = property;
 		IsEnabled = property.Editable;
@@ -56,7 +56,7 @@ public class TabControlComboBox : ComboBox
 
 	private void InitializeComponent()
 	{
-		MaxWidth = TabControlParams.ControlMaxWidth;
+		MaxWidth = TabObjectEditor.ControlMaxWidth;
 
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 

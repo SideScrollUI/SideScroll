@@ -4,6 +4,8 @@
 
   <ControlTheme x:Key="{x:Type toolbar:TabControlToolbar}" TargetType="toolbar:TabControlToolbar">
     <Setter Property="Background" Value="{DynamicResource ToolbarBackgroundBrush}"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="VerticalAlignment" Value="Top"/>
   </ControlTheme>
 
   <ControlTheme x:Key="{x:Type toolbar:ToolbarSeparator}" TargetType="toolbar:ToolbarSeparator">

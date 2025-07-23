@@ -315,7 +315,7 @@ public class TabViewer : Grid
 			[ColumnProperty] = 1,
 		};
 
-		TabControlButton buttonScrollRight = new()
+		TabButton buttonScrollRight = new()
 		{
 			Content = ">",
 			[ToolTip.ShowDelayProperty] = 5,
@@ -325,7 +325,7 @@ public class TabViewer : Grid
 		buttonScrollRight.Click += ButtonExpand_Click;
 		grid.Children.Add(buttonScrollRight);
 
-		TabControlButton buttonScrollLeft = new()
+		TabButton buttonScrollLeft = new()
 		{
 			Content = "<",
 			[ToolTip.TipProperty] = "Scroll Left ( <- )",
