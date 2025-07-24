@@ -1,8 +1,8 @@
 using System.IO.Compression;
 
-namespace SideScroll;
+namespace SideScroll.Utilities;
 
-public class Compression
+public class CompressionUtils
 {
 	public static void Compress(Call call, FileInfo fileToCompress)
 	{

@@ -115,7 +115,7 @@ public class TabView : Grid, IDisposable
 		ActualThemeVariantChanged += TabView_ActualThemeVariantChanged;
 	}
 
-	private void Instance_OnCopyToClipboard(object? sender, TabInstance.EventCopyToClipboard e)
+	private void Instance_OnCopyToClipboard(object? sender, TabInstance.CopyToClipboardEventArgs e)
 	{
 		ClipboardUtils.SetText(this, e.Text);
 	}
@@ -1063,7 +1063,7 @@ public class TabView : Grid, IDisposable
 		LoadBookmark();
 	}
 
-	private void TabInstance_OnSelectItems(object? sender, TabInstance.EventSelectItems e)
+	private void TabInstance_OnSelectItems(object? sender, TabInstance.ItemsSelectedEventArgs e)
 	{
 		if (TabDatas.Count > 0)
 		{

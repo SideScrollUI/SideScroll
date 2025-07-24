@@ -25,10 +25,10 @@ public class LogWriterText : IDisposable
 
 		_context = SynchronizationContext.Current ?? new SynchronizationContext();
 
-		log.OnMessage += LogEntry_OnMessage;
+		log.OnMessage += Log_OnMessage;
 	}
 
-	private void LogEntry_OnMessage(object? sender, EventLogMessage e)
+	private void Log_OnMessage(object? sender, LogMessageEventArgs e)
 	{
 		string indentation = new('\t', e.Entries.Count);
 

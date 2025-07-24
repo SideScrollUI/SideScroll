@@ -4,8 +4,7 @@ using SideScroll.Serialize;
 
 namespace SideScroll.Tabs.Bookmarks;
 
-// Display Class
-public class TabBookmarkItem(LinkedBookmark linkedBookmark, Project project) : ITab, IInnerTab
+public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab, IInnerTab
 {
 	//[ButtonColumn("-")]
 	public event EventHandler<EventArgs>? OnDelete;

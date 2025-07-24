@@ -107,19 +107,19 @@ public class TabInstance : IDisposable
 	public SynchronizationContext UiContext { get; set; }
 	public TabBookmark? FilterBookmarkNode { get; set; }
 
-	public class EventSelectItem(object obj) : EventArgs
+	public class ItemSelectedEventArgs(object obj) : EventArgs
 	{
 		public object Object => obj;
 
 		public override string? ToString() => Object?.ToString();
 	}
 
-	public class EventSelectItems(IList list) : EventArgs
+	public class ItemsSelectedEventArgs(IList list) : EventArgs
 	{
 		public IList List => list;
 	}
 
-	public class EventCopyToClipboard(string text) : EventArgs
+	public class CopyToClipboardEventArgs(string text) : EventArgs
 	{
 		public string Text => text;
 	}
@@ -129,12 +129,12 @@ public class TabInstance : IDisposable
 	public event EventHandler<EventArgs>? OnModelChanged;
 	public event EventHandler<EventArgs>? OnLoadBookmark;
 	public event EventHandler<EventArgs>? OnClearSelection;
-	public event EventHandler<EventSelectItems>? OnSelectItems;
-	public event EventHandler<EventSelectItem>? OnSelectionChanged;
+	public event EventHandler<ItemsSelectedEventArgs>? OnSelectItems;
+	public event EventHandler<ItemSelectedEventArgs>? OnSelectionChanged;
 	public event EventHandler<EventArgs>? OnModified;
 	public event EventHandler<EventArgs>? OnResize;
 	public event EventHandler<EventArgs>? OnValidate;
-	public event EventHandler<EventCopyToClipboard>? OnCopyToClipboard;
+	public event EventHandler<CopyToClipboardEventArgs>? OnCopyToClipboard;
 
 	public Action? DefaultAction { get; set; } // Default action when Enter pressed
 
@@ -587,7 +587,7 @@ public class TabInstance : IDisposable
 	{
 		if (OnSelectItems != null)
 		{
-			UiContext.Send(_ => OnSelectItems(this, new EventSelectItems(items)), null);
+			UiContext.Send(_ => OnSelectItems(this, new ItemsSelectedEventArgs(items)), null);
 		}
 		else
 		{
@@ -969,7 +969,7 @@ public class TabInstance : IDisposable
 	{
 		if (SelectedItems?.Count > 0)
 		{
-			var eSelectItem = new EventSelectItem(SelectedItems[0]!);
+			var eSelectItem = new ItemSelectedEventArgs(SelectedItems[0]!);
 			OnSelectionChanged?.Invoke(sender, eSelectItem);
 		}
 	}
@@ -981,6 +981,6 @@ public class TabInstance : IDisposable
 
 	public void CopyToClipboard(string text)
 	{
-		OnCopyToClipboard?.Invoke(this, new EventCopyToClipboard(text));
+		OnCopyToClipboard?.Invoke(this, new CopyToClipboardEventArgs(text));
 	}
 }

@@ -1,24 +1,9 @@
 <Project>
   <PropertyGroup>
-    <Version>0.9.9</Version>
+    <Version>0.9.10</Version>
     <PackageReleaseNotes>
-    - Added DataViewCollection for displaying items without a view
-    - Improved WordSpacing for lowercase hex strings so it doesn't split them
-    - Added Chart DateTimeFormat for showing only years
-    - Split ProjectPath into an AppDataPath and LocalDataPath, using the DotNet SpecialFolder values
-    - Tab View Buttons can now specify a Flyout to show when clicking a button
-    - Added Data Tab to Settings to show data and allow deleting local data
-    - Enabled File Viewer to delete directories with a confirmation
-    - Updated serializer sharing permissions to block simultaneous writes
-    - Added more serializer size validation checks for type repo object counts and the lists within
-    - Added serializer support for ulong, sbyte, short, ushort, and decimal
-    - Switched Project Temp DataRepo to a Cache DataRepo to better align with it's usage
-    - Changed Data Repo hash paths to use Base32 encoding to shorten paths
-    - Added an extra link hash layer directory to even better isolate links (was previously removed due to legacy Windows path limits)
-    - Added Cache cleanup background thread and user setting for cache duration (defaults to 30 days)
-    - Added viewing and deleting of all data repo versions in the settings
-    - Refactored a DataSettings class out of the UserSettings class for data storage settings
-    - Updated serializer format to version 2, switching the version to a ushort and moving the file size to before the name
+    - Updated TabControl names to remove Control to match existing controls
+    - Fixed suffix for several EventArgs to match existing patterns
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.2</AvaloniaVersion>

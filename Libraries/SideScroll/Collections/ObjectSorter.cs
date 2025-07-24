@@ -1,7 +1,7 @@
 using System.Collections;
 using System.ComponentModel;
 
-namespace SideScroll;
+namespace SideScroll.Collections;
 
 public class CustomComparer : IComparer
 {
@@ -49,7 +49,7 @@ public class CustomComparer : IComparer
 	}
 }
 
-public class Sorter : CustomComparer
+public class ObjectSorter : CustomComparer
 {
 	public ListSortDescriptionCollection? Sorts { get; set; }
 	public ListSortDirection SortDirection { get; set; }
@@ -67,7 +67,7 @@ public class Sorter : CustomComparer
 
 		if (SortDirection == ListSortDirection.Descending)
 		{
-			comparison = -comparison;
+			return -comparison;
 		}
 
 		return comparison;

@@ -17,7 +17,7 @@ public class Log : LogEntry
 	//[HiddenColumn]
 	//public override string Summary => SummaryText;
 
-	public event EventHandler<EventLogMessage>? OnMessage;
+	public event EventHandler<LogMessageEventArgs>? OnMessage;
 
 	public Log()
 	{
@@ -221,7 +221,7 @@ public class Log : LogEntry
 			UpdateStats(logEntry);
 		}
 
-		CreateEventLogMessage(logEntry);
+		NotifyLogMessage(logEntry);
 
 		// Update if there can be child entries
 		if (logEntry is Log log)
@@ -238,26 +238,26 @@ public class Log : LogEntry
 		if (logEntry.Level > Level)
 		{
 			Level = logEntry.Level;
-			CreateEventPropertyChanged(nameof(Level));
+			NotifyPropertyChanged(nameof(Level));
 		}
 
-		CreateEventPropertyChanged(nameof(Entries));
+		NotifyPropertyChanged(nameof(Entries));
 	}
 
-	private void CreateEventLogMessage(LogEntry logEntry)
+	private void NotifyLogMessage(LogEntry logEntry)
 	{
-		EventLogMessage eventLogMessage = new()
+		LogMessageEventArgs eventArgs = new()
 		{
 			Entries = [logEntry, this],
 		};
-		OnMessage?.Invoke(this, eventLogMessage);
+		OnMessage?.Invoke(this, eventArgs);
 	}
 
-	private void ChildLog_OnMessage(object? sender, EventLogMessage eventLogMessage)
+	private void ChildLog_OnMessage(object? sender, LogMessageEventArgs e)
 	{
-		UpdateStats(eventLogMessage.Entries[0]);
-		eventLogMessage.Entries.Add(this);
-		OnMessage?.Invoke(this, eventLogMessage);
+		UpdateStats(e.Entries[0]);
+		e.Entries.Add(this);
+		OnMessage?.Invoke(this, e);
 	}
 
 	public void SetLogLevel(LogLevel logLevel)

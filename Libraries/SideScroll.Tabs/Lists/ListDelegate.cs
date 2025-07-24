@@ -27,8 +27,8 @@ public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 				{
 					if (!_valueCached)
 					{
-						_valueCached = true;
 						_valueObject = GetValue();
+						_valueCached = true;
 					}
 					return _valueObject;
 				}

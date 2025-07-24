@@ -35,7 +35,7 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection lin
 			return new Instance(this);
 		}
 
-		return TabBookmarkItem.Create(LinkedBookmark, linkCollection.Project, this);
+		return TabLinkView.Create(LinkedBookmark, linkCollection.Project, this);
 	}
 
 	public class Toolbar : TabToolbar
@@ -55,7 +55,7 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection lin
 
 			model.Items = new List<ListItem>()
 			{
-				new("Link", new TabBookmarkItem(tab.LinkedBookmark, Project)),
+				new("Link", new TabLinkView(tab.LinkedBookmark, Project)),
 				new("Data", tab.LinkedBookmark),
 				new("Json", json),
 			};
