@@ -4,6 +4,7 @@
     <PackageReleaseNotes>
     - Updated TabControl names to remove Control to match existing controls
     - Fixed suffix for several EventArgs to match existing patterns
+    - Added DataPageView HasNext and HasPrevious DataBinding
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.2</AvaloniaVersion>
