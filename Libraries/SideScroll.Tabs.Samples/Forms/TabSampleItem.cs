@@ -1,12 +1,12 @@
 using SideScroll.Attributes;
 using SideScroll.Serialize.DataRepos;
 
-namespace SideScroll.Tabs.Samples.Params;
+namespace SideScroll.Tabs.Samples.Forms;
 
-public class TabSampleParamItem : ITab, IDataView
+public class TabSampleItem : ITab, IDataView
 {
 	[DataValue]
-	public SampleParamItem? TestItem;
+	public SampleItem? TestItem;
 
 	//[ButtonColumn("-")]
 	public event EventHandler<EventArgs>? OnDelete;
@@ -22,23 +22,23 @@ public class TabSampleParamItem : ITab, IDataView
 
 	public int? Amount => TestItem?.Amount;
 
-	public TabSampleParamItem() { }
+	public TabSampleItem() { }
 
-	public TabSampleParamItem(SampleParamItem testItem)
+	public TabSampleItem(SampleItem testItem)
 	{
 		TestItem = testItem;
 	}
 
 	public void Load(object sender, object obj, object?[] tabParams)
 	{
-		TestItem = (SampleParamItem)obj;
+		TestItem = (SampleItem)obj;
 	}
 
 	public override string? ToString() => Name;
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance(TabSampleParamItem tab) : TabInstance
+	public class Instance(TabSampleItem tab) : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{

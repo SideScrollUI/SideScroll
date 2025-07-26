@@ -20,4 +20,5 @@ public class TabSampleDataGrid
 	public static TabSampleFilter Filter => new();
 	public static TabSampleGridUpdating Updating => new();
 	public static TabSampleHeaders Headers => new();
+	// public static TabSampleGridEditing Editing => new();
 }

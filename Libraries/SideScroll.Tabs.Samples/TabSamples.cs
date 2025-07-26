@@ -6,7 +6,7 @@ using SideScroll.Tabs.Samples.DataRepo;
 using SideScroll.Tabs.Samples.Demo;
 using SideScroll.Tabs.Samples.Loading;
 using SideScroll.Tabs.Samples.Objects;
-using SideScroll.Tabs.Samples.Params;
+using SideScroll.Tabs.Samples.Forms;
 using SideScroll.Tabs.Tools;
 
 namespace SideScroll.Tabs.Samples;
@@ -18,7 +18,7 @@ public class TabSamples
 
 	public static TabSampleObjects Objects => new();
 	public static TabSampleDataGrid DataGrid => new();
-	public static TabSampleParams Params => new();
+	public static TabSampleForms Forms => new();
 	public static TabSampleToolbar Toolbar => new();
 	public static TabSampleActions Actions => new();
 	public static TabSampleLoading Loading => new();

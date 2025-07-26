@@ -478,13 +478,9 @@ public class TabView : Grid, IDisposable
 		{
 			AddControlString(text);
 		}
-		else
+		else if (tabObject.Editable)
 		{
-			ParamsAttribute? paramsAttribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
-			if (paramsAttribute != null)
-			{
-				AddControl(new TabObjectEditor(obj), gridLength, tabObject.EnableScrolling);
-			}
+			AddControl(new TabForm(obj), gridLength, tabObject.EnableScrolling);
 		}
 	}
 

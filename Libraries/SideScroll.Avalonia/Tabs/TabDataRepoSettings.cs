@@ -24,8 +24,8 @@ public class TabDataRepoSettings(UserSettings userSettings) : ITab
 		{
 			model.AutoSelectSaved = AutoSelectType.NonEmpty;
 
-			var objectEditor = new TabObjectEditor(DataSettings);
-			model.AddObject(objectEditor);
+			var tabForm = new TabForm(DataSettings);
+			model.AddObject(tabForm);
 
 			List<ListItem> currentVersion =
 			[

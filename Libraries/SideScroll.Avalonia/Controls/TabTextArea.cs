@@ -19,7 +19,7 @@ public class TabTextArea : Border
 	{
 		Text = text ?? "";
 
-		MaxWidth = TabObjectEditor.ControlMaxWidth;
+		MaxWidth = TabForm.ControlMaxWidth;
 
 		TextBlock = new TextBlock
 		{

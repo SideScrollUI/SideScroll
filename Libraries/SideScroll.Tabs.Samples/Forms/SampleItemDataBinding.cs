@@ -3,10 +3,9 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 
-namespace SideScroll.Tabs.Samples.Params;
+namespace SideScroll.Tabs.Samples.Forms;
 
-[Params]
-public class SampleParamItemDataBinding(SynchronizationContext context) : INotifyPropertyChanged
+public class SampleItemDataBinding(SynchronizationContext context) : INotifyPropertyChanged
 {
 	[DataKey, Required, StringLength(30)]
 	public string? Value

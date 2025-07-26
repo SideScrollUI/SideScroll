@@ -575,7 +575,7 @@ public class Serializer : IDisposable
 			return obj;
 		}
 
-		if (typeRepo.TypeSchema.IsStatic)
+		if (typeRepo.TypeSchema.IsCloneReference)
 		{
 			Clones[obj] = obj; // optional
 			return obj;

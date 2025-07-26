@@ -2,9 +2,9 @@ using SideScroll.Collections;
 using SideScroll.Serialize;
 using SideScroll.Tasks;
 
-namespace SideScroll.Tabs.Samples.Params;
+namespace SideScroll.Tabs.Samples.Forms;
 
-public class TabSampleParamsTasks : ITab
+public class TabSampleFormTasks : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -12,8 +12,8 @@ public class TabSampleParamsTasks : ITab
 	{
 		private const string DataKey = "Params";
 
-		private readonly ItemCollectionUI<ParamTestResult> _items = [];
-		private SampleParamItem? _paramTestItem;
+		private readonly ItemCollectionUI<SampleResult> _items = [];
+		private SampleItem? _sampleItem;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -26,24 +26,24 @@ public class TabSampleParamsTasks : ITab
 				new TaskDelegateAsync("Task with Sub Tasks", TaskCountAsync, true),
 			};
 
-			_paramTestItem = LoadData<SampleParamItem>(DataKey);
-			if (_paramTestItem!.DateTime.Ticks == 0)
+			_sampleItem = LoadData<SampleItem>(DataKey);
+			if (_sampleItem!.DateTime.Ticks == 0)
 			{
-				_paramTestItem.DateTime = DateTime.Now; // in case the serializer loses it
+				_sampleItem.DateTime = DateTime.Now; // in case the serializer loses it
 			}
-			model.AddObject(_paramTestItem);
+			model.AddObject(_sampleItem, editable: true);
 		}
 
 		private void Add(Call call)
 		{
 			Validate();
 
-			SaveData(DataKey, _paramTestItem!);
+			SaveData(DataKey, _sampleItem!);
 
-			SampleParamItem clone = _paramTestItem.DeepClone(call)!;
-			ParamTestResult result = new()
+			SampleItem clone = _sampleItem.DeepClone(call)!;
+			SampleResult result = new()
 			{
-				Parameters = clone,
+				SampleItem = clone,
 			};
 			_items.Add(result);
 		}
@@ -73,11 +73,11 @@ public class TabSampleParamsTasks : ITab
 		}
 	}
 
-	public class ParamTestResult
+	public class SampleResult
 	{
-		public SampleParamItem? Parameters;
-		public string? Name => Parameters?.Name;
-		public DateTime? DateTime => Parameters?.DateTime;
+		public SampleItem? SampleItem;
+		public string? Name => SampleItem?.Name;
+		public DateTime? DateTime => SampleItem?.DateTime;
 
 		public override string? ToString() => Name;
 	}

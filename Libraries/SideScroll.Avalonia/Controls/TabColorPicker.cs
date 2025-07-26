@@ -37,7 +37,7 @@ public class TabColorPicker : ColorPicker
 		HexInputAlphaPosition = AlphaComponentPosition.Leading;
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		BorderThickness = new Thickness(1);
-		MaxWidth = TabObjectEditor.ControlMaxWidth;
+		MaxWidth = TabForm.ControlMaxWidth;
 
 		ToolTip.SetTip(this, Property?.Value?.ToString());
 

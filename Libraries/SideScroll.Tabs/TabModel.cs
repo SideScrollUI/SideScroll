@@ -17,6 +17,7 @@ public class TabObject
 
 	public bool Fill { get; set; } // Stretch to Fill all vertical space
 	public bool EnableScrolling { get; set; }
+	public bool Editable { get; set; }
 }
 
 public enum AutoSelectType
@@ -105,7 +106,7 @@ public class TabModel
 		return tabModel;
 	}
 
-	public TabObject AddObject(object obj, bool fill = false, bool enableScrolling = false)
+	public TabObject AddObject(object obj, bool fill = false, bool enableScrolling = false, bool editable = false)
 	{
 		obj ??= "(null)";
 
@@ -120,6 +121,7 @@ public class TabModel
 			Object = obj,
 			Fill = fill,
 			EnableScrolling = enableScrolling,
+			Editable = editable,
 		};
 
 		Objects.Add(tabObject);

@@ -20,8 +20,8 @@ public class TabSampleLog : ITab
 
 			model.Items = new List<ListItem>
 			{
-				new("Sample Call", _sampleCall),
 				new("Sample Call Log", _sampleCall.Log),
+				new("Sample Call", _sampleCall),
 				new("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),
 			};
 
@@ -43,7 +43,7 @@ public class TabSampleLog : ITab
 			for (int i = 0; i < count; i++)
 			{
 				_counter++;
-				_sampleCall!.Log.Add("New Log entry", new Tag("name", "value"));
+				_sampleCall!.Log.Add("New Log entry", new Tag("Id", _counter));
 			}
 		}
 
@@ -76,7 +76,7 @@ public class TabSampleLog : ITab
 
 		private void AddNextEntry(Call call, Log logChild)
 		{
-			var tag = new Tag("counter", _counter);
+			var tag = new Tag("Counter", _counter);
 			call.Log.Add("New Call Log Entry", tag);
 			logChild.Add("New Child Log Entry", tag);
 			_sampleCall!.Log.Add("New Sample Log Entry", tag);

@@ -1,8 +1,8 @@
 namespace SideScroll.Attributes;
 
-// When Cloning an object, anything marked with [Static] won't be deep copied
+// When Cloning an object, anything marked with [CloneReference] won't be deep copied
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
-public class StaticAttribute : Attribute;
+public class CloneReferenceAttribute : Attribute;
 
 // Override serializer defaults (constructor only check for now)
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]

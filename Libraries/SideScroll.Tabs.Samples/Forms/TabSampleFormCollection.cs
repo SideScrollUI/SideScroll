@@ -4,9 +4,9 @@ using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Toolbar;
 
-namespace SideScroll.Tabs.Samples.Params;
+namespace SideScroll.Tabs.Samples.Forms;
 
-public class TabSampleParamsCollection : ITab
+public class TabSampleFormCollection : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -20,16 +20,16 @@ public class TabSampleParamsCollection : ITab
 	{
 		private const string DataKey = "Params";
 
-		private ItemCollection<SampleParamItem> _items = [];
-		private SampleParamItem? _paramTestItem;
-		private DataRepoInstance<SampleParamItem>? _dataRepoParams;
+		private ItemCollection<SampleItem> _items = [];
+		private SampleItem? _sampleItem;
+		private DataRepoInstance<SampleItem>? _dataRepoParams;
 
 		public override void Load(Call call, TabModel model)
 		{
 			LoadSavedItems(call, model);
 
-			_paramTestItem = LoadData<SampleParamItem>(DataKey);
-			model.AddObject(_paramTestItem!);
+			_sampleItem = LoadData<SampleItem>(DataKey);
+			model.AddObject(_sampleItem!, editable: true);
 
 			var toolbar = new Toolbar();
 			toolbar.ButtonNew.Action = New;
@@ -39,17 +39,17 @@ public class TabSampleParamsCollection : ITab
 
 		private void LoadSavedItems(Call call, TabModel model)
 		{
-			_dataRepoParams = Data.App.Open<SampleParamItem>("CollectionTest");
+			_dataRepoParams = Data.App.Open<SampleItem>("CollectionTest");
 			DataRepoInstance = _dataRepoParams;
 
 			var sortedValues = _dataRepoParams.LoadAll(call).SortedValues;
-			_items = new ItemCollection<SampleParamItem>(sortedValues);
+			_items = new ItemCollection<SampleItem>(sortedValues);
 			model.Items = _items;
 		}
 
 		private void New(Call call)
 		{
-			_paramTestItem = new();
+			_sampleItem = new();
 			Reload();
 		}
 
@@ -57,7 +57,7 @@ public class TabSampleParamsCollection : ITab
 		{
 			Validate();
 
-			SampleParamItem clone = _paramTestItem.DeepClone(call)!;
+			SampleItem clone = _sampleItem.DeepClone(call)!;
 			_dataRepoParams!.Save(call, clone.ToString(), clone);
 			//SaveData(DataKey, clone);
 			_items.Add(clone);

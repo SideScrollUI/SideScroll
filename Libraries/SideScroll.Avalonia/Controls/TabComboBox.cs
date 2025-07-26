@@ -56,7 +56,7 @@ public class TabComboBox : ComboBox
 
 	private void InitializeComponent()
 	{
-		MaxWidth = TabObjectEditor.ControlMaxWidth;
+		MaxWidth = TabForm.ControlMaxWidth;
 
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 

@@ -2,7 +2,7 @@ using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Tabs.Samples.Loading;
 
-public class TabSampleSlowAsyncItem : ITab
+public class TabSampleLoadAsyncItemDelegate : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -21,7 +21,7 @@ public class TabSampleSlowAsyncItem : ITab
 		// Need a new CollectionView that can preload and cache?
 		private static async Task<object?> SlowItemAsync(Call call)
 		{
-			await Task.Delay(1000);
+			await Task.Delay(2000);
 			return "finished";
 		}
 	}

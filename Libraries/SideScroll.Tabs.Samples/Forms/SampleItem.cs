@@ -4,10 +4,10 @@ using SideScroll.Time;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace SideScroll.Tabs.Samples.Params;
+namespace SideScroll.Tabs.Samples.Forms;
 
-[Params, PublicData]
-public class SampleParamItem
+[PublicData]
+public class SampleItem
 {
 	[DataKey, Required, StringLength(30)]
 	public string Name { get; set; } = "Test";
@@ -45,7 +45,7 @@ public class SampleParamItem
 	[BindList(nameof(TimeZones))]
 	public TimeZoneView TimeZone { get; set; } = TimeZoneView.Current;
 
-	public SampleParamItem()
+	public SampleItem()
 	{
 		ListItem = ListItems[1];
 	}

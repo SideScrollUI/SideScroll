@@ -104,7 +104,7 @@ public class TabTextBox : TextBox
 		}
 		else
 		{
-			MaxWidth = TabObjectEditor.ControlMaxWidth;
+			MaxWidth = TabForm.ControlMaxWidth;
 		}
 
 		MaxHeightAttribute? maxHeightAttribute = property.GetCustomAttribute<MaxHeightAttribute>();
@@ -114,7 +114,7 @@ public class TabTextBox : TextBox
 		}
 		else
 		{
-			MaxHeight = TabObjectEditor.ControlMaxHeight;
+			MaxHeight = TabForm.ControlMaxHeight;
 		}
 
 		if (property.GetCustomAttribute<RangeAttribute>() is RangeAttribute rangeAttribute)

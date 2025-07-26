@@ -3,7 +3,6 @@ using SideScroll.Tabs.Settings;
 
 namespace SideScroll.Avalonia.Samples;
 
-[Params]
 public class CustomUserSettings : UserSettings
 {
 	[Header("Custom"), WordWrap]

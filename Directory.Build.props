@@ -3,8 +3,11 @@
     <Version>0.9.10</Version>
     <PackageReleaseNotes>
     - Updated TabControl names to remove Control to match existing controls
+      - Renamed TabControlParams to TabForm
     - Fixed suffix for several EventArgs to match existing patterns
     - Added DataPageView HasNext and HasPrevious DataBinding
+    - Removed [Params] and added TabModel.AddObject(obj, editable: true)
+    - Renamed [Static] to [CloneReference] to better reflect usage
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.2</AvaloniaVersion>

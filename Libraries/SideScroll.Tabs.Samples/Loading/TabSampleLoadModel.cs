@@ -1,6 +1,6 @@
 namespace SideScroll.Tabs.Samples.Loading;
 
-public class TabSampleSlowLoad : ITab
+public class TabSampleLoadModel : ITab
 {
 	public TabInstance Create() => new Instance();
 

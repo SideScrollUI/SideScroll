@@ -77,7 +77,7 @@ public class TabDateTimePicker : Grid
 			CustomDateFormatString = "yyyy/M/d",
 			Watermark = "yyyy/M/d",
 			MinWidth = 105,
-			MaxWidth = TabObjectEditor.ControlMaxWidth,
+			MaxWidth = TabForm.ControlMaxWidth,
 			IsEnabled = Property.Editable,
 		};
 
@@ -99,7 +99,7 @@ public class TabDateTimePicker : Grid
 			Watermark = "15:30:45",
 			Margin = new Thickness(10, 0, 0, 0),
 			MinWidth = 75,
-			MaxWidth = TabObjectEditor.ControlMaxWidth,
+			MaxWidth = TabForm.ControlMaxWidth,
 			Focusable = true, // already set?
 			[Grid.ColumnProperty] = 1,
 		};

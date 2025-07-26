@@ -1,9 +1,9 @@
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
 
-namespace SideScroll.Tabs.Samples.Params;
+namespace SideScroll.Tabs.Samples.Forms;
 
-public class TabSampleParamUpdating : ITab
+public class TabSampleFormUpdating : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -16,14 +16,14 @@ public class TabSampleParamUpdating : ITab
 	{
 		protected SynchronizationContext Context = SynchronizationContext.Current ?? new();
 
-		private SampleParamItemDataBinding? _paramTestItem;
+		private SampleItemDataBinding? _sampleItem;
 		private readonly Random _random = new();
 
 		public override void Load(Call call, TabModel model)
 		{
-			_paramTestItem = new SampleParamItemDataBinding(Context);
+			_sampleItem = new SampleItemDataBinding(Context);
 			Randomize(call);
-			model.AddObject(_paramTestItem!);
+			model.AddObject(_sampleItem!, editable: true);
 
 			var toolbar = new Toolbar();
 			toolbar.ButtonRandomize.Action = Randomize;
@@ -36,9 +36,9 @@ public class TabSampleParamUpdating : ITab
 			{
 				int value = _random.Next() % 3;
 
-				if (value.ToString() == _paramTestItem?.Value) continue;
+				if (value.ToString() == _sampleItem?.Value) continue;
 
-				_paramTestItem!.Value = value.ToString();
+				_sampleItem!.Value = value.ToString();
 				break;
 			}
 		}

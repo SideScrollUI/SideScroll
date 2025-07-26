@@ -24,7 +24,7 @@ public class TabCheckBox : CheckBox
 	private void Initialize()
 	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
-		MaxWidth = TabObjectEditor.ControlMaxWidth;
+		MaxWidth = TabForm.ControlMaxWidth;
 		//Margin = new Thickness(2, 2);
 		//Padding = new Thickness(6, 3);
 	}

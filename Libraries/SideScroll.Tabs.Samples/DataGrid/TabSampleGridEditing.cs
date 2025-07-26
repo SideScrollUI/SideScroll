@@ -1,9 +1,8 @@
 using SideScroll.Logs;
-using SideScroll.Tasks;
 
-namespace SideScroll.Tabs.Samples.Params;
+namespace SideScroll.Tabs.Samples.DataGrid;
 
-public class TabSampleParamsDataGrid : ITab
+public class TabSampleGridEditing : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -19,16 +18,6 @@ public class TabSampleParamsDataGrid : ITab
 			// uses DataGrid internally, doesn't work well yet
 			model.AddData(_logEntry);
 			model.Editing = true;
-
-			model.Actions = new List<TaskCreator>
-			{
-				new TaskDelegate("Add Log Entry", AddEntry),
-			};
-		}
-
-		private void AddEntry(Call call)
-		{
-			call.Log.AddLogEntry(_logEntry);
 		}
 	}
 }

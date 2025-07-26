@@ -38,7 +38,7 @@ public class TabDemoPlanets : ITab
 		public override void LoadUI(Call call, TabModel model)
 		{
 			_planet = Planet.CreateSample();
-			model.AddObject(_planet);
+			model.AddObject(_planet, editable: true);
 
 			Toolbar toolbar = new();
 			toolbar.ButtonReset.Action = Reset;

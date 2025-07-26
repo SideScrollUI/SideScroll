@@ -1,6 +1,4 @@
 using SideScroll.Logs;
-using SideScroll.Tabs.Lists;
-using SideScroll.Tabs.Samples.Params;
 using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Samples.Actions;
@@ -16,12 +14,6 @@ public class TabSampleActions : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.MinDesiredWidth = 250;
-
-			model.Items = new List<ListItem>
-			{
-				new("Parameters", new TabSampleParamsDataGrid()),
-				new("Async Load", new TabSampleLoadAsync()),
-			};
 
 			model.Actions = new List<TaskCreator>
 			{

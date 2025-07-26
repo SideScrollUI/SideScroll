@@ -15,7 +15,6 @@ public class ThemeSection : INotifyPropertyChanged
 	}
 }
 
-[Params]
 public class TabTheme : ThemeSection
 {
 	public override string ToString() => "Tab";
@@ -87,7 +86,6 @@ public class TabTheme : ThemeSection
 	public Color? ButtonBorder { get; set; }
 }
 
-[Params]
 public class FontTheme : ThemeSection
 {
 	public override string ToString() => "Font";
@@ -120,7 +118,6 @@ public class FontTheme : ThemeSection
 	public double ControlContentFontSize { get; set; } = 14;
 }
 
-[Params]
 public class ToolbarTheme : ThemeSection
 {
 	public override string ToString() => "Toolbar";
@@ -168,7 +165,6 @@ public class ToolbarTheme : ThemeSection
 	public Color? RadioButtonForegroundPointerOver { get; set; }
 }
 
-[Params]
 public class ToolTipTheme : ThemeSection
 {
 	public override string ToString() => "Tool Tip";
@@ -186,7 +182,6 @@ public class ToolTipTheme : ThemeSection
 	public double FontSize { get; set; } = 14;
 }
 
-[Params]
 public class ScrollBarTheme : ThemeSection
 {
 	public override string ToString() => "Scroll Bar";
@@ -227,7 +222,6 @@ public class ScrollBarTheme : ThemeSection
 	public Color? ButtonArrowForegroundPointerOver { get; set; }*/
 }
 
-[Params]
 public class DataGridTheme : ThemeSection
 {
 	public override string ToString() => "Data Grid";
@@ -300,7 +294,6 @@ public class DataGridTheme : ThemeSection
 }
 
 // Button, including TabTextButton
-[Params]
 public class ButtonTheme : ThemeSection
 {
 	public override string ToString() => "Button";
@@ -361,7 +354,6 @@ public class ButtonTheme : ThemeSection
 	public Color? WarningBorderPointerOver { get; set; }
 }
 
-[Params]
 public class TextControlTheme : ThemeSection
 {
 	public override string ToString() => "Text Control";
@@ -491,7 +483,6 @@ public class TextControlTheme : ThemeSection
 	public Color? ErrorTextForeground { get; set; }
 }
 
-[Params]
 public class TextAreaTheme : ThemeSection
 {
 	public override string ToString() => "Text Area";
@@ -506,7 +497,6 @@ public class TextAreaTheme : ThemeSection
 	public Color? Border { get; set; }
 }
 
-[Params]
 public class TextEditorTheme : ThemeSection
 {
 	public override string ToString() => "Text Editor";
@@ -577,7 +567,6 @@ public class TextEditorTheme : ThemeSection
 	//public Color? Border { get; set; }
 }
 
-[Params]
 public class ChartTheme : ThemeSection
 {
 	public override string ToString() => "Chart";

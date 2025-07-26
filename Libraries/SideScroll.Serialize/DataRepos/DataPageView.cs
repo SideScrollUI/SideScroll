@@ -22,9 +22,9 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 
 	public DataRepoInstance<T> DataRepoInstance => dataRepoInstance;
 
-	private List<string>? _allPaths;
-
 	public IEnumerable<string>? Paths => DataRepoInstance.GetPathEnumerable(Ascending);
+
+	private List<string>? _allPaths;
 
 	public bool Ascending { get; set; } = ascending;
 

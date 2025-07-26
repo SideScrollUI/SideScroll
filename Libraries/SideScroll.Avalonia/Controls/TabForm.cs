@@ -28,7 +28,7 @@ public class TabHeader : Border
 
 public class TabSeparator : Border;
 
-public class TabObjectEditor : Border, IValidationControl
+public class TabForm : Border, IValidationControl
 {
 	public static int ControlMaxWidth { get; set; } = 2000;
 	public static int ControlMaxHeight { get; set; } = 400;
@@ -41,7 +41,7 @@ public class TabObjectEditor : Border, IValidationControl
 
 	public override string? ToString() => Object?.ToString();
 
-	public TabObjectEditor(object? obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
+	public TabForm(object? obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
 	{
 		Object = obj;
 

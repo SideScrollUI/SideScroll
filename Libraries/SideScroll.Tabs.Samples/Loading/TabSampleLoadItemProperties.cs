@@ -2,7 +2,7 @@ using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Tabs.Samples.Loading;
 
-public class TabSampleSlowModel : ITab
+public class TabSampleLoadItemProperties : ITab
 {
 	public TabInstance Create() => new Instance();
 

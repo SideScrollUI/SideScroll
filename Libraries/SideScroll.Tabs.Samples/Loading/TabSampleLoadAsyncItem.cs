@@ -3,7 +3,7 @@ using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Tabs.Samples.Loading;
 
-public class TabSampleSlowAsyncModel : ITab
+public class TabSampleLoadAsyncItem : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -24,7 +24,7 @@ public class TabSampleSlowAsyncModel : ITab
 			[Item]
 			public async Task<string> Text(Call call)
 			{
-				await Task.Delay(1000);
+				await Task.Delay(2000);
 				return "Text";
 			}
 		}

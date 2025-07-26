@@ -4,10 +4,10 @@ using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Toolbar;
 
-namespace SideScroll.Tabs.Samples.Params;
+namespace SideScroll.Tabs.Samples.Forms;
 
 [TabRoot, PublicData]
-public class TabSampleParamsDataTabs : ITab
+public class TabSampleFormDataTabs : ITab
 {
 	public override string ToString() => "Data Repos";
 
@@ -24,15 +24,15 @@ public class TabSampleParamsDataTabs : ITab
 		private const string GroupId = "SampleParams";
 		private const string DataKey = "Params";
 
-		private SampleParamItem? _sampleParamItem;
-		private DataRepoView<SampleParamItem>? _dataRepoView;
+		private SampleItem? _sampleItem;
+		private DataRepoView<SampleItem>? _dataRepoView;
 
 		public override void Load(Call call, TabModel model)
 		{
 			LoadSavedItems(call, model);
 
-			_sampleParamItem ??= LoadData<SampleParamItem>(DataKey);
-			model.AddObject(_sampleParamItem!);
+			_sampleItem ??= LoadData<SampleItem>(DataKey);
+			model.AddObject(_sampleItem!, editable: true);
 
 			Toolbar toolbar = new();
 			toolbar.ButtonNew.Action = New;
@@ -42,16 +42,16 @@ public class TabSampleParamsDataTabs : ITab
 
 		private void LoadSavedItems(Call call, TabModel model)
 		{
-			_dataRepoView = Data.App.LoadView<SampleParamItem>(call, GroupId, nameof(SampleParamItem.Name));
+			_dataRepoView = Data.App.LoadView<SampleItem>(call, GroupId, nameof(SampleItem.Name));
 			DataRepoInstance = _dataRepoView; // Allow links to pass the selected items
 
-			var dataCollection = new DataViewCollection<SampleParamItem, TabSampleParamItem>(_dataRepoView);
+			var dataCollection = new DataViewCollection<SampleItem, TabSampleItem>(_dataRepoView);
 			model.Items = dataCollection.Items;
 		}
 
 		private void New(Call call)
 		{
-			_sampleParamItem = new();
+			_sampleItem = new();
 			Reload();
 		}
 
@@ -59,7 +59,7 @@ public class TabSampleParamsDataTabs : ITab
 		{
 			Validate();
 
-			SampleParamItem clone = _sampleParamItem.DeepClone(call)!;
+			SampleItem clone = _sampleItem.DeepClone(call)!;
 			_dataRepoView!.Save(call, clone);
 			SaveData(DataKey, clone);
 		}

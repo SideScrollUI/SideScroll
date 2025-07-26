@@ -7,7 +7,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SideScroll.Tabs.Settings;
 
-[Params]
 public class UserSettings
 {
 	[Header("Base")]

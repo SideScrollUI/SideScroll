@@ -27,7 +27,7 @@ public class TabAvaloniaThemes : ITab
 	{
 		public ThemeId ThemeId { get; protected set; } = new();
 		private DataRepoView<AvaloniaThemeSettings>? _dataRepoThemes;
-		private TabObjectEditor? _themeEditor;
+		private TabForm? _themeForm;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -40,8 +40,8 @@ public class TabAvaloniaThemes : ITab
 		public override void LoadUI(Call call, TabModel model)
 		{
 			ThemeId.Reset();
-			_themeEditor = new TabObjectEditor(ThemeId);
-			model.AddObject(_themeEditor);
+			_themeForm = new TabForm(ThemeId);
+			model.AddObject(_themeForm);
 
 			var toolbar = new Toolbar(this);
 			toolbar.ButtonSave.Action = Save;
@@ -67,11 +67,10 @@ public class TabAvaloniaThemes : ITab
 			ThemeManager.Instance!.Add(call, themeSettings);
 
 			ThemeId.Reset();
-			_themeEditor!.LoadObject(ThemeId);
+			_themeForm!.LoadObject(ThemeId);
 		}
 	}
 
-	[Params]
 	public class ThemeId : AvaloniaObject
 	{
 		[Required, StringLength(50)]

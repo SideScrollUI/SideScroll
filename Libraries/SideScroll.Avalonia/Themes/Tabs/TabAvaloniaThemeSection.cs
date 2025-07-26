@@ -11,7 +11,7 @@ using SideScroll.Tabs.Samples.Actions;
 using SideScroll.Tabs.Samples.Chart;
 using SideScroll.Tabs.Samples.DataGrid;
 using SideScroll.Tabs.Samples.Objects;
-using SideScroll.Tabs.Samples.Params;
+using SideScroll.Tabs.Samples.Forms;
 using SideScroll.Tabs.Toolbar;
 using System.Collections;
 
@@ -66,10 +66,10 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 			Toolbar toolbar = new(this);
 			model.AddObject(toolbar);
 
-			var objectEditor = new TabObjectEditor(tab.Object);
-			model.AddObject(objectEditor, true, true);
+			var tabForm = new TabForm(tab.Object);
+			model.AddObject(tabForm, true, true);
 
-			foreach (var control in objectEditor.ContainerGrid.Children)
+			foreach (var control in tabForm.ContainerGrid.Children)
 			{
 				if (control is ColorPicker colorPicker)
 				{
@@ -103,7 +103,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				},
 				TabTheme => new List<ListItem>
 				{
-					new("Forms", new TabSampleParamsDataTabs()),
+					new("Forms", new TabSampleFormDataTabs()),
 					new("Buttons", new TabSampleGridHashSet()),
 					new("Loading", new TabSampleLoadAsync()),
 				},
@@ -121,7 +121,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 					new("Actions", new TabSampleActions()),
 					new("Popups", new TabSampleFlyout()),
 				},
-				TextControlTheme => new TabSampleParamsDataTabs(),
+				TextControlTheme => new TabSampleFormDataTabs(),
 				TextAreaTheme => new TabSampleTextArea(),
 				TextEditorTheme => new List<ListItem>
 				{
