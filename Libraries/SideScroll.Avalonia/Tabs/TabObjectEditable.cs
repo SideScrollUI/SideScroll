@@ -14,7 +14,7 @@ public class TabObjectEditable(object obj) : ITab
 		{
 			model.MinDesiredWidth = 225;
 
-			model.AddObject(tab.Object, true);
+			model.AddForm(tab.Object, true);
 		}
 	}
 }

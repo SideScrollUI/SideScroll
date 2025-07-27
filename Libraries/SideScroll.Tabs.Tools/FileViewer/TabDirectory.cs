@@ -67,7 +67,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 			toolbar.ButtonRefresh.Action = Refresh;
 			toolbar.ButtonOpenFolder.Action = OpenFolder;
 			toolbar.ButtonDelete.Action = Delete;
-			toolbar.ButtonDelete.Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete this directory?\n\n" + DirectoryView.Name, "Delete");
+			toolbar.ButtonDelete.Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete the selected items in this directory?\n\n" + DirectoryView.Name, "Delete");
 			model.AddObject(toolbar);
 
 			List<DirectoryView> directories = GetDirectories(call);

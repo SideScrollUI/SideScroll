@@ -5,7 +5,6 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
-using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls.DataGrids;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Avalonia.Controls.Viewer;
@@ -18,7 +17,6 @@ using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Toolbar;
 using System.Collections;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.View;
 
@@ -726,10 +724,7 @@ public class TabView : Grid, IDisposable
 			//if (double.IsNaN(tabChildControls.arrangeOverrideFinalSize.Width))
 			//	return false;
 
-			//if (rendered == false)
-			//	return false;
-
-			// don't show if the new control won't have enough room
+			// Don't show if the new control won't have enough room
 			StyledElement? styledElement = Parent;
 			double offset = _tabChildControls.Bounds.X;
 			while (styledElement != null)
@@ -745,10 +740,11 @@ public class TabView : Grid, IDisposable
 					offset += control.Bounds.X;
 					styledElement = control.Parent;
 				}
+				else
+				{
+					break;
+				}
 			}
-			//GetControlOffset(Parent);
-			//var window = (BaseWindow)VisualRoot;
-			//window.scrollViewer.View
 
 			return true;
 		}
@@ -770,6 +766,10 @@ public class TabView : Grid, IDisposable
 			{
 				offset += control.Bounds.X;
 				styledElement = control.Parent;
+			}
+			else
+			{
+				break;
 			}
 		}
 		return 0;
