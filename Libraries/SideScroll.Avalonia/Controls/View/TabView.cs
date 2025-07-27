@@ -1119,7 +1119,7 @@ public class TabView : Grid, IDisposable
 
 	private void LoadBookmarkData(ITabDataControl dataControl, TabBookmark tabBookmark, int index)
 	{
-		dataControl.TabDataSettings = TabViewSettings.GetData(index++);
+		dataControl.TabDataSettings = TabViewSettings.GetData(index);
 		dataControl.LoadSettings();
 
 		foreach (TabInstance childTabInstance in Instance.ChildTabInstances.Values)

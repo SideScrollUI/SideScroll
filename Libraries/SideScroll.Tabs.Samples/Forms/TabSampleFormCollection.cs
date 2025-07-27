@@ -29,7 +29,7 @@ public class TabSampleFormCollection : ITab
 			LoadSavedItems(call, model);
 
 			_sampleItem = LoadData<SampleItem>(DataKey);
-			model.AddObject(_sampleItem!, editable: true);
+			model.AddForm(_sampleItem!);
 
 			var toolbar = new Toolbar();
 			toolbar.ButtonNew.Action = New;

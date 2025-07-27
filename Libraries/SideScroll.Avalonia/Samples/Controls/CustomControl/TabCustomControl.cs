@@ -27,11 +27,11 @@ public class TabCustomControl : ITab
 			model.AddObject(_planetForm);
 
 			_toolbar = new TabControlSearchToolbar(this);
-			model.AddObject(_toolbar);
 			_toolbar.ButtonNew.Add(New);
 			_toolbar.ButtonSave.Add(Save);
 			_toolbar.ButtonSearch.Add(SearchUI);
 			_toolbar.ButtonCopyClipBoard.Add(CopyClipBoardUI);
+			model.AddObject(_toolbar);
 
 			_planets ??= [.. SolarSystem.Sample.Planets];
 			model.Items = _planets;

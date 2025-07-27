@@ -31,7 +31,7 @@ public class TabSampleFormTasks : ITab
 			{
 				_sampleItem.DateTime = DateTime.Now; // in case the serializer loses it
 			}
-			model.AddObject(_sampleItem, editable: true);
+			model.AddForm(_sampleItem);
 		}
 
 		private void Add(Call call)

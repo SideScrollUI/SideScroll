@@ -129,6 +129,11 @@ public class TabModel
 		return tabObject;
 	}
 
+	public TabObject AddForm(object obj, bool fill = false, bool enableScrolling = false)
+	{
+		return AddObject(obj, fill, enableScrolling, true);
+	}
+
 	public void AddData(object? obj)
 	{
 		Object = obj;

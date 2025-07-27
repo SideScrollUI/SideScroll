@@ -32,7 +32,7 @@ public class TabSampleFormDataTabs : ITab
 			LoadSavedItems(call, model);
 
 			_sampleItem ??= LoadData<SampleItem>(DataKey);
-			model.AddObject(_sampleItem!, editable: true);
+			model.AddForm(_sampleItem!);
 
 			Toolbar toolbar = new();
 			toolbar.ButtonNew.Action = New;
