@@ -147,8 +147,6 @@ public class TabInstance : IDisposable
 	private string TypeLabelPath => "TypePath/" + Model.ObjectTypePath + "/" + Label;
 	private string TypePath => "Type/" + Model.ObjectTypePath;
 
-	private string LoadedPath => "Loaded/" + Model.ObjectTypePath;
-
 	// Reload to initial state
 	public bool IsLoaded { get; set; }
 	public bool LoadCalled { get; set; } // Used by the view
@@ -180,7 +178,6 @@ public class TabInstance : IDisposable
 		StaticModel = true;
 
 		InitializeContext();
-		SetStartLoad();
 	}
 
 	public TabInstance CreateChildTab(ITab iTab)
@@ -871,16 +868,6 @@ public class TabInstance : IDisposable
 			}
 		}
 		SaveDefaultBookmark();
-	}
-
-	protected void SetStartLoad()
-	{
-		Data.Cache.Save(LoadedPath, true, TaskInstance.Call);
-	}
-
-	public void SetEndLoad()
-	{
-		Data.Cache.Delete(null, typeof(bool), LoadedPath);
 	}
 
 	// for detecting parent/child loops

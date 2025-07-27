@@ -39,6 +39,7 @@ public class TabSampleDataRepo : ITab
 			Project.Data.Cache.DeleteRepo(call);
 			Project.Data.App.DeleteRepo(call);
 			Project.Data.Shared.DeleteRepo(call);
+
 			Reload();
 		}
 	}

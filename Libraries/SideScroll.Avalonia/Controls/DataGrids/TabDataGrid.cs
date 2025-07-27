@@ -129,7 +129,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 		Dispatcher.UIThread.Post(() =>
 		{
-			TabInstance.SetEndLoad();
 			_disableSaving--;
 			if (_selectionModified)
 			{
@@ -867,10 +866,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			Type type = value.GetType();
 			if (TabUtils.ObjectHasLinks(value, true) && type.IsEnum == false)
 			{
-				// make sure there's something present
-				if (value is ICollection collection && collection.Count == 0)
-					continue;
-
 				if (TabInstance.IsOwnerObject(obj.GetInnerValue())) // stops self referencing loops
 					return null;
 
@@ -988,7 +983,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		get => DataGrid.SelectedItem;
 		set
 		{
-			//autoSelectItem = null;
 			if (value == null)
 			{
 				_selectItemEnabled = false;
