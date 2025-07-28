@@ -176,15 +176,6 @@ public class DataRepo
 		call ??= new();
 		groupId ??= DefaultGroupId;
 
-		/*ItemCollection<string> objectIds = GetObjectIds(typeof(T));
-
-		var list = new ItemCollection<T>();
-		foreach (string id in objectIds)
-		{
-			T item = Load<T>(id, log, createIfNeeded, lazy, taskInstance);
-			if (item != null)
-				list.Add(item);
-		}*/
 		DataItemCollection<T> entries = [];
 
 		string groupPath = GetGroupPath(typeof(T), groupId);
@@ -355,24 +346,4 @@ public class DataRepo
 		string nameHash = key.HashSha256ToBase32();
 		return Paths.Combine(groupPath, nameHash);
 	}
-
-	// clean this up?
-	/*private ItemCollection<string> GetObjectIds(Type type, string key = null)
-	{
-		var list = new ItemCollection<string>();
-
-		string typePath = GetTypePath(type, key);
-		if (Directory.Exists(typePath))
-		{
-			foreach (string filePath in Directory.EnumerateDirectories(typePath))
-			{
-				string fileName = Path.GetFileName(filePath);
-				string dataPath = Paths.Combine(filePath, DataName);
-				if (File.Exists(dataPath) == false)
-					continue;
-				list.Add(fileName);
-			}
-		}
-		return list;
-	}*/
 }

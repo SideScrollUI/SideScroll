@@ -348,8 +348,6 @@ public class TabModel
 			{
 				Skippable = true;
 			}
-
-			//Skippable = (skippableAttribute != null) || (!(firstItem is ITab) && TabDataSettings.GetVisibleProperties(elementType).Count > 1);
 		}
 	}
 

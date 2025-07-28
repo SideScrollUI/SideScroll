@@ -7,10 +7,10 @@ public class WordSpacer
 	public static HashSet<char> NumberConnectors { get; set; } = ['-', ':', '.', ','];
 	public static HashSet<char> SeparatorSymbols { get; set; } = ['|', '/', '-'];
 
-	public string Text { get; init; }
-	public string Formatted { get; private set; } = "";
+	public string Text { get; }
+	public string Formatted { get; protected set; } = "";
 
-	public List<Token> Tokens { get; set; } = [];
+	public List<Token> Tokens { get; protected set; } = [];
 
 	public WordSpacer(string? text)
 	{

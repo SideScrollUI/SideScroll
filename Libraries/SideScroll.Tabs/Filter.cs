@@ -16,11 +16,10 @@ public class FilterExpression
 	{
 		int index = valueUppercase.IndexOf(TextUppercase!);
 		if (index >= 0)
-		//if (valueText != null && valueText.CaseInsensitiveContains(filter))
 		{
 			if (MatchWord)
 			{
-				// require whitespace or start/end
+				// Require surrounding whitespace or at start/end
 				if (index > 0 && !char.IsWhiteSpace(valueUppercase[index - 1]))
 					return false;
 

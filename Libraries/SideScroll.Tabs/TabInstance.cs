@@ -650,11 +650,11 @@ public class TabInstance : IDisposable
 
 		/*if (DataRepoInstance != null)
 		{
-			foreach (var item in tabViewSettings.SelectedRows)
+			foreach (var item in TabViewSettings.SelectedRows)
 			{
 				var dataRepoItem = new DataRepoItem()
 				{
-					Directory = DataRepoInstance.Directory,
+					GroupId = DataRepoInstance.GroupId,
 					Key = item.dataKey,
 					Value = item.dataValue,
 				};
@@ -956,8 +956,8 @@ public class TabInstance : IDisposable
 	{
 		if (SelectedItems?.Count > 0)
 		{
-			var eSelectItem = new ItemSelectedEventArgs(SelectedItems[0]!);
-			OnSelectionChanged?.Invoke(sender, eSelectItem);
+			var itemSelectedEventArgs = new ItemSelectedEventArgs(SelectedItems[0]!);
+			OnSelectionChanged?.Invoke(sender, itemSelectedEventArgs);
 		}
 	}
 
