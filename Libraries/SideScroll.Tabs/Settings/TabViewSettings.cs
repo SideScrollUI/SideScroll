@@ -62,11 +62,4 @@ public class TabViewSettings
 		}
 		return TabDataSettings[index];
 	}
-
-	/*public override string ToString()
-	{
-		var strings = new List<string>();
-		TabDataSettings.ForEach(p => strings.Add(p.Formatted()));
-		return string.Join(",", strings);
-	}*/
 }

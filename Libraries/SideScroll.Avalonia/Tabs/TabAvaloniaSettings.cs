@@ -38,7 +38,7 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 			model.AddObject(toolbar);
 
 			LoadCustomSettings();
-			model.AddObject(CustomUserSettings!);
+			model.AddForm(CustomUserSettings!);
 
 			model.Items = new List<ListItem>
 			{

@@ -5,7 +5,6 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
-using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls.DataGrids;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Avalonia.Controls.Viewer;
@@ -18,13 +17,12 @@ using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Toolbar;
 using System.Collections;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.View;
 
 public interface IControlCreator
 {
-	void AddControl(TabInstance tabInstance, TabControlSplitContainer container, object obj);
+	void AddControl(TabInstance tabInstance, TabSplitGrid container, object obj);
 }
 
 public interface IValidationControl
@@ -78,10 +76,10 @@ public class TabView : Grid, IDisposable
 	// Layout Controls
 	private Grid? _containerGrid;
 	private Border? _parentContainerBorder;
-	private TabControlSplitContainer? _tabParentControls;
+	private TabSplitGrid? _tabParentControls;
 	private TabViewTitle? _tabTitle;
 	private GridSplitter? _parentChildGridSplitter;
-	private TabControlSplitContainer? _tabChildControls;
+	private TabSplitGrid? _tabChildControls;
 	private Panel? _fillerPanel; // GridSplitter doesn't work without control on right side
 
 	private Size _arrangeOverrideFinalSize;
@@ -115,7 +113,7 @@ public class TabView : Grid, IDisposable
 		ActualThemeVariantChanged += TabView_ActualThemeVariantChanged;
 	}
 
-	private void Instance_OnCopyToClipboard(object? sender, TabInstance.EventCopyToClipboard e)
+	private void Instance_OnCopyToClipboard(object? sender, TabInstance.CopyToClipboardEventArgs e)
 	{
 		ClipboardUtils.SetText(this, e.Text);
 	}
@@ -228,7 +226,7 @@ public class TabView : Grid, IDisposable
 
 	private void AddParentControls()
 	{
-		_tabParentControls = new TabControlSplitContainer
+		_tabParentControls = new TabSplitGrid
 		{
 			ColumnDefinitions = new ColumnDefinitions("*"),
 			MinDesiredWidth = Model.MinDesiredWidth,
@@ -278,7 +276,7 @@ public class TabView : Grid, IDisposable
 
 	private void AddChildControls()
 	{
-		_tabChildControls = new TabControlSplitContainer
+		_tabChildControls = new TabSplitGrid
 		{
 			ColumnDefinitions = new ColumnDefinitions("Auto"),
 		};
@@ -478,13 +476,9 @@ public class TabView : Grid, IDisposable
 		{
 			AddControlString(text);
 		}
-		else
+		else if (tabObject.Editable)
 		{
-			ParamsAttribute? paramsAttribute = obj.GetType().GetCustomAttribute<ParamsAttribute>();
-			if (paramsAttribute != null)
-			{
-				AddControl(new TabControlParams(obj), gridLength, tabObject.EnableScrolling);
-			}
+			AddControl(new TabForm(obj), gridLength, tabObject.EnableScrolling);
 		}
 	}
 
@@ -520,7 +514,7 @@ public class TabView : Grid, IDisposable
 		int index = 0;
 		foreach (IList iList in Model.ItemList)
 		{
-			var tabData = new TabControlDataGrid(Instance, iList, true, TabViewSettings.GetData(index));
+			var tabData = new TabDataGrid(Instance, iList, true, TabViewSettings.GetData(index));
 			tabData.OnSelectionChanged += ParentListSelectionChanged;
 			_tabParentControls!.AddControl(tabData, true, SeparatorType.Splitter);
 			TabDatas.Add(tabData);
@@ -618,7 +612,7 @@ public class TabView : Grid, IDisposable
 
 		if (!Instance.LoadingMessage.IsNullOrEmpty())
 		{
-			TabControlTextBlock textBlock = new()
+			TabTextBlock textBlock = new()
 			{
 				Text = Instance.LoadingMessage,
 				TextWrapping = TextWrapping.Wrap,
@@ -730,10 +724,7 @@ public class TabView : Grid, IDisposable
 			//if (double.IsNaN(tabChildControls.arrangeOverrideFinalSize.Width))
 			//	return false;
 
-			//if (rendered == false)
-			//	return false;
-
-			// don't show if the new control won't have enough room
+			// Don't show if the new control won't have enough room
 			StyledElement? styledElement = Parent;
 			double offset = _tabChildControls.Bounds.X;
 			while (styledElement != null)
@@ -749,10 +740,11 @@ public class TabView : Grid, IDisposable
 					offset += control.Bounds.X;
 					styledElement = control.Parent;
 				}
+				else
+				{
+					break;
+				}
 			}
-			//GetControlOffset(Parent);
-			//var window = (BaseWindow)VisualRoot;
-			//window.scrollViewer.View
 
 			return true;
 		}
@@ -774,6 +766,10 @@ public class TabView : Grid, IDisposable
 			{
 				offset += control.Bounds.X;
 				styledElement = control.Parent;
+			}
+			else
+			{
+				break;
 			}
 		}
 		return 0;
@@ -1063,7 +1059,7 @@ public class TabView : Grid, IDisposable
 		LoadBookmark();
 	}
 
-	private void TabInstance_OnSelectItems(object? sender, TabInstance.EventSelectItems e)
+	private void TabInstance_OnSelectItems(object? sender, TabInstance.ItemsSelectedEventArgs e)
 	{
 		if (TabDatas.Count > 0)
 		{
@@ -1123,7 +1119,7 @@ public class TabView : Grid, IDisposable
 
 	private void LoadBookmarkData(ITabDataControl dataControl, TabBookmark tabBookmark, int index)
 	{
-		dataControl.TabDataSettings = TabViewSettings.GetData(index++);
+		dataControl.TabDataSettings = TabViewSettings.GetData(index);
 		dataControl.LoadSettings();
 
 		foreach (TabInstance childTabInstance in Instance.ChildTabInstances.Values)

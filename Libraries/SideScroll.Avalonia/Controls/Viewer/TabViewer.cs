@@ -13,7 +13,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SideScroll.Avalonia.Controls.Viewer;
 
-public class EventTabLoaded(object obj) : EventArgs
+public class TabLoadedEventArgs(object obj) : EventArgs
 {
 	public object Object => obj;
 }
@@ -46,7 +46,7 @@ public class TabViewer : Grid
 
 	public Control? ContentControl { get; protected set; }
 
-	public event EventHandler<EventTabLoaded>? OnTabLoaded;
+	public event EventHandler<TabLoadedEventArgs>? OnTabLoaded;
 
 	public TabViewer(Project project)
 	{
@@ -315,7 +315,7 @@ public class TabViewer : Grid
 			[ColumnProperty] = 1,
 		};
 
-		TabControlButton buttonScrollRight = new()
+		TabButton buttonScrollRight = new()
 		{
 			Content = ">",
 			[ToolTip.ShowDelayProperty] = 5,
@@ -325,7 +325,7 @@ public class TabViewer : Grid
 		buttonScrollRight.Click += ButtonExpand_Click;
 		grid.Children.Add(buttonScrollRight);
 
-		TabControlButton buttonScrollLeft = new()
+		TabButton buttonScrollLeft = new()
 		{
 			Content = "<",
 			[ToolTip.TipProperty] = "Scroll Left ( <- )",
@@ -467,6 +467,6 @@ public class TabViewer : Grid
 
 	internal void TabLoaded(object obj, Control control)
 	{
-		OnTabLoaded?.Invoke(control, new EventTabLoaded(obj));
+		OnTabLoaded?.Invoke(control, new TabLoadedEventArgs(obj));
 	}
 }

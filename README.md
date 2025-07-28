@@ -11,7 +11,7 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 - **Multiple Path Support** — Open and compare multiple paths simultaneously.
 - **Shareable Links** — Create links to share views with others.
 - **DataRepos** — Manage local data storage and display data bound views
-- **Dynamic Form Generation** — Load any object into a **Param Control** for auto-generated Avalonia controls.
+- **Dynamic Form Generation** — Load any object into a **TabForm** for auto-generated Avalonia controls.
 - **Rich Text Support** — Integrated [AvaloniaEdit](https://github.com/AvaloniaUI/AvaloniaEdit) support for rich text viewing and editing
 - **Interactive Charting** — Integrated [LiveCharts 2](https://github.com/beto-rodriguez/LiveCharts2) support for smooth, animated charts. Use the mouse to zoom in or select a series to show additional tabs.
 

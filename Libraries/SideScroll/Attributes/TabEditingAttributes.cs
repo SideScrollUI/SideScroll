@@ -48,9 +48,3 @@ public class HeaderAttribute(string text) : Attribute
 // ->Toolbar: Show a separator before this item
 [AttributeUsage(AttributeTargets.Property)]
 public class SeparatorAttribute : Attribute;
-
-// If set, this method will appear as an Action (rename to [Action]?)
-/*[AttributeUsage(AttributeTargets.Method)]
-public class VisibleAttribute : Attribute
-{
-}*/

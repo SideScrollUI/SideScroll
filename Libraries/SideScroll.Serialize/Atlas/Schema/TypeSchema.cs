@@ -69,7 +69,7 @@ public class TypeSchema
 	public bool IsPublic { get; protected set; } // [PublicData], will get exported if PublicOnly set
 	public bool IsPublicOnly => IsPublic || IsProtected;
 	
-	public bool IsStatic { get; protected set; }
+	public bool IsCloneReference { get; protected set; }
 	
 	public bool IsSerialized { get; protected set; }
 	public bool IsUnserialized { get; protected set; }
@@ -118,11 +118,11 @@ public class TypeSchema
 		IsPrimitive = NonNullableType.IsPrimitive;
 		HasEmptyConstructor = TypeHasEmptyConstructor(Type);
 
-		IsSerialized = (Type.GetCustomAttribute<SerializedAttribute>() != null);
-		IsUnserialized = (Type.GetCustomAttribute<UnserializedAttribute>() != null);
-		IsStatic = (Type.GetCustomAttribute<StaticAttribute>() != null);
+		IsSerialized = Type.GetCustomAttribute<SerializedAttribute>() != null;
+		IsUnserialized = Type.GetCustomAttribute<UnserializedAttribute>() != null;
+		IsCloneReference = Type.GetCustomAttribute<CloneReferenceAttribute>() != null;
 		IsPrivate = GetIsPrivate();
-		IsProtected = (Type.GetCustomAttribute<ProtectedDataAttribute>() != null);
+		IsProtected = Type.GetCustomAttribute<ProtectedDataAttribute>() != null;
 		IsPublic = GetIsPublic();
 	}
 

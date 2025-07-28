@@ -27,13 +27,15 @@ public class TabSampleDataRepoPaging : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			Toolbar toolbar = new();
-			toolbar.ButtonPrevious.Action = LoadPrevious;
-			toolbar.ButtonNext.Action = LoadNext;
-			model.AddObject(toolbar);
-
 			LoadPageView(call);
 			model.Items = _sampleItems;
+
+			Toolbar toolbar = new();
+			toolbar.ButtonPrevious.Action = LoadPrevious;
+			toolbar.ButtonPrevious.IsEnabledBinding = new PropertyBinding(nameof(IDataPageView.HasPrevious), _pageView);
+			toolbar.ButtonNext.Action = LoadNext;
+			toolbar.ButtonNext.IsEnabledBinding = new PropertyBinding(nameof(IDataPageView.HasNext), _pageView);
+			model.AddObject(toolbar);
 
 			model.Actions = new List<TaskCreator>
 			{

@@ -43,10 +43,11 @@ public class HideAttribute(object? value, params object?[] additonalValues) : At
 {
 	// passing a null param passes a null array :(
 	// Combine both params into a single list
-	public List<object?> Values { get; init; } = new(additonalValues)
-	{
+	public object?[] Values { get; } =
+	[
+		.. additonalValues,
 		value
-	};
+	];
 }
 
 // Don't show row if any value matches
@@ -55,10 +56,11 @@ public class HideRowAttribute(object? value, params object?[] additonalValues) :
 {
 	// passing a null param passes a null array :(
 	// Combine both params into a single list
-	public List<object?> Values { get; init; } = new(additonalValues)
-	{
+	public object?[] Values { get; } =
+	[
+		.. additonalValues,
 		value
-	};
+	];
 }
 
 // Don't show row if any value matches
@@ -67,13 +69,14 @@ public class HideColumnAttribute(object? value, params object?[] additonalValues
 {
 	// passing a null param passes a null array :(
 	// Combine both params into a single list
-	public List<object?> Values { get; init; } = new(additonalValues)
-	{
+	public object?[] Values { get; } =
+	[
+		.. additonalValues,	
 		value
-	};
+	];
 }
 
-// Don't show unless #if DEBUG set
+// Don't show except for DEBUG builds
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
 public class DebugOnlyAttribute(bool value = true) : Attribute
 {

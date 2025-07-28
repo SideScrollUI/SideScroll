@@ -12,12 +12,7 @@ public class Log : LogEntry
 	[InnerValue]
 	public ItemCollection<LogEntry> Items { get; set; } = []; // change to LRU for performance? No Binding?
 
-	//private readonly string SummaryText;
-
-	//[HiddenColumn]
-	//public override string Summary => SummaryText;
-
-	public event EventHandler<EventLogMessage>? OnMessage;
+	public event EventHandler<LogMessageEventArgs>? OnMessage;
 
 	public Log()
 	{
@@ -87,7 +82,7 @@ public class Log : LogEntry
 
 		if (e is TaskCanceledException)
 		{
-			return Add(e.Message, allTags.ToArray());
+			return Add(e.Message, [.. allTags]);
 		}
 		else if (e is AggregateException ae)
 		{
@@ -96,18 +91,18 @@ public class Log : LogEntry
 			{
 				if (ex is TaskCanceledException)
 				{
-					logEntry = Add(ex.Message, allTags.ToArray());
+					logEntry = Add(ex.Message, [.. allTags]);
 				}
 				else
 				{
-					logEntry = AddError(ex.Message, allTags.ToArray());
+					logEntry = AddError(ex.Message, [.. allTags]);
 				}
 			}
 			return logEntry!;
 		}
 		else
 		{
-			return AddError(e.Message, allTags.ToArray());
+			return AddError(e.Message, [.. allTags]);
 		}
 	}
 
@@ -221,7 +216,7 @@ public class Log : LogEntry
 			UpdateStats(logEntry);
 		}
 
-		CreateEventLogMessage(logEntry);
+		NotifyLogMessage(logEntry);
 
 		// Update if there can be child entries
 		if (logEntry is Log log)
@@ -238,26 +233,26 @@ public class Log : LogEntry
 		if (logEntry.Level > Level)
 		{
 			Level = logEntry.Level;
-			CreateEventPropertyChanged(nameof(Level));
+			NotifyPropertyChanged(nameof(Level));
 		}
 
-		CreateEventPropertyChanged(nameof(Entries));
+		NotifyPropertyChanged(nameof(Entries));
 	}
 
-	private void CreateEventLogMessage(LogEntry logEntry)
+	private void NotifyLogMessage(LogEntry logEntry)
 	{
-		EventLogMessage eventLogMessage = new()
+		LogMessageEventArgs eventArgs = new()
 		{
 			Entries = [logEntry, this],
 		};
-		OnMessage?.Invoke(this, eventLogMessage);
+		OnMessage?.Invoke(this, eventArgs);
 	}
 
-	private void ChildLog_OnMessage(object? sender, EventLogMessage eventLogMessage)
+	private void ChildLog_OnMessage(object? sender, LogMessageEventArgs e)
 	{
-		UpdateStats(eventLogMessage.Entries[0]);
-		eventLogMessage.Entries.Add(this);
-		OnMessage?.Invoke(this, eventLogMessage);
+		UpdateStats(e.Entries[0]);
+		e.Entries.Add(this);
+		OnMessage?.Invoke(this, e);
 	}
 
 	public void SetLogLevel(LogLevel logLevel)
@@ -267,46 +262,6 @@ public class Log : LogEntry
 }
 
 /*
-Requirements
-
-	1 per line?
-
-	Parent/Child relationship
-
-	Separate files?
-	
-	Tags?
-
-	Human readable?
-
-	Special interface for outside threads
-
-	Object Creator Logs / Constructor Log
-		History of Object level creation
-	Method Caller Logs / Method Log
-		Map Clicks
-
-	How to make only one function call with both of them?
-
-
-Options
-
-	Data has to get copied
-		lock it always (too many locks)
-		serialize it
-
-	CallContext.LogicalSetData("time", DateTime.Now);
-		Loses Messages, Allows multiple writes?
-	
-	delegates
-
-		No unsafe code can be accessed within the anonymous-method-block. 
-
-	Receive unsafe, lock, serialize, unlock, deserialize
-
-	Serialize, queue
-
-
 	public class LogStackFrame
 	{
 		public int line;
@@ -314,9 +269,8 @@ Options
 		public string method;
 	}
 
-
 	StackTrace stackTrace = new StackTrace();
-	for (int i = 1; i<stackTrace.FrameCount; i++)
+	for (int i = 1; i < stackTrace.FrameCount; i++)
 	{
 		StackFrame frame = stackTrace.GetFrame(i);
 		LogStackFrame logFrame = new LogStackFrame();

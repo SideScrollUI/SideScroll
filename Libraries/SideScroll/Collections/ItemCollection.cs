@@ -74,7 +74,7 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 
 	public List<T> ToList()
 	{
-		return new List<T>(this);
+		return [.. this];
 	}
 
 	/*public new void Add(T item)

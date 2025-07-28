@@ -24,8 +24,8 @@ public class TabDataRepoSettings(UserSettings userSettings) : ITab
 		{
 			model.AutoSelectSaved = AutoSelectType.NonEmpty;
 
-			var paramControl = new TabControlParams(DataSettings);
-			model.AddObject(paramControl);
+			var tabForm = new TabForm(DataSettings);
+			model.AddObject(tabForm);
 
 			List<ListItem> currentVersion =
 			[

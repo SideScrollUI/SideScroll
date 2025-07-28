@@ -14,8 +14,10 @@ namespace SideScroll.Tabs;
 public class TabObject
 {
 	public object? Object { get; set; }
+
 	public bool Fill { get; set; } // Stretch to Fill all vertical space
 	public bool EnableScrolling { get; set; }
+	public bool Editable { get; set; }
 }
 
 public enum AutoSelectType
@@ -104,7 +106,7 @@ public class TabModel
 		return tabModel;
 	}
 
-	public TabObject AddObject(object obj, bool fill = false, bool enableScrolling = false)
+	public TabObject AddObject(object obj, bool fill = false, bool enableScrolling = false, bool editable = false)
 	{
 		obj ??= "(null)";
 
@@ -119,11 +121,17 @@ public class TabModel
 			Object = obj,
 			Fill = fill,
 			EnableScrolling = enableScrolling,
+			Editable = editable,
 		};
 
 		Objects.Add(tabObject);
 
 		return tabObject;
+	}
+
+	public TabObject AddForm(object obj, bool fill = false, bool enableScrolling = false)
+	{
+		return AddObject(obj, fill, enableScrolling, true);
 	}
 
 	public void AddData(object? obj)
@@ -340,8 +348,6 @@ public class TabModel
 			{
 				Skippable = true;
 			}
-
-			//Skippable = (skippableAttribute != null) || (!(firstItem is ITab) && TabDataSettings.GetVisibleProperties(elementType).Count > 1);
 		}
 	}
 

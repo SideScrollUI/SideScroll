@@ -14,7 +14,7 @@ public class TabSampleTextArea : ITab
 		{
 			model.MaxDesiredWidth = 800;
 
-			var textArea = new TabControlTextArea(TextSamples.Plain);
+			var textArea = new TabTextArea(TextSamples.Plain);
 			model.AddObject(textArea, true);
 		}
 	}

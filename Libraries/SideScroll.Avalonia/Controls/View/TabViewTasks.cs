@@ -26,9 +26,9 @@ public class TabViewTasks : Grid, IDisposable
 			task.TaskStatus == TaskStatus.Faulted ||
 			task.Log.Level >= LogLevel.Error);
 
-	public IList SelectedItems => _tabControlDataGrid.SelectedItems;
+	public IList SelectedItems => _tabDataGrid.SelectedItems;
 
-	private TabControlDataGrid _tabControlDataGrid;
+	private TabDataGrid _tabDataGrid;
 
 	public override string ToString() => TabInstance.Model.Name;
 
@@ -44,22 +44,22 @@ public class TabViewTasks : Grid, IDisposable
 
 		IsVisible = ShowTasks;
 
-		_tabControlDataGrid = new TabControlDataGrid(TabInstance, TabInstance.Model.Tasks, false) // don't autogenerate
+		_tabDataGrid = new TabDataGrid(TabInstance, TabInstance.Model.Tasks, false) // don't autogenerate
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			MaxHeight = 150,
 		};
 
-		_tabControlDataGrid.AddButtonColumn(nameof(TaskInstance.Cancel));
-		_tabControlDataGrid.AddColumn("Task", nameof(TaskInstance.Label));
-		_tabControlDataGrid.AddColumn("   %   ", nameof(TaskInstance.Percent));
-		_tabControlDataGrid.AddColumn("Status", nameof(TaskInstance.Status));
-		_tabControlDataGrid.AddColumn("Duration", nameof(TaskInstance.Duration));
-		//tabControlDataGrid.AddColumn("Message", nameof(TaskInstance.Message));
+		_tabDataGrid.AddButtonColumn(nameof(TaskInstance.Cancel));
+		_tabDataGrid.AddColumn("Task", nameof(TaskInstance.Label));
+		_tabDataGrid.AddColumn("   %   ", nameof(TaskInstance.Percent));
+		_tabDataGrid.AddColumn("Status", nameof(TaskInstance.Status));
+		_tabDataGrid.AddColumn("Duration", nameof(TaskInstance.Duration));
+		//_tabDataGrid.AddColumn("Message", nameof(TaskInstance.Message));
 
-		_tabControlDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;
-		Children.Add(_tabControlDataGrid);
+		_tabDataGrid.OnSelectionChanged += TabData_OnSelectionChanged;
+		Children.Add(_tabDataGrid);
 
 		if (TabInstance.Model.Tasks.Count > 0)
 		{
@@ -80,7 +80,7 @@ public class TabViewTasks : Grid, IDisposable
 
 	private void CollectionChangedUI(NotifyCollectionChangedEventArgs e)
 	{
-		if (_tabControlDataGrid == null)
+		if (_tabDataGrid == null)
 			return;
 
 		if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex >= 0)
@@ -91,21 +91,21 @@ public class TabViewTasks : Grid, IDisposable
 
 	private void SelectLastItem()
 	{
-		_tabControlDataGrid.MinHeight = _tabControlDataGrid.DesiredSize.Height;
-		MinHeight = _tabControlDataGrid.MinHeight;
-		_tabControlDataGrid.InvalidateMeasure();
+		_tabDataGrid.MinHeight = _tabDataGrid.DesiredSize.Height;
+		MinHeight = _tabDataGrid.MinHeight;
+		_tabDataGrid.InvalidateMeasure();
 		IsVisible = ShowTasks;
 
 		if (AutoSelectNew && TabInstance.Model.Tasks.Count > 0)
 		{
 			TaskInstance taskInstance = TabInstance.Model.Tasks.Last();
-			if (_tabControlDataGrid.SelectedItem == taskInstance)
+			if (_tabDataGrid.SelectedItem == taskInstance)
 			{
 				UpdateSelection();
 			}
 			else
 			{
-				_tabControlDataGrid.SelectedItem = taskInstance;
+				_tabDataGrid.SelectedItem = taskInstance;
 			}
 
 			// use lock internally?
@@ -118,7 +118,7 @@ public class TabViewTasks : Grid, IDisposable
 				taskInstance.OnComplete = () => Dispatcher.UIThread.Post(() => TaskCompleted(taskInstance), DispatcherPriority.SystemIdle);
 			}
 
-			_tabControlDataGrid.MinHeight = Math.Min(TabInstance.Model.Tasks.Count * LineHeight + LineHeight, 6 * LineHeight);
+			_tabDataGrid.MinHeight = Math.Min(TabInstance.Model.Tasks.Count * LineHeight + LineHeight, 6 * LineHeight);
 		}
 	}
 
@@ -128,12 +128,12 @@ public class TabViewTasks : Grid, IDisposable
 		IsVisible = ShowTasks;
 
 		// Unselect running if no error
-		if (AutoSelectNew && !taskInstance.Errored && _tabControlDataGrid != null)
+		if (AutoSelectNew && !taskInstance.Errored && _tabDataGrid != null)
 		{
-			IList selectedItems = _tabControlDataGrid.SelectedItems;
+			IList selectedItems = _tabDataGrid.SelectedItems;
 			if (selectedItems.Count == 1 && selectedItems[0] == taskInstance)
 			{
-				_tabControlDataGrid.SelectedItem = null;
+				_tabDataGrid.SelectedItem = null;
 			}
 		}
 		else if (IsVisible != wasVisible)
@@ -157,8 +157,8 @@ public class TabViewTasks : Grid, IDisposable
 
 	public void Dispose()
 	{
-		_tabControlDataGrid.OnSelectionChanged -= TabData_OnSelectionChanged;
-		_tabControlDataGrid.Dispose();
+		_tabDataGrid.OnSelectionChanged -= TabData_OnSelectionChanged;
+		_tabDataGrid.Dispose();
 
 		if (TabInstance.Model.Tasks is INotifyCollectionChanged notifyCollectionChanged)
 		{

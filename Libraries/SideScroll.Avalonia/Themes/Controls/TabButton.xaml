@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sidescroll="clr-namespace:SideScroll.Avalonia.Controls;assembly=SideScroll.Avalonia">
   
-  <ControlTheme x:Key="{x:Type sidescroll:TabControlButton}" TargetType="sidescroll:TabControlButton">
+  <ControlTheme x:Key="{x:Type sidescroll:TabButton}" TargetType="sidescroll:TabButton">
     <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundBrush}"/>
     <Setter Property="BorderBrush" Value="{DynamicResource ThemeButtonBorderBrush}"/>
     <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}"/>

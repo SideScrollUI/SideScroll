@@ -32,12 +32,12 @@ public class ConfirmationFlyout : Flyout
 					Spacing = 8,
 					Children =
 					{
-						new TabControlTextButton(cancelText ?? "Cancel")
+						new TabTextButton(cancelText ?? "Cancel")
 						.Also(button =>
 							{
 								button.Click += (_, _) => Hide();
 							}),
-						new TabControlTextButton(confirmText, AccentType.Warning)
+						new TabTextButton(confirmText, AccentType.Warning)
 						.Also(button =>
 							{
 								button.Click += (_, _) =>

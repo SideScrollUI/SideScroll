@@ -48,7 +48,7 @@ public class LogTimer : Log, IDisposable
 	{
 		Duration = _stopwatch.Elapsed;
 
-		CreateEventPropertyChanged(nameof(Duration));
+		NotifyPropertyChanged(nameof(Duration));
 	}
 
 	public void Dispose()

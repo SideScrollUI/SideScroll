@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace SideScroll.Logs;
 
-public class EventLogMessage : EventArgs
+public class LogMessageEventArgs : EventArgs
 {
 	public List<LogEntry> Entries { get; set; } = []; // First is new log message, last is highest parent log message
 }
@@ -103,7 +103,7 @@ public class LogEntry : INotifyPropertyChanged
 		set
 		{
 			_duration = value;
-			CreateEventPropertyChanged();
+			NotifyPropertyChanged();
 		}
 	}
 	private TimeSpan? _duration;
@@ -140,7 +140,7 @@ public class LogEntry : INotifyPropertyChanged
 		Settings ??= new LogSettings();
 	}
 
-	protected void CreateEventPropertyChanged([CallerMemberName] string propertyName = "")
+	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
 		Settings?.Context?.Post(NotifyPropertyChangedContext, propertyName);
 	}

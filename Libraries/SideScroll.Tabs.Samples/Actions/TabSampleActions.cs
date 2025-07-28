@@ -1,6 +1,4 @@
 using SideScroll.Logs;
-using SideScroll.Tabs.Lists;
-using SideScroll.Tabs.Samples.Params;
 using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Samples.Actions;
@@ -17,22 +15,16 @@ public class TabSampleActions : ITab
 		{
 			model.MinDesiredWidth = 250;
 
-			model.Items = new List<ListItem>
-			{
-				new("Parameters", new TabSampleParamsDataGrid()),
-				new("Async Load", new TabSampleLoadAsync()),
-			};
-
 			model.Actions = new List<TaskCreator>
 			{
-				new TaskDelegate("Add Log Entry", AddEntry),
+				new TaskDelegate("Add Log Entry", AddEntry, true, true),
 				new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
-				new TaskDelegate("Parallel Task Progress", ParallelTaskProgress, true),
+				new TaskDelegate("Parallel Task Progress", ParallelTaskProgress, true, true),
 				new TaskDelegateAsync("Task Progress", SubTaskProgressAsync, true),
 				new TaskDelegateAsync("Multi Level Progress", MultiLevelRunAsync, true),
 				new TaskAction("Action", () => PassParams(1, "abc")),
 				new TaskDelegateAsync("Long load (Async)", SleepAsync, true),
-				new TaskDelegate("StartAsync error", StartAsyncError),
+				new TaskDelegate("StartAsync error", StartAsyncError, true, true),
 			};
 		}
 

@@ -52,7 +52,7 @@ public class LazyJsonArray(JsonArray jsonArray) : LazyJsonNode
 		{
 			if (_items == null)
 			{
-				_items = new List<object?>();
+				_items = [];
 				foreach (JsonNode? jsonNode in JsonArray)
 				{
 					_items.Add(Create(jsonNode));

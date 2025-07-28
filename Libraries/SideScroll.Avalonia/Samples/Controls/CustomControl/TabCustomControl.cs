@@ -17,21 +17,21 @@ public class TabCustomControl : ITab
 		private ItemCollectionUI<Planet>? _planets;
 		private Planet? _planet;
 		private TabControlSearchToolbar? _toolbar;
-		private TabControlParams? planetParams;
+		private TabForm? _planetForm;
 
 		public override void LoadUI(Call call, TabModel model)
 		{
 			_planet = Planet.CreateSample();
 
-			planetParams = new TabControlParams(_planet);
-			model.AddObject(planetParams);
+			_planetForm = new TabForm(_planet);
+			model.AddObject(_planetForm);
 
 			_toolbar = new TabControlSearchToolbar(this);
-			model.AddObject(_toolbar);
 			_toolbar.ButtonNew.Add(New);
 			_toolbar.ButtonSave.Add(Save);
 			_toolbar.ButtonSearch.Add(SearchUI);
 			_toolbar.ButtonCopyClipBoard.Add(CopyClipBoardUI);
+			model.AddObject(_toolbar);
 
 			_planets ??= [.. SolarSystem.Sample.Planets];
 			model.Items = _planets;
@@ -40,7 +40,7 @@ public class TabCustomControl : ITab
 		private void New(Call call)
 		{
 			_planet = new();
-			planetParams!.LoadObject(_planet);
+			_planetForm!.LoadObject(_planet);
 		}
 
 		private void Save(Call call)

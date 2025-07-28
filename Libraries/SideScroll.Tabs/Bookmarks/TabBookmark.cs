@@ -7,7 +7,7 @@ namespace SideScroll.Tabs.Bookmarks;
 
 /*public class DataRepoItem
 {
-	public string Directory { get; set; }
+	public string GroupId { get; set; }
 	public string Key { get; set; }
 	public object Value { get; set; }
 }*/

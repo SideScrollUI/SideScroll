@@ -5,9 +5,9 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
 
-public class ToolbarButton : TabControlImageButton
+public class ToolbarButton : TabImageButton
 {
-	public TabControlToolbar Toolbar { get; init; }
+	public TabControlToolbar Toolbar { get; }
 
 	public ToolbarButton(TabControlToolbar toolbar, ToolButton toolButton) :
 		base(toolButton.Tooltip, toolButton.ImageResource, toolButton.Label)

@@ -24,7 +24,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 	public static int MaxPointsToShowMarkers { get; set; } = 8;
 	public static double DefaultGeometrySize { get; set; } = 5;
 
-	public TabControlLiveChart Chart { get; init; }
+	public TabLiveChart Chart { get; init; }
 	public ListSeries ListSeries { get; init; }
 	public bool UseDateTimeAxis { get; set; }
 
@@ -33,7 +33,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 
 	public override string? ToString() => ListSeries?.ToString();
 
-	public LiveChartSeries(TabControlLiveChart chart, ListSeries listSeries, Color color, bool useDateTimeAxis)
+	public LiveChartSeries(TabLiveChart chart, ListSeries listSeries, Color color, bool useDateTimeAxis)
 	{
 		Chart = chart;
 		ListSeries = listSeries;
