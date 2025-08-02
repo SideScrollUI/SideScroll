@@ -5,23 +5,36 @@ namespace SideScroll.Attributes;
 public class CloneReferenceAttribute : Attribute;
 
 // Override serializer defaults (constructor only check for now)
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
 public class SerializedAttribute : Attribute;
 
 // Can't use [NonSerialized] since that's only for fields :(
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
 public class UnserializedAttribute : Attribute;
 
 // Serialized when exported for public usage
 // Fields & Properties will default to [PublicData] unless overriden with another permission
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
 public class PublicDataAttribute : Attribute;
 
 // All class members will default to [PrivateData]
 // Members can override if reference or type specifies [PublicData]/[ProtectedData]
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
 public class ProtectedDataAttribute : Attribute;
 
 // Not serialized when exported for public usage, data is only saved locally, could require encryption
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
 public class PrivateDataAttribute : Attribute;
+
+// Allows deserialized a deprecated member name in addition to the default name
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+public class DeprecatedNameAttribute(string name, params string[] names) : Attribute
+{
+	// passing a null param passes a null array :(
+	// Combine both params into a single list
+	public string[] Names { get; } =
+	[
+		name,
+		.. names
+	];
+}

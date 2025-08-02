@@ -43,7 +43,7 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	{
 		if (Context == null || reset)
 		{
-			Context = SynchronizationContext.Current ?? new SynchronizationContext();
+			Context = SynchronizationContext.Current ?? new();
 		}
 	}
 

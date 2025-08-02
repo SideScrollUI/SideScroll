@@ -188,13 +188,6 @@ public abstract class TypeRepo : IDisposable
 
 	public void SaveHeader(Log log, BinaryWriter writer)
 	{
-		// todo: optimize this
-		//writer.Write(objectOffsets.Count);
-		// offsets are a better solution if we don't read everything
-		/*foreach (long offset in objectOffsets)
-		{
-			writer.Write(offset);
-		}*/
 		// For UnknownTypeRepo
 		if (ObjectSizes == null)
 			return;
@@ -246,7 +239,6 @@ public abstract class TypeRepo : IDisposable
 			long objectStart = writer.BaseStream.Position;
 			SaveObject(writer, obj);
 			long objectEnd = writer.BaseStream.Position;
-			//ObjectOffsets.Add(objectStart);
 			ObjectSizes[index++] = (int)(objectEnd - objectStart);
 
 			logTimer.AddDebug("Saved Object", new Tag(TypeSchema.Name, obj));

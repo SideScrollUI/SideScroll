@@ -213,7 +213,7 @@ public class TabInstance : IDisposable
 	[MemberNotNull(nameof(UiContext))]
 	private void InitializeContext()
 	{
-		UiContext ??= SynchronizationContext.Current ?? new SynchronizationContext();
+		UiContext ??= SynchronizationContext.Current ?? new();
 	}
 
 	private static void ActionCallback(object? state)

@@ -12,18 +12,14 @@ public class LogWriterConsole
 	{
 		Log = log;
 
-		Context = SynchronizationContext.Current ?? new SynchronizationContext();
+		Context = SynchronizationContext.Current ?? new();
 
 		log.OnMessage += LogEntry_OnMessage;
 	}
 
 	private static void LogEntry_OnMessage(object? sender, LogMessageEventArgs e)
 	{
-		string indentation = "";
-		for (int i = 1; i < e.Entries.Count; i++)
-		{
-			indentation += '\t';
-		}
+		string indentation = new('\t', e.Entries.Count);
 
 		LogEntry newLog = e.Entries[0];
 		//string line = log.Created.ToString("yyyy-MM-dd HH:mm:ss") + indentation + log.ToString();

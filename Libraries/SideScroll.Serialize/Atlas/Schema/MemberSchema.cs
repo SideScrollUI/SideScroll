@@ -3,11 +3,11 @@ using System.Reflection;
 
 namespace SideScroll.Serialize.Atlas.Schema;
 
-public class MemberSchema
+public class MemberSchema(TypeSchema typeSchema, string name)
 {
-	public TypeSchema OwnerTypeSchema { get; }
+	public TypeSchema OwnerTypeSchema => typeSchema;
 
-	public string Name { get; }
+	public string Name => name;
 
 	public int TypeIndex { get; set; } = -1;
 
@@ -17,12 +17,6 @@ public class MemberSchema
 	public bool IsPrivate { get; protected set; }
 	public bool IsPublic { get; protected set; }
 	public bool IsReadable { get; set; }
-
-	public MemberSchema(TypeSchema typeSchema, string name)
-	{
-		OwnerTypeSchema = typeSchema;
-		Name = name;
-	}
 
 	public void Save(BinaryWriter writer)
 	{
@@ -37,17 +31,16 @@ public class MemberSchema
 
 		if (typeSchema.Type == null) return new MemberSchema(typeSchema, name);
 
-		var members = typeSchema.Type.GetMember(name, TypeSchema.BindingAttributes);
+		MemberInfo? memberInfo = typeSchema.GetMemberInfo(name);
 
-		if (members.Length > 0 && (serializer.EnableFieldToPropertyMapping || members[0] is T))
+		if (memberInfo != null && (serializer.EnableFieldToPropertyMapping || memberInfo is T))
 		{
-			// Flattened Binding used so there's only one
-			if (members[0] is FieldInfo fieldInfo)
+			if (memberInfo is FieldInfo fieldInfo)
 			{
 				return new FieldSchema(typeSchema, fieldInfo);
 			}
 
-			if (members[0] is PropertyInfo propertyInfo)
+			if (memberInfo is PropertyInfo propertyInfo)
 			{
 				return new PropertySchema(typeSchema, propertyInfo);
 			}

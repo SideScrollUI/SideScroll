@@ -271,9 +271,6 @@ public class TypeSchema
 		if (typeof(Type).IsAssignableFrom(Type))
 			return true;
 
-		//if (Type.IsSecurityCritical) // useful?
-		//	return true;
-
 		if (Type.IsGenericType)
 		{
 			Type genericType = Type.GetGenericTypeDefinition();
@@ -463,5 +460,23 @@ public class TypeSchema
 		{
 			propertySchema.Validate(typeSchemas);
 		}
+	}
+
+	public MemberInfo? GetMemberInfo(string name)
+	{
+		var members = Type!.GetMember(name, BindingAttributes);
+		if (members.Length > 0)
+			return members[0];
+
+		// Check deprecated names
+		foreach (MemberInfo memberInfo in Type!.GetMembers(BindingAttributes))
+		{
+			if (memberInfo.GetCustomAttribute<DeprecatedNameAttribute>() is DeprecatedNameAttribute attribute &&
+				attribute.Names.Contains(name))
+			{
+				return memberInfo;
+			}
+		}
+		return null;
 	}
 }

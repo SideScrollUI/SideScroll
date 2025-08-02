@@ -8,6 +8,9 @@
     - Added DataPageView HasNext and HasPrevious DataBinding
     - Removed [Params] and added TabModel.AddObject(obj, editable: true)
     - Renamed [Static] to [CloneReference] to better reflect usage
+    - Added [DeprecatedName("OldName")] to allow deserializing deprecated member names
+    - Added struct support for several attributes to match class support
+    - Rolled Svg.Controls.Skia.Avalonia back to an older Avalonia.Svg.Skia due to older Linux and WebAssembly compatibility issues
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.2</AvaloniaVersion>

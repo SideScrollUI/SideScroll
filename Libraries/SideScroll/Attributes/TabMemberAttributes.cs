@@ -38,15 +38,15 @@ public class HiddenColumnAttribute : Attribute;
 public class HiddenRowAttribute : Attribute;
 
 // Don't show row or column if any value matches
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
 public class HideAttribute(object? value, params object?[] additonalValues) : Attribute
 {
 	// passing a null param passes a null array :(
 	// Combine both params into a single list
 	public object?[] Values { get; } =
 	[
-		.. additonalValues,
-		value
+		value,
+		.. additonalValues
 	];
 }
 
@@ -58,8 +58,8 @@ public class HideRowAttribute(object? value, params object?[] additonalValues) :
 	// Combine both params into a single list
 	public object?[] Values { get; } =
 	[
-		.. additonalValues,
-		value
+		value,
+		.. additonalValues
 	];
 }
 
@@ -71,8 +71,8 @@ public class HideColumnAttribute(object? value, params object?[] additonalValues
 	// Combine both params into a single list
 	public object?[] Values { get; } =
 	[
-		.. additonalValues,	
-		value
+		value,
+		.. additonalValues
 	];
 }
 
@@ -167,7 +167,7 @@ public class ButtonColumnAttribute : Attribute
 	}
 }
 
-// -> Allows setting the column for param controls. This should usually be in multiples of 2 since a label & control use two columns
+// -> Allows setting the column for tab forms. This should usually be in multiples of 2 since a label & control use two columns
 [AttributeUsage(AttributeTargets.Property)]
 public class ColumnIndexAttribute(int index) : Attribute
 {

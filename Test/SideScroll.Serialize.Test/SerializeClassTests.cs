@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Attributes;
 using SideScroll.Serialize.Atlas;
 using System.Collections;
 using System.Text;
@@ -153,6 +154,40 @@ public class SerializeClassTests : SerializeBaseTest
 				Array.Copy(newBytes, 0, bytes, i, newBytes.Length);
 			}
 		}
+	}
+
+	public class OldClass
+	{
+		public int OldField = 1;
+		public int OldProperty { get; set; } = 1;
+	}
+
+	public class NewClass
+	{
+		[DeprecatedName(nameof(OldClass.OldField))]
+		public int NewField = 2;
+
+		[DeprecatedName(nameof(OldClass.OldProperty))]
+		public int NewProperty { get; set; } = 2;
+	}
+
+	[Test]
+	public void DeprecatedName()
+	{
+		OldClass input = new()
+		{
+			OldField = 4,
+			OldProperty = 5,
+		};
+
+		_serializer.Save(Call, input);
+
+		ReplaceBytes(nameof(OldClass), nameof(NewClass));
+
+		var output = _serializer.Load<NewClass>(Call);
+
+		Assert.That(output.NewField, Is.EqualTo(input.OldField));
+		Assert.That(output.NewProperty, Is.EqualTo(input.OldProperty));
 	}
 
 	public class NullablePropertyPrimitives

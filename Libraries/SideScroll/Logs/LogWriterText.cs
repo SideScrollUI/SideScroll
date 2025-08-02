@@ -23,7 +23,7 @@ public class LogWriterText : IDisposable
 
 		_textStreamWriter = new StreamWriter(SaveFilePath);
 
-		_context = SynchronizationContext.Current ?? new SynchronizationContext();
+		_context = SynchronizationContext.Current ?? new();
 
 		log.OnMessage += Log_OnMessage;
 	}
