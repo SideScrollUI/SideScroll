@@ -44,7 +44,7 @@ public class TabFileSerialized(string path) : ITab
 				call.Log.Add(ex);
 			}
 
-			_items.Add(new ListItem("Bytes", ListByte.Load(_serializerFile.DataPath!)));
+			_items.Add(new ListItem("Bytes", new TabFileBytes(_serializerFile.DataPath!)));
 		}
 
 		private void LoadPublicData(Call call)

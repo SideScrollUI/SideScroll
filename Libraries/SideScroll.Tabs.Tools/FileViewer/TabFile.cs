@@ -109,6 +109,10 @@ public class TabFile(FileView fileView) : ITab
 				{
 					items.Add(new ListItem("Contents", new FilePath(path)));
 				}
+				else
+				{
+					items.Add(new ListItem("Bytes", new TabFileBytes(path)));
+				}
 			}
 			items.Add(new ListItem("File Info", new FileInfo(path)));
 
