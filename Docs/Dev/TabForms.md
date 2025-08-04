@@ -1,19 +1,20 @@
-# Param Controls
+# Tab Forms
 
-* Param controls allow editing objects by automatically mapping visible properties to a matching UI control
-* Adding a class of type `[Params]` to a `TabModel` creates a `TabControlParams`
+* Tab Form controls allow editing objects by automatically mapping visible properties to a matching Avalonia control
 
-### Sample Param Tab
+### Sample Tab Form
 
 ```csharp
+using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Toolbar;
 
-namespace SideScroll.Tabs.Samples.Params;
+namespace SideScroll.Tabs.Samples.Forms;
 
-public class TabSampleParamsDataTabs : ITab
+[TabRoot, PublicData]
+public class TabSampleFormDataTabs : ITab
 {
 	public override string ToString() => "Data Repos";
 
@@ -27,17 +28,18 @@ public class TabSampleParamsDataTabs : ITab
 
 	public class Instance : TabInstance
 	{
+		private const string GroupId = "SampleParams";
 		private const string DataKey = "Params";
 
-		private SampleParamItem? _sampleParamItem;
-		private DataRepoView<SampleParamItem>? _dataRepoView;
+		private SampleItem? _sampleItem;
+		private DataRepoView<SampleItem>? _dataRepoView;
 
 		public override void Load(Call call, TabModel model)
 		{
 			LoadSavedItems(call, model);
 
-			_sampleParamItem = LoadData<SampleParamItem>(DataKey);
-			model.AddObject(_sampleParamItem!);
+			_sampleItem ??= LoadData<SampleItem>(DataKey);
+			model.AddForm(_sampleItem!);
 
 			Toolbar toolbar = new();
 			toolbar.ButtonNew.Action = New;
@@ -47,15 +49,16 @@ public class TabSampleParamsDataTabs : ITab
 
 		private void LoadSavedItems(Call call, TabModel model)
 		{
-			_dataRepoView = DataApp.LoadView<SampleParamItem>(call, "SampleParams", nameof(SampleParamItem.Name));
-			DataRepoInstance = _dataRepoView;
+			_dataRepoView = Data.App.LoadView<SampleItem>(call, GroupId, nameof(SampleItem.Name));
+			DataRepoInstance = _dataRepoView; // Allow links to pass the selected items
 
-			var dataCollection = new DataViewCollection<SampleParamItem, TabSampleParamItem>(_dataRepoView);
+			var dataCollection = new DataViewCollection<SampleItem, TabSampleItem>(_dataRepoView);
 			model.Items = dataCollection.Items;
 		}
 
 		private void New(Call call)
 		{
+			_sampleItem = new();
 			Reload();
 		}
 
@@ -63,12 +66,13 @@ public class TabSampleParamsDataTabs : ITab
 		{
 			Validate();
 
-			SampleParamItem clone = _sampleParamItem.DeepClone(call)!;
-			_dataRepoView!.Save(call, clone.ToString(), clone);
+			SampleItem clone = _sampleItem.DeepClone(call)!;
+			_dataRepoView!.Save(call, clone);
 			SaveData(DataKey, clone);
 		}
 	}
 }
+
 ```
 [Source](../../Libraries/SideScroll.Tabs.Samples/Forms/TabSampleFormDataTabs.cs)
 
@@ -76,13 +80,15 @@ public class TabSampleParamsDataTabs : ITab
 
 ```csharp
 using SideScroll.Attributes;
+using SideScroll.Extensions;
+using SideScroll.Time;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace SideScroll.Tabs.Samples.Params;
+namespace SideScroll.Tabs.Samples.Forms;
 
-[Params, PublicData]
-public class SampleParamItem
+[PublicData]
+public class SampleItem
 {
 	[DataKey, Required, StringLength(30)]
 	public string Name { get; set; } = "Test";
@@ -103,7 +109,7 @@ public class SampleParamItem
 
 	public AttributeTargets EnumAttributeTargets { get; set; } = AttributeTargets.Event;
 
-	public static List<ParamListItem> ListItems =>
+	public static List<ParamListItem> ListItems { get; } =
 	[
 		new("One", 1),
 		new("Two", 2),
@@ -113,9 +119,14 @@ public class SampleParamItem
 	[BindList(nameof(ListItems)), ColumnIndex(2)]
 	public ParamListItem ListItem { get; set; }
 
-	public DateTime DateTime { get; set; } = DateTime.Now;
+	public DateTime DateTime { get; set; } = TimeZoneView.Now.Trim();
 
-	public SampleParamItem()
+	public static List<TimeZoneView> TimeZones => TimeZoneView.All;
+
+	[BindList(nameof(TimeZones))]
+	public TimeZoneView TimeZone { get; set; } = TimeZoneView.Current;
+
+	public SampleItem()
 	{
 		ListItem = ListItems[1];
 	}
@@ -124,30 +135,23 @@ public class SampleParamItem
 }
 
 [PublicData]
-public class ParamListItem
+public class ParamListItem(string name, int value)
 {
-	public string? Name { get; set; }
-	public int Value { get; set; }
+	public string? Name { get; set; } = name;
+	public int Value { get; set; } = value;
 
 	public override string? ToString() => Name;
-
-	public ParamListItem() { }
-
-	public ParamListItem(string name, int value)
-	{
-		Name = name;
-		Value = value;
-	}
 }
+
 ```
 [Source](../../Libraries/SideScroll.Tabs.Samples/Forms/SampleItem.cs)
 
 ## Custom Controls
 
-- Pass any `object` to a `TabControlParams` to allow updating that control directly
+- Pass any `object` to a `TabForm` to allow updating that control directly
 ```csharp
-var planetParams = new TabControlParams(_planet);
-model.AddObject(planetParams);
+var planetForm = new TabForm(_planet);
+model.AddObject(planetForm);
 ```
 [Source](../../Libraries/SideScroll.Avalonia/Samples/Controls/CustomControl/TabCustomControl.cs)
 
