@@ -70,7 +70,7 @@ public class TabSampleParamsDataTabs : ITab
 	}
 }
 ```
-[Source](../../Libraries/SideScroll.Tabs.Samples/Params/TabSampleParamsDataTabs.cs)
+[Source](../../Libraries/SideScroll.Tabs.Samples/Forms/TabSampleFormDataTabs.cs)
 
 ### Sample Param Item
 
@@ -140,7 +140,7 @@ public class ParamListItem
 	}
 }
 ```
-[Source](../../Libraries/SideScroll.Tabs.Samples/Params/SampleParamItem.cs)
+[Source](../../Libraries/SideScroll.Tabs.Samples/Forms/SampleItem.cs)
 
 ## Custom Controls
 
@@ -165,4 +165,4 @@ model.AddObject(planetParams);
 
 ## Links
 
-- [Sample Tabs](../../Libraries/SideScroll.Tabs.Samples/Params/TabSampleParams.cs)
+- [Sample Tabs](../../Libraries/SideScroll.Tabs.Samples/Forms/TabSampleForms.cs)

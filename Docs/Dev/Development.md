@@ -27,7 +27,7 @@ dotnet run --project Programs/SideScroll.Start.Avalonia/SideScroll.Start.Avaloni
 
 * [Project Setup](ProjectSetup.md)
 * [Adding Tabs](AddingTabs.md)
-* [Param Controls](ParamControls.md)
+* [Tab Forms](TabForms.md)
 * [DataRepos](DataRepos.md)
 * [Serializer](Serializer.md)
 * [Logs](Logs.md)

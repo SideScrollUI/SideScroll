@@ -43,8 +43,11 @@
 * SideScroll.Avalonia.Charts
   - Base chart interface
 
-* SideScroll.Avalonia.LiveCharts
+* SideScroll.Avalonia.Charts.LiveCharts
   - LiveCharts version of the Charts package
+
+* SideScroll.Avalonia.Samples
+  - Sample tabs for custom Avalonia controls
 
 * SideScroll.Avalonia.ScreenCapture
   - Screenshot control for Windows and MacOS
