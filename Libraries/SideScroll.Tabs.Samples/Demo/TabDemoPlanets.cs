@@ -4,7 +4,6 @@ using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Samples.Models;
 using SideScroll.Tabs.Toolbar;
-using System.Text.Json;
 
 namespace SideScroll.Tabs.Samples.Demo;
 
@@ -102,9 +101,7 @@ public class TabDemoPlanets : ITab
 
 		private void CopyClipBoardUI(Call call)
 		{
-			var options = new JsonSerializerOptions { WriteIndented = true };
-			string json = JsonSerializer.Serialize(SelectedItems, options);
-			CopyToClipboard(json);
+			CopyToClipboard(SelectedItems);
 		}
 	}
 }

@@ -1,5 +1,7 @@
 using Avalonia;
+using Avalonia.Data.Core.Plugins;
 using Avalonia.Styling;
+using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Themes.Tabs;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs;
@@ -136,6 +138,16 @@ public class ThemeManager
 		{
 			DataRepoDefaultThemes.Save(call, themeSettings);
 		}
+	}
+
+	// This should only be run once at program startup
+	public static void InitializeApp()
+	{
+		// Remove Default DataAnnotations Validators
+		// These validators show before values are entered, which ends up showing too many initial warnings
+		// https://docs.avaloniaui.net/docs/data-binding/data-validation
+		// Add custom template?
+		BindingPlugins.DataValidators.RemoveAt(0);
 	}
 
 	public static void Initialize(Project project)

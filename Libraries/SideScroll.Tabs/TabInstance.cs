@@ -12,6 +12,7 @@ using SideScroll.Tasks;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Text.Json;
 
 namespace SideScroll.Tabs;
 
@@ -969,5 +970,12 @@ public class TabInstance : IDisposable
 	public void CopyToClipboard(string text)
 	{
 		OnCopyToClipboard?.Invoke(this, new CopyToClipboardEventArgs(text));
+	}
+
+	public void CopyToClipboard(object? obj)
+	{
+		var options = new JsonSerializerOptions { WriteIndented = true };
+		string json = JsonSerializer.Serialize(obj, options);
+		CopyToClipboard(json);
 	}
 }

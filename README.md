@@ -47,6 +47,7 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 
 ## Documentation
 
+* [Project Setup](Docs/Dev/ProjectSetup.md)
 * [Development](Docs/Dev/Development.md)
 * [User Guide](Docs/UserGuide.md)
 * [Credits](Docs/Credits.md)

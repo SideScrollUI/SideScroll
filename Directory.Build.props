@@ -13,7 +13,7 @@
     - Rolled Svg.Controls.Skia.Avalonia back to an older Avalonia.Svg.Skia due to older Linux and WebAssembly compatibility issues
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.2</AvaloniaVersion>
+    <AvaloniaVersion>11.3.3</AvaloniaVersion>
     <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
@@ -23,6 +23,7 @@
 
     <Description>SideScroll is a cross platform Avalonia UI framework designed for quickly navigating through a tree of tabs. Every tab that shows will automatically select the next most likely tabs, and the next, until you need to start scrolling. Navigate 20 or even 50 tabs deep, and create links to save or share with others.</Description>
     <RepositoryUrl>https://github.com/SideScrollUI/SideScroll</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <Authors>SideScroll UI</Authors>
     <Copyright>SideScroll UI</Copyright>
 

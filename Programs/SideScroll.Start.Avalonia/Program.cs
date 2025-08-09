@@ -1,8 +1,8 @@
 using Avalonia;
-using Avalonia.Data.Core.Plugins;
 using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Samples;
 using SideScroll.Avalonia.ScreenCapture;
+using SideScroll.Avalonia.Themes;
 using SideScroll.Utilities;
 
 namespace SideScroll.Start.Avalonia;
@@ -13,11 +13,7 @@ static class Program
 	{
 		AppBuilder builder = BuildAvaloniaApp();
 
-		// Remove Default DataAnnotations Validators
-		// These validators show before values are entered, which ends up showing too many initial warnings
-		// https://docs.avaloniaui.net/docs/data-binding/data-validation
-		// Add custom template?
-		BindingPlugins.DataValidators.RemoveAt(0);
+		ThemeManager.InitializeApp();
 
 		TabViewer.Plugins.Add(new ScreenCapture.TabViewerPlugin());
 
