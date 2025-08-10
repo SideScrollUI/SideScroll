@@ -11,8 +11,9 @@
     - Added [DeprecatedName("OldName")] to allow deserializing deprecated field and property names
     - Added struct support for several attributes to match class support
     - Rolled Svg.Controls.Skia.Avalonia back to an older Avalonia.Svg.Skia due to older Linux and WebAssembly compatibility issues
-    - Added Process Manager Tab to the Sample Charts
-    - Added ChartView.ShowNowTime for showing the chart now time annotation
+    - Added Process Monitor Tab to the Sample Charts
+    - Added ChartView.ShowNowTime to control showing the chart now time annotation
+    - Improved LiveCharts handling when there's no data points
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.3</AvaloniaVersion>

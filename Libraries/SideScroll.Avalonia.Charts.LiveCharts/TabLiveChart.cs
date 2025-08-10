@@ -456,7 +456,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		{
 			var startTime = new DateTime((long)minimum, DateTimeKind.Utc);
 			var endTime = new DateTime((long)maximum, DateTimeKind.Utc);
-			var timeWindow = new TimeWindow(startTime, endTime).Trim();
+			var timeWindow = new TimeWindow(startTime, endTime);
 
 			if (ChartView.TimeWindow == null)
 			{
@@ -494,7 +494,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 		XAxis.Labeler = value =>
 		{
-			DateTime timestamp = TimeZoneView.Current.Convert(new DateTime((long)value, DateTimeKind.Utc));
+			DateTime timestamp = TimeZoneView.Current.Convert(value < 0.0 ? DateTime.UtcNow : new DateTime((long)value, DateTimeKind.Utc));
 			return dateFormat.Format(timestamp);
 		};
 		XAxis.UnitWidth = stepDuration.Ticks; // Hover depends on this

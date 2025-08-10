@@ -93,6 +93,10 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	public void UpdateTotal()
 	{
 		Total = ChartSeries.ListSeries.Total;
+		if (Count == 0 && ChartSeries.ListSeries.List.Count > 0)
+		{
+			IsSelected = true; // Now has points
+		}
 		Count = ChartSeries.ListSeries.List.Count;
 		if (TextBlockTotal != null)
 		{

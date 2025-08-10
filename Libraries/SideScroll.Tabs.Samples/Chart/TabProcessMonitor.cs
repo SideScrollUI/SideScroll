@@ -3,6 +3,7 @@ using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Time;
 using System.Diagnostics;
 
 namespace SideScroll.Tabs.Samples.Chart;
@@ -22,7 +23,10 @@ public class TabProcessMonitor : ITab
 	public class Instance : TabInstance
 	{
 		private ItemQueueCollection<CpuSample> _cpuUsage = [];
-		private ItemQueueCollection<MemorySample> _memoryUsage = [];
+
+		private ItemQueueCollection<TimeRangeValue> _memoryUsageWorkingSet = [];
+		private ItemQueueCollection<TimeRangeValue> _memoryUsagePrivate = [];
+		private ItemQueueCollection<TimeRangeValue> _memoryUsageManaged = [];
 
 		private Process? _process;
 		private Timer? _timer;
@@ -38,7 +42,11 @@ public class TabProcessMonitor : ITab
 			_process = Process.GetCurrentProcess();
 
 			_cpuUsage = [];
-			_memoryUsage = [];
+
+			_memoryUsageWorkingSet = [];
+			_memoryUsagePrivate = [];
+			_memoryUsageManaged = [];
+
 			_prevSampleTime = null;
 
 			AddSample();
@@ -48,26 +56,30 @@ public class TabProcessMonitor : ITab
 			toolbar.ButtonStop.Action = StopTask;
 			model.AddObject(toolbar);
 
+			// Uses one collection for all series, and maps object properties to the values
 			ChartView cpuChart = new("CPU Usage")
 			{
 				ShowNowTime = false,
+				DefaultPeriodDuration = TimeSpan.FromSeconds(1),
 			};
 			cpuChart.AddSeries("Privileged", _cpuUsage, nameof(CpuSample.TimeStamp), nameof(CpuSample.PrivilegedUsage), SeriesType.Average);
 			cpuChart.AddSeries("Total", _cpuUsage, nameof(CpuSample.TimeStamp), nameof(CpuSample.TotalUsage), SeriesType.Average);
 			cpuChart.AddSeries("User", _cpuUsage, nameof(CpuSample.TimeStamp), nameof(CpuSample.UserUsage), SeriesType.Average);
 			model.AddObject(cpuChart);
 
+			// Uses separate collections per series, and each series uses separate TimeRangeValue records
 			ChartView memoryChart = new("Memory Usage")
 			{
 				ShowNowTime = false,
+				DefaultPeriodDuration = TimeSpan.FromSeconds(1),
 			};
-			memoryChart.AddSeries("Working Set", _memoryUsage, nameof(MemorySample.TimeStamp), nameof(MemorySample.WorkingSet), SeriesType.Average);
-			memoryChart.AddSeries("Private", _memoryUsage, nameof(MemorySample.TimeStamp), nameof(MemorySample.PrivateBytes), SeriesType.Average);
-			memoryChart.AddSeries("Managed", _memoryUsage, nameof(MemorySample.TimeStamp), nameof(MemorySample.ManagedMemory), SeriesType.Average);
+			memoryChart.AddSeries("Working Set", _memoryUsageWorkingSet, seriesType: SeriesType.Average);
+			memoryChart.AddSeries("Private", _memoryUsagePrivate, seriesType: SeriesType.Average);
+			memoryChart.AddSeries("Managed", _memoryUsageManaged, seriesType: SeriesType.Average);
 			model.AddObject(memoryChart);
 
 			_timer?.Dispose();
-			_timer = new Timer(Callback, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+			_timer = new Timer(Callback, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
 		}
 
 		private void StopTask(Call call)
@@ -122,15 +134,14 @@ public class TabProcessMonitor : ITab
 		private void AddMemorySample()
 		{
 			DateTime sampleTime = DateTime.Now;
-			MemorySample sample = new()
-			{
-				TimeStamp = sampleTime,
-				WorkingSet = _process!.WorkingSet64,         // Physical memory in bytes
-				PrivateBytes = _process.PrivateMemorySize64, // Private memory in bytes
-				ManagedMemory = GC.GetTotalMemory(false),    // Managed heap only
-			};
 
-			_memoryUsage.Add(sample);
+			long workingSet = _process!.WorkingSet64;          // Physical memory in bytes
+			long privateMemory = _process.PrivateMemorySize64; // Private memory in bytes
+			long managedMemory = GC.GetTotalMemory(false);     // Managed heap only
+
+			_memoryUsageWorkingSet.Add(new TimeRangeValue(sampleTime, sampleTime, workingSet));
+			_memoryUsagePrivate.Add(new TimeRangeValue(sampleTime, sampleTime, privateMemory));
+			_memoryUsageManaged.Add(new TimeRangeValue(sampleTime, sampleTime, managedMemory));
 		}
 	}
 }
@@ -141,12 +152,4 @@ public class CpuSample
 	public double PrivilegedUsage { get; set; }
 	public double TotalUsage { get; set; }
 	public double UserUsage { get; set; }
-}
-
-public class MemorySample
-{
-	public DateTime TimeStamp { get; set; }
-	public long WorkingSet { get; set; }
-	public long PrivateBytes { get; set; }
-	public long ManagedMemory { get; set; }
 }

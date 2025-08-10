@@ -110,7 +110,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		return title;
 	}
 
-	public string[] GetTooltipLines(ChartPoint point)
+	public List<string> GetTooltipLines(ChartPoint point)
 	{
 		List<string> lines = [];
 
@@ -135,7 +135,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 					}
 					else
 					{
-						lines.Add($"Time: {startTime.Formatted()}");
+						lines.Add($"Time: {startTime.Format()}");
 					}
 				}
 				else
@@ -160,7 +160,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 			lines.Add("");
 			lines.AddRange(ListSeries.Description.Split('\n'));
 		}
-		return lines.ToArray();
+		return lines;
 	}
 
 	private List<LiveChartPoint> GetDataPoints(ListSeries listSeries, IList iList)

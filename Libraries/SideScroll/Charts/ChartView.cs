@@ -50,6 +50,7 @@ public class ChartView
 	public double XBinSize { get; set; }
 
 	public TimeWindow? TimeWindow { get; set; }
+	public TimeSpan? DefaultPeriodDuration { get; set; }
 
 	public List<ListSeries> Series { get; set; } = [];
 
@@ -81,7 +82,10 @@ public class ChartView
 
 	public ListSeries AddSeries(string name, IList list, string? xPropertyName = null, string? yPropertyName = null, SeriesType seriesType = SeriesType.Sum)
 	{
-		var series = new ListSeries(name, list, xPropertyName, yPropertyName, seriesType);
+		var series = new ListSeries(name, list, xPropertyName, yPropertyName, seriesType)
+		{
+			PeriodDuration = DefaultPeriodDuration,
+		};
 		Series.Add(series);
 		return series;
 	}
@@ -121,6 +125,7 @@ public class ChartView
 			var listSeries = new ListSeries(name, dimensionList, _xPropertyName, _yPropertyName)
 			{
 				XBinSize = XBinSize,
+				PeriodDuration = DefaultPeriodDuration,
 			};
 			Series.Add(listSeries);
 		}
