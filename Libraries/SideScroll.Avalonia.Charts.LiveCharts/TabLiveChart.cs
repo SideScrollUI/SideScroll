@@ -201,9 +201,11 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 	public void Refresh()
 	{
+		ChartView.SortByTotal();
+
 		UpdateAxis();
 
-		Legend.RefreshModel();
+		Legend?.RefreshModel();
 
 		//InvalidateChart();
 	}
@@ -450,12 +452,20 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			XAxis.MaxLimit = maximum;
 		}*/
 
-		if (ChartView.TimeWindow == null && minimum != double.MaxValue)
+		if (minimum != double.MaxValue)
 		{
 			var startTime = new DateTime((long)minimum, DateTimeKind.Utc);
 			var endTime = new DateTime((long)maximum, DateTimeKind.Utc);
+			var timeWindow = new TimeWindow(startTime, endTime).Trim();
 
-			ChartView.TimeWindow = new TimeWindow(startTime, endTime).Trim();
+			if (ChartView.TimeWindow == null)
+			{
+				ChartView.TimeWindow = timeWindow;
+			}
+			else if (timeWindow.EndTime > ChartView.TimeWindow!.EndTime)
+			{
+				ChartView.TimeWindow.Update(timeWindow);
+			}
 		}
 
 		UpdateDateTimeAxisWindow(ChartView.TimeWindow?.Selection ?? ChartView.TimeWindow);

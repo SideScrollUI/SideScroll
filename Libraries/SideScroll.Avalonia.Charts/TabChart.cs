@@ -60,6 +60,8 @@ public interface ITabChart
 
 public abstract class TabChart<TSeries> : Border, ITabChart
 {
+	public const string NowTimeName = "Now";
+
 	public Color TimeTrackerColor { get; set; } = SideScrollTheme.DataGridRowHighlight.Color;
 	public Color GridLineColor { get; set; } = SideScrollTheme.ChartGridLines.Color;
 	public Color NowColor { get; set; } = SideScrollTheme.ChartNowLine.Color;
@@ -191,6 +193,10 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 
 	public void UpdateNowTime()
 	{
+		ChartView.Annotations.RemoveAll(a => a.Text == NowTimeName);
+
+		if (!ChartView.ShowNowTime) return;
+		
 		var now = DateTime.UtcNow;
 		if (NowTimeAnnotation == null)
 		{
@@ -199,7 +205,7 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 
 			NowTimeAnnotation = new ChartAnnotation
 			{
-				Text = "Now",
+				Text = NowTimeName,
 				Horizontal = false,
 				Color = NowColor.AsSystemColor(),
 				// LineStyle = LineStyle.Dot,
@@ -209,7 +215,6 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 		NowTimeAnnotation.X = now.Ticks;
 
 		// ChartView's can be reused across different Charts, so we can't just remove the current occurence of Now
-		ChartView.Annotations.RemoveAll(a => a.Text == "Now");
 		ChartView.Annotations.Add(NowTimeAnnotation);
 	}
 

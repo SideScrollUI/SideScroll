@@ -41,7 +41,8 @@ public class ChartView
 	public string? LegendTitle { get; set; }
 
 	public bool ShowOrder { get; set; } = true;
-	public bool ShowTimeTracker { get; set; }
+	public bool ShowNowTime { get; set; } = true; // Time Series only
+	public bool ShowTimeTracker { get; set; } // Time Series only
 	public bool IsStacked { get; set; }
 
 	public double? LogBase { get; set; }

@@ -2,7 +2,6 @@ using Avalonia;
 using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Samples;
 using SideScroll.Avalonia.ScreenCapture;
-using SideScroll.Avalonia.Themes;
 using SideScroll.Utilities;
 
 namespace SideScroll.Start.Avalonia;
@@ -12,8 +11,6 @@ static class Program
 	static int Main(string[] args)
 	{
 		AppBuilder builder = BuildAvaloniaApp();
-
-		ThemeManager.InitializeApp();
 
 		TabViewer.Plugins.Add(new ScreenCapture.TabViewerPlugin());
 

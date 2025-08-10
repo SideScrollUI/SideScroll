@@ -84,7 +84,10 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void SetFilled(bool filled)
 	{
-		_polygon!.Fill = filled && Count > 0 ? _colorBrush : Brushes.Transparent;
+		if (_polygon != null)
+		{
+			_polygon.Fill = filled && Count > 0 ? _colorBrush : Brushes.Transparent;
+		}
 	}
 
 	public void UpdateTotal()
@@ -95,6 +98,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		{
 			TextBlockTotal.Text = Total?.FormattedShortDecimal();
 		}
+		UpdateCheckBox();
 	}
 
 	private void AddCheckBox()
@@ -109,17 +113,28 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			VerticalAlignment = VerticalAlignment.Center,
 		};
 
+		UpdateCheckBox();
+
+		_polygon.PointerPressed += Polygon_PointerPressed;
+		Children.Add(_polygon);
+	}
+
+	private void UpdateCheckBox()
+	{
+		if (_polygon == null) return;
+
 		if (Count > 0)
 		{
+			if (_polygon.Fill == null)
+			{
+				IsSelected = true;
+			}
 			_polygon.Fill = _colorBrush;
 		}
 		else
 		{
 			IsSelected = false;
 		}
-
-		_polygon.PointerPressed += Polygon_PointerPressed;
-		Children.Add(_polygon);
 	}
 
 	private static List<Point> GetPolygonPoints(int width, int height, int cornerSize = 3)

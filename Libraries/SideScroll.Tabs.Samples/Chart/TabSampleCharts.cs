@@ -12,4 +12,5 @@ public class TabSampleCharts
 	public static TabSampleChartTimeSeriesFractional Fractional => new();
 	public static TabSampleChartSeriesCount SeriesCount => new();
 	public static TabSampleChartNoData NoData => new();
+	public static TabProcessMonitor ProcessMonitor => new();
 }

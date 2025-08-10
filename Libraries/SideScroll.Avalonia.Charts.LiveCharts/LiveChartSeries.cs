@@ -31,6 +31,8 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 	public LiveChartLineSeries LineSeries { get; set; }
 	public List<LiveChartPoint> DataPoints { get; set; } = [];
 
+	public SKColor SkColor { get; protected set; }
+
 	public override string? ToString() => ListSeries?.ToString();
 
 	public LiveChartSeries(TabLiveChart chart, ListSeries listSeries, Color color, bool useDateTimeAxis)
@@ -39,7 +41,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		ListSeries = listSeries;
 		UseDateTimeAxis = useDateTimeAxis;
 
-		SKColor skColor = color.AsSkColor();
+		SkColor = color.AsSkColor();
 
 		// Can't add gaps with ItemSource so convert to LiveChartPoint ourselves
 		DataPoints = GetDataPoints(listSeries, listSeries.List);
@@ -52,17 +54,13 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 			GeometrySize = listSeries.MarkerSize ?? DefaultGeometrySize,
 			EnableNullSplitting = true,
 
-			Stroke = new SolidColorPaint(skColor, (float)listSeries.StrokeThickness),
+			Stroke = new SolidColorPaint(SkColor, (float)listSeries.StrokeThickness),
 			GeometryStroke = null,
 			GeometryFill = null,
 			Fill = null,
 		};
 
-		if (listSeries.List.Count > 0 && listSeries.List.Count <= MaxPointsToShowMarkers || HasSinglePoint(DataPoints))
-		{
-			//LineSeries.GeometryStroke = new SolidColorPaint(skColor, 2f);
-			LineSeries.GeometryFill = new SolidColorPaint(skColor);
-		}
+		UpdateMarkers();
 
 		if (listSeries.List is INotifyCollectionChanged notifyCollectionChanged)
 		{
@@ -71,6 +69,18 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 				// Can we remove this later when disposing?
 				SeriesChanged(listSeries, e);
 			});
+		}
+	}
+	private void UpdateMarkers()
+	{
+		if (ListSeries.List.Count > 0 && ListSeries.List.Count <= MaxPointsToShowMarkers || HasSinglePoint(DataPoints))
+		{
+			//LineSeries.GeometryStroke = new SolidColorPaint(skColor, 2f);
+			LineSeries.GeometryFill = new SolidColorPaint(SkColor);
+		}
+		else
+		{
+			LineSeries.GeometryFill = null;
 		}
 	}
 
@@ -278,6 +288,8 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 					DataPoints.RemoveAll(point => point.X == datapoint.X);
 				}
 			}
+
+			UpdateMarkers();
 		}
 
 		Dispatcher.UIThread.InvokeAsync(Chart.Refresh, DispatcherPriority.Background);

@@ -28,7 +28,7 @@ public class TabSampleFormCollection : ITab
 		{
 			LoadSavedItems(call, model);
 
-			_sampleItem = LoadData<SampleItem>(DataKey);
+			_sampleItem = LoadData<SampleItem>(DataKey, true);
 			model.AddForm(_sampleItem!);
 
 			var toolbar = new Toolbar();

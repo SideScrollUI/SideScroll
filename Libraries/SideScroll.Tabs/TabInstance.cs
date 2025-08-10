@@ -241,6 +241,8 @@ public class TabInstance : IDisposable
 
 	public void Invoke(Call call, Action action)
 	{
+		using var callTimer = call.Timer(action.ToString());
+
 		UiContext.Post(ActionCallback, action);
 	}
 
@@ -801,14 +803,13 @@ public class TabInstance : IDisposable
 		Data.App.Save<T>(groupId, key, obj, TaskInstance.Call);
 	}
 
-	// todo: Should createIfNeeded = false?
-	public T? LoadData<T>(string key, bool createIfNeeded = true)
+	public T? LoadData<T>(string key, bool createIfNeeded) // todo: switch default to false
 	{
 		T? data = Data.App.Load<T>(key, TaskInstance.Call, createIfNeeded);
 		return data;
 	}
 
-	public T? LoadData<T>(string groupId, string key, bool createIfNeeded = true)
+	public T? LoadData<T>(string groupId, string key, bool createIfNeeded) // todo: switch default to false
 	{
 		T? data = Data.App.Load<T>(groupId, key, TaskInstance.Call, createIfNeeded);
 		return data;

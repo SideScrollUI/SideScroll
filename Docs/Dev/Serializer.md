@@ -35,7 +35,7 @@ public class MyClass(int param)
 ## Object Cloning
 
 - You can call the `Serializer.DeepClone<Type>()` to do a deep clone of any object that can be serialized.
-- Any class with a `[Static]` will not be cloned to speed things up (useful for objects that won't change). This can be useful for copying objects where most of the data doesn't change and you want to take snapshots at intervals.
+- Any class with a `[CloneReference]` will not be cloned to speed things up (useful for objects that won't change). This can be useful for copying objects where most of the data doesn't change and you want to take snapshots at intervals.
 
 ## Restricting Types & Members
 

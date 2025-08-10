@@ -26,7 +26,7 @@ public class TabSampleFormTasks : ITab
 				new TaskDelegateAsync("Task with Sub Tasks", TaskCountAsync, true),
 			};
 
-			_sampleItem = LoadData<SampleItem>(DataKey);
+			_sampleItem = LoadData<SampleItem>(DataKey, true);
 			if (_sampleItem!.DateTime.Ticks == 0)
 			{
 				_sampleItem.DateTime = DateTime.Now; // in case the serializer loses it

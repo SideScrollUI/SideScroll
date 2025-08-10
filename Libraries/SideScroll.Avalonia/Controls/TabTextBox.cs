@@ -198,4 +198,13 @@ public class TabTextBox : TextBox
 	{
 		Text = JsonUtils.Format(text);
 	}
+
+	protected override void UpdateDataValidation(AvaloniaProperty property, BindingValueType state, Exception? error)
+	{
+		// Only allow default validators to clear
+		if (error == null)
+		{
+			base.UpdateDataValidation(property, state, error);
+		}
+	}
 }
