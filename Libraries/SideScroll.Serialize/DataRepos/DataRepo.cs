@@ -97,12 +97,32 @@ public class DataRepo
 		Save(typeof(T).GetAssemblyQualifiedShortName(), obj, call);
 	}
 
-	public DataItem<T>? LoadItem<T>(string key, Call? call = null, bool createIfNeeded = false, bool lazy = false)
+	public DataItem<T>? LoadItem<T>(string key, Call? call = null, bool lazy = false)
 	{
-		return LoadItem<T>(DefaultGroupId, key, call, createIfNeeded, lazy);
+		return LoadItem<T>(DefaultGroupId, key, call, lazy);
 	}
 
-	public DataItem<T>? LoadItem<T>(string groupId, string key, Call? call, bool createIfNeeded = false, bool lazy = false)
+	public DataItem<T>? LoadItem<T>(string groupId, string key, Call? call, bool lazy = false)
+	{
+		SerializerFile serializerFile = GetSerializerFile(typeof(T), groupId, key);
+
+		if (serializerFile.Exists)
+		{
+			T? obj = serializerFile.Load<T>(call, lazy);
+			if (obj != null)
+			{
+				return new DataItem<T>(key, obj, serializerFile.DataPath);
+			}
+		}
+		return default;
+	}
+
+	public DataItem<T> LoadOrCreateItem<T>(string key, Call? call = null, bool lazy = false)
+	{
+		return LoadOrCreateItem<T>(DefaultGroupId, key, call, lazy);
+	}
+
+	public DataItem<T> LoadOrCreateItem<T>(string groupId, string key, Call? call, bool lazy = false)
 	{
 		SerializerFile serializerFile = GetSerializerFile(typeof(T), groupId, key);
 
@@ -115,21 +135,17 @@ public class DataRepo
 			}
 		}
 
-		if (createIfNeeded)
-		{
-			T newObject = Activator.CreateInstance<T>();
-			Debug.Assert(newObject != null);
-			return new DataItem<T>(key, newObject, serializerFile.DataPath);
-		}
-		return default;
+		T newObject = Activator.CreateInstance<T>();
+		Debug.Assert(newObject != null);
+		return new DataItem<T>(key, newObject, serializerFile.DataPath);
 	}
 
-	public T? Load<T>(string key, Call? call = null, bool createIfNeeded = false, bool lazy = false)
+	public T? Load<T>(string key, Call? call = null, bool lazy = false)
 	{
-		return Load<T>(DefaultGroupId, key, call, createIfNeeded, lazy);
+		return Load<T>(DefaultGroupId, key, call, lazy);
 	}
 
-	public T? Load<T>(string groupId, string key, Call? call, bool createIfNeeded = false, bool lazy = false)
+	public T? Load<T>(string groupId, string key, Call? call, bool lazy = false)
 	{
 		SerializerFile serializerFile = GetSerializerFile(typeof(T), groupId, key);
 
@@ -140,19 +156,40 @@ public class DataRepo
 				return obj;
 		}
 
-		if (createIfNeeded)
-		{
-			T newObject = Activator.CreateInstance<T>();
-			Debug.Assert(newObject != null);
-			return newObject;
-		}
 		return default;
 	}
 
-	public T? Load<T>(bool createIfNeeded = false, bool lazy = false, Call? call = null)
+	public T? Load<T>(bool lazy = false, Call? call = null)
 	{
 		call ??= new();
-		return Load<T>(typeof(T).GetAssemblyQualifiedShortName(), call, createIfNeeded, lazy);
+		return Load<T>(typeof(T).GetAssemblyQualifiedShortName(), call, lazy);
+	}
+
+	public T LoadOrCreate<T>(string key, Call? call = null, bool lazy = false)
+	{
+		return LoadOrCreate<T>(DefaultGroupId, key, call, lazy);
+	}
+
+	public T LoadOrCreate<T>(string groupId, string key, Call? call, bool lazy = false)
+	{
+		SerializerFile serializerFile = GetSerializerFile(typeof(T), groupId, key);
+
+		if (serializerFile.Exists)
+		{
+			T? obj = serializerFile.Load<T>(call, lazy);
+			if (obj != null)
+				return obj;
+		}
+
+		T newObject = Activator.CreateInstance<T>();
+		Debug.Assert(newObject != null);
+		return newObject;
+	}
+
+	public T LoadOrCreate<T>(bool lazy = false, Call? call = null)
+	{
+		call ??= new();
+		return LoadOrCreate<T>(typeof(T).GetAssemblyQualifiedShortName(), call, lazy);
 	}
 
 	public static DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false)

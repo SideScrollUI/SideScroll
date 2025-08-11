@@ -31,8 +31,8 @@ public class TabSampleFormDataTabs : ITab
 		{
 			LoadSavedItems(call, model);
 
-			_sampleItem ??= LoadData<SampleItem>(DataKey, true);
-			model.AddForm(_sampleItem!);
+			_sampleItem ??= LoadOrCreateData<SampleItem>(DataKey);
+			model.AddForm(_sampleItem);
 
 			Toolbar toolbar = new();
 			toolbar.ButtonNew.Action = New;

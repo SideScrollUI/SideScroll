@@ -1,19 +1,8 @@
 <Project>
   <PropertyGroup>
-    <Version>0.9.10</Version>
+    <Version>0.9.11</Version>
     <PackageReleaseNotes>
-    - Updated TabControl names to remove Control to match existing controls
-      - Renamed TabControlParams to TabForm
-    - Fixed suffix for several EventArgs to match existing patterns
-    - Added DataPageView HasNext and HasPrevious DataBinding
-    - Removed [Params] and added TabModel.AddForm()
-    - Renamed [Static] to [CloneReference] to better reflect usage
-    - Added [DeprecatedName("OldName")] to allow deserializing deprecated field and property names
-    - Added struct support for several attributes to match class support
-    - Rolled Svg.Controls.Skia.Avalonia back to an older Avalonia.Svg.Skia due to older Linux and WebAssembly compatibility issues
-    - Added Process Monitor Tab to the Sample Charts
-    - Added ChartView.ShowNowTime to control showing the chart now time annotation
-    - Improved LiveCharts handling when there's no data points
+    - Added LoadOrCreate Methods
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.3</AvaloniaVersion>

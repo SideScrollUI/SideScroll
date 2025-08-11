@@ -803,17 +803,11 @@ public class TabInstance : IDisposable
 		Data.App.Save<T>(groupId, key, obj, TaskInstance.Call);
 	}
 
-	public T? LoadData<T>(string key, bool createIfNeeded) // todo: switch default to false
-	{
-		T? data = Data.App.Load<T>(key, TaskInstance.Call, createIfNeeded);
-		return data;
-	}
+	public T? LoadData<T>(string key) => Data.App.Load<T>(key, TaskInstance.Call);
+	public T? LoadData<T>(string groupId, string key) => Data.App.Load<T>(groupId, key, TaskInstance.Call);
 
-	public T? LoadData<T>(string groupId, string key, bool createIfNeeded) // todo: switch default to false
-	{
-		T? data = Data.App.Load<T>(groupId, key, TaskInstance.Call, createIfNeeded);
-		return data;
-	}
+	public T LoadOrCreateData<T>(string key) => Data.App.LoadOrCreate<T>(key, TaskInstance.Call)!;
+	public T LoadOrCreateData<T>(string groupId, string key) => Data.App.LoadOrCreate<T>(groupId, key, TaskInstance.Call)!;
 
 	public TabViewSettings LoadDefaultTabSettings()
 	{
@@ -826,7 +820,7 @@ public class TabInstance : IDisposable
 		if (CustomPath != null)
 		{
 			// It's better to return the default constructor so the Tab autosizes instead of using the saved defaults which might have a width specified
-			return Data.Cache.Load<TabViewSettings>(CustomPath, TaskInstance.Call, true)!;
+			return Data.Cache.LoadOrCreate<TabViewSettings>(CustomPath, TaskInstance.Call)!;
 		}
 
 		Type type = GetType();

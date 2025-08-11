@@ -64,9 +64,14 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		DataRepo.Save<T>(GroupId, key, item, call);
 	}
 
-	public virtual T? Load(Call? call, string? key = null, bool createIfNeeded = false, bool lazy = false)
+	public virtual T? Load(Call? call, string? key = null, bool lazy = false)
 	{
-		return DataRepo.Load<T>(GroupId, key ?? DefaultKey, call, createIfNeeded, lazy);
+		return DataRepo.Load<T>(GroupId, key ?? DefaultKey, call, lazy);
+	}
+
+	public virtual T LoadOrCreate(Call? call, string? key = null, bool lazy = false)
+	{
+		return DataRepo.LoadOrCreate<T>(GroupId, key ?? DefaultKey, call, lazy);
 	}
 
 	public virtual DataPageView<T> LoadPageView(Call? call, bool ascending = true)
