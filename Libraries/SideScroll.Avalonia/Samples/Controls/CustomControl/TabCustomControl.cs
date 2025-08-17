@@ -60,7 +60,7 @@ public class TabCustomControl : ITab
 		{
 			await Task.Delay(2000);
 
-			Invoke(ShowSearchResults, 1, "abc");
+			Post(ShowSearchResults, 1, "abc");
 		}
 
 		private void ShowSearchResults(Call call, params object[] objects)

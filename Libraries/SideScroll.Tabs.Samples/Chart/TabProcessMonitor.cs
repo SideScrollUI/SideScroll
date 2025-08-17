@@ -95,7 +95,7 @@ public class TabProcessMonitor : ITab
 
 		private void Callback(object? state)
 		{
-			Invoke(AddSample);
+			Post(AddSample);
 		}
 
 		private void AddSample()

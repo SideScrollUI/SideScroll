@@ -135,7 +135,7 @@ public class TabView : Grid, IDisposable
 
 	public async Task LoadBackgroundAsync(Call call)
 	{
-		Instance.Invoke(ShowLoading);
+		Instance.Post(ShowLoading);
 
 		await Instance.ReinitializeAsync(call);
 	}
@@ -648,7 +648,7 @@ public class TabView : Grid, IDisposable
 		// Could have parent instance reload children
 		TabViewSettings = new TabViewSettings();
 		Instance.SaveTabSettings();
-		Instance.Invoke(ShowLoading);
+		Instance.Post(ShowLoading);
 		Instance.Reinitialize(true);
 	}
 

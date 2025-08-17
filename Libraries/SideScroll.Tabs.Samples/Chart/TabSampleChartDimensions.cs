@@ -106,7 +106,7 @@ public class TabSampleChartDimensions : ITab
 		{
 			int param1 = 1;
 			string param2 = "abc";
-			Invoke(call, AddSampleUI, param1, param2);
+			Post(call, AddSampleUI, param1, param2);
 		}
 
 		private Call? _addCall;
@@ -117,7 +117,7 @@ public class TabSampleChartDimensions : ITab
 			CancellationToken token = call.TaskInstance!.TokenSource.Token;
 			for (int i = 0; i < 20 && !token.IsCancellationRequested; i++)
 			{
-				Invoke(call, AddSampleUI);
+				Post(call, AddSampleUI);
 				await Task.Delay(1000);
 			}
 		}

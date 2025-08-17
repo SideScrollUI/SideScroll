@@ -229,31 +229,29 @@ public class TabInstance : IDisposable
 		StartTask(taskDelegate, false);
 	}*/
 
-	public void Invoke(Action action)
+	public void Post(Action action)
 	{
 		UiContext.Post(ActionCallback, action);
 	}
 
-	public void Invoke(SendOrPostCallback callback, object? param = null)
+	public void Post(SendOrPostCallback callback, object? param = null)
 	{
 		UiContext.Post(callback, param);
 	}
 
-	public void Invoke(Call call, Action action)
+	public void Post(Call call, Action action)
 	{
 		using var callTimer = call.Timer(action.ToString());
 
 		UiContext.Post(ActionCallback, action);
 	}
 
-	// switch to SendOrPostCallback?
-	public void Invoke(CallActionParams callAction, params object[] objects)
+	public void Post(CallActionParams callAction, params object[] objects)
 	{
-		Invoke(null, callAction, objects);
+		Post(null, callAction, objects);
 	}
 
-	// switch to SendOrPostCallback?
-	public void Invoke(Call? call, CallActionParams callAction, params object[] objects)
+	public void Post(Call? call, CallActionParams callAction, params object[] objects)
 	{
 		var taskDelegate = new TaskDelegateParams(call, callAction.Method.Name, callAction, false, null, objects);
 		UiContext.Post(CallActionParamsCallback, taskDelegate);
@@ -373,7 +371,7 @@ public class TabInstance : IDisposable
 		}
 
 		var subTask = call.AddSubTask("Loading");
-		Invoke(() => LoadModelUI(subTask.Call, model)); // Some controls need to be created on the UI context
+		Post(() => LoadModelUI(subTask.Call, model)); // Some controls need to be created on the UI context
 	}
 
 	private async Task<TabModel> LoadModelAsync(Call call)

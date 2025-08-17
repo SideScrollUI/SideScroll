@@ -66,7 +66,7 @@ public class TabSampleChartProperties : ITab
 
 		private void AddEntry(Call call)
 		{
-			Invoke(AddSampleCallback, call);
+			Post(AddSampleCallback, call);
 		}
 
 		private Call? _addCall;
@@ -77,7 +77,7 @@ public class TabSampleChartProperties : ITab
 			CancellationToken token = call.TaskInstance!.TokenSource.Token;
 			for (int i = 0; i < 1000 && !token.IsCancellationRequested; i++)
 			{
-				Invoke(AddSampleCallback, call);
+				Post(AddSampleCallback, call);
 				await Task.Delay(1000);
 			}
 		}

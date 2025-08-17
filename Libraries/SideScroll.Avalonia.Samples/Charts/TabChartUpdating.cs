@@ -77,7 +77,7 @@ public class TabChartUpdating : ITab
 			CancellationToken token = call.TaskInstance!.TokenSource.Token;
 			for (int i = 0; i < 60 && !token.IsCancellationRequested; i++)
 			{
-				Invoke(call, () => Update(call));
+				Post(call, () => Update(call));
 				await Task.Delay(1000);
 			}
 		}
