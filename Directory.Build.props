@@ -2,7 +2,8 @@
   <PropertyGroup>
     <Version>0.9.11</Version>
     <PackageReleaseNotes>
-    - Added LoadOrCreate Methods
+    - Added TabInstance.LoadOrCreate Methods
+    - Fixed serializer regression when removing class members
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.3</AvaloniaVersion>

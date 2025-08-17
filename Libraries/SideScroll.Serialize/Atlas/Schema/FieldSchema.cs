@@ -12,8 +12,8 @@ public class FieldSchema : MemberSchema
 
 	public override string ToString() => Name;
 
-	public FieldSchema(TypeSchema typeSchema, FieldInfo fieldInfo) :
-		base(typeSchema, fieldInfo.Name)
+	public FieldSchema(TypeSchema typeSchema, FieldInfo fieldInfo, int typeIndex = -1) :
+		base(typeSchema, fieldInfo.Name, typeIndex)
 	{
 		FieldInfo = fieldInfo;
 

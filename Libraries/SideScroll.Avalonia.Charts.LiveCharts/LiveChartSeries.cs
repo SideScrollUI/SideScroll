@@ -71,6 +71,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 			});
 		}
 	}
+
 	private void UpdateMarkers()
 	{
 		if (ListSeries.List.Count > 0 && ListSeries.List.Count <= MaxPointsToShowMarkers || HasSinglePoint(DataPoints))

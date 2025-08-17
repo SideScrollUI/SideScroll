@@ -152,6 +152,33 @@ public class TypeRepoObject : TypeRepo
 		}
 	}
 
+	// Skips loading all data
+	public class MemberRepo : IMemberRepo
+	{
+		public MemberSchema MemberSchema { get; }
+		public TypeRepo? TypeRepo { get; }
+
+		public override string ToString() => "Member Repo: " + MemberSchema.Name;
+
+		public MemberRepo(MemberSchema memberSchema, TypeRepo? typeRepo = null)
+		{
+			MemberSchema = memberSchema;
+			TypeRepo = typeRepo;
+			MemberSchema.IsReadable = false;
+		}
+
+		public void Load(object obj)
+		{
+			TypeRepo!.SkipObjectRef();
+		}
+
+		public object? Get()
+		{
+			TypeRepo!.SkipObjectRef();
+			return null;
+		}
+	}
+
 	public TypeRepoObject(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
@@ -179,10 +206,8 @@ public class TypeRepoObject : TypeRepo
 
 	public override void InitializeLoading(Log log)
 	{
-		InitializeFields(log);
-		InitializeProperties(log);
+		InitializeMembers(log);
 		InitializeConstructor(log);
-		//InitializeSaving();
 
 		if (!TypeSchema.HasConstructor)
 		{
@@ -206,91 +231,103 @@ public class TypeRepoObject : TypeRepo
 		}
 	}
 
-	public void InitializeFields(Log log)
+	public void InitializeMembers(Log log)
 	{
-		foreach (FieldSchema fieldSchema in TypeSchema.FieldSchemas)
-		{
-			//if (fieldSchema.IsReadable == false)
-			//	continue;
+		List<PropertyRepo> lazyPropertyRepos = [];
 
-			TypeRepo typeRepo;
-			if (fieldSchema.TypeIndex >= 0)
+		foreach (MemberSchema memberSchema in TypeSchema.MemberSchemas)
+		{
+			if (memberSchema is FieldSchema fieldSchema)
 			{
-				typeRepo = Serializer.TypeRepos[fieldSchema.TypeIndex];
-				if (typeRepo.Type != fieldSchema.NonNullableType)
-				{
-					log.Add("Can't load field, type has changed", new Tag("Field", fieldSchema));
-					fieldSchema.IsReadable = false;
-					//continue;
-				}
+				InitializeField(log, fieldSchema);
+			}
+			else if (memberSchema is PropertySchema propertySchema)
+			{
+				InitializeProperty(log, propertySchema, lazyPropertyRepos);
 			}
 			else
 			{
-				Type fieldType = fieldSchema.FieldInfo!.FieldType.GetNonNullableType();
-				typeRepo = Serializer.GetOrCreateRepo(log, fieldType);
-			}
-			fieldSchema.FieldTypeSchema = typeRepo.TypeSchema;
-			//TypeRepo typeRepo = serializer.typeRepos[fieldSchema.typeIndex];
-			//if (typeRepo == null)
-			//	continue;
-
-			var fieldRepo = new FieldRepo(fieldSchema, typeRepo);
-			FieldRepos.Add(fieldRepo);
-			MemberRepos.Add(fieldRepo);
-		}
-	}
-
-	public void InitializeProperties(Log log)
-	{
-		var lazyPropertyRepos = new List<PropertyRepo>();
-		foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
-		{
-			//if (propertySchema.Loadable == false)
-			//	continue;
-
-			TypeRepo typeRepo;
-			if (propertySchema.TypeIndex >= 0 || propertySchema.PropertyInfo == null)
-			{
-				typeRepo = Serializer.TypeRepos[propertySchema.TypeIndex];
-				if (typeRepo.Type != propertySchema.NonNullableType)
-				{
-					// should we add type conversion here?
-					log.Add("Can't load field, type has changed", new Tag("Property", propertySchema));
-					propertySchema.IsWriteable = false;
-					//continue;
-				}
-			}
-			else
-			{
-				// Base Type might not have been serialized
-				Type propertyType = propertySchema.PropertyInfo.PropertyType.GetNonNullableType();
-				typeRepo = Serializer.GetOrCreateRepo(log, propertyType);
-			}
-
-			propertySchema.PropertyTypeSchema = typeRepo.TypeSchema;
-
-			var propertyRepo = new PropertyRepo(propertySchema, typeRepo);
-			PropertyRepos.Add(propertyRepo);
-			MemberRepos.Add(propertyRepo);
-
-			if (propertySchema.IsWriteable && !propertySchema.Type!.IsPrimitive)
-			{
-				lazyPropertyRepos.Add(propertyRepo);
+				InitializeMember(log, memberSchema);
 			}
 		}
 
-		// should we add an attribute for this instead?
 		if (Serializer.Lazy && HasVirtualProperty)
 		{
 			LazyClass = new LazyClass(LoadableType!, lazyPropertyRepos);
 			LoadableType = LazyClass.LazyType;
 		}
+	}
 
-		/*if (lazyClass != null)
+	public void InitializeField(Log log, FieldSchema fieldSchema)
+	{
+		TypeRepo typeRepo;
+		if (fieldSchema.TypeIndex >= 0)
 		{
-			//if (propertySchema.propertyInfo != null)
-				lazyClass.LazyProperties.TryGetValue(propertySchema.propertyInfo, out propertyRepo.lazyProperty);
-		}*/
+			typeRepo = Serializer.TypeRepos[fieldSchema.TypeIndex];
+			if (typeRepo.Type != fieldSchema.NonNullableType)
+			{
+				log.Add("Can't load field, type has changed", new Tag("Field", fieldSchema));
+				fieldSchema.IsReadable = false;
+			}
+		}
+		else
+		{
+			Type fieldType = fieldSchema.FieldInfo!.FieldType.GetNonNullableType();
+			typeRepo = Serializer.GetOrCreateRepo(log, fieldType);
+		}
+		fieldSchema.FieldTypeSchema = typeRepo.TypeSchema;
+
+		var fieldRepo = new FieldRepo(fieldSchema, typeRepo);
+		FieldRepos.Add(fieldRepo);
+		MemberRepos.Add(fieldRepo);
+	}
+
+	public void InitializeProperty(Log log, PropertySchema propertySchema, List<PropertyRepo> lazyPropertyRepos)
+	{
+		TypeRepo typeRepo;
+		if (propertySchema.TypeIndex >= 0 || propertySchema.PropertyInfo == null)
+		{
+			typeRepo = Serializer.TypeRepos[propertySchema.TypeIndex];
+			if (typeRepo.Type != propertySchema.NonNullableType)
+			{
+				// Should we add type conversion here?
+				log.Add("Can't load field, type has changed", new Tag("Property", propertySchema));
+				propertySchema.IsWriteable = false;
+			}
+		}
+		else
+		{
+			// Base Type might not have been serialized
+			Type propertyType = propertySchema.PropertyInfo.PropertyType.GetNonNullableType();
+			typeRepo = Serializer.GetOrCreateRepo(log, propertyType);
+		}
+
+		propertySchema.PropertyTypeSchema = typeRepo.TypeSchema;
+
+		var propertyRepo = new PropertyRepo(propertySchema, typeRepo);
+		PropertyRepos.Add(propertyRepo);
+		MemberRepos.Add(propertyRepo);
+
+		if (propertySchema.IsWriteable && !propertySchema.Type!.IsPrimitive)
+		{
+			lazyPropertyRepos.Add(propertyRepo);
+		}
+	}
+
+	public void InitializeMember(Log log, MemberSchema memberSchema)
+	{
+		TypeRepo typeRepo;
+		if (memberSchema.TypeIndex >= 0)
+		{
+			typeRepo = Serializer.TypeRepos[memberSchema.TypeIndex];
+		}
+		else
+		{
+			throw new SerializerException("Member Type Index is invalid", new Tag("Member", memberSchema));
+		}
+
+		var memberRepo = new MemberRepo(memberSchema, typeRepo);
+		MemberRepos.Add(memberRepo);
 	}
 
 	private readonly List<object> _constructorRepos = [];
@@ -438,6 +475,7 @@ public class TypeRepoObject : TypeRepo
 			Serializer.AddObjectRef(propertyValue);
 		}
 
+		// Groups values by property instead of object
 		/*foreach (PropertySchema propertySchema in typeSchema.propertySchemas)
 		{
 			Type propertyType = propertySchema.propertyInfo.PropertyType.GetNonNullableType();

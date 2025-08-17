@@ -3,13 +3,13 @@ using System.Reflection;
 
 namespace SideScroll.Serialize.Atlas.Schema;
 
-public class MemberSchema(TypeSchema typeSchema, string name)
+public class MemberSchema(TypeSchema typeSchema, string name, int typeIndex = -1)
 {
 	public TypeSchema OwnerTypeSchema => typeSchema;
 
 	public string Name => name;
 
-	public int TypeIndex { get; set; } = -1;
+	public int TypeIndex { get; set; } = typeIndex;
 
 	public Type? Type { get; protected set; }
 	public Type? NonNullableType { get; protected set; }
@@ -17,6 +17,8 @@ public class MemberSchema(TypeSchema typeSchema, string name)
 	public bool IsPrivate { get; protected set; }
 	public bool IsPublic { get; protected set; }
 	public bool IsReadable { get; set; }
+
+	public override string ToString() => Name;
 
 	public void Save(BinaryWriter writer)
 	{
@@ -29,7 +31,7 @@ public class MemberSchema(TypeSchema typeSchema, string name)
 		string name = reader.ReadString();
 		int typeIndex = reader.ReadInt16();
 
-		if (typeSchema.Type == null) return new MemberSchema(typeSchema, name);
+		if (typeSchema.Type == null) return new MemberSchema(typeSchema, name, typeIndex);
 
 		MemberInfo? memberInfo = typeSchema.GetMemberInfo(name);
 
@@ -37,15 +39,15 @@ public class MemberSchema(TypeSchema typeSchema, string name)
 		{
 			if (memberInfo is FieldInfo fieldInfo)
 			{
-				return new FieldSchema(typeSchema, fieldInfo);
+				return new FieldSchema(typeSchema, fieldInfo, typeIndex);
 			}
 
 			if (memberInfo is PropertyInfo propertyInfo)
 			{
-				return new PropertySchema(typeSchema, propertyInfo);
+				return new PropertySchema(typeSchema, propertyInfo, typeIndex);
 			}
 		}
-		return new MemberSchema(typeSchema, name);
+		return new MemberSchema(typeSchema, name, typeIndex);
 	}
 
 	protected bool GetIsPrivate(MemberInfo memberInfo)

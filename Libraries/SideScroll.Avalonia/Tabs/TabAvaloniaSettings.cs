@@ -32,6 +32,8 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 
 		public override void LoadUI(Call call, TabModel model)
 		{
+			model.MaxDesiredWidth = 500;
+
 			Toolbar toolbar = new();
 			toolbar.ButtonReset.Action = Reset;
 			toolbar.ButtonSave.Action = Save;

@@ -17,8 +17,8 @@ public class PropertySchema : MemberSchema
 
 	public override string ToString() => Name;
 
-	public PropertySchema(TypeSchema typeSchema, PropertyInfo propertyInfo) :
-		base(typeSchema, propertyInfo.Name)
+	public PropertySchema(TypeSchema typeSchema, PropertyInfo propertyInfo, int typeIndex = -1) :
+		base(typeSchema, propertyInfo.Name, typeIndex)
 	{
 		PropertyInfo = propertyInfo;
 
