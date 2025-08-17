@@ -16,6 +16,7 @@ public class TabSampleControls : ITab
 			{
 				new("Custom Control", new TabCustomControl()),
 				new("Text Area", new TabSampleTextArea()),
+				new("Flyouts", new TabSampleFlyout()),
 			};
 		}
 	}

@@ -6,7 +6,7 @@ using SideScroll.Tabs.Toolbar;
 using SideScroll.Time;
 using System.Diagnostics;
 
-namespace SideScroll.Tabs.Samples.Chart;
+namespace SideScroll.Tabs.Samples.Charts;
 
 public class TabProcessMonitor : ITab
 {

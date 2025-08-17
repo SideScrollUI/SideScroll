@@ -1,6 +1,6 @@
 using SideScroll.Time;
 
-namespace SideScroll.Tabs.Samples.Chart;
+namespace SideScroll.Tabs.Samples.Charts;
 
 public static class ChartSamples
 {

@@ -1,6 +1,6 @@
 using SideScroll.Attributes;
 
-namespace SideScroll.Tabs.Samples.Chart;
+namespace SideScroll.Tabs.Samples.Charts;
 
 [ListItem]
 public class TabSampleCharts

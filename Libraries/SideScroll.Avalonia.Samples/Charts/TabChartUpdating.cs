@@ -4,7 +4,7 @@ using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Resources;
 using SideScroll.Tabs;
-using SideScroll.Tabs.Samples.Chart;
+using SideScroll.Tabs.Samples.Charts;
 using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Avalonia.Samples.Charts;

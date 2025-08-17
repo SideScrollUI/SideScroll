@@ -4,7 +4,7 @@ using SideScroll.Collections;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
 
-namespace SideScroll.Tabs.Samples.Chart;
+namespace SideScroll.Tabs.Samples.Charts;
 
 public class TabSampleChartLists : ITab
 {

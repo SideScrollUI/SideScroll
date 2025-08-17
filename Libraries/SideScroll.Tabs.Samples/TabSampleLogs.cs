@@ -4,7 +4,7 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Samples;
 
-public class TabSampleLog : ITab
+public class TabSampleLogs : ITab
 {
 	public TabInstance Create() => new Instance();
 

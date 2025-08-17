@@ -7,7 +7,7 @@ using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.Time;
 
-namespace SideScroll.Tabs.Samples.Chart;
+namespace SideScroll.Tabs.Samples.Charts;
 
 public class TabSampleChartDimensions : ITab
 {

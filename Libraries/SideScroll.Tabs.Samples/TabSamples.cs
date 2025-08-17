@@ -1,6 +1,6 @@
 using SideScroll.Attributes;
 using SideScroll.Tabs.Samples.Actions;
-using SideScroll.Tabs.Samples.Chart;
+using SideScroll.Tabs.Samples.Charts;
 using SideScroll.Tabs.Samples.DataGrid;
 using SideScroll.Tabs.Samples.DataRepo;
 using SideScroll.Tabs.Samples.Demo;
@@ -22,10 +22,10 @@ public class TabSamples
 	public static TabSampleToolbar Toolbar => new();
 	public static TabSampleActions Actions => new();
 	public static TabSampleLoading Loading => new();
-	public static TabSampleLog Log => new();
+	public static TabSampleLogs Logs => new();
 
 	public static TabSampleTextEditor TextEditor => new();
-	public static TabSampleCharts Chart => new();
+	public static TabSampleCharts Charts => new();
 
 	public static TabSampleSerializer Serializer => new();
 	public static TabSampleDataRepo DataRepos => new();

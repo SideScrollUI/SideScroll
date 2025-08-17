@@ -8,7 +8,7 @@ using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Samples.Actions;
-using SideScroll.Tabs.Samples.Chart;
+using SideScroll.Tabs.Samples.Charts;
 using SideScroll.Tabs.Samples.DataGrid;
 using SideScroll.Tabs.Samples.Objects;
 using SideScroll.Tabs.Samples.Forms;
