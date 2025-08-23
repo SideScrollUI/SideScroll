@@ -349,7 +349,7 @@ public class TabForm : Border, IValidationControl
 
 		if (!valid)
 		{
-			throw new ValidationException("Invalid Parameters");
+			throw new ValidationException("Invalid Values");
 		}
 	}
 }

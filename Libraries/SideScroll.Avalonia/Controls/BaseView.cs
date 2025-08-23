@@ -47,8 +47,8 @@ public class BaseView : UserControl
 		Content = TabViewer = new TabViewer(Project);
 	}
 
-	public virtual void AddTab(ITab tab)
+	public virtual void LoadTab(ITab tab)
 	{
-		TabViewer.AddTab(tab);
+		TabViewer.LoadTab(tab);
 	}
 }

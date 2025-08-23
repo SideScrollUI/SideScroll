@@ -10,7 +10,7 @@ public class MainWindow : BaseWindow
 {
 	public MainWindow() : base(Project.Load<CustomUserSettings>(SampleProjectSettings.Settings))
 	{
-		AddTab(new TabAvalonia());
+		LoadTab(new TabAvalonia());
 
 		LiveChartCreator.Register();
 		TabViewer.Toolbar?.AddVersion();

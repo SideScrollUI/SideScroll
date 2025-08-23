@@ -26,20 +26,6 @@ public class TabTextBox : TextBox
 
 	public TabTextBox()
 	{
-		InitializeComponent();
-	}
-
-	public TabTextBox(ListProperty property)
-	{
-		Property = property;
-
-		InitializeComponent();
-
-		InitializeProperty(property);
-	}
-
-	private void InitializeComponent()
-	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Top;
 
@@ -47,6 +33,13 @@ public class TabTextBox : TextBox
 		MaxWidth = 3000;
 
 		InitializeBorder();
+	}
+
+	public TabTextBox(ListProperty property) : this()
+	{
+		Property = property;
+
+		InitializeProperty(property);
 	}
 
 	// Default Padding shows a gap between ScrollBar and Border, and has too big of a left Margin
@@ -59,7 +52,7 @@ public class TabTextBox : TextBox
 		{
 			Setters =
 			{
-				new Setter(TextPresenter.MarginProperty, new Thickness(6)),
+				new Setter(MarginProperty, new Thickness(6)),
 			}
 		};
 		Styles.Add(style);
@@ -68,7 +61,7 @@ public class TabTextBox : TextBox
 		{
 			Setters =
 			{
-				new Setter(TextBlock.MarginProperty, new Thickness(6)),
+				new Setter(MarginProperty, new Thickness(6)),
 			}
 		};
 		Styles.Add(style);
@@ -201,8 +194,12 @@ public class TabTextBox : TextBox
 
 	protected override void UpdateDataValidation(AvaloniaProperty property, BindingValueType state, Exception? error)
 	{
-		// Only allow default validators to clear
-		if (error == null)
+		// Default validators can appear on init, and have messages that are way too long
+		if (error is InvalidCastException)
+		{
+			base.UpdateDataValidation(property, state, new DataValidationException("Invalid format"));
+		}
+		else if (error == null)
 		{
 			base.UpdateDataValidation(property, state, error);
 		}

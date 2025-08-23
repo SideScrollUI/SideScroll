@@ -13,7 +13,7 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 
 	public AvaloniaList<object> ItemList { get; set; } = [];
 
-	private CheckBox? _checkboxAutoLoad;
+	private CheckBox? _checkboxAutoSelect;
 
 	protected override Type StyleKeyOverride => typeof(ContextMenu);
 
@@ -43,26 +43,26 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 
 		// Avalonia's MenuItem.xaml restricts the max Icon size to 16 pixels so this will look tiny
 		// Putting the CheckBox in the Header also works, but doesn't align the checkbox to the left of the text
-		_checkboxAutoLoad = new CheckBox
+		_checkboxAutoSelect = new CheckBox
 		{
-			IsChecked = TabInstance!.Project.UserSettings.AutoLoad,
+			IsChecked = TabInstance!.Project.UserSettings.AutoSelect,
 		};
-		var menuItemAutoLoad = new TabMenuItem
+		var menuItemAutoSelect = new TabMenuItem
 		{
-			Header = "_AutoLoad",
-			Icon = _checkboxAutoLoad,
+			Header = "_AutoSelect",
+			Icon = _checkboxAutoSelect,
 		};
-		menuItemAutoLoad.Click += MenuItemAutoLoad_Click;
-		ItemList.Add(menuItemAutoLoad);
+		menuItemAutoSelect.Click += MenuItemAutoSelect_Click;
+		ItemList.Add(menuItemAutoSelect);
 #endif
 
 		ItemsSource = ItemList;
 	}
 
-	private void MenuItemAutoLoad_Click(object? sender, RoutedEventArgs e)
+	private void MenuItemAutoSelect_Click(object? sender, RoutedEventArgs e)
 	{
-		TabInstance!.Project.UserSettings.AutoLoad = !TabInstance.Project.UserSettings.AutoLoad;
-		_checkboxAutoLoad!.IsChecked = TabInstance.Project.UserSettings.AutoLoad;
+		TabInstance!.Project.UserSettings.AutoSelect = !TabInstance.Project.UserSettings.AutoSelect;
+		_checkboxAutoSelect!.IsChecked = TabInstance.Project.UserSettings.AutoSelect;
 		TabInstance.Project.SaveUserSettings();
 	}
 

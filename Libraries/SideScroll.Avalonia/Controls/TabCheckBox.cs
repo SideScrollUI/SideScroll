@@ -11,25 +11,19 @@ public class TabCheckBox : CheckBox
 
 	public TabCheckBox()
 	{
-		Initialize();
-	}
-
-	public TabCheckBox(ListProperty property)
-	{
-		Initialize();
-		IsEnabled = property.Editable;
-		Bind(property);
-	}
-
-	private void Initialize()
-	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		MaxWidth = TabForm.ControlMaxWidth;
 		//Margin = new Thickness(2, 2);
 		//Padding = new Thickness(6, 3);
 	}
 
-	private void Bind(ListProperty property)
+	public TabCheckBox(ListProperty property) : this()
+	{
+		IsEnabled = property.Editable;
+		Bind(property);
+	}
+
+	public void Bind(ListProperty property)
 	{
 		var binding = new Binding(property.PropertyInfo.Name)
 		{

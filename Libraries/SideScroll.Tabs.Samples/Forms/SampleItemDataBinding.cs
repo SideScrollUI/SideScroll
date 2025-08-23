@@ -57,7 +57,7 @@ public class SampleItemDataBinding(SynchronizationContext context) : INotifyProp
 
 	public AttributeTargets? EnumAttributeTargets { get; set; }
 
-	public static List<ParamListItem> ListItems { get; } =
+	public static List<SampleListItem> ListItems { get; } =
 	[
 		new("One", 1),
 		new("Two", 2),
@@ -65,7 +65,7 @@ public class SampleItemDataBinding(SynchronizationContext context) : INotifyProp
 	];
 
 	[BindList(nameof(ListItems)), ColumnIndex(2)]
-	public ParamListItem? ListItem { get; set; }
+	public SampleListItem? ListItem { get; set; }
 
 	[ReadOnly(true)]
 	public DateTime? DateTime { get; set; }

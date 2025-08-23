@@ -51,26 +51,11 @@ public class TabViewer : Grid
 	public TabViewer(Project project)
 	{
 		BaseViewer = this;
-		LoadProject(project);
-	}
 
-	[MemberNotNull(nameof(Project)), MemberNotNull(nameof(BottomGrid)), MemberNotNull(nameof(ScrollViewer)), MemberNotNull(nameof(ContentGrid))]
-	public void LoadProject(Project project)
-	{
-		Project = project;
-
-		InitializeComponent();
-	}
-
-	[MemberNotNull(nameof(BottomGrid)), MemberNotNull(nameof(ScrollViewer)), MemberNotNull(nameof(ContentGrid))]
-	private void InitializeComponent()
-	{
 		// Toolbar
 		// ScrollViewer | Buttons
 		ColumnDefinitions = new ColumnDefinitions("*");
 		RowDefinitions = new RowDefinitions("Auto,*");
-
-		AddToolbar();
 
 		BottomGrid = new Grid
 		{
@@ -111,6 +96,16 @@ public class TabViewer : Grid
 
 		BottomGrid.Children.Add(scrollButtons);
 
+		LoadProject(project);
+	}
+
+	[MemberNotNull(nameof(Project))]
+	public void LoadProject(Project project)
+	{
+		Project = project;
+
+		AddToolbar();
+
 		Plugins.ForEach(plugin => plugin.Initialize(this));
 	}
 
@@ -120,7 +115,7 @@ public class TabViewer : Grid
 			return;
 
 		Toolbar = new TabViewerToolbar(this);
-		Toolbar.ButtonLink?.AddAsync(LinkAsync);
+		Toolbar.ButtonLink?.AddAsync(CreateLinkAsync);
 		Toolbar.ButtonImport?.AddAsync(ImportClipboardLinkAsync);
 		Children.Add(Toolbar);
 	}
@@ -132,7 +127,7 @@ public class TabViewer : Grid
 		TabView!.Instance.Reload();
 	}
 
-	private async Task LinkAsync(Call call)
+	private async Task CreateLinkAsync(Call call)
 	{
 		Flyout flyout = new()
 		{
@@ -365,8 +360,8 @@ public class TabViewer : Grid
 		ScrollViewer.Offset = new Vector(minXOffset, ScrollViewer.Offset.Y);
 	}
 
-	// How to set the main Content
-	public TabInstance AddTab(ITab tab)
+	// Load the main Tab Content
+	public TabInstance LoadTab(ITab tab)
 	{
 		TabInstance tabInstance = tab.Create();
 		tabInstance.Model.Name = "Start";
@@ -386,7 +381,7 @@ public class TabViewer : Grid
 		{
 			tabInstance.TabBookmark = LoadBookmark.TabBookmark;
 		}
-		else if (Project.UserSettings.AutoLoad) // did we load successfully last time?
+		else if (Project.UserSettings.AutoSelect)
 		{
 			tabInstance.LoadDefaultBookmark();
 		}
@@ -394,7 +389,6 @@ public class TabViewer : Grid
 		TabView = new TabView(tabInstance);
 		TabView.Load();
 
-		//scrollViewer.Content = tabView;
 		ContentGrid.Children.Add(TabView);
 
 		return tabInstance;

@@ -90,9 +90,9 @@ public class BaseWindow : Window
 		this.GetObservable(ClientSizeProperty).Subscribe(new AnonymousObserver<Size>(Resize));
 	}
 
-	public virtual void AddTab(ITab tab)
+	public virtual void LoadTab(ITab tab)
 	{
-		TabViewer.AddTab(tab);
+		TabViewer.LoadTab(tab);
 	}
 
 	private void Resize(Size size)

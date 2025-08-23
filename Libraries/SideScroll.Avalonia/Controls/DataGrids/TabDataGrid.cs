@@ -226,7 +226,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	private void AddListUpdatedDispatcher()
 	{
-		if (List is INotifyCollectionChanged notifyCollectionChanged) // AutoLoad
+		if (List is INotifyCollectionChanged notifyCollectionChanged) // Auto Select New
 		{
 			// DataGrid must exist before adding this
 			notifyCollectionChanged.CollectionChanged += NotifyCollectionChanged_CollectionChanged;
@@ -718,7 +718,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	{
 		if (List == null) return;
 
-		if (TabInstance.Project.UserSettings.AutoLoad)
+		if (TabInstance.Project.UserSettings.AutoSelect)
 		{
 			// SortSavedColumn(); // Not supported yet
 			LoadSearch();
@@ -1215,7 +1215,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			SearchControl = null;
 		}
 
-		if (List is INotifyCollectionChanged notifyCollectionChanged) // as AutoLoad
+		if (List is INotifyCollectionChanged notifyCollectionChanged) // Auto Select New
 		{
 			notifyCollectionChanged.CollectionChanged -= NotifyCollectionChanged_CollectionChanged;
 		}

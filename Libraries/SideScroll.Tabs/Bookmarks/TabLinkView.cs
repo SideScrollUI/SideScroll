@@ -6,7 +6,6 @@ namespace SideScroll.Tabs.Bookmarks;
 
 public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab, IInnerTab
 {
-	//[ButtonColumn("-")]
 	public event EventHandler<EventArgs>? OnDelete;
 
 	[ButtonColumn("-")]

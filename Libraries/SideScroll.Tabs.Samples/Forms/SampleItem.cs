@@ -28,7 +28,7 @@ public class SampleItem
 
 	public AttributeTargets EnumAttributeTargets { get; set; } = AttributeTargets.Event;
 
-	public static List<ParamListItem> ListItems { get; } =
+	public static List<SampleListItem> ListItems { get; } =
 	[
 		new("One", 1),
 		new("Two", 2),
@@ -36,7 +36,7 @@ public class SampleItem
 	];
 
 	[BindList(nameof(ListItems)), ColumnIndex(2)]
-	public ParamListItem ListItem { get; set; }
+	public SampleListItem ListItem { get; set; }
 
 	public DateTime DateTime { get; set; } = TimeZoneView.Now.Trim();
 
@@ -54,7 +54,7 @@ public class SampleItem
 }
 
 [PublicData]
-public class ParamListItem(string name, int value)
+public class SampleListItem(string name, int value)
 {
 	public string? Name { get; set; } = name;
 	public int Value { get; set; } = value;

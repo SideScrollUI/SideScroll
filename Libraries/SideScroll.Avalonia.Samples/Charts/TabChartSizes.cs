@@ -28,12 +28,12 @@ public class TabChartSizes : ITab
 			};
 			chartView.AddSeries("Count", series, seriesType: SeriesType.Average);
 
-			var chart = new TabLiveChart(this, chartView)
+			var liveChart = new TabLiveChart(this, chartView)
 			{
 				Height = 80,
 			};
-			chart.Chart.MinHeight = 80;
-			model.AddObject(chart);
+			liveChart.Chart.MinHeight = 80;
+			model.AddObject(liveChart);
 		}
 	}
 }

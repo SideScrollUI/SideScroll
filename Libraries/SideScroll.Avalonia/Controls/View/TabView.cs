@@ -632,7 +632,7 @@ public class TabView : Grid, IDisposable
 		{
 			Instance.TabViewSettings = Instance.TabBookmark.ViewSettings;
 		}
-		else if (Instance.Project.UserSettings.AutoLoad)
+		else if (Instance.Project.UserSettings.AutoSelect)
 		{
 			LoadDefaultTabSettings();
 		}
@@ -1097,7 +1097,7 @@ public class TabView : Grid, IDisposable
 
 	private void LoadBookmark()
 	{
-		Instance.Project.UserSettings.AutoLoad = true;
+		Instance.Project.UserSettings.AutoSelect = true;
 
 		TabBookmark tabBookmark = Instance.TabBookmark!;
 		TabViewSettings = tabBookmark.ViewSettings;

@@ -528,7 +528,6 @@ public class TabInstance : IDisposable
 				UiContext.Send(_ => OnReload(this, EventArgs.Empty), null);
 			}
 		}
-		// todo: this needs to actually wait for reload
 	}
 
 	// Reloads Controls & Settings
@@ -540,7 +539,6 @@ public class TabInstance : IDisposable
 		{
 			var onRefresh = OnRefresh; // create temporary copy since this gets delayed
 			UiContext.Send(_ => onRefresh(this, EventArgs.Empty), null);
-			// todo: this needs to actually wait for refresh?
 		}
 	}
 
@@ -749,7 +747,7 @@ public class TabInstance : IDisposable
 
 	public void LoadDefaultBookmark()
 	{
-		if (Project.UserSettings.AutoLoad == false)
+		if (Project.UserSettings.AutoSelect == false)
 			return;
 
 		Bookmark? bookmark = Data.App.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);
@@ -965,10 +963,14 @@ public class TabInstance : IDisposable
 		OnCopyToClipboard?.Invoke(this, new CopyToClipboardEventArgs(text));
 	}
 
+	private static JsonSerializerOptions _jsonSerializerOptions = new()
+	{
+		WriteIndented = true
+	};
+
 	public void CopyToClipboard(object? obj)
 	{
-		var options = new JsonSerializerOptions { WriteIndented = true };
-		string json = JsonSerializer.Serialize(obj, options);
+		string json = JsonSerializer.Serialize(obj, _jsonSerializerOptions);
 		CopyToClipboard(json);
 	}
 }

@@ -156,7 +156,6 @@ public class TabDataSettings
 		var propertyColumns = new List<PropertyColumn>();
 
 		// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
-		//Debug.Assert(visibleProperties.Count > 0); // built in types don't always have properties
 		foreach (PropertyInfo propertyInfo in visibleProperties)
 		{
 			NameAttribute? attribute = propertyInfo.GetCustomAttribute<NameAttribute>();
