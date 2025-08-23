@@ -16,7 +16,7 @@ public class TabSampleFormDataTabs : ITab
 	public class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonNew { get; set; } = new("New", Icons.Svg.BlankDocument);
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save);
+		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true);
 	}
 
 	public class Instance : TabInstance
@@ -31,7 +31,7 @@ public class TabSampleFormDataTabs : ITab
 		{
 			LoadSavedItems(call, model);
 
-			_sampleItem ??= LoadOrCreateData<SampleItem>(DataKey);
+			_sampleItem ??= LoadData<SampleItem>(DataKey) ?? SampleItem.CreateSample();
 			model.AddForm(_sampleItem);
 
 			Toolbar toolbar = new();

@@ -19,7 +19,7 @@ public class ToolbarButton : TabImageButton
 		CallAction = toolButton.Action;
 		CallActionAsync = toolButton.ActionAsync;
 
-		if (toolButton.Default)
+		if (toolButton.IsDefault)
 		{
 			SetDefault();
 		}

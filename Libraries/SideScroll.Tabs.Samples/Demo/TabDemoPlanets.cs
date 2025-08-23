@@ -20,7 +20,7 @@ public class TabDemoPlanets : ITab
 
 		[Separator]
 		public ToolButton ButtonNew { get; set; } = new("New", Icons.Svg.BlankDocument);
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save);
+		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true);
 		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
 
 		[Separator]

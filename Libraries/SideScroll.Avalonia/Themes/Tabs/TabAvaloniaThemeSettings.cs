@@ -55,7 +55,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 		public ToolButton ButtonReset { get; set; } = new("Reset", Icons.Svg.Reset);
 
 		[Separator]
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save);
+		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true);
 
 		[Separator]
 		public ToolButton ButtonCopy { get; set; } = new("Copy to Clipboard", Icons.Svg.Copy);
@@ -156,6 +156,8 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 		private void Save(Call call)
 		{
+			Validate();
+
 			ThemeSettings.ModifiedAt = DateTime.Now;
 			tab.DataViewCollection!.DataRepoView.Save(call, ThemeSettings);
 			UpdateTheme();

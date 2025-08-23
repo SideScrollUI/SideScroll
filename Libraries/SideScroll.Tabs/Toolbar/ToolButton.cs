@@ -11,7 +11,7 @@ public class ToolButton
 	public IResourceView ImageResource { get; set; }
 
 	public bool ShowTask { get; set; }
-	public bool Default { get; set; } // Use Enter as HotKey, add more complex keymapping later?
+	public bool IsDefault { get; set; } // Use Enter as HotKey, add more complex keymapping later?
 
 	public object? HotKey { get; set; } // Only AvaloniaUI KeyGesture currently supported
 
@@ -27,7 +27,7 @@ public class ToolButton
 		Tooltip = tooltip;
 		ImageResource = imageResource;
 		Action = action;
-		Default = isDefault;
+		IsDefault = isDefault;
 		ShowTask = showTask;
 	}
 
@@ -36,7 +36,7 @@ public class ToolButton
 		Tooltip = tooltip;
 		ImageResource = imageResource;
 		ActionAsync = actionAsync;
-		Default = isDefault;
+		IsDefault = isDefault;
 		ShowTask = showTask;
 	}
 }

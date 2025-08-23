@@ -1,10 +1,8 @@
 using SideScroll.Avalonia.Controls;
-using SideScroll.Avalonia.Utilities;
 using SideScroll.Collections;
 using SideScroll.Serialize;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Samples.Models;
-using System.Text.Json;
 
 namespace SideScroll.Avalonia.Samples.Controls.CustomControl;
 
@@ -16,6 +14,7 @@ public class TabCustomControl : ITab
 	{
 		private ItemCollectionUI<Planet>? _planets;
 		private Planet? _planet;
+
 		private TabControlSearchToolbar? _toolbar;
 		private TabForm? _planetForm;
 
@@ -70,9 +69,7 @@ public class TabCustomControl : ITab
 
 		private void CopyClipBoardUI(Call call)
 		{
-			var options = new JsonSerializerOptions { WriteIndented = true };
-			string json = JsonSerializer.Serialize(_planets, options);
-			ClipboardUtils.SetText(_toolbar, json);
+			CopyToClipboard(SelectedItems);
 		}
 	}
 }

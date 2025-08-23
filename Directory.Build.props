@@ -5,6 +5,10 @@
     - Added TabInstance.LoadOrCreate Methods
     - Renamed TabInstance.Invoke() to Post()
     - Fixed serializer regression when removing class members
+    - Invalid parsing validations now show an error again
+    - Added TextBox support for Shift-Enter
+    - The first validated control that fails will now be focused
+    - Renamed ToolButton.Default to IsDefault
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.3</AvaloniaVersion>

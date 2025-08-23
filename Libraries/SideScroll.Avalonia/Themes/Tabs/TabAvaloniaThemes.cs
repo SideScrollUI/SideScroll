@@ -17,7 +17,7 @@ public class TabAvaloniaThemes : ITab
 	public class Toolbar(Instance instance) : TabToolbar
 	{
 		public ToolButton ButtonNew { get; set; } = new("New", Icons.Svg.BlankDocument);
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save)
+		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true)
 		{
 			IsEnabledBinding = new PropertyBinding(nameof(ThemeId.HasName), instance.ThemeId),
 		};

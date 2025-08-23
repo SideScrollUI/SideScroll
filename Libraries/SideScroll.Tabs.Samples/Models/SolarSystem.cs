@@ -18,7 +18,7 @@ public class Planet
 {
 	[Required]
 	public string? Name { get; set; }
-	[HiddenColumn]
+	[HiddenColumn, AcceptsReturn]
 	public string? Description { get; set; }
 
 	public long? DistanceKm { get; set; }

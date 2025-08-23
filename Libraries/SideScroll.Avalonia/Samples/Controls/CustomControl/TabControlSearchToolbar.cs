@@ -35,6 +35,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 	{
 		ButtonNew = AddButton("New", Icons.Svg.BlankDocument, "New");
 		ButtonSave = AddButton("Save", Icons.Svg.Save);
+		ButtonSave.SetDefault();
 
 		AddSeparator();
 		ButtonSearch = AddButton("Search (Ctrl + S)", Icons.Svg.Search);

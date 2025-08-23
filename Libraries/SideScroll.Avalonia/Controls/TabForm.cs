@@ -344,7 +344,14 @@ public class TabForm : Border, IValidationControl
 		bool valid = true;
 		foreach (var propertyControl in _propertyControls)
 		{
-			valid = AvaloniaUtils.ValidateControl(propertyControl.Key, propertyControl.Value) && valid;
+			if (!AvaloniaUtils.ValidateControl(propertyControl.Key, propertyControl.Value))
+			{
+				if (valid)
+				{
+					propertyControl.Value.Focus();
+				}
+				valid = false;
+			}
 		}
 
 		if (!valid)

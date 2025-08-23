@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -203,5 +204,16 @@ public class TabTextBox : TextBox
 		{
 			base.UpdateDataValidation(property, state, error);
 		}
+	}
+
+	protected override void OnKeyDown(KeyEventArgs e)
+	{
+		if (AcceptsReturn && e.Key == Key.Enter && !e.KeyModifiers.HasFlag(KeyModifiers.Shift))
+		{
+			// Handle Shift-Enter but not Enter
+			return;
+		}
+
+		base.OnKeyDown(e);
 	}
 }

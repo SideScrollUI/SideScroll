@@ -13,22 +13,22 @@ public class TabSampleFormCollection : ITab
 	public class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonNew { get; set; } = new ToolButton("New", Icons.Svg.BlankDocument);
-		public ToolButton ButtonSave { get; set; } = new ToolButton("Save", Icons.Svg.Save);
+		public ToolButton ButtonSave { get; set; } = new ToolButton("Save", Icons.Svg.Save, isDefault: true);
 	}
 
 	public class Instance : TabInstance
 	{
-		private const string DataKey = "Params";
+		private const string DataKey = "FormCollection";
 
 		private ItemCollection<SampleItem> _items = [];
 		private SampleItem? _sampleItem;
-		private DataRepoInstance<SampleItem>? _dataRepoParams;
+		private DataRepoInstance<SampleItem>? _dataRepoInstance;
 
 		public override void Load(Call call, TabModel model)
 		{
 			LoadSavedItems(call, model);
 
-			_sampleItem = LoadOrCreateData<SampleItem>(DataKey);
+			_sampleItem ??= LoadData<SampleItem>(DataKey) ?? SampleItem.CreateSample();
 			model.AddForm(_sampleItem);
 
 			var toolbar = new Toolbar();
@@ -39,10 +39,10 @@ public class TabSampleFormCollection : ITab
 
 		private void LoadSavedItems(Call call, TabModel model)
 		{
-			_dataRepoParams = Data.App.Open<SampleItem>("CollectionTest");
-			DataRepoInstance = _dataRepoParams;
+			_dataRepoInstance = Data.App.Open<SampleItem>("CollectionTest");
+			DataRepoInstance = _dataRepoInstance;
 
-			var sortedValues = _dataRepoParams.LoadAll(call).SortedValues;
+			var sortedValues = _dataRepoInstance.LoadAll(call).SortedValues;
 			_items = new ItemCollection<SampleItem>(sortedValues);
 			model.Items = _items;
 		}
@@ -58,8 +58,8 @@ public class TabSampleFormCollection : ITab
 			Validate();
 
 			SampleItem clone = _sampleItem.DeepClone(call)!;
-			_dataRepoParams!.Save(call, clone.ToString(), clone);
-			//SaveData(DataKey, clone);
+			_dataRepoInstance!.Save(call, clone.ToString()!, clone);
+			SaveData(DataKey, clone);
 			_items.Add(clone);
 		}
 	}
