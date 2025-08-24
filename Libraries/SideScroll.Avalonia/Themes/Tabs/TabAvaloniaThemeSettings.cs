@@ -10,6 +10,7 @@ using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Tasks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -52,7 +53,10 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonReset { get; set; } = new("Reset", Icons.Svg.Reset);
+		public ToolButton ButtonReset { get; set; } = new("Reset", Icons.Svg.Reset)
+		{
+			Flyout = new ConfirmationFlyoutConfig("Are you sure you want to reset this theme?", "Reset"),
+		};
 
 		[Separator]
 		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true);

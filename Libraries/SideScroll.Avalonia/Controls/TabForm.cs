@@ -65,6 +65,7 @@ public class TabForm : Border, IValidationControl
 	private void FormObject_ObjectChanged(object? sender, EventArgs e)
 	{
 		LoadObject(sender);
+		Focus();
 	}
 
 	[MemberNotNull(nameof(ContainerGrid))]

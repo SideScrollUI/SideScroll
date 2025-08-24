@@ -57,8 +57,6 @@ public static class AvaloniaUtils
 			list.Add(menuItemPaste);
 		}
 
-		//list.Add(new Separator());
-
 		ContextMenu contextMenu = new()
 		{
 			ItemsSource = list,

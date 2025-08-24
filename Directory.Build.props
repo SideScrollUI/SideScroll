@@ -9,6 +9,8 @@
     - Added TextBox support for Shift-Enter
     - The first validated control that fails will now be focused
     - Renamed ToolButton.Default to IsDefault
+    - Changed TabModel.AddForm() to return an updatable form
+    - Added Confirmation Dialogs for Settings Reset Buttons
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.3</AvaloniaVersion>
