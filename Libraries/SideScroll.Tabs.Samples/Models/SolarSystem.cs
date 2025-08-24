@@ -38,19 +38,6 @@ public class Planet
 
 	public override string? ToString() => Name;
 
-	public void Clear()
-	{
-		Name = null;
-		Description = null;
-		DistanceKm = null;
-		RadiusKm = null;
-		MassKg = null;
-		GravityM_s2 = null;
-		Moons = null;
-		OrbitalPeriodDays = null;
-		Inner = null;
-	}
-
 	public static Planet CreateSample() => new()
 	{
 		Name = "Planet X",

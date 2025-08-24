@@ -33,11 +33,12 @@ public class TabDemoPlanets : ITab
 
 		private DataRepoView<Planet>? _dataRepoView;
 		private Planet? _planet;
+		private TabFormObject? _tabFormObject;
 
 		public override void LoadUI(Call call, TabModel model)
 		{
 			_planet = Planet.CreateSample();
-			model.AddForm(_planet);
+			_tabFormObject = model.AddForm(_planet);
 
 			Toolbar toolbar = new();
 			toolbar.ButtonReset.Action = Reset;
@@ -78,8 +79,8 @@ public class TabDemoPlanets : ITab
 
 		private void New(Call call)
 		{
-			_planet!.Clear();
-			Refresh();
+			_planet = new();
+			_tabFormObject!.NotifyChanged(_planet);
 		}
 
 		private void Save(Call call)
@@ -89,6 +90,8 @@ public class TabDemoPlanets : ITab
 			var clone = _planet.DeepClone()!;
 
 			_dataRepoView!.Save(call, clone);
+
+			New(call);
 		}
 
 		private void Delete(Call call)

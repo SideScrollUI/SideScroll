@@ -476,9 +476,9 @@ public class TabView : Grid, IDisposable
 		{
 			AddControlString(text);
 		}
-		else if (tabObject.Editable)
+		else if (tabObject is TabFormObject formObject)
 		{
-			AddControl(new TabForm(obj), gridLength, tabObject.EnableScrolling);
+			AddControl(new TabForm(formObject), gridLength, tabObject.EnableScrolling);
 		}
 	}
 

@@ -7,6 +7,7 @@ using SideScroll.Avalonia.Controls.View;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Collections;
 using SideScroll.Extensions;
+using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
@@ -35,6 +36,8 @@ public class TabForm : Border, IValidationControl
 
 	public object? Object { get; set; }
 
+	public TabFormObject? FormObject { get; set; }
+
 	public Grid ContainerGrid { get; protected set; }
 
 	private readonly Dictionary<ListProperty, Control> _propertyControls = [];
@@ -51,6 +54,17 @@ public class TabForm : Border, IValidationControl
 		{
 			LoadObject(obj);
 		}
+	}
+
+	public TabForm(TabFormObject formObject, bool autoGenerateRows = true) : this(formObject.Object)
+	{
+		FormObject = formObject;
+		FormObject.ObjectChanged += FormObject_ObjectChanged;
+	}
+
+	private void FormObject_ObjectChanged(object? sender, EventArgs e)
+	{
+		LoadObject(sender);
 	}
 
 	[MemberNotNull(nameof(ContainerGrid))]

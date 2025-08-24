@@ -30,7 +30,7 @@ public class TabUserSettings : ITab
 			model.AddObject(toolbar);
 
 			UserSettings = Project.UserSettings.DeepClone(call)!;
-			model.AddObject(UserSettings);
+			model.AddForm(UserSettings);
 		}
 
 		private void Reset(Call call)

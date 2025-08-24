@@ -40,6 +40,7 @@ public class TabCustomControl : ITab
 		{
 			_planet = new();
 			_planetForm!.LoadObject(_planet);
+			_planetForm.Focus();
 		}
 
 		private void Save(Call call)
