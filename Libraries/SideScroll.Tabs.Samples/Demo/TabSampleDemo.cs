@@ -1,8 +1,10 @@
 using SideScroll.Attributes;
 using SideScroll.Resources;
+using SideScroll.Tabs.Samples.Charts;
 using SideScroll.Tabs.Samples.DataGrid;
-using SideScroll.Tabs.Samples.Objects;
 using SideScroll.Tabs.Samples.Forms;
+using SideScroll.Tabs.Samples.Forms.Todo;
+using SideScroll.Tabs.Samples.Objects;
 using SideScroll.Tabs.Tools.FileViewer;
 
 namespace SideScroll.Tabs.Samples.Demo;
@@ -19,5 +21,7 @@ public class TabSampleDemo
 	public static TabSampleFormDataTabs Forms => new();
 	public static string Json => TextSamples.Json;
 	public static TabFileViewer FileViewer => new();
+	public static TabProcessMonitor ProcessMonitor => new();
+	public static TabSampleTodos Todo => new();
 	public static TabSampleDemo Copy => new();
 }

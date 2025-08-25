@@ -13,7 +13,7 @@
     - Added Confirmation Dialogs for Settings Reset Buttons
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.3</AvaloniaVersion>
+    <AvaloniaVersion>11.3.4</AvaloniaVersion>
     <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
