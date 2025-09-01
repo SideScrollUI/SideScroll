@@ -392,7 +392,6 @@ public class TabView : Grid, IDisposable
 		double desiredWidth = Math.Min(_parentContainerBorder!.DesiredSize.Width, Model.MaxDesiredWidth);
 		TabViewSettings.SplitterDistance = desiredWidth;
 		_parentContainerBorder.Width = desiredWidth;
-		//containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
 		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 
 		_containerGrid.InvalidateMeasure();

@@ -963,7 +963,7 @@ public class TabInstance : IDisposable
 		OnCopyToClipboard?.Invoke(this, new CopyToClipboardEventArgs(text));
 	}
 
-	private static JsonSerializerOptions _jsonSerializerOptions = new()
+	private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
 	{
 		WriteIndented = true
 	};

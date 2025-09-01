@@ -7,6 +7,7 @@ namespace SideScroll.Serialize.DataRepos;
 public interface IDataRepoInstance
 {
 	string GroupId { get; }
+	string GroupPath { get; }
 
 	Type DataType { get; }
 
@@ -25,7 +26,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 
 	public Type DataType => typeof(T);
 
-	public DataRepoIndexInstance<T>? Index { get; set; }
+	public DataRepoIndex<T>? Index { get; set; }
 
 	public override string ToString() => GroupId;
 

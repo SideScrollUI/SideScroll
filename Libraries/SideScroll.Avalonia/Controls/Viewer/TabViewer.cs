@@ -243,7 +243,7 @@ public class TabViewer : Grid
 
 		if (LinkManager.Instance != null && bookmark.Imported)
 		{
-			// Add Bookmark to bookmark manager
+			// Add Bookmark to Link Manager
 			TabView!.Instance.SelectPath("Links", "Imported"); // Select path first so the child tab autoselects the new bookmark
 			LinkManager.Instance.Imported.AddNew(call, linkUri, bookmark);
 			ScrollViewer.Offset = new Vector(0, 0);

@@ -303,6 +303,7 @@ public class DataRepo
 	{
 		call ??= new();
 		groupId ??= DefaultGroupId;
+
 		string dataPath = GetDataPath(type, groupId, key);
 		if (!Directory.Exists(dataPath))
 			return;
