@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Version>0.9.11</Version>
+    <Version>0.10</Version>
     <PackageReleaseNotes>
     - Added TabInstance.LoadOrCreate() Methods
     - Added TextBox support for Shift-Enter

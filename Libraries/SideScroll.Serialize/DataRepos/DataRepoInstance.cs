@@ -147,7 +147,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		}
 	}
 
-	public IEnumerable<DataItem<T>> LoadAllDataItems(Call call, bool ascending = false)
+	public IEnumerable<DataItem<T>> LoadAllDataItems(Call call, bool ascending = true)
 	{
 		var pathIterator = GetPathEnumerable(ascending);
 		if (pathIterator == null) return [];
