@@ -364,8 +364,8 @@ public class TabForm : Border, IValidationControl
 				if (valid)
 				{
 					propertyControl.Value.Focus();
+					valid = false;
 				}
-				valid = false;
 			}
 		}
 
