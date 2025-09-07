@@ -62,9 +62,9 @@ public class TabForm : Border, IValidationControl
 		FormObject.ObjectChanged += FormObject_ObjectChanged;
 	}
 
-	private void FormObject_ObjectChanged(object? sender, EventArgs e)
+	private void FormObject_ObjectChanged(object? sender, ObjectUpdatedEventArgs e)
 	{
-		LoadObject(sender);
+		LoadObject(e.Object);
 		Focus();
 	}
 
@@ -89,6 +89,7 @@ public class TabForm : Border, IValidationControl
 	{
 		ContainerGrid.Children.Clear();
 		ContainerGrid.RowDefinitions.Clear();
+		_propertyControls.Clear();
 	}
 
 	public void LoadObject(object? obj)

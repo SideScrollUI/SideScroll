@@ -61,6 +61,11 @@ public class TabSampleTodos : ITab
 			},
 		];
 
+		public Instance()
+		{
+			OnSelectionChanged += Instance_OnSelectionChanged;
+		}
+
 		public override void LoadUI(Call call, TabModel model)
 		{
 			model.MaxDesiredWidth = 850;
@@ -80,6 +85,17 @@ public class TabSampleTodos : ITab
 			LoadSavedItems(call, model);
 
 			_todoItem.Id = _dataRepoView!.Items.Count + 1;
+		}
+
+		private void Instance_OnSelectionChanged(object? sender, ItemSelectedEventArgs e)
+		{
+			if (_formObject == null) return;
+
+			if (e.Object is SampleTodoItem todoItem)
+			{
+				_todoItem = todoItem.DeepClone();
+				_formObject.Update(sender, _todoItem!);
+			}
 		}
 
 		private void LoadSavedItems(Call call, TabModel model)
@@ -111,7 +127,7 @@ public class TabSampleTodos : ITab
 		{
 			_todoItem = new();
 			_todoItem.Id = _dataRepoView!.Items.Count + 1;
-			_formObject!.NotifyChanged(_todoItem);
+			_formObject!.Update(this, _todoItem);
 		}
 
 		private void Save(Call call)

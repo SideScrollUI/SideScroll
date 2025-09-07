@@ -65,8 +65,9 @@ public static class SideScrollTheme
 	//public static SolidColorBrush LabelHighlightForeground => GetBrush("LabelHighlightForegroundBrush");
 
 	public static SolidColorBrush TextControlBackground => GetBrush("TextControlBackground");
-	public static SolidColorBrush TextReadOnlyForeground => GetBrush("TextControlForegroundReadOnlyBrush");
+	public static SolidColorBrush TextControlForeground => GetBrush("TextControlForeground");
 	public static SolidColorBrush TextReadOnlyBackground => GetBrush("TextControlBackgroundReadOnlyBrush");
+	public static SolidColorBrush TextReadOnlyForeground => GetBrush("TextControlForegroundReadOnlyBrush");
 
 	// TextArea 
 	public static SolidColorBrush TextAreaBackground => GetBrush("TextAreaBackgroundBrush");

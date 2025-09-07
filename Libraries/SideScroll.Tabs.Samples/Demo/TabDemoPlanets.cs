@@ -80,7 +80,7 @@ public class TabDemoPlanets : ITab
 		private void New(Call call)
 		{
 			_planet = new();
-			_tabFormObject!.NotifyChanged(_planet);
+			_tabFormObject!.Update(this, _planet);
 		}
 
 		private void Save(Call call)

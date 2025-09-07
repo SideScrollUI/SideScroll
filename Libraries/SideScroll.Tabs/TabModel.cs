@@ -17,15 +17,25 @@ public class TabObject
 
 	public bool Fill { get; set; } // Stretch to Fill all vertical space
 	public bool EnableScrolling { get; set; }
+
+	public override string? ToString() => Object?.ToString();
+}
+
+public class ObjectUpdatedEventArgs(object obj) : EventArgs
+{
+	public object Object => obj;
+
+	public override string? ToString() => Object?.ToString();
 }
 
 public class TabFormObject : TabObject
 {
-	public event EventHandler? ObjectChanged;
+	public event EventHandler<ObjectUpdatedEventArgs>? ObjectChanged;
 
-	public void NotifyChanged(object sender)
+	public void Update(object? sender, object obj)
 	{
-		ObjectChanged?.Invoke(sender, EventArgs.Empty);
+		Object = obj;
+		ObjectChanged?.Invoke(sender, new ObjectUpdatedEventArgs(Object!));
 	}
 }
 

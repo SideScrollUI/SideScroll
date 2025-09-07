@@ -207,4 +207,18 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	{
 		OnCollectionChanged(e);
 	}
+
+	public void Replace(T oldObject, T newObject)
+	{
+		int index = Items.IndexOf(oldObject);
+		if (index >= 0)
+		{
+			RemoveAt(index);
+			Insert(index, newObject);
+		}
+		else
+		{
+			Add(newObject);
+		}
+	}
 }
