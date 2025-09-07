@@ -3,6 +3,7 @@
     <Version>0.11</Version>
     <PackageReleaseNotes>
     - DataViewCollection now updates items when they change
+    - Renamed ListProperty.Editable to IsEditable
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.4</AvaloniaVersion>

@@ -19,7 +19,7 @@ public class TabCheckBox : CheckBox
 
 	public TabCheckBox(ListProperty property) : this()
 	{
-		IsEnabled = property.Editable;
+		IsEnabled = property.IsEditable;
 		Bind(property);
 	}
 
@@ -27,7 +27,7 @@ public class TabCheckBox : CheckBox
 	{
 		var binding = new Binding(property.PropertyInfo.Name)
 		{
-			Mode = property.Editable ? BindingMode.TwoWay : BindingMode.OneWay,
+			Mode = property.IsEditable ? BindingMode.TwoWay : BindingMode.OneWay,
 			Source = property.Object,
 		};
 		Bind(IsCheckedProperty, binding);

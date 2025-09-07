@@ -236,7 +236,7 @@ public class TabAvaloniaEdit : Border
 	public void EnableEditing(ListMember listMember)
 	{
 		ListProperty = listMember as ListProperty;
-		if (ListProperty != null && !ListProperty.Editable)
+		if (ListProperty != null && !ListProperty.IsEditable)
 			return;
 
 		TextEditor.IsReadOnly = false;

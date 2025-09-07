@@ -10,7 +10,7 @@ public class TabSampleFormTasks : ITab
 
 	public class Instance : TabInstance
 	{
-		private const string DataKey = "Params";
+		private const string DataKey = "Tasks";
 
 		private readonly ItemCollectionUI<SampleResult> _items = [];
 		private SampleItem? _sampleItem;

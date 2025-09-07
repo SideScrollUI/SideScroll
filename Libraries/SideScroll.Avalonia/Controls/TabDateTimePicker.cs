@@ -50,7 +50,7 @@ public class TabDateTimePicker : Grid
 		Binding = new Binding(Property.PropertyInfo.Name)
 		{
 			Converter = _dateTimeConverter,
-			Mode = property.Editable ? BindingMode.TwoWay : BindingMode.OneWay,
+			Mode = property.IsEditable ? BindingMode.TwoWay : BindingMode.OneWay,
 			Source = Property.Object,
 		};
 
@@ -59,7 +59,7 @@ public class TabDateTimePicker : Grid
 
 		AddButton("Copy to Clipboard", Icons.Svg.Copy, 2, CopyToClipboard);
 
-		if (Property.Editable)
+		if (Property.IsEditable)
 		{
 			AddButton("Import from Clipboard", Icons.Svg.Import, 3, ImportFromClipboard);
 		}
@@ -78,10 +78,10 @@ public class TabDateTimePicker : Grid
 			Watermark = "yyyy/M/d",
 			MinWidth = 105,
 			MaxWidth = TabForm.ControlMaxWidth,
-			IsEnabled = Property.Editable,
+			IsEnabled = Property.IsEditable,
 		};
 
-		if (!Property.Editable)
+		if (!Property.IsEditable)
 		{
 			_datePicker.Background = SideScrollTheme.TextReadOnlyBackground;
 		}
@@ -95,7 +95,7 @@ public class TabDateTimePicker : Grid
 	{
 		_timeTextBox = new TabTextBox
 		{
-			IsReadOnly = !Property.Editable,
+			IsReadOnly = !Property.IsEditable,
 			Watermark = "15:30:45",
 			Margin = new Thickness(10, 0, 0, 0),
 			MinWidth = 75,
@@ -104,7 +104,7 @@ public class TabDateTimePicker : Grid
 			[Grid.ColumnProperty] = 1,
 		};
 
-		if (!Property.Editable)
+		if (!Property.IsEditable)
 		{
 			_timeTextBox.Background = SideScrollTheme.TextReadOnlyBackground;
 			_timeTextBox.Foreground = SideScrollTheme.TextReadOnlyForeground;

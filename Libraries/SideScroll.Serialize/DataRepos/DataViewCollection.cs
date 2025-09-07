@@ -274,8 +274,8 @@ public class DataViewCollection<T>
 				if (newItem != oldItem)
 				{
 					_valueLookup.Remove(oldItem);
-					_valueLookup[newItem] = newObject;
 				}
+				_valueLookup[newItem] = newObject;
 
 				index++;
 			}

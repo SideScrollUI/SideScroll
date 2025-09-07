@@ -6,13 +6,13 @@ using System.Reflection;
 
 namespace SideScroll.Tabs.Lists;
 
-public class ListField : ListMember, IPropertyEditable
+public class ListField : ListMember, IPropertyIsEditable
 {
 	[HiddenColumn]
 	public FieldInfo FieldInfo { get; }
 
 	[HiddenColumn]
-	public override bool Editable => true;
+	public override bool IsEditable => true;
 
 	[Hidden]
 	public bool IsFormatted => FieldInfo.GetCustomAttribute<FormattedAttribute>() != null;

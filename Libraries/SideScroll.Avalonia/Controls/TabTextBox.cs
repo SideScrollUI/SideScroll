@@ -70,7 +70,7 @@ public class TabTextBox : TextBox
 
 	private void InitializeProperty(ListProperty property)
 	{
-		IsReadOnly = !property.Editable;
+		IsReadOnly = !property.IsEditable;
 
 		PasswordCharAttribute? passwordCharAttribute = property.GetCustomAttribute<PasswordCharAttribute>();
 		if (passwordCharAttribute != null)
@@ -156,7 +156,7 @@ public class TabTextBox : TextBox
 			Source = property.Object,
 		};
 		Type type = property.UnderlyingType;
-		if (property.Editable && (type == typeof(string) || type.IsPrimitive))
+		if (property.IsEditable && (type == typeof(string) || type.IsPrimitive))
 		{
 			binding.Mode = BindingMode.TwoWay;
 		}

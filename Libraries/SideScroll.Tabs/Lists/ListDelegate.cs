@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace SideScroll.Tabs.Lists;
 
-public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
+public class ListDelegate : ListMember, IPropertyIsEditable, ILoadAsync
 {
 	public delegate Task<object?> LoadObjectAsync(Call call);
 

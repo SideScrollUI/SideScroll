@@ -32,6 +32,9 @@ public class SampleItemDataBinding(SynchronizationContext context) : INotifyProp
 
 				DateTime = new DateTime(2024, 7, i + 1);
 				NotifyPropertyChanged(nameof(DateTime));
+
+				Boolean = i % 2 == 0;
+				NotifyPropertyChanged(nameof(Boolean));
 			}
 
 			if (double.TryParse(_value, out double d))

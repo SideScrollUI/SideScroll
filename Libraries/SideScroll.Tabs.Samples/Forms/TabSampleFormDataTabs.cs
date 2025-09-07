@@ -22,7 +22,7 @@ public class TabSampleFormDataTabs : ITab
 	public class Instance : TabInstance
 	{
 		private const string GroupId = "SampleParams";
-		private const string DataKey = "Params";
+		private const string DataKey = "Default";
 
 		private SampleItem? _sampleItem;
 		private DataRepoView<SampleItem>? _dataRepoView;

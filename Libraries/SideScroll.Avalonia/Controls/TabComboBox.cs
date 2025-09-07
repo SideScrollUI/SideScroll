@@ -32,7 +32,7 @@ public class TabComboBox : ComboBox
 	public TabComboBox(ListProperty property, string? listPropertyName)
 	{
 		Property = property;
-		IsEnabled = property.Editable;
+		IsEnabled = property.IsEditable;
 
 		InitializeComponent();
 

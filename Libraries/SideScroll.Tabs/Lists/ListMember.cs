@@ -54,7 +54,7 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 	public int Order { get; set; } = 0;
 
 	[HiddenColumn]
-	public virtual bool Editable => true;
+	public virtual bool IsEditable => true;
 
 	[HiddenColumn]
 	public bool IsAutoSelectable { get; set; } = true;

@@ -280,7 +280,7 @@ public class TabForm : Border, IValidationControl
 		BindListAttribute? listAttribute = type.GetCustomAttribute<BindListAttribute>();
 		listAttribute ??= property.GetCustomAttribute<BindListAttribute>();
 
-		if (property.Editable)
+		if (property.IsEditable)
 		{
 			if (type.IsEnum || listAttribute != null)
 			{
