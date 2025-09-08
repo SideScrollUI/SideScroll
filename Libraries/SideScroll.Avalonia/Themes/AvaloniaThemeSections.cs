@@ -404,8 +404,7 @@ public class TextControlTheme : ThemeSection
 	[Header("Text Control - Border"), ResourceKey(
 		"TextControlBorderBrush",
 		"ComboBoxBorderBrush",
-		"CalendarDatePickerBorderBrush",
-		"CheckBoxCheckBackgroundStrokeUnchecked"
+		"CalendarDatePickerBorderBrush"
 		)]
 	public Color? TextControlBorder { get; set; }
 
@@ -426,6 +425,13 @@ public class TextControlTheme : ThemeSection
 		"ComboBoxBorderThemeThickness"
 		)]
 	public double? BorderThickness { get; set; }
+
+	[ResourceKey("CheckBoxCheckBackgroundStrokeUnchecked",
+		"CheckBoxCheckBackgroundStrokeUncheckedDisabled",
+		"CheckBoxCheckBackgroundStrokeCheckedDisabled",
+		"CheckBoxCheckBackgroundStrokeIndeterminateDisabled"
+		)]
+	public Color? CheckBoxBorder { get; set; }
 
 	[Range(0, 5), ResourceKey("CheckBoxBorderThemeThickness")]
 	public double? CheckBoxBorderThickness { get; set; }

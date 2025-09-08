@@ -20,6 +20,8 @@ public class TabSampleItem : ITab, IDataView
 	[DataKey]
 	public string? Name => TestItem?.Name;
 
+	public bool? Boolean => TestItem?.Boolean;
+
 	public int? Amount => TestItem?.Amount;
 
 	public TabSampleItem() { }
