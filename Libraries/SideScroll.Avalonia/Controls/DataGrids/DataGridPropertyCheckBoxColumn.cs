@@ -28,7 +28,7 @@ public class DataGridPropertyCheckBoxColumn : DataGridCheckBoxColumn
 
 	protected override Control GenerateElement(DataGridCell cell, object dataItem)
 	{
-		if (DisplayIndex > 0)
+		if (StyleCells && DisplayIndex > 0)
 		{
 			cell.BorderThickness = new Thickness(1, 0, 0, 1); // Left and Bottom
 		}

@@ -49,9 +49,9 @@
     "RadioButtonForegroundPointerOver": "Black"
   },
   "ToolTip": {
-    "Background": "#ff695f9e",
+    "Background": "#ff595994",
     "Foreground": "#ffe1e3f2",
-    "Border": "#a840318c",
+    "Border": "#a82e2e82",
     "FontSize": 14
   },
   "ScrollBar": {
@@ -87,15 +87,15 @@
     "Border": "#ff9aa4d9"
   },
   "Button": {
-    "Background": "#ffe6e7fa",
-    "BackgroundPointerOver": "#ffd4d7ff",
+    "Background": "#ffdee3fa",
+    "BackgroundPointerOver": "#ffccd5ff",
     "BackgroundPressed": "#ffd9dcff",
     "Foreground": "#ff280b9c",
-    "ForegroundPointerOver": "#ff5400fc",
+    "ForegroundPointerOver": "#ff0c30e8",
     "ForegroundPressed": "#ff0017eb",
-    "Border": "#ffb3b9f2",
-    "BorderPointerOver": "#ff8289d9",
-    "BorderPressed": "#ff8289d9",
+    "Border": "#ffb3bef2",
+    "BorderPointerOver": "#ff8290d9",
+    "BorderPressed": "#ff8290d9",
     "BorderThickness": 1.5,
     "CornerRadius": 12,
     "WarningBackground": "#ffd97c4e",

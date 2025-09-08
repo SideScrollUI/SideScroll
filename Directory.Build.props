@@ -6,7 +6,7 @@
     - Renamed ListProperty.Editable to IsEditable
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.4</AvaloniaVersion>
+    <AvaloniaVersion>11.3.5</AvaloniaVersion>
     <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
