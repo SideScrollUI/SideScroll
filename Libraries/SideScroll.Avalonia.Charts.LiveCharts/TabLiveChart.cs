@@ -188,7 +188,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		ChartView.SortByTotal();
 
 		Chart.Series = ChartView.Series
-			.Take(SeriesLimit)
+			.Take(ChartView.SeriesLimit)
 			.Select(AddListSeries)
 			.ToList();
 

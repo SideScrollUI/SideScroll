@@ -4,6 +4,8 @@
     <PackageReleaseNotes>
     - DataViewCollection now updates items when they change
     - Renamed ListProperty.Editable to IsEditable
+    - Moved Chart SeriesLimit into ChartView
+    - Updated Blue Theme Colors
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.5</AvaloniaVersion>

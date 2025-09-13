@@ -62,7 +62,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 				return;
 			}
 
-			var toolbar = new Toolbar();
+			Toolbar toolbar = new();
 			toolbar.ButtonStar = new("Favorite", Icons.Svg.StarFilled, Icons.Svg.Star, new ListProperty(DirectoryView, nameof(DirectoryView.Favorite)));
 			toolbar.ButtonRefresh.Action = Refresh;
 			toolbar.ButtonOpenFolder.Action = OpenFolder;
@@ -93,7 +93,7 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 				return Directory.EnumerateFiles(tab.Path)
 					.Where(name =>
 						fileExtensions == null ||
-						fileExtensions.Any(ext => ext == System.IO.Path.GetExtension(name).ToLower()))
+						fileExtensions.Any(ext => ext.Equals(System.IO.Path.GetExtension(name), StringComparison.CurrentCultureIgnoreCase)))
 					.Select(name => new FileView(name, tab.FileSelectorOptions))
 					.ToList();
 			}

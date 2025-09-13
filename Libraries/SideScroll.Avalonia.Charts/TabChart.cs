@@ -82,7 +82,6 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 	public TabInstance TabInstance { get; init; }
 	public ChartView ChartView { get; set; }
 	public bool FillHeight { get; set; }
-	public int SeriesLimit { get; set; } = 25;
 
 	public List<ChartSeries<TSeries>> ChartSeries { get; private set; } = [];
 	protected Dictionary<string, ChartSeries<TSeries>> IdxNameToChartSeries { get; set; } = [];

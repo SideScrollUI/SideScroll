@@ -53,6 +53,7 @@ public class ChartView
 	public TimeSpan? DefaultPeriodDuration { get; set; }
 
 	public List<ListSeries> Series { get; set; } = [];
+	public int SeriesLimit { get; set; } = 25;
 
 	public List<ChartAnnotation> Annotations { get; set; } = [];
 
