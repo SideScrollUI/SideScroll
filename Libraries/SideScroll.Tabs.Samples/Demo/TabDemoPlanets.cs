@@ -87,7 +87,7 @@ public class TabDemoPlanets : ITab
 		{
 			Validate();
 
-			var clone = _planet.DeepClone()!;
+			var clone = _planet!.DeepClone();
 
 			_dataRepoView!.Save(call, clone);
 

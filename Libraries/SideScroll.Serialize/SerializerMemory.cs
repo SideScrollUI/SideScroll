@@ -22,16 +22,21 @@ public abstract class SerializerMemory
 	public abstract void Validate(Call? call = null);
 
 	// Save an object to a memory stream and then load it
-	public static T? DeepClone<T>(Call call, T? obj, bool publicOnly = false) where T : class
+	public static T DeepClone<T>(Call call, T obj, bool publicOnly = false) where T : class
+	{
+		var memorySerializer = Create();
+		memorySerializer.PublicOnly = publicOnly;
+		using CallTimer timer = call.Timer(LogLevel.Debug, "Deep Cloning", new Tag("Object", obj.Formatted()));
+		return memorySerializer.DeepCloneInternal(timer, obj);
+	}
+
+	public static T? TryDeepClone<T>(Call call, T? obj, bool publicOnly = false) where T : class
 	{
 		if (obj == null) return null;
 
 		try
 		{
-			var memorySerializer = Create();
-			memorySerializer.PublicOnly = publicOnly;
-			using CallTimer timer = call.Timer(LogLevel.Debug, "Deep Cloning", new Tag("Object", obj.Formatted()));
-			return memorySerializer.DeepCloneInternal(timer, obj);
+			return DeepClone(call, obj, publicOnly);
 		}
 		catch (Exception e)
 		{
@@ -40,7 +45,7 @@ public abstract class SerializerMemory
 		return default;
 	}
 
-	public static object? DeepClone(Call call, object? obj, bool publicOnly = false)
+	public static object? TryDeepClone(Call call, object? obj, bool publicOnly = false)
 	{
 		if (obj == null) return null;
 
@@ -67,7 +72,7 @@ public abstract class SerializerMemory
 		memorySerializer.Validate(call);
 	}
 
-	protected abstract T? DeepCloneInternal<T>(Call call, T obj) where T : class;
+	protected abstract T DeepCloneInternal<T>(Call call, T obj) where T : class;
 
 	protected abstract object? DeepCloneInternal(Call call, object obj);
 

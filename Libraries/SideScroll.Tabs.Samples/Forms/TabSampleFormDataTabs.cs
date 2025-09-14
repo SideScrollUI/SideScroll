@@ -59,7 +59,7 @@ public class TabSampleFormDataTabs : ITab
 		{
 			Validate();
 
-			SampleItem clone = _sampleItem.DeepClone(call)!;
+			SampleItem clone = _sampleItem!.DeepClone(call);
 			_dataRepoView!.Save(call, clone);
 			SaveData(DataKey, clone);
 		}

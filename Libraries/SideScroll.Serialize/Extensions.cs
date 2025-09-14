@@ -9,16 +9,22 @@ public static class SerializerExtensions
 		BindingFlags.Instance |
 		BindingFlags.FlattenHierarchy;
 
-	public static T? DeepClone<T>(this T? obj, Call? call = null, bool publicOnly = false) where T : class
+	public static T DeepClone<T>(this T obj, Call? call = null, bool publicOnly = false) where T : class
 	{
 		call ??= new();
 		return SerializerMemory.DeepClone<T>(call, obj, publicOnly);
 	}
 
-	public static object? DeepClone(this object? obj, Call? call = null, bool publicOnly = false)
+	public static T? TryDeepClone<T>(this T? obj, Call? call = null, bool publicOnly = false) where T : class
 	{
 		call ??= new();
-		return SerializerMemory.DeepClone(call, obj, publicOnly);
+		return SerializerMemory.TryDeepClone<T>(call, obj, publicOnly);
+	}
+
+	public static object? TryDeepClone(this object? obj, Call? call = null, bool publicOnly = false)
+	{
+		call ??= new();
+		return SerializerMemory.TryDeepClone(call, obj, publicOnly);
 	}
 
 	public static void CloneParentClass(this object dest, object source)

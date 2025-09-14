@@ -6,6 +6,7 @@ using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Tools;
 
+// See Avalonia version: TabAvaloniaSettings
 public class TabUserSettings : ITab
 {
 	public TabInstance Create() => new Instance();
@@ -29,7 +30,7 @@ public class TabUserSettings : ITab
 			toolbar.ButtonSave.Action = Save;
 			model.AddObject(toolbar);
 
-			UserSettings = Project.UserSettings.DeepClone(call)!;
+			UserSettings = Project.UserSettings.DeepClone(call);
 			model.AddForm(UserSettings);
 		}
 
@@ -42,7 +43,7 @@ public class TabUserSettings : ITab
 		private void Save(Call call)
 		{
 			Data.App.Save(UserSettings!, call);
-			Project.UserSettings = UserSettings.DeepClone(call)!;
+			Project.UserSettings = UserSettings!.DeepClone(call);
 		}
 	}
 }

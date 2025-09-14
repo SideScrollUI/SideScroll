@@ -194,7 +194,9 @@ public class TabImageButton : Button, IDisposable
 					_dispatcherTimer.Tick += DispatcherTimer_Tick;
 				}
 				if (!_dispatcherTimer.IsEnabled)
+				{
 					_dispatcherTimer.Start();
+				}
 				return;
 			}
 		}

@@ -628,7 +628,7 @@ public class TabInstance : IDisposable
 			TabBookmark = { IsRoot = true }
 		};
 		GetBookmark(bookmark.TabBookmark);
-		bookmark = bookmark.DeepClone(TaskInstance.Call)!; // Sanitize and test bookmark
+		bookmark = bookmark.DeepClone(TaskInstance.Call); // Sanitize and test bookmark
 		return bookmark;
 	}
 
@@ -642,7 +642,7 @@ public class TabInstance : IDisposable
 	public virtual void GetBookmark(TabBookmark tabBookmark)
 	{
 		tabBookmark.Name = Label;
-		tabBookmark.ViewSettings = TabViewSettings.DeepClone() ?? new TabViewSettings();
+		tabBookmark.ViewSettings = TabViewSettings.TryDeepClone() ?? new();
 		tabBookmark.DataRepoGroupId = DataRepoInstance?.GroupId;
 		tabBookmark.DataRepoType = DataRepoInstance?.DataType;
 		tabBookmark.SelectedRow = SelectedRow;

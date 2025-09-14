@@ -108,7 +108,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 		{
 			CurrentIndex--;
 			Bookmark oldBookmark = History[CurrentIndex];
-			Bookmark newBookmark = oldBookmark.DeepClone()!; // sanitize
+			Bookmark newBookmark = oldBookmark.DeepClone(); // Sanitize
 			Append(newBookmark, false); // Fork instead?
 			return newBookmark;
 		}

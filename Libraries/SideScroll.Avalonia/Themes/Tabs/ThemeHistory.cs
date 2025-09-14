@@ -40,7 +40,7 @@ public class ThemeHistory : AvaloniaObject
 		{
 			_items.RemoveRange(_index + 1, _items.Count - _index - 1);
 		}
-		_items.Add(themeSettings.DeepClone()!);
+		_items.Add(themeSettings.DeepClone());
 		_index = _items.Count - 1;
 
 		UpdateState();
@@ -48,7 +48,7 @@ public class ThemeHistory : AvaloniaObject
 
 	public void Replace(AvaloniaThemeSettings themeSettings)
 	{
-		_items[_index] = themeSettings.DeepClone()!;
+		_items[_index] = themeSettings.DeepClone();
 	}
 
 	public bool TryGetPrevious([NotNullWhen(true)] out AvaloniaThemeSettings? themeSettings)

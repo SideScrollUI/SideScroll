@@ -134,7 +134,7 @@ public class TabSampleTodos : ITab
 		{
 			Validate();
 
-			var clone = _todoItem.DeepClone()!;
+			var clone = _todoItem!.DeepClone();
 
 			_dataRepoView!.Save(call, clone);
 

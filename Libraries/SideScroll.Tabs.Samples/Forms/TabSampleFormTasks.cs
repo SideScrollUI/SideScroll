@@ -40,7 +40,7 @@ public class TabSampleFormTasks : ITab
 
 			SaveData(DataKey, _sampleItem!);
 
-			SampleItem clone = _sampleItem.DeepClone(call)!;
+			SampleItem clone = _sampleItem!.DeepClone(call);
 			SampleResult result = new()
 			{
 				SampleItem = clone,

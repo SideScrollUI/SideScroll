@@ -61,7 +61,7 @@ public class Project
 
 	public Project Open(LinkedBookmark linkedBookmark)
 	{
-		UserSettings userSettings = UserSettings.DeepClone()!;
+		UserSettings userSettings = UserSettings.DeepClone();
 		userSettings.DataSettings.LinkId = linkedBookmark.LinkId;
 		var project = new Project(ProjectSettings, userSettings)
 		{

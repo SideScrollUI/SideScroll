@@ -45,7 +45,7 @@ public class TabCustomControl : ITab
 
 		private void Save(Call call)
 		{
-			_planets!.Add(_planet.DeepClone()!);
+			_planets!.Add(_planet!.DeepClone());
 			New(call);
 		}
 

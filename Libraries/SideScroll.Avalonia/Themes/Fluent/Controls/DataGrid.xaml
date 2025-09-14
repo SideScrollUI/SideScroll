@@ -43,7 +43,7 @@
     <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundPointerOverBrush}" />
   </Style>
 
-  <Style Selector="dg|DataGridCell:selected">
+  <Style Selector="dg|DataGridCell:selected:not(:pointerover)">
     <Setter Property="Foreground" Value="{DynamicResource DataGridCellForegroundSelectedBrush}" />
   </Style>
 

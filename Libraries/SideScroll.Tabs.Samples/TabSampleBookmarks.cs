@@ -16,7 +16,7 @@ public class TabSampleBookmarks : ITab
 	{
 		public override void LoadUI(Call call, TabModel model)
 		{
-			BookmarkNavigator navigator = Project.Navigator.DeepClone(call)!; // Clone from UI thread only
+			BookmarkNavigator navigator = Project.Navigator.DeepClone(call); // Clone from UI thread only
 			navigator.History.RemoveAt(navigator.History.Count - 1); // Remove the current in progress bookmark
 			navigator.CurrentIndex = navigator.History.Count;
 

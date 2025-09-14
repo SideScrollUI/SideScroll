@@ -68,7 +68,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 	public class Instance(TabAvaloniaThemeSettings tab) : TabInstance
 	{
-		public AvaloniaThemeSettings ThemeSettings = tab.ThemeSettings.DeepClone()!;
+		public AvaloniaThemeSettings ThemeSettings = tab.ThemeSettings!.DeepClone();
 
 		private TabForm? _themeForm;
 

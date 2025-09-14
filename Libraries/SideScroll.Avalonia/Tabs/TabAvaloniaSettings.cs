@@ -28,7 +28,7 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 		};
 
 		[Separator]
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save);
+		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true);
 	}
 
 	public class Instance : TabInstance
@@ -77,7 +77,7 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 		private void Save(Call call)
 		{
 			Data.App.Save(CustomUserSettings!);
-			Project.UserSettings = CustomUserSettings.DeepClone(call)!;
+			Project.UserSettings = CustomUserSettings!.DeepClone(call);
 
 			TimeZoneView.Current = Project.UserSettings.TimeZone;
 			DateTimeExtensions.DefaultFormatType = Project.UserSettings.TimeFormat;
