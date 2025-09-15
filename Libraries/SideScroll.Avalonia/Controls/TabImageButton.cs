@@ -184,7 +184,7 @@ public class TabImageButton : Button, IDisposable
 			TimeSpan timeSpan = DateTime.UtcNow.Subtract(_lastInvoked.Value);
 			if (canDelay && timeSpan < MinWaitTime)
 			{
-				// Rate limiting can delay these
+				// Rate limit request
 				if (_dispatcherTimer == null)
 				{
 					_dispatcherTimer = new DispatcherTimer

@@ -14,11 +14,13 @@ namespace SideScroll.Avalonia.Controls;
 
 public class BaseWindow : Window
 {
-	public static int MinWindowWidth { get; set; } = 700;
-	public static int MinWindowHeight { get; set; } = 500;
+	public static int DefaultMinWidth { get; set; } = 700;
+	public static int DefaultMinHeight { get; set; } = 500;
 
-	public static int DefaultWindowWidth { get; set; } = 1280;
-	public static int DefaultWindowHeight { get; set; } = 800;
+	public static int DefaultWidth { get; set; } = 1280;
+	public static int DefaultHeight { get; set; } = 800;
+
+	public static TimeSpan CleanupInterval { get; set; } = TimeSpan.FromMinutes(10);
 
 	public static BaseWindow? Instance { get; set; }
 
@@ -30,7 +32,7 @@ public class BaseWindow : Window
 
 	private Rect? _normalSizeBounds; // used for saving when maximized
 
-	private readonly DispatcherTimer _dispatcherTimer;
+	private readonly DispatcherTimer _cleanupDispatcherTimer;
 
 	public BaseWindow(Project project)
 	{
@@ -45,12 +47,12 @@ public class BaseWindow : Window
 
 		Opened += BaseWindow_Opened;
 
-		_dispatcherTimer = new DispatcherTimer
+		_cleanupDispatcherTimer = new DispatcherTimer
 		{
-			Interval = TimeSpan.FromMinutes(10), // Won't trigger initially
+			Interval = CleanupInterval, // Won't trigger initially
 		};
-		_dispatcherTimer.Tick += DispatcherTimer_Tick;
-		_dispatcherTimer.Start();
+		_cleanupDispatcherTimer.Tick += CleanupDispatcherTimer_Tick;
+		_cleanupDispatcherTimer.Start();
 	}
 
 	public BaseWindow(ProjectSettings settings) : 
@@ -80,8 +82,8 @@ public class BaseWindow : Window
 
 		Background = SideScrollTheme.TabBackground;
 
-		MinWidth = MinWindowWidth;
-		MinHeight = MinWindowHeight;
+		MinWidth = DefaultMinWidth;
+		MinHeight = DefaultMinHeight;
 
 		Content = TabViewer = new TabViewer(Project);
 
@@ -140,7 +142,7 @@ public class BaseWindow : Window
 				_normalSizeBounds = bounds;
 			}
 
-			var windowSettings = new WindowSettings
+			WindowSettings windowSettings = new()
 			{
 				Maximized = maximized,
 				Width = bounds.Width,
@@ -151,12 +153,12 @@ public class BaseWindow : Window
 
 			if (windowSettings.Width <= 0)
 			{
-				windowSettings.Width = DefaultWindowWidth;
+				windowSettings.Width = DefaultWidth;
 			}
 
 			if (windowSettings.Height <= 0)
 			{
-				windowSettings.Height = DefaultWindowHeight;
+				windowSettings.Height = DefaultHeight;
 			}
 
 			return windowSettings;
@@ -164,8 +166,8 @@ public class BaseWindow : Window
 		set
 		{
 			// These are causing the window to be shifted down
-			Width = Math.Clamp(value.Width, MinWindowWidth, MaxWidth);
-			Height = Math.Clamp(value.Height, MinWindowHeight, MaxHeight);
+			Width = Math.Clamp(value.Width, MinWidth, MaxWidth);
+			Height = Math.Clamp(value.Height, MinHeight, MaxHeight);
 
 			double minLeft = -10; // Left position for windows starts at -10
 			double left = Math.Clamp(value.Left, minLeft, MaxWidth - Width + minLeft); // values can be negative
@@ -221,7 +223,7 @@ public class BaseWindow : Window
 		SaveWindowSettings();
 	}
 
-	private void DispatcherTimer_Tick(object? sender, EventArgs e)
+	private void CleanupDispatcherTimer_Tick(object? sender, EventArgs e)
 	{
 		Project.Data.Cache.CleanupCache(new(), TimeSpan.FromDays(Project.DataSettings.CacheDurationDays));
 	}
