@@ -443,7 +443,7 @@ public class TypeSchema
 				new Tag("Total Bytes", totalBytes));
 		}
 
-		if (IsPublic && NumObjects > PublicMaxObjects)
+		if (serializer.PublicOnly && IsPublic && NumObjects > PublicMaxObjects)
 		{
 			throw new SerializerException("Too many objects for public import",
 				new Tag("Type", Type),
