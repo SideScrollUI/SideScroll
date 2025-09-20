@@ -1,7 +1,9 @@
+using SideScroll.Attributes;
 using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
 
+[PrivateData]
 public class TabFileBytes(string path) : ITab
 {
 	public string Path => path;

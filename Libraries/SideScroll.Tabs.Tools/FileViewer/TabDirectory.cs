@@ -8,6 +8,7 @@ using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
 
+[PrivateData]
 public class TabDirectory(DirectoryView directoryView) : ITab
 {
 	public DirectoryView DirectoryView => directoryView;

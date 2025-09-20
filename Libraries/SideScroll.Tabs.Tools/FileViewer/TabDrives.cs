@@ -1,7 +1,9 @@
+using SideScroll.Attributes;
 using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
 
+[PrivateData]
 public class TabDrives(FileSelectorOptions? fileSelectorOptions = null) : ITab
 {
 	public FileSelectorOptions? FileSelectorOptions { get; set; } = fileSelectorOptions;

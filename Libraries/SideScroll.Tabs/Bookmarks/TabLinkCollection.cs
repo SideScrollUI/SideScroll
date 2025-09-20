@@ -2,6 +2,8 @@ using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Tasks;
+using System.Collections;
 
 namespace SideScroll.Tabs.Bookmarks;
 
@@ -16,7 +18,10 @@ public class TabLinkCollection(LinkCollection links) : ITab
 		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
 
 		[Separator]
-		public ToolButton ButtonDeleteAll { get; set; } = new("Delete All", Icons.Svg.DeleteList);
+		public ToolButton ButtonDeleteAll { get; set; } = new("Delete All", Icons.Svg.DeleteList)
+		{
+			Flyout = new ConfirmationFlyoutConfig("Delete all links?", "Delete"),
+		};
 
 		[Separator]
 		public ToolToggleButton? ToggleButtonShowLinkInfoTab { get; set; }
@@ -29,7 +34,10 @@ public class TabLinkCollection(LinkCollection links) : ITab
 			model.CustomSettingsPath = tab.Links.GroupId;
 			model.MinDesiredWidth = 300;
 
-			tab.Links.Load(call, true);
+			if (Project.Data.DataSettings.LinkId == null)
+			{
+				tab.Links.Load(call, true);
+			}
 
 			model.AddData(tab.Links.Items);
 		}
@@ -39,6 +47,7 @@ public class TabLinkCollection(LinkCollection links) : ITab
 			Toolbar toolbar = new();
 			toolbar.ButtonRefresh.Action = Refresh;
 			toolbar.ButtonDeleteAll.Action = DeleteAll;
+			toolbar.ButtonDeleteAll.IsEnabledBinding = new PropertyBinding(nameof(IList.Count), tab.Links.Items);
 			ListProperty listProperty = new(tab.Links, nameof(LinkCollection.ShowLinkInfoTab));
 			toolbar.ToggleButtonShowLinkInfoTab = new("Show Link Info Tab", Icons.Svg.PanelLeftContract, Icons.Svg.PanelLeftExpand, listProperty, ShowLinkTab);
 			model.AddObject(toolbar);

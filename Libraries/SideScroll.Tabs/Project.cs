@@ -96,7 +96,7 @@ public class Project
 
 public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings userSettings)
 {
-	protected DataSettings DataSettings => userSettings.DataSettings;
+	public DataSettings DataSettings => userSettings.DataSettings;
 
 	public DataRepo App => new(AppPath);
 	public DataRepo Cache => new(CachePath);

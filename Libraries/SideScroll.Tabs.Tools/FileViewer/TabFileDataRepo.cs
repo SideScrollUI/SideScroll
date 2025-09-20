@@ -1,9 +1,11 @@
+using SideScroll.Attributes;
 using SideScroll.Resources;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
 
+[PrivateData]
 public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes, FileSelectorOptions? fileSelectorOptions = null) : ITab
 {
 	public DataRepoView<NodeView> DataRepoNodes => dataRepoNodes;

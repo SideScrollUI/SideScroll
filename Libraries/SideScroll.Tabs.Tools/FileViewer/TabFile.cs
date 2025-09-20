@@ -12,6 +12,7 @@ public interface IFileTypeView
 	string? Path { get; set; }
 }
 
+[PrivateData]
 public class TabFile(FileView fileView) : ITab
 {
 	public TabFile(string filePath) : this(new FileView(filePath)) { }
