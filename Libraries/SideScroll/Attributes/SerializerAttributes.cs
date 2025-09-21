@@ -47,32 +47,6 @@ public class CloneReferenceAttribute : Attribute
 }
 
 /// <summary>
-/// Forces serialization of members that would otherwise be excluded.
-/// </summary>
-/// <remarks>
-/// <b>Apply to:</b> Classes or structs.
-/// <para>
-/// Use when you need to explicitly include members that the serializer would normally skip.
-/// When applied to types, all members default to being serialized (individual members can override).
-/// Missing constructors in base classes is a common reason to use this
-/// </para>
-/// </remarks>
-/// <example>
-/// <code>
-/// [Serialized]
-/// public class Example
-/// {
-///     public int ForceInclude { get; set; }
-/// }
-/// </code>
-/// </example>
-// TODO: Consider adding support for individual fields and properties in the future
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-public class SerializedAttribute : Attribute
-{
-}
-
-/// <summary>
 /// Prevents serialization entirely (both local and export). Not overridable
 /// </summary>
 /// <remarks>

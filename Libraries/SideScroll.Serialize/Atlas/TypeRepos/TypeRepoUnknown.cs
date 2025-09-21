@@ -20,7 +20,7 @@ public class TypeRepoUnknown(Serializer serializer, TypeSchema typeSchema) : Typ
 	{
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if ((!typeSchema.HasConstructor && !typeSchema.IsSerialized) ||
+			if (!typeSchema.HasConstructor ||
 				(typeSchema.IsPublicOnly && !serializer.PublicOnly))
 			{
 				return new TypeRepoUnknown(serializer, typeSchema);

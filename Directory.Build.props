@@ -12,6 +12,7 @@
     - Added Attribute Summary Documentation
     - Renamed [Editing] to [EditColumn]
     - Disabled [Unit] until it can be implemented
+    - Removed [Serialized] since it's no longer needed
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.6</AvaloniaVersion>

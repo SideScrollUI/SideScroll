@@ -12,7 +12,7 @@ public class TypeRepoObject : TypeRepo
 		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
 			// todo: support matching constructors with name params & types to fields/properties
-			if (typeSchema.HasConstructor || typeSchema.IsSerialized)
+			if (typeSchema.HasConstructor)
 			{
 				return new TypeRepoObject(serializer, typeSchema);
 			}

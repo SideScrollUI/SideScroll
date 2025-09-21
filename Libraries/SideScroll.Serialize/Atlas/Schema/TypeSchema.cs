@@ -71,7 +71,6 @@ public class TypeSchema
 	
 	public bool IsCloneReference { get; protected set; }
 	
-	public bool IsSerialized { get; protected set; }
 	public bool IsUnserialized { get; protected set; }
 	
 	public bool HasEmptyConstructor { get; protected set; }
@@ -118,7 +117,6 @@ public class TypeSchema
 		IsPrimitive = NonNullableType.IsPrimitive;
 		HasEmptyConstructor = TypeHasEmptyConstructor(Type);
 
-		IsSerialized = Type.GetCustomAttribute<SerializedAttribute>() != null;
 		IsUnserialized = Type.GetCustomAttribute<UnserializedAttribute>() != null;
 		IsCloneReference = Type.GetCustomAttribute<CloneReferenceAttribute>() != null;
 		IsPrivate = GetIsPrivate();

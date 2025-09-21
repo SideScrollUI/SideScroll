@@ -140,13 +140,9 @@ public abstract class TypeRepo : IDisposable
 		}
 
 		// Derived types can still have valid constructors
-		if (!typeSchema.HasConstructor && !typeSchema.IsSerialized)
+		if (!typeSchema.HasConstructor)
 		{
 			typeRepo = new TypeRepoUnknown(serializer, typeSchema);
-			if (typeSchema.IsSerialized)
-			{
-				log.AddWarning("Type has no constructor", new Tag(typeSchema));
-			}
 		}
 		else
 		{
