@@ -41,7 +41,7 @@ public static class ObjectUtils
 		return null;
 	}
 
-	// Get's the [DataValue] member that will be imported with an Imported Bookmark
+	// Get's the [DataValue] member that will be imported with an Imported Link
 	public static object? GetDataValue(object? obj)
 	{
 		if (obj == null) return null;

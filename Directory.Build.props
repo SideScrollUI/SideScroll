@@ -9,6 +9,9 @@
     - Fixed DataGrid Theming for cells that are both selected and pointer over
     - Renamed DeepClone to TryDeepClone and added non-nullable DeepClone version
     - Fixed max object limit when loading a private file
+    - Added Attribute Summary Documentation
+    - Renamed [Editing] to [EditColumn]
+    - Disabled [Unit] until it can be implemented
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.6</AvaloniaVersion>

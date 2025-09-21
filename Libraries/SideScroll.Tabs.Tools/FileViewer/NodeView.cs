@@ -25,7 +25,7 @@ public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 	[Unserialized, HiddenColumn]
 	public FileSelectorOptions? FileSelectorOptions { get; set; }
 
-	[Name("  ★"), Editing]
+	[Name("  ★"), EditColumn]
 	public bool Favorite
 	{
 		get => _favorite;
@@ -94,7 +94,7 @@ public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 // Shows if only directories present
 public interface IDirectoryView : IHasLinks
 {
-	[Name("  ★"), Editing]
+	[Name("  ★"), EditColumn]
 	public bool Favorite { get; set; }
 
 	public string Name { get; }

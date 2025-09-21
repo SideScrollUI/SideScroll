@@ -17,7 +17,7 @@ public class ListField : ListMember, IPropertyIsEditable
 	[Hidden]
 	public bool IsFormatted => FieldInfo.GetCustomAttribute<FormattedAttribute>() != null;
 
-	[Editing, InnerValue]
+	[EditColumn, InnerValue]
 	public override object? Value
 	{
 		get

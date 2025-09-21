@@ -187,21 +187,25 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 			_lastHistoryUpdatable = isUpdatable;
 		}
 
-		private void CopyToClipboard(Call call)
+		private static JsonSerializerOptions CreateJsonSerializerOptions()
 		{
 			var options = new JsonSerializerOptions { WriteIndented = true };
 			options.Converters.Add(new JsonColorConverter());
-			string json = JsonSerializer.Serialize(ThemeSettings, options);
+			return options;
+		}
+
+		private static JsonSerializerOptions _jsonSerializerOptions = CreateJsonSerializerOptions();
+
+		private void CopyToClipboard(Call call)
+		{
+			string json = JsonSerializer.Serialize(ThemeSettings, _jsonSerializerOptions);
 			ClipboardUtils.SetText(_themeForm, json);
 		}
 
 		private void ImportFromClipboard(Call call)
 		{
 			string json = ClipboardUtils.GetText(_themeForm)!;
-
-			var options = new JsonSerializerOptions();
-			options.Converters.Add(new JsonColorConverter());
-			var theme = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, options)!;
+			var theme = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, _jsonSerializerOptions)!;
 			LoadTheme(theme);
 		}
 	}

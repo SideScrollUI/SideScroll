@@ -7,30 +7,12 @@ namespace SideScroll.Extensions;
 
 public static class SideScrollExtensions
 {
-	public static XmlNode[] Elements(this XmlDocument xmlDoc, string name)
-	{
-		var list = new List<XmlNode>();
-		foreach (XmlNode xmlNode in xmlDoc.ChildNodes)
-		{
-			if (xmlNode.Name == name)
-			{
-				list.Add(xmlNode);
-			}
-		}
-		return list.ToArray();
-	}
-
 	public static XmlNode[] Elements(this XmlNode xmlNode, string name)
 	{
-		var list = new List<XmlNode>();
-		foreach (XmlNode childNode in xmlNode.ChildNodes)
-		{
-			if (childNode.Name == name)
-			{
-				list.Add(childNode);
-			}
-		}
-		return list.ToArray();
+		return xmlNode.ChildNodes
+			.OfType<XmlNode>()
+			.Where(xmlNode => xmlNode.Name == name)
+			.ToArray();
 	}
 
 	public static void Merge(this IList iList, IList newList)
