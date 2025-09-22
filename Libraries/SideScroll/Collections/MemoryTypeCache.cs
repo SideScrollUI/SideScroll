@@ -16,7 +16,7 @@ public class MemoryTypeCache<T>
 		MaxItems = maxItems;
 		CacheDuration = cacheDuration;
 
-		var options = new MemoryCacheOptions
+		MemoryCacheOptions options = new()
 		{
 			SizeLimit = MaxItems,
 			ExpirationScanFrequency = TimeSpan.FromSeconds(60),
@@ -28,7 +28,7 @@ public class MemoryTypeCache<T>
 	{
 		if (value == null) return;
 
-		var options = new MemoryCacheEntryOptions
+		MemoryCacheEntryOptions options = new()
 		{
 			Size = 1, // Assume all items are the same size for now
 		};

@@ -129,11 +129,13 @@ public class TabViewer : Grid
 
 	private async Task CreateLinkAsync(Call call)
 	{
+		var buttonLink = Toolbar!.ButtonLink!;
+
 		Flyout flyout = new()
 		{
 			Placement = PlacementMode.BottomEdgeAlignedLeft,
 		};
-		AvaloniaUtils.ShowFlyout(Toolbar!.ButtonLink!, flyout, "Creating Link ...");
+		AvaloniaUtils.ShowFlyout(buttonLink, flyout, "Creating Link ...");
 
 		Bookmark bookmark = TabView!.Instance.CreateBookmark();
 		TabBookmark? leafNode = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
@@ -156,11 +158,11 @@ public class TabViewer : Grid
 
 			LinkManager.Instance?.Created.AddNew(call, linkUri, bookmark);
 			await ClipboardUtils.SetTextAsync(this, linkUri.ToString());
-			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonLink!, flyout, "Link copied to clipboard");
+			AvaloniaUtils.ShowFlyout(buttonLink, flyout, "Link copied to clipboard");
 		}
 		catch (Exception ex)
 		{
-			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonLink!, flyout, ex.Message);
+			AvaloniaUtils.ShowFlyout(buttonLink, flyout, ex.Message);
 		}
 	}
 
@@ -172,6 +174,14 @@ public class TabViewer : Grid
 		if (LinkUri.TryParse(clipboardText, out LinkUri? linkUri))
 		{
 			await ImportLinkAsync(call, linkUri, true);
+		}
+		else
+		{
+			Flyout flyout = new()
+			{
+				Placement = PlacementMode.BottomEdgeAlignedLeft,
+			};
+			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonImport!, flyout, "Failed to parse Clipboard text");
 		}
 	}
 
