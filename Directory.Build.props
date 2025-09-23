@@ -3,16 +3,17 @@
     <Version>0.11</Version>
     <PackageReleaseNotes>
     - DataViewCollection now updates items when they change
-    - Renamed ListProperty.Editable to IsEditable
-    - Moved Chart SeriesLimit into ChartView
-    - Updated Blue Theme Colors
+    - Updated Light Blue Theme Colors
     - Fixed DataGrid Theming for cells that are both selected and pointer over
-    - Renamed DeepClone to TryDeepClone and added non-nullable DeepClone version
     - Fixed max object limit when loading a private file
-    - Added Attribute Summary Documentation
-    - Renamed [Editing] to [EditColumn]
-    - Disabled [Unit] until it can be implemented
-    - Removed [Serialized] since it's no longer needed
+    - Moved Chart SeriesLimit into ChartView
+    - Renamed ListProperty.Editable to IsEditable
+    - Renamed DeepClone() to TryDeepClone() and added non-nullable DeepClone() version
+    - Attributes
+      - Added Attribute Summary Documentation
+      - Renamed [Editing] to [EditColumn]
+      - Disabled [Unit] until it can be implemented
+      - Removed [Serialized] since it's no longer needed
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.6</AvaloniaVersion>
