@@ -84,7 +84,12 @@
     "StyledNoLinksBackground": "#ffedeefa",
     "StyledHasLinksForeground": "#ff190587",
     "StyledBorder": "#ffbcbde6",
-    "Border": "#ff9aa4d9"
+    "Border": "#ff9aa4d9",
+    "ButtonBackground": "#ffebecfa",
+    "ButtonBackgroundPointerOver": "#ffbac6ff",
+    "ButtonBackgroundPressed": "#ffe6e8ff",
+    "ButtonForeground": "#ff4a4141",
+    "ButtonBorder": "#ffcac5e6"
   },
   "Button": {
     "Background": "#ffdee1fa",

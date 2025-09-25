@@ -114,6 +114,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				{
 					new("Collections", new TabSampleDataGrid()),
 					new("Objects", new TabSampleObjects()),
+					new("Forms", new TabSampleFormDataTabs()),
 				},
 				ButtonTheme => new List<ListItem>
 				{

@@ -291,6 +291,22 @@ public class DataGridTheme : ThemeSection
 
 	[Header("Border"), ResourceKey("DataGridBorderBrush")]
 	public Color? Border { get; set; }
+
+	// Button
+	[Header("Button"), ResourceKey("DataGridButtonBackgroundBrush")]
+	public Color? ButtonBackground { get; set; }
+
+	[ResourceKey("DataGridButtonBackgroundPointerOverBrush")]
+	public Color? ButtonBackgroundPointerOver { get; set; }
+
+	[ResourceKey("DataGridButtonBackgroundPressedBrush")]
+	public Color? ButtonBackgroundPressed { get; set; }
+
+	[ResourceKey("DataGridButtonForegroundBrush")]
+	public Color? ButtonForeground { get; set; }
+
+	[ResourceKey("DataGridButtonBorderBrush")]
+	public Color? ButtonBorder { get; set; }
 }
 
 // Button, including TabTextButton
