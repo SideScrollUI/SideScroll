@@ -305,6 +305,9 @@ public class DataGridTheme : ThemeSection
 	[ResourceKey("DataGridButtonForegroundBrush")]
 	public Color? ButtonForeground { get; set; }
 
+	[ResourceKey("DataGridButtonForegroundPointerOverBrush")]
+	public Color? ButtonForegroundPointerOver { get; set; }
+
 	[ResourceKey("DataGridButtonBorderBrush")]
 	public Color? ButtonBorder { get; set; }
 }

@@ -4,7 +4,7 @@ using Avalonia.Data;
 using Avalonia.Reactive;
 using Avalonia.VisualTree;
 
-namespace SideScroll.Avalonia.Controls;
+namespace SideScroll.Avalonia.Controls.DataGrids;
 
 public class DataGridButton : Button
 {

@@ -214,6 +214,7 @@
           <SolidColorBrush x:Key="DataGridButtonBackgroundPointerOverBrush" Color="#24b224" />
           <SolidColorBrush x:Key="DataGridButtonBackgroundPressedBrush" Color="#296629" />
           <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#d1f0d1" />
+          <SolidColorBrush x:Key="DataGridButtonForegroundPointerOverBrush" Color="#d1f0d1" />
           <SolidColorBrush x:Key="DataGridButtonBorderBrush" Color="#0eab0e" />
           
           <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
@@ -590,11 +591,12 @@
 
           <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#c8c2f9" />
 
-          <SolidColorBrush x:Key="DataGridButtonBackgroundBrush" Color="#121212" />
-          <SolidColorBrush x:Key="DataGridButtonBackgroundPointerOverBrush" Color="#2040a0" />
-          <SolidColorBrush x:Key="DataGridButtonBackgroundPressedBrush" Color="#3060d0" />
-          <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#dddddd" />
-          <SolidColorBrush x:Key="DataGridButtonBorderBrush" Color="Black" />
+          <SolidColorBrush x:Key="DataGridButtonBackgroundBrush" Color="#92de92" />
+          <SolidColorBrush x:Key="DataGridButtonBackgroundPointerOverBrush" Color="#53a653" />
+          <SolidColorBrush x:Key="DataGridButtonBackgroundPressedBrush" Color="#296629" />
+          <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#377337" />
+          <SolidColorBrush x:Key="DataGridButtonForegroundPointerOverBrush" Color="#d1f0d1" />
+          <SolidColorBrush x:Key="DataGridButtonBorderBrush" Color="#ff3cc73c" />
           
           <!--- End Fluent Defaults -->
 

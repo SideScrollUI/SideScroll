@@ -89,7 +89,8 @@
     "ButtonBackgroundPointerOver": "#ffbac6ff",
     "ButtonBackgroundPressed": "#ffe6e8ff",
     "ButtonForeground": "#ff4a4141",
-    "ButtonBorder": "#ffcac5e6"
+    "ButtonForegroundPointerOver": "#fff0f2fc",
+    "ButtonBorder": "#ffc5c8e6"
   },
   "Button": {
     "Background": "#ffdee1fa",
