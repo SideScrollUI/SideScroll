@@ -33,13 +33,7 @@ public class DataGridButtonColumn : DataGridBoundColumn
 		//cell.Background = GetCellBrush(cell, dataItem);
 		//cell.MaxHeight = 100; // don't let them have more than a few lines each
 
-		var button = new TabButton(ButtonText)
-		{
-			Padding = new Thickness(0),
-			Margin = new Thickness(0),
-			MinWidth = 12,
-			BorderThickness = new Thickness(0, 0, 0, 1),
-		};
+		var button = new DataGridButton(ButtonText);
 		button.Resources.Add("ButtonPadding", new Thickness(2, 5));
 		if (VisiblePropertyName != null)
 		{

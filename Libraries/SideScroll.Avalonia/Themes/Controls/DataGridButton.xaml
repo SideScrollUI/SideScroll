@@ -1,15 +1,17 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sidescroll="clr-namespace:SideScroll.Avalonia.Controls;assembly=SideScroll.Avalonia">
+                    xmlns:sidescroll="clr-namespace:SideScroll.Avalonia.Controls.DataGrids;assembly=SideScroll.Avalonia">
   
-  <ControlTheme x:Key="{x:Type sidescroll:TabButton}" TargetType="sidescroll:TabButton">
-    <Setter Property="Background" Value="{DynamicResource TabButtonBackgroundBrush}"/>
-    <Setter Property="BorderBrush" Value="{DynamicResource TabButtonBorderBrush}"/>
-    <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}"/>
-    <Setter Property="Foreground" Value="{DynamicResource TabButtonForegroundBrush}"/>
+  <ControlTheme x:Key="{x:Type sidescroll:DataGridButton}" TargetType="sidescroll:DataGridButton">
+    <Setter Property="Background" Value="{DynamicResource DataGridButtonBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource DataGridButtonBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Foreground" Value="{DynamicResource DataGridButtonForegroundBrush}"/>
     <Setter Property="HorizontalContentAlignment" Value="Center"/>
     <Setter Property="VerticalContentAlignment" Value="Center"/>
-    <Setter Property="Padding" Value="4"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="Margin" Value="0"/>
+    <Setter Property="MinWidth" Value="12"/>
     <Setter Property="Template">
       <ControlTemplate>
         <ContentPresenter Name="PART_ContentPresenter"
@@ -25,14 +27,14 @@
       </ControlTemplate>
     </Setter>
     <Style Selector="^:pointerover /template/ ContentPresenter">
-      <Setter Property="Background" Value="{DynamicResource TabButtonBackgroundPointerOverBrush}"/>
-      <Setter Property="Foreground" Value="{DynamicResource TabButtonForegroundPointerOverBrush}"/>
-      <Setter Property="BorderBrush" Value="{DynamicResource TabButtonBorderPointerOverBrush}"/>
+      <Setter Property="Background" Value="{DynamicResource DataGridButtonBackgroundPointerOverBrush}"/>
+      <Setter Property="Foreground" Value="{DynamicResource DataGridButtonForegroundPointerOverBrush}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource DataGridButtonBorderPointerOverBrush}"/>
     </Style>
     <Style Selector="^:pressed /template/ ContentPresenter">
-      <Setter Property="Background" Value="{DynamicResource TabButtonBackgroundPressedBrush}"/>
-      <Setter Property="Foreground" Value="{DynamicResource TabButtonForegroundPointerOverBrush}"/>
-      <Setter Property="BorderBrush" Value="{DynamicResource TabButtonBorderPointerOverBrush}"/>
+      <Setter Property="Background" Value="{DynamicResource DataGridButtonBackgroundPressedBrush}"/>
+      <Setter Property="Foreground" Value="{DynamicResource DataGridButtonForegroundPointerOverBrush}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource DataGridButtonBorderPointerOverBrush}"/>
     </Style>
     <Style Selector="^:disabled">
       <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}"/>

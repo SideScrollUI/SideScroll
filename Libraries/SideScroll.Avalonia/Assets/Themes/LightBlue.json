@@ -29,8 +29,10 @@
     "ButtonBackground": "#ffebecfa",
     "ButtonBackgroundPointerOver": "#ffbac6ff",
     "ButtonBackgroundPressed": "#ffe6e8ff",
-    "ButtonForeground": "#ff4a4141",
-    "ButtonBorder": "#ffcac5e6"
+    "ButtonForeground": "#ff41434a",
+    "ButtonForegroundPointerOver": "#ff1a39eb",
+    "ButtonBorder": "#ffc5c5e6",
+    "ButtonBorderPointerOver": "#ffaeaee6"
   },
   "Toolbar": {
     "Background": "#ffe8eeff",
@@ -84,7 +86,14 @@
     "StyledNoLinksBackground": "#ffedeefa",
     "StyledHasLinksForeground": "#ff190587",
     "StyledBorder": "#ffbcbde6",
-    "Border": "#ff9aa4d9"
+    "Border": "#ff9aa4d9",
+    "ButtonBackground": "#ffebecfa",
+    "ButtonBackgroundPointerOver": "#ffbac6ff",
+    "ButtonBackgroundPressed": "#ffe6e8ff",
+    "ButtonForeground": "#ff4a4141",
+    "ButtonForegroundPointerOver": "#fff0f2fc",
+    "ButtonBorder": "#ffc5c8e6",
+    "ButtonBorderPointerOver": "#ff9da6f2"
   },
   "Button": {
     "Background": "#ffdee1fa",

@@ -34,7 +34,7 @@ public class TabSampleTodos : ITab
 		private SampleTodoItem? _todoItem;
 		private TabFormObject? _formObject;
 
-		private SampleTodoItem[] _samples =
+		private readonly SampleTodoItem[] _samples =
 		[
 			new()
 			{
@@ -125,8 +125,10 @@ public class TabSampleTodos : ITab
 
 		private void New(Call call)
 		{
-			_todoItem = new();
-			_todoItem.Id = _dataRepoView!.Items.Count + 1;
+			_todoItem = new()
+			{
+				Id = _dataRepoView!.Items.Count + 1
+			};
 			_formObject!.Update(this, _todoItem);
 		}
 
