@@ -70,20 +70,26 @@ public class TabTheme : ThemeSection
 	public Color? ProgressBarForeground { get; set; }
 
 	// Button
-	[Header("Button"), ResourceKey("ThemeButtonBackgroundBrush")]
+	[Header("Button"), ResourceKey("TabButtonBackgroundBrush")]
 	public Color? ButtonBackground { get; set; }
 
-	[ResourceKey("ThemeButtonBackgroundPointerOverBrush")]
+	[ResourceKey("TabButtonBackgroundPointerOverBrush")]
 	public Color? ButtonBackgroundPointerOver { get; set; }
 
-	[ResourceKey("ThemeButtonBackgroundPressedBrush")]
+	[ResourceKey("TabButtonBackgroundPressedBrush")]
 	public Color? ButtonBackgroundPressed { get; set; }
 
-	[ResourceKey("ThemeButtonForegroundBrush")]
+	[ResourceKey("TabButtonForegroundBrush")]
 	public Color? ButtonForeground { get; set; }
 
-	[ResourceKey("ThemeButtonBorderBrush")]
+	[ResourceKey("TabButtonForegroundPointerOverBrush")]
+	public Color? ButtonForegroundPointerOver { get; set; }
+
+	[ResourceKey("TabButtonBorderBrush")]
 	public Color? ButtonBorder { get; set; }
+
+	[ResourceKey("TabButtonBorderPointerOverBrush")]
+	public Color? ButtonBorderPointerOver { get; set; }
 }
 
 public class FontTheme : ThemeSection
@@ -310,6 +316,9 @@ public class DataGridTheme : ThemeSection
 
 	[ResourceKey("DataGridButtonBorderBrush")]
 	public Color? ButtonBorder { get; set; }
+
+	[ResourceKey("DataGridButtonBorderPointerOverBrush")]
+	public Color? ButtonBorderPointerOver { get; set; }
 }
 
 // Button, including TabTextButton

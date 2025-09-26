@@ -56,10 +56,10 @@
           <SolidColorBrush x:Key="HighlightForegroundBrush" Color="AliceBlue" />
 
           <!-- Buttons -->
-          <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#27204a" />
-          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#60bdff" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#3060d0" />
+          <SolidColorBrush x:Key="TabButtonBackgroundBrush" Color="#27204a" />
+          <SolidColorBrush x:Key="TabButtonForegroundBrush" Color="#60bdff" />
+          <SolidColorBrush x:Key="TabButtonBackgroundPointerOverBrush" Color="#2040a0" />
+          <SolidColorBrush x:Key="TabButtonBackgroundPressedBrush" Color="#3060d0" />
 
           <!-- RadioButton -->
           <SolidColorBrush x:Key="ThemeRadioButtonBorderBrush" Color="#004dd0" />

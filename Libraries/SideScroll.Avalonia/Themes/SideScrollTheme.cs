@@ -51,8 +51,8 @@ public static class SideScrollTheme
 	public static SolidColorBrush DataGridEditableBackground => GetBrush("DataGridEditableBackgroundBrush");
 
 	// Button
-	public static SolidColorBrush ButtonBackground => GetBrush("ThemeButtonBackgroundBrush");
-	public static SolidColorBrush ButtonForeground => GetBrush("ThemeButtonForegroundBrush");
+	public static SolidColorBrush ButtonBackground => GetBrush("TabButtonBackgroundBrush");
+	public static SolidColorBrush ButtonForeground => GetBrush("TabButtonForegroundBrush");
 
 	public static SolidColorBrush ButtonWarningBackground => GetBrush("ButtonWarningBackground");
 	public static SolidColorBrush ButtonWarningBackgroundPointerOver => GetBrush("ButtonWarningBackgroundPointerOver");

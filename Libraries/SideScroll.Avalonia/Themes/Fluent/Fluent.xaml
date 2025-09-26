@@ -210,12 +210,13 @@
           <SolidColorBrush x:Key="DataGridNoLinksBackgroundBrush" Color="#3c3a54" />
           <SolidColorBrush x:Key="DataGridStyledBorderBrush" Color="#1c1a34" />
 
-          <SolidColorBrush x:Key="DataGridButtonBackgroundBrush" Color="#6ccc6c" />
+          <SolidColorBrush x:Key="DataGridButtonBackgroundBrush" Color="#7ecc7e" />
           <SolidColorBrush x:Key="DataGridButtonBackgroundPointerOverBrush" Color="#24b224" />
           <SolidColorBrush x:Key="DataGridButtonBackgroundPressedBrush" Color="#296629" />
-          <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#d1f0d1" />
+          <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#434c43" />
           <SolidColorBrush x:Key="DataGridButtonForegroundPointerOverBrush" Color="#d1f0d1" />
           <SolidColorBrush x:Key="DataGridButtonBorderBrush" Color="#0eab0e" />
+          <SolidColorBrush x:Key="DataGridButtonBorderPointerOverBrush" Color="#0eab0e" />
           
           <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
 
@@ -288,11 +289,13 @@
 
           <!-- Title & Side Buttons -->
           
-          <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#27204a" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#292f66" />
-          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#d0d0f0" />
-          <SolidColorBrush x:Key="ThemeButtonBorderBrush" Color="#ff01020d" />
+          <SolidColorBrush x:Key="TabButtonBackgroundBrush" Color="#27204a" />
+          <SolidColorBrush x:Key="TabButtonBackgroundPointerOverBrush" Color="#2040a0" />
+          <SolidColorBrush x:Key="TabButtonBackgroundPressedBrush" Color="#292f66" />
+          <SolidColorBrush x:Key="TabButtonForegroundBrush" Color="#d0d0f0" />
+          <SolidColorBrush x:Key="TabButtonForegroundPointerOverBrush" Color="#d0d0f0" />
+          <SolidColorBrush x:Key="TabButtonBorderBrush" Color="#ff01020d" />
+          <SolidColorBrush x:Key="TabButtonBorderPointerOverBrush" Color="#ff01020d" />
 
           <!-- Text -->
 
@@ -591,12 +594,15 @@
 
           <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#c8c2f9" />
 
-          <SolidColorBrush x:Key="DataGridButtonBackgroundBrush" Color="#92de92" />
-          <SolidColorBrush x:Key="DataGridButtonBackgroundPointerOverBrush" Color="#53a653" />
-          <SolidColorBrush x:Key="DataGridButtonBackgroundPressedBrush" Color="#296629" />
-          <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#377337" />
-          <SolidColorBrush x:Key="DataGridButtonForegroundPointerOverBrush" Color="#d1f0d1" />
-          <SolidColorBrush x:Key="DataGridButtonBorderBrush" Color="#ff3cc73c" />
+          <SolidColorBrush x:Key="DataGridButtonBackgroundBrush" Color="#121212" />
+          <SolidColorBrush x:Key="DataGridButtonBackgroundPointerOverBrush" Color="#2040a0" />
+          <SolidColorBrush x:Key="DataGridButtonBackgroundPressedBrush" Color="#3060d0" />
+          
+          <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#dddddd" />
+          <SolidColorBrush x:Key="DataGridButtonForegroundPointerOverBrush" Color="#dddddd" />
+          
+          <SolidColorBrush x:Key="DataGridButtonBorderBrush" Color="Black" />
+          <SolidColorBrush x:Key="DataGridButtonBorderPointerOverBrush" Color="Black" />
           
           <!--- End Fluent Defaults -->
 
@@ -652,11 +658,13 @@
 
           <!-- Title & Side Buttons -->
           
-          <SolidColorBrush x:Key="ThemeButtonBackgroundBrush" Color="#121212" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundPointerOverBrush" Color="#2040a0" />
-          <SolidColorBrush x:Key="ThemeButtonBackgroundPressedBrush" Color="#3060d0" />
-          <SolidColorBrush x:Key="ThemeButtonForegroundBrush" Color="#dddddd" />
-          <SolidColorBrush x:Key="ThemeButtonBorderBrush" Color="Black" />
+          <SolidColorBrush x:Key="TabButtonBackgroundBrush" Color="#121212" />
+          <SolidColorBrush x:Key="TabButtonBackgroundPointerOverBrush" Color="#2040a0" />
+          <SolidColorBrush x:Key="TabButtonBackgroundPressedBrush" Color="#3060d0" />
+          <SolidColorBrush x:Key="TabButtonForegroundBrush" Color="#dddddd" />
+          <SolidColorBrush x:Key="TabButtonForegroundPointerOverBrush" Color="#dddddd" />
+          <SolidColorBrush x:Key="TabButtonBorderBrush" Color="Black" />
+          <SolidColorBrush x:Key="TabButtonBorderPointerOverBrush" Color="Black" />
          
           <!-- Text -->
           
