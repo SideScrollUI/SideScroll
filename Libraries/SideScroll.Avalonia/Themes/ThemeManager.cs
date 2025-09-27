@@ -1,7 +1,5 @@
 using Avalonia;
-using Avalonia.Data.Core.Plugins;
 using Avalonia.Styling;
-using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Themes.Tabs;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs;
@@ -37,7 +35,7 @@ public class ThemeManager
 		DataRepoDefaultThemes = Project.Data.App.LoadView<AvaloniaThemeSettings>(new(), DefaultGroupId, nameof(AvaloniaThemeSettings.Name));
 
 		DataRepoThemes = Project.Data.App.LoadView<AvaloniaThemeSettings>(new(), GroupId, nameof(AvaloniaThemeSettings.Name));
-		foreach (AvaloniaThemeSettings theme in DataRepoThemes.Items.Values)
+		foreach (AvaloniaThemeSettings theme in DataRepoThemes.Values)
 		{
 			UpdateTheme(theme);
 		}
@@ -48,7 +46,7 @@ public class ThemeManager
 	{
 		if (themeName == null) return null;
 
-		var theme = DataRepoThemes.Items.Values.FirstOrDefault(theme => theme.Name == themeName);
+		var theme = DataRepoThemes.Values.FirstOrDefault(theme => theme.Name == themeName);
 		UpdateTheme(theme);
 		return theme;
 	}
@@ -74,7 +72,7 @@ public class ThemeManager
 	public void AddThemeVariant(Call call, string variant)
 	{
 		// Always overwrite default themes when the version changes
-		var defaultTheme = DataRepoDefaultThemes.Items.Values.FirstOrDefault(theme => theme.Name == variant);
+		var defaultTheme = DataRepoDefaultThemes.Values.FirstOrDefault(theme => theme.Name == variant);
 		if (defaultTheme == null || defaultTheme.Version != Project.Version || defaultTheme.HasNullValue())
 		{
 			defaultTheme = Create(variant, variant);
@@ -98,7 +96,7 @@ public class ThemeManager
 
 		if (isDefault)
 		{
-			var defaultTheme = DataRepoDefaultThemes.Items.Values.FirstOrDefault(theme => theme.Name == themeSettings.Name);
+			var defaultTheme = DataRepoDefaultThemes.Values.FirstOrDefault(theme => theme.Name == themeSettings.Name);
 			if (defaultTheme == null || defaultTheme.Version != Project.Version)
 			{
 				themeSettings.FillMissingValues();

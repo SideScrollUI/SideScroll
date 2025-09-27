@@ -12,7 +12,7 @@ namespace SideScroll.Avalonia.Controls.View;
 
 public class TabViewTitle : Border, IDisposable
 {
-	public TabView TabView { get; init; }
+	public TabView TabView { get; }
 	public TabInstance TabInstance => TabView.Instance;
 	public string Label { get; set; }
 

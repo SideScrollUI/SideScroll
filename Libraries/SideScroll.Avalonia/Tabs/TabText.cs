@@ -40,7 +40,3 @@ public class TabText(string text) : ITab
 		}
 	}
 }
-/*
-Markdown support?
-- Avalonia.Markdown slow for large text and doesn't allow text selection (yet?)
-*/

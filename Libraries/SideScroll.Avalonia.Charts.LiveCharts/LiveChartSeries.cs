@@ -24,8 +24,8 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 	public static int MaxPointsToShowMarkers { get; set; } = 8;
 	public static double DefaultGeometrySize { get; set; } = 5;
 
-	public TabLiveChart Chart { get; init; }
-	public ListSeries ListSeries { get; init; }
+	public TabLiveChart Chart { get; }
+	public ListSeries ListSeries { get; }
 	public bool UseDateTimeAxis { get; set; }
 
 	public LiveChartLineSeries LineSeries { get; set; }

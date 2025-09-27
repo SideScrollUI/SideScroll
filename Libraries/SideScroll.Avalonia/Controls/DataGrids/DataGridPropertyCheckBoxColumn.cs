@@ -10,7 +10,7 @@ namespace SideScroll.Avalonia.Controls.DataGrids;
 
 public class DataGridPropertyCheckBoxColumn : DataGridCheckBoxColumn
 {
-	public PropertyInfo PropertyInfo { get; set; }
+	public PropertyInfo PropertyInfo { get; }
 
 	public bool StyleCells { get; set; } // True if any column has a Style applied, so we can manually draw the horizontal lines
 

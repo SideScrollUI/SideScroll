@@ -8,7 +8,7 @@ public class ListDelegate : ListMember, IPropertyIsEditable, ILoadAsync
 {
 	public delegate Task<object?> LoadObjectAsync(Call call);
 
-	public LoadObjectAsync LoadAction { get; init; }
+	public LoadObjectAsync LoadAction { get; }
 	public MethodInfo MethodInfo => LoadAction.Method;
 
 	public bool CacheEnabled { get; set; }

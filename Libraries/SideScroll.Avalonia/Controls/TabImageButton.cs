@@ -16,7 +16,7 @@ namespace SideScroll.Avalonia.Controls;
 public class TabImageButton : Button, IDisposable
 {
 	public string? Label { get; set; }
-	public string? Tooltip { get; set; }
+	public string? Tooltip { get; }
 
 	public IResourceView ImageResource { get; set; }
 	public double IconSize { get; set; } = 24;

@@ -8,8 +8,8 @@ namespace SideScroll.Avalonia.Controls.View;
 
 public class TabViewContextMenu : ContextMenu, IDisposable
 {
-	public TabView? TabView { get; set; }
-	public TabInstance? TabInstance { get; set; }
+	public TabView? TabView { get; protected set; }
+	public TabInstance? TabInstance { get; protected set; }
 
 	public AvaloniaList<object> ItemList { get; set; } = [];
 

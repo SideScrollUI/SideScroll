@@ -50,8 +50,8 @@ public abstract class TypeRepo : IDisposable
 		//new TypeRepoObject.Creator(),
 	];
 
-	public Serializer Serializer { get; init; }
-	public TypeSchema TypeSchema { get; init; }
+	public Serializer Serializer { get; }
+	public TypeSchema TypeSchema { get; }
 	public Type? Type { get; init; } // might be null after loading
 	public Type? LoadableType { get; protected set; } // some types get overridden lazy load, or get removed [Unserialized]
 	public int TypeIndex { get; set; } // -1 if null

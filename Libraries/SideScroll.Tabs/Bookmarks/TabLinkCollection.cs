@@ -9,7 +9,7 @@ namespace SideScroll.Tabs.Bookmarks;
 
 public class TabLinkCollection(LinkCollection links) : ITab
 {
-	public LinkCollection Links { get; set; } = links;
+	public LinkCollection Links => links;
 
 	public TabInstance Create() => new Instance(this);
 

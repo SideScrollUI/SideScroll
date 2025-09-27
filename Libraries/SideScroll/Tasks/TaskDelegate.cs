@@ -4,7 +4,7 @@ public delegate void CallAction(Call call);
 
 public class TaskDelegate : TaskCreator
 {
-	public CallAction Action { get; init; }
+	public CallAction Action { get; }
 
 	public override string? ToString() => Label;
 

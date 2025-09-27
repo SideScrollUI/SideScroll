@@ -12,8 +12,8 @@ namespace SideScroll.Avalonia.Controls.DataGrids;
 // Rename to DataGridBoundTextDataColumn?
 public class DataGridBoundTextColumn : DataGridTextColumn
 {
-	public DataGrid DataGrid { get; init; }
-	public DataColumn DataColumn { get; init; }
+	public DataGrid DataGrid { get; }
+	public DataColumn DataColumn { get; }
 
 	public int MaxDesiredWidth { get; set; } = 500;
 	public bool WordWrap { get; set; }

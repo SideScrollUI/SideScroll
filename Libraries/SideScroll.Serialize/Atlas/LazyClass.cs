@@ -46,8 +46,8 @@ public class LazyProperty
 
 public class LazyClass
 {
-	public Type OriginalType;
-	public Type LazyType;
+	public Type OriginalType { get; }
+	public Type LazyType { get; }
 
 	public Dictionary<PropertyInfo, LazyProperty> LazyProperties = [];
 

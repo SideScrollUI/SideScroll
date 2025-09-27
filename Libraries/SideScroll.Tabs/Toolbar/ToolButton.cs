@@ -5,10 +5,10 @@ namespace SideScroll.Tabs.Toolbar;
 
 public class ToolButton
 {
-	public string Tooltip { get; set; }
+	public string Tooltip { get; }
 	public string? Label { get; set; }
 
-	public IResourceView ImageResource { get; set; }
+	public IResourceView ImageResource { get; }
 
 	public bool ShowTask { get; set; }
 	public bool IsDefault { get; set; } // Use Enter as HotKey, add more complex keymapping later?

@@ -2,7 +2,7 @@ namespace SideScroll.Logs;
 
 public class LogWriterConsole
 {
-	public Log Log { get; init; }
+	public Log Log { get; }
 
 	public SynchronizationContext Context { get; set; }
 

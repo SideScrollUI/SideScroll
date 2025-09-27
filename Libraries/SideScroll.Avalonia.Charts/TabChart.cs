@@ -79,7 +79,7 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 	protected const double MarginPercent = 0.1; // This needs a min height so this can be lowered
 	protected const int MinSelectionWidth = 10;
 
-	public TabInstance TabInstance { get; init; }
+	public TabInstance TabInstance { get; }
 	public ChartView ChartView { get; set; }
 	public bool FillHeight { get; set; }
 

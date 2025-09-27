@@ -7,7 +7,7 @@ namespace SideScroll.Avalonia.Controls.Viewer;
 
 public class TabViewerToolbar : TabControlToolbar
 {
-	public TabViewer TabViewer { get; init; }
+	public TabViewer TabViewer { get; }
 
 	public ToolbarButton ButtonBack { get; protected set; }
 	public ToolbarButton ButtonForward { get; protected set; }

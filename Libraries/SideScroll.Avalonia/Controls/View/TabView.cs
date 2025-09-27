@@ -56,7 +56,7 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
-	public TabInstance Instance { get; set; }
+	public TabInstance Instance { get; }
 	public TabModel Model => Instance.Model;
 
 	public string Label
