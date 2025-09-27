@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Version>0.12</Version>
     <PackageReleaseNotes>
-    - 
+    - Split DataGridButton out of TabButton and changed to show only on selection or pointer over
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.6</AvaloniaVersion>

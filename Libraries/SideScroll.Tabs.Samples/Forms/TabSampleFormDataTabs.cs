@@ -45,6 +45,22 @@ public class TabSampleFormDataTabs : ITab
 			_dataRepoView = Data.App.LoadView<SampleItem>(call, GroupId, nameof(SampleItem.Name));
 			DataRepoInstance = _dataRepoView; // Allow links to pass the selected items
 
+			if (_dataRepoView.Items.Count == 0)
+			{
+				for (int i = 0; i < 10; i++)
+				{
+					SampleItem sampleItem = new()
+					{
+						Name = "Item " + i,
+						Amount = i * 10,
+						Boolean = i % 2 == 0,
+						DateTime = DateTime.Now.AddHours(i),
+						Description = "Describe all the things",
+					};
+					_dataRepoView.Save(call, sampleItem);
+				}
+			}
+
 			var dataCollection = new DataViewCollection<SampleItem, TabSampleItem>(_dataRepoView);
 			model.Items = dataCollection.Items;
 		}

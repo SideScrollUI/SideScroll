@@ -3,6 +3,7 @@ using SideScroll.Extensions;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Utilities;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
@@ -44,7 +45,7 @@ public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 	public abstract long? Size { get; set; }
 
 	[StyleValue, Formatted]
-	public abstract TimeSpan Modified { get; }
+	public abstract TimeSpan? Modified { get; }
 
 	[Hidden]
 	public abstract bool HasLinks { get; }
@@ -107,7 +108,7 @@ public class DirectoryView : NodeView, IDirectoryView
 	public override string Name => Directory;
 	public override long? Size { get; set; } = null;
 	public DateTime LastWriteTime { get; set; }
-	public override TimeSpan Modified => LastWriteTime.Age();
+	public override TimeSpan? Modified => LastWriteTime.Age();
 	public override bool HasLinks => true;
 
 	public DirectoryView(string path)
@@ -128,14 +129,14 @@ public class FileView : NodeView
 {
 	public string Filename { get; set; }
 	public override long? Size { get; set; }
-	public DateTime LastWriteTime { get; set; }
-	public override TimeSpan Modified => LastWriteTime.Age();
+	public DateTime? LastWriteTime { get; set; }
+	public override TimeSpan? Modified => LastWriteTime?.Age();
 	public override bool HasLinks => false;
 
 	public override string Name => Filename;
 
 	[HiddenColumn]
-	public FileInfo FileInfo { get; set; }
+	public FileInfo? FileInfo { get; set; }
 
 	public FileView(string path)
 		: this(path, null)
@@ -144,10 +145,17 @@ public class FileView : NodeView
 	public FileView(string path, FileSelectorOptions? fileSelectorOptions = null)
 		: base(path, fileSelectorOptions)
 	{
-		FileInfo = new FileInfo(path);
 		Filename = System.IO.Path.GetFileName(path);
-		Size = FileInfo.Length;
-		LastWriteTime = FileInfo.LastWriteTime.Trim();
+		try
+		{
+			FileInfo = new FileInfo(path);
+			Size = FileInfo.Length;
+			LastWriteTime = FileInfo.LastWriteTime.Trim();
+		}
+		catch (Exception e)
+		{
+			Debug.WriteLine(e);
+		}
 
 		if (Filename.EndsWith(".atlas"))
 		{
