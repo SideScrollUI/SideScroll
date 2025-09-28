@@ -145,7 +145,7 @@ public class ChartView
 
 		var orderedSeries = Series.OrderByDescending(series => series.CalculateTotal(timeWindow));
 
-		Series = new List<ListSeries>(orderedSeries);
+		Series = [.. orderedSeries];
 	}
 
 	public TimeWindow GetSeriesTimeWindow()

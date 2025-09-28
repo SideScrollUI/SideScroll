@@ -37,7 +37,7 @@ public class AvaloniaDataBindingTests
 
 	private static void TestBind(int count)
 	{
-		var binding = new Binding
+		Binding binding = new()
 		{
 			Path = nameof(TestItem.Name),
 			Mode = BindingMode.OneWay, // copying a value to the clipboard triggers an infinite loop without this?
@@ -45,7 +45,7 @@ public class AvaloniaDataBindingTests
 
 		for (int i = 0; i < count; i++)
 		{
-			var textBlock = new TextBlock();
+			TextBlock textBlock = new();
 			//var testItem = new TestItem();
 
 			textBlock.Bind(TextBlock.TextProperty, binding);

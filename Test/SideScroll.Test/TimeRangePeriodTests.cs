@@ -18,14 +18,14 @@ public class TimeRangePeriodTests : BaseTest
 	[Test]
 	public void PeriodCountsMergePointsTotal()
 	{
-		var timeWindow = new TimeWindow
+		TimeWindow timeWindow = new()
 		{
 			StartTime = StartTime,
 			EndTime = StartTime.AddMinutes(1),
 		};
 		TimeSpan periodDuration = TimeSpan.FromSeconds(10);
 
-		var timeRangeValues = new List<TimeRangeValue>();
+		List<TimeRangeValue> timeRangeValues = [];
 		for (int i = 0; i < 3; i++)
 		{
 			DateTime startTime = StartTime.AddSeconds(5 + i * 10);
@@ -46,14 +46,14 @@ public class TimeRangePeriodTests : BaseTest
 	[Test]
 	public void PeriodCountsBeforeTimeWindow()
 	{
-		var timeWindow = new TimeWindow
+		TimeWindow timeWindow = new()
 		{
 			StartTime = StartTime,
 			EndTime = StartTime.AddMinutes(1),
 		};
 		TimeSpan periodDuration = TimeSpan.FromSeconds(10);
 
-		var timeRangeValues = new List<TimeRangeValue>();
+		List<TimeRangeValue> timeRangeValues = [];
 		for (int i = 0; i < 3; i++)
 		{
 			DateTime startTime = StartTime.AddSeconds(-15 + i * 10);

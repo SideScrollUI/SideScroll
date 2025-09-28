@@ -27,7 +27,7 @@ public static class ChartSamples
 
 		for (int i = 0; i < sampleCount; i++)
 		{
-			var value = new TimeRangeValue
+			TimeRangeValue value = new()
 			{
 				StartTime = currentTime,
 				EndTime = currentTime + sampleDuration.Value,

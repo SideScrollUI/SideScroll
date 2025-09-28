@@ -59,11 +59,11 @@ public class TabSampleChartLists : ITab
 		{
 			_addCall = call;
 
-			CancellationToken token = call.TaskInstance!.CancelToken;
-			for (int i = 0; i < 1000 && !token.IsCancellationRequested; i++)
+			CancellationToken cancelToken = call.TaskInstance!.CancelToken;
+			for (int i = 0; i < 1000 && !cancelToken.IsCancellationRequested; i++)
 			{
 				Post(AddSampleUI, call);
-				await Task.Delay(1000);
+				await Task.Delay(1000, cancelToken);
 			}
 		}
 

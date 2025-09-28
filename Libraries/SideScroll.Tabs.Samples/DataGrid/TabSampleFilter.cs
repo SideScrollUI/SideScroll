@@ -9,7 +9,7 @@ public class TabSampleFilter : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			string characters = "abcdefghijklmn";
-			var items = new List<TestFilterItem>();
+			List<TestFilterItem> items = [];
 			for (int i = 0; i < 10; i++)
 			{
 				var item = new TestFilterItem("Item " + i, i)

@@ -113,7 +113,7 @@ public static class ProcessUtils
 
 	public static Process StartDotnetProcess(string arguments)
 	{
-		var processStartInfo = new ProcessStartInfo
+		ProcessStartInfo processStartInfo = new()
 		{
 			FileName = GetDotnetFileName(),
 			Arguments = arguments,
@@ -134,7 +134,7 @@ public static class ProcessUtils
 
 	public static List<DotnetRuntimeInfo> GetDotnetRuntimes()
 	{
-		var processStartInfo = new ProcessStartInfo
+		ProcessStartInfo processStartInfo = new()
 		{
 			FileName = GetDotnetFileName(),
 			Arguments = "--list-runtimes",

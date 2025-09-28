@@ -17,7 +17,7 @@ public class AvaloniaFieldValueConverterTests
 	{
 		TimeZoneView.Current = TimeZoneView.Utc;
 		DateTime dateTime = new(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc);
-		var converter = new FormatValueConverter();
+		FormatValueConverter converter = new();
 		string converted = (string)converter.Convert(dateTime, typeof(string), null, CultureInfo.CurrentCulture)!;
 		DateTime processedDateTime = (DateTime)converter.Convert(converted, typeof(DateTime), null, CultureInfo.CurrentCulture)!;
 		Assert.That(processedDateTime, Is.EqualTo(dateTime));

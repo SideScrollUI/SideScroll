@@ -47,7 +47,7 @@ public class TabChartUpdating : ITab
 
 		private ChartView CreateView()
 		{
-			var chartView = new ChartView
+			ChartView chartView = new()
 			{
 				LegendPosition = ChartLegendPosition.Right,
 				ShowTimeTracker = true,
@@ -74,11 +74,11 @@ public class TabChartUpdating : ITab
 		{
 			_addCall = call;
 
-			CancellationToken token = call.TaskInstance!.CancelToken;
-			for (int i = 0; i < 60 && !token.IsCancellationRequested; i++)
+			CancellationToken cancelToken = call.TaskInstance!.CancelToken;
+			for (int i = 0; i < 60 && !cancelToken.IsCancellationRequested; i++)
 			{
 				Post(call, () => Update(call));
-				await Task.Delay(1000);
+				await Task.Delay(1000, cancelToken);
 			}
 		}
 

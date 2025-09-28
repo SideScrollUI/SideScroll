@@ -35,7 +35,7 @@ public class TabSampleGridCollectionSize : ITab
 			for (int i = 0; i < count; i++)
 			{
 				int number = _items.Count;
-				var testItem = new TestItem
+				TestItem testItem = new()
 				{
 					SmallNumber = number
 				};

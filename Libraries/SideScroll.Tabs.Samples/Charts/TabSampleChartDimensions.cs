@@ -70,7 +70,7 @@ public class TabSampleChartDimensions : ITab
 			AddSeries("Cats");
 			AddSeries("Dogs");
 
-			var chartView = new ChartView();
+			ChartView chartView = new();
 			chartView.AddDimensions(_samples,
 				nameof(ChartSample.TimeStamp),
 				nameof(ChartSample.Value),
@@ -114,11 +114,11 @@ public class TabSampleChartDimensions : ITab
 		{
 			_addCall = call;
 
-			CancellationToken token = call.TaskInstance!.CancelToken;
-			for (int i = 0; i < 20 && !token.IsCancellationRequested; i++)
+			CancellationToken cancelToken = call.TaskInstance!.CancelToken;
+			for (int i = 0; i < 20 && !cancelToken.IsCancellationRequested; i++)
 			{
 				Post(call, AddSampleUI);
-				await Task.Delay(1000);
+				await Task.Delay(1000, cancelToken);
 			}
 		}
 

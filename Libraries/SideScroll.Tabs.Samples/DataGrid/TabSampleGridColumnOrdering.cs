@@ -8,10 +8,10 @@ public class TabSampleGridColumnOrdering : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			var items = new List<TestChild>();
+			List<TestChild> items = [];
 			for (int i = 0; i < 2; i++)
 			{
-				var item = new TestChild
+				TestChild item = new()
 				{
 				};
 

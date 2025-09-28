@@ -41,7 +41,7 @@ public class TabSampleSerializer : ITab
 
 		private void SerializeOneMillionObjects(Call call)
 		{
-			var sampleItems = new List<SampleItem>();
+			var sampleItems = new List<SampleItem>(1_000_000);
 			for (int i = 0; i < 1_000_000; i++)
 			{
 				sampleItems.Add(new SampleItem(i, "Item " + i));

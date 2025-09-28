@@ -26,7 +26,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 
 	public TabLiveChart Chart { get; }
 	public ListSeries ListSeries { get; }
-	public bool UseDateTimeAxis { get; set; }
+	public bool UseDateTimeAxis { get; }
 
 	public LiveChartLineSeries LineSeries { get; set; }
 	public List<LiveChartPoint> DataPoints { get; set; } = [];
@@ -167,7 +167,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 	private List<LiveChartPoint> GetDataPoints(ListSeries listSeries, IList iList)
 	{
 		double x = DataPoints.Count;
-		var chartPoints = new List<LiveChartPoint>();
+		List<LiveChartPoint> chartPoints = [];
 		// Faster than using ItemSource?
 		foreach (object obj in iList)
 		{
@@ -251,7 +251,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		}
 
 		bool prevNan = false;
-		var binDataPoints = new List<LiveChartPoint>();
+		List<LiveChartPoint> binDataPoints = [];
 		for (int i = 0; i < numBins; i++)
 		{
 			double value = bins[i];
