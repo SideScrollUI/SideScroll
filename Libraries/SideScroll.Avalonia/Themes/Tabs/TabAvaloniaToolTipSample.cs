@@ -46,7 +46,7 @@ public class TabAvaloniaToolTipSample : ITab
 
 		private void UpdateTheme()
 		{
-			var textBox = new TabTextBox
+			TabTextBox textBox = new()
 			{
 				[ToolTip.TipProperty] = "When does a ToolTip get too long and when should\nit wrap lines?",
 				[ToolTip.PlacementProperty] = PlacementMode.Right,

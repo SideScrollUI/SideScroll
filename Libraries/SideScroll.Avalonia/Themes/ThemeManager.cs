@@ -16,7 +16,7 @@ public class ThemeManager
 	public static ThemeManager? Instance { get; set; }
 	public static AvaloniaThemeSettings? CurrentTheme { get; protected set; }
 
-	public Project Project { get; init; }
+	public Project Project { get; }
 
 	public static Application Application => Application.Current!;
 

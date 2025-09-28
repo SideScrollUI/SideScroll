@@ -9,7 +9,7 @@ public class MemoryTypeCache<T>
 	public int MaxItems { get; set; }
 	public TimeSpan? CacheDuration { get; set; }
 
-	public MemoryCache MemoryCache { get; init; }
+	public MemoryCache MemoryCache { get; }
 
 	public MemoryTypeCache(int maxItems = 100, TimeSpan? cacheDuration = null)
 	{

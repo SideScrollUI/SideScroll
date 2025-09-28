@@ -12,7 +12,7 @@ public class DataGridContextMenu : ContextMenu, IDisposable
 
 	public static int MaxCellValueLength { get; set; } = 10_000;
 
-	public DataGrid DataGrid { get; init; }
+	public DataGrid DataGrid { get; }
 	public DataGridPropertyTextColumn? Column { get; set; }
 	public DataGridCell? Cell { get; set; }
 

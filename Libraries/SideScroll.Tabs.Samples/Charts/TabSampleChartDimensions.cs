@@ -114,7 +114,7 @@ public class TabSampleChartDimensions : ITab
 		{
 			_addCall = call;
 
-			CancellationToken token = call.TaskInstance!.TokenSource.Token;
+			CancellationToken token = call.TaskInstance!.CancelToken;
 			for (int i = 0; i < 20 && !token.IsCancellationRequested; i++)
 			{
 				Post(call, AddSampleUI);

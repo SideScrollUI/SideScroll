@@ -74,7 +74,7 @@ public class TabChartUpdating : ITab
 		{
 			_addCall = call;
 
-			CancellationToken token = call.TaskInstance!.TokenSource.Token;
+			CancellationToken token = call.TaskInstance!.CancelToken;
 			for (int i = 0; i < 60 && !token.IsCancellationRequested; i++)
 			{
 				Post(call, () => Update(call));
