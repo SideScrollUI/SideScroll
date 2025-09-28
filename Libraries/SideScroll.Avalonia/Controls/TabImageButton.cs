@@ -5,6 +5,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
+using SideScroll.Avalonia.Controls.Flyouts;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
@@ -221,9 +222,16 @@ public class TabImageButton : Button, IDisposable
 		}
 
 		// Only allow one since we don't block for completion of first
-		if (StartTaskAsync() == null)
+		if ((StartTaskAsync() ?? StartTask()) is TaskInstance taskInstance)
 		{
-			StartTask();
+			if (taskInstance.Errored)
+			{
+				MessageFlyout flyout = new(taskInstance.Message ?? $"{Name} Failed")
+				{
+					Placement = PlacementMode.BottomEdgeAlignedLeft,
+				};
+				flyout.ShowAt(this);
+			}
 		}
 	}
 

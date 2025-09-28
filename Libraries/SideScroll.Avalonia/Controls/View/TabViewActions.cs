@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using SideScroll.Tasks;
 using SideScroll.Tabs;
+using SideScroll.Avalonia.Controls.Flyouts;
 
 namespace SideScroll.Avalonia.Controls.View;
 

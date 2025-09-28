@@ -41,6 +41,11 @@ public class TaskDelegate : TaskCreator
 		}
 		catch (Exception e)
 		{
+			if (call.TaskInstance is TaskInstance taskInstance)
+			{
+				taskInstance.Errored = true;
+				taskInstance.Message = e.Message;
+			}
 			call.Log.Add(e);
 		}
 	}

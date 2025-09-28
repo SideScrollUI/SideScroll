@@ -1,4 +1,5 @@
 using Avalonia.Input;
+using SideScroll.Avalonia.Controls.Flyouts;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.Tasks;

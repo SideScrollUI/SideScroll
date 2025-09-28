@@ -3,6 +3,8 @@
     <Version>0.12</Version>
     <PackageReleaseNotes>
     - Split DataGridButton out of TabButton and changed to show only on selection or pointer over
+    - Image Buttons now show a Flyout for any errors
+    - Light Blue Theme Updates
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.6</AvaloniaVersion>

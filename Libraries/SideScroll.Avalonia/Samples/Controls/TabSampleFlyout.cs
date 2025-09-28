@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using SideScroll.Avalonia.Controls;
+using SideScroll.Avalonia.Controls.Flyouts;
 using SideScroll.Tabs;
 using System.Reflection;
 
@@ -32,7 +33,7 @@ public class TabSampleFlyout : ITab
 
 		private static Control? CreateFlyout()
 		{
-			var flyout = new ConfirmationFlyout(() => { }, "Confirm all the things?", "Confirm")
+			var flyout = new ConfirmationFlyout(() => { }, "Confirm all the things?")
 			{
 				Placement = PlacementMode.BottomEdgeAlignedLeft,
 				ShowMode = FlyoutShowMode.Transient,
