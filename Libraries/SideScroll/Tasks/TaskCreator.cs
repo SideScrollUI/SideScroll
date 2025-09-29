@@ -59,6 +59,7 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	}
 
 	// Creates, Starts, and returns a new Task
+	// If UseTask is not enabled will wait for action completion
 	public TaskInstance Start(Call call)
 	{
 		Context ??= SynchronizationContext.Current ?? new();

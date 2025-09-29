@@ -283,10 +283,10 @@ public class TabInstance : IDisposable
 		return StartTask(taskDelegate, showTask, call);
 	}
 
-	public void StartTask(CallActionParams callAction, bool useTask, bool showTask, params object[] objects)
+	public TaskInstance StartTask(CallActionParams callAction, bool useTask, bool showTask, params object[] objects)
 	{
-		var taskDelegate = new TaskDelegateParams(null, callAction.Method.Name.TrimEnd("Async").WordSpaced(), callAction, useTask, null, objects);
-		StartTask(taskDelegate, showTask);
+		var taskDelegate = new TaskDelegateParams(null, callAction.Method.Name.WordSpaced(), callAction, useTask, null, objects);
+		return StartTask(taskDelegate, showTask);
 	}
 
 	public void AddTask(TaskInstance taskInstance, bool showTask)

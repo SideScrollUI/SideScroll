@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using SideScroll.Avalonia.Controls;
 using SideScroll.Avalonia.Controls.Flyouts;
 using SideScroll.Tabs;
 using System.Reflection;

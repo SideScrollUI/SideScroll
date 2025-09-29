@@ -21,7 +21,7 @@ public class TabTextBox : TextBox
 {
 	protected override Type StyleKeyOverride => typeof(TextBox);
 
-	public ListProperty? Property { get; init; }
+	public ListProperty? Property { get; protected init; }
 
 	public override string? ToString() => Property?.ToString();
 
@@ -68,7 +68,7 @@ public class TabTextBox : TextBox
 		Styles.Add(style);
 	}
 
-	private void InitializeProperty(ListProperty property)
+	protected void InitializeProperty(ListProperty property)
 	{
 		IsReadOnly = !property.IsEditable;
 
@@ -210,7 +210,7 @@ public class TabTextBox : TextBox
 	{
 		if (AcceptsReturn && e.Key == Key.Enter && !e.KeyModifiers.HasFlag(KeyModifiers.Shift))
 		{
-			// Handle Shift-Enter but not Enter
+			// Ignore Shift-Enter but allow Enter
 			return;
 		}
 
