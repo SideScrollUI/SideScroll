@@ -25,6 +25,8 @@ public class TabSampleFormDataTabs : ITab
 		private const string DataKey = "Default";
 
 		private SampleItem? _sampleItem;
+		private TabFormObject? _tabFormObject;
+
 		private DataRepoView<SampleItem>? _dataRepoView;
 
 		public override void Load(Call call, TabModel model)
@@ -32,7 +34,7 @@ public class TabSampleFormDataTabs : ITab
 			LoadSavedItems(call, model);
 
 			_sampleItem ??= LoadData<SampleItem>(DataKey) ?? SampleItem.CreateSample();
-			model.AddForm(_sampleItem);
+			_tabFormObject = model.AddForm(_sampleItem);
 
 			Toolbar toolbar = new();
 			toolbar.ButtonNew.Action = New;
@@ -68,7 +70,7 @@ public class TabSampleFormDataTabs : ITab
 		private void New(Call call)
 		{
 			_sampleItem = new();
-			Reload();
+			_tabFormObject!.Update(this, _sampleItem);
 		}
 
 		private void Save(Call call)

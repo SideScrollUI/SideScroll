@@ -66,7 +66,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 	{
 		var seriesType = SeriesType.Other;
 
-		foreach (var series in ChartView.Series)
+		foreach (ListSeries series in ChartView.Series)
 		{
 			if (seriesType == SeriesType.Other)
 			{

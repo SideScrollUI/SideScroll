@@ -6,6 +6,12 @@ namespace SideScroll.Avalonia.Utilities;
 
 public static class ClipboardUtils
 {
+	private static IClipboard GetClipboard(Visual? visual)
+	{
+		return (TopLevel.GetTopLevel(visual)?.Clipboard)
+					?? throw new Exception("Failed to get clipboard");
+	}
+
 	public static void SetText(Visual? visual, string text)
 	{
 		Task.Run(() => SetTextAsync(visual, text));
@@ -13,9 +19,7 @@ public static class ClipboardUtils
 
 	public static async Task SetTextAsync(Visual? visual, string text)
 	{
-		IClipboard clipboard = (TopLevel.GetTopLevel(visual)?.Clipboard)
-			?? throw new Exception("Failed to get clipboard");
-
+		IClipboard clipboard = GetClipboard(visual);
 		await clipboard.SetTextAsync(text);
 	}
 
@@ -26,9 +30,7 @@ public static class ClipboardUtils
 
 	public static async Task<string?> GetTextAsync(Visual? visual)
 	{
-		IClipboard clipboard = (TopLevel.GetTopLevel(visual)?.Clipboard)
-			?? throw new Exception("Failed to get clipboard");
-
+		IClipboard clipboard = GetClipboard(visual);
 		string? clipboardText = await clipboard.GetTextAsync();
 		return clipboardText;
 	}

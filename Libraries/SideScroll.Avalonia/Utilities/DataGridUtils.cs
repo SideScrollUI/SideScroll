@@ -29,10 +29,10 @@ public static class DataGridUtils
 	private static List<List<string>> GetCellValues(List<List<string>> contentRows, int maxColumnWidth, List<int> columnNameWidths)
 	{
 		// Get formatted cell values and wrap text across multiple lines
-		var cellValues = new List<List<string>>();
+		List<List<string>> cellValues = [];
 		foreach (List<string> row in contentRows)
 		{
-			var rowValues = new List<string>();
+			List<string> rowValues = [];
 			foreach (string value in row)
 			{
 				string text = value?
@@ -46,7 +46,7 @@ public static class DataGridUtils
 			while (true)
 			{
 				bool overflowed = false;
-				var lineValues = new List<string>();
+				List<string> lineValues = [];
 				for (int column = 0; column < rowValues.Count; column++)
 				{
 					string value = rowValues[column];
