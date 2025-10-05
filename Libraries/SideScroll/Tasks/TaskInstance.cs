@@ -14,7 +14,7 @@ public class ShowMessageEventArgs(string message) : EventArgs
 public class TaskInstance : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
-	public event EventHandler<ShowMessageEventArgs> OnShowMessage;
+	public event EventHandler<ShowMessageEventArgs>? OnShowMessage;
 	//public event EventHandler<EventArgs> OnComplete;
 
 	public Action? OnComplete;
@@ -339,7 +339,6 @@ public class TaskInstance : INotifyPropertyChanged
 		OnShowMessage?.Invoke(this, new ShowMessageEventArgs(message));
 	}
 
-	// Starts, and returns a new Task
 	// If UseTask is not enabled will wait for action completion
 	public void Start()
 	{

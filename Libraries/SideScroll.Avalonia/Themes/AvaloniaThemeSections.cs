@@ -447,6 +447,9 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? TextControlBorderPointerOver { get; set; }
 
+	[ResourceKey("TextControlBorderBrushFocused")]
+	public Color? TextControlBorderFocused { get; set; }
+
 	[Range(0, 5), ResourceKey("TextControlBorderThemeThickness",
 		"TextControlBorderThemeThicknessFocused",
 		"CalendarDatePickerBorderThemeThickness",
@@ -491,6 +494,9 @@ public class TextControlTheme : ThemeSection
 
 	[ResourceKey("ComboBoxItemForegroundSelected")]
 	public Color? ComboBoxItemForegroundSelected { get; set; }
+
+	[ResourceKey("ComboBoxDropDownBorderBrush")]
+	public Color? ComboBoxDropDownBorder { get; set; }
 
 	// Calendar View / Date Time Picker
 	[Header("Calendar View"), ResourceKey("CalendarViewBackground")]

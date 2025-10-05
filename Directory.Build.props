@@ -6,7 +6,9 @@
     - Toolbar/Image Buttons can now show Flyouts using the TaskInstance
     - Toolbar/Image Buttons now show a Flyout for any errors
     - Light Blue Theme Updates
+    - Added Theming for TextControlBorderFocused and ComboBoxDropDownBorder
     - Fixed removing extra UI items when deleting from DataView layer
+    - Fixed native theme loading not accounting for Brush opacity
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.6</AvaloniaVersion>

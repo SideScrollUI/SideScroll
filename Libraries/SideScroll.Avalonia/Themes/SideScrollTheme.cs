@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
+using SideScroll.Avalonia.Extensions;
 
 namespace SideScroll.Avalonia.Themes;
 
@@ -152,6 +153,14 @@ public static class SideScrollTheme
 	public static SolidColorBrush GetBrush(string brushName)
 	{
 		return (SolidColorBrush)GetResource(brushName);
+	}
+
+	public static Color GetBrushColor(string brushName)
+	{
+		var brush = (SolidColorBrush)GetResource(brushName);
+		if (brush.Opacity == 1.0) return brush.Color;
+
+		return brush.Color.WithAlpha((byte)(brush.Color.A * brush.Opacity));
 	}
 
 	public static double GetDouble(string name)
