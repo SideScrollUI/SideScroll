@@ -132,7 +132,7 @@ public class TabDateTimePicker : Grid
 
 	private void ImportFromClipboard(Call call)
 	{
-		string? clipboardText = ClipboardUtils.GetText(this);
+		string? clipboardText = ClipboardUtils.TryGetText(this);
 		if (clipboardText == null) return;
 
 		if (DateTimeUtils.TryParseTimeSpan(clipboardText, out TimeSpan timeSpan))

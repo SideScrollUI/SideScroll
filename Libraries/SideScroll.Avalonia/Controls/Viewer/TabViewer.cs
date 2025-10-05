@@ -168,7 +168,7 @@ public class TabViewer : Grid
 
 	private async Task ImportClipboardLinkAsync(Call call)
 	{
-		string? clipboardText = await ClipboardUtils.GetTextAsync(this);
+		string? clipboardText = await ClipboardUtils.TryGetTextAsync(this);
 		if (clipboardText == null) return;
 
 		if (LinkUri.TryParse(clipboardText, out LinkUri? linkUri))

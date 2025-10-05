@@ -11,6 +11,10 @@ public static class ClipboardUtils
 		return (TopLevel.GetTopLevel(visual)?.Clipboard)
 					?? throw new Exception("Failed to get clipboard");
 	}
+	private static IClipboard? TryGetClipboard(Visual? visual)
+	{
+		return TopLevel.GetTopLevel(visual)?.Clipboard;
+	}
 
 	public static void SetText(Visual? visual, string text)
 	{
@@ -23,15 +27,17 @@ public static class ClipboardUtils
 		await clipboard.SetTextAsync(text);
 	}
 
-	public static string? GetText(Visual? visual)
+	public static string? TryGetText(Visual? visual)
 	{
-		return Task.Run(() => GetTextAsync(visual)).GetAwaiter().GetResult();
+		return Task.Run(() => TryGetTextAsync(visual)).GetAwaiter().GetResult();
 	}
 
-	public static async Task<string?> GetTextAsync(Visual? visual)
+	public static async Task<string?> TryGetTextAsync(Visual? visual)
 	{
-		IClipboard clipboard = GetClipboard(visual);
-		string? clipboardText = await clipboard.GetTextAsync();
+		IClipboard? clipboard = TryGetClipboard(visual);
+		if (clipboard == null) return null;
+
+		string? clipboardText = await clipboard.TryGetTextAsync();
 		return clipboardText;
 	}
 }

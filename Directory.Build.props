@@ -11,7 +11,7 @@
     - Fixed native theme loading not accounting for Brush opacity
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.6</AvaloniaVersion>
+    <AvaloniaVersion>11.3.7</AvaloniaVersion>
     <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>

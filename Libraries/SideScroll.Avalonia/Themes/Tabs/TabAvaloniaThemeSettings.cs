@@ -209,7 +209,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 		{
 			try
 			{
-				string json = ClipboardUtils.GetText(_themeForm)!;
+				string json = ClipboardUtils.TryGetText(_themeForm)!;
 				var theme = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, _jsonSerializerOptions)!;
 				LoadTheme(theme);
 
