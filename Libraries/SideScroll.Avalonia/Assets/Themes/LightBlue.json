@@ -129,7 +129,7 @@
     "CornerRadius": 4,
     "TextControlSelectionForeground": "White",
     "TextControlSelectionHighlight": "#ff26a5ff",
-    "ComboBoxDropDownBackground": "#fff0f1ff",
+    "ComboBoxDropDownBackground": "#fff0f2ff",
     "ComboBoxItemBackgroundSelected": "#ffb2bfff",
     "ComboBoxItemBackgroundPointerOver": "#ffccd4ff",
     "ComboBoxItemForegroundSelected": "#ff001061",

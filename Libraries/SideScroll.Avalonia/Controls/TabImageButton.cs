@@ -226,11 +226,7 @@ public class TabImageButton : Button, IDisposable
 		{
 			if (taskInstance.Errored)
 			{
-				MessageFlyout flyout = new(taskInstance.Message ?? $"{Name} Failed")
-				{
-					Placement = PlacementMode.BottomEdgeAlignedLeft,
-				};
-				flyout.ShowAt(this);
+				ShowFlyout(taskInstance.Message ?? $"{Name} Failed");
 			}
 		}
 	}
@@ -245,17 +241,7 @@ public class TabImageButton : Button, IDisposable
 		{
 			OnComplete = () => IsActive = false,
 		};
-
-		if (TabInstance != null)
-		{
-			return TabInstance.StartTask(taskDelegate, ShowTask);
-		}
-		else
-		{
-			var call = new Call(taskDelegate.Label);
-			TaskInstance taskInstance = taskDelegate.Start(call);
-			return taskInstance;
-		}
+		return StartTask(taskDelegate);
 	}
 
 	private TaskInstance? StartTask()
@@ -268,15 +254,22 @@ public class TabImageButton : Button, IDisposable
 		{
 			OnComplete = () => IsActive = false,
 		};
+		return StartTask(taskDelegate);
+	}
 
+	private TaskInstance? StartTask(TaskCreator taskCreator)
+	{
 		if (TabInstance != null)
 		{
-			return TabInstance!.StartTask(taskDelegate, ShowTask);
+			TaskInstance taskInstance = TabInstance.CreateTask(taskCreator, ShowTask);
+			taskInstance.OnShowMessage += (_, e) => ShowFlyout(e.Message);
+			taskInstance.Start();
+			return taskInstance;
 		}
 		else
 		{
-			var call = new Call(taskDelegate.Label);
-			TaskInstance taskInstance = taskDelegate.Start(call);
+			var call = new Call(taskCreator.Label);
+			TaskInstance taskInstance = taskCreator.Start(call);
 			return taskInstance;
 		}
 	}
@@ -302,6 +295,15 @@ public class TabImageButton : Button, IDisposable
 		{
 			call.Log.Add(e);
 		}
+	}
+
+	protected void ShowFlyout(string message)
+	{
+		MessageFlyout flyout = new(message)
+		{
+			Placement = PlacementMode.BottomEdgeAlignedLeft,
+		};
+		flyout.ShowAt(this);
 	}
 
 	protected override void OnPointerEntered(PointerEventArgs e)

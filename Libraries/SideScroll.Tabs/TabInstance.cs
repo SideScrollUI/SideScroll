@@ -263,11 +263,18 @@ public class TabInstance : IDisposable
 		StartTask(taskDelegate, false);
 	}
 
-	public TaskInstance StartTask(TaskCreator taskCreator, bool showTask, Call? call = null)
+	public TaskInstance CreateTask(TaskCreator taskCreator, bool showTask, Call? call = null)
 	{
 		call ??= new Call(taskCreator.Label);
 		TaskInstance taskInstance = taskCreator.Start(call);
 		AddTask(taskInstance, showTask);
+		return taskInstance;
+	}
+
+	public TaskInstance StartTask(TaskCreator taskCreator, bool showTask, Call? call = null)
+	{
+		TaskInstance taskInstance = CreateTask(taskCreator, showTask, call);
+		taskInstance.Start();
 		return taskInstance;
 	}
 

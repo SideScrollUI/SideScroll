@@ -82,6 +82,8 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 			TimeZoneView.Current = Project.UserSettings.TimeZone;
 			DateTimeExtensions.DefaultFormatType = Project.UserSettings.TimeFormat;
 			ThemeManager.Instance?.LoadCurrentTheme();
+
+			call.TaskInstance!.ShowMessage("Saved Settings");
 		}
 	}
 }

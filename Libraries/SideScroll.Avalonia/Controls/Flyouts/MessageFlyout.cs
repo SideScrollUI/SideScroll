@@ -11,7 +11,7 @@ public class MessageFlyout : Flyout
 		Placement = PlacementMode.Bottom;
 		Content = new StackPanel
 		{
-			Margin = new Thickness(10, 10, 10, 5),
+			Margin = new Thickness(0),
 			Spacing = 8,
 			MaxWidth = 350,
 			Children =
@@ -20,7 +20,7 @@ public class MessageFlyout : Flyout
 				{
 					Text = text,
 					TextWrapping = TextWrapping.Wrap,
-					Margin = new Thickness(0, 0, 0, 10)
+					Margin = new Thickness(0)
 				},
 			}
 		};

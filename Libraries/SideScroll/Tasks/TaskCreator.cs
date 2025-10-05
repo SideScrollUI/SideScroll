@@ -48,7 +48,7 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	[HiddenColumn]
 	public SynchronizationContext? Context { get; set; }
 
-	protected abstract Action CreateAction(Call call);
+	public abstract Action CreateAction(Call call);
 
 	public override string? ToString() => Label;
 
@@ -58,9 +58,7 @@ public abstract class TaskCreator : INotifyPropertyChanged
 		taskInstance.Task!.GetAwaiter().GetResult();
 	}
 
-	// Creates, Starts, and returns a new Task
-	// If UseTask is not enabled will wait for action completion
-	public TaskInstance Start(Call call)
+	public TaskInstance Create(Call call)
 	{
 		Context ??= SynchronizationContext.Current ?? new();
 		call.Log.Settings!.Context = Context;
@@ -71,20 +69,15 @@ public abstract class TaskCreator : INotifyPropertyChanged
 			Creator = this,
 		};
 		call.TaskInstance = taskInstance;
+		return taskInstance;
+	}
 
-		Action action = CreateAction(call);
-		if (UseTask)
-		{
-			taskInstance.Task = new Task(action);
-			taskInstance.Task.ContinueWith(_ => taskInstance.SetFinished());
-			taskInstance.Task.Start();
-		}
-		else
-		{
-			action.Invoke();
-			taskInstance.SetFinished();
-		}
-
+	// Creates, Starts, and returns a new Task
+	// If UseTask is not enabled will wait for action completion
+	public TaskInstance Start(Call call)
+	{
+		TaskInstance taskInstance = Create(call);
+		taskInstance.Start();
 		return taskInstance;
 	}
 }

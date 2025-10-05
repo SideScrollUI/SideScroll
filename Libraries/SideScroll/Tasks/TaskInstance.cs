@@ -6,9 +6,15 @@ using System.Runtime.CompilerServices;
 
 namespace SideScroll.Tasks;
 
+public class ShowMessageEventArgs(string message) : EventArgs
+{
+	public string Message => message;
+}
+
 public class TaskInstance : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
+	public event EventHandler<ShowMessageEventArgs> OnShowMessage;
 	//public event EventHandler<EventArgs> OnComplete;
 
 	public Action? OnComplete;
@@ -299,9 +305,9 @@ public class TaskInstance : INotifyPropertyChanged
 
 	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		if (Creator != null)
+		if (Creator?.Context is SynchronizationContext context)
 		{
-			Creator.Context!.Post(NotifyPropertyChangedContext, propertyName);
+			context.Post(NotifyPropertyChangedContext, propertyName);
 		}
 		else
 		{
@@ -313,5 +319,41 @@ public class TaskInstance : INotifyPropertyChanged
 	{
 		string propertyName = (string)state!;
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
+
+	public void ShowMessage(string message)
+	{
+		if (Creator?.Context is SynchronizationContext context)
+		{
+			context.Post(ShowMessageContext, message);
+		}
+		else
+		{
+			ShowMessageContext(message);
+		}
+	}
+
+	private void ShowMessageContext(object? state)
+	{
+		string message = (string)state!;
+		OnShowMessage?.Invoke(this, new ShowMessageEventArgs(message));
+	}
+
+	// Starts, and returns a new Task
+	// If UseTask is not enabled will wait for action completion
+	public void Start()
+	{
+		Action action = Creator!.CreateAction(Call);
+		if (Creator.UseTask)
+		{
+			Task = new Task(action);
+			Task.ContinueWith(_ => SetFinished());
+			Task.Start();
+		}
+		else
+		{
+			action.Invoke();
+			SetFinished();
+		}
 	}
 }

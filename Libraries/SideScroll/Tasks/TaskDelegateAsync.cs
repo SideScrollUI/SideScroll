@@ -29,7 +29,7 @@ public class TaskDelegateAsync : TaskCreator
 		Description = description;
 	}
 
-	protected override Action CreateAction(Call call)
+	public override Action CreateAction(Call call)
 	{
 		return () => InvokeAction(call);
 	}

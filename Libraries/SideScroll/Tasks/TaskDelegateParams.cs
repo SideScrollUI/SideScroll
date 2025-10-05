@@ -20,7 +20,7 @@ public class TaskDelegateParams : TaskCreator
 		Objects = objects;
 	}
 
-	protected override Action CreateAction(Call call)
+	public override Action CreateAction(Call call)
 	{
 		return () => InvokeAction(call);
 	}

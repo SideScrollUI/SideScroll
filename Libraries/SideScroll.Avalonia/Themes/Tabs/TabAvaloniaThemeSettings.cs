@@ -165,6 +165,8 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 			ThemeSettings.ModifiedAt = DateTime.Now;
 			tab.DataViewCollection!.DataRepoView.Save(call, ThemeSettings);
 			UpdateTheme();
+
+			call.TaskInstance!.ShowMessage("Saved");
 		}
 
 		private void UpdateTheme()
@@ -200,13 +202,23 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 		{
 			string json = JsonSerializer.Serialize(ThemeSettings, _jsonSerializerOptions);
 			ClipboardUtils.SetText(_themeForm, json);
+			call.TaskInstance!.ShowMessage("Copied to Clipboard");
 		}
 
 		private void ImportFromClipboard(Call call)
 		{
-			string json = ClipboardUtils.GetText(_themeForm)!;
-			var theme = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, _jsonSerializerOptions)!;
-			LoadTheme(theme);
+			try
+			{
+				string json = ClipboardUtils.GetText(_themeForm)!;
+				var theme = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, _jsonSerializerOptions)!;
+				LoadTheme(theme);
+
+				call.TaskInstance!.ShowMessage("Imported Theme");
+			}
+			catch (Exception e)
+			{
+				call.TaskInstance!.ShowMessage("Import Failed: " + e.Message);
+			}
 		}
 	}
 }

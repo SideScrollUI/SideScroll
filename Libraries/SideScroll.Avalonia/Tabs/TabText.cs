@@ -37,6 +37,8 @@ public class TabText(string text) : ITab
 		private async Task CopyAsync(Call call)
 		{
 			await ClipboardUtils.SetTextAsync(BaseWindow.Instance, tab.Text);
+
+			call.TaskInstance!.ShowMessage("Copied to Clipboard");
 		}
 	}
 }

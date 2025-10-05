@@ -17,7 +17,7 @@ public class TaskMethod : TaskCreator
 		Label = methodInfo.Name;
 	}
 
-	protected override Action CreateAction(Call call)
+	public override Action CreateAction(Call call)
 	{
 		return () => RunMethod(call);
 	}

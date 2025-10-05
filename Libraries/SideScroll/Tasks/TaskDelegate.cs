@@ -27,7 +27,7 @@ public class TaskDelegate : TaskCreator
 		Description = description;
 	}
 
-	protected override Action CreateAction(Call call)
+	public override Action CreateAction(Call call)
 	{
 		return () => InvokeAction(call);
 	}
