@@ -98,7 +98,11 @@ public class TabDemoPlanets : ITab
 
 		private void Delete(Call call)
 		{
-			foreach (Planet planet in SelectedItems!)
+			List<Planet> selected = SelectedItems!
+				.OfType<Planet>()
+				.ToList();
+
+			foreach (Planet planet in selected)
 			{
 				_dataRepoView!.Delete(call, planet);
 			}

@@ -3,8 +3,10 @@
     <Version>0.12</Version>
     <PackageReleaseNotes>
     - Split DataGridButton out of TabButton and changed to show only on selection or pointer over
-    - Image Buttons now show a Flyout for any errors
+    - Toolbar/Image Buttons can now show Flyouts using the TaskInstance
+    - Toolbar/Image Buttons now show a Flyout for any errors
     - Light Blue Theme Updates
+    - Fixed removing extra UI items when deleting from DataView layer
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.6</AvaloniaVersion>

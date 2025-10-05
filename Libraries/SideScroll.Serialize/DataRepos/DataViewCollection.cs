@@ -223,9 +223,16 @@ public class DataViewCollection<T>
 		if (_valueLookup.Remove(dataItem, out T? existing))
 		{
 			Items.Remove(existing);
-		}
 
-		Items.Remove((T)dataItem.Object);
+			if (dataItem.Object is T obj && !Equals(existing, obj))
+			{
+				Items.Remove(obj);
+			}
+		}
+		else
+		{
+			Items.Remove((T)dataItem.Object);
+		}
 	}
 
 	private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

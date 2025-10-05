@@ -266,7 +266,7 @@ public class TabInstance : IDisposable
 	public TaskInstance CreateTask(TaskCreator taskCreator, bool showTask, Call? call = null)
 	{
 		call ??= new Call(taskCreator.Label);
-		TaskInstance taskInstance = taskCreator.Start(call);
+		TaskInstance taskInstance = taskCreator.Create(call);
 		AddTask(taskInstance, showTask);
 		return taskInstance;
 	}
