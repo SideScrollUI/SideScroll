@@ -26,7 +26,7 @@ public class SerializeAvaloniaTests : BaseTest
 	[Test]
 	public void SerializeBookmark()
 	{
-		var input = new Bookmark
+		Bookmark input = new()
 		{
 			TabBookmark = new TabBookmark
 			{

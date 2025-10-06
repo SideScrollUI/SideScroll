@@ -87,10 +87,11 @@ public class TabSampleActions : ITab
 		{
 			using CallTimer callTimer = call.Timer("Task", new Tag(id));
 
-			for (int i = 0; i < id && !callTimer.TaskInstance!.CancelToken.IsCancellationRequested; i++)
+			CancellationToken cancelToken = callTimer.TaskInstance!.CancelToken;
+			for (int i = 0; i < id && !cancelToken.IsCancellationRequested; i++)
 			{
 				callTimer.Log.Add("Sleeping");
-				await Task.Delay(1000, callTimer.TaskInstance.CancelToken);
+				await Task.Delay(1000, cancelToken);
 			}
 
 			return id;

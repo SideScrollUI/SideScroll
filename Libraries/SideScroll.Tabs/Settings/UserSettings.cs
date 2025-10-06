@@ -10,7 +10,7 @@ namespace SideScroll.Tabs.Settings;
 public class UserSettings
 {
 	[Header("Base")]
-	public bool AutoLoad { get; set; } = true;
+	public bool AutoSelect { get; set; } = true;
 
 	[Range(1, 20)]
 	public int VerticalTabLimit { get; set; } = 10;

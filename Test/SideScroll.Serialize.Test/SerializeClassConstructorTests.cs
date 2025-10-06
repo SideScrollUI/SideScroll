@@ -42,7 +42,6 @@ public class SerializeClassConstructorTests : SerializeBaseTest
 
 	public class DerivedClassWithConstructorReference
 	{
-		[Serialized]
 		public NoConstructorBaseClass? BaseClass;
 	}
 
@@ -69,6 +68,48 @@ public class SerializeClassConstructorTests : SerializeBaseTest
 		var output = _serializer.Load<DerivedClassWithConstructorReference>(Call);
 
 		Assert.That(output.BaseClass!.B, Is.EqualTo(input.BaseClass.B));
+	}
+
+	public class ProtectedConstructorBaseClass
+	{
+		protected ProtectedConstructorBaseClass(int a)
+		{
+			A = a;
+		}
+
+		public ProtectedConstructorBaseClass(int a, int b)
+		{
+			A = a;
+			B = b;
+		}
+
+		public int A;
+
+		[Unserialized]
+		public int B;
+	}
+
+	public class DerivedClassWithProtectedConstructor : ProtectedConstructorBaseClass
+	{
+		public DerivedClassWithProtectedConstructor() : base(0)
+		{
+		}
+
+		public DerivedClassWithProtectedConstructor(int a) : base(a)
+		{
+		}
+	}
+
+	[Test, Description("Serialize Protected Constructor Base Class")]
+	public void SerializeProtectedConstructorBaseClass()
+	{
+		var input = new DerivedClassWithProtectedConstructor(2);
+		var inputList = new List<ProtectedConstructorBaseClass>() { input };
+
+		_serializer.Save(Call, inputList);
+		var output = _serializer.Load<List<ProtectedConstructorBaseClass>>(Call);
+
+		Assert.That(output[0].B, Is.EqualTo(input.B));
 	}
 
 	public record CustomConstructorFieldClass

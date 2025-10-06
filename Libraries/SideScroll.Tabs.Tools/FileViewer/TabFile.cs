@@ -12,6 +12,7 @@ public interface IFileTypeView
 	string? Path { get; set; }
 }
 
+[PrivateData]
 public class TabFile(FileView fileView) : ITab
 {
 	public TabFile(string filePath) : this(new FileView(filePath)) { }
@@ -108,6 +109,10 @@ public class TabFile(FileView fileView) : ITab
 				if (FileUtils.IsTextFile(path))
 				{
 					items.Add(new ListItem("Contents", new FilePath(path)));
+				}
+				else
+				{
+					items.Add(new ListItem("Bytes", new TabFileBytes(path)));
 				}
 			}
 			items.Add(new ListItem("File Info", new FileInfo(path)));

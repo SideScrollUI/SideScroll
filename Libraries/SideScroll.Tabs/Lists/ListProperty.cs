@@ -7,12 +7,12 @@ using System.Reflection;
 
 namespace SideScroll.Tabs.Lists;
 
-public interface IPropertyEditable
+public interface IPropertyIsEditable
 {
-	bool Editable { get; }
+	bool IsEditable { get; }
 }
 
-public class ListProperty : ListMember, IPropertyEditable
+public class ListProperty : ListMember, IPropertyIsEditable
 {
 	[HiddenColumn]
 	public PropertyInfo PropertyInfo { get; }
@@ -24,19 +24,21 @@ public class ListProperty : ListMember, IPropertyEditable
 	private object? _valueObject;
 
 	[HiddenColumn]
-	public override bool Editable // rename to IsReadOnly?
+	public override bool IsEditable // rename to IsReadOnly?
 	{
 		get
 		{
-			bool propertyReadOnly = PropertyInfo.GetCustomAttribute<ReadOnlyAttribute>() != null;
-			return PropertyInfo.CanWrite && PropertyInfo.SetMethod?.IsPublic == true && !propertyReadOnly;
+			var readOnlyAttribute = PropertyInfo.GetCustomAttribute<ReadOnlyAttribute>();
+			return PropertyInfo.CanWrite && 
+				PropertyInfo.SetMethod?.IsPublic == true && 
+				readOnlyAttribute?.IsReadOnly != true;
 		}
 	}
 
 	[Hidden]
 	public bool IsFormatted => PropertyInfo.GetCustomAttribute<FormattedAttribute>() != null;
 
-	[Editing, InnerValue, WordWrap]
+	[EditColumn, InnerValue, WordWrap]
 	public override object? Value
 	{
 		get

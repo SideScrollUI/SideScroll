@@ -52,62 +52,6 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		}
 	}
 
-	private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-	{
-		if (e.Action == NotifyCollectionChangedAction.Add)
-		{
-			if (e.NewItems != null)
-			{
-				foreach (IDataItem item in e.NewItems)
-				{
-					Add(item);
-				}
-			}
-		}
-		else if (e.Action == NotifyCollectionChangedAction.Remove)
-		{
-			if (e.OldItems != null)
-			{
-				foreach (IDataItem item in e.OldItems)
-				{
-					Remove(item);
-				}
-			}
-		}
-		else if (e.Action == NotifyCollectionChangedAction.Replace)
-		{
-			if (e.OldItems == null || e.NewItems?.Count != e.OldItems.Count) return;
-
-			List<TViewType> viewItems = [];
-			int index = 0;
-			foreach (IDataItem oldItem in e.OldItems)
-			{
-				if (_valueLookup.TryGetValue(oldItem, out TViewType? itemView))
-				{
-					var newItem = (IDataItem)e.NewItems![index]!;
-					itemView.Load(this, newItem.Object, LoadParams);
-					viewItems.Add(itemView);
-				}
-				index++;
-			}
-
-			if (viewItems.Count > 0)
-			{
-				int indexOfItem = Items.IndexOf(viewItems.First());
-				Items.NotifyCollectionChanged(
-					new NotifyCollectionChangedEventArgs(
-						NotifyCollectionChangedAction.Replace,
-						viewItems,
-						viewItems,
-						indexOfItem));
-			}
-		}
-		else if (e.Action == NotifyCollectionChangedAction.Reset)
-		{
-			Items.Clear();
-		}
-	}
-
 	public TViewType Add(IDataItem dataItem)
 	{
 		var itemView = new TViewType();
@@ -115,6 +59,19 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		itemView.OnDelete += Item_OnDelete;
 
 		Items.Add(itemView);
+		_dataItemLookup.Add(itemView, dataItem);
+		_valueLookup.Add(dataItem, itemView);
+
+		return itemView;
+	}
+
+	public TViewType Insert(int index, IDataItem dataItem)
+	{
+		var itemView = new TViewType();
+		itemView.Load(this, dataItem.Object, LoadParams);
+		itemView.OnDelete += Item_OnDelete;
+
+		Items.Insert(index, itemView);
 		_dataItemLookup.Add(itemView, dataItem);
 		_valueLookup.Add(dataItem, itemView);
 
@@ -143,9 +100,74 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		}
 	}
 
+	public void Replace(IDataItem oldDataItem, IDataItem newDataItem)
+	{
+		int index = -1;
+		if (_valueLookup.Remove(oldDataItem, out TViewType? existing))
+		{
+			index = Items.IndexOf(existing);
+
+			_dataItemLookup.Remove(existing);
+			Items.Remove(existing);
+
+			Insert(index, newDataItem);
+		}
+		else
+		{
+			Add(newDataItem);
+		}
+	}
+
 	public void AddDataRepo(DataRepoView<TDataType> dataRepoView)
 	{
 		DataRepoSecondary = dataRepoView;
+	}
+
+	private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	{
+		if (e.Action == NotifyCollectionChangedAction.Add)
+		{
+			if (e.NewItems != null)
+			{
+				foreach (IDataItem item in e.NewItems)
+				{
+					Add(item);
+				}
+			}
+		}
+		else if (e.Action == NotifyCollectionChangedAction.Remove)
+		{
+			if (e.OldItems != null)
+			{
+				foreach (IDataItem item in e.OldItems)
+				{
+					Remove(item);
+				}
+			}
+		}
+		else if (e.Action == NotifyCollectionChangedAction.Replace)
+		{
+			if (e.OldItems == null || e.NewItems?.Count != e.OldItems.Count) return;
+
+			int index = 0;
+			foreach (IDataItem oldItem in e.OldItems)
+			{
+				var newItem = (IDataItem)e.NewItems![index]!;
+				if (_valueLookup.TryGetValue(oldItem, out TViewType? itemView))
+				{
+					Replace(oldItem, newItem);
+				}
+				else
+				{
+					Add(newItem);
+				}
+				index++;
+			}
+		}
+		else if (e.Action == NotifyCollectionChangedAction.Reset)
+		{
+			Items.Clear();
+		}
 	}
 }
 
@@ -158,6 +180,8 @@ public class DataViewCollection<T>
 
 	public DataRepoView<T> DataRepoView { get; }
 
+	private Dictionary<IDataItem, T> _valueLookup;
+
 	public override string ToString() => DataRepoView.ToString();
 
 	public DataViewCollection(DataRepoView<T> dataRepoView)
@@ -169,13 +193,45 @@ public class DataViewCollection<T>
 		Reload();
 	}
 
+	[MemberNotNull(nameof(_valueLookup))]
 	public void Reload()
 	{
 		Items.Clear();
 
+		_valueLookup = [];
+
 		foreach (DataItem<T> dataItem in DataRepoView.Items)
 		{
 			Add(dataItem);
+		}
+	}
+
+	public T Add(IDataItem dataItem)
+	{
+		var item = (T)dataItem.Object;
+		Items.Add(item);
+		_valueLookup.Add(dataItem, item);
+
+		return item;
+	}
+
+	public void Remove(IDataItem dataItem)
+	{
+		Call call = new();
+		DataRepoView.Delete(call, dataItem.Key);
+
+		if (_valueLookup.Remove(dataItem, out T? existing))
+		{
+			Items.Remove(existing);
+
+			if (dataItem.Object is T obj && !Equals(existing, obj))
+			{
+				Items.Remove(obj);
+			}
+		}
+		else
+		{
+			Items.Remove((T)dataItem.Object);
 		}
 	}
 
@@ -205,48 +261,35 @@ public class DataViewCollection<T>
 		{
 			if (e.OldItems == null || e.NewItems?.Count != e.OldItems.Count) return;
 
-			List<T> newItems = [];
 			int index = 0;
 			foreach (IDataItem oldItem in e.OldItems)
 			{
-				if (Items.Contains((T)oldItem.Object))
-				{
-					var newItem = (IDataItem)e.NewItems![index]!;
-					newItems.Add((T)newItem.Object);
-				}
-				index++;
-			}
+				var newItem = (IDataItem)e.NewItems![index]!;
+				var oldObject = (T)oldItem.Object;
+				var newObject = (T)newItem.Object;
 
-			if (newItems.Count > 0)
-			{
-				int indexOfItem = Items.IndexOf(newItems.First());
-				Items.NotifyCollectionChanged(
-					new NotifyCollectionChangedEventArgs(
-						NotifyCollectionChangedAction.Replace,
-						newItems,
-						newItems,
-						indexOfItem));
+				// OldItem can be mapped to newItem so grab the real old value
+				if (_valueLookup.TryGetValue(oldItem, out T? itemView))
+				{
+					Items.Replace(itemView, newObject);
+				}
+				else if (Items.Contains(oldObject))
+				{
+					Items.Replace(oldObject, newObject);
+				}
+
+				if (newItem != oldItem)
+				{
+					_valueLookup.Remove(oldItem);
+				}
+				_valueLookup[newItem] = newObject;
+
+				index++;
 			}
 		}
 		else if (e.Action == NotifyCollectionChangedAction.Reset)
 		{
 			Items.Clear();
 		}
-	}
-
-	public T Add(IDataItem dataItem)
-	{
-		var item = (T)dataItem.Object;
-		Items.Add(item);
-
-		return item;
-	}
-
-	public void Remove(IDataItem dataItem)
-	{
-		Call call = new();
-		DataRepoView.Delete(call, dataItem.Key);
-
-		Items.Remove((T)dataItem.Object);
 	}
 }

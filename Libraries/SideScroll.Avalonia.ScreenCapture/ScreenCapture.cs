@@ -32,7 +32,7 @@ public class ScreenCapture : Grid
 	private Point? _startPoint;
 	private Rect _selectionRect;
 
-	public TabViewer TabViewer { get; init; }
+	public TabViewer TabViewer { get; }
 
 	public class TabViewerPlugin : ITabViewerPlugin
 	{

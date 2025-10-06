@@ -57,8 +57,6 @@ public static class AvaloniaUtils
 			list.Add(menuItemPaste);
 		}
 
-		//list.Add(new Separator());
-
 		ContextMenu contextMenu = new()
 		{
 			ItemsSource = list,
@@ -81,7 +79,7 @@ public static class AvaloniaUtils
 		var menuItemPaste = new TabMenuItem("Paste");
 		menuItemPaste.Click += delegate
 		{
-			if (ClipboardUtils.GetText(comboBox) is string clipboardText)
+			if (ClipboardUtils.TryGetText(comboBox) is string clipboardText)
 			{
 				if (comboBox.Items.FirstOrDefault(i => i?.ToString() == clipboardText) is object matchingItem)
 				{
@@ -113,7 +111,7 @@ public static class AvaloniaUtils
 		var menuItemPaste = new TabMenuItem("Paste");
 		menuItemPaste.Click += delegate
 		{
-			if (ClipboardUtils.GetText(colorPicker) is string clipboardText &&
+			if (ClipboardUtils.TryGetText(colorPicker) is string clipboardText &&
 				Color.TryParse(clipboardText, out Color color))
 			{
 				colorPicker.Color = color;

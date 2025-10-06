@@ -22,7 +22,7 @@ public class TabSampleWideColumns : ITab
 		{
 			for (int i = 0; i < 100; i++)
 			{
-				var testItem = new TestWideItem
+				TestWideItem testItem = new()
 				{
 					SmallNumber = i
 				};

@@ -71,7 +71,6 @@ public class TypeSchema
 	
 	public bool IsCloneReference { get; protected set; }
 	
-	public bool IsSerialized { get; protected set; }
 	public bool IsUnserialized { get; protected set; }
 	
 	public bool HasEmptyConstructor { get; protected set; }
@@ -118,7 +117,6 @@ public class TypeSchema
 		IsPrimitive = NonNullableType.IsPrimitive;
 		HasEmptyConstructor = TypeHasEmptyConstructor(Type);
 
-		IsSerialized = Type.GetCustomAttribute<SerializedAttribute>() != null;
 		IsUnserialized = Type.GetCustomAttribute<UnserializedAttribute>() != null;
 		IsCloneReference = Type.GetCustomAttribute<CloneReferenceAttribute>() != null;
 		IsPrivate = GetIsPrivate();
@@ -270,9 +268,6 @@ public class TypeSchema
 
 		if (typeof(Type).IsAssignableFrom(Type))
 			return true;
-
-		//if (Type.IsSecurityCritical) // useful?
-		//	return true;
 
 		if (Type.IsGenericType)
 		{
@@ -446,7 +441,7 @@ public class TypeSchema
 				new Tag("Total Bytes", totalBytes));
 		}
 
-		if (IsPublic && NumObjects > PublicMaxObjects)
+		if (serializer.PublicOnly && IsPublic && NumObjects > PublicMaxObjects)
 		{
 			throw new SerializerException("Too many objects for public import",
 				new Tag("Type", Type),
@@ -463,5 +458,23 @@ public class TypeSchema
 		{
 			propertySchema.Validate(typeSchemas);
 		}
+	}
+
+	public MemberInfo? GetMemberInfo(string name)
+	{
+		var members = Type!.GetMember(name, BindingAttributes);
+		if (members.Length > 0)
+			return members[0];
+
+		// Check deprecated names
+		foreach (MemberInfo memberInfo in Type!.GetMembers(BindingAttributes))
+		{
+			if (memberInfo.GetCustomAttribute<DeprecatedNameAttribute>() is DeprecatedNameAttribute attribute &&
+				attribute.Names.Contains(name))
+			{
+				return memberInfo;
+			}
+		}
+		return null;
 	}
 }

@@ -34,7 +34,7 @@ public class TabSampleToolbar : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			var toolbar = new Toolbar();
+			Toolbar toolbar = new();
 			toolbar.ButtonRefresh.Action = Refresh;
 			toolbar.ButtonSearch.ActionAsync = SearchAsync;
 			toolbar.ButtonOpenBrowser.Action = OpenBrowser;

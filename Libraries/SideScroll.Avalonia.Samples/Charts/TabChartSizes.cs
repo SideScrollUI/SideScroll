@@ -2,7 +2,7 @@ using SideScroll.Avalonia.Charts.LiveCharts;
 using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Tabs;
-using SideScroll.Tabs.Samples.Chart;
+using SideScroll.Tabs.Samples.Charts;
 
 namespace SideScroll.Avalonia.Samples.Charts;
 
@@ -28,12 +28,12 @@ public class TabChartSizes : ITab
 			};
 			chartView.AddSeries("Count", series, seriesType: SeriesType.Average);
 
-			var chart = new TabLiveChart(this, chartView)
+			var liveChart = new TabLiveChart(this, chartView)
 			{
 				Height = 80,
 			};
-			chart.Chart.MinHeight = 80;
-			model.AddObject(chart);
+			liveChart.Chart.MinHeight = 80;
+			model.AddObject(liveChart);
 		}
 	}
 }

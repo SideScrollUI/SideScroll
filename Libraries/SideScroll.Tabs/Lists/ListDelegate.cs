@@ -4,11 +4,11 @@ using System.Reflection;
 
 namespace SideScroll.Tabs.Lists;
 
-public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
+public class ListDelegate : ListMember, IPropertyIsEditable, ILoadAsync
 {
 	public delegate Task<object?> LoadObjectAsync(Call call);
 
-	public LoadObjectAsync LoadAction { get; init; }
+	public LoadObjectAsync LoadAction { get; }
 	public MethodInfo MethodInfo => LoadAction.Method;
 
 	public bool CacheEnabled { get; set; }
@@ -16,7 +16,7 @@ public class ListDelegate : ListMember, IPropertyEditable, ILoadAsync
 	private bool _valueCached;
 	private object? _valueObject;
 
-	[Editing, InnerValue, WordWrap]
+	[EditColumn, InnerValue, WordWrap]
 	public override object? Value
 	{
 		get

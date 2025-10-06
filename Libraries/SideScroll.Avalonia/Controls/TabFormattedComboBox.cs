@@ -16,7 +16,7 @@ public class TabFormattedComboBox : ComboBox
 {
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
-	public ListProperty Property { get; init; }
+	public ListProperty Property { get; }
 
 	private List<FormattedItem>? _items;
 
@@ -33,7 +33,7 @@ public class TabFormattedComboBox : ComboBox
 	public TabFormattedComboBox(ListProperty property, string? listPropertyName)
 	{
 		Property = property;
-		IsEnabled = property.Editable;
+		IsEnabled = property.IsEditable;
 
 		InitializeComponent();
 

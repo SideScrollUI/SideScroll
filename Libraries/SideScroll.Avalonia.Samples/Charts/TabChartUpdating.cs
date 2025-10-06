@@ -4,7 +4,7 @@ using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Resources;
 using SideScroll.Tabs;
-using SideScroll.Tabs.Samples.Chart;
+using SideScroll.Tabs.Samples.Charts;
 using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Avalonia.Samples.Charts;
@@ -47,7 +47,7 @@ public class TabChartUpdating : ITab
 
 		private ChartView CreateView()
 		{
-			var chartView = new ChartView
+			ChartView chartView = new()
 			{
 				LegendPosition = ChartLegendPosition.Right,
 				ShowTimeTracker = true,
@@ -74,11 +74,11 @@ public class TabChartUpdating : ITab
 		{
 			_addCall = call;
 
-			CancellationToken token = call.TaskInstance!.TokenSource.Token;
-			for (int i = 0; i < 60 && !token.IsCancellationRequested; i++)
+			CancellationToken cancelToken = call.TaskInstance!.CancelToken;
+			for (int i = 0; i < 60 && !cancelToken.IsCancellationRequested; i++)
 			{
-				Invoke(call, () => Update(call));
-				await Task.Delay(1000);
+				Post(call, () => Update(call));
+				await Task.Delay(1000, cancelToken);
 			}
 		}
 

@@ -4,7 +4,7 @@ using SideScroll.Collections;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
 
-namespace SideScroll.Tabs.Samples.Chart;
+namespace SideScroll.Tabs.Samples.Charts;
 
 public class TabSampleChartProperties : ITab
 {
@@ -56,7 +56,7 @@ public class TabSampleChartProperties : ITab
 				AddSample(i);
 			}
 
-			var chartView = new ChartView();
+			ChartView chartView = new();
 			chartView.AddSeries("Alpha", _samples, null, nameof(ChartSample.Alpha));
 			chartView.AddSeries("Beta", _samples, null, nameof(ChartSample.Beta));
 			chartView.AddSeries("Gamma", _samples, null, nameof(ChartSample.Gamma));
@@ -66,7 +66,7 @@ public class TabSampleChartProperties : ITab
 
 		private void AddEntry(Call call)
 		{
-			Invoke(AddSampleCallback, call);
+			Post(AddSampleCallback, call);
 		}
 
 		private Call? _addCall;
@@ -74,11 +74,11 @@ public class TabSampleChartProperties : ITab
 		{
 			_addCall = call;
 
-			CancellationToken token = call.TaskInstance!.TokenSource.Token;
-			for (int i = 0; i < 1000 && !token.IsCancellationRequested; i++)
+			CancellationToken cancelToken = call.TaskInstance!.CancelToken;
+			for (int i = 0; i < 1000 && !cancelToken.IsCancellationRequested; i++)
 			{
-				Invoke(AddSampleCallback, call);
-				await Task.Delay(1000);
+				Post(AddSampleCallback, call);
+				await Task.Delay(1000, cancelToken);
 			}
 		}
 

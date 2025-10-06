@@ -17,7 +17,7 @@ public class TabAvaloniaThemes : ITab
 	public class Toolbar(Instance instance) : TabToolbar
 	{
 		public ToolButton ButtonNew { get; set; } = new("New", Icons.Svg.BlankDocument);
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save)
+		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true)
 		{
 			IsEnabledBinding = new PropertyBinding(nameof(ThemeId.HasName), instance.ThemeId),
 		};
@@ -44,6 +44,7 @@ public class TabAvaloniaThemes : ITab
 			model.AddObject(_themeForm);
 
 			var toolbar = new Toolbar(this);
+			toolbar.ButtonNew.Action = New;
 			toolbar.ButtonSave.Action = Save;
 			model.AddObject(toolbar);
 		}
@@ -58,6 +59,13 @@ public class TabAvaloniaThemes : ITab
 			model.Items = dataCollection.Items;
 		}
 
+		private void New(Call call)
+		{
+			ThemeId.Reset();
+			_themeForm!.LoadObject(ThemeId);
+			_themeForm.Focus();
+		}
+
 		private void Save(Call call)
 		{
 			Validate();
@@ -66,8 +74,7 @@ public class TabAvaloniaThemes : ITab
 
 			ThemeManager.Instance!.Add(call, themeSettings);
 
-			ThemeId.Reset();
-			_themeForm!.LoadObject(ThemeId);
+			New(call);
 		}
 	}
 

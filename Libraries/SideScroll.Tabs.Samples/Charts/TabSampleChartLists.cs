@@ -4,7 +4,7 @@ using SideScroll.Collections;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
 
-namespace SideScroll.Tabs.Samples.Chart;
+namespace SideScroll.Tabs.Samples.Charts;
 
 public class TabSampleChartLists : ITab
 {
@@ -51,7 +51,7 @@ public class TabSampleChartLists : ITab
 
 		private void AddEntry(Call call)
 		{
-			Invoke(call, AddSampleUI);
+			Post(call, AddSampleUI);
 		}
 
 		private Call? _addCall;
@@ -59,11 +59,11 @@ public class TabSampleChartLists : ITab
 		{
 			_addCall = call;
 
-			CancellationToken token = call.TaskInstance!.TokenSource.Token;
-			for (int i = 0; i < 1000 && !token.IsCancellationRequested; i++)
+			CancellationToken cancelToken = call.TaskInstance!.CancelToken;
+			for (int i = 0; i < 1000 && !cancelToken.IsCancellationRequested; i++)
 			{
-				Invoke(AddSampleUI, call);
-				await Task.Delay(1000);
+				Post(AddSampleUI, call);
+				await Task.Delay(1000, cancelToken);
 			}
 		}
 

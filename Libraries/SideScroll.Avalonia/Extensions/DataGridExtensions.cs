@@ -19,7 +19,7 @@ public static class DataGridExtensions
 		ArgumentNullException.ThrowIfNull(dataGrid);
 		ArgumentNullException.ThrowIfNull(column);
 
-		var sb = new StringBuilder();
+		StringBuilder sb = new();
 		foreach (var item in dataGrid.ItemsSource)
 		{
 			string? value = GetCellValue(column, item);
@@ -33,7 +33,7 @@ public static class DataGridExtensions
 		ArgumentNullException.ThrowIfNull(dataGrid);
 		ArgumentNullException.ThrowIfNull(column);
 
-		var sb = new StringBuilder();
+		StringBuilder sb = new();
 		foreach (var item in dataGrid.SelectedItems)
 		{
 			string? value = GetCellValue(column, item);
@@ -47,8 +47,7 @@ public static class DataGridExtensions
 		Binding binding = (Binding)column.Binding;
 		string propertyName = binding.Path;
 		Type type = item.GetType();
-		PropertyInfo? propertyInfo = type.GetProperty(propertyName);
-		if (propertyInfo != null)
+		if (type.GetProperty(propertyName) is PropertyInfo propertyInfo)
 		{
 			object? obj = propertyInfo.GetValue(item);
 			string? value = GetFormattedCellText(column, obj);
@@ -69,7 +68,7 @@ public static class DataGridExtensions
 			return null;
 
 		Type type = obj.GetType();
-		var sb = new StringBuilder();
+		StringBuilder sb = new();
 		foreach (DataGridColumn column in dataGrid.Columns)
 		{
 			// Buttons don't have a binding
@@ -140,7 +139,7 @@ public static class DataGridExtensions
 
 	private static string TableToCsv(List<ColumnInfo> columns, List<List<string>> contentRows)
 	{
-		var stringBuilder = new StringBuilder();
+		StringBuilder stringBuilder = new();
 		bool addComma = false;
 		foreach (ColumnInfo columnInfo in columns)
 		{
@@ -178,7 +177,7 @@ public static class DataGridExtensions
 		contentRows = [];
 		if (dataGrid == null || items == null) return;
 
-		var visibleColumns = new Dictionary<int, DataGridColumn>();
+		Dictionary<int, DataGridColumn> visibleColumns = [];
 
 		foreach (DataGridColumn dataColumn in dataGrid.Columns)
 		{
@@ -206,7 +205,7 @@ public static class DataGridExtensions
 		int maxLength = maxValueLength ?? MaxValueLength;
 		foreach (var item in items)
 		{
-			var stringCells = new List<string>();
+			List<string> stringCells = [];
 			foreach (DataGridColumn dataColumn in visibleColumns.Values)
 			{
 				if (dataColumn is DataGridBoundColumn boundColumn)

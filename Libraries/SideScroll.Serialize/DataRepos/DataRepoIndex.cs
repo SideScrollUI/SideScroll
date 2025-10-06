@@ -3,18 +3,11 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Serialize.DataRepos;
 
-public class DataRepoIndex(DataRepo dataRepo)
-{
-	public DataRepo DataRepo => dataRepo;
-
-	public record Item(long Index, string Key);
-}
-
-public class DataRepoIndexInstance<T>(DataRepoInstance<T> dataRepoInstance, int? maxItems = null)
+public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItems = null)
 {
 	public static TimeSpan MutexTimeout { get; set; } = TimeSpan.FromSeconds(5);
 
-	public DataRepoInstance<T> DataRepoInstance { get; set; } = dataRepoInstance;
+	public DataRepoInstance<T> DataRepoInstance => dataRepoInstance;
 
 	public int? MaxItems { get; set; } = maxItems;
 

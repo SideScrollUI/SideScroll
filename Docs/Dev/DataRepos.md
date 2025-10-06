@@ -84,7 +84,7 @@ public class TabSampleParamsDataTabs : ITab
 	}
 }
 ```
-[Source](../../Libraries/SideScroll.Tabs.Samples/Params/TabSampleParamsDataTabs.cs)
+[Source](../../Libraries/SideScroll.Tabs.Samples/Forms/TabSampleFormDataTabs.cs)
 
 ## Attributes
 

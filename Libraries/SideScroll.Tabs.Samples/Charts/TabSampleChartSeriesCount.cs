@@ -4,7 +4,7 @@ using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
 using SideScroll.Time;
 
-namespace SideScroll.Tabs.Samples.Chart;
+namespace SideScroll.Tabs.Samples.Charts;
 
 public class TabSampleChartSeriesCount : ITab
 {

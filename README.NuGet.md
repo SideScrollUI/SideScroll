@@ -54,7 +54,7 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 ## Samples
 
 * [Video Game Database](https://github.com/SideScrollUI/VideoGamesDB)
-* [SideScroll Samples](https://github.com/SideScrollUI/SideScroll/blob/main/Programs/SideScroll.Start.Avalonia/MainWindow.cs)
+* [SideScroll Samples](https://github.com/SideScrollUI/SideScroll/blob/main/Libraries/SideScroll.Avalonia.Samples/MainWindow.cs)
 
 ## License
 

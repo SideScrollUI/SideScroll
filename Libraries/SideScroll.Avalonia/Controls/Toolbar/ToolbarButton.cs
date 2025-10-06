@@ -1,4 +1,5 @@
 using Avalonia.Input;
+using SideScroll.Avalonia.Controls.Flyouts;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.Tasks;
@@ -19,7 +20,7 @@ public class ToolbarButton : TabImageButton
 		CallAction = toolButton.Action;
 		CallActionAsync = toolButton.ActionAsync;
 
-		if (toolButton.Default)
+		if (toolButton.IsDefault)
 		{
 			SetDefault();
 		}

@@ -48,11 +48,6 @@ public class Bookmark
 
 	public void MergeBookmarks(List<Bookmark> bookmarks)
 	{
-		/*var nodes = new List<Node>();
-		foreach (Bookmark bookmark in bookmarks)
-			nodes.Add(bookmark.node);
-		node.MergeNodes(nodes);*/
-
 		foreach (Bookmark bookmark in bookmarks)
 		{
 			TabBookmark.MergeNode(bookmark.TabBookmark);

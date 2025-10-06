@@ -10,6 +10,7 @@ using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Tasks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -52,10 +53,13 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonReset { get; set; } = new("Reset", Icons.Svg.Reset);
+		public ToolButton ButtonReset { get; set; } = new("Reset", Icons.Svg.Reset)
+		{
+			Flyout = new ConfirmationFlyoutConfig("Are you sure you want to reset this theme?", "Reset"),
+		};
 
 		[Separator]
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save);
+		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true);
 
 		[Separator]
 		public ToolButton ButtonCopy { get; set; } = new("Copy to Clipboard", Icons.Svg.Copy);
@@ -64,7 +68,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 	public class Instance(TabAvaloniaThemeSettings tab) : TabInstance
 	{
-		public AvaloniaThemeSettings ThemeSettings = tab.ThemeSettings.DeepClone()!;
+		public AvaloniaThemeSettings ThemeSettings = tab.ThemeSettings!.DeepClone();
 
 		private TabForm? _themeForm;
 
@@ -156,9 +160,13 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 		private void Save(Call call)
 		{
+			Validate();
+
 			ThemeSettings.ModifiedAt = DateTime.Now;
 			tab.DataViewCollection!.DataRepoView.Save(call, ThemeSettings);
 			UpdateTheme();
+
+			call.TaskInstance!.ShowMessage("Saved");
 		}
 
 		private void UpdateTheme()
@@ -181,22 +189,36 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 			_lastHistoryUpdatable = isUpdatable;
 		}
 
-		private void CopyToClipboard(Call call)
+		private static JsonSerializerOptions CreateJsonSerializerOptions()
 		{
 			var options = new JsonSerializerOptions { WriteIndented = true };
 			options.Converters.Add(new JsonColorConverter());
-			string json = JsonSerializer.Serialize(ThemeSettings, options);
+			return options;
+		}
+
+		private static JsonSerializerOptions _jsonSerializerOptions = CreateJsonSerializerOptions();
+
+		private void CopyToClipboard(Call call)
+		{
+			string json = JsonSerializer.Serialize(ThemeSettings, _jsonSerializerOptions);
 			ClipboardUtils.SetText(_themeForm, json);
+			call.TaskInstance!.ShowMessage("Copied to Clipboard");
 		}
 
 		private void ImportFromClipboard(Call call)
 		{
-			string json = ClipboardUtils.GetText(_themeForm)!;
+			try
+			{
+				string json = ClipboardUtils.TryGetText(_themeForm)!;
+				var theme = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, _jsonSerializerOptions)!;
+				LoadTheme(theme);
 
-			var options = new JsonSerializerOptions();
-			options.Converters.Add(new JsonColorConverter());
-			var theme = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, options)!;
-			LoadTheme(theme);
+				call.TaskInstance!.ShowMessage("Imported Theme");
+			}
+			catch (Exception e)
+			{
+				call.TaskInstance!.ShowMessage("Import Failed: " + e.Message);
+			}
 		}
 	}
 }

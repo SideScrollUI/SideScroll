@@ -36,7 +36,7 @@ public class HttpCache : IDisposable
 		}*/
 	}
 
-	public string BasePath { get; set; }
+	public string BasePath { get; }
 	public long Size => _dataStream.Length;
 
 	private readonly Dictionary<string, Entry> _cache = [];

@@ -34,7 +34,7 @@ public class TabSampleObjectProperties : ITab
 
 public class PropertyTest : INotifyPropertyChanged
 {
-	[Editing]
+	[EditColumn]
 	public bool Boolean
 	{
 		get => _boolean;

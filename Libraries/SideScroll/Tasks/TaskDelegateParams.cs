@@ -5,7 +5,7 @@ public delegate void CallActionParams(Call call, params object[] objects);
 public class TaskDelegateParams : TaskCreator
 {
 	public Call Call { get; set; }
-	public CallActionParams CallAction { get; init; }
+	public CallActionParams CallAction { get; }
 	public object[] Objects { get; set; }
 
 	public override string? ToString() => Label;
@@ -20,7 +20,7 @@ public class TaskDelegateParams : TaskCreator
 		Objects = objects;
 	}
 
-	protected override Action CreateAction(Call call)
+	public override Action CreateAction(Call call)
 	{
 		return () => InvokeAction(call);
 	}
@@ -33,6 +33,11 @@ public class TaskDelegateParams : TaskCreator
 		}
 		catch (Exception e)
 		{
+			if (call.TaskInstance is TaskInstance taskInstance)
+			{
+				taskInstance.Errored = true;
+				taskInstance.Message = e.Message;
+			}
 			call.Log.Add(e);
 		}
 	}

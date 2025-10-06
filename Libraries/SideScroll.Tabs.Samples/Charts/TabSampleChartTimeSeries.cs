@@ -4,9 +4,9 @@ using SideScroll.Extensions;
 using SideScroll.Time;
 using System.Drawing;
 
-namespace SideScroll.Tabs.Samples.Chart;
+namespace SideScroll.Tabs.Samples.Charts;
 
-public class TabSampleChartTimeSeriesFractional : ITab
+public class TabSampleChartTimeSeries : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -18,7 +18,7 @@ public class TabSampleChartTimeSeriesFractional : ITab
 
 			AddAnimals(model, endTime);
 			AddToys(model, endTime);
-			AddDecimalPrecision(model, endTime);
+			AddBirds(model, endTime);
 		}
 
 		private static DateTime AddAnimals(TabModel model, DateTime endTime)
@@ -26,15 +26,16 @@ public class TabSampleChartTimeSeriesFractional : ITab
 			var chartView = new ChartView("Animals")
 			{
 				ShowTimeTracker = true,
+				LogBase = 10,
 			};
 
-			chartView.AddSeries("Cats", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.5), seriesType: SeriesType.Average);
-			chartView.AddSeries("Dogs", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.25), seriesType: SeriesType.Average);
+			chartView.AddSeries("Cats", ChartSamples.CreateTimeSeries(endTime), seriesType: SeriesType.Average);
+			chartView.AddSeries("Dogs", ChartSamples.CreateTimeSeries(endTime), seriesType: SeriesType.Average);
 
 			chartView.Annotations.Add(new ChartAnnotation
 			{
 				Text = "Too Many",
-				Y = 0.5,
+				Y = 2_000_000_000,
 				Color = Color.Red,
 			});
 			model.AddObject(chartView);
@@ -47,18 +48,18 @@ public class TabSampleChartTimeSeriesFractional : ITab
 			{
 				ShowTimeTracker = true,
 			};
-			chartViewToys.AddSeries("Toys", ChartSamples.CreateIdenticalTimeSeries(endTime, value: 0.42), seriesType: SeriesType.Average);
+			chartViewToys.AddSeries("Toys", ChartSamples.CreateIdenticalTimeSeries(endTime), seriesType: SeriesType.Average);
 			model.AddObject(chartViewToys);
 		}
 
-		private static DateTime AddDecimalPrecision(TabModel model, DateTime endTime)
+		private static DateTime AddBirds(TabModel model, DateTime endTime)
 		{
-			var chartView = new ChartView("Decimal Precision")
+			var chartView = new ChartView("Birds")
 			{
 				ShowTimeTracker = true,
 			};
 
-			chartView.AddSeries("Percent", ChartSamples.CreateTimeSeries(endTime, minValue: 99.9999, maxValue: 100), seriesType: SeriesType.Average);
+			chartView.AddSeries("Birds", ChartSamples.CreateTimeSeries(endTime, minValue: 9999999, maxValue: 10000000), seriesType: SeriesType.Average);
 
 			model.AddObject(chartView);
 			return endTime;

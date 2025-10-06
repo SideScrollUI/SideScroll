@@ -71,19 +71,19 @@ public class TimeRangePeriod : ITags
 		DateTime minStartTime = periodTimeWindow.StartTime.Trim();
 		DateTime maxEndTime = periodTimeWindow.EndTime;
 
-		var timeRangePeriods = new List<TimeRangePeriod>();
+		List<TimeRangePeriod> timeRangePeriods = [];
 
 		for (int i = 0; i <= numPeriods; i++)
 		{
-			var bin = new TimeRangePeriod
+			TimeRangePeriod period = new()
 			{
 				StartTime = minStartTime.AddSeconds(i * periodSeconds),
 				EndTime = minStartTime.AddSeconds((i + 1) * periodSeconds),
 			};
-			timeRangePeriods.Add(bin);
+			timeRangePeriods.Add(period);
 		}
 
-		foreach (var timeRangeValue in timeRangeValues)
+		foreach (TimeRangeValue timeRangeValue in timeRangeValues)
 		{
 			if (double.IsNaN(timeRangeValue.Value))
 				continue;
@@ -99,37 +99,37 @@ public class TimeRangePeriod : ITags
 			for (DateTime valueBinStartTime = valueStartTime; valueBinStartTime < valueEndTime || !hasDuration;)
 			{
 				double offset = valueBinStartTime.Subtract(minStartTime).TotalSeconds;
-				int period = (int)(offset / periodSeconds);
-				Debug.Assert(period >= 0 && period < timeRangePeriods.Count);
-				TimeRangePeriod bin = timeRangePeriods[period];
+				int periodIndex = (int)(offset / periodSeconds);
+				Debug.Assert(periodIndex >= 0 && periodIndex < timeRangePeriods.Count);
+				TimeRangePeriod period = timeRangePeriods[periodIndex];
 
-				DateTime binStartTime = valueStartTime.Max(bin.StartTime);
-				DateTime binEndTime = valueEndTime.Min(bin.EndTime);
+				DateTime binStartTime = valueStartTime.Max(period.StartTime);
+				DateTime binEndTime = valueEndTime.Min(period.EndTime);
 
-				bin.MinStartTime = bin.MinStartTime?.Min(binStartTime) ?? binStartTime;
-				bin.MaxEndTime = bin.MaxEndTime?.Max(binEndTime) ?? binEndTime;
+				period.MinStartTime = period.MinStartTime?.Min(binStartTime) ?? binStartTime;
+				period.MaxEndTime = period.MaxEndTime?.Max(binEndTime) ?? binEndTime;
 
-				bin.MinValue = Math.Min(bin.MinValue, timeRangeValue.Value);
-				bin.MaxValue = Math.Max(bin.MaxValue, timeRangeValue.Value);
+				period.MinValue = Math.Min(period.MinValue, timeRangeValue.Value);
+				period.MaxValue = Math.Max(period.MaxValue, timeRangeValue.Value);
 
 				TimeSpan binDuration = binEndTime.Subtract(binStartTime);
-				bin.Count++;
-				bin.AllTags.AddRange(timeRangeValue.Tags);
+				period.Count++;
+				period.AllTags.AddRange(timeRangeValue.Tags);
 
 				if (hasDuration)
 				{
 					double totalSeconds = binDuration.Min(timeRangeValue.Duration).TotalSeconds;
 					//bin.Sum += binDuration.TotalSeconds / timeRangeValue.Duration.TotalSeconds * timeRangeValue.Value;
-					bin.Sum += binDuration.TotalSeconds / totalSeconds * timeRangeValue.Value;
-					bin.SummedDurations += binDuration;
-					bin.SummedSecondValues += totalSeconds * timeRangeValue.Value;
+					period.Sum += binDuration.TotalSeconds / totalSeconds * timeRangeValue.Value;
+					period.SummedDurations += binDuration;
+					period.SummedSecondValues += totalSeconds * timeRangeValue.Value;
 					valueBinStartTime += binDuration;
 				}
 				else
 				{
-					bin.Sum += timeRangeValue.Value;
-					bin.SummedDurations += periodDuration;
-					bin.SummedSecondValues += periodDuration.TotalSeconds * timeRangeValue.Value;
+					period.Sum += timeRangeValue.Value;
+					period.SummedDurations += periodDuration;
+					period.SummedSecondValues += periodDuration.TotalSeconds * timeRangeValue.Value;
 					break;
 				}
 			}
@@ -137,13 +137,13 @@ public class TimeRangePeriod : ITags
 
 		if (trimPeriods)
 		{
-			foreach (var bin in timeRangePeriods)
+			foreach (TimeRangePeriod period in timeRangePeriods)
 			{
-				if (bin.SummedDurations.TotalSeconds == 0.0)
+				if (period.SummedDurations.TotalSeconds == 0.0)
 					continue;
 
-				bin.StartTime = bin.MinStartTime ?? bin.StartTime;
-				bin.EndTime = bin.MaxEndTime ?? bin.EndTime;
+				period.StartTime = period.MinStartTime ?? period.StartTime;
+				period.EndTime = period.MaxEndTime ?? period.EndTime;
 			}
 		}
 		return timeRangePeriods;
@@ -156,8 +156,8 @@ public class TimeRangePeriod : ITags
 			return 0;
 
 		double totalSum = 0;
-		var totalDuration = TimeSpan.Zero;
-		foreach (var period in periods)
+		TimeSpan totalDuration = TimeSpan.Zero;
+		foreach (TimeRangePeriod period in periods)
 		{
 			totalDuration = totalDuration.Add(period.SummedDurations);
 			totalSum += period.SummedSecondValues;

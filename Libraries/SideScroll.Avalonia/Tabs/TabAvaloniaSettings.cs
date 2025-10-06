@@ -1,3 +1,4 @@
+using Avalonia.Controls;
 using SideScroll.Attributes;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Themes.Tabs;
@@ -8,6 +9,7 @@ using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Tasks;
 using SideScroll.Time;
 
 namespace SideScroll.Avalonia.Tabs;
@@ -20,10 +22,13 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonReset { get; set; } = new("Reset", Icons.Svg.Reset);
+		public ToolButton ButtonReset { get; set; } = new("Reset", Icons.Svg.Reset)
+		{
+			Flyout = new ConfirmationFlyoutConfig("Are you sure you want to reset the settings?", "Reset"),
+		};
 
 		[Separator]
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save);
+		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true);
 	}
 
 	public class Instance : TabInstance
@@ -32,6 +37,8 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 
 		public override void LoadUI(Call call, TabModel model)
 		{
+			model.MaxDesiredWidth = 500;
+
 			Toolbar toolbar = new();
 			toolbar.ButtonReset.Action = Reset;
 			toolbar.ButtonSave.Action = Save;
@@ -70,11 +77,13 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 		private void Save(Call call)
 		{
 			Data.App.Save(CustomUserSettings!);
-			Project.UserSettings = CustomUserSettings.DeepClone(call)!;
+			Project.UserSettings = CustomUserSettings!.DeepClone(call);
 
 			TimeZoneView.Current = Project.UserSettings.TimeZone;
 			DateTimeExtensions.DefaultFormatType = Project.UserSettings.TimeFormat;
 			ThemeManager.Instance?.LoadCurrentTheme();
+
+			call.TaskInstance!.ShowMessage("Saved Settings");
 		}
 	}
 }

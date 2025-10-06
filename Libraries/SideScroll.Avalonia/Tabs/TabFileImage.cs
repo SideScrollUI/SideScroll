@@ -46,7 +46,7 @@ public class TabFileImage : ITab, IFileTypeView
 
 		public string Path => tab.Path!;
 
-		public Image? Image;
+		private Image? _image;
 
 		public override void LoadUI(Call call, TabModel model)
 		{
@@ -58,7 +58,7 @@ public class TabFileImage : ITab, IFileTypeView
 				return;
 			}
 
-			Image = new Image
+			_image = new Image
 			{
 				VerticalAlignment = VerticalAlignment.Top,
 			};
@@ -69,16 +69,16 @@ public class TabFileImage : ITab, IFileTypeView
 				{
 					if (SvgUtils.TryGetSvgImage(call, Path, out IImage? imageSource))
 					{
-						Image.Source = imageSource;
+						_image.Source = imageSource;
 						model.MaxDesiredWidth = Math.Max(MinDesiredWidth, (int)imageSource.Size.Width);
 					}
 				}
 				else
 				{
-					Bitmap bitmap = ImageUtils.LoadImage(Image, Path);
+					Bitmap bitmap = ImageUtils.LoadImage(_image, Path);
 					model.MaxDesiredWidth = Math.Max(MinDesiredWidth, (int)bitmap.Size.Width);
 				}
-				model.AddObject(Image, true);
+				model.AddObject(_image, true);
 			}
 			catch (Exception ex)
 			{

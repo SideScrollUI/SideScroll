@@ -4,7 +4,7 @@ public delegate void CallAction(Call call);
 
 public class TaskDelegate : TaskCreator
 {
-	public CallAction Action { get; init; }
+	public CallAction Action { get; }
 
 	public override string? ToString() => Label;
 
@@ -27,7 +27,7 @@ public class TaskDelegate : TaskCreator
 		Description = description;
 	}
 
-	protected override Action CreateAction(Call call)
+	public override Action CreateAction(Call call)
 	{
 		return () => InvokeAction(call);
 	}
@@ -41,6 +41,11 @@ public class TaskDelegate : TaskCreator
 		}
 		catch (Exception e)
 		{
+			if (call.TaskInstance is TaskInstance taskInstance)
+			{
+				taskInstance.Errored = true;
+				taskInstance.Message = e.Message;
+			}
 			call.Log.Add(e);
 		}
 	}

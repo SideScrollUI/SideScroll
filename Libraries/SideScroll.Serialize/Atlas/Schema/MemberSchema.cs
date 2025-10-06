@@ -3,13 +3,13 @@ using System.Reflection;
 
 namespace SideScroll.Serialize.Atlas.Schema;
 
-public class MemberSchema
+public class MemberSchema(TypeSchema typeSchema, string name, int typeIndex = -1)
 {
-	public TypeSchema OwnerTypeSchema { get; }
+	public TypeSchema OwnerTypeSchema => typeSchema;
 
-	public string Name { get; }
+	public string Name => name;
 
-	public int TypeIndex { get; set; } = -1;
+	public int TypeIndex { get; set; } = typeIndex;
 
 	public Type? Type { get; protected set; }
 	public Type? NonNullableType { get; protected set; }
@@ -18,11 +18,7 @@ public class MemberSchema
 	public bool IsPublic { get; protected set; }
 	public bool IsReadable { get; set; }
 
-	public MemberSchema(TypeSchema typeSchema, string name)
-	{
-		OwnerTypeSchema = typeSchema;
-		Name = name;
-	}
+	public override string ToString() => Name;
 
 	public void Save(BinaryWriter writer)
 	{
@@ -35,24 +31,23 @@ public class MemberSchema
 		string name = reader.ReadString();
 		int typeIndex = reader.ReadInt16();
 
-		if (typeSchema.Type == null) return new MemberSchema(typeSchema, name);
+		if (typeSchema.Type == null) return new MemberSchema(typeSchema, name, typeIndex);
 
-		var members = typeSchema.Type.GetMember(name, TypeSchema.BindingAttributes);
+		MemberInfo? memberInfo = typeSchema.GetMemberInfo(name);
 
-		if (members.Length > 0 && (serializer.EnableFieldToPropertyMapping || members[0] is T))
+		if (memberInfo != null && (serializer.EnableFieldToPropertyMapping || memberInfo is T))
 		{
-			// Flattened Binding used so there's only one
-			if (members[0] is FieldInfo fieldInfo)
+			if (memberInfo is FieldInfo fieldInfo)
 			{
-				return new FieldSchema(typeSchema, fieldInfo);
+				return new FieldSchema(typeSchema, fieldInfo, typeIndex);
 			}
 
-			if (members[0] is PropertyInfo propertyInfo)
+			if (memberInfo is PropertyInfo propertyInfo)
 			{
-				return new PropertySchema(typeSchema, propertyInfo);
+				return new PropertySchema(typeSchema, propertyInfo, typeIndex);
 			}
 		}
-		return new MemberSchema(typeSchema, name);
+		return new MemberSchema(typeSchema, name, typeIndex);
 	}
 
 	protected bool GetIsPrivate(MemberInfo memberInfo)

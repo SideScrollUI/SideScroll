@@ -4,8 +4,14 @@ namespace SideScroll.Extensions;
 
 public static class TimeSpanExtensions
 {
+	/// <summary>
+	/// Represents a time unit with its TimeSpan value and display name
+	/// </summary>
 	public record TimeUnit(TimeSpan TimeSpan, string Name);
 
+	/// <summary>
+	/// List of common time units for formatting (Year, Week, Day, Hour, Minute, Second, Millisecond)
+	/// </summary>
 	public static List<TimeUnit> TimeUnits { get; set; } =
 	[
 		new(TimeSpan.FromDays(365.25), "Year"),
@@ -17,6 +23,9 @@ public static class TimeSpanExtensions
 		new(TimeSpan.FromMilliseconds(1), "Millisecond"),
 	];
 
+	/// <summary>
+	/// Formats a TimeSpan as a decimal number with the largest appropriate time unit (e.g., "3.5 Hours")
+	/// </summary>
 	public static string FormattedDecimal(this TimeSpan timeSpan)
 	{
 		string format = "#,0.#";
@@ -39,7 +48,14 @@ public static class TimeSpanExtensions
 		return timeSpan.TotalSeconds + " Seconds";
 	}
 
-	// Only show required units, with 3 optional decimal places
+	/// <summary>
+	/// Formats a TimeSpan in a compact format showing only required units with up to 3 optional decimal places. Format: [d:]h:mm:ss[.fff]
+	/// - Shows days only if > 0 (e.g., "2:1:23:45" for 2 days 1 hour)
+	/// - Shows hours only if > 0 (e.g., "1:23:45" for 1 hour)
+	/// - Shows minutes only if > 0, with zero-padded seconds (e.g., "2:30" for 2 minutes 30 seconds)
+	/// - Always shows seconds (e.g., "45" for 45 seconds)
+	/// - Shows milliseconds only if > 0, with trailing zeros trimmed (e.g., "1:23:45.12" or "45.5")
+	/// </summary>
 	public static string FormattedShort(this TimeSpan timeSpan)
 	{
 		StringBuilder sb = new();
@@ -82,6 +98,9 @@ public static class TimeSpanExtensions
 		return sb.ToString();
 	}
 
+	/// <summary>
+	/// List of commonly used TimeSpan durations for UI selection
+	/// </summary>
 	public static List<TimeSpan> CommonTimeSpans { get; set; } =
 	[
 		TimeSpan.FromSeconds(1),
@@ -103,6 +122,9 @@ public static class TimeSpanExtensions
 		TimeSpan.FromDays(28),
 	];
 
+	/// <summary>
+	/// Calculates an appropriate period duration for dividing a TimeSpan into the specified number of periods
+	/// </summary>
 	public static TimeSpan PeriodDuration(this TimeSpan timeSpan, int numPeriods = 100)
 	{
 		TimeSpan maxPeriodDuration = timeSpan.Multiply(2.0 / numPeriods);
@@ -114,26 +136,41 @@ public static class TimeSpanExtensions
 		return CommonTimeSpans.First();
 	}
 
+	/// <summary>
+	/// Trims a TimeSpan to the specified tick precision, removing fractional ticks (default: seconds)
+	/// </summary>
 	public static TimeSpan Trim(this TimeSpan timeSpan, long ticks = TimeSpan.TicksPerSecond)
 	{
 		return new TimeSpan(timeSpan.Ticks - (timeSpan.Ticks % ticks));
 	}
 
+	/// <summary>
+	/// Trims a TimeSpan to the specified rounding interval precision
+	/// </summary>
 	public static TimeSpan Trim(this TimeSpan timeSpan, TimeSpan roundingInterval)
 	{
 		return Trim(timeSpan, roundingInterval.Ticks);
 	}
 
+	/// <summary>
+	/// Rounds a TimeSpan up to the next tick interval (default: seconds)
+	/// </summary>
 	public static TimeSpan Ceil(this TimeSpan timeSpan, long ticks = TimeSpan.TicksPerSecond)
 	{
 		return new TimeSpan(ticks * ((timeSpan.Ticks + ticks - 1) / ticks));
 	}
 
+	/// <summary>
+	/// Returns the longer of two TimeSpan values
+	/// </summary>
 	public static TimeSpan Max(this TimeSpan first, TimeSpan second)
 	{
 		return new TimeSpan(Math.Max(first.Ticks, second.Ticks));
 	}
 
+	/// <summary>
+	/// Returns the shorter of two TimeSpan values
+	/// </summary>
 	public static TimeSpan Min(this TimeSpan first, TimeSpan second)
 	{
 		return new TimeSpan(Math.Min(first.Ticks, second.Ticks));

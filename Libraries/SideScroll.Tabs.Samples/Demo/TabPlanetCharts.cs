@@ -1,7 +1,7 @@
 using SideScroll.Charts;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
-using SideScroll.Tabs.Samples.Chart;
+using SideScroll.Tabs.Samples.Charts;
 using SideScroll.Tabs.Samples.Models;
 using SideScroll.Time;
 

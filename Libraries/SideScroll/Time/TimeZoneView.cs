@@ -28,7 +28,7 @@ public class TimeZoneView : IComparable
 		{
 			TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(id);
 		}
-		catch (Exception)
+		catch (TimeZoneNotFoundException)
 		{
 			TimeZoneInfo = TimeZoneInfo.CreateCustomTimeZone(id, timeSpan, name, name);
 		}

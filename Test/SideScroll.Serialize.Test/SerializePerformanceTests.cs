@@ -12,7 +12,7 @@ public class SerializePerformanceTests : SerializeBaseTest
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
-		Initialize("TestSerializePerformance");
+		Initialize("SerializePerformance");
 	}
 
 	[SetUp]

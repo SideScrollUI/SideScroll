@@ -24,12 +24,14 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 	public static int MaxPointsToShowMarkers { get; set; } = 8;
 	public static double DefaultGeometrySize { get; set; } = 5;
 
-	public TabLiveChart Chart { get; init; }
-	public ListSeries ListSeries { get; init; }
-	public bool UseDateTimeAxis { get; set; }
+	public TabLiveChart Chart { get; }
+	public ListSeries ListSeries { get; }
+	public bool UseDateTimeAxis { get; }
 
 	public LiveChartLineSeries LineSeries { get; set; }
 	public List<LiveChartPoint> DataPoints { get; set; } = [];
+
+	public SKColor SkColor { get; protected set; }
 
 	public override string? ToString() => ListSeries?.ToString();
 
@@ -39,7 +41,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		ListSeries = listSeries;
 		UseDateTimeAxis = useDateTimeAxis;
 
-		SKColor skColor = color.AsSkColor();
+		SkColor = color.AsSkColor();
 
 		// Can't add gaps with ItemSource so convert to LiveChartPoint ourselves
 		DataPoints = GetDataPoints(listSeries, listSeries.List);
@@ -52,17 +54,13 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 			GeometrySize = listSeries.MarkerSize ?? DefaultGeometrySize,
 			EnableNullSplitting = true,
 
-			Stroke = new SolidColorPaint(skColor, (float)listSeries.StrokeThickness),
+			Stroke = new SolidColorPaint(SkColor, (float)listSeries.StrokeThickness),
 			GeometryStroke = null,
 			GeometryFill = null,
 			Fill = null,
 		};
 
-		if (listSeries.List.Count > 0 && listSeries.List.Count <= MaxPointsToShowMarkers || HasSinglePoint(DataPoints))
-		{
-			//LineSeries.GeometryStroke = new SolidColorPaint(skColor, 2f);
-			LineSeries.GeometryFill = new SolidColorPaint(skColor);
-		}
+		UpdateMarkers();
 
 		if (listSeries.List is INotifyCollectionChanged notifyCollectionChanged)
 		{
@@ -71,6 +69,19 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 				// Can we remove this later when disposing?
 				SeriesChanged(listSeries, e);
 			});
+		}
+	}
+
+	private void UpdateMarkers()
+	{
+		if (ListSeries.List.Count > 0 && ListSeries.List.Count <= MaxPointsToShowMarkers || HasSinglePoint(DataPoints))
+		{
+			//LineSeries.GeometryStroke = new SolidColorPaint(skColor, 2f);
+			LineSeries.GeometryFill = new SolidColorPaint(SkColor);
+		}
+		else
+		{
+			LineSeries.GeometryFill = null;
 		}
 	}
 
@@ -100,7 +111,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		return title;
 	}
 
-	public string[] GetTooltipLines(ChartPoint point)
+	public List<string> GetTooltipLines(ChartPoint point)
 	{
 		List<string> lines = [];
 
@@ -125,7 +136,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 					}
 					else
 					{
-						lines.Add($"Time: {startTime.Formatted()}");
+						lines.Add($"Time: {startTime.Format()}");
 					}
 				}
 				else
@@ -150,13 +161,13 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 			lines.Add("");
 			lines.AddRange(ListSeries.Description.Split('\n'));
 		}
-		return lines.ToArray();
+		return lines;
 	}
 
 	private List<LiveChartPoint> GetDataPoints(ListSeries listSeries, IList iList)
 	{
 		double x = DataPoints.Count;
-		var chartPoints = new List<LiveChartPoint>();
+		List<LiveChartPoint> chartPoints = [];
 		// Faster than using ItemSource?
 		foreach (object obj in iList)
 		{
@@ -240,7 +251,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		}
 
 		bool prevNan = false;
-		var binDataPoints = new List<LiveChartPoint>();
+		List<LiveChartPoint> binDataPoints = [];
 		for (int i = 0; i < numBins; i++)
 		{
 			double value = bins[i];
@@ -278,6 +289,8 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 					DataPoints.RemoveAll(point => point.X == datapoint.X);
 				}
 			}
+
+			UpdateMarkers();
 		}
 
 		Dispatcher.UIThread.InvokeAsync(Chart.Refresh, DispatcherPriority.Background);

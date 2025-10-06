@@ -47,6 +47,7 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 
 ## Documentation
 
+* [Project Setup](Docs/Dev/ProjectSetup.md)
 * [Development](Docs/Dev/Development.md)
 * [User Guide](Docs/UserGuide.md)
 * [Credits](Docs/Credits.md)
@@ -54,7 +55,7 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 ## Samples
 
 Try one of the samples out to see SideScroll in action
-* [Tab Samples](/Programs/SideScroll.Start.Avalonia/MainWindow.cs) - Inside this repo
+* [Tab Samples](/Libraries/SideScroll.Avalonia.Samples/MainWindow.cs) - Inside this repo
 * [Video Game Database](https://github.com/SideScrollUI/VideoGamesDB) - Sample external project
 
 ## License

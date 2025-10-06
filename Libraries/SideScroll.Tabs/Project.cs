@@ -61,7 +61,7 @@ public class Project
 
 	public Project Open(LinkedBookmark linkedBookmark)
 	{
-		UserSettings userSettings = UserSettings.DeepClone()!;
+		UserSettings userSettings = UserSettings.DeepClone();
 		userSettings.DataSettings.LinkId = linkedBookmark.LinkId;
 		var project = new Project(ProjectSettings, userSettings)
 		{
@@ -96,7 +96,7 @@ public class Project
 
 public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings userSettings)
 {
-	protected DataSettings DataSettings => userSettings.DataSettings;
+	public DataSettings DataSettings => userSettings.DataSettings;
 
 	public DataRepo App => new(AppPath);
 	public DataRepo Cache => new(CachePath);

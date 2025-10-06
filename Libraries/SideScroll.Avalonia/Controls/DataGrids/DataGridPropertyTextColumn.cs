@@ -18,8 +18,8 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 	public static int EnableWordWrapMinStringLength { get; set; } = 64; // Don't enable wordwrap unless we have to (expensive and not always wanted)
 	public static int MaxRowScanProperties { get; set; } = 30;
 
-	public DataGrid DataGrid { get; init; }
-	public PropertyInfo PropertyInfo { get; set; }
+	public DataGrid DataGrid { get; }
+	public PropertyInfo PropertyInfo { get; }
 
 	public int MinDesiredWidth { get; set; } = 25;
 	public int MaxDesiredWidth { get; set; } = 500;

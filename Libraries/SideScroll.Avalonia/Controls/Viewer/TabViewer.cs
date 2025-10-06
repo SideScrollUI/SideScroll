@@ -51,26 +51,11 @@ public class TabViewer : Grid
 	public TabViewer(Project project)
 	{
 		BaseViewer = this;
-		LoadProject(project);
-	}
 
-	[MemberNotNull(nameof(Project)), MemberNotNull(nameof(BottomGrid)), MemberNotNull(nameof(ScrollViewer)), MemberNotNull(nameof(ContentGrid))]
-	public void LoadProject(Project project)
-	{
-		Project = project;
-
-		InitializeComponent();
-	}
-
-	[MemberNotNull(nameof(BottomGrid)), MemberNotNull(nameof(ScrollViewer)), MemberNotNull(nameof(ContentGrid))]
-	private void InitializeComponent()
-	{
 		// Toolbar
 		// ScrollViewer | Buttons
 		ColumnDefinitions = new ColumnDefinitions("*");
 		RowDefinitions = new RowDefinitions("Auto,*");
-
-		AddToolbar();
 
 		BottomGrid = new Grid
 		{
@@ -111,6 +96,16 @@ public class TabViewer : Grid
 
 		BottomGrid.Children.Add(scrollButtons);
 
+		LoadProject(project);
+	}
+
+	[MemberNotNull(nameof(Project))]
+	public void LoadProject(Project project)
+	{
+		Project = project;
+
+		AddToolbar();
+
 		Plugins.ForEach(plugin => plugin.Initialize(this));
 	}
 
@@ -120,7 +115,7 @@ public class TabViewer : Grid
 			return;
 
 		Toolbar = new TabViewerToolbar(this);
-		Toolbar.ButtonLink?.AddAsync(LinkAsync);
+		Toolbar.ButtonLink?.AddAsync(CreateLinkAsync);
 		Toolbar.ButtonImport?.AddAsync(ImportClipboardLinkAsync);
 		Children.Add(Toolbar);
 	}
@@ -132,13 +127,15 @@ public class TabViewer : Grid
 		TabView!.Instance.Reload();
 	}
 
-	private async Task LinkAsync(Call call)
+	private async Task CreateLinkAsync(Call call)
 	{
+		var buttonLink = Toolbar!.ButtonLink!;
+
 		Flyout flyout = new()
 		{
 			Placement = PlacementMode.BottomEdgeAlignedLeft,
 		};
-		AvaloniaUtils.ShowFlyout(Toolbar!.ButtonLink!, flyout, "Creating Link ...");
+		AvaloniaUtils.ShowFlyout(buttonLink, flyout, "Creating Link ...");
 
 		Bookmark bookmark = TabView!.Instance.CreateBookmark();
 		TabBookmark? leafNode = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
@@ -161,22 +158,30 @@ public class TabViewer : Grid
 
 			LinkManager.Instance?.Created.AddNew(call, linkUri, bookmark);
 			await ClipboardUtils.SetTextAsync(this, linkUri.ToString());
-			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonLink!, flyout, "Link copied to clipboard");
+			AvaloniaUtils.ShowFlyout(buttonLink, flyout, "Link copied to clipboard");
 		}
 		catch (Exception ex)
 		{
-			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonLink!, flyout, ex.Message);
+			AvaloniaUtils.ShowFlyout(buttonLink, flyout, ex.Message);
 		}
 	}
 
 	private async Task ImportClipboardLinkAsync(Call call)
 	{
-		string? clipboardText = await ClipboardUtils.GetTextAsync(this);
+		string? clipboardText = await ClipboardUtils.TryGetTextAsync(this);
 		if (clipboardText == null) return;
 
 		if (LinkUri.TryParse(clipboardText, out LinkUri? linkUri))
 		{
 			await ImportLinkAsync(call, linkUri, true);
+		}
+		else
+		{
+			Flyout flyout = new()
+			{
+				Placement = PlacementMode.BottomEdgeAlignedLeft,
+			};
+			AvaloniaUtils.ShowFlyout(Toolbar!.ButtonImport!, flyout, "Failed to parse Clipboard text");
 		}
 	}
 
@@ -248,7 +253,7 @@ public class TabViewer : Grid
 
 		if (LinkManager.Instance != null && bookmark.Imported)
 		{
-			// Add Bookmark to bookmark manager
+			// Add Bookmark to Link Manager
 			TabView!.Instance.SelectPath("Links", "Imported"); // Select path first so the child tab autoselects the new bookmark
 			LinkManager.Instance.Imported.AddNew(call, linkUri, bookmark);
 			ScrollViewer.Offset = new Vector(0, 0);
@@ -365,8 +370,8 @@ public class TabViewer : Grid
 		ScrollViewer.Offset = new Vector(minXOffset, ScrollViewer.Offset.Y);
 	}
 
-	// How to set the main Content
-	public TabInstance AddTab(ITab tab)
+	// Load the main Tab Content
+	public TabInstance LoadTab(ITab tab)
 	{
 		TabInstance tabInstance = tab.Create();
 		tabInstance.Model.Name = "Start";
@@ -386,7 +391,7 @@ public class TabViewer : Grid
 		{
 			tabInstance.TabBookmark = LoadBookmark.TabBookmark;
 		}
-		else if (Project.UserSettings.AutoLoad) // did we load successfully last time?
+		else if (Project.UserSettings.AutoSelect)
 		{
 			tabInstance.LoadDefaultBookmark();
 		}
@@ -394,7 +399,6 @@ public class TabViewer : Grid
 		TabView = new TabView(tabInstance);
 		TabView.Load();
 
-		//scrollViewer.Content = tabView;
 		ContentGrid.Children.Add(TabView);
 
 		return tabInstance;

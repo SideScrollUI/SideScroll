@@ -1,4 +1,3 @@
-using SideScroll.Attributes;
 using SideScroll.Collections;
 using SideScroll.Tasks;
 
@@ -36,7 +35,7 @@ public class TabSampleGridCollectionSize : ITab
 			for (int i = 0; i < count; i++)
 			{
 				int number = _items.Count;
-				var testItem = new TestItem
+				TestItem testItem = new()
 				{
 					SmallNumber = number
 				};
@@ -52,12 +51,6 @@ public class TabSampleGridCollectionSize : ITab
 
 	public class TestItem
 	{
-		[ButtonColumn("-")]
-		public void Click()
-		{
-
-		}
-
 		public int SmallNumber { get; set; } = 123;
 		public long BigNumber { get; set; } = 1234567890123456789;
 		public string LongText { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";

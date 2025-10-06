@@ -40,29 +40,9 @@ public class SerializerHeader
 				new Tag("Found", sideId)));
 		}
 
-		// Peek next byte to determine if it's a string length (v1) or binary version (v2+)
-		int peekByte = reader.PeekChar();
-		if (peekByte == 1)
-		{
-			// Likely v1: version as string
-			string versionStr = reader.ReadString();
-			Version = versionStr switch
-			{
-				"1" => 1,
-				_ => throw new SerializerException("Unsupported string version",
-							new Tag("Version", versionStr))
-			};
-
-			Name = reader.ReadString();
-			FileSize = reader.ReadInt64();
-		}
-		else
-		{
-			// v2+: version is ushort
-			Version = reader.ReadUInt16();
-			FileSize = reader.ReadInt64();
-			Name = reader.ReadString();
-		}
+		Version = reader.ReadUInt16();
+		FileSize = reader.ReadInt64();
+		Name = reader.ReadString();
 
 		if (!requiredName.IsNullOrEmpty() && Name != requiredName)
 		{

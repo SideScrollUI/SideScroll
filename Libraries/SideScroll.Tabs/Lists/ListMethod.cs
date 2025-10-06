@@ -13,7 +13,7 @@ public class ListMethod : ListMember
 	private bool _valueCached;
 	private object? _valueObject;
 
-	[Editing, InnerValue, WordWrap]
+	[EditColumn, InnerValue, WordWrap]
 	public override object? Value
 	{
 		get

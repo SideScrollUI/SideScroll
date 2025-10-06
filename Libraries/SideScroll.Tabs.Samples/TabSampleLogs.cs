@@ -4,7 +4,7 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Samples;
 
-public class TabSampleLog : ITab
+public class TabSampleLogs : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -55,8 +55,8 @@ public class TabSampleLog : ITab
 		private void SyncTaskThread(Call call)
 		{
 			Log logChild = call.Log.Call("Child");
-			CancellationToken token = call.TaskInstance!.TokenSource.Token;
-			for (int i = 0; !token.IsCancellationRequested; i++)
+			CancellationToken cancelToken = call.TaskInstance!.CancelToken;
+			for (int i = 0; !cancelToken.IsCancellationRequested; i++)
 			{
 				AddNextEntry(call, logChild);
 				Thread.Sleep(1000);
@@ -66,7 +66,7 @@ public class TabSampleLog : ITab
 		private async Task ASyncTaskThreadAsync(Call call)
 		{
 			Log logChild = call.Log.Call("Child");
-			CancellationToken token = call.TaskInstance!.TokenSource.Token;
+			CancellationToken token = call.TaskInstance!.CancelToken;
 			for (int i = 0; !token.IsCancellationRequested; i++)
 			{
 				AddNextEntry(call, logChild);

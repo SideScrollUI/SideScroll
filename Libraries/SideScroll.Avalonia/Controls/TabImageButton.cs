@@ -5,6 +5,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
+using SideScroll.Avalonia.Controls.Flyouts;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
@@ -16,7 +17,7 @@ namespace SideScroll.Avalonia.Controls;
 public class TabImageButton : Button, IDisposable
 {
 	public string? Label { get; set; }
-	public string? Tooltip { get; set; }
+	public string? Tooltip { get; }
 
 	public IResourceView ImageResource { get; set; }
 	public double IconSize { get; set; } = 24;
@@ -184,7 +185,7 @@ public class TabImageButton : Button, IDisposable
 			TimeSpan timeSpan = DateTime.UtcNow.Subtract(_lastInvoked.Value);
 			if (canDelay && timeSpan < MinWaitTime)
 			{
-				// Rate limiting can delay these
+				// Rate limit request
 				if (_dispatcherTimer == null)
 				{
 					_dispatcherTimer = new DispatcherTimer
@@ -194,7 +195,9 @@ public class TabImageButton : Button, IDisposable
 					_dispatcherTimer.Tick += DispatcherTimer_Tick;
 				}
 				if (!_dispatcherTimer.IsEnabled)
+				{
 					_dispatcherTimer.Start();
+				}
 				return;
 			}
 		}
@@ -219,9 +222,12 @@ public class TabImageButton : Button, IDisposable
 		}
 
 		// Only allow one since we don't block for completion of first
-		if (StartTaskAsync() == null)
+		if ((StartTaskAsync() ?? StartTask()) is TaskInstance taskInstance)
 		{
-			StartTask();
+			if (taskInstance.Errored)
+			{
+				ShowFlyout(taskInstance.Message ?? $"{Name} Failed");
+			}
 		}
 	}
 
@@ -235,17 +241,7 @@ public class TabImageButton : Button, IDisposable
 		{
 			OnComplete = () => IsActive = false,
 		};
-
-		if (TabInstance != null)
-		{
-			return TabInstance.StartTask(taskDelegate, ShowTask);
-		}
-		else
-		{
-			var call = new Call(taskDelegate.Label);
-			TaskInstance taskInstance = taskDelegate.Start(call);
-			return taskInstance;
-		}
+		return StartTask(taskDelegate);
 	}
 
 	private TaskInstance? StartTask()
@@ -258,15 +254,22 @@ public class TabImageButton : Button, IDisposable
 		{
 			OnComplete = () => IsActive = false,
 		};
+		return StartTask(taskDelegate);
+	}
 
+	private TaskInstance? StartTask(TaskCreator taskCreator)
+	{
 		if (TabInstance != null)
 		{
-			return TabInstance!.StartTask(taskDelegate, ShowTask);
+			TaskInstance taskInstance = TabInstance.CreateTask(taskCreator, ShowTask);
+			taskInstance.OnShowMessage += (_, e) => ShowFlyout(e.Message);
+			taskInstance.Start();
+			return taskInstance;
 		}
 		else
 		{
-			var call = new Call(taskDelegate.Label);
-			TaskInstance taskInstance = taskDelegate.Start(call);
+			var call = new Call(taskCreator.Label);
+			TaskInstance taskInstance = taskCreator.Start(call);
 			return taskInstance;
 		}
 	}
@@ -292,6 +295,15 @@ public class TabImageButton : Button, IDisposable
 		{
 			call.Log.Add(e);
 		}
+	}
+
+	protected void ShowFlyout(string message)
+	{
+		MessageFlyout flyout = new(message)
+		{
+			Placement = PlacementMode.BottomEdgeAlignedLeft,
+		};
+		flyout.ShowAt(this);
 	}
 
 	protected override void OnPointerEntered(PointerEventArgs e)

@@ -46,6 +46,7 @@ public class SerializeCollectionTests : SerializeBaseTest
 		_serializer.Save(Call, input);
 		byte[] output = _serializer.Load<byte[]>(Call);
 		Assert.That(output, Is.Not.Null);
+		Assert.That(output, Is.EqualTo(input));
 	}
 
 	private class MultipleArrays

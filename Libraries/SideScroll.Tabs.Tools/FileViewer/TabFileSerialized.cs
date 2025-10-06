@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Collections;
 using SideScroll.Serialize.Atlas;
 using SideScroll.Tabs.Lists;
@@ -5,6 +6,7 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
 
+[PrivateData]
 public class TabFileSerialized(string path) : ITab
 {
 	public string Path => path;
@@ -44,7 +46,7 @@ public class TabFileSerialized(string path) : ITab
 				call.Log.Add(ex);
 			}
 
-			_items.Add(new ListItem("Bytes", ListByte.Load(_serializerFile.DataPath!)));
+			_items.Add(new ListItem("Bytes", new TabFileBytes(_serializerFile.DataPath!)));
 		}
 
 		private void LoadPublicData(Call call)

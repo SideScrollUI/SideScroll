@@ -148,7 +148,7 @@ public class TabChartSizes : ITab
 	}
 }
 ```
-[Source](../../Programs/SideScroll.Start.Avalonia/Charts/TabChartSizes.cs)
+[Source](../../Libraries/SideScroll.Avalonia.Samples/Charts/TabChartSizes.cs)
 
 ## Links
 

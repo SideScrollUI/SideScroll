@@ -178,7 +178,7 @@ public class TabSplitGrid : Grid
 	{
 		//AddRowDefinition(false, rowIndex);
 
-		var gridSplitter = new TabSplitter
+		TabSplitter gridSplitter = new()
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			ResizeDirection = GridResizeDirection.Rows,
@@ -192,7 +192,7 @@ public class TabSplitGrid : Grid
 
 	protected void AddVerticalGridSplitter(int columnIndex)
 	{
-		var gridSplitter = new TabSplitter
+		TabSplitter gridSplitter = new()
 		{
 			VerticalAlignment = VerticalAlignment.Stretch,
 			ResizeDirection = GridResizeDirection.Columns,
@@ -208,7 +208,7 @@ public class TabSplitGrid : Grid
 		//if (Children.Count <= 1)
 		//	return;
 
-		var border = new Border
+		Border border = new()
 		{
 			//Width = 100,
 			Height = 6,
@@ -246,7 +246,7 @@ public class TabSplitGrid : Grid
 		int newIndex = 1;
 		foreach (Control control in orderedControls)
 		{
-			var item = new Item
+			Item item = new()
 			{
 				Control = control,
 				GridLength = GridLength.Star,

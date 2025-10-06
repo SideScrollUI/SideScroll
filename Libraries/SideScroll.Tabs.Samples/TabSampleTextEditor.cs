@@ -42,7 +42,7 @@ public class TabSampleTextEditor : ITab
 
 		private static string GetLines(int lines)
 		{
-			var sb = new StringBuilder();
+			StringBuilder sb = new();
 			for (int i = 0; i < lines; i++)
 			{
 				sb.Append("Lots of Lines\n");
@@ -59,7 +59,7 @@ public class TabSampleTextEditor : ITab
 
 		private static string GetString(int length)
 		{
-			var sb = new StringBuilder();
+			StringBuilder sb = new();
 			while (sb.Length < length)
 			{
 				sb.Append("Long String ");

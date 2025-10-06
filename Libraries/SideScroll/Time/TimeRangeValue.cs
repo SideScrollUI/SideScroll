@@ -86,7 +86,7 @@ public class TimeRangeValue : ITags
 		TimeSpan minGap = GetMinGap(sorted, periodDuration);
 
 		DateTime? prevTime = null;
-		var output = new List<TimeRangeValue>();
+		List<TimeRangeValue> output = [];
 		foreach (TimeRangeValue point in sorted)
 		{
 			DateTime startTime = point.StartTime;
@@ -95,7 +95,7 @@ public class TimeRangeValue : ITags
 				DateTime expectedTime = prevTime.Value.Add(minGap);
 				if (expectedTime < startTime)
 				{
-					var insertedPoint = new TimeRangeValue
+					TimeRangeValue insertedPoint = new()
 					{
 						StartTime = expectedTime.ToUniversalTime(),
 						EndTime = startTime.ToUniversalTime(),
@@ -114,7 +114,7 @@ public class TimeRangeValue : ITags
 
 	public static List<TimeRangeValue> AddGaps(List<TimeRangeValue> input, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
 	{
-		var output = new List<TimeRangeValue>();
+		List<TimeRangeValue> output = [];
 		if (input.Count == 0)
 		{
 			AddGap(startTime, endTime, periodDuration, output);
@@ -164,7 +164,7 @@ public class TimeRangeValue : ITags
 
 		// Merge continuous points with the same value together to improve storage speeds
 		TimeRangeValue? firstValue = null;
-		var merged = new List<TimeRangeValue>();
+		List<TimeRangeValue> merged = [];
 		foreach (TimeRangeValue timeRangeValue in sorted)
 		{
 			TimeRangeValue? previousValue = merged.LastOrDefault();
@@ -198,7 +198,7 @@ public class TimeRangeValue : ITags
 
 	private static void AddGap(DateTime startTime, DateTime endTime, TimeSpan periodDuration, List<TimeRangeValue> output)
 	{
-		var timeRangeValue = new TimeRangeValue
+		TimeRangeValue timeRangeValue = new()
 		{
 			StartTime = startTime,
 			EndTime = endTime,

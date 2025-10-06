@@ -10,7 +10,7 @@ namespace SideScroll.Avalonia.Charts;
 
 public abstract class TabChartLegend<TSeries> : Grid
 {
-	public TabChart<TSeries> TabChart { get; init; }
+	public TabChart<TSeries> TabChart { get; }
 	public ChartView ChartView => TabChart.ChartView;
 
 	public List<TabChartLegendItem<TSeries>> LegendItems { get; protected set; } = [];
@@ -66,7 +66,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 	{
 		var seriesType = SeriesType.Other;
 
-		foreach (var series in ChartView.Series)
+		foreach (ListSeries series in ChartView.Series)
 		{
 			if (seriesType == SeriesType.Other)
 			{

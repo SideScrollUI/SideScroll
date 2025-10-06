@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <EmbeddedResource Remove="Themes\Controls\ControlThemes.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\DataGridButton.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabButton.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlToolbar.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabForm.xaml" />
@@ -76,6 +77,9 @@
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\Fonts\SourceCodePro-Regular.ttf" />
+    <AvaloniaResource Include="Themes\Controls\DataGridButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabButton.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>

@@ -26,7 +26,7 @@ public class DeepCloneTests : SerializeBaseTest
 	{
 		var input = new StringClass();
 
-		var output = input.DeepClone()!;
+		var output = input.DeepClone();
 
 		Assert.That(output.Value, Is.SameAs(input.Value));
 	}

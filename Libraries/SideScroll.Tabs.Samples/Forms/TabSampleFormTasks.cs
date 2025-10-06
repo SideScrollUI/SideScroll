@@ -10,7 +10,7 @@ public class TabSampleFormTasks : ITab
 
 	public class Instance : TabInstance
 	{
-		private const string DataKey = "Params";
+		private const string DataKey = "Tasks";
 
 		private readonly ItemCollectionUI<SampleResult> _items = [];
 		private SampleItem? _sampleItem;
@@ -26,8 +26,8 @@ public class TabSampleFormTasks : ITab
 				new TaskDelegateAsync("Task with Sub Tasks", TaskCountAsync, true),
 			};
 
-			_sampleItem = LoadData<SampleItem>(DataKey);
-			if (_sampleItem!.DateTime.Ticks == 0)
+			_sampleItem = LoadOrCreateData<SampleItem>(DataKey);
+			if (_sampleItem.DateTime.Ticks == 0)
 			{
 				_sampleItem.DateTime = DateTime.Now; // in case the serializer loses it
 			}
@@ -40,7 +40,7 @@ public class TabSampleFormTasks : ITab
 
 			SaveData(DataKey, _sampleItem!);
 
-			SampleItem clone = _sampleItem.DeepClone(call)!;
+			SampleItem clone = _sampleItem!.DeepClone(call);
 			SampleResult result = new()
 			{
 				SampleItem = clone,

@@ -1,5 +1,5 @@
 using SideScroll.Attributes;
-using SideScroll.Tabs.Samples.Chart;
+using SideScroll.Tabs.Samples.Charts;
 
 namespace SideScroll.Avalonia.Samples.Charts;
 

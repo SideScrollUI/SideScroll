@@ -43,7 +43,7 @@ public class FileNodeDataRepoView(string groupId, bool indexed = false, int? max
 			// DataRepo might only have been opened and not loaded before
 			_dataRepoNodes ??= project.Data.App.OpenView<NodeView>(GroupId, Indexed, MaxItems);
 			_dataRepoNodes.LoadAllIndexed(call);
-			foreach (NodeView nodeView in _dataRepoNodes.Items.Values)
+			foreach (NodeView nodeView in _dataRepoNodes.Values)
 			{
 				nodeView.FileSelectorOptions = fileSelectorOptions;
 			}

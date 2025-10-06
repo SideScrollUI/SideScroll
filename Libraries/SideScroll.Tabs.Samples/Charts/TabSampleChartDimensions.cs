@@ -7,7 +7,7 @@ using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.Time;
 
-namespace SideScroll.Tabs.Samples.Chart;
+namespace SideScroll.Tabs.Samples.Charts;
 
 public class TabSampleChartDimensions : ITab
 {
@@ -70,7 +70,7 @@ public class TabSampleChartDimensions : ITab
 			AddSeries("Cats");
 			AddSeries("Dogs");
 
-			var chartView = new ChartView();
+			ChartView chartView = new();
 			chartView.AddDimensions(_samples,
 				nameof(ChartSample.TimeStamp),
 				nameof(ChartSample.Value),
@@ -106,7 +106,7 @@ public class TabSampleChartDimensions : ITab
 		{
 			int param1 = 1;
 			string param2 = "abc";
-			Invoke(call, AddSampleUI, param1, param2);
+			Post(call, AddSampleUI, param1, param2);
 		}
 
 		private Call? _addCall;
@@ -114,11 +114,11 @@ public class TabSampleChartDimensions : ITab
 		{
 			_addCall = call;
 
-			CancellationToken token = call.TaskInstance!.TokenSource.Token;
-			for (int i = 0; i < 20 && !token.IsCancellationRequested; i++)
+			CancellationToken cancelToken = call.TaskInstance!.CancelToken;
+			for (int i = 0; i < 20 && !cancelToken.IsCancellationRequested; i++)
 			{
-				Invoke(call, AddSampleUI);
-				await Task.Delay(1000);
+				Post(call, AddSampleUI);
+				await Task.Delay(1000, cancelToken);
 			}
 		}
 

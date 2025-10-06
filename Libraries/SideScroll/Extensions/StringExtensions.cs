@@ -7,11 +7,17 @@ namespace SideScroll.Extensions;
 
 public static class StringExtensions
 {
+	/// <summary>
+	/// Determines whether a string contains a specified substring using case-insensitive comparison
+	/// </summary>
 	public static bool CaseInsensitiveContains(this string text, string value, StringComparison stringComparison = StringComparison.CurrentCultureIgnoreCase)
 	{
 		return text.Contains(value, stringComparison);
 	}
 
+	/// <summary>
+	/// Reverses the characters in a string
+	/// </summary>
 	public static string Reverse(this string input)
 	{
 		char[] chars = input.ToCharArray();
@@ -19,6 +25,9 @@ public static class StringExtensions
 		return new string(chars);
 	}
 
+	/// <summary>
+	/// Removes all occurrences of the specified prefix from the beginning of a string
+	/// </summary>
 	public static string? TrimStart(this string? input, string? prefix)
 	{
 		if (input == null || prefix == null || prefix.Length == 0)
@@ -32,6 +41,9 @@ public static class StringExtensions
 		return input;
 	}
 
+	/// <summary>
+	/// Removes the specified postfix from the end of a string if it exists
+	/// </summary>
 	public static string TrimEnd(this string input, string postfix)
 	{
 		if (input.EndsWith(postfix))
@@ -42,6 +54,9 @@ public static class StringExtensions
 		return input;
 	}
 
+	/// <summary>
+	/// Returns a substring from the specified start index to end index (inclusive)
+	/// </summary>
 	public static string Range(this string input, int start, int end)
 	{
 		end++;
@@ -52,6 +67,9 @@ public static class StringExtensions
 		return input[start..end];
 	}
 
+	/// <summary>
+	/// Returns a substring from the specified start index to the end of the string
+	/// </summary>
 	public static string Range(this string input, int start)
 	{
 		if (input.Length < start)
@@ -60,13 +78,17 @@ public static class StringExtensions
 		return input[start..];
 	}
 
-	// Adds spaces between words
-	// 'wordsNeed_spacesAndWNSToo' -> 'Words Need Spaces And WNS Too'
+	/// <summary>
+	/// Adds spaces between words in camelCase, PascalCase, and underscore-separated text (e.g., "wordsNeed_spacesAndABCToo" becomes "Words Need Spaces And ABC Too")
+	/// </summary>
 	public static string WordSpaced(this string? text)
 	{
 		return WordSpacer.Format(text);
 	}
 
+	/// <summary>
+	/// Converts a string to camel case by capitalizing the first letter and lowercasing the rest
+	/// </summary>
 	public static string CamelCased(this string text)
 	{
 		string lowerCased = text.ToLower();
@@ -74,6 +96,9 @@ public static class StringExtensions
 		return camelCased;
 	}
 
+	/// <summary>
+	/// Returns all index positions where the match string occurs in the source string using regex
+	/// </summary>
 	public static IEnumerable<int> GetAllIndexes(this string source, string matchString)
 	{
 		matchString = Regex.Escape(matchString);
@@ -83,6 +108,9 @@ public static class StringExtensions
 		}
 	}
 
+	/// <summary>
+	/// Returns a list of all index positions where the value string occurs in the string
+	/// </summary>
 	public static List<int> AllIndexesOf(this string str, string value)
 	{
 		ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
@@ -98,6 +126,9 @@ public static class StringExtensions
 		}
 	}
 
+	/// <summary>
+	/// Yields all index positions where the value string occurs in the string
+	/// </summary>
 	public static IEnumerable<int> AllIndexesOfYield(this string str, string value)
 	{
 		ArgumentException.ThrowIfNullOrWhiteSpace(value, nameof(value));
@@ -112,7 +143,9 @@ public static class StringExtensions
 		}
 	}
 
-	// Returns a 64 character hash of the string
+	/// <summary>
+	/// Computes a SHA256 hash of the string and returns it as a 64-character hexadecimal string
+	/// </summary>
 	public static string HashSha256ToHex(this string rawData)
 	{
 		byte[] hashBytes = SHA256.HashData(Encoding.UTF8.GetBytes(rawData));
@@ -135,7 +168,9 @@ public static class StringExtensions
 		return (char)(val < 10 ? '0' + val : 'a' + (val - 10));
 	}
 
-	// Returns a 52-character Base32 SHA256 hash (lossless)
+	/// <summary>
+	/// Computes a SHA256 hash of the string and returns it as a 52-character Base32 string (lossless encoding)
+	/// </summary>
 	public static string HashSha256ToBase32(this string rawData)
 	{
 		byte[] bytes = SHA256.HashData(Encoding.UTF8.GetBytes(rawData));
@@ -176,6 +211,9 @@ public static class StringExtensions
 		return result.ToString();
 	}
 
+	/// <summary>
+	/// Determines whether a string is null or empty
+	/// </summary>
 	public static bool IsNullOrEmpty([NotNullWhen(false)] this string? text)
 	{
 		return string.IsNullOrEmpty(text);

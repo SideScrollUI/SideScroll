@@ -12,7 +12,9 @@ public class ListItem<TKey, TValue>(TKey key, TValue value, object obj) : INotif
 	[HiddenColumn, InnerValue]
 	public object Object { get; set; } = obj;
 
-	public bool AutoLoad = true;
+	[HiddenColumn]
+	public bool IsAutoSelectable { get; set; } = true;
+
 #pragma warning disable 414
 	public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -11,7 +11,7 @@ namespace SideScroll.Avalonia.Charts.LiveCharts;
 
 public class LiveChartPoint : ObservablePoint
 {
-	public object? Object { get; set; }
+	public object? Object { get; }
 
 	public LiveChartPoint(object? obj, double? x, double? y, double? yCoordinate) : base(x, y)
 	{

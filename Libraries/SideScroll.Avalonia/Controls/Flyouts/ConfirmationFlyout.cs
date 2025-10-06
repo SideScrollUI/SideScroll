@@ -5,11 +5,11 @@ using Avalonia.Media;
 using SideScroll.Avalonia.Extensions;
 using SideScroll.Tasks;
 
-namespace SideScroll.Avalonia.Controls;
+namespace SideScroll.Avalonia.Controls.Flyouts;
 
 public class ConfirmationFlyout : Flyout
 {
-	public ConfirmationFlyout(Action action, string text, string confirmText, string? cancelText = null)
+	public ConfirmationFlyout(Action action, string text, string? confirmText = null, string? cancelText = null)
 	{
 		Placement = PlacementMode.Bottom;
 		Content = new StackPanel
@@ -37,7 +37,7 @@ public class ConfirmationFlyout : Flyout
 							{
 								button.Click += (_, _) => Hide();
 							}),
-						new TabTextButton(confirmText, AccentType.Warning)
+						new TabTextButton(confirmText ?? "Confirm", AccentType.Warning)
 						.Also(button =>
 							{
 								button.Click += (_, _) =>

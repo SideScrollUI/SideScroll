@@ -13,8 +13,8 @@ public interface IToolComboBox
 
 public class ToolComboBox<T> : IToolComboBox
 {
-	public string Label { get; set; }
-	public List<T> Items { get; set; }
+	public string Label { get; }
+	public List<T> Items { get; }
 	public T? SelectedItem { get; set; }
 
 	public object? SelectedObject

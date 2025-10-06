@@ -56,7 +56,7 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
-	public TabInstance Instance { get; set; }
+	public TabInstance Instance { get; }
 	public TabModel Model => Instance.Model;
 
 	public string Label
@@ -135,7 +135,7 @@ public class TabView : Grid, IDisposable
 
 	public async Task LoadBackgroundAsync(Call call)
 	{
-		Instance.Invoke(ShowLoading);
+		Instance.Post(ShowLoading);
 
 		await Instance.ReinitializeAsync(call);
 	}
@@ -392,7 +392,6 @@ public class TabView : Grid, IDisposable
 		double desiredWidth = Math.Min(_parentContainerBorder!.DesiredSize.Width, Model.MaxDesiredWidth);
 		TabViewSettings.SplitterDistance = desiredWidth;
 		_parentContainerBorder.Width = desiredWidth;
-		//containerGrid.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
 		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 
 		_containerGrid.InvalidateMeasure();
@@ -476,9 +475,9 @@ public class TabView : Grid, IDisposable
 		{
 			AddControlString(text);
 		}
-		else if (tabObject.Editable)
+		else if (tabObject is TabFormObject formObject)
 		{
-			AddControl(new TabForm(obj), gridLength, tabObject.EnableScrolling);
+			AddControl(new TabForm(formObject), gridLength, tabObject.EnableScrolling);
 		}
 	}
 
@@ -632,7 +631,7 @@ public class TabView : Grid, IDisposable
 		{
 			Instance.TabViewSettings = Instance.TabBookmark.ViewSettings;
 		}
-		else if (Instance.Project.UserSettings.AutoLoad)
+		else if (Instance.Project.UserSettings.AutoSelect)
 		{
 			LoadDefaultTabSettings();
 		}
@@ -648,7 +647,7 @@ public class TabView : Grid, IDisposable
 		// Could have parent instance reload children
 		TabViewSettings = new TabViewSettings();
 		Instance.SaveTabSettings();
-		Instance.Invoke(ShowLoading);
+		Instance.Post(ShowLoading);
 		Instance.Reinitialize(true);
 	}
 
@@ -1097,7 +1096,7 @@ public class TabView : Grid, IDisposable
 
 	private void LoadBookmark()
 	{
-		Instance.Project.UserSettings.AutoLoad = true;
+		Instance.Project.UserSettings.AutoSelect = true;
 
 		TabBookmark tabBookmark = Instance.TabBookmark!;
 		TabViewSettings = tabBookmark.ViewSettings;

@@ -11,7 +11,7 @@ public class ListToString
 	public static int MaxItems { get; set; } = 200_000;
 
 	[InnerValue, HiddenColumn]
-	public object Object { get; set; }
+	public object Object { get; }
 
 	public string? Value { get; set; }
 

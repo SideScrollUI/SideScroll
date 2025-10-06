@@ -50,8 +50,8 @@ public abstract class TypeRepo : IDisposable
 		//new TypeRepoObject.Creator(),
 	];
 
-	public Serializer Serializer { get; init; }
-	public TypeSchema TypeSchema { get; init; }
+	public Serializer Serializer { get; }
+	public TypeSchema TypeSchema { get; }
 	public Type? Type { get; init; } // might be null after loading
 	public Type? LoadableType { get; protected set; } // some types get overridden lazy load, or get removed [Unserialized]
 	public int TypeIndex { get; set; } // -1 if null
@@ -140,13 +140,9 @@ public abstract class TypeRepo : IDisposable
 		}
 
 		// Derived types can still have valid constructors
-		if (!typeSchema.HasConstructor && !typeSchema.IsSerialized)
+		if (!typeSchema.HasConstructor)
 		{
 			typeRepo = new TypeRepoUnknown(serializer, typeSchema);
-			if (typeSchema.IsSerialized)
-			{
-				log.AddWarning("Type has no constructor", new Tag(typeSchema));
-			}
 		}
 		else
 		{
@@ -188,13 +184,6 @@ public abstract class TypeRepo : IDisposable
 
 	public void SaveHeader(Log log, BinaryWriter writer)
 	{
-		// todo: optimize this
-		//writer.Write(objectOffsets.Count);
-		// offsets are a better solution if we don't read everything
-		/*foreach (long offset in objectOffsets)
-		{
-			writer.Write(offset);
-		}*/
 		// For UnknownTypeRepo
 		if (ObjectSizes == null)
 			return;
@@ -246,7 +235,6 @@ public abstract class TypeRepo : IDisposable
 			long objectStart = writer.BaseStream.Position;
 			SaveObject(writer, obj);
 			long objectEnd = writer.BaseStream.Position;
-			//ObjectOffsets.Add(objectStart);
 			ObjectSizes[index++] = (int)(objectEnd - objectStart);
 
 			logTimer.AddDebug("Saved Object", new Tag(TypeSchema.Name, obj));

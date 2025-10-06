@@ -18,7 +18,7 @@ public class Planet
 {
 	[Required]
 	public string? Name { get; set; }
-	[HiddenColumn]
+	[HiddenColumn, AcceptsReturn]
 	public string? Description { get; set; }
 
 	public long? DistanceKm { get; set; }
@@ -37,19 +37,6 @@ public class Planet
 	public bool? Inner { get; set; }
 
 	public override string? ToString() => Name;
-
-	public void Clear()
-	{
-		Name = null;
-		Description = null;
-		DistanceKm = null;
-		RadiusKm = null;
-		MassKg = null;
-		GravityM_s2 = null;
-		Moons = null;
-		OrbitalPeriodDays = null;
-		Inner = null;
-	}
 
 	public static Planet CreateSample() => new()
 	{

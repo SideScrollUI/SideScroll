@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
+using SideScroll.Avalonia.Extensions;
 
 namespace SideScroll.Avalonia.Themes;
 
@@ -51,8 +52,8 @@ public static class SideScrollTheme
 	public static SolidColorBrush DataGridEditableBackground => GetBrush("DataGridEditableBackgroundBrush");
 
 	// Button
-	public static SolidColorBrush ButtonBackground => GetBrush("ThemeButtonBackgroundBrush");
-	public static SolidColorBrush ButtonForeground => GetBrush("ThemeButtonForegroundBrush");
+	public static SolidColorBrush ButtonBackground => GetBrush("TabButtonBackgroundBrush");
+	public static SolidColorBrush ButtonForeground => GetBrush("TabButtonForegroundBrush");
 
 	public static SolidColorBrush ButtonWarningBackground => GetBrush("ButtonWarningBackground");
 	public static SolidColorBrush ButtonWarningBackgroundPointerOver => GetBrush("ButtonWarningBackgroundPointerOver");
@@ -65,8 +66,9 @@ public static class SideScrollTheme
 	//public static SolidColorBrush LabelHighlightForeground => GetBrush("LabelHighlightForegroundBrush");
 
 	public static SolidColorBrush TextControlBackground => GetBrush("TextControlBackground");
-	public static SolidColorBrush TextReadOnlyForeground => GetBrush("TextControlForegroundReadOnlyBrush");
+	public static SolidColorBrush TextControlForeground => GetBrush("TextControlForeground");
 	public static SolidColorBrush TextReadOnlyBackground => GetBrush("TextControlBackgroundReadOnlyBrush");
+	public static SolidColorBrush TextReadOnlyForeground => GetBrush("TextControlForegroundReadOnlyBrush");
 
 	// TextArea 
 	public static SolidColorBrush TextAreaBackground => GetBrush("TextAreaBackgroundBrush");
@@ -151,6 +153,14 @@ public static class SideScrollTheme
 	public static SolidColorBrush GetBrush(string brushName)
 	{
 		return (SolidColorBrush)GetResource(brushName);
+	}
+
+	public static Color GetBrushColor(string brushName)
+	{
+		var brush = (SolidColorBrush)GetResource(brushName);
+		if (brush.Opacity == 1.0) return brush.Color;
+
+		return brush.Color.WithAlpha((byte)(brush.Color.A * brush.Opacity));
 	}
 
 	public static double GetDouble(string name)

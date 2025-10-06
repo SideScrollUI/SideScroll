@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -20,25 +21,11 @@ public class TabTextBox : TextBox
 {
 	protected override Type StyleKeyOverride => typeof(TextBox);
 
-	public ListProperty? Property { get; init; }
+	public ListProperty? Property { get; protected init; }
 
 	public override string? ToString() => Property?.ToString();
 
 	public TabTextBox()
-	{
-		InitializeComponent();
-	}
-
-	public TabTextBox(ListProperty property)
-	{
-		Property = property;
-
-		InitializeComponent();
-
-		InitializeProperty(property);
-	}
-
-	private void InitializeComponent()
 	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Top;
@@ -47,6 +34,13 @@ public class TabTextBox : TextBox
 		MaxWidth = 3000;
 
 		InitializeBorder();
+	}
+
+	public TabTextBox(ListProperty property) : this()
+	{
+		Property = property;
+
+		InitializeProperty(property);
 	}
 
 	// Default Padding shows a gap between ScrollBar and Border, and has too big of a left Margin
@@ -59,7 +53,7 @@ public class TabTextBox : TextBox
 		{
 			Setters =
 			{
-				new Setter(TextPresenter.MarginProperty, new Thickness(6)),
+				new Setter(MarginProperty, new Thickness(6)),
 			}
 		};
 		Styles.Add(style);
@@ -68,15 +62,15 @@ public class TabTextBox : TextBox
 		{
 			Setters =
 			{
-				new Setter(TextBlock.MarginProperty, new Thickness(6)),
+				new Setter(MarginProperty, new Thickness(6)),
 			}
 		};
 		Styles.Add(style);
 	}
 
-	private void InitializeProperty(ListProperty property)
+	protected void InitializeProperty(ListProperty property)
 	{
-		IsReadOnly = !property.Editable;
+		IsReadOnly = !property.IsEditable;
 
 		PasswordCharAttribute? passwordCharAttribute = property.GetCustomAttribute<PasswordCharAttribute>();
 		if (passwordCharAttribute != null)
@@ -162,7 +156,7 @@ public class TabTextBox : TextBox
 			Source = property.Object,
 		};
 		Type type = property.UnderlyingType;
-		if (property.Editable && (type == typeof(string) || type.IsPrimitive))
+		if (property.IsEditable && (type == typeof(string) || type.IsPrimitive))
 		{
 			binding.Mode = BindingMode.TwoWay;
 		}
@@ -197,5 +191,29 @@ public class TabTextBox : TextBox
 	public void SetFormattedJson(string text)
 	{
 		Text = JsonUtils.Format(text);
+	}
+
+	protected override void UpdateDataValidation(AvaloniaProperty property, BindingValueType state, Exception? error)
+	{
+		// Default validators can appear on init, and have messages that are way too long
+		if (error is InvalidCastException)
+		{
+			base.UpdateDataValidation(property, state, new DataValidationException("Invalid format"));
+		}
+		else if (error == null)
+		{
+			base.UpdateDataValidation(property, state, error);
+		}
+	}
+
+	protected override void OnKeyDown(KeyEventArgs e)
+	{
+		if (AcceptsReturn && e.Key == Key.Enter && !e.KeyModifiers.HasFlag(KeyModifiers.Shift))
+		{
+			// Ignore Shift-Enter but allow Enter
+			return;
+		}
+
+		base.OnKeyDown(e);
 	}
 }

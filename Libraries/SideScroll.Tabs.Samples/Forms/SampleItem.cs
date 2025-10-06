@@ -10,25 +10,25 @@ namespace SideScroll.Tabs.Samples.Forms;
 public class SampleItem
 {
 	[DataKey, Required, StringLength(30)]
-	public string Name { get; set; } = "Test";
+	public string? Name { get; set; }
 
-	[WordWrap, Watermark("Description")]
+	[WordWrap, Watermark("Description"), AcceptsReturn]
 	public string? Description { get; set; }
 
 	[ReadOnly(true)]
-	public string ReadOnly { get; set; } = "ReadOnly";
+	public string? ReadOnly { get; set; }
 
 	public bool Boolean { get; set; } = true;
 
 	[Range(1, 1000), Required]
-	public int Amount { get; set; } = 123;
+	public int Amount { get; set; } = 1;
 
 	[ColumnIndex(2)]
-	public double Double { get; set; } = 3.14;
+	public double Double { get; set; }
 
 	public AttributeTargets EnumAttributeTargets { get; set; } = AttributeTargets.Event;
 
-	public static List<ParamListItem> ListItems { get; } =
+	public static List<SampleListItem> ListItems { get; } =
 	[
 		new("One", 1),
 		new("Two", 2),
@@ -36,7 +36,7 @@ public class SampleItem
 	];
 
 	[BindList(nameof(ListItems)), ColumnIndex(2)]
-	public ParamListItem ListItem { get; set; }
+	public SampleListItem ListItem { get; set; }
 
 	public DateTime DateTime { get; set; } = TimeZoneView.Now.Trim();
 
@@ -50,11 +50,18 @@ public class SampleItem
 		ListItem = ListItems[1];
 	}
 
-	public override string ToString() => Name;
+	public override string? ToString() => Name;
+
+	public static SampleItem CreateSample() => new()
+	{
+		Name = "Test",
+		Description = "All the descriptions",
+		ReadOnly = "ReadOnly",
+	};
 }
 
 [PublicData]
-public class ParamListItem(string name, int value)
+public class SampleListItem(string name, int value)
 {
 	public string? Name { get; set; } = name;
 	public int Value { get; set; } = value;

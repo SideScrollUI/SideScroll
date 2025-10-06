@@ -11,7 +11,7 @@ public class DataRepoTests : SerializeBaseTest
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
-		Initialize("TestDataRepo");
+		Initialize("DataRepo");
 	}
 
 	[SetUp]
@@ -27,7 +27,7 @@ public class DataRepoTests : SerializeBaseTest
 		return instance;
 	}
 
-	[Test, Description("Serialize int Save Load")]
+	[Test, Description("DataRepo int Save Load")]
 	public void DataRepoSaveLoadInt()
 	{
 		string keyId = "int";

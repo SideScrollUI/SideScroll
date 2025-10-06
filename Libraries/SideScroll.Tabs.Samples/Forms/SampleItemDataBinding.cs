@@ -32,6 +32,9 @@ public class SampleItemDataBinding(SynchronizationContext context) : INotifyProp
 
 				DateTime = new DateTime(2024, 7, i + 1);
 				NotifyPropertyChanged(nameof(DateTime));
+
+				Boolean = i % 2 == 0;
+				NotifyPropertyChanged(nameof(Boolean));
 			}
 
 			if (double.TryParse(_value, out double d))
@@ -57,7 +60,7 @@ public class SampleItemDataBinding(SynchronizationContext context) : INotifyProp
 
 	public AttributeTargets? EnumAttributeTargets { get; set; }
 
-	public static List<ParamListItem> ListItems { get; } =
+	public static List<SampleListItem> ListItems { get; } =
 	[
 		new("One", 1),
 		new("Two", 2),
@@ -65,7 +68,7 @@ public class SampleItemDataBinding(SynchronizationContext context) : INotifyProp
 	];
 
 	[BindList(nameof(ListItems)), ColumnIndex(2)]
-	public ParamListItem? ListItem { get; set; }
+	public SampleListItem? ListItem { get; set; }
 
 	[ReadOnly(true)]
 	public DateTime? DateTime { get; set; }

@@ -148,6 +148,8 @@ public class ListSeries
 
 	public double? GetTotal()
 	{
+		if (List.Count == 0) return null;
+
 		return SeriesType switch
 		{
 			SeriesType.Count => List.Count,

@@ -12,6 +12,7 @@ using SideScroll.Tasks;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Text.Json;
 
 namespace SideScroll.Tabs;
 
@@ -213,7 +214,7 @@ public class TabInstance : IDisposable
 	[MemberNotNull(nameof(UiContext))]
 	private void InitializeContext()
 	{
-		UiContext ??= SynchronizationContext.Current ?? new SynchronizationContext();
+		UiContext ??= SynchronizationContext.Current ?? new();
 	}
 
 	private static void ActionCallback(object? state)
@@ -228,29 +229,29 @@ public class TabInstance : IDisposable
 		StartTask(taskDelegate, false);
 	}*/
 
-	public void Invoke(Action action)
+	public void Post(Action action)
 	{
 		UiContext.Post(ActionCallback, action);
 	}
 
-	public void Invoke(SendOrPostCallback callback, object? param = null)
+	public void Post(SendOrPostCallback callback, object? param = null)
 	{
 		UiContext.Post(callback, param);
 	}
 
-	public void Invoke(Call call, Action action)
+	public void Post(Call call, Action action)
 	{
+		using var callTimer = call.Timer(action.ToString());
+
 		UiContext.Post(ActionCallback, action);
 	}
 
-	// switch to SendOrPostCallback?
-	public void Invoke(CallActionParams callAction, params object[] objects)
+	public void Post(CallActionParams callAction, params object[] objects)
 	{
-		Invoke(null, callAction, objects);
+		Post(null, callAction, objects);
 	}
 
-	// switch to SendOrPostCallback?
-	public void Invoke(Call? call, CallActionParams callAction, params object[] objects)
+	public void Post(Call? call, CallActionParams callAction, params object[] objects)
 	{
 		var taskDelegate = new TaskDelegateParams(call, callAction.Method.Name, callAction, false, null, objects);
 		UiContext.Post(CallActionParamsCallback, taskDelegate);
@@ -262,11 +263,18 @@ public class TabInstance : IDisposable
 		StartTask(taskDelegate, false);
 	}
 
-	public TaskInstance StartTask(TaskCreator taskCreator, bool showTask, Call? call = null)
+	public TaskInstance CreateTask(TaskCreator taskCreator, bool showTask, Call? call = null)
 	{
 		call ??= new Call(taskCreator.Label);
-		TaskInstance taskInstance = taskCreator.Start(call);
+		TaskInstance taskInstance = taskCreator.Create(call);
 		AddTask(taskInstance, showTask);
+		return taskInstance;
+	}
+
+	public TaskInstance StartTask(TaskCreator taskCreator, bool showTask, Call? call = null)
+	{
+		TaskInstance taskInstance = CreateTask(taskCreator, showTask, call);
+		taskInstance.Start();
 		return taskInstance;
 	}
 
@@ -282,10 +290,10 @@ public class TabInstance : IDisposable
 		return StartTask(taskDelegate, showTask, call);
 	}
 
-	public void StartTask(CallActionParams callAction, bool useTask, bool showTask, params object[] objects)
+	public TaskInstance StartTask(CallActionParams callAction, bool useTask, bool showTask, params object[] objects)
 	{
-		var taskDelegate = new TaskDelegateParams(null, callAction.Method.Name.TrimEnd("Async").WordSpaced(), callAction, useTask, null, objects);
-		StartTask(taskDelegate, showTask);
+		var taskDelegate = new TaskDelegateParams(null, callAction.Method.Name.WordSpaced(), callAction, useTask, null, objects);
+		return StartTask(taskDelegate, showTask);
 	}
 
 	public void AddTask(TaskInstance taskInstance, bool showTask)
@@ -370,7 +378,7 @@ public class TabInstance : IDisposable
 		}
 
 		var subTask = call.AddSubTask("Loading");
-		Invoke(() => LoadModelUI(subTask.Call, model)); // Some controls need to be created on the UI context
+		Post(() => LoadModelUI(subTask.Call, model)); // Some controls need to be created on the UI context
 	}
 
 	private async Task<TabModel> LoadModelAsync(Call call)
@@ -527,7 +535,6 @@ public class TabInstance : IDisposable
 				UiContext.Send(_ => OnReload(this, EventArgs.Empty), null);
 			}
 		}
-		// todo: this needs to actually wait for reload
 	}
 
 	// Reloads Controls & Settings
@@ -539,7 +546,6 @@ public class TabInstance : IDisposable
 		{
 			var onRefresh = OnRefresh; // create temporary copy since this gets delayed
 			UiContext.Send(_ => onRefresh(this, EventArgs.Empty), null);
-			// todo: this needs to actually wait for refresh?
 		}
 	}
 
@@ -629,7 +635,7 @@ public class TabInstance : IDisposable
 			TabBookmark = { IsRoot = true }
 		};
 		GetBookmark(bookmark.TabBookmark);
-		bookmark = bookmark.DeepClone(TaskInstance.Call)!; // Sanitize and test bookmark
+		bookmark = bookmark.DeepClone(TaskInstance.Call); // Sanitize and test bookmark
 		return bookmark;
 	}
 
@@ -643,7 +649,7 @@ public class TabInstance : IDisposable
 	public virtual void GetBookmark(TabBookmark tabBookmark)
 	{
 		tabBookmark.Name = Label;
-		tabBookmark.ViewSettings = TabViewSettings.DeepClone() ?? new TabViewSettings();
+		tabBookmark.ViewSettings = TabViewSettings.TryDeepClone() ?? new();
 		tabBookmark.DataRepoGroupId = DataRepoInstance?.GroupId;
 		tabBookmark.DataRepoType = DataRepoInstance?.DataType;
 		tabBookmark.SelectedRow = SelectedRow;
@@ -748,7 +754,7 @@ public class TabInstance : IDisposable
 
 	public void LoadDefaultBookmark()
 	{
-		if (Project.UserSettings.AutoLoad == false)
+		if (Project.UserSettings.AutoSelect == false)
 			return;
 
 		Bookmark? bookmark = Data.App.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);
@@ -800,18 +806,11 @@ public class TabInstance : IDisposable
 		Data.App.Save<T>(groupId, key, obj, TaskInstance.Call);
 	}
 
-	// todo: Should createIfNeeded = false?
-	public T? LoadData<T>(string key, bool createIfNeeded = true)
-	{
-		T? data = Data.App.Load<T>(key, TaskInstance.Call, createIfNeeded);
-		return data;
-	}
+	public T? LoadData<T>(string key) => Data.App.Load<T>(key, TaskInstance.Call);
+	public T? LoadData<T>(string groupId, string key) => Data.App.Load<T>(groupId, key, TaskInstance.Call);
 
-	public T? LoadData<T>(string groupId, string key, bool createIfNeeded = true)
-	{
-		T? data = Data.App.Load<T>(groupId, key, TaskInstance.Call, createIfNeeded);
-		return data;
-	}
+	public T LoadOrCreateData<T>(string key) => Data.App.LoadOrCreate<T>(key, TaskInstance.Call)!;
+	public T LoadOrCreateData<T>(string groupId, string key) => Data.App.LoadOrCreate<T>(groupId, key, TaskInstance.Call)!;
 
 	public TabViewSettings LoadDefaultTabSettings()
 	{
@@ -824,7 +823,7 @@ public class TabInstance : IDisposable
 		if (CustomPath != null)
 		{
 			// It's better to return the default constructor so the Tab autosizes instead of using the saved defaults which might have a width specified
-			return Data.Cache.Load<TabViewSettings>(CustomPath, TaskInstance.Call, true)!;
+			return Data.Cache.LoadOrCreate<TabViewSettings>(CustomPath, TaskInstance.Call)!;
 		}
 
 		Type type = GetType();
@@ -969,5 +968,16 @@ public class TabInstance : IDisposable
 	public void CopyToClipboard(string text)
 	{
 		OnCopyToClipboard?.Invoke(this, new CopyToClipboardEventArgs(text));
+	}
+
+	private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
+	{
+		WriteIndented = true
+	};
+
+	public void CopyToClipboard(object? obj)
+	{
+		string json = JsonSerializer.Serialize(obj, _jsonSerializerOptions);
+		CopyToClipboard(json);
 	}
 }

@@ -21,7 +21,7 @@ public class LinkedBookmark(LinkUri linkUri, Bookmark bookmark)
 
 public class LinkCollection
 {
-	public Project Project { get; init; }
+	public Project Project { get; }
 
 	public string GroupId { get; init; }
 
@@ -57,7 +57,7 @@ public class LinkCollection
 
 			_dataRepoView.LoadAllOrderBy(call, nameof(LinkedBookmark.TimeStamp));
 
-			foreach (LinkedBookmark linkedBookmark in _dataRepoView.Items.Values)
+			foreach (LinkedBookmark linkedBookmark in _dataRepoView.Values)
 			{
 				if (linkedBookmark.Bookmark.Name == TabInstance.CurrentBookmarkName)
 					continue;

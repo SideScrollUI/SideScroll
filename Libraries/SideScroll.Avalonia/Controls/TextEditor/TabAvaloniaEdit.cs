@@ -43,7 +43,7 @@ public class TabAvaloniaEdit : Border
 {
 	public const int MaxAutoLoadSize = 1_000_000;
 
-	public TabInstance TabInstance { get; set; }
+	public TabInstance TabInstance { get; }
 
 	public string? Path { get; set; }
 	public ListProperty? ListProperty { get; set; }
@@ -236,7 +236,7 @@ public class TabAvaloniaEdit : Border
 	public void EnableEditing(ListMember listMember)
 	{
 		ListProperty = listMember as ListProperty;
-		if (ListProperty != null && !ListProperty.Editable)
+		if (ListProperty != null && !ListProperty.IsEditable)
 			return;
 
 		TextEditor.IsReadOnly = false;

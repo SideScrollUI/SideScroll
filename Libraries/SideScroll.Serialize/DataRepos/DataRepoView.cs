@@ -9,7 +9,9 @@ public class DataRepoView<T> : DataRepoInstance<T>
 {
 	//public DataRepo<T> DataRepo; // Add template version?
 
-	public DataItemCollection<T> Items { get; set; } = [];
+	public DataItemCollection<T> Items { get; protected set; } = [];
+
+	public IEnumerable<T> Values => Items.Values;
 
 	public bool Loaded { get; protected set; }
 

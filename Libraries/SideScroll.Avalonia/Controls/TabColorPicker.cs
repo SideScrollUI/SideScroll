@@ -21,25 +21,10 @@ public class TabColorPicker : ColorPicker
 
 	public TabColorPicker()
 	{
-		Initialize();
-	}
-
-	public TabColorPicker(ListProperty property)
-	{
-		Property = property;
-
-		Initialize();
-		Bind(property);
-	}
-
-	private void Initialize()
-	{
 		HexInputAlphaPosition = AlphaComponentPosition.Leading;
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		BorderThickness = new Thickness(1);
 		MaxWidth = TabForm.ControlMaxWidth;
-
-		ToolTip.SetTip(this, Property?.Value?.ToString());
 
 		Resources.Add("ComboBoxDropDownGlyphForeground", SideScrollTheme.ButtonForeground);
 		Resources.Add("TextControlForegroundDisabled", SideScrollTheme.ButtonForeground);
@@ -50,11 +35,20 @@ public class TabColorPicker : ColorPicker
 		PropertyChanged += TabColorPicker_PropertyChanged;
 	}
 
+	public TabColorPicker(ListProperty property) : this()
+	{
+		Property = property;
+
+		ToolTip.SetTip(this, Property.Value?.ToString());
+
+		Bind(property);
+	}
+
 	private void Bind(ListProperty property)
 	{
 		var binding = new Binding(property.PropertyInfo.Name)
 		{
-			Mode = property.Editable ? BindingMode.TwoWay : BindingMode.OneWay,
+			Mode = property.IsEditable ? BindingMode.TwoWay : BindingMode.OneWay,
 			Source = property.Object,
 		};
 		Bind(ColorProperty, binding);

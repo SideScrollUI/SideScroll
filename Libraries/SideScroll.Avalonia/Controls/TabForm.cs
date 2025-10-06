@@ -7,6 +7,7 @@ using SideScroll.Avalonia.Controls.View;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Collections;
 using SideScroll.Extensions;
+using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using System.Collections;
 using System.ComponentModel.DataAnnotations;
@@ -35,6 +36,8 @@ public class TabForm : Border, IValidationControl
 
 	public object? Object { get; set; }
 
+	public TabFormObject? FormObject { get; set; }
+
 	public Grid ContainerGrid { get; protected set; }
 
 	private readonly Dictionary<ListProperty, Control> _propertyControls = [];
@@ -51,6 +54,18 @@ public class TabForm : Border, IValidationControl
 		{
 			LoadObject(obj);
 		}
+	}
+
+	public TabForm(TabFormObject formObject, bool autoGenerateRows = true) : this(formObject.Object)
+	{
+		FormObject = formObject;
+		FormObject.ObjectChanged += FormObject_ObjectChanged;
+	}
+
+	private void FormObject_ObjectChanged(object? sender, ObjectUpdatedEventArgs e)
+	{
+		LoadObject(e.Object);
+		Focus();
 	}
 
 	[MemberNotNull(nameof(ContainerGrid))]
@@ -74,6 +89,7 @@ public class TabForm : Border, IValidationControl
 	{
 		ContainerGrid.Children.Clear();
 		ContainerGrid.RowDefinitions.Clear();
+		_propertyControls.Clear();
 	}
 
 	public void LoadObject(object? obj)
@@ -264,7 +280,7 @@ public class TabForm : Border, IValidationControl
 		BindListAttribute? listAttribute = type.GetCustomAttribute<BindListAttribute>();
 		listAttribute ??= property.GetCustomAttribute<BindListAttribute>();
 
-		if (property.Editable)
+		if (property.IsEditable)
 		{
 			if (type.IsEnum || listAttribute != null)
 			{
@@ -344,12 +360,19 @@ public class TabForm : Border, IValidationControl
 		bool valid = true;
 		foreach (var propertyControl in _propertyControls)
 		{
-			valid = AvaloniaUtils.ValidateControl(propertyControl.Key, propertyControl.Value) && valid;
+			if (!AvaloniaUtils.ValidateControl(propertyControl.Key, propertyControl.Value))
+			{
+				if (valid)
+				{
+					propertyControl.Value.Focus();
+					valid = false;
+				}
+			}
 		}
 
 		if (!valid)
 		{
-			throw new ValidationException("Invalid Parameters");
+			throw new ValidationException("Invalid Values");
 		}
 	}
 }

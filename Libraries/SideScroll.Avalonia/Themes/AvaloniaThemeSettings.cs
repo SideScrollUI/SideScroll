@@ -118,7 +118,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 			string resourceName = attribute.Names.First();
 			if (listProperty.UnderlyingType == typeof(Color))
 			{
-				Color color = SideScrollTheme.GetBrush(resourceName).Color;
+				Color color = SideScrollTheme.GetBrushColor(resourceName);
 				listProperty.Value = color;
 			}
 			else if (listProperty.UnderlyingType == typeof(double))
@@ -153,7 +153,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 
 			if (listProperty.UnderlyingType == typeof(Color))
 			{
-				Color color = SideScrollTheme.GetBrush(attribute.Names.First()).Color;
+				Color color = SideScrollTheme.GetBrushColor(attribute.Names.First());
 				listProperty.Value = color;
 			}
 			else if (listProperty.UnderlyingType == typeof(double))

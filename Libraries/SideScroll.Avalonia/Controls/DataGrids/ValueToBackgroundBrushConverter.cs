@@ -34,7 +34,7 @@ public class ValueToBackgroundBrushConverter(PropertyInfo propertyInfo) : IValue
 				{
 					return StyleBrushes.HasLinks; // null?
 				}
-				else if (Editable && value is ListMember listMember && listMember.Editable)
+				else if (Editable && value is ListMember listMember && listMember.IsEditable)
 				{
 					return StyleBrushes.Editable;
 				}

@@ -17,7 +17,26 @@ public class TabObject
 
 	public bool Fill { get; set; } // Stretch to Fill all vertical space
 	public bool EnableScrolling { get; set; }
-	public bool Editable { get; set; }
+
+	public override string? ToString() => Object?.ToString();
+}
+
+public class ObjectUpdatedEventArgs(object obj) : EventArgs
+{
+	public object Object => obj;
+
+	public override string? ToString() => Object?.ToString();
+}
+
+public class TabFormObject : TabObject
+{
+	public event EventHandler<ObjectUpdatedEventArgs>? ObjectChanged;
+
+	public void Update(object? sender, object obj)
+	{
+		Object = obj;
+		ObjectChanged?.Invoke(sender, new ObjectUpdatedEventArgs(Object!));
+	}
 }
 
 public enum AutoSelectType
@@ -106,7 +125,7 @@ public class TabModel
 		return tabModel;
 	}
 
-	public TabObject AddObject(object obj, bool fill = false, bool enableScrolling = false, bool editable = false)
+	public TabObject AddObject(object? obj, bool fill = false, bool enableScrolling = false)
 	{
 		obj ??= "(null)";
 
@@ -121,7 +140,6 @@ public class TabModel
 			Object = obj,
 			Fill = fill,
 			EnableScrolling = enableScrolling,
-			Editable = editable,
 		};
 
 		Objects.Add(tabObject);
@@ -129,9 +147,18 @@ public class TabModel
 		return tabObject;
 	}
 
-	public TabObject AddForm(object obj, bool fill = false, bool enableScrolling = false)
+	public TabFormObject AddForm(object obj, bool fill = false, bool enableScrolling = false)
 	{
-		return AddObject(obj, fill, enableScrolling, true);
+		TabFormObject tabObject = new()
+		{
+			Object = obj,
+			Fill = fill,
+			EnableScrolling = enableScrolling,
+		};
+
+		Objects.Add(tabObject);
+
+		return tabObject;
 	}
 
 	public void AddData(object? obj)

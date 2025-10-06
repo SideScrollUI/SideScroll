@@ -6,7 +6,6 @@ namespace SideScroll.Tabs.Bookmarks;
 
 public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab, IInnerTab
 {
-	//[ButtonColumn("-")]
 	public event EventHandler<EventArgs>? OnDelete;
 
 	[ButtonColumn("-")]
@@ -50,7 +49,7 @@ public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab,
 		}
 
 		var call = new Call();
-		LinkedBookmark linkedBookmarkCopy = linkedBookmark.DeepClone(call, true)!; // This will get modified as users navigate
+		LinkedBookmark linkedBookmarkCopy = linkedBookmark.DeepClone(call, true); // This will get modified as users navigate
 		Bookmark bookmark = linkedBookmarkCopy.Bookmark;
 		bookmark.Reinitialize();
 

@@ -7,6 +7,7 @@ namespace SideScroll.Serialize.DataRepos;
 public interface IDataRepoInstance
 {
 	string GroupId { get; }
+	string GroupPath { get; }
 
 	Type DataType { get; }
 
@@ -25,7 +26,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 
 	public Type DataType => typeof(T);
 
-	public DataRepoIndexInstance<T>? Index { get; set; }
+	public DataRepoIndex<T>? Index { get; set; }
 
 	public override string ToString() => GroupId;
 
@@ -64,9 +65,14 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		DataRepo.Save<T>(GroupId, key, item, call);
 	}
 
-	public virtual T? Load(Call? call, string? key = null, bool createIfNeeded = false, bool lazy = false)
+	public virtual T? Load(Call? call, string? key = null, bool lazy = false)
 	{
-		return DataRepo.Load<T>(GroupId, key ?? DefaultKey, call, createIfNeeded, lazy);
+		return DataRepo.Load<T>(GroupId, key ?? DefaultKey, call, lazy);
+	}
+
+	public virtual T LoadOrCreate(Call? call, string? key = null, bool lazy = false)
+	{
+		return DataRepo.LoadOrCreate<T>(GroupId, key ?? DefaultKey, call, lazy);
 	}
 
 	public virtual DataPageView<T> LoadPageView(Call? call, bool ascending = true)
@@ -141,7 +147,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		}
 	}
 
-	public IEnumerable<DataItem<T>> LoadAllDataItems(Call call, bool ascending = false)
+	public IEnumerable<DataItem<T>> LoadAllDataItems(Call call, bool ascending = true)
 	{
 		var pathIterator = GetPathEnumerable(ascending);
 		if (pathIterator == null) return [];

@@ -8,10 +8,10 @@ public class TabSampleGridColumnTypes : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			var items = new List<ManyTypesItem>();
+			List<ManyTypesItem> items = [];
 			for (int i = 0; i < 10; i++)
 			{
-				var testItem = new ManyTypesItem
+				ManyTypesItem testItem = new()
 				{
 					Integer = i,
 					Long = (long)i * int.MaxValue,

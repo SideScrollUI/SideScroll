@@ -5,6 +5,9 @@ namespace SideScroll.Extensions;
 
 public static class TypeExtensions
 {
+	/// <summary>
+	/// Set of all numeric types including integers and floating-point types
+	/// </summary>
 	public static HashSet<Type> NumericTypes { get; set; } =
 	[
 		typeof(byte),
@@ -24,6 +27,9 @@ public static class TypeExtensions
 		typeof(decimal),
 	];
 
+	/// <summary>
+	/// Set of floating-point decimal types (float, double, decimal)
+	/// </summary>
 	public static HashSet<Type> DecimalTypes { get; set; } =
 	[
 		typeof(float),
@@ -31,18 +37,27 @@ public static class TypeExtensions
 		typeof(decimal),
 	];
 
+	/// <summary>
+	/// Determines whether a type is a numeric type (including nullable numeric types)
+	/// </summary>
 	public static bool IsNumeric(this Type type)
 	{
 		type = GetNonNullableType(type);
 		return NumericTypes.Contains(type);
 	}
 
+	/// <summary>
+	/// Determines whether a type is a decimal/floating-point type (including nullable)
+	/// </summary>
 	public static bool IsDecimal(this Type type)
 	{
 		type = GetNonNullableType(type);
 		return DecimalTypes.Contains(type);
 	}
 
+	/// <summary>
+	/// Returns the underlying type if the type is Nullable&lt;T&gt;, otherwise returns the type itself
+	/// </summary>
 	public static Type GetNonNullableType(this Type type)
 	{
 		if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
@@ -50,6 +65,9 @@ public static class TypeExtensions
 		return type;
 	}
 
+	/// <summary>
+	/// Determines whether a type can be assigned to a generic type definition, checking interfaces and base types
+	/// </summary>
 	public static bool IsAssignableToGenericType(this Type givenType, Type genericType)
 	{
 		var interfaceTypes = givenType.GetInterfaces();
@@ -70,6 +88,9 @@ public static class TypeExtensions
 		return IsAssignableToGenericType(baseType, genericType);
 	}
 
+	/// <summary>
+	/// Gets the element type for arrays, generic collections, or base types that have element types
+	/// </summary>
 	public static Type? GetElementTypeForAll(this Type type)
 	{
 		if (type.HasElementType)
@@ -88,6 +109,9 @@ public static class TypeExtensions
 		return null;
 	}
 
+	/// <summary>
+	/// Returns all visible properties (excluding [Hidden], [HiddenColumn], indexed properties, and static properties), ordered by declaration
+	/// </summary>
 	public static List<PropertyInfo> GetVisibleProperties(this Type type)
 	{
 		return type.GetProperties()
@@ -100,11 +124,17 @@ public static class TypeExtensions
 			.ToList();
 	}
 
+	/// <summary>
+	/// Returns the first property decorated with the specified attribute type
+	/// </summary>
 	public static PropertyInfo? GetPropertyWithAttribute<T>(this Type type) where T : Attribute
 	{
 		return GetPropertiesWithAttribute<T>(type).FirstOrDefault();
 	}
 
+	/// <summary>
+	/// Returns all properties decorated with the specified attribute type, ordered by declaration
+	/// </summary>
 	public static List<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type) where T : Attribute
 	{
 		// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
@@ -115,6 +145,9 @@ public static class TypeExtensions
 			.ToList();
 	}
 
+	/// <summary>
+	/// Returns all fields decorated with the specified attribute type, ordered by declaration
+	/// </summary>
 	public static List<FieldInfo> GetFieldsWithAttribute<T>(this Type type) where T : Attribute
 	{
 		// Fields are returned in a random order, so sort them by the MetadataToken to get the original order
@@ -125,7 +158,9 @@ public static class TypeExtensions
 			.ToList();
 	}
 
-	// AssemblyQualifiedName with only the Namespace, Type, and Assembly Name for consistency across versions
+	/// <summary>
+	/// Returns an assembly-qualified name with only the namespace, type, and assembly name (for consistency across versions)
+	/// </summary>
 	public static string GetAssemblyQualifiedShortName(this Type type)
 	{
 		string name;

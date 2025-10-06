@@ -1,16 +1,18 @@
 <Project>
   <PropertyGroup>
-    <Version>0.9.10</Version>
+    <Version>0.12</Version>
     <PackageReleaseNotes>
-    - Updated TabControl names to remove Control to match existing controls
-      - Renamed TabControlParams to TabForm
-    - Fixed suffix for several EventArgs to match existing patterns
-    - Added DataPageView HasNext and HasPrevious DataBinding
-    - Removed [Params] and added TabModel.AddObject(obj, editable: true)
-    - Renamed [Static] to [CloneReference] to better reflect usage
+    - Split DataGridButton out of TabButton and changed to show only on selection or pointer over
+    - Toolbar/Image Buttons can now show Flyouts using the TaskInstance
+    - Toolbar/Image Buttons now show a Flyout for any errors
+    - Light Blue Theme updates
+    - Added Theming for TextControlBorderFocused and ComboBoxDropDownBorder
+    - Fixed removing extra UI items when deleting from DataView layer
+    - Fixed native theme loading not accounting for Brush opacity
+    - Added Summary documentation for Extensions and ItemCollections
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.2</AvaloniaVersion>
+    <AvaloniaVersion>11.3.7</AvaloniaVersion>
     <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
@@ -21,6 +23,7 @@
 
     <Description>SideScroll is a cross platform Avalonia UI framework designed for quickly navigating through a tree of tabs. Every tab that shows will automatically select the next most likely tabs, and the next, until you need to start scrolling. Navigate 20 or even 50 tabs deep, and create links to save or share with others.</Description>
     <RepositoryUrl>https://github.com/SideScrollUI/SideScroll</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <Authors>SideScroll UI</Authors>
     <Copyright>SideScroll UI</Copyright>
 

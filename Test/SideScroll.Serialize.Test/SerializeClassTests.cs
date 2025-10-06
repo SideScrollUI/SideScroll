@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Serialize.Atlas;
 using System.Collections;
-using System.Text;
 
 namespace SideScroll.Serialize.Test;
 
@@ -93,66 +92,6 @@ public class SerializeClassTests : SerializeBaseTest
 		Assert.That(output.UintTest, Is.EqualTo(input.UintTest));
 		Assert.That(output.DoubleTest, Is.EqualTo(input.DoubleTest));
 		Assert.That(output.StringTest, Is.EqualTo(input.StringTest));
-	}
-
-	public class Class1
-	{
-		public int Integer = 1;
-	}
-
-	public class Class2
-	{
-		public int Integer { get; set; } = 1;
-	}
-
-	[Test]
-	public void RenameFieldToProperty()
-	{
-		Class1 input = new()
-		{
-			Integer = 2,
-		};
-
-		_serializer.Save(Call, input);
-
-		ReplaceBytes("Class1", "Class2");
-
-		var output = _serializer.Load<Class2>(Call);
-
-		Assert.That(output.Integer, Is.EqualTo(input.Integer));
-	}
-
-	[Test]
-	public void RenamePropertyToField()
-	{
-		Class2 input = new()
-		{
-			Integer = 2,
-		};
-
-		_serializer.Save(Call, input);
-
-		ReplaceBytes("Class2", "Class1");
-
-		var output = _serializer.Load<Class1>(Call);
-
-		Assert.That(output.Integer, Is.EqualTo(input.Integer));
-	}
-
-	private void ReplaceBytes(string searchText, string replaceText)
-	{
-		var bytes = _serializer.Stream.GetBuffer();
-
-		var oldBytes = Encoding.UTF8.GetBytes(searchText);
-		var newBytes = Encoding.UTF8.GetBytes(replaceText);
-
-		for (int i = 0; i <= bytes.Length - oldBytes.Length; i++)
-		{
-			if (bytes.Skip(i).Take(oldBytes.Length).SequenceEqual(oldBytes))
-			{
-				Array.Copy(newBytes, 0, bytes, i, newBytes.Length);
-			}
-		}
 	}
 
 	public class NullablePropertyPrimitives

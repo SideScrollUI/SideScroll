@@ -35,13 +35,13 @@ public class TabSampleSerializer : ITab
 
 		private void Deserialize(Call call)
 		{
-			SampleItem sampleItem = Project.Data.App.Load<SampleItem>(false, false, call)!;
+			SampleItem sampleItem = Project.Data.App.Load<SampleItem>(false, call)!;
 			_items.Add(new ListItem("Deserialized Sample Item", sampleItem));
 		}
 
 		private void SerializeOneMillionObjects(Call call)
 		{
-			var sampleItems = new List<SampleItem>();
+			var sampleItems = new List<SampleItem>(1_000_000);
 			for (int i = 0; i < 1_000_000; i++)
 			{
 				sampleItems.Add(new SampleItem(i, "Item " + i));
@@ -52,7 +52,7 @@ public class TabSampleSerializer : ITab
 
 		private void DeserializeOneMillionObjects(Call call)
 		{
-			List<SampleItem> sampleItems = Project.Data.App.Load<List<SampleItem>>(false, false, call)!;
+			List<SampleItem> sampleItems = Project.Data.App.Load<List<SampleItem>>(false, call)!;
 			_items.Add(new ListItem("DeserializeOneMillionObjects", sampleItems));
 		}
 	}

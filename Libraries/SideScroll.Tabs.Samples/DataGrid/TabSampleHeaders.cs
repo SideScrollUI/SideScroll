@@ -32,7 +32,7 @@ public class TabSampleHeaders : ITab
 
 		private static ItemCollection<TestItem> BuildHideHeaders()
 		{
-			ItemCollection<TestItem> items = new();
+			ItemCollection<TestItem> items = [];
 			for (int i = 0; i < 10; i++)
 			{
 				items.Add(new TestItem($"Test {i}", i));

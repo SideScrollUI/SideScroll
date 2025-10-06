@@ -6,8 +6,8 @@ namespace SideScroll.Tabs.Toolbar;
 
 public class ToolToggleButton : ToolButton
 {
-	public IResourceView OnImageResource { get; set; }
-	public IResourceView OffImageResource { get; set; }
+	public IResourceView OnImageResource { get; }
+	public IResourceView OffImageResource { get; }
 
 	public ListProperty? ListProperty { get; set; }
 
