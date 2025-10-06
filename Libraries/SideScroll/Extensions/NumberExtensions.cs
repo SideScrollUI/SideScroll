@@ -2,11 +2,17 @@ namespace SideScroll.Extensions;
 
 public static class NumberExtensions
 {
+	/// <summary>
+	/// Formats a double as a decimal number with thousand separators and one optional decimal place
+	/// </summary>
 	public static string FormattedDecimal(this double d)
 	{
 		return d.ToString("#,0.#");
 	}
 
+	/// <summary>
+	/// Formats a double using short suffixes (K, M, G, T) with configurable minimum precision
+	/// </summary>
 	public static string FormattedShortDecimal(this double d, int minimumPrecision = 0)
 	{
 		double absValue = Math.Abs(d);
@@ -57,11 +63,17 @@ public static class NumberExtensions
 		return string.Format(format, scaled, suffix);
 	}
 
+	/// <summary>
+	/// Rounds a double to the specified number of significant figures
+	/// </summary>
 	public static double RoundToSignificantFigures(this double num, int significantFigures)
 	{
 		return (double)RoundToSignificantFigures((decimal)num, significantFigures);
 	}
 
+	/// <summary>
+	/// Rounds a decimal to the specified number of significant figures
+	/// </summary>
 	public static decimal RoundToSignificantFigures(this decimal num, int significantFigures)
 	{
 		if (num == 0) return 0;

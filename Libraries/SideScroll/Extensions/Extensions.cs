@@ -7,6 +7,9 @@ namespace SideScroll.Extensions;
 
 public static class SideScrollExtensions
 {
+	/// <summary>
+	/// Returns all child XML nodes with the specified name
+	/// </summary>
 	public static XmlNode[] Elements(this XmlNode xmlNode, string name)
 	{
 		return xmlNode.ChildNodes
@@ -15,6 +18,9 @@ public static class SideScrollExtensions
 			.ToArray();
 	}
 
+	/// <summary>
+	/// Merges items from newList into iList, adding only items that don't already exist
+	/// </summary>
 	public static void Merge(this IList iList, IList newList)
 	{
 		foreach (object item in newList)
@@ -26,6 +32,9 @@ public static class SideScrollExtensions
 		}
 	}
 
+	/// <summary>
+	/// Merges properties from newObject into obj, setting only null properties in obj
+	/// </summary>
 	public static void Merge(this object obj, object newObject)
 	{
 		Type type = obj.GetType();
@@ -47,7 +56,9 @@ public static class SideScrollExtensions
 		//FieldInfo[] fieldInfos = type.GetFields();
 	}
 
-	// Returns value of first property or field that sets [InnerValue]
+	/// <summary>
+	/// Returns the value of the first property or field decorated with [InnerValue] attribute, recursively unwrapping nested inner values
+	/// </summary>
 	public static object? GetInnerValue(this object? value)
 	{
 		if (value == null)
@@ -84,6 +95,9 @@ public static class SideScrollExtensions
 		return value;
 	}
 
+	/// <summary>
+	/// Formats a Version by removing trailing ".0" segments (e.g., "1.2.0.0" becomes "1.2")
+	/// </summary>
 	public static string Formatted(this Version version)
 	{
 		return version.ToString()
@@ -92,6 +106,9 @@ public static class SideScrollExtensions
 			.TrimEnd(".0");
 	}
 
+	/// <summary>
+	/// Creates a new array containing a portion of the source array
+	/// </summary>
 	public static T[] SubArray<T>(this T[] array, int offset, int length)
 	{
 		var result = new T[length];

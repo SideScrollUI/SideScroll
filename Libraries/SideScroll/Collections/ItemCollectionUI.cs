@@ -4,41 +4,90 @@ using System.Collections.Specialized;
 
 namespace SideScroll.Collections;
 
+/// <summary>
+/// Interface for objects that manage a SynchronizationContext for thread-safe UI operations
+/// </summary>
 public interface IContext
 {
+	/// <summary>
+	/// The SynchronizationContext used for marshalling operations to the UI thread
+	/// </summary>
 	SynchronizationContext? Context { get; set; }
+	
+	/// <summary>
+	/// Initializes the SynchronizationContext for this object
+	/// </summary>
 	void InitializeContext(bool reset = false);
 }
 
-// Allows updating UI after initialization
+/// <summary>
+/// A thread-safe observable collection for UI updates. Allows safely adding/removing items from background threads by marshalling operations to the UI thread via SynchronizationContext.
+/// Use this instead of ItemCollection when updating the collection from multiple threads or background tasks.
+/// </summary>
 public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollection, IContext //, IRaiseItemChangedEvents //
 {
+	/// <summary>
+	/// The label to display for this collection
+	/// </summary>
 	public string? Label { get; set; }
+	
+	/// <summary>
+	/// The name to display for the first column in the DataGrid
+	/// </summary>
 	public string? ColumnName { get; set; }
+	
+	/// <summary>
+	/// Custom path for saving/loading tab view settings
+	/// </summary>
 	public string? CustomSettingsPath { get; set; }
+	
+	/// <summary>
+	/// The default item to select when the collection is displayed
+	/// </summary>
 	public object? DefaultSelectedItem { get; set; }
+	
+	/// <summary>
+	/// Whether single-item collections should be automatically skipped/expanded in the UI (default: true)
+	/// </summary>
 	public bool Skippable { get; set; } = true;
+	
+	/// <summary>
+	/// Override default header visibility - when set, always shows/hides the header regardless of other settings
+	/// </summary>
 	public bool? ShowHeader { get; set; }
 
-	// Enable for thread safety when there's multiple threads acting on this collection
-	// true:  Always post new Events to the context
-	// false: Events can shortcut and run on the current context, bypassing the event queue, which can be faster, but out of order
+	/// <summary>
+	/// Controls thread safety behavior:
+	/// - true: Always posts events to the UI context (safer, maintains order)
+	/// - false: Events can run on current context if already on UI thread (faster, but may be out of order)
+	/// </summary>
 	public bool PostOnly { get; set; }
 
-	public SynchronizationContext? Context { get; set; } // TabInstance will initialize this, don't want to initialize this early due to default SynchronizationContext not posting messages in order
+	/// <summary>
+	/// The SynchronizationContext used for marshalling operations to the UI thread. Initialized by TabInstance.
+	/// </summary>
+	public SynchronizationContext? Context { get; set; }
 
+	/// <summary>
+	/// Gets whether operations should be posted to the UI context based on PostOnly flag and current thread context
+	/// </summary>
 	public bool UsePost => Context != null && (PostOnly || Context != SynchronizationContext.Current);
 
 	private readonly object _lock = new();
 
 	public ItemCollectionUI() { }
 
-	// Don't implement List<T>, it isn't sortable
+	/// <summary>
+	/// Initializes a new ItemCollectionUI with items from an enumerable collection
+	/// </summary>
 	public ItemCollectionUI(IEnumerable<T> enumerable) :
 		base(enumerable)
 	{
 	}
 
+	/// <summary>
+	/// Initializes or resets the SynchronizationContext to the current thread's context
+	/// </summary>
 	public void InitializeContext(bool reset = false)
 	{
 		if (Context == null || reset)
@@ -47,6 +96,9 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 		}
 	}
 
+	/// <summary>
+	/// Adds an item to the collection. Thread-safe - marshals to UI thread if called from background thread.
+	/// </summary>
 	public new void Add(T item)
 	{
 		if (UsePost)
@@ -71,6 +123,9 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 		}
 	}
 
+	/// <summary>
+	/// Adds multiple items to the collection. Thread-safe - marshals to UI thread if called from background thread.
+	/// </summary>
 	public void AddRange(IEnumerable<T> collection)
 	{
 		if (UsePost)
@@ -99,7 +154,9 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 		}
 	}
 
-
+	/// <summary>
+	/// Replaces all items in the collection with the specified items. Thread-safe - marshals to UI thread if called from background thread.
+	/// </summary>
 	public void Replace(IEnumerable<T> collection)
 	{
 		if (UsePost)
@@ -129,9 +186,14 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 		}
 	}
 
+	/// <summary>
+	/// Record struct holding an item and its insertion index for thread-safe insertion operations
+	/// </summary>
 	public readonly record struct ItemLocation(int Index, T Item);
 
-	// Overriding InsertItem() has out of order issues, so override this instead
+	/// <summary>
+	/// Inserts an item at the specified index. Thread-safe - marshals to UI thread if called from background thread.
+	/// </summary>
 	public new void Insert(int index, T item)
 	{
 		var location = new ItemLocation(index, item);
@@ -159,6 +221,9 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 		}
 	}
 
+	/// <summary>
+	/// Clears all items from the collection. Thread-safe - marshals to UI thread if called from background thread.
+	/// </summary>
 	public new void Clear()
 	{
 		if (UsePost)
@@ -180,6 +245,9 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 		}
 	}
 
+	/// <summary>
+	/// Removes the item at the specified index. Thread-safe - marshals to UI thread if called from background thread.
+	/// </summary>
 	protected override void RemoveItem(int index)
 	{
 		if (UsePost)
@@ -203,11 +271,17 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 		}
 	}
 
+	/// <summary>
+	/// Raises the CollectionChanged event with the specified event arguments
+	/// </summary>
 	public void NotifyCollectionChanged(NotifyCollectionChangedEventArgs e)
 	{
 		OnCollectionChanged(e);
 	}
 
+	/// <summary>
+	/// Replaces an existing object in the collection with a new object, maintaining the original object's index position
+	/// </summary>
 	public void Replace(T oldObject, T newObject)
 	{
 		int index = Items.IndexOf(oldObject);
