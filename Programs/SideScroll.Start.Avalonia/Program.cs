@@ -8,6 +8,7 @@ namespace SideScroll.Start.Avalonia;
 
 static class Program
 {
+	[STAThread]
 	static int Main(string[] args)
 	{
 		AppBuilder builder = BuildAvaloniaApp();

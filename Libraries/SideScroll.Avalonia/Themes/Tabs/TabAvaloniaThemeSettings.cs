@@ -201,15 +201,25 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 		private void CopyToClipboard(Call call)
 		{
 			string json = JsonSerializer.Serialize(ThemeSettings, _jsonSerializerOptions);
-			ClipboardUtils.SetText(_themeForm, json);
+			CopyToClipboard(json);
 			call.TaskInstance!.ShowMessage("Copied to Clipboard");
 		}
 
 		private void ImportFromClipboard(Call call)
 		{
+			Dispatcher.UIThread.Post(async () => await ImportFromClipboardAsync(call));
+		}
+
+		private async Task ImportFromClipboardAsync(Call call)
+		{
 			try
 			{
-				string json = ClipboardUtils.TryGetText(_themeForm)!;
+				string? json = await ClipboardUtils.TryGetTextAsync(_themeForm)!;
+				if (json == null)
+				{
+					call.TaskInstance!.ShowMessage("No clipboard content found");
+					return;
+				}
 				var theme = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, _jsonSerializerOptions)!;
 				LoadTheme(theme);
 

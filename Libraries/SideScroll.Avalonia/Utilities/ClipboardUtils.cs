@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input.Platform;
+using Avalonia.Threading;
 
 namespace SideScroll.Avalonia.Utilities;
 
@@ -18,18 +19,13 @@ public static class ClipboardUtils
 
 	public static void SetText(Visual? visual, string text)
 	{
-		Task.Run(() => SetTextAsync(visual, text));
+		Dispatcher.UIThread.Post(async () => await SetTextAsync(visual, text));
 	}
 
 	public static async Task SetTextAsync(Visual? visual, string text)
 	{
 		IClipboard clipboard = GetClipboard(visual);
 		await clipboard.SetTextAsync(text);
-	}
-
-	public static string? TryGetText(Visual? visual)
-	{
-		return Task.Run(() => TryGetTextAsync(visual)).GetAwaiter().GetResult();
 	}
 
 	public static async Task<string?> TryGetTextAsync(Visual? visual)

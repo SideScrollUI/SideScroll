@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace SideScroll;
 
 public static class Paths
@@ -19,19 +21,19 @@ public static class Paths
 		char[] invalidFileNameChars = Path.GetInvalidFileNameChars();
 		char[] invalidPathChars = Path.GetInvalidPathChars();
 
-		string encodedUri = "";
+		StringBuilder encodedUri = new();
 		foreach (char c in path)
 		{
 			if (c != '/' && (invalidPathChars.Contains(c) || invalidFileNameChars.Contains(c)))
 			{
-				encodedUri += "_" + Convert.ToByte(c).ToString("x2") + "_";
+				encodedUri.Append('_' + Convert.ToByte(c).ToString("x2") + '_');
 			}
 			else
 			{
-				encodedUri += c;
+				encodedUri.Append(c);
 			}
 		}
-		return encodedUri;
+		return encodedUri.ToString();
 	}
 
 	// Windows: C:\Users\<User>

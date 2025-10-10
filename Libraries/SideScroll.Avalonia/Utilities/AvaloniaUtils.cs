@@ -77,9 +77,9 @@ public static class AvaloniaUtils
 		list.Add(menuItemCopy);
 
 		var menuItemPaste = new TabMenuItem("Paste");
-		menuItemPaste.Click += delegate
+		menuItemPaste.Click += async delegate
 		{
-			if (ClipboardUtils.TryGetText(comboBox) is string clipboardText)
+			if (await ClipboardUtils.TryGetTextAsync(comboBox) is string clipboardText)
 			{
 				if (comboBox.Items.FirstOrDefault(i => i?.ToString() == clipboardText) is object matchingItem)
 				{
@@ -109,9 +109,9 @@ public static class AvaloniaUtils
 		list.Add(menuItemCopy);
 
 		var menuItemPaste = new TabMenuItem("Paste");
-		menuItemPaste.Click += delegate
+		menuItemPaste.Click += async delegate
 		{
-			if (ClipboardUtils.TryGetText(colorPicker) is string clipboardText &&
+			if (await ClipboardUtils.TryGetTextAsync(colorPicker) is string clipboardText &&
 				Color.TryParse(clipboardText, out Color color))
 			{
 				colorPicker.Color = color;
