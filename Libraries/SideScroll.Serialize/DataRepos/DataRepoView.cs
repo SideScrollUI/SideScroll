@@ -11,6 +11,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 
 	public DataItemCollection<T> Items { get; protected set; } = [];
 
+	public IEnumerable<string> Keys => Items.Keys;
 	public IEnumerable<T> Values => Items.Values;
 
 	public bool Loaded { get; protected set; }

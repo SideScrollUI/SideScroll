@@ -10,6 +10,7 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 {
 	public SortedDictionary<string, DataItem<T>> Lookup { get; protected set; } = [];
 
+	public IEnumerable<string> Keys => this.Select(o => o.Key);
 	public IEnumerable<T> Values => this.Select(o => o.Value);
 	public IEnumerable<T> SortedValues => Lookup.Values.Select(o => o.Value);
 

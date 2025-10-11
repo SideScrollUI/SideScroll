@@ -16,6 +16,8 @@ public class ThemeManager
 	public static ThemeManager? Instance { get; set; }
 	public static AvaloniaThemeSettings? CurrentTheme { get; protected set; }
 
+	public static JsonSerializerOptions JsonSerializerOptions { get; } = CreateJsonSerializerOptions();
+
 	public Project Project { get; }
 
 	public static Application Application => Application.Current!;
@@ -89,22 +91,24 @@ public class ThemeManager
 
 	public void AddJson(Call call, string json, bool isDefault = false)
 	{
-		var options = new JsonSerializerOptions();
-		options.Converters.Add(new JsonColorConverter());
-		var themeSettings = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, options)!;
+		var themeSettings = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, JsonSerializerOptions)!;
 		themeSettings.Version = Project.Version;
+
+		// Overwrite previous if not found since the change is so large. Todo: Remove eventually
+		bool isHybridFound = DataRepoDefaultThemes.Keys.Contains("Hybrid");
 
 		if (isDefault)
 		{
 			var defaultTheme = DataRepoDefaultThemes.Values.FirstOrDefault(theme => theme.Name == themeSettings.Name);
-			if (defaultTheme == null || defaultTheme.Version != Project.Version)
+			if (defaultTheme == null || defaultTheme.Version != Project.Version || !isHybridFound)
 			{
 				themeSettings.FillMissingValues();
 				DataRepoDefaultThemes.Save(call, themeSettings);
 			}
 		}
 
-		if (GetUpdatedTheme(themeSettings.Name) is not AvaloniaThemeSettings existingThemeSettings ||
+		if (!isHybridFound ||
+			GetUpdatedTheme(themeSettings.Name) is not AvaloniaThemeSettings existingThemeSettings ||
 			(existingThemeSettings.ModifiedAt == null && existingThemeSettings.Version != Project.Version))
 		{
 			DataRepoThemes.Save(call, themeSettings);
@@ -177,5 +181,12 @@ public class ThemeManager
 		LoadTheme(themeSettings);
 
 		return themeSettings;
+	}
+
+	private static JsonSerializerOptions CreateJsonSerializerOptions()
+	{
+		var options = new JsonSerializerOptions { WriteIndented = true };
+		options.Converters.Add(new JsonColorConverter());
+		return options;
 	}
 }

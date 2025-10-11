@@ -189,18 +189,9 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 			_lastHistoryUpdatable = isUpdatable;
 		}
 
-		private static JsonSerializerOptions CreateJsonSerializerOptions()
-		{
-			var options = new JsonSerializerOptions { WriteIndented = true };
-			options.Converters.Add(new JsonColorConverter());
-			return options;
-		}
-
-		private static JsonSerializerOptions _jsonSerializerOptions = CreateJsonSerializerOptions();
-
 		private void CopyToClipboard(Call call)
 		{
-			string json = JsonSerializer.Serialize(ThemeSettings, _jsonSerializerOptions);
+			string json = JsonSerializer.Serialize(ThemeSettings, ThemeManager.JsonSerializerOptions);
 			CopyToClipboard(json);
 			call.TaskInstance!.ShowMessage("Copied to Clipboard");
 		}
@@ -220,7 +211,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 					call.TaskInstance!.ShowMessage("No clipboard content found");
 					return;
 				}
-				var theme = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, _jsonSerializerOptions)!;
+				var theme = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, ThemeManager.JsonSerializerOptions)!;
 				LoadTheme(theme);
 
 				call.TaskInstance!.ShowMessage("Imported Theme");

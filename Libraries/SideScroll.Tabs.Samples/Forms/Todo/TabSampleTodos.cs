@@ -132,6 +132,7 @@ public class TabSampleTodos : ITab
 				Id = _dataRepoView!.Items.Count + 1
 			};
 			_formObject!.Update(this, _todoItem);
+			_formObject!.Focus(this);
 		}
 
 		private void Save(Call call)
