@@ -57,7 +57,6 @@
 
   <ItemGroup>
     <None Remove="Assets\Fonts\SourceCodePro-Regular.ttf" />
-    <None Remove="Assets\Themes\LightBlue.json" />
     <None Remove="DefaultTheme.xaml" />
     <None Remove="StyleResources.xaml" />
     <None Remove="Themes\Controls\ControlThemes.xaml" />
@@ -144,7 +143,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets\Themes\LightBlue.json" />
+    <EmbeddedResource Include="Assets\Themes\Hybrid.json" />
   </ItemGroup>
 
   <ItemGroup>

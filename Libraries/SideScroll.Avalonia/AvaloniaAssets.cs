@@ -23,6 +23,6 @@ public static class AvaloniaAssets
 
 	public static class Themes
 	{
-		public static string LightBlue => GetText("LightBlue", "json");
+		public static string Hybrid => GetText("Hybrid", "json");
 	}
 }

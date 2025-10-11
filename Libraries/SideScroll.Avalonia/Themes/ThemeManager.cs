@@ -146,7 +146,7 @@ public class ThemeManager
 		Instance.AddThemeVariant(call, "Light");
 		Instance.AddThemeVariant(call, "Dark");
 
-		Instance.AddJson(call, AvaloniaAssets.Themes.LightBlue, true);
+		Instance.AddJson(call, AvaloniaAssets.Themes.Hybrid, true);
 
 		Instance.LoadCurrentTheme();
 	}
