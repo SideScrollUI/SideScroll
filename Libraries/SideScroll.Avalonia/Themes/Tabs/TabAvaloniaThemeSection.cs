@@ -19,8 +19,10 @@ namespace SideScroll.Avalonia.Themes.Tabs;
 
 public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstance, object obj) : ITab
 {
-	public TabAvaloniaThemeSettings.Instance TabInstance = tabInstance;
-	public object Object = obj;
+	[HiddenColumn]
+	public TabAvaloniaThemeSettings.Instance TabInstance => tabInstance;
+
+	public object Object => obj;
 
 	public override string? ToString() => Object?.ToString();
 
