@@ -41,24 +41,24 @@ public class TabSampleTodos : ITab
 			new()
 			{
 				Id = 1,
-				Title = "Feed cats",
-				Description = "Give each cat a can of wet food",
+				Title = "Refuel astronaut (snack break)",
+				Description = "Consume one pouch of space pudding and pretend it's crème brûlée. Hydrate like a champion.",
 				Priority = TodoPriority.High,
 				Status = TodoStatus.Completed,
 			},
 			new()
 			{
 				Id = 2,
-				Title = "Walk cat",
-				Description = "Take cat for a walk around the block. Avoid dogs when possible.",
+				Title = "Moonwalk lap around the lander",
+				Description = "Bounce gracefully in 1/6 g. Avoid dramatic slow-motion faceplants.",
 				Priority = TodoPriority.Medium,
 				Status = TodoStatus.InProgress,
 			},
 			new()
 			{
 				Id = 3,
-				Title = "Trim cats nails",
-				Description = "Clip each cats nails and give them treats afterwards. Apply bandages to any war wounds.",
+				Title = "De-dust lunar boots",
+				Description = "Brush off clingy lunar regolith; it's the glitter of space. Apologize to the air filter.",
 				Priority = TodoPriority.Low,
 			},
 		];

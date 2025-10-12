@@ -73,16 +73,20 @@ public class ThemeManager
 
 	public void AddThemeVariant(Call call, string variant)
 	{
+		// Overwrite previous if not found since the change is so large. Todo: Remove eventually
+		bool isHybridFound = DataRepoDefaultThemes.Keys.Contains("Hybrid");
+
 		// Always overwrite default themes when the version changes
 		var defaultTheme = DataRepoDefaultThemes.Values.FirstOrDefault(theme => theme.Name == variant);
-		if (defaultTheme == null || defaultTheme.Version != Project.Version || defaultTheme.HasNullValue())
+		if (defaultTheme == null || defaultTheme.Version != Project.Version || defaultTheme.HasNullValue() || !isHybridFound)
 		{
 			defaultTheme = Create(variant, variant);
 			DataRepoDefaultThemes.Save(call, defaultTheme);
 		}
 
 		// Don't replace user modified themes, but update them to add new resources
-		if (GetUpdatedTheme(variant) is not AvaloniaThemeSettings existingThemeSettings ||
+		if (!isHybridFound || 
+			GetUpdatedTheme(variant) is not AvaloniaThemeSettings existingThemeSettings ||
 			(existingThemeSettings.ModifiedAt == null && existingThemeSettings.Version != Project.Version))
 		{
 			DataRepoThemes.Save(call, defaultTheme);
@@ -94,21 +98,17 @@ public class ThemeManager
 		var themeSettings = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, JsonSerializerOptions)!;
 		themeSettings.Version = Project.Version;
 
-		// Overwrite previous if not found since the change is so large. Todo: Remove eventually
-		bool isHybridFound = DataRepoDefaultThemes.Keys.Contains("Hybrid");
-
 		if (isDefault)
 		{
 			var defaultTheme = DataRepoDefaultThemes.Values.FirstOrDefault(theme => theme.Name == themeSettings.Name);
-			if (defaultTheme == null || defaultTheme.Version != Project.Version || !isHybridFound)
+			if (defaultTheme == null || defaultTheme.Version != Project.Version)
 			{
 				themeSettings.FillMissingValues();
 				DataRepoDefaultThemes.Save(call, themeSettings);
 			}
 		}
 
-		if (!isHybridFound ||
-			GetUpdatedTheme(themeSettings.Name) is not AvaloniaThemeSettings existingThemeSettings ||
+		if (GetUpdatedTheme(themeSettings.Name) is not AvaloniaThemeSettings existingThemeSettings ||
 			(existingThemeSettings.ModifiedAt == null && existingThemeSettings.Version != Project.Version))
 		{
 			DataRepoThemes.Save(call, themeSettings);
