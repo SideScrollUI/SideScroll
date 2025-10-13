@@ -10,6 +10,7 @@
     - Added Theming for TextControlBorderFocused and ComboBoxDropDownBorder
     - Fixed removing extra UI items when deleting from DataView layer
     - Fixed native theme loading not accounting for Brush opacity
+    - Fixed DataRepo Indices that use restricted characters in the GroupId
     - Added Summary documentation for Extensions and ItemCollections
     </PackageReleaseNotes>
 

@@ -22,6 +22,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	public DataRepo DataRepo { get; }
 
 	public string GroupId { get; }
+	public string GroupHash => DataRepo.GetGroupHash(typeof(T), GroupId);
 	public string GroupPath => DataRepo.GetGroupPath(typeof(T), GroupId);
 
 	public Type DataType => typeof(T);

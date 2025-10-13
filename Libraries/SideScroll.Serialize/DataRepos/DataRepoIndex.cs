@@ -16,6 +16,9 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 
 	public string IndexPath => Paths.Combine(GroupPath, "Index.dat");
 
+	// Don't use GroupId since it can throw exceptions due to invalid characters
+	protected string MutexName => DataRepoInstance.GroupHash;
+
 	public record Item(long Index, string Key);
 
 	public class Indices
@@ -83,7 +86,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 
 	public TResult? LockedGetCall<TResult>(Call call, Func<TResult> func)
 	{
-		using var mutex = new Mutex(false, DataRepoInstance.GroupId);
+		using var mutex = new Mutex(false, MutexName);
 
 		try
 		{
@@ -123,7 +126,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 
 	public void LockedSetCall(Call call, CallAction callAction)
 	{
-		using var mutex = new Mutex(false, DataRepoInstance.GroupId);
+		using var mutex = new Mutex(false, MutexName);
 
 		try
 		{
