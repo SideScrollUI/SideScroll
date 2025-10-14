@@ -40,7 +40,7 @@
           <SolidColorBrush x:Key="TextControlForeground" Color="#ff001061" />
           <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="#ff001061" />
           <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#ff001061" />
-          <SolidColorBrush x:Key="TextControlBorderBrush" Color="#ffd3d3f5" />
+          <SolidColorBrush x:Key="TextControlBorderBrush" Color="#e6ced7f5" />
           <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#ff8fc3f7" />
           <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#ff61aaf2" />
           <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#ff26a5ff" />
@@ -202,17 +202,17 @@
 
           <!-- DataGrid -->
           
-          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#ffe8ebfa" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#ffe1e8fa" />
           <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#ff91a2fa" />
           <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#ff140066" />
           <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#fff2f4fc" />
 
-          <SolidColorBrush x:Key="DataGridRowBackgroundBrush" Color="#fff5f6fc" />
+          <SolidColorBrush x:Key="DataGridRowBackgroundBrush" Color="#fff5f7fc" />
           <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="#ffbdd0fc" />
           
-          <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="#ff2f3866" />
-          <SolidColorBrush x:Key="DataGridCellForegroundPointerOverBrush" Color="#ff1335bd" />
-          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="#ff0f2699" />
+          <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="#ff2f3c66" />
+          <SolidColorBrush x:Key="DataGridCellForegroundPointerOverBrush" Color="#ff0b38bd" />
+          <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="#ff1033a3" />
           <SolidColorBrush x:Key="DataGridCellBorderBrush" Color="#ffd8daf2" />
           <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="#ff7c8acc" />
 
@@ -222,10 +222,10 @@
 
           <SolidColorBrush x:Key="DataGridHeaderSeparatorBrush" Color="#ff9aa4d9" />
 
-          <SolidColorBrush x:Key="DataGridHasLinksBackgroundBrush" Color="#ffdcdffa" />
-          <SolidColorBrush x:Key="DataGridHasLinksForegroundBrush" Color="#ff190587" />
-          <SolidColorBrush x:Key="DataGridNoLinksBackgroundBrush" Color="#ffedeefa" />
-          <SolidColorBrush x:Key="DataGridStyledBorderBrush" Color="#ffbcbde6" />
+          <SolidColorBrush x:Key="DataGridHasLinksBackgroundBrush" Color="#ffdee7fa" />
+          <SolidColorBrush x:Key="DataGridHasLinksForegroundBrush" Color="#ff051b87" />
+          <SolidColorBrush x:Key="DataGridNoLinksBackgroundBrush" Color="#ffedf1fa" />
+          <SolidColorBrush x:Key="DataGridStyledBorderBrush" Color="#ffbcc9e6" />
 
           <SolidColorBrush x:Key="DataGridButtonBackgroundBrush" Color="#ffebeefc" />
           <SolidColorBrush x:Key="DataGridButtonBackgroundPointerOverBrush" Color="#ffbac6ff" />
@@ -320,7 +320,7 @@
 
           <SolidColorBrush x:Key="LabelForegroundBrush" Color="#ff001061" />
 
-          <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#ffedeffa" />
+          <SolidColorBrush x:Key="TextControlBackgroundReadOnlyBrush" Color="#ffedf0fa" />
           <SolidColorBrush x:Key="TextControlForegroundReadOnlyBrush" Color="#ff616161" />
           
           <SolidColorBrush x:Key="TextControlBackgroundPointerOverBrush" Color="#ddffdd" />
