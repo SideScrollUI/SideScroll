@@ -73,27 +73,27 @@
           <!-- CalendarDatePicker -->
 
           <SolidColorBrush x:Key="CalendarDatePickerBackground" Color="White" />
-          <SolidColorBrush x:Key="CalendarDatePickerBorderBrush" Color="#ffd3d3f5" />
+          <SolidColorBrush x:Key="CalendarDatePickerBorderBrush" Color="#ffb2c2ff" />
           <SolidColorBrush x:Key="CalendarDatePickerBorderBrushPointerOver" Color="#ff8fc3f7" />
           <SolidColorBrush x:Key="CalendarDatePickerForeground" Color="#ff001061" />
 
           <SolidColorBrush x:Key="CalendarViewBackground" Color="#ffbac6ff" />
-          <SolidColorBrush x:Key="CalendarViewBorderBrush" Color="#ffe6e6e6" />
-          <SolidColorBrush x:Key="CalendarViewOutOfScopeBackground" Color="#ffd1d1f0" />
-          <SolidColorBrush x:Key="CalendarViewHoverBorderBrush" Color="#ff6791e6" />
+          <SolidColorBrush x:Key="CalendarViewBorderBrush" Color="#ffe6e6e6" /> <!-- Both border and CalendarViewItemBackground -->
+          <SolidColorBrush x:Key="CalendarViewOutOfScopeBackground" Color="#ffc0cceb" />
+          <SolidColorBrush x:Key="CalendarViewHoverBorderBrush" Color="#ff6a9bfc" />
           <SolidColorBrush x:Key="CalendarViewCalendarItemForeground" Color="#ff001061" />
 
           <!-- CheckBox -->
 
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUnchecked" Color="White" />
-          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#ffa8b0f0" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#e6ced7f5" />
 
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPointerOver" Color="White" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="#ff8fc3f7" />
 
-          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedDisabled" Color="#ffa8b0f0" />
-          <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="#ffa8b0f0" />
-          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedDisabled" Color="#ffa8b0f0" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedDisabled" Color="#e6ced7f5" />
+          <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="#e6ced7f5" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedDisabled" Color="#e6ced7f5" />
         
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPressed" Color="White" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedDisabled" Color="Transparent" />
@@ -186,9 +186,9 @@
           <SolidColorBrush x:Key="ScrollBarButtonArrowForeground" Color="#ff001061" />
           <SolidColorBrush x:Key="ScrollBarButtonArrowForegroundPointerOver" Color="#ff001061" />
 
-          <SolidColorBrush x:Key="ScrollBarButtonBackground" Color="#ffd5d8f7"/>
-          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPointerOver" Color="#ffc6c8f7"/>
-          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="#ff96a8ff"/>
+          <SolidColorBrush x:Key="ScrollBarButtonBackground" Color="#ffd5ddf7"/>
+          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPointerOver" Color="#ffc6d1f7"/>
+          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="#ff96afff"/>
 
           <SolidColorBrush x:Key="ScrollBarPanningThumbBackground" Color="#ff0000" />
           <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#ffd7ddf7" />
@@ -197,18 +197,18 @@
           <SolidColorBrush x:Key="ScrollBarShowingBorderBrush" Color="#ff97aac9" />
 
           <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#ffd7ddf7" />
-          <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#ff96a8ff" />
-          <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="#ff879afa" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#ff96afff" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="#ff87a2fa" />
 
           <!-- DataGrid -->
           
           <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#ffe1e8fa" />
-          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#ff91a2fa" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#ff91a9fa" />
           <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#ff140066" />
           <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#fff2f4fc" />
 
           <SolidColorBrush x:Key="DataGridRowBackgroundBrush" Color="#fff5f7fc" />
-          <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="#ffbdd0fc" />
+          <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="#ffc4d6ff" />
           
           <SolidColorBrush x:Key="DataGridCellForegroundBrush" Color="#ff2f3c66" />
           <SolidColorBrush x:Key="DataGridCellForegroundPointerOverBrush" Color="#ff0b38bd" />
@@ -222,14 +222,14 @@
 
           <SolidColorBrush x:Key="DataGridHeaderSeparatorBrush" Color="#ff9aa4d9" />
 
-          <SolidColorBrush x:Key="DataGridHasLinksBackgroundBrush" Color="#ffdee7fa" />
+          <SolidColorBrush x:Key="DataGridHasLinksBackgroundBrush" Color="#ffe1e9fc" />
           <SolidColorBrush x:Key="DataGridHasLinksForegroundBrush" Color="#ff051b87" />
-          <SolidColorBrush x:Key="DataGridNoLinksBackgroundBrush" Color="#ffedf1fa" />
-          <SolidColorBrush x:Key="DataGridStyledBorderBrush" Color="#ffbcc9e6" />
+          <SolidColorBrush x:Key="DataGridNoLinksBackgroundBrush" Color="#ffedf2fc" />
+          <SolidColorBrush x:Key="DataGridStyledBorderBrush" Color="#ffc5cfe6" />
 
-          <SolidColorBrush x:Key="DataGridButtonBackgroundBrush" Color="#ffebeefc" />
-          <SolidColorBrush x:Key="DataGridButtonBackgroundPointerOverBrush" Color="#ffbac6ff" />
-          <SolidColorBrush x:Key="DataGridButtonBackgroundPressedBrush" Color="#ffe6e8ff" />
+          <SolidColorBrush x:Key="DataGridButtonBackgroundBrush" Color="#ffebf0fc" />
+          <SolidColorBrush x:Key="DataGridButtonBackgroundPointerOverBrush" Color="#ffbacaff" />
+          <SolidColorBrush x:Key="DataGridButtonBackgroundPressedBrush" Color="#ff99b1ff" />
           
           <SolidColorBrush x:Key="DataGridButtonForegroundBrush" Color="#ff41434a" />
           <SolidColorBrush x:Key="DataGridButtonForegroundPointerOverBrush" Color="#fff2f4fc" />
@@ -343,7 +343,7 @@
 
           <!-- Chart -->
 
-          <SolidColorBrush x:Key="ChartBackgroundBrush" Color="#fffcfdff" />
+          <SolidColorBrush x:Key="ChartBackgroundBrush" Color="#fffafbfc" />
           <SolidColorBrush x:Key="ChartBackgroundSelectedBrush" Color="#448dff" />
           <sys:Double x:Key="ChartBackgroundSelectedAlpha">64</sys:Double>
           
@@ -351,14 +351,14 @@
           <SolidColorBrush x:Key="ChartLabelForegroundHighlightBrush" Color="#ff0057fa" />
           
           <SolidColorBrush x:Key="ChartGridLinesBrush" Color="#ffe0e8ff" />
-          <SolidColorBrush x:Key="ChartNowLineBrush" Color="#ff519e4c" />
+          <SolidColorBrush x:Key="ChartNowLineBrush" Color="#ff45b541" />
 
           <SolidColorBrush x:Key="ChartToolTipBackgroundBrush" Color="#d9575d9e" />
           <SolidColorBrush x:Key="ChartToolTipForegroundBrush" Color="#ffe6e8f7" />
 
-          <SolidColorBrush x:Key="ChartBorderBrush" Color="#ffedebf7" />
+          <SolidColorBrush x:Key="ChartBorderBrush" Color="#ffc3cade" />
           <Thickness x:Key="ChartBorderThickness">0</Thickness>
-          <SolidColorBrush x:Key="ChartLegendIconBorderBrush" Color="#ff32418c" />
+          <SolidColorBrush x:Key="ChartLegendIconBorderBrush" Color="#ff324d8c" />
 
           <SolidColorBrush x:Key="ChartSeries1Brush" Color="#ff1e8cfa" />
           <SolidColorBrush x:Key="ChartSeries2Brush" Color="#fffca000" />
