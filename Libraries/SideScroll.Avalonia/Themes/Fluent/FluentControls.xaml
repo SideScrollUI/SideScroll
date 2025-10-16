@@ -16,12 +16,12 @@
 
   <Style Selector="TextBox[IsReadOnly=true]:pointerover /template/ Border#PART_BorderElement">
     <Setter Property="Background" Value="{DynamicResource TextControlBackgroundReadOnlyBrush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushReadOnlyPointerOver}"/>
   </Style>
 
   <Style Selector="TextBox[IsReadOnly=true]:focus /template/ Border#PART_BorderElement">
     <Setter Property="Background" Value="{DynamicResource TextControlBackgroundReadOnlyBrush}"/>
-    <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushDisabled}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushReadOnlyPointerOver}"/>
   </Style>
 
   <Style Selector="GridSplitter">

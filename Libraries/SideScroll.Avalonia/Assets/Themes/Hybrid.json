@@ -124,6 +124,7 @@
     "TextControlBorder": "#b508061c",
     "TextControlBorderPointerOver": "#ff3060c0",
     "TextControlBorderFocused": "#ff0078d7",
+    "TextControlBorderReadOnlyPointerOver": "#5e65729c",
     "BorderThickness": 1.5,
     "CheckBoxBorder": "#66000000",
     "CheckBoxBorderThickness": 1,

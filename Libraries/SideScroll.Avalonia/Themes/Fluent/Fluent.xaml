@@ -37,12 +37,16 @@
           <SolidColorBrush x:Key="TextControlBackground" Color="White" />
 
           <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White" />
+          
           <SolidColorBrush x:Key="TextControlForeground" Color="#ff001061" />
           <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="#ff001061" />
           <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#ff001061" />
+          
           <SolidColorBrush x:Key="TextControlBorderBrush" Color="#e6ced7f5" />
           <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#ff8fc3f7" />
           <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#ff61aaf2" />
+          <SolidColorBrush x:Key="TextControlBorderBrushReadOnlyPointerOver" Color="#5e65729c" />
+          
           <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="#ff26a5ff" />
 
           <SolidColorBrush x:Key="TextControlSelectionForegroundBrush" Color="White" />
@@ -254,7 +258,7 @@
           <!-- Tab -->
 
           <SolidColorBrush x:Key="TabBackgroundBrush" Color="#fffafafa" />
-          <SolidColorBrush x:Key="TabBackgroundFocusedBrush" Color="#fffafbff" />
+          <SolidColorBrush x:Key="TabBackgroundFocusedBrush" Color="#fff7f9fc" />
           <SolidColorBrush x:Key="TabBackgroundBorderBrush" Color="#ffc3cade" />
 
           <SolidColorBrush x:Key="TabHeaderForegroundBrush" Color="#ff555555" />
@@ -443,13 +447,16 @@
           <SolidColorBrush x:Key="TextControlForeground" Color="{DynamicResource TextForegroundColor}" />
           <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="{DynamicResource TextForegroundHighColor}" />
           <SolidColorBrush x:Key="TextControlForegroundFocused" Color="{DynamicResource TextForegroundHighColor}" />
-          <SolidColorBrush x:Key="TextControlBorderBrush" Color="#22FFFFFF" />
           <SolidColorBrush x:Key="TextControlBackground" Color="{DynamicResource SystemAltMediumLowColor}" />
 
           <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="{StaticResource SystemAltMediumColor}" />
           <!--SolidColorBrush x:Key="TextControlPlaceholderForegroundPointerOver" Color="#172144" /-->
+
+          <SolidColorBrush x:Key="TextControlBorderBrush" Color="#22FFFFFF" />
           <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
           <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#ff0078d7" />
+          <SolidColorBrush x:Key="TextControlBorderBrushReadOnlyPointerOver" Color="#5e838b9c" />
+          
           <SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
 
           <SolidColorBrush x:Key="TextControlSelectionForegroundBrush" Color="#e6e6e6" />

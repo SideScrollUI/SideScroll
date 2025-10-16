@@ -450,6 +450,9 @@ public class TextControlTheme : ThemeSection
 	[ResourceKey("TextControlBorderBrushFocused")]
 	public Color? TextControlBorderFocused { get; set; }
 
+	[ResourceKey("TextControlBorderBrushReadOnlyPointerOver")]
+	public Color? TextControlBorderReadOnlyPointerOver { get; set; }
+
 	[Range(0, 5), ResourceKey("TextControlBorderThemeThickness",
 		"TextControlBorderThemeThicknessFocused",
 		"CalendarDatePickerBorderThemeThickness",
