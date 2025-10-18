@@ -66,11 +66,15 @@
 
           <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#fff0f2ff" />
           <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#4029498a" />
-          <SolidColorBrush x:Key="ComboBoxItemForeground" Color="#ff001061" />
+
           <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#ffccd5ff" />
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#ffb2c2ff" />
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#ffccd5ff" />
-          <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#ff001061" />
+
+          <SolidColorBrush x:Key="ComboBoxItemForeground" Color="#ff001361" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#ff103ceb" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="#ff103ceb" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPointerOver" Color="#ff103ceb" />
 
           <Thickness x:Key="ComboBoxBorderThemeThickness">1.5</Thickness>
           
@@ -206,10 +210,10 @@
 
           <!-- DataGrid -->
           
-          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#ffe1e8fa" />
-          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#ff91a9fa" />
-          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#ff140066" />
-          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#fff2f4fc" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#ffe6ecf7" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#ff91b0fa" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#ff002266" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#fff2f5fc" />
 
           <SolidColorBrush x:Key="DataGridRowBackgroundBrush" Color="#fff5f7fc" />
           <SolidColorBrush x:Key="DataGridRowHighlightBrush" Color="#ffc4d6ff" />
@@ -219,12 +223,13 @@
           <SolidColorBrush x:Key="DataGridCellForegroundSelectedBrush" Color="#ff1033a3" />
           <SolidColorBrush x:Key="DataGridCellBorderBrush" Color="#ffd8daf2" />
           <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush" Color="#ff7c8acc" />
+          <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush" Color="#99ffffff" />
 
           <SolidColorBrush x:Key="DataGridEditableBackgroundBrush" Color="#c8c2f9" />
 
           <SolidColorBrush x:Key="DataGridBorderBrush" Color="#ff9aa4d9" />
 
-          <SolidColorBrush x:Key="DataGridHeaderSeparatorBrush" Color="#ff9aa4d9" />
+          <SolidColorBrush x:Key="DataGridHeaderSeparatorBrush" Color="#ff9aafd9" />
 
           <SolidColorBrush x:Key="DataGridHasLinksBackgroundBrush" Color="#ffe1e9fc" />
           <SolidColorBrush x:Key="DataGridHasLinksForegroundBrush" Color="#ff051b87" />
@@ -280,9 +285,9 @@
 
           <!-- Toolbar -->
           
-          <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#ffe8eeff" />
+          <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#ffebf0fc" />
           
-          <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#ffd4ddff" />
+          <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#ffd4e1ff" />
           <CornerRadius x:Key="ToolbarButtonCornerRadius">6</CornerRadius>
           
           <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#ff5d85e3" />
@@ -302,17 +307,17 @@
           <Color x:Key="IconAltForegroundColor">#ffe68917</Color>
           <Color x:Key="IconAltForegroundHighlightColor">#ffeb9800</Color>
 
-          <SolidColorBrush x:Key="IconForegroundBrush" Color="#ff6b8ff2" />
-          <SolidColorBrush x:Key="IconForegroundHighlightBrush" Color="#ff4472f2" />
+          <SolidColorBrush x:Key="IconForegroundBrush" Color="#ff6b98f2" />
+          <SolidColorBrush x:Key="IconForegroundHighlightBrush" Color="#ff4783fc" />
           
           <SolidColorBrush x:Key="IconAltForegroundBrush" Color="{DynamicResource IconAltForegroundColor}" />
           <SolidColorBrush x:Key="IconAltForegroundHighlightBrush" Color="{DynamicResource IconAltForegroundHighlightColor}" />
           
-          <SolidColorBrush x:Key="IconForegroundDisabledBrush" Color="#ffa4b7ed" />
+          <SolidColorBrush x:Key="IconForegroundDisabledBrush" Color="#ffa4bced" />
 
           <!-- Title & Side Buttons -->
           
-          <SolidColorBrush x:Key="TabButtonBackgroundBrush" Color="#ffebecfa" />
+          <SolidColorBrush x:Key="TabButtonBackgroundBrush" Color="#ffebeffa" />
           <SolidColorBrush x:Key="TabButtonBackgroundPointerOverBrush" Color="#ffbac6ff" />
           <SolidColorBrush x:Key="TabButtonBackgroundPressedBrush" Color="#ffe6e8ff" />
           <SolidColorBrush x:Key="TabButtonForegroundBrush" Color="#ff41434a" />
@@ -334,7 +339,7 @@
 
           <!-- TextArea -->
 
-          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#ffe8ecfc" />
+          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#ffe8eefc" />
           <SolidColorBrush x:Key="TextAreaForegroundBrush" Color="#ff121242" />
           <SolidColorBrush x:Key="TextAreaBorderBrush" Color="#ffacaec4" />
 
@@ -475,14 +480,18 @@
           <SolidColorBrush x:Key="ComboBoxForeground" Color="{DynamicResource TextForegroundColor}" />
           <SolidColorBrush x:Key="ComboBoxForegroundFocused" Color="{DynamicResource TextForegroundHighColor}" />
           <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="#22FFFFFF" />
-          <SolidColorBrush x:Key="ComboBoxItemForeground" Color="{DynamicResource TextForegroundColor}" />
 
           <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#e6141414" />
           <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#e6000000" />
+
           <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#AA3060c0" />
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
-          <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="White" />
+
+          <SolidColorBrush x:Key="ComboBoxItemForeground" Color="{DynamicResource TextForegroundColor}" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#ffebebeb" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="#ffebebeb" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPointerOver" Color="#ffebebeb" />
 
           <Thickness x:Key="ComboBoxBorderThemeThickness">1</Thickness>
 

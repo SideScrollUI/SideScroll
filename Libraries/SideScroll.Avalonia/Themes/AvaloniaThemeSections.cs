@@ -495,7 +495,13 @@ public class TextControlTheme : ThemeSection
 		)]
 	public Color? ComboBoxItemBackgroundPointerOver { get; set; }
 
-	[ResourceKey("ComboBoxItemForegroundSelected")]
+	[ResourceKey("ComboBoxItemForeground")]
+	public Color? ComboBoxItemForeground { get; set; }
+
+	[ResourceKey("ComboBoxItemForegroundSelected",
+		"ComboBoxItemForegroundPointerOver",
+		"ComboBoxItemForegroundSelectedPointerOver"
+		)]
 	public Color? ComboBoxItemForegroundSelected { get; set; }
 
 	[ResourceKey("ComboBoxDropDownBorderBrush")]

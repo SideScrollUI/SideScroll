@@ -134,6 +134,7 @@
     "ComboBoxDropDownBackground": "#fff2f2f2",
     "ComboBoxItemBackgroundSelected": "#aa92f397",
     "ComboBoxItemBackgroundPointerOver": "#ff92f397",
+    "ComboBoxItemForeground": "#ff383838",
     "ComboBoxItemForegroundSelected": "Black",
     "ComboBoxDropDownBorder": "#23000000",
     "CalendarViewBackground": "White",

@@ -1,17 +1,9 @@
 <Project>
   <PropertyGroup>
-    <Version>0.12</Version>
+    <Version>0.13</Version>
     <PackageReleaseNotes>
-    - Updated Light Theme to use Light Blue Theme and renamed old Theme to Hybrid
-      - Also updated new Light Theme colors
-    - Split DataGridButton out of TabButton and changed to show only on selection or pointer over
-    - Toolbar/Image Buttons can now show Flyouts using the TaskInstance
-    - Toolbar/Image Buttons now show a Flyout for any errors
-    - Added Theming for TextControlBorderFocused and ComboBoxDropDownBorder
-    - Fixed removing extra UI items when deleting from DataView layer
-    - Fixed native theme loading not accounting for Brush opacity
-    - Fixed DataRepo Indices that use restricted characters in the GroupId
-    - Added Summary documentation for Extensions and ItemCollections
+    - Updated new Light Theme colors
+    - Added theming for ComboBoxItemForeground
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.7</AvaloniaVersion>
