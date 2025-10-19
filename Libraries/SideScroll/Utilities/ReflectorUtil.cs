@@ -2,9 +2,28 @@ using System.Reflection;
 
 namespace SideScroll.Utilities;
 
-// https://stackoverflow.com/questions/366332/best-way-to-get-sub-properties-using-getproperty
+/// <summary>
+/// Provides reflection utilities for navigating object property paths
+/// </summary>
+/// <remarks>
+/// Based on: https://stackoverflow.com/questions/366332/best-way-to-get-sub-properties-using-getproperty
+/// </remarks>
 public static class ReflectorUtil
 {
+	/// <summary>
+	/// Follows a property path on an object to retrieve a nested value
+	/// </summary>
+	/// <param name="value">The object to start navigation from</param>
+	/// <param name="path">The property path to follow, using dot notation (e.g., "Property.SubProperty[0]")</param>
+	/// <returns>The value at the end of the property path, or null if not found</returns>
+	/// <remarks>
+	/// Supports:
+	/// <list type="bullet">
+	/// <item><description>Nested properties using dot notation (e.g., "Address.Street")</description></item>
+	/// <item><description>Dictionary indexing using brackets (e.g., "Items[key]")</description></item>
+	/// <item><description>List indexing using brackets (e.g., "Items[0]")</description></item>
+	/// </list>
+	/// </remarks>
 	public static object? FollowPropertyPath(object value, string path)
 	{
 		ArgumentNullException.ThrowIfNull(value);
@@ -56,12 +75,18 @@ public static class ReflectorUtil
 		return obj;
 	}
 
+	/// <summary>
+	/// Gets an element from a dictionary by converting the index to the appropriate key type
+	/// </summary>
 	public static TValue GetDictionaryElement<TKey, TValue>(IDictionary<TKey, TValue> dict, object index)
 	{
 		TKey key = (TKey)Convert.ChangeType(index, typeof(TKey), null);
 		return dict[key];
 	}
 
+	/// <summary>
+	/// Gets an element from a list by index
+	/// </summary>
 	public static T GetListElement<T>(IList<T> list, object index)
 	{
 		return list[Convert.ToInt32(index)];

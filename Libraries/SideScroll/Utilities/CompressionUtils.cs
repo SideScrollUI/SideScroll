@@ -2,8 +2,14 @@ using System.IO.Compression;
 
 namespace SideScroll.Utilities;
 
+/// <summary>
+/// Provides utilities for compressing and decompressing files
+/// </summary>
 public class CompressionUtils
 {
+	/// <summary>
+	/// Compresses a file using GZip compression
+	/// </summary>
 	public static void Compress(Call call, FileInfo fileToCompress)
 	{
 		if ((File.GetAttributes(fileToCompress.FullName) & FileAttributes.Hidden) == FileAttributes.Hidden)
@@ -29,6 +35,9 @@ public class CompressionUtils
 			);
 	}
 
+	/// <summary>
+	/// Decompresses a file (supports both .zip and .gz formats)
+	/// </summary>
 	public static void Decompress(Call call, FileInfo fileToDecompress)
 	{
 		using CallTimer decompressCall = call.Timer("Decompressing", new Tag("File", fileToDecompress.FullName));

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Version>0.13</Version>
     <PackageReleaseNotes>
-    - Updated new Light Theme colors
+    - Updated Light Theme colors
     - Added theming for ComboBoxItemForeground
     </PackageReleaseNotes>
 

@@ -11,6 +11,7 @@ public class ShowMessageEventArgs(string message) : EventArgs
 	public string Message => message;
 }
 
+[Unserialized]
 public class TaskInstance : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;

@@ -5,8 +5,15 @@ using System.Reflection;
 
 namespace SideScroll.Utilities;
 
+/// <summary>
+/// Provides utilities for working with objects, including data key and value extraction
+/// </summary>
 public static class ObjectUtils
 {
+	/// <summary>
+	/// Gets a unique identifier string for an object, using DataKey or DataValue attributes if available
+	/// </summary>
+	/// <returns>A unique string identifier for the object</returns>
 	public static string? GetObjectId(object? obj)
 	{
 		string? id = GetDataKey(obj);
@@ -21,7 +28,10 @@ public static class ObjectUtils
 		return id ?? obj.ToUniqueString();
 	}
 
-	// Returns the Value.ToUniqueString() for the first property or field that has a [DataKey]
+	/// <summary>
+	/// Gets the data key value for an object by finding the first property or field with a [DataKey] attribute
+	/// </summary>
+	/// <returns>The unique string representation of the data key value, or null if no data key is found</returns>
 	public static string? GetDataKey(object? obj)
 	{
 		if (obj == null) return null;
@@ -41,7 +51,10 @@ public static class ObjectUtils
 		return null;
 	}
 
-	// Get's the [DataValue] member that will be imported with an Imported Link
+	/// <summary>
+	/// Gets the data value for an object by finding the first property or field with a [DataValue] attribute
+	/// </summary>
+	/// <returns>The data value object, or null if no data value is found</returns>
 	public static object? GetDataValue(object? obj)
 	{
 		if (obj == null) return null;
@@ -64,6 +77,11 @@ public static class ObjectUtils
 		return null;
 	}
 
+	/// <summary>
+	/// Determines whether two objects are equal, with support for comparing lists
+	/// </summary>
+	/// <param name="maxDepth">Maximum recursion depth for comparing nested collections (default is 3)</param>
+	/// <returns>True if the objects are equal; otherwise, false</returns>
 	public static bool AreEqual(object? obj1, object? obj2, int maxDepth = 3)
 	{
 		if (obj1 == null) return obj2 == null;

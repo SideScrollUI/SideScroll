@@ -3,11 +3,24 @@ using System.Diagnostics;
 
 namespace SideScroll.Utilities;
 
+/// <summary>
+/// Provides concurrent rate limiting functionality with configurable concurrency and request rate limits
+/// </summary>
 public class ConcurrentRateLimiter : IDisposable
 {
+	/// <summary>
+	/// Gets or sets the default maximum number of concurrent requests
+	/// </summary>
 	public static int DefaultMaxConcurrentRequests { get; set; } = 10;
 
+	/// <summary>
+	/// Gets the maximum number of concurrent requests allowed
+	/// </summary>
 	public int MaxConcurrentRequests { get; }
+	
+	/// <summary>
+	/// Gets the maximum number of requests per second, or null if no rate limit is set
+	/// </summary>
 	public int? MaxRequestsPerSecond { get; }
 
 	private readonly SemaphoreSlim _concurrencySemaphore;
@@ -16,6 +29,9 @@ public class ConcurrentRateLimiter : IDisposable
 	private readonly CancellationTokenSource _cts = new();
 	private readonly Task? _tokenRefillTask;
 
+	/// <summary>
+	/// Initializes a new instance of the ConcurrentRateLimiter class
+	/// </summary>
 	public ConcurrentRateLimiter(int? maxConcurrentRequests = null, int? maxRequestsPerSecond = null)
 	{
 		MaxConcurrentRequests = maxConcurrentRequests ?? DefaultMaxConcurrentRequests;
@@ -30,6 +46,9 @@ public class ConcurrentRateLimiter : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Waits asynchronously for permission to proceed based on concurrency and rate limits
+	/// </summary>
 	public async Task<IDisposable> WaitAsync(CancellationToken cancellationToken = default)
 	{
 		if (_rateSemaphore != null)
@@ -78,6 +97,9 @@ public class ConcurrentRateLimiter : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Disposes the rate limiter and releases all resources
+	/// </summary>
 	public void Dispose()
 	{
 		_cts.Cancel();

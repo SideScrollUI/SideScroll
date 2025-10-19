@@ -4,12 +4,25 @@ using System.Runtime.InteropServices;
 
 namespace SideScroll.Utilities;
 
+/// <summary>
+/// Represents information about a .NET runtime installation
+/// </summary>
 public record DotnetRuntimeInfo(string Name, Version Version, string Path);
 
+/// <summary>
+/// Provides utilities for process operations and platform detection
+/// </summary>
 public static class ProcessUtils
 {
+	/// <summary>
+	/// Gets the current operating system platform name in camel case format
+	/// </summary>
 	public static string OSPlatformName => GetOSPlatform().ToString().CamelCased();
 
+	/// <summary>
+	/// Detects and returns the current operating system platform
+	/// </summary>
+	/// <returns>The current OSPlatform (Windows, Linux, OSX, or Unknown)</returns>
 	public static OSPlatform GetOSPlatform()
 	{
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -28,6 +41,9 @@ public static class ProcessUtils
 		return OSPlatform.Create("Unknown");
 	}
 
+	/// <summary>
+	/// Opens a URL in the default web browser
+	/// </summary>
 	public static void OpenBrowser(string url)
 	{
 		if (url == null)
@@ -54,6 +70,9 @@ public static class ProcessUtils
 		}
 	}
 
+	/// <summary>
+	/// Opens a folder in the system's file explorer, optionally selecting a specific file
+	/// </summary>
 	public static void OpenFolder(string folder, string? selection = null)
 	{
 		// Select file instead if in folder path
@@ -95,6 +114,10 @@ public static class ProcessUtils
 		}
 	}
 
+	/// <summary>
+	/// Gets the file name or path for the dotnet executable on the current platform
+	/// </summary>
+	/// <returns>The dotnet executable path or name</returns>
 	public static string GetDotnetFileName()
 	{
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -111,6 +134,10 @@ public static class ProcessUtils
 		}
 	}
 
+	/// <summary>
+	/// Starts a new dotnet process with the specified arguments
+	/// </summary>
+	/// <returns>The started Process instance</returns>
 	public static Process StartDotnetProcess(string arguments)
 	{
 		ProcessStartInfo processStartInfo = new()
@@ -132,6 +159,10 @@ public static class ProcessUtils
 		return process;
 	}
 
+	/// <summary>
+	/// Gets a list of all installed .NET runtimes on the system
+	/// </summary>
+	/// <returns>A list of DotnetRuntimeInfo objects representing installed runtimes</returns>
 	public static List<DotnetRuntimeInfo> GetDotnetRuntimes()
 	{
 		ProcessStartInfo processStartInfo = new()

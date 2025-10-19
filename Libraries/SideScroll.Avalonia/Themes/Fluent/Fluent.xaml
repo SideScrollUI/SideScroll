@@ -85,9 +85,9 @@
           <SolidColorBrush x:Key="CalendarDatePickerBorderBrushPointerOver" Color="#ff8fc3f7" />
           <SolidColorBrush x:Key="CalendarDatePickerForeground" Color="#ff001061" />
 
-          <SolidColorBrush x:Key="CalendarViewBackground" Color="#ffbac6ff" />
-          <SolidColorBrush x:Key="CalendarViewBorderBrush" Color="#ffe6e6e6" /> <!-- Both border and CalendarViewItemBackground -->
-          <SolidColorBrush x:Key="CalendarViewOutOfScopeBackground" Color="#ffc0cceb" />
+          <SolidColorBrush x:Key="CalendarViewBackground" Color="#ffbac8ff" />
+          <SolidColorBrush x:Key="CalendarViewBorderBrush" Color="#fff0f3ff" /> <!-- Both border and CalendarViewItemBackground -->
+          <SolidColorBrush x:Key="CalendarViewOutOfScopeBackground" Color="#ffe1e5f0" />
           <SolidColorBrush x:Key="CalendarViewHoverBorderBrush" Color="#ff6a9bfc" />
           <SolidColorBrush x:Key="CalendarViewCalendarItemForeground" Color="#ff001061" />
 
