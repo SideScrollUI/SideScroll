@@ -503,7 +503,7 @@
           <SolidColorBrush x:Key="CalendarDatePickerBorderBrush" Color="#22FFFFFF" />
           <SolidColorBrush x:Key="CalendarDatePickerBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
 
-          <SolidColorBrush x:Key="CalendarViewBackground" Color="Black" />
+          <SolidColorBrush x:Key="CalendarViewBackground" Color="#cc080808" />
           <SolidColorBrush x:Key="CalendarViewBorderBrush" Color="#ff1f1f1f" />
           <SolidColorBrush x:Key="CalendarViewOutOfScopeBackground" Color="#ff2b2b2b" />
           <SolidColorBrush x:Key="CalendarViewCalendarItemForeground" Color="#ffd0d0d0" />
@@ -686,7 +686,7 @@
           <!-- Toolbar -->
           
           <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#0d0d0d" />
-          <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#2c2c2c" />
+          <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#bf2b2b2b" />
           <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#363636" />
 
           <SolidColorBrush x:Key="ToolbarLabelForegroundBrush" Color="{DynamicResource TextForegroundColor}" />
