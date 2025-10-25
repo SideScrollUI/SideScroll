@@ -101,7 +101,7 @@ public class DateTimeValueConverter : IValueConverter
 			dateTime = TimeZoneView.Now.Date;
 		}
 
-		PreviousDateTime = dateTime.Date.AddSeconds(timeSpan.TotalSeconds);
+		PreviousDateTime = dateTime.Date.Add(timeSpan);
 		return PreviousDateTime;
 	}
 }

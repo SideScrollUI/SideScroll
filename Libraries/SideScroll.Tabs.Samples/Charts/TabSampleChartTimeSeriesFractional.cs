@@ -24,14 +24,14 @@ public class TabSampleChartTimeSeriesFractional : ITab
 
 		private static DateTime AddCoinFlips(TabModel model, DateTime endTime)
 		{
-			var chartView = new ChartView("Coin Flips")
+			var chartView = new ChartView("Fractional Times and Values")
 			{
 				DefaultPeriodDuration = SampleDuration,
 				ShowTimeTracker = true,
 			};
 
-			chartView.AddSeries("Heads", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.5, sampleDuration: SampleDuration), seriesType: SeriesType.Average);
-			chartView.AddSeries("Tails", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.25, sampleDuration: SampleDuration), seriesType: SeriesType.Average);
+			chartView.AddSeries("Primary", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.5, sampleDuration: SampleDuration), seriesType: SeriesType.Average);
+			chartView.AddSeries("Secondary", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.25, sampleDuration: SampleDuration), seriesType: SeriesType.Average);
 
 			chartView.Annotations.Add(new ChartAnnotation
 			{

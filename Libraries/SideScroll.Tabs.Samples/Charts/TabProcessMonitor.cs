@@ -118,9 +118,9 @@ public class TabProcessMonitor : ITab
 				CpuSample cpuSample = new()
 				{
 					TimeStamp = sampleTime,
-					PrivilegedUsage = privilegedProcessorTime.Subtract(_prevPrivilegedProcessorTime!.Value)!.TotalSeconds / duration.TotalSeconds,
-					TotalUsage = totalProcessorTime.Subtract(_prevTotalProcessorTime!.Value)!.TotalSeconds / duration.TotalSeconds,
-					UserUsage = userProcessorTime.Subtract(_prevUserProcessorTime!.Value)!.TotalSeconds / duration.TotalSeconds,
+					PrivilegedUsage = privilegedProcessorTime.Subtract(_prevPrivilegedProcessorTime!.Value)! / duration,
+					TotalUsage = totalProcessorTime.Subtract(_prevTotalProcessorTime!.Value)! / duration,
+					UserUsage = userProcessorTime.Subtract(_prevUserProcessorTime!.Value)! / duration,
 				};
 				_cpuUsage.Add(cpuSample);
 			}

@@ -111,7 +111,7 @@ public class TimeRangeValue : ITags
 		if (input.Count < 10)
 			return periodDuration;
 
-		TimeSpan minDistance = TimeSpan.FromSeconds(2 * (int)periodDuration.TotalSeconds);
+		TimeSpan minDistance = 2 * periodDuration;
 		DateTime? prevTime = null;
 		foreach (TimeRangeValue point in input)
 		{
@@ -119,7 +119,7 @@ public class TimeRangeValue : ITags
 			if (prevTime != null)
 			{
 				TimeSpan duration = startTime.Subtract(prevTime.Value);
-				duration = TimeSpan.FromSeconds(Math.Abs((int)duration.TotalSeconds));
+				duration = TimeSpan.FromTicks(Math.Abs(duration.Ticks));
 				minDistance = minDistance.Min(duration);
 			}
 
@@ -180,7 +180,7 @@ public class TimeRangeValue : ITags
 
 		List<TimeRangeValue> merged = MergeIdenticalMiddleValues(input);
 
-		//bool hasDuration = merged.First().Duration.TotalSeconds > 0;
+		//bool hasDuration = merged.First().Duration.Ticks > 0;
 		DateTime prevTime = startTime;
 		foreach (TimeRangeValue point in merged)
 		{
@@ -268,21 +268,21 @@ public class TimeRangeValue : ITags
 	}
 
 	// Add NaN points for each period duration between the start/end times
-	/*private static DateTime FillGaps(DateTime startTime, DateTime endTime, int periodDuration, List<TimeRangeValue> output)
+	/*private static DateTime FillGaps(DateTime startTime, DateTime endTime, TimeSpan periodDuration, List<TimeRangeValue> output)
 	{
-		int maxGap = periodDuration * 2;
+		TimeSpan maxGap = periodDuration * 2;
 
 		while (true)
 		{
 			TimeSpan timeSpan = endTime.Subtract(startTime);
-			if (timeSpan.TotalSeconds <= maxGap)
+			if (timeSpan <= maxGap)
 				break;
 
-			DateTime expectedTime = startTime.AddSeconds(periodDuration);
+			DateTime expectedTime = startTime.Add(periodDuration);
 			var insertedPoint = new TimeRangeValue()
 			{
 				StartTime = expectedTime.ToUniversalTime(),
-				EndTime = expectedTime.ToUniversalTime().AddSeconds(periodDuration),
+				EndTime = expectedTime.ToUniversalTime().Add(periodDuration),
 				Value = double.NaN,
 			};
 

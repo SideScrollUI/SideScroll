@@ -173,7 +173,6 @@ public class TimeRangePeriod : ITags
 				if (hasDuration)
 				{
 					long totalTicks = binDuration.Min(timeRangeValue.Duration).Ticks;
-					//bin.Sum += binDuration.Ticks / timeRangeValue.Duration.Ticks * timeRangeValue.Value;
 					double weight = (double)binDuration.Ticks / totalTicks;
 					period.Sum += weight * timeRangeValue.Value;
 					period.SummedDurations += binDuration;
