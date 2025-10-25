@@ -136,7 +136,11 @@ public static class DateTimeUtils
 
 		string dateFormat = "yyyy-M-d";
 		string timeFormat = "T";
-		if (startTime.Second == 0 && endTime.Second == 0)
+		if (startTime.Millisecond != 0 || endTime.Millisecond != 0)
+		{
+			timeFormat = GetTimeFormatMilliseconds();
+		}
+		else if (startTime.Second == 0 && endTime.Second == 0)
 		{
 			timeFormat = "t";
 		}
@@ -154,5 +158,18 @@ public static class DateTimeUtils
 			text += " - " + duration.FormattedDecimal();
 		}
 		return text;
+	}
+
+	public static string GetTimeFormatMilliseconds(CultureInfo? culture = null)
+	{
+		culture ??= CultureInfo.CurrentCulture;
+		var hasAmPm = culture.DateTimeFormat.ShortTimePattern.Contains('t');
+		var hourIsTwoDigits =
+			culture.DateTimeFormat.ShortTimePattern.Contains("hh") ||
+			culture.DateTimeFormat.ShortTimePattern.Contains("HH");
+
+		return hasAmPm
+			? (hourIsTwoDigits ? "hh:mm:ss.FFF tt" : "h:mm:ss.FFF tt")
+			: (hourIsTwoDigits ? "HH:mm:ss.FFF" : "H:mm:ss.FFF");
 	}
 }

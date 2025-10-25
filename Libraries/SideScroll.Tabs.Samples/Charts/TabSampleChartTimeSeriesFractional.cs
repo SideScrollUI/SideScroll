@@ -12,28 +12,30 @@ public class TabSampleChartTimeSeriesFractional : ITab
 
 	public class Instance : TabInstance
 	{
+		private static readonly TimeSpan SampleDuration = TimeSpan.FromMilliseconds(10);
+
 		public override void Load(Call call, TabModel model)
 		{
-			DateTime endTime = TimeZoneView.Now.Trim(TimeSpan.TicksPerHour).AddHours(12);
+			DateTime endTime = TimeZoneView.Now.Trim(SampleDuration);
 
-			AddAnimals(model, endTime);
-			AddToys(model, endTime);
+			AddCoinFlips(model, endTime);
 			AddDecimalPrecision(model, endTime);
 		}
 
-		private static DateTime AddAnimals(TabModel model, DateTime endTime)
+		private static DateTime AddCoinFlips(TabModel model, DateTime endTime)
 		{
-			var chartView = new ChartView("Animals")
+			var chartView = new ChartView("Coin Flips")
 			{
+				DefaultPeriodDuration = SampleDuration,
 				ShowTimeTracker = true,
 			};
 
-			chartView.AddSeries("Cats", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.5), seriesType: SeriesType.Average);
-			chartView.AddSeries("Dogs", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.25), seriesType: SeriesType.Average);
+			chartView.AddSeries("Heads", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.5, sampleDuration: SampleDuration), seriesType: SeriesType.Average);
+			chartView.AddSeries("Tails", ChartSamples.CreateTimeSeries(endTime, maxValue: 0.25, sampleDuration: SampleDuration), seriesType: SeriesType.Average);
 
 			chartView.Annotations.Add(new ChartAnnotation
 			{
-				Text = "Too Many",
+				Text = "Average",
 				Y = 0.5,
 				Color = Color.Red,
 			});
@@ -41,24 +43,15 @@ public class TabSampleChartTimeSeriesFractional : ITab
 			return endTime;
 		}
 
-		private static void AddToys(TabModel model, DateTime endTime)
-		{
-			var chartViewToys = new ChartView("Toys")
-			{
-				ShowTimeTracker = true,
-			};
-			chartViewToys.AddSeries("Toys", ChartSamples.CreateIdenticalTimeSeries(endTime, value: 0.42), seriesType: SeriesType.Average);
-			model.AddObject(chartViewToys);
-		}
-
 		private static DateTime AddDecimalPrecision(TabModel model, DateTime endTime)
 		{
 			var chartView = new ChartView("Decimal Precision")
 			{
+				DefaultPeriodDuration = SampleDuration,
 				ShowTimeTracker = true,
 			};
 
-			chartView.AddSeries("Percent", ChartSamples.CreateTimeSeries(endTime, minValue: 99.9999, maxValue: 100), seriesType: SeriesType.Average);
+			chartView.AddSeries("Percent", ChartSamples.CreateTimeSeries(endTime, minValue: 99.9999, maxValue: 100, sampleDuration: SampleDuration), seriesType: SeriesType.Average);
 
 			model.AddObject(chartView);
 			return endTime;

@@ -103,6 +103,12 @@ public static class TimeSpanExtensions
 	/// </summary>
 	public static List<TimeSpan> CommonTimeSpans { get; set; } =
 	[
+		TimeSpan.FromMilliseconds(1),
+		TimeSpan.FromMilliseconds(5),
+		TimeSpan.FromMilliseconds(10),
+		TimeSpan.FromMilliseconds(50),
+		TimeSpan.FromMilliseconds(100),
+		TimeSpan.FromMilliseconds(500),
 		TimeSpan.FromSeconds(1),
 		TimeSpan.FromSeconds(5),
 		TimeSpan.FromSeconds(10),

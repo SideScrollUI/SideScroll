@@ -4,6 +4,8 @@
     <PackageReleaseNotes>
     - Updated Light Theme colors
     - Added theming for ComboBoxItemForeground
+    - Added charting support for milliseconds
+    - Fixed TimeRangePeriod for milliseconds and below
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.7</AvaloniaVersion>
