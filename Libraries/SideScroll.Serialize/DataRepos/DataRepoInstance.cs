@@ -62,7 +62,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	public virtual void Save(Call? call, string key, T item)
 	{
 		call ??= new();
-		Index?.Add(call, key);
+		Index?.Save(call, key);
 		DataRepo.Save<T>(GroupId, key, item, call);
 	}
 

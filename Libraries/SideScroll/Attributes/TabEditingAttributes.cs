@@ -44,7 +44,7 @@ public class EditColumnAttribute : Attribute;
 /// <summary>
 /// Controls whether text inputs accepts Return for multi-line entry.
 /// </summary>
-/// <param name="acceptsPlainEnter">Whether to require Shift + Return for new lines (default: true).</param>
+/// <param name="acceptsPlainEnter">Whether the input accepts Enter instead of just Shift + Enter for new lines (default: false).</param>
 /// <remarks>
 /// <b>Apply to:</b> Properties.
 /// <para>
@@ -65,7 +65,7 @@ public class EditColumnAttribute : Attribute;
 public class AcceptsReturnAttribute(bool acceptsPlainEnter = false) : Attribute
 {
 	/// <summary>
-	/// Whether the input accepts Shift+Return for new lines.
+	/// Whether the input accepts Enter instead of just Shift + Enter for new lines.
 	/// </summary>
 	public bool AcceptsPlainEnter => acceptsPlainEnter;
 }

@@ -7,9 +7,10 @@
     - Added charting support for milliseconds
     - Fixed TimeRangePeriod for milliseconds and below
     - Added AcceptsReturnAttribute.AcceptsPlainEnter to support the Enter key only
+    - Changed DataRepoIndex to retain existing order when updating instead of moving to the end
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.7</AvaloniaVersion>
+    <AvaloniaVersion>11.3.8</AvaloniaVersion>
     <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
