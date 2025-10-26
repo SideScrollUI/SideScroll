@@ -14,7 +14,7 @@ public class SampleTodoItem
 	[DataKey, Required, StringLength(100), WordWrap]
 	public string? Title { get; set; }
 
-	[WordWrap, AcceptsReturn]
+	[WordWrap, AcceptsReturn(true)]
 	public string? Description { get; set; }
 
 	public TodoPriority Priority { get; set; } = TodoPriority.Medium;

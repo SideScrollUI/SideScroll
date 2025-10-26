@@ -2,6 +2,7 @@ using SideScroll.Utilities;
 
 namespace SideScroll.Avalonia.Charts;
 
+// Provides a DateTimeFormat based on the DateTime and TimeSpan Durations, showing enough precision to allow multiple periods
 public class DateTimeFormat(string? dateFormat, string? timeFormat, string? timeFormatUtc, TimeSpan minimum, TimeSpan maximum)
 {
 	public const double DaysInAYear = 365.25;

@@ -42,14 +42,14 @@ internal static class _DocTabEditingSentinel { }
 public class EditColumnAttribute : Attribute;
 
 /// <summary>
-/// Controls whether text inputs accept Shift + Return for multi-line entry.
+/// Controls whether text inputs accepts Return for multi-line entry.
 /// </summary>
-/// <param name="allow">Whether to allow Shift + Return for new lines (default: true).</param>
+/// <param name="acceptsPlainEnter">Whether to require Shift + Return for new lines (default: true).</param>
 /// <remarks>
 /// <b>Apply to:</b> Properties.
 /// <para>
-/// Applies to text boxes and form inputs. When enabled, pressing Shift + Enter creates 
-/// a new line instead of submitting the form. Regular Enter still submits the form.
+/// Applies to text boxes and form inputs. When enabled, pressing Enter or Shift + Enter creates 
+/// a new line instead of submitting the form. If acceptsPlainEnter is false, Regular Enter will still submit the form
 /// </para>
 /// </remarks>
 /// <example>
@@ -62,12 +62,12 @@ public class EditColumnAttribute : Attribute;
 /// </code>
 /// </example>
 [AttributeUsage(AttributeTargets.Property)]
-public class AcceptsReturnAttribute(bool allow = true) : Attribute
+public class AcceptsReturnAttribute(bool acceptsPlainEnter = false) : Attribute
 {
 	/// <summary>
 	/// Whether the input accepts Shift+Return for new lines.
 	/// </summary>
-	public bool Allow => allow;
+	public bool AcceptsPlainEnter => acceptsPlainEnter;
 }
 
 /// <summary>

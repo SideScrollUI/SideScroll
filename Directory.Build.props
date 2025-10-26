@@ -6,6 +6,7 @@
     - Added theming for ComboBoxItemForeground
     - Added charting support for milliseconds
     - Fixed TimeRangePeriod for milliseconds and below
+    - Added AcceptsReturnAttribute.AcceptsPlainEnter to support the Enter key only
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.7</AvaloniaVersion>
