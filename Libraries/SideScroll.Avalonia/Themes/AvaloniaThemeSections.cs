@@ -481,7 +481,10 @@ public class TextControlTheme : ThemeSection
 	public Color? TextControlSelectionHighlight { get; set; }
 
 	// ComboBox
-	[Header("ComboBox"), ResourceKey("ComboBoxDropDownBackground")]
+	[Header("ComboBox"), ResourceKey("ComboBoxBackgroundPressed")]
+	public Color? ComboBoxBackgroundPressed { get; set; }
+
+	[ResourceKey("ComboBoxDropDownBackground")]
 	public Color? ComboBoxDropDownBackground { get; set; }
 
 	[ResourceKey("ComboBoxItemBackgroundSelected",
@@ -490,8 +493,7 @@ public class TextControlTheme : ThemeSection
 	public Color? ComboBoxItemBackgroundSelected { get; set; }
 
 	[ResourceKey("ComboBoxItemBackgroundPointerOver",
-		"ComboBoxItemBackgroundSelectedPointerOver",
-		"ComboBoxBackgroundPressed"
+		"ComboBoxItemBackgroundSelectedPointerOver"
 		)]
 	public Color? ComboBoxItemBackgroundPointerOver { get; set; }
 

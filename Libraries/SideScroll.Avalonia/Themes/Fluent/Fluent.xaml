@@ -58,8 +58,10 @@
 
           <SolidColorBrush x:Key="ComboBoxBackground" Color="White" />
           <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="White" />
-          <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#ffccd5ff" />
+          <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#ffcce2ff" />
+
           <SolidColorBrush x:Key="ComboBoxForeground" Color="#ff001061" />
+          
           <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="#ffd3d3f5" />
           <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="#ff8fc3f7" />
           <SolidColorBrush x:Key="ComboBoxBorderBrushPressed" Color="#ff8fc3f7" />
@@ -474,12 +476,13 @@
           <SolidColorBrush x:Key="ComboBoxBackground" Color="{DynamicResource SystemAltMediumLowColor}" />
           <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="{StaticResource SystemAltMediumColor}" />
           <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#ff3060c0" />
+
+          <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="#22FFFFFF" />
           <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
           <SolidColorBrush x:Key="ComboBoxBorderBrushPressed" Color="{DynamicResource ThemeControlBorderHighColor}" />
 
           <SolidColorBrush x:Key="ComboBoxForeground" Color="{DynamicResource TextForegroundColor}" />
           <SolidColorBrush x:Key="ComboBoxForegroundFocused" Color="{DynamicResource TextForegroundHighColor}" />
-          <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="#22FFFFFF" />
 
           <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#e6141414" />
           <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#e6000000" />
