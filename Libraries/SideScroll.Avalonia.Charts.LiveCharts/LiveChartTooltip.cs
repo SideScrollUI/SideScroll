@@ -189,10 +189,11 @@ public class LiveChartTooltip(TabLiveChart liveChart) : SKDefaultTooltip
 
     public override void Show(IEnumerable<ChartPoint> foundPoints, Chart chart)
 	{
+		bool wasHidden = Opacity < 1;
+
 		base.Show(foundPoints, chart);
 
 		// Write code here to add custom behavior when the tooltip is shown.
-		bool wasHidden = Opacity < 1;
 
 		// Update for new padding
 		var size = Measure();
@@ -227,8 +228,5 @@ public class LiveChartTooltip(TabLiveChart liveChart) : SKDefaultTooltip
 		base.Hide(chart);
 
 		// Write code here to add custom behavior when the tooltip is hidden.
-		if (chart is null || _layout is null) return;
-
-		chart.Canvas.Invalidate(); // More responsive
 	}
 }
