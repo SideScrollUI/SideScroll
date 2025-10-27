@@ -1,84 +1,80 @@
 using LiveChartsCore;
 using LiveChartsCore.Drawing;
+using LiveChartsCore.Drawing.Layouts;
 using LiveChartsCore.Kernel;
-using LiveChartsCore.Kernel.Sketches;
+using LiveChartsCore.Painting;
 using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Drawing.Geometries;
-using LiveChartsCore.SkiaSharpView.VisualElements;
-using LiveChartsCore.VisualElements;
+using LiveChartsCore.SkiaSharpView.Drawing.Layouts;
+using LiveChartsCore.SkiaSharpView.Painting;
+using LiveChartsCore.SkiaSharpView.Painting.ImageFilters;
+using LiveChartsCore.SkiaSharpView.SKCharts;
 using SideScroll.Extensions;
+using SkiaSharp;
 
 namespace SideScroll.Avalonia.Charts.LiveCharts;
 
 // Based on LiveCharts Tooltip
-public class LiveChartTooltip(TabLiveChart liveChart) : IChartTooltip<SkiaSharpDrawingContext>
+public class LiveChartTooltip(TabLiveChart liveChart) : SKDefaultTooltip
 {
 	public TabLiveChart LiveChart => liveChart;
 
 	public double TextSize { get; set; } = 15;
 	public float LabelMaxWidth { get; set; } = 310;
 
-	private static readonly int s_zIndex = 10100;
+	internal StackLayout? _layout;
 
-	internal StackPanel<PopUpGeometry, SkiaSharpDrawingContext>? _panel;
-	private IPaint<SkiaSharpDrawingContext>? _backgroundPaint;
+	public Paint? FontPaint { get; set; }
 
-	public IPaint<SkiaSharpDrawingContext>? FontPaint { get; set; }
+	private bool _animationAdded;
 
-	public IPaint<SkiaSharpDrawingContext>? BackgroundPaint
+	private ChartPoint? _closestPoint;
+
+	// Override so we can delay adding the Animation so it doesn't start from the top left
+	protected override void Initialize(Chart chart)
 	{
-		get => _backgroundPaint;
-		set
-		{
-			_backgroundPaint = value;
-			if (value is not null)
+		var theme = chart.GetTheme();
+
+		var backgroundPaint =
+			chart.View.TooltipBackgroundPaint ??
+			theme.TooltipBackgroundPaint ??
+			new SolidColorPaint(new SKColor(235, 235, 235, 230))
 			{
-				value.IsFill = true;
-			}
-		}
-	}
-
-	public void Show(IEnumerable<ChartPoint> foundPoints, Chart<SkiaSharpDrawingContext> chart)
-	{
-		const int wedge = 10;
-
-		if (chart.View.TooltipTextSize is not null) TextSize = chart.View.TooltipTextSize.Value;
-		if (chart.View.TooltipBackgroundPaint is not null) BackgroundPaint = chart.View.TooltipBackgroundPaint;
-		if (chart.View.TooltipTextPaint is not null) FontPaint = chart.View.TooltipTextPaint;
-
-		bool addAnimation = false;
-		if (_panel is null)
-		{
-			_panel = new StackPanel<PopUpGeometry, SkiaSharpDrawingContext>
-			{
-				Orientation = ContainerOrientation.Vertical,
-				HorizontalAlignment = Align.Middle,
-				VerticalAlignment = Align.Middle,
-				BackgroundPaint = BackgroundPaint
+				ImageFilter = new DropShadow(2, 2, 6, 6, new SKColor(50, 0, 0, 100))
 			};
 
-			_panel.BackgroundGeometry.Wedge = wedge;
-			_panel.BackgroundGeometry.WedgeThickness = 3;
+		TextSize = chart.View.TooltipTextSize;
+		if (chart.View.TooltipTextPaint is Paint toolTipTextPaint) FontPaint = toolTipTextPaint;
 
-			addAnimation = true;
-		}
+		Geometry.Wedge = Wedge;
+		Geometry.WedgeThickness = 3;
 
-		if (BackgroundPaint is not null) BackgroundPaint.ZIndex = s_zIndex;
-		if (FontPaint is not null) FontPaint.ZIndex = s_zIndex + 1;
+		Geometry.Fill = backgroundPaint;
+	}
 
-		foreach (var child in _panel.Children.ToArray())
+	// The GetLayout method is used to define the content of the tooltip,
+	// It is called every time the tooltip changes.
+	protected override Layout<SkiaSharpDrawingContext> GetLayout(IEnumerable<ChartPoint> foundPoints, Chart chart)
+	{
+		_layout ??= new StackLayout
 		{
-			_ = _panel.Children.Remove(child);
-			chart.RemoveVisual(child);
+			Orientation = ContainerOrientation.Vertical,
+			HorizontalAlignment = Align.Middle,
+			VerticalAlignment = Align.Middle,
+		};
+
+		foreach (var child in _layout.Children.ToArray())
+		{
+			_ = _layout.Children.Remove(child);
 		}
 
-		var tableLayout = new TableLayout<RoundedRectangleGeometry, SkiaSharpDrawingContext>
+		var tableLayout = new TableLayout()
 		{
 			HorizontalAlignment = Align.Middle,
 			VerticalAlignment = Align.Middle
 		};
 
-		if (LiveChart.CursorPosition == null || !foundPoints.Any()) return;
+		if (LiveChart.CursorPosition == null || !foundPoints.Any()) return _layout;
 		var cursorPosition = LiveChart.CursorPosition.Value;
 		var cursorPoint = new LvcPoint(cursorPosition.X, cursorPosition.Y);
 
@@ -86,6 +82,7 @@ public class LiveChartTooltip(TabLiveChart liveChart) : IChartTooltip<SkiaSharpD
 			.Select(x => new { distance = LiveChartLineSeries.GetDistanceTo(x, cursorPoint), point = x })
 			.MinBy(x => x.distance)!
 			.point;
+		_closestPoint = closestPoint;
 
 		// Points are in chart series order, not closest
 		// Use pointer moved value in chart to find closest?
@@ -96,16 +93,15 @@ public class LiveChartTooltip(TabLiveChart liveChart) : IChartTooltip<SkiaSharpD
 			if (title != null)
 			{
 				tableLayout.AddChild(
-					new LabelVisual
+					new LabelGeometry
 					{
 						Text = title,
 						Paint = FontPaint,
-						TextSize = TextSize,
+						TextSize = (float)TextSize,
 						Padding = new Padding(0, 0, 0, 4),
 						MaxWidth = LabelMaxWidth,
-						VerticalAlignment = Align.Start,
-						HorizontalAlignment = Align.Start,
-						ClippingMode = LiveChartsCore.Measure.ClipMode.XY
+						VerticalAlign = Align.Start,
+						HorizontalAlign = Align.Start,
 					}, row++, 0, horizontalAlign: Align.Start);
 			}
 
@@ -116,102 +112,123 @@ public class LiveChartTooltip(TabLiveChart liveChart) : IChartTooltip<SkiaSharpD
 				if (!line.IsNullOrEmpty())
 				{
 					tableLayout.AddChild(
-						new LabelVisual
+						new LabelGeometry
 						{
 							Text = line,
 							Paint = FontPaint,
-							TextSize = TextSize,
+							TextSize = (float)TextSize,
 							Padding = new Padding(0, 3, 0, 0),
 							MaxWidth = LabelMaxWidth,
-							VerticalAlignment = Align.Start,
-							HorizontalAlignment = Align.Start,
-							ClippingMode = LiveChartsCore.Measure.ClipMode.None
+							VerticalAlign = Align.Start,
+							HorizontalAlign = Align.Start,
 						}, row++, 0, horizontalAlign: Align.Start);
 				}
 				else
 				{
 					tableLayout.AddChild(
-						new StackPanel<RectangleGeometry, SkiaSharpDrawingContext> { Padding = new(0, 8) }, row++, 0);
+						new StackLayout { Padding = new(0, 8) }, row++, 0);
 				}
 			}
 
 			// todo: After Tooltip clipping issue fixed:
 			// Switch to showing all series, or all with a data point present for that X value
-			/*var series = (IChartSeries<SkiaSharpDrawingContext>)point.Context.Series;
+			/*var series = (IChartSeries)point.Context.Series;
 
 			tableLayout.AddChild(series.GetMiniaturesSketch().AsDrawnControl(s_zIndex), i, 0);
 
 			tableLayout.AddChild(
-				new LabelVisual
+				new LabelGeometry
 				{
 					Text = point.Context.Series.Name ?? string.Empty,
 					Paint = FontPaint,
 					TextSize = TextSize,
 					Padding = new Padding(10, 0, 0, 0),
 					MaxWidth = lw,
-					VerticalAlignment = Align.Start,
-					HorizontalAlignment = Align.Start,
-					ClippingMode = LiveChartsCore.Measure.ClipMode.None
+					VerticalAlign = Align.Start,
+					HorizontalAlign = Align.Start,
 				}, i, 1, horizontalAlign: Align.Start);
 
 			tableLayout.AddChild(
-				new LabelVisual
+				new LabelGeometry
 				{
 					Text = content,
 					Paint = FontPaint,
 					TextSize = TextSize,
 					Padding = new Padding(10, 0, 0, 0),
 					MaxWidth = lw,
-					VerticalAlignment = Align.Start,
-					HorizontalAlignment = Align.Start,
-					ClippingMode = LiveChartsCore.Measure.ClipMode.None
+					VerticalAlign = Align.Start,
+					HorizontalAlign = Align.Start,
 				}, i, 2, horizontalAlign: Align.End);
 			*/
 		}
 
-		_panel.Children.Add(tableLayout);
+		_layout.Children.Add(tableLayout);
 
-		var size = _panel.Measure(chart);
-		_ = foundPoints.GetTooltipLocation(size, chart);
-		_panel.BackgroundGeometry.Placement = chart.AutoToolTipsInfo.ToolTipPlacement;
+		var pointArray = new ChartPoint[] { closestPoint };
+		var size = _layout.Measure();
+		_ = pointArray.GetTooltipLocation(size, chart);
+		Geometry.Placement = chart.AutoToolTipsInfo.ToolTipPlacement;
+
+		const int px = 8;
+		const int py = 12;
 
 		switch (chart.AutoToolTipsInfo.ToolTipPlacement)
 		{
 			case LiveChartsCore.Measure.PopUpPlacement.Top:
-				_panel.Padding = new Padding(12, 8, 12, 8 + wedge); break;
+				_layout.Padding = new Padding(py, px, py, px + Wedge); break;
 			case LiveChartsCore.Measure.PopUpPlacement.Bottom:
-				_panel.Padding = new Padding(12, 8 + wedge, 12, 8); break;
+				_layout.Padding = new Padding(py, px + Wedge, py, px); break;
 			case LiveChartsCore.Measure.PopUpPlacement.Left:
-				_panel.Padding = new Padding(12, 8, 12 + wedge, 8); break;
+				_layout.Padding = new Padding(py, px, py + Wedge, px); break;
 			case LiveChartsCore.Measure.PopUpPlacement.Right:
-				_panel.Padding = new Padding(12 + wedge, 8, 12, 8); break;
+				_layout.Padding = new Padding(py + Wedge, px, py, px); break;
 			default: break;
 		}
+		return _layout;
+	}
+
+    public override void Show(IEnumerable<ChartPoint> foundPoints, Chart chart)
+	{
+		base.Show(foundPoints, chart);
+
+		// Write code here to add custom behavior when the tooltip is shown.
+		bool wasHidden = Opacity < 1;
 
 		// Update for new padding
-		size = _panel.Measure(chart);
-		var location = foundPoints.GetTooltipLocation(size, chart);
+		var size = Measure();
+		var pointArray = new ChartPoint[] { _closestPoint! };
 
-		_panel.X = location.X;
-		_panel.Y = location.Y;
+		var location = pointArray.GetTooltipLocation(size, chart);
 
-		chart.AddVisual(_panel);
+		X = location.X;
+		Y = location.Y;
+
+		if (wasHidden)
+		{
+			// Jump to a new location if visibility changes
+			CompleteTransition();
+		}
 
 		// Wait to add the animation so the ToolTip doesn't start animating from the top left
-		if (addAnimation)
+		if (!_animationAdded)
 		{
-			_panel
-				.Animate(
-					new Animation(EasingFunctions.EaseOut, TimeSpan.FromMilliseconds(150)),
-					nameof(RoundedRectangleGeometry.X),
-					nameof(RoundedRectangleGeometry.Y));
+			this.Animate(
+				new Animation(Easing, AnimationsSpeed),
+					// OpacityProperty, // Too distracting
+					ScaleTransformProperty,
+					XProperty,
+					YProperty);
+			_animationAdded = true;
 		}
 	}
 
-	public void Hide(Chart<SkiaSharpDrawingContext> chart)
+	public override void Hide(Chart chart)
 	{
-		if (chart is null || _panel is null) return;
+		base.Hide(chart);
 
-		chart.RemoveVisual(_panel);
+		// Write code here to add custom behavior when the tooltip is hidden.
+		if (chart is null || _layout is null) return;
+
+		chart.Canvas.Invalidate(); // More responsive
 	}
 }
