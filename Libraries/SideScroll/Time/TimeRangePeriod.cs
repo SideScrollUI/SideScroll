@@ -55,9 +55,9 @@ public class TimeRangePeriod : ITags
 	public double Sum { get; set; }
 	
 	/// <summary>
-	/// Gets or sets the total of all values weighted by seconds
+	/// Gets or sets the total of all values weighted by period
 	/// </summary>
-	public double SummedSecondValues { get; set; }
+	public double SummedValues { get; set; }
 	
 	/// <summary>
 	/// Gets or sets the total duration covered by all values in this period
@@ -176,14 +176,14 @@ public class TimeRangePeriod : ITags
 					double weight = (double)binDuration.Ticks / totalTicks;
 					period.Sum += weight * timeRangeValue.Value;
 					period.SummedDurations += binDuration;
-					period.SummedSecondValues += totalTicks * timeRangeValue.Value;
+					period.SummedValues += totalTicks * timeRangeValue.Value;
 					valueBinStartTime += binDuration;
 				}
 				else
 				{
 					period.Sum += timeRangeValue.Value;
 					period.SummedDurations += periodDuration;
-					period.SummedSecondValues += periodDuration.Ticks * timeRangeValue.Value;
+					period.SummedValues += periodDuration.Ticks * timeRangeValue.Value;
 					break;
 				}
 			}
@@ -217,7 +217,7 @@ public class TimeRangePeriod : ITags
 		foreach (TimeRangePeriod period in periods)
 		{
 			totalDuration = totalDuration.Add(period.SummedDurations);
-			totalSum += period.SummedSecondValues;
+			totalSum += period.SummedValues;
 		}
 		if (totalDuration.Ticks == 0)
 			return 0;
@@ -290,7 +290,7 @@ public class TimeRangePeriod : ITags
 			.Where(period => period.SummedDurations.Ticks > 0)
 			.Select(period =>
 			{
-				double average = period.SummedSecondValues / period.SummedDurations.Min(period.Duration).Ticks;
+				double average = period.SummedValues / period.SummedDurations.Min(period.Duration).Ticks;
 				return new TimeRangeValue(period.StartTime, period.EndTime, average, period.Tags);
 			})
 			.ToList();
@@ -348,9 +348,9 @@ public class TimeRangePeriod : ITags
 	/// </summary>
 	public static List<TimeRangeValue>? PeriodCounts(IEnumerable<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, int minPeriods, int maxPeriods)
 	{
-		long durationTicks = timeWindow.Duration.Ticks;
-		int numPeriods = Math.Clamp((int)(durationTicks / TimeSpan.TicksPerMillisecond), minPeriods, maxPeriods);
-		long periodTicks = (durationTicks + numPeriods - 1) / numPeriods; // Ceiling division
+		TimeSpan periodDuration = timeWindow.Duration.PeriodDuration(maxPeriods);
+		int numPeriods = Math.Clamp((int)(timeWindow.Duration / periodDuration), minPeriods, maxPeriods);
+		long periodTicks = (timeWindow.Duration.Ticks + numPeriods - 1) / numPeriods; // Ceiling division
 
 		return PeriodCounts(timeRangeValues, timeWindow, TimeSpan.FromTicks(periodTicks));
 	}
