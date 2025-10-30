@@ -58,7 +58,7 @@
 
           <SolidColorBrush x:Key="ComboBoxBackground" Color="White" />
           <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="White" />
-          <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#ffcce2ff" />
+          <SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="#ffccdaff" />
 
           <SolidColorBrush x:Key="ComboBoxForeground" Color="#ff001061" />
           
@@ -66,17 +66,17 @@
           <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="#ff8fc3f7" />
           <SolidColorBrush x:Key="ComboBoxBorderBrushPressed" Color="#ff8fc3f7" />
 
-          <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#fff0f2ff" />
+          <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#fff0f4ff" />
           <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#4029498a" />
 
-          <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#ffccd5ff" />
-          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#ffb2c2ff" />
-          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#ffccd5ff" />
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#ffccdbff" />
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#ffb2c9ff" />
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#ffccdbff" />
 
-          <SolidColorBrush x:Key="ComboBoxItemForeground" Color="#ff001361" />
-          <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#ff103ceb" />
-          <SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="#ff103ceb" />
-          <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPointerOver" Color="#ff103ceb" />
+          <SolidColorBrush x:Key="ComboBoxItemForeground" Color="#ff001a61" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#ff1355f0" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="#ff1657f0" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPointerOver" Color="#ff1657f0" />
 
           <Thickness x:Key="ComboBoxBorderThemeThickness">1.5</Thickness>
           
@@ -266,7 +266,7 @@
 
           <SolidColorBrush x:Key="TabBackgroundBrush" Color="#fffafafa" />
           <SolidColorBrush x:Key="TabBackgroundFocusedBrush" Color="#fff7f9fc" />
-          <SolidColorBrush x:Key="TabBackgroundBorderBrush" Color="#ffc3cade" />
+          <SolidColorBrush x:Key="TabBackgroundBorderBrush" Color="#ffe1e4ed" />
 
           <SolidColorBrush x:Key="TabHeaderForegroundBrush" Color="#ff555555" />
           
@@ -275,7 +275,7 @@
 
           <SolidColorBrush x:Key="TabProgressBarForegroundBrush" Color="#ffbac6ff" />
 
-          <SolidColorBrush x:Key="TabSplitterBackgroundBrush" Color="#ffedf2f7" />
+          <SolidColorBrush x:Key="TabSplitterBackgroundBrush" Color="#fff2f6fa" />
           <sys:Double x:Key="TabSplitterSize">6</sys:Double>
 
           <!-- Title -->
@@ -341,8 +341,8 @@
 
           <!-- TextArea -->
 
-          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#ffe8eefc" />
-          <SolidColorBrush x:Key="TextAreaForegroundBrush" Color="#ff121242" />
+          <SolidColorBrush x:Key="TextAreaBackgroundBrush" Color="#ffebf0fa" />
+          <SolidColorBrush x:Key="TextAreaForegroundBrush" Color="#ff0b1d42" />
           <SolidColorBrush x:Key="TextAreaBorderBrush" Color="#ffacaec4" />
 
           <!-- Fonts -->

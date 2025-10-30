@@ -3,11 +3,11 @@
     <Version>0.13</Version>
     <PackageReleaseNotes>
     - Updated Light Theme colors
-    - Added theming for ComboBoxItemForeground and ComboBoxBackgroundPressed
-    - Added charting support for milliseconds
-    - Fixed TimeRangePeriod for milliseconds and below
+    - Added theming for ComboBoxItemForeground, ComboBoxItemForegroundPointerOver, and ComboBoxBackgroundPressed
     - Added AcceptsReturnAttribute.AcceptsPlainEnter to support the Enter key only
-    - Changed DataRepoIndex to retain existing order when updating instead of moving to the end
+    - Added TimeRangePeriod support for milliseconds and below
+    - Added charting support for milliseconds
+    - Changed DataRepoIndex to retain existing order when updating items instead of moving items to the end
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.8</AvaloniaVersion>

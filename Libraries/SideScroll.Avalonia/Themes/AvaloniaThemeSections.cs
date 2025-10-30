@@ -45,7 +45,7 @@ public class TabTheme : ThemeSection
 	[Header("Splitter"), ResourceKey("TabSplitterBackgroundBrush")]
 	public Color? SplitterBackground { get; set; }
 
-	[ResourceKey("TabSplitterSize"), Range(6, 100)]
+	[ResourceKey("TabSplitterSize"), Range(6, 20)]
 	public double? SplitterSize { get; set; }
 
 
@@ -500,11 +500,13 @@ public class TextControlTheme : ThemeSection
 	[ResourceKey("ComboBoxItemForeground")]
 	public Color? ComboBoxItemForeground { get; set; }
 
-	[ResourceKey("ComboBoxItemForegroundSelected",
-		"ComboBoxItemForegroundPointerOver",
+	[ResourceKey("ComboBoxItemForegroundSelected")]
+	public Color? ComboBoxItemForegroundSelected { get; set; }
+
+	[ResourceKey("ComboBoxItemForegroundPointerOver",
 		"ComboBoxItemForegroundSelectedPointerOver"
 		)]
-	public Color? ComboBoxItemForegroundSelected { get; set; }
+	public Color? ComboBoxItemForegroundPointerOver { get; set; }
 
 	[ResourceKey("ComboBoxDropDownBorderBrush")]
 	public Color? ComboBoxDropDownBorder { get; set; }

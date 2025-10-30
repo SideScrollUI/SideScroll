@@ -1,5 +1,4 @@
 using SideScroll.Attributes;
-using SideScroll.Avalonia.Controls;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
