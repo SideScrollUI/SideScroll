@@ -63,8 +63,9 @@
     "ThumbPointerOver": "#ff477ed7",
     "ButtonBackground": "#ff27204a",
     "ButtonBackgroundPointerOver": "#ff477ed7",
-    "ButtonBackgroundPressed": "#ff477ed7",
-    "ButtonArrowForeground": "#ffeeeeee"
+    "ButtonBackgroundPressed": "#ff232869",
+    "ButtonArrowForeground": "#ffeeeeee",
+    "ButtonArrowForegroundPointerOver": "#ffe8f1ff"
   },
   "DataGrid": {
     "ColumnHeaderBackground": "#ff27204a",

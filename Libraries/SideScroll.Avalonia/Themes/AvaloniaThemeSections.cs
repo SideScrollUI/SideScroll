@@ -223,9 +223,8 @@ public class ScrollBarTheme : ThemeSection
 	[Separator, ResourceKey("ScrollBarButtonArrowForeground")]
 	public Color? ButtonArrowForeground { get; set; }
 
-	// Doesn't work
-	/*[ResourceKey("ScrollBarButtonArrowForegroundPointerOver")]
-	public Color? ButtonArrowForegroundPointerOver { get; set; }*/
+	[ResourceKey("ScrollBarButtonArrowForegroundPointerOver")]
+	public Color? ButtonArrowForegroundPointerOver { get; set; }
 }
 
 public class DataGridTheme : ThemeSection

@@ -3,7 +3,7 @@
     <Version>0.13</Version>
     <PackageReleaseNotes>
     - Updated Light Theme colors
-    - Added theming for ComboBoxItemForeground, ComboBoxItemForegroundPointerOver, and ComboBoxBackgroundPressed
+    - Added theming for ComboBoxItemForeground, ComboBoxItemForegroundPointerOver, ComboBoxBackgroundPressed, and ScrollBarButtonArrowForegroundPointerOver
     - Added AcceptsReturnAttribute.AcceptsPlainEnter to support the Enter key only
     - Added TimeRangePeriod support for milliseconds and below
     - Added charting support for milliseconds

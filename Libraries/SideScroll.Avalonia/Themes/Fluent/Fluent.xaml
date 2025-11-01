@@ -69,14 +69,14 @@
           <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#fff0f4ff" />
           <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#4029498a" />
 
-          <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#ffccdbff" />
-          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#ffb2c9ff" />
-          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#ffccdbff" />
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="#ff98b6fa" />
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#ff7a9ff5" />
+          <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#ff7a9ff5" />
 
           <SolidColorBrush x:Key="ComboBoxItemForeground" Color="#ff001a61" />
-          <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#ff1355f0" />
-          <SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="#ff1657f0" />
-          <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPointerOver" Color="#ff1657f0" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#fff2f6fc" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="#ffebf1fa" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPointerOver" Color="#ffebf1fa" />
 
           <Thickness x:Key="ComboBoxBorderThemeThickness">1.5</Thickness>
           
@@ -162,8 +162,8 @@
 
           <!-- ContextMenu -->
 
-          <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#ffe6e8ff" />
-          <SolidColorBrush x:Key="MenuFlyoutItemForeground" Color="#ff2d3196" />
+          <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#ffe6ecff" />
+          <SolidColorBrush x:Key="MenuFlyoutItemForeground" Color="#ff2d4996" />
           <SolidColorBrush x:Key="MenuFlyoutItemForegroundPressed" Color="#ff2d3196" />
           <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver" Color="#ff2d3196" />
 
@@ -193,22 +193,22 @@
 
           <sys:Double x:Key="LargeChange">20</sys:Double>
 
-          <SolidColorBrush x:Key="ScrollBarButtonArrowForeground" Color="#ff001061" />
-          <SolidColorBrush x:Key="ScrollBarButtonArrowForegroundPointerOver" Color="#ff001061" />
+          <SolidColorBrush x:Key="ScrollBarShowingBorderBrush" Color="#ffb6c3e0" />
 
-          <SolidColorBrush x:Key="ScrollBarButtonBackground" Color="#ffd5ddf7"/>
-          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPointerOver" Color="#ffc6d1f7"/>
-          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="#ff96afff"/>
+          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#ffe6ebf7" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#ff96afff" />
+          <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="#ff87a2fa" />
 
           <SolidColorBrush x:Key="ScrollBarPanningThumbBackground" Color="#ff0000" />
           <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#ffd7ddf7" />
           <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#ffd7ddf7" />
 
-          <SolidColorBrush x:Key="ScrollBarShowingBorderBrush" Color="#ff97aac9" />
+          <SolidColorBrush x:Key="ScrollBarButtonBackground" Color="#ffd5ddf7"/>
+          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPointerOver" Color="#ff87a2fa"/>
+          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="#ff4c75fc"/>
 
-          <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#ffd7ddf7" />
-          <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#ff96afff" />
-          <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="#ff87a2fa" />
+          <SolidColorBrush x:Key="ScrollBarButtonArrowForeground" Color="#ff001761" />
+          <SolidColorBrush x:Key="ScrollBarButtonArrowForegroundPointerOver" Color="#ffe8efff" />
 
           <!-- DataGrid -->
           
@@ -602,22 +602,22 @@
 
           <!-- ScrollBar -->
 
-          <SolidColorBrush x:Key="ScrollBarButtonArrowForeground" Color="#eeeeee" />
-          <SolidColorBrush x:Key="ScrollBarButtonArrowForegroundPointerOver" Color="#eeeeee" />
-
-          <SolidColorBrush x:Key="ScrollBarButtonBackground" Color="#242424"/>
-          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}"/>
-          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="{DynamicResource ThemeControlBackgroundSelectedColor}"/>
-
-          <SolidColorBrush x:Key="ScrollBarPanningThumbBackground" Color="#ff0000" />
-          <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#292929" />
-          <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#292929" />
-
           <SolidColorBrush x:Key="ScrollBarShowingBorderBrush" Color="#FF000000" />
 
           <SolidColorBrush x:Key="ThemeScrollBarBackgroundBrush" Color="#292929" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbBrush" Color="#444444" />
           <SolidColorBrush x:Key="ThemeScrollBarThumbPointerOverBrush" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
+
+          <SolidColorBrush x:Key="ScrollBarPanningThumbBackground" Color="#ff0000" />
+          <SolidColorBrush x:Key="ScrollBarTrackFill" Color="#292929" />
+          <SolidColorBrush x:Key="ScrollBarTrackFillPointerOver" Color="#292929" />
+
+          <SolidColorBrush x:Key="ScrollBarButtonBackground" Color="#242424"/>
+          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}"/>
+          <SolidColorBrush x:Key="ScrollBarButtonBackgroundPressed" Color="#ff2f6deb"/>
+
+          <SolidColorBrush x:Key="ScrollBarButtonArrowForeground" Color="#eeeeee" />
+          <SolidColorBrush x:Key="ScrollBarButtonArrowForegroundPointerOver" Color="#eeeeee" />
 
           <!-- DataGrid -->
           

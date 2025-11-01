@@ -38,8 +38,11 @@
   <Style Selector="ScrollBar[IsExpanded=true]">
     <Setter Property="BorderBrush" Value="{DynamicResource ScrollBarShowingBorderBrush}"/>
   </Style>
-  <Style Selector="ScrollBar[IsExpanded=true] /template/ PathIcon">
+  <Style Selector="ScrollBar[IsExpanded=true] /template/ RepeatButton PathIcon">
     <Setter Property="Foreground" Value="{DynamicResource ScrollBarButtonArrowForeground}"/>
+  </Style>
+  <Style Selector="ScrollBar[IsExpanded=true] /template/ RepeatButton:pointerover PathIcon">
+    <Setter Property="Foreground" Value="{DynamicResource ScrollBarButtonArrowForegroundPointerOver}"/>
   </Style>
   <!-- Original ScrollBarThumbBackgroundColor Brush is a StaticResource so override with a DynamicResource -->
   <Style Selector="ScrollBar[IsExpanded=true] /template/ Thumb">
