@@ -28,24 +28,11 @@ public class TabTheme : ThemeSection
 	[ResourceKey("TabBackgroundBorderBrush")]
 	public Color? Border { get; set; }
 
-	// Title
-	[Header("Title"), ResourceKey("TitleBackgroundBrush", "SystemControlBackgroundBaseLowBrush")]
-	public Color? TitleBackground { get; set; }
-
-	[ResourceKey("TitleButtonBackgroundPointerOverBrush")]
-	public Color? TitleButtonBackgroundPointerOver { get; set; }
-
-	[ResourceKey("TitleForegroundBrush")]
-	public Color? TitleForeground { get; set; }
-
-	[ResourceKey("TitleBorderBrush")]
-	public Color? TitleBorder { get; set; }
-
 	// Splitter
 	[Header("Splitter"), ResourceKey("TabSplitterBackgroundBrush")]
 	public Color? SplitterBackground { get; set; }
 
-	[ResourceKey("TabSplitterSize"), Range(6, 100)]
+	[ResourceKey("TabSplitterSize"), Range(6, 20)]
 	public double? SplitterSize { get; set; }
 
 
@@ -70,7 +57,7 @@ public class TabTheme : ThemeSection
 	public Color? ProgressBarForeground { get; set; }
 
 	// Button
-	[Header("Button"), ResourceKey("TabButtonBackgroundBrush")]
+	[Header("Scroll Buttons"), ResourceKey("TabButtonBackgroundBrush")]
 	public Color? ButtonBackground { get; set; }
 
 	[ResourceKey("TabButtonBackgroundPointerOverBrush")]
@@ -91,6 +78,44 @@ public class TabTheme : ThemeSection
 	[ResourceKey("TabButtonBorderPointerOverBrush")]
 	public Color? ButtonBorderPointerOver { get; set; }
 }
+
+public class TitleTheme : ThemeSection
+{
+	public override string ToString() => "Title";
+
+	// Title
+	[Header("Title"), ResourceKey("TabTitleBackgroundBrush", "SystemControlBackgroundBaseLowBrush")]
+	public Color? Background { get; set; }
+
+	[ResourceKey("TabTitleForegroundBrush")]
+	public Color? Foreground { get; set; }
+
+	[ResourceKey("TabTitleBorderBrush")]
+	public Color? Border { get; set; }
+
+	// Button
+	[Header("Button"), ResourceKey("TabTitleButtonBackgroundBrush")]
+	public Color? ButtonBackground { get; set; }
+
+	[ResourceKey("TabTitleButtonBackgroundPointerOverBrush")]
+	public Color? ButtonBackgroundPointerOver { get; set; }
+
+	[ResourceKey("TabTitleButtonBackgroundPressedBrush")]
+	public Color? ButtonBackgroundPressed { get; set; }
+
+	[ResourceKey("TabTitleButtonForegroundBrush")]
+	public Color? ButtonForeground { get; set; }
+
+	[ResourceKey("TabTitleButtonForegroundPointerOverBrush")]
+	public Color? ButtonForegroundPointerOver { get; set; }
+
+	[ResourceKey("TabTitleButtonBorderBrush")]
+	public Color? ButtonBorder { get; set; }
+
+	[ResourceKey("TabTitleButtonBorderPointerOverBrush")]
+	public Color? ButtonBorderPointerOver { get; set; }
+}
+
 
 public class FontTheme : ThemeSection
 {
@@ -223,9 +248,8 @@ public class ScrollBarTheme : ThemeSection
 	[Separator, ResourceKey("ScrollBarButtonArrowForeground")]
 	public Color? ButtonArrowForeground { get; set; }
 
-	// Doesn't work
-	/*[ResourceKey("ScrollBarButtonArrowForegroundPointerOver")]
-	public Color? ButtonArrowForegroundPointerOver { get; set; }*/
+	[ResourceKey("ScrollBarButtonArrowForegroundPointerOver")]
+	public Color? ButtonArrowForegroundPointerOver { get; set; }
 }
 
 public class DataGridTheme : ThemeSection
@@ -450,6 +474,9 @@ public class TextControlTheme : ThemeSection
 	[ResourceKey("TextControlBorderBrushFocused")]
 	public Color? TextControlBorderFocused { get; set; }
 
+	[ResourceKey("TextControlBorderBrushReadOnlyPointerOver")]
+	public Color? TextControlBorderReadOnlyPointerOver { get; set; }
+
 	[Range(0, 5), ResourceKey("TextControlBorderThemeThickness",
 		"TextControlBorderThemeThicknessFocused",
 		"CalendarDatePickerBorderThemeThickness",
@@ -478,7 +505,10 @@ public class TextControlTheme : ThemeSection
 	public Color? TextControlSelectionHighlight { get; set; }
 
 	// ComboBox
-	[Header("ComboBox"), ResourceKey("ComboBoxDropDownBackground")]
+	[Header("ComboBox"), ResourceKey("ComboBoxBackgroundPressed")]
+	public Color? ComboBoxBackgroundPressed { get; set; }
+
+	[ResourceKey("ComboBoxDropDownBackground")]
 	public Color? ComboBoxDropDownBackground { get; set; }
 
 	[ResourceKey("ComboBoxItemBackgroundSelected",
@@ -487,13 +517,20 @@ public class TextControlTheme : ThemeSection
 	public Color? ComboBoxItemBackgroundSelected { get; set; }
 
 	[ResourceKey("ComboBoxItemBackgroundPointerOver",
-		"ComboBoxItemBackgroundSelectedPointerOver",
-		"ComboBoxBackgroundPressed"
+		"ComboBoxItemBackgroundSelectedPointerOver"
 		)]
 	public Color? ComboBoxItemBackgroundPointerOver { get; set; }
 
+	[ResourceKey("ComboBoxItemForeground")]
+	public Color? ComboBoxItemForeground { get; set; }
+
 	[ResourceKey("ComboBoxItemForegroundSelected")]
 	public Color? ComboBoxItemForegroundSelected { get; set; }
+
+	[ResourceKey("ComboBoxItemForegroundPointerOver",
+		"ComboBoxItemForegroundSelectedPointerOver"
+		)]
+	public Color? ComboBoxItemForegroundPointerOver { get; set; }
 
 	[ResourceKey("ComboBoxDropDownBorderBrush")]
 	public Color? ComboBoxDropDownBorder { get; set; }

@@ -439,12 +439,15 @@ public class TabInstance : IDisposable
 			int itemCount = 0;
 			foreach (object obj in iList)
 			{
-				foreach (var propertyColumn in propertyColumns)
+				if (obj != null)
 				{
-					if (propertyColumn.PropertyInfo.DeclaringType?.IsAbstract == true)
-						continue;
+					foreach (var propertyColumn in propertyColumns)
+					{
+						if (propertyColumn.PropertyInfo.DeclaringType?.IsAbstract == true)
+							continue;
 
-					propertyColumn.PropertyInfo.GetValue(obj);
+						propertyColumn.PropertyInfo.GetValue(obj);
+					}
 				}
 				itemCount++;
 				if (itemCount > MaxPreloadItems)

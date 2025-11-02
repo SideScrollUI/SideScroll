@@ -35,10 +35,10 @@ public static class TimeSpanExtensions
 			if (absTimeSpan < timeUnit.TimeSpan)
 				continue;
 
-			double units = timeSpan.TotalSeconds / timeUnit.TimeSpan.TotalSeconds;
+			double units = timeSpan / timeUnit.TimeSpan;
 			string value = units.ToString(format) + " " + timeUnit.Name;
 
-			if (absTimeSpan.TotalSeconds > timeUnit.TimeSpan.TotalSeconds)
+			if (absTimeSpan > timeUnit.TimeSpan)
 			{
 				value += "s";
 			}
@@ -103,6 +103,12 @@ public static class TimeSpanExtensions
 	/// </summary>
 	public static List<TimeSpan> CommonTimeSpans { get; set; } =
 	[
+		TimeSpan.FromMilliseconds(1),
+		TimeSpan.FromMilliseconds(5),
+		TimeSpan.FromMilliseconds(10),
+		TimeSpan.FromMilliseconds(50),
+		TimeSpan.FromMilliseconds(100),
+		TimeSpan.FromMilliseconds(500),
 		TimeSpan.FromSeconds(1),
 		TimeSpan.FromSeconds(5),
 		TimeSpan.FromSeconds(10),

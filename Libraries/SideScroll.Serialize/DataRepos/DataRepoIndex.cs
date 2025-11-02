@@ -16,6 +16,9 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 
 	public string IndexPath => Paths.Combine(GroupPath, "Index.dat");
 
+	// Don't use GroupId since it can throw exceptions due to invalid characters
+	protected string MutexName => DataRepoInstance.GroupHash;
+
 	public record Item(long Index, string Key);
 
 	public class Indices
@@ -24,24 +27,31 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		public long NextIndex { get; set; }
 	}
 
-	public Item? Add(Call call, string key)
+	public Item? Save(Call call, string key)
 	{
-		return LockedGetCall(call, () => AddInternal(call, key));
+		return LockedGetCall(call, () => SaveInternal(call, key));
 	}
 
-	private Item AddInternal(Call call, string key)
+	private Item SaveInternal(Call call, string key)
 	{
 		Indices indices = Load(call);
-		long index = indices.NextIndex++;
-		Item item = new(index, key);
 
-		indices.Items.RemoveAll(item => item.Key == key);
-		indices.Items.Add(item);
-		Save(indices);
+		if (indices.Items.FirstOrDefault(item => item.Key == key) is Item existingItem)
+		{
+			return existingItem;
+		}
+		else
+		{
+			long index = indices.NextIndex++;
+			Item item = new(index, key);
+			indices.Items.RemoveAll(item => item.Key == key);
+			indices.Items.Add(item);
+			Save(indices);
 
-		PruneMaxItems(call, indices);
+			PruneMaxItems(call, indices);
 
-		return item;
+			return item;
+		}
 	}
 
 	private void PruneMaxItems(Call call, Indices indices)
@@ -83,7 +93,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 
 	public TResult? LockedGetCall<TResult>(Call call, Func<TResult> func)
 	{
-		using var mutex = new Mutex(false, DataRepoInstance.GroupId);
+		using var mutex = new Mutex(false, MutexName);
 
 		try
 		{
@@ -123,7 +133,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 
 	public void LockedSetCall(Call call, CallAction callAction)
 	{
-		using var mutex = new Mutex(false, DataRepoInstance.GroupId);
+		using var mutex = new Mutex(false, MutexName);
 
 		try
 		{

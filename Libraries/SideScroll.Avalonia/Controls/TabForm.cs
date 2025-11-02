@@ -60,11 +60,16 @@ public class TabForm : Border, IValidationControl
 	{
 		FormObject = formObject;
 		FormObject.ObjectChanged += FormObject_ObjectChanged;
+		FormObject.OnFocus += FormObject_OnFocus;
 	}
 
 	private void FormObject_ObjectChanged(object? sender, ObjectUpdatedEventArgs e)
 	{
 		LoadObject(e.Object);
+	}
+
+	private void FormObject_OnFocus(object? sender, EventArgs e)
+	{
 		Focus();
 	}
 

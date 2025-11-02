@@ -16,7 +16,7 @@ public static class AvaloniaUtils
 	// TextBlock control doesn't allow selecting text, so add a Copy command to the context menu
 	public static void AddContextMenu(TextBlock textBlock)
 	{
-		var list = new AvaloniaList<object>();
+		AvaloniaList<object> list = [];
 
 		var menuItemCopy = new TabMenuItem("_Copy");
 		menuItemCopy.Click += delegate
@@ -37,7 +37,7 @@ public static class AvaloniaUtils
 	{
 		var keymap = Application.Current!.PlatformSettings!.HotkeyConfiguration;
 
-		var list = new AvaloniaList<object>();
+		AvaloniaList<object> list = [];
 
 		if (!textBox.IsReadOnly)
 		{
@@ -67,7 +67,7 @@ public static class AvaloniaUtils
 
 	public static void AddContextMenu(ComboBox comboBox)
 	{
-		var list = new AvaloniaList<object>();
+		AvaloniaList<object> list = [];
 
 		var menuItemCopy = new TabMenuItem("_Copy");
 		menuItemCopy.Click += delegate
@@ -77,9 +77,9 @@ public static class AvaloniaUtils
 		list.Add(menuItemCopy);
 
 		var menuItemPaste = new TabMenuItem("Paste");
-		menuItemPaste.Click += delegate
+		menuItemPaste.Click += async delegate
 		{
-			if (ClipboardUtils.TryGetText(comboBox) is string clipboardText)
+			if (await ClipboardUtils.TryGetTextAsync(comboBox) is string clipboardText)
 			{
 				if (comboBox.Items.FirstOrDefault(i => i?.ToString() == clipboardText) is object matchingItem)
 				{
@@ -99,7 +99,7 @@ public static class AvaloniaUtils
 
 	public static void AddContextMenu(ColorPicker colorPicker)
 	{
-		var list = new AvaloniaList<object>();
+		AvaloniaList<object> list = [];
 
 		var menuItemCopy = new TabMenuItem("_Copy");
 		menuItemCopy.Click += delegate
@@ -109,9 +109,9 @@ public static class AvaloniaUtils
 		list.Add(menuItemCopy);
 
 		var menuItemPaste = new TabMenuItem("Paste");
-		menuItemPaste.Click += delegate
+		menuItemPaste.Click += async delegate
 		{
-			if (ClipboardUtils.TryGetText(colorPicker) is string clipboardText &&
+			if (await ClipboardUtils.TryGetTextAsync(colorPicker) is string clipboardText &&
 				Color.TryParse(clipboardText, out Color color))
 			{
 				colorPicker.Color = color;
@@ -129,12 +129,12 @@ public static class AvaloniaUtils
 
 	private static void SendKeyGesture(InputElement inputElement, List<KeyGesture> keyGestures)
 	{
-		foreach (var key in keyGestures)
+		foreach (KeyGesture keyGesture in keyGestures)
 		{
-			var args = new KeyEventArgs
+			KeyEventArgs args = new()
 			{
-				Key = key.Key,
-				KeyModifiers = key.KeyModifiers,
+				Key = keyGesture.Key,
+				KeyModifiers = keyGesture.KeyModifiers,
 				RoutedEvent = InputElement.KeyDownEvent,
 			};
 

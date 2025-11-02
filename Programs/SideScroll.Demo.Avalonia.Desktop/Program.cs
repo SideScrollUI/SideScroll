@@ -4,10 +4,11 @@ using SideScroll.Avalonia.Samples;
 using SideScroll.Avalonia.ScreenCapture;
 using SideScroll.Utilities;
 
-namespace SideScroll.Start.Avalonia;
+namespace SideScroll.Demo.Avalonia.Desktop;
 
 static class Program
 {
+	[STAThread]
 	static int Main(string[] args)
 	{
 		AppBuilder builder = BuildAvaloniaApp();

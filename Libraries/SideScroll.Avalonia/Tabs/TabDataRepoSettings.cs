@@ -1,5 +1,4 @@
 using SideScroll.Attributes;
-using SideScroll.Avalonia.Controls;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
@@ -24,8 +23,7 @@ public class TabDataRepoSettings(UserSettings userSettings) : ITab
 		{
 			model.AutoSelectSaved = AutoSelectType.NonEmpty;
 
-			var tabForm = new TabForm(DataSettings);
-			model.AddObject(tabForm);
+			model.AddForm(DataSettings);
 
 			List<ListItem> currentVersion =
 			[

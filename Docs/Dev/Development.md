@@ -16,7 +16,7 @@ cd SideScroll
 - Start Sample Application
 ```
 dotnet build
-dotnet run --project Programs/SideScroll.Start.Avalonia/SideScroll.Start.Avalonia.csproj
+dotnet run --project Programs/SideScroll.Demo.Avalonia.Desktop/SideScroll.Demo.Avalonia.Desktop.csproj
 ```
 
 ## Avalonia UI

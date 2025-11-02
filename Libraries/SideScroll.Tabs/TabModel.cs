@@ -31,11 +31,17 @@ public class ObjectUpdatedEventArgs(object obj) : EventArgs
 public class TabFormObject : TabObject
 {
 	public event EventHandler<ObjectUpdatedEventArgs>? ObjectChanged;
+	public event EventHandler<EventArgs>? OnFocus;
 
 	public void Update(object? sender, object obj)
 	{
 		Object = obj;
 		ObjectChanged?.Invoke(sender, new ObjectUpdatedEventArgs(Object!));
+	}
+
+	public void Focus(object? sender)
+	{
+		OnFocus?.Invoke(sender, EventArgs.Empty);
 	}
 }
 

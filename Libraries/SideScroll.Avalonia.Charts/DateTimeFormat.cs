@@ -1,5 +1,8 @@
+using SideScroll.Utilities;
+
 namespace SideScroll.Avalonia.Charts;
 
+// Provides a DateTimeFormat based on the DateTime and TimeSpan Durations, showing enough precision to allow multiple periods
 public class DateTimeFormat(string? dateFormat, string? timeFormat, string? timeFormatUtc, TimeSpan minimum, TimeSpan maximum)
 {
 	public const double DaysInAYear = 365.25;
@@ -36,6 +39,7 @@ public class DateTimeFormat(string? dateFormat, string? timeFormat, string? time
 
 	public static List<DateTimeFormat> Formats { get; set; } =
 	[
+		new(null, DateTimeUtils.GetTimeFormatMilliseconds(), "H:mm:ss.FFF", TimeSpan.FromMilliseconds(1), TimeSpan.FromSeconds(3)),
 		new(null, "T", "H:mm:ss", TimeSpan.FromSeconds(1), TimeSpan.FromMinutes(3)),
 		new(null, "t", "H:mm", TimeSpan.FromMinutes(1), TimeSpan.FromDays(1)),
 		new("M/d", "t", "H:mm", TimeSpan.FromMinutes(1), TimeSpan.FromDays(3)),

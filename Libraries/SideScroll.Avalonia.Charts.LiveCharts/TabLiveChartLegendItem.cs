@@ -1,6 +1,5 @@
 using Avalonia.Media;
 using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Painting;
 
 namespace SideScroll.Avalonia.Charts.LiveCharts;
@@ -27,7 +26,7 @@ public class TabLiveChartLegendItem(TabLiveChartLegend legend, ChartSeries<ISeri
 				lineSeries.GeometryFill = new SolidColorPaint(skColor);
 			}
 
-			var chart = (CartesianChart<SkiaSharpDrawingContext>)LiveChartLegend.Chart.CoreChart;
+			var chart = LiveChartLegend.Chart.CoreChart;
 
 			lock (LiveChartLegend.Chart.CoreCanvas.Sync)
 			{

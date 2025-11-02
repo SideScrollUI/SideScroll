@@ -78,7 +78,7 @@ public class TabSampleActions : ITab
 
 		private static async Task SubTaskProgressAsync(Call call)
 		{
-			List<int> ids = Enumerable.Range(0, 30).ToList();
+			List<int> ids = Enumerable.Range(0, 20).ToList();
 
 			var results = await call.RunAsync(DoTask, ids);
 		}

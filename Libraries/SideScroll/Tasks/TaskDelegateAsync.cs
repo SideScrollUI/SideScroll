@@ -29,21 +29,14 @@ public class TaskDelegateAsync : TaskCreator
 		Description = description;
 	}
 
-	public override Action CreateAction(Call call)
+	public override Task CreateTask(Call call)
 	{
-		return () => InvokeAction(call);
+		return InvokeActionAsync(call);
 	}
 
-	private void InvokeAction(Call call)
+	public override Action CreateAction(Call call)
 	{
-		try
-		{
-			Task.Run(() => InvokeActionAsync(call)).GetAwaiter().GetResult();
-		}
-		catch (Exception e)
-		{
-			call.Log.Add(e);
-		}
+		return async () => await InvokeActionAsync(call);
 	}
 
 	private async Task InvokeActionAsync(Call call)

@@ -16,12 +16,12 @@ public class TabSampleDemo
 
 	public static TabDemoPlanets Planets => new();
 	public static TabPlanetCharts Charts => new();
+	public static TabSampleTodos Todo => new();
 	public static TabSampleGridCollectionSize Collections => new();
 	public static TabSampleObjectMembers Objects => new();
 	public static TabSampleFormDataTabs Forms => new();
 	public static string Json => TextSamples.Json;
 	public static TabFileViewer FileViewer => new();
 	public static TabProcessMonitor ProcessMonitor => new();
-	public static TabSampleTodos Todo => new();
 	public static TabSampleDemo Copy => new();
 }

@@ -57,11 +57,11 @@ public class TabDateTimePicker : Grid
 		AddDatePicker();
 		AddTimeTextBox();
 
-		AddButton("Copy to Clipboard", Icons.Svg.Copy, 2, CopyToClipboard);
+		AddButton("Copy to Clipboard", Icons.Svg.Copy, 2, CopyToClipboardAsync);
 
 		if (Property.IsEditable)
 		{
-			AddButton("Import from Clipboard", Icons.Svg.Import, 3, ImportFromClipboard);
+			AddButton("Import from Clipboard", Icons.Svg.Import, 3, ImportFromClipboardAsync);
 		}
 	}
 
@@ -114,14 +114,14 @@ public class TabDateTimePicker : Grid
 		Children.Add(_timeTextBox);
 	}
 
-	protected TabImageButton AddButton(string tooltip, IResourceView resourcView, int column, CallAction callAction)
+	protected TabImageButton AddButton(string tooltip, IResourceView resourcView, int column, CallActionAsync callActionAsync)
 	{
 		var button = new TabImageButton(tooltip, resourcView, null, 20)
 		{
 			Padding = new(5),
 			HorizontalAlignment = HorizontalAlignment.Right,
 			VerticalAlignment = VerticalAlignment.Center,
-			CallAction = callAction,
+			CallActionAsync = callActionAsync,
 
 			[ToolTip.TipProperty] = tooltip,
 			[Grid.ColumnProperty] = column,
@@ -130,9 +130,9 @@ public class TabDateTimePicker : Grid
 		return button;
 	}
 
-	private void ImportFromClipboard(Call call)
+	private async Task ImportFromClipboardAsync(Call call)
 	{
-		string? clipboardText = ClipboardUtils.TryGetText(this);
+		string? clipboardText = await ClipboardUtils.TryGetTextAsync(this);
 		if (clipboardText == null) return;
 
 		if (DateTimeUtils.TryParseTimeSpan(clipboardText, out TimeSpan timeSpan))
@@ -152,11 +152,11 @@ public class TabDateTimePicker : Grid
 		}
 	}
 
-	private void CopyToClipboard(Call call)
+	private async Task CopyToClipboardAsync(Call call)
 	{
 		if (Property.Value is DateTime dateTime)
 		{
-			ClipboardUtils.SetText(this, dateTime.Format(TimeFormatType.Second)!);
+			await ClipboardUtils.SetTextAsync(this, dateTime.Format(TimeFormatType.Second)!);
 		}
 	}
 }

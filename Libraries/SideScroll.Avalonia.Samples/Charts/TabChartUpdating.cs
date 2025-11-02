@@ -2,6 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Avalonia.Charts.LiveCharts;
 using SideScroll.Charts;
 using SideScroll.Collections;
+using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Samples.Charts;
@@ -53,7 +54,7 @@ public class TabChartUpdating : ITab
 				ShowTimeTracker = true,
 			};
 
-			DateTime dateTime = DateTime.Now;
+			DateTime dateTime = DateTime.Now.Trim();
 			for (int i = 0; i < 2; i++)
 			{
 				var series = ChartSamples.CreateTimeSeries(dateTime, TimeSpan.FromHours(1), SampleCount);

@@ -16,6 +16,8 @@ public class ThemeManager
 	public static ThemeManager? Instance { get; set; }
 	public static AvaloniaThemeSettings? CurrentTheme { get; protected set; }
 
+	public static JsonSerializerOptions JsonSerializerOptions { get; } = CreateJsonSerializerOptions();
+
 	public Project Project { get; }
 
 	public static Application Application => Application.Current!;
@@ -71,16 +73,20 @@ public class ThemeManager
 
 	public void AddThemeVariant(Call call, string variant)
 	{
+		// Overwrite previous if not found since the change is so large. Todo: Remove eventually
+		bool isHybridFound = DataRepoDefaultThemes.Keys.Contains("Hybrid");
+
 		// Always overwrite default themes when the version changes
 		var defaultTheme = DataRepoDefaultThemes.Values.FirstOrDefault(theme => theme.Name == variant);
-		if (defaultTheme == null || defaultTheme.Version != Project.Version || defaultTheme.HasNullValue())
+		if (defaultTheme == null || defaultTheme.Version != Project.Version || defaultTheme.HasNullValue() || !isHybridFound)
 		{
 			defaultTheme = Create(variant, variant);
 			DataRepoDefaultThemes.Save(call, defaultTheme);
 		}
 
 		// Don't replace user modified themes, but update them to add new resources
-		if (GetUpdatedTheme(variant) is not AvaloniaThemeSettings existingThemeSettings ||
+		if (!isHybridFound || 
+			GetUpdatedTheme(variant) is not AvaloniaThemeSettings existingThemeSettings ||
 			(existingThemeSettings.ModifiedAt == null && existingThemeSettings.Version != Project.Version))
 		{
 			DataRepoThemes.Save(call, defaultTheme);
@@ -89,9 +95,7 @@ public class ThemeManager
 
 	public void AddJson(Call call, string json, bool isDefault = false)
 	{
-		var options = new JsonSerializerOptions();
-		options.Converters.Add(new JsonColorConverter());
-		var themeSettings = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, options)!;
+		var themeSettings = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, JsonSerializerOptions)!;
 		themeSettings.Version = Project.Version;
 
 		if (isDefault)
@@ -146,7 +150,7 @@ public class ThemeManager
 		Instance.AddThemeVariant(call, "Light");
 		Instance.AddThemeVariant(call, "Dark");
 
-		Instance.AddJson(call, AvaloniaAssets.Themes.LightBlue, true);
+		Instance.AddJson(call, AvaloniaAssets.Themes.Hybrid, true);
 
 		Instance.LoadCurrentTheme();
 	}
@@ -177,5 +181,12 @@ public class ThemeManager
 		LoadTheme(themeSettings);
 
 		return themeSettings;
+	}
+
+	private static JsonSerializerOptions CreateJsonSerializerOptions()
+	{
+		var options = new JsonSerializerOptions { WriteIndented = true };
+		options.Converters.Add(new JsonColorConverter());
+		return options;
 	}
 }

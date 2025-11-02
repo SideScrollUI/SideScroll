@@ -371,10 +371,15 @@ public class DataRepo
 	}
 
 	// Don't use GetHashCode(), it returns a different value each time the process is run
-	public string GetGroupPath(Type type, string? groupId = null)
+	public string GetGroupHash(Type type, string? groupId = null)
 	{
 		groupId ??= DefaultGroupId;
-		string groupHash = (type.GetNonNullableType().GetAssemblyQualifiedShortName() + ';' + RepoName + ';' + groupId).HashSha256ToBase32();
+		return (type.GetNonNullableType().GetAssemblyQualifiedShortName() + ';' + RepoName + ';' + groupId).HashSha256ToBase32();
+	}
+
+	public string GetGroupPath(Type type, string? groupId = null)
+	{
+		string groupHash = GetGroupHash(type, groupId);
 		return Paths.Combine(RepoPath, groupHash);
 	}
 

@@ -4,43 +4,89 @@ using SideScroll.Attributes;
 
 namespace SideScroll.Time;
 
+/// <summary>
+/// Interface for objects that contain tags
+/// </summary>
 public interface ITags
 {
+	/// <summary>
+	/// Gets the list of tags
+	/// </summary>
 	List<Tag> Tags { get; }
 }
 
+/// <summary>
+/// Represents a time range with an associated numeric value and tags
+/// </summary>
 public class TimeRangeValue : ITags
 {
+	/// <summary>
+	/// Gets or sets the start time of this value's range
+	/// </summary>
 	[XAxis]
 	public DateTime StartTime { get; set; }
+	
+	/// <summary>
+	/// Gets or sets the end time of this value's range
+	/// </summary>
 	public DateTime EndTime { get; set; }
 
+	/// <summary>
+	/// Gets the duration between start and end time
+	/// </summary>
 	public TimeSpan Duration => EndTime.Subtract(StartTime);
 
+	/// <summary>
+	/// Gets the formatted time range text without duration
+	/// </summary>
 	public string TimeText => DateTimeUtils.FormatTimeRange(StartTime, EndTime, false);
 
+	/// <summary>
+	/// Gets or sets the name of this time range value
+	/// </summary>
 	public string? Name { get; set; }
 
+	/// <summary>
+	/// Gets or sets the numeric value associated with this time range
+	/// </summary>
 	[YAxis]
 	public double Value { get; set; }
 
-	//[Tags]
+	/// <summary>
+	/// Gets or sets the tags associated with this time range value
+	/// </summary>
+	// [Tags]
 	public List<Tag> Tags { get; set; } = [];
 
+	/// <summary>
+	/// Gets a comma-separated description of all tags
+	/// </summary>
 	public string Description => string.Join(", ", Tags);
 
+	/// <summary>
+	/// Gets a TimeWindow representing this time range
+	/// </summary>
 	public TimeWindow TimeWindow => new(StartTime, EndTime);
 
 	public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Value;
 
+	/// <summary>
+	/// Initializes a new instance of the TimeRangeValue class
+	/// </summary>
 	public TimeRangeValue() { }
 
+	/// <summary>
+	/// Initializes a new instance with a single point in time
+	/// </summary>
 	public TimeRangeValue(DateTime startTime)
 	{
 		StartTime = startTime;
 		EndTime = startTime;
 	}
 
+	/// <summary>
+	/// Initializes a new instance with a time range, value, and tags
+	/// </summary>
 	public TimeRangeValue(DateTime startTime, DateTime endTime, double value, params Tag[] tags)
 	{
 		StartTime = startTime;
@@ -49,6 +95,9 @@ public class TimeRangeValue : ITags
 		Tags = tags.ToList();
 	}
 
+	/// <summary>
+	/// Initializes a new instance with a time range, value, and tag list
+	/// </summary>
 	public TimeRangeValue(DateTime startTime, DateTime endTime, double value, List<Tag> tags)
 	{
 		StartTime = startTime;
@@ -62,7 +111,7 @@ public class TimeRangeValue : ITags
 		if (input.Count < 10)
 			return periodDuration;
 
-		TimeSpan minDistance = TimeSpan.FromSeconds(2 * (int)periodDuration.TotalSeconds);
+		TimeSpan minDistance = 2 * periodDuration;
 		DateTime? prevTime = null;
 		foreach (TimeRangeValue point in input)
 		{
@@ -70,7 +119,7 @@ public class TimeRangeValue : ITags
 			if (prevTime != null)
 			{
 				TimeSpan duration = startTime.Subtract(prevTime.Value);
-				duration = TimeSpan.FromSeconds(Math.Abs((int)duration.TotalSeconds));
+				duration = TimeSpan.FromTicks(Math.Abs(duration.Ticks));
 				minDistance = minDistance.Min(duration);
 			}
 
@@ -79,7 +128,12 @@ public class TimeRangeValue : ITags
 		return periodDuration.Max(minDistance);
 	}
 
-	// Adds a single NaN point between all gaps greater than minGap so the chart will add gaps in lines
+	/// <summary>
+	/// Adds NaN gap points between discontinuous time range values for charting purposes
+	/// </summary>
+	/// <remarks>
+	/// Inserts NaN values between gaps greater than the minimum detected gap so charts will display line breaks
+	/// </remarks>
 	public static List<TimeRangeValue> AddGaps(IEnumerable<TimeRangeValue> input, TimeSpan periodDuration)
 	{
 		var sorted = input.OrderBy(p => p.StartTime).ToList();
@@ -112,6 +166,9 @@ public class TimeRangeValue : ITags
 		return output;
 	}
 
+	/// <summary>
+	/// Adds NaN gap points between discontinuous time range values within a specified time range
+	/// </summary>
 	public static List<TimeRangeValue> AddGaps(List<TimeRangeValue> input, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
 	{
 		List<TimeRangeValue> output = [];
@@ -123,7 +180,7 @@ public class TimeRangeValue : ITags
 
 		List<TimeRangeValue> merged = MergeIdenticalMiddleValues(input);
 
-		//bool hasDuration = merged.First().Duration.TotalSeconds > 0;
+		//bool hasDuration = merged.First().Duration.Ticks > 0;
 		DateTime prevTime = startTime;
 		foreach (TimeRangeValue point in merged)
 		{
@@ -211,21 +268,21 @@ public class TimeRangeValue : ITags
 	}
 
 	// Add NaN points for each period duration between the start/end times
-	/*private static DateTime FillGaps(DateTime startTime, DateTime endTime, int periodDuration, List<TimeRangeValue> output)
+	/*private static DateTime FillGaps(DateTime startTime, DateTime endTime, TimeSpan periodDuration, List<TimeRangeValue> output)
 	{
-		int maxGap = periodDuration * 2;
+		TimeSpan maxGap = periodDuration * 2;
 
 		while (true)
 		{
 			TimeSpan timeSpan = endTime.Subtract(startTime);
-			if (timeSpan.TotalSeconds <= maxGap)
+			if (timeSpan <= maxGap)
 				break;
 
-			DateTime expectedTime = startTime.AddSeconds(periodDuration);
+			DateTime expectedTime = startTime.Add(periodDuration);
 			var insertedPoint = new TimeRangeValue()
 			{
 				StartTime = expectedTime.ToUniversalTime(),
-				EndTime = expectedTime.ToUniversalTime().AddSeconds(periodDuration),
+				EndTime = expectedTime.ToUniversalTime().Add(periodDuration),
 				Value = double.NaN,
 			};
 

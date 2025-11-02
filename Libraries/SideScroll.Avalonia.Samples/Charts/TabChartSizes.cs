@@ -1,6 +1,7 @@
 using SideScroll.Avalonia.Charts.LiveCharts;
 using SideScroll.Charts;
 using SideScroll.Collections;
+using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Samples.Charts;
 
@@ -18,7 +19,7 @@ public class TabChartSizes : ITab
 		{
 			model.MinDesiredWidth = 1000;
 
-			DateTime dateTime = DateTime.Now;
+			DateTime dateTime = DateTime.Now.Trim();
 			var series = ChartSamples.CreateTimeSeries(dateTime, TimeSpan.FromHours(6), SampleCount);
 
 			var chartView = new ChartView

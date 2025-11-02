@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Charts;
 using SideScroll.Collections;
+using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.Time;
@@ -106,7 +107,7 @@ public class TabProcessMonitor : ITab
 
 		private void AddCpuSample()
 		{
-			DateTime sampleTime = DateTime.Now;
+			DateTime sampleTime = DateTime.Now.Trim();
 			TimeSpan privilegedProcessorTime = _process!.PrivilegedProcessorTime;
 			TimeSpan totalProcessorTime = _process.TotalProcessorTime;
 			TimeSpan userProcessorTime = _process.UserProcessorTime;
@@ -118,9 +119,9 @@ public class TabProcessMonitor : ITab
 				CpuSample cpuSample = new()
 				{
 					TimeStamp = sampleTime,
-					PrivilegedUsage = privilegedProcessorTime.Subtract(_prevPrivilegedProcessorTime!.Value)!.TotalSeconds / duration.TotalSeconds,
-					TotalUsage = totalProcessorTime.Subtract(_prevTotalProcessorTime!.Value)!.TotalSeconds / duration.TotalSeconds,
-					UserUsage = userProcessorTime.Subtract(_prevUserProcessorTime!.Value)!.TotalSeconds / duration.TotalSeconds,
+					PrivilegedUsage = privilegedProcessorTime.Subtract(_prevPrivilegedProcessorTime!.Value)! / duration,
+					TotalUsage = totalProcessorTime.Subtract(_prevTotalProcessorTime!.Value)! / duration,
+					UserUsage = userProcessorTime.Subtract(_prevUserProcessorTime!.Value)! / duration,
 				};
 				_cpuUsage.Add(cpuSample);
 			}
@@ -133,7 +134,7 @@ public class TabProcessMonitor : ITab
 
 		private void AddMemorySample()
 		{
-			DateTime sampleTime = DateTime.Now;
+			DateTime sampleTime = DateTime.Now.Trim();
 
 			long workingSet = _process!.WorkingSet64;          // Physical memory in bytes
 			long privateMemory = _process.PrivateMemorySize64; // Private memory in bytes

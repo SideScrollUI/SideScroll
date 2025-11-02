@@ -2,14 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "SideScroll.Start.Avalonia",
+            "name": "SideScroll.Demo.Avalonia.Desktop",
             "console": "integratedTerminal",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build SideScroll",
-            "program": "${workspaceFolder}/Programs/SideScroll.Start.Avalonia/bin/Debug/net8.0/SideScroll.Start.Avalonia.dll",
+            "program": "${workspaceFolder}/Programs/SideScroll.Demo.Avalonia.Desktop/bin/Debug/net8.0/SideScroll.Demo.Avalonia.Desktop.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Programs/SideScroll.Start.Avalonia",
+            "cwd": "${workspaceFolder}/Programs/SideScroll.Demo.Avalonia.Desktop",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart"
         },

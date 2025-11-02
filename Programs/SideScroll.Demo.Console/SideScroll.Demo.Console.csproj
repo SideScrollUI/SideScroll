@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <AssemblyName>SideScroll.Console</AssemblyName>
-    <RootNamespace>SideScroll.Console</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

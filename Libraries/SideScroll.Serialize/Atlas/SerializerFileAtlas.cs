@@ -21,7 +21,7 @@ public class SerializerFileAtlas : SerializerFile
 		{
 			if (attempt > 0)
 			{
-				Thread.Sleep(attempt * (int)SaveAttemptsBackoff.TotalMilliseconds);
+				Thread.Sleep(attempt * SaveAttemptsBackoff);
 			}
 
 			try

@@ -16,7 +16,6 @@ public class Call
 
 	public Call? ParentCall { get; set; }
 
-	[Unserialized]
 	public TaskInstance? TaskInstance { get; set; } // Shows the Task Status and let's you stop them
 
 	public override string? ToString() => Name;

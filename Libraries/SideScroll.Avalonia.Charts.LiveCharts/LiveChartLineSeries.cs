@@ -5,7 +5,7 @@ using LiveChartsCore.Kernel;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Drawing;
+using LiveChartsCore.SkiaSharpView.Avalonia;
 
 namespace SideScroll.Avalonia.Charts.LiveCharts;
 
@@ -37,14 +37,14 @@ public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<L
 
 	public override string? ToString() => LiveChartSeries.ToString();
 
-	public new IEnumerable<ChartPoint> Fetch(IChart chart) => base.Fetch(chart);
+	public new IEnumerable<ChartPoint> Fetch(Chart chart) => base.Fetch(chart);
 
-	IEnumerable<ChartPoint> ISeries.FindHitPoints(IChart chart, LvcPoint pointerPosition, TooltipFindingStrategy strategy)
+	IEnumerable<ChartPoint> ISeries.FindHitPoints(Chart chart, LvcPoint pointerPosition, FindingStrategy strategy, FindPointFor findPointFor)
 	{
 		return FindHitPoints(chart, pointerPosition, LiveChartSeries.Chart.MaxFindDistance);
 	}
 
-	IEnumerable<ChartPoint> FindHitPoints(IChart chart, LvcPoint pointerPosition, double maxDistance)
+	IEnumerable<ChartPoint> FindHitPoints(Chart chart, LvcPoint pointerPosition, double maxDistance)
 	{
 		if (!IsVisible) return [];
 
@@ -57,27 +57,19 @@ public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<L
 
 	public static double GetDistanceTo(ChartPoint target, LvcPoint location)
 	{
-		if (target.Context.Chart is not ICartesianChartView<SkiaSharpDrawingContext> cartesianChart)
+		if (target.Context.Chart is not CartesianChart cartesianChart)
 		{
 			throw new NotImplementedException();
 		}
 
-		var cartesianSeries = (ICartesianSeries<SkiaSharpDrawingContext>)target.Context.Series;
+		var cartesianSeries = (ICartesianSeries)target.Context.Series;
+		var cartesianChartView = (ICartesianChartView)cartesianChart.CoreChart.View;
 
-		// Can be empty when loading
-		var yAxes = cartesianChart.Core.YAxes;
-		if (yAxes.Length <= cartesianSeries.ScalesYAt)
-			return double.NaN;
+		var primaryAxis = cartesianChartView.Core.YAxes[cartesianSeries.ScalesYAt];
+		var secondaryAxis = cartesianChartView.Core.XAxes[cartesianSeries.ScalesXAt];
 
-		var xAxes = cartesianChart.Core.XAxes;
-		if (xAxes.Length <= cartesianSeries.ScalesXAt)
-			return double.NaN;
-
-		var primaryAxis = yAxes[cartesianSeries.ScalesYAt];
-		var secondaryAxis = xAxes[cartesianSeries.ScalesXAt];
-
-		var drawLocation = cartesianChart.Core.DrawMarginLocation;
-		var drawMarginSize = cartesianChart.Core.DrawMarginSize;
+		var drawLocation = cartesianChartView.Core.DrawMarginLocation;
+		var drawMarginSize = cartesianChartView.Core.DrawMarginSize;
 
 		var secondaryScale = new Scaler(drawLocation, drawMarginSize, secondaryAxis);
 		var primaryScale = new Scaler(drawLocation, drawMarginSize, primaryAxis);

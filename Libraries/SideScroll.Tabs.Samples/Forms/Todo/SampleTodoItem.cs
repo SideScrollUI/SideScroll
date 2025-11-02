@@ -11,10 +11,10 @@ public class SampleTodoItem
 	[HiddenRow]
 	public int Id { get; set; } = 1;
 
-	[DataKey, Required, StringLength(100)]
+	[DataKey, Required, StringLength(100), WordWrap]
 	public string? Title { get; set; }
 
-	[WordWrap, AcceptsReturn]
+	[WordWrap, AcceptsReturn(true)]
 	public string? Description { get; set; }
 
 	public TodoPriority Priority { get; set; } = TodoPriority.Medium;
@@ -24,7 +24,7 @@ public class SampleTodoItem
 	[BindList(nameof(Statuses)), ColumnIndex(2)]
 	public string Status { get; set; }
 
-	[HiddenRow]
+	[Hidden]
 	public DateTime Created { get; set; } = TimeZoneView.Now.Trim();
 
 	public SampleTodoItem()

@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Skia;
@@ -12,7 +13,6 @@ using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Avalonia;
-using LiveChartsCore.SkiaSharpView.Drawing;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.Painting.ImageFilters;
 using SideScroll.Avalonia.Controls;
@@ -97,12 +97,14 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			VerticalAlignment = VerticalAlignment.Stretch,
 			XAxes = new List<Axis> { XAxis },
 			YAxes = new List<Axis> { YAxis },
+			Background = SideScrollTheme.ChartBackground,
 			TooltipBackgroundPaint = new SolidColorPaint(SideScrollTheme.ChartToolTipBackground.Color.AsSkColor())
 			{
-				ImageFilter = new DropShadow(2, 2, 2, 2, new SKColor(50, 0, 0, 100))
+				ImageFilter = new DropShadow(2, 2, 2, 2, new SKColor(50, 0, 0, 100)),
 			},
 			TooltipTextPaint = new SolidColorPaint(SideScrollTheme.ChartToolTipForeground.Color.AsSkColor()),
-			TooltipFindingStrategy = TooltipFindingStrategy.CompareAllTakeClosest,
+			TooltipTextSize = 15,
+			FindingStrategy = FindingStrategy.CompareAllTakeClosest,
 			Tooltip = new LiveChartTooltip(this),
 			LegendPosition = LegendPosition.Hidden,
 			AnimationsSpeed = TimeSpan.Zero,
@@ -111,11 +113,12 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			[Grid.RowProperty] = 1,
 		};
 
-		Chart.ChartPointPointerDown += Chart_ChartPointPointerDown;
+		Chart.DataPointerDown += Chart_DataPointerDown;
 		Chart.PointerExited += Chart_PointerExited;
 		Chart.PointerPressed += TabLiveChart_PointerPressed;
 		Chart.PointerReleased += TabLiveChart_PointerReleased;
 		Chart.PointerMoved += TabLiveChart_PointerMoved;
+		Chart.AddHandler(PointerWheelChangedEvent, Chart_PointerWheelChanged, RoutingStrategies.Bubble, true);
 		Chart.EffectiveViewportChanged += Chart_EffectiveViewportChanged;
 		Chart.SizeChanged += Chart_SizeChanged;
 
@@ -263,7 +266,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		Axis axis;
 		if (ChartView.LogBase is double logBase)
 		{
-			axis = new LogaritmicAxis(logBase)
+			axis = new LogarithmicAxis(logBase)
 			{
 				Labeler = (v) => Math.Pow(logBase, v).FormattedShortDecimal(),
 			};
@@ -771,17 +774,11 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 	private void TabLiveChart_PointerMoved(object? sender, PointerEventArgs e)
 	{
+		// Store the mouse down point, check it when mouse button is released to determine if the context menu should be shown
+		var point = e.GetPosition(Chart);
+		CursorPosition = point;
 		try
 		{
-			// Can be empty when loading
-			var chart = (CartesianChart<SkiaSharpDrawingContext>)Chart.CoreChart;
-			if (chart.XAxes.Length == 0 || chart.YAxes.Length == 0)
-				return;
-
-			// Store the mouse down point, check it when mouse button is released to determine if the context menu should be shown
-			var point = e.GetPosition(Chart);
-			CursorPosition = point;
-
 			ChartPoint? hitPoint = FindClosestPoint(new LvcPoint(point.X, point.Y), MaxFindDistance);
 			if (hitPoint != null)
 			{
@@ -802,7 +799,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 					Legend.UnhighlightAll(true);
 				}
 			}
-			
+
 			LvcPointD dataPoint = Chart.ScalePixelsToData(new LvcPointD(point.X, point.Y));
 
 			var moveEvent = new PointerMovedEventArgs(dataPoint.X);
@@ -816,9 +813,9 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		}
 	}
 
-	private void Chart_ChartPointPointerDown(IChartView chart, ChartPoint? point)
+	private void Chart_DataPointerDown(IChartView chart, IEnumerable<ChartPoint> points)
 	{
-		_pointClicked = point;
+		_pointClicked = points.FirstOrDefault();
 	}
 
 	private void TabLiveChart_PointerPressed(object? sender, PointerPressedEventArgs e)
@@ -872,6 +869,16 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		}
 	}
 
+	private void Chart_PointerWheelChanged(object? sender, PointerWheelEventArgs e)
+	{
+		// LiveCharts will handle this event even if zoom is disabled
+		// Unmark the event as handled to allow it to bubble up to parent controls
+		if (Chart.ZoomMode == ZoomAndPanMode.None)
+		{
+			e.Handled = false;
+		}
+	}
+
 	private void Chart_PointerExited(object? sender, PointerEventArgs e)
 	{
 		if (HoverSeries != null)
@@ -916,7 +923,8 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		Chart.PointerPressed -= TabLiveChart_PointerPressed;
 		Chart.PointerReleased -= TabLiveChart_PointerReleased;
 		Chart.PointerMoved -= TabLiveChart_PointerMoved;
-		Chart.ChartPointPointerDown -= Chart_ChartPointPointerDown;
+		Chart.RemoveHandler(PointerWheelChangedEvent, Chart_PointerWheelChanged);
+		Chart.DataPointerDown -= Chart_DataPointerDown;
 		Chart.PointerExited -= Chart_PointerExited;
 		if (_pointerMovedSubscriber != null)
 		{

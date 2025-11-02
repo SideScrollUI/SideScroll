@@ -43,6 +43,8 @@ public class ListProperty : ListMember, IPropertyIsEditable
 	{
 		get
 		{
+			if (Object == null) return null;
+
 			try
 			{
 				if (Cachable)

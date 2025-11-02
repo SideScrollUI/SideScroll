@@ -2,11 +2,20 @@ using System.Runtime.InteropServices;
 
 namespace SideScroll.Utilities;
 
+/// <summary>
+/// Represents a file path
+/// </summary>
 public struct FilePath(string path)
 {
+	/// <summary>
+	/// Gets the file path string
+	/// </summary>
 	public readonly string Path => path;
 }
 
+/// <summary>
+/// Provides utilities for file operations and file system permissions
+/// </summary>
 public static class FileUtils
 {
 	// User
@@ -26,8 +35,14 @@ public static class FileUtils
 
 	// Disallow setting group and other permissions, only allow user
 	public const int UmaskUserOnlyPermissions = S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH;
+	/// <summary>
+	/// Gets a timestamp string in the format yyyy-MM-dd_HH-mm-ss
+	/// </summary>
 	public static string TimestampString => DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
+	/// <summary>
+	/// Gets or sets the set of file extensions that are considered text files
+	/// </summary>
 	public static HashSet<string> TextExtensions { get; set; } =
 	[
 		".csv",
@@ -49,6 +64,10 @@ public static class FileUtils
 		return RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || Environment.OSVersion.Platform == PlatformID.Unix;
 	}
 
+	/// <summary>
+	/// Sets the umask to allow only user permissions on Unix-like systems
+	/// </summary>
+	/// <returns>The previous umask value, or 0 if not on a Unix-like system</returns>
 	public static int SetUmaskUserOnly()
 	{
 		if (!CanSetPermissions())
@@ -57,7 +76,9 @@ public static class FileUtils
 		return umask(UmaskUserOnlyPermissions);
 	}
 
-	// https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
+	/// <summary>
+	/// Recursively copies a directory and its contents to a new location
+	/// </summary>
 	public static void DirectoryCopy(Call call, string sourceDirPath, string destDirPath, bool copySubDirs)
 	{
 		var directoryInfo = new DirectoryInfo(sourceDirPath);
@@ -100,6 +121,10 @@ public static class FileUtils
 		}
 	}
 
+	/// <summary>
+	/// Determines whether a file is currently open by attempting to open it exclusively
+	/// </summary>
+	/// <returns>True if the file is open; otherwise, false</returns>
 	public static bool IsFileOpen(string fileName)
 	{
 		var fileInfo = new FileInfo(fileName);
@@ -125,6 +150,10 @@ public static class FileUtils
 		return false;
 	}
 
+	/// <summary>
+	/// Determines whether a file is a text file based on its extension or content analysis
+	/// </summary>
+	/// <returns>True if the file is a text file; otherwise, false</returns>
 	public static bool IsTextFile(string path)
 	{
 		string extension = Path.GetExtension(path);
@@ -143,6 +172,10 @@ public static class FileUtils
 		return false;
 	}
 
+	/// <summary>
+	/// Determines whether a stream contains text content
+	/// </summary>
+	/// <returns>True if the stream contains text; otherwise, false</returns>
 	public static bool IsTextStream(Stream stream)
 	{
 		try
@@ -157,6 +190,10 @@ public static class FileUtils
 		return false;
 	}
 
+	/// <summary>
+	/// Determines whether a stream reader contains text content by analyzing its characters
+	/// </summary>
+	/// <returns>True if the stream contains text; otherwise, false</returns>
 	public static bool IsTextStream(StreamReader streamReader)
 	{
 		try
@@ -173,6 +210,9 @@ public static class FileUtils
 		return false;
 	}
 
+	/// <summary>
+	/// Deletes a directory and all its contents if it exists
+	/// </summary>
 	public static void DeleteDirectory(Call? call, string? path)
 	{
 		call ??= new();

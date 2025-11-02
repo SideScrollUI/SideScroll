@@ -36,6 +36,7 @@ public static class DataGridUtils
 			foreach (string value in row)
 			{
 				string text = value?
+					.Replace("\0", "")
 					.Replace("\n", " ")
 					.Replace("\r", "")
 					.Replace("\t", "    ")

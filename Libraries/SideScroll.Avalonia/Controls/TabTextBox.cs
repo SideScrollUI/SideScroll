@@ -23,6 +23,8 @@ public class TabTextBox : TextBox
 
 	public ListProperty? Property { get; protected init; }
 
+	public bool AcceptsPlainEnter { get; set; }
+
 	public override string? ToString() => Property?.ToString();
 
 	public TabTextBox()
@@ -88,7 +90,8 @@ public class TabTextBox : TextBox
 		AcceptsReturnAttribute? acceptsReturnAttribute = property.GetCustomAttribute<AcceptsReturnAttribute>();
 		if (acceptsReturnAttribute != null)
 		{
-			AcceptsReturn = acceptsReturnAttribute.Allow;
+			AcceptsReturn = true;
+			AcceptsPlainEnter = acceptsReturnAttribute.AcceptsPlainEnter;
 		}
 
 		MaxWidthAttribute? maxWidthAttribute = property.GetCustomAttribute<MaxWidthAttribute>();
@@ -208,10 +211,13 @@ public class TabTextBox : TextBox
 
 	protected override void OnKeyDown(KeyEventArgs e)
 	{
-		if (AcceptsReturn && e.Key == Key.Enter && !e.KeyModifiers.HasFlag(KeyModifiers.Shift))
+		if (AcceptsReturn && e.Key == Key.Enter)
 		{
-			// Ignore Shift-Enter but allow Enter
-			return;
+			if (!AcceptsPlainEnter && !e.KeyModifiers.HasFlag(KeyModifiers.Shift))
+			{
+				// Ignore Enter but allow Shift-Enter
+				return;
+			}
 		}
 
 		base.OnKeyDown(e);

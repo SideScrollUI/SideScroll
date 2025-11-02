@@ -22,6 +22,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	public DataRepo DataRepo { get; }
 
 	public string GroupId { get; }
+	public string GroupHash => DataRepo.GetGroupHash(typeof(T), GroupId);
 	public string GroupPath => DataRepo.GetGroupPath(typeof(T), GroupId);
 
 	public Type DataType => typeof(T);
@@ -61,7 +62,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	public virtual void Save(Call? call, string key, T item)
 	{
 		call ??= new();
-		Index?.Add(call, key);
+		Index?.Save(call, key);
 		DataRepo.Save<T>(GroupId, key, item, call);
 	}
 

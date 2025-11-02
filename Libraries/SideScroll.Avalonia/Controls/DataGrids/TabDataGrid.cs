@@ -402,7 +402,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	private void DataGrid_ColumnReordered(object? sender, DataGridColumnEventArgs e)
 	{
-		var orderedColumns = new SortedDictionary<int, string>();
+		SortedDictionary<int, string> orderedColumns = [];
 		foreach (DataGridColumn column in DataGrid.Columns)
 		{
 			orderedColumns[column.DisplayIndex] = _columnNames[column];

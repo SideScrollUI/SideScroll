@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
@@ -89,22 +88,12 @@ public class TabViewTitle : Border, IDisposable
 	{
 		if (!TabInstance.IsLinkable) return;
 
-		var linkButton = new TabButton
+		TabTitleButton linkButton = new()
 		{
-			VerticalAlignment = VerticalAlignment.Stretch,
-			HorizontalAlignment = HorizontalAlignment.Left,
 			Content = "~",
-			Margin = new Thickness(0, 0, 0, 0),
-			Padding = new Thickness(2, 0),
-			Background = Brushes.Transparent,
-			Foreground = SideScrollTheme.TitleForeground,
-			BorderBrush = SideScrollTheme.TabBackgroundBorder,
-			BorderThickness = new Thickness(0, 0, 1, 0),
 			[Grid.ColumnProperty] = 0,
 			[ToolTip.TipProperty] = "Copy Tab Link",
 		};
-		linkButton.Resources.Add("ThemeButtonBackgroundPointerOverBrush", SideScrollTheme.TitleButtonBackgroundPointerOver);
-		linkButton.Resources.Add("ThemeButtonBackgroundPressedBrush", SideScrollTheme.TitleButtonBackgroundPointerOver);
 		linkButton.Click += LinkButton_Click;
 		ContainerGrid.Children.Add(linkButton);
 	}
@@ -151,3 +140,5 @@ public class TabViewTitle : Border, IDisposable
 		Child = null;
 	}
 }
+
+public class TabTitleButton : TabButton;
