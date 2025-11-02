@@ -2,7 +2,7 @@ using SideScroll.Logs;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
 
-namespace SideScroll.Console;
+namespace SideScroll.Demo.Console;
 
 public class Console
 {

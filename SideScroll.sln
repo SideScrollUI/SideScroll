@@ -25,9 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Avalonia", "Libr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Programs", "Programs", "{E4AFA68B-CE75-4BFE-9329-85FECDB49D3D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Start.Avalonia", "Programs\SideScroll.Start.Avalonia\SideScroll.Start.Avalonia.csproj", "{377A0FF6-2ED8-43C4-8DAB-46D994857A13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Demo.Avalonia.Desktop", "Programs\SideScroll.Demo.Avalonia.Desktop\SideScroll.Demo.Avalonia.Desktop.csproj", "{377A0FF6-2ED8-43C4-8DAB-46D994857A13}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Console", "Programs\SideScroll.Console\SideScroll.Console.csproj", "{A36CA3F6-3029-44AA-99D9-CC68722CFB27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Demo.Console", "Programs\SideScroll.Demo.Console\SideScroll.Demo.Console.csproj", "{A36CA3F6-3029-44AA-99D9-CC68722CFB27}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{B14E9554-8531-4CE0-80BB-FD4C4A87F488}"
 EndProject
