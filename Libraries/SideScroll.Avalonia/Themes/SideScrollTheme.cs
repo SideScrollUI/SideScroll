@@ -13,11 +13,6 @@ public static class SideScrollTheme
 	public static SolidColorBrush TabBackgroundFocused => GetBrush("TabBackgroundFocusedBrush");
 	public static SolidColorBrush TabProgressBarForeground => GetBrush("TabProgressBarForegroundBrush");
 
-	// Title
-	public static SolidColorBrush TitleBackground => GetBrush("TitleBackgroundBrush");
-	public static SolidColorBrush TitleButtonBackgroundPointerOver => GetBrush("TitleButtonBackgroundPointerOverBrush");
-	public static SolidColorBrush TitleForeground => GetBrush("TitleForegroundBrush");
-
 	// Toolbar
 	public static SolidColorBrush ToolbarBackground => GetBrush("ToolbarBackgroundBrush");
 	public static SolidColorBrush ToolbarButtonBackgroundPointerOver => GetBrush("ToolbarButtonBackgroundPointerOverBrush");

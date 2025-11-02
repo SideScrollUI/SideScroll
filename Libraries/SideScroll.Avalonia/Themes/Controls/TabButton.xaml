@@ -4,9 +4,9 @@
   
   <ControlTheme x:Key="{x:Type sidescroll:TabButton}" TargetType="sidescroll:TabButton">
     <Setter Property="Background" Value="{DynamicResource TabButtonBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TabButtonForegroundBrush}"/>
     <Setter Property="BorderBrush" Value="{DynamicResource TabButtonBorderBrush}"/>
     <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}"/>
-    <Setter Property="Foreground" Value="{DynamicResource TabButtonForegroundBrush}"/>
     <Setter Property="HorizontalContentAlignment" Value="Center"/>
     <Setter Property="VerticalContentAlignment" Value="Center"/>
     <Setter Property="Padding" Value="4"/>

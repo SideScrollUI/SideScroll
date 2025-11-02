@@ -280,10 +280,17 @@
 
           <!-- Title -->
           
-          <SolidColorBrush x:Key="TitleBackgroundBrush" Color="#ff5e68ad" />
-          <SolidColorBrush x:Key="TitleButtonBackgroundPointerOverBrush" Color="#ff292dab" />
-          <SolidColorBrush x:Key="TitleForegroundBrush" Color="#ffdfdfed" />
-          <SolidColorBrush x:Key="TitleBorderBrush" Color="#ff5e70cc" />
+          <SolidColorBrush x:Key="TabTitleBackgroundBrush" Color="#ff5e68ad" />
+          <SolidColorBrush x:Key="TabTitleForegroundBrush" Color="#ffdfdfed" />
+          <SolidColorBrush x:Key="TabTitleBorderBrush" Color="#ff5e70cc" />
+
+          <SolidColorBrush x:Key="TabTitleButtonBackgroundBrush" Color="#ff5e68ad" />
+          <SolidColorBrush x:Key="TabTitleButtonBackgroundPointerOverBrush" Color="#ff3e488a" />
+          <SolidColorBrush x:Key="TabTitleButtonBackgroundPressedBrush" Color="#ff556af2" />
+          <SolidColorBrush x:Key="TabTitleButtonForegroundBrush" Color="#ffdfdfed" />
+          <SolidColorBrush x:Key="TabTitleButtonForegroundPointerOverBrush" Color="#ffe6e9fc" />
+          <SolidColorBrush x:Key="TabTitleButtonBorderBrush" Color="#ffc5cae6" />
+          <SolidColorBrush x:Key="TabTitleButtonBorderPointerOverBrush" Color="#ffaeb6e6" />
 
           <!-- Toolbar -->
           
@@ -681,10 +688,17 @@
 
           <!-- Title -->
 
-          <SolidColorBrush x:Key="TitleBackgroundBrush" Color="#ff2a2a59" />
-          <SolidColorBrush x:Key="TitleButtonBackgroundPointerOverBrush" Color="#ff3737b0" />
-          <SolidColorBrush x:Key="TitleForegroundBrush" Color="#B4B8CF" />
-          <SolidColorBrush x:Key="TitleBorderBrush" Color="Black" />
+          <SolidColorBrush x:Key="TabTitleBackgroundBrush" Color="#ff2a2a59" />
+          <SolidColorBrush x:Key="TabTitleForegroundBrush" Color="#B4B8CF" />
+          <SolidColorBrush x:Key="TabTitleBorderBrush" Color="Black" />
+
+          <SolidColorBrush x:Key="TabTitleButtonBackgroundBrush" Color="#121212" />
+          <SolidColorBrush x:Key="TabTitleButtonBackgroundPointerOverBrush" Color="#ff3737b0" />
+          <SolidColorBrush x:Key="TabTitleButtonBackgroundPressedBrush" Color="#3060d0" />
+          <SolidColorBrush x:Key="TabTitleButtonForegroundBrush" Color="#dddddd" />
+          <SolidColorBrush x:Key="TabTitleButtonForegroundPointerOverBrush" Color="#dddddd" />
+          <SolidColorBrush x:Key="TabTitleButtonBorderBrush" Color="Black" />
+          <SolidColorBrush x:Key="TabTitleButtonBorderPointerOverBrush" Color="Black" />
 
           <!-- Toolbar -->
           
@@ -715,7 +729,7 @@
           
           <SolidColorBrush x:Key="IconForegroundDisabledBrush" Color="#ff383838" />
 
-          <!-- Title & Side Buttons -->
+          <!-- Side Buttons -->
           
           <SolidColorBrush x:Key="TabButtonBackgroundBrush" Color="#121212" />
           <SolidColorBrush x:Key="TabButtonBackgroundPointerOverBrush" Color="#2040a0" />

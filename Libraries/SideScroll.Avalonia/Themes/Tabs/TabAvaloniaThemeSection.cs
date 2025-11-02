@@ -103,10 +103,9 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 					new("Json", TextSamples.Json),
 					new("Xml", TextSamples.Xml),
 				},
-				TabTheme => new List<ListItem>
+				TabTheme or TitleTheme => new List<ListItem>
 				{
 					new("Forms", new TabSampleFormDataTabs()),
-					new("Buttons", new TabSampleGridHashSet()),
 					new("Loading", new TabSampleLoadAsync()),
 				},
 				ToolbarTheme => new TabCustomControl(),

@@ -28,19 +28,6 @@ public class TabTheme : ThemeSection
 	[ResourceKey("TabBackgroundBorderBrush")]
 	public Color? Border { get; set; }
 
-	// Title
-	[Header("Title"), ResourceKey("TitleBackgroundBrush", "SystemControlBackgroundBaseLowBrush")]
-	public Color? TitleBackground { get; set; }
-
-	[ResourceKey("TitleButtonBackgroundPointerOverBrush")]
-	public Color? TitleButtonBackgroundPointerOver { get; set; }
-
-	[ResourceKey("TitleForegroundBrush")]
-	public Color? TitleForeground { get; set; }
-
-	[ResourceKey("TitleBorderBrush")]
-	public Color? TitleBorder { get; set; }
-
 	// Splitter
 	[Header("Splitter"), ResourceKey("TabSplitterBackgroundBrush")]
 	public Color? SplitterBackground { get; set; }
@@ -70,7 +57,7 @@ public class TabTheme : ThemeSection
 	public Color? ProgressBarForeground { get; set; }
 
 	// Button
-	[Header("Button"), ResourceKey("TabButtonBackgroundBrush")]
+	[Header("Scroll Buttons"), ResourceKey("TabButtonBackgroundBrush")]
 	public Color? ButtonBackground { get; set; }
 
 	[ResourceKey("TabButtonBackgroundPointerOverBrush")]
@@ -91,6 +78,44 @@ public class TabTheme : ThemeSection
 	[ResourceKey("TabButtonBorderPointerOverBrush")]
 	public Color? ButtonBorderPointerOver { get; set; }
 }
+
+public class TitleTheme : ThemeSection
+{
+	public override string ToString() => "Title";
+
+	// Title
+	[Header("Title"), ResourceKey("TabTitleBackgroundBrush", "SystemControlBackgroundBaseLowBrush")]
+	public Color? Background { get; set; }
+
+	[ResourceKey("TabTitleForegroundBrush")]
+	public Color? Foreground { get; set; }
+
+	[ResourceKey("TabTitleBorderBrush")]
+	public Color? Border { get; set; }
+
+	// Button
+	[Header("Button"), ResourceKey("TabTitleButtonBackgroundBrush")]
+	public Color? ButtonBackground { get; set; }
+
+	[ResourceKey("TabTitleButtonBackgroundPointerOverBrush")]
+	public Color? ButtonBackgroundPointerOver { get; set; }
+
+	[ResourceKey("TabTitleButtonBackgroundPressedBrush")]
+	public Color? ButtonBackgroundPressed { get; set; }
+
+	[ResourceKey("TabTitleButtonForegroundBrush")]
+	public Color? ButtonForeground { get; set; }
+
+	[ResourceKey("TabTitleButtonForegroundPointerOverBrush")]
+	public Color? ButtonForegroundPointerOver { get; set; }
+
+	[ResourceKey("TabTitleButtonBorderBrush")]
+	public Color? ButtonBorder { get; set; }
+
+	[ResourceKey("TabTitleButtonBorderPointerOverBrush")]
+	public Color? ButtonBorderPointerOver { get; set; }
+}
+
 
 public class FontTheme : ThemeSection
 {

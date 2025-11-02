@@ -44,6 +44,8 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 	[Inline]
 	public TabTheme Tab { get; set; } = new();
 	[Inline]
+	public TitleTheme Title { get; set; } = new();
+	[Inline]
 	public ToolbarTheme Toolbar { get; set; } = new();
 	[Inline]
 	public ToolTipTheme ToolTip { get; set; } = new();
@@ -70,6 +72,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 	[
 		Font,
 		Tab,
+		Title,
 		Toolbar,
 		ToolTip,
 		ScrollBar,
