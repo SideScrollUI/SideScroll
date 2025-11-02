@@ -9,6 +9,7 @@
     - Added TimeRangePeriod support for milliseconds and below
     - Added charting support for milliseconds
     - Changed DataRepoIndex to retain existing order when updating items instead of moving items to the end
+    - Added TaskCreator.CreateTask() to Simplify Async Task Creation and fix an async ClipBoard copying threading issue
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.8</AvaloniaVersion>

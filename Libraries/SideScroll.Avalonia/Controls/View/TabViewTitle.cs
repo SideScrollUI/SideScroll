@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;

@@ -48,8 +48,6 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	[HiddenColumn]
 	public SynchronizationContext? Context { get; set; }
 
-	public abstract Action CreateAction(Call call);
-
 	public override string? ToString() => Label;
 
 	public void Run(Call call)
@@ -79,5 +77,13 @@ public abstract class TaskCreator : INotifyPropertyChanged
 		TaskInstance taskInstance = Create(call);
 		taskInstance.Start();
 		return taskInstance;
+	}
+
+	public abstract Action CreateAction(Call call);
+
+	public virtual Task CreateTask(Call call)
+	{
+		Action action = CreateAction(call);
+		return new Task(action);
 	}
 }

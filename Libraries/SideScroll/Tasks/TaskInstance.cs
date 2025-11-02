@@ -343,15 +343,21 @@ public class TaskInstance : INotifyPropertyChanged
 	// If UseTask is not enabled will wait for action completion
 	public void Start()
 	{
-		Action action = Creator!.CreateAction(Call);
-		if (Creator.UseTask)
+		if (Creator!.UseTask)
 		{
-			Task = new Task(action);
+			Task = Creator.CreateTask(Call);
+			
+			// ContinueWith works whether the task is already completed, running, or not yet started
 			Task.ContinueWith(_ => SetFinished());
-			Task.Start();
+			
+			if (Task.Status == TaskStatus.Created)
+			{
+				Task.Start();
+			}
 		}
 		else
 		{
+			Action action = Creator.CreateAction(Call);
 			action.Invoke();
 			SetFinished();
 		}
