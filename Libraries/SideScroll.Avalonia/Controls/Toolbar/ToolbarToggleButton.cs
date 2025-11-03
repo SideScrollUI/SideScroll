@@ -55,7 +55,7 @@ public class ToolbarToggleButton : ToolbarButton
 		SetImage(IsChecked ? OnImageResource : OffImageResource);
 	}
 
-	public override void Invoke(bool canDelay = true)
+	public override async Task InvokeAsync(bool canDelay = true)
 	{
 		if (!IsEnabled || IsActive) return;
 
@@ -66,6 +66,6 @@ public class ToolbarToggleButton : ToolbarButton
 		}
 		SetImage();
 
-		base.Invoke(false);
+		await base.InvokeAsync(false);
 	}
 }

@@ -39,6 +39,8 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	[HiddenColumn]
 	public bool UseTask { get; set; } // Blocks, Action uses UI thread if false
 
+	public bool UseUIThread { get; set; }
+
 	[HiddenColumn]
 	public AccentType AccentType { get; set; }
 

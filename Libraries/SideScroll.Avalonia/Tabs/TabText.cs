@@ -27,6 +27,7 @@ public class TabText(string text) : ITab
 
 			Toolbar toolbar = new();
 			toolbar.ButtonCopy.ActionAsync = CopyAsync;
+			toolbar.ButtonCopy.UseUIThread = true;
 			model.AddObject(toolbar);
 
 			var tabAvaloniaEdit = new TabAvaloniaEdit(this);

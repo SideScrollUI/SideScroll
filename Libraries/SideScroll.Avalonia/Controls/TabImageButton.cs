@@ -29,6 +29,7 @@ public class TabImageButton : Button, IDisposable
 
 	public bool ShowTask { get; set; }
 	public bool IsActive { get; set; } // Only allow one task at once (modifying IsEnabled doesn't update elsewhere)
+	public bool UseUIThread { get; set; }
 
 	public KeyGesture? KeyGesture { get; set; }
 
@@ -152,9 +153,9 @@ public class TabImageButton : Button, IDisposable
 		}
 	}
 
-	private void ToolbarButton_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+	private async void ToolbarButton_Click(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
 	{
-		Invoke();
+		await InvokeAsync();
 	}
 
 	public void BindIsEnabled(string path, object? source)
@@ -171,11 +172,11 @@ public class TabImageButton : Button, IDisposable
 	{
 		if (TabInstance != null)
 		{
-			TabInstance.DefaultAction = () => Invoke();
+			TabInstance.DefaultAction = async () => await InvokeAsync();
 		}
 	}
 
-	public virtual void Invoke(bool canDelay = true)
+	public virtual async Task InvokeAsync(bool canDelay = true)
 	{
 		if (!IsEnabled || IsActive)
 			return;
@@ -209,11 +210,11 @@ public class TabImageButton : Button, IDisposable
 		}
 		else
 		{
-			InvokeTask();
+			await InvokeTaskAsync();
 		}
 	}
 
-	public void InvokeTask()
+	public async Task InvokeTaskAsync()
 	{
 		if (TabInstance == null)
 		{
@@ -221,17 +222,23 @@ public class TabImageButton : Button, IDisposable
 			return;
 		}
 
-		// Only allow one since we don't block for completion of first
-		if ((StartTaskAsync() ?? StartTask()) is TaskInstance taskInstance)
+		TaskInstance? taskInstance;
+		if (CallActionAsync != null)
 		{
-			if (taskInstance.Errored)
-			{
-				ShowFlyout(taskInstance.Message ?? $"{Name} Failed");
-			}
+			taskInstance = await StartTaskAsync();
+		}
+		else
+		{
+			taskInstance = StartTask();
+		}
+
+		if (taskInstance?.Errored == true)
+		{
+			ShowFlyout(taskInstance.Message ?? $"{Name} Failed");
 		}
 	}
 
-	private TaskInstance? StartTaskAsync()
+	private async Task<TaskInstance?> StartTaskAsync()
 	{
 		if (CallActionAsync == null)
 			return null;
@@ -239,9 +246,10 @@ public class TabImageButton : Button, IDisposable
 		IsActive = true;
 		var taskDelegate = new TaskDelegateAsync(CallActionAsync, true)
 		{
+			UseUIThread = UseUIThread,
 			OnComplete = () => IsActive = false,
 		};
-		return StartTask(taskDelegate);
+		return await StartTaskAsync(taskDelegate);
 	}
 
 	private TaskInstance? StartTask()
@@ -264,6 +272,23 @@ public class TabImageButton : Button, IDisposable
 			TaskInstance taskInstance = TabInstance.CreateTask(taskCreator, ShowTask);
 			taskInstance.OnShowMessage += (_, e) => ShowFlyout(e.Message);
 			taskInstance.Start();
+			return taskInstance;
+		}
+		else
+		{
+			var call = new Call(taskCreator.Label);
+			TaskInstance taskInstance = taskCreator.Start(call);
+			return taskInstance;
+		}
+	}
+
+	private async Task<TaskInstance?> StartTaskAsync(TaskCreator taskCreator)
+	{
+		if (TabInstance != null)
+		{
+			TaskInstance taskInstance = TabInstance.CreateTask(taskCreator, ShowTask);
+			taskInstance.OnShowMessage += (_, e) => ShowFlyout(e.Message);
+			await taskInstance.StartAsync();
 			return taskInstance;
 		}
 		else
@@ -323,10 +348,10 @@ public class TabImageButton : Button, IDisposable
 		UpdateImage();
 	}
 
-	private void DispatcherTimer_Tick(object? sender, EventArgs e)
+	private async void DispatcherTimer_Tick(object? sender, EventArgs e)
 	{
 		_dispatcherTimer!.Stop();
-		Invoke(false);
+		await InvokeAsync(false);
 	}
 
 	public void Dispose()

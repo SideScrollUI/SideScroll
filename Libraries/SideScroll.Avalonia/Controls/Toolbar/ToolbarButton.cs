@@ -19,6 +19,7 @@ public class ToolbarButton : TabImageButton
 
 		CallAction = toolButton.Action;
 		CallActionAsync = toolButton.ActionAsync;
+		UseUIThread = toolButton.UseUIThread;
 
 		if (toolButton.IsDefault)
 		{
@@ -37,7 +38,7 @@ public class ToolbarButton : TabImageButton
 
 		if (toolButton.Flyout is ConfirmationFlyoutConfig config)
 		{
-			Flyout = new ConfirmationFlyout(InvokeTask, config.Text, config.ConfirmText, config.CancelText);
+			Flyout = new ConfirmationFlyout(async () => await InvokeTaskAsync(), config.Text, config.ConfirmText, config.CancelText);
 		}
 	}
 

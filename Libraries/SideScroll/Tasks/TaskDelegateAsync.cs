@@ -31,12 +31,31 @@ public class TaskDelegateAsync : TaskCreator
 
 	public override Task CreateTask(Call call)
 	{
-		return InvokeActionAsync(call);
+		if (UseUIThread)
+		{
+			return InvokeActionAsync(call);
+		}
+		else
+		{
+			return new Task(() => InvokeAction(call));
+		}
 	}
 
 	public override Action CreateAction(Call call)
 	{
 		return async () => await InvokeActionAsync(call);
+	}
+
+	private void InvokeAction(Call call)
+	{
+		try
+		{
+			Task.Run(() => InvokeActionAsync(call)).GetAwaiter().GetResult();
+		}
+		catch (Exception e)
+		{
+			call.Log.Add(e);
+		}
 	}
 
 	private async Task InvokeActionAsync(Call call)

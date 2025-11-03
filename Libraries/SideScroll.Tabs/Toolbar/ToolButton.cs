@@ -11,6 +11,7 @@ public class ToolButton
 	public IResourceView ImageResource { get; }
 
 	public bool ShowTask { get; set; }
+	public bool UseUIThread { get; set; }
 	public bool IsDefault { get; set; } // Use Enter as HotKey, add more complex keymapping later?
 
 	public object? HotKey { get; set; } // Only AvaloniaUI KeyGesture currently supported

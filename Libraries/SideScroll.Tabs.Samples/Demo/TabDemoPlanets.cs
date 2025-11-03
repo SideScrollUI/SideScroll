@@ -37,7 +37,7 @@ public class TabDemoPlanets : ITab
 		private Planet? _planet;
 		private TabFormObject? _tabFormObject;
 
-		public override void LoadUI(Call call, TabModel model)
+		public override void Load(Call call, TabModel model)
 		{
 			_planet = Planet.CreateSample();
 			_tabFormObject = model.AddForm(_planet);
