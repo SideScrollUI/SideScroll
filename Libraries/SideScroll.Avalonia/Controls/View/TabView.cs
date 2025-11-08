@@ -135,8 +135,6 @@ public class TabView : Grid, IDisposable
 
 	protected async Task LoadBackgroundAsync(Call call)
 	{
-		//Instance.Post(ShowLoading);
-
 		await Instance.ReinitializeAsync(call);
 	}
 
@@ -572,17 +570,9 @@ public class TabView : Grid, IDisposable
 			return;
 		Instance.LoadCalled = true;
 
-		if (Instance.UiContext == SynchronizationContext.Current)
-		{
-			ShowLoading();
-		}
-		else
-		{
-			Instance.Post(ShowLoading);
-		}
-		//ShowLoading();
+		ShowLoading();
 
-		Instance.StartAsync(LoadBackgroundAsync);
+		Instance.StartAsync(Instance.ReinitializeAsync);
 	}
 
 	public void ShowLoading()

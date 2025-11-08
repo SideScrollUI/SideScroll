@@ -39,7 +39,8 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	[HiddenColumn]
 	public bool UseTask { get; set; } // Blocks, Action uses UI thread if false
 
-	public bool UseUIThread { get; set; }
+	[HiddenColumn]
+	public bool UseBackgroundThread { get; set; }
 
 	[HiddenColumn]
 	public AccentType AccentType { get; set; }
@@ -83,9 +84,9 @@ public abstract class TaskCreator : INotifyPropertyChanged
 
 	public abstract Action CreateAction(Call call);
 
-	public virtual Task CreateTask(Call call)
+	public virtual Task StartTask(Call call)
 	{
 		Action action = CreateAction(call);
-		return new Task(action);
+		return Task.Run(action);
 	}
 }

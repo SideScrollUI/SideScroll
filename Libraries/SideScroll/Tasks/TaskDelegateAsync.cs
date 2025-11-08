@@ -29,33 +29,21 @@ public class TaskDelegateAsync : TaskCreator
 		Description = description;
 	}
 
-	public override Task CreateTask(Call call)
+	public override Task StartTask(Call call)
 	{
-		if (UseUIThread)
+		if (UseBackgroundThread)
 		{
-			return InvokeActionAsync(call);
+			return Task.Run(async () => await InvokeActionAsync(call));
 		}
 		else
 		{
-			return new Task(() => InvokeAction(call));
+			return InvokeActionAsync(call);
 		}
 	}
 
 	public override Action CreateAction(Call call)
 	{
 		return async () => await InvokeActionAsync(call);
-	}
-
-	private void InvokeAction(Call call)
-	{
-		try
-		{
-			Task.Run(() => InvokeActionAsync(call)).GetAwaiter().GetResult();
-		}
-		catch (Exception e)
-		{
-			call.Log.Add(e);
-		}
 	}
 
 	private async Task InvokeActionAsync(Call call)

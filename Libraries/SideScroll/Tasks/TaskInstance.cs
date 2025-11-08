@@ -345,39 +345,10 @@ public class TaskInstance : INotifyPropertyChanged
 	{
 		if (Creator!.UseTask)
 		{
-			Task = Creator.CreateTask(Call);
+			Task = Creator.StartTask(Call);
 			
 			// ContinueWith works whether the task is already completed, running, or not yet started
 			Task.ContinueWith(_ => SetFinished());
-			
-			if (Task.Status == TaskStatus.Created)
-			{
-				Task.Start();
-			}
-		}
-		else
-		{
-			Action action = Creator.CreateAction(Call);
-			action.Invoke();
-			SetFinished();
-		}
-	}
-
-	// If UseTask is not enabled will wait for action completion
-	public async Task StartAsync()
-	{
-		if (Creator!.UseTask)
-		{
-			Task = Creator.CreateTask(Call);
-
-			// ContinueWith works whether the task is already completed, running, or not yet started
-			await Task.ContinueWith(_ => SetFinished());
-
-			if (Task.Status == TaskStatus.Created)
-			{
-				//Task.Start();
-				await Task;
-			}
 		}
 		else
 		{

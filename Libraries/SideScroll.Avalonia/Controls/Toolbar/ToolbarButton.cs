@@ -19,7 +19,7 @@ public class ToolbarButton : TabImageButton
 
 		CallAction = toolButton.Action;
 		CallActionAsync = toolButton.ActionAsync;
-		UseUIThread = toolButton.UseUIThread;
+		UseBackgroundThread = toolButton.UseBackgroundThread;
 
 		if (toolButton.IsDefault)
 		{

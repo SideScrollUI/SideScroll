@@ -11,6 +11,7 @@ public class TaskAction : TaskCreator
 		Label = label;
 		Action = action;
 		UseTask = useTask;
+		UseBackgroundThread = useTask;
 	}
 
 	public override Action CreateAction(Call call)

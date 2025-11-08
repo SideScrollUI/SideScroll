@@ -11,7 +11,7 @@ public class ToolButton
 	public IResourceView ImageResource { get; }
 
 	public bool ShowTask { get; set; }
-	public bool UseUIThread { get; set; }
+	public bool UseBackgroundThread { get; set; }
 	public bool IsDefault { get; set; } // Use Enter as HotKey, add more complex keymapping later?
 
 	public object? HotKey { get; set; } // Only AvaloniaUI KeyGesture currently supported
@@ -23,22 +23,24 @@ public class ToolButton
 	public CallAction? Action { get; set; }
 	public CallActionAsync? ActionAsync { get; set; }
 
-	public ToolButton(string tooltip, IResourceView imageResource, CallAction? action = null, bool isDefault = false, bool showTask = false)
+	public ToolButton(string tooltip, IResourceView imageResource, CallAction? action = null, bool isDefault = false, bool showTask = false, bool backgroundThread = false)
 	{
 		Tooltip = tooltip;
 		ImageResource = imageResource;
 		Action = action;
 		IsDefault = isDefault;
 		ShowTask = showTask;
+		UseBackgroundThread = backgroundThread;
 	}
 
-	public ToolButton(string tooltip, IResourceView imageResource, CallActionAsync? actionAsync, bool isDefault = false, bool showTask = false)
+	public ToolButton(string tooltip, IResourceView imageResource, CallActionAsync? actionAsync, bool isDefault = false, bool showTask = false, bool backgroundThread = false)
 	{
 		Tooltip = tooltip;
 		ImageResource = imageResource;
 		ActionAsync = actionAsync;
 		IsDefault = isDefault;
 		ShowTask = showTask;
+		UseBackgroundThread = backgroundThread;
 	}
 }
 

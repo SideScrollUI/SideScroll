@@ -14,6 +14,7 @@ public class TaskDelegate : TaskCreator
 		Label = label;
 		Action = callAction;
 		UseTask = useTask;
+		UseBackgroundThread = useTask;
 		ShowTask = showTask;
 		Description = description;
 	}
@@ -23,6 +24,7 @@ public class TaskDelegate : TaskCreator
 		Label = callAction.Method.Name;
 		Action = callAction;
 		UseTask = useTask;
+		UseBackgroundThread = useTask;
 		ShowTask = showTask;
 		Description = description;
 	}

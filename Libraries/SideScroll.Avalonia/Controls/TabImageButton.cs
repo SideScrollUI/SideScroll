@@ -29,7 +29,7 @@ public class TabImageButton : Button, IDisposable
 
 	public bool ShowTask { get; set; }
 	public bool IsActive { get; set; } // Only allow one task at once (modifying IsEnabled doesn't update elsewhere)
-	public bool UseUIThread { get; set; }
+	public bool UseBackgroundThread { get; set; }
 
 	public KeyGesture? KeyGesture { get; set; }
 
@@ -225,7 +225,11 @@ public class TabImageButton : Button, IDisposable
 		TaskInstance? taskInstance;
 		if (CallActionAsync != null)
 		{
-			taskInstance = await StartTaskAsync();
+			taskInstance = StartTaskAsync();
+			if (!UseBackgroundThread && taskInstance?.Task is Task task)
+			{
+				await task;
+			}
 		}
 		else
 		{
@@ -238,7 +242,7 @@ public class TabImageButton : Button, IDisposable
 		}
 	}
 
-	private async Task<TaskInstance?> StartTaskAsync()
+	private TaskInstance? StartTaskAsync()
 	{
 		if (CallActionAsync == null)
 			return null;
@@ -246,10 +250,10 @@ public class TabImageButton : Button, IDisposable
 		IsActive = true;
 		var taskDelegate = new TaskDelegateAsync(CallActionAsync, true)
 		{
-			UseUIThread = UseUIThread,
+			UseBackgroundThread = UseBackgroundThread,
 			OnComplete = () => IsActive = false,
 		};
-		return await StartTaskAsync(taskDelegate);
+		return StartTask(taskDelegate);
 	}
 
 	private TaskInstance? StartTask()
@@ -272,23 +276,6 @@ public class TabImageButton : Button, IDisposable
 			TaskInstance taskInstance = TabInstance.CreateTask(taskCreator, ShowTask);
 			taskInstance.OnShowMessage += (_, e) => ShowFlyout(e.Message);
 			taskInstance.Start();
-			return taskInstance;
-		}
-		else
-		{
-			var call = new Call(taskCreator.Label);
-			TaskInstance taskInstance = taskCreator.Start(call);
-			return taskInstance;
-		}
-	}
-
-	private async Task<TaskInstance?> StartTaskAsync(TaskCreator taskCreator)
-	{
-		if (TabInstance != null)
-		{
-			TaskInstance taskInstance = TabInstance.CreateTask(taskCreator, ShowTask);
-			taskInstance.OnShowMessage += (_, e) => ShowFlyout(e.Message);
-			await taskInstance.StartAsync();
 			return taskInstance;
 		}
 		else
