@@ -286,10 +286,7 @@ public class TabInstance : IDisposable
 
 	public TaskInstance StartAsync(CallActionAsync callAction, Call? call = null, bool showTask = false)
 	{
-		var taskDelegate = new TaskDelegateAsync(callAction, true)
-		{
-			UseBackgroundThread = true,
-		};
+		var taskDelegate = new TaskDelegateAsync(callAction, true);
 		return StartTask(taskDelegate, showTask, call);
 	}
 

@@ -11,20 +11,22 @@ public class TaskDelegateAsync : TaskCreator
 	public override string? ToString() => Label;
 
 	// Lists read easier with the label as the first param
-	public TaskDelegateAsync(string label, CallActionAsync callAction, bool showTask = false, string? description = null)
+	public TaskDelegateAsync(string label, CallActionAsync callAction, bool useBackgroundThread = false, bool showTask = false, string? description = null)
 	{
 		Label = label;
 		CallAction = callAction;
 		UseTask = true;
+		UseBackgroundThread = useBackgroundThread;
 		ShowTask = showTask;
 		Description = description;
 	}
 
-	public TaskDelegateAsync(CallActionAsync callAction, bool showTask = false, string? description = null)
+	public TaskDelegateAsync(CallActionAsync callAction, bool useBackgroundThread = false, bool showTask = false, string? description = null)
 	{
 		Label = callAction.Method.Name.TrimEnd("Async").WordSpaced();
 		CallAction = callAction;
 		UseTask = true;
+		UseBackgroundThread = useBackgroundThread;
 		ShowTask = showTask;
 		Description = description;
 	}

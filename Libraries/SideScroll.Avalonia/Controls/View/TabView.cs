@@ -570,7 +570,14 @@ public class TabView : Grid, IDisposable
 			return;
 		Instance.LoadCalled = true;
 
-		ShowLoading();
+		if (AvaloniaSynchronizationContext.Current == Instance.UiContext)
+		{
+			ShowLoading();
+		}
+		else
+		{
+			Instance.Post(ShowLoading);
+		}
 
 		Instance.StartAsync(Instance.ReinitializeAsync);
 	}
