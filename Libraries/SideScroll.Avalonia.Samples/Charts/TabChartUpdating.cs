@@ -19,7 +19,7 @@ public class TabChartUpdating : ITab
 		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
 
 		[Separator]
-		public ToolButton ButtonStart { get; set; } = new("Start", Icons.Svg.Play);
+		public ToolButton ButtonStart { get; set; } = new("Start", Icons.Svg.Play, backgroundThread: true);
 		public ToolButton ButtonStop { get; set; } = new("Stop", Icons.Svg.Stop);
 	}
 

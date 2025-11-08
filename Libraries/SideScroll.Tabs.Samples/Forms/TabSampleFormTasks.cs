@@ -22,8 +22,8 @@ public class TabSampleFormTasks : ITab
 			model.Actions = new List<TaskCreator>
 			{
 				new TaskDelegate("Add", Add),
-				new TaskDelegateAsync("Task with Progress", ShowProgressAsync, true),
-				new TaskDelegateAsync("Task with Sub Tasks", TaskCountAsync, true),
+				new TaskDelegateAsync("Task with Progress", ShowProgressAsync, true, true),
+				new TaskDelegateAsync("Task with Sub Tasks", TaskCountAsync, true, true),
 			};
 
 			_sampleItem = LoadOrCreateData<SampleItem>(DataKey);

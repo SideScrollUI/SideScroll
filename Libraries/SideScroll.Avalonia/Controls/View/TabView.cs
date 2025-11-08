@@ -133,10 +133,8 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
-	public async Task LoadBackgroundAsync(Call call)
+	protected async Task LoadBackgroundAsync(Call call)
 	{
-		Instance.Post(ShowLoading);
-
 		await Instance.ReinitializeAsync(call);
 	}
 
@@ -309,14 +307,14 @@ public class TabView : Grid, IDisposable
 		ReloadControls();
 	}
 
-	private void TabView_KeyDown(object? sender, KeyEventArgs e)
+	private async void TabView_KeyDown(object? sender, KeyEventArgs e)
 	{
 		foreach (ToolbarButton toolbarButton in _hotKeys)
 		{
 			var hotKey = toolbarButton.HotKey;
 			if (hotKey?.Key == e.Key && hotKey.KeyModifiers == e.KeyModifiers)
 			{
-				toolbarButton.Invoke();
+				await toolbarButton.InvokeAsync();
 				e.Handled = true;
 				return;
 			}
@@ -572,7 +570,16 @@ public class TabView : Grid, IDisposable
 			return;
 		Instance.LoadCalled = true;
 
-		Instance.StartAsync(LoadBackgroundAsync);
+		if (AvaloniaSynchronizationContext.Current == Instance.UiContext)
+		{
+			ShowLoading();
+		}
+		else
+		{
+			Instance.Post(ShowLoading);
+		}
+
+		Instance.StartAsync(Instance.ReinitializeAsync);
 	}
 
 	public void ShowLoading()

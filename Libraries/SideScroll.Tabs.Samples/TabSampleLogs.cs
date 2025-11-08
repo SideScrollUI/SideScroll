@@ -34,7 +34,7 @@ public class TabSampleLogs : ITab
 				new TaskAction("Add 10,000 Entries", () => AddEntries(10_000)),
 				new TaskDelegate("Reset", Reset),
 				new TaskDelegate("Sync Task Delegate Thread: Log 1 Entry / second", SyncTaskThread, true, true),
-				new TaskDelegateAsync("Async Task Delegate Thread: Log 1 Entry / second", ASyncTaskThreadAsync, true),
+				new TaskDelegateAsync("Async Task Delegate Thread: Log 1 Entry / second", ASyncTaskThreadAsync, true, true),
 			};
 		}
 

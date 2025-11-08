@@ -15,7 +15,7 @@ public class TabSampleChartProperties : ITab
 		public ToolButton ButtonAdd { get; set; } = new("Add", Icons.Svg.Add);
 
 		[Separator]
-		public ToolButton ButtonStart { get; set; } = new("Start", Icons.Svg.Play);
+		public ToolButton ButtonStart { get; set; } = new("Start", Icons.Svg.Play, backgroundThread: true);
 		public ToolButton ButtonStop { get; set; } = new("Stop", Icons.Svg.Stop);
 	}
 

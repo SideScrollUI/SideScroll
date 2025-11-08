@@ -16,6 +16,7 @@ public class TaskDelegateParams : TaskCreator
 		Label = label;
 		CallAction = callAction;
 		UseTask = useTask;
+		UseBackgroundThread = useTask;
 		Description = description;
 		Objects = objects;
 	}

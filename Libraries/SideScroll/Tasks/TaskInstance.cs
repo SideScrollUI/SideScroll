@@ -345,15 +345,10 @@ public class TaskInstance : INotifyPropertyChanged
 	{
 		if (Creator!.UseTask)
 		{
-			Task = Creator.CreateTask(Call);
+			Task = Creator.StartTask(Call);
 			
 			// ContinueWith works whether the task is already completed, running, or not yet started
 			Task.ContinueWith(_ => SetFinished());
-			
-			if (Task.Status == TaskStatus.Created)
-			{
-				Task.Start();
-			}
 		}
 		else
 		{
