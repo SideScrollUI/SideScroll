@@ -108,32 +108,32 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		var list = new AvaloniaList<object>();
 
 		var menuItemCopy = new TabMenuItem("_Copy - Cell Contents");
-		menuItemCopy.Click += delegate
+		menuItemCopy.Click += async delegate
 		{
-			ClipboardUtils.SetText(DataGrid, textBlock.Text ?? "");
+			await ClipboardUtils.SetTextAsync(DataGrid, textBlock.Text ?? "");
 		};
 		list.Add(menuItemCopy);
 
 		list.Add(new Separator());
 
 		var menuItemCopyDataGrid = new TabMenuItem("Copy - _DataGrid");
-		menuItemCopyDataGrid.Click += delegate
+		menuItemCopyDataGrid.Click += async delegate
 		{
 			string? text = DataGrid.ToStringTable();
 			if (text != null)
 			{
-				ClipboardUtils.SetText(DataGrid, text);
+				await ClipboardUtils.SetTextAsync(DataGrid, text);
 			}
 		};
 		list.Add(menuItemCopyDataGrid);
 
 		var menuItemCopyDataGridCsv = new TabMenuItem("Copy - DataGrid - C_SV");
-		menuItemCopyDataGridCsv.Click += delegate
+		menuItemCopyDataGridCsv.Click += async delegate
 		{
 			string? text = DataGrid.ToCsv();
 			if (text != null)
 			{
-				ClipboardUtils.SetText(DataGrid, text);
+				await ClipboardUtils.SetTextAsync(DataGrid, text);
 			}
 		};
 		list.Add(menuItemCopyDataGridCsv);

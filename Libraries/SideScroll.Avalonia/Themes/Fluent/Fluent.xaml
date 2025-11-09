@@ -212,9 +212,9 @@
 
           <!-- DataGrid -->
           
-          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#ffe6ecf7" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundBrush" Color="#ffe6ecfa" />
           <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundPointerOverBrush" Color="#ff91b0fa" />
-          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#ff002266" />
+          <SolidColorBrush x:Key="DataGridColumnHeaderForegroundBrush" Color="#ff06297a" />
           <SolidColorBrush x:Key="DataGridColumnHeaderForegroundPointerOverBrush" Color="#fff2f5fc" />
 
           <SolidColorBrush x:Key="DataGridRowBackgroundBrush" Color="#fff5f7fc" />
@@ -361,7 +361,7 @@
 
           <!-- Chart -->
 
-          <SolidColorBrush x:Key="ChartBackgroundBrush" Color="#fffafbfc" />
+          <SolidColorBrush x:Key="ChartBackgroundBrush" Color="#fffafafa" />
           <SolidColorBrush x:Key="ChartBackgroundSelectedBrush" Color="#448dff" />
           <sys:Double x:Key="ChartBackgroundSelectedAlpha">64</sys:Double>
           

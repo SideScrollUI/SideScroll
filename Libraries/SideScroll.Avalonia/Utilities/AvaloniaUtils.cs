@@ -19,9 +19,9 @@ public static class AvaloniaUtils
 		AvaloniaList<object> list = [];
 
 		var menuItemCopy = new TabMenuItem("_Copy");
-		menuItemCopy.Click += delegate
+		menuItemCopy.Click += async delegate
 		{
-			ClipboardUtils.SetText(textBlock, textBlock.Text ?? "");
+			await ClipboardUtils.SetTextAsync(textBlock, textBlock.Text ?? "");
 		};
 		list.Add(menuItemCopy);
 
@@ -70,9 +70,9 @@ public static class AvaloniaUtils
 		AvaloniaList<object> list = [];
 
 		var menuItemCopy = new TabMenuItem("_Copy");
-		menuItemCopy.Click += delegate
+		menuItemCopy.Click += async delegate
 		{
-			ClipboardUtils.SetText(comboBox, comboBox.SelectedItem?.ToString() ?? "");
+			await ClipboardUtils.SetTextAsync(comboBox, comboBox.SelectedItem?.ToString() ?? "");
 		};
 		list.Add(menuItemCopy);
 
@@ -102,9 +102,9 @@ public static class AvaloniaUtils
 		AvaloniaList<object> list = [];
 
 		var menuItemCopy = new TabMenuItem("_Copy");
-		menuItemCopy.Click += delegate
+		menuItemCopy.Click += async delegate
 		{
-			ClipboardUtils.SetText(colorPicker, colorPicker.Color.ToString() ?? "");
+			await ClipboardUtils.SetTextAsync(colorPicker, colorPicker.Color.ToString() ?? "");
 		};
 		list.Add(menuItemCopy);
 

@@ -12,6 +12,7 @@ public static class ClipboardUtils
 		return (TopLevel.GetTopLevel(visual)?.Clipboard)
 					?? throw new Exception("Failed to get clipboard");
 	}
+
 	private static IClipboard? TryGetClipboard(Visual? visual)
 	{
 		return TopLevel.GetTopLevel(visual)?.Clipboard;

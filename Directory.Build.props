@@ -9,7 +9,8 @@
     - Added TimeRangePeriod support for milliseconds and below
     - Added charting support for milliseconds
     - Changed DataRepoIndex to retain existing order when updating items instead of moving items to the end
-    - Added TaskCreator.CreateTask() to Simplify Async Task Creation and fix an async ClipBoard copying threading issue
+    - Switched async UI Tasks to run in the UI thread by default, and added a background thread param to TaskDelegateAsync
+    - Added TaskCreator.StartTask() to Simplify Async Task Creation and fix an async ClipBoard copying threading issue
     - Fixed DataGrid Clipboard export for string values that contain null characters
     </PackageReleaseNotes>
 

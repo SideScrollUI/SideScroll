@@ -107,15 +107,15 @@ public class TabView : Grid, IDisposable
 		}
 
 		Instance.OnValidate += Instance_OnValidate;
-		Instance.OnCopyToClipboard += Instance_OnCopyToClipboard;
+		Instance.OnCopyToClipboard += Instance_OnCopyToClipboardAsync;
 
 		KeyDown += TabView_KeyDown;
 		ActualThemeVariantChanged += TabView_ActualThemeVariantChanged;
 	}
 
-	private void Instance_OnCopyToClipboard(object? sender, TabInstance.CopyToClipboardEventArgs e)
+	private async void Instance_OnCopyToClipboardAsync(object? sender, TabInstance.CopyToClipboardEventArgs e)
 	{
-		ClipboardUtils.SetText(this, e.Text);
+		await ClipboardUtils.SetTextAsync(this, e.Text);
 	}
 
 	private void TabView_ActualThemeVariantChanged(object? sender, EventArgs e)
@@ -1159,7 +1159,7 @@ public class TabView : Grid, IDisposable
 
 			Instance.OnModelChanged -= TabInstance_OnModelChanged;
 			Instance.OnValidate -= Instance_OnValidate;
-			Instance.OnCopyToClipboard -= Instance_OnCopyToClipboard;
+			Instance.OnCopyToClipboard -= Instance_OnCopyToClipboardAsync;
 			if (Instance is ITabSelector tabSelector)
 			{
 				tabSelector.OnSelectionChanged -= ParentListSelectionChanged;
