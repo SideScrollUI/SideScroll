@@ -133,11 +133,6 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
-	protected async Task LoadBackgroundAsync(Call call)
-	{
-		await Instance.ReinitializeAsync(call);
-	}
-
 	protected override Size ArrangeOverride(Size finalSize)
 	{
 		try
@@ -570,14 +565,7 @@ public class TabView : Grid, IDisposable
 			return;
 		Instance.LoadCalled = true;
 
-		if (AvaloniaSynchronizationContext.Current == Instance.UiContext)
-		{
-			ShowLoading();
-		}
-		else
-		{
-			Instance.Post(ShowLoading);
-		}
+		Instance.Post(ShowLoading);
 
 		Instance.StartAsync(Instance.ReinitializeAsync);
 	}
