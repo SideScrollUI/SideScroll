@@ -501,6 +501,13 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	{
 		PointerPoint point = e.GetCurrentPoint(row);
 
+		// Prevent right-click from focusing the cell (but still allow context menu to show)
+		if (point.Properties.IsRightButtonPressed)
+		{
+			e.Handled = true;
+			return;
+		}
+
 		if (!point.Properties.IsLeftButtonPressed)
 			return;
 

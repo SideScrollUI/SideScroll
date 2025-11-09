@@ -402,7 +402,7 @@
           
           <!-- Default is too dark when the foreground is black -->
           <!-- SelectionForeground can't be set to a light color yet so use a light selection color instead -->
-          <SolidColorBrush x:Key="TextEditorBackgroundBrush" Color="White" />
+          <SolidColorBrush x:Key="TextEditorBackgroundBrush" Color="#fffefefe" />
           <SolidColorBrush x:Key="TextEditorForegroundBrush" Color="#ff001061" />
           <SolidColorBrush x:Key="TextEditorBorderBrush" Color="Black" />
           
