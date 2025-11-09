@@ -8,9 +8,9 @@ public abstract class SerializerFile(string basePath, string name = "")
 {
 	private const string DefaultName = "<Default>";
 
+	public string BasePath => basePath;
 	public string? HeaderPath { get; set; }
 	public string? DataPath { get; set; }
-	public string BasePath { get; set; } = basePath;
 	public string Name { get; set; } = name;
 
 	public bool Exists => File.Exists(DataPath) && new FileInfo(DataPath).Length > 0;

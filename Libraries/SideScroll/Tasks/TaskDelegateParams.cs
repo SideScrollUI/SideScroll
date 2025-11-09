@@ -6,7 +6,7 @@ public class TaskDelegateParams : TaskCreator
 {
 	public Call Call { get; set; }
 	public CallActionParams CallAction { get; }
-	public object[] Objects { get; set; }
+	public object[] Objects { get; }
 
 	public override string? ToString() => Label;
 

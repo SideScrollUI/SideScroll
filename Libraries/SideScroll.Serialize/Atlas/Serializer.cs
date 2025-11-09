@@ -21,7 +21,7 @@ public class Serializer : IDisposable
 
 	public TypeRepoString? TypeRepoString { get; set; } // Reuse string instances to reduce memory use when deep cloning
 
-	public BinaryReader? Reader { get; set; }
+	public BinaryReader? Reader { get; protected set; }
 
 	public bool Lazy { get; set; }
 	public bool PublicOnly { get; set; }

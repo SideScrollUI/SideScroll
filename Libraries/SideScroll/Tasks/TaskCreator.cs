@@ -34,7 +34,7 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	public string? Description { get; set; } // Button hint text
 
 	[HiddenColumn]
-	public bool ShowTask { get; set; }
+	public bool ShowTask { get; set; } // Shows TaskInstance, Actions will still create a TaskInstance even if a UseTask isn't enabled
 
 	[HiddenColumn]
 	public bool UseTask { get; set; } // Blocks, Action uses UI thread if false
