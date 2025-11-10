@@ -25,7 +25,7 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 
 #### Light Theme
 
-![Light Theme](https://raw.githubusercontent.com/SideScrollUI/SideScroll/f50a9893752d9e565e9f702d61d016649c703f0d/Images/Screenshots/PlanetsLight.png)
+![Light Theme](https://raw.githubusercontent.com/SideScrollUI/SideScroll/5f6bb10bd202c1710621f2a759c294aff0ecc39b/Images/Screenshots/PlanetsLight.png)
 
 #### Dark Theme
 

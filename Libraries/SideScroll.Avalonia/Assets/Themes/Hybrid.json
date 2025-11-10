@@ -32,7 +32,6 @@
   },
   "Title": {
     "Background": "#ff4f52bb",
-    "ButtonBackgroundPointerOver": "#ff292dab",
     "Foreground": "#ffd0d0e8",
     "Border": "Black",
     "ButtonBackground": "#ff27204a",
@@ -148,6 +147,7 @@
     "ComboBoxItemForeground": "#ff383838",
     "ComboBoxItemForegroundSelected": "Black",
     "ComboBoxItemForegroundPointerOver": "Black",
+    "ComboBoxItemForegroundPressed": "Black",
     "ComboBoxDropDownBorder": "#23000000",
     "CalendarViewBackground": "White",
     "CalendarViewItemBackground": "#ffe6e6e6",

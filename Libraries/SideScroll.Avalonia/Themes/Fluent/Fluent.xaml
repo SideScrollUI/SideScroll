@@ -77,6 +77,7 @@
           <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#fff2f6fc" />
           <SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="#ffebf1fa" />
           <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPointerOver" Color="#ffebf1fa" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundPressed" Color="#ffebf1fa" />
 
           <Thickness x:Key="ComboBoxBorderThemeThickness">1.5</Thickness>
           
@@ -502,6 +503,7 @@
           <SolidColorBrush x:Key="ComboBoxItemForegroundSelected" Color="#ffebebeb" />
           <SolidColorBrush x:Key="ComboBoxItemForegroundPointerOver" Color="#ffebebeb" />
           <SolidColorBrush x:Key="ComboBoxItemForegroundSelectedPointerOver" Color="#ffebebeb" />
+          <SolidColorBrush x:Key="ComboBoxItemForegroundPressed" Color="#ffebebeb" />
 
           <Thickness x:Key="ComboBoxBorderThemeThickness">1</Thickness>
 

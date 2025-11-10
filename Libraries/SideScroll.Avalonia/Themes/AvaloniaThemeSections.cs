@@ -512,7 +512,8 @@ public class TextControlTheme : ThemeSection
 	public Color? ComboBoxDropDownBackground { get; set; }
 
 	[ResourceKey("ComboBoxItemBackgroundSelected",
-		"ComboBoxItemBackgroundPressed"
+		"ComboBoxItemBackgroundPressed",
+		"ComboBoxItemBackgroundSelectedPressed"
 		)]
 	public Color? ComboBoxItemBackgroundSelected { get; set; }
 
@@ -531,6 +532,11 @@ public class TextControlTheme : ThemeSection
 		"ComboBoxItemForegroundSelectedPointerOver"
 		)]
 	public Color? ComboBoxItemForegroundPointerOver { get; set; }
+
+	[ResourceKey("ComboBoxItemForegroundPressed",
+		"ComboBoxItemForegroundSelectedPressed"
+		)]
+	public Color? ComboBoxItemForegroundPressed { get; set; }
 
 	[ResourceKey("ComboBoxDropDownBorderBrush")]
 	public Color? ComboBoxDropDownBorder { get; set; }
