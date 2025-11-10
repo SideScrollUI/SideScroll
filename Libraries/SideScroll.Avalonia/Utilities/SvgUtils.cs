@@ -8,10 +8,16 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SideScroll.Avalonia.Utilities;
 
+/// <summary>
+/// Provides utility methods for loading and processing SVG images in Avalonia
+/// </summary>
 public static class SvgUtils
 {
 	private static readonly MemoryTypeCache<IImage> _imageCache = new();
 
+	/// <summary>
+	/// Loads an SVG image from a resource with optional color customization
+	/// </summary>
 	public static IImage GetSvgColorImage(IResourceView imageResource, Color? color = null)
 	{
 		color ??= (imageResource as ImageColorView)?.Color;
@@ -28,6 +34,9 @@ public static class SvgUtils
 		}
 	}
 
+	/// <summary>
+	/// Attempts to load an SVG image from a resource with optional color customization
+	/// </summary>
 	public static IImage? TryGetSvgColorImage(IResourceView imageResource, Color? color = null)
 	{
 		if (imageResource.ResourceType != "svg") return null;
@@ -43,6 +52,9 @@ public static class SvgUtils
 		}
 	}
 
+	/// <summary>
+	/// Loads an SVG image from a stream and replaces black colors and the currentColor with the specified color
+	/// </summary>
 	public static IImage GetSvgColorImage(Stream stream, Color? color = null)
 	{
 		stream.Position = 0;
@@ -63,6 +75,9 @@ public static class SvgUtils
 		};
 	}
 
+	/// <summary>
+	/// Attempts to load an SVG image from a file path
+	/// </summary>
 	public static bool TryGetSvgImage(Call call, string path, [NotNullWhen(true)] out IImage? image)
 	{
 		image = default;
@@ -86,6 +101,9 @@ public static class SvgUtils
 		}
 	}
 
+	/// <summary>
+	/// Determines if a stream contains SVG content by checking for XML header
+	/// </summary>
 	public static bool IsSvg(Stream stream)
 	{
 		if (stream.Length < 10) return false;

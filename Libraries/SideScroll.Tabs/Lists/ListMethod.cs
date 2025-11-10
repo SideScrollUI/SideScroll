@@ -73,14 +73,14 @@ public class ListMethod : ListMember
 
 	/*public async Task<object> LoadAsync(Call call)
 	{
-		Task task = (Task)MethodInfo.Invoke(Object, new object[] { call });
+		Task task = (Task)MethodInfo.Invoke(Object, [call]);
 		await task.ConfigureAwait(false);
-		return (object)((dynamic)task).Result;
+		return ((dynamic)task).Result;
 	}*/
 
 	private object? GetValue()
 	{
-		var parameters = Array.Empty<object>();
+		object[] parameters = [];
 		ParameterInfo[] parameterInfos = MethodInfo.GetParameters();
 		if (parameterInfos.Length == 1 && parameterInfos[0].ParameterType == typeof(Call))
 		{
@@ -91,7 +91,7 @@ public class ListMethod : ListMember
 
 		if (result is Task)
 		{
-			return (object)((dynamic)result).Result;
+			return ((dynamic)result).Result;
 		}
 
 		return result;
@@ -101,7 +101,7 @@ public class ListMethod : ListMember
 	{
 		// this doesn't work for virtual methods (or any method modifier?)
 		var methodInfos = obj.GetType().GetMethods()
-			.Where(m => IsVisible(m))
+			.Where(IsVisible)
 			.Where(m => includeBaseTypes || m.DeclaringType == obj.GetType())
 			.Where(m => includeStatic || !m.IsStatic)
 			.OrderBy(m => m.Module.Name)

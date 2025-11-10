@@ -5,16 +5,35 @@ using System.Text;
 
 namespace SideScroll.Avalonia.Utilities;
 
+/// <summary>
+/// Provides utility methods for working with data grids and tables
+/// </summary>
 public static class DataGridUtils
 {
+	/// <summary>
+	/// Gets or sets the maximum width for table columns
+	/// </summary>
 	public static int MaxColumnWidth { get; set; } = 100;
 
+	/// <summary>
+	/// Represents column information for table formatting
+	/// </summary>
 	public class ColumnInfo(string name)
 	{
-		public string Name { get; set; } = name;
+		/// <summary>
+		/// Gets the column name
+		/// </summary>
+		public string Name => name;
+		
+		/// <summary>
+		/// Gets or sets the text alignment for the column
+		/// </summary>
 		public TextAlignment RightAlign { get; set; }
 	}
 
+	/// <summary>
+	/// Converts table data to a formatted string representation with columns and rows
+	/// </summary>
 	public static string TableToString(List<ColumnInfo> columns, List<List<string>> contentRows, int? maxColumnWidth = null)
 	{
 		List<int> columnNameWidths = columns
@@ -132,6 +151,9 @@ public static class DataGridUtils
 		return sb.ToString();
 	}
 
+	/// <summary>
+	/// Determines if a type can be sorted
+	/// </summary>
 	public static bool IsTypeSortable(Type type)
 	{
 		type = type.GetNonNullableType();
@@ -146,6 +168,9 @@ public static class DataGridUtils
 		return false;
 	}
 
+	/// <summary>
+	/// Determines if a type should use auto-sizing in columns
+	/// </summary>
 	public static bool IsTypeAutoSize(Type type)
 	{
 		type = type.GetNonNullableType();
@@ -164,6 +189,9 @@ public static class DataGridUtils
 		return false;
 	}
 
+	/// <summary>
+	/// Gets the appropriate text alignment for a given type
+	/// </summary>
 	public static TextAlignment GetTextAlignment(Type type)
 	{
 		type = type.GetNonNullableType();

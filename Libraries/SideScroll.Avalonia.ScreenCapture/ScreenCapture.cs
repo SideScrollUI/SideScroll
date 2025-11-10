@@ -34,6 +34,8 @@ public class ScreenCapture : Grid
 
 	public TabViewer TabViewer { get; }
 
+	private string? _lastSavePath;
+
 	public class TabViewerPlugin : ITabViewerPlugin
 	{
 		public void Initialize(TabViewer tabViewer)
@@ -79,10 +81,16 @@ public class ScreenCapture : Grid
 	private void AddToolbar()
 	{
 		var toolbar = new ScreenCaptureToolbar(TabViewer);
-		toolbar.ButtonCopyClipboard?.Add(CopyClipboard);
+		toolbar.ButtonCopyClipboard?.AddAsync(CopyClipboardAsync);
 		toolbar.ButtonSave.AddAsync(SaveAsync);
+		toolbar.ButtonOpenFolder.Add(OpenFolder);
 		toolbar.ButtonClose.Add(Close);
 		Children.Add(toolbar);
+	}
+
+	private void OpenFolder(Call call)
+	{
+		ProcessUtils.OpenFolder(_lastSavePath ?? Paths.PicturesPath);
 	}
 
 	private void AddContent(Control control)
@@ -109,7 +117,7 @@ public class ScreenCapture : Grid
 		_contentGrid.PointerMoved += ScreenCapture_PointerMoved;
 	}
 
-	private void CopyClipboard(Call call)
+	private async Task CopyClipboardAsync(Call call)
 	{
 		RenderTargetBitmap? bitmap = GetSelectedBitmap();
 		if (bitmap == null)
@@ -122,7 +130,7 @@ public class ScreenCapture : Grid
 			{
 				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 				{
-					CopyClipboardWindows(bitmap);
+					await CopyClipboardWindowsAsync(bitmap);
 				}
 				else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 				{
@@ -137,9 +145,9 @@ public class ScreenCapture : Grid
 	}
 
 	[SupportedOSPlatform("windows")]
-	private static void CopyClipboardWindows(RenderTargetBitmap bitmap)
+	private static async Task CopyClipboardWindowsAsync(RenderTargetBitmap bitmap)
 	{
-		Task.Run(() => Win32ClipboardUtils.SetBitmapAsync(bitmap)).GetAwaiter().GetResult();
+		await Win32ClipboardUtils.SetBitmapAsync(bitmap);
 	}
 
 	private void CopyClipboardOsx(RenderTargetBitmap bitmap)
@@ -181,6 +189,7 @@ public class ScreenCapture : Grid
 		});
 		if (result?.TryGetLocalPath() is string path)
 		{
+			_lastSavePath = path;
 			bitmap.Save(path);
 		}
 	}
@@ -250,7 +259,7 @@ public class ScreenCapture : Grid
 		if (_startPoint == null)
 			return;
 
-		CopyClipboard(new Call());
+		CopyClipboardAsync(new Call());
 
 		_startPoint = null;
 	}

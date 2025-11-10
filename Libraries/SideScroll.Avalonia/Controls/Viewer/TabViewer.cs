@@ -216,36 +216,6 @@ public class TabViewer : Grid
 		}
 	}
 
-	public Bookmark? ImportLink(Call call, LinkUri linkUri, bool checkVersion)
-	{
-		Flyout flyout = new()
-		{
-			Content = "Importing Link ...",
-			Placement = PlacementMode.BottomEdgeAlignedLeft,
-		};
-		flyout.ShowAt(Toolbar!.ButtonImport!);
-
-		try
-		{
-			Bookmark bookmark = Task.Run(() => Project.Linker.GetLinkAsync(call, linkUri, checkVersion)).GetAwaiter().GetResult();
-			if (bookmark == null)
-				return null;
-
-			flyout.Content = "Link retrieved, importing";
-
-			ImportBookmark(call, linkUri, bookmark);
-
-			flyout.Content = "Link imported";
-
-			return bookmark;
-		}
-		catch (Exception ex)
-		{
-			flyout.Content = ex.Message;
-			return null;
-		}
-	}
-
 	private void ImportBookmark(Call call, LinkUri linkUri, Bookmark bookmark)
 	{
 		if (bookmark == null)
@@ -383,8 +353,7 @@ public class TabViewer : Grid
 			// Wait until Bookmarks tab has been created
 			if (LinkUri.TryParse(LoadLinkUri, out LinkUri? linkUri))
 			{
-				Dispatcher.UIThread.Post(() => ImportLink(new Call(), linkUri, false), DispatcherPriority.SystemIdle);
-				//Dispatcher.UIThread.InvokeAsync(() => ImportLinkAsync(new Call(), LoadLinkUri, false), DispatcherPriority.SystemIdle).GetAwaiter().GetResult();
+				Dispatcher.UIThread.Post(async () => await ImportLinkAsync(new Call(), linkUri, false), DispatcherPriority.SystemIdle);
 			}
 		}
 		else if (LoadBookmark != null)

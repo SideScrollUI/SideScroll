@@ -11,9 +11,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SideScroll.Avalonia.Utilities;
 
+/// <summary>
+/// Provides utility methods for Avalonia UI controls
+/// </summary>
 public static class AvaloniaUtils
 {
-	// TextBlock control doesn't allow selecting text, so add a Copy command to the context menu
+	/// <summary>
+	/// Adds a context menu with Copy functionality to a TextBlock control
+	/// </summary>
 	public static void AddContextMenu(TextBlock textBlock)
 	{
 		AvaloniaList<object> list = [];
@@ -33,6 +38,9 @@ public static class AvaloniaUtils
 		textBlock.ContextMenu = contextMenu;
 	}
 
+	/// <summary>
+	/// Adds a context menu with Cut, Copy, and Paste functionality to a TextBox control
+	/// </summary>
 	public static void AddContextMenu(TextBox textBox)
 	{
 		var keymap = Application.Current!.PlatformSettings!.HotkeyConfiguration;
@@ -65,6 +73,9 @@ public static class AvaloniaUtils
 		textBox.ContextMenu = contextMenu;
 	}
 
+	/// <summary>
+	/// Adds a context menu with Copy and Paste functionality to a ComboBox control
+	/// </summary>
 	public static void AddContextMenu(ComboBox comboBox)
 	{
 		AvaloniaList<object> list = [];
@@ -97,6 +108,9 @@ public static class AvaloniaUtils
 		comboBox.ContextMenu = contextMenu;
 	}
 
+	/// <summary>
+	/// Adds a context menu with Copy and Paste functionality to a ColorPicker control
+	/// </summary>
 	public static void AddContextMenu(ColorPicker colorPicker)
 	{
 		AvaloniaList<object> list = [];
@@ -143,9 +157,12 @@ public static class AvaloniaUtils
 		}
 	}
 
-	// Add padding to avoid poppin effect?
+	/// <summary>
+	/// Determines if a control is visible within its parent hierarchy
+	/// </summary>
 	public static bool IsControlVisible(Control control)
 	{
+		// Add padding param to load in earlier and avoid poppin effect?
 		Point controlTopLeftPoint = new(0, 0);
 		Point controlBottomRight = new(control.Bounds.Width, control.Bounds.Height);
 		StyledElement? parentElement = control.Parent;
@@ -176,6 +193,10 @@ public static class AvaloniaUtils
 		return true;
 	}
 
+	/// <summary>
+	/// Validates a control against data validation attributes and displays error messages.
+	/// Supports RequiredAttribute, StringLengthAttribute, and RangeAttribute validation.
+	/// </summary>
 	public static bool ValidateControl(ListProperty listProperty, Control control)
 	{
 		dynamic? value = listProperty.Value;
@@ -220,6 +241,9 @@ public static class AvaloniaUtils
 		return true;
 	}
 
+	/// <summary>
+	/// Shows a flyout with text content attached to a control
+	/// </summary>
 	public static void ShowFlyout(Control control, Flyout flyout, string text)
 	{
 		Dispatcher.UIThread.Post(() => ShowFlyoutUI(control, flyout, text));

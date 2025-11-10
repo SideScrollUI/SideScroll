@@ -13,6 +13,8 @@
     - Added TaskCreator.StartTask() to Simplify Async Task Creation and fix an async ClipBoard copying threading issue
     - Updated DataGrid so it no longer moves focus when right clicking
     - Fixed DataGrid Clipboard export for string values that contain null characters
+    - Added OpenFolder Button to ScreenCapture
+    - Added Summary documentation for Utilities and Time classes
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.8</AvaloniaVersion>

@@ -18,11 +18,11 @@ public class TabSampleChartTimeSeriesFractional : ITab
 		{
 			DateTime endTime = TimeZoneView.Now.Trim(SampleDuration);
 
-			AddCoinFlips(model, endTime);
-			AddDecimalPrecision(model, endTime);
+			AddFractionChart(model, endTime);
+			AddDecimalPrecisionChart(model, endTime);
 		}
 
-		private static DateTime AddCoinFlips(TabModel model, DateTime endTime)
+		private static DateTime AddFractionChart(TabModel model, DateTime endTime)
 		{
 			var chartView = new ChartView("Fractional Times and Values")
 			{
@@ -43,7 +43,7 @@ public class TabSampleChartTimeSeriesFractional : ITab
 			return endTime;
 		}
 
-		private static DateTime AddDecimalPrecision(TabModel model, DateTime endTime)
+		private static DateTime AddDecimalPrecisionChart(TabModel model, DateTime endTime)
 		{
 			var chartView = new ChartView("Decimal Precision")
 			{
