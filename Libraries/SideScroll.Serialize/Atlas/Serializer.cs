@@ -37,6 +37,8 @@ public class Serializer : IDisposable
 
 	public TaskInstance? TaskInstance { get; set; }
 
+	private bool _disposed;
+
 	public struct LoadItem
 	{
 		public TypeRepo TypeRepo;
@@ -327,9 +329,8 @@ public class Serializer : IDisposable
 		}
 	}
 
-	record TypeRepoWriter(TypeRepo typeRepo)
+	record TypeRepoWriter(TypeRepo TypeRepo)
 	{
-		public TypeRepo TypeRepo => typeRepo;
 		public MemoryStream MemoryStream = new();
 	}
 
@@ -646,13 +647,38 @@ public class Serializer : IDisposable
 		_loadQueue.Enqueue(loadItem);
 	}
 
-	public void Dispose()
+	protected virtual void Dispose(bool disposing)
 	{
-		foreach (TypeRepo typeRepo in TypeRepos)
+		if (_disposed)
+			return;
+
+		if (disposing)
 		{
-			typeRepo.Dispose();
+			// Dispose managed resources
+			foreach (TypeRepo typeRepo in TypeRepos)
+			{
+				typeRepo.Dispose();
+			}
+
+			Reader?.Dispose();
+			Reader = null;
+
+			// Clear collections
+			TypeSchemas.Clear();
+			TypeRepos.Clear();
+			IdxTypeToRepo.Clear();
+			ParserQueue.Clear();
+			Primitives.Clear();
+			Clones.Clear();
+			CloneQueue.Clear();
 		}
 
-		Reader?.Dispose();
+		_disposed = true;
+	}
+
+	public void Dispose()
+	{
+		Dispose(true);
+		GC.SuppressFinalize(this);
 	}
 }

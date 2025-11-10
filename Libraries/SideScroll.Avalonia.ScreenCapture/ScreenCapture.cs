@@ -254,12 +254,12 @@ public class ScreenCapture : Grid
 		_startPoint = e.GetPosition(_backgroundImage);
 	}
 
-	private void ScreenCapture_PointerReleased(object? sender, PointerReleasedEventArgs e)
+	private async void ScreenCapture_PointerReleased(object? sender, PointerReleasedEventArgs e)
 	{
 		if (_startPoint == null)
 			return;
 
-		CopyClipboardAsync(new Call());
+		await CopyClipboardAsync(new Call());
 
 		_startPoint = null;
 	}

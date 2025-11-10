@@ -36,10 +36,11 @@ public class TabImageButton : Button, IDisposable
 	public TimeSpan MinWaitTime { get; set; } = TimeSpan.FromSeconds(1); // Wait time between clicks
 
 	private DateTime? _lastInvoked;
-	private DispatcherTimer? _dispatcherTimer;  // delays auto selection to throttle updates
+	private DispatcherTimer? _dispatcherTimer;  // Delays auto selection to throttle updates
 
-	private Image _imageControl;
+	private readonly Image _imageControl;
 	private IImage? _defaultImage;
+	private bool _disposed;
 
 	protected virtual Color Color => (ImageResource as ImageColorView)?.Color ?? SideScrollTheme.IconForeground.Color;
 
@@ -340,13 +341,37 @@ public class TabImageButton : Button, IDisposable
 		await InvokeAsync(false);
 	}
 
+	protected virtual void Dispose(bool disposing)
+	{
+		if (_disposed)
+			return;
+
+		if (disposing)
+		{
+			// Dispose managed resources
+			if (_dispatcherTimer != null)
+			{
+				_dispatcherTimer.Stop();
+				_dispatcherTimer.Tick -= DispatcherTimer_Tick;
+				_dispatcherTimer = null;
+			}
+
+			// Unsubscribe from events
+			Click -= ToolbarButton_Click;
+			ActualThemeVariantChanged -= ToolbarButton_ActualThemeVariantChanged;
+
+			// Dispose images if they're disposable
+			(_defaultImage as IDisposable)?.Dispose();
+			(_highlightImage as IDisposable)?.Dispose();
+			(_disabledImage as IDisposable)?.Dispose();
+		}
+
+		_disposed = true;
+	}
+
 	public void Dispose()
 	{
-		if (_dispatcherTimer != null)
-		{
-			_dispatcherTimer.Stop();
-			_dispatcherTimer.Tick -= DispatcherTimer_Tick;
-			_dispatcherTimer = null;
-		}
+		Dispose(true);
+		GC.SuppressFinalize(this);
 	}
 }

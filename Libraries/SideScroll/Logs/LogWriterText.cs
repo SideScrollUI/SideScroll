@@ -7,6 +7,7 @@ public class LogWriterText : IDisposable
 
 	private readonly StreamWriter _textStreamWriter;
 	private readonly SynchronizationContext _context;
+	private bool _disposed;
 
 	public override string ToString() => SaveFilePath;
 
@@ -38,8 +39,27 @@ public class LogWriterText : IDisposable
 		_textStreamWriter.Flush();
 	}
 
+	protected virtual void Dispose(bool disposing)
+	{
+		if (_disposed)
+			return;
+
+		if (disposing)
+		{
+			// Dispose managed resources
+			// Unsubscribe from event
+			Log.OnMessage -= Log_OnMessage;
+
+			// Close and dispose writer
+			_textStreamWriter.Close();
+		}
+
+		_disposed = true;
+	}
+
 	public virtual void Dispose()
 	{
-		_textStreamWriter.Close();
+		Dispose(true);
+		GC.SuppressFinalize(this);
 	}
 }

@@ -67,6 +67,8 @@ public abstract class TypeRepo : IDisposable
 	// Saving Only
 	public Dictionary<object, int> IdxObjectToIndex { get; protected set; } = []; // for saving only, not filled in for loading
 
+	private bool _disposed;
+
 	// Loading Only
 
 	public int Cloned { get; set; } = 0; // for stats
@@ -505,9 +507,28 @@ public abstract class TypeRepo : IDisposable
 		return obj;
 	}
 
+	protected virtual void Dispose(bool disposing)
+	{
+		if (_disposed)
+			return;
+
+		if (disposing)
+		{
+			// Dispose managed resources
+			// Note: Reader is shared and should not be disposed here
+			
+			// Clear collections
+			Objects.Clear();
+			IdxObjectToIndex.Clear();
+		}
+
+		_disposed = true;
+	}
+
 	public virtual void Dispose()
 	{
-
+		Dispose(true);
+		GC.SuppressFinalize(this);
 	}
 
 	public void ValidateBytesAvailable(int requested)

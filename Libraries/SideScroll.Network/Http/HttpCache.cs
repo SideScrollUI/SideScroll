@@ -48,6 +48,7 @@ public class HttpCache : IDisposable
 	private readonly Stream _dataStream;
 
 	private readonly object _entryLock = new();
+	private bool _disposed;
 
 	public override string ToString() => BasePath;
 
@@ -71,10 +72,28 @@ public class HttpCache : IDisposable
 		LoadIndex();
 	}
 
+	protected virtual void Dispose(bool disposing)
+	{
+		if (_disposed)
+			return;
+
+		if (disposing)
+		{
+			// Dispose managed resources
+			_indexStream.Dispose();
+			_dataStream.Dispose();
+
+			// Clear collections
+			_cache.Clear();
+		}
+
+		_disposed = true;
+	}
+
 	public void Dispose()
 	{
-		_indexStream.Dispose();
-		_dataStream.Dispose();
+		Dispose(true);
+		GC.SuppressFinalize(this);
 	}
 
 	private void LoadHeader(BinaryReader indexReader)

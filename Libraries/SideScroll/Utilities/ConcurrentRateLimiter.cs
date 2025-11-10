@@ -28,6 +28,7 @@ public class ConcurrentRateLimiter : IDisposable
 	private readonly ConcurrentQueue<DateTime> _requestTimestamps = new();
 	private readonly CancellationTokenSource _cts = new();
 	private readonly Task? _tokenRefillTask;
+	private bool _disposed;
 
 	/// <summary>
 	/// Initializes a new instance of the ConcurrentRateLimiter class
@@ -100,19 +101,38 @@ public class ConcurrentRateLimiter : IDisposable
 	/// <summary>
 	/// Disposes the rate limiter and releases all resources
 	/// </summary>
+	protected virtual void Dispose(bool disposing)
+	{
+		if (_disposed)
+			return;
+
+		if (disposing)
+		{
+			// Dispose managed resources
+			_cts.Cancel();
+			try
+			{
+				_tokenRefillTask?.Wait(); // Ensure cleanup of background task
+			}
+			catch (AggregateException)
+			{
+				// Expected when cancellation occurs
+			}
+			_cts.Dispose();
+			_rateSemaphore?.Dispose();
+			_concurrencySemaphore.Dispose();
+
+			// Clear queue
+			_requestTimestamps.Clear();
+		}
+
+		_disposed = true;
+	}
+
 	public void Dispose()
 	{
-		_cts.Cancel();
-		try
-		{
-			_tokenRefillTask?.Wait(); // Ensure cleanup of background task
-		}
-		catch (AggregateException)
-		{
-		}
-		_cts.Dispose();
-		_rateSemaphore?.Dispose();
-		_concurrencySemaphore.Dispose();
+		Dispose(true);
+		GC.SuppressFinalize(this);
 	}
 
 	private class ConcurrencyRelease(SemaphoreSlim semaphore) : IDisposable
