@@ -16,10 +16,10 @@ public class ToolbarButton : TabImageButton
 		TabInstance = toolbar.TabInstance;
 		Toolbar = toolbar;
 		ShowTask = toolButton.ShowTask;
+		UseBackgroundThread = toolButton.UseBackgroundThread;
 
 		CallAction = toolButton.Action;
 		CallActionAsync = toolButton.ActionAsync;
-		UseBackgroundThread = toolButton.UseBackgroundThread;
 
 		if (toolButton.IsDefault)
 		{

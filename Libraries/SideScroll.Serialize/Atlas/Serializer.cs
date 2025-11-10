@@ -45,7 +45,7 @@ public class Serializer : IDisposable
 		public int Index;
 		public bool Preloaded; // set after IPreloadRepo preloads data
 
-		public override string ToString() => $"{TypeRepo} - {Index}";
+		public override readonly string ToString() => $"{TypeRepo} - {Index}";
 	}
 
 	private readonly Queue<LoadItem> _loadQueue = new();

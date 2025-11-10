@@ -49,7 +49,7 @@ public static class AvaloniaUtils
 
 		if (!textBox.IsReadOnly)
 		{
-			var menuItemCut = new TabMenuItem("Cut");
+			var menuItemCut = new TabMenuItem("Cu_t");
 			menuItemCut.Click += delegate { SendKeyGesture(textBox, keymap.Cut); };
 			list.Add(menuItemCut);
 		}
@@ -60,7 +60,7 @@ public static class AvaloniaUtils
 
 		if (!textBox.IsReadOnly)
 		{
-			var menuItemPaste = new TabMenuItem("Paste");
+			var menuItemPaste = new TabMenuItem("_Paste");
 			menuItemPaste.Click += delegate { SendKeyGesture(textBox, keymap.Paste); };
 			list.Add(menuItemPaste);
 		}
@@ -87,7 +87,7 @@ public static class AvaloniaUtils
 		};
 		list.Add(menuItemCopy);
 
-		var menuItemPaste = new TabMenuItem("Paste");
+		var menuItemPaste = new TabMenuItem("_Paste");
 		menuItemPaste.Click += async delegate
 		{
 			if (await ClipboardUtils.TryGetTextAsync(comboBox) is string clipboardText)
@@ -122,7 +122,7 @@ public static class AvaloniaUtils
 		};
 		list.Add(menuItemCopy);
 
-		var menuItemPaste = new TabMenuItem("Paste");
+		var menuItemPaste = new TabMenuItem("_Paste");
 		menuItemPaste.Click += async delegate
 		{
 			if (await ClipboardUtils.TryGetTextAsync(colorPicker) is string clipboardText &&

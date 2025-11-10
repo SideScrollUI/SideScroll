@@ -11,6 +11,8 @@ public struct FilePath(string path)
 	/// Gets the file path string
 	/// </summary>
 	public readonly string Path => path;
+
+	public override readonly string ToString() => path;
 }
 
 /// <summary>
