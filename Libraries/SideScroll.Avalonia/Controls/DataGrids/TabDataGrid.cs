@@ -193,7 +193,9 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		};
 
 		if (AutoGenerateColumns)
+		{
 			AddColumns();
+		}
 
 		CollectionView = new DataGridCollectionView(List);
 		DataGrid.ItemsSource = CollectionView;
@@ -762,7 +764,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	public List<object> GetMatchingRowObjects()
 	{
-		var rowObjects = new List<object>();
+		List<object> rowObjects = [];
 		if (TabDataSettings.SelectedRows.Count == 0)
 			return rowObjects;
 

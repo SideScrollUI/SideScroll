@@ -30,7 +30,7 @@ public class BaseWindow : Window
 
 	private bool _loadComplete;
 
-	private Rect? _normalSizeBounds; // used for saving when maximized
+	private Rect? _normalSizeBounds; // Used for saving when maximized
 
 	private readonly DispatcherTimer _cleanupDispatcherTimer;
 
@@ -112,11 +112,11 @@ public class BaseWindow : Window
 			double workingHeight = screen.WorkingArea.Height;
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || !_loadComplete)
 			{
-				// OSX doesn't resize to smaller correctly if maximized at start
+				// macOS doesn't resize to smaller correctly if maximized at start
 				workingHeight -= 20;
 				if (WindowState == WindowState.Maximized)
 				{
-					maxHeight -= 12; // On windows, the menu header takes up an extra 12 pixels when not maximized
+					maxHeight -= 12; // On Windows, the menu header takes up an extra 12 pixels when not maximized
 				}
 			}
 			maxHeight = Math.Max(maxHeight, workingHeight);
@@ -137,7 +137,7 @@ public class BaseWindow : Window
 			}
 			else
 			{
-				// Bounds.Position is 0, 0 (Windows & OSX)
+				// Bounds.Position is 0, 0 (Windows & macOS)
 				bounds = new Rect(Position.X, Position.Y, bounds.Width, bounds.Height);
 				_normalSizeBounds = bounds;
 			}
@@ -169,14 +169,14 @@ public class BaseWindow : Window
 			Width = Math.Clamp(value.Width, MinWidth, MaxWidth);
 			Height = Math.Clamp(value.Height, MinHeight, MaxHeight);
 
-			double minLeft = -10; // Left position for windows starts at -10
-			double left = Math.Clamp(value.Left, minLeft, MaxWidth - Width + minLeft); // values can be negative
+			double minLeft = -10; // Left position for Windows starts at -10
+			double left = Math.Clamp(value.Left, minLeft, MaxWidth - Width + minLeft); // Values can be negative
 
 			double maxHeight = MaxHeight;
 			double top = Math.Clamp(value.Top, 0, maxHeight - Height);
 			Position = new PixelPoint((int)left, (int)top);
 
-			// Avalonia bug? WindowState doesn't update correctly for MacOS
+			// Avalonia bug? WindowState doesn't update correctly for macOS
 			if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 			{
 				WindowState = value.Maximized ? WindowState.Maximized : WindowState.Normal;
@@ -188,20 +188,23 @@ public class BaseWindow : Window
 	{
 		SetMaxBounds();
 
-		var settings = Project.Data.App.Load<WindowSettings>(true);
-		if (settings != null)
+		var settings = Project.Data.App.Load<WindowSettings>();
+		if (settings == null)
 		{
-			WindowSettings = settings;
+			settings = new();
+			settings.Left = (MaxWidth - settings.Width) / 2;
+			settings.Top = (MaxHeight - settings.Height) / 2;
 		}
+		WindowSettings = settings;
 	}
 
 	// Still saving due to a HandleResized calls after IsActive (loadComplete does nothing)
 	private void SaveWindowSettings()
 	{
-		// need a better trigger for when the screen size changes
+		// Do we need a better trigger for when the screen size changes?
 		SetMaxBounds();
 
-		if (_loadComplete)// && IsArrangeValid && IsMeasureValid) // && IsActive (this can be false even after loading)
+		if (_loadComplete)
 		{
 			Dispatcher.UIThread.Post(SaveWindowSettingsInternal, DispatcherPriority.SystemIdle);
 		}
