@@ -9,6 +9,7 @@ using Avalonia.Layout;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using SideScroll.Attributes;
+using SideScroll.Avalonia.Controls.Converters;
 using SideScroll.Avalonia.Controls.View;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Collections;
@@ -19,6 +20,7 @@ using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -193,7 +195,17 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 		if (AutoGenerateColumns)
 		{
-			AddColumns();
+			_columnNames = [];
+			_columnProperties = [];
+
+			if (List is DataView dataView)
+			{
+				AddDataTableColumns(dataView);
+			}
+			else
+			{
+				AddColumns();
+			}
 		}
 
 		CollectionView = new DataGridCollectionView(List);
@@ -206,6 +218,8 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		DataGrid.ColumnReordered += DataGrid_ColumnReordered;
 
 		DataGrid.EffectiveViewportChanged += DataGrid_EffectiveViewportChanged;
+
+		DataGrid.Sorting += DataGrid_Sorting;
 
 		DataGrid.AddHandler(KeyDownEvent, DataGrid_KeyDown, RoutingStrategies.Tunnel);
 
@@ -580,9 +594,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	private void AddColumns()
 	{
-		_columnNames = [];
-		_columnProperties = [];
-
 		List<TabDataSettings.MethodColumn> methodColumns = TabDataSettings.GetButtonMethods(ElementType);
 		foreach (TabDataSettings.MethodColumn methodColumn in methodColumns)
 		{
@@ -625,6 +636,51 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		{
 			AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo, styleCells);
 		}
+	}
+
+	private void AddDataTableColumns(DataView dataView)
+	{
+		DataTable dataTable = dataView.Table!;
+
+		if (dataTable.Columns.Count == 0)
+			return;
+
+		if (dataTable.Columns.Count == 1)
+		{
+			DataGrid.HeadersVisibility = DataGridHeadersVisibility.None;
+		}
+
+		foreach (DataColumn dataColumn in dataTable.Columns)
+		{
+			AddDataColumn(dataColumn);
+		}
+	}
+
+	public void AddDataColumn(DataColumn dataColumn)
+	{
+		int maxDesiredWidth =  MaxColumnWidth;
+		DataGridBoundColumn column;
+
+		if (dataColumn.DataType.GetNonNullableType() == typeof(bool))
+		{
+			column = new DataGridCheckBoxColumn();
+		}
+		else
+		{
+			var textColumn = new DataGridBoundTextColumn(DataGrid, dataColumn);
+			column = textColumn;
+		}
+		column.Binding = new Binding("Row.ItemArray[" + dataColumn.Ordinal + ']')
+		{
+			Converter = new FormatValueConverter(),
+		};
+		column.Header = dataColumn.Caption;
+		column.IsReadOnly = true;
+		column.CanUserSort = true;
+		column.MaxWidth = MaxColumnWidth;
+
+		DataGrid.Columns.Add(column);
+		_columnNames[column] = dataColumn.Caption;
 	}
 
 	public void AddColumn(string label, string propertyName, bool styleCells = false)
@@ -697,8 +753,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		DataGrid.Columns.Add(column);
 		_columnNames[column] = propertyInfo.Name;
 		_columnProperties.Add(propertyInfo);
-
-		DataGrid.Sorting += DataGrid_Sorting;
 	}
 
 	private void DataGrid_Sorting(object? sender, DataGridColumnEventArgs e)

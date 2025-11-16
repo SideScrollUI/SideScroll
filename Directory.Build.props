@@ -2,6 +2,7 @@
   <PropertyGroup>
     <Version>0.14</Version>
     <PackageReleaseNotes>
+    - Added DataTable support to TabModel.AddData()
     - Improved Default Window Sizing and Position
     </PackageReleaseNotes>
 

@@ -7,6 +7,7 @@ using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tasks;
 using System.Collections;
+using System.Data;
 using System.Reflection;
 
 namespace SideScroll.Tabs;
@@ -209,6 +210,10 @@ public class TabModel
 			// show inner type as list (but only one column using a ToString for the label)
 			//AddObject(type);
 			AddEnumerable(enumerable);
+		}
+		else if (obj is DataTable dataTable)
+		{
+			ItemList.Add(dataTable.DefaultView);
 		}
 		else if (obj is ChartView)
 		{

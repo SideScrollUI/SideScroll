@@ -2,6 +2,7 @@ using SideScroll.Extensions;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Settings;
 using System.Collections;
+using System.Data;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -92,7 +93,7 @@ public class Filter
 			if (text.Length == 0)
 				continue;
 
-			var filterExpression = new FilterExpression();
+			FilterExpression filterExpression = new();
 			if (text.First() == '"' && text.Last() == '"')
 			{
 				filterExpression.MatchWord = true;
@@ -113,8 +114,23 @@ public class Filter
 
 	public bool Matches(object obj, List<PropertyInfo> columnProperties)
 	{
-		List<string> uppercaseValues = new();
-		GetItemSearchText(obj, columnProperties, uppercaseValues);
+		List<string> uppercaseValues = [];
+		if (obj is DataRowView dataRowView)
+		{
+			foreach (var item in dataRowView.Row.ItemArray)
+			{
+				string? valueText = item?.ToString();
+				if (valueText.IsNullOrEmpty())
+					continue;
+
+				uppercaseValues.Add(valueText.ToUpper());
+			}
+		}
+		else
+		{
+			GetItemSearchText(obj, columnProperties, uppercaseValues);
+		}
+
 		if (IsAnd)
 		{
 			return FilterExpressions.All(f => uppercaseValues.Any(v => f.Matches(v)));
