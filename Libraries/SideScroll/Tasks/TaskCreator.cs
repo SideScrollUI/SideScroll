@@ -17,7 +17,7 @@ public class ConfirmationFlyoutConfig(string text, string confirmText, string ca
 {
 	public string Text => text;
 	public string ConfirmText => confirmText;
-	public string? CancelText => cancelText;
+	public string CancelText => cancelText;
 }
 
 

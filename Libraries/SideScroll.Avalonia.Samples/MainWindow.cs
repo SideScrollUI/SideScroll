@@ -8,7 +8,7 @@ namespace SideScroll.Avalonia.Samples;
 
 public class MainWindow : BaseWindow
 {
-	public MainWindow() : base(Project.Load<CustomUserSettings>(SampleProjectSettings.Settings))
+	public MainWindow() : base(Project.Load<SampleUserSettings>(SampleProjectSettings.Settings))
 	{
 		LoadTab(new TabAvalonia());
 

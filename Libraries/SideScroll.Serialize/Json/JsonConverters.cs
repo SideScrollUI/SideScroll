@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace SideScroll.Serialize.Json;
 
 // Partial implementation, only used for viewing currently
-public class JsonConverters
+public static class JsonConverters
 {
 	public static JsonSerializerOptions JsonSerializerOptions => _jsonSerializerOptions ??= CreateOptions();
 	private static JsonSerializerOptions? _jsonSerializerOptions;

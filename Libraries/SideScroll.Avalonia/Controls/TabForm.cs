@@ -56,7 +56,7 @@ public class TabForm : Border, IValidationControl
 		}
 	}
 
-	public TabForm(TabFormObject formObject, bool autoGenerateRows = true) : this(formObject.Object)
+	public TabForm(TabFormObject formObject, bool autoGenerateRows = true) : this(formObject.Object, autoGenerateRows)
 	{
 		FormObject = formObject;
 		FormObject.ObjectChanged += FormObject_ObjectChanged;

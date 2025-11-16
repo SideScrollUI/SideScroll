@@ -102,10 +102,9 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 
 	public void Replace(IDataItem oldDataItem, IDataItem newDataItem)
 	{
-		int index = -1;
 		if (_valueLookup.Remove(oldDataItem, out TViewType? existing))
 		{
-			index = Items.IndexOf(existing);
+			int index = Items.IndexOf(existing);
 
 			_dataItemLookup.Remove(existing);
 			Items.Remove(existing);

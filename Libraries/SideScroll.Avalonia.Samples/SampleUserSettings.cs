@@ -3,7 +3,7 @@ using SideScroll.Tabs.Settings;
 
 namespace SideScroll.Avalonia.Samples;
 
-public class CustomUserSettings : UserSettings
+public class SampleUserSettings : UserSettings
 {
 	[Header("Custom"), WordWrap]
 	public string ApiUri { get; set; } = @"http://localhost:80/";

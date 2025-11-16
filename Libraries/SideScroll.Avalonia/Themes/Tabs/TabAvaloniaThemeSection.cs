@@ -12,6 +12,7 @@ using SideScroll.Tabs.Samples.Charts;
 using SideScroll.Tabs.Samples.DataGrid;
 using SideScroll.Tabs.Samples.Objects;
 using SideScroll.Tabs.Samples.Forms;
+using SideScroll.Tabs.Samples.Loading;
 using SideScroll.Tabs.Toolbar;
 using System.Collections;
 

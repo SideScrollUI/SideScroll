@@ -19,7 +19,7 @@ public class SerializerMemoryAtlas : SerializerMemory
 
 	public override void Save(Call call, object obj)
 	{
-		using CallTimer callTimer = call.Timer("Save");
+		using CallTimer callTimer = call.Timer();
 
 		using var writer = new BinaryWriter(Stream, Encoding.Default, true);
 
@@ -47,7 +47,7 @@ public class SerializerMemoryAtlas : SerializerMemory
 	public override object? Load(Call? call = null)
 	{
 		call ??= new();
-		using CallTimer callTimer = call.Timer("Load");
+		using CallTimer callTimer = call.Timer();
 
 		Stream.Seek(0, SeekOrigin.Begin);
 		using var reader = new BinaryReader(Stream);
@@ -61,7 +61,7 @@ public class SerializerMemoryAtlas : SerializerMemory
 	public override void Validate(Call? call = null)
 	{
 		call ??= new();
-		using CallTimer callTimer = call.Timer("Validate");
+		using CallTimer callTimer = call.Timer();
 
 		Stream.Seek(0, SeekOrigin.Begin);
 		using var reader = new BinaryReader(Stream);

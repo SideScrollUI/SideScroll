@@ -184,7 +184,7 @@ public class WordSpacer
 		public Token(string value)
 		{
 			TokenType = GetType(value.First());
-			Value = value.ToString();
+			Value = value;
 		}
 
 		public override string ToString() => Value;

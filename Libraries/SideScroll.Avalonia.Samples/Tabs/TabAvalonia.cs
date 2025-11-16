@@ -22,7 +22,7 @@ public class TabAvalonia : ITab
 				new("Controls", new TabSampleControls()),
 				new("Charts", new TabCustomCharts()),
 				new("Links", new TabLinks()),
-				new("Settings", new TabAvaloniaSettings<CustomUserSettings>()),
+				new("Settings", new TabAvaloniaSettings<SampleUserSettings>()),
 			};
 		}
 	}

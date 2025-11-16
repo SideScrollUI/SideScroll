@@ -72,7 +72,7 @@ public class TabAvaloniaThemes : ITab
 
 			AvaloniaThemeSettings themeSettings = ThemeManager.Instance!.Create(ThemeId.Name!, ThemeId.Variant!);
 
-			ThemeManager.Instance!.Add(call, themeSettings);
+			ThemeManager.Instance.Add(call, themeSettings);
 
 			New(call);
 		}

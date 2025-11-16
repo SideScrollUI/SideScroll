@@ -109,6 +109,9 @@ public class TimeRangePeriod : ITags
 	/// <summary>
 	/// Aggregates time range values into periods of specified duration within a time window
 	/// </summary>
+	/// <param name="timeRangeValues">Series of TimeRangeValues to aggregate</param>
+	/// <param name="timeWindow">Specifies Start to End times to view, and allows synchronizing the vertical mouse cursor</param>
+	/// <param name="periodDuration">Individual period durations to aggregate values for</param>
 	/// <param name="trimPeriods">Whether to trim period boundaries to actual data boundaries</param>
 	/// <returns>A list of time periods with aggregated statistics, or null if parameters are invalid</returns>
 	public static List<TimeRangePeriod>? Periods(IEnumerable<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration, bool trimPeriods = true)

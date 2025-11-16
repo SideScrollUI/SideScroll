@@ -66,7 +66,11 @@ public class TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) : 
 	public override void LoadObjectData(object obj)
 	{
 		var array = (byte[])obj;
-		Reader!.Read(array, 0, array.Length);
+		int read = Reader!.Read(array, 0, array.Length);
+		if (read != array.Length)
+		{
+			throw new EndOfStreamException();
+		}
 	}
 
 	public override void Clone(object source, object dest)

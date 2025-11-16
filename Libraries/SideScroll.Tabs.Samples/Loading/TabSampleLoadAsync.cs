@@ -1,7 +1,7 @@
 using SideScroll.Resources;
 using SideScroll.Tabs.Toolbar;
 
-namespace SideScroll.Tabs.Samples.Actions;
+namespace SideScroll.Tabs.Samples.Loading;
 
 public class TabSampleLoadAsync : ITab
 {

@@ -21,7 +21,7 @@ public class TabSampleChartTimeSeries : ITab
 			AddBirds(model, endTime);
 		}
 
-		private static DateTime AddAnimals(TabModel model, DateTime endTime)
+		private static void AddAnimals(TabModel model, DateTime endTime)
 		{
 			var chartView = new ChartView("Animals")
 			{
@@ -39,7 +39,6 @@ public class TabSampleChartTimeSeries : ITab
 				Color = Color.Red,
 			});
 			model.AddObject(chartView);
-			return endTime;
 		}
 
 		private static void AddToys(TabModel model, DateTime endTime)
@@ -52,7 +51,7 @@ public class TabSampleChartTimeSeries : ITab
 			model.AddObject(chartViewToys);
 		}
 
-		private static DateTime AddBirds(TabModel model, DateTime endTime)
+		private static void AddBirds(TabModel model, DateTime endTime)
 		{
 			var chartView = new ChartView("Birds")
 			{
@@ -62,7 +61,6 @@ public class TabSampleChartTimeSeries : ITab
 			chartView.AddSeries("Birds", ChartSamples.CreateTimeSeries(endTime, minValue: 9999999, maxValue: 10000000), seriesType: SeriesType.Average);
 
 			model.AddObject(chartView);
-			return endTime;
 		}
 	}
 }

@@ -11,10 +11,7 @@ public class TabSampleGridColumnOrdering : ITab
 			List<TestChild> items = [];
 			for (int i = 0; i < 2; i++)
 			{
-				TestChild item = new()
-				{
-				};
-
+				TestChild item = new();
 				items.Add(item);
 			}
 

@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls.Converters;
@@ -18,12 +19,11 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 	public static int EnableWordWrapMinStringLength { get; set; } = 64; // Don't enable wordwrap unless we have to (expensive and not always wanted)
 	public static int MaxRowScanProperties { get; set; } = 30;
 
-	public DataGrid DataGrid { get; }
 	public PropertyInfo PropertyInfo { get; }
 
 	public int MinDesiredWidth { get; set; } = 25;
-	public int MaxDesiredWidth { get; set; } = 500;
-	public int MaxDesiredHeight { get; set; } = 100;
+	public int MaxDesiredWidth { get; }
+	public int MaxDesiredHeight { get; } = 100;
 
 	public bool AutoSize { get; set; }
 	public bool WordWrap { get; set; }
@@ -36,9 +36,8 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 
 	public override string ToString() => PropertyInfo.Name;
 
-	public DataGridPropertyTextColumn(DataGrid dataGrid, PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
+	public DataGridPropertyTextColumn(PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
 	{
-		DataGrid = dataGrid;
 		PropertyInfo = propertyInfo;
 		IsReadOnly = isReadOnly;
 		MaxDesiredWidth = maxDesiredWidth;
@@ -175,7 +174,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 				Converter = new ValueToBackgroundBrushConverter(PropertyInfo),
 				Mode = BindingMode.OneWay,
 			};
-			cell.Bind(DataGridCell.BackgroundProperty, binding);
+			cell.Bind(TemplatedControl.BackgroundProperty, binding);
 
 			var foregroundBinding = new Binding
 			{

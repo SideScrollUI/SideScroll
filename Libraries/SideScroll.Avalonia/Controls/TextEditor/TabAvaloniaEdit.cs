@@ -43,18 +43,14 @@ public class TabAvaloniaEdit : Border
 {
 	public const int MaxAutoLoadSize = 1_000_000;
 
-	public TabInstance TabInstance { get; }
-
 	public string? Path { get; set; }
 	public ListProperty? ListProperty { get; set; }
 	public AvaloniaEdit.TextEditor TextEditor { get; protected set; }
 
 	public TextType TextType { get; set; }
 
-	public TabAvaloniaEdit(TabInstance tabInstance)
+	public TabAvaloniaEdit()
 	{
-		TabInstance = tabInstance;
-
 		MinWidth = 50; // WordWrap causes freezing below certain values
 		MaxWidth = 3000;
 

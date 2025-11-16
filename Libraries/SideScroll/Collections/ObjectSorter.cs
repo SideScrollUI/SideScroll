@@ -21,7 +21,7 @@ public class CustomComparer : IComparer
 
 		if (x is string xString && y is string yString)
 		{
-			return string.Compare(xString, yString);// , true); // performance hit?
+			return string.CompareOrdinal(xString, yString);// , true); // performance hit?
 		}
 
 		if (x is ICollection xCollection && y is ICollection yCollection)
@@ -45,7 +45,7 @@ public class CustomComparer : IComparer
 			return 1;
 		}
 
-		return string.Compare(x.ToString(), y.ToString());
+		return string.CompareOrdinal(x.ToString(), y.ToString());
 	}
 }
 

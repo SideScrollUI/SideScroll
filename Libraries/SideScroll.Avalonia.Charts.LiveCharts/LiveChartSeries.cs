@@ -64,11 +64,11 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 
 		if (listSeries.List is INotifyCollectionChanged notifyCollectionChanged)
 		{
-			notifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(delegate (object? sender, NotifyCollectionChangedEventArgs e)
+			notifyCollectionChanged.CollectionChanged += delegate (object? sender, NotifyCollectionChangedEventArgs e)
 			{
 				// Can we remove this later when disposing?
 				SeriesChanged(listSeries, e);
-			});
+			};
 		}
 	}
 
@@ -91,7 +91,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		bool prevNan2 = false;
 		foreach (LiveChartPoint dataPoint in dataPoints)
 		{
-			bool nan = dataPoint.Y == null || double.IsNaN(dataPoint.Y.Value);
+			bool nan = dataPoint.Y is null or double.NaN;
 			if (prevNan2 && !prevNan1 && nan)
 				return true;
 

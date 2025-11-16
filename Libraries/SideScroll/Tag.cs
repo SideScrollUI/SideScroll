@@ -56,7 +56,7 @@ public class Tag
 	}
 }
 
-public class TaggedException(string text, params Tag[] tags) : Exception()
+public class TaggedException(string text, params Tag[] tags) : Exception
 {
 	public string Text => text;
 	public Tag[] Tags => tags;

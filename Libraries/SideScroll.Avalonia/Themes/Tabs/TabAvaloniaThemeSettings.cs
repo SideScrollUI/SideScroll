@@ -205,7 +205,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 		{
 			try
 			{
-				string? json = await ClipboardUtils.TryGetTextAsync(_themeForm)!;
+				string? json = await ClipboardUtils.TryGetTextAsync(_themeForm);
 				if (json == null)
 				{
 					call.TaskInstance!.ShowMessage("No clipboard content found");

@@ -39,7 +39,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	public IList? List { get; set; }
 	public Type ElementType { get; protected set; }
 
-	public bool AutoGenerateColumns { get; set; } = true;
+	public bool AutoGenerateColumns { get; set; }
 
 	public DataGrid DataGrid { get; set; }
 	public TabSearch? SearchControl { get; set; }
@@ -48,7 +48,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
-	private Dictionary<string, DataGridColumn> _columnObjects = [];
 	private Dictionary<DataGridColumn, string> _columnNames = [];
 	private List<PropertyInfo> _columnProperties = []; // makes filtering faster, could change other Dictionaries strings to PropertyInfo
 
@@ -95,7 +94,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	public override string ToString() => TabModel.Name;
 
-	public TabDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns, TabDataSettings? tabDataSettings = null, TabModel? model = null)
+	public TabDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns = true, TabDataSettings? tabDataSettings = null, TabModel? model = null)
 	{
 		TabInstance = tabInstance;
 		TabModel = model ?? TabInstance.Model;
@@ -581,7 +580,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	private void AddColumns()
 	{
-		_columnObjects = [];
 		_columnNames = [];
 		_columnProperties = [];
 
@@ -668,7 +666,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			}
 			else
 			{
-				var textColumn = new DataGridPropertyTextColumn(DataGrid, propertyInfo, isReadOnly, maxDesiredWidth)
+				var textColumn = new DataGridPropertyTextColumn(propertyInfo, isReadOnly, maxDesiredWidth)
 				{
 					StyleCells = styleCells,
 				};
@@ -697,7 +695,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 
 		DataGrid.Columns.Add(column);
-		_columnObjects[propertyInfo.Name] = column;
 		_columnNames[column] = propertyInfo.Name;
 		_columnProperties.Add(propertyInfo);
 

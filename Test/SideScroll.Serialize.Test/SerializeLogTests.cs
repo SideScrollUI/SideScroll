@@ -26,19 +26,13 @@ public class SerializeLogTests : SerializeBaseTest
 		public enum LogType
 		{
 			Debug,
-			Tab,
-			Call,
 			Info,
 			Warn,
 			Error,
-			Alert
 		}
-		//public event PropertyChangedEventHandler PropertyChanged;
-		//private Settings settings = new Settings();
-		// Change everything to tags? const for created/message/childLog? harder to use then
 		public DateTime Created { get; set; } = DateTime.Now;
 		public LogType Type { get; set; }
-		public string Text = "Log";// { get; set; }
+		public string Text { get; set; } = "Log";
 		public int Entries { get; set; }
 	}
 

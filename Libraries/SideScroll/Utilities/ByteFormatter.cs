@@ -51,7 +51,7 @@ public class ByteFormatter : ICustomFormatter
 	{
 		if (arg is long value)
 		{
-			return Format(value, 1);
+			return Format(value);
 		}
 
 		return arg?.ToString() ?? "(null)";

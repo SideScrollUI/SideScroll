@@ -152,9 +152,7 @@ public class TabViewer : Grid
 
 		try
 		{
-			LinkUri? linkUri = await Project.Linker.AddLinkAsync(call, bookmark);
-			if (linkUri == null)
-				return;
+			LinkUri linkUri = await Project.Linker.AddLinkAsync(call, bookmark);
 
 			LinkManager.Instance?.Created.AddNew(call, linkUri, bookmark);
 			await ClipboardUtils.SetTextAsync(this, linkUri.ToString());

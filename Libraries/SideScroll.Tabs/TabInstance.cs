@@ -52,11 +52,11 @@ public class TabCreatorAsync(ITabCreatorAsync creatorAsync) : TabInstance, ITabA
 
 	public async Task LoadAsync(Call call, TabModel model)
 	{
-		ITab? iTab = await CreatorAsync.CreateAsync(call);
-		if (iTab == null)
+		ITab? tab = await CreatorAsync.CreateAsync(call);
+		if (tab == null)
 			return;
 
-		_innerChildInstance = CreateChildTab(iTab);
+		_innerChildInstance = CreateChildTab(tab);
 		if (_innerChildInstance is ITabAsync tabAsync)
 		{
 			await tabAsync.LoadAsync(call, model);
@@ -183,15 +183,15 @@ public class TabInstance : IDisposable
 		InitializeContext();
 	}
 
-	public TabInstance CreateChildTab(ITab iTab)
+	public TabInstance CreateChildTab(ITab tab)
 	{
-		TabInstance tabInstance = iTab.Create();
+		TabInstance tabInstance = tab.Create();
 
 		if (tabInstance.Project.LinkType == null)
 		{
 			tabInstance.Project = Project;
 		}
-		tabInstance.iTab = iTab;
+		tabInstance.iTab = tab;
 		tabInstance.ParentTabInstance = this;
 		//tabInstance.taskInstance = taskInstance.AddSubTask(taskInstance.call); // too slow?
 		return tabInstance;
@@ -862,7 +862,7 @@ public class TabInstance : IDisposable
 		if (CustomPath != null)
 		{
 			// It's better to return the default constructor so the Tab autosizes instead of using the saved defaults which might have a width specified
-			return Data.Cache.LoadOrCreate<TabViewSettings>(CustomPath, TaskInstance.Call)!;
+			return Data.Cache.LoadOrCreate<TabViewSettings>(CustomPath, TaskInstance.Call);
 		}
 
 		Type type = GetType();

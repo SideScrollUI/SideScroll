@@ -76,7 +76,7 @@ public class LazyClass
 
 		foreach (TypeRepoObject.PropertyRepo propertyRepo in propertyRepos)
 		{
-			PropertyInfo propertyInfo = propertyRepo.PropertySchema.PropertyInfo!;
+			PropertyInfo propertyInfo = propertyRepo.PropertySchema.PropertyInfo;
 			if (propertyInfo.CanRead == false || propertyInfo.CanWrite == false)
 				continue;
 

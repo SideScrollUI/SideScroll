@@ -176,7 +176,7 @@ public class HttpCache : IDisposable
 		}
 	}
 
-	public bool Contains(string uri)
+	public bool ContainsKey(string uri)
 	{
 		return _cache.ContainsKey(uri);
 	}

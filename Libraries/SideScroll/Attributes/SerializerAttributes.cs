@@ -4,8 +4,8 @@ namespace SideScroll.Attributes;
 /// Attributes that control SideScroll's serialization, cloning, and data export behavior.
 /// </summary>
 /// <remarks>
-/// <b>Serialization:</b> Public instance fields/properties are included by default. Use <see cref="SerializedAttribute"/> 
-/// or <see cref="UnserializedAttribute"/> to override defaults.
+/// <b>Serialization:</b> Public instance fields/properties are included by default. Use <see cref="UnserializedAttribute"/> 
+/// to override defaults.
 /// <para>
 /// <b>Cloning:</b> Deep cloner handles circular references. Use <see cref="CloneReferenceAttribute"/> to skip deep-copying.
 /// </para>

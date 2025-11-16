@@ -78,7 +78,8 @@ public class TabComboBox : ComboBox
 
 	private void SelectDefaultValue()
 	{
-		if ((Property?.Object != null && SelectedItem != null) || Items.GetEnumerator().MoveNext() == false) return;
+		using var enumerator = Items.GetEnumerator();
+		if ((Property?.Object != null && SelectedItem != null) || enumerator.MoveNext() == false) return;
 
 		// Check for null value match
 		object? value = Property!.Value;
@@ -91,10 +92,6 @@ public class TabComboBox : ComboBox
 			}
 		}
 
-		var enumerator = Items.GetEnumerator();
-		if (enumerator.MoveNext())
-		{
-			SelectedItem = enumerator.Current;
-		}
+		SelectedItem = enumerator.Current;
 	}
 }

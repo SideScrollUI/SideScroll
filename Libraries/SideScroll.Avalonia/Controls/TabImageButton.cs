@@ -269,7 +269,7 @@ public class TabImageButton : Button, IDisposable
 		return StartTask(taskDelegate);
 	}
 
-	private TaskInstance? StartTask(TaskCreator taskCreator)
+	private TaskInstance StartTask(TaskCreator taskCreator)
 	{
 		if (TabInstance != null)
 		{

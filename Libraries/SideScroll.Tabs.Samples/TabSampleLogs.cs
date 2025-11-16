@@ -56,7 +56,7 @@ public class TabSampleLogs : ITab
 		{
 			Log logChild = call.Log.Call("Child");
 			CancellationToken cancelToken = call.TaskInstance!.CancelToken;
-			for (int i = 0; !cancelToken.IsCancellationRequested; i++)
+			for (int i = 0; i < 60 && !cancelToken.IsCancellationRequested; i++)
 			{
 				AddNextEntry(call, logChild);
 				Thread.Sleep(1000);
@@ -67,7 +67,7 @@ public class TabSampleLogs : ITab
 		{
 			Log logChild = call.Log.Call("Child");
 			CancellationToken token = call.TaskInstance!.CancelToken;
-			for (int i = 0; !token.IsCancellationRequested; i++)
+			for (int i = 0; i < 60 && !token.IsCancellationRequested; i++)
 			{
 				AddNextEntry(call, logChild);
 				await Task.Delay(1000);

@@ -61,9 +61,6 @@ public class BookmarkNavigator : INotifyPropertyChanged
 
 	public void Append(Bookmark bookmark, bool makeCurrent)
 	{
-		if (bookmark == null)
-			return;
-
 		// Current isn't visible, so doing this here gets the right count
 		TrimHistory();
 

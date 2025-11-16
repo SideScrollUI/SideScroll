@@ -14,7 +14,7 @@ public class TabTextFile(FilePath filePath) : ITab
 	{
 		public override void LoadUI(Call call, TabModel model)
 		{
-			var tabAvaloniaEdit = new TabAvaloniaEdit(this);
+			var tabAvaloniaEdit = new TabAvaloniaEdit();
 			tabAvaloniaEdit.Load(tab.FilePath.Path);
 			model.AddObject(tabAvaloniaEdit, true);
 		}

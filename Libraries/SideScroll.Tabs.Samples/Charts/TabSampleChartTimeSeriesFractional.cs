@@ -22,7 +22,7 @@ public class TabSampleChartTimeSeriesFractional : ITab
 			AddDecimalPrecisionChart(model, endTime);
 		}
 
-		private static DateTime AddFractionChart(TabModel model, DateTime endTime)
+		private static void AddFractionChart(TabModel model, DateTime endTime)
 		{
 			var chartView = new ChartView("Fractional Times and Values")
 			{
@@ -40,10 +40,9 @@ public class TabSampleChartTimeSeriesFractional : ITab
 				Color = Color.Red,
 			});
 			model.AddObject(chartView);
-			return endTime;
 		}
 
-		private static DateTime AddDecimalPrecisionChart(TabModel model, DateTime endTime)
+		private static void AddDecimalPrecisionChart(TabModel model, DateTime endTime)
 		{
 			var chartView = new ChartView("Decimal Precision")
 			{
@@ -54,7 +53,6 @@ public class TabSampleChartTimeSeriesFractional : ITab
 			chartView.AddSeries("Percent", ChartSamples.CreateTimeSeries(endTime, minValue: 99.9999, maxValue: 100, sampleDuration: SampleDuration), seriesType: SeriesType.Average);
 
 			model.AddObject(chartView);
-			return endTime;
 		}
 	}
 }

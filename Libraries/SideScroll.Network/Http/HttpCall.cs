@@ -13,11 +13,7 @@ public class HttpCall(Call call)
 	public virtual async Task<string?> GetStringAsync(string uri, string? accept = null)
 	{
 		byte[] bytes = await GetResponseAsync(uri, accept);
-		if (bytes != null)
-		{
-			return Encoding.ASCII.GetString(bytes);
-		}
-		return null;
+		return Encoding.ASCII.GetString(bytes);
 	}
 
 	public virtual async Task<byte[]> GetBytesAsync(string uri)

@@ -60,7 +60,7 @@ public class DataRepoTests : SerializeBaseTest
 			instance.Save(Call, i.ToString(), i);
 		}
 
-		var pageView = instance.LoadPageView(Call, true)!;
+		var pageView = instance.LoadPageView(Call);
 		pageView.PageSize = pageSize;
 
 		// Order is unknown without indexing
@@ -81,7 +81,7 @@ public class DataRepoTests : SerializeBaseTest
 			instance.Save(Call, i.ToString(), i);
 		}
 
-		DataPageView<int> pageView = instance.LoadPageView(Call, true)!;
+		DataPageView<int> pageView = instance.LoadPageView(Call);
 		pageView.PageSize = pageSize;
 
 		var page1 = pageView.Next(Call).ToList();

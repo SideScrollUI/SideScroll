@@ -80,7 +80,7 @@ public class ScreenCapture : Grid
 
 	private void AddToolbar()
 	{
-		var toolbar = new ScreenCaptureToolbar(TabViewer);
+		ScreenCaptureToolbar toolbar = new();
 		toolbar.ButtonCopyClipboard?.AddAsync(CopyClipboardAsync);
 		toolbar.ButtonSave.AddAsync(SaveAsync);
 		toolbar.ButtonOpenFolder.Add(OpenFolder);

@@ -71,7 +71,7 @@ public abstract class TypeRepo : IDisposable
 
 	// Loading Only
 
-	public int Cloned { get; set; } = 0; // for stats
+	public int Cloned { get; set; } // For stats
 
 	public abstract void SaveObject(BinaryWriter writer, object obj);
 	public virtual void LoadObjectData(object obj) { }

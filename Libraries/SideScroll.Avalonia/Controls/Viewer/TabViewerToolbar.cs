@@ -24,11 +24,11 @@ public class TabViewerToolbar : TabControlToolbar
 		// HotKeys are handled in TabViewer
 		ButtonBack = AddButton("Back (Alt + Left)", Icons.Svg.LeftArrow);
 		ButtonBack.BindIsEnabled(nameof(BookmarkNavigator.CanSeekBackward), TabViewer.Project.Navigator);
-		ButtonBack.Add((call) => TabViewer.SeekBackward());
+		ButtonBack.Add(_ => TabViewer.SeekBackward());
 
 		ButtonForward = AddButton("Forward (Alt + Right)", Icons.Svg.RightArrow);
 		ButtonForward.BindIsEnabled(nameof(BookmarkNavigator.CanSeekForward), TabViewer.Project.Navigator);
-		ButtonForward.Add((call) => TabViewer.SeekForward());
+		ButtonForward.Add(_ => TabViewer.SeekForward());
 		
 		AddSeparator();
 		ButtonRefresh = AddButton("Refresh (Ctrl + R)", Icons.Svg.Refresh);

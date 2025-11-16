@@ -82,11 +82,8 @@ public class DataGridContextMenu : ContextMenu, IDisposable
 
 	private async void MenuItemCopyDataGrid_Click(object? sender, RoutedEventArgs e)
 	{
-		string? text = DataGrid.ToStringTable();
-		if (text != null)
-		{
-			await ClipboardUtils.SetTextAsync(DataGrid, text);
-		}
+		string text = DataGrid.ToStringTable();
+		await ClipboardUtils.SetTextAsync(DataGrid, text);
 	}
 
 	private async void MenuItemCopyCellContents_Click(object? sender, RoutedEventArgs e)
@@ -131,11 +128,8 @@ public class DataGridContextMenu : ContextMenu, IDisposable
 	{
 		if (Column is DataGridBoundColumn column)
 		{
-			string? text = DataGrid.ColumnToStringTable(column);
-			if (text != null)
-			{
-				await ClipboardUtils.SetTextAsync(DataGrid, text);
-			}
+			string text = DataGrid.ColumnToStringTable(column);
+			await ClipboardUtils.SetTextAsync(DataGrid, text);
 		}
 	}
 
@@ -150,20 +144,14 @@ public class DataGridContextMenu : ContextMenu, IDisposable
 
 	private async void MenuItemCopySelected_Click(object? sender, RoutedEventArgs e)
 	{
-		string? text = DataGrid.SelectedToString();
-		if (text != null)
-		{
-			await ClipboardUtils.SetTextAsync(DataGrid, text);
-		}
+		string text = DataGrid.SelectedToString();
+		await ClipboardUtils.SetTextAsync(DataGrid, text);
 	}
 
 	private async void MenuItemCopySelectedCsv_Click(object? sender, RoutedEventArgs e)
 	{
-		string? text = DataGrid.SelectedToCsv();
-		if (text != null)
-		{
-			await ClipboardUtils.SetTextAsync(DataGrid, text);
-		}
+		string text = DataGrid.SelectedToCsv();
+		await ClipboardUtils.SetTextAsync(DataGrid, text);
 	}
 
 	private async void MenuItemCopySelectedColumn_Click(object? sender, RoutedEventArgs e)
@@ -177,11 +165,8 @@ public class DataGridContextMenu : ContextMenu, IDisposable
 
 	private async void MenuItemCopyDataGridCsv_Click(object? sender, RoutedEventArgs e)
 	{
-		string? text = DataGrid.ToCsv();
-		if (text != null)
-		{
-			await ClipboardUtils.SetTextAsync(DataGrid, text);
-		}
+		string text = DataGrid.ToCsv();
+		await ClipboardUtils.SetTextAsync(DataGrid, text);
 	}
 
 	public void Dispose()

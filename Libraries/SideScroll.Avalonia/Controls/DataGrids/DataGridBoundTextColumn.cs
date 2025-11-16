@@ -119,22 +119,16 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		var menuItemCopyDataGrid = new TabMenuItem("Copy - _DataGrid");
 		menuItemCopyDataGrid.Click += async delegate
 		{
-			string? text = DataGrid.ToStringTable();
-			if (text != null)
-			{
-				await ClipboardUtils.SetTextAsync(DataGrid, text);
-			}
+			string text = DataGrid.ToStringTable();
+			await ClipboardUtils.SetTextAsync(DataGrid, text);
 		};
 		list.Add(menuItemCopyDataGrid);
 
 		var menuItemCopyDataGridCsv = new TabMenuItem("Copy - DataGrid - C_SV");
 		menuItemCopyDataGridCsv.Click += async delegate
 		{
-			string? text = DataGrid.ToCsv();
-			if (text != null)
-			{
-				await ClipboardUtils.SetTextAsync(DataGrid, text);
-			}
+			string text = DataGrid.ToCsv();
+			await ClipboardUtils.SetTextAsync(DataGrid, text);
 		};
 		list.Add(menuItemCopyDataGridCsv);
 

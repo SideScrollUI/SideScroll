@@ -28,6 +28,6 @@ public class TabSampleNullableArray : ITab
 		public int SmallNumber { get; set; }
 		public long BigNumber { get; set; }
 
-		public override readonly string ToString() => SmallNumber.ToString();
+		public readonly override string ToString() => SmallNumber.ToString();
 	}
 }

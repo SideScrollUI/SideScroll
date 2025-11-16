@@ -118,7 +118,7 @@ public static class StringExtensions
 		var indexes = new List<int>();
 		for (int index = 0; ; index += value.Length)
 		{
-			index = str.IndexOf(value, index);
+			index = str.IndexOf(value, index, StringComparison.Ordinal);
 			if (index == -1)
 				return indexes;
 
@@ -135,7 +135,7 @@ public static class StringExtensions
 
 		for (int index = 0; ; index += value.Length)
 		{
-			index = str.IndexOf(value, index);
+			index = str.IndexOf(value, index, StringComparison.Ordinal);
 			if (index == -1)
 				break;
 

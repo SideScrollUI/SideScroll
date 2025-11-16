@@ -33,7 +33,7 @@ public class ListByte(int index, byte b)
 			using FileStream fileStream = File.OpenRead(path);
 
 			var buffer = new byte[MaxBytes];
-			fileStream.Read(buffer, 0, buffer.Length);
+			fileStream.ReadExactly(buffer, 0, buffer.Length);
 			return Create(buffer);
 		}
 		else

@@ -39,13 +39,13 @@ public class Serializer : IDisposable
 
 	private bool _disposed;
 
-	public struct LoadItem
+	private struct LoadItem
 	{
 		public TypeRepo TypeRepo;
 		public int Index;
 		public bool Preloaded; // set after IPreloadRepo preloads data
 
-		public override readonly string ToString() => $"{TypeRepo} - {Index}";
+		public readonly override string ToString() => $"{TypeRepo} - {Index}";
 	}
 
 	private readonly Queue<LoadItem> _loadQueue = new();
@@ -288,10 +288,7 @@ public class Serializer : IDisposable
 				typeRepo.ObjectsLoaded = TypeRepoString.Objects.ToArray();
 			}
 
-			if (typeRepo != null)
-			{
-				AddTypeRepo(typeRepo);
-			}
+			AddTypeRepo(typeRepo);
 		}
 	}
 
@@ -306,9 +303,6 @@ public class Serializer : IDisposable
 
 			foreach (TypeRepo typeRepo in TypeRepos)
 			{
-				if (typeRepo == null) // if we want to save after opening?
-					continue;
-
 				if (!typeRepo.TypeSchema.CanReference)
 				{
 					primitives.Add(typeRepo);

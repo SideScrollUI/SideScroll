@@ -84,8 +84,6 @@ public abstract class SerializerFile(string basePath, string name = "")
 
 	public SerializerHeader LoadHeader(Call call)
 	{
-		call ??= new();
-
 		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Loading header", new Tag("Name", Name));
 
 		var memoryStream = new MemoryStream(File.ReadAllBytes(HeaderPath!));

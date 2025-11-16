@@ -25,8 +25,6 @@ public class TabChartUpdating : ITab
 
 	public class Instance : TabInstance
 	{
-		public const int SampleCount = 24;
-
 		private readonly Random _random = new();
 
 		private TabLiveChart? _chart;
@@ -57,7 +55,7 @@ public class TabChartUpdating : ITab
 			DateTime dateTime = DateTime.Now.Trim();
 			for (int i = 0; i < 2; i++)
 			{
-				var series = ChartSamples.CreateTimeSeries(dateTime, TimeSpan.FromHours(1), SampleCount);
+				var series = ChartSamples.CreateTimeSeries(dateTime, TimeSpan.FromHours(1));
 				chartView.AddSeries($"Series {2 * i + _random.Next() % 2}", series, seriesType: SeriesType.Average);
 			}
 

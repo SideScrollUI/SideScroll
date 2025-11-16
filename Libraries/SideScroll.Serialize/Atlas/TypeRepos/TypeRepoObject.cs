@@ -57,7 +57,7 @@ public class TypeRepoObject : TypeRepo
 			{
 				object? valueObject = TypeRepo!.LoadObjectRef();
 				// todo: 36% of current cpu usage, break into explicit operators? (is that even possible?)
-				FieldSchema.FieldInfo!.SetValue(obj, valueObject); // else set to null?
+				FieldSchema.FieldInfo.SetValue(obj, valueObject); // else set to null?
 			}
 			else
 			{
@@ -126,11 +126,11 @@ public class TypeRepoObject : TypeRepo
 				if (TypeRepo.TypeSchema.IsPrimitive)
 				{
 					// todo: construct temp object and store default instead for speed?
-					dynamic? currentValue = PropertySchema.PropertyInfo!.GetValue(obj);
+					dynamic? currentValue = PropertySchema.PropertyInfo.GetValue(obj);
 					if ((dynamic?)valueObject == currentValue)
 						return;
 				}
-				PropertySchema.PropertyInfo!.SetValue(obj, valueObject);
+				PropertySchema.PropertyInfo.SetValue(obj, valueObject);
 			}
 		}
 
@@ -224,7 +224,7 @@ public class TypeRepoObject : TypeRepo
 			{
 				if (!propertySchema.IsWriteable) continue;
 
-				MethodInfo getMethod = propertySchema.PropertyInfo!.GetGetMethod(false)!;
+				MethodInfo getMethod = propertySchema.PropertyInfo.GetGetMethod(false)!;
 				if (getMethod.IsVirtual) return true;
 			}
 			return false;
@@ -272,7 +272,7 @@ public class TypeRepoObject : TypeRepo
 		}
 		else
 		{
-			Type fieldType = fieldSchema.FieldInfo!.FieldType.GetNonNullableType();
+			Type fieldType = fieldSchema.FieldInfo.FieldType.GetNonNullableType();
 			typeRepo = Serializer.GetOrCreateRepo(log, fieldType);
 		}
 		fieldSchema.FieldTypeSchema = typeRepo.TypeSchema;
@@ -450,7 +450,7 @@ public class TypeRepoObject : TypeRepo
 			if (!fieldSchema.IsReadable)
 				continue;
 
-			object? fieldValue = fieldSchema.FieldInfo!.GetValue(obj);
+			object? fieldValue = fieldSchema.FieldInfo.GetValue(obj);
 			Serializer.AddObjectRef(fieldValue);
 		}
 	}
@@ -459,7 +459,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		foreach (FieldRepo fieldRepo in FieldRepos)
 		{
-			FieldInfo fieldInfo = fieldRepo.FieldSchema.FieldInfo!;
+			FieldInfo fieldInfo = fieldRepo.FieldSchema.FieldInfo;
 			object? fieldValue = fieldInfo.GetValue(obj);
 			Serializer.WriteObjectRef(fieldRepo.FieldSchema.NonNullableType!, fieldValue, writer);
 		}
@@ -471,7 +471,7 @@ public class TypeRepoObject : TypeRepo
 		{
 			if (!propertySchema.ShouldWrite) continue;
 
-			object? propertyValue = propertySchema.PropertyInfo!.GetValue(obj);
+			object? propertyValue = propertySchema.PropertyInfo.GetValue(obj);
 			Serializer.AddObjectRef(propertyValue);
 		}
 
@@ -498,7 +498,7 @@ public class TypeRepoObject : TypeRepo
 	{
 		foreach (PropertyRepo propertyRepo in PropertyRepos)
 		{
-			PropertyInfo propertyInfo = propertyRepo.PropertySchema.PropertyInfo!;
+			PropertyInfo propertyInfo = propertyRepo.PropertySchema.PropertyInfo;
 			object? propertyValue = propertyInfo.GetValue(obj);
 			Serializer.WriteObjectRef(propertyRepo.PropertySchema.NonNullableType!, propertyValue, writer);
 		}
@@ -516,7 +516,7 @@ public class TypeRepoObject : TypeRepo
 		{
 			if (!fieldSchema.IsReadable) continue;
 
-			object? fieldValue = fieldSchema.FieldInfo!.GetValue(source);
+			object? fieldValue = fieldSchema.FieldInfo.GetValue(source);
 			Serializer.AddObjectRef(fieldValue);
 			object? clone = Serializer.Clone(fieldValue);
 			fieldSchema.FieldInfo.SetValue(dest, clone);
@@ -529,7 +529,7 @@ public class TypeRepoObject : TypeRepo
 		{
 			if (!propertySchema.ShouldWrite) continue;
 
-			object? propertyValue = propertySchema.PropertyInfo!.GetValue(source);
+			object? propertyValue = propertySchema.PropertyInfo.GetValue(source);
 			Serializer.AddObjectRef(propertyValue);
 			object? clone = Serializer.Clone(propertyValue);
 			propertySchema.PropertyInfo.SetValue(dest, clone); // else set to null?

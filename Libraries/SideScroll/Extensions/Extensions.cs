@@ -14,7 +14,7 @@ public static class SideScrollExtensions
 	{
 		return xmlNode.ChildNodes
 			.OfType<XmlNode>()
-			.Where(xmlNode => xmlNode.Name == name)
+			.Where(childNode => childNode.Name == name)
 			.ToArray();
 	}
 

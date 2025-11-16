@@ -1,4 +1,3 @@
-using Avalonia.Controls;
 using SideScroll.Attributes;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Themes.Tabs;

@@ -110,9 +110,7 @@ public class TabViewTitle : Border, IDisposable
 		{
 			Bookmark bookmark = TabInstance.CreateBookmark();
 			bookmark.BookmarkType = BookmarkType.Tab;
-			LinkUri? linkUri = await TabInstance.Project.Linker.AddLinkAsync(new Call(), bookmark);
-			if (linkUri == null)
-				return;
+			LinkUri linkUri = await TabInstance.Project.Linker.AddLinkAsync(new Call(), bookmark);
 
 			await ClipboardUtils.SetTextAsync(this, linkUri.ToString());
 			AvaloniaUtils.ShowFlyout(this, flyout, "Link copied to clipboard");

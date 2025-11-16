@@ -5,14 +5,14 @@ namespace SideScroll.Utilities;
 /// <summary>
 /// Represents a file path
 /// </summary>
-public struct FilePath(string path)
+public readonly struct FilePath(string path)
 {
 	/// <summary>
 	/// Gets the file path string
 	/// </summary>
-	public readonly string Path => path;
+	public string Path => path;
 
-	public override readonly string ToString() => path;
+	public override string ToString() => path;
 }
 
 /// <summary>
@@ -135,6 +135,7 @@ public static class FileUtils
 		{
 			using FileStream stream = fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.None);
 			stream.Close();
+			return false;
 		}
 		catch (DirectoryNotFoundException)
 		{
@@ -148,8 +149,6 @@ public static class FileUtils
 		{
 			return true;
 		}
-
-		return false;
 	}
 
 	/// <summary>
@@ -169,9 +168,8 @@ public static class FileUtils
 		}
 		catch (Exception)
 		{
+			return false;
 		}
-
-		return false;
 	}
 
 	/// <summary>
@@ -187,9 +185,8 @@ public static class FileUtils
 		}
 		catch (Exception)
 		{
+			return false;
 		}
-
-		return false;
 	}
 
 	/// <summary>
@@ -207,9 +204,8 @@ public static class FileUtils
 		}
 		catch (Exception)
 		{
+			return false;
 		}
-
-		return false;
 	}
 
 	/// <summary>

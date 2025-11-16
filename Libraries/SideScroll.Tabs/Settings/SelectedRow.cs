@@ -25,8 +25,8 @@ public class SelectedRow : IEquatable<SelectedRow>
 
 	public SelectedRow(object obj)
 	{
-		Object = obj;
 		if (obj == null) return; // obj can still be null
+		Object = obj;
 
 		Label = obj.ToString();
 

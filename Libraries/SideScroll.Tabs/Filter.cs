@@ -14,7 +14,7 @@ public class FilterExpression
 
 	public bool Matches(string valueUppercase)
 	{
-		int index = valueUppercase.IndexOf(TextUppercase!);
+		int index = valueUppercase.IndexOf(TextUppercase!, StringComparison.Ordinal);
 		if (index >= 0)
 		{
 			if (MatchWord)

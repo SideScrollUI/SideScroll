@@ -262,7 +262,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void TabChartLegendItem_PointerEntered(object? sender, PointerEventArgs e)
 	{
-		Legend.UnhighlightAll(false);
+		Legend.UnhighlightAll();
 		Highlight = true;
 	}
 

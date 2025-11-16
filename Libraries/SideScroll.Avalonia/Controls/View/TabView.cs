@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -508,7 +507,7 @@ public class TabView : Grid, IDisposable
 		{
 			var tabData = new TabDataGrid(Instance, iList, true, TabViewSettings.GetData(index));
 			tabData.OnSelectionChanged += ParentListSelectionChanged;
-			_tabParentControls!.AddControl(tabData, true, SeparatorType.Splitter);
+			_tabParentControls!.AddControl(tabData, true);
 			TabDatas.Add(tabData);
 			index++;
 		}

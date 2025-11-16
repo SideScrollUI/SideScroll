@@ -243,8 +243,6 @@ public abstract class TabChartLegend<TSeries> : Grid
 
 	public virtual void UpdateVisibleSeries()
 	{
-		if (TabChart == null) return;
-
 		foreach (TabChartLegendItem<TSeries> legendItem in LegendItems)
 		{
 			legendItem.UpdateVisible();

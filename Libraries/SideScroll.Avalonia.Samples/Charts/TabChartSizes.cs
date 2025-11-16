@@ -13,14 +13,12 @@ public class TabChartSizes : ITab
 
 	public class Instance : TabInstance
 	{
-		public const int SampleCount = 24;
-
 		public override void LoadUI(Call call, TabModel model)
 		{
 			model.MinDesiredWidth = 1000;
 
 			DateTime dateTime = DateTime.Now.Trim();
-			var series = ChartSamples.CreateTimeSeries(dateTime, TimeSpan.FromHours(6), SampleCount);
+			var series = ChartSamples.CreateTimeSeries(dateTime, TimeSpan.FromHours(6));
 
 			var chartView = new ChartView
 			{

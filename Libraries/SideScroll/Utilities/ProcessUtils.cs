@@ -109,8 +109,9 @@ public static class ProcessUtils
 				Process.Start("open", folder);
 			}
 		}
-		catch
+		catch (Exception e)
 		{
+			Debug.WriteLine(e);
 		}
 	}
 
