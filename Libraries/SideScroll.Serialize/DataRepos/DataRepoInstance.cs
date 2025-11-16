@@ -138,14 +138,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 				.Select(path => path);
 		}
 
-		if (ascending)
-		{
-			return enumerable;
-		}
-		else
-		{
-			return enumerable.Reverse();
-		}
+		return ascending ? enumerable : enumerable.Reverse();
 	}
 
 	public IEnumerable<DataItem<T>> LoadAllDataItems(Call call, bool ascending = true)

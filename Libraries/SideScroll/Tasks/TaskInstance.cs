@@ -18,7 +18,8 @@ public class TaskInstance : INotifyPropertyChanged
 	public event EventHandler<ShowMessageEventArgs>? OnShowMessage;
 	//public event EventHandler<EventArgs> OnComplete;
 
-	public Action? OnComplete;
+	[HiddenColumn]
+	public Action? OnComplete { get; set; }
 
 	private string? _label;
 	public string? Label

@@ -78,23 +78,26 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 				collectionView.Refresh();
 			}
 			else*/
-			if (DataGrid != null)
-			{
-				CollectionView = new DataGridCollectionView(List);
+			CollectionView = new DataGridCollectionView(List);
 
-				DataGrid.ItemsSource = CollectionView; // DataGrid autoselects on assignment :(
+			DataGrid.ItemsSource = CollectionView; // DataGrid autoselects on assignment :(
 
-				if (TabModel.AutoSelectSaved == AutoSelectType.None && !TabModel.AutoSelectDefault)
-					ClearSelection();
-				else
-					LoadSettings();
+			if (TabModel.AutoSelectSaved == AutoSelectType.None && !TabModel.AutoSelectDefault)
+				ClearSelection();
+			else
+				LoadSettings();
 
-				Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
-			}
+			Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 		}
 	}
 
 	public override string ToString() => TabModel.Name;
+
+	static TabDataGrid()
+	{
+		// DataGridRow event triggers before DataGridCell :(
+		PointerPressedEvent.AddClassHandler<DataGridRow>(DataGridRow_PointerPressed, RoutingStrategies.Tunnel, true);
+	}
 
 	public TabDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns = true, TabDataSettings? tabDataSettings = null, TabModel? model = null)
 	{
@@ -108,39 +111,11 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		ColumnDefinitions = new ColumnDefinitions("*");
 		RowDefinitions = new RowDefinitions("Auto,*");
 
-		Initialize();
-	}
-
-	static TabDataGrid()
-	{
-		// DataGridRow event triggers before DataGridCell :(
-		PointerPressedEvent.AddClassHandler<DataGridRow>(DataGridRow_PointerPressed, RoutingStrategies.Tunnel, true);
-	}
-
-	[MemberNotNull(nameof(ElementType), nameof(DataGrid))]
-	protected void Initialize()
-	{
 		_disableSaving++;
 
 		Type listType = List!.GetType();
 		ElementType = listType.GetElementTypeForAll()!;
 
-		InitializeControls();
-		AddListUpdatedDispatcher();
-
-		Dispatcher.UIThread.Post(() =>
-		{
-			_disableSaving--;
-			if (_selectionModified)
-			{
-				TabInstance.SaveTabSettings(); // selection has probably changed
-			}
-		}, DispatcherPriority.Background);
-	}
-
-	[MemberNotNull(nameof(DataGrid))]
-	private void InitializeControls()
-	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
 		VerticalAlignment = VerticalAlignment.Stretch;
 
@@ -153,6 +128,17 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		AddDataGrid();
 
 		LoadSettings();
+
+		AddListUpdatedDispatcher();
+
+		Dispatcher.UIThread.Post(() =>
+		{
+			_disableSaving--;
+			if (_selectionModified)
+			{
+				TabInstance.SaveTabSettings(); // selection has probably changed
+			}
+		}, DispatcherPriority.Background);
 	}
 
 	private void AddSearch()
@@ -264,7 +250,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	protected void AutoSizeColumns()
 	{
 		// Only works with Stretch right now
-		if (DataGrid == null || HorizontalAlignment != HorizontalAlignment.Stretch)
+		if (HorizontalAlignment != HorizontalAlignment.Stretch)
 			return;
 
 		var autoSizeColumns = DataGrid.Columns
@@ -1065,7 +1051,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	protected void ScrollIntoView(object? value)
 	{
 		// DataGrid.IsInitialized is unreliable and can still be false while showing
-		if (value == null || DataGrid == null || !DataGrid.IsEffectivelyVisible)
+		if (value == null || !DataGrid.IsEffectivelyVisible)
 			return;
 
 		try
@@ -1252,21 +1238,18 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 		_notifyItemChangedStopwatch.Stop();
 
-		if (DataGrid != null)
+		DataGrid.SelectionChanged -= DataGrid_SelectionChanged;
+		DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
+		DataGrid.ColumnReordered -= DataGrid_ColumnReordered;
+		DataGrid.EffectiveViewportChanged -= DataGrid_EffectiveViewportChanged;
+
+		DataGrid.ItemsSource = null;
+
+		if (DataGrid.ContextMenu is IDisposable contextMenu)
 		{
-			DataGrid.SelectionChanged -= DataGrid_SelectionChanged;
-			DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
-			DataGrid.ColumnReordered -= DataGrid_ColumnReordered;
-			DataGrid.EffectiveViewportChanged -= DataGrid_EffectiveViewportChanged;
-
-			DataGrid.ItemsSource = null;
-
-			if (DataGrid.ContextMenu is IDisposable contextMenu)
-			{
-				contextMenu.Dispose();
-			}
-			DataGrid.ContextMenu = null;
+			contextMenu.Dispose();
 		}
+		DataGrid.ContextMenu = null;
 
 		if (SearchControl != null)
 		{
@@ -1324,7 +1307,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	// Hide control when offscreen
 	private void UpdateVisible()
 	{
-		if (DataGrid == null || !IsLoaded) return;
+		if (!IsLoaded) return;
 
 		bool visible = AvaloniaUtils.IsControlVisible(this);
 		if (visible != DataGrid.IsVisible)

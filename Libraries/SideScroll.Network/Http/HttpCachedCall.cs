@@ -20,11 +20,6 @@ public class HttpCachedCall(Call call, HttpCache httpCache) : HttpCall(call)
 	public override async Task<string?> GetStringAsync(string uri, string? accept = null)
 	{
 		byte[] bytes = await GetBytesAsync(uri);
-		if (bytes != null)
-		{
-			return Encoding.ASCII.GetString(bytes);
-		}
-
-		return null;
+		return Encoding.ASCII.GetString(bytes);
 	}
 }

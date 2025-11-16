@@ -8,10 +8,6 @@ public class FormatValueConverter : IValueConverter
 {
 	public int MaxLength { get; set; } = 1000;
 
-	// add a map to store original mappings?
-	//public Dictionary<object, object> { get; set; }
-
-	// public bool ConvertBackEnabled { get; set; } = true;
 	public bool IsFormatted { get; set; }
 
 	public ICustomFormatter? Formatter { get; set; }

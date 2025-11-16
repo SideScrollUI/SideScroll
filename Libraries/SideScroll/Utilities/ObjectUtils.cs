@@ -93,8 +93,8 @@ public static class ObjectUtils
 		}
 
 		Type type = obj1.GetType();
-		object covertedObject = Convert.ChangeType(obj2, type);
-		return obj1.Equals(covertedObject);
+		object convertedObject = Convert.ChangeType(obj2, type);
+		return obj1.Equals(convertedObject);
 	}
 
 	private static bool AreListsEqual(IList list1, IList list2, int maxDepth)

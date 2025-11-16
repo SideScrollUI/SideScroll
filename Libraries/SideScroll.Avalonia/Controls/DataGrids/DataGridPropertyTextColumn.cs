@@ -71,7 +71,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 	}
 
 	// Check first x rows for [Hide()] and apply WordWrap to strings/objects automatically
-	public void ScanItemAttributes(IList List)
+	public void ScanItemAttributes(IList list)
 	{
 		bool checkWordWrap = (!WordWrap && (PropertyInfo.PropertyType == typeof(string) || PropertyInfo.PropertyType == typeof(object)));
 
@@ -79,14 +79,14 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 
 		if (checkWordWrap || hideAttribute != null)
 		{
-			if (hideAttribute != null && List.Count > 0)
+			if (hideAttribute != null && list.Count > 0)
 			{
 				IsVisible = false;
 			}
 
-			for (int i = 0; i < MaxRowScanProperties && i < List.Count; i++)
+			for (int i = 0; i < MaxRowScanProperties && i < list.Count; i++)
 			{
-				object? obj = List[i];
+				object? obj = list[i];
 				if (obj == null)
 					continue;
 
@@ -280,43 +280,5 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 			element.SetBinding(TextBox.TextProperty, GetTextBinding());
 			return element;
 		}
-	}*/
-
-	/*private Type GetBindingType(object dataItem)
-	{
-		if (PropertyInfo.GetIndexParameters().Length > 0)
-			return null;
-
-		if (PropertyInfo.DeclaringType.IsAssignableFrom(dataItem.GetType()))
-		{
-			object obj = PropertyInfo.GetValue(dataItem);
-			if (obj == null)
-				return null;
-			return obj.GetType();
-		}
-		return null;
-	}
-
-	Binding GetTextBinding()
-	{
-		Binding binding = (Binding)Binding;
-		if (binding == null)
-			return new Binding(PropertyInfo.Name);
-
-		//if (unformattedBinding == null)
-		{
-			unformattedBinding = new Binding
-			{
-				Path = binding.Path,
-				Mode = BindingMode.OneWay, // copying a value to the clipboard triggers an infinite loop without this?
-			};
-			//if (!IsReadOnly)
-			//	unformattedBinding.Mode = BindingMode.TwoWay;
-			//else
-			//unformattedBinding.Mode = binding.Mode;
-			//unformattedBinding.BindsDirectlyToSource = true;
-		}
-
-		return unformattedBinding;
 	}*/
 }

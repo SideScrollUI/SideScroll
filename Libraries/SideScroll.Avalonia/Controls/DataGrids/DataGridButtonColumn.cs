@@ -30,9 +30,6 @@ public class DataGridButtonColumn : DataGridBoundColumn
 
 	protected override Control GenerateEditingElementDirect(DataGridCell cell, object dataItem)
 	{
-		//cell.Background = GetCellBrush(cell, dataItem);
-		//cell.MaxHeight = 100; // don't let them have more than a few lines each
-
 		var button = new DataGridButton(ButtonText);
 		button.Resources.Add("ButtonPadding", new Thickness(2, 5));
 		if (VisiblePropertyName != null)

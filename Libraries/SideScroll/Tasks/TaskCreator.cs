@@ -25,7 +25,8 @@ public abstract class TaskCreator : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged; // Used only for INotifyPropertyChanged memory leak fix?
 
-	public Action? OnComplete;
+	[HiddenColumn]
+	public Action? OnComplete { get; set; }
 
 	[HiddenColumn]
 	public string? Label { get; set; } // used for Button Label

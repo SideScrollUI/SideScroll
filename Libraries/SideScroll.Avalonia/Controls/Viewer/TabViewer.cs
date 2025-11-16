@@ -216,9 +216,6 @@ public class TabViewer : Grid
 
 	private void ImportBookmark(Call call, LinkUri linkUri, Bookmark bookmark)
 	{
-		if (bookmark == null)
-			return;
-
 		if (LinkManager.Instance != null && bookmark.Imported)
 		{
 			// Add Bookmark to Link Manager

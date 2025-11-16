@@ -19,7 +19,7 @@ public class ValueToBackgroundBrushConverter(PropertyInfo propertyInfo) : IValue
 		public ISolidColorBrush NoLinks => SideScrollTheme.DataGridNoLinksBackground;
 		public ISolidColorBrush Editable { get; set; } = SideScrollTheme.DataGridEditableBackground;
 	}
-	internal static BrushColors StyleBrushes { get; set; } = new();
+	public static BrushColors StyleBrushes { get; set; } = new();
 
 	public bool Editable { get; set; }
 
@@ -49,9 +49,6 @@ public class ValueToBackgroundBrushConverter(PropertyInfo propertyInfo) : IValue
 		}
 
 		return null;
-		//	return Brushes.White; // checkbox column requires a valid value
-		//else
-		//	return EditableBrush;
 	}
 
 	public object? ConvertBack(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
@@ -59,8 +56,3 @@ public class ValueToBackgroundBrushConverter(PropertyInfo propertyInfo) : IValue
 		throw new NotSupportedException();
 	}
 }
-
-/*
-Used by DataGridPropertyTextColumn
-Need to hook this into Cell.OnPaint for hover?
-*/

@@ -18,7 +18,7 @@ public class ValueToForegroundBrushConverter(PropertyInfo propertyInfo) : IValue
 		public ISolidColorBrush NoLinks => SideScrollTheme.ToolbarTextForeground; // Should this be different?
 		// public ISolidColorBrush Editable { get; set; } = SideScrollTheme.Editable;
 	}
-	internal static BrushColors StyleBrushes { get; set; } = new();
+	public static BrushColors StyleBrushes { get; set; } = new();
 
 	public bool Editable { get; set; }
 

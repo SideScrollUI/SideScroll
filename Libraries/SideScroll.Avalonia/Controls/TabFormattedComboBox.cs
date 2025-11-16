@@ -131,9 +131,20 @@ public class TabFormattedComboBox : ComboBox
 	{
 		base.SelectedItem = GetFormattedItem(Property.Value);
 
-		if (SelectedItem == null && Items.GetEnumerator().MoveNext())
+		if (SelectedItem == null)
 		{
-			SelectedIndex = 0;
+			var enumerator = Items.GetEnumerator();
+			try
+			{
+				if (enumerator.MoveNext())
+				{
+					SelectedIndex = 0;
+				}
+			}
+			finally
+			{
+				(enumerator as IDisposable)?.Dispose();
+			}
 		}
 	}
 
