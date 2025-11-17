@@ -23,7 +23,7 @@ public class TabControlToolbar : Grid, IDisposable
 
 	public TabInstance? TabInstance { get; set; }
 
-	public TabControlToolbar(TabInstance? tabInstance, TabToolbar? toolbar = null)
+	public TabControlToolbar(TabInstance? tabInstance = null, TabToolbar? toolbar = null)
 	{
 		TabInstance = tabInstance;
 
@@ -164,6 +164,8 @@ public class TabControlToolbar : Grid, IDisposable
 		Panel panel = new()
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
+			Background = Brushes.Transparent,
+			IsHitTestVisible = false,
 		};
 		AddControl(panel, true);
 	}

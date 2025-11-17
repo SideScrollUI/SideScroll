@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform;
 using Avalonia.Reactive;
 using Avalonia.Threading;
 using SideScroll.Avalonia.Controls.Viewer;
@@ -37,6 +38,11 @@ public class BaseWindow : Window
 	public BaseWindow(Project project)
 	{
 		Instance = this;
+
+		//SystemDecorations = SystemDecorations.None;
+		ExtendClientAreaToDecorationsHint = true;
+		ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.SystemChrome; // Has Drop Shadow and non-visible working buttons
+		//ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.PreferSystemChrome; // No Drop Shadow but has buttons
 
 		SideScrollInit.Initialize();
 		SideScrollTheme.InitializeFonts();

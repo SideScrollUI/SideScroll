@@ -4,7 +4,9 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Threading;
+using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Avalonia.Controls.View;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Tabs;
@@ -51,6 +53,7 @@ public class TabViewer : Grid
 	public TabViewer(Project project)
 	{
 		BaseViewer = this;
+		Background = null;
 
 		// Toolbar
 		// ScrollViewer | Buttons
@@ -113,6 +116,15 @@ public class TabViewer : Grid
 	{
 		if (Project.ProjectSettings.ShowToolbar == false)
 			return;
+
+		// TabViewerToolbar has a null Background to allow drag/drop to work
+		// This background gets shown instead
+		TabControlToolbar titleBackgroundToolbar = new()
+		{
+			Height = 34,
+		};
+		titleBackgroundToolbar.IsHitTestVisible = false;
+		Children.Add(titleBackgroundToolbar);
 
 		Toolbar = new TabViewerToolbar(this);
 		Toolbar.ButtonLink?.AddAsync(CreateLinkAsync);

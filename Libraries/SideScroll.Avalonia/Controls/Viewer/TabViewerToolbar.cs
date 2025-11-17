@@ -1,3 +1,4 @@
+using Avalonia;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Extensions;
 using SideScroll.Resources;
@@ -20,6 +21,7 @@ public class TabViewerToolbar : TabControlToolbar
 	public TabViewerToolbar(TabViewer tabViewer) : base(null)
 	{
 		TabViewer = tabViewer;
+		Background = null;
 
 		// HotKeys are handled in TabViewer
 		ButtonBack = AddButton("Back (Alt + Left)", Icons.Svg.LeftArrow);
@@ -51,7 +53,12 @@ public class TabViewerToolbar : TabControlToolbar
 		versionLabel += " *";
 #endif
 		var textBlock = new ToolbarHeaderTextBlock(versionLabel);
+		textBlock.Margin = new Thickness(0, 0, 20, 0);
 		AddControl(textBlock);
+
+		AddButton("Minimize", Icons.Svg.DownArrow);
+		AddButton("Maximize", Icons.Svg.UpArrow);
+		AddButton("Delete", Icons.Svg.Delete);
 	}
 
 	private void Refresh(Call call)
