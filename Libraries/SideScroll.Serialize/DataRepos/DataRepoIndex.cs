@@ -44,7 +44,6 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		{
 			long index = indices.NextIndex++;
 			Item newItem = new(index, key);
-			indices.Items.RemoveAll(item => item.Key == key);
 			indices.Items.Add(newItem);
 			Save(indices);
 
