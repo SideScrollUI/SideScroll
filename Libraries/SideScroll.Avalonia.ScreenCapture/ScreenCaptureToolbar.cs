@@ -15,7 +15,7 @@ public class ScreenCaptureToolbar : TabControlToolbar
 	public ToolbarButton ButtonOpenFolder { get; set; }
 	public ToolbarButton ButtonClose { get; set; }
 
-	public ScreenCaptureToolbar() : base(null)
+	public ScreenCaptureToolbar()
 	{
 		OSPlatform platform = ProcessUtils.GetOSPlatform();
 		if (platform != OSPlatform.Linux)

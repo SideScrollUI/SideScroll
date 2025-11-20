@@ -18,7 +18,7 @@ public class TabViewerToolbar : TabControlToolbar
 	public ToolbarButton? ButtonLink { get; protected set; }
 	public ToolbarButton? ButtonImport { get; protected set; }
 
-	public TabViewerToolbar(TabViewer tabViewer) : base(null)
+	public TabViewerToolbar(TabViewer tabViewer)
 	{
 		TabViewer = tabViewer;
 		Background = null;

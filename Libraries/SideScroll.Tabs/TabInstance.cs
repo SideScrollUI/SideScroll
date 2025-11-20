@@ -468,7 +468,8 @@ public class TabInstance : IDisposable
 		{
 			IList iList = model.ItemList[i];
 			Type listType = iList.GetType();
-			Type elementType = listType.GetElementTypeForAll()!;
+			Type? elementType = listType.GetElementTypeForAll();
+			if (elementType == null) continue;
 
 			var tabDataSettings = TabViewSettings.GetData(i);
 			List<TabDataSettings.PropertyColumn> propertyColumns = tabDataSettings.GetPropertiesAsColumns(elementType);
