@@ -249,7 +249,7 @@ public class TabImageButton : Button, IDisposable
 			return null;
 
 		IsActive = true;
-		var taskDelegate = new TaskDelegateAsync(CallActionAsync)
+		var taskDelegate = new TaskDelegateAsync(CallActionAsync, UseBackgroundThread)
 		{
 			OnComplete = () => IsActive = false,
 		};
