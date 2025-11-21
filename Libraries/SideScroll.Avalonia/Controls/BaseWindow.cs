@@ -41,8 +41,9 @@ public class BaseWindow : Window
 
 		//SystemDecorations = SystemDecorations.None;
 		ExtendClientAreaToDecorationsHint = true;
-		ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.SystemChrome; // Has Drop Shadow and non-visible working buttons
+		//ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.SystemChrome; // Has Drop Shadow and non-visible working buttons
 		//ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.PreferSystemChrome; // No Drop Shadow but has buttons
+		ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome; // Has Drop Shadow and non-visible working buttons
 
 		SideScrollInit.Initialize();
 		SideScrollTheme.InitializeFonts();
@@ -85,8 +86,6 @@ public class BaseWindow : Window
 	private void InitializeComponent()
 	{
 		Title = Project.ProjectSettings.Name ?? "<Name>";
-
-		Background = SideScrollTheme.TabBackground;
 
 		MinWidth = DefaultMinWidth;
 		MinHeight = DefaultMinHeight;

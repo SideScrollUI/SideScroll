@@ -1,5 +1,4 @@
 using SideScroll.Avalonia.Controls.Toolbar;
-using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Resources;
 using SideScroll.Utilities;
 using System.Runtime.InteropServices;

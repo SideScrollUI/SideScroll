@@ -6,7 +6,6 @@ using Avalonia.Media;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.Highlighting;
 using SideScroll.Avalonia.Themes;
-using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Utilities;
 

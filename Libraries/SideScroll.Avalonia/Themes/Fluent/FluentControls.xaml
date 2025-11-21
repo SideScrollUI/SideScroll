@@ -56,4 +56,8 @@
     <Setter Property="BorderBrush" Value="{DynamicResource CheckBoxBorderBrushUnchecked}" />
   </Style>
 
+  <Style Selector="Window">
+    <Setter Property="Background" Value="{DynamicResource TabBackgroundBrush}" />
+  </Style>
+
 </Styles>
