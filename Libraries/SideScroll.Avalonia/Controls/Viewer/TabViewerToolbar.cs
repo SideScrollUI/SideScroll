@@ -13,6 +13,8 @@ public class TabViewerToolbar : TabControlToolbar
 {
 	public TabViewer TabViewer { get; }
 
+	public ToolbarButton ButtonLogo { get; protected set; }
+
 	public ToolbarButton ButtonBack { get; protected set; }
 	public ToolbarButton ButtonForward { get; protected set; }
 
@@ -29,6 +31,10 @@ public class TabViewerToolbar : TabControlToolbar
 	{
 		TabViewer = tabViewer;
 		Background = null;
+
+		ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScroll, updateIconColors: false);
+		ButtonLogo.DoubleTapped += ButtonLogo_DoubleTapped;
+		AddSeparator();
 
 		// HotKeys are handled in TabViewer
 		ButtonBack = AddButton("Back (Alt + Left)", Icons.Svg.LeftArrow);
@@ -51,7 +57,15 @@ public class TabViewerToolbar : TabControlToolbar
 		}
 		SubscribeToWindowState();
 	}
-	
+
+	private void ButtonLogo_DoubleTapped(object? sender, global::Avalonia.Input.TappedEventArgs e)
+	{
+		if (VisualRoot is Window window)
+		{
+			window.Close();
+		}
+	}
+
 	public void AddTitle()
 	{
 		var textBlock = new ToolbarHeaderTextBlock(TabViewer.Project.Name!)
@@ -155,12 +169,12 @@ public class TabViewerToolbar : TabControlToolbar
 		if (state == WindowState.Maximized)
 		{
 			ButtonMaximize!.SetImage(Icons.Svg.Restore);
-			ToolTip.SetTip(ButtonMaximize, "Maximize");
+			ToolTip.SetTip(ButtonMaximize, "Restore Down");
 		}
 		else
 		{
 			ButtonMaximize!.SetImage(Icons.Svg.Maximize);
-			ToolTip.SetTip(ButtonMaximize, "Restore Down");
+			ToolTip.SetTip(ButtonMaximize, "Maximize");
 		}
 	}
 }

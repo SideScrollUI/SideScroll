@@ -89,6 +89,13 @@ public class BaseWindow : Window
 		MinWidth = DefaultMinWidth;
 		MinHeight = DefaultMinHeight;
 
+		if (IsWindows10OrBelow())
+		{
+			// Windows 10 and below won't display a border or drop shadow
+			BorderThickness = new(1);
+			BorderBrush = SideScrollTheme.TabBackgroundBorder;
+		}
+
 		Content = TabViewer = new TabViewer(Project);
 
 		PositionChanged += BaseWindow_PositionChanged;
@@ -245,5 +252,27 @@ public class BaseWindow : Window
 	private void CleanupDispatcherTimer_Tick(object? sender, EventArgs e)
 	{
 		Project.Data.Cache.CleanupCache(new(), TimeSpan.FromDays(Project.DataSettings.CacheDurationDays));
+	}
+
+	private static bool IsWindows10OrBelow()
+	{
+		if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			return false;
+
+		// Windows 11 is version 10.0 with build >= 22000
+		// Windows 10 is version 10.0 with build < 22000
+		// Windows 8.1 is version 6.3
+		// Windows 8 is version 6.2
+		// Windows 7 is version 6.1
+
+		var version = Environment.OSVersion.Version;
+
+		if (version.Major < 10)
+			return true; // Windows 8.1 or below
+
+		if (version.Major == 10 && version.Build < 22000)
+			return true; // Windows 10
+
+		return false; // Windows 11 or above
 	}
 }

@@ -5,6 +5,7 @@ using SideScroll.Collections;
 using SideScroll.Resources;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace SideScroll.Avalonia.Utilities;
 
@@ -99,6 +100,20 @@ public static class SvgUtils
 			call.Log.Add(e);
 			return false;
 		}
+	}
+
+	public static IImage GetSvgImage(IResourceView imageResource)
+	{
+		if (imageResource.ResourceType != "svg")
+		{
+			throw new Exception("File path must end with a .svg extension");
+		}
+		using var reader = new StreamReader(imageResource.Stream);
+
+		return new SvgImage
+		{
+			Source = SvgSource.LoadFromSvg(reader.ReadToEnd()),
+		};
 	}
 
 	/// <summary>

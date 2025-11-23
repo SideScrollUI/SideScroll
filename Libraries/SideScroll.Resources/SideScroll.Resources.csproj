@@ -67,6 +67,7 @@
     <None Remove="Icons\svg\StopCircle.svg" />
     <None Remove="Icons\svg\Undo.svg" />
     <None Remove="Icons\svg\UpArrow.svg" />
+    <None Remove="Logo\svg\SideScroll.svg" />
     <None Remove="Samples\Text\SolarSystem.json" />
     <None Remove="Samples\Text\SolarSystem.txt" />
     <None Remove="Samples\Text\SolarSystem.xml" />
@@ -118,6 +119,7 @@
     <EmbeddedResource Include="Icons\svg\StopCircle.svg" />
     <EmbeddedResource Include="Icons\svg\Undo.svg" />
     <EmbeddedResource Include="Icons\svg\UpArrow.svg" />
+    <EmbeddedResource Include="Logo\svg\SideScroll.svg" />
     <EmbeddedResource Include="Samples\Text\SolarSystem.json" />
     <EmbeddedResource Include="Samples\Text\SolarSystem.txt" />
     <EmbeddedResource Include="Samples\Text\SolarSystem.xml" />
