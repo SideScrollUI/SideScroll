@@ -41,8 +41,11 @@ public class BaseWindow : Window
 
 		WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-		ExtendClientAreaToDecorationsHint = true;
-		ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+		if (project.UserSettings.EnableCustomTitleBar)
+		{
+			ExtendClientAreaToDecorationsHint = true;
+			ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+		}
 
 		SideScrollInit.Initialize();
 		SideScrollTheme.InitializeFonts();
@@ -89,7 +92,7 @@ public class BaseWindow : Window
 		MinWidth = DefaultMinWidth;
 		MinHeight = DefaultMinHeight;
 
-		if (IsWindows10OrBelow())
+		if (Project.UserSettings.EnableCustomTitleBar && IsWindows10OrBelow())
 		{
 			// Windows 10 and below won't display a border or drop shadow
 			BorderThickness = new(1);
@@ -106,7 +109,7 @@ public class BaseWindow : Window
 
 	private void WindowStateChanged(WindowState state)
 	{
-		if (WindowState == WindowState.Maximized)
+		if (Project.UserSettings.EnableCustomTitleBar && WindowState == WindowState.Maximized)
 		{
 			Padding = new Thickness(7);
 		}

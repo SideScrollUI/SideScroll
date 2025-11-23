@@ -13,7 +13,9 @@ public class TabViewerToolbar : TabControlToolbar
 {
 	public TabViewer TabViewer { get; }
 
-	public ToolbarButton ButtonLogo { get; protected set; }
+	public bool EnableCustomTitleBar => TabViewer.Project.UserSettings.EnableCustomTitleBar;
+
+	public ToolbarButton? ButtonLogo { get; protected set; }
 
 	public ToolbarButton ButtonBack { get; protected set; }
 	public ToolbarButton ButtonForward { get; protected set; }
@@ -32,9 +34,12 @@ public class TabViewerToolbar : TabControlToolbar
 		TabViewer = tabViewer;
 		Background = null;
 
-		ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScroll, updateIconColors: false);
-		ButtonLogo.DoubleTapped += ButtonLogo_DoubleTapped;
-		AddSeparator();
+		if (EnableCustomTitleBar)
+		{
+			ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScroll, updateIconColors: false);
+			ButtonLogo.DoubleTapped += ButtonLogo_DoubleTapped;
+			AddSeparator();
+		}
 
 		// HotKeys are handled in TabViewer
 		ButtonBack = AddButton("Back (Alt + Left)", Icons.Svg.LeftArrow);
@@ -55,7 +60,11 @@ public class TabViewerToolbar : TabControlToolbar
 			ButtonLink = AddButton("Link - Copy to Clipboard", Icons.Svg.Link);
 			ButtonImport = AddButton("Import Link from Clipboard", Icons.Svg.Import);
 		}
-		SubscribeToWindowState();
+
+		if (EnableCustomTitleBar)
+		{
+			SubscribeToWindowState();
+		}
 	}
 
 	private void ButtonLogo_DoubleTapped(object? sender, global::Avalonia.Input.TappedEventArgs e)
@@ -78,9 +87,14 @@ public class TabViewerToolbar : TabControlToolbar
 
 	public void AddVersion()
 	{
-		AddTitle();
-
-		//AddFill();
+		if (!EnableCustomTitleBar)
+		{
+			AddFill();
+		}
+		else
+		{
+			AddTitle();
+		}
 
 		string versionLabel = 'v' + TabViewer.Project.Version.Formatted();
 #if DEBUG
@@ -90,15 +104,18 @@ public class TabViewerToolbar : TabControlToolbar
 		textBlock.Margin = new Thickness(0, 0, 20, 0);
 		AddControl(textBlock);
 
-		ButtonMinimize = AddButton("Minimize", Icons.Svg.Minimize);
-		ButtonMinimize.Width = 44;
-		ButtonMinimize.Add(Minimize);
-		ButtonMaximize = AddButton("Maximize", Icons.Svg.Restore);
-		ButtonMaximize.Width = 44;
-		ButtonMaximize.Add(Maximize);
-		ButtonClose = AddButton("Close", Icons.Svg.Close);
-		ButtonClose.Width = 44;
-		ButtonClose.Add(Close);
+		if (EnableCustomTitleBar)
+		{
+			ButtonMinimize = AddButton("Minimize", Icons.Svg.Minimize);
+			ButtonMinimize.Width = 44;
+			ButtonMinimize.Add(Minimize);
+			ButtonMaximize = AddButton("Maximize", Icons.Svg.Restore);
+			ButtonMaximize.Width = 44;
+			ButtonMaximize.Add(Maximize);
+			ButtonClose = AddButton("Close", Icons.Svg.Close);
+			ButtonClose.Width = 44;
+			ButtonClose.Add(Close);
+		}
 	}
 
 	private void Refresh(Call call)
@@ -166,14 +183,16 @@ public class TabViewerToolbar : TabControlToolbar
 
 	private void OnWindowStateChanged(WindowState state)
 	{
+		if (ButtonMaximize == null) return;
+
 		if (state == WindowState.Maximized)
 		{
-			ButtonMaximize!.SetImage(Icons.Svg.Restore);
+			ButtonMaximize.SetImage(Icons.Svg.Restore);
 			ToolTip.SetTip(ButtonMaximize, "Restore Down");
 		}
 		else
 		{
-			ButtonMaximize!.SetImage(Icons.Svg.Maximize);
+			ButtonMaximize.SetImage(Icons.Svg.Maximize);
 			ToolTip.SetTip(ButtonMaximize, "Maximize");
 		}
 	}
