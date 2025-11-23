@@ -39,11 +39,10 @@ public class BaseWindow : Window
 	{
 		Instance = this;
 
-		//SystemDecorations = SystemDecorations.None;
+		WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
 		ExtendClientAreaToDecorationsHint = true;
-		//ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.SystemChrome; // Has Drop Shadow and non-visible working buttons
-		//ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.PreferSystemChrome; // No Drop Shadow but has buttons
-		ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome; // Has Drop Shadow and non-visible working buttons
+		ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
 
 		SideScrollInit.Initialize();
 		SideScrollTheme.InitializeFonts();
@@ -95,6 +94,19 @@ public class BaseWindow : Window
 		PositionChanged += BaseWindow_PositionChanged;
 
 		this.GetObservable(ClientSizeProperty).Subscribe(new AnonymousObserver<Size>(Resize));
+		this.GetObservable(WindowStateProperty).Subscribe(new AnonymousObserver<WindowState>(WindowStateChanged));
+	}
+
+	private void WindowStateChanged(WindowState state)
+	{
+		if (WindowState == WindowState.Maximized)
+		{
+			Padding = new Thickness(7);
+		}
+		else
+		{
+			Padding = new Thickness(0);
+		}
 	}
 
 	public virtual void LoadTab(ITab tab)
@@ -107,7 +119,8 @@ public class BaseWindow : Window
 		SaveWindowSettings();
 	}
 
-	private void SetMaxBounds()
+	// Modifying the actual MaxWidth or MaxHeight breaks double click restoring the previous Width and Height
+	private Size GetMaxBounds()
 	{
 		double maxWidth = 0;
 		double maxHeight = 0;
@@ -126,8 +139,7 @@ public class BaseWindow : Window
 			}
 			maxHeight = Math.Max(maxHeight, workingHeight);
 		}
-		MaxWidth = maxWidth;
-		MaxHeight = maxHeight;
+		return new Size(maxWidth, maxHeight);
 	}
 
 	protected WindowSettings WindowSettings
@@ -170,12 +182,13 @@ public class BaseWindow : Window
 		}
 		set
 		{
+			Size maxBounds = GetMaxBounds();
 			// These are causing the window to be shifted down
-			Width = Math.Clamp(value.Width, MinWidth, MaxWidth);
+			Width = Math.Clamp(value.Width, MinWidth, maxBounds.Width);
 			Height = Math.Clamp(value.Height, MinHeight, MaxHeight);
 
 			double minLeft = -10; // Left position for Windows starts at -10
-			double left = Math.Clamp(value.Left, minLeft, MaxWidth - Width + minLeft); // Values can be negative
+			double left = Math.Clamp(value.Left, minLeft, maxBounds.Width - Width + minLeft); // Values can be negative
 
 			double maxHeight = MaxHeight;
 			double top = Math.Clamp(value.Top, 0, maxHeight - Height);
@@ -191,24 +204,22 @@ public class BaseWindow : Window
 
 	protected void LoadWindowSettings()
 	{
-		SetMaxBounds();
-
 		var settings = Project.Data.App.Load<WindowSettings>();
 		if (settings == null)
 		{
 			settings = new();
-			settings.Left = (MaxWidth - settings.Width) / 2;
-			settings.Top = (MaxHeight - settings.Height) / 2;
+			Width = settings.Width;
+			Height = settings.Height;
 		}
-		WindowSettings = settings;
+		else
+		{
+			WindowSettings = settings;
+		}
 	}
 
 	// Still saving due to a HandleResized calls after IsActive (loadComplete does nothing)
 	private void SaveWindowSettings()
 	{
-		// Do we need a better trigger for when the screen size changes?
-		SetMaxBounds();
-
 		if (_loadComplete)
 		{
 			Dispatcher.UIThread.Post(SaveWindowSettingsInternal, DispatcherPriority.SystemIdle);

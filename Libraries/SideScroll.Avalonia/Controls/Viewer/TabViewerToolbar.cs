@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
+using Avalonia.Reactive;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Extensions;
 using SideScroll.Resources;
@@ -48,6 +49,7 @@ public class TabViewerToolbar : TabControlToolbar
 			ButtonLink = AddButton("Link - Copy to Clipboard", Icons.Svg.Link);
 			ButtonImport = AddButton("Import Link from Clipboard", Icons.Svg.Import);
 		}
+		SubscribeToWindowState();
 	}
 	
 	public void AddTitle()
@@ -74,11 +76,14 @@ public class TabViewerToolbar : TabControlToolbar
 		textBlock.Margin = new Thickness(0, 0, 20, 0);
 		AddControl(textBlock);
 
-		ButtonMinimize = AddButton("Minimize", Icons.Svg.DownArrow);
+		ButtonMinimize = AddButton("Minimize", Icons.Svg.Minimize);
+		ButtonMinimize.Width = 44;
 		ButtonMinimize.Add(Minimize);
-		ButtonMaximize = AddButton("Maximize", Icons.Svg.UpArrow);
+		ButtonMaximize = AddButton("Maximize", Icons.Svg.Restore);
+		ButtonMaximize.Width = 44;
 		ButtonMaximize.Add(Maximize);
-		ButtonClose = AddButton("Close", Icons.Svg.Delete);
+		ButtonClose = AddButton("Close", Icons.Svg.Close);
+		ButtonClose.Width = 44;
 		ButtonClose.Add(Close);
 	}
 
@@ -129,6 +134,33 @@ public class TabViewerToolbar : TabControlToolbar
 		if (VisualRoot is Window window)
 		{
 			window.Close();
+		}
+	}
+
+	private async void SubscribeToWindowState()
+	{
+		Window? hostWindow = VisualRoot as Window;
+
+		while (hostWindow == null)
+		{
+			await Task.Delay(50);
+			hostWindow = VisualRoot as Window;
+		}
+
+		hostWindow.GetObservable(Window.WindowStateProperty).Subscribe(new AnonymousObserver<WindowState>(OnWindowStateChanged));
+	}
+
+	private void OnWindowStateChanged(WindowState state)
+	{
+		if (state == WindowState.Maximized)
+		{
+			ButtonMaximize!.SetImage(Icons.Svg.Restore);
+			ToolTip.SetTip(ButtonMaximize, "Maximize");
+		}
+		else
+		{
+			ButtonMaximize!.SetImage(Icons.Svg.Maximize);
+			ToolTip.SetTip(ButtonMaximize, "Restore Down");
 		}
 	}
 }

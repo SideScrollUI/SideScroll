@@ -71,6 +71,11 @@ public static class Icons
 		public static ResourceView PanelLeftExpand => Get("PanelLeftExpand");
 		public static ResourceView PanelLeftContract => Get("PanelLeftContract");
 
+		public static ResourceView Minimize => Get("Minimize");
+		public static ResourceView Maximize => Get("Maximize");
+		public static ResourceView Restore => Get("Restore");
+		public static ResourceView Close => Get("Close");
+
 		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "svg", resourceName, "svg");
 	}
 }
