@@ -16,5 +16,6 @@
     <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabView.xaml"/>
     <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/TabViewer.xaml"/>
     <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/ToolbarButton.xaml"/>
+    <ResourceInclude Source="avares://SideScroll.Avalonia/Themes/Controls/MacosTitleButtons.xaml"/>
   </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

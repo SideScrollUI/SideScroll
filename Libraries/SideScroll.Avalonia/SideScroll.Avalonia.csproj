@@ -35,6 +35,7 @@
   <ItemGroup>
     <EmbeddedResource Remove="Themes\Controls\ControlThemes.xaml" />
     <EmbeddedResource Remove="Themes\Controls\DataGridButton.xaml" />
+    <EmbeddedResource Remove="Themes\Controls\MacosTitleButtons.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabButton.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabControlToolbar.xaml" />
     <EmbeddedResource Remove="Themes\Controls\TabForm.xaml" />
@@ -83,6 +84,9 @@
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabAvaloniaEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Controls\MacosTitleButtons.xaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Controls\TabTextArea.xaml">

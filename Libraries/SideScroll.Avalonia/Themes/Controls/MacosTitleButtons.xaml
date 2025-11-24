@@ -1,0 +1,104 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sidescroll="clr-namespace:SideScroll.Avalonia.Controls;assembly=SideScroll.Avalonia">
+
+  <ControlTheme x:Key="{x:Type sidescroll:MacosTitleButtons}" TargetType="sidescroll:MacosTitleButtons">
+
+    <Setter Property="Template">
+      <ControlTemplate>
+        <StackPanel Orientation="Horizontal"
+                    DockPanel.Dock="Left"
+                    Spacing="8"
+                    Margin="8,0,8,0"
+                    Background="Transparent">
+          <StackPanel.Styles>
+            <Style Selector="StackPanel:pointerover Path">
+              <Setter Property="IsVisible" Value="true"></Setter>
+            </Style>
+            <Style Selector="StackPanel:not(:pointerover) Path">
+              <Setter Property="IsVisible" Value="false"></Setter>
+            </Style>
+          </StackPanel.Styles>
+          <Button Name="CloseButton"
+                  HorizontalContentAlignment="Center"
+                  VerticalContentAlignment="Center"
+                  VerticalAlignment="Center"
+                  Padding="2"
+                  Width="16"
+                  Height="16">
+            <Button.Resources>
+              <CornerRadius x:Key="ControlCornerRadius">8</CornerRadius>
+            </Button.Resources>
+            <Button.Styles>
+              <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#99FF5D55"/>
+              </Style>
+              <Style Selector="Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#FF5D55"/>
+              </Style>
+            </Button.Styles>
+
+            <Path Data="M 0,0 l 6,6 M 0,6 l 6,-6"
+                  Stroke="#222222"
+                  StrokeThickness="1"
+                  Width="6"
+                  Height="6"></Path>
+          </Button>
+
+          <Button Name="MinimizeButton"
+                  HorizontalContentAlignment="Center"
+                  VerticalContentAlignment="Center"
+                  VerticalAlignment="Center"
+                  Padding="2"
+                  Width="16"
+                  Height="16">
+            <Button.Resources>
+              <CornerRadius x:Key="ControlCornerRadius">8</CornerRadius>
+            </Button.Resources>
+            <Button.Styles>
+              <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#99FFBC2E"/>
+              </Style>
+              <Style Selector="Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#FFBC2E"/>
+              </Style>
+            </Button.Styles>
+
+            <Path Data="M 0,0 l 6,0"
+                  Stroke="#222222"
+                  StrokeThickness="1"
+                  Width="6"
+                  Height="1"></Path>
+          </Button>
+
+          <Button Name="ZoomButton"
+                  HorizontalContentAlignment="Center"
+                  VerticalContentAlignment="Center"
+                  VerticalAlignment="Center"
+                  Padding="2"
+                  Width="16"
+                  Height="16">
+            <Button.Resources>
+              <CornerRadius x:Key="ControlCornerRadius">8</CornerRadius>
+            </Button.Resources>
+            <Button.Styles>
+              <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#9928C83E"/>
+              </Style>
+              <Style Selector="Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="#28C83E"/>
+              </Style>
+            </Button.Styles>
+
+            <Path Data="M 0,6 l 4.5,0 l -4.5,-4.5 l 0,4.5 M 6,0 l 0,4.5 l -4.5,-4.5 l 4.5,0"
+                  Fill="#222222"
+                  StrokeThickness="0"
+                  Width="6"
+                  Height="6"></Path>
+          </Button>
+
+        </StackPanel>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

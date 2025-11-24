@@ -61,3 +61,9 @@
 
 - Licences
   - [Open Font License](https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)
+
+## Templates
+
+| Template | Name | License |
+| - | - | - |
+| [Avalonia-CustomTitleBarTemplate](https://github.com/FrankenApps/Avalonia-CustomTitleBarTemplate) | FrankenApps | MIT license |

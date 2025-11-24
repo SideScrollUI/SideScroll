@@ -5,7 +5,6 @@ using SideScroll.Collections;
 using SideScroll.Resources;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
 namespace SideScroll.Avalonia.Utilities;
 

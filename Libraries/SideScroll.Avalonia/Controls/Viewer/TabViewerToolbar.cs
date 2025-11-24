@@ -6,6 +6,7 @@ using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Tabs.Bookmarks;
+using System.Runtime.InteropServices;
 
 namespace SideScroll.Avalonia.Controls.Viewer;
 
@@ -29,6 +30,8 @@ public class TabViewerToolbar : TabControlToolbar
 	public ToolbarButton? ButtonMaximize { get; protected set; }
 	public ToolbarButton? ButtonClose { get; protected set; }
 
+	private bool IsMacOS => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+
 	public TabViewerToolbar(TabViewer tabViewer)
 	{
 		TabViewer = tabViewer;
@@ -36,8 +39,16 @@ public class TabViewerToolbar : TabControlToolbar
 
 		if (EnableCustomTitleBar)
 		{
-			ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScroll, updateIconColors: false);
-			ButtonLogo.DoubleTapped += ButtonLogo_DoubleTapped;
+			if (IsMacOS)
+			{
+				var macosTitleButtons = new MacosTitleButtons();
+				AddControl(macosTitleButtons);
+			}
+			else
+			{
+				ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScroll, updateIconColors: false);
+				ButtonLogo.DoubleTapped += ButtonLogo_DoubleTapped;
+			}
 			AddSeparator();
 		}
 
@@ -79,20 +90,23 @@ public class TabViewerToolbar : TabControlToolbar
 	{
 		var textBlock = new ToolbarHeaderTextBlock(TabViewer.Project.Name!)
 		{
-			HorizontalAlignment = HorizontalAlignment.Right,
+			//HorizontalAlignment = HorizontalAlignment.Right,
 			IsHitTestVisible = false,
 		};
-		AddControl(textBlock, true);
+		AddControl(textBlock);
 	}
 
 	public void AddVersion()
 	{
-		if (!EnableCustomTitleBar)
+		AddFill();
+
+		if (EnableCustomTitleBar)
 		{
-			AddFill();
-		}
-		else
-		{
+			if (IsMacOS)
+			{
+				ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScroll, updateIconColors: false);
+				ButtonLogo.HorizontalAlignment = HorizontalAlignment.Right;
+			}
 			AddTitle();
 		}
 
@@ -104,7 +118,7 @@ public class TabViewerToolbar : TabControlToolbar
 		textBlock.Margin = new Thickness(0, 0, 20, 0);
 		AddControl(textBlock);
 
-		if (EnableCustomTitleBar)
+		if (EnableCustomTitleBar && !IsMacOS)
 		{
 			ButtonMinimize = AddButton("Minimize", Icons.Svg.Minimize);
 			ButtonMinimize.Width = 44;

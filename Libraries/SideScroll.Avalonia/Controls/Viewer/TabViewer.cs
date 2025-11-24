@@ -52,7 +52,7 @@ public class TabViewer : Grid
 	public TabViewer(Project project)
 	{
 		BaseViewer = this;
-		Background = null;
+		Background = null; // Custom Title Toolbar requires this for dragging
 
 		// Toolbar
 		// ScrollViewer | Buttons

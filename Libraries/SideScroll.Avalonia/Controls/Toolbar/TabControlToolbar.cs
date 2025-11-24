@@ -164,8 +164,8 @@ public class TabControlToolbar : Grid, IDisposable
 		Panel panel = new()
 		{
 			HorizontalAlignment = HorizontalAlignment.Stretch,
-			Background = Brushes.Transparent,
-			IsHitTestVisible = false,
+			Background = Brushes.Transparent, // Custom Title Toolbar requires this for dragging
+			IsHitTestVisible = false, // Custom Title Toolbar requires this for dragging
 		};
 		AddControl(panel, true);
 	}
