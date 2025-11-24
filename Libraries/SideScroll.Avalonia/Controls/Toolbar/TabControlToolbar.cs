@@ -100,9 +100,16 @@ public class TabControlToolbar : Grid, IDisposable
 		Children.Add(control);
 	}
 
-	public ToolbarButton AddButton(string tooltip, IResourceView imageResource, string? label = null, bool updateIconColors = true)
+	public ToolbarButton AddButton(string tooltip, IResourceView imageResource, string? label)
 	{
-		var button = new ToolbarButton(this, tooltip, imageResource, null, label, updateIconColors);
+		var button = new ToolbarButton(this, tooltip, imageResource, null, label);
+		AddControl(button);
+		return button;
+	}
+
+	public ToolbarButton AddButton(string tooltip, IResourceView imageResource, double? iconSize = null, string? label = null, bool updateIconColors = true)
+	{
+		var button = new ToolbarButton(this, tooltip, imageResource, iconSize, label, updateIconColors);
 		AddControl(button);
 		return button;
 	}

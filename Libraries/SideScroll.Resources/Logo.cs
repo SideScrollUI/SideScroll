@@ -11,7 +11,7 @@ public static class Logo
 
 	public class Svg : NamedItemCollection<Svg, ResourceView>
 	{
-		public static ResourceView SideScroll => Get("SideScroll");
+		public static ResourceView SideScrollTranslucent => Get("SideScroll-Translucent");
 
 		public static ResourceView Get(string resourceName) => new(Assembly, LogoPath, "svg", resourceName, "svg");
 	}

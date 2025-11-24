@@ -41,7 +41,7 @@ public class BaseWindow : Window
 
 		WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-		if (project.UserSettings.EnableCustomTitleBar)
+		if (project.UserSettings.EnableCustomTitleBar == true)
 		{
 			ExtendClientAreaToDecorationsHint = true;
 			ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
@@ -92,7 +92,7 @@ public class BaseWindow : Window
 		MinWidth = DefaultMinWidth;
 		MinHeight = DefaultMinHeight;
 
-		if (Project.UserSettings.EnableCustomTitleBar && IsWindows10OrBelow())
+		if (Project.UserSettings.EnableCustomTitleBar == true && IsWindows10OrBelow())
 		{
 			// Windows 10 and below won't display a border or drop shadow
 			BorderThickness = new(1);
@@ -109,7 +109,7 @@ public class BaseWindow : Window
 
 	private void WindowStateChanged(WindowState state)
 	{
-		if (Project.UserSettings.EnableCustomTitleBar && WindowState == WindowState.Maximized)
+		if (Project.UserSettings.EnableCustomTitleBar == true && WindowState == WindowState.Maximized)
 		{
 			Padding = new Thickness(7);
 		}

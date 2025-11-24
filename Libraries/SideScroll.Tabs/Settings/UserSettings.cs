@@ -29,7 +29,7 @@ public class UserSettings
 	[Separator, BindList(nameof(Themes))]
 	public string? Theme { get; set; }
 
-	public bool EnableCustomTitleBar { get; set; }
+	public bool? EnableCustomTitleBar { get; set; }
 
 	[Hidden]
 	public DataSettings DataSettings { get; set; } = new();

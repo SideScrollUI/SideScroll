@@ -33,7 +33,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 
 	public TabControlSearchToolbar(TabInstance tabInstance) : base(tabInstance)
 	{
-		ButtonNew = AddButton("New", Icons.Svg.BlankDocument, "New");
+		ButtonNew = AddButton("New", Icons.Svg.BlankDocument, null, "New");
 		ButtonSave = AddButton("Save", Icons.Svg.Save);
 		ButtonSave.SetDefault();
 

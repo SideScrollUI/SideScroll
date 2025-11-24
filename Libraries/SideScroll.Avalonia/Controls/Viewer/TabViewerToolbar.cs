@@ -14,7 +14,7 @@ public class TabViewerToolbar : TabControlToolbar
 {
 	public TabViewer TabViewer { get; }
 
-	public bool EnableCustomTitleBar => TabViewer.Project.UserSettings.EnableCustomTitleBar;
+	public bool EnableCustomTitleBar => TabViewer.Project.UserSettings.EnableCustomTitleBar == true;
 
 	public ToolbarButton? ButtonLogo { get; protected set; }
 
@@ -46,7 +46,7 @@ public class TabViewerToolbar : TabControlToolbar
 			}
 			else
 			{
-				ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScroll, updateIconColors: false);
+				ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScrollTranslucent, updateIconColors: false);
 				ButtonLogo.DoubleTapped += ButtonLogo_DoubleTapped;
 			}
 			AddSeparator();
@@ -90,7 +90,6 @@ public class TabViewerToolbar : TabControlToolbar
 	{
 		var textBlock = new ToolbarHeaderTextBlock(TabViewer.Project.Name!)
 		{
-			//HorizontalAlignment = HorizontalAlignment.Right,
 			IsHitTestVisible = false,
 		};
 		AddControl(textBlock);
@@ -104,7 +103,7 @@ public class TabViewerToolbar : TabControlToolbar
 		{
 			if (IsMacOS)
 			{
-				ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScroll, updateIconColors: false);
+				ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScrollTranslucent, updateIconColors: false);
 				ButtonLogo.HorizontalAlignment = HorizontalAlignment.Right;
 			}
 			AddTitle();
@@ -120,14 +119,18 @@ public class TabViewerToolbar : TabControlToolbar
 
 		if (EnableCustomTitleBar && !IsMacOS)
 		{
-			ButtonMinimize = AddButton("Minimize", Icons.Svg.Minimize);
-			ButtonMinimize.Width = 44;
+			int width = 44;
+
+			ButtonMinimize = AddButton("Minimize", Icons.Svg.Minimize, 20);
+			ButtonMinimize.Width = width;
 			ButtonMinimize.Add(Minimize);
-			ButtonMaximize = AddButton("Maximize", Icons.Svg.Restore);
-			ButtonMaximize.Width = 44;
+
+			ButtonMaximize = AddButton("Maximize", Icons.Svg.Restore, 20);
+			ButtonMaximize.Width = width;
 			ButtonMaximize.Add(Maximize);
-			ButtonClose = AddButton("Close", Icons.Svg.Close);
-			ButtonClose.Width = 44;
+
+			ButtonClose = AddButton("Close", Icons.Svg.Close, 20);
+			ButtonClose.Width = width;
 			ButtonClose.Add(Close);
 		}
 	}
