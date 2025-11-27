@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform;
 using Avalonia.Reactive;
 using Avalonia.Threading;
 using SideScroll.Avalonia.Controls.Viewer;
@@ -37,6 +38,14 @@ public class BaseWindow : Window
 	public BaseWindow(Project project)
 	{
 		Instance = this;
+
+		WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+		if (project.UserSettings.EnableCustomTitleBar == true)
+		{
+			ExtendClientAreaToDecorationsHint = true;
+			ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+		}
 
 		SideScrollInit.Initialize();
 		SideScrollTheme.InitializeFonts();
@@ -80,16 +89,34 @@ public class BaseWindow : Window
 	{
 		Title = Project.ProjectSettings.Name ?? "<Name>";
 
-		Background = SideScrollTheme.TabBackground;
-
 		MinWidth = DefaultMinWidth;
 		MinHeight = DefaultMinHeight;
+
+		if (Project.UserSettings.EnableCustomTitleBar == true && IsWindows10OrBelow())
+		{
+			// Windows 10 and below won't display a border or drop shadow
+			BorderThickness = new(1);
+			BorderBrush = SideScrollTheme.TabBackgroundBorder;
+		}
 
 		Content = TabViewer = new TabViewer(Project);
 
 		PositionChanged += BaseWindow_PositionChanged;
 
 		this.GetObservable(ClientSizeProperty).Subscribe(new AnonymousObserver<Size>(Resize));
+		this.GetObservable(WindowStateProperty).Subscribe(new AnonymousObserver<WindowState>(WindowStateChanged));
+	}
+
+	private void WindowStateChanged(WindowState state)
+	{
+		if (Project.UserSettings.EnableCustomTitleBar == true && WindowState == WindowState.Maximized)
+		{
+			Padding = new Thickness(7);
+		}
+		else
+		{
+			Padding = new Thickness(0);
+		}
 	}
 
 	public virtual void LoadTab(ITab tab)
@@ -102,7 +129,8 @@ public class BaseWindow : Window
 		SaveWindowSettings();
 	}
 
-	private void SetMaxBounds()
+	// Modifying the actual MaxWidth or MaxHeight breaks double click restoring the previous Width and Height
+	private Size GetMaxBounds()
 	{
 		double maxWidth = 0;
 		double maxHeight = 0;
@@ -121,8 +149,7 @@ public class BaseWindow : Window
 			}
 			maxHeight = Math.Max(maxHeight, workingHeight);
 		}
-		MaxWidth = maxWidth;
-		MaxHeight = maxHeight;
+		return new Size(maxWidth, maxHeight);
 	}
 
 	protected WindowSettings WindowSettings
@@ -165,12 +192,13 @@ public class BaseWindow : Window
 		}
 		set
 		{
+			Size maxBounds = GetMaxBounds();
 			// These are causing the window to be shifted down
-			Width = Math.Clamp(value.Width, MinWidth, MaxWidth);
+			Width = Math.Clamp(value.Width, MinWidth, maxBounds.Width);
 			Height = Math.Clamp(value.Height, MinHeight, MaxHeight);
 
 			double minLeft = -10; // Left position for Windows starts at -10
-			double left = Math.Clamp(value.Left, minLeft, MaxWidth - Width + minLeft); // Values can be negative
+			double left = Math.Clamp(value.Left, minLeft, maxBounds.Width - Width + minLeft); // Values can be negative
 
 			double maxHeight = MaxHeight;
 			double top = Math.Clamp(value.Top, 0, maxHeight - Height);
@@ -186,24 +214,22 @@ public class BaseWindow : Window
 
 	protected void LoadWindowSettings()
 	{
-		SetMaxBounds();
-
 		var settings = Project.Data.App.Load<WindowSettings>();
 		if (settings == null)
 		{
 			settings = new();
-			settings.Left = (MaxWidth - settings.Width) / 2;
-			settings.Top = (MaxHeight - settings.Height) / 2;
+			Width = settings.Width;
+			Height = settings.Height;
 		}
-		WindowSettings = settings;
+		else
+		{
+			WindowSettings = settings;
+		}
 	}
 
 	// Still saving due to a HandleResized calls after IsActive (loadComplete does nothing)
 	private void SaveWindowSettings()
 	{
-		// Do we need a better trigger for when the screen size changes?
-		SetMaxBounds();
-
 		if (_loadComplete)
 		{
 			Dispatcher.UIThread.Post(SaveWindowSettingsInternal, DispatcherPriority.SystemIdle);
@@ -229,5 +255,27 @@ public class BaseWindow : Window
 	private void CleanupDispatcherTimer_Tick(object? sender, EventArgs e)
 	{
 		Project.Data.Cache.CleanupCache(new(), TimeSpan.FromDays(Project.DataSettings.CacheDurationDays));
+	}
+
+	private static bool IsWindows10OrBelow()
+	{
+		if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			return false;
+
+		// Windows 11 is version 10.0 with build >= 22000
+		// Windows 10 is version 10.0 with build < 22000
+		// Windows 8.1 is version 6.3
+		// Windows 8 is version 6.2
+		// Windows 7 is version 6.1
+
+		var version = Environment.OSVersion.Version;
+
+		if (version.Major < 10)
+			return true; // Windows 8.1 or below
+
+		if (version.Major == 10 && version.Build < 22000)
+			return true; // Windows 10
+
+		return false; // Windows 11 or above
 	}
 }

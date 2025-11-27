@@ -12,6 +12,6 @@ public class MainView : BaseView
 		LoadTab(new TabAvalonia());
 
 		LiveChartCreator.Register();
-		TabViewer.Toolbar?.AddVersion();
+		TabViewer.Toolbar?.AddRightControls();
 	}
 }

@@ -101,6 +101,20 @@ public static class SvgUtils
 		}
 	}
 
+	public static IImage GetSvgImage(IResourceView imageResource)
+	{
+		if (imageResource.ResourceType != "svg")
+		{
+			throw new Exception("File path must end with a .svg extension");
+		}
+		using var reader = new StreamReader(imageResource.Stream);
+
+		return new SvgImage
+		{
+			Source = SvgSource.LoadFromSvg(reader.ReadToEnd()),
+		};
+	}
+
 	/// <summary>
 	/// Determines if a stream contains SVG content by checking for XML header
 	/// </summary>

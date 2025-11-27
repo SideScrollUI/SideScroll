@@ -36,7 +36,7 @@ public class TabUserSettings : ITab
 
 		private void Reset(Call call)
 		{
-			Project.UserSettings = new();
+			Project.UserSettings = Project.ProjectSettings.DefaultUserSettings;
 			Refresh();
 		}
 
