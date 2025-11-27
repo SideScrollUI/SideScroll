@@ -30,7 +30,9 @@ public class TabViewerToolbar : TabControlToolbar
 	public ToolbarButton? ButtonMaximize { get; protected set; }
 	public ToolbarButton? ButtonClose { get; protected set; }
 
-	private bool IsMacOS => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+	protected static bool IsMacOS => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+
+	protected string ProjectName => TabViewer.Project.Name!;
 
 	public TabViewerToolbar(TabViewer tabViewer)
 	{
@@ -41,12 +43,12 @@ public class TabViewerToolbar : TabControlToolbar
 		{
 			if (IsMacOS)
 			{
-				var macosTitleButtons = new MacosTitleButtons();
+				MacosTitleButtons macosTitleButtons = new();
 				AddControl(macosTitleButtons);
 			}
 			else
 			{
-				ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScrollTranslucent, updateIconColors: false);
+				ButtonLogo = AddButton(ProjectName, Logo.Svg.SideScrollTranslucent, updateIconColors: false);
 				ButtonLogo.DoubleTapped += ButtonLogo_DoubleTapped;
 			}
 			AddSeparator();
@@ -88,14 +90,14 @@ public class TabViewerToolbar : TabControlToolbar
 
 	public void AddTitle()
 	{
-		var textBlock = new ToolbarHeaderTextBlock(TabViewer.Project.Name!)
+		var textBlock = new ToolbarHeaderTextBlock(ProjectName)
 		{
 			IsHitTestVisible = false,
 		};
 		AddControl(textBlock);
 	}
 
-	public void AddVersion()
+	public void AddRightControls()
 	{
 		AddFill();
 
@@ -103,36 +105,47 @@ public class TabViewerToolbar : TabControlToolbar
 		{
 			if (IsMacOS)
 			{
-				ButtonLogo = AddButton("SideScroll", Logo.Svg.SideScrollTranslucent, updateIconColors: false);
+				ButtonLogo = AddButton(ProjectName, Logo.Svg.SideScrollTranslucent, updateIconColors: false);
 				ButtonLogo.HorizontalAlignment = HorizontalAlignment.Right;
 			}
 			AddTitle();
 		}
 
+		AddVersion();
+		AddWindowControls();
+	}
+
+	public ToolbarHeaderTextBlock AddVersion()
+	{
 		string versionLabel = 'v' + TabViewer.Project.Version.Formatted();
 #if DEBUG
 		versionLabel += " *";
 #endif
-		var textBlock = new ToolbarHeaderTextBlock(versionLabel);
-		textBlock.Margin = new Thickness(0, 0, 20, 0);
-		AddControl(textBlock);
-
-		if (EnableCustomTitleBar && !IsMacOS)
+		var textBlock = new ToolbarHeaderTextBlock(versionLabel)
 		{
-			int width = 44;
+			Margin = new Thickness(0, 0, 20, 0)
+		};
+		AddControl(textBlock);
+		return textBlock;
+	}
 
-			ButtonMinimize = AddButton("Minimize", Icons.Svg.Minimize, 20);
-			ButtonMinimize.Width = width;
-			ButtonMinimize.Add(Minimize);
+	private void AddWindowControls()
+	{
+		if (!EnableCustomTitleBar || IsMacOS) return;
 
-			ButtonMaximize = AddButton("Maximize", Icons.Svg.Restore, 20);
-			ButtonMaximize.Width = width;
-			ButtonMaximize.Add(Maximize);
+		int buttonWidth = 44;
 
-			ButtonClose = AddButton("Close", Icons.Svg.Close, 20);
-			ButtonClose.Width = width;
-			ButtonClose.Add(Close);
-		}
+		ButtonMinimize = AddButton("Minimize", Icons.Svg.Minimize);
+		ButtonMinimize.Width = buttonWidth;
+		ButtonMinimize.Add(Minimize);
+
+		ButtonMaximize = AddButton("Maximize", Icons.Svg.Restore);
+		ButtonMaximize.Width = buttonWidth;
+		ButtonMaximize.Add(Maximize);
+
+		ButtonClose = AddButton("Close", Icons.Svg.Close);
+		ButtonClose.Width = buttonWidth;
+		ButtonClose.Add(Close);
 	}
 
 	private void Refresh(Call call)

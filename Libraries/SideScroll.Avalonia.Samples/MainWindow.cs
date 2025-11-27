@@ -13,7 +13,7 @@ public class MainWindow : BaseWindow
 		LoadTab(new TabAvalonia());
 
 		LiveChartCreator.Register();
-		TabViewer.Toolbar?.AddVersion();
+		TabViewer.Toolbar?.AddRightControls();
 
 		Icon = new WindowIcon(Assets.Icons.SideScroll.Stream);
 	}

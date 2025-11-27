@@ -41,7 +41,7 @@ public class TabSearch : Grid
 		TextBoxSearch = new ToolbarTextBox
 		{
 			VerticalContentAlignment = VerticalAlignment.Center,
-			Padding = new Thickness(5, 3, 25, 3),
+			Padding = new Thickness(5, 3, 25, 1),
 			Watermark = "Search",
 		};
 
@@ -57,7 +57,7 @@ public class TabSearch : Grid
 			Width = 16,
 			Height = 16,
 			Source = coloredImage,
-			Margin = new Thickness(7, 4),
+			Margin = new Thickness(7, 0),
 			HorizontalAlignment = HorizontalAlignment.Right,
 		};
 		Children.Add(image);
