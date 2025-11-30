@@ -41,6 +41,28 @@ public static class ProcessUtils
 		return OSPlatform.Create("Unknown");
 	}
 
+	public static bool IsWindows10OrBelow()
+	{
+		if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+			return false;
+
+		// Windows 11 is version 10.0 with build >= 22000
+		// Windows 10 is version 10.0 with build < 22000
+		// Windows 8.1 is version 6.3
+		// Windows 8 is version 6.2
+		// Windows 7 is version 6.1
+
+		var version = Environment.OSVersion.Version;
+
+		if (version.Major < 10)
+			return true; // Windows 8.1 or below
+
+		if (version.Major == 10 && version.Build < 22000)
+			return true; // Windows 10
+
+		return false; // Windows 11 or above
+	}
+
 	/// <summary>
 	/// Opens a URL in the default web browser
 	/// </summary>

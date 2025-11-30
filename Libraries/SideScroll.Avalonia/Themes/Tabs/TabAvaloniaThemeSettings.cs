@@ -18,10 +18,11 @@ namespace SideScroll.Avalonia.Themes.Tabs;
 
 public class TabAvaloniaThemeSettings : ITab, IDataView
 {
-	[DataValue]
-	public AvaloniaThemeSettings? ThemeSettings;
+	[DataValue, HiddenColumn]
+	public AvaloniaThemeSettings? ThemeSettings { get; set; }
 
-	public DataViewCollection<AvaloniaThemeSettings, TabAvaloniaThemeSettings>? DataViewCollection;
+	[HiddenColumn]
+	public DataViewCollection<AvaloniaThemeSettings, TabAvaloniaThemeSettings>? DataViewCollection { get; set; }
 
 	[DataKey]
 	public string? Name => ThemeSettings?.Name;

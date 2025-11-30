@@ -90,7 +90,7 @@ public class TabAvaloniaThemes : ITab
 				HasName = !_name.IsNullOrEmpty();
 			}
 		}
-		public string? _name;
+		private string? _name;
 
 		public static List<string> Variants { get; } =
 		[

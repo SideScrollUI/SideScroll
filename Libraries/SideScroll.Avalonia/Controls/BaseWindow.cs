@@ -8,6 +8,7 @@ using SideScroll.Avalonia.Tabs;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
+using SideScroll.Utilities;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
@@ -28,6 +29,7 @@ public class BaseWindow : Window
 	public Project Project { get; protected set; }
 
 	public TabViewer TabViewer { get; protected set; }
+	public Border? Border { get; protected set; } // Windows 10 only for now
 
 	private bool _loadComplete;
 
@@ -92,19 +94,38 @@ public class BaseWindow : Window
 		MinWidth = DefaultMinWidth;
 		MinHeight = DefaultMinHeight;
 
-		if (Project.UserSettings.EnableCustomTitleBar == true && IsWindows10OrBelow())
-		{
-			// Windows 10 and below won't display a border or drop shadow
-			BorderThickness = new(1);
-			BorderBrush = SideScrollTheme.TabBackgroundBorder;
-		}
+		TabViewer = new TabViewer(Project);
 
-		Content = TabViewer = new TabViewer(Project);
+		if (Project.UserSettings.EnableCustomTitleBar == true && ProcessUtils.IsWindows10OrBelow())
+		{
+			// Windows 10 and below won't display a border or drop shadow for custom title bars with the mode we need
+			Border = new()
+			{
+				BorderBrush = SideScrollTheme.TabBackgroundBorder,
+				BorderThickness = new(1),
+				Child = TabViewer,
+			};
+			Content = Border;
+
+			ActualThemeVariantChanged += Border_ActualThemeVariantChanged;
+		}
+		else
+		{
+			Content = TabViewer;
+		}
 
 		PositionChanged += BaseWindow_PositionChanged;
 
 		this.GetObservable(ClientSizeProperty).Subscribe(new AnonymousObserver<Size>(Resize));
 		this.GetObservable(WindowStateProperty).Subscribe(new AnonymousObserver<WindowState>(WindowStateChanged));
+	}
+
+	private void Border_ActualThemeVariantChanged(object? sender, EventArgs e)
+	{
+		if (Border != null)
+		{
+			Border.BorderBrush = SideScrollTheme.TabBackgroundBorder;
+		}
 	}
 
 	private void WindowStateChanged(WindowState state)
@@ -255,27 +276,5 @@ public class BaseWindow : Window
 	private void CleanupDispatcherTimer_Tick(object? sender, EventArgs e)
 	{
 		Project.Data.Cache.CleanupCache(new(), TimeSpan.FromDays(Project.DataSettings.CacheDurationDays));
-	}
-
-	private static bool IsWindows10OrBelow()
-	{
-		if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-			return false;
-
-		// Windows 11 is version 10.0 with build >= 22000
-		// Windows 10 is version 10.0 with build < 22000
-		// Windows 8.1 is version 6.3
-		// Windows 8 is version 6.2
-		// Windows 7 is version 6.1
-
-		var version = Environment.OSVersion.Version;
-
-		if (version.Major < 10)
-			return true; // Windows 8.1 or below
-
-		if (version.Major == 10 && version.Build < 22000)
-			return true; // Windows 10
-
-		return false; // Windows 11 or above
 	}
 }

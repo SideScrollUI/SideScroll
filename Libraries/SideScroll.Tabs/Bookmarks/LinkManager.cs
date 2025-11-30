@@ -4,8 +4,8 @@ public class LinkManager(Project project)
 {
 	public static LinkManager? Instance { get; set; }
 
-	public LinkCollection Created { get; set; } = new(project, "Created");
-	public LinkCollection Imported { get; set; } = new(project, "Imported");
+	public LinkCollection Created { get; } = new(project, "Created");
+	public LinkCollection Imported { get; } = new(project, "Imported");
 
 	public void Reload(Call call)
 	{

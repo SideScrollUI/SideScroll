@@ -13,14 +13,14 @@ public class WeakEventSource<TEventArgs> where TEventArgs : EventArgs
 	/// <summary>
 	/// The underlying event that subscribers can attach to
 	/// </summary>
-	public event EventHandler<TEventArgs>? Event;
+	public event EventHandler<TEventArgs>? OnEvent;
 
 	/// <summary>
 	/// Raises the event with the specified sender and event arguments
 	/// </summary>
 	public void Raise(object? sender, TEventArgs eventArgs)
 	{
-		Event?.Invoke(sender, eventArgs);
+		OnEvent?.Invoke(sender, eventArgs);
 	}
 
 	/// <summary>
@@ -28,8 +28,8 @@ public class WeakEventSource<TEventArgs> where TEventArgs : EventArgs
 	/// Subscribers are held with weak references, allowing them to be garbage collected even if they forget to unsubscribe.
 	/// </summary>
 	public readonly WeakEvent<WeakEventSource<TEventArgs>, TEventArgs> WeakEvent = global::Avalonia.Utilities.WeakEvent.Register<WeakEventSource<TEventArgs>, TEventArgs>(
-		(t, s) => t.Event += s,
-		(t, s) => t.Event -= s);
+		(t, s) => t.OnEvent += s,
+		(t, s) => t.OnEvent -= s);
 }
 
 /// <summary>
@@ -41,7 +41,7 @@ public delegate void WeakEventAction<TEventArgs>(object? sender, TEventArgs args
 /// Implements a weak event subscriber that wraps an action delegate.
 /// This allows subscribing to weak events using lambda expressions or method references.
 /// </summary>
-public class WeakSubscriber<TEventArgs>(WeakEventAction<TEventArgs> _onEvent) :
+public class WeakSubscriber<TEventArgs>(WeakEventAction<TEventArgs> onEvent) :
 	IWeakEventSubscriber<TEventArgs> where TEventArgs : EventArgs
 {
 	/// <summary>
@@ -49,6 +49,6 @@ public class WeakSubscriber<TEventArgs>(WeakEventAction<TEventArgs> _onEvent) :
 	/// </summary>
 	public void OnEvent(object? sender, WeakEvent ev, TEventArgs args)
 	{
-		_onEvent.Invoke(sender, args);
+		onEvent.Invoke(sender, args);
 	}
 }

@@ -28,7 +28,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 
 	public int NextId { get; set; }
 
-	public List<Bookmark> History { get; set; } = [];
+	public List<Bookmark> History { get; } = [];
 
 	public Bookmark? Current
 	{

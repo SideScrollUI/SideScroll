@@ -24,11 +24,11 @@ public class TabSplitGrid : Grid
 	public double MaxDesiredWidth { get; set; } = double.MaxValue;
 
 	public Dictionary<object, Control> GridControls { get; protected set; } = [];
-	public List<GridSplitter> GridSplitters { get; protected set; } = []; // reattach each time controls change
+	public List<GridSplitter> GridSplitters { get; } = []; // reattach each time controls change
 
 	public new bool IsArrangeValid { get; protected set; }
 
-	private List<Item> _gridItems = [];
+	private readonly List<Item> _gridItems = [];
 
 	public class Item
 	{
