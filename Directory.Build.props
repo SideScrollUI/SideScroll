@@ -2,6 +2,9 @@
   <PropertyGroup>
     <Version>0.14</Version>
     <PackageReleaseNotes>
+    - Added Custom Title Bar to show the TabViewer Toolbar in the Title Bar
+      - This currently only works for Windows and macOS (no Linux support for now)
+      - This can be enabled and disabled in the Settings
     - Added DataTable support to TabModel.AddData()
     - Improved Default Window Sizing and Position
     </PackageReleaseNotes>

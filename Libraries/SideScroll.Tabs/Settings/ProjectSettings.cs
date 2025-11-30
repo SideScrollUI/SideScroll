@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace SideScroll.Tabs.Settings;
 
@@ -15,6 +16,10 @@ public class ProjectSettings
 
 	public bool ShowToolbar { get; set; } = true;
 
+	public bool DefaultEnableCustomTitlebar => 
+		RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || 
+		RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+
 	public string DefaultAppDataPath => Paths.Combine(Paths.AppDataPath, RelativePath);
 
 	public string DefaultLocalDataPath => Paths.Combine(Paths.LocalDataPath, RelativePath);
@@ -28,6 +33,7 @@ public class ProjectSettings
 
 	public virtual UserSettings DefaultUserSettings => new()
 	{
+		EnableCustomTitleBar = DefaultEnableCustomTitlebar,
 		DataSettings = new()
 		{
 			AppDataPath = DefaultAppDataPath,

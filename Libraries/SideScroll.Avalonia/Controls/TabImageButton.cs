@@ -21,6 +21,7 @@ public class TabImageButton : Button, IDisposable
 
 	public IResourceView ImageResource { get; set; }
 	public double IconSize { get; set; } = 24;
+	public bool UpdateIconColors { get; set; } = true;
 
 	public TabInstance? TabInstance { get; set; }
 
@@ -47,7 +48,7 @@ public class TabImageButton : Button, IDisposable
 	protected virtual Color? HighlightColor => (ImageResource as ImageColorView)?.HighlightColor ?? SideScrollTheme.IconForegroundHighlight.Color;
 	protected virtual Color? DisabledColor => SideScrollTheme.IconForegroundDisabled.Color;
 
-	protected IImage? HighlightImage => _highlightImage ??= SvgUtils.TryGetSvgColorImage(ImageResource, HighlightColor);
+	protected IImage? HighlightImage => _highlightImage ??= UpdateIconColors ? SvgUtils.TryGetSvgColorImage(ImageResource, HighlightColor) : _defaultImage;
 	private IImage? _highlightImage;
 
 	protected IImage? DisabledImage => _disabledImage ??= SvgUtils.TryGetSvgColorImage(ImageResource, DisabledColor);
@@ -65,12 +66,13 @@ public class TabImageButton : Button, IDisposable
 
 	public override string? ToString() => Tooltip;
 
-	public TabImageButton(string tooltip, IResourceView imageResource, string? label = null, double? iconSize = null)
+	public TabImageButton(string tooltip, IResourceView imageResource, string? label = null, double? iconSize = null, bool updateIconColors = true)
 	{
 		Tooltip = tooltip;
 		ImageResource = imageResource;
 		Label = label;
 		IconSize = iconSize ?? IconSize;
+		UpdateIconColors = updateIconColors;
 
 		Grid grid = new()
 		{
@@ -80,7 +82,14 @@ public class TabImageButton : Button, IDisposable
 
 		if (ImageResource.ResourceType == "svg")
 		{
-			_defaultImage = SvgUtils.TryGetSvgColorImage(ImageResource);
+			if (updateIconColors)
+			{
+				_defaultImage = SvgUtils.TryGetSvgColorImage(ImageResource);
+			}
+			else
+			{
+				_defaultImage = SvgUtils.GetSvgImage(ImageResource);
+			}
 		}
 		else
 		{
@@ -135,7 +144,7 @@ public class TabImageButton : Button, IDisposable
 
 	protected void UpdateImage()
 	{
-		if (ImageResource.ResourceType != "svg") return;
+		if (ImageResource.ResourceType != "svg" || !UpdateIconColors) return;
 
 		_defaultImage ??= SvgUtils.TryGetSvgColorImage(ImageResource);
 		var source = IsEnabled ? _defaultImage : (DisabledImage ?? _defaultImage);

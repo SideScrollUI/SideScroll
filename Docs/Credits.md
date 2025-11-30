@@ -40,6 +40,10 @@
 | [Reset](https://icon-icons.com/icon/arrow-reset-regular/204640) | Microsoft | MIT license |
 | [Download](https://icon-icons.com/icon/download/128877) | Feather Icons | Free for commercial use |
 | [Play Circle](https://icon-icons.com/icon/play-button/121290) | Lucy G |  CC Atribution |
+| [Minimize](https://icon-icons.com/icon/line-horizontal-filled/199807) | Microsoft | MIT license |
+| [Maximize](https://icon-icons.com/icon/maximize-filled/199783) | Microsoft | MIT license |
+| [Close](https://icon-icons.com/icon/dismiss-filled/199890) | Microsoft | MIT license |
+| [Restore](https://icon-icons.com/icon/window-restore-line/235520) | Clarity design system  | MIT license |
 
 * Flaticon 
    - http://www.flaticon.com is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/)
@@ -57,3 +61,9 @@
 
 - Licences
   - [Open Font License](https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL)
+
+## Templates
+
+| Template | Name | License |
+| - | - | - |
+| [Avalonia-CustomTitleBarTemplate](https://github.com/FrankenApps/Avalonia-CustomTitleBarTemplate) | FrankenApps | MIT license |

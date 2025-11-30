@@ -42,8 +42,8 @@ public class ToolbarButton : TabImageButton
 		}
 	}
 
-	public ToolbarButton(TabControlToolbar toolbar, string tooltip, IResourceView imageResource, double? iconSize = null, string? label = null) :
-		base(tooltip, imageResource, label, iconSize)
+	public ToolbarButton(TabControlToolbar toolbar, string tooltip, IResourceView imageResource, double? iconSize = null, string? label = null, bool updateIconColors = true) :
+		base(tooltip, imageResource, label, iconSize, updateIconColors)
 	{
 		TabInstance = toolbar.TabInstance;
 		Toolbar = toolbar;

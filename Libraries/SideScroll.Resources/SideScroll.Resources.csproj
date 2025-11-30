@@ -27,6 +27,7 @@
     <None Remove="Icons\svg\Bookmark.svg" />
     <None Remove="Icons\svg\Cancel.svg" />
     <None Remove="Icons\svg\ClearSearch.svg" />
+    <None Remove="Icons\svg\Close.svg" />
     <None Remove="Icons\svg\Copy.svg" />
     <None Remove="Icons\svg\DeleteList.svg" />
     <None Remove="Icons\svg\DownArrow.svg" />
@@ -37,11 +38,14 @@
     <None Remove="Icons\svg\Info.svg" />
     <None Remove="Icons\svg\LeftArrow.svg" />
     <None Remove="Icons\svg\LeftArrowCircle.svg" />
+    <None Remove="Icons\svg\Maximize.svg" />
+    <None Remove="Icons\svg\Minimize.svg" />
     <None Remove="Icons\svg\PanelLeftContract.svg" />
     <None Remove="Icons\svg\PanelLeftExpand.svg" />
     <None Remove="Icons\svg\PlayCircle.svg" />
     <None Remove="Icons\svg\Redo.svg" />
     <None Remove="Icons\svg\Reset.svg" />
+    <None Remove="Icons\svg\Restore.svg" />
     <None Remove="Icons\svg\RightArrow.svg" />
     <None Remove="Icons\svg\RightArrowCircle.svg" />
     <None Remove="Icons\svg\SearchRight.svg" />
@@ -63,6 +67,7 @@
     <None Remove="Icons\svg\StopCircle.svg" />
     <None Remove="Icons\svg\Undo.svg" />
     <None Remove="Icons\svg\UpArrow.svg" />
+    <None Remove="Logo\svg\SideScroll-Translucent.svg" />
     <None Remove="Samples\Text\SolarSystem.json" />
     <None Remove="Samples\Text\SolarSystem.txt" />
     <None Remove="Samples\Text\SolarSystem.xml" />
@@ -74,6 +79,7 @@
     <EmbeddedResource Include="Icons\svg\Bookmark.svg" />
     <EmbeddedResource Include="Icons\svg\Cancel.svg" />
     <EmbeddedResource Include="Icons\svg\ClearSearch.svg" />
+    <EmbeddedResource Include="Icons\svg\Close.svg" />
     <EmbeddedResource Include="Icons\svg\Copy.svg" />
     <EmbeddedResource Include="Icons\svg\DeleteList.svg" />
     <EmbeddedResource Include="Icons\svg\DownArrow.svg" />
@@ -83,11 +89,14 @@
     <EmbeddedResource Include="Icons\svg\Eraser.svg" />
     <EmbeddedResource Include="Icons\svg\Info.svg" />
     <EmbeddedResource Include="Icons\svg\LeftArrowCircle.svg" />
+    <EmbeddedResource Include="Icons\svg\Maximize.svg" />
+    <EmbeddedResource Include="Icons\svg\Minimize.svg" />
     <EmbeddedResource Include="Icons\svg\PanelLeftContract.svg" />
     <EmbeddedResource Include="Icons\svg\PanelLeftExpand.svg" />
     <EmbeddedResource Include="Icons\svg\PlayCircle.svg" />
     <EmbeddedResource Include="Icons\svg\Redo.svg" />
     <EmbeddedResource Include="Icons\svg\Reset.svg" />
+    <EmbeddedResource Include="Icons\svg\Restore.svg" />
     <EmbeddedResource Include="Icons\svg\RightArrowCircle.svg" />
     <EmbeddedResource Include="Icons\svg\SearchRight.svg" />
     <EmbeddedResource Include="Icons\svg\Star.svg" />
@@ -110,6 +119,7 @@
     <EmbeddedResource Include="Icons\svg\StopCircle.svg" />
     <EmbeddedResource Include="Icons\svg\Undo.svg" />
     <EmbeddedResource Include="Icons\svg\UpArrow.svg" />
+    <EmbeddedResource Include="Logo\svg\SideScroll-Translucent.svg" />
     <EmbeddedResource Include="Samples\Text\SolarSystem.json" />
     <EmbeddedResource Include="Samples\Text\SolarSystem.txt" />
     <EmbeddedResource Include="Samples\Text\SolarSystem.xml" />
