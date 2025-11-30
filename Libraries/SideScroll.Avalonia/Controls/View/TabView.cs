@@ -67,8 +67,8 @@ public class TabView : Grid, IDisposable
 	// Created Controls
 	public TabViewActions? TabActions { get; set; }
 	public TabViewTasks? TabTasks { get; set; }
-	public List<ITabDataSelector> TabDatas { get; set; } = [];
-	public List<ITabSelector> CustomTabControls { get; set; } = []; // should everything use this?
+	public List<ITabDataSelector> TabDatas { get; protected set; } = [];
+	public List<ITabSelector> CustomTabControls { get; protected set; } = []; // should everything use this?
 
 	private List<ToolbarButton> _hotKeys = [];
 

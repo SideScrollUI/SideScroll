@@ -17,7 +17,7 @@ public class ToolbarTextBox : TextBox
 
 		LoadTheme();
 
-		ActualThemeVariantChanged += (sender, e) => LoadTheme();
+		ActualThemeVariantChanged += (_, _) => LoadTheme();
 	}
 
 	private void LoadTheme()

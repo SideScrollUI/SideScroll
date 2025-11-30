@@ -44,7 +44,7 @@ public class TabAvaloniaEdit : Border
 
 	public string? Path { get; set; }
 	public ListProperty? ListProperty { get; set; }
-	public AvaloniaEdit.TextEditor TextEditor { get; protected set; }
+	public AvaloniaEdit.TextEditor TextEditor { get; }
 
 	public TextType TextType { get; set; }
 

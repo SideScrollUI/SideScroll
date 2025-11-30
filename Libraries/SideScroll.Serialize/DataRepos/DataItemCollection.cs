@@ -8,7 +8,7 @@ namespace SideScroll.Serialize.DataRepos;
 // Collection of DataRepo items with a key/value lookup
 public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 {
-	public SortedDictionary<string, DataItem<T>> Lookup { get; protected set; } = [];
+	public SortedDictionary<string, DataItem<T>> Lookup { get; } = [];
 
 	public IEnumerable<string> Keys => this.Select(o => o.Key);
 	public IEnumerable<T> Values => this.Select(o => o.Value);
@@ -104,7 +104,7 @@ public interface IDataItem
 
 public class DataItem<T>(string key, T value, string? path = null) : IDataItem
 {
-	public string Key { get; set; } = key;
+	public string Key { get; } = key;
 	public T Value { get; set; } = value;
 	public object Object => Value!;
 	public string? Path { get; set; } = path;

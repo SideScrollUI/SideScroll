@@ -11,70 +11,70 @@ public static class Icons
 
 	public class Svg : NamedItemCollection<Svg, ResourceView>
 	{
-		public static ResourceView Refresh => Get("Refresh");
+		public static ResourceView Refresh { get; } = Get("Refresh");
 
-		public static ResourceView Add => Get("Add");
-		public static ResourceView Delete => Get("Cancel");
+		public static ResourceView Add { get; } = Get("Add");
+		public static ResourceView Delete { get; } = Get("Cancel");
 
-		public static ResourceView Back => Get("LeftArrowCircle");
-		public static ResourceView Forward => Get("RightArrowCircle");
+		public static ResourceView Back { get; } = Get("LeftArrowCircle");
+		public static ResourceView Forward { get; } = Get("RightArrowCircle");
 
-		public static ResourceView Play => Get("PlayCircle");
-		public static ResourceView Stop => Get("StopCircle");
+		public static ResourceView Play { get; } = Get("PlayCircle");
+		public static ResourceView Stop { get; } = Get("StopCircle");
 
-		public static ResourceView LeftArrow => Get("LeftArrow");
-		public static ResourceView RightArrow => Get("RightArrow");
-		public static ResourceView UpArrow => Get("UpArrow");
-		public static ResourceView DownArrow => Get("DownArrow");
+		public static ResourceView LeftArrow { get; } = Get("LeftArrow");
+		public static ResourceView RightArrow { get; } = Get("RightArrow");
+		public static ResourceView UpArrow { get; } = Get("UpArrow");
+		public static ResourceView DownArrow { get; } = Get("DownArrow");
 
-		public static ResourceView Reset => Get("Reset");
-		public static ResourceView Undo => Get("Undo");
-		public static ResourceView Redo => Get("Redo");
+		public static ResourceView Reset { get; } = Get("Reset");
+		public static ResourceView Undo { get; } = Get("Undo");
+		public static ResourceView Redo { get; } = Get("Redo");
 
-		public static ResourceView Search => Get("Search");
-		public static ResourceView SearchRight => Get("SearchRight");
-		public static ResourceView ClearSearch => Get("ClearSearch");
+		public static ResourceView Search { get; } = Get("Search");
+		public static ResourceView SearchRight { get; } = Get("SearchRight");
+		public static ResourceView ClearSearch { get; } = Get("ClearSearch");
 
-		public static ResourceView BlankDocument => Get("BlankDocument");
-		public static ResourceView Save => Get("Save");
-		public static ResourceView OpenFolder => Get("OpenFolder");
+		public static ResourceView BlankDocument { get; } = Get("BlankDocument");
+		public static ResourceView Save { get; } = Get("Save");
+		public static ResourceView OpenFolder { get; } = Get("OpenFolder");
 
-		public static ResourceView Star => Get("Star");
-		public static ResourceView StarFilled => Get("StarFilled");
+		public static ResourceView Star { get; } = Get("Star");
+		public static ResourceView StarFilled { get; } = Get("StarFilled");
 
-		public static ResourceView Browser => Get("Internet");
+		public static ResourceView Browser { get; } = Get("Internet");
 
-		public static ResourceView Enter => Get("Enter");
+		public static ResourceView Enter { get; } = Get("Enter");
 
-		public static ResourceView Copy => Get("Copy");
-		public static ResourceView PadNote => Get("PadNote");
-		public static ResourceView Eraser => Get("Eraser");
+		public static ResourceView Copy { get; } = Get("Copy");
+		public static ResourceView PadNote { get; } = Get("PadNote");
+		public static ResourceView Eraser { get; } = Get("Eraser");
 
-		public static ResourceView Duplicate => Get("Duplicate");
+		public static ResourceView Duplicate { get; } = Get("Duplicate");
 
-		public static ResourceView Pin => Get("Placeholder");
-		public static ResourceView Bookmark => Get("Bookmark");
+		public static ResourceView Pin { get; } = Get("Placeholder");
+		public static ResourceView Bookmark { get; } = Get("Bookmark");
 
-		public static ResourceView Info => Get("Info");
+		public static ResourceView Info { get; } = Get("Info");
 
-		public static ResourceView Stats => Get("Stats");
+		public static ResourceView Stats { get; } = Get("Stats");
 
-		public static ResourceView List1 => Get("List1");
-		public static ResourceView List2 => Get("List2");
-		public static ResourceView DeleteList => Get("DeleteList");
+		public static ResourceView List1 { get; } = Get("List1");
+		public static ResourceView List2 { get; } = Get("List2");
+		public static ResourceView DeleteList { get; } = Get("DeleteList");
 
-		public static ResourceView Link => Get("Link");
-		public static ResourceView Import => Get("Import");
-		public static ResourceView Download => Get("Download");
-		public static ResourceView Screenshot => Get("Screenshot");
+		public static ResourceView Link { get; } = Get("Link");
+		public static ResourceView Import { get; } = Get("Import");
+		public static ResourceView Download { get; } = Get("Download");
+		public static ResourceView Screenshot { get; } = Get("Screenshot");
 
-		public static ResourceView PanelLeftExpand => Get("PanelLeftExpand");
-		public static ResourceView PanelLeftContract => Get("PanelLeftContract");
+		public static ResourceView PanelLeftExpand { get; } = Get("PanelLeftExpand");
+		public static ResourceView PanelLeftContract { get; } = Get("PanelLeftContract");
 
-		public static ResourceView Minimize => Get("Minimize");
-		public static ResourceView Maximize => Get("Maximize");
-		public static ResourceView Restore => Get("Restore");
-		public static ResourceView Close => Get("Close");
+		public static ResourceView Minimize { get; } = Get("Minimize");
+		public static ResourceView Maximize { get; } = Get("Maximize");
+		public static ResourceView Restore { get; } = Get("Restore");
+		public static ResourceView Close { get; } = Get("Close");
 
 		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "svg", resourceName, "svg");
 	}

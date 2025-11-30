@@ -32,7 +32,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 
 	public Binding FormattedBinding { get; set; }
 	//private Binding unformattedBinding;
-	public FormatValueConverter FormatConverter { get; set; } = new();
+	public FormatValueConverter FormatConverter { get; } = new();
 
 	public override string ToString() => PropertyInfo.Name;
 

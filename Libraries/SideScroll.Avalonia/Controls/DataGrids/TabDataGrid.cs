@@ -35,13 +35,13 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	public int MaxColumnWidth { get; set; } = 600;
 
-	public TabModel TabModel { get; set; }
-	public TabInstance TabInstance { get; set; }
+	public TabModel TabModel { get; }
+	public TabInstance TabInstance { get; }
 	public TabDataSettings TabDataSettings { get; set; }
 	public IList? List { get; set; }
-	public Type ElementType { get; protected set; }
+	public Type ElementType { get; }
 
-	public bool AutoGenerateColumns { get; set; }
+	public bool AutoGenerateColumns { get; }
 
 	public DataGrid DataGrid { get; set; }
 	public TabSearch? SearchControl { get; set; }

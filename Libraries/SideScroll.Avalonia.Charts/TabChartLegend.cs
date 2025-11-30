@@ -13,12 +13,12 @@ public abstract class TabChartLegend<TSeries> : Grid
 	public TabChart<TSeries> TabChart { get; }
 	public ChartView ChartView => TabChart.ChartView;
 
-	public List<TabChartLegendItem<TSeries>> LegendItems { get; protected set; } = [];
-	public Dictionary<string, TabChartLegendItem<TSeries>> IdxLegendItems { get; protected set; } = [];
+	public List<TabChartLegendItem<TSeries>> LegendItems { get; } = [];
+	public Dictionary<string, TabChartLegendItem<TSeries>> IdxLegendItems { get; } = [];
 
-	protected ScrollViewer ScrollViewer { get; set; }
-	protected WrapPanel WrapPanel { get; set; }
-	protected TextBlock? TextBlockTotal { get; set; }
+	protected ScrollViewer ScrollViewer { get; }
+	protected WrapPanel WrapPanel { get; }
+	protected TextBlock? TextBlockTotal { get; }
 
 	public event EventHandler<EventArgs>? OnVisibleSeriesChanged;
 

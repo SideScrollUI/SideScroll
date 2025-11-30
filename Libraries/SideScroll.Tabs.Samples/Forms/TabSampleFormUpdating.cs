@@ -9,7 +9,7 @@ public class TabSampleFormUpdating : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonRandomize { get; set; } = new ToolButton("Randomize", Icons.Svg.Refresh);
+		public ToolButton ButtonRandomize { get; } = new ToolButton("Randomize", Icons.Svg.Refresh);
 	}
 
 	public class Instance : TabInstance

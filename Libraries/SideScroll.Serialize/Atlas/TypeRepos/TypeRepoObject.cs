@@ -26,10 +26,10 @@ public class TypeRepoObject : TypeRepo
 		public object? Get();
 	}
 
-	public List<IMemberRepo> MemberRepos { get; protected set; } = [];
+	public List<IMemberRepo> MemberRepos { get; } = [];
 
-	public List<FieldRepo> FieldRepos { get; protected set; } = [];
-	public List<PropertyRepo> PropertyRepos { get; protected set; } = [];
+	public List<FieldRepo> FieldRepos { get; } = [];
+	public List<PropertyRepo> PropertyRepos { get; } = [];
 
 	public LazyClass? LazyClass { get; protected set; }
 

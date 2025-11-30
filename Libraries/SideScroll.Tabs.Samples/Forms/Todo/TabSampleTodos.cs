@@ -12,20 +12,20 @@ public class TabSampleTodos : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
+		public ToolButton ButtonRefresh { get; } = new("Refresh", Icons.Svg.Refresh);
 
 		[Separator]
-		public ToolButton ButtonNew { get; set; } = new("New", Icons.Svg.BlankDocument);
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true);
+		public ToolButton ButtonNew { get; } = new("New", Icons.Svg.BlankDocument);
+		public ToolButton ButtonSave { get; } = new("Save", Icons.Svg.Save, isDefault: true);
 
 		[Separator]
-		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
+		public ToolButton ButtonDelete { get; } = new("Delete", Icons.Svg.Delete);
 
 		[Separator]
-		public ToolButton ButtonCopyToClipboard { get; set; } = new("Copy to Clipboard", Icons.Svg.Copy);
+		public ToolButton ButtonCopyToClipboard { get; } = new("Copy to Clipboard", Icons.Svg.Copy);
 
 		[Separator]
-		public ToolButton ButtonReset { get; set; } = new("Reset", Icons.Svg.Reset);
+		public ToolButton ButtonReset { get; } = new("Reset", Icons.Svg.Reset);
 	}
 
 	public class Instance : TabInstance

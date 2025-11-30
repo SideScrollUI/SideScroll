@@ -9,7 +9,7 @@ namespace SideScroll.Avalonia.Controls.DataGrids;
 
 public class DataGridButtonColumn : DataGridBoundColumn
 {
-	public MethodInfo MethodInfo { get; set; }
+	public MethodInfo MethodInfo { get; }
 	public string ButtonText { get; set; }
 	public string? VisiblePropertyName { get; set; }
 

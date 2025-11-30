@@ -27,7 +27,7 @@ static class Program
 		}
 	}
 
-	public static AppBuilder BuildAvaloniaApp()
+	private static AppBuilder BuildAvaloniaApp()
 		=> AppBuilder.Configure<App>()
 			.UsePlatformDetect()
 			.WithInterFont()

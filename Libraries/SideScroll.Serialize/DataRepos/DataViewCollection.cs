@@ -16,12 +16,12 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 {
 	//public event EventHandler<EventArgs> OnDelete; // todo?
 
-	public ItemCollectionUI<TViewType> Items { get; set; } = [];
+	public ItemCollectionUI<TViewType> Items { get; } = [];
 
 	public DataRepoView<TDataType> DataRepoView { get; }
 	public DataRepoView<TDataType>? DataRepoSecondary { get; set; } // Optional: Saves and Deletes goto a 2nd copy
 
-	public object?[] LoadParams { get; set; }
+	public object?[] LoadParams { get; }
 
 	private Dictionary<TViewType, IDataItem> _dataItemLookup;
 	private Dictionary<IDataItem, TViewType> _valueLookup;

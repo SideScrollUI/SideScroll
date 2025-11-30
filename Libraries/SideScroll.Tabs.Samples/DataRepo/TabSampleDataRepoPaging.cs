@@ -13,8 +13,8 @@ public class TabSampleDataRepoPaging : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonPrevious { get; set; } = new("Previous", Icons.Svg.LeftArrow);
-		public ToolButton ButtonNext { get; set; } = new("Next", Icons.Svg.RightArrow);
+		public ToolButton ButtonPrevious { get; } = new("Previous", Icons.Svg.LeftArrow);
+		public ToolButton ButtonNext { get; } = new("Next", Icons.Svg.RightArrow);
 	}
 
 	public class Instance : TabInstance

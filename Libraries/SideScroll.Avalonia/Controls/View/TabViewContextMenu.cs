@@ -11,9 +11,9 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 	public TabView? TabView { get; protected set; }
 	public TabInstance? TabInstance { get; protected set; }
 
-	public AvaloniaList<object> ItemList { get; set; } = [];
+	public AvaloniaList<object> ItemList { get; } = [];
 
-	private CheckBox? _checkboxAutoSelect;
+	private readonly CheckBox? _checkboxAutoSelect;
 
 	protected override Type StyleKeyOverride => typeof(ContextMenu);
 

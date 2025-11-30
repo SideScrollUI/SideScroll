@@ -30,7 +30,7 @@ public class ListSeries
 	public PropertyInfo? XPropertyInfo { get; set; } // optional
 	public PropertyInfo? YPropertyInfo { get; set; } // optional
 
-	public string? XLabel { get; set; }
+	// public string? XLabel { get; set; }
 	public string? YLabel { get; set; }
 
 	public double XBinSize { get; set; }

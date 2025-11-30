@@ -28,7 +28,7 @@ public class TabViewTasks : Grid, IDisposable
 
 	public IList SelectedItems => _tabDataGrid.SelectedItems;
 
-	private TabDataGrid _tabDataGrid;
+	private readonly TabDataGrid _tabDataGrid;
 
 	public override string ToString() => TabInstance.Model.Name;
 

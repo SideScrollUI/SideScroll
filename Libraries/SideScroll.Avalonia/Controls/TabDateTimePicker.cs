@@ -32,7 +32,7 @@ public class TabDateTimePicker : Grid
 {
 	public ListProperty Property { get; }
 
-	public Binding Binding { get; set; }
+	public Binding Binding { get; }
 
 	private readonly DateTimeValueConverter _dateTimeConverter;
 	private TabCalendarDatePicker _datePicker;

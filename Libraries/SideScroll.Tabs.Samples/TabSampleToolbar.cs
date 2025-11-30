@@ -12,16 +12,16 @@ public class TabSampleToolbar : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
+		public ToolButton ButtonRefresh { get; } = new("Refresh", Icons.Svg.Refresh);
 
 		[Separator]
-		public ToolButton ButtonSearch { get; set; } = new("Search", Icons.Svg.Search)
+		public ToolButton ButtonSearch { get; } = new("Search", Icons.Svg.Search)
 		{
 			ShowTask = true,
 		};
 
 		[Separator]
-		public ToolButton ButtonOpenBrowser { get; set; } = new("Open in Browser", Icons.Svg.Browser);
+		public ToolButton ButtonOpenBrowser { get; } = new("Open in Browser", Icons.Svg.Browser);
 
 		[Separator]
 		public ToolComboBox<TimeSpan> Duration { get; set; } = new("Duration", TimeSpanExtensions.CommonTimeSpans, TimeSpan.FromMinutes(5));

@@ -37,13 +37,13 @@ public class TabViewer : Grid
 	public static Bookmark? LoadBookmark { get; set; }
 	public static List<ITabViewerPlugin> Plugins { get; set; } = [];
 
-	public Project Project { get; set; }
+	public Project Project { get; protected set; }
 
 	// Controls
 	public TabViewerToolbar? Toolbar { get; protected set; }
-	protected Grid BottomGrid { get; set; }
-	public ScrollViewer ScrollViewer { get; protected set; }
-	public Grid ContentGrid { get; protected set; }
+	protected Grid BottomGrid { get; }
+	public ScrollViewer ScrollViewer { get; }
+	public Grid ContentGrid { get; }
 	public TabView? TabView { get; protected set; }
 
 	public Control? ContentControl { get; protected set; }

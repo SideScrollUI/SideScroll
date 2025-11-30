@@ -11,9 +11,9 @@ namespace SideScroll.Avalonia.Controls;
 // See TabAvaloniaEdit for an editable version
 public class TabTextArea : Border
 {
-	public string Text { get; set; }
+	public string Text { get; }
 
-	public TextBlock TextBlock { get; protected set; }
+	public TextBlock TextBlock { get; }
 
 	public TabTextArea(string? text = null)
 	{

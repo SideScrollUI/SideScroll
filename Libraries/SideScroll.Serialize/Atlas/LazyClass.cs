@@ -49,7 +49,7 @@ public class LazyClass
 	public Type OriginalType { get; }
 	public Type LazyType { get; }
 
-	public Dictionary<PropertyInfo, LazyProperty> LazyProperties = [];
+	public Dictionary<PropertyInfo, LazyProperty> LazyProperties { get; } = [];
 
 	public LazyClass(Type type, List<TypeRepoObject.PropertyRepo> propertyRepos)
 	{

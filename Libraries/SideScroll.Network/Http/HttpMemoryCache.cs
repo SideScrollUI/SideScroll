@@ -9,7 +9,7 @@ public class HttpMemoryCache
 
 	// public TimeSpan CacheDuration { get; set; } = TimeSpan.FromHours(1);
 
-	public MemoryCache MemoryCache { get; protected set; }
+	public MemoryCache MemoryCache { get; }
 
 	public HttpMemoryCache(int? maxItems = null)
 	{

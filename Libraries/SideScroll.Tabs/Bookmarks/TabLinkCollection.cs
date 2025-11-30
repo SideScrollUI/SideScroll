@@ -15,10 +15,10 @@ public class TabLinkCollection(LinkCollection links) : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
+		public ToolButton ButtonRefresh { get; } = new("Refresh", Icons.Svg.Refresh);
 
 		[Separator]
-		public ToolButton ButtonDeleteAll { get; set; } = new("Delete All", Icons.Svg.DeleteList)
+		public ToolButton ButtonDeleteAll { get; } = new("Delete All", Icons.Svg.DeleteList)
 		{
 			Flyout = new ConfirmationFlyoutConfig("Delete all links?", "Delete"),
 		};

@@ -10,7 +10,7 @@ public class WordSpacer
 	public string Text { get; }
 	public string Formatted { get; protected set; } = "";
 
-	public List<Token> Tokens { get; protected set; } = [];
+	public List<Token> Tokens { get; } = [];
 
 	public WordSpacer(string? text)
 	{

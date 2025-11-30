@@ -40,7 +40,7 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection lin
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonCopyLinkToClipboard { get; set; } = new("Copy Link to Clipboard", Icons.Svg.Link);
+		public ToolButton ButtonCopyLinkToClipboard { get; } = new("Copy Link to Clipboard", Icons.Svg.Link);
 	}
 
 	public class Instance(TabLinkedBookmark tab) : TabInstance

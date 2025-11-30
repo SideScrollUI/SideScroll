@@ -17,7 +17,7 @@ public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes, FileSelectorO
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonClearAll { get; set; } = new("Clear All", Icons.Svg.DeleteList)
+		public ToolButton ButtonClearAll { get; } = new("Clear All", Icons.Svg.DeleteList)
 		{
 			Flyout = new ConfirmationFlyoutConfig("Clear All?", "Confirm"),
 		};

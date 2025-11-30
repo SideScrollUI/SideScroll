@@ -83,10 +83,10 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 	public ChartView ChartView { get; set; }
 	public bool FillHeight { get; set; }
 
-	public List<ChartSeries<TSeries>> ChartSeries { get; private set; } = [];
-	protected Dictionary<string, ChartSeries<TSeries>> IdxNameToChartSeries { get; set; } = [];
-	protected Dictionary<IList, ListSeries> IdxListToListSeries { get; set; } = [];
-	protected Dictionary<string, SeriesInfo> IdxSeriesInfo { get; set; } = [];
+	public List<ChartSeries<TSeries>> ChartSeries { get; } = [];
+	protected Dictionary<string, ChartSeries<TSeries>> IdxNameToChartSeries { get; } = [];
+	protected Dictionary<IList, ListSeries> IdxListToListSeries { get; } = [];
+	protected Dictionary<string, SeriesInfo> IdxSeriesInfo { get; } = [];
 
 	public List<ListSeries> SelectedSeries
 	{
@@ -112,11 +112,11 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 	public bool UseDateTimeAxis => (XAxisPropertyInfo?.PropertyType == typeof(DateTime)) ||
 									(ChartView.TimeWindow != null);
 
-	public List<ChartAnnotation> Annotations { get; set; } = [];
+	public List<ChartAnnotation> Annotations { get; } = [];
 
 	public ChartAnnotation? NowTimeAnnotation { get; set; }
 
-	public Grid ContainerGrid { get; protected set; }
+	public Grid ContainerGrid { get; }
 
 	public override string? ToString() => ChartView.ToString();
 

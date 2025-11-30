@@ -15,8 +15,8 @@ public class TabSampleFormDataTabs : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonNew { get; set; } = new("New", Icons.Svg.BlankDocument);
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true);
+		public ToolButton ButtonNew { get; } = new("New", Icons.Svg.BlankDocument);
+		public ToolButton ButtonSave { get; } = new("Save", Icons.Svg.Save, isDefault: true);
 	}
 
 	public class Instance : TabInstance

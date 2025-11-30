@@ -53,17 +53,17 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonReset { get; set; } = new("Reset", Icons.Svg.Reset)
+		public ToolButton ButtonReset { get; } = new("Reset", Icons.Svg.Reset)
 		{
 			Flyout = new ConfirmationFlyoutConfig("Are you sure you want to reset this theme?", "Reset"),
 		};
 
 		[Separator]
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save, isDefault: true);
+		public ToolButton ButtonSave { get; } = new("Save", Icons.Svg.Save, isDefault: true);
 
 		[Separator]
-		public ToolButton ButtonCopy { get; set; } = new("Copy to Clipboard", Icons.Svg.Copy);
-		public ToolButton ButtonImport { get; set; } = new("Import from Clipboard", Icons.Svg.Import);
+		public ToolButton ButtonCopy { get; } = new("Copy to Clipboard", Icons.Svg.Copy);
+		public ToolButton ButtonImport { get; } = new("Import from Clipboard", Icons.Svg.Import);
 	}
 
 	public class Instance(TabAvaloniaThemeSettings tab) : TabInstance

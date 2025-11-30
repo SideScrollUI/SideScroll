@@ -30,13 +30,13 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 		public ToolToggleButton? ButtonStar { get; set; }
 
 		[Separator]
-		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
+		public ToolButton ButtonRefresh { get; } = new("Refresh", Icons.Svg.Refresh);
 
 		[Separator]
-		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Svg.OpenFolder);
+		public ToolButton ButtonOpenFolder { get; } = new("Open Folder", Icons.Svg.OpenFolder);
 
 		[Separator]
-		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete, showTask: true);
+		public ToolButton ButtonDelete { get; } = new("Delete", Icons.Svg.Delete, showTask: true);
 	}
 
 	public class Instance(TabDirectory tab) : TabInstance, ITabAsync

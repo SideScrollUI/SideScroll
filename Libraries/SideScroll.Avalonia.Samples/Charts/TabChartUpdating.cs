@@ -16,11 +16,11 @@ public class TabChartUpdating : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
+		public ToolButton ButtonRefresh { get; } = new("Refresh", Icons.Svg.Refresh);
 
 		[Separator]
-		public ToolButton ButtonStart { get; set; } = new("Start", Icons.Svg.Play, backgroundThread: true);
-		public ToolButton ButtonStop { get; set; } = new("Stop", Icons.Svg.Stop);
+		public ToolButton ButtonStart { get; } = new("Start", Icons.Svg.Play, backgroundThread: true);
+		public ToolButton ButtonStop { get; } = new("Stop", Icons.Svg.Stop);
 	}
 
 	public class Instance : TabInstance

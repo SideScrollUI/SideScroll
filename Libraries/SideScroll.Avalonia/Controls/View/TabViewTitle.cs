@@ -17,8 +17,8 @@ public class TabViewTitle : Border, IDisposable
 
 	public int MaxDesiredWidth { get; set; } = 50;
 
-	public TextBlock TextBlock { get; protected set; }
-	public Grid ContainerGrid { get; protected set; }
+	public TextBlock TextBlock { get; }
+	public Grid ContainerGrid { get; }
 
 	public string Text
 	{

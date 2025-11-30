@@ -14,22 +14,22 @@ public class TabControlSearchToolbar : TabControlToolbar
 {
 	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
 
-	public ToolbarButton ButtonNew { get; protected set; }
-	public ToolbarButton ButtonSave { get; protected set; }
+	public ToolbarButton ButtonNew { get; }
+	public ToolbarButton ButtonSave { get; }
 
-	public ToolbarButton ButtonSearch { get; protected set; }
-	public ToolbarButton ButtonLoadNext { get; protected set; }
+	public ToolbarButton ButtonSearch { get; }
+	public ToolbarButton ButtonLoadNext { get; }
 
-	public ToolbarButton ButtonCopyClipBoard { get; protected set; }
+	public ToolbarButton ButtonCopyClipBoard { get; }
 
-	public TabSearch Search { get; protected set; }
+	public TabSearch Search { get; }
 
-	public TextBox TextBoxLimit { get; protected set; }
+	public TextBox TextBoxLimit { get; }
 
-	public ToolbarRadioButton RadioButtonAscending { get; protected set; }
+	public ToolbarRadioButton RadioButtonAscending { get; }
 	public ToolbarRadioButton RadioButtonDescending { get; protected set; }
 
-	public TextBox TextBoxStatus { get; protected set; }
+	public TextBox TextBoxStatus { get; }
 
 	public TabControlSearchToolbar(TabInstance tabInstance) : base(tabInstance)
 	{

@@ -6,7 +6,7 @@ namespace SideScroll.Avalonia.Themes.Tabs;
 
 public class ThemeHistory : AvaloniaObject
 {
-	private List<AvaloniaThemeSettings> _items = [];
+	private readonly List<AvaloniaThemeSettings> _items = [];
 	private int _index = -1;
 
 	public bool HasPrevious

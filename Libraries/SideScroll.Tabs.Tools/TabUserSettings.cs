@@ -13,10 +13,10 @@ public class TabUserSettings : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonReset { get; set; } = new("Reset", Icons.Svg.Reset);
+		public ToolButton ButtonReset { get; } = new("Reset", Icons.Svg.Reset);
 
 		[Separator]
-		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save);
+		public ToolButton ButtonSave { get; } = new("Save", Icons.Svg.Save);
 	}
 
 	public class Instance : TabInstance

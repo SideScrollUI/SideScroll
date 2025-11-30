@@ -15,7 +15,7 @@ public class TabText(string text) : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonCopy { get; set; } = new("Copy", Icons.Svg.Copy);
+		public ToolButton ButtonCopy { get; } = new("Copy", Icons.Svg.Copy);
 	}
 
 	public class Instance(TabText tab) : TabInstance

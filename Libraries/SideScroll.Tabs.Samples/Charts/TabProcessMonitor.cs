@@ -15,10 +15,10 @@ public class TabProcessMonitor : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonReset { get; set; } = new("Reset", Icons.Svg.Reset);
+		public ToolButton ButtonReset { get; } = new("Reset", Icons.Svg.Reset);
 
 		[Separator]
-		public ToolButton ButtonStop { get; set; } = new("Stop", Icons.Svg.Stop);
+		public ToolButton ButtonStop { get; } = new("Stop", Icons.Svg.Stop);
 	}
 
 	public class Instance : TabInstance

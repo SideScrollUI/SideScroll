@@ -21,7 +21,7 @@ public class TabTextBox : TextBox
 {
 	protected override Type StyleKeyOverride => typeof(TextBox);
 
-	public ListProperty? Property { get; protected init; }
+	public ListProperty? Property { get; }
 
 	public bool AcceptsPlainEnter { get; set; }
 

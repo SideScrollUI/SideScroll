@@ -14,7 +14,7 @@ public class TabAvaloniaToolTipSample : ITab
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
+		public ToolButton ButtonRefresh { get; } = new("Refresh", Icons.Svg.Refresh);
 	}
 
 	public class Instance : TabInstance

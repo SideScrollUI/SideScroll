@@ -36,7 +36,7 @@ public class TabForm : Border, IValidationControl
 
 	public object? Object { get; set; }
 
-	public TabFormObject? FormObject { get; set; }
+	public TabFormObject? FormObject { get; }
 
 	public Grid ContainerGrid { get; protected set; }
 

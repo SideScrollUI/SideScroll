@@ -12,12 +12,12 @@ public class Serializer : IDisposable
 {
 	public const uint ScrollId = 0x4C524353; // SCRL -> LRCS: 76, 82, 67, 83, Start of object data (little endian format)
 
-	public SerializerHeader Header { get; set; } = new();
+	public SerializerHeader Header { get; } = new();
 
-	public List<TypeSchema> TypeSchemas { get; protected set; } = [];
+	public List<TypeSchema> TypeSchemas { get; } = [];
 
-	public List<TypeRepo> TypeRepos { get; protected set; } = [];
-	public Dictionary<Type, TypeRepo> IdxTypeToRepo { get; protected set; } = [];
+	public List<TypeRepo> TypeRepos { get; } = [];
+	public Dictionary<Type, TypeRepo> IdxTypeToRepo { get; } = [];
 
 	public TypeRepoString? TypeRepoString { get; set; } // Reuse string instances to reduce memory use when deep cloning
 
@@ -29,11 +29,11 @@ public class Serializer : IDisposable
 
 	// Convert to Parser class?
 	// Use a queue so we don't exceed the stack size due to cross references (i.e. a list with values that refer back to the list)
-	public Queue<object> ParserQueue { get; protected set; } = [];
-	public List<object?> Primitives { get; protected set; } = []; // primitives are usually serialized inline, but that doesn't work if that's the primary type
+	public Queue<object> ParserQueue { get; } = [];
+	public List<object?> Primitives { get; } = []; // primitives are usually serialized inline, but that doesn't work if that's the primary type
 
-	protected Dictionary<object, object> Clones { get; set; } = [];
-	protected Queue<Action> CloneQueue { get; set; } = new();
+	protected Dictionary<object, object> Clones { get; } = [];
+	protected Queue<Action> CloneQueue { get; } = new();
 
 	public TaskInstance? TaskInstance { get; set; }
 

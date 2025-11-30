@@ -42,11 +42,11 @@ public class TypeSchema
 	public bool CanReference { get; set; } // whether the object can reference other types
 	public bool IsCollection { get; protected set; }
 
-	public List<MemberSchema> MemberSchemas { get; set; } = [];
-	public List<FieldSchema> FieldSchemas { get; set; } = [];
-	public List<PropertySchema> PropertySchemas { get; set; } = [];
+	public List<MemberSchema> MemberSchemas { get; } = [];
+	public List<FieldSchema> FieldSchemas { get; } = [];
+	public List<PropertySchema> PropertySchemas { get; } = [];
 	[HiddenColumn]
-	public List<PropertySchema> ReadOnlyPropertySchemas { get; set; } = [];
+	public List<PropertySchema> ReadOnlyPropertySchemas { get; } = [];
 
 	// not really schema, could break out into a records class
 	public int TypeIndex { get; set; } // -1 if null

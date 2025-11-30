@@ -13,7 +13,7 @@ public class TabPlanetCharts : ITab
 
 	public class Instance : TabInstance, ITabSelector
 	{
-		private SolarSystem _solarSystem = SolarSystem.Sample;
+		private readonly SolarSystem _solarSystem = SolarSystem.Sample;
 
 		public new event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 

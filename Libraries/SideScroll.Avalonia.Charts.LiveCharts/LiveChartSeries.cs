@@ -29,7 +29,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 	public bool UseDateTimeAxis { get; }
 
 	public LiveChartLineSeries LineSeries { get; set; }
-	public List<LiveChartPoint> DataPoints { get; set; } = [];
+	public List<LiveChartPoint> DataPoints { get; set; } = []; // Must be initialized for GetDataPoints()
 
 	public SKColor SkColor { get; protected set; }
 

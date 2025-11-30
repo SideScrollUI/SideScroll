@@ -38,10 +38,10 @@ public class TabFile(FileView fileView) : ITab
 		public ToolToggleButton? ButtonStar { get; set; }
 
 		[Separator]
-		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Svg.OpenFolder);
+		public ToolButton ButtonOpenFolder { get; } = new("Open Folder", Icons.Svg.OpenFolder);
 
 		[Separator]
-		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete, showTask: true)
+		public ToolButton ButtonDelete { get; } = new("Delete", Icons.Svg.Delete, showTask: true)
 		{
 			Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete this file?", "Delete"),
 		};

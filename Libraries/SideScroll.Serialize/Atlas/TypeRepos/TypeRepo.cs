@@ -52,11 +52,11 @@ public abstract class TypeRepo : IDisposable
 
 	public Serializer Serializer { get; }
 	public TypeSchema TypeSchema { get; }
-	public Type? Type { get; init; } // might be null after loading
+	public Type? Type { get; } // might be null after loading
 	public Type? LoadableType { get; protected set; } // some types get overridden lazy load, or get removed [Unserialized]
 	public int TypeIndex { get; set; } // -1 if null
 
-	public List<object> Objects { get; protected set; } = []; // ordered by index, not filled in when loading
+	public List<object> Objects { get; } = []; // ordered by index, not filled in when loading
 	public int[]? ObjectSizes { get; protected set; }
 	public long[]? ObjectOffsets { get; protected set; }
 	public object?[] ObjectsLoaded { get; set; }
@@ -65,7 +65,7 @@ public abstract class TypeRepo : IDisposable
 	public BinaryReader? Reader { get; set; }
 
 	// Saving Only
-	public Dictionary<object, int> IdxObjectToIndex { get; protected set; } = []; // for saving only, not filled in for loading
+	public Dictionary<object, int> IdxObjectToIndex { get; } = []; // for saving only, not filled in for loading
 
 	private bool _disposed;
 

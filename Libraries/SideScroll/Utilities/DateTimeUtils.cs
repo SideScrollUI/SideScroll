@@ -12,7 +12,7 @@ public static class DateTimeUtils
 	/// <summary>
 	/// Gets the Unix epoch time (January 1, 1970, 00:00:00 UTC)
 	/// </summary>
-	public static DateTime EpochTime { get; private set; } = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+	public static DateTime EpochTime { get; } = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 	/// <summary>
 	/// Attempts to parse a string into a TimeSpan value
