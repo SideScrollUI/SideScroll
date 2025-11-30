@@ -1,3 +1,4 @@
+using SideScroll.Resources;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -15,6 +16,8 @@ public class ProjectSettings
 	public Version DataVersion { get; set; } = new(); // What Data Repo version to use, bump to current Version when you make a breaking serialization change, (like a breaking NameSpace change, no renaming support yet)
 
 	public bool ShowToolbar { get; set; } = true;
+
+	public IResourceView? CustomTitleIcon { get; set; }
 
 	public bool DefaultEnableCustomTitlebar => 
 		RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || 

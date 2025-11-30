@@ -8,6 +8,7 @@ using Avalonia.Threading;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Avalonia.Controls.View;
 using SideScroll.Avalonia.Utilities;
+using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
 using System.Diagnostics.CodeAnalysis;
@@ -121,8 +122,8 @@ public class TabViewer : Grid
 		TabControlToolbar titleBackgroundToolbar = new()
 		{
 			Height = 34,
+			IsHitTestVisible = false
 		};
-		titleBackgroundToolbar.IsHitTestVisible = false;
 		Children.Add(titleBackgroundToolbar);
 
 		Toolbar = new TabViewerToolbar(this);

@@ -5,6 +5,7 @@ using Avalonia.Reactive;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Extensions;
 using SideScroll.Resources;
+using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
 using System.Runtime.InteropServices;
 
@@ -13,8 +14,9 @@ namespace SideScroll.Avalonia.Controls.Viewer;
 public class TabViewerToolbar : TabControlToolbar
 {
 	public TabViewer TabViewer { get; }
+	public Project Project => TabViewer.Project;
 
-	public bool EnableCustomTitleBar => TabViewer.Project.UserSettings.EnableCustomTitleBar == true;
+	public bool EnableCustomTitleBar => Project.UserSettings.EnableCustomTitleBar == true;
 
 	public ToolbarButton? ButtonLogo { get; protected set; }
 
@@ -30,9 +32,11 @@ public class TabViewerToolbar : TabControlToolbar
 	public ToolbarButton? ButtonMaximize { get; protected set; }
 	public ToolbarButton? ButtonClose { get; protected set; }
 
+	public IResourceView CustomTitleIcon => Project.ProjectSettings.CustomTitleIcon ?? Logo.Svg.SideScrollTranslucent;
+
 	protected static bool IsMacOS => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-	protected string ProjectName => TabViewer.Project.Name!;
+	protected string ProjectName => Project.Name!;
 
 	public TabViewerToolbar(TabViewer tabViewer)
 	{
@@ -48,7 +52,7 @@ public class TabViewerToolbar : TabControlToolbar
 			}
 			else
 			{
-				ButtonLogo = AddButton(ProjectName, Logo.Svg.SideScrollTranslucent, updateIconColors: false);
+				ButtonLogo = AddButton(ProjectName, CustomTitleIcon, updateIconColors: false);
 				ButtonLogo.DoubleTapped += ButtonLogo_DoubleTapped;
 			}
 			AddSeparator();
@@ -56,11 +60,11 @@ public class TabViewerToolbar : TabControlToolbar
 
 		// HotKeys are handled in TabViewer
 		ButtonBack = AddButton("Back (Alt + Left)", Icons.Svg.LeftArrow);
-		ButtonBack.BindIsEnabled(nameof(BookmarkNavigator.CanSeekBackward), TabViewer.Project.Navigator);
+		ButtonBack.BindIsEnabled(nameof(BookmarkNavigator.CanSeekBackward), Project.Navigator);
 		ButtonBack.Add(_ => TabViewer.SeekBackward());
 
 		ButtonForward = AddButton("Forward (Alt + Right)", Icons.Svg.RightArrow);
-		ButtonForward.BindIsEnabled(nameof(BookmarkNavigator.CanSeekForward), TabViewer.Project.Navigator);
+		ButtonForward.BindIsEnabled(nameof(BookmarkNavigator.CanSeekForward), Project.Navigator);
 		ButtonForward.Add(_ => TabViewer.SeekForward());
 		
 		AddSeparator();
@@ -105,7 +109,7 @@ public class TabViewerToolbar : TabControlToolbar
 		{
 			if (IsMacOS)
 			{
-				ButtonLogo = AddButton(ProjectName, Logo.Svg.SideScrollTranslucent, updateIconColors: false);
+				ButtonLogo = AddButton(ProjectName, CustomTitleIcon, updateIconColors: false);
 				ButtonLogo.HorizontalAlignment = HorizontalAlignment.Right;
 			}
 			AddTitle();
@@ -117,7 +121,7 @@ public class TabViewerToolbar : TabControlToolbar
 
 	public ToolbarHeaderTextBlock AddVersion()
 	{
-		string versionLabel = 'v' + TabViewer.Project.Version.Formatted();
+		string versionLabel = 'v' + Project.Version.Formatted();
 #if DEBUG
 		versionLabel += " *";
 #endif
