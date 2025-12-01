@@ -13,7 +13,7 @@ public class TabDashboard : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		public const int RowCount = 10;
 		public const int ColumnCount = 2;

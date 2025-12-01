@@ -4,7 +4,7 @@ public class TabSampleLoadModel : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		public Instance()
 		{

@@ -10,7 +10,7 @@ public class TabCustomControl : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private ItemCollectionUI<Planet>? _planets;
 		private Planet? _planet;

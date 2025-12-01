@@ -40,7 +40,7 @@ public class TabFileImage : ITab, IFileTypeView
 		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
 	}
 
-	public class Instance(TabFileImage tab) : TabInstance
+	private class Instance(TabFileImage tab) : TabInstance
 	{
 		public static int MinDesiredWidth { get; set; } = 100;
 

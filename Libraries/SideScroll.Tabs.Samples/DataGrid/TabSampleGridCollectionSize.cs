@@ -7,7 +7,7 @@ public class TabSampleGridCollectionSize : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private ItemCollection<TestItem> _items = [];
 

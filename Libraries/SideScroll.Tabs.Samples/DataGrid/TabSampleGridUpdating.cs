@@ -10,13 +10,13 @@ public class TabSampleGridUpdating : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonStart { get; } = new("Start", Icons.Svg.Play, backgroundThread: true);
 		public ToolButton ButtonStop { get; } = new("Stop", Icons.Svg.Stop);
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		protected SynchronizationContext Context = SynchronizationContext.Current ?? new();
 
@@ -71,7 +71,7 @@ public class TabSampleGridUpdating : ITab
 		}
 	}
 
-	public class TestItem(SynchronizationContext context) : INotifyPropertyChanged
+	private class TestItem(SynchronizationContext context) : INotifyPropertyChanged
 	{
 		public int SmallNumber { get; set; } = 123;
 		public long BigNumber { get; set; } = 1234567890123456789;

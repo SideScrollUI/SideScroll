@@ -11,7 +11,7 @@ public class TabPlanetCharts : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance, ITabSelector
+	private class Instance : TabInstance, ITabSelector
 	{
 		private readonly SolarSystem _solarSystem = SolarSystem.Sample;
 

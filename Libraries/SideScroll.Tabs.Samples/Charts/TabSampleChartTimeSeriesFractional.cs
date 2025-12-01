@@ -10,7 +10,7 @@ public class TabSampleChartTimeSeriesFractional : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private static readonly TimeSpan SampleDuration = TimeSpan.FromMilliseconds(10);
 

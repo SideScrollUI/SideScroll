@@ -4,7 +4,7 @@ public class TabSampleGridColumnOrdering : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{
@@ -19,7 +19,7 @@ public class TabSampleGridColumnOrdering : ITab
 		}
 	}
 
-	public abstract class TestParent
+	private abstract class TestParent
 	{
 		public string Field = "1";
 		public string Original { get; set; } = "2";
@@ -30,7 +30,7 @@ public class TabSampleGridColumnOrdering : ITab
 		public override string ToString() => Original;
 	}
 
-	public class TestChild : TestParent
+	private class TestChild : TestParent
 	{
 		public override string Overriden { get; set; } = "5";
 		public override string Abstract => "6";

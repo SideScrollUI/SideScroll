@@ -11,7 +11,7 @@ public class TabDemoPlanets : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonRefresh { get; } = new("Refresh", Icons.Svg.Refresh);
 
@@ -29,7 +29,7 @@ public class TabDemoPlanets : ITab
 		public ToolButton ButtonReset { get; } = new("Reset", Icons.Svg.Reset);
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private const string GroupId = "Planets";
 

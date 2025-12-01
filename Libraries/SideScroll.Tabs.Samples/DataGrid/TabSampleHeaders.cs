@@ -7,7 +7,7 @@ public class TabSampleHeaders : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{
@@ -41,7 +41,7 @@ public class TabSampleHeaders : ITab
 			return items;
 		}
 
-		public class TestItem(string id, int value)
+		private class TestItem(string id, int value)
 		{
 			public string Id => id;
 			public int Value => value;

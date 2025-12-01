@@ -7,7 +7,7 @@ public class TabSampleWideColumns : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private ItemCollection<TestWideItem> _items = [];
 
@@ -36,7 +36,7 @@ public class TabSampleWideColumns : ITab
 		}
 	}
 
-	public class TestWideItem
+	private class TestWideItem
 	{
 		public int SmallNumber { get; set; } = 123;
 		public long BigNumber { get; set; } = 1234567890123456789;

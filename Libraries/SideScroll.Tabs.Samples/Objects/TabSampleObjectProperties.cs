@@ -9,7 +9,7 @@ public class TabSampleObjectProperties : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private readonly PropertyTest _propertyTest = new();
 

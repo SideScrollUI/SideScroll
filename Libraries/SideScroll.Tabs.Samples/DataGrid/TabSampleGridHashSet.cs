@@ -4,7 +4,7 @@ public class TabSampleGridHashSet : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private HashSet<TabSampleGridCollectionSize.TestItem> _items = [];
 

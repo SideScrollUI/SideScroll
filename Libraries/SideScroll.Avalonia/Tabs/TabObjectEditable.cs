@@ -8,7 +8,7 @@ public class TabObjectEditable(object obj) : ITab
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance(TabObjectEditable tab) : TabInstance
+	private class Instance(TabObjectEditable tab) : TabInstance
 	{
 		public override void LoadUI(Call call, TabModel model)
 		{

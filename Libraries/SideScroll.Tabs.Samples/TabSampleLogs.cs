@@ -8,7 +8,7 @@ public class TabSampleLogs : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private Call? _sampleCall;
 		private int _counter;

@@ -8,7 +8,7 @@ public class TabTools : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private ItemCollectionUI<ListItem> _items = [];
 

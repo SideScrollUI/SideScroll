@@ -9,7 +9,7 @@ public class TabSampleDataRepoCollection : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private const string RepoId = "TestRepo";
 
@@ -93,7 +93,7 @@ public class TabSampleDataRepoCollection : ITab
 		}
 	}
 
-	public class SampleItem
+	private class SampleItem
 	{
 		[DataKey]
 		public int Id { get; set; }

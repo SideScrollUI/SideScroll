@@ -4,7 +4,7 @@ public class TabSampleGridDictionary : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private Dictionary<string, TestItem> _items = [];
 
@@ -36,7 +36,7 @@ public class TabSampleGridDictionary : ITab
 		}
 	}
 
-	public class TestItem
+	private class TestItem
 	{
 		public string? Name { get; set; }
 		public int Value { get; set; }

@@ -6,7 +6,7 @@ public class TabSampleGridColumnSizing : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{
@@ -29,7 +29,7 @@ public class TabSampleGridColumnSizing : ITab
 		}
 	}
 
-	public class ManyTypesItem
+	private class ManyTypesItem
 	{
 		public int Integer { get; set; }
 		public long Long { get; set; } = 1234567890123456789;

@@ -13,7 +13,7 @@ public class TabSampleChartDimensions : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class ChartSample
+	private class ChartSample
 	{
 		public string? Animal { get; set; }
 
@@ -34,7 +34,7 @@ public class TabSampleChartDimensions : ITab
 		public int Amount { get; set; }
 	}
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonAdd { get; } = new("Add", Icons.Svg.Add);
 
@@ -43,7 +43,7 @@ public class TabSampleChartDimensions : ITab
 		public ToolButton ButtonStop { get; } = new("Stop", Icons.Svg.Stop);
 	}
 
-	public class Instance : TabInstance, ITabSelector
+	private class Instance : TabInstance, ITabSelector
 	{
 		private const int MaxValue = 100;
 		private const int SampleCount = 10;

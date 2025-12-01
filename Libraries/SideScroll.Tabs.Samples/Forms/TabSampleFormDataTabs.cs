@@ -13,13 +13,13 @@ public class TabSampleFormDataTabs : ITab
 
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonNew { get; } = new("New", Icons.Svg.BlankDocument);
 		public ToolButton ButtonSave { get; } = new("Save", Icons.Svg.Save, isDefault: true);
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private const string GroupId = "SampleParams";
 		private const string DataKey = "Default";

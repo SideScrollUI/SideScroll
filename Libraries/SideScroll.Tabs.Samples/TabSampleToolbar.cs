@@ -10,7 +10,7 @@ public class TabSampleToolbar : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonRefresh { get; } = new("Refresh", Icons.Svg.Refresh);
 
@@ -30,7 +30,7 @@ public class TabSampleToolbar : ITab
 		public string Label => "(Status)";
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{

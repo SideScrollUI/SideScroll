@@ -11,13 +11,13 @@ public class TabSampleDataRepoPaging : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonPrevious { get; } = new("Previous", Icons.Svg.LeftArrow);
 		public ToolButton ButtonNext { get; } = new("Next", Icons.Svg.RightArrow);
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private const string RepoId = "PagingRepo";
 
@@ -131,7 +131,7 @@ public class TabSampleDataRepoPaging : ITab
 		}
 	}
 
-	public class SampleItem
+	private class SampleItem
 	{
 		[DataKey]
 		public int Id { get; set; }

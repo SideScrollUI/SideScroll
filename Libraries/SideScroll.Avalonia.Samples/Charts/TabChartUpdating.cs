@@ -14,7 +14,7 @@ public class TabChartUpdating : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonRefresh { get; } = new("Refresh", Icons.Svg.Refresh);
 
@@ -23,7 +23,7 @@ public class TabChartUpdating : ITab
 		public ToolButton ButtonStop { get; } = new("Stop", Icons.Svg.Stop);
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private readonly Random _random = new();
 

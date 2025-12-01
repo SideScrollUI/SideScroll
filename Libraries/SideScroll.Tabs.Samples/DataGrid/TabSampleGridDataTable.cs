@@ -10,7 +10,7 @@ public class TabSampleGridDataTable : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance, ITabCreator
+	private class Instance : TabInstance, ITabCreator
 	{
 		private DataTable? _dataTable;
 

@@ -18,7 +18,7 @@ public class TabText(string text) : ITab
 		public ToolButton ButtonCopy { get; } = new("Copy", Icons.Svg.Copy);
 	}
 
-	public class Instance(TabText tab) : TabInstance
+	private class Instance(TabText tab) : TabInstance
 	{
 		public override void LoadUI(Call call, TabModel model)
 		{

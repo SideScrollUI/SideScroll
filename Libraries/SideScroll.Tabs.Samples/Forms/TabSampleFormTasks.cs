@@ -8,7 +8,7 @@ public class TabSampleFormTasks : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private const string DataKey = "Tasks";
 
@@ -73,7 +73,7 @@ public class TabSampleFormTasks : ITab
 		}
 	}
 
-	public class SampleResult
+	private class SampleResult
 	{
 		public SampleItem? SampleItem;
 		public string? Name => SampleItem?.Name;

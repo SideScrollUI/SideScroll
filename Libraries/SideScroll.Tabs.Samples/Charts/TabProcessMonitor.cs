@@ -13,7 +13,7 @@ public class TabProcessMonitor : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonReset { get; } = new("Reset", Icons.Svg.Reset);
 
@@ -21,7 +21,7 @@ public class TabProcessMonitor : ITab
 		public ToolButton ButtonStop { get; } = new("Stop", Icons.Svg.Stop);
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private ItemQueueCollection<CpuSample> _cpuUsage = [];
 

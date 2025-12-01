@@ -15,7 +15,7 @@ public class TabDataRepoSettings(UserSettings userSettings) : ITab
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance(TabDataRepoSettings tab) : TabInstance
+	private class Instance(TabDataRepoSettings tab) : TabInstance
 	{
 		protected DataSettings DataSettings => tab.UserSettings.DataSettings;
 

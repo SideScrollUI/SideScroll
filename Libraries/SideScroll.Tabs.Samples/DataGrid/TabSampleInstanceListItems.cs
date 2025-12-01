@@ -6,7 +6,7 @@ public class TabSampleInstanceListItems : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		public bool BooleanField = true; // Ignored for now, GetListItems() doesn't support fields
 		public bool BooleanProperty { get; set; } = true;

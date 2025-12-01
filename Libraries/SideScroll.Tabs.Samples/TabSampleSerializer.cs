@@ -8,7 +8,7 @@ public class TabSampleSerializer : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private ItemCollectionUI<ListItem> _items = [];
 
@@ -57,7 +57,7 @@ public class TabSampleSerializer : ITab
 		}
 	}
 
-	public class SampleItem
+	private class SampleItem
 	{
 		public int Id { get; set; }
 		public string? Name { get; set; }

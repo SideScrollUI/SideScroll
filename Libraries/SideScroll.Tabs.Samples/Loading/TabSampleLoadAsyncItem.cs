@@ -7,7 +7,7 @@ public class TabSampleLoadAsyncItem : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{
@@ -17,7 +17,7 @@ public class TabSampleLoadAsyncItem : ITab
 			};
 		}
 
-		public class TestItem
+		private class TestItem
 		{
 			public int Integer { get; set; }
 

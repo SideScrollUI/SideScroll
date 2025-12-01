@@ -10,7 +10,7 @@ public class TabSampleChartProperties : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonAdd { get; } = new("Add", Icons.Svg.Add);
 
@@ -19,7 +19,7 @@ public class TabSampleChartProperties : ITab
 		public ToolButton ButtonStop { get; } = new("Stop", Icons.Svg.Stop);
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private readonly ItemCollection<ChartSample> _samples = [];
 		private readonly Random _random = new();

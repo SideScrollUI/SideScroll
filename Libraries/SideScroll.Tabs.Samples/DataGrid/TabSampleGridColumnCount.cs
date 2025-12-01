@@ -7,7 +7,7 @@ public class TabSampleGridColumnCount : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private ItemCollectionUI<TestItem> _items = [];
 
@@ -38,7 +38,7 @@ public class TabSampleGridColumnCount : ITab
 		}
 	}
 
-	public class TestItem
+	private class TestItem
 	{
 		public int Index { get; set; }
 

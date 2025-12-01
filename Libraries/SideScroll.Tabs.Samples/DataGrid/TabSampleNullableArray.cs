@@ -4,7 +4,7 @@ public class TabSampleNullableArray : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{
@@ -23,7 +23,7 @@ public class TabSampleNullableArray : ITab
 		}
 	}
 
-	public struct TestItem
+	private struct TestItem
 	{
 		public int SmallNumber { get; set; }
 		public long BigNumber { get; set; }

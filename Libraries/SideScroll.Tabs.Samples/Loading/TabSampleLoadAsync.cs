@@ -7,12 +7,12 @@ public class TabSampleLoadAsync : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonRefresh { get; } = new("Refresh", Icons.Svg.Refresh);
 	}
 
-	public class Instance : TabInstance, ITabAsync
+	private class Instance : TabInstance, ITabAsync
 	{
 		private const int DelayMs = 5000;
 

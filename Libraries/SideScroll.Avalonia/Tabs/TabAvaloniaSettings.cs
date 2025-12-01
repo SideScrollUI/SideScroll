@@ -30,7 +30,7 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 		public ToolButton ButtonSave { get; } = new("Save", Icons.Svg.Save, isDefault: true);
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		public T? CustomUserSettings;
 

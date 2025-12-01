@@ -7,25 +7,25 @@ public class TabSampleFormUpdating : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonRandomize { get; } = new ToolButton("Randomize", Icons.Svg.Refresh);
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
-		protected SynchronizationContext Context = SynchronizationContext.Current ?? new();
+		private readonly SynchronizationContext _context = SynchronizationContext.Current ?? new();
 
 		private SampleItemDataBinding? _sampleItem;
 		private readonly Random _random = new();
 
 		public override void Load(Call call, TabModel model)
 		{
-			_sampleItem = new SampleItemDataBinding(Context);
+			_sampleItem = new SampleItemDataBinding(_context);
 			Randomize(call);
 			model.AddForm(_sampleItem!);
 
-			var toolbar = new Toolbar();
+			Toolbar toolbar = new();
 			toolbar.ButtonRandomize.Action = Randomize;
 			model.AddObject(toolbar);
 		}

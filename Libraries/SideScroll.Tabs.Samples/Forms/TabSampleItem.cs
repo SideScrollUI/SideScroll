@@ -40,7 +40,7 @@ public class TabSampleItem : ITab, IDataView
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance(TabSampleItem tab) : TabInstance
+	private class Instance(TabSampleItem tab) : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{

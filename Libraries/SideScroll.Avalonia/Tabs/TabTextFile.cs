@@ -10,7 +10,7 @@ public class TabTextFile(FilePath filePath) : ITab
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance(TabTextFile tab) : TabInstance
+	private class Instance(TabTextFile tab) : TabInstance
 	{
 		public override void LoadUI(Call call, TabModel model)
 		{

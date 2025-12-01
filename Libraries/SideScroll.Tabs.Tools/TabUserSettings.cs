@@ -21,7 +21,7 @@ public class TabUserSettings : ITab
 
 	public class Instance : TabInstance
 	{
-		public UserSettings? UserSettings;
+		public UserSettings? UserSettings { get; protected set; }
 
 		public override void Load(Call call, TabModel model)
 		{
