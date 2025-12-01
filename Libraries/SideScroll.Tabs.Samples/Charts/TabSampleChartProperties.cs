@@ -29,7 +29,7 @@ public class TabSampleChartProperties : ITab
 			public int Amount { get; set; }
 		}
 
-		public class ChartSample
+		private class ChartSample
 		{
 			public string? Name { get; set; }
 

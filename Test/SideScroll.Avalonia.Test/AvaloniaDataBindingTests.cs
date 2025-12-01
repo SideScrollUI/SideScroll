@@ -11,7 +11,7 @@ public class AvaloniaDataBindingTests
 	{
 	}
 
-	public class TestItem
+	private class TestItem
 	{
 		public string? Name { get; set; }
 	}

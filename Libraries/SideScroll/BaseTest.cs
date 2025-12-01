@@ -4,7 +4,7 @@ namespace SideScroll;
 
 public class BaseTest
 {
-	public Call Call { get; set; } = new();
+	protected Call Call { get; set; } = new();
 
 	public virtual void Initialize(string name, LogLevel logLevel = LogLevel.Info)
 	{

@@ -6,7 +6,7 @@ namespace SideScroll.Serialize.Test;
 [Category("Serialize")]
 public class DataRepoTests : SerializeBaseTest
 {
-	private DataRepo _dataRepo = new(TestPath, "Test");
+	private readonly DataRepo _dataRepo = new(TestPath, "Test");
 
 	[OneTimeSetUp]
 	public void BaseSetup()

@@ -5,7 +5,7 @@ namespace SideScroll.Test;
 [Category("Call")]
 public class CallTests : BaseTest
 {
-	private List<int?> _input = [null, 0, 1];
+	private readonly List<int?> _input = [null, 0, 1];
 
 	[OneTimeSetUp]
 	public void BaseSetup()

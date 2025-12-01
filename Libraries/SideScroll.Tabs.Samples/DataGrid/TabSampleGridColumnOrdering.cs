@@ -1,5 +1,6 @@
 namespace SideScroll.Tabs.Samples.DataGrid;
 
+// Tests the column order matches for the different types
 public class TabSampleGridColumnOrdering : ITab
 {
 	public TabInstance Create() => new Instance();
@@ -38,6 +39,3 @@ public class TabSampleGridColumnOrdering : ITab
 		public override string ToString() => Original;
 	}
 }
-/*
-Tests the column order matches for the different types
-*/

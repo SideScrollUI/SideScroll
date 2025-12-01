@@ -18,7 +18,7 @@ public class TabSampleGridUpdating : ITab
 
 	private class Instance : TabInstance
 	{
-		protected SynchronizationContext Context = SynchronizationContext.Current ?? new();
+		private readonly SynchronizationContext _context = SynchronizationContext.Current ?? new();
 
 		private ItemCollection<TestItem> _items = [];
 		private Call? _counterCall;
@@ -39,7 +39,7 @@ public class TabSampleGridUpdating : ITab
 		{
 			for (int i = 0; i < 20; i++)
 			{
-				var testItem = new TestItem(Context)
+				var testItem = new TestItem(_context)
 				{
 					SmallNumber = i
 				};
@@ -76,8 +76,6 @@ public class TabSampleGridUpdating : ITab
 		public int SmallNumber { get; set; } = 123;
 		public long BigNumber { get; set; } = 1234567890123456789;
 
-		protected SynchronizationContext Context = context;
-
 		public event PropertyChangedEventHandler? PropertyChanged;
 
 		public override string ToString() => SmallNumber.ToString();
@@ -87,9 +85,9 @@ public class TabSampleGridUpdating : ITab
 			NotifyPropertyChanged(nameof(BigNumber));
 		}
 
-		public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+		private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 		{
-			Context.Post(NotifyPropertyChangedContext, propertyName);
+			context.Post(NotifyPropertyChangedContext, propertyName);
 		}
 
 		private void NotifyPropertyChangedContext(object? state)

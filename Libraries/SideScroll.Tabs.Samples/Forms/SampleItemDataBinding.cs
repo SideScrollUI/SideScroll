@@ -73,15 +73,13 @@ public class SampleItemDataBinding(SynchronizationContext context) : INotifyProp
 	[ReadOnly(true)]
 	public DateTime? DateTime { get; set; }
 
-	protected SynchronizationContext Context = context;
-
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public override string? ToString() => Value;
 
 	public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		Context.Post(NotifyPropertyChangedContext, propertyName);
+		context.Post(NotifyPropertyChangedContext, propertyName);
 	}
 
 	private void NotifyPropertyChangedContext(object? state)

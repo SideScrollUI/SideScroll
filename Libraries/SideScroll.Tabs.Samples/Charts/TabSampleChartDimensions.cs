@@ -29,7 +29,7 @@ public class TabSampleChartDimensions : ITab
 		public override string ToString() => $"{Animal}: {Value}";
 	}
 
-	public class TestItem
+	private class TestItem
 	{
 		public int Amount { get; set; }
 	}

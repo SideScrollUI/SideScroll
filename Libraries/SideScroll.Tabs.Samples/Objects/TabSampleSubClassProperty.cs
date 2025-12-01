@@ -19,7 +19,7 @@ public class TabSampleSubClassProperty : ITab
 		}
 	}
 
-	public class ParentClass
+	private class ParentClass
 	{
 		public ChildClass Child { get; set; } = new();
 
@@ -27,7 +27,7 @@ public class TabSampleSubClassProperty : ITab
 	}
 
 
-	public class ChildClass
+	private class ChildClass
 	{
 		public string Text { get; set; } = "test";
 

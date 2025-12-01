@@ -36,7 +36,7 @@ public class SampleItem
 	];
 
 	[BindList(nameof(ListItems)), ColumnIndex(2)]
-	public SampleListItem ListItem { get; set; }
+	public SampleListItem ListItem { get; set; } = ListItems[1];
 
 	public DateTime DateTime { get; set; } = TimeZoneView.Now.Trim();
 
@@ -44,11 +44,6 @@ public class SampleItem
 
 	[BindList(nameof(TimeZones))]
 	public TimeZoneView TimeZone { get; set; } = TimeZoneView.Current;
-
-	public SampleItem()
-	{
-		ListItem = ListItems[1];
-	}
 
 	public override string? ToString() => Name;
 
