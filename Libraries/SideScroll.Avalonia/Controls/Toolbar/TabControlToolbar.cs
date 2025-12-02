@@ -193,7 +193,7 @@ public class TabControlToolbar : Grid, IDisposable
 			TextWrapping = TextWrapping.NoWrap,
 			VerticalAlignment = VerticalAlignment.Center,
 			IsReadOnly = true,
-			Margin = DefaultMargin,
+			Padding = new Thickness(10, 8, 6, 2),
 			BorderThickness = new Thickness(0),
 			BorderBrush = Brushes.Transparent,
 			Background = Brushes.Transparent,
@@ -247,7 +247,7 @@ public class ToolbarTextBlock : TextBlock
 	public ToolbarTextBlock(string text = "")
 	{
 		Text = text;
-		Margin = TabControlToolbar.DefaultMargin;
+		Margin = new Thickness(6, 2, 6, 0);
 		TextWrapping = TextWrapping.NoWrap;
 		VerticalAlignment = VerticalAlignment.Center;
 	}

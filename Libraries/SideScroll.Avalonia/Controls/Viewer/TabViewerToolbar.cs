@@ -53,6 +53,7 @@ public class TabViewerToolbar : TabControlToolbar
 			else
 			{
 				ButtonLogo = AddButton(ProjectName, CustomTitleIcon, updateIconColors: false);
+				ButtonLogo.Width = 42;
 				ButtonLogo.DoubleTapped += ButtonLogo_DoubleTapped;
 			}
 			AddSeparator();
@@ -92,15 +93,6 @@ public class TabViewerToolbar : TabControlToolbar
 		}
 	}
 
-	public void AddTitle()
-	{
-		var textBlock = new ToolbarHeaderTextBlock(ProjectName)
-		{
-			IsHitTestVisible = false,
-		};
-		AddControl(textBlock);
-	}
-
 	public void AddRightControls()
 	{
 		AddFill();
@@ -119,6 +111,15 @@ public class TabViewerToolbar : TabControlToolbar
 		AddWindowControls();
 	}
 
+	public void AddTitle()
+	{
+		var textBlock = new ToolbarHeaderTextBlock(ProjectName)
+		{
+			IsHitTestVisible = false,
+		};
+		AddControl(textBlock);
+	}
+
 	public ToolbarHeaderTextBlock AddVersion()
 	{
 		string versionLabel = 'v' + Project.Version.Formatted();
@@ -133,7 +134,7 @@ public class TabViewerToolbar : TabControlToolbar
 		return textBlock;
 	}
 
-	private void AddWindowControls()
+	public void AddWindowControls()
 	{
 		if (!EnableCustomTitleBar || IsMacOS) return;
 

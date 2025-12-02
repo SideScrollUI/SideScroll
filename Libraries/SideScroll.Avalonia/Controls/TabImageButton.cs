@@ -94,7 +94,10 @@ public class TabImageButton : Button, IDisposable
 		else
 		{
 			Stream stream = ImageResource.Stream;
-			_defaultImage = new Bitmap(stream);
+			// For .ico files with multiple resolutions, decode to the target size
+			// This selects the closest matching resolution from the icon
+			int targetSize = (int)IconSize;
+			_defaultImage = Bitmap.DecodeToWidth(stream, targetSize);
 		}
 
 		_imageControl = new()

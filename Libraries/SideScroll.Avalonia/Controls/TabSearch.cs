@@ -41,7 +41,7 @@ public class TabSearch : Grid
 		TextBoxSearch = new ToolbarTextBox
 		{
 			VerticalContentAlignment = VerticalAlignment.Center,
-			Padding = new Thickness(5, 3, 25, 1),
+			Padding = new Thickness(5, 2, 25, 1),
 			Watermark = "Search",
 		};
 
