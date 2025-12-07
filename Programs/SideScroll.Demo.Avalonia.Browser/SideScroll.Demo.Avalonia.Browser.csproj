@@ -9,6 +9,7 @@
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <PublishTrimmed>false</PublishTrimmed>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
