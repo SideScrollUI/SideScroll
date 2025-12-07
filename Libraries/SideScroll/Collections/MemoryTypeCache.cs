@@ -3,6 +3,10 @@ using SideScroll.Attributes;
 
 namespace SideScroll.Collections;
 
+/// <summary>
+/// A typed memory cache wrapper that provides size-limited caching with optional expiration
+/// </summary>
+/// <typeparam name="T">The type of objects to cache</typeparam>
 [Unserialized]
 public class MemoryTypeCache<T>
 {
@@ -11,6 +15,9 @@ public class MemoryTypeCache<T>
 
 	public MemoryCache MemoryCache { get; }
 
+	/// <summary>
+	/// Initializes a new memory cache with specified size and duration limits
+	/// </summary>
 	public MemoryTypeCache(int maxItems = 100, TimeSpan? cacheDuration = null)
 	{
 		MaxItems = maxItems;
@@ -24,6 +31,9 @@ public class MemoryTypeCache<T>
 		MemoryCache = new MemoryCache(options);
 	}
 
+	/// <summary>
+	/// Stores a value in the cache with the specified key
+	/// </summary>
 	public void Set(string key, T value)
 	{
 		if (value == null) return;
@@ -36,6 +46,9 @@ public class MemoryTypeCache<T>
 		MemoryCache.Set(key, value, options);
 	}
 
+	/// <summary>
+	/// Retrieves a cached value and logs when found
+	/// </summary>
 	public T? Get(Call call, string key)
 	{
 		if (MemoryCache.TryGetValue(key, out object? obj))
@@ -47,6 +60,9 @@ public class MemoryTypeCache<T>
 		return default;
 	}
 
+	/// <summary>
+	/// Attempts to retrieve a cached value
+	/// </summary>
 	public bool TryGetValue(string key, out T? value)
 	{
 		if (MemoryCache.TryGetValue(key, out object? obj))
@@ -58,6 +74,9 @@ public class MemoryTypeCache<T>
 		return false;
 	}
 
+	/// <summary>
+	/// Attempts to retrieve a cached value and logs when found
+	/// </summary>
 	public bool TryGetValue(Call call, string key, out T? value)
 	{
 		if (MemoryCache.TryGetValue(key, out object? obj))

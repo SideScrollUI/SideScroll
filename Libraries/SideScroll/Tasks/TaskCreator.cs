@@ -19,6 +19,9 @@ public class ConfirmationFlyoutConfig(string text, string confirmText, string ca
 }
 
 
+/// <summary>
+/// Base class for creating and managing task execution with support for threading, logging, and progress tracking
+/// </summary>
 public abstract class TaskCreator : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged; // Used only for INotifyPropertyChanged memory leak fix?
@@ -52,12 +55,18 @@ public abstract class TaskCreator : INotifyPropertyChanged
 
 	public override string? ToString() => Label;
 
+	/// <summary>
+	/// Synchronously runs the task and waits for completion
+	/// </summary>
 	public void Run(Call call)
 	{
 		TaskInstance taskInstance = Start(call);
 		taskInstance.Task!.GetAwaiter().GetResult();
 	}
 
+	/// <summary>
+	/// Creates a new task instance without starting it
+	/// </summary>
 	public TaskInstance Create(Call call)
 	{
 		Context ??= SynchronizationContext.Current ?? new();
@@ -72,8 +81,12 @@ public abstract class TaskCreator : INotifyPropertyChanged
 		return taskInstance;
 	}
 
-	// Creates, Starts, and returns a new Task
-	// If UseTask is not enabled will wait for action completion
+	/// <summary>
+	/// Creates and starts a new task instance
+	/// </summary>
+	/// <remarks>
+	/// If UseTask is not enabled, will wait for action completion before returning
+	/// </remarks>
 	public TaskInstance Start(Call call)
 	{
 		TaskInstance taskInstance = Create(call);
@@ -81,8 +94,14 @@ public abstract class TaskCreator : INotifyPropertyChanged
 		return taskInstance;
 	}
 
+	/// <summary>
+	/// Creates an action delegate that will execute the task logic
+	/// </summary>
 	public abstract Action CreateAction(Call call);
 
+	/// <summary>
+	/// Starts the task asynchronously and returns the Task
+	/// </summary>
 	public virtual Task StartTask(Call call)
 	{
 		Action action = CreateAction(call);

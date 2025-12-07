@@ -3,8 +3,14 @@ using System.ComponentModel;
 
 namespace SideScroll.Collections;
 
+/// <summary>
+/// A custom comparer that handles comparison of various object types including primitives, strings, collections, and IComparable objects
+/// </summary>
 public class CustomComparer : IComparer
 {
+	/// <summary>
+	/// Compares two objects and returns a value indicating their relative sort order
+	/// </summary>
 	public virtual int Compare(object? x, object? y)
 	{
 		if (x == null && y == null)
@@ -49,11 +55,17 @@ public class CustomComparer : IComparer
 	}
 }
 
+/// <summary>
+/// Extends CustomComparer to support property-based sorting with sort direction
+/// </summary>
 public class ObjectSorter : CustomComparer
 {
 	public ListSortDescriptionCollection? Sorts { get; set; }
 	public ListSortDirection SortDirection { get; set; }
 
+	/// <summary>
+	/// Compares two objects based on the specified property descriptor and sort direction
+	/// </summary>
 	public override int Compare(object? x, object? y)
 	{
 		PropertyDescriptor descriptor = Sorts![0]!.PropertyDescriptor!;

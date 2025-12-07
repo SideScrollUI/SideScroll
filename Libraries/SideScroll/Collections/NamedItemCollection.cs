@@ -2,6 +2,24 @@ using System.Reflection;
 
 namespace SideScroll.Collections;
 
+/// <summary>
+/// Provides static reflection-based access to public static properties and fields of a specified type
+/// </summary>
+/// <typeparam name="TCollection">The type containing the static members to collect</typeparam>
+/// <typeparam name="TValue">The type of values to collect</typeparam>
+/// <example>
+/// <code>
+/// // Given a collection class:
+/// public class Icons : NamedItemCollection<Icons, string>
+/// {
+///     public static string Home = "home.png";
+///     public static string Settings = "settings.png";
+/// }
+/// 
+/// // Access all values:
+/// var icons = Icons.Values;
+/// </code>
+/// </example>
 public class NamedItemCollection<TCollection, TValue>
 {
 	public static List<KeyValuePair<MemberInfo, TValue>> Items => _items ??= GetItems();
@@ -10,6 +28,9 @@ public class NamedItemCollection<TCollection, TValue>
 	public static List<TValue> Values => _values ??= Items.Select(v => v.Value).ToList();
 	private static List<TValue>? _values;
 
+	/// <summary>
+	/// Retrieves all public static properties and fields from the collection type that match the value type
+	/// </summary>
 	public static List<KeyValuePair<MemberInfo, TValue>> GetItems()
 	{
 		Type collectionType = typeof(TCollection);

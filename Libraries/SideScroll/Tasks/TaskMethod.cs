@@ -2,6 +2,9 @@ using System.Reflection;
 
 namespace SideScroll.Tasks;
 
+/// <summary>
+/// A task creator that wraps a method from an object using reflection for dynamic task execution
+/// </summary>
 public class TaskMethod : TaskCreator
 {
 	public MethodInfo MethodInfo { get; }
@@ -9,6 +12,9 @@ public class TaskMethod : TaskCreator
 
 	public override string ToString() => MethodInfo.Name;
 
+	/// <summary>
+	/// Initializes a new task method with the specified method info and target object
+	/// </summary>
 	public TaskMethod(MethodInfo methodInfo, object obj)
 	{
 		MethodInfo = methodInfo;
@@ -17,6 +23,9 @@ public class TaskMethod : TaskCreator
 		Label = methodInfo.Name;
 	}
 
+	/// <summary>
+	/// Creates an action that will invoke the method on the target object
+	/// </summary>
 	public override Action CreateAction(Call call)
 	{
 		return () => RunMethod(call);

@@ -6,11 +6,17 @@ using System.Runtime.CompilerServices;
 
 namespace SideScroll.Tasks;
 
+/// <summary>
+/// Event arguments for showing messages to the user
+/// </summary>
 public class ShowMessageEventArgs(string message) : EventArgs
 {
 	public string Message => message;
 }
 
+/// <summary>
+/// Represents a running or completed task instance with progress tracking, cancellation support, and logging
+/// </summary>
 [Unserialized]
 public class TaskInstance : INotifyPropertyChanged
 {
@@ -80,6 +86,9 @@ public class TaskInstance : INotifyPropertyChanged
 
 	public override string? ToString() => Label;
 
+	/// <summary>
+	/// Initializes a new task instance
+	/// </summary>
 	public TaskInstance()
 	{
 		Call.TaskInstance = this;
@@ -87,6 +96,9 @@ public class TaskInstance : INotifyPropertyChanged
 		_stopwatch.Start();
 	}
 
+	/// <summary>
+	/// Initializes a new task instance with the specified label
+	/// </summary>
 	public TaskInstance(string? label)
 	{
 		Label = label;
@@ -96,6 +108,9 @@ public class TaskInstance : INotifyPropertyChanged
 		_stopwatch.Start();
 	}
 
+	/// <summary>
+	/// Initializes a new sub-task instance
+	/// </summary>
 	public TaskInstance(Call call, TaskInstance parentTask)
 	{
 		Label = call.Name;
@@ -211,13 +226,18 @@ public class TaskInstance : INotifyPropertyChanged
 
 	public bool CancelVisible => !Finished;
 
+	/// <summary>
+	/// Cancels the task by requesting cancellation via the token source
+	/// </summary>
 	[ButtonColumn("-", nameof(CancelVisible))]
 	public void Cancel()
 	{
 		TokenSource.Cancel();
 	}
 
-	// allows having progress broken down into multiple tasks
+	/// <summary>
+	/// Creates and adds a sub-task instance that will contribute to this task's progress
+	/// </summary>
 	public TaskInstance AddSubTask(Call call)
 	{
 		var subTask = new TaskInstance(call, this);
@@ -230,6 +250,9 @@ public class TaskInstance : INotifyPropertyChanged
 		return subTask;
 	}
 
+	/// <summary>
+	/// Marks the task as finished and triggers completion notifications
+	/// </summary>
 	public void SetFinished()
 	{
 		if (Finished)
@@ -305,6 +328,9 @@ public class TaskInstance : INotifyPropertyChanged
 		OnComplete?.Invoke();
 	}
 
+	/// <summary>
+	/// Notifies that a property value has changed, using the synchronization context if available
+	/// </summary>
 	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
 		if (Creator?.Context is SynchronizationContext context)
@@ -323,6 +349,9 @@ public class TaskInstance : INotifyPropertyChanged
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 
+	/// <summary>
+	/// Shows a message to the user via the OnShowMessage event
+	/// </summary>
 	public void ShowMessage(string message)
 	{
 		if (Creator?.Context is SynchronizationContext context)
@@ -341,7 +370,12 @@ public class TaskInstance : INotifyPropertyChanged
 		OnShowMessage?.Invoke(this, new ShowMessageEventArgs(message));
 	}
 
-	// If UseTask is not enabled will wait for action completion
+	/// <summary>
+	/// Starts the task execution
+	/// </summary>
+	/// <remarks>
+	/// If UseTask is not enabled, will wait for action completion before returning
+	/// </remarks>
 	public void Start()
 	{
 		if (Creator!.UseTask)

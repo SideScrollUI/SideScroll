@@ -2,13 +2,18 @@ namespace SideScroll.Tasks;
 
 public delegate void CallAction(Call call);
 
+/// <summary>
+/// A task creator that wraps a CallAction delegate which receives a Call parameter for logging and cancellation support
+/// </summary>
 public class TaskDelegate : TaskCreator
 {
 	public CallAction Action { get; }
 
 	public override string? ToString() => Label;
 
-	// Lists read easier with a label as the first param
+	/// <summary>
+	/// Initializes a new task delegate with the specified label and action
+	/// </summary>
 	public TaskDelegate(string label, CallAction callAction, bool useTask = false, bool showTask = false, string? description = null)
 	{
 		Label = label;
@@ -19,6 +24,9 @@ public class TaskDelegate : TaskCreator
 		Description = description;
 	}
 
+	/// <summary>
+	/// Initializes a new task delegate using the method name as the label
+	/// </summary>
 	public TaskDelegate(CallAction callAction, bool useTask = false, bool showTask = false, string? description = null)
 	{
 		Label = callAction.Method.Name;
@@ -29,6 +37,9 @@ public class TaskDelegate : TaskCreator
 		Description = description;
 	}
 
+	/// <summary>
+	/// Creates an action that will invoke the call action with exception handling
+	/// </summary>
 	public override Action CreateAction(Call call)
 	{
 		return () => InvokeAction(call);
