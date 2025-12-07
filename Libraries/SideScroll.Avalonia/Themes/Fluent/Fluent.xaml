@@ -327,13 +327,13 @@
 
           <!-- Title & Side Buttons -->
           
-          <SolidColorBrush x:Key="TabButtonBackgroundBrush" Color="#ffebeffa" />
+          <SolidColorBrush x:Key="TabButtonBackgroundBrush" Color="#ffe6e9fa" />
           <SolidColorBrush x:Key="TabButtonBackgroundPointerOverBrush" Color="#ffbac6ff" />
           <SolidColorBrush x:Key="TabButtonBackgroundPressedBrush" Color="#ffe6e8ff" />
           <SolidColorBrush x:Key="TabButtonForegroundBrush" Color="#ff41434a" />
-          <SolidColorBrush x:Key="TabButtonForegroundPointerOverBrush" Color="#ff1a39eb" />
-          <SolidColorBrush x:Key="TabButtonBorderBrush" Color="#ffc5c5e6" />
-          <SolidColorBrush x:Key="TabButtonBorderPointerOverBrush" Color="#ffaeaee6" />
+          <SolidColorBrush x:Key="TabButtonForegroundPointerOverBrush" Color="#ff072ff7" />
+          <SolidColorBrush x:Key="TabButtonBorderBrush" Color="#ffc5cbe6" />
+          <SolidColorBrush x:Key="TabButtonBorderPointerOverBrush" Color="#ffaeb8e6" />
 
           <!-- Text -->
 
