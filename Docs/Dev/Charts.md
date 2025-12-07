@@ -25,16 +25,16 @@ public class TabSampleChartLists : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonAdd { get; set; } = new("Add", Icons.Svg.Add);
+		public ToolButton ButtonAdd { get; } = new("Add", Icons.Svg.Add);
 
 		[Separator]
-		public ToolButton ButtonStart { get; set; } = new("Start", Icons.Svg.Play);
-		public ToolButton ButtonStop { get; set; } = new("Stop", Icons.Svg.Stop);
+		public ToolButton ButtonStart { get; } = new("Start", Icons.Svg.Play);
+		public ToolButton ButtonStop { get; } = new("Stop", Icons.Svg.Stop);
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private List<ItemCollection<int>> _series = [];
 		private readonly Random _random = new();
@@ -120,9 +120,9 @@ public class TabChartSizes : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
-		public const int SampleCount = 24;
+		private const int SampleCount = 24;
 
 		public override void LoadUI(Call call, TabModel model)
 		{

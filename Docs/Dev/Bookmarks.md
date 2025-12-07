@@ -27,7 +27,7 @@
 ## Saving and Restoring Bookmark Data
 
 ```csharp
-public class Instance : TabInstance, ITabAsync
+private class Instance : TabInstance, ITabAsync
 {
   public bool TestFlag { get; set; }
 
@@ -58,7 +58,7 @@ public class Instance : TabInstance, ITabAsync
 
 - If a List is showing a DataRepo, you can set the `TabInstance.DataRepoInstance` to that DataRepo to automatically export selected items in the bookmark
 ```csharp
-public class Instance : TabInstance
+private class Instance : TabInstance
 {
   private DataRepoView<ParamTestItem> _dataRepoParams;
 

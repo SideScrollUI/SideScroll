@@ -41,8 +41,6 @@ public class BaseWindow : Window
 	{
 		Instance = this;
 
-		WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
 		if (project.UserSettings.EnableCustomTitleBar == true)
 		{
 			ExtendClientAreaToDecorationsHint = true;
@@ -238,12 +236,14 @@ public class BaseWindow : Window
 		var settings = Project.Data.App.Load<WindowSettings>();
 		if (settings == null)
 		{
+			WindowStartupLocation = WindowStartupLocation.CenterScreen;
 			settings = new();
 			Width = settings.Width;
 			Height = settings.Height;
 		}
 		else
 		{
+			WindowStartupLocation = WindowStartupLocation.Manual;
 			WindowSettings = settings;
 		}
 	}

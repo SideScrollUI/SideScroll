@@ -26,7 +26,7 @@ public class TabSampleFormDataTabs : ITab
 		public ToolButton ButtonSave { get; set; } = new("Save", Icons.Svg.Save);
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		private const string GroupId = "SampleParams";
 		private const string DataKey = "Params";

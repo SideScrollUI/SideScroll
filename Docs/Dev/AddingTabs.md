@@ -100,7 +100,7 @@ public class TabSample(int count) : ITab
 
 	public TabInstance Create() => new Instance();
 
-	public class Instance(TabSample tab) : TabInstance
+	private class Instance(TabSample tab) : TabInstance
 	{
 		private ItemCollectionUI<SampleItem> _sampleItems;
 
@@ -171,7 +171,7 @@ public class TabSampleAsync : ITab
 {
 	public TabInstance Create() { return new Instance(); }
 
-	public class Instance : TabInstance, ITabAsync
+	private class Instance : TabInstance, ITabAsync
 	{
 		//private ItemCollection<ListItem> items;
 
@@ -219,7 +219,7 @@ public class TabSampleToolbar : ITab
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
+	private class Toolbar : TabToolbar
 	{
 		public ToolButton ButtonRefresh { get; set; } = new("Refresh", Icons.Svg.Refresh);
 
@@ -239,7 +239,7 @@ public class TabSampleToolbar : ITab
 		public string Label => "(Status)";
 	}
 
-	public class Instance : TabInstance
+	private class Instance : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{
