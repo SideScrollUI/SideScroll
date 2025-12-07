@@ -1,0 +1,25 @@
+{
+  "solution": {
+    "path": "SideScroll.sln",
+    "projects": [
+      "Libraries\\SideScroll\\SideScroll.csproj",
+      "Libraries\\SideScroll.Avalonia\\SideScroll.Avalonia.csproj",
+      "Libraries\\SideScroll.Avalonia.Charts\\SideScroll.Avalonia.Charts.csproj",
+      "Libraries\\SideScroll.Avalonia.Charts.LiveCharts\\SideScroll.Avalonia.Charts.LiveCharts.csproj",
+      "Libraries\\SideScroll.Avalonia.Samples\\SideScroll.Avalonia.Samples.csproj",
+      "Libraries\\SideScroll.Avalonia.ScreenCapture\\SideScroll.Avalonia.ScreenCapture.csproj",
+      "Libraries\\SideScroll.Network\\SideScroll.Network.csproj",
+      "Libraries\\SideScroll.Resources\\SideScroll.Resources.csproj",
+      "Libraries\\SideScroll.Serialize\\SideScroll.Serialize.csproj",
+      "Libraries\\SideScroll.Tabs\\SideScroll.Tabs.csproj",
+      "Libraries\\SideScroll.Tabs.Samples\\SideScroll.Tabs.Samples.csproj",
+      "Libraries\\SideScroll.Tabs.Tools\\SideScroll.Tabs.Tools.csproj",
+      "Programs\\SideScroll.Demo.Avalonia.Desktop\\SideScroll.Demo.Avalonia.Desktop.csproj",
+      "Programs\\SideScroll.Demo.Console\\SideScroll.Demo.Console.csproj",
+      "Test\\SideScroll.Avalonia.Test\\SideScroll.Avalonia.Test.csproj",
+      "Test\\SideScroll.Network.Test\\SideScroll.Network.Test.csproj",
+      "Test\\SideScroll.Serialize.Test\\SideScroll.Serialize.Test.csproj",
+      "Test\\SideScroll.Test\\SideScroll.Test.csproj"
+    ]
+  }
+}
