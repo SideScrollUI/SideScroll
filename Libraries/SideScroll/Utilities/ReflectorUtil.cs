@@ -74,22 +74,4 @@ public static class ReflectorUtil
 		}
 		return obj;
 	}
-
-	/// <summary>
-	/// Gets an element from a dictionary by converting the index to the appropriate key type
-	/// </summary>
-	public static TValue GetDictionaryElement<TKey, TValue>(IDictionary<TKey, TValue> dict, object index)
-	{
-		TKey key = (TKey)Convert.ChangeType(index, typeof(TKey), null);
-		return dict[key];
-	}
-
-	/// <summary>
-	/// Gets an element from a list by index
-	/// </summary>
-	public static T GetListElement<T>(IList<T> list, object index)
-	{
-		return list[Convert.ToInt32(index)];
-	}
-
 }

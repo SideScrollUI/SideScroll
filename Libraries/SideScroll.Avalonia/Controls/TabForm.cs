@@ -20,7 +20,7 @@ public class TabHeader : Border
 {
 	public TabHeader(string text)
 	{
-		Child = new TextBlock()
+		Child = new TextBlock
 		{
 			Text = text,
 		};
@@ -229,7 +229,7 @@ public class TabForm : Border, IValidationControl
 		if (control == null)
 			return null;
 
-		property.Cachable = false;
+		property.IsCacheable = false;
 
 		int columnIndex = property.GetCustomAttribute<ColumnIndexAttribute>()?.Index ?? 0;
 		int rowIndex = ContainerGrid.RowDefinitions.Count;

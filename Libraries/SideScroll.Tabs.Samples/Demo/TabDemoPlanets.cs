@@ -47,7 +47,7 @@ public class TabDemoPlanets : ITab
 			toolbar.ButtonNew.Action = New;
 			toolbar.ButtonSave.Action = Save;
 			toolbar.ButtonDelete.Action = Delete;
-			toolbar.ButtonCopyToClipboard.Action = CopyClipBoardUI;
+			toolbar.ButtonCopyToClipboard.Action = CopyClipBoard;
 			toolbar.ButtonReset.Action = Reset;
 			model.AddObject(toolbar);
 
@@ -108,7 +108,7 @@ public class TabDemoPlanets : ITab
 			}
 		}
 
-		private void CopyClipBoardUI(Call call)
+		private void CopyClipBoard(Call call)
 		{
 			CopyToClipboard(SelectedItems);
 		}

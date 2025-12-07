@@ -18,7 +18,7 @@ public class ListProperty : ListMember, IPropertyIsEditable
 	public PropertyInfo PropertyInfo { get; }
 
 	[HiddenColumn]
-	public bool Cachable { get; set; }
+	public bool IsCacheable { get; set; }
 
 	private bool _valueCached;
 	private object? _valueObject;
@@ -47,7 +47,7 @@ public class ListProperty : ListMember, IPropertyIsEditable
 
 			try
 			{
-				if (Cachable)
+				if (IsCacheable)
 				{
 					if (!_valueCached)
 					{
@@ -109,11 +109,11 @@ public class ListProperty : ListMember, IPropertyIsEditable
 
 	public override string? ToString() => Name;
 
-	public ListProperty(object obj, PropertyInfo propertyInfo, bool cachable = true) :
+	public ListProperty(object obj, PropertyInfo propertyInfo, bool isCacheable = true) :
 		base(obj, propertyInfo)
 	{
 		PropertyInfo = propertyInfo;
-		Cachable = cachable;
+		IsCacheable = isCacheable;
 
 		NameAttribute? nameAttribute = propertyInfo.GetCustomAttribute<NameAttribute>();
 
@@ -131,8 +131,8 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		}
 	}
 
-	public ListProperty(object obj, string propertyName, bool cachable = true) :
-		this(obj, obj.GetType().GetProperty(propertyName)!, cachable)
+	public ListProperty(object obj, string propertyName, bool isCacheable = true) :
+		this(obj, obj.GetType().GetProperty(propertyName)!, isCacheable)
 	{
 	}
 

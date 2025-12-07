@@ -61,11 +61,6 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 			Margin = new Thickness(4),
 			VerticalAlignment = VerticalAlignment.Center,
 			MaxDesiredWidth = this.MaxDesiredWidth,
-			//FontFamily
-			//FontSize
-			//FontStyle
-			//FontWeight
-			//Foreground
 		};
 
 		if (Binding != null)

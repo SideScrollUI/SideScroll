@@ -1,3 +1,4 @@
+using SideScroll.Resources;
 using SideScroll.Tabs.Settings;
 
 namespace SideScroll.Avalonia.Samples;
@@ -10,5 +11,6 @@ public static class SampleProjectSettings
 		LinkType = "sidescroll",
 		Version = ProjectSettings.ProgramVersion(),
 		DataVersion = new Version(0, 13, 0),
+		CustomTitleIcon = Logo.Svg.SideScrollTranslucent,
 	};
 }

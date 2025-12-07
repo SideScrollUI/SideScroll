@@ -32,7 +32,7 @@ public class SerializerFileAtlas : SerializerFile
 
 				using var writer = new BinaryWriter(stream);
 
-				var serializer = new Serializer()
+				Serializer serializer = new()
 				{
 					PublicOnly = publicOnly,
 				};
@@ -53,7 +53,7 @@ public class SerializerFileAtlas : SerializerFile
 
 	protected override object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false)
 	{
-		var serializer = new Serializer
+		Serializer serializer = new()
 		{
 			TaskInstance = taskInstance,
 			PublicOnly = publicOnly,
@@ -111,7 +111,7 @@ public class SerializerFileAtlas : SerializerFile
 
 		using var reader = new BinaryReader(fileStream);
 
-		var serializer = new Serializer();
+		Serializer serializer = new();
 		serializer.Load(call, reader, Name, false);
 		return serializer;
 	}
@@ -126,11 +126,9 @@ public class SerializerFileAtlas : SerializerFile
 			result = Load<T>(call, lazy, taskInstance);
 		}
 
-		if (result == null)
-		{
-			T newObject = Activator.CreateInstance<T>();
-			return newObject;
-		}
-		return result;
+		if (result != null) return result;
+		
+		T newObject = Activator.CreateInstance<T>();
+		return newObject;
 	}
 }

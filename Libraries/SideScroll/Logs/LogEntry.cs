@@ -17,7 +17,7 @@ public class LogSettings
 
 	public LogLevel DebugPrintLogLevel { get; set; } = LogLevel.Warn;
 
-	internal object Lock = new(); // todo: replace this with individual ones? or a non-blocking version
+	internal readonly object Lock = new(); // todo: replace this with individual ones? or a non-blocking version
 
 	[Hidden]
 	public SynchronizationContext? Context { get; set; } // inherited from creator (which can be a Parent Log)

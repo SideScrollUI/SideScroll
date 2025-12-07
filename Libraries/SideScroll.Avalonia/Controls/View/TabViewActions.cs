@@ -66,7 +66,7 @@ public class TabViewActions : UserControl
 		}
 	}
 
-	public void InvokeTask(TaskCreator taskCreator)
+	private void InvokeTask(TaskCreator taskCreator)
 	{
 		TabInstance.StartTask(taskCreator, taskCreator.ShowTask);
 	}

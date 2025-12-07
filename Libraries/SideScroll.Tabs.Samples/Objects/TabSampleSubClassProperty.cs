@@ -8,14 +8,10 @@ public class TabSampleSubClassProperty : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			var items = new List<ParentClass>();
-
-			for (int i = 0; i < 1; i++)
+			model.Items = new List<ParentClass>
 			{
-				items.Add(new ParentClass());
-			}
-
-			model.Items = items;
+				new()
+			};
 		}
 	}
 

@@ -53,7 +53,7 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection lin
 
 			string json = JsonSerializer.Serialize(tab.Bookmark, JsonConverters.JsonSerializerOptions);
 
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new("Link", new TabLinkView(tab.LinkedBookmark, Project)),
 				new("Data", tab.LinkedBookmark),

@@ -168,9 +168,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			HorizontalAlignment = HorizontalAlignment.Stretch,
 			VerticalAlignment = VerticalAlignment.Stretch,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-			//BorderThickness = new Thickness(0), // DataGrid bug, fixes the extra border below the scrollbar, but then there's no border
-			//Padding = new Thickness(0),
-
 			BorderThickness = new Thickness(0, 1),
 			IsReadOnly = !TabModel.Editing,
 			GridLinesVisibility = DataGridGridLinesVisibility.None,
@@ -199,12 +196,9 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		DataGrid.SelectedItem = null;
 
 		DataGrid.SelectionChanged += DataGrid_SelectionChanged;
-
 		DataGrid.CellPointerPressed += DataGrid_CellPointerPressed; // Add one click deselection
 		DataGrid.ColumnReordered += DataGrid_ColumnReordered;
-
 		DataGrid.EffectiveViewportChanged += DataGrid_EffectiveViewportChanged;
-
 		DataGrid.Sorting += DataGrid_Sorting;
 
 		DataGrid.AddHandler(KeyDownEvent, DataGrid_KeyDown, RoutingStrategies.Tunnel);
@@ -346,7 +340,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			{
 				_selectItemEnabled = true;
 				object? item = e.NewItems![0];
-				//object item = List[List.Count - 1];
 				// don't update the selection too often or we'll slow things down
 				if (!_notifyItemChangedStopwatch.IsRunning || _notifyItemChangedStopwatch.ElapsedMilliseconds > 1000)
 				{
@@ -439,19 +432,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
-	protected static DataGridRow? GetControlRow(object? obj, int depth)
-	{
-		if (depth == 0)
-			return null;
-
-		return obj switch
-		{
-			DataGridRow row => row,
-			Control control => GetControlRow(control.Parent, depth - 1),
-			_ => null
-		};
-	}
-
 	// Single click deselect
 	private void DataGrid_CellPointerPressed(object? sender, DataGridCellPointerPressedEventArgs e)
 	{
@@ -514,22 +494,19 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 		DataGrid? dataGrid = GetOwningDataGrid(row);
 		// Can't access row.OwningGrid, so we have to do this the hard way
-		if (dataGrid != null)
+		if (dataGrid?.SelectedItems is not { Count: 1 })
+			return;
+
+		// Ignore if toggling CheckBox or clicking Button
+		// ReadOnly CheckBoxes will return the Cell Grid instead of a child Border control
+		IInputElement? input = row.InputHitTest(point.Position);
+		if (IsControlSelectable(input))
+			return;
+
+		if (dataGrid.SelectedItems.Contains(row.DataContext))
 		{
-			if (dataGrid.SelectedItems == null || dataGrid.SelectedItems.Count != 1)
-				return;
-
-			// Ignore if toggling CheckBox or clicking Button
-			// ReadOnly CheckBoxes will return the Cell Grid instead of a child Border control
-			IInputElement? input = row.InputHitTest(point.Position);
-			if (IsControlSelectable(input))
-				return;
-
-			if (dataGrid.SelectedItems.Contains(row.DataContext))
-			{
-				Dispatcher.UIThread.Post(() => ClearSelection(dataGrid), DispatcherPriority.Background);
-				e.Handled = true;
-			}
+			Dispatcher.UIThread.Post(() => ClearSelection(dataGrid), DispatcherPriority.Background);
+			e.Handled = true;
 		}
 	}
 
@@ -989,33 +966,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			}
 			_disableSaving--;
 		}
-		// save for future cell selection support?
-		/*get
-		{
-			var orderedRows = new SortedDictionary<int, object>();
-
-			foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
-			{
-				orderedRows[dataGrid.Items.IndexOf(cellInfo.Item)] = cellInfo.Item;
-			}
-			return orderedRows.Values.ToList();
-		}
-		set
-		{
-			foreach (object obj in value)
-				dataGrid.SelectedItems.Add(obj);
-
-			var idxSelected = new HashSet<object>();
-			foreach (object obj in value)
-				idxSelected.Add(obj);
-
-			dataGrid.SelectedItems.Clear();
-			foreach (DataGridViewRow row in dataGrid.Rows)
-			{
-				if (idxSelected.Contains(row.DataBoundItem))
-					row.Cells[0].Selected = true;
-			}
-		}*/
 	}
 
 	public int SelectedIndex
@@ -1079,49 +1029,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	{
 		get
 		{
-			// todo: cell selection not supported yet
-			var selectedRows = new HashSet<SelectedRow>();
-			/*var orderedRows = new Dictionary<object, List<DataGridCellInfo>>();
-			foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
-			{
-				if (cellInfo.Column == null)
-					continue; // this shouldn't happen, but it does (WPF only?)
-				if (!orderedRows.ContainsKey(cellInfo.Item))
-					orderedRows[cellInfo.Item] = new List<DataGridCellInfo>();
-				orderedRows[cellInfo.Item].Add(cellInfo);
-			}
-			foreach (var selectedRow in orderedRows)
-			{
-				object obj = selectedRow.Key;
-				List<DataGridCellInfo> cellsInfos = selectedRow.Value;
-				Type type = obj.GetType();
-				var selectedItem = new SelectedRow();
-				selectedItem.label = obj.ObjectToUniqueString();
-				selectedItem.index = dataGrid.Items.IndexOf(obj);
-				if (selectedItem.label == type.FullName)
-				{
-					selectedItem.label = null;
-				}
-				foreach (DataGridCellInfo cellInfo in cellsInfos)
-				{
-					selectedItem.columns.Add(columnNames[cellInfo.Column]);
-				}
-				//selectedItem.pinned = pinnedItems.Contains(row.Index);
-				tabDataConfiguration.selected.Add(selectedItem);
-			}*/
-			/*object obj = dataGrid.SelectedItem;
-			if (obj != null)
-			{
-				Type type = obj.GetType();
-				var selectedItem = new SelectedRow();
-				selectedItem.label = obj.ObjectToUniqueString();
-				//selectedItem.index = dataGrid.Items.IndexOf(obj);
-				if (selectedItem.label == type.FullName)
-				{
-					selectedItem.label = null;
-				}
-				tabDataConfiguration.selectedRows.Add(selectedItem);
-			}*/
+			HashSet<SelectedRow> selectedRows = [];
 
 			try
 			{
@@ -1282,14 +1190,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 					SearchControl.Focus();
 				return;
 			}
-
-			/*if (keyData == Keys.F2)
-			{
-				//dataGrid.SelectedCells;
-				dataGrid.BeginEdit(true);
-				return true;
-			}
-			*/
 		}
 		else if (e.Key == Key.Escape)
 		{
@@ -1322,179 +1222,3 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 }
-
-/* From SideScroll.Wpf
-
-public List<DataGridCellInfo> GetMatchingCellInfos()
-{
-	var cellInfos = new List<DataGridCellInfo>();
-	var keys = new Dictionary<string, object>(); // todo: change to unordered?
-	foreach (object listItem in iList)
-	{
-		if (listItem == null)
-			continue;
-
-		string id = listItem.ObjectToUniqueString();
-		if (id != null)
-			keys[id] = listItem;
-	}
-	foreach (SelectedRow selectedRow in tabDataConfiguration.selected)
-	{
-		object listItem;
-		if (selectedRow.obj != null)
-		{
-			listItem = selectedRow.obj;
-		}
-		else if (selectedRow.label != null)
-		{
-			if (!keys.TryGetValue(selectedRow.label, out listItem))
-				continue;
-		}
-		else
-		{
-			if (selectedRow.index < 0 || selectedRow.index >= dataGrid.Items.Count) // some items might be filtered or have changed
-				continue;
-			listItem = dataGrid.Items[selectedRow.index];
-		}
-		if (tabInstance.IsOwnerObject(listItem.GetInnerValue())) // stops self referencing loops
-			continue;
-
-
-		if (selectedRow.columns.Count == 0)
-		{
-			// select all columns
-			foreach (DataGridColumn dataGridColumn in columnObjects.Values)
-			{
-				DataGridCellInfo cellInfo = new DataGridCellInfo(listItem, dataGridColumn);
-				cellInfos.Add(cellInfo);
-				break;// break for bug
-			}
-		}
-		else
-		{
-			foreach (var columnName in selectedRow.columns)
-			{
-				DataGridColumn dataGridColumn;
-				if (columnObjects.TryGetValue(columnName, out dataGridColumn)) // column might have been renamed/removed
-				{
-					DataGridCellInfo cellInfo = new DataGridCellInfo(listItem, dataGridColumn);
-					cellInfos.Add(cellInfo);
-					break; // avoid DataGrid bug when selecting 2 cells in the same row
-				}
-			}
-		}
-	}
-
-	return cellInfos;
-}
-
-// don't clear cells and then reselect if you can help it (although we could disable updates while updating these)
-public void SelectSavedItems()
-{
-	List<DataGridCellInfo> cellInfos = GetMatchingCellInfos();
-
-	//SuspendLayout();
-	//ClearSelection();
-	var matchingCellInfos = new List<DataGridCellInfo>();
-	var removedCellInfos = new List<DataGridCellInfo>();
-	foreach (DataGridCellInfo cellInfo in dataGrid.SelectedCells)
-	{
-		if (cellInfo.Column == null)
-		{
-			dataGrid.SelectedCells.Clear();
-			break;
-			//continue;
-		}
-		DataGridCellInfo? matchingCellInfo = null;
-		foreach (DataGridCellInfo newCellInfo in cellInfos)
-		{
-			if (cellInfo.Item == newCellInfo.Item && cellInfo.Column == newCellInfo.Column)
-			{
-				matchingCellInfo = newCellInfo;
-				//cellInfos.Remove(cellInfo);
-				matchingCellInfos.Add(newCellInfo);
-				break;
-			}
-		}
-		if (matchingCellInfo == null)
-		{
-			removedCellInfos.Add(cellInfo);
-		}
-	}
-
-	foreach (DataGridCellInfo cellInfo in matchingCellInfos)
-	{
-		cellInfos.Remove(cellInfo);
-	}
-
-	foreach (DataGridCellInfo cellInfo in removedCellInfos)
-	{
-		dataGrid.SelectedCells.Remove(cellInfo);
-	}
-
-	foreach (DataGridCellInfo newCellInfo in cellInfos)
-	{
-		dataGrid.SelectedCells.Add(newCellInfo);
-	}
-
-	if (dataGrid.SelectedCells.Count > 0)
-	{
-		DataGridCellInfo cellInfo = dataGrid.SelectedCells[0];
-		dataGrid.CurrentCell = cellInfo;
-		dataGrid.ScrollIntoView(cellInfo);
-	}
-
-	/*dataGrid.SelectedCells.Clear();
-
-if (cellInfos.Count > 0)
-{
-  foreach (DataGridCellInfo cellInfo in cellInfos)
-  {
-	  dataGrid.SelectedCells.Add(cellInfo);
-  }
-
-  dataGrid.CurrentCell = cellInfos[0];
-  dataGrid.ScrollIntoView(cellInfos[0].Item);
-  }
-
-	//ResumeLayout();
-}
-
-private void dataGrid_Sorting(object sender, DataGridSortingEventArgs e)
-{
-	// could possibly use "DataGridSort.Comparer.Set(Column, comparer)" instead
-	ListCollectionView listCollectionView = collectionView as ListCollectionView;
-	if (e.Column != null && e.Column.CanUserSort == true && listCollectionView != null)
-	{
-		if (e.Column.SortDirection == ListSortDirection.Ascending)
-		{
-			e.Column.SortDirection = ListSortDirection.Descending;
-		}
-		else
-		{
-			e.Column.SortDirection = ListSortDirection.Ascending;
-		}
-		tabDataConfiguration.SortColumn = columnNames[e.Column];
-		tabDataConfiguration.SortDirection = (ListSortDirection)e.Column.SortDirection;
-		dataGrid.SelectedCellsChanged -= DataGrid_SelectedCellsChanged;
-		SortSavedColumn();
-		dataGrid.SelectedCellsChanged += DataGrid_SelectedCellsChanged;
-		//SelectSavedLabels(); // sorting selects different item
-		tabInstance.SaveConfiguration();
-		//Dispatcher.Invoke(SelectSavedLabels);
-		//CancellationTokenSource tokenSource = new CancellationTokenSource();
-		//this.Dispatcher.Invoke(() => SelectSavedLabels(), DispatcherPriority.SystemIdle, tokenSource.Token, TimeSpan.FromSeconds(1));
-		e.Handled = true;
-	}
-}
-
-private void dataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-{
-	object obj = e.Row.DataContext;
-	if ((obj is ListProperty) && !e.Column.IsReadOnly)
-	{
-		if (!((ListProperty)obj).Editable)
-			e.Cancel = true;
-	}
-}
-*/

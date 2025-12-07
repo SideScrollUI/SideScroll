@@ -6,10 +6,10 @@ using SideScroll.Utilities;
 
 namespace SideScroll.Demo.Avalonia.Desktop;
 
-static class Program
+internal static class Program
 {
 	[STAThread]
-	static int Main(string[] args)
+	private static int Main(string[] args)
 	{
 		AppBuilder builder = BuildAvaloniaApp();
 

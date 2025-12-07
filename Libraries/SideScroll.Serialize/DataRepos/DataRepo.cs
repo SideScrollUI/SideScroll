@@ -221,13 +221,12 @@ public class DataRepo
 			foreach (string filePath in Directory.EnumerateDirectories(groupPath))
 			{
 				var serializerFile = SerializerFile.Create(filePath);
-				if (serializerFile.Exists)
+				if (!serializerFile.Exists) continue;
+				
+				T? obj = serializerFile.Load<T>(call, lazy);
+				if (obj != null)
 				{
-					T? obj = serializerFile.Load<T>(call, lazy);
-					if (obj != null)
-					{
-						entries.Add(serializerFile.LoadHeader(call).Name ?? "", obj);
-					}
+					entries.Add(serializerFile.LoadHeader(call).Name ?? "", obj);
 				}
 			}
 		}
@@ -247,14 +246,10 @@ public class DataRepo
 			foreach (string filePath in Directory.EnumerateDirectories(groupPath))
 			{
 				var serializerFile = SerializerFile.Create(filePath);
-				if (serializerFile.Exists)
-				{
-					SerializerHeader header = serializerFile.LoadHeader(call);
-					if (header != null)
-					{
-						headers.Add(header);
-					}
-				}
+				if (!serializerFile.Exists) continue;
+				
+				SerializerHeader header = serializerFile.LoadHeader(call);
+				headers.Add(header);
 			}
 		}
 		return headers;

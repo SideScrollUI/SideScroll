@@ -11,7 +11,7 @@ public class ListDelegate : ListMember, IPropertyIsEditable, ILoadAsync
 	public LoadObjectAsync LoadAction { get; }
 	public MethodInfo MethodInfo => LoadAction.Method;
 
-	public bool CacheEnabled { get; set; }
+	public bool IsCacheable { get; set; }
 
 	private bool _valueCached;
 	private object? _valueObject;
@@ -23,7 +23,7 @@ public class ListDelegate : ListMember, IPropertyIsEditable, ILoadAsync
 		{
 			try
 			{
-				if (CacheEnabled)
+				if (IsCacheable)
 				{
 					if (!_valueCached)
 					{
@@ -48,11 +48,11 @@ public class ListDelegate : ListMember, IPropertyIsEditable, ILoadAsync
 
 	public override string? ToString() => Name;
 
-	public ListDelegate(LoadObjectAsync loadAction, bool cached = true) :
+	public ListDelegate(LoadObjectAsync loadAction, bool isCacheable = true) :
 		base(loadAction.Target!, loadAction.Method)
 	{
 		LoadAction = loadAction;
-		CacheEnabled = cached;
+		IsCacheable = isCacheable;
 
 		Name = MethodInfo.Name.WordSpaced();
 

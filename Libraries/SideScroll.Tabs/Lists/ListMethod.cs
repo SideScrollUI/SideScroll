@@ -8,7 +8,7 @@ namespace SideScroll.Tabs.Lists;
 public class ListMethod : ListMember
 {
 	public MethodInfo MethodInfo { get; }
-	private bool CacheEnabled { get; set; }
+	public bool IsCacheable { get; set; }
 
 	private bool _valueCached;
 	private object? _valueObject;
@@ -20,7 +20,7 @@ public class ListMethod : ListMember
 		{
 			try
 			{
-				if (CacheEnabled)
+				if (IsCacheable)
 				{
 					if (!_valueCached)
 					{
@@ -45,11 +45,11 @@ public class ListMethod : ListMember
 
 	public override string? ToString() => Name;
 
-	public ListMethod(object obj, MethodInfo methodInfo, bool cached = true) :
+	public ListMethod(object obj, MethodInfo methodInfo, bool isCacheable = true) :
 		base(obj, methodInfo)
 	{
 		MethodInfo = methodInfo;
-		CacheEnabled = cached;
+		IsCacheable = isCacheable;
 
 		UpdateName();
 	}

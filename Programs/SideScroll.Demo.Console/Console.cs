@@ -10,7 +10,7 @@ public class Console
 	private readonly LogWriterConsole _logWriterConsole;
 	private readonly LogWriterText _logWriterText;
 
-	static void Main(string[] args)
+	private static void Main(string[] args)
 	{
 		var console = new Console();
 	}

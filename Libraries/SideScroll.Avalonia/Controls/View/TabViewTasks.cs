@@ -80,9 +80,6 @@ public class TabViewTasks : Grid, IDisposable
 
 	private void CollectionChangedUI(NotifyCollectionChangedEventArgs e)
 	{
-		if (_tabDataGrid == null)
-			return;
-
 		if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex >= 0)
 		{
 			SelectLastItem();
@@ -128,7 +125,7 @@ public class TabViewTasks : Grid, IDisposable
 		IsVisible = ShowTasks;
 
 		// Unselect running if no error
-		if (AutoSelectNew && !taskInstance.Errored && _tabDataGrid != null)
+		if (AutoSelectNew && !taskInstance.Errored)
 		{
 			IList selectedItems = _tabDataGrid.SelectedItems;
 			if (selectedItems.Count == 1 && selectedItems[0] == taskInstance)

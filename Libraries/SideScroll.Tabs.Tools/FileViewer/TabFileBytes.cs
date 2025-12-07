@@ -10,7 +10,7 @@ public class TabFileBytes(string path) : ITab
 
 	public TabInstance Create() => new Instance(this);
 
-	public class Instance(TabFileBytes tab) : TabInstance
+	private class Instance(TabFileBytes tab) : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
 		{

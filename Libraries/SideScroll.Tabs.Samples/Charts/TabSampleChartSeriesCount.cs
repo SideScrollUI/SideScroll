@@ -14,7 +14,7 @@ public class TabSampleChartSeriesCount : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new(10, TabModel.Create("10", CreateChartView(10))),
 				new(25, TabModel.Create("25", CreateChartView(25))),

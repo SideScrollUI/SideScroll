@@ -27,7 +27,7 @@ public static class SerializerExtensions
 		return SerializerMemory.TryDeepClone(call, obj, publicOnly);
 	}
 
-	public static void CloneParentClass(this object dest, object source)
+	public static void ShallowClone(this object dest, object source)
 	{
 		Type inputType = source.GetType();
 		Type outputType = dest.GetType();

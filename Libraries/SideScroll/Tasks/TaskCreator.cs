@@ -9,9 +9,7 @@ public enum AccentType
 	Warning
 }
 
-public interface IFlyoutConfig
-{
-}
+public interface IFlyoutConfig;
 
 public class ConfirmationFlyoutConfig(string text, string confirmText, string cancelText = "Cancel") : IFlyoutConfig
 {

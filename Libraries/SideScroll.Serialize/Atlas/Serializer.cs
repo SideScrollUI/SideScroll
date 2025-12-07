@@ -210,7 +210,6 @@ public class Serializer : IDisposable
 		writer.Write(Primitives.Count);
 		foreach (object? obj in Primitives)
 		{
-			//TypeRepo typeRepo = GetOrCreateRepo(obj.GetType());
 			WriteObjectRef(typeof(object), obj, writer);
 		}
 	}
@@ -323,9 +322,9 @@ public class Serializer : IDisposable
 		}
 	}
 
-	record TypeRepoWriter(TypeRepo TypeRepo)
+	private record TypeRepoWriter(TypeRepo TypeRepo)
 	{
-		public MemoryStream MemoryStream = new();
+		public MemoryStream MemoryStream { get; } = new();
 	}
 
 	private void SaveObjects(Log log, BinaryWriter writer)

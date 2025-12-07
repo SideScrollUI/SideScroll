@@ -12,7 +12,7 @@ public class TabLinks : ITab
 		{
 			var linkManager = LinkManager.Instance!;
 
-			model.Items = new List<ListItem>()
+			model.Items = new List<ListItem>
 			{
 				new("Imported", new TabLinkCollection(linkManager.Imported)),
 				new("Created", new TabLinkCollection(linkManager.Created)),

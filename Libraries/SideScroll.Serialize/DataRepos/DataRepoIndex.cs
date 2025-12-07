@@ -212,7 +212,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 			}
 			items.Add(new Item(index, key));
 		}
-		return new Indices()
+		return new Indices
 		{
 			Items = items,
 			NextIndex = nextIndex,
@@ -228,7 +228,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 			.Select(header => new Item(index++, header.Name ?? ""))
 			.ToList();
 
-		return new Indices()
+		return new Indices
 		{
 			Items = items,
 			NextIndex = index,

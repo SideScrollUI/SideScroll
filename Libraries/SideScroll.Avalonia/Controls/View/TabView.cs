@@ -119,16 +119,15 @@ public class TabView : Grid, IDisposable
 
 	private void TabView_ActualThemeVariantChanged(object? sender, EventArgs e)
 	{
-		if (IsLoaded && ActualThemeVariant != null)
+		if (!IsLoaded || ActualThemeVariant == null) return;
+		
+		if (Model.ReloadOnThemeChange)
 		{
-			if (Model.ReloadOnThemeChange)
-			{
-				ReloadControls();
-			}
-			if (_parentContainerBorder != null)
-			{
-				_parentContainerBorder.BorderBrush = SideScrollTheme.TabBackgroundBorder;
-			}
+			ReloadControls();
+		}
+		if (_parentContainerBorder != null)
+		{
+			_parentContainerBorder.BorderBrush = SideScrollTheme.TabBackgroundBorder;
 		}
 	}
 
@@ -145,7 +144,6 @@ public class TabView : Grid, IDisposable
 		if (!_childControlsFinishedLoading)
 		{
 			AddDispatchLoader();
-			//tabInstance.SetEndLoad();
 		}
 		return _arrangeOverrideFinalSize;
 	}
@@ -225,7 +223,7 @@ public class TabView : Grid, IDisposable
 			MaxDesiredWidth = Math.Max(Model.MaxDesiredWidth, TabViewSettings.SplitterDistance ?? 0),
 		};
 
-		_parentContainerBorder = new Border()
+		_parentContainerBorder = new Border
 		{
 			BorderThickness = new Thickness(1),
 			BorderBrush = SideScrollTheme.TabBackgroundBorder,
@@ -392,7 +390,7 @@ public class TabView : Grid, IDisposable
 		UpdateSplitterFiller();
 	}
 
-	public void UpdateSplitterDistance()
+	protected void UpdateSplitterDistance()
 	{
 		if (_containerGrid == null)
 			return;
@@ -768,7 +766,7 @@ public class TabView : Grid, IDisposable
 		return 0;
 	}
 
-	public void UpdateSplitterFiller()
+	protected void UpdateSplitterFiller()
 	{
 		if (_fillerPanel != null)
 		{
@@ -870,7 +868,7 @@ public class TabView : Grid, IDisposable
 		return orderedChildControls;
 	}
 
-	internal void CreateChildControls(IEnumerable newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector? tabControl = null)
+	private void CreateChildControls(IEnumerable newList, Dictionary<object, Control> oldChildControls, Dictionary<object, Control> newChildControls, List<Control> orderedChildControls, ITabSelector? tabControl = null)
 	{
 		foreach (object obj in newList)
 		{
@@ -917,7 +915,7 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
-	internal Control? CreateChildControl(SelectedRow? selectedRow, object obj, string? label = null, ITabSelector? tabControl = null)
+	protected Control? CreateChildControl(SelectedRow? selectedRow, object obj, string? label = null, ITabSelector? tabControl = null)
 	{
 		try
 		{

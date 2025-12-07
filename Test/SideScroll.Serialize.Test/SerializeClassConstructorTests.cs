@@ -104,7 +104,7 @@ public class SerializeClassConstructorTests : SerializeBaseTest
 	public void SerializeProtectedConstructorBaseClass()
 	{
 		var input = new DerivedClassWithProtectedConstructor(2);
-		var inputList = new List<ProtectedConstructorBaseClass>() { input };
+		var inputList = new List<ProtectedConstructorBaseClass> { input };
 
 		_serializer.Save(Call, inputList);
 		var output = _serializer.Load<List<ProtectedConstructorBaseClass>>(Call);

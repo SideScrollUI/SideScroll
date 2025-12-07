@@ -51,16 +51,4 @@ public class TaskDelegate : TaskCreator
 			call.Log.Add(e);
 		}
 	}
-
-	/*private void InvokeAction2(Call call)
-	{
-		try
-		{
-			Task.Run(() => Action.Invoke(call)).GetAwaiter().GetResult();
-		}
-		catch (Exception e)
-		{
-			call.Log.Add(e);
-		}
-	}*/
 }

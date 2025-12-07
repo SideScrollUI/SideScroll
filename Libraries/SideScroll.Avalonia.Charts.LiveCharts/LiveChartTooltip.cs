@@ -68,7 +68,7 @@ public class LiveChartTooltip(TabLiveChart liveChart) : SKDefaultTooltip
 			_ = _layout.Children.Remove(child);
 		}
 
-		var tableLayout = new TableLayout()
+		var tableLayout = new TableLayout
 		{
 			HorizontalAlignment = Align.Middle,
 			VerticalAlignment = Align.Middle

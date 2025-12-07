@@ -266,30 +266,4 @@ public class TimeRangeValue : ITags
 			output.Add(timeRangeValue);
 		}
 	}
-
-	// Add NaN points for each period duration between the start/end times
-	/*private static DateTime FillGaps(DateTime startTime, DateTime endTime, TimeSpan periodDuration, List<TimeRangeValue> output)
-	{
-		TimeSpan maxGap = periodDuration * 2;
-
-		while (true)
-		{
-			TimeSpan timeSpan = endTime.Subtract(startTime);
-			if (timeSpan <= maxGap)
-				break;
-
-			DateTime expectedTime = startTime.Add(periodDuration);
-			var insertedPoint = new TimeRangeValue()
-			{
-				StartTime = expectedTime.ToUniversalTime(),
-				EndTime = expectedTime.ToUniversalTime().Add(periodDuration),
-				Value = double.NaN,
-			};
-
-			output.Add(insertedPoint);
-			startTime = expectedTime;
-		}
-
-		return startTime;
-	}*/
 }
