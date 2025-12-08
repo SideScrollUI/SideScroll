@@ -1,9 +1,8 @@
 using Avalonia;
 using Avalonia.Browser;
 using SideScroll.Avalonia.Samples;
-using System.Runtime.Versioning;
 
-[assembly: SupportedOSPlatform("browser")]
+namespace SideScroll.Demo.Avalonia.Browser;
 
 internal sealed partial class Program
 {

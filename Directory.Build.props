@@ -8,7 +8,13 @@
       - The CustomTitleIcon can be configured in the ProjectSettings
       - Added Minimize, Maximize, Restore, and Close Button Svg Icons
     - Added DataTable support to TabModel.AddData()
+    - Added Browser Demo Project (this is still too slow for real world usage)
+    - Added Summary Documentation for Tasks and Collections
     - Improved Default Window Sizing and Position
+    - ImageButtons will now resize Icons to the IconSize
+    - Updated IsCacheable naming for ListDelegate, ListMethod, and ListProperty
+    - Fixed regression for ImageButton.StartTaskAsync() not passing UseBackgroundThread
+      - This could cause async Tasks to not show logs while active
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.8</AvaloniaVersion>
