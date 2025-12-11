@@ -219,10 +219,9 @@ public class TabModel
 		{
 			AddObject(obj);
 		}
-		else if (type.IsEnum)
+		else if (obj is Enum enumValue)
 		{
-			var values = Enum.GetValues(type);
-			AddEnumerable(values);
+			ItemList.Add(ListEnumValue.Create(enumValue));
 		}
 		else if (TabUtils.ObjectHasLinks(obj))
 		{

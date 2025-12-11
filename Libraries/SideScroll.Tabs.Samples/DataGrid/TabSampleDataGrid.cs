@@ -16,6 +16,7 @@ public class TabSampleDataGrid
 	public static TabSampleArray Array => new();
 	public static TabSampleNullableArray NullableArray => new();
 	public static TabSampleBytes Bytes => new();
+	public static TabSampleEnums Enums => new();
 	public static TabSampleGridDataTable DataTable => new();
 	public static TabSampleInstanceListItems InstanceListItems => new();
 	public static TabSampleFilter Filter => new();
