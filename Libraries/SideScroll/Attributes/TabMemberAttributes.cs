@@ -204,7 +204,7 @@ public class HiddenRowAttribute : Attribute;
 /// Hides rows or columns when the member value matches any of the specified values.
 /// </summary>
 /// <param name="value">Primary value to match for hiding.</param>
-/// <param name="additonalValues">Additional values that trigger hiding.</param>
+/// <param name="additionalValues">Additional values that trigger hiding.</param>
 /// <remarks>
 /// <b>Apply to:</b> Fields, properties, classes, or structs.
 /// <para>
@@ -222,7 +222,7 @@ public class HiddenRowAttribute : Attribute;
 /// </code>
 /// </example>
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
-public class HideAttribute(object? value, params object?[] additonalValues) : Attribute
+public class HideAttribute(object? value, params object?[] additionalValues) : Attribute
 {
 	/// <summary>
 	/// All values that trigger hiding when matched.
@@ -230,7 +230,7 @@ public class HideAttribute(object? value, params object?[] additonalValues) : At
 	public object?[] Values { get; } =
 	[
 		value,
-		.. additonalValues
+		.. additionalValues
 	];
 }
 
@@ -238,7 +238,7 @@ public class HideAttribute(object? value, params object?[] additonalValues) : At
 /// Hides rows when the member value matches any of the specified values.
 /// </summary>
 /// <param name="value">Primary value to match for hiding rows.</param>
-/// <param name="additonalValues">Additional values that trigger row hiding.</param>
+/// <param name="additionalValues">Additional values that trigger row hiding.</param>
 /// <remarks>
 /// <b>Apply to:</b> Fields or properties.
 /// <para>
@@ -256,7 +256,7 @@ public class HideAttribute(object? value, params object?[] additonalValues) : At
 /// </code>
 /// </example>
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-public class HideRowAttribute(object? value, params object?[] additonalValues) : Attribute
+public class HideRowAttribute(object? value, params object?[] additionalValues) : Attribute
 {
 	/// <summary>
 	/// All values that trigger row hiding when matched.
@@ -264,7 +264,7 @@ public class HideRowAttribute(object? value, params object?[] additonalValues) :
 	public object?[] Values { get; } =
 	[
 		value,
-		.. additonalValues
+		.. additionalValues
 	];
 }
 
@@ -272,7 +272,7 @@ public class HideRowAttribute(object? value, params object?[] additonalValues) :
 /// Hides columns when the member value matches any of the specified values.
 /// </summary>
 /// <param name="value">Primary value to match for hiding columns.</param>
-/// <param name="additonalValues">Additional values that trigger column hiding.</param>
+/// <param name="additionalValues">Additional values that trigger column hiding.</param>
 /// <remarks>
 /// <b>Apply to:</b> Properties.
 /// <para>
@@ -290,7 +290,7 @@ public class HideRowAttribute(object? value, params object?[] additonalValues) :
 /// </code>
 /// </example>
 [AttributeUsage(AttributeTargets.Property)]
-public class HideColumnAttribute(object? value, params object?[] additonalValues) : Attribute
+public class HideColumnAttribute(object? value, params object?[] additionalValues) : Attribute
 {
 	/// <summary>
 	/// All values that trigger column hiding when matched.
@@ -298,7 +298,7 @@ public class HideColumnAttribute(object? value, params object?[] additonalValues
 	public object?[] Values { get; } =
 	[
 		value,
-		.. additonalValues
+		.. additionalValues
 	];
 }
 

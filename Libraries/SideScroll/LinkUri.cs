@@ -5,22 +5,52 @@ using System.Text.RegularExpressions;
 
 namespace SideScroll;
 
-// <prefix>://<type>/[v<version>/]<path>[?<query>]
+/// <summary>
+/// Represents a structured URI with format: <prefix>://<type>/[v<version>/]<path>[?<query>]
+/// </summary>
 [PublicData]
 public class LinkUri
 {
+	/// <summary>
+	/// Gets or sets the URI prefix
+	/// </summary>
 	public string? Prefix { get; set; }
+
+	/// <summary>
+	/// Gets or sets the URI type
+	/// </summary>
 	public string? Type { get; set; }
+
+	/// <summary>
+	/// Gets or sets the optional version number
+	/// </summary>
 	public Version? Version { get; set; }
+
+	/// <summary>
+	/// Gets or sets the URI path
+	/// </summary>
 	public string? Path { get; set; }
+
+	/// <summary>
+	/// Gets or sets the optional query string
+	/// </summary>
 	public string? Query { get; set; }
 
+	/// <summary>
+	/// Gets or sets the complete URL string
+	/// </summary>
 	public string? Url { get; set; }
 
 	private static readonly Regex _regex = new(@"^(?<prefix>[a-zA-Z]+)\:\/\/(?<type>[-0-9a-zA-Z\.]+)\/(v(?<version>[\d\.]+)\/)?(?<path>[^\?]+)(\?(?<query>.+))?$");
 
+	/// <summary>
+	/// Initializes a new empty instance of the LinkUri class
+	/// </summary>
 	public LinkUri() { }
 
+	/// <summary>
+	/// Initializes a new instance of the LinkUri class with the specified components
+	/// </summary>
 	public LinkUri(string prefix, string type, Version version, string path, string? query = null)
 	{
 		Prefix = prefix;
@@ -34,11 +64,17 @@ public class LinkUri
 
 	public override string ToString() => Url ?? ToUri();
 
+	/// <summary>
+	/// Validates that required URI components (Prefix, Type, and Path) are present
+	/// </summary>
 	public virtual bool IsValid() =>
 		!Prefix.IsNullOrEmpty() &&
 		!Type.IsNullOrEmpty() &&
 		!Path.IsNullOrEmpty();
 
+	/// <summary>
+	/// Converts the LinkUri components into a complete URI string
+	/// </summary>
 	public string ToUri()
 	{
 		string uri = $"{Prefix}://{Type}/";
@@ -58,6 +94,9 @@ public class LinkUri
 		return uri;
 	}
 
+	/// <summary>
+	/// Parses a URL string into a LinkUri object
+	/// </summary>
 	public static LinkUri Parse(string url)
 	{
 		if (TryParse(url, out LinkUri? linkUri)) return linkUri;
@@ -65,6 +104,12 @@ public class LinkUri
 		throw new ArgumentException($"Invalid LinkUri {url}");
 	}
 
+	/// <summary>
+	/// Attempts to parse a URL string into a LinkUri object
+	/// </summary>
+	/// <param name="url">The URL string to parse</param>
+	/// <param name="linkUri">When successful, contains the parsed LinkUri; otherwise null</param>
+	/// <returns>True if the URL was successfully parsed; otherwise false</returns>
 	public static bool TryParse(string? url, [NotNullWhen(true)] out LinkUri? linkUri)
 	{
 		linkUri = null;

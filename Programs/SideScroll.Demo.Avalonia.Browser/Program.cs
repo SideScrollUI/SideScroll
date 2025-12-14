@@ -4,12 +4,12 @@ using SideScroll.Avalonia.Samples;
 
 namespace SideScroll.Demo.Avalonia.Browser;
 
-internal sealed partial class Program
+internal sealed class Program
 {
     private static Task Main(string[] args) => BuildAvaloniaApp()
             .WithInterFont()
             .StartBrowserAppAsync("out");
 
-    public static AppBuilder BuildAvaloniaApp()
+    private static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>();
 }

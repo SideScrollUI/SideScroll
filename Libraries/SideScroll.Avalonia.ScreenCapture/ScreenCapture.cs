@@ -7,13 +7,12 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Avalonia.Controls.Viewer;
-using SideScroll.Avalonia.ScreenCapture.Unmanaged;
 using SideScroll.Avalonia.Themes;
+using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
 using SideScroll.Utilities;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 
 namespace SideScroll.Avalonia.ScreenCapture;
 
@@ -123,14 +122,13 @@ public class ScreenCapture : Grid
 		if (bitmap == null)
 			return;
 
-		//ClipboardUtils.SetTextAsync(bitmap); // AvaloniaUI will probably eventually support this
 		try
 		{
 			using (bitmap)
 			{
 				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 				{
-					await CopyClipboardWindowsAsync(bitmap);
+					await ClipboardUtils.SetBitmapAsync(this, bitmap);
 				}
 				else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 				{
@@ -142,12 +140,6 @@ public class ScreenCapture : Grid
 		{
 			Debug.WriteLine(e);
 		}
-	}
-
-	[SupportedOSPlatform("windows")]
-	private static async Task CopyClipboardWindowsAsync(RenderTargetBitmap bitmap)
-	{
-		await Win32ClipboardUtils.SetBitmapAsync(bitmap);
 	}
 
 	private void CopyClipboardOsx(RenderTargetBitmap bitmap)

@@ -44,7 +44,7 @@ public class Project
 	public Project(ProjectSettings projectSettings, UserSettings userSettings)
 	{
 		ProjectSettings = projectSettings;
-		userSettings.EnableCustomTitleBar ??= projectSettings.DefaultEnableCustomTitlebar;
+		userSettings.EnableCustomTitleBar ??= ProjectSettings.DefaultEnableCustomTitlebar;
 		userSettings.DataSettings.AppDataPath ??= projectSettings.DefaultAppDataPath;
 		userSettings.DataSettings.LocalDataPath ??= projectSettings.DefaultLocalDataPath;
 		UserSettings = userSettings;

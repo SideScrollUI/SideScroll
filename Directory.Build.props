@@ -8,7 +8,7 @@
       - Filters now treat all words as required by default unless an | operator is used
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.8</AvaloniaVersion>
+    <AvaloniaVersion>11.3.9</AvaloniaVersion>
     <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>

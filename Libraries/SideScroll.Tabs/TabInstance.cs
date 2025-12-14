@@ -139,8 +139,6 @@ public class TabInstance : IDisposable
 
 	public Action? DefaultAction { get; set; } // Default action when Enter pressed
 
-	private bool _disposed;
-
 	// Relative paths for where all the TabSettings get stored, primarily used for loading future defaults
 	// paths get hashed later to avoid having to encode and super long names breaking path limits
 	private string? CustomPath => (Model.CustomSettingsPath != null) ? "Custom/" + GetType().GetAssemblyQualifiedShortName() + "/" + Model.CustomSettingsPath : null;
@@ -164,6 +162,8 @@ public class TabInstance : IDisposable
 	public TabInstance RootInstance => ParentTabInstance?.RootInstance ?? this;
 
 	private bool _settingLoaded;
+
+	private bool _disposed;
 
 	public override string ToString() => Label;
 

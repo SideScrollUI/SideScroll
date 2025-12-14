@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input.Platform;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 
 namespace SideScroll.Avalonia.Utilities;
@@ -22,7 +23,7 @@ public static class ClipboardUtils
 	}
 
 	/// <summary>
-	/// Sets text to the clipboard asynchronously
+	/// Sets clipboard text asynchronously on the UI Thread
 	/// </summary>
 	public static void SetText(Visual? visual, string text)
 	{
@@ -30,12 +31,13 @@ public static class ClipboardUtils
 	}
 
 	/// <summary>
-	/// Sets text to the clipboard
+	/// Sets clipboard to text
 	/// </summary>
 	public static async Task SetTextAsync(Visual? visual, string text)
 	{
 		IClipboard clipboard = GetClipboard(visual);
 		await clipboard.SetTextAsync(text);
+		await clipboard.FlushAsync(); // Flush to retain clipboard content after app closes
 	}
 
 	/// <summary>
@@ -48,5 +50,15 @@ public static class ClipboardUtils
 
 		string? clipboardText = await clipboard.TryGetTextAsync();
 		return clipboardText;
+	}
+
+	/// <summary>
+	/// Sets clipboard to bitmap
+	/// </summary>
+	public static async Task SetBitmapAsync(Visual? visual, Bitmap? bitmap)
+	{
+		IClipboard clipboard = GetClipboard(visual);
+		await clipboard.SetBitmapAsync(bitmap);
+		await clipboard.FlushAsync(); // Flush to retain clipboard content after app closes
 	}
 }
