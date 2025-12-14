@@ -3,6 +3,9 @@
     <Version>0.15</Version>
     <PackageReleaseNotes>
     - Added ListEnumValue for showing enums and flags
+    - Added Nested DataGrid Filter Support
+      - Filters now allow nesting via parenthesis
+      - Filters now treat all words as required by default unless an | operator is used
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.8</AvaloniaVersion>

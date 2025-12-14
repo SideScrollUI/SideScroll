@@ -1067,7 +1067,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 				TabModel.SearchFilter.Filter = _filter;
 			}
 
-			if (_filter.FilterExpressions.Count > 0)
+			if (_filter.RootNode != null)
 			{
 				if (_filter.Depth > 0)
 				{

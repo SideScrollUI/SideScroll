@@ -29,17 +29,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Demo.Avalonia.De
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Demo.Console", "Programs\SideScroll.Demo.Console\SideScroll.Demo.Console.csproj", "{A36CA3F6-3029-44AA-99D9-CC68722CFB27}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{B14E9554-8531-4CE0-80BB-FD4C4A87F488}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B14E9554-8531-4CE0-80BB-FD4C4A87F488}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Serialize.Test", "Test\SideScroll.Serialize.Test\SideScroll.Serialize.Test.csproj", "{531C1233-3073-43CD-8239-05ACA0E2D067}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Serialize.Tests", "Tests\SideScroll.Serialize.Tests\SideScroll.Serialize.Tests.csproj", "{531C1233-3073-43CD-8239-05ACA0E2D067}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Network.Test", "Test\SideScroll.Network.Test\SideScroll.Network.Test.csproj", "{223B95ED-76CE-4B23-842B-EBC1A13C582D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Network.Tests", "Tests\SideScroll.Network.Tests\SideScroll.Network.Tests.csproj", "{223B95ED-76CE-4B23-842B-EBC1A13C582D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Resources", "Libraries\SideScroll.Resources\SideScroll.Resources.csproj", "{77D36F2E-2D9A-4FF3-B92D-2BEFFF03CC8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Avalonia.Test", "Test\SideScroll.Avalonia.Test\SideScroll.Avalonia.Test.csproj", "{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Avalonia.Tests", "Tests\SideScroll.Avalonia.Tests\SideScroll.Avalonia.Tests.csproj", "{6DDD8F96-72EC-49EB-B745-0393EF9B20A9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Test", "Test\SideScroll.Test\SideScroll.Test.csproj", "{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Tests", "Tests\SideScroll.Tests\SideScroll.Tests.csproj", "{A9E489EB-93E9-44C1-A2CA-5EABC7C1DD91}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{332EF461-464E-4A75-A15D-647E3FED6C18}"
 	ProjectSection(SolutionItems) = preProject
@@ -55,6 +55,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SideScroll.Avalonia.Samples", "Libraries\SideScroll.Avalonia.Samples\SideScroll.Avalonia.Samples.csproj", "{2609CBA4-D4BE-463E-A5C1-2723AD7E139E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SideScroll.Demo.Avalonia.Browser", "Programs\SideScroll.Demo.Avalonia.Browser\SideScroll.Demo.Avalonia.Browser.csproj", "{37291051-A795-C95B-2818-E94ADB44E259}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SideScroll.Tabs.Tests", "Tests\SideScroll.Tabs.Tests\SideScroll.Tabs.Tests.csproj", "{7744F053-F15A-4ABD-959F-147A44DF8639}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -177,6 +179,12 @@ Global
 		{37291051-A795-C95B-2818-E94ADB44E259}.DebugX86|Any CPU.Build.0 = DebugX86|Any CPU
 		{37291051-A795-C95B-2818-E94ADB44E259}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37291051-A795-C95B-2818-E94ADB44E259}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7744F053-F15A-4ABD-959F-147A44DF8639}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7744F053-F15A-4ABD-959F-147A44DF8639}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7744F053-F15A-4ABD-959F-147A44DF8639}.DebugX86|Any CPU.ActiveCfg = DebugX86|Any CPU
+		{7744F053-F15A-4ABD-959F-147A44DF8639}.DebugX86|Any CPU.Build.0 = DebugX86|Any CPU
+		{7744F053-F15A-4ABD-959F-147A44DF8639}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7744F053-F15A-4ABD-959F-147A44DF8639}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -203,6 +211,7 @@ Global
 		{EEB5042F-0D91-41C0-B52D-E2674CA01709} = {E7D9713F-A249-443C-B300-52A335BD8891}
 		{2609CBA4-D4BE-463E-A5C1-2723AD7E139E} = {E7D9713F-A249-443C-B300-52A335BD8891}
 		{37291051-A795-C95B-2818-E94ADB44E259} = {E4AFA68B-CE75-4BFE-9329-85FECDB49D3D}
+		{7744F053-F15A-4ABD-959F-147A44DF8639} = {B14E9554-8531-4CE0-80BB-FD4C4A87F488}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B8EE36E-D3EA-401F-A48B-6B0D45E04DCC}

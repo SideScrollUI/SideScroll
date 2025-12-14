@@ -2,13 +2,14 @@ using SideScroll.Attributes;
 
 namespace SideScroll.Tabs.Lists;
 
-public class ListEnumValue(string name, bool isSelected, object value)
+public class ListEnumValue(string name, bool isSelected, object value, string hex)
 {
 	[StyleValue]
 	public bool Selected => isSelected;
 
 	public string Name => name;
 	public object Value => value;
+	public string Hex => hex;
 
 	public override string ToString() => Name;
 
@@ -24,9 +25,10 @@ public class ListEnumValue(string name, bool isSelected, object value)
 			bool isSelected = isFlagsEnum ? enumValue.HasFlag(flag) : enumValue.Equals(flag);
 			
 			string name = flag.ToString();
-			object value = Convert.ToInt64(flag);
+			long value = Convert.ToInt64(flag);
+			string hex = $"{value:X}";
 
-			flags.Add(new ListEnumValue(name, isSelected, value));
+			flags.Add(new ListEnumValue(name, isSelected, value, hex));
 		}
 
 		return flags;
@@ -42,10 +44,11 @@ public class ListEnumValue(string name, bool isSelected, object value)
 		foreach (T flag in Enum.GetValues(enumType))
 		{
 			string name = flag.ToString();
-			object value = Convert.ToInt64(flag);
+			long value = Convert.ToInt64(flag);
+			string hex = $"{value:X}";
 
 			// No selection for static enum display
-			flags.Add(new ListEnumValue(name, false, value));
+			flags.Add(new ListEnumValue(name, false, value, hex));
 		}
 
 		return flags;
