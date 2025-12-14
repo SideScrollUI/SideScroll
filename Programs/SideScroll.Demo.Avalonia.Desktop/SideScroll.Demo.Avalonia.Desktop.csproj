@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\SideScroll.Avalonia.Samples\SideScroll.Avalonia.Samples.csproj" />
-    <ProjectReference Include="..\..\Libraries\SideScroll.Avalonia.ScreenCapture\SideScroll.Avalonia.ScreenCapture.csproj" />
   </ItemGroup>
 
 </Project>

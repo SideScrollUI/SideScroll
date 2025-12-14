@@ -1,7 +1,7 @@
 using Avalonia;
+using SideScroll.Avalonia.Controls.ScreenCapture;
 using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Samples;
-using SideScroll.Avalonia.ScreenCapture;
 using SideScroll.Utilities;
 
 namespace SideScroll.Demo.Avalonia.Desktop;

@@ -12,9 +12,8 @@ using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
 using SideScroll.Utilities;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 
-namespace SideScroll.Avalonia.ScreenCapture;
+namespace SideScroll.Avalonia.Controls.ScreenCapture;
 
 public class ScreenCapture : Grid
 {
@@ -99,7 +98,7 @@ public class ScreenCapture : Grid
 			HorizontalAlignment = HorizontalAlignment.Left,
 			VerticalAlignment = VerticalAlignment.Top,
 			Cursor = new Cursor(StandardCursorType.Cross),
-			[Grid.RowProperty] = 1,
+			[RowProperty] = 1,
 		};
 		Children.Add(_contentGrid);
 
@@ -118,49 +117,19 @@ public class ScreenCapture : Grid
 
 	private async Task CopyClipboardAsync(Call call)
 	{
+		// This must not be disposed on macOS
 		RenderTargetBitmap? bitmap = GetSelectedBitmap();
 		if (bitmap == null)
 			return;
 
 		try
 		{
-			using (bitmap)
-			{
-				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-				{
-					await ClipboardUtils.SetBitmapAsync(this, bitmap);
-				}
-				else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-				{
-					CopyClipboardOsx(bitmap);
-				}
-			}
+			await ClipboardUtils.SetBitmapAsync(this, bitmap);
 		}
 		catch (Exception e)
 		{
 			Debug.WriteLine(e);
 		}
-	}
-
-	private void CopyClipboardOsx(RenderTargetBitmap bitmap)
-	{
-		string directory = TabViewer.Project.ProjectSettings.DefaultLocalDataPath;
-		string filePath = Paths.Combine(directory, "clipboard.png");
-
-		Directory.CreateDirectory(directory);
-
-		bitmap.Save(filePath);
-
-		ProcessStartInfo processStartInfo = new()
-		{
-			FileName = "osascript",
-			ArgumentList =
-			{
-				"-e",
-				$"set the clipboard to (read \"{filePath}\" as TIFF picture)",
-			},
-		};
-		Process.Start(processStartInfo);
 	}
 
 	private async Task SaveAsync(Call call)

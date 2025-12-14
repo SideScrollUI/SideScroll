@@ -3,7 +3,7 @@ using SideScroll.Resources;
 using SideScroll.Utilities;
 using System.Runtime.InteropServices;
 
-namespace SideScroll.Avalonia.ScreenCapture;
+namespace SideScroll.Avalonia.Controls.ScreenCapture;
 
 public class ScreenCaptureToolbar : TabControlToolbar
 {
