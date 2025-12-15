@@ -27,9 +27,6 @@
   - Shared across UI frameworks
     - Currently only AvaloniaUI
   
-* SideScroll.Tabs.Tools
-  - File Browser
-  
 * SideScroll.Tabs.Samples
   - Used for testing UI features
   - `* Samples` tabs that show up in debug mode
@@ -49,15 +46,16 @@
 * SideScroll.Avalonia.Samples
   - Sample tabs for custom Avalonia controls
 
-* SideScroll.Avalonia.ScreenCapture
-  - Screenshot control for Windows and MacOS
-
 ## Programs
 
 * SideScroll.Demo.Avalonia.Desktop
   - The primary application that loads all the other modules
   - Uses the `SideScroll.Avalonia` controls with the `SideScroll.Tabs.Samples`
   - Cross Platform (Windows, Mac, Linux)
+
+* SideScroll.Demo.Avalonia.Browser
+  - Web Browser Demo
+  - This is still too slow for real world usage
   
 * SideScroll.Demo.Console
   - Future shell or command line program?
