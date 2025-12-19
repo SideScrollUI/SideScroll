@@ -8,7 +8,6 @@
       - Filters now treat all words as required by default unless an | operator is used
     - Moved a few projects into others to simplify dependencies
       - Moved SideScroll.Avalonia.ScreenCapture into SideScroll.Avalonia
-      - Moved SideScroll.Tabs.Tools into SideScroll.Tabs
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.9</AvaloniaVersion>

@@ -27,6 +27,9 @@
   - Shared across UI frameworks
     - Currently only AvaloniaUI
   
+* SideScroll.Tabs.Tools
+  - File Browser
+  
 * SideScroll.Tabs.Samples
   - Used for testing UI features
   - `* Samples` tabs that show up in debug mode
