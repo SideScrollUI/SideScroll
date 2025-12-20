@@ -362,14 +362,8 @@ public class TabView : Grid, IDisposable
 
 		//TabViewSettings.SplitterDistance = (int)Math.Ceiling(e.Vector.Y); // backwards
 		double width = (int)_containerGrid!.ColumnDefinitions[0].ActualWidth;
-		TabViewSettings.SplitterDistance = width;
-		_parentContainerBorder!.Width = width;
-		_containerGrid.ColumnDefinitions[0].Width = new GridLength(width);
 
-		//UpdateSplitterDistance();
-		Instance.SaveTabSettings();
-		UpdateSplitterFiller();
-		_parentContainerBorder.InvalidateMeasure();
+		SetSplitterDistance(width);
 	}
 
 	// The Drag start, delta, and complete get called for this too. Which makes this really hard to do well
@@ -380,14 +374,24 @@ public class TabView : Grid, IDisposable
 		// DesiredSize gets updated by Measure()
 		_parentContainerBorder.Measure(_parentContainerBorder.Bounds.Size.WithWidth(Model.MaxDesiredWidth));
 		double desiredWidth = Math.Min(_parentContainerBorder!.DesiredSize.Width, Model.MaxDesiredWidth);
-		TabViewSettings.SplitterDistance = desiredWidth;
-		_parentContainerBorder.Width = desiredWidth;
-		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Auto);
 
-		_containerGrid.InvalidateMeasure();
+		SetSplitterDistance(desiredWidth);
+	}
+
+	private void SetSplitterDistance(double width)
+	{
+		TabViewSettings.SplitterDistance = width;
+		_parentContainerBorder!.Width = width;
+		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(width);
+		_tabParentControls!.MaxDesiredWidth = Math.Max(Model.MaxDesiredWidth, width);
 
 		Instance.SaveTabSettings();
 		UpdateSplitterFiller();
+
+		// This still doesn't update DataGrids when resizing larger until hovered over
+		_parentContainerBorder.InvalidateMeasure();
+		_tabParentControls.InvalidateMeasure();
+		_containerGrid.InvalidateMeasure();
 	}
 
 	protected void UpdateSplitterDistance()

@@ -6,8 +6,9 @@
     - Added Nested DataGrid Filter Support
       - Filters now allow nesting via parenthesis
       - Filters now treat all words as required by default unless an | operator is used
-    - Moved a few projects into others to simplify dependencies
-      - Moved SideScroll.Avalonia.ScreenCapture into SideScroll.Avalonia
+    - Fixed Tab Resizing not updating MaxDesiredWidth
+      - This also fixes resizing DataGrid columns and missing DataGrid values
+    - Moved SideScroll.Avalonia.ScreenCapture project into SideScroll.Avalonia
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.9</AvaloniaVersion>

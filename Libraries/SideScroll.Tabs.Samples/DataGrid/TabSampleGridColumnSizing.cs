@@ -46,6 +46,9 @@ public class TabSampleGridColumnSizing : ITab
 		[MaxWidth(200)]
 		public string ShowPrefix { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 
+		[AutoSize]
+		public string AutoSize { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyz";
+
 		[MaxWidth(1000), WordWrap]
 		public string LongString { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 
