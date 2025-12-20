@@ -2,9 +2,19 @@ using System.Text;
 
 namespace SideScroll;
 
+/// <summary>
+/// Provides utility methods and properties for cross-platform path operations and common system directories
+/// </summary>
 public static class Paths
 {
-	// Windows can't combine Linux paths correctly, which are needed for FTP (still true?)
+	/// <summary>
+	/// Combines multiple path segments into a single path with forward slashes, handling null values and trimming leading slashes
+	/// </summary>
+	/// <example>
+	/// <code>
+	/// Paths.Combine("root", "folder", "file.txt") → "root/folder/file.txt"
+	/// </code>
+	/// </example>
 	public static string Combine(string? path, params string?[] paths)
 	{
 		path ??= "";
@@ -16,6 +26,14 @@ public static class Paths
 		return path.Replace('\\', '/');
 	}
 
+	/// <summary>
+	/// Escapes invalid path and filename characters by replacing them with underscore-hexadecimal-underscore format
+	/// </summary>
+	/// <example>
+	/// <code>
+	/// Paths.Escape("file:name") → "file_3a_name"
+	/// </code>
+	/// </example>
 	public static string Escape(string path)
 	{
 		char[] invalidFileNameChars = Path.GetInvalidFileNameChars();
@@ -36,21 +54,36 @@ public static class Paths
 		return encodedUri.ToString();
 	}
 
-	// Windows: C:\Users\<User>
-	// macOS: /Users/<user>
+	/// <summary>
+	/// Gets the user's home directory path
+	/// <para>Windows: C:\Users\[User]</para>
+	/// <para>macOS: /Users/[user]</para>
+	/// </summary>
 	public static string HomePath => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-	// Windows: ApplicationData -> C:\Users\<User>\AppData\Roaming
-	// macOS: /Users/<user>/Library/Application Support/ (same as Local, no official support for Remote?)
+	/// <summary>
+	/// Gets the application data directory path for roaming user data
+	/// <para>Windows: C:\Users\[User]\AppData\Roaming</para>
+	/// <para>macOS: /Users/[user]/Library/Application Support/</para>
+	/// </summary>
 	public static string AppDataPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-	// Windows: C:\Users\<User>\AppData\Local
-	// macOS: /Users/<user>/Library/Application Support/
+	/// <summary>
+	/// Gets the local application data directory path
+	/// <para>Windows: C:\Users\[User]\AppData\Local</para>
+	/// <para>macOS: /Users/[user]/Library/Application Support/</para>
+	/// </summary>
 	public static string LocalDataPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-	// Windows: C:\Users\<User>\Pictures
-	// macOS: /Users/<user>/Pictures
+	/// <summary>
+	/// Gets the user's Pictures directory path
+	/// <para>Windows: C:\Users\[User]\Pictures</para>
+	/// <para>macOS: /Users/[user]/Pictures</para>
+	/// </summary>
 	public static string PicturesPath => Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
+	/// <summary>
+	/// Gets the user's Downloads directory path
+	/// </summary>
 	public static string DownloadPath => Combine(HomePath, "Downloads");
 }

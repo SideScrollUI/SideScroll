@@ -39,8 +39,6 @@ public class ListEnumValue(string name, bool isSelected, object value, string he
 		Type enumType = typeof(T);
 		List<ListEnumValue> flags = [];
 
-		bool isFlagsEnum = enumType.GetCustomAttributes(typeof(FlagsAttribute), false).Length > 0;
-
 		foreach (T flag in Enum.GetValues(enumType))
 		{
 			string name = flag.ToString();

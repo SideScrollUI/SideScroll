@@ -12,7 +12,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 	public IEnumerable<string> Keys => Items.Keys;
 	public IEnumerable<T> Values => Items.Values;
 
-	public bool Loaded { get; protected set; }
+	public bool IsLoaded { get; protected set; }
 
 	public DataRepoView(DataRepo dataRepo, string groupId, bool indexed = false, int? maxItems = null)
 		: base(dataRepo, groupId, indexed, maxItems)
@@ -27,7 +27,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		lock (DataRepo)
 		{
 			Items = base.LoadAll(call, ascending);
-			Loaded = true;
+			IsLoaded = true;
 			return Items;
 		}
 	}
@@ -36,7 +36,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 	{
 		lock (DataRepo)
 		{
-			if (Loaded && !force) return;
+			if (IsLoaded && !force) return;
 
 			if (Index == null)
 			{
@@ -46,7 +46,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 
 			var dataItems = LoadAllDataItems(call, ascending);
 			Items = [.. dataItems];
-			Loaded = true;
+			IsLoaded = true;
 		}
 	}
 
@@ -57,7 +57,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 			DataItemCollection<T> items = base.LoadAll(call);
 			var ordered = ascending ? items.OrderBy(orderByMemberName) : items.OrderByDescending(orderByMemberName);
 			Items = [.. ordered];
-			Loaded = true;
+			IsLoaded = true;
 		}
 	}
 
@@ -91,7 +91,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		{
 			// Delete(call, key); // Don't trigger delete notifications
 			base.Save(call, key, item);
-			if (Loaded)
+			if (IsLoaded)
 			{
 				Items.Update(key, item);
 			}
@@ -112,7 +112,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 			base.Delete(call, key);
 
 			var item = Items.FirstOrDefault(d => d.Key == key);
-			if (Loaded && item != null)
+			if (IsLoaded && item != null)
 			{
 				Items.Remove(item);
 			}

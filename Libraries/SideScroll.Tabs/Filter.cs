@@ -280,10 +280,7 @@ public class Filter
 		}
 
 		// If only one node remains after AND operations
-		if (nodes.Count > 0)
-			return nodes[0];
-		
-		return null;
+		return nodes.FirstOrDefault();
 	}
 
 	public bool Matches(IList iList)
@@ -350,10 +347,7 @@ public class Filter
 			else
 			{
 				List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleProperties(innerType); // cache me
-				if (visibleProperties != null)
-				{
-					GetItemSearchText(innerValue, visibleProperties, uppercaseValues);
-				}
+				GetItemSearchText(innerValue, visibleProperties, uppercaseValues);
 			}
 		}
 	}

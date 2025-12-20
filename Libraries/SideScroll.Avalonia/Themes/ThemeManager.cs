@@ -26,9 +26,9 @@ public class ThemeManager
 		.Select(i => i.Value.Name!)
 		.ToList();
 
-	public DataRepoView<AvaloniaThemeSettings> DataRepoDefaultThemes { get; protected set; }
+	public DataRepoView<AvaloniaThemeSettings> DataRepoDefaultThemes { get; }
 
-	public DataRepoView<AvaloniaThemeSettings> DataRepoThemes { get; protected set; }
+	public DataRepoView<AvaloniaThemeSettings> DataRepoThemes { get; }
 
 	public ThemeManager(Project project)
 	{

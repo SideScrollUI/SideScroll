@@ -23,7 +23,7 @@ public class TabAvaloniaToolTipSample : ITab
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			var toolbar = new Toolbar();
+			Toolbar toolbar = new();
 			toolbar.ButtonRefresh.Action = Refresh;
 			model.AddObject(toolbar);
 

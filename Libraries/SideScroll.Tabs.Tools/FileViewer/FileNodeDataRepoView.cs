@@ -38,7 +38,7 @@ public class FileNodeDataRepoView(string groupId, bool indexed = false, int? max
 
 		try
 		{
-			if (_dataRepoNodes?.Loaded == true) return _dataRepoNodes;
+			if (_dataRepoNodes?.IsLoaded == true) return _dataRepoNodes;
 
 			// DataRepo might only have been opened and not loaded before
 			_dataRepoNodes ??= project.Data.App.OpenView<NodeView>(GroupId, Indexed, MaxItems);

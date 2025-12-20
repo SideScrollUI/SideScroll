@@ -83,8 +83,8 @@ public class TabInstance : IDisposable
 
 	public Project Project { get; set; }
 	public ITab? iTab { get; set; } // Collision with derived Tab
-	public TaskInstance TaskInstance { get; set; } = new();
-	public TabModel Model { get; set; } = new();
+	public TaskInstance TaskInstance { get; } = new();
+	public TabModel Model { get; private set; } = new();
 	public string Label
 	{
 		get => Model.Name;
@@ -149,7 +149,7 @@ public class TabInstance : IDisposable
 	private string TypePath => "Type/" + Model.ObjectTypePath;
 
 	// Reload to initial state
-	public bool IsLoaded { get; set; }
+	public bool IsLoaded { get; private set; }
 	public bool LoadCalled { get; set; } // Used by the view
 	public bool StaticModel { get; set; }
 	public bool ShowTasks { get; set; }
@@ -373,8 +373,8 @@ public class TabInstance : IDisposable
 		return null;
 	}
 
-	public bool HasLoadMethod => GetDerivedLoadMethod(nameof(Load), 2) != null;
-	public bool HasLoadUIMethod => GetDerivedLoadMethod(nameof(LoadUI), 2) != null;
+	private bool HasLoadMethod => GetDerivedLoadMethod(nameof(Load), 2) != null;
+	private bool HasLoadUIMethod => GetDerivedLoadMethod(nameof(LoadUI), 2) != null;
 
 	public virtual void Load(Call call, TabModel model)
 	{
@@ -503,7 +503,7 @@ public class TabInstance : IDisposable
 		}
 	}
 
-	public void LoadModelUI(Call call, TabModel model)
+	private void LoadModelUI(Call call, TabModel model)
 	{
 		// Set the model before calling LoadUI() in case the Settings are needed
 		// Load() initializes the tabModel.Object & CustomSettingsPath which gets used for the settings path
@@ -809,7 +809,7 @@ public class TabInstance : IDisposable
 		if (_settingLoaded && !reload && TabViewSettings != null)
 			return TabViewSettings;
 
-		if (TabBookmark != null && TabBookmark.ViewSettings != null)
+		if (TabBookmark?.ViewSettings != null)
 		{
 			TabViewSettings = TabBookmark.ViewSettings;
 		}
@@ -1005,7 +1005,7 @@ public class TabInstance : IDisposable
 		OnValidate?.Invoke(this, EventArgs.Empty);
 	}
 
-	public void CopyToClipboard(string text)
+	protected void CopyToClipboard(string text)
 	{
 		OnCopyToClipboard?.Invoke(this, new CopyToClipboardEventArgs(text));
 	}
@@ -1015,7 +1015,7 @@ public class TabInstance : IDisposable
 		WriteIndented = true
 	};
 
-	public void CopyToClipboard(object? obj)
+	protected void CopyToClipboard(object? obj)
 	{
 		string json = JsonSerializer.Serialize(obj, _jsonSerializerOptions);
 		CopyToClipboard(json);

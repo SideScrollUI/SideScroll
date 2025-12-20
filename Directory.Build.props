@@ -9,9 +9,10 @@
     - Fixed Tab Resizing not updating MaxDesiredWidth
       - This also fixes resizing DataGrid columns and missing DataGrid values
     - Moved SideScroll.Avalonia.ScreenCapture project into SideScroll.Avalonia
+    - Added Summary docs for ListSeries, ChartView, Paths, and WordSpacer
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.9</AvaloniaVersion>
+    <AvaloniaVersion>11.3.10</AvaloniaVersion>
     <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
