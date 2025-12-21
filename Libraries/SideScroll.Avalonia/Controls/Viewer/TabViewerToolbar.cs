@@ -58,6 +58,12 @@ public class TabViewerToolbar : TabControlToolbar
 			}
 			AddSeparator();
 		}
+		else if (!TabViewer.IsWindowed)
+		{
+			ButtonLogo = AddButton(ProjectName, CustomTitleIcon, updateIconColors: false);
+			ButtonLogo.Width = 42;
+			AddSeparator();
+		}
 
 		// HotKeys are handled in TabViewer
 		ButtonBack = AddButton("Back (Alt + Left)", Icons.Svg.LeftArrow);
@@ -77,11 +83,6 @@ public class TabViewerToolbar : TabControlToolbar
 			AddSeparator();
 			ButtonLink = AddButton("Link - Copy to Clipboard", Icons.Svg.Link);
 			ButtonImport = AddButton("Import Link from Clipboard", Icons.Svg.Import);
-		}
-
-		if (EnableCustomTitleBar)
-		{
-			SubscribeToWindowState();
 		}
 	}
 
@@ -136,7 +137,7 @@ public class TabViewerToolbar : TabControlToolbar
 
 	public void AddWindowControls()
 	{
-		if (!EnableCustomTitleBar || IsMacOS) return;
+		if (!EnableCustomTitleBar || IsMacOS || !TabViewer.IsWindowed) return;
 
 		int buttonWidth = 44;
 
@@ -151,6 +152,8 @@ public class TabViewerToolbar : TabControlToolbar
 		ButtonClose = AddButton("Close", Icons.Svg.Close);
 		ButtonClose.Width = buttonWidth;
 		ButtonClose.Add(Close);
+
+		SubscribeToWindowState();
 	}
 
 	private void Refresh(Call call)

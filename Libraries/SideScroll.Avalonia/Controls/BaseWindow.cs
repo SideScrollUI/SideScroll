@@ -70,7 +70,7 @@ public class BaseWindow : Window
 	}
 
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]
-	public void LoadProject(Project project)
+	private void LoadProject(Project project)
 	{
 		project.Initialize();
 		Project = project;

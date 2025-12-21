@@ -81,11 +81,6 @@ public static class TabCreator
 		{
 			value = new TabText(value.ToString()!); // create an ITab
 		}
-		/*else if (value is Uri uri)
-		{
-			var tabWebBrowser = new TabWebBrowser(uri);
-			value = tabWebBrowser;
-		}*/
 
 		if (value is ILoadAsync loadAsync)
 		{

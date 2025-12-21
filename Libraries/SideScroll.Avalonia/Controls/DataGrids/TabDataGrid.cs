@@ -38,15 +38,15 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	public TabModel TabModel { get; }
 	public TabInstance TabInstance { get; }
 	public TabDataSettings TabDataSettings { get; set; }
-	public IList? List { get; set; }
+	public IList? List { get; protected set; }
 	public Type ElementType { get; }
 
 	public bool AutoGenerateColumns { get; }
 
-	public DataGrid DataGrid { get; set; }
-	public TabSearch? SearchControl { get; set; }
+	public DataGrid DataGrid { get; protected set; }
+	public TabSearch? SearchControl { get; protected set; }
 
-	public DataGridCollectionView? CollectionView { get; set; }
+	public DataGridCollectionView? CollectionView { get; protected set; }
 
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 

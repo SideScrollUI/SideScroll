@@ -623,7 +623,7 @@ public class TabView : Grid, IDisposable
 
 	public void LoadSettings()
 	{
-		if (Instance.TabBookmark != null && Instance.TabBookmark.ViewSettings != null)
+		if (Instance.TabBookmark?.ViewSettings != null)
 		{
 			Instance.TabViewSettings = Instance.TabBookmark.ViewSettings;
 		}

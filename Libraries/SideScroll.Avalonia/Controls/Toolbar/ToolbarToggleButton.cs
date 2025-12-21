@@ -31,15 +31,6 @@ public class ToolbarToggleButton : ToolbarButton
 		}
 	}
 
-	private void ListProperty_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-	{
-		if (e.PropertyName == nameof(ListProperty.Value))
-		{
-			IsChecked = ListProperty?.Value?.Equals(true) ?? false;
-			SetImage();
-		}
-	}
-
 	public ToolbarToggleButton(TabControlToolbar toolbar, string tooltip, IResourceView onImageResource, IResourceView offImageResource, bool isChecked, string? label = null) :
 		base(toolbar, tooltip, isChecked ? onImageResource : offImageResource, null, label)
 	{
@@ -53,6 +44,15 @@ public class ToolbarToggleButton : ToolbarButton
 	protected void SetImage()
 	{
 		SetImage(IsChecked ? OnImageResource : OffImageResource);
+	}
+
+	private void ListProperty_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		if (e.PropertyName == nameof(ListProperty.Value))
+		{
+			IsChecked = ListProperty?.Value?.Equals(true) ?? false;
+			SetImage();
+		}
 	}
 
 	public override async Task InvokeAsync(bool canDelay = true)

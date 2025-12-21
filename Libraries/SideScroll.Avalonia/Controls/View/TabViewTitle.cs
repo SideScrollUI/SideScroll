@@ -13,28 +13,28 @@ public class TabViewTitle : Border, IDisposable
 {
 	public TabView TabView { get; }
 	public TabInstance TabInstance => TabView.Instance;
-	public string Label { get; set; }
 
 	public int MaxDesiredWidth { get; set; } = 50;
 
 	public TextBlock TextBlock { get; }
 	public Grid ContainerGrid { get; }
 
-	public string Text
+	public string Label
 	{
-		get => Label;
+		get => _label;
 		set
 		{
-			Label = value;
+			_label = value;
 			TextBlock.Text = value;
 		}
 	}
+	private string _label;
 
 	public TabViewTitle(TabView tabView, string? label = null)
 	{
 		TabView = tabView;
 		label ??= TabInstance.Label;
-		Label = new StringReader(label).ReadLine()!; // Remove anything after first line
+		_label = new StringReader(label).ReadLine()!; // Remove anything after first line
 
 		ContainerGrid = new Grid
 		{

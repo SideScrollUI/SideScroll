@@ -7,9 +7,9 @@ namespace SideScroll.Avalonia.Controls.Viewer;
 
 public class MacosTitleButtons : TemplatedControl
 {
-	private Button? CloseButton { get; set; }
-	private Button? MinimizeButton { get; set; }
-	private Button? ZoomButton { get; set; }
+	protected Button? CloseButton { get; set; }
+	protected Button? MinimizeButton { get; set; }
+	protected Button? ZoomButton { get; set; }
 
 	private Rect? _normalBounds;
 

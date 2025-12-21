@@ -35,7 +35,7 @@ public class BaseView : UserControl
 	}
 
 	[MemberNotNull(nameof(Project), nameof(TabViewer))]
-	public void LoadProject(Project project)
+	private void LoadProject(Project project)
 	{
 		project.Initialize();
 		Project = project;
@@ -44,7 +44,7 @@ public class BaseView : UserControl
 
 		Background = SideScrollTheme.TabBackground;
 
-		Content = TabViewer = new TabViewer(Project);
+		Content = TabViewer = new TabViewer(Project, false);
 	}
 
 	public virtual void LoadTab(ITab tab)

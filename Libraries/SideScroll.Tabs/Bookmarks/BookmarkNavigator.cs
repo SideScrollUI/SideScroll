@@ -101,25 +101,21 @@ public class BookmarkNavigator : INotifyPropertyChanged
 
 	public Bookmark? SeekBackward()
 	{
-		if (CurrentIndex > 0)
-		{
-			CurrentIndex--;
-			Bookmark oldBookmark = History[CurrentIndex];
-			Bookmark newBookmark = oldBookmark.DeepClone(); // Sanitize
-			Append(newBookmark, false); // Fork instead?
-			return newBookmark;
-		}
-		return null; // throw exception?
+		if (CurrentIndex <= 0) return null;
+		
+		CurrentIndex--;
+		Bookmark oldBookmark = History[CurrentIndex];
+		Bookmark newBookmark = oldBookmark.DeepClone(); // Sanitize
+		Append(newBookmark, false); // Fork instead?
+		return newBookmark;
 	}
 
 	public Bookmark? SeekForward()
 	{
-		if (CurrentIndex < History.Count - 1)
-		{
-			CurrentIndex++;
-			return History[CurrentIndex];
-		}
-		return null; // throw exception?
+		if (CurrentIndex >= History.Count - 1) return null;
+		
+		CurrentIndex++;
+		return History[CurrentIndex];
 	}
 
 	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

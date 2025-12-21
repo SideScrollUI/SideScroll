@@ -36,21 +36,25 @@ public class TabViewer : Grid
 	public static Bookmark? LoadBookmark { get; set; }
 	public static List<ITabViewerPlugin> Plugins { get; set; } = [];
 
-	public Project Project { get; protected set; }
+	public Project Project { get; }
+	public bool IsWindowed { get; }
 
 	// Controls
 	public TabViewerToolbar? Toolbar { get; protected set; }
 	protected Grid BottomGrid { get; }
 	public ScrollViewer ScrollViewer { get; }
-	public Grid ContentGrid { get; }
+	protected Grid ContentGrid { get; }
 	public TabView? TabView { get; protected set; }
 
-	public Control? ContentControl { get; protected set; }
+	protected Control? ContentControl { get; set; }
 
 	public event EventHandler<TabLoadedEventArgs>? OnTabLoaded;
 
-	public TabViewer(Project project)
+	public TabViewer(Project project, bool isWindowed = true)
 	{
+		Project = project;
+		IsWindowed = isWindowed;
+
 		BaseViewer = this;
 		Background = null; // Custom Title Toolbar requires this for dragging
 
@@ -97,14 +101,6 @@ public class TabViewer : Grid
 		Grid scrollButtons = CreateScrollButtons();
 
 		BottomGrid.Children.Add(scrollButtons);
-
-		LoadProject(project);
-	}
-
-	[MemberNotNull(nameof(Project))]
-	public void LoadProject(Project project)
-	{
-		Project = project;
 
 		AddToolbar();
 

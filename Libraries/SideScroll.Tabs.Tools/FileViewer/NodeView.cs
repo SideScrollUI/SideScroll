@@ -51,7 +51,7 @@ public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 	public abstract bool HasLinks { get; }
 
 	[DataKey, HiddenColumn]
-	public string Path { get; init; }
+	public string Path { get; }
 
 	[InnerValue, Unserialized, HiddenColumn]
 	public ITab? Tab { get; set; }
@@ -103,11 +103,11 @@ public interface IDirectoryView : IHasLinks
 
 public class DirectoryView : NodeView, IDirectoryView
 {
-	public string Directory { get; set; }
+	public string Directory { get; }
 
 	public override string Name => Directory;
 	public override long? Size { get; set; } = null;
-	public DateTime LastWriteTime { get; set; }
+	public DateTime LastWriteTime { get; }
 	public override TimeSpan? Modified => LastWriteTime.Age();
 	public override bool HasLinks => true;
 
@@ -127,16 +127,16 @@ public class DirectoryView : NodeView, IDirectoryView
 
 public class FileView : NodeView
 {
-	public string Filename { get; set; }
+	public string Filename { get; }
 	public override long? Size { get; set; }
-	public DateTime? LastWriteTime { get; set; }
+	public DateTime? LastWriteTime { get; }
 	public override TimeSpan? Modified => LastWriteTime?.Age();
 	public override bool HasLinks => false;
 
 	public override string Name => Filename;
 
 	[HiddenColumn]
-	public FileInfo? FileInfo { get; set; }
+	public FileInfo? FileInfo { get; }
 
 	public FileView(string path)
 		: this(path, null)

@@ -23,7 +23,7 @@ public class LinkCollection
 {
 	public Project Project { get; }
 
-	public string GroupId { get; init; }
+	public string GroupId { get; }
 
 	public ItemCollectionUI<TabLinkedBookmark> Items { get; set; } = new()
 	{

@@ -259,7 +259,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		}
 	}
 
-	private ValueLabeler _valueLabeler = new();
+	private readonly ValueLabeler _valueLabeler = new();
 
 	public Axis CreateYAxis() // AxisPosition axisPosition = AxisPosition.Left)
 	{
