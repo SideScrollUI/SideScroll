@@ -8,6 +8,7 @@
       - Filters now treat all words as required by default unless an | operator is used
     - Fixed Tab Resizing not updating MaxDesiredWidth
       - This also fixes resizing DataGrid columns and missing DataGrid values
+    - Improved serializer handling when changing nullability of class members
     - Moved SideScroll.Avalonia.ScreenCapture project into SideScroll.Avalonia
     - Added Summary docs for ListSeries, ChartView, Paths, and WordSpacer
     </PackageReleaseNotes>

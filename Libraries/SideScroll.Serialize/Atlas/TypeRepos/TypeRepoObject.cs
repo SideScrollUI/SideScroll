@@ -56,8 +56,10 @@ public class TypeRepoObject : TypeRepo
 			if (FieldSchema.IsReadable)
 			{
 				object? valueObject = TypeRepo!.LoadObjectRef();
-				// todo: 36% of current cpu usage, break into explicit operators? (is that even possible?)
-				FieldSchema.FieldInfo.SetValue(obj, valueObject); // else set to null?
+				if (valueObject != null || FieldSchema.IsNullable)
+				{
+					FieldSchema.FieldInfo.SetValue(obj, valueObject);
+				}
 			}
 			else
 			{
@@ -130,7 +132,10 @@ public class TypeRepoObject : TypeRepo
 					if ((dynamic?)valueObject == currentValue)
 						return;
 				}
-				PropertySchema.PropertyInfo.SetValue(obj, valueObject);
+				if (valueObject != null || PropertySchema.IsNullable)
+				{
+					PropertySchema.PropertyInfo.SetValue(obj, valueObject);
+				}
 			}
 		}
 

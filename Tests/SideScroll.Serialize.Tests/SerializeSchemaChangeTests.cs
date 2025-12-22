@@ -146,4 +146,39 @@ public class SerializeSchemaChangeTests : SerializeBaseTest
 		Assert.That(output.NewField, Is.EqualTo(input.OldField));
 		Assert.That(output.NewProperty, Is.EqualTo(input.OldProperty));
 	}
+
+	public class NullableOldClass
+	{
+		public int? IntegerField;
+		public int? IntegerProperty { get; set; }
+
+		public string? StringField;
+		public string? StringProperty { get; set; }
+	}
+
+	public class NullableNewClass
+	{
+		public int IntegerField = 1;
+		public int IntegerProperty { get; set; } = 2;
+
+		public string StringField = "field";
+		public string StringProperty { get; set; } = "property";
+	}
+
+	[Test]
+	public void MemberNullToNonNull()
+	{
+		NullableOldClass input = new();
+
+		_serializer.Save(Call, input);
+
+		ReplaceBytes(nameof(NullableOldClass), nameof(NullableNewClass));
+
+		var output = _serializer.Load<NullableNewClass>(Call);
+
+		Assert.That(output.IntegerField, Is.EqualTo(1));
+		Assert.That(output.IntegerProperty, Is.EqualTo(2));
+		Assert.That(output.StringField, Is.EqualTo("field"));
+		Assert.That(output.StringProperty, Is.EqualTo("property"));
+	}
 }

@@ -13,6 +13,7 @@ public class MemberSchema(TypeSchema typeSchema, string name, int typeIndex = -1
 
 	public Type? Type { get; protected set; }
 	public Type? NonNullableType { get; protected set; }
+	public bool IsNullable => Type != NonNullableType;
 
 	public bool IsPrivate { get; protected set; }
 	public bool IsPublic { get; protected set; }
