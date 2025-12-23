@@ -45,6 +45,7 @@ public class BaseWindow : Window
 		{
 			ExtendClientAreaToDecorationsHint = true;
 			ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+			ExtendClientAreaTitleBarHeightHint = 50; // Increased from default ~32 to match custom title bar height (34px + margins)
 		}
 
 		SideScrollInit.Initialize();

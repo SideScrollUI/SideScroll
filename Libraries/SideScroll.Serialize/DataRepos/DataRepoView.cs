@@ -131,7 +131,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 
 public class DataRepoViewCollection<T>(DataRepo dataRepo, string defaultGroupId, string? orderByMemberName = null)
 {
-	private Dictionary<string, DataRepoView<T>> _dataRepoViews = [];
+	private readonly Dictionary<string, DataRepoView<T>> _dataRepoViews = [];
 
 	public DataRepoView<T> Load(Call call, string? groupId = null)
 	{
