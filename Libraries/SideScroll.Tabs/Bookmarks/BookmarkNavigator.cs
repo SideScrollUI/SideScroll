@@ -122,7 +122,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	{
 		if (Context != null)
 		{
-			Context!.Post(NotifyPropertyChangedContext, propertyName);
+			Context.Post(NotifyPropertyChangedContext, propertyName);
 		}
 		else
 		{

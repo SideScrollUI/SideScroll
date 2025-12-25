@@ -147,11 +147,6 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 		MaxWidth = 1500;
 		MaxHeight = 645; // 25 Items
 
-		if (TabInstance.TabViewSettings.ChartDataSettings.Count == 0)
-		{
-			TabInstance.TabViewSettings.ChartDataSettings.Add(new TabDataSettings());
-		}
-
 		XAxisPropertyInfo = chartView.Series.FirstOrDefault()?.XPropertyInfo;
 
 		AddTitle();

@@ -175,7 +175,7 @@ public class DataViewCollection<T>
 {
 	//public event EventHandler<EventArgs> OnDelete; // todo?
 
-	public ItemCollectionUI<T> Items { get; set; } = [];
+	public ItemCollectionUI<T> Items { get; } = [];
 
 	public DataRepoView<T> DataRepoView { get; }
 

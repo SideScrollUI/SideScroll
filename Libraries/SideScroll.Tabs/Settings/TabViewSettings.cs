@@ -38,8 +38,6 @@ public class TabViewSettings
 
 	public List<TabDataSettings> TabDataSettings { get; set; } = [];
 
-	public List<TabDataSettings> ChartDataSettings { get; set; } = []; // for the Chart's internal Data List
-
 	[JsonIgnore]
 	public List<SelectedRow> SelectedRows => TabDataSettings?.SelectMany(d => d.SelectedRows).ToList() ?? [];
 

@@ -82,7 +82,7 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	{
 		if (Context != null)
 		{
-			Context!.Post(NotifyPropertyChangedContext, propertyName);
+			Context.Post(NotifyPropertyChangedContext, propertyName);
 		}
 		else
 		{

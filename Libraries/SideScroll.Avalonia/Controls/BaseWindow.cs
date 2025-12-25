@@ -29,7 +29,7 @@ public class BaseWindow : Window
 	public Project Project { get; protected set; }
 
 	public TabViewer TabViewer { get; protected set; }
-	public Border? Border { get; protected set; } // Windows 10 only for now
+	public Border? Border { get; protected set; } // Windows 10 only for now since it has no border without chrome enabled
 
 	private bool _loadComplete;
 

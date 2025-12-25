@@ -77,19 +77,6 @@ public class TabBookmark
 		return tabBookmark;
 	}
 
-	// Shallow Clone
-	public TabBookmark Clone()
-	{
-		return new TabBookmark
-		{
-			Bookmark = Bookmark,
-			Name = Name,
-			SelectedRow = SelectedRow,
-			DataRepoGroupId = DataRepoGroupId,
-			BookmarkData = BookmarkData,
-		};
-	}
-
 	public void Add(TabBookmark tabBookmark)
 	{
 		ChildBookmarks.Add(tabBookmark.Name!, tabBookmark);
@@ -98,7 +85,6 @@ public class TabBookmark
 		{
 			Label = tabBookmark.Name,
 		};
-		ViewSettings ??= new TabViewSettings();
 		ViewSettings.TabDataSettings ??= [];
 		if (ViewSettings.TabDataSettings.Count == 0)
 		{
@@ -113,15 +99,12 @@ public class TabBookmark
 	public SortedDictionary<string, T> GetSelectedData<T>()
 	{
 		var items = new SortedDictionary<string, T>();
-		if (ViewSettings != null)
+		foreach (SelectedRow row in ViewSettings.SelectedRows)
 		{
-			foreach (SelectedRow row in ViewSettings.SelectedRows)
+			string? dataKey = row.DataKey ?? row.Label;
+			if (dataKey != null && row.DataValue != null && row.DataValue.GetType() == typeof(T))
 			{
-				string? dataKey = row.DataKey ?? row.Label;
-				if (dataKey != null && row.DataValue != null && row.DataValue.GetType() == typeof(T))
-				{
-					items[dataKey] = (T)row.DataValue;
-				}
+				items[dataKey] = (T)row.DataValue;
 			}
 		}
 		return items;
@@ -134,7 +117,6 @@ public class TabBookmark
 
 	public void SetData(string name, object? obj)
 	{
-		ViewSettings ??= new TabViewSettings();
 		BookmarkData ??= new Dictionary<string, object?>();
 		BookmarkData[name] = obj;
 	}
@@ -152,31 +134,28 @@ public class TabBookmark
 		visited ??= [];
 		if (maxDepth <= 0 || !visited.Add(this)) return "";
 
-		if (ChildBookmarks?.Count > 0)
+		if (ChildBookmarks.Count == 0)
 		{
-			string comma = "";
-			string address = "";
-			if (ChildBookmarks.Count > 1)
-			{
-				address += "[";
-			}
-			//address += Name + "::";
-			foreach (var bookmark in ChildBookmarks)
-			{
-				address += comma;
-				address += bookmark.Key + " / " + bookmark.Value.GetAddress(maxDepth - 1, visited);
-				comma = ", ";
-			}
-			if (ChildBookmarks.Count > 1)
-			{
-				address += "]";
-			}
-			return address;
+			return ViewSettings.Address ?? "";
 		}
-		else
+		
+		string comma = "";
+		string address = "";
+		if (ChildBookmarks.Count > 1)
 		{
-			return ViewSettings?.Address ?? "";
+			address += "[";
 		}
+		foreach (var bookmark in ChildBookmarks)
+		{
+			address += comma;
+			address += bookmark.Key + " / " + bookmark.Value.GetAddress(maxDepth - 1, visited);
+			comma = ", ";
+		}
+		if (ChildBookmarks.Count > 1)
+		{
+			address += "]";
+		}
+		return address;
 	}
 
 	public void SelectPath(params string[] labels)
@@ -205,14 +184,14 @@ public class TabBookmark
 	{
 		ViewSettings = new TabViewSettings
 		{
-			TabDataSettings = new List<TabDataSettings>
-			{
-				new()
+			TabDataSettings =
+			[
+				new TabDataSettings
 				{
-					SelectionType = SelectionType.User,
-					SelectedRows = selectedRows,
-				},
-			},
+					SelectionType = SelectionType.User, 
+					SelectedRows = selectedRows, 
+				}
+			],
 		};
 	}
 
@@ -228,17 +207,11 @@ public class TabBookmark
 
 	public TabBookmark? GetChild(string dataKey)
 	{
-		if (ChildBookmarks == null)
-			return null;
-
 		return ChildBookmarks.GetValueOrDefault(dataKey);
 	}
 
 	public void Import(Project project)
 	{
-		if (ViewSettings == null)
-			return;
-
 		foreach (SelectedRow row in ViewSettings.SelectedRows)
 		{
 			string? dataKey = row.DataKey ?? row.Label;
@@ -275,67 +248,6 @@ public class TabBookmark
 			return this;
 
 		return null;
-	}
-
-	public void MergeNode(TabBookmark node)
-	{
-		foreach (var nodeEntry in node.ChildBookmarks)
-		{
-			if (ChildBookmarks.TryGetValue(nodeEntry.Key, out TabBookmark? existingNode))
-			{
-				existingNode.MergeNode(nodeEntry.Value);
-			}
-			else
-			{
-				ChildBookmarks.Add(nodeEntry.Key, nodeEntry.Value);
-			}
-		}
-
-		if (ViewSettings == null)
-		{
-			ViewSettings = node.ViewSettings;
-			return;
-		}
-
-		Name = " + " + node.Name;
-
-		for (int i = 0; i < ViewSettings.TabDataSettings.Count; i++)
-		{
-			var currentSelection = ViewSettings.TabDataSettings[i].SelectedRows;
-			var otherSelection = node.ViewSettings.TabDataSettings[i].SelectedRows;
-
-			var labelsUsed = new HashSet<string>();
-			var indicesUsed = new HashSet<int>();
-			foreach (SelectedRow row in currentSelection)
-			{
-				if (row.Label != null)
-				{
-					labelsUsed.Add(row.Label);
-				}
-				else if (row.RowIndex is int rowIndex && rowIndex >= 0)
-				{
-					indicesUsed.Add(rowIndex);
-				}
-			}
-
-			foreach (SelectedRow row in otherSelection)
-			{
-				if (row.Label != null)
-				{
-					if (!labelsUsed.Contains(row.Label))
-					{
-						currentSelection.Add(row);
-					}
-				}
-				else if (row.RowIndex is int rowIndex && rowIndex >= 0)
-				{
-					if (!indicesUsed.Contains(rowIndex))
-					{
-						currentSelection.Add(row);
-					}
-				}
-			}
-		}
 	}
 
 	public void Reinitialize(Bookmark bookmark)

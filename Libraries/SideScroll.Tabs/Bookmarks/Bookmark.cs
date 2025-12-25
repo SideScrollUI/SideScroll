@@ -46,14 +46,6 @@ public class Bookmark
 		TabBookmark.IsRoot = true;
 	}
 
-	public void MergeBookmarks(List<Bookmark> bookmarks)
-	{
-		foreach (Bookmark bookmark in bookmarks)
-		{
-			TabBookmark.MergeNode(bookmark.TabBookmark);
-		}
-	}
-
 	public string ToBase64String(Call call, bool publicOnly)
 	{
 		return SerializerMemory.ToBase64String(call, this, publicOnly);
