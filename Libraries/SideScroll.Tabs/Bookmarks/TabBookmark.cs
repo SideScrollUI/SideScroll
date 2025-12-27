@@ -38,7 +38,7 @@ public class TabBookmark
 	public HashSet<object> SelectedObjects { get; set; } = []; // does this work with multiple TabDatas?
 
 	[Unserialized]
-	public TabModel? TabModel { get; set; }
+	public TabModel? TabModel { get; set; } // Used for search results
 
 	public override string? ToString() => Name;
 

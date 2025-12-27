@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
@@ -76,8 +77,11 @@ public class TabImageButton : Button, IDisposable
 
 		Grid grid = new()
 		{
-			ColumnDefinitions = new ColumnDefinitions("Auto,Auto"),
-			RowDefinitions = new RowDefinitions("Auto"),
+			ColumnDefinitions = new ColumnDefinitions("*,Auto"),
+			RowDefinitions = new RowDefinitions("*"),
+			HorizontalAlignment = HorizontalAlignment.Stretch,
+			VerticalAlignment = VerticalAlignment.Stretch,
+			Background = Brushes.Transparent, // Catch clicks
 		};
 
 		if (ImageResource.ResourceType == "svg")
@@ -106,6 +110,7 @@ public class TabImageButton : Button, IDisposable
 			Width = IconSize,
 			Height = IconSize,
 			Stretch = ImageResource.ResourceType == "svg" ? Stretch.Uniform : Stretch.None,
+			Margin = new Thickness(4),
 		};
 		grid.Children.Add(_imageControl);
 
@@ -116,7 +121,8 @@ public class TabImageButton : Button, IDisposable
 				Text = Label,
 				FontSize = 15,
 				Foreground = SideScrollTheme.ToolbarLabelForeground,
-				Margin = new Thickness(6),
+				VerticalAlignment = VerticalAlignment.Center,
+				Margin = new Thickness(2, 4, 6, 4),
 				[Grid.ColumnProperty] = 1,
 			};
 			grid.Children.Add(textBlock);

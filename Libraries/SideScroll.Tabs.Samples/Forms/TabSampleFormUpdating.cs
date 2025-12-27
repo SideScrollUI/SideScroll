@@ -23,7 +23,7 @@ public class TabSampleFormUpdating : ITab
 		{
 			_sampleItem = new SampleItemDataBinding(_context);
 			Randomize(call);
-			model.AddForm(_sampleItem!);
+			model.AddForm(_sampleItem);
 
 			Toolbar toolbar = new();
 			toolbar.ButtonRandomize.Action = Randomize;
