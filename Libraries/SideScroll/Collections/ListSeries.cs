@@ -325,14 +325,14 @@ public class ListSeries
 					continue;
 				}
 
-				DateTime timeStamp = (DateTime)XPropertyInfo.GetValue(obj)!;
+				DateTime timestamp = (DateTime)XPropertyInfo.GetValue(obj)!;
 				double value = 1;
 				if (YPropertyInfo != null)
 				{
 					object yObj = YPropertyInfo.GetValue(obj)!;
 					value = Convert.ToDouble(yObj);
 				}
-				DateTime startTime = timeStamp;
+				DateTime startTime = timestamp;
 				DateTime endTime = startTime.Add(PeriodDuration ?? TimeSpan.Zero);
 				timeRangeValue = new TimeRangeValue(startTime, endTime, value);
 				timeRangeValues.Add(timeRangeValue);

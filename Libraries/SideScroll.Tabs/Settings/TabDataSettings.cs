@@ -2,7 +2,6 @@ using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
 using System.Collections;
-using System.ComponentModel;
 using System.Reflection;
 
 namespace SideScroll.Tabs.Settings;
@@ -21,8 +20,9 @@ public class TabDataSettings
 	public SelectionType SelectionType { get; set; } = SelectionType.None;
 	public List<string> ColumnNameOrder { get; set; } = []; // Order to show the columns in, users can drag columns around to reorder these
 
-	public string? SortColumnName { get; set; } // Currently sorted column
-	public ListSortDirection SortDirection { get; set; }
+	// Not currently supported by DataGrid
+	// public string? SortColumnName { get; set; } // Currently sorted column
+	// public ListSortDirection SortDirection { get; set; }
 
 	public string? Filter { get; set; }
 	public string? Address

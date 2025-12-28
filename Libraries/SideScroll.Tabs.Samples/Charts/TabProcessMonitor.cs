@@ -63,9 +63,9 @@ public class TabProcessMonitor : ITab
 				ShowNowTime = false,
 				DefaultPeriodDuration = TimeSpan.FromSeconds(1),
 			};
-			cpuChart.AddSeries("Privileged", _cpuUsage, nameof(CpuSample.TimeStamp), nameof(CpuSample.PrivilegedUsage), SeriesType.Average);
-			cpuChart.AddSeries("Total", _cpuUsage, nameof(CpuSample.TimeStamp), nameof(CpuSample.TotalUsage), SeriesType.Average);
-			cpuChart.AddSeries("User", _cpuUsage, nameof(CpuSample.TimeStamp), nameof(CpuSample.UserUsage), SeriesType.Average);
+			cpuChart.AddSeries("Privileged", _cpuUsage, nameof(CpuSample.Timestamp), nameof(CpuSample.PrivilegedUsage), SeriesType.Average);
+			cpuChart.AddSeries("Total", _cpuUsage, nameof(CpuSample.Timestamp), nameof(CpuSample.TotalUsage), SeriesType.Average);
+			cpuChart.AddSeries("User", _cpuUsage, nameof(CpuSample.Timestamp), nameof(CpuSample.UserUsage), SeriesType.Average);
 			model.AddObject(cpuChart);
 
 			// Uses separate collections per series, and each series uses separate TimeRangeValue records
@@ -118,7 +118,7 @@ public class TabProcessMonitor : ITab
 
 				CpuSample cpuSample = new()
 				{
-					TimeStamp = sampleTime,
+					Timestamp = sampleTime,
 					PrivilegedUsage = privilegedProcessorTime.Subtract(_prevPrivilegedProcessorTime!.Value) / duration,
 					TotalUsage = totalProcessorTime.Subtract(_prevTotalProcessorTime!.Value) / duration,
 					UserUsage = userProcessorTime.Subtract(_prevUserProcessorTime!.Value) / duration,
@@ -149,7 +149,7 @@ public class TabProcessMonitor : ITab
 
 public class CpuSample
 {
-	public DateTime TimeStamp { get; set; }
+	public DateTime Timestamp { get; set; }
 	public double PrivilegedUsage { get; set; }
 	public double TotalUsage { get; set; }
 	public double UserUsage { get; set; }

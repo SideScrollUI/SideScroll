@@ -9,6 +9,7 @@
     - Fixed Tab Resizing not updating MaxDesiredWidth
       - This also fixes resizing DataGrid columns and missing DataGrid values
     - Fixed Custom Titlebar not responding to mouse clicks near the bottom of the title bar when maximized
+    - Fixed Mouse Clicks not being detected around Image and Toolbar Button Borders
     - Improved serializer handling when changing nullability of class members
     - Moved SideScroll.Avalonia.ScreenCapture project into SideScroll.Avalonia
     - Added Summary docs for ListSeries, ChartView, Paths, and WordSpacer

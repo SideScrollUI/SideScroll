@@ -106,7 +106,7 @@ public class SerializeDateTimeTests : SerializeBaseTest
 	public class NullableDateTime
 	{
 		public long Long { get; set; }
-		public DateTime? TimeStamp { get; set; }
+		public DateTime? Timestamp { get; set; }
 	}
 
 	[Test, Description("Serialize Long and DateTime")]
@@ -114,12 +114,12 @@ public class SerializeDateTimeTests : SerializeBaseTest
 	{
 		var input = new NullableDateTime
 		{
-			TimeStamp = DateTime.UtcNow,
+			Timestamp = DateTime.UtcNow,
 		};
 
 		_serializer.Save(Call, input);
 		var output = _serializer.Load<NullableDateTime>(Call);
 
-		Assert.That(output.TimeStamp, Is.EqualTo(input.TimeStamp));
+		Assert.That(output.Timestamp, Is.EqualTo(input.Timestamp));
 	}
 }

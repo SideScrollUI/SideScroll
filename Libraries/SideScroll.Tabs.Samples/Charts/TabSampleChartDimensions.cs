@@ -18,7 +18,7 @@ public class TabSampleChartDimensions : ITab
 		public string? Animal { get; set; }
 
 		[XAxis]
-		public DateTime TimeStamp { get; set; }
+		public DateTime Timestamp { get; set; }
 
 		public int? Value { get; set; }
 
@@ -72,7 +72,7 @@ public class TabSampleChartDimensions : ITab
 
 			ChartView chartView = new();
 			chartView.AddDimensions(_samples,
-				nameof(ChartSample.TimeStamp),
+				nameof(ChartSample.Timestamp),
 				nameof(ChartSample.Value),
 				nameof(ChartSample.Animal));
 			chartView.SelectionChanged += ChartView_SelectionChanged;
@@ -133,7 +133,7 @@ public class TabSampleChartDimensions : ITab
 			ChartSample sample = new()
 			{
 				Animal = animal,
-				TimeStamp = _baseDateTime.AddMinutes(i),
+				Timestamp = _baseDateTime.AddMinutes(i),
 				Value = _random.Next(50, MaxValue),
 				TestItem = new TestItem
 				{
@@ -148,7 +148,7 @@ public class TabSampleChartDimensions : ITab
 			ChartSample sample = new()
 			{
 				Animal = animal,
-				TimeStamp = _baseDateTime.AddMinutes(i),
+				Timestamp = _baseDateTime.AddMinutes(i),
 				TestItem = new TestItem
 				{
 					Amount = _random.Next(0, MaxValue),
