@@ -696,7 +696,6 @@ public class TabInstance : IDisposable
 		//tabBookmark.ViewSettings = TabViewSettings.TryDeepClone() ?? new();
 		//tabBookmark.DataRepoGroupId = DataRepoInstance?.GroupId;
 		//tabBookmark.DataRepoType = DataRepoInstance?.DataType;
-		//tabBookmark.SelectedRow = SelectedRow;
 
 		/*if (DataRepoInstance != null)
 		{
@@ -792,24 +791,6 @@ public class TabInstance : IDisposable
 
 		return TabViewSettings; // remove?
 	}
-
-	/*public virtual void SelectBookmark(TabBookmark tabBookmark, bool reload = false)
-	{
-		if (reload)
-		{
-			ClearSelection();
-		}
-
-		TabBookmark = tabBookmark;
-		TabViewSettings = tabBookmark.ViewSettings;
-
-		if (OnLoadBookmark != null)
-		{
-			UiContext.Send(_ => OnLoadBookmark(this, EventArgs.Empty), null);
-		}
-
-		SaveTabSettings();
-	}*/
 
 	public virtual void SelectBookmark(TabViewBookmark tabBookmark, bool reload = false)
 	{

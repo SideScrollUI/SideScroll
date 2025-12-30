@@ -97,20 +97,6 @@ public class TabBookmark
 		//Select(ChildBookmarks.Keys);
 	}*/
 
-	/*public SortedDictionary<string, T> GetSelectedData<T>()
-	{
-		var items = new SortedDictionary<string, T>();
-		foreach (SelectedRow row in ViewSettings.SelectedRows)
-		{
-			string? dataKey = row.DataKey ?? row.Label;
-			if (dataKey != null && row.DataValue != null && row.DataValue.GetType() == typeof(T))
-			{
-				items[dataKey] = (T)row.DataValue;
-			}
-		}
-		return items;
-	}*/
-
 	public void SetData(object obj)
 	{
 		SetData(DefaultDataName, obj);
