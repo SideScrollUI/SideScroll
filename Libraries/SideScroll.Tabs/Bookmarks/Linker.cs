@@ -1,3 +1,5 @@
+using SideScroll.Tabs.Bookmarks.Models;
+
 namespace SideScroll.Tabs.Bookmarks;
 
 public class Linker(Project project)

@@ -1,5 +1,6 @@
 using SideScroll.Attributes;
 using SideScroll.Serialize;
+using SideScroll.Tabs.Bookmarks.Models;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -55,6 +56,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 		Bookmark bookmark = new()
 		{
 			Name = "Start",
+			CreatedTime = DateTime.Now,
 		};
 		Append(bookmark, true);
 	}

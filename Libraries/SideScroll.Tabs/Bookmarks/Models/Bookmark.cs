@@ -1,7 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Serialize;
 
-namespace SideScroll.Tabs.Bookmarks;
+namespace SideScroll.Tabs.Bookmarks.Models;
 
 public enum BookmarkType
 {
@@ -19,18 +19,22 @@ public class Bookmark
 
 	public string? Changed { get; set; } // what was just selected, used for naming, find better default name
 
-	[HiddenColumn]
-	public Type? Type { get; set; } // Must be ITab
+	[HiddenColumn, DeprecatedName("Type")]
+	public Type? TabType { get; set; } // Must be ITab
 
-	public string Address => TabBookmark?.GetAddress() ?? "";
-
-	[HiddenColumn]
-	public string Path => (Name != null ? (Name + ":\n") : "") + Address;
-
-	public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
+	public string Address => TabViewBookmark?.GetAddress() ?? TabBookmark?.GetAddress() ?? "";
 
 	[HiddenColumn]
-	public TabBookmark TabBookmark { get; set; } = new();
+	public string Label => (Name != null ? (Name + ":\n") : "") + Address;
+
+	[DeprecatedName("TimeStamp")]
+	public DateTime? CreatedTime { get; set; }
+
+	[HiddenColumn]
+	public TabBookmark? TabBookmark { get; set; }
+
+	[HiddenColumn]
+	public TabViewBookmark TabViewBookmark { get; set; } = new();
 
 	[HiddenColumn]
 	public BookmarkType BookmarkType { get; set; }
@@ -38,12 +42,11 @@ public class Bookmark
 	[HiddenColumn]
 	public bool Imported { get; set; }
 
-	public override string ToString() => Path;
+	public override string ToString() => Label;
 
 	public Bookmark()
 	{
-		TabBookmark.Bookmark = this;
-		TabBookmark.IsRoot = true;
+		TabViewBookmark.IsRoot = true;
 	}
 
 	public string ToBase64String(Call call, bool publicOnly)
@@ -66,13 +69,20 @@ public class Bookmark
 	{
 		Bookmark bookmark = new()
 		{
-			TabBookmark = TabBookmark.Create(labels)
+			TabBookmark = TabBookmark.Create(labels),
+			CreatedTime = DateTime.Now,
 		};
 		return bookmark;
 	}
 
 	public void Reinitialize()
 	{
-		TabBookmark.Reinitialize(this);
+		TabBookmark?.Reinitialize(this);
+	}
+
+	internal void Import(Project project)
+	{
+		//TabBookmark.Import(project);
+		TabViewBookmark.Import(project);
 	}
 }

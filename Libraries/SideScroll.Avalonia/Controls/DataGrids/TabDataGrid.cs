@@ -15,7 +15,7 @@ using SideScroll.Avalonia.Utilities;
 using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
-using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
 using System.Collections;
@@ -1076,7 +1076,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 					TabBookmark bookmarkNode = tabModel.FindMatches(_filter, _filter.Depth);
 					TabInstance.FilterBookmarkNode = bookmarkNode;
 					CollectionView!.Filter = FilterPredicate;
-					TabInstance.SelectBookmark(bookmarkNode);
+					//TabInstance.SelectBookmark(bookmarkNode);
 				}
 				else
 				{

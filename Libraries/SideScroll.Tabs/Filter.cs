@@ -1,5 +1,5 @@
 using SideScroll.Extensions;
-using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Settings;
 using System.Collections;
 using System.Data;

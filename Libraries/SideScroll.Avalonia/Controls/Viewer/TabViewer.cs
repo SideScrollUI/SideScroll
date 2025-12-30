@@ -10,7 +10,7 @@ using SideScroll.Avalonia.Controls.View;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
-using System.Diagnostics.CodeAnalysis;
+using SideScroll.Tabs.Bookmarks.Models;
 
 namespace SideScroll.Avalonia.Controls.Viewer;
 
@@ -145,11 +145,11 @@ public class TabViewer : Grid
 		AvaloniaUtils.ShowFlyout(buttonLink, flyout, "Creating Link ...");
 
 		Bookmark bookmark = TabView!.Instance.CreateBookmark();
-		TabBookmark? leafNode = bookmark.TabBookmark.GetLeaf(); // Get the shallowest root node
-		if (leafNode != bookmark.TabBookmark)
+		TabViewBookmark? leafNode = bookmark.TabViewBookmark.GetLeaf(); // Get the shallowest root node
+		if (leafNode != bookmark.TabViewBookmark)
 		{
 			bookmark.Name = leafNode!.Tab?.ToString();
-			bookmark.TabBookmark = leafNode;
+			bookmark.TabViewBookmark = leafNode;
 			bookmark.BookmarkType = BookmarkType.Leaf;
 		}
 		else
@@ -236,18 +236,19 @@ public class TabViewer : Grid
 			bool reloadBase = true;
 			if (reloadBase)
 			{
-				TabView.Instance.TabBookmark = bookmark.TabBookmark;
+				//TabView.Instance.TabBookmark = bookmark.TabBookmark;
+				TabView.Instance.TabViewBookmark = bookmark.TabViewBookmark;
 				Reload(call);
 			}
 			else
 			{
 				// only if TabBookmarks used, don't need to reload the tab
-				TabView.Instance.SelectBookmark(bookmark.TabBookmark);
+				TabView.Instance.SelectBookmark(bookmark.TabViewBookmark);
 			}
 		}
 	}
 
-	public void SelectBookmark(TabBookmark tabBookmark, bool reload)
+	public void SelectBookmark(TabViewBookmark tabBookmark, bool reload)
 	{
 		if (reload)
 		{
@@ -360,7 +361,7 @@ public class TabViewer : Grid
 		}
 		else if (LoadBookmark != null)
 		{
-			tabInstance.TabBookmark = LoadBookmark.TabBookmark;
+			tabInstance.TabViewBookmark = LoadBookmark.TabViewBookmark;
 		}
 		else if (Project.UserSettings.AutoSelect)
 		{
@@ -385,7 +386,7 @@ public class TabViewer : Grid
 	{
 		if (Project.Navigator.SeekBackward() is Bookmark bookmark)
 		{
-			TabView!.Instance.SelectBookmark(bookmark.TabBookmark);
+			TabView!.Instance.SelectBookmark(bookmark.TabViewBookmark);
 		}
 	}
 
@@ -393,7 +394,7 @@ public class TabViewer : Grid
 	{
 		if (Project.Navigator.SeekForward() is Bookmark bookmark)
 		{
-			TabView!.Instance.SelectBookmark(bookmark.TabBookmark);
+			TabView!.Instance.SelectBookmark(bookmark.TabViewBookmark);
 		}
 	}
 

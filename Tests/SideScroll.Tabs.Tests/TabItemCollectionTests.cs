@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Attributes;
-using SideScroll.Tabs.Settings;
+using SideScroll.Tabs.Bookmarks.Models;
 using System.Collections;
 
 namespace SideScroll.Tabs.Tests;

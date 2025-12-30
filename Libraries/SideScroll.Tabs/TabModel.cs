@@ -2,7 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Extensions;
-using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tasks;

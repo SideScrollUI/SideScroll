@@ -3,10 +3,8 @@ using SideScroll.Attributes;
 using SideScroll.Avalonia.Tabs;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
-using SideScroll.Tabs.Bookmarks;
-using SideScroll.Tabs.Settings;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Utilities;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.View;
@@ -44,22 +42,22 @@ public static class TabCreator
 
 		label = labelOverride ?? label; // update label before comparing bookmarks
 
-		TabBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
-		if (parentTabInstance.TabBookmark is TabBookmark parentTabBookmark && parentTabBookmark.ChildBookmarks != null)
+		TabViewBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
+		if (parentTabInstance.TabViewBookmark is TabViewBookmark parentTabBookmark && parentTabBookmark.TabDatas != null)
 		{
 			string dataKey = new SelectedRow(obj).ToString() ?? label;
-			if (parentTabBookmark.ChildBookmarks.TryGetValue(dataKey, out tabBookmark))
+			if (parentTabBookmark.TabDatas.Select(d => d.Selected.FirstOrDefault(s => s.ToString() == dataKey)).FirstOrDefault() is SelectedRowView view)
 			{
 				// FindMatches only
-				if (tabBookmark.TabModel != null)
+				/*if (tabBookmark.TabModel != null)
 				{
 					value = tabBookmark.TabModel;
-				}
+				}*/
 			}
-			else if (parentTabBookmark.Bookmark?.Imported == true && parentTabBookmark.ChildBookmarks.Count > 0)
+			/*else if (parentTabBookmark.Bookmark?.Imported == true && parentTabBookmark.ChildBookmarks.Count > 0)
 			{
 				Debug.WriteLine($"Failed to find imported tab bookmark for {dataKey} in [{parentTabBookmark.ChildBookmarks.Keys.CollectionToString()}]");
-			}
+			}*/
 		}
 		if (value == null)
 			return null;
@@ -87,7 +85,7 @@ public static class TabCreator
 			var childTabInstance = new TabInstanceLoadAsync(loadAsync)
 			{
 				Project = parentTabInstance.Project,
-				TabBookmark = tabBookmark,
+				TabViewBookmark = tabBookmark,
 			};
 			childTabInstance.Model.Name = label;
 			value = new TabView(childTabInstance);
@@ -112,7 +110,7 @@ public static class TabCreator
 			if (childTabInstance == null)
 				return null;
 
-			childTabInstance.TabBookmark ??= tabBookmark;
+			childTabInstance.TabViewBookmark ??= tabBookmark;
 			//childTabInstance.Reinitialize(); // todo: fix, called in TabView
 			childTabInstance.Model.Name = label;
 			var tabView = new TabView(childTabInstance);
@@ -122,7 +120,7 @@ public static class TabCreator
 		else if (value is TabView tabView)
 		{
 			tabView.Instance.ParentTabInstance = parentTabInstance;
-			tabView.Instance.TabBookmark = tabBookmark ?? tabView.Instance.TabBookmark;
+			tabView.Instance.TabViewBookmark = tabBookmark ?? tabView.Instance.TabViewBookmark;
 			tabView.Label = label;
 			tabView.Load();
 			return tabView;

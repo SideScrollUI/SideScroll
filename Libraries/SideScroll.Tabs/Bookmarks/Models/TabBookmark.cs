@@ -2,7 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
 using System.Collections;
 
-namespace SideScroll.Tabs.Bookmarks;
+namespace SideScroll.Tabs.Bookmarks.Models;
 
 /*public class DataRepoItem
 {
@@ -20,6 +20,7 @@ public class TabBookmark
 	[PrivateData]
 	public Bookmark? Bookmark { get; set; }
 	public string? Name { get; set; }
+	[PrivateData]
 	public bool IsRoot { get; set; } // [TabRoot] set or first in a Bookmark
 	public ITab? Tab { get; set; } // [TabRoot] will set this to use the serialized tab as the root tab
 
@@ -77,7 +78,7 @@ public class TabBookmark
 		return tabBookmark;
 	}
 
-	public void Add(TabBookmark tabBookmark)
+	/*public void Add(TabBookmark tabBookmark)
 	{
 		ChildBookmarks.Add(tabBookmark.Name!, tabBookmark);
 
@@ -94,9 +95,9 @@ public class TabBookmark
 		ViewSettings.TabDataSettings[0].SelectedRows ??= [];
 		ViewSettings.TabDataSettings[0].SelectedRows.Add(selectedRow);
 		//Select(ChildBookmarks.Keys);
-	}
+	}*/
 
-	public SortedDictionary<string, T> GetSelectedData<T>()
+	/*public SortedDictionary<string, T> GetSelectedData<T>()
 	{
 		var items = new SortedDictionary<string, T>();
 		foreach (SelectedRow row in ViewSettings.SelectedRows)
@@ -108,7 +109,7 @@ public class TabBookmark
 			}
 		}
 		return items;
-	}
+	}*/
 
 	public void SetData(object obj)
 	{
@@ -117,7 +118,7 @@ public class TabBookmark
 
 	public void SetData(string name, object? obj)
 	{
-		BookmarkData ??= new Dictionary<string, object?>();
+		BookmarkData ??= [];
 		BookmarkData[name] = obj;
 	}
 
@@ -218,6 +219,7 @@ public class TabBookmark
 			if (dataKey == null || row.DataValue == null)
 				continue;
 
+			// Interfaces or base classes need to specify a type
 			if (DataRepoType is Type type)
 			{
 				project.Data.App.Save(type, DataRepoGroupId, dataKey, row.DataValue);

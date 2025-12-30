@@ -69,7 +69,7 @@ public class Project
 			Linker = Linker,
 		};
 		//project.Import(bookmark);
-		linkedBookmark.Bookmark.TabBookmark.Import(project);
+		linkedBookmark.Bookmark.Import(project);
 		return project;
 	}
 

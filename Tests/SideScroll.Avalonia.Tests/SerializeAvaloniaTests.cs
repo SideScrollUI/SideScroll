@@ -2,7 +2,7 @@ using Avalonia.Media;
 using NUnit.Framework;
 using SideScroll.Serialize;
 using SideScroll.Serialize.Atlas;
-using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Bookmarks.Models;
 
 namespace SideScroll.Avalonia.Tests;
 
@@ -33,8 +33,9 @@ public class SerializeAvaloniaTests : BaseTest
 				ChildBookmarks = new Dictionary<string, TabBookmark>
 				{
 					{ "test", new TabBookmark() }
-				}
+				},
 			},
+			CreatedTime = DateTime.Now,
 		};
 		input.TabBookmark.Bookmark = input;
 		_serializer!.Save(Call, input);

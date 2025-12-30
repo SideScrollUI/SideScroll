@@ -11,7 +11,7 @@ using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
-using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Toolbar;
 using System.Collections;
@@ -623,9 +623,9 @@ public class TabView : Grid, IDisposable
 
 	public void LoadSettings()
 	{
-		if (Instance.TabBookmark?.ViewSettings != null)
+		if (Instance.TabViewBookmark != null)
 		{
-			Instance.TabViewSettings = Instance.TabBookmark.ViewSettings;
+			Instance.TabViewSettings = Instance.TabViewBookmark.ToViewSettings();
 		}
 		else if (Instance.Project.UserSettings.AutoSelect)
 		{
@@ -825,11 +825,11 @@ public class TabView : Grid, IDisposable
 			orderedChildControls.Add(_fillerPanel);
 			newChildControls[FillerPanelId] = _fillerPanel;
 		}
-		else if (Instance.TabBookmark != null)
+		else if (Instance.TabViewBookmark != null)
 		{
 			Instance.SaveTabSettings();
-			Instance.TabBookmarkLoaded = Instance.TabBookmark;
-			Instance.TabBookmark = null; // clear so user can navigate and save prefs
+			Instance.TabBookmarkLoaded = Instance.TabViewBookmark;
+			Instance.TabViewBookmark = null; // clear so user can navigate and save prefs
 		}
 		_tabChildControls!.SetControls(newChildControls, orderedChildControls);
 		UpdateSelectedTabInstances();
@@ -1094,8 +1094,8 @@ public class TabView : Grid, IDisposable
 	{
 		Instance.Project.UserSettings.AutoSelect = true;
 
-		TabBookmark tabBookmark = Instance.TabBookmark!;
-		TabViewSettings = tabBookmark.ViewSettings;
+		TabViewBookmark tabBookmark = Instance.TabViewBookmark!;
+		TabViewSettings = tabBookmark.ToViewSettings();
 
 		int index = 0;
 		foreach (ITabDataSelector tabData in TabDatas)
@@ -1112,14 +1112,14 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
-	private void LoadBookmarkData(ITabDataControl dataControl, TabBookmark tabBookmark, int index)
+	private void LoadBookmarkData(ITabDataControl dataControl, TabViewBookmark tabBookmark, int index)
 	{
 		dataControl.TabDataSettings = TabViewSettings.GetData(index);
 		dataControl.LoadSettings();
 
 		foreach (TabInstance childTabInstance in Instance.ChildTabInstances.Values)
 		{
-			if (tabBookmark.ChildBookmarks.TryGetValue(childTabInstance.Label, out TabBookmark? childBookmarkNode))
+			if (tabBookmark.TryGetValue(childTabInstance.Label, out TabViewBookmark? childBookmarkNode))
 			{
 				childTabInstance.SelectBookmark(childBookmarkNode);
 			}

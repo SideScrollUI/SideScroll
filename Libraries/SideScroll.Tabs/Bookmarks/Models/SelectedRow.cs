@@ -2,7 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Utilities;
 
-namespace SideScroll.Tabs.Settings;
+namespace SideScroll.Tabs.Bookmarks.Models;
 
 [PublicData]
 public class SelectedRow : IEquatable<SelectedRow>

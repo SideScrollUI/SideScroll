@@ -1,4 +1,5 @@
 using SideScroll.Attributes;
+using SideScroll.Tabs.Bookmarks.Models;
 using System.Text.Json.Serialization;
 
 namespace SideScroll.Tabs.Settings;
