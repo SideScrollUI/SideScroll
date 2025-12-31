@@ -9,8 +9,6 @@ public class TabViewBookmark
 {
 	public const string DefaultDataName = "default";
 
-	//public string? Name { get; set; }
-
 	public string? Address
 	{
 		get
@@ -22,7 +20,7 @@ public class TabViewBookmark
 			int count = 0;
 			foreach (TabDataBookmark tabDataBookmark in TabDatas)
 			{
-				foreach (SelectedRowView selectedRowView in tabDataBookmark.Selected)
+				foreach (SelectedRowView selectedRowView in tabDataBookmark.SelectedRows)
 				{
 					address += comma;
 					address += selectedRowView.SelectedRow?.Label;
@@ -49,6 +47,13 @@ public class TabViewBookmark
 	public bool IsRoot { get; set; } // [TabRoot] set or first in a Bookmark
 
 	public Dictionary<string, object?>? BookmarkData { get; set; }
+
+	// Temporary, Only FindMatches() uses, refactor these out?
+	[Unserialized]
+	public HashSet<object> SelectedObjects { get; set; } = []; // does this work with multiple TabDatas?
+
+	[Unserialized]
+	public TabModel? TabModel { get; set; } // Used for search results
 
 	//public List<DataRepoItem> DataRepoItems { get; set; } = new();
 	//public string? DataRepoGroupId { get; set; }
@@ -116,7 +121,7 @@ public class TabViewBookmark
 	{
 		if (TabDatas.Count == 1)
 		{
-			var leaf = TabDatas.First().Selected.Select(s => s.TabViewBookmark.GetLeaf()).FirstOrDefault();
+			var leaf = TabDatas.First().SelectedRows.Select(s => s.TabViewBookmark.GetLeaf()).FirstOrDefault();
 			if (leaf != null)
 				return leaf;
 		}
@@ -125,6 +130,26 @@ public class TabViewBookmark
 			return this;
 
 		return null;
+	}
+
+	public static TabViewBookmark Create(params object[] objs)
+	{
+		// get TabBookmark.SelectedObjects working again and replace?
+
+		string? prevKey = null;
+		TabViewBookmark rootBookmark = new();
+		TabViewBookmark? tabBookmark = rootBookmark;
+		foreach (object obj in objs)
+		{
+			string? dataKey = new SelectedRow(obj).ToString();
+			if (dataKey == null) throw new Exception("SelectedRow DataKey is null");
+
+			TabViewBookmark newBookmark = new();
+			tabBookmark.SelectRow(new(new(dataKey), newBookmark));
+			tabBookmark = newBookmark;
+			prevKey = dataKey;
+		}
+		return rootBookmark;
 	}
 
 	// Single level multi-select
@@ -141,7 +166,7 @@ public class TabViewBookmark
 			[
 				new()
 				{
-					Selected = selectedRows,
+					SelectedRows = selectedRows,
 				}
 			],
 		};
@@ -158,16 +183,22 @@ public class TabViewBookmark
 		}
 	}
 
+	private void SelectRow(SelectedRowView selectedRow)
+	{
+		TabDatas =
+		[
+			new TabDataBookmark
+			{
+				SelectionType = SelectionType.User,
+				SelectedRows = [selectedRow],
+			}
+		];
+	}
+
 	public void SelectRows(params string[] labels)
 	{
 		var selectedRows = labels.Select(label =>
-			new SelectedRowView
-			{
-				SelectedRow = new()
-				{
-					Label = label,
-				}
-			}
+			new SelectedRowView(new SelectedRow(label))
 		).ToHashSet();
 
 		SelectRows(selectedRows);
@@ -180,18 +211,15 @@ public class TabViewBookmark
 			new TabDataBookmark
 			{
 				SelectionType = SelectionType.User,
-				Selected = selectedRows.ToList(),
+				SelectedRows = selectedRows.ToList(),
 			}
 		];
 	}
 
 	public SelectedRowView AddChild(string dataKey)
 	{
-		SelectedRowView childBookmark = new()
-		{
-			SelectedRow = new(dataKey),
-		};
-		TabDatas.First().Selected.Add(childBookmark);
+		SelectedRowView childBookmark = new(new(dataKey));
+		TabDatas.First().SelectedRows.Add(childBookmark);
 		return childBookmark;
 	}
 
@@ -200,7 +228,6 @@ public class TabViewBookmark
 		TabViewSettings tabViewSettings = new()
 		{
 			SplitterDistance = SplitterDistance,
-			//SelectedRows = TabDataSettings.SelectMany(t => t.Selected.Select(s => s.SelectedRow!)).ToList(),
 			TabDataSettings = TabDatas.Select(t => t.ToDataSettings()).ToList(),
 		};
 		return tabViewSettings;
@@ -208,7 +235,7 @@ public class TabViewBookmark
 
 	public bool TryGetValue(string label, out TabViewBookmark? childBookmarkNode)
 	{
-		if (TabDatas.SelectMany(t => t.Selected).FirstOrDefault(t => t.SelectedRow?.ToString() == label) is SelectedRowView selectedRowView)
+		if (TabDatas.SelectMany(t => t.SelectedRows).FirstOrDefault(t => t.SelectedRow?.ToString() == label) is SelectedRowView selectedRowView)
 		{
 			childBookmarkNode = selectedRowView.TabViewBookmark;
 			return true;

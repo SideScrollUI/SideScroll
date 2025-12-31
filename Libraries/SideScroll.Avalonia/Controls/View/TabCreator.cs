@@ -46,7 +46,7 @@ public static class TabCreator
 		if (parentTabInstance.TabViewBookmark is TabViewBookmark parentTabBookmark && parentTabBookmark.TabDatas != null)
 		{
 			string dataKey = new SelectedRow(obj).ToString() ?? label;
-			if (parentTabBookmark.TabDatas.Select(d => d.Selected.FirstOrDefault(s => s.ToString() == dataKey)).FirstOrDefault() is SelectedRowView view)
+			if (parentTabBookmark.TabDatas.Select(d => d.SelectedRows.FirstOrDefault(s => s.ToString() == dataKey)).FirstOrDefault() is SelectedRowView view)
 			{
 				// FindMatches only
 				/*if (tabBookmark.TabModel != null)

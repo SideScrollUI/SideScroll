@@ -411,12 +411,9 @@ public class TabModel
 			Actions = methods;
 	}*/
 
-	public TabBookmark FindMatches(Filter filter, int depth)
+	public TabViewBookmark FindMatches(Filter filter, int depth)
 	{
-		TabBookmark tabBookmark = new()
-		{
-			Name = Name,
-		};
+		TabViewBookmark tabBookmark = new();
 
 		depth = Math.Min(depth, MaxSearchDepth);
 		depth--;
@@ -424,8 +421,8 @@ public class TabModel
 		{
 			List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleElementProperties(iList);
 
-			TabDataSettings tabDataSettings = new();
-			tabBookmark.ViewSettings.TabDataSettings.Add(tabDataSettings);
+			TabDataBookmark tabDataBookmark = new();
+			tabBookmark.TabDatas.Add(tabDataBookmark);
 
 			foreach (object obj in iList)
 			{
@@ -435,7 +432,7 @@ public class TabModel
 					{
 						Object = obj,
 					};
-					tabDataSettings.SelectedRows.Add(selectedRow);
+					tabDataBookmark.SelectedRows.Add(new(selectedRow));
 					tabBookmark.SelectedObjects.Add(obj);
 				}
 				else if (depth >= 0)
@@ -443,7 +440,7 @@ public class TabModel
 					TabModel? tabModel = Create(obj.Formatted() ?? "", obj);
 					if (tabModel != null)
 					{
-						TabBookmark childNode = tabModel.FindMatches(filter, depth);
+						TabViewBookmark childNode = tabModel.FindMatches(filter, depth);
 						if (childNode.SelectedObjects.Count > 0)
 						{
 							childNode.TabModel = tabModel;
@@ -451,8 +448,7 @@ public class TabModel
 							{
 								Object = obj,
 							};
-							tabDataSettings.SelectedRows.Add(selectedRow);
-							tabBookmark.ChildBookmarks.Add(childNode.Name!, childNode);
+							tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
 							tabBookmark.SelectedObjects.Add(obj);
 						}
 					}

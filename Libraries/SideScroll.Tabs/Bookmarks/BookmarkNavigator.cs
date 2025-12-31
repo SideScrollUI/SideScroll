@@ -98,7 +98,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 
 		Bookmark currentBookmark = History[CurrentIndex];
 		//bookmark = Serialize.SerializerMemory.Clone<Bookmark>(new Core.Log(), bookmark); // sanitize
-		currentBookmark.TabBookmark = bookmark.TabBookmark;
+		currentBookmark.TabViewBookmark = bookmark.TabViewBookmark;
 	}
 
 	public Bookmark? SeekBackward()

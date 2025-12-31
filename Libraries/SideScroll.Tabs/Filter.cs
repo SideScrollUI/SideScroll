@@ -54,10 +54,10 @@ public class SearchFilter
 {
 	public Filter? Filter { get; set; }
 
-	public TabBookmark FindMatches(IList list)
+	public TabViewBookmark FindMatches(IList list)
 	{
 		TabModel tabModel = TabModel.Create("", list)!;
-		TabBookmark bookmarkNode = tabModel.FindMatches(Filter!, Filter!.Depth);
+		TabViewBookmark bookmarkNode = tabModel.FindMatches(Filter!, Filter!.Depth);
 		return bookmarkNode;
 	}
 
@@ -67,7 +67,7 @@ public class SearchFilter
 			return true;
 
 		TabModel tabModel = TabModel.Create("Search", obj)!;
-		TabBookmark bookmarkNode = tabModel.FindMatches(Filter!, Filter.Depth);
+		TabViewBookmark bookmarkNode = tabModel.FindMatches(Filter!, Filter.Depth);
 		return bookmarkNode.SelectedObjects.Count > 0;
 	}
 }

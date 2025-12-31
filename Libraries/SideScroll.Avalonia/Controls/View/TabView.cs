@@ -828,7 +828,7 @@ public class TabView : Grid, IDisposable
 		else if (Instance.TabViewBookmark != null)
 		{
 			Instance.SaveTabSettings();
-			Instance.TabBookmarkLoaded = Instance.TabViewBookmark;
+			Instance.TabViewBookmarkLoaded = Instance.TabViewBookmark;
 			Instance.TabViewBookmark = null; // clear so user can navigate and save prefs
 		}
 		_tabChildControls!.SetControls(newChildControls, orderedChildControls);

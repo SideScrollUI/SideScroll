@@ -15,14 +15,14 @@ public class TabDataBookmark
 	public string? DataRepoGroupId { get; set; }
 	public Type? DataRepoType { get; set; } // Interfaces need to specify this
 
-	public List<SelectedRowView> Selected { get; set; } = []; // doesn't know which tabData to use, maps id to child info
+	public List<SelectedRowView> SelectedRows { get; set; } = []; // doesn't know which tabData to use, maps id to child info
 
 	public string? Filter { get; set; }
 	public string? Address
 	{
 		get
 		{
-			var labels = Selected.Select(s => s.SelectedRow?.Label).ToList();
+			var labels = SelectedRows.Select(s => s.SelectedRow?.Label).ToList();
 			if (labels.Count <= 1)
 				return labels.FirstOrDefault();
 
@@ -35,24 +35,24 @@ public class TabDataBookmark
 		visited ??= [];
 		//if (maxDepth <= 0 || !visited.Add(this)) return "";
 
-		if (Selected.Count == 0)
+		if (SelectedRows.Count == 0)
 		{
 			return Address ?? "";
 		}
 
 		string comma = "";
 		string address = "";
-		if (Selected.Count > 1)
+		if (SelectedRows.Count > 1)
 		{
 			address += "[";
 		}
-		foreach (var bookmark in Selected)
+		foreach (var bookmark in SelectedRows)
 		{
 			address += comma;
 			address += bookmark.ToString() + " / " + bookmark.TabViewBookmark.GetAddress(maxDepth - 1, visited);
 			comma = ", ";
 		}
-		if (Selected.Count > 1)
+		if (SelectedRows.Count > 1)
 		{
 			address += "]";
 		}
@@ -63,7 +63,7 @@ public class TabDataBookmark
 
 	public void Import(Project project)
 	{
-		foreach (var view in Selected)
+		foreach (var view in SelectedRows)
 		{
 			var row = view.SelectedRow;
 			string? dataKey = row.DataKey ?? row.Label;
@@ -90,7 +90,7 @@ public class TabDataBookmark
 		{
 			ColumnNameOrder = ColumnNameOrder,
 			Filter = Filter,
-			SelectedRows = Selected.Select(s => s.SelectedRow!).ToHashSet(),
+			SelectedRows = SelectedRows.Select(s => s.SelectedRow!).ToHashSet(),
 			SelectionType = SelectionType.User,
 		};
 		return settings;

@@ -3,18 +3,11 @@ using SideScroll.Attributes;
 namespace SideScroll.Tabs.Bookmarks.Models;
 
 [PublicData]
-public class SelectedRowView
+public class SelectedRowView(SelectedRow selectedRow, TabViewBookmark? tabViewBookmark = null)
 {
-	public SelectedRow? SelectedRow { get; set; } // The parent selection that created this bookmark
+	public SelectedRow SelectedRow { get; set; } = selectedRow;
 
-	public TabViewBookmark TabViewBookmark { get; set; } = new(); // The child TabView
+	public TabViewBookmark TabViewBookmark { get; set; } = tabViewBookmark ?? new();
 
 	public override string? ToString() => SelectedRow?.ToString();
-
-	public SelectedRowView() { }
-
-	public SelectedRowView(SelectedRow selectedRow)
-	{
-		SelectedRow = selectedRow;
-	}
 }

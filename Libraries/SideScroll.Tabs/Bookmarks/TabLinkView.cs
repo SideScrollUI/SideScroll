@@ -52,7 +52,6 @@ public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab,
 		var call = new Call();
 		LinkedBookmark linkedBookmarkCopy = linkedBookmark.DeepClone(call, true); // This will get modified as users navigate
 		Bookmark bookmark = linkedBookmarkCopy.Bookmark;
-		bookmark.Reinitialize();
 
 		ITab tab = bookmark.TabViewBookmark.Tab ?? bookmark.TabBookmark?.Tab ?? (ITab)Activator.CreateInstance(bookmark.TabType!)!;
 

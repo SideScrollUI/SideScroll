@@ -69,15 +69,10 @@ public class Bookmark
 	{
 		Bookmark bookmark = new()
 		{
-			TabBookmark = TabBookmark.Create(labels),
+			TabViewBookmark = TabViewBookmark.Create(labels),
 			CreatedTime = DateTime.Now,
 		};
 		return bookmark;
-	}
-
-	public void Reinitialize()
-	{
-		TabBookmark?.Reinitialize(this);
 	}
 
 	internal void Import(Project project)

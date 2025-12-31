@@ -1073,7 +1073,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 				{
 					// create a new collection because this one might have multiple lists
 					TabModel tabModel = TabModel.Create(this.TabModel.Name, List!)!;
-					TabBookmark bookmarkNode = tabModel.FindMatches(_filter, _filter.Depth);
+					TabViewBookmark bookmarkNode = tabModel.FindMatches(_filter, _filter.Depth);
 					TabInstance.FilterBookmarkNode = bookmarkNode;
 					CollectionView!.Filter = FilterPredicate;
 					//TabInstance.SelectBookmark(bookmarkNode);

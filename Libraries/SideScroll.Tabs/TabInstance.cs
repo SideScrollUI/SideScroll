@@ -98,7 +98,7 @@ public class TabInstance : IDisposable
 	public TabViewSettings TabViewSettings { get; set; } = new();
 	public TabBookmark? TabBookmark { get; set; }
 	public TabViewBookmark? TabViewBookmark { get; set; }
-	public TabViewBookmark? TabBookmarkLoaded { get; set; }
+	public TabViewBookmark? TabViewBookmarkLoaded { get; set; }
 	public SelectedRow? SelectedRow { get; set; } // The parent selection that points to this tab
 
 	public int Depth => 1 + (ParentTabInstance?.Depth ?? 0);
@@ -107,7 +107,7 @@ public class TabInstance : IDisposable
 	public Dictionary<object, TabInstance> ChildTabInstances { get; set; } = [];
 
 	public SynchronizationContext UiContext { get; set; }
-	public TabBookmark? FilterBookmarkNode { get; set; }
+	public TabViewBookmark? FilterBookmarkNode { get; set; }
 
 	public class ItemSelectedEventArgs(object obj) : EventArgs
 	{
@@ -562,7 +562,7 @@ public class TabInstance : IDisposable
 
 		if (reloadBookmark)
 		{
-			TabViewBookmark = TabBookmarkLoaded;
+			TabViewBookmark = TabViewBookmarkLoaded;
 		}
 
 		if (OnReload != null)
@@ -749,28 +749,25 @@ public class TabInstance : IDisposable
 			tabBookmark.TabDatas.Add(dataBookmark);
 			foreach (SelectedRow selectedRow in dataSettings.SelectedRows)
 			{
-				SelectedRowView rowView = new()
-				{
-					SelectedRow = selectedRow,
-				};
+				SelectedRowView rowView = new(selectedRow);
 				if (lookup.TryGetValue(selectedRow, out TabInstance? tabInstance))
 				{
 					rowView.TabViewBookmark = new();
 					tabInstance.GetBookmarkView(rowView.TabViewBookmark);
 				}
-				dataBookmark.Selected.Add(rowView);
+				dataBookmark.SelectedRows.Add(rowView);
 			}
 		}
 
-		/*foreach (TabInstance tabInstance in ChildTabInstances.Values)
+		foreach (TabInstance tabInstance in ChildTabInstances.Values)
 		{
 			string dataKey = tabInstance.SelectedRow?.ToString() ?? tabInstance.Label;
-			if (tabBookmark.TabDataSettings.Any(d => d.Selected.Any(s => s.SelectedRow?.ToString() == dataKey)))
+			if (tabBookmark.TabDatas.Any(d => d.SelectedRows.Any(s => s.SelectedRow?.ToString() == dataKey)))
 				continue;
 
 			var childBookmark = tabBookmark.AddChild(dataKey);
-			tabInstance.GetBookmark(childBookmark);
-		}*/
+			tabInstance.GetBookmarkView(childBookmark.TabViewBookmark);
+		}
 	}
 
 	public TabViewSettings LoadBookmark(Bookmark bookmark)
@@ -848,11 +845,6 @@ public class TabInstance : IDisposable
 		_settingLoaded = true;
 		return TabViewSettings;
 	}
-
-	/*protected SortedDictionary<string, T> GetBookmarkSelectedData<T>()
-	{
-		return TabBookmark?.GetSelectedData<T>() ?? [];
-	}*/
 
 	public T? GetBookmarkData<T>(string name = TabViewBookmark.DefaultDataName)
 	{
