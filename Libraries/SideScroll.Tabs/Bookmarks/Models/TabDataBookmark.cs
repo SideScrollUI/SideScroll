@@ -37,10 +37,9 @@ public class TabDataBookmark
 		}
 	}
 
-	public string GetAddress(int maxDepth = 100, HashSet<SelectedRowView>? visited = null)
+	public string GetAddress(int maxDepth = 100, HashSet<TabViewBookmark>? visited = null)
 	{
 		visited ??= [];
-		//if (maxDepth <= 0 || !visited.Add(this)) return "";
 
 		if (SelectedRows.Count == 0)
 		{
@@ -51,17 +50,17 @@ public class TabDataBookmark
 		string address = "";
 		if (SelectedRows.Count > 1)
 		{
-			address += "[";
+			address += '[';
 		}
-		foreach (var bookmark in SelectedRows)
+		foreach (var selectedRow in SelectedRows)
 		{
 			address += comma;
-			address += bookmark.ToString() + " / " + bookmark.TabViewBookmark.GetAddress(maxDepth - 1, visited);
+			address += selectedRow.ToString() + " / " + selectedRow.TabViewBookmark.GetAddress(maxDepth - 1, visited);
 			comma = ", ";
 		}
 		if (SelectedRows.Count > 1)
 		{
-			address += "]";
+			address += ']';
 		}
 		return address;
 	}

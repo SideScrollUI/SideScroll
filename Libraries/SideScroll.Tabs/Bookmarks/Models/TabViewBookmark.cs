@@ -24,7 +24,7 @@ public class TabViewBookmark
 		}
 	}
 
-	public double? SplitterDistance { get; set; }
+	public double? Width { get; set; }
 
 	public List<TabDataBookmark> TabDatas { get; set; } = [];
 
@@ -93,9 +93,10 @@ public class TabViewBookmark
 		}
 	}
 
-	public string GetAddress(int maxDepth = 100, HashSet<SelectedRowView>? visited = null)
+	public string GetAddress(int maxDepth = 100, HashSet<TabViewBookmark>? visited = null)
 	{
 		visited ??= [];
+		if (maxDepth <= 0 || !visited.Add(this)) return "";
 
 		return string.Join(',', TabDatas.Select(d => d.GetAddress(maxDepth, visited)));
 	}
@@ -215,7 +216,7 @@ public class TabViewBookmark
 	{
 		TabViewSettings tabViewSettings = new()
 		{
-			SplitterDistance = SplitterDistance,
+			Width = Width,
 			TabDataSettings = TabDatas.Select(t => t.ToDataSettings()).ToList(),
 		};
 		return tabViewSettings;

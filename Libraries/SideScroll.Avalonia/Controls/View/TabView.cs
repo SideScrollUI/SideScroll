@@ -205,9 +205,9 @@ public class TabView : Grid, IDisposable
 			return;
 
 		int desiredWidth = (int)_parentContainerBorder.DesiredSize.Width;
-		if (Model.CustomSettingsPath != null && TabViewSettings.SplitterDistance != null)
+		if (Model.CustomSettingsPath != null && TabViewSettings.Width != null)
 		{
-			desiredWidth = (int)TabViewSettings.SplitterDistance.Value;
+			desiredWidth = (int)TabViewSettings.Width.Value;
 		}
 
 		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(desiredWidth);
@@ -220,7 +220,7 @@ public class TabView : Grid, IDisposable
 		{
 			ColumnDefinitions = new ColumnDefinitions("*"),
 			MinDesiredWidth = Model.MinDesiredWidth,
-			MaxDesiredWidth = Math.Max(Model.MaxDesiredWidth, TabViewSettings.SplitterDistance ?? 0),
+			MaxDesiredWidth = Math.Max(Model.MaxDesiredWidth, TabViewSettings.Width ?? 0),
 		};
 
 		_parentContainerBorder = new Border
@@ -333,14 +333,14 @@ public class TabView : Grid, IDisposable
 
 	private void GridSplitter_DragDelta(object? sender, VectorEventArgs e)
 	{
-		if (TabViewSettings.SplitterDistance != null)
+		if (TabViewSettings.Width != null)
 		{
 			_parentContainerBorder!.Width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
 		}
 
 		// force the width to update (Grid Auto Size caching problem?
 		double width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
-		TabViewSettings.SplitterDistance = width;
+		TabViewSettings.Width = width;
 		_parentContainerBorder!.Width = width;
 
 		//if (TabViewSettings.SplitterDistance != null)
@@ -380,7 +380,7 @@ public class TabView : Grid, IDisposable
 
 	private void SetSplitterDistance(double width)
 	{
-		TabViewSettings.SplitterDistance = width;
+		TabViewSettings.Width = width;
 		_parentContainerBorder!.Width = width;
 		_containerGrid!.ColumnDefinitions[0].Width = new GridLength(width);
 		_tabParentControls!.MaxDesiredWidth = Math.Max(Model.MaxDesiredWidth, width);
@@ -399,7 +399,7 @@ public class TabView : Grid, IDisposable
 		if (_containerGrid == null)
 			return;
 
-		if (TabViewSettings.SplitterDistance is double splitterDistance && splitterDistance > MinDesiredSplitterDistance)
+		if (TabViewSettings.Width is double splitterDistance && splitterDistance > MinDesiredSplitterDistance)
 		{
 			_containerGrid.ColumnDefinitions[0].Width = new GridLength((int)splitterDistance);
 			if (_parentContainerBorder != null)

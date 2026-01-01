@@ -35,7 +35,8 @@ public class TabViewSettings
 		}
 	}
 
-	public double? SplitterDistance { get; set; }
+	[DeprecatedName("SplitterDistance")]
+	public double? Width { get; set; }
 
 	public List<TabDataSettings> TabDataSettings { get; set; } = [];
 

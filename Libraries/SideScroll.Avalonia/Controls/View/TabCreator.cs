@@ -23,7 +23,7 @@ public static class TabCreator
 			label = obj.Formatted();
 			if (label.IsNullOrEmpty())
 			{
-				label = "(" + obj.GetType().Name + ")";
+				label = '(' + obj.GetType().Name + ')';
 			}
 		}
 

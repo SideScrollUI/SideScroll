@@ -38,7 +38,7 @@ public class SerializeAvaloniaTests : BaseTest
 						[
 							new(new("Label"), new TabViewBookmark()
 							{
-								SplitterDistance = 99,
+								Width = 99,
 							}),
 						],
 					}
@@ -53,7 +53,7 @@ public class SerializeAvaloniaTests : BaseTest
 		Assert.That(output.TabViewBookmark, Is.Not.Null);
 		Assert.That(output.TabViewBookmark.TabDatas, Has.Exactly(1).Items);
 		Assert.That(output.TabViewBookmark.TabDatas[0].SelectedRows, Has.Exactly(1).Items);
-		Assert.That(output.TabViewBookmark.TabDatas[0].SelectedRows[0].TabViewBookmark.SplitterDistance, Is.EqualTo(99));
+		Assert.That(output.TabViewBookmark.TabDatas[0].SelectedRows[0].TabViewBookmark.Width, Is.EqualTo(99));
 	}
 
 	[Test]

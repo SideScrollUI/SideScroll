@@ -690,10 +690,8 @@ public class TabInstance : IDisposable
 
 	public virtual void GetBookmarkView(TabViewBookmark tabBookmark)
 	{
-		//tabBookmark.Name = Label;
-		tabBookmark.SplitterDistance = TabViewSettings.SplitterDistance;
+		tabBookmark.Width = TabViewSettings.Width;
 		var viewSettings = TabViewSettings.TryDeepClone() ?? new();
-		//tabBookmark.ViewSettings = TabViewSettings.TryDeepClone() ?? new();
 		//tabBookmark.DataRepoGroupId = DataRepoInstance?.GroupId;
 		//tabBookmark.DataRepoType = DataRepoInstance?.DataType;
 

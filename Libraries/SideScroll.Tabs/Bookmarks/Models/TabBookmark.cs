@@ -12,7 +12,7 @@ namespace SideScroll.Tabs.Bookmarks.Models;
 }*/
 
 // rename to TabInstanceSettings?
-[PublicData]
+[PublicData, Obsolete("Use TabViewBookmark instead")]
 public class TabBookmark
 {
 	public const string DefaultDataName = "default";
