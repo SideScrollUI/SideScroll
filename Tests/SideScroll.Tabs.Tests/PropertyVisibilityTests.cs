@@ -3,7 +3,6 @@ using SideScroll.Attributes;
 using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
-using SideScroll.Tabs.Settings;
 using System.Reflection;
 
 namespace SideScroll.Tabs.Tests;
@@ -188,7 +187,7 @@ public class PropertyVisibilityTests : BaseTest
 	public void PropertyHideNullEmptyListVisible()
 	{
 		List<HideableClassData> list = [];
-		TabDataSettings tabDataSettings = new();
+		TabDataColumns tabDataSettings = new();
 		var propertyColumns = tabDataSettings.GetPropertiesAsColumns(typeof(HideableClassData));
 
 		Assert.That(propertyColumns, Has.Exactly(1).Items);

@@ -236,7 +236,6 @@ public class TabViewer : Grid
 			bool reloadBase = true;
 			if (reloadBase)
 			{
-				//TabView.Instance.TabBookmark = bookmark.TabBookmark;
 				TabView.Instance.TabViewBookmark = bookmark.TabViewBookmark;
 				Reload(call);
 			}

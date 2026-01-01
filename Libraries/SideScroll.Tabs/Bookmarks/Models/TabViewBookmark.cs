@@ -13,27 +13,14 @@ public class TabViewBookmark
 	{
 		get
 		{
-			if (TabDatas == null) return null;
+			var addresses = TabDatas
+				.Select(d => d.Address)
+				.ToList();
 
-			string address = "";
-			string comma = "";
-			int count = 0;
-			foreach (TabDataBookmark tabDataBookmark in TabDatas)
-			{
-				foreach (SelectedRowView selectedRowView in tabDataBookmark.SelectedRows)
-				{
-					address += comma;
-					address += selectedRowView.SelectedRow?.Label;
-					comma = ", ";
-					count++;
-				}
-			}
-			if (count > 1)
-			{
-				address += "[" + address + "] ";
-			}
+			if (addresses.Count <= 1)
+				return addresses.FirstOrDefault();
 
-			return address;
+			return "[" + string.Join(", ", addresses) + "] ";
 		}
 	}
 
@@ -49,9 +36,6 @@ public class TabViewBookmark
 	public Dictionary<string, object?>? BookmarkData { get; set; }
 
 	// Temporary, Only FindMatches() uses, refactor these out?
-	[Unserialized]
-	public HashSet<object> SelectedObjects { get; set; } = []; // does this work with multiple TabDatas?
-
 	[Unserialized]
 	public TabModel? TabModel { get; set; } // Used for search results
 
@@ -219,6 +203,10 @@ public class TabViewBookmark
 	public SelectedRowView AddChild(string dataKey)
 	{
 		SelectedRowView childBookmark = new(new(dataKey));
+		if (TabDatas.Count == 0)
+		{
+			TabDatas.Add(new());
+		}
 		TabDatas.First().SelectedRows.Add(childBookmark);
 		return childBookmark;
 	}

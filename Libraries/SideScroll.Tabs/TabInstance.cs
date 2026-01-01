@@ -96,7 +96,6 @@ public class TabInstance : IDisposable
 	public ProjectDataRepos Data => Project.Data;
 
 	public TabViewSettings TabViewSettings { get; set; } = new();
-	public TabBookmark? TabBookmark { get; set; }
 	public TabViewBookmark? TabViewBookmark { get; set; }
 	public TabViewBookmark? TabViewBookmarkLoaded { get; set; }
 	public SelectedRow? SelectedRow { get; set; } // The parent selection that points to this tab
@@ -473,7 +472,8 @@ public class TabInstance : IDisposable
 			if (elementType == null) continue;
 
 			var tabDataSettings = TabViewSettings.GetData(i);
-			List<TabDataSettings.PropertyColumn> propertyColumns = tabDataSettings.GetPropertiesAsColumns(elementType);
+			TabDataColumns dataColumns = new(tabDataSettings.ColumnNameOrder);
+			List<TabPropertyColumn> propertyColumns = dataColumns.GetPropertiesAsColumns(elementType);
 			int itemCount = 0;
 			foreach (object obj in iList)
 			{
@@ -733,7 +733,6 @@ public class TabInstance : IDisposable
 				(tabBookmark.IsRoot || IsRoot))
 			{
 				tabBookmark.Tab = iTab;
-				//tabBookmark.Name = iTab.ToString();
 			}
 		}
 

@@ -1,6 +1,5 @@
 using SideScroll.Extensions;
 using SideScroll.Tabs.Bookmarks.Models;
-using SideScroll.Tabs.Settings;
 using System.Collections;
 using System.Data;
 using System.Reflection;
@@ -68,7 +67,7 @@ public class SearchFilter
 
 		TabModel tabModel = TabModel.Create("Search", obj)!;
 		TabViewBookmark bookmarkNode = tabModel.FindMatches(Filter!, Filter.Depth);
-		return bookmarkNode.SelectedObjects.Count > 0;
+		return bookmarkNode.TabDatas.Any(d => d.SelectedRows.Count > 0);
 	}
 }
 
@@ -287,7 +286,7 @@ public class Filter
 	{
 		Type listType = iList.GetType();
 		Type elementType = listType.GetGenericArguments()[0]; // dictionaries?
-		List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleProperties(elementType);
+		List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleProperties(elementType);
 		return Matches(iList, visibleProperties);
 	}
 
@@ -338,7 +337,7 @@ public class Filter
 			Type innerType = innerValue.GetType();
 			if (innerValue is IList list)
 			{
-				List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleElementProperties(list); // cache me
+				List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(list); // cache me
 				foreach (var item in list)
 				{
 					GetItemSearchText(item, visibleProperties, uppercaseValues);
@@ -346,7 +345,7 @@ public class Filter
 			}
 			else
 			{
-				List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleProperties(innerType); // cache me
+				List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleProperties(innerType); // cache me
 				GetItemSearchText(innerValue, visibleProperties, uppercaseValues);
 			}
 		}

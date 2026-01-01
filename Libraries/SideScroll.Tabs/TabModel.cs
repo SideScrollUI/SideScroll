@@ -4,7 +4,6 @@ using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Lists;
-using SideScroll.Tabs.Settings;
 using SideScroll.Tasks;
 using System.Collections;
 using System.Data;
@@ -381,7 +380,7 @@ public class TabModel
 			{
 				Skippable = skippableAttribute.Value;
 			}
-			else if (firstItem is not ITab && TabDataSettings.GetVisibleProperties(elementType).Count > 1)
+			else if (firstItem is not ITab && TabDataColumns.GetVisibleProperties(elementType).Count > 1)
 			{
 				Skippable = true;
 			}
@@ -419,7 +418,7 @@ public class TabModel
 		depth--;
 		foreach (IList iList in ItemList)
 		{
-			List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleElementProperties(iList);
+			List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(iList);
 
 			TabDataBookmark tabDataBookmark = new();
 			tabBookmark.TabDatas.Add(tabDataBookmark);
@@ -433,7 +432,6 @@ public class TabModel
 						Object = obj,
 					};
 					tabDataBookmark.SelectedRows.Add(new(selectedRow));
-					tabBookmark.SelectedObjects.Add(obj);
 				}
 				else if (depth >= 0)
 				{
@@ -441,7 +439,7 @@ public class TabModel
 					if (tabModel != null)
 					{
 						TabViewBookmark childNode = tabModel.FindMatches(filter, depth);
-						if (childNode.SelectedObjects.Count > 0)
+						if (childNode.TabDatas.First().SelectedRows.Count > 0)
 						{
 							childNode.TabModel = tabModel;
 							SelectedRow selectedRow = new()
@@ -449,7 +447,6 @@ public class TabModel
 								Object = obj,
 							};
 							tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
-							tabBookmark.SelectedObjects.Add(obj);
 						}
 					}
 				}

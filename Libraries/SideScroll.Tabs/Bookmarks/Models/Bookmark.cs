@@ -30,7 +30,7 @@ public class Bookmark
 	[DeprecatedName("TimeStamp")]
 	public DateTime? CreatedTime { get; set; }
 
-	[HiddenColumn]
+	[HiddenColumn, Obsolete("Use TabViewBookmark instead")]
 	public TabBookmark? TabBookmark { get; set; }
 
 	[HiddenColumn]

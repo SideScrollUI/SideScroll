@@ -28,23 +28,32 @@ public class SerializeAvaloniaTests : BaseTest
 	{
 		Bookmark input = new()
 		{
-			TabBookmark = new TabBookmark
+			TabViewBookmark = new()
 			{
-				ChildBookmarks = new Dictionary<string, TabBookmark>
-				{
-					{ "test", new TabBookmark() }
-				},
+				TabDatas =
+				[
+					new()
+					{
+						SelectedRows =
+						[
+							new(new("Label"), new TabViewBookmark()
+							{
+								SplitterDistance = 99,
+							}),
+						],
+					}
+				],
 			},
 			CreatedTime = DateTime.Now,
 		};
-		input.TabBookmark.Bookmark = input;
 		_serializer!.Save(Call, input);
 		Bookmark output = _serializer.Load<Bookmark>(Call);
 
 		Assert.That(output, Is.Not.Null);
-		Assert.That(output.TabBookmark, Is.Not.Null);
-		Assert.That(output.TabBookmark.ChildBookmarks, Is.Not.Null);
-		Assert.That(output.TabBookmark.ChildBookmarks, Has.Exactly(1).Items);
+		Assert.That(output.TabViewBookmark, Is.Not.Null);
+		Assert.That(output.TabViewBookmark.TabDatas, Has.Exactly(1).Items);
+		Assert.That(output.TabViewBookmark.TabDatas[0].SelectedRows, Has.Exactly(1).Items);
+		Assert.That(output.TabViewBookmark.TabDatas[0].SelectedRows[0].TabViewBookmark.SplitterDistance, Is.EqualTo(99));
 	}
 
 	[Test]

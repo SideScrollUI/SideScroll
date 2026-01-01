@@ -8,21 +8,28 @@ public class TabDataBookmark
 {
 	[PrivateData]
 	public SelectionType SelectionType { get; set; } = SelectionType.None;
+
 	public List<string> ColumnNameOrder { get; set; } = []; // Order to show the columns in, users can drag columns around to reorder these
 
+	// Not currently supported by DataGrid
 	// public string? SortColumnName { get; set; } // Currently sorted column
 	// public ListSortDirection SortDirection { get; set; }
+
 	public string? DataRepoGroupId { get; set; }
 	public Type? DataRepoType { get; set; } // Interfaces need to specify this
 
-	public List<SelectedRowView> SelectedRows { get; set; } = []; // doesn't know which tabData to use, maps id to child info
+	public List<SelectedRowView> SelectedRows { get; set; } = [];
 
 	public string? Filter { get; set; }
+
 	public string? Address
 	{
 		get
 		{
-			var labels = SelectedRows.Select(s => s.SelectedRow?.Label).ToList();
+			var labels = SelectedRows
+				.Select(s => s.SelectedRow?.Label)
+				.ToList();
+
 			if (labels.Count <= 1)
 				return labels.FirstOrDefault();
 
@@ -91,7 +98,7 @@ public class TabDataBookmark
 			ColumnNameOrder = ColumnNameOrder,
 			Filter = Filter,
 			SelectedRows = SelectedRows.Select(s => s.SelectedRow!).ToHashSet(),
-			SelectionType = SelectionType.User,
+			SelectionType = SelectionType.Link,
 		};
 		return settings;
 	}

@@ -78,25 +78,6 @@ public class TabBookmark
 		return tabBookmark;
 	}
 
-	/*public void Add(TabBookmark tabBookmark)
-	{
-		ChildBookmarks.Add(tabBookmark.Name!, tabBookmark);
-
-		var selectedRow = tabBookmark.SelectedRow ?? new SelectedRow
-		{
-			Label = tabBookmark.Name,
-		};
-		ViewSettings.TabDataSettings ??= [];
-		if (ViewSettings.TabDataSettings.Count == 0)
-		{
-			ViewSettings.TabDataSettings.Add(new TabDataSettings());
-		}
-		ViewSettings.TabDataSettings[0].SelectionType = SelectionType.User;
-		ViewSettings.TabDataSettings[0].SelectedRows ??= [];
-		ViewSettings.TabDataSettings[0].SelectedRows.Add(selectedRow);
-		//Select(ChildBookmarks.Keys);
-	}*/
-
 	public void SetData(object obj)
 	{
 		SetData(DefaultDataName, obj);
