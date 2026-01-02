@@ -31,7 +31,7 @@ public class TabViewer : Grid
 	public int DefaultScrollWidth => Math.Min(MaxScrollWidth, (int)(ScrollViewer.Viewport.Width * ScrollPercent));
 	public int KeyboardScrollWidth { get; set; } = 500;
 
-	public static TabViewer? BaseViewer { get; set; }
+	public static TabViewer? Instance { get; set; }
 	public static string? LoadLinkUri { get; set; }
 	public static Bookmark? LoadBookmark { get; set; }
 	public static List<ITabViewerPlugin> Plugins { get; set; } = [];
@@ -55,7 +55,7 @@ public class TabViewer : Grid
 		Project = project;
 		IsWindowed = isWindowed;
 
-		BaseViewer = this;
+		Instance = this;
 		Background = null; // Custom Title Toolbar requires this for dragging
 
 		// Toolbar

@@ -27,13 +27,13 @@ public class TabDataBookmark
 		get
 		{
 			var labels = SelectedRows
-				.Select(s => s.SelectedRow?.Label)
+				.Select(s => s.SelectedRow.Label)
 				.ToList();
 
 			if (labels.Count <= 1)
 				return labels.FirstOrDefault();
 
-			return "[" + string.Join(", ", labels) + "] ";
+			return '[' + string.Join(", ", labels) + "] ";
 		}
 	}
 
@@ -76,7 +76,7 @@ public class TabDataBookmark
 			if (dataKey == null || row.DataValue == null)
 				continue;
 
-			// Interfaces or base classes need to specify a type
+			// Interfaces and base classes need to specify a type
 			if (DataRepoType is Type type)
 			{
 				project.Data.App.Save(type, DataRepoGroupId, dataKey, row.DataValue);
@@ -96,7 +96,7 @@ public class TabDataBookmark
 		{
 			ColumnNameOrder = ColumnNameOrder,
 			Filter = Filter,
-			SelectedRows = SelectedRows.Select(s => s.SelectedRow!).ToHashSet(),
+			SelectedRows = SelectedRows.Select(s => s.SelectedRow).ToHashSet(),
 			SelectionType = SelectionType.Link,
 		};
 		return settings;

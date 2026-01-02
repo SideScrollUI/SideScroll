@@ -54,11 +54,11 @@ public class Bookmark
 		return SerializerMemory.ToBase64String(call, this, publicOnly);
 	}
 
-	public static Bookmark Create(Call call, string encoded, bool publicOnly)
+	public static Bookmark Create(Call call, string base64, bool publicOnly)
 	{
 		var serializer = SerializerMemory.Create();
 		serializer.PublicOnly = publicOnly;
-		serializer.LoadBase64String(encoded);
+		serializer.LoadBase64String(base64);
 
 		Bookmark bookmark = serializer.Load<Bookmark>(call);
 		bookmark.Imported = true;

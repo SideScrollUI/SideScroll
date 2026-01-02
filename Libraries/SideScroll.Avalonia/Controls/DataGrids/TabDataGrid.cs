@@ -1077,7 +1077,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 					TabViewBookmark bookmarkNode = tabModel.FindMatches(_filter, _filter.Depth);
 					TabInstance.FilterBookmarkNode = bookmarkNode;
 					CollectionView!.Filter = FilterPredicate;
-					//TabInstance.SelectBookmark(bookmarkNode);
+					TabInstance.SelectBookmark(bookmarkNode);
 				}
 				else
 				{

@@ -805,7 +805,7 @@ public class TabView : Grid, IDisposable
 
 		_childControlsFinishedLoading = true;
 
-		TabViewer.BaseViewer!.SetMinScrollOffset();
+		TabViewer.Instance!.SetMinScrollOffset();
 
 		// Create new child controls
 		//Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
@@ -931,7 +931,7 @@ public class TabView : Grid, IDisposable
 
 			if (control != null)
 			{
-				TabViewer.BaseViewer!.TabLoaded(obj, control);
+				TabViewer.Instance!.TabLoaded(obj, control);
 			}
 
 			return control;
@@ -1094,20 +1094,20 @@ public class TabView : Grid, IDisposable
 	{
 		Instance.Project.UserSettings.AutoSelect = true;
 
-		TabViewBookmark tabBookmark = Instance.TabViewBookmark!;
-		TabViewSettings = tabBookmark.ToViewSettings();
+		TabViewBookmark tabViewBookmark = Instance.TabViewBookmark!;
+		TabViewSettings = tabViewBookmark.ToViewSettings();
 
 		int index = 0;
 		foreach (ITabDataSelector tabData in TabDatas)
 		{
-			LoadBookmarkData(tabData, tabBookmark, index++);
+			LoadBookmarkData(tabData, tabViewBookmark, index++);
 		}
 
 		foreach (ITabSelector tabControl in CustomTabControls)
 		{
 			if (tabControl is ITabDataControl dataControl)
 			{
-				LoadBookmarkData(dataControl, tabBookmark, index++);
+				LoadBookmarkData(dataControl, tabViewBookmark, index++);
 			}
 		}
 	}

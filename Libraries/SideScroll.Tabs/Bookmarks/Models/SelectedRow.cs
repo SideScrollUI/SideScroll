@@ -57,7 +57,7 @@ public class SelectedRow : IEquatable<SelectedRow>
 			   Label == other.Label &&
 			   DataKey == other.DataKey &&
 			   DataValue == other.DataValue &&
-			   (RowIndex == other.RowIndex || RowIndex == null || other.RowIndex == null || RowIndex < 0 || other.RowIndex < 0); // Allow matching on missing rows
+			   (RowIndex == other.RowIndex || RowIndex == null || other.RowIndex == null); // Allow matching on missing rows
 	}
 
 	public override int GetHashCode()

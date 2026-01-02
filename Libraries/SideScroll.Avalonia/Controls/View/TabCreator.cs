@@ -4,7 +4,9 @@ using SideScroll.Avalonia.Tabs;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks.Models;
+using SideScroll.Tabs.Settings;
 using SideScroll.Utilities;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.View;
@@ -42,22 +44,24 @@ public static class TabCreator
 
 		label = labelOverride ?? label; // update label before comparing bookmarks
 
-		TabViewBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
+		TabViewBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.Instance.TabViewBookmark = tabBookmark;
 		if (parentTabInstance.TabViewBookmark is TabViewBookmark parentTabBookmark && parentTabBookmark.TabDatas != null)
 		{
 			string dataKey = new SelectedRow(obj).ToString() ?? label;
-			if (parentTabBookmark.TabDatas.Select(d => d.SelectedRows.FirstOrDefault(s => s.ToString() == dataKey)).FirstOrDefault() is SelectedRowView view)
+			if (parentTabBookmark.TabDatas.Select(d => d.SelectedRows.FirstOrDefault(s => s.ToString() == dataKey)).FirstOrDefault() is SelectedRowView selectedRowView)
 			{
+				tabBookmark = selectedRowView.TabViewBookmark;
+
 				// FindMatches only
-				/*if (tabBookmark.TabModel != null)
+				if (tabBookmark.TabModel != null)
 				{
 					value = tabBookmark.TabModel;
-				}*/
+				}
 			}
-			/*else if (parentTabBookmark.Bookmark?.Imported == true && parentTabBookmark.ChildBookmarks.Count > 0)
+			else if (parentTabBookmark.SelectionType == SelectionType.Link && parentTabBookmark.TabDatas.Any(d => d.SelectedRows.Count > 0))
 			{
-				Debug.WriteLine($"Failed to find imported tab bookmark for {dataKey} in [{parentTabBookmark.ChildBookmarks.Keys.CollectionToString()}]");
-			}*/
+				Debug.WriteLine($"Failed to find imported tab bookmark for {dataKey} in [{parentTabBookmark.TabDatas.SelectMany(t => t.SelectedRows.CollectionToString())}]");
+			}
 		}
 		if (value == null)
 			return null;

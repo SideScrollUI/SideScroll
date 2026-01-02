@@ -40,11 +40,9 @@ public class TabViewBookmark
 	public TabModel? TabModel { get; set; } // Used for search results
 
 	//public List<DataRepoItem> DataRepoItems { get; set; } = new();
-	//public string? DataRepoGroupId { get; set; }
-	//public Type? DataRepoType { get; set; } // Interfaces need to specify this
 
 	//[JsonIgnore]
-	//public List<SelectedRow> SelectedRows => TabDataSettings?.SelectMany(d => d.Selected.Select(s => s.SelectedRow!)).ToList() ?? [];
+	//public List<SelectedRow> SelectedRows => TabDatas?.SelectMany(d => d.SelectedRows.Select(s => s.SelectedRow!)).ToList() ?? [];
 
 	// Store Skipped bool instead?
 	public SelectionType SelectionType => TabDatas?
@@ -53,11 +51,9 @@ public class TabViewBookmark
 
 	public override string? ToString() => Address;
 
-	// change to string id?
+	// Change to string id?
 	public TabDataBookmark GetData(int index)
 	{
-		TabDatas ??= [];
-
 		// Creates new Settings if necessary
 		while (TabDatas.Count <= index)
 		{
@@ -106,7 +102,10 @@ public class TabViewBookmark
 	{
 		if (TabDatas.Count == 1)
 		{
-			var leaf = TabDatas.First().SelectedRows.Select(s => s.TabViewBookmark.GetLeaf()).FirstOrDefault();
+			var leaf = TabDatas
+				.First()
+				.SelectedRows.Select(s => s.TabViewBookmark.GetLeaf())
+				.FirstOrDefault();
 			if (leaf != null)
 				return leaf;
 		}
@@ -119,11 +118,8 @@ public class TabViewBookmark
 
 	public static TabViewBookmark Create(params object[] objs)
 	{
-		// get TabBookmark.SelectedObjects working again and replace?
-
-		string? prevKey = null;
 		TabViewBookmark rootBookmark = new();
-		TabViewBookmark? tabBookmark = rootBookmark;
+		TabViewBookmark tabBookmark = rootBookmark;
 		foreach (object obj in objs)
 		{
 			string? dataKey = new SelectedRow(obj).ToString();
@@ -132,7 +128,6 @@ public class TabViewBookmark
 			TabViewBookmark newBookmark = new();
 			tabBookmark.SelectRow(new(new(dataKey), newBookmark));
 			tabBookmark = newBookmark;
-			prevKey = dataKey;
 		}
 		return rootBookmark;
 	}
