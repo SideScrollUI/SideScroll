@@ -24,14 +24,14 @@ public class TabViewBookmark
 		}
 	}
 
-	public double? Width { get; set; }
-
-	public List<TabDataBookmark> TabDatas { get; set; } = [];
-
 	public ITab? Tab { get; set; } // [TabRoot] will set this to use the serialized tab as the root tab
 
 	[PrivateData]
 	public bool IsRoot { get; set; } // [TabRoot] set or first in a Bookmark
+
+	public double? Width { get; set; }
+
+	public List<TabDataBookmark> TabDatas { get; set; } = [];
 
 	public Dictionary<string, object?>? BookmarkData { get; set; }
 
@@ -81,14 +81,6 @@ public class TabViewBookmark
 		return default;
 	}
 
-	public void Import(Project project)
-	{
-		foreach (var row in TabDatas)
-		{
-			row.Import(project);
-		}
-	}
-
 	public string GetAddress(int maxDepth = 100, HashSet<TabViewBookmark>? visited = null)
 	{
 		visited ??= [];
@@ -114,6 +106,14 @@ public class TabViewBookmark
 			return this;
 
 		return null;
+	}
+
+	public void Import(Project project)
+	{
+		foreach (var row in TabDatas)
+		{
+			row.Import(project);
+		}
 	}
 
 	public static TabViewBookmark Create(params object[] objs)

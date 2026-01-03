@@ -1,5 +1,6 @@
 using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
+using System.Text.Json.Serialization;
 
 namespace SideScroll.Tabs.Bookmarks.Models;
 
@@ -9,6 +10,7 @@ public class TabDataBookmark
 	[PrivateData]
 	public SelectionType SelectionType { get; set; } = SelectionType.None;
 
+	[JsonIgnore]
 	public List<string> ColumnNameOrder { get; set; } = []; // Order to show the columns in, users can drag columns around to reorder these
 
 	// Not currently supported by DataGrid

@@ -740,6 +740,8 @@ public class TabInstance : IDisposable
 			{
 				Filter = dataSettings.Filter,
 				ColumnNameOrder = dataSettings.ColumnNameOrder,
+				DataRepoGroupId = DataRepoInstance?.GroupId,
+				DataRepoType = DataRepoInstance?.DataType,
 			};
 			tabBookmark.TabDatas.Add(dataBookmark);
 			foreach (SelectedRow selectedRow in dataSettings.SelectedRows)
@@ -753,7 +755,8 @@ public class TabInstance : IDisposable
 			}
 		}
 
-		foreach (TabInstance tabInstance in ChildTabInstances.Values)
+		// Adds children that don't have parents?
+		/*foreach (TabInstance tabInstance in ChildTabInstances.Values)
 		{
 			string label = tabInstance.SelectedRow?.ToString() ?? tabInstance.Label;
 			if (tabBookmark.TabDatas.Any(d => d.SelectedRows.Any(s => s.SelectedRow?.ToString() == label)))
@@ -761,7 +764,7 @@ public class TabInstance : IDisposable
 
 			var childBookmark = tabBookmark.AddChild(label);
 			tabInstance.GetBookmarkView(childBookmark.TabViewBookmark);
-		}
+		}*/
 	}
 
 	public TabViewSettings LoadBookmark(Bookmark bookmark)

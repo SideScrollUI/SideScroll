@@ -1,4 +1,5 @@
 using SideScroll.Attributes;
+using System.Text.Json.Serialization;
 
 namespace SideScroll.Tabs.Bookmarks.Models;
 
@@ -7,6 +8,7 @@ public class SelectedRowView(SelectedRow selectedRow, TabViewBookmark? tabViewBo
 {
 	public SelectedRow SelectedRow { get; set; } = selectedRow;
 
+	[JsonPropertyName("TabView")]
 	public TabViewBookmark TabViewBookmark { get; set; } = tabViewBookmark ?? new();
 
 	public override string? ToString() => SelectedRow.ToString();

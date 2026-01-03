@@ -29,7 +29,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 
 	public int NextId { get; set; }
 
-	public List<Bookmark> History { get; } = [];
+	public List<Bookmark> History { get; set; } = [];
 
 	public Bookmark? Current
 	{

@@ -1,5 +1,6 @@
 using SideScroll.Attributes;
 using SideScroll.Serialize;
+using System.Text.Json.Serialization;
 
 namespace SideScroll.Tabs.Bookmarks.Models;
 
@@ -14,13 +15,18 @@ public enum BookmarkType
 [PublicData]
 public class Bookmark
 {
-	[Name("Bookmark")]
 	public string? Name { get; set; }
 
 	public string? Changed { get; set; } // what was just selected, used for naming, find better default name
 
 	[HiddenColumn, DeprecatedName("Type")]
 	public Type? TabType { get; set; } // Must be ITab
+
+	[HiddenColumn]
+	public BookmarkType BookmarkType { get; set; }
+
+	[HiddenColumn]
+	public bool Imported { get; set; }
 
 	public string Address => TabViewBookmark?.GetAddress() ?? TabBookmark?.GetAddress() ?? "";
 
@@ -33,14 +39,8 @@ public class Bookmark
 	[HiddenColumn, Obsolete("Use TabViewBookmark instead")]
 	public TabBookmark? TabBookmark { get; set; }
 
-	[HiddenColumn]
+	[HiddenColumn, JsonPropertyName("TabView")]
 	public TabViewBookmark TabViewBookmark { get; set; } = new();
-
-	[HiddenColumn]
-	public BookmarkType BookmarkType { get; set; }
-
-	[HiddenColumn]
-	public bool Imported { get; set; }
 
 	public override string ToString() => Label;
 
