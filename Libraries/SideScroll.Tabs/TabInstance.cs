@@ -692,8 +692,6 @@ public class TabInstance : IDisposable
 	{
 		tabBookmark.Width = TabViewSettings.Width;
 		var viewSettings = TabViewSettings.TryDeepClone() ?? new();
-		//tabBookmark.DataRepoGroupId = DataRepoInstance?.GroupId;
-		//tabBookmark.DataRepoType = DataRepoInstance?.DataType;
 
 		/*if (DataRepoInstance != null)
 		{
@@ -736,9 +734,9 @@ public class TabInstance : IDisposable
 
 		var lookup = ChildTabInstances.Values.ToDictionary(t => t.SelectedRow!);
 
-		foreach (var dataSettings in viewSettings.TabDataSettings)
+		foreach (TabDataSettings dataSettings in viewSettings.TabDataSettings)
 		{
-			var dataBookmark = new TabDataBookmark()
+			TabDataBookmark dataBookmark = new()
 			{
 				Filter = dataSettings.Filter,
 				ColumnNameOrder = dataSettings.ColumnNameOrder,
@@ -746,23 +744,22 @@ public class TabInstance : IDisposable
 			tabBookmark.TabDatas.Add(dataBookmark);
 			foreach (SelectedRow selectedRow in dataSettings.SelectedRows)
 			{
-				SelectedRowView rowView = new(selectedRow);
+				SelectedRowView selectedRowView = new(selectedRow);
 				if (lookup.TryGetValue(selectedRow, out TabInstance? tabInstance))
 				{
-					rowView.TabViewBookmark = new();
-					tabInstance.GetBookmarkView(rowView.TabViewBookmark);
+					tabInstance.GetBookmarkView(selectedRowView.TabViewBookmark);
 				}
-				dataBookmark.SelectedRows.Add(rowView);
+				dataBookmark.SelectedRows.Add(selectedRowView);
 			}
 		}
 
 		foreach (TabInstance tabInstance in ChildTabInstances.Values)
 		{
-			string dataKey = tabInstance.SelectedRow?.ToString() ?? tabInstance.Label;
-			if (tabBookmark.TabDatas.Any(d => d.SelectedRows.Any(s => s.SelectedRow?.ToString() == dataKey)))
+			string label = tabInstance.SelectedRow?.ToString() ?? tabInstance.Label;
+			if (tabBookmark.TabDatas.Any(d => d.SelectedRows.Any(s => s.SelectedRow?.ToString() == label)))
 				continue;
 
-			var childBookmark = tabBookmark.AddChild(dataKey);
+			var childBookmark = tabBookmark.AddChild(label);
 			tabInstance.GetBookmarkView(childBookmark.TabViewBookmark);
 		}
 	}

@@ -36,7 +36,7 @@ public class SerializeAvaloniaTests : BaseTest
 					{
 						SelectedRows =
 						[
-							new(new("Label"), new TabViewBookmark()
+							new("Label", new TabViewBookmark()
 							{
 								Width = 99,
 							}),

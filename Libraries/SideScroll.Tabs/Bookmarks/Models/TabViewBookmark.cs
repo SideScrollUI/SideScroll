@@ -122,11 +122,11 @@ public class TabViewBookmark
 		TabViewBookmark tabBookmark = rootBookmark;
 		foreach (object obj in objs)
 		{
-			string? dataKey = new SelectedRow(obj).ToString();
-			if (dataKey == null) throw new Exception("SelectedRow DataKey is null");
+			string? label = new SelectedRow(obj).ToString();
+			if (label == null) throw new Exception("SelectedRow Label is null");
 
 			TabViewBookmark newBookmark = new();
-			tabBookmark.SelectRow(new(new(dataKey), newBookmark));
+			tabBookmark.SelectRow(new(label, newBookmark));
 			tabBookmark = newBookmark;
 		}
 		return rootBookmark;
@@ -137,7 +137,7 @@ public class TabViewBookmark
 	{
 		var selectedRows = list
 			.Cast<object>()
-			.Select(obj => new SelectedRowView(new(obj)))
+			.Select(obj => new SelectedRowView(new SelectedRow(obj)))
 			.ToList();
 
 		return new TabViewBookmark
@@ -157,7 +157,7 @@ public class TabViewBookmark
 		TabViewBookmark tabBookmark = this;
 		foreach (string label in labels)
 		{
-			var view = new SelectedRowView(new(label));
+			var view = new SelectedRowView(label);
 			tabBookmark.SelectRows([view]);
 			tabBookmark = view.TabViewBookmark;
 		}
@@ -178,7 +178,7 @@ public class TabViewBookmark
 	public void SelectRows(params string[] labels)
 	{
 		var selectedRows = labels.Select(label =>
-			new SelectedRowView(new SelectedRow(label))
+			new SelectedRowView(label)
 		).ToHashSet();
 
 		SelectRows(selectedRows);
@@ -196,9 +196,9 @@ public class TabViewBookmark
 		];
 	}
 
-	public SelectedRowView AddChild(string dataKey)
+	public SelectedRowView AddChild(string label)
 	{
-		SelectedRowView childBookmark = new(new(dataKey));
+		SelectedRowView childBookmark = new(label);
 		if (TabDatas.Count == 0)
 		{
 			TabDatas.Add(new());
