@@ -2,6 +2,8 @@ using SideScroll.Attributes;
 using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Serialize.DataRepos;
+using SideScroll.Tabs.Bookmarks.Models;
+using SideScroll.Tabs.Bookmarks.Tabs;
 using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Bookmarks;
@@ -12,7 +14,7 @@ public class LinkedBookmark(LinkUri linkUri, Bookmark bookmark)
 	[MaxHeight(150)]
 	public LinkUri LinkUri => linkUri;
 	public Bookmark Bookmark => bookmark;
-	public DateTime TimeStamp => Bookmark.TimeStamp;
+	public DateTime? CreatedTime => Bookmark.CreatedTime;
 
 	public string LinkId => linkUri.ToString();
 
@@ -55,7 +57,7 @@ public class LinkCollection
 
 			Items.Clear();
 
-			_dataRepoView.LoadAllOrderBy(call, nameof(LinkedBookmark.TimeStamp));
+			_dataRepoView.LoadAllOrderBy(call, nameof(LinkedBookmark.CreatedTime));
 
 			foreach (LinkedBookmark linkedBookmark in _dataRepoView.Values)
 			{

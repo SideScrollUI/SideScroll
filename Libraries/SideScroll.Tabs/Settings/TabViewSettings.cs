@@ -1,9 +1,8 @@
-using SideScroll.Attributes;
+using SideScroll.Tabs.Bookmarks.Models;
 using System.Text.Json.Serialization;
 
 namespace SideScroll.Tabs.Settings;
 
-[PublicData]
 public class TabViewSettings
 {
 	public string? Address
@@ -34,7 +33,7 @@ public class TabViewSettings
 		}
 	}
 
-	public double? SplitterDistance { get; set; }
+	public double? Width { get; set; }
 
 	public List<TabDataSettings> TabDataSettings { get; set; } = [];
 

@@ -2,7 +2,7 @@ using Avalonia.Media;
 using NUnit.Framework;
 using SideScroll.Serialize;
 using SideScroll.Serialize.Atlas;
-using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Bookmarks.Models;
 
 namespace SideScroll.Avalonia.Tests;
 
@@ -28,22 +28,32 @@ public class SerializeAvaloniaTests : BaseTest
 	{
 		Bookmark input = new()
 		{
-			TabBookmark = new TabBookmark
+			TabBookmark = new()
 			{
-				ChildBookmarks = new Dictionary<string, TabBookmark>
-				{
-					{ "test", new TabBookmark() }
-				}
+				TabDatas =
+				[
+					new()
+					{
+						SelectedRows =
+						[
+							new("Label", new TabBookmark()
+							{
+								Width = 99,
+							}),
+						],
+					}
+				],
 			},
+			CreatedTime = DateTime.Now,
 		};
-		input.TabBookmark.Bookmark = input;
 		_serializer!.Save(Call, input);
 		Bookmark output = _serializer.Load<Bookmark>(Call);
 
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output.TabBookmark, Is.Not.Null);
-		Assert.That(output.TabBookmark.ChildBookmarks, Is.Not.Null);
-		Assert.That(output.TabBookmark.ChildBookmarks, Has.Exactly(1).Items);
+		Assert.That(output.TabBookmark.TabDatas, Has.Exactly(1).Items);
+		Assert.That(output.TabBookmark.TabDatas[0].SelectedRows, Has.Exactly(1).Items);
+		Assert.That(output.TabBookmark.TabDatas[0].SelectedRows[0].TabBookmark.Width, Is.EqualTo(99));
 	}
 
 	[Test]

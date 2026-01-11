@@ -1,5 +1,6 @@
 using SideScroll.Attributes;
 using SideScroll.Resources;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tabs.Toolbar;

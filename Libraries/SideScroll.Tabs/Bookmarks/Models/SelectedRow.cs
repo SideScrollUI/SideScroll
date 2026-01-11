@@ -2,7 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Utilities;
 
-namespace SideScroll.Tabs.Settings;
+namespace SideScroll.Tabs.Bookmarks.Models;
 
 [PublicData]
 public class SelectedRow : IEquatable<SelectedRow>
@@ -57,7 +57,7 @@ public class SelectedRow : IEquatable<SelectedRow>
 			   Label == other.Label &&
 			   DataKey == other.DataKey &&
 			   DataValue == other.DataValue &&
-			   (RowIndex == other.RowIndex || RowIndex == null || other.RowIndex == null || RowIndex < 0 || other.RowIndex < 0); // Allow matching on missing rows
+			   (RowIndex == other.RowIndex || RowIndex == null || other.RowIndex == null); // Allow matching on missing rows
 	}
 
 	public override int GetHashCode()

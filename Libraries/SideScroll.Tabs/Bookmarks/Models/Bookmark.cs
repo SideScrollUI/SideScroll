@@ -1,7 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Serialize;
 
-namespace SideScroll.Tabs.Bookmarks;
+namespace SideScroll.Tabs.Bookmarks.Models;
 
 public enum BookmarkType
 {
@@ -14,23 +14,12 @@ public enum BookmarkType
 [PublicData]
 public class Bookmark
 {
-	[Name("Bookmark")]
 	public string? Name { get; set; }
 
 	public string? Changed { get; set; } // what was just selected, used for naming, find better default name
 
 	[HiddenColumn]
-	public Type? Type { get; set; } // Must be ITab
-
-	public string Address => TabBookmark?.GetAddress() ?? "";
-
-	[HiddenColumn]
-	public string Path => (Name != null ? (Name + ":\n") : "") + Address;
-
-	public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
-
-	[HiddenColumn]
-	public TabBookmark TabBookmark { get; set; } = new();
+	public Type? TabType { get; set; } // Must be ITab
 
 	[HiddenColumn]
 	public BookmarkType BookmarkType { get; set; }
@@ -38,11 +27,20 @@ public class Bookmark
 	[HiddenColumn]
 	public bool Imported { get; set; }
 
-	public override string ToString() => Path;
+	public string Address => TabBookmark?.GetAddress() ?? "";
+
+	[HiddenColumn]
+	public string Label => (Name != null ? (Name + ":\n") : "") + Address;
+
+	public DateTime? CreatedTime { get; set; }
+
+	[HiddenColumn]
+	public TabBookmark TabBookmark { get; set; } = new();
+
+	public override string ToString() => Label;
 
 	public Bookmark()
 	{
-		TabBookmark.Bookmark = this;
 		TabBookmark.IsRoot = true;
 	}
 
@@ -51,11 +49,11 @@ public class Bookmark
 		return SerializerMemory.ToBase64String(call, this, publicOnly);
 	}
 
-	public static Bookmark Create(Call call, string encoded, bool publicOnly)
+	public static Bookmark Create(Call call, string base64, bool publicOnly)
 	{
 		var serializer = SerializerMemory.Create();
 		serializer.PublicOnly = publicOnly;
-		serializer.LoadBase64String(encoded);
+		serializer.LoadBase64String(base64);
 
 		Bookmark bookmark = serializer.Load<Bookmark>(call);
 		bookmark.Imported = true;
@@ -66,13 +64,14 @@ public class Bookmark
 	{
 		Bookmark bookmark = new()
 		{
-			TabBookmark = TabBookmark.Create(labels)
+			TabBookmark = TabBookmark.Create(labels),
+			CreatedTime = DateTime.Now,
 		};
 		return bookmark;
 	}
 
-	public void Reinitialize()
+	internal void Import(Project project)
 	{
-		TabBookmark.Reinitialize(this);
+		TabBookmark.Import(project);
 	}
 }

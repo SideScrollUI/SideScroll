@@ -1,11 +1,12 @@
 using SideScroll.Attributes;
 using SideScroll.Resources;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
 using SideScroll.Tasks;
 using System.Collections;
 
-namespace SideScroll.Tabs.Bookmarks;
+namespace SideScroll.Tabs.Bookmarks.Tabs;
 
 public class TabLinkCollection(LinkCollection links) : ITab
 {
@@ -69,7 +70,7 @@ public class TabLinkCollection(LinkCollection links) : ITab
 			base.GetBookmark(tabBookmark);
 
 			// Set links created from this link to always start from the child Link Tab
-			foreach (TabBookmark childBookmark in tabBookmark.ChildBookmarks.Values)
+			foreach (TabBookmark childBookmark in tabBookmark.SelectedTabViews)
 			{
 				childBookmark.IsRoot = true;
 			}
