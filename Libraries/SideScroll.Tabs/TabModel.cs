@@ -284,7 +284,7 @@ public class TabModel
 
 	private void AddDictionary(IDictionary dictionary)
 	{
-		var sortedList = new List<DictionaryEntry>(); // can't sort ItemCollection
+		List<DictionaryEntry> sortedList = []; // can't sort ItemCollection
 		try
 		{
 			foreach (DictionaryEntry item in dictionary)

@@ -1,6 +1,6 @@
 # Project Setup
 
-## Install SideScroll dotnet Template
+## Install dotnet SideScroll Templates
 
 ```bash
 dotnet new install SideScroll.Templates
