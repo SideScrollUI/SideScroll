@@ -200,6 +200,8 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		Legend?.RefreshModel();
 
 		IsVisible = true;
+		
+		InvalidateChart();
 	}
 
 	public void Refresh()

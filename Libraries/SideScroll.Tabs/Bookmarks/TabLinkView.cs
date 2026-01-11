@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Serialize;
+using SideScroll.Tabs.Bookmarks.Models;
 
 namespace SideScroll.Tabs.Bookmarks;
 
@@ -18,7 +19,7 @@ public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab,
 	public string LinkId => linkedBookmark.LinkId;
 
 	[Formatted]
-	public TimeSpan Age => Bookmark.TimeStamp.Age();
+	public TimeSpan? Age => Bookmark.CreatedTime?.Age();
 
 	[HiddenColumn]
 	public LinkedBookmark LinkedBookmark => linkedBookmark;
@@ -32,7 +33,7 @@ public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab,
 	[HiddenColumn]
 	public ITab? Tab => Bookmark.TabBookmark.Tab;
 
-	public override string ToString() => Bookmark.Name ?? Bookmark.Path;
+	public override string ToString() => Bookmark.Name ?? Bookmark.Label;
 
 	public TabInstance Create()
 	{
@@ -41,7 +42,7 @@ public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab,
 
 	public static TabInstance Create(LinkedBookmark linkedBookmark, Project project, ITab iTab)
 	{
-		Type tabType = linkedBookmark.Bookmark.Type ?? throw new ArgumentNullException("Bookmark.Type");
+		Type tabType = linkedBookmark.Bookmark.TabType ?? throw new ArgumentNullException("Bookmark.Type");
 
 		if (!typeof(ITab).IsAssignableFrom(tabType))
 		{
@@ -51,9 +52,8 @@ public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab,
 		var call = new Call();
 		LinkedBookmark linkedBookmarkCopy = linkedBookmark.DeepClone(call, true); // This will get modified as users navigate
 		Bookmark bookmark = linkedBookmarkCopy.Bookmark;
-		bookmark.Reinitialize();
 
-		ITab tab = bookmark.TabBookmark.Tab ?? (ITab)Activator.CreateInstance(bookmark.Type!)!;
+		ITab tab = bookmark.TabBookmark.Tab ?? (ITab)Activator.CreateInstance(bookmark.TabType!)!;
 
 		if (tab is IReload reloadable)
 		{

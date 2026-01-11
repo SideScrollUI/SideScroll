@@ -10,7 +10,6 @@ using SideScroll.Avalonia.Utilities;
 using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Tabs;
-using SideScroll.Tabs.Settings;
 using System.Collections;
 using System.Reflection;
 

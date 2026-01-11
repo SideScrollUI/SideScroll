@@ -15,7 +15,7 @@ using SideScroll.Avalonia.Utilities;
 using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
-using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
 using System.Collections;
@@ -557,13 +557,14 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	private void AddColumns()
 	{
-		List<TabDataSettings.MethodColumn> methodColumns = TabDataSettings.GetButtonMethods(ElementType);
-		foreach (TabDataSettings.MethodColumn methodColumn in methodColumns)
+		List<TabMethodColumn> methodColumns = TabDataColumns.GetMethodColumns(ElementType);
+		foreach (TabMethodColumn methodColumn in methodColumns)
 		{
 			AddButtonColumn(methodColumn);
 		}
 
-		List<TabDataSettings.PropertyColumn> propertyColumns = TabDataSettings.GetPropertiesAsColumns(ElementType);
+		TabDataColumns dataColumns = new(TabDataSettings.ColumnNameOrder);
+		List<TabPropertyColumn> propertyColumns = dataColumns.GetPropertyColumns(ElementType);
 
 		// Filter [Hide(null)]
 		propertyColumns = propertyColumns
@@ -595,7 +596,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			.Select(p => p.IsStyled())
 			.Max();
 
-		foreach (TabDataSettings.PropertyColumn propertyColumn in propertyColumns)
+		foreach (TabPropertyColumn propertyColumn in propertyColumns)
 		{
 			AddColumn(propertyColumn.Label, propertyColumn.PropertyInfo, styleCells);
 		}
@@ -726,10 +727,10 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	public void AddButtonColumn(string methodName)
 	{
 		MethodInfo methodInfo = ElementType.GetMethod(methodName)!;
-		AddButtonColumn(new TabDataSettings.MethodColumn(methodInfo));
+		AddButtonColumn(new TabMethodColumn(methodInfo));
 	}
 
-	public void AddButtonColumn(TabDataSettings.MethodColumn methodColumn)
+	public void AddButtonColumn(TabMethodColumn methodColumn)
 	{
 		var column = new DataGridButtonColumn(methodColumn.MethodInfo, methodColumn.Label);
 		DataGrid.Columns.Add(column);
@@ -795,7 +796,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			rowObjects.Add(matchingObject);
 		}
 
-		if (TabInstance.TabBookmark?.Bookmark?.Imported == true && rowObjects.Count != TabDataSettings.SelectedRows.Count)
+		if (TabDataSettings?.SelectionType == SelectionType.Link && rowObjects.Count != TabDataSettings.SelectedRows.Count)
 		{
 			// Replace with call and CallDebugLogger?
 			Debug.Print("Failed to find all bookmarked rows, Selected: [" + string.Join(", ", TabDataSettings.SelectedRows) + "], Found: [" + string.Join(", ", rowObjects) + "]");
@@ -1101,7 +1102,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	{
 		if (TabInstance.FilterBookmarkNode != null)
 		{
-			return TabInstance.FilterBookmarkNode.SelectedObjects.Contains(obj);
+			return TabInstance.FilterBookmarkNode.SelectedRows.Contains(obj);
 		}
 		else
 		{

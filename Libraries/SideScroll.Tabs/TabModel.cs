@@ -2,9 +2,8 @@ using SideScroll.Attributes;
 using SideScroll.Charts;
 using SideScroll.Collections;
 using SideScroll.Extensions;
-using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Lists;
-using SideScroll.Tabs.Settings;
 using SideScroll.Tasks;
 using System.Collections;
 using System.Data;
@@ -381,7 +380,7 @@ public class TabModel
 			{
 				Skippable = skippableAttribute.Value;
 			}
-			else if (firstItem is not ITab && TabDataSettings.GetVisibleProperties(elementType).Count > 1)
+			else if (firstItem is not ITab && TabDataColumns.GetVisibleProperties(elementType).Count > 1)
 			{
 				Skippable = true;
 			}
@@ -413,19 +412,16 @@ public class TabModel
 
 	public TabBookmark FindMatches(Filter filter, int depth)
 	{
-		TabBookmark tabBookmark = new()
-		{
-			Name = Name,
-		};
+		TabBookmark tabBookmark = new();
 
 		depth = Math.Min(depth, MaxSearchDepth);
 		depth--;
 		foreach (IList iList in ItemList)
 		{
-			List<PropertyInfo> visibleProperties = TabDataSettings.GetVisibleElementProperties(iList);
+			List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(iList);
 
-			TabDataSettings tabDataSettings = new();
-			tabBookmark.ViewSettings.TabDataSettings.Add(tabDataSettings);
+			TabDataBookmark tabDataBookmark = new();
+			tabBookmark.TabDatas.Add(tabDataBookmark);
 
 			foreach (object obj in iList)
 			{
@@ -435,8 +431,7 @@ public class TabModel
 					{
 						Object = obj,
 					};
-					tabDataSettings.SelectedRows.Add(selectedRow);
-					tabBookmark.SelectedObjects.Add(obj);
+					tabDataBookmark.SelectedRows.Add(new(selectedRow));
 				}
 				else if (depth >= 0)
 				{
@@ -444,16 +439,14 @@ public class TabModel
 					if (tabModel != null)
 					{
 						TabBookmark childNode = tabModel.FindMatches(filter, depth);
-						if (childNode.SelectedObjects.Count > 0)
+						if (childNode.SelectedRows.Count > 0)
 						{
 							childNode.TabModel = tabModel;
 							SelectedRow selectedRow = new()
 							{
 								Object = obj,
 							};
-							tabDataSettings.SelectedRows.Add(selectedRow);
-							tabBookmark.ChildBookmarks.Add(childNode.Name!, childNode);
-							tabBookmark.SelectedObjects.Add(obj);
+							tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
 						}
 					}
 				}

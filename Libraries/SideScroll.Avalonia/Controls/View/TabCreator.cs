@@ -3,7 +3,7 @@ using SideScroll.Attributes;
 using SideScroll.Avalonia.Tabs;
 using SideScroll.Extensions;
 using SideScroll.Tabs;
-using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Settings;
 using SideScroll.Utilities;
 using System.Diagnostics;
@@ -21,11 +21,11 @@ public static class TabCreator
 
 		if (label == null)
 		{
-			// use object? or inner value?
+			// Use object? or inner value?
 			label = obj.Formatted();
 			if (label.IsNullOrEmpty())
 			{
-				label = "(" + obj.GetType().Name + ")";
+				label = '(' + obj.GetType().Name + ')';
 			}
 		}
 
@@ -42,23 +42,25 @@ public static class TabCreator
 			value = tabCreator.CreateControl(value, out labelOverride);
 		}
 
-		label = labelOverride ?? label; // update label before comparing bookmarks
+		label = labelOverride ?? label; // Update label before comparing bookmarks
 
-		TabBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.tabInstance.tabBookmark = tabBookmark;
-		if (parentTabInstance.TabBookmark is TabBookmark parentTabBookmark && parentTabBookmark.ChildBookmarks != null)
+		TabBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.Instance.TabBookmark = tabBookmark;
+		if (parentTabInstance.TabBookmark is TabBookmark parentTabBookmark && parentTabBookmark.TabDatas != null)
 		{
 			string dataKey = new SelectedRow(obj).ToString() ?? label;
-			if (parentTabBookmark.ChildBookmarks.TryGetValue(dataKey, out tabBookmark))
+			if (parentTabBookmark.SelectedRowViews.FirstOrDefault(s => s.ToString() == dataKey) is SelectedRowView selectedRowView)
 			{
+				tabBookmark = selectedRowView.TabBookmark;
+
 				// FindMatches only
 				if (tabBookmark.TabModel != null)
 				{
 					value = tabBookmark.TabModel;
 				}
 			}
-			else if (parentTabBookmark.Bookmark?.Imported == true && parentTabBookmark.ChildBookmarks.Count > 0)
+			else if (parentTabBookmark.SelectionType == SelectionType.Link && parentTabBookmark.SelectedRows.Count > 0)
 			{
-				Debug.WriteLine($"Failed to find imported tab bookmark for {dataKey} in [{parentTabBookmark.ChildBookmarks.Keys.CollectionToString()}]");
+				Debug.WriteLine($"Failed to find imported tab bookmark for {dataKey} in [{parentTabBookmark.SelectedRows.CollectionToString()}]");
 			}
 		}
 		if (value == null)

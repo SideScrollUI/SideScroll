@@ -5,7 +5,7 @@ using SideScroll.Logs;
 using SideScroll.Serialize;
 using SideScroll.Serialize.Atlas.Schema;
 using SideScroll.Serialize.DataRepos;
-using SideScroll.Tabs.Bookmarks;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
 using SideScroll.Tasks;
@@ -472,7 +472,8 @@ public class TabInstance : IDisposable
 			if (elementType == null) continue;
 
 			var tabDataSettings = TabViewSettings.GetData(i);
-			List<TabDataSettings.PropertyColumn> propertyColumns = tabDataSettings.GetPropertiesAsColumns(elementType);
+			TabDataColumns dataColumns = new(tabDataSettings.ColumnNameOrder);
+			List<TabPropertyColumn> propertyColumns = dataColumns.GetPropertyColumns(elementType);
 			int itemCount = 0;
 			foreach (object obj in iList)
 			{
@@ -671,8 +672,9 @@ public class TabInstance : IDisposable
 		Bookmark bookmark = new()
 		{
 			Name = Label,
-			Type = iTab?.GetType(),
-			TabBookmark = { IsRoot = true }
+			TabType = iTab?.GetType(),
+			TabBookmark = { IsRoot = true },
+			CreatedTime = DateTime.Now,
 		};
 		GetBookmark(bookmark.TabBookmark);
 		bookmark = bookmark.DeepClone(TaskInstance.Call); // Sanitize and test bookmark
@@ -688,11 +690,8 @@ public class TabInstance : IDisposable
 
 	public virtual void GetBookmark(TabBookmark tabBookmark)
 	{
-		tabBookmark.Name = Label;
-		tabBookmark.ViewSettings = TabViewSettings.TryDeepClone() ?? new();
-		tabBookmark.DataRepoGroupId = DataRepoInstance?.GroupId;
-		tabBookmark.DataRepoType = DataRepoInstance?.DataType;
-		tabBookmark.SelectedRow = SelectedRow;
+		tabBookmark.Width = TabViewSettings.Width;
+		var viewSettings = TabViewSettings.TryDeepClone() ?? new();
 
 		/*if (DataRepoInstance != null)
 		{
@@ -730,22 +729,45 @@ public class TabInstance : IDisposable
 				(tabBookmark.IsRoot || IsRoot))
 			{
 				tabBookmark.Tab = iTab;
-				tabBookmark.Bookmark!.Name = iTab.ToString();
 			}
 		}
 
-		foreach (TabInstance tabInstance in ChildTabInstances.Values)
+		var lookup = ChildTabInstances.Values.ToDictionary(t => (t.SelectedRow ?? new()).ToString() ?? "");
+
+		foreach (TabDataSettings dataSettings in viewSettings.TabDataSettings)
 		{
-			string dataKey = tabInstance.SelectedRow?.ToString() ?? tabInstance.Label;
-			if (tabBookmark.ChildBookmarks.ContainsKey(dataKey))
+			TabDataBookmark dataBookmark = new()
+			{
+				Filter = dataSettings.Filter,
+				ColumnNameOrder = dataSettings.ColumnNameOrder,
+				DataRepoGroupId = DataRepoInstance?.GroupId,
+				DataRepoType = DataRepoInstance?.DataType,
+			};
+			tabBookmark.TabDatas.Add(dataBookmark);
+			foreach (SelectedRow selectedRow in dataSettings.SelectedRows)
+			{
+				SelectedRowView selectedRowView = new(selectedRow);
+				if (lookup.TryGetValue(selectedRow.ToString() ?? "", out TabInstance? tabInstance))
+				{
+					tabInstance.GetBookmark(selectedRowView.TabBookmark);
+				}
+				dataBookmark.SelectedRows.Add(selectedRowView);
+			}
+		}
+
+		// Add children that don't have parents?
+		/*foreach (TabInstance tabInstance in ChildTabInstances.Values)
+		{
+			string label = tabInstance.SelectedRow?.ToString() ?? tabInstance.Label;
+			if (tabBookmark.SelectedRows.Any(s => s.ToString() == label))
 				continue;
 
-			var childBookmark = tabBookmark.AddChild(dataKey);
-			tabInstance.GetBookmark(childBookmark);
-		}
+			var childBookmark = tabBookmark.AddChild(label);
+			tabInstance.GetBookmark(childBookmark.TabBookmark);
+		}*/
 	}
 
-	public TabViewSettings LoadBookmark(Bookmark bookmark)
+	public void LoadBookmark(Bookmark bookmark)
 	{
 		TabBookmark = null;
 		if (bookmark != null)
@@ -755,13 +777,11 @@ public class TabInstance : IDisposable
 				Type type = iTab.GetType();
 				if (type.GetCustomAttribute<PrivateDataAttribute>() != null)
 				{
-					return TabViewSettings;
+					return;
 				}
 			}
 			SelectBookmark(bookmark.TabBookmark);
 		}
-
-		return TabViewSettings; // remove?
 	}
 
 	public virtual void SelectBookmark(TabBookmark tabBookmark, bool reload = false)
@@ -772,7 +792,7 @@ public class TabInstance : IDisposable
 		}
 
 		TabBookmark = tabBookmark;
-		TabViewSettings = tabBookmark.ViewSettings;
+		TabViewSettings = tabBookmark.ToViewSettings();
 
 		if (OnLoadBookmark != null)
 		{
@@ -809,9 +829,9 @@ public class TabInstance : IDisposable
 		if (_settingLoaded && !reload && TabViewSettings != null)
 			return TabViewSettings;
 
-		if (TabBookmark?.ViewSettings != null)
+		if (TabBookmark != null)
 		{
-			TabViewSettings = TabBookmark.ViewSettings;
+			TabViewSettings = TabBookmark.ToViewSettings();
 		}
 		else
 		{
@@ -819,11 +839,6 @@ public class TabInstance : IDisposable
 		}
 		_settingLoaded = true;
 		return TabViewSettings;
-	}
-
-	protected SortedDictionary<string, T> GetBookmarkSelectedData<T>()
-	{
-		return TabBookmark?.GetSelectedData<T>() ?? [];
 	}
 
 	public T? GetBookmarkData<T>(string name = TabBookmark.DefaultDataName)
@@ -960,7 +975,7 @@ public class TabInstance : IDisposable
 
 		if (TabBookmark != null)
 		{
-			if (TabBookmark.ChildBookmarks.TryGetValue(model.Name, out TabBookmark? tabChildBookmark))
+			if (TabBookmark.TryGetValue(model.Name, out TabBookmark? tabChildBookmark))
 			{
 				childTabInstance.TabBookmark = tabChildBookmark;
 			}

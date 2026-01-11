@@ -2,11 +2,12 @@ using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Resources;
 using SideScroll.Serialize.Json;
+using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
 using System.Text.Json;
 
-namespace SideScroll.Tabs.Bookmarks;
+namespace SideScroll.Tabs.Bookmarks.Tabs;
 
 public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection linkCollection) : ITab
 {
@@ -21,10 +22,11 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection lin
 	[Hidden]
 	public LinkedBookmark LinkedBookmark => linkedBookmark;
 
+	[WordWrap]
 	public Bookmark Bookmark => linkedBookmark.Bookmark;
 
 	[Formatted]
-	public TimeSpan Age => Bookmark.TimeStamp.Age();
+	public TimeSpan? Age => Bookmark.CreatedTime?.Age();
 
 	public override string ToString() => Bookmark.ToString();
 

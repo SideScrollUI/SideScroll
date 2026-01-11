@@ -1,6 +1,6 @@
 using SideScroll.Tabs.Lists;
 
-namespace SideScroll.Tabs.Bookmarks;
+namespace SideScroll.Tabs.Bookmarks.Tabs;
 
 public class TabLinks : ITab
 {
