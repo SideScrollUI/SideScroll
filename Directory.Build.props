@@ -2,6 +2,8 @@
   <PropertyGroup>
     <Version>0.15</Version>
     <PackageReleaseNotes>
+    - Simplified Bookmark Schema to group the SelectedRow and TabBookmark together
+      - This new schema should also make it easier to add Json Bookmark serialization in the future
     - Added ListEnumValue for showing enums and flags
     - Added Nested DataGrid Filter Support
       - Filters now allow nesting via parenthesis
