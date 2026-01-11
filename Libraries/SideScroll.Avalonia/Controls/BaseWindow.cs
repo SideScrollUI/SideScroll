@@ -16,6 +16,8 @@ namespace SideScroll.Avalonia.Controls;
 
 public class BaseWindow : Window
 {
+	public static int WindowsBorderWidth = 7;
+
 	public static int DefaultMinWidth { get; set; } = 700;
 	public static int DefaultMinHeight { get; set; } = 500;
 
@@ -217,7 +219,11 @@ public class BaseWindow : Window
 			Width = Math.Clamp(value.Width, MinWidth, maxBounds.Width);
 			Height = Math.Clamp(value.Height, MinHeight, MaxHeight);
 
-			double minLeft = -10; // Left position for Windows starts at -10
+			double minLeft = 0;
+			if (Project.UserSettings.EnableCustomTitleBar == false)
+			{
+				minLeft = -WindowsBorderWidth;
+			}
 			double left = Math.Clamp(value.Left, minLeft, maxBounds.Width - Width + minLeft); // Values can be negative
 
 			double maxHeight = MaxHeight;

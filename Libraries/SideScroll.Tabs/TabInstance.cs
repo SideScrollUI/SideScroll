@@ -1020,7 +1020,7 @@ public class TabInstance : IDisposable
 		OnValidate?.Invoke(this, EventArgs.Empty);
 	}
 
-	protected void CopyToClipboard(string text)
+	public void CopyToClipboard(string text)
 	{
 		OnCopyToClipboard?.Invoke(this, new CopyToClipboardEventArgs(text));
 	}
@@ -1030,7 +1030,7 @@ public class TabInstance : IDisposable
 		WriteIndented = true
 	};
 
-	protected void CopyToClipboard(object? obj)
+	public void CopyToClipboard(object? obj)
 	{
 		string json = JsonSerializer.Serialize(obj, _jsonSerializerOptions);
 		CopyToClipboard(json);
