@@ -12,7 +12,7 @@ public class SampleItem
 	[DataKey, Required, StringLength(30)]
 	public string? Name { get; set; }
 
-	[WordWrap, Watermark("Description"), AcceptsReturn]
+	[WordWrap, Watermark("Description"), AcceptsReturn, MinWidth(350)]
 	public string? Description { get; set; }
 
 	[ReadOnly(true)]

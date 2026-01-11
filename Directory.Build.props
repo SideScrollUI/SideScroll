@@ -15,6 +15,7 @@
     - Fixed Mouse Clicks not being detected around Image and Toolbar Button Borders
     - Improved serializer handling when changing nullability of class members
     - Moved SideScroll.Avalonia.ScreenCapture project into SideScroll.Avalonia
+    - Added MinWidth attribute support for TabTextBox
     - Added Summary docs for ListSeries, ChartView, Paths, and WordSpacer
     </PackageReleaseNotes>
 

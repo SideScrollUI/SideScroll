@@ -74,7 +74,7 @@ public class TabTextBox : TextBox
 	{
 		IsReadOnly = !property.IsEditable;
 
-		PasswordCharAttribute? passwordCharAttribute = property.GetCustomAttribute<PasswordCharAttribute>();
+		var passwordCharAttribute = property.GetCustomAttribute<PasswordCharAttribute>();
 		if (passwordCharAttribute != null)
 		{
 			PasswordChar = passwordCharAttribute.Character;
@@ -87,14 +87,20 @@ public class TabTextBox : TextBox
 			TextWrapping = TextWrapping.Wrap;
 		}
 
-		AcceptsReturnAttribute? acceptsReturnAttribute = property.GetCustomAttribute<AcceptsReturnAttribute>();
+		var acceptsReturnAttribute = property.GetCustomAttribute<AcceptsReturnAttribute>();
 		if (acceptsReturnAttribute != null)
 		{
 			AcceptsReturn = true;
 			AcceptsPlainEnter = acceptsReturnAttribute.AcceptsPlainEnter;
 		}
 
-		MaxWidthAttribute? maxWidthAttribute = property.GetCustomAttribute<MaxWidthAttribute>();
+		var minWidthAttribute = property.GetCustomAttribute<MinWidthAttribute>();
+		if (minWidthAttribute != null)
+		{
+			MinWidth = minWidthAttribute.MinWidth;
+		}
+
+		var maxWidthAttribute = property.GetCustomAttribute<MaxWidthAttribute>();
 		if (maxWidthAttribute != null)
 		{
 			MaxWidth = maxWidthAttribute.MaxWidth;
@@ -104,7 +110,7 @@ public class TabTextBox : TextBox
 			MaxWidth = TabForm.ControlMaxWidth;
 		}
 
-		MaxHeightAttribute? maxHeightAttribute = property.GetCustomAttribute<MaxHeightAttribute>();
+		var maxHeightAttribute = property.GetCustomAttribute<MaxHeightAttribute>();
 		if (maxHeightAttribute != null)
 		{
 			MaxHeight = maxHeightAttribute.MaxHeight;
