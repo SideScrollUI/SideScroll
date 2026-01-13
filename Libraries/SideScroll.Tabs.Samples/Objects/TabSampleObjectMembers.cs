@@ -21,8 +21,8 @@ public class TabSampleObjectMembers : ITab
 
 public class SampleMembers
 {
-	public static readonly string? StaticStringField = "Static Value";
-	public static string? StaticStringProperty { get; set; } = "Static Value";
+	public static readonly string? StaticStringField = "Static Field Value";
+	public static string? StaticStringProperty { get; set; } = "Static Property Value";
 
 	public bool BoolProperty => true;
 	public bool BoolField = false;

@@ -233,7 +233,7 @@ public class TabBookmark
 
 	public TabViewSettings ToViewSettings()
 	{
-		return new TabViewSettings()
+		return new TabViewSettings
 		{
 			Width = Width,
 			TabDataSettings = TabDatas.Select(t => t.ToDataSettings()).ToList(),

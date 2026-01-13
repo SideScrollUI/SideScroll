@@ -71,6 +71,7 @@ public class TabDataBookmark
 
 	public void Import(Project project)
 	{
+		SelectionType = SelectionType.Link;
 		foreach (SelectedRowView selectedRowView in SelectedRows)
 		{
 			var row = selectedRowView.SelectedRow;
@@ -93,12 +94,12 @@ public class TabDataBookmark
 
 	public TabDataSettings ToDataSettings()
 	{
-		return new TabDataSettings()
+		return new TabDataSettings
 		{
 			ColumnNameOrder = ColumnNameOrder,
 			Filter = Filter,
 			SelectedRows = SelectedRows.Select(s => s.SelectedRow).ToHashSet(),
-			SelectionType = SelectionType.Link,
+			SelectionType = SelectionType,
 		};
 	}
 }

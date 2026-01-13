@@ -83,9 +83,13 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			DataGrid.ItemsSource = CollectionView; // DataGrid autoselects on assignment :(
 
 			if (TabModel.AutoSelectSaved == AutoSelectType.None && !TabModel.AutoSelectDefault)
+			{
 				ClearSelection();
+			}
 			else
+			{
 				LoadSettings();
+			}
 
 			Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 		}
@@ -178,9 +182,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 		if (AutoGenerateColumns)
 		{
-			_columnNames = [];
-			_columnProperties = [];
-
 			if (List is DataView dataView)
 			{
 				AddDataTableColumns(dataView);
