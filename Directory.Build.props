@@ -19,7 +19,7 @@
     - Added Summary docs for ListSeries, ChartView, Paths, and WordSpacer
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.10</AvaloniaVersion>
+    <AvaloniaVersion>11.3.11</AvaloniaVersion>
     <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>

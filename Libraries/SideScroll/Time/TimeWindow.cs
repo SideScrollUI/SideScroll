@@ -120,10 +120,10 @@ public class TimeWindow
 	/// <summary>
 	/// Calculates the count of values for each period within this time window
 	/// </summary>
-	/// <param name="addGaps">Whether to add NaN gaps between periods with no data</param>
-	public List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration, bool addGaps = false)
+	/// <param name="fillAndMerge">Whether to add NaN gaps between periods with no data</param>
+	public List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration, bool fillAndMerge = false)
 	{
-		return TimeRangePeriod.PeriodCounts(timeRangeValues, this, periodDuration, addGaps);
+		return TimeRangePeriod.PeriodCounts(timeRangeValues, this, periodDuration, fillAndMerge);
 	}
 }
 
