@@ -28,7 +28,7 @@ public class TabBookmark
 			if (addresses.Count <= 1)
 				return addresses.FirstOrDefault();
 
-			return "[" + string.Join(", ", addresses) + "] ";
+			return '[' + string.Join(", ", addresses) + ']';
 		}
 	}
 
@@ -209,15 +209,20 @@ public class TabBookmark
 		];
 	}
 
-	public SelectedRowView AddChild(string label)
+	public SelectedRowView AddSelected(string label)
 	{
-		SelectedRowView childBookmark = new(label);
+		SelectedRowView selectedRowView = new(label);
+		AddSelected(selectedRowView);
+		return selectedRowView;
+	}
+
+	public void AddSelected(SelectedRowView selectedRowView)
+	{
 		if (TabDatas.Count == 0)
 		{
 			TabDatas.Add(new());
 		}
-		TabDatas.First().SelectedRows.Add(childBookmark);
-		return childBookmark;
+		TabDatas.First().SelectedRows.Add(selectedRowView);
 	}
 
 	public bool TryGetValue(string label, out TabBookmark? childBookmarkNode)

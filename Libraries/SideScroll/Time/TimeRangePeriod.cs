@@ -168,13 +168,9 @@ public class TimeRangePeriod : ITags
 				// Calculate intersection with period using window-clipped times
 				DateTime binStartTime = valueStartTime.Max(period.StartTime);
 				DateTime binEndTime = valueEndTime.Min(period.EndTime);
-				
-				// Track actual coverage for trimming
-				DateTime clippedBinStart = binStartTime;
-				DateTime clippedBinEnd = binEndTime;
 
-				period.MinStartTime = period.MinStartTime?.Min(clippedBinStart) ?? clippedBinStart;
-				period.MaxEndTime = period.MaxEndTime?.Max(clippedBinEnd) ?? clippedBinEnd;
+				period.MinStartTime = period.MinStartTime?.Min(binStartTime) ?? binStartTime;
+				period.MaxEndTime = period.MaxEndTime?.Max(binEndTime) ?? binEndTime;
 
 				period.MinValue = Math.Min(period.MinValue, timeRangeValue.Value);
 				period.MaxValue = Math.Max(period.MaxValue, timeRangeValue.Value);
