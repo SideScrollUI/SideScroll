@@ -13,13 +13,15 @@
     - Fixed Custom Titlebar not responding to mouse clicks near the bottom of the title bar when maximized
     - Fixed Windows left positioning when the Custom Titlebar is used
     - Fixed Mouse Clicks not being detected around Image and Toolbar Button Borders
+    - Fixed DateTimeUtils.FormatTimeRange() for UTC Time Ranges
+    - Fixed TimeRangePeriod Summing when TimeRangeValues aren't aligned with the TimeWindow and period
     - Improved serializer handling when changing nullability of class members
     - Moved SideScroll.Avalonia.ScreenCapture project into SideScroll.Avalonia
     - Added MinWidth attribute support for TabTextBox
     - Added Summary docs for ListSeries, ChartView, Paths, and WordSpacer
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.10</AvaloniaVersion>
+    <AvaloniaVersion>11.3.11</AvaloniaVersion>
     <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>

@@ -1,6 +1,7 @@
 using SideScroll.Utilities;
 using SideScroll.Extensions;
 using System.Diagnostics;
+using SideScroll.Attributes;
 
 namespace SideScroll.Time;
 
@@ -50,9 +51,13 @@ public class TimeRangePeriod : ITags
 	public double MaxValue { get; set; } = double.MinValue;
 
 	/// <summary>
-	/// Gets or sets the sum of all values in this period
+	/// Gets or sets the sum of all values per period.
+	/// For duration-based values, contributions are calculated as rates normalized to the period duration:
+	/// contribution = value × (intersectionDuration / periodDuration)
+	/// Multiple periods are used when filling gaps and merging identical values
 	/// </summary>
-	public double Sum { get; set; }
+	[DeprecatedName("Sum")]
+	public double SumPerPeriod { get; set; }
 	
 	/// <summary>
 	/// Gets or sets the total of all values weighted by period
@@ -160,6 +165,7 @@ public class TimeRangePeriod : ITags
 				Debug.Assert(periodIndex >= 0 && periodIndex < timeRangePeriods.Count);
 				TimeRangePeriod period = timeRangePeriods[periodIndex];
 
+				// Calculate intersection with period using window-clipped times
 				DateTime binStartTime = valueStartTime.Max(period.StartTime);
 				DateTime binEndTime = valueEndTime.Min(period.EndTime);
 
@@ -175,16 +181,19 @@ public class TimeRangePeriod : ITags
 
 				if (hasDuration)
 				{
+					// Treat values as rates normalized to the target period duration
+					// Each bin gets the full proportional value based on its duration relative to period
+					double rateContribution = timeRangeValue.Value * ((double)binDuration.Ticks / periodTicks);
+					period.SumPerPeriod += rateContribution;
+					
 					long totalTicks = binDuration.Min(timeRangeValue.Duration).Ticks;
-					double weight = (double)binDuration.Ticks / totalTicks;
-					period.Sum += weight * timeRangeValue.Value;
 					period.SummedDurations += binDuration;
 					period.SummedValues += totalTicks * timeRangeValue.Value;
 					valueBinStartTime += binDuration;
 				}
 				else
 				{
-					period.Sum += timeRangeValue.Value;
+					period.SumPerPeriod += timeRangeValue.Value;
 					period.SummedDurations += periodDuration;
 					period.SummedValues += periodDuration.Ticks * timeRangeValue.Value;
 					break;
@@ -239,7 +248,7 @@ public class TimeRangePeriod : ITags
 		if (periods == null)
 			return 0;
 
-		double total = periods.Sum(p => p.Sum);
+		double total = periods.Sum(p => p.SumPerPeriod);
 		return total;
 	}
 
@@ -308,7 +317,7 @@ public class TimeRangePeriod : ITags
 
 		return periods?
 			.Where(period => period.SummedDurations.Ticks > 0)
-			.Select(period => new TimeRangeValue(period.StartTime, period.EndTime, period.Sum, period.Tags))
+			.Select(period => new TimeRangeValue(period.StartTime, period.EndTime, period.SumPerPeriod, period.Tags))
 			.ToList();
 	}
 
@@ -361,8 +370,8 @@ public class TimeRangePeriod : ITags
 	/// <summary>
 	/// Calculates the count of values for each period and returns them as time range values
 	/// </summary>
-	/// <param name="addGaps">Whether to add NaN gaps between periods with no data</param>
-	public static List<TimeRangeValue>? PeriodCounts(IEnumerable<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration, bool addGaps = false)
+	/// <param name="fillAndMerge">Whether to add NaN gaps between periods with no data and merge identical values</param>
+	public static List<TimeRangeValue>? PeriodCounts(IEnumerable<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration, bool fillAndMerge = false)
 	{
 		var periods = Periods(timeRangeValues, timeWindow, periodDuration, false);
 		if (periods == null)
@@ -375,9 +384,9 @@ public class TimeRangePeriod : ITags
 			.Select(period => new TimeRangeValue(period.StartTime, period.EndTime, period.Count, period.Tags))
 			.ToList();
 
-		if (addGaps)
+		if (fillAndMerge)
 		{
-			return TimeRangeValue.AddGaps(periodCounts, timeWindow.StartTime, timeWindow.EndTime, periodDuration);
+			return TimeRangeValue.FillAndMerge(periodCounts, timeWindow.StartTime, timeWindow.EndTime, periodDuration);
 		}
 
 		return periodCounts;

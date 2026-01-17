@@ -141,7 +141,18 @@ public static class DateTimeUtils
 		}
 		else if (startTime.Second == 0 && endTime.Second == 0)
 		{
-			timeFormat = "t";
+			if (startTime.Kind == DateTimeKind.Utc)
+			{
+				timeFormat = "H:mm";
+			}
+			else
+			{
+				timeFormat = "t";
+			}
+		}
+		else if (startTime.Kind == DateTimeKind.Utc)
+		{
+			timeFormat = "H:mm:ss";
 		}
 
 		string text = startTime.ToString(dateFormat) + ' ' + startTime.ToString(timeFormat) + " -";

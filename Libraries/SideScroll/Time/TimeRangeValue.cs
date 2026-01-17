@@ -129,12 +129,12 @@ public class TimeRangeValue : ITags
 	}
 
 	/// <summary>
-	/// Adds NaN gap points between discontinuous time range values for charting purposes
+	/// Fills gaps with NaN and merges consecutive identical values for efficient charting
 	/// </summary>
 	/// <remarks>
 	/// Inserts NaN values between gaps greater than the minimum detected gap so charts will display line breaks
 	/// </remarks>
-	public static List<TimeRangeValue> AddGaps(IEnumerable<TimeRangeValue> input, TimeSpan periodDuration)
+	public static List<TimeRangeValue> FillAndMerge(IEnumerable<TimeRangeValue> input, TimeSpan periodDuration)
 	{
 		var sorted = input.OrderBy(p => p.StartTime).ToList();
 		TimeSpan minGap = GetMinGap(sorted, periodDuration);
@@ -167,9 +167,12 @@ public class TimeRangeValue : ITags
 	}
 
 	/// <summary>
-	/// Adds NaN gap points between discontinuous time range values within a specified time range
+	/// Fills gaps with NaN and merges consecutive identical values within a specified time range for efficient charting
 	/// </summary>
-	public static List<TimeRangeValue> AddGaps(List<TimeRangeValue> input, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
+	/// <remarks>
+	/// Fills the entire time window from startTime to endTime with NaN gaps and merges consecutive identical middle values
+	/// </remarks>
+	public static List<TimeRangeValue> FillAndMerge(List<TimeRangeValue> input, DateTime startTime, DateTime endTime, TimeSpan periodDuration)
 	{
 		List<TimeRangeValue> output = [];
 		if (input.Count == 0)
