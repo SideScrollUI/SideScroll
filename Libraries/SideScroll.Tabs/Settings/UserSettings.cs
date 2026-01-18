@@ -29,6 +29,7 @@ public class UserSettings
 	[Separator, BindList(nameof(Themes))]
 	public string? Theme { get; set; }
 
+	[ToolTip("Restart Required")]
 	public bool? EnableCustomTitleBar { get; set; }
 
 	[Hidden]

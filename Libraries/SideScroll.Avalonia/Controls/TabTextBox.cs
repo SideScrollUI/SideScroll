@@ -120,7 +120,11 @@ public class TabTextBox : TextBox
 			MaxHeight = TabForm.ControlMaxHeight;
 		}
 
-		if (property.GetCustomAttribute<RangeAttribute>() is RangeAttribute rangeAttribute)
+		if (property.GetCustomAttribute<ToolTipAttribute>() is ToolTipAttribute toolTipAttribute)
+		{
+			ToolTip.SetTip(this, toolTipAttribute.Text);
+		}
+		else if (property.GetCustomAttribute<RangeAttribute>() is RangeAttribute rangeAttribute)
 		{
 			ToolTip.SetTip(this, $"{rangeAttribute.Minimum} - {rangeAttribute.Maximum}");
 		}

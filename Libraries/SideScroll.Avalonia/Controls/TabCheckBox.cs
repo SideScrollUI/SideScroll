@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
+using SideScroll.Attributes;
 using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Avalonia.Controls;
@@ -20,6 +21,12 @@ public class TabCheckBox : CheckBox
 	public TabCheckBox(ListProperty property) : this()
 	{
 		IsEnabled = property.IsEditable;
+
+		if (property.GetCustomAttribute<ToolTipAttribute>() is ToolTipAttribute toolTipAttribute)
+		{
+			ToolTip.SetTip(this, toolTipAttribute.Text);
+		}
+
 		Bind(property);
 	}
 

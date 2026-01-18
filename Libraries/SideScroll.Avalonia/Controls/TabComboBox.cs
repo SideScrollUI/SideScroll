@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
+using SideScroll.Attributes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Tabs.Lists;
 using System.Collections;
@@ -35,6 +36,11 @@ public class TabComboBox : ComboBox
 		IsEnabled = property.IsEditable;
 
 		InitializeComponent();
+
+		if (property.GetCustomAttribute<ToolTipAttribute>() is ToolTipAttribute toolTipAttribute)
+		{
+			ToolTip.SetTip(this, toolTipAttribute.Text);
+		}
 
 		if (listPropertyName != null)
 		{

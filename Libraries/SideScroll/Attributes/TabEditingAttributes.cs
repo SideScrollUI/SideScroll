@@ -111,6 +111,38 @@ public class WatermarkAttribute(string text, string? memberName = null) : Attrib
 }
 
 /// <summary>
+/// Displays a tooltip when hovering over the property in the UI.
+/// </summary>
+/// <param name="text">The tooltip text to display on hover.</param>
+/// <remarks>
+/// <b>Apply to:</b> Properties.
+/// <para>
+/// Shows helpful information or guidance when users hover over the property label or control.
+/// Useful for providing additional context, instructions, or explanations without cluttering the UI.
+/// </para>
+/// </remarks>
+/// <example>
+/// <code>
+/// public class Settings
+/// {
+///     [ToolTip("This setting requires an application restart to take effect")]
+///     public string ServerAddress { get; set; } = "";
+///     
+///     [ToolTip("Your API key can be found in the account settings page")]
+///     public string ApiKey { get; set; } = "";
+/// }
+/// </code>
+/// </example>
+[AttributeUsage(AttributeTargets.Property)]
+public class ToolTipAttribute(string text) : Attribute
+{
+	/// <summary>
+	/// The ToolTip text to display.
+	/// </summary>
+	public string Text => text;
+}
+
+/// <summary>
 /// Specifies the character to use for masking password input.
 /// </summary>
 /// <param name="c">The character to display instead of actual input characters.</param>
