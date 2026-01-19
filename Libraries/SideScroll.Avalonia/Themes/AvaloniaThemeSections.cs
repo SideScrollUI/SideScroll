@@ -28,6 +28,12 @@ public class TabTheme : ThemeSection
 	[ResourceKey("TabBackgroundBorderBrush")]
 	public Color? Border { get; set; }
 
+	[ResourceKey("SystemControlFocusVisualPrimaryBrush")]
+	public Color? BorderFocusPrimary { get; set; }
+
+	[ResourceKey("SystemControlFocusVisualSecondaryBrush")]
+	public Color? BorderFocusSecondary { get; set; }
+
 	// Splitter
 	[Header("Splitter"), ResourceKey("TabSplitterBackgroundBrush")]
 	public Color? SplitterBackground { get; set; }

@@ -21,6 +21,7 @@
     - Moved SideScroll.Avalonia.ScreenCapture project into SideScroll.Avalonia
     - Added MinWidth attribute support for TabTextBox
     - Added ToolTip attribute support for Text Controls
+    - Added Theming for Border Focus Colors
     - Added Summary docs for ListSeries, ChartView, Paths, and WordSpacer
     </PackageReleaseNotes>
 

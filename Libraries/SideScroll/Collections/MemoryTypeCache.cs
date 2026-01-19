@@ -12,11 +12,24 @@ namespace SideScroll.Collections;
 [Unserialized]
 public class MemoryTypeCache<T>
 {
+	/// <summary>
+	/// Gets or sets the default maximum number of items for new cache instances
+	/// </summary>
 	public static int DefaultMaxItems { get; set; } = 1000;
 
+	/// <summary>
+	/// Gets the maximum number of items this cache can hold
+	/// </summary>
 	public int MaxItems { get; }
+	
+	/// <summary>
+	/// Gets the duration items remain in the cache before expiring
+	/// </summary>
 	public TimeSpan? CacheDuration { get; }
 
+	/// <summary>
+	/// Gets the underlying memory cache instance
+	/// </summary>
 	public MemoryCache MemoryCache { get; }
 
 	/// <summary>

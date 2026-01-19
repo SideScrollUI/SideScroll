@@ -32,6 +32,9 @@
           <SolidColorBrush x:Key="SystemControlBackgroundBaseLowBrush" Color="#ff5e68ad" />
           <SolidColorBrush x:Key="SystemControlErrorTextForegroundBrush" Color="#ffc4230a"/>
 
+          <SolidColorBrush x:Key="SystemControlFocusVisualPrimaryBrush" Color="#ff7c8acc"/>
+          <SolidColorBrush x:Key="SystemControlFocusVisualSecondaryBrush" Color="#99ffffff"/>
+
           <!-- TextControl -->
           
           <SolidColorBrush x:Key="TextControlBackground" Color="White" />
@@ -456,6 +459,9 @@
 
           <SolidColorBrush x:Key="SystemControlBackgroundBaseLowBrush" Color="#2a2954" />
           <SolidColorBrush x:Key="SystemControlErrorTextForegroundBrush" Color="#ffbb12"/>
+
+          <SolidColorBrush x:Key="SystemControlFocusVisualPrimaryBrush" Color="#ff006dbb"/>
+          <SolidColorBrush x:Key="SystemControlFocusVisualSecondaryBrush" Color="Transparent"/>
 
           <!-- TextControl -->
 

@@ -4,15 +4,34 @@ using SideScroll.Extensions;
 
 namespace SideScroll.Network.Http;
 
+/// <summary>
+/// HTTP response cache that stores deserialized objects with optional expiration
+/// </summary>
 public class HttpMemoryCache
 {
+	/// <summary>
+	/// Gets or sets the default maximum number of items for new cache instances
+	/// </summary>
 	public static int DefaultMaxItems { get; set; } = 1000;
 
+	/// <summary>
+	/// Gets the maximum number of items this cache can hold
+	/// </summary>
 	public int MaxItems { get; }
+	
+	/// <summary>
+	/// Gets the duration items remain in the cache before expiring
+	/// </summary>
 	public TimeSpan? CacheDuration { get; }
 
+	/// <summary>
+	/// Gets the underlying memory cache instance
+	/// </summary>
 	public MemoryCache MemoryCache { get; }
 
+	/// <summary>
+	/// Initializes a new HTTP memory cache with specified size and duration limits
+	/// </summary>
 	public HttpMemoryCache(int? maxItems = null, TimeSpan? cacheDuration = null)
 	{
 		MaxItems = maxItems ?? DefaultMaxItems;
@@ -31,6 +50,9 @@ public class HttpMemoryCache
 		MemoryCache = new MemoryCache(options);
 	}
 
+	/// <summary>
+	/// Adds an object to the cache with the specified key
+	/// </summary>
 	public void Add(string key, object? obj)
 	{
 		if (obj == null)
@@ -49,6 +71,9 @@ public class HttpMemoryCache
 		MemoryCache.Set(key, obj, options);
 	}
 
+	/// <summary>
+	/// Retrieves a cached object or fetches it from the URI if not cached
+	/// </summary>
 	public T? Get<T>(Call call, string uri)
 	{
 		if (TryGetValue(call, uri, out T? t))
@@ -57,6 +82,9 @@ public class HttpMemoryCache
 		return default;
 	}
 
+	/// <summary>
+	/// Attempts to retrieve a cached object or fetch and deserialize it from the URI
+	/// </summary>
 	public bool TryGetValue<T>(Call call, string uri, out T? t)
 	{
 		if (uri == null)
