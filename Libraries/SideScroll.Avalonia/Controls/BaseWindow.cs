@@ -26,8 +26,6 @@ public class BaseWindow : Window
 
 	public static TimeSpan CleanupInterval { get; set; } = TimeSpan.FromMinutes(10);
 
-	public static BaseWindow? Instance { get; set; }
-
 	public Project Project { get; protected set; }
 
 	public TabViewer TabViewer { get; protected set; }
@@ -41,8 +39,6 @@ public class BaseWindow : Window
 
 	public BaseWindow(Project project)
 	{
-		Instance = this;
-
 		if (project.UserSettings.EnableCustomTitleBar == true)
 		{
 			ExtendClientAreaToDecorationsHint = true;

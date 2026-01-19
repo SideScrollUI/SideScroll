@@ -49,7 +49,7 @@ public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab,
 			throw new Exception("Bookmark.Type must implement ITab");
 		}
 
-		var call = new Call();
+		Call call = new();
 		LinkedBookmark linkedBookmarkCopy = linkedBookmark.DeepClone(call, true); // This will get modified as users navigate
 		Bookmark bookmark = linkedBookmarkCopy.Bookmark;
 

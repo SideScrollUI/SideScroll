@@ -11,16 +11,12 @@ namespace SideScroll.Avalonia.Controls;
 
 public class BaseView : UserControl
 {
-	public static BaseView? Instance { get; set; }
-
 	public Project Project { get; protected set; }
 
 	public TabViewer TabViewer { get; protected set; }
 
 	public BaseView(Project project)
 	{
-		Instance = this;
-
 		SideScrollInit.Initialize();
 		SideScrollTheme.InitializeFonts();
 

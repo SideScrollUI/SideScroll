@@ -1,5 +1,6 @@
 using SideScroll.Avalonia.Controls;
 using SideScroll.Avalonia.Controls.TextEditor;
+using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
 using SideScroll.Tabs;
@@ -36,7 +37,7 @@ public class TabText(string text) : ITab
 
 		private async Task CopyAsync(Call call)
 		{
-			await ClipboardUtils.SetTextAsync(BaseWindow.Instance, tab.Text);
+			await ClipboardUtils.SetTextAsync(TabViewer.Instance, tab.Text);
 
 			call.TaskInstance!.ShowMessage("Copied to Clipboard");
 		}
