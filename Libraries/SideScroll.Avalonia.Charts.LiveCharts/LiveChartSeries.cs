@@ -26,20 +26,18 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 
 	public TabLiveChart Chart { get; }
 	public ListSeries ListSeries { get; }
-	public bool UseDateTimeAxis { get; }
 
 	public LiveChartLineSeries LineSeries { get; set; }
 	public List<LiveChartPoint> DataPoints { get; set; } = []; // Must be initialized for GetDataPoints()
 
 	public SKColor SkColor { get; protected set; }
 
-	public override string? ToString() => ListSeries?.ToString();
+	public override string? ToString() => ListSeries.ToString();
 
-	public LiveChartSeries(TabLiveChart chart, ListSeries listSeries, Color color, bool useDateTimeAxis)
+	public LiveChartSeries(TabLiveChart chart, ListSeries listSeries, Color color)
 	{
 		Chart = chart;
 		ListSeries = listSeries;
-		UseDateTimeAxis = useDateTimeAxis;
 
 		SkColor = color.AsSkColor();
 
@@ -64,7 +62,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 
 		if (listSeries.List is INotifyCollectionChanged notifyCollectionChanged)
 		{
-			notifyCollectionChanged.CollectionChanged += delegate (object? sender, NotifyCollectionChangedEventArgs e)
+			notifyCollectionChanged.CollectionChanged += delegate (object? _, NotifyCollectionChangedEventArgs e)
 			{
 				// Can we remove this later when disposing?
 				SeriesChanged(listSeries, e);

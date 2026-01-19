@@ -21,7 +21,7 @@ public class LazyJsonNode
 		{
 			return new LazyJsonObject(obj);
 		}
-		else if (jsonNode?.GetValue<JsonElement>() is JsonElement jsonElement)
+		else if (jsonNode.GetValue<JsonElement>() is JsonElement jsonElement)
 		{
 			return jsonElement.ToString();
 		}

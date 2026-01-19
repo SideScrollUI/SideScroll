@@ -24,11 +24,6 @@ public class Call
 	public Log Log { get; set; }
 
 	/// <summary>
-	/// Gets or sets the parent call context in the call hierarchy
-	/// </summary>
-	public Call? ParentCall { get; set; }
-
-	/// <summary>
 	/// Gets or sets the task instance for tracking task status and enabling task cancellation
 	/// </summary>
 	public TaskInstance? TaskInstance { get; set; } // Shows the Task Status and let's you stop them
@@ -68,7 +63,6 @@ public class Call
 		Call call = new()
 		{
 			Name = name,
-			ParentCall = this,
 			TaskInstance = TaskInstance,
 			Log = Log.Call(name, tags),
 		};
@@ -121,7 +115,6 @@ public class Call
 		CallTimer call = new()
 		{
 			Name = name,
-			ParentCall = this,
 		};
 		call.TaskInstance = TaskInstance?.AddSubTask(call);
 		call.Log = Log.Call(logLevel, name ?? "Timer", tags);
@@ -163,7 +156,6 @@ public class Call
 		CallTimer call = new()
 		{
 			Name = name,
-			ParentCall = this,
 			IsTask = true,
 		};
 		call.TaskInstance = TaskInstance?.AddSubTask(call) ?? new TaskInstance(name)

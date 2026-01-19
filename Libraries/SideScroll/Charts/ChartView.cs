@@ -24,11 +24,6 @@ public class ChartAnnotation
 	public Color? Color { get; set; }
 
 	/// <summary>
-	/// Gets or sets whether the annotation is horizontal (true) or vertical (false)
-	/// </summary>
-	public bool Horizontal { get; set; } = true;
-
-	/// <summary>
 	/// Gets or sets the X-axis position of the annotation
 	/// </summary>
 	public double? X { get; set; }

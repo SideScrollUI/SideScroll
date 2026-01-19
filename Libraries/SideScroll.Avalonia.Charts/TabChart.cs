@@ -78,13 +78,11 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 	protected const double MarginPercent = 0.1; // This needs a min height so this can be lowered
 	protected const int MinSelectionWidth = 10;
 
-	public TabInstance TabInstance { get; }
 	public ChartView ChartView { get; set; }
 	public bool FillHeight { get; set; }
 
 	public List<ChartSeries<TSeries>> ChartSeries { get; } = [];
 	protected Dictionary<string, ChartSeries<TSeries>> IdxNameToChartSeries { get; } = [];
-	protected Dictionary<IList, ListSeries> IdxListToListSeries { get; } = [];
 	protected Dictionary<string, SeriesInfo> IdxSeriesInfo { get; } = [];
 
 	public List<ListSeries> SelectedSeries
@@ -119,9 +117,8 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 
 	public override string? ToString() => ChartView.ToString();
 
-	protected TabChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false)
+	protected TabChart(ChartView chartView, bool fillHeight = false)
 	{
-		TabInstance = tabInstance;
 		ChartView = chartView;
 		FillHeight = fillHeight;
 
@@ -199,7 +196,6 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 			NowTimeAnnotation = new ChartAnnotation
 			{
 				Text = NowTimeName,
-				Horizontal = false,
 				Color = NowColor.AsSystemColor(),
 				// LineStyle = LineStyle.Dot,
 			};

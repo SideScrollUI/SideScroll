@@ -41,7 +41,7 @@ public class LiveChartCreator : IControlCreator
 	{
 		var chartView = (ChartView)obj;
 
-		var tabChart = new TabLiveChart(tabInstance, chartView, true);
+		var tabChart = new TabLiveChart(chartView, true);
 
 		container.AddControl(tabChart, true, SeparatorType.Spacer);
 	}
@@ -81,8 +81,8 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 	private LvcPointD? _startDataPoint;
 	private LvcPointD? _endDataPoint;
 
-	public TabLiveChart(TabInstance tabInstance, ChartView chartView, bool fillHeight = false) :
-		base(tabInstance, chartView, fillHeight)
+	public TabLiveChart(ChartView chartView, bool fillHeight = false) :
+		base(chartView, fillHeight)
 	{
 		TimeTrackerSkColor = TimeTrackerColor.ToSKColor();
 		GridLineSkColor = GridLineColor.ToSKColor();
@@ -306,13 +306,12 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			GetSeriesInfo(listSeries)?.Color ??
 			GetColor(IdxSeriesInfo.Count);
 
-		var liveChartSeries = new LiveChartSeries(this, listSeries, color, UseDateTimeAxis);
+		var liveChartSeries = new LiveChartSeries(this, listSeries, color);
 		XAxisPropertyInfo = listSeries.XPropertyInfo;
 
 		var chartSeries = new ChartSeries<ISeries>(listSeries, liveChartSeries.LineSeries, color);
 		LiveChartSeries.Add(liveChartSeries);
 		ChartSeries.Add(chartSeries);
-		IdxListToListSeries[listSeries.List] = listSeries;
 		if (listSeries.Name != null)
 		{
 			IdxNameToChartSeries[listSeries.Name] = chartSeries;
@@ -805,7 +804,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			LvcPointD dataPoint = Chart.ScalePixelsToData(new LvcPointD(point.X, point.Y));
 
 			var moveEvent = new PointerMovedEventArgs(dataPoint.X);
-			_pointerMovedEventSource?.Raise(sender, moveEvent);
+			_pointerMovedEventSource.Raise(sender, moveEvent);
 
 			UpdateZoomSection(dataPoint);
 		}
@@ -891,7 +890,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 		// Hide cursor when out of scope
 		var moveEvent = new PointerMovedEventArgs(0);
-		_pointerMovedEventSource?.Raise(sender, moveEvent);
+		_pointerMovedEventSource.Raise(sender, moveEvent);
 	}
 
 	private void Chart_SizeChanged(object? sender, SizeChangedEventArgs e)
@@ -911,7 +910,6 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 		ChartSeries.Clear();
 		LiveChartSeries.Clear();
-		IdxListToListSeries.Clear();
 		IdxNameToChartSeries.Clear();
 	}
 

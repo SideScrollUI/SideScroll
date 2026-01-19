@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SideScroll.Network.Http;
 
@@ -42,7 +43,7 @@ public class HttpMemoryCache
 		return default;
 	}
 
-	public bool TryGetValue<T>(Call call, string uri, out T? t)
+	public bool TryGetValue<T>(Call call, string uri, [NotNullWhen(true)] out T? t)
 	{
 		if (uri == null)
 		{

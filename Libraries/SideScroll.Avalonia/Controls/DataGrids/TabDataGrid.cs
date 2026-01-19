@@ -623,7 +623,6 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	public void AddDataColumn(DataColumn dataColumn)
 	{
-		int maxDesiredWidth =  MaxColumnWidth;
 		DataGridBoundColumn column;
 
 		if (dataColumn.DataType.GetNonNullableType() == typeof(bool))
@@ -797,7 +796,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			rowObjects.Add(matchingObject);
 		}
 
-		if (TabDataSettings?.SelectionType == SelectionType.Link && rowObjects.Count != TabDataSettings.SelectedRows.Count)
+		if (TabDataSettings.SelectionType == SelectionType.Link && rowObjects.Count != TabDataSettings.SelectedRows.Count)
 		{
 			// Replace with call and CallDebugLogger?
 			Debug.Print("Failed to find all bookmarked rows, Selected: [" + string.Join(", ", TabDataSettings.SelectedRows) + "], Found: [" + string.Join(", ", rowObjects) + "]");

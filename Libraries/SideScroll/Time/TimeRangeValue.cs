@@ -42,11 +42,6 @@ public class TimeRangeValue : ITags
 	public string TimeText => DateTimeUtils.FormatTimeRange(StartTime, EndTime, false);
 
 	/// <summary>
-	/// Gets or sets the name of this time range value
-	/// </summary>
-	public string? Name { get; set; }
-
-	/// <summary>
 	/// Gets or sets the numeric value associated with this time range
 	/// </summary>
 	[YAxis]
@@ -68,7 +63,7 @@ public class TimeRangeValue : ITags
 	/// </summary>
 	public TimeWindow TimeWindow => new(StartTime, EndTime);
 
-	public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Value;
+	public override string ToString() => DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Value;
 
 	/// <summary>
 	/// Initializes a new instance of the TimeRangeValue class

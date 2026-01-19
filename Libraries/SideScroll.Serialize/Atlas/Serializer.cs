@@ -35,8 +35,6 @@ public class Serializer : IDisposable
 	protected Dictionary<object, object> Clones { get; } = [];
 	protected Queue<Action> CloneQueue { get; } = new();
 
-	public TaskInstance? TaskInstance { get; set; }
-
 	private bool _disposed;
 
 	private struct LoadItem

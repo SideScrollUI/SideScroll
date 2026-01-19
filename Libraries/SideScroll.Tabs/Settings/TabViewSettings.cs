@@ -38,10 +38,10 @@ public class TabViewSettings
 	public List<TabDataSettings> TabDataSettings { get; set; } = [];
 
 	[JsonIgnore]
-	public List<SelectedRow> SelectedRows => TabDataSettings?.SelectMany(d => d.SelectedRows).ToList() ?? [];
+	public List<SelectedRow> SelectedRows => TabDataSettings.SelectMany(d => d.SelectedRows).ToList();
 
 	// Store Skipped bool instead?
-	public SelectionType SelectionType => TabDataSettings?
+	public SelectionType SelectionType => TabDataSettings
 				.FirstOrDefault(dataSettings => dataSettings.SelectionType != SelectionType.None)
 				?.SelectionType ?? SelectionType.None;
 
@@ -50,8 +50,6 @@ public class TabViewSettings
 	// change to string id?
 	public TabDataSettings GetData(int index)
 	{
-		TabDataSettings ??= [];
-
 		// Creates new Settings if necessary
 		while (TabDataSettings.Count <= index)
 		{

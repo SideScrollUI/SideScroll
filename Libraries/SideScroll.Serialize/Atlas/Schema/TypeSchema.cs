@@ -361,7 +361,7 @@ public class TypeSchema
 			{
 				Type = Type.GetType(
 					AssemblyQualifiedName,
-					(name) =>
+					(_) =>
 					{
 						return AppDomain.CurrentDomain.GetAssemblies()
 							.FirstOrDefault(a => a.GetType(typeName) != null);

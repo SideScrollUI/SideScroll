@@ -26,7 +26,7 @@ public static class SvgUtils
 
 		lock (_imageCache)
 		{
-			if (_imageCache.TryGetValue(key, out IImage? image)) return image!;
+			if (_imageCache.TryGetValue(key, out IImage? image)) return image;
 
 			IImage colorImage = GetSvgColorImage(imageResource.Stream, color);
 			_imageCache.Set(key, colorImage);

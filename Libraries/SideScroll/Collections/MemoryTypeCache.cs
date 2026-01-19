@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using SideScroll.Attributes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SideScroll.Collections;
 
@@ -11,7 +12,7 @@ namespace SideScroll.Collections;
 public class MemoryTypeCache<T>
 {
 	public int MaxItems { get; set; }
-	public TimeSpan? CacheDuration { get; set; }
+	public TimeSpan? CacheDuration { get; }
 
 	public MemoryCache MemoryCache { get; }
 
@@ -63,7 +64,7 @@ public class MemoryTypeCache<T>
 	/// <summary>
 	/// Attempts to retrieve a cached value
 	/// </summary>
-	public bool TryGetValue(string key, out T? value)
+	public bool TryGetValue(string key, [NotNullWhen(true)] out T? value)
 	{
 		if (MemoryCache.TryGetValue(key, out object? obj))
 		{
@@ -77,7 +78,7 @@ public class MemoryTypeCache<T>
 	/// <summary>
 	/// Attempts to retrieve a cached value and logs when found
 	/// </summary>
-	public bool TryGetValue(Call call, string key, out T? value)
+	public bool TryGetValue(Call call, string key, [NotNullWhen(true)] out T? value)
 	{
 		if (MemoryCache.TryGetValue(key, out object? obj))
 		{

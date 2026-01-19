@@ -1,6 +1,5 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sidescroll="clr-namespace:SideScroll.Avalonia.Controls;assembly=SideScroll.Avalonia"
                     xmlns:viewer="clr-namespace:SideScroll.Avalonia.Controls.Viewer">
 
   <ControlTheme x:Key="{x:Type viewer:MacosTitleButtons}" TargetType="viewer:MacosTitleButtons">

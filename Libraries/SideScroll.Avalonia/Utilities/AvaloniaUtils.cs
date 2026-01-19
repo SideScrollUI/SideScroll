@@ -118,7 +118,7 @@ public static class AvaloniaUtils
 		var menuItemCopy = new TabMenuItem("_Copy");
 		menuItemCopy.Click += async delegate
 		{
-			await ClipboardUtils.SetTextAsync(colorPicker, colorPicker.Color.ToString() ?? "");
+			await ClipboardUtils.SetTextAsync(colorPicker, colorPicker.Color.ToString());
 		};
 		list.Add(menuItemCopy);
 

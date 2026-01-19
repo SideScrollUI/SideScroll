@@ -47,7 +47,7 @@ public class ScreenCapture : Grid
 		tabViewer.Toolbar!.AddSeparator();
 
 		ToolbarButton snapshotButton = tabViewer.Toolbar.AddButton("Snapshot", Icons.Svg.Screenshot);
-		snapshotButton.Click += (s, e) =>
+		snapshotButton.Click += (_, _) =>
 		{
 			var screenCapture = new ScreenCapture(tabViewer, tabViewer.ScrollViewer);
 			tabViewer.SetContent(screenCapture);

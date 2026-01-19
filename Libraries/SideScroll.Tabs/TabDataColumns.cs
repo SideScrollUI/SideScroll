@@ -54,7 +54,7 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 	private List<PropertyInfo> GetOrderedPropertyColumns(Type elementType)
 	{
 		List<PropertyInfo> visibleProperties = GetVisibleProperties(elementType);
-		if (ColumnNameOrder?.Count > 0)
+		if (ColumnNameOrder.Count > 0)
 		{
 			var propertyNames = visibleProperties.ToDictionary(propertyInfo => propertyInfo.Name);
 

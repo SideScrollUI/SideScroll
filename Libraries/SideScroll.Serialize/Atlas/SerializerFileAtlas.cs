@@ -55,7 +55,6 @@ public class SerializerFileAtlas : SerializerFile
 	{
 		Serializer serializer = new()
 		{
-			TaskInstance = taskInstance,
 			PublicOnly = publicOnly,
 		};
 

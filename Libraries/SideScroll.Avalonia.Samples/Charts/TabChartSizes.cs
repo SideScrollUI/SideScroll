@@ -27,7 +27,7 @@ public class TabChartSizes : ITab
 			};
 			chartView.AddSeries("Count", series, seriesType: SeriesType.Average);
 
-			var liveChart = new TabLiveChart(this, chartView)
+			var liveChart = new TabLiveChart(chartView)
 			{
 				Height = 80,
 			};

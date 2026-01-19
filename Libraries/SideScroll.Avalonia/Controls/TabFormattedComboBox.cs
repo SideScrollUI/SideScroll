@@ -92,9 +92,9 @@ public class TabFormattedComboBox : ComboBox
 
 	private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
-		if (e.PropertyName == Property?.PropertyInfo.Name)
+		if (e.PropertyName == Property.PropertyInfo.Name)
 		{
-			SelectedItem = Property!.Value;
+			SelectedItem = Property.Value;
 		}
 	}
 

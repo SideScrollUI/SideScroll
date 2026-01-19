@@ -23,7 +23,7 @@ public class ProjectSettings
 
 	/// <summary>
 	/// Gets or sets the LinkUri type
-	///  <prefix>://<type>/[v<version>/]<path>[?<query>]
+	///  &lt;prefix&gt;://&lt;type&gt;/[v&lt;version&gt;/]&lt;path&gt;[?&lt;query&gt;]
 	/// </summary>
 	public string? LinkType { get; set; }
 

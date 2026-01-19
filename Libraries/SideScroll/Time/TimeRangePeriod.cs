@@ -36,11 +36,6 @@ public class TimeRangePeriod : ITags
 	public TimeSpan Duration => EndTime.Subtract(StartTime);
 
 	/// <summary>
-	/// Gets or sets the name of this period
-	/// </summary>
-	public string? Name { get; set; }
-
-	/// <summary>
 	/// Gets or sets the minimum value encountered in this period
 	/// </summary>
 	public double MinValue { get; set; } = double.MaxValue;
@@ -109,7 +104,7 @@ public class TimeRangePeriod : ITags
 		}
 	}
 
-	public override string ToString() => Name ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Count;
+	public override string ToString() => DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Count;
 
 	/// <summary>
 	/// Aggregates time range values into periods of specified duration within a time window
@@ -370,6 +365,9 @@ public class TimeRangePeriod : ITags
 	/// <summary>
 	/// Calculates the count of values for each period and returns them as time range values
 	/// </summary>
+	/// <param name="timeRangeValues">Series of TimeRangeValues to aggregate</param>
+	/// <param name="timeWindow">Specifies Start to End times to view, and allows synchronizing the vertical mouse cursor</param>
+	/// <param name="periodDuration">Individual period durations to aggregate values for</param>
 	/// <param name="fillAndMerge">Whether to add NaN gaps between periods with no data and merge identical values</param>
 	public static List<TimeRangeValue>? PeriodCounts(IEnumerable<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration, bool fillAndMerge = false)
 	{

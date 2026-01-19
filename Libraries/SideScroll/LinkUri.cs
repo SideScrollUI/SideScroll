@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 namespace SideScroll;
 
 /// <summary>
-/// Represents a structured URI with format: <prefix>://<type>/[v<version>/]<path>[?<query>]
+/// Represents a structured URI with format: &lt;prefix&gt;://&lt;type&gt;/[v&lt;version&gt;/]&lt;path&gt;[?&lt;query&gt;]
 /// </summary>
 [PublicData]
 public class LinkUri

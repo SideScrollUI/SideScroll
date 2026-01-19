@@ -62,5 +62,5 @@ public class TaggedException(string text, params Tag[] tags) : Exception
 	public Tag[] Tags => tags;
 
 	[WordWrap, MinWidth(300)]
-	public override string Message => tags?.Length > 0 ? $"{Text} {string.Join<Tag>(' ', tags)}" : Text;
+	public override string Message => tags.Length > 0 ? $"{Text} {string.Join<Tag>(' ', tags)}" : Text;
 }

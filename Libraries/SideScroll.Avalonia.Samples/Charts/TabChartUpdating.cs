@@ -40,7 +40,7 @@ public class TabChartUpdating : ITab
 			model.AddObject(toolbar);
 
 			ChartView chartView = CreateView();
-			_chart = new TabLiveChart(this, chartView);
+			_chart = new TabLiveChart(chartView);
 			model.AddObject(_chart, true);
 		}
 

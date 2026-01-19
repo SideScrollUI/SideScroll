@@ -9,8 +9,8 @@ namespace SideScroll.Collections;
 /// <typeparam name="TValue">The type of values to collect</typeparam>
 /// <example>
 /// <code>
-/// // Given a collection class:
-/// public class Icons : NamedItemCollection<Icons, string>
+/// // Example usage:
+/// public class Icons : NamedItemCollection&lt;Icons, string&gt;
 /// {
 ///     public static string Home = "home.png";
 ///     public static string Settings = "settings.png";

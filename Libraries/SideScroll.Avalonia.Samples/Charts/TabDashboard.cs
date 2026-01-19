@@ -51,7 +51,7 @@ public class TabDashboard : ITab
 
 						chartView.AddSeries($"Series {i}", series, seriesType: SeriesType.Average);
 
-						var chart = new TabLiveChart(this, chartView)
+						var chart = new TabLiveChart(chartView)
 						{
 							MinHeight = 250,
 							IsTitleSelectable = true,

@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Tabs.Settings;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace SideScroll.Tabs.Bookmarks.Models;
@@ -51,16 +52,16 @@ public class TabBookmark
 	//public List<DataRepoItem> DataRepoItems { get; set; } = new();
 
 	[JsonIgnore]
-	public List<SelectedRowView> SelectedRowViews => TabDatas.SelectMany(d => d.SelectedRows).ToList();
+	public List<SelectedRowView> SelectedRowViews => [.. TabDatas.SelectMany(d => d.SelectedRows)];
 
 	[JsonIgnore]
-	public List<SelectedRow> SelectedRows => SelectedRowViews.Select(s => s.SelectedRow).ToList();
+	public List<SelectedRow> SelectedRows => [.. SelectedRowViews.Select(s => s.SelectedRow)];
 
 	[JsonIgnore]
-	public List<TabBookmark> SelectedTabViews => SelectedRowViews.Select(s => s.TabBookmark).ToList();
+	public List<TabBookmark> SelectedTabViews => [.. SelectedRowViews.Select(s => s.TabBookmark)];
 
 	// Store Skipped bool instead?
-	public SelectionType SelectionType => TabDatas?
+	public SelectionType SelectionType => TabDatas
 				.FirstOrDefault(tabDataBookmark => tabDataBookmark.SelectionType != SelectionType.None)
 				?.SelectionType ?? SelectionType.None;
 
@@ -135,9 +136,7 @@ public class TabBookmark
 		TabBookmark tabBookmark = rootBookmark;
 		foreach (object obj in objs)
 		{
-			string? label = new SelectedRow(obj).ToString();
-			if (label == null) throw new Exception("SelectedRow Label is null");
-
+			string label = new SelectedRow(obj).ToString() ?? throw new Exception("SelectedRow Label is null");
 			TabBookmark newBookmark = new();
 			tabBookmark.SelectRow(new(label, newBookmark));
 			tabBookmark = newBookmark;
@@ -204,7 +203,7 @@ public class TabBookmark
 			new TabDataBookmark
 			{
 				SelectionType = SelectionType.User,
-				SelectedRows = selectedRows.ToList(),
+				SelectedRows = [.. selectedRows],
 			}
 		];
 	}
@@ -225,9 +224,9 @@ public class TabBookmark
 		TabDatas.First().SelectedRows.Add(selectedRowView);
 	}
 
-	public bool TryGetValue(string label, out TabBookmark? childBookmarkNode)
+	public bool TryGetValue(string label, [NotNullWhen(true)] out TabBookmark? childBookmarkNode)
 	{
-		if (SelectedRowViews.FirstOrDefault(t => t.SelectedRow?.ToString() == label) is SelectedRowView selectedRowView)
+		if (SelectedRowViews.FirstOrDefault(t => t.SelectedRow.ToString() == label) is SelectedRowView selectedRowView)
 		{
 			childBookmarkNode = selectedRowView.TabBookmark;
 			return true;
@@ -241,7 +240,7 @@ public class TabBookmark
 		return new TabViewSettings
 		{
 			Width = Width,
-			TabDataSettings = TabDatas.Select(t => t.ToDataSettings()).ToList(),
+			TabDataSettings = [.. TabDatas.Select(t => t.ToDataSettings())],
 		};
 	}
 }

@@ -956,8 +956,6 @@ public class TabView : Grid, IDisposable
 
 	private void ParentListSelectionChanged(object? sender, TabSelectionChangedEventArgs e)
 	{
-		e ??= new TabSelectionChangedEventArgs();
-
 		UpdateChildControls(e.Recreate);
 
 		Instance.SelectionChanged(sender, e);
@@ -1064,9 +1062,7 @@ public class TabView : Grid, IDisposable
 			}
 			else if (e.List[0] is ITab)
 			{
-				HashSet<object> newItems = e.List
-					.Cast<object>()
-					.ToHashSet();
+				HashSet<object> newItems = [.. e.List.Cast<object>()];
 
 				TabDatas[0].SelectedItems = TabDatas[0].Items!
 					.Cast<object>()

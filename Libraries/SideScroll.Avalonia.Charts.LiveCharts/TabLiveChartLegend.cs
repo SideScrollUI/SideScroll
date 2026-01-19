@@ -13,7 +13,7 @@ public class TabLiveChartLegend(TabLiveChart liveChart)
 	{
 		var legendItem = new TabLiveChartLegendItem(this, chartSeries);
 		legendItem.OnVisibilityChanged += LegendItem_VisibilityChanged;
-		legendItem.PointerPressed += (s, e) =>
+		legendItem.PointerPressed += (_, e) =>
 		{
 			if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
 			{

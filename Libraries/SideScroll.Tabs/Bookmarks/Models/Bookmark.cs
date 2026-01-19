@@ -27,7 +27,7 @@ public class Bookmark
 	[HiddenColumn]
 	public bool Imported { get; set; }
 
-	public string Address => TabBookmark?.GetAddress() ?? "";
+	public string Address => TabBookmark.GetAddress();
 
 	[HiddenColumn]
 	public string Label => (Name != null ? (Name + ":\n") : "") + Address;

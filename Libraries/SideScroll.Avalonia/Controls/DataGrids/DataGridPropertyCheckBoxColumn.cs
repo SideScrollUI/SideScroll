@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -40,7 +41,7 @@ public class DataGridPropertyCheckBoxColumn : DataGridCheckBoxColumn
 		var checkBox = (CheckBox)GenerateEditingElementDirect(cell, dataItem);
 		if (Binding != null)
 		{
-			checkBox.Bind(CheckBox.IsCheckedProperty, Binding);
+			checkBox.Bind(ToggleButton.IsCheckedProperty, Binding);
 		}
 
 		checkBox.Margin = new Thickness(10, 0, 4, 0); // Checkbox isn't centered (due to optional text control?)

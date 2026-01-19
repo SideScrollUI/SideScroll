@@ -323,7 +323,7 @@ public class TimeRangePeriodTests : BaseTest
 		// After flooring (CalculateTotal floors values > 50), both should be 55 and 56
 		Assert.That(total1, Is.EqualTo(56), "Window1 should equal 56");
 		Assert.That(total2, Is.EqualTo(55), "Window2 should equal 55 after flooring");
-		Assert.That(total1, Is.GreaterThan(total2), 
+		Assert.That(total1, Is.GreaterThan(total2!), 
 			"Window1 (aligned) should have a higher sum than Window2 (offset)");
 		
 		// Verify the expected count
