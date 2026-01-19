@@ -9,8 +9,6 @@ using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Charts;
 using SideScroll.Collections;
-using SideScroll.Tabs;
-using System.Collections;
 using System.Reflection;
 
 namespace SideScroll.Avalonia.Charts;

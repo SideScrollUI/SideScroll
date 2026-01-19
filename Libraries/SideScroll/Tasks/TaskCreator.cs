@@ -18,7 +18,6 @@ public class ConfirmationFlyoutConfig(string text, string confirmText, string ca
 	public string CancelText => cancelText;
 }
 
-
 /// <summary>
 /// Base class for creating and managing task execution with support for threading, logging, and progress tracking
 /// </summary>

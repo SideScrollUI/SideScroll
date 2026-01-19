@@ -1,4 +1,3 @@
-using SideScroll.Avalonia.Controls;
 using SideScroll.Avalonia.Controls.TextEditor;
 using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Utilities;
