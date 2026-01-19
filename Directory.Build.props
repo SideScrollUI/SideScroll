@@ -16,6 +16,7 @@
     - Fixed DateTimeUtils.FormatTimeRange() for UTC Time Ranges
     - Fixed TimeRangePeriod Summing when TimeRangeValues aren't aligned with the TimeWindow and period
     - Fixed Copying Text in TabText for Web Browsers
+    - Fixed MemoryTypeCache cache duration not expiring items (only size was limiting)
     - Improved serializer handling when changing nullability of class members
     - Moved SideScroll.Avalonia.ScreenCapture project into SideScroll.Avalonia
     - Added MinWidth attribute support for TabTextBox

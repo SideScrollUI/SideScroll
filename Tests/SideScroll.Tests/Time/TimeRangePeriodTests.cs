@@ -2,7 +2,7 @@ using NUnit.Framework;
 using SideScroll.Collections;
 using SideScroll.Time;
 
-namespace SideScroll.Tests;
+namespace SideScroll.Tests.Time;
 
 [Category("Core")]
 public class TimeRangePeriodTests : BaseTest

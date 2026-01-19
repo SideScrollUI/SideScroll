@@ -1,10 +1,10 @@
 using NUnit.Framework;
 using SideScroll.Utilities;
 
-namespace SideScroll.Tests;
+namespace SideScroll.Tests.Utilities;
 
 [Category("Json")]
-public class JsonTests : BaseTest
+public class JsonUtilsTests : BaseTest
 {
 	[OneTimeSetUp]
 	public void BaseSetup()

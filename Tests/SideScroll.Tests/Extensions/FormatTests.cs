@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Extensions;
 
-namespace SideScroll.Tests;
+namespace SideScroll.Tests.Extensions;
 
 [Category("Formatting")]
 public class FormatTests : BaseTest

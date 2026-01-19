@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using SideScroll.Attributes;
+using SideScroll.Extensions;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SideScroll.Collections;
@@ -11,7 +12,9 @@ namespace SideScroll.Collections;
 [Unserialized]
 public class MemoryTypeCache<T>
 {
-	public int MaxItems { get; set; }
+	public static int DefaultMaxItems { get; set; } = 1000;
+
+	public int MaxItems { get; }
 	public TimeSpan? CacheDuration { get; }
 
 	public MemoryCache MemoryCache { get; }
@@ -19,16 +22,21 @@ public class MemoryTypeCache<T>
 	/// <summary>
 	/// Initializes a new memory cache with specified size and duration limits
 	/// </summary>
-	public MemoryTypeCache(int maxItems = 100, TimeSpan? cacheDuration = null)
+	public MemoryTypeCache(int? maxItems = null, TimeSpan? cacheDuration = null)
 	{
-		MaxItems = maxItems;
+		MaxItems = maxItems ?? DefaultMaxItems;
 		CacheDuration = cacheDuration;
 
 		MemoryCacheOptions options = new()
 		{
 			SizeLimit = MaxItems,
-			ExpirationScanFrequency = TimeSpan.FromSeconds(60),
 		};
+
+		if (CacheDuration.HasValue)
+		{
+			options.ExpirationScanFrequency = CacheDuration.Value.Min(TimeSpan.FromMinutes(1));
+		}
+
 		MemoryCache = new MemoryCache(options);
 	}
 
@@ -43,6 +51,11 @@ public class MemoryTypeCache<T>
 		{
 			Size = 1, // Assume all items are the same size for now
 		};
+
+		if (CacheDuration.HasValue)
+		{
+			options.AbsoluteExpirationRelativeToNow = CacheDuration.Value;
+		}
 
 		MemoryCache.Set(key, value, options);
 	}

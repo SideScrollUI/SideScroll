@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Utilities;
 
-namespace SideScroll.Tests;
+namespace SideScroll.Tests.Utilities;
 
 [Category("Core")]
 public class ObjectUtilsTests : BaseTest

@@ -1,23 +1,33 @@
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
+using SideScroll.Extensions;
 
 namespace SideScroll.Network.Http;
 
 public class HttpMemoryCache
 {
-	public static int DefaultMaxItems { get; set; } = 100;
+	public static int DefaultMaxItems { get; set; } = 1000;
 
-	// public TimeSpan CacheDuration { get; set; } = TimeSpan.FromHours(1);
+	public int MaxItems { get; }
+	public TimeSpan? CacheDuration { get; }
 
 	public MemoryCache MemoryCache { get; }
 
-	public HttpMemoryCache(int? maxItems = null)
+	public HttpMemoryCache(int? maxItems = null, TimeSpan? cacheDuration = null)
 	{
+		MaxItems = maxItems ?? DefaultMaxItems;
+		CacheDuration = cacheDuration;
+
 		MemoryCacheOptions options = new()
 		{
-			SizeLimit = maxItems ?? DefaultMaxItems,
-			ExpirationScanFrequency = TimeSpan.FromSeconds(60),
+			SizeLimit = MaxItems,
 		};
+
+		if (CacheDuration.HasValue)
+		{
+			options.ExpirationScanFrequency = CacheDuration.Value.Min(TimeSpan.FromMinutes(1));
+		}
+
 		MemoryCache = new MemoryCache(options);
 	}
 
@@ -30,6 +40,11 @@ public class HttpMemoryCache
 		{
 			Size = 1, // Assume all items are the same size for now
 		};
+
+		if (CacheDuration.HasValue)
+		{
+			options.AbsoluteExpirationRelativeToNow = CacheDuration.Value;
+		}
 
 		MemoryCache.Set(key, obj, options);
 	}
