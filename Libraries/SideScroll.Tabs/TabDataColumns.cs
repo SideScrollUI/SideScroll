@@ -11,7 +11,7 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 	// Order to show the columns in, users can drag columns around to reorder these
 	public List<string> ColumnNameOrder { get; set; } = columnNameOrder ?? [];
 
-	private static readonly Dictionary<Type, List<PropertyInfo>> _visiblePropertiesCache = [];
+	private static readonly Dictionary<Type, List<PropertyInfo>> VisiblePropertiesCache = [];
 
 	public static List<TabMethodColumn> GetMethodColumns(Type type)
 	{
@@ -33,13 +33,13 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 
 	public static List<PropertyInfo> GetVisibleProperties(Type type)
 	{
-		lock (_visiblePropertiesCache)
+		lock (VisiblePropertiesCache)
 		{
-			if (_visiblePropertiesCache.TryGetValue(type, out List<PropertyInfo>? list))
+			if (VisiblePropertiesCache.TryGetValue(type, out List<PropertyInfo>? list))
 				return list;
 
 			list = type.GetVisibleProperties();
-			_visiblePropertiesCache.Add(type, list);
+			VisiblePropertiesCache.Add(type, list);
 			return list;
 		}
 	}

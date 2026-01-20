@@ -114,7 +114,7 @@ public class TabDateTimePicker : Grid
 		Children.Add(_timeTextBox);
 	}
 
-	protected TabImageButton AddButton(string tooltip, IResourceView resourcView, int column, CallActionAsync callActionAsync)
+	private void AddButton(string tooltip, IResourceView resourcView, int column, CallActionAsync callActionAsync)
 	{
 		var button = new TabImageButton(tooltip, resourcView, null, 20)
 		{
@@ -124,10 +124,9 @@ public class TabDateTimePicker : Grid
 			CallActionAsync = callActionAsync,
 
 			[ToolTip.TipProperty] = tooltip,
-			[Grid.ColumnProperty] = column,
+			[ColumnProperty] = column,
 		};
 		Children.Add(button);
-		return button;
 	}
 
 	private async Task ImportFromClipboardAsync(Call call)

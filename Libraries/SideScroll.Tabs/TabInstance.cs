@@ -259,12 +259,6 @@ public class TabInstance : IDisposable
 		action.Invoke();
 	}
 
-	/*private void ActionParamsCallback(object? state)
-	{
-		TaskDelegateParams taskDelegate = (TaskDelegateParams)state!;
-		StartTask(taskDelegate, false);
-	}*/
-
 	public void Post(Action action)
 	{
 		UiContext.Post(ActionCallback, action);
@@ -603,9 +597,6 @@ public class TabInstance : IDisposable
 	{
 		get
 		{
-			if (TabViewSettings == null)
-				return false;
-
 			//if (TabViewSettings.SelectionType == SelectionType.User && TabViewSettings.SelectedRows.Count == 0) // Need to split apart user selected rows?
 			if (TabViewSettings.SelectionType != SelectionType.None && TabViewSettings.SelectedRows.Count == 0)
 				return false;
@@ -770,18 +761,17 @@ public class TabInstance : IDisposable
 	public void LoadBookmark(Bookmark bookmark)
 	{
 		TabBookmark = null;
-		if (bookmark != null)
+		if (bookmark == null) return;
+		
+		if (iTab != null)
 		{
-			if (iTab != null)
+			Type type = iTab.GetType();
+			if (type.GetCustomAttribute<PrivateDataAttribute>() != null)
 			{
-				Type type = iTab.GetType();
-				if (type.GetCustomAttribute<PrivateDataAttribute>() != null)
-				{
-					return;
-				}
+				return;
 			}
-			SelectBookmark(bookmark.TabBookmark);
 		}
+		SelectBookmark(bookmark.TabBookmark);
 	}
 
 	public virtual void SelectBookmark(TabBookmark tabBookmark, bool reload = false)
@@ -805,9 +795,6 @@ public class TabInstance : IDisposable
 	private void SaveDefaultBookmark()
 	{
 		Bookmark bookmark = RootInstance.CreateBookmark(); // create from base Tab
-		if (bookmark == null)
-			return;
-
 		bookmark.Name = CurrentBookmarkName;
 		Data.App.Save(bookmark.Name, bookmark, TaskInstance.Call);
 	}
@@ -983,23 +970,6 @@ public class TabInstance : IDisposable
 		return childTabInstance;
 	}
 
-	/*private object? GetBookmarkObject(string dataKey)
-	{
-		if (TabBookmark == null)
-			return null;
-
-		// FindMatches uses bookmarks
-		if (TabBookmark.ChildBookmarks.TryGetValue(dataKey, out TabBookmark? tabChildBookmark))
-		{
-			if (tabChildBookmark.TabModel != null)
-			{
-				return tabChildBookmark.TabModel;
-			}
-		}
-
-		return tabChildBookmark;
-	}*/
-
 	public void UpdateNavigator()
 	{
 		Bookmark bookmark = RootInstance.CreateBookmark(); // create from root Tab
@@ -1025,14 +995,14 @@ public class TabInstance : IDisposable
 		OnCopyToClipboard?.Invoke(this, new CopyToClipboardEventArgs(text));
 	}
 
-	private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
+	private static readonly JsonSerializerOptions JsonSerializerOptions = new()
 	{
 		WriteIndented = true
 	};
 
 	public void CopyToClipboard(object? obj)
 	{
-		string json = JsonSerializer.Serialize(obj, _jsonSerializerOptions);
+		string json = JsonSerializer.Serialize(obj, JsonSerializerOptions);
 		CopyToClipboard(json);
 	}
 }

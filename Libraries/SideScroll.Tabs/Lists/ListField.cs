@@ -38,10 +38,7 @@ public class ListField : ListMember, IPropertyIsEditable
 				return null;
 			}
 		}
-		set
-		{
-			FieldInfo.SetValue(Object, Convert.ChangeType(value, FieldInfo.FieldType));
-		}
+		set => FieldInfo.SetValue(Object, Convert.ChangeType(value, FieldInfo.FieldType));
 	}
 
 	[Hidden]
@@ -75,9 +72,9 @@ public class ListField : ListMember, IPropertyIsEditable
 			.OrderBy(f => f.Module.Name)
 			.ThenBy(f => f.MetadataToken);
 
-		var listFields = new ItemCollection<ListField>();
+		ItemCollection<ListField> listFields = [];
 		// replace any overriden/new field & properties
-		var fieldToIndex = new Dictionary<string, int>();
+		Dictionary<string, int> fieldToIndex = [];
 		foreach (FieldInfo fieldInfo in fieldInfos)
 		{
 			var listField = new ListField(obj, fieldInfo);
@@ -104,7 +101,7 @@ public class ListField : ListMember, IPropertyIsEditable
 		if (hideAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
 			return false;
 
-		var classHideAttribute = FieldInfo.DeclaringType!.GetCustomAttribute<HideAttribute>();
+		var classHideAttribute = FieldInfo.DeclaringType?.GetCustomAttribute<HideAttribute>();
 		if (classHideAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
 			return false;
 

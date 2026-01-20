@@ -9,8 +9,6 @@ public class TabViewSettings
 	{
 		get
 		{
-			if (TabDataSettings == null) return null;
-
 			string address = "";
 			string comma = "";
 			int count = 0;

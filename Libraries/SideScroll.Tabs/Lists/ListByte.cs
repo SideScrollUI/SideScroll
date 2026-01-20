@@ -36,9 +36,7 @@ public class ListByte(int index, byte b)
 			fileStream.ReadExactly(buffer, 0, buffer.Length);
 			return Create(buffer);
 		}
-		else
-		{
-			return Create(File.ReadAllBytes(path));
-		}
+		
+		return Create(File.ReadAllBytes(path));
 	}
 }

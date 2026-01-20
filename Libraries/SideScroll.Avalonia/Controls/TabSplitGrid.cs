@@ -155,7 +155,6 @@ public class TabSplitGrid : Grid
 
 		Debug.Assert(_gridItems.Count * 2 == RowDefinitions.Count);
 		int index = 0;
-		//int prevStretch = -1; // todo: we can figure out splitters vs spacers automatically via fill property
 		foreach (var gridItem in _gridItems)
 		{
 			if (index > 0)
@@ -186,7 +185,6 @@ public class TabSplitGrid : Grid
 		};
 		GridSplitters.Add(gridSplitter);
 		SetRow(gridSplitter, rowIndex);
-		//Children.Insert(index, gridSplitter);
 		Children.Add(gridSplitter);
 	}
 
@@ -197,9 +195,8 @@ public class TabSplitGrid : Grid
 			VerticalAlignment = VerticalAlignment.Stretch,
 			ResizeDirection = GridResizeDirection.Columns,
 		};
-		//GridSplitters.Add(gridSplitter);
+		GridSplitters.Add(gridSplitter);
 		SetColumn(gridSplitter, columnIndex);
-		//Children.Insert(index, gridSplitter);
 		Children.Add(gridSplitter);
 	}
 
@@ -210,7 +207,6 @@ public class TabSplitGrid : Grid
 
 		Border border = new()
 		{
-			//Width = 100,
 			Height = 6,
 			[Grid.RowProperty] = rowIndex
 		};

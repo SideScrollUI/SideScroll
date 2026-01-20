@@ -7,6 +7,7 @@ using SideScroll.Tabs.Lists;
 using SideScroll.Tasks;
 using System.Collections;
 using System.Data;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace SideScroll.Tabs;
@@ -292,9 +293,11 @@ public class TabModel
 				sortedList.Add(item);
 			}
 		}
-		catch (Exception)
+		catch (Exception e)
 		{
-
+			Debug.WriteLine("Failed to add Dictionary",
+				new Tag("Exception", e),
+				new Tag("Dictionary", dictionary));
 		}
 
 		if (Object is IComparable)
