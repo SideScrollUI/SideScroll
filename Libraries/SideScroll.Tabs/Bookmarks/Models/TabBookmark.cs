@@ -159,6 +159,7 @@ public class TabBookmark
 				new()
 				{
 					SelectedRows = selectedRows,
+					SelectionType = SelectionType.User,
 				}
 			],
 		};
@@ -222,6 +223,14 @@ public class TabBookmark
 			TabDatas.Add(new());
 		}
 		TabDatas.First().SelectedRows.Add(selectedRowView);
+	}
+
+	public void SetSelectionType(SelectionType selectionType)
+	{
+		foreach (TabDataBookmark tabDataBookmark in TabDatas)
+		{
+			tabDataBookmark.SetSelectionType(selectionType);
+		}
 	}
 
 	public bool TryGetValue(string label, [NotNullWhen(true)] out TabBookmark? childBookmarkNode)

@@ -92,6 +92,15 @@ public class TabDataBookmark
 		}
 	}
 
+	public void SetSelectionType(SelectionType selectionType)
+	{
+		SelectionType = selectionType;
+		foreach (SelectedRowView selectedRowView in SelectedRows)
+		{
+			selectedRowView.TabBookmark.SetSelectionType(selectionType);
+		}
+	}
+
 	public TabDataSettings ToDataSettings()
 	{
 		return new TabDataSettings

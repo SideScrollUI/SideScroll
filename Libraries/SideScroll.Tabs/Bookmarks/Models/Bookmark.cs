@@ -70,7 +70,7 @@ public class Bookmark
 		return bookmark;
 	}
 
-	internal void Import(Project project)
+	public void Import(Project project)
 	{
 		TabBookmark.Import(project);
 	}

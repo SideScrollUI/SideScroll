@@ -35,16 +35,6 @@ public class TabLinkCollection(LinkCollection links) : ITab
 			model.CustomSettingsPath = tab.Links.GroupId;
 			model.MinDesiredWidth = 300;
 
-			if (Project.Data.DataSettings.LinkId == null)
-			{
-				tab.Links.Load(call, true);
-			}
-
-			model.AddData(tab.Links.Items);
-		}
-
-		public override void LoadUI(Call call, TabModel model)
-		{
 			Toolbar toolbar = new();
 			toolbar.ButtonRefresh.Action = Refresh;
 			toolbar.ButtonDeleteAll.Action = DeleteAll;
@@ -52,6 +42,13 @@ public class TabLinkCollection(LinkCollection links) : ITab
 			ListProperty listProperty = new(tab.Links, nameof(LinkCollection.ShowLinkInfoTab));
 			toolbar.ToggleButtonShowLinkInfoTab = new("Show Link Info Tab", Icons.Svg.PanelLeftContract, Icons.Svg.PanelLeftExpand, listProperty, ShowLinkTab);
 			model.AddObject(toolbar);
+
+			if (Project.Data.DataSettings.LinkId == null)
+			{
+				tab.Links.Load(call, true);
+			}
+
+			model.AddData(tab.Links.Items);
 
 			if (tab.Links.NewBookmark != null)
 			{

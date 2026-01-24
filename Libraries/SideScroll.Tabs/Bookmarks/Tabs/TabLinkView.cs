@@ -3,7 +3,7 @@ using SideScroll.Extensions;
 using SideScroll.Serialize;
 using SideScroll.Tabs.Bookmarks.Models;
 
-namespace SideScroll.Tabs.Bookmarks;
+namespace SideScroll.Tabs.Bookmarks.Tabs;
 
 public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab, IInnerTab
 {

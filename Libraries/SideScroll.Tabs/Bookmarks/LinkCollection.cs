@@ -83,6 +83,7 @@ public class LinkCollection
 
 	public void AddNew(Call call, LinkUri linkUri, Bookmark bookmark)
 	{
+		bookmark.TabBookmark.SetSelectionType(Settings.SelectionType.Link);
 		LinkedBookmark linkedBookmark = new(linkUri, bookmark);
 		lock (_lock)
 		{

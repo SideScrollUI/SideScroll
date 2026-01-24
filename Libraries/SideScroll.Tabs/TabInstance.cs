@@ -733,6 +733,7 @@ public class TabInstance : IDisposable
 				ColumnNameOrder = dataSettings.ColumnNameOrder,
 				DataRepoGroupId = DataRepoInstance?.GroupId,
 				DataRepoType = DataRepoInstance?.DataType,
+				SelectionType = dataSettings.SelectionType,
 			};
 			tabBookmark.TabDatas.Add(dataBookmark);
 			foreach (SelectedRow selectedRow in dataSettings.SelectedRows)

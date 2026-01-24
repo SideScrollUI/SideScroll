@@ -117,7 +117,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 		_disableSaving++;
 
-		Type listType = List!.GetType();
+		Type listType = List.GetType();
 		ElementType = listType.GetElementTypeForAll()!;
 
 		HorizontalAlignment = HorizontalAlignment.Stretch;
