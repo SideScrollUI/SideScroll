@@ -34,7 +34,7 @@ public class ToolComboBox<T> : IToolComboBox
 	public CallAction? Action { get; set; }
 	public CallActionAsync? ActionAsync { get; set; }
 
-	public ToolComboBox(string label, List<T> items, T selectedItem, CallAction? action = null)
+	public ToolComboBox(string label, List<T> items, T? selectedItem = default, CallAction? action = null)
 	{
 		Label = label;
 		Items = items;

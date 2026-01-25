@@ -80,7 +80,7 @@ public class TypeSchema
 	public bool HasSubType { get; protected set; }
 
 	// Type lookup can take a long time, especially when there's missing types
-	private static readonly Dictionary<string, Type?> _typeCache = [];
+	private static readonly Dictionary<string, Type?> TypeCache = [];
 
 	public const BindingFlags BindingAttributes = BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
 
@@ -320,9 +320,9 @@ public class TypeSchema
 
 	private void LoadType(Log log)
 	{
-		lock (_typeCache)
+		lock (TypeCache)
 		{
-			if (_typeCache.TryGetValue(AssemblyQualifiedName, out Type? type))
+			if (TypeCache.TryGetValue(AssemblyQualifiedName, out Type? type))
 			{
 				Type = type;
 				return;
@@ -377,9 +377,9 @@ public class TypeSchema
 			}
 		}
 
-		lock (_typeCache)
+		lock (TypeCache)
 		{
-			_typeCache.TryAdd(AssemblyQualifiedName, Type);
+			TypeCache.TryAdd(AssemblyQualifiedName, Type);
 		}
 	}
 

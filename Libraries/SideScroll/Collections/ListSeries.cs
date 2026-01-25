@@ -316,7 +316,7 @@ public class ListSeries
 			if (XPropertyInfo?.PropertyType != typeof(DateTime))
 				return null;
 
-			var timeRangeValues = new List<TimeRangeValue>();
+			List<TimeRangeValue> timeRangeValues = [];
 			foreach (object obj in List)
 			{
 				if (obj is TimeRangeValue timeRangeValue)

@@ -114,7 +114,7 @@ public class DataRepo
 				return new DataItem<T>(key, obj, serializerFile.DataPath);
 			}
 		}
-		return default;
+		return null;
 	}
 
 	public DataItem<T> LoadOrCreateItem<T>(string key, Call? call = null, bool lazy = false)

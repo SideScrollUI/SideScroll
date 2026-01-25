@@ -378,7 +378,8 @@ public abstract class TypeRepo : IDisposable
 				int objectIndex = Reader.ReadInt32();
 				return LoadObject(objectIndex);
 			}
-			else if (objectType == ObjectType.DerivedType)
+			
+			if (objectType == ObjectType.DerivedType)
 			{
 				int typeIndex = Reader.ReadInt16();
 				if (typeIndex >= Serializer.TypeRepos.Count)
@@ -391,10 +392,8 @@ public abstract class TypeRepo : IDisposable
 				int objectIndex = Reader.ReadInt32();
 				return typeRepo.LoadObject(objectIndex);
 			}
-			else
-			{
-				return null;
-			}
+			
+			return null;
 		}
 		else
 		{

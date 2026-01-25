@@ -42,7 +42,7 @@ public static class TypeExtensions
 	/// </summary>
 	public static bool IsNumeric(this Type type)
 	{
-		type = GetNonNullableType(type);
+		type = type.GetNonNullableType();
 		return NumericTypes.Contains(type);
 	}
 
@@ -51,7 +51,7 @@ public static class TypeExtensions
 	/// </summary>
 	public static bool IsDecimal(this Type type)
 	{
-		type = GetNonNullableType(type);
+		type = type.GetNonNullableType();
 		return DecimalTypes.Contains(type);
 	}
 
@@ -85,7 +85,7 @@ public static class TypeExtensions
 		if (baseType == null)
 			return false;
 
-		return IsAssignableToGenericType(baseType, genericType);
+		return baseType.IsAssignableToGenericType(genericType);
 	}
 
 	/// <summary>
@@ -103,7 +103,7 @@ public static class TypeExtensions
 		}
 		else if (type.BaseType != null)
 		{
-			return GetElementTypeForAll(type.BaseType);
+			return type.BaseType.GetElementTypeForAll();
 		}
 
 		return null;
@@ -129,7 +129,7 @@ public static class TypeExtensions
 	/// </summary>
 	public static PropertyInfo? GetPropertyWithAttribute<T>(this Type type) where T : Attribute
 	{
-		return GetPropertiesWithAttribute<T>(type).FirstOrDefault();
+		return type.GetPropertiesWithAttribute<T>().FirstOrDefault();
 	}
 
 	/// <summary>
@@ -166,7 +166,7 @@ public static class TypeExtensions
 		string name;
 		if (type.IsGenericType)
 		{
-			var args = type.GetGenericArguments().Select(a => '[' + GetAssemblyQualifiedShortName(a) + ']');
+			var args = type.GetGenericArguments().Select(a => '[' + a.GetAssemblyQualifiedShortName() + ']');
 			name = $"{type.GetGenericTypeDefinition().FullName}[{string.Join(", ", args)}]";
 		}
 		else

@@ -106,7 +106,7 @@ public static class ObjectExtensions
 			Type? elementType = type.GetElementTypeForAll();
 			if (elementType?.GetCustomAttribute<ToStringAttribute>() != null)
 			{
-				return CollectionToString(collection);
+				return collection.CollectionToString();
 			}
 			return collection.Count.ToString("N0");
 		}
@@ -173,7 +173,7 @@ public static class ObjectExtensions
 	/// </summary>
 	public static string CollectionToString(this ICollection collection)
 	{
-		return EnumerableToString(collection);
+		return collection.EnumerableToString();
 	}
 
 	/// <summary>
@@ -242,7 +242,7 @@ public static class ObjectExtensions
 			object? propertyValue = propertyInfo.GetValue(obj);
 			if (propertyValue != null)
 			{
-				string? toString = ToUniqueString(propertyValue);
+				string? toString = propertyValue.ToUniqueString();
 				if (toString != null)
 					return toString;
 			}
@@ -255,7 +255,7 @@ public static class ObjectExtensions
 			object? fieldValue = fieldInfo.GetValue(obj);
 			if (fieldValue != null)
 			{
-				string? toString = ToUniqueString(fieldValue);
+				string? toString = fieldValue.ToUniqueString();
 				if (toString != null)
 					return toString;
 			}

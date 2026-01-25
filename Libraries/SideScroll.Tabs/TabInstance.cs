@@ -852,8 +852,8 @@ public class TabInstance : IDisposable
 	public T? LoadData<T>(string key) => Data.App.Load<T>(key, TaskInstance.Call);
 	public T? LoadData<T>(string groupId, string key) => Data.App.Load<T>(groupId, key, TaskInstance.Call);
 
-	public T LoadOrCreateData<T>(string key) => Data.App.LoadOrCreate<T>(key, TaskInstance.Call)!;
-	public T LoadOrCreateData<T>(string groupId, string key) => Data.App.LoadOrCreate<T>(groupId, key, TaskInstance.Call)!;
+	public T LoadOrCreateData<T>(string key) => Data.App.LoadOrCreate<T>(key, TaskInstance.Call);
+	public T LoadOrCreateData<T>(string groupId, string key) => Data.App.LoadOrCreate<T>(groupId, key, TaskInstance.Call);
 
 	public TabViewSettings LoadDefaultTabSettings()
 	{

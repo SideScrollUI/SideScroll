@@ -42,7 +42,7 @@ public abstract class SerializerMemory
 		{
 			call.Log.Add(e);
 		}
-		return default;
+		return null;
 	}
 
 	public static object? TryDeepClone(Call call, object? obj, bool publicOnly = false)

@@ -25,7 +25,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 
 	public void Save(Call call, object obj, string? name = null, bool publicOnly = false)
 	{
-		ArgumentNullException.ThrowIfNull(obj, nameof(obj));
+		ArgumentNullException.ThrowIfNull(obj);
 
 		name ??= DefaultName;
 

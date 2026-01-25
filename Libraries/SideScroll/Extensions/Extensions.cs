@@ -74,7 +74,7 @@ public static class SideScrollExtensions
 			if (propertyInfo.GetCustomAttribute<InnerValueAttribute>() != null)
 			{
 				object? propertyValue = propertyInfo.GetValue(value);
-				return GetInnerValue(propertyValue);
+				return propertyValue.GetInnerValue();
 			}
 		}
 
@@ -83,7 +83,7 @@ public static class SideScrollExtensions
 			if (fieldInfo.GetCustomAttribute<InnerValueAttribute>() != null)
 			{
 				object? fieldValue = fieldInfo.GetValue(value);
-				return GetInnerValue(fieldValue);
+				return fieldValue.GetInnerValue();
 			}
 		}
 

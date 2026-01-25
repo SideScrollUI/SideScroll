@@ -150,7 +150,7 @@ public class Log : LogEntry
 
 	public string EntriesText()
 	{
-		var stringBuilder = new StringBuilder();
+		StringBuilder stringBuilder = new();
 		foreach (LogEntry logEntry in Items)
 		{
 			stringBuilder.AppendLine(logEntry.ToString());

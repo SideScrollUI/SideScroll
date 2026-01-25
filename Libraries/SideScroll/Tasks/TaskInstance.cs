@@ -62,13 +62,7 @@ public class TaskInstance : INotifyPropertyChanged
 	private int? _taskCount;
 	public int TaskCount
 	{
-		get
-		{
-			if (_taskCount != null)
-				return _taskCount.Value;
-			else
-				return SubTasks.Count;
-		}
+		get => _taskCount ?? SubTasks.Count;
 		set
 		{
 			_taskCount = value;

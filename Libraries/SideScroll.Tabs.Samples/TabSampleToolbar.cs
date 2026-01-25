@@ -24,7 +24,7 @@ public class TabSampleToolbar : ITab
 		public ToolButton ButtonOpenBrowser { get; } = new("Open in Browser", Icons.Svg.Browser);
 
 		[Separator]
-		public ToolComboBox<TimeSpan> Duration { get; set; } = new("Duration", TimeSpanExtensions.CommonTimeSpans, TimeSpan.FromMinutes(5));
+		public ToolComboBox<TimeSpan> Duration { get; } = new("Duration", TimeSpanExtensions.CommonTimeSpans, TimeSpan.FromMinutes(5));
 
 		[Separator]
 		public string Label => "(Status)";
