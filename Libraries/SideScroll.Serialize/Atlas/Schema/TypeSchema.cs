@@ -216,7 +216,8 @@ public class TypeSchema
 		foreach (ConstructorInfo constructor in constructors)
 		{
 			ParameterInfo[] parameters = constructor.GetParameters();
-			if (parameters.All(p => members.Contains(p.Name?.ToLower() ?? "- invalid -")))
+			// Skip optional parameters (with default values) when checking for matching constructor
+			if (parameters.All(p => p.HasDefaultValue || members.Contains(p.Name?.ToLower() ?? "- invalid -")))
 			{
 				return constructor;
 			}

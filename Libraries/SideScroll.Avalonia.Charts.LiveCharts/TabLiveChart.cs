@@ -518,8 +518,6 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 	public void UpdateYAxis() // Axis yAxis, string axisKey = null
 	{
-		if (YAxis == null) return;
-
 		var (minimum, maximum, hasFraction) = GetYValueRange();
 
 		if (minimum == double.MaxValue)

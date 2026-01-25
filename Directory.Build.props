@@ -18,6 +18,7 @@
     - Fixed Copying Text in TabText for Web Browsers
     - Fixed MemoryTypeCache cache duration not expiring items (only size was limiting)
     - Improved serializer handling when changing nullability of class members
+    - Added serializer support for custom constructors with optional parameters that can't be serialized
     - Moved SideScroll.Avalonia.ScreenCapture project into SideScroll.Avalonia
     - Added MinWidth attribute support for TabTextBox
     - Added ToolTip attribute support for Text Controls

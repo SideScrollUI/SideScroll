@@ -60,10 +60,6 @@ public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 
 	public override string ToString() => Name;
 
-	protected NodeView(string path)
-		: this(path, null)
-	{ }
-
 	protected NodeView(string path, FileSelectorOptions? fileSelectorOptions = null)
 	{
 		Path = path;
@@ -111,10 +107,6 @@ public class DirectoryView : NodeView, IDirectoryView
 	public override TimeSpan? Modified => LastWriteTime.Age();
 	public override bool HasLinks => true;
 
-	public DirectoryView(string path)
-		: this(path, null)
-	{ }
-
 	public DirectoryView(string path, FileSelectorOptions? fileSelectorOptions = null) :
 		base(path, fileSelectorOptions)
 	{
@@ -137,10 +129,6 @@ public class FileView : NodeView
 
 	[HiddenColumn]
 	public FileInfo? FileInfo { get; }
-
-	public FileView(string path)
-		: this(path, null)
-	{ }
 
 	public FileView(string path, FileSelectorOptions? fileSelectorOptions = null)
 		: base(path, fileSelectorOptions)

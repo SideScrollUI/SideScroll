@@ -335,7 +335,8 @@ public class TypeRepoObject : TypeRepo
 		MemberRepos.Add(memberRepo);
 	}
 
-	private readonly List<object> _constructorRepos = [];
+	// Can be either a FieldRepo, PropertyRepo, or default param
+	private readonly List<object?> _constructorParams = [];
 
 	public void InitializeConstructor(Log log)
 	{
@@ -350,11 +351,16 @@ public class TypeRepoObject : TypeRepo
 			string name = param.Name!.ToLower();
 			if (fields.TryGetValue(name, out var field))
 			{
-				_constructorRepos.Add(field);
+				_constructorParams.Add(field);
 			}
 			else if (properties.TryGetValue(name, out var property))
 			{
-				_constructorRepos.Add(property);
+				_constructorParams.Add(property);
+			}
+			else if (param.HasDefaultValue)
+			{
+				// Skip optional parameters that don't have matching members
+				_constructorParams.Add(param.DefaultValue);
 			}
 			else
 			{
@@ -378,9 +384,9 @@ public class TypeRepoObject : TypeRepo
 		Dictionary<PropertyRepo, object?> propertyValues = PropertyRepos.ToDictionary(p => p, p => p.Get());
 
 		List<object?> parameters = [];
-		foreach (var repo in _constructorRepos)
+		foreach (object? parameter in _constructorParams)
 		{
-			if (repo is FieldRepo fieldRepo)
+			if (parameter is FieldRepo fieldRepo)
 			{
 				if (fieldValues.TryGetValue(fieldRepo, out object? value))
 				{
@@ -391,7 +397,7 @@ public class TypeRepoObject : TypeRepo
 					throw new SerializerException("Missing FieldRepo: " + fieldRepo);
 				}
 			}
-			else if (repo is PropertyRepo propertyRepo)
+			else if (parameter is PropertyRepo propertyRepo)
 			{
 				if (propertyValues.TryGetValue(propertyRepo, out object? value))
 				{
@@ -404,7 +410,8 @@ public class TypeRepoObject : TypeRepo
 			}
 			else
 			{
-				throw new SerializerException("Unhandled repo type: " + repo);
+				// This is a default value for an optional parameter
+				parameters.Add(parameter);
 			}
 		}
 

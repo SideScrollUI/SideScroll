@@ -207,4 +207,26 @@ public class SerializeClassConstructorTests : SerializeBaseTest
 
 		Assert.That(output.A, Is.EqualTo(input.A));
 	}
+
+	public class CustomConstructorWithNullableParam
+	{
+		public string A { get; } = "abc";
+
+		public CustomConstructorWithNullableParam(string a, int? b = null)
+		{
+			A = a;
+		}
+	}
+
+	[Test, Description("Serialize Custom Constructor with Nullable Param")]
+	public void SerializeCustomConstructorWithNullableParam()
+	{
+		var input = new CustomConstructorWithNullableParam("123");
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<CustomConstructorWithNullableParam>(Call);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output.A, Is.EqualTo(input.A));
+	}
 }
