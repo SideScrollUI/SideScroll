@@ -32,7 +32,7 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 
 		TextBlock textBlock = CreateTextBlock();
 		//TextBlock textBlock = (TextBlock)base.GenerateElement(cell, dataItem);
-		textBlock.TextAlignment = DataGridUtils.GetTextAlignment(DataColumn.DataType);
+		textBlock.TextAlignment = TableUtils.GetTextAlignment(DataColumn.DataType);
 		AddTextBlockContextMenu(textBlock);
 		return textBlock;
 	}

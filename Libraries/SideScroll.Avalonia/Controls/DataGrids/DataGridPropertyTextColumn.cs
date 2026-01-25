@@ -58,12 +58,12 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 			FormatConverter.Formatter = (ICustomFormatter)Activator.CreateInstance(formatterAttribute.Type)!;
 		}
 
-		if (DataGridUtils.IsTypeAutoSize(propertyInfo.PropertyType))
+		if (TableUtils.IsTypeAutoSize(propertyInfo.PropertyType))
 		{
 			AutoSize = true;
 		}
 
-		CanUserSort = DataGridUtils.IsTypeSortable(propertyInfo.PropertyType);
+		CanUserSort = TableUtils.IsTypeSortable(propertyInfo.PropertyType);
 
 		WordWrap = (PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null);
 

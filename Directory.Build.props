@@ -22,6 +22,7 @@
     - Added MinWidth attribute support for TabTextBox
     - Added ToolTip attribute support for Text Controls
     - Added Theming for Border Focus Colors
+    - Added Chart Legend Context Menu for copying the name and totals to the clipboard
     - Added Summary docs for ListSeries, ChartView, Paths, and WordSpacer
     </PackageReleaseNotes>
 

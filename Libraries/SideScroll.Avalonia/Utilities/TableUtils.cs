@@ -6,9 +6,9 @@ using System.Text;
 namespace SideScroll.Avalonia.Utilities;
 
 /// <summary>
-/// Provides utility methods for working with data grids and tables
+/// Provides utility methods for formatting and working with tabular data
 /// </summary>
-public static class DataGridUtils
+public static class TableUtils
 {
 	/// <summary>
 	/// Gets or sets the maximum width for table columns

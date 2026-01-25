@@ -31,7 +31,7 @@ public class TextBlockElement : TextBlock
 
 		if (!Column.FormatConverter.IsFormatted)
 		{
-			TextAlignment = DataGridUtils.GetTextAlignment(PropertyInfo.PropertyType);
+			TextAlignment = TableUtils.GetTextAlignment(PropertyInfo.PropertyType);
 		}
 
 		if (Column.WordWrap)

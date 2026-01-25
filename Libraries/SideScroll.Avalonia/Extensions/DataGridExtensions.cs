@@ -6,7 +6,7 @@ using SideScroll.Utilities;
 using System.Collections;
 using System.Reflection;
 using System.Text;
-using static SideScroll.Avalonia.Utilities.DataGridUtils;
+using static SideScroll.Avalonia.Utilities.TableUtils;
 
 namespace SideScroll.Avalonia.Extensions;
 

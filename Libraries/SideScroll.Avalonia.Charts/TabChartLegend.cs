@@ -1,8 +1,11 @@
 using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
+using Avalonia.Media;
 using SideScroll.Avalonia.Controls;
+using SideScroll.Avalonia.Utilities;
 using SideScroll.Charts;
 using SideScroll.Collections;
 
@@ -59,7 +62,59 @@ public abstract class TabChartLegend<TSeries> : Grid
 			};
 		}
 
+		AddContextMenu();
+
 		RefreshModel();
+	}
+
+	private void AddContextMenu()
+	{
+		var menuItemCopyAll = new TabMenuItem("Copy - _All");
+		menuItemCopyAll.Click += async delegate
+		{
+			await CopyToClipboardAsync(false);
+		};
+
+		var menuItemCopySelected = new TabMenuItem("Copy - _Selected");
+		menuItemCopySelected.Click += async delegate
+		{
+			await CopyToClipboardAsync(true);
+		};
+
+		ContextMenu = new ContextMenu
+		{
+			ItemsSource = new AvaloniaList<object>
+			{
+				menuItemCopyAll,
+				menuItemCopySelected,
+			}
+		};
+	}
+
+	private async Task CopyToClipboardAsync(bool selectedOnly)
+	{
+		List<TableUtils.ColumnInfo> columns =
+		[
+			new("Name"),
+			new("Total") { RightAlign = TextAlignment.Right }
+		];
+
+		List<List<string>> contentRows = [];
+		foreach (TabChartLegendItem<TSeries> legendItem in LegendItems)
+		{
+			if (selectedOnly && !legendItem.IsSelected)
+				continue;
+
+			List<string> row =
+			[
+				legendItem.ToString() ?? "",
+				legendItem.Total?.ToString() ?? ""
+			];
+			contentRows.Add(row);
+		}
+
+		string tableText = TableUtils.TableToString(columns, contentRows);
+		await ClipboardUtils.SetTextAsync(this, tableText);
 	}
 
 	private string GetTotalName()
