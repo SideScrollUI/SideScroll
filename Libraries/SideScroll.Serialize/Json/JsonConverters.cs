@@ -1,15 +1,25 @@
+using SideScroll.Attributes;
 using SideScroll.Extensions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace SideScroll.Serialize.Json;
 
-// Partial implementation, only used for viewing currently
+/// <summary>
+/// Provides JSON serialization options and custom converters for serializing objects
+/// </summary>
 public static class JsonConverters
 {
-	public static JsonSerializerOptions JsonSerializerOptions => _jsonSerializerOptions ??= CreateOptions();
-	private static JsonSerializerOptions? _jsonSerializerOptions;
+	/// <summary>
+	/// Gets the default JSON serializer options configured for public data only, with read-only members ignored
+	/// </summary>
+	public static JsonSerializerOptions PublicSerializerOptions => _publicSerializerOptions ??= CreateOptions();
+	private static JsonSerializerOptions? _publicSerializerOptions;
 
+	/// <summary>
+	/// Creates a new instance of JSON serializer options configured to serialize only public, writable members
+	/// </summary>
 	public static JsonSerializerOptions CreateOptions()
 	{
 		JsonSerializerOptions jsonSerializerOptions = new()
@@ -18,6 +28,10 @@ public static class JsonConverters
 			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 			IgnoreReadOnlyFields = true,
 			IgnoreReadOnlyProperties = true,
+			TypeInfoResolver = new DefaultJsonTypeInfoResolver
+			{
+				Modifiers = { IgnorePrivateDataAttributeModifier }
+			}
 		};
 
 		jsonSerializerOptions.Converters.Add(new TypeJsonConverter());
@@ -25,8 +39,26 @@ public static class JsonConverters
 
 		return jsonSerializerOptions;
 	}
+
+	private static void IgnorePrivateDataAttributeModifier(JsonTypeInfo typeInfo)
+	{
+		if (typeInfo.Kind != JsonTypeInfoKind.Object)
+			return;
+
+		foreach (JsonPropertyInfo property in typeInfo.Properties)
+		{
+			// Check if the property has PrivateDataAttribute
+			if (property.AttributeProvider?.IsDefined(typeof(PrivateDataAttribute), inherit: true) == true)
+			{
+				property.ShouldSerialize = (_, _) => false;
+			}
+		}
+	}
 }
 
+/// <summary>
+/// JSON converter for System.Type that serializes types using their assembly qualified name
+/// </summary>
 public class TypeJsonConverter : JsonConverter<Type>
 {
 	public override Type? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -44,6 +76,9 @@ public class TypeJsonConverter : JsonConverter<Type>
 	}
 }
 
+/// <summary>
+/// JSON converter for TimeZoneInfo that serializes using the time zone ID
+/// </summary>
 public class TimeZoneInfoJsonConverter : JsonConverter<TimeZoneInfo>
 {
 	public override TimeZoneInfo? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

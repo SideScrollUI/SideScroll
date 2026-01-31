@@ -5,6 +5,7 @@
     - ScreenCapture Border, Icon, and Memory Improvements
     - Fixed TabViewSettings.Address with multiple paths
     - Disabled Debug Info for Release builds
+    - Fixed Bookmark JSON Serialization for enums
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.11</AvaloniaVersion>

@@ -1,11 +1,9 @@
 using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Resources;
-using SideScroll.Serialize.Json;
 using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
-using System.Text.Json;
 
 namespace SideScroll.Tabs.Bookmarks.Tabs;
 
@@ -53,7 +51,7 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection lin
 			toolbar.ButtonCopyLinkToClipboard.Action = CopyLinkToClipboard;
 			model.AddObject(toolbar);
 
-			string json = JsonSerializer.Serialize(tab.Bookmark, JsonConverters.JsonSerializerOptions);
+			string json = tab.Bookmark.ToJson();
 
 			model.Items = new List<ListItem>
 			{

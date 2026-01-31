@@ -1,8 +1,12 @@
 using SideScroll.Attributes;
 using SideScroll.Serialize;
+using SideScroll.Serialize.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SideScroll.Tabs.Bookmarks.Models;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum BookmarkType
 {
 	Default = 0,
@@ -44,11 +48,6 @@ public class Bookmark
 		TabBookmark.IsRoot = true;
 	}
 
-	public string ToBase64String(Call call, bool publicOnly)
-	{
-		return SerializerMemory.ToBase64String(call, this, publicOnly);
-	}
-
 	public static Bookmark Create(Call call, string base64, bool publicOnly)
 	{
 		var serializer = SerializerMemory.Create();
@@ -73,5 +72,15 @@ public class Bookmark
 	public void Import(Project project)
 	{
 		TabBookmark.Import(project);
+	}
+
+	public string ToBase64String(Call call, bool publicOnly)
+	{
+		return SerializerMemory.ToBase64String(call, this, publicOnly);
+	}
+
+	public string ToJson()
+	{
+		return JsonSerializer.Serialize(this, JsonConverters.PublicSerializerOptions);
 	}
 }
