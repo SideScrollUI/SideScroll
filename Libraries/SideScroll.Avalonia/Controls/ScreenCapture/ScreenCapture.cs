@@ -19,6 +19,8 @@ public class ScreenCapture : Grid
 {
 	public static int MinClipboardSize { get; set; } = 10;
 
+	private static RenderTargetBitmap? _clipboardBitmap;
+
 	private RenderTargetBitmap? _originalBitmap;
 	private RenderTargetBitmap? _backgroundBitmap; // 50% faded
 	private RenderTargetBitmap? _selectionBitmap;
@@ -117,14 +119,17 @@ public class ScreenCapture : Grid
 
 	private async Task CopyClipboardAsync(Call call)
 	{
-		// This must not be disposed on macOS
-		RenderTargetBitmap? bitmap = GetSelectedBitmap();
-		if (bitmap == null)
+		_clipboardBitmap?.Dispose();
+		_clipboardBitmap = null;
+		
+		// Get new bitmap - this must not be disposed after setting to clipboard on macOS
+		_clipboardBitmap = GetSelectedBitmap();
+		if (_clipboardBitmap == null)
 			return;
 
 		try
 		{
-			await ClipboardUtils.SetBitmapAsync(this, bitmap);
+			await ClipboardUtils.SetBitmapAsync(this, _clipboardBitmap);
 		}
 		catch (Exception e)
 		{
@@ -269,9 +274,8 @@ public class ScreenCapture : Grid
 				Math.Max(2, _selectionRect.Top)),
 			_selectionRect.BottomRight);
 
-		var brush = SideScrollTheme.ToolbarLabelForeground;
-		var innerPen = new Pen(Brushes.Black, 2, lineCap: PenLineCap.Square);
-		var outerPen = new Pen(brush, 4, lineCap: PenLineCap.Square);
+		var outerPen = new Pen(SideScrollTheme.BorderFocusPrimary, 3, lineCap: PenLineCap.Square);
+		var innerPen = new Pen(SideScrollTheme.BorderFocusSecondary, 1, lineCap: PenLineCap.Square);
 		using (var ctx = _selectionBitmap.CreateDrawingContext())
 		{
 			ctx.DrawImage(_originalBitmap, _selectionRect, _selectionRect);

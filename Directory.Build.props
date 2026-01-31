@@ -1,30 +1,10 @@
 <Project>
   <PropertyGroup>
-    <Version>0.15</Version>
+    <Version>0.16</Version>
     <PackageReleaseNotes>
-    - Simplified Bookmark Schema to group the SelectedRow and TabBookmark together
-      - This new schema should also make it easier to add Json Bookmark serialization in the future
-    - Added ListEnumValue for showing enums and flags
-    - Added Nested DataGrid Filter Support
-      - Filters now allow nesting via parenthesis
-      - Filters now treat all words as required by default unless an | operator is used
-    - Fixed Tab Resizing not updating MaxDesiredWidth
-      - This also fixes resizing DataGrid columns and missing DataGrid values
-    - Fixed Custom Titlebar not responding to mouse clicks near the bottom of the title bar when maximized
-    - Fixed Windows left positioning when the Custom Titlebar is used
-    - Fixed Mouse Clicks not being detected around Image and Toolbar Button Borders
-    - Fixed DateTimeUtils.FormatTimeRange() for UTC Time Ranges
-    - Fixed TimeRangePeriod Summing when TimeRangeValues aren't aligned with the TimeWindow and period
-    - Fixed Copying Text in TabText for Web Browsers
-    - Fixed MemoryTypeCache cache duration not expiring items (only size was limiting)
-    - Improved serializer handling when changing nullability of class members
-    - Added serializer support for custom constructors with optional parameters that can't be serialized
-    - Moved SideScroll.Avalonia.ScreenCapture project into SideScroll.Avalonia
-    - Added MinWidth attribute support for TabTextBox
-    - Added ToolTip attribute support for Text Controls
-    - Added Theming for Border Focus Colors
-    - Added Chart Legend Context Menu for copying the name and totals to the clipboard
-    - Added Summary docs for ListSeries, ChartView, Paths, and WordSpacer
+    - ScreenCapture Border, Icon, and Memory Improvements
+    - Fixed TabViewSettings.Address with multiple paths
+    - Disabled Debug Info for Release builds
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.11</AvaloniaVersion>
@@ -49,5 +29,9 @@
 
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>none</DebugType>
   </PropertyGroup>
 </Project>

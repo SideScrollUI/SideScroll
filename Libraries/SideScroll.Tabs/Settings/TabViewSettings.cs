@@ -5,7 +5,7 @@ namespace SideScroll.Tabs.Settings;
 
 public class TabViewSettings
 {
-	public string? Address
+	public string Address
 	{
 		get
 		{
@@ -24,7 +24,7 @@ public class TabViewSettings
 			}
 			if (count > 1)
 			{
-				address += '[' + address + ']';
+				address = '[' + address + ']';
 			}
 
 			return address;

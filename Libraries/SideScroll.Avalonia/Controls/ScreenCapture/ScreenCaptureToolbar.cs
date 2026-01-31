@@ -27,6 +27,6 @@ public class ScreenCaptureToolbar : TabControlToolbar
 		ButtonOpenFolder = AddButton("Open Folder", Icons.Svg.OpenFolder);
 
 		AddSeparator();
-		ButtonClose = AddButton("Close Snapshot", Icons.Svg.Delete);
+		ButtonClose = AddButton("Close Snapshot", Icons.Svg.Close);
 	}
 }

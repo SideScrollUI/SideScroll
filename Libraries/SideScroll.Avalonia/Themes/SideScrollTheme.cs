@@ -13,6 +13,9 @@ public static class SideScrollTheme
 	public static SolidColorBrush TabBackgroundFocused => GetBrush("TabBackgroundFocusedBrush");
 	public static SolidColorBrush TabProgressBarForeground => GetBrush("TabProgressBarForegroundBrush");
 
+	public static SolidColorBrush BorderFocusPrimary => GetBrush("SystemControlFocusVisualPrimaryBrush");
+	public static SolidColorBrush BorderFocusSecondary => GetBrush("SystemControlFocusVisualSecondaryBrush");
+
 	// Toolbar
 	public static SolidColorBrush ToolbarBackground => GetBrush("ToolbarBackgroundBrush");
 	public static SolidColorBrush ToolbarButtonBackgroundPointerOver => GetBrush("ToolbarButtonBackgroundPointerOverBrush");
