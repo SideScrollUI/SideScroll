@@ -28,9 +28,14 @@ public static class JsonConverters
 			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 			IgnoreReadOnlyFields = true,
 			IgnoreReadOnlyProperties = true,
+			WriteIndented = true,
 			TypeInfoResolver = new DefaultJsonTypeInfoResolver
 			{
-				Modifiers = { IgnorePrivateDataAttributeModifier }
+				Modifiers =
+				{
+					IgnoreUnserializedAttributeModifier,
+					IgnorePrivateDataAttributeModifier,
+				}
 			}
 		};
 
@@ -49,6 +54,28 @@ public static class JsonConverters
 		{
 			// Check if the property has PrivateDataAttribute
 			if (property.AttributeProvider?.IsDefined(typeof(PrivateDataAttribute), inherit: true) == true)
+			{
+				property.ShouldSerialize = (_, _) => false;
+				continue;
+			}
+
+			// Check if the property's type has PrivateDataAttribute
+			if (property.PropertyType.IsDefined(typeof(PrivateDataAttribute), inherit: true))
+			{
+				property.ShouldSerialize = (_, _) => false;
+			}
+		}
+	}
+
+	private static void IgnoreUnserializedAttributeModifier(JsonTypeInfo typeInfo)
+	{
+		if (typeInfo.Kind != JsonTypeInfoKind.Object)
+			return;
+
+		foreach (JsonPropertyInfo property in typeInfo.Properties)
+		{
+			// Check if the property has UnserializedAttribute
+			if (property.AttributeProvider?.IsDefined(typeof(UnserializedAttribute), inherit: true) == true)
 			{
 				property.ShouldSerialize = (_, _) => false;
 			}

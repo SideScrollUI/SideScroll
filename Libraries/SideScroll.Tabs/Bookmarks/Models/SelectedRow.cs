@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Utilities;
+using System.Text.Json.Serialization;
 
 namespace SideScroll.Tabs.Bookmarks.Models;
 
@@ -14,6 +15,8 @@ public class SelectedRow : IEquatable<SelectedRow>
 	public object? Object { get; set; } // used for bookmark searches, dangerous to keep these references around otherwise
 
 	public string? DataKey { get; set; }
+
+	[JsonIgnore] // Todo: Add Json permission type validations
 	public object? DataValue { get; set; } // Imported with bookmark into it's App DataRepo
 
 	// public bool Pinned;

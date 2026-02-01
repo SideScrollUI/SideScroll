@@ -9,14 +9,14 @@ using SideScroll.Utilities;
 namespace SideScroll.Tabs.Bookmarks;
 
 [PublicData]
-public class LinkedBookmark(LinkUri linkUri, Bookmark bookmark)
+public class LinkedBookmark(LinkUri? linkUri, Bookmark bookmark)
 {
 	[MaxHeight(150)]
-	public LinkUri LinkUri => linkUri;
+	public LinkUri? LinkUri => linkUri;
 	public Bookmark Bookmark => bookmark;
 	public DateTime? CreatedTime => Bookmark.CreatedTime;
 
-	public string LinkId => linkUri.ToString();
+	public string LinkId => linkUri?.ToString() ?? bookmark.ToString();
 
 	public override string ToString() => LinkId;
 }
@@ -81,7 +81,7 @@ public class LinkCollection
 		return tabItem;
 	}
 
-	public void AddNew(Call call, LinkUri linkUri, Bookmark bookmark)
+	public void AddNew(Call call, LinkUri? linkUri, Bookmark bookmark)
 	{
 		bookmark.TabBookmark.SetSelectionType(Settings.SelectionType.Link);
 		LinkedBookmark linkedBookmark = new(linkUri, bookmark);

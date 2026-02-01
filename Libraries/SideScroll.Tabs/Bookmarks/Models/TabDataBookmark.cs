@@ -107,7 +107,7 @@ public class TabDataBookmark
 		{
 			ColumnNameOrder = ColumnNameOrder,
 			Filter = Filter,
-			SelectedRows = SelectedRows.Select(s => s.SelectedRow).ToHashSet(),
+			SelectedRows = [.. SelectedRows.Select(s => s.SelectedRow)],
 			SelectionType = SelectionType,
 		};
 	}

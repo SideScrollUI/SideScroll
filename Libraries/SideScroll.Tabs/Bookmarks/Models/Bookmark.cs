@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Serialize;
 using SideScroll.Serialize.Json;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -82,5 +83,19 @@ public class Bookmark
 	public string ToJson()
 	{
 		return JsonSerializer.Serialize(this, JsonConverters.PublicSerializerOptions);
+	}
+
+	public static bool TryParseJson(string json, [NotNullWhen(true)] out Bookmark? bookmark)
+	{
+		try
+		{
+			bookmark = JsonSerializer.Deserialize<Bookmark>(json, JsonConverters.PublicSerializerOptions);
+			return bookmark != null;
+		}
+		catch
+		{
+			bookmark = null;
+			return false;
+		}
 	}
 }

@@ -180,6 +180,10 @@ public class TabViewer : Grid
 		{
 			await ImportLinkAsync(call, linkUri, true);
 		}
+		else if (Bookmark.TryParseJson(clipboardText, out Bookmark? bookmark))
+		{
+			ImportJsonBookmark(call, bookmark);
+		}
 		else
 		{
 			Flyout flyout = new()
@@ -208,7 +212,7 @@ public class TabViewer : Grid
 
 			AvaloniaUtils.ShowFlyout(buttonImport, flyout, "Link retrieved, importing");
 
-			ImportBookmark(call, linkUri, bookmark);
+			ImportLinkBookmark(call, linkUri, bookmark);
 
 			AvaloniaUtils.ShowFlyout(buttonImport, flyout, "Link imported");
 
@@ -221,7 +225,7 @@ public class TabViewer : Grid
 		}
 	}
 
-	private void ImportBookmark(Call call, LinkUri linkUri, Bookmark bookmark)
+	private void ImportLinkBookmark(Call call, LinkUri? linkUri, Bookmark bookmark)
 	{
 		if (LinkManager.Instance != null && bookmark.Imported)
 		{
@@ -244,6 +248,31 @@ public class TabViewer : Grid
 				// only if TabBookmarks used, don't need to reload the tab
 				TabView.Instance.SelectBookmark(bookmark.TabBookmark);
 			}
+		}
+	}
+
+	private void ImportJsonBookmark(Call call, Bookmark bookmark)
+	{
+		var buttonImport = Toolbar!.ButtonImport!;
+
+		Flyout flyout = new()
+		{
+			Placement = PlacementMode.BottomEdgeAlignedLeft,
+		};
+		AvaloniaUtils.ShowFlyout(buttonImport, flyout, "Importing JSON Bookmark ...");
+
+		try
+		{
+			bookmark.Imported = true;
+			bookmark.CreatedTime ??= DateTime.Now;
+
+			ImportLinkBookmark(call, null, bookmark);
+
+			AvaloniaUtils.ShowFlyout(buttonImport, flyout, "JSON Bookmark imported");
+		}
+		catch (Exception ex)
+		{
+			AvaloniaUtils.ShowFlyout(buttonImport, flyout, ex.Message);
 		}
 	}
 
