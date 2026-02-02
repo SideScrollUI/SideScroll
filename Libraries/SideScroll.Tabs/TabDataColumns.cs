@@ -6,13 +6,21 @@ using System.Reflection;
 
 namespace SideScroll.Tabs;
 
+/// <summary>
+/// Manages the columns displayed in tab data grids, including property and method columns
+/// </summary>
 public class TabDataColumns(List<string>? columnNameOrder = null)
 {
-	// Order to show the columns in, users can drag columns around to reorder these
+	/// <summary>
+	/// Order to show the columns in. Users can drag columns around to reorder these
+	/// </summary>
 	public List<string> ColumnNameOrder { get; set; } = columnNameOrder ?? [];
 
 	private static readonly Dictionary<Type, List<PropertyInfo>> VisiblePropertiesCache = [];
 
+	/// <summary>
+	/// Gets the method columns for a type based on ButtonColumnAttribute annotations
+	/// </summary>
 	public static List<TabMethodColumn> GetMethodColumns(Type type)
 	{
 		var methodInfos = type.GetMethods()
@@ -31,6 +39,9 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 		return methodColumns;
 	}
 
+	/// <summary>
+	/// Gets the visible properties for a type, using caching for performance
+	/// </summary>
 	public static List<PropertyInfo> GetVisibleProperties(Type type)
 	{
 		lock (VisiblePropertiesCache)
@@ -44,6 +55,9 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 		}
 	}
 
+	/// <summary>
+	/// Gets the visible properties for the element type of a list
+	/// </summary>
 	public static List<PropertyInfo> GetVisibleElementProperties(IList list)
 	{
 		Type listType = list.GetType();
@@ -75,6 +89,9 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 		return visibleProperties;
 	}
 
+	/// <summary>
+	/// Gets the property columns for a type, ordered according to the ColumnNameOrder
+	/// </summary>
 	public List<TabPropertyColumn> GetPropertyColumns(Type elementType)
 	{
 		List<PropertyInfo> visibleProperties = GetOrderedPropertyColumns(elementType);
@@ -92,6 +109,9 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 	}
 }
 
+/// <summary>
+/// Represents a column backed by a method with a ButtonColumnAttribute
+/// </summary>
 public class TabMethodColumn(MethodInfo methodInfo, string? label = null)
 {
 	[HiddenColumn]
@@ -100,6 +120,9 @@ public class TabMethodColumn(MethodInfo methodInfo, string? label = null)
 	public string Label { get; set; } = label ?? methodInfo.GetCustomAttribute<ButtonColumnAttribute>()?.Name ?? methodInfo.Name;
 }
 
+/// <summary>
+/// Represents a column backed by a property
+/// </summary>
 public class TabPropertyColumn(PropertyInfo propertyInfo, string label)
 {
 	[HiddenColumn]
@@ -109,12 +132,18 @@ public class TabPropertyColumn(PropertyInfo propertyInfo, string label)
 
 	public override string ToString() => Label;
 
+	/// <summary>
+	/// Determines if this column should be styled based on StyleValueAttribute or type
+	/// </summary>
 	public bool IsStyled()
 	{
 		return PropertyInfo.IsDefined(typeof(StyleValueAttribute)) ||
 			typeof(DictionaryEntry).IsAssignableFrom(PropertyInfo.DeclaringType);
 	}
 
+	/// <summary>
+	/// Determines if this column should be visible by checking HideAttribute and HideColumnAttribute, then evaluating visibility for each item in the list
+	/// </summary>
 	public bool IsVisible(IList list)
 	{
 		if (PropertyInfo.GetCustomAttribute<HideAttribute>() == null &&

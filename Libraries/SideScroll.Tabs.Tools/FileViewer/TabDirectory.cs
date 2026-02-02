@@ -45,14 +45,6 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 
 		public async Task LoadAsync(Call call, TabModel model)
 		{
-			DirectoryView.FileSelectorOptions ??= new()
-			{
-				DataRepoFavorites = await FileDataRepos.Favorites.LoadViewAsync(call, Project),
-			};
-		}
-
-		public override void Load(Call call, TabModel model)
-		{
 			model.CustomSettingsPath = tab.Path;
 			model.Editing = true;
 			model.ShowTasks = true;
@@ -62,6 +54,11 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 				model.AddObject("Directory doesn't exist");
 				return;
 			}
+
+			DirectoryView.FileSelectorOptions ??= new()
+			{
+				DataRepoFavorites = await FileDataRepos.Favorites.LoadViewAsync(call, Project),
+			};
 
 			Toolbar toolbar = new();
 			toolbar.ButtonStar = new("Favorite", Icons.Svg.StarFilled, Icons.Svg.Star, new ListProperty(DirectoryView, nameof(DirectoryView.Favorite)));

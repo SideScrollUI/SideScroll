@@ -4,16 +4,36 @@ using System.Collections;
 
 namespace SideScroll.Tabs;
 
-// Overrides default ObjectHasLinks()
+/// <summary>
+/// Overrides default ObjectHasLinks()
+/// </summary>
 public interface IHasLinks
 {
+	/// <summary>
+	/// Indicates whether this object contains linkable content
+	/// Objects that have links will show in a different color and show sub Tabs
+	/// </summary>
 	bool HasLinks { get; }
 }
 
+/// <summary>
+/// Utility methods for working with tab objects and links
+/// </summary>
 public static class TabUtils
 {
+	/// <summary>
+	/// Types that should be ignored when checking for links when ignoreEmpty is true
+	/// </summary>
 	public static List<Type> IgnoreHighlightTypes { get; set; } = [];
 
+	/// <summary>
+	/// Determines whether an object contains linkable content or nested objects.
+	/// Objects that have links will show in a different color and show sub Tabs.
+	/// Returns false for primitive types (int, bool, etc.), enums, strings, decimals, DateTime, and TimeSpan.
+	/// Returns true for complex types like classes, collections, and other objects that can be navigated into.
+	/// </summary>
+	/// <param name="obj">The object to check for linkable content</param>
+	/// <param name="ignoreEmpty">If true, empty collections and types in IgnoreHighlightTypes will return false</param>
 	public static bool ObjectHasLinks(object? obj, bool ignoreEmpty = false)
 	{
 		if (obj == null)

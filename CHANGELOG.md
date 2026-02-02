@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ScreenCapture Border, Icon, and Memory Improvements
 - CHANGELOG.md to track version history
 - CONTRIBUTING.md for contributor guidelines
+- Summary docs for TabDataColumns, TabItemCollection, TabUtils, and Linker
 
 ### Fixed
 - Fixed Bookmark JSON Serialization for enums

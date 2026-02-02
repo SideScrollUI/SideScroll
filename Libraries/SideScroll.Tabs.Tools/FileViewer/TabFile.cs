@@ -57,20 +57,17 @@ public class TabFile(FileView fileView) : ITab
 
 		public async Task LoadAsync(Call call, TabModel model)
 		{
-			FileView.FileSelectorOptions ??= new()
-			{
-				DataRepoFavorites = await FileDataRepos.Favorites.LoadViewAsync(call, Project),
-			};
-		}
-
-		public override void Load(Call call, TabModel model)
-		{
 			string path = tab.Path;
 			if (!File.Exists(path))
 			{
 				model.AddObject("File doesn't exist");
 				return;
 			}
+
+			FileView.FileSelectorOptions ??= new()
+			{
+				DataRepoFavorites = await FileDataRepos.Favorites.LoadViewAsync(call, Project),
+			};
 
 			Toolbar toolbar = new()
 			{

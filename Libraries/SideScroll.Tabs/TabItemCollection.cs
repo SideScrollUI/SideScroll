@@ -4,16 +4,29 @@ using System.Collections;
 
 namespace SideScroll.Tabs;
 
+/// <summary>
+/// Manages a collection of items for tab views, providing indexing and selection capabilities
+/// </summary>
 public class TabItemCollection
 {
+	/// <summary>
+	/// The complete list of items in the collection
+	/// </summary>
 	public IList Items { get; set; }
-	public IEnumerable? Filtered { get; set; } // CollectionView takes filters into account
+	
+	/// <summary>
+	/// The filtered view of items. CollectionView takes filters into account
+	/// </summary>
+	public IEnumerable? Filtered { get; set; }
 
 	private HashSet<object> _objects = [];
 	private Dictionary<string, object> _keys = [];
 
 	public override string? ToString() => Items.ToString();
 
+	/// <summary>
+	/// Creates a new TabItemCollection with the specified items and optional filtered view
+	/// </summary>
 	public TabItemCollection(IList items, IEnumerable? filtered = null)
 	{
 		Items = items;
@@ -22,6 +35,9 @@ public class TabItemCollection
 		UpdateIndices();
 	}
 
+	/// <summary>
+	/// Updates the internal indices and key mappings for items in the collection
+	/// </summary>
 	public void UpdateIndices()
 	{
 		_objects = [];
@@ -46,6 +62,9 @@ public class TabItemCollection
 		}
 	}
 
+	/// <summary>
+	/// Retrieves the objects corresponding to the selected rows
+	/// </summary>
 	public List<object> GetSelectedObjects(HashSet<SelectedRow> selectedRows)
 	{
 		if (selectedRows.Count == 0 || _objects.Count == 0)
@@ -57,6 +76,9 @@ public class TabItemCollection
 			.ToList();
 	}
 
+	/// <summary>
+	/// Finds the object that matches the specified selected row by comparing object reference, row index, data key, or label
+	/// </summary>
 	public object? GetMatchingObject(SelectedRow selectedRow)
 	{
 		if (selectedRow.Object != null && _objects.Contains(selectedRow.Object))

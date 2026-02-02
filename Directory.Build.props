@@ -22,7 +22,7 @@
 
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/SideScrollUI/SideScroll</PackageProjectUrl>
-    <PackageTags>sidescroll;sidescrollui;avalonia;avaloniaui</PackageTags>
+    <PackageTags>sidescroll;sidescrollui;avalonia;avaloniaui;ui;framework;desktop;cross-platform;tabs;datagrid;forms;charts</PackageTags>
     <PackageIcon>SideScroll_128.png</PackageIcon>
     <PackageReadmeFile>README.NuGet.md</PackageReadmeFile>
 
