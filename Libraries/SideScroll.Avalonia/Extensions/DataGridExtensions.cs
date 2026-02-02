@@ -10,10 +10,19 @@ using static SideScroll.Avalonia.Utilities.TableUtils;
 
 namespace SideScroll.Avalonia.Extensions;
 
+/// <summary>
+/// Extension methods for DataGrid operations including export to string tables and CSV
+/// </summary>
 public static class DataGridExtensions
 {
+	/// <summary>
+	/// Maximum length for cell values when exporting to string or CSV
+	/// </summary>
 	public static int MaxValueLength { get; set; } = 2000;
 
+	/// <summary>
+	/// Converts all values from a specific column to a string table (one value per line)
+	/// </summary>
 	public static string ColumnToStringTable(this DataGrid dataGrid, DataGridBoundColumn column)
 	{
 		ArgumentNullException.ThrowIfNull(dataGrid);
@@ -28,6 +37,9 @@ public static class DataGridExtensions
 		return sb.ToString();
 	}
 
+	/// <summary>
+	/// Converts values from a specific column for selected rows to a string (one value per line)
+	/// </summary>
 	public static string SelectedColumnToString(this DataGrid dataGrid, DataGridBoundColumn column)
 	{
 		ArgumentNullException.ThrowIfNull(dataGrid);
@@ -60,6 +72,9 @@ public static class DataGridExtensions
 		//object content = column.GetCellValue(item, column.ClipboardContentBinding);
 	}
 
+	/// <summary>
+	/// Converts a DataGrid row object to a formatted string showing all column values
+	/// </summary>
 	public static string? RowToString(this DataGrid dataGrid, object? obj)
 	{
 		ArgumentNullException.ThrowIfNull(dataGrid);
@@ -93,6 +108,9 @@ public static class DataGridExtensions
 		return sb.ToString();
 	}
 
+	/// <summary>
+	/// Converts selected DataGrid rows to a formatted string table
+	/// </summary>
 	public static string SelectedToString(this DataGrid dataGrid)
 	{
 		ArgumentNullException.ThrowIfNull(dataGrid);
@@ -104,6 +122,9 @@ public static class DataGridExtensions
 		return TableToString(columns, contentRows);
 	}
 
+	/// <summary>
+	/// Converts selected DataGrid rows to CSV format
+	/// </summary>
 	public static string SelectedToCsv(this DataGrid dataGrid)
 	{
 		ArgumentNullException.ThrowIfNull(dataGrid);
@@ -115,6 +136,9 @@ public static class DataGridExtensions
 		return TableToCsv(columns, contentRows);
 	}
 
+	/// <summary>
+	/// Converts all DataGrid rows to a formatted string table
+	/// </summary>
 	public static string ToStringTable(this DataGrid dataGrid)
 	{
 		ArgumentNullException.ThrowIfNull(dataGrid);
@@ -126,6 +150,9 @@ public static class DataGridExtensions
 		return TableToString(columns, contentRows);
 	}
 
+	/// <summary>
+	/// Converts all DataGrid rows to CSV format
+	/// </summary>
 	public static string ToCsv(this DataGrid dataGrid)
 	{
 		ArgumentNullException.ThrowIfNull(dataGrid);
