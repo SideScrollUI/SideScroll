@@ -63,6 +63,20 @@ public class JsonConverterTests : SerializeBaseTest
 	[Test, Description("Test [PrivateData] on class blocks serialization")]
 	public void SerializePrivateDataClass()
 	{
+		var input = new PrivateClass
+		{
+			Confidential = "secrets",
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<PrivateClass>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Null);
+	}
+
+	[Test, Description("Test [PrivateData] on member class blocks serialization")]
+	public void SerializePrivateDataMemberClass()
+	{
 		var input = new ContainerWithPrivateClass
 		{
 			PublicData = "visible",
@@ -78,6 +92,127 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.PublicData, Is.EqualTo("visible"));
 		Assert.That(output.PrivateObject, Is.Null);
+	}
+
+	#endregion
+
+	#region ProtectedData Tests
+
+	[ProtectedData]
+	public class ProtectedPropertiesClass
+	{
+		[PublicData]
+		public string? PublicProperty { get; set; }
+
+		public string? NormalProperty { get; set; }
+	}
+
+	[Test, Description("Test [ProtectedData] class with [PublicData] properties")]
+	public void SerializeProtectedProperties()
+	{
+		var input = new ProtectedPropertiesClass
+		{
+			PublicProperty = "publicData",
+			NormalProperty = "secrets",
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ProtectedPropertiesClass>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.PublicProperty, Is.EqualTo("publicData"));
+		Assert.That(output.NormalProperty, Is.Null);
+	}
+
+	[ProtectedData]
+	public class ProtectedFieldsClass
+	{
+		[PublicData]
+		public string? PublicField;
+
+		public string? NormalField;
+	}
+
+	[Test, Description("Test [ProtectedData] class with [PublicData] fields")]
+	public void SerializeProtectedFields()
+	{
+		var input = new ProtectedFieldsClass
+		{
+			PublicField = "publicData",
+			NormalField = "secrets",
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ProtectedFieldsClass>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.PublicField, Is.EqualTo("publicData"));
+		Assert.That(output.NormalField, Is.Null);
+	}
+
+	[ProtectedData]
+	public class ProtectedMixedClass
+	{
+		[PublicData]
+		public string? PublicProperty { get; set; }
+
+		[PublicData]
+		public string? PublicField;
+
+		public string? PrivateProperty { get; set; }
+
+		public string? PrivateField;
+	}
+
+	[Test, Description("Test [ProtectedData] class with mixed members")]
+	public void SerializeProtectedMixedMembers()
+	{
+		var input = new ProtectedMixedClass
+		{
+			PublicProperty = "visible property",
+			PublicField = "visible field",
+			PrivateProperty = "hidden property",
+			PrivateField = "hidden field",
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ProtectedMixedClass>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.PublicProperty, Is.EqualTo("visible property"));
+		Assert.That(output.PublicField, Is.EqualTo("visible field"));
+		Assert.That(output.PrivateProperty, Is.Null);
+		Assert.That(output.PrivateField, Is.Null);
+	}
+
+	[PublicData]
+	public class ContainerWithProtectedClass
+	{
+		public string? PublicData { get; set; }
+		public ProtectedPropertiesClass? ProtectedObject { get; set; }
+	}
+
+	[Test, Description("Test [ProtectedData] class as member")]
+	public void SerializeProtectedDataMemberClass()
+	{
+		var input = new ContainerWithProtectedClass
+		{
+			PublicData = "visible",
+			ProtectedObject = new ProtectedPropertiesClass
+			{
+				PublicProperty = "public in protected",
+				NormalProperty = "secrets",
+			},
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ContainerWithProtectedClass>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.PublicData, Is.EqualTo("visible"));
+		Assert.That(output.ProtectedObject, Is.Not.Null);
+		Assert.That(output.ProtectedObject!.PublicProperty, Is.EqualTo("public in protected"));
+		Assert.That(output.ProtectedObject.NormalProperty, Is.Null);
 	}
 
 	#endregion

@@ -28,6 +28,7 @@ public static class JsonConverters
 			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 			IgnoreReadOnlyFields = true,
 			IgnoreReadOnlyProperties = true,
+			IncludeFields = true,
 			WriteIndented = true,
 			TypeInfoResolver = new DefaultJsonTypeInfoResolver
 			{
@@ -35,10 +36,12 @@ public static class JsonConverters
 				{
 					IgnoreUnserializedAttributeModifier,
 					IgnorePrivateDataAttributeModifier,
+					IgnoreProtectedDataAttributeModifier,
 				}
 			}
 		};
 
+		jsonSerializerOptions.Converters.Add(new PrivateDataJsonConverterFactory());
 		jsonSerializerOptions.Converters.Add(new TypeJsonConverter());
 		jsonSerializerOptions.Converters.Add(new TimeZoneInfoJsonConverter());
 
@@ -80,6 +83,78 @@ public static class JsonConverters
 				property.ShouldSerialize = (_, _) => false;
 			}
 		}
+	}
+
+	private static void IgnoreProtectedDataAttributeModifier(JsonTypeInfo typeInfo)
+	{
+		if (typeInfo.Kind != JsonTypeInfoKind.Object)
+			return;
+
+		// Check if the class itself has ProtectedDataAttribute
+		bool isProtectedClass = typeInfo.Type.IsDefined(typeof(ProtectedDataAttribute), inherit: true);
+		
+		if (!isProtectedClass)
+			return;
+
+		// For ProtectedData classes, only serialize members explicitly marked with PublicData
+		foreach (JsonPropertyInfo property in typeInfo.Properties)
+		{
+			bool hasPublicDataAttribute = property.AttributeProvider?.IsDefined(typeof(PublicDataAttribute), inherit: true) == true;
+			
+			// Also check the actual field/property on the type (for fields especially)
+			if (!hasPublicDataAttribute)
+			{
+				var memberInfo = typeInfo.Type.GetMember(property.Name, 
+					System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | 
+					System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static).FirstOrDefault();
+				
+				if (memberInfo != null)
+				{
+					hasPublicDataAttribute = memberInfo.IsDefined(typeof(PublicDataAttribute), inherit: true);
+				}
+			}
+			
+			if (!hasPublicDataAttribute)
+			{
+				property.ShouldSerialize = (_, _) => false;
+			}
+		}
+	}
+}
+
+/// <summary>
+/// JSON converter factory for types marked with PrivateDataAttribute
+/// </summary>
+public class PrivateDataJsonConverterFactory : JsonConverterFactory
+{
+	public override bool CanConvert(Type typeToConvert)
+	{
+		return typeToConvert.IsDefined(typeof(PrivateDataAttribute), inherit: true);
+	}
+
+	public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+	{
+		return (JsonConverter?)Activator.CreateInstance(
+			typeof(PrivateDataJsonConverter<>).MakeGenericType(typeToConvert));
+	}
+}
+
+/// <summary>
+/// JSON converter that serializes types marked with PrivateDataAttribute as null
+/// </summary>
+public class PrivateDataJsonConverter<T> : JsonConverter<T>
+{
+	public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+	{
+		// Skip the value and return null/default
+		reader.Skip();
+		return default;
+	}
+
+	public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
+	{
+		// Write null for private data types
+		writer.WriteNullValue();
 	}
 }
 
