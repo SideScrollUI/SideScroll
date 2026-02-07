@@ -602,6 +602,14 @@ public class TextEditorTheme : ThemeSection
 	[ResourceKey("LinkTextForegroundBrush")]
 	public Color? LinkForeground { get; set; }
 
+	// Search
+
+	[Header("Search"), ResourceKey("SearchPanelBackgroundBrush")]
+	public Color? SearchPanelBackground { get; set; }
+
+	[ResourceKey("SearchPanelBorderBrush")]
+	public Color? SearchPanelBorder { get; set; }
+
 	// Json
 
 	[Header("Json"), ResourceKey("JsonHighlightPunctuationBrush")]

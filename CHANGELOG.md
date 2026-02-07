@@ -8,8 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Added Json Serialization link importing (only paths are allowed for now, no data items)
+- Json Serialization link importing (only paths are allowed for now, no data items)
 - ScreenCapture Border, Icon, and Memory Improvements
+- TextEditor Search Panel Theming
 - CHANGELOG.md to track version history
 - CONTRIBUTING.md for contributor guidelines
 - Summary docs for TabDataColumns, TabItemCollection, TabUtils, Linker, SerializerExtensions, AvaloniaExtensions, and DataGridExtensions

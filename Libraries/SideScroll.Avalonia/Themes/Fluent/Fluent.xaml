@@ -410,6 +410,8 @@
           <SolidColorBrush x:Key="TextEditorForegroundBrush" Color="#ff001061" />
           <SolidColorBrush x:Key="TextEditorBorderBrush" Color="Black" />
           
+          <SolidColorBrush x:Key="SearchPanelBackgroundBrush" Color="#ffebf0fc" />
+          <SolidColorBrush x:Key="SearchPanelBorderBrush" Color="#ffe1e4ed" />
           <SolidColorBrush x:Key="TextAreaSelectionBrush" Color="#ffdbe5ff" />
           <SolidColorBrush x:Key="LinkTextForegroundBrush" Color="#ff0000f7" />
 
@@ -803,7 +805,9 @@
           <SolidColorBrush x:Key="TextEditorBackgroundBrush" Color="#1c1c1c" />
           <SolidColorBrush x:Key="TextEditorForegroundBrush" Color="{DynamicResource TextForegroundColor}" />
           <SolidColorBrush x:Key="TextEditorBorderBrush" Color="Black" />
-          
+
+          <SolidColorBrush x:Key="SearchPanelBackgroundBrush" Color="#0d0d0d" />
+          <SolidColorBrush x:Key="SearchPanelBorderBrush" Color="Black" />
           <SolidColorBrush x:Key="TextAreaSelectionBrush" Color="#db182c7a" />
           <SolidColorBrush x:Key="LinkTextForegroundBrush" Color="#3178D9" />
 

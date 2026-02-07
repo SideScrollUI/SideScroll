@@ -168,6 +168,8 @@
     "Foreground": "Black",
     "SelectedBackground": "#ffb8d6ff",
     "LinkForeground": "Blue",
+    "SearchPanelBackground": "#ffebf0fc",
+    "SearchPanelBorder": "#ffe1e4ed",
     "JsonPunctuation": "Black",
     "JsonFieldName": "DarkMagenta",
     "JsonString": "Green",

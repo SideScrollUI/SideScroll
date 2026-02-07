@@ -7,7 +7,7 @@
     </PackageReleaseNotes>
 
     <AvaloniaVersion>11.3.11</AvaloniaVersion>
-    <AvaloniaEditVersion>11.3.0</AvaloniaEditVersion>
+    <AvaloniaEditVersion>11.4.1</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
     <Configurations>Debug;Release;DebugX86</Configurations>
