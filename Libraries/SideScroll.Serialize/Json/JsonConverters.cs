@@ -166,7 +166,7 @@ public class ObjectJsonConverterFactory : JsonConverterFactory
 {
 	public override bool CanConvert(Type typeToConvert)
 	{
-		return typeToConvert == typeof(object);
+		return typeToConvert == typeof(object) || typeToConvert.IsInterface;
 	}
 
 	public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
@@ -212,7 +212,7 @@ public class ObjectJsonConverter : JsonConverter<object>
 
 	public override bool CanConvert(Type typeToConvert)
 	{
-		return typeToConvert == typeof(object);
+		return typeToConvert == typeof(object) || typeToConvert.IsInterface;
 	}
 
 	public static bool IsAllowedType(Type type)

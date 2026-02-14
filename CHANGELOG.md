@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Json Serialization link importing (only paths and data items are allowed for now)
+- Json links can now be imported
 - ScreenCapture Border, Icon, and Memory Improvements
 - TextEditor Search Panel Theming
 - Toolbar Copy button to TabTextFile

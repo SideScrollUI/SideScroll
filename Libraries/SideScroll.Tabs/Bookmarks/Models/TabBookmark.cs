@@ -33,7 +33,6 @@ public class TabBookmark
 		}
 	}
 
-	[JsonIgnore] // Todo: Add Json permission type validations
 	public ITab? Tab { get; set; } // [TabRoot] will set this to use the serialized tab as the root tab
 
 	[PrivateData]
@@ -44,7 +43,6 @@ public class TabBookmark
 	public List<TabDataBookmark> TabDatas { get; set; } = [];
 
 	// Custom Tab Data, object Types must be allowed or have [PublicData] set
-	[JsonIgnore] // Todo: Add Json permission type validations
 	public Dictionary<string, object?>? BookmarkData { get; set; }
 
 	// Temporary, Only FindMatches() uses, refactor these out?

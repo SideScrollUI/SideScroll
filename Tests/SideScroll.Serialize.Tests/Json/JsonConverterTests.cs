@@ -1053,5 +1053,590 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(outputNested.Value, Is.EqualTo(42));
 	}
 
+	[PublicData]
+	public class UserData
+	{
+		public string? Username { get; set; }
+		public int Score { get; set; }
+		public DateTime LastLogin { get; set; }
+	}
+
+	[PublicData]
+	public class ObjectDictionaryContainer
+	{
+		public Dictionary<string, object?>? ObjectData { get; set; }
+	}
+
+	[Test, Description("Test Dictionary<string, object?> with [PublicData] types")]
+	public void SerializeDictionaryWithPublicDataObjectValues()
+	{
+		var input = new ObjectDictionaryContainer
+		{
+			ObjectData = new Dictionary<string, object?>
+			{
+				{ "user1", new UserData { Username = "alice", Score = 100, LastLogin = new DateTime(2024, 1, 15, 10, 30, 0, DateTimeKind.Utc) } },
+				{ "user2", new UserData { Username = "bob", Score = 250, LastLogin = new DateTime(2024, 2, 20, 14, 45, 0, DateTimeKind.Utc) } },
+				{ "count", 42 },
+				{ "message", "Hello World" },
+				{ "nullValue", null }
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		
+		// Verify JSON contains type information for UserData objects
+		Assert.That(json, Contains.Substring("$type"));
+		Assert.That(json, Contains.Substring("$value"));
+		Assert.That(json, Contains.Substring("UserData"));
+		
+		var output = JsonSerializer.Deserialize<ObjectDictionaryContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.ObjectData, Is.Not.Null);
+		Assert.That(output.ObjectData, Has.Count.EqualTo(5));
+		
+		// Verify UserData object 1
+		Assert.That(output.ObjectData!["user1"], Is.InstanceOf<UserData>());
+		var user1 = (UserData)output.ObjectData["user1"]!;
+		Assert.That(user1.Username, Is.EqualTo("alice"));
+		Assert.That(user1.Score, Is.EqualTo(100));
+		Assert.That(user1.LastLogin.ToUniversalTime(), Is.EqualTo(new DateTime(2024, 1, 15, 10, 30, 0, DateTimeKind.Utc)));
+		
+		// Verify UserData object 2
+		Assert.That(output.ObjectData["user2"], Is.InstanceOf<UserData>());
+		var user2 = (UserData)output.ObjectData["user2"]!;
+		Assert.That(user2.Username, Is.EqualTo("bob"));
+		Assert.That(user2.Score, Is.EqualTo(250));
+		Assert.That(user2.LastLogin.ToUniversalTime(), Is.EqualTo(new DateTime(2024, 2, 20, 14, 45, 0, DateTimeKind.Utc)));
+		
+		// Verify primitive values
+		Assert.That(output.ObjectData["count"], Is.Not.Null);
+		Assert.That(output.ObjectData["count"]!.ToString(), Is.EqualTo("42"));
+		
+		Assert.That(output.ObjectData["message"], Is.Not.Null);
+		Assert.That(output.ObjectData["message"]!.ToString(), Is.EqualTo("Hello World"));
+		
+		// Verify null value
+		Assert.That(output.ObjectData["nullValue"], Is.Null);
+	}
+
+	[Test, Description("Test Dictionary<string, object?> with mixed [PublicData] and primitive types")]
+	public void SerializeDictionaryWithMixedObjectTypes()
+	{
+		var input = new ObjectDictionaryContainer
+		{
+			ObjectData = new Dictionary<string, object?>
+			{
+				{ "data", new UserData { Username = "charlie", Score = 500, LastLogin = DateTime.UtcNow } },
+				{ "number", 123 },
+				{ "text", "Sample text" },
+				{ "flag", true },
+				{ "list", new List<int> { 1, 2, 3 } },
+				{ "decimal", 99.99m }
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ObjectDictionaryContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.ObjectData, Is.Not.Null);
+		Assert.That(output.ObjectData, Has.Count.EqualTo(6));
+		
+		// Verify [PublicData] type
+		Assert.That(output.ObjectData!["data"], Is.InstanceOf<UserData>());
+		var userData = (UserData)output.ObjectData["data"]!;
+		Assert.That(userData.Username, Is.EqualTo("charlie"));
+		Assert.That(userData.Score, Is.EqualTo(500));
+		
+		// Verify primitives and collections
+		Assert.That(output.ObjectData["number"]!.ToString(), Is.EqualTo("123"));
+		Assert.That(output.ObjectData["text"]!.ToString(), Is.EqualTo("Sample text"));
+		Assert.That(output.ObjectData["flag"]!.ToString(), Is.EqualTo("True"));
+		Assert.That(output.ObjectData["list"], Is.InstanceOf<List<int>>());
+		Assert.That(output.ObjectData["decimal"]!.ToString(), Is.EqualTo("99.99"));
+	}
+
+	// Unregistered class without [PublicData] attribute
+	public class UnregisteredUserData
+	{
+		public string? Username { get; set; }
+		public int Score { get; set; }
+	}
+
+	[Test, Description("Test Dictionary<string, object?> blocks unregistered types without [PublicData]")]
+	public void SerializeDictionaryBlocksUnregisteredTypes()
+	{
+		var input = new ObjectDictionaryContainer
+		{
+			ObjectData = new Dictionary<string, object?>
+			{
+				{ "unregistered", new UnregisteredUserData { Username = "blocked", Score = 999 } },
+				{ "allowed", new UserData { Username = "allowed", Score = 100, LastLogin = DateTime.UtcNow } },
+				{ "primitive", 42 }
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ObjectDictionaryContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.ObjectData, Is.Not.Null);
+		Assert.That(output.ObjectData, Has.Count.EqualTo(3));
+		
+		// Unregistered type should be serialized as null
+		Assert.That(output.ObjectData!["unregistered"], Is.Null);
+		
+		// [PublicData] type should serialize correctly
+		Assert.That(output.ObjectData["allowed"], Is.InstanceOf<UserData>());
+		var userData = (UserData)output.ObjectData["allowed"]!;
+		Assert.That(userData.Username, Is.EqualTo("allowed"));
+		
+		// Primitive should work
+		Assert.That(output.ObjectData["primitive"]!.ToString(), Is.EqualTo("42"));
+	}
+
+	[Test, Description("Test Dictionary<string, object?> blocks raw object instances")]
+	public void SerializeDictionaryBlocksRawObjects()
+	{
+		var input = new ObjectDictionaryContainer
+		{
+			ObjectData = new Dictionary<string, object?>
+			{
+				{ "rawObject", new object() },
+				{ "allowed", new UserData { Username = "test", Score = 50, LastLogin = DateTime.UtcNow } }
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ObjectDictionaryContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.ObjectData, Is.Not.Null);
+		Assert.That(output.ObjectData, Has.Count.EqualTo(2));
+		
+		// Raw object should be serialized as null
+		Assert.That(output.ObjectData!["rawObject"], Is.Null);
+		
+		// [PublicData] type should work
+		Assert.That(output.ObjectData["allowed"], Is.InstanceOf<UserData>());
+	}
+
+	[Test, Description("Test Dictionary<string, object?> with all unregistered types returns dictionary with nulls")]
+	public void SerializeDictionaryWithAllUnregisteredTypes()
+	{
+		var input = new ObjectDictionaryContainer
+		{
+			ObjectData = new Dictionary<string, object?>
+			{
+				{ "unregistered1", new UnregisteredUserData { Username = "user1", Score = 100 } },
+				{ "unregistered2", new UnregisteredClass { Data = "data", Value = 42 } },
+				{ "rawObject", new object() }
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ObjectDictionaryContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.ObjectData, Is.Not.Null);
+		Assert.That(output.ObjectData, Has.Count.EqualTo(3));
+		
+		// All unregistered types should be null
+		Assert.That(output.ObjectData!["unregistered1"], Is.Null);
+		Assert.That(output.ObjectData["unregistered2"], Is.Null);
+		Assert.That(output.ObjectData["rawObject"], Is.Null);
+	}
+
+	public interface IUnregisteredInterface
+	{
+		string Name { get; set; }
+	}
+
+	// Implementation without [PublicData]
+	public class UnregisteredImplementation : IUnregisteredInterface
+	{
+		public string Name { get; set; } = "";
+		public int Value { get; set; }
+	}
+
+	[Test, Description("Test Dictionary<string, object?> blocks interface implementations without [PublicData]")]
+	public void SerializeDictionaryBlocksUnregisteredInterfaceImplementations()
+	{
+		var input = new ObjectDictionaryContainer
+		{
+			ObjectData = new Dictionary<string, object?>
+			{
+				{ "unregisteredImpl", new UnregisteredImplementation { Name = "blocked", Value = 999 } },
+				{ "registeredImpl", new Dog { Name = "Buddy", Breed = "Labrador" } }
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ObjectDictionaryContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.ObjectData, Is.Not.Null);
+		Assert.That(output.ObjectData, Has.Count.EqualTo(2));
+		
+		// Unregistered implementation should be null
+		Assert.That(output.ObjectData!["unregisteredImpl"], Is.Null);
+		
+		// Registered [PublicData] implementation should work
+		Assert.That(output.ObjectData["registeredImpl"], Is.InstanceOf<Dog>());
+		var dog = (Dog)output.ObjectData["registeredImpl"]!;
+		Assert.That(dog.Name, Is.EqualTo("Buddy"));
+		Assert.That(dog.Breed, Is.EqualTo("Labrador"));
+	}
+
+	#endregion
+
+	#region Interface Serialization Tests
+
+	public interface IAnimal
+	{
+		string Name { get; set; }
+		string Sound { get; }
+	}
+
+	[PublicData]
+	public class Dog : IAnimal
+	{
+		public string Name { get; set; } = "";
+		public string Sound => "Woof";
+		public string Breed { get; set; } = "";
+	}
+
+	[PublicData]
+	public class Cat : IAnimal
+	{
+		public string Name { get; set; } = "";
+		public string Sound => "Meow";
+		public int Lives { get; set; } = 9;
+	}
+
+	[PublicData]
+	public class AnimalContainer
+	{
+		public IAnimal? Pet { get; set; }
+		public IAnimal[]? Animals { get; set; }
+	}
+
+	[Test, Description("Test interface property with Dog implementation")]
+	public void SerializeInterfaceWithDogImplementation()
+	{
+		var input = new AnimalContainer
+		{
+			Pet = new Dog { Name = "Buddy", Breed = "Golden Retriever" }
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		
+		// Verify JSON contains type information for interface
+		Assert.That(json, Contains.Substring("$type"));
+		Assert.That(json, Contains.Substring("$value"));
+		Assert.That(json, Contains.Substring("Dog"));
+		
+		var output = JsonSerializer.Deserialize<AnimalContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Pet, Is.Not.Null);
+		Assert.That(output.Pet, Is.InstanceOf<Dog>());
+		
+		var dog = (Dog)output.Pet!;
+		Assert.That(dog.Name, Is.EqualTo("Buddy"));
+		Assert.That(dog.Breed, Is.EqualTo("Golden Retriever"));
+		Assert.That(dog.Sound, Is.EqualTo("Woof"));
+	}
+
+	[Test, Description("Test interface property with Cat implementation")]
+	public void SerializeInterfaceWithCatImplementation()
+	{
+		var input = new AnimalContainer
+		{
+			Pet = new Cat { Name = "Whiskers", Lives = 7 }
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		
+		// Verify JSON contains type information for interface
+		Assert.That(json, Contains.Substring("$type"));
+		Assert.That(json, Contains.Substring("$value"));
+		Assert.That(json, Contains.Substring("Cat"));
+		
+		var output = JsonSerializer.Deserialize<AnimalContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Pet, Is.Not.Null);
+		Assert.That(output.Pet, Is.InstanceOf<Cat>());
+		
+		var cat = (Cat)output.Pet!;
+		Assert.That(cat.Name, Is.EqualTo("Whiskers"));
+		Assert.That(cat.Lives, Is.EqualTo(7));
+		Assert.That(cat.Sound, Is.EqualTo("Meow"));
+	}
+
+	[Test, Description("Test interface array with multiple implementations")]
+	public void SerializeInterfaceArrayWithMixedImplementations()
+	{
+		var input = new AnimalContainer
+		{
+			Animals = new IAnimal[]
+			{
+				new Dog { Name = "Max", Breed = "Labrador" },
+				new Cat { Name = "Luna", Lives = 8 },
+				new Dog { Name = "Charlie", Breed = "Beagle" },
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		
+		// Verify JSON contains type information for each array element
+		Assert.That(json, Contains.Substring("Dog"));
+		Assert.That(json, Contains.Substring("Cat"));
+		
+		var output = JsonSerializer.Deserialize<AnimalContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Animals, Is.Not.Null);
+		Assert.That(output.Animals, Has.Length.EqualTo(3));
+		
+		// Verify first Dog
+		Assert.That(output.Animals![0], Is.InstanceOf<Dog>());
+		var dog1 = (Dog)output.Animals[0];
+		Assert.That(dog1.Name, Is.EqualTo("Max"));
+		Assert.That(dog1.Breed, Is.EqualTo("Labrador"));
+		
+		// Verify Cat
+		Assert.That(output.Animals[1], Is.InstanceOf<Cat>());
+		var cat = (Cat)output.Animals[1];
+		Assert.That(cat.Name, Is.EqualTo("Luna"));
+		Assert.That(cat.Lives, Is.EqualTo(8));
+		
+		// Verify second Dog
+		Assert.That(output.Animals[2], Is.InstanceOf<Dog>());
+		var dog2 = (Dog)output.Animals[2];
+		Assert.That(dog2.Name, Is.EqualTo("Charlie"));
+		Assert.That(dog2.Breed, Is.EqualTo("Beagle"));
+	}
+
+	[Test, Description("Test null interface property")]
+	public void SerializeNullInterfaceProperty()
+	{
+		var input = new AnimalContainer
+		{
+			Pet = null,
+			Animals = null
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<AnimalContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Pet, Is.Null);
+		Assert.That(output.Animals, Is.Null);
+	}
+
+	public interface IShape
+	{
+		double Area { get; }
+	}
+
+	[PublicData]
+	public class Circle : IShape
+	{
+		public double Radius { get; set; }
+		public double Area => Math.PI * Radius * Radius;
+	}
+
+	[PublicData]
+	public class Rectangle : IShape
+	{
+		public double Width { get; set; }
+		public double Height { get; set; }
+		public double Area => Width * Height;
+	}
+
+	[PublicData]
+	public class ShapeCollection
+	{
+		public List<IShape>? Shapes { get; set; }
+	}
+
+	[Test, Description("Test List of interfaces with different implementations")]
+	public void SerializeListOfInterfaces()
+	{
+		var input = new ShapeCollection
+		{
+			Shapes = new List<IShape>
+			{
+				new Circle { Radius = 5.0 },
+				new Rectangle { Width = 4.0, Height = 6.0 },
+				new Circle { Radius = 3.0 },
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		
+		// Verify JSON contains type information for each element
+		Assert.That(json, Contains.Substring("Circle"));
+		Assert.That(json, Contains.Substring("Rectangle"));
+		
+		var output = JsonSerializer.Deserialize<ShapeCollection>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Shapes, Is.Not.Null);
+		Assert.That(output.Shapes, Has.Count.EqualTo(3));
+		
+		// Verify first Circle
+		Assert.That(output.Shapes![0], Is.InstanceOf<Circle>());
+		var circle1 = (Circle)output.Shapes[0];
+		Assert.That(circle1.Radius, Is.EqualTo(5.0));
+		Assert.That(circle1.Area, Is.EqualTo(Math.PI * 25).Within(0.0001));
+		
+		// Verify Rectangle
+		Assert.That(output.Shapes[1], Is.InstanceOf<Rectangle>());
+		var rectangle = (Rectangle)output.Shapes[1];
+		Assert.That(rectangle.Width, Is.EqualTo(4.0));
+		Assert.That(rectangle.Height, Is.EqualTo(6.0));
+		Assert.That(rectangle.Area, Is.EqualTo(24.0));
+		
+		// Verify second Circle
+		Assert.That(output.Shapes[2], Is.InstanceOf<Circle>());
+		var circle2 = (Circle)output.Shapes[2];
+		Assert.That(circle2.Radius, Is.EqualTo(3.0));
+	}
+
+	public interface INotification
+	{
+		string Message { get; set; }
+	}
+
+	[PublicData]
+	public class EmailNotification : INotification
+	{
+		public string Message { get; set; } = "";
+		public string EmailAddress { get; set; } = "";
+	}
+
+	[PublicData]
+	public class SmsNotification : INotification
+	{
+		public string Message { get; set; } = "";
+		public string PhoneNumber { get; set; } = "";
+	}
+
+	[PublicData]
+	public class NotificationQueue
+	{
+		public Dictionary<string, INotification>? Notifications { get; set; }
+	}
+
+	[Test, Description("Test Dictionary with interface values")]
+	public void SerializeDictionaryWithInterfaceValues()
+	{
+		var input = new NotificationQueue
+		{
+			Notifications = new Dictionary<string, INotification>
+			{
+				{ "user1", new EmailNotification { Message = "Welcome!", EmailAddress = "user1@example.com" } },
+				{ "user2", new SmsNotification { Message = "Alert!", PhoneNumber = "+1234567890" } },
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		
+		// Verify JSON contains type information
+		Assert.That(json, Contains.Substring("EmailNotification"));
+		Assert.That(json, Contains.Substring("SmsNotification"));
+		
+		var output = JsonSerializer.Deserialize<NotificationQueue>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Notifications, Is.Not.Null);
+		Assert.That(output.Notifications, Has.Count.EqualTo(2));
+		
+		// Verify EmailNotification
+		Assert.That(output.Notifications!["user1"], Is.InstanceOf<EmailNotification>());
+		var email = (EmailNotification)output.Notifications["user1"];
+		Assert.That(email.Message, Is.EqualTo("Welcome!"));
+		Assert.That(email.EmailAddress, Is.EqualTo("user1@example.com"));
+		
+		// Verify SmsNotification
+		Assert.That(output.Notifications["user2"], Is.InstanceOf<SmsNotification>());
+		var sms = (SmsNotification)output.Notifications["user2"];
+		Assert.That(sms.Message, Is.EqualTo("Alert!"));
+		Assert.That(sms.PhoneNumber, Is.EqualTo("+1234567890"));
+	}
+
+	public interface IVehicle
+	{
+		int Speed { get; set; }
+	}
+
+	[PublicData]
+	public class NestedContainer
+	{
+		public string? Name { get; set; }
+		public IVehicle? Vehicle { get; set; }
+	}
+
+	[PublicData]
+	public class Car : IVehicle
+	{
+		public int Speed { get; set; }
+		public int Doors { get; set; }
+	}
+
+	[PublicData]
+	public class OuterContainer
+	{
+		public string? Title { get; set; }
+		public IAnimal? Animal { get; set; }
+		public NestedContainer? Nested { get; set; }
+	}
+
+	[Test, Description("Test nested interfaces at multiple levels")]
+	public void SerializeNestedInterfaces()
+	{
+		var input = new OuterContainer
+		{
+			Title = "Test",
+			Animal = new Dog { Name = "Rex", Breed = "German Shepherd" },
+			Nested = new NestedContainer
+			{
+				Name = "Inner",
+				Vehicle = new Car { Speed = 120, Doors = 4 }
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		
+		// Verify JSON contains type information for both interfaces
+		Assert.That(json, Contains.Substring("Dog"));
+		Assert.That(json, Contains.Substring("Car"));
+		
+		var output = JsonSerializer.Deserialize<OuterContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Title, Is.EqualTo("Test"));
+		
+		// Verify Animal interface
+		Assert.That(output.Animal, Is.Not.Null);
+		Assert.That(output.Animal, Is.InstanceOf<Dog>());
+		var dog = (Dog)output.Animal!;
+		Assert.That(dog.Name, Is.EqualTo("Rex"));
+		Assert.That(dog.Breed, Is.EqualTo("German Shepherd"));
+		
+		// Verify nested interface
+		Assert.That(output.Nested, Is.Not.Null);
+		Assert.That(output.Nested!.Name, Is.EqualTo("Inner"));
+		Assert.That(output.Nested.Vehicle, Is.Not.Null);
+		Assert.That(output.Nested.Vehicle, Is.InstanceOf<Car>());
+		var car = (Car)output.Nested.Vehicle!;
+		Assert.That(car.Speed, Is.EqualTo(120));
+		Assert.That(car.Doors, Is.EqualTo(4));
+	}
+
 	#endregion
 }
