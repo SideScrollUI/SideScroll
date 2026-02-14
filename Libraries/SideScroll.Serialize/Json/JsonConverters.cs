@@ -44,6 +44,7 @@ public static class JsonConverters
 		jsonSerializerOptions.Converters.Add(new PrivateDataJsonConverterFactory());
 		jsonSerializerOptions.Converters.Add(new TypeJsonConverter());
 		jsonSerializerOptions.Converters.Add(new TimeZoneInfoJsonConverter());
+		jsonSerializerOptions.Converters.Add(new ObjectJsonConverterFactory());
 
 		return jsonSerializerOptions;
 	}
@@ -155,6 +156,178 @@ public class PrivateDataJsonConverter<T> : JsonConverter<T>
 	{
 		// Write null for private data types
 		writer.WriteNullValue();
+	}
+}
+
+/// <summary>
+/// JSON converter factory for object type that validates whether the runtime type is allowed to be serialized
+/// </summary>
+public class ObjectJsonConverterFactory : JsonConverterFactory
+{
+	public override bool CanConvert(Type typeToConvert)
+	{
+		return typeToConvert == typeof(object);
+	}
+
+	public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+	{
+		return new ObjectJsonConverter();
+	}
+}
+
+/// <summary>
+/// JSON converter for object type that validates whether the runtime type is allowed to be serialized
+/// This is the wrapper version that adds $type/$value at the top level
+/// </summary>
+public class ObjectJsonConverter : JsonConverter<object>
+{
+	/// <summary>
+	/// Types that are allowed to be serialized when stored in object members
+	/// </summary>
+	public static HashSet<Type> PublicTypes { get; set; } =
+	[
+		typeof(string),
+		typeof(DateTime),
+		typeof(DateTimeOffset),
+		typeof(TimeSpan),
+		typeof(TimeZoneInfo),
+		typeof(Type),
+		typeof(Version),
+		typeof(Uri),
+		typeof(Guid),
+		typeof(decimal),
+	];
+
+	/// <summary>
+	/// Generic type definitions that are allowed to be serialized when stored in object members
+	/// </summary>
+	public static HashSet<Type> PublicGenericTypes { get; set; } =
+	[
+		typeof(List<>),
+		typeof(Dictionary<,>),
+		typeof(SortedDictionary<,>),
+		typeof(HashSet<>),
+		typeof(Nullable<>),
+	];
+
+	public override bool CanConvert(Type typeToConvert)
+	{
+		return typeToConvert == typeof(object);
+	}
+
+	public static bool IsAllowedType(Type type)
+	{
+		// Allow primitives
+		if (type.IsPrimitive)
+			return true;
+
+		// Allow registered public types
+		if (PublicTypes.Contains(type))
+			return true;
+
+		// Allow types marked with PublicData
+		if (type.IsDefined(typeof(PublicDataAttribute), inherit: true))
+			return true;
+
+		// Allow generic collections of allowed types
+		if (type.IsGenericType)
+		{
+			Type genericTypeDef = type.GetGenericTypeDefinition();
+			if (PublicGenericTypes.Contains(genericTypeDef))
+			{
+				return true;
+			}
+		}
+
+		// Block everything else (including unregistered custom classes)
+		return false;
+	}
+
+	public override object? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+	{
+		// For deserialization, check if there's type information to deserialize to the correct type
+		using var jsonDoc = JsonDocument.ParseValue(ref reader);
+		
+		// Check for type information in objects
+		if (jsonDoc.RootElement.ValueKind == JsonValueKind.Object && 
+		    jsonDoc.RootElement.TryGetProperty("$type", out var typeProperty) &&
+		    jsonDoc.RootElement.TryGetProperty("$value", out var valueProperty))
+		{
+			string? typeName = typeProperty.GetString();
+			if (typeName != null)
+			{
+				Type? actualType = Type.GetType(typeName, throwOnError: false);
+				if (actualType != null && IsAllowedType(actualType))
+				{
+					try
+					{
+						// Deserialize the $value property as the actual type
+						return JsonSerializer.Deserialize(valueProperty.GetRawText(), actualType, options);
+					}
+					catch
+					{
+						// If deserialization fails, fall through to default behavior
+					}
+				}
+			}
+		}
+		
+		// Default deserialization without type information
+		return jsonDoc.RootElement.ValueKind switch
+		{
+			JsonValueKind.Null => null,
+			JsonValueKind.True => true,
+			JsonValueKind.False => false,
+			JsonValueKind.Number => jsonDoc.RootElement.TryGetInt32(out int i) ? i :
+			                        jsonDoc.RootElement.TryGetInt64(out long l) ? l :
+			                        jsonDoc.RootElement.TryGetDouble(out double d) ? d :
+			                        (object)jsonDoc.RootElement.GetDecimal(),
+			JsonValueKind.String => jsonDoc.RootElement.GetString(),
+			JsonValueKind.Array => jsonDoc.RootElement.Deserialize<List<object?>>(options),
+			JsonValueKind.Object => jsonDoc.RootElement.Deserialize<Dictionary<string, object?>>(options),
+			_ => null
+		};
+	}
+
+	public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
+	{
+		if (value == null)
+		{
+			writer.WriteNullValue();
+			return;
+		}
+
+		Type runtimeType = value.GetType();
+
+		// Check if type is allowed
+		if (!IsAllowedType(runtimeType))
+		{
+			// Block unregistered types - write null instead
+			writer.WriteNullValue();
+			return;
+		}
+
+		// For primitives and simple types that don't need type information, serialize directly
+		if (runtimeType.IsPrimitive || 
+		    runtimeType == typeof(string) || 
+		    runtimeType == typeof(decimal) ||
+		    runtimeType == typeof(DateTime) ||
+		    runtimeType == typeof(DateTimeOffset) ||
+		    runtimeType == typeof(TimeSpan) ||
+		    runtimeType == typeof(Guid))
+		{
+			JsonSerializer.Serialize(writer, value, runtimeType, options);
+			return;
+		}
+
+		// For complex types (custom classes, collections, etc.), include type information
+		// Serialize with type information wrapper
+		writer.WriteStartObject();
+		writer.WriteString("$type", runtimeType.GetAssemblyQualifiedShortName());
+		writer.WritePropertyName("$value");
+		// Serialize the value with its actual runtime type
+		JsonSerializer.Serialize(writer, value, runtimeType, options);
+		writer.WriteEndObject();
 	}
 }
 

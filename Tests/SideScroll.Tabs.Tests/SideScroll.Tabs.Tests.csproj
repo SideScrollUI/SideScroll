@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\SideScroll.Tabs\SideScroll.Tabs.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Tabs.Samples\SideScroll.Tabs.Samples.csproj" />
   </ItemGroup>
 
 </Project>

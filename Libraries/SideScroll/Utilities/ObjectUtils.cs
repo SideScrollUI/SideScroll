@@ -52,16 +52,15 @@ public static class ObjectUtils
 	}
 
 	/// <summary>
-	/// Gets the data value for an object by finding the first property or field with a [DataValue] attribute
+	/// Gets the data value for an object by finding the first property or field with a [DataValue] attribute,
+	/// or returns the object itself if the type has a [PublicData] attribute
 	/// </summary>
-	/// <returns>The data value object, or null if no data value is found</returns>
+	/// <returns>The data value object, the object itself if it has [PublicData] attribute, or null if no data value is found</returns>
 	public static object? GetDataValue(object? obj)
 	{
 		if (obj == null) return null;
 
 		Type type = obj.GetType();
-		if (type.GetCustomAttribute<DataKeyAttribute>() != null)
-			return obj;
 
 		var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
 		if (valueProperties.FirstOrDefault() is PropertyInfo propertyInfo)
@@ -74,6 +73,10 @@ public static class ObjectUtils
 		{
 			return fieldInfo.GetValue(obj);
 		}
+
+		if (type.GetCustomAttribute<PublicDataAttribute>() != null)
+			return obj;
+
 		return null;
 	}
 

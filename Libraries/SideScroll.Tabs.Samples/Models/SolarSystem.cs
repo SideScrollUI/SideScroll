@@ -14,6 +14,7 @@ public class SolarSystem
 	public static SolarSystem Sample => JsonSerializer.Deserialize<SolarSystem>(TextSamples.Json)!;
 }
 
+[PublicData]
 public class Planet
 {
 	[Required]

@@ -8,9 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Json Serialization link importing (only paths are allowed for now, no data items)
+- Json Serialization link importing (only paths and data items are allowed for now)
 - ScreenCapture Border, Icon, and Memory Improvements
 - TextEditor Search Panel Theming
+- Toolbar Copy button to TabTextFile
 - CHANGELOG.md to track version history
 - CONTRIBUTING.md for contributor guidelines
 - Summary docs for TabDataColumns, TabItemCollection, TabUtils, Linker, SerializerExtensions, AvaloniaExtensions, and DataGridExtensions
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed TabViewSettings.Address with multiple paths
 
 ### Changed
+- Updated Bookmark DataItem linking to use the passed object if it is a public data type when no DataValueAttribute is found
 - Disabled Debug Info for Release builds
 
 ## [0.15] - 2026-01-25
