@@ -1,5 +1,5 @@
-using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 
 namespace SideScroll.Utilities;
 
@@ -33,6 +33,11 @@ public static class JsonUtils
 		return text;
 	}
 
+	private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
+	{
+		WriteIndented = true,
+	};
+
 	/// <summary>
 	/// Attempts to format JSON text with proper indentation
 	/// </summary>
@@ -44,15 +49,95 @@ public static class JsonUtils
 
 		try
 		{
-			// System.Json has a lot of problems with newlines (not fixable?) and + (fixable)
-			// Can escape newlines inside double quotes, but escaping outside strings produces parsing errors
-			dynamic parsedJson = JsonConvert.DeserializeObject(text)!;
-			json = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+			// First try parsing as-is (handles valid JSON with structural whitespace)
+			using JsonDocument document = JsonDocument.Parse(text);
+			json = JsonSerializer.Serialize(document.RootElement, _jsonSerializerOptions);
 			return true;
+		}
+		catch (JsonException)
+		{
+			// If parsing fails, try escaping unescaped control characters inside strings
+			// This handles legacy systems that produce malformed JSON
+			try
+			{
+				string escaped = EscapeUnescapedControlCharactersInStrings(text);
+				using JsonDocument document = JsonDocument.Parse(escaped);
+				json = JsonSerializer.Serialize(document.RootElement, _jsonSerializerOptions);
+				return true;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
 		}
 		catch (Exception)
 		{
 			return false;
 		}
+	}
+	
+	/// <summary>
+	/// Escapes unescaped control characters inside JSON string values
+	/// This is a workaround for legacy systems that produce malformed JSON with unescaped control characters
+	/// Note: This is a simple heuristic and may not handle all edge cases
+	/// </summary>
+	public static string EscapeUnescapedControlCharactersInStrings(string json)
+	{
+		var result = new System.Text.StringBuilder(json.Length + 100);
+		bool inString = false;
+		bool escaped = false;
+		
+		for (int i = 0; i < json.Length; i++)
+		{
+			char c = json[i];
+			
+			if (escaped)
+			{
+				result.Append(c);
+				escaped = false;
+				continue;
+			}
+			
+			if (c == '\\' && inString)
+			{
+				result.Append(c);
+				escaped = true;
+				continue;
+			}
+			
+			if (c == '"')
+			{
+				result.Append(c);
+				inString = !inString;
+				continue;
+			}
+			
+			// Escape control characters inside strings only
+			if (inString && char.IsControl(c))
+			{
+				switch (c)
+				{
+					case '\n':
+						result.Append("\\n");
+						break;
+					case '\r':
+						result.Append("\\r");
+						break;
+					case '\t':
+						result.Append("\\t");
+						break;
+					default:
+						// For other control characters, use Unicode escape
+						result.Append($"\\u{(int)c:X4}");
+						break;
+				}
+			}
+			else
+			{
+				result.Append(c);
+			}
+		}
+		
+		return result.ToString();
 	}
 }
