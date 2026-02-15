@@ -3,6 +3,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using SideScroll.Attributes;
+using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
 using SideScroll.Tabs;
@@ -34,10 +35,7 @@ public class TabFileImage : ITab, IFileTypeView
 
 	public class Toolbar : TabToolbar
 	{
-		public ToolButton ButtonOpenFolder { get; set; } = new("Open Folder", Icons.Svg.OpenFolder);
-
-		[Separator]
-		public ToolButton ButtonDelete { get; set; } = new("Delete", Icons.Svg.Delete);
+		public ToolButton ButtonCopy { get; set; } = new("Copy to Clipboard", Icons.Svg.Copy);
 	}
 
 	private class Instance(TabFileImage tab) : TabInstance
@@ -57,6 +55,10 @@ public class TabFileImage : ITab, IFileTypeView
 				model.AddObject("File doesn't exist");
 				return;
 			}
+
+			Toolbar toolbar = new();
+			toolbar.ButtonCopy.ActionAsync = CopyToClipboardAsync;
+			model.AddObject(toolbar);
 
 			_image = new Image
 			{
@@ -84,6 +86,14 @@ public class TabFileImage : ITab, IFileTypeView
 			{
 				call.Log.Add(ex);
 				model.AddObject(ex);
+			}
+		}
+
+		private async Task CopyToClipboardAsync(Call call)
+		{
+			if (_image?.Source is Bitmap bitmap)
+			{
+				await ClipboardUtils.SetBitmapAsync(TabViewer.Instance, bitmap);
 			}
 		}
 	}

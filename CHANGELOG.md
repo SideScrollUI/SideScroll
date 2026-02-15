@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Json links can now be imported
+- File Viewer now supports viewing zip files
+- Copy to Clipboard button to TabFileImage toolbar
 - ScreenCapture Border, Icon, and Memory Improvements
 - TextEditor Search Panel Theming
 - Toolbar Copy button to TabTextFile

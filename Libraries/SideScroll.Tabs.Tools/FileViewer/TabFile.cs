@@ -21,7 +21,10 @@ public class TabFile(FileView fileView) : ITab
 
 	public string Path => fileView.Path;
 
-	public static Dictionary<string, Type> ExtensionTypes { get; set; } = [];
+	public static Dictionary<string, Type> ExtensionTypes { get; set; } = new()
+	{
+		[".zip"] = typeof(TabZipFile),
+	};
 
 	public static void RegisterType<T>(params string[] extensions) where T : new()
 	{
