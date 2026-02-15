@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json;
+using System.Text.Json;
 using SideScroll.Extensions;
+using SideScroll.Utilities;
 
 namespace SideScroll.Network.Http;
 
@@ -28,6 +29,12 @@ public class HttpMemoryCache
 	/// Gets the underlying memory cache instance
 	/// </summary>
 	public MemoryCache MemoryCache { get; }
+
+	public JsonSerializerOptions JsonSerializerOptions { get; set; } = new()
+	{
+		IncludeFields = true,
+		PropertyNameCaseInsensitive = true,
+	};
 
 	/// <summary>
 	/// Initializes a new HTTP memory cache with specified size and duration limits
@@ -105,15 +112,8 @@ public class HttpMemoryCache
 			string? text = HttpUtils.GetString(call, uri);
 			if (text != null)
 			{
-				// doesn't handle newlines
-				//var options = new JsonSerializerOptions { IncludeFields = true };
-				//t = JsonSerializer.Deserialize<T>(text, options);
-
-				JsonSerializerSettings options = new()
-				{
-					DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-				};
-				t = JsonConvert.DeserializeObject<T>(text, options);
+				string escaped = JsonUtils.EscapeUnescapedControlCharactersInStrings(text);
+				t = JsonSerializer.Deserialize<T>(escaped, JsonSerializerOptions);
 				Add(uri, t);
 				return true;
 			}

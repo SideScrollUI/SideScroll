@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed TabViewSettings.Address with multiple paths
 
 ### Changed
+- Switched all remaining json serialization to System.Text.Json
 - Updated Bookmark DataItem linking to use the passed object if it is a public data type when no DataValueAttribute is found
 - Disabled Debug Info for Release builds
 
