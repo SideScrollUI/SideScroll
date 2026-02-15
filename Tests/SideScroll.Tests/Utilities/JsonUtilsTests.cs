@@ -17,7 +17,8 @@ public class JsonUtilsTests : BaseTest
 	{
 		string input = "{\"name\": \"+\"}";
 		Assert.That(JsonUtils.TryFormat(input, out string? formatted));
-		Assert.That(formatted, Is.EqualTo("{\r\n  \"name\": \"\\u002B\"\r\n}"));
+		string expected = "{" + Environment.NewLine + "  \"name\": \"\\u002B\"" + Environment.NewLine + "}";
+		Assert.That(formatted, Is.EqualTo(expected));
 	}
 
 	[Test]
@@ -62,7 +63,8 @@ public class JsonUtilsTests : BaseTest
 		// Test multiple plus signs in different contexts
 		string input = "{\"operation\": \"+\", \"formula\": \"a+b\", \"positive\": \"+1\"}";
 		Assert.That(JsonUtils.TryFormat(input, out string? formatted));
-		Assert.That(formatted, Is.EqualTo("{\r\n  \"operation\": \"\\u002B\",\r\n  \"formula\": \"a\\u002Bb\",\r\n  \"positive\": \"\\u002B1\"\r\n}"));
+		string expected = "{" + Environment.NewLine + "  \"operation\": \"\\u002B\"," + Environment.NewLine + "  \"formula\": \"a\\u002Bb\"," + Environment.NewLine + "  \"positive\": \"\\u002B1\"" + Environment.NewLine + "}";
+		Assert.That(formatted, Is.EqualTo(expected));
 	}
 
 	[Test]
@@ -81,7 +83,8 @@ public class JsonUtilsTests : BaseTest
 		// Test combination of special characters including plus and newlines
 		string input = "{\"data\": \"Value: +123\\nNext line\", \"symbol\": \"+\"}";
 		Assert.That(JsonUtils.TryFormat(input, out string? formatted));
-		Assert.That(formatted, Is.EqualTo("{\r\n  \"data\": \"Value: \\u002B123\\nNext line\",\r\n  \"symbol\": \"\\u002B\"\r\n}"));
+		string expected = "{" + Environment.NewLine + "  \"data\": \"Value: \\u002B123\\nNext line\"," + Environment.NewLine + "  \"symbol\": \"\\u002B\"" + Environment.NewLine + "}";
+		Assert.That(formatted, Is.EqualTo(expected));
 	}
 
 	[Test]
@@ -133,6 +136,7 @@ public class JsonUtilsTests : BaseTest
 		
 		// Assert that System.Text.Json correctly rejects invalid JSON
 		Assert.That(result, Is.True);
-		Assert.That(formatted, Is.EqualTo("{\r\n  \"name\": \"value\\n1\"\r\n}"));
+		string expected = "{" + Environment.NewLine + "  \"name\": \"value\\n1\"" + Environment.NewLine + "}";
+		Assert.That(formatted, Is.EqualTo(expected));
 	}
 }
