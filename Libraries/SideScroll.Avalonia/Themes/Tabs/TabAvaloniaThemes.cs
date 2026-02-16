@@ -39,7 +39,7 @@ public class TabAvaloniaThemes : ITab
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			ThemeId.Reset();
+			ThemeId.Reset(); // AvaloniaObject requires UI thread
 			_themeForm = new TabForm(ThemeId);
 			model.AddObject(_themeForm);
 

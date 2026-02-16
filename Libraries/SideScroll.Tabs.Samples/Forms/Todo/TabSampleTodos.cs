@@ -68,7 +68,7 @@ public class TabSampleTodos : ITab
 			OnSelectionChanged += Instance_OnSelectionChanged;
 		}
 
-		public override void LoadUI(Call call, TabModel model)
+		public override void Load(Call call, TabModel model)
 		{
 			model.MaxDesiredWidth = 850;
 

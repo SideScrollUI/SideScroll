@@ -26,12 +26,38 @@ public class TabFile(FileView fileView) : ITab
 		[".zip"] = typeof(TabZipFile),
 	};
 
+	/// <summary>
+	/// Registers a tab type for specific file extensions.
+	/// </summary>
 	public static void RegisterType<T>(params string[] extensions) where T : new()
 	{
 		foreach (string extension in extensions)
 		{
 			ExtensionTypes[extension] = typeof(T);
 		}
+	}
+
+	/// <summary>
+	/// Detects the appropriate tab type for a file by checking probes and then extensions.
+	/// </summary>
+	private static Type? DetectFileType(string path)
+	{
+		if (!File.Exists(path))
+			return null;
+
+		// First try content-based probing
+		Type? probedType = FileTypeDetector.ProbeFile(path);
+		if (probedType != null)
+			return probedType;
+
+		// Fall back to extension-based detection
+		string extension = System.IO.Path.GetExtension(path).ToLower();
+		if (ExtensionTypes.TryGetValue(extension, out Type? type))
+		{
+			return type;
+		}
+
+		return null;
 	}
 
 	public TabInstance Create() => new Instance(this);
@@ -91,7 +117,9 @@ public class TabFile(FileView fileView) : ITab
 
 			string extension = System.IO.Path.GetExtension(path).ToLower();
 
-			if (ExtensionTypes.TryGetValue(extension, out Type? type))
+			// Use probe-based detection or fall back to extension-based detection
+			Type? type = DetectFileType(path);
+			if (type != null)
 			{
 				var viewTab = (IFileTypeView)Activator.CreateInstance(type)!;
 				viewTab.Path = path;

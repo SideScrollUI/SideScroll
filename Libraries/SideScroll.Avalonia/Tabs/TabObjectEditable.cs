@@ -10,7 +10,7 @@ public class TabObjectEditable(object obj) : ITab
 
 	private class Instance(TabObjectEditable tab) : TabInstance
 	{
-		public override void LoadUI(Call call, TabModel model)
+		public override void Load(Call call, TabModel model)
 		{
 			model.MinDesiredWidth = 225;
 
