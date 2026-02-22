@@ -10,9 +10,9 @@ public class ListByte(int index, byte b)
 	public int Index => index;
 
 	public byte Byte => b;
-	public string Hex { get; init; } = BitConverter.ToString([b]);
-	public char Char { get; init; } = Convert.ToChar(b);
-	public string Bits { get; init; } = Convert.ToString(b, 2).PadLeft(8, '0');
+	public string Hex { get; } = BitConverter.ToString([b]);
+	public char Char { get; } = Convert.ToChar(b);
+	public string Bits { get; } = Convert.ToString(b, 2).PadLeft(8, '0');
 
 	public override string ToString() => Index.ToString();
 

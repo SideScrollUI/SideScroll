@@ -41,6 +41,7 @@ public class TabViewActions : UserControl
 				Margin = new Thickness(4, 2),
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				HorizontalContentAlignment = HorizontalAlignment.Center,
+				[ToolTip.TipProperty] = taskCreator.Description,
 			};
 			button.Click += Button_Click;
 			_taskCreators[button] = taskCreator;

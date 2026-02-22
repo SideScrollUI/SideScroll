@@ -49,9 +49,39 @@ public static class JsonUtils
 
 		try
 		{
-			// First try parsing as-is (handles valid JSON with structural whitespace)
 			using JsonDocument document = JsonDocument.Parse(text);
 			json = JsonSerializer.Serialize(document.RootElement, _jsonSerializerOptions);
+			return true;
+		}
+		catch (Exception)
+		{
+			return false;
+		}
+	}
+
+	private static readonly JsonSerializerOptions _jsonSerializerUnescapedOptions = new()
+	{
+		WriteIndented = true,
+		// Don't escape unicode chars such as apostrophe
+		Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+	};
+
+	/// <summary>
+	/// Attempts to format JSON text with proper indentation
+	/// Characters suchs as apostrophe aren't escaped and may need to be escaped elsewhere
+	/// This is safe when displaying in this UI, but should be escaped when exporting into html
+	/// </summary>
+	/// <returns>True if the text was successfully formatted; otherwise, false</returns>
+	public static bool TryFormatUnescaped(string text, [NotNullWhen(true)] out string? json)
+	{
+		json = default;
+		if (!IsJson(text)) return false;
+
+		try
+		{
+			// First try parsing as-is (handles valid JSON with structural whitespace)
+			using JsonDocument document = JsonDocument.Parse(text);
+			json = JsonSerializer.Serialize(document.RootElement, _jsonSerializerUnescapedOptions);
 			return true;
 		}
 		catch (JsonException)
@@ -62,7 +92,7 @@ public static class JsonUtils
 			{
 				string escaped = EscapeUnescapedControlCharactersInStrings(text);
 				using JsonDocument document = JsonDocument.Parse(escaped);
-				json = JsonSerializer.Serialize(document.RootElement, _jsonSerializerOptions);
+				json = JsonSerializer.Serialize(document.RootElement, _jsonSerializerUnescapedOptions);
 				return true;
 			}
 			catch (Exception)

@@ -33,6 +33,11 @@ public class ProjectSettings
 	public bool EnableLinking { get; set; } = true;
 
 	/// <summary>
+	/// Gets or sets whether json linking functionality is enabled
+	/// </summary>
+	public bool EnableJsonLinking { get; set; } = true;
+
+	/// <summary>
 	/// Gets or sets the project version
 	/// This is used for links and what appears in the UI
 	/// </summary>

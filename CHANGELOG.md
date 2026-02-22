@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Json links can now be imported
+  - Added ProjectSettings.EnableJsonLinking
 - File Viewer now supports viewing zip files
 - Copy to Clipboard button to TabFileImage toolbar
 - ScreenCapture Border, Icon, and Memory Improvements
@@ -25,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Switched all remaining json serialization to System.Text.Json
+  - Added JsonUtils.TryFormatUnescaped as an unescaped version of TryFormat to match previous behavior
 - Updated Bookmark DataItem linking to use the passed object if it is a public data type when no DataValueAttribute is found
 - Disabled Debug Info for Release builds
 

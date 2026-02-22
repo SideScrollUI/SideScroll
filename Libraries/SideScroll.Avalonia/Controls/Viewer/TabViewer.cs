@@ -11,6 +11,7 @@ using SideScroll.Avalonia.Utilities;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Bookmarks.Models;
+using SideScroll.Tabs.Settings;
 
 namespace SideScroll.Avalonia.Controls.Viewer;
 
@@ -259,6 +260,13 @@ public class TabViewer : Grid
 		{
 			Placement = PlacementMode.BottomEdgeAlignedLeft,
 		};
+
+		if (!Project.ProjectSettings.EnableJsonLinking)
+		{
+			AvaloniaUtils.ShowFlyout(buttonImport, flyout, "Json linking is not enabled");
+			return;
+		}
+
 		AvaloniaUtils.ShowFlyout(buttonImport, flyout, "Importing JSON Bookmark ...");
 
 		try

@@ -191,7 +191,7 @@ public class TabAvaloniaEdit : Border
 	{
 		try
 		{
-			if (JsonUtils.TryFormat(text, out string? json))
+			if (JsonUtils.TryFormatUnescaped(text, out string? json))
 			{
 				Text = json;
 				TextType = TextType.Json;
