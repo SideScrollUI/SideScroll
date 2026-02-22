@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Toolbar Copy button to TabTextFile
 - CHANGELOG.md to track version history
 - CONTRIBUTING.md for contributor guidelines
-- Summary docs for TabDataColumns, TabItemCollection, TabUtils, Linker, SerializerExtensions, AvaloniaExtensions, and DataGridExtensions
+- Summary docs for TabDataColumns, TabItemCollection, TabUtils, Linker, SerializerExtensions, AvaloniaExtensions, DataGridExtensions, Log, LogEntry, and LogTimer
 
 ### Fixed
 - Fixed Bookmark JSON Serialization for enums
@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added JsonUtils.TryFormatUnescaped as an unescaped version of TryFormat to match previous behavior
 - Updated Bookmark DataItem linking to use the passed object if it is a public data type when no DataValueAttribute is found
 - Renamed Index.dat to Primary.sidx
+- Renamed Log.Call() to Log.AddChild()
 - Disabled Debug Info for Release builds
 
 ## [0.15] - 2026-01-25

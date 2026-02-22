@@ -77,7 +77,7 @@ public class CloneTests : SerializeBaseTest
 	public void CloneLogChild()
 	{
 		Log testLog = new();
-		testLog.Call("test");
+		testLog.AddChild("test");
 
 		Log output = _serializer.Clone(Log, testLog)!;
 		Assert.That(output, Is.Not.Null);

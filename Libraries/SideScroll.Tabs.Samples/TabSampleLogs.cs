@@ -54,7 +54,7 @@ public class TabSampleLogs : ITab
 
 		private void SyncTaskThread(Call call)
 		{
-			Log logChild = call.Log.Call("Child");
+			Log logChild = call.Log.AddChild("Child");
 			CancellationToken cancelToken = call.TaskInstance!.CancelToken;
 			for (int i = 0; i < 60 && !cancelToken.IsCancellationRequested; i++)
 			{
@@ -65,7 +65,7 @@ public class TabSampleLogs : ITab
 
 		private async Task ASyncTaskThreadAsync(Call call)
 		{
-			Log logChild = call.Log.Call("Child");
+			Log logChild = call.Log.AddChild("Child");
 			CancellationToken token = call.TaskInstance!.CancelToken;
 			for (int i = 0; i < 60 && !token.IsCancellationRequested; i++)
 			{

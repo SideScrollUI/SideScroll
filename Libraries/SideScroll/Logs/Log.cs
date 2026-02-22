@@ -6,19 +6,34 @@ using System.Text;
 
 namespace SideScroll.Logs;
 
+/// <summary>
+/// A hierarchical log that can contain child log entries
+/// </summary>
 [Skippable(false)]
 public class Log : LogEntry
 {
+	/// <summary>
+	/// Collection of child log entries
+	/// </summary>
 	[InnerValue]
 	public ItemCollection<LogEntry> Items { get; set; } = []; // change to LRU for performance? No Binding?
 
+	/// <summary>
+	/// Event raised when a log message is added to this log or any child log
+	/// </summary>
 	public event EventHandler<LogMessageEventArgs>? OnMessage;
 
+	/// <summary>
+	/// Creates a new log with default settings
+	/// </summary>
 	public Log()
 	{
 		Initialize();
 	}
 
+	/// <summary>
+	/// Creates a new log with the specified text, settings, and tags
+	/// </summary>
 	public Log(string? text = null, LogSettings? logSettings = null, Tag[]? tags = null)
 	{
 		Text = text;
@@ -28,37 +43,41 @@ public class Log : LogEntry
 		Initialize();
 	}
 
-	// use caller instead?
-	public Log Call(string name, params Tag[] tags)
-	{
-		return AddChildEntry(LogLevel.Info, name, tags);
-	}
-
-	public Log Call(LogLevel logLevel, string text, params Tag[] tags)
-	{
-		return AddChildEntry(logLevel, text, tags);
-	}
-
+	/// <summary>
+	/// Adds a log entry with Info level
+	/// </summary>
 	public LogEntry? Add(string text, params Tag[] tags)
 	{
 		return Add(LogLevel.Info, text, tags);
 	}
 
+	/// <summary>
+	/// Adds a log entry with Debug level
+	/// </summary>
 	public LogEntry? AddDebug(string text, params Tag[] tags)
 	{
 		return Add(LogLevel.Debug, text, tags);
 	}
 
+	/// <summary>
+	/// Adds a log entry with Warning level
+	/// </summary>
 	public LogEntry? AddWarning(string text, params Tag[] tags)
 	{
 		return Add(LogLevel.Warn, text, tags);
 	}
 
+	/// <summary>
+	/// Adds a log entry with Error level
+	/// </summary>
 	public LogEntry? AddError(string text, params Tag[] tags)
 	{
 		return Add(LogLevel.Error, text, tags);
 	}
 
+	/// <summary>
+	/// Adds a log entry with the specified log level
+	/// </summary>
 	public LogEntry? Add(LogLevel logLevel, string text, params Tag[] tags)
 	{
 		if (logLevel < Settings!.MinLogLevel)
@@ -69,6 +88,9 @@ public class Log : LogEntry
 		return logEntry;
 	}
 
+	/// <summary>
+	/// Adds an exception to the log with appropriate level based on exception type
+	/// </summary>
 	public LogEntry? Add(Exception e, params Tag[] tags)
 	{
 		Debug.Print("Exception: " + e.Message);
@@ -98,7 +120,7 @@ public class Log : LogEntry
 					logEntry = AddError(ex.Message, [.. allTags]);
 				}
 			}
-			return logEntry!;
+			return logEntry;
 		}
 		else
 		{
@@ -106,17 +128,50 @@ public class Log : LogEntry
 		}
 	}
 
+	/// <summary>
+	/// Creates a child log entry with Info level
+	/// </summary>
+	public Log AddChild(string name, params Tag[] tags)
+	{
+		return AddChild(LogLevel.Info, name, tags);
+	}
+
+	/// <summary>
+	/// Creates a child log entry with the specified log level
+	/// </summary>
+	public Log AddChild(LogLevel logLevel, string text, params Tag[] tags)
+	{
+		Log log = new(text, Settings, tags)
+		{
+			OriginalLevel = logLevel,
+			Level = logLevel,
+		};
+		AddLogEntry(log);
+		return log;
+	}
+
+	/// <summary>
+	/// Logs an exception and then re-throws it
+	/// </summary>
 	public void Throw(Exception e)
 	{
 		Add(e);
 		throw e;
 	}
 
+	/// <summary>
+	/// Logs a message as an exception and throws a TaggedException
+	/// </summary>
 	public void Throw(string text, params Tag[] tags)
 	{
 		Throw(new TaggedException(text, tags));
 	}
 
+	/// <summary>
+	/// Logs a message as an exception and throws the specified exception type. 
+	/// Attempts to find a constructor that accepts a string message parameter.
+	/// </summary>
+	/// <typeparam name="T">The exception type to throw</typeparam>
 	public void Throw<T>(string text, params Tag[] tags) where T : Exception
 	{
 		ConstructorInfo[] constructors = typeof(T).GetConstructors();
@@ -134,6 +189,9 @@ public class Log : LogEntry
 		Throw(text, tags);
 	}
 
+	/// <summary>
+	/// Creates a timing log entry that tracks duration
+	/// </summary>
 	public LogTimer Timer(string text, params Tag[] tags)
 	{
 		var logTimer = new LogTimer(text, Settings, tags);
@@ -141,6 +199,9 @@ public class Log : LogEntry
 		return logTimer;
 	}
 
+	/// <summary>
+	/// Creates a timing log entry with Debug level
+	/// </summary>
 	public LogTimer TimerDebug(string text, params Tag[] tags)
 	{
 		var logTimer = new LogTimer(LogLevel.Debug, text, Settings, tags);
@@ -148,6 +209,9 @@ public class Log : LogEntry
 		return logTimer;
 	}
 
+	/// <summary>
+	/// Returns all log entries as formatted text
+	/// </summary>
 	public string EntriesText()
 	{
 		StringBuilder stringBuilder = new();
@@ -158,17 +222,9 @@ public class Log : LogEntry
 		return stringBuilder.ToString();
 	}
 
-	private Log AddChildEntry(LogLevel logLevel, string text, params Tag[] tags)
-	{
-		Log log = new(text, Settings, tags)
-		{
-			OriginalLevel = logLevel,
-			Level = logLevel,
-		};
-		AddLogEntry(log);
-		return log;
-	}
-
+	/// <summary>
+	/// Adds a log entry to this log in a thread-safe manner
+	/// </summary>
 	public void AddLogEntry(LogEntry logEntry)
 	{
 		// LogTimer calls this once for a new child message, and once for adding to parent log
@@ -255,6 +311,9 @@ public class Log : LogEntry
 		OnMessage?.Invoke(this, e);
 	}
 
+	/// <summary>
+	/// Updates the minimum log level for this log
+	/// </summary>
 	public void SetLogLevel(LogLevel logLevel)
 	{
 		Settings = Settings?.WithMinLogLevel(logLevel);

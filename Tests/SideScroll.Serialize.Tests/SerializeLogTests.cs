@@ -99,7 +99,7 @@ public class SerializeLogTests : SerializeBaseTest
 	public void SerializeLogChild()
 	{
 		var input = new Log();
-		input.Call("test");
+		input.AddChild("test");
 
 		_serializer.Save(Call, input);
 		Log output = _serializer.Load<Log>(Call);
