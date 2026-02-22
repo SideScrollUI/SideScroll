@@ -103,28 +103,32 @@ public class PublicDataAttribute : Attribute
 }
 
 /// <summary>
-/// Marks data as protected - excluded from public export but available for internal use.
+/// Marks types as serializable with opt-in member visibility for public export.
 /// </summary>
 /// <remarks>
 /// <b>Apply to:</b> Fields, properties, classes, or structs.
 /// <para>
-/// When applied to types, members default to protected (excluded from public export) unless 
+/// <b>On Types:</b> The type itself is treated as <see cref="PublicDataAttribute"/> (serializable and exportable), 
+/// but members are treated as <see cref="PrivateDataAttribute"/> by default (excluded from public export) unless 
 /// explicitly marked with <see cref="PublicDataAttribute"/>.
 /// </para>
 /// <para>
-/// <b>Public Export:</b> Protected data is excluded from <c>publicOnly = true</c> exports, 
-/// allowing you to set secure defaults while permitting selective public exposure.
+/// <b>On Members:</b> Individual members can be marked as protected to exclude them from public export 
+/// (currently has no effect when applied to members of <see cref="PublicDataAttribute"/> classes).
+/// </para>
+/// <para>
+/// <b>Use Case:</b> Provides secure defaults for types that need selective public exposure. 
+/// The type is serializable, but only explicitly-marked members are included in public exports.
 /// </para>
 /// </remarks>
 /// <example>
 /// <code>
-/// [ProtectedData]
+/// [ProtectedData]                     // Type is serializable
 /// public class Account
 /// {
-///     // Defaults to private unless explicitly marked public
-///     public string Email { get; set; } = "";
+///     public string Email { get; set; } = "";          // Private by default - excluded from public export
 ///
-///     [PublicData]                     // Explicitly allowed for public export
+///     [PublicData]                                     // Explicitly public - included in public export
 ///     public string PublicId { get; set; } = "";
 /// }
 /// </code>

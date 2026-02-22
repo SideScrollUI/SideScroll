@@ -229,6 +229,10 @@ public class ObjectJsonConverter : JsonConverter<object>
 		if (type.IsDefined(typeof(PublicDataAttribute), inherit: true))
 			return true;
 
+		// Allow types marked with ProtectedData
+		if (type.IsDefined(typeof(ProtectedDataAttribute), inherit: true))
+			return true;
+
 		// Allow generic collections of allowed types
 		if (type.IsGenericType)
 		{

@@ -110,6 +110,23 @@ public class JsonConverterTests : SerializeBaseTest
 		public string? NormalProperty { get; set; }
 	}
 
+	public class ProtectedUserDataForContainer
+	{
+		[PublicData]
+		public string? Username { get; set; }
+
+		public int Score { get; set; }
+	}
+
+	[ProtectedData]
+	public class ProtectedContainer
+	{
+		[PublicData]
+		public string? PublicBase { get; set; }
+
+		public ProtectedUserDataForContainer? PrivateBase { get; set; }
+	}
+
 	[Test, Description("Test [ProtectedData] class with [PublicData] properties")]
 	public void SerializeProtectedProperties()
 	{
@@ -125,6 +142,27 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.PublicProperty, Is.EqualTo("publicData"));
 		Assert.That(output.NormalProperty, Is.Null);
+	}
+
+	[Test, Description("Test [ProtectedData] class excludes non-[PublicData] members")]
+	public void SerializeProtectedContainerWithNonPublicMember()
+	{
+		var input = new ProtectedContainer
+		{
+			PublicBase = "visible",
+			PrivateBase = new ProtectedUserDataForContainer
+			{
+				Username = "hidden",
+				Score = 42
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ProtectedContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.PublicBase, Is.EqualTo("visible"));
+		Assert.That(output.PrivateBase, Is.Null);
 	}
 
 	[ProtectedData]
@@ -216,6 +254,39 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output.ProtectedObject, Is.Not.Null);
 		Assert.That(output.ProtectedObject!.PublicProperty, Is.EqualTo("public in protected"));
 		Assert.That(output.ProtectedObject.NormalProperty, Is.Null);
+	}
+
+	[PublicData]
+	public class PublicContainerWithProtectedMembers
+	{
+		[ProtectedData]
+		public string? ProtectedProperty { get; set; }
+
+		[ProtectedData]
+		public string ProtectedField = "default";
+
+		public string? PublicProperty { get; set; }
+	}
+
+	[Test, Description("Test [ProtectedData] attribute on members is serialized in [PublicData] class (member-level [ProtectedData] has no effect)")]
+	public void SerializeProtectedMembersInPublicClass()
+	{
+		var input = new PublicContainerWithProtectedMembers
+		{
+			ProtectedProperty = "serialized property",
+			ProtectedField = "serialized field",
+			PublicProperty = "serialized public"
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<PublicContainerWithProtectedMembers>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		// All members are serialized because the class is [PublicData]
+		// [ProtectedData] on individual members has no effect currently
+		Assert.That(output!.PublicProperty, Is.EqualTo("serialized public"));
+		Assert.That(output.ProtectedProperty, Is.EqualTo("serialized property"));
+		Assert.That(output.ProtectedField, Is.EqualTo("serialized field"));
 	}
 
 	#endregion
@@ -576,6 +647,32 @@ public class JsonConverterTests : SerializeBaseTest
 		public string? Description { get; set; }
 	}
 
+	[ProtectedData]
+	public class ProtectedUserData
+	{
+		[PublicData]
+		public string? Username { get; set; }
+
+		public int Score { get; set; }
+	}
+
+	[ProtectedData]
+	public class ProtectedBaseData
+	{
+		[PublicData]
+		public string? PublicBase { get; set; }
+
+		public string? PrivateBase { get; set; }
+	}
+
+	public class ProtectedDerivedData : ProtectedBaseData
+	{
+		[PublicData]
+		public string? PublicDerived { get; set; }
+
+		public string? PrivateDerived { get; set; }
+	}
+
 	[PublicData]
 	public class ObjectContainerUnregistered
 	{
@@ -640,6 +737,67 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.PublicData, Is.EqualTo("visible"));
 		Assert.That(output.UnregisteredObject, Is.Null);
+	}
+
+	[PublicData]
+	public class ObjectContainerProtected
+	{
+		public object? ProtectedObject { get; set; }
+	}
+
+	[Test, Description("Test object member containing [ProtectedData] type is allowed")]
+	public void SerializeObjectWithProtectedData()
+	{
+		var input = new ObjectContainerProtected
+		{
+			ProtectedObject = new ProtectedUserData
+			{
+				Username = "protected-user",
+				Score = 123
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ObjectContainerProtected>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.ProtectedObject, Is.InstanceOf<ProtectedUserData>());
+		var protectedUser = (ProtectedUserData)output.ProtectedObject!;
+		Assert.That(protectedUser.Username, Is.EqualTo("protected-user"));
+		// [ProtectedData] default: non-[PublicData] members should be excluded
+		Assert.That(protectedUser.Score, Is.EqualTo(0));
+	}
+
+	[PublicData]
+	public class ObjectContainerProtectedInheritance
+	{
+		public object? ProtectedObject { get; set; }
+	}
+
+	[Test, Description("Test [ProtectedData] inheritance on object member")]
+	public void SerializeObjectWithProtectedDataInheritance()
+	{
+		var input = new ObjectContainerProtectedInheritance
+		{
+			ProtectedObject = new ProtectedDerivedData
+			{
+				PublicBase = "base public",
+				PrivateBase = "base private",
+				PublicDerived = "derived public",
+				PrivateDerived = "derived private"
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ObjectContainerProtectedInheritance>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.ProtectedObject, Is.InstanceOf<ProtectedDerivedData>());
+		var protectedDerived = (ProtectedDerivedData)output.ProtectedObject!;
+		Assert.That(protectedDerived.PublicBase, Is.EqualTo("base public"));
+		Assert.That(protectedDerived.PublicDerived, Is.EqualTo("derived public"));
+		Assert.That(protectedDerived.PrivateBase, Is.Null);
+		Assert.That(protectedDerived.PrivateDerived, Is.Null);
 	}
 
 	[PublicData]
