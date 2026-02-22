@@ -14,7 +14,8 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	public string GroupId => DataRepoInstance.GroupId;
 	public string GroupPath => DataRepoInstance.GroupPath;
 
-	public string IndexPath => Paths.Combine(GroupPath, "Index.dat");
+	public string OldIndexPath => Paths.Combine(GroupPath, "Index.dat");
+	public string PrimaryIndexPath => Paths.Combine(GroupPath, "Primary.sidx");
 
 	// Don't use GroupId since it can throw exceptions due to invalid characters
 	protected string MutexName => DataRepoInstance.GroupHash;
@@ -176,7 +177,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		}
 		// Don't allow reading until finished since we seek backwards at the end to set the file size
 		// FileShare.None also avoids simultaneous writes
-		using var stream = new FileStream(IndexPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
+		using var stream = new FileStream(PrimaryIndexPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
 		using var writer = new BinaryWriter(stream);
 
 		writer.Write(indices.Items.Count);
@@ -191,9 +192,19 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 
 	public Indices Load(Call call)
 	{
-		if (!File.Exists(IndexPath)) return BuildIndices(call);
+		if (File.Exists(PrimaryIndexPath))
+		{
+		}
+		else if (File.Exists(OldIndexPath))
+		{
+			File.Move(OldIndexPath, PrimaryIndexPath);
+		}
+		else
+		{
+			return BuildIndices(call);
+		}
 
-		using var stream = new FileStream(IndexPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+		using var stream = new FileStream(PrimaryIndexPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 		using var reader = new BinaryReader(stream);
 
 		List<Item> items = [];

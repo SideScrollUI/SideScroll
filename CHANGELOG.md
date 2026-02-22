@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Switched all remaining json serialization to System.Text.Json
   - Added JsonUtils.TryFormatUnescaped as an unescaped version of TryFormat to match previous behavior
 - Updated Bookmark DataItem linking to use the passed object if it is a public data type when no DataValueAttribute is found
+- Renamed Index.dat to Primary.sidx
 - Disabled Debug Info for Release builds
 
 ## [0.15] - 2026-01-25
