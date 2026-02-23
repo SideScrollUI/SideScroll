@@ -25,25 +25,25 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 
 #### Light Theme
 
-![Light Theme](https://raw.githubusercontent.com/SideScrollUI/SideScroll/5f6bb10bd202c1710621f2a759c294aff0ecc39b/Images/Screenshots/PlanetsLight.png)
+![Light Theme](https://raw.githubusercontent.com/SideScrollUI/SideScroll/7b67c08951361310fa23bec67e4f953343bf8af2/Images/Screenshots/PlanetsLight.png)
 
 #### Dark Theme
 
-![Dark Theme](https://raw.githubusercontent.com/SideScrollUI/SideScroll/f50a9893752d9e565e9f702d61d016649c703f0d/Images/Screenshots/PlanetsDark.png)
+![Dark Theme](https://raw.githubusercontent.com/SideScrollUI/SideScroll/7b67c08951361310fa23bec67e4f953343bf8af2/Images/Screenshots/PlanetsDark.png)
 
 #### Custom Theming - Hybrid Theme
 
-![Light Blue Theme](https://raw.githubusercontent.com/SideScrollUI/SideScroll/f50a9893752d9e565e9f702d61d016649c703f0d/Images/Screenshots/HybridTheme.png)
+![Light Blue Theme](https://raw.githubusercontent.com/SideScrollUI/SideScroll/7b67c08951361310fa23bec67e4f953343bf8af2/Images/Screenshots/HybridTheme.png)
 
 #### Rich Text Editing with AvaloniaEdit
 
-![Rich Text Editing](https://raw.githubusercontent.com/SideScrollUI/SideScroll/9ab33ab14ebe7cfa4c8e9e8027bb1b5da96008a7/Images/Screenshots/TextEditorJsonAndXml.png)
+![Rich Text Editing](https://raw.githubusercontent.com/SideScrollUI/SideScroll/7b67c08951361310fa23bec67e4f953343bf8af2/Images/Screenshots/TextEditorJsonAndXml.png)
 
 #### Share Links
 
-![Links](https://raw.githubusercontent.com/SideScrollUI/SideScroll/a8f4cb937e8d49db55fca4123aa92afa25e28dda/Images/Screenshots/Links.png)
+![Links](https://raw.githubusercontent.com/SideScrollUI/SideScroll/7b67c08951361310fa23bec67e4f953343bf8af2/Images/Screenshots/Links.png)
 
-![Logo](https://raw.githubusercontent.com/SideScrollUI/SideScroll/a8f4cb937e8d49db55fca4123aa92afa25e28dda/Images/Logo/png/SideScroll_40.png)
+![Logo](https://raw.githubusercontent.com/SideScrollUI/SideScroll/7b67c08951361310fa23bec67e4f953343bf8af2/Images/Logo/png/SideScroll_40.png)
 
 ## Documentation
 

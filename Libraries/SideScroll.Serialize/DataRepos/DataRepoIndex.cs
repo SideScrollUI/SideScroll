@@ -3,31 +3,75 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Serialize.DataRepos;
 
+/// <summary>
+/// Manages an index for a data repository to maintain ordered access to items
+/// </summary>
 public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItems = null)
 {
+	/// <summary>
+	/// Gets or sets the timeout duration for acquiring the mutex lock
+	/// </summary>
 	public static TimeSpan MutexTimeout { get; set; } = TimeSpan.FromSeconds(5);
 
+	/// <summary>
+	/// Gets the associated data repository instance
+	/// </summary>
 	public DataRepoInstance<T> DataRepoInstance => dataRepoInstance;
 
+	/// <summary>
+	/// Gets or sets the maximum number of items to retain in the index
+	/// </summary>
 	public int? MaxItems { get; set; } = maxItems;
 
+	/// <summary>
+	/// Gets the group identifier
+	/// </summary>
 	public string GroupId => DataRepoInstance.GroupId;
+	
+	/// <summary>
+	/// Gets the group path
+	/// </summary>
 	public string GroupPath => DataRepoInstance.GroupPath;
 
-	public string OldIndexPath => Paths.Combine(GroupPath, "Index.dat");
+	/// <summary>
+	/// Gets the legacy index file path
+	/// </summary>
+	protected string OldIndexPath => Paths.Combine(GroupPath, "Index.dat");
+	
+	/// <summary>
+	/// Gets the primary index file path
+	/// </summary>
 	public string PrimaryIndexPath => Paths.Combine(GroupPath, "Primary.sidx");
 
-	// Don't use GroupId since it can throw exceptions due to invalid characters
-	protected string MutexName => DataRepoInstance.GroupHash;
+	/// <summary>
+	/// Gets the mutex name used for thread synchronization
+	/// </summary>
+	protected string MutexName => DataRepoInstance.GroupHash; // GroupId can throw exceptions due to invalid characters
 
+	/// <summary>
+	/// Represents an indexed item with an index and key
+	/// </summary>
 	public record Item(long Index, string Key);
 
+	/// <summary>
+	/// Contains the collection of indexed items and the next index value
+	/// </summary>
 	public class Indices
 	{
+		/// <summary>
+		/// Gets or sets the list of indexed items
+		/// </summary>
 		public List<Item> Items { get; set; } = [];
+		
+		/// <summary>
+		/// Gets or sets the next index value to assign
+		/// </summary>
 		public long NextIndex { get; set; }
 	}
 
+	/// <summary>
+	/// Saves an item to the index, returning the index item
+	/// </summary>
 	public Item? Save(Call call, string key)
 	{
 		return LockedGetCall(call, () => SaveInternal(call, key));
@@ -67,6 +111,9 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		}
 	}
 
+	/// <summary>
+	/// Removes an item from the index by key
+	/// </summary>
 	public void Remove(Call call, string key)
 	{
 		LockedSetCall(call, (c) => RemoveInternal(c, key));
@@ -79,6 +126,9 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		Save(indices);
 	}
 
+	/// <summary>
+	/// Removes all items from the index
+	/// </summary>
 	public void RemoveAll(Call call)
 	{
 		LockedSetCall(call, RemoveAllInternal);
@@ -91,6 +141,9 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		Save(indices);
 	}
 
+	/// <summary>
+	/// Executes a function with a mutex lock and returns the result
+	/// </summary>
 	public TResult? LockedGetCall<TResult>(Call call, Func<TResult> func)
 	{
 		using var mutex = new Mutex(false, MutexName);
@@ -131,6 +184,9 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		return default;
 	}
 
+	/// <summary>
+	/// Executes an action with a mutex lock
+	/// </summary>
 	public void LockedSetCall(Call call, CallAction callAction)
 	{
 		using var mutex = new Mutex(false, MutexName);
@@ -190,6 +246,9 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		}
 	}
 
+	/// <summary>
+	/// Loads the index from disk or builds it if it doesn't exist
+	/// </summary>
 	public Indices Load(Call call)
 	{
 		if (File.Exists(PrimaryIndexPath))

@@ -3,15 +3,30 @@ using SideScroll.Utilities;
 
 namespace SideScroll.Serialize.DataRepos;
 
-// Holds an in memory copy of the DataRepoInstance
+/// <summary>
+/// Holds an in-memory copy of the data repository instance with automatic synchronization
+/// </summary>
 [Unserialized]
 public class DataRepoView<T> : DataRepoInstance<T>
 {
+	/// <summary>
+	/// Gets the in-memory collection of items
+	/// </summary>
 	public DataItemCollection<T> Items { get; protected set; } = [];
 
+	/// <summary>
+	/// Gets all keys in the collection
+	/// </summary>
 	public IEnumerable<string> Keys => Items.Keys;
+	
+	/// <summary>
+	/// Gets all values in the collection
+	/// </summary>
 	public IEnumerable<T> Values => Items.Values;
 
+	/// <summary>
+	/// Gets whether the items have been loaded from storage
+	/// </summary>
 	public bool IsLoaded { get; protected set; }
 
 	public DataRepoView(DataRepo dataRepo, string groupId, bool indexed = false, int? maxItems = null)
@@ -32,6 +47,9 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		}
 	}
 
+	/// <summary>
+	/// Loads all indexed items into memory
+	/// </summary>
 	public void LoadAllIndexed(Call call, bool ascending = true, bool force = false)
 	{
 		lock (DataRepo)
@@ -50,6 +68,9 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		}
 	}
 
+	/// <summary>
+	/// Loads all items and orders them by the specified member name
+	/// </summary>
 	public void LoadAllOrderBy(Call call, string orderByMemberName, bool ascending = true)
 	{
 		lock (DataRepo)
@@ -61,6 +82,9 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		}
 	}
 
+	/// <summary>
+	/// Sorts the loaded items by the specified member name in ascending order
+	/// </summary>
 	public void SortBy(string memberName)
 	{
 		lock (DataRepo)
@@ -70,6 +94,9 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		}
 	}
 
+	/// <summary>
+	/// Sorts the loaded items by the specified member name in descending order
+	/// </summary>
 	public void SortByDescending(string memberName)
 	{
 		lock (DataRepo)
@@ -129,10 +156,16 @@ public class DataRepoView<T> : DataRepoInstance<T>
 	}
 }
 
+/// <summary>
+/// Manages a collection of data repository views organized by group identifier
+/// </summary>
 public class DataRepoViewCollection<T>(DataRepo dataRepo, string defaultGroupId, string? orderByMemberName = null)
 {
 	private readonly Dictionary<string, DataRepoView<T>> _dataRepoViews = [];
 
+	/// <summary>
+	/// Loads a data repository view for the specified group, using a cached instance if available
+	/// </summary>
 	public DataRepoView<T> Load(Call call, string? groupId = null)
 	{
 		groupId ??= defaultGroupId;

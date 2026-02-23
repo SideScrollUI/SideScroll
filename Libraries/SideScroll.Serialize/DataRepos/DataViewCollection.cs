@@ -4,23 +4,47 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SideScroll.Serialize.DataRepos;
 
+/// <summary>
+/// Interface for data views that can be loaded and deleted
+/// </summary>
 public interface IDataView
 {
+	/// <summary>
+	/// Occurs when the view is deleted
+	/// </summary>
 	event EventHandler<EventArgs>? OnDelete;
 
+	/// <summary>
+	/// Loads the view with the specified object and parameters
+	/// </summary>
 	void Load(object sender, object obj, params object?[] loadParams);
 }
 
-// A UI Item Collection that shows a View around every item
+/// <summary>
+/// UI collection that wraps data items in view objects for display
+/// </summary>
 public class DataViewCollection<TDataType, TViewType> where TViewType : IDataView, new()
 {
 	//public event EventHandler<EventArgs> OnDelete; // todo?
 
+	/// <summary>
+	/// Gets the UI collection of view items
+	/// </summary>
 	public ItemCollectionUI<TViewType> Items { get; } = [];
 
+	/// <summary>
+	/// Gets the primary data repository view
+	/// </summary>
 	public DataRepoView<TDataType> DataRepoView { get; }
-	public DataRepoView<TDataType>? DataRepoSecondary { get; set; } // Optional: Saves and Deletes goto a 2nd copy
+	
+	/// <summary>
+	/// Gets or sets the optional secondary repository for saves and deletes
+	/// </summary>
+	public DataRepoView<TDataType>? DataRepoSecondary { get; set; }
 
+	/// <summary>
+	/// Gets the parameters used when loading view items
+	/// </summary>
 	public object?[] LoadParams { get; }
 
 	private Dictionary<TViewType, IDataItem> _dataItemLookup;
@@ -38,6 +62,9 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		Reload();
 	}
 
+	/// <summary>
+	/// Reloads all items from the data repository
+	/// </summary>
 	[MemberNotNull(nameof(_dataItemLookup), nameof(_valueLookup))]
 	public void Reload()
 	{
@@ -52,6 +79,9 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		}
 	}
 
+	/// <summary>
+	/// Adds a new view item for the specified data item
+	/// </summary>
 	public TViewType Add(IDataItem dataItem)
 	{
 		var itemView = new TViewType();
@@ -65,6 +95,9 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		return itemView;
 	}
 
+	/// <summary>
+	/// Inserts a new view item at the specified index
+	/// </summary>
 	public TViewType Insert(int index, IDataItem dataItem)
 	{
 		var itemView = new TViewType();
@@ -87,6 +120,9 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		Remove(dataItem);
 	}
 
+	/// <summary>
+	/// Removes the view item associated with the specified data item
+	/// </summary>
 	public void Remove(IDataItem dataItem)
 	{
 		Call call = new();
@@ -100,6 +136,9 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		}
 	}
 
+	/// <summary>
+	/// Replaces an old data item with a new one
+	/// </summary>
 	public void Replace(IDataItem oldDataItem, IDataItem newDataItem)
 	{
 		if (_valueLookup.Remove(oldDataItem, out TViewType? existing))
@@ -117,6 +156,9 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		}
 	}
 
+	/// <summary>
+	/// Adds a secondary data repository for saves and deletes
+	/// </summary>
 	public void AddDataRepo(DataRepoView<TDataType> dataRepoView)
 	{
 		DataRepoSecondary = dataRepoView;
@@ -170,13 +212,21 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	}
 }
 
-// Provides a UI thread safe ItemCollectionUI around a DataRepoView
+/// <summary>
+/// Provides a UI thread-safe collection wrapper around a data repository view
+/// </summary>
 public class DataViewCollection<T>
 {
 	//public event EventHandler<EventArgs> OnDelete; // todo?
 
+	/// <summary>
+	/// Gets the UI collection of items
+	/// </summary>
 	public ItemCollectionUI<T> Items { get; } = [];
 
+	/// <summary>
+	/// Gets the underlying data repository view
+	/// </summary>
 	public DataRepoView<T> DataRepoView { get; }
 
 	private Dictionary<IDataItem, T> _valueLookup;
@@ -192,6 +242,9 @@ public class DataViewCollection<T>
 		Reload();
 	}
 
+	/// <summary>
+	/// Reloads all items from the data repository
+	/// </summary>
 	[MemberNotNull(nameof(_valueLookup))]
 	public void Reload()
 	{
@@ -205,6 +258,9 @@ public class DataViewCollection<T>
 		}
 	}
 
+	/// <summary>
+	/// Adds a new item to the collection
+	/// </summary>
 	public T Add(IDataItem dataItem)
 	{
 		var item = (T)dataItem.Object;
@@ -214,6 +270,9 @@ public class DataViewCollection<T>
 		return item;
 	}
 
+	/// <summary>
+	/// Removes the specified data item from the collection
+	/// </summary>
 	public void Remove(IDataItem dataItem)
 	{
 		Call call = new();
