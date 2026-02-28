@@ -5,6 +5,7 @@ using System.Collections;
 namespace SideScroll.Tabs;
 
 // Generates an event when the SelectedItems change
+// Can be used with TabInstance and any objects added to the TabModel
 public interface ITabSelector
 {
 	IList? SelectedItems { get; }
@@ -29,6 +30,7 @@ public interface ITabCreator
 	object CreateControl(object value, out string? label);
 }
 
+// When this object is viewed, it will call CreateAsync() to generate an iTab to show instead
 public interface ITabCreatorAsync
 {
 	Task<ITab?> CreateAsync(Call call);

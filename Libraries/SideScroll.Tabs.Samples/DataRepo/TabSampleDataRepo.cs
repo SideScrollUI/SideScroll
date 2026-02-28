@@ -24,14 +24,14 @@ public class TabSampleDataRepo : ITab
 				new("Cache Directory", new TabDirectory(Project.Data.Cache.RepoPath)),
 			};
 
-			model.Actions = new List<TaskCreator>
-			{
+			model.Actions =
+			[
 				new TaskDelegate("Delete Repos", DeleteRepos)
 				{
 					Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete all DataRepos?", "Delete"),
 					AccentType = AccentType.Warning,
 				}
-			};
+			];
 		}
 
 		private void DeleteRepos(Call call)

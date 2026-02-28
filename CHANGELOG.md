@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Toolbar Copy button to TabTextFile
 - CHANGELOG.md to track version history
 - CONTRIBUTING.md for contributor guidelines
-- Summary docs for TabDataColumns, TabItemCollection, TabUtils, Linker, SerializerExtensions, AvaloniaExtensions, DataGridExtensions, Log, LogEntry, LogTimer, CallTimer, Tag, DataRepos, and ToolButton
+- Summary docs for TabDataColumns, TabItemCollection, TabUtils, Linker, SerializerExtensions, AvaloniaExtensions, DataGridExtensions, Log, LogEntry, LogTimer, CallTimer, Tag, DataRepos, ToolButton, TabModel, ResourceView, TimeZoneView, Tab Toolbars, and LazyJsonNode
 
 ### Fixed
 - Fixed Bookmark JSON Serialization for enums
@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Bookmark DataItem linking to use the passed object if it is a public data type when no DataValueAttribute is found
 - Renamed Index.dat to Primary.sidx
 - Renamed Log.Call() to Log.AddChild()
+- Renamed IReload to ITabReload
 - Disabled Debug Info for Release builds
 
 ## [0.15] - 2026-01-25

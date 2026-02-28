@@ -19,12 +19,12 @@ public class TabSampleFormTasks : ITab
 		{
 			model.Items = _items;
 
-			model.Actions = new List<TaskCreator>
-			{
+			model.Actions =
+			[
 				new TaskDelegate("Add", Add),
 				new TaskDelegateAsync("Task with Progress", ShowProgressAsync, true, true),
 				new TaskDelegateAsync("Task with Sub Tasks", TaskCountAsync, true, true),
-			};
+			];
 
 			_sampleItem = LoadOrCreateData<SampleItem>(DataKey);
 			if (_sampleItem.DateTime.Ticks == 0)

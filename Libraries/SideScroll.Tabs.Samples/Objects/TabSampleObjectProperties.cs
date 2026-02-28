@@ -19,10 +19,10 @@ public class TabSampleObjectProperties : ITab
 			model.Items = ListProperty.Create(_propertyTest);
 			model.Editing = true;
 
-			model.Actions = new List<TaskCreator>
-			{
+			model.Actions =
+			[
 				new TaskDelegate("Toggle", Toggle),
-			};
+			];
 		}
 
 		private void Toggle(Call call)

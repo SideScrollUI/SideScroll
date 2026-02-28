@@ -25,8 +25,8 @@ public class TabSampleLogs : ITab
 				new("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),
 			};
 
-			model.Actions = new List<TaskCreator>
-			{
+			model.Actions =
+			[
 				new TaskAction("Add 1 Entry", () => AddEntries(1)),
 				new TaskAction("Add 10 Entries",() => AddEntries(10)),
 				new TaskAction("Add 100 Entries", () => AddEntries(100)),
@@ -35,7 +35,7 @@ public class TabSampleLogs : ITab
 				new TaskDelegate("Reset", Reset),
 				new TaskDelegate("Sync Task Delegate Thread: Log 1 Entry / second", SyncTaskThread, true, true),
 				new TaskDelegateAsync("Async Task Delegate Thread: Log 1 Entry / second", ASyncTaskThreadAsync, true, true),
-			};
+			];
 		}
 
 		private void AddEntries(int count)

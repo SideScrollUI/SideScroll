@@ -18,8 +18,8 @@ public class TabSampleGridCollectionSize : ITab
 			model.Items = _items;
 			model.ReloadOnThemeChange = true;
 
-			model.Actions = new List<TaskCreator>
-			{
+			model.Actions =
+			[
 				new TaskAction("Add 100 Entries", () => AddEntries(100)),
 				new TaskAction("Add 1,000 Entries", () => AddEntries(1_000)),
 				new TaskAction("Add 10,000 Entries", () => AddEntries(10_000)),
@@ -27,7 +27,7 @@ public class TabSampleGridCollectionSize : ITab
 				{
 					AccentType = AccentType.Warning,
 				},
-			};
+			];
 		}
 
 		private void AddEntries(int count)

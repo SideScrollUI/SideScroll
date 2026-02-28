@@ -16,13 +16,13 @@ public class TabSampleSerializer : ITab
 		{
 			model.Items = _items = [];
 
-			model.Actions = new List<TaskCreator>
-			{
+			model.Actions =
+			[
 				new TaskDelegate("Serialize 1 object", Serialize, true, true),
 				new TaskDelegate("Deserialize 1 object", Deserialize, true, true),
 				new TaskDelegate("Serialize 1 million objects", SerializeOneMillionObjects, true, true),
 				new TaskDelegate("Deserialize 1 million objects", DeserializeOneMillionObjects, true, true),
-			};
+			];
 		}
 
 		private void Serialize(Call call)

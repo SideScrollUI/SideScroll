@@ -3,15 +3,35 @@ using SideScroll.Extensions;
 
 namespace SideScroll.Time;
 
+/// <summary>
+/// Provides a view of a time zone with abbreviation, name, and conversion functionality
+/// </summary>
 [PublicData]
 public class TimeZoneView : IComparable
 {
+	/// <summary>
+	/// The time zone abbreviation (e.g., PST, EST, UTC)
+	/// </summary>
 	public string? Abbreviation { get; set; }
+
+	/// <summary>
+	/// The full time zone name
+	/// </summary>
 	public string? Name { get; set; }
+
+	/// <summary>
+	/// The .NET TimeZoneInfo for this time zone
+	/// </summary>
 	public TimeZoneInfo? TimeZoneInfo { get; set; }
 
+	/// <summary>
+	/// Initializes a new instance of the TimeZoneView class
+	/// </summary>
 	public TimeZoneView() { }
 
+	/// <summary>
+	/// Initializes a new instance of the TimeZoneView class with the specified properties
+	/// </summary>
 	public TimeZoneView(string abbreviation, string name, TimeZoneInfo timeZoneInfo)
 	{
 		Abbreviation = abbreviation;
@@ -19,6 +39,11 @@ public class TimeZoneView : IComparable
 		TimeZoneInfo = timeZoneInfo;
 	}
 
+	/// <summary>
+	/// Initializes a new instance of the TimeZoneView class, looking up or creating a custom time zone
+	/// </summary>
+	/// <param name="id">The time zone identifier to look up</param>
+	/// <param name="timeSpan">The UTC offset to use if creating a custom time zone</param>
 	public TimeZoneView(string abbreviation, string name, string id, TimeSpan timeSpan)
 	{
 		Abbreviation = abbreviation;
@@ -41,6 +66,9 @@ public class TimeZoneView : IComparable
 		return Abbreviation + " - " + Name + ": " + TimeZoneInfo?.BaseUtcOffset.FormattedDecimal();
 	}
 
+	/// <summary>
+	/// Converts a DateTime to this time zone
+	/// </summary>
 	public DateTime Convert(DateTime dateTime)
 	{
 		if (Equals(Utc)) return ConvertTimeToUtc(dateTime);
@@ -64,6 +92,9 @@ public class TimeZoneView : IComparable
 		return dateTime;
 	}
 
+	/// <summary>
+	/// Converts a DateTime to UTC using this time zone as the source
+	/// </summary>
 	public DateTime ConvertTimeToUtc(DateTime dateTime)
 	{
 		if (Equals(Utc))
@@ -85,11 +116,17 @@ public class TimeZoneView : IComparable
 		return TimeZoneInfo.ConvertTimeToUtc(dateTime);
 	}
 
+	/// <summary>
+	/// Compares this time zone to another object by string representation
+	/// </summary>
 	public int CompareTo(object? obj)
 	{
 		return obj?.ToString()?.CompareTo(ToString()) ?? 1;
 	}
 
+	/// <summary>
+	/// Determines whether the specified object is a TimeZoneView with the same name
+	/// </summary>
 	public override bool Equals(object? obj)
 	{
 		if (obj is TimeZoneView timeZoneView)
@@ -106,16 +143,32 @@ public class TimeZoneView : IComparable
 		return base.GetHashCode();
 	}
 
+	/// <summary>
+	/// UTC time zone
+	/// </summary>
 	public static TimeZoneView Utc { get; } = new("Utc", "Utc", TimeZoneInfo.Utc);
+
+	/// <summary>
+	/// Local system time zone
+	/// </summary>
 	public static TimeZoneView Local { get; } = new("Local", "Local", TimeZoneInfo.Local);
 
+	/// <summary>
+	/// The current time zone being used (defaults to Local)
+	/// </summary>
 	public static TimeZoneView Current { get; set; } = Local;
 
+	/// <summary>
+	/// Gets the current DateTime in the Current time zone
+	/// </summary>
 	public static DateTime Now => Current.Convert(DateTime.Now);
 
-	// Time Zones can have different names across Operating Systems, and this provides a compatible view
-	// Some abbreviations are reused across different countries and are ambiguous to use
-	// https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
+	/// <summary>
+	/// List of common time zones with cross-platform compatible names.
+	/// Time zones can have different names across operating systems, and this provides a compatible view.
+	/// Some abbreviations are reused across different countries and are ambiguous to use.
+	/// See: https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
+	/// </summary>
 	public static List<TimeZoneView> All { get; set; } =
 	[
 		Utc,

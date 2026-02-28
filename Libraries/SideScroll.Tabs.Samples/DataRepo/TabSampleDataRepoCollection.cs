@@ -21,14 +21,14 @@ public class TabSampleDataRepoCollection : ITab
 			LoadSavedItems(call);
 			model.Items = _sampleItems;
 
-			model.Actions = new List<TaskCreator>
-			{
+			model.Actions =
+			[
 				new TaskDelegate("Add", Add), // Foreground task so we can modify collection
 				new TaskDelegate("Add 10", Add10),
 				new TaskDelegate("Replace", Replace),
 				new TaskDelegate("Delete", Delete),
 				new TaskDelegate("Delete All", DeleteAll),
-			};
+			];
 		}
 
 		private void LoadSavedItems(Call call)

@@ -55,7 +55,7 @@ public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab,
 
 		ITab tab = bookmark.TabBookmark.Tab ?? (ITab)Activator.CreateInstance(bookmark.TabType!)!;
 
-		if (tab is IReload reloadable)
+		if (tab is ITabReload reloadable)
 		{
 			reloadable.Reload();
 		}

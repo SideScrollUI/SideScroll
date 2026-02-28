@@ -29,8 +29,8 @@ public class TabFileSerialized(string path) : ITab
 
 				_items.Add(new ListItem("Schema", serializer.TypeSchemas));
 
-				model.Actions = new List<TaskCreator>
-				{
+				model.Actions =
+				[
 					new TaskDelegate("Load Public Data", LoadPublicData, true, true),
 					new TaskDelegate("Load All Data", LoadAllData, true, true)
 					{
@@ -39,7 +39,7 @@ public class TabFileSerialized(string path) : ITab
 							"Load"),
 						AccentType = AccentType.Warning,
 					},
-				};
+				];
 			}
 			catch (Exception ex)
 			{

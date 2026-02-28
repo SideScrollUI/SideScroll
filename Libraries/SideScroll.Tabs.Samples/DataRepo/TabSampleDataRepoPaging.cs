@@ -37,15 +37,15 @@ public class TabSampleDataRepoPaging : ITab
 			toolbar.ButtonNext.IsEnabledBinding = new PropertyBinding(nameof(IDataPageView.HasNext), _pageView);
 			model.AddObject(toolbar);
 
-			model.Actions = new List<TaskCreator>
-			{
+			model.Actions =
+			[
 				new TaskDelegate("Add", Add), // Foreground task so we can modify collection
 				new TaskDelegate("Add 10", Add10),
 				new TaskDelegate("Replace", Replace),
 				new TaskDelegate("Delete", Delete),
 				new TaskDelegate("Delete All", DeleteAll),
 				new TaskDelegate("Load All", LoadAll),
-			};
+			];
 		}
 
 		private void LoadPageView(Call call)

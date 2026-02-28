@@ -15,8 +15,8 @@ public class TabSampleActions : ITab
 		{
 			model.MinDesiredWidth = 250;
 
-			model.Actions = new List<TaskCreator>
-			{
+			model.Actions =
+			[
 				new TaskDelegate("Add Log Entry", AddEntry, true, true),
 				new TaskDelegate("Test Exception", TestException, true, true, "Throws an exception"),
 				new TaskDelegate("Parallel Task Progress", ParallelTaskProgress, true, true),
@@ -25,7 +25,7 @@ public class TabSampleActions : ITab
 				new TaskAction("Action", () => PassParams(1, "abc")),
 				new TaskDelegateAsync("Long load (Async)", SleepAsync, true, true),
 				new TaskDelegate("StartAsync error", StartAsyncError, true, true),
-			};
+			];
 		}
 
 		private void StartAsyncError(Call call)

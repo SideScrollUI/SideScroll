@@ -21,14 +21,20 @@ public interface ITab
 	TabInstance Create();
 }
 
-public interface ITabAsync
-{
-	Task LoadAsync(Call call, TabModel model);
-}
-
 public interface IInnerTab
 {
 	ITab? Tab { get; }
+}
+
+public interface ITabReload
+{
+	// Called when viewing a link
+	void Reload();
+}
+
+public interface ITabAsync
+{
+	Task LoadAsync(Call call, TabModel model);
 }
 
 public class TabInstanceLoadAsync(ILoadAsync loadAsync) : TabInstance, ITabAsync

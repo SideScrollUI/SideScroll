@@ -16,12 +16,12 @@ public class TabSampleGridColumnCount : ITab
 			model.Items = _items = [];
 			AddEntries(50);
 
-			model.Actions = new List<TaskCreator>
-			{
+			model.Actions =
+			[
 				new TaskAction("Add 100 Entries", () => AddEntries(100)),
 				new TaskAction("Add 1,000 Entries", () => AddEntries(1_000)),
 				new TaskAction("Add 10,000 Entries", () => AddEntries(10_000)),
-			};
+			];
 		}
 
 		private void AddEntries(int count)

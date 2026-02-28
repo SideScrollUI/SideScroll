@@ -12,78 +12,198 @@ using System.Reflection;
 
 namespace SideScroll.Tabs;
 
+/// <summary>
+/// Represents a tab object that can be displayed in a tab view
+/// </summary>
 public class TabObject
 {
+	/// <summary>
+	/// The object to display
+	/// </summary>
 	public object? Object { get; set; }
 
-	public bool Fill { get; set; } // Stretch to Fill all vertical space
+	/// <summary>
+	/// Stretch to fill all vertical space
+	/// </summary>
+	public bool Fill { get; set; }
+
+	/// <summary>
+	/// Enables vertical scrolling for the object
+	/// </summary>
 	public bool EnableScrolling { get; set; }
 
 	public override string? ToString() => Object?.ToString();
 }
 
+/// <summary>
+/// Event arguments for object update events
+/// </summary>
 public class ObjectUpdatedEventArgs(object obj) : EventArgs
 {
+	/// <summary>
+	/// The updated object
+	/// </summary>
 	public object Object => obj;
 
 	public override string? ToString() => Object?.ToString();
 }
 
+/// <summary>
+/// A tab object with form functionality that supports change notifications
+/// A TabForm will be created with this object
+/// </summary>
 public class TabFormObject : TabObject
 {
+	/// <summary>
+	/// Event raised when the object is changed
+	/// </summary>
 	public event EventHandler<ObjectUpdatedEventArgs>? ObjectChanged;
+
+	/// <summary>
+	/// Event raised when focus is requested
+	/// </summary>
 	public event EventHandler<EventArgs>? OnFocus;
 
+	/// <summary>
+	/// Updates the object and notifies listeners
+	/// </summary>
 	public void Update(object? sender, object obj)
 	{
 		Object = obj;
 		ObjectChanged?.Invoke(sender, new ObjectUpdatedEventArgs(Object!));
 	}
 
+	/// <summary>
+	/// Requests focus on the object
+	/// </summary>
 	public void Focus(object? sender)
 	{
 		OnFocus?.Invoke(sender, EventArgs.Empty);
 	}
 }
 
+/// <summary>
+/// Specifies how items should be automatically selected
+/// </summary>
 public enum AutoSelectType
 {
-	Any, // 0 to many
-	NonEmpty, // 1 - many, or default selection
-	None, // Deselect all
+	/// <summary>
+	/// Auto-select saved items if they exist, otherwise allow empty selection
+	/// </summary>
+	Any,
+
+	/// <summary>
+	/// Auto-select saved items if they exist, otherwise select default items to ensure at least one item is selected
+	/// </summary>
+	NonEmpty,
+
+	/// <summary>
+	/// Disable auto-selection of saved items
+	/// </summary>
+	None,
 }
 
+/// <summary>
+/// Model for defining tab content including data items, objects, and display settings
+/// </summary>
 public class TabModel
 {
 	// public string? Id { get; set; } // todo: Unique key for bookmarks?
-	public string Name { get; set; } = "<TabModel>";
-	public object? Object { get; set; } // optional
 
-	// Selects Saved or Default, and then any New
+	/// <summary>
+	/// The display name for the tab
+	/// </summary>
+	public string Name { get; set; } = "<TabModel>";
+
+	/// <summary>
+	/// Optional object associated with the tab
+	/// </summary>
+	public object? Object { get; set; }
+
+	/// <summary>
+	/// Selects saved or default, and then any new items
+	/// </summary>
 	public AutoSelectType AutoSelectSaved { get; set; } = AutoSelectType.Any;
+
+	/// <summary>
+	/// Automatically select default items
+	/// </summary>
 	public bool AutoSelectDefault { get; set; } = true;
+
+	/// <summary>
+	/// Automatically select new items
+	/// </summary>
 	public bool AutoSelectNew { get; set; } = true;
+
+	/// <summary>
+	/// Reload the tab when the theme changes
+	/// </summary>
 	public bool ReloadOnThemeChange { get; set; }
 
+	/// <summary>
+	/// Whether the DataGrids allow editing
+	/// </summary>
 	public bool Editing { get; set; }
-	public bool Skippable { get; set; } // Will collapse collections that have a single item
-	public bool ShowTasks { get; set; } // Will add the Tasks to show logs when an error occurs
-	public bool ShowSearch { get; set; } // Show search filter above DataGrids
 
+	/// <summary>
+	/// Will horizontally collapse tabs that have a single item
+	/// </summary>
+	public bool Skippable { get; set; }
+
+	/// <summary>
+	/// Controls whether actions will show all tasks run or only tasks that error
+	/// </summary>
+	public bool ShowTasks { get; set; }
+
+	/// <summary>
+	/// Show search filter above data grids
+	/// </summary>
+	public bool ShowSearch { get; set; }
+
+	/// <summary>
+	/// Minimum desired width for the tab
+	/// </summary>
 	public int MinDesiredWidth { get; set; }
+
+	/// <summary>
+	/// Maximum desired width for the tab
+	/// </summary>
 	public int MaxDesiredWidth { get; set; } = 1500;
 
-	public SearchFilter? SearchFilter { get; set; } // DataGrid filtering will also update this filter
+	/// <summary>
+	/// DataGrid filtering will also update this filter
+	/// </summary>
+	public SearchFilter? SearchFilter { get; set; }
+
+	/// <summary>
+	/// Maximum depth to search when filtering
+	/// </summary>
 	public int MaxSearchDepth { get; set; } = 0;
 
-	public IList? Actions { get; set; }
+	/// <summary>
+	/// Collection of available actions for the tab
+	/// </summary>
+	public IReadOnlyList<TaskCreator>? Actions { get; set; }
+
+	/// <summary>
+	/// Collection of task instances for the tab
+	/// </summary>
 	public TaskInstanceCollection Tasks { get; set; } = [];
 
+	/// <summary>
+	/// List of data item collections to display
+	/// </summary>
 	public List<IList> ItemList { get; set; } = [];
 
+	/// <summary>
+	/// List of objects to display in the tab
+	/// </summary>
 	public List<TabObject> Objects { get; set; } = [];
 	//public List<ITabControl> CustomTabControls { get; set; } = []; // should everything be a custom control? tabControls?
 
+	/// <summary>
+	/// Primary data items collection (gets/sets the first item list)
+	/// </summary>
 	public IList? Items
 	{
 		get => ItemList.FirstOrDefault();
@@ -94,10 +214,19 @@ public class TabModel
 		}
 	}
 
+	/// <summary>
+	/// Default item to select when the tab is displayed
+	/// </summary>
 	public object? DefaultSelectedItem { get; set; }
 
-	// used for saving/loading TabViewSettings
-	public string? CustomSettingsPath { get; set; } // Must be set before LoadUI()
+	/// <summary>
+	/// Custom path for saving/loading tab view settings. Must be set before LoadUI()
+	/// </summary>
+	public string? CustomSettingsPath { get; set; }
+
+	/// <summary>
+	/// Assembly qualified short name of the object type
+	/// </summary>
 	public string ObjectTypePath
 	{
 		get
@@ -112,13 +241,23 @@ public class TabModel
 
 	public override string ToString() => Name;
 
+	/// <summary>
+	/// Initializes a new instance of the TabModel class
+	/// </summary>
 	public TabModel() { }
 
+	/// <summary>
+	/// Initializes a new instance of the TabModel class with a name
+	/// </summary>
 	public TabModel(string name)
 	{
 		Name = name;
 	}
 
+	/// <summary>
+	/// Creates a TabModel from an object if it contains displayable data
+	/// </summary>
+	/// <returns>A TabModel instance if the object has links or is an enum, otherwise null</returns>
 	public static TabModel? Create(string name, object obj)
 	{
 		if (TabUtils.ObjectHasLinks(obj) == false && obj is not Enum)
@@ -132,6 +271,9 @@ public class TabModel
 		return tabModel;
 	}
 
+	/// <summary>
+	/// Adds an object to display in the tab
+	/// </summary>
 	public TabObject AddObject(object? obj, bool fill = false, bool enableScrolling = false)
 	{
 		obj ??= "(null)";
@@ -154,6 +296,9 @@ public class TabModel
 		return tabObject;
 	}
 
+	/// <summary>
+	/// Adds a form object with change notification support
+	/// </summary>
 	public TabFormObject AddForm(object obj, bool fill = false, bool enableScrolling = false)
 	{
 		TabFormObject tabObject = new()
@@ -168,6 +313,9 @@ public class TabModel
 		return tabObject;
 	}
 
+	/// <summary>
+	/// Adds data to the tab by analyzing the object type and adding appropriate collections
+	/// </summary>
 	public void AddData(object? obj)
 	{
 		Object = obj;
@@ -310,6 +458,9 @@ public class TabModel
 		ItemList.Add(new ItemCollection<DictionaryEntry>(sortedList));
 	}
 
+	/// <summary>
+	/// Gets the generic arguments for a specific generic interface type
+	/// </summary>
 	public static Type[]? GetInterfaceGenericArguments(Type type, Type genericType)
 	{
 		foreach (Type iType in type.GetInterfaces())
@@ -390,6 +541,9 @@ public class TabModel
 		}
 	}
 
+	/// <summary>
+	/// Clears all objects, items, and actions from the tab
+	/// </summary>
 	public void Clear()
 	{
 		Objects.Clear();
@@ -413,6 +567,10 @@ public class TabModel
 			Actions = methods;
 	}*/
 
+	/// <summary>
+	/// Recursively searches for items matching the filter criteria
+	/// </summary>
+	/// <param name="depth">Maximum depth to search nested objects. Limited by MaxSearchDepth</param>
 	public TabBookmark FindMatches(Filter filter, int depth)
 	{
 		TabBookmark tabBookmark = new();
@@ -430,10 +588,7 @@ public class TabModel
 			{
 				if (filter.Matches(obj, visibleProperties))
 				{
-					SelectedRow selectedRow = new()
-					{
-						Object = obj,
-					};
+					SelectedRow selectedRow = new(obj);
 					tabDataBookmark.SelectedRows.Add(new(selectedRow));
 				}
 				else if (depth >= 0)
@@ -445,10 +600,7 @@ public class TabModel
 						if (childNode.SelectedRows.Count > 0)
 						{
 							childNode.TabModel = tabModel;
-							SelectedRow selectedRow = new()
-							{
-								Object = obj,
-							};
+							SelectedRow selectedRow = new(obj);
 							tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
 						}
 					}
