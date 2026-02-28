@@ -31,10 +31,10 @@ public class TabSampleGridDataTable : ITab
 			}
 		}
 
-		public object CreateControl(object value, out string? label)
+		public object CreateControl(object obj, out string? label)
 		{
-			label = value.ToString();
-			if (value is DataRowView dataRowView)
+			label = obj.ToString();
+			if (obj is DataRowView dataRowView)
 			{
 				return dataRowView.Row.ItemArray
 					.WithIndex()
@@ -42,7 +42,7 @@ public class TabSampleGridDataTable : ITab
 					.ToList();
 			}
 
-			return value.ToString()!;
+			return obj.ToString()!;
 		}
 	}
 }

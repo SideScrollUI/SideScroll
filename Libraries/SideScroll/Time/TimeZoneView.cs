@@ -42,6 +42,8 @@ public class TimeZoneView : IComparable
 	/// <summary>
 	/// Initializes a new instance of the TimeZoneView class, looking up or creating a custom time zone
 	/// </summary>
+	/// <param name="abbreviation">The time zone abbreviation</param>
+	/// <param name="name">The full time zone name</param>
 	/// <param name="id">The time zone identifier to look up</param>
 	/// <param name="timeSpan">The UTC offset to use if creating a custom time zone</param>
 	public TimeZoneView(string abbreviation, string name, string id, TimeSpan timeSpan)

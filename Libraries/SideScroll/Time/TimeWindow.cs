@@ -120,6 +120,8 @@ public class TimeWindow
 	/// <summary>
 	/// Calculates the count of values for each period within this time window
 	/// </summary>
+	/// <param name="timeRangeValues">The list of time range values to process</param>
+	/// <param name="periodDuration">The duration of each period</param>
 	/// <param name="fillAndMerge">Whether to add NaN gaps between periods with no data and merge duplicate values</param>
 	public List<TimeRangeValue>? PeriodCounts(List<TimeRangeValue> timeRangeValues, TimeSpan periodDuration, bool fillAndMerge = false)
 	{

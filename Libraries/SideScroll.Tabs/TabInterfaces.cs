@@ -94,9 +94,10 @@ public interface ITabCreator
 	/// <summary>
 	/// Creates a control for the specified value
 	/// </summary>
+	/// <param name="obj">The value to create a control for</param>
 	/// <param name="label">Outputs the label for the created control</param>
 	/// <returns>The created control object</returns>
-	object CreateControl(object value, out string? label);
+	object CreateControl(object obj, out string? label);
 }
 
 /// <summary>

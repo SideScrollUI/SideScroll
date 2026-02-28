@@ -83,6 +83,8 @@ public static class ObjectUtils
 	/// <summary>
 	/// Determines whether two objects are equal, with support for comparing lists
 	/// </summary>
+	/// <param name="obj1">The first object to compare</param>
+	/// <param name="obj2">The second object to compare</param>
 	/// <param name="maxDepth">Maximum recursion depth for comparing nested collections (default is 3)</param>
 	/// <returns>True if the objects are equal; otherwise, false</returns>
 	public static bool AreEqual(object? obj1, object? obj2, int maxDepth = 3)

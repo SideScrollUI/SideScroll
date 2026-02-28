@@ -6,7 +6,7 @@
     - See Changelog for more
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.11</AvaloniaVersion>
+    <AvaloniaVersion>11.3.12</AvaloniaVersion>
     <AvaloniaEditVersion>11.4.1</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
@@ -31,6 +31,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DebugType>none</DebugType>
   </PropertyGroup>
 </Project>

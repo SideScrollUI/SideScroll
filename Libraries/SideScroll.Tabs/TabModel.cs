@@ -570,6 +570,7 @@ public class TabModel
 	/// <summary>
 	/// Recursively searches for items matching the filter criteria
 	/// </summary>
+	/// <param name="filter">The filter to apply when searching</param>
 	/// <param name="depth">Maximum depth to search nested objects. Limited by MaxSearchDepth</param>
 	public TabBookmark FindMatches(Filter filter, int depth)
 	{

@@ -54,7 +54,12 @@ public class ToolToggleButton : ToolButton
 	/// <summary>
 	/// Initializes a new toggle button bound to a property
 	/// </summary>
+	/// <param name="tooltip">Tooltip text for the button</param>
+	/// <param name="onImageResource">Image to display when checked</param>
+	/// <param name="offImageResource">Image to display when unchecked</param>
 	/// <param name="listProperty">The property to bind the toggle state to</param>
+	/// <param name="action">Optional action to execute when clicked</param>
+	/// <param name="isDefault">Whether this is the default button</param>
 	public ToolToggleButton(string tooltip, IResourceView onImageResource, IResourceView offImageResource, ListProperty listProperty, CallAction? action = null, bool isDefault = false)
 		: base(tooltip, offImageResource, action, isDefault)
 	{

@@ -171,6 +171,8 @@ public class Call
 	/// Starts a new task with a specific count for tracking multiple sub-operations
 	/// </summary>
 	/// <param name="taskCount">The number of sub-tasks to track within this task</param>
+	/// <param name="name">The name of the task</param>
+	/// <param name="tags">Optional tags for additional context</param>
 	/// <example>
 	/// <code>
 	/// var items = new[] { "file1.txt", "file2.txt", "file3.txt" };

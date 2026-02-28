@@ -59,6 +59,7 @@ public class XAxisAttribute : Attribute;
 [AttributeUsage(AttributeTargets.Property)]
 public class YAxisAttribute : Attribute;
 
+/*
 // todo: Need to add unit support for LiveCharts axis first
 /// <summary>
 /// Specifies the unit of measurement for the field or property in charts and displays.
@@ -87,7 +88,7 @@ public class YAxisAttribute : Attribute;
 /// }
 /// </code>
 /// </example>
-/*[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class UnitAttribute(string name) : Attribute
 {
 	/// <summary>

@@ -32,6 +32,7 @@ public class Linker(Project project)
 	/// Override this method to replace save the base64 elsewhere and return a different LinkUri instead
 	/// GetLinkAsync should be modified to retrieve that base64 if required 
 	/// </summary>
+	/// <param name="call">The call context for logging</param>
 	/// <param name="bookmark">The bookmark to encode. Must not exceed MaxLength when encoded</param>
 #pragma warning disable CS1998 // subclasses can be async
 	public virtual async Task<LinkUri> AddLinkAsync(Call call, Bookmark bookmark)
@@ -63,7 +64,9 @@ public class Linker(Project project)
 	/// Retrieves a bookmark from a parsed LinkUri by decoding the base64 encoded bookmark data
 	/// Override this method to return the base64 elsewhere based on the LinkUri
 	/// </summary>
+	/// <param name="call">The call context for logging</param>
 	/// <param name="linkUri">The parsed link URI. Must have a valid SideScroll prefix and not exceed MaxLength</param>
+	/// <param name="checkVersion">Whether to validate the link version matches the current version</param>
 #pragma warning disable CS1998 // subclasses can be async
 	public virtual async Task<Bookmark> GetLinkAsync(Call call, LinkUri linkUri, bool checkVersion)
 #pragma warning restore CS1998
