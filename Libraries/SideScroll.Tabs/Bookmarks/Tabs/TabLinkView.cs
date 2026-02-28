@@ -5,7 +5,7 @@ using SideScroll.Tabs.Bookmarks.Models;
 
 namespace SideScroll.Tabs.Bookmarks.Tabs;
 
-public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab, IInnerTab
+public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITabContainer
 {
 	public event EventHandler<EventArgs>? OnDelete;
 
@@ -55,7 +55,7 @@ public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITab,
 
 		ITab tab = bookmark.TabBookmark.Tab ?? (ITab)Activator.CreateInstance(bookmark.TabType!)!;
 
-		if (tab is ITabReload reloadable)
+		if (tab is ITabReloadable reloadable)
 		{
 			reloadable.Reload();
 		}
