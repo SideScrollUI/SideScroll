@@ -7,32 +7,71 @@ using System.Text.RegularExpressions;
 
 namespace SideScroll.Tabs;
 
+/// <summary>
+/// Logical operator types for combining filter expressions
+/// </summary>
 public enum FilterOperator
 {
+	/// <summary>
+	/// All conditions must match
+	/// </summary>
 	And,
+
+	/// <summary>
+	/// Any condition can match
+	/// </summary>
 	Or
 }
 
+/// <summary>
+/// Base class for filter expression tree nodes
+/// </summary>
 public abstract class FilterNode
 {
+	/// <summary>
+	/// Determines whether this node matches the provided values
+	/// </summary>
+	/// <param name="uppercaseValues">List of uppercase text values to match against</param>
 	public abstract bool Matches(List<string> uppercaseValues);
 }
 
+/// <summary>
+/// Leaf node representing a single search term in the filter expression tree
+/// </summary>
 public class FilterLeafNode : FilterNode
 {
+	/// <summary>
+	/// Gets or sets the uppercase search text to match
+	/// </summary>
 	public string? TextUppercase { get; set; }
 
+	/// <summary>
+	/// Checks if any value contains the search text
+	/// </summary>
 	public override bool Matches(List<string> uppercaseValues)
 	{
 		return uppercaseValues.Any(v => v.Contains(TextUppercase!, StringComparison.Ordinal));
 	}
 }
 
+/// <summary>
+/// Operator node combining multiple filter nodes with AND or OR logic
+/// </summary>
 public class FilterOperatorNode : FilterNode
 {
+	/// <summary>
+	/// Gets or sets the logical operator (AND or OR)
+	/// </summary>
 	public FilterOperator Operator { get; set; }
+
+	/// <summary>
+	/// Gets or sets the child filter nodes
+	/// </summary>
 	public List<FilterNode> Children { get; set; } = [];
 
+	/// <summary>
+	/// Evaluates all children using the specified operator logic
+	/// </summary>
 	public override bool Matches(List<string> uppercaseValues)
 	{
 		if (Children.Count == 0)
@@ -49,10 +88,19 @@ public class FilterOperatorNode : FilterNode
 	}
 }
 
+/// <summary>
+/// Helper class for applying filters to tab data and finding matches
+/// </summary>
 public class SearchFilter
 {
+	/// <summary>
+	/// Gets or sets the filter to apply
+	/// </summary>
 	public Filter? Filter { get; set; }
 
+	/// <summary>
+	/// Finds all matching items in a list using the filter
+	/// </summary>
 	public TabBookmark FindMatches(IList list)
 	{
 		TabModel tabModel = TabModel.Create("", list)!;
@@ -60,6 +108,9 @@ public class SearchFilter
 		return tabBookmark;
 	}
 
+	/// <summary>
+	/// Determines whether an object matches the filter criteria
+	/// </summary>
 	public bool IsMatch(object obj)
 	{
 		if (Filter == null || Filter.FilterText.IsNullOrEmpty())
@@ -71,19 +122,36 @@ public class SearchFilter
 	}
 }
 
+/// <summary>
+/// Parses and evaluates text search expressions with support for AND/OR operators, quoted strings, and nested depth.
+/// Syntax examples: "ABC" | 123, +3 "ABC" | 123, (foo | bar) &amp; baz
+/// </summary>
 public class Filter
 {
+	/// <summary>
+	/// Gets or sets the original filter text
+	/// </summary>
 	public string FilterText { get; set; }
+
+	/// <summary>
+	/// Gets or sets the search depth for nested objects (0 = current level only)
+	/// </summary>
 	public int Depth { get; set; }
+
+	/// <summary>
+	/// Gets or sets the root node of the parsed expression tree
+	/// </summary>
 	public FilterNode? RootNode { get; set; }
 
 	private static readonly Regex _regex = new(@"^(?<Depth>\+\d+ )?(?<Filters>.+)$", RegexOptions.IgnoreCase);
 
 	public override string ToString() => FilterText;
 
-	// "ABC" | 123
-	// +3 "ABC" | 123
-	// (foo | bar) & baz
+	/// <summary>
+	/// Initializes a new filter by parsing the filter text expression.
+	/// Supports depth prefix (+N), quoted strings, AND (&amp;), OR (|), and parentheses for grouping.
+	/// </summary>
+	/// <param name="filterText">The filter expression to parse (e.g., "+3 foo &amp; bar | baz")</param>
 	public Filter(string? filterText)
 	{
 		FilterText = filterText ?? "";
@@ -282,6 +350,9 @@ public class Filter
 		return nodes.FirstOrDefault();
 	}
 
+	/// <summary>
+	/// Determines whether any items in the list match the filter
+	/// </summary>
 	public bool Matches(IList iList)
 	{
 		Type listType = iList.GetType();
@@ -290,6 +361,11 @@ public class Filter
 		return Matches(iList, visibleProperties);
 	}
 
+	/// <summary>
+	/// Determines whether an object matches the filter using the specified properties
+	/// </summary>
+	/// <param name="obj">The object to check</param>
+	/// <param name="columnProperties">The properties to extract text values from</param>
 	public bool Matches(object obj, List<PropertyInfo> columnProperties)
 	{
 		List<string> uppercaseValues = [];

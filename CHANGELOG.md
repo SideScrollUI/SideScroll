@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CHANGELOG.md to track version history
 - CONTRIBUTING.md for contributor guidelines
 - Enabled summary xml doc generation
-- Summary docs for TabDataColumns, TabItemCollection, TabUtils, Linker, SerializerExtensions, AvaloniaExtensions, DataGridExtensions, Log, LogEntry, LogTimer, CallTimer, Tag, DataRepos, ToolButton, TabModel, ResourceView, TimeZoneView, Tab Toolbars, Tab Interfaces, TabInstance, Tab Bookmarks, and LazyJsonNode
+- Summary docs for TabDataColumns, TabItemCollection, TabUtils, Linker, SerializerExtensions, AvaloniaExtensions, DataGridExtensions, Log, LogEntry, LogTimer, CallTimer, Tag, DataRepos, ToolButton, TabModel, ResourceView, TimeZoneView, Tab Toolbars, Tab Interfaces, TabInstance, Tab Bookmarks, Tab Settings, Filter, Project, and LazyJsonNode
 
 ### Fixed
 - Fixed Bookmark JSON Serialization for enums

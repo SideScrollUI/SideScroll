@@ -114,9 +114,15 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 /// </summary>
 public class TabMethodColumn(MethodInfo methodInfo, string? label = null)
 {
+	/// <summary>
+	/// Gets the method info for this column
+	/// </summary>
 	[HiddenColumn]
 	public MethodInfo MethodInfo => methodInfo;
 
+	/// <summary>
+	/// Gets or sets the display label for this column
+	/// </summary>
 	public string Label { get; set; } = label ?? methodInfo.GetCustomAttribute<ButtonColumnAttribute>()?.Name ?? methodInfo.Name;
 }
 
@@ -125,9 +131,15 @@ public class TabMethodColumn(MethodInfo methodInfo, string? label = null)
 /// </summary>
 public class TabPropertyColumn(PropertyInfo propertyInfo, string label)
 {
+	/// <summary>
+	/// Gets the property info for this column
+	/// </summary>
 	[HiddenColumn]
 	public PropertyInfo PropertyInfo => propertyInfo;
 
+	/// <summary>
+	/// Gets or sets the display label for this column
+	/// </summary>
 	public string Label { get; set; } = label;
 
 	public override string ToString() => Label;

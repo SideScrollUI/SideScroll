@@ -56,7 +56,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	{
 		get
 		{
-			if (CurrentIndex >= History.Count)
+			if (CurrentIndex < 0 || CurrentIndex >= History.Count)
 				return null;
 			return History[CurrentIndex];
 		}

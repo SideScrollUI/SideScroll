@@ -20,22 +20,54 @@ public readonly struct FilePath(string path)
 /// </summary>
 public static class FileUtils
 {
-	// User
+	/// <summary>
+	/// Unix permission bit: User read permission
+	/// </summary>
 	public const int S_IRUSR = 0x100;
+
+	/// <summary>
+	/// Unix permission bit: User write permission
+	/// </summary>
 	public const int S_IWUSR = 0x80;
+
+	/// <summary>
+	/// Unix permission bit: User execute permission
+	/// </summary>
 	public const int S_IXUSR = 0x40;
 
-	// Group
+	/// <summary>
+	/// Unix permission bit: Group read permission
+	/// </summary>
 	public const int S_IRGRP = 0x20;
+
+	/// <summary>
+	/// Unix permission bit: Group write permission
+	/// </summary>
 	public const int S_IWGRP = 0x10;
+
+	/// <summary>
+	/// Unix permission bit: Group execute permission
+	/// </summary>
 	public const int S_IXGRP = 0x8;
 
-	// Other
+	/// <summary>
+	/// Unix permission bit: Other read permission
+	/// </summary>
 	public const int S_IROTH = 0x4;
+
+	/// <summary>
+	/// Unix permission bit: Other write permission
+	/// </summary>
 	public const int S_IWOTH = 0x2;
+
+	/// <summary>
+	/// Unix permission bit: Other execute permission
+	/// </summary>
 	public const int S_IXOTH = 0x1;
 
-	// Disallow setting group and other permissions, only allow user
+	/// <summary>
+	/// Umask value that disallows setting group and other permissions, allowing only user permissions
+	/// </summary>
 	public const int UmaskUserOnlyPermissions = S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH;
 	/// <summary>
 	/// Gets a timestamp string in the format yyyy-MM-dd_HH-mm-ss
