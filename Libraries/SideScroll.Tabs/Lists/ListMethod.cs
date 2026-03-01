@@ -5,14 +5,27 @@ using System.Reflection;
 
 namespace SideScroll.Tabs.Lists;
 
+/// <summary>
+/// Represents a method member as a list item with lazy invocation and optional caching
+/// </summary>
 public class ListMethod : ListMember
 {
+	/// <summary>
+	/// Gets the method info for this method
+	/// </summary>
 	public MethodInfo MethodInfo { get; }
+
+	/// <summary>
+	/// Gets or sets whether the method result should be cached
+	/// </summary>
 	public bool IsCacheable { get; set; }
 
 	private bool _valueCached;
 	private object? _valueObject;
 
+	/// <summary>
+	/// Gets or sets the method result value, with optional caching
+	/// </summary>
 	[EditColumn, InnerValue, WordWrap]
 	public override object? Value
 	{
@@ -45,6 +58,9 @@ public class ListMethod : ListMember
 
 	public override string? ToString() => Name;
 
+	/// <summary>
+	/// Initializes a new ListMethod for the specified method
+	/// </summary>
 	public ListMethod(object obj, MethodInfo methodInfo, bool isCacheable = true) :
 		base(obj, methodInfo)
 	{
@@ -97,6 +113,12 @@ public class ListMethod : ListMember
 		return result;
 	}
 
+	/// <summary>
+	/// Creates a collection of list methods from an object using reflection, filtering to methods marked with [Item]
+	/// </summary>
+	/// <param name="obj">The object to extract methods from</param>
+	/// <param name="includeBaseTypes">Whether to include methods from base types</param>
+	/// <param name="includeStatic">Whether to include static methods</param>
 	public new static ItemCollection<ListMethod> Create(object obj, bool includeBaseTypes, bool includeStatic = true)
 	{
 		// this doesn't work for virtual methods (or any method modifier?)
@@ -128,6 +150,9 @@ public class ListMethod : ListMember
 		return listMethods;
 	}
 
+	/// <summary>
+	/// Determines whether a method should be visible in lists (must have [Item] attribute and meet visibility criteria)
+	/// </summary>
 	public static bool IsVisible(MethodInfo methodInfo)
 	{
 		if (methodInfo.DeclaringType!.IsNotPublic ||

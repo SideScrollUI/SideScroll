@@ -41,6 +41,10 @@ public static class ProcessUtils
 		return OSPlatform.Create("Unknown");
 	}
 
+	/// <summary>
+	/// Determines whether the current operating system is Windows 10 or earlier (excludes Windows 11 and later)
+	/// </summary>
+	/// <returns>True if running on Windows 10 or below; false for Windows 11+ or non-Windows platforms</returns>
 	public static bool IsWindows10OrBelow()
 	{
 		if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

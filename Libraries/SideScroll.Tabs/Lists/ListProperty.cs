@@ -7,24 +7,42 @@ using System.Reflection;
 
 namespace SideScroll.Tabs.Lists;
 
+/// <summary>
+/// Interface for properties that can be edited
+/// </summary>
 public interface IPropertyIsEditable
 {
+	/// <summary>
+	/// Gets whether the property can be edited
+	/// </summary>
 	bool IsEditable { get; }
 }
 
+/// <summary>
+/// Represents a property member as a list item with reflection-based value access, editing support, and optional caching
+/// </summary>
 public class ListProperty : ListMember, IPropertyIsEditable
 {
+	/// <summary>
+	/// Gets the property info for this property
+	/// </summary>
 	[HiddenColumn]
 	public PropertyInfo PropertyInfo { get; }
 
+	/// <summary>
+	/// Gets or sets whether the property value should be cached
+	/// </summary>
 	[HiddenColumn]
 	public bool IsCacheable { get; set; }
 
 	private bool _valueCached;
 	private object? _valueObject;
 
+	/// <summary>
+	/// Gets whether this property can be edited (based on CanWrite, public setter, and ReadOnly attribute)
+	/// </summary>
 	[HiddenColumn]
-	public override bool IsEditable // rename to IsReadOnly?
+	public override bool IsEditable
 	{
 		get
 		{
@@ -35,9 +53,15 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		}
 	}
 
+	/// <summary>
+	/// Gets whether the property should be formatted using the Formatted() extension
+	/// </summary>
 	[Hidden]
 	public bool IsFormatted => PropertyInfo.GetCustomAttribute<FormattedAttribute>() != null;
 
+	/// <summary>
+	/// Gets or sets the property value, with optional caching and formatting
+	/// </summary>
 	[EditColumn, InnerValue, WordWrap]
 	public override object? Value
 	{
@@ -72,10 +96,9 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		{
 			if (PropertyInfo.CanWrite)
 			{
-				Type type = PropertyInfo.PropertyType;
 				if (value != null)
 				{
-					type = type.GetNonNullableType();
+					Type type = UnderlyingType;
 
 					if (!type.IsInstanceOfType(value))
 					{
@@ -101,14 +124,23 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		}
 	}
 
+	/// <summary>
+	/// Gets the underlying non-nullable type of the property
+	/// </summary>
 	[Hidden]
 	public Type UnderlyingType => PropertyInfo.PropertyType.GetNonNullableType();
 
+	/// <summary>
+	/// Gets whether the property should be visible in row displays
+	/// </summary>
 	[Hidden]
 	public bool IsPropertyVisible => PropertyInfo.IsRowVisible();
 
 	public override string? ToString() => Name;
 
+	/// <summary>
+	/// Initializes a new ListProperty for the specified property
+	/// </summary>
 	public ListProperty(object obj, PropertyInfo propertyInfo, bool isCacheable = true) :
 		base(obj, propertyInfo)
 	{
@@ -131,11 +163,17 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		}
 	}
 
+	/// <summary>
+	/// Initializes a new ListProperty by property name
+	/// </summary>
 	public ListProperty(object obj, string propertyName, bool isCacheable = true) :
 		this(obj, obj.GetType().GetProperty(propertyName)!, isCacheable)
 	{
 	}
 
+	/// <summary>
+	/// Handles property change notifications from the source object to invalidate cache
+	/// </summary>
 	protected void ListProperty_PropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
 		if (e.PropertyName != MemberInfo.Name) return;
@@ -144,6 +182,12 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		ValueChanged();
 	}
 
+	/// <summary>
+	/// Creates a collection of list properties from an object using reflection
+	/// </summary>
+	/// <param name="obj">The object to extract properties from</param>
+	/// <param name="includeBaseTypes">Whether to include properties from base types</param>
+	/// <param name="includeStatic">Whether to include static properties</param>
 	public new static ItemCollection<ListProperty> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
 	{
 		// this doesn't work for virtual methods (or any method modifier?)
@@ -177,7 +221,9 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		return ExpandInlined(listProperties, includeBaseTypes);
 	}
 
-	// If a member specifies [Inline], replace this member with all it's members
+	/// <summary>
+	/// Expands properties marked with [Inline] attribute by replacing them with their inner properties
+	/// </summary>
 	public static ItemCollection<ListProperty> ExpandInlined(ItemCollection<ListProperty> listProperties, bool includeBaseTypes)
 	{
 		ItemCollection<ListProperty> newProperties = [];
@@ -199,6 +245,9 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		return newProperties;
 	}
 
+	/// <summary>
+	/// Determines whether the property should be visible as a row based on Hide attributes
+	/// </summary>
 	public bool IsRowVisible()
 	{
 		var hideAttribute = PropertyInfo.GetCustomAttribute<HideAttribute>();
@@ -216,6 +265,9 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		return true;
 	}
 
+	/// <summary>
+	/// Determines whether the property should be visible as a column based on Hide attributes
+	/// </summary>
 	public bool IsColumnVisible()
 	{
 		var hideAttribute = PropertyInfo.GetCustomAttribute<HideAttribute>();
@@ -229,7 +281,9 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		return true;
 	}
 
-	// This can be slow due to lazy property loading
+	/// <summary>
+	/// Sorts properties by auto-select attribute and link presence
+	/// </summary>
 	public static ItemCollection<ListProperty> Sort(IEnumerable<ListProperty> listProperties)
 	{
 		var sortedProperties = listProperties

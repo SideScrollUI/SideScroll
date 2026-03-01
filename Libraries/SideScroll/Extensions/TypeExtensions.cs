@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace SideScroll.Extensions;
 
+/// <summary>
+/// Extension methods for Type inspection, reflection, and type checking
+/// </summary>
 public static class TypeExtensions
 {
 	/// <summary>

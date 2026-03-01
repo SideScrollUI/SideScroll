@@ -34,6 +34,9 @@ public interface IItemCollection
 	/// </summary>
 	bool? ShowHeader { get; set; }
 
+	/// <summary>
+	/// Loads display settings from another IItemCollection
+	/// </summary>
 	void LoadSettings(IItemCollection itemCollection)
 	{
 		ColumnName = itemCollection.ColumnName;

@@ -22,9 +22,15 @@ namespace SideScroll.Collections;
 /// </example>
 public class NamedItemCollection<TCollection, TValue>
 {
+	/// <summary>
+	/// Gets all public static members (properties and fields) from the collection type as MemberInfo/value pairs
+	/// </summary>
 	public static List<KeyValuePair<MemberInfo, TValue>> Items => _items ??= GetItems();
 	private static List<KeyValuePair<MemberInfo, TValue>>? _items;
 
+	/// <summary>
+	/// Gets all values from the public static members of the collection type
+	/// </summary>
 	public static List<TValue> Values => _values ??= Items.Select(v => v.Value).ToList();
 	private static List<TValue>? _values;
 

@@ -5,6 +5,9 @@ using System.Xml;
 
 namespace SideScroll.Extensions;
 
+/// <summary>
+/// General extension methods for XML, lists, objects, versions, and arrays
+/// </summary>
 public static class SideScrollExtensions
 {
 	/// <summary>

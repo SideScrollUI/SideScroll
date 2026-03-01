@@ -1,5 +1,8 @@
 namespace SideScroll.Extensions;
 
+/// <summary>
+/// Extension methods for formatting and manipulating numeric values
+/// </summary>
 public static class NumberExtensions
 {
 	/// <summary>

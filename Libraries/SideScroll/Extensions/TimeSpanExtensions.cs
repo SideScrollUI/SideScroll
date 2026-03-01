@@ -2,6 +2,9 @@ using System.Text;
 
 namespace SideScroll.Extensions;
 
+/// <summary>
+/// Extension methods for formatting and manipulating TimeSpan values
+/// </summary>
 public static class TimeSpanExtensions
 {
 	/// <summary>

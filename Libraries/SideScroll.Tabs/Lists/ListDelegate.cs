@@ -4,18 +4,37 @@ using System.Reflection;
 
 namespace SideScroll.Tabs.Lists;
 
+/// <summary>
+/// Represents an async delegate member that can be lazily loaded and cached
+/// </summary>
 public class ListDelegate : ListMember, IPropertyIsEditable, ILoadAsync
 {
+	/// <summary>
+	/// Delegate type for loading objects asynchronously
+	/// </summary>
 	public delegate Task<object?> LoadObjectAsync(Call call);
 
+	/// <summary>
+	/// Gets the async load action delegate
+	/// </summary>
 	public LoadObjectAsync LoadAction { get; }
+
+	/// <summary>
+	/// Gets the method info for the load action
+	/// </summary>
 	public MethodInfo MethodInfo => LoadAction.Method;
 
+	/// <summary>
+	/// Gets or sets whether the loaded value should be cached
+	/// </summary>
 	public bool IsCacheable { get; set; }
 
 	private bool _valueCached;
 	private object? _valueObject;
 
+	/// <summary>
+	/// Gets or sets the loaded value, with optional caching
+	/// </summary>
 	[EditColumn, InnerValue, WordWrap]
 	public override object? Value
 	{
@@ -48,6 +67,9 @@ public class ListDelegate : ListMember, IPropertyIsEditable, ILoadAsync
 
 	public override string? ToString() => Name;
 
+	/// <summary>
+	/// Initializes a new ListDelegate with the specified async load action
+	/// </summary>
 	public ListDelegate(LoadObjectAsync loadAction, bool isCacheable = true) :
 		base(loadAction.Target!, loadAction.Method)
 	{
@@ -63,6 +85,9 @@ public class ListDelegate : ListMember, IPropertyIsEditable, ILoadAsync
 		}
 	}
 
+	/// <summary>
+	/// Loads the value asynchronously using the load action
+	/// </summary>
 	public async Task<object?> LoadAsync(Call call)
 	{
 		return await LoadAction.Invoke(call);

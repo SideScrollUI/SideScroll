@@ -170,6 +170,11 @@ public static class DateTimeUtils
 		return text;
 	}
 
+	/// <summary>
+	/// Gets the time format string with millisecond precision for the specified culture
+	/// </summary>
+	/// <param name="culture">The culture to use for formatting (uses current culture if null)</param>
+	/// <returns>A time format string with milliseconds (e.g., "h:mm:ss.FFF tt" or "H:mm:ss.FFF")</returns>
 	public static string GetTimeFormatMilliseconds(CultureInfo? culture = null)
 	{
 		culture ??= CultureInfo.CurrentCulture;

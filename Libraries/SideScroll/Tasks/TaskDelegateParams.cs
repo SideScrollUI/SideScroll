@@ -1,5 +1,8 @@
 namespace SideScroll.Tasks;
 
+/// <summary>
+/// Represents a method that receives a Call parameter and additional object parameters
+/// </summary>
 public delegate void CallActionParams(Call call, params object[] objects);
 
 /// <summary>
@@ -7,8 +10,19 @@ public delegate void CallActionParams(Call call, params object[] objects);
 /// </summary>
 public class TaskDelegateParams : TaskCreator
 {
+	/// <summary>
+	/// Gets or sets the Call context to use for the task
+	/// </summary>
 	public Call Call { get; set; }
+
+	/// <summary>
+	/// Gets the action delegate to execute
+	/// </summary>
 	public CallActionParams CallAction { get; }
+
+	/// <summary>
+	/// Gets the additional parameters to pass to the action
+	/// </summary>
 	public object[] Objects { get; }
 
 	public override string? ToString() => Label;

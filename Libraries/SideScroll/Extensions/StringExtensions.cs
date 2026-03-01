@@ -5,6 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace SideScroll.Extensions;
 
+/// <summary>
+/// Extension methods for string manipulation, formatting, and hashing
+/// </summary>
 public static class StringExtensions
 {
 	/// <summary>

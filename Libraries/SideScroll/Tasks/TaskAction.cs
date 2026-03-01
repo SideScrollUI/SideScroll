@@ -5,6 +5,9 @@ namespace SideScroll.Tasks;
 /// </summary>
 public class TaskAction : TaskCreator
 {
+	/// <summary>
+	/// Gets the action delegate to execute
+	/// </summary>
 	public Action Action { get; }
 
 	public override string? ToString() => Label;

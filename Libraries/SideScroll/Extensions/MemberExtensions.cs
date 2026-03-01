@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace SideScroll.Extensions;
 
+/// <summary>
+/// Extension methods for MemberInfo, FieldInfo, and PropertyInfo to determine visibility in data displays
+/// </summary>
 public static class MemberExtensions
 {
 	/// <summary>

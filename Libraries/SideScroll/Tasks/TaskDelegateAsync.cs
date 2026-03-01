@@ -2,6 +2,9 @@ using SideScroll.Extensions;
 
 namespace SideScroll.Tasks;
 
+/// <summary>
+/// Represents an async method that receives a Call parameter for logging and cancellation support
+/// </summary>
 public delegate Task CallActionAsync(Call call);
 
 /// <summary>
@@ -9,6 +12,9 @@ public delegate Task CallActionAsync(Call call);
 /// </summary>
 public class TaskDelegateAsync : TaskCreator
 {
+	/// <summary>
+	/// Gets the async action delegate to execute
+	/// </summary>
 	public CallActionAsync CallAction { get; }
 
 	public override string? ToString() => Label;

@@ -60,7 +60,14 @@ public class CustomComparer : IComparer
 /// </summary>
 public class ObjectSorter : CustomComparer
 {
+	/// <summary>
+	/// Gets or sets the collection of sort descriptions containing the properties to sort by
+	/// </summary>
 	public ListSortDescriptionCollection? Sorts { get; set; }
+
+	/// <summary>
+	/// Gets or sets the sort direction (Ascending or Descending)
+	/// </summary>
 	public ListSortDirection SortDirection { get; set; }
 
 	/// <summary>

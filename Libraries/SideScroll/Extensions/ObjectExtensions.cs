@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace SideScroll.Extensions;
 
+/// <summary>
+/// Extension methods for formatting, converting, and inspecting objects
+/// </summary>
 public static class ObjectExtensions
 {
 	/// <summary>

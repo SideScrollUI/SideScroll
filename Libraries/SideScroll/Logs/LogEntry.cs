@@ -37,8 +37,11 @@ public class LogSettings
 
 	internal readonly object Lock = new(); // todo: replace this with individual ones? or a non-blocking version
 
+	/// <summary>
+	/// Gets or sets the synchronization context, inherited from creator (which can be a Parent Log)
+	/// </summary>
 	[Hidden]
-	public SynchronizationContext? Context { get; set; } // inherited from creator (which can be a Parent Log)
+	public SynchronizationContext? Context { get; set; }
 
 	/// <summary>
 	/// Creates a copy of the log settings

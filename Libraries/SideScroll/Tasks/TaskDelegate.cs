@@ -1,5 +1,8 @@
 namespace SideScroll.Tasks;
 
+/// <summary>
+/// Represents a method that receives a Call parameter for logging and cancellation support
+/// </summary>
 public delegate void CallAction(Call call);
 
 /// <summary>
@@ -7,6 +10,9 @@ public delegate void CallAction(Call call);
 /// </summary>
 public class TaskDelegate : TaskCreator
 {
+	/// <summary>
+	/// Gets the action delegate to execute
+	/// </summary>
 	public CallAction Action { get; }
 
 	public override string? ToString() => Label;

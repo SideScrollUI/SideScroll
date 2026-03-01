@@ -7,6 +7,9 @@ namespace SideScroll.Tasks;
 /// </summary>
 public class TaskInstanceCollection : ItemCollection<TaskInstance>
 {
+	/// <summary>
+	/// Gets or sets the maximum number of tasks to keep in the collection (default: 10)
+	/// </summary>
 	public int MaxTasks { get; set; } = 10;
 
 	/// <summary>

@@ -11,6 +11,9 @@ namespace SideScroll.Tasks;
 /// </summary>
 public class ShowMessageEventArgs(string message) : EventArgs
 {
+	/// <summary>
+	/// Gets the message to display
+	/// </summary>
 	public string Message => message;
 }
 
@@ -20,46 +23,110 @@ public class ShowMessageEventArgs(string message) : EventArgs
 [Unserialized]
 public class TaskInstance : INotifyPropertyChanged
 {
+	/// <summary>
+	/// Event raised when a property value changes
+	/// </summary>
 	public event PropertyChangedEventHandler? PropertyChanged;
+
+	/// <summary>
+	/// Event raised when a message should be displayed to the user
+	/// </summary>
 	public event EventHandler<ShowMessageEventArgs>? OnShowMessage;
 	//public event EventHandler<EventArgs> OnComplete;
 
+	/// <summary>
+	/// Action to invoke when the task completes
+	/// </summary>
 	[HiddenColumn]
 	public Action? OnComplete { get; set; }
 
 	private string? _label;
+	/// <summary>
+	/// Gets or sets the task label, falls back to the Creator's label if not set
+	/// </summary>
 	public string? Label
 	{
 		get => _label ?? Creator?.Label;
 		set => _label = value;
 	}
+
+	/// <summary>
+	/// Gets or sets the task creator that created this instance
+	/// </summary>
 	public TaskCreator? Creator { get; set; }
 
+	/// <summary>
+	/// Gets or sets the Call context associated with this task
+	/// </summary>
 	[HiddenColumn]
 	public Call Call { get; set; } = new();
 
+	/// <summary>
+	/// Gets the log associated with this task's Call
+	/// </summary>
 	[InnerValue, HiddenColumn]
 	public Log Log => Call.Log;
 
+	/// <summary>
+	/// Gets or sets whether to show the task in the UI
+	/// </summary>
 	[HiddenColumn]
 	public bool ShowTask { get; set; }
 
+	/// <summary>
+	/// Gets or sets the underlying Task object
+	/// </summary>
 	public Task? Task { get; set; }
+
+	/// <summary>
+	/// Gets the current status of the Task
+	/// </summary>
 	public TaskStatus TaskStatus => Task?.Status ?? TaskStatus.Created;
 
+	/// <summary>
+	/// Gets or sets the cancellation token source for this task
+	/// </summary>
 	public CancellationTokenSource TokenSource { get; set; } = new();
+
+	/// <summary>
+	/// Gets the cancellation token from the TokenSource
+	/// </summary>
 	public CancellationToken CancelToken => TokenSource.Token;
 
+	/// <summary>
+	/// Gets or sets the current status message
+	/// </summary>
 	public string Status { get; set; } = "Running";
+
+	/// <summary>
+	/// Gets or sets an optional message describing the task state
+	/// </summary>
 	public string? Message { get; set; }
 
+	/// <summary>
+	/// Gets or sets whether the task encountered an error
+	/// </summary>
 	public bool Errored { get; set; }
+
+	/// <summary>
+	/// Gets or sets whether the task has finished execution
+	/// </summary>
 	public bool Finished { get; set; }
 
+	/// <summary>
+	/// Gets or sets the parent task if this is a sub-task
+	/// </summary>
 	public TaskInstance? ParentTask { get; set; }
+
+	/// <summary>
+	/// Gets or sets the list of sub-tasks created by this task
+	/// </summary>
 	public List<TaskInstance> SubTasks { get; set; } = [];
 
 	private int? _taskCount;
+	/// <summary>
+	/// Gets or sets the expected number of tasks, defaults to SubTasks.Count if not set
+	/// </summary>
 	public int TaskCount
 	{
 		get => _taskCount ?? SubTasks.Count;
@@ -70,10 +137,19 @@ public class TaskInstance : INotifyPropertyChanged
 		}
 	}
 
+	/// <summary>
+	/// Gets or sets the UTC time when the task started
+	/// </summary>
 	public DateTime StartTime { get; set; } = DateTime.UtcNow;
 
+	/// <summary>
+	/// Gets or sets the UTC time when the task ended
+	/// </summary>
 	public DateTime? EndTime { get; set; }
 
+	/// <summary>
+	/// Gets the elapsed time from start to end (or current time if not finished)
+	/// </summary>
 	public TimeSpan Duration => (EndTime ?? DateTime.UtcNow) - StartTime;
 
 	private readonly Stopwatch _stopwatch = new();
@@ -120,6 +196,9 @@ public class TaskInstance : INotifyPropertyChanged
 		_stopwatch.Start();
 	}
 
+	/// <summary>
+	/// Gets or sets the completion percentage (0-100)
+	/// </summary>
 	[Formatted]
 	public double Percent
 	{
@@ -134,9 +213,20 @@ public class TaskInstance : INotifyPropertyChanged
 		}
 	}
 	private double _percent;
+
+	/// <summary>
+	/// Gets the elapsed time since the task started
+	/// </summary>
 	public TimeSpan Elapsed => DateTime.UtcNow - StartTime;
+
+	/// <summary>
+	/// Gets the estimated time remaining based on current progress
+	/// </summary>
 	public TimeSpan? ETA => Percent > 0.0 ? (Elapsed * 100.0 / Percent) - Elapsed : null;
 
+	/// <summary>
+	/// Gets or sets the current progress value
+	/// </summary>
 	public double Progress
 	{
 		get => _progress;
@@ -165,6 +255,9 @@ public class TaskInstance : INotifyPropertyChanged
 	private double _prevPercent;
 	private double _lastNotifiedProgress;
 
+	/// <summary>
+	/// Gets or sets the maximum progress value
+	/// </summary>
 	[Formatted]
 	public double ProgressMax
 	{
@@ -218,6 +311,9 @@ public class TaskInstance : INotifyPropertyChanged
 	}
 	private TimeSpan _lastNotifiedDuration;
 
+	/// <summary>
+	/// Gets whether the cancel button should be visible
+	/// </summary>
 	public bool CancelVisible => !Finished;
 
 	/// <summary>

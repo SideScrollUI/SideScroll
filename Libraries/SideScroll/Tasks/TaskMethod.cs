@@ -7,8 +7,15 @@ namespace SideScroll.Tasks;
 /// </summary>
 public class TaskMethod : TaskCreator
 {
+	/// <summary>
+	/// Gets the method info to invoke
+	/// </summary>
 	public MethodInfo MethodInfo { get; }
-	public object Object { get; } // Object to invoke method for
+
+	/// <summary>
+	/// Gets the target object to invoke the method on
+	/// </summary>
+	public object Object { get; }
 
 	public override string ToString() => MethodInfo.Name;
 
