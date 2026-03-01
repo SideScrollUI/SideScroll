@@ -4,26 +4,48 @@ using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Bookmarks.Models;
 
+/// <summary>
+/// Represents a selected row in a data grid with label, index, and optional data key/value for bookmark persistence
+/// </summary>
 [PublicData]
 public class SelectedRow : IEquatable<SelectedRow>
 {
-	public string? Label { get; set; } // ToString() value, can be null
-	public int? RowIndex { get; set; } // Index in original list without filtering
+	/// <summary>
+	/// Gets or sets the display label (ToString() value, can be null)
+	/// </summary>
+	public string? Label { get; set; }
 
+	/// <summary>
+	/// Gets or sets the zero-based row index in the original unfiltered list
+	/// </summary>
+	public int? RowIndex { get; set; }
+
+	/// <summary>
+	/// Gets or sets the underlying object (used for bookmark searches, not serialized)
+	/// </summary>
 	[Unserialized]
-	public object? Object { get; set; } // used for bookmark searches, dangerous to keep these references around otherwise
+	public object? Object { get; set; }
 
+	/// <summary>
+	/// Gets or sets the data key for identifying this row
+	/// </summary>
 	public string? DataKey { get; set; }
 
-	public object? DataValue { get; set; } // Imported with bookmark into it's App DataRepo
-
-	// public bool Pinned;
-	// public List<string> SelectedColumns = []; // Not supported yet
+	/// <summary>
+	/// Gets or sets the data value (imported with bookmark into the app DataRepo)
+	/// </summary>
+	public object? DataValue { get; set; }
 
 	public override string? ToString() => DataKey ?? Label;
 
+	/// <summary>
+	/// Initializes a new empty selected row
+	/// </summary>
 	public SelectedRow() { }
 
+	/// <summary>
+	/// Initializes a new selected row from an object, extracting its label and data key/value
+	/// </summary>
 	public SelectedRow(object obj)
 	{
 		if (obj == null) return; // obj can still be null
@@ -52,6 +74,9 @@ public class SelectedRow : IEquatable<SelectedRow>
 		return Equals(obj as SelectedRow);
 	}
 
+	/// <summary>
+	/// Determines whether this selected row equals another by comparing label, data key, data value, and optionally row index
+	/// </summary>
 	public bool Equals(SelectedRow? other)
 	{
 		return other != null &&

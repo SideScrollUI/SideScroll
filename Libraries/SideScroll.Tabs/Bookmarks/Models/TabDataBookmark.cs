@@ -4,26 +4,51 @@ using System.Text.Json.Serialization;
 
 namespace SideScroll.Tabs.Bookmarks.Models;
 
+/// <summary>
+/// Represents tab data state including selected rows, filters, and column settings for bookmark persistence
+/// </summary>
 [PublicData]
 public class TabDataBookmark
 {
+	/// <summary>
+	/// Gets or sets the selection type (user, link, or none)
+	/// </summary>
 	[PrivateData]
 	public SelectionType SelectionType { get; set; } = SelectionType.None;
 
+	/// <summary>
+	/// Gets or sets the column display order, users can drag columns around to reorder these
+	/// </summary>
 	[JsonIgnore]
-	public List<string> ColumnNameOrder { get; set; } = []; // Order to show the columns in, users can drag columns around to reorder these
+	public List<string> ColumnNameOrder { get; set; } = [];
 
 	// Not currently supported by Avalonia DataGrid
 	// public string? SortColumnName { get; set; } // Currently sorted column
 	// public ListSortDirection SortDirection { get; set; }
 
+	/// <summary>
+	/// Gets or sets the data repository group identifier
+	/// </summary>
 	public string? DataRepoGroupId { get; set; }
-	public Type? DataRepoType { get; set; } // Interfaces need to specify this
 
+	/// <summary>
+	/// Gets or sets the data repository type (required for interfaces)
+	/// </summary>
+	public Type? DataRepoType { get; set; }
+
+	/// <summary>
+	/// Gets or sets the list of selected rows with their child bookmarks
+	/// </summary>
 	public List<SelectedRowView> SelectedRows { get; set; } = [];
 
+	/// <summary>
+	/// Gets or sets the filter text applied to the data
+	/// </summary>
 	public string? Filter { get; set; }
 
+	/// <summary>
+	/// Gets the navigation address for this tab data
+	/// </summary>
 	public string? Address
 	{
 		get
@@ -39,6 +64,11 @@ public class TabDataBookmark
 		}
 	}
 
+	/// <summary>
+	/// Gets the full hierarchical address including child bookmark addresses
+	/// </summary>
+	/// <param name="maxDepth">Maximum recursion depth to prevent infinite loops</param>
+	/// <param name="visited">Set of visited bookmarks to prevent cycles</param>
 	public string GetAddress(int maxDepth = 100, HashSet<TabBookmark>? visited = null)
 	{
 		visited ??= [];
@@ -69,6 +99,9 @@ public class TabDataBookmark
 
 	public override string? ToString() => Address;
 
+	/// <summary>
+	/// Imports this tab data's selected row data values into the project's data repository
+	/// </summary>
 	public void Import(Project project)
 	{
 		SelectionType = SelectionType.Link;
@@ -92,6 +125,9 @@ public class TabDataBookmark
 		}
 	}
 
+	/// <summary>
+	/// Sets the selection type for this tab data and all child bookmarks
+	/// </summary>
 	public void SetSelectionType(SelectionType selectionType)
 	{
 		SelectionType = selectionType;
@@ -101,6 +137,9 @@ public class TabDataBookmark
 		}
 	}
 
+	/// <summary>
+	/// Converts this tab data bookmark to tab data settings
+	/// </summary>
 	public TabDataSettings ToDataSettings()
 	{
 		return new TabDataSettings
