@@ -14,7 +14,7 @@ public class LogWriterText : IDisposable
 	public LogWriterText(Log log, string saveFilePath)
 	{
 		Log = log;
-		SaveFilePath = saveFilePath + ".log.txt";
+		SaveFilePath = saveFilePath;
 
 		string parentDirectory = Path.GetDirectoryName(SaveFilePath)!;
 		if (!Directory.Exists(parentDirectory))

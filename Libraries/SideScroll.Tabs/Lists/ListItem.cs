@@ -20,7 +20,7 @@ public interface IListItem
 	/// <summary>
 	/// Gets the value of the item
 	/// </summary>
-	[HiddenColumn, InnerValue, StyleValue]
+	[HiddenColumn, InnerValue]
 	object? Value { get; }
 
 	/// <summary>

@@ -21,7 +21,7 @@ public class Console
 		var project = Project.Load(Settings);
 		_call = new Call(GetType().Name);
 		_logWriterConsole = new LogWriterConsole(_call.Log);
-		_logWriterText = new LogWriterText(_call.Log, project.Data.App.GetGroupPath(typeof(Console)) + "/Logs/Main");
+		_logWriterText = new LogWriterText(_call.Log, project.Data.App.GetGroupPath(typeof(Console)) + "/Logs/Main.log");
 
 		//TestLogWriter();
 	}
@@ -39,6 +39,3 @@ public class Console
 		_call.Log.Add("test");
 	}
 }
-/*
-This should probably get turned into a library if it ever gets used
-*/

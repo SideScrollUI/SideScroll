@@ -141,7 +141,7 @@ public class ChartView
 	/// <summary>
 	/// Gets or sets the maximum number of series to display
 	/// </summary>
-	public int SeriesLimit { get; set; } = 25;
+	public int SeriesLimit { get; set; } = 50;
 
 	/// <summary>
 	/// Gets or sets the list of chart annotations

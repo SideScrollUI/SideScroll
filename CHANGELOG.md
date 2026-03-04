@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed Bookmark JSON Serialization for enums
 - Fixed TabViewSettings.Address with multiple paths
+- Fixed NumberExtensions.RoundToSignificantFigures() for NaN and Infinity
 
 ### Changed
 - Switched all remaining json serialization to System.Text.Json
@@ -34,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed IInnerTab to ITabContainer
 - Renamed IReload to ITabReloadable
 - Disabled Debug Info for Release builds
+- Changed ChartView SeriesLimit default from 25 to 50
 
 ## [0.15] - 2026-01-25
 

@@ -71,7 +71,22 @@ public static class NumberExtensions
 	/// </summary>
 	public static double RoundToSignificantFigures(this double num, int significantFigures)
 	{
-		return (double)RoundToSignificantFigures((decimal)num, significantFigures);
+		// Handle special cases that can't be rounded
+		if (double.IsNaN(num) || double.IsInfinity(num))
+			return num;
+
+		if (num == 0)
+			return 0;
+
+		double absNum = Math.Abs(num);
+		int d = (int)Math.Floor(Math.Log10(absNum));
+		int power = significantFigures - d - 1;
+
+		double magnitude = Math.Pow(10, power);
+		double shifted = Math.Round(num * magnitude, MidpointRounding.AwayFromZero);
+		double ret = shifted / magnitude;
+
+		return ret;
 	}
 
 	/// <summary>
