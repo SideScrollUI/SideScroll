@@ -32,6 +32,5 @@
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DebugType>none</DebugType>
   </PropertyGroup>
 </Project>
