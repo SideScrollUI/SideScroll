@@ -2,13 +2,29 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Serialize.Atlas;
 
+/// <summary>
+/// File-based serializer implementation using the Atlas format
+/// </summary>
 public class SerializerFileAtlas : SerializerFile
 {
+	/// <summary>
+	/// The default filename for Atlas data files
+	/// </summary>
 	public const string DataFileName = "Data.atlas";
 
+	/// <summary>
+	/// Gets or sets the maximum number of save attempts when file is locked
+	/// </summary>
 	public static int SaveAttemptsMax { get; set; } = 10;
-	public static TimeSpan SaveAttemptsBackoff { get; set; } = TimeSpan.FromMilliseconds(10); // Backoff * attempt #
+	
+	/// <summary>
+	/// Gets or sets the backoff time between save attempts (multiplied by attempt number)
+	/// </summary>
+	public static TimeSpan SaveAttemptsBackoff { get; set; } = TimeSpan.FromMilliseconds(10);
 
+	/// <summary>
+	/// Initializes a new instance of the SerializerFileAtlas class
+	/// </summary>
 	public SerializerFileAtlas(string basePath, string name = "") : base(basePath, name)
 	{
 		HeaderPath = Paths.Combine(basePath, DataFileName);
@@ -104,6 +120,9 @@ public class SerializerFileAtlas : SerializerFile
 		}
 	}*/
 
+	/// <summary>
+	/// Loads the serializer schema without loading the object data
+	/// </summary>
 	public Serializer LoadSchema(Call call)
 	{
 		using var fileStream = new FileStream(HeaderPath!, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -115,6 +134,9 @@ public class SerializerFileAtlas : SerializerFile
 		return serializer;
 	}
 
+	/// <summary>
+	/// Loads an existing object or creates a new instance if it doesn't exist
+	/// </summary>
 	public T LoadOrCreate<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
 	{
 		call ??= new();

@@ -5,32 +5,75 @@ using System.Reflection.Emit;
 
 namespace SideScroll.Serialize.Atlas;
 
+/// <summary>
+/// Represents a reference to a serialized type and its index
+/// </summary>
 public class TypeRef
 {
+	/// <summary>
+	/// Gets or sets the type repository containing the object
+	/// </summary>
 	public TypeRepo? TypeRepo;
+	
+	/// <summary>
+	/// Gets or sets the index of the object within the type repository
+	/// </summary>
 	public int Index;
 
+	/// <summary>
+	/// Loads the full object from the type repository
+	/// </summary>
 	public object? Load()
 	{
 		return TypeRepo?.LoadFullObject(Index);
 	}
 }
 
+/// <summary>
+/// Represents a lazily-loaded property with metadata for dynamic type generation
+/// </summary>
 public class LazyProperty
 {
+	/// <summary>
+	/// Gets or sets the property builder for the lazy property
+	/// </summary>
 	public PropertyBuilder? PropertyBuilder;
 
+	/// <summary>
+	/// Gets or sets the original property info from the base type
+	/// </summary>
 	public PropertyInfo? PropertyInfoOriginal;
+	
+	/// <summary>
+	/// Gets or sets the overridden property info from the lazy type
+	/// </summary>
 	public PropertyInfo? PropertyInfoOverride;
 
+	/// <summary>
+	/// Gets or sets the field builder for tracking whether the property has been loaded
+	/// </summary>
 	public FieldBuilder? FieldBuilderLoaded;
+	
+	/// <summary>
+	/// Gets or sets the field builder for storing the type reference
+	/// </summary>
 	public FieldBuilder? FieldBuilderTypeRef;
 
+	/// <summary>
+	/// Gets or sets the field info for the loaded flag
+	/// </summary>
 	public FieldInfo? FieldInfoLoaded;
+	
+	/// <summary>
+	/// Gets or sets the field info for the type reference
+	/// </summary>
 	public FieldInfo? FieldInfoTypeRef;
 
 	public override string? ToString() => PropertyBuilder?.Name;
 
+	/// <summary>
+	/// Sets the type reference for lazy loading or marks the property as already loaded
+	/// </summary>
 	public void SetTypeRef(object obj, TypeRef? typeRef)
 	{
 		if (typeRef == null)
@@ -44,13 +87,29 @@ public class LazyProperty
 	}
 }
 
+/// <summary>
+/// Generates and manages dynamically created lazy-loading wrapper types
+/// </summary>
 public class LazyClass
 {
+	/// <summary>
+	/// Gets the original type being wrapped
+	/// </summary>
 	public Type OriginalType { get; }
+	
+	/// <summary>
+	/// Gets the dynamically generated lazy wrapper type
+	/// </summary>
 	public Type LazyType { get; }
 
+	/// <summary>
+	/// Gets the dictionary mapping original properties to their lazy property metadata
+	/// </summary>
 	public Dictionary<PropertyInfo, LazyProperty> LazyProperties { get; } = [];
 
+	/// <summary>
+	/// Initializes a new instance of the LazyClass for the specified type
+	/// </summary>
 	public LazyClass(Type type, List<TypeRepoObject.PropertyRepo> propertyRepos)
 	{
 		OriginalType = type;
@@ -67,7 +126,7 @@ public class LazyClass
 		}
 	}
 
-	public TypeInfo CreateLazyType(List<TypeRepoObject.PropertyRepo> propertyRepos)
+	protected TypeInfo CreateLazyType(List<TypeRepoObject.PropertyRepo> propertyRepos)
 	{
 		TypeBuilder typeBuilder = GetTypeBuilder();
 		// ConstructorBuilder constructor = typeBuilder.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);

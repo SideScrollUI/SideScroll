@@ -3,11 +3,15 @@ using System.Text;
 
 namespace SideScroll.Serialize.Atlas;
 
+/// <summary>
+/// In-memory serializer implementation using the Atlas format
+/// </summary>
 public class SerializerMemoryAtlas : SerializerMemory
 {
-	//private MemoryStream stream = new();
-
-	protected TypeRepoString? TypeRepoString { get; set; } // Reuse string instances to reduce memory use when deep cloning
+	/// <summary>
+	/// Gets or sets the string type repository used to reuse string instances during deep cloning
+	/// </summary>
+	protected TypeRepoString? TypeRepoString { get; set; }
 
 	private new Serializer Create()
 	{
@@ -17,6 +21,9 @@ public class SerializerMemoryAtlas : SerializerMemory
 		};
 	}
 
+	/// <summary>
+	/// Saves an object to the memory stream using Atlas serialization
+	/// </summary>
 	public override void Save(Call call, object obj)
 	{
 		using CallTimer callTimer = call.Timer();
@@ -33,17 +40,26 @@ public class SerializerMemoryAtlas : SerializerMemory
 		}
 	}
 
+	/// <summary>
+	/// Loads an object of the specified type from the memory stream
+	/// </summary>
 	public override T Load<T>(Call? call = null)
 	{
 		return (T)Load(call)!;
 	}
 
+	/// <summary>
+	/// Attempts to load an object from the memory stream
+	/// </summary>
 	public override bool TryLoad<T>(out T? obj, Call? call = null) where T : class
 	{
 		obj = (T?)Load(call);
 		return obj != null;
 	}
 
+	/// <summary>
+	/// Loads an object from the memory stream
+	/// </summary>
 	public override object? Load(Call? call = null)
 	{
 		call ??= new();
@@ -58,6 +74,9 @@ public class SerializerMemoryAtlas : SerializerMemory
 		return serializer.BaseObject(call);
 	}
 
+	/// <summary>
+	/// Validates the serialized data without fully loading the object
+	/// </summary>
 	public override void Validate(Call? call = null)
 	{
 		call ??= new();
@@ -70,7 +89,9 @@ public class SerializerMemoryAtlas : SerializerMemory
 		serializer.Load(callTimer, reader, loadData: false);
 	}
 
-	//public static T Clone<T>(Call call, T obj)
+	/// <summary>
+	/// Internal implementation for deep cloning a typed object
+	/// </summary>
 	protected override T DeepCloneInternal<T>(Call call, T obj) where T : class
 	{
 		Save(call, obj);
@@ -78,6 +99,9 @@ public class SerializerMemoryAtlas : SerializerMemory
 		return copy;
 	}
 
+	/// <summary>
+	/// Internal implementation for deep cloning an object
+	/// </summary>
 	protected override object? DeepCloneInternal(Call call, object obj)
 	{
 		Save(call, obj);

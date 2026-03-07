@@ -4,26 +4,50 @@ using System.Diagnostics;
 
 namespace SideScroll.Serialize.Atlas.TypeRepos;
 
+/// <summary>
+/// Specifies the type of object reference being serialized
+/// </summary>
 public enum ObjectType
 {
+	/// <summary>
+	/// Object reference is null
+	/// </summary>
 	Null,
+	/// <summary>
+	/// Object is the same type as the base type
+	/// </summary>
 	BaseType,
+	/// <summary>
+	/// Object is a derived type from the base type
+	/// </summary>
 	DerivedType,
 }
 
+/// <summary>
+/// Interface for creating type-specific repository instances
+/// </summary>
 public interface IRepoCreator
 {
-	// needs to handle generics (lists, arrays, dictionaries)
+	/// <summary>
+	/// Attempts to create a type repository for the given type schema
+	/// </summary>
 	TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema);
 }
 
-// TypeRepo's can implement to preload object data first (example: TypeRepoHashSet)
+/// <summary>
+/// Interface for type repositories that need to preload object data (example: TypeRepoHashSet)
+/// </summary>
 public interface IPreloadRepo
 {
+	/// <summary>
+	/// Preloads object data before full deserialization
+	/// </summary>
 	public void PreloadObjectData(object? obj);
 }
 
-// Represents all the object references for each unique type
+/// <summary>
+/// Base class that manages serialization and deserialization of objects for a specific type
+/// </summary>
 public abstract class TypeRepo : IDisposable
 {
 	// Should we switch this to List<Type> instead?
@@ -50,40 +74,118 @@ public abstract class TypeRepo : IDisposable
 		//new TypeRepoObject.Creator(),
 	];
 
+	/// <summary>
+	/// Gets the parent serializer instance
+	/// </summary>
 	public Serializer Serializer { get; }
+	
+	/// <summary>
+	/// Gets the type schema for this repository
+	/// </summary>
 	public TypeSchema TypeSchema { get; }
-	public Type? Type { get; } // might be null after loading
-	public Type? LoadableType { get; protected set; } // some types get overridden lazy load, or get removed [Unserialized]
-	public int TypeIndex { get; set; } // -1 if null
+	
+	/// <summary>
+	/// Gets the runtime type (might be null after loading if type no longer exists)
+	/// </summary>
+	public Type? Type { get; }
+	
+	/// <summary>
+	/// Gets or sets the type that can be loaded (some types get overridden for lazy load, or get removed if [Unserialized])
+	/// </summary>
+	public Type? LoadableType { get; protected set; }
+	
+	/// <summary>
+	/// Gets or sets the type index in the serializer's type list
+	/// </summary>
+	public int TypeIndex { get; set; }
 
-	public List<object> Objects { get; } = []; // ordered by index, not filled in when loading
+	/// <summary>
+	/// Gets the list of objects being serialized (ordered by index, not filled in when loading)
+	/// </summary>
+	public List<object> Objects { get; } = [];
+	
+	/// <summary>
+	/// Gets or sets the array of object sizes in bytes
+	/// </summary>
 	public int[]? ObjectSizes { get; protected set; }
+	
+	/// <summary>
+	/// Gets or sets the array of object file offsets
+	/// </summary>
 	public long[]? ObjectOffsets { get; protected set; }
+	
+	/// <summary>
+	/// Gets or sets the array of loaded objects
+	/// </summary>
 	public object?[] ObjectsLoaded { get; set; }
+	
+	/// <summary>
+	/// Gets the count of objects that have been loaded
+	/// </summary>
 	public int ObjectsLoadedCount { get; protected set; }
 
+	/// <summary>
+	/// Gets or sets the binary reader for loading serialized data
+	/// </summary>
 	public BinaryReader? Reader { get; set; }
 
-	// Saving Only
-	public Dictionary<object, int> IdxObjectToIndex { get; } = []; // for saving only, not filled in for loading
+	/// <summary>
+	/// Gets the dictionary mapping objects to their indices (for saving only, not filled in for loading)
+	/// </summary>
+	public Dictionary<object, int> IdxObjectToIndex { get; } = [];
 
 	private bool _disposed;
 
-	// Loading Only
+	/// <summary>
+	/// Gets or sets the count of cloned objects (for statistics)
+	/// </summary>
+	public int Cloned { get; set; }
 
-	public int Cloned { get; set; } // For stats
-
+	/// <summary>
+	/// Saves an object to the binary writer
+	/// </summary>
 	public abstract void SaveObject(BinaryWriter writer, object obj);
+	
+	/// <summary>
+	/// Loads data into an existing object instance
+	/// </summary>
 	public virtual void LoadObjectData(object obj) { }
+	
+	/// <summary>
+	/// Clones data from source object to destination object
+	/// </summary>
 	public abstract void Clone(object source, object dest);
+	
+	/// <summary>
+	/// Adds child objects to the serialization queue
+	/// </summary>
 	public virtual void AddChildObjects(object obj) { }
+	
+	/// <summary>
+	/// Initializes the repository for saving operations
+	/// </summary>
 	public virtual void InitializeSaving() { }
+	
+	/// <summary>
+	/// Initializes the repository for loading operations
+	/// </summary>
 	public virtual void InitializeLoading(Log log) { }
+	
+	/// <summary>
+	/// Saves custom header data for specialized repositories
+	/// </summary>
 	protected virtual void SaveCustomHeader(BinaryWriter writer) { }
+	
+	/// <summary>
+	/// Loads custom header data for specialized repositories
+	/// </summary>
 	protected virtual void LoadCustomHeader() { }
 
 	public override string ToString() => TypeSchema.Name;
 
+	/// <summary>
+	/// Initializes a new instance of the TypeRepo class
+	/// </summary>
 	protected TypeRepo(Serializer serializer, TypeSchema typeSchema)
 	{
 		Serializer = serializer;
@@ -96,6 +198,9 @@ public abstract class TypeRepo : IDisposable
 		ObjectsLoaded = new object?[typeSchema.NumObjects];
 	}
 
+	/// <summary>
+	/// Creates the appropriate type repository for the given type schema
+	/// </summary>
 	public static TypeRepo Create(Log log, Serializer serializer, TypeSchema typeSchema)
 	{
 		if (typeSchema.IsUnserialized)
@@ -170,12 +275,18 @@ public abstract class TypeRepo : IDisposable
 		}
 	}*/
 
+	/// <summary>
+	/// Saves the type schema to the binary writer
+	/// </summary>
 	public void SaveSchema(BinaryWriter writer)
 	{
 		TypeSchema.NumObjects = Objects.Count;
 		TypeSchema.Save(writer);
 	}
 
+	/// <summary>
+	/// Reserves space in the file for object headers during the first pass
+	/// </summary>
 	public void SkipHeader(BinaryWriter writer)
 	{
 		byte[] buffer = new byte[Objects.Count * sizeof(int)];
@@ -184,6 +295,9 @@ public abstract class TypeRepo : IDisposable
 		SaveCustomHeader(writer);
 	}
 
+	/// <summary>
+	/// Saves the object headers with size information
+	/// </summary>
 	public void SaveHeader(Log log, BinaryWriter writer)
 	{
 		// For UnknownTypeRepo
@@ -204,6 +318,9 @@ public abstract class TypeRepo : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Loads the object headers including sizes and offsets
+	/// </summary>
 	public void LoadHeader(Log log)
 	{
 		using LogTimer logTimer = log.Timer("Loading Headers",
@@ -224,6 +341,9 @@ public abstract class TypeRepo : IDisposable
 		LoadCustomHeader();
 	}
 
+	/// <summary>
+	/// Saves all objects managed by this repository
+	/// </summary>
 	public void SaveObjects(Log log, BinaryWriter writer)
 	{
 		using LogTimer logTimer = log.Timer("Serializing (" + TypeSchema.Name + ")");
@@ -279,7 +399,9 @@ public abstract class TypeRepo : IDisposable
 		public TypeRepo typeRepo;
 	}*/
 
-	// Creates one if required
+	/// <summary>
+	/// Gets the index for an existing object or adds it to the repository and returns the new index
+	/// </summary>
 	public int GetOrAddObjectRef(object obj)
 	{
 		if (LoadableType == null || LoadableType.IsPrimitive)
@@ -295,6 +417,9 @@ public abstract class TypeRepo : IDisposable
 		return index;
 	}
 
+	/// <summary>
+	/// Loads a lazy object reference that will be loaded on demand
+	/// </summary>
 	public TypeRef? LoadLazyObjectRef()
 	{
 		ObjectType objectType = (ObjectType)Reader!.ReadByte();
@@ -328,6 +453,9 @@ public abstract class TypeRepo : IDisposable
 		return typeRef;
 	}
 
+	/// <summary>
+	/// Skips an object reference in the stream without loading it
+	/// </summary>
 	public object? SkipObjectRef()
 	{
 		ObjectType objectType = (ObjectType)Reader!.ReadByte();
@@ -362,6 +490,9 @@ public abstract class TypeRepo : IDisposable
 		return null;
 	}
 
+	/// <summary>
+	/// Loads an object reference from the binary reader
+	/// </summary>
 	public object? LoadObjectRef()
 	{
 		ObjectType objectType = (ObjectType)Reader!.ReadByte();
@@ -402,6 +533,9 @@ public abstract class TypeRepo : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Loads an object reference from a byte array
+	/// </summary>
 	public object? LoadObjectRef(byte[] bytes, ref int byteOffset)
 	{
 		bool isNull = Convert.ToBoolean(bytes[byteOffset++]);
@@ -427,6 +561,9 @@ public abstract class TypeRepo : IDisposable
 		return typeRepo.LoadObject(objectIndex);
 	}
 
+	/// <summary>
+	/// Loads an object without an index (for primitive types)
+	/// </summary>
 	public virtual object? LoadObject()
 	{
 		return null;
@@ -439,6 +576,9 @@ public abstract class TypeRepo : IDisposable
 		return obj;
 	}
 
+	/// <summary>
+	/// Preloads object data at the specified index for repositories that implement IPreloadRepo
+	/// </summary>
 	public void PreloadObjectData(int objectIndex)
 	{
 		if (this is IPreloadRepo preload)
@@ -455,6 +595,9 @@ public abstract class TypeRepo : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Loads object data at the specified index
+	/// </summary>
 	public void LoadObjectData(int objectIndex)
 	{
 		object? obj = GetObjectAt(objectIndex);
@@ -469,6 +612,9 @@ public abstract class TypeRepo : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Loads an object at the specified index, creating it if necessary
+	/// </summary>
 	public object? LoadObject(int objectIndex)
 	{
 		if (LoadableType == null) // type might have disappeared or been renamed
@@ -486,6 +632,9 @@ public abstract class TypeRepo : IDisposable
 		return obj;
 	}
 
+	/// <summary>
+	/// Loads an object and all its dependencies immediately
+	/// </summary>
 	public object? LoadFullObject(int objectIndex)
 	{
 		if (ObjectsLoaded[objectIndex] is object existingObject)
@@ -530,6 +679,9 @@ public abstract class TypeRepo : IDisposable
 		GC.SuppressFinalize(this);
 	}
 
+	/// <summary>
+	/// Validates that the requested number of bytes is available in the stream
+	/// </summary>
 	public void ValidateBytesAvailable(int requested)
 	{
 		long available = TypeSchema.EndDataOffset - Reader!.BaseStream.Position;

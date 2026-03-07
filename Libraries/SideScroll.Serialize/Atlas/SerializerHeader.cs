@@ -3,18 +3,43 @@ using SideScroll.Logs;
 
 namespace SideScroll.Serialize.Atlas;
 
+/// <summary>
+/// Represents the header information for serialized Atlas files
+/// </summary>
 public class SerializerHeader
 {
-	public const uint SideId = 0x45444953; // SIDE -> EDIS: 69, 68, 73, 83, Start of file (little endian format)
+	/// <summary>
+	/// Magic number identifying Atlas files
+	/// SIDE in little endian format
+	/// EDIS in big endian format (69, 68, 73, 83)
+	/// </summary>
+	public const uint SideId = 0x45444953;
 
+	/// <summary>
+	/// The latest version number of the serializer format
+	/// </summary>
 	public const ushort LatestVersion = 2;
 
+	/// <summary>
+	/// Gets or sets the version number of the serialized file
+	/// </summary>
 	public ushort? Version { get; set; }
+	
+	/// <summary>
+	/// Gets or sets the total file size in bytes
+	/// </summary>
 	public long FileSize { get; set; }
+	
+	/// <summary>
+	/// Gets or sets the name of the serialized object
+	/// </summary>
 	public string? Name { get; set; }
 
 	public override string ToString() => $"v{Version}: {Name}";
 
+	/// <summary>
+	/// Saves the header to a binary writer
+	/// </summary>
 	public void Save(BinaryWriter writer)
 	{
 		writer.Write(SideId);
@@ -23,6 +48,9 @@ public class SerializerHeader
 		writer.Write(Name ?? "");
 	}
 
+	/// <summary>
+	/// Updates the file size in the header after serialization is complete
+	/// </summary>
 	public void SaveFileSize(BinaryWriter writer)
 	{
 		FileSize = writer.BaseStream.Length;
@@ -30,6 +58,9 @@ public class SerializerHeader
 		writer.Write(FileSize);
 	}
 
+	/// <summary>
+	/// Loads the header from a binary reader and validates the format
+	/// </summary>
 	public void Load(Log log, BinaryReader reader, string? requiredName = null)
 	{
 		uint sideId = reader.ReadUInt32();

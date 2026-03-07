@@ -7,10 +7,20 @@ using System.Reflection;
 
 namespace SideScroll.Serialize.Atlas.Schema;
 
+/// <summary>
+/// Represents schema information for a serialized type including its fields, properties, and metadata
+/// </summary>
 public class TypeSchema
 {
+	/// <summary>
+	/// Gets or sets the maximum number of objects allowed for public types during import
+	/// </summary>
 	public static int PublicMaxObjects { get; set; } = 100_000;
 
+	/// <summary>
+	/// Gets or sets the set of types that are considered public by default
+	/// Only these types and the PublicGenericTypes will be imported or exported if the Serializer is set to PublicOnly
+	/// </summary>
 	public static HashSet<Type> PublicTypes { get; set; } =
 	[
 		typeof(string),
@@ -23,11 +33,18 @@ public class TypeSchema
 		typeof(object),
 	];
 
+	/// <summary>
+	/// Gets or sets the set of types that are considered private by default
+	/// </summary>
 	public static HashSet<Type> PrivateTypes { get; set; } =
 	[
 		typeof(MemoryStream),
 	];
 
+	/// <summary>
+	/// Gets or sets the set of generic type definitions that are considered public
+	/// Only these types and the PublicTypes will be imported or exported if the Serializer is set to PublicOnly
+	/// </summary>
 	public static HashSet<Type> PublicGenericTypes { get; set; } =
 	[
 		typeof(List<>),
@@ -36,52 +53,147 @@ public class TypeSchema
 		typeof(HashSet<>),
 	];
 
+	/// <summary>
+	/// Gets or sets the type name
+	/// </summary>
 	[WordWrap]
 	public string Name { get; set; }
+	
+	/// <summary>
+	/// Gets or sets the assembly qualified name for the type
+	/// </summary>
 	public string AssemblyQualifiedName { get; set; }
-	public bool CanReference { get; set; } // whether the object can reference other types
+	
+	/// <summary>
+	/// Gets or sets whether the type can reference other types
+	/// </summary>
+	public bool CanReference { get; set; }
+	
+	/// <summary>
+	/// Gets whether the type is a collection
+	/// </summary>
 	public bool IsCollection { get; protected set; }
 
+	/// <summary>
+	/// Gets the list of all member schemas (fields and properties)
+	/// </summary>
 	public List<MemberSchema> MemberSchemas { get; } = [];
+	
+	/// <summary>
+	/// Gets the list of field schemas
+	/// </summary>
 	public List<FieldSchema> FieldSchemas { get; } = [];
+	
+	/// <summary>
+	/// Gets the list of writable property schemas
+	/// </summary>
 	public List<PropertySchema> PropertySchemas { get; } = [];
+	
+	/// <summary>
+	/// Gets the list of all property schemas including read-only ones
+	/// </summary>
 	[HiddenColumn]
 	public List<PropertySchema> ReadOnlyPropertySchemas { get; } = [];
 
-	// not really schema, could break out into a records class
-	public int TypeIndex { get; set; } // -1 if null
+	/// <summary>
+	/// Gets or sets the type index in the serializer's type list
+	/// </summary>
+	public int TypeIndex { get; set; }
+	
+	/// <summary>
+	/// Gets or sets the number of serialized objects of this type
+	/// </summary>
 	public int NumObjects { get; set; }
+	
+	/// <summary>
+	/// Gets or sets the size of the serialized data for this type in bytes
+	/// </summary>
 	public long DataSize { get; set; }
+	
+	/// <summary>
+	/// Gets or sets the starting offset of the data in the file
+	/// </summary>
 	public long StartDataOffset { get; set; }
+	
+	/// <summary>
+	/// Gets the ending offset of the data in the file
+	/// </summary>
 	public long EndDataOffset => StartDataOffset + DataSize;
 
-	// not written out
+	/// <summary>
+	/// Gets the actual runtime type (not serialized)
+	/// </summary>
 	[WordWrap]
 	public Type? Type { get; protected set; }
+	
+	/// <summary>
+	/// Gets the non-nullable version of the type (not serialized)
+	/// </summary>
 	[WordWrap, HiddenColumn]
 	public Type? NonNullableType { get; protected set; }
 
+	/// <summary>
+	/// Gets whether the type is a primitive type
+	/// </summary>
 	public bool IsPrimitive { get; protected set; }
 	
-	// Permissions
+	/// <summary>
+	/// Gets whether the type is marked as private data
+	/// </summary>
 	public bool IsPrivate { get; protected set; }
+	
+	/// <summary>
+	/// Gets whether the type is marked as protected data
+	/// </summary>
 	public bool IsProtected { get; protected set; }
-	public bool IsPublic { get; protected set; } // [PublicData], will get exported if PublicOnly set
+	
+	/// <summary>
+	/// Gets whether the type is marked as public data (will be exported if Serializer PublicOnly is set)
+	/// </summary>
+	public bool IsPublic { get; protected set; }
+	
+	/// <summary>
+	/// Gets whether the type is either public or protected
+	/// </summary>
 	public bool IsPublicOnly => IsPublic || IsProtected;
 	
+	/// <summary>
+	/// Gets whether the type should be cloned by reference instead of deep cloning
+	/// </summary>
 	public bool IsCloneReference { get; protected set; }
 	
+	/// <summary>
+	/// Gets whether the type is marked as unserialized
+	/// </summary>
 	public bool IsUnserialized { get; protected set; }
 	
+	/// <summary>
+	/// Gets whether the type has an empty constructor
+	/// </summary>
 	public bool HasEmptyConstructor { get; protected set; }
+	
+	/// <summary>
+	/// Gets the custom constructor used for deserialization
+	/// </summary>
 	[HiddenColumn]
 	public ConstructorInfo? CustomConstructor { get; protected set; }
+	
+	/// <summary>
+	/// Gets whether the type has a constructor (empty or custom)
+	/// </summary>
 	public bool HasConstructor => HasEmptyConstructor || CustomConstructor != null;
+	
+	/// <summary>
+	/// Gets whether the type has subtypes (is not sealed)
+	/// </summary>
 	public bool HasSubType { get; protected set; }
 
 	// Type lookup can take a long time, especially when there's missing types
 	private static readonly Dictionary<string, Type?> TypeCache = [];
 
+	/// <summary>
+	/// Binding flags used for reflection when accessing members
+	/// </summary>
 	public const BindingFlags BindingAttributes = BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
 
 	public override string ToString() => Name;
@@ -177,8 +289,14 @@ public class TypeSchema
 		}
 	}
 
+	/// <summary>
+	/// Checks whether a type has any usable constructor (empty or custom)
+	/// </summary>
 	public static bool TypeHasConstructor(Type type) => TypeHasEmptyConstructor(type) || TypeGetCustomConstructor(type) != null;
 
+	/// <summary>
+	/// Checks whether a type has an empty parameterless constructor
+	/// </summary>
 	public static bool TypeHasEmptyConstructor(Type type)
 	{
 		ConstructorInfo? constructorInfo = type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
@@ -186,11 +304,17 @@ public class TypeSchema
 		return (constructorInfo != null || constructors.Length == 0);
 	}
 
+	/// <summary>
+	/// Gets the custom constructor for a type if available
+	/// </summary>
 	public static ConstructorInfo? TypeGetCustomConstructor(Type type)
 	{
 		return new TypeSchema(type, new Serializer()).GetCustomConstructor();
 	}
 
+	/// <summary>
+	/// Gets a custom constructor that matches the type's serializable members
+	/// </summary>
 	public ConstructorInfo? GetCustomConstructor()
 	{
 		if (HasEmptyConstructor || Type == null) return null;
@@ -225,6 +349,9 @@ public class TypeSchema
 		return null;
 	}
 
+	/// <summary>
+	/// Adds properties required by the custom constructor to the serialization list
+	/// </summary>
 	public void AddCustomConstructorProperties()
 	{
 		if (CustomConstructor == null) return;
@@ -280,6 +407,9 @@ public class TypeSchema
 		return false;
 	}
 
+	/// <summary>
+	/// Saves the type schema to the binary writer
+	/// </summary>
 	public void Save(BinaryWriter writer)
 	{
 		writer.Write(Name);
@@ -293,6 +423,9 @@ public class TypeSchema
 		SaveProperties(writer);
 	}
 
+	/// <summary>
+	/// Loads the type schema from the binary reader
+	/// </summary>
 	[MemberNotNull(nameof(Name), nameof(AssemblyQualifiedName))]
 	public void Load(Log log, Serializer serializer, BinaryReader reader)
 	{
@@ -391,6 +524,9 @@ public class TypeSchema
 		return Assembly.Load(assemblyName);
 	}
 
+	/// <summary>
+	/// Saves field schemas to the binary writer
+	/// </summary>
 	public void SaveFields(BinaryWriter writer)
 	{
 		writer.Write(FieldSchemas.Count);
@@ -400,6 +536,9 @@ public class TypeSchema
 		}
 	}
 
+	/// <summary>
+	/// Saves property schemas to the binary writer
+	/// </summary>
 	public void SaveProperties(BinaryWriter writer)
 	{
 		writer.Write(PropertySchemas.Count);
@@ -409,6 +548,9 @@ public class TypeSchema
 		}
 	}
 
+	/// <summary>
+	/// Loads member schemas from the binary reader
+	/// </summary>
 	public void LoadMembers<T>(Serializer serializer, BinaryReader reader) where T : MemberInfo
 	{
 		int count = reader.ReadInt32();
@@ -429,7 +571,9 @@ public class TypeSchema
 		}
 	}
 
-	// todo: this isn't getting called for types not serialized
+	/// <summary>
+	/// Validates the type schema against the serializer and list of type schemas
+	/// </summary>
 	public void Validate(Serializer serializer, List<TypeSchema> typeSchemas)
 	{
 		long totalBytes = serializer.Reader!.BaseStream.Length;
@@ -461,6 +605,9 @@ public class TypeSchema
 		}
 	}
 
+	/// <summary>
+	/// Gets the member info for the specified member name, checking deprecated names if not found
+	/// </summary>
 	public MemberInfo? GetMemberInfo(string name)
 	{
 		var members = Type!.GetMember(name, BindingAttributes);

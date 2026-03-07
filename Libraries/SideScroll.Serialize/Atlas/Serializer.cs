@@ -4,38 +4,94 @@ using SideScroll.Serialize.Atlas.TypeRepos;
 
 namespace SideScroll.Serialize.Atlas;
 
+/// <summary>
+/// Exception thrown when serialization or deserialization errors occur
+/// </summary>
 public class SerializerException(string text, params Tag[] tags) : 
 	TaggedException(text, tags);
 
+/// <summary>
+/// Core serializer class that handles Atlas format serialization and deserialization
+/// </summary>
 public class Serializer : IDisposable
 {
-	public const uint ScrollId = 0x4C524353; // SCRL -> LRCS: 76, 82, 67, 83, Start of object data (little endian format)
+	/// <summary>
+	/// Magic number identifying the start of object data 
+	/// SCRL in little endian format
+	/// LRCS in big endian format (76, 82, 67, 83)
+	/// </summary>
+	public const uint ScrollId = 0x4C524353;
 
+	/// <summary>
+	/// Gets the serializer header containing metadata about the serialized data
+	/// </summary>
 	public SerializerHeader Header { get; } = new();
 
+	/// <summary>
+	/// Gets the list of type schemas for all types in the serialized data
+	/// </summary>
 	public List<TypeSchema> TypeSchemas { get; } = [];
 
+	/// <summary>
+	/// Gets the list of type repositories managing serialized instances
+	/// </summary>
 	public List<TypeRepo> TypeRepos { get; } = [];
+	
+	/// <summary>
+	/// Gets the dictionary mapping types to their type repositories
+	/// </summary>
 	public Dictionary<Type, TypeRepo> IdxTypeToRepo { get; } = [];
 
-	public TypeRepoString? TypeRepoString { get; set; } // Reuse string instances to reduce memory use when deep cloning
+	/// <summary>
+	/// Gets or sets the string type repository used to reuse string instances during cloning
+	/// </summary>
+	public TypeRepoString? TypeRepoString { get; set; }
 
+	/// <summary>
+	/// Gets or sets the binary reader for loading serialized data
+	/// </summary>
 	public BinaryReader? Reader { get; protected set; }
 
+	/// <summary>
+	/// Gets or sets whether to use lazy loading for objects
+	/// </summary>
 	public bool Lazy { get; set; }
+	
+	/// <summary>
+	/// Gets or sets whether to serialize only public data
+	/// </summary>
 	public bool PublicOnly { get; set; }
+	
+	/// <summary>
+	/// Gets or sets whether to enable mapping between fields and properties during deserialization
+	/// </summary>
 	public bool EnableFieldToPropertyMapping { get; set; } = true;
 
-	// Convert to Parser class?
-	// Use a queue so we don't exceed the stack size due to cross references (i.e. a list with values that refer back to the list)
+	/// <summary>
+	/// Gets the queue of objects waiting to be parsed
+	/// </summary>
 	public Queue<object> ParserQueue { get; } = [];
-	public List<object?> Primitives { get; } = []; // primitives are usually serialized inline, but that doesn't work if that's the primary type
+	
+	/// <summary>
+	/// Gets the list of primitive values (primitives are usually serialized inline, but not when they're the primary type)
+	/// </summary>
+	public List<object?> Primitives { get; } = [];
 
+	/// <summary>
+	/// Gets the dictionary tracking cloned objects
+	/// </summary>
 	protected Dictionary<object, object> Clones { get; } = [];
+	
+	/// <summary>
+	/// Gets the queue of clone operations to process
+	/// </summary>
 	protected Queue<Action> CloneQueue { get; } = new();
 
 	private bool _disposed;
 
+	/// <summary>
+	/// Represents an item in the load queue
+	/// </summary>
 	private struct LoadItem
 	{
 		public TypeRepo TypeRepo;
@@ -47,6 +103,9 @@ public class Serializer : IDisposable
 
 	private readonly Queue<LoadItem> _loadQueue = new();
 
+	/// <summary>
+	/// Gets the base object from the serialized data
+	/// </summary>
 	public object? BaseObject(Call call)
 	{
 		if (TypeRepos.Count == 0)
@@ -69,6 +128,9 @@ public class Serializer : IDisposable
 		return LoadObject(typeRepo, 0);
 	}
 
+	/// <summary>
+	/// Loads an object from a type repository at the specified index
+	/// </summary>
 	public object? LoadObject(TypeRepo typeRepo, int index)
 	{
 		object? obj = typeRepo.LoadObject(index);
@@ -78,6 +140,9 @@ public class Serializer : IDisposable
 		return obj;
 	}
 
+	/// <summary>
+	/// Processes the queue of objects waiting to be loaded
+	/// </summary>
 	public void ProcessLoadQueue()
 	{
 		while (_loadQueue.Count > 0)
@@ -96,12 +161,18 @@ public class Serializer : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Record containing information about loaded objects for a type
+	/// </summary>
 	public record ObjectsLoaded
 	{
 		public string Name { get; init; } = default!;
 		public int Loaded { get; init; }
 	}
 
+	/// <summary>
+	/// Logs information about all loaded types
+	/// </summary>
 	public void LogLoadedTypes(Call call)
 	{
 		List<ObjectsLoaded> loaded = TypeRepos
@@ -115,7 +186,9 @@ public class Serializer : IDisposable
 		call.Log.Add("Objects Loaded", new Tag("Type Repos", loaded));
 	}
 
-	// todo: only add types that are used
+	/// <summary>
+	/// Adds type repositories for all member types in object schemas
+	/// </summary>
 	private void AddObjectMemberTypes(Log log)
 	{
 		// TypeSchemas can grow as members are added, don't use enumerable
@@ -165,6 +238,9 @@ public class Serializer : IDisposable
 		}
 	}*/
 
+	/// <summary>
+	/// Saves all serialized data to the binary writer
+	/// </summary>
 	public void Save(Call call, BinaryWriter writer)
 	{
 		using CallTimer callSaving = call.Timer("Saving object");
@@ -183,6 +259,9 @@ public class Serializer : IDisposable
 		Header.SaveFileSize(writer);
 	}
 
+	/// <summary>
+	/// Loads serialized data from the binary reader
+	/// </summary>
 	public void Load(Call call, BinaryReader reader, string? name = null, bool loadData = true, bool lazy = false)
 	{
 		Reader = reader;
@@ -411,7 +490,9 @@ public class Serializer : IDisposable
 		}
 	}
 
-	// Adds TypeSchema and TypeRepo if required
+	/// <summary>
+	/// Gets an existing type repository or creates a new one for the specified type
+	/// </summary>
 	public TypeRepo GetOrCreateRepo(Log? log, Type type)
 	{
 		if (IdxTypeToRepo.TryGetValue(type, out TypeRepo? typeRepo))
@@ -431,6 +512,9 @@ public class Serializer : IDisposable
 		return typeRepo;
 	}
 
+	/// <summary>
+	/// Adds a type repository to the serializer's collection
+	/// </summary>
 	private void AddTypeRepo(TypeRepo typeRepo)
 	{
 		typeRepo.TypeIndex = TypeRepos.Count;
@@ -441,6 +525,9 @@ public class Serializer : IDisposable
 		TypeRepos.Add(typeRepo);
 	}
 
+	/// <summary>
+	/// Adds an object reference to be serialized
+	/// </summary>
 	public void AddObjectRef(object? obj)
 	{
 		if (obj != null)
@@ -450,24 +537,9 @@ public class Serializer : IDisposable
 		}
 	}
 
-	/*public void AddAndWriteObjectRef(object obj, BinaryWriter writer)
-	{
-		if (obj == null)
-		{
-			writer.Write(true);
-		}
-		else
-		{
-			writer.Write(false);
-			TypeRepo typeRepo = GetOrCreateRepo(obj.GetType());
-			int objectIndex = typeRepo.GetOrAddObjectRef(obj);
-			if (!typeRepo.type.IsSealed) // sealed classes can't have sub-classes
-				writer.Write(typeRepo.typeIndex); // could compress by storing Base Class subtype offset only
-			writer.Write(objectIndex);
-		}
-		//typeRepo.WriteObjectRef(obj, objectIndex, writer);
-	}*/
-
+	/// <summary>
+	/// Writes an object reference to the binary writer
+	/// </summary>
 	public void WriteObjectRef(Type baseType, object? obj, BinaryWriter writer)
 	{
 		if (obj == null)
@@ -519,7 +591,9 @@ public class Serializer : IDisposable
 		//typeRepo.WriteObjectRef(obj, objectIndex, writer);
 	}
 
-	// speed issue, we don't know what objects index will be when enqueued, so we have to lookup again later
+	/// <summary>
+	/// Adds an object and all its child objects to the serialization queue
+	/// </summary>
 	public void AddObject(Call call, object obj)
 	{
 		using CallTimer callTimer = call.Timer("Parsing object", new Tag("Object", obj?.ToString()));
@@ -541,6 +615,9 @@ public class Serializer : IDisposable
 		}
 	}
 
+	/// <summary>
+	/// Creates a shallow clone of an object (non-generic version)
+	/// </summary>
 	public object? Clone(object? obj)
 	{
 		if (obj == null)
@@ -593,6 +670,9 @@ public class Serializer : IDisposable
 		return clone;
 	}
 
+	/// <summary>
+	/// Creates a shallow clone of an object and processes the clone queue
+	/// </summary>
 	public T? Clone<T>(Log log, T obj)
 	{
 		T? clone = (T?)Clone(obj);
@@ -613,6 +693,9 @@ public class Serializer : IDisposable
 		return clone;
 	}
 
+	/// <summary>
+	/// Logs information about all cloned types
+	/// </summary>
 	public void LogClonedTypes(Log log)
 	{
 		List<ObjectsLoaded> loaded = TypeRepos
@@ -626,6 +709,9 @@ public class Serializer : IDisposable
 		log.Add("Objects Loaded", new Tag("Type Repos", loaded));
 	}
 
+	/// <summary>
+	/// Queues an object for loading from the specified type repository
+	/// </summary>
 	internal void QueueLoading(TypeRepo typeRepo, int objectIndex)
 	{
 		LoadItem loadItem = new()

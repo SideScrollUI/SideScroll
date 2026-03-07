@@ -8,10 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Summary docs for Serializer
+
+### Fixed
+
+### Changed
+
+## [0.16] - 2026-03-03
+
+### Added
 - Json links can now be imported
   - Added ProjectSettings.EnableJsonLinking
 - File Viewer now supports viewing zip files
-- Copy to Clipboard button to TabFileImage toolbar
+- Copy to Clipboard button for TabFileImage toolbar
 - ScreenCapture Border, Icon, and Memory Improvements
 - TextEditor Search Panel Theming
 - Added FileTypeDetector to allow probing files to determine their type
@@ -34,8 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed Log.Call() to Log.AddChild()
 - Renamed IInnerTab to ITabContainer
 - Renamed IReload to ITabReloadable
-- Disabled Debug Info for Release builds
-- Changed ChartView SeriesLimit default from 25 to 50
+- Increased ChartView SeriesLimit default from 25 to 50
 
 ## [0.15] - 2026-01-25
 
