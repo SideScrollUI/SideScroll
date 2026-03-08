@@ -6,7 +6,6 @@ using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls.Converters;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
-using SideScroll.Tabs.Lists;
 using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -45,7 +44,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 		Binding = GetFormattedTextBinding();
 
 		var maxHeightAttribute = propertyInfo.GetCustomAttribute<MaxHeightAttribute>();
-		if (maxHeightAttribute != null && typeof(IListItem).IsAssignableFrom(PropertyInfo.PropertyType))
+		if (maxHeightAttribute != null)
 		{
 			MaxDesiredHeight = maxHeightAttribute.MaxHeight;
 			FormatConverter.MaxLength = MaxDesiredHeight * 10;
@@ -237,48 +236,4 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 
 		return FormattedBinding;
 	}
-
-	/*protected override FrameworkElement GenerateElement(DataGridCell cell, object dataItem)
-	{
-		if (GetBindingType(dataItem) == typeof(bool))
-		{
-			CheckBox checkbox = new CheckBox()
-			{
-				Margin = new Thickness(10, 0, 0, 0)
-			};
-			GetTextBinding();
-			unformattedBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-			checkbox.SetBinding(CheckBox.IsCheckedProperty, unformattedBinding);
-			if (IsReadOnly)
-				checkbox.IsHitTestVisible = false; // disable changing
-												   //formattedBinding = unformattedBinding;
-												   //Binding = unformattedBinding;
-			return checkbox;
-		}
-		else
-		{
-			TextBlock element = base.GenerateElement(cell, dataItem) as TextBlock;
-			element.SetBinding(TextBlock.TextProperty, GetFormattedTextBinding());
-			return element;
-		}
-	}
-
-	protected override FrameworkElement GenerateEditingElement(DataGridCell cell, object dataItem)
-	{
-		if (GetBindingType(dataItem) == typeof(bool))
-		{
-			CheckBox checkbox = new CheckBox()
-			{
-				HorizontalAlignment = HorizontalAlignment.Center
-			};
-			checkbox.SetBinding(CheckBox.IsCheckedProperty, GetTextBinding());
-			return checkbox;
-		}
-		else
-		{
-			TextBox element = base.GenerateEditingElement(cell, dataItem) as TextBox;
-			element.SetBinding(TextBox.TextProperty, GetTextBinding());
-			return element;
-		}
-	}*/
 }

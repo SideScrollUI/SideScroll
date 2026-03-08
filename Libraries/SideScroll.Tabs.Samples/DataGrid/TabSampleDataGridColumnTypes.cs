@@ -1,8 +1,6 @@
-using SideScroll.Attributes;
-
 namespace SideScroll.Tabs.Samples.DataGrid;
 
-public class TabSampleGridColumnSizing : ITab
+public class TabSampleDataGridColumnTypes : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -17,10 +15,21 @@ public class TabSampleGridColumnSizing : ITab
 				{
 					Integer = i,
 					Long = (long)i * int.MaxValue,
+					Double = i / 3.0,
 					DateTime = DateTime.Now.AddHours(i),
 					TimeSpan = TimeSpan.FromHours(i),
-					Bool = i % 2 == 1,
+					Bool = (i % 2 == 1),
 				};
+
+				if (i % 2 == 0)
+				{
+					testItem.Object = (i % 4 == 0);
+				}
+
+				for (int j = 0; j < i; j++)
+				{
+					testItem.IntegerList.Add(j);
+				}
 
 				testItem.LongString += i; // make as a unique string
 				items.Add(testItem);
@@ -31,25 +40,17 @@ public class TabSampleGridColumnSizing : ITab
 
 	private class ManyTypesItem
 	{
-		public int Integer { get; set; }
+		public int Integer { get; set; } = 123;
 		public long Long { get; set; } = 1234567890123456789;
+		public double Double { get; set; } = 123.456;
+		public decimal Decimal { get; set; } = 123456789.0123456789M;
 		public bool Bool { get; set; }
-
+		public byte[] ByteArray { get; set; } = new byte[256];
+		public List<int> IntegerList { get; set; } = [];
 		public DateTime DateTime { get; set; }
-
-		[Formatted]
 		public TimeSpan TimeSpan { get; set; }
-
-		[MaxWidth(200)]
+		public object? Object { get; set; }
 		public string ShortString { get; set; } = "Text";
-
-		[MaxWidth(200)]
-		public string ShowPrefix { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
-
-		[AutoSize]
-		public string AutoSize { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyz";
-
-		[MaxWidth(1000), WordWrap]
 		public string LongString { get; set; } = "abcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghijklmnopqrztuvwxyzabcdefghij";
 
 		public override string ToString() => Integer.ToString();

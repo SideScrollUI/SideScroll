@@ -2,7 +2,7 @@ using SideScroll.Logs;
 
 namespace SideScroll.Tabs.Samples.DataGrid;
 
-public class TabSampleGridEditing : ITab
+public class TabSampleDataGridEditing : ITab
 {
 	public TabInstance Create() => new Instance();
 

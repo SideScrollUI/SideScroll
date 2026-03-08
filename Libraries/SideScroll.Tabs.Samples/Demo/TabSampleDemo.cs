@@ -17,7 +17,7 @@ public class TabSampleDemo
 	public static TabDemoPlanets Planets => new();
 	public static TabPlanetCharts Charts => new();
 	public static TabSampleTodos Todo => new();
-	public static TabSampleGridCollectionSize Collections => new();
+	public static TabSampleDataGridCollectionSize Collections => new();
 	public static TabSampleObjectMembers Objects => new();
 	public static TabSampleFormDataTabs Forms => new();
 	public static string Json => TextSamples.Json;

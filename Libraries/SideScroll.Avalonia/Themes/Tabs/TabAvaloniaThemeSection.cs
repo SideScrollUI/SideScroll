@@ -111,16 +111,16 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				},
 				ToolbarTheme => new TabCustomControl(),
 				ToolTipTheme => new TabAvaloniaToolTipSample(),
-				ScrollBarTheme => new TabSampleGridCollectionSize(),
+				ScrollBarTheme => new TabSampleDataGridCollectionSize(),
 				DataGridTheme => new List<ListItem>
 				{
-					new("Collections", new TabSampleDataGrid()),
+					new("Collections", new TabSampleDataGrids()),
 					new("Objects", new TabSampleObjects()),
 					new("Forms", new TabSampleFormDataTabs()),
 				},
 				ButtonTheme => new List<ListItem>
 				{
-					new("Collections", new TabSampleGridCollectionSize()),
+					new("Collections", new TabSampleDataGridCollectionSize()),
 					new("Actions", new TabSampleActions()),
 					new("Popups", new TabSampleFlyout()),
 				},

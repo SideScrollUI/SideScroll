@@ -1,6 +1,6 @@
 namespace SideScroll.Tabs.Samples.DataGrid;
 
-public class TabSampleGridDictionary : ITab
+public class TabSampleDataGridDictionary : ITab
 {
 	public TabInstance Create() => new Instance();
 

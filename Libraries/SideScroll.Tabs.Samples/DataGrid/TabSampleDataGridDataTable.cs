@@ -6,7 +6,7 @@ namespace SideScroll.Tabs.Samples.DataGrid;
 
 // DataTable's can be used to show dynamic columns for a DataGrid
 // For structured data with known schema's, it's recommended to DataBind directly to the items instead of using a DataTable
-public class TabSampleGridDataTable : ITab
+public class TabSampleDataGridDataTable : ITab
 {
 	public TabInstance Create() => new Instance();
 

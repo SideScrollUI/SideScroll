@@ -3,7 +3,7 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Samples.DataGrid;
 
-public class TabSampleGridCollectionSize : ITab
+public class TabSampleDataGridCollectionSize : ITab
 {
 	public TabInstance Create() => new Instance();
 

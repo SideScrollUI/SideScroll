@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace SideScroll.Tabs.Samples.DataGrid;
 
-public class TabSampleGridUpdating : ITab
+public class TabSampleDataGridUpdating : ITab
 {
 	public TabInstance Create() => new Instance();
 

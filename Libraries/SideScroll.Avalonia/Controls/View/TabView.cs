@@ -568,7 +568,7 @@ public class TabView : Grid, IDisposable
 
 		Instance.Post(ShowLoading);
 
-		Instance.StartAsync(Instance.ReinitializeAsync);
+		Instance.StartAsync(Instance.ReinitializeAsync, Instance.TaskInstance.Call);
 	}
 
 	public void ShowLoading()
@@ -808,9 +808,6 @@ public class TabView : Grid, IDisposable
 		TabViewer.Instance!.SetMinScrollOffset();
 
 		// Create new child controls
-		//Dictionary<object, Control> oldChildControls = tabChildControls.gridControls;
-		//tabChildControls.gridControls = new Dictionary<object, Control>();
-
 		List<Control> orderedChildControls = CreateAllChildControls(recreate, out Dictionary<object, Control> newChildControls);
 
 		_fillerPanel = null;
