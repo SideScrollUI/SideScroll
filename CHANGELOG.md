@@ -8,11 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- TabSampleDataGridMixedHeights to test the mouse wheel scrolling problem
 - Summary docs for Serializer
 
 ### Fixed
 
 ### Changed
+- Updated DataGridPropertyTextColumn to check MaxHeightAttribute for all Properties
 
 ## [0.16] - 2026-03-03
 
@@ -23,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Copy to Clipboard button for TabFileImage toolbar
 - ScreenCapture Border, Icon, and Memory Improvements
 - TextEditor Search Panel Theming
-- Added FileTypeDetector to allow probing files to determine their type
+- FileTypeDetector to allow probing files to determine their type
 - Toolbar Copy button to TabTextFile
 - CHANGELOG.md to track version history
 - CONTRIBUTING.md for contributor guidelines

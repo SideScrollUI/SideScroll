@@ -1,5 +1,7 @@
 # SideScroll
 
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://sidescrollui.github.io/SideScroll/)
+
 SideScroll is a cross platform Avalonia UI framework designed for quickly navigating through a tree of tabs. Every tab that shows will automatically select the next most likely tabs, and the next, until you need to start scrolling. Navigate 20 or even 50 tabs deep, and create links to save or share with others.
 
 SideScroll is designed with speed in mind, for both development and usage. Most tabs are created in code which makes them easier to link together and refactor later. Any object can be viewed or edited by adding it to a tab, with all the controls being automatically created for you, and customized via attributes. DataRepos can be used to save and load these objects, and the selected items can be passed in links automatically.
@@ -51,6 +53,12 @@ SideScroll is designed with speed in mind, for both development and usage. Most 
 * [Development](Docs/Dev/Development.md)
 * [User Guide](Docs/UserGuide.md)
 * [Credits](Docs/Credits.md)
+
+## Live Demo
+
+Try SideScroll directly in your browser: **[https://sidescrollui.github.io/SideScroll/](https://sidescrollui.github.io/SideScroll/)**
+
+The demo runs entirely in WebAssembly using Avalonia's browser support - no installation required!
 
 ## Samples
 
