@@ -3,9 +3,15 @@
 
 <head>
     <title>SideScroll</title>
-    <base href="/SideScroll/" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Dynamically set base href based on environment
+        // Use /SideScroll/ for GitHub Pages, / for local development
+        const base = document.createElement('base');
+        base.href = window.location.hostname === 'sidescrollui.github.io' ? '/SideScroll/' : '/';
+        document.head.appendChild(base);
+    </script>
     <link rel="stylesheet" href="./app.css" />
 </head>
 

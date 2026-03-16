@@ -43,7 +43,7 @@ python -m http.server 8000
 
 Visit: http://localhost:8000
 
-**Note**: When testing locally, you may need to temporarily remove or modify the `<base href="/SideScroll/" />` tag in `index.html` to `<base href="/" />`.
+**Note**: The `index.html` file automatically detects the environment and sets the correct base path (uses `/SideScroll/` for GitHub Pages and `/` for local development), so no manual changes are needed for local testing.
 
 ## Enabling on Your Fork (Optional)
 
@@ -58,9 +58,10 @@ If you fork this repository and want to deploy to your own GitHub Pages:
    if: github.repository == 'YourUsername/SideScroll'
    ```
 
-3. **Update the base path** in `wwwroot/index.html`:
-   ```html
-   <base href="/YourRepoName/" />
+3. **Update the base path detection** in `wwwroot/index.html` script:
+   ```javascript
+   // Change the hostname check to match your GitHub Pages URL
+   base.href = window.location.hostname === 'yourusername.github.io' ? '/YourRepoName/' : '/';
    ```
 
 4. **Push to main** and the workflow will deploy to your Pages site
@@ -68,8 +69,9 @@ If you fork this repository and want to deploy to your own GitHub Pages:
 ## Troubleshooting
 
 ### Assets not loading (404 errors)
-- Verify the `<base href="/SideScroll/" />` tag is in `index.html`
-- Check that the repository name matches the base href path
+- Check the dynamic base path logic in `index.html` is correctly detecting the hostname
+- Verify the repository name matches the base href path in the script
+- Open browser developer tools to see what base URL is being set
 
 ### Workflow fails with permissions error
 - Ensure GitHub Pages is enabled in repository settings
