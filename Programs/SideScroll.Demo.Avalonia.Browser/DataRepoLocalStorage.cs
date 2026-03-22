@@ -37,8 +37,6 @@ public class DataRepoLocalStorage : DataRepo
 	/// </summary>
 	public override DataRepoView<T> LoadView<T>(Call call, string groupId, string? orderByMemberName = null, bool ascending = true)
 	{
-		Console.WriteLine($"🔵 DataRepoLocalStorage.LoadView called: type={typeof(T).Name}, group={groupId}");
-		
 		var view = new DataRepoViewLocalStorage<T>(this, groupId);
 		if (orderByMemberName != null)
 		{
@@ -52,12 +50,20 @@ public class DataRepoLocalStorage : DataRepo
 	}
 
 	/// <summary>
+	/// Loads an indexed repository view with all items using localStorage
+	/// </summary>
+	public override DataRepoView<T> LoadIndexedView<T>(Call call, string groupId, bool ascending = true)
+	{
+		var view = new DataRepoViewLocalStorage<T>(this, groupId, indexed: true);
+		view.LoadAllIndexed(call, ascending);
+		return view;
+	}
+
+	/// <summary>
 	/// Gets a serializer file that uses localStorage instead of file system
 	/// </summary>
 	public override SerializerFile GetSerializerFile(Type type, string groupId, string key)
 	{
-		Console.WriteLine($"🟢 DataRepoLocalStorage.GetSerializerFile called: type={type.Name}, group={groupId}, key={key}");
-		
 		string dataPath = GetDataPath(type, groupId, key);
 		return new SerializerLocalStorage(dataPath, key);
 	}
@@ -70,21 +76,15 @@ public class DataRepoLocalStorage : DataRepo
 		call ??= new();
 		groupId ??= ".Default";
 
-		Console.WriteLine($"🔵 DataRepoLocalStorage.LoadAll called: type={typeof(T).Name}, group={groupId}");
-		
 		DataItemCollection<T> entries = [];
 
 		// Get the group path pattern to match localStorage keys
 		string groupPath = GetGroupPath(typeof(T), groupId);
 		string keyPrefix = SerializerLocalStorage.ConvertPathToStorageKey(groupPath);
-		
-		Console.WriteLine($"🔍 Searching localStorage with prefix: {keyPrefix}");
 
 		// Get all localStorage keys that start with this prefix
 		var allKeys = SerializerLocalStorage.GetAllKeys();
 		var matchingKeys = allKeys.Where(k => k.StartsWith(keyPrefix + "_")).ToList();
-		
-		Console.WriteLine($"📦 Found {matchingKeys.Count} matching keys in localStorage");
 
 		foreach (string storageKey in matchingKeys)
 		{
@@ -95,27 +95,85 @@ public class DataRepoLocalStorage : DataRepo
 				
 				var serializerFile = new SerializerLocalStorage(path);
 				if (!serializerFile.Exists)
-				{
-					Console.WriteLine($"⚠️ Key exists but Exists=false: {storageKey}");
 					continue;
-				}
 				
 				T? obj = serializerFile.Load<T>(call, lazy);
 				if (obj != null)
 				{
-					// Extract name from storage key (last segment)
 					string name = serializerFile.Name;
-					Console.WriteLine($"✅ Loaded item: {name}");
 					entries.Add(name, obj);
 				}
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine($"❌ Error loading from {storageKey}: {e.Message}");
+				call.Log.Add(e, new Tag("Key", storageKey));
 			}
 		}
 		
-		Console.WriteLine($"📊 Loaded {entries.Count} items total");
 		return entries;
+	}
+
+	/// <summary>
+	/// Deletes an item from localStorage
+	/// </summary>
+	public override void Delete(Call? call, Type type, string? groupId, string key)
+	{
+		call ??= new();
+		groupId ??= ".Default";
+
+		string dataPath = GetDataPath(type, groupId, key);
+		string storageKey = SerializerLocalStorage.ConvertPathToStorageKey(dataPath);
+
+		try
+		{
+			SerializerLocalStorage.RemoveItem(storageKey);
+			call.Log.Add("Deleted from localStorage", new Tag("Key", storageKey));
+		}
+		catch (Exception e)
+		{
+			call.Log.Add(e, new Tag("Key", storageKey));
+		}
+	}
+
+	/// <summary>
+	/// Deletes all items in a group from localStorage
+	/// </summary>
+	public override void DeleteAll(Call? call, Type type, string? groupId = null)
+	{
+		call ??= new();
+		groupId ??= ".Default";
+
+		string groupPath = GetGroupPath(type, groupId);
+		string keyPrefix = SerializerLocalStorage.ConvertPathToStorageKey(groupPath);
+
+		// Get all localStorage keys that start with this prefix
+		var allKeys = SerializerLocalStorage.GetAllKeys();
+		var matchingKeys = allKeys.Where(k => k.StartsWith(keyPrefix + "_")).ToList();
+
+		call.Log.Add("Deleting items from localStorage", new Tag("Type", type.Name), new Tag("Group", groupId), new Tag("Count", matchingKeys.Count));
+
+		foreach (string storageKey in matchingKeys)
+		{
+			try
+			{
+				SerializerLocalStorage.RemoveItem(storageKey);
+			}
+			catch (Exception e)
+			{
+				call.Log.Add(e, new Tag("Key", storageKey));
+			}
+		}
+
+		// Also delete the index if it exists
+		string indexPath = Paths.Combine(groupPath, "Primary.sidx");
+		string indexKey = SerializerLocalStorage.ConvertPathToStorageKey(indexPath);
+		try
+		{
+			SerializerLocalStorage.RemoveItem(indexKey);
+		}
+		catch
+		{
+			// Index might not exist, that's okay
+		}
 	}
 }

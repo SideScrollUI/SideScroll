@@ -77,7 +77,7 @@ public class DataRepo
 	/// <summary>
 	/// Loads an indexed repository view with all items
 	/// </summary>
-	public DataRepoView<T> LoadIndexedView<T>(Call call, string groupId, bool ascending = true)
+	public virtual DataRepoView<T> LoadIndexedView<T>(Call call, string groupId, bool ascending = true)
 	{
 		var view = new DataRepoView<T>(this, groupId, true);
 		view.LoadAllIndexed(call, ascending);
@@ -358,7 +358,7 @@ public class DataRepo
 	/// <summary>
 	/// Deletes all items of the specified type in the given group
 	/// </summary>
-	public void DeleteAll(Call? call, Type type, string? groupId = null)
+	public virtual void DeleteAll(Call? call, Type type, string? groupId = null)
 	{
 		call ??= new();
 
@@ -403,7 +403,7 @@ public class DataRepo
 	/// <summary>
 	/// Deletes an item of the specified type with the given group and key
 	/// </summary>
-	public void Delete(Call? call, Type type, string? groupId, string key)
+	public virtual void Delete(Call? call, Type type, string? groupId, string key)
 	{
 		call ??= new();
 		groupId ??= DefaultGroupId;

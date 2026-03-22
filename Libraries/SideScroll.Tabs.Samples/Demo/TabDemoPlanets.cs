@@ -56,7 +56,7 @@ public class TabDemoPlanets : ITab
 
 		private void LoadSavedItems(Call call, TabModel model)
 		{
-			_dataRepoView = Data.App.LoadView<Planet>(call, GroupId);
+			_dataRepoView = Data.App.LoadIndexedView<Planet>(call, GroupId);
 			DataRepoInstance = _dataRepoView; // Allow links to pass the selected items
 
 			if (_dataRepoView.Items.Count == 0)

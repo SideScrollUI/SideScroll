@@ -34,7 +34,6 @@ public partial class SerializerLocalStorage : SerializerFile
 		string pathKey = basePath.Replace("\\", "_").Replace("/", "_").Replace(":", "");
 		StorageKey = StoragePrefix + pathKey;
 		DataPath = basePath; // Keep original path for compatibility
-		Console.WriteLine($"🟢 Creating SerializerLocalStorage with path: {basePath}");
 	}
 
 	/// <summary>
@@ -46,13 +45,10 @@ public partial class SerializerLocalStorage : SerializerFile
 		{
 			try
 			{
-				bool exists = ExistsInStorageSync(StorageKey);
-				Console.WriteLine($"📦 Exists check for {StorageKey}: {exists}");
-				return exists;
+				return ExistsInStorageSync(StorageKey);
 			}
-			catch (Exception e)
+			catch
 			{
-				Console.WriteLine($"❌ Error checking existence: {e.Message}");
 				return false;
 			}
 		}
@@ -60,8 +56,6 @@ public partial class SerializerLocalStorage : SerializerFile
 
 	protected override void SaveInternal(Call call, object obj, string? name = null, bool publicOnly = false)
 	{
-		Console.WriteLine($"🔵 SerializerLocalStorage.SaveInternal called: {StorageKey}");
-		
 		var options = publicOnly
 			? JsonConverters.PublicSerializerOptions
 			: JsonConverters.CreateOptions();
@@ -69,25 +63,20 @@ public partial class SerializerLocalStorage : SerializerFile
 		try
 		{
 			string json = JsonSerializer.Serialize(obj, obj.GetType(), options);
-			Console.WriteLine($"🔵 Serialized to JSON ({json.Length} bytes), calling setItem");
-			
 			bool success = SetLocalStorageItemSync(StorageKey, json);
 			
 			if (success)
 			{
-				Console.WriteLine($"✅ Saved to localStorage: {StorageKey} ({json.Length} bytes)");
-				call.Log.AddDebug($"Saved to localStorage: {StorageKey} ({json.Length} bytes)");
+				call.Log.AddDebug("Saved to localStorage", new Tag("Key", StorageKey), new Tag("Size", json.Length));
 			}
 			else
 			{
-				Console.WriteLine($"❌ Failed to save to localStorage: {StorageKey}");
-				call.Log.AddWarning($"Failed to save to localStorage: {StorageKey}");
+				call.Log.AddWarning("Failed to save to localStorage", new Tag("Key", StorageKey));
 			}
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine($"❌ Exception saving to localStorage: {e}");
-			call.Log.Add($"Exception saving to localStorage: {e.Message}");
+			call.Log.Add(e, new Tag("Key", StorageKey));
 		}
 	}
 
@@ -100,8 +89,6 @@ public partial class SerializerLocalStorage : SerializerFile
 
 	protected override object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false, Type? expectedType = null)
 	{
-		Console.WriteLine($"🔵 SerializerLocalStorage.LoadInternal called: {StorageKey}, expectedType={expectedType?.Name}");
-		
 		var options = publicOnly
 			? JsonConverters.PublicSerializerOptions
 			: JsonConverters.CreateOptions();
@@ -112,33 +99,26 @@ public partial class SerializerLocalStorage : SerializerFile
 			
 			if (string.IsNullOrEmpty(json))
 			{
-				Console.WriteLine($"📭 No data found in localStorage: {StorageKey}");
-				call.Log.AddDebug($"No data found in localStorage: {StorageKey}");
+				call.Log.AddDebug("No data found in localStorage", new Tag("Key", StorageKey));
 				return null;
 			}
 
-			Console.WriteLine($"✅ Loaded from localStorage: {StorageKey} ({json.Length} bytes)");
-			call.Log.AddDebug($"Loaded from localStorage: {StorageKey} ({json.Length} bytes)");
+			call.Log.AddDebug("Loaded from localStorage", new Tag("Key", StorageKey), new Tag("Size", json.Length));
 			
 			taskInstance?.SetFinished();
 
 			// Use expectedType if provided
 			if (expectedType != null)
 			{
-				var result = JsonSerializer.Deserialize(json, expectedType, options);
-				Console.WriteLine($"✅ Deserialized to type {expectedType.Name}");
-				return result;
+				return JsonSerializer.Deserialize(json, expectedType, options);
 			}
 
 			// Fallback to Dictionary
-			var dictResult = JsonSerializer.Deserialize<Dictionary<string, object?>>(json, options);
-			Console.WriteLine($"✅ Deserialized to Dictionary");
-			return dictResult;
+			return JsonSerializer.Deserialize<Dictionary<string, object?>>(json, options);
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine($"❌ Exception loading from localStorage: {e.Message}");
-			call.Log.AddError($"Exception loading from localStorage: {e.Message}");
+			call.Log.Add(e, new Tag("Key", StorageKey));
 			return null;
 		}
 	}
@@ -191,6 +171,30 @@ public partial class SerializerLocalStorage : SerializerFile
 		return StoragePrefix + pathKey;
 	}
 
+	/// <summary>
+	/// Gets an item from localStorage (public static helper for index)
+	/// </summary>
+	public static string? GetItem(string key)
+	{
+		return GetLocalStorageItemSync(key);
+	}
+
+	/// <summary>
+	/// Sets an item in localStorage (public static helper for index)
+	/// </summary>
+	public static void SetItem(string key, string value)
+	{
+		SetLocalStorageItemSync(key, value);
+	}
+
+	/// <summary>
+	/// Removes an item from localStorage (public static helper for delete)
+	/// </summary>
+	public static void RemoveItem(string key)
+	{
+		RemoveLocalStorageItemSync(key);
+	}
+
 	// JavaScript interop methods - using globalThis.BrowserStorage from storage.js (already loaded in HTML)
 	[JSImport("globalThis.BrowserStorage.load")]
 	private static partial string? GetLocalStorageItemSync(string key);
@@ -200,6 +204,9 @@ public partial class SerializerLocalStorage : SerializerFile
 
 	[JSImport("globalThis.BrowserStorage.exists")]
 	private static partial bool ExistsInStorageSync(string key);
+
+	[JSImport("globalThis.BrowserStorage.remove")]
+	private static partial void RemoveLocalStorageItemSync(string key);
 
 	[JSImport("globalThis.BrowserStorage.getKeysJson")]
 	private static partial string GetKeysJsonSync(string prefix);

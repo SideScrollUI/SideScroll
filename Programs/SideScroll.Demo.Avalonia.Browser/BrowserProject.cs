@@ -23,7 +23,6 @@ public class BrowserProject : Project
 	{
 		get
 		{
-			Console.WriteLine("🔴 BrowserProject.Data accessed - returning BrowserProjectDataRepos");
 			return new BrowserProjectDataRepos(ProjectSettings, UserSettings);
 		}
 	}

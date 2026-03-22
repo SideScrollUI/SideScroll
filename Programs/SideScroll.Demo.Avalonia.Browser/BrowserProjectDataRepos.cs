@@ -14,36 +14,15 @@ public class BrowserProjectDataRepos(ProjectSettings projectSettings, UserSettin
 	/// <summary>
 	/// Gets a DataRepo for application-wide data using localStorage
 	/// </summary>
-	public override DataRepo App
-	{
-		get
-		{
-			Console.WriteLine($"🟡 BrowserProjectDataRepos.App accessed: {AppPath}");
-			return new DataRepoLocalStorage(AppPath);
-		}
-	}
+	public override DataRepo App => new DataRepoLocalStorage(AppPath);
 
 	/// <summary>
 	/// Gets a DataRepo for cache data using localStorage
 	/// </summary>
-	public override DataRepo Cache
-	{
-		get
-		{
-			Console.WriteLine($"🟡 BrowserProjectDataRepos.Cache accessed: {CachePath}");
-			return new DataRepoLocalStorage(CachePath);
-		}
-	}
+	public override DataRepo Cache => new DataRepoLocalStorage(CachePath);
 
 	/// <summary>
 	/// Gets a DataRepo for shared data using localStorage
 	/// </summary>
-	public override DataRepo Shared
-	{
-		get
-		{
-			Console.WriteLine($"🟡 BrowserProjectDataRepos.Shared accessed: {SharedPath}");
-			return new DataRepoLocalStorage(SharedPath);
-		}
-	}
+	public override DataRepo Shared => new DataRepoLocalStorage(SharedPath);
 }

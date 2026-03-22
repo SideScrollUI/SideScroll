@@ -4,6 +4,7 @@ using SideScroll.Avalonia.Charts.LiveCharts;
 using SideScroll.Avalonia.Controls;
 using SideScroll.Avalonia.Samples;
 using SideScroll.Avalonia.Samples.Tabs;
+using SideScroll.Logs;
 using SideScroll.Tabs;
 
 namespace SideScroll.Demo.Avalonia.Browser;
@@ -12,12 +13,21 @@ public partial class BrowserMainView : BaseView
 {
 	public static BrowserMainView? Instance { get; private set; }
 	
+	/// <summary>
+	/// Global log for browser application - logs appear in browser console via LogWriterConsole
+	/// </summary>
+	public static Log AppLog { get; } = new();
+	
 	private static bool _storageModuleImported = false;
 	private System.Timers.Timer? _saveTimer;
+	private LogWriterConsole? _logWriter;
 
 	public BrowserMainView() : base(BrowserProject.Load())
 	{
 		Instance = this;
+		
+		// Hook up console logging for all AppLog messages
+		_logWriter = new LogWriterConsole(AppLog);
 		
 		LoadTab(new TabAvalonia());
 		LiveChartCreator.Register();
@@ -32,7 +42,7 @@ public partial class BrowserMainView : BaseView
 		_saveTimer.AutoReset = true;
 		_saveTimer.Start();
 
-		Console.WriteLine("✓ BrowserMainView initialized with localStorage support");
+		AppLog.Add("BrowserMainView initialized", new Tag("Storage", "localStorage"));
 	}
 
 	private async void OnLoadedAsync(object? sender, RoutedEventArgs e)
@@ -46,7 +56,7 @@ public partial class BrowserMainView : BaseView
 		{
 			// Import the storage.js module first
 			await JSHost.ImportAsync("storage.js", "../storage.js");
-			Console.WriteLine("✓ storage.js module imported");
+			AppLog.Add("storage.js module imported");
 			
 			// Now reload the project using LoadAsync which uses project.Data.App.Load<T>()
 			var newProject = await BrowserProject.LoadAsync();
@@ -55,11 +65,11 @@ public partial class BrowserMainView : BaseView
 			Project.UserSettings = newProject.UserSettings;
 			Project.Initialize();
 			
-			Console.WriteLine("✓ User settings loaded from localStorage");
+			AppLog.Add("User settings loaded from localStorage");
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"❌ Failed to load settings from localStorage: {ex.Message}");
+			AppLog.Add(ex, new Tag("Context", "LoadSettings"));
 		}
 	}
 }

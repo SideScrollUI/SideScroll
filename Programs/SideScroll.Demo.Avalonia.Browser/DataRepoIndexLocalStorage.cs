@@ -1,0 +1,168 @@
+using System.Runtime.Versioning;
+using System.Text.Json;
+using SideScroll.Serialize.Atlas;
+using SideScroll.Serialize.DataRepos;
+
+namespace SideScroll.Demo.Avalonia.Browser;
+
+/// <summary>
+/// localStorage-based index for browser applications
+/// Stores index data in localStorage instead of filesystem
+/// </summary>
+[SupportedOSPlatform("browser")]
+public class DataRepoIndexLocalStorage<T> : DataRepoIndex<T>
+{
+	private string IndexStorageKey => SerializerLocalStorage.ConvertPathToStorageKey(PrimaryIndexPath);
+
+	public DataRepoIndexLocalStorage(DataRepoInstance<T> dataRepoInstance, int? maxItems = null)
+		: base(dataRepoInstance, maxItems)
+	{
+	}
+
+	/// <summary>
+	/// Loads the index from localStorage or builds it if it doesn't exist
+	/// </summary>
+	public new Indices Load(Call call)
+	{
+		string? json = SerializerLocalStorage.GetItem(IndexStorageKey);
+		
+		if (!string.IsNullOrEmpty(json))
+		{
+			try
+			{
+				var indices = JsonSerializer.Deserialize<Indices>(json);
+				if (indices != null)
+				{
+					call.Log.AddDebug("Loaded index from localStorage", new Tag("Key", IndexStorageKey), new Tag("Count", indices.Items.Count));
+					return indices;
+				}
+			}
+			catch (Exception ex)
+			{
+				call.Log.Add(ex, new Tag("Key", IndexStorageKey), new Tag("Operation", "LoadIndex"));
+			}
+		}
+
+		return BuildIndices(call);
+	}
+
+	/// <summary>
+	/// Saves the index to localStorage
+	/// </summary>
+	private void Save(Indices indices)
+	{
+		var options = new JsonSerializerOptions
+		{
+			WriteIndented = false
+		};
+		
+		string json = JsonSerializer.Serialize(indices, options);
+		SerializerLocalStorage.SetItem(IndexStorageKey, json);
+	}
+
+	/// <summary>
+	/// Saves an item to the index
+	/// </summary>
+	public new Item? Save(Call call, string key)
+	{
+		// Use a simple lock instead of mutex (not available in browser)
+		lock (DataRepoInstance)
+		{
+			return SaveInternal(call, key);
+		}
+	}
+
+	private Item SaveInternal(Call call, string key)
+	{
+		Indices indices = Load(call);
+
+		if (indices.Items.FirstOrDefault(item => item.Key == key) is Item existingItem)
+		{
+			return existingItem;
+		}
+		else
+		{
+			long index = indices.NextIndex++;
+			Item newItem = new(index, key);
+			indices.Items.Add(newItem);
+			Save(indices);
+			
+			PruneMaxItems(call, indices);
+
+			return newItem;
+		}
+	}
+
+	private void PruneMaxItems(Call call, Indices indices)
+	{
+		if (MaxItems is int maxItems)
+		{
+			while (indices.Items.Count > maxItems)
+			{
+				DataRepoInstance.Delete(call, indices.Items[0].Key);
+				indices.Items.RemoveAt(0);
+				Save(indices);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Removes an item from the index by key
+	/// </summary>
+	public new void Remove(Call call, string key)
+	{
+		lock (DataRepoInstance)
+		{
+			RemoveInternal(call, key);
+		}
+	}
+
+	private void RemoveInternal(Call call, string key)
+	{
+		Indices indices = Load(call);
+		int removed = indices.Items.RemoveAll(item => item.Key == key);
+		if (removed > 0)
+		{
+			Save(indices);
+		}
+	}
+
+	/// <summary>
+	/// Removes all items from the index
+	/// </summary>
+	public new void RemoveAll(Call call)
+	{
+		lock (DataRepoInstance)
+		{
+			RemoveAllInternal(call);
+		}
+	}
+
+	private void RemoveAllInternal(Call call)
+	{
+		Indices indices = Load(call);
+		indices.Items.Clear();
+		Save(indices);
+	}
+
+	private Indices BuildIndices(Call call)
+	{
+		List<SerializerHeader> headers = DataRepoInstance.LoadHeaders(call);
+
+		int index = 0;
+		List<Item> items = headers
+			.Select(header => new Item(index++, header.Name ?? ""))
+			.ToList();
+
+		var indices = new Indices
+		{
+			Items = items,
+			NextIndex = index,
+		};
+		
+		// Save the newly built index
+		Save(indices);
+		
+		return indices;
+	}
+}

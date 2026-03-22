@@ -21,7 +21,7 @@ public class BrowserStorageService
 	/// <summary>
 	/// Saves an object to localStorage as JSON
 	/// </summary>
-	public async Task<bool> SaveAsync<T>(string key, T value)
+	public async Task<bool> SaveAsync<T>(Call call, string key, T value)
 	{
 		try
 		{
@@ -35,7 +35,7 @@ public class BrowserStorageService
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"❌ Failed to save settings to localStorage: {ex}");
+			call.Log.Add(ex, new Tag("Key", key), new Tag("Operation", "SaveAsync"));
 			return false;
 		}
 	}
@@ -43,7 +43,7 @@ public class BrowserStorageService
 	/// <summary>
 	/// Loads an object from localStorage
 	/// </summary>
-	public async Task<T?> LoadAsync<T>(string key) where T : class
+	public async Task<T?> LoadAsync<T>(Call call, string key) where T : class
 	{
 		try
 		{
@@ -57,7 +57,7 @@ public class BrowserStorageService
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"Failed to load from localStorage: {key} - {ex.Message}");
+			call.Log.Add(ex, new Tag("Key", key), new Tag("Operation", "LoadAsync"));
 			return null;
 		}
 	}
