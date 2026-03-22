@@ -31,11 +31,11 @@ public class BrowserStorageService
 			});
 			
 			string fullKey = StoragePrefix + key;
-			return await _jsRuntime.InvokeAsync<bool>("BrowserStorage.save", fullKey, json);
+			return await _jsRuntime.InvokeAsync<bool>("BrowserStorage.saveAsync", fullKey, json);
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"Failed to save to localStorage: {key} - {ex.Message}");
+			Console.WriteLine($"❌ Failed to save settings to localStorage: {ex}");
 			return false;
 		}
 	}
@@ -48,7 +48,7 @@ public class BrowserStorageService
 		try
 		{
 			string fullKey = StoragePrefix + key;
-			string? json = await _jsRuntime.InvokeAsync<string?>("BrowserStorage.load", fullKey);
+			string? json = await _jsRuntime.InvokeAsync<string?>("BrowserStorage.loadAsync", fullKey);
 			
 			if (string.IsNullOrEmpty(json))
 				return null;
@@ -70,7 +70,7 @@ public class BrowserStorageService
 		try
 		{
 			string fullKey = StoragePrefix + key;
-			return await _jsRuntime.InvokeAsync<bool>("BrowserStorage.exists", fullKey);
+			return await _jsRuntime.InvokeAsync<bool>("BrowserStorage.existsAsync", fullKey);
 		}
 		catch
 		{
@@ -86,7 +86,7 @@ public class BrowserStorageService
 		try
 		{
 			string fullKey = StoragePrefix + key;
-			return await _jsRuntime.InvokeAsync<bool>("BrowserStorage.remove", fullKey);
+			return await _jsRuntime.InvokeAsync<bool>("BrowserStorage.removeAsync", fullKey);
 		}
 		catch
 		{
@@ -101,7 +101,7 @@ public class BrowserStorageService
 	{
 		try
 		{
-			return await _jsRuntime.InvokeAsync<StorageStats>("BrowserStorage.getStats");
+			return await _jsRuntime.InvokeAsync<StorageStats>("BrowserStorage.getStatsAsync");
 		}
 		catch
 		{

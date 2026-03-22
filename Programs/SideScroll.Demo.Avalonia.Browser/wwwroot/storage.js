@@ -1,12 +1,13 @@
-// Browser storage helper for SideScroll UserSettings persistence
+// Browser storage helper for SideScroll data persistence
+// NOTE: Two APIs - synchronous for JSImport, async for IJSRuntime
 export const BrowserStorage = {
     /**
-     * Saves data to localStorage
+     * Saves data to localStorage (SYNCHRONOUS for JSImport)
      * @param {string} key - The storage key
      * @param {string} jsonData - JSON string to store
-     * @returns {Promise<boolean>} - Success status
+     * @returns {boolean} - Success status
      */
-    save: async function(key, jsonData) {
+    save: function(key, jsonData) {
         try {
             localStorage.setItem(key, jsonData);
             console.log(`✓ Saved to localStorage: ${key} (${jsonData.length} bytes)`);
@@ -18,11 +19,11 @@ export const BrowserStorage = {
     },
 
     /**
-     * Loads data from localStorage
+     * Loads data from localStorage (SYNCHRONOUS for JSImport)
      * @param {string} key - The storage key
-     * @returns {Promise<string|null>} - JSON string or null if not found
+     * @returns {string|null} - JSON string or null if not found
      */
-    load: async function(key) {
+    load: function(key) {
         try {
             const data = localStorage.getItem(key);
             if (data) {
@@ -38,7 +39,7 @@ export const BrowserStorage = {
     },
 
     /**
-     * Checks if a key exists in localStorage
+     * Checks if a key exists in localStorage (SYNCHRONOUS)
      * @param {string} key - The storage key
      * @returns {boolean} - True if key exists
      */
@@ -47,7 +48,7 @@ export const BrowserStorage = {
     },
 
     /**
-     * Removes data from localStorage
+     * Removes data from localStorage (SYNCHRONOUS)
      * @param {string} key - The storage key
      * @returns {boolean} - Success status
      */
@@ -79,6 +80,16 @@ export const BrowserStorage = {
     },
 
     /**
+     * Gets all keys from localStorage with a specific prefix as JSON string
+     * @param {string} prefix - Key prefix to filter by
+     * @returns {string} - JSON array of matching keys
+     */
+    getKeysJson: function(prefix) {
+        const keys = this.getKeys(prefix);
+        return JSON.stringify(keys);
+    },
+
+    /**
      * Gets storage statistics
      * @returns {object} - Storage stats
      */
@@ -98,6 +109,44 @@ export const BrowserStorage = {
             estimatedSize: totalSize,
             estimatedSizeMB: (totalSize / (1024 * 1024)).toFixed(2)
         };
+    },
+
+    // Async wrappers for IJSRuntime.InvokeAsync compatibility
+    // (IJSRuntime in browser requires async JavaScript functions)
+    
+    /**
+     * Async save wrapper for BrowserStorageService (IJSRuntime)
+     */
+    saveAsync: async function(key, jsonData) {
+        return this.save(key, jsonData);
+    },
+
+    /**
+     * Async load wrapper for BrowserStorageService (IJSRuntime)
+     */
+    loadAsync: async function(key) {
+        return this.load(key);
+    },
+
+    /**
+     * Async exists wrapper for BrowserStorageService (IJSRuntime)
+     */
+    existsAsync: async function(key) {
+        return this.exists(key);
+    },
+
+    /**
+     * Async remove wrapper for BrowserStorageService (IJSRuntime)
+     */
+    removeAsync: async function(key) {
+        return this.remove(key);
+    },
+
+    /**
+     * Async getStats wrapper for BrowserStorageService (IJSRuntime)
+     */
+    getStatsAsync: async function() {
+        return this.getStats();
     }
 };
 

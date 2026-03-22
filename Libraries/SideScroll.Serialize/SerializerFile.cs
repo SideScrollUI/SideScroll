@@ -1,5 +1,6 @@
 using SideScroll.Logs;
 using SideScroll.Serialize.Atlas;
+using SideScroll.Serialize.Json;
 using SideScroll.Tasks;
 
 namespace SideScroll.Serialize;
@@ -34,7 +35,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 	/// <summary>
 	/// Gets whether the data file exists and is non-empty
 	/// </summary>
-	public bool Exists => File.Exists(DataPath) && new FileInfo(DataPath).Length > 0;
+	public virtual bool Exists => File.Exists(DataPath) && new FileInfo(DataPath).Length > 0;
 
 	public override string ToString() => BasePath;
 
@@ -73,12 +74,43 @@ public abstract class SerializerFile(string basePath, string name = "")
 	protected abstract void SaveInternal(Call call, object obj, string? name = null, bool publicOnly = false);
 
 	/// <summary>
+	/// Saves an object to the file system asynchronously
+	/// </summary>
+	public virtual async Task SaveAsync(Call call, object obj, string? name = null, bool publicOnly = false)
+	{
+		ArgumentNullException.ThrowIfNull(obj);
+
+		name ??= DefaultName;
+
+		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object", 
+			new Tag("Name", name), 
+			new Tag("Path", BasePath));
+
+		if (!Directory.Exists(BasePath))
+		{
+			Directory.CreateDirectory(BasePath);
+		}
+
+		await SaveInternalAsync(callTimer, obj, name, publicOnly);
+	}
+
+	/// <summary>
+	/// Internal implementation for saving an object asynchronously
+	/// Default implementation calls synchronous SaveInternal
+	/// </summary>
+	protected virtual Task SaveInternalAsync(Call call, object obj, string? name = null, bool publicOnly = false)
+	{
+		SaveInternal(call, obj, name, publicOnly);
+		return Task.CompletedTask;
+	}
+
+	/// <summary>
 	/// Loads an object of the specified type from the file
 	/// </summary>
-	public T? Load<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
+	public virtual T? Load<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
 	{
 		call ??= new();
-		object? obj = Load(call, lazy, taskInstance);
+		object? obj = Load(call, lazy, taskInstance, LogLevel.Debug, false, typeof(T));
 		if (obj is T loaded) return loaded;
 
 		if (obj != null)
@@ -102,13 +134,13 @@ public abstract class SerializerFile(string basePath, string name = "")
 	/// <summary>
 	/// Loads an object from the file
 	/// </summary>
-	public object? Load(Call call, bool lazy = false, TaskInstance? taskInstance = null, LogLevel logLevel = LogLevel.Debug, bool publicOnly = false)
+	public object? Load(Call call, bool lazy = false, TaskInstance? taskInstance = null, LogLevel logLevel = LogLevel.Debug, bool publicOnly = false, Type? expectedType = null)
 	{
 		using CallTimer callTimer = call.Timer(logLevel, "Loading object", new Tag("Name", Name));
 
 		try
 		{
-			return LoadInternal(callTimer, lazy, taskInstance, publicOnly);
+			return LoadInternal(callTimer, lazy, taskInstance, publicOnly, expectedType);
 		}
 		catch (Exception e)
 		{
@@ -135,14 +167,67 @@ public abstract class SerializerFile(string basePath, string name = "")
 	/// <summary>
 	/// Internal implementation for loading an object
 	/// </summary>
-	protected abstract object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false);
+	protected abstract object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false, Type? expectedType = null);
+
+	/// <summary>
+	/// Loads an object of the specified type from the file asynchronously
+	/// </summary>
+	public virtual async Task<T?> LoadAsync<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
+	{
+		call ??= new();
+		object? obj = await LoadAsync(call, lazy, taskInstance);
+		if (obj is T loaded) return loaded;
+
+		if (obj != null)
+		{
+			call.Log.Throw(new SerializerException("Loaded type doesn't match type specified",
+				new Tag("Loaded Type", obj.GetType()),
+				new Tag("Expected Type", typeof(T))));
+		}
+
+		return default;
+	}
+
+	/// <summary>
+	/// Loads an object from the file asynchronously
+	/// </summary>
+	public virtual async Task<object?> LoadAsync(Call call, bool lazy = false, TaskInstance? taskInstance = null, LogLevel logLevel = LogLevel.Debug, bool publicOnly = false)
+	{
+		using CallTimer callTimer = call.Timer(logLevel, "Loading object", new Tag("Name", Name));
+
+		try
+		{
+			return await LoadInternalAsync(callTimer, lazy, taskInstance, publicOnly);
+		}
+		catch (Exception e)
+		{
+			callTimer.Log.AddError("Exception loading file", new Tag("Exception", e.ToString()));
+			return null;
+		}
+	}
+
+	/// <summary>
+	/// Internal implementation for loading an object asynchronously
+	/// Default implementation calls synchronous LoadInternal
+	/// </summary>
+	protected virtual Task<object?> LoadInternalAsync(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false, Type? expectedType = null)
+	{
+		object? result = LoadInternal(call, lazy, taskInstance, publicOnly, expectedType);
+		return Task.FromResult(result);
+	}
 
 	/// <summary>
 	/// Creates a serializer file instance for the specified path
 	/// </summary>
-	public static SerializerFile Create(string dataPath, string name = "")
+	/// <param name="dataPath">The base path for data storage</param>
+	/// <param name="name">Optional name for the serializer instance</param>
+	/// <param name="useJson">Whether to use JSON format (default: false, uses Atlas)</param>
+	public static SerializerFile Create(string dataPath, string name = "", bool useJson = false)
 	{
+		if (useJson)
+		{
+			return new SerializerFileJson(dataPath, name);
+		}
 		return new SerializerFileAtlas(dataPath, name);
-		// todo: Add SerializerFileJson
 	}
 }

@@ -66,7 +66,7 @@ public class Project
 	/// <summary>
 	/// Gets the data repositories accessor for app, cache, and shared data
 	/// </summary>
-	public ProjectDataRepos Data => new(ProjectSettings, UserSettings);
+	public virtual ProjectDataRepos Data => new(ProjectSettings, UserSettings);
 
 	public override string? ToString() => Name;
 
@@ -159,17 +159,17 @@ public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings user
 	/// <summary>
 	/// Gets the app data repository
 	/// </summary>
-	public DataRepo App => new(AppPath);
+	public virtual DataRepo App => new(AppPath, useJson: projectSettings.UseJsonSerialization);
 
 	/// <summary>
 	/// Gets the cache data repository
 	/// </summary>
-	public DataRepo Cache => new(CachePath);
+	public virtual DataRepo Cache => new(CachePath, useJson: projectSettings.UseJsonSerialization);
 
 	/// <summary>
 	/// Gets the shared data repository (shared across versions, may have schema compatibility issues)
 	/// </summary>
-	public DataRepo Shared => new(SharedPath);
+	public virtual DataRepo Shared => new(SharedPath, useJson: projectSettings.UseJsonSerialization);
 
 	/// <summary>
 	/// Gets the app data path including version and link-specific subdirectories

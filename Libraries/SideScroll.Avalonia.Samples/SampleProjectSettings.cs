@@ -11,6 +11,7 @@ public static class SampleProjectSettings
 		LinkType = "sidescroll",
 		Version = ProjectSettings.ProgramVersion(),
 		DataVersion = new Version(0, 16, 0),
+		UseJsonSerialization = true, // Enable JSON serialization for testing
 		CustomTitleIcon = Logo.Svg.SideScrollTranslucent,
 	};
 }

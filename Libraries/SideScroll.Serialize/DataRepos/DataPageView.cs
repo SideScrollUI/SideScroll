@@ -126,7 +126,7 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 		return _allPaths
 			.Skip(PageSize * page)
 			.Take(PageSize)
-			.Select(path => DataRepo.LoadPath<T>(call, path))
+			.Select(path => DataRepo.LoadPath<T>(call, path, useJson: DataRepoInstance.DataRepo.UseJson))
 			.OfType<DataItem<T>>()
 			.Select(dataItem => new DataItem<T>(dataItem.Key, dataItem.Value))
 			.ToList();

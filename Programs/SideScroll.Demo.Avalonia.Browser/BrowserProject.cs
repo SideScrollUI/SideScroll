@@ -1,113 +1,69 @@
-using System.Runtime.InteropServices.JavaScript;
 using System.Runtime.Versioning;
-using System.Text.Json;
 using SideScroll.Avalonia.Samples;
-using SideScroll.Serialize.Json;
 using SideScroll.Tabs;
+using SideScroll.Tabs.Settings;
 
 namespace SideScroll.Demo.Avalonia.Browser;
 
-public static partial class BrowserProject
+/// <summary>
+/// Browser-specific Project that uses localStorage for data persistence
+/// </summary>
+[SupportedOSPlatform("browser")]
+public class BrowserProject : Project
 {
-	private static bool _moduleImported = false;
+	public BrowserProject(ProjectSettings projectSettings, UserSettings userSettings)
+		: base(projectSettings, userSettings)
+	{
+	}
 
 	/// <summary>
-	/// Loads project with default settings synchronously (for initial construction)
+	/// Override Data property to use BrowserProjectDataRepos with localStorage
 	/// </summary>
-	public static Project Load()
+	public override ProjectDataRepos Data
+	{
+		get
+		{
+			Console.WriteLine("🔴 BrowserProject.Data accessed - returning BrowserProjectDataRepos");
+			return new BrowserProjectDataRepos(ProjectSettings, UserSettings);
+		}
+	}
+
+	/// <summary>
+	/// Loads project with default settings for browser
+	/// Settings will be loaded asynchronously after storage.js module is imported
+	/// </summary>
+	public static BrowserProject Load()
 	{
 		var projectSettings = SampleProjectSettings.Settings;
-		return Project.Load<SampleUserSettings>(projectSettings);
+		var userSettings = new SampleUserSettings();
+		var project = new BrowserProject(projectSettings, userSettings);
+		project.Initialize();
+		return project;
 	}
 
 	/// <summary>
-	/// Ensures the JavaScript module is imported
+	/// Asynchronously loads project with user settings from localStorage
+	/// Call this after storage.js module has been imported
 	/// </summary>
-	private static async Task EnsureModuleImportedAsync()
+	public static async Task<BrowserProject> LoadAsync()
 	{
-		if (!_moduleImported)
+		var projectSettings = SampleProjectSettings.Settings;
+		var defaultUserSettings = new SampleUserSettings();
+		var tempProject = new BrowserProject(projectSettings, defaultUserSettings);
+		
+		// Use the standard pattern: project.Data.App.Load<T>()
+		var userSettings = tempProject.Data.App.Load<SampleUserSettings>() ?? defaultUserSettings;
+		
+		var project = new BrowserProject(projectSettings, userSettings);
+		project.Initialize();
+		
+		// If no saved settings existed, save the defaults
+		if (userSettings == defaultUserSettings)
 		{
-			await JSHost.ImportAsync("main.js", "../main.js");
-			_moduleImported = true;
-			Console.WriteLine("✓ JavaScript module imported");
-		}
-	}
-
-	/// <summary>
-	/// Asynchronously loads user settings from localStorage and updates the project
-	/// This should be called after the app is fully initialized
-	/// </summary>
-	public static async Task<bool> LoadUserSettingsFromStorageAsync(Project project)
-	{
-		try
-		{
-			await EnsureModuleImportedAsync();
-			
-			const string key = "SideScroll_UserSettings";
-			string? json = await GetLocalStorageItem(key);
-			
-			if (string.IsNullOrEmpty(json))
-			{
-				Console.WriteLine("📭 No saved settings found in localStorage");
-				return false;
-			}
-
-			var options = new JsonSerializerOptions
-			{
-				WriteIndented = true,
-				Converters = { new TimeZoneInfoJsonConverter() }
-			};
-
-			var userSettings = JsonSerializer.Deserialize<SampleUserSettings>(json, options);
-			if (userSettings != null)
-			{
-				project.UserSettings = userSettings;
-				project.Initialize(); // Reinitialize with loaded settings
-				Console.WriteLine($"✓ Loaded user settings from localStorage ({json.Length} bytes)");
-				return true;
-			}
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine($"❌ Failed to load settings from localStorage: {ex.Message}");
+			project.Data.App.Save(userSettings);
 		}
 		
-		return false;
+		return project;
 	}
-
-	/// <summary>
-	/// Asynchronously saves user settings to localStorage
-	/// </summary>
-	public static async Task<bool> SaveUserSettingsToStorageAsync(Project project)
-	{
-		try
-		{
-			await EnsureModuleImportedAsync();
-			
-			const string key = "SideScroll_UserSettings";
-			var options = new JsonSerializerOptions
-			{
-				WriteIndented = true,
-				Converters = { new TimeZoneInfoJsonConverter() }
-			};
-			
-			string json = JsonSerializer.Serialize(project.UserSettings, options);
-			
-			await SetLocalStorageItem(key, json);
-			Console.WriteLine($"✓ Saved user settings to localStorage ({json.Length} bytes)");
-			return true;
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine($"❌ Failed to save settings to localStorage: {ex.Message}");
-			return false;
-		}
-	}
-
-	[JSImport("BrowserStorage.load", "main.js")]
-	private static partial Task<string?> GetLocalStorageItem(string key);
-
-	[JSImport("BrowserStorage.save", "main.js")]
-	private static partial Task<bool> SetLocalStorageItem(string key, string value);
 }
 

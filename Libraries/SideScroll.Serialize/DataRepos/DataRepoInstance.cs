@@ -202,7 +202,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	/// <summary>
 	/// Gets an enumerable collection of file paths for all items
 	/// </summary>
-	public IEnumerable<string>? GetPathEnumerable(bool ascending)
+	public virtual IEnumerable<string>? GetPathEnumerable(bool ascending)
 	{
 		if (!Directory.Exists(GroupPath)) return null;
 
@@ -225,13 +225,13 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	/// <summary>
 	/// Loads all data items from the repository
 	/// </summary>
-	public IEnumerable<DataItem<T>> LoadAllDataItems(Call call, bool ascending = true)
+	public virtual IEnumerable<DataItem<T>> LoadAllDataItems(Call call, bool ascending = true)
 	{
 		var pathIterator = GetPathEnumerable(ascending);
 		if (pathIterator == null) return [];
 
 		return pathIterator
-			.Select(path => DataRepo.LoadPath<T>(call, path))
+			.Select(path => DataRepo.LoadPath<T>(call, path, useJson: DataRepo.UseJson))
 			.OfType<DataItem<T>>()
 			.Select(dataItem => new DataItem<T>(dataItem.Key, dataItem.Value));
 	}

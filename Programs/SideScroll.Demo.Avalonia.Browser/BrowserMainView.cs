@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using Avalonia.Interactivity;
 using SideScroll.Avalonia.Charts.LiveCharts;
 using SideScroll.Avalonia.Controls;
@@ -7,11 +8,11 @@ using SideScroll.Tabs;
 
 namespace SideScroll.Demo.Avalonia.Browser;
 
-public class BrowserMainView : BaseView
+public partial class BrowserMainView : BaseView
 {
 	public static BrowserMainView? Instance { get; private set; }
 	
-	private bool _settingsLoaded = false;
+	private static bool _storageModuleImported = false;
 	private System.Timers.Timer? _saveTimer;
 
 	public BrowserMainView() : base(BrowserProject.Load())
@@ -22,44 +23,43 @@ public class BrowserMainView : BaseView
 		LiveChartCreator.Register();
 		TabViewer.Toolbar?.AddRightControls();
 
-		// Use Avalonia's Loaded event to load settings asynchronously after UI is ready
+		// Import storage.js and reload project with saved settings
 		Loaded += OnLoadedAsync;
-		
+
 		// Set up auto-save timer (saves every 30 seconds)
 		_saveTimer = new System.Timers.Timer(30000);
-		_saveTimer.Elapsed += async (s, e) => await SaveSettingsAsync();
+		_saveTimer.Elapsed += (s, e) => Project.Data.App.Save(Project.UserSettings);
 		_saveTimer.AutoReset = true;
+		_saveTimer.Start();
 
 		Console.WriteLine("✓ BrowserMainView initialized with localStorage support");
 	}
 
 	private async void OnLoadedAsync(object? sender, RoutedEventArgs e)
 	{
-		if (_settingsLoaded)
+		if (_storageModuleImported)
 			return;
 
-		_settingsLoaded = true;
+		_storageModuleImported = true;
 		
-		// Load settings from localStorage after the UI is fully initialized
-		Console.WriteLine("🔄 Loading settings from localStorage...");
-		bool loaded = await BrowserProject.LoadUserSettingsFromStorageAsync(Project);
-		
-		if (!loaded)
+		try
 		{
-			// Save default settings for next time
-			Console.WriteLine("💾 Saving default settings...");
-			await BrowserProject.SaveUserSettingsToStorageAsync(Project);
+			// Import the storage.js module first
+			await JSHost.ImportAsync("storage.js", "../storage.js");
+			Console.WriteLine("✓ storage.js module imported");
+			
+			// Now reload the project using LoadAsync which uses project.Data.App.Load<T>()
+			var newProject = await BrowserProject.LoadAsync();
+			
+			// Update the BaseView's project
+			Project.UserSettings = newProject.UserSettings;
+			Project.Initialize();
+			
+			Console.WriteLine("✓ User settings loaded from localStorage");
 		}
-		
-		// Start auto-save timer after initial load
-		_saveTimer?.Start();
-	}
-
-	private async Task SaveSettingsAsync()
-	{
-		if (!_settingsLoaded)
-			return; // Don't save during initial load
-
-		await BrowserProject.SaveUserSettingsToStorageAsync(Project);
+		catch (Exception ex)
+		{
+			Console.WriteLine($"❌ Failed to load settings from localStorage: {ex.Message}");
+		}
 	}
 }
