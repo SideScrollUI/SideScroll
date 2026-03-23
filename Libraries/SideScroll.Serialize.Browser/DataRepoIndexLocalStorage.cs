@@ -3,21 +3,17 @@ using System.Text.Json;
 using SideScroll.Serialize.Atlas;
 using SideScroll.Serialize.DataRepos;
 
-namespace SideScroll.Demo.Avalonia.Browser;
+namespace SideScroll.Serialize.Browser;
 
 /// <summary>
 /// localStorage-based index for browser applications
 /// Stores index data in localStorage instead of filesystem
 /// </summary>
 [SupportedOSPlatform("browser")]
-public class DataRepoIndexLocalStorage<T> : DataRepoIndex<T>
+public class DataRepoIndexLocalStorage<T>(DataRepoInstance<T> dataRepoInstance, int? maxItems = null)
+	: DataRepoIndex<T>(dataRepoInstance, maxItems)
 {
 	private string IndexStorageKey => SerializerLocalStorage.ConvertPathToStorageKey(PrimaryIndexPath);
-
-	public DataRepoIndexLocalStorage(DataRepoInstance<T> dataRepoInstance, int? maxItems = null)
-		: base(dataRepoInstance, maxItems)
-	{
-	}
 
 	/// <summary>
 	/// Loads the index from localStorage or builds it if it doesn't exist
@@ -51,7 +47,7 @@ public class DataRepoIndexLocalStorage<T> : DataRepoIndex<T>
 	/// </summary>
 	private void Save(Indices indices)
 	{
-		var options = new JsonSerializerOptions
+		JsonSerializerOptions options = new()
 		{
 			WriteIndented = false
 		};
@@ -154,7 +150,7 @@ public class DataRepoIndexLocalStorage<T> : DataRepoIndex<T>
 			.Select(header => new Item(index++, header.Name ?? ""))
 			.ToList();
 
-		var indices = new Indices
+		Indices indices = new()
 		{
 			Items = items,
 			NextIndex = index,

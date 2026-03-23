@@ -1,4 +1,5 @@
 using System.Runtime.Versioning;
+using SideScroll.Serialize.Browser;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
@@ -9,7 +10,8 @@ namespace SideScroll.Demo.Avalonia.Browser;
 /// Browser-specific ProjectDataRepos that uses localStorage instead of file system
 /// </summary>
 [SupportedOSPlatform("browser")]
-public class BrowserProjectDataRepos(ProjectSettings projectSettings, UserSettings userSettings) : ProjectDataRepos(projectSettings, userSettings)
+public class BrowserProjectDataRepos(ProjectSettings projectSettings, UserSettings userSettings) : 
+	ProjectDataRepos(projectSettings, userSettings)
 {
 	/// <summary>
 	/// Gets a DataRepo for application-wide data using localStorage

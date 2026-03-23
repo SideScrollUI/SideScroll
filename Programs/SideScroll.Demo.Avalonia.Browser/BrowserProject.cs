@@ -9,23 +9,13 @@ namespace SideScroll.Demo.Avalonia.Browser;
 /// Browser-specific Project that uses localStorage for data persistence
 /// </summary>
 [SupportedOSPlatform("browser")]
-public class BrowserProject : Project
+public class BrowserProject(ProjectSettings projectSettings, UserSettings userSettings)
+	: Project(projectSettings, userSettings)
 {
-	public BrowserProject(ProjectSettings projectSettings, UserSettings userSettings)
-		: base(projectSettings, userSettings)
-	{
-	}
-
 	/// <summary>
 	/// Override Data property to use BrowserProjectDataRepos with localStorage
 	/// </summary>
-	public override ProjectDataRepos Data
-	{
-		get
-		{
-			return new BrowserProjectDataRepos(ProjectSettings, UserSettings);
-		}
-	}
+	public override ProjectDataRepos Data => new BrowserProjectDataRepos(ProjectSettings, UserSettings);
 
 	/// <summary>
 	/// Loads project with default settings for browser

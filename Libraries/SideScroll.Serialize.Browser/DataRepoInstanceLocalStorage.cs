@@ -1,7 +1,7 @@
 using System.Runtime.Versioning;
 using SideScroll.Serialize.DataRepos;
 
-namespace SideScroll.Demo.Avalonia.Browser;
+namespace SideScroll.Serialize.Browser;
 
 /// <summary>
 /// localStorage-based DataRepoInstance for browser applications

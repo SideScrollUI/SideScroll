@@ -8,15 +8,9 @@ namespace SideScroll.Demo.Avalonia.Browser;
 /// Provides localStorage-based persistence for browser applications
 /// </summary>
 [SupportedOSPlatform("browser")]
-public class BrowserStorageService
+public class BrowserStorageService(IJSRuntime jsRuntime)
 {
-	private readonly IJSRuntime _jsRuntime;
 	private const string StoragePrefix = "SideScroll_";
-
-	public BrowserStorageService(IJSRuntime jsRuntime)
-	{
-		_jsRuntime = jsRuntime;
-	}
 
 	/// <summary>
 	/// Saves an object to localStorage as JSON
@@ -31,7 +25,7 @@ public class BrowserStorageService
 			});
 			
 			string fullKey = StoragePrefix + key;
-			return await _jsRuntime.InvokeAsync<bool>("BrowserStorage.saveAsync", fullKey, json);
+			return await jsRuntime.InvokeAsync<bool>("BrowserStorage.saveAsync", fullKey, json);
 		}
 		catch (Exception ex)
 		{
@@ -48,7 +42,7 @@ public class BrowserStorageService
 		try
 		{
 			string fullKey = StoragePrefix + key;
-			string? json = await _jsRuntime.InvokeAsync<string?>("BrowserStorage.loadAsync", fullKey);
+			string? json = await jsRuntime.InvokeAsync<string?>("BrowserStorage.loadAsync", fullKey);
 			
 			if (string.IsNullOrEmpty(json))
 				return null;
@@ -70,7 +64,7 @@ public class BrowserStorageService
 		try
 		{
 			string fullKey = StoragePrefix + key;
-			return await _jsRuntime.InvokeAsync<bool>("BrowserStorage.existsAsync", fullKey);
+			return await jsRuntime.InvokeAsync<bool>("BrowserStorage.existsAsync", fullKey);
 		}
 		catch
 		{
@@ -86,7 +80,7 @@ public class BrowserStorageService
 		try
 		{
 			string fullKey = StoragePrefix + key;
-			return await _jsRuntime.InvokeAsync<bool>("BrowserStorage.removeAsync", fullKey);
+			return await jsRuntime.InvokeAsync<bool>("BrowserStorage.removeAsync", fullKey);
 		}
 		catch
 		{
@@ -101,7 +95,7 @@ public class BrowserStorageService
 	{
 		try
 		{
-			return await _jsRuntime.InvokeAsync<StorageStats>("BrowserStorage.getStatsAsync");
+			return await jsRuntime.InvokeAsync<StorageStats>("BrowserStorage.getStatsAsync");
 		}
 		catch
 		{

@@ -1,12 +1,11 @@
 using System.Runtime.InteropServices.JavaScript;
 using System.Runtime.Versioning;
 using System.Text.Json;
-using SideScroll.Logs;
 using SideScroll.Serialize;
 using SideScroll.Serialize.Json;
 using SideScroll.Tasks;
 
-namespace SideScroll.Demo.Avalonia.Browser;
+namespace SideScroll.Serialize.Browser;
 
 /// <summary>
 /// localStorage-based serializer implementation for browser applications
@@ -154,11 +153,11 @@ public partial class SerializerLocalStorage : SerializerFile
 			// Since JSImport doesn't support string[], get them via JSON
 			string json = GetKeysJsonSync(StoragePrefix);
 			var keys = JsonSerializer.Deserialize<List<string>>(json);
-			return keys ?? new List<string>();
+			return keys ?? [];
 		}
 		catch
 		{
-			return new List<string>();
+			return [];
 		}
 	}
 

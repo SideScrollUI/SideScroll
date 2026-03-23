@@ -19,7 +19,7 @@ public partial class BrowserMainView : BaseView
 	public static Log AppLog { get; } = new();
 	
 	private static bool _storageModuleImported = false;
-	private System.Timers.Timer? _saveTimer;
+	private readonly System.Timers.Timer? _saveTimer;
 	private LogWriterConsole? _logWriter;
 
 	public BrowserMainView() : base(BrowserProject.Load())

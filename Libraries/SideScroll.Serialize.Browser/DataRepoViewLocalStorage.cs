@@ -1,20 +1,16 @@
 using System.Runtime.Versioning;
 using SideScroll.Serialize.DataRepos;
 
-namespace SideScroll.Demo.Avalonia.Browser;
+namespace SideScroll.Serialize.Browser;
 
 /// <summary>
 /// localStorage-based DataRepoView for browser applications
 /// Inherits GetPathEnumerable override from DataRepoInstanceLocalStorage
 /// </summary>
 [SupportedOSPlatform("browser")]
-public class DataRepoViewLocalStorage<T> : DataRepoView<T>
+public class DataRepoViewLocalStorage<T>(DataRepo dataRepo, string groupId, bool indexed = false, int? maxItems = null)
+	: DataRepoView<T>(dataRepo, groupId, indexed, maxItems)
 {
-	public DataRepoViewLocalStorage(DataRepo dataRepo, string groupId, bool indexed = false, int? maxItems = null)
-		: base(dataRepo, groupId, indexed, maxItems)
-	{
-	}
-
 	/// <summary>
 	/// Overrides GetPathEnumerable to scan localStorage keys instead of filesystem directories
 	/// </summary>
@@ -60,11 +56,9 @@ public class DataRepoViewLocalStorage<T> : DataRepoView<T>
 					continue;
 				
 				T? obj = serializer.Load<T>(call, lazy: false);
-				if (obj != null)
-				{
-					string key = SideScroll.Utilities.ObjectUtils.GetObjectId(obj) ?? serializer.Name;
-					items.Add(new DataItem<T>(key, obj, path));
-				}
+				if (obj == null) continue;
+				string key = SideScroll.Utilities.ObjectUtils.GetObjectId(obj) ?? serializer.Name;
+				items.Add(new DataItem<T>(key, obj, path));
 			}
 			catch (Exception e)
 			{

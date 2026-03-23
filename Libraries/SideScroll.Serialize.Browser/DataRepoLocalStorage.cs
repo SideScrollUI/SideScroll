@@ -1,20 +1,17 @@
 using System.Runtime.Versioning;
-using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
 
-namespace SideScroll.Demo.Avalonia.Browser;
+namespace SideScroll.Serialize.Browser;
 
 /// <summary>
 /// localStorage-based DataRepo for browser applications
 /// Overrides file system operations to use localStorage instead
 /// </summary>
 [SupportedOSPlatform("browser")]
-public class DataRepoLocalStorage : DataRepo
+public class DataRepoLocalStorage(string repoPath, string? repoName = null)
+	: DataRepo(repoPath, repoName, useJson: true)
 {
-	public DataRepoLocalStorage(string repoPath, string? repoName = null) 
-		: base(repoPath, repoName, useJson: true) // Always use JSON for localStorage
-	{
-	}
+	// Always use JSON for localStorage
 
 	/// <summary>
 	/// Opens a repository instance that uses localStorage
