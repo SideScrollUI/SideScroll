@@ -8,8 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- TabSampleDataGridMixedHeights to test the mouse wheel scrolling problem
+- Added Desktop Link for File Viewer
 - Summary docs for Serializer
+- TabSampleDataGridMixedHeights to test the mouse wheel scrolling problem
 
 ### Fixed
 

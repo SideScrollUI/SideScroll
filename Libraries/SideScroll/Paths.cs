@@ -86,4 +86,11 @@ public static class Paths
 	/// Gets the user's Downloads directory path
 	/// </summary>
 	public static string DownloadPath => Combine(HomePath, "Downloads");
+
+	/// <summary>
+	/// Gets the user's Desktop directory path
+	/// <para>Windows: C:\Users\[User]\Desktop</para>
+	/// <para>macOS: /Users/[user]/Desktop</para>
+	/// </summary>
+	public static string DesktopPath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 }

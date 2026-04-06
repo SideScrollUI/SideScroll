@@ -31,7 +31,7 @@ dotnet run --project Programs/SideScroll.Demo.Avalonia.Desktop/SideScroll.Demo.A
 * [DataRepos](DataRepos.md)
 * [Serializer](Serializer.md)
 * [Logs](Logs.md)
-* [Bookmarks](Bookmarks.md)
+* [Shareable Links](Links.md)
 * [Charts](Charts.md)
 * [Projects](Projects.md)
 * [Building](Building.md)

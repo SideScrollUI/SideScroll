@@ -3,12 +3,12 @@
 1. Download SideScroll
     - `git clone https://github.com/SideScrollUI/sidescroll.git`
 2. Install a C# IDE
-   - Visual Studio 2022 recommended (community edition is fine)
+   - Visual Studio 2026 recommended (community edition is fine)
 3. Open `SideScroll.sln` in IDE
 4. Start SideScroll in Debugger
     - It's recommended to always run it in debug mode
   
-## Visual Studio 2022
+## Visual Studio 2026
 
 * Customizing (you can search for these options in the Options Menu)
   - Insert tabs instead of spaces (spaces only make sense if you don't use IDEs)

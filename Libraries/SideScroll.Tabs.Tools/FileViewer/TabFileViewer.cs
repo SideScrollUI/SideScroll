@@ -24,6 +24,7 @@ public class TabFileViewer(SelectFileDelegate? selectFileDelegate = null) : ITab
 			model.Items = new List<ListItem>
 			{
 				new("Current", new TabDirectory(Directory.GetCurrentDirectory(), fileSelectorOptions)),
+				new("Desktop", new TabDirectory(Paths.DesktopPath, fileSelectorOptions)),
 				new("Downloads", new TabDirectory(Paths.DownloadPath, fileSelectorOptions)),
 				new("Drives", new TabDrives(fileSelectorOptions)),
 				new("Favorites", new TabFileDataRepo(dataRepoFavorites, fileSelectorOptions)),
