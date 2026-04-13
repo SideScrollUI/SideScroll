@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
@@ -11,6 +12,8 @@ public class App : Application
 		AvaloniaXamlLoader.Load(this);
 	}
 
+	protected virtual Control CreateSingleView() => new MainView();
+
 	public override void OnFrameworkInitializationCompleted()
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
@@ -19,7 +22,7 @@ public class App : Application
 		}
 		else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewLifetime)
 		{
-			singleViewLifetime.MainView = new MainView();
+			singleViewLifetime.MainView = CreateSingleView();
 		}
 
 		base.OnFrameworkInitializationCompleted();

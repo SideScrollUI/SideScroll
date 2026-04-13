@@ -14,13 +14,19 @@ public static class JsonConverters
 	/// <summary>
 	/// Gets the default JSON serializer options configured for public data only, with read-only members ignored
 	/// </summary>
-	public static JsonSerializerOptions PublicSerializerOptions => _publicSerializerOptions ??= CreateOptions();
+	public static JsonSerializerOptions PublicSerializerOptions => _publicSerializerOptions ??= CreatePublicOptions();
 	private static JsonSerializerOptions? _publicSerializerOptions;
+
+	/// <summary>
+	/// Gets JSON serializer options that include [PrivateData] members, for trusted/internal use where all data should be preserved
+	/// </summary>
+	public static JsonSerializerOptions PrivateSerializerOptions => _privateSerializerOptions ??= CreatePrivateOptions();
+	private static JsonSerializerOptions? _privateSerializerOptions;
 
 	/// <summary>
 	/// Creates a new instance of JSON serializer options configured to serialize only public, writable members
 	/// </summary>
-	public static JsonSerializerOptions CreateOptions()
+	public static JsonSerializerOptions CreatePublicOptions()
 	{
 		JsonSerializerOptions jsonSerializerOptions = new()
 		{
@@ -42,6 +48,37 @@ public static class JsonConverters
 		};
 
 		jsonSerializerOptions.Converters.Add(new PrivateDataJsonConverterFactory());
+		jsonSerializerOptions.Converters.Add(new TypeJsonConverter());
+		jsonSerializerOptions.Converters.Add(new TimeZoneInfoJsonConverter());
+		jsonSerializerOptions.Converters.Add(new ObjectJsonConverterFactory());
+
+		return jsonSerializerOptions;
+	}
+
+	/// <summary>
+	/// Creates a new instance of JSON serializer options that include [PrivateData] members,
+	/// for trusted/internal serialization where private data must be preserved
+	/// </summary>
+	public static JsonSerializerOptions CreatePrivateOptions()
+	{
+		JsonSerializerOptions jsonSerializerOptions = new()
+		{
+			ReferenceHandler = ReferenceHandler.IgnoreCycles,
+			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+			IgnoreReadOnlyFields = true,
+			IgnoreReadOnlyProperties = true,
+			IncludeFields = true,
+			WriteIndented = true,
+			TypeInfoResolver = new DefaultJsonTypeInfoResolver
+			{
+				Modifiers =
+				{
+					IgnoreUnserializedAttributeModifier,
+					IgnoreProtectedDataAttributeModifier,
+				}
+			}
+		};
+
 		jsonSerializerOptions.Converters.Add(new TypeJsonConverter());
 		jsonSerializerOptions.Converters.Add(new TimeZoneInfoJsonConverter());
 		jsonSerializerOptions.Converters.Add(new ObjectJsonConverterFactory());

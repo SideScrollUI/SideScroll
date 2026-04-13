@@ -97,6 +97,61 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output.PrivateObject, Is.Null);
 	}
 
+	[Test, Description("Test PrivateSerializerOptions preserves [PrivateData] members")]
+	public void SerializePrivateDataAttributeWithPrivateOptions()
+	{
+		var input = new PrivateDataContainer
+		{
+			PublicData = "visible",
+			PrivateProperty = "preserved property",
+			PrivateField = "preserved field",
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PrivateSerializerOptions);
+		var output = JsonSerializer.Deserialize<PrivateDataContainer>(json, JsonConverters.PrivateSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.PublicData, Is.EqualTo("visible"));
+		Assert.That(output.PrivateProperty, Is.EqualTo("preserved property"));
+		Assert.That(output.PrivateField, Is.EqualTo("preserved field"));
+	}
+
+	[Test, Description("Test PrivateSerializerOptions preserves [PrivateData] class members")]
+	public void SerializePrivateDataClassWithPrivateOptions()
+	{
+		var input = new PrivateClass
+		{
+			Confidential = "preserved secrets",
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PrivateSerializerOptions);
+		var output = JsonSerializer.Deserialize<PrivateClass>(json, JsonConverters.PrivateSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Confidential, Is.EqualTo("preserved secrets"));
+	}
+
+	[Test, Description("Test PrivateSerializerOptions preserves [PrivateData] member class")]
+	public void SerializePrivateDataMemberClassWithPrivateOptions()
+	{
+		var input = new ContainerWithPrivateClass
+		{
+			PublicData = "visible",
+			PrivateObject = new PrivateClass
+			{
+				Confidential = "preserved secrets",
+			},
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PrivateSerializerOptions);
+		var output = JsonSerializer.Deserialize<ContainerWithPrivateClass>(json, JsonConverters.PrivateSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.PublicData, Is.EqualTo("visible"));
+		Assert.That(output.PrivateObject, Is.Not.Null);
+		Assert.That(output.PrivateObject!.Confidential, Is.EqualTo("preserved secrets"));
+	}
+
 	#endregion
 
 	#region ProtectedData Tests

@@ -1,5 +1,6 @@
 using SideScroll.Logs;
 using SideScroll.Serialize.Atlas;
+using SideScroll.Serialize.Json;
 using SideScroll.Tasks;
 
 namespace SideScroll.Serialize;
@@ -34,7 +35,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 	/// <summary>
 	/// Gets whether the data file exists and is non-empty
 	/// </summary>
-	public bool Exists => File.Exists(DataPath) && new FileInfo(DataPath).Length > 0;
+	public virtual bool Exists => File.Exists(DataPath) && new FileInfo(DataPath).Length > 0;
 
 	public override string ToString() => BasePath;
 
@@ -75,10 +76,10 @@ public abstract class SerializerFile(string basePath, string name = "")
 	/// <summary>
 	/// Loads an object of the specified type from the file
 	/// </summary>
-	public T? Load<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
+	public virtual T? Load<T>(Call? call = null, bool lazy = false, TaskInstance? taskInstance = null)
 	{
 		call ??= new();
-		object? obj = Load(call, lazy, taskInstance);
+		object? obj = Load(call, lazy, taskInstance, LogLevel.Debug, false, typeof(T));
 		if (obj is T loaded) return loaded;
 
 		if (obj != null)
@@ -102,13 +103,13 @@ public abstract class SerializerFile(string basePath, string name = "")
 	/// <summary>
 	/// Loads an object from the file
 	/// </summary>
-	public object? Load(Call call, bool lazy = false, TaskInstance? taskInstance = null, LogLevel logLevel = LogLevel.Debug, bool publicOnly = false)
+	public object? Load(Call call, bool lazy = false, TaskInstance? taskInstance = null, LogLevel logLevel = LogLevel.Debug, bool publicOnly = false, Type? expectedType = null)
 	{
 		using CallTimer callTimer = call.Timer(logLevel, "Loading object", new Tag("Name", Name));
 
 		try
 		{
-			return LoadInternal(callTimer, lazy, taskInstance, publicOnly);
+			return LoadInternal(callTimer, lazy, taskInstance, publicOnly, expectedType);
 		}
 		catch (Exception e)
 		{
@@ -135,14 +136,20 @@ public abstract class SerializerFile(string basePath, string name = "")
 	/// <summary>
 	/// Internal implementation for loading an object
 	/// </summary>
-	protected abstract object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false);
+	protected abstract object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false, Type? expectedType = null);
 
 	/// <summary>
 	/// Creates a serializer file instance for the specified path
 	/// </summary>
-	public static SerializerFile Create(string dataPath, string name = "")
+	/// <param name="dataPath">The base path for data storage</param>
+	/// <param name="name">Optional name for the serializer instance</param>
+	/// <param name="useJson">Whether to use JSON format (default: false, uses Atlas)</param>
+	public static SerializerFile Create(string dataPath, string name = "", bool useJson = false)
 	{
+		if (useJson)
+		{
+			return new SerializerFileJson(dataPath, name);
+		}
 		return new SerializerFileAtlas(dataPath, name);
-		// todo: Add SerializerFileJson
 	}
 }

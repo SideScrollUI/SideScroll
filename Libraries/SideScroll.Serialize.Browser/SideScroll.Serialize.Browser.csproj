@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-browser</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Browser/WebAssembly localStorage implementation for SideScroll serialization and data repositories</Description>
+    <PackageTags>sidescroll;serialization;browser;webassembly;localstorage;blazor</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Images\Logo\png\SideScroll_128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.NuGet.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.JSInterop" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SideScroll.Serialize\SideScroll.Serialize.csproj" />
+  </ItemGroup>
+
+</Project>

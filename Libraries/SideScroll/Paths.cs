@@ -65,15 +65,37 @@ public static class Paths
 	/// Gets the application data directory path for roaming user data
 	/// <para>Windows: C:\Users\[User]\AppData\Roaming</para>
 	/// <para>macOS: /Users/[user]/Library/Application Support/</para>
+	/// <para>Browser: /appdata (IDBFS mounted)</para>
 	/// </summary>
-	public static string AppDataPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+	public static string AppDataPath
+	{
+		get
+		{
+			// Use IDBFS mounted path in browser
+			if (OperatingSystem.IsBrowser())
+				return "/appdata";
+			
+			return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+		}
+	}
 
 	/// <summary>
 	/// Gets the local application data directory path
 	/// <para>Windows: C:\Users\[User]\AppData\Local</para>
 	/// <para>macOS: /Users/[user]/Library/Application Support/</para>
+	/// <para>Browser: /localappdata (IDBFS mounted)</para>
 	/// </summary>
-	public static string LocalDataPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+	public static string LocalDataPath
+	{
+		get
+		{
+			// Use IDBFS mounted path in browser
+			if (OperatingSystem.IsBrowser())
+				return "/localappdata";
+			
+			return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+		}
+	}
 
 	/// <summary>
 	/// Gets the user's Pictures directory path

@@ -11,7 +11,6 @@ using SideScroll.Avalonia.Utilities;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Bookmarks.Models;
-using SideScroll.Tabs.Settings;
 
 namespace SideScroll.Avalonia.Controls.Viewer;
 
