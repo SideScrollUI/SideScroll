@@ -41,7 +41,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	/// <summary>
 	/// Gets the primary index file path
 	/// </summary>
-	public string PrimaryIndexPath => Paths.Combine(GroupPath, "Primary.sidx");
+	public string PrimaryIndexPath => Paths.Combine(GroupPath, DataRepo.PrimaryIndexFileName);
 
 	/// <summary>
 	/// Gets the mutex name used for thread synchronization
@@ -72,7 +72,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	/// <summary>
 	/// Saves an item to the index, returning the index item
 	/// </summary>
-	public Item? Save(Call call, string key)
+	public virtual Item? Save(Call call, string key)
 	{
 		return LockedGetCall(call, () => SaveInternal(call, key));
 	}
@@ -114,7 +114,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	/// <summary>
 	/// Removes an item from the index by key
 	/// </summary>
-	public void Remove(Call call, string key)
+	public virtual void Remove(Call call, string key)
 	{
 		LockedSetCall(call, (c) => RemoveInternal(c, key));
 	}
@@ -129,7 +129,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	/// <summary>
 	/// Removes all items from the index
 	/// </summary>
-	public void RemoveAll(Call call)
+	public virtual void RemoveAll(Call call)
 	{
 		LockedSetCall(call, RemoveAllInternal);
 	}
@@ -225,7 +225,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		}
 	}
 
-	private void Save(Indices indices)
+	protected virtual void Save(Indices indices)
 	{
 		if (!Directory.Exists(GroupPath))
 		{
@@ -249,7 +249,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	/// <summary>
 	/// Loads the index from disk or builds it if it doesn't exist
 	/// </summary>
-	public Indices Load(Call call)
+	public virtual Indices Load(Call call)
 	{
 		if (File.Exists(PrimaryIndexPath))
 		{

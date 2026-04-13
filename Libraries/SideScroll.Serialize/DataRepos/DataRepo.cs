@@ -11,7 +11,8 @@ namespace SideScroll.Serialize.DataRepos;
 [Unserialized]
 public class DataRepo
 {
-	private const string DefaultGroupId = ".Default";
+	public const string DefaultGroupId = ".Default";
+	public const string PrimaryIndexFileName = "Primary.sidx";
 
 	/// <summary>
 	/// Gets the root path of the repository
@@ -23,14 +24,20 @@ public class DataRepo
 	/// </summary>
 	public string? RepoName { get; }
 
+	/// <summary>
+	/// Gets or sets whether to use JSON format for serialization (default: false, uses Atlas)
+	/// </summary>
+	public bool UseJson { get; set; }
+
 	//public RepoSettings Settings;
 
 	public override string ToString() => RepoPath;
 
-	public DataRepo(string repoPath, string? repoName = null)
+	public DataRepo(string repoPath, string? repoName = null, bool useJson = false)
 	{
 		RepoPath = repoPath;
 		RepoName = repoName;
+		UseJson = useJson;
 
 		Debug.Assert(repoPath != null);
 	}
@@ -38,7 +45,7 @@ public class DataRepo
 	/// <summary>
 	/// Opens a repository instance for the specified type and group without loading data
 	/// </summary>
-	public DataRepoInstance<T> Open<T>(string groupId, bool indexed = false)
+	public virtual DataRepoInstance<T> Open<T>(string groupId, bool indexed = false)
 	{
 		return new DataRepoInstance<T>(this, groupId, indexed);
 	}
@@ -46,7 +53,7 @@ public class DataRepo
 	/// <summary>
 	/// Opens a repository view for the specified type and group without loading data
 	/// </summary>
-	public DataRepoView<T> OpenView<T>(string groupId, bool indexed = false, int? maxItems = null)
+	public virtual DataRepoView<T> OpenView<T>(string groupId, bool indexed = false, int? maxItems = null)
 	{
 		return new DataRepoView<T>(this, groupId, indexed, maxItems);
 	}
@@ -54,7 +61,7 @@ public class DataRepo
 	/// <summary>
 	/// Loads a repository view with all items, optionally ordered by a member name
 	/// </summary>
-	public DataRepoView<T> LoadView<T>(Call call, string groupId, string? orderByMemberName = null, bool ascending = true)
+	public virtual DataRepoView<T> LoadView<T>(Call call, string groupId, string? orderByMemberName = null, bool ascending = true)
 	{
 		var view = new DataRepoView<T>(this, groupId);
 		if (orderByMemberName != null)
@@ -71,7 +78,7 @@ public class DataRepo
 	/// <summary>
 	/// Loads an indexed repository view with all items
 	/// </summary>
-	public DataRepoView<T> LoadIndexedView<T>(Call call, string groupId, bool ascending = true)
+	public virtual DataRepoView<T> LoadIndexedView<T>(Call call, string groupId, bool ascending = true)
 	{
 		var view = new DataRepoView<T>(this, groupId, true);
 		view.LoadAllIndexed(call, ascending);
@@ -98,10 +105,10 @@ public class DataRepo
 	/// <summary>
 	/// Gets a serializer file for the specified type, group, and key
 	/// </summary>
-	public SerializerFile GetSerializerFile(Type type, string groupId, string key)
+	public virtual SerializerFile GetSerializerFile(Type type, string groupId, string key)
 	{
 		string dataPath = GetDataPath(type, groupId, key);
-		var serializer = SerializerFile.Create(dataPath, key);
+		var serializer = SerializerFile.Create(dataPath, key, UseJson);
 		return serializer;
 	}
 
@@ -232,7 +239,7 @@ public class DataRepo
 	/// <summary>
 	/// Loads an object with the specified key, creating a new instance if it doesn't exist
 	/// </summary>
-	public T LoadOrCreate<T>(string key, Call? call = null, bool lazy = false)
+	public virtual T LoadOrCreate<T>(string key, Call? call = null, bool lazy = false)
 	{
 		return LoadOrCreate<T>(DefaultGroupId, key, call, lazy);
 	}
@@ -240,7 +247,7 @@ public class DataRepo
 	/// <summary>
 	/// Loads an object with the specified group and key, creating a new instance if it doesn't exist
 	/// </summary>
-	public T LoadOrCreate<T>(string groupId, string key, Call? call, bool lazy = false)
+	public virtual T LoadOrCreate<T>(string groupId, string key, Call? call, bool lazy = false)
 	{
 		SerializerFile serializerFile = GetSerializerFile(typeof(T), groupId, key);
 
@@ -259,7 +266,7 @@ public class DataRepo
 	/// <summary>
 	/// Loads an object using the type name as the key, creating a new instance if it doesn't exist
 	/// </summary>
-	public T LoadOrCreate<T>(bool lazy = false, Call? call = null)
+	public virtual T LoadOrCreate<T>(bool lazy = false, Call? call = null)
 	{
 		call ??= new();
 		return LoadOrCreate<T>(typeof(T).GetAssemblyQualifiedShortName(), call, lazy);
@@ -268,17 +275,21 @@ public class DataRepo
 	/// <summary>
 	/// Loads a data item from the specified file path
 	/// </summary>
-	public static DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false)
+	public static DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false, bool useJson = false)
 	{
 		call ??= new();
 
-		var serializerFile = SerializerFile.Create(path);
+		var serializerFile = SerializerFile.Create(path, useJson: useJson);
 		if (serializerFile.Exists)
 		{
 			T? obj = serializerFile.Load<T>(call, lazy);
 			if (obj != null)
 			{
-				return new DataItem<T>(serializerFile.LoadHeader(call).Name ?? "", obj);
+				// Get name from header (Atlas) or use path directory name (JSON)
+				string name = useJson 
+					? obj.ToString() ?? ""
+					: serializerFile.LoadHeader(call).Name ?? "";
+				return new DataItem<T>(name, obj);
 			}
 		}
 		return null;
@@ -287,7 +298,7 @@ public class DataRepo
 	/// <summary>
 	/// Loads all items from the repository
 	/// </summary>
-	public DataItemCollection<T> LoadAll<T>(Call? call = null, string? groupId = null, bool lazy = false)
+	public virtual DataItemCollection<T> LoadAll<T>(Call? call = null, string? groupId = null, bool lazy = false)
 	{
 		call ??= new();
 		groupId ??= DefaultGroupId;
@@ -348,7 +359,7 @@ public class DataRepo
 	/// <summary>
 	/// Deletes all items of the specified type in the given group
 	/// </summary>
-	public void DeleteAll(Call? call, Type type, string? groupId = null)
+	public virtual void DeleteAll(Call? call, Type type, string? groupId = null)
 	{
 		call ??= new();
 
@@ -393,7 +404,7 @@ public class DataRepo
 	/// <summary>
 	/// Deletes an item of the specified type with the given group and key
 	/// </summary>
-	public void Delete(Call? call, Type type, string? groupId, string key)
+	public virtual void Delete(Call? call, Type type, string? groupId, string key)
 	{
 		call ??= new();
 		groupId ??= DefaultGroupId;

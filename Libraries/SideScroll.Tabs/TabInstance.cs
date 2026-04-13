@@ -1089,7 +1089,7 @@ public class TabInstance : IDisposable
 	/// </summary>
 	public void LoadDefaultBookmark()
 	{
-		if (Project.UserSettings.AutoSelect == false)
+		if (!Project.UserSettings.AutoSelect)
 			return;
 
 		Bookmark? bookmark = Data.App.Load<Bookmark>(CurrentBookmarkName, TaskInstance.Call);

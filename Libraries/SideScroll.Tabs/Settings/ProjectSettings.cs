@@ -38,6 +38,11 @@ public class ProjectSettings
 	public bool EnableJsonLinking { get; set; } = true;
 
 	/// <summary>
+	/// Gets or sets whether to use JSON format for DataRepo serialization (default: false, uses Atlas)
+	/// </summary>
+	public bool UseJsonSerialization { get; set; }
+
+	/// <summary>
 	/// Gets or sets the project version
 	/// This is used for links and what appears in the UI
 	/// </summary>

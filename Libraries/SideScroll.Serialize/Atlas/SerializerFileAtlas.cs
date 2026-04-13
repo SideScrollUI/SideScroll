@@ -67,7 +67,7 @@ public class SerializerFileAtlas : SerializerFile
 		}
 	}
 
-	protected override object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false)
+	protected override object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false, Type? expectedType = null)
 	{
 		Serializer serializer = new()
 		{

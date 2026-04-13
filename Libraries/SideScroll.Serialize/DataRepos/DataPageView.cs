@@ -55,11 +55,6 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	/// </summary>
 	public DataRepoInstance<T> DataRepoInstance => dataRepoInstance;
 
-	/// <summary>
-	/// Gets the enumerable collection of file paths
-	/// </summary>
-	public IEnumerable<string>? Paths => DataRepoInstance.GetPathEnumerable(Ascending);
-
 	private List<string>? _allPaths;
 
 	/// <summary>
@@ -115,18 +110,23 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	public SynchronizationContext? Context { get; set; } = SynchronizationContext.Current ?? new();
 
 	/// <summary>
+	/// Gets the enumerable collection of file paths
+	/// </summary>
+	public IEnumerable<string>? GetPathEnumerable(Call call) => DataRepoInstance.GetPathEnumerable(call, Ascending);
+	
+	/// <summary>
 	/// Loads and returns the items for the specified page
 	/// </summary>
 	public List<DataItem<T>> GetPage(int page, Call? call = null)
 	{
-		_allPaths ??= Paths?.ToList();
+		_allPaths ??= GetPathEnumerable(call ?? new())?.ToList();
 		if (_allPaths == null) return [];
 
 		call ??= new();
 		return _allPaths
 			.Skip(PageSize * page)
 			.Take(PageSize)
-			.Select(path => DataRepo.LoadPath<T>(call, path))
+			.Select(path => DataRepo.LoadPath<T>(call, path, useJson: DataRepoInstance.DataRepo.UseJson))
 			.OfType<DataItem<T>>()
 			.Select(dataItem => new DataItem<T>(dataItem.Key, dataItem.Value))
 			.ToList();

@@ -8,13 +8,19 @@
     <IsPackable>false</IsPackable>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+    <!-- Enable IDBFS for persistent storage -->
+    <WasmBuildNative>true</WasmBuildNative>
+    <EmccExtraArgs>-lidbfs.js</EmccExtraArgs>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia.Browser" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Microsoft.JSInterop" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\SideScroll.Avalonia.Samples\SideScroll.Avalonia.Samples.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Serialize.Browser\SideScroll.Serialize.Browser.csproj" />
   </ItemGroup>
+
 </Project>

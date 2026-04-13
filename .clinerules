@@ -1,0 +1,158 @@
+# SideScroll Coding Standards for Cline
+
+This document provides guidance for AI assistants working on the SideScroll codebase.
+
+## Method Overriding Pattern
+
+### ✅ CORRECT: Make base methods virtual first, then override
+When extending functionality in derived classes:
+
+1. **First**: Make the base class method `virtual`
+   ```csharp
+   // In DataRepo.cs (base class)
+   public virtual DataRepoView<T> LoadIndexedView<T>(Call call, string groupId, bool ascending = true)
+   ```
+
+2. **Then**: Override in derived class
+   ```csharp
+   // In DataRepoLocalStorage.cs (derived class)
+   public override DataRepoView<T> LoadIndexedView<T>(Call call, string groupId, bool ascending = true)
+   ```
+
+### ❌ AVOID: Using `new` keyword to hide base methods
+- `new` keyword hides the base implementation instead of polymorphically replacing it
+- This breaks polymorphism - callers using base class references won't call your new implementation
+- Only use `new` when intentionally hiding (very rare cases)
+
+### Why This Matters:
+```csharp
+DataRepo repo = new DataRepoLocalStorage(...);
+repo.LoadIndexedView<Planet>(...); // Uses which implementation?
+
+// With `new`: Calls DataRepo.LoadIndexedView (base class) ❌
+// With `override`: Calls DataRepoLocalStorage.LoadIndexedView (derived class) ✅
+```
+
+## Logging Standards
+
+### ✅ CORRECT: Use Tag parameters for dynamic values
+```csharp
+call.Log.AddDebug("Saved to localStorage", 
+    new Tag("Key", storageKey), 
+    new Tag("Size", jsonData.Length));
+
+call.Log.Add("Deleted from localStorage", 
+    new Tag("Key", storageKey));
+
+call.Log.Add(exception, 
+    new Tag("Key", storageKey));
+```
+
+### ❌ AVOID: String interpolation in log messages
+```csharp
+// DON'T DO THIS:
+call.Log.AddDebug($"Saved to localStorage: {storageKey} ({jsonData.Length} bytes)");
+call.Log.Add($"Exception: {e.Message}");
+```
+
+### Why Tags Are Better:
+1. **Structured Logging**: Tags can be parsed, filtered, and searched programmatically
+2. **Consistency**: Standardized format across all logs
+3. **Flexibility**: UI can display tags differently (e.g., tooltips, expandable sections)
+4. **Performance**: Tags can be conditionally evaluated/formatted
+5. **Debugging**: Easy to filter logs by specific tag values
+
+### Tag Usage Examples:
+```csharp
+// For simple messages with context
+call.Log.Add("Operation completed", new Tag("Type", type.Name), new Tag("Count", items.Count));
+
+// For exceptions with context
+call.Log.Add(exception, new Tag("Path", filePath), new Tag("Operation", "Save"));
+
+// For warnings
+call.Log.AddWarning("Resource not found", new Tag("ResourceId", id));
+
+// For debug messages
+call.Log.AddDebug("Cache hit", new Tag("Key", cacheKey), new Tag("Age", age));
+```
+
+## Call-Based Logging vs Console
+
+### ✅ PREFER: Use Call.Log for production logging
+```csharp
+public void SaveData(Call call, string key, object data)
+{
+    call.Log.AddDebug("Saving data", new Tag("Key", key));
+    
+    try
+    {
+        // Save operation
+        call.Log.Add("Data saved successfully", new Tag("Key", key));
+    }
+    catch (Exception e)
+    {
+        call.Log.Add(e, new Tag("Key", key));
+    }
+}
+```
+
+### ⚠️ Console.WriteLine is for DEBUGGING ONLY
+```csharp
+// Acceptable for temporary debugging during development:
+Console.WriteLine($"🔵 Method called with key: {key}");
+
+// But production code should use Call.Log instead
+```
+
+### Why Call.Log Is Better:
+1. **Structured & Searchable**: Logs with Tags can be filtered and analyzed
+2. **User-Visible**: Call.Log appears in the UI for users to see
+3. **Hierarchical**: Child calls create nested log structure
+4. **Configurable**: Log levels can be adjusted per component
+5. **Persistent**: Logs can be saved and reviewed later
+6. **Context-Aware**: Automatically includes timing and task progress
+
+### Call Logging Features:
+```csharp
+// Create child context for nested operations
+var childCall = call.Child("LoadData", new Tag("Source", "API"));
+
+// Measure execution time automatically
+using (var timer = call.Timer("ProcessData"))
+{
+    // Work happens here
+    // Elapsed time logged automatically on dispose
+}
+
+// Track task progress
+using (var task = call.StartTask(items.Count, "ProcessItems"))
+{
+    foreach (var item in items)
+    {
+        // Progress tracked automatically
+    }
+}
+
+// Debug logging (can be disabled globally)
+call.Log.AddDebug("Cache hit", new Tag("Key", cacheKey));
+```
+
+## General Principles
+
+1. **Check for existing virtual methods** before using `new`
+2. **Make base methods virtual** when creating extensibility points
+3. **Always use Tag parameters** for dynamic values in logging
+4. **Keep static messages** in the first parameter, dynamic values in Tags
+5. **Prefer `call.Log.Add*` over `Console.WriteLine`** for production code
+6. **`Console.WriteLine` is acceptable** for temporary debugging with emoji prefixes (e.g., 🔵, ✅, ❌)
+7. **Pass Call through method chains** to maintain logging context
+
+## Quick Reference
+
+| Scenario | Base Class | Derived Class |
+|----------|------------|---------------|
+| Extending behavior | `public virtual void Method()` | `public override void Method()` |
+| Hiding (rare) | `public void Method()` | `public new void Method()` |
+| Logging value | N/A | `new Tag("Name", value)` |
+| Logging exception | N/A | `call.Log.Add(ex, new Tag(...))` |
