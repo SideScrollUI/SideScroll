@@ -12,13 +12,13 @@ public class App : Application
 		AvaloniaXamlLoader.Load(this);
 	}
 
-	protected virtual Control CreateSingleView() => new MainView();
+	protected virtual Control CreateSingleView() => new SampleMainView();
 
 	public override void OnFrameworkInitializationCompleted()
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
 		{
-			desktopLifetime.MainWindow = new MainWindow();
+			desktopLifetime.MainWindow = new SampleMainWindow();
 		}
 		else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewLifetime)
 		{

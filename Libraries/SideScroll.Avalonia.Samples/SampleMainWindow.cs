@@ -6,9 +6,9 @@ using SideScroll.Tabs;
 
 namespace SideScroll.Avalonia.Samples;
 
-public class MainWindow : BaseWindow
+public class SampleMainWindow : BaseWindow
 {
-	public MainWindow() : base(Project.Load<SampleUserSettings>(SampleProjectSettings.Settings))
+	public SampleMainWindow() : base(Project.Load<SampleUserSettings>(SampleProjectSettings.Settings))
 	{
 		LoadTab(new TabAvalonia());
 

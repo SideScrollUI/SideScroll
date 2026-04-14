@@ -8,14 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Added Desktop Link for File Viewer
+- Browser Local Storage support to allow saving data between sessions
+- Desktop Link for File Viewer
 - Summary docs for Serializer
 - TabSampleDataGridMixedHeights to test the mouse wheel scrolling problem
 
 ### Fixed
+- Fixed SideScroll.Desktop.slnf
 
 ### Changed
 - Updated DataGridPropertyTextColumn to check MaxHeightAttribute for all Properties
+- Updated to Avalonia 11.3.14
+- Updated to LiveCharts 2.0.0
+- Renamed Sample App to SampleApp
+- Renamed Sample MainView to SampleMainView
+- Renamed Sample MainWindow to SampleMainWindow
 
 ## [0.16] - 2026-03-03
 

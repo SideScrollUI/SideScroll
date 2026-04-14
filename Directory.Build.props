@@ -6,7 +6,8 @@
     - See Changelog for more
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.12</AvaloniaVersion>
+    <AvaloniaVersion>11.3.14</AvaloniaVersion>
+    <AvaloniaDataGridVersion>11.3.13</AvaloniaDataGridVersion>
     <AvaloniaEditVersion>11.4.1</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>

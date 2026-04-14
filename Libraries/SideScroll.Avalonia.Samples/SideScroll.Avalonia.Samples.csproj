@@ -5,12 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="App.xaml" />
     <None Remove="Assets\Logo\SideScroll.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="App.xaml" />
+    <AvaloniaResource Include="SampleApp.xaml" />
   </ItemGroup>
 
   <ItemGroup>
