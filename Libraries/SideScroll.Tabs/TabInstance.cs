@@ -1000,8 +1000,10 @@ public class TabInstance : IDisposable
 				tabBookmark.Tab = iTab;
 			}
 		}
-
-		var lookup = ChildTabInstances.Values.ToDictionary(t => (t.SelectedRow ?? new()).ToString() ?? "");
+		
+		var lookup = ChildTabInstances.Values
+			.GroupBy(t => (t.SelectedRow ?? new()).ToString() ?? "")
+			.ToDictionary(g => g.Key, g => g.Last());
 
 		foreach (TabDataSettings dataSettings in viewSettings.TabDataSettings)
 		{
