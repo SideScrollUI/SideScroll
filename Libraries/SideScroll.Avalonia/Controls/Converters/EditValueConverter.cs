@@ -4,8 +4,10 @@ using System.Globalization;
 
 namespace SideScroll.Avalonia.Controls.Converters;
 
+/// <summary>Converts a property value to a display string and converts the edited string back to the target type for two-way data binding in editable controls.</summary>
 public class EditValueConverter : IValueConverter
 {
+	/// <summary>Converts a value to a string for display in an editable control.</summary>
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		if (value == null)
@@ -15,6 +17,7 @@ public class EditValueConverter : IValueConverter
 		return result;
 	}
 
+	/// <summary>Converts the edited string back to the target type.</summary>
 	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		if (value == null)
@@ -24,6 +27,7 @@ public class EditValueConverter : IValueConverter
 		return result;
 	}
 
+	/// <summary>Converts <paramref name="value"/> to <paramref name="targetType"/>, handling <see cref="DateTime"/> and formatted types.</summary>
 	public static object? ChangeType(object? value, Type targetType)
 	{
 		if (value == null)

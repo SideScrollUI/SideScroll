@@ -11,8 +11,12 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.View;
 
+/// <summary>
+/// Factory helpers that convert arbitrary objects into child tab controls for display within a <see cref="TabView"/>.
+/// </summary>
 public static class TabCreator
 {
+	/// <summary>Creates the appropriate child tab control for the given object, resolving inner values and applying label overrides.</summary>
 	public static Control? CreateChildControl(TabInstance parentTabInstance, object obj, string? label = null, ITabSelector? tabControl = null)
 	{
 		object? value = obj.GetInnerValue();

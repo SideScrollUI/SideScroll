@@ -9,14 +9,24 @@ using SideScroll.Tabs.Bookmarks.Models;
 
 namespace SideScroll.Avalonia.Controls.View;
 
+/// <summary>
+/// The clickable title bar rendered at the top of each <see cref="TabView"/>, supporting context menus, bookmark indicators, and selection highlighting.
+/// </summary>
 public class TabViewTitle : Border, IDisposable
 {
+	/// <summary>Gets the tab view this title belongs to.</summary>
 	public TabView TabView { get; }
+
+	/// <summary>Gets the tab instance from the owning tab view.</summary>
 	public TabInstance TabInstance => TabView.Instance;
 
+	/// <summary>Gets or sets the maximum desired width used to keep the title compact.</summary>
 	public int MaxDesiredWidth { get; set; } = 50;
 
+	/// <summary>Gets the text block that renders the title label.</summary>
 	public TextBlock TextBlock { get; }
+
+	/// <summary>Gets the container grid that holds the title text and status indicators.</summary>
 	public Grid ContainerGrid { get; }
 
 	public string Label
@@ -139,4 +149,5 @@ public class TabViewTitle : Border, IDisposable
 	}
 }
 
+/// <summary>A styled button used inside the tab title bar (e.g., the link button).</summary>
 public class TabTitleButton : TabButton;

@@ -5,6 +5,7 @@ using SideScroll.Avalonia.Themes;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
 
+/// <summary>A compact single-line text box styled for use in a toolbar.</summary>
 public class ToolbarTextBox : TextBox
 {
 	protected override Type StyleKeyOverride => typeof(TextBox);

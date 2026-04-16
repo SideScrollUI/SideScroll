@@ -17,14 +17,21 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>
+/// A styled text box that binds to a <see cref="ListProperty"/>, supporting validation attributes,
+/// read-only mode, password masking, and auto-width resizing.
+/// </summary>
 public class TabTextBox : TextBox
 {
 	protected override Type StyleKeyOverride => typeof(TextBox);
 
+	/// <summary>Gets the list property this text box is bound to, or <c>null</c> if unbound.</summary>
 	public ListProperty? Property { get; }
 
+	/// <summary>Gets or sets whether pressing Enter without a modifier key inserts a new line (requires <see cref="TextBox.AcceptsReturn"/> to also be <c>true</c>).</summary>
 	public bool AcceptsPlainEnter { get; set; }
 
+	/// <summary>Returns the string representation of the bound property.</summary>
 	public override string? ToString() => Property?.ToString();
 
 	public TabTextBox()
@@ -180,7 +187,7 @@ public class TabTextBox : TextBox
 		Bind(TextBlock.TextProperty, binding);
 	}
 
-	// Highlighting is too distracting for large controls
+	/// <summary>Disables the pointer-over background highlight; useful for large read-only text area controls.</summary>
 	public void DisableHover()
 	{
 		Resources.Add("TextControlBackgroundPointerOverBrush", Background);
@@ -201,6 +208,7 @@ public class TabTextBox : TextBox
 		}
 	}
 
+	/// <summary>Parses and pretty-prints the given JSON string into the text box.</summary>
 	public void SetFormattedJson(string text)
 	{
 		Text = JsonUtils.Format(text);

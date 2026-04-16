@@ -13,14 +13,21 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
 
+/// <summary>A visual separator used between toolbar buttons.</summary>
 public class ToolbarSeparator : Border;
 
+/// <summary>
+/// A horizontal toolbar grid that hosts buttons, toggle buttons, combo boxes, labels, and separators,
+/// with optional data binding to a <see cref="TabToolbar"/> model.
+/// </summary>
 public class TabControlToolbar : Grid, IDisposable
 {
 	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
 
+	/// <summary>Gets or sets the default margin applied to toolbar controls.</summary>
 	public static Thickness DefaultMargin { get; set; } = new(6, 2);
 
+	/// <summary>Gets or sets the tab instance used for task context when invoking button actions.</summary>
 	public TabInstance? TabInstance { get; set; }
 
 	public TabControlToolbar(TabInstance? tabInstance = null, TabToolbar? toolbar = null)
@@ -35,6 +42,7 @@ public class TabControlToolbar : Grid, IDisposable
 		}
 	}
 
+	/// <summary>Populates the toolbar by reflecting the properties of the given <see cref="TabToolbar"/> model.</summary>
 	public void LoadToolbar(TabToolbar toolbar)
 	{
 		var properties = toolbar.GetType().GetVisibleProperties();
@@ -86,6 +94,7 @@ public class TabControlToolbar : Grid, IDisposable
 		}
 	}
 
+	/// <summary>Adds a control to the next available column, optionally using a star-sized fill column.</summary>
 	public void AddControl(Control control, bool fill = false)
 	{
 		Grid.SetColumn(control, ColumnDefinitions.Count);
@@ -100,6 +109,7 @@ public class TabControlToolbar : Grid, IDisposable
 		Children.Add(control);
 	}
 
+	/// <summary>Adds a toolbar button with an explicit label overload.</summary>
 	public ToolbarButton AddButton(string tooltip, IResourceView imageResource, string? label)
 	{
 		var button = new ToolbarButton(this, tooltip, imageResource, null, label);
@@ -107,6 +117,7 @@ public class TabControlToolbar : Grid, IDisposable
 		return button;
 	}
 
+	/// <summary>Adds a toolbar button with optional icon size, label, and color update settings.</summary>
 	public ToolbarButton AddButton(string tooltip, IResourceView imageResource, double? iconSize = null, string? label = null, bool updateIconColors = true)
 	{
 		var button = new ToolbarButton(this, tooltip, imageResource, iconSize, label, updateIconColors);
@@ -114,6 +125,7 @@ public class TabControlToolbar : Grid, IDisposable
 		return button;
 	}
 
+	/// <summary>Adds a toolbar button from a <see cref="ToolButton"/> model.</summary>
 	public ToolbarButton AddButton(ToolButton toolButton)
 	{
 		var button = new ToolbarButton(this, toolButton);
@@ -121,6 +133,7 @@ public class TabControlToolbar : Grid, IDisposable
 		return button;
 	}
 
+	/// <summary>Adds a toggle button with separate on/off image resources.</summary>
 	public ToolbarToggleButton AddToggleButton(string tooltip, IResourceView onImageResource, IResourceView offImageResource, bool isChecked, string? label = null)
 	{
 		var button = new ToolbarToggleButton(this, tooltip, onImageResource, offImageResource, isChecked, label);
@@ -128,6 +141,7 @@ public class TabControlToolbar : Grid, IDisposable
 		return button;
 	}
 
+	/// <summary>Adds a toggle button from a <see cref="ToolToggleButton"/> model.</summary>
 	public ToolbarToggleButton AddToggleButton(ToolToggleButton toolButton)
 	{
 		var button = new ToolbarToggleButton(this, toolButton);
@@ -135,6 +149,7 @@ public class TabControlToolbar : Grid, IDisposable
 		return button;
 	}
 
+	/// <summary>Adds a radio button with the given text label.</summary>
 	public ToolbarRadioButton AddRadioButton(string text, bool isChecked = false)
 	{
 		var radioButton = new ToolbarRadioButton(text)
@@ -145,6 +160,7 @@ public class TabControlToolbar : Grid, IDisposable
 		return radioButton;
 	}
 
+	/// <summary>Adds a label text block followed by a formatted combo box for the given combo box model.</summary>
 	public TabFormattedComboBox AddComboBox(IToolComboBox toolComboBox)
 	{
 		var textBlock = new ToolbarTextBlock(toolComboBox.Label);
@@ -156,6 +172,7 @@ public class TabControlToolbar : Grid, IDisposable
 		return comboBox;
 	}
 
+	/// <summary>Adds a separator, skipping it if the toolbar has no existing controls.</summary>
 	public void AddSeparator()
 	{
 		// For optional null controls
@@ -165,7 +182,7 @@ public class TabControlToolbar : Grid, IDisposable
 		AddControl(new ToolbarSeparator());
 	}
 
-	// For right aligning
+	/// <summary>Adds a transparent stretch panel that pushes subsequent toolbar controls to the right.</summary>
 	public void AddFill()
 	{
 		Panel panel = new()
@@ -242,6 +259,7 @@ public class TabControlToolbar : Grid, IDisposable
 	}
 }
 
+/// <summary>A non-wrapping text block styled for use in a toolbar.</summary>
 public class ToolbarTextBlock : TextBlock
 {
 	public ToolbarTextBlock(string text = "")
@@ -253,8 +271,10 @@ public class ToolbarTextBlock : TextBlock
 	}
 }
 
+/// <summary>A bold header text block styled for use in a toolbar.</summary>
 public class ToolbarHeaderTextBlock(string text = "") : ToolbarTextBlock(text);
 
+/// <summary>A radio button styled for horizontal placement in a toolbar.</summary>
 public class ToolbarRadioButton : RadioButton
 {
 	protected override Type StyleKeyOverride => typeof(RadioButton);

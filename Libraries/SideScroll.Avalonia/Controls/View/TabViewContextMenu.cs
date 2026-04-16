@@ -6,11 +6,18 @@ using SideScroll.Tabs;
 
 namespace SideScroll.Avalonia.Controls.View;
 
+/// <summary>
+/// A context menu attached to a <see cref="TabView"/> that provides refresh, reload, settings, and bookmark actions.
+/// </summary>
 public class TabViewContextMenu : ContextMenu, IDisposable
 {
+	/// <summary>Gets the tab view this menu is attached to.</summary>
 	public TabView? TabView { get; protected set; }
+
+	/// <summary>Gets the tab instance associated with this menu.</summary>
 	public TabInstance? TabInstance { get; protected set; }
 
+	/// <summary>Gets the mutable list of menu items used to build the context menu.</summary>
 	public AvaloniaList<object> ItemList { get; } = [];
 
 	private readonly CheckBox? _checkboxAutoSelect;

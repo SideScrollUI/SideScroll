@@ -9,12 +9,15 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>A combo box bound to a <see cref="ListProperty"/>, with support for attribute-based enabled items and auto-select of a default value.</summary>
 public class TabComboBox : ComboBox
 {
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
+	/// <summary>Gets the list property this combo box is bound to, or <c>null</c> if unbound.</summary>
 	public ListProperty? Property { get; }
 
+	/// <summary>Returns the string representation of the currently selected item.</summary>
 	public override string? ToString() => SelectedItem?.ToString();
 
 	public TabComboBox()
@@ -69,6 +72,7 @@ public class TabComboBox : ComboBox
 		AvaloniaUtils.AddContextMenu(this);
 	}
 
+	/// <summary>Binds the combo box's selected item two-way to the specified property path on <paramref name="obj"/>.</summary>
 	public void Bind(object obj, string path)
 	{
 		var binding = new Binding(path)

@@ -19,24 +19,31 @@ using System.Diagnostics;
 
 namespace SideScroll.Avalonia.Controls.View;
 
+/// <summary>Implement to register a custom control that renders a specific object type inside a <see cref="TabSplitGrid"/>.</summary>
 public interface IControlCreator
 {
 	void AddControl(TabInstance tabInstance, TabSplitGrid container, object obj);
 }
 
+/// <summary>Implement to add data validation behavior to a control displayed in a tab form.</summary>
 public interface IValidationControl
 {
 	void Validate();
 }
 
+/// <summary>A draggable splitter between tab panels.</summary>
 public class TabSplitter : GridSplitter;
 
+/// <summary>
+/// The primary panel grid that renders a <see cref="TabInstance"/> — including its title, toolbar, objects, and child tabs —
+/// and manages layout, bookmarking, scrolling, and keyboard navigation.
+/// </summary>
 public class TabView : Grid, IDisposable
 {
 	private const string FillerPanelId = "FillerPanelId";
 	private const int MinDesiredSplitterDistance = 10;
 
-	// Model.Objects
+	/// <summary>Gets or sets the registered custom control creators keyed by object type.</summary>
 	public static Dictionary<Type, IControlCreator> ControlCreators { get; set; } = [];
 
 	// Maybe this control should own it's own settings?
@@ -55,7 +62,10 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
+	/// <summary>Gets the tab instance this view is rendering.</summary>
 	public TabInstance Instance { get; }
+
+	/// <summary>Gets the model exposed by the current tab instance.</summary>
 	public TabModel Model => Instance.Model;
 
 	public string Label
@@ -64,11 +74,17 @@ public class TabView : Grid, IDisposable
 		set => Model.Name = value;
 	}
 
-	// Created Controls
+	/// <summary>Gets or sets the actions control displaying the tab's available actions.</summary>
 	public TabViewActions? TabActions { get; set; }
+
+	/// <summary>Gets or sets the tasks control that shows running and queued background tasks.</summary>
 	public TabViewTasks? TabTasks { get; set; }
+
+	/// <summary>Gets the list of data grid selectors that drive child tab selection.</summary>
 	public List<ITabDataSelector> TabDatas { get; } = [];
-	public List<ITabSelector> CustomTabControls { get; } = []; // should everything use this?
+
+	/// <summary>Gets the list of custom tab selector controls registered for this view.</summary>
+	public List<ITabSelector> CustomTabControls { get; } = [];
 
 	private List<ToolbarButton> _hotKeys = [];
 
@@ -90,6 +106,7 @@ public class TabView : Grid, IDisposable
 	private DispatcherTimer? _dispatcherTimer;  // delays auto selection to throttle updates
 	private bool _updateChildControls;
 
+	/// <summary>Returns the model's display name.</summary>
 	public override string ToString() => Model.Name;
 
 	public TabView(TabInstance tabInstance)
@@ -413,6 +430,7 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
+	/// <summary>Clears and regenerates all child controls from the current tab model.</summary>
 	public void ReloadControls()
 	{
 		ClearControls(false);
@@ -555,11 +573,13 @@ public class TabView : Grid, IDisposable
 		_tabParentControls!.AddControl(textBox, false, SeparatorType.Spacer);
 	}
 
+	/// <summary>Marks the tab as needing a reload on its next load call.</summary>
 	public void Invalidate()
 	{
 		Instance.LoadCalled = false;
 	}
 
+	/// <summary>Triggers an async initialization if the tab has not yet been loaded.</summary>
 	public void Load()
 	{
 		if (Instance.LoadCalled)
@@ -571,6 +591,7 @@ public class TabView : Grid, IDisposable
 		Instance.StartAsync(Instance.ReinitializeAsync, Instance.TaskInstance.Call);
 	}
 
+	/// <summary>Replaces the tab content with an indeterminate progress bar and optional loading message.</summary>
 	public void ShowLoading()
 	{
 		ClearControls(true);
@@ -621,6 +642,7 @@ public class TabView : Grid, IDisposable
 		Children.Add(containerGrid);
 	}
 
+	/// <summary>Restores tab view settings from the current bookmark or user defaults.</summary>
 	public void LoadSettings()
 	{
 		if (Instance.TabBookmark != null)
@@ -638,6 +660,7 @@ public class TabView : Grid, IDisposable
 		TabViewSettings = Instance.LoadDefaultTabSettings();
 	}
 
+	/// <summary>Resets view settings and triggers a full reinitialisation of the tab instance.</summary>
 	public void Reinitialize()
 	{
 		// Could have parent instance reload children

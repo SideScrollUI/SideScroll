@@ -16,6 +16,7 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>A section header border used to visually group properties in a <see cref="TabForm"/>.</summary>
 public class TabHeader : Border
 {
 	public TabHeader(string text)
@@ -27,21 +28,33 @@ public class TabHeader : Border
 	}
 }
 
+/// <summary>A visual horizontal separator used between property rows in a <see cref="TabForm"/>.</summary>
 public class TabSeparator : Border;
 
+/// <summary>
+/// A property editor that uses reflection to generate input controls (text boxes, combo boxes, check boxes, etc.)
+/// for each public, visible property of a bound object, supporting validation, grouping, and data binding.
+/// </summary>
 public class TabForm : Border, IValidationControl
 {
+	/// <summary>Gets or sets the maximum width in pixels applied to form input controls.</summary>
 	public static int ControlMaxWidth { get; set; } = 2000;
+
+	/// <summary>Gets or sets the maximum height in pixels applied to form input controls.</summary>
 	public static int ControlMaxHeight { get; set; } = 400;
 
+	/// <summary>Gets or sets the object whose properties are displayed in this form.</summary>
 	public object? Object { get; set; }
 
+	/// <summary>Gets the form object configuration, or <c>null</c> if constructed directly.</summary>
 	public TabFormObject? FormObject { get; }
 
+	/// <summary>Gets the container grid that holds all the property label/control rows.</summary>
 	public Grid ContainerGrid { get; protected set; }
 
 	private readonly Dictionary<ListProperty, Control> _propertyControls = [];
 
+	/// <summary>Returns the string representation of the bound object.</summary>
 	public override string? ToString() => Object?.ToString();
 
 	public TabForm(object? obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
@@ -97,6 +110,7 @@ public class TabForm : Border, IValidationControl
 		_propertyControls.Clear();
 	}
 
+	/// <summary>Clears the existing form controls and regenerates rows for all visible properties of <paramref name="obj"/>.</summary>
 	public void LoadObject(object? obj)
 	{
 		ClearControls();
@@ -158,6 +172,7 @@ public class TabForm : Border, IValidationControl
 		}
 	}
 
+	/// <summary>Adds a row of property controls for each visible property of <paramref name="obj"/> and returns the created controls.</summary>
 	public List<Control> AddObjectRow(object obj, List<PropertyInfo>? properties = null)
 	{
 		properties ??= obj.GetType().GetVisibleProperties();
@@ -212,17 +227,20 @@ public class TabForm : Border, IValidationControl
 		}
 	}
 
+	/// <summary>Adds a label-and-input row for the named property on the bound object.</summary>
 	public Control? AddPropertyControl(string propertyName)
 	{
 		PropertyInfo propertyInfo = Object!.GetType().GetProperty(propertyName)!;
 		return AddPropertyControl(new ListProperty(Object, propertyInfo));
 	}
 
+	/// <summary>Adds a label-and-input row for the given <see cref="PropertyInfo"/> on the bound object.</summary>
 	public Control? AddPropertyControl(PropertyInfo propertyInfo)
 	{
 		return AddPropertyControl(new ListProperty(Object!, propertyInfo));
 	}
 
+	/// <summary>Adds a label-and-input row for the given property, reusing the current row when a column index attribute is specified.</summary>
 	public Control? AddPropertyControl(ListProperty property)
 	{
 		Control? control = CreatePropertyControl(property);
@@ -313,6 +331,7 @@ public class TabForm : Border, IValidationControl
 		return null;
 	}
 
+	/// <summary>Appends a full-width header label spanning all columns to the form.</summary>
 	public void AddHeader(string text)
 	{
 		if (ContainerGrid.Children.Count > 0)
@@ -330,6 +349,7 @@ public class TabForm : Border, IValidationControl
 		AddControl(header, 0, rowIndex);
 	}
 
+	/// <summary>Appends a full-width visual separator row to the form, unless the form is empty.</summary>
 	public void AddSeparator()
 	{
 		// Don't add for first item or optional null controls
@@ -345,8 +365,7 @@ public class TabForm : Border, IValidationControl
 		AddControl(separator, 0, rowIndex);
 	}
 
-	// Focus first input control
-	// Add [Focus] attribute if more control needed?
+	/// <summary>Focuses the first text-box input control in the form, or the form itself if none is found.</summary>
 	public void Focus()
 	{
 		foreach (Control control in ContainerGrid.Children)
@@ -360,6 +379,7 @@ public class TabForm : Border, IValidationControl
 		base.Focus();
 	}
 
+	/// <summary>Validates all bound property controls and highlights any that fail validation.</summary>
 	public void Validate()
 	{
 		bool valid = true;

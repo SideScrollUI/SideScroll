@@ -6,11 +6,13 @@ using System.Globalization;
 
 namespace SideScroll.Avalonia.Controls.Converters;
 
+/// <summary>Converts between a <see cref="DateTime"/> or <see cref="TimeSpan"/> property value and a time-of-day string, with round-trip fidelity for <see cref="TabDateTimePicker"/>.</summary>
 public class DateTimeValueConverter : IValueConverter
 {
 	protected string? PreviousTimeText { get; set; }
 	protected DateTime? PreviousDateTime { get; set; }
 
+	/// <summary>Converts a <see cref="DateTime"/> to a formatted time-of-day string for display in a date-time picker.</summary>
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		// Debug.WriteLine($"Convert {value} of Type {value?.GetType()}, Target: {targetType}");
@@ -41,6 +43,7 @@ public class DateTimeValueConverter : IValueConverter
 		}
 	}
 
+	/// <summary>Converts the edited time string back to a <see cref="DateTime"/>, merging with the stored date component.</summary>
 	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		// Debug.WriteLine($"ConvertBack {value} of Type {value?.GetType()}, Target: {targetType}");
@@ -83,6 +86,7 @@ public class DateTimeValueConverter : IValueConverter
 		}
 	}
 
+	/// <summary>Parses the given time text and merges it with the stored date, returning a validation error string if the format is invalid.</summary>
 	public object? SetTime(string timeText)
 	{
 		// Debug.WriteLine($"SetTime {timeText}");

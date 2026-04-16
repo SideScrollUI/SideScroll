@@ -6,8 +6,12 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
 
+/// <summary>
+/// An icon button for use in a <see cref="TabControlToolbar"/> that dispatches synchronous or async actions via a <see cref="TaskInstance"/>.
+/// </summary>
 public class ToolbarButton : TabImageButton
 {
+	/// <summary>Gets the toolbar that owns this button.</summary>
 	public TabControlToolbar Toolbar { get; }
 
 	public ToolbarButton(TabControlToolbar toolbar, ToolButton toolButton) :

@@ -7,10 +7,16 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.DataGrids;
 
+/// <summary>A data-grid column that renders a <see cref="DataGridButton"/> in each cell and invokes a reflected method on the row's data object when clicked.</summary>
 public class DataGridButtonColumn : DataGridBoundColumn
 {
+	/// <summary>Gets the method invoked when the button in a cell is clicked.</summary>
 	public MethodInfo MethodInfo { get; }
+
+	/// <summary>Gets or sets the button label text.</summary>
 	public string ButtonText { get; set; }
+
+	/// <summary>Gets or sets the name of a boolean property on the row object that controls button visibility, or <c>null</c> to always show.</summary>
 	public string? VisiblePropertyName { get; set; }
 
 	public DataGridButtonColumn(MethodInfo methodInfo, string buttonText)

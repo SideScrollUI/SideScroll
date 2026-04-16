@@ -8,13 +8,18 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.DataGrids;
 
+/// <summary>A styled text block used as a data-grid cell element, applying foreground/background brush converters and capping its desired size to the column's configured maximum.</summary>
 public class TextBlockElement : TextBlock
 {
 	protected override Type StyleKeyOverride => typeof(TextBlock);
 
+	/// <summary>Gets the owning <see cref="DataGridPropertyTextColumn"/> that created this element.</summary>
 	public DataGridPropertyTextColumn Column { get; }
+
+	/// <summary>Gets the reflected property this element displays.</summary>
 	public PropertyInfo PropertyInfo { get; }
 
+	/// <summary>Gets or sets the cached desired size used to limit column auto-sizing.</summary>
 	public new Size DesiredSize { get; set; }
 
 	public TextBlockElement(DataGridPropertyTextColumn column, PropertyInfo propertyInfo)

@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Browser Local Storage support to allow saving data between sessions
 - Desktop Link for File Viewer
-- Summary docs for Serializer
+- Summary docs for Serializer and Avalonia Controls
 - TabSampleDataGridMixedHeights to test the mouse wheel scrolling problem
 
 ### Fixed

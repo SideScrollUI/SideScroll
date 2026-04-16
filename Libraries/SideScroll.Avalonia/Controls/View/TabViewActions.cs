@@ -7,9 +7,16 @@ using SideScroll.Avalonia.Controls.Flyouts;
 
 namespace SideScroll.Avalonia.Controls.View;
 
+/// <summary>
+/// A panel that renders the clickable action buttons defined in <see cref="TabModel.Actions"/>,
+/// each wired to invoke a <see cref="TaskCreator"/> on the owning tab instance.
+/// </summary>
 public class TabViewActions : UserControl
 {
+	/// <summary>Gets the tab instance whose actions this panel renders.</summary>
 	public TabInstance TabInstance { get; }
+
+	/// <summary>Gets the tab model from the owning tab instance.</summary>
 	public TabModel TabModel => TabInstance.Model;
 
 	private readonly Dictionary<Button, TaskCreator> _taskCreators = [];

@@ -15,8 +15,13 @@ using System.Diagnostics;
 
 namespace SideScroll.Avalonia.Controls.ScreenCapture;
 
+/// <summary>
+/// An interactive screen capture control that renders a faded snapshot of a control and allows the user
+/// to select a region by dragging, then copy or save the selection.
+/// </summary>
 public class ScreenCapture : Grid
 {
+	/// <summary>Gets or sets the minimum pixel dimension (width or height) required before a selection can be copied.</summary>
 	public static int MinClipboardSize { get; set; } = 10;
 
 	private static RenderTargetBitmap? _clipboardBitmap;
@@ -32,18 +37,24 @@ public class ScreenCapture : Grid
 	private Point? _startPoint;
 	private Rect _selectionRect;
 
+	/// <summary>Gets the tab viewer this capture is displayed inside.</summary>
 	public TabViewer TabViewer { get; }
 
 	private string? _lastSavePath;
 
+	/// <summary>
+	/// A <see cref="ITabViewerPlugin"/> that registers the screen capture snapshot button on the tab viewer toolbar.
+	/// </summary>
 	public class TabViewerPlugin : ITabViewerPlugin
 	{
+		/// <summary>Adds the screen capture button to the given tab viewer toolbar.</summary>
 		public void Initialize(TabViewer tabViewer)
 		{
 			AddControlTo(tabViewer);
 		}
 	}
 
+	/// <summary>Adds a snapshot toolbar button to the given tab viewer that opens a <see cref="ScreenCapture"/> when clicked.</summary>
 	public static ToolbarButton AddControlTo(TabViewer tabViewer)
 	{
 		tabViewer.Toolbar!.AddSeparator();

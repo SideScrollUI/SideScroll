@@ -6,6 +6,7 @@ using Avalonia.VisualTree;
 
 namespace SideScroll.Avalonia.Controls.DataGrids;
 
+/// <summary>A button inside a data-grid cell that mirrors the row's selected and pointer-over states so it blends visually with the row highlight.</summary>
 public class DataGridButton : Button
 {
 	private DataGridRow? _row;
@@ -18,6 +19,7 @@ public class DataGridButton : Button
 		Content = label;
 	}
 
+	/// <summary>Binds <see cref="Avalonia.Controls.Control.IsVisible"/> one-way to the named property on the row's DataContext.</summary>
 	public void BindVisible(string propertyName)
 	{
 		var binding = new Binding(propertyName)

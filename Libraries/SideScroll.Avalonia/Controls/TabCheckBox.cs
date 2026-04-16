@@ -6,6 +6,9 @@ using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>
+/// A styled check box that binds to a <see cref="ListProperty"/>, respecting editable and tooltip attributes.
+/// </summary>
 public class TabCheckBox : CheckBox
 {
 	protected override Type StyleKeyOverride => typeof(CheckBox);
@@ -30,6 +33,7 @@ public class TabCheckBox : CheckBox
 		Bind(property);
 	}
 
+	/// <summary>Binds the check box's checked state to the given list property.</summary>
 	public void Bind(ListProperty property)
 	{
 		var binding = new Binding(property.PropertyInfo.Name)

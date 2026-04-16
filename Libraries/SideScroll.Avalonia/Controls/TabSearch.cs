@@ -11,10 +11,15 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>
+/// A search bar grid that combines a text box and a clear button, raising a text-changed event as the user types.
+/// </summary>
 public class TabSearch : Grid
 {
+	/// <summary>Gets the text box that accepts the search input.</summary>
 	public TextBox TextBoxSearch { get; protected set; }
 
+	/// <summary>Gets or sets the current search text.</summary>
 	public string? Text
 	{
 		get => TextBoxSearch.Text;

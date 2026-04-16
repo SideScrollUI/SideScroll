@@ -9,14 +9,18 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.DataGrids;
 
+/// <summary>A data-grid check-box column bound to a reflected <see cref="PropertyInfo"/>, with optional cell styling for horizontal grid-line emulation.</summary>
 public class DataGridPropertyCheckBoxColumn : DataGridCheckBoxColumn
 {
+	/// <summary>Gets the reflected property this column is bound to.</summary>
 	public PropertyInfo PropertyInfo { get; }
 
-	public bool StyleCells { get; set; } // True if any column has a Style applied, so we can manually draw the horizontal lines
+	/// <summary>Gets or sets whether any column in the grid uses cell styling, which requires this column to manually draw horizontal lines.</summary>
+	public bool StyleCells { get; set; }
 
 	private Binding _formattedBinding;
 
+	/// <summary>Returns the reflected property name.</summary>
 	public override string ToString() => PropertyInfo.Name;
 
 	public DataGridPropertyCheckBoxColumn(PropertyInfo propertyInfo, bool isReadOnly)

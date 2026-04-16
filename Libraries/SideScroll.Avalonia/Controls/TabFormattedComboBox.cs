@@ -13,14 +13,20 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>
+/// A combo box that wraps its items in <see cref="FormattedItem"/> wrappers to display human-readable labels
+/// while preserving the underlying value for two-way binding via a <see cref="ListProperty"/>.
+/// </summary>
 public class TabFormattedComboBox : ComboBox
 {
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
+	/// <summary>Gets the list property this combo box is bound to.</summary>
 	public ListProperty Property { get; }
 
 	private List<FormattedItem>? _items;
 
+	/// <summary>Returns the string representation of the currently selected item.</summary>
 	public override string? ToString() => SelectedItem?.ToString();
 
 	public TabFormattedComboBox(ListProperty property, IList list)
@@ -187,12 +193,16 @@ public class TabFormattedComboBox : ComboBox
 	}
 }
 
+/// <summary>Wraps an arbitrary object with a formatted display string for use in a <see cref="TabFormattedComboBox"/>.</summary>
 public class FormattedItem(object? obj)
 {
+	/// <summary>Gets or sets the underlying value wrapped by this item.</summary>
 	public object? Object { get; set; } = obj;
 
+	/// <summary>Returns the formatted display string of the wrapped object.</summary>
 	public override string? ToString() => Object.Formatted();
 
+	/// <summary>Creates a list of <see cref="FormattedItem"/> wrappers from the given enumerable, de-duplicating by <see cref="object.ToString"/>.</summary>
 	public static List<FormattedItem>? Create(IEnumerable? items)
 	{
 		return items?.Cast<object>()

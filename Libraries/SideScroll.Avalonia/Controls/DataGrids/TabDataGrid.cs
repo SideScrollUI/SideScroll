@@ -27,27 +27,52 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.DataGrids;
 
+/// <summary>
+/// A full-featured data grid control that auto-generates typed columns from reflection, supports sorting, filtering,
+/// selection synchronisation, context menus, bookmarks, and incremental list updates.
+/// </summary>
 public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelector
 {
+	/// <summary>Gets or sets the minimum column width (in pixels) above which columns switch to percentage-based sizing.</summary>
 	public static int ColumnPercentBased { get; set; } = 150;
+
+	/// <summary>Gets or sets the global cap on auto-generated minimum column widths.</summary>
 	public static int MaxMinColumnWidth { get; set; } = 200;
+
+	/// <summary>Gets or sets the global cap on minimum column widths when auto-sizing is enabled.</summary>
 	public static int MaxAutoSizeMinColumnWidth { get; set; } = 250;
 
+	/// <summary>Gets or sets the maximum column width in pixels for this grid instance.</summary>
 	public int MaxColumnWidth { get; set; } = 600;
 
+	/// <summary>Gets the tab model providing configuration and data for this grid.</summary>
 	public TabModel TabModel { get; }
+
+	/// <summary>Gets the owning tab instance used for task and selection context.</summary>
 	public TabInstance TabInstance { get; }
+
+	/// <summary>Gets or sets the persisted column-width and sort settings for this grid.</summary>
 	public TabDataSettings TabDataSettings { get; set; }
+
+	/// <summary>Gets or sets the data list currently bound to the grid.</summary>
 	public IList? List { get; protected set; }
+
+	/// <summary>Gets the element type of the items in <see cref="List"/>.</summary>
 	public Type ElementType { get; }
 
+	/// <summary>Gets whether columns are auto-generated from the element type's public properties.</summary>
 	public bool AutoGenerateColumns { get; }
 
+	/// <summary>Gets the underlying Avalonia <see cref="Avalonia.Controls.DataGrid"/> rendered inside this control.</summary>
 	public DataGrid DataGrid { get; protected set; }
+
+	/// <summary>Gets the search bar control shown above the grid, or <c>null</c> if not yet initialised.</summary>
 	public TabSearch? SearchControl { get; protected set; }
 
+	/// <summary>Gets the collection view wrapping <see cref="List"/> that provides filtering and sorting to the data grid.</summary>
 	public DataGridCollectionView? CollectionView { get; protected set; }
 
+	/// <summary>Raised whenever the grid selection changes.</summary>
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
 	private Dictionary<DataGridColumn, string> _columnNames = [];
@@ -95,6 +120,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Returns the grid's display name from the tab model.</summary>
 	public override string ToString() => TabModel.Name;
 
 	static TabDataGrid()
@@ -621,6 +647,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Adds a bound column for the given <see cref="DataColumn"/>, selecting a text or check-box column based on the data type.</summary>
 	public void AddDataColumn(DataColumn dataColumn)
 	{
 		DataGridBoundColumn column;
@@ -777,6 +804,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Returns the list items whose saved selection keys match those recorded in <see cref="TabDataSettings"/>.</summary>
 	public List<object> GetMatchingRowObjects()
 	{
 		List<object> rowObjects = [];
@@ -806,6 +834,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		return rowObjects;
 	}
 
+	/// <summary>Selects rows that match the saved selection and returns <c>true</c> if any were found.</summary>
 	public bool SelectSavedItems()
 	{
 		if (TabDataSettings.SelectionType == SelectionType.None)

@@ -13,26 +13,46 @@ using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.DataGrids;
 
+/// <summary>
+/// A data-grid text column bound to a reflected <see cref="PropertyInfo"/>, with configurable width constraints, word-wrap,
+/// auto-sizing, cell styling, foreground/background brush converters, and a context menu.
+/// </summary>
 public class DataGridPropertyTextColumn : DataGridTextColumn
 {
-	public static int EnableWordWrapMinStringLength { get; set; } = 64; // Don't enable wordwrap unless we have to (expensive and not always wanted)
+	/// <summary>Gets or sets the minimum string length above which word-wrap is enabled automatically. Defaults to 64.</summary>
+	public static int EnableWordWrapMinStringLength { get; set; } = 64;
+
+	/// <summary>Gets or sets the maximum number of rows scanned when inferring column attributes from item values. Defaults to 30.</summary>
 	public static int MaxRowScanProperties { get; set; } = 30;
 
+	/// <summary>Gets the reflected property this column is bound to.</summary>
 	public PropertyInfo PropertyInfo { get; }
 
+	/// <summary>Gets or sets the minimum desired column width in pixels. Defaults to 25.</summary>
 	public int MinDesiredWidth { get; set; } = 25;
+
+	/// <summary>Gets the maximum desired column width in pixels.</summary>
 	public int MaxDesiredWidth { get; }
+
+	/// <summary>Gets the maximum desired cell height in pixels. Defaults to 100.</summary>
 	public int MaxDesiredHeight { get; } = 100;
 
+	/// <summary>Gets or sets whether the column width automatically adjusts to fit cell content.</summary>
 	public bool AutoSize { get; set; }
-	public bool WordWrap { get; set; }
-	//public bool Editable { get; set; } = false;
-	public bool StyleCells { get; set; } // True if any column has a Style applied, so we can manually draw the horizontal lines
 
+	/// <summary>Gets or sets whether cell text wraps when it exceeds the column width.</summary>
+	public bool WordWrap { get; set; }
+
+	/// <summary>Gets or sets whether any column in the grid uses cell styling, requiring this column to manually draw horizontal lines.</summary>
+	public bool StyleCells { get; set; }
+
+	/// <summary>Gets or sets the formatted binding used to display cell values via <see cref="FormatConverter"/>.</summary>
 	public Binding FormattedBinding { get; set; }
 	//private Binding unformattedBinding;
+	/// <summary>Gets the value converter used to format cell content for display.</summary>
 	public FormatValueConverter FormatConverter { get; } = new();
 
+	/// <summary>Returns the reflected property name.</summary>
 	public override string ToString() => PropertyInfo.Name;
 
 	public DataGridPropertyTextColumn(PropertyInfo propertyInfo, bool isReadOnly, int maxDesiredWidth)
@@ -69,7 +89,7 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 		//CellStyleClasses = new Classes()
 	}
 
-	// Check first x rows for [Hide()] and apply WordWrap to strings/objects automatically
+	/// <summary>Scans the first <see cref="MaxRowScanProperties"/> items to infer <see cref="HideAttribute"/> visibility and enable word-wrap for long strings.</summary>
 	public void ScanItemAttributes(IList list)
 	{
 		bool checkWordWrap = (!WordWrap && (PropertyInfo.PropertyType == typeof(string) || PropertyInfo.PropertyType == typeof(object)));

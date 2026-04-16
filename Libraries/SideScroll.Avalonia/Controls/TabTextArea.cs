@@ -7,12 +7,16 @@ using SideScroll.Avalonia.Utilities;
 
 namespace SideScroll.Avalonia.Controls;
 
-// ReadOnly string control with wordwrap, scrolling, and clipboard copy
-// See TabAvaloniaEdit for an editable version
+/// <summary>
+/// A read-only, word-wrapping, scrollable text area with a clipboard copy context menu.
+/// For an editable version, see <see cref="TextEditor.TabAvaloniaEdit"/>.
+/// </summary>
 public class TabTextArea : Border
 {
+	/// <summary>Gets the raw text displayed in this area.</summary>
 	public string Text { get; }
 
+	/// <summary>Gets the text block that renders the content.</summary>
 	public TextBlock TextBlock { get; }
 
 	public TabTextArea(string? text = null)

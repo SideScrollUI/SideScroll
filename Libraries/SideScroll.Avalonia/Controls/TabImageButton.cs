@@ -15,27 +15,50 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>
+/// An icon-and-label button that dispatches synchronous or async actions via a <see cref="TaskInstance"/>,
+/// supports hot keys, flyouts, progress, and theme-aware SVG icon recoloring.
+/// </summary>
 public class TabImageButton : Button, IDisposable
 {
+	/// <summary>Gets or sets an optional text label displayed beside the icon.</summary>
 	public string? Label { get; set; }
+
+	/// <summary>Gets the tooltip text shown on hover.</summary>
 	public string? Tooltip { get; }
 
+	/// <summary>Gets or sets the SVG or bitmap resource used as the button icon.</summary>
 	public IResourceView ImageResource { get; set; }
+
+	/// <summary>Gets or sets the icon size in pixels. Defaults to 24.</summary>
 	public double IconSize { get; set; } = 24;
+
+	/// <summary>Gets or sets whether the icon colors are updated to match the current theme.</summary>
 	public bool UpdateIconColors { get; set; } = true;
 
+	/// <summary>Gets or sets the tab instance used for task context.</summary>
 	public TabInstance? TabInstance { get; set; }
 
+	/// <summary>Gets or sets a synchronous action to invoke when the button is clicked.</summary>
 	public CallAction? CallAction { get; set; }
+
+	/// <summary>Gets or sets an asynchronous action to invoke when the button is clicked.</summary>
 	public CallActionAsync? CallActionAsync { get; set; }
 
+	/// <summary>Gets or sets whether the running task is displayed in the tab task list.</summary>
 	public bool ShowTask { get; set; }
-	public bool IsActive { get; set; } // Only allow one task at once (modifying IsEnabled doesn't update elsewhere)
+
+	/// <summary>Gets or sets whether a task is currently active; prevents re-entry while a task is running.</summary>
+	public bool IsActive { get; set; }
+
+	/// <summary>Gets or sets whether the async action runs on a background thread instead of the UI thread.</summary>
 	public bool UseBackgroundThread { get; set; }
 
+	/// <summary>Gets or sets an optional keyboard shortcut that triggers the button's action.</summary>
 	public KeyGesture? KeyGesture { get; set; }
 
-	public TimeSpan MinWaitTime { get; set; } = TimeSpan.FromSeconds(1); // Wait time between clicks
+	/// <summary>Gets or sets the minimum time between repeated invocations when the button is clicked rapidly. Defaults to 1 second.</summary>
+	public TimeSpan MinWaitTime { get; set; } = TimeSpan.FromSeconds(1);
 
 	private DateTime? _lastInvoked;
 	private DispatcherTimer? _dispatcherTimer;  // Delays auto selection to throttle updates
@@ -65,6 +88,7 @@ public class TabImageButton : Button, IDisposable
 		}
 	}
 
+	/// <summary>Returns the button's tooltip text.</summary>
 	public override string? ToString() => Tooltip;
 
 	public TabImageButton(string tooltip, IResourceView imageResource, string? label = null, double? iconSize = null, bool updateIconColors = true)
@@ -140,6 +164,7 @@ public class TabImageButton : Button, IDisposable
 		SetImage(ImageResource);
 	}
 
+	/// <summary>Replaces the button icon with the given resource and clears any cached recolored image variants.</summary>
 	public void SetImage(IResourceView imageResource)
 	{
 		ImageResource = imageResource;
@@ -177,6 +202,7 @@ public class TabImageButton : Button, IDisposable
 		await InvokeAsync();
 	}
 
+	/// <summary>Binds <see cref="Avalonia.Controls.Control.IsEnabled"/> one-way to the specified property path on <paramref name="source"/>.</summary>
 	public void BindIsEnabled(string path, object? source)
 	{
 		Bind(IsEnabledProperty, new Binding
@@ -187,6 +213,7 @@ public class TabImageButton : Button, IDisposable
 		});
 	}
 
+	/// <summary>Registers this button's invocation as the default action on the owning <see cref="TabInstance"/>.</summary>
 	public void SetDefault()
 	{
 		if (TabInstance != null)
@@ -195,6 +222,7 @@ public class TabImageButton : Button, IDisposable
 		}
 	}
 
+	/// <summary>Invokes the button action, optionally rate-limiting rapid repeated clicks by <see cref="MinWaitTime"/>.</summary>
 	public virtual async Task InvokeAsync(bool canDelay = true)
 	{
 		if (!IsEnabled || IsActive)
@@ -233,6 +261,7 @@ public class TabImageButton : Button, IDisposable
 		}
 	}
 
+	/// <summary>Starts the configured synchronous or asynchronous action as a managed task and shows a flyout message on error.</summary>
 	public async Task InvokeTaskAsync()
 	{
 		if (TabInstance == null)
@@ -304,11 +333,13 @@ public class TabImageButton : Button, IDisposable
 		}
 	}
 
+	/// <summary>Registers a synchronous call action to invoke when the button is clicked.</summary>
 	public void Add(CallAction callAction)
 	{
 		CallAction = callAction;
 	}
 
+	/// <summary>Registers an asynchronous call action to invoke when the button is clicked.</summary>
 	public void AddAsync(CallActionAsync callActionAsync)
 	{
 		CallActionAsync = callActionAsync;
@@ -387,6 +418,7 @@ public class TabImageButton : Button, IDisposable
 		_disposed = true;
 	}
 
+	/// <summary>Releases event subscriptions, stops the rate-limit timer, and disposes cached image resources.</summary>
 	public void Dispose()
 	{
 		Dispose(true);

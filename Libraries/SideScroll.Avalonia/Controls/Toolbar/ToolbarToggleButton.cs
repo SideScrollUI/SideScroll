@@ -5,14 +5,23 @@ using System.ComponentModel;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
 
+/// <summary>
+/// A two-state icon toggle button for use in a <see cref="TabControlToolbar"/>, with separate on/off images and optional model binding.
+/// </summary>
 public class ToolbarToggleButton : ToolbarButton
 {
 	protected override Type StyleKeyOverride => typeof(ToolbarButton);
 
+	/// <summary>Gets or sets the image resource used when the toggle is in the on/checked state.</summary>
 	public IResourceView OnImageResource { get; set; }
+
+	/// <summary>Gets or sets the image resource used when the toggle is in the off/unchecked state.</summary>
 	public IResourceView OffImageResource { get; set; }
 
+	/// <summary>Gets the optional list property this toggle is bound to for two-way state sync.</summary>
 	public ListProperty? ListProperty { get; }
+
+	/// <summary>Gets or sets whether the toggle button is currently in the checked state.</summary>
 	public bool IsChecked { get; set; }
 
 	public ToolbarToggleButton(TabControlToolbar toolbar, ToolToggleButton toolButton) :
@@ -55,6 +64,7 @@ public class ToolbarToggleButton : ToolbarButton
 		}
 	}
 
+	/// <summary>Toggles the check state, updates the bound property value, and invokes the base action.</summary>
 	public override async Task InvokeAsync(bool canDelay = true)
 	{
 		if (!IsEnabled || IsActive) return;

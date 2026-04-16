@@ -14,22 +14,39 @@ using System.Runtime.InteropServices;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>
+/// Base Avalonia Window that initializes a SideScroll project, manages window settings persistence,
+/// and hosts a <see cref="TabViewer"/>.
+/// </summary>
 public class BaseWindow : Window
 {
+	/// <summary>The extra border width compensated for on Windows when using a custom title bar.</summary>
 	public static int WindowsBorderWidth = 7;
 
+	/// <summary>Gets or sets the default minimum window width in pixels.</summary>
 	public static int DefaultMinWidth { get; set; } = 700;
+
+	/// <summary>Gets or sets the default minimum window height in pixels.</summary>
 	public static int DefaultMinHeight { get; set; } = 500;
 
+	/// <summary>Gets or sets the default window width in pixels.</summary>
 	public static int DefaultWidth { get; set; } = 1280;
+
+	/// <summary>Gets or sets the default window height in pixels.</summary>
 	public static int DefaultHeight { get; set; } = 800;
 
+	/// <summary>Gets or sets how often the data cache cleanup timer fires.</summary>
 	public static TimeSpan CleanupInterval { get; set; } = TimeSpan.FromMinutes(10);
 
+	/// <summary>Gets the active SideScroll project.</summary>
 	public Project Project { get; protected set; }
 
+	/// <summary>Gets the root tab viewer hosted in this window.</summary>
 	public TabViewer TabViewer { get; protected set; }
-	public Border? Border { get; protected set; } // Windows 10 only for now since it has no border without chrome enabled
+
+	// Windows 10 only for now since it has no border without chrome enabled
+	/// <summary>Gets the optional border used on Windows 10 to simulate a window chrome border when the custom title bar is enabled.</summary>
+	public Border? Border { get; protected set; }
 
 	private bool _loadComplete;
 
@@ -137,6 +154,7 @@ public class BaseWindow : Window
 		}
 	}
 
+	/// <summary>Loads and displays a tab in the tab viewer.</summary>
 	public virtual void LoadTab(ITab tab)
 	{
 		TabViewer.LoadTab(tab);
@@ -170,6 +188,7 @@ public class BaseWindow : Window
 		return new Size(maxWidth, maxHeight);
 	}
 
+	/// <summary>Gets or sets the window position and size settings, loading and clamping them to valid screen bounds.</summary>
 	protected WindowSettings WindowSettings
 	{
 		get
@@ -234,6 +253,7 @@ public class BaseWindow : Window
 		}
 	}
 
+	/// <summary>Loads previously saved window position and size settings, centering the window on first launch.</summary>
 	protected void LoadWindowSettings()
 	{
 		var settings = Project.Data.App.Load<WindowSettings>();

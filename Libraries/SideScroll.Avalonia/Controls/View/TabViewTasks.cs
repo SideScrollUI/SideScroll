@@ -10,14 +10,22 @@ using System.Collections.Specialized;
 
 namespace SideScroll.Avalonia.Controls.View;
 
+/// <summary>
+/// A grid panel that displays the background tasks associated with a <see cref="TabInstance"/> in a data grid,
+/// auto-selecting new tasks and raising selection-changed events so child tabs update accordingly.
+/// </summary>
 public class TabViewTasks : Grid, IDisposable
 {
+	/// <summary>Gets or sets the row height in pixels used for each task entry.</summary>
 	public static int LineHeight { get; set; } = 34;
 
+	/// <summary>Gets the tab instance whose tasks are displayed.</summary>
 	public TabInstance TabInstance { get; }
 
+	/// <summary>Raised when the task selection changes.</summary>
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
+	/// <summary>Gets or sets whether newly added tasks are automatically selected.</summary>
 	public bool AutoSelectNew { get; set; } = true;
 
 	private bool ShowTasks => TabInstance.Model.Tasks
@@ -26,6 +34,7 @@ public class TabViewTasks : Grid, IDisposable
 			task.TaskStatus == TaskStatus.Faulted ||
 			task.Log.Level >= LogLevel.Error);
 
+	/// <summary>Gets the list of currently selected items in the task data grid.</summary>
 	public IList SelectedItems => _tabDataGrid.SelectedItems;
 
 	private readonly TabDataGrid _tabDataGrid;

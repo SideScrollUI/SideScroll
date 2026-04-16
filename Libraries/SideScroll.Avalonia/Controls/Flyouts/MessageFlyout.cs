@@ -4,6 +4,9 @@ using Avalonia.Media;
 
 namespace SideScroll.Avalonia.Controls.Flyouts;
 
+/// <summary>
+/// A flyout that displays a simple read-only text message.
+/// </summary>
 public class MessageFlyout : Flyout
 {
 	public MessageFlyout(string text)

@@ -16,6 +16,7 @@ using System.Globalization;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>A calendar date picker that suppresses the default scroll-wheel date increment behavior on desktop.</summary>
 public class TabCalendarDatePicker : CalendarDatePicker
 {
 	protected override Type StyleKeyOverride => typeof(CalendarDatePicker);
@@ -28,10 +29,16 @@ public class TabCalendarDatePicker : CalendarDatePicker
 	}
 }
 
+/// <summary>
+/// A compound date-and-time picker that combines a <see cref="TabCalendarDatePicker"/> and a time text box,
+/// both bound to a single <see cref="ListProperty"/> via a <see cref="DateTimeValueConverter"/>.
+/// </summary>
 public class TabDateTimePicker : Grid
 {
+	/// <summary>Gets the list property this picker is bound to.</summary>
 	public ListProperty Property { get; }
 
+	/// <summary>Gets the Avalonia binding shared by the date picker and time text box.</summary>
 	public Binding Binding { get; }
 
 	private readonly DateTimeValueConverter _dateTimeConverter;

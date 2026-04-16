@@ -10,10 +10,14 @@ using System.ComponentModel;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>
+/// A color picker that binds to a <see cref="ListProperty"/>, persisting the last-used color model and tab selection across instances.
+/// </summary>
 public class TabColorPicker : ColorPicker
 {
 	protected override Type StyleKeyOverride => typeof(ColorPicker);
 
+	/// <summary>Gets the list property this color picker is bound to, or <c>null</c> if unbound.</summary>
 	public ListProperty? Property { get; }
 
 	private static int? _prevSelectedIndex = 2;

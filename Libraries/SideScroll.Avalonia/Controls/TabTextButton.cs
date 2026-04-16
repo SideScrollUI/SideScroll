@@ -5,6 +5,7 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>A styled text-label button with optional warning or default accent coloring, used for action buttons in tab forms.</summary>
 public class TabTextButton : Button
 {
 	protected override Type StyleKeyOverride => typeof(Button);
@@ -18,6 +19,7 @@ public class TabTextButton : Button
 		}
 	}
 
+	/// <summary>Applies warning-themed colors (background, foreground, border) to the button.</summary>
 	public void UseWarningAccent()
 	{
 		Resources.Add("ButtonBackground", SideScrollTheme.ButtonWarningBackground);
@@ -34,6 +36,7 @@ public class TabTextButton : Button
 		Resources.Add("ButtonBorderBrushPressed", SideScrollTheme.ButtonWarningBorderPointerOver);
 	}
 
+	/// <summary>Binds <see cref="Avalonia.Controls.Control.IsVisible"/> one-way to the specified property path on the DataContext.</summary>
 	public void BindVisible(string propertyName)
 	{
 		var binding = new Binding(propertyName)

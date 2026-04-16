@@ -6,14 +6,21 @@ using SideScroll.Avalonia.Utilities;
 
 namespace SideScroll.Avalonia.Controls.DataGrids;
 
+/// <summary>A context menu for a <see cref="DataGrid"/> that provides copy, select-all, and filter actions, updating its items based on the currently focused column and cell.</summary>
 public class DataGridContextMenu : ContextMenu, IDisposable
 {
 	protected override Type StyleKeyOverride => typeof(ContextMenu);
 
+	/// <summary>Gets or sets the maximum number of characters copied from a cell value to avoid huge clipboard payloads.</summary>
 	public static int MaxCellValueLength { get; set; } = 10_000;
 
+	/// <summary>Gets the data grid this context menu is attached to.</summary>
 	public DataGrid DataGrid { get; }
+
+	/// <summary>Gets or sets the column the menu was opened on.</summary>
 	public DataGridPropertyTextColumn? Column { get; set; }
+
+	/// <summary>Gets or sets the cell the menu was opened on.</summary>
 	public DataGridCell? Cell { get; set; }
 
 	public DataGridContextMenu(DataGrid dataGrid)

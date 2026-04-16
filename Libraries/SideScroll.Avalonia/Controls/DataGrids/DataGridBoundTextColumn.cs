@@ -9,13 +9,19 @@ using System.Data;
 
 namespace SideScroll.Avalonia.Controls.DataGrids;
 
-// Rename to DataGridBoundTextDataColumn?
+/// <summary>A data-grid text column bound to a <see cref="DataColumn"/>, with configurable max width, word wrap, and a clipboard context menu.</summary>
 public class DataGridBoundTextColumn : DataGridTextColumn
 {
+	/// <summary>Gets the parent data grid this column belongs to.</summary>
 	public DataGrid DataGrid { get; }
+
+	/// <summary>Gets the <see cref="DataColumn"/> this column is bound to.</summary>
 	public DataColumn DataColumn { get; }
 
+	/// <summary>Gets or sets the maximum desired column width in pixels. Defaults to 500.</summary>
 	public int MaxDesiredWidth { get; set; } = 500;
+
+	/// <summary>Gets or sets whether cell text wraps when it exceeds the column width.</summary>
 	public bool WordWrap { get; set; }
 
 	public DataGridBoundTextColumn(DataGrid dataGrid, DataColumn dataColumn)
@@ -37,10 +43,12 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 		return textBlock;
 	}
 
+	/// <summary>A text block whose <see cref="MeasureCore"/> caps the available width to <see cref="MaxDesiredWidth"/> to prevent runaway column auto-sizing.</summary>
 	public class TextBlockElement : TextBlock
 	{
 		protected override Type StyleKeyOverride => typeof(TextBlock);
 
+		/// <summary>The maximum width in pixels that this element reports as its desired width.</summary>
 		public double MaxDesiredWidth = 500;
 
 		// can't override DesiredSize

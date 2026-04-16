@@ -14,40 +14,74 @@ using SideScroll.Tabs.Bookmarks.Models;
 
 namespace SideScroll.Avalonia.Controls.Viewer;
 
+/// <summary>Event arguments for the <see cref="TabViewer.OnTabLoaded"/> event, carrying the newly loaded object.</summary>
 public class TabLoadedEventArgs(object obj) : EventArgs
 {
+	/// <summary>Gets the object that was loaded into the viewer.</summary>
 	public object Object => obj;
 }
 
+/// <summary>Implement to add custom controls or toolbar buttons to a <see cref="TabViewer"/> during initialization.</summary>
 public interface ITabViewerPlugin
 {
 	public void Initialize(TabViewer tabViewer);
 }
 
+/// <summary>
+/// The root viewer grid that hosts a scrollable <see cref="TabView"/> tree, a navigation toolbar, and registered plugins.
+/// It manages bookmark navigation, keyboard scroll, and switching between tab content and overlay controls.
+/// </summary>
 public class TabViewer : Grid
 {
-	public int MaxScrollWidth { get; set; } = 1000; // should we also use a max percent?
+	/// <summary>Gets or sets the maximum pixel width used when calculating default scroll increments.</summary>
+	public int MaxScrollWidth { get; set; } = 1000;
+
+	/// <summary>Gets or sets the fraction of the viewport width used as the default scroll distance.</summary>
 	public double ScrollPercent { get; set; } = 0.5;
+
+	/// <summary>Gets the default scroll width as the smaller of <see cref="MaxScrollWidth"/> and a percentage of the viewport.</summary>
 	public int DefaultScrollWidth => Math.Min(MaxScrollWidth, (int)(ScrollViewer.Viewport.Width * ScrollPercent));
+
+	/// <summary>Gets or sets the fixed pixel distance scrolled by keyboard navigation.</summary>
 	public int KeyboardScrollWidth { get; set; } = 500;
 
+	/// <summary>Gets or sets the most recently constructed TabViewer instance (singleton-style).</summary>
 	public static TabViewer? Instance { get; set; }
+
+	/// <summary>Gets or sets a URI to load on next initialization.</summary>
 	public static string? LoadLinkUri { get; set; }
+
+	/// <summary>Gets or sets a bookmark to restore on next initialization.</summary>
 	public static Bookmark? LoadBookmark { get; set; }
+
+	/// <summary>Gets the registered plugins that are initialized with each new viewer.</summary>
 	public static List<ITabViewerPlugin> Plugins { get; set; } = [];
 
+	/// <summary>Gets the project this viewer is displaying.</summary>
 	public Project Project { get; }
+
+	/// <summary>Gets whether this viewer is hosted inside a window (as opposed to an embedded panel).</summary>
 	public bool IsWindowed { get; }
 
-	// Controls
+	/// <summary>Gets the navigation toolbar displayed at the top of the viewer.</summary>
 	public TabViewerToolbar? Toolbar { get; protected set; }
+
+	/// <summary>Gets the grid that contains the scroll viewer and optional side buttons.</summary>
 	protected Grid BottomGrid { get; }
+
+	/// <summary>Gets the scroll viewer that hosts the tab view content.</summary>
 	public ScrollViewer ScrollViewer { get; }
+
+	/// <summary>Gets the inner content grid that wraps the tab view.</summary>
 	protected Grid ContentGrid { get; }
+
+	/// <summary>Gets the current root tab view, or <c>null</c> if no tab has been loaded.</summary>
 	public TabView? TabView { get; protected set; }
 
+	/// <summary>Gets or sets an overlay control that temporarily replaces the scroll viewer content.</summary>
 	protected Control? ContentControl { get; set; }
 
+	/// <summary>Raised when a new tab has been loaded into the viewer.</summary>
 	public event EventHandler<TabLoadedEventArgs>? OnTabLoaded;
 
 	public TabViewer(Project project, bool isWindowed = true)
@@ -127,6 +161,7 @@ public class TabViewer : Grid
 		Children.Add(Toolbar);
 	}
 
+	/// <summary>Reloads the link manager and the root tab view.</summary>
 	public void Reload(Call? call = null)
 	{
 		call ??= new();
@@ -194,6 +229,7 @@ public class TabViewer : Grid
 		}
 	}
 
+	/// <summary>Fetches the bookmark for the given link URI and navigates to it, showing flyout feedback throughout.</summary>
 	public async Task<Bookmark?> ImportLinkAsync(Call call, LinkUri linkUri, bool checkVersion)
 	{
 		var buttonImport = Toolbar!.ButtonImport!;
@@ -283,6 +319,7 @@ public class TabViewer : Grid
 		}
 	}
 
+	/// <summary>Navigates to the given bookmark, optionally resetting the scroll position first.</summary>
 	public void SelectBookmark(TabBookmark tabBookmark, bool reload)
 	{
 		if (reload)
@@ -293,6 +330,7 @@ public class TabViewer : Grid
 		TabView!.Instance.SelectBookmark(tabBookmark, reload);
 	}
 
+	/// <summary>Replaces the viewer content with the given control, spanning both scroll rows.</summary>
 	public void SetContent(Control control)
 	{
 		ClearContent();
@@ -305,6 +343,7 @@ public class TabViewer : Grid
 		Children.Add(control);
 	}
 
+	/// <summary>Restores the normal bottom grid after a <see cref="SetContent"/> call.</summary>
 	public void ClearContent()
 	{
 		if (ContentControl == null)
@@ -411,12 +450,13 @@ public class TabViewer : Grid
 		return tabInstance;
 	}
 
-	// don't allow the scroll viewer to jump back to the left while we're loading content and the content grid width is fluctuating
+	/// <summary>Pins the content grid's minimum width to prevent the scroll viewer jumping left during layout fluctuations.</summary>
 	public void SetMinScrollOffset()
 	{
 		ContentGrid.MinWidth = ScrollViewer.Offset.X + ScrollViewer.Bounds.Size.Width;
 	}
 
+	/// <summary>Navigates to the previous bookmark in the navigator history.</summary>
 	public void SeekBackward()
 	{
 		if (Project.Navigator.SeekBackward() is Bookmark bookmark)
@@ -425,6 +465,7 @@ public class TabViewer : Grid
 		}
 	}
 
+	/// <summary>Navigates to the next bookmark in the navigator history.</summary>
 	public void SeekForward()
 	{
 		if (Project.Navigator.SeekForward() is Bookmark bookmark)

@@ -8,6 +8,7 @@ using System.Diagnostics;
 
 namespace SideScroll.Avalonia.Controls;
 
+/// <summary>Controls the type of separator inserted between items in a <see cref="TabSplitGrid"/>.</summary>
 public enum SeparatorType
 {
 	None,
@@ -15,25 +16,39 @@ public enum SeparatorType
 	Spacer,
 }
 
-// Grid wrapper that allows multiple children and optional splitters in between each
-// Only updates controls that change
-// Vertical only right now
+/// <summary>
+/// A vertical grid wrapper that hosts multiple controls with optional <see cref="GridSplitter"/> or spacer separators
+/// between each item, and incrementally updates only controls that change.
+/// </summary>
 public class TabSplitGrid : Grid
 {
+	/// <summary>Gets or sets the minimum desired width in pixels used for measure calculations.</summary>
 	public double MinDesiredWidth { get; set; } = 100;
+
+	/// <summary>Gets or sets the maximum desired width in pixels used for measure calculations.</summary>
 	public double MaxDesiredWidth { get; set; } = double.MaxValue;
 
+	/// <summary>Gets the currently displayed controls keyed by their source object.</summary>
 	public Dictionary<object, Control> GridControls { get; protected set; } = [];
-	public List<GridSplitter> GridSplitters { get; } = []; // reattach each time controls change
 
+	/// <summary>Gets the list of grid splitters currently inserted between controls.</summary>
+	public List<GridSplitter> GridSplitters { get; } = [];
+
+	/// <summary>Gets whether the last arrange pass completed successfully.</summary>
 	public new bool IsArrangeValid { get; protected set; }
 
 	private readonly List<Item> _gridItems = [];
 
+	/// <summary>Represents a single tracked item in the split grid, pairing a source object with its control and desired row height.</summary>
 	public class Item
 	{
+		/// <summary>Gets or sets the source object this item was created for.</summary>
 		public object? Object { get; set; }
+
+		/// <summary>Gets or sets the Avalonia control rendered for this item.</summary>
 		public Control? Control { get; set; }
+
+		/// <summary>Gets or sets the grid row height for this item.</summary>
 		public GridLength GridLength { get; set; }
 	}
 
@@ -64,12 +79,14 @@ public class TabSplitGrid : Grid
 		return base.ArrangeOverride(finalSize);
 	}
 
+	/// <summary>Adds a control to the split grid using auto or star sizing determined by <paramref name="fill"/>, with optional splitter and scroll wrapping.</summary>
 	public void AddControl(Control control, bool fill, SeparatorType separatorType = SeparatorType.Splitter, bool scrollable = false)
 	{
 		var gridLength = fill ? GridLength.Star : GridLength.Auto;
 		AddControl(control, gridLength, separatorType, scrollable);
 	}
 
+	/// <summary>Adds a control with the specified grid length, inserting a separator row before it and optionally wrapping it in a <see cref="ScrollViewer"/>.</summary>
 	public void AddControl(Control control, GridLength gridLength, SeparatorType separatorType = SeparatorType.Splitter, bool scrollable = false)
 	{
 		if (scrollable)
@@ -129,9 +146,7 @@ public class TabSplitGrid : Grid
 		return rowDefinition;
 	}
 
-	// always show splitters if their is a fill before or after?
-	// Do we allow changing an auto to a fill?
-	// always add a RowDefinition before and after
+	/// <summary>Inserts a control at the specified row index, adding spacer row definitions before and at the target row.</summary>
 	public void InsertControl(Control control, GridLength gridLength, int rowIndex)
 	{
 		InsertRowDefinition(GridLength.Auto, rowIndex - 1); // Splitter or Spacer
@@ -258,7 +273,7 @@ public class TabSplitGrid : Grid
 		}
 	}
 
-	// Only used for child controls right now
+	/// <summary>Replaces the current child controls with a new ordered set, removing stale entries and reattaching splitters.</summary>
 	public void SetControls(Dictionary<object, Control> newControls, List<Control> orderedControls)
 	{
 		Dictionary<object, Control> oldControls = GridControls;

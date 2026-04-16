@@ -11,31 +11,55 @@ using System.Runtime.InteropServices;
 
 namespace SideScroll.Avalonia.Controls.Viewer;
 
+/// <summary>
+/// The main navigation toolbar for a <see cref="TabViewer"/>, with back/forward/refresh navigation, optional bookmark link sharing,
+/// and custom title bar support (including macOS traffic-light buttons or a logo button on Windows/Linux).
+/// </summary>
 public class TabViewerToolbar : TabControlToolbar
 {
+	/// <summary>Gets the tab viewer this toolbar belongs to.</summary>
 	public TabViewer TabViewer { get; }
+
+	/// <summary>Gets the project whose settings configure this toolbar.</summary>
 	public Project Project => TabViewer.Project;
 
+	/// <summary>Gets whether the custom title bar (draggable window chrome) is enabled for this project.</summary>
 	public bool EnableCustomTitleBar => Project.UserSettings.EnableCustomTitleBar == true;
 
+	/// <summary>Gets the logo / application icon button shown in the custom title bar. <c>null</c> on macOS.</summary>
 	public ToolbarButton? ButtonLogo { get; protected set; }
 
+	/// <summary>Gets the back navigation button.</summary>
 	public ToolbarButton ButtonBack { get; protected set; }
+
+	/// <summary>Gets the forward navigation button.</summary>
 	public ToolbarButton ButtonForward { get; protected set; }
 
+	/// <summary>Gets the refresh button.</summary>
 	public ToolbarButton ButtonRefresh { get; protected set; }
 
+	/// <summary>Gets the copy-link button, or <c>null</c> if link sharing is not available.</summary>
 	public ToolbarButton? ButtonLink { get; protected set; }
+
+	/// <summary>Gets the import-bookmark button, or <c>null</c> if not available.</summary>
 	public ToolbarButton? ButtonImport { get; protected set; }
 
+	/// <summary>Gets the window minimize button (custom title bar only).</summary>
 	public ToolbarButton? ButtonMinimize { get; protected set; }
+
+	/// <summary>Gets the window maximize/restore button (custom title bar only).</summary>
 	public ToolbarButton? ButtonMaximize { get; protected set; }
+
+	/// <summary>Gets the window close button (custom title bar only).</summary>
 	public ToolbarButton? ButtonClose { get; protected set; }
 
+	/// <summary>Gets the icon shown in the logo button, falling back to the SideScroll logo if none is configured.</summary>
 	public IResourceView CustomTitleIcon => Project.ProjectSettings.CustomTitleIcon ?? Logo.Svg.SideScrollTranslucent;
 
+	/// <summary>Gets whether the current OS is macOS.</summary>
 	protected static bool IsMacOS => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
+	/// <summary>Gets the display name of the project, used as the logo button tooltip.</summary>
 	protected string ProjectName => Project.Name!;
 
 	public TabViewerToolbar(TabViewer tabViewer)
@@ -94,6 +118,7 @@ public class TabViewerToolbar : TabControlToolbar
 		}
 	}
 
+	/// <summary>Adds the fill spacer, title, version label, and optional window controls to the right side of the toolbar.</summary>
 	public void AddRightControls()
 	{
 		AddFill();
@@ -112,6 +137,7 @@ public class TabViewerToolbar : TabControlToolbar
 		AddWindowControls();
 	}
 
+	/// <summary>Adds the project name as a non-interactive header text block to the toolbar.</summary>
 	public void AddTitle()
 	{
 		var textBlock = new ToolbarHeaderTextBlock(ProjectName)
@@ -135,6 +161,7 @@ public class TabViewerToolbar : TabControlToolbar
 		return textBlock;
 	}
 
+	/// <summary>Adds minimize, maximize, and close window buttons when using a custom title bar on Windows.</summary>
 	public void AddWindowControls()
 	{
 		if (!EnableCustomTitleBar || IsMacOS || !TabViewer.IsWindowed) return;

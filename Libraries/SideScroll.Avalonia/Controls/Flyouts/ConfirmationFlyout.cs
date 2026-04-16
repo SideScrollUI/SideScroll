@@ -7,8 +7,18 @@ using SideScroll.Tasks;
 
 namespace SideScroll.Avalonia.Controls.Flyouts;
 
+/// <summary>
+/// A flyout that displays a confirmation prompt with configurable confirm and cancel buttons.
+/// </summary>
 public class ConfirmationFlyout : Flyout
 {
+	/// <summary>
+	/// Creates a confirmation flyout with the given message and optional button labels.
+	/// </summary>
+	/// <param name="action">The action invoked when the confirm button is clicked.</param>
+	/// <param name="text">The message displayed in the flyout.</param>
+	/// <param name="confirmText">The label for the confirm button. Defaults to "Confirm".</param>
+	/// <param name="cancelText">The label for the cancel button. Defaults to "Cancel".</param>
 	public ConfirmationFlyout(Action action, string text, string? confirmText = null, string? cancelText = null)
 	{
 		Placement = PlacementMode.Bottom;

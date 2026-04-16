@@ -11,6 +11,9 @@ using SideScroll.Utilities;
 
 namespace SideScroll.Avalonia.Controls.TextEditor;
 
+/// <summary>
+/// An AvaloniaEdit text editor with a wrapped <see cref="MeasureOverride"/> that suppresses the 10,000-character line length exception.
+/// </summary>
 public class TabTextEditor : AvaloniaEdit.TextEditor
 {
 	protected override Type StyleKeyOverride => typeof(AvaloniaEdit.TextEditor);
@@ -31,6 +34,7 @@ public class TabTextEditor : AvaloniaEdit.TextEditor
 	}
 }
 
+/// <summary>Specifies the syntax highlighting mode for a <see cref="TabAvaloniaEdit"/>.</summary>
 public enum TextType
 {
 	Default,
@@ -38,14 +42,25 @@ public enum TextType
 	Xml,
 }
 
+/// <summary>
+/// A read-only or editable syntax-highlighted text editor supporting JSON and XML highlighting,
+/// monospace font, line numbers, and optional property data binding.
+/// </summary>
 public class TabAvaloniaEdit : Border
 {
+	/// <summary>The maximum file size in bytes that is loaded automatically without truncation.</summary>
 	public const int MaxAutoLoadSize = 1_000_000;
 
+	/// <summary>Gets or sets the file path last loaded into this editor.</summary>
 	public string? Path { get; set; }
+
+	/// <summary>Gets or sets the list property this editor is bound to when editing is enabled.</summary>
 	public ListProperty? ListProperty { get; set; }
+
+	/// <summary>Gets the underlying AvaloniaEdit text editor control.</summary>
 	public AvaloniaEdit.TextEditor TextEditor { get; }
 
+	/// <summary>Gets or sets the current text type, used to apply syntax highlighting.</summary>
 	public TextType TextType { get; set; }
 
 	public TabAvaloniaEdit()
@@ -93,6 +108,7 @@ public class TabAvaloniaEdit : Border
 		UpdateTheme();
 	}
 
+	/// <summary>Loads a file from the given path, reading only the first <see cref="MaxAutoLoadSize"/> bytes for large files.</summary>
 	public void Load(string path)
 	{
 		Path = path;
@@ -116,6 +132,7 @@ public class TabAvaloniaEdit : Border
 		UpdateLineNumbers();
 	}
 
+	/// <summary>Gets or sets the editor text, updating the syntax highlighting theme on each assignment.</summary>
 	public string Text
 	{
 		get => TextEditor.Text;
@@ -145,6 +162,7 @@ public class TabAvaloniaEdit : Border
 		}
 	}
 
+	/// <summary>Switches the editor font to the configured monospace font family.</summary>
 	public void EnableMonospace()
 	{
 		if (SideScrollTheme.MonospaceFontFamily is FontFamily fontFamily)
@@ -154,6 +172,7 @@ public class TabAvaloniaEdit : Border
 		}
 	}
 
+	/// <summary>Applies JSON syntax highlighting with theme-aware colors.</summary>
 	public void EnableJsonSyntaxHighlighting()
 	{
 		TextEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("Json");
@@ -166,6 +185,7 @@ public class TabAvaloniaEdit : Border
 		SetHighlightColor("Punctuation", SideScrollTheme.JsonHighlightPunctuationBrush.Color);
 	}
 
+	/// <summary>Applies XML syntax highlighting with theme-aware colors.</summary>
 	public void EnableXmlSyntaxHighlighting()
 	{
 		TextEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("XML");
@@ -181,12 +201,14 @@ public class TabAvaloniaEdit : Border
 		SetHighlightColor("BrokenEntity", SideScrollTheme.XmlHighlightBrokenEntityBrush.Color);
 	}
 
+	/// <summary>Sets a named highlight color rule to the given color.</summary>
 	public void SetHighlightColor(string name, Color color)
 	{
 		var highlightColor = TextEditor.SyntaxHighlighting.GetNamedColor(name);
 		highlightColor.Foreground = new SimpleHighlightingBrush(color);
 	}
 
+	/// <summary>Attempts to format the text as JSON or XML, falling back to plain text. Sets <see cref="TextType"/> to enable syntax highlighting.</summary>
 	public void SetFormatted(string text)
 	{
 		try
@@ -228,6 +250,7 @@ public class TabAvaloniaEdit : Border
 		}
 	}
 
+	/// <summary>Enables text editing for the given list member, subscribing to property change notifications if bound.</summary>
 	public void EnableEditing(ListMember listMember)
 	{
 		ListProperty = listMember as ListProperty;

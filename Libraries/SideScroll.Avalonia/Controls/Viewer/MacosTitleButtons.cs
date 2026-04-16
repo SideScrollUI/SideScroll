@@ -5,6 +5,10 @@ using Avalonia.Interactivity;
 
 namespace SideScroll.Avalonia.Controls.Viewer;
 
+/// <summary>
+/// A templated control that renders the macOS-style close, minimize, and zoom (maximize) title bar buttons
+/// and wires them to the parent <see cref="Window"/> actions.
+/// </summary>
 public class MacosTitleButtons : TemplatedControl
 {
 	protected Button? CloseButton { get; set; }
