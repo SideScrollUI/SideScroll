@@ -11,22 +11,34 @@ using SideScroll.Extensions;
 
 namespace SideScroll.Avalonia.Charts;
 
+/// <summary>
+/// Abstract base class for a single legend item row. Displays a color swatch, series name, and optional total value,
+/// and handles click-to-select and hover-to-highlight interactions.
+/// </summary>
 public abstract class TabChartLegendItem<TSeries> : Grid
 {
+	/// <summary>Raised when the item's visibility (selection) state is toggled by the user.</summary>
 	public event EventHandler<EventArgs>? OnVisibilityChanged;
 
+	/// <summary>Gets the parent legend panel this item belongs to.</summary>
 	public TabChartLegend<TSeries> Legend { get; }
+	/// <summary>Gets the chart series this legend item represents.</summary>
 	public ChartSeries<TSeries> ChartSeries { get; }
 
+	/// <summary>Gets the chart view data model from the parent legend.</summary>
 	public ChartView ChartView => Legend.ChartView;
+	/// <summary>Gets the native chart series object.</summary>
 	public TSeries Series => ChartSeries.LineSeries;
 
+	/// <summary>Gets the text block displaying the series name (and optional rank prefix).</summary>
 	public TabTextBlock? TextBlock { get; protected set; }
+	/// <summary>Gets the text block displaying the series total value, or <c>null</c> if totals are not shown.</summary>
 	public TabTextBlock? TextBlockTotal { get; protected set; }
 
 	protected Polygon? _polygon;
 
 	private int _index;
+	/// <summary>Gets or sets the 1-based display rank shown as a prefix in the legend label when ordering is enabled.</summary>
 	public int Index
 	{
 		get => _index;
@@ -36,10 +48,13 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			UpdateTitleText();
 		}
 	}
+	/// <summary>Gets or sets the number of data points in this series.</summary>
 	public int Count { get; set; }
+	/// <summary>Gets or sets the aggregate total value for this series.</summary>
 	public double? Total { get; set; }
 
 	private bool _isSelected = true;
+	/// <summary>Gets or sets whether this series is selected (visible). Updates the color swatch fill accordingly.</summary>
 	public bool IsSelected
 	{
 		get => _isSelected;
@@ -90,6 +105,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		}
 	}
 
+	/// <summary>Refreshes the point count, total value, and swatch fill from the underlying series data.</summary>
 	public void UpdateTotal()
 	{
 		Total = ChartSeries.ListSeries.Total;
@@ -231,6 +247,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		}
 	}
 
+	/// <summary>Updates the series color to full or faded based on whether this item is highlighted or <paramref name="showFaded"/> is requested.</summary>
 	public void UpdateHighlight(bool showFaded)
 	{
 		Color newColor;
@@ -246,8 +263,10 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		UpdateColor(newColor);
 	}
 
+	/// <summary>Applies the given color to the underlying native series paint.</summary>
 	public abstract void UpdateColor(Color color);
 
+	/// <summary>Synchronizes the native series visibility with the current <see cref="IsSelected"/> and <see cref="Highlight"/> state.</summary>
 	public abstract void UpdateVisible();
 
 	private void Polygon_PointerPressed(object? sender, PointerPressedEventArgs e)

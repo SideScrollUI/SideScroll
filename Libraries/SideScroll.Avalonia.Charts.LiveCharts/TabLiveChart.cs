@@ -30,13 +30,19 @@ using System.Diagnostics;
 
 namespace SideScroll.Avalonia.Charts.LiveCharts;
 
+/// <summary>
+/// Registers <see cref="TabLiveChart"/> as the Avalonia control creator for <see cref="ChartView"/> objects,
+/// so that chart views are automatically rendered as LiveCharts controls in the tab system.
+/// </summary>
 public class LiveChartCreator : IControlCreator
 {
+	/// <summary>Registers this creator with the tab view system for <see cref="ChartView"/> objects.</summary>
 	public static void Register()
 	{
 		TabView.ControlCreators[typeof(ChartView)] = new LiveChartCreator();
 	}
 
+	/// <summary>Creates a <see cref="TabLiveChart"/> and adds it to the tab split grid container.</summary>
 	public void AddControl(TabInstance tabInstance, TabSplitGrid container, object obj)
 	{
 		var chartView = (ChartView)obj;
@@ -47,31 +53,48 @@ public class LiveChartCreator : IControlCreator
 	}
 }
 
+/// <summary>
+/// An Avalonia chart control backed by LiveCharts. Supports DateTime and linear X axes, log-scale Y axis,
+/// time-window zoom/selection, cross-chart pointer tracking, annotations, and an interactive series legend.
+/// </summary>
 public class TabLiveChart : TabChart<ISeries>, IDisposable
 {
+	/// <summary>Gets or sets the SkiaSharp color for the time-tracker cursor line.</summary>
 	public SKColor TimeTrackerSkColor { get; set; }
+	/// <summary>Gets or sets the SkiaSharp color for chart grid lines.</summary>
 	public SKColor GridLineSkColor { get; set; }
+	/// <summary>Gets or sets the SkiaSharp color for axis label text.</summary>
 	public SKColor TextSkColor { get; set; }
 
+	/// <summary>Gets or sets the maximum number of Y-axis separator lines to display.</summary>
 	public int MaxSeparators { get; set; } = 5;
+	/// <summary>Gets or sets the minimum pixel distance between Y-axis separator lines.</summary>
 	public int MinSeparatorDistance { get; set; } = 50;
+	/// <summary>Gets or sets the maximum pixel distance from a point at which hover hit-testing succeeds.</summary>
 	public int MaxFindDistance { get; set; } = 20;
 
+	/// <summary>Gets the underlying LiveCharts <see cref="CartesianChart"/> control.</summary>
 	public CartesianChart Chart { get; private set; }
 
+	/// <summary>Gets the legend panel displayed beside or below the chart.</summary>
 	public TabChartLegend<ISeries> Legend { get; private set; }
 
+	/// <summary>Gets or sets the X axis configuration.</summary>
 	public Axis XAxis { get; set; }
+	/// <summary>Gets or sets the Y axis configuration.</summary>
 	public Axis YAxis { get; set; } // left/right?
 
+	/// <summary>Gets the list of LiveChart series wrappers for each data series.</summary>
 	public List<LiveChartSeries> LiveChartSeries { get; private set; } = [];
 
+	/// <summary>Gets the chart series the pointer is currently hovering over, or <c>null</c> when not hovering.</summary>
 	public ChartSeries<ISeries>? HoverSeries { get; private set; }
 
 	private List<RectangularSection> _sections = [];
 	private RectangularSection? _trackerSection;
 	private RectangularSection? _zoomSection;
 
+	/// <summary>Gets the current pointer position in chart control pixels, or <c>null</c> when outside the chart.</summary>
 	public Point? CursorPosition { get; private set; }
 
 	private ChartPoint? _pointClicked;
@@ -168,6 +191,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		AddSections();
 	}
 
+	/// <summary>Clears existing series and reloads the chart from a new <see cref="ChartView"/>.</summary>
 	public void LoadView(ChartView chartView)
 	{
 		ClearSeries();
@@ -204,6 +228,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		InvalidateChart();
 	}
 
+	/// <summary>Re-sorts series by total and refreshes axis limits and the legend without a full chart reload.</summary>
 	public void Refresh()
 	{
 		ChartView.SortByTotal();
@@ -226,10 +251,16 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		};
 	}
 
+	/// <summary>
+	/// Dynamically determines the number of decimal places needed to distinguish Y-axis tick labels
+	/// based on the current visible value range.
+	/// </summary>
 	public class ValueLabeler
 	{
+		/// <summary>Gets or sets the minimum number of decimal places to show in Y-axis labels.</summary>
 		public int MinimumPrecision { get; set; }
 
+		/// <summary>Recalculates <see cref="MinimumPrecision"/> from the visible Y-axis range.</summary>
 		public void UpdatePrecision(double minValue, double maxValue)
 		{
 			double range = Math.Abs(maxValue - minValue);
@@ -255,6 +286,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			MinimumPrecision = precision;
 		}
 
+		/// <summary>Formats a Y-axis tick value using the computed minimum precision.</summary>
 		public string Format(double d)
 		{
 			return d.FormattedShortDecimal(MinimumPrecision);
@@ -299,6 +331,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		axis.Position = axisPosition;*/
 	}
 
+	/// <summary>Converts a <see cref="ListSeries"/> to a <see cref="LiveChartSeries"/>, assigns a color, and registers it with the chart.</summary>
 	public ISeries AddListSeries(ListSeries listSeries)
 	{
 		Color color =
@@ -373,6 +406,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		UpdateYAxis();
 	}
 
+	/// <summary>Creates a LiveCharts <see cref="RectangularSection"/> from a <see cref="ChartAnnotation"/> definition.</summary>
 	public RectangularSection CreateAnnotation(ChartAnnotation chartAnnotation)
 	{
 		var c = chartAnnotation.Color!.Value;
@@ -412,6 +446,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		Dispatcher.UIThread.Post(Chart.InvalidateVisual, DispatcherPriority.Background);
 	}
 
+	/// <summary>Recalculates and applies the X and Y axis limits and label formatters based on the current data and time window.</summary>
 	public void UpdateAxis()
 	{
 		UpdateLinearAxis();
@@ -516,6 +551,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		//InvalidateChart();
 	}
 
+	/// <summary>Recalculates Y axis limits and step size based on the currently visible data points and any annotations.</summary>
 	public void UpdateYAxis() // Axis yAxis, string axisKey = null
 	{
 		var (minimum, maximum, hasFraction) = GetYValueRange();
@@ -658,6 +694,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		return (minimum, maximum, hasFraction);
 	}
 
+	/// <summary>Finds the visible series point nearest to <paramref name="pointerPosition"/> within <paramref name="maxDistance"/> pixels.</summary>
 	public ChartPoint? FindClosestPoint(LvcPoint pointerPosition, double maxDistance)
 	{
 		return LiveChartSeries
@@ -669,6 +706,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			?.point;
 	}
 
+	/// <summary>Selects the series that owns the given chart point and raises the selection-changed event.</summary>
 	public void SelectPoint(ChartPoint chartPoint)
 	{
 		if (chartPoint.Context.Series.Name is string name)

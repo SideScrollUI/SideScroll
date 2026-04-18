@@ -18,18 +18,30 @@ namespace SideScroll.Avalonia.Charts.LiveCharts;
 	public ListSeries Series => series;
 }*/
 
+/// <summary>
+/// Wraps a <see cref="SideScroll.Collections.ListSeries"/> for use with LiveCharts, converting source data objects into
+/// <see cref="LiveChartPoint"/> instances and subscribing to collection changes for live updates.
+/// </summary>
 public class LiveChartSeries //: ChartSeries<ISeries>
 {
+	/// <summary>Gets or sets the maximum number of characters shown in a tooltip series title before truncation.</summary>
 	public static int MaxTitleLength { get; set; } = 200;
+	/// <summary>Gets or sets the maximum data point count at which individual point markers are drawn.</summary>
 	public static int MaxPointsToShowMarkers { get; set; } = 8;
+	/// <summary>Gets or sets the default marker geometry size in pixels.</summary>
 	public static double DefaultGeometrySize { get; set; } = 5;
 
+	/// <summary>Gets the parent chart control.</summary>
 	public TabLiveChart Chart { get; }
+	/// <summary>Gets the source data series.</summary>
 	public ListSeries ListSeries { get; }
 
+	/// <summary>Gets or sets the LiveCharts native line series used for rendering.</summary>
 	public LiveChartLineSeries LineSeries { get; set; }
+	/// <summary>Gets or sets the converted list of chart data points.</summary>
 	public List<LiveChartPoint> DataPoints { get; set; } = []; // Must be initialized for GetDataPoints()
 
+	/// <summary>Gets the SkiaSharp color used for painting this series.</summary>
 	public SKColor SkColor { get; protected set; }
 
 	public override string? ToString() => ListSeries.ToString();
@@ -99,6 +111,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		return false;
 	}
 
+	/// <summary>Returns the series name truncated to <see cref="MaxTitleLength"/> characters for display in the tooltip.</summary>
 	public string? GetTooltipTitle()
 	{
 		string? title = ListSeries.Name;
@@ -109,6 +122,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		return title;
 	}
 
+	/// <summary>Builds the tooltip content lines for the given data point, including time, value, tags, and description.</summary>
 	public List<string> GetTooltipLines(ChartPoint point)
 	{
 		List<string> lines = [];

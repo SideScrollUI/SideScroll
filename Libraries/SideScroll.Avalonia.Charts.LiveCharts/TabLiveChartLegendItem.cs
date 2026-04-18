@@ -4,11 +4,17 @@ using LiveChartsCore.SkiaSharpView.Painting;
 
 namespace SideScroll.Avalonia.Charts.LiveCharts;
 
+/// <summary>
+/// A legend item for <see cref="TabLiveChart"/> that updates the underlying <see cref="LiveChartLineSeries"/>
+/// stroke and fill paints when the color or visibility changes.
+/// </summary>
 public class TabLiveChartLegendItem(TabLiveChartLegend legend, ChartSeries<ISeries> chartSeries)
 	: TabChartLegendItem<ISeries>(legend, chartSeries)
 {
+	/// <summary>Gets the parent LiveCharts legend panel.</summary>
 	public TabLiveChartLegend LiveChartLegend => legend;
 
+	/// <summary>Updates the <see cref="LiveChartLineSeries"/> stroke and geometry fill to the given color.</summary>
 	public override void UpdateColor(Color color)
 	{
 		if (ChartSeries.LineSeries is LiveChartLineSeries lineSeries)
@@ -35,6 +41,7 @@ public class TabLiveChartLegendItem(TabLiveChartLegend legend, ChartSeries<ISeri
 		}
 	}
 
+	/// <summary>Syncs the <see cref="LiveChartLineSeries"/> visibility with the current selected/highlight state.</summary>
 	public override void UpdateVisible()
 	{
 		bool isVisible = IsSelected || Highlight;

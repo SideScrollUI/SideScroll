@@ -14,16 +14,23 @@ using SkiaSharp;
 
 namespace SideScroll.Avalonia.Charts.LiveCharts;
 
-// Based on LiveCharts Tooltip
+/// <summary>
+/// Custom LiveCharts tooltip that shows the closest series point's time, value, tags, and description.
+/// Extends <see cref="SKDefaultTooltip"/> to defer animation until the tooltip first becomes visible.
+/// </summary>
 public class LiveChartTooltip(TabLiveChart liveChart) : SKDefaultTooltip
 {
+	/// <summary>Gets the parent chart control this tooltip belongs to.</summary>
 	public TabLiveChart LiveChart => liveChart;
 
+	/// <summary>Gets or sets the font size used for tooltip label text.</summary>
 	public double TextSize { get; set; } = 15;
+	/// <summary>Gets or sets the maximum pixel width of a single tooltip label before it wraps.</summary>
 	public float LabelMaxWidth { get; set; } = 310;
 
 	internal StackLayout? _layout;
 
+	/// <summary>Gets or sets the paint used for tooltip text, sourced from the chart theme.</summary>
 	public Paint? FontPaint { get; set; }
 
 	private bool _animationAdded;

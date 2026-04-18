@@ -11,18 +11,30 @@ using SideScroll.Collections;
 
 namespace SideScroll.Avalonia.Charts;
 
+/// <summary>
+/// Abstract base class for the chart legend panel. Manages a scrollable, wrapping list of
+/// <see cref="TabChartLegendItem{TSeries}"/> controls and handles series selection, highlighting, and clipboard export.
+/// </summary>
 public abstract class TabChartLegend<TSeries> : Grid
 {
+	/// <summary>Gets the parent chart control this legend belongs to.</summary>
 	public TabChart<TSeries> TabChart { get; }
+	/// <summary>Gets the chart view data model.</summary>
 	public ChartView ChartView => TabChart.ChartView;
 
+	/// <summary>Gets the ordered list of legend items.</summary>
 	public List<TabChartLegendItem<TSeries>> LegendItems { get; } = [];
+	/// <summary>Gets the index of legend items keyed by series name.</summary>
 	public Dictionary<string, TabChartLegendItem<TSeries>> IdxLegendItems { get; } = [];
 
+	/// <summary>Gets the scroll viewer that wraps the legend items panel.</summary>
 	protected ScrollViewer ScrollViewer { get; }
+	/// <summary>Gets the wrap panel that lays out legend items horizontally or vertically.</summary>
 	protected WrapPanel WrapPanel { get; }
+	/// <summary>Gets the optional text block showing the aggregate column header (e.g., "Total" or "Count").</summary>
 	protected TextBlock? TextBlockTotal { get; }
 
+	/// <summary>Raised when the visible set of series changes due to selection or highlight actions.</summary>
 	public event EventHandler<EventArgs>? OnVisibleSeriesChanged;
 
 	public override string? ToString() => ChartView.ToString();
@@ -136,6 +148,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 		return seriesType.ToString();
 	}
 
+	/// <summary>Creates and registers a legend item for the given chart series.</summary>
 	protected abstract TabChartLegendItem<TSeries> AddSeries(ChartSeries<TSeries> chartSeries);
 
 	// Show items in order of count, retaining original order for unused values
@@ -173,6 +186,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 		WrapPanel.Children.AddRange(ordered);
 	}
 
+	/// <summary>Selects a single legend item, deselecting all others, or restores full visibility if it was already the only selected item.</summary>
 	protected void SelectLegendItem(TabChartLegendItem<TSeries> legendItem)
 	{
 		int selectedCount = LegendItems.Count(item => item.IsSelected);
@@ -191,6 +205,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 		OnVisibleSeriesChanged?.Invoke(this, EventArgs.Empty);
 	}
 
+	/// <summary>Selects the legend item corresponding to the given series by name.</summary>
 	public void SelectSeries(TSeries series, ListSeries listSeries)
 	{
 		if (listSeries.Name == null) return;
@@ -201,6 +216,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 		}
 	}
 
+	/// <summary>Highlights the legend item with the given series name, fading all others.</summary>
 	public void HighlightSeries(string? name)
 	{
 		if (name == null) return;
@@ -227,6 +243,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 		UpdateVisibleSeries();
 	}
 
+	/// <summary>Sets all legend items to the specified selection state, optionally triggering a visible-series update.</summary>
 	public void SetAllVisible(bool selected, bool update = false)
 	{
 		bool changed = false;
@@ -243,6 +260,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 		}
 	}
 
+	/// <summary>Synchronizes the legend items with the current chart series, adding new items and updating totals for existing ones.</summary>
 	public void RefreshModel()
 	{
 		WrapPanel.Children.Clear();
@@ -289,6 +307,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 		}*/
 	}
 
+	/// <summary>Clears all legend items and resets state.</summary>
 	public void Unload()
 	{
 		WrapPanel.Children.Clear();
@@ -296,6 +315,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 		LegendItems.Clear();
 	}
 
+	/// <summary>Updates the visible state of all legend items based on their current selection and highlight.</summary>
 	public virtual void UpdateVisibleSeries()
 	{
 		foreach (TabChartLegendItem<TSeries> legendItem in LegendItems)
@@ -310,6 +330,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 		OnVisibleSeriesChanged?.Invoke(this, EventArgs.Empty);
 	}
 
+	/// <summary>Updates each legend item's color to either its full color or a faded version, based on highlight state.</summary>
 	public virtual void UpdateHighlight(bool showFaded)
 	{
 		foreach (TabChartLegendItem<TSeries> item in LegendItems)
@@ -318,6 +339,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 		}
 	}
 
+	/// <summary>Clears the highlight from all legend items, optionally refreshing series visibility.</summary>
 	public void UnhighlightAll(bool update = false)
 	{
 		foreach (TabChartLegendItem<TSeries> item in LegendItems)
