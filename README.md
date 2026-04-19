@@ -72,7 +72,7 @@ The demo runs entirely in WebAssembly using Avalonia's browser support—no inst
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later
 - Git
 - Your preferred IDE:
-  - [Visual Studio 2026](https://visualstudio.microsoft.com/) (Windows/Mac)
+  - [Visual Studio 2026](https://visualstudio.microsoft.com/) (Windows)
   - [Visual Studio Code](https://code.visualstudio.com/) (All platforms)
   - [JetBrains Rider](https://www.jetbrains.com/rider/) (All platforms)
 
@@ -146,7 +146,7 @@ SideScroll/
 ├── Programs/                           # Runnable applications
 │   ├── SideScroll.Demo.Avalonia.Desktop/   # Desktop demo app
 │   └── SideScroll.Demo.Avalonia.Browser/   # WebAssembly demo app
-├── Tests/                              # Unit and integration tests
+├── Tests/                              # Unit tests
 ├── Docs/                               # Documentation
 └── Images/                             # Screenshots and assets
 ```
