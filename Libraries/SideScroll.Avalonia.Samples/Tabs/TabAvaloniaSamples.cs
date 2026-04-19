@@ -8,7 +8,7 @@ using SideScroll.Tabs.Samples;
 
 namespace SideScroll.Avalonia.Samples.Tabs;
 
-public class TabAvalonia : ITab
+public class TabAvaloniaSamples : ITab
 {
 	public TabInstance Create() => new Instance();
 

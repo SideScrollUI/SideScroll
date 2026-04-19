@@ -19,7 +19,7 @@ public class BrowserMainView : BaseView
 		// Hook up console logging for all AppLog messages
 		_logWriter = new LogWriterConsole(AppLog);
 		
-		LoadTab(new TabAvalonia());
+		LoadTab(new TabAvaloniaSamples());
 		LiveChartCreator.Register();
 		TabViewer.Toolbar?.AddRightControls();
 	}

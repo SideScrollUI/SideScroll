@@ -7,7 +7,7 @@ using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Samples.Demo;
 
-public class TabDemoPlanets : ITab
+public class TabSamplePlanets : ITab
 {
 	public TabInstance Create() => new Instance();
 

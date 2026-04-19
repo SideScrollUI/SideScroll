@@ -7,7 +7,7 @@ using SideScroll.Time;
 
 namespace SideScroll.Tabs.Samples.Demo;
 
-public class TabPlanetCharts : ITab
+public class TabSamplePlanetCharts : ITab
 {
 	public TabInstance Create() => new Instance();
 

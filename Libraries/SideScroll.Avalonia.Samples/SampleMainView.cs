@@ -9,7 +9,7 @@ public class SampleMainView : BaseView
 {
 	public SampleMainView() : base(Project.Load(SampleProjectSettings.Settings))
 	{
-		LoadTab(new TabAvalonia());
+		LoadTab(new TabAvaloniaSamples());
 
 		LiveChartCreator.Register();
 		TabViewer.Toolbar?.AddRightControls();

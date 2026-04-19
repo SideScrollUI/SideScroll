@@ -10,7 +10,7 @@ public class SampleMainWindow : BaseWindow
 {
 	public SampleMainWindow() : base(Project.Load<SampleUserSettings>(SampleProjectSettings.Settings))
 	{
-		LoadTab(new TabAvalonia());
+		LoadTab(new TabAvaloniaSamples());
 
 		LiveChartCreator.Register();
 		TabViewer.Toolbar?.AddRightControls();

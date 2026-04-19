@@ -14,8 +14,8 @@ public class TabSampleDemo
 {
 	public override string ToString() => "Demo";
 
-	public static TabDemoPlanets Planets => new();
-	public static TabPlanetCharts Charts => new();
+	public static TabSamplePlanets Planets => new();
+	public static TabSamplePlanetCharts Charts => new();
 	public static TabSampleTodos Todo => new();
 	public static TabSampleDataGridCollectionSize Collections => new();
 	public static TabSampleObjectMembers Objects => new();

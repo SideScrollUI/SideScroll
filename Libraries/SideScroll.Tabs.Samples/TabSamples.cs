@@ -31,6 +31,6 @@ public class TabSamples
 	public static TabSampleDataRepo DataRepos => new();
 	public static TabSampleProcess Process => new();
 	public static TabSampleBookmarks Bookmarks => new();
-	public static TabIcons Icons => new();
+	public static TabSampleIcons Icons => new();
 	public static TabTools Tools => new();
 }
