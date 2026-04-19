@@ -137,7 +137,7 @@ public class TabView : Grid, IDisposable
 	private void TabView_ActualThemeVariantChanged(object? sender, EventArgs e)
 	{
 		if (!IsLoaded || ActualThemeVariant == null) return;
-		
+
 		if (Model.ReloadOnThemeChange)
 		{
 			ReloadControls();

@@ -1000,7 +1000,7 @@ public class TabInstance : IDisposable
 				tabBookmark.Tab = iTab;
 			}
 		}
-		
+
 		var lookup = ChildTabInstances.Values
 			.GroupBy(t => (t.SelectedRow ?? new()).ToString() ?? "")
 			.ToDictionary(g => g.Key, g => g.Last());
@@ -1046,7 +1046,7 @@ public class TabInstance : IDisposable
 	{
 		TabBookmark = null;
 		if (bookmark == null) return;
-		
+
 		if (iTab != null)
 		{
 			Type type = iTab.GetType();

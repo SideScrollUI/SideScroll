@@ -27,12 +27,12 @@ public class MemberSchema(TypeSchema typeSchema, string name, int typeIndex = -1
 	/// Gets or sets the member's type
 	/// </summary>
 	public Type? Type { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets or sets the non-nullable version of the member's type
 	/// </summary>
 	public Type? NonNullableType { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets whether the member type is nullable
 	/// </summary>
@@ -42,13 +42,13 @@ public class MemberSchema(TypeSchema typeSchema, string name, int typeIndex = -1
 	/// Gets or sets whether the member is marked as private data
 	/// </summary>
 	public bool IsPrivate { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets or sets whether the member is marked as public data
 	/// Only public data will be exported if the Serializer is set to PublicOnly
 	/// </summary>
 	public bool IsPublic { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets or sets whether the member can be read during serialization
 	/// </summary>

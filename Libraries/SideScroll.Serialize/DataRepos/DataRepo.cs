@@ -18,7 +18,7 @@ public class DataRepo
 	/// Gets the root path of the repository
 	/// </summary>
 	public string RepoPath { get; }
-	
+
 	/// <summary>
 	/// Gets the repository name used as an additional seed in the group hash
 	/// </summary>
@@ -286,7 +286,7 @@ public class DataRepo
 			if (obj != null)
 			{
 				// Get name from header (Atlas) or use path directory name (JSON)
-				string name = useJson 
+				string name = useJson
 					? obj.ToString() ?? ""
 					: serializerFile.LoadHeader(call).Name ?? "";
 				return new DataItem<T>(name, obj);
@@ -312,7 +312,7 @@ public class DataRepo
 			{
 				var serializerFile = SerializerFile.Create(filePath);
 				if (!serializerFile.Exists) continue;
-				
+
 				T? obj = serializerFile.Load<T>(call, lazy);
 				if (obj != null)
 				{
@@ -340,7 +340,7 @@ public class DataRepo
 			{
 				var serializerFile = SerializerFile.Create(filePath);
 				if (!serializerFile.Exists) continue;
-				
+
 				SerializerHeader header = serializerFile.LoadHeader(call);
 				headers.Add(header);
 			}

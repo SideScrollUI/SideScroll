@@ -43,7 +43,7 @@ public class ListEnumValue(string name, bool isSelected, object value, string he
 		foreach (Enum flag in Enum.GetValues(enumType))
 		{
 			bool isSelected = isFlagsEnum ? enumValue.HasFlag(flag) : enumValue.Equals(flag);
-			
+
 			string name = flag.ToString();
 			long value = Convert.ToInt64(flag);
 			string hex = $"{value:X}";

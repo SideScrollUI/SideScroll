@@ -116,7 +116,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	private void TrimHistory()
 	{
 		if (History.Count < MaxHistorySize) return;
-		
+
 		int removeCount = History.Count - MaxHistorySize;
 		History.RemoveRange(0, removeCount);
 
@@ -149,7 +149,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	public Bookmark? SeekBackward()
 	{
 		if (CurrentIndex <= 0) return null;
-		
+
 		CurrentIndex--;
 		Bookmark oldBookmark = History[CurrentIndex];
 		Bookmark newBookmark = oldBookmark.DeepClone(); // Sanitize
@@ -164,7 +164,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	public Bookmark? SeekForward()
 	{
 		if (CurrentIndex >= History.Count - 1) return null;
-		
+
 		CurrentIndex++;
 		return History[CurrentIndex];
 	}

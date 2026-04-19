@@ -23,7 +23,7 @@ public class PropertySchema : MemberSchema
 	/// Gets or sets whether the property can be written during deserialization
 	/// </summary>
 	public bool IsWriteable { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets whether the property is required by a custom constructor
 	/// Readonly properties are only serialized if needed by a custom constructor

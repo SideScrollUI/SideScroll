@@ -72,7 +72,7 @@ public class JsonUtilsTests : BaseTest
 		// With UnsafeRelaxedJsonEscaping, apostrophes should NOT be escaped
 		string input = "{\"description\": \"Earth's moon\"}";
 		Assert.That(JsonUtils.TryFormatUnescaped(input, out string? formatted));
-		
+
 		Assert.That(formatted, Is.Not.Null);
 		Assert.That(formatted!.Contains("Earth's moon"), "Apostrophe should remain unescaped");
 		Assert.That(formatted.Contains("\\u0027"), Is.False, "Should not contain escaped apostrophe");
@@ -84,7 +84,7 @@ public class JsonUtilsTests : BaseTest
 		// With UnsafeRelaxedJsonEscaping, plus signs should NOT be escaped
 		string input = "{\"name\": \"+\"}";
 		Assert.That(JsonUtils.TryFormatUnescaped(input, out string? formatted));
-		
+
 		string expected = "{" + Environment.NewLine + "  \"name\": \"+\"" + Environment.NewLine + "}";
 		Assert.That(formatted, Is.EqualTo(expected), "Plus sign should remain unescaped");
 	}
@@ -131,7 +131,7 @@ public class JsonUtilsTests : BaseTest
 		// With UnsafeRelaxedJsonEscaping, plus signs should NOT be escaped
 		string input = "{\"operation\": \"+\", \"formula\": \"a+b\", \"positive\": \"+1\"}";
 		Assert.That(JsonUtils.TryFormatUnescaped(input, out string? formatted));
-		
+
 		Assert.That(formatted, Is.Not.Null);
 		Assert.That(formatted!.Contains("\"+\""), "Plus signs should remain unescaped");
 		Assert.That(formatted.Contains("\"a+b\""), "Plus signs should remain unescaped");
@@ -154,7 +154,7 @@ public class JsonUtilsTests : BaseTest
 		// With UnsafeRelaxedJsonEscaping, plus signs should NOT be escaped, but control chars should
 		string input = "{\"data\": \"Value: +123\\nNext line\", \"symbol\": \"+\"}";
 		Assert.That(JsonUtils.TryFormatUnescaped(input, out string? formatted));
-		
+
 		Assert.That(formatted, Is.Not.Null);
 		Assert.That(formatted!.Contains("Value: +123"), "Plus signs should remain unescaped");
 		Assert.That(formatted.Contains("\\n"), "Newline escape should be preserved");
@@ -203,11 +203,11 @@ public class JsonUtilsTests : BaseTest
 	{
 		// Test with an actual unescaped newline in a string value (invalid JSON per spec)
 		string input = "{\"name\": \"value\n1\"}";  // Actual newline character, not \n
-		
+
 		// This is technically invalid JSON (unescaped control characters in strings)
 		// The EscapeUnescapedControlCharactersInStrings fallback should handle this
 		bool result = JsonUtils.TryFormatUnescaped(input, out string? formatted);
-		
+
 		Assert.That(result, Is.True);
 		string expected = "{" + Environment.NewLine + "  \"name\": \"value\\n1\"" + Environment.NewLine + "}";
 		Assert.That(formatted, Is.EqualTo(expected));

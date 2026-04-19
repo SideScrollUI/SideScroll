@@ -19,7 +19,7 @@ public class HttpMemoryCache
 	/// Gets the maximum number of items this cache can hold
 	/// </summary>
 	public int MaxItems { get; }
-	
+
 	/// <summary>
 	/// Gets the duration items remain in the cache before expiring
 	/// </summary>

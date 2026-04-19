@@ -80,7 +80,7 @@ public class BaseWindow : Window
 		_cleanupDispatcherTimer.Start();
 	}
 
-	public BaseWindow(ProjectSettings settings) : 
+	public BaseWindow(ProjectSettings settings) :
 		this(Project.Load(settings))
 	{
 	}

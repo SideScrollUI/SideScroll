@@ -14,7 +14,7 @@ public class TypeRef
 	/// Gets or sets the type repository containing the object
 	/// </summary>
 	public TypeRepo? TypeRepo;
-	
+
 	/// <summary>
 	/// Gets or sets the index of the object within the type repository
 	/// </summary>
@@ -43,7 +43,7 @@ public class LazyProperty
 	/// Gets or sets the original property info from the base type
 	/// </summary>
 	public PropertyInfo? PropertyInfoOriginal;
-	
+
 	/// <summary>
 	/// Gets or sets the overridden property info from the lazy type
 	/// </summary>
@@ -53,7 +53,7 @@ public class LazyProperty
 	/// Gets or sets the field builder for tracking whether the property has been loaded
 	/// </summary>
 	public FieldBuilder? FieldBuilderLoaded;
-	
+
 	/// <summary>
 	/// Gets or sets the field builder for storing the type reference
 	/// </summary>
@@ -63,7 +63,7 @@ public class LazyProperty
 	/// Gets or sets the field info for the loaded flag
 	/// </summary>
 	public FieldInfo? FieldInfoLoaded;
-	
+
 	/// <summary>
 	/// Gets or sets the field info for the type reference
 	/// </summary>
@@ -96,7 +96,7 @@ public class LazyClass
 	/// Gets the original type being wrapped
 	/// </summary>
 	public Type OriginalType { get; }
-	
+
 	/// <summary>
 	/// Gets the dynamically generated lazy wrapper type
 	/// </summary>

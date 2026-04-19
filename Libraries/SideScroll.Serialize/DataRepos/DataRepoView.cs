@@ -18,7 +18,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 	/// Gets all keys in the collection
 	/// </summary>
 	public IEnumerable<string> Keys => Items.Keys;
-	
+
 	/// <summary>
 	/// Gets all values in the collection
 	/// </summary>

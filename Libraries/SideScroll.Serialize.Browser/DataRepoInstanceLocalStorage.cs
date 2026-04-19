@@ -10,7 +10,7 @@ namespace SideScroll.Serialize.Browser;
 [SupportedOSPlatform("browser")]
 public class DataRepoInstanceLocalStorage<T> : DataRepoInstance<T>
 {
-	public DataRepoInstanceLocalStorage(DataRepo dataRepo, string groupId, bool indexed = false, int? maxItems = null) 
+	public DataRepoInstanceLocalStorage(DataRepo dataRepo, string groupId, bool indexed = false, int? maxItems = null)
 		: base(dataRepo, groupId, false, maxItems) // Don't let base class create index
 	{
 		// Create localStorage-compatible index if needed
@@ -32,7 +32,7 @@ public class DataRepoInstanceLocalStorage<T> : DataRepoInstance<T>
 			var paths = indices.Items.Select(i => DataRepo.GetDataPath(DataType, GroupId, i.Key));
 			return ascending ? paths : paths.Reverse();
 		}
-		
+
 		// Otherwise, scan localStorage keys
 		string keyPrefix = SerializerLocalStorage.ConvertPathToStorageKey(GroupPath);
 		var allKeys = SerializerLocalStorage.GetAllKeys();

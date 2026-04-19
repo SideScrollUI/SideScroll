@@ -24,12 +24,12 @@ public class SerializerHeader
 	/// Gets or sets the version number of the serialized file
 	/// </summary>
 	public ushort? Version { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the total file size in bytes
 	/// </summary>
 	public long FileSize { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the name of the serialized object
 	/// </summary>

@@ -14,7 +14,7 @@ public class TimeRangePeriod : ITags
 	/// Gets or sets the start time of this period
 	/// </summary>
 	public DateTime StartTime { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the minimum start time of values that contributed to this period
 	/// </summary>
@@ -24,7 +24,7 @@ public class TimeRangePeriod : ITags
 	/// Gets or sets the end time of this period
 	/// </summary>
 	public DateTime EndTime { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the maximum end time of values that contributed to this period
 	/// </summary>
@@ -39,7 +39,7 @@ public class TimeRangePeriod : ITags
 	/// Gets or sets the minimum value encountered in this period
 	/// </summary>
 	public double MinValue { get; set; } = double.MaxValue;
-	
+
 	/// <summary>
 	/// Gets or sets the maximum value encountered in this period
 	/// </summary>
@@ -53,12 +53,12 @@ public class TimeRangePeriod : ITags
 	/// </summary>
 	[DeprecatedName("Sum")]
 	public double SumPerPeriod { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the total of all values weighted by period
 	/// </summary>
 	public double SummedValues { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the total duration covered by all values in this period
 	/// </summary>
@@ -180,7 +180,7 @@ public class TimeRangePeriod : ITags
 					// Each bin gets the full proportional value based on its duration relative to period
 					double rateContribution = timeRangeValue.Value * ((double)binDuration.Ticks / periodTicks);
 					period.SumPerPeriod += rateContribution;
-					
+
 					long totalTicks = binDuration.Min(timeRangeValue.Duration).Ticks;
 					period.SummedDurations += binDuration;
 					period.SummedValues += totalTicks * timeRangeValue.Value;

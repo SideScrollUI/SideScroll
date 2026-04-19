@@ -74,7 +74,7 @@ public static class Paths
 			// Use IDBFS mounted path in browser
 			if (OperatingSystem.IsBrowser())
 				return "/appdata";
-			
+
 			return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 		}
 	}
@@ -92,7 +92,7 @@ public static class Paths
 			// Use IDBFS mounted path in browser
 			if (OperatingSystem.IsBrowser())
 				return "/localappdata";
-			
+
 			return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 		}
 	}

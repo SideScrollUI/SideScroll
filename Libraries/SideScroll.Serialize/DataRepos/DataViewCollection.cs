@@ -36,7 +36,7 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	/// Gets the primary data repository view
 	/// </summary>
 	public DataRepoView<TDataType> DataRepoView { get; }
-	
+
 	/// <summary>
 	/// Gets or sets the optional secondary repository for saves and deletes
 	/// </summary>

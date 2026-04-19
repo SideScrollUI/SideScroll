@@ -17,7 +17,7 @@ public class TimeWindow
 	/// Gets or sets the start time of this window
 	/// </summary>
 	public DateTime StartTime { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the end time of this window
 	/// </summary>

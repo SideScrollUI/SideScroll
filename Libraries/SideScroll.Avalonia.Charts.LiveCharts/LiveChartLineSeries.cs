@@ -25,7 +25,7 @@ public class LiveChartPoint : ObservablePoint
 	{
 		Object = obj;
 		if (x == null) return;
-		
+
 		if (yCoordinate != null)
 		{
 			Coordinate = new(x.Value, yCoordinate.Value);

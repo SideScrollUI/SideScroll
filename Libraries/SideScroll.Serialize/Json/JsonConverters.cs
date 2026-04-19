@@ -130,7 +130,7 @@ public static class JsonConverters
 
 		// Check if the class itself has ProtectedDataAttribute
 		bool isProtectedClass = typeInfo.Type.IsDefined(typeof(ProtectedDataAttribute), inherit: true);
-		
+
 		if (!isProtectedClass)
 			return;
 
@@ -138,20 +138,20 @@ public static class JsonConverters
 		foreach (JsonPropertyInfo property in typeInfo.Properties)
 		{
 			bool hasPublicDataAttribute = property.AttributeProvider?.IsDefined(typeof(PublicDataAttribute), inherit: true) == true;
-			
+
 			// Also check the actual field/property on the type (for fields especially)
 			if (!hasPublicDataAttribute)
 			{
-				var memberInfo = typeInfo.Type.GetMember(property.Name, 
-					System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | 
+				var memberInfo = typeInfo.Type.GetMember(property.Name,
+					System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic |
 					System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static).FirstOrDefault();
-				
+
 				if (memberInfo != null)
 				{
 					hasPublicDataAttribute = memberInfo.IsDefined(typeof(PublicDataAttribute), inherit: true);
 				}
 			}
-			
+
 			if (!hasPublicDataAttribute)
 			{
 				property.ShouldSerialize = (_, _) => false;
@@ -288,11 +288,11 @@ public class ObjectJsonConverter : JsonConverter<object>
 	{
 		// For deserialization, check if there's type information to deserialize to the correct type
 		using var jsonDoc = JsonDocument.ParseValue(ref reader);
-		
+
 		// Check for type information in objects
-		if (jsonDoc.RootElement.ValueKind == JsonValueKind.Object && 
-		    jsonDoc.RootElement.TryGetProperty("$type", out var typeProperty) &&
-		    jsonDoc.RootElement.TryGetProperty("$value", out var valueProperty))
+		if (jsonDoc.RootElement.ValueKind == JsonValueKind.Object &&
+			jsonDoc.RootElement.TryGetProperty("$type", out var typeProperty) &&
+			jsonDoc.RootElement.TryGetProperty("$value", out var valueProperty))
 		{
 			string? typeName = typeProperty.GetString();
 			if (typeName != null)
@@ -312,7 +312,7 @@ public class ObjectJsonConverter : JsonConverter<object>
 				}
 			}
 		}
-		
+
 		// Default deserialization without type information
 		return jsonDoc.RootElement.ValueKind switch
 		{
@@ -320,9 +320,9 @@ public class ObjectJsonConverter : JsonConverter<object>
 			JsonValueKind.True => true,
 			JsonValueKind.False => false,
 			JsonValueKind.Number => jsonDoc.RootElement.TryGetInt32(out int i) ? i :
-			                        jsonDoc.RootElement.TryGetInt64(out long l) ? l :
-			                        jsonDoc.RootElement.TryGetDouble(out double d) ? d :
-			                        (object)jsonDoc.RootElement.GetDecimal(),
+									jsonDoc.RootElement.TryGetInt64(out long l) ? l :
+									jsonDoc.RootElement.TryGetDouble(out double d) ? d :
+									(object)jsonDoc.RootElement.GetDecimal(),
 			JsonValueKind.String => jsonDoc.RootElement.GetString(),
 			JsonValueKind.Array => jsonDoc.RootElement.Deserialize<List<object?>>(options),
 			JsonValueKind.Object => jsonDoc.RootElement.Deserialize<Dictionary<string, object?>>(options),
@@ -349,13 +349,13 @@ public class ObjectJsonConverter : JsonConverter<object>
 		}
 
 		// For primitives and simple types that don't need type information, serialize directly
-		if (runtimeType.IsPrimitive || 
-		    runtimeType == typeof(string) || 
-		    runtimeType == typeof(decimal) ||
-		    runtimeType == typeof(DateTime) ||
-		    runtimeType == typeof(DateTimeOffset) ||
-		    runtimeType == typeof(TimeSpan) ||
-		    runtimeType == typeof(Guid))
+		if (runtimeType.IsPrimitive ||
+			runtimeType == typeof(string) ||
+			runtimeType == typeof(decimal) ||
+			runtimeType == typeof(DateTime) ||
+			runtimeType == typeof(DateTimeOffset) ||
+			runtimeType == typeof(TimeSpan) ||
+			runtimeType == typeof(Guid))
 		{
 			JsonSerializer.Serialize(writer, value, runtimeType, options);
 			return;

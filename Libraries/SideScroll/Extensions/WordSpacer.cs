@@ -258,7 +258,7 @@ public class WordSpacer
 	/// <summary>
 	/// Represents a parsed token with its type and value
 	/// </summary>
-	public class Token 
+	public class Token
 	{
 		/// <summary>
 		/// Gets or sets the type of this token
@@ -361,7 +361,7 @@ public class WordSpacer
 			else if (char.IsUpper(c))
 			{
 				if (TokenType == TokenType.UpperString) return true;
-				
+
 				if (!char.IsLower(firstChar)) return false;
 
 				TokenType = TokenType.Capitalized;

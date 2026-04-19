@@ -39,7 +39,7 @@ public class FilterTests : BaseTest
 		Assert.That(filter.FilterText, Is.EqualTo("test"));
 		Assert.That(filter.Depth, Is.EqualTo(0));
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterLeafNode>());
-		
+
 		var leafNode = (FilterLeafNode)filter.RootNode!;
 		Assert.That(leafNode.TextUppercase, Is.EqualTo("TEST"));
 	}
@@ -50,7 +50,7 @@ public class FilterTests : BaseTest
 		var filter = new Filter("\"hello world\"");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterLeafNode>());
-		
+
 		var leafNode = (FilterLeafNode)filter.RootNode!;
 		Assert.That(leafNode.TextUppercase, Is.EqualTo("HELLO WORLD"));
 	}
@@ -61,7 +61,7 @@ public class FilterTests : BaseTest
 		var filter = new Filter("\"hello world");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterLeafNode>());
-		
+
 		var leafNode = (FilterLeafNode)filter.RootNode!;
 		Assert.That(leafNode.TextUppercase, Is.EqualTo("HELLO WORLD"));
 	}
@@ -73,7 +73,7 @@ public class FilterTests : BaseTest
 		var filter = new Filter("\"hello world & test");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterLeafNode>());
-		
+
 		var leafNode = (FilterLeafNode)filter.RootNode!;
 		// The entire remainder is treated as quoted text with the opening quote removed
 		Assert.That(leafNode.TextUppercase, Is.EqualTo("HELLO WORLD & TEST"));
@@ -86,11 +86,11 @@ public class FilterTests : BaseTest
 		var filter = new Filter("\"hello world\" & test");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.And));
 		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
-		
+
 		var leaf1 = (FilterLeafNode)operatorNode.Children[0];
 		var leaf2 = (FilterLeafNode)operatorNode.Children[1];
 		Assert.That(leaf1.TextUppercase, Is.EqualTo("HELLO WORLD"));
@@ -125,13 +125,13 @@ public class FilterTests : BaseTest
 		var filter = new Filter("foo & bar");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.And));
 		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
 		Assert.That(operatorNode.Children[0], Is.InstanceOf<FilterLeafNode>());
 		Assert.That(operatorNode.Children[1], Is.InstanceOf<FilterLeafNode>());
-		
+
 		var leaf1 = (FilterLeafNode)operatorNode.Children[0];
 		var leaf2 = (FilterLeafNode)operatorNode.Children[1];
 		Assert.That(leaf1.TextUppercase, Is.EqualTo("FOO"));
@@ -144,7 +144,7 @@ public class FilterTests : BaseTest
 		var filter = new Filter("foo bar");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.And));
 		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
@@ -156,11 +156,11 @@ public class FilterTests : BaseTest
 		var filter = new Filter("foo & bar & baz");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.And));
 		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
-		
+
 		// First child should be another AND node
 		Assert.That(operatorNode.Children[0], Is.InstanceOf<FilterOperatorNode>());
 		var nestedAnd = (FilterOperatorNode)operatorNode.Children[0];
@@ -177,11 +177,11 @@ public class FilterTests : BaseTest
 		var filter = new Filter("foo | bar");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.Or));
 		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
-		
+
 		var leaf1 = (FilterLeafNode)operatorNode.Children[0];
 		var leaf2 = (FilterLeafNode)operatorNode.Children[1];
 		Assert.That(leaf1.TextUppercase, Is.EqualTo("FOO"));
@@ -194,7 +194,7 @@ public class FilterTests : BaseTest
 		var filter = new Filter("foo | bar | baz");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.Or));
 		Assert.That(operatorNode.Children, Has.Count.EqualTo(3));
@@ -210,11 +210,11 @@ public class FilterTests : BaseTest
 		var filter = new Filter("foo & bar | baz");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.Or));
 		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
-		
+
 		// First child should be an AND node
 		Assert.That(operatorNode.Children[0], Is.InstanceOf<FilterOperatorNode>());
 		var andNode = (FilterOperatorNode)operatorNode.Children[0];
@@ -227,11 +227,11 @@ public class FilterTests : BaseTest
 		var filter = new Filter("foo | bar & baz");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.Or));
 		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
-		
+
 		// Second child should be an AND node
 		Assert.That(operatorNode.Children[1], Is.InstanceOf<FilterOperatorNode>());
 		var andNode = (FilterOperatorNode)operatorNode.Children[1];
@@ -248,11 +248,11 @@ public class FilterTests : BaseTest
 		var filter = new Filter("(foo | bar) & baz");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.And));
 		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
-		
+
 		// First child should be an OR node (from parentheses)
 		Assert.That(operatorNode.Children[0], Is.InstanceOf<FilterOperatorNode>());
 		var orNode = (FilterOperatorNode)operatorNode.Children[0];
@@ -265,7 +265,7 @@ public class FilterTests : BaseTest
 		var filter = new Filter("((foo | bar) & baz)");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.And));
 	}
@@ -276,11 +276,11 @@ public class FilterTests : BaseTest
 		var filter = new Filter("(foo | bar) & (baz | qux)");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.And));
 		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
-		
+
 		// Both children should be OR nodes
 		Assert.That(operatorNode.Children[0], Is.InstanceOf<FilterOperatorNode>());
 		Assert.That(operatorNode.Children[1], Is.InstanceOf<FilterOperatorNode>());
@@ -541,7 +541,7 @@ public class FilterTests : BaseTest
 		var filter = new Filter("foo    &    bar");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.And));
 		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
@@ -553,10 +553,10 @@ public class FilterTests : BaseTest
 		var filter = new Filter("\"hello world\" & test");
 
 		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
-		
+
 		var operatorNode = (FilterOperatorNode)filter.RootNode!;
 		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.And));
-		
+
 		var leaf1 = (FilterLeafNode)operatorNode.Children[0];
 		Assert.That(leaf1.TextUppercase, Is.EqualTo("HELLO WORLD"));
 	}

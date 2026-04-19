@@ -25,7 +25,7 @@ public class BookmarkJsonTests : BaseTest
 		};
 
 		string json = bookmark.ToJson();
-		
+
 		Assert.That(json, Is.Not.Null);
 		Assert.That(json, Contains.Substring("Test Bookmark"));
 
@@ -95,13 +95,13 @@ public class BookmarkJsonTests : BaseTest
 		Assert.That(deserialized.BookmarkType, Is.EqualTo(original.BookmarkType));
 		Assert.That(deserialized.Imported, Is.EqualTo(original.Imported));
 		Assert.That(deserialized.TabBookmark.Width, Is.EqualTo(original.TabBookmark.Width));
-		
+
 		var originalTabData = original.TabBookmark.TabDatas[0];
 		var deserializedTabData = deserialized.TabBookmark.TabDatas[0];
-		
+
 		Assert.That(deserializedTabData.DataRepoGroupId, Is.EqualTo(originalTabData.DataRepoGroupId));
 		Assert.That(deserializedTabData.Filter, Is.EqualTo(originalTabData.Filter));
-		Assert.That(deserializedTabData.SelectedRows[0].SelectedRow.Label, 
+		Assert.That(deserializedTabData.SelectedRows[0].SelectedRow.Label,
 			Is.EqualTo(originalTabData.SelectedRows[0].SelectedRow.Label));
 	}
 
@@ -245,7 +245,7 @@ public class BookmarkJsonTests : BaseTest
 		// Verify DataValue is properly serialized and deserialized
 		Assert.That(firstSelectedRow.SelectedRow.DataValue, Is.Not.Null);
 		Assert.That(firstSelectedRow.SelectedRow.DataValue, Is.InstanceOf<SampleItem>());
-		
+
 		var dataValueItem = (SampleItem)firstSelectedRow.SelectedRow.DataValue!;
 		Assert.That(dataValueItem.Name, Is.EqualTo("Item 3"));
 		Assert.That(dataValueItem.Description, Is.EqualTo("Describe all the things"));
@@ -344,10 +344,10 @@ public class BookmarkJsonTests : BaseTest
 		// Verify the unregistered type in DataValue was blocked (serialized as null)
 		var firstTabData = deserialized!.TabBookmark.TabDatas[0];
 		var firstSelectedRow = firstTabData.SelectedRows[0];
-		
+
 		Assert.That(firstSelectedRow.SelectedRow.Label, Is.EqualTo("Test Item"));
 		Assert.That(firstSelectedRow.SelectedRow.DataKey, Is.EqualTo("test"));
-		
+
 		// Unregistered types should be blocked from serialization (result in null)
 		Assert.That(firstSelectedRow.SelectedRow.DataValue, Is.Null);
 	}

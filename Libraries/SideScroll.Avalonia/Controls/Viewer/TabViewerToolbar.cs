@@ -97,7 +97,7 @@ public class TabViewerToolbar : TabControlToolbar
 		ButtonForward = AddButton("Forward (Alt + Right)", Icons.Svg.RightArrow);
 		ButtonForward.BindIsEnabled(nameof(BookmarkNavigator.CanSeekForward), Project.Navigator);
 		ButtonForward.Add(_ => TabViewer.SeekForward());
-		
+
 		AddSeparator();
 		ButtonRefresh = AddButton("Refresh (Ctrl + R)", Icons.Svg.Refresh);
 		ButtonRefresh.Add(Refresh);

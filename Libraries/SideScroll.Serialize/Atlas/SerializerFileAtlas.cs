@@ -16,7 +16,7 @@ public class SerializerFileAtlas : SerializerFile
 	/// Gets or sets the maximum number of save attempts when file is locked
 	/// </summary>
 	public static int SaveAttemptsMax { get; set; } = 10;
-	
+
 	/// <summary>
 	/// Gets or sets the backoff time between save attempts (multiplied by attempt number)
 	/// </summary>
@@ -148,7 +148,7 @@ public class SerializerFileAtlas : SerializerFile
 		}
 
 		if (result != null) return result;
-		
+
 		T newObject = Activator.CreateInstance<T>();
 		return newObject;
 	}

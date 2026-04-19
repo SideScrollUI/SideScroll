@@ -58,7 +58,7 @@ public class ListSeries
 	/// Gets or sets the series description
 	/// </summary>
 	public string? Description { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the series metadata tags
 	/// </summary>

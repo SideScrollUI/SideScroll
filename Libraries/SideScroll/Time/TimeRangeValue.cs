@@ -25,7 +25,7 @@ public class TimeRangeValue : ITags
 	/// </summary>
 	[XAxis]
 	public DateTime StartTime { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the end time of this value's range
 	/// </summary>

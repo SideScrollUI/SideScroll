@@ -18,12 +18,12 @@ public interface IDataPageView : INotifyPropertyChanged
 	/// Gets or sets the number of items per page
 	/// </summary>
 	public int PageSize { get; set; }
-	
+
 	/// <summary>
 	/// Gets the total number of pages
 	/// </summary>
 	public int PageCount { get; }
-	
+
 	/// <summary>
 	/// Gets or sets the current page index
 	/// </summary>
@@ -33,7 +33,7 @@ public interface IDataPageView : INotifyPropertyChanged
 	/// Gets whether there is a previous page available
 	/// </summary>
 	public bool HasPrevious { get; }
-	
+
 	/// <summary>
 	/// Gets whether there is a next page available
 	/// </summary>
@@ -66,12 +66,12 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	/// Gets or sets the number of items per page
 	/// </summary>
 	public int PageSize { get; set; } = pageSize ?? DefaultPageSize;
-	
+
 	/// <summary>
 	/// Gets the total number of pages
 	/// </summary>
 	public int PageCount => ((_allPaths?.Count + PageSize - 1) ?? 0) / PageSize;
-	
+
 	/// <summary>
 	/// Gets or sets the current page index
 	/// </summary>
@@ -92,7 +92,7 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	/// Gets whether there is a previous page available
 	/// </summary>
 	public bool HasPrevious => PageIndex > 0;
-	
+
 	/// <summary>
 	/// Gets whether there is a next page available
 	/// </summary>
@@ -113,7 +113,7 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	/// Gets the enumerable collection of file paths
 	/// </summary>
 	public IEnumerable<string>? GetPathEnumerable(Call call) => DataRepoInstance.GetPathEnumerable(call, Ascending);
-	
+
 	/// <summary>
 	/// Loads and returns the items for the specified page
 	/// </summary>

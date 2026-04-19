@@ -7,7 +7,7 @@ namespace SideScroll.Serialize.Atlas;
 /// <summary>
 /// Exception thrown when serialization or deserialization errors occur
 /// </summary>
-public class SerializerException(string text, params Tag[] tags) : 
+public class SerializerException(string text, params Tag[] tags) :
 	TaggedException(text, tags);
 
 /// <summary>
@@ -36,7 +36,7 @@ public class Serializer : IDisposable
 	/// Gets the list of type repositories managing serialized instances
 	/// </summary>
 	public List<TypeRepo> TypeRepos { get; } = [];
-	
+
 	/// <summary>
 	/// Gets the dictionary mapping types to their type repositories
 	/// </summary>
@@ -56,12 +56,12 @@ public class Serializer : IDisposable
 	/// Gets or sets whether to use lazy loading for objects
 	/// </summary>
 	public bool Lazy { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets whether to serialize only public data
 	/// </summary>
 	public bool PublicOnly { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets whether to enable mapping between fields and properties during deserialization
 	/// </summary>
@@ -71,7 +71,7 @@ public class Serializer : IDisposable
 	/// Gets the queue of objects waiting to be parsed
 	/// </summary>
 	public Queue<object> ParserQueue { get; } = [];
-	
+
 	/// <summary>
 	/// Gets the list of primitive values (primitives are usually serialized inline, but not when they're the primary type)
 	/// </summary>
@@ -81,7 +81,7 @@ public class Serializer : IDisposable
 	/// Gets the dictionary tracking cloned objects
 	/// </summary>
 	protected Dictionary<object, object> Clones { get; } = [];
-	
+
 	/// <summary>
 	/// Gets the queue of clone operations to process
 	/// </summary>

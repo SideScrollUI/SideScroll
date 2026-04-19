@@ -59,7 +59,7 @@ public partial class SerializerLocalStorage : SerializerFile
 		{
 			string json = JsonSerializer.Serialize(obj, obj.GetType(), options);
 			bool success = SetLocalStorageItem(StorageKey, json);
-			
+
 			if (success)
 			{
 				call.Log.AddDebug("Saved to localStorage",
@@ -90,7 +90,7 @@ public partial class SerializerLocalStorage : SerializerFile
 		try
 		{
 			string? json = GetLocalStorageItem(StorageKey);
-			
+
 			if (string.IsNullOrEmpty(json))
 			{
 				call.Log.AddDebug("No data found in localStorage",
@@ -101,7 +101,7 @@ public partial class SerializerLocalStorage : SerializerFile
 			call.Log.AddDebug("Loaded from localStorage",
 				new Tag("Key", StorageKey),
 				new Tag("Size", json.Length));
-			
+
 			taskInstance?.SetFinished();
 
 			// Use expectedType if provided

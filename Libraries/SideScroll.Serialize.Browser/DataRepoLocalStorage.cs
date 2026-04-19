@@ -93,14 +93,14 @@ public class DataRepoLocalStorage(string repoPath, string? repoName = null)
 				string path = storageKey
 					.Substring("SideScroll_Data_".Length)
 					.Replace('_', '/');
-				
+
 				var serializerFile = new SerializerLocalStorage(path);
 				if (!serializerFile.Exists)
 					continue;
-				
+
 				T? obj = serializerFile.Load<T>(call, lazy);
 				if (obj == null) continue;
-				
+
 				string name = serializerFile.Name;
 				entries.Add(name, obj);
 			}
@@ -109,7 +109,7 @@ public class DataRepoLocalStorage(string repoPath, string? repoName = null)
 				call.Log.Add(e, new Tag("Key", storageKey));
 			}
 		}
-		
+
 		return entries;
 	}
 
@@ -154,7 +154,7 @@ public class DataRepoLocalStorage(string repoPath, string? repoName = null)
 			.Where(k => k.StartsWith(keyPrefix + '_'))
 			.ToList();
 
-		using CallTimer callTimer = call.Timer("Deleting items from localStorage", 
+		using CallTimer callTimer = call.Timer("Deleting items from localStorage",
 			new Tag("Type", type.Name),
 			new Tag("Group", groupId),
 			new Tag("Count", matchingKeys.Count));

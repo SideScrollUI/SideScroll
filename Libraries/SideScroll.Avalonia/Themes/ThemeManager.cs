@@ -85,7 +85,7 @@ public class ThemeManager
 		}
 
 		// Don't replace user modified themes, but update them to add new resources
-		if (!isHybridFound || 
+		if (!isHybridFound ||
 			GetUpdatedTheme(variant) is not AvaloniaThemeSettings existingThemeSettings ||
 			(existingThemeSettings.ModifiedAt == null && existingThemeSettings.Version != Project.Version))
 		{

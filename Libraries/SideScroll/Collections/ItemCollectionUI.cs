@@ -13,7 +13,7 @@ public interface IContext
 	/// The SynchronizationContext used for marshalling operations to the UI thread
 	/// </summary>
 	SynchronizationContext? Context { get; set; }
-	
+
 	/// <summary>
 	/// Initializes the SynchronizationContext for this object
 	/// </summary>
@@ -30,27 +30,27 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	/// The label to display for this collection
 	/// </summary>
 	public string? Label { get; set; }
-	
+
 	/// <summary>
 	/// The name to display for the first column in the DataGrid
 	/// </summary>
 	public string? ColumnName { get; set; }
-	
+
 	/// <summary>
 	/// Custom path for saving/loading tab view settings
 	/// </summary>
 	public string? CustomSettingsPath { get; set; }
-	
+
 	/// <summary>
 	/// The default item to select when the collection is displayed
 	/// </summary>
 	public object? DefaultSelectedItem { get; set; }
-	
+
 	/// <summary>
 	/// Whether single-item collections should be automatically skipped/expanded in the UI (default: true)
 	/// </summary>
 	public bool Skippable { get; set; } = true;
-	
+
 	/// <summary>
 	/// Override default header visibility - when set, always shows/hides the header regardless of other settings
 	/// </summary>

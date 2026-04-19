@@ -167,7 +167,7 @@ public class Filter
 		}
 
 		string filters = match.Groups["Filters"].Value;
-		
+
 		// Parse into tree structure
 		RootNode = ParseExpression(filters, 0, out _);
 	}
@@ -176,7 +176,7 @@ public class Filter
 	{
 		List<FilterNode> nodes = [];
 		List<FilterOperator> operators = [];
-		
+
 		int i = startIndex;
 		bool insideQuotes = false;
 		int tokenStart = i;
@@ -212,10 +212,10 @@ public class Filter
 			{
 				// Add token before operator
 				AddToken(input, tokenStart, i, nodes);
-				
+
 				// Add operator
 				operators.Add(c == '&' ? FilterOperator.And : FilterOperator.Or);
-				
+
 				i++;
 				tokenStart = i;
 			}
@@ -230,9 +230,9 @@ public class Filter
 					{
 						lookAhead++;
 					}
-					
+
 					bool nextIsOperator = lookAhead < input.Length && (input[lookAhead] == '&' || input[lookAhead] == '|');
-					
+
 					if (!nextIsOperator)
 					{
 						AddToken(input, tokenStart, i, nodes);
@@ -255,7 +255,7 @@ public class Filter
 
 		// Add final token
 		AddToken(input, tokenStart, i, nodes);
-		
+
 		endIndex = i;
 		return BuildTree(nodes, operators);
 	}
@@ -302,7 +302,7 @@ public class Filter
 			// Try to recover by returning what we have
 			if (nodes.Count == 1)
 				return nodes[0];
-			
+
 			// Create an AND node with all nodes as a fallback
 			return new FilterOperatorNode
 			{
@@ -327,7 +327,7 @@ public class Filter
 					Operator = FilterOperator.And,
 					Children = [nodes[i], nodes[i + 1]]
 				};
-				
+
 				nodes.RemoveAt(i + 1);
 				nodes[i] = andNode;
 				operators.RemoveAt(i);

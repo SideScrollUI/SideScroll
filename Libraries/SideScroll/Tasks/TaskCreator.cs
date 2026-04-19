@@ -12,7 +12,7 @@ public enum AccentType
 	/// Default visual style
 	/// </summary>
 	Default,
-	
+
 	/// <summary>
 	/// Warning visual style to indicate caution
 	/// </summary>
@@ -33,12 +33,12 @@ public class ConfirmationFlyoutConfig(string text, string confirmText, string ca
 	/// Gets the confirmation message text
 	/// </summary>
 	public string Text => text;
-	
+
 	/// <summary>
 	/// Gets the text for the confirmation button
 	/// </summary>
 	public string ConfirmText => confirmText;
-	
+
 	/// <summary>
 	/// Gets the text for the cancel button
 	/// </summary>

@@ -13,5 +13,4 @@ public class TabSampleLoading
 	public static TabSampleLoadAsyncItem LoadAsyncItem => new();
 	public static TabSampleSkip Skip => new();
 	public static TabSampleExceptions Exceptions => new();
-	
 }

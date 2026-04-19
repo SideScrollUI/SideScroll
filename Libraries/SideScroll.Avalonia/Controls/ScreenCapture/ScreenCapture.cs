@@ -132,7 +132,7 @@ public class ScreenCapture : Grid
 	{
 		_clipboardBitmap?.Dispose();
 		_clipboardBitmap = null;
-		
+
 		// Get new bitmap - this must not be disposed after setting to clipboard on macOS
 		_clipboardBitmap = GetSelectedBitmap();
 		if (_clipboardBitmap == null)

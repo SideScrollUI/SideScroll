@@ -11,7 +11,7 @@ public class Linker(Project project)
 	/// The URI prefix for SideScroll links
 	/// </summary>
 	public const string SideScrollPrefix = "sidescroll";
-	
+
 	/// <summary>
 	/// The link type identifier
 	/// </summary>
@@ -21,7 +21,7 @@ public class Linker(Project project)
 	/// Only allow exporting classes and members with PublicOnly
 	/// </summary>
 	public bool PublicOnly { get; set; } = true;
-	
+
 	/// <summary>
 	/// Maximum length for encoded link URIs. Default is 65,500 (Uri.EscapeDataString limit)
 	/// </summary>

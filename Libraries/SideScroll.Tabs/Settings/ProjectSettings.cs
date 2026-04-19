@@ -68,8 +68,8 @@ public class ProjectSettings
 	/// <summary>
 	/// Gets whether custom titlebar is enabled by default on Windows and macOS platforms
 	/// </summary>
-	public static bool DefaultEnableCustomTitlebar => 
-		RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || 
+	public static bool DefaultEnableCustomTitlebar =>
+		RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
 		RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
 	/// <summary>

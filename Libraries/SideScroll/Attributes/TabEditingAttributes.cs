@@ -103,7 +103,7 @@ public class WatermarkAttribute(string text, string? memberName = null) : Attrib
 	/// The watermark text to display.
 	/// </summary>
 	public string Text => text;
-	
+
 	/// <summary>
 	/// Optional member name to use as watermark source (overrides Text if set).
 	/// </summary>

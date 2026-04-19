@@ -19,12 +19,12 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	/// Gets all keys in the collection
 	/// </summary>
 	public IEnumerable<string> Keys => this.Select(o => o.Key);
-	
+
 	/// <summary>
 	/// Gets all values in the collection
 	/// </summary>
 	public IEnumerable<T> Values => this.Select(o => o.Value);
-	
+
 	/// <summary>
 	/// Gets all values sorted by key
 	/// </summary>
@@ -148,7 +148,7 @@ public interface IDataItem
 	/// Gets the unique key for this item
 	/// </summary>
 	string Key { get; }
-	
+
 	/// <summary>
 	/// Gets the object value
 	/// </summary>
@@ -164,17 +164,17 @@ public class DataItem<T>(string key, T value, string? path = null) : IDataItem
 	/// Gets the unique key for this item
 	/// </summary>
 	public string Key { get; } = key;
-	
+
 	/// <summary>
 	/// Gets or sets the typed value
 	/// </summary>
 	public T Value { get; set; } = value;
-	
+
 	/// <summary>
 	/// Gets the value as an object
 	/// </summary>
 	public object Object => Value!;
-	
+
 	/// <summary>
 	/// Gets or sets the file path associated with this item
 	/// </summary>

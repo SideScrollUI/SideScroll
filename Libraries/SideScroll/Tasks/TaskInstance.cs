@@ -188,7 +188,7 @@ public class TaskInstance : INotifyPropertyChanged
 		Creator = parentTask.Creator;
 		TokenSource = parentTask.TokenSource;
 		ParentTask = parentTask;
-		
+
 		if (parentTask.ProgressMax > 0)
 		{
 			_progressMax = 100;
@@ -471,7 +471,7 @@ public class TaskInstance : INotifyPropertyChanged
 		if (Creator!.UseTask)
 		{
 			Task = Creator.StartTask(Call);
-			
+
 			// ContinueWith works whether the task is already completed, running, or not yet started
 			Task.ContinueWith(_ => SetFinished());
 		}

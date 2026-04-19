@@ -115,7 +115,7 @@ public class FieldVisibilityTests : BaseTest
 	{
 		HideNullClass input = new();
 		ItemCollection<ListMember> listMembers = ListMember.Create(input);
-			
+
 		Assert.That(listMembers, Has.Exactly(1).Items);
 
 		Assert.That(listMembers[0].MemberInfo.Name, Is.EqualTo(nameof(HideNullClass.VisibleField)));

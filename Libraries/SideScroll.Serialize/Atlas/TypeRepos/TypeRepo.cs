@@ -78,22 +78,22 @@ public abstract class TypeRepo : IDisposable
 	/// Gets the parent serializer instance
 	/// </summary>
 	public Serializer Serializer { get; }
-	
+
 	/// <summary>
 	/// Gets the type schema for this repository
 	/// </summary>
 	public TypeSchema TypeSchema { get; }
-	
+
 	/// <summary>
 	/// Gets the runtime type (might be null after loading if type no longer exists)
 	/// </summary>
 	public Type? Type { get; }
-	
+
 	/// <summary>
 	/// Gets or sets the type that can be loaded (some types get overridden for lazy load, or get removed if [Unserialized])
 	/// </summary>
 	public Type? LoadableType { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets or sets the type index in the serializer's type list
 	/// </summary>
@@ -103,22 +103,22 @@ public abstract class TypeRepo : IDisposable
 	/// Gets the list of objects being serialized (ordered by index, not filled in when loading)
 	/// </summary>
 	public List<object> Objects { get; } = [];
-	
+
 	/// <summary>
 	/// Gets or sets the array of object sizes in bytes
 	/// </summary>
 	public int[]? ObjectSizes { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets or sets the array of object file offsets
 	/// </summary>
 	public long[]? ObjectOffsets { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets or sets the array of loaded objects
 	/// </summary>
 	public object?[] ObjectsLoaded { get; set; }
-	
+
 	/// <summary>
 	/// Gets the count of objects that have been loaded
 	/// </summary>
@@ -145,37 +145,37 @@ public abstract class TypeRepo : IDisposable
 	/// Saves an object to the binary writer
 	/// </summary>
 	public abstract void SaveObject(BinaryWriter writer, object obj);
-	
+
 	/// <summary>
 	/// Loads data into an existing object instance
 	/// </summary>
 	public virtual void LoadObjectData(object obj) { }
-	
+
 	/// <summary>
 	/// Clones data from source object to destination object
 	/// </summary>
 	public abstract void Clone(object source, object dest);
-	
+
 	/// <summary>
 	/// Adds child objects to the serialization queue
 	/// </summary>
 	public virtual void AddChildObjects(object obj) { }
-	
+
 	/// <summary>
 	/// Initializes the repository for saving operations
 	/// </summary>
 	public virtual void InitializeSaving() { }
-	
+
 	/// <summary>
 	/// Initializes the repository for loading operations
 	/// </summary>
 	public virtual void InitializeLoading(Log log) { }
-	
+
 	/// <summary>
 	/// Saves custom header data for specialized repositories
 	/// </summary>
 	protected virtual void SaveCustomHeader(BinaryWriter writer) { }
-	
+
 	/// <summary>
 	/// Loads custom header data for specialized repositories
 	/// </summary>
@@ -509,7 +509,7 @@ public abstract class TypeRepo : IDisposable
 				int objectIndex = Reader.ReadInt32();
 				return LoadObject(objectIndex);
 			}
-			
+
 			if (objectType == ObjectType.DerivedType)
 			{
 				int typeIndex = Reader.ReadInt16();
@@ -523,7 +523,7 @@ public abstract class TypeRepo : IDisposable
 				int objectIndex = Reader.ReadInt32();
 				return typeRepo.LoadObject(objectIndex);
 			}
-			
+
 			return null;
 		}
 		else
@@ -664,7 +664,7 @@ public abstract class TypeRepo : IDisposable
 		{
 			// Dispose managed resources
 			// Note: Reader is shared and should not be disposed here
-			
+
 			// Clear collections
 			Objects.Clear();
 			IdxObjectToIndex.Clear();

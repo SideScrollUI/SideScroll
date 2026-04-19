@@ -1118,23 +1118,23 @@ public class JsonConverterTests : SerializeBaseTest
 		};
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
-		
+
 		// Verify JSON contains type information for complex types
 		Assert.That(json, Contains.Substring("$type"));
 		Assert.That(json, Contains.Substring("$value"));
-		
+
 		var output = JsonSerializer.Deserialize<TypedObjectContainer>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.ListObject, Is.InstanceOf<List<int>>());
 		Assert.That(output.CustomObject, Is.InstanceOf<CustomTypeForRoundtrip>());
-		
+
 		var outputList = (List<int>)output.ListObject!;
 		Assert.That(outputList, Has.Count.EqualTo(3));
 		Assert.That(outputList[0], Is.EqualTo(1));
 		Assert.That(outputList[1], Is.EqualTo(2));
 		Assert.That(outputList[2], Is.EqualTo(3));
-		
+
 		var outputCustom = (CustomTypeForRoundtrip)output.CustomObject!;
 		Assert.That(outputCustom.Name, Is.EqualTo("TestObject"));
 		Assert.That(outputCustom.Value, Is.EqualTo(123));
@@ -1150,11 +1150,11 @@ public class JsonConverterTests : SerializeBaseTest
 		};
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
-		
+
 		// Verify JSON does NOT contain type information for simple types
 		Assert.That(json, Does.Not.Contain("$type"));
 		Assert.That(json, Does.Not.Contain("$value"));
-		
+
 		var output = JsonSerializer.Deserialize<ObjectContainerPrimitive>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
@@ -1172,10 +1172,10 @@ public class JsonConverterTests : SerializeBaseTest
 		};
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
-		
+
 		// DateTime should serialize directly without type wrapper
 		Assert.That(json, Does.Not.Contain("$type"));
-		
+
 		var output = JsonSerializer.Deserialize<ObjectContainerPublicTypes>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
@@ -1228,39 +1228,39 @@ public class JsonConverterTests : SerializeBaseTest
 		};
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
-		
+
 		// Verify JSON structure:
 		// - DataValue should have $type/$value wrapper (top level object?)
 		// - But NestedItem inside ParentWithNestedObjects should NOT have wrapper
-		
+
 		// Count occurrences of $type - should only be 2 (one for DataValue, one for NestedItem at its level)
 		int typeCount = System.Text.RegularExpressions.Regex.Matches(json, @"\$type").Count;
 		Assert.That(typeCount, Is.EqualTo(2), "Should have exactly 2 $type occurrences");
-		
+
 		// Verify the structure is correct
 		Assert.That(json, Contains.Substring("\"DataValue\""));
 		Assert.That(json, Contains.Substring("\"$type\""));
 		Assert.That(json, Contains.Substring("\"$value\""));
 		Assert.That(json, Contains.Substring("ParentWithNestedObjects"));
 		Assert.That(json, Contains.Substring("NestedObjectItem"));
-		
+
 		// Verify NestedItem serializes cleanly within its parent
 		// The JSON should show NestedItem with $type/$value at its level (since it's also object?)
 		// but the properties inside NestedObjectItem (Name, Value) should be clean
 		Assert.That(json, Contains.Substring("\"Name\": \"Nested\""));
 		Assert.That(json, Contains.Substring("\"Value\": 42"));
-		
+
 		// Deserialize and verify round-trip
 		var output = JsonSerializer.Deserialize<ContainerWithObjectMember>(json, JsonConverters.PublicSerializerOptions);
-		
+
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.Description, Is.EqualTo("Container"));
 		Assert.That(output.DataValue, Is.InstanceOf<ParentWithNestedObjects>());
-		
+
 		var outputParent = (ParentWithNestedObjects)output.DataValue!;
 		Assert.That(outputParent.Title, Is.EqualTo("Parent"));
 		Assert.That(outputParent.NestedItem, Is.InstanceOf<NestedObjectItem>());
-		
+
 		var outputNested = (NestedObjectItem)outputParent.NestedItem!;
 		Assert.That(outputNested.Name, Is.EqualTo("Nested"));
 		Assert.That(outputNested.Value, Is.EqualTo(42));
@@ -1296,39 +1296,39 @@ public class JsonConverterTests : SerializeBaseTest
 		};
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
-		
+
 		// Verify JSON contains type information for UserData objects
 		Assert.That(json, Contains.Substring("$type"));
 		Assert.That(json, Contains.Substring("$value"));
 		Assert.That(json, Contains.Substring("UserData"));
-		
+
 		var output = JsonSerializer.Deserialize<ObjectDictionaryContainer>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.ObjectData, Is.Not.Null);
 		Assert.That(output.ObjectData, Has.Count.EqualTo(5));
-		
+
 		// Verify UserData object 1
 		Assert.That(output.ObjectData!["user1"], Is.InstanceOf<UserData>());
 		var user1 = (UserData)output.ObjectData["user1"]!;
 		Assert.That(user1.Username, Is.EqualTo("alice"));
 		Assert.That(user1.Score, Is.EqualTo(100));
 		Assert.That(user1.LastLogin.ToUniversalTime(), Is.EqualTo(new DateTime(2024, 1, 15, 10, 30, 0, DateTimeKind.Utc)));
-		
+
 		// Verify UserData object 2
 		Assert.That(output.ObjectData["user2"], Is.InstanceOf<UserData>());
 		var user2 = (UserData)output.ObjectData["user2"]!;
 		Assert.That(user2.Username, Is.EqualTo("bob"));
 		Assert.That(user2.Score, Is.EqualTo(250));
 		Assert.That(user2.LastLogin.ToUniversalTime(), Is.EqualTo(new DateTime(2024, 2, 20, 14, 45, 0, DateTimeKind.Utc)));
-		
+
 		// Verify primitive values
 		Assert.That(output.ObjectData["count"], Is.Not.Null);
 		Assert.That(output.ObjectData["count"]!.ToString(), Is.EqualTo("42"));
-		
+
 		Assert.That(output.ObjectData["message"], Is.Not.Null);
 		Assert.That(output.ObjectData["message"]!.ToString(), Is.EqualTo("Hello World"));
-		
+
 		// Verify null value
 		Assert.That(output.ObjectData["nullValue"], Is.Null);
 	}
@@ -1355,13 +1355,13 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.ObjectData, Is.Not.Null);
 		Assert.That(output.ObjectData, Has.Count.EqualTo(6));
-		
+
 		// Verify [PublicData] type
 		Assert.That(output.ObjectData!["data"], Is.InstanceOf<UserData>());
 		var userData = (UserData)output.ObjectData["data"]!;
 		Assert.That(userData.Username, Is.EqualTo("charlie"));
 		Assert.That(userData.Score, Is.EqualTo(500));
-		
+
 		// Verify primitives and collections
 		Assert.That(output.ObjectData["number"]!.ToString(), Is.EqualTo("123"));
 		Assert.That(output.ObjectData["text"]!.ToString(), Is.EqualTo("Sample text"));
@@ -1396,15 +1396,15 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.ObjectData, Is.Not.Null);
 		Assert.That(output.ObjectData, Has.Count.EqualTo(3));
-		
+
 		// Unregistered type should be serialized as null
 		Assert.That(output.ObjectData!["unregistered"], Is.Null);
-		
+
 		// [PublicData] type should serialize correctly
 		Assert.That(output.ObjectData["allowed"], Is.InstanceOf<UserData>());
 		var userData = (UserData)output.ObjectData["allowed"]!;
 		Assert.That(userData.Username, Is.EqualTo("allowed"));
-		
+
 		// Primitive should work
 		Assert.That(output.ObjectData["primitive"]!.ToString(), Is.EqualTo("42"));
 	}
@@ -1427,10 +1427,10 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.ObjectData, Is.Not.Null);
 		Assert.That(output.ObjectData, Has.Count.EqualTo(2));
-		
+
 		// Raw object should be serialized as null
 		Assert.That(output.ObjectData!["rawObject"], Is.Null);
-		
+
 		// [PublicData] type should work
 		Assert.That(output.ObjectData["allowed"], Is.InstanceOf<UserData>());
 	}
@@ -1454,7 +1454,7 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.ObjectData, Is.Not.Null);
 		Assert.That(output.ObjectData, Has.Count.EqualTo(3));
-		
+
 		// All unregistered types should be null
 		Assert.That(output.ObjectData!["unregistered1"], Is.Null);
 		Assert.That(output.ObjectData["unregistered2"], Is.Null);
@@ -1491,10 +1491,10 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.ObjectData, Is.Not.Null);
 		Assert.That(output.ObjectData, Has.Count.EqualTo(2));
-		
+
 		// Unregistered implementation should be null
 		Assert.That(output.ObjectData!["unregisteredImpl"], Is.Null);
-		
+
 		// Registered [PublicData] implementation should work
 		Assert.That(output.ObjectData["registeredImpl"], Is.InstanceOf<Dog>());
 		var dog = (Dog)output.ObjectData["registeredImpl"]!;
@@ -1544,18 +1544,18 @@ public class JsonConverterTests : SerializeBaseTest
 		};
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
-		
+
 		// Verify JSON contains type information for interface
 		Assert.That(json, Contains.Substring("$type"));
 		Assert.That(json, Contains.Substring("$value"));
 		Assert.That(json, Contains.Substring("Dog"));
-		
+
 		var output = JsonSerializer.Deserialize<AnimalContainer>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.Pet, Is.Not.Null);
 		Assert.That(output.Pet, Is.InstanceOf<Dog>());
-		
+
 		var dog = (Dog)output.Pet!;
 		Assert.That(dog.Name, Is.EqualTo("Buddy"));
 		Assert.That(dog.Breed, Is.EqualTo("Golden Retriever"));
@@ -1571,18 +1571,18 @@ public class JsonConverterTests : SerializeBaseTest
 		};
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
-		
+
 		// Verify JSON contains type information for interface
 		Assert.That(json, Contains.Substring("$type"));
 		Assert.That(json, Contains.Substring("$value"));
 		Assert.That(json, Contains.Substring("Cat"));
-		
+
 		var output = JsonSerializer.Deserialize<AnimalContainer>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.Pet, Is.Not.Null);
 		Assert.That(output.Pet, Is.InstanceOf<Cat>());
-		
+
 		var cat = (Cat)output.Pet!;
 		Assert.That(cat.Name, Is.EqualTo("Whiskers"));
 		Assert.That(cat.Lives, Is.EqualTo(7));
@@ -1603,29 +1603,29 @@ public class JsonConverterTests : SerializeBaseTest
 		};
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
-		
+
 		// Verify JSON contains type information for each array element
 		Assert.That(json, Contains.Substring("Dog"));
 		Assert.That(json, Contains.Substring("Cat"));
-		
+
 		var output = JsonSerializer.Deserialize<AnimalContainer>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.Animals, Is.Not.Null);
 		Assert.That(output.Animals, Has.Length.EqualTo(3));
-		
+
 		// Verify first Dog
 		Assert.That(output.Animals![0], Is.InstanceOf<Dog>());
 		var dog1 = (Dog)output.Animals[0];
 		Assert.That(dog1.Name, Is.EqualTo("Max"));
 		Assert.That(dog1.Breed, Is.EqualTo("Labrador"));
-		
+
 		// Verify Cat
 		Assert.That(output.Animals[1], Is.InstanceOf<Cat>());
 		var cat = (Cat)output.Animals[1];
 		Assert.That(cat.Name, Is.EqualTo("Luna"));
 		Assert.That(cat.Lives, Is.EqualTo(8));
-		
+
 		// Verify second Dog
 		Assert.That(output.Animals[2], Is.InstanceOf<Dog>());
 		var dog2 = (Dog)output.Animals[2];
@@ -1690,30 +1690,30 @@ public class JsonConverterTests : SerializeBaseTest
 		};
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
-		
+
 		// Verify JSON contains type information for each element
 		Assert.That(json, Contains.Substring("Circle"));
 		Assert.That(json, Contains.Substring("Rectangle"));
-		
+
 		var output = JsonSerializer.Deserialize<ShapeCollection>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.Shapes, Is.Not.Null);
 		Assert.That(output.Shapes, Has.Count.EqualTo(3));
-		
+
 		// Verify first Circle
 		Assert.That(output.Shapes![0], Is.InstanceOf<Circle>());
 		var circle1 = (Circle)output.Shapes[0];
 		Assert.That(circle1.Radius, Is.EqualTo(5.0));
 		Assert.That(circle1.Area, Is.EqualTo(Math.PI * 25).Within(0.0001));
-		
+
 		// Verify Rectangle
 		Assert.That(output.Shapes[1], Is.InstanceOf<Rectangle>());
 		var rectangle = (Rectangle)output.Shapes[1];
 		Assert.That(rectangle.Width, Is.EqualTo(4.0));
 		Assert.That(rectangle.Height, Is.EqualTo(6.0));
 		Assert.That(rectangle.Area, Is.EqualTo(24.0));
-		
+
 		// Verify second Circle
 		Assert.That(output.Shapes[2], Is.InstanceOf<Circle>());
 		var circle2 = (Circle)output.Shapes[2];
@@ -1758,23 +1758,23 @@ public class JsonConverterTests : SerializeBaseTest
 		};
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
-		
+
 		// Verify JSON contains type information
 		Assert.That(json, Contains.Substring("EmailNotification"));
 		Assert.That(json, Contains.Substring("SmsNotification"));
-		
+
 		var output = JsonSerializer.Deserialize<NotificationQueue>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.Notifications, Is.Not.Null);
 		Assert.That(output.Notifications, Has.Count.EqualTo(2));
-		
+
 		// Verify EmailNotification
 		Assert.That(output.Notifications!["user1"], Is.InstanceOf<EmailNotification>());
 		var email = (EmailNotification)output.Notifications["user1"];
 		Assert.That(email.Message, Is.EqualTo("Welcome!"));
 		Assert.That(email.EmailAddress, Is.EqualTo("user1@example.com"));
-		
+
 		// Verify SmsNotification
 		Assert.That(output.Notifications["user2"], Is.InstanceOf<SmsNotification>());
 		var sms = (SmsNotification)output.Notifications["user2"];
@@ -1824,23 +1824,23 @@ public class JsonConverterTests : SerializeBaseTest
 		};
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
-		
+
 		// Verify JSON contains type information for both interfaces
 		Assert.That(json, Contains.Substring("Dog"));
 		Assert.That(json, Contains.Substring("Car"));
-		
+
 		var output = JsonSerializer.Deserialize<OuterContainer>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.Title, Is.EqualTo("Test"));
-		
+
 		// Verify Animal interface
 		Assert.That(output.Animal, Is.Not.Null);
 		Assert.That(output.Animal, Is.InstanceOf<Dog>());
 		var dog = (Dog)output.Animal!;
 		Assert.That(dog.Name, Is.EqualTo("Rex"));
 		Assert.That(dog.Breed, Is.EqualTo("German Shepherd"));
-		
+
 		// Verify nested interface
 		Assert.That(output.Nested, Is.Not.Null);
 		Assert.That(output.Nested!.Name, Is.EqualTo("Inner"));

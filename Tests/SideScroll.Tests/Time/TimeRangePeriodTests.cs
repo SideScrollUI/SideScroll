@@ -245,14 +245,14 @@ public class TimeRangePeriodTests : BaseTest
 		// since they cover the same duration with the same amount of data
 		Assert.That(total1, Is.Not.Null, "First time window total should not be null");
 		Assert.That(total2, Is.Not.Null, "Second time window total should not be null");
-		Assert.That(timeRangeValues1.Count, Is.EqualTo(timeRangeValues2.Count), 
+		Assert.That(timeRangeValues1.Count, Is.EqualTo(timeRangeValues2.Count),
 			"Both windows should have the same number of time range values");
-		Assert.That(total2, Is.EqualTo(total1), 
+		Assert.That(total2, Is.EqualTo(total1),
 			$"Differently aligned time windows should produce the same sum. Window1 (0:00): {total1}, Window2 (0:01): {total2}");
-		
+
 		// Verify the expected count matches the number of 12-hour periods
 		int expectedCount = timeRangeValues1.Count;
-		Assert.That(total1, Is.EqualTo(expectedCount), 
+		Assert.That(total1, Is.EqualTo(expectedCount),
 			$"Total should equal the number of time range values: {expectedCount}");
 	}
 
@@ -311,24 +311,24 @@ public class TimeRangePeriodTests : BaseTest
 		// Window2 is offset by 1 minute, so it misses 1 minute of the first TimeRangeValue
 		Assert.That(total1, Is.Not.Null, "First time window total should not be null");
 		Assert.That(total2, Is.Not.Null, "Second time window total should not be null");
-		
+
 		// Check the raw sum before flooring
 		double? rawTotal2 = listSeries2.GetTotal(timeWindow2);
 		double expectedWindow2Raw = 55.0 + (11.0 * 60 + 59) / (12.0 * 60); // 55 + 719/720 = 55.99861...
-		
+
 		// The raw total should be proportionally less
-		Assert.That(rawTotal2, Is.EqualTo(expectedWindow2Raw).Within(0.01), 
+		Assert.That(rawTotal2, Is.EqualTo(expectedWindow2Raw).Within(0.01),
 			$"Window2 raw sum should be proportionally less. Expected: {expectedWindow2Raw}, Actual: {rawTotal2}");
-		
+
 		// After flooring (CalculateTotal floors values > 50), both should be 55 and 56
 		Assert.That(total1, Is.EqualTo(56), "Window1 should equal 56");
 		Assert.That(total2, Is.EqualTo(55), "Window2 should equal 55 after flooring");
-		Assert.That(total1, Is.GreaterThan(total2!), 
+		Assert.That(total1, Is.GreaterThan(total2!),
 			"Window1 (aligned) should have a higher sum than Window2 (offset)");
-		
+
 		// Verify the expected count
 		int expectedCount = timeRangeValues.Count;
-		Assert.That(total1, Is.EqualTo(expectedCount), 
+		Assert.That(total1, Is.EqualTo(expectedCount),
 			$"Total should equal the number of time range values: {expectedCount}");
 	}
 }

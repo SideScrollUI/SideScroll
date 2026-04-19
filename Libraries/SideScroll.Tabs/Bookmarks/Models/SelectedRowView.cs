@@ -34,7 +34,7 @@ public class SelectedRowView
 	/// <summary>
 	/// Initializes a new selected row view from an object and optional child bookmark
 	/// </summary>
-	public SelectedRowView(object obj, TabBookmark? tabBookmark = null) : 
+	public SelectedRowView(object obj, TabBookmark? tabBookmark = null) :
 		this(new SelectedRow(obj), tabBookmark)
 	{
 	}

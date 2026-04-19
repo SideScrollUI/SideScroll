@@ -229,7 +229,7 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 		ChartView.Annotations.RemoveAll(a => a.Text == NowTimeName);
 
 		if (!ChartView.ShowNowTime) return;
-		
+
 		var now = DateTime.UtcNow;
 		if (NowTimeAnnotation == null)
 		{

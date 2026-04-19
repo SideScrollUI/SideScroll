@@ -23,8 +23,8 @@ public class TypeRepoHashSet : TypeRepoEnumerable, IPreloadRepo
 
 	public static bool CanAssign(Type? type)
 	{
-		return type != null && 
-			type.IsGenericType && 
+		return type != null &&
+			type.IsGenericType &&
 			typeof(HashSet<>).IsAssignableFrom(type.GetGenericTypeDefinition());
 	}
 

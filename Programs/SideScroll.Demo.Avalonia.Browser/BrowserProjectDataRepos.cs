@@ -10,7 +10,7 @@ namespace SideScroll.Demo.Avalonia.Browser;
 /// Browser-specific ProjectDataRepos that uses localStorage instead of file system
 /// </summary>
 [SupportedOSPlatform("browser")]
-public class BrowserProjectDataRepos(ProjectSettings projectSettings, UserSettings userSettings) : 
+public class BrowserProjectDataRepos(ProjectSettings projectSettings, UserSettings userSettings) :
 	ProjectDataRepos(projectSettings, userSettings)
 {
 	/// <summary>

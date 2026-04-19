@@ -13,7 +13,7 @@ public class TabItemCollection
 	/// The complete list of items in the collection
 	/// </summary>
 	public IList Items { get; set; }
-	
+
 	/// <summary>
 	/// The filtered view of items. CollectionView takes filters into account
 	/// </summary>

@@ -207,13 +207,12 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 
 		if (DisplayIndex > 0)
 		{
-			//border.BorderThickness = new Thickness(1, 0, 0, 1); // Left and Bottom
 			cell.BorderThickness = new Thickness(1, 0, 0, 1); // Left and Bottom
-			//cell.BorderThickness = new Thickness(0, 0, 1, 1); // Right and Bottom
+
+			// cell.BorderThickness = new Thickness(0, 0, 1, 1); // Right and Bottom
 		}
 		else
 		{
-			//border.BorderThickness = new Thickness(0, 0, 1, 1); // Right and Bottom
 			cell.BorderThickness = new Thickness(0, 0, 1, 1); // Right and Bottom
 		}
 

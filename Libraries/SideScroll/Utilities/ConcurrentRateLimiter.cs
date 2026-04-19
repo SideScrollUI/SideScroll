@@ -17,7 +17,7 @@ public class ConcurrentRateLimiter : IDisposable
 	/// Gets the maximum number of concurrent requests allowed
 	/// </summary>
 	public int MaxConcurrentRequests { get; }
-	
+
 	/// <summary>
 	/// Gets the maximum number of requests per second, or null if no rate limit is set
 	/// </summary>

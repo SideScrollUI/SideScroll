@@ -58,17 +58,17 @@ public class TypeSchema
 	/// </summary>
 	[WordWrap]
 	public string Name { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the assembly qualified name for the type
 	/// </summary>
 	public string AssemblyQualifiedName { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets whether the type can reference other types
 	/// </summary>
 	public bool CanReference { get; set; }
-	
+
 	/// <summary>
 	/// Gets whether the type is a collection
 	/// </summary>
@@ -78,17 +78,17 @@ public class TypeSchema
 	/// Gets the list of all member schemas (fields and properties)
 	/// </summary>
 	public List<MemberSchema> MemberSchemas { get; } = [];
-	
+
 	/// <summary>
 	/// Gets the list of field schemas
 	/// </summary>
 	public List<FieldSchema> FieldSchemas { get; } = [];
-	
+
 	/// <summary>
 	/// Gets the list of writable property schemas
 	/// </summary>
 	public List<PropertySchema> PropertySchemas { get; } = [];
-	
+
 	/// <summary>
 	/// Gets the list of all property schemas including read-only ones
 	/// </summary>
@@ -99,22 +99,22 @@ public class TypeSchema
 	/// Gets or sets the type index in the serializer's type list
 	/// </summary>
 	public int TypeIndex { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the number of serialized objects of this type
 	/// </summary>
 	public int NumObjects { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the size of the serialized data for this type in bytes
 	/// </summary>
 	public long DataSize { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the starting offset of the data in the file
 	/// </summary>
 	public long StartDataOffset { get; set; }
-	
+
 	/// <summary>
 	/// Gets the ending offset of the data in the file
 	/// </summary>
@@ -125,7 +125,7 @@ public class TypeSchema
 	/// </summary>
 	[WordWrap]
 	public Type? Type { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets the non-nullable version of the type (not serialized)
 	/// </summary>
@@ -136,53 +136,53 @@ public class TypeSchema
 	/// Gets whether the type is a primitive type
 	/// </summary>
 	public bool IsPrimitive { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets whether the type is marked as private data
 	/// </summary>
 	public bool IsPrivate { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets whether the type is marked as protected data
 	/// </summary>
 	public bool IsProtected { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets whether the type is marked as public data (will be exported if Serializer PublicOnly is set)
 	/// </summary>
 	public bool IsPublic { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets whether the type is either public or protected
 	/// </summary>
 	public bool IsPublicOnly => IsPublic || IsProtected;
-	
+
 	/// <summary>
 	/// Gets whether the type should be cloned by reference instead of deep cloning
 	/// </summary>
 	public bool IsCloneReference { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets whether the type is marked as unserialized
 	/// </summary>
 	public bool IsUnserialized { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets whether the type has an empty constructor
 	/// </summary>
 	public bool HasEmptyConstructor { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets the custom constructor used for deserialization
 	/// </summary>
 	[HiddenColumn]
 	public ConstructorInfo? CustomConstructor { get; protected set; }
-	
+
 	/// <summary>
 	/// Gets whether the type has a constructor (empty or custom)
 	/// </summary>
 	public bool HasConstructor => HasEmptyConstructor || CustomConstructor != null;
-	
+
 	/// <summary>
 	/// Gets whether the type has subtypes (is not sealed)
 	/// </summary>

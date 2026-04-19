@@ -74,7 +74,7 @@ public class DataRepoViewLocalStorage<T> : DataRepoView<T>
 
 				T? obj = serializer.Load<T>(call, lazy: false);
 				if (obj == null) continue;
-				
+
 				string key = SideScroll.Utilities.ObjectUtils.GetObjectId(obj) ?? serializer.Name;
 				items.Add(new DataItem<T>(key, obj, path));
 			}

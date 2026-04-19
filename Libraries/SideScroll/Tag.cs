@@ -92,7 +92,7 @@ public class TaggedException(string text, params Tag[] tags) : Exception
 	/// Gets the exception text
 	/// </summary>
 	public string Text => text;
-	
+
 	/// <summary>
 	/// Gets the tags associated with this exception
 	/// </summary>

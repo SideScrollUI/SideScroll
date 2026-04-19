@@ -33,8 +33,8 @@ public class SerializerFileJson : SerializerFile
 
 	protected override void SaveInternal(Call call, object obj, string? name = null, bool publicOnly = false)
 	{
-		var options = publicOnly 
-			? JsonConverters.PublicSerializerOptions 
+		var options = publicOnly
+			? JsonConverters.PublicSerializerOptions
 			: JsonConverters.PrivateSerializerOptions;
 
 		for (int attempt = 0; attempt < SaveAttemptsMax; attempt++)
@@ -68,9 +68,9 @@ public class SerializerFileJson : SerializerFile
 			new Tag("ExpectedType", expectedType),
 			new Tag("Name", Name),
 			new Tag("Path", DataPath));
-		
+
 		byte[] jsonBytes = File.ReadAllBytes(DataPath!);
-			
+
 		taskInstance?.SetFinished();
 
 		// Use expectedType if provided

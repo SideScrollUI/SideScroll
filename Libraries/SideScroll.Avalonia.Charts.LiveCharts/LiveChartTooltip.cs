@@ -194,7 +194,7 @@ public class LiveChartTooltip(TabLiveChart liveChart) : SKDefaultTooltip
 		return _layout;
 	}
 
-    public override void Show(IEnumerable<ChartPoint> foundPoints, Chart chart)
+	public override void Show(IEnumerable<ChartPoint> foundPoints, Chart chart)
 	{
 		bool wasHidden = Opacity < 1;
 

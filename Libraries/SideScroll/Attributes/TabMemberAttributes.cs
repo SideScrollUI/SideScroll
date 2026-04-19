@@ -628,7 +628,7 @@ public class ButtonColumnAttribute : Attribute
 	/// The display name for the button.
 	/// </summary>
 	public string? Name { get; init; }
-	
+
 	/// <summary>
 	/// Property name that controls button visibility.
 	/// </summary>

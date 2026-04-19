@@ -24,7 +24,7 @@ public static class TableUtils
 		/// Gets the column name
 		/// </summary>
 		public string Name => name;
-		
+
 		/// <summary>
 		/// Gets or sets the text alignment for the column
 		/// </summary>

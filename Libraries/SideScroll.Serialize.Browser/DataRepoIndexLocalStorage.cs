@@ -21,7 +21,7 @@ public class DataRepoIndexLocalStorage<T>(DataRepoInstance<T> dataRepoInstance, 
 	public override Indices Load(Call call)
 	{
 		string? json = SerializerLocalStorage.GetItem(IndexStorageKey);
-		
+
 		if (!string.IsNullOrEmpty(json))
 		{
 			try
@@ -37,7 +37,7 @@ public class DataRepoIndexLocalStorage<T>(DataRepoInstance<T> dataRepoInstance, 
 			}
 			catch (Exception ex)
 			{
-				call.Log.Add(ex, 
+				call.Log.Add(ex,
 					new Tag("Key", IndexStorageKey),
 					new Tag("Operation", "LoadIndex"));
 			}
@@ -80,7 +80,7 @@ public class DataRepoIndexLocalStorage<T>(DataRepoInstance<T> dataRepoInstance, 
 		Item newItem = new(index, key);
 		indices.Items.Add(newItem);
 		Save(indices);
-		
+
 		PruneMaxItemsFromLocalStorage(call, indices);
 
 		return newItem;
@@ -89,7 +89,7 @@ public class DataRepoIndexLocalStorage<T>(DataRepoInstance<T> dataRepoInstance, 
 	private void PruneMaxItemsFromLocalStorage(Call call, Indices indices)
 	{
 		if (MaxItems is not int maxItems) return;
-		
+
 		while (indices.Items.Count > maxItems)
 		{
 			DataRepoInstance.Delete(call, indices.Items[0].Key);
@@ -151,10 +151,10 @@ public class DataRepoIndexLocalStorage<T>(DataRepoInstance<T> dataRepoInstance, 
 			Items = items,
 			NextIndex = index,
 		};
-		
+
 		// Save the newly built index
 		Save(indices);
-		
+
 		return indices;
 	}
 }

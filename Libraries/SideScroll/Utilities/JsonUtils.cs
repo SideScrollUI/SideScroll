@@ -17,8 +17,8 @@ public static class JsonUtils
 		if (text == null) return false;
 
 		text = text.Trim();
-		return 
-			(text.StartsWith('{') && text.EndsWith('}')) || 
+		return
+			(text.StartsWith('{') && text.EndsWith('}')) ||
 			(text.StartsWith('[') && text.EndsWith(']'));
 	}
 
@@ -105,7 +105,7 @@ public static class JsonUtils
 			return false;
 		}
 	}
-	
+
 	/// <summary>
 	/// Escapes unescaped control characters inside JSON string values
 	/// This is a workaround for legacy systems that produce malformed JSON with unescaped control characters
@@ -116,32 +116,32 @@ public static class JsonUtils
 		var result = new System.Text.StringBuilder(json.Length + 100);
 		bool inString = false;
 		bool escaped = false;
-		
+
 		for (int i = 0; i < json.Length; i++)
 		{
 			char c = json[i];
-			
+
 			if (escaped)
 			{
 				result.Append(c);
 				escaped = false;
 				continue;
 			}
-			
+
 			if (c == '\\' && inString)
 			{
 				result.Append(c);
 				escaped = true;
 				continue;
 			}
-			
+
 			if (c == '"')
 			{
 				result.Append(c);
 				inString = !inString;
 				continue;
 			}
-			
+
 			// Escape control characters inside strings only
 			if (inString && char.IsControl(c))
 			{
@@ -167,7 +167,7 @@ public static class JsonUtils
 				result.Append(c);
 			}
 		}
-		
+
 		return result.ToString();
 	}
 }

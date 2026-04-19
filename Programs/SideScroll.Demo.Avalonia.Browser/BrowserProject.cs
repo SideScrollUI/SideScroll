@@ -28,7 +28,7 @@ public class BrowserProject(ProjectSettings projectSettings, UserSettings userSe
 		// Create a temporary project to access Data.App for loading previously saved UserSettings
 		var tempProject = new BrowserProject(projectSettings, defaultUserSettings);
 		var userSettings = tempProject.Data.App.Load<SampleUserSettings>() ?? defaultUserSettings;
-		
+
 		return new BrowserProject(projectSettings, userSettings);
 	}
 }

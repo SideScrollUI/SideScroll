@@ -16,17 +16,17 @@ public abstract class SerializerFile(string basePath, string name = "")
 	/// Gets the base path for the serializer files
 	/// </summary>
 	public string BasePath => basePath;
-	
+
 	/// <summary>
 	/// Gets or sets the path to the header file
 	/// </summary>
 	public string? HeaderPath { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the path to the data file
 	/// </summary>
 	public string? DataPath { get; set; }
-	
+
 	/// <summary>
 	/// Gets or sets the name of this serializer instance
 	/// </summary>
@@ -56,8 +56,8 @@ public abstract class SerializerFile(string basePath, string name = "")
 
 		name ??= DefaultName;
 
-		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object", 
-			new Tag("Name", name), 
+		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object",
+			new Tag("Name", name),
 			new Tag("Path", BasePath));
 
 		if (!Directory.Exists(BasePath))

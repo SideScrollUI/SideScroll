@@ -13,22 +13,22 @@ public interface IItemCollection
 	/// The name to display for the column in the DataGrid
 	/// </summary>
 	string? ColumnName { get; set; }
-	
+
 	/// <summary>
 	/// Custom path for saving/loading tab view settings
 	/// </summary>
 	string? CustomSettingsPath { get; set; }
-	
+
 	/// <summary>
 	/// The default item to select when the collection is displayed
 	/// </summary>
 	public object? DefaultSelectedItem { get; set; }
-	
+
 	/// <summary>
 	/// Whether single-item collections should be automatically skipped/expanded in the UI
 	/// </summary>
 	bool Skippable { get; set; }
-	
+
 	/// <summary>
 	/// Override default header visibility - when set, always shows/hides the header regardless of other settings
 	/// </summary>
@@ -57,27 +57,27 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 	/// The label to display for this collection
 	/// </summary>
 	public string? Label { get; set; }
-	
+
 	/// <summary>
 	/// The name to display for the column in the DataGrid
 	/// </summary>
 	public string? ColumnName { get; set; }
-	
+
 	/// <summary>
 	/// Custom path for saving/loading tab view settings
 	/// </summary>
 	public string? CustomSettingsPath { get; set; }
-	
+
 	/// <summary>
 	/// The default item to select when the collection is displayed
 	/// </summary>
 	public object? DefaultSelectedItem { get; set; }
-	
+
 	/// <summary>
 	/// Whether single-item collections should be automatically skipped/expanded in the UI (default: true)
 	/// </summary>
 	public bool Skippable { get; set; } = true;
-	
+
 	/// <summary>
 	/// Override default header visibility - when set, always shows/hides the header regardless of other settings
 	/// </summary>

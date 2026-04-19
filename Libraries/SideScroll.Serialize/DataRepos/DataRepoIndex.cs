@@ -27,7 +27,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	/// Gets the group identifier
 	/// </summary>
 	public string GroupId => DataRepoInstance.GroupId;
-	
+
 	/// <summary>
 	/// Gets the group path
 	/// </summary>
@@ -37,7 +37,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	/// Gets the legacy index file path
 	/// </summary>
 	protected string OldIndexPath => Paths.Combine(GroupPath, "Index.dat");
-	
+
 	/// <summary>
 	/// Gets the primary index file path
 	/// </summary>
@@ -62,7 +62,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		/// Gets or sets the list of indexed items
 		/// </summary>
 		public List<Item> Items { get; set; } = [];
-		
+
 		/// <summary>
 		/// Gets or sets the next index value to assign
 		/// </summary>

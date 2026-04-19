@@ -13,7 +13,7 @@ public interface IDataRepoInstance
 	/// Gets the group identifier
 	/// </summary>
 	string GroupId { get; }
-	
+
 	/// <summary>
 	/// Gets the group path
 	/// </summary>
@@ -47,12 +47,12 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	/// Gets the group identifier
 	/// </summary>
 	public string GroupId { get; }
-	
+
 	/// <summary>
 	/// Gets the hashed group identifier
 	/// </summary>
 	public string GroupHash => DataRepo.GetGroupHash(typeof(T), GroupId);
-	
+
 	/// <summary>
 	/// Gets the file system path for this group
 	/// </summary>
