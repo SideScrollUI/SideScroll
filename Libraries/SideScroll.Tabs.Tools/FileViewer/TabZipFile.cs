@@ -46,7 +46,7 @@ public class TabZipFile : ITab, IFileTypeView
 			}
 		}
 
-		private List<ZipNodeView> LoadZipContents(Call call, string zipPath)
+		private static List<ZipNodeView> LoadZipContents(Call call, string zipPath)
 		{
 			var rootNodes = new List<ZipNodeView>();
 			var directories = new Dictionary<string, ZipDirectoryView>(StringComparer.OrdinalIgnoreCase);
@@ -101,7 +101,7 @@ public class TabZipFile : ITab, IFileTypeView
 			return rootNodes;
 		}
 
-		private ZipDirectoryView EnsureDirectoryPath(
+		private static ZipDirectoryView EnsureDirectoryPath(
 			Dictionary<string, ZipDirectoryView> directories,
 			string path,
 			List<ZipNodeView> rootNodes)
@@ -149,7 +149,7 @@ public class TabZipFile : ITab, IFileTypeView
 
 // Base class for zip entries
 [Unserialized]
-public abstract class ZipNodeView : IHasLinks
+public abstract class ZipNodeView(string fullPath) : IHasLinks
 {
 	public abstract string Name { get; }
 
@@ -163,17 +163,12 @@ public abstract class ZipNodeView : IHasLinks
 	public abstract bool HasLinks { get; }
 
 	[HiddenColumn]
-	public string FullPath { get; }
+	public string FullPath { get; } = fullPath;
 
 	[InnerValue, Unserialized, HiddenColumn]
 	public ITab? Tab { get; set; }
 
 	public override string ToString() => Name;
-
-	protected ZipNodeView(string fullPath)
-	{
-		FullPath = fullPath;
-	}
 }
 
 // Represents a directory within a zip file
@@ -196,38 +191,25 @@ public class ZipDirectoryView : ZipNodeView, IHasLinks
 }
 
 // Represents a file within a zip file
-public class ZipFileView : ZipNodeView
+public class ZipFileView(ZipArchiveEntry entry) : ZipNodeView(entry.FullName)
 {
-	public override string Name { get; }
-	public override long? Size { get; }
-	public DateTime? LastWriteTime { get; }
+	public override string Name { get; } = Path.GetFileName(entry.FullName);
+	public override long? Size { get; } = entry.Length;
+	public DateTime? LastWriteTime { get; } = entry.LastWriteTime.DateTime;
 	public override TimeSpan? Modified => LastWriteTime?.Age();
 	public override bool HasLinks => false;
 
 	[HiddenColumn]
-	public long CompressedSize { get; }
-
-	public ZipFileView(ZipArchiveEntry entry) : base(entry.FullName)
-	{
-		Name = System.IO.Path.GetFileName(entry.FullName);
-		Size = entry.Length;
-		CompressedSize = entry.CompressedLength;
-		LastWriteTime = entry.LastWriteTime.DateTime;
-	}
+	public long CompressedSize { get; } = entry.CompressedLength;
 }
 
 // Tab for displaying a zip directory's contents
 [PrivateData]
-public class TabZipDirectory : ITab
+public class TabZipDirectory(ZipDirectoryView directoryView) : ITab
 {
-	private readonly ZipDirectoryView _directoryView;
+	private readonly ZipDirectoryView _directoryView = directoryView;
 
 	public string Path => _directoryView.FullPath;
-
-	public TabZipDirectory(ZipDirectoryView directoryView)
-	{
-		_directoryView = directoryView;
-	}
 
 	public override string ToString() => Path;
 

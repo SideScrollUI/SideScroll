@@ -593,7 +593,7 @@ public class TabInstance : IDisposable
 					m.DeclaringType != typeof(TabInstance) &&
 					m.GetParameters().Length == paramCount);
 		}
-		catch (Exception)
+		catch
 		{
 		}
 		return null;
@@ -630,6 +630,7 @@ public class TabInstance : IDisposable
 		StartAsync(ReinitializeAsync, TaskInstance.Call);
 	}
 
+	/// <summary>Reloads the tab model (or reuses the static model) and re-runs preload and load, effectively refreshing the tab's data without tearing down the parent hierarchy.</summary>
 	public async Task ReinitializeAsync(Call call)
 	{
 		_settingLoaded = false;

@@ -101,6 +101,7 @@ public static class SvgUtils
 		}
 	}
 
+	/// <summary>Loads an SVG image from a resource without any color replacement, throwing if the resource is not an SVG.</summary>
 	public static IImage GetSvgImage(IResourceView imageResource)
 	{
 		if (imageResource.ResourceType != "svg")

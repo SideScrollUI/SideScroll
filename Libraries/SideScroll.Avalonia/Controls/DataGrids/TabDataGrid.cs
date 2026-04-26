@@ -88,6 +88,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	private Filter? _filter;
 
+	/// <summary>Gets or sets the list bound to the data grid, rebuilding the collection view and restoring selection whenever a new list is assigned.</summary>
 	public IList? Items
 	{
 		get => List;
@@ -129,6 +130,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		PointerPressedEvent.AddClassHandler<DataGridRow>(DataGridRow_PointerPressed, RoutingStrategies.Tunnel, true);
 	}
 
+	/// <summary>Initializes a new <see cref="TabDataGrid"/> for the given list, optionally generating columns automatically and applying saved settings.</summary>
 	public TabDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns = true, TabDataSettings? tabDataSettings = null, TabModel? model = null)
 	{
 		TabInstance = tabInstance;
@@ -268,6 +270,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 	private double? _maxDesiredWidth;
 
+	/// <summary>Resizes visible text and check-box columns to fit their content, respecting min/max width constraints and auto-size hints.</summary>
 	protected void AutoSizeColumns()
 	{
 		// Only works with Stretch right now
@@ -481,6 +484,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Returns <c>true</c> if <paramref name="inputElement"/> is (or is a child of) a <see cref="CheckBox"/> or <see cref="Button"/>, indicating a click should not deselect the row.</summary>
 	protected static bool IsControlSelectable(IInputElement? inputElement)
 	{
 		if (inputElement == null)
@@ -494,6 +498,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			(inputElement is Visual visual && IsControlSelectable(visual.GetVisualParent() as IInputElement));
 	}
 
+	/// <summary>Walks up the visual tree from <paramref name="control"/> to find the owning <see cref="DataGrid"/>, or returns <c>null</c> if not found.</summary>
 	protected static DataGrid? GetOwningDataGrid(StyledElement? control)
 	{
 		return control switch
@@ -537,17 +542,20 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Clears all selected items from the data grid.</summary>
 	protected void ClearSelection()
 	{
 		ClearSelection(DataGrid);
 	}
 
+	/// <summary>Clears all selected items from the given <paramref name="dataGrid"/>.</summary>
 	protected static void ClearSelection(DataGrid dataGrid)
 	{
 		dataGrid.SelectedItems.Clear();
 		dataGrid.SelectedItem = null;
 	}
 
+	/// <summary>Hides the search bar (unless always shown), clears the filter text, returns focus to the grid, and saves settings.</summary>
 	protected void ClearSearch()
 	{
 		if (!TabModel.ShowSearch)
@@ -674,12 +682,14 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		_columnNames[column] = dataColumn.Caption;
 	}
 
+	/// <summary>Adds a column for the property with the given name, looked up via reflection on the list element type.</summary>
 	public void AddColumn(string label, string propertyName, bool styleCells = false)
 	{
 		PropertyInfo propertyInfo = ElementType.GetProperty(propertyName)!;
 		AddColumn(label, propertyInfo, styleCells);
 	}
 
+	/// <summary>Adds a bound text or check-box column for the given property, applying any min/max width and auto-size attributes.</summary>
 	public void AddColumn(string label, PropertyInfo propertyInfo, bool styleCells = false)
 	{
 		MinWidthAttribute? attributeMinWidth = propertyInfo.GetCustomAttribute<MinWidthAttribute>();
@@ -751,12 +761,14 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		Dispatcher.UIThread.Post(AutoSizeColumns, DispatcherPriority.Background);
 	}
 
+	/// <summary>Adds a button column for the public method with the given name on the list element type.</summary>
 	public void AddButtonColumn(string methodName)
 	{
 		MethodInfo methodInfo = ElementType.GetMethod(methodName)!;
 		AddButtonColumn(new TabMethodColumn(methodInfo));
 	}
 
+	/// <summary>Adds a <see cref="DataGridButtonColumn"/> for the given method column descriptor.</summary>
 	public void AddButtonColumn(TabMethodColumn methodColumn)
 	{
 		var column = new DataGridButtonColumn(methodColumn.MethodInfo, methodColumn.Label);
@@ -765,6 +777,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		_columnNames[column] = methodColumn.Label;
 	}
 
+	/// <summary>Restores saved search filter and selection from <see cref="TabDataSettings"/>, falling back to auto-selecting the default item if nothing was saved.</summary>
 	public void LoadSettings()
 	{
 		if (List == null) return;
@@ -785,6 +798,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Restores the search filter control from <see cref="TabDataSettings"/>, showing or hiding it based on the model's <see cref="TabModel.ShowSearch"/> flag.</summary>
 	protected void LoadSearch()
 	{
 		if (SearchControl == null)
@@ -867,6 +881,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		return false;
 	}
 
+	/// <summary>Returns the item that matches the list's or model's configured <c>DefaultSelectedItem</c>, or <c>null</c> if none is configured or found.</summary>
 	protected object? GetDefaultSelectedItem()
 	{
 		string defaultItemText;
@@ -891,6 +906,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		return null;
 	}
 
+	/// <summary>Returns the first item in the collection view that has navigable child links and is not a self-referencing owner object, or <c>null</c> if none qualify.</summary>
 	protected object? GetAutoSelectValue()
 	{
 		object? firstValidObject = null;
@@ -929,6 +945,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		return firstValidObject;
 	}
 
+	/// <summary>Selects the default item (from the collection's default or the first auto-selectable item with links) if auto-selection is enabled and nothing is currently selected.</summary>
 	protected void SelectDefaultItems()
 	{
 		if (!TabModel.AutoSelectDefault)
@@ -948,6 +965,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Gets or sets the list of selected items, replacing any existing selection and scrolling the first selected item into view.</summary>
 	public IList SelectedItems
 	{
 		get => DataGrid.SelectedItems;
@@ -998,12 +1016,14 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Gets or sets the zero-based index of the selected row in the underlying data grid.</summary>
 	public int SelectedIndex
 	{
 		get => DataGrid.SelectedIndex;
 		set => DataGrid.SelectedIndex = value;
 	}
 
+	/// <summary>Gets or sets the currently selected item, clearing any existing selection and scrolling the item into view.</summary>
 	public object? SelectedItem
 	{
 		get => DataGrid.SelectedItem;
@@ -1028,6 +1048,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Scrolls the data grid so that <paramref name="value"/> is visible, if the grid is currently visible on screen.</summary>
 	protected void ScrollIntoView(object? value)
 	{
 		// DataGrid.IsInitialized is unreliable and can still be false while showing
@@ -1047,6 +1068,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Saves the current selection to <see cref="TabDataSettings"/> and fires <see cref="OnSelectionChanged"/>, optionally signalling that child controls should be recreated.</summary>
 	protected void UpdateSelection(bool recreate = false)
 	{
 		TabDataSettings.SelectedRows = SelectedRows;
@@ -1055,6 +1077,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		OnSelectionChanged?.Invoke(this, new TabSelectionChangedEventArgs(recreate));
 	}
 
+	/// <summary>Gets a snapshot of the currently selected rows as <see cref="SelectedRow"/> entries that include the row index for efficient lookup.</summary>
 	public HashSet<SelectedRow> SelectedRows
 	{
 		get
@@ -1086,6 +1109,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Sets the active search filter, applies it to the collection view, and optionally navigates to bookmarked matching items when the filter has a depth qualifier.</summary>
 	protected string? FilterText
 	{
 		set
@@ -1127,6 +1151,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		}
 	}
 
+	/// <summary>Returns <c>true</c> if <paramref name="obj"/> matches the current filter, either by bookmark inclusion or by the search text filter.</summary>
 	protected bool FilterPredicate(object obj)
 	{
 		if (TabInstance.FilterBookmarkNode != null)

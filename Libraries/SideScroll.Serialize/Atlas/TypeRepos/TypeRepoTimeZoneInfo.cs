@@ -60,7 +60,7 @@ public class TypeRepoTimeZoneInfo(Serializer serializer, TypeSchema typeSchema) 
 		{
 			return TimeZoneInfo.FindSystemTimeZoneById(id);
 		}
-		catch (Exception)
+		catch
 		{
 		}
 		return null;

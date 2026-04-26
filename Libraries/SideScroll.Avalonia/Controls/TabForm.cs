@@ -19,6 +19,7 @@ namespace SideScroll.Avalonia.Controls;
 /// <summary>A section header border used to visually group properties in a <see cref="TabForm"/>.</summary>
 public class TabHeader : Border
 {
+	/// <summary>Initializes a new <see cref="TabHeader"/> displaying the given section heading text.</summary>
 	public TabHeader(string text)
 	{
 		Child = new TextBlock
@@ -57,6 +58,7 @@ public class TabForm : Border, IValidationControl
 	/// <summary>Returns the string representation of the bound object.</summary>
 	public override string? ToString() => Object?.ToString();
 
+	/// <summary>Initializes a new <see cref="TabForm"/> for the given object, optionally auto-generating property rows using the specified column layout.</summary>
 	public TabForm(object? obj, bool autoGenerateRows = true, string columnDefinitions = "Auto,*")
 	{
 		Object = obj;
@@ -69,6 +71,7 @@ public class TabForm : Border, IValidationControl
 		}
 	}
 
+	/// <summary>Initializes a new <see cref="TabForm"/> driven by a <see cref="TabFormObject"/>, subscribing to object-change and focus events.</summary>
 	public TabForm(TabFormObject formObject, bool autoGenerateRows = true) : this(formObject.Object, autoGenerateRows)
 	{
 		FormObject = formObject;

@@ -67,14 +67,20 @@ public class TabImageButton : Button, IDisposable
 	private IImage? _defaultImage;
 	private bool _disposed;
 
+	/// <summary>Gets the normal-state icon tint color, taken from <see cref="ImageColorView"/> when available, otherwise the theme default.</summary>
 	protected virtual Color Color => (ImageResource as ImageColorView)?.Color ?? SideScrollTheme.IconForeground.Color;
 
+	/// <summary>Gets the pointer-hover icon tint color, taken from <see cref="ImageColorView"/> when available, otherwise the theme highlight default.</summary>
 	protected virtual Color? HighlightColor => (ImageResource as ImageColorView)?.HighlightColor ?? SideScrollTheme.IconForegroundHighlight.Color;
+	
+	/// <summary>Gets the disabled-state icon tint color from the current theme.</summary>
 	protected virtual Color? DisabledColor => SideScrollTheme.IconForegroundDisabled.Color;
 
+	/// <summary>Gets the lazily-created pointer-hover image, recolored with <see cref="HighlightColor"/>.</summary>
 	protected IImage? HighlightImage => _highlightImage ??= UpdateIconColors ? SvgUtils.TryGetSvgColorImage(ImageResource, HighlightColor) : _defaultImage;
 	private IImage? _highlightImage;
 
+	/// <summary>Gets the lazily-created disabled-state image, recolored with <see cref="DisabledColor"/>.</summary>
 	protected IImage? DisabledImage => _disabledImage ??= SvgUtils.TryGetSvgColorImage(ImageResource, DisabledColor);
 	private IImage? _disabledImage;
 
@@ -91,6 +97,7 @@ public class TabImageButton : Button, IDisposable
 	/// <summary>Returns the button's tooltip text.</summary>
 	public override string? ToString() => Tooltip;
 
+	/// <summary>Initializes a new <see cref="TabImageButton"/> with the given tooltip, icon resource, optional label, size, and color-update flag.</summary>
 	public TabImageButton(string tooltip, IResourceView imageResource, string? label = null, double? iconSize = null, bool updateIconColors = true)
 	{
 		Tooltip = tooltip;
@@ -176,6 +183,7 @@ public class TabImageButton : Button, IDisposable
 		UpdateImage();
 	}
 
+	/// <summary>Refreshes the displayed icon, switching to the disabled variant when <see cref="IsEnabled"/> is <c>false</c>.</summary>
 	protected void UpdateImage()
 	{
 		if (ImageResource.ResourceType != "svg" || !UpdateIconColors) return;
@@ -202,7 +210,7 @@ public class TabImageButton : Button, IDisposable
 		await InvokeAsync();
 	}
 
-	/// <summary>Binds <see cref="Avalonia.Controls.Control.IsEnabled"/> one-way to the specified property path on <paramref name="source"/>.</summary>
+	/// <summary>Binds <see cref="IsEnabled"/> one-way to the specified property path on <paramref name="source"/>.</summary>
 	public void BindIsEnabled(string path, object? source)
 	{
 		Bind(IsEnabledProperty, new Binding
@@ -345,6 +353,7 @@ public class TabImageButton : Button, IDisposable
 		CallActionAsync = callActionAsync;
 	}
 
+	/// <summary>Invokes the registered <see cref="CallActionAsync"/> and/or <see cref="CallAction"/> for this button.</summary>
 	protected void InvokeAction(Call call)
 	{
 		try
@@ -358,6 +367,7 @@ public class TabImageButton : Button, IDisposable
 		}
 	}
 
+	/// <summary>Displays a message flyout anchored below this button.</summary>
 	protected void ShowFlyout(string message)
 	{
 		MessageFlyout flyout = new(message)

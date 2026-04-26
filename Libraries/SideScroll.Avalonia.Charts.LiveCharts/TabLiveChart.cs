@@ -104,6 +104,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 	private LvcPointD? _startDataPoint;
 	private LvcPointD? _endDataPoint;
 
+	/// <summary>Initializes a new <see cref="TabLiveChart"/> bound to <paramref name="chartView"/>, building the CartesianChart, axes, legend, and event wiring.</summary>
 	public TabLiveChart(ChartView chartView, bool fillHeight = false) :
 		base(chartView, fillHeight)
 	{
@@ -178,7 +179,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		Legend.OnVisibleSeriesChanged += Legend_OnVisibleSeriesChanged;
 
 		_pointerMovedSubscriber = new(TabLiveChart_OnPointerChanged);
-		_pointerMovedEventSource.WeakEvent.Subscribe(_pointerMovedEventSource, _pointerMovedSubscriber);
+		PointerMovedEventSource.WeakEvent.Subscribe(PointerMovedEventSource, _pointerMovedSubscriber);
 		if (ChartView.TimeWindow != null)
 		{
 			ChartView.TimeWindow.OnSelectionChanged += TimeWindow_OnSelectionChanged;
@@ -199,7 +200,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		ReloadView();
 	}
 
-	// Reuses previous colors and TimeWindow
+	/// <summary>Updates the chart's series from the new view while reusing the previous color assignments and time window.</summary>
 	public override void UpdateView(ChartView chartView)
 	{
 		ClearSeries();
@@ -210,6 +211,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		ReloadView();
 	}
 
+	/// <summary>Rebuilds all chart series from the current <see cref="TabChart{TSeries}.ChartView"/>, refreshes the axes and legend, and invalidates the chart surface.</summary>
 	public override void ReloadView()
 	{
 		ChartView.SortByTotal();
@@ -295,6 +297,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 	private readonly ValueLabeler _valueLabeler = new();
 
+	/// <summary>Creates and configures the Y axis, using a logarithmic scale when <see cref="SideScroll.Charts.ChartView.LogBase"/> is set.</summary>
 	public Axis CreateYAxis() // AxisPosition axisPosition = AxisPosition.Left)
 	{
 		Axis axis;
@@ -397,6 +400,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		return _trackerSection;
 	}
 
+	/// <summary>Adds an annotation to the chart, creates a <see cref="RectangularSection"/> for it, and refreshes the Y axis.</summary>
 	public override void AddAnnotation(ChartAnnotation chartAnnotation)
 	{
 		base.AddAnnotation(chartAnnotation);
@@ -840,7 +844,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			LvcPointD dataPoint = Chart.ScalePixelsToData(new LvcPointD(point.X, point.Y));
 
 			var moveEvent = new PointerMovedEventArgs(dataPoint.X);
-			_pointerMovedEventSource.Raise(sender, moveEvent);
+			PointerMovedEventSource.Raise(sender, moveEvent);
 
 			UpdateZoomSection(dataPoint);
 		}
@@ -926,7 +930,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 		// Hide cursor when out of scope
 		var moveEvent = new PointerMovedEventArgs(0);
-		_pointerMovedEventSource.Raise(sender, moveEvent);
+		PointerMovedEventSource.Raise(sender, moveEvent);
 	}
 
 	private void Chart_SizeChanged(object? sender, SizeChangedEventArgs e)
@@ -964,7 +968,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		Chart.PointerExited -= Chart_PointerExited;
 		if (_pointerMovedSubscriber != null)
 		{
-			_pointerMovedEventSource.WeakEvent.Unsubscribe(_pointerMovedEventSource, _pointerMovedSubscriber);
+			PointerMovedEventSource.WeakEvent.Unsubscribe(PointerMovedEventSource, _pointerMovedSubscriber);
 		}
 		Chart.EffectiveViewportChanged -= Chart_EffectiveViewportChanged;
 		Chart.SizeChanged -= Chart_SizeChanged;

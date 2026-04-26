@@ -589,7 +589,7 @@ public abstract class TypeRepo : IDisposable
 			{
 				preload.PreloadObjectData(obj);
 			}
-			catch (Exception)
+			catch
 			{
 			}
 		}
@@ -607,7 +607,7 @@ public abstract class TypeRepo : IDisposable
 		{
 			LoadObjectData(obj);
 		}
-		catch (Exception)
+		catch
 		{
 		}
 	}

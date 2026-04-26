@@ -24,6 +24,7 @@ public class TabLoadedEventArgs(object obj) : EventArgs
 /// <summary>Implement to add custom controls or toolbar buttons to a <see cref="TabViewer"/> during initialization.</summary>
 public interface ITabViewerPlugin
 {
+	/// <summary>Initializes and injects custom controls or toolbar buttons into the given <paramref name="tabViewer"/>.</summary>
 	public void Initialize(TabViewer tabViewer);
 }
 
@@ -84,6 +85,7 @@ public class TabViewer : Grid
 	/// <summary>Raised when a new tab has been loaded into the viewer.</summary>
 	public event EventHandler<TabLoadedEventArgs>? OnTabLoaded;
 
+	/// <summary>Initializes a new <see cref="TabViewer"/> for the given project, building the scroll layout, side buttons, toolbar, and any registered plugins.</summary>
 	public TabViewer(Project project, bool isWindowed = true)
 	{
 		Project = project;
@@ -417,7 +419,7 @@ public class TabViewer : Grid
 		ScrollViewer.Offset = new Vector(minXOffset, ScrollViewer.Offset.Y);
 	}
 
-	// Load the main Tab Content
+	/// <summary>Loads the main tab content from <paramref name="tab"/>, restoring any pending link URI, bookmark, or default auto-select state.</summary>
 	public TabInstance LoadTab(ITab tab)
 	{
 		TabInstance tabInstance = tab.Create();
@@ -474,6 +476,10 @@ public class TabViewer : Grid
 		}
 	}
 
+	/// <summary>
+	/// Handles keyboard navigation: Left/Right arrow scrolls or seeks backward/forward when Alt is held;
+	/// Ctrl+R reloads the viewer.
+	/// </summary>
 	protected override void OnKeyDown(KeyEventArgs e)
 	{
 		base.OnKeyDown(e);

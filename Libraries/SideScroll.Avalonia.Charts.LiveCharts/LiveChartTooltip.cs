@@ -230,6 +230,7 @@ public class LiveChartTooltip(TabLiveChart liveChart) : SKDefaultTooltip
 		}
 	}
 
+	/// <summary>Hides the tooltip for the given chart.</summary>
 	public override void Hide(Chart chart)
 	{
 		base.Hide(chart);

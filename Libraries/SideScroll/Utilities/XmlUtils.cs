@@ -23,10 +23,8 @@ public static class XmlUtils
 		if (!text.StartsWith('<')) return false;
 
 		using var memoryStream = new MemoryStream();
-		using var writer = new XmlTextWriter(memoryStream, Encoding.Unicode)
-		{
-			Formatting = Formatting.Indented,
-		};
+		using var writer = new XmlTextWriter(memoryStream, Encoding.Unicode);
+		writer.Formatting = Formatting.Indented;
 		var document = new XmlDocument();
 
 		try

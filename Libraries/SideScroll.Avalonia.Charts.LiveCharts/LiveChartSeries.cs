@@ -44,7 +44,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 	/// <summary>Gets the SkiaSharp color used for painting this series.</summary>
 	public SKColor SkColor { get; protected set; }
 
-	public override string? ToString() => ListSeries.ToString();
+	public override string ToString() => ListSeries.ToString();
 
 	public LiveChartSeries(TabLiveChart chart, ListSeries listSeries, Color color)
 	{

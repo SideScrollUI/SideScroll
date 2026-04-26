@@ -31,11 +31,19 @@ public interface IFileTypeProbe
 /// </summary>
 public class FileProbeContext
 {
+	/// <summary>Gets the full path of the file being probed.</summary>
 	public string FilePath { get; }
+
+	/// <summary>Gets the leading bytes of the file used for magic-number / content-based detection.</summary>
 	public ReadOnlyMemory<byte> HeaderBytes { get; }
+
+	/// <summary>Gets the lower-case file extension (without the leading dot) of the file being probed.</summary>
 	public string Extension { get; }
+	
+	/// <summary>Gets the total size of the file in bytes.</summary>
 	public long FileSize { get; }
 
+	/// <summary>Initializes a new <see cref="FileProbeContext"/> with the given file metadata and header bytes.</summary>
 	public FileProbeContext(string filePath, ReadOnlyMemory<byte> headerBytes, string extension, long fileSize)
 	{
 		FilePath = filePath;

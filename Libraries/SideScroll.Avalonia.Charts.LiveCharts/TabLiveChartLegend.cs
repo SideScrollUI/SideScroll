@@ -15,6 +15,7 @@ public class TabLiveChartLegend(TabLiveChart liveChart)
 	/// <summary>Gets the underlying LiveCharts <see cref="CartesianChart"/> control.</summary>
 	public CartesianChart Chart => LiveChart.Chart;
 
+	/// <summary>Creates a <see cref="TabLiveChartLegendItem"/> for the series, wires up visibility and pointer events, and registers it in the legend.</summary>
 	protected override TabChartLegendItem<ISeries> AddSeries(ChartSeries<ISeries> chartSeries)
 	{
 		var legendItem = new TabLiveChartLegendItem(this, chartSeries);
@@ -35,6 +36,7 @@ public class TabLiveChartLegend(TabLiveChart liveChart)
 		return legendItem;
 	}
 
+	/// <summary>Updates the highlight state of all legend items and refreshes the chart axis and rendering.</summary>
 	public override void UpdateHighlight(bool showFaded)
 	{
 		base.UpdateHighlight(showFaded);

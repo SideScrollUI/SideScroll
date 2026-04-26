@@ -14,14 +14,16 @@ using System.Reflection;
 namespace SideScroll.Avalonia.Charts;
 
 /// <summary>
-/// Pairs a <see cref="SideScroll.Charts.ListSeries"/> with its underlying chart series object and display color.
+/// Pairs a <see cref="SideScroll.Collections.ListSeries"/> with its underlying chart series object and display color.
 /// </summary>
 public class ChartSeries<TSeries>(ListSeries listSeries, TSeries lineSeries, Color color)
 {
 	/// <summary>Gets the source data series.</summary>
 	public ListSeries ListSeries => listSeries;
+
 	/// <summary>Gets the native chart series used by the charting library.</summary>
 	public TSeries LineSeries => lineSeries;
+
 	/// <summary>Gets the display color for this series.</summary>
 	public Color Color => color;
 
@@ -89,34 +91,50 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 
 	/// <summary>Gets or sets the color of the pointer time-tracker line.</summary>
 	public Color TimeTrackerColor { get; set; } = SideScrollTheme.DataGridRowHighlight.Color;
+
 	/// <summary>Gets or sets the color of chart grid lines.</summary>
 	public Color GridLineColor { get; set; } = SideScrollTheme.ChartGridLines.Color;
+
 	/// <summary>Gets or sets the color of the "Now" annotation line.</summary>
 	public Color NowColor { get; set; } = SideScrollTheme.ChartNowLine.Color;
+
 	/// <summary>Gets or sets the color of axis labels and chart text.</summary>
 	public Color TextColor { get; set; } = SideScrollTheme.ChartLabelForeground.Color;
 
+	/// <summary>Gets the number of distinct chart series colors available before cycling.</summary>
 	public const int DefaultColorCount = 10;
+
+	/// <summary>Returns the theme color for the series at the given zero-based index, cycling through <see cref="DefaultColorCount"/> colors.</summary>
 	public static Color GetColor(int index) => SideScrollTheme.ChartSeries(1 + index % DefaultColorCount).Color;
 
-	protected static readonly WeakEventSource<PointerMovedEventArgs> _pointerMovedEventSource = new();
+	/// <summary>Cross-chart event source for broadcasting pointer move positions.</summary>
+	protected static readonly WeakEventSource<PointerMovedEventArgs> PointerMovedEventSource = new();
 
+	/// <summary>Subscription handle for receiving pointer move events from other charts.</summary>
 	protected WeakSubscriber<PointerMovedEventArgs>? _pointerMovedSubscriber;
 
 	/// <summary>Raised when the set of selected series changes.</summary>
 	public event EventHandler<SeriesSelectedEventArgs>? SelectionChanged;
 
+	/// <summary>Fraction of the data range added as padding above and below the visible area. Needs a minimum height so this can be lowered.</summary>
 	protected const double MarginPercent = 0.1; // This needs a min height so this can be lowered
+
+	/// <summary>Minimum pixel width required to register a drag-selection gesture.</summary>
 	protected const int MinSelectionWidth = 10;
 
 	/// <summary>Gets or sets the data model driving this chart.</summary>
 	public ChartView ChartView { get; set; }
+
 	/// <summary>Gets or sets whether the chart expands to fill available vertical space up to its maximum height.</summary>
 	public bool FillHeight { get; set; }
 
 	/// <summary>Gets the list of all chart series with their display state.</summary>
 	public List<ChartSeries<TSeries>> ChartSeries { get; } = [];
+
+	/// <summary>Maps series name to the corresponding <see cref="ChartSeries{TSeries}"/> for fast lookup.</summary>
 	protected Dictionary<string, ChartSeries<TSeries>> IdxNameToChartSeries { get; } = [];
+
+	/// <summary>Maps series name to a snapshot of its display state, used to restore color and selection across reloads.</summary>
 	protected Dictionary<string, SeriesInfo> IdxSeriesInfo { get; } = [];
 
 	/// <summary>Gets the list of currently selected (visible) series, or an empty list when all series are selected.</summary>
@@ -139,10 +157,13 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 
 	/// <summary>Gets the title text block displayed above the chart, or <c>null</c> if no title was set.</summary>
 	public TextBlock? TitleTextBlock { get; protected set; }
+
 	/// <summary>Gets or sets whether the title text block highlights on hover to indicate it is clickable.</summary>
 	public bool IsTitleSelectable { get; set; }
 
+	/// <summary>Reflection info for the property used as the X-axis value, or <c>null</c> if not set.</summary>
 	protected PropertyInfo? XAxisPropertyInfo { get; set; }
+	
 	/// <summary>Gets whether the X axis should use DateTime formatting, based on the series X property type or a configured time window.</summary>
 	public bool UseDateTimeAxis => (XAxisPropertyInfo?.PropertyType == typeof(DateTime)) ||
 									(ChartView.TimeWindow != null);
@@ -158,6 +179,7 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 
 	public override string? ToString() => ChartView.ToString();
 
+	/// <summary>Initializes a new chart control bound to the given <paramref name="chartView"/>, optionally expanding to fill available vertical space.</summary>
 	protected TabChart(ChartView chartView, bool fillHeight = false)
 	{
 		ChartView = chartView;
@@ -270,6 +292,7 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 		return null;
 	}
 
+	/// <summary>Saves the current color and selection state of <paramref name="chartSeries"/> so it can be restored on reload.</summary>
 	protected void UpdateSeriesInfo(ChartSeries<TSeries> chartSeries)
 	{
 		if (chartSeries.ListSeries.Name is string name)

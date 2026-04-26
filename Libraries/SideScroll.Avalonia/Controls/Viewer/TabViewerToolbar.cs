@@ -62,6 +62,7 @@ public class TabViewerToolbar : TabControlToolbar
 	/// <summary>Gets the display name of the project, used as the logo button tooltip.</summary>
 	protected string ProjectName => Project.Name!;
 
+	/// <summary>Initializes a new <see cref="TabViewerToolbar"/> for the given viewer, adding navigation buttons and optional link/import buttons.</summary>
 	public TabViewerToolbar(TabViewer tabViewer)
 	{
 		TabViewer = tabViewer;
@@ -147,6 +148,7 @@ public class TabViewerToolbar : TabControlToolbar
 		AddControl(textBlock);
 	}
 
+	/// <summary>Adds the project version label to the right side of the toolbar and returns the created text block.</summary>
 	public ToolbarHeaderTextBlock AddVersion()
 	{
 		string versionLabel = 'v' + Project.Version.Formatted();

@@ -129,9 +129,9 @@ public static class ObjectExtensions
 			try
 			{
 				// can throw exception if stream has been closed
-				return "[" + stream.Length.ToString("N0") + "]";
+				return '[' + stream.Length.ToString("N0") + ']';
 			}
-			catch (Exception)
+			catch
 			{
 			}
 		}

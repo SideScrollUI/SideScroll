@@ -20,7 +20,7 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 	/// <summary>Gets the mutable list of menu items used to build the context menu.</summary>
 	public AvaloniaList<object> ItemList { get; } = [];
 
-	private readonly CheckBox? _checkboxAutoSelect;
+	private readonly CheckBox _checkboxAutoSelect;
 
 	protected override Type StyleKeyOverride => typeof(ContextMenu);
 
@@ -69,7 +69,7 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 	private void MenuItemAutoSelect_Click(object? sender, RoutedEventArgs e)
 	{
 		TabInstance!.Project.UserSettings.AutoSelect = !TabInstance.Project.UserSettings.AutoSelect;
-		_checkboxAutoSelect!.IsChecked = TabInstance.Project.UserSettings.AutoSelect;
+		_checkboxAutoSelect.IsChecked = TabInstance.Project.UserSettings.AutoSelect;
 		TabInstance.Project.SaveUserSettings();
 	}
 

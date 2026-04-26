@@ -29,6 +29,7 @@ public class TabFormattedComboBox : ComboBox
 	/// <summary>Returns the string representation of the currently selected item.</summary>
 	public override string? ToString() => SelectedItem?.ToString();
 
+	/// <summary>Initializes a new <see cref="TabFormattedComboBox"/> bound to <paramref name="property"/> with a fixed <paramref name="list"/> of choices.</summary>
 	public TabFormattedComboBox(ListProperty property, IList list)
 	{
 		Property = property;
@@ -37,6 +38,7 @@ public class TabFormattedComboBox : ComboBox
 		InitializeComponent();
 	}
 
+	/// <summary>Initializes a new <see cref="TabFormattedComboBox"/> bound to <paramref name="property"/>, loading choices from a named property on the bound object or from the property's enum type when <paramref name="listPropertyName"/> is <c>null</c>.</summary>
 	public TabFormattedComboBox(ListProperty property, string? listPropertyName)
 	{
 		Property = property;
@@ -81,6 +83,7 @@ public class TabFormattedComboBox : ComboBox
 		AvaloniaUtils.AddContextMenu(this);
 	}
 
+	/// <summary>Establishes a two-way binding between <see cref="SelectedFormattedItem"/> and the combo box's selected item, and subscribes to property-change notifications on the bound object.</summary>
 	protected void Bind()
 	{
 		var binding = new Binding(nameof(SelectedFormattedItem))
@@ -160,6 +163,7 @@ public class TabFormattedComboBox : ComboBox
 		}
 	}
 
+	/// <summary>Gets or sets the currently selected item as a <see cref="FormattedItem"/>, syncing the underlying property value when set.</summary>
 	public object? SelectedFormattedItem
 	{
 		set
@@ -172,6 +176,7 @@ public class TabFormattedComboBox : ComboBox
 		get => GetFormattedItem(Property.Value);
 	}
 
+	/// <summary>Gets or sets the unwrapped selected value, finding or creating a matching <see cref="FormattedItem"/> in the list.</summary>
 	public new object? SelectedItem
 	{
 		get

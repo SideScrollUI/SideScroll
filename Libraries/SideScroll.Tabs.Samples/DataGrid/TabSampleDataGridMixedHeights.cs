@@ -23,7 +23,7 @@ public class TabSampleDataGridMixedHeights : ITab
 
 	private class TestItem
 	{
-		public int Index { get; set; } = 0;
+		public int Index { get; set; }
 
 		[MaxHeight(300)]
 		public string? Text { get; set; }

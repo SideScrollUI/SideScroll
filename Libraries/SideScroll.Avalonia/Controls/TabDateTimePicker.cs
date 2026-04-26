@@ -45,6 +45,7 @@ public class TabDateTimePicker : Grid
 	private TabCalendarDatePicker _datePicker;
 	private TabTextBox _timeTextBox;
 
+	/// <summary>Initializes a new <see cref="TabDateTimePicker"/> bound to the given <paramref name="property"/>, creating the date picker and time text box controls.</summary>
 	public TabDateTimePicker(ListProperty property)
 	{
 		Property = property;

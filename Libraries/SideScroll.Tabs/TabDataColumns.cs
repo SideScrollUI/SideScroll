@@ -171,7 +171,7 @@ public class TabPropertyColumn(PropertyInfo propertyInfo, string label)
 				if (listProperty.IsColumnVisible())
 					return true;
 			}
-			catch (Exception)
+			catch
 			{
 			}
 		}

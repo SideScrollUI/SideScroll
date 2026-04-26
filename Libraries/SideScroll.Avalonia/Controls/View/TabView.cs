@@ -22,12 +22,14 @@ namespace SideScroll.Avalonia.Controls.View;
 /// <summary>Implement to register a custom control that renders a specific object type inside a <see cref="TabSplitGrid"/>.</summary>
 public interface IControlCreator
 {
+	/// <summary>Creates the appropriate control for <paramref name="obj"/> and adds it to <paramref name="container"/>.</summary>
 	void AddControl(TabInstance tabInstance, TabSplitGrid container, object obj);
 }
 
 /// <summary>Implement to add data validation behavior to a control displayed in a tab form.</summary>
 public interface IValidationControl
 {
+	/// <summary>Validates the control's current value and updates any error indicators.</summary>
 	void Validate();
 }
 
@@ -68,6 +70,7 @@ public class TabView : Grid, IDisposable
 	/// <summary>Gets the model exposed by the current tab instance.</summary>
 	public TabModel Model => Instance.Model;
 
+	/// <summary>Gets or sets the display name of this tab, mirrored from <see cref="TabModel.Name"/>.</summary>
 	public string Label
 	{
 		get => Model.Name;
@@ -109,6 +112,7 @@ public class TabView : Grid, IDisposable
 	/// <summary>Returns the model's display name.</summary>
 	public override string ToString() => Model.Name;
 
+	/// <summary>Initializes a new <see cref="TabView"/> for the given tab instance, wiring up event handlers and keyboard support.</summary>
 	public TabView(TabInstance tabInstance)
 	{
 		Instance = tabInstance;
@@ -148,13 +152,14 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
+	/// <summary>Arranges child controls and, on the first valid pass, schedules the deferred child-control loader.</summary>
 	protected override Size ArrangeOverride(Size finalSize)
 	{
 		try
 		{
 			_arrangeOverrideFinalSize = base.ArrangeOverride(finalSize);
 		}
-		catch (Exception)
+		catch
 		{
 		}
 
@@ -411,6 +416,7 @@ public class TabView : Grid, IDisposable
 		_containerGrid.InvalidateMeasure();
 	}
 
+	/// <summary>Restores the saved column splitter width from <see cref="TabViewSettings"/>, or falls back to auto-sizing if no valid width is stored.</summary>
 	protected void UpdateSplitterDistance()
 	{
 		if (_containerGrid == null)
@@ -446,6 +452,7 @@ public class TabView : Grid, IDisposable
 		UpdateChildControls();
 	}
 
+	/// <summary>Iterates over the model's object list and adds a corresponding control for each entry to the parent panel.</summary>
 	protected void AddObjects()
 	{
 		foreach (TabObject tabObject in Model.Objects)
@@ -499,6 +506,7 @@ public class TabView : Grid, IDisposable
 		AddControl(toolbarControl, GridLength.Auto);
 	}
 
+	/// <summary>Creates and adds the <see cref="TabViewActions"/> control if the model defines any actions.</summary>
 	protected void AddActions()
 	{
 		if (Model.Actions == null)
@@ -509,6 +517,7 @@ public class TabView : Grid, IDisposable
 		_tabParentControls!.AddControl(TabActions, false, SeparatorType.Spacer);
 	}
 
+	/// <summary>Creates and adds the <see cref="TabViewTasks"/> control when the model has actions or objects to display.</summary>
 	protected void AddTasks()
 	{
 		if (Model.Actions == null && Model.Objects == null)
@@ -520,6 +529,7 @@ public class TabView : Grid, IDisposable
 		_tabParentControls!.AddControl(TabTasks, false, SeparatorType.Spacer);
 	}
 
+	/// <summary>Creates a <see cref="TabDataGrid"/> for each <see cref="IList"/> in the model and adds it to the parent panel.</summary>
 	protected void AddData()
 	{
 		int index = 0;
@@ -533,6 +543,7 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
+	/// <summary>Adds a control to the parent panel, also registering any toolbar hot-keys it exposes.</summary>
 	// should we check for a Grid stretch instead of passing that parameter?
 	protected void AddControl(Control control, GridLength gridLength, bool scrollable = false)
 	{
@@ -543,6 +554,7 @@ public class TabView : Grid, IDisposable
 		_tabParentControls!.AddControl(control, gridLength, SeparatorType.Splitter, scrollable);
 	}
 
+	/// <summary>Registers a custom <see cref="ITabSelector"/> control, wires up its selection-changed event, and adds it to the parent panel.</summary>
 	protected void AddITabControl(ITabSelector control, GridLength gridLength)
 	{
 		control.OnSelectionChanged += ParentListSelectionChanged;
@@ -550,6 +562,7 @@ public class TabView : Grid, IDisposable
 		CustomTabControls.Add(control);
 	}
 
+	/// <summary>Adds a read-only, word-wrapped text box displaying <paramref name="text"/> to the parent panel.</summary>
 	protected void AddControlString(string text)
 	{
 		TextBox textBox = new()
@@ -793,6 +806,7 @@ public class TabView : Grid, IDisposable
 		return 0;
 	}
 
+	/// <summary>Recalculates and applies the width of the filler panel so the grid splitter has room to drag rightward.</summary>
 	protected void UpdateSplitterFiller()
 	{
 		if (_fillerPanel != null)
@@ -939,6 +953,7 @@ public class TabView : Grid, IDisposable
 		}
 	}
 
+	/// <summary>Creates the child control for <paramref name="obj"/>, attaches any selected-row context, raises the tab-loaded event, and returns the control (or an error control on exception).</summary>
 	protected Control? CreateChildControl(SelectedRow? selectedRow, object obj, string? label = null, ITabSelector? tabControl = null)
 	{
 		try

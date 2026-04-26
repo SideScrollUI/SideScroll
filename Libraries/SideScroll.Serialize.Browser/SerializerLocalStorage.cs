@@ -54,6 +54,7 @@ public partial class SerializerLocalStorage : SerializerFile
 	/// </summary>
 	protected override void EnsureStorageExists() { }
 
+	/// <summary>Serializes <paramref name="obj"/> to JSON and writes it to localStorage under <see cref="StorageKey"/>, logging success or failure to <paramref name="call"/>.</summary>
 	protected override void SaveInternal(Call call, object obj, string? name = null, bool publicOnly = false)
 	{
 		var options = publicOnly
@@ -89,6 +90,7 @@ public partial class SerializerLocalStorage : SerializerFile
 		}
 	}
 
+	/// <summary>Reads JSON from localStorage under <see cref="StorageKey"/>, deserializes it to <paramref name="expectedType"/> (or a generic dictionary if unspecified), and returns the result.</summary>
 	protected override object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false, Type? expectedType = null)
 	{
 		var options = publicOnly

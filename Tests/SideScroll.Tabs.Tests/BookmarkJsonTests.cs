@@ -252,10 +252,10 @@ public class BookmarkJsonTests : BaseTest
 		Assert.That(dataValueItem.Amount, Is.EqualTo(30));
 		Assert.That(dataValueItem.EnumAttributeTargets, Is.EqualTo((AttributeTargets)512));
 		Assert.That(dataValueItem.ListItem, Is.Not.Null);
-		Assert.That(dataValueItem.ListItem!.Name, Is.EqualTo("Two"));
+		Assert.That(dataValueItem.ListItem.Name, Is.EqualTo("Two"));
 		Assert.That(dataValueItem.ListItem.Value, Is.EqualTo(2));
 		Assert.That(dataValueItem.TimeZone, Is.Not.Null);
-		Assert.That(dataValueItem.TimeZone!.Name, Is.EqualTo("Pacific Time"));
+		Assert.That(dataValueItem.TimeZone.Name, Is.EqualTo("Pacific Time"));
 
 		// Verify nested TabBookmark structure
 		Assert.That(firstSelectedRow.TabBookmark, Is.Not.Null);

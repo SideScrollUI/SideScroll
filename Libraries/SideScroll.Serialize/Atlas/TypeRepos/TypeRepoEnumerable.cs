@@ -17,9 +17,9 @@ public class TypeRepoEnumerable : TypeRepo
 		}
 	}*/
 
-	protected readonly Type? _elementType;
-	protected TypeRepo? _listTypeRepo;
-	protected readonly MethodInfo? _addMethod;
+	protected readonly Type? ElementType;
+	protected TypeRepo? ListTypeRepo;
+	protected readonly MethodInfo? AddMethod;
 
 	private PropertyInfo? _countPropertyInfo; // IEnumerable isn't required to implement this
 
@@ -31,10 +31,10 @@ public class TypeRepoEnumerable : TypeRepo
 			Type[] types = LoadableType.GetGenericArguments();
 			if (types.Length > 0)
 			{
-				_elementType = types[0];
+				ElementType = types[0];
 			}
 
-			_addMethod = LoadableType.GetMethods()
+			AddMethod = LoadableType.GetMethods()
 				.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 1);
 
 			_countPropertyInfo = LoadableType.GetProperty("Count");
@@ -48,9 +48,9 @@ public class TypeRepoEnumerable : TypeRepo
 
 	public override void InitializeLoading(Log log)
 	{
-		if (_elementType != null)
+		if (ElementType != null)
 		{
-			_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
+			ListTypeRepo = Serializer.GetOrCreateRepo(log, ElementType);
 		}
 	}
 
@@ -71,7 +71,7 @@ public class TypeRepoEnumerable : TypeRepo
 		writer.Write(count);
 		foreach (object item in enumerable)
 		{
-			Serializer.WriteObjectRef(_elementType!, item, writer);
+			Serializer.WriteObjectRef(ElementType!, item, writer);
 		}
 	}
 
@@ -81,8 +81,8 @@ public class TypeRepoEnumerable : TypeRepo
 
 		for (int j = 0; j < count; j++)
 		{
-			object objectValue = _listTypeRepo!.LoadObjectRef()!;
-			_addMethod!.Invoke(obj, [objectValue]);
+			object objectValue = ListTypeRepo!.LoadObjectRef()!;
+			AddMethod!.Invoke(obj, [objectValue]);
 		}
 	}
 
@@ -92,7 +92,7 @@ public class TypeRepoEnumerable : TypeRepo
 		foreach (object? item in enumerable)
 		{
 			object? clone = Serializer.Clone(item);
-			_addMethod!.Invoke(dest, [clone]);
+			AddMethod!.Invoke(dest, [clone]);
 		}
 	}
 }

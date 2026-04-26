@@ -35,7 +35,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	/// <summary>Gets the text block displaying the series total value, or <c>null</c> if totals are not shown.</summary>
 	public TabTextBlock? TextBlockTotal { get; protected set; }
 
-	protected Polygon? _polygon;
+	protected Polygon? Polygon;
 
 	private int _index;
 	/// <summary>Gets or sets the 1-based display rank shown as a prefix in the legend label when ordering is enabled.</summary>
@@ -99,9 +99,9 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void SetFilled(bool filled)
 	{
-		if (_polygon != null)
+		if (Polygon != null)
 		{
-			_polygon.Fill = filled && Count > 0 ? _colorBrush : Brushes.Transparent;
+			Polygon.Fill = filled && Count > 0 ? _colorBrush : Brushes.Transparent;
 		}
 	}
 
@@ -123,7 +123,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void AddCheckBox()
 	{
-		_polygon = new Polygon
+		Polygon = new Polygon
 		{
 			Width = 16,
 			Height = 13,
@@ -135,21 +135,21 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 		UpdateCheckBox();
 
-		_polygon.PointerPressed += Polygon_PointerPressed;
-		Children.Add(_polygon);
+		Polygon.PointerPressed += Polygon_PointerPressed;
+		Children.Add(Polygon);
 	}
 
 	private void UpdateCheckBox()
 	{
-		if (_polygon == null) return;
+		if (Polygon == null) return;
 
 		if (Count > 0)
 		{
-			if (_polygon.Fill == null)
+			if (Polygon.Fill == null)
 			{
 				IsSelected = true;
 			}
-			_polygon.Fill = _colorBrush;
+			Polygon.Fill = _colorBrush;
 		}
 		else
 		{
@@ -220,7 +220,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			_highlight = value;
 			if (_highlight)
 			{
-				_polygon!.Points = PolygonPointsLarge;
+				Polygon!.Points = PolygonPointsLarge;
 				SetFilled(true);
 				_highlight = true;
 				TextBlock!.Foreground = SideScrollTheme.ChartLabelForegroundHighlight;
@@ -231,7 +231,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			}
 			else
 			{
-				_polygon!.Points = PolygonPointsSmall;
+				Polygon!.Points = PolygonPointsSmall;
 				_highlight = false;
 				SetFilled(IsSelected);
 				TextBlock!.Foreground = SideScrollTheme.ChartLabelForeground;
