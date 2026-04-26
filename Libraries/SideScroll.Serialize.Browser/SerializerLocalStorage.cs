@@ -63,12 +63,14 @@ public partial class SerializerLocalStorage : SerializerFile
 			if (success)
 			{
 				call.Log.AddDebug("Saved to localStorage",
+					new Tag("Name", name),
 					new Tag("Key", StorageKey),
 					new Tag("Size", json.Length));
 			}
 			else
 			{
 				call.Log.AddWarning("Failed to save to localStorage",
+					new Tag("Name", name),
 					new Tag("Type", obj.GetType()),
 					new Tag("Key", StorageKey));
 			}
@@ -76,6 +78,7 @@ public partial class SerializerLocalStorage : SerializerFile
 		catch (Exception e)
 		{
 			call.Log.Add(e,
+				new Tag("Name", name),
 				new Tag("Type", obj.GetType()),
 				new Tag("Key", StorageKey));
 		}

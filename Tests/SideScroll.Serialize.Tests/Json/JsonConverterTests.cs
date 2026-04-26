@@ -959,7 +959,7 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output!.DateTimeObject, Is.Not.Null);
 		// DateTime gets serialized in ISO 8601 format, parse and convert to UTC for comparison
-		var outputDateTime = DateTime.Parse(output.DateTimeObject.ToString()!).ToUniversalTime();
+		var outputDateTime = DateTime.Parse(output.DateTimeObject!.ToString()!).ToUniversalTime();
 		Assert.That(outputDateTime, Is.EqualTo(inputDateTime));
 	}
 
@@ -1849,6 +1849,79 @@ public class JsonConverterTests : SerializeBaseTest
 		var car = (Car)output.Nested.Vehicle!;
 		Assert.That(car.Speed, Is.EqualTo(120));
 		Assert.That(car.Doors, Is.EqualTo(4));
+	}
+
+	#endregion
+
+	#region Primary Constructor Tests
+
+	/// <summary>
+	/// A type using a C# primary constructor — its backing properties are read-only
+	/// but must round-trip through JSON for persistence (e.g., browser localStorage).
+	/// </summary>
+	[PublicData]
+	public class PrimaryCtorValue(string name, int count)
+	{
+		/// <summary>Backed by constructor parameter — must be serialized.</summary>
+		public string Name => name;
+
+		/// <summary>Backed by constructor parameter — must be serialized.</summary>
+		public int Count => count;
+
+		/// <summary>Computed from constructor data — must NOT be serialized.</summary>
+		public string Summary => $"{name} ({count})";
+	}
+
+	[Test, Description("Primary constructor properties are serialized and deserialized correctly")]
+	public void SerializePrimaryConstructor_RoundTrips()
+	{
+		var input = new PrimaryCtorValue("hello", 42);
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PrivateSerializerOptions);
+		var output = JsonSerializer.Deserialize<PrimaryCtorValue>(json, JsonConverters.PrivateSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Name, Is.EqualTo("hello"));
+		Assert.That(output.Count, Is.EqualTo(42));
+	}
+
+	[Test, Description("Computed (derived) read-only properties on primary constructor types are excluded from JSON")]
+	public void SerializePrimaryConstructor_ExcludesComputedProperties()
+	{
+		var input = new PrimaryCtorValue("hello", 42);
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PrivateSerializerOptions);
+
+		Assert.That(json, Does.Not.Contain("Summary"),
+			"Computed property 'Summary' should not appear in the serialized JSON");
+	}
+
+	/// <summary>
+	/// A regular type with a parameterless constructor — computed read-only properties should be excluded.
+	/// </summary>
+	[PublicData]
+	public class RegularClassWithComputed
+	{
+		public string? FirstName { get; set; }
+		public string? LastName { get; set; }
+
+		/// <summary>Computed — must NOT be serialized.</summary>
+		public string FullName => $"{FirstName} {LastName}";
+	}
+
+	[Test, Description("Computed read-only properties on regular classes are excluded from JSON")]
+	public void SerializeRegularClass_ExcludesComputedReadOnlyProperties()
+	{
+		var input = new RegularClassWithComputed { FirstName = "John", LastName = "Doe" };
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PrivateSerializerOptions);
+		var output = JsonSerializer.Deserialize<RegularClassWithComputed>(json, JsonConverters.PrivateSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.FirstName, Is.EqualTo("John"));
+		Assert.That(output.LastName, Is.EqualTo("Doe"));
+		Assert.That(json, Does.Not.Contain("FullName"),
+			"Computed property 'FullName' should not appear in the serialized JSON");
 	}
 
 	#endregion

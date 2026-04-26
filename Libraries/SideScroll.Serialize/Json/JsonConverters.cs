@@ -33,7 +33,6 @@ public static class JsonConverters
 			ReferenceHandler = ReferenceHandler.IgnoreCycles,
 			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 			IgnoreReadOnlyFields = true,
-			IgnoreReadOnlyProperties = true,
 			IncludeFields = true,
 			WriteIndented = true,
 			TypeInfoResolver = new DefaultJsonTypeInfoResolver
@@ -43,6 +42,7 @@ public static class JsonConverters
 					IgnoreUnserializedAttributeModifier,
 					IgnorePrivateDataAttributeModifier,
 					IgnoreProtectedDataAttributeModifier,
+					IgnoreReadOnlyNotInConstructorModifier,
 				}
 			}
 		};
@@ -66,7 +66,6 @@ public static class JsonConverters
 			ReferenceHandler = ReferenceHandler.IgnoreCycles,
 			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 			IgnoreReadOnlyFields = true,
-			IgnoreReadOnlyProperties = true,
 			IncludeFields = true,
 			WriteIndented = true,
 			TypeInfoResolver = new DefaultJsonTypeInfoResolver
@@ -75,6 +74,7 @@ public static class JsonConverters
 				{
 					IgnoreUnserializedAttributeModifier,
 					IgnoreProtectedDataAttributeModifier,
+					IgnoreReadOnlyNotInConstructorModifier,
 				}
 			}
 		};
@@ -84,6 +84,56 @@ public static class JsonConverters
 		jsonSerializerOptions.Converters.Add(new ObjectJsonConverterFactory());
 
 		return jsonSerializerOptions;
+	}
+
+	/// <summary>
+	/// Modifier that suppresses serialization of read-only properties that are not required by a
+	/// parameterized constructor, allowing types using C# primary constructors to round-trip through JSON.
+	/// <list type="bullet">
+	///   <item>When a type has <b>no</b> parameterless constructor, properties whose names match a
+	///   constructor parameter are kept so the deserializer can reconstruct the object via that constructor.</item>
+	///   <item>All other read-only properties (computed/derived values) are excluded from the JSON output.</item>
+	///   <item>When a parameterless constructor exists, all read-only properties are excluded because the
+	///   deserializer will use property setters instead of the constructor.</item>
+	/// </list>
+	/// </summary>
+	private static void IgnoreReadOnlyNotInConstructorModifier(JsonTypeInfo typeInfo)
+	{
+		if (typeInfo.Kind != JsonTypeInfoKind.Object)
+			return;
+
+		HashSet<string> constructorParamNames = [];
+
+		// Only consider constructor parameters when there's no parameterless constructor,
+		// because System.Text.Json uses the parameterless constructor when one is available.
+		bool hasParameterlessConstructor = typeInfo.Type.GetConstructor(Type.EmptyTypes) != null;
+
+		if (!hasParameterlessConstructor)
+		{
+			// Prefer a constructor explicitly tagged with [JsonConstructor]; otherwise use the one with the most parameters.
+			var bestConstructor =
+				typeInfo.Type.GetConstructors()
+					.FirstOrDefault(c => c.IsDefined(typeof(JsonConstructorAttribute), inherit: false))
+				?? typeInfo.Type.GetConstructors()
+					.OrderByDescending(c => c.GetParameters().Length)
+					.FirstOrDefault();
+
+			if (bestConstructor != null)
+			{
+				constructorParamNames = new HashSet<string>(
+					bestConstructor.GetParameters().Select(p => p.Name!),
+					StringComparer.OrdinalIgnoreCase);
+			}
+		}
+
+		// Suppress serialization of read-only properties that are not backed by a constructor parameter.
+		foreach (JsonPropertyInfo property in typeInfo.Properties)
+		{
+			if (property.Set == null && !constructorParamNames.Contains(property.Name))
+			{
+				property.ShouldSerialize = (_, _) => false;
+			}
+		}
 	}
 
 	private static void IgnorePrivateDataAttributeModifier(JsonTypeInfo typeInfo)

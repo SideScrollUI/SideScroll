@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Fixed
+- Fixed JSON serialization not handling primary constuctors with readonly properties
+  - This fixes Links not saving or loading correctly in Browsers
+
+### Changed
+
+## [0.17] - 2026-04-18
+
+### Added
 - Browser Local Storage support to allow saving data between sessions
 - Desktop Link for File Viewer
 - Summary docs for Serializer and Avalonia Controls
