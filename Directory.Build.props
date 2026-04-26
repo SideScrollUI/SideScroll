@@ -6,9 +6,9 @@
     - See Changelog for more
     </PackageReleaseNotes>
 
-    <AvaloniaVersion>11.3.14</AvaloniaVersion>
-    <AvaloniaDataGridVersion>11.3.13</AvaloniaDataGridVersion>
-    <AvaloniaEditVersion>11.4.1</AvaloniaEditVersion>
+    <AvaloniaVersion>12.0.1</AvaloniaVersion>
+    <AvaloniaDataGridVersion>12.0.0</AvaloniaDataGridVersion>
+    <AvaloniaEditVersion>12.0.0</AvaloniaEditVersion>
 
     <TargetFramework>net8.0</TargetFramework>
     <Configurations>Debug;Release;DebugX86</Configurations>

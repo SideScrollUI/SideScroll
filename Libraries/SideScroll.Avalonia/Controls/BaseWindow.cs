@@ -59,7 +59,7 @@ public class BaseWindow : Window
 		if (project.UserSettings.EnableCustomTitleBar == true)
 		{
 			ExtendClientAreaToDecorationsHint = true;
-			ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+			WindowDecorations = WindowDecorations.BorderOnly;
 			ExtendClientAreaTitleBarHeightHint = 50; // Increased from default ~32 to match custom title bar height (34px + margins)
 		}
 

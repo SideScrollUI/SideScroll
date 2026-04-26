@@ -83,7 +83,7 @@ public class TabDateTimePicker : Grid
 			VerticalContentAlignment = VerticalAlignment.Center,
 			SelectedDateFormat = CalendarDatePickerFormat.Custom,
 			CustomDateFormatString = "yyyy/M/d",
-			Watermark = "yyyy/M/d",
+			PlaceholderText = "yyyy/M/d",
 			MinWidth = 105,
 			MaxWidth = TabForm.ControlMaxWidth,
 			IsEnabled = Property.IsEditable,
@@ -104,7 +104,7 @@ public class TabDateTimePicker : Grid
 		_timeTextBox = new TabTextBox
 		{
 			IsReadOnly = !Property.IsEditable,
-			Watermark = "15:30:45",
+			PlaceholderText = "15:30:45",
 			Margin = new Thickness(10, 0, 0, 0),
 			MinWidth = 75,
 			MaxWidth = TabForm.ControlMaxWidth,

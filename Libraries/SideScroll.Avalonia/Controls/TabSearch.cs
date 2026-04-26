@@ -47,7 +47,7 @@ public class TabSearch : Grid
 		{
 			VerticalContentAlignment = VerticalAlignment.Center,
 			Padding = new Thickness(5, 2, 25, 1),
-			Watermark = "Search",
+			PlaceholderText = "Search",
 		};
 
 		Children.Add(TextBoxSearch);
@@ -68,7 +68,7 @@ public class TabSearch : Grid
 		Children.Add(image);
 	}
 
-	protected override void OnGotFocus(GotFocusEventArgs e)
+	protected override void OnGotFocus(FocusChangedEventArgs e)
 	{
 		TextBoxSearch.Focus();
 	}

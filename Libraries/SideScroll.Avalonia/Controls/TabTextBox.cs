@@ -87,7 +87,7 @@ public class TabTextBox : TextBox
 			PasswordChar = passwordCharAttribute.Character;
 		}
 
-		SetWatermark(property);
+		SetPlaceholderText(property);
 
 		if (property.PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
 		{
@@ -141,7 +141,7 @@ public class TabTextBox : TextBox
 		AvaloniaUtils.AddContextMenu(this); // Custom menu to handle ReadOnly items better
 	}
 
-	private void SetWatermark(ListProperty property)
+	private void SetPlaceholderText(ListProperty property)
 	{
 		WatermarkAttribute? attribute = property.GetCustomAttribute<WatermarkAttribute>();
 		if (attribute == null)
@@ -158,14 +158,14 @@ public class TabTextBox : TextBox
 			MemberInfo memberInfo = memberInfos.First();
 			if (memberInfo is PropertyInfo propertyInfo)
 			{
-				Watermark = propertyInfo.GetValue(property.Object)?.ToString();
+				PlaceholderText = propertyInfo.GetValue(property.Object)?.ToString();
 			}
 			else if (memberInfo is FieldInfo fieldInfo)
 			{
-				Watermark = fieldInfo.GetValue(property.Object)?.ToString();
+				PlaceholderText = fieldInfo.GetValue(property.Object)?.ToString();
 			}
 		}
-		Watermark ??= attribute.Text;
+		PlaceholderText ??= attribute.Text;
 	}
 
 	private void BindProperty(ListProperty property)
