@@ -105,7 +105,7 @@ The demo runs entirely in WebAssembly using Avalonia's browser support—no inst
 
 ## 🎯 Sample Projects
 
-- **[SideScroll Samples](https://github.com/SideScrollUI/SideScroll/blob/main/Libraries/SideScroll.Avalonia.Samples/MainWindow.cs)** — Included in the repository
+- **[SideScroll Samples](https://github.com/SideScrollUI/SideScroll/blob/main/Libraries/SideScroll.Avalonia.Samples/SampleMainWindow.cs)** — Included in the repository
 - **[Video Game Database](https://github.com/SideScrollUI/VideoGamesDB)** — External sample project demonstrating real-world usage
 
 ## 📄 License

@@ -182,7 +182,7 @@ SideScroll/
 
 Explore these examples to see SideScroll in action:
 
-- **[Tab Samples](Libraries/SideScroll.Avalonia.Samples/MainWindow.cs)** — Included in this repository
+- **[Tab Samples](Libraries/SideScroll.Avalonia.Samples/SampleMainWindow.cs)** — Included in this repository
 - **[Video Game Database](https://github.com/SideScrollUI/VideoGamesDB)** — External sample project demonstrating real-world usage
 
 ---

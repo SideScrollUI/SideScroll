@@ -48,6 +48,18 @@ public abstract class SerializerFile(string basePath, string name = "")
 	}
 
 	/// <summary>
+	/// Ensures the storage location exists before saving.
+	/// Override in derived classes for non-filesystem storage (e.g., localStorage).
+	/// </summary>
+	protected virtual void EnsureStorageExists()
+	{
+		if (!Directory.Exists(BasePath))
+		{
+			Directory.CreateDirectory(BasePath);
+		}
+	}
+
+	/// <summary>
 	/// Saves an object to the file system
 	/// </summary>
 	public void Save(Call call, object obj, string? name = null, bool publicOnly = false)
@@ -60,10 +72,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 			new Tag("Name", name),
 			new Tag("Path", BasePath));
 
-		if (!Directory.Exists(BasePath))
-		{
-			Directory.CreateDirectory(BasePath);
-		}
+		EnsureStorageExists();
 
 		SaveInternal(callTimer, obj, name, publicOnly);
 	}
@@ -119,9 +128,10 @@ public abstract class SerializerFile(string basePath, string name = "")
 	}
 
 	/// <summary>
-	/// Loads only the header from the file without loading the full object data
+	/// Loads only the header from the file without loading the full object data.
+	/// Override in derived classes that use a different header mechanism (e.g., JSON).
 	/// </summary>
-	public SerializerHeader LoadHeader(Call call)
+	public virtual SerializerHeader LoadHeader(Call call)
 	{
 		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Loading header", new Tag("Name", Name));
 

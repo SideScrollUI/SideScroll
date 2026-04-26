@@ -21,16 +21,26 @@ public class TabFileViewer(SelectFileDelegate? selectFileDelegate = null) : ITab
 				SelectFileDelegate = tab.SelectFileDelegate
 			};
 
-			model.Items = new List<ListItem>
-			{
+			List<ListItem> items =
+			[
 				new("Current", new TabDirectory(Directory.GetCurrentDirectory(), fileSelectorOptions)),
-				new("Desktop", new TabDirectory(Paths.DesktopPath, fileSelectorOptions)),
+			];
+
+			if (!string.IsNullOrEmpty(Paths.DesktopPath))
+			{
+				items.Add(new("Desktop", new TabDirectory(Paths.DesktopPath, fileSelectorOptions)));
+			}
+
+			items.AddRange(
+			[
 				new("Downloads", new TabDirectory(Paths.DownloadPath, fileSelectorOptions)),
 				new("Drives", new TabDrives(fileSelectorOptions)),
 				new("Favorites", new TabFileDataRepo(dataRepoFavorites, fileSelectorOptions)),
 				new("App Data", new TabDirectory(Project.DataSettings.AppDataPath!, fileSelectorOptions)),
 				new("Local Data", new TabDirectory(Project.DataSettings.LocalDataPath!, fileSelectorOptions)),
-			};
+			]);
+
+			model.Items = items;
 		}
 	}
 }

@@ -43,13 +43,9 @@ public class DataRepoViewLocalStorage<T> : DataRepoView<T>
 		if (matchingKeys.Count == 0)
 			return null;
 
-		var scannedPaths = matchingKeys.Select(storageKey =>
-		{
-			string path = storageKey
-				.Substring("SideScroll_Data_".Length)
-				.Replace('_', '/');
-			return path;
-		}).ToList();
+		var scannedPaths = matchingKeys
+			.Select(SerializerLocalStorage.ConvertStorageKeyToPath)
+			.ToList();
 
 		return ascending ? scannedPaths : scannedPaths.AsEnumerable().Reverse();
 	}

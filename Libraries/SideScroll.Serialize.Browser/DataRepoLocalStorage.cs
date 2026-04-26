@@ -90,9 +90,7 @@ public class DataRepoLocalStorage(string repoPath, string? repoName = null)
 			try
 			{
 				// Extract the path from the storage key
-				string path = storageKey
-					.Substring("SideScroll_Data_".Length)
-					.Replace('_', '/');
+				string path = SerializerLocalStorage.ConvertStorageKeyToPath(storageKey);
 
 				var serializerFile = new SerializerLocalStorage(path);
 				if (!serializerFile.Exists)

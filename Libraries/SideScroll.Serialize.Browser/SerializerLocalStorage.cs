@@ -49,6 +49,11 @@ public partial class SerializerLocalStorage : SerializerFile
 		}
 	}
 
+	/// <summary>
+	/// No-op: localStorage does not require directory creation
+	/// </summary>
+	protected override void EnsureStorageExists() { }
+
 	protected override void SaveInternal(Call call, object obj, string? name = null, bool publicOnly = false)
 	{
 		var options = publicOnly
@@ -151,6 +156,15 @@ public partial class SerializerLocalStorage : SerializerFile
 			.Replace('/', '_')
 			.Replace(":", "");
 		return StoragePrefix + pathKey;
+	}
+
+	/// <summary>
+	/// Converts a localStorage key back to a file path
+	/// </summary>
+	public static string ConvertStorageKeyToPath(string storageKey)
+	{
+		return storageKey[StoragePrefix.Length..]
+			.Replace('_', '/');
 	}
 
 	/// <summary>

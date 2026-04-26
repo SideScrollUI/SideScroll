@@ -44,12 +44,7 @@ public class DataRepoInstanceLocalStorage<T> : DataRepoInstance<T>
 			return null;
 
 		// Convert storage keys back to paths
-		var scannedPaths = matchingKeys.Select(storageKey =>
-		{
-			string path = storageKey["SideScroll_Data_".Length..]
-				.Replace('_', '/');
-			return '/' + path; // Add leading slash to match expected format
-		});
+		var scannedPaths = matchingKeys.Select(SerializerLocalStorage.ConvertStorageKeyToPath);
 
 		return ascending ? scannedPaths : scannedPaths.Reverse();
 	}

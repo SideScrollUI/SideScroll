@@ -1,3 +1,4 @@
+using SideScroll.Serialize.Atlas;
 using SideScroll.Tasks;
 using System.Text.Json;
 
@@ -29,6 +30,15 @@ public class SerializerFileJson : SerializerFile
 	public SerializerFileJson(string basePath, string name = "") : base(basePath, name)
 	{
 		DataPath = Paths.Combine(basePath, DataFileName);
+	}
+
+	/// <summary>
+	/// Returns a header with the name from this serializer instance.
+	/// JSON files do not use a binary header file; the name comes from the constructor.
+	/// </summary>
+	public override SerializerHeader LoadHeader(Call call)
+	{
+		return new SerializerHeader { Name = Name };
 	}
 
 	protected override void SaveInternal(Call call, object obj, string? name = null, bool publicOnly = false)
